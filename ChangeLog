@@ -1,0 +1,132 @@
+# ChangeLog
+
+Project: touch.player
+Versial: 0.0.6.0
+Date: 10/26/2011
+- Get local caching work, ready for publish.
+
+Project: touch.player
+Versial: 0.0.5.1
+Date: 10/24/2011
+- Mac theme and mouse events fixed
+
+Project: touch.player
+Versial: 0.0.5.0
+Date: 10/23/2011
+- Renamed from touch to annot
+- Start using google code.
+- Added language selection.
+- Added annot filter.
+- Finished annot editing.
+- Finished alias editing.
+- Token tag, name and file merged into alias.
+- Game and media type merged into one.
+- Most client-side componets finished except sync mode and local cache.
+- Ready for publishing.
+
+Project: touch.player
+Versial: 0.0.4.2
+Date: 10/16/2011
+- Added client side signal mode.
+
+Project: touch.player
+Versial: 0.0.4.1
+Date: 10/16/2011
+- Finished GTH and process monitor module
+
+Project: touch.player
+Versial: 0.0.4
+Date: 10/12/2011
+- Start with ITH
+
+Project: touch.player
+Version: 0.0.3.1
+Date: 9/15/2011
+- Added local cache using SQLite to implement SOAP client functions.
+- Added persistant storage.
+- Added licences
+
+Project: touch.player
+Version: 0.0.3
+Date: 9/10/2011
+- Replaced REST xml parser with SOAP RPC.
+
+Project: touch.app
+Version: 0.0.0.1
+Date: 9/3/2011
+- Project start.
+
+Project: touch.player
+Version: 0.0.2.1
+Date: 9/3/2011
+- Add subtitle support
+
+Project: touch.player
+Version: 0.0.2.0
+Date: 8/26/2011
+- First server side support (annotation/token/user)
+- Mac OS X new GUI
+- Several bug fixed. Stable release.
+- Support LaTeX style commands
+- Disc basic support in Windows.
+
+Project: touch.player
+Version: 0.0.1.3
+Date: 7/31/2011
+- Added AIML module.
+
+Project: touch.player
+Version: 0.0.1.2
+Date: 7/30/2011
+- Mac OS X support using VLCKit!
+
+Project: touch.player
+Version: 0.0.1.1
+Hook version: 0.0.0.2
+Date: 7/27/2011
+- Several bug fixed. Stable release.
+- Improved command line edit.
+- Using event filter in Windows hook
+
+Project: touch.player
+Version: 0.0.1.0
+Hook version: 0.0.0.1
+Date: 7/26/2011
+
+- Most GUI issue solved.
+  - DWM aero
+  - Mouse hook on Windows
+  - OSD display
+  - Graphics view animation
+  - Text encoding
+  - QSS and UI style
+
+- Directory structure changed a lot.
+  - Moved common packages into Core
+  - Moved Windows stuff into win32
+  - Put VLC wrapper (MediaPlayer) alone.
+  - Combined with touch.reader.
+
+- Work under Linux.
+  But only tested for Windows.
+  Missing VLC 1.1.x for Mac.
+
+- Major Missing component
+  - Database
+  - User
+  - Network
+  - Platform other then win7
+
+Project: touch.player
+Version: 0.0.0.0
+Date: 6/30/2011
+
+- Project start.
+
+Project: touch.reader
+Version: 0.0.0.0
+Date: 6/18/2011
+
+- Project start.
+
+# EOF

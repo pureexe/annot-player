@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SOAP-ENV:Envelope
+ xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+ xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+ xmlns:tns="http://service.annot.me/">
+ <SOAP-ENV:Body>
+   <tns:submitMediaToken>
+    <arg0>
+     <blessedCount>0</blessedCount>
+     <blockedCount>0</blockedCount>
+     <createTime>0</createTime>
+     <cursedCount>0</cursedCount>
+     <digest></digest>
+     <flags>0</flags>
+     <id>0</id>
+     <userId>0</userId>
+     <status>0</status>
+     <visitedCount>0</visitedCount>
+    </arg0>
+   </tns:submitMediaToken>
+
+ </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
