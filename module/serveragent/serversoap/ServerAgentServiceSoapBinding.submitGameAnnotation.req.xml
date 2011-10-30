@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SOAP-ENV:Envelope
+ xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+ xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+ xmlns:tns="http://service.annot.me/">
+ <SOAP-ENV:Body>
+   <tns:submitGameAnnotation>
+    <arg0>
+     <blessedCount>0</blessedCount>
+     <blockedCount>0</blockedCount>
+     <createTime>0</createTime>
+     <cursedCount>0</cursedCount>
+     <flags>0</flags>
+     <id>0</id>
+     <language>0</language>
+     <pos>0</pos>
+     <posType>0</posType>
+     <userId>0</userId>
+     <userAlias></userAlias>
+     <status>0</status>
+     <text></text>
+     <tokenId>0</tokenId>
+     <updateTime>0</updateTime>
+    </arg0>
+   </tns:submitGameAnnotation>
+
+ </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>

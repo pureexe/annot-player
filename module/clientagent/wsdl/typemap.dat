@@ -1,0 +1,4 @@
+# typemap.dat
+# Since 10/7/2011
+# See: http://www.cs.fsu.edu/~engelen/soapdoc2.html#tth_sEc8.2
+tns = "http://service.annot.me/"

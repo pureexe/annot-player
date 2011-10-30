@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>WebBrowserUi</class>
+ <widget class="QMainWindow" name="WebBrowserUi">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>600</width>
+    <height>400</height>
+   </rect>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QLineEdit {
+	border-image: url(&quot;:/images/lineedit.png&quot;) ;
+	border-width:4;
+	color:black;
+}
+
+QTabWidget::tab-bar {
+     top: 4px;
+}
+
+ QTabBar::tab { 
+	border-image: url(&quot;:/images/tab.png&quot;) ;
+	border-width:4px;
+	padding-left:3px;
+	min-width:54ex;
+	color: black;
+}
+
+QTabBar::tab:!selected{
+     margin-top: 3px;
+     margin-bottom: 5px;
+  }
+
+QTabBar::tab:selected {
+	border-image: url(&quot;:/images/tab-selected.png&quot;) ;
+    margin-bottom: 3px;
+}
+
+QTabBar::tab:last {  border-image: url(&quot;:/images/tab-last.png&quot;) ;}
+
+QTabBar::tab:selected:only-one {
+	border-image: url(&quot;:/images/tab-last-selected.png&quot;) ;
+    margin-bottom: 3px;
+}
+
+QTabBar::tab:selected:last {
+	border-image: url(&quot;:/images/tab-last-selected.png&quot;) ;
+    margin-bottom: 3px;
+}
+
+QTabBar::tab:!selected:last:hover { border-image: url(&quot;:/images/tab-last-hover.png&quot;) ; }
+QTabBar::tab:hover:!selected { border-image: url(&quot;:/images/tab-hover.png&quot;) ; }
+/*
+QTabBar::close-button { image: url(&quot;:/images/closebutton.png&quot;) ; }
+QTabBar::close-button:hover:!pressed { image: url(&quot;:/images/closebutton_hover.png&quot;) ;}
+QTabBar::close-button:pressed { image: url(&quot;:/images/closebutton_pressed.png&quot;) ;}
+*/</string>
+  </property>
+  <property name="documentMode">
+   <bool>false</bool>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <property name="styleSheet">
+    <string notr="true">
+QToolButton {
+	border-image: url(&quot;:/images/button.png&quot;) ;
+	border-width:3;
+	min-width:22px;
+}
+
+QToolButton::hover {
+	border-image: url(&quot;:/images/button-hover.png&quot;) ;
+}
+
+QToolButton::pressed {
+	border-image: url(&quot;:/images/button-pressed.png&quot;) ;
+}
+
+ QTabWidget::pane {
+	border-image: url(&quot;:/images/tabframe.png&quot;) ;
+	border-width:4;
+/*	border-top: 8px;*/
+}
+</string>
+   </property>
+   <layout class="QGridLayout" name="gridLayout">
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>6</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>4</number>
+    </property>
+    <property name="horizontalSpacing">
+     <number>6</number>
+    </property>
+    <property name="verticalSpacing">
+     <number>2</number>
+    </property>
+    <item row="0" column="0">
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <item>
+       <widget class="QToolButton" name="backButton">
+        <property name="styleSheet">
+         <string notr="true">QToolButton {
+	border-image: url(&quot;:/images/button-left.png&quot;) ;
+}
+
+QToolButton:hover {
+	border-image: url(&quot;:/images/button-left-hover.png&quot;) ;
+}
+</string>
+        </property>
+        <property name="text">
+         <string>Back</string>
+        </property>
+        <property name="icon">
+         <iconset resource="webbrowser.qrc">
+          <normaloff>:/images/arrow-back.png</normaloff>:/images/arrow-back.png</iconset>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QToolButton" name="forwardButton">
+        <property name="styleSheet">
+         <string notr="true">QToolButton {
+	border-image: url(&quot;:/images/button-right.png&quot;) ;
+}
+
+QToolButton:hover {
+	border-image: url(&quot;:/images/button-right-hover.png&quot;) ;
+}
+</string>
+        </property>
+        <property name="text">
+         <string>Back</string>
+        </property>
+        <property name="icon">
+         <iconset resource="webbrowser.qrc">
+          <normaloff>:/images/arrow-forward.png</normaloff>:/images/arrow-forward.png</iconset>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="0" column="2">
+     <widget class="QLineEdit" name="addressLine">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+        <horstretch>1</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string>http://qt.nokia.com</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="3">
+     <widget class="QLineEdit" name="searchEdit">
+      <property name="styleSheet">
+       <string notr="true">color:gray;</string>
+      </property>
+      <property name="text">
+       <string>Search</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="QToolButton" name="reloadButton">
+      <property name="text">
+       <string/>
+      </property>
+      <property name="icon">
+       <iconset resource="webbrowser.qrc">
+        <normaloff>:/images/reload.png</normaloff>:/images/reload.png</iconset>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0" colspan="4">
+     <widget class="QTabWidget" name="tabWidget">
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <property name="documentMode">
+       <bool>false</bool>
+      </property>
+      <property name="tabsClosable">
+       <bool>true</bool>
+      </property>
+      <property name="movable">
+       <bool>true</bool>
+      </property>
+      <widget class="QWidget" name="tab">
+       <attribute name="title">
+        <string>Tab 1</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_2">
+        <property name="margin">
+         <number>0</number>
+        </property>
+        <property name="spacing">
+         <number>0</number>
+        </property>
+       </layout>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <action name="actionFunction">
+   <property name="text">
+    <string>Function</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources>
+  <include location="webbrowser.qrc"/>
+ </resources>
+ <connections/>
+</ui>

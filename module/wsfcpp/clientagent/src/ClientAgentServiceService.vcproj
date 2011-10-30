@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VisualStudioProject Keyword="Win32Proj" Version="8.00" ProjectType="Visual C++" Name="ClientAgentService" RootNamespace="service">
+<Platforms>
+<Platform Name="Win32"/>
+</Platforms>
+<ToolFiles/>
+<Configurations>
+<Configuration CharacterSet="1" IntermediateDirectory="$(ConfigurationName)" OutputDirectory="$(SolutionDir)$(ConfigurationName)" Name="Debug|Win32" ConfigurationType="2">
+<Tool Name="VCPreBuildEventTool"/>
+<Tool Name="VCCustomBuildTool"/>
+<Tool Name="VCXMLDataGeneratorTool"/>
+<Tool Name="VCWebServiceProxyGeneratorTool"/>
+<Tool Name="VCMIDLTool"/>
+<Tool DebugInformationFormat="4" Detect64BitPortabilityProblems="true" WarningLevel="3" UsePrecompiledHeader="0" RuntimeLibrary="3" BasicRuntimeChecks="3" MinimalRebuild="true" PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_DEPRECATE;AXIS2_DECLARE_EXPORT" Optimization="0" Name="VCCLCompilerTool" AdditionalIncludeDirectories=".;$(WSFCPP_HOME)\include;$(WSFCPP_HOME)\include\platforms"/>
+<Tool Name="VCManagedResourceCompilerTool"/>
+<Tool Name="VCResourceCompilerTool"/>
+<Tool Name="VCPreLinkEventTool"/>
+<Tool TargetMachine="1" SubSystem="1" GenerateDebugInformation="true" AdditionalLibraryDirectories="$(WSFCPP_HOME)\lib" LinkIncremental="2" AdditionalDependencies="wso2_wsf.lib wso2_wsf_security.lib axiom.lib axis2_engine.lib axutil.lib" Name="VCLinkerTool"/>
+<Tool Name="VCALinkTool"/>
+<Tool Name="VCManifestTool"/>
+<Tool Name="VCXDCMakeTool"/>
+<Tool Name="VCBscMakeTool"/>
+<Tool Name="VCFxCopTool"/>
+<Tool Name="VCAppVerifierTool"/>
+<Tool Name="VCWebDeploymentTool"/>
+<Tool Name="VCPostBuildEventTool"/>
+</Configuration>
+<Configuration WholeProgramOptimization="1" CharacterSet="1" IntermediateDirectory="$(ConfigurationName)" OutputDirectory="$(SolutionDir)$(ConfigurationName)" Name="Release|Win32" ConfigurationType="2">
+<Tool Name="VCPreBuildEventTool"/>
+<Tool Name="VCCustomBuildTool"/>
+<Tool Name="VCXMLDataGeneratorTool"/>
+<Tool Name="VCWebServiceProxyGeneratorTool"/>
+<Tool Name="VCMIDLTool"/>
+<Tool DebugInformationFormat="3" Detect64BitPortabilityProblems="true" WarningLevel="3" UsePrecompiledHeader="0" RuntimeLibrary="2" PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;_CRT_SECURE_NO_DEPRECATE;AXIS2_DECLARE_EXPORT" Name="VCCLCompilerTool" AdditionalIncludeDirectories=".;$(WSFCPP_HOME)\include;$(WSFCPP_HOME)\include\platforms"/>
+<Tool Name="VCManagedResourceCompilerTool"/>
+<Tool Name="VCResourceCompilerTool"/>
+<Tool Name="VCPreLinkEventTool"/>
+<Tool TargetMachine="1" EnableCOMDATFolding="2" OptimizeReferences="2" SubSystem="1" AdditionalLibraryDirectories="$(WSFCPP_HOME)\lib" GenerateDebugInformation="true" LinkIncremental="1" AdditionalDependencies="wso2_wsf.lib wso2_wsf_security.lib axiom.lib axis2_engine.lib axutil.lib" Name="VCLinkerTool"/>
+<Tool Name="VCALinkTool"/>
+<Tool Name="VCManifestTool"/>
+<Tool Name="VCXDCMakeTool"/>
+<Tool Name="VCBscMakeTool"/>
+<Tool Name="VCFxCopTool"/>
+<Tool Name="VCAppVerifierTool"/>
+<Tool Name="VCWebDeploymentTool"/>
+<Tool Name="VCPostBuildEventTool"/>
+</Configuration>
+</Configurations>
+<References/>
+<Files>
+<Filter Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx" Name="Source Files">
+<File RelativePath=".\ClientAgentService.cpp"/>
+<File RelativePath=".\ClientAgentServiceSkeleton.cpp"/>
+<File RelativePath=".\ClientAgentServiceMacro.cpp"/>
+<File RelativePath=".\IsAuthorizedE1.cpp"/>
+<File RelativePath=".\IsAuthorizedResponseE5.cpp"/>
+<File RelativePath=".\DeauthorizeE2.cpp"/>
+<File RelativePath=".\DeauthorizeResponseE6.cpp"/>
+<File RelativePath=".\AuthorizeE4.cpp"/>
+<File RelativePath=".\AuthorizeResponseE3.cpp"/>
+<File RelativePath=".\ChatE0.cpp"/>
+<File RelativePath=".\ChatResponseE8.cpp"/>
+<File RelativePath=".\IsAuthorizedE1.cpp"/>
+<File RelativePath=".\IsConnectedResponseE7.cpp"/>
+</Filter>
+<Filter Filter="h;hpp;hxx;hm;inl;inc;xsd" Name="Header Files">
+<File RelativePath=".\ClientAgentService.h"/>
+<File RelativePath=".\ClientAgentServiceSkeleton.h"/>
+<File RelativePath=".\IsAuthorizedE1.h"/>
+<File RelativePath=".\IsAuthorizedResponseE5.h"/>
+<File RelativePath=".\DeauthorizeE2.h"/>
+<File RelativePath=".\DeauthorizeResponseE6.h"/>
+<File RelativePath=".\AuthorizeE4.h"/>
+<File RelativePath=".\AuthorizeResponseE3.h"/>
+<File RelativePath=".\ChatE0.h"/>
+<File RelativePath=".\ChatResponseE8.h"/>
+<File RelativePath=".\IsAuthorizedE1.h"/>
+<File RelativePath=".\IsConnectedResponseE7.h"/>
+</Filter>
+<Filter Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav" Name="Resource Files"/>
+</Files>
+<Globals/>
+</VisualStudioProject>
