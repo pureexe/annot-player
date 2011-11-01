@@ -240,6 +240,9 @@ Translator::translate(int tid) const
   case T_MENUTEXT_PLAY:         return tr("&Play");
   case T_TIP_PLAY:              return tr("Play media");
 
+  case T_MENUTEXT_MENU:         return tr("&Menu");
+  case T_TIP_MENU:              return tr("Show menu");
+
   case T_MENUTEXT_PAUSE:        return tr("&Pause");
   case T_TIP_PAUSE:             return tr("Pause playing");
 
@@ -300,6 +303,15 @@ Translator::translate(int tid) const
 
   case T_MENUTEXT_SEEKDIALOG:   return tr("&Seek");
   case T_TIP_SEEKDIALOG:        return tr("Show seek dialog");
+
+  case T_MENUTEXT_PICKDIALOG:   return tr("&Pick window");
+  case T_TIP_PICKDIALOG:        return tr("Show pick dialog");
+
+  case T_MENUTEXT_PROCESSPICKDIALOG:   return tr("Open window");
+  case T_TIP_PROCESSPICKDIALOG:        return tr("Select process window");
+
+  case T_MENUTEXT_WINDOWPICKDIALOG:   return tr("Select &annots window");
+  case T_TIP_WINDOWPICKDIALOG:        return tr("Select window to show annots");
 
   case T_TITLE_ABOUT:           return tr("About");
   case T_MENUTEXT_ABOUT:        return tr("&About");
@@ -392,7 +404,8 @@ Translator::translate(int tid) const
   case T_MENUTEXT_COMMENTVIEW:  return tr("Comments");
   case T_TIP_COMMENTVIEW:       return tr("Show comment browser");
 
-  case T_MENUTEXT_CLOUDVIEW:    return tr("Cloud");
+  // case T_MENUTEXT_CLOUDVIEW:    return tr("Cloud");
+  case T_MENUTEXT_CLOUDVIEW:    return tr("Register"); // TO BE REPLACED WITH CLOUD
   case T_TIP_CLOUDVIEW:         return tr("Show cloud browser");
 
   case T_MENUTEXT_EDIT:         return tr("&Edit");
@@ -401,7 +414,7 @@ Translator::translate(int tid) const
   case T_MENUTEXT_ADDALIAS:     return tr("&Add alias");
   case T_TIP_ADDALIAS:          return tr("Add alias");
 
-  case T_MENUTEXT_SIGNALVIEW:     return tr("Open &process");
+  case T_MENUTEXT_SIGNALVIEW:     return tr("Select &process");
   case T_TIP_SIGNALVIEW:          return tr("Select process signal");
 
   case T_MENUTEXT_ATTACHPROCESS: return tr("&Attach process");

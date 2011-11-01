@@ -19,6 +19,8 @@
      <status>0</status>
      <visitedCount>0</visitedCount>
     </arg0>
+    <userName></userName>
+    <password></password>
    </tns:submitMediaToken>
 
  </SOAP-ENV:Body>

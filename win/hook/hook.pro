@@ -13,7 +13,7 @@ CONFIG  += dll
 
 DEFINES += HOOK_LIB
 DEFINES += USE_MOUSE_HOOK
-DEFINES += HOOK_DLL_NAME=\\\"$$TARGET\\\"
+DEFINES += HOOK_DLL_NAME=L\\\"$$TARGET\\\"
 
 HEADERS = \
     hook_config.h \
@@ -30,6 +30,5 @@ OTHER_FILES = \
 RC_FILE += hook.rc
 
 include($$ROOTDIR/win/qtwin/qtwin.pri)
-
 
 # EOF

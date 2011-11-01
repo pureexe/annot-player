@@ -39,56 +39,49 @@ signals:
 public slots:
   void reset();
 
-  // - Login -
-public:
-  bool login(const QString &userName, const QString &passwordDigest);
-  bool logout();
-  QString chat(const QString &message);
-
-  bool getAuthorized();
-  bool getConnected();
-  User getUser();
-
-  bool setClientType(const QString &typeString);
-
   // - User -
-  bool setUserAnonymous(bool t);
-  bool setUserLanguage(qint32 language);
-
-  // - Callback -
 public:
-  bool setCallback(int port, long key);
+
+  bool getConnected();
+
+  User selectUser(const QString &userName, const QString &password);
+  bool setUserAnonymous(bool t, const QString &userName, const QString &password);
+  bool setUserLanguage(qint32 language, const QString &userName, const QString &password);
+
+  bool isClientUpdated(const QString &clientVersion);
+
+  QString chat(const QString &message);
 
   // - Submissions -
 public:
-  qint64 submitMediaToken(const Token &token);
-  qint64 submitGameToken(const Token &token);
+  qint64 submitMediaToken(const Token &token, const QString &userName, const QString &password);
+  qint64 submitGameToken(const Token &token, const QString &userName, const QString &password);
 
-  qint64 submitMediaTokenDigest(const QString &digest);
-  qint64 submitGameTokenDigest(const QString &digest);
+  qint64 submitMediaTokenDigest(const QString &digest, const QString &userName, const QString &password);
+  qint64 submitGameTokenDigest(const QString &digest, const QString &userName, const QString &password);
 
-  qint64 submitMediaAlias(const Alias &alias);
-  qint64 submitGameAlias(const Alias &alias);
+  qint64 submitMediaAlias(const Alias &alias, const QString &userName, const QString &password);
+  qint64 submitGameAlias(const Alias &alias, const QString &userName, const QString &password);
 
-  qint64 submitMediaAliasTextWithTokenId(const QString &text, qint32 aliasType, qint64 tokenId);
-  qint64 submitGameAliasTextWithTokenId(const QString &text, qint32 aliasType, qint64 tokenId);
+  qint64 submitMediaAliasTextWithTokenId(const QString &text, qint32 aliasType, qint64 tokenId, const QString &userName, const QString &password);
+  qint64 submitGameAliasTextWithTokenId(const QString &text, qint32 aliasType, qint64 tokenId, const QString &userName, const QString &password);
 
-  qint64 submitMediaAliasTextAndTokenDigest(const QString &text, qint32 aliasType, const QString &digest);
-  qint64 submitGameAliasTextAndTokenDigest(const QString &text, qint32 aliasType, const QString &digest);
+  qint64 submitMediaAliasTextAndTokenDigest(const QString &text, qint32 aliasType, const QString &digest, const QString &userName, const QString &password);
+  qint64 submitGameAliasTextAndTokenDigest(const QString &text, qint32 aliasType, const QString &digest, const QString &userName, const QString &password);
 
-  qint64 submitMediaAnnotation(const Annotation &annot);
-  qint64 submitGameAnnotation(const Annotation &annot);
+  qint64 submitMediaAnnotation(const Annotation &annot, const QString &userName, const QString &password);
+  qint64 submitGameAnnotation(const Annotation &annot, const QString &userName, const QString &password);
 
-  qint64 submitMediaAnnotationTextWithTokenId(const QString &text, qint64 pos, qint32 posType, qint64 tokenId);
-  qint64 submitGameAnnotationTextWithTokenId(const QString &text, qint64 pos, qint32 posType, qint64 tokenId);
+  qint64 submitMediaAnnotationTextWithTokenId(const QString &text, qint64 pos, qint32 posType, qint64 tokenId, const QString &userName, const QString &password);
+  qint64 submitGameAnnotationTextWithTokenId(const QString &text, qint64 pos, qint32 posType, qint64 tokenId, const QString &userName, const QString &password);
 
-  qint64 submitMediaAnnotationTextAndTokenDigest(const QString &text, qint64 pos, qint32 posType, const QString &digest);
-  qint64 submitGameAnnotationTextAndTokenDigest(const QString &text, qint64 pos, qint32 posType, const QString &digest);
+  qint64 submitMediaAnnotationTextAndTokenDigest(const QString &text, qint64 pos, qint32 posType, const QString &digest, const QString &userName, const QString &password);
+  qint64 submitGameAnnotationTextAndTokenDigest(const QString &text, qint64 pos, qint32 posType, const QString &digest, const QString &userName, const QString &password);
 
   // - Update -
 public:
-  bool updateMediaAnnotationTextWithId(const QString &text, qint64 id);
-  bool updateGameAnnotationTextWithId(const QString &text, qint64 id);
+  bool updateMediaAnnotationTextWithId(const QString &text, qint64 id, const QString &userName, const QString &password);
+  bool updateGameAnnotationTextWithId(const QString &text, qint64 id, const QString &userName, const QString &password);
 
   // - Queries -
 public:
@@ -107,8 +100,8 @@ public:
 
   // - Cast -
 public:
-  bool blessMediaAnnotationWithId(qint64 id);
-  bool blessGameAnnotationWithId(qint64 id);
+  bool blessMediaAnnotationWithId(qint64 id, const QString &userName, const QString &password);
+  bool blessGameAnnotationWithId(qint64 id, const QString &userName, const QString &password);
 };
 
 #endif // SERVERPROXY_H

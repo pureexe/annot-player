@@ -29,7 +29,7 @@ Tray::createActions()
 
   MAKE_ACTION(openAct,          OPENFILE,       w_,     SLOT(open()))
   MAKE_ACTION(openFileAct,      OPENFILE,       w_,     SLOT(openFile()))
-  MAKE_ACTION(openProcessAct,   SIGNALVIEW,     w_,     SLOT(openProcess()))
+  MAKE_ACTION(openWindowAct,    PROCESSPICKDIALOG,w_,   SLOT(openWindow()))
   MAKE_ACTION(aboutAct,         ABOUT,          w_,     SLOT(about()))
   MAKE_ACTION(helpAct,          HELP,           w_,     SLOT(help()))
   MAKE_ACTION(quitAct,          QUIT,           w_,     SLOT(close()))
@@ -43,7 +43,7 @@ Tray::createActions()
   QMenu *menu = new QMenu(w_); {
     menu->addAction(openFileAct);
 #ifdef USE_MODE_SIGNAL
-    menu->addAction(openProcessAct);
+    menu->addAction(openWindowAct);
 #endif // USE_MODE_SIGNAL
     menu->addSeparator();
     menu->addAction(aboutAct);

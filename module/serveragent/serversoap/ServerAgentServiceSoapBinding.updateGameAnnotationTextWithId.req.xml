@@ -9,6 +9,8 @@
    <tns:updateGameAnnotationTextWithId>
     <arg0></arg0>
     <arg1>0</arg1>
+    <userName></userName>
+    <password></password>
    </tns:updateGameAnnotationTextWithId>
 
  </SOAP-ENV:Body>

@@ -8,6 +8,8 @@
  <SOAP-ENV:Body>
    <tns:setUserAnonymous>
     <arg0>false</arg0>
+    <userName></userName>
+    <password></password>
    </tns:setUserAnonymous>
 
  </SOAP-ENV:Body>

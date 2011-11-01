@@ -17,7 +17,7 @@
 #define DEBUG "main"
 #include "module/debug/debug.h"
 
-// - debug -
+// - Debug -
 
 namespace { // anonymous, debug
 
@@ -40,6 +40,15 @@ namespace { // anonymous, debug
 #undef TIMESTAMP
   }
 
+} // anonymous namespace
+
+// - Meta types -
+
+namespace { // anonymous
+  inline void registerMetaTypes()
+  {
+    //qRegisterMetaType<WId>("WId");
+  }
 } // anonymous namespace
 
 // - i18n -
@@ -93,7 +102,6 @@ main(int argc, char *argv[])
   // Set OS encoding to UTF-8 before application starts.
   QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
   QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));
-
   // Directory
   {
 #ifdef USE_MODE_DEBUG
@@ -121,7 +129,9 @@ main(int argc, char *argv[])
       return 0;
     }
   }
-#endif USE_WIN_QTWIN
+#endif // USE_WIN_QTWIN
+
+  ::registerMetaTypes();
 
   Translator::globalInstance()->installCurrentTranslator(&a);
 
@@ -138,6 +148,8 @@ main(int argc, char *argv[])
     }
   }
 #endif // USE_MODE_DEBUG
+
+  Settings::globalInstance()->setVersion(G_VERSION);
 
   // Hashes
   //qDebug() << qHash(QString("\\sub"));

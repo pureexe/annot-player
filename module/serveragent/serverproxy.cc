@@ -37,12 +37,16 @@ ServerProxy::reset()
 // - User -
 
 bool
-ServerProxy::setUserAnonymous(bool t)
+ServerProxy::setUserAnonymous(bool t, const QString &userName, const QString &password)
 {
   DOUT("setUserAnonymous:enter: anonymous =" << t);
 
   tns__setUserAnonymous request;
   request.arg0 = t;
+  std::string s_userName = userName.toStdString();
+  request.userName = &s_userName;
+  std::string s_password = password.toStdString();
+  request.userName = &s_password;
 
   tns__setUserAnonymousResponse response;
   mutex_.lock();
@@ -61,12 +65,16 @@ ServerProxy::setUserAnonymous(bool t)
 }
 
 bool
-ServerProxy::setUserLanguage(qint32 language)
+ServerProxy::setUserLanguage(qint32 language, const QString &userName, const QString &password)
 {
   DOUT("setUserLanguage:enter: language =" << language);
 
   tns__setUserLanguage request;
   request.arg0 = language;
+  std::string s_userName = userName.toStdString();
+  request.userName = &s_userName;
+  std::string s_password = password.toStdString();
+  request.password = &s_password;
 
   tns__setUserLanguageResponse response;
   mutex_.lock();
@@ -85,59 +93,33 @@ ServerProxy::setUserLanguage(qint32 language)
 }
 
 bool
-ServerProxy::setClientType(const QString &version)
+ServerProxy::isClientUpdated(const QString &version)
 {
-  DOUT("setClientType:enter: version =" << version);
+  DOUT("isClientUpdated:enter: version =" << version);
 
-  tns__setClientType request;
+  tns__isClientUpdated request;
   std::string arg0 = version.toStdString();
   request.arg0 = &arg0;
 
-  tns__setClientTypeResponse response;
+  tns__isClientUpdatedResponse response;
   mutex_.lock();
-  int err = proxy_->setClientType(&request, &response);
+  int err = proxy_->isClientUpdated(&request, &response);
   mutex_.unlock();
   if (err) {
-    DOUT("setClientType: soap error, err =" << err);
+    DOUT("isClientUpdated: soap error, err =" << err);
     emit soapError(err);
-    DOUT("setClientType:exit");
+    DOUT("isClientUpdated:exit");
     return false;
   }
 
   bool ret = response.return_;
-  DOUT("setClientType:exit: ret =" << ret);
-  return ret;
-}
-
-// - Callback -
-
-bool
-ServerProxy::setCallback(int port, long key)
-{
-  DOUT("setCallback:enter: port =" << port << ", key =" << key);
-
-  tns__setCallback request;
-  request.arg0 = port;
-  request.arg1 = key;
-
-  tns__setCallbackResponse response;
-  mutex_.lock();
-  int err = proxy_->setCallback(&request, &response);
-  mutex_.unlock();
-  if (err) {
-    DOUT("setCallback: soap error, err =" << err);
-    emit soapError(err);
-    DOUT("setCallback:exit");
-    return false;
-  }
-
-  bool ret = response.return_;
-  DOUT("setCallback:exit: ret =" << ret);
+  DOUT("isClientUpdated:exit: ret =" << ret);
   return ret;
 }
 
 // - Actions -
 
+/*
 bool
 ServerProxy::login(const QString &userName, const QString &password)
 {
@@ -184,6 +166,7 @@ ServerProxy::logout()
   DOUT("logout:exit: ret =" << true);
   return true;
 }
+*/
 
 bool
 ServerProxy::getConnected()
@@ -206,6 +189,7 @@ ServerProxy::getConnected()
   return ret;
 }
 
+/*
 bool
 ServerProxy::getAuthorized()
 {
@@ -226,6 +210,7 @@ ServerProxy::getAuthorized()
   DOUT("getAuthorized:exit: ret =" << ret);
   return ret;
 }
+*/
 
 QString
 ServerProxy::chat(const QString &message)
@@ -257,20 +242,26 @@ ServerProxy::chat(const QString &message)
 }
 
 User
-ServerProxy::getUser()
+ServerProxy::selectUser(const QString &userName, const QString &password)
 {
-  DOUT("getUser:enter");
+  DOUT("selectUser:enter: userName =" << userName);
   User ret;
 
-  tns__getUser request;
-  tns__getUserResponse response;
+  tns__selectUser request;
+  std::string s_userName = userName.toStdString();
+  request.userName = &s_userName;
+  std::string s_password = password.toStdString();
+  request.password = &s_password;
+
+  tns__selectUserResponse response;
+
   mutex_.lock();
-  int err = proxy_->getUser(&request, &response);
+  int err = proxy_->selectUser(&request, &response);
   mutex_.unlock();
   if (err) {
-    DOUT("getUser: soap error, err =" << err);
+    DOUT("selectUser: soap error, err =" << err);
     emit soapError(err);
-    DOUT("getUser:exit");
+    DOUT("selectUser:exit");
     return ret;
   }
 
@@ -297,7 +288,7 @@ ServerProxy::getUser()
       ret.setPassword(QString::fromStdString(*p->password));
   }
 
-  DOUT("getUser:exit: username =" << ret.name() << ", id =" << ret.id());
+  DOUT("selectUser:exit: username =" << ret.name() << ", id =" << ret.id());
   return ret;
 }
 
@@ -305,7 +296,7 @@ ServerProxy::getUser()
 
 #define MAKE_submitToken(_type, _Type) \
   qint64 \
-  ServerProxy::submit##_Type##Token(const Token &token) \
+  ServerProxy::submit##_Type##Token(const Token &token, const QString &userName, const QString &password) \
   { \
     DOUT("submit" #_Type "Token:enter"); \
 \
@@ -329,6 +320,10 @@ ServerProxy::getUser()
 \
     tns__submit##_Type##Token request; \
     request.arg0 = &arg0; \
+    std::string s_userName = userName.toStdString(); \
+    request.userName = &s_userName; \
+    std::string s_password = password.toStdString(); \
+    request.password = &s_password; \
 \
     tns__submit##_Type##TokenResponse response; \
     mutex_.lock(); \
@@ -352,7 +347,7 @@ ServerProxy::getUser()
 
 #define MAKE_submitTokenDigest(_type, _Type) \
   qint64 \
-  ServerProxy::submit##_Type##TokenDigest(const QString &digest) \
+  ServerProxy::submit##_Type##TokenDigest(const QString &digest, const QString &userName, const QString &password) \
   { \
     DOUT("submit" #_Type "TokenDigest:enter"); \
 \
@@ -364,6 +359,10 @@ ServerProxy::getUser()
     tns__submit##_Type##TokenDigest request; \
     std::string arg0 = digest.toStdString(); \
     request.arg0 = &arg0; \
+    std::string s_userName = userName.toStdString(); \
+    request.userName = &s_userName; \
+    std::string s_password = password.toStdString(); \
+    request.password = &s_password; \
 \
     tns__submit##_Type##TokenDigestResponse response; \
     mutex_.lock(); \
@@ -387,7 +386,7 @@ ServerProxy::getUser()
 
 #define MAKE_submitAlias(_type, _Type) \
   qint64 \
-  ServerProxy::submit##_Type##Alias(const Alias &alias) \
+  ServerProxy::submit##_Type##Alias(const Alias &alias, const QString &userName, const QString &password) \
   { \
     DOUT("submit" #_Type "Alias:enter"); \
 \
@@ -417,6 +416,10 @@ ServerProxy::getUser()
 \
     tns__submit##_Type##Alias request; \
     request.arg0 = &arg0; \
+    std::string s_userName = userName.toStdString(); \
+    request.userName = &s_userName; \
+    std::string s_password = password.toStdString(); \
+    request.password = &s_password; \
 \
     tns__submit##_Type##AliasResponse response; \
     mutex_.lock(); \
@@ -440,7 +443,7 @@ ServerProxy::getUser()
 
 #define MAKE_submitAliasTextWithTokenId(_type, _Type) \
   qint64 \
-  ServerProxy::submit##_Type##AliasTextWithTokenId(const QString &text, qint32 aliasType, qint64 tokenId) \
+  ServerProxy::submit##_Type##AliasTextWithTokenId(const QString &text, qint32 aliasType, qint64 tokenId, const QString &userName, const QString &password) \
   { \
     DOUT("submit" #_Type "AliasTextWithTokenId:enter"); \
 \
@@ -458,6 +461,10 @@ ServerProxy::getUser()
     request.arg0 = &arg0; \
     request.arg1 = aliasType; \
     request.arg2 = tokenId; \
+    std::string s_userName = userName.toStdString(); \
+    request.userName = &s_userName; \
+    std::string s_password = password.toStdString(); \
+    request.password = &s_password; \
 \
     tns__submit##_Type##AliasTextWithTokenIdResponse response; \
     mutex_.lock(); \
@@ -481,7 +488,7 @@ ServerProxy::getUser()
 
 #define MAKE_submitAliasTextAndTokenDigest(_type, _Type) \
   qint64 \
-  ServerProxy::submit##_Type##AliasTextAndTokenDigest(const QString &text, qint32 aliasType, const QString &digest) \
+  ServerProxy::submit##_Type##AliasTextAndTokenDigest(const QString &text, qint32 aliasType, const QString &digest, const QString &userName, const QString &password) \
   { \
     DOUT("submit" #_Type "AliasTextAndTokenDigest:enter"); \
 \
@@ -504,6 +511,10 @@ ServerProxy::getUser()
     request.arg0 = &arg0; \
     request.arg1 = aliasType; \
     request.arg2 = &arg2; \
+    std::string s_userName = userName.toStdString(); \
+    request.userName = &s_userName; \
+    std::string s_password = password.toStdString(); \
+    request.password = &s_password; \
 \
     tns__submit##_Type##AliasTextAndTokenDigestResponse response; \
     mutex_.lock(); \
@@ -527,7 +538,7 @@ ServerProxy::getUser()
 
 #define MAKE_submitAnnotation(_type, _Type) \
   qint64 \
-  ServerProxy::submit##_Type##Annotation(const Annotation &annot) \
+  ServerProxy::submit##_Type##Annotation(const Annotation &annot, const QString &userName, const QString &password) \
   { \
     DOUT("submit" #_Type "Annotation:enter"); \
 \
@@ -561,6 +572,10 @@ ServerProxy::getUser()
 \
     tns__submit##_Type##Annotation request; \
     request.arg0 = &arg0; \
+    std::string s_userName = userName.toStdString(); \
+    request.userName = &s_userName; \
+    std::string s_password = password.toStdString(); \
+    request.password = &s_password; \
 \
     tns__submit##_Type##AnnotationResponse response; \
     mutex_.lock(); \
@@ -584,7 +599,7 @@ ServerProxy::getUser()
 
 #define MAKE_submitAnnotationTextWithTokenId(_type, _Type) \
   qint64 \
-  ServerProxy::submit##_Type##AnnotationTextWithTokenId(const QString &text, qint64 pos, qint32 posType, qint64 tokenId) \
+  ServerProxy::submit##_Type##AnnotationTextWithTokenId(const QString &text, qint64 pos, qint32 posType, qint64 tokenId, const QString &userName, const QString &password) \
   { \
     DOUT("submit" #_Type "AnnotationTextWithTokenId:enter"); \
 \
@@ -603,6 +618,10 @@ ServerProxy::getUser()
     request.arg1 = pos; \
     request.arg2 = posType; \
     request.arg3 = tokenId; \
+    std::string s_userName = userName.toStdString(); \
+    request.userName = &s_userName; \
+    std::string s_password = password.toStdString(); \
+    request.password = &s_password; \
 \
     tns__submit##_Type##AnnotationTextWithTokenIdResponse response; \
     mutex_.lock(); \
@@ -626,7 +645,7 @@ ServerProxy::getUser()
 
 #define MAKE_submitAnnotationTextAndTokenDigest(_type, _Type) \
   qint64 \
-  ServerProxy::submit##_Type##AnnotationTextAndTokenDigest(const QString &text, qint64 pos, qint32 posType, const QString &digest) \
+  ServerProxy::submit##_Type##AnnotationTextAndTokenDigest(const QString &text, qint64 pos, qint32 posType, const QString &digest, const QString &userName, const QString &password) \
   { \
     DOUT("submit" #_Type "AnnotationTextAndTokenDigest:enter"); \
 \
@@ -650,6 +669,10 @@ ServerProxy::getUser()
     request.arg1 = pos; \
     request.arg2 = posType; \
     request.arg3 = &arg3; \
+    std::string s_userName = userName.toStdString(); \
+    request.userName = &s_userName; \
+    std::string s_password = password.toStdString(); \
+    request.password = &s_password; \
 \
     tns__submit##_Type##AnnotationTextAndTokenDigestResponse response; \
     mutex_.lock(); \
@@ -928,12 +951,16 @@ ServerProxy::getUser()
 
 #define MAKE_blessAnnotationWithId(_type, _Type) \
   bool \
-  ServerProxy::bless##_Type##AnnotationWithId(qint64 id) \
+  ServerProxy::bless##_Type##AnnotationWithId(qint64 id, const QString &userName, const QString &password) \
   { \
     DOUT("bless" #_Type "AnnotationWithId:enter: id =" << id); \
 \
     tns__bless##_Type##AnnotationWithId request; \
     request.arg0 = id; \
+    std::string s_userName = userName.toStdString(); \
+    request.userName = &s_userName; \
+    std::string s_password = password.toStdString(); \
+    request.password = &s_password; \
 \
     tns__bless##_Type##AnnotationWithIdResponse response; \
     mutex_.lock(); \
@@ -959,7 +986,7 @@ ServerProxy::getUser()
 
 #define MAKE_updateMediaAnnotationTextWithId(_type, _Type) \
   bool \
-  ServerProxy::update##_Type##AnnotationTextWithId(const QString &text, qint64 id) \
+  ServerProxy::update##_Type##AnnotationTextWithId(const QString &text, qint64 id, const QString &userName, const QString &password) \
   { \
     DOUT("update" #_Type "AnnotationTextWithId:enter: id =" << id << ", text =" << text); \
 \
@@ -967,6 +994,10 @@ ServerProxy::getUser()
     std::string arg0 = text.toStdString(); \
     request.arg0 = &arg0; \
     request.arg1 = id; \
+    std::string s_userName = userName.toStdString(); \
+    request.userName = &s_userName; \
+    std::string s_password = password.toStdString(); \
+    request.password = &s_password; \
 \
     tns__update##_Type##AnnotationTextWithIdResponse response; \
     mutex_.lock(); \

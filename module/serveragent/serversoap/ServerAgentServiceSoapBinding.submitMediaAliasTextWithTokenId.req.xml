@@ -10,6 +10,8 @@
     <arg0></arg0>
     <arg1>0</arg1>
     <arg2>0</arg2>
+    <userName></userName>
+    <password></password>
    </tns:submitMediaAliasTextWithTokenId>
 
  </SOAP-ENV:Body>

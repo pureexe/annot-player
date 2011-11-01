@@ -29,6 +29,7 @@
 #include "tr.h"
 #include "translator.h"
 #include "logindialog.h"
+#include "pickdialog.h"
 #include "seekdialog.h"
 #include "livedialog.h"
 #include "syncdialog.h"
@@ -59,6 +60,9 @@
 #ifdef USE_WIN_QTWIN
   #include "win/qtwin/qtwin.h"
 #endif // USE_WIN_QTWIN
+#ifdef USE_WIN_PICKER
+  #include "win/picker/picker.h"
+#endif // USE_WIN_PICKER
 #include "core/os.h"
 #include "core/cmd.h"
 #include "core/annotationparser.h"
@@ -177,7 +181,6 @@ namespace { namespace task_ { // anonymous
   };
 
 } } // anonymous namespace task_
-
 
 // - Hook -
 #ifdef USE_WIN_HOOK
@@ -452,6 +455,12 @@ MainWindow::createComponents()
   seekDialog_ = new SeekDialog(this);
   syncDialog_ = new SyncDialog(this);
 
+  windowPickDialog_ = new PickDialog(this);
+  windowPickDialog_->setMessage(tr("Select annots window"));
+
+  processPickDialog_ = new PickDialog(this);
+  processPickDialog_->setMessage(tr("Select process window to open"));
+
   //liveDialog_ = new LiveDialog(this);
   //liveDialog_ = 0; // TODO
 
@@ -493,6 +502,7 @@ MainWindow::createConnections()
   connect(hub_, SIGNAL(stopped()),SLOT(stop()));
 
   // Player UI
+
   #define CONNECT(_playerui) \
     connect(_playerui, SIGNAL(commandEntered(QString)), SLOT(eval(QString))); \
     connect(_playerui, SIGNAL(showUserPanelRequested()), SLOT(showUserPanel())); \
@@ -507,6 +517,13 @@ MainWindow::createConnections()
     CONNECT(osdPlayer_)
   #undef CONNECT
 
+  connect(osdPlayer_, SIGNAL(invalidateMenuRequested()), SLOT(invalidateContextMenu()));
+
+  // Queued connections
+  connect(this, SIGNAL(responded(QString)), SLOT(respond(QString)), Qt::QueuedConnection);
+  connect(this, SIGNAL(said(QString,QString)), SLOT(say(QString,QString)), Qt::QueuedConnection);
+  connect(this, SIGNAL(showTextRequested(QString)), SLOT(showText(QString)), Qt::QueuedConnection);
+
   // Annotation graphics view
   connect(this, SIGNAL(addAndShowAnnotationRequested(Annotation)),
           annotationView_, SLOT(addAndShowAnnotation(Annotation)),
@@ -518,7 +535,7 @@ MainWindow::createConnections()
   // Tokens:
   connect(tokenView_, SIGNAL(aliasSubmitted(Alias)), SLOT(submitAlias(Alias)));
 #ifdef USE_MODE_SIGNAL
-  connect(signalView_->tokenView(), SIGNAL(aliasSubmitted(Alias)), SLOT(submitAlias(Alias)));
+  //connect(signalView_->tokenView(), SIGNAL(aliasSubmitted(Alias)), SLOT(submitAlias(Alias)));
 
   connect(signalView_, SIGNAL(dragEnterEventReceived(QDragEnterEvent*)), SLOT(dragEnterEvent(QDragEnterEvent*)));
   connect(signalView_, SIGNAL(dragLeaveEventReceived(QDragLeaveEvent*)), SLOT(dragLeaveEvent(QDragLeaveEvent*)));
@@ -562,6 +579,14 @@ MainWindow::createConnections()
   connect(player_, SIGNAL(paused()), hub_, SLOT(stopSyncPlayMode()));
   connect(player_, SIGNAL(stopped()), hub_, SLOT(stopSyncPlayMode()));
   connect(this, SIGNAL(seeked()), hub_, SLOT(stopSyncPlayMode()));
+
+  // - Picker -
+  connect(windowPickDialog_, SIGNAL(windowPicked(WId)), annotationView_, SLOT(setTrackingWindow(WId)));
+  connect(processPickDialog_, SIGNAL(windowPicked(WId)), annotationView_, SLOT(setTrackingWindow(WId)));
+#ifdef USE_MODE_SIGNAL
+  connect(processPickDialog_, SIGNAL(windowPicked(WId)), SLOT(openProcessWindow(WId)));
+#endif // USE_MODE_SIGNAL
+  connect(annotationView_, SIGNAL(trackingWindowChanged(WId)), osdPlayer_, SLOT(setTrackingWindow(WId)));
 
   // Synchronize text edit
   //#define SYNC(_playerui1, _playerui2)
@@ -667,6 +692,8 @@ MainWindow::createActions()
   MAKE_TOGGLE(toggleUserAnonymousAct_,  ANONYMOUS,       this,         SLOT(setUserAnonymous(bool)))
   MAKE_TOGGLE(toggleUserPanelVisibleAct_, USER,          this,         SLOT(setUserPanelVisible(bool)))
   MAKE_TOGGLE(toggleLoginDialogVisibleAct_, LOGINDIALOG, this,         SLOT(setLoginDialogVisible(bool)))
+  MAKE_TOGGLE(toggleWindowPickDialogVisibleAct_,  WINDOWPICKDIALOG,  this,         SLOT(setWindowPickDialogVisible(bool)))
+  MAKE_TOGGLE(toggleProcessPickDialogVisibleAct_, PROCESSPICKDIALOG, this,         SLOT(setProcessPickDialogVisible(bool)))
   MAKE_TOGGLE(toggleSeekDialogVisibleAct_,  SEEKDIALOG,  this,         SLOT(setSeekDialogVisible(bool)))
   MAKE_TOGGLE(toggleLiveDialogVisibleAct_,  LIVEDIALOG,  this,         SLOT(setLiveDialogVisible(bool)))
   MAKE_TOGGLE(toggleSyncDialogVisibleAct_,  SYNCDIALOG,  this,         SLOT(setSyncDialogVisible(bool)))
@@ -749,6 +776,7 @@ MainWindow::createMenus()
   // Context menu
   contextMenu_ = new QMenu(TR(T_TITLE_PROGRAM), this);
   UiStyle::globalInstance()->setContextMenuStyle(contextMenu_);
+  osdPlayer_->setMenu(contextMenu_);
 
   appLanguageContextMenu_ = new QMenu(this); {
     UiStyle::globalInstance()->setContextMenuStyle(appLanguageContextMenu_);
@@ -902,22 +930,28 @@ void
 MainWindow::updateTokenMode()
 {
   // Update player mode
-  bool v = hub_->isMediaTokenMode();
+  bool m = hub_->isMediaTokenMode();
   switch (hub_->playerMode()) {
   case SignalHub::NormalPlayerMode:
-    hub_->setMiniPlayerMode(!v);
+    if (!m && annotationView_->trackingWindow())
+      hub_->setFullScreenPlayerMode(!m);
+    else
+      hub_->setMiniPlayerMode(!m);
     break;
 
   case SignalHub::FullScreenPlayerMode:
     mainPlayer_->hide();
     miniPlayer_->hide();
-    setVisible(v);
-    osdPlayer_->show();
-    osdDock_->raise();
+    if (m)
+      hub_->setNormalPlayerMode();
+
+    //setVisible(m);
+    //osdPlayer_->show();
+    //osdDock_->raise();
     break;
 
   case SignalHub::MiniPlayerMode:
-    if (v)
+    if (m)
       hub_->setNormalPlayerMode();
     else {
       hide();
@@ -928,10 +962,14 @@ MainWindow::updateTokenMode()
     break;
   }
 
+  if (m)
+    annotationView_->setTrackingWindow(0);
+
   annotationView_->invalidateGeometry();
+  osdPlayer_->invalidateGeometry();
 
 #ifdef USE_WIN_QTH
-  messageHandler_->setActive(!v);
+  messageHandler_->setActive(!m);
 #endif // USE_WIN_QTH
 }
 
@@ -1048,6 +1086,14 @@ MainWindow::openProcess()
 {
 #ifdef USE_MODE_SIGNAL
   showSignalView();
+#endif // USE_MODE_SIGNAL
+}
+
+void
+MainWindow::openWindow()
+{
+#ifdef USE_MODE_SIGNAL
+  setProcessPickDialogVisible(true);
 #endif // USE_MODE_SIGNAL
 }
 
@@ -1236,8 +1282,8 @@ MainWindow::stop()
     break;
 
   case SignalHub::MediaTokenMode:
-    if (player_->isPlaying())
-      player_->pause();
+    if (!player_->isStopped())
+      player_->stop();
     break;
   }
 }
@@ -1692,6 +1738,14 @@ MainWindow::setCommentViewVisible(bool visible)
   commentView_->setVisible(visible);
 }
 
+void
+MainWindow::setWindowPickDialogVisible(bool visible)
+{ windowPickDialog_->setVisible(visible); }
+
+void
+MainWindow::setProcessPickDialogVisible(bool visible)
+{ processPickDialog_->setVisible(visible); }
+
 // - Annotations -
 
 void
@@ -1814,7 +1868,7 @@ MainWindow::setToken(const QString &input, bool async)
   commentView_->setTokenId(token.id());
   tokenView_->setAliases(aliases);
 #ifdef USE_MODE_SIGNAL
-  signalView_->tokenView()->setAliases(aliases);
+  //signalView_->tokenView()->setAliases(aliases);
 #endif // USE_MODE_SIGNAL
 
   AnnotationList annots = dataManager_->selectAnnotationsWithToken(token);
@@ -1979,15 +2033,15 @@ MainWindow::chat(const QString &input, bool async)
   mutex_.lock();
   DOUT("chat: mutex locked");
 
-  showText(CORE_CMD_COLOR_BLUE " " + text);
-  say(text, "blue");
+  emit showTextRequested(CORE_CMD_COLOR_BLUE " " + text);
+  emit said(text, "blue");
 
 #ifdef USE_MODULE_DOLL
   Q_ASSERT(doll_);
   doll_->chat(text);
 #else
   if (server_->isConnected())
-    respond(server_->chat(text));
+    emit responded(server_->chat(text));
 #endif // USE_MODULE_DOLL
 
   DOUT("chat: mutex unlocking");
@@ -2059,18 +2113,22 @@ MainWindow::mousePressEvent(QMouseEvent *event)
 }
 
 bool
-MainWindow::isPosNearOSDPlayer(const QPoint &pos) const
+MainWindow::isGlobalPosNearOSDPlayer(const QPoint &pos) const
 {
-  return pos.x() < 6 || pos.x() > osdDock_->width() - 6 ||
-         pos.y() < 6 || pos.y() > osdDock_->height() / 4 * 3 - 6;
+  QRect r = annotationView_->globalRect();
+  return pos.x() < 6 || pos.x() > osdWindow_->width() - 6 ||  // Near the border
+         pos.y() < 6 || pos.y() > osdWindow_->height() - 6 || // Near the border
+
+         pos.x() < r.right() + 6 && pos.x() > r.left() - 6 &&
+         pos.y() < r.bottom() + 6 && pos.y() > r.top() + r.height() / 4 * 3 - 6;
 }
 
 void
 MainWindow::mouseMoveEvent(QMouseEvent *event)
 {
   // Prevent auto hide osd player.
-  if (hub_->isFullScreenVideoMode())
-    if (!event || isPosNearOSDPlayer(event->globalPos())) {
+  if (hub_->isFullScreenPlayerMode())
+    if (!event || isGlobalPosNearOSDPlayer(event->globalPos())) {
       if (!hasVisiblePlayer())
         osdPlayer_->show();
       else if (osdPlayer_->isVisible())
@@ -2141,282 +2199,296 @@ void
 MainWindow::contextMenuEvent(QContextMenuEvent *event)
 {
   if (event) {
-    contextMenu_->clear();
+    invalidateContextMenu();
+    contextMenu_->popup(event->globalPos());
+    event->accept();
+  }
+}
 
-    // Open
-    {
-      //contextMenu_->addSeparator();
+void
+MainWindow::invalidateContextMenu()
+{
+  contextMenu_->clear();
 
-      //contextMenu_->addAction(openAct_);
-      contextMenu_->addAction(openFileAct_);
+  // Open
+  {
+    //contextMenu_->addSeparator();
+
+    //contextMenu_->addAction(openAct_);
+    contextMenu_->addAction(openFileAct_);
 
 #ifdef USE_MODE_SIGNAL
-      toggleSignalViewVisibleAct_->setChecked(signalView_->isVisible());
-      contextMenu_->addAction(toggleSignalViewVisibleAct_ );
+#ifdef USE_WIN_PICKER
+     toggleProcessPickDialogVisibleAct_->setChecked(processPickDialog_->isVisible());
+     contextMenu_->addAction(toggleProcessPickDialogVisibleAct_);
+#endif // USE_WIN_PICKER
 
-      if (hub_->isSignalTokenMode()) {
-        toggleRecentMessageViewVisibleAct_->setChecked(recentMessageView_->isVisible());
-        contextMenu_->addAction(toggleRecentMessageViewVisibleAct_ );
-      }
+    toggleSignalViewVisibleAct_->setChecked(signalView_->isVisible());
+    contextMenu_->addAction(toggleSignalViewVisibleAct_ );
+
+    if (hub_->isSignalTokenMode()) {
+      toggleRecentMessageViewVisibleAct_->setChecked(recentMessageView_->isVisible());
+      contextMenu_->addAction(toggleRecentMessageViewVisibleAct_ );
+    }
 #endif // USE_MODE_SIGNAL
 
-      if (openContextMenu_->isEmpty()) {
-        // only add once
-        openContextMenu_->addAction(openSubtitleAct_);
-        openContextMenu_->addAction(openDeviceAct_);
-        //openContextMenu_->addAction(openFileAct_);
-      }
-      contextMenu_->addMenu(openContextMenu_);
+    if (openContextMenu_->isEmpty()) {
+      // only add once
+      openContextMenu_->addAction(openSubtitleAct_);
+      openContextMenu_->addAction(openDeviceAct_);
+      //openContextMenu_->addAction(openFileAct_);
+    }
+    contextMenu_->addMenu(openContextMenu_);
 
-      // Recent
-      if (!recent_.isEmpty()) {
-        recentMenu_->clear(); {
+    // Recent
+    if (!recent_.isEmpty()) {
+      recentMenu_->clear(); {
 
-        QList<QAction*> l;
+      QList<QAction*> l;
 #define ADD_RECENT(_i) \
-          if (recent_.size() > _i) { \
-            QString path = recent_[_i]; \
-            QFileInfo fi(path); \
-            if (fi.exists()) { \
-              recent##_i##Act_->setText(fi.fileName()); \
-              recent##_i##Act_->setToolTip(path); \
-              l.prepend(recent##_i##Act_); \
-            } else \
-              recent_.removeAt(_i); \
-          }
+        if (recent_.size() > _i) { \
+          QString path = recent_[_i]; \
+          QFileInfo fi(path); \
+          if (fi.exists()) { \
+            recent##_i##Act_->setText(fi.fileName()); \
+            recent##_i##Act_->setToolTip(path); \
+            l.prepend(recent##_i##Act_); \
+          } else \
+            recent_.removeAt(_i); \
+        }
 
-          ADD_RECENT(9) ADD_RECENT(8) ADD_RECENT(7)
-          ADD_RECENT(6) ADD_RECENT(5) ADD_RECENT(4)
-          ADD_RECENT(3) ADD_RECENT(2) ADD_RECENT(1)
-          ADD_RECENT(0)
+        ADD_RECENT(9) ADD_RECENT(8) ADD_RECENT(7)
+        ADD_RECENT(6) ADD_RECENT(5) ADD_RECENT(4)
+        ADD_RECENT(3) ADD_RECENT(2) ADD_RECENT(1)
+        ADD_RECENT(0)
 #undef ADD_RECENT
-          recentMenu_->addActions(l);
-          recentMenu_->addSeparator();
-          recentMenu_->addAction(clearRecentAct_);
-        }
-
-        contextMenu_->addMenu(recentMenu_);
+        recentMenu_->addActions(l);
+        recentMenu_->addSeparator();
+        recentMenu_->addAction(clearRecentAct_);
       }
+
+      contextMenu_->addMenu(recentMenu_);
     }
+  }
 
-     // Annotation
-     {
-       contextMenu_->addSeparator();
-       if (annotationView_->isPlaybackEnabled()) {
-         toggleAnnotationVisibleAct_->setChecked(true);
-         toggleAnnotationVisibleAct_->setText(TR(T_MENUTEXT_SHOWANNOT));
-       } else {
-         toggleAnnotationVisibleAct_->setChecked(false);
-         toggleAnnotationVisibleAct_->setText(TR(T_MENUTEXT_HIDEANNOT));
-       }
-       contextMenu_->addAction(toggleAnnotationVisibleAct_ );
-
-       contextMenu_->addMenu(annotationLanguageContextMenu_);
-
-      // Subtitle menu
-      if (hub_->isMediaTokenMode() && player_->hasMedia()) {
-        contextMenu_->addSeparator();
-
-        subtitleContextMenu_->clear();
-        if (player_->hasSubtitles()) {
-          if (player_->isSubtitleVisible()) {
-            toggleSubtitleVisibleAct_->setChecked(true);
-            toggleSubtitleVisibleAct_->setText(TR(T_MENUTEXT_SHOWSUBTITLE));
-          } else {
-            toggleSubtitleVisibleAct_->setChecked(false);
-            toggleSubtitleVisibleAct_->setText(TR(T_MENUTEXT_HIDESUBTITLE));
-          }
-          contextMenu_->addAction(toggleSubtitleVisibleAct_);
-
-          subtitleContextMenu_->addSeparator();
-
-          QStringList l = player_->subtitleDescriptions();
-          int id = 0;
-          foreach (const QString &subtitle, l) {
-            BOOST_AUTO(action, new Core::Gui::ActionWithId(id, subtitle, subtitleContextMenu_));
-            if (id == player_->subtitleId())
-              action->setIcon(QIcon(RC_IMAGE_CURRENTSUBTITLE));
-            connect(action, SIGNAL(triggeredWithId(int)), player_, SLOT(setSubtitleId(int)));
-            subtitleContextMenu_->addAction(action);
-            id++;
-          }
-
-          subtitleContextMenu_->addSeparator();
-        }
-        subtitleContextMenu_->addAction(openSubtitleAct_);
-        contextMenu_->addMenu(subtitleContextMenu_);
-      }
+   // Annotation
+   {
+     contextMenu_->addSeparator();
+     if (annotationView_->isPlaybackEnabled()) {
+       toggleAnnotationVisibleAct_->setChecked(true);
+       toggleAnnotationVisibleAct_->setText(TR(T_MENUTEXT_SHOWANNOT));
+     } else {
+       toggleAnnotationVisibleAct_->setChecked(false);
+       toggleAnnotationVisibleAct_->setText(TR(T_MENUTEXT_HIDEANNOT));
      }
+     contextMenu_->addAction(toggleAnnotationVisibleAct_ );
 
-    if (player_->hasMedia()
-#ifdef USE_MODE_SIGNAL
-        && hub_->isMediaTokenMode()
-#endif // USE_MODE_SIGNAL
-        ) {
-      // Sync mode
-      if (ALPHA) {
-        contextMenu_->addSeparator();
+#ifdef USE_WIN_PICKER
+     toggleWindowPickDialogVisibleAct_->setChecked(windowPickDialog_->isVisible());
+     contextMenu_->addAction(toggleWindowPickDialogVisibleAct_);
+#endif // USE_WIN_PICKER
 
-        toggleSyncModeAct_->setChecked(hub_->isSyncPlayMode());
-        contextMenu_->addAction(toggleSyncModeAct_);
+     contextMenu_->addMenu(annotationLanguageContextMenu_);
 
-        toggleSyncDialogVisibleAct_->setChecked(syncDialog_->isVisible());
-        contextMenu_->addAction(toggleSyncDialogVisibleAct_);
-      }
-      /*
-      { // Live mode
-        contextMenu_->addSeparator();
-
-        toggleLiveModeAct_->setChecked(isLiveMode());
-        contextMenu_->addAction(toggleLiveModeAct_);
-
-        toggleLiveDialogVisibleAct_->setChecked(liveDialog_->isVisible());
-        contextMenu_->addAction(toggleLiveDialogVisibleAct_);
-      }
-      */
-    }
-
-    if (hub_->isSignalTokenMode()
-        || hub_->isMediaTokenMode() && player_->hasMedia()) {
-      // Basic control
-      contextMenu_->addSeparator();
-
-      if (hub_->isSignalTokenMode() && !hub_->isPlaying() ||
-          hub_->isMediaTokenMode() && !player_->isPlaying())
-        contextMenu_->addAction(playAct_);
-
-      if (hub_->isSignalTokenMode() && hub_->isPlaying() ||
-          hub_->isMediaTokenMode() && player_->isPlaying())
-        contextMenu_->addAction(pauseAct_);
-
-      if (hub_->isMediaTokenMode())
-        contextMenu_->addAction(nextFrameAct_);
-
-      if (hub_->isSignalTokenMode() && !hub_->isStopped() ||
-          hub_->isMediaTokenMode() && !player_->isStopped())
-      contextMenu_->addAction(stopAct_);
-
-      if (hub_->isMediaTokenMode())
-        contextMenu_->addAction(replayAct_);
-
-      if (hub_->isMediaTokenMode() && !player_->isStopped() ||
-          hub_->isSignalTokenMode())
-        contextMenu_->addAction(snapshotAct_);
-    }
-
-    // Forward/backward
+    // Subtitle menu
     if (hub_->isMediaTokenMode() && player_->hasMedia()) {
       contextMenu_->addSeparator();
 
-      contextMenu_->addMenu(backwardContextMenu_);
-      contextMenu_->addMenu(forwardContextMenu_);
+      subtitleContextMenu_->clear();
+      if (player_->hasSubtitles()) {
+        if (player_->isSubtitleVisible()) {
+          toggleSubtitleVisibleAct_->setChecked(true);
+          toggleSubtitleVisibleAct_->setText(TR(T_MENUTEXT_SHOWSUBTITLE));
+        } else {
+          toggleSubtitleVisibleAct_->setChecked(false);
+          toggleSubtitleVisibleAct_->setText(TR(T_MENUTEXT_HIDESUBTITLE));
+        }
+        contextMenu_->addAction(toggleSubtitleVisibleAct_);
 
-      toggleSeekDialogVisibleAct_->setChecked(seekDialog_->isVisible());
-      contextMenu_->addAction(toggleSeekDialogVisibleAct_);
-    }
+        subtitleContextMenu_->addSeparator();
 
-    // Toggles
-    {
-      contextMenu_->addSeparator();
-
-      toggleFullScreenModeAct_->setChecked(hub_->isFullScreenVideoMode());
-      contextMenu_->addAction(toggleFullScreenModeAct_);
-
-      toggleMiniModeAct_->setChecked(hub_->isMiniPlayerMode());
-      contextMenu_->addAction(toggleMiniModeAct_);
-
-      toggleAnnotationEditorVisibleAct_->setChecked(annotationEditor_->isVisible());
-      contextMenu_->addAction(toggleAnnotationEditorVisibleAct_ );
-
-      if (hub_->isSignalTokenMode() || player_->hasMedia()) {
-        toggleAnnotationBrowserVisibleAct_->setChecked(annotationBrowser_->isVisible());
-        contextMenu_->addAction(toggleAnnotationBrowserVisibleAct_ );
-
-        toggleTokenViewVisibleAct_->setChecked(tokenView_->isVisible());
-        contextMenu_->addAction(toggleTokenViewVisibleAct_ );
-      }
-
-      if (ALPHA) if (commentView_->tokenId()) {
-        toggleCommentViewVisibleAct_->setChecked(commentView_->isVisible());
-        contextMenu_->addAction(toggleCommentViewVisibleAct_ );
-      }
-
-      toggleCloudViewVisibleAct_->setChecked(cloudView_->isVisible());
-      contextMenu_->addAction(toggleCloudViewVisibleAct_ );
-    }
-
-    // User
-    {
-      contextMenu_->addSeparator();
-
-      if (server_->isAuthorized()) {
-        contextMenu_->addAction(logoutAct_);
-
-        if (ALPHA) {
-          toggleUserPanelVisibleAct_->setChecked(loginDialog_->isVisible());
-          contextMenu_->addAction(toggleUserPanelVisibleAct_);
-
-          if (server_->isConnected())
-            contextMenu_->addAction(disconnectAct_);
-          else
-            contextMenu_->addAction(connectAct_);
+        QStringList l = player_->subtitleDescriptions();
+        int id = 0;
+        foreach (const QString &subtitle, l) {
+          BOOST_AUTO(action, new Core::Gui::ActionWithId(id, subtitle, subtitleContextMenu_));
+          if (id == player_->subtitleId())
+            action->setIcon(QIcon(RC_IMAGE_CURRENTSUBTITLE));
+          connect(action, SIGNAL(triggeredWithId(int)), player_, SLOT(setSubtitleId(int)));
+          subtitleContextMenu_->addAction(action);
+          id++;
         }
 
-        toggleUserAnonymousAct_->setChecked(server_->user().isAnonymous());
-        contextMenu_->addAction(toggleUserAnonymousAct_);
-
-        contextMenu_->addMenu(userLanguageContextMenu_); {
-          setUserLanguageToEnglishAct_->setChecked(server_->user().language() == Traits::English);
-          setUserLanguageToJapaneseAct_->setChecked(server_->user().language() == Traits::Japanese);
-          setUserLanguageToChineseAct_->setChecked(server_->user().language() == Traits::Chinese);
-          setUserLanguageToKoreanAct_->setChecked(server_->user().language() == Traits::Korean);
-          setUserLanguageToUnknownAct_->setChecked(server_->user().language() == Traits::UnknownLanguage);
-        }
-
-      } else
-        contextMenu_->addAction(loginAct_);
+        subtitleContextMenu_->addSeparator();
+      }
+      subtitleContextMenu_->addAction(openSubtitleAct_);
+      contextMenu_->addMenu(subtitleContextMenu_);
     }
+  }
 
-    // Toggles
-    {
-      //if (!isFullScreenMode()) {
-      //  contextMenu_->addSeparator();
-      //  contextMenu_->addAction(toggleWindowStaysOnTopAct_);
-      //}
-    }
-
-    // Language
+  if (player_->hasMedia()
+#ifdef USE_MODE_SIGNAL
+      && hub_->isMediaTokenMode()
+#endif // USE_MODE_SIGNAL
+      ) {
+    // Sync mode
     if (ALPHA) {
       contextMenu_->addSeparator();
-      contextMenu_->addMenu(appLanguageContextMenu_);
 
-      int l = Translator::globalInstance()->language();
-      setAppLanguageToJapaneseAct_->setChecked(l == QLocale::Japanese);
-      setAppLanguageToTraditionalChineseAct_->setChecked(l == Translator::TraditionalChinese);
-      setAppLanguageToSimplifiedChineseAct_->setChecked(l == QLocale::Chinese);
+      toggleSyncModeAct_->setChecked(hub_->isSyncPlayMode());
+      contextMenu_->addAction(toggleSyncModeAct_);
 
-      switch (l) {
-      case QLocale::Japanese: case QLocale::Taiwan: case QLocale::Chinese:
-        setAppLanguageToEnglishAct_->setChecked(false);
-        break;
-      case QLocale::English: default:
-        setAppLanguageToEnglishAct_->setChecked(true);
-      }
+      toggleSyncDialogVisibleAct_->setChecked(syncDialog_->isVisible());
+      contextMenu_->addAction(toggleSyncDialogVisibleAct_);
     }
-
-    // Help
-    {
+    /*
+    { // Live mode
       contextMenu_->addSeparator();
 
-      if (ALPHA)
-        contextMenu_->addAction(helpAct_);
-      contextMenu_->addAction(aboutAct_);
-      contextMenu_->addAction(quitAct_);
+      toggleLiveModeAct_->setChecked(isLiveMode());
+      contextMenu_->addAction(toggleLiveModeAct_);
+
+      toggleLiveDialogVisibleAct_->setChecked(liveDialog_->isVisible());
+      contextMenu_->addAction(toggleLiveDialogVisibleAct_);
+    }
+    */
+  }
+
+  if (hub_->isSignalTokenMode()
+      || hub_->isMediaTokenMode() && player_->hasMedia()) {
+    // Basic control
+    contextMenu_->addSeparator();
+
+    if (hub_->isSignalTokenMode() && !hub_->isPlaying() ||
+        hub_->isMediaTokenMode() && !player_->isPlaying())
+      contextMenu_->addAction(playAct_);
+
+    if (hub_->isSignalTokenMode() && hub_->isPlaying() ||
+        hub_->isMediaTokenMode() && player_->isPlaying())
+      contextMenu_->addAction(pauseAct_);
+
+    if (hub_->isMediaTokenMode())
+      contextMenu_->addAction(nextFrameAct_);
+
+    if (hub_->isSignalTokenMode() && !hub_->isStopped() ||
+        hub_->isMediaTokenMode() && !player_->isStopped())
+    contextMenu_->addAction(stopAct_);
+
+    if (hub_->isMediaTokenMode())
+      contextMenu_->addAction(replayAct_);
+
+    if (hub_->isMediaTokenMode() && !player_->isStopped() ||
+        hub_->isSignalTokenMode())
+      contextMenu_->addAction(snapshotAct_);
+  }
+
+  // Forward/backward
+  if (hub_->isMediaTokenMode() && player_->hasMedia()) {
+    contextMenu_->addSeparator();
+
+    contextMenu_->addMenu(backwardContextMenu_);
+    contextMenu_->addMenu(forwardContextMenu_);
+
+    toggleSeekDialogVisibleAct_->setChecked(seekDialog_->isVisible());
+    contextMenu_->addAction(toggleSeekDialogVisibleAct_);
+  }
+
+  // Toggles
+  {
+    contextMenu_->addSeparator();
+
+    toggleFullScreenModeAct_->setChecked(hub_->isFullScreenVideoMode());
+    contextMenu_->addAction(toggleFullScreenModeAct_);
+
+    toggleMiniModeAct_->setChecked(hub_->isMiniPlayerMode());
+    contextMenu_->addAction(toggleMiniModeAct_);
+
+    toggleAnnotationEditorVisibleAct_->setChecked(annotationEditor_->isVisible());
+    contextMenu_->addAction(toggleAnnotationEditorVisibleAct_ );
+
+    if (hub_->isSignalTokenMode() || player_->hasMedia()) {
+      toggleAnnotationBrowserVisibleAct_->setChecked(annotationBrowser_->isVisible());
+      contextMenu_->addAction(toggleAnnotationBrowserVisibleAct_ );
+
+      toggleTokenViewVisibleAct_->setChecked(tokenView_->isVisible());
+      contextMenu_->addAction(toggleTokenViewVisibleAct_ );
     }
 
-    contextMenu_->popup(event->globalPos());
+    if (ALPHA) if (commentView_->tokenId()) {
+      toggleCommentViewVisibleAct_->setChecked(commentView_->isVisible());
+      contextMenu_->addAction(toggleCommentViewVisibleAct_ );
+    }
 
-    event->accept();
+    toggleCloudViewVisibleAct_->setChecked(cloudView_->isVisible());
+    contextMenu_->addAction(toggleCloudViewVisibleAct_ );
+  }
+
+  // User
+  {
+    contextMenu_->addSeparator();
+
+    if (server_->isAuthorized()) {
+      contextMenu_->addAction(logoutAct_);
+
+      if (ALPHA) {
+        toggleUserPanelVisibleAct_->setChecked(loginDialog_->isVisible());
+        contextMenu_->addAction(toggleUserPanelVisibleAct_);
+
+        if (server_->isConnected())
+          contextMenu_->addAction(disconnectAct_);
+        else
+          contextMenu_->addAction(connectAct_);
+      }
+
+      toggleUserAnonymousAct_->setChecked(server_->user().isAnonymous());
+      contextMenu_->addAction(toggleUserAnonymousAct_);
+
+      contextMenu_->addMenu(userLanguageContextMenu_); {
+        setUserLanguageToEnglishAct_->setChecked(server_->user().language() == Traits::English);
+        setUserLanguageToJapaneseAct_->setChecked(server_->user().language() == Traits::Japanese);
+        setUserLanguageToChineseAct_->setChecked(server_->user().language() == Traits::Chinese);
+        setUserLanguageToKoreanAct_->setChecked(server_->user().language() == Traits::Korean);
+        setUserLanguageToUnknownAct_->setChecked(server_->user().language() == Traits::UnknownLanguage);
+      }
+
+    } else
+      contextMenu_->addAction(loginAct_);
+  }
+
+  // Toggles
+  {
+    //if (!isFullScreenMode()) {
+    //  contextMenu_->addSeparator();
+    //  contextMenu_->addAction(toggleWindowStaysOnTopAct_);
+    //}
+  }
+
+  // Language
+  if (ALPHA) {
+    contextMenu_->addSeparator();
+    contextMenu_->addMenu(appLanguageContextMenu_);
+
+    int l = Translator::globalInstance()->language();
+    setAppLanguageToJapaneseAct_->setChecked(l == QLocale::Japanese);
+    setAppLanguageToTraditionalChineseAct_->setChecked(l == Translator::TraditionalChinese);
+    setAppLanguageToSimplifiedChineseAct_->setChecked(l == QLocale::Chinese);
+
+    switch (l) {
+    case QLocale::Japanese: case QLocale::Taiwan: case QLocale::Chinese:
+      setAppLanguageToEnglishAct_->setChecked(false);
+      break;
+    case QLocale::English: default:
+      setAppLanguageToEnglishAct_->setChecked(true);
+    }
+  }
+
+  // Help
+  {
+    contextMenu_->addSeparator();
+
+    if (ALPHA)
+      contextMenu_->addAction(helpAct_);
+    contextMenu_->addAction(aboutAct_);
+    contextMenu_->addAction(quitAct_);
   }
 }
 
@@ -2570,10 +2642,34 @@ MainWindow::closeEvent(QCloseEvent *event)
   //if (server_->isConnected() && server_->isAuthorized())
   //  server_->logout();
 
-  QThreadPool::globalInstance()->waitForDone();
+  if (QThreadPool::globalInstance()->activeThreadCount()) {
+#ifdef USE_WIN_PICKER
+    if (PICKER->isActive())
+      PICKER->stop();
+#endif // USE_WIN_PICKER
+#ifdef USE_WIN_HOOK
+    if (HOOK->isActive())
+      HOOK->stop();
+#endif // USE_WIN_HOOK
+    if (!hub_->isStopped()) {
+      if (hub_->isMediaTokenMode())
+        player_->setVolume(0);
+      hub_->stop();
+    }
+    hide();
+    osdWindow_->hide();
+    osdDock_->hide();
+    annotationView_->hide();
+    globalOsdConsole_->hide();
+    //if (parentWidget())
+    //  parentWidget()->hide();
+    QThreadPool::globalInstance()->waitForDone();
+  }
 
-  if (parentWidget())
+  if (parentWidget()) {
+    //parentWidget()->hide();
     parentWidget()->close();
+  }
 
   Base::closeEvent(event);
   DOUT("closeEvent:exit");
@@ -2786,6 +2882,45 @@ MainWindow::setLiveMode(bool t)
 // - Signal mode -
 
 void
+MainWindow::openProcessWindow(WId hwnd)
+{
+#ifdef USE_WIN_QTWIN
+  ulong pid = QtWin::getWindowProcessId(hwnd);
+  if (pid) {
+    log(tr("found process id for window") + QString(" (pid = %1)").arg(QString::number(pid)));
+    openProcessId(pid);
+  } else
+    warn(tr("process id for window was not found"));
+#endif USE_WIN_QTWIN
+  openProcess();
+}
+
+void
+MainWindow::openProcessId(ulong pid)
+{
+  if (!pid)
+    return;
+
+  if (QTH->isProcessAttached(pid))
+    log(tr("process was attached") + QString(" (pid = %1)").arg(pid));
+  else {
+    bool ok = QTH->attachProcess(pid);
+    if (ok) {
+      log(tr("process attached") + QString(" (pid = %1)").arg(QString::number(pid)));
+      signalView_->processView()->refresh();
+    } else {
+      error(tr("failed to attach process ") + QString(" (pid = %1)").arg(QString::number(pid)));
+      if (!QtWin::isProcessActiveWithId(pid))
+        notify(tr("Is the process running now?"));
+      else if (!QTH->isElevated())
+        notify(tr("Run me as administrator and try again (o^^o)"));
+      else
+        notify(tr("Restart the target process might help -_-"));
+    }
+  }
+}
+
+void
 MainWindow::openProcessPath(const QString &path)
 {
   QString processName = QFileInfo(path).fileName();
@@ -2799,22 +2934,8 @@ MainWindow::openProcessPath(const QString &path)
   }
   if (!pid)
     warn(tr("failed to start process") + QString(" (name = %1)").arg(processName));
-  else if (QTH->isProcessAttached(pid))
-    log(tr("process was attached") + QString(" (pid = %1)").arg(pid));
-  else {
-    bool ok = QTH->attachProcess(pid);
-    if (ok)
-      log(tr("process attached") + QString(" (pid = %1)").arg(QString::number(pid)));
-    else {
-      error(tr("failed to attach process ") + QString(" (pid = %1)").arg(QString::number(pid)));
-      if (!QtWin::isProcessActiveWithId(pid))
-        notify(tr("Is the process running now?"));
-      else if (!QTH->isElevated())
-        notify(tr("Run me as administrator and try again (o^^o)"));
-      else
-        notify(tr("Restart the target process might help -_-"));
-    }
-  }
+  else
+    openProcessId(pid);
   signalView_->processView()->refresh();
   openProcess();
   addRecent(path);
@@ -2874,9 +2995,9 @@ MainWindow::setSignalViewVisible(bool visible)
   //  if (hub_->isMediaTokenMode() && !isVisible())
   //    show();
   //}
-  signalView_->tokenView()->setToken(tokenView_->token());
+  //signalView_->tokenView()->setToken(tokenView_->token());
   //signalView_->tokenView()->setAliases(tokenView_->aliases());
-  signalView_->tokenView()->setUserId(tokenView_->userId());
+  //signalView_->tokenView()->setUserId(tokenView_->userId());
   signalView_->setVisible(visible);
 }
 

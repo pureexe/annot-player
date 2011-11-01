@@ -6,8 +6,13 @@
 #include "annotationeditor.h"
 #include "stylesheet.h"
 #include "signalhub.h"
+#include "videoview.h"
 #include "logger.h"
+#include "global.h"
 #include "module/player/player.h"
+#ifdef USE_WIN_QTWIN
+  #include "win/qtwin/qtwin.h"
+#endif // USE_WIN_QTWIN
 #include <QtGui>
 #include <boost/typeof/typeof.hpp>
 #include <climits>
@@ -20,14 +25,14 @@ using namespace Logger;
 
 // - Constructions -
 
-AnnotationGraphicsView::AnnotationGraphicsView(SignalHub *hub, Player *player, QWidget *view, QWidget *parent)
-  : Base(parent), view_(view), fullScreenView_(0),
+AnnotationGraphicsView::AnnotationGraphicsView(SignalHub *hub, Player *player, VideoView *view, QWidget *parent)
+  : Base(parent), videoView_(view), fullScreenView_(0), trackingWindow_(0),
     hub_(hub), player_(player), active_(false), paused_(false),
-    playTime_(-1), playbackEnabled_(true), userId_(0), languages_(0)
+    playTime_(-1), languages_(0), userId_(0), playbackEnabled_(true)
 {
   Q_ASSERT(hub_);
   Q_ASSERT(player_);
-  Q_ASSERT(view_);
+  Q_ASSERT(videoView_);
 
   setContentsMargins(0, 0, 0, 0);
   setStyleSheet(SS_GRAPHICSVIEW);
@@ -45,6 +50,10 @@ AnnotationGraphicsView::AnnotationGraphicsView(SignalHub *hub, Player *player, Q
 
   editor_ = new AnnotationEditor(this);
   connect(editor_, SIGNAL(textSaved(QString)), SLOT(updateAnnotationText(QString)));
+
+  trackingTimer_ = new QTimer(this);
+  trackingTimer_->setInterval(G_TRACKING_INTERVAL);
+  connect(trackingTimer_, SIGNAL(timeout()), SLOT(invalidateGeometry()));
 
   //centerOn(0, 0);
 }
@@ -143,13 +152,22 @@ AnnotationGraphicsView::invalidateGeometry()
 void
 AnnotationGraphicsView::invalidateSize()
 {
-  if (hub_->isMediaTokenMode() || hub_->isNormalPlayerMode()) {
+  if (trackingWindow_) {
+#ifdef USE_WIN_QTWIN
+    QRect r = QtWin::getWindowRect(trackingWindow_);
+    if (r.isNull()) {
+      if (!QtWin::isValidWindow(trackingWindow_))
+        setTrackingWindow(0);
+    } else if (size() != r.size())
+      resize(r.size());
+#endif // USE_WIN_QTWIN
+  } else if (hub_->isMediaTokenMode() || hub_->isNormalPlayerMode()) {
     // FIXME: 10/24/2011: Screen not working orz
 #ifdef Q_WS_MAC
     if (fullScreenView_)
       resize(fullScreenView_->size());
 #else
-    resize(view_->size());
+    resize(videoView_->size());
 #endif // Q_WS_MAC
 
   } else if (hub_->isSignalTokenMode()) {
@@ -163,30 +181,50 @@ AnnotationGraphicsView::invalidateSize()
 void
 AnnotationGraphicsView::invalidatePos()
 {
-  if (hub_->isMediaTokenMode() || hub_->isNormalPlayerMode()) {
+  if (trackingWindow_) {
+#ifdef USE_WIN_QTWIN
+    QRect r = QtWin::getWindowRect(trackingWindow_);
+    if (r.isNull()) {
+      if (!QtWin::isValidWindow(trackingWindow_))
+        setTrackingWindow(0);
+    } else {
+      QPoint newPos = r.topLeft();
+      moveToGlobalPos(newPos);
+      return;
+    }
+#endif // USE_WIN_QTWIN
+  } else if (hub_->isMediaTokenMode() || hub_->isNormalPlayerMode()) {
 #ifdef Q_WS_MAC
     if (fullScreenView_)
       move(fullScreenView_->pos());
     // FIXME: 10/24/2011: Screen not working orz. Failed to compute exact location
     /*
-    QPoint g_to = view_->mapToGlobal(QPoint());
+    QPoint g_to = videoView_->mapToGlobal(QPoint());
     QPoint g_from = mapToGlobal(pos());
 
     move(frameGeometry().topLeft() + pos()  // relative position
-         - QPoint(0, view_->height())       // Fix height taken by NSView in QMacCocoaView
+         - QPoint(0, videoView_->height())       // Fix height taken by NSView in QMacCocoaView
          + g_to - g_from);                  // absolute distance
          */
 
 #else
-    QPoint g_to = view_->mapToGlobal(QPoint());
-    QPoint g_from = mapToGlobal(pos());
+    QPoint newPos = videoView_->mapToGlobal(QPoint());
+    moveToGlobalPos(newPos);
 
-    move(frameGeometry().topLeft() + pos() // relative position
-       + g_to - g_from);                 // absolute distance
 #endif // Q_WS_MAC
   } else if (hub_->isSignalTokenMode()) {
     move(fullScreenView_->pos());
   }
+}
+
+void
+AnnotationGraphicsView::moveToGlobalPos(const QPoint &globalPos)
+{
+  // Currently only work on Windows
+  QPoint newPos = frameGeometry().topLeft() + pos() // relative position
+                  + globalPos - mapToGlobal(pos()); // absolute distance
+  if (newPos != pos())
+    move(newPos);
 }
 
 void
@@ -375,7 +413,6 @@ void
 AnnotationGraphicsView::addAndShowAnnotation(const Annotation &annot)
 { addAnnotation(annot, LLONG_MAX); }
 
-
 void
 AnnotationGraphicsView::showAnnotation(const Annotation &annot)
 {
@@ -517,6 +554,53 @@ AnnotationGraphicsView::isItemBlocked(const AnnotationGraphicsItem *item) const
   }
 
   return false;
+}
+
+// - Tracking -
+
+WId
+AnnotationGraphicsView::trackingWindow() const
+{ return trackingWindow_; }
+
+void
+AnnotationGraphicsView::setTrackingWindow(WId hwnd)
+{
+  if (hwnd == videoView_->winId()
+#ifdef USE_WIN_HOOK
+      ||  videoView_->containsWindow(hwnd)
+#endif // USE_WIN_HOOK
+      )
+    hwnd = 0;
+
+  if (trackingWindow_ != hwnd) {
+     trackingWindow_ = hwnd;
+     if (trackingWindow_)
+       startTracking();
+     else
+       stopTracking();
+     emit trackingWindowChanged(trackingWindow_);
+  }
+}
+
+void
+AnnotationGraphicsView::startTracking()
+{
+  if (!trackingTimer_->isActive())
+    trackingTimer_->start();
+}
+
+void
+AnnotationGraphicsView::stopTracking()
+{
+  if (trackingTimer_->isActive())
+    trackingTimer_->stop();
+}
+
+QRect
+AnnotationGraphicsView::globalRect() const
+{
+  QPoint topLeft = mapToGlobal(QPoint());
+  return QRect(topLeft, size());
 }
 
 // EOF

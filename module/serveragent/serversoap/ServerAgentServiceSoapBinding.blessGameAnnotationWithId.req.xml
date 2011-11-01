@@ -8,6 +8,8 @@
  <SOAP-ENV:Body>
    <tns:blessGameAnnotationWithId>
     <arg0>0</arg0>
+    <userName></userName>
+    <password></password>
    </tns:blessGameAnnotationWithId>
 
  </SOAP-ENV:Body>

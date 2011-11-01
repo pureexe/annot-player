@@ -69,25 +69,13 @@ class SOAP_CMAC ServerAgentServiceSoapBindingProxy : public soap
 	virtual	int chat(tns__chat *tns__chat_, tns__chatResponse *tns__chatResponse_) { return chat(NULL, NULL, tns__chat_, tns__chatResponse_); }
 	virtual	int chat(const char *endpoint, const char *soap_action, tns__chat *tns__chat_, tns__chatResponse *tns__chatResponse_);
 
-	/// Web service operation 'getUser' (returns error code or SOAP_OK)
-	virtual	int getUser(tns__getUser *tns__getUser_, tns__getUserResponse *tns__getUserResponse_) { return getUser(NULL, NULL, tns__getUser_, tns__getUserResponse_); }
-	virtual	int getUser(const char *endpoint, const char *soap_action, tns__getUser *tns__getUser_, tns__getUserResponse *tns__getUserResponse_);
-
-	/// Web service operation 'isAuthorized' (returns error code or SOAP_OK)
-	virtual	int isAuthorized(tns__isAuthorized *tns__isAuthorized_, tns__isAuthorizedResponse *tns__isAuthorizedResponse_) { return isAuthorized(NULL, NULL, tns__isAuthorized_, tns__isAuthorizedResponse_); }
-	virtual	int isAuthorized(const char *endpoint, const char *soap_action, tns__isAuthorized *tns__isAuthorized_, tns__isAuthorizedResponse *tns__isAuthorizedResponse_);
+	/// Web service operation 'isClientUpdated' (returns error code or SOAP_OK)
+	virtual	int isClientUpdated(tns__isClientUpdated *tns__isClientUpdated_, tns__isClientUpdatedResponse *tns__isClientUpdatedResponse_) { return isClientUpdated(NULL, NULL, tns__isClientUpdated_, tns__isClientUpdatedResponse_); }
+	virtual	int isClientUpdated(const char *endpoint, const char *soap_action, tns__isClientUpdated *tns__isClientUpdated_, tns__isClientUpdatedResponse *tns__isClientUpdatedResponse_);
 
 	/// Web service operation 'isConnected' (returns error code or SOAP_OK)
 	virtual	int isConnected(tns__isConnected *tns__isConnected_, tns__isConnectedResponse *tns__isConnectedResponse_) { return isConnected(NULL, NULL, tns__isConnected_, tns__isConnectedResponse_); }
 	virtual	int isConnected(const char *endpoint, const char *soap_action, tns__isConnected *tns__isConnected_, tns__isConnectedResponse *tns__isConnectedResponse_);
-
-	/// Web service operation 'login' (returns error code or SOAP_OK)
-	virtual	int login(tns__login *tns__login_, tns__loginResponse *tns__loginResponse_) { return login(NULL, NULL, tns__login_, tns__loginResponse_); }
-	virtual	int login(const char *endpoint, const char *soap_action, tns__login *tns__login_, tns__loginResponse *tns__loginResponse_);
-
-	/// Web service operation 'logout' (returns error code or SOAP_OK)
-	virtual	int logout(tns__logout *tns__logout_, tns__logoutResponse *tns__logoutResponse_) { return logout(NULL, NULL, tns__logout_, tns__logoutResponse_); }
-	virtual	int logout(const char *endpoint, const char *soap_action, tns__logout *tns__logout_, tns__logoutResponse *tns__logoutResponse_);
 
 	/// Web service operation 'selectGameAliasesWithTokenId' (returns error code or SOAP_OK)
 	virtual	int selectGameAliasesWithTokenId(tns__selectGameAliasesWithTokenId *tns__selectGameAliasesWithTokenId_, tns__selectGameAliasesWithTokenIdResponse *tns__selectGameAliasesWithTokenIdResponse_) { return selectGameAliasesWithTokenId(NULL, NULL, tns__selectGameAliasesWithTokenId_, tns__selectGameAliasesWithTokenIdResponse_); }
@@ -129,13 +117,9 @@ class SOAP_CMAC ServerAgentServiceSoapBindingProxy : public soap
 	virtual	int selectRelatedMediaAnnotationsWithTokenId(tns__selectRelatedMediaAnnotationsWithTokenId *tns__selectRelatedMediaAnnotationsWithTokenId_, tns__selectRelatedMediaAnnotationsWithTokenIdResponse *tns__selectRelatedMediaAnnotationsWithTokenIdResponse_) { return selectRelatedMediaAnnotationsWithTokenId(NULL, NULL, tns__selectRelatedMediaAnnotationsWithTokenId_, tns__selectRelatedMediaAnnotationsWithTokenIdResponse_); }
 	virtual	int selectRelatedMediaAnnotationsWithTokenId(const char *endpoint, const char *soap_action, tns__selectRelatedMediaAnnotationsWithTokenId *tns__selectRelatedMediaAnnotationsWithTokenId_, tns__selectRelatedMediaAnnotationsWithTokenIdResponse *tns__selectRelatedMediaAnnotationsWithTokenIdResponse_);
 
-	/// Web service operation 'setCallback' (returns error code or SOAP_OK)
-	virtual	int setCallback(tns__setCallback *tns__setCallback_, tns__setCallbackResponse *tns__setCallbackResponse_) { return setCallback(NULL, NULL, tns__setCallback_, tns__setCallbackResponse_); }
-	virtual	int setCallback(const char *endpoint, const char *soap_action, tns__setCallback *tns__setCallback_, tns__setCallbackResponse *tns__setCallbackResponse_);
-
-	/// Web service operation 'setClientType' (returns error code or SOAP_OK)
-	virtual	int setClientType(tns__setClientType *tns__setClientType_, tns__setClientTypeResponse *tns__setClientTypeResponse_) { return setClientType(NULL, NULL, tns__setClientType_, tns__setClientTypeResponse_); }
-	virtual	int setClientType(const char *endpoint, const char *soap_action, tns__setClientType *tns__setClientType_, tns__setClientTypeResponse *tns__setClientTypeResponse_);
+	/// Web service operation 'selectUser' (returns error code or SOAP_OK)
+	virtual	int selectUser(tns__selectUser *tns__selectUser_, tns__selectUserResponse *tns__selectUserResponse_) { return selectUser(NULL, NULL, tns__selectUser_, tns__selectUserResponse_); }
+	virtual	int selectUser(const char *endpoint, const char *soap_action, tns__selectUser *tns__selectUser_, tns__selectUserResponse *tns__selectUserResponse_);
 
 	/// Web service operation 'setUserAnonymous' (returns error code or SOAP_OK)
 	virtual	int setUserAnonymous(tns__setUserAnonymous *tns__setUserAnonymous_, tns__setUserAnonymousResponse *tns__setUserAnonymousResponse_) { return setUserAnonymous(NULL, NULL, tns__setUserAnonymous_, tns__setUserAnonymousResponse_); }
@@ -216,14 +200,6 @@ class SOAP_CMAC ServerAgentServiceSoapBindingProxy : public soap
 	/// Web service operation 'updateMediaAnnotationTextWithId' (returns error code or SOAP_OK)
 	virtual	int updateMediaAnnotationTextWithId(tns__updateMediaAnnotationTextWithId *tns__updateMediaAnnotationTextWithId_, tns__updateMediaAnnotationTextWithIdResponse *tns__updateMediaAnnotationTextWithIdResponse_) { return updateMediaAnnotationTextWithId(NULL, NULL, tns__updateMediaAnnotationTextWithId_, tns__updateMediaAnnotationTextWithIdResponse_); }
 	virtual	int updateMediaAnnotationTextWithId(const char *endpoint, const char *soap_action, tns__updateMediaAnnotationTextWithId *tns__updateMediaAnnotationTextWithId_, tns__updateMediaAnnotationTextWithIdResponse *tns__updateMediaAnnotationTextWithIdResponse_);
-
-	/// Web service operation 'visitGameTokenWithId' (returns error code or SOAP_OK)
-	virtual	int visitGameTokenWithId(tns__visitGameTokenWithId *tns__visitGameTokenWithId_, tns__visitGameTokenWithIdResponse *tns__visitGameTokenWithIdResponse_) { return visitGameTokenWithId(NULL, NULL, tns__visitGameTokenWithId_, tns__visitGameTokenWithIdResponse_); }
-	virtual	int visitGameTokenWithId(const char *endpoint, const char *soap_action, tns__visitGameTokenWithId *tns__visitGameTokenWithId_, tns__visitGameTokenWithIdResponse *tns__visitGameTokenWithIdResponse_);
-
-	/// Web service operation 'visitMediaTokenWithId' (returns error code or SOAP_OK)
-	virtual	int visitMediaTokenWithId(tns__visitMediaTokenWithId *tns__visitMediaTokenWithId_, tns__visitMediaTokenWithIdResponse *tns__visitMediaTokenWithIdResponse_) { return visitMediaTokenWithId(NULL, NULL, tns__visitMediaTokenWithId_, tns__visitMediaTokenWithIdResponse_); }
-	virtual	int visitMediaTokenWithId(const char *endpoint, const char *soap_action, tns__visitMediaTokenWithId *tns__visitMediaTokenWithId_, tns__visitMediaTokenWithIdResponse *tns__visitMediaTokenWithIdResponse_);
 };
 
 } // namespace ServerSoap

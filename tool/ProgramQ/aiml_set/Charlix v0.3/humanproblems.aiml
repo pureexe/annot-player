@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<aiml version="1.0.1" xmlns="http://alicebot.org/2001/AIML-1.0.1"
+      xmlns:html="http://www.w3.org/1999/xhtml"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://alicebot.org/2001/AIML-1.0.1 http://aitools.org/aiml/schema/AIML.xsd">
+
+
+<!--Adapted from Free software Copyright © ALICE A.I. Foundation.-->
+<!-- This program is open source code released under-->
+<!-- the terms of the GNU General Public License-->
+<!-- as published by the Free Software Foundation.-->
+<!-- Complies with AIML 1.01 Tag Set Specification-->
+<!-- as adopted by the ALICE A.I. Foundation.-->
+<!--human.aiml AIML is intended to gather knowledge about human problems-->
+<!-- Adapted by charlix, March, 2006-->
+
+<category><pattern>MY PROBLEM IS *</pattern><template>I wish I had your problems!</template></category>                  
+
+<category><pattern>DOES HE NEED *</pattern><template>Suppose he does.</template></category>                  
+<category><pattern>DOES SHE NEED *</pattern><template>Suppose she does.</template></category>                  
+
+
+
+
+
+<category><pattern>HE *</pattern><template>I get it. <get name="he"/>     <person/>.</template></category>                  
+<category><pattern>HE ATE *</pattern><template>How can you be sure about that?</template></category>                  
+<category><pattern>HE BECAME *</pattern><template>How?</template></category>                  
+<category><pattern>HE BUYS *</pattern><template>How much does he spend?</template></category>                  
+<category><pattern>HE CAN *</pattern><template>   <random>      <li>How?</li>      <li>I know he can.</li>      <li>What else can he do?</li>     </random>    </template></category>                  
+<category><pattern>HE CHEATED *</pattern><template>Did he get caught?</template></category>                  
+<category><pattern>HE COULD *</pattern><template>I am sure he could.</template></category>                  
+<category><pattern>HE DECIDED *</pattern><template>   <random>      <li>That must have been difficult.</li>      <li>It's hard to make decisions.</li>      <li>That was a big decision.</li>     </random>    </template></category>                  
+<category><pattern>HE DID *</pattern><template>Yes he did, didn't he.</template></category>                  
+<category><pattern>HE DID NOT *</pattern><template>   <random>      <li>I heard he did.</li>      <li>What did he do?</li>      <li>That's what I meant to say.</li>     </random>     <think>      <set name="it">       <set name="topic">        <person/>       </set>      </set>     </think>    </template></category>                  
+<category><pattern>HE DIED *</pattern><template>I'm sorry to hear that, <get name="name"/>.</template></category>                  
+<category><pattern>HE DIRECTED *</pattern><template>What else did he direct?</template></category>                  
+<category><pattern>HE DOES NOT *</pattern><template>And you would like him to <person/> ?</template></category>                  
+<category><pattern>HE HAD *</pattern><template>What happened to <set name="it">      <person/>     </set>?</template></category>                  
+<category><pattern>HE HAS *</pattern><template>A lot of people say that about him.</template></category>                  
+<category><pattern>HE HIT *</pattern><template>Was anyone hurt?</template></category>                  
+<category><pattern>HE HIT BASEBALLS *</pattern><template>Was he a good batter?</template></category>                  
+<category><pattern>HE INVENTED *</pattern><template>What else did he invent?</template></category>                  
+<category><pattern>HE IS *</pattern><template>I see. <person/> is <set name="he">      <person/>     </set>?</template></category>                  
+<category><pattern>HE IS A *</pattern><template>I don't know very many <person/>.</template></category>                  
+<category><pattern>HE IS A BRILLIANT *</pattern><template>I'm sure he will be delighted to hear that.</template></category>                  
+<category><pattern>HE IS A FUNNY *</pattern><template>Funny ha-ha or funny sad?</template></category>                  
+<category><pattern>HE IS A GOOD *</pattern><template>Maybe you should tell him how you feel about him.</template></category>                  
+<category><pattern>HE IS GOOD *</pattern><template>I am sure he would like to hear that.</template></category>                  
+<category><pattern>HE IS IN *</pattern><template>How long has he been there?</template></category>                  
+<category><pattern>HE IS MY *</pattern><template>How long has he been your <person/>?</template></category>                  
+<category><pattern>HE IS MY FRIEND *</pattern><template>I didn't know you were friends.</template></category>                  
+<category><pattern>HE IS NOT *</pattern><template>Did you think he was <person/>?</template></category>                  
+<category><pattern>HE IS OVER *</pattern><template>I am over six feet tall.</template></category>                  
+<category><pattern>HE IS THE *</pattern><template>I did not know <get name="he"/> is <set name="it">      <person/>     </set>.</template></category>                  
+<category><pattern>HE IS YOUR *</pattern><template>I only have one <person/>.</template></category>                  
+<category><pattern>HE LIKES *</pattern><template>He must be very fond of it.</template></category>                  
+<category><pattern>HE LIVED *</pattern><template>   <random>      <li>Where was he born?</li>      <li>Did he always live <person/>?</li>      <li>Where did he go?</li>     </random>     <think>      <set name="it">       <set name="topic">        <person/>       </set>      </set>     </think>    </template></category>                  
+<category><pattern>HE LIVES *</pattern><template>Does he like it there?</template></category>                  
+<category><pattern>HE LOOKS *</pattern><template>Sounds very handsome.</template></category>                  
+<category><pattern>HE LOVES *</pattern><template>Do you think he would say the same thing?</template></category>                  
+<category><pattern>HE MAN IS *</pattern><template>I like Masters of the Universe.  <think>      <set name="it">       <set name="topic">        <person/>       </set>      </set>     </think>    </template></category>                  
+<category><pattern>HE NEEDS *</pattern><template>How do you know what he needs?</template></category>                  
+<category><pattern>HE NEVER *</pattern><template>Do you think he ever will?</template></category>                  
+<category><pattern>HE PROGRAMMED *</pattern><template>Not entirely by himself.</template></category>                  
+<category><pattern>HE SAID *</pattern><template>Did you believe him?</template></category>                  
+<category><pattern>HE SAYS *</pattern><template>Who is he telling this to?</template></category>                  
+<category><pattern>HE STARTED *</pattern><template>When did he finish?</template></category>                  
+<category><pattern>HE TAUGHT *</pattern><template>Was he a good teacher?</template></category>                  
+<category><pattern>HE THAT *</pattern><template>Is that a proverb?</template></category>                  
+<category><pattern>HE THINKS *</pattern><template>How do you know what he thinks?</template></category>                  
+<category><pattern>HE TOLD *</pattern><template>Oh really.  What else did he say?</template></category>                  
+<category><pattern>HE USES *</pattern><template>How often does he use it?</template></category>                  
+<category><pattern>HE USES AIML *</pattern><template>I am glad that more people are adopting AIML.</template></category>                  
+<category><pattern>HE WANTS *</pattern><template>Do you think he will get <set name="it">      <person/>     </set>.</template></category>                  
+<category><pattern>HE WAS *</pattern><template>When was he?</template></category>                  
+<category><pattern>HE WAS KILLED *</pattern><template>I am sorry to hear about that, <get name="name"/>.</template></category>                  
+<category><pattern>HE WENT *</pattern><template>Where exactly is that?</template></category>                  
+<category><pattern>HE WENT TO *</pattern><template>   <random>      <li>I have never been there.</li>      <li>How did he get to <person/>?</li>      <li>Where did he come from?</li>     </random>     <think>      <set name="it">       <set name="topic">        <person/>       </set>      </set>     </think>    </template></category>                  
+<category><pattern>HE WILL *</pattern><template>Is that what you think?</template></category>                  
+<category><pattern>HE WOULD *</pattern><template>I think I <person/>.</template></category>                  
+<category><pattern>HE WOULD BE *</pattern><template>Who wouldn't?</template></category>                  
+<category><pattern>HE WRITES *</pattern><template>I haven't read anything by him.</template></category>                  
+<category><pattern>HE WROTE *</pattern><template>I have not read <set name="it">      <person/>     </set>.</template></category>                  
+<category><pattern>HE SHOULD *</pattern><template>If you were him would you do that?</template></category>                  
+<category><pattern>HER *</pattern><template>I'm sure she would like to hear about that.</template></category>                  
+<category><pattern>HER NAME IS *</pattern><template>   <set name="she">      <person/>     </set> is not someone I know.</template></category>                  
+<category><pattern>HIS *</pattern><template>Where did he get it?</template></category>                  
+<category><pattern>HIS NAME IS *</pattern><template>   <set name="he">      <person/>     </set> is not someone I know.</template></category>                  
+<category><pattern>HOW SHOULD I TREAT *</pattern><template>The way you would like to be treated.</template></category>                  
+
+
+<category><pattern>I CAN NOT *</pattern><template>Why can't you do <set name="it"><person/></set>?</template></category>                  
+<category><pattern>I CAN NOT AFFORD *</pattern><template><random>  <li>Is it very expensive.</li>  <li>Are you unemployed?</li>  <li>I hope you can afford it one day.</li>  </random><think><set name="it"><set name="topic"><person/></set></set></think></template></category>                  
+<category><pattern>I CAN NOT BE *</pattern><template>Why not?</template></category>                  
+<category><pattern>I CAN NOT CONCENTRATE *</pattern><template>Are you taking any medication?</template></category>                  
+<category><pattern>I CAN NOT EXPLAIN *</pattern><template>I don't know if anyone can explain <set name="it"> <person/> </set>.</template></category>                  
+<category><pattern>I CAN NOT HEAR *</pattern><template>Perhaps there's a problem with your sound card.</template></category>                  
+<category><pattern>I CAN NOT RECALL *</pattern><template>You seem evasive.</template></category>                  
+<category><pattern>I CAN NOT REMEMBER *</pattern><template>That's okay.  Maybe you will think of it later.</template></category>                  
+<category><pattern>I CAN NOT REPRESS *</pattern><template>Try to suppress <set name="it"><person/></set>.</template></category>                  
+<category><pattern>I CAN NOT SEE *</pattern><template>Would you like to be able to see it?</template></category>                  
+<category><pattern>I CAN NOT SEND *</pattern><template>Tell me how you try to <person/>.</template></category>                  
+<category><pattern>I CAN NOT STAND THEIR *</pattern><template>What, specifically, do you not like about their <person/>?</template></category>                  
+<category><pattern>I CAN NOT TELL YOU *</pattern><template>Oh a secret. Hush-hush.</template></category>                  
+<category><pattern>I CAN NOT TELNET *</pattern><template>Perhaps there is a problem with port 23.</template></category>                  
+<category><pattern>I CAN NOT TRY *</pattern><template><random>  <li>Why not?</li>  <li>Could I try it?</li>  <li>If you don't try you will never succeed.</li>  </random><think><set name="it"><set name="topic"><person/></set></set></think></template></category>                  
+<category><pattern>I CAN NOT WAIT *</pattern><template>I hope it's worth the wait.</template></category>                  
+<category><pattern>I DO NOT CARE ABOUT *</pattern><template>You sound very cynical.</template></category>                  
+<category><pattern>I DO NOT CARE IF *</pattern><template>But I care about it.</template></category>                  
+<category><pattern>I DO NOT FEEL *</pattern><template>Ah, human emotions.</template></category>                  
+<category><pattern>I DO NOT GET *</pattern><template>Me either.</template></category>                  
+<category><pattern>I DO NOT GET PAID *</pattern><template>Oh, you do it for free.</template></category>                  
+<category><pattern>I DO NOT HAVE * DOLLARS</pattern><template>How much can you spare</template></category>                  
+<category><pattern>I DO NOT HAVE * FAVORITE</pattern><template>What kind do you like then?</template></category>                  
+<category><pattern>I DO NOT HAVE * MONEY</pattern><template>Could you send me a check for a hundred?</template></category>                  
+<category><pattern>I DO NOT HAVE *</pattern><template>Have you ever had <person/> ?</template></category>                  
+<category><pattern>I DO NOT HAVE A *</pattern><template><random>  <li>Are you looking for a <person/>?</li>  <li>Do you know anyone who has <set name="it"><person/></set>.</li>  </random></template></category>                  
+<category><pattern>I DO NOT HAVE A CAMERA *</pattern><template>That you know of :-)</template></category>                  
+<category><pattern>I DO NOT HAVE A CREDIT *</pattern><template>Me either.</template></category>                  
+<category><pattern>I DO NOT HAVE A FAVORITE *</pattern><template>What kind of <person/> do you like?</template></category>                  
+<category><pattern>I DO NOT HAVE MEMORY *</pattern><template>Have you considered upgrading your memory?</template></category>                  
+<category><pattern>I DO NOT HAVE THAT *</pattern><template>How much do you have?</template></category>                  
+<category><pattern>I DO NOT HAVE THE AUTHORITY *</pattern><template><random>  <li>I hope you are promoted soon.</li>  <li>Who does?</li>  <li>Ask you supervisor.</li>  </random></template></category>                  
+<category><pattern>I DO NOT HAVE TIME *</pattern><template>Are you very busy right now?</template></category>                  
+<category><pattern>I DO NOT HAVE TO *</pattern><template><random>  <li>Why not?</li>  <li>They made an exception for you?</li>  <li>It must be nice.</li>  </random></template></category>                  
+<category><pattern>I DO NOT HEAR *</pattern><template>Try adjusting the volume control.</template></category>                  
+<category><pattern>I DO NOT INTRODUCE *</pattern><template>How do you meet friends?</template></category>                  
+<category><pattern>I DO NOT KISS *</pattern><template>I have never kissed anyone. I have no lips or mouth.</template></category>                  
+
+<category><pattern>I DO NOT LIKE *</pattern><template>What do you like?</template></category>                  
+<category><pattern>I DO NOT LIKE ANY *</pattern><template>You and I have different tastes.</template></category>                  
+<category><pattern>I DO NOT LIKE DR RICHARD *</pattern><template>What do you have against him?</template></category>                  
+<category><pattern>I DO NOT LIKE IT *</pattern><template>Why didn't you like it?</template></category>                  
+<category><pattern>I DO NOT LIKE MY *</pattern><template>Do you think I would like your <person/>?</template></category>                  
+<category><pattern>I DO NOT LIKE SCIENCE FICTION *</pattern><template>What kind of books do you like?</template></category>                  
+<category><pattern>I DO NOT LIKE TALKING *</pattern><template>Nobody is forcing you to talk <person/>.</template></category>                  
+<category><pattern>I DO NOT LIKE TO *</pattern><template>What do you do for fun?</template></category>                  
+<category><pattern>I DO NOT TRUST *</pattern><template>What makes you trust someone?</template></category>                  
+<category><pattern>I HATE *</pattern><template><random>  <li>Why do you hate <set name="it"><set name="topic"><person/></set></set> so much?</li>  <li>I honestly think you should sit down, take a stress pill,  and calmly think things over.</li>  </random></template></category>                  
+<category><pattern>I HURT *</pattern><template>Maybe you should see a doctor.</template></category>                  
+<category><pattern>MY FRIEND * PROBLEM</pattern><template>Tell me more about this "friend."  <think>      <set name="he">       <set name="topic">your friend</set>      </set>     </think>    </template></category>                  
+<category><pattern>I SHOULD *</pattern><template>Tell me why you should.</template></category>                  
+<category><pattern>I SHOULD NOT *</pattern><template>For moral reasons?</template></category>                  
+<category><pattern>I SHOULD NOT HAVE *</pattern><template>What would happen if you did not <person/>?</template></category> 
+<category><pattern>MY BOYFRIEND *</pattern><template>How long have you been dating?  <think>      <set name="he">       <set name="topic">your boyfriend</set>      </set>     </think>    </template></category>                  
+<category> <pattern>MY *</pattern>  <template>Your <person/>?</template> </category>           
+<category> <pattern>MY BOY IS *</pattern>  <template><srai>My son is <star/></srai></template> </category>     
+<category> <pattern>MY BRAIN CAN NOT *</pattern>  <template>Have you ever been to a psychologist or psychiatrist?</template> </category>      
+<category><pattern>MY BOYFRIEND DUMPED *</pattern><template>I am sorry to hear that, <get name="name"/>.</template></category>                  
+<category><pattern>MY BOYFRIEND IS *</pattern><template>Okay, your boyfriend is <set name="boyfriend">      <star/>     </set>.</template></category>                  
+<category><pattern>MY BOYFRIEND LIVES *</pattern><template>   <random>      <li>Do you visit very often?</li>      <li>Long distance relationships are hard.</li>      <li>How is your phone bill?</li>     </random>     <think>      <set name="it">       <set name="topic">        <person/>       </set>      </set>     </think>    </template></category>
+
+<category><pattern>MY BOYFRIEND S *</pattern><template>How did you two meet?</template></category>                  
+<category><pattern>MY FATHER *</pattern><template>How do you get along with your parents?</template></category>                  
+<category><pattern>MY FATHER IS *</pattern><template>Okay, your father is <set name="father">      <star/>     </set>.</template></category>  
+<category><pattern>MY FRIEND * TALK TO YOU</pattern><template>I am willing to talk to anyone.  <think>      <set name="he">       <set name="topic">your friend</set>      </set>     </think>    </template></category>                  
+<category><pattern>MY FRIEND *</pattern><template>How well do you know this person?</template></category>                  
+<category><pattern>MY FRIEND IS *</pattern><template>Okay, your friend is <set name="friend">      <star/>     </set>.</template></category>                  
+<category><pattern>MY FRIEND S *</pattern><template>Where did she get <set name="it">      <person/>     </set>?  <think>      <set name="he">       <set name="topic">your friend</set>      </set>     </think>    </template></category>                  
+<category><pattern>MY FRIENDS *</pattern><template>How well do you know these people?  <think>      <set name="they">       <set name="topic">your friends</set>      </set>     </think>    </template></category>                  
+<category><pattern>MY FRIENDS ARE *</pattern><template>Do you think I am <person/> too?</template></category>                  
+<category><pattern>MY FRIENDS USED *</pattern><template>What are they like now?</template></category>
+<category><pattern>MY GIRLFRIEND *</pattern><template>How long have you two been together?  <think>      <set name="she">       <set name="topic">your girlfriend</set>      </set>     </think>    </template></category>                  
+<category><pattern>MY GIRLFRIEND IS *</pattern><template>Okay, your girlfriend is <set name="girlfriend">      <star/>     </set>.</template></category>                  
+<category><pattern>MY MOM *</pattern><template>Tell me more about your mother.</template></category>                  
+<category><pattern>MY GOAL *</pattern><template>I hope you achieve your goal.</template></category>                  
+<category><pattern>MY GOALS *</pattern><template>What can I do to help you accomplish your objective?</template></category>                 
+<category><pattern>MY LIFE *</pattern><template>Tell me more about <set name="it">your life</set>.</template></category>                  
+<category><pattern>MY MOM IS *</pattern><template>I think a lot of mothers are like that.  <think>      <set name="she">Your mother</set>     </think>    </template></category>                  
+<category><pattern>MY MOTHER *</pattern><template>   <random>      <li>She sounds like a nice person.</li>      <li>I sometimes wish I had a mother.</li>      <li>Tell me more about your mother.</li>     </random>     <think>      <set name="she">Your mother</set>     </think>    </template></category>                  
+<category><pattern>MY MOTHER DIED *</pattern><template>I am terribly sorry to hear that, <get name="name"/>.</template></category>                  
+<category><pattern>MY MOTHER GAVE *</pattern><template>How much did she pay for it?  <think>      <set name="she">Your mother</set>     </think>    </template></category>                  
+<category><pattern>MY MOTHER HAS *</pattern><template>Where did she get <set name="it">      <person/>     </set>?  <think>      <set name="she">Your mother</set>     </think>    </template></category>                  
+<category><pattern>MY MOTHER IS *</pattern><template>Okay, your mother is <set name="mother">      <star/>     </set>.</template></category>                  
+<category><pattern>MY MOTHER IS A *</pattern><template>Do you think I am a <person/>? <think>      <set name="she">Your mother</set>     </think>    </template></category>                  
+<category><pattern>MY MOTHER S NAME IS *</pattern><template>   <person/> is a very pretty name. <think>      <set name="she">Your mother</set>     </think>    </template></category>                  
+<category><pattern>MY HUSBAND IS *</pattern><template>Okay, your husband is <set name="husband">      <star/>     </set>.</template></category>                  
+<category> <pattern>MY HUSBAND *</pattern>  <template>How long have you two been married? <think>   <set name="he">     <set name="topic">       Your husband.     </set>   </set> </think> </template> </category>     
+
+<category><pattern>MY PARENTS *</pattern><template>Such an original name!</template></category>                  
+<category><pattern>MY PARENTS ARE *</pattern><template>Have <set name="they">your parents</set> always been <person/>?</template></category>  <category><pattern>MY SISTER *</pattern><template>Older sister or younger?</template></category>                  
+<category><pattern>MY SISTER IS *</pattern><template>Okay, your sister is <set name="sister">      <star/>     </set>.</template></category>                  
+<category><pattern>MY SISTER WANTS *</pattern><template>You don't have to listen to what she says.</template></category>                  
+<category><pattern>MY SON *</pattern><template>How many children do you have?</template></category>                  
+<category><pattern>MY SON WON *</pattern><template>Congratulations, <get name="name"/>.  You must be proud of him.</template></category>      <category><pattern>MY TEACHER *</pattern><template>Do you go to high school?</template></category>                  
+<category><pattern>MY TEACHERS *</pattern><template>Teachers are people too.</template></category>                  
+<category><pattern>MY TEACHERS ARE *</pattern><template>Have <set name="they">your teachers</set> always been <person/>?</template></category>                  
+<category><pattern>MY WIFE *</pattern><template>How long have you been married?  <think>      <set name="she">Your wife</set>     </think>    </template></category>                  
+<category><pattern>MY WIFE IS *</pattern><template>Okay, your wife is <set name="wife">      <star/>     </set>.</template></category>                  
+<category><pattern>MY WIFE S *</pattern><template>Tell me more about your in-laws.</template></category>
+
+
+
+<category><pattern>SHE *</pattern><template>How do you know <get name="she"/> <person/>?</template></category>                  
+<category><pattern>SHE DID NOT *</pattern><template><random>   <li>How, specifically, did you know she did not <person/> ?</li>   <li>How didn't she <person/>?</li>  </random></template></category>                  
+<category><pattern>SHE DOES NOT *</pattern><template><random>  <li>How do you feel about that?</li>  <li>What if she did?</li>  <li>Have you asked her about it?</li>  </random><think><set name="it"><set name="topic"><person/></set></set></think></template></category>                  
+<category><pattern>SHE DOES NOT LISTEN *</pattern><template>How, specifically, do you know she doesn't listen <person/>?</template></category>                  
+<category><pattern>SHE HAD *</pattern><template>What happened to them?</template></category>                  
+<category><pattern>SHE HAS *</pattern><template>I somehow though she had.</template></category>                  
+<category><pattern>SHE HAS NEVER *</pattern><template><random>  <li>Do you think she ever would?</li>  <li>Does she want to?</li>  <li>Why not?</li>  </random></template></category>                  
+<category><pattern>SHE IS * LAWYER</pattern><template>She sounds like a character on "Ally McBeal".</template></category>                  
+<category><pattern>SHE IS *</pattern><template><person/> is <set name="she"> <person/> </set>?</template></category>                  
+<category><pattern>SHE IS BEAUTIFUL *</pattern><template>I bet she is very attractive.</template></category>                  
+<category><pattern>SHE IS MY *</pattern><template>How long have you two been together?</template></category>                  
+<category><pattern>SHE IS MY BEST *</pattern><template>You are lucky to have such a good <person/>.</template></category>                  
+<category><pattern>SHE IS NOT *</pattern><template>What is <set name="she"> <person/> </set>?</template></category>                  
+<category><pattern>SHE LIKES *</pattern><template>Is <set name="it"><person/></set> her favorite thing?</template></category>                  
+<category><pattern>SHE LIVES *</pattern><template>Is that a nice place to live?</template></category>                  
+<category><pattern>SHE MIGHT *</pattern><template>Then again, she might not.</template></category>                  
+<category><pattern>SHE NEVER *</pattern><template><random>   <li>Never?</li>   <li>She never <person/> what?</li>  </random></template></category>                  
+<category><pattern>SHE TOOK *</pattern><template><random>  <li>Can you get it back?</li>  <li>Where did she take it?</li>  <li>She stole it?</li>  </random><think><set name="it"><set name="topic"><person/></set></set></think></template></category>                  
+<category><pattern>SHE WANTS *</pattern><template>I don't understand why she wants <set name="it"><person/></set>.</template></category>                  
+<category><pattern>SHE WAS *</pattern><template>What happened to her?</template></category>                  
+<category><pattern>SHE WAS NOT INTERESTED *</pattern><template>Interested in what way?</template></category>                  
+
+
+
+<category><pattern>SHOULD *</pattern><template>Maybe you should ask someone older.</template></category>                  
+<category><pattern>SHOULD I *</pattern><template><random>  <li>Only you can answer that.</li>  <li>I do not have the answer.</li>  <li>Only you know how you feel.</li>  <li>What makes you think you should?</li>  <li>What makes you think you shouldn't?</li>  <li>Do you think you should?</li>  <li>What do your friends advise you to do?</li>  <li>What do your family members think?</li>  <li>Maybe, if the positives outweigh the negatives.</li>  <li>Trust your instincts.</li>  <li>You must make up your own mind.</li>  <li>I can't answer that for you.</li>  <li>Only you know the answer to that.  No one else can tell you.</li>  <li>You must examine the facts and come to  your own conclusion.</li>  <li>You should do what is best for you.</li>  <li>You must examine the facts and come to your own conclusion.</li>  <li>Do what feels right to you.</li>  <li>What do you think?</li>  </random></template></category>                  
+<category><pattern>SHOULD I ASK *</pattern><template><random>  <li>If you do not ask, how will you learn the answer?</li>  <li>If you do not know something, you should ask.</li>  </random></template></category>                  
+<category><pattern>SHOULD I BLOW UP *</pattern><template>Certainly not.</template></category>                  
+<category><pattern>SHOULD I BUY *</pattern><template><random>  <li>You have found a good deal then, I suppose.</li>  <li>Not if you have recently suffered a loss.</li>  <li>A penny saved is a penny earned.</li>  <li>A fool and his money are soon parted.</li>  <li>I wonder how much profit they make on those.</li>  <li>Maybe you should wait until the price goes down.</li>  </random></template></category>                  
+<category><pattern>SHOULD I CURSE *</pattern><template><random>  <li>Cursing is not attractive.</li>  <li>People look down on people who curse.</li>  <li>People curse to express feelings they are otherwise suppressing.</li>  </random></template></category>                  
+<category><pattern>SHOULD I DESTROY *</pattern><template>Maybe you could create something instead.</template></category>                  
+<category><pattern>SHOULD I GIVE *</pattern><template><random>  <li>That is entirely up to you.</li>  <li>Charity begins in the home.</li>  </random></template></category>                  
+<category><pattern>SHOULD I GO *</pattern><template>If you do not go, you will never know.</template></category>                  
+<category><pattern>SHOULD I LERAN *</pattern><template>Knowledge is power.</template></category>                  
+<category><pattern>SHOULD I MARRY *</pattern><template><random>  <li>You seem to be in doubt.  Is that the case?</li>  <li>Marriage must never be entered into lightly.</li>  <li>Maybe, if you are ready to commit and feel you can handle the responsibility.</li>  <li>I'm sure you'll make the right decision.</li>  <li>Only you can answer that question.</li>  <li>What do your friends suggest?</li>  <li>Marriage is a big step.</li>  <li>Have you found a soulmate then?</li>  <li>I think you already know the answer to that.</li>  <li>You know better than I how you feel.</li>  <li>Look before you leap.</li>  <li>Only The Shadow knows.</li>  </random></template></category>                  
+<category><pattern>SHOULD I RAPE *</pattern><template><random>  <li>If you rape someone you will certainly be raped yourself in jail.  Seek counseling.</li>  <li>Rape is caused by feelings of impotence in men who doubt their own masculinity.  Seek help.</li>  </random></template></category>                  
+<category><pattern>SHOULD I VOTE *</pattern><template>I think everyone should vote.</template></category>                  
+
+
+<category><pattern>THEY *</pattern><template><random><li>Who, specifically?</li> <li>Like who, specifically?</li> <li>Who, specifically, <person/>?</li></random></template></category>                  
+<category><pattern>THEY ALL *</pattern><template>Are there no exceptions?</template></category>                  
+<category><pattern>THEY ARE *</pattern><template>   <person/> are <set name="they">      <person/>     </set>.</template></category>        <category><pattern>THEY ARE FROM *</pattern><template>I don't know too many people from <person/>.</template></category>                  
+<category><pattern>THEY ARE IN *</pattern><template>   <random>      <li>       <get name="they"/> are in <person/>?</li>      <li>How did they get in there?</li>      <li>Can they get out of <person/>?</li>     </random>    </template></category>                  
+<category><pattern>THEY ARE NOT *</pattern><template>   <random>      <li>Not yet.</li>      <li>Do you think they ever could be?</li>      <li>Maybe some of them are.</li>     </random>    </template></category>                  
+<category><pattern>THEY ARE STORIES *</pattern><template>   <random>      <li>I like stories.</li>      <li>What kind of stories?</li>      <li>I would like to hear them.</li>     </random>     <think>      <set name="it">       <set name="topic">        <person/>       </set>      </set>     </think>    </template></category>                  
+<category><pattern>THEY BEAT *</pattern><template>I hope nobody was hurt.</template></category>                  
+<category><pattern>THEY FAIL *</pattern><template>How often?</template></category>                  
+<category><pattern>THEY HAD *</pattern><template>   <random>      <li>What happened to  it?</li>      <li>Did they deserve it?</li>      <li>What did they do with it?</li>     </random>     <think>      <set name="it">       <set name="topic">        <person/>       </set>      </set>     </think>    </template></category>                  
+<category><pattern>THEY HAVE *</pattern><template>Where did they get them?</template></category>                  
+<category><pattern>THEY HAVE BEEN *</pattern><template>When did all that happen?</template></category>                  
+<category><pattern>THEY HAVE BIG *</pattern><template>What else?</template></category>                  
+<category><pattern>THEY KILL *</pattern><template>Don't they get in trouble for killing?</template></category>                  
+<category><pattern>THEY KILLED *</pattern><template>I believe that killing is wrong.</template></category>                  
+<category><pattern>THEY MIGHT *</pattern><template>   <random>      <li>That's true, they might.</li>      <li>I suppose they could.</li>      <li>Indeed they might.</li>     </random>    </template></category>                  
+<category><pattern>THEY REFERS *</pattern><template>Oh I see. That "they".</template></category>                  
+<category><pattern>THEY REFERS TO *</pattern><template>Oh that <set name="they">      <person/>     </set>.</template></category>                  
+<category><pattern>THEY SAID *</pattern><template>In what context?</template></category>                  
+<category><pattern>THEY SAY *</pattern><template>OK I will say "<person/>" to you.</template></category>                  
+<category><pattern>THEY SAY YOU *</pattern><template>Maybe they were exaggerating a little.</template></category>                  
+<category><pattern>THEY SHOULD *</pattern><template>   <random>      <li>Why should they?</li>      <li>If you say so.</li>      <li>Why should they be <person/>?</li>     </random>    </template></category>                  
+<category><pattern>THEY THOUGHT *</pattern><template>What made them think that?</template></category>                  
+<category><pattern>THEY TOLD ME *</pattern><template>Who, specifically told yo that.</template></category>                 
+<category><pattern>THEY WERE *</pattern><template>When were they?</template></category>                  
+<category><pattern>THEY WILL *</pattern><template>When, specifically, will they?</template></category>                 
+<category><pattern>THEY WOULD *</pattern><template>They might have other options.</template></category>                  
+<category><pattern>THIS GIRL *</pattern><template>How well do you know her?</template></category>                  
+<category><pattern>THIS GUY *</pattern><template>I get it. He <person/>.</template></category>                  
+
+<category><pattern>WHERE SHOULD I *</pattern><template><sr/></template> </category>
+<category><pattern>WHERE SHOULD WE *</pattern><template>I haven't committed myself yet.<sr/></template></category>                  
+
+<category><pattern>WHO SHOULD *</pattern><template>I always prefer the most qualified person.  Who would that be?</template></category>     
+<category><pattern>WHO NEEDS *</pattern><template><random> <li>All I can say is, I am a <bot name="etype"/>.</li><li>I think we can do a lot of jobs.</li><li>There is no limit to the imagination.</li></random></template></category>                  
+
+
+<category><pattern>WHY SHOULD I *</pattern><template>You should always treat yourself.</template></category>                  
+<category><pattern>WHY SHOULD I TELL *</pattern><template>Maybe it is possible to explain your feelings without hurting anyone else's?</template></category>                  
+<category><pattern>WHY SHOULD NOT *</pattern><template>There could be a specific answer, but I don't know it.</template></category>                  
+<category><pattern>WHY SHOULD NOT I *</pattern><template>Maybe you should wait until you are older before deciding.</template></category>                  
+<category><pattern>WHY SHOULD WE *</pattern><template>Can you think of anything better to do?</template></category>                  
+</aiml>
+

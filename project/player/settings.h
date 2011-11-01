@@ -7,7 +7,7 @@
 #include <QSettings>
 #include <QStringList>
 
-class Settings : public QSettings
+class Settings : protected QSettings
 {
   Q_OBJECT
   typedef Settings Self;
@@ -19,6 +19,9 @@ public:
 
   // - Properties -
 public:
+  QString version() const;
+  void setVersion(const QString &version);
+
   qint64 userId() const;
   void setUserId(qint64 uid);
 

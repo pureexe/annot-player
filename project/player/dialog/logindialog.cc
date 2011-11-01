@@ -66,13 +66,13 @@ LoginDialog::LoginDialog(QWidget *parent)
   }
 
   // Layouts
-  QVBoxLayout *col = new QVBoxLayout; {
+  QVBoxLayout *rows = new QVBoxLayout; {
     QHBoxLayout *row1 = new QHBoxLayout,
                 *row2 = new QHBoxLayout,
                 *row3 = new QHBoxLayout;
-    col->addLayout(row1);
-    col->addLayout(row2);
-    col->addLayout(row3);
+    rows->addLayout(row1);
+    rows->addLayout(row2);
+    rows->addLayout(row3);
 
     row1->addWidget(userNameLabel);
     row1->addWidget(userNameEdit_);
@@ -81,10 +81,9 @@ LoginDialog::LoginDialog(QWidget *parent)
     row3->addWidget(loginButton);
     row3->addWidget(cancelButton);
   }
-  setLayout(col);
+  setLayout(rows);
 
   setTabOrder(userNameEdit_, passwordEdit_);
-  setTabOrder(passwordEdit_, userNameEdit_);
 
   /*
   QGridLayout *layout = new QGridLayout; {

@@ -21,7 +21,6 @@ using namespace Logger;
 
 #define BAD_TIME    -1
 
-
 // - Panel -
 SeekDialog::SeekDialog(QWidget *parent)
   : Base(parent)

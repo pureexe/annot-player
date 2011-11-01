@@ -17,6 +17,28 @@
 #include <string>
 #include <cstdlib>
 
+#ifdef _MSC_VER
+  #pragma warning (disable: 4996)     // C4996: 'getenv': This function or variable may be unsafe. Consider using _dupenv_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+#endif // _MSC_VER
+
+// - Helpers -
+
+namespace { // anonymous
+
+  inline QPoint POINT2QPoint(const POINT &pt)
+  { return QPoint((int)pt.x, (int)pt.y); }
+
+  inline POINT QPoint2POINT(const QPoint &pos)
+  { POINT ret = { pos.x(), pos.y() }; return ret; }
+
+  inline QRect RECT2QRect(const RECT &rect)
+  { return QRect((int)rect.left, (int)rect.top, int(rect.right - rect.left), int(rect.bottom - rect.top)); } // QRect(x, y, w, h)
+
+  inline RECT QRect2RECT(const QRect &r)
+  { RECT ret = { r.x(), r.y(), r.right(), r.bottom() }; return ret; } // RECT { x1, y1, x2, y2 }
+
+} // anonymous namespace
+
 // - Threads and processes -
 
 bool
@@ -112,7 +134,6 @@ QtWin::getProcessIdsByName(const QString &processName)
     ::CloseHandle(hSnapshot);
   return ret;
 }
-
 
 ulong
 QtWin::getProcessIdByName(const QString &processName)
@@ -255,7 +276,7 @@ QtWin::createProcessWithExecutablePath(const QString &filePath)
   return bResult;
 }
 
-// - Widgets -
+// - Windows -
 
 bool
 QtWin::setFocus(QWidget *w)
@@ -279,6 +300,40 @@ QtWin::getChildWindow(HWND hwnd)
     return 0;
   HWND child = ::GetWindow(hwnd, GW_CHILD);
   return child && ::IsWindow(child)? child : 0;
+}
+
+HWND
+QtWin::getWindowAtPos(const QPoint &globalPos)
+{ return ::WindowFromPoint(::QPoint2POINT(globalPos)); }
+
+HWND
+QtWin::getChildWindowAtPos(const QPoint &globalPos, HWND parent)
+{ return ::ChildWindowFromPoint(parent, ::QPoint2POINT(globalPos)); }
+
+QRect
+QtWin::getWindowRect(HWND hwnd)
+{
+  QRect ret;
+  RECT rect;
+  if (::GetWindowRect(hwnd, &rect))
+    ret = ::RECT2QRect(rect);
+  return ret;
+}
+
+bool
+QtWin::isValidWindow(HWND hwnd)
+{ return ::IsWindow(hwnd); }
+
+DWORD
+QtWin::getWindowThreadId(HWND hwnd)
+{ return ::GetWindowThreadProcessId(hwnd, 0); }
+
+DWORD
+QtWin::getWindowProcessId(HWND hwnd)
+{
+  DWORD dwProcessId;
+  ::GetWindowThreadProcessId(hwnd, &dwProcessId);
+  return dwProcessId;
 }
 
 // - Mouse and keyboard -

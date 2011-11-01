@@ -8,6 +8,8 @@
  <SOAP-ENV:Body>
    <tns:submitGameTokenDigest>
     <arg0></arg0>
+    <userName></userName>
+    <password></password>
    </tns:submitGameTokenDigest>
 
  </SOAP-ENV:Body>

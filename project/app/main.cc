@@ -22,10 +22,12 @@
 
 namespace { // anonymous
 
-  inline std::string dirname(const std::string &path)
+  inline std::string
+  dirname(const std::string &path)
   { return path.substr(0, path.find_last_of('\\')); }
 
-  inline std::wstring dirname(const std::wstring &path)
+  inline std::wstring
+  dirname(const std::wstring &path)
   { return path.substr(0, path.find_last_of(L'\\')); }
 
 } // anonymous namespace

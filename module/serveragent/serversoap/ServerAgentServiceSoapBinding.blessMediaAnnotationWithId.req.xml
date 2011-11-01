@@ -8,6 +8,8 @@
  <SOAP-ENV:Body>
    <tns:blessMediaAnnotationWithId>
     <arg0>0</arg0>
+    <userName></userName>
+    <password></password>
    </tns:blessMediaAnnotationWithId>
 
  </SOAP-ENV:Body>

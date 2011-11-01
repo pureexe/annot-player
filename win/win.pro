@@ -6,6 +6,7 @@ include(disk/disk.pri)
 include(dwm/dwm.pri)
 include(qtwin/qtwin.pri)
 SUBDIRS += hook
+SUBDIRS += picker
 SUBDIRS += qth
 #SUBDIRS += qtith
 

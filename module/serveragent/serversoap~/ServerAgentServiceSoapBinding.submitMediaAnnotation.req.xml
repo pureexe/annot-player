@@ -24,6 +24,8 @@
      <tokenId>0</tokenId>
      <updateTime>0</updateTime>
     </arg0>
+    <userName></userName>
+    <password></password>
    </tns:submitMediaAnnotation>
 
  </SOAP-ENV:Body>

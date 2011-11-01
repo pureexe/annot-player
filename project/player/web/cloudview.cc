@@ -4,6 +4,7 @@
 #include "cloudview.h"
 #include "global.h"
 #include "uistyle.h"
+#include "tr.h"
 #include <QtGui>
 #include <QtWebKit>
 
@@ -20,6 +21,8 @@
 CloudView::CloudView(QWidget *parent)
   : Base(parent)
 {
+  setWindowTitle(TR(T_TITLE_CLOUDVIEW));
+
   setWindowFlags(WINDOW_FLAGS);
   setContentsMargins(0, 0, 0, 0);
   setHomePage(G_STARTPAGE_URL);

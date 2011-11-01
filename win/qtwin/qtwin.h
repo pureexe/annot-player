@@ -8,6 +8,8 @@
 #include <QList>
 #include <QWidget>
 #include <QString>
+#include <QPoint>
+#include <QRect>
 
 namespace QtWin {
 
@@ -66,13 +68,23 @@ namespace QtWin {
   };
   QList<ModuleInfo> getModulesInfo();
 
-  // - Widgets -
+  // - Windows -
 
   ///  Set focus using a native way. If failed, return false but still do it in Qt way.
   bool setFocus(QWidget *w);
   bool setFocus(WId hwnd); // Same as windows version.
 
   WId getChildWindow(WId hwnd);
+
+  WId getWindowAtPos(const QPoint &globalPos);
+  WId getChildWindowAtPos(const QPoint &globalPos, WId parent);
+
+  ulong getWindowThreadId(WId hwnd);
+  ulong getWindowProcessId(WId hwnd);
+
+  QRect getWindowRect(WId hwnd);
+
+  bool isValidWindow(WId hwnd);
 
   // - Mouse and keyboard -
   void sendMouseClick(const QPoint& globalPos, Qt::MouseButton button);

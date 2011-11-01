@@ -20,7 +20,7 @@ enum { ALPHA = 0 };
 // - About -
 #define G_ORGANIZATION  "Annot"
 #define G_APPLICATION   "Player"
-#define G_VERSION       "0.0.7.1"
+#define G_VERSION       "0.0.8.0"
 #define G_HOMEPAGE      "http://annot.me"
 #define G_UPDATEPAGE    "http://code.google.com/p/annot-player"
 #define G_EMAIL         "AnnotCloud@gmail.com"
@@ -42,6 +42,8 @@ enum { ALPHA = 0 };
 #define G_VOLUME_DELTA      0.05   // 5 %
 
 #define G_ANNOTATION_MAXSIZE 255
+
+#define G_TRACKING_INTERVAL       200 // msec
 
 // TO BE MOVED INTO mediaplayer.h
 #define G_FORMAT_ALL            "*"
@@ -102,6 +104,13 @@ enum { ALPHA = 0 };
 #else
   #define HOOK          #error "Hook is not used"
 #endif // USE_WIN_HOOK
+
+// - Picker -
+#ifdef USE_WIN_PICKER
+  #define PICKER        WindowPicker::globalInstance()
+#else
+  #define PICKER        #error "Picker is not used"
+#endif // USE_WIN_PICKER
 
 // - QTH -
 #ifdef USE_WIN_QTH

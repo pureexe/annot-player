@@ -1,6 +1,19 @@
 # ChangeLog
 
 Project: touch.player
+Versial: 0.0.8.0
+Date: 11/1/2011
+- Communication approach with server changed.
+
+Project: touch.player
+Versial: 0.0.7.2
+Date: 10/30/2011
+- Added window picker (windows only).
+- Enable attach process by window (windows only).
+- Enable attach OSDPlayer to other window (windows only).
+- TokenView removed from SignalView.
+
+Project: touch.player
 Versial: 0.0.7.1
 Date: 10/29/2011
 - Asynchronized communication.

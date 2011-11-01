@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<aiml version="1.0.1" xmlns="http://alicebot.org/2001/AIML-1.0.1"
+      xmlns:html="http://www.w3.org/1999/xhtml"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://alicebot.org/2001/AIML-1.0.1 http://aitools.org/aiml/schema/AIML.xsd">
+
+
+<!-- Free software Copyright © Charlix.-->
+<!-- This program is open source code released under-->
+<!-- the terms of the GNU General Public License-->
+<!-- as published by the Free Software Foundation.-->
+<!-- Complies with AIML 1.01 Tag Set Specification-->
+<!-- as adopted by the ALICE A.I. Foundation.-->
+<!-- update.aiml: knowledge added by the client-->
+
+<category>
+<pattern>the sound does not work</pattern>
+<template> To check that sound is working independently of aRts, make sure that artsd isn't running and then try playing sound through XMMS or another multimedia application that isn't a part of KDE. If that application doesn't play sound, then your general sound setup is probably broken and it's not a KDE problem. Try playing sound with artsplay /path/to/some/soundfile. Try various formats, ogg, mp3 and wav. Any error messages there might be useful in pointing you in the right direction. Try setting the aRts output method to OSS. In the KDE Control Center go to Sound &amp; Multimedia->Sound System. On the Hardware tab, under Select the audio device choose Open Sound System. If you are running alsa this will use the OSS emulation, which may give better or worse results. Running artsd -l 0 from a terminal will give you a lot of debug output, some of which might help you to diagnose the problem. Trying this in conjunction with using artsplay in a second terminal can give a wealth of information. If an artsd instance is already running, exit it with artsshell terminate
+    </template>
+  </category>
+<category>
+    <pattern>_ no sound</pattern>
+    <template> <srai> the sound does not work</srai> </template>
+  </category>
+<category>
+    <pattern>_ any sound</pattern>
+    <template> <srai> the sound does not work</srai> </template>
+  </category>
+</aiml>
+      

@@ -8,6 +8,8 @@
  <SOAP-ENV:Body>
    <tns:submitMediaTokenDigest>
     <arg0></arg0>
+    <userName></userName>
+    <password></password>
    </tns:submitMediaTokenDigest>
 
  </SOAP-ENV:Body>

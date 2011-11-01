@@ -8,6 +8,8 @@
  <SOAP-ENV:Body>
    <tns:setUserLanguage>
     <arg0>0</arg0>
+    <userName></userName>
+    <password></password>
    </tns:setUserLanguage>
 
  </SOAP-ENV:Body>

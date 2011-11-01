@@ -106,6 +106,12 @@
 #define RC_IMAGE_SNAPSHOT_DISABLED      RC_PREFIX_IMAGE "snapshot_disabled.png"
 #define RC_IMAGE_SNAPSHOT_CHECKED       RC_PREFIX_IMAGE "snapshot_checked.png"
 #define RC_IMAGE_SNAPSHOT_CHECKED_HOVER RC_IMAGE_SNAPSHOT_HOVER
+#define RC_IMAGE_MENU                   RC_PREFIX_IMAGE "menu.png"
+#define RC_IMAGE_MENU_HOVER             RC_PREFIX_IMAGE "menu_hover.png"
+#define RC_IMAGE_MENU_PRESSED           RC_PREFIX_IMAGE "menu_pressed.png"
+#define RC_IMAGE_MENU_DISABLED          RC_PREFIX_IMAGE "menu_disabled.png"
+#define RC_IMAGE_MENU_CHECKED           RC_PREFIX_IMAGE "menu_checked.png"
+#define RC_IMAGE_MENU_CHECKED_HOVER RC_IMAGE_MENU_HOVER
 
 // - Buttons -
 
@@ -128,7 +134,6 @@
 #define RC_IMAGE_TEXTEDIT       RC_PREFIX_IMAGE "textedit.png"
 #define RC_IMAGE_BACKGROUND     RC_PREFIX_IMAGE "background.png"
 #define RC_IMAGE_WINDOW         RC_IMAGE_NULL //RC_PREFIX_IMAGE "window.png"
-#define RC_IMAGE_MENU           RC_IMAGE_NULL //RC_PREFIX_IMAGE "menu.png"
 #define RC_IMAGE_CONTEXTMENU    RC_IMAGE_NULL //RC_PREFIX_IMAGE "contextmenu.png"
 
 // TODO
@@ -177,6 +182,10 @@
 #define RC_IMAGE_LOGINDIALOG    RC_IMAGE_NULL
 #define RC_IMAGE_LIVEDIALOG     RC_IMAGE_NULL
 #define RC_IMAGE_SYNCDIALOG     RC_IMAGE_NULL
+
+#define RC_IMAGE_PICKDIALOG     RC_IMAGE_NULL
+#define RC_IMAGE_WINDOWPICKDIALOG       RC_IMAGE_NULL
+#define RC_IMAGE_PROCESSPICKDIALOG      RC_IMAGE_NULL
 
 #define RC_IMAGE_OPENCONTEXTMENU RC_IMAGE_NULL
 #define RC_IMAGE_OPENFILE       RC_IMAGE_OPEN

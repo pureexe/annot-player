@@ -41,6 +41,7 @@ public slots:
 public slots:
   void addToWindowsHook();
   void removeFromWindowsHook();
+  bool containsWindow(WId winId) const;
 private:
   QList<WId> children_, history_;
 #endif // USE_WIN_HOOK

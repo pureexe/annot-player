@@ -125,9 +125,9 @@ public slots:
   // - Implementations -
 private:
   TokenMode tokenMode_;
+  PlayMode playMode_;
   PlayerMode playerMode_;
   VideoMode videoMode_;
-  PlayMode playMode_;
 
   bool playing_, paused_, stopped_;
 };

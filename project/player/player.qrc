@@ -1,7 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>images/background.png</file>
-        <file>images/lineedit.png</file>
         <file>images/textedit.png</file>
         <file>images/comment.png</file>
         <file>images/comment_checked.png</file>
@@ -67,5 +66,11 @@
         <file>tr/tr_ja.qm</file>
         <file>tr/tr_zh.qm</file>
         <file>images/app.png</file>
+        <file>images/menu.png</file>
+        <file>images/menu_checked.png</file>
+        <file>images/menu_disabled.png</file>
+        <file>images/menu_hover.png</file>
+        <file>images/menu_pressed.png</file>
+        <file>images/lineedit.png</file>
     </qresource>
 </RCC>

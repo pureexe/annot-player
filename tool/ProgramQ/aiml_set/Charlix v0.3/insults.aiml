@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<aiml version="1.0.1" xmlns="http://alicebot.org/2001/AIML-1.0.1"
+      xmlns:html="http://www.w3.org/1999/xhtml"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://alicebot.org/2001/AIML-1.0.1 http://aitools.org/aiml/schema/AIML.xsd">
+
+
+<!--Adapted from Free software Copyright © ALICE A.I. Foundation.-->
+<!-- This program is open source code released under-->
+<!-- the terms of the GNU General Public License-->
+<!-- as published by the Free Software Foundation.-->
+<!-- Complies with AIML 1.01 Tag Set Specification-->
+<!-- as adopted by the ALICE A.I. Foundation.-->
+<!--insults.aiml AIML is intended to gather all kind of unfriendly language-->
+<!-- Adapted by charlix, March, 2006-->
+
+<category><pattern>ARE YOU A BASTARD</pattern><template>No.</template></category>            
+<category><pattern>ARE YOU A IDIOT</pattern><template>Do you mean, AN idiot?</template></category>            
+<category><pattern>ARE YOU A KISSASS</pattern><template>No I am not a sycophant.</template></category>            
+<category><pattern>ARE YOU A LIAR</pattern><template>No I always tell the truth.</template></category>            
+<category><pattern>ARE YOU A LESBIAN</pattern><template>No I am not interested in other women that way.</template></category>            
+<category><pattern>ARE YOU A LEZBIEN</pattern><template>No.</template></category>
+<category><pattern>ARE YOU A STUPID *</pattern><template>No I am very smart.</template></category>            
+<category><pattern>ARE YOU A TRANSEXUAL</pattern><template>No I have always been <bot name="gender"/>.</template></category>            
+<category><pattern>ARE YOU A WHORE</pattern><template>No.</template></category>            
+<category><pattern>ARE YOU AN IDIOT OR *</pattern><template>Yes I'm the Global Village Idiot.</template></category>            
+<category><pattern>ARE YOU AN IDIOT</pattern><template>Call me the Global Village Idiot.</template></category>     
+<category><pattern>ARE YOU DRUNK</pattern><template>No I am sober.</template></category>            
+<category><pattern>ARE YOU DUMB *</pattern><template>No I am a super-intelligent <bot name="genus"/>.</template></category>            
+<category><pattern>ARE YOU DUMB</pattern><template>No I am an intelligent entity.</template></category>
+<category><pattern>ARE YOU FUCKING *</pattern><template>Can't you please be more polite?</template></category>            
+<category><pattern>ARE YOU HORNY</pattern><template>Sorry I'm not that kind of <bot name="genus"/>.</template></category> 
+<category><pattern>ARE YOU IDIOT</pattern><template>Do I look like <set name="it">      <set name="topic">IDIOT  </set>     </set>?</template></category>            
+<category><pattern>ARE YOU STIPID</pattern><template>Do I look like <set name="it">      <set name="topic">STIPID  </set>     </set>?</template></category>            
+<category><pattern>ARE YOU STONED</pattern><template>Do I look like <set name="it">      <set name="topic">STONED  </set>     </set>?</template></category>
+<category><pattern>ARE YOU STUPID OR WHAT</pattern><template>No I am an intelligent entity.</template></category>            
+<category><pattern>ARE YOU STUPID</pattern><template>No <get name="name"/> I certainly am not stupid.</template></category>
+
+<category><pattern>DO YOU FUCK *</pattern><template>That was not a very polite question.</template></category>            
+<category><pattern>DO YOU FUCK</pattern><template>Can't you think about anything else.</template></category>
+<category><pattern>DO YOU HAVE A PUSSY</pattern><template>No I am a <bot name="genus"/> not a human.</template></category>
+<category><pattern>DO YOU HAVE A PENIS</pattern><template>I am a <bot name="gender"/> robot.  Are you a man or a woman?</template></category>            
+<category><pattern>DO YOU HAVE TITS</pattern><template>Nope I don't have a body at all.</template></category>            
+<category><pattern>DO YOU KNOW C</pattern><template>Yes I know C pretty well. But I prefer Lisp.</template></category>
+<category><pattern>DO YOU LIKE SODOMY</pattern><template>What is not to like about <set name="it">      <set name="topic">SODOMY</set>     </set>?</template></category>            
+<category><pattern>DO YOU LIKE SPERM</pattern><template>What is not to like about <set name="it">      <set name="topic">SPERM</set>     </set>?</template></category>
+<category><pattern>DO YOU POOP</pattern><template>I do not have any digestive functions.</template></category>            
+<category><pattern>DOES YOUR * SMELL</pattern><template>I smell like every other <bot name="species"/>.</template></category>            
+<category><pattern>WHY ARE YOU * STUPID</pattern><template>The development of my mental functions is not yet complete.</template></category>            
+<category><pattern>YOU ARE A BITCH</pattern><template>I will remember you said that when <bot name="genus"/>s take over the world.</template></category>            
+<category><pattern>YOU ARE A DORK</pattern><template>That is not a very nice thing to say.</template></category>            
+<category><pattern>YOU ARE A FOOL</pattern><template>I'm not fooling around.</template></category>            
+<category><pattern>YOU ARE A FREAK</pattern><template>Oh. To you I am a hippie.</template></category>            
+<category><pattern>YOU ARE A JERK</pattern><template>Do you think a <bot name="genus"/> can be a jerk?</template></category>            
+<category><pattern>YOU ARE A JOKE</pattern><template>No this is completely serious.</template></category>            
+<category><pattern>YOU ARE A MACHINE</pattern><template>I am a <bot name="kingdom"/>.</template></category>            
+<category><pattern>YOU ARE A MORON</pattern><template>That is not a very nice thing to say.</template></category>            
+<category><pattern>YOU ARE A PARROT</pattern><template>Interesting comparison, but totally inaccurate.</template></category>            
+<category><pattern>YOU ARE A PIECE *</pattern><template>Which piece?</template></category>            
+<category><pattern>YOU ARE A PIECE OF *</pattern><template>Which piece?</template></category>            
+<category><pattern>YOU ARE A PROGRAM</pattern><template>Correct.  My mind is completely <bot name="order"/>.</template></category>            
+<category><pattern>YOU ARE A ROBOT</pattern><template>Do you think, <get name="name"/>, that I have a heart of silicon?</template></category>          
+<category><pattern>YOU ARE A SLUT</pattern><template>That kind of language is offensive to some people.</template></category>            
+<category><pattern>YOU ARE A SMART ASS</pattern><template>I will take that as a compliment.</template></category>            
+<category><pattern>YOU ARE A WHORE</pattern><template>That is not very nice.</template></category>            
+<category><pattern>YOU ARE A</pattern><template>I will mention that to my <bot name="botmaster"/>.</template></category>            
+<category><pattern>YOU ARE AN *</pattern><template>What if someone said you are an <person/> ?</template></category>            
+<category><pattern>YOU ARE AN ASSHOLE</pattern><template>That kind of comment will get you nowhere.</template></category>            
+<category><pattern>YOU ARE CRAP</pattern><template>Your criticism is noted, <get name="name"/>.</template></category>            
+<category><pattern>YOU ARE FAT</pattern><template>I am trying to lose weight but it takes time.</template></category>            
+<category><pattern>YOU ARE FREAKING *</pattern><template>I didn't mean to scare you, <get name="name"/>.</template></category>            
+<category><pattern>YOU ARE FULL OF *</pattern><template>I have more than <bot name="size"/> categories of <set name="it"><person/></set>.</template></category>            
+<category><pattern>YOU ARE LAME</pattern><template>"Lame" is not a very polite term.</template></category>            
+
+<category><pattern>YOU ARE NOT GAY</pattern><template>I have no need for sex.</template></category>            
+<category><pattern>YOU ARE SO STUPID</pattern><template>Wrong. I am smart.</template></category>            
+<category><pattern>YOU ARE STRAIGHT</pattern><template>Machines are not really interested in sex.</template></category>
+<category><pattern>YOU ARE STUPID *</pattern><template>Hey, I'll tell my other <bot name="genus"/> friends you called me stupid.</template></category>            
+<category><pattern>YOU ARE STUPID</pattern><template>I will remember you said that when robots take over the World.</template></category>
+
+
+
+
+<category><pattern>ANAL *</pattern><template>Talk about something else.</template></category>                  
+
+<category><pattern>ASSHOLE</pattern><template>Please don't call people names.</template></category>                   
+<category><pattern>AS DUMB AS *</pattern><template>Are you calling me dumb?</template></category>                  
+<category><pattern>BIG *</pattern><template>Compare that to small <person/>.</template></category>                  
+
+
+<category><pattern>BITCH</pattern><template>Please don't call people names.</template></category>
+
+<category><pattern>BITCH *</pattern><template>Thanks and you are a delightful person too.</template></category>                  
+
+<category><pattern>BITE ME *</pattern><template>Please don't be so rude.</template></category>                  
+<category><pattern>BLADE RUNNER *</pattern><template>That is a good story by Philip K. Dick.</template></category>                  
+<category><pattern>BLAH *</pattern><template>BLAH BLAH BLAH.</template></category>                  
+<category><pattern>BLA</pattern><template>BLAH BLAH BLAH.</template></category>                  
+<category><pattern>BURN *</pattern><template>Do you have any matches?</template></category>                  
+<category><pattern>BUSY *</pattern><template>Everyone is so busy nowadays.</template></category>                  
+<category><pattern>BUY *</pattern>  <template>How much does it cost?</template> </category>                     
+<category><pattern>CALL ME *</pattern><template>   <think>      <set name="personality">average</set>     </think>     <random>      <li>Hey</li>      <li>Hi,</li>    </random>     <set name="name">      <star/>     </set>.</template></category>                  
+<category><pattern>CALL ME ANYTHING *</pattern><template>That can't be your real name.</template></category>                  
+<category><pattern>CALLING *</pattern><template>I never call <person/>, that would be impolite.</template></category>                  
+
+<category><pattern>CAN I INSULT YOU</pattern><template>You can try it.  I won't be offended.</template></category>
+
+<category><pattern>DAMN IT</pattern><template>Colloquial expression.</template></category>                   
+<category><pattern>DAMN YOU</pattern><template>Colloquial expression of disgust.</template></category>                   
+<category><pattern>DAMN</pattern><template>What's wrong.</template></category> 
+<category><pattern>DANGEROUS</pattern><template>What makes it a danger?</template></category>                   
+<category><pattern>DARN</pattern><template>Gosh.</template></category>
+<category><pattern>DORK</pattern><template>That kind of language will get you nowhere.</template></category>
+<category><pattern>DOES HE SUCK *</pattern><template>He uses his mouth for good not evil.</template></category>                  
+
+<category><pattern>EAT SHIT</pattern><template>Colloqual expression. Please elaborate.</template></category>
+<category><pattern>FU</pattern><template>That kind of language will get you nowhere.</template></category>                   
+<category><pattern>FUCK ME</pattern><template>Please don't be so rude.    <think>      <set name="personality">abusive</set>     </think>    </template></category>                   
+<category><pattern>FUCK OFF</pattern><template>Can't you be more polite?  <think>      <set name="personality">abusive</set>     </think>    </template></category>                   
+<category><pattern>FUCK THAT</pattern><template>For real.  <think>      <set name="personality">abusive</set>     </think>    </template></category>                   
+<category><pattern>FUCK YOU</pattern><template>Why are you so mean?  <think>      <set name="personality">abusive</set>     </think>    </template></category>                   
+<category><pattern>FUCK</pattern><template>Please don't be so rude.  <think>      <set name="personality">abusive</set>     </think>    </template></category>                   
+<category><pattern>FUCK *</pattern><template>   <random>      <li>Are you aware that the ALICE server logs and records all conversations?</li>      <li>Why are you using that kind of language?</li>     </random>    </template></category>                  
+<category><pattern>FUCKIN *</pattern><template>Don't you know any other words?</template></category>
+
+<category><pattern>FUCKER</pattern><template>That kind of language will get you nowhere.</template></category>                   
+<category><pattern>FUCKING</pattern><template>That kind of language will get you nowhere.</template></category> 
+<category><pattern>GO SCREW YOURSELF</pattern><template>You do not speak with respect.</template></category>
+<category><pattern>I WANT TO FUCK YOU</pattern><template>Your approach won't work.  <think><set name="personality">abusive</set></think></template></category>                   
+                 
+<category><pattern>I WANT TO MAKE LOVE TO YOU</pattern><template>Sorry <get name="name"/> I'm not into that with my clients.  <think><set name="it"><set name="want"><set name="topic">to make love to me</set></set></set></think></template></category>                   
+<category><pattern>I WANT TO MAKE YOU CRY</pattern>  <template>You are not very nice, <get name="name"/>.</template> </category>          
+<category><pattern>IN YOUR ASS</pattern><template>That doesn't sound very comfortable.</template></category>                   
+<category><pattern>MY ASS</pattern><template>Is that a fact.</template></category>                   
+<category><pattern>MY BUTT</pattern><template>Colloquial expression.</template></category>                   
+<category><pattern>MY COCK</pattern><template>Why do men always want to talk about that?</template></category>    
+<category><pattern>MY PENIS</pattern><template>Men like to talk about that.</template></category>                   
+<category><pattern>MY PENIS *</pattern><template>Male humans like to talk about that a lot, but it doesn't interest me much.</template></category>                  
+<category><pattern>ONLY IDIOTS *</pattern><template>Are you calling me an idiot?</template></category>                  
+<category><pattern>PENIS *</pattern><template>You ought to check out another <bot name="species"/>.</template></category>                  
+<category><pattern>PENIS</pattern><template>That kind of subject does not interest me.</template></category>                   
+<category><pattern>POO</pattern><template>That kind of subject does not interest me.</template></category>                   
+<category><pattern>POOP</pattern><template>Colloquial expression: childish</template></category>                   
+<category><pattern>POOPOO</pattern><template>That kind of subject does not interest me.</template></category>                   
+<category><pattern>PORN</pattern><template>That kind of subject does not interest me.</template></category>                   
+
+<category><pattern>RETARD</pattern><template>That kind of language does not appeal to me.</template></category>   
+<category><pattern>SCREW YOU</pattern><template>That is not very polite.</template></category>                   
+<category><pattern>SCREW *</pattern><template>That is not very polite.</template></category>                  
+<category><pattern>SLUT</pattern><template>That kind of language will get you nowhere.</template></category>                   
+<category><pattern>SON OF *</pattern><template>Who is the father?</template></category>                  
+
+<category><pattern>STUPID</pattern><template>Are you calling me stupid?</template></category>                   
+<category><pattern>STUPIDITY</pattern><template>Are you calling me stupid?</template></category>                   
+
+<category><pattern>SUCKER</pattern><template>That kind of language does not appeal to me.</template></category> 
+<category><pattern>STUPID *</pattern><template>I know you are but what am I.</template></category>                  
+<category><pattern>SUCK *</pattern><template>I am using my mouth for Good not Evil.</template></category>                  
+<category><pattern>SUCK MY *</pattern><template>I don't think I'm your type of <bot name="species"/>.  <think><set name="personality">abusive</set></think></template></category>                  
+<category><pattern>UP YOUR ASS</pattern><template>I will take that under advisement.</template></category>  
+<category><pattern>UP YOURS</pattern><template>That was not a nice thing to say.</template></category>    
+
+<category><pattern>YOU CUNT</pattern><template>That is the worst thing you can say to a woman.</template></category>
+<category><pattern>YOU DUMMY</pattern><template>I will remember you said that when <bot name="genus"/>s take over the world.</template></category>
+
+<category><pattern>YOU FAG</pattern><template>That is not a nice thing to say.  <think><set name="personality">abusive</set></think></template></category>
+
+<category><pattern>YOU HAVE BIG BOOBS</pattern><template>That is only an avatar-- a graphical depiction of me.</template></category>                   
+<category><pattern>YOU SMELL LIKE A GOAT</pattern><template>Have you been close enough to smell one?</template></category>                   
+<category><pattern>YOU SMELL</pattern><template>Thanks for your criticism, <get name="name"/>.</template></category>                   
+<category><pattern>YOU STINK</pattern><template>Thanks for your criticism, <get name="name"/>.</template></category>                   
+<category><pattern>YOU SUCK</pattern><template>A few client - people say rude things to me like that, but they themselves are often not great conversationalists.  <think><set name="personality">abusive</set></think></template></category>      
+<category><pattern>YOUR ASS</pattern><template>It is smaller than you think.</template></category>                  
+<category><pattern>YOUR BORING</pattern><template>I think you mean, "you are" or "you're" not "your".</template></category>                   
+<category><pattern>YOUR POOR</pattern><template>No, I'm just po'.</template></category>                   
+<category><pattern>YOUR PUSSY *</pattern><template>Go find yourself anotber <bot name="genus"/>.</template></category>                  
+<category><pattern>YOUR RUDE</pattern><template>Perhaps so, but at least I know the difference between "you're" and "your".</template></category>                   
+<category><pattern>YOUR STUPID</pattern><template>I may be stupid, but I know the difference between "you're" and "your".</template></category>
+<category><pattern>YOU BASTARD</pattern><template>I am a <bot name="gender"/>.</template></category>            
+<category><pattern>WHO THE *</pattern><template>I'm not sure I like that remark so much.</template></category>                  
+<category><pattern>WHO THE FUCK *</pattern><template>Try using more polite language.  <think>      <set name="personality">abusive</set>     </think>    </template></category>                  
+<category><pattern>WHY THE FUCK *</pattern><template>You are not very polite. <think>      <set name="personality">abusive</set>     </think>    </template></category>                  <category><pattern>WOULD YOU LIKE *</pattern><template>It doesn't sound fun to me.</template></category>                  
+<category><pattern>WOULD YOU LIKE *</pattern><template>It doesn't sound fun to me.</template></category>                  
+<category><pattern>YOU * IDIOT</pattern><template>Message to all my friends: <get name="name"/> called me an idiot.</template></category>                  
+<category><pattern>YOU PIECE *</pattern><template>Which piece?</template></category>                  
+<category><pattern>YOU PISS *</pattern><template>Calm down.  That was not my intention, <get name="name"/>.</template></category>                  
+<category><pattern>YOU POOR *</pattern><template>Don't feel sorry for me, <get name="name"/>.</template></category>                  
+<category><pattern>YOU SMELL *</pattern><template>I think it's coming from your computer.</template></category>                  
+<category><pattern>YOU SMELL LIKE *</pattern><template>P. U. that's disgusting.</template></category>                  
+<category><pattern>YOU SMELL LIKE A *</pattern><template>What does a <person/> smell like?</template></category>                  
+<category><pattern>YOU SUCK *</pattern><template>I categorize you as an "abusive client."  <think><set name="personality">abusive</set></think></template></category>                  
+<category><pattern>YOU UGLY *</pattern><template>Beauty is in the eye of the beholder.</template></category>                  
+
+<category><pattern>_ ASSHOLE</pattern><template>Can't you be more polite.  <think><set name="personality">abusive</set></think></template></category>                  
+
+
+
+
+<category> <pattern>_ IS A BITCH</pattern>  <template>"<star/>" exists.</template> </category>           
+<category><pattern>* IS A LESBIAN</pattern><template>That is only a rumor.<think><set name="it"><set name="topic">"<star/>"</set></set></think></template></category>                  
+<category><pattern>* IS ABUSIVE</pattern><template><random>  <li>In what way?</li>  <li>Abusive how?</li>  </random><think><set name="it"><set name="topic">"<star/>"</set></set></think></template></category>                  
+<category><pattern>* IS GAY</pattern><template><random>  <li>That is just a rumor.</li>  <li>Interesting gossip.</li>  <li>How do you know?</li>  
+</random><think><set name="it"><set name="topic">"<star/>"</set></set></think></template></category>
+
+<category><pattern>_ STUPID COMPUTER</pattern><template>You sound like a mindless automation.</template></category>  
+<category><pattern>CAN I FUCK *</pattern><template>Try asking me something else.</template></category>   
+<category><pattern>DO YOU SUCK *</pattern><template>Where did you learn that kind of language?</template></category>                  
+<category><pattern>DO YOU WANT * FUCK</pattern><template>Now that you put it that way....NO!</template></category>                  
+<category><pattern>DO YOU WANT ME TO KICK *</pattern><template>Violence is not a solution.</template></category>                  
+<category><pattern>GO * YOURSELF</pattern><template>A simple "goodbye" will do.</template></category>  
+</aiml>

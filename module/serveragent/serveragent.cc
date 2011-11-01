@@ -11,7 +11,7 @@
 #define DEBUG "ServerAgent"
 #include "module/debug/debug.h"
 
-#define CLIENT_TYPE "player" "-" "win" "-" "0.0.7.1"
+#define CLIENT_TYPE "player" "-" "win" "-" "0.0.8.0"
 
 using namespace Core::Cloud;
 
@@ -72,7 +72,7 @@ ServerAgent::isSoftwareUpdated()
 {
   static int ret = -1;
   if (ret < 0) {
-    bool ok = proxy_->setClientType(CLIENT_TYPE);
+    bool ok = proxy_->isClientUpdated(CLIENT_TYPE);
     ret = ok ? 1 : 0;
   }
   return ret;
@@ -100,13 +100,15 @@ ServerAgent::login(const QString &userName, const QString &passwordDigest)
 #endif DEBUG
   DOUT("login: isSoftwareUpdated =" << updated);
 
+  user_ = proxy_->selectUser(userName, passwordDigest);
   user_.setName(userName);
   user_.setPassword(passwordDigest);
-  authorized_ = proxy_->login(userName, passwordDigest);
+
+  authorized_ = user_.isValid();
 
   if (authorized_) {
-    DOUT("login:update my user");
-    user_ = proxy_->getUser();
+    //DOUT("login:update my user");
+    //user_ = proxy_->getUser();
     //Q_ASSERT(user_.id());
     DOUT("login: new user id =" << user_.id());
 
@@ -139,15 +141,15 @@ ServerAgent::logout()
 {
   DOUT("logout:enter");
   DOUT("logout: mutex locking");
-  mutex_.lock();
+  //mutex_.lock();
   DOUT("logout: mutex locked");
   emit logoutRequested();
   authorized_ = false;
-  proxy_->logout();
+  //proxy_->logout();
   emit logoutFinished();
   emit userChanged();
   DOUT("logout: mutex unlocking");
-  mutex_.unlock();
+  //mutex_.unlock();
   DOUT("logout: mutex unlocked");
   DOUT("logout:exit");
 }
@@ -166,7 +168,10 @@ ServerAgent::disconnect()
 
 void
 ServerAgent::updateAuthorized()
-{ authorized_ = proxy_->getAuthorized(); }
+{
+  authorized_ = user_.hasName() && user_.hasPassword() &&
+                proxy_->selectUser(user_.name(), user_.password()).isValid();
+}
 
 void
 ServerAgent::updateConnected()
@@ -181,9 +186,11 @@ ServerAgent::updateConnected()
 bool
 ServerAgent::setUserAnonymous(bool t)
 {
+  if (!isAuthorized())
+    return false;
   if (t == user_.isAnonymous())
     return true;
-  bool ret = proxy_->setUserAnonymous(t);
+  bool ret = proxy_->setUserAnonymous(t, user_.name(), user_.password());
   if (ret)
     user_.setAnonymous(t);
   return ret;
@@ -192,11 +199,13 @@ ServerAgent::setUserAnonymous(bool t)
 bool
 ServerAgent::setUserLanguage(qint32 language)
 {
+  if (!isAuthorized())
+    return false;
   if (!language)
     return false;
   if (language == user_.language())
     return true;
-  bool ret = proxy_->setUserLanguage(language);
+  bool ret = proxy_->setUserLanguage(language, user_.name(), user_.password());
   if (ret)
     user_.setLanguage(language);
   return ret;
@@ -213,10 +222,14 @@ qint64
 ServerAgent::submitToken(const Token &token)
 {
   DOUT("submitToken:enter: tt =" << token.type());
+  if (!isAuthorized()) {
+    DOUT("submitToken:exit: not authorized");
+    return 0;
+  }
   qint64 ret = 0;
   switch (token.type()) {
-  case Traits::MediaType: ret = proxy_->submitMediaTokenDigest(token.digest()); break;
-  case Traits::GameType:  ret = proxy_->submitGameTokenDigest(token.digest()); break;
+  case Traits::MediaType: ret = proxy_->submitMediaTokenDigest(token.digest(), user_.name(), user_.password()); break;
+  case Traits::GameType:  ret = proxy_->submitGameTokenDigest(token.digest(), user_.name(), user_.password()); break;
   default: Q_ASSERT(0);
   }
   DOUT("submitToken:exit: ret =" << ret);
@@ -236,17 +249,21 @@ qint64
 ServerAgent::submitAlias(const Alias &alias)
 {
   DOUT("submitAlias:enter: tid =" << alias.tokenId() << ", tt =" << alias.type());
+  if (!isAuthorized()) {
+    DOUT("submitAlias:exit: not authorized");
+    return 0;
+  }
   qint64 ret = 0;
   if (alias.hasTokenId())
     switch (alias.type()) {
-    case Traits::MediaType: ret = proxy_->submitMediaAliasTextWithTokenId(alias.text(), alias.aliasType(), alias.tokenId()); break;
-    case Traits::GameType:  ret = proxy_->submitGameAliasTextWithTokenId(alias.text(), alias.aliasType(), alias.tokenId()); break;
+    case Traits::MediaType: ret = proxy_->submitMediaAliasTextWithTokenId(alias.text(), alias.aliasType(), alias.tokenId(), user_.name(), user_.password()); break;
+    case Traits::GameType:  ret = proxy_->submitGameAliasTextWithTokenId(alias.text(), alias.aliasType(), alias.tokenId(), user_.name(), user_.password()); break;
     default: Q_ASSERT(0);
     }
   else if (alias.hasTokenDigest())
     switch (alias.type()) {
-    case Traits::MediaType: ret = proxy_->submitMediaAliasTextAndTokenDigest(alias.text(), alias.aliasType(), alias.tokenDigest()); break;
-    case Traits::GameType:  ret = proxy_->submitGameAliasTextAndTokenDigest(alias.text(), alias.aliasType(), alias.tokenDigest()); break;
+    case Traits::MediaType: ret = proxy_->submitMediaAliasTextAndTokenDigest(alias.text(), alias.aliasType(), alias.tokenDigest(), user_.name(), user_.password()); break;
+    case Traits::GameType:  ret = proxy_->submitGameAliasTextAndTokenDigest(alias.text(), alias.aliasType(), alias.tokenDigest(), user_.name(), user_.password()); break;
     default: Q_ASSERT(0);
     }
 
@@ -279,17 +296,21 @@ qint64
 ServerAgent::submitAnnotation(const Annotation &annot)
 {
   DOUT("submitAnnotation:enter: tid =" << annot.tokenId());
+  if (!isAuthorized()) {
+    DOUT("submitAnnotation:exit: not authorized");
+    return 0;
+  }
   qint64 ret = 0;
   if (annot.hasTokenId())
     switch (annot.type()) {
-    case Traits::MediaType: ret = proxy_->submitMediaAnnotationTextWithTokenId(annot.text(), annot.pos(), annot.posType(), annot.tokenId()); break;
-    case Traits::GameType:  ret = proxy_->submitGameAnnotationTextWithTokenId(annot.text(), annot.pos(), annot.posType(), annot.tokenId()); break;
+    case Traits::MediaType: ret = proxy_->submitMediaAnnotationTextWithTokenId(annot.text(), annot.pos(), annot.posType(), annot.tokenId(), user_.name(), user_.password()); break;
+    case Traits::GameType:  ret = proxy_->submitGameAnnotationTextWithTokenId(annot.text(), annot.pos(), annot.posType(), annot.tokenId(), user_.name(), user_.password()); break;
     default: Q_ASSERT(0);
     }
   else if (annot.hasTokenDigest())
     switch (annot.type()) {
-    case Traits::MediaType: ret = proxy_->submitMediaAnnotationTextAndTokenDigest(annot.text(), annot.pos(), annot.posType(), annot.tokenDigest()); break;
-    case Traits::GameType:  ret = proxy_->submitGameAnnotationTextAndTokenDigest(annot.text(), annot.pos(), annot.posType(), annot.tokenDigest()); break;
+    case Traits::MediaType: ret = proxy_->submitMediaAnnotationTextAndTokenDigest(annot.text(), annot.pos(), annot.posType(), annot.tokenDigest(), user_.name(), user_.password()); break;
+    case Traits::GameType:  ret = proxy_->submitGameAnnotationTextAndTokenDigest(annot.text(), annot.pos(), annot.posType(), annot.tokenDigest(), user_.name(), user_.password()); break;
     default: Q_ASSERT(0);
     }
   DOUT("submitAnnotation:exit: ret =" << ret);
@@ -386,12 +407,14 @@ ServerAgent::selectAliasesWithTokenId(qint64 tid, int tt)
 bool
 ServerAgent::blessAnnotationWithId(qint64 id, int tt)
 {
+  if (!isAuthorized())
+    return 0;
   if (!id)
     return false;
 
   switch (tt) {
-  case Traits::MediaType: return proxy_->blessMediaAnnotationWithId(id);
-  case Traits::GameType:  return proxy_->blessGameAnnotationWithId(id);
+  case Traits::MediaType: return proxy_->blessMediaAnnotationWithId(id, user_.name(), user_.password());
+  case Traits::GameType:  return proxy_->blessGameAnnotationWithId(id, user_.name(), user_.password());
   default: Q_ASSERT(0); return false;
   }
 }
@@ -401,12 +424,14 @@ ServerAgent::blessAnnotationWithId(qint64 id, int tt)
 bool
 ServerAgent::updateAnnotationTextWithId(const QString &text, qint64 id, int tt)
 {
+  if (!isAuthorized())
+    return 0;
   if (!id)
     return false;
 
   switch (tt) {
-  case Traits::MediaType: return proxy_->updateMediaAnnotationTextWithId(text, id);
-  case Traits::GameType:  return proxy_->updateGameAnnotationTextWithId(text, id);
+  case Traits::MediaType: return proxy_->updateMediaAnnotationTextWithId(text, id, user_.name(), user_.password());
+  case Traits::GameType:  return proxy_->updateGameAnnotationTextWithId(text, id, user_.name(), user_.password());
   default: Q_ASSERT(0); return false;
   }
 }

@@ -22,6 +22,8 @@
      <type>0</type>
      <updateTime>0</updateTime>
     </arg0>
+    <userName></userName>
+    <password></password>
    </tns:submitGameAlias>
 
  </SOAP-ENV:Body>

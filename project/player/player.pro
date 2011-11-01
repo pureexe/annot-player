@@ -31,10 +31,12 @@ win32 {
 win32 {
     include($$ROOTDIR/win/dwm/dwm.pri)
     include($$ROOTDIR/win/hook/hook.pri)
+    include($$ROOTDIR/win/picker/picker.pri)
     include($$ROOTDIR/win/qth/qth.pri)
     include($$ROOTDIR/win/qtwin/qtwin.pri)
     DEFINES += USE_WIN_DWM
     DEFINES += USE_WIN_HOOK
+    DEFINES += USE_WIN_PICKER
     DEFINES += USE_WIN_QTH
     DEFINES += USE_WIN_QTWIN
 
@@ -98,6 +100,7 @@ HEADERS += \
     define/stylesheet.h \
     dialog/livedialog.h \
     dialog/logindialog.h \
+    dialog/pickdialog.h \
     dialog/seekdialog.h \
     dialog/syncdialog.h \
     osd/osdconsole.h \
@@ -115,6 +118,7 @@ HEADERS += \
     token/addaliasdialog.h \
     token/tokenview.h \
     user/userpanel.h \
+    util/closewidgetthread.h \
     util/grabber.h \
     util/lineedit.h \
     util/logger.h \
@@ -138,6 +142,7 @@ SOURCES += \
     db/db.cc \
     dialog/livedialog.cc \
     dialog/logindialog.cc \
+    dialog/pickdialog.cc \
     dialog/seekdialog.cc \
     dialog/syncdialog.cc \
     osd/osdconsole.cc \
@@ -198,6 +203,9 @@ mac {
 }
 
 # EOF
+
+
+
 
 
 

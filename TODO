@@ -1,9 +1,44 @@
+check server log to figure out what cuase dying cxf
+
+update annotation time
+
+window2window to streaming galgame
+
+add images to wiki to demonstract how to make it work
+
+how to intercept directx call
+http://www.gamedev.net/topic/359794-c-direct3d-hooking-sample/
+- make my player on top of others
+- alternative, use d3dwin tool
+- use for my wine project
+
+- on exit, hide gui
+on exit, remove all hooks
+use a thread to wait for thread pool and then close parent to avoid hanging
+
+on ma: design icon for menu
+
+- flash window rect after picking!
+- Create a window tracking Layer! to unify osdplayer and annotationview
+
+FIXME: osdscreen
+
 - fix parallelization problem on my gemm benchmark
   start tunning
 - sequential lib
+
+rename dlls to?
+- MouseHook
+- TextHook
+- WindowHook
+
 - write tutorial
 
 - use posType as stay seconds for mediaannotation!
+
+- use hook to get hwnd under point
+i.e. tracking next MOUSE CLICK for hook
+  - add another mousehook for getting window under mouse click
 
 ####
 

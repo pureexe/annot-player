@@ -2,7 +2,7 @@
 // 10/16/2011
 
 #include "signalview.h"
-#include "tokenview.h"
+//#include "tokenview.h"
 #include "messageview.h"
 #include "processview.h"
 #include "uistyle.h"
@@ -31,14 +31,14 @@ SignalView::SignalView(QWidget *parent)
   // Views
   processView_ = new ProcessView;
   messageView_ = new MessageView;
-  tokenView_ = new TokenView;
+  //tokenView_ = new TokenView;
 
   processView_->setWindowFlags(Qt::Widget);
   messageView_->setWindowFlags(Qt::Widget);
-  tokenView_->setWindowFlags(Qt::Widget);
+  //tokenView_->setWindowFlags(Qt::Widget);
   processView_->setDraggable(false);
   messageView_->setDraggable(false);
-  tokenView_->setDraggable(false);
+  //tokenView_->setDraggable(false);
 
   // Buttons
 
@@ -53,7 +53,7 @@ SignalView::SignalView(QWidget *parent)
   } \
   connect(_id##Button, SIGNAL(clicked(bool)), _id##View_, SLOT(setVisible(bool)));
 
-  MAKE_BUTTON(token, tr("info"))
+  //MAKE_BUTTON(token, tr("info"))
   MAKE_BUTTON(process, tr("process"))
   MAKE_BUTTON(message, tr("message"))
 #undef MAKE_BUTTON
@@ -65,16 +65,16 @@ SignalView::SignalView(QWidget *parent)
     rows->addLayout(header);
     rows->addLayout(center);
 
-    header->addWidget(tokenButton);
+    //header->addWidget(tokenButton);
     header->addWidget(processButton);
     header->addWidget(messageButton);
 
-    center->addWidget(tokenView_);
+    //center->addWidget(tokenView_);
     center->addWidget(processView_);
     center->addWidget(messageView_);
 
     // left, top, right, bottom
-    tokenView_->layout()->setContentsMargins(4, 9, 4, 9);
+    //tokenView_->layout()->setContentsMargins(4, 9, 4, 9);
     processView_->layout()->setContentsMargins(4, 9, 4, 9);
     messageView_->layout()->setContentsMargins(4, 6, 4, 9);
     header->setContentsMargins(0, 0, 0, 0);
@@ -95,10 +95,10 @@ SignalView::SignalView(QWidget *parent)
   connect(processView_, SIGNAL(dragMoveEventReceived(QDragMoveEvent*)), SLOT(dragMoveEvent(QDragMoveEvent*)));
   connect(processView_, SIGNAL(dropEventReceived(QDropEvent*)), SLOT(dropEvent(QDropEvent*)));
 
-  connect(tokenView_, SIGNAL(dragEnterEventReceived(QDragEnterEvent*)), SLOT(dragEnterEvent(QDragEnterEvent*)));
-  connect(tokenView_, SIGNAL(dragLeaveEventReceived(QDragLeaveEvent*)), SLOT(dragLeaveEvent(QDragLeaveEvent*)));
-  connect(tokenView_, SIGNAL(dragMoveEventReceived(QDragMoveEvent*)), SLOT(dragMoveEvent(QDragMoveEvent*)));
-  connect(tokenView_, SIGNAL(dropEventReceived(QDropEvent*)), SLOT(dropEvent(QDropEvent*)));
+  //connect(tokenView_, SIGNAL(dragEnterEventReceived(QDragEnterEvent*)), SLOT(dragEnterEvent(QDragEnterEvent*)));
+  //connect(tokenView_, SIGNAL(dragLeaveEventReceived(QDragLeaveEvent*)), SLOT(dragLeaveEvent(QDragLeaveEvent*)));
+  //connect(tokenView_, SIGNAL(dragMoveEventReceived(QDragMoveEvent*)), SLOT(dragMoveEvent(QDragMoveEvent*)));
+  //connect(tokenView_, SIGNAL(dropEventReceived(QDropEvent*)), SLOT(dropEvent(QDropEvent*)));
 
   // Initial states - hide TokenView by default -- TODO: remove this after tokenView works out of box
   //tokenButton->setCheckable(false);
@@ -107,9 +107,9 @@ SignalView::SignalView(QWidget *parent)
   //processView_->setFocus();
 }
 
-TokenView*
-SignalView::tokenView() const
-{ return tokenView_; }
+//TokenView*
+//SignalView::tokenView() const
+//{ return tokenView_; }
 
 ProcessView*
 SignalView::processView() const

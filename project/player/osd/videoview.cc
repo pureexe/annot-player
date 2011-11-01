@@ -74,6 +74,10 @@ VideoView::removeFromWindowsHook()
   DOUT("removeFromWindowsHook:exit");
 }
 
+bool
+VideoView::containsWindow(WId hwnd) const
+{ return children_.contains(hwnd); }
+
 #endif // USE_WIN_HOOK
 
 // - VLCKit -

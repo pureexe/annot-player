@@ -73,6 +73,7 @@ namespace { // anonymous
       ADD("php-cgi");
       ADD("QQ");
       ADD("qtcreator");
+      ADD("SecureCRT");
       ADD("SetPoint");
       ADD("softinfo");
       ADD("SogouCloud");

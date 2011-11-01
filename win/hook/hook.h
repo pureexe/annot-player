@@ -92,11 +92,11 @@ class WindowsHookManager : public QObject
 
   Impl *impl_;
 
-  // Singleton
+  // - Singleton -
 public:
   HOOKAPI static Self *globalInstance();
 
-  // - Global - TODO: it will be better to put these options into flags/setFlags methods.
+  // - Options - TODO: it will be better to put these options into flags/setFlags methods.
 public:
 
 #ifdef USE_MOUSE_HOOK
@@ -179,9 +179,9 @@ public:
   //HOOKAPI bool empty() const; ///< No threads and no listeners
   HOOKAPI void clear();       ///< removeAllThreads and removeAllListneres
 
-  // - Internal implementation details -
-public:
-  WindowsHookManager();   ///< \internal
+  // - Implementations -
+protected:
+  explicit WindowsHookManager(QObject *parent = 0);   ///< \internal
   ~WindowsHookManager();  ///< \internal
 protected:
   virtual bool event(QEvent *e); ///< \internal

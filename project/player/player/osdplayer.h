@@ -5,9 +5,10 @@
 // 7/11/2011
 
 #include "playerui.h"
-#include <QObject>
 
 QT_FORWARD_DECLARE_CLASS(QTimer)
+QT_FORWARD_DECLARE_CLASS(QMenu)
+QT_FORWARD_DECLARE_CLASS(QToolButton)
 
 class OSDPlayerUi : public PlayerUi
 {
@@ -15,15 +16,24 @@ class OSDPlayerUi : public PlayerUi
   typedef OSDPlayerUi Self;
   typedef PlayerUi Base;
 
-  QTimer *autoHideTimer_;
-
 public:
   explicit OSDPlayerUi(SignalHub *hub, Player *player, ServerAgent *server, QWidget *parent = 0);
 
+signals:
+  void invalidateMenuRequested();
+public:
   bool autoHideEnabled() const;
-  void setAutoHideEnabled(bool enabled = true);
+  WId trackingWindow() const;
+
+  void setMenu(QMenu *menu);
+
+protected:
+  QToolButton *menuButton();
+protected slots:
+  void popupMenu();
 
 public slots:
+  void setAutoHideEnabled(bool enabled = true);
   void autoHide();
 
   void invalidateGeometry();    ///< Automatically adjust from its parent.
@@ -32,8 +42,27 @@ public slots:
   void resetAutoHideTimeoutWhenEditing(const QString&) { return resetAutoHideTimeout(); }
   void resetAutoHideTimeoutWhenEditing(int, int) { return resetAutoHideTimeout(); }
 
+  void setTrackingWindow(WId winId);
+
+  virtual void setVisible(bool visible); ///< \override
+
+protected:
+  void moveToGlobalPos(const QPoint &globalPos);
+
+protected slots:
+  void startTracking();
+  void stopTracking();
+
 private:
   void createLayout();
+
+private:
+  QTimer *autoHideTimer_;
+  QTimer *trackingTimer_;
+
+  QToolButton *menuButton_;
+
+  WId trackingWindow_;
 };
 
 #endif // OSDPLAYER_H

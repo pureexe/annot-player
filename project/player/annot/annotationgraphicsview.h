@@ -10,8 +10,11 @@
 #include <QHash>
 #include <QList>
 
+QT_FORWARD_DECLARE_CLASS(QTimer)
+
 class SignalHub;
 class Player;
+class VideoView;
 class AnnotationGraphicsItem;
 class AnnotationEditor;
 
@@ -27,7 +30,7 @@ class AnnotationGraphicsView : public QGraphicsView, public Core::EventListener
 
   // - Constructions -
 public:
-  explicit AnnotationGraphicsView(SignalHub *hub, Player *player, QWidget *videoView, QWidget *parent = 0);
+  explicit AnnotationGraphicsView(SignalHub *hub, Player *player, VideoView *videoView, QWidget *parent = 0);
   ~AnnotationGraphicsView();
 
   qint64 userId() const;
@@ -42,6 +45,17 @@ public:
    */
   void setFullScreenView(QWidget *w);
 
+  /**
+   *  Set the windows to track.
+   *  Currently only works on Windows.
+   */
+signals:
+  void trackingWindowChanged(WId winId);
+public:
+  WId trackingWindow() const;
+public slots:
+  void setTrackingWindow(WId winId);
+
 signals:
   void posChanged(); ///< current pos changed by show at pos, not the pos of the widget
   void annotationTextUpdated(const QString &text, qint64 id);
@@ -49,9 +63,16 @@ signals:
 public slots:
   void invalidateAnnotationPos(); ///< emit posChanged
 
+protected slots:
+  void startTracking();
+  void stopTracking();
+
 public:
   // - Events -
   virtual void setVisible(bool visible); ///< \override stop polling when hidden
+
+public:
+  QRect globalRect() const;
 
   // Implement event listener.
   virtual void sendContextMenuEvent(QContextMenuEvent *event); ///< \override
@@ -65,6 +86,8 @@ protected:
   void disconnectPlayer();
   void connectHub();
   void disconnectHub();
+
+  void moveToGlobalPos(const QPoint &globalPos);
 
   AnnotationGraphicsItem *itemWithId(qint64 aid) const;
 
@@ -141,22 +164,24 @@ public:
 
   // - Implementations -
 private:
-  QWidget *view_;
+  VideoView *videoView_;
   QWidget *fullScreenView_;
+  WId trackingWindow_;
   SignalHub *hub_;
   Player *player_;
   bool active_;
   bool paused_;
 
-  qint64 languages_;
-
-  qint64 userId_;
+  QTimer *trackingTimer_;
 
   AnnotationEditor *editor_;
 
   // Though not quint64, the time is not supposed to be negative.
   QHash<qint64, QList<AnnotationGraphicsItem*>*> annots_; // indexed by secs for MediaMode or hash for SignalMode
   qint64 playTime_; // in sec
+
+  qint64 languages_;
+  qint64 userId_;
 
   bool playbackEnabled_;
 

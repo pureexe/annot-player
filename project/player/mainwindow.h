@@ -52,6 +52,7 @@ class VideoView;
 // Dialogs
 class LiveDialog;
 class LoginDialog;
+class PickDialog;
 class SeekDialog;
 class SyncDialog;
 
@@ -102,6 +103,10 @@ public:
 
   // - Signals -
 signals:
+  void responded(const QString &text);
+  void said(const QString &text, const QString &color);
+  void showTextRequested(const QString &text);
+
   void seeked();
   void addAndShowAnnotationRequested(const Annotation &a);
   void setAnnotationsRequested(const AnnotationList &l);
@@ -131,6 +136,7 @@ public slots:
   void open();  ///< By default the same as openFile()
   void openFile();
   void openProcess();
+  void openWindow();
   void openDevice();
   void openSubtitle();
   void openDirectory();
@@ -206,6 +212,9 @@ protected slots:
   void hideCommentView();
   void setCommentViewVisible(bool visible);
 
+  void setWindowPickDialogVisible(bool visible);
+  void setProcessPickDialogVisible(bool visible);
+
   // - User -
 public slots:
   void setUserAnonymous(bool t, bool async = true);
@@ -277,8 +286,10 @@ protected slots:
   virtual void dragLeaveEvent(QDragLeaveEvent *event); ///< \override
   virtual void dropEvent(QDropEvent *event); ///< \override
 
+  void invalidateContextMenu();
+
 protected:
-  bool isPosNearOSDPlayer(const QPoint &pos) const;
+  bool isGlobalPosNearOSDPlayer(const QPoint &pos) const;
 
 public slots:
   void updatePlayMode();
@@ -291,6 +302,8 @@ public slots:
 protected slots:
   void openProcessPath(const QString &path);
   void openProcessHook(int hookId, const ProcessInfo &pi = ProcessInfo());
+  void openProcessWindow(WId hwnd);
+  void openProcessId(ulong pid);
 #endif // USE_WIN_QTH
 
 #ifdef USE_MODE_SIGNAL
@@ -361,8 +374,10 @@ private:
   AnnotationEditor *annotationEditor_;
 
   LoginDialog *loginDialog_;
-  SeekDialog *seekDialog_;
   LiveDialog *liveDialog_;
+  PickDialog *windowPickDialog_;
+  PickDialog *processPickDialog_;
+  SeekDialog *seekDialog_;
   SyncDialog *syncDialog_;
 
   CloudView *cloudView_;
@@ -425,6 +440,8 @@ private:
           *toggleCloudViewVisibleAct_,
           *toggleLiveDialogVisibleAct_,
           *toggleLoginDialogVisibleAct_,
+          *toggleWindowPickDialogVisibleAct_,
+          *toggleProcessPickDialogVisibleAct_,
           *toggleSeekDialogVisibleAct_,
           *toggleSyncDialogVisibleAct_,
           *toggleUserPanelVisibleAct_;

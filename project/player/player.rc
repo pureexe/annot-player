@@ -10,8 +10,8 @@
 IDI_ICON1 ICON DISCARDABLE "player.ico"
 
 VS_VERSION_INFO VERSIONINFO
-        FILEVERSION 0,0,7,1
-        PRODUCTVERSION 0,0,7,1
+        FILEVERSION 0,0,8,0
+        PRODUCTVERSION 0,0,8,0
         FILEFLAGS 0x0L
         FILEFLAGSMASK 0x3fL
         FILEOS 0x00040004L
@@ -22,14 +22,14 @@ VS_VERSION_INFO VERSIONINFO
                 BEGIN
                         BLOCK "000004b0"
                         BEGIN
-                                VALUE "CompanyName", "Annot.Me"
+                                VALUE "CompanyName", "Annot Cloud"
                                 VALUE "FileDescription", "Annot Player"
-                                VALUE "FileVersion", "0.0.7.1"
+                                VALUE "FileVersion", "0.0.8.0"
                                 VALUE "LegalCopyright", "Copyright (C) 2011."
                                 VALUE "InternalName", "player.exe"
                                 VALUE "OriginalFilename", "player.exe"
                                 VALUE "ProductName", "Player"
-                                VALUE "ProductVersion", "0.0.7.1"
+                                VALUE "ProductVersion", "0.0.8.0"
                         END
                 END
                 BLOCK "VarFileInfo"

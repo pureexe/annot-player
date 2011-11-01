@@ -24,7 +24,7 @@ VS_VERSION_INFO VERSIONINFO
                 BEGIN
                         BLOCK "040904B0"
                         BEGIN
-                                VALUE "CompanyName", "Annot.Me\0"
+                                VALUE "CompanyName", "Annot Cloud\0"
                                 VALUE "FileDescription", "Annot Browser\0"
                                 VALUE "FileVersion", "0.0.0.1\0"
                                 VALUE "LegalCopyright", "Copyright\0"

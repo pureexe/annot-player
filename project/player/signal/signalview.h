@@ -9,7 +9,7 @@
 
 class ProcessView;
 class MessageView;
-class TokenView;
+//class TokenView;
 
 typedef Core::Gui::Dialog SignalViewBase;
 
@@ -21,12 +21,12 @@ class SignalView : public SignalViewBase
 
   ProcessView *processView_;
   MessageView *messageView_;
-  TokenView *tokenView_;
+  //TokenView *tokenView_;
 
 public:
   explicit SignalView(QWidget *parent = 0);
 
-  TokenView *tokenView() const;
+  //TokenView *tokenView() const;
   ProcessView *processView() const;
   MessageView *messageView() const;
 

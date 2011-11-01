@@ -68,7 +68,7 @@
     /*"INDEX(token_digest)"*/ \
     /*"FOREIGN KEY(user_id) REFERENCES token(token_id) "*/ \
     /*  "ON DELETE CASCADE ON UPDATE CASCADE"*/ \
-    /*"FOREIGN KEY(user_id) REFERENCES user(user_id) "/ \
+    /*"FOREIGN KEY(user_id) REFERENCES user(user_id) "*/ \
     /*  "ON DELETE CASCADE ON UPDATE CASCADE"*/ \
   ")"
 

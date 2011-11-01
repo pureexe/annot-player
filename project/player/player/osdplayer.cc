@@ -3,12 +3,21 @@
 
 #include "osdplayer.h"
 #include "global.h"
+#include "tr.h"
 #include "stylesheet.h"
+#include "uistyle.h"
+#ifdef USE_WIN_QTWIN
+  #include "win/qtwin/qtwin.h"
+#endif // USE_WIN_QTWIN
+#include "core/gui/toolbutton.h"
 #include <QtGui>
+
+#define DEBUG "OSDPlayerUi"
+#include "module/debug/debug.h"
 
 // - Constructions -
 OSDPlayerUi::OSDPlayerUi(SignalHub *hub, Player *player, ServerAgent *server, QWidget *parent)
-  : Base(hub, player, server, parent)
+  : Base(hub, player, server, parent), menuButton_(0), trackingWindow_(0)
 {
   setWindowFlags(Qt::FramelessWindowHint);
   setContentsMargins(0, 0, 0, 0);
@@ -18,6 +27,10 @@ OSDPlayerUi::OSDPlayerUi(SignalHub *hub, Player *player, ServerAgent *server, QW
   autoHideTimer_ = new QTimer(this);
   autoHideTimer_->setInterval(G_AUTOHIDE_TIMEOUT);
   connect(autoHideTimer_, SIGNAL(timeout()), SLOT(autoHide()));
+
+  trackingTimer_ = new QTimer(this);
+  trackingTimer_->setInterval(G_TRACKING_INTERVAL);
+  connect(trackingTimer_, SIGNAL(timeout()), SLOT(invalidateGeometry()));
 
   connect(prefixLineEdit(), SIGNAL(textChanged(QString)), SLOT(resetAutoHideTimeoutWhenEditing(QString)));
   connect(lineEdit(), SIGNAL(textChanged(QString)), SLOT(resetAutoHideTimeoutWhenEditing(QString)));
@@ -38,6 +51,7 @@ OSDPlayerUi::createLayout()
     rows->addWidget(positionSlider());
     rows->addLayout(row);
 
+    row->addWidget(menuButton());
     row->addWidget(playButton());
     row->addWidget(toggleAnnotationButton());
     row->addWidget(nextFrameButton());
@@ -101,20 +115,123 @@ OSDPlayerUi::resetAutoHideTimeout()
 void
 OSDPlayerUi::invalidateGeometry()
 {
-  QWidget *widget = qobject_cast<QWidget*>(parent());
-  if (!widget)
+  if (trackingWindow_) {
+#ifdef USE_WIN_QTWIN
+    QRect r = QtWin::getWindowRect(trackingWindow_);
+    if (r.isNull()) {
+      if (!QtWin::isValidWindow(trackingWindow_))
+        setTrackingWindow(0);
+    } else {
+
+      int w_max = r.width();
+      int h_hint = sizeHint().height();
+      QSize newSize(w_max, h_hint);
+      if (newSize != size())
+        resize(newSize);
+
+      int x_left = r.x();
+      int y_bottom = r.bottom() - height();
+
+      moveToGlobalPos(QPoint(x_left, y_bottom));
+    }
+#endif // USE_WIN_QTWIN
+  } else if(parentWidget()) {
+
+    // Invalidate size
+    int w_max = parentWidget()->width();
+    int h_hint = sizeHint().height();
+    resize(w_max, h_hint);
+
+    // Invalidate position
+    //int x_center = widget->width() / 2 - 2 * width();
+    int x_left = 0;
+    int y_bottom = parentWidget()->height() - height();
+    move(x_left, y_bottom);
+  }
+}
+
+void
+OSDPlayerUi::moveToGlobalPos(const QPoint &globalPos)
+{
+  // Currently only work on Windows
+  QPoint newPos = frameGeometry().topLeft() + pos() // relative position
+                  + globalPos - mapToGlobal(pos()); // absolute distance
+  if (newPos != pos())
+    move(newPos);
+}
+
+WId
+OSDPlayerUi::trackingWindow() const
+{ return trackingWindow_; }
+
+void
+OSDPlayerUi::setTrackingWindow(WId hwnd)
+{
+  if (trackingWindow_ != hwnd) {
+     trackingWindow_ = hwnd;
+     if (trackingWindow_)
+       startTracking();
+     else
+       stopTracking();
+  }
+}
+
+void
+OSDPlayerUi::startTracking()
+{
+  if (!trackingTimer_->isActive())
+    trackingTimer_->start();
+}
+
+void
+OSDPlayerUi::stopTracking()
+{
+  if (trackingTimer_->isActive())
+    trackingTimer_->stop();
+}
+
+void
+OSDPlayerUi::setVisible(bool visible)
+{
+  if (visible == isVisible())
     return;
 
-  // Invalidate size
-  int w_max = widget->width();
-  int h_hint = sizeHint().height();
-  resize(w_max, h_hint);
+  if (visible) {
+    if (trackingWindow_) {
+      invalidateGeometry();
+      startTracking();
+    }
+  } else
+    stopTracking();
 
-  // Invalidate position
-  //int x_center = widget->width() / 2 - 2 * width();
-  int x_left = 0;
-  int y_bottom = widget->height() - height();
-  move(x_left, y_bottom);
+  Base::setVisible(visible);
+}
+
+// - Menu button -
+
+void
+OSDPlayerUi::setMenu(QMenu *menu)
+{ menuButton()->setMenu(menu); }
+
+QToolButton*
+OSDPlayerUi::menuButton()
+{
+  if (!menuButton_) {
+    menuButton_ = new Core::Gui::ToolButton(this);
+    menuButton_->setStyleSheet(SS_TOOLBUTTON_MENU);
+    menuButton_->setToolTip(TR(T_TOOLTIP_MENU));
+    UiStyle::globalInstance()->setToolButtonStyle(menuButton_);
+
+    connect(menuButton_, SIGNAL(clicked()), SLOT(popupMenu()));
+  }
+  return menuButton_;
+}
+
+void
+OSDPlayerUi::popupMenu()
+{
+  emit invalidateMenuRequested();
+  menuButton()->showMenu();
 }
 
 // EOF

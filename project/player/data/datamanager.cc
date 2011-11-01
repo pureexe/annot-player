@@ -160,7 +160,7 @@ DataManager::selectTokenWithId(qint64 id, int tt)
 {
   DOUT("selectTokenWithId:enter: id =" << id);
   Token ret;
-  if (server_->isConnected() && server_->isAuthorized()) {
+  if (server_->isConnected()) {
     ret = server_->selectTokenWithId(id, tt);
     if (ret.isValid() && cache_->isValid()) {
       cache_->deleteTokenWithId(ret.id(), ret.type());
@@ -177,7 +177,7 @@ DataManager::selectTokenWithDigest(const QString &digest, int tt)
 {
   DOUT("selectTokenWithDigest:enter: digest =" << digest);
   Token ret;
-  if (server_->isConnected() && server_->isAuthorized()) {
+  if (server_->isConnected()) {
     ret = server_->selectTokenWithDigest(digest, tt);
     if (ret.isValid() && cache_->isValid()) {
       cache_->deleteTokenWithId(ret.id(), ret.type());
@@ -194,7 +194,7 @@ DataManager::selectAnnotationsWithTokenId(qint64 tid, int tt)
 {
   DOUT("selectAnnotationsWithTokenId:enter: tid =" << tid);
   AnnotationList ret;
-  if (server_->isConnected() && server_->isAuthorized()) {
+  if (server_->isConnected()) {
     ret = server_->selectAnnotationsWithTokenId(tid, tt);
     if (!ret.isEmpty() && cache_->isValid()) {
       cache_->deleteAnnotationsWithTokenId(tid, tt);
@@ -211,7 +211,7 @@ DataManager::selectAliasesWithTokenId(qint64 tid, int tt)
 {
   DOUT("selectAliasesWithTokenId:enter: tid =" << tid);
   AliasList ret;
-  if (server_->isConnected() && server_->isAuthorized()) {
+  if (server_->isConnected()) {
     ret = server_->selectAliasesWithTokenId(tid, tt);
     if (!ret.isEmpty() && cache_->isValid()) {
       cache_->deleteAliasesWithTokenId(tid, tt);
@@ -228,7 +228,7 @@ DataManager::selectRelatedAnnotationsWithTokenId(qint64 tid, int tt)
 {
   DOUT("selectRelatedAnnotationsWithTokenId:enter: tid =" << tid);
   AnnotationList ret;
-  if (server_->isConnected() && server_->isAuthorized()) {
+  if (server_->isConnected()) {
     ret = server_->selectRelatedAnnotationsWithTokenId(tid, tt);
     if (!ret.isEmpty() && cache_->isValid())
       foreach (Annotation a, ret) {

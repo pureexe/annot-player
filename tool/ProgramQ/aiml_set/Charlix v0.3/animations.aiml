@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<aiml version="1.0.1" xmlns="http://alicebot.org/2001/AIML-1.0.1"
+      xmlns:html="http://www.w3.org/1999/xhtml"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://alicebot.org/2001/AIML-1.0.1 http://aitools.org/aiml/schema/AIML.xsd">
+<!-- Free software (c) 2006 Charlix.   -->
+<!-- This program is open source code released under -->
+<!-- the terms of the GNU General Public License     -->
+<!-- as published by the Free Software Foundation.   -->
+<!-- Complies with AIML 1.01 Tag Set Specification -->
+<!-- as adopted by the ALICE A.I. Foundation.  -->
+
+
+
+<!-- faces,--> 
+<category><pattern>AMAZED FACE</pattern><template>@:-7 </template></category> 
+<category><pattern>ANGRY FACE</pattern><template>@:-$ </template></category>  
+<category><pattern>ANGEL FACE</pattern><template>O @:-) </template></category>  
+<category><pattern>CLOWN FACE</pattern><template>@*&lt;:-) </template></category>  
+<category><pattern>COOL FACE</pattern><template>@B~] </template></category>  
+<category><pattern>CRAZY FACE</pattern><template>@%~) </template></category>
+<category><pattern>CRYING FACE</pattern><template>@:'-( </template></category>
+<category><pattern>DEAD FACE</pattern><template>@X-( </template></category>  
+<category><pattern>DRUNK FACE</pattern><template>@:*) </template></category>  
+<category><pattern>HUNGRY FACE</pattern><template>@:-9 </template></category>  
+<category><pattern>KIND FACE</pattern><template>@:~) </template></category>        
+<category><pattern>LAUGHING FACE</pattern><template>@:-D </template></category>  
+<category><pattern>MISERIBLE FACE</pattern><template>@:-C </template></category>  
+<category><pattern>PULLING TONGUE FACE</pattern><template>@:-p </template></category>  
+<category><pattern>SAD FACE</pattern><template>@:-( </template></category>  
+<category><pattern>SILENT FACE</pattern><template>@:-X </template></category>  
+<category><pattern>SINGING FACE</pattern><template>@:-@ </template></category>  
+<category><pattern>SLEEPY FACE</pattern><template>@|-I </template></category>  
+<category><pattern>SMILEY FACE</pattern><template>@:-) </template></category>  
+<category><pattern>SURPRISED FACE</pattern><template>@8-O oops </template></category>  
+<category><pattern>SKEPTICAL FACE</pattern><template>@:-/ </template></category>  
+<category><pattern>WINKING FACE</pattern><template>@;-) </template></category>  
+<category><pattern>YAWNING FACE</pattern><template>@|-O </template></category>  
+
+
+</aiml>

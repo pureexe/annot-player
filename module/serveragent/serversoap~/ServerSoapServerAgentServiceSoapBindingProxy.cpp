@@ -105,7 +105,7 @@ int ServerAgentServiceSoapBindingProxy::blessGameAnnotationWithId(const char *en
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (!soap_endpoint)
-		soap_endpoint = "http://localhost:8080/services/ServerAgentPort";
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
 	if (!soap_action)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -159,7 +159,7 @@ int ServerAgentServiceSoapBindingProxy::blessMediaAnnotationWithId(const char *e
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (!soap_endpoint)
-		soap_endpoint = "http://localhost:8080/services/ServerAgentPort";
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
 	if (!soap_action)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -213,7 +213,7 @@ int ServerAgentServiceSoapBindingProxy::chat(const char *endpoint, const char *s
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (!soap_endpoint)
-		soap_endpoint = "http://localhost:8080/services/ServerAgentPort";
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
 	if (!soap_action)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -261,27 +261,27 @@ int ServerAgentServiceSoapBindingProxy::chat(const char *endpoint, const char *s
 	return soap_closesock(soap);
 }
 
-int ServerAgentServiceSoapBindingProxy::getUser(const char *endpoint, const char *soap_action, tns__getUser *tns__getUser_, tns__getUserResponse *tns__getUserResponse_)
+int ServerAgentServiceSoapBindingProxy::isClientUpdated(const char *endpoint, const char *soap_action, tns__isClientUpdated *tns__isClientUpdated_, tns__isClientUpdatedResponse *tns__isClientUpdatedResponse_)
 {	struct soap *soap = this;
-	struct __tns__getUser soap_tmp___tns__getUser;
+	struct __tns__isClientUpdated soap_tmp___tns__isClientUpdated;
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (!soap_endpoint)
-		soap_endpoint = "http://localhost:8080/services/ServerAgentPort";
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
 	if (!soap_action)
 		soap_action = "";
 	soap->encodingStyle = NULL;
-	soap_tmp___tns__getUser.tns__getUser_ = tns__getUser_;
+	soap_tmp___tns__isClientUpdated.tns__isClientUpdated_ = tns__isClientUpdated_;
 	soap_begin(soap);
 	soap_serializeheader(soap);
-	soap_serialize___tns__getUser(soap, &soap_tmp___tns__getUser);
+	soap_serialize___tns__isClientUpdated(soap, &soap_tmp___tns__isClientUpdated);
 	if (soap_begin_count(soap))
 		return soap->error;
 	if (soap->mode & SOAP_IO_LENGTH)
 	{	if (soap_envelope_begin_out(soap)
 		 || soap_putheader(soap)
 		 || soap_body_begin_out(soap)
-		 || soap_put___tns__getUser(soap, &soap_tmp___tns__getUser, "-tns:getUser", NULL)
+		 || soap_put___tns__isClientUpdated(soap, &soap_tmp___tns__isClientUpdated, "-tns:isClientUpdated", NULL)
 		 || soap_body_end_out(soap)
 		 || soap_envelope_end_out(soap))
 			 return soap->error;
@@ -292,74 +292,20 @@ int ServerAgentServiceSoapBindingProxy::getUser(const char *endpoint, const char
 	 || soap_envelope_begin_out(soap)
 	 || soap_putheader(soap)
 	 || soap_body_begin_out(soap)
-	 || soap_put___tns__getUser(soap, &soap_tmp___tns__getUser, "-tns:getUser", NULL)
+	 || soap_put___tns__isClientUpdated(soap, &soap_tmp___tns__isClientUpdated, "-tns:isClientUpdated", NULL)
 	 || soap_body_end_out(soap)
 	 || soap_envelope_end_out(soap)
 	 || soap_end_send(soap))
 		return soap_closesock(soap);
-	if (!tns__getUserResponse_)
+	if (!tns__isClientUpdatedResponse_)
 		return soap_closesock(soap);
-	tns__getUserResponse_->soap_default(soap);
+	tns__isClientUpdatedResponse_->soap_default(soap);
 	if (soap_begin_recv(soap)
 	 || soap_envelope_begin_in(soap)
 	 || soap_recv_header(soap)
 	 || soap_body_begin_in(soap))
 		return soap_closesock(soap);
-	tns__getUserResponse_->soap_get(soap, "tns:getUserResponse", "tns:getUserResponse");
-	if (soap->error)
-		return soap_recv_fault(soap, 0);
-	if (soap_body_end_in(soap)
-	 || soap_envelope_end_in(soap)
-	 || soap_end_recv(soap))
-		return soap_closesock(soap);
-	return soap_closesock(soap);
-}
-
-int ServerAgentServiceSoapBindingProxy::isAuthorized(const char *endpoint, const char *soap_action, tns__isAuthorized *tns__isAuthorized_, tns__isAuthorizedResponse *tns__isAuthorizedResponse_)
-{	struct soap *soap = this;
-	struct __tns__isAuthorized soap_tmp___tns__isAuthorized;
-	if (endpoint)
-		soap_endpoint = endpoint;
-	if (!soap_endpoint)
-		soap_endpoint = "http://localhost:8080/services/ServerAgentPort";
-	if (!soap_action)
-		soap_action = "";
-	soap->encodingStyle = NULL;
-	soap_tmp___tns__isAuthorized.tns__isAuthorized_ = tns__isAuthorized_;
-	soap_begin(soap);
-	soap_serializeheader(soap);
-	soap_serialize___tns__isAuthorized(soap, &soap_tmp___tns__isAuthorized);
-	if (soap_begin_count(soap))
-		return soap->error;
-	if (soap->mode & SOAP_IO_LENGTH)
-	{	if (soap_envelope_begin_out(soap)
-		 || soap_putheader(soap)
-		 || soap_body_begin_out(soap)
-		 || soap_put___tns__isAuthorized(soap, &soap_tmp___tns__isAuthorized, "-tns:isAuthorized", NULL)
-		 || soap_body_end_out(soap)
-		 || soap_envelope_end_out(soap))
-			 return soap->error;
-	}
-	if (soap_end_count(soap))
-		return soap->error;
-	if (soap_connect(soap, soap_endpoint, soap_action)
-	 || soap_envelope_begin_out(soap)
-	 || soap_putheader(soap)
-	 || soap_body_begin_out(soap)
-	 || soap_put___tns__isAuthorized(soap, &soap_tmp___tns__isAuthorized, "-tns:isAuthorized", NULL)
-	 || soap_body_end_out(soap)
-	 || soap_envelope_end_out(soap)
-	 || soap_end_send(soap))
-		return soap_closesock(soap);
-	if (!tns__isAuthorizedResponse_)
-		return soap_closesock(soap);
-	tns__isAuthorizedResponse_->soap_default(soap);
-	if (soap_begin_recv(soap)
-	 || soap_envelope_begin_in(soap)
-	 || soap_recv_header(soap)
-	 || soap_body_begin_in(soap))
-		return soap_closesock(soap);
-	tns__isAuthorizedResponse_->soap_get(soap, "tns:isAuthorizedResponse", "tns:isAuthorizedResponse");
+	tns__isClientUpdatedResponse_->soap_get(soap, "tns:isClientUpdatedResponse", "tns:isClientUpdatedResponse");
 	if (soap->error)
 		return soap_recv_fault(soap, 0);
 	if (soap_body_end_in(soap)
@@ -375,7 +321,7 @@ int ServerAgentServiceSoapBindingProxy::isConnected(const char *endpoint, const 
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (!soap_endpoint)
-		soap_endpoint = "http://localhost:8080/services/ServerAgentPort";
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
 	if (!soap_action)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -423,121 +369,13 @@ int ServerAgentServiceSoapBindingProxy::isConnected(const char *endpoint, const 
 	return soap_closesock(soap);
 }
 
-int ServerAgentServiceSoapBindingProxy::login(const char *endpoint, const char *soap_action, tns__login *tns__login_, tns__loginResponse *tns__loginResponse_)
-{	struct soap *soap = this;
-	struct __tns__login soap_tmp___tns__login;
-	if (endpoint)
-		soap_endpoint = endpoint;
-	if (!soap_endpoint)
-		soap_endpoint = "http://localhost:8080/services/ServerAgentPort";
-	if (!soap_action)
-		soap_action = "";
-	soap->encodingStyle = NULL;
-	soap_tmp___tns__login.tns__login_ = tns__login_;
-	soap_begin(soap);
-	soap_serializeheader(soap);
-	soap_serialize___tns__login(soap, &soap_tmp___tns__login);
-	if (soap_begin_count(soap))
-		return soap->error;
-	if (soap->mode & SOAP_IO_LENGTH)
-	{	if (soap_envelope_begin_out(soap)
-		 || soap_putheader(soap)
-		 || soap_body_begin_out(soap)
-		 || soap_put___tns__login(soap, &soap_tmp___tns__login, "-tns:login", NULL)
-		 || soap_body_end_out(soap)
-		 || soap_envelope_end_out(soap))
-			 return soap->error;
-	}
-	if (soap_end_count(soap))
-		return soap->error;
-	if (soap_connect(soap, soap_endpoint, soap_action)
-	 || soap_envelope_begin_out(soap)
-	 || soap_putheader(soap)
-	 || soap_body_begin_out(soap)
-	 || soap_put___tns__login(soap, &soap_tmp___tns__login, "-tns:login", NULL)
-	 || soap_body_end_out(soap)
-	 || soap_envelope_end_out(soap)
-	 || soap_end_send(soap))
-		return soap_closesock(soap);
-	if (!tns__loginResponse_)
-		return soap_closesock(soap);
-	tns__loginResponse_->soap_default(soap);
-	if (soap_begin_recv(soap)
-	 || soap_envelope_begin_in(soap)
-	 || soap_recv_header(soap)
-	 || soap_body_begin_in(soap))
-		return soap_closesock(soap);
-	tns__loginResponse_->soap_get(soap, "tns:loginResponse", "tns:loginResponse");
-	if (soap->error)
-		return soap_recv_fault(soap, 0);
-	if (soap_body_end_in(soap)
-	 || soap_envelope_end_in(soap)
-	 || soap_end_recv(soap))
-		return soap_closesock(soap);
-	return soap_closesock(soap);
-}
-
-int ServerAgentServiceSoapBindingProxy::logout(const char *endpoint, const char *soap_action, tns__logout *tns__logout_, tns__logoutResponse *tns__logoutResponse_)
-{	struct soap *soap = this;
-	struct __tns__logout soap_tmp___tns__logout;
-	if (endpoint)
-		soap_endpoint = endpoint;
-	if (!soap_endpoint)
-		soap_endpoint = "http://localhost:8080/services/ServerAgentPort";
-	if (!soap_action)
-		soap_action = "";
-	soap->encodingStyle = NULL;
-	soap_tmp___tns__logout.tns__logout_ = tns__logout_;
-	soap_begin(soap);
-	soap_serializeheader(soap);
-	soap_serialize___tns__logout(soap, &soap_tmp___tns__logout);
-	if (soap_begin_count(soap))
-		return soap->error;
-	if (soap->mode & SOAP_IO_LENGTH)
-	{	if (soap_envelope_begin_out(soap)
-		 || soap_putheader(soap)
-		 || soap_body_begin_out(soap)
-		 || soap_put___tns__logout(soap, &soap_tmp___tns__logout, "-tns:logout", NULL)
-		 || soap_body_end_out(soap)
-		 || soap_envelope_end_out(soap))
-			 return soap->error;
-	}
-	if (soap_end_count(soap))
-		return soap->error;
-	if (soap_connect(soap, soap_endpoint, soap_action)
-	 || soap_envelope_begin_out(soap)
-	 || soap_putheader(soap)
-	 || soap_body_begin_out(soap)
-	 || soap_put___tns__logout(soap, &soap_tmp___tns__logout, "-tns:logout", NULL)
-	 || soap_body_end_out(soap)
-	 || soap_envelope_end_out(soap)
-	 || soap_end_send(soap))
-		return soap_closesock(soap);
-	if (!tns__logoutResponse_)
-		return soap_closesock(soap);
-	tns__logoutResponse_->soap_default(soap);
-	if (soap_begin_recv(soap)
-	 || soap_envelope_begin_in(soap)
-	 || soap_recv_header(soap)
-	 || soap_body_begin_in(soap))
-		return soap_closesock(soap);
-	tns__logoutResponse_->soap_get(soap, "tns:logoutResponse", "tns:logoutResponse");
-	if (soap->error)
-		return soap_recv_fault(soap, 0);
-	if (soap_body_end_in(soap)
-	 || soap_envelope_end_in(soap)
-	 || soap_end_recv(soap))
-		return soap_closesock(soap);
-	return soap_closesock(soap);
-}
-
 int ServerAgentServiceSoapBindingProxy::selectGameAliasesWithTokenId(const char *endpoint, const char *soap_action, tns__selectGameAliasesWithTokenId *tns__selectGameAliasesWithTokenId_, tns__selectGameAliasesWithTokenIdResponse *tns__selectGameAliasesWithTokenIdResponse_)
 {	struct soap *soap = this;
 	struct __tns__selectGameAliasesWithTokenId soap_tmp___tns__selectGameAliasesWithTokenId;
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (!soap_endpoint)
-		soap_endpoint = "http://localhost:8080/services/ServerAgentPort";
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
 	if (!soap_action)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -591,7 +429,7 @@ int ServerAgentServiceSoapBindingProxy::selectGameAnnotationsWithTokenId(const c
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (!soap_endpoint)
-		soap_endpoint = "http://localhost:8080/services/ServerAgentPort";
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
 	if (!soap_action)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -645,7 +483,7 @@ int ServerAgentServiceSoapBindingProxy::selectGameTokenWithDigest(const char *en
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (!soap_endpoint)
-		soap_endpoint = "http://localhost:8080/services/ServerAgentPort";
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
 	if (!soap_action)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -699,7 +537,7 @@ int ServerAgentServiceSoapBindingProxy::selectGameTokenWithId(const char *endpoi
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (!soap_endpoint)
-		soap_endpoint = "http://localhost:8080/services/ServerAgentPort";
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
 	if (!soap_action)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -753,7 +591,7 @@ int ServerAgentServiceSoapBindingProxy::selectMediaAliasesWithTokenId(const char
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (!soap_endpoint)
-		soap_endpoint = "http://localhost:8080/services/ServerAgentPort";
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
 	if (!soap_action)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -807,7 +645,7 @@ int ServerAgentServiceSoapBindingProxy::selectMediaAnnotationsWithTokenId(const 
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (!soap_endpoint)
-		soap_endpoint = "http://localhost:8080/services/ServerAgentPort";
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
 	if (!soap_action)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -861,7 +699,7 @@ int ServerAgentServiceSoapBindingProxy::selectMediaTokenWithDigest(const char *e
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (!soap_endpoint)
-		soap_endpoint = "http://localhost:8080/services/ServerAgentPort";
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
 	if (!soap_action)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -915,7 +753,7 @@ int ServerAgentServiceSoapBindingProxy::selectMediaTokenWithId(const char *endpo
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (!soap_endpoint)
-		soap_endpoint = "http://localhost:8080/services/ServerAgentPort";
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
 	if (!soap_action)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -969,7 +807,7 @@ int ServerAgentServiceSoapBindingProxy::selectRelatedGameAnnotationsWithTokenId(
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (!soap_endpoint)
-		soap_endpoint = "http://localhost:8080/services/ServerAgentPort";
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
 	if (!soap_action)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -1023,7 +861,7 @@ int ServerAgentServiceSoapBindingProxy::selectRelatedMediaAnnotationsWithTokenId
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (!soap_endpoint)
-		soap_endpoint = "http://localhost:8080/services/ServerAgentPort";
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
 	if (!soap_action)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -1071,27 +909,27 @@ int ServerAgentServiceSoapBindingProxy::selectRelatedMediaAnnotationsWithTokenId
 	return soap_closesock(soap);
 }
 
-int ServerAgentServiceSoapBindingProxy::setCallback(const char *endpoint, const char *soap_action, tns__setCallback *tns__setCallback_, tns__setCallbackResponse *tns__setCallbackResponse_)
+int ServerAgentServiceSoapBindingProxy::selectUser(const char *endpoint, const char *soap_action, tns__selectUser *tns__selectUser_, tns__selectUserResponse *tns__selectUserResponse_)
 {	struct soap *soap = this;
-	struct __tns__setCallback soap_tmp___tns__setCallback;
+	struct __tns__selectUser soap_tmp___tns__selectUser;
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (!soap_endpoint)
-		soap_endpoint = "http://localhost:8080/services/ServerAgentPort";
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
 	if (!soap_action)
 		soap_action = "";
 	soap->encodingStyle = NULL;
-	soap_tmp___tns__setCallback.tns__setCallback_ = tns__setCallback_;
+	soap_tmp___tns__selectUser.tns__selectUser_ = tns__selectUser_;
 	soap_begin(soap);
 	soap_serializeheader(soap);
-	soap_serialize___tns__setCallback(soap, &soap_tmp___tns__setCallback);
+	soap_serialize___tns__selectUser(soap, &soap_tmp___tns__selectUser);
 	if (soap_begin_count(soap))
 		return soap->error;
 	if (soap->mode & SOAP_IO_LENGTH)
 	{	if (soap_envelope_begin_out(soap)
 		 || soap_putheader(soap)
 		 || soap_body_begin_out(soap)
-		 || soap_put___tns__setCallback(soap, &soap_tmp___tns__setCallback, "-tns:setCallback", NULL)
+		 || soap_put___tns__selectUser(soap, &soap_tmp___tns__selectUser, "-tns:selectUser", NULL)
 		 || soap_body_end_out(soap)
 		 || soap_envelope_end_out(soap))
 			 return soap->error;
@@ -1102,74 +940,20 @@ int ServerAgentServiceSoapBindingProxy::setCallback(const char *endpoint, const 
 	 || soap_envelope_begin_out(soap)
 	 || soap_putheader(soap)
 	 || soap_body_begin_out(soap)
-	 || soap_put___tns__setCallback(soap, &soap_tmp___tns__setCallback, "-tns:setCallback", NULL)
+	 || soap_put___tns__selectUser(soap, &soap_tmp___tns__selectUser, "-tns:selectUser", NULL)
 	 || soap_body_end_out(soap)
 	 || soap_envelope_end_out(soap)
 	 || soap_end_send(soap))
 		return soap_closesock(soap);
-	if (!tns__setCallbackResponse_)
+	if (!tns__selectUserResponse_)
 		return soap_closesock(soap);
-	tns__setCallbackResponse_->soap_default(soap);
+	tns__selectUserResponse_->soap_default(soap);
 	if (soap_begin_recv(soap)
 	 || soap_envelope_begin_in(soap)
 	 || soap_recv_header(soap)
 	 || soap_body_begin_in(soap))
 		return soap_closesock(soap);
-	tns__setCallbackResponse_->soap_get(soap, "tns:setCallbackResponse", "tns:setCallbackResponse");
-	if (soap->error)
-		return soap_recv_fault(soap, 0);
-	if (soap_body_end_in(soap)
-	 || soap_envelope_end_in(soap)
-	 || soap_end_recv(soap))
-		return soap_closesock(soap);
-	return soap_closesock(soap);
-}
-
-int ServerAgentServiceSoapBindingProxy::setClientType(const char *endpoint, const char *soap_action, tns__setClientType *tns__setClientType_, tns__setClientTypeResponse *tns__setClientTypeResponse_)
-{	struct soap *soap = this;
-	struct __tns__setClientType soap_tmp___tns__setClientType;
-	if (endpoint)
-		soap_endpoint = endpoint;
-	if (!soap_endpoint)
-		soap_endpoint = "http://localhost:8080/services/ServerAgentPort";
-	if (!soap_action)
-		soap_action = "";
-	soap->encodingStyle = NULL;
-	soap_tmp___tns__setClientType.tns__setClientType_ = tns__setClientType_;
-	soap_begin(soap);
-	soap_serializeheader(soap);
-	soap_serialize___tns__setClientType(soap, &soap_tmp___tns__setClientType);
-	if (soap_begin_count(soap))
-		return soap->error;
-	if (soap->mode & SOAP_IO_LENGTH)
-	{	if (soap_envelope_begin_out(soap)
-		 || soap_putheader(soap)
-		 || soap_body_begin_out(soap)
-		 || soap_put___tns__setClientType(soap, &soap_tmp___tns__setClientType, "-tns:setClientType", NULL)
-		 || soap_body_end_out(soap)
-		 || soap_envelope_end_out(soap))
-			 return soap->error;
-	}
-	if (soap_end_count(soap))
-		return soap->error;
-	if (soap_connect(soap, soap_endpoint, soap_action)
-	 || soap_envelope_begin_out(soap)
-	 || soap_putheader(soap)
-	 || soap_body_begin_out(soap)
-	 || soap_put___tns__setClientType(soap, &soap_tmp___tns__setClientType, "-tns:setClientType", NULL)
-	 || soap_body_end_out(soap)
-	 || soap_envelope_end_out(soap)
-	 || soap_end_send(soap))
-		return soap_closesock(soap);
-	if (!tns__setClientTypeResponse_)
-		return soap_closesock(soap);
-	tns__setClientTypeResponse_->soap_default(soap);
-	if (soap_begin_recv(soap)
-	 || soap_envelope_begin_in(soap)
-	 || soap_recv_header(soap)
-	 || soap_body_begin_in(soap))
-		return soap_closesock(soap);
-	tns__setClientTypeResponse_->soap_get(soap, "tns:setClientTypeResponse", "tns:setClientTypeResponse");
+	tns__selectUserResponse_->soap_get(soap, "tns:selectUserResponse", "tns:selectUserResponse");
 	if (soap->error)
 		return soap_recv_fault(soap, 0);
 	if (soap_body_end_in(soap)
@@ -1185,7 +969,7 @@ int ServerAgentServiceSoapBindingProxy::setUserAnonymous(const char *endpoint, c
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (!soap_endpoint)
-		soap_endpoint = "http://localhost:8080/services/ServerAgentPort";
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
 	if (!soap_action)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -1239,7 +1023,7 @@ int ServerAgentServiceSoapBindingProxy::setUserLanguage(const char *endpoint, co
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (!soap_endpoint)
-		soap_endpoint = "http://localhost:8080/services/ServerAgentPort";
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
 	if (!soap_action)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -1293,7 +1077,7 @@ int ServerAgentServiceSoapBindingProxy::submitGameAlias(const char *endpoint, co
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (!soap_endpoint)
-		soap_endpoint = "http://localhost:8080/services/ServerAgentPort";
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
 	if (!soap_action)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -1347,7 +1131,7 @@ int ServerAgentServiceSoapBindingProxy::submitGameAliasTextAndTokenDigest(const 
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (!soap_endpoint)
-		soap_endpoint = "http://localhost:8080/services/ServerAgentPort";
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
 	if (!soap_action)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -1401,7 +1185,7 @@ int ServerAgentServiceSoapBindingProxy::submitGameAliasTextWithTokenId(const cha
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (!soap_endpoint)
-		soap_endpoint = "http://localhost:8080/services/ServerAgentPort";
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
 	if (!soap_action)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -1455,7 +1239,7 @@ int ServerAgentServiceSoapBindingProxy::submitGameAnnotation(const char *endpoin
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (!soap_endpoint)
-		soap_endpoint = "http://localhost:8080/services/ServerAgentPort";
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
 	if (!soap_action)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -1509,7 +1293,7 @@ int ServerAgentServiceSoapBindingProxy::submitGameAnnotationTextAndTokenDigest(c
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (!soap_endpoint)
-		soap_endpoint = "http://localhost:8080/services/ServerAgentPort";
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
 	if (!soap_action)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -1563,7 +1347,7 @@ int ServerAgentServiceSoapBindingProxy::submitGameAnnotationTextWithTokenId(cons
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (!soap_endpoint)
-		soap_endpoint = "http://localhost:8080/services/ServerAgentPort";
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
 	if (!soap_action)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -1617,7 +1401,7 @@ int ServerAgentServiceSoapBindingProxy::submitGameToken(const char *endpoint, co
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (!soap_endpoint)
-		soap_endpoint = "http://localhost:8080/services/ServerAgentPort";
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
 	if (!soap_action)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -1671,7 +1455,7 @@ int ServerAgentServiceSoapBindingProxy::submitGameTokenDigest(const char *endpoi
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (!soap_endpoint)
-		soap_endpoint = "http://localhost:8080/services/ServerAgentPort";
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
 	if (!soap_action)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -1725,7 +1509,7 @@ int ServerAgentServiceSoapBindingProxy::submitMediaAlias(const char *endpoint, c
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (!soap_endpoint)
-		soap_endpoint = "http://localhost:8080/services/ServerAgentPort";
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
 	if (!soap_action)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -1779,7 +1563,7 @@ int ServerAgentServiceSoapBindingProxy::submitMediaAliasTextAndTokenDigest(const
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (!soap_endpoint)
-		soap_endpoint = "http://localhost:8080/services/ServerAgentPort";
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
 	if (!soap_action)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -1833,7 +1617,7 @@ int ServerAgentServiceSoapBindingProxy::submitMediaAliasTextWithTokenId(const ch
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (!soap_endpoint)
-		soap_endpoint = "http://localhost:8080/services/ServerAgentPort";
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
 	if (!soap_action)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -1887,7 +1671,7 @@ int ServerAgentServiceSoapBindingProxy::submitMediaAnnotation(const char *endpoi
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (!soap_endpoint)
-		soap_endpoint = "http://localhost:8080/services/ServerAgentPort";
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
 	if (!soap_action)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -1941,7 +1725,7 @@ int ServerAgentServiceSoapBindingProxy::submitMediaAnnotationTextAndTokenDigest(
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (!soap_endpoint)
-		soap_endpoint = "http://localhost:8080/services/ServerAgentPort";
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
 	if (!soap_action)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -1995,7 +1779,7 @@ int ServerAgentServiceSoapBindingProxy::submitMediaAnnotationTextWithTokenId(con
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (!soap_endpoint)
-		soap_endpoint = "http://localhost:8080/services/ServerAgentPort";
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
 	if (!soap_action)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -2049,7 +1833,7 @@ int ServerAgentServiceSoapBindingProxy::submitMediaToken(const char *endpoint, c
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (!soap_endpoint)
-		soap_endpoint = "http://localhost:8080/services/ServerAgentPort";
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
 	if (!soap_action)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -2103,7 +1887,7 @@ int ServerAgentServiceSoapBindingProxy::submitMediaTokenDigest(const char *endpo
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (!soap_endpoint)
-		soap_endpoint = "http://localhost:8080/services/ServerAgentPort";
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
 	if (!soap_action)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -2157,7 +1941,7 @@ int ServerAgentServiceSoapBindingProxy::updateGameAnnotationTextWithId(const cha
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (!soap_endpoint)
-		soap_endpoint = "http://localhost:8080/services/ServerAgentPort";
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
 	if (!soap_action)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -2211,7 +1995,7 @@ int ServerAgentServiceSoapBindingProxy::updateMediaAnnotationTextWithId(const ch
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (!soap_endpoint)
-		soap_endpoint = "http://localhost:8080/services/ServerAgentPort";
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
 	if (!soap_action)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -2250,114 +2034,6 @@ int ServerAgentServiceSoapBindingProxy::updateMediaAnnotationTextWithId(const ch
 	 || soap_body_begin_in(soap))
 		return soap_closesock(soap);
 	tns__updateMediaAnnotationTextWithIdResponse_->soap_get(soap, "tns:updateMediaAnnotationTextWithIdResponse", "tns:updateMediaAnnotationTextWithIdResponse");
-	if (soap->error)
-		return soap_recv_fault(soap, 0);
-	if (soap_body_end_in(soap)
-	 || soap_envelope_end_in(soap)
-	 || soap_end_recv(soap))
-		return soap_closesock(soap);
-	return soap_closesock(soap);
-}
-
-int ServerAgentServiceSoapBindingProxy::visitGameTokenWithId(const char *endpoint, const char *soap_action, tns__visitGameTokenWithId *tns__visitGameTokenWithId_, tns__visitGameTokenWithIdResponse *tns__visitGameTokenWithIdResponse_)
-{	struct soap *soap = this;
-	struct __tns__visitGameTokenWithId soap_tmp___tns__visitGameTokenWithId;
-	if (endpoint)
-		soap_endpoint = endpoint;
-	if (!soap_endpoint)
-		soap_endpoint = "http://localhost:8080/services/ServerAgentPort";
-	if (!soap_action)
-		soap_action = "";
-	soap->encodingStyle = NULL;
-	soap_tmp___tns__visitGameTokenWithId.tns__visitGameTokenWithId_ = tns__visitGameTokenWithId_;
-	soap_begin(soap);
-	soap_serializeheader(soap);
-	soap_serialize___tns__visitGameTokenWithId(soap, &soap_tmp___tns__visitGameTokenWithId);
-	if (soap_begin_count(soap))
-		return soap->error;
-	if (soap->mode & SOAP_IO_LENGTH)
-	{	if (soap_envelope_begin_out(soap)
-		 || soap_putheader(soap)
-		 || soap_body_begin_out(soap)
-		 || soap_put___tns__visitGameTokenWithId(soap, &soap_tmp___tns__visitGameTokenWithId, "-tns:visitGameTokenWithId", NULL)
-		 || soap_body_end_out(soap)
-		 || soap_envelope_end_out(soap))
-			 return soap->error;
-	}
-	if (soap_end_count(soap))
-		return soap->error;
-	if (soap_connect(soap, soap_endpoint, soap_action)
-	 || soap_envelope_begin_out(soap)
-	 || soap_putheader(soap)
-	 || soap_body_begin_out(soap)
-	 || soap_put___tns__visitGameTokenWithId(soap, &soap_tmp___tns__visitGameTokenWithId, "-tns:visitGameTokenWithId", NULL)
-	 || soap_body_end_out(soap)
-	 || soap_envelope_end_out(soap)
-	 || soap_end_send(soap))
-		return soap_closesock(soap);
-	if (!tns__visitGameTokenWithIdResponse_)
-		return soap_closesock(soap);
-	tns__visitGameTokenWithIdResponse_->soap_default(soap);
-	if (soap_begin_recv(soap)
-	 || soap_envelope_begin_in(soap)
-	 || soap_recv_header(soap)
-	 || soap_body_begin_in(soap))
-		return soap_closesock(soap);
-	tns__visitGameTokenWithIdResponse_->soap_get(soap, "tns:visitGameTokenWithIdResponse", "tns:visitGameTokenWithIdResponse");
-	if (soap->error)
-		return soap_recv_fault(soap, 0);
-	if (soap_body_end_in(soap)
-	 || soap_envelope_end_in(soap)
-	 || soap_end_recv(soap))
-		return soap_closesock(soap);
-	return soap_closesock(soap);
-}
-
-int ServerAgentServiceSoapBindingProxy::visitMediaTokenWithId(const char *endpoint, const char *soap_action, tns__visitMediaTokenWithId *tns__visitMediaTokenWithId_, tns__visitMediaTokenWithIdResponse *tns__visitMediaTokenWithIdResponse_)
-{	struct soap *soap = this;
-	struct __tns__visitMediaTokenWithId soap_tmp___tns__visitMediaTokenWithId;
-	if (endpoint)
-		soap_endpoint = endpoint;
-	if (!soap_endpoint)
-		soap_endpoint = "http://localhost:8080/services/ServerAgentPort";
-	if (!soap_action)
-		soap_action = "";
-	soap->encodingStyle = NULL;
-	soap_tmp___tns__visitMediaTokenWithId.tns__visitMediaTokenWithId_ = tns__visitMediaTokenWithId_;
-	soap_begin(soap);
-	soap_serializeheader(soap);
-	soap_serialize___tns__visitMediaTokenWithId(soap, &soap_tmp___tns__visitMediaTokenWithId);
-	if (soap_begin_count(soap))
-		return soap->error;
-	if (soap->mode & SOAP_IO_LENGTH)
-	{	if (soap_envelope_begin_out(soap)
-		 || soap_putheader(soap)
-		 || soap_body_begin_out(soap)
-		 || soap_put___tns__visitMediaTokenWithId(soap, &soap_tmp___tns__visitMediaTokenWithId, "-tns:visitMediaTokenWithId", NULL)
-		 || soap_body_end_out(soap)
-		 || soap_envelope_end_out(soap))
-			 return soap->error;
-	}
-	if (soap_end_count(soap))
-		return soap->error;
-	if (soap_connect(soap, soap_endpoint, soap_action)
-	 || soap_envelope_begin_out(soap)
-	 || soap_putheader(soap)
-	 || soap_body_begin_out(soap)
-	 || soap_put___tns__visitMediaTokenWithId(soap, &soap_tmp___tns__visitMediaTokenWithId, "-tns:visitMediaTokenWithId", NULL)
-	 || soap_body_end_out(soap)
-	 || soap_envelope_end_out(soap)
-	 || soap_end_send(soap))
-		return soap_closesock(soap);
-	if (!tns__visitMediaTokenWithIdResponse_)
-		return soap_closesock(soap);
-	tns__visitMediaTokenWithIdResponse_->soap_default(soap);
-	if (soap_begin_recv(soap)
-	 || soap_envelope_begin_in(soap)
-	 || soap_recv_header(soap)
-	 || soap_body_begin_in(soap))
-		return soap_closesock(soap);
-	tns__visitMediaTokenWithIdResponse_->soap_get(soap, "tns:visitMediaTokenWithIdResponse", "tns:visitMediaTokenWithIdResponse");
 	if (soap->error)
 		return soap_recv_fault(soap, 0);
 	if (soap_body_end_in(soap)

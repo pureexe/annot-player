@@ -8,6 +8,7 @@
 #include <tuple>
 
 #define DEBUG "Hook"
+//#define USE_MODE_DEBUG
 #include "module/debug/debug.h"
 
 #ifndef HOOK_DLL_NAME
@@ -42,7 +43,7 @@ namespace { // anonymous, hook callbacks
   // } MOUSEHOOKSTRUCT, *PMOUSEHOOKSTRUCT, *LPMOUSEHOOKSTRUCT;
   //LPMOUSEHOOKSTRUCT pMouseHook = (MOUSEHOOKSTRUCT FAR *)lparam;
   LRESULT CALLBACK
-  MouseProc(int nCode,WPARAM wparam,LPARAM lparam)
+  MouseProc(__in int nCode, __in WPARAM wparam, __in LPARAM lparam)
   {
     #define NEXT ::CallNextHookEx(hHook, nCode, wparam, lparam)
     HHOOK hHook = (HHOOK)HOOK_MANAGER->hookHandleForThreadId(GetCurrentThreadId(), HOOK_PROC_MOUSE);
@@ -459,7 +460,6 @@ namespace { // anonymous, keyboard hook
 
 #endif // USE_KEYBOARD_HOOK
 
-
 // - Windows Hook Manager Impl -
 
 class WindowsHookManagerImpl
@@ -496,8 +496,8 @@ WindowsHookManager*
 WindowsHookManager::globalInstance()
 { static Self g; return &g; }
 
-WindowsHookManager::WindowsHookManager()
-{ impl_ = new Impl; }
+WindowsHookManager::WindowsHookManager(QObject *parent)
+  : Base(parent) { impl_ = new Impl; }
 
 WindowsHookManager::~WindowsHookManager()
 {
@@ -612,7 +612,7 @@ WindowsHookManager::start()
   } else { // Global mode
 
     DOUT("DLL name:" << HOOK_MODULE_NAME);
-    HINSTANCE hInstance = ::GetModuleHandleA(HOOK_MODULE_NAME);
+    HINSTANCE hInstance = ::GetModuleHandle(HOOK_MODULE_NAME);
     Q_ASSERT(hInstance);
     if (!hInstance) // This mostly happens when dll is not available.
       return;
@@ -864,197 +864,3 @@ WindowsHookAdaptor::event(QEvent *event)
 */
 
 // EOF
-
-//#include <afxdllx.h>
-
-//#ifdef _DEBUG
-//#define new DEBUG_NEW
-//#undef THIS_FILE
-//static char THIS_FILE[] = __FILE__;
-//#endif
-
- /*
-#pragma data_seg("mydata")
-     HWND glhPrevTarWnd=NULL; //上次鼠标所指的窗口句柄
-     HWND glhDisplayWnd=NULL; //显示目标窗口标题编辑框的句柄
-         HHOOK glhHook=NULL; //安装的鼠标勾子句柄
-         HINSTANCE glhInstance=NULL; //DLL实例句柄
-#pragma data_seg()
-
-HWND XYZWindowFromPoint(HWND hwndParent,      // handle to parent window
-                        POINT point,          // structure with point coordinates
-                        UINT uFlags  = CWP_SKIPINVISIBLE       // skip options
-                                           );
-static AFX_EXTENSION_MODULE MousehookDLL = { NULL, NULL };
-
-extern "C" int APIENTRY
-DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
-{
-  // Remove this if you use lpReserved
-  UNREFERENCED_PARAMETER(lpReserved);
-
-  if (dwReason == DLL_PROCESS_ATTACH)
-  {
-    TRACE0("MOUSEHOOK.DLL Initializing!\n");
-
-    // Extension DLL one-time initialization
-    if (!AfxInitExtensionModule(MousehookDLL, hInstance))
-      return 0;
-
-    // Insert this DLL into the resource chain
-    // NOTE: If this Extension DLL is being implicitly linked to by
-    //  an MFC Regular DLL (such as an ActiveX Control)
-    //  instead of an MFC application, then you will want to
-    //  remove this line from DllMain and put it in a separate
-    //  function exported from this Extension DLL.  The Regular DLL
-    //  that uses this Extension DLL should then explicitly call that
-    //  function to initialize this Extension DLL.  Otherwise,
-    //  the CDynLinkLibrary object will not be attached to the
-    //  Regular DLL's resource chain, and serious problems will
-    //  result.
-
-    new CDynLinkLibrary(MousehookDLL);
-    glhInstance=hInstance; //插入保存DLL实例句柄
-  }
-  else if (dwReason == DLL_PROCESS_DETACH)
-  {
-    TRACE0("MOUSEHOOK.DLL Terminating!\n");
-    // Terminate the library before destructors are called
-    AfxTermExtensionModule(MousehookDLL);
-  }
-  return 1;   // ok
-}
-
-//钩子函数的实现：
-LRESULT WINAPI MouseProc(int nCode,WPARAM wparam,LPARAM lparam)
-{
-  LPMOUSEHOOKSTRUCT pMouseHook=(MOUSEHOOKSTRUCT FAR *)lparam;
-  if (nCode>=0)
-  {
-    //============================================================================
-    // 如下代码是得到父窗口标题文本的做法
-    // HWND glhTargetWnd=pMouseHook->hwnd;     //取目标窗口句柄
-    // HWND ParentWnd=glhTargetWnd;
-    // while (ParentWnd !=NULL)
-    // {
-    //   glhTargetWnd=ParentWnd;
-    //   ParentWnd=GetParent(glhTargetWnd);   //取应用程序主窗口句柄
-    // }
-    // ===========================================================================
-    HWND glhTargetWnd=XYZWindowFromPoint(NULL,pMouseHook->pt);    //用上面的一段注释掉的代码替换此行是得到父窗口标题文本的做法
-    if(glhTargetWnd!=glhPrevTarWnd)
-    {
-      char szCaption[256];
-      GetWindowText(glhTargetWnd,szCaption,100);
-      //取目标窗口标题
-      if(IsWindow(glhDisplayWnd))
-        SendMessage(glhDisplayWnd,WM_SETTEXT,0,(LPARAM)(LPCTSTR)szCaption);
-      glhPrevTarWnd=glhTargetWnd;
-      //保存目标窗口
-    }
-  }
-  return CallNextHookEx(glhHook,nCode,wparam,lparam);
-  //继续传递消息
-}
-*/
-
-/*
-//安装钩子并设定接收显示窗口句柄
-BOOL CMouseHook::StartHook(HWND hWnd)
-{
-  BOOL bResult=FALSE;
-
-  glhHook=SetWindowsHookEx(WH_MOUSE,MouseProc,glhInstance,0);
-  // =================================================================================
-  //   HHOOK SetWindowsHookEx( int idHook,HOOKPROC lpfn, INSTANCE hMod,DWORD dwThreadId )
-　　// 参数idHook表示钩子类型，它是和钩子函数类型一一对应的。
-  //   比如，WH_KEYBOARD表示安装的是键盘钩子，WH_MOUSE表示是鼠标钩子等等。
-//
-　　// Lpfn是钩子函数的地址。
-//
-　　// HMod是钩子函数所在的实例的句柄。对于线程钩子，该参数为NULL；
-  //   对于系统钩子，该参数为钩子函数所在的DLL句柄。
-//
-　　// dwThreadId 指定钩子所监视的线程的线程号。对于全局钩子，该参数为NULL。
-//
-　　// SetWindowsHookEx返回所安装的钩子句柄。
-  //   值得注意的是线程钩子和系统钩子的钩子函数的位置有很大的差别。
-  //       线程钩子一般在当前线程或者当前线程派生的线程内，
-  //       而系统钩子必须放在独立的动态链接库中，实现起来要麻烦一些。
-  //       ==================================================================================
-        if(glhHook!=NULL)
-                bResult=TRUE;
-        glhDisplayWnd=hWnd;
-        //设置显示目标窗口标题编辑框的句柄
-        return bResult;
-}
-
-//卸载钩子
-BOOL CMouseHook::StopHook()
-{
-  BOOL bResult=FALSE;
-  if(glhHook)
-  {
-    bResult= UnhookWindowsHookEx(glhHook);
-    if(bResult)
-    {
-      glhPrevTarWnd=NULL;
-      glhDisplayWnd=NULL;//清变量
-      glhHook=NULL;
-    }
-  }
-  return bResult;
-}
-*/
-
- /*
-//返回光标(point)所在点的子窗口句柄
-HWND XYZWindowFromPoint(HWND hwndParent,   // handle to parent window
-                        POINT point,       // structure with point coordinates
-                        UINT uFlags        // skip options
-)
-{
-  if(hwndParent != NULL)
-    return ::ChildWindowFromPointEx(hwndParent, point, uFlags);
-  //返回光标(point)所在点的子窗口句柄
-
-  // Find the smallest "window" still containing the point
-  // Doing this prevents us from stopping at the first window containing the point
-  RECT rect, rectSearch;
-  HWND pWnd, hWnd, hSearchWnd;
-
-  hWnd = ::WindowFromPoint(point);//得到光标(point)所在点的窗口句柄
-  if(hWnd != NULL)
-  {
-    // Get the size and parent for compare later
-    ::GetWindowRect(hWnd, &rect);  //得到整个窗口在屏幕上的矩形框位置
-    pWnd = ::GetParent(hWnd);       //得到父窗口句柄
-
-    // We only search further if the window has a parent
-    if(pWnd != NULL)
-    {
-      // Search from the window down in the Z-Order
-      hSearchWnd = hWnd;
-      do{
-        hSearchWnd = ::GetWindow(hSearchWnd, GW_HWNDNEXT);//如果再也找不到这样的窗口，该函数就会返回NULL
-        //GetWindow得到和句柄为hSearchWnd(即首次循环为hWnd)的窗口相关的窗口，其关系由GW_HWNDNEXT决定，这里是寻找兄弟窗口
-
-        // Does the search window also contain the point, have the same parent, and is visible?
-        ::GetWindowRect(hSearchWnd, &rectSearch);
-        if(::PtInRect(&rectSearch, point) && ::GetParent(hSearchWnd) == pWnd && ::IsWindowVisible(hSearchWnd))
-        {
-          // It does, but is it smaller?比较看谁的面积最小
-          if(((rectSearch.right - rectSearch.left) * (rectSearch.bottom - rectSearch.top)) < ((rect.right - rect.left) * (rect.bottom - rect.top)))
-          {
-            // Found new smaller window, update compare window
-            hWnd = hSearchWnd;
-            ::GetWindowRect(hWnd, &rect);
-          }
-        }
-      }
-      while(hSearchWnd != NULL);
-    }
-  }
-  return hWnd;
-}
-*/

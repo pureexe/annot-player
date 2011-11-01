@@ -9,17 +9,18 @@
 
 #define SK_ORGANIZATION   G_ORGANIZATION
 #define SK_APPLICATION    G_APPLICATION
+#define SK_VERSION        "Version"
 
-#define SK_USERID       "userId"
-#define SK_USERNAME     "userName"
-#define SK_PASSWORD     "password"
+#define SK_USERID       "UserId"
+#define SK_USERNAME     "UserName"
+#define SK_PASSWORD     "Password"
 
-#define SK_LANGUAGE     "language"
-#define SK_ANNOTLANGUAGES "annotationLanguages"
+#define SK_LANGUAGE     "Language"
+#define SK_ANNOTLANGUAGES "AnnotationLanguages"
 
-#define SK_QUEUEEMPTY   "queueEmpty"
+#define SK_QUEUEEMPTY   "QueueEmpty"
 
-#define SK_RECENT(_i)   "recent" #_i
+#define SK_RECENT(_i)   "Recent" #_i
 namespace { enum { RECENT_COUNT = 10 }; }
 
 // - Constructions -
@@ -36,6 +37,14 @@ Settings::Settings(QObject *parent)
 {  }
 
 // - Properties -
+
+QString
+Settings::version() const
+{ return value(SK_VERSION).toString(); }
+
+void
+Settings::setVersion(const QString &version)
+{ setValue(SK_VERSION, version); }
 
 qint64
 Settings::userId() const
