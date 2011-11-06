@@ -1,0 +1,26 @@
+<!-- This file was auto-generated from WSDL -->
+<!-- by the Apache Axis2 version: 1.0  Built on : Oct 15, 2009 (12:36:59 IST) -->
+<service name="ClientAgentService">
+<parameter name="ServiceClass">ClientAgentService</parameter>
+<description>ClientAgentServiceService</description>
+<operation name="isAuthorized" mep="http://www.w3.org/ns/wsdl/in-out">
+<messageReceiver class="wsf_cpp_msg_recv"/>
+<parameter name="wsamapping">ClientAgent#isAuthorized</parameter>
+</operation>
+<operation name="deauthorize" mep="http://www.w3.org/ns/wsdl/in-out">
+<messageReceiver class="wsf_cpp_msg_recv"/>
+<parameter name="wsamapping">ClientAgent#deauthorize</parameter>
+</operation>
+<operation name="authorize" mep="http://www.w3.org/ns/wsdl/in-out">
+<messageReceiver class="wsf_cpp_msg_recv"/>
+<parameter name="wsamapping">ClientAgent#authorize</parameter>
+</operation>
+<operation name="chat" mep="http://www.w3.org/ns/wsdl/in-out">
+<messageReceiver class="wsf_cpp_msg_recv"/>
+<parameter name="wsamapping">ClientAgent#chat</parameter>
+</operation>
+<operation name="isConnected" mep="http://www.w3.org/ns/wsdl/in-out">
+<messageReceiver class="wsf_cpp_msg_recv"/>
+<parameter name="wsamapping">ClientAgent#isConnected</parameter>
+</operation>
+</service>

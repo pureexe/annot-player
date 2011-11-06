@@ -1,0 +1,41 @@
+/*
+ * app.rc 7/20/2011
+ */
+#if defined(UNDER_CE)
+# include <winbase.h>
+#else
+#  include <winver.h>
+#endif
+
+IDI_ICON1 ICON DISCARDABLE "app.ico"
+
+VS_VERSION_INFO VERSIONINFO
+        FILEVERSION 0,0,8,3
+        PRODUCTVERSION 0,0,8,3
+        FILEFLAGS 0x0L
+        FILEFLAGSMASK 0x3fL
+        FILEOS 0x00040004L
+        FILETYPE 0x1L
+        FILESUBTYPE 0x0L
+        BEGIN
+                BLOCK "StringFileInfo"
+                BEGIN
+                        BLOCK "000004b0"
+                        BEGIN
+                                VALUE "CompanyName", "Annot Cloud"
+                                VALUE "FileDescription", "Annot Player"
+                                VALUE "FileVersion", "0.0.8.3"
+                                VALUE "LegalCopyright", "Copyright (C) 2011."
+                                VALUE "InternalName", "app.exe"
+                                VALUE "OriginalFilename", "app.exe"
+                                VALUE "ProductName", "Annot Player"
+                                VALUE "ProductVersion", "0.0.8.3"
+                        END
+                END
+                BLOCK "VarFileInfo"
+                BEGIN
+                        VALUE "Translation", 0x0, 1200
+                END
+        END
+
+/* End of Version info */
