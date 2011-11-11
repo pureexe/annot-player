@@ -27,8 +27,8 @@ CloudView::CloudView(QWidget *parent)
   setContentsMargins(0, 0, 0, 0);
   setHomePage(G_STARTPAGE_URL);
 
-  const bool useUiStyleQss = false;
-  UiStyle::globalInstance()->setWindowStyle(this, useUiStyleQss);
+  UiStyle::globalInstance()->setWindowStyle(this);
+  setWindowOpacity(1.0); // window is opaque
 }
 
 // - Events -

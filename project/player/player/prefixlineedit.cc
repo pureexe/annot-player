@@ -7,13 +7,6 @@
 #include "prefixlineedit.h"
 #include <QtGui>
 
-//#define DEBUG
-#ifdef DEBUG
-  #define DOUT(_msg)    qDebug() << "PrefixLineEdit:" << _msg
-#else
-  #define DOUT(_dummy)  ;
-#endif // DEBUG
-
 PrefixLineEdit::PrefixLineEdit(QWidget *parent)
   : Base(parent)
 { }

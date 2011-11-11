@@ -33,8 +33,12 @@ public:
 
   void setAutoClearInterval(int msecs);
 
+signals:
+  void asyncSetText(const QString &text); ///< \internal
+
   // - Output -
 public:
+  void append(const QString &text);
   Self &operator<<(const QString &text);
 
   bool isAutoClearTimerActive() const;

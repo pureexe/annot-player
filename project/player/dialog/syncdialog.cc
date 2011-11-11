@@ -16,8 +16,8 @@ SyncDialog::SyncDialog(QWidget *parent)
   : Base(parent), timeSlotIndex_(0)
 {
   setWindowTitle(TR(T_TITLE_SYNC));
-  UiStyle::globalInstance()->setWindowStyle(this);
   setContentsMargins(0, 0, 0, 0);
+  UiStyle::globalInstance()->setWindowStyle(this);
 
   // Widgets
 

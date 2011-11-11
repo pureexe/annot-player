@@ -4,9 +4,17 @@
 // module/serveragent/serverproxy_config.h
 // 10/8/2011
 
+#include <QtGlobal>
+
 // SOAP imode and omode, enforcing UTF-8, and gzip compression
 #define SERVER_SOAP_MODE        (SOAP_C_UTFSTRING | SOAP_ENC_ZLIB)
 
-#define CLIENT_TYPE "player" "-" "win" "-" "0.0.8.3"
+#ifdef Q_WS_WIN
+  #define CLIENT_TYPE "player" "-" "win" "-" "0.0.9.1"
+#elif defined(Q_WS_MAC)
+  #define CLIENT_TYPE "player" "-" "mac" "-" "0.0.9.1"
+#else
+  #define CLIENT_TYPE "player" "-" "linux" "-" "0.0.9.1"
+#endif // Q_WS_
 
 #endif // SERVERPROXY_CONFIG_H

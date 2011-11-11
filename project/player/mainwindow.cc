@@ -2,6 +2,7 @@
 // 6/30/2011
 
 #include "mainwindow.h"
+#include "mainwindowprivate.h"
 
 #include "db.h"
 #include "datamanager.h"
@@ -52,6 +53,9 @@
 #ifdef USE_MODULE_DOLL
   #include "module/doll/doll.h"
 #endif // USE_MODULE_DOLL
+#ifdef USE_WIN_HOOK
+  #include "win/hook/hook.h"
+#endif // USE_WIN_HOOK
 //#ifdef USE_WIN_DWM
 //  #include "win/dwm/dwm.h"
 //#endif // USE_WIN_DWM
@@ -87,156 +91,6 @@ using namespace Logger;
 
 #define DEBUG "MainWindow"
 #include "module/debug/debug.h"
-
-// - Helpers -
-
-namespace { // anonymous
-
-  template <typename L>
-  inline L
-  revertList(const L &l)
-  {
-    L ret;
-    if (!l.isEmpty())
-      foreach (typename L::value_type v, l)
-        ret.push_front(v);
-    return ret;
-  }
-
-} // anonymous namespace
-
-// - Tasks -
-
-namespace { namespace task_ { // anonymous
-
-  class login : public QRunnable
-  {
-    MainWindow *w_;
-    QString name_, pass_;
-    virtual void run() { w_->login(name_, pass_, false); } // \override, async = false
-  public:
-    login(const QString userName, const QString &password, MainWindow *w)
-      : w_(w), name_(userName), pass_(password) { Q_ASSERT(w_); }
-  };
-
-  class logout : public QRunnable
-  {
-    MainWindow *w_;
-    virtual void run() { w_->logout(false); } // \override, async = false
-  public:
-    explicit logout(MainWindow *w) : w_(w) { Q_ASSERT(w_); }
-  };
-
-  class setUserAnonymous : public QRunnable
-  {
-    MainWindow *w_;
-    bool t_;
-    virtual void run() { w_->setUserAnonymous(t_, false); } // \override, async = false
-  public:
-    setUserAnonymous(bool t, MainWindow *w) : w_(w), t_(t) { Q_ASSERT(w_); }
-  };
-
-  class setUserLanguage : public QRunnable
-  {
-    MainWindow *w_;
-    int l_;
-    virtual void run() { w_->setUserLanguage(l_, false); } // \override, async = false
-  public:
-    setUserLanguage(int l, MainWindow *w) : w_(w), l_(l) { Q_ASSERT(w_); }
-  };
-
-  class chat : public QRunnable
-  {
-    MainWindow *w_;
-    QString text_;
-    virtual void run() { w_->chat(text_, false); } // \override, async = false
-  public:
-    chat(const QString &text, MainWindow *w) : w_(w), text_(text) { Q_ASSERT(w_); }
-  };
-
-  class submitText : public QRunnable
-  {
-    MainWindow *w_;
-    QString text_;
-    virtual void run() { w_->submitText(text_, false); } // \override, async = false
-  public:
-    submitText(const QString &text, MainWindow *w) : w_(w), text_(text) { Q_ASSERT(w_); }
-  };
-
-  class submitAlias : public QRunnable
-  {
-    MainWindow *w_;
-    Alias a_;
-    virtual void run() { w_->submitAlias(a_, false); } // \override, async = false
-  public:
-    submitAlias(const Alias &a, MainWindow *w) : w_(w), a_(a) { Q_ASSERT(w_); }
-  };
-
-  class setToken : public QRunnable
-  {
-    MainWindow *w_;
-    QString t_;
-    virtual void run() { w_->setToken(t_, false); } // \override, async = false
-  public:
-    setToken(const QString &t, MainWindow *w) : w_(w), t_(t) { Q_ASSERT(w_); }
-  };
-
-} } // anonymous namespace task_
-
-// - Hook -
-#ifdef USE_WIN_HOOK
-
-HookEventForwarder::HookEventForwarder(MainWindow *w, QObject *parent)
-  : Base(parent), w_(w)
-{ Q_ASSERT(w_); }
-
-bool
-HookEventForwarder::eventFilter(QObject *hook, QEvent *event)
-{
-  // jichi 8/2/2011: Ugly fix for cancelling context menu.
-  static bool contextMenuPoppedUp = false;
-
-  if (event)
-    switch (event->type()) {
-    case QEvent::ContextMenu:
-      contextMenuPoppedUp = true;
-      QApplication::sendEvent(w_, event);
-      return true;
-
-      // Forward
-    case QEvent::MouseButtonDblClick:
-      contextMenuPoppedUp = false;
-    case QEvent::MouseMove:
-    case QEvent::Wheel:
-      QApplication::sendEvent(w_, event);
-      return true;
-
-    case QEvent::MouseButtonPress: {
-        QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event);
-        Q_ASSERT(mouseEvent);
-        if (mouseEvent->button() == Qt::LeftButton
-            && !contextMenuPoppedUp)
-          if (w_->isPlaying() || w_->isEditing())
-            w_->pause();
-      }
-      contextMenuPoppedUp = false;
-    case QEvent::MouseButtonRelease:
-      event->accept();
-      return true;
-
-    //case QEvent::KeyPress:
-    //case QEvent::KeyRelease:
-    //  //QApplication::sendEvent(w_, event);
-    //  if (w_->visiblePlayer())
-    //    w_->visiblePlayer()->lineEdit()->clearFocus();
-    //  w_->setFocus();
-    //  return true;
-    }
-
-  return Base::eventFilter(hook, event);
-}
-
-#endif // USE_WIN_HOOK
 
 // - Focus -
 
@@ -318,7 +172,7 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags f)
   HOOK->setContextMenuEventEnabled(true);       // Listen to context menu event.
   HOOK->setDoubleClickEventEnabled(true);       // Listen to double click event.
   HOOK->setMouseMoveEventEscaped(true);         // Always receive mouse move event
-  HOOK->installEventFilter(new HookEventForwarder(this, this));
+  HOOK->installEventFilter(new HookEventForwarder(this));
 
   //connect(player_, SIGNAL(mediaOpen()), videoView_, SLOT(addToWindowsHook()));
   connect(player_, SIGNAL(playing()), videoView_, SLOT(addToWindowsHook()));
@@ -327,6 +181,9 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags f)
   HOOK->start();
 #endif // USE_WIN_HOOK
 
+  // Use default subtitle color
+  //setSubtitleColorToDefaultAct_->setChecked(true);
+  setSubtitleColorToOrange();
 
   // Load settings
   recent_ = Settings::globalInstance()->recent();
@@ -441,10 +298,13 @@ MainWindow::createComponents()
   miniPlayer_ = new MiniPlayerUi(hub_, player_, server_, this);
 
 #ifdef Q_WS_MAC
+  videoView_->showView();
   player_->setEmbeddedWindowHandle(videoView_->view());
+  QTimer::singleShot(0, videoView_, SLOT(hideView()));
 #else
   player_->embed(videoView_);
 #endif // Q_WS_MAC
+  player_->setFullScreen(false);
 
   //annotationView_->hide();
   miniPlayer_->hide();
@@ -617,6 +477,13 @@ MainWindow::createConnections()
   connect(player_, SIGNAL(stopped()), videoView_, SLOT(hideView()));
 #endif // Q_WS_MAC
 
+#ifdef USE_WIN_QTWIN
+  if (!QtWin::isWindowsVistaOrLater()) {
+    connect(player_, SIGNAL(playing()), SLOT(disableWindowTransparency()));
+    connect(player_, SIGNAL(stopped()), SLOT(enableWindowTransparency()));
+  }
+#endif // USE_WIN_QTWIN
+
   // Agents:
 #ifdef USE_MODULE_CLIENTAGENT
   connect(client_, SIGNAL(chatReceived(QString)), this, SLOT(respond(QString)));
@@ -722,6 +589,12 @@ MainWindow::createActions()
   MAKE_ACTION(clearCacheAct_,   CLEARCACHE,     cache_,         SLOT(clear()))
   MAKE_ACTION(connectAct_,      CONNECT,        server_,        SLOT(updateConnected()))
   MAKE_ACTION(disconnectAct_,   DISCONNECT,     server_,        SLOT(disconnect()))
+  MAKE_TOGGLE(setSubtitleColorToDefaultAct_, DEFAULTCOLOR, this, SLOT(setSubtitleColorToDefault()))
+  MAKE_TOGGLE(setSubtitleColorToBlueAct_, BLUECOLOR, this, SLOT(setSubtitleColorToBlue()))
+  MAKE_TOGGLE(setSubtitleColorToOrangeAct_, ORANGECOLOR, this, SLOT(setSubtitleColorToOrange()))
+  MAKE_TOGGLE(setSubtitleColorToPurpleAct_, PURPLECOLOR, this, SLOT(setSubtitleColorToPurple()))
+  MAKE_TOGGLE(setSubtitleColorToBlackAct_, BLACKCOLOR, this, SLOT(setSubtitleColorToBlack()))
+  MAKE_TOGGLE(setSubtitleColorToRedAct_, REDCOLOR, this, SLOT(setSubtitleColorToRed()))
 #ifdef USE_MODE_SIGNAL
   MAKE_TOGGLE(toggleSignalViewVisibleAct_, SIGNALVIEW, this, SLOT(setSignalViewVisible(bool)))
   MAKE_TOGGLE(toggleRecentMessageViewVisibleAct_, RECENTMESSAGES, this, SLOT(setRecentMessageViewVisible(bool)))
@@ -774,9 +647,32 @@ MainWindow::createActions()
   MAKE_TOGGLE(toggleAnnotationLanguageToUnknownAct_, UNKNOWNLANGUAGE, this,SLOT(invalidateAnnotationLanguages()))
   MAKE_TOGGLE(toggleAnnotationLanguageToAnyAct_, ANYLANGUAGE, this,SLOT(invalidateAnnotationLanguages()))
 
-  MAKE_ACTION(aboutAct_,        ABOUT,          this,   SLOT(about()))
-  MAKE_ACTION(helpAct_,         HELP,           this,   SLOT(help()))
-  MAKE_ACTION(quitAct_,         QUIT,           this,   SLOT(close()))
+  MAKE_TOGGLE(setThemeToDefaultAct_,    DEFAULTTHEME,   this,   SLOT(setThemeToDefault()))
+  MAKE_TOGGLE(setThemeToRandomAct_,     RANDOMTHEME,    this,   SLOT(setThemeToRandom()))
+  MAKE_TOGGLE(setThemeToBlack1Act_,     BLACKTHEME1,    this,   SLOT(setThemeToBlack1()))
+  MAKE_TOGGLE(setThemeToBlack2Act_,     BLACKTHEME2,    this,   SLOT(setThemeToBlack2()))
+  MAKE_TOGGLE(setThemeToBlue1Act_,      BLUETHEME1,     this,   SLOT(setThemeToBlue1()))
+  MAKE_TOGGLE(setThemeToBlue2Act_,      BLUETHEME2,     this,   SLOT(setThemeToBlue2()))
+  MAKE_TOGGLE(setThemeToBrown1Act_,     BROWNTHEME1,    this,   SLOT(setThemeToBrown1()))
+  MAKE_TOGGLE(setThemeToBrown2Act_,     BROWNTHEME2,    this,   SLOT(setThemeToBrown2()))
+  MAKE_TOGGLE(setThemeToGreen1Act_,     GREENTHEME1,    this,   SLOT(setThemeToGreen1()))
+  MAKE_TOGGLE(setThemeToGreen2Act_,     GREENTHEME2,    this,   SLOT(setThemeToGreen2()))
+  MAKE_TOGGLE(setThemeToLightBlue1Act_, LIGHTBLUETHEME1,this,   SLOT(setThemeToLightBlue1()))
+  MAKE_TOGGLE(setThemeToLightBlue2Act_, LIGHTBLUETHEME2,this,   SLOT(setThemeToLightBlue2()))
+  MAKE_TOGGLE(setThemeToOrange1Act_,    ORANGETHEME1,   this,   SLOT(setThemeToOrange1()))
+  MAKE_TOGGLE(setThemeToOrange2Act_,    ORANGETHEME2,   this,   SLOT(setThemeToOrange2()))
+  MAKE_TOGGLE(setThemeToPink1Act_,      PINKTHEME1,     this,   SLOT(setThemeToPink1()))
+  MAKE_TOGGLE(setThemeToPink2Act_,      PINKTHEME2,     this,   SLOT(setThemeToPink2()))
+  MAKE_TOGGLE(setThemeToPurple1Act_,    PURPLETHEME1,   this,   SLOT(setThemeToPurple1()))
+  MAKE_TOGGLE(setThemeToPurple2Act_,    PURPLETHEME2,   this,   SLOT(setThemeToPurple2()))
+  MAKE_TOGGLE(setThemeToRed1Act_,       REDTHEME1,      this,   SLOT(setThemeToRed1()))
+  MAKE_TOGGLE(setThemeToRed2Act_,       REDTHEME2,      this,   SLOT(setThemeToRed2()))
+  MAKE_TOGGLE(setThemeToYellow1Act_,    YELLOWTHEME1,   this,   SLOT(setThemeToYellow1()))
+  MAKE_TOGGLE(setThemeToYellow2Act_,    YELLOWTHEME2,   this,   SLOT(setThemeToYellow2()))
+
+  MAKE_ACTION(aboutAct_,        ABOUT,  this,   SLOT(about()))
+  MAKE_ACTION(helpAct_,         HELP,   this,   SLOT(help()))
+  MAKE_ACTION(quitAct_,         QUIT,   this,   SLOT(close()))
 
   openAct_->setShortcuts(QKeySequence::Open);
   helpAct_->setShortcuts(QKeySequence::HelpContents);
@@ -790,23 +686,23 @@ MainWindow::createMenus()
 {
   // Context menu
   contextMenu_ = new QMenu(TR(T_TITLE_PROGRAM), this);
-  UiStyle::globalInstance()->setContextMenuStyle(contextMenu_);
+  UiStyle::globalInstance()->setContextMenuStyle(contextMenu_, true); // persistent = true
   osdPlayer_->setMenu(contextMenu_);
 
   appLanguageContextMenu_ = new QMenu(this); {
-    UiStyle::globalInstance()->setContextMenuStyle(appLanguageContextMenu_);
+    UiStyle::globalInstance()->setContextMenuStyle(appLanguageContextMenu_, true); // persistent = true
 
     appLanguageContextMenu_->setTitle("Language"); // no tr wrapping "language"
     appLanguageContextMenu_->setToolTip(TR(T_TOOLTIP_APPLANGUAGE));
 
     appLanguageContextMenu_->addAction(setAppLanguageToEnglishAct_);
     appLanguageContextMenu_->addAction(setAppLanguageToJapaneseAct_);
-    appLanguageContextMenu_->addAction(setAppLanguageToTraditionalChineseAct_);
+    //appLanguageContextMenu_->addAction(setAppLanguageToTraditionalChineseAct_); // Temporarily disabled since no traditional chinese at this time
     appLanguageContextMenu_->addAction(setAppLanguageToSimplifiedChineseAct_);
   }
 
   userLanguageContextMenu_ = new QMenu(this); {
-    UiStyle::globalInstance()->setContextMenuStyle(userLanguageContextMenu_);
+    UiStyle::globalInstance()->setContextMenuStyle(userLanguageContextMenu_, true); // persistent = true
 
     userLanguageContextMenu_->setTitle(TR(T_MENUTEXT_USERLANGUAGE));
     userLanguageContextMenu_->setToolTip(TR(T_TOOLTIP_USERLANGUAGE));
@@ -819,7 +715,7 @@ MainWindow::createMenus()
   }
 
   annotationLanguageContextMenu_ = new QMenu(this); {
-    UiStyle::globalInstance()->setContextMenuStyle(annotationLanguageContextMenu_);
+    UiStyle::globalInstance()->setContextMenuStyle(annotationLanguageContextMenu_, true); // persistent = true
 
     annotationLanguageContextMenu_->setTitle(TR(T_MENUTEXT_ANNOTATIONLANGUAGE));
     annotationLanguageContextMenu_->setToolTip(TR(T_TOOLTIP_ANNOTATIONLANGUAGE));
@@ -833,8 +729,53 @@ MainWindow::createMenus()
     annotationLanguageContextMenu_->addAction(toggleAnnotationLanguageToKoreanAct_);
   }
 
+  themeMenu_ = new QMenu(this); {
+    UiStyle::globalInstance()->setContextMenuStyle(themeMenu_, true); // persistent = true
+    themeMenu_->setTitle(TR(T_MENUTEXT_THEME));
+    themeMenu_->setToolTip(TR(T_TOOLTIP_THEME));
+
+    themeMenu_->addAction(setThemeToDefaultAct_);
+    themeMenu_->addAction(setThemeToRandomAct_);
+    themeMenu_->addSeparator();
+    themeMenu_->addAction(setThemeToBlack1Act_);
+    themeMenu_->addAction(setThemeToBlack2Act_);
+    themeMenu_->addAction(setThemeToBlue1Act_);
+    themeMenu_->addAction(setThemeToBlue2Act_);
+    themeMenu_->addAction(setThemeToBrown1Act_);
+    themeMenu_->addAction(setThemeToBrown2Act_);
+    themeMenu_->addAction(setThemeToGreen1Act_);
+    themeMenu_->addAction(setThemeToGreen2Act_);
+    themeMenu_->addAction(setThemeToLightBlue1Act_);
+    themeMenu_->addAction(setThemeToLightBlue2Act_);
+    themeMenu_->addAction(setThemeToOrange1Act_);
+    themeMenu_->addAction(setThemeToOrange2Act_);
+    themeMenu_->addAction(setThemeToPink1Act_);
+    themeMenu_->addAction(setThemeToPink2Act_);
+    themeMenu_->addAction(setThemeToPurple1Act_);
+    themeMenu_->addAction(setThemeToPurple2Act_);
+    themeMenu_->addAction(setThemeToRed1Act_);
+    themeMenu_->addAction(setThemeToRed2Act_);
+    themeMenu_->addAction(setThemeToYellow1Act_);
+    themeMenu_->addAction(setThemeToYellow2Act_);
+  }
+
+  subtitleStyleMenu_ = new QMenu(this); {
+    UiStyle::globalInstance()->setContextMenuStyle(subtitleStyleMenu_, true); // persistent = true
+
+    subtitleStyleMenu_->setTitle(TR(T_MENUTEXT_SUBTITLESTYLE));
+    subtitleStyleMenu_->setToolTip(TR(T_TOOLTIP_SUBTITLESTYLE));
+
+    subtitleStyleMenu_->addAction(setSubtitleColorToDefaultAct_);
+    subtitleStyleMenu_->addSeparator();
+    subtitleStyleMenu_->addAction(setSubtitleColorToBlueAct_);
+    subtitleStyleMenu_->addAction(setSubtitleColorToPurpleAct_);
+    subtitleStyleMenu_->addAction(setSubtitleColorToRedAct_);
+    subtitleStyleMenu_->addAction(setSubtitleColorToOrangeAct_);
+    subtitleStyleMenu_->addAction(setSubtitleColorToBlackAct_);
+  }
+
   recentMenu_ = new QMenu(this); {
-    UiStyle::globalInstance()->setContextMenuStyle(recentMenu_);
+    UiStyle::globalInstance()->setContextMenuStyle(recentMenu_, true); // persistent = true
     recentMenu_->setTitle(TR(T_MENUTEXT_RECENT));
     recentMenu_->setToolTip(TR(T_TOOLTIP_RECENT));
   }
@@ -843,7 +784,7 @@ MainWindow::createMenus()
     backwardContextMenu_->setIcon(QIcon(RC_IMAGE_BACKWARD));
     backwardContextMenu_->setTitle(TR(T_MENUTEXT_BACKWARD));
     backwardContextMenu_->setToolTip(TR(T_TOOLTIP_BACKWARD));
-    UiStyle::globalInstance()->setContextMenuStyle(backwardContextMenu_);
+    UiStyle::globalInstance()->setContextMenuStyle(backwardContextMenu_, true); // persistent = true
 
     backwardContextMenu_->addAction(backward5sAct_);
     backwardContextMenu_->addAction(backward30sAct_);
@@ -856,7 +797,7 @@ MainWindow::createMenus()
     forwardContextMenu_->setIcon(QIcon(RC_IMAGE_FORWARD));
     forwardContextMenu_->setTitle(TR(T_MENUTEXT_FORWARD));
     forwardContextMenu_->setToolTip(TR(T_TOOLTIP_FORWARD));
-    UiStyle::globalInstance()->setContextMenuStyle(forwardContextMenu_);
+    UiStyle::globalInstance()->setContextMenuStyle(forwardContextMenu_, true); // persistent = true
 
     forwardContextMenu_->addAction(forward5sAct_);
     forwardContextMenu_->addAction(forward30sAct_);
@@ -869,14 +810,14 @@ MainWindow::createMenus()
     openContextMenu_->setTitle(TR(T_MENUTEXT_OPENCONTEXTMENU));
     openContextMenu_->setToolTip(TR(T_TOOLTIP_OPENCONTEXTMENU));
     openContextMenu_->setIcon(QIcon(RC_IMAGE_OPENCONTEXTMENU));
-    UiStyle::globalInstance()->setContextMenuStyle(openContextMenu_);
+    UiStyle::globalInstance()->setContextMenuStyle(openContextMenu_, true); // persistent = true
   }
 
   subtitleContextMenu_ = new QMenu(this); {
     subtitleContextMenu_->setIcon(QIcon(RC_IMAGE_SUBTITLE));
     subtitleContextMenu_->setTitle(TR(T_MENUTEXT_SUBTITLE));
     subtitleContextMenu_->setToolTip(TR(T_TOOLTIP_SUBTITLE));
-    UiStyle::globalInstance()->setContextMenuStyle(subtitleContextMenu_);
+    UiStyle::globalInstance()->setContextMenuStyle(subtitleContextMenu_, true); // persistent = true
   }
 
 #ifdef Q_WS_MAC
@@ -1031,7 +972,8 @@ MainWindow::updateVideoMode()
   switch (hub_->videoMode()) {
   case SignalHub::FullScreenVideoMode:
 #ifdef USE_WIN_DWM
-    UiStyle::globalInstance()->setWindowDwmEnabled(this, false);
+    if (UiStyle::isAeroAvailable())
+      UiStyle::globalInstance()->setWindowDwmEnabled(this, false);
 #endif // USE_WIN_DWM
     if (mainPlayer_->isVisible())
       mainPlayer_->hide();
@@ -1059,7 +1001,8 @@ MainWindow::updateVideoMode()
     annotationView_->invalidateSize(); // Otherwise the height doesn't look right
 
 #ifdef USE_WIN_DWM
-    UiStyle::globalInstance()->setWindowDwmEnabled(this, true);
+    if (UiStyle::isAeroAvailable())
+      UiStyle::globalInstance()->setWindowDwmEnabled(this, true);
 #endif // USE_WIN_DWM
     break;
   }
@@ -1084,6 +1027,9 @@ MainWindow::openFile()
 
   static const QString filter =
       TR(T_FORMAT_SUPPORTED) + ("(" G_FORMAT_SUPPORTED ")" ";;")
+#ifdef USE_MODE_SIGNAL
+    + TR(T_FORMAT_EXE)       + ("(" G_FORMAT_EXE ")" ";;")
+#endif // USE_MODE_SIGNAL
     + TR(T_FORMAT_VIDEO)     + ("(" G_FORMAT_VIDEO ")" ";;")
     + TR(T_FORMAT_AUDIO)     + ("(" G_FORMAT_AUDIO ")" ";;")
     + TR(T_FORMAT_ALL)       + ("(" G_FORMAT_ALL ")");
@@ -1093,7 +1039,7 @@ MainWindow::openFile()
 
   if (!fileName.isEmpty()) {
     lastOpenedPath_ = QFileInfo(fileName).absolutePath();
-    openPath(fileName);
+    openSource(fileName);
   }
 }
 
@@ -1187,10 +1133,8 @@ MainWindow::openUrl(const QUrl &url)
   QString path = url.toLocalFile();
   if (!path.isEmpty())
     openSource(path);
-  else {
-    bool checkPath = false;
-    openPath(url.toEncoded(), checkPath);
-  }
+  else
+    openPath(url.toEncoded(), false); // check path = false
 }
 
 void
@@ -1225,17 +1169,17 @@ MainWindow::openPath(const QString &path, bool checkPath)
     }
   }
 
+//#ifdef Q_WS_MAC
+  //if (!videoView_->isViewVisible())
+  //  videoView_->showView();
+//#endif // Q_WS_MAC
+
   player_->openMedia(path);
   if (player_->hasMedia()) {
     //if (mode_ == NormalPlayMode)
     //  videoView_->resize(INIT_WINDOW_SIZE);
 
     setToken(path);
-
-#ifdef Q_WS_MAC
-    if (!videoView_->isViewVisible())
-       videoView_->showView();
-#endif // Q_WS_MAC
 
     addRecent(path);
 
@@ -1692,6 +1636,7 @@ MainWindow::setLoginDialogVisible(bool visible)
     loginDialog_->setUserName(server_->user().name());
     loginDialog_->setPassword(server_->user().password());
     loginDialog_->show();
+    loginDialog_->raise();
   } else
     loginDialog_->hide();
 }
@@ -1710,6 +1655,7 @@ MainWindow::setSeekDialogVisible(bool visible)
   if (visible) {
     seekDialog_->setTime(player_->time());
     seekDialog_->show();
+    seekDialog_->raise();
   } else
     seekDialog_->hide();
 }
@@ -1724,7 +1670,11 @@ MainWindow::hideLiveDialog()
 
 void
 MainWindow::setLiveDialogVisible(bool visible)
-{ liveDialog_->setVisible(visible); }
+{
+  liveDialog_->setVisible(visible);
+  if (visible)
+    liveDialog_->raise();
+}
 
 void
 MainWindow::showSyncDialog()
@@ -1736,7 +1686,11 @@ MainWindow::hideSyncDialog()
 
 void
 MainWindow::setSyncDialogVisible(bool visible)
-{ syncDialog_->setVisible(visible); }
+{
+  syncDialog_->setVisible(visible);
+  if (visible)
+    syncDialog_->raise();
+}
 
 void
 MainWindow::showCommentView()
@@ -1752,6 +1706,8 @@ MainWindow::setCommentViewVisible(bool visible)
   if (visible && tokenView_->hasToken())
     commentView_->setTokenId(tokenView_->token().id());
   commentView_->setVisible(visible);
+  if (visible)
+    commentView_->raise();
 }
 
 void
@@ -1760,11 +1716,19 @@ MainWindow::showWindowPickDialog()
 
 void
 MainWindow::setWindowPickDialogVisible(bool visible)
-{ windowPickDialog_->setVisible(visible); }
+{
+  windowPickDialog_->setVisible(visible);
+  if (visible)
+    windowPickDialog_->raise();
+}
 
 void
 MainWindow::setProcessPickDialogVisible(bool visible)
-{ processPickDialog_->setVisible(visible); }
+{
+  processPickDialog_->setVisible(visible);
+  if (visible)
+    processPickDialog_->raise();
+}
 
 // - Annotations -
 
@@ -1932,10 +1896,19 @@ MainWindow::showText(const QString &text)
 }
 
 void
-MainWindow::showTextAsSubtitle(const QString &text)
+MainWindow::showTextAsSubtitle(const QString &input)
 {
-  if (text.isEmpty())
+  if (input.isEmpty())
     return;
+  QString text = input;
+  QString rest;
+
+  // Split long text
+  int n = int(annotationView_->width() * 0.9 / G_ANNOT_CHAR_WIDTH);
+  if (n && text.size() > n) {
+    rest = text.mid(n);
+    text = text.left(n);
+  }
 
   Annotation annot;
   if (server_->isAuthorized()) {
@@ -1944,8 +1917,12 @@ MainWindow::showTextAsSubtitle(const QString &text)
     annot.setUserAnonymous(server_->user().isAnonymous());
   }
   annot.setLanguage(Traits::AnyLanguage);
-  annot.setText(CORE_CMD_SUB " " + text);
+  QString sub = CORE_CMD_SUB " " + text;
+  annot.setText(sub)    ;
   annotationView_->showAnnotation(annot);
+
+  if (!rest.isEmpty())
+    showTextAsSubtitle(rest);
 }
 
 void
@@ -2334,6 +2311,8 @@ MainWindow::invalidateContextMenu()
     toggleSubtitleStaysOnTopAct_->setChecked(isSubtitleStaysOnTop());
     contextMenu_->addAction(toggleSubtitleStaysOnTopAct_);
 
+    contextMenu_->addMenu(subtitleStyleMenu_);
+
     if (hub_->isMediaTokenMode() && player_->hasMedia()) {
       contextMenu_->addSeparator();
 
@@ -2508,23 +2487,61 @@ MainWindow::invalidateContextMenu()
     //}
   }
 
-  // Language
-  if (ALPHA) {
+  // App
+  {
     contextMenu_->addSeparator();
-    contextMenu_->addMenu(appLanguageContextMenu_);
 
-    int l = TranslatorManager::globalInstance()->language();
-    setAppLanguageToJapaneseAct_->setChecked(l == QLocale::Japanese);
-    setAppLanguageToTraditionalChineseAct_->setChecked(l == TranslatorManager::TraditionalChinese);
-    setAppLanguageToSimplifiedChineseAct_->setChecked(l == QLocale::Chinese);
+    // Theme
+#ifdef USE_WIN_QTWIN
+    //if (!QtWin::isWindowsVistaOrLater())
+#endif // USE_WIN_QTWIN
+    {
+      contextMenu_->addMenu(themeMenu_);
 
-    switch (l) {
-    case QLocale::Japanese: case QLocale::Taiwan: case QLocale::Chinese:
-      setAppLanguageToEnglishAct_->setChecked(false);
-      break;
-    case QLocale::English: default:
-      setAppLanguageToEnglishAct_->setChecked(true);
+      UiStyle::Theme t = UiStyle::globalInstance()->theme();
+      setThemeToDefaultAct_->setChecked(t == UiStyle::DefaultTheme);
+      setThemeToRandomAct_->setChecked(t == UiStyle::RandomTheme);
+      setThemeToBlack1Act_->setChecked(t == UiStyle::BlackTheme1);
+      setThemeToBlack2Act_->setChecked(t == UiStyle::BlackTheme2);
+      setThemeToBlue1Act_->setChecked(t == UiStyle::BlueTheme1);
+      setThemeToBlue2Act_->setChecked(t == UiStyle::BlueTheme2);
+      setThemeToBrown1Act_->setChecked(t == UiStyle::BrownTheme1);
+      setThemeToBrown2Act_->setChecked(t == UiStyle::BrownTheme2);
+      setThemeToGreen1Act_->setChecked(t == UiStyle::GreenTheme1);
+      setThemeToGreen2Act_->setChecked(t == UiStyle::GreenTheme2);
+      setThemeToLightBlue1Act_->setChecked(t == UiStyle::LightBlueTheme1);
+      setThemeToLightBlue2Act_->setChecked(t == UiStyle::LightBlueTheme2);
+      setThemeToOrange1Act_->setChecked(t == UiStyle::OrangeTheme1);
+      setThemeToOrange2Act_->setChecked(t == UiStyle::OrangeTheme2);
+      setThemeToPink1Act_->setChecked(t == UiStyle::PinkTheme1);
+      setThemeToPink2Act_->setChecked(t == UiStyle::PinkTheme2);
+      setThemeToPurple1Act_->setChecked(t == UiStyle::PurpleTheme1);
+      setThemeToPurple2Act_->setChecked(t == UiStyle::PurpleTheme2);
+      setThemeToRed1Act_->setChecked(t == UiStyle::RedTheme1);
+      setThemeToRed2Act_->setChecked(t == UiStyle::RedTheme2);
+      setThemeToYellow1Act_->setChecked(t == UiStyle::YellowTheme1);
+      setThemeToYellow2Act_->setChecked(t == UiStyle::YellowTheme2);
     }
+
+    // Language
+    {
+      contextMenu_->addMenu(appLanguageContextMenu_);
+
+      //int l = TranslatorManager::globalInstance()->language();
+      int l = Settings::globalInstance()->language();
+      setAppLanguageToJapaneseAct_->setChecked(l == QLocale::Japanese);
+      //setAppLanguageToTraditionalChineseAct_->setChecked(l == TranslatorManager::TraditionalChinese);
+      setAppLanguageToSimplifiedChineseAct_->setChecked(l == QLocale::Chinese);
+
+      switch (l) {
+      case QLocale::Japanese: case QLocale::Taiwan: case QLocale::Chinese:
+        setAppLanguageToEnglishAct_->setChecked(false);
+        break;
+      case QLocale::English: default:
+        setAppLanguageToEnglishAct_->setChecked(true);
+      }
+    }
+
   }
 
   // Help
@@ -2669,7 +2686,7 @@ void
 MainWindow::closeEvent(QCloseEvent *event)
 {
   DOUT("closeEvent:enter");
-  respond(tr("yin: ..."));
+  //respond(tr("yin: ...")); // crash on mac
   log("closing application ...");
 
   //hide();
@@ -2683,6 +2700,8 @@ MainWindow::closeEvent(QCloseEvent *event)
   tray_->hide();
 
   Settings::globalInstance()->setRecent(recent_);
+
+  Settings::globalInstance()->setThemeId(UiStyle::globalInstance()->theme());
 
   // Disabled for saving closing time orz
   //if (server_->isConnected() && server_->isAuthorized())
@@ -2870,9 +2889,14 @@ MainWindow::login(const QString &userName, const QString &encryptedPassword, boo
   }
 
   if (server_->isConnected() && server_->isAuthorized()) {
-    bool updated = server_->isSoftwareUpdated();
-    if (!updated)
-      warn(tr("new version released, check here: ") + G_UPDATEPAGE_URL);
+    QDate today = QDate::currentDate();
+    if (Settings::globalInstance()->updateDate() != today) {
+      bool updated = server_->isSoftwareUpdated();
+      if (!updated)
+        warn(tr("new version released, check here: ") + G_UPDATEPAGE_URL);
+
+      Settings::globalInstance()->setUpdateDate(today);
+    }
   }
 
   dataManager_->commitQueue();
@@ -2982,12 +3006,17 @@ MainWindow::openProcessPath(const QString &path)
     log(tr("told process to start") + QString(" (name = %1)").arg(processName));
     pid = QTH->getProcessIdByName(processName);
   }
-  if (!pid)
-    warn(tr("failed to start process") + QString(" (name = %1)").arg(processName));
-  else
-    openProcessId(pid);
+
   signalView_->processView()->refresh();
-  openProcess();
+  if (!pid) {
+    warn(tr("failed to start process") + QString(" (name = %1)").arg(processName));
+    openProcess();
+  } else {
+    enum { seconds = G_OPENPROCESS_TIMEOUT / 1000 }; // msecs / 1000
+    log(tr("wait %1 seconds for process to start ...").arg(QString::number(seconds)));
+    auto *slot = new MainWindow_slot_::OpenProcessId(pid, this);
+    QTimer::singleShot(G_OPENPROCESS_TIMEOUT, slot, SLOT(openProcessId()));
+  }
   addRecent(path);
 }
 
@@ -3049,6 +3078,8 @@ MainWindow::setSignalViewVisible(bool visible)
   //signalView_->tokenView()->setAliases(tokenView_->aliases());
   //signalView_->tokenView()->setUserId(tokenView_->userId());
   signalView_->setVisible(visible);
+  if (visible)
+    signalView_->raise();
 }
 
 void
@@ -3068,6 +3099,8 @@ MainWindow::setRecentMessageViewVisible(bool visible)
     recentMessageView_->setCurrentIndex(1);
   }
   recentMessageView_->setVisible(visible);
+  if (visible)
+    recentMessageView_->raise();
 }
 
 #endif // USE_MODE_SIGNAL
@@ -3186,24 +3219,24 @@ MainWindow::invalidateAnnotationLanguages()
 
 void
 MainWindow::setAppLanguageToEnglish()
-{ TranslatorManager::globalInstance()->setLanguage(QLocale::English); }
+{ Settings::globalInstance()->setLanguage(QLocale::English); invalidateAppLanguage(); }
 
 void
 MainWindow::setAppLanguageToJapanese()
-{ TranslatorManager::globalInstance()->setLanguage(QLocale::Japanese); }
+{ Settings::globalInstance()->setLanguage(QLocale::Japanese); invalidateAppLanguage(); }
 
 // TODO: Simplified Chinese and Traditional Chinese are not differed until qt 4.8
 void
 MainWindow::setAppLanguageToTraditionalChinese()
-{ TranslatorManager::globalInstance()->setLanguage(TranslatorManager::TraditionalChinese); }
+{ Settings::globalInstance()->setLanguage(TranslatorManager::TraditionalChinese); invalidateAppLanguage(); }
 
 void
 MainWindow::setAppLanguageToSimplifiedChinese()
-{ TranslatorManager::globalInstance()->setLanguage(QLocale::Chinese); }
+{ Settings::globalInstance()->setLanguage(QLocale::Chinese); invalidateAppLanguage(); }
 
 void
 MainWindow::invalidateAppLanguage()
-{ log(tr("hot plug unimplemented; please restart the app to use the new language")); }
+{ notify(tr("restart the app to use the new language")); }
 
 // - Helpers -
 
@@ -3342,6 +3375,77 @@ MainWindow::setSubtitleStaysOnTop(bool t)
 bool
 MainWindow::isSubtitleStaysOnTop() const
 { return annotationView_->subtitlePosition() == AnnotationGraphicsView::AP_Top; }
+
+void
+MainWindow::uncheckSubtitleColorActions()
+{
+  setSubtitleColorToDefaultAct_->setChecked(false);
+  setSubtitleColorToBlueAct_->setChecked(false);
+  setSubtitleColorToPurpleAct_->setChecked(false);
+  setSubtitleColorToBlackAct_->setChecked(false);
+  setSubtitleColorToOrangeAct_->setChecked(false);
+  setSubtitleColorToRedAct_->setChecked(false);
+}
+
+
+void
+MainWindow::setSubtitleColorToDefault()
+{
+  annotationView_->setSubtitlePrefix(QString());
+  uncheckSubtitleColorActions();
+  setSubtitleColorToDefaultAct_->setChecked(true);
+}
+
+#define SET_SUBTITLE_COLOR(_Color, _COLOR) \
+  void \
+  MainWindow::setSubtitleColorTo##_Color() \
+  { \
+    QString prefix = CORE_CMD_COLOR_##_COLOR " "; \
+    annotationView_->setSubtitlePrefix(prefix); \
+    uncheckSubtitleColorActions(); \
+    setSubtitleColorTo##_Color##Act_->setChecked(true); \
+  }
+
+  SET_SUBTITLE_COLOR(Black, BLACK)
+  SET_SUBTITLE_COLOR(Blue, BLUE)
+  SET_SUBTITLE_COLOR(Orange, ORANGE)
+  SET_SUBTITLE_COLOR(Purple, PURPLE)
+  SET_SUBTITLE_COLOR(Red, RED)
+#undef SET_SUBTITLE_COLOR
+
+
+// - Themes -
+
+void MainWindow::setThemeToDefault() { UiStyle::globalInstance()->setTheme(UiStyle::DefaultTheme); }
+void MainWindow::setThemeToRandom() { UiStyle::globalInstance()->setTheme(UiStyle::RandomTheme); }
+void MainWindow::setThemeToBlack1() { UiStyle::globalInstance()->setTheme(UiStyle::BlackTheme1); }
+void MainWindow::setThemeToBlack2() { UiStyle::globalInstance()->setTheme(UiStyle::BlackTheme2); }
+void MainWindow::setThemeToBlue1() { UiStyle::globalInstance()->setTheme(UiStyle::BlueTheme1); }
+void MainWindow::setThemeToBlue2() { UiStyle::globalInstance()->setTheme(UiStyle::BlueTheme2); }
+void MainWindow::setThemeToBrown1() { UiStyle::globalInstance()->setTheme(UiStyle::BrownTheme1); }
+void MainWindow::setThemeToBrown2() { UiStyle::globalInstance()->setTheme(UiStyle::BrownTheme2); }
+void MainWindow::setThemeToGreen1() { UiStyle::globalInstance()->setTheme(UiStyle::GreenTheme1); }
+void MainWindow::setThemeToGreen2() { UiStyle::globalInstance()->setTheme(UiStyle::GreenTheme2); }
+void MainWindow::setThemeToLightBlue1() { UiStyle::globalInstance()->setTheme(UiStyle::LightBlueTheme1); }
+void MainWindow::setThemeToLightBlue2() { UiStyle::globalInstance()->setTheme(UiStyle::LightBlueTheme2); }
+void MainWindow::setThemeToOrange1() { UiStyle::globalInstance()->setTheme(UiStyle::OrangeTheme1); }
+void MainWindow::setThemeToOrange2() { UiStyle::globalInstance()->setTheme(UiStyle::OrangeTheme2); }
+void MainWindow::setThemeToPink1() { UiStyle::globalInstance()->setTheme(UiStyle::PinkTheme1); }
+void MainWindow::setThemeToPink2() { UiStyle::globalInstance()->setTheme(UiStyle::PinkTheme2); }
+void MainWindow::setThemeToPurple1() { UiStyle::globalInstance()->setTheme(UiStyle::PurpleTheme1); }
+void MainWindow::setThemeToPurple2() { UiStyle::globalInstance()->setTheme(UiStyle::PurpleTheme2); }
+void MainWindow::setThemeToRed1() { UiStyle::globalInstance()->setTheme(UiStyle::RedTheme1); }
+void MainWindow::setThemeToRed2() { UiStyle::globalInstance()->setTheme(UiStyle::RedTheme2); }
+void MainWindow::setThemeToYellow1() { UiStyle::globalInstance()->setTheme(UiStyle::YellowTheme1); }
+void MainWindow::setThemeToYellow2() { UiStyle::globalInstance()->setTheme(UiStyle::YellowTheme2); }
+
+void
+MainWindow::enableWindowTransparency()
+{ setWindowOpacity(G_WINDOW_OPACITY); }
+
+void
+MainWindow::disableWindowTransparency()
+{ setWindowOpacity(1.0); }
 
 // EOF
 

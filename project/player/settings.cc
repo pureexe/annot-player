@@ -15,10 +15,12 @@
 #define SK_USERNAME     "UserName"
 #define SK_PASSWORD     "Password"
 
+#define SK_ANNOTLANGUAGES "AnnotationLanguages"
 #define SK_LANGUAGE     "Language"
+#define SK_THEME        "Theme"
 #define SK_TRANSLATE    "Translate"
 #define SK_SUBTITLEONTOP "SubtitleStaysOnTop"
-#define SK_ANNOTLANGUAGES "AnnotationLanguages"
+#define SK_UPDATEDATE   "UpdateDate"
 
 #define SK_QUEUEEMPTY   "QueueEmpty"
 
@@ -59,6 +61,21 @@ Settings::userId() const
 }
 
 void
+Settings::setThemeId(int tid)
+{ setValue(SK_THEME, tid); }
+
+int
+Settings::themeId() const
+{
+  bool ok;
+  int ret = value(SK_THEME).toInt(&ok);
+  if (!ok)
+    return 0;
+  return ret;
+}
+
+
+void
 Settings::setUserId(qint64 uid)
 { setValue(SK_USERID, uid); }
 
@@ -77,6 +94,14 @@ Settings::password() const
 void
 Settings::setPassword(const QString &password)
 { setValue(SK_PASSWORD, password); }
+
+QDate
+Settings::updateDate() const
+{ return value(SK_UPDATEDATE).toDate(); }
+
+void
+Settings::setUpdateDate(const QDate &date)
+{ setValue(SK_UPDATEDATE, date); }
 
 int
 Settings::language() const
@@ -182,6 +207,10 @@ Settings::setRecent(const QStringList &l)
   r = l.size() <= 3 ? QString() : l[3]; setValue(SK_RECENT(3), r);
   r = l.size() <= 4 ? QString() : l[4]; setValue(SK_RECENT(4), r);
   r = l.size() <= 5 ? QString() : l[5]; setValue(SK_RECENT(5), r);
+  r = l.size() <= 6 ? QString() : l[6]; setValue(SK_RECENT(6), r);
+  r = l.size() <= 7 ? QString() : l[7]; setValue(SK_RECENT(7), r);
+  r = l.size() <= 8 ? QString() : l[8]; setValue(SK_RECENT(8), r);
+  r = l.size() <= 9 ? QString() : l[9]; setValue(SK_RECENT(9), r);
 }
 
 // EOF

@@ -5,14 +5,15 @@
 #include "global.h"
 #include "stylesheet.h"
 #include "signalhub.h"
-#include "module/player/player.h"    // TO BE REMOVED; added due to bad design of playerui.
 #include "uistyle.h"
+#include "module/player/player.h"    // TO BE REMOVED; added due to bad design of playerui.
 #include <QtGui>
 
 #define WINDOW_FLAGS ( \
   Qt::Dialog | \
   Qt::CustomizeWindowHint | \
-  Qt::WindowTitleHint )
+  Qt::WindowTitleHint | \
+  Qt::WindowStaysOnTopHint )
 
 // - Constructions -
 
@@ -50,15 +51,20 @@ MiniPlayerUi::createLayout()
     row1->addWidget(nextFrameButton());
     row1->addWidget(stopButton());
     row1->addWidget(openButton());
-    row1->addWidget(togglePlayModeButton());
     row1->addWidget(toggleMiniModeButton());
+    row1->addWidget(togglePlayModeButton());
     row1->addWidget(volumeSlider());
 
     row2->addWidget(userButton());
     row2->addWidget(prefixLineEdit());
     row2->addWidget(lineEdit());
 
-    rows->setContentsMargins(9, 0, 9, 0);
+    int top = 0;
+    if (UiStyle::isAeroAvailable())
+      top = 9;
+
+    // void setContentsMargins(int left, int top, int right, int bottom);
+    rows->setContentsMargins(9, 9, 9, 0);
     row0->setContentsMargins(0, 0, 0, 0);
     row1->setContentsMargins(0, 0, 0, 9);
     row2->setContentsMargins(0, 0, 0, 9);

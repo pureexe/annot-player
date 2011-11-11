@@ -20,9 +20,10 @@ enum { ALPHA = 0 };
 // - About -
 #define G_ORGANIZATION  "Annot"
 #define G_APPLICATION   "Player"
-#define G_VERSION       "0.0.8.3"
+#define G_VERSION       "0.0.9.1"
 #define G_HOMEPAGE      "http://annot.me"
 #define G_UPDATEPAGE    "http://code.google.com/p/annot-player"
+#define G_DOWNLOADPAGE  "http://code.google.com/p/annot-player/downloads"
 #define G_EMAIL         "AnnotCloud@gmail.com"
 
 
@@ -32,9 +33,11 @@ enum { ALPHA = 0 };
 #define G_POSITION_MAX     10000.0
 #define G_POSITION_STEP    100
 
+#define G_OPENPROCESS_TIMEOUT 5000 // 5 sec
+
 #define G_STARTPAGE_URL    G_HOMEPAGE
 #define G_TOKENVIEW_URL    G_HOMEPAGE
-#define G_UPDATEPAGE_URL   G_UPDATEPAGE
+#define G_UPDATEPAGE_URL   G_DOWNLOADPAGE
 
 #define G_FORWARD_INTERVAL  10000  // 10 sec
 #define G_BACKWARD_INTERVAL 10000  // 10 sec
@@ -43,14 +46,21 @@ enum { ALPHA = 0 };
 
 #define G_ANNOTATION_MAXSIZE 255
 
-#define G_TRACKING_INTERVAL       200 // msec
+#define G_ANNOT_CHAR_WIDTH      20
+
+#define G_TRACKING_INTERVAL     200 // msec
 
 // TO BE MOVED INTO mediaplayer.h
 #define G_FORMAT_ALL            "*"
 #define G_FORMAT_AUDIO          "*.mp3 " "*.mp4 " "*.m4a " "*.m4r "
 #define G_FORMAT_VIDEO          "*.mp4 " "*.mkv " "*.rmvb " "*.rm " "*.flv " "*.avi " "*.mpg " "*.mpeg "
 #define G_FORMAT_SUBTITLE       "*.ass " "*.ssa"
-#define G_FORMAT_SUPPORTED      G_FORMAT_VIDEO G_FORMAT_AUDIO
+#define G_FORMAT_EXE            "*.exe " "*.lnk "
+#ifdef USE_MODE_SIGNAL
+  #define G_FORMAT_SUPPORTED      G_FORMAT_VIDEO G_FORMAT_AUDIO G_FORMAT_EXE
+#else
+  #define G_FORMAT_SUPPORTED      G_FORMAT_VIDEO G_FORMAT_AUDIO
+#endif // USE_MODE_SIGNAL
 
 #define VLC_AUTOHIDE_TIMEOUT    1500    // in msecs, same as VLC
 #define G_AUTOHIDE_TIMEOUT (VLC_AUTOHIDE_TIMEOUT * 2)
@@ -81,6 +91,7 @@ enum { ALPHA = 0 };
 
 
 // - UI Style -
+
 #define G_CONTEXTMENU_OPACITY           0.8
 #define G_CONTEXTMENU_COLOR             "orange"
 #define G_CONTEXTMENU_COLOR_STRENGTH    1       // 0 = no color, 1 = full color (default)
@@ -90,6 +101,7 @@ enum { ALPHA = 0 };
 #define G_DIALOG_COLOR_STRENGTH         1       // 0 = no color, 1 = full color (default)
 
 #define G_WINDOW_ALPHA                  240
+#define G_WINDOW_OPACITY                0.95
 
 // - Helpers -
 #define BAD_POS     QPoint(-1, -1)
@@ -125,8 +137,8 @@ enum { ALPHA = 0 };
   { \
     Q_ASSERT(_w); \
     if (Dwm::isCompositionEnabled()) { \
-      Dwm::enableBlurBehindWindow(_w); \
-      Dwm::extendFrameIntoClientArea(_w); \
+      Dwm::enableBlurBehindWindow((_w)); \
+      Dwm::extendFrameIntoClientArea((_w)); \
       _w->setAttribute(Qt::WA_TranslucentBackground); \
       _w->setAttribute(Qt::WA_NoSystemBackground); \
     } \
@@ -136,8 +148,8 @@ enum { ALPHA = 0 };
   { \
     Q_ASSERT(_w); \
     if (Dwm::isCompositionEnabled()) { \
-      Dwm::enableBlurBehindWindow(_w, false); \
-      Dwm::extendFrameIntoClientArea(_w, 0, 0, 0, 0); \
+      Dwm::enableBlurBehindWindow((_w), false); \
+      Dwm::extendFrameIntoClientArea((_w), 0, 0, 0, 0); \
       _w->setAttribute(Qt::WA_TranslucentBackground, false); \
       _w->setAttribute(Qt::WA_NoSystemBackground, false); \
     } \
@@ -147,8 +159,8 @@ enum { ALPHA = 0 };
   { \
     Q_ASSERT(_w); \
     if (Dwm::isCompositionEnabled()) { \
-      Dwm::enableBlurBehindWindow(_w->winId()); \
-      Dwm::extendFrameIntoClientArea(_w->winId()); \
+      Dwm::enableBlurBehindWindow((_w)->winId()); \
+      Dwm::extendFrameIntoClientArea((_w)->winId()); \
       _w->setAttribute(Qt::WA_TranslucentBackground); \
       _w->setAttribute(Qt::WA_NoSystemBackground); \
     } \

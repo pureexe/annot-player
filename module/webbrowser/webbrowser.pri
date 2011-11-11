@@ -7,7 +7,7 @@ HEADERS += \
     $$PWD/webbrowser_config.h \
     $$PWD/webbrowser.h
 
-LIBS    += -lwebbrowser
-#mac:  LIBS  += -framework WebBrowser
+!mac: LIBS  += -lwebbrowser
+mac:  LIBS  += -framework WebBrowser
 
 # EOF

@@ -22,7 +22,7 @@ public:
   static Self *globalInstance();
 public:
   int language() const;
-  void setLanguage(int language);
+  void setLanguage(int language, bool updateTranslator = true); ///< if true, app translator is updated automatically
 
   enum { TraditionalChinese = -1 }; // TO BE REMOVED AFTER Qt 4.8
 

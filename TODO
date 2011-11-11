@@ -1,28 +1,57 @@
-added qtxml4.framework in mac os x
-fixme: email not sent
+0.0.9.0
+xp:
+- fixme: vlc view blinking while playing
+mac:
+- mac deployment: fix all dynamic links
+  rewrite script to automatically link mac names using otool and install_name_tool
+  http://doc.qt.nokia.com/stable/deployment-mac.html
+  use webbrowser as an example
+- fixme: annotview window tracking problem
+- fixme: global osd logger hang
+- fixme: annot window always on top
 
-miinmize button in context menu, then restore at tray
+tranation
+- Chinese translation
+- Japanese translation
 
-todo: change default subtitle font, size, or even prefix
-todo: make xp gui better by using customized background stolen from aero
+server:
+- fixme: server email not sent
+- trend: list latest added token, alias, annot, etc
 
-alter server database:
-- user: last login ip
-- annot: last seconds
+0.1.0.0 -- stable
+- sever side: trend, last visited token, alias
 
-finish bless/curse/block
+publish to ktxp.com s1/2b!
+publish to kf!
+publish to 2ch!
 
-LIVE MODE using polling BEFORE SPRING FESTEVAL
-中国网络电视台 2012 春节晚会
+## NextProject
+
+recompile wined3d.dll
 
 window2window to streaming galgame
 - client
   - rdp: rdesktop, opensource, with annots; but requiring X11 libs
   - mstsc: close source, no annots
-    
 - server: linux, xrdp + wine
+  xming open source
 
-###
+## NextStep
+
+finish bless/curse/block
+
+minmize button in context menu, then restore at tray
+
+select game encoding
+
+displaying which process get attached
+
+LIVE MODE using polling BEFORE SPRING FESTEVAL
+中国网络电视台 2012 春节晚会
+
+## FixMes
+change soap back to rest
+add another rest module on server side
 
 fixme: hide qdialog after create
 
@@ -30,12 +59,9 @@ todo: track user last login time
 
 sutitle friendly
 wiki like style for shared subtitle
-update annotation time
+update annotation time pos
 
-chinese/japanese translation
-
-
-###
+##
 
 how to intercept directx call
 http://www.gamedev.net/topic/359794-c-direct3d-hooking-sample/

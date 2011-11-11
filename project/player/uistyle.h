@@ -5,6 +5,7 @@
 // 7/30/2011
 
 #include <QWidget>
+#include <QList>
 
 QT_BEGIN_NAMESPACE
 class QDialog;
@@ -19,27 +20,58 @@ class UiStyle : public QObject
   typedef UiStyle Self;
   typedef QObject Base;
 
-  static Self *global_;
+public:
+  enum Theme {
+    DefaultTheme = 0, RandomTheme,
+    BlackTheme1, BlackTheme2,
+    BlueTheme1, BlueTheme2,
+    BrownTheme1, BrownTheme2,
+    GreenTheme1, GreenTheme2,
+    LightBlueTheme1, LightBlueTheme2,
+    OrangeTheme1, OrangeTheme2,
+    PinkTheme1, PinkTheme2,
+    PurpleTheme1, PurpleTheme2,
+    RedTheme1, RedTheme2,
+    YellowTheme1, YellowTheme2,
+    WindowsTheme1, WindowsTheme2,
+    ThemeCount
+  };
+
 public:
   static Self *globalInstance()               { Q_ASSERT(global_); return global_; }
   static void setGlobalInstance(Self *global) { global_ = global; }
-
 public:
   explicit UiStyle(QObject *parent = 0);
 
+  Theme theme() const;
+  void setTheme(int tid);
+
 public:
-  void setMainWindowStyle(QWidget *mw, bool useQss = true);
-  void setWindowStyle(QWidget *w, bool useQss = true);
-  void setMenuStyle(QMenu *menu, bool useQss = true);
-  void setContextMenuStyle(QMenu *menu, bool useQss = true);
+  void setMainWindowStyle(QWidget *w);
+  void setWindowStyle(QWidget *w, bool persistent = true);
+  //void setMenuStyle(QMenu *menu);
+  void setContextMenuStyle(QMenu *menu, bool persistent);
   void setToolButtonStyle(QToolButton *button, bool useQss = true);
   void setComboBoxStyle(QComboBox *box, bool useQss = true);
+
+  void setBackground(QWidget *w, bool persistent); ///< If the widget is persistant
+
+public slots:
+  void invalidateBackground();
 
 #ifdef USE_WIN_DWM
 public slots:
   void setWindowDwmEnabled(QWidget *w, bool t = true);
   void setWindowDwmEnabled(WId wid, bool t = true);
 #endif // USE_WIN_DWM
+
+public:
+  static bool isAeroAvailable();
+
+private:
+  static Self *global_;
+  Theme theme_;
+  QList<QWidget*> widgets_; // widgets with customized background
 };
 
 #endif // UISTYLE_H

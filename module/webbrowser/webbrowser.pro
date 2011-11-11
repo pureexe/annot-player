@@ -8,13 +8,13 @@ QT += core gui webkit
 
 TEMPLATE = lib
 
-TARGET = webbrowser
-#mac:    TARGET = WebBrowser
+!mac: TARGET = webbrowser
+mac:  TARGET = WebBrowser
 
 # Use dylib instead of frameworks, which gave me lots of trouble orz
 # see: http://doc.qt.nokia.com/latest/qmake-variable-reference.html#config
 CONFIG  += shared
-mac:    CONFIG += dylib #lib_bundle
+mac:    CONFIG += dylib lib_bundle
 win32:  CONFIG += dll embed_manifest_dll
 
 DEFINES += WEBBROWSER_LIB

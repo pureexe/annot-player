@@ -11,7 +11,7 @@
         <key>CFBundleSignature</key>
         <string>????</string>
         <key>CFBundleVersion</key>
-        <string>0.0.8.3</string>
+        <string>0.0.9.1</string>
         <key>CFBundleIdentifier</key>
         <string>me.annot.player</string>
         <key>CFBundleExecutable</key>

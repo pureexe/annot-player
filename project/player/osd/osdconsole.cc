@@ -33,6 +33,7 @@ OSDConsole::OSDConsole(QWidget *parent)
   connect(timer_, SIGNAL(timeout()), SLOT(clear()));
 
   connect(this, SIGNAL(restartAutoClearTimerRequested()), SLOT(restartAutoClearTimer()), Qt::QueuedConnection);
+  connect(this, SIGNAL(asyncSetText(QString)), SLOT(setText(QString)), Qt::QueuedConnection);
 
   createActions();
   createMenus();
@@ -56,7 +57,7 @@ void
 OSDConsole::createMenus()
 {
   contextMenu_ = new QMenu(this);
-  UiStyle::globalInstance()->setContextMenuStyle(contextMenu_);
+  UiStyle::globalInstance()->setContextMenuStyle(contextMenu_, true); // persistent = true
 }
 
 void
@@ -84,15 +85,19 @@ OSDConsole::isAutoClearTimerActive() const
 
 // - Output -
 
-OSDConsole&
-OSDConsole::operator<<(const QString &append)
+void
+OSDConsole::append(const QString &t)
 {
   mutex_.lock();
   emit restartAutoClearTimerRequested();
-  setText(text() + append);
+  //setText(text() + append);
+  emit asyncSetText(text() + t);
   mutex_.unlock();
-  return *this;
 }
+
+OSDConsole&
+OSDConsole::operator<<(const QString &text)
+{ append(text); return *this; }
 
 // - Events -
 

@@ -1,6 +1,10 @@
 <RCC>
     <qresource prefix="/">
+        <file>tr/tr_en.qm</file>
+        <file>tr/tr_ja.qm</file>
+        <file>tr/tr_zh.qm</file>
         <file>images/background.png</file>
+        <file>images/lineedit.png</file>
         <file>images/textedit.png</file>
         <file>images/comment.png</file>
         <file>images/comment_checked.png</file>
@@ -22,6 +26,11 @@
         <file>images/live_disabled.png</file>
         <file>images/live_hover.png</file>
         <file>images/live_pressed.png</file>
+        <file>images/menu.png</file>
+        <file>images/menu_checked.png</file>
+        <file>images/menu_disabled.png</file>
+        <file>images/menu_hover.png</file>
+        <file>images/menu_pressed.png</file>
         <file>images/mini.png</file>
         <file>images/mini_checked.png</file>
         <file>images/mini_disabled.png</file>
@@ -62,15 +71,27 @@
         <file>images/uparrow_disabled.png</file>
         <file>images/uparrow_hover.png</file>
         <file>images/uparrow_pressed.png</file>
-        <file>tr/tr_en.qm</file>
-        <file>tr/tr_ja.qm</file>
-        <file>tr/tr_zh.qm</file>
         <file>images/app.png</file>
-        <file>images/menu.png</file>
-        <file>images/menu_checked.png</file>
-        <file>images/menu_disabled.png</file>
-        <file>images/menu_hover.png</file>
-        <file>images/menu_pressed.png</file>
-        <file>images/lineedit.png</file>
+        <file>images/aero.png</file>
+        <file>images/aero_black1.jpg</file>
+        <file>images/aero_black2.jpg</file>
+        <file>images/aero_blue1.jpg</file>
+        <file>images/aero_blue2.jpg</file>
+        <file>images/aero_brown1.jpg</file>
+        <file>images/aero_brown2.jpg</file>
+        <file>images/aero_green1.jpg</file>
+        <file>images/aero_green2.jpg</file>
+        <file>images/aero_lightblue1.jpg</file>
+        <file>images/aero_lightblue2.jpg</file>
+        <file>images/aero_orange1.jpg</file>
+        <file>images/aero_orange2.jpg</file>
+        <file>images/aero_pink1.jpg</file>
+        <file>images/aero_pink2.jpg</file>
+        <file>images/aero_purple1.jpg</file>
+        <file>images/aero_purple2.jpg</file>
+        <file>images/aero_red1.jpg</file>
+        <file>images/aero_red2.jpg</file>
+        <file>images/aero_yellow1.jpg</file>
+        <file>images/aero_yellow2.jpg</file>
     </qresource>
 </RCC>

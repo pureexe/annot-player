@@ -11,6 +11,7 @@
 #endif // USE_MODE_SIGNAL
 #include <QMainWindow>
 #include <QStringList>
+#include <QUrl>
 #include <QMutex>
 
 QT_FORWARD_DECLARE_CLASS(QUrl)
@@ -56,28 +57,6 @@ class LoginDialog;
 class PickDialog;
 class SeekDialog;
 class SyncDialog;
-
-// Hook
-#ifdef USE_WIN_HOOK
-#include "win/hook/hook.h"
-
-class MainWindow;
-class HookEventForwarder : public QObject
-{
-  Q_OBJECT
-  typedef HookEventForwarder Self;
-  typedef QObject Base;
-
-  MainWindow *w_;
-
-public:
-  explicit HookEventForwarder(MainWindow *w, QObject *parent = 0);
-
-protected:
-  /// \override  Hook event filter.
-  virtual bool eventFilter(QObject *hook, QEvent *event);
-};
-#endif // USE_WIN_HOOK
 
 // MainWindow
 class MainWindow : public QMainWindow
@@ -131,7 +110,16 @@ public slots:
   void translate(const QString &text);
 
   void setSubtitleStaysOnTop(bool t);
+  void setSubtitleColorToDefault();
+  void setSubtitleColorToBlue();
+  void setSubtitleColorToRed();
+  void setSubtitleColorToPurple();
+  void setSubtitleColorToOrange();
+  void setSubtitleColorToBlack();
+private:
+  void uncheckSubtitleColorActions();
 
+public slots:
   void onFocusedWidgetChanged(QWidget *w_old, QWidget *w_new);
 
   void about();
@@ -192,6 +180,9 @@ public slots:
   void invalidateWindowTitle();
   void syncLineEditText(const QString &text);
   void syncPrefixLineEditText(const QString &text);
+
+  void enableWindowTransparency();
+  void disableWindowTransparency();
 
   //void setWindowStaysOnTop(bool enabled = true); // TODO
 
@@ -311,9 +302,23 @@ public slots:
   void updateTokenMode();
   void updateVideoMode();
 
+  // - Themes -
+public slots:
+  void setThemeToDefault(); void setThemeToRandom();
+  void setThemeToBlack1(); void setThemeToBlack2();
+  void setThemeToBlue1(); void setThemeToBlue2();
+  void setThemeToBrown1(); void setThemeToBrown2();
+  void setThemeToGreen1(); void setThemeToGreen2();
+  void setThemeToLightBlue1(); void setThemeToLightBlue2();
+  void setThemeToOrange1(); void setThemeToOrange2();
+  void setThemeToPink1(); void setThemeToPink2();
+  void setThemeToPurple1(); void setThemeToPurple2();
+  void setThemeToRed1(); void setThemeToRed2();
+  void setThemeToYellow1(); void setThemeToYellow2();
+
   // - Signal mode -
 #ifdef USE_WIN_QTH
-protected slots:
+public slots:
   void openProcessPath(const QString &path);
   void openProcessHook(int hookId, const ProcessInfo &pi = ProcessInfo());
   void openProcessWindow(WId hwnd);
@@ -421,7 +426,16 @@ private:
         *forwardContextMenu_,
         *appLanguageContextMenu_,
         *userLanguageContextMenu_,
-        *annotationLanguageContextMenu_;
+        *annotationLanguageContextMenu_,
+        *themeMenu_,
+        *subtitleStyleMenu_;
+
+  QAction *setSubtitleColorToDefaultAct_,
+          *setSubtitleColorToBlueAct_,
+          *setSubtitleColorToRedAct_,
+          *setSubtitleColorToPurpleAct_,
+          *setSubtitleColorToOrangeAct_,
+          *setSubtitleColorToBlackAct_;
 
   QAction *openAct_,
           *openFileAct_,
@@ -506,6 +520,18 @@ private:
           *toggleAnnotationLanguageToKoreanAct_,
           *toggleAnnotationLanguageToUnknownAct_,
           *toggleAnnotationLanguageToAnyAct_;
+
+  QAction *setThemeToDefaultAct_, *setThemeToRandomAct_,
+          *setThemeToBlack1Act_, *setThemeToBlack2Act_,
+          *setThemeToBlue1Act_, *setThemeToBlue2Act_,
+          *setThemeToBrown1Act_, *setThemeToBrown2Act_,
+          *setThemeToGreen1Act_, *setThemeToGreen2Act_,
+          *setThemeToLightBlue1Act_, *setThemeToLightBlue2Act_,
+          *setThemeToOrange1Act_, *setThemeToOrange2Act_,
+          *setThemeToPink1Act_, *setThemeToPink2Act_,
+          *setThemeToPurple1Act_, *setThemeToPurple2Act_,
+          *setThemeToRed1Act_, *setThemeToRed2Act_,
+          *setThemeToYellow1Act_, *setThemeToYellow2Act_;
 
   QAction *helpAct_,
           *aboutAct_,

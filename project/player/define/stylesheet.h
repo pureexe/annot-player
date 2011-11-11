@@ -224,28 +224,24 @@
 // - Menus -
 #define SS_MENU SS_NULL
 
-#ifdef Q_WS_WIN
-  #define SS_CONTEXTMENU \
-    SS_BEGIN(QWidget) \
-      SS_COLOR(red) \
-      SS_BACKGROUND_IMAGE_URL(RC_IMAGE_NULL) \
-    SS_END
-#else
-  #define SS_CONTEXTMENU SS_NULL
-  //#define SS_CONTEXTMENU
-  //  SS_BEGIN(QWidget)
-  //    SS_COLOR(orange)
-  //    SS_BACKGROUND_IMAGE_URL(RC_IMAGE_CONTEXTMENU)
-  //  SS_END
-#endif // Q_WS_WIN
-
-#ifdef USE_WIN_DWM
-  // SS_BORDER_RADIUS(5px) for context menu not used since it conflicts with DWM aero effects.
-  #define SS_CONTEXTMENU_DWM \
-    SS_BEGIN(QMenu) \
-      SS_COLOR(red) \
-    SS_END
-#endif // USE_WIN_DWM
+// See: http://doc.qt.nokia.com/latest/stylesheet-examples.html#customizing-qmenu
+// See: http://drpeterjones.com/colorcalc/
+#define SS_CONTEXTMENU \
+  SS_BEGIN(QMenu) \
+    SS_BACKGROUND_IMAGE_URL(RC_IMAGE_CONTEXTMENU) \
+  SS_END \
+  SS_BEGIN(QMenu::item) \
+    SS_COLOR(orange) \
+  SS_END \
+  SS_BEGIN(QMenu::item::selected) \
+    SS_BACKGROUND( \
+      qlineargradient(spread:pad, \
+        x1:0, y1:0, x2:1, y2:0, \
+        stop:0    rgba(255, 204, 0, 64), \
+        stop:0.25 rgba(255, 204, 51, 128), \
+        stop:0.5  rgba(255, 204, 102, 64), \
+        stop:1    rgba(255, 204, 153, 16))) \
+  SS_END
 
 // - Text edits -
 
@@ -258,8 +254,9 @@
 
 //#define SS_WINDOW
 //  SS_BEGIN(QWidget)
-//    SS_BACKGROUND_IMAGE_URL(RC_IMAGE_WINDOW)
+//    SS_BACKGROUND_IMAGE_URL(RC_IMAGE_AERO)
 //  SS_END
+#define SS_WINDOW     SS_NULL
 
 //#ifdef USE_WIN_DWM
 //  #define SS_WINDOW_DWM
@@ -268,10 +265,14 @@
 //    SS_END
 //#endif // USE_WIN_DWM
 //
-
-#define SS_WINDOW       SS_NULL
 #define SS_WINDOW_DWM   SS_NULL
-#define SS_MAINWINDOW   SS_NULL
+
+// - Customized -
+
+#define SS_BACKGROUND_CLASS(_class) \
+  SS_BEGIN(_class) \
+    SS_BACKGROUND_IMAGE_URL(RC_IMAGE_AERO) \
+  SS_END
 
 
 #endif // STYLESHEET_H

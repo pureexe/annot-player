@@ -9,22 +9,8 @@
 #include <boost/tuple/tuple.hpp>
 #include <boost/typeof/typeof.hpp>
 
-//#define DEBUG
-
-#ifdef DEBUG
-  #define DOUT(_msg)    qDebug() << "AnnotationParser:" << _msg
-#else
-  #define DOUT(_dummy)
-
-  #ifdef _MSC_VER
-    #pragma warning (disable: 4390)     // C4390: empty controlled statement found: is this the intent?
-  #endif // _MSC_VER
-
-  #ifdef __GNUC__
-    #pragma GCC diagnostic ignored "-Wempty-body" // empty body in an if or else statement
-  #endif // __GNUC__
-
-#endif // DEBUG
+#define DEBUG "Core::AnnotationParser"
+#include "module/debug/debug.h"
 
 #define DEFAULT_TINY_SIZE        "10px"
 #define DEFAULT_SMALL_SIZE       "15px"
@@ -735,6 +721,7 @@ namespace Core {
     QString ret;
     QWebElement e = input;
     while (!e.isNull()) {
+
       QString t = e.tagName();
       QString tail;
 
@@ -745,7 +732,21 @@ namespace Core {
         continue;
       }
       else IFTAG(t, "body") {
-        qDebug() << e.toInnerXml();
+        // Fix HTML siblings
+        // See: http://developer.qt.nokia.com/forums/viewthread/7262/
+        // if not <html> and not <head>, fix inner html
+        QString innerHtml = e.toInnerXml();
+        if (!innerHtml.isEmpty() && !e.firstChild().isNull()) {
+          innerHtml.replace("<", "<<");
+          innerHtml.replace(">", ">>");
+          innerHtml.replace("<<", "</span><");
+          innerHtml.replace(">>", "><span>");
+          innerHtml = "<span>" + innerHtml + "</span>";
+          e.setInnerXml(innerHtml);
+        }
+        DOUT("reduceHtmlElement: new html body follows");
+        DOUT(innerHtml);
+
       } else IFTAG(t, "p")
         tail = "\\n ";
       else IFTAG(t, "br") {

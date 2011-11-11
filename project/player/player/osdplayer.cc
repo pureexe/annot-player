@@ -57,8 +57,8 @@ OSDPlayerUi::createLayout()
     row->addWidget(nextFrameButton());
     row->addWidget(stopButton());
     row->addWidget(openButton());
-    row->addWidget(togglePlayModeButton());
     row->addWidget(toggleMiniModeButton());
+    row->addWidget(togglePlayModeButton());
     row->addStretch();
     row->addWidget(userButton());
     row->addWidget(prefixLineEdit());

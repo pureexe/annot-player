@@ -43,9 +43,9 @@
 
 // Must consistent with wrapper.c
 struct vout_sys_t {
-    char           *title;
-    vout_display_t *vd;
-    bool           use_dr;
+  char           *title;
+  vout_display_t *vd;
+  bool           use_dr;
 };
 
 namespace { // anonymous

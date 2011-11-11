@@ -4,6 +4,7 @@
 #include "mainwindow.h"
 #include "settings.h"
 #include "global.h"
+#include "uistyle.h"
 #include "translatormanager.h"
 #ifdef USE_WIN_QTWIN
   #include "win/qtwin/qtwin.h"
@@ -16,7 +17,7 @@
 
 #define DEBUG "main"
 #include "module/debug/debug.h"
-
+#include "win/dwm/dwm.h"
 // - Debug -
 
 namespace { // anonymous, debug
@@ -115,6 +116,9 @@ main(int argc, char *argv[])
       caches.mkpath(caches.absolutePath());
   }
 
+  // Set global random seed.
+  ::qsrand((uint)QDateTime::currentMSecsSinceEpoch());
+
   // Applications
   QApplication a(argc, argv);
 #ifdef USE_WIN_QTWIN
@@ -133,8 +137,6 @@ main(int argc, char *argv[])
 
   ::registerMetaTypes();
 
-  TranslatorManager::globalInstance()->installCurrentTranslator(&a);
-
 #ifdef USE_MODE_DEBUG
   {
     QFile debug(G_PATH_DEBUG);
@@ -148,6 +150,18 @@ main(int argc, char *argv[])
     }
   }
 #endif // USE_MODE_DEBUG
+
+  // Initialize translator
+  {
+    int lang = Settings::globalInstance()->language();
+    if (!lang) {
+      lang =  QLocale::system().language();
+      Settings::globalInstance()->setLanguage(lang);
+    }
+    TranslatorManager::globalInstance()->setLanguage(lang, false); // auto-update translator = false
+    TranslatorManager::globalInstance()->installCurrentTranslator(&a);
+    DOUT("main: app language =" << lang);
+  }
 
   Settings::globalInstance()->setVersion(G_VERSION);
 
@@ -167,11 +181,17 @@ main(int argc, char *argv[])
   // Set webkit settings
   QWebSettings::globalSettings()->setAttribute(QWebSettings::PluginsEnabled, true);
 
+  // Set theme.
+  {
+    int tid = Settings::globalInstance()->themeId();
+    UiStyle::globalInstance()->setTheme(tid);
+  }
+
 #ifdef USE_MODE_SIGNAL
   // Root window
   QMainWindow root; // Persistant visible root widget to prevent Qt from automatic closing invisible windows
   root.setWindowFlags(root.windowFlags() | Qt::WindowStaysOnTopHint);
-  root.resize(0,0);
+  root.resize(0, 0);
 
   // Main window
   MainWindow w(&root, WINDOW_FLAGS);
@@ -195,6 +215,11 @@ main(int argc, char *argv[])
     w.login(userName, password);
 
   w.parseArguments(a.arguments());
+
+  //QWidget t;
+  //t.setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint);
+  //DWM_ENABLE_AERO_WIDGET((&t));
+  //t.showMaximized();
 
   //w.openPath("d:\\i\\sample.mp4");
   //w.openPath("d:/i/sample.mp4");

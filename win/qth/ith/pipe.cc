@@ -56,7 +56,6 @@ void CreateNewPipe()
 
 void DetachFromProcess(DWORD pid)
 {
-  DWORD flag=0;
   HANDLE hMutex,hEvent;
   IO_STATUS_BLOCK ios;
   //module=man->GetModuleByPID(pid);

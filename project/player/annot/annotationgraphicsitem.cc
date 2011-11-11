@@ -5,6 +5,7 @@
 #include "annotationgraphicsview.h"
 #include "annotationgraphicsstyle.h"
 #include "annotationeditor.h"
+//#include "textformathandler.h"
 #include "uistyle.h"
 #include "tr.h"
 #include "global.h"
@@ -119,17 +120,19 @@ AnnotationGraphicsItem::setAnnotation(const Annotation &annot)
 {
   annotation_ = annot;
 
-  QString text;
+  QString text = annotation_.text();
+  if (text.contains(CORE_CMD_SUB " ") || text.contains(CORE_CMD_SUBTITLE " "))
+    text = view_->subtitlePrefix() + text;
+
+  QString code;
   QStringList tags;
-  boost::tie(text, tags) = ANNOT_PARSE_CODE(annotation_.text());
+  boost::tie(code, tags) = ANNOT_PARSE_CODE(text);
   setTags(tags);
   if (!tags.empty() && tags.contains(CORE_CMD_VERBATIM))
-    setPlainText(text);
+    setPlainText(code);
   else
-    setText(text);
+    setText(code);
 }
-
-
 
 // TODO: How to use QTextCharFormat to set advanced format:
 // See: http://lists.trolltech.com/qt-interest/2005-12/thread00469-0.html
@@ -138,6 +141,15 @@ void
 AnnotationGraphicsItem::setText(const QString &text)
 {
   setHtml(text);
+
+  //Q_ASSERT(document());
+  //TextFormatHandler *h = new TextFormatHandler(text, this);
+  //document()->documentLayout()->registerHandler(TextFormatHandler::TextFormat, h);
+  //QTextCharFormat f;
+  //f.setObjectType(TextFormatHandler::TextFormat);
+  //QTextCursor tc = textCursor();
+  //tc.insertText(QString(QChar::ObjectReplacementCharacter), f);
+  //setTextCursor(tc);
 
   //QTextCharFormat format;
   //format.setTextOutline(QPen(Qt::blue, 3));
@@ -520,7 +532,7 @@ AnnotationGraphicsItem::contextMenuEvent(QContextMenuEvent *event)
       pause();
 
     QMenu menu;
-    UiStyle::globalInstance()->setContextMenuStyle(&menu);
+    UiStyle::globalInstance()->setContextMenuStyle(&menu, false); // persistent = false
 
     menu.addAction(TR(T_MENUTEXT_EDIT), this, SLOT(edit()));
     menu.addAction(TR(T_MENUTEXT_COPY), this, SLOT(copyToClipboard()));

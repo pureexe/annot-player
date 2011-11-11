@@ -4,7 +4,7 @@
 // qtstep.h
 // 7/30/2011
 
-// object NSView
+// - NSView -
 struct nsview_t { };
 nsview_t *nsview_new();
 void nsview_release(nsview_t *handle);

@@ -20,19 +20,23 @@ TranslatorManager::globalInstance()
 TranslatorManager::TranslatorManager(QObject *parent)
   : Base(parent),
     tr_en_(0), tr_ja_(0), tr_tw_(0), tr_zh_(0)
-{ setLanguage(QLocale::system().language()); }
+{
+  //setLanguage(QLocale::system().language());
+}
 
 int
 TranslatorManager::language() const
 { return language_; }
 
 void
-TranslatorManager::setLanguage(int language)
+TranslatorManager::setLanguage(int language, bool updateTranslator)
 {
   if (language_ != language) {
-    removeCurrentTranslator(qApp);
+    if (updateTranslator)
+      removeCurrentTranslator(qApp);
     language_ = language;
-    installCurrentTranslator(qApp);
+    if (updateTranslator)
+      installCurrentTranslator(qApp);
 
     emit languageChanged();
   }
@@ -94,9 +98,13 @@ TranslatorManager::removeCurrentTranslator(QCoreApplication *a)
 QString
 TranslatorManager::translate(int tid) const
 {
+#define SELF(_t)      translate(_t)
   switch (tid) {
   case T_NULL:          return QString();
 
+  case T_WINDOWS:       return tr("Windows");
+  case T_DEFAULT:       return tr("Default");
+  case T_RANDOM:        return tr("Random");
   case T_POSITION:      return tr("Progress");
   case T_VOLUME:        return tr("Volume");
   case T_USER:          return tr("User");
@@ -131,12 +139,15 @@ TranslatorManager::translate(int tid) const
   case T_BROWN:         return tr("Brown");
   case T_CYAN:          return tr("Cyan");
   case T_GRAY:          return tr("Gray");
+  case T_GREEN:         return tr("Green");
   case T_MAGENTA:       return tr("Magenta");
   case T_ORANGE:        return tr("Orange");
   case T_PINK:          return tr("Pink");
+  case T_PURPLE:        return tr("Purple");
   case T_RED:           return tr("Red");
   case T_WHITE:         return tr("White");
   case T_YELLOW:        return tr("Yellow");
+  case T_LIGHTBLUE:     return tr("Light blue");
 
   case T_ALIEN:         return tr("Alien");
   case T_ENGLISH:       return tr("English");
@@ -219,6 +230,7 @@ TranslatorManager::translate(int tid) const
   case T_FORMAT_VIDEO:          return tr("Video");
   case T_FORMAT_AUDIO:          return tr("Audio");
   case T_FORMAT_SUBTITLE:       return tr("Subtitle");
+  case T_FORMAT_EXE:            return tr("Executable");
 
   // Actions:
 
@@ -228,7 +240,7 @@ TranslatorManager::translate(int tid) const
   case T_MENUTEXT_OPENFILE:     return tr("Open &file");
   case T_TIP_OPENFILE:          return tr("Open media file");
 
-  case T_MENUTEXT_OPENDEVICE:   return tr("Open &device");
+  case T_MENUTEXT_OPENDEVICE:   return tr("Open CD/&DVD");
   case T_TIP_OPENDEVICE:        return tr("Open media device");
 
   case T_MENUTEXT_OPENSUBTITLE: return tr("Open &subtitle");
@@ -451,6 +463,12 @@ TranslatorManager::translate(int tid) const
   case T_MENUTEXT_SUBTITLEONTOP:  return tr("Subtitle on &top");
   case T_TIP_SUBTITLEONTOP:       return tr("Display subtitle on the top/bottom");
 
+  case T_MENUTEXT_SUBTITLESTYLE:  return tr("Subtitle &color");
+  case T_TIP_SUBTITLESTYLE:       return tr("Select subtitle color");
+
+  case T_MENUTEXT_THEME:  return tr("&Theme");
+  case T_TIP_THEME:       return tr("Select GUI theme");
+
   case T_LABEL_CREATEDATE:      return tr("Create");
   case T_TIP_CREATEDATE:        return tr("Create date");
   case T_LABEL_UPDATEDATE:      return tr("Update");
@@ -491,11 +509,35 @@ TranslatorManager::translate(int tid) const
   case T_MENUTEXT_CLEARRECENT:  return tr("Clear");
   case T_TIP_CLEARRECENT:       return tr("Clear recent files");
 
+  case T_MENUTEXT_BLACKTHEME1:  return SELF(T_BLACK) + "1";
+  case T_MENUTEXT_BLACKTHEME2:  return SELF(T_BLACK) + "2";
+  case T_MENUTEXT_BLUETHEME1:  return SELF(T_BLUE) + "1";
+  case T_MENUTEXT_BLUETHEME2:  return SELF(T_BLUE) + "2";
+  case T_MENUTEXT_BROWNTHEME1:  return SELF(T_BROWN) + "1";
+  case T_MENUTEXT_BROWNTHEME2:  return SELF(T_BROWN) + "2";
+  case T_MENUTEXT_GREENTHEME1:  return SELF(T_GREEN) + "1";
+  case T_MENUTEXT_GREENTHEME2:  return SELF(T_GREEN) + "2";
+  case T_MENUTEXT_LIGHTBLUETHEME1:  return SELF(T_LIGHTBLUE) + "1";
+  case T_MENUTEXT_LIGHTBLUETHEME2:  return SELF(T_LIGHTBLUE) + "2";
+  case T_MENUTEXT_ORANGETHEME1:  return SELF(T_ORANGE) + "1";
+  case T_MENUTEXT_ORANGETHEME2:  return SELF(T_ORANGE) + "2";
+  case T_MENUTEXT_PINKTHEME1:  return SELF(T_PINK) + "1";
+  case T_MENUTEXT_PINKTHEME2:  return SELF(T_PINK) + "2";
+  case T_MENUTEXT_PURPLETHEME1:  return SELF(T_PURPLE) + "1";
+  case T_MENUTEXT_PURPLETHEME2:  return SELF(T_PURPLE) + "2";
+  case T_MENUTEXT_REDTHEME1:  return SELF(T_RED) + "1";
+  case T_MENUTEXT_REDTHEME2:  return SELF(T_RED) + "2";
+  case T_MENUTEXT_YELLOWTHEME1:  return SELF(T_YELLOW) + "1";
+  case T_MENUTEXT_YELLOWTHEME2:  return SELF(T_YELLOW) + "2";
+  case T_MENUTEXT_WINDOWSTHEME1:  return SELF(T_WINDOWS) + "1";
+  case T_MENUTEXT_WINDOWSTHEME2:  return SELF(T_WINDOWS) + "2";
+
   default:
     qWarning() << "TranslatorManager:translate: Unknown tid =" << tid;
     Q_ASSERT(0);
     return QString();
   }
+#undef SELF
 }
 
 // EOF

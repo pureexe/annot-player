@@ -25,7 +25,7 @@ linux:  INCLUDEPATH     += $$ROOTDIR/linux
 DEFINES += UNICODE
 
 # C++0x
-win32:  QMAKE_CXXFLAGS  += /Zc:auto
+win32:  QMAKE_CXXFLAGS  += -Zc:auto
 linux:  QMAKE_CXXFLAGS  += -std=c++0x
 #mac:    QMAKE_CXXFLAGS  += -std=c++0x
 

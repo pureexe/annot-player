@@ -2,11 +2,8 @@
 // Since 7/30/2011
 
 #include "vlckit_qt.h"
+#import "VLCKit/VLCKit.h"
 #include <QtGlobal>
-
-extern "C" {
-  #include "VLCKit/VLCKit.h"
-} // extern C
 
 // -- Helpers --
 namespace { // anonymous, cast

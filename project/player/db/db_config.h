@@ -136,20 +136,20 @@
       "?"       /* 13: user_blocked_count */ \
     ")" \
   ); \
-  _query.addBindValue(_user.status());       /* 0 */ \
-  _query.addBindValue(_user.flags());        /* 1 */ \
-  _query.addBindValue(_user.id());           /* 2 */ \
-  _query.addBindValue(_user.groupId());      /* 3 */ \
-  _query.addBindValue(_user.name());         /* 4 */ \
-  _query.addBindValue(_user.password());     /* 5 */ \
-  _query.addBindValue(_user.nickname());     /* 6 */ \
-  _query.addBindValue(_user.email());        /* 7 */ \
-  _query.addBindValue(_user.language());     /* 8 */ \
-  _query.addBindValue(_user.createTime());   /* 9 */ \
-  _query.addBindValue(_user.loginTime());    /* 10 */ \
-  _query.addBindValue(_user.blessedCount()); /* 11 */ \
-  _query.addBindValue(_user.cursedCount());  /* 12 */ \
-  _query.addBindValue(_user.blockedCount()); /* 13 */ \
+  (_query).addBindValue((_user).status());       /* 0 */ \
+  (_query).addBindValue((_user).flags());        /* 1 */ \
+  (_query).addBindValue((_user).id());           /* 2 */ \
+  (_query).addBindValue((_user).groupId());      /* 3 */ \
+  (_query).addBindValue((_user).name());         /* 4 */ \
+  (_query).addBindValue((_user).password());     /* 5 */ \
+  (_query).addBindValue((_user).nickname());     /* 6 */ \
+  (_query).addBindValue((_user).email());        /* 7 */ \
+  (_query).addBindValue((_user).language());     /* 8 */ \
+  (_query).addBindValue((_user).createTime());   /* 9 */ \
+  (_query).addBindValue((_user).loginTime());    /* 10 */ \
+  (_query).addBindValue((_user).blessedCount()); /* 11 */ \
+  (_query).addBindValue((_user).cursedCount());  /* 12 */ \
+  (_query).addBindValue((_user).blockedCount()); /* 13 */ \
 }
 
 #define DB_INSERT_TOKEN(_token, _query) \
@@ -181,17 +181,17 @@
       "?"       /* 10: token_visited_count */ \
     ")" \
   ); \
-  _query.addBindValue(_token.status());       /* 0 */ \
-  _query.addBindValue(_token.flags());        /* 1 */ \
-  _query.addBindValue(_token.id());           /* 2 */ \
-  _query.addBindValue(_token.userId());       /* 3 */ \
-  _query.addBindValue(_token.digest());       /* 4 */ \
-  _query.addBindValue(_token.type());         /* 5 */ \
-  _query.addBindValue(_token.createTime());   /* 6 */ \
-  _query.addBindValue(_token.blessedCount()); /* 7 */ \
-  _query.addBindValue(_token.cursedCount());  /* 8 */ \
-  _query.addBindValue(_token.blockedCount()); /* 9 */ \
-  _query.addBindValue(_token.visitedCount()); /* 10 */ \
+  (_query).addBindValue((_token).status());       /* 0 */ \
+  (_query).addBindValue((_token).flags());        /* 1 */ \
+  (_query).addBindValue((_token).id());           /* 2 */ \
+  (_query).addBindValue((_token).userId());       /* 3 */ \
+  (_query).addBindValue((_token).digest());       /* 4 */ \
+  (_query).addBindValue((_token).type());         /* 5 */ \
+  (_query).addBindValue((_token).createTime());   /* 6 */ \
+  (_query).addBindValue((_token).blessedCount()); /* 7 */ \
+  (_query).addBindValue((_token).cursedCount());  /* 8 */ \
+  (_query).addBindValue((_token).blockedCount()); /* 9 */ \
+  (_query).addBindValue((_token).visitedCount()); /* 10 */ \
 }
 
 #define DB_INSERT_ALIAS(_alias, _query) \
@@ -229,20 +229,20 @@
       "?,"      /* 13: alias_blocked_count */ \
     ")" \
   ); \
-  _query.addBindValue(_alias.status());       /* 0 */ \
-  _query.addBindValue(_alias.flags());        /* 1 */ \
-  _query.addBindValue(_alias.id());           /* 2 */ \
-  _query.addBindValue(_alias.tokenId());      /* 3 */ \
-  _query.addBindValue(_alias.tokenDigest());  /* 4 */ \
-  _query.addBindValue(_alias.userId());       /* 5 */ \
-  _query.addBindValue(_alias.type());         /* 6 */ \
-  _query.addBindValue(_alias.aliasType());    /* 7 */ \
-  _query.addBindValue(_alias.text());         /* 8 */ \
-  _query.addBindValue(_alias.language());     /* 9 */ \
-  _query.addBindValue(_alias.updateTime());   /* 10 */ \
-  _query.addBindValue(_alias.blessedCount()); /* 11 */ \
-  _query.addBindValue(_alias.cursedCount());  /* 12 */ \
-  _query.addBindValue(_alias.blockedCount()); /* 13 */ \
+  (_query).addBindValue((_alias).status());       /* 0 */ \
+  (_query).addBindValue((_alias).flags());        /* 1 */ \
+  (_query).addBindValue((_alias).id());           /* 2 */ \
+  (_query).addBindValue((_alias).tokenId());      /* 3 */ \
+  (_query).addBindValue((_alias).tokenDigest());  /* 4 */ \
+  (_query).addBindValue((_alias).userId());       /* 5 */ \
+  (_query).addBindValue((_alias).type());         /* 6 */ \
+  (_query).addBindValue((_alias).aliasType());    /* 7 */ \
+  (_query).addBindValue((_alias).text());         /* 8 */ \
+  (_query).addBindValue((_alias).language());     /* 9 */ \
+  (_query).addBindValue((_alias).updateTime());   /* 10 */ \
+  (_query).addBindValue((_alias).blessedCount()); /* 11 */ \
+  (_query).addBindValue((_alias).cursedCount());  /* 12 */ \
+  (_query).addBindValue((_alias).blockedCount()); /* 13 */ \
 }
 
 #define DB_INSERT_ANNOT(_annot, _query) \
@@ -286,23 +286,23 @@
       "?"       /* 16: annot_blocked_count */ \
     ")" \
   ); \
-  _query.addBindValue(_annot.status());       /* 0 */ \
-  _query.addBindValue(_annot.flags());        /* 1 */ \
-  _query.addBindValue(_annot.id());           /* 2 */ \
-  _query.addBindValue(_annot.tokenId());      /* 3 */ \
-  _query.addBindValue(_annot.tokenDigest());  /* 4 */ \
-  _query.addBindValue(_annot.userId());       /* 5 */ \
-  _query.addBindValue(_annot.userAlias());    /* 6 */ \
-  _query.addBindValue(_annot.type());         /* 7 */ \
-  _query.addBindValue(_annot.pos());          /* 8 */ \
-  _query.addBindValue(_annot.posType());      /* 9 */ \
-  _query.addBindValue(_annot.text());         /* 10 */ \
-  _query.addBindValue(_annot.language());     /* 11 */ \
-  _query.addBindValue(_annot.createTime());   /* 12 */ \
-  _query.addBindValue(_annot.updateTime());   /* 13 */ \
-  _query.addBindValue(_annot.blessedCount()); /* 14 */ \
-  _query.addBindValue(_annot.cursedCount());  /* 15 */ \
-  _query.addBindValue(_annot.blockedCount()); /* 16 */ \
+  (_query).addBindValue((_annot).status());       /* 0 */ \
+  (_query).addBindValue((_annot).flags());        /* 1 */ \
+  (_query).addBindValue((_annot).id());           /* 2 */ \
+  (_query).addBindValue((_annot).tokenId());      /* 3 */ \
+  (_query).addBindValue((_annot).tokenDigest());  /* 4 */ \
+  (_query).addBindValue((_annot).userId());       /* 5 */ \
+  (_query).addBindValue((_annot).userAlias());    /* 6 */ \
+  (_query).addBindValue((_annot).type());         /* 7 */ \
+  (_query).addBindValue((_annot).pos());          /* 8 */ \
+  (_query).addBindValue((_annot).posType());      /* 9 */ \
+  (_query).addBindValue((_annot).text());         /* 10 */ \
+  (_query).addBindValue((_annot).language());     /* 11 */ \
+  (_query).addBindValue((_annot).createTime());   /* 12 */ \
+  (_query).addBindValue((_annot).updateTime());   /* 13 */ \
+  (_query).addBindValue((_annot).blessedCount()); /* 14 */ \
+  (_query).addBindValue((_annot).cursedCount());  /* 15 */ \
+  (_query).addBindValue((_annot).blockedCount()); /* 16 */ \
 }
 
 // - Queries -
@@ -328,29 +328,29 @@
 #define DB_SET_USER(_user, _query) \
 { \
   bool ok; \
-  _user.setStatus(_query.value(0).toInt(&ok)); \
+  (_user).setStatus((_query).value(0).toInt(&ok)); \
   Q_ASSERT(ok); \
-  _user.setFlags(_query.value(1).toULongLong(&ok)); \
+  (_user).setFlags((_query).value(1).toULongLong(&ok)); \
   Q_ASSERT(ok); \
-  _user.setId(_query.value(2).toLongLong(&ok)); \
+  (_user).setId((_query).value(2).toLongLong(&ok)); \
   Q_ASSERT(ok); \
-  _user.setGroupId(_query.value(3).toLongLong(&ok)); \
+  (_user).setGroupId((_query).value(3).toLongLong(&ok)); \
   Q_ASSERT(ok); \
-  _user.setName(_query.value(4).toString()); \
-  _user.setPassword(_query.value(5).toString()); \
-  _user.setNickname(_query.value(6).toString()); \
-  _user.setEmail(_query.value(7).toString()); \
-  _user.setLanguage(_query.value(8).toInt(&ok)); \
+  (_user).setName((_query).value(4).toString()); \
+  (_user).setPassword((_query).value(5).toString()); \
+  (_user).setNickname((_query).value(6).toString()); \
+  (_user).setEmail((_query).value(7).toString()); \
+  (_user).setLanguage((_query).value(8).toInt(&ok)); \
   Q_ASSERT(ok); \
-  _user.setCreateTime(_query.value(9).toULongLong(&ok)); \
+  (_user).setCreateTime((_query).value(9).toULongLong(&ok)); \
   Q_ASSERT(ok); \
-  _user.setLoginTime(_query.value(10).toULongLong(&ok)); \
+  (_user).setLoginTime((_query).value(10).toULongLong(&ok)); \
   Q_ASSERT(ok); \
-  _user.setBlessedCount(_query.value(11).toUInt(&ok)); \
+  (_user).setBlessedCount((_query).value(11).toUInt(&ok)); \
   Q_ASSERT(ok); \
-  _user.setCursedCount(_query.value(12).toUInt(&ok)); \
+  (_user).setCursedCount((_query).value(12).toUInt(&ok)); \
   Q_ASSERT(ok); \
-  _user.setBlockedCount(_query.value(13).toUInt(&ok)); \
+  (_user).setBlockedCount((_query).value(13).toUInt(&ok)); \
   Q_ASSERT(ok); \
 }
 
@@ -372,26 +372,26 @@
 #define DB_SET_TOKEN(_token, _query) \
 { \
   bool ok; \
-  _token.setStatus(_query.value(0).toInt(&ok)); \
+  (_token).setStatus((_query).value(0).toInt(&ok)); \
   Q_ASSERT(ok); \
-  _token.setFlags(_query.value(1).toULongLong(&ok)); \
+  (_token).setFlags((_query).value(1).toULongLong(&ok)); \
   Q_ASSERT(ok); \
-  _token.setId(_query.value(2).toLongLong()); \
+  (_token).setId((_query).value(2).toLongLong()); \
   Q_ASSERT(ok); \
-  _token.setUserId(_query.value(3).toLongLong()); \
+  (_token).setUserId((_query).value(3).toLongLong()); \
   Q_ASSERT(ok); \
-  _token.setDigest(_query.value(4).toString()); \
-  _token.setType(_query.value(5).toInt(&ok)); \
+  (_token).setDigest((_query).value(4).toString()); \
+  (_token).setType((_query).value(5).toInt(&ok)); \
   Q_ASSERT(ok); \
-  _token.setCreateTime(_query.value(6).toLongLong(&ok)); \
+  (_token).setCreateTime((_query).value(6).toLongLong(&ok)); \
   Q_ASSERT(ok); \
-  _token.setBlessedCount(_query.value(7).toUInt(&ok)); \
+  (_token).setBlessedCount((_query).value(7).toUInt(&ok)); \
   Q_ASSERT(ok); \
-  _token.setCursedCount(_query.value(8).toUInt(&ok)); \
+  (_token).setCursedCount((_query).value(8).toUInt(&ok)); \
   Q_ASSERT(ok); \
-  _token.setBlockedCount(_query.value(9).toUInt(&ok)); \
+  (_token).setBlockedCount((_query).value(9).toUInt(&ok)); \
   Q_ASSERT(ok); \
-  _token.setVisitedCount(_query.value(10).toUInt(&ok)); \
+  (_token).setVisitedCount((_query).value(10).toUInt(&ok)); \
   Q_ASSERT(ok); \
 }
 
@@ -416,31 +416,31 @@
 #define DB_SET_ALIAS(_alias, _query) \
 { \
   bool ok; \
-  _alias.setStatus(_query.value(0).toInt(&ok)); \
+  (_alias).setStatus((_query).value(0).toInt(&ok)); \
   Q_ASSERT(ok); \
-  _alias.setFlags(_query.value(1).toULongLong(&ok)); \
+  (_alias).setFlags((_query).value(1).toULongLong(&ok)); \
   Q_ASSERT(ok); \
-  _alias.setId(_query.value(2).toLongLong()); \
+  (_alias).setId((_query).value(2).toLongLong()); \
   Q_ASSERT(ok); \
-  _alias.setTokenId(_query.value(3).toLongLong()); \
+  (_alias).setTokenId((_query).value(3).toLongLong()); \
   Q_ASSERT(ok); \
-  _alias.setTokenDigest(_query.value(4).toString()); \
-  _alias.setUserId(_query.value(5).toLongLong()); \
+  (_alias).setTokenDigest((_query).value(4).toString()); \
+  (_alias).setUserId((_query).value(5).toLongLong()); \
   Q_ASSERT(ok); \
-  _alias.setType(_query.value(6).toInt(&ok)); \
+  (_alias).setType((_query).value(6).toInt(&ok)); \
   Q_ASSERT(ok); \
-  _alias.setAliasType(_query.value(7).toInt(&ok)); \
+  (_alias).setAliasType((_query).value(7).toInt(&ok)); \
   Q_ASSERT(ok); \
-  _alias.setText(_query.value(8).toString()); \
-  _alias.setLanguage(_query.value(9).toInt(&ok)); \
+  (_alias).setText((_query).value(8).toString()); \
+  (_alias).setLanguage((_query).value(9).toInt(&ok)); \
   Q_ASSERT(ok); \
-  _alias.setUpdateTime(_query.value(10).toLongLong(&ok)); \
+  (_alias).setUpdateTime((_query).value(10).toLongLong(&ok)); \
   Q_ASSERT(ok); \
-  _alias.setBlessedCount(_query.value(11).toUInt(&ok)); \
+  (_alias).setBlessedCount((_query).value(11).toUInt(&ok)); \
   Q_ASSERT(ok); \
-  _alias.setCursedCount(_query.value(12).toUInt(&ok)); \
+  (_alias).setCursedCount((_query).value(12).toUInt(&ok)); \
   Q_ASSERT(ok); \
-  _alias.setBlockedCount(_query.value(13).toUInt(&ok)); \
+  (_alias).setBlockedCount((_query).value(13).toUInt(&ok)); \
   Q_ASSERT(ok); \
 }
 
@@ -468,36 +468,36 @@
 #define DB_SET_ANNOTATION(_annot, _query) \
 { \
   bool ok; \
-  _annot.setStatus(_query.value(0).toInt(&ok)); \
+  (_annot).setStatus((_query).value(0).toInt(&ok)); \
   Q_ASSERT(ok); \
-  _annot.setFlags(_query.value(1).toULongLong(&ok)); \
+  (_annot).setFlags((_query).value(1).toULongLong(&ok)); \
   Q_ASSERT(ok); \
-  _annot.setId(_query.value(2).toLongLong(&ok)); \
+  (_annot).setId((_query).value(2).toLongLong(&ok)); \
   Q_ASSERT(ok); \
-  _annot.setTokenId(_query.value(3).toLongLong(&ok)); \
+  (_annot).setTokenId((_query).value(3).toLongLong(&ok)); \
   Q_ASSERT(ok); \
-  _annot.setTokenDigest(_query.value(4).toString()); \
-  _annot.setUserId(_query.value(5).toLongLong(&ok)); \
+  (_annot).setTokenDigest((_query).value(4).toString()); \
+  (_annot).setUserId((_query).value(5).toLongLong(&ok)); \
   Q_ASSERT(ok); \
-  _annot.setUserAlias(_query.value(6).toString()); \
-  _annot.setType(_query.value(7).toInt(&ok)); \
+  (_annot).setUserAlias((_query).value(6).toString()); \
+  (_annot).setType((_query).value(7).toInt(&ok)); \
   Q_ASSERT(ok); \
-  _annot.setPos(_query.value(8).toLongLong(&ok)); \
+  (_annot).setPos((_query).value(8).toLongLong(&ok)); \
   Q_ASSERT(ok); \
-  _annot.setPosType(_query.value(9).toInt(&ok)); \
+  (_annot).setPosType((_query).value(9).toInt(&ok)); \
   Q_ASSERT(ok); \
-  _annot.setText(_query.value(10).toString()); \
-  _annot.setLanguage(_query.value(11).toInt(&ok)); \
+  (_annot).setText((_query).value(10).toString()); \
+  (_annot).setLanguage((_query).value(11).toInt(&ok)); \
   Q_ASSERT(ok); \
-  _annot.setCreateTime(_query.value(12).toLongLong(&ok)); \
+  (_annot).setCreateTime((_query).value(12).toLongLong(&ok)); \
   Q_ASSERT(ok); \
-  _annot.setUpdateTime(_query.value(13).toLongLong(&ok)); \
+  (_annot).setUpdateTime((_query).value(13).toLongLong(&ok)); \
   Q_ASSERT(ok); \
-  _annot.setBlessedCount(_query.value(14).toUInt(&ok)); \
+  (_annot).setBlessedCount((_query).value(14).toUInt(&ok)); \
   Q_ASSERT(ok); \
-  _annot.setCursedCount(_query.value(15).toUInt(&ok)); \
+  (_annot).setCursedCount((_query).value(15).toUInt(&ok)); \
   Q_ASSERT(ok); \
-  _annot.setBlockedCount(_query.value(16).toUInt(&ok)); \
+  (_annot).setBlockedCount((_query).value(16).toUInt(&ok)); \
   Q_ASSERT(ok); \
 }
 

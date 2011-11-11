@@ -10,3 +10,5 @@
   #pragma GCC diagnostic ignored "-Wunused-function"    // defined not used
   #pragma GCC diagnostic ignored "-Wunused-parameter"   // unused parameter
 #endif // __GNUC__
+
+// EOF

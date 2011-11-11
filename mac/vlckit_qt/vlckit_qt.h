@@ -6,7 +6,7 @@
 
 #include "qtstep/qtstep.h"
 
-// class VLCVideoView
+// - VLCVideoView -
 struct vlcvideoview_t : public nsview_t { };
 
 vlcvideoview_t *vlcvideoview_new();

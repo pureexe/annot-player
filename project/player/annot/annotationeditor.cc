@@ -130,7 +130,12 @@ AnnotationEditor::createRibons()
     row1->addWidget(moveStyleComboBox_);
     row1->addStretch();
 
-    rows->setContentsMargins(0, 0, 0, 0);
+    int patch = 0;
+    if (!UiStyle::isAeroAvailable())
+      patch = 4;
+
+    // void setContentsMargins(int left, int top, int right, int bottom);
+    rows->setContentsMargins(patch, patch, patch, patch);
     row0->setContentsMargins(0, 0, 0, 0);
     row1->setContentsMargins(0, 0, 0, 0);
     codeRibon->setContentsMargins(0, 0, 0, 0);
@@ -239,7 +244,11 @@ AnnotationEditor::createRibons()
     row1->addWidget(alignComboBox_);
     row1->addStretch();
 
-    rows->setContentsMargins(0, 0, 0, 0);
+    int patch = 0;
+    if (!UiStyle::isAeroAvailable())
+      patch = 4;
+
+    rows->setContentsMargins(patch, patch, patch, patch);
     row0->setContentsMargins(0, 0, 0, 0);
     row1->setContentsMargins(0, 0, 0, 0);
     htmlRibon->setContentsMargins(0, 0, 0, 0);
@@ -266,7 +275,7 @@ AnnotationEditor::createRibons()
     formatButton_->setToolTip(tr("Format"));
 
     QMenu *menu = new QMenu; {
-      UiStyle::globalInstance()->setMenuStyle(menu);
+      UiStyle::globalInstance()->setContextMenuStyle(menu, false); // persistent = false
 
       // - Styles
       menu->addAction(boldAct_);
@@ -395,10 +404,13 @@ AnnotationEditor::createLayout()
     footer->addWidget(cancelButton_);
 
     // left, top, right, bottom
+    int patch = 0;
+    if (!UiStyle::isAeroAvailable())
+      patch = 9;
     header->setContentsMargins(0, 0, 0, 0);
     footer->setContentsMargins(0, 0, 0, 0);
     rows->setContentsMargins(0, 0, 0, 0);
-    setContentsMargins(9, 0, 9, 0);
+    setContentsMargins(9, patch, 9, patch);
   }
   setLayout(rows);
 }

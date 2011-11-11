@@ -29,6 +29,7 @@
 
 #define PLAYER_FORMAT_SUBTITLE(...) \
     __VA_ARGS__ "ass" \
+    __VA_ARGS__ "srt" \
     __VA_ARGS__ "ssa" \
     __VA_ARGS__ "sub"
 

@@ -51,6 +51,9 @@ public:
   AnnotationPosition subtitlePosition() const;
   void setSubtitlePosition(AnnotationPosition ap);
 
+  void setSubtitlePrefix(const QString &prefix);
+  const QString &subtitlePrefix() const;
+
   /**
    *  Only used to measure the current full screen geometry.
    *  \param  w  any widget which is never null and is always in full screen mode
@@ -183,6 +186,8 @@ private:
   Player *player_;
   bool active_;
   bool paused_;
+
+  QString subtilePrefix_;
 
   QTimer *trackingTimer_;
 

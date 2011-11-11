@@ -6,6 +6,7 @@
 
 #include <QSettings>
 #include <QStringList>
+#include <QDate>
 
 class Settings : protected QSettings
 {
@@ -40,8 +41,15 @@ public:
   bool isSubtitleStaysOnTop() const;
   void setSubtitleStaysOnTop(bool t);
 
+  QDate updateDate() const;
+  void setUpdateDate(const QDate &date);
+
   int language() const; ///< Application language
   void setLanguage(int lang);
+
+  ///  Theme in UiStyle
+  int themeId() const;
+  void setThemeId(int tid);
 
   qint64 annotationLanguages() const; ///< Annotation language
   void setAnnotationLanguages(qint64 lang);

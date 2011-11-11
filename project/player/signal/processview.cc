@@ -322,7 +322,7 @@ ProcessView::createActions()
 
   // Create menus
   contextMenu_ = new QMenu(windowTitle(), this);
-  UiStyle::globalInstance()->setContextMenuStyle(contextMenu_);
+  UiStyle::globalInstance()->setContextMenuStyle(contextMenu_, true); // persistent = true
 }
 
 

@@ -1,0 +1,4 @@
+// 10/15/2011
+http://www.cnblogs.com/wubiyu/archive/2010/05/17/1737420.html
+copied from "C:\Program Files\Microsoft Visual Studio 10.0\VC\include\sal.h",
+which is supposed to override "C:\WinDDK\7600.16385.1\inc\api\sal.h。"

@@ -46,7 +46,7 @@ namespace { // anonymous, hook callbacks
   MouseProc(__in int nCode, __in WPARAM wparam, __in LPARAM lparam)
   {
     #define NEXT ::CallNextHookEx(hHook, nCode, wparam, lparam)
-    HHOOK hHook = (HHOOK)HOOK_MANAGER->hookHandleForThreadId(GetCurrentThreadId(), HOOK_PROC_MOUSE);
+    HHOOK hHook = (HHOOK)HOOK_MANAGER->hookHandleForThreadId(::GetCurrentThreadId(), HOOK_PROC_MOUSE);
     Q_ASSERT(hHook);
     if (!hHook)
       return 0;
@@ -72,7 +72,7 @@ namespace { // anonymous, hook callbacks
 
       QMouseEvent event(QEvent::MouseMove, pos, globalPos, Qt::NoButton, Qt::NoButton, Qt::NoModifier);
       //HOOK_MANAGER->mouseEvent(&event);
-      QApplication::sendEvent(HOOK_MANAGER, &event);
+      QCoreApplication::sendEvent(HOOK_MANAGER, &event);
     }
 
     return NEXT;
@@ -152,7 +152,6 @@ namespace { // anonymous, low level mouse procedure with double-click support
     shared_::flush();
   }
 
-
   // Return if matched doubleClick, and modify wparam.
   // Double click, see: http://topic.csdn.net/t/20020318/10/582776.html
   bool
@@ -199,8 +198,7 @@ namespace { // anonymous, low level mouse procedure with double-click support
     switch (*wparam) {
     CASE(L, R)
     CASE(R, L)
-    default:
-      history = RESET;
+    default: history = RESET;
     }
 
     return matched;
@@ -284,7 +282,6 @@ namespace { // anonymous, low level mouse procedure with double-click support
           break;
 
         default:
-          qDebug() << wparam;
           Q_ASSERT(0);
         }
       }
@@ -367,7 +364,7 @@ namespace { // anonymous, low level mouse procedure with double-click support
       default:                  event = new QMouseEvent(type, pos, globalPos, button, buttons, modifiers);
       }
 
-      QApplication::sendEvent(HOOK_MANAGER, event);
+      QCoreApplication::sendEvent(HOOK_MANAGER, event);
       accepted = event->isAccepted();
 
       delete event;
@@ -446,7 +443,7 @@ namespace { // anonymous, keyboard hook
       QEvent::Type type = released ? QEvent::KeyRelease : QEvent::KeyPress;
       Qt::KeyboardModifiers modifiers = Qt::NoModifier;
       QKeyEvent event(type, key, modifiers);
-      QApplication::sendEvent(HOOK_MANAGER, &event);
+      QCoreApplication::sendEvent(HOOK_MANAGER, &event);
       if (event.isAccepted())
         return 0;
     }
@@ -638,10 +635,12 @@ WindowsHookManager::isActive()
 void
 WindowsHookManager::stop()
 {
-  foreach (HHOOK hHook, impl_->globalHooks)
-    if (hHook)
-      ::UnhookWindowsHookEx(hHook);
-  impl_->globalHooks.fill(0);
+  if (!impl_->globalHooks.empty()) {
+    foreach (HHOOK hHook, impl_->globalHooks)
+      if (hHook)
+        ::UnhookWindowsHookEx(hHook);
+    impl_->globalHooks.fill(0);
+  }
 
   if (!impl_->threadHooks.empty())
     foreach (DWORD tid, impl_->threadHooks.keys()) {
@@ -691,12 +690,12 @@ WindowsHookManager::removeThreadId(DWORD dwThreadId)
 
 void
 WindowsHookManager::addCurrentThread()
-{ addThreadId(GetCurrentThreadId()); }
+{ addThreadId(::GetCurrentThreadId()); }
 
 void
 WindowsHookManager::addAllThreadsInCurrentProcess()
 {
-  auto threads = QtWin::getThreadIdsByProcessId(GetCurrentProcessId());
+  auto threads = QtWin::getThreadIdsByProcessId(::GetCurrentProcessId());
   if (!threads.empty())
     foreach (DWORD tid, threads)
       addThreadId(tid);
@@ -704,7 +703,7 @@ WindowsHookManager::addAllThreadsInCurrentProcess()
 
 void
 WindowsHookManager::removeCurrentThread()
-{ removeThreadId(GetCurrentThreadId()); }
+{ removeThreadId(::GetCurrentThreadId()); }
 
 void
 WindowsHookManager::removeAllThreads()
@@ -757,7 +756,7 @@ void
 WindowsHookManager::addWinId(WId hwnd)
 {
   if (hwnd && impl_->windows.indexOf(hwnd) < 0)
-    impl_->windows.push_back(hwnd);
+    impl_->windows.append(hwnd);
 }
 
 void
@@ -785,7 +784,7 @@ void
 WindowsHookManager::addListener(WindowsHookListener *listener)
 {
   if (listener && impl_->listeners.indexOf(listener) < 0)
-    impl_->listeners.push_back(listener);
+    impl_->listeners.append(listener);
 }
 
 void
@@ -841,6 +840,8 @@ WindowsHookManager::event(QEvent *event)
   return false;
 }
 
+// EOF
+
 // - Windows Hook Listener and Adaptor -
 
 /*
@@ -862,5 +863,3 @@ WindowsHookAdaptor::event(QEvent *event)
   return true;
 }
 */
-
-// EOF

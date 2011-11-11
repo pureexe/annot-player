@@ -58,6 +58,17 @@ AnnotationGraphicsView::AnnotationGraphicsView(SignalHub *hub, Player *player, V
   //centerOn(0, 0);
 }
 
+AnnotationGraphicsView::~AnnotationGraphicsView()
+{ clearAnnotations(); }
+
+const QString&
+AnnotationGraphicsView::subtitlePrefix() const
+{ return subtilePrefix_; }
+
+void
+AnnotationGraphicsView::setSubtitlePrefix(const QString &prefix)
+{ subtilePrefix_ = prefix; }
+
 AnnotationGraphicsView::AnnotationPosition
 AnnotationGraphicsView::subtitlePosition() const
 { return subtitlePosition_; }
@@ -85,9 +96,6 @@ AnnotationGraphicsView::setUserId(qint64 uid)
 AnnotationEditor*
 AnnotationGraphicsView::editor() const
 { return editor_; }
-
-AnnotationGraphicsView::~AnnotationGraphicsView()
-{ clearAnnotations(); }
 
 void
 AnnotationGraphicsView::setFullScreenView(QWidget *w)

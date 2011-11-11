@@ -79,7 +79,7 @@ SignalView::SignalView(QWidget *parent)
     messageView_->layout()->setContentsMargins(4, 6, 4, 9);
     header->setContentsMargins(0, 0, 0, 0);
     center->setContentsMargins(0, 0, 0, 0);
-    rows->setContentsMargins(4, 0, 0, 4);
+    rows->setContentsMargins(4, 0, 4, 4);
   }
   setLayout(rows);
 

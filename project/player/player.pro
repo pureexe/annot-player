@@ -13,9 +13,7 @@ include($$ROOTDIR/module/serveragent/serveragent.pri)
 #include($$ROOTDIR/module/clientagent/clientagent.pri)
 include($$ROOTDIR/module/gsoap/gsoap.pri)       # would static linking cause license conflicts?
 include($$ROOTDIR/module/translator/translator.pri)
-
-win32:  include($$ROOTDIR/module/webbrowser/webbrowser.pri)
-!win32: include($$ROOTDIR/module/webbrowser/webbrowser_static.pri)
+include($$ROOTDIR/module/webbrowser/webbrowser.pri)
 
 DEFINES += USE_MODE_DEBUG
 
@@ -53,6 +51,12 @@ mac {
 
 QT      += core gui sql webkit
 
+# Increase heap space
+#win32 {
+#  QMAKE_CXXFLAGS += -Zm2000    # 2000 is the maximum according to MSDN
+#  #QMAKE_LFLAGS   += -Zm1000
+#}
+
 ## Sources
 
 TEMPLATE      = app
@@ -84,6 +88,7 @@ HEADERS += \
     config.h \
     eventlogger.h \
     mainwindow.h \
+    mainwindowprivate.h \
     settings.h \
     tray.h \
     uistyle.h \
@@ -92,6 +97,7 @@ HEADERS += \
     annot/annotationgraphicsitem.h \
     annot/annotationgraphicsview.h \
     annot/annotationgraphicsstyle.h \
+    annot/textformathandler.h \
     data/datamanager.h \
     db/db_config.h \
     db/db.h \
@@ -139,6 +145,7 @@ SOURCES += \
     annot/annotationgraphicsitem.cc \
     annot/annotationgraphicsview.cc \
     annot/annotationgraphicsstyle.cc \
+    annot/textformathandler.cc \
     data/datamanager.cc \
     db/db.cc \
     dialog/livedialog.cc \

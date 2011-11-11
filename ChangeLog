@@ -1,6 +1,22 @@
 # ChangeLog
 
 Project: touch.player
+Versial: 0.0.9.0
+Date: 11/?/2011
+- Windows XP theme redesigned.
+- Mac OS X theme redesigned.
+- Several bug fixes for Mac and Windows XP.
+- Added Chinese translation.
+
+Project: touch.player
+Versial: 0.0.8.4
+Date: 11/8/2011
+- Open file context menu item now could open game exe as well.
+- Finished update module.
+- HTML editor sibling bug fixed.
+- Subtitle color is now customizable. Long subtitle is splitted.
+
+Project: touch.player
 Versial: 0.0.8.3
 Date: 11/4/2011
 - NtCreateThreadEx replaced by synchronized NtCreatThread for Windows XP support.

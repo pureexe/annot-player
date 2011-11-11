@@ -10,8 +10,8 @@
 IDI_ICON1 ICON DISCARDABLE "app.ico"
 
 VS_VERSION_INFO VERSIONINFO
-        FILEVERSION 0,0,8,3
-        PRODUCTVERSION 0,0,8,3
+        FILEVERSION 0,0,9,1
+        PRODUCTVERSION 0,0,9,1
         FILEFLAGS 0x0L
         FILEFLAGSMASK 0x3fL
         FILEOS 0x00040004L
@@ -24,12 +24,12 @@ VS_VERSION_INFO VERSIONINFO
                         BEGIN
                                 VALUE "CompanyName", "Annot Cloud"
                                 VALUE "FileDescription", "Annot Player"
-                                VALUE "FileVersion", "0.0.8.3"
+                                VALUE "FileVersion", "0.0.9.1"
                                 VALUE "LegalCopyright", "Copyright (C) 2011."
                                 VALUE "InternalName", "app.exe"
                                 VALUE "OriginalFilename", "app.exe"
                                 VALUE "ProductName", "Annot Player"
-                                VALUE "ProductVersion", "0.0.8.3"
+                                VALUE "ProductVersion", "0.0.9.1"
                         END
                 END
                 BLOCK "VarFileInfo"

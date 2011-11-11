@@ -98,10 +98,11 @@ VideoView::VideoView(QWidget *parent)
 {
   setContentsMargins(0, 0, 0, 0);
   //setAttribute(Qt::WA_TransparentForMouseEvents);
+  //setWindowOpacity(1.0); // opaque
 
 #ifdef USE_MAC_VLCKIT
   view_ = ::vlcvideoview_new();
-  setCocoaView(view_);
+  //setCocoaView(view_);
 #endif // USE_MAC_VLCKIT
 }
 #undef BASE

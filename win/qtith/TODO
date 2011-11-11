@@ -1,0 +1,56 @@
+use GetProcAddress to avoid LINKING with windows libraries!!!!!!!!! (WDDK and WSDK)
+so that it could run on diff OSes!
+
+http://tech.ddvip.com/2010-06/1275460483154749_3.html   ntcreatethread
+http://tech.ddvip.com/2010-06/1275461433154753_5.html   ntresumethread
+http://tech.ddvip.com/2010-06/1275461905154757_3.html   pcontext
+
+use documentation on:
+http://undocumented.ntinternals.net
+
+format tags
+add new[] in common.h
+
+http://www.progtown.com/topic331379-dll-injection-by-means-of-ntcreatethread.html
+
+
+
+NTSTATUS
+NtCreateThread(
+  OUT PHANDLE ThreadHandle
+  IN  ACCESS_MASK DesiredAccess
+  IN  POBJECT_ATTRIBUTES ObjectAttributes OPTIONAL
+  IN  HANDLE ProcessHandle
+  OUT PCLIENT_ID ClientId
+  IN  PCONTEXT ThreadContext
+  IN  PINITIAL_TEB InitialTeb
+  IN  BOOLEAN CreateSuspended
+  );
+
+Routine Description:
+
+    This system service API creates and initializes a thread object.
+
+Arguments:
+
+    ThreadHandle - Returns the handle for the new thread.
+
+    DesiredAccess - Supplies the desired access modes to the new thread.
+
+    ObjectAttributes - Supplies the object attributes of the new thread.
+
+    ProcessHandle - Supplies a handle to the process that the thread is being
+                    created within.
+
+    ClientId - Returns the CLIENT_ID of the new thread.
+
+    ThreadContext - Supplies an initial context for the new thread.
+
+    InitialTeb - Supplies the initial contents for the thread's TEB.
+
+    CreateSuspended - Supplies a value that controls whether or not a
+                      thread is created in a suspended state.
+
+Return Value:
+
+    TBD

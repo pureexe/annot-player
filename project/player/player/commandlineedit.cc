@@ -36,7 +36,7 @@ CommandLineEdit::createActions()
 
   // Create menus
   contextMenu_ = new QMenu(TR(T_TITLE_ANNOTATIONBROWSER), this);
-  UiStyle::globalInstance()->setContextMenuStyle(contextMenu_);
+  UiStyle::globalInstance()->setContextMenuStyle(contextMenu_, true); // persistent = true
 }
 
 
