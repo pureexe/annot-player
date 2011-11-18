@@ -41,16 +41,16 @@ public:
 
   // - Update -
 public:
-  bool updateAnnotationTextWithId(const QString &text, qint64 id, int tt);
+  bool updateAnnotationTextWithId(const QString &text, qint64 id);
 
   // - Queries -
 public:
-  Token selectTokenWithId(qint64 id, int tt);
-  Token selectTokenWithDigest(const QString &digest, int tt);
+  Token selectTokenWithId(qint64 id);
+  Token selectTokenWithDigest(const QString &digest, qint32 digestType);
 
-  AnnotationList selectAnnotationsWithTokenId(qint64 tid, int tt);
-  AliasList selectAliasesWithTokenId(qint64 tid, int tt);
-  AnnotationList selectRelatedAnnotationsWithTokenId(qint64 tid, int tt);
+  AnnotationList selectAnnotationsWithTokenId(qint64 tid);
+  AliasList selectAliasesWithTokenId(qint64 tid);
+  AnnotationList selectRelatedAnnotationsWithTokenId(qint64 tid);
 
   AliasList selectAliasesWithToken(const Token &token);
   AnnotationList selectAnnotationsWithToken(const Token &token);

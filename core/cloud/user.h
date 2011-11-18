@@ -49,14 +49,14 @@ namespace Core { namespace Cloud {
 
   private: QString name_;
   public:
-    QString name() const                { return name_; }
+    const QString &name() const         { return name_; }
     void setName(const QString &name)   { name_ = name; }
     bool hasName() const                { return !name_.isNull(); }
     bool hasValidName() const           { return isValidName(name_); }
 
   private: QString nickname_;
   public:
-    QString nickname() const            { return nickname_; }
+    const QString &nickname() const     { return nickname_; }
     void setNickname(const QString &name) { nickname_ = name; }
     bool hasNickname() const            { return !nickname_.isNull(); }
 
@@ -64,16 +64,9 @@ namespace Core { namespace Cloud {
     // Password encoded as SHA1 hex string.
   private: QString password_;
   public:
-    QString password() const            { return password_; }
+    const QString &password() const     { return password_; }
     void setPassword(const QString &hex) { password_ = hex; }
     bool hasPassword() const            { return !password_.isNull(); }
-
-  private: QString email_;
-  public:
-    QString email() const               { return email_; }
-    void setEmail(const QString &email) { email_ = email; }
-    bool hasEmail() const               { return !email_.isNull(); }
-    bool hasValidEmail() const          { return isValidEmail(email_); }
 
   private: qint32 status_;
   public:
@@ -149,7 +142,6 @@ namespace Core { namespace Cloud {
     // - Helpers -
   public:
     static bool isValidName(const QString &userName);
-    static bool isValidEmail(const QString &email);
     static bool isValidPassword(const QString &password);
     static bool isValidNickName(const QString &nickName);
 

@@ -28,6 +28,7 @@ public slots:
   void logVolumeChanged();
   void logMediaChanged();
   void logMediaClosed();
+  void logTitleChanged();
   void logOpening();
   void logBuffering();
   void logPlaying();

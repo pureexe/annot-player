@@ -17,9 +17,11 @@ public:
 
 public:
   const QString &baseName() const;
+  const QString &savePath() const;
 
 public slots:
   void setBaseName(const QString &name);
+  void setSavePath(const QString &path);
 
   void grabWindow(WId winid);
   void grabDesktop();

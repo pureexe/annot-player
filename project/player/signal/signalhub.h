@@ -3,10 +3,7 @@
 
 // signalhub.h
 // 10/16/2011
-#include "core/cloud/traits.h"
 #include <QObject>
-
-using namespace Core::Cloud;
 
 // TODO: Gradually replace signals connections in MainWindow, ServerAgent and Player with this hub
 class SignalHub : public QObject
@@ -35,14 +32,6 @@ public slots:
   void stopSignalTokenMode()            { setSignalTokenMode(false); }
 signals:
   void tokenModeChanged(SignalHub::TokenMode mode);
-public:
-  int tokenType() const {
-    switch (tokenMode_) {
-    case MediaTokenMode: return Traits::MediaType;
-    case SignalTokenMode: return Traits::GameType;
-    default: return Traits::NoType;
-    }
-  }
 
 public:
   enum PlayerMode { NormalPlayerMode = 0, MiniPlayerMode, FullScreenPlayerMode };

@@ -12,12 +12,14 @@ INCLUDEPATH += $$PWD/serversoap
 #DEFINES += USE_MODULE_CLIENTAGENT
 
 HEADERS += \
+    $$PWD/castmanager.h \
     $$PWD/serveragent.h \
     $$PWD/serverproxy.h \
     $$PWD/serverproxy_config.h \
     $$PWD/serversoap.h
 
 SOURCES += \
+    $$PWD/castmanager.cc \
     $$PWD/serveragent.cc \
     $$PWD/serverproxy.cc \
     $$PWD/serversoap.cc

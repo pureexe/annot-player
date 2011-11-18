@@ -1,29 +1,53 @@
-0.0.9.0
-xp:
-- fixme: vlc view blinking while playing
-mac:
-- mac deployment: fix all dynamic links
-  rewrite script to automatically link mac names using otool and install_name_tool
-  http://doc.qt.nokia.com/stable/deployment-mac.html
-  use webbrowser as an example
-- fixme: annotview window tracking problem
-- fixme: global osd logger hang
-- fixme: annot window always on top
-
-tranation
-- Chinese translation
-- Japanese translation
+0.1.0.0 -- stable
 
 server:
 - fixme: server email not sent
-- trend: list latest added token, alias, annot, etc
 
-0.1.0.0 -- stable
-- sever side: trend, last visited token, alias
+client:
+- Move stuff from main to Application
+- add openFile function in windows through register
+- move current Annotations/Token/Alias into DataManager from TokenView and AnnotationView
+- replace annotborowser/processview/tokenview with filteredTableView
+- compact context menu
+- Finish bless/block user/annots/aliases at client side
+  - add block/bless/curse user
+- save ng list to settings
+- debug offline mode to see if token/annot/alias offline submission works or not
+- reduce dout files, only focus on specific files to debug
+- fixme: make mainwindow as root again in windows
+- fixme: DVD play in mac: mouse single click not working
+- fixme: edit time, edit comments, etc; otherwise, make them readonly
 
-publish to ktxp.com s1/2b!
-publish to kf!
-publish to 2ch!
+wiki:
+- mension manga/picture support
+- japanese/chinese introduction
+
+publish to ktxp.com s1-2b caso xueku-sc
+publish to hf 4chan
+publish to 2ch niji
+
+## NextStep
+
+## server
+## client
+
+server:
+- add comment page for each token
+- add trend: list latest added token, alias, annot, etc
+
+client:
+- add winzip extraction to view picture
+ using quazip:http://quazip.sourceforge.net/
+ directly open unzipped binaries and pass it to vlc
+- ape/cue next track previous/track
+  add playlist view
+
+- minmize button in context menu, then restore at tray
+
+server:
+- comment for each token
+- LIVE MODE using polling BEFORE SPRING FESTEVAL
+  中国网络电视台 2012 春节晚会
 
 ## NextProject
 
@@ -36,19 +60,6 @@ window2window to streaming galgame
 - server: linux, xrdp + wine
   xming open source
 
-## NextStep
-
-finish bless/curse/block
-
-minmize button in context menu, then restore at tray
-
-select game encoding
-
-displaying which process get attached
-
-LIVE MODE using polling BEFORE SPRING FESTEVAL
-中国网络电视台 2012 春节晚会
-
 ## FixMes
 change soap back to rest
 add another rest module on server side
@@ -57,9 +68,14 @@ fixme: hide qdialog after create
 
 todo: track user last login time
 
+select game encoding
+
+displaying which process get attached
+
 sutitle friendly
 wiki like style for shared subtitle
 update annotation time pos
+diff subtitle effects
 
 ##
 
@@ -125,7 +141,6 @@ add wiki as well
 
 mkdir settings if not exist
 
-TODO Finish offline mode to submit token
 FIXME: how to get text between QWebElement siblings
 
 after finish sync mode

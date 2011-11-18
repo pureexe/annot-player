@@ -43,7 +43,7 @@ public slots:
   void removeFromWindowsHook();
   bool containsWindow(WId winId) const;
 private:
-  QList<WId> children_, history_;
+  QList<WId> children_;
 #endif // USE_WIN_HOOK
 
 #ifdef Q_WS_MAC

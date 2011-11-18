@@ -18,7 +18,6 @@ namespace Core { namespace Cloud {
     // - Types -
   public:
     typedef Traits::Language Language;
-    typedef Traits::Type Type;
 
     enum AliasType {
       AT_Null = 0, // invalid
@@ -38,11 +37,11 @@ namespace Core { namespace Cloud {
 
     // - Properties -
 
-  private: qint32 type_;
-  public:
-    qint32 type() const                 { return type_; }
-    void setType(qint32 t)              { type_ = t; }
-    bool hasType() const                { return type_; }
+  //private: qint32 type_;
+  //public:
+  //  qint32 type() const                 { return type_; }
+  //  void setType(qint32 t)              { type_ = t; }
+  //  bool hasType() const                { return type_; }
 
   private: qint64 id_;
   public:
@@ -63,17 +62,24 @@ namespace Core { namespace Cloud {
     void setTokenDigest(const QString &hex) { tokenDigest_ = hex; }
     bool hasTokenDigest() const             { return !tokenDigest_.isNull(); }
 
+    ///  Used only in offline mode
+  private: qint32 tokenDigestType_;
+  public:
+    qint32 tokenDigestType() const          { return tokenDigestType_; }
+    void setTokenDigestType(qint32 type)    { tokenDigestType_ = type; }
+    bool hasTokenDigestType() const         { return tokenDigestType_; }
+
   private: qint64 userId_;
   public:
     qint64 userId() const               { return userId_; }
     void setUserId(qint64 uid)          { userId_ = uid; }
     bool hasUserId() const              { return userId_; }
 
-  private: int aliasType_;
+  private: int type_;
   public:
-    int aliasType() const               { return aliasType_; }
-    void setAliasType(int at)           { aliasType_ = at; }
-    bool hasAliasType() const           { return aliasType_; }
+    int type() const                    { return type_; }
+    void setType(int at)                { type_ = at; }
+    bool hasType() const                { return type_; }
 
   private: qint32 status_;
   public:
@@ -134,7 +140,7 @@ namespace Core { namespace Cloud {
     // - Constructions -
   public:
     Alias()
-      : type_(0), id_(0), tokenId_(0), userId_(0), aliasType_(0),
+      : id_(0), tokenId_(0), tokenDigestType_(0), userId_(0), type_(0),
         status_(0), flags_(0), language_(0), updateTime_(0),
         blessed_(0), cursed_(0), blocked_(0)
     { }

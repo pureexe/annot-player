@@ -275,16 +275,15 @@ Database::isAliasExists(const Alias &alias) const
   QSqlQuery query(db_);
   if (alias.hasTokenId()) {
     DOUT("isAliasExists: query using token_id");
-    query.prepare("SELECT alias_id FROM alias WHERE token_id = ? AND alias_tt = ? AND alias_type = ? AND alias_text LIKE ?");
+    query.prepare("SELECT alias_id FROM alias WHERE token_id = ? AND alias_type = ? AND alias_text LIKE ?");
     query.addBindValue(alias.tokenId());
     query.addBindValue(alias.type());
-    query.addBindValue(alias.aliasType());
     query.addBindValue(alias.text());
   } else if (alias.hasTokenDigest()){
     DOUT("isAliasExists: query using token_digest");
     query.prepare("SELECT alias_id FROM alias WHERE token_digest ? AND alias_type = ? AND alias_text LIKE ?");
     query.addBindValue(alias.tokenDigest());
-    query.addBindValue(alias.aliasType());
+    query.addBindValue(alias.type());
     query.addBindValue(alias.text());
   }
 
@@ -312,7 +311,7 @@ Database::insertAliases(const AliasList &l)
       }
   DOUT("insertAliases:exit: ret =" << ret);
   return ret;
-    }
+}
 
 
 qint64
@@ -440,18 +439,17 @@ Database::selectUsers() const
 
 
 Token
-Database::selectTokenWithId(qint64 id, int tt) const
+Database::selectTokenWithId(qint64 id) const
 {
-  DOUT("selectTokenWithId:enter: id =" << id << ", tt =" << tt);
+  DOUT("selectTokenWithId:enter: id =" << id);
   Q_ASSERT(isValid());
   //Q_ASSERT(id);
   Token ret;
 
   QSqlQuery query(db_);
 
-  query.prepare(DB_SELECT_TOKEN "WHERE token_id = ? AND token_tt = ?");
+  query.prepare(DB_SELECT_TOKEN "WHERE token_id = ?");
   query.addBindValue(id);
-  query.addBindValue(tt);
 
   bool ok = query.exec();
   if (!ok) {
@@ -470,9 +468,9 @@ Database::selectTokenWithId(qint64 id, int tt) const
 }
 
 Token
-Database::selectTokenWithDigest(const QString &digest) const
+Database::selectTokenWithDigest(const QString &digest, qint32 digestType) const
 {
-  DOUT("selectTokenWithDigest:enter: digest =" << digest);
+  DOUT("selectTokenWithDigest:enter: digestType =" << digestType << ", digest =" << digest);
   Q_ASSERT(isValid());
   //if (digest.isEmpty())
   //  return;
@@ -480,8 +478,9 @@ Database::selectTokenWithDigest(const QString &digest) const
 
   QSqlQuery query(db_);
 
-  query.prepare(DB_SELECT_TOKEN "WHERE token_digest = ?");
+  query.prepare(DB_SELECT_TOKEN "WHERE token_digest = ? AND token_digest_type = ?");
   query.addBindValue(digest);
+  query.addBindValue(digestType);
 
   bool ok = query.exec();
   if (!ok) {
@@ -525,18 +524,17 @@ Database::selectTokens() const
 }
 
 Alias
-Database::selectAliasWithId(qint64 id, int tt) const
+Database::selectAliasWithId(qint64 id) const
 {
-  DOUT("selectAliasWithId:enter: id =" << id << ", tt =" << tt);
+  DOUT("selectAliasWithId:enter: id =" << id);
   //Q_ASSERT(id)
 
   Q_ASSERT(isValid());
   Alias ret;
 
   QSqlQuery query(db_);
-  query.prepare(DB_SELECT_ALIAS "WHERE alias_id = ? AND alias_tt = ?");
+  query.prepare(DB_SELECT_ALIAS "WHERE alias_id = ?");
   query.addBindValue(id);
-  query.addBindValue(tt);
 
   bool ok = query.exec();
   if (!ok) {
@@ -556,18 +554,17 @@ Database::selectAliasWithId(qint64 id, int tt) const
 }
 
 AliasList
-Database::selectAliasesWithTokenId(qint64 tid, int tt) const
+Database::selectAliasesWithTokenId(qint64 tid) const
 {
-  DOUT("selectAliasesWithTokenId:enter: tid =" << tid << ", tt =" << tt);
+  DOUT("selectAliasesWithTokenId:enter: tid =" << tid);
   //Q_ASSERT(tid)
 
   Q_ASSERT(isValid());
   AliasList ret;
 
   QSqlQuery query(db_);
-  query.prepare(DB_SELECT_ALIAS "WHERE token_id = ? AND alias_tt = ?");
+  query.prepare(DB_SELECT_ALIAS "WHERE token_id = ?");
   query.addBindValue(tid);
-  query.addBindValue(tt);
 
   bool ok = query.exec();
   if (!ok) {
@@ -586,16 +583,17 @@ Database::selectAliasesWithTokenId(qint64 tid, int tt) const
 }
 
 AliasList
-Database::selectAliasesWithTokenDigest(const QString &digest)
+Database::selectAliasesWithTokenDigest(const QString &digest, qint32 digestType)
 {
-  DOUT("selectAliasesWithTokenDigest:enter");
+  DOUT("selectAliasesWithTokenDigest:enter: digestType =" << digestType);
 
   Q_ASSERT(isValid());
   AliasList ret;
 
   QSqlQuery query(db_);
-  query.prepare(DB_SELECT_ALIAS "WHERE token_digest = ?");
+  query.prepare(DB_SELECT_ALIAS "WHERE token_digest = ? AND token_digest_type = ?");
   query.addBindValue(digest);
+  query.addBindValue(digestType);
 
   bool ok = query.exec();
   if (!ok) {
@@ -641,18 +639,17 @@ Database::selectAliases() const
 
 
 Annotation
-Database::selectAnnotationWithId(qint64 id, int tt) const
+Database::selectAnnotationWithId(qint64 id) const
 {
-  DOUT("selectAnnotationWithId:enter: id =" << id << ", tt =" << tt);
+  DOUT("selectAnnotationWithId:enter: id =" << id);
   //Q_ASSERT(id)
 
   Q_ASSERT(isValid());
   Annotation ret;
 
   QSqlQuery query(db_);
-  query.prepare(DB_SELECT_ANNOTATION "WHERE annot_id = ? AND annot_tt = ?");
+  query.prepare(DB_SELECT_ANNOTATION "WHERE annot_id =");
   query.addBindValue(id);
-  query.addBindValue(tt);
 
   bool ok = query.exec();
   if (!ok) {
@@ -672,18 +669,17 @@ Database::selectAnnotationWithId(qint64 id, int tt) const
 }
 
 AnnotationList
-Database::selectAnnotationsWithTokenId(qint64 tid, int tt) const
+Database::selectAnnotationsWithTokenId(qint64 tid) const
 {
-  DOUT("selectAnnotationsWithTokenId:enter: tid =" << tid << ", tt =" << tt);
+  DOUT("selectAnnotationsWithTokenId:enter: tid =" << tid);
   //Q_ASSERT(tid)
 
   Q_ASSERT(isValid());
   AnnotationList ret;
 
   QSqlQuery query(db_);
-  query.prepare(DB_SELECT_ANNOTATION "WHERE token_id = ? AND annot_tt = ?");
+  query.prepare(DB_SELECT_ANNOTATION "WHERE token_id = ?");
   query.addBindValue(tid);
-  query.addBindValue(tt);
 
   bool ok = query.exec();
   if (!ok) {
@@ -702,16 +698,17 @@ Database::selectAnnotationsWithTokenId(qint64 tid, int tt) const
 }
 
 AnnotationList
-Database::selectAnnotationsWithTokenDigest(const QString &digest) const
+Database::selectAnnotationsWithTokenDigest(const QString &digest, qint32 digestType) const
 {
-  DOUT("selectAnnotationsWithTokenDigest:enter");
+  DOUT("selectAnnotationsWithTokenDigest:enter: digestType =" << digestType);
 
   Q_ASSERT(isValid());
   AnnotationList ret;
 
   QSqlQuery query(db_);
-  query.prepare(DB_SELECT_ANNOTATION "WHERE token_digest = ?");
+  query.prepare(DB_SELECT_ANNOTATION "WHERE token_digest = ? AND token_digest_type = ?");
   query.addBindValue(digest);
+  query.addBindValue(digestType);
 
   bool ok = query.exec();
   if (!ok) {
@@ -770,102 +767,100 @@ Database::deleteUserWithId(qint64 id)
 }
 
 void
-Database::deleteTokenWithId(qint64 id, int tt)
+Database::deleteTokenWithId(qint64 id)
 {
-  DOUT("deleteTokenWithId:enter: id =" << id << ", tt =" << tt);
+  DOUT("deleteTokenWithId:enter: id =" << id);
   Q_ASSERT(isValid());
   QSqlQuery query(db_);
-  query.prepare("DELETE FROM token WHERE token_id = ? AND token_tt = ?");
+  query.prepare("DELETE FROM token WHERE token_id = ?");
   query.addBindValue(id);
-  query.addBindValue(tt);
   query.exec();
   DOUT("deleteTokenWithId:exit: affected rows =" << query.numRowsAffected());
 }
 
 void
-Database::deleteTokenWithDigest(const QString &digest)
+Database::deleteTokenWithDigest(const QString &digest, qint32 digestType)
 {
-  DOUT("deleteTokenWithDigest:enter");
+  DOUT("deleteTokenWithDigest:enter: digestType =" << digestType);
   Q_ASSERT(isValid());
   QSqlQuery query(db_);
-  query.prepare("DELETE FROM token WHERE token_digest = ?");
+  query.prepare("DELETE FROM token WHERE token_digest = ? AND token_digest_type = ?");
   query.addBindValue(digest);
+  query.addBindValue(digestType);
   query.exec();
   DOUT("deleteTokenWithDiget:exit: affected rows =" << query.numRowsAffected());
 }
 
 void
-Database::deleteAliasWithId(qint64 id, int tt)
+Database::deleteAliasWithId(qint64 id)
 {
-  DOUT("deleteAliasWithId:enter: id =" << id << ", tt =" << tt);
+  DOUT("deleteAliasWithId:enter: id =" << id);
   Q_ASSERT(isValid());
   QSqlQuery query(db_);
-  query.prepare("DELETE FROM alias WHERE alias_id = ? AND alias_tt = ?");
+  query.prepare("DELETE FROM alias WHERE alias_id = ?");
   query.addBindValue(id);
-  query.addBindValue(tt);
   query.exec();
   DOUT("deleteAliasWithId:exit: affected rows =" << query.numRowsAffected());
 }
 
 void
-Database::deleteAliasesWithTokenId(qint64 tid, int tt)
+Database::deleteAliasesWithTokenId(qint64 tid)
 {
-  DOUT("deleteAliasesWithTokenId:enter: tid =" << tid << ", tt =" << tt);
+  DOUT("deleteAliasesWithTokenId:enter: tid =" << tid);
   Q_ASSERT(isValid());
   QSqlQuery query(db_);
-  query.prepare("DELETE FROM alias WHERE token_id = ? AND token_tt = ?");
+  query.prepare("DELETE FROM alias WHERE token_id = ?");
   query.addBindValue(tid);
-  query.addBindValue(tt);
   query.exec();
   DOUT("deleteAliasesWithTokenId:exit: affected rows =" << query.numRowsAffected());
 }
 
 void
-Database::deleteAliasesWithTokenDigest(const QString &digest)
+Database::deleteAliasesWithTokenDigest(const QString &digest, qint32 digestType)
 {
-  DOUT("deleteAliasesWithTokenDigest:enter");
+  DOUT("deleteAliasesWithTokenDigest:enter: digestType =" << digestType);
   Q_ASSERT(isValid());
   QSqlQuery query(db_);
-  query.prepare("DELETE FROM alias WHERE token_digest = ?");
+  query.prepare("DELETE FROM alias WHERE token_digest = ? AND token_digest_type = ?");
   query.addBindValue(digest);
+  query.addBindValue(digestType);
   query.exec();
   DOUT("deleteAliasesWithTokenDigest:exit: affected rows =" << query.numRowsAffected());
 }
 
 void
-Database::deleteAnnotationWithId(qint64 id, int tt)
+Database::deleteAnnotationWithId(qint64 id)
 {
-  DOUT("deleteAnnotationWithId:enter: id =" << id << ", tt = ?" << tt);
+  DOUT("deleteAnnotationWithId:enter: id =" << id);
   Q_ASSERT(isValid());
   QSqlQuery query(db_);
-  query.prepare("DELETE FROM annot WHERE annot_id = ? AND annot_tt = ?");
+  query.prepare("DELETE FROM annot WHERE annot_id = ?");
   query.addBindValue(id);
-  query.addBindValue(tt);
   query.exec();
   DOUT("deleteAnnotationWithId:exit: affected rows =" << query.numRowsAffected());
 }
 
 void
-Database::deleteAnnotationsWithTokenId(qint64 tid, int tt)
+Database::deleteAnnotationsWithTokenId(qint64 tid)
 {
-  DOUT("deleteAnnotationsWithTokenId:enter: tid =" << tid << ", tt =" << tt);
+  DOUT("deleteAnnotationsWithTokenId:enter: tid =" << tid);
   Q_ASSERT(isValid());
   QSqlQuery query(db_);
-  query.prepare("DELETE FROM annot WHERE token_id = ? AND token_tt = ?");
+  query.prepare("DELETE FROM annot WHERE token_id = ?");
   query.addBindValue(tid);
-  query.addBindValue(tt);
   query.exec();
   DOUT("deleteAnnotationsWithTokenId:exit: affected rows =" << query.numRowsAffected());
 }
 
 void
-Database::deleteAnnotationsWithTokenDigest(const QString &digest)
+Database::deleteAnnotationsWithTokenDigest(const QString &digest, qint32 digestType)
 {
-  DOUT("deleteAnnotationsWithTokenDigest:enter");
+  DOUT("deleteAnnotationsWithTokenDigest:enter: digestType =" << digestType);
   Q_ASSERT(isValid());
   QSqlQuery query(db_);
-  query.prepare("DELETE FROM annot WHERE token_digest = ?");
+  query.prepare("DELETE FROM annot WHERE token_digest = ? AND token_digest_type = ?");
   query.addBindValue(digest);
+  query.addBindValue(digestType);
   query.exec();
   DOUT("deleteAnnotationsWithTokenDigest:exit: affected rows =" << query.numRowsAffected());
 }

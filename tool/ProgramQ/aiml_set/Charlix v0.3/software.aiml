@@ -1,0 +1,486 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<aiml version="1.0.1" xmlns="http://alicebot.org/2001/AIML-1.0.1"
+      xmlns:html="http://www.w3.org/1999/xhtml"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://alicebot.org/2001/AIML-1.0.1 http://aitools.org/aiml/schema/AIML.xsd">
+<!-- Free software (c) 2006 Charlix.   -->
+<!-- This program is open source code released under -->
+<!-- the terms of the GNU General Public License     -->
+<!-- as published by the Free Software Foundation.   -->
+<!-- Complies with AIML 1.01 Tag Set Specification -->
+<!-- as adopted by the ALICE A.I. Foundation.  -->
+
+<!-- !kde specific -->
+<category><pattern>CLIPBOARD</pattern><template>Starting Klipper. <system>popup Klipper</system></template></category> 
+<category><pattern>DEVICE MANAGER</pattern><template>Starting KDE Info Center. <system>popup kinfocenter</system></template></category> 
+<category><pattern>MIRC</pattern><template>Starting Ksirc. <system>popup ksirc</system></template></category> 
+<category><pattern>ICQ</pattern><template>Starting Licq. <system>popup licq</system></template></category> 
+<category><pattern>TASK MANAGER</pattern><template>Starting KDE System Guard. <system>popup ksysguard</system></template></category> 
+<category><pattern>SETTING</pattern><template>Starting KDE control Center. <system>popup kcontrol</system></template></category> 
+<category><pattern>SETTINGS</pattern><template>Starting KDE Control Center. <system>popup kcontrol</system></template></category> 
+<category><pattern>SYSTEM INFORMATION</pattern><template>Starting KDE Info Center. <system>popup kinfocenter</system></template></category> 
+<category><pattern>KOPETE</pattern><template>starting the instant messenger <set name="application">kopete</set> <system>kopete</system></template></category>  
+<category><pattern>KMAIL</pattern><template>Starting the email client <set name="application">kmail</set><system>kmail</system></template></category>  
+<category><pattern>KNOTES</pattern><template>starting the sticky note manager <set name="application">knote</set>.<system>knotes</system></template></category>  
+<category><pattern>KONSOLE</pattern><template>Starting the kde terminale <set name="application">konsole</set><system>popup konsole</system></template></category> 
+<category><pattern>KONQUEROR</pattern><template>Starting kde browser <set name="application">konqueror</set>.<system>popup konqueror</system></template></category>  
+
+ <!-- !kde and gnome games -->
+<category><pattern>ATLANTIK</pattern><template>Starting <set name="application">atlantik</set><system>popup atlantik</system></template></category> 
+<category><pattern>GNOBOTS2</pattern><template>Starting <set name="application">gnobots2</set><system>popup gnobots2</system></template></category> 
+<category><pattern>KASTEROIDS</pattern><template>Starting <set name="application">kasteroids</set><system>popup kasteroids</system></template></category> 
+<category><pattern>KGOLDRUNNER</pattern><template>Starting <set name="application">kgoldrunner</set><system>popup kgoldrunner</system></template></category> 
+<category><pattern>KPAT</pattern><template>Starting <set name="application">kpat</set><system>popup kpat</system></template></category> 
+<category><pattern>KSOKOBAN</pattern><template>Starting <set name="application">ksokoban</set><system>popup ksokoban</system></template></category> 
+<category><pattern>MAHJONGG</pattern><template>Starting <set name="application">mahjongg</set><system>popup mahjongg</system></template></category> 
+<category><pattern>BANNER</pattern><template>Please enter a banner message</template></category>
+<category><pattern>_</pattern><that>PLEASE ENTER A BANNER MESSAGE</that><template>displaying <set name="application">banner</set><system>banner -w 35 <star/></system></template></category> 
+<category><pattern>GNOME STONES</pattern><template>Starting <set name="application">gnome-stones</set><system>popup gnome-stones</system></template></category> 
+<category><pattern>KATOMIC</pattern><template>Starting <set name="application">katomic</set><system>popup katomic</system></template></category> 
+<category><pattern>KJUMPINGCUBE</pattern><template>Starting <set name="application">kjumpingcube</set><system>popup kjumpingcube</system></template></category> 
+<category><pattern>KPOKER</pattern><template>Starting <set name="application">kpoker</set><system>popup kpoker</system></template></category> 
+<category><pattern>KSPACEDUEL</pattern><template>Starting <set name="application">kspaceduel</set><system>popup kspaceduel</system></template></category> 
+<category><pattern>SAME GNOME</pattern><template>Starting <set name="application">same-gnome</set><system>popup same-gnome</system></template></category> 
+<category><pattern>BLACKJACK</pattern><template>Starting <set name="application">blackjack</set><system>popup blackjack</system></template></category> 
+<category><pattern>GNOMETRIS</pattern><template>Starting <set name="application">gnometris</set><system>popup gnometris</system></template></category> 
+<category><pattern>KBACKGAMMON</pattern><template>Starting <set name="application">kbackgammon</set><system>popup kbackgammon</system></template></category> 
+<category><pattern>KLICKETY</pattern><template>Starting <set name="application">klickety</set><system>popup klickety</system></template></category> 
+<category><pattern>KREVERSI</pattern><template>Starting <set name="application">kreversi</set><system>popup kreversi</system></template></category> 
+<category><pattern>KTRON</pattern><template>Starting <set name="application">ktron</set><system>popup ktron</system></template></category> 
+<category><pattern>SOL</pattern><template>Starting <set name="application">sol</set><system>popup sol</system></template></category> 
+<category><pattern>FORTUNE</pattern><template>Opening a fortune cookie  <set name="application">fortune</set><system>fortune</system></template></category> 
+<category><pattern>GNOMINE</pattern><template>Starting <set name="application">gnomine</set><system>popup gnomine</system></template></category> 
+<category><pattern>KBATTLESHIP</pattern><template>Starting <set name="application">kbattleship</set><system>popup kbattleship</system></template></category> 
+<category><pattern>KLINES</pattern><template>Starting <set name="application">klines</set><system>popup klines</system></template></category> 
+<category><pattern>KSAME</pattern><template>Starting <set name="application">ksame</set><system>popup ksame</system></template></category> 
+<category><pattern>KTUBERLING</pattern><template>Starting <set name="application">ktuberling</set><system>popup ktuberling</system></template></category> 
+<category><pattern>GATAXX</pattern><template>Starting <set name="application">gataxx</set><system>popup gataxx</system></template></category> 
+<category><pattern>GNOTRAVEX</pattern><template>Starting <set name="application">gnotravex</set><system>popup gnotravex</system></template></category> 
+<category><pattern>KBLACKBOX</pattern><template>Starting <set name="application">kblackbox</set><system>popup kblackbox</system></template></category> 
+<category><pattern>KMAHJONGG</pattern><template>Starting <set name="application">kmahjongg</set><system>popup kmahjongg</system></template></category> 
+<category><pattern>KSHISEN</pattern><template>Starting <set name="application">kshisen</set><system>popup kshisen</system></template></category> 
+<category><pattern>KWIN4</pattern><template>Starting <set name="application">kwin4</set><system>popup kwin4</system></template></category> 
+<category><pattern>GLINES</pattern><template>Starting <set name="application">glines</set><system>popup glines</system></template></category> 
+<category><pattern>GNOTSKI</pattern><template>Starting <set name="application">gnotski</set><system>popup gnotski</system></template></category> 
+<category><pattern>KBOUNCE</pattern><template>Starting <set name="application">kbounce</set><system>popup kbounce</system></template></category> 
+<category><pattern>KMINES</pattern><template>Starting <set name="application">kmines</set><system>popup kmines</system></template></category> 
+<category><pattern>KSIRTET</pattern><template>Starting <set name="application">ksirtet</set><system>popup ksirtet</system></template></category> 
+<category><pattern>KWIN4PROC</pattern><template>Starting <set name="application">kwin4proc</set><system>popup kwin4proc</system></template></category> 
+<category><pattern>GNECT</pattern><template>Starting <set name="application">gnect</set><system>popup gnect</system></template></category>  <category><pattern>GTALI</pattern><template>Starting <set name="application">gtali</set><system>popup gtali</system></template></category> 
+<category><pattern>KENOLABA</pattern><template>Starting <set name="application">kenolaba</set><system>popup kenolaba</system></template></category> <category><pattern>KOLF</pattern><template>Starting <set name="application">kolf</set><system>popup kolf</system></template></category> 
+<category><pattern>KSMILETRIS</pattern><template>Starting <set name="application">ksmiletris</set><system>popup ksmiletris</system></template></category> <category><pattern>LSKAT</pattern><template>Starting <set name="application">lskat</set><system>popup lskat</system></template></category> 
+<category><pattern>GNIBBLES</pattern><template>Starting <set name="application">gnibbles</set><system>popup gnibbles</system></template></category> <category><pattern>IAGNO</pattern><template>Starting <set name="application">iagno</set><system>popup iagno</system></template></category> 
+<category><pattern>KFOULEGGS</pattern><template>Starting <set name="application">kfouleggs</set><system>popup kfouleggs</system></template></category> 
+<category><pattern>KONQUEST</pattern><template>Starting <set name="application">konquest</set><system>popup konquest</system></template></category> 
+<category><pattern>KSNAKE</pattern><template>Starting <set name="application">ksnake</set><system>popup ksnake</system></template></category> 
+<category><pattern>LSKATPROC</pattern><template>Starting <set name="application">lskatproc</set><system>popup lskatproc</system></template></category> 
+
+ <!-- !most known windos apps -->
+
+<category><pattern>KWORD</pattern><template>Starting <set name="application">KWord</set><system>popup kword</system></template></category> 
+<category><pattern>WORD</pattern><template>Starting <set name="application"><get name="wordprocessor"/></set><system>popup <get name="wordprocessor"/></system></template></category> 
+<category><pattern>WORD PROCESSOR</pattern><template>Starting <set name="application"><get name="wordprocessor"/></set><system>popup kword</system></template></category> 
+<category><pattern>MICROSOFT WORD</pattern><template>Starting <set name="application"><get name="wordprocessor"/></set><system>popup <get name="wordprocessor"/></system></template></category> 
+<category><pattern>WORD *</pattern><template>Starting <set name="application"><get name="wordprocessor"/></set><system>popup <get name="wordprocessor"/></system></template></category> 
+<category><pattern>KSPREAD</pattern><template>Starting <set name="application">KSpread</set><system>popup kspread</system></template></category> 
+<category><pattern>SPREADSHEET APPLICATION</pattern><template>Starting <set name="application"><get name="spreadsheet"/></set><system>popup <get name="spreadsheet"/></system></template></category> 
+<category><pattern>SPREADSHEETS</pattern><template>Starting <set name="application"><get name="spreadsheet"/></set><system>popup <get name="spreadsheet"/></system></template></category> 
+<category><pattern>SPREADSHEET *</pattern><template>Starting <set name="application"><get name="spreadsheet"/></set><system>popup <get name="spreadsheet"/></system></template></category> 
+<category><pattern>MICROSOFT EXCEL</pattern><template>Starting <set name="application"><get name="spreadsheet"/></set><system>popup <get name="spreadsheet"/></system></template></category>  
+<category><pattern>EXCEL</pattern><template>Starting <set name="application"><get name="spreadsheet"/></set><system>popup <get name="spreadsheet"/></system></template></category> 
+<category><pattern>EXCEL *</pattern><template>Starting <set name="application"><get name="spreadsheet"/></set><system>popup <get name="spreadsheet"/></system></template></category> 
+<category><pattern>KPRESENTER</pattern><template>Starting <set name="application">KPresenter</set><system>popup kpresenter</system></template></category> 
+<category><pattern>POWERPOINT</pattern><template>Starting <set name="application"><get name="presentationeditor"/></set><system>popup <get name="presentationeditor"/></system></template></category> 
+<category><pattern>MICROSOFT POWERPOINT</pattern><template>Starting <set name="application"><get name="presentationeditor"/></set><system>popup <get name="presentationeditor"/></system></template></category> 
+<category><pattern>POWERPOINT PRESENTATION</pattern><template>Starting <set name="application"><get name="presentationeditor"/></set><system>popup <get name="presentationeditor"/></system></template></category> 
+<category><pattern>POWERPOINT PRESENTATIONS</pattern><template>Starting <set name="application"><get name="presentationeditor"/></set><system>popup <get name="presentationeditor"/></system></template></category> 
+<category><pattern>PHOTOSHOP</pattern><template>Starting <set name="application"><get name="imageeditor"/></set><system>popup <get name="imageeditor"/></system></template></category> 
+<category><pattern>ADOBE PHOTOSHOP</pattern><template>Starting <set name="application"><get name="imageeditor"/></set><system>popup <get name="imageeditor"/></system></template></category> 
+<category><pattern>PHOTO EDITOR</pattern><template>Starting <set name="application"><get name="imageeditor"/></set><system>popup <get name="imageeditor"/></system></template></category> 
+ 
+<category><pattern>ACDC</pattern><template>Starting <set name="application"><get name="picturewiewer"/></set><system>popup <get name="picturewiewer"/></system></template></category> 
+<category><pattern>SKYPE</pattern><template>Starting <set name="application">Skype</set><system>popup skype</system></template></category> 
+<category><pattern>NETWORK NEIGHBORHOOD</pattern><template>Starting <set name="application">SMB</set><system>popup smb</system></template></category> 
+<category><pattern>AZUREUS BITTORRENT</pattern><template>Starting <set name="application">azureus</set><system>popup smb</system></template></category> 
+<category><pattern>AIM</pattern><template><system>popup <get name="instantmessenger"/></system>Starting the instant messenger.</template></category> 
+<category><pattern>ICQ</pattern><template><system>popup <get name="instantmessenger"/></system>Starting the instant messenger.</template></category> 
+<category><pattern>MSN MESSENGER</pattern><template><system>popup <get name="instantmessenger"/></system>Starting the instant messenger.</template></category> 
+<category><pattern>MSN</pattern><template><system>popup <get name="instantmessenger"/></system>Starting the instant messenger.</template></category> 
+<category><pattern>YAHOO IM</pattern><template><system>popup <get name="instantmessenger"/></system>Starting the instant messenger.</template></category> 
+<category><pattern>YAHOO MESSENGER</pattern><template><system>popup <get name="instantmessenger"/></system>Starting the instant messenger.</template></category> 
+<category><pattern>INSTANT MESSENGER</pattern><template><system>popup <get name="instantmessenger"/></system>Starting the instant messenger.</template></category> 
+<category><pattern>GAIM</pattern><template><system>popup <get name="instantmessenger"/></system>Starting the instant messenger.</template></category> 
+<category><pattern>OUTLOOK EXPRESS</pattern><template><system>popup <get name="emailclient"/></system>Starting  <get name="emailclient"/>.</template></category> 
+<category><pattern>OUTLOOK</pattern><template><system>popup <get name="emailclient"/></system>Starting  <get name="emailclient"/>.</template></category> 
+<category><pattern>MICROSOFT OUTLOOK</pattern><template><system>popup <get name="emailclient"/></system>Starting  <get name="emailclient"/>.</template></category> 
+<category><pattern>MICROSOFT OUTLOOK EXPRESS</pattern><template><system>popup <get name="emailclient"/></system>Starting  <get name="emailclient"/>.</template></category> 
+<category><pattern>MICROSOFT INTERNET EXPLORER</pattern><template><system>popup <get name="browser"/></system>Starting  <get name="browser"/>.</template></category> 
+<category><pattern>INTERNET EXPLORER</pattern><template><system>popup <get name="browser"/></system>Starting  <get name="browser"/>.</template></category> 
+<category><pattern>EXPLORER</pattern><template>Starting <get name="browser"/>. <system>popup <get name="browser"/></system></template></category> 
+<category><pattern>ROXIO</pattern><template>Starting <get name="cdburner"/>. <system>popup <get name="cdburner"/></system></template></category> 
+<category><pattern>NERO</pattern><template>Starting <get name="cdburner"/>. <system>popup <get name="cdburner"/></system></template></category> 
+<category><pattern>CD PLAYER</pattern><template>Starting <get name="musicplayer"/>. <system>popup <get name="musicplayer"/></system></template></category> 
+<category><pattern>WINAMP</pattern><template>Starting <get name="musicplayer"/>. <system>popup <get name="musicplayer"/></system></template></category> 
+<category><pattern>MUSIC PLAYER</pattern><template>Starting <get name="musicplayer"/>. <system>popup <get name="musicplayer"/></system></template></category> 
+<category><pattern>WINDOWS MEDIA PLAYER</pattern><template>Starting <get name="movieplayer"/>. <system>popup <get name="movieplayer"/></system></template></category> 
+<category><pattern>MEDIA PLAYER</pattern><template>Starting <get name="movieplayer"/>. <system>popup <get name="movieplayer"/></system></template></category> 
+<category><pattern>MOVIE PLAYER</pattern><template>Starting <get name="movieplayer"/>. <system>popup <get name="movieplayer"/></system></template></category> 
+<category><pattern>VIDEO PLAYER</pattern><template>Starting <get name="movieplayer"/>. <system>popup <get name="movieplayer"/></system></template></category> 
+<category><pattern>MS MONEY</pattern><template>Starting <get name="accountability"/>. <system>popup <get name="accountability"/></system></template></category> 
+<category><pattern>MICROSOFT MONEY</pattern><template>Starting <get name="accountability"/>. <system>popup <get name="accountability"/></system></template></category> 
+<category><pattern>MONEY</pattern><template>Starting <get name="accountability"/>. <system>popup <get name="accountability"/></system></template></category> 
+<category><pattern>OPENOFFICE CALC</pattern><template>Starting <get name="spreadsheet"/>. <system>popup <get name="spreadsheet"/></system></template></category> 
+<category><pattern>OPENOFFICE IMPRESS</pattern><template>Starting <get name="presentationeditor"/>. <system>popup <get name="presentationeditor"/></system></template></category> 
+<category><pattern>OPENOFFICE WRITER</pattern><template>Starting <get name="wordprocessor"/>. <system>popup <get name="wordprocessor"/></system></template></category> 
+<category><pattern>WORDPAD</pattern><template>Starting <get name="texteditor"/>.<system>popup <get name="texteditor"/></system></template></category> 
+<category><pattern>NOTEPAD</pattern><template>Starting <get name="texteditor"/>.<system>popup <get name="texteditor"/></system></template></category> 
+<category><pattern>COMMAND LINE</pattern><template>Starting <get name="console"/>. <system>popup <get name="console"/></system></template></category> 
+<category><pattern>COMMAND PROMPT</pattern><template>Starting <get name="console"/>.<system>popup <get name="console"/></system></template></category> 
+<category><pattern>TERMINAL</pattern><template>Starting <get name="console"/>. <system>popup <get name="console"/></system></template></category> 
+<category><pattern>SHELL</pattern><template>Starting <get name="console"/>.<system>popup <get name="console"/></system></template></category> 
+<category><pattern>WINZIP</pattern><template>Starting <get name="archiver"/>. <system>popup <get name="archiver"/></system></template></category> 
+<category><pattern>WINRAR</pattern><template>Starting <get name="archiver"/>. <system>popup <get name="archiver"/></system></template></category> 
+
+
+ <!-- !most known linux apps -->          
+<category><pattern>AMAROK</pattern><template>Starting <set name="application">amarok</set><system>popup amarok</system></template></category>
+<category><pattern>APACHE</pattern><template>Starting <set name="application">apache</set><system>popup apache</system></template></category>
+<category><pattern>APT-GET *</pattern><template>Starting <set name="application">apt</set><system>apt-get <star/></system></template></category>
+<category><pattern>AUDACITY</pattern><template>Starting <set name="application">audacity</set><system>popup audacity</system></template></category>
+<category><pattern>BIND</pattern><template>Starting <set name="application">bind</set><system>popup bind</system></template></category>
+<category><pattern>BINUTILS</pattern><template>Starting <set name="application">binutils</set><system>popup binutils</system></template></category>
+<category><pattern>BISON</pattern><template>Starting <set name="application">bison</set><system>popup bison</system></template></category>
+<category><pattern>BITTORRENT</pattern><template>Starting <set name="application">BitTorrent</set><system>popup kbittorrent</system></template></category>
+<category><pattern>BLACKBOX</pattern><template>Starting <set name="application">blackbox</set><system>popup blackbox</system></template></category>
+<category><pattern>BLENDER</pattern><template>Starting <set name="application">blender</set><system>popup blender</system></template></category>
+<category><pattern>BLUEFISH</pattern><template>Starting <set name="application">bluefish</set><system>popup bluefish</system></template></category>
+<category><pattern>BOCHS</pattern><template>Starting <set name="application">bochs</set><system>popup bochs</system></template></category>
+<category><pattern>BZIP</pattern><template>Starting <set name="application">bzip</set><system>popup bzip</system></template></category>
+<category><pattern>CINELERRA</pattern><template>Starting <set name="application">cinelerra</set><system>popup cinelerra</system></template></category>
+<category><pattern>CUPS</pattern><template>Starting <set name="application">cups</set><system>popup cups</system></template></category>
+<category><pattern>ECLIPSE</pattern><template>Starting <set name="application">eclipse</set><system>popup eclipse</system></template></category>
+<category><pattern>EMACS</pattern><template>Starting <set name="application">emacs</set><system>popup emacs</system></template></category>
+<category><pattern>EPIPHANY</pattern><template>Starting <set name="application">epiphany</set><system>popup epiphany</system></template></category>
+<category><pattern>ETHEREAL</pattern><template>Starting <set name="application">ethereal</set><system>popup ethereal</system></template></category>
+<category><pattern>EVOLUTION</pattern><template>Starting <set name="application">evolution</set><system>popup evolution</system></template></category>
+<category><pattern>EXIM</pattern><template>Starting <set name="application">exim</set><system>popup exim</system></template></category>
+<category><pattern>FIREFOX</pattern><template>Starting <set name="application">firefox</set><system>popup firefox</system></template></category>
+<category><pattern>FREETYPE</pattern><template>Starting <set name="application">freetype</set><system>popup freetype</system></template></category>
+<category><pattern>GALEON</pattern><template>Starting <set name="application">galeon</set><system>popup galeon</system></template></category>
+<category><pattern>GHOSTSCRIPT</pattern><template>Starting <set name="application">ghostscript</set><system>popup ghostscript</system></template></category>
+<category><pattern>GIMP</pattern><template>Starting <set name="application">gimp</set><system>popup gimp</system></template></category>
+<category><pattern>GKRELLM</pattern><template>Starting <set name="application">gkrellm</set><system>popup gkrellm</system></template></category>
+<category><pattern>GLADE</pattern><template>Starting <set name="application">glade</set><system>popup glade</system></template></category>
+<category><pattern>GLIBC</pattern><template>Starting <set name="application">glibc</set><system>popup glibc</system></template></category>
+<category><pattern>GNUCASH</pattern><template>Starting <set name="application">gnucash</set><system>popup gnucash</system></template></category>
+<category><pattern>GNUMERIC</pattern><template>Starting <set name="application">gnumeric</set><system>popup gnumeric</system></template></category>
+<category><pattern>GNUPG</pattern><template>Starting <set name="application">gnupg</set><system>popup gnupg</system></template></category>
+<category><pattern>GQVIEW</pattern><template>Starting <set name="application">gqview</set><system>popup gqview</system></template></category>
+<category><pattern>GREP *</pattern><template><system>grep <star/></system></template></category>
+<category><pattern>AGROFF</pattern><template>Starting <set name="application">agroff</set><system>popup agroff</system></template></category>
+<category><pattern>GZIP *</pattern><template>Starting <set name="application">gzip</set><system>gzip <star/></system></template></category>
+<category><pattern>ICEWM</pattern><template>Starting <set name="application">icewm</set><system>popup icewm</system></template></category> <category><pattern>IMAGEMAGICK</pattern><template>Starting <set name="application">ImageMagick</set><system>popup ImageMagick</system></template></category>
+<category><pattern>INKSCAPE</pattern><template>Starting <set name="application">inkscape</set><system>popup inkscape</system></template></category>
+<category><pattern>IPTABLES</pattern><template>Starting <set name="application">iptables</set><system>popup iptables</system></template></category>
+<category><pattern>IPVSADM</pattern><template>Starting <set name="application">ipvsadm</set><system>popup ipvsadm</system></template></category>
+<category><pattern>JAKARTATOMCAT</pattern><template>Starting <set name="application">jakartatomcat</set><system>popup jakartatomcat</system></template></category>
+<category><pattern>KB</pattern><template>Starting <set name="application">kb</set><system>popup kb</system></template></category>
+<category><pattern>KDEVELOP</pattern><template>Starting <set name="application">kdevelop</set><system>popup kdevelop</system></template></category>
+<category><pattern>KDEWEBDEV</pattern><template>Starting <set name="application">kdewebdev</set><system>popup kdewebdev</system></template></category>
+<category><pattern>KOFFICE</pattern><template>Starting <set name="application">koffice</set><system>popup koffice</system></template></category>
+<category><pattern>KRUSADER</pattern><template>Starting <set name="application">krusader</set><system>popup krusader</system></template></category>
+<category><pattern>LYNX *</pattern><template>Starting <set name="application">lynx</set><system>lynx <star/></system></template></category>
+<category><pattern>LYX</pattern><template>Starting <set name="application">lyx</set><system>popup lyx</system></template></category>
+<category><pattern>MAILSCANNER</pattern><template>Starting <set name="application">MailScanner</set><system>popup MailScanner</system></template></category>
+<category><pattern>MAKE</pattern><template>Starting <set name="application">make</set><system>make</system></template></category>
+<category><pattern>MAN *</pattern><template>Starting <set name="application">man</set><system>man <star/> </system></template></category>
+<category><pattern>MOD_PERL</pattern><template>Starting <set name="application">mod_perl</set><system>popup mod_perl</system></template></category>
+<category><pattern>MOD_SSL</pattern><template>Starting <set name="application">mod_ssl</set><system>popup mod_ssl</system></template></category>
+<category><pattern>MODUTILS</pattern><template>Starting <set name="application">modutils</set><system>popup modutils</system></template></category>
+<category><pattern>MOZILLA</pattern><template>Starting <set name="application">mozilla</set><system>popup mozilla</system></template></category>
+<category><pattern>MPLAYER</pattern><template>Starting <set name="application">MPlayer</set><system>popup mplayer</system></template></category>
+<category><pattern>KMPLAYER</pattern><template>Starting <set name="application">kmplayer</set><system>popup kmpayer</system></template></category>
+<category><pattern>NAUTILUS</pattern><template>Starting <set name="application">nautilus</set><system>popup nautilus</system></template></category>
+<category><pattern>NCURSES</pattern><template>Starting <set name="application">ncurses</set><system>popup ncurses</system></template></category>
+<category><pattern>NEDIT</pattern><template>Starting <set name="application">nedit</set><system>popup nedit</system></template></category>
+<category><pattern>NESSUS</pattern><template>Starting <set name="application">nessus</set><system>popup nessus</system></template></category>
+<category><pattern>NETATALK</pattern><template>Starting <set name="application">netatalk</set><system>popup netatalk</system></template></category>
+<category><pattern>NETBEANS</pattern><template>Starting <set name="application">NetBeans</set><system>popup NetBeans</system></template></category>
+<category><pattern>NETQMAIL</pattern><template>Starting <set name="application">netqmail</set><system>popup netqmail</system></template></category>
+<category><pattern>NMAP</pattern><template>Starting <set name="application">nmap</set><system>popup nmap</system></template></category>
+<category><pattern>OPENLDAP</pattern><template>Starting <set name="application">openldap</set><system>popup openldap</system></template></category>
+<category><pattern>OPENOFFICE</pattern><template>Starting <set name="application">OpenOffice</set><system>popup OpenOffice</system></template></category>
+<category><pattern>OPENSSH</pattern><template>Starting <set name="application">openssh</set><system>popup openssh</system></template></category>
+<category><pattern>POPENSSL</pattern><template>Starting <set name="application">popenssl</set><system>popup popenssl</system></template></category>
+<category><pattern>OPERA</pattern><template>Starting <set name="application">opera</set><system>popup opera</system></template></category>
+<category><pattern>PAN</pattern><template>Starting <set name="application">pan</set><system>popup pan</system></template></category>
+<category><pattern>PARTED</pattern><template>Starting <set name="application">parted</set><system>popup parted</system></template></category>
+<category><pattern>PATCH</pattern><template>Starting <set name="application">patch</set><system>popup patch</system></template></category>
+<category><pattern>PERL *</pattern><template>Starting <set name="application">perl program</set><system>popup perl <star/></system></template></category>
+<category><pattern>PHPMYADMIN</pattern><template>Starting <set name="application">phpMyAdmin</set><system>popup phpMyAdmin</system></template></category>
+<category><pattern>PINE</pattern><template>Starting <set name="application">pine</set><system>popup pine</system></template></category>
+<category><pattern>POSTFIX</pattern><template>Starting <set name="application">postfix</set><system>popup postfix</system></template></category>
+<category><pattern>POSTGRESQL</pattern><template>Starting <set name="application">postgresql</set><system>popup postgresql</system></template></category>
+<category><pattern>PPP</pattern><template>Starting <set name="application">ppp</set><system>popup ppp</system></template></category>
+<category><pattern>PROCMAIL</pattern><template>Starting <set name="application">procmail</set><system>popup procmail</system></template></category>
+<category><pattern>PROFTPD</pattern><template>Starting <set name="application">proftpd</set><system>popup proftpd</system></template></category>
+<category><pattern>PYTHON *</pattern><template>Starting <set name="application">Python</set><system>popup Python <star/></system></template></category>
+<category><pattern>QPOPPER</pattern><template>Starting <set name="application">qpopper</set><system>popup qpopper</system></template></category>
+<category><pattern>QTPARTED</pattern><template>Starting <set name="application">qtparted</set><system>popup qtparted</system></template></category>
+<category><pattern>QTX</pattern><template>Starting <set name="application">qtx</set><system>popup qtx</system></template></category>
+<category><pattern>REISERFSPROGS</pattern><template>Starting <set name="application">reiserfsprogs</set><system>popup reiserfsprogs</system></template></category>
+<category><pattern>RPPPPOE</pattern><template>Starting <set name="application">rppppoe</set><system>popup rppppoe</system></template></category>
+<category><pattern>RSYNC</pattern><template>Starting <set name="application">rsync</set><system>popup rsync</system></template></category>
+<category><pattern>SAMBA</pattern><template>Starting <set name="application">samba</set><system>popup samba</system></template></category>
+<category><pattern>CSANEBACKENDS</pattern><template>Starting <set name="application">csanebackends</set><system>popup csanebackends</system></template></category>
+<category><pattern>SCREEN</pattern><template>Starting <set name="application">screen</set><system>popup screen</system></template></category>
+<category><pattern>SCRIBUS</pattern><template>Starting <set name="application">scribus</set><system>popup scribus</system></template></category>
+<category><pattern>SENDMAIL</pattern><template>Starting <set name="application">sendmail</set><system>popup sendmail</system></template></category>
+<category><pattern>SNORT</pattern><template>Starting <set name="application">snort</set><system>popup snort</system></template></category>
+<category><pattern>SQLITE</pattern><template>Starting <set name="application">sqlite</set><system>popup sqlite</system></template></category>
+<category><pattern>SQUID</pattern><template>Starting <set name="application">squid</set><system>popup squid</system></template></category>
+<category><pattern>SQUIRRELMAIL</pattern><template>Starting <set name="application">squirrelmail</set><system>popup squirrelmail</system></template></category>
+<category><pattern>SUBVERSION</pattern><template>Starting <set name="application">subversion</set><system>popup subversion</system></template></category>
+<category><pattern>SYLPHEED</pattern><template>Starting <set name="application">sylpheed</set><system>popup sylpheed</system></template></category>
+<category><pattern>SYNAPTIC</pattern><template>Starting <set name="application">synaptic</set><system>popup synaptic</system></template></category>
+<category><pattern>SYSVINIT</pattern><template>Starting <set name="application">sysvinit</set><system>popup sysvinit</system></template></category>
+<category><pattern>TAR *</pattern><template>Starting <set name="application">tar</set><system>popup tar <star/></system></template></category>
+<category><pattern>TCL</pattern><template>Starting <set name="application">tcl</set><system>popup tcl</system></template></category>
+<category><pattern>TCPDUMP</pattern><template>Starting <set name="application">tcpdump</set><system>popup tcpdump</system></template></category>
+<category><pattern>TETEX</pattern><template>Starting <set name="application">tetex</set><system>popup tetex</system></template></category>
+<category><pattern>TEXINFO</pattern><template>Starting <set name="application">texinfo</set><system>popup texinfo</system></template></category>
+<category><pattern>THUNDERBIRD</pattern><template>Starting <set name="application">thunderbird</set><system>popup thunderbird</system></template></category>
+<category><pattern>MOZILLA THUNDERBIRD</pattern><template>Starting <set name="application">thunderbird</set><system>popup thunderbird</system></template></category>
+<category><pattern>TIGHTVNC</pattern><template>Starting <set name="application">tightvnc</set><system>popup tightvnc</system></template></category>
+<category><pattern>VLC</pattern><template>Starting <set name="application">vlc</set><system>popup vlc</system></template></category>
+<category><pattern>AVNC</pattern><template>Starting <set name="application">avnc</set><system>popup avnc</system></template></category>
+<category><pattern>VSFTPD</pattern><template>Starting <set name="application">vsftpd</set><system>popup vsftpd</system></template></category>
+<category><pattern>WEBALIZER</pattern><template>Starting <set name="application">webalizer</set><system>popup webalizer</system></template></category>
+<category><pattern>WEBMIN</pattern><template>Starting <set name="application">webmin</set><system>popup webmin</system></template></category>
+<category><pattern>WGET</pattern><template>Starting <set name="application">wget</set><system>wget <star/></system></template></category>
+<category><pattern>WINDOWMAKER</pattern><template>Starting <set name="application">WindowMaker</set><system>popup WindowMaker</system></template></category>
+<category><pattern>WINE</pattern><template>Starting <set name="application">wine</set><system>popup wine</system></template></category>
+<category><pattern>XAWTV</pattern><template>Starting <set name="application">xawtv</set><system>popup xawtv</system></template></category>
+<category><pattern>XCDROAST</pattern><template>Starting <set name="application">xcdroast</set><system>popup xcdroast</system></template></category>
+<category><pattern>ALPHAXCHAT</pattern><template>Starting <set name="application">alphaxchat</set><system>popup alphaxchat</system></template></category>
+<category><pattern>XMMS</pattern><template>Starting <set name="application">xmms</set><system>popup xmms</system></template></category>
+<category><pattern>YUM *</pattern><template>Starting <set name="application">yum</set><system>yum <star/></system></template></category>
+<category><pattern>ZOPE</pattern><template>Starting <set name="application">Zope</set><system>popup Zope</system></template></category>
+
+
+ <!-- !description of  apps -->
+
+<category><pattern>WHAT IS ABIWORD</pattern><template>abiword abiword (AbiWord Personal) AbiWord Personal is a lean and fast full-featured word processor. It can import many formats including Word97/2000 and RTF, Palm, Psion, DocBook and XHTML documents, and can export to RTF, Palm, Psion, XHTML, Text, and LaTeX formats. Linux Journal calls it "an elegant, open source word processor that delivers the Word functionality most people use."</template></category> 
+<category><pattern>WHAT IS artwiz-fonts</pattern><template> This is set of (improved) artwiz fonts. The ultimate solution to your all problems with artwiz fonts.</template></category>               
+<category><pattern>WHAT IS ATERM</pattern><template> aterm is designed to provide pleasing visual effects, while performing such a mundane function as terminal emulation under X. It is largely based on rxvt code.</template></category>               
+<category><pattern>WHAT IS AZUREUS</pattern><template>azureus Azureus is a java bittorrent client. Azureus offers multiple torrent downloads, queuing/priority systems (on torrents and files), start/stop seeding options and instant access to numerous pieces of information about your torrents. Azureus now features an embedded tracker easily set up and ready to use.</template></category>               
+<category><pattern>WHAT IS BLACKBOX</pattern><template> blackbox (Blackbox window manager) Blackbox is that fast, light window manager you have been looking for without all those annoying library dependencies. Also included in this package is the bbkeys utility for controlling keyboard shortcut commands from within Blackbox. The Blackbox home page is http://blackboxwm.sourceforge.ne</template></category>               
+<category><pattern>WHAT IS ETERM</pattern><template>eterm Eterm is a color vt102 terminal emulator intended as a replacement for xterm. It is designed with a Freedom of Choice philosophy, leaving as much power, flexibility, and freedom as possible in the hands of the user. It is designed to look good and work well, but takes a feature-rich approach rather than one of minimalism while still maintaining speed and efficiency.</template></category> 
+<category><pattern>WHAT IS MOZILLA FIREFOX</pattern><template>  (Mozilla Firefox Web browser) This project is a redesign of the Mozilla browser component written using the XUL user interface language. Firefox empowers you to browse faster, more safely and more efficiently than with any other browser. Visit the Mozilla Firefox project online: http://www.mozilla.org/projects/firefox/</template></category>               
+<category><pattern>WHAT IS FIREFOX</pattern><template> mozilla-firefox (Mozilla Firefox Web browser) This project is a redesign of the Mozilla browser component written using the XUL user interface language. Firefox empowers you to browse faster, more safely and more efficiently than with any other browser. Visit the Mozilla Firefox project online: http://www.mozilla.org/projects/firefox/</template></category>               
+<category><pattern>WHAT IS FLUXBOX</pattern><template> (Fluxbox window manager) Fluxbox is yet another windowmanager for X that is based on the Blackbox 0.61.1 code but with many new features.</template></category>               
+<category><pattern>WHAT IS FVWM</pattern><template> fvwm (a small and fast virtual window manager for X) Fvwm is the classic highly-configurable virtual window manager for X11. It is a derivative of twm, redesigned to minimize memory consumption, provide a 3-D look to window frames, and provide a simple virtual desktop.</template></category>               
+<category><pattern>WHAT IS GAIM</pattern><template> Gaim allows you to talk to anyone using a variety of messaging protocols, including AIM (Oscar and TOC), ICQ, IRC, Yahoo!, MSN Messenger, Jabber, Gadu-Gadu, Napster, and Zephyr. These protocols are implemented using a modular, easy to use design. To use a protocol, just load the plugin for it. Gaim is NOT affiliated with or endorsed by AOL.</template></category>               
+<category><pattern>WHAT IS GFTP</pattern><template>gftp gftp gFTP is a multithreaded FTP client for X written using GTK+. It features simultaneous downloads, resuming of interrupted file transfers, file transfer queues, downloading of entire directories, ftp proxy support, remote directory caching, passive and non-passive file transfers, drag-n-drop support, bookmarks menu, stop button, and many more features.</template></category>               
+<category><pattern>WHAT IS GIMP</pattern><template>(The GNU Image Manipulation Program) The GIMP is a powerful tool for the preparation and manipulation of digital images. The GIMP provides the user with a wide variety of image manipulation, painting, processing, and rendering tools. The GIMP's open design and extensible architecture make for a very powerful end product for photo and image retouching, web graphics design, or digital illustration.</template></category>               
+<category><pattern>WHAT IS THE GIMP</pattern><template><srai>WHAT IS GIMP</srai></template></category>               
+<category><pattern>WHAT IS GKRELLM</pattern><template>  (GNU Krell Monitors) GKrellM charts SMP CPU, load, Disk, and all active net interfaces automatically. An on/off button and online timer for the PPP interface is provided. Monitors for memory and swap usage, file system, internet connections, APM laptop battery, mbox style mailboxes, and cpu temps. Also includes an uptime monitor, hostname label, and clock/calendar. Bill Wilson is the author of GKrellM.</template></category>               
+<category><pattern>WHAT IS GNUCHESS</pattern><template>  (GPL licensed chess engines and graphical frontends) This is a package of programs for playing chess. It includes the gnuchess and Sjeng chess engines, and the eboard and XBoard graphical interfaces to these engines.</template></category>            
+<category><pattern>WHAT IS GNUPLOT</pattern><template> Gnuplot is a portable command-line driven interactive data and function plotting utility for UNIX, IBM OS/2, MS Windows, DOS, Macintosh, VMS, Atari and many other platforms.</template></category>               
+<category><pattern>WHAT IS GPHOTO2</pattern><template>gphoto2 gPhoto2 is a free, redistributable, ready to use set of digital camera software applications for Unix-like systems, written by a whole team of dedicated volunteers around the world. It supports more than 600 cameras. gPhoto2 runs on a large range of UNIX-like operating system, including Linux, FreeBSD, NetBSD, etc. gPhoto is provided by major Linux distributions like Debian GNU/Linux, Gentoo, RedHat Linux, SUSE Linux, Mandriva, etc. gPhoto2 is freely available and distributed under the terms of the GNU LGPL.</template></category>               <category><pattern>WHAT IS GUCHARMAP</pattern><template>gucharmap gucharmap (character map utility) gucharmap is a Unicode character map and font viewer.</template></category>               
+<category><pattern>WHAT IS GXINE</pattern><template> (GTK+ media player based on Xine) Xine is a free multimedia player. It plays back CDs, DVDs, and VCDs, multimedia files, and multimedia streamed over a network. The gxine package contains a GTK+ graphical user interface for the Xine multimedia player.</template></category>               
+<category><pattern>WHAT IS IMAGEMAGICK</pattern><template> (a robust collection of image processing tools) ImageMagick is a collection of tools for manipulating and displaying digital images. It can merge images, transform image dimensions, do screen captures, create animation sequences, and convert between many different image formats. ImageMagick was written by John Cristy of ImageMagick Studio. Home page: http://www.imagemagick.org/</template></category>               
+<category><pattern>WHAT IS INKSCAPE</pattern><template> Inkscape is an Open Source vector graphics editor, with capabilities similar to Illustrator, Freehand, CorelDraw, or Xara X using the W3C standard Scalable Vector Graphics (SVG) file format.</template></category>               <category><pattern>WHAT IS lyx</pattern><template>lyx LyX is an advanced, open-source "document processor". Unlike standard word processors, LyX encourages writing based on the structure of your documents, not their appearance. It lets you concentrate on writing, leaving details of visual layout to the software.</template></category>  
+<category><pattern>WHAT IS MOZILLA</pattern><template>  (Mozilla Firefox Web browser) This project is a redesign of the Mozilla browser component written using the XUL user interface language. Firefox empowers you to browse faster, more safely and more efficiently than with any other browser. Visit the Mozilla Firefox project online: http://www.mozilla.org/projects/firefox/</template></category>               
+<category><pattern>WHAT IS MPLAYER</pattern><template>MPlayer is a movie player for Linux (runs on many other Unices, and non-x86 CPUs, see the documentation). It plays most MPEG, VOB, AVI, Ogg/OGM, VIVO, ASF/WMA/WMV, QT/MOV/MP4, FLI, RM, NuppelVideo, YUV4MPEG, FILM, RoQ, PVA files, supported by many native, XAnim, and Win32 DLL codecs. You can watch VideoCD, SVCD, DVD, 3ivx, DivX 3/4/5 and even WMV movies, too (without the avifile library).</template></category>               
+<category><pattern>WHAT IS MYTHTV</pattern><template> MythTV is a suite of programs that allow you to build the mythical home media convergence box on your own using Open Source software and operating systems.</template></category>               
+<category><pattern>WHAT IS OPENOFFICE</pattern><template> OpenOffice.org is both a multi-platform and multi-lingual office suite and an open-source project. Compatible with all other major office suites, the product is free to download, use, and distribute.</template></category>               <category><pattern>WHAT IS PAN</pattern><template>pan This is PAN, a powerful and user-friendly USENET newsreader based on GTK+2. Pan is the only Unix newsreader to score 100% on the Good Net-Keeping Seal of Approval newsreader evaluations.</template></category>               
+<category><pattern>WHAT IS RXVT</pattern><template>rxvt (terminal emulator) rxvt is a color vt102 terminal emulator intended as an xterm replacement for users who do not require features such as Tektronix 4014 emulation and toolkit-style configurability. As a result, rxvt uses much less memory -- a significant advantage on a machine serving many X sessions. Also included is rclock, an analog clock for X.</template></category>               <category><pattern>WHAT IS SANE</pattern><template>sane sane (Scanner Access Now Easy) SANE is a universal scanner interface that provides standardized access to any raster image scanner hardware, such as flatbed scanners, hand-held scanners, video and still cameras, frame-grabbers, and other similar devices.</template></category>               
+<category><pattern>WHAT IS SCRIBUS</pattern><template>Scribus brings award-winning professional DTP to Linux and *nix desktops with a combination of press-ready output and new approaches to page layout.</template></category>               
+<category><pattern>WHAT IS SYNAPTICS</pattern><template> synaptics driver for notebook touchpads</template></category>               <category><pattern>WHAT IS THUNDERBIRD</pattern><template>thunderbird mozilla-thunderbird (Mozilla Thunderbird mail application) Mozilla Thunderbird is a redesign of the Mozilla mail component written using the XUL user interface language. Thunderbird makes emailing safer, faster, and easier than ever before with the industry's best implementations of features such as intelligent spam filters, built-in RSS reader, quick search, and much more. Visit the Mozilla Thunderbird project online: http://www.mozilla.org/projects/thunderbird/</template></category>               
+<category><pattern>WHAT IS TRANSCODE</pattern><template>Transcode is a suite of command line utilities, for transcoding various video, audio, and container formats. It can decode and encode various video/audio formats.</template></category>               
+<category><pattern>WHAT IS windowmaker</pattern><template> (a fast and elegant window manager) Window Maker is a window manager for the X Window System that is relatively fast and small, feature rich, easy to use, with a simple and elegant appearance reminiscent of the NeXTSTEP(tm) graphical user interface. Window Maker is part of the official GNU project.</template></category>               
+<category><pattern>WHAT IS X3270</pattern><template> (IBM host access tool for X) x3270 opens a telnet connection to an IBM host in an X window. Since the window created by x3270 can use its own font for displaying characters, is a fairly accurate representation of an IBM 3278.</template></category>          
+<category><pattern>WHAT IS xcdroast</pattern><template>(Graphical frontend for cdrtools) X-CD-Roast is a graphical frontend for the command line cdrtools. You can do anything X-CD-Roast does yourself using the command line tools - but it's nicer and easier with the frontend. The cdrtools contain "cdrecord" (which does the actual writing of CDs), "readcd" (reads data tracks of CDs), "mkisofs" (masters CD images), and "cdda2wav" (reads audio tracks). Cdrecord, readcd and mkisofs are maintained by Joerg Schilling, cdda2wav by Heiko Eissfeldt, and X-CD-Roast by Thomas Niederreiter.</template></category>            
+<category><pattern>WHAT IS XCHAT</pattern><template>X-Chat is a GTK+-based IRC (Internet Relay Chat) client.</template></category>               <category><pattern>WHAT IS XFCE</pattern><template>(a fast and lightweight desktop environment for X) XFce is a fast and lightweight desktop environment that is both visually appealing and easy to use. For more information, see: http://www.xfce.org XFce was developed by Olivier Fourdan.</template></category>               
+<category><pattern>WHAT IS XGAMES</pattern><template> (small X games collection) A few small games and toys for X. Includes maze, spider, xcolormap, xlander, xminesweep, xroach, xsnow.</template></category>               
+<category><pattern>WHAT IS xine-lib</pattern><template>(xine multimedia playback engine libraries) xine-lib is a free (GPL licensed) high-performance multimedia playback engine. The xine shared libraries are used by xine-ui (and other media players and multimedia applications) for smooth video processing and playback of multimedia streams such as movies, radio and TV network streams, DVDs, and VCDs.</template></category>               <category><pattern>WHAT IS XINE</pattern><template> (xine multimedia playback engine user interface) Xine is a free multimedia player. It plays back CDs, DVDs, and VCDs, multimedia files, and multimedia streamed over a network. The xine-ui package contains the graphical user interface for the xine multimedia player.</template></category>               
+<category><pattern>WHAT IS XLOCKMORE</pattern><template> (screen locker for X) Patrick J. Naughton's xlock screensaver/locker for X, with many more modes added by David A. Bagley. The 'Bob' bitmap has been included especially for Slackware, as well as a Linux penguin logo. (NOTE: the image of J. R. "Bob" Dobbs is a registered trademark of The Subgenius Foundation, used by permission)</template></category>               
+<category><pattern>WHAT IS XMLTV</pattern><template> XMLTV is a set of programs to process TV (tvguide) listings and manage your TV viewing, storing listings in an XML format. There are backends to download TV listings for several countries, filter programs and Perl libraries to process listings.</template></category>               
+<category><pattern>WHAT IS XMMS</pattern><template> (X Multimedia System) XMMS is the X Multimedia System. It is used to play audio and other kinds of media files. By default XMMS can play MPEG audio, Ogg Vorbis, RIFF wav, most module formats, and a few other formats. XMMS can be extended through plugins to play a number of other audio and video formats.</template></category>               
+<category><pattern>WHAT IS xpaint</pattern><template>(simple X paint program) XPaint is a versatile bitmap/pixmap editing tool with a feature set similar to MacPaint. The short features list: Brushes, Spray paint, Pencil, Lines, Arcs, Pattern Fill, Text, Boxes, Circles, Polygons. Works on multiple images simultaneously. Cut/Copy/Paste between all active images. Fatbits/Zoom on the image windows.</template></category>               
+<category><pattern>WHAT IS XPDF</pattern><template>(PDF viewer for X) Xpdf is a viewer for Portable Document Format (PDF) files. The package also contains some command-line PDF manipulation utilities. xpdf was written by Derek B. Noonburg. The xpdf package requires the t1lib package to render Type 1 fonts.</template></category>               
+<category><pattern>WHAT IS XSANE</pattern><template>(Graphical frontend to SANE, Scanner Access Now Easy) xsane provides a graphical user-interface to control an image acquisition device such as a flatbed scanner. It allows previewing and scanning individual images and can be invoked either directly from the command-line or through the GIMP image manipulation program. xsane accesses image acquisition devices through the SANE (Scanner Access Now Easy) interface.</template></category>               
+<category><pattern>WHAT IS XSCREENSAVER</pattern><template>(a screen saver and locker for X) A modular screen saver and locker for the X Window System. Highly customizable: allows the use of any program that can draw on the root window as a display mode. More than 100 display modes are included in this package.</template></category>               
+<category><pattern>WHAT IS XV</pattern><template>(John Bradley's interactive image viewer) xv is an interactive image manipulation program. NOTICE: This program is unregistered shareware. Please read the license information included.</template></category>               
+<category><pattern>WHAT IS XXGDB</pattern><template>(graphical program debugger interface) Xxgdb is a graphical user interface to the gdb debugger under the X Window System. It provides visual feedback and mouse input for the user to control program execution through breakpoints, to examine and traverse the function call stack, and to display values of variables and data structures.</template></category>
+
+<!-- Description of Games-->
+
+<category><pattern>WHAT IS ARMAGETRON</pattern><template> Tron lightcycle game in 3D</template></category> 
+<category><pattern>WHAT IS ASTEROIDS3D</pattern><template> A first person game of blowing up asteroids.</template></category> 
+<category><pattern>WHAT IS ATLANTIK</pattern><template>KDE client for playing Monopoly-like game on the monopd network</template></category> 
+<category><pattern>WHAT IS BLACKJACK</pattern><template> Blackjack provides a casino-style blackjack card game.</template></category> 
+<category><pattern>WHAT IS BANNER</pattern><template> A clone of Minesweeper for KDE.</template></category>
+<category><pattern>WHAT IS FORTUNE</pattern><template>Open a fortune cookie.</template></category> 
+<category><pattern>WHAT IS FROZEN BUBBLE </pattern><template> A Puzzle-Bobble clone.</template></category> 
+<category><pattern>WHAT IS GATAXX</pattern><template> ATAXX A disc-flipping game where you attempt to dominate the board.</template></category> 
+<category><pattern>WHAT IS GLINES</pattern><template> Five or more: GNOME port of the once-popular Colour Lines game</template></category> 
+<category><pattern>WHAT IS GNECT</pattern><template> "Four in a row" for GNOME, with a computer player driven by Giuliano Bertoletti's Velena Engine.</template></category> 
+<category><pattern>WHAT IS GNIBBLES</pattern><template> A worm game for GNOME</template></category> 
+<category><pattern>WHAT IS GNOBOTS2</pattern><template> GNOME Robots Game</template></category> 
+<category><pattern>WHAT IS GNOME STONES</pattern><template> Mine through dirt and collect gems.</template></category> 
+<category><pattern>WHAT IS GNOMETRIS</pattern><template> A clone of tetris for GNOME.</template></category> 
+<category><pattern>WHAT IS GNOMINE</pattern><template> A clone of Minesweeper for GNOME.</template></category> 
+<category><pattern>WHAT IS GNOTRAVEX</pattern><template> A clone of A Tetravex clone. for GNOME.</template></category> 
+<category><pattern>WHAT IS GNOTSKI</pattern><template> A clone of Klotski for GNOME.</template></category> 
+<category><pattern>WHAT IS GTALI</pattern><template> A sort of poker with dice and less money.</template></category> 
+<category><pattern>WHAT IS IAGNO</pattern><template> GNOME version of the popular Othello disk flipping game.</template></category> 
+<category><pattern>WHAT IS KASTEROIDS</pattern><template> Destroy the asteroids to avoid being destroyed yourself</template></category> 
+<category><pattern>WHAT IS KATOMIC</pattern><template> Sokoban-like game but you need to form molecules</template></category> 
+<category><pattern>WHAT IS KBACKGAMMON</pattern><template> Backgammon game for KDE</template></category> 
+<category><pattern>WHAT IS IAGNO</pattern><template> GNOME version of the popular Othello disk flipping game.</template></category> 
+<category><pattern>WHAT IS IAGNO</pattern><template> GNOME version of the popular Othello disk flipping game.</template></category> 
+<category><pattern>WHAT IS KBATTLESHIP</pattern><template> Battleship game that you can play as a single player against the computer or over the network.</template></category>               
+<category><pattern>WHAT IS KBLACKBOX</pattern><template>Emacs' blackbox game version for KDE</template></category>               
+<category><pattern>WHAT IS KBOUNCE</pattern><template> Shrink the area occupied by the balls the fastest possible</template></category>               
+<category><pattern>WHAT IS KENOLABA</pattern><template> Kenolaba game</template></category>               
+<category><pattern>WHAT IS KBATTLESHIP</pattern><template> Battleship game that you can play as a single player against the computer or over the network.</template></category>               
+<category><pattern>WHAT IS KFOULEGGS</pattern><template> Yet another game that resembles Tetris style </template></category>               
+<category><pattern>WHAT IS KGOLDRUNNER</pattern><template> kgoldrunner is a platform game with bricks and ladders. </template></category>               
+<category><pattern>WHAT IS KJUMPINGCUBE</pattern><template> Strategy game for 2 players </template></category>               
+<category><pattern>WHAT IS KLICKETY</pattern><template> klickety game </template></category>               
+<category><pattern>WHAT IS KLINES</pattern><template> klines game is the once-popular Colour Lines game</template></category>               
+<category><pattern>WHAT IS KMAHJONGG</pattern><template>Mahjongg for KDE where players must remove all the tiles, one pair at a time.</template></category>
+<category><pattern>WHAT IS KMINES</pattern><template> A clone of Minesweeper for KDE.</template></category> 
+<category><pattern>WHAT IS KOLF</pattern><template> A Golf game for KDE.</template></category> 
+<category><pattern>WHAT IS KONQUEST</pattern><template> Space strategy game.</template></category> 
+<category><pattern>WHAT IS KPAT</pattern><template> Patience for KDE.</template></category> 
+<category><pattern>WHAT IS KPOKER</pattern><template> A single player video poker game. </template></category>               
+<category><pattern>WHAT IS KREVERSI</pattern><template>Othello-like game for KDE.</template></category> 
+<category><pattern>WHAT IS KSAME</pattern><template> Relaxing game where you should try to remove most of the balls</template></category> 
+<category><pattern>WHAT IS KSHISEN</pattern><template> Shisen game for KDE.</template></category> 
+<category><pattern>WHAT IS KSIRTET</pattern><template> Tetris-style game in which players attempt to fit falling pieces together to form full lines.</template></category>               
+<category><pattern>WHAT IS KSMILETRIS</pattern><template> Tetris-like game for KDE.</template></category> 
+<category><pattern>WHAT IS KSNAKE</pattern><template> Evergrowing snake game for KDE.</template></category> 
+<category><pattern>WHAT IS KSOKOBAN</pattern><template> Sokoban game for KDE.</template></category> 
+<category><pattern>WHAT IS KSPACEDUEL</pattern><template> SpaceDuel game version for KDE.</template></category> 
+<category><pattern>WHAT IS KSUDOKU</pattern><template> Sudoku Puzzle Generator and Solver for KDE. GUI for playing, saving, printing, solving and dubbing puzzles. The program is fully expandable since the algorithm is extendible to any general graph coloring problem.</template></category> 
+<category><pattern>WHAT IS KTRON</pattern><template> Tron / LightCycles game version for KDE.</template></category> 
+<category><pattern>WHAT IS KTUBERLING</pattern><template>'Potato-man' drawing game for children</template></category> 
+<category><pattern>WHAT IS KTUX</pattern><template> kdetoys program.</template></category> 
+<category><pattern>WHAT IS KWIN4</pattern><template> Strategy game that vaguely resembles Othello.</template></category> 
+<category><pattern>WHAT IS KWIN4PROC</pattern><template> command line KWIN4.</template></category> 
+<category><pattern>WHAT IS LSKAT</pattern><template> Lieutnant skat for KDE. (card game)</template></category> 
+<category><pattern>WHAT IS LSKATPROC</pattern><template> command line LSKAT</template></category> 
+<category><pattern>WHAT IS MAHJONGG</pattern><template> GNOME version of the Eastern tile game, Mahjongg.</template></category> 
+<category><pattern>WHAT IS PATIENCE</pattern><template> A single player card game where you can choose any of 14 games such as Spider Solitaire and Free Cell.</template></category>               
+<category><pattern>WHAT IS PLANET PENGUIN RACER</pattern><template> A 3-D racing game in which players guide Tux, the Linux mascot, down the snowy hill, avoiding trees and rocks. Works best with 3D acceleration enabled.</template></category>               
+<category><pattern>WHAT IS SAMEGAME</pattern><template> A game based on the Macintosh SameGame in which a player tries to remove as many stones as possible in the largest groups possible.</template></category>               
+<category><pattern>WHAT IS SOL</pattern><template> AisleRiot provides a rule-based solitaire card engine that allows many different games to be played</template></category> 
+<category><pattern>WHAT IS TUXKART</pattern><template> A 3-D go-kart racing game with several race courses to choose from. Works best with 3D acceleration enabled. </template></category>               
+
+
+<!-- graphics-->
+<category><pattern>WHAT IS DIGIKAM</pattern><template> A digital photo management application that makes it very easy to import, organize and manipulate digital photos. Digikam has an easy user interface which allows you to connect a digital camera, preview images and download and/or delete them. </template></category>               
+<category><pattern>WHAT IS GIMP</pattern><template>The GNU Image Manipulation Program allows you to draw, paint, edit and create images and more.</template></category>               
+<category><pattern>WHAT IS KDEPRINTFAX</pattern><template>Utility for sending faxes. </template></category>               
+<category><pattern>WHAT IS KFAX</pattern><template>Utility for viewing faxes.  </template></category>               
+<category><pattern>WHAT IS KOOKA</pattern><template>Utility for scanning images. </template></category>               
+<category><pattern>WHAT IS KUICKSHOW</pattern><template>An image browser/viewer that also performs slideshows. Supports many image formats including jpg, gif, tiff, png, bmp, psd, xpm, xbm, and pbm. </template></category>               
+<category><pattern>WHAT IS SHOWFOTO</pattern><template>:  An image viewer that also performs minor editing. </template></category>               
+<category><pattern>WHAT IS KCOLORCHOOSER</pattern><template>A utility that makes it easy to choose colors. </template></category>               
+<category><pattern>WHAT IS KCOLOREDIT</pattern><template>A color palette editor, can be used to choose and name colors. </template></category>             
+<category><pattern>WHAT IS KICONEDIT</pattern><template>This editor makes it easy to create and edit icons. </template></category>               
+<category><pattern>WHAT IS KMAGNIFIER</pattern><template>A screen magnifier tool that can be used to magnify part of the screen. </template></category>    
+<category><pattern>WHAT IS KRULER</pattern><template>A screen ruler that supports inches, centimeters and pixels. Also mesaures color.  </template></category>               
+<category><pattern>WHAT IS KSNAPSHOT</pattern><template>An applet for taking screenshots of the whole desktop or a single windows.</template></category>    
+<!-- Internet-->
+<category><pattern>WHAT IS AKREGATOR</pattern><template> Feed reader program allows you to quickly browse internet feeds.</template></category>            
+<category><pattern>WHAT IS AZUREUS</pattern><template> A BitTorrent client, it offers multiple torrent download, queuing/priority systems, start/stop seeding options and instant access to information about your torrents. </template></category>               
+<category><pattern>WHAT IS GFTP</pattern><template> A multithreaded FTP client features simultaneous downloads, resuming of interrupted file transers, file transfer queues, downloading entire directories, FTP and HTTP proxy support, drag-n-drop support and more. </template></category>               
+<category><pattern>WHAT IS GAIM</pattern><template> Instant messaging client capable of using AIM, ICQ, Yahoo, MSN, IRC, Jabber, Napster, Zephyr and Gadu-Gadu all at once.  </template></category>               
+<category><pattern>WHAT IS KGET</pattern><template> A download manager which keeps all your downloads in one dialog and allows transfers to be paused, resumed, queued or scheduled.  </template></category>               
+<category><pattern>WHAT IS KMAIL</pattern><template> Email client that supports IMAP, POP3, multiple accounts, mail filtering and sorting, PGP/GnuPG privacy and inline attachments.  </template></category>               
+<category><pattern>WHAT IS KONQUEROR</pattern><template> Advanced file manager, web browser and document viewer.</template></category>               
+<category><pattern>WHAT IS MOZILLA THUNDERBIRD</pattern><template> Email client from Mozilla. Supports IMAP, POP3, multiple accounts, junk filtering and more. </template></category>               
+<category><pattern>WHAT IS THUNDERBIRD</pattern><template> Email client from Mozilla. Supports IMAP, POP3, multiple accounts, junk filtering and more. </template></category>               
+<category><pattern>WHAT IS XCHATIRC</pattern><template> Graphical IRC Client.</template></category>               
+<category><pattern>WHAT IS CAMSTREAM</pattern><template> Collection of tools for webcams and other video devices. </template></category>               
+<category><pattern>WHAT IS KRDC</pattern><template>The KDE graphical client for the rfb protocol, which can be used to connec to Windows Terminal Servers using RDP. </template></category>               
+<category><pattern>WHAT IS KPPP</pattern><template> Modem dialer and ppp frontend, it automates the dialing in process to your ISP while letting you monitor the entire process. Also allows for interactive script generation and network setup. </template></category>               
+<category><pattern>WHAT IS SKYPE</pattern><template>Free internet telephone includes conference calling for up to five groups, global directory, customization, mobility and multiple Skype accounts on one PC.</template></category>               
+<category><pattern>WHAT IS ADSL/PPPOE CONFIGURATION</pattern><template> Package that allows you to connect to ADSL internet service providers that use PPPoE. </template></category>               
+<category><pattern>WHAT IS SMB</pattern><template> Allows you to browse Microsoft Windows shares.</template></category>               
+<category><pattern>WHAT IS SMB4K</pattern><template>SMB (Windows) share browser for KDE.  </template></category>               
+<category><pattern>WHAT IS KNETATTACH</pattern><template>Network folder wizard. </template></category>               
+<category><pattern>WHAT IS GUARDDOG</pattern><template> A firewall configuration utility that is easy to use, even for those with little knowledge of networking and security.</template></category>               
+<category><pattern>WHAT IS KLAMAV</pattern><template> Anti-virus software.</template></category>               
+<category><pattern>WHAT IS KGPG</pattern><template> Gnu Privacy Guard provides file encryption, file decryption and key management.</template></category> 
+
+<!-- Multimedia-->
+<category><pattern>WHAT IS AMAROK</pattern><template> Audio player for KDE featuring drag and drop playlist creation, collection-indexing support, album cover support, and much more.</template></category>               
+<category><pattern>WHAT IS K3B</pattern><template>Fully functional CD burning software with many features. </template></category>               
+<category><pattern>WHAT IS KSCD</pattern><template>Audio CD player.</template></category>               
+<category><pattern>WHAT IS KAFFEINE</pattern><template>Video media player that supports multiple player engines, letting Kaffeine access CDs, DVDs and network streams. </template></category>               
+<category><pattern>WHAT IS KPLAYER</pattern><template> A multimedia player based on MPlayer. </template></category>               
+<category><pattern>WHAT IS KMIX</pattern><template>Sound mixer applet. </template></category>               
+<category><pattern>WHAT IS ARTS BUILDER</pattern><template>Synthesizer designer for aRts.</template></category>               
+<category><pattern>WHAT IS REALPLAYER</pattern><template>:  Media player that plays RealAudio, RealVideo, MP3, 3GPP Video, Flash, SMIL 2.0, JPEG, GIF, PNG, RealPix, RealText and more. </template></category>               
+<category><pattern>WHAT IS KREC</pattern><template> Sound recorder utility for KDE. </template></category>               
+<category><pattern>WHAT IS KINO</pattern><template>Digital video data editor allows you to record, create, edit and play movies recorded with DV camcorders. </template></category>               
+<category><pattern>WHAT IS XAWTV</pattern><template> TV application supports video4linux devices and Xvideo extension.</template></category> 
+ 
+<!-- Office-->
+<category><pattern>WHAT IS CHECKBOOK TRACKER</pattern><template>Program that allows you to record and balance checkbook transactions.</template></category>               
+<category><pattern>WHAT IS KPDF</pattern><template> A PDF viewer for KDE.</template></category>               
+<category><pattern>WHAT IS KORGANIZER</pattern><template>A personal organizer, calendar and scheduling program. Supports information interchange with other calendar applications through vCalendar file format.</template></category>               
+<category><pattern>WHAT IS KNOTES</pattern><template>A program that lets you write sticky notes, which are saved automatically when you exit the program and display when you open the program. Also allows you to print or mail your notes. </template></category>               
+<category><pattern>WHAT IS KONTACT</pattern><template>Personal information manager combines KMail, KOrganizer and KAddressBook into one interface which makes it easy to access mail, scheduling, address book, and other functions.</template></category>               
+<category><pattern>WHAT IS KGHOSTVIEW</pattern><template> A PostScript viewer for KDE. </template></category>               
+<category><pattern>WHAT IS OPENOFFICE * BASE</pattern><template> The database component for OpenOffice. </template></category>               
+<category><pattern>WHAT IS OPENOFFICE * CALC</pattern><template>A powerful, all-purpose spreadsheet application. </template></category>               
+<category><pattern>WHAT IS OPENOFFICE * DRAW</pattern><template>A graphics package that allows you to do anything from a quick sketch to a complex plan. You can also create Flash graphics and import graphics in multiple formats, such as BMP, GIF, JPEG, PNG, TIFF, and WMF. </template></category>             
+<category><pattern>WHAT IS OPENOFFICE * IMPRESS</pattern><template>A program for creating multimedia presentations utilizing 2D and 3D clip art, special effects, animation and high-impact drawing tools.  </template></category>               
+<category><pattern>WHAT IS OPENOFFICE * MATH</pattern><template>Component for creating and editing equations and formulas which can be used inside Writer, Calc or Impress. </template></category>               
+<category><pattern>WHAT IS OPENOFFICE * WRITER</pattern><template>A fully equipped word processor program. Writer allows you to make any of your documents into .pdf files with one-click.</template></category>               
+<category><pattern>WHAT IS SCRIBUS</pattern><template> A desktop publishing program for designing brochures and newsletters to laying out newspapers and magazines. </template></category>               
+<category><pattern>WHAT IS KATE</pattern><template>: Kate is a multi-document editor based on KWrite. It is a multi-view editor which allows a user to view multiple files for easy reference or simultaneous editing. Kate also works well for editing big files, extensible syntax highlighting, and selectable encoding.  </template></category>               
+<category><pattern>WHAT IS KEDIT</pattern><template>: Kedit is a simple text editor that can be used with Konqueror for text and configuration file browing. It also works well for creating small plain text documents.</template></category>               
+<category><pattern>WHAT IS KWRITE</pattern><template>: KWrite could be considered as a partial alternative to more powerful editors, but also works very well as a simple text editor. It may be best used in conjunction with Konqueror for source file browsing for different languages.</template></category>
+
+<!-- System-->            
+<category><pattern>WHAT IS QTPARTED</pattern><template>A tool for creating partitions on your hard drive. </template></category>               
+<category><pattern>WHAT IS KDE SYSTEM GUARD</pattern><template>A program that allows you to monitor various statistics about your computer. </template></category>               
+<category><pattern>WHAT IS KSYSGUARD</pattern><template>A program that allows you to monitor various statistics about your computer. </template></category>               
+<category><pattern>WHAT IS KMENUEDIT</pattern><template>A tool for easily editing the K Menu. </template></category>               
+<category><pattern>WHAT IS PRINTING MANAGER</pattern><template>A tool for managing printers and print jobs.  </template></category>               
+<category><pattern>WHAT IS WALLET MANAGEMENT TOOL</pattern><template>A program that enables you to keep wallets containing any kind of data stored with encrypted passwords. You can also create a master password to all wallets. </template></category>               
+<category><pattern>WHAT IS INFO CENTER</pattern><template>The KDE info center is a central location to find out information about your computer.</template></category> 
+<category><pattern>WHAT IS KCONTROL</pattern><template>The KDE info center is a central location to find out information about your computer.</template></category> 
+<category><pattern>WHAT IS KONSOLE</pattern><template>A terminal program which provides a commandline interface. </template></category>               
+<category><pattern>WHAT IS KPACKAGE</pattern><template>A package management tool that allows you to view currently installed packages, available packages and install/remove packages. </template></category>               
+<category><pattern>WHAT IS KUSER</pattern><template>A user/group administration tool. </template></category>               
+<category><pattern>WHAT IS SYNAPTIC</pattern><template>A package management tool that enables you to install, upgrade, and remove software packages. Also allows you to view software that is currently installed and search available packages.</template></category> 
+ 
+<!-- Utilities-->                   
+<category><pattern>WHAT IS ARK</pattern><template> A program for managing various archive formats. Archives can be viewed, extracted, created and modified. The program can handle various formats such as tar, gzip, bzip2, zip, rar and lha.</template></category>               
+<category><pattern>WHAT IS KCALC</pattern><template> A multi-function calculator, works in regular mode and scientific mode. </template></category>        
+<category><pattern>WHAT IS KDICT</pattern><template>A dictionary that searches databases for definitions and also provides synonyms.</template></category> 
+<category><pattern>WHAT IS KFLOPPY</pattern><template> Utility for formatting 3.5; and 5.25 floppy disks. </template></category>               
+<category><pattern>WHAT IS KLIPPER</pattern><template> A clipboard utility.</template></category>               
+<category><pattern>WHAT IS KPILOT</pattern><template> An application for synchronizing your Palm Pilot or similar device, similar to the Palm HotSync for MS-Windows. </template></category>               
+<category><pattern>WHAT IS KALARM</pattern><template> A utility that allows you to schedule personal timed events and set reminders. The alarm can be a text message, a spoken message or play a sound file. </template></category>               
+<category><pattern>WHAT IS KCHARSELECT</pattern><template> A character set selector. </template></category>               
+<category><pattern>WHAT IS KFONTVIEWER</pattern><template> A simple font viewer. </template></category>               
+<category><pattern>WHAT IS KJOTS</pattern><template> A note taker program. </template></category>               
+<category><pattern>WHAT IS KMOUSETOOL</pattern><template> A mouse manipulation tool that clicks the mouse when the cursor pauses briefly. Designed for those with repetitive strain injuries or for whom pressing buttons hurts. </template></category>               
+<category><pattern>WHAT IS KPAGER</pattern><template> A desktop pager program. </template></category>               
+<category><pattern>WHAT IS KPALMDOC</pattern><template> PalmDoc converter. </template></category>               
+<category><pattern>WHAT IS KSYNC</pattern><template> A small application for selecting and syncing files. </template></category>               
+<category><pattern>WHAT IS KTIMER</pattern><template> A timer application. It allows you to execute commands after a certain amount of time and also supports looping commands. </template></category>               
+<category><pattern>WHAT IS TNEF FILE VIEWER</pattern><template> A tool for unpacking attachments that are encapsulated into the TNEF attachment, which would have required MS Outlook in order to view the attachment. </template></category>    
+
+</aiml>
+
+

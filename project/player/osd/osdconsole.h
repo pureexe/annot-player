@@ -13,10 +13,10 @@ class QMenu;
 class QAction;
 QT_END_NAMESPACE
 
-class OSDConsole : public QLabel
+class OsdConsole : public QLabel
 {
   Q_OBJECT
-  typedef OSDConsole Self;
+  typedef OsdConsole Self;
   typedef QLabel Base;
 
   QMutex mutex_;
@@ -29,7 +29,7 @@ public:
   static void setGlobalInstance(Self *global);
 
 public:
-  explicit OSDConsole(QWidget *parent = 0);
+  explicit OsdConsole(QWidget *parent = 0);
 
   void setAutoClearInterval(int msecs);
 
@@ -75,10 +75,10 @@ private:
 };
 
 // Default global console. Global instance must be set before invoke this function.
-inline OSDConsole&
+inline OsdConsole&
 gConsole()
 {
-  OSDConsole *g = OSDConsole::globalInstance();
+  OsdConsole *g = OsdConsole::globalInstance();
   Q_ASSERT(g);
   return (*g);
 }

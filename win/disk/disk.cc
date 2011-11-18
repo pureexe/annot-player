@@ -204,6 +204,7 @@ Disk::close()
   if (handle_ != INVALID_HANDLE_VALUE) {
     BOOL bResult = ::CloseHandle((HANDLE)handle_);
     Q_ASSERT(bResult);
+    Q_UNUSED(bResult);
   }
 
   handle_ = 0;

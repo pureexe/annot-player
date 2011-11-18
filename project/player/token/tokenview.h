@@ -20,6 +20,7 @@ class QTreeView;
 QT_END_NAMESPACE
 
 class AddAliasDialog;
+class ServerAgent;
 
 typedef Core::Gui::Dialog TokenViewBase;
 
@@ -52,13 +53,15 @@ protected:
   };
 
 public:
-  explicit TokenView(QWidget *parent = 0);
+  explicit TokenView(ServerAgent *server, QWidget *parent = 0);
 
-  qint64 userId() const;
-  void setUserId(qint64 uid);
+  //qint64 userId() const;
+  //void setUserId(qint64 uid);
 
 signals:
   void aliasSubmitted(const Alias &alias);
+  void tokenBlessedWithId(qint64 tid);
+  void tokenCursedWithId(qint64 tid);
 
   // - Properties -
 public:
@@ -116,7 +119,8 @@ protected:
   static void setAliasHeaderData(QAbstractItemModel *model);
 
 private:
-  qint64 userId_;
+  ServerAgent *server_;
+  //qint64 userId_;
   QStandardItemModel *sourceModel_;
   QSortFilterProxyModel *proxyModel_;
   QTreeView *proxyView_;

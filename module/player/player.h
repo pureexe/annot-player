@@ -30,13 +30,15 @@ class Player : public QObject
 
   // - Properties -
 public:
-  static QStringList supportedAudioSuffices();
-  static QStringList supportedVideoSuffices();
-  static QStringList supportedSubtitleSuffices();
+  static const QStringList &supportedAudioSuffices();
+  static const QStringList &supportedVideoSuffices();
+  static const QStringList &supportedPictureSuffices();
+  static const QStringList &supportedSubtitleSuffices();
 
-  static QStringList supportedAudioFilters();
-  static QStringList supportedVideoFilters();
-  static QStringList supportedSubtitleFilters();
+  static const QStringList &supportedAudioFilters();
+  static const QStringList &supportedVideoFilters();
+  static const QStringList &supportedPictureFilters();
+  static const QStringList &supportedSubtitleFilters();
 
   // - Constructions -
 private:
@@ -108,6 +110,14 @@ public:
   bool setSubtitleFromFile(const QString &fileName);
   QStringList searchExternalSubtitles() const; ///< return external subtitle files
 
+  bool hasTitles() const;
+  int titleId() const;
+  int titleCount() const;
+  bool hasChapters() const;
+  int chapterId() const;
+  int chapterCount() const;
+  int chapterCountForTitleId(int tid) const;
+
   // - Slots -
 public slots:
 
@@ -165,6 +175,15 @@ public slots:
   void hideSubtitle();
   void setSubtitleVisible(bool visible);
 
+  void setChapterId(int cid);
+  void setPreviousChapter();
+  void setNextChapter();
+  void setTitleId(int tid);
+  void setPreviousTitle();
+  void setNextTitle();
+
+  void invalidateTitleId();
+
   void loadExternalSubtitles(); ///< try to automatically load external subtitles
 
   // - Signals -
@@ -206,6 +225,9 @@ public:
     ADD_SIGNAL(errorEncountered())
 #undef ADD_SIGNAL
   //@}
+
+signals:
+  void titleIdChanged(int tid);
 
   // - Implementations -
 protected:

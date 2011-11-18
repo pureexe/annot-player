@@ -1,23 +1,31 @@
 // main.cc
 // 6/30/2011
 
+#include "application.h"
 #include "mainwindow.h"
 #include "settings.h"
 #include "global.h"
 #include "uistyle.h"
 #include "translatormanager.h"
-#ifdef USE_WIN_QTWIN
-  #include "win/qtwin/qtwin.h"
-#endif // USE_WIN_QTWIN
+#include "annotationgraphicsitem.h"
 #ifdef USE_WIN_QTH
   #include "win/qth/qth.h"
 #endif // USE_WIN_QTH
+#ifdef USE_WIN_DWM
+  #include "win/dwm/dwm.h"
+#endif // USE_WIN_DWM
+#ifdef Q_WS_WIN
+  #include "win/qtwin/qtwin.h"
+#endif // W_WS_WIN
+#ifdef Q_WS_MAC
+  #include "mac/qtmac/qtmac.h"
+#endif // Q_WS_MAC
 #include <QtGui>
 #include <QtWebKit>
 
 #define DEBUG "main"
 #include "module/debug/debug.h"
-#include "win/dwm/dwm.h"
+
 // - Debug -
 
 namespace { // anonymous, debug
@@ -115,13 +123,12 @@ main(int argc, char *argv[])
     if (!caches.exists())
       caches.mkpath(caches.absolutePath());
   }
-
   // Set global random seed.
   ::qsrand((uint)QDateTime::currentMSecsSinceEpoch());
 
   // Applications
-  QApplication a(argc, argv);
-#ifdef USE_WIN_QTWIN
+  Application a(argc, argv);
+#ifdef Q_WS_WIN
   {
     QFileInfo fi(QCoreApplication::applicationFilePath());
     QString processName = fi.fileName();
@@ -133,7 +140,7 @@ main(int argc, char *argv[])
       return 0;
     }
   }
-#endif // USE_WIN_QTWIN
+#endif // Q_WS_WIN
 
   ::registerMetaTypes();
 
@@ -150,6 +157,17 @@ main(int argc, char *argv[])
     }
   }
 #endif // USE_MODE_DEBUG
+
+#ifdef Q_WS_WIN
+  QtWin::warmUp();
+#endif // Q_WS_WIN
+
+#ifdef USE_WIN_DWM
+  Dwm::warmUp();
+#endif // USE_WIN_DWM
+
+  // Cache needed fonts in Mac OS X
+  AnnotationGraphicsItem::warmUp();
 
   // Initialize translator
   {
@@ -198,11 +216,15 @@ main(int argc, char *argv[])
   root.show();
 #else
   MainWindow w;
+
 #endif // USE_MODE_SIGNAL
   Q_ASSERT(w.isValid());
+
 #ifdef USE_WIN_QTH
   QTH->setParentWinId(w.winId());
 #endif // USE_WIN_QTH
+
+  a.setMainWindow(&w);
 
   // Show main window
   w.resize(INIT_WINDOW_SIZE);
@@ -225,9 +247,7 @@ main(int argc, char *argv[])
   //w.openPath("d:/i/sample.mp4");
   //w.openPath("file:///d:/i/sample.mp4");
   //w.openPath("/Volumes/local/i/sample.mp4");
-
   return a.exec();
 }
 
 // EOF
-

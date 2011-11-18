@@ -18,6 +18,7 @@
 
 class ServerProxy;
 class ClientAgent;
+class CastManager;
 
 class ServerAgent: public QObject
 {
@@ -103,27 +104,52 @@ public:
 
   // - Update -
 public:
-  bool updateAnnotationTextWithId(const QString &text, qint64 id, int tt);
+  bool updateAnnotationTextWithId(const QString &text, qint64 id);
 
   // - Queries -
 public:
-  Token selectTokenWithId(qint64 id, int tt);
-  Token selectTokenWithDigest(const QString &digest, int tt);
+  Token selectTokenWithId(qint64 id);
+  Token selectTokenWithDigest(const QString &digest, qint32 digestType);
 
-  AnnotationList selectAnnotationsWithTokenId(qint64 tid, int tt);
-  AliasList selectAliasesWithTokenId(qint64 tid, int tt);
+  AnnotationList selectAnnotationsWithTokenId(qint64 tid);
+  AliasList selectAliasesWithTokenId(qint64 tid);
 
  ///  Clustered at server based on token's aliases
-  AnnotationList selectRelatedAnnotationsWithTokenId(qint64 tid, int tt);
+  AnnotationList selectRelatedAnnotationsWithTokenId(qint64 tid);
 
   // - Cast -
 public:
-  bool blessAnnotationWithId(qint64 id, int tt);
+  bool blessAnnotationWithId(qint64 id);
+  bool curseAnnotationWithId(qint64 id);
+  bool blockAnnotationWithId(qint64 id);
+
+  bool blessAliasWithId(qint64 id);
+  bool curseAliasWithId(qint64 id);
+  bool blockAliasWithId(qint64 id);
+
+  bool blessTokenWithId(qint64 id);
+  bool curseTokenWithId(qint64 id);
+
+  bool blockUserWithId(qint64 id);
+
+  bool isAnnotationBlessedWithId(qint64 id) const;
+  bool isAnnotationCursedWithId(qint64 id) const;
+  bool isAnnotationBlockedWithId(qint64 id) const;
+
+  bool isAliasBlessedWithId(qint64 id) const;
+  bool isAliasCursedWithId(qint64 id) const;
+  bool isAliasBlockedWithId(qint64 id) const;
+
+  bool isTokenBlessedWithId(qint64 id) const;
+  bool isTokenCursedWithId(qint64 id) const;
+
+  bool isUserBlockedWithId(qint64 id) const;
 
   // - Implementations -
 private:
   QMutex mutex_;
   ServerProxy *proxy_;
+  CastManager *cast_;
   User user_;
   bool authorized_;
   bool connected_;

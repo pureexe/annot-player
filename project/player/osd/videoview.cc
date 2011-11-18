@@ -9,53 +9,52 @@
 #ifdef USE_WIN_HOOK
 #include "win/hook/hook.h"
 
-#ifdef USE_WIN_QTWIN
-#include "win/qtwin/qtwin.h"
-#endif // USE_WIN_QTWIN
+#ifdef Q_WS_WIN
+  #include "win/qtwin/qtwin.h"
+#endif // Q_WS_WIN
 
-#define DEBUG "VideoView"
+//#define DEBUG "VideoView"
 #include "module/debug/debug.h"
 
+// This function is re-entrant, and \var tries is not synchornized
 void
 VideoView::addToWindowsHook()
 {
-  #define VLC_CHILDREN_COUNT  2
-  #define VLC_PLAYING_TIMEOUT   100     // in msecs
-  enum { max_retries = 30 };
-  static int retries = 0; // retries count
+  enum { VLC_CHILDREN_COUNT = 2 };
+  enum { VLC_PLAYING_TIMEOUT = 200 }; // in msecs
+  enum { MAX_TRIES = 50 }; // in total 10 secs
+  static int tries = 0; // retries count
 
-  DOUT("addToWindowsHook:enter");
-  if (children_.size() >= VLC_CHILDREN_COUNT) {
-    DOUT("addToWindowsHook:exit: hooks already added");
+  DOUT("addToWindowsHook:enter: tries =" << tries);
+  //if (children_.size() >= VLC_CHILDREN_COUNT) {
+  if (tries > MAX_TRIES || children_.size() >= 2 * VLC_CHILDREN_COUNT) {
+    // This should never happen.
+    //Q_ASSERT(0);
+    DOUT("addToWindowsHook:exit: max tries/children already reached");
+    tries = 0;
     return;
   }
 
-#ifdef USE_WIN_QTWIN
   WId hwnd = winId();
   while (hwnd = QtWin::getChildWindow(hwnd))
-    if (history_.indexOf(hwnd) < 0) { // if not existed
-      history_.push_back(hwnd);
-      children_.push_back(hwnd);
+    if (children_.indexOf(hwnd) < 0) { // if not existed
+      children_.append(hwnd);
       HOOK->addWinId(hwnd);
-      DOUT("add hwnd to hook:" << hwnd);
+      DOUT("add hwnd to hook:" << hwnd << ", tries =" << tries);
     }
 
   // jichi 8/10/2011: VLC player usually added two child windows.
 
-  if (children_.size() < VLC_CHILDREN_COUNT) {
-    DOUT("not hook enough child windows, try again soon: retries =" << retries);
-    if (retries < max_retries)  {
-      QTimer::singleShot(VLC_PLAYING_TIMEOUT, this, SLOT(addToWindowsHook()));
-      retries++;
-    } else {
-      DOUT("max number of retries reached, give up hooking child windows");
-      retries = 0;
-    }
+  //if (children_.size() < VLC_CHILDREN_COUNT) {
+  //DOUT("not hook enough child windows, try again soon: tries =" << tries);
+  if (tries < MAX_TRIES &&
+      children_.size() < 2 * VLC_CHILDREN_COUNT)  {
+    tries++;
+    QTimer::singleShot(VLC_PLAYING_TIMEOUT, this, SLOT(addToWindowsHook()));
   } else {
-    DOUT("successfully hooked enough child windows");
-    retries = 0;
+    tries = 0;
+    DOUT("max number of tries/children reached, stop watching child windows");
   }
-#endif // USE_WIN_QTWIN
 
   DOUT("addToWindowsHook:exit");
 }
@@ -70,7 +69,6 @@ VideoView::removeFromWindowsHook()
     children_.clear();
     DOUT("hooked hwnd removed");
   }
-  //history_.clear(); // history is never cleared
   DOUT("removeFromWindowsHook:exit");
 }
 
@@ -154,6 +152,8 @@ VideoView::hideView()
 
 #endif // Q_WS_MAC
 
+// EOF
+
 /*
 void
 VideoView::mousePressEvent(QMouseEvent *event)
@@ -186,4 +186,3 @@ VideoView::mouseDoubleClickEvent(QMouseEvent *event)
 }
 */
 
-// EOF

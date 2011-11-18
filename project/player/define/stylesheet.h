@@ -227,9 +227,6 @@
 // See: http://doc.qt.nokia.com/latest/stylesheet-examples.html#customizing-qmenu
 // See: http://drpeterjones.com/colorcalc/
 #define SS_CONTEXTMENU \
-  SS_BEGIN(QMenu) \
-    SS_BACKGROUND_IMAGE_URL(RC_IMAGE_CONTEXTMENU) \
-  SS_END \
   SS_BEGIN(QMenu::item) \
     SS_COLOR(orange) \
   SS_END \
@@ -242,6 +239,9 @@
         stop:0.5  rgba(255, 204, 102, 64), \
         stop:1    rgba(255, 204, 153, 16))) \
   SS_END
+//SS_BEGIN(QMenu)
+//SS_BACKGROUND_IMAGE_URL(RC_IMAGE_CONTEXTMENU)
+//SS_EN
 
 // - Text edits -
 

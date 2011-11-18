@@ -18,10 +18,14 @@
 
 using namespace Logger;
 
-// - Panel -
+// - Constructions -
+
 PickDialog::PickDialog(QWidget *parent)
   : Base(parent), active_(false)
 {
+#ifdef Q_WS_MAC
+  setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
+#endif // Q_WS_MAC
   setWindowTitle(tr("Select window"));
   UiStyle::globalInstance()->setWindowStyle(this);
   setContentsMargins(0, 0, 0, 0);

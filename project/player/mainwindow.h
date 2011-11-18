@@ -13,11 +13,13 @@
 #include <QStringList>
 #include <QUrl>
 #include <QMutex>
+#include <QFileInfoList>
 
 QT_FORWARD_DECLARE_CLASS(QUrl)
 QT_FORWARD_DECLARE_CLASS(QMimeData)
 
 // Objects
+class AnnotationFilter;
 class ClientAgent;
 class Database;
 class DataManager;
@@ -39,10 +41,10 @@ class MainPlayerUi;
 class MessageHandler;
 class MiniPlayerUi;
 //class MiniPlayerDock;
-class OSDDock;
-class OSDWindow;
-class OSDConsole;
-class OSDPlayerUi;
+//class OsdDock;
+class OsdWindow;
+class OsdConsole;
+class OsdPlayerUi;
 class PlayerUi;
 class MessageView;
 class SignalView;
@@ -52,6 +54,9 @@ class UserPanelDock;
 class VideoView;
 
 // Dialogs
+class AboutDialog;
+class BlacklistView;
+class HelpDialog;
 class LiveDialog;
 class LoginDialog;
 class PickDialog;
@@ -149,6 +154,9 @@ public slots:
   void stop();
   void nextFrame();
   void snapshot();
+
+  void previous();
+  void next();
 
   void seek(qint64 msecs);
   void forward(qint64 msecs = 0);  ///< If <=0, default delta time is used.
@@ -251,7 +259,19 @@ public slots:
   void showTextAsSubtitle(const QString &text);
 
   void setToken(const QString &filePath, bool async = true);
+  void invalidateToken();
   void submitAlias(const Alias &alias, bool async = true);
+
+  void blessTokenWithId(qint64 tid, bool async = true);
+  void curseTokenWithId(qint64 tid, bool async = true);
+
+  void blessAliasWithId(qint64 tid, bool async = true);
+  void curseAliasWithId(qint64 tid, bool async = true);
+  void blockAliasWithId(qint64 tid, bool async = true);
+
+  void blessAnnotationWithId(qint64 tid, bool async = true);
+  void curseAnnotationWithId(qint64 tid, bool async = true);
+  void blockAnnotationWithId(qint64 tid, bool async = true);
 
   void updateAnnotationTextWithId(const QString &text, qint64 id);
 
@@ -267,6 +287,8 @@ protected slots:
   void invalidateRecent();
 
   // - Events -
+public slots:
+  //virtual void setVisible(bool visible); ///< \override
 protected:
   virtual void mousePressEvent(QMouseEvent *event); ///< \override
   virtual void mouseMoveEvent(QMouseEvent *event); ///< \override
@@ -294,7 +316,7 @@ protected slots:
   void invalidateContextMenu();
 
 protected:
-  bool isGlobalPosNearOSDPlayer(const QPoint &pos) const;
+  bool isGlobalPosNearOsdPlayer(const QPoint &pos) const;
 
 public slots:
   void updatePlayMode();
@@ -315,6 +337,16 @@ public slots:
   void setThemeToPurple1(); void setThemeToPurple2();
   void setThemeToRed1(); void setThemeToRed2();
   void setThemeToYellow1(); void setThemeToYellow2();
+
+  // - Browse -
+public slots:
+  void setBrowsedFile(const QString &filePath);
+  void openBrowsedFile(int id);
+  void openPreviousFile();
+  void openNextFile();
+
+protected:
+  int currentBrowsedFileId() const;
 
   // - Signal mode -
 #ifdef USE_WIN_QTH
@@ -347,6 +379,8 @@ private:
   // - Helpers -
   static QString languageToString(int lang);
 
+  static int fileType(const QString &fileName);
+
   // - Members for initialization. -
 private:
   void createComponents();
@@ -361,7 +395,8 @@ private:
   Tray *tray_;
   SignalHub *hub_;
 
-  QStringList recent_;
+  QStringList recentFiles_;
+  QFileInfoList browsedFiles_;
 
   Translator *translator_;
 
@@ -379,21 +414,25 @@ private:
   DataManager *dataManager_;
 
   EventLogger *logger_;
-  OSDConsole *globalOsdConsole_;
+  OsdConsole *globalOsdConsole_;
 
-  OSDDock *osdDock_;
-  OSDWindow *osdWindow_;
+  //OsdDock *osdDock_;
+  OsdWindow *osdWindow_;
   TokenView *tokenView_;
   VideoView *videoView_;
 
   MainPlayerUi *mainPlayer_;
   MiniPlayerUi *miniPlayer_;
-  OSDPlayerUi *osdPlayer_;
+  OsdPlayerUi *osdPlayer_;
 
   AnnotationGraphicsView *annotationView_;
   AnnotationBrowser *annotationBrowser_;
   AnnotationEditor *annotationEditor_;
+  AnnotationFilter *annotationFilter_;
 
+  AboutDialog *aboutDialog_;
+  BlacklistView *blacklistView_;
+  HelpDialog *helpDialog_;
   LoginDialog *loginDialog_;
   LiveDialog *liveDialog_;
   PickDialog *windowPickDialog_;
@@ -413,22 +452,31 @@ private:
   // - Menus and actions -
 
 #ifdef Q_WS_MAC
+  QMenuBar *menuBar_;
   QMenu *fileMenu_,
-        *viewMenu_,
+        //*viewMenu_,
         *helpMenu_;
 #endif // Q_WS_MAC
+
   QMenu *contextMenu_,
         *advancedMenu_,
         *recentMenu_,
-        *openContextMenu_,
-        *subtitleContextMenu_,
-        *backwardContextMenu_,
-        *forwardContextMenu_,
-        *appLanguageContextMenu_,
-        *userLanguageContextMenu_,
-        *annotationLanguageContextMenu_,
+        *openMenu_,
+        *subtitleMenu_,
+        *browseMenu_,
+        *sectionMenu_,
+        *backwardMenu_,
+        *forwardMenu_,
+        *appLanguageMenu_,
+        *userLanguageMenu_,
+        *annotationLanguageMenu_,
         *themeMenu_,
         *subtitleStyleMenu_;
+
+  QAction *previousSectionAct_,
+          *nextSectionAct_,
+          *previousFileAct_,
+          *nextFileAct_;
 
   QAction *setSubtitleColorToDefaultAct_,
           *setSubtitleColorToBlueAct_,
@@ -446,6 +494,8 @@ private:
           *stopAct_,
           *replayAct_,
           *nextFrameAct_,
+          *previousAct_,
+          *nextAct_,
           *snapshotAct_,
           *toggleAnnotationVisibleAct_,
           *toggleFullScreenModeAct_,
@@ -476,7 +526,8 @@ private:
           *toggleProcessPickDialogVisibleAct_,
           *toggleSeekDialogVisibleAct_,
           *toggleSyncDialogVisibleAct_,
-          *toggleUserPanelVisibleAct_;
+          *toggleUserPanelVisibleAct_,
+          *toggleBlacklistViewVisibleAct_;
 
   QAction *toggleUserAnonymousAct_;
 

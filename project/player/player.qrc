@@ -36,6 +36,11 @@
         <file>images/mini_disabled.png</file>
         <file>images/mini_hover.png</file>
         <file>images/mini_pressed.png</file>
+        <file>images/next.png</file>
+        <file>images/next_checked.png</file>
+        <file>images/next_disabled.png</file>
+        <file>images/next_hover.png</file>
+        <file>images/next_pressed.png</file>
         <file>images/nextframe.png</file>
         <file>images/nextframe_checked.png</file>
         <file>images/nextframe_disabled.png</file>
@@ -56,6 +61,11 @@
         <file>images/play_disabled.png</file>
         <file>images/play_hover.png</file>
         <file>images/play_pressed.png</file>
+        <file>images/previous.png</file>
+        <file>images/previous_checked.png</file>
+        <file>images/previous_disabled.png</file>
+        <file>images/previous_hover.png</file>
+        <file>images/previous_pressed.png</file>
         <file>images/stop.png</file>
         <file>images/stop_checked.png</file>
         <file>images/stop_disabled.png</file>
@@ -73,25 +83,46 @@
         <file>images/uparrow_pressed.png</file>
         <file>images/app.png</file>
         <file>images/aero.png</file>
+        <file>images/aero_thumbnail.png</file>
         <file>images/aero_black1.jpg</file>
+        <file>images/aero_black1_thumbnail.png</file>
         <file>images/aero_black2.jpg</file>
+        <file>images/aero_black2_thumbnail.png</file>
         <file>images/aero_blue1.jpg</file>
+        <file>images/aero_blue1_thumbnail.png</file>
         <file>images/aero_blue2.jpg</file>
+        <file>images/aero_blue2_thumbnail.png</file>
         <file>images/aero_brown1.jpg</file>
+        <file>images/aero_brown1_thumbnail.png</file>
         <file>images/aero_brown2.jpg</file>
+        <file>images/aero_brown2_thumbnail.png</file>
         <file>images/aero_green1.jpg</file>
+        <file>images/aero_green1_thumbnail.png</file>
         <file>images/aero_green2.jpg</file>
+        <file>images/aero_green2_thumbnail.png</file>
         <file>images/aero_lightblue1.jpg</file>
+        <file>images/aero_lightblue1_thumbnail.png</file>
         <file>images/aero_lightblue2.jpg</file>
+        <file>images/aero_lightblue2_thumbnail.png</file>
         <file>images/aero_orange1.jpg</file>
+        <file>images/aero_orange1_thumbnail.png</file>
         <file>images/aero_orange2.jpg</file>
+        <file>images/aero_orange2_thumbnail.png</file>
         <file>images/aero_pink1.jpg</file>
+        <file>images/aero_pink1_thumbnail.png</file>
         <file>images/aero_pink2.jpg</file>
+        <file>images/aero_pink2_thumbnail.png</file>
         <file>images/aero_purple1.jpg</file>
+        <file>images/aero_purple1_thumbnail.png</file>
         <file>images/aero_purple2.jpg</file>
+        <file>images/aero_purple2_thumbnail.png</file>
         <file>images/aero_red1.jpg</file>
+        <file>images/aero_red1_thumbnail.png</file>
         <file>images/aero_red2.jpg</file>
+        <file>images/aero_red2_thumbnail.png</file>
         <file>images/aero_yellow1.jpg</file>
+        <file>images/aero_yellow1_thumbnail.png</file>
         <file>images/aero_yellow2.jpg</file>
+        <file>images/aero_yellow2_thumbnail.png</file>
     </qresource>
 </RCC>

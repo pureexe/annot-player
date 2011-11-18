@@ -30,46 +30,58 @@ namespace { // anonymous
 
 QString
 Core::Cloud::
-Token::digestFromFile(const QString &fileName)
+Token::digestFromFile(const QString &input)
 {
-  DOUT("digestFromFile: enter:" << fileName);
+  DOUT("digestFromFile: enter:" << input);
 
-  QByteArray cloud;
-#ifdef Q_WS_WIN
-  QString deviceFileName = Disk::guessDeviceFileName(fileName);
-  if (Disk::isValidDeviceFileName(deviceFileName)) {
-    Disk disk(deviceFileName);
-    bool succeed = disk.open(QIODevice::ReadOnly);
-    if (!succeed) {
-      DOUT("digestFromFile: Failed to open device disk for hashing: " << fileName);
-      return QByteArray();
-    }
-    cloud = disk.read(DIGEST_SIZE);
-    disk.close();
+  QByteArray data;
+  QString filePath = input;
+  QFileInfo fi(input);
+  if (fi.isDir()) {
+    QString dir = fi.filePath();
+    filePath = dir + "/VIDEO_TS/VIDEO_TS.IFO";
+    if (!QFileInfo(filePath).exists())
+      filePath = dir + "/VIDEO_TS/VIDEO_TS.BUP";
+    if (!QFileInfo(filePath).exists())
+      filePath = QString();
   }
-  else
+
+#ifdef Q_WS_WIN
+  if (filePath.isEmpty()) {
+    QString deviceFileName = Disk::guessDeviceFileName(input);
+    if (Disk::isValidDeviceFileName(deviceFileName)) {
+      Disk disk(deviceFileName);
+      bool succeed = disk.open(QIODevice::ReadOnly);
+      if (!succeed) {
+        DOUT("digestFromFile: Failed to open device disk for hashing: " << input);
+        return QByteArray();
+      }
+      data = disk.read(DIGEST_SIZE);
+      disk.close();
+    }
+  } else
 #endif // Q_WS_WIN
-  {
-    QFile file(fileName);
+  if (!filePath.isEmpty()) {
+    QFile file(filePath);
     bool succeed = file.open(QIODevice::ReadOnly);
     if (!succeed) {
-      DOUT("digestFromFile: Failed to open file for hashing: " << fileName);
+      DOUT("digestFromFile: Failed to open file for hashing: " << filePath);
       return QByteArray();
     }
 
     if (file.size() <= DIGEST_SIZE)
-      cloud = file.readAll();
+      data = file.readAll();
     else
-      cloud = file.read(DIGEST_SIZE);
+      data = file.read(DIGEST_SIZE);
     file.close();
   }
 
-  if (cloud.isEmpty()) {
-    DOUT("digestFromFile: Error: get empty cloud to hash: " << fileName);
+  if (data.isEmpty()) {
+    DOUT("digestFromFile: Error: get empty data to hash: " << filePath);
     return QByteArray();
   }
 
-  QByteArray ret = DIGEST(cloud);
+  QByteArray ret = DIGEST(data);
   DOUT("digestFromFile: exit");
   return ret.toHex().toUpper();
 }

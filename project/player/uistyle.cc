@@ -7,9 +7,9 @@
 #ifdef USE_WIN_DWM
   #include "win/dwm/dwm.h"
 #endif // USE_WIN_DWM
-#ifdef USE_WIN_QTWIN
+#ifdef Q_WS_WIN
   #include "win/qtwin/qtwin.h"
-#endif USE_WIN_QTWIN
+#endif // Q_WS_WIN
 #include <QtGui>
 
 // - Constructions -
@@ -30,55 +30,9 @@ UiStyle::setTheme(int tid)
   invalidateBackground();
 }
 
-bool
-UiStyle::isAeroAvailable()
+const char*
+UiStyle::backgroundImagePath() const
 {
-  return false;
-  return
-#ifdef Q_WS_WIN
-  true
-#ifdef USE_WIN_QTWIN
-  && QtWin::isWindowsVistaOrLater()
-#endif // USE_WIN_QTWIN
-#if USE_WIN_DWM
-  && Dwm::isCompositionEnabled()
-#endif // USE_WIN_DWM
-#else
-  false
-#endif Q_WS_WIN;
-  ;
-}
-
-// - Styles -
-
-void
-UiStyle::setMainWindowStyle(QWidget *w)
-{
-  Q_ASSERT(w);
-#ifdef USE_WIN_DWM
-  if(isAeroAvailable()) {
-    w->setAttribute(Qt::WA_TranslucentBackground);
-    w->setAttribute(Qt::WA_NoSystemBackground);
-
-    setWindowDwmEnabled(w, true);
-    return;
-  }
-#endif // USE_WIN_DWM
-  //if (qss)
-  //  w->setStyleSheet(SS_BACKGROUND_CLASS(MainWindow));
-  setBackground(w, true); // persistent = true
-#ifdef Q_WS_WIN
-  w->setWindowOpacity(G_WINDOW_OPACITY);
-#endif // Q_WS_WIN
-}
-
-void
-UiStyle::setBackground(QWidget *w, bool persistent)
-{
-  Q_ASSERT(w);
-  if (!w)
-    return;
-
   int t = theme_;
   if (t == RandomTheme)
     t = ::qrand() % (ThemeCount - 2) + 2; // eliminate first 2 themes (default and random)
@@ -113,6 +67,54 @@ UiStyle::setBackground(QWidget *w, bool persistent)
   default: rc = RC_IMAGE_AERO;
   }
 
+  return rc;
+}
+
+bool
+UiStyle::isAeroAvailable()
+{
+  return
+#ifdef Q_WS_WIN
+  QtWin::isWindowsVistaOrLater()
+#if USE_WIN_DWM
+  && Dwm::isCompositionEnabled()
+#endif // USE_WIN_DWM
+#else
+  false
+#endif // Q_WS_WIN;
+  ;
+}
+
+// - Styles -
+
+void
+UiStyle::setMainWindowStyle(QWidget *w)
+{
+  Q_ASSERT(w);
+#ifdef USE_WIN_DWM
+  if(isAeroAvailable()) {
+    w->setAttribute(Qt::WA_TranslucentBackground);
+    w->setAttribute(Qt::WA_NoSystemBackground);
+
+    setWindowDwmEnabled(w, true);
+    return;
+  }
+#endif // USE_WIN_DWM
+  //if (qss)
+  //  w->setStyleSheet(SS_BACKGROUND_CLASS(MainWindow));
+  setWindowBackground(w, true); // persistent = true
+  w->setWindowOpacity(G_WINDOW_OPACITY);
+}
+
+void
+UiStyle::setWindowBackground(QWidget *w, bool persistent)
+{
+  Q_ASSERT(w);
+  if (!w)
+    return;
+
+  const char *rc = backgroundImagePath();
+
   QPalette palette;
   palette.setBrush(QPalette::Window, QPixmap(rc));
 
@@ -120,17 +122,51 @@ UiStyle::setBackground(QWidget *w, bool persistent)
   w->setPalette(palette);
 
   if (persistent) {
-    if (!widgets_.contains(w))
-      widgets_.append(w);
+    if (!windows_.contains(w))
+      windows_.append(w);
+  }
+}
+
+void
+UiStyle::setMenuBackground(QMenu *m, bool persistent)
+{
+  Q_ASSERT(m);
+  if (!m)
+    return;
+
+#ifdef Q_WS_MAC
+  if (theme_ == DefaultTheme)
+    m->setStyleSheet(QString());
+  else
+#endif // Q_WS_MAC
+  {
+    QString rc = backgroundImagePath();
+    m->setStyleSheet(
+      SS_CONTEXTMENU
+      SS_BEGIN(QMenu)
+        SS_BACKGROUND_IMAGE_URL_BEGIN
+          + rc +
+        SS_BACKGROUND_IMAGE_URL_END
+      SS_END
+    );
+  }
+
+  if (persistent) {
+    if (!menus_.contains(m))
+      menus_.append(m);
   }
 }
 
 void
 UiStyle::invalidateBackground()
 {
-  if (!widgets_.isEmpty())
-    foreach (QWidget *w, widgets_)
-      setBackground(w, false); // persistent = false
+  if (!windows_.isEmpty())
+    foreach (QWidget *w, windows_)
+      setWindowBackground(w, false); // persistent = false
+
+  if (!menus_.isEmpty())
+    foreach (QMenu *m, menus_)
+      setMenuBackground(m, false); // persistent = false
 }
 
 #ifdef USE_WIN_DWM
@@ -187,10 +223,8 @@ UiStyle::setWindowStyle(QWidget *w, bool persistent)
   //w->setAttribute(Qt::WA_StyledBackground, false);
   //w->setAutoFillBackground(true);
 
-  setBackground(w, persistent);
-#ifdef Q_WS_WIN
+  setWindowBackground(w, persistent);
   w->setWindowOpacity(G_WINDOW_OPACITY);
-#endif // Q_WS_WIN
 
   //if (qss)
   //  w->setStyleSheet(SS_WINDOW);
@@ -230,66 +264,54 @@ UiStyle::setMenuStyle(QMenu *menu)
 */
 
 void
-UiStyle::setContextMenuStyle(QMenu *menu, bool persistent)
+UiStyle::setContextMenuStyle(QMenu *m, bool persistent)
 {
-  Q_ASSERT(menu);
-  if (!menu)
+  Q_ASSERT(m);
+  if (!m)
     return;
 
 #ifdef USE_WIN_DWM
   if (isAeroAvailable()) {
-    DWM_ENABLE_ONETIME_AERO_WIDGET(menu);
+    DWM_ENABLE_ONETIME_AERO_WIDGET(m);
     //if (qss)
-    //  menu->setStyleSheet(SS_CONTEXTMENU_DWM);
+    //  m->setStyleSheet(SS_CONTEXTMENU_DWM);
 
-    QGraphicsColorizeEffect *effect = new QGraphicsColorizeEffect(menu);
+    QGraphicsColorizeEffect *effect = new QGraphicsColorizeEffect(m);
     effect->setColor(G_CONTEXTMENU_COLOR);
     effect->setStrength(G_CONTEXTMENU_COLOR_STRENGTH);
-    menu->setGraphicsEffect(effect);
+    m->setGraphicsEffect(effect);
 
     return;
   }
 #endif // USE_WIN_DWM
 
-#ifdef Q_WS_WIN
-  // Window XP
-  menu->setStyleSheet(SS_CONTEXTMENU);
-  setBackground(menu, persistent); // persistent = false
+  setMenuBackground(m, persistent);
+  m->setWindowOpacity(G_CONTEXTMENU_OPACITY);
 
-  //QGraphicsOpacityEffect *transparent = new QGraphicsOpacityEffect(menu);
-  //menu->setGraphicsEffect(transparent);
-  menu->setWindowOpacity(G_CONTEXTMENU_OPACITY);
+  //QGraphicsOpacityEffect *transparent = new QGraphicsOpacityEffect(m);
+  //m->setGraphicsEffect(transparent);
 
-  //QGraphicsBlurEffect *blur = new QGraphicsBlurEffect(menu);
-  //menu->setGraphicsEffect(blur);
-
-#else
-  // Do nothing for Mac/Linux
-  //if (qss)
-  //  menu->setStyleSheet(SS_CONTEXTMENU);
-  Q_UNUSED(persistent);
-#endif // Q_WS_WIN
+  //QGraphicsBlurEffect *blur = new QGraphicsBlurEffect(m);
+  //m->setGraphicsEffect(blur);
 }
 
 void
-UiStyle::setToolButtonStyle(QToolButton *button, bool qss)
+UiStyle::setToolButtonStyle(QToolButton *button)
 {
   Q_ASSERT(button);
   if (!button)
     return;
 
-  Q_UNUSED(qss);
-
-#ifdef Q_WS_WIN
+//#ifdef Q_WS_WIN
   QGraphicsBlurEffect *blur = new QGraphicsBlurEffect(this);
   blur->setBlurHints(QGraphicsBlurEffect::PerformanceHint);
   blur->setBlurRadius(G_TOOLBUTTON_BLUR_RADIUS);
   button->setGraphicsEffect(blur);
-#endif // Q_WS_WIN
+//#endif // Q_WS_WIN
 }
 
 void
-UiStyle::setComboBoxStyle(QComboBox *w, bool qss)
+UiStyle::setComboBoxStyle(QComboBox *w)
 {
   Q_ASSERT(w);
   if (!w)
@@ -303,8 +325,7 @@ UiStyle::setComboBoxStyle(QComboBox *w, bool qss)
 #endif
   */
 
-  if (qss)
-    w->setStyleSheet(SS_COMBOBOX);
+  w->setStyleSheet(SS_COMBOBOX);
 
   /*
 #ifdef Q_WS_WIN

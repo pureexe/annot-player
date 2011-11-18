@@ -14,6 +14,26 @@
 
 namespace MainWindow_slot_ { // anonymous slot_
 
+  class OpenSource : public QObject {
+    Q_OBJECT
+    typedef QObject Base;
+
+    MainWindow *w_;
+    QString url_;
+
+  public:
+    OpenSource(const QString &url, MainWindow *w)
+      : Base(w), w_(w), url_(url)
+    { Q_ASSERT(w_); }
+
+  public slots:
+    void openSource()
+    {
+      w_->openSource(url_);
+      QTimer::singleShot(0, this, SLOT(deleteLater()));
+    }
+  };
+
 #ifdef USE_MODE_SIGNAL
   class OpenProcessId : public QObject
   {
@@ -25,7 +45,7 @@ namespace MainWindow_slot_ { // anonymous slot_
 
   public:
     OpenProcessId(ulong pid, MainWindow *w)
-      : Base(w), pid_(pid), w_(w)
+      : Base(w), w_(w), pid_(pid)
     { Q_ASSERT(w_); Q_ASSERT(pid_); }
 
   public slots:
@@ -116,6 +136,20 @@ namespace { namespace task_ { // anonymous
     setToken(const QString &t, MainWindow *w) : w_(w), t_(t) { Q_ASSERT(w_); }
   };
 
+#define CAST(_cast, _entity) \
+  class _cast##_entity##WithId : public QRunnable \
+  { \
+    MainWindow *w_; \
+    qint64 id_; \
+    virtual void run() { w_->_cast##_entity##WithId(id_, false); } \
+  public: \
+    _cast##_entity##WithId(qint64 id, MainWindow *w) : w_(w), id_(id) { Q_ASSERT(w_); } \
+  };
+
+  CAST(bless, Token)
+  CAST(curse, Token)
+#undef CAST
+
 } } // anonymous namespace task_
 
 // - Hook -
@@ -138,32 +172,32 @@ protected:
   eventFilter(QObject *hook, QEvent *event) // \override  Hook event filter.
   {
     // jichi 8/2/2011: Ugly fix for cancelling context menu.
-    static bool contextMenuPoppedUp = false;
+    //static bool contextMenuPoppedUp = false;
 
     if (event)
       switch (event->type()) {
       case QEvent::ContextMenu:
-        contextMenuPoppedUp = true;
+        //contextMenuPoppedUp = true;
         QCoreApplication::sendEvent(w_, event);
         return true;
 
         // Forward
       case QEvent::MouseButtonDblClick:
-        contextMenuPoppedUp = false;
+        //contextMenuPoppedUp = false;
       case QEvent::MouseMove:
       case QEvent::Wheel:
         QCoreApplication::sendEvent(w_, event);
         return true;
 
       case QEvent::MouseButtonPress: {
-          QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event);
-          Q_ASSERT(mouseEvent);
-          if (mouseEvent->button() == Qt::LeftButton
-              && !contextMenuPoppedUp)
-            if (w_->isPlaying() || w_->isEditing())
-              w_->pause();
+          //QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event);
+          //Q_ASSERT(mouseEvent);
+          //if (mouseEvent->button() == Qt::LeftButton
+          //    && !contextMenuPoppedUp)
+          //  if (w_->isPlaying() || w_->isEditing())
+          //    w_->pause();
         }
-        contextMenuPoppedUp = false;
+        //contextMenuPoppedUp = false;
       case QEvent::MouseButtonRelease:
         event->accept();
         return true;

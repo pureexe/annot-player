@@ -5,48 +5,37 @@
 // 7/12/2011
 
 #include <QWidget>
-#include <QDockWidget>
 
 namespace Core { class EventListener; }
 
-// Dock widget for OSDWindow
-class OSDDock : public QDockWidget
+///  Provide an Osd layer
+class OsdWindow : public QWidget
 {
   Q_OBJECT
-  typedef OSDDock Self;
-  typedef QDockWidget Base;
-
-public:
-  explicit OSDDock(QWidget *parent = 0);
-
-  virtual void setVisible(bool visible); // stop polling when hidden
-protected:
-  virtual void closeEvent(QCloseEvent *event); ///< override
-};
-
-///  Provide an OSD layer
-class OSDWindow : public QWidget
-{
-  Q_OBJECT
-  typedef OSDWindow Self;
+  typedef OsdWindow Self;
   typedef QWidget Base;
 
   Core::EventListener *listener_;
 
 public:
-  explicit OSDWindow(QWidget *parent = 0);
+  explicit OsdWindow(QWidget *parent = 0);
 
   Core::EventListener *eventListener() const;
   void setEventListener(Core::EventListener *listener);
 
+public slots:
+  void showInOsdMode();
+
 protected:
   void forward(QEvent *event);
 
-  virtual void contextMenuEvent(QContextMenuEvent *event);
-  virtual void mouseMoveEvent(QMouseEvent *event);
-  virtual void mousePressEvent(QMouseEvent *event);
-  virtual void mouseReleaseEvent(QMouseEvent *event);
-  virtual void mouseDoubleClickEvent(QMouseEvent *event);
+  virtual void contextMenuEvent(QContextMenuEvent *event); ///< override
+  virtual void mouseMoveEvent(QMouseEvent *event); ///< override
+  virtual void mousePressEvent(QMouseEvent *event); ///< override
+  virtual void mouseReleaseEvent(QMouseEvent *event); ///< override
+  virtual void mouseDoubleClickEvent(QMouseEvent *event); ///< override
+
+  virtual void closeEvent(QCloseEvent *event); ///< override
 };
 
 #endif // OSDWINDOW_H

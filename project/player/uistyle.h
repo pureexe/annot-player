@@ -20,6 +20,8 @@ class UiStyle : public QObject
   typedef UiStyle Self;
   typedef QObject Base;
 
+  // - Constructions -
+
 public:
   enum Theme {
     DefaultTheme = 0, RandomTheme,
@@ -40,21 +42,25 @@ public:
 public:
   static Self *globalInstance()               { Q_ASSERT(global_); return global_; }
   static void setGlobalInstance(Self *global) { global_ = global; }
+  static bool isAeroAvailable();
 public:
   explicit UiStyle(QObject *parent = 0);
 
   Theme theme() const;
   void setTheme(int tid);
 
+  // - Stylers -
+
 public:
   void setMainWindowStyle(QWidget *w);
   void setWindowStyle(QWidget *w, bool persistent = true);
   //void setMenuStyle(QMenu *menu);
   void setContextMenuStyle(QMenu *menu, bool persistent);
-  void setToolButtonStyle(QToolButton *button, bool useQss = true);
-  void setComboBoxStyle(QComboBox *box, bool useQss = true);
+  void setToolButtonStyle(QToolButton *button);
+  void setComboBoxStyle(QComboBox *box);
 
-  void setBackground(QWidget *w, bool persistent); ///< If the widget is persistant
+  void setWindowBackground(QWidget *w, bool persistent); ///< If the widget is persistant
+  void setMenuBackground(QMenu *m, bool persistent); ///< If the widget is persistant
 
 public slots:
   void invalidateBackground();
@@ -65,13 +71,16 @@ public slots:
   void setWindowDwmEnabled(WId wid, bool t = true);
 #endif // USE_WIN_DWM
 
-public:
-  static bool isAeroAvailable();
+  // - Implementations -
+
+protected:
+  const char *backgroundImagePath() const; // rc for current theme
 
 private:
   static Self *global_;
   Theme theme_;
-  QList<QWidget*> widgets_; // widgets with customized background
+  QList<QWidget*> windows_; // windows with customized background
+  QList<QMenu*> menus_; // menus with customized background
 };
 
 #endif // UISTYLE_H

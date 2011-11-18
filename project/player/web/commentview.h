@@ -18,7 +18,8 @@ class CommentView: public CommentViewBase
 
   // - Constructions -
 public:
-  explicit CommentView(QWidget *parent = 0);
+  explicit
+  CommentView(QWidget *parent = 0);
 
   // - Properties -
 public:

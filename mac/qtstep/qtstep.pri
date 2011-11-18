@@ -7,7 +7,14 @@ HEADERS += $$PWD/qtstep.h
 
 SOURCES += $$PWD/qtstep.mm
 
-QT      += core
+QT      += core gui
 LIBS    += -framework Foundation -framework AppKit
+
+# Carbon
+# TO BE REPLACED WITH Cocoa
+# See: http://developer.apple.com/library/mac/#documentation/MacOSX/Conceptual/BPFrameworks/Tasks/IncludingFrameworks.html
+#DEFINES += USE_MAC_CARBON
+#INCLUDEPATH += /Developer/Headers/FlatCarbon
+#LIBS      += -framework Carbon
 
 # EOF

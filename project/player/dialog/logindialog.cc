@@ -14,10 +14,14 @@
 using namespace Core::Cloud;
 using namespace Logger;
 
-// - Panel -
+// - Constructions -
+
 LoginDialog::LoginDialog(QWidget *parent)
   : Base(parent)
 {
+#ifdef Q_WS_MAC
+  setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
+#endif // Q_WS_MAC
   setWindowTitle(TR(T_TITLE_LOGIN));
   UiStyle::globalInstance()->setWindowStyle(this);
   setContentsMargins(0, 0, 0, 0);

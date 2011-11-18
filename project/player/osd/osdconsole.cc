@@ -8,22 +8,22 @@
 #include "uistyle.h"
 #include <QtGui>
 
-#define DEBUG "OSDConsole"
+#define DEBUG "OsdConsole"
 #include "module/debug/debug.h"
 
 // - Constructions -
 
-OSDConsole *OSDConsole::global_ = 0;
+OsdConsole *OsdConsole::global_ = 0;
 
-OSDConsole*
-OSDConsole::globalInstance()
+OsdConsole*
+OsdConsole::globalInstance()
 { return global_; }
 
 void
-OSDConsole::setGlobalInstance(Self *global)
+OsdConsole::setGlobalInstance(Self *global)
 { global_ = global; }
 
-OSDConsole::OSDConsole(QWidget *parent)
+OsdConsole::OsdConsole(QWidget *parent)
   : Base(parent), dragPos_(BAD_POS)
 {
   setContentsMargins(0, 0, 0, 0);
@@ -40,7 +40,7 @@ OSDConsole::OSDConsole(QWidget *parent)
 }
 
 void
-OSDConsole::createActions()
+OsdConsole::createActions()
 {
 #define MAKE_ACTION(_action, _styleid, _slot) \
   _action = new QAction(QIcon(RC_IMAGE_##_styleid), TR(T_MENUTEXT_##_styleid), this); \
@@ -54,18 +54,18 @@ OSDConsole::createActions()
 }
 
 void
-OSDConsole::createMenus()
+OsdConsole::createMenus()
 {
   contextMenu_ = new QMenu(this);
   UiStyle::globalInstance()->setContextMenuStyle(contextMenu_, true); // persistent = true
 }
 
 void
-OSDConsole::setAutoClearInterval(int msecs)
+OsdConsole::setAutoClearInterval(int msecs)
 { timer_->setInterval(msecs); }
 
 void
-OSDConsole::restartAutoClearTimer()
+OsdConsole::restartAutoClearTimer()
 {
   if (timer_->isActive())
     timer_->stop();
@@ -73,20 +73,20 @@ OSDConsole::restartAutoClearTimer()
 }
 
 void
-OSDConsole::stopAutoClearTimer()
+OsdConsole::stopAutoClearTimer()
 {
   if (timer_->isActive())
     timer_->stop();
 }
 
 bool
-OSDConsole::isAutoClearTimerActive() const
+OsdConsole::isAutoClearTimerActive() const
 { return timer_->isActive(); }
 
 // - Output -
 
 void
-OSDConsole::append(const QString &t)
+OsdConsole::append(const QString &t)
 {
   mutex_.lock();
   emit restartAutoClearTimerRequested();
@@ -95,15 +95,15 @@ OSDConsole::append(const QString &t)
   mutex_.unlock();
 }
 
-OSDConsole&
-OSDConsole::operator<<(const QString &text)
+OsdConsole&
+OsdConsole::operator<<(const QString &text)
 { append(text); return *this; }
 
 // - Events -
 
 /*
 void
-OSDConsole::mousePressEvent(QMouseEvent *event)
+OsdConsole::mousePressEvent(QMouseEvent *event)
 {
   DOUT("mousePressEvent: enter");
   restartAutoClearTimer();
@@ -117,7 +117,7 @@ OSDConsole::mousePressEvent(QMouseEvent *event)
 }
 
 void
-OSDConsole::mouseMoveEvent(QMouseEvent *event)
+OsdConsole::mouseMoveEvent(QMouseEvent *event)
 {
   DOUT("mouseMoveEvent: enter");
   restartAutoClearTimer();
@@ -132,7 +132,7 @@ OSDConsole::mouseMoveEvent(QMouseEvent *event)
 }
 
 void
-OSDConsole::mouseReleaseEvent(QMouseEvent *event)
+OsdConsole::mouseReleaseEvent(QMouseEvent *event)
 {
   DOUT("mouseReleaseEvent: begin");
   restartAutoClearTimer();
@@ -144,7 +144,7 @@ OSDConsole::mouseReleaseEvent(QMouseEvent *event)
 }
 
 void
-OSDConsole::mouseDoubleClickEvent(QMouseEvent *event)
+OsdConsole::mouseDoubleClickEvent(QMouseEvent *event)
 {
   DOUT("mouseDoubleClickEvent: begin");
   Base::mouseDoubleClickEvent(event);
@@ -152,7 +152,7 @@ OSDConsole::mouseDoubleClickEvent(QMouseEvent *event)
 }
 
 void
-OSDConsole::contextMenuEvent(QContextMenuEvent *event)
+OsdConsole::contextMenuEvent(QContextMenuEvent *event)
 {
   DOUT("contexrMenuEvent: enter");
   Base::contextMenuEvent(event);
@@ -174,7 +174,7 @@ OSDConsole::contextMenuEvent(QContextMenuEvent *event)
 // - Copy && paste -
 
 void
-OSDConsole::copyToClipboard() const
+OsdConsole::copyToClipboard() const
 {
   QClipboard *clipboard = QApplication::clipboard();
   if (clipboard)
@@ -182,7 +182,7 @@ OSDConsole::copyToClipboard() const
 }
 
 void
-OSDConsole::pasteFromClipboard()
+OsdConsole::pasteFromClipboard()
 {
   QClipboard *clipboard = QApplication::clipboard();
   if (clipboard)

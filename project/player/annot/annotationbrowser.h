@@ -111,6 +111,7 @@ protected slots:
 protected:
   static void setHeaderData(QAbstractItemModel *model);
 
+public:  // TO BE MOVED TO A COMMON PLACE
   static QString languageToString(int lang);
   static QStringList annotationFlagsToStringList(int flags);
   static QString annotationStatusToString(int flags);

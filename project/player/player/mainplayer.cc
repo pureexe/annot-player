@@ -5,7 +5,7 @@
 #include "stylesheet.h"
 #include <QtGui>
 
-// - MainPlayerDock -
+// + MainPlayerDock +
 
 MainPlayerDock::MainPlayerDock(QWidget *parent)
   : Base(parent)
@@ -27,7 +27,7 @@ MainPlayerDock::setVisible(bool visible)
   Base::setVisible(visible);
 }
 
-// - Constructions -
+// + MainPlayerUi +
 
 MainPlayerUi::MainPlayerUi(SignalHub *hub, Player *player, ServerAgent *server, QWidget *parent)
   : Base(hub, player, server, parent)

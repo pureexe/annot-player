@@ -7,11 +7,11 @@
 #include <QtGlobal>
 
 #ifdef WEBBROWSER_LIB
-  #define WEBBROWSER_EXPORT Q_DECL_EXPORT
+  #define WEBBROWSER_API Q_DECL_EXPORT
 #elif defined(WEBBROWSER_STATICLIB)
-  #define WEBBROWSER_EXPORT
+  #define WEBBROWSER_API
 #else
-  #define WEBBROWSER_EXPORT Q_DECL_IMPORT
+  #define WEBBROWSER_API Q_DECL_IMPORT
 #endif // WEBBROWSER_LIB
 
 #define WEBBROWSER_HOMEPAGE     "http://www.google.com"

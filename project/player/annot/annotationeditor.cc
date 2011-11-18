@@ -15,7 +15,7 @@
 #include <boost/tuple/tuple.hpp>
 #include <QtGui>
 
-#define DEBUG "AnnotationEditor"
+//#define DEBUG "AnnotationEditor"
 #include "module/debug/debug.h"
 
 #define WINDOW_FLAGS ( \
@@ -40,7 +40,6 @@ AnnotationEditor::AnnotationEditor(QWidget *parent)
   UiStyle::globalInstance()->setWindowStyle(this);
 
   textEdit_ = new TextEdit;
-  textEdit_->setStyleSheet(SS_TEXTEDIT);
 
   createActions();
   createRibons();
@@ -265,7 +264,7 @@ AnnotationEditor::createRibons()
 
   // Header
 
-  MAKE_RIBON_BUTTON(codeRibonButton_, tr("code"), SLOT(setCodeMode()))
+  MAKE_RIBON_BUTTON(codeRibonButton_, tr("tex"), SLOT(setCodeMode()))
   MAKE_RIBON_BUTTON(htmlRibonButton_, tr("html"), SLOT(setHtmlMode()))
 
   formatButton_ = new Core::Gui::ToolButton; {

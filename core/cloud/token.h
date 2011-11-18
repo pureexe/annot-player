@@ -4,7 +4,7 @@
 // core/cloud/token.h
 // 8/7/2011
 
-#include "core/cloud/traits.h"
+//#include "core/cloud/traits.h"
 #include <QString>
 #include <QMetaType>
 #include <QList>
@@ -17,7 +17,13 @@ namespace Core { namespace Cloud {
 
     // - Types -
   public:
-    typedef Traits::Type Type;
+    enum TokenType {
+      TT_Null = 0x0,
+      TT_Video = 0x8,
+      TT_Audio = 0x9,
+      TT_Picture = 0xa,
+      TT_Program = 0xb
+    };
 
     enum TokenStatus {
       TS_Active = 0,
@@ -30,18 +36,18 @@ namespace Core { namespace Cloud {
 
     // - Properties -
 
-  private: qint32 type_;
-  public:
-    qint32 type() const                 { return type_; }
-    void setType(qint32 t)              { type_ = t; }
-    bool hasType() const                { return type_; }
-
     // id > 0: made by human; id < 0: made by doll
   private: qint64 id_;
   public:
     qint64 id() const                   { return id_; }
     void setId(qint64 id)               { id_ = id; }
     bool hasId() const                  { return id_; }
+
+  private: qint32 type_;
+  public:
+    qint32 type() const                 { return type_; }
+    void setType(qint32 t)              { type_ = t; }
+    bool hasType() const                { return type_; }
 
   private: qint64 userId_;
   public:
@@ -51,9 +57,15 @@ namespace Core { namespace Cloud {
 
   private: QString digest_;
   public:
-    QString digest() const              { return digest_; }
+    const QString &digest() const       { return digest_; }
     void setDigest(const QString &hex)  { digest_ = hex; }
     bool hasDigest() const              { return !digest_.isNull(); }
+
+  private: qint32 digestType_;
+  public:
+    qint32 digestType() const           { return digestType_; }
+    void setDigestType(qint32 type)     { digestType_ = type; }
+    bool hasDigestType() const          { return digestType_; }
 
   private: qint32 status_;
   public:
@@ -108,7 +120,7 @@ namespace Core { namespace Cloud {
     // - Constructions -
   public:
     Token()
-      : type_(0), id_(0), userId_(0), status_(0), flags_(0), createTime_(0),
+      : id_(0), type_(0), userId_(0), digestType_(0), status_(0), flags_(0), createTime_(0),
         blessed_(0), cursed_(0), blocked_(0), visited_(0)
     { }
 

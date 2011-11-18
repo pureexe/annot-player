@@ -282,10 +282,9 @@ ServerProxy::selectUser(const QString &userName, const QString &password)
       ret.setName(QString::fromStdString(*p->name));
     if (p->nickname)
       ret.setNickname(QString::fromStdString(*p->nickname));
-    if (p->email)
-      ret.setEmail(QString::fromStdString(*p->email));
-    if (p->password)
-      ret.setPassword(QString::fromStdString(*p->password));
+    //if (p->password)
+    //  ret.setPassword(QString::fromStdString(*p->password));
+    ret.setPassword(password);
   }
 
   DOUT("selectUser:exit: username =" << ret.name() << ", id =" << ret.id());
@@ -294,729 +293,712 @@ ServerProxy::selectUser(const QString &userName, const QString &password)
 
 // - Submissions -
 
-#define MAKE_submitToken(_type, _Type) \
-  qint64 \
-  ServerProxy::submit##_Type##Token(const Token &token, const QString &userName, const QString &password) \
-  { \
-    DOUT("submit" #_Type "Token:enter"); \
-\
-    if (!token.hasDigest() || token.digest().length() != Traits::TOKEN_DIGEST_LENGTH) { \
-      DOUT("submit" #_Type "Token:exit: error: invalid digest =" << token.digest()); \
-      return 0; \
-    } \
-\
-    tns__##_type##Token arg0; \
-    arg0.status = token.status(); \
-    arg0.flags = token.flags(); \
-    arg0.id = token.id(); \
-    arg0.userId = token.userId(); \
-    std::string digest = token.digest().toStdString(); \
-    arg0.digest = &digest; \
-    arg0.createTime = token.createTime(); \
-    arg0.blessedCount = token.blessedCount(); \
-    arg0.cursedCount = token.cursedCount(); \
-    arg0.blockedCount = token.blockedCount(); \
-    arg0.visitedCount = token.visitedCount(); \
-\
-    tns__submit##_Type##Token request; \
-    request.arg0 = &arg0; \
-    std::string s_userName = userName.toStdString(); \
-    request.userName = &s_userName; \
-    std::string s_password = password.toStdString(); \
-    request.password = &s_password; \
-\
-    tns__submit##_Type##TokenResponse response; \
-    mutex_.lock(); \
-    int err = proxy_->submit##_Type##Token(&request, &response); \
-    mutex_.unlock(); \
-    if (err) { \
-      DOUT("submit" #_Type "Token: soap error, err =" << err); \
-      emit soapError(err); \
-      DOUT("submit" #_Type "Token:exit"); \
-      return 0; \
-    } \
-\
-    qint64 ret = response.return_; \
-    DOUT("submit" #_Type "Token:exit: tid =" << ret); \
-    return ret; \
+qint64
+ServerProxy::submitToken(const Token &token, const QString &userName, const QString &password)
+{
+  DOUT("submitToken:enter");
+
+  if (!token.hasDigest() || token.digest().length() != Traits::TOKEN_DIGEST_LENGTH) {
+    DOUT("submitToken:exit: error: invalid digest =" << token.digest());
+    return 0;
   }
 
-  MAKE_submitToken(media, Media)
-  MAKE_submitToken(game, Game)
-#undef MAKE_submitToken
+  tns__mediaToken arg0;
+  arg0.status = token.status();
+  arg0.flags = token.flags();
+  arg0.id = token.id();
+  arg0.type = token.type();
+  arg0.userId = token.userId();
+  std::string digest = token.digest().toStdString();
+  arg0.digest = &digest;
+  arg0.digestType = token.digestType();
+  arg0.createTime = token.createTime();
+  arg0.blessedCount = token.blessedCount();
+  arg0.cursedCount = token.cursedCount();
+  arg0.blockedCount = token.blockedCount();
+  arg0.visitedCount = token.visitedCount();
 
-#define MAKE_submitTokenDigest(_type, _Type) \
-  qint64 \
-  ServerProxy::submit##_Type##TokenDigest(const QString &digest, const QString &userName, const QString &password) \
-  { \
-    DOUT("submit" #_Type "TokenDigest:enter"); \
-\
-    if (digest.length() != Traits::TOKEN_DIGEST_LENGTH) { \
-      DOUT("submit" #_Type "TokenDigest:exit: error: invalid digest =" << digest); \
-      return 0; \
-    } \
-\
-    tns__submit##_Type##TokenDigest request; \
-    std::string arg0 = digest.toStdString(); \
-    request.arg0 = &arg0; \
-    std::string s_userName = userName.toStdString(); \
-    request.userName = &s_userName; \
-    std::string s_password = password.toStdString(); \
-    request.password = &s_password; \
-\
-    tns__submit##_Type##TokenDigestResponse response; \
-    mutex_.lock(); \
-    int err = proxy_->submit##_Type##TokenDigest(&request, &response); \
-    mutex_.unlock(); \
-    if (err) { \
-      DOUT("submit" #_Type "TokenDigest: soap error, err =" << err); \
-      emit soapError(err); \
-      DOUT("submit" #_Type "TokenDigest:exit"); \
-      return 0; \
-    } \
-\
-    qint64 ret = response.return_; \
-    DOUT("submit" #_Type "Token:exit: tid =" << ret); \
-    return ret; \
+  tns__submitMediaToken request;
+  request.arg0 = &arg0;
+  std::string s_userName = userName.toStdString();
+  request.userName = &s_userName;
+  std::string s_password = password.toStdString();
+  request.password = &s_password;
+
+  tns__submitMediaTokenResponse response;
+  mutex_.lock();
+  int err = proxy_->submitMediaToken(&request, &response);
+  mutex_.unlock();
+  if (err) {
+    DOUT("submitToken: soap error, err =" << err);
+    emit soapError(err);
+    DOUT("submitToken:exit");
+    return 0;
   }
 
-  MAKE_submitTokenDigest(media, Media)
-  MAKE_submitTokenDigest(game, Game)
-#undef MAKE_submitTokenDigest
+  qint64 ret = response.return_;
+  DOUT("submitToken:exit: tid =" << ret);
+  return ret;
+}
 
-#define MAKE_submitAlias(_type, _Type) \
-  qint64 \
-  ServerProxy::submit##_Type##Alias(const Alias &alias, const QString &userName, const QString &password) \
-  { \
-    DOUT("submit" #_Type "Alias:enter"); \
-\
-    if (!alias.hasText()) { \
-      DOUT("submit" #_Type "Alias:exit: error: missing text"); \
-      return 0; \
-    } \
-    if (alias.text().size() > Traits::MAX_ANNOT_LENGTH) { \
-      DOUT("submit" #_Type "Alias:exit: error: text too long, size =" << alias.text().size()); \
-      return 0; \
-    } \
-\
-    tns__##_type##Alias arg0; \
-    arg0.status = alias.status(); \
-    arg0.flags = alias.flags(); \
-    arg0.id = alias.id(); \
-    arg0.tokenId = alias.tokenId(); \
-    arg0.userId = alias.userId(); \
-    arg0.type = alias.aliasType(); \
-    std::string text = alias.text().toStdString(); \
-    arg0.text = &text; \
-    arg0.language = alias.language(); \
-    arg0.updateTime = alias.updateTime(); \
-    arg0.blessedCount = alias.blessedCount(); \
-    arg0.cursedCount = alias.cursedCount(); \
-    arg0.blockedCount = alias.blockedCount(); \
-\
-    tns__submit##_Type##Alias request; \
-    request.arg0 = &arg0; \
-    std::string s_userName = userName.toStdString(); \
-    request.userName = &s_userName; \
-    std::string s_password = password.toStdString(); \
-    request.password = &s_password; \
-\
-    tns__submit##_Type##AliasResponse response; \
-    mutex_.lock(); \
-    int err = proxy_->submit##_Type##Alias(&request, &response); \
-    mutex_.unlock(); \
-    if (err) { \
-      DOUT("submit" #_Type "Alias: soap error, err =" << err); \
-      emit soapError(err); \
-      DOUT("submitAlias:exit"); \
-      return 0; \
-    } \
-\
-    qint64 ret = response.return_; \
-    DOUT("submit" #_Type "Alias:exit: aid =" << ret); \
-    return ret; \
+qint64
+ServerProxy::submitTokenDigest(const QString &digest, qint32 digestType, qint32 tokenType, const QString &userName, const QString &password)
+{
+  DOUT("submitTokenDigest:enter: tokenType =" << tokenType);
+  //if (tokenType < 0) {
+  //  DOUT("submitTokenDigest:exit: error: invalid tokenType =" << tokenType);
+  //  return 0;
+  //}
+  if (digest.length() != Traits::TOKEN_DIGEST_LENGTH) {
+    DOUT("submitTokenDigest:exit: error: invalid digest =" << digest);
+    return 0;
   }
 
-  MAKE_submitAlias(media, Media)
-  MAKE_submitAlias(game, Game)
-#undef MAKE_submitAlias
+  tns__submitMediaTokenDigest request;
+  std::string arg0 = digest.toStdString();
+  request.arg0 = &arg0;
+  request.arg1 = digestType;
+  request.arg2 = tokenType;
+  std::string s_userName = userName.toStdString();
+  request.userName = &s_userName;
+  std::string s_password = password.toStdString();
+  request.password = &s_password;
 
-#define MAKE_submitAliasTextWithTokenId(_type, _Type) \
-  qint64 \
-  ServerProxy::submit##_Type##AliasTextWithTokenId(const QString &text, qint32 aliasType, qint64 tokenId, const QString &userName, const QString &password) \
-  { \
-    DOUT("submit" #_Type "AliasTextWithTokenId:enter"); \
-\
-    if (text.isEmpty()) { \
-      DOUT("submit" #_Type "AliasTextWithTokenId:exit: error: missing text"); \
-      return 0; \
-    } \
-    if (text.size() > Traits::MAX_ANNOT_LENGTH) { \
-      DOUT("submit" #_Type "AliasTextWithTokenId:exit: error: text too long, size =" << text.size()); \
-      return 0; \
-    } \
-\
-    tns__submit##_Type##AliasTextWithTokenId request; \
-    std::string arg0 = text.toStdString(); \
-    request.arg0 = &arg0; \
-    request.arg1 = aliasType; \
-    request.arg2 = tokenId; \
-    std::string s_userName = userName.toStdString(); \
-    request.userName = &s_userName; \
-    std::string s_password = password.toStdString(); \
-    request.password = &s_password; \
-\
-    tns__submit##_Type##AliasTextWithTokenIdResponse response; \
-    mutex_.lock(); \
-    int err = proxy_->submit##_Type##AliasTextWithTokenId(&request, &response); \
-    mutex_.unlock(); \
-    if (err) { \
-      DOUT("submit" #_Type "AliasTextWithTokenId: soap error, err =" << err); \
-      emit soapError(err); \
-      DOUT("submit" #_Type "AliasTextWithTokenId:exit"); \
-      return 0; \
-    } \
-\
-    qint64 ret = response.return_; \
-    DOUT("submit" #_Type "AliasTextWithTokenId:exit: aid =" << ret); \
-    return ret; \
+  tns__submitMediaTokenDigestResponse response;
+  mutex_.lock();
+  int err = proxy_->submitMediaTokenDigest(&request, &response);
+  mutex_.unlock();
+  if (err) {
+    DOUT("submitTokenDigest: soap error, err =" << err);
+    emit soapError(err);
+    DOUT("submitTokenDigest:exit");
+    return 0;
   }
 
-  MAKE_submitAliasTextWithTokenId(media, Media)
-  MAKE_submitAliasTextWithTokenId(game, Game)
-#undef MAKE_submitAliasTextWithTokenId
+  qint64 ret = response.return_;
+  DOUT("submitToken:exit: tid =" << ret);
+  return ret;
+}
 
-#define MAKE_submitAliasTextAndTokenDigest(_type, _Type) \
-  qint64 \
-  ServerProxy::submit##_Type##AliasTextAndTokenDigest(const QString &text, qint32 aliasType, const QString &digest, const QString &userName, const QString &password) \
-  { \
-    DOUT("submit" #_Type "AliasTextAndTokenDigest:enter"); \
-\
-    if (text.isEmpty()) { \
-      DOUT("submit" #_Type "AliasTextAndTokenDigest:exit: error: missing text"); \
-      return 0; \
-    } \
-    if (text.size() > Traits::MAX_ANNOT_LENGTH) { \
-      DOUT("submit" #_Type "AliasTextAndTokenDigest:exit: error: text too long, size =" << text.size()); \
-      return 0; \
-    } \
-    if (digest.size() != Traits::TOKEN_DIGEST_LENGTH) { \
-      DOUT("submit" #_Type "AliasTextAndTokenDigest:exit: invalid digest size =" << digest.size()); \
-      return 0; \
-    } \
-\
-    tns__submit##_Type##AliasTextAndTokenDigest request; \
-    std::string arg0 = text.toStdString(); \
-    std::string arg2 = digest.toStdString(); \
-    request.arg0 = &arg0; \
-    request.arg1 = aliasType; \
-    request.arg2 = &arg2; \
-    std::string s_userName = userName.toStdString(); \
-    request.userName = &s_userName; \
-    std::string s_password = password.toStdString(); \
-    request.password = &s_password; \
-\
-    tns__submit##_Type##AliasTextAndTokenDigestResponse response; \
-    mutex_.lock(); \
-    int err = proxy_->submit##_Type##AliasTextAndTokenDigest(&request, &response); \
-    mutex_.unlock(); \
-    if (err) { \
-      DOUT("submit" #_Type "AliasTextAndTokenDigest: soap error, err =" << err); \
-      emit soapError(err); \
-      DOUT("submit" #_Type "AliasTextAndTokenDigest:exit"); \
-      return 0; \
-    } \
-\
-    qint64 ret = response.return_; \
-    DOUT("submit" #_Type "AliasTextAndTokenDigest:exit: aid =" << ret); \
-    return ret; \
+qint64
+ServerProxy::submitAlias(const Alias &alias, const QString &userName, const QString &password)
+{
+  DOUT("submitAlias:enter");
+
+  if (!alias.hasText()) {
+    DOUT("submitAlias:exit: error: missing text");
+    return 0;
+  }
+  if (alias.text().size() > Traits::MAX_ANNOT_LENGTH) {
+    DOUT("submitAlias:exit: error: text too long, size =" << alias.text().size());
+    return 0;
   }
 
-  MAKE_submitAliasTextAndTokenDigest(media, Media)
-  MAKE_submitAliasTextAndTokenDigest(game, Game)
-#undef MAKE_submitAliasTextAndTokenDigest
+  tns__mediaAlias arg0;
+  arg0.status = alias.status();
+  arg0.flags = alias.flags();
+  arg0.id = alias.id();
+  arg0.tokenId = alias.tokenId();
+  arg0.userId = alias.userId();
+  arg0.type = alias.type();
+  std::string text = alias.text().toStdString();
+  arg0.text = &text;
+  arg0.language = alias.language();
+  arg0.updateTime = alias.updateTime();
+  arg0.blessedCount = alias.blessedCount();
+  arg0.cursedCount = alias.cursedCount();
+  arg0.blockedCount = alias.blockedCount();
 
-#define MAKE_submitAnnotation(_type, _Type) \
-  qint64 \
-  ServerProxy::submit##_Type##Annotation(const Annotation &annot, const QString &userName, const QString &password) \
-  { \
-    DOUT("submit" #_Type "Annotation:enter"); \
-\
-    if (!annot.hasText()) { \
-      DOUT("submit" #_Type "Annotation:exit: error: missing text"); \
-      return 0; \
-    } \
-    if (annot.text().size() > Traits::MAX_ANNOT_LENGTH) { \
-      DOUT("submit" #_Type "Annotation:exit: error: text too long, size =" << annot.text().size()); \
-      return 0; \
-    } \
-\
-    tns__##_type##Annotation arg0; \
-    arg0.status = annot.status(); \
-    arg0.flags = annot.flags(); \
-    arg0.id = annot.id(); \
-    arg0.tokenId = annot.tokenId(); \
-    arg0.userId = annot.userId(); \
-    std::string userAlias = annot.userAlias().toStdString(); \
-    arg0.userAlias = &userAlias; \
-    arg0.pos = annot.pos(); \
-    arg0.posType = annot.posType(); \
-    std::string text = annot.text().toStdString(); \
-    arg0.text = &text; \
-    arg0.language = annot.language(); \
-    arg0.createTime = annot.createTime(); \
-    arg0.updateTime = annot.updateTime(); \
-    arg0.blessedCount = annot.blessedCount(); \
-    arg0.cursedCount = annot.cursedCount(); \
-    arg0.blockedCount = annot.blockedCount(); \
-\
-    tns__submit##_Type##Annotation request; \
-    request.arg0 = &arg0; \
-    std::string s_userName = userName.toStdString(); \
-    request.userName = &s_userName; \
-    std::string s_password = password.toStdString(); \
-    request.password = &s_password; \
-\
-    tns__submit##_Type##AnnotationResponse response; \
-    mutex_.lock(); \
-    int err = proxy_->submit##_Type##Annotation(&request, &response); \
-    mutex_.unlock(); \
-    if (err) { \
-      DOUT("submit" #_Type "Annotation: soap error, err =" << err); \
-      emit soapError(err); \
-      DOUT("submit" #_Type "Annotation:exit"); \
-      return 0; \
-    } \
-\
-    qint64 ret = response.return_; \
-    DOUT("submit" #_Type "Annotation:exit: aid =" << ret); \
-    return ret; \
+  tns__submitMediaAlias request;
+  request.arg0 = &arg0;
+  std::string s_userName = userName.toStdString();
+  request.userName = &s_userName;
+  std::string s_password = password.toStdString();
+  request.password = &s_password;
+
+  tns__submitMediaAliasResponse response;
+  mutex_.lock();
+  int err = proxy_->submitMediaAlias(&request, &response);
+  mutex_.unlock();
+  if (err) {
+    DOUT("submitAlias: soap error, err =" << err);
+    emit soapError(err);
+    DOUT("submitAlias:exit");
+    return 0;
   }
 
-  MAKE_submitAnnotation(media, Media)
-  MAKE_submitAnnotation(game, Game)
-#undef MAKE_submitAnnotation
+  qint64 ret = response.return_;
+  DOUT("submitAlias:exit: aid =" << ret);
+  return ret;
+}
 
-#define MAKE_submitAnnotationTextWithTokenId(_type, _Type) \
-  qint64 \
-  ServerProxy::submit##_Type##AnnotationTextWithTokenId(const QString &text, qint64 pos, qint32 posType, qint64 tokenId, const QString &userName, const QString &password) \
-  { \
-    DOUT("submit" #_Type "AnnotationTextWithTokenId:enter"); \
-\
-    if (text.isEmpty()) { \
-      DOUT("submit" #_Type "AnnotationTextWithTokenId:exit: error: missing text"); \
-      return 0; \
-    } \
-    if (text.size() > Traits::MAX_ANNOT_LENGTH) { \
-      DOUT("submit" #_Type "AnnotationTextWithTokenId:exit: error: text too long, size =" << text.size()); \
-      return 0; \
-    } \
-\
-    tns__submit##_Type##AnnotationTextWithTokenId request; \
-    std::string arg0 = text.toStdString(); \
-    request.arg0 = &arg0; \
-    request.arg1 = pos; \
-    request.arg2 = posType; \
-    request.arg3 = tokenId; \
-    std::string s_userName = userName.toStdString(); \
-    request.userName = &s_userName; \
-    std::string s_password = password.toStdString(); \
-    request.password = &s_password; \
-\
-    tns__submit##_Type##AnnotationTextWithTokenIdResponse response; \
-    mutex_.lock(); \
-    int err = proxy_->submit##_Type##AnnotationTextWithTokenId(&request, &response); \
-    mutex_.unlock(); \
-    if (err) { \
-      DOUT("submit" #_Type "AnnotationTextWithTokenId: soap error, err =" << err); \
-      emit soapError(err); \
-      DOUT("submit" #_Type "AnnotationTextWithTokenId:exit"); \
-      return 0; \
-    } \
-\
-    qint64 ret = response.return_; \
-    DOUT("submit" #_Type "AnnotationTextWithTokenId:exit: aid =" << ret); \
-    return ret; \
+qint64
+ServerProxy::submitAliasTextWithTokenId(const QString &text, qint32 type, qint64 tokenId, const QString &userName, const QString &password)
+{
+  DOUT("submitAliasTextWithTokenId:enter");
+
+  if (text.isEmpty()) {
+    DOUT("submitAliasTextWithTokenId:exit: error: missing text");
+    return 0;
+  }
+  if (text.size() > Traits::MAX_ANNOT_LENGTH) {
+    DOUT("submitAliasTextWithTokenId:exit: error: text too long, size =" << text.size());
+    return 0;
   }
 
-  MAKE_submitAnnotationTextWithTokenId(media, Media)
-  MAKE_submitAnnotationTextWithTokenId(game, Game)
-#undef MAKE_submitAnnotationText
+  tns__submitMediaAliasTextWithTokenId request;
+  std::string arg0 = text.toStdString();
+  request.arg0 = &arg0;
+  request.arg1 = type;
+  request.arg2 = tokenId;
+  std::string s_userName = userName.toStdString();
+  request.userName = &s_userName;
+  std::string s_password = password.toStdString();
+  request.password = &s_password;
 
-#define MAKE_submitAnnotationTextAndTokenDigest(_type, _Type) \
-  qint64 \
-  ServerProxy::submit##_Type##AnnotationTextAndTokenDigest(const QString &text, qint64 pos, qint32 posType, const QString &digest, const QString &userName, const QString &password) \
-  { \
-    DOUT("submit" #_Type "AnnotationTextAndTokenDigest:enter"); \
-\
-    if (text.isEmpty()) { \
-      DOUT("submit" #_Type "AnnotationTextAndTokenDigest:exit: error: missing text"); \
-      return 0; \
-    } \
-    if (text.size() > Traits::MAX_ANNOT_LENGTH) { \
-      DOUT("submit" #_Type "AnnotationTextAndTokenDigest:exit: error: text too long, size =" << text.size()); \
-      return 0; \
-    } \
-    if (digest.size() != Traits::TOKEN_DIGEST_LENGTH) { \
-      DOUT("submit" #_Type "AnnotationTextAndTokenDigest:exit: error: text too long, size =" << text.size()); \
-      return 0; \
-    } \
-\
-    tns__submit##_Type##AnnotationTextAndTokenDigest request; \
-    std::string arg0 = text.toStdString(); \
-    std::string arg3 = digest.toStdString(); \
-    request.arg0 = &arg0; \
-    request.arg1 = pos; \
-    request.arg2 = posType; \
-    request.arg3 = &arg3; \
-    std::string s_userName = userName.toStdString(); \
-    request.userName = &s_userName; \
-    std::string s_password = password.toStdString(); \
-    request.password = &s_password; \
-\
-    tns__submit##_Type##AnnotationTextAndTokenDigestResponse response; \
-    mutex_.lock(); \
-    int err = proxy_->submit##_Type##AnnotationTextAndTokenDigest(&request, &response); \
-    mutex_.unlock(); \
-    if (err) { \
-      DOUT("submit" #_Type "AnnotationTextAndTokenDigest: soap error, err =" << err); \
-      emit soapError(err); \
-      DOUT("submit" #_Type "AnnotationTextAndTokenDigest:exit"); \
-      return 0; \
-    } \
-\
-    qint64 ret = response.return_; \
-    DOUT("submit" #_Type "AnnotationTextAndTokenDigest:exit: aid =" << ret); \
-    return ret; \
+  tns__submitMediaAliasTextWithTokenIdResponse response;
+  mutex_.lock();
+  int err = proxy_->submitMediaAliasTextWithTokenId(&request, &response);
+  mutex_.unlock();
+  if (err) {
+    DOUT("submitAliasTextWithTokenId: soap error, err =" << err);
+    emit soapError(err);
+    DOUT("submitAliasTextWithTokenId:exit");
+    return 0;
   }
 
-  MAKE_submitAnnotationTextAndTokenDigest(media, Media)
-  MAKE_submitAnnotationTextAndTokenDigest(game, Game)
-#undef MAKE_submitAnnotationText
+  qint64 ret = response.return_;
+  DOUT("submitAliasTextWithTokenId:exit: aid =" << ret);
+  return ret;
+}
+
+
+qint64
+ServerProxy::submitAliasTextAndTokenDigest(const QString &text, qint32 type, const QString &digest, qint32 digestType, const QString &userName, const QString &password)
+{
+  DOUT("submitAliasTextAndTokenDigest:enter: digestType =" << digestType);
+
+  if (text.isEmpty()) {
+    DOUT("submitAliasTextAndTokenDigest:exit: error: missing text");
+    return 0;
+  }
+  if (text.size() > Traits::MAX_ANNOT_LENGTH) {
+    DOUT("submitAliasTextAndTokenDigest:exit: error: text too long, size =" << text.size());
+    return 0;
+  }
+  if (digest.size() != Traits::TOKEN_DIGEST_LENGTH) {
+    DOUT("submitAliasTextAndTokenDigest:exit: invalid digest size =" << digest.size());
+    return 0;
+  }
+
+  tns__submitMediaAliasTextAndTokenDigest request;
+  std::string arg0 = text.toStdString();
+  std::string arg2 = digest.toStdString();
+  request.arg0 = &arg0;
+  request.arg1 = type;
+  request.arg2 = &arg2;
+  request.arg3 = digestType;
+  std::string s_userName = userName.toStdString();
+  request.userName = &s_userName;
+  std::string s_password = password.toStdString();
+  request.password = &s_password;
+
+  tns__submitMediaAliasTextAndTokenDigestResponse response;
+  mutex_.lock();
+  int err = proxy_->submitMediaAliasTextAndTokenDigest(&request, &response);
+  mutex_.unlock();
+  if (err) {
+    DOUT("submitAliasTextAndTokenDigest: soap error, err =" << err);
+    emit soapError(err);
+    DOUT("submitAliasTextAndTokenDigest:exit");
+    return 0;
+  }
+
+  qint64 ret = response.return_;
+  DOUT("submitAliasTextAndTokenDigest:exit: aid =" << ret);
+  return ret;
+}
+
+qint64
+ServerProxy::submitAnnotation(const Annotation &annot, const QString &userName, const QString &password)
+{
+  DOUT("submitAnnotation:enter");
+
+  if (!annot.hasText()) {
+    DOUT("submitAnnotation:exit: error: missing text");
+    return 0;
+  }
+  if (annot.text().size() > Traits::MAX_ANNOT_LENGTH) {
+    DOUT("submitAnnotation:exit: error: text too long, size =" << annot.text().size());
+    return 0;
+  }
+
+  tns__mediaAnnotation arg0;
+  arg0.status = annot.status();
+  arg0.flags = annot.flags();
+  arg0.id = annot.id();
+  arg0.tokenId = annot.tokenId();
+  arg0.userId = annot.userId();
+  std::string userAlias = annot.userAlias().toStdString();
+  arg0.userAlias = &userAlias;
+  arg0.pos = annot.pos();
+  arg0.posType = annot.posType();
+  arg0.time = annot.time();
+  std::string text = annot.text().toStdString();
+  arg0.text = &text;
+  arg0.language = annot.language();
+  arg0.createTime = annot.createTime();
+  arg0.updateTime = annot.updateTime();
+  arg0.blessedCount = annot.blessedCount();
+  arg0.cursedCount = annot.cursedCount();
+  arg0.blockedCount = annot.blockedCount();
+
+  tns__submitMediaAnnotation request;
+  request.arg0 = &arg0;
+  std::string s_userName = userName.toStdString();
+  request.userName = &s_userName;
+  std::string s_password = password.toStdString();
+  request.password = &s_password;
+
+  tns__submitMediaAnnotationResponse response;
+  mutex_.lock();
+  int err = proxy_->submitMediaAnnotation(&request, &response);
+  mutex_.unlock();
+  if (err) {
+    DOUT("submitAnnotation: soap error, err =" << err);
+    emit soapError(err);
+    DOUT("submitAnnotation:exit");
+    return 0;
+  }
+
+  qint64 ret = response.return_;
+  DOUT("submitAnnotation:exit: aid =" << ret);
+  return ret;
+}
+
+qint64
+ServerProxy::submitAnnotationTextWithTokenId(const QString &text, qint64 pos, qint32 posType, qint64 tokenId, const QString &userName, const QString &password)
+{
+  DOUT("submitAnnotationTextWithTokenId:enter");
+
+  if (text.isEmpty()) {
+    DOUT("submitAnnotationTextWithTokenId:exit: error: missing text");
+    return 0;
+  }
+  if (text.size() > Traits::MAX_ANNOT_LENGTH) {
+    DOUT("submitAnnotationTextWithTokenId:exit: error: text too long, size =" << text.size());
+    return 0;
+  }
+
+  tns__submitMediaAnnotationTextWithTokenId request;
+  std::string arg0 = text.toStdString();
+  request.arg0 = &arg0;
+  request.arg1 = pos;
+  request.arg2 = posType;
+  request.arg3 = tokenId;
+  std::string s_userName = userName.toStdString();
+  request.userName = &s_userName;
+  std::string s_password = password.toStdString();
+  request.password = &s_password;
+
+  tns__submitMediaAnnotationTextWithTokenIdResponse response;
+  mutex_.lock();
+  int err = proxy_->submitMediaAnnotationTextWithTokenId(&request, &response);
+  mutex_.unlock();
+  if (err) {
+    DOUT("submitAnnotationTextWithTokenId: soap error, err =" << err);
+    emit soapError(err);
+    DOUT("submitAnnotationTextWithTokenId:exit");
+    return 0;
+  }
+
+  qint64 ret = response.return_;
+  DOUT("submitAnnotationTextWithTokenId:exit: aid =" << ret);
+  return ret;
+}
+
+qint64
+ServerProxy::submitAnnotationTextAndTokenDigest(const QString &text, qint64 pos, qint32 posType, const QString &digest, qint32 digestType, const QString &userName, const QString &password)
+{
+  DOUT("submitAnnotationTextAndTokenDigest:enter: digestType =" << digestType);
+
+  if (text.isEmpty()) {
+    DOUT("submitAnnotationTextAndTokenDigest:exit: error: missing text");
+    return 0;
+  }
+  if (text.size() > Traits::MAX_ANNOT_LENGTH) {
+    DOUT("submitAnnotationTextAndTokenDigest:exit: error: text too long, size =" << text.size());
+    return 0;
+  }
+  if (digest.size() != Traits::TOKEN_DIGEST_LENGTH) {
+    DOUT("submitAnnotationTextAndTokenDigest:exit: error: text too long, size =" << text.size());
+    return 0;
+  }
+
+  tns__submitMediaAnnotationTextAndTokenDigest request;
+  std::string arg0 = text.toStdString();
+  std::string arg3 = digest.toStdString();
+  request.arg0 = &arg0;
+  request.arg1 = pos;
+  request.arg2 = posType;
+  request.arg3 = &arg3;
+  request.arg4 = digestType;
+  std::string s_userName = userName.toStdString();
+  request.userName = &s_userName;
+  std::string s_password = password.toStdString();
+  request.password = &s_password;
+
+  tns__submitMediaAnnotationTextAndTokenDigestResponse response;
+  mutex_.lock();
+  int err = proxy_->submitMediaAnnotationTextAndTokenDigest(&request, &response);
+  mutex_.unlock();
+  if (err) {
+    DOUT("submitAnnotationTextAndTokenDigest: soap error, err =" << err);
+    emit soapError(err);
+    DOUT("submitAnnotationTextAndTokenDigest:exit");
+    return 0;
+  }
+
+  qint64 ret = response.return_;
+  DOUT("submitAnnotationTextAndTokenDigest:exit: aid =" << ret);
+  return ret;
+}
 
 // - Queries -
 
-#define MAKE_selectTokenWithId(_type, _Type) \
-  Token \
-  ServerProxy::select##_Type##TokenWithId(qint64 id) \
-  { \
-    DOUT("select" #_Type "TokenWithId:enter"); \
-    Token ret; \
-\
-    tns__select##_Type##TokenWithId request; \
-    request.arg0 = id; \
-\
-    tns__select##_Type##TokenWithIdResponse response; \
-    mutex_.lock(); \
-    int err = proxy_->select##_Type##TokenWithId(&request, &response); \
-    mutex_.unlock(); \
-    if (err) { \
-      DOUT("select" #_Type "TokenWithId: soap error, err =" << err); \
-      emit soapError(err); \
-      DOUT("select" #_Type "TokenWithId:exit"); \
-      return ret; \
-    } \
-\
-    tns__##_type##Token *p = response.return_; \
-    if (p) { \
-      ret.setType(Traits::_Type##Type); \
-      ret.setStatus(p->status); \
-      ret.setFlags(p->flags); \
-      ret.setId(p->id); \
-      ret.setUserId(p->userId); \
-      if (p->digest) \
-        ret.setDigest(QString::fromStdString(*p->digest)); \
-      ret.setCreateTime(p->createTime); \
-      ret.setBlessedCount(p->blessedCount); \
-      ret.setCursedCount(p->cursedCount); \
-      ret.setBlockedCount(p->blockedCount); \
-      ret.setVisitedCount(p->visitedCount); \
-    } \
-\
-    DOUT("select" #_Type "TokenWithId:exit: tid =" << ret.id()); \
-    return ret; \
+Token
+ServerProxy::selectTokenWithId(qint64 id)
+{
+  DOUT("selectTokenWithId:enter");
+  Token ret;
+
+  tns__selectMediaTokenWithId request;
+  request.arg0 = id;
+
+  tns__selectMediaTokenWithIdResponse response;
+  mutex_.lock();
+  int err = proxy_->selectMediaTokenWithId(&request, &response);
+  mutex_.unlock();
+  if (err) {
+    DOUT("selectTokenWithId: soap error, err =" << err);
+    emit soapError(err);
+    DOUT("selectTokenWithId:exit");
+    return ret;
   }
 
-  MAKE_selectTokenWithId(media, Media)
-  MAKE_selectTokenWithId(game, Game)
-#undef MAKE_selectTokenWithId
-
-#define MAKE_selectTokenWithDigest(_type, _Type) \
-  Token \
-  ServerProxy::select##_Type##TokenWithDigest(const QString &digest) \
-  { \
-    DOUT("select" #_Type "TokenWithDigest:enter"); \
-    Token ret; \
-\
-    tns__select##_Type##TokenWithDigest request; \
-    std::string arg0 = digest.toStdString(); \
-    request.arg0 = &arg0; \
-\
-    tns__select##_Type##TokenWithDigestResponse response; \
-    mutex_.lock(); \
-    int err = proxy_->select##_Type##TokenWithDigest(&request, &response); \
-    mutex_.unlock(); \
-    if (err) { \
-      DOUT("select" #_Type "TokenWithDigest: soap error, err =" << err); \
-      emit soapError(err); \
-      DOUT("select" #_Type "TokenWithDigest:exit"); \
-      return ret; \
-    } \
-\
-    tns__##_type##Token *p = response.return_; \
-    if (p) { \
-      ret.setType(Traits::_Type##Type); \
-      ret.setStatus(p->status); \
-      ret.setFlags(p->flags); \
-      ret.setId(p->id); \
-      ret.setUserId(p->userId); \
-      ret.setDigest(digest); \
-      ret.setCreateTime(p->createTime); \
-      ret.setBlessedCount(p->blessedCount); \
-      ret.setCursedCount(p->cursedCount); \
-      ret.setBlockedCount(p->blockedCount); \
-      ret.setVisitedCount(p->visitedCount); \
-    } \
-\
-    DOUT("select" #_Type "TokenWithId:exit: tid =" << ret.id()); \
-    return ret; \
+  tns__mediaToken *p = response.return_;
+  if (p) {
+    ret.setStatus(p->status);
+    ret.setFlags(p->flags);
+    ret.setId(p->id);
+    ret.setType(p->type);
+    ret.setUserId(p->userId);
+    if (p->digest)
+      ret.setDigest(QString::fromStdString(*p->digest));
+    ret.setDigestType(p->digestType);
+    ret.setCreateTime(p->createTime);
+    ret.setBlessedCount(p->blessedCount);
+    ret.setCursedCount(p->cursedCount);
+    ret.setBlockedCount(p->blockedCount);
+    ret.setVisitedCount(p->visitedCount);
   }
 
-  MAKE_selectTokenWithDigest(media, Media)
-  MAKE_selectTokenWithDigest(game, Game)
-#undef MAKE_selectTokenWithDigest
+  DOUT("selectTokenWithId:exit: tid =" << ret.id());
+  return ret;
+}
 
-#define MAKE_selectAliasesWithTokenId(_type, _Type) \
-  AliasList \
-  ServerProxy::select##_Type##AliasesWithTokenId(qint64 tid) \
-  { \
-    DOUT("select" #_Type "AliasesWithTokenId:enter: tid =" << tid); \
-    AliasList ret; \
-\
-    tns__select##_Type##AliasesWithTokenId request; \
-    request.arg0 = tid; \
-\
-    tns__select##_Type##AliasesWithTokenIdResponse response; \
-    mutex_.lock(); \
-    int err = proxy_->select##_Type##AliasesWithTokenId(&request, &response); \
-    mutex_.unlock(); \
-    if (err) { \
-      DOUT("select" #_Type "AliasesWithTokenId: soap error, err =" << err); \
-      emit soapError(err); \
-      DOUT("select" #_Type "AliasesWithTokenId:exit"); \
-      return ret; \
-    } \
-\
-    if (!response.return_.empty()) \
-      foreach (tns__##_type##Alias *p, response.return_) \
-        if (p) { \
-          Alias a; \
-          a.setType(Traits::_Type##Type); \
-          a.setStatus(p->status); \
-          a.setFlags(p->flags); \
-          a.setId(p->id); \
-          a.setTokenId(p->tokenId); \
-          a.setUserId(p->userId); \
-          a.setAliasType(p->type); \
-          a.setLanguage(p->language); \
-          if (p->text) \
-            a.setText(QString::fromStdString(*p->text)); \
-          a.setUpdateTime(p->updateTime); \
-          a.setBlessedCount(p->blessedCount); \
-          a.setCursedCount(p->cursedCount); \
-          a.setBlockedCount(p->blockedCount); \
-\
-          ret.append(a); \
-        } \
-\
-    DOUT("select" #_Type "AliasesWithTokenId:exit: count =" << ret.size()); \
-    return ret; \
+Token
+ServerProxy::selectTokenWithDigest(const QString &digest, int digestType)
+{
+  DOUT("selectTokenWithDigest:enter: digestType =" << digestType);
+  Token ret;
+
+  tns__selectMediaTokenWithDigest request;
+  std::string arg0 = digest.toStdString();
+  request.arg0 = &arg0;
+  request.arg1 = digestType;
+
+  tns__selectMediaTokenWithDigestResponse response;
+  mutex_.lock();
+  int err = proxy_->selectMediaTokenWithDigest(&request, &response);
+  mutex_.unlock();
+  if (err) {
+    DOUT("selectTokenWithDigest: soap error, err =" << err);
+    emit soapError(err);
+    DOUT("selectTokenWithDigest:exit");
+    return ret;
   }
 
-  MAKE_selectAliasesWithTokenId(media, Media)
-  MAKE_selectAliasesWithTokenId(game, Game)
-#undef MAKE_selectAliasesWithTokenId
-
-#define MAKE_selectAnnotationsWithTokenId(_type, _Type) \
-  AnnotationList \
-  ServerProxy::select##_Type##AnnotationsWithTokenId(qint64 tid) \
-  { \
-    DOUT("select" #_Type "AnnotationsWithTokenId:enter: tid =" << tid); \
-    AnnotationList ret; \
-\
-    tns__select##_Type##AnnotationsWithTokenId request; \
-    request.arg0 = tid; \
-\
-    tns__select##_Type##AnnotationsWithTokenIdResponse response; \
-    mutex_.lock(); \
-    int err = proxy_->select##_Type##AnnotationsWithTokenId(&request, &response); \
-    mutex_.unlock(); \
-    if (err) { \
-      DOUT("select" #_Type "AnnotationsWithTokenId: soap error, err =" << err); \
-      emit soapError(err); \
-      DOUT("select" #_Type "AnnotationsWithTokenId:exit"); \
-      return ret; \
-    } \
-\
-    if (!response.return_.empty()) \
-      foreach (tns__##_type##Annotation *p, response.return_) \
-        if (p) { \
-          Annotation a; \
-          a.setType(Traits::_Type##Type); \
-          a.setStatus(p->status); \
-          a.setFlags(p->flags); \
-          a.setId(p->id); \
-          a.setTokenId(p->tokenId); \
-          a.setUserId(p->userId); \
-          if (p->userAlias) \
-            a.setUserAlias(QString::fromStdString(*p->userAlias)); \
-          a.setPos(p->pos); \
-          a.setPosType(p->posType); \
-          a.setLanguage(p->language); \
-          if (p->text) \
-            a.setText(QString::fromStdString(*p->text)); \
-          a.setCreateTime(p->createTime); \
-          a.setUpdateTime(p->updateTime); \
-          a.setBlessedCount(p->blessedCount); \
-          a.setCursedCount(p->cursedCount); \
-          a.setBlockedCount(p->blockedCount); \
-\
-          ret.append(a); \
-        } \
-\
-    DOUT("select" #_Type "AnnotationsWithTokenId:exit: count =" << ret.size()); \
-    return ret; \
+  tns__mediaToken *p = response.return_;
+  if (p) {
+    ret.setStatus(p->status);
+    ret.setFlags(p->flags);
+    ret.setId(p->id);
+    ret.setType(p->type);
+    ret.setUserId(p->userId);
+    ret.setDigest(digest);
+    ret.setDigestType(p->digestType);
+    ret.setCreateTime(p->createTime);
+    ret.setBlessedCount(p->blessedCount);
+    ret.setCursedCount(p->cursedCount);
+    ret.setBlockedCount(p->blockedCount);
+    ret.setVisitedCount(p->visitedCount);
   }
 
-  MAKE_selectAnnotationsWithTokenId(media, Media)
-  MAKE_selectAnnotationsWithTokenId(game, Game)
-#undef MAKE_selectAnnotationsWithTokenId
+  DOUT("selectTokenWithId:exit: tid =" << ret.id());
+  return ret;
+}
 
-#define MAKE_selectRelatedAnnotationsWithTokenId(_type, _Type) \
-  AnnotationList \
-  ServerProxy::selectRelated##_Type##AnnotationsWithTokenId(qint64 tid) \
-  { \
-    DOUT("selectRelated" #_Type "AnnotationsWithTokenId:enter: tid =" << tid); \
-    AnnotationList ret; \
-\
-    tns__selectRelated##_Type##AnnotationsWithTokenId request; \
-    request.arg0 = tid; \
-\
-    tns__selectRelated##_Type##AnnotationsWithTokenIdResponse response; \
-    mutex_.lock(); \
-    int err = proxy_->selectRelated##_Type##AnnotationsWithTokenId(&request, &response); \
-    mutex_.unlock(); \
-    if (err) { \
-      DOUT("selectRelated" #_Type "AnnotationsWithTokenId: soap error, err =" << err); \
-      emit soapError(err); \
-      DOUT("selectRelated" #_Type "AnnotationsWithTokenId:exit"); \
-      return ret; \
-    } \
-\
-    if (!response.return_.empty()) \
-      foreach (tns__##_type##Annotation *p, response.return_) \
-        if (p) { \
-          Annotation a; \
-          a.setType(Traits::_Type##Type); \
-          a.setStatus(p->status); \
-          a.setFlags(p->flags); \
-          a.setId(p->id); \
-          a.setTokenId(p->tokenId); \
-          a.setUserId(p->userId); \
-          if (p->userAlias) \
-            a.setUserAlias(QString::fromStdString(*p->userAlias)); \
-          a.setPos(p->pos); \
-          a.setPosType(p->posType); \
-          a.setLanguage(p->language); \
-          if (p->text) \
-            a.setText(QString::fromStdString(*p->text)); \
-          a.setCreateTime(p->createTime); \
-          a.setUpdateTime(p->updateTime); \
-          a.setBlessedCount(p->blessedCount); \
-          a.setCursedCount(p->cursedCount); \
-          a.setBlockedCount(p->blockedCount); \
-\
-          ret.append(a); \
-        } \
-\
-    DOUT("selectRelated" #_Type "AnnotationsWithTokenId:exit: count =" << ret.size()); \
-    return ret; \
+AliasList
+ServerProxy::selectAliasesWithTokenId(qint64 tid)
+{
+  DOUT("selectAliasesWithTokenId:enter: tid =" << tid);
+  AliasList ret;
+
+  tns__selectMediaAliasesWithTokenId request;
+  request.arg0 = tid;
+
+  tns__selectMediaAliasesWithTokenIdResponse response;
+  mutex_.lock();
+  int err = proxy_->selectMediaAliasesWithTokenId(&request, &response);
+  mutex_.unlock();
+  if (err) {
+    DOUT("selectAliasesWithTokenId: soap error, err =" << err);
+    emit soapError(err);
+    DOUT("selectAliasesWithTokenId:exit");
+    return ret;
   }
 
-  MAKE_selectRelatedAnnotationsWithTokenId(media, Media)
-  MAKE_selectRelatedAnnotationsWithTokenId(game, Game)
-#undef MAKE_selectRelatedAnnotationsWithTokenId
+  if (!response.return_.empty())
+    foreach (tns__mediaAlias *p, response.return_)
+      if (p) {
+        Alias a;
+        a.setStatus(p->status);
+        a.setFlags(p->flags);
+        a.setId(p->id);
+        a.setTokenId(p->tokenId);
+        a.setUserId(p->userId);
+        a.setType(p->type);
+        a.setLanguage(p->language);
+        if (p->text)
+          a.setText(QString::fromStdString(*p->text));
+        a.setUpdateTime(p->updateTime);
+        a.setBlessedCount(p->blessedCount);
+        a.setCursedCount(p->cursedCount);
+        a.setBlockedCount(p->blockedCount);
+
+        ret.append(a);
+      }
+
+  DOUT("selectAliasesWithTokenId:exit: count =" << ret.size());
+  return ret;
+}
+
+AnnotationList
+ServerProxy::selectAnnotationsWithTokenId(qint64 tid)
+{
+  DOUT("selectAnnotationsWithTokenId:enter: tid =" << tid);
+  AnnotationList ret;
+
+  tns__selectMediaAnnotationsWithTokenId request;
+  request.arg0 = tid;
+
+  tns__selectMediaAnnotationsWithTokenIdResponse response;
+  mutex_.lock();
+  int err = proxy_->selectMediaAnnotationsWithTokenId(&request, &response);
+  mutex_.unlock();
+  if (err) {
+    DOUT("selectAnnotationsWithTokenId: soap error, err =" << err);
+    emit soapError(err);
+    DOUT("selectAnnotationsWithTokenId:exit");
+    return ret;
+  }
+
+  if (!response.return_.empty())
+    foreach (tns__mediaAnnotation *p, response.return_)
+      if (p) {
+        Annotation a;
+        a.setStatus(p->status);
+        a.setFlags(p->flags);
+        a.setId(p->id);
+        a.setTokenId(p->tokenId);
+        a.setUserId(p->userId);
+        if (p->userAlias)
+          a.setUserAlias(QString::fromStdString(*p->userAlias));
+        a.setPos(p->pos);
+        a.setPosType(p->posType);
+        a.setTime(p->time);
+        a.setLanguage(p->language);
+        if (p->text)
+          a.setText(QString::fromStdString(*p->text));
+        a.setCreateTime(p->createTime);
+        a.setUpdateTime(p->updateTime);
+        a.setBlessedCount(p->blessedCount);
+        a.setCursedCount(p->cursedCount);
+        a.setBlockedCount(p->blockedCount);
+
+        ret.append(a);
+      }
+
+  DOUT("selectAnnotationsWithTokenId:exit: count =" << ret.size());
+  return ret;
+}
+
+AnnotationList
+ServerProxy::selectRelatedAnnotationsWithTokenId(qint64 tid)
+{
+  DOUT("selectRelatedAnnotationsWithTokenId:enter: tid =" << tid);
+  AnnotationList ret;
+
+  tns__selectRelatedMediaAnnotationsWithTokenId request;
+  request.arg0 = tid;
+
+  tns__selectRelatedMediaAnnotationsWithTokenIdResponse response;
+  mutex_.lock();
+  int err = proxy_->selectRelatedMediaAnnotationsWithTokenId(&request, &response);
+  mutex_.unlock();
+  if (err) {
+    DOUT("selectRelatedAnnotationsWithTokenId: soap error, err =" << err);
+    emit soapError(err);
+    DOUT("selectRelatedAnnotationsWithTokenId:exit");
+    return ret;
+  }
+
+  if (!response.return_.empty())
+    foreach (tns__mediaAnnotation *p, response.return_)
+      if (p) {
+        Annotation a;
+        a.setStatus(p->status);
+        a.setFlags(p->flags);
+        a.setId(p->id);
+        a.setTokenId(p->tokenId);
+        a.setUserId(p->userId);
+        if (p->userAlias)
+          a.setUserAlias(QString::fromStdString(*p->userAlias));
+        a.setPos(p->pos);
+        a.setPosType(p->posType);
+        a.setTime(p->time);
+        a.setLanguage(p->language);
+        if (p->text)
+          a.setText(QString::fromStdString(*p->text));
+        a.setCreateTime(p->createTime);
+        a.setUpdateTime(p->updateTime);
+        a.setBlessedCount(p->blessedCount);
+        a.setCursedCount(p->cursedCount);
+        a.setBlockedCount(p->blockedCount);
+
+        ret.append(a);
+      }
+
+  DOUT("selectRelatedAnnotationsWithTokenId:exit: count =" << ret.size());
+  return ret;
+}
 
 // - Cast -
 
-#define MAKE_blessAnnotationWithId(_type, _Type) \
+#define CAST_MEDIA(_cast, _entity) \
   bool \
-  ServerProxy::bless##_Type##AnnotationWithId(qint64 id, const QString &userName, const QString &password) \
+  ServerProxy::_cast##_entity##WithId(qint64 id, const QString &userName, const QString &password) \
   { \
-    DOUT("bless" #_Type "AnnotationWithId:enter: id =" << id); \
-\
-    tns__bless##_Type##AnnotationWithId request; \
+    DOUT(#_cast #_entity "WithId:enter: id =" << id); \
+ \
+    tns__##_cast##Media##_entity##WithId request; \
     request.arg0 = id; \
     std::string s_userName = userName.toStdString(); \
     request.userName = &s_userName; \
     std::string s_password = password.toStdString(); \
     request.password = &s_password; \
-\
-    tns__bless##_Type##AnnotationWithIdResponse response; \
+ \
+    tns__##_cast##Media##_entity##WithIdResponse response; \
     mutex_.lock(); \
-    int err = proxy_->bless##_Type##AnnotationWithId(&request, &response); \
+    int err = proxy_->_cast##Media##_entity##WithId(&request, &response); \
     mutex_.unlock(); \
     if (err) { \
-      DOUT("bless" #_Type "AnnotationWithId: soap error, err =" << err); \
+      DOUT(#_cast #_entity "WithId: soap error, err =" << err); \
       emit soapError(err); \
-      DOUT("bless" #_Type "AnnotationWithId:exit"); \
+      DOUT(#_cast #_entity "WithId:exit"); \
       return false; \
     } \
-\
+ \
     bool ret = response.return_; \
-    DOUT("bless" #_Type "AnnotationWithId:exit: ret =" << ret); \
+    DOUT(#_cast #_entity "WithId:exit: ret =" << ret); \
     return ret; \
   }
 
-  MAKE_blessAnnotationWithId(media, Media)
-  MAKE_blessAnnotationWithId(game, Game)
-#undef MAKE_blessAnnotationWithId
+  CAST_MEDIA(bless, Annotation)
+  CAST_MEDIA(curse, Annotation)
+  CAST_MEDIA(block, Annotation)
 
-// - Update -
+  CAST_MEDIA(bless, Alias)
+  CAST_MEDIA(curse, Alias)
+  CAST_MEDIA(block, Alias)
 
-#define MAKE_updateMediaAnnotationTextWithId(_type, _Type) \
+  CAST_MEDIA(bless, Token)
+  CAST_MEDIA(curse, Token)
+#undef CAST_MEDIA
+
+#define CAST(_cast, _entity) \
   bool \
-  ServerProxy::update##_Type##AnnotationTextWithId(const QString &text, qint64 id, const QString &userName, const QString &password) \
+  ServerProxy::_cast##_entity##WithId(qint64 id, const QString &userName, const QString &password) \
   { \
-    DOUT("update" #_Type "AnnotationTextWithId:enter: id =" << id << ", text =" << text); \
-\
-    tns__update##_Type##AnnotationTextWithId request; \
-    std::string arg0 = text.toStdString(); \
-    request.arg0 = &arg0; \
-    request.arg1 = id; \
+    DOUT(#_cast #_entity "WithId:enter: id =" << id); \
+ \
+    tns__##_cast##_entity##WithId request; \
+    request.arg0 = id; \
     std::string s_userName = userName.toStdString(); \
     request.userName = &s_userName; \
     std::string s_password = password.toStdString(); \
     request.password = &s_password; \
-\
-    tns__update##_Type##AnnotationTextWithIdResponse response; \
+ \
+    tns__##_cast##_entity##WithIdResponse response; \
     mutex_.lock(); \
-    int err = proxy_->update##_Type##AnnotationTextWithId(&request, &response); \
+    int err = proxy_->_cast##_entity##WithId(&request, &response); \
     mutex_.unlock(); \
     if (err) { \
-      DOUT("update" #_Type "AnnotationTextWithId: soap error, err =" << err); \
+      DOUT(#_cast #_entity "WithId: soap error, err =" << err); \
       emit soapError(err); \
-      DOUT("update" #_Type "AnnotationTextWithId:exit"); \
+      DOUT(#_cast #_entity "WithId:exit"); \
       return false; \
     } \
-\
+ \
     bool ret = response.return_; \
-    DOUT("update" #_Type "AnnotationTextWithId:exit: ret =" << ret); \
+    DOUT(#_cast #_entity "WithId:exit: ret =" << ret); \
     return ret; \
-  } \
+  }
 
-  MAKE_updateMediaAnnotationTextWithId(media, Media)
-  MAKE_updateMediaAnnotationTextWithId(game, Game)
-#undef MAKE_updateMediaAnnotationTextWithId
+  CAST(block, User)
+#undef CAST
+
+// - Update -
+
+bool
+ServerProxy::updateAnnotationTextWithId(const QString &text, qint64 id, const QString &userName, const QString &password)
+{
+  DOUT("updateAnnotationTextWithId:enter: id =" << id << ", text =" << text);
+
+  tns__updateMediaAnnotationTextWithId request;
+  std::string arg0 = text.toStdString();
+  request.arg0 = &arg0;
+  request.arg1 = id;
+  std::string s_userName = userName.toStdString();
+  request.userName = &s_userName;
+  std::string s_password = password.toStdString();
+  request.password = &s_password;
+
+  tns__updateMediaAnnotationTextWithIdResponse response;
+  mutex_.lock();
+  int err = proxy_->updateMediaAnnotationTextWithId(&request, &response);
+  mutex_.unlock();
+  if (err) {
+    DOUT("updateAnnotationTextWithId: soap error, err =" << err);
+    emit soapError(err);
+    DOUT("updateAnnotationTextWithId:exit");
+    return false;
+  }
+
+  bool ret = response.return_;
+  DOUT("updateAnnotationTextWithId:exit: ret =" << ret);
+  return ret;
+}
 
 // EOF

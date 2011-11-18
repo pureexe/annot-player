@@ -39,6 +39,8 @@ public:
   enum { AnnotationGraphicsItemType = UserType + 1 };
   enum Style { FlyStyle = 0, SubtitleStyle, TopStyle, BottomStyle };  // Appear style
 
+  static void warmUp(); ///< optional, caching fonts on first load
+
 public:
   explicit AnnotationGraphicsItem(const Annotation &annotation, SignalHub *hub, AnnotationGraphicsView *viewWithScene);
   //explicit AnnotationGraphicsItem(AnnotationGraphicsView *viewWithScene);

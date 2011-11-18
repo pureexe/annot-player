@@ -11,10 +11,14 @@
 
 #define SLOTLINE_MAXWIDTH 150
 
-// - Panel -
+// - Constructions -
+
 SyncDialog::SyncDialog(QWidget *parent)
   : Base(parent), timeSlotIndex_(0)
 {
+#ifdef Q_WS_MAC
+  setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
+#endif // Q_WS_MAC
   setWindowTitle(TR(T_TITLE_SYNC));
   setContentsMargins(0, 0, 0, 0);
   UiStyle::globalInstance()->setWindowStyle(this);

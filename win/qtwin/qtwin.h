@@ -5,8 +5,8 @@
 // qtwin.h
 // 7/21/2011
 
-#include <QList>
 #include <QWidget>
+#include <QList>
 #include <QString>
 #include <QPoint>
 #include <QRect>
@@ -18,6 +18,10 @@ namespace QtWin {
 
   // Direct access windows DLL api
   namespace Api { }
+
+  // - Maintence -
+
+  void warmUp(); ///< Not mandatory, but for better speed up
 
   // - Main module -
 
@@ -75,6 +79,7 @@ namespace QtWin {
   bool setFocus(WId hwnd); // Same as windows version.
 
   WId getChildWindow(WId hwnd);
+  QList<WId> getChildWindows(WId hwnd);
 
   WId getWindowAtPos(const QPoint &globalPos);
   WId getChildWindowAtPos(const QPoint &globalPos, WId parent);

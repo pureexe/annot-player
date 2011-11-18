@@ -19,7 +19,6 @@ namespace Core { namespace Cloud {
     // - Types -
   public:
     typedef Traits::Language Language;
-    typedef Traits::Type Type;
 
     enum AnnotationStatus {
       AS_Active = 0,
@@ -33,11 +32,11 @@ namespace Core { namespace Cloud {
 
     // - Properties -
 
-  private: qint32 type_;
-  public:
-    qint32 type() const                 { return type_; }
-    void setType(qint32 t)              { type_ = t; }
-    bool hasType() const                { return type_; }
+  //private: qint32 type_;
+  //public:
+  //  qint32 type() const                 { return type_; }
+  //  void setType(qint32 t)              { type_ = t; }
+  //  bool hasType() const                { return type_; }
 
     // id > 0: made by human; id < 0: made by doll
   private: qint64 id_;
@@ -55,9 +54,16 @@ namespace Core { namespace Cloud {
     ///  Used only in offline mode
   private: QString tokenDigest_;
   public:
-    QString tokenDigest() const             { return tokenDigest_; }
+    const QString &tokenDigest() const      { return tokenDigest_; }
     void setTokenDigest(const QString &hex) { tokenDigest_ = hex; }
     bool hasTokenDigest() const             { return !tokenDigest_.isNull(); }
+
+    ///  Used only in offline mode
+  private: qint32 tokenDigestType_;
+  public:
+    qint32 tokenDigestType() const          { return tokenDigestType_; }
+    void setTokenDigestType(qint32 type)    { tokenDigestType_ = type; }
+    bool hasTokenDigestType() const         { return tokenDigestType_; }
 
   private: qint64 userId_;
   public:
@@ -67,7 +73,7 @@ namespace Core { namespace Cloud {
 
   private: QString userAlias_;
   public:
-    QString userAlias() const           { return userAlias_; }
+    const QString &userAlias() const    { return userAlias_; }
     void setUserAlias(const QString &alias) { userAlias_ = alias; }
     bool hasUserAlias() const           { return userAlias_.isEmpty(); }
 
@@ -129,9 +135,15 @@ namespace Core { namespace Cloud {
     void setPosType(int count)          { posType_ = count; }
     bool hasPosType() const             { return posType_; }
 
+  private: int time_;
+  public:
+    int time() const                 { return time_; }
+    void setTime(int msecs)          { time_ = msecs; }
+    bool hasTime() const             { return time_; }
+
   private: QString text_;
   public:
-    QString text() const                { return text_; }
+    const QString &text() const         { return text_; }
     void setText(const QString &text)   { text_ = text; }
     bool hasText() const                { return !text_.isNull(); }
 
@@ -156,13 +168,13 @@ namespace Core { namespace Cloud {
     // - Constructions -
   public:
     Annotation()
-      : type_(0), id_(0), tokenId_(0), userId_(0), status_(0), flags_(0), language_(0),
+      : id_(0), tokenId_(0), tokenDigestType_(0), userId_(0), status_(0), flags_(0), language_(0),
         createTime_(0), updateTime_(0),
-        pos_(0), posType_(0),
+        pos_(0), posType_(0), time_(0),
         blessed_(0), cursed_(0), blocked_(0)
     { }
 
-    bool isValid() const { return hasId(); } // && hasType
+    bool isValid() const { return hasId(); }
 
     void clear() { (*this) = Self(); }
 

@@ -243,7 +243,7 @@ namespace Core {
 
         Q_ASSERT(H_Style ==     qHash(QString(CORE_CMD_STYLE)));
 
-        Q_ASSERT(H_Blink ==     qHash(QString(CORE_CMD_STYLE_BLINK));
+        Q_ASSERT(H_Blink ==     qHash(QString(CORE_CMD_STYLE_BLINK)));
         Q_ASSERT(H_Lowercase == qHash(QString(CORE_CMD_STYLE_LOWERCASE)));
         Q_ASSERT(H_Strike ==    qHash(QString(CORE_CMD_STYLE_STRIKE)));
         Q_ASSERT(H_StrikeOut == qHash(QString(CORE_CMD_STYLE_STRIKEOUT)));

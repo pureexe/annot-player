@@ -3,6 +3,7 @@
 
 // core/ss.h
 // 7/15/2011
+#include <QString>
 
 // - QSS syntax -
 
@@ -21,7 +22,6 @@
 #define SS_BACKGROUND(_color)   "background:" #_color ";"
 #define SS_BACKGROUND_COLOR(_color) "background-color:" #_color ";"
 #define SS_BACKGROUND_IMAGE(_img)   "background-image:" #_img ";"
-#define SS_BACKGROUND_IMAGE_URL(_url) "background-image: url(" _url ");"
 #define SS_TRANSPARENT          "background:transparent;"
 #define SS_COLOR(_color)        "color:" #_color ";"
 #define SS_BORDER_COLOR(_color) "border-color:" #_color ";"
@@ -40,5 +40,13 @@
 #define SS_BORDER_IMAGE(_img)   "border-image:" #_img ";"
 #define SS_BORDER_IMAGE_URL(_url) "border-image: url(" _url ");"
 #define SS_SELECTION_COLOR(_color)"selection-color:" #_color ";"
+
+#define SS_BACKGROUND_IMAGE_URL(_url) "background-image: url(" _url ");"
+#define SS_BACKGROUND_IMAGE_URL_BEGIN "background-image: url("
+#define SS_BACKGROUND_IMAGE_URL_END   ");"
+
+inline QString
+ss_background_image_url(const QString &url)
+{ return SS_BACKGROUND_IMAGE_URL_BEGIN + url + SS_BACKGROUND_IMAGE_URL_END; }
 
 #endif // _CORE_SS_H

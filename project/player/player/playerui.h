@@ -10,7 +10,7 @@ class SignalHub;
 class Player;
 class ServerAgent;
 
- class PlayerUi : public PlayerPanel
+class PlayerUi : public PlayerPanel
 {
   Q_OBJECT
   typedef PlayerUi Self;

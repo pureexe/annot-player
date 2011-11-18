@@ -11,7 +11,7 @@
         <key>CFBundleSignature</key>
         <string>????</string>
         <key>CFBundleVersion</key>
-        <string>0.0.9.1</string>
+        <string>0.1.0.0</string>
         <key>CFBundleIdentifier</key>
         <string>me.annot.player</string>
         <key>CFBundleExecutable</key>
@@ -23,7 +23,7 @@
         <key>LSMinimumSystemVersionByArchitecture</key>
         <dict>
                 <key>x86_64</key>
-                <string>10.6.0</string>
+                <string>10.6.7</string>
         </dict>
         <key>CFBundleDocumentTypes</key>
         <array>

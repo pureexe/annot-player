@@ -99,9 +99,9 @@ char *ServerAgentServiceSoapBindingProxy::soap_sprint_fault(char *buf, size_t le
 }
 #endif
 
-int ServerAgentServiceSoapBindingProxy::blessGameAnnotationWithId(const char *endpoint, const char *soap_action, tns__blessGameAnnotationWithId *tns__blessGameAnnotationWithId_, tns__blessGameAnnotationWithIdResponse *tns__blessGameAnnotationWithIdResponse_)
+int ServerAgentServiceSoapBindingProxy::blessMediaAliasWithId(const char *endpoint, const char *soap_action, tns__blessMediaAliasWithId *tns__blessMediaAliasWithId_, tns__blessMediaAliasWithIdResponse *tns__blessMediaAliasWithIdResponse_)
 {	struct soap *soap = this;
-	struct __tns__blessGameAnnotationWithId soap_tmp___tns__blessGameAnnotationWithId;
+	struct __tns__blessMediaAliasWithId soap_tmp___tns__blessMediaAliasWithId;
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (!soap_endpoint)
@@ -109,17 +109,17 @@ int ServerAgentServiceSoapBindingProxy::blessGameAnnotationWithId(const char *en
 	if (!soap_action)
 		soap_action = "";
 	soap->encodingStyle = NULL;
-	soap_tmp___tns__blessGameAnnotationWithId.tns__blessGameAnnotationWithId_ = tns__blessGameAnnotationWithId_;
+	soap_tmp___tns__blessMediaAliasWithId.tns__blessMediaAliasWithId_ = tns__blessMediaAliasWithId_;
 	soap_begin(soap);
 	soap_serializeheader(soap);
-	soap_serialize___tns__blessGameAnnotationWithId(soap, &soap_tmp___tns__blessGameAnnotationWithId);
+	soap_serialize___tns__blessMediaAliasWithId(soap, &soap_tmp___tns__blessMediaAliasWithId);
 	if (soap_begin_count(soap))
 		return soap->error;
 	if (soap->mode & SOAP_IO_LENGTH)
 	{	if (soap_envelope_begin_out(soap)
 		 || soap_putheader(soap)
 		 || soap_body_begin_out(soap)
-		 || soap_put___tns__blessGameAnnotationWithId(soap, &soap_tmp___tns__blessGameAnnotationWithId, "-tns:blessGameAnnotationWithId", NULL)
+		 || soap_put___tns__blessMediaAliasWithId(soap, &soap_tmp___tns__blessMediaAliasWithId, "-tns:blessMediaAliasWithId", NULL)
 		 || soap_body_end_out(soap)
 		 || soap_envelope_end_out(soap))
 			 return soap->error;
@@ -130,20 +130,20 @@ int ServerAgentServiceSoapBindingProxy::blessGameAnnotationWithId(const char *en
 	 || soap_envelope_begin_out(soap)
 	 || soap_putheader(soap)
 	 || soap_body_begin_out(soap)
-	 || soap_put___tns__blessGameAnnotationWithId(soap, &soap_tmp___tns__blessGameAnnotationWithId, "-tns:blessGameAnnotationWithId", NULL)
+	 || soap_put___tns__blessMediaAliasWithId(soap, &soap_tmp___tns__blessMediaAliasWithId, "-tns:blessMediaAliasWithId", NULL)
 	 || soap_body_end_out(soap)
 	 || soap_envelope_end_out(soap)
 	 || soap_end_send(soap))
 		return soap_closesock(soap);
-	if (!tns__blessGameAnnotationWithIdResponse_)
+	if (!tns__blessMediaAliasWithIdResponse_)
 		return soap_closesock(soap);
-	tns__blessGameAnnotationWithIdResponse_->soap_default(soap);
+	tns__blessMediaAliasWithIdResponse_->soap_default(soap);
 	if (soap_begin_recv(soap)
 	 || soap_envelope_begin_in(soap)
 	 || soap_recv_header(soap)
 	 || soap_body_begin_in(soap))
 		return soap_closesock(soap);
-	tns__blessGameAnnotationWithIdResponse_->soap_get(soap, "tns:blessGameAnnotationWithIdResponse", "tns:blessGameAnnotationWithIdResponse");
+	tns__blessMediaAliasWithIdResponse_->soap_get(soap, "tns:blessMediaAliasWithIdResponse", "tns:blessMediaAliasWithIdResponse");
 	if (soap->error)
 		return soap_recv_fault(soap, 0);
 	if (soap_body_end_in(soap)
@@ -207,6 +207,222 @@ int ServerAgentServiceSoapBindingProxy::blessMediaAnnotationWithId(const char *e
 	return soap_closesock(soap);
 }
 
+int ServerAgentServiceSoapBindingProxy::blessMediaTokenWithId(const char *endpoint, const char *soap_action, tns__blessMediaTokenWithId *tns__blessMediaTokenWithId_, tns__blessMediaTokenWithIdResponse *tns__blessMediaTokenWithIdResponse_)
+{	struct soap *soap = this;
+	struct __tns__blessMediaTokenWithId soap_tmp___tns__blessMediaTokenWithId;
+	if (endpoint)
+		soap_endpoint = endpoint;
+	if (!soap_endpoint)
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
+	if (!soap_action)
+		soap_action = "";
+	soap->encodingStyle = NULL;
+	soap_tmp___tns__blessMediaTokenWithId.tns__blessMediaTokenWithId_ = tns__blessMediaTokenWithId_;
+	soap_begin(soap);
+	soap_serializeheader(soap);
+	soap_serialize___tns__blessMediaTokenWithId(soap, &soap_tmp___tns__blessMediaTokenWithId);
+	if (soap_begin_count(soap))
+		return soap->error;
+	if (soap->mode & SOAP_IO_LENGTH)
+	{	if (soap_envelope_begin_out(soap)
+		 || soap_putheader(soap)
+		 || soap_body_begin_out(soap)
+		 || soap_put___tns__blessMediaTokenWithId(soap, &soap_tmp___tns__blessMediaTokenWithId, "-tns:blessMediaTokenWithId", NULL)
+		 || soap_body_end_out(soap)
+		 || soap_envelope_end_out(soap))
+			 return soap->error;
+	}
+	if (soap_end_count(soap))
+		return soap->error;
+	if (soap_connect(soap, soap_endpoint, soap_action)
+	 || soap_envelope_begin_out(soap)
+	 || soap_putheader(soap)
+	 || soap_body_begin_out(soap)
+	 || soap_put___tns__blessMediaTokenWithId(soap, &soap_tmp___tns__blessMediaTokenWithId, "-tns:blessMediaTokenWithId", NULL)
+	 || soap_body_end_out(soap)
+	 || soap_envelope_end_out(soap)
+	 || soap_end_send(soap))
+		return soap_closesock(soap);
+	if (!tns__blessMediaTokenWithIdResponse_)
+		return soap_closesock(soap);
+	tns__blessMediaTokenWithIdResponse_->soap_default(soap);
+	if (soap_begin_recv(soap)
+	 || soap_envelope_begin_in(soap)
+	 || soap_recv_header(soap)
+	 || soap_body_begin_in(soap))
+		return soap_closesock(soap);
+	tns__blessMediaTokenWithIdResponse_->soap_get(soap, "tns:blessMediaTokenWithIdResponse", "tns:blessMediaTokenWithIdResponse");
+	if (soap->error)
+		return soap_recv_fault(soap, 0);
+	if (soap_body_end_in(soap)
+	 || soap_envelope_end_in(soap)
+	 || soap_end_recv(soap))
+		return soap_closesock(soap);
+	return soap_closesock(soap);
+}
+
+int ServerAgentServiceSoapBindingProxy::blockMediaAliasWithId(const char *endpoint, const char *soap_action, tns__blockMediaAliasWithId *tns__blockMediaAliasWithId_, tns__blockMediaAliasWithIdResponse *tns__blockMediaAliasWithIdResponse_)
+{	struct soap *soap = this;
+	struct __tns__blockMediaAliasWithId soap_tmp___tns__blockMediaAliasWithId;
+	if (endpoint)
+		soap_endpoint = endpoint;
+	if (!soap_endpoint)
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
+	if (!soap_action)
+		soap_action = "";
+	soap->encodingStyle = NULL;
+	soap_tmp___tns__blockMediaAliasWithId.tns__blockMediaAliasWithId_ = tns__blockMediaAliasWithId_;
+	soap_begin(soap);
+	soap_serializeheader(soap);
+	soap_serialize___tns__blockMediaAliasWithId(soap, &soap_tmp___tns__blockMediaAliasWithId);
+	if (soap_begin_count(soap))
+		return soap->error;
+	if (soap->mode & SOAP_IO_LENGTH)
+	{	if (soap_envelope_begin_out(soap)
+		 || soap_putheader(soap)
+		 || soap_body_begin_out(soap)
+		 || soap_put___tns__blockMediaAliasWithId(soap, &soap_tmp___tns__blockMediaAliasWithId, "-tns:blockMediaAliasWithId", NULL)
+		 || soap_body_end_out(soap)
+		 || soap_envelope_end_out(soap))
+			 return soap->error;
+	}
+	if (soap_end_count(soap))
+		return soap->error;
+	if (soap_connect(soap, soap_endpoint, soap_action)
+	 || soap_envelope_begin_out(soap)
+	 || soap_putheader(soap)
+	 || soap_body_begin_out(soap)
+	 || soap_put___tns__blockMediaAliasWithId(soap, &soap_tmp___tns__blockMediaAliasWithId, "-tns:blockMediaAliasWithId", NULL)
+	 || soap_body_end_out(soap)
+	 || soap_envelope_end_out(soap)
+	 || soap_end_send(soap))
+		return soap_closesock(soap);
+	if (!tns__blockMediaAliasWithIdResponse_)
+		return soap_closesock(soap);
+	tns__blockMediaAliasWithIdResponse_->soap_default(soap);
+	if (soap_begin_recv(soap)
+	 || soap_envelope_begin_in(soap)
+	 || soap_recv_header(soap)
+	 || soap_body_begin_in(soap))
+		return soap_closesock(soap);
+	tns__blockMediaAliasWithIdResponse_->soap_get(soap, "tns:blockMediaAliasWithIdResponse", "tns:blockMediaAliasWithIdResponse");
+	if (soap->error)
+		return soap_recv_fault(soap, 0);
+	if (soap_body_end_in(soap)
+	 || soap_envelope_end_in(soap)
+	 || soap_end_recv(soap))
+		return soap_closesock(soap);
+	return soap_closesock(soap);
+}
+
+int ServerAgentServiceSoapBindingProxy::blockMediaAnnotationWithId(const char *endpoint, const char *soap_action, tns__blockMediaAnnotationWithId *tns__blockMediaAnnotationWithId_, tns__blockMediaAnnotationWithIdResponse *tns__blockMediaAnnotationWithIdResponse_)
+{	struct soap *soap = this;
+	struct __tns__blockMediaAnnotationWithId soap_tmp___tns__blockMediaAnnotationWithId;
+	if (endpoint)
+		soap_endpoint = endpoint;
+	if (!soap_endpoint)
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
+	if (!soap_action)
+		soap_action = "";
+	soap->encodingStyle = NULL;
+	soap_tmp___tns__blockMediaAnnotationWithId.tns__blockMediaAnnotationWithId_ = tns__blockMediaAnnotationWithId_;
+	soap_begin(soap);
+	soap_serializeheader(soap);
+	soap_serialize___tns__blockMediaAnnotationWithId(soap, &soap_tmp___tns__blockMediaAnnotationWithId);
+	if (soap_begin_count(soap))
+		return soap->error;
+	if (soap->mode & SOAP_IO_LENGTH)
+	{	if (soap_envelope_begin_out(soap)
+		 || soap_putheader(soap)
+		 || soap_body_begin_out(soap)
+		 || soap_put___tns__blockMediaAnnotationWithId(soap, &soap_tmp___tns__blockMediaAnnotationWithId, "-tns:blockMediaAnnotationWithId", NULL)
+		 || soap_body_end_out(soap)
+		 || soap_envelope_end_out(soap))
+			 return soap->error;
+	}
+	if (soap_end_count(soap))
+		return soap->error;
+	if (soap_connect(soap, soap_endpoint, soap_action)
+	 || soap_envelope_begin_out(soap)
+	 || soap_putheader(soap)
+	 || soap_body_begin_out(soap)
+	 || soap_put___tns__blockMediaAnnotationWithId(soap, &soap_tmp___tns__blockMediaAnnotationWithId, "-tns:blockMediaAnnotationWithId", NULL)
+	 || soap_body_end_out(soap)
+	 || soap_envelope_end_out(soap)
+	 || soap_end_send(soap))
+		return soap_closesock(soap);
+	if (!tns__blockMediaAnnotationWithIdResponse_)
+		return soap_closesock(soap);
+	tns__blockMediaAnnotationWithIdResponse_->soap_default(soap);
+	if (soap_begin_recv(soap)
+	 || soap_envelope_begin_in(soap)
+	 || soap_recv_header(soap)
+	 || soap_body_begin_in(soap))
+		return soap_closesock(soap);
+	tns__blockMediaAnnotationWithIdResponse_->soap_get(soap, "tns:blockMediaAnnotationWithIdResponse", "tns:blockMediaAnnotationWithIdResponse");
+	if (soap->error)
+		return soap_recv_fault(soap, 0);
+	if (soap_body_end_in(soap)
+	 || soap_envelope_end_in(soap)
+	 || soap_end_recv(soap))
+		return soap_closesock(soap);
+	return soap_closesock(soap);
+}
+
+int ServerAgentServiceSoapBindingProxy::blockUserWithId(const char *endpoint, const char *soap_action, tns__blockUserWithId *tns__blockUserWithId_, tns__blockUserWithIdResponse *tns__blockUserWithIdResponse_)
+{	struct soap *soap = this;
+	struct __tns__blockUserWithId soap_tmp___tns__blockUserWithId;
+	if (endpoint)
+		soap_endpoint = endpoint;
+	if (!soap_endpoint)
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
+	if (!soap_action)
+		soap_action = "";
+	soap->encodingStyle = NULL;
+	soap_tmp___tns__blockUserWithId.tns__blockUserWithId_ = tns__blockUserWithId_;
+	soap_begin(soap);
+	soap_serializeheader(soap);
+	soap_serialize___tns__blockUserWithId(soap, &soap_tmp___tns__blockUserWithId);
+	if (soap_begin_count(soap))
+		return soap->error;
+	if (soap->mode & SOAP_IO_LENGTH)
+	{	if (soap_envelope_begin_out(soap)
+		 || soap_putheader(soap)
+		 || soap_body_begin_out(soap)
+		 || soap_put___tns__blockUserWithId(soap, &soap_tmp___tns__blockUserWithId, "-tns:blockUserWithId", NULL)
+		 || soap_body_end_out(soap)
+		 || soap_envelope_end_out(soap))
+			 return soap->error;
+	}
+	if (soap_end_count(soap))
+		return soap->error;
+	if (soap_connect(soap, soap_endpoint, soap_action)
+	 || soap_envelope_begin_out(soap)
+	 || soap_putheader(soap)
+	 || soap_body_begin_out(soap)
+	 || soap_put___tns__blockUserWithId(soap, &soap_tmp___tns__blockUserWithId, "-tns:blockUserWithId", NULL)
+	 || soap_body_end_out(soap)
+	 || soap_envelope_end_out(soap)
+	 || soap_end_send(soap))
+		return soap_closesock(soap);
+	if (!tns__blockUserWithIdResponse_)
+		return soap_closesock(soap);
+	tns__blockUserWithIdResponse_->soap_default(soap);
+	if (soap_begin_recv(soap)
+	 || soap_envelope_begin_in(soap)
+	 || soap_recv_header(soap)
+	 || soap_body_begin_in(soap))
+		return soap_closesock(soap);
+	tns__blockUserWithIdResponse_->soap_get(soap, "tns:blockUserWithIdResponse", "tns:blockUserWithIdResponse");
+	if (soap->error)
+		return soap_recv_fault(soap, 0);
+	if (soap_body_end_in(soap)
+	 || soap_envelope_end_in(soap)
+	 || soap_end_recv(soap))
+		return soap_closesock(soap);
+	return soap_closesock(soap);
+}
+
 int ServerAgentServiceSoapBindingProxy::chat(const char *endpoint, const char *soap_action, tns__chat *tns__chat_, tns__chatResponse *tns__chatResponse_)
 {	struct soap *soap = this;
 	struct __tns__chat soap_tmp___tns__chat;
@@ -252,6 +468,168 @@ int ServerAgentServiceSoapBindingProxy::chat(const char *endpoint, const char *s
 	 || soap_body_begin_in(soap))
 		return soap_closesock(soap);
 	tns__chatResponse_->soap_get(soap, "tns:chatResponse", "tns:chatResponse");
+	if (soap->error)
+		return soap_recv_fault(soap, 0);
+	if (soap_body_end_in(soap)
+	 || soap_envelope_end_in(soap)
+	 || soap_end_recv(soap))
+		return soap_closesock(soap);
+	return soap_closesock(soap);
+}
+
+int ServerAgentServiceSoapBindingProxy::curseMediaAliasWithId(const char *endpoint, const char *soap_action, tns__curseMediaAliasWithId *tns__curseMediaAliasWithId_, tns__curseMediaAliasWithIdResponse *tns__curseMediaAliasWithIdResponse_)
+{	struct soap *soap = this;
+	struct __tns__curseMediaAliasWithId soap_tmp___tns__curseMediaAliasWithId;
+	if (endpoint)
+		soap_endpoint = endpoint;
+	if (!soap_endpoint)
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
+	if (!soap_action)
+		soap_action = "";
+	soap->encodingStyle = NULL;
+	soap_tmp___tns__curseMediaAliasWithId.tns__curseMediaAliasWithId_ = tns__curseMediaAliasWithId_;
+	soap_begin(soap);
+	soap_serializeheader(soap);
+	soap_serialize___tns__curseMediaAliasWithId(soap, &soap_tmp___tns__curseMediaAliasWithId);
+	if (soap_begin_count(soap))
+		return soap->error;
+	if (soap->mode & SOAP_IO_LENGTH)
+	{	if (soap_envelope_begin_out(soap)
+		 || soap_putheader(soap)
+		 || soap_body_begin_out(soap)
+		 || soap_put___tns__curseMediaAliasWithId(soap, &soap_tmp___tns__curseMediaAliasWithId, "-tns:curseMediaAliasWithId", NULL)
+		 || soap_body_end_out(soap)
+		 || soap_envelope_end_out(soap))
+			 return soap->error;
+	}
+	if (soap_end_count(soap))
+		return soap->error;
+	if (soap_connect(soap, soap_endpoint, soap_action)
+	 || soap_envelope_begin_out(soap)
+	 || soap_putheader(soap)
+	 || soap_body_begin_out(soap)
+	 || soap_put___tns__curseMediaAliasWithId(soap, &soap_tmp___tns__curseMediaAliasWithId, "-tns:curseMediaAliasWithId", NULL)
+	 || soap_body_end_out(soap)
+	 || soap_envelope_end_out(soap)
+	 || soap_end_send(soap))
+		return soap_closesock(soap);
+	if (!tns__curseMediaAliasWithIdResponse_)
+		return soap_closesock(soap);
+	tns__curseMediaAliasWithIdResponse_->soap_default(soap);
+	if (soap_begin_recv(soap)
+	 || soap_envelope_begin_in(soap)
+	 || soap_recv_header(soap)
+	 || soap_body_begin_in(soap))
+		return soap_closesock(soap);
+	tns__curseMediaAliasWithIdResponse_->soap_get(soap, "tns:curseMediaAliasWithIdResponse", "tns:curseMediaAliasWithIdResponse");
+	if (soap->error)
+		return soap_recv_fault(soap, 0);
+	if (soap_body_end_in(soap)
+	 || soap_envelope_end_in(soap)
+	 || soap_end_recv(soap))
+		return soap_closesock(soap);
+	return soap_closesock(soap);
+}
+
+int ServerAgentServiceSoapBindingProxy::curseMediaAnnotationWithId(const char *endpoint, const char *soap_action, tns__curseMediaAnnotationWithId *tns__curseMediaAnnotationWithId_, tns__curseMediaAnnotationWithIdResponse *tns__curseMediaAnnotationWithIdResponse_)
+{	struct soap *soap = this;
+	struct __tns__curseMediaAnnotationWithId soap_tmp___tns__curseMediaAnnotationWithId;
+	if (endpoint)
+		soap_endpoint = endpoint;
+	if (!soap_endpoint)
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
+	if (!soap_action)
+		soap_action = "";
+	soap->encodingStyle = NULL;
+	soap_tmp___tns__curseMediaAnnotationWithId.tns__curseMediaAnnotationWithId_ = tns__curseMediaAnnotationWithId_;
+	soap_begin(soap);
+	soap_serializeheader(soap);
+	soap_serialize___tns__curseMediaAnnotationWithId(soap, &soap_tmp___tns__curseMediaAnnotationWithId);
+	if (soap_begin_count(soap))
+		return soap->error;
+	if (soap->mode & SOAP_IO_LENGTH)
+	{	if (soap_envelope_begin_out(soap)
+		 || soap_putheader(soap)
+		 || soap_body_begin_out(soap)
+		 || soap_put___tns__curseMediaAnnotationWithId(soap, &soap_tmp___tns__curseMediaAnnotationWithId, "-tns:curseMediaAnnotationWithId", NULL)
+		 || soap_body_end_out(soap)
+		 || soap_envelope_end_out(soap))
+			 return soap->error;
+	}
+	if (soap_end_count(soap))
+		return soap->error;
+	if (soap_connect(soap, soap_endpoint, soap_action)
+	 || soap_envelope_begin_out(soap)
+	 || soap_putheader(soap)
+	 || soap_body_begin_out(soap)
+	 || soap_put___tns__curseMediaAnnotationWithId(soap, &soap_tmp___tns__curseMediaAnnotationWithId, "-tns:curseMediaAnnotationWithId", NULL)
+	 || soap_body_end_out(soap)
+	 || soap_envelope_end_out(soap)
+	 || soap_end_send(soap))
+		return soap_closesock(soap);
+	if (!tns__curseMediaAnnotationWithIdResponse_)
+		return soap_closesock(soap);
+	tns__curseMediaAnnotationWithIdResponse_->soap_default(soap);
+	if (soap_begin_recv(soap)
+	 || soap_envelope_begin_in(soap)
+	 || soap_recv_header(soap)
+	 || soap_body_begin_in(soap))
+		return soap_closesock(soap);
+	tns__curseMediaAnnotationWithIdResponse_->soap_get(soap, "tns:curseMediaAnnotationWithIdResponse", "tns:curseMediaAnnotationWithIdResponse");
+	if (soap->error)
+		return soap_recv_fault(soap, 0);
+	if (soap_body_end_in(soap)
+	 || soap_envelope_end_in(soap)
+	 || soap_end_recv(soap))
+		return soap_closesock(soap);
+	return soap_closesock(soap);
+}
+
+int ServerAgentServiceSoapBindingProxy::curseMediaTokenWithId(const char *endpoint, const char *soap_action, tns__curseMediaTokenWithId *tns__curseMediaTokenWithId_, tns__curseMediaTokenWithIdResponse *tns__curseMediaTokenWithIdResponse_)
+{	struct soap *soap = this;
+	struct __tns__curseMediaTokenWithId soap_tmp___tns__curseMediaTokenWithId;
+	if (endpoint)
+		soap_endpoint = endpoint;
+	if (!soap_endpoint)
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
+	if (!soap_action)
+		soap_action = "";
+	soap->encodingStyle = NULL;
+	soap_tmp___tns__curseMediaTokenWithId.tns__curseMediaTokenWithId_ = tns__curseMediaTokenWithId_;
+	soap_begin(soap);
+	soap_serializeheader(soap);
+	soap_serialize___tns__curseMediaTokenWithId(soap, &soap_tmp___tns__curseMediaTokenWithId);
+	if (soap_begin_count(soap))
+		return soap->error;
+	if (soap->mode & SOAP_IO_LENGTH)
+	{	if (soap_envelope_begin_out(soap)
+		 || soap_putheader(soap)
+		 || soap_body_begin_out(soap)
+		 || soap_put___tns__curseMediaTokenWithId(soap, &soap_tmp___tns__curseMediaTokenWithId, "-tns:curseMediaTokenWithId", NULL)
+		 || soap_body_end_out(soap)
+		 || soap_envelope_end_out(soap))
+			 return soap->error;
+	}
+	if (soap_end_count(soap))
+		return soap->error;
+	if (soap_connect(soap, soap_endpoint, soap_action)
+	 || soap_envelope_begin_out(soap)
+	 || soap_putheader(soap)
+	 || soap_body_begin_out(soap)
+	 || soap_put___tns__curseMediaTokenWithId(soap, &soap_tmp___tns__curseMediaTokenWithId, "-tns:curseMediaTokenWithId", NULL)
+	 || soap_body_end_out(soap)
+	 || soap_envelope_end_out(soap)
+	 || soap_end_send(soap))
+		return soap_closesock(soap);
+	if (!tns__curseMediaTokenWithIdResponse_)
+		return soap_closesock(soap);
+	tns__curseMediaTokenWithIdResponse_->soap_default(soap);
+	if (soap_begin_recv(soap)
+	 || soap_envelope_begin_in(soap)
+	 || soap_recv_header(soap)
+	 || soap_body_begin_in(soap))
+		return soap_closesock(soap);
+	tns__curseMediaTokenWithIdResponse_->soap_get(soap, "tns:curseMediaTokenWithIdResponse", "tns:curseMediaTokenWithIdResponse");
 	if (soap->error)
 		return soap_recv_fault(soap, 0);
 	if (soap_body_end_in(soap)
@@ -360,222 +738,6 @@ int ServerAgentServiceSoapBindingProxy::isConnected(const char *endpoint, const 
 	 || soap_body_begin_in(soap))
 		return soap_closesock(soap);
 	tns__isConnectedResponse_->soap_get(soap, "tns:isConnectedResponse", "tns:isConnectedResponse");
-	if (soap->error)
-		return soap_recv_fault(soap, 0);
-	if (soap_body_end_in(soap)
-	 || soap_envelope_end_in(soap)
-	 || soap_end_recv(soap))
-		return soap_closesock(soap);
-	return soap_closesock(soap);
-}
-
-int ServerAgentServiceSoapBindingProxy::selectGameAliasesWithTokenId(const char *endpoint, const char *soap_action, tns__selectGameAliasesWithTokenId *tns__selectGameAliasesWithTokenId_, tns__selectGameAliasesWithTokenIdResponse *tns__selectGameAliasesWithTokenIdResponse_)
-{	struct soap *soap = this;
-	struct __tns__selectGameAliasesWithTokenId soap_tmp___tns__selectGameAliasesWithTokenId;
-	if (endpoint)
-		soap_endpoint = endpoint;
-	if (!soap_endpoint)
-		soap_endpoint = "http://localhost/services/ServerAgentPort";
-	if (!soap_action)
-		soap_action = "";
-	soap->encodingStyle = NULL;
-	soap_tmp___tns__selectGameAliasesWithTokenId.tns__selectGameAliasesWithTokenId_ = tns__selectGameAliasesWithTokenId_;
-	soap_begin(soap);
-	soap_serializeheader(soap);
-	soap_serialize___tns__selectGameAliasesWithTokenId(soap, &soap_tmp___tns__selectGameAliasesWithTokenId);
-	if (soap_begin_count(soap))
-		return soap->error;
-	if (soap->mode & SOAP_IO_LENGTH)
-	{	if (soap_envelope_begin_out(soap)
-		 || soap_putheader(soap)
-		 || soap_body_begin_out(soap)
-		 || soap_put___tns__selectGameAliasesWithTokenId(soap, &soap_tmp___tns__selectGameAliasesWithTokenId, "-tns:selectGameAliasesWithTokenId", NULL)
-		 || soap_body_end_out(soap)
-		 || soap_envelope_end_out(soap))
-			 return soap->error;
-	}
-	if (soap_end_count(soap))
-		return soap->error;
-	if (soap_connect(soap, soap_endpoint, soap_action)
-	 || soap_envelope_begin_out(soap)
-	 || soap_putheader(soap)
-	 || soap_body_begin_out(soap)
-	 || soap_put___tns__selectGameAliasesWithTokenId(soap, &soap_tmp___tns__selectGameAliasesWithTokenId, "-tns:selectGameAliasesWithTokenId", NULL)
-	 || soap_body_end_out(soap)
-	 || soap_envelope_end_out(soap)
-	 || soap_end_send(soap))
-		return soap_closesock(soap);
-	if (!tns__selectGameAliasesWithTokenIdResponse_)
-		return soap_closesock(soap);
-	tns__selectGameAliasesWithTokenIdResponse_->soap_default(soap);
-	if (soap_begin_recv(soap)
-	 || soap_envelope_begin_in(soap)
-	 || soap_recv_header(soap)
-	 || soap_body_begin_in(soap))
-		return soap_closesock(soap);
-	tns__selectGameAliasesWithTokenIdResponse_->soap_get(soap, "tns:selectGameAliasesWithTokenIdResponse", "tns:selectGameAliasesWithTokenIdResponse");
-	if (soap->error)
-		return soap_recv_fault(soap, 0);
-	if (soap_body_end_in(soap)
-	 || soap_envelope_end_in(soap)
-	 || soap_end_recv(soap))
-		return soap_closesock(soap);
-	return soap_closesock(soap);
-}
-
-int ServerAgentServiceSoapBindingProxy::selectGameAnnotationsWithTokenId(const char *endpoint, const char *soap_action, tns__selectGameAnnotationsWithTokenId *tns__selectGameAnnotationsWithTokenId_, tns__selectGameAnnotationsWithTokenIdResponse *tns__selectGameAnnotationsWithTokenIdResponse_)
-{	struct soap *soap = this;
-	struct __tns__selectGameAnnotationsWithTokenId soap_tmp___tns__selectGameAnnotationsWithTokenId;
-	if (endpoint)
-		soap_endpoint = endpoint;
-	if (!soap_endpoint)
-		soap_endpoint = "http://localhost/services/ServerAgentPort";
-	if (!soap_action)
-		soap_action = "";
-	soap->encodingStyle = NULL;
-	soap_tmp___tns__selectGameAnnotationsWithTokenId.tns__selectGameAnnotationsWithTokenId_ = tns__selectGameAnnotationsWithTokenId_;
-	soap_begin(soap);
-	soap_serializeheader(soap);
-	soap_serialize___tns__selectGameAnnotationsWithTokenId(soap, &soap_tmp___tns__selectGameAnnotationsWithTokenId);
-	if (soap_begin_count(soap))
-		return soap->error;
-	if (soap->mode & SOAP_IO_LENGTH)
-	{	if (soap_envelope_begin_out(soap)
-		 || soap_putheader(soap)
-		 || soap_body_begin_out(soap)
-		 || soap_put___tns__selectGameAnnotationsWithTokenId(soap, &soap_tmp___tns__selectGameAnnotationsWithTokenId, "-tns:selectGameAnnotationsWithTokenId", NULL)
-		 || soap_body_end_out(soap)
-		 || soap_envelope_end_out(soap))
-			 return soap->error;
-	}
-	if (soap_end_count(soap))
-		return soap->error;
-	if (soap_connect(soap, soap_endpoint, soap_action)
-	 || soap_envelope_begin_out(soap)
-	 || soap_putheader(soap)
-	 || soap_body_begin_out(soap)
-	 || soap_put___tns__selectGameAnnotationsWithTokenId(soap, &soap_tmp___tns__selectGameAnnotationsWithTokenId, "-tns:selectGameAnnotationsWithTokenId", NULL)
-	 || soap_body_end_out(soap)
-	 || soap_envelope_end_out(soap)
-	 || soap_end_send(soap))
-		return soap_closesock(soap);
-	if (!tns__selectGameAnnotationsWithTokenIdResponse_)
-		return soap_closesock(soap);
-	tns__selectGameAnnotationsWithTokenIdResponse_->soap_default(soap);
-	if (soap_begin_recv(soap)
-	 || soap_envelope_begin_in(soap)
-	 || soap_recv_header(soap)
-	 || soap_body_begin_in(soap))
-		return soap_closesock(soap);
-	tns__selectGameAnnotationsWithTokenIdResponse_->soap_get(soap, "tns:selectGameAnnotationsWithTokenIdResponse", "tns:selectGameAnnotationsWithTokenIdResponse");
-	if (soap->error)
-		return soap_recv_fault(soap, 0);
-	if (soap_body_end_in(soap)
-	 || soap_envelope_end_in(soap)
-	 || soap_end_recv(soap))
-		return soap_closesock(soap);
-	return soap_closesock(soap);
-}
-
-int ServerAgentServiceSoapBindingProxy::selectGameTokenWithDigest(const char *endpoint, const char *soap_action, tns__selectGameTokenWithDigest *tns__selectGameTokenWithDigest_, tns__selectGameTokenWithDigestResponse *tns__selectGameTokenWithDigestResponse_)
-{	struct soap *soap = this;
-	struct __tns__selectGameTokenWithDigest soap_tmp___tns__selectGameTokenWithDigest;
-	if (endpoint)
-		soap_endpoint = endpoint;
-	if (!soap_endpoint)
-		soap_endpoint = "http://localhost/services/ServerAgentPort";
-	if (!soap_action)
-		soap_action = "";
-	soap->encodingStyle = NULL;
-	soap_tmp___tns__selectGameTokenWithDigest.tns__selectGameTokenWithDigest_ = tns__selectGameTokenWithDigest_;
-	soap_begin(soap);
-	soap_serializeheader(soap);
-	soap_serialize___tns__selectGameTokenWithDigest(soap, &soap_tmp___tns__selectGameTokenWithDigest);
-	if (soap_begin_count(soap))
-		return soap->error;
-	if (soap->mode & SOAP_IO_LENGTH)
-	{	if (soap_envelope_begin_out(soap)
-		 || soap_putheader(soap)
-		 || soap_body_begin_out(soap)
-		 || soap_put___tns__selectGameTokenWithDigest(soap, &soap_tmp___tns__selectGameTokenWithDigest, "-tns:selectGameTokenWithDigest", NULL)
-		 || soap_body_end_out(soap)
-		 || soap_envelope_end_out(soap))
-			 return soap->error;
-	}
-	if (soap_end_count(soap))
-		return soap->error;
-	if (soap_connect(soap, soap_endpoint, soap_action)
-	 || soap_envelope_begin_out(soap)
-	 || soap_putheader(soap)
-	 || soap_body_begin_out(soap)
-	 || soap_put___tns__selectGameTokenWithDigest(soap, &soap_tmp___tns__selectGameTokenWithDigest, "-tns:selectGameTokenWithDigest", NULL)
-	 || soap_body_end_out(soap)
-	 || soap_envelope_end_out(soap)
-	 || soap_end_send(soap))
-		return soap_closesock(soap);
-	if (!tns__selectGameTokenWithDigestResponse_)
-		return soap_closesock(soap);
-	tns__selectGameTokenWithDigestResponse_->soap_default(soap);
-	if (soap_begin_recv(soap)
-	 || soap_envelope_begin_in(soap)
-	 || soap_recv_header(soap)
-	 || soap_body_begin_in(soap))
-		return soap_closesock(soap);
-	tns__selectGameTokenWithDigestResponse_->soap_get(soap, "tns:selectGameTokenWithDigestResponse", "tns:selectGameTokenWithDigestResponse");
-	if (soap->error)
-		return soap_recv_fault(soap, 0);
-	if (soap_body_end_in(soap)
-	 || soap_envelope_end_in(soap)
-	 || soap_end_recv(soap))
-		return soap_closesock(soap);
-	return soap_closesock(soap);
-}
-
-int ServerAgentServiceSoapBindingProxy::selectGameTokenWithId(const char *endpoint, const char *soap_action, tns__selectGameTokenWithId *tns__selectGameTokenWithId_, tns__selectGameTokenWithIdResponse *tns__selectGameTokenWithIdResponse_)
-{	struct soap *soap = this;
-	struct __tns__selectGameTokenWithId soap_tmp___tns__selectGameTokenWithId;
-	if (endpoint)
-		soap_endpoint = endpoint;
-	if (!soap_endpoint)
-		soap_endpoint = "http://localhost/services/ServerAgentPort";
-	if (!soap_action)
-		soap_action = "";
-	soap->encodingStyle = NULL;
-	soap_tmp___tns__selectGameTokenWithId.tns__selectGameTokenWithId_ = tns__selectGameTokenWithId_;
-	soap_begin(soap);
-	soap_serializeheader(soap);
-	soap_serialize___tns__selectGameTokenWithId(soap, &soap_tmp___tns__selectGameTokenWithId);
-	if (soap_begin_count(soap))
-		return soap->error;
-	if (soap->mode & SOAP_IO_LENGTH)
-	{	if (soap_envelope_begin_out(soap)
-		 || soap_putheader(soap)
-		 || soap_body_begin_out(soap)
-		 || soap_put___tns__selectGameTokenWithId(soap, &soap_tmp___tns__selectGameTokenWithId, "-tns:selectGameTokenWithId", NULL)
-		 || soap_body_end_out(soap)
-		 || soap_envelope_end_out(soap))
-			 return soap->error;
-	}
-	if (soap_end_count(soap))
-		return soap->error;
-	if (soap_connect(soap, soap_endpoint, soap_action)
-	 || soap_envelope_begin_out(soap)
-	 || soap_putheader(soap)
-	 || soap_body_begin_out(soap)
-	 || soap_put___tns__selectGameTokenWithId(soap, &soap_tmp___tns__selectGameTokenWithId, "-tns:selectGameTokenWithId", NULL)
-	 || soap_body_end_out(soap)
-	 || soap_envelope_end_out(soap)
-	 || soap_end_send(soap))
-		return soap_closesock(soap);
-	if (!tns__selectGameTokenWithIdResponse_)
-		return soap_closesock(soap);
-	tns__selectGameTokenWithIdResponse_->soap_default(soap);
-	if (soap_begin_recv(soap)
-	 || soap_envelope_begin_in(soap)
-	 || soap_recv_header(soap)
-	 || soap_body_begin_in(soap))
-		return soap_closesock(soap);
-	tns__selectGameTokenWithIdResponse_->soap_get(soap, "tns:selectGameTokenWithIdResponse", "tns:selectGameTokenWithIdResponse");
 	if (soap->error)
 		return soap_recv_fault(soap, 0);
 	if (soap_body_end_in(soap)
@@ -801,60 +963,6 @@ int ServerAgentServiceSoapBindingProxy::selectMediaTokenWithId(const char *endpo
 	return soap_closesock(soap);
 }
 
-int ServerAgentServiceSoapBindingProxy::selectRelatedGameAnnotationsWithTokenId(const char *endpoint, const char *soap_action, tns__selectRelatedGameAnnotationsWithTokenId *tns__selectRelatedGameAnnotationsWithTokenId_, tns__selectRelatedGameAnnotationsWithTokenIdResponse *tns__selectRelatedGameAnnotationsWithTokenIdResponse_)
-{	struct soap *soap = this;
-	struct __tns__selectRelatedGameAnnotationsWithTokenId soap_tmp___tns__selectRelatedGameAnnotationsWithTokenId;
-	if (endpoint)
-		soap_endpoint = endpoint;
-	if (!soap_endpoint)
-		soap_endpoint = "http://localhost/services/ServerAgentPort";
-	if (!soap_action)
-		soap_action = "";
-	soap->encodingStyle = NULL;
-	soap_tmp___tns__selectRelatedGameAnnotationsWithTokenId.tns__selectRelatedGameAnnotationsWithTokenId_ = tns__selectRelatedGameAnnotationsWithTokenId_;
-	soap_begin(soap);
-	soap_serializeheader(soap);
-	soap_serialize___tns__selectRelatedGameAnnotationsWithTokenId(soap, &soap_tmp___tns__selectRelatedGameAnnotationsWithTokenId);
-	if (soap_begin_count(soap))
-		return soap->error;
-	if (soap->mode & SOAP_IO_LENGTH)
-	{	if (soap_envelope_begin_out(soap)
-		 || soap_putheader(soap)
-		 || soap_body_begin_out(soap)
-		 || soap_put___tns__selectRelatedGameAnnotationsWithTokenId(soap, &soap_tmp___tns__selectRelatedGameAnnotationsWithTokenId, "-tns:selectRelatedGameAnnotationsWithTokenId", NULL)
-		 || soap_body_end_out(soap)
-		 || soap_envelope_end_out(soap))
-			 return soap->error;
-	}
-	if (soap_end_count(soap))
-		return soap->error;
-	if (soap_connect(soap, soap_endpoint, soap_action)
-	 || soap_envelope_begin_out(soap)
-	 || soap_putheader(soap)
-	 || soap_body_begin_out(soap)
-	 || soap_put___tns__selectRelatedGameAnnotationsWithTokenId(soap, &soap_tmp___tns__selectRelatedGameAnnotationsWithTokenId, "-tns:selectRelatedGameAnnotationsWithTokenId", NULL)
-	 || soap_body_end_out(soap)
-	 || soap_envelope_end_out(soap)
-	 || soap_end_send(soap))
-		return soap_closesock(soap);
-	if (!tns__selectRelatedGameAnnotationsWithTokenIdResponse_)
-		return soap_closesock(soap);
-	tns__selectRelatedGameAnnotationsWithTokenIdResponse_->soap_default(soap);
-	if (soap_begin_recv(soap)
-	 || soap_envelope_begin_in(soap)
-	 || soap_recv_header(soap)
-	 || soap_body_begin_in(soap))
-		return soap_closesock(soap);
-	tns__selectRelatedGameAnnotationsWithTokenIdResponse_->soap_get(soap, "tns:selectRelatedGameAnnotationsWithTokenIdResponse", "tns:selectRelatedGameAnnotationsWithTokenIdResponse");
-	if (soap->error)
-		return soap_recv_fault(soap, 0);
-	if (soap_body_end_in(soap)
-	 || soap_envelope_end_in(soap)
-	 || soap_end_recv(soap))
-		return soap_closesock(soap);
-	return soap_closesock(soap);
-}
-
 int ServerAgentServiceSoapBindingProxy::selectRelatedMediaAnnotationsWithTokenId(const char *endpoint, const char *soap_action, tns__selectRelatedMediaAnnotationsWithTokenId *tns__selectRelatedMediaAnnotationsWithTokenId_, tns__selectRelatedMediaAnnotationsWithTokenIdResponse *tns__selectRelatedMediaAnnotationsWithTokenIdResponse_)
 {	struct soap *soap = this;
 	struct __tns__selectRelatedMediaAnnotationsWithTokenId soap_tmp___tns__selectRelatedMediaAnnotationsWithTokenId;
@@ -1062,438 +1170,6 @@ int ServerAgentServiceSoapBindingProxy::setUserLanguage(const char *endpoint, co
 	 || soap_body_begin_in(soap))
 		return soap_closesock(soap);
 	tns__setUserLanguageResponse_->soap_get(soap, "tns:setUserLanguageResponse", "tns:setUserLanguageResponse");
-	if (soap->error)
-		return soap_recv_fault(soap, 0);
-	if (soap_body_end_in(soap)
-	 || soap_envelope_end_in(soap)
-	 || soap_end_recv(soap))
-		return soap_closesock(soap);
-	return soap_closesock(soap);
-}
-
-int ServerAgentServiceSoapBindingProxy::submitGameAlias(const char *endpoint, const char *soap_action, tns__submitGameAlias *tns__submitGameAlias_, tns__submitGameAliasResponse *tns__submitGameAliasResponse_)
-{	struct soap *soap = this;
-	struct __tns__submitGameAlias soap_tmp___tns__submitGameAlias;
-	if (endpoint)
-		soap_endpoint = endpoint;
-	if (!soap_endpoint)
-		soap_endpoint = "http://localhost/services/ServerAgentPort";
-	if (!soap_action)
-		soap_action = "";
-	soap->encodingStyle = NULL;
-	soap_tmp___tns__submitGameAlias.tns__submitGameAlias_ = tns__submitGameAlias_;
-	soap_begin(soap);
-	soap_serializeheader(soap);
-	soap_serialize___tns__submitGameAlias(soap, &soap_tmp___tns__submitGameAlias);
-	if (soap_begin_count(soap))
-		return soap->error;
-	if (soap->mode & SOAP_IO_LENGTH)
-	{	if (soap_envelope_begin_out(soap)
-		 || soap_putheader(soap)
-		 || soap_body_begin_out(soap)
-		 || soap_put___tns__submitGameAlias(soap, &soap_tmp___tns__submitGameAlias, "-tns:submitGameAlias", NULL)
-		 || soap_body_end_out(soap)
-		 || soap_envelope_end_out(soap))
-			 return soap->error;
-	}
-	if (soap_end_count(soap))
-		return soap->error;
-	if (soap_connect(soap, soap_endpoint, soap_action)
-	 || soap_envelope_begin_out(soap)
-	 || soap_putheader(soap)
-	 || soap_body_begin_out(soap)
-	 || soap_put___tns__submitGameAlias(soap, &soap_tmp___tns__submitGameAlias, "-tns:submitGameAlias", NULL)
-	 || soap_body_end_out(soap)
-	 || soap_envelope_end_out(soap)
-	 || soap_end_send(soap))
-		return soap_closesock(soap);
-	if (!tns__submitGameAliasResponse_)
-		return soap_closesock(soap);
-	tns__submitGameAliasResponse_->soap_default(soap);
-	if (soap_begin_recv(soap)
-	 || soap_envelope_begin_in(soap)
-	 || soap_recv_header(soap)
-	 || soap_body_begin_in(soap))
-		return soap_closesock(soap);
-	tns__submitGameAliasResponse_->soap_get(soap, "tns:submitGameAliasResponse", "tns:submitGameAliasResponse");
-	if (soap->error)
-		return soap_recv_fault(soap, 0);
-	if (soap_body_end_in(soap)
-	 || soap_envelope_end_in(soap)
-	 || soap_end_recv(soap))
-		return soap_closesock(soap);
-	return soap_closesock(soap);
-}
-
-int ServerAgentServiceSoapBindingProxy::submitGameAliasTextAndTokenDigest(const char *endpoint, const char *soap_action, tns__submitGameAliasTextAndTokenDigest *tns__submitGameAliasTextAndTokenDigest_, tns__submitGameAliasTextAndTokenDigestResponse *tns__submitGameAliasTextAndTokenDigestResponse_)
-{	struct soap *soap = this;
-	struct __tns__submitGameAliasTextAndTokenDigest soap_tmp___tns__submitGameAliasTextAndTokenDigest;
-	if (endpoint)
-		soap_endpoint = endpoint;
-	if (!soap_endpoint)
-		soap_endpoint = "http://localhost/services/ServerAgentPort";
-	if (!soap_action)
-		soap_action = "";
-	soap->encodingStyle = NULL;
-	soap_tmp___tns__submitGameAliasTextAndTokenDigest.tns__submitGameAliasTextAndTokenDigest_ = tns__submitGameAliasTextAndTokenDigest_;
-	soap_begin(soap);
-	soap_serializeheader(soap);
-	soap_serialize___tns__submitGameAliasTextAndTokenDigest(soap, &soap_tmp___tns__submitGameAliasTextAndTokenDigest);
-	if (soap_begin_count(soap))
-		return soap->error;
-	if (soap->mode & SOAP_IO_LENGTH)
-	{	if (soap_envelope_begin_out(soap)
-		 || soap_putheader(soap)
-		 || soap_body_begin_out(soap)
-		 || soap_put___tns__submitGameAliasTextAndTokenDigest(soap, &soap_tmp___tns__submitGameAliasTextAndTokenDigest, "-tns:submitGameAliasTextAndTokenDigest", NULL)
-		 || soap_body_end_out(soap)
-		 || soap_envelope_end_out(soap))
-			 return soap->error;
-	}
-	if (soap_end_count(soap))
-		return soap->error;
-	if (soap_connect(soap, soap_endpoint, soap_action)
-	 || soap_envelope_begin_out(soap)
-	 || soap_putheader(soap)
-	 || soap_body_begin_out(soap)
-	 || soap_put___tns__submitGameAliasTextAndTokenDigest(soap, &soap_tmp___tns__submitGameAliasTextAndTokenDigest, "-tns:submitGameAliasTextAndTokenDigest", NULL)
-	 || soap_body_end_out(soap)
-	 || soap_envelope_end_out(soap)
-	 || soap_end_send(soap))
-		return soap_closesock(soap);
-	if (!tns__submitGameAliasTextAndTokenDigestResponse_)
-		return soap_closesock(soap);
-	tns__submitGameAliasTextAndTokenDigestResponse_->soap_default(soap);
-	if (soap_begin_recv(soap)
-	 || soap_envelope_begin_in(soap)
-	 || soap_recv_header(soap)
-	 || soap_body_begin_in(soap))
-		return soap_closesock(soap);
-	tns__submitGameAliasTextAndTokenDigestResponse_->soap_get(soap, "tns:submitGameAliasTextAndTokenDigestResponse", "tns:submitGameAliasTextAndTokenDigestResponse");
-	if (soap->error)
-		return soap_recv_fault(soap, 0);
-	if (soap_body_end_in(soap)
-	 || soap_envelope_end_in(soap)
-	 || soap_end_recv(soap))
-		return soap_closesock(soap);
-	return soap_closesock(soap);
-}
-
-int ServerAgentServiceSoapBindingProxy::submitGameAliasTextWithTokenId(const char *endpoint, const char *soap_action, tns__submitGameAliasTextWithTokenId *tns__submitGameAliasTextWithTokenId_, tns__submitGameAliasTextWithTokenIdResponse *tns__submitGameAliasTextWithTokenIdResponse_)
-{	struct soap *soap = this;
-	struct __tns__submitGameAliasTextWithTokenId soap_tmp___tns__submitGameAliasTextWithTokenId;
-	if (endpoint)
-		soap_endpoint = endpoint;
-	if (!soap_endpoint)
-		soap_endpoint = "http://localhost/services/ServerAgentPort";
-	if (!soap_action)
-		soap_action = "";
-	soap->encodingStyle = NULL;
-	soap_tmp___tns__submitGameAliasTextWithTokenId.tns__submitGameAliasTextWithTokenId_ = tns__submitGameAliasTextWithTokenId_;
-	soap_begin(soap);
-	soap_serializeheader(soap);
-	soap_serialize___tns__submitGameAliasTextWithTokenId(soap, &soap_tmp___tns__submitGameAliasTextWithTokenId);
-	if (soap_begin_count(soap))
-		return soap->error;
-	if (soap->mode & SOAP_IO_LENGTH)
-	{	if (soap_envelope_begin_out(soap)
-		 || soap_putheader(soap)
-		 || soap_body_begin_out(soap)
-		 || soap_put___tns__submitGameAliasTextWithTokenId(soap, &soap_tmp___tns__submitGameAliasTextWithTokenId, "-tns:submitGameAliasTextWithTokenId", NULL)
-		 || soap_body_end_out(soap)
-		 || soap_envelope_end_out(soap))
-			 return soap->error;
-	}
-	if (soap_end_count(soap))
-		return soap->error;
-	if (soap_connect(soap, soap_endpoint, soap_action)
-	 || soap_envelope_begin_out(soap)
-	 || soap_putheader(soap)
-	 || soap_body_begin_out(soap)
-	 || soap_put___tns__submitGameAliasTextWithTokenId(soap, &soap_tmp___tns__submitGameAliasTextWithTokenId, "-tns:submitGameAliasTextWithTokenId", NULL)
-	 || soap_body_end_out(soap)
-	 || soap_envelope_end_out(soap)
-	 || soap_end_send(soap))
-		return soap_closesock(soap);
-	if (!tns__submitGameAliasTextWithTokenIdResponse_)
-		return soap_closesock(soap);
-	tns__submitGameAliasTextWithTokenIdResponse_->soap_default(soap);
-	if (soap_begin_recv(soap)
-	 || soap_envelope_begin_in(soap)
-	 || soap_recv_header(soap)
-	 || soap_body_begin_in(soap))
-		return soap_closesock(soap);
-	tns__submitGameAliasTextWithTokenIdResponse_->soap_get(soap, "tns:submitGameAliasTextWithTokenIdResponse", "tns:submitGameAliasTextWithTokenIdResponse");
-	if (soap->error)
-		return soap_recv_fault(soap, 0);
-	if (soap_body_end_in(soap)
-	 || soap_envelope_end_in(soap)
-	 || soap_end_recv(soap))
-		return soap_closesock(soap);
-	return soap_closesock(soap);
-}
-
-int ServerAgentServiceSoapBindingProxy::submitGameAnnotation(const char *endpoint, const char *soap_action, tns__submitGameAnnotation *tns__submitGameAnnotation_, tns__submitGameAnnotationResponse *tns__submitGameAnnotationResponse_)
-{	struct soap *soap = this;
-	struct __tns__submitGameAnnotation soap_tmp___tns__submitGameAnnotation;
-	if (endpoint)
-		soap_endpoint = endpoint;
-	if (!soap_endpoint)
-		soap_endpoint = "http://localhost/services/ServerAgentPort";
-	if (!soap_action)
-		soap_action = "";
-	soap->encodingStyle = NULL;
-	soap_tmp___tns__submitGameAnnotation.tns__submitGameAnnotation_ = tns__submitGameAnnotation_;
-	soap_begin(soap);
-	soap_serializeheader(soap);
-	soap_serialize___tns__submitGameAnnotation(soap, &soap_tmp___tns__submitGameAnnotation);
-	if (soap_begin_count(soap))
-		return soap->error;
-	if (soap->mode & SOAP_IO_LENGTH)
-	{	if (soap_envelope_begin_out(soap)
-		 || soap_putheader(soap)
-		 || soap_body_begin_out(soap)
-		 || soap_put___tns__submitGameAnnotation(soap, &soap_tmp___tns__submitGameAnnotation, "-tns:submitGameAnnotation", NULL)
-		 || soap_body_end_out(soap)
-		 || soap_envelope_end_out(soap))
-			 return soap->error;
-	}
-	if (soap_end_count(soap))
-		return soap->error;
-	if (soap_connect(soap, soap_endpoint, soap_action)
-	 || soap_envelope_begin_out(soap)
-	 || soap_putheader(soap)
-	 || soap_body_begin_out(soap)
-	 || soap_put___tns__submitGameAnnotation(soap, &soap_tmp___tns__submitGameAnnotation, "-tns:submitGameAnnotation", NULL)
-	 || soap_body_end_out(soap)
-	 || soap_envelope_end_out(soap)
-	 || soap_end_send(soap))
-		return soap_closesock(soap);
-	if (!tns__submitGameAnnotationResponse_)
-		return soap_closesock(soap);
-	tns__submitGameAnnotationResponse_->soap_default(soap);
-	if (soap_begin_recv(soap)
-	 || soap_envelope_begin_in(soap)
-	 || soap_recv_header(soap)
-	 || soap_body_begin_in(soap))
-		return soap_closesock(soap);
-	tns__submitGameAnnotationResponse_->soap_get(soap, "tns:submitGameAnnotationResponse", "tns:submitGameAnnotationResponse");
-	if (soap->error)
-		return soap_recv_fault(soap, 0);
-	if (soap_body_end_in(soap)
-	 || soap_envelope_end_in(soap)
-	 || soap_end_recv(soap))
-		return soap_closesock(soap);
-	return soap_closesock(soap);
-}
-
-int ServerAgentServiceSoapBindingProxy::submitGameAnnotationTextAndTokenDigest(const char *endpoint, const char *soap_action, tns__submitGameAnnotationTextAndTokenDigest *tns__submitGameAnnotationTextAndTokenDigest_, tns__submitGameAnnotationTextAndTokenDigestResponse *tns__submitGameAnnotationTextAndTokenDigestResponse_)
-{	struct soap *soap = this;
-	struct __tns__submitGameAnnotationTextAndTokenDigest soap_tmp___tns__submitGameAnnotationTextAndTokenDigest;
-	if (endpoint)
-		soap_endpoint = endpoint;
-	if (!soap_endpoint)
-		soap_endpoint = "http://localhost/services/ServerAgentPort";
-	if (!soap_action)
-		soap_action = "";
-	soap->encodingStyle = NULL;
-	soap_tmp___tns__submitGameAnnotationTextAndTokenDigest.tns__submitGameAnnotationTextAndTokenDigest_ = tns__submitGameAnnotationTextAndTokenDigest_;
-	soap_begin(soap);
-	soap_serializeheader(soap);
-	soap_serialize___tns__submitGameAnnotationTextAndTokenDigest(soap, &soap_tmp___tns__submitGameAnnotationTextAndTokenDigest);
-	if (soap_begin_count(soap))
-		return soap->error;
-	if (soap->mode & SOAP_IO_LENGTH)
-	{	if (soap_envelope_begin_out(soap)
-		 || soap_putheader(soap)
-		 || soap_body_begin_out(soap)
-		 || soap_put___tns__submitGameAnnotationTextAndTokenDigest(soap, &soap_tmp___tns__submitGameAnnotationTextAndTokenDigest, "-tns:submitGameAnnotationTextAndTokenDigest", NULL)
-		 || soap_body_end_out(soap)
-		 || soap_envelope_end_out(soap))
-			 return soap->error;
-	}
-	if (soap_end_count(soap))
-		return soap->error;
-	if (soap_connect(soap, soap_endpoint, soap_action)
-	 || soap_envelope_begin_out(soap)
-	 || soap_putheader(soap)
-	 || soap_body_begin_out(soap)
-	 || soap_put___tns__submitGameAnnotationTextAndTokenDigest(soap, &soap_tmp___tns__submitGameAnnotationTextAndTokenDigest, "-tns:submitGameAnnotationTextAndTokenDigest", NULL)
-	 || soap_body_end_out(soap)
-	 || soap_envelope_end_out(soap)
-	 || soap_end_send(soap))
-		return soap_closesock(soap);
-	if (!tns__submitGameAnnotationTextAndTokenDigestResponse_)
-		return soap_closesock(soap);
-	tns__submitGameAnnotationTextAndTokenDigestResponse_->soap_default(soap);
-	if (soap_begin_recv(soap)
-	 || soap_envelope_begin_in(soap)
-	 || soap_recv_header(soap)
-	 || soap_body_begin_in(soap))
-		return soap_closesock(soap);
-	tns__submitGameAnnotationTextAndTokenDigestResponse_->soap_get(soap, "tns:submitGameAnnotationTextAndTokenDigestResponse", "tns:submitGameAnnotationTextAndTokenDigestResponse");
-	if (soap->error)
-		return soap_recv_fault(soap, 0);
-	if (soap_body_end_in(soap)
-	 || soap_envelope_end_in(soap)
-	 || soap_end_recv(soap))
-		return soap_closesock(soap);
-	return soap_closesock(soap);
-}
-
-int ServerAgentServiceSoapBindingProxy::submitGameAnnotationTextWithTokenId(const char *endpoint, const char *soap_action, tns__submitGameAnnotationTextWithTokenId *tns__submitGameAnnotationTextWithTokenId_, tns__submitGameAnnotationTextWithTokenIdResponse *tns__submitGameAnnotationTextWithTokenIdResponse_)
-{	struct soap *soap = this;
-	struct __tns__submitGameAnnotationTextWithTokenId soap_tmp___tns__submitGameAnnotationTextWithTokenId;
-	if (endpoint)
-		soap_endpoint = endpoint;
-	if (!soap_endpoint)
-		soap_endpoint = "http://localhost/services/ServerAgentPort";
-	if (!soap_action)
-		soap_action = "";
-	soap->encodingStyle = NULL;
-	soap_tmp___tns__submitGameAnnotationTextWithTokenId.tns__submitGameAnnotationTextWithTokenId_ = tns__submitGameAnnotationTextWithTokenId_;
-	soap_begin(soap);
-	soap_serializeheader(soap);
-	soap_serialize___tns__submitGameAnnotationTextWithTokenId(soap, &soap_tmp___tns__submitGameAnnotationTextWithTokenId);
-	if (soap_begin_count(soap))
-		return soap->error;
-	if (soap->mode & SOAP_IO_LENGTH)
-	{	if (soap_envelope_begin_out(soap)
-		 || soap_putheader(soap)
-		 || soap_body_begin_out(soap)
-		 || soap_put___tns__submitGameAnnotationTextWithTokenId(soap, &soap_tmp___tns__submitGameAnnotationTextWithTokenId, "-tns:submitGameAnnotationTextWithTokenId", NULL)
-		 || soap_body_end_out(soap)
-		 || soap_envelope_end_out(soap))
-			 return soap->error;
-	}
-	if (soap_end_count(soap))
-		return soap->error;
-	if (soap_connect(soap, soap_endpoint, soap_action)
-	 || soap_envelope_begin_out(soap)
-	 || soap_putheader(soap)
-	 || soap_body_begin_out(soap)
-	 || soap_put___tns__submitGameAnnotationTextWithTokenId(soap, &soap_tmp___tns__submitGameAnnotationTextWithTokenId, "-tns:submitGameAnnotationTextWithTokenId", NULL)
-	 || soap_body_end_out(soap)
-	 || soap_envelope_end_out(soap)
-	 || soap_end_send(soap))
-		return soap_closesock(soap);
-	if (!tns__submitGameAnnotationTextWithTokenIdResponse_)
-		return soap_closesock(soap);
-	tns__submitGameAnnotationTextWithTokenIdResponse_->soap_default(soap);
-	if (soap_begin_recv(soap)
-	 || soap_envelope_begin_in(soap)
-	 || soap_recv_header(soap)
-	 || soap_body_begin_in(soap))
-		return soap_closesock(soap);
-	tns__submitGameAnnotationTextWithTokenIdResponse_->soap_get(soap, "tns:submitGameAnnotationTextWithTokenIdResponse", "tns:submitGameAnnotationTextWithTokenIdResponse");
-	if (soap->error)
-		return soap_recv_fault(soap, 0);
-	if (soap_body_end_in(soap)
-	 || soap_envelope_end_in(soap)
-	 || soap_end_recv(soap))
-		return soap_closesock(soap);
-	return soap_closesock(soap);
-}
-
-int ServerAgentServiceSoapBindingProxy::submitGameToken(const char *endpoint, const char *soap_action, tns__submitGameToken *tns__submitGameToken_, tns__submitGameTokenResponse *tns__submitGameTokenResponse_)
-{	struct soap *soap = this;
-	struct __tns__submitGameToken soap_tmp___tns__submitGameToken;
-	if (endpoint)
-		soap_endpoint = endpoint;
-	if (!soap_endpoint)
-		soap_endpoint = "http://localhost/services/ServerAgentPort";
-	if (!soap_action)
-		soap_action = "";
-	soap->encodingStyle = NULL;
-	soap_tmp___tns__submitGameToken.tns__submitGameToken_ = tns__submitGameToken_;
-	soap_begin(soap);
-	soap_serializeheader(soap);
-	soap_serialize___tns__submitGameToken(soap, &soap_tmp___tns__submitGameToken);
-	if (soap_begin_count(soap))
-		return soap->error;
-	if (soap->mode & SOAP_IO_LENGTH)
-	{	if (soap_envelope_begin_out(soap)
-		 || soap_putheader(soap)
-		 || soap_body_begin_out(soap)
-		 || soap_put___tns__submitGameToken(soap, &soap_tmp___tns__submitGameToken, "-tns:submitGameToken", NULL)
-		 || soap_body_end_out(soap)
-		 || soap_envelope_end_out(soap))
-			 return soap->error;
-	}
-	if (soap_end_count(soap))
-		return soap->error;
-	if (soap_connect(soap, soap_endpoint, soap_action)
-	 || soap_envelope_begin_out(soap)
-	 || soap_putheader(soap)
-	 || soap_body_begin_out(soap)
-	 || soap_put___tns__submitGameToken(soap, &soap_tmp___tns__submitGameToken, "-tns:submitGameToken", NULL)
-	 || soap_body_end_out(soap)
-	 || soap_envelope_end_out(soap)
-	 || soap_end_send(soap))
-		return soap_closesock(soap);
-	if (!tns__submitGameTokenResponse_)
-		return soap_closesock(soap);
-	tns__submitGameTokenResponse_->soap_default(soap);
-	if (soap_begin_recv(soap)
-	 || soap_envelope_begin_in(soap)
-	 || soap_recv_header(soap)
-	 || soap_body_begin_in(soap))
-		return soap_closesock(soap);
-	tns__submitGameTokenResponse_->soap_get(soap, "tns:submitGameTokenResponse", "tns:submitGameTokenResponse");
-	if (soap->error)
-		return soap_recv_fault(soap, 0);
-	if (soap_body_end_in(soap)
-	 || soap_envelope_end_in(soap)
-	 || soap_end_recv(soap))
-		return soap_closesock(soap);
-	return soap_closesock(soap);
-}
-
-int ServerAgentServiceSoapBindingProxy::submitGameTokenDigest(const char *endpoint, const char *soap_action, tns__submitGameTokenDigest *tns__submitGameTokenDigest_, tns__submitGameTokenDigestResponse *tns__submitGameTokenDigestResponse_)
-{	struct soap *soap = this;
-	struct __tns__submitGameTokenDigest soap_tmp___tns__submitGameTokenDigest;
-	if (endpoint)
-		soap_endpoint = endpoint;
-	if (!soap_endpoint)
-		soap_endpoint = "http://localhost/services/ServerAgentPort";
-	if (!soap_action)
-		soap_action = "";
-	soap->encodingStyle = NULL;
-	soap_tmp___tns__submitGameTokenDigest.tns__submitGameTokenDigest_ = tns__submitGameTokenDigest_;
-	soap_begin(soap);
-	soap_serializeheader(soap);
-	soap_serialize___tns__submitGameTokenDigest(soap, &soap_tmp___tns__submitGameTokenDigest);
-	if (soap_begin_count(soap))
-		return soap->error;
-	if (soap->mode & SOAP_IO_LENGTH)
-	{	if (soap_envelope_begin_out(soap)
-		 || soap_putheader(soap)
-		 || soap_body_begin_out(soap)
-		 || soap_put___tns__submitGameTokenDigest(soap, &soap_tmp___tns__submitGameTokenDigest, "-tns:submitGameTokenDigest", NULL)
-		 || soap_body_end_out(soap)
-		 || soap_envelope_end_out(soap))
-			 return soap->error;
-	}
-	if (soap_end_count(soap))
-		return soap->error;
-	if (soap_connect(soap, soap_endpoint, soap_action)
-	 || soap_envelope_begin_out(soap)
-	 || soap_putheader(soap)
-	 || soap_body_begin_out(soap)
-	 || soap_put___tns__submitGameTokenDigest(soap, &soap_tmp___tns__submitGameTokenDigest, "-tns:submitGameTokenDigest", NULL)
-	 || soap_body_end_out(soap)
-	 || soap_envelope_end_out(soap)
-	 || soap_end_send(soap))
-		return soap_closesock(soap);
-	if (!tns__submitGameTokenDigestResponse_)
-		return soap_closesock(soap);
-	tns__submitGameTokenDigestResponse_->soap_default(soap);
-	if (soap_begin_recv(soap)
-	 || soap_envelope_begin_in(soap)
-	 || soap_recv_header(soap)
-	 || soap_body_begin_in(soap))
-		return soap_closesock(soap);
-	tns__submitGameTokenDigestResponse_->soap_get(soap, "tns:submitGameTokenDigestResponse", "tns:submitGameTokenDigestResponse");
 	if (soap->error)
 		return soap_recv_fault(soap, 0);
 	if (soap_body_end_in(soap)
@@ -1926,60 +1602,6 @@ int ServerAgentServiceSoapBindingProxy::submitMediaTokenDigest(const char *endpo
 	 || soap_body_begin_in(soap))
 		return soap_closesock(soap);
 	tns__submitMediaTokenDigestResponse_->soap_get(soap, "tns:submitMediaTokenDigestResponse", "tns:submitMediaTokenDigestResponse");
-	if (soap->error)
-		return soap_recv_fault(soap, 0);
-	if (soap_body_end_in(soap)
-	 || soap_envelope_end_in(soap)
-	 || soap_end_recv(soap))
-		return soap_closesock(soap);
-	return soap_closesock(soap);
-}
-
-int ServerAgentServiceSoapBindingProxy::updateGameAnnotationTextWithId(const char *endpoint, const char *soap_action, tns__updateGameAnnotationTextWithId *tns__updateGameAnnotationTextWithId_, tns__updateGameAnnotationTextWithIdResponse *tns__updateGameAnnotationTextWithIdResponse_)
-{	struct soap *soap = this;
-	struct __tns__updateGameAnnotationTextWithId soap_tmp___tns__updateGameAnnotationTextWithId;
-	if (endpoint)
-		soap_endpoint = endpoint;
-	if (!soap_endpoint)
-		soap_endpoint = "http://localhost/services/ServerAgentPort";
-	if (!soap_action)
-		soap_action = "";
-	soap->encodingStyle = NULL;
-	soap_tmp___tns__updateGameAnnotationTextWithId.tns__updateGameAnnotationTextWithId_ = tns__updateGameAnnotationTextWithId_;
-	soap_begin(soap);
-	soap_serializeheader(soap);
-	soap_serialize___tns__updateGameAnnotationTextWithId(soap, &soap_tmp___tns__updateGameAnnotationTextWithId);
-	if (soap_begin_count(soap))
-		return soap->error;
-	if (soap->mode & SOAP_IO_LENGTH)
-	{	if (soap_envelope_begin_out(soap)
-		 || soap_putheader(soap)
-		 || soap_body_begin_out(soap)
-		 || soap_put___tns__updateGameAnnotationTextWithId(soap, &soap_tmp___tns__updateGameAnnotationTextWithId, "-tns:updateGameAnnotationTextWithId", NULL)
-		 || soap_body_end_out(soap)
-		 || soap_envelope_end_out(soap))
-			 return soap->error;
-	}
-	if (soap_end_count(soap))
-		return soap->error;
-	if (soap_connect(soap, soap_endpoint, soap_action)
-	 || soap_envelope_begin_out(soap)
-	 || soap_putheader(soap)
-	 || soap_body_begin_out(soap)
-	 || soap_put___tns__updateGameAnnotationTextWithId(soap, &soap_tmp___tns__updateGameAnnotationTextWithId, "-tns:updateGameAnnotationTextWithId", NULL)
-	 || soap_body_end_out(soap)
-	 || soap_envelope_end_out(soap)
-	 || soap_end_send(soap))
-		return soap_closesock(soap);
-	if (!tns__updateGameAnnotationTextWithIdResponse_)
-		return soap_closesock(soap);
-	tns__updateGameAnnotationTextWithIdResponse_->soap_default(soap);
-	if (soap_begin_recv(soap)
-	 || soap_envelope_begin_in(soap)
-	 || soap_recv_header(soap)
-	 || soap_body_begin_in(soap))
-		return soap_closesock(soap);
-	tns__updateGameAnnotationTextWithIdResponse_->soap_get(soap, "tns:updateGameAnnotationTextWithIdResponse", "tns:updateGameAnnotationTextWithIdResponse");
 	if (soap->error)
 		return soap_recv_fault(soap, 0);
 	if (soap_body_end_in(soap)

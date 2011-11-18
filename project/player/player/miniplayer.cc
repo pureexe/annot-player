@@ -9,11 +9,19 @@
 #include "module/player/player.h"    // TO BE REMOVED; added due to bad design of playerui.
 #include <QtGui>
 
-#define WINDOW_FLAGS ( \
+#define WINDOW_FLAGS_BASE \
   Qt::Dialog | \
   Qt::CustomizeWindowHint | \
   Qt::WindowTitleHint | \
-  Qt::WindowStaysOnTopHint )
+  Qt::WindowStaysOnTopHint
+
+#ifdef Q_WS_MAC
+  #define WINDOW_FLAGS ( \
+    Qt::FramelessWindowHint | \
+    WINDOW_FLAGS_BASE )
+#else
+  #define WINDOW_FLAGS ( WINDOW_FLAGS_BASE )
+#endif // Q_WS_MAC
 
 // - Constructions -
 

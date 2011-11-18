@@ -4,20 +4,21 @@
 #include "annotationgraphicsview.h"
 #include "annotationgraphicsitem.h"
 #include "annotationeditor.h"
+#include "annotationfilter.h"
 #include "stylesheet.h"
 #include "signalhub.h"
 #include "videoview.h"
 #include "logger.h"
 #include "global.h"
 #include "module/player/player.h"
-#ifdef USE_WIN_QTWIN
+#ifdef Q_WS_WIN
   #include "win/qtwin/qtwin.h"
-#endif // USE_WIN_QTWIN
+#endif // Q_WS_WIN
 #include <QtGui>
 #include <boost/typeof/typeof.hpp>
 #include <climits>
 
-#define DEBUG "AnnotationGraphicsView"
+//#define DEBUG "AnnotationGraphicsView"
 #include "module/debug/debug.h"
 
 using namespace Core::Cloud;
@@ -27,8 +28,8 @@ using namespace Logger;
 
 AnnotationGraphicsView::AnnotationGraphicsView(SignalHub *hub, Player *player, VideoView *view, QWidget *parent)
   : Base(parent), videoView_(view), fullScreenView_(0), trackingWindow_(0),
-    hub_(hub), player_(player), active_(false), paused_(false),
-    playTime_(-1), languages_(0), userId_(0), playbackEnabled_(true), subtitlePosition_(AP_Bottom)
+    hub_(hub), player_(player), filter_(0), active_(false), paused_(false),
+    playTime_(-1), userId_(0), playbackEnabled_(true), subtitlePosition_(AP_Bottom)
 {
   Q_ASSERT(hub_);
   Q_ASSERT(player_);
@@ -61,6 +62,10 @@ AnnotationGraphicsView::AnnotationGraphicsView(SignalHub *hub, Player *player, V
 AnnotationGraphicsView::~AnnotationGraphicsView()
 { clearAnnotations(); }
 
+void
+AnnotationGraphicsView::setFilter(AnnotationFilter *filter)
+{ filter_ = filter; }
+
 const QString&
 AnnotationGraphicsView::subtitlePrefix() const
 { return subtilePrefix_; }
@@ -76,14 +81,6 @@ AnnotationGraphicsView::subtitlePosition() const
 void
 AnnotationGraphicsView::setSubtitlePosition(AnnotationPosition ap)
 { subtitlePosition_ = ap; }
-
-qint64
-AnnotationGraphicsView::languages() const
-{ return languages_; }
-
-void
-AnnotationGraphicsView::setLanguages(qint64 bits)
-{ languages_ = bits; }
 
 qint64
 AnnotationGraphicsView::userId() const
@@ -169,22 +166,22 @@ void
 AnnotationGraphicsView::invalidateSize()
 {
   if (trackingWindow_) {
-#ifdef USE_WIN_QTWIN
+#ifdef Q_WS_WIN
     QRect r = QtWin::getWindowRect(trackingWindow_);
     if (r.isNull()) {
       if (!QtWin::isValidWindow(trackingWindow_))
         setTrackingWindow(0);
     } else if (size() != r.size())
       resize(r.size());
-#endif // USE_WIN_QTWIN
+#endif // Q_WS_WIN
   } else if (hub_->isMediaTokenMode() || hub_->isNormalPlayerMode()) {
     // FIXME: 10/24/2011: Screen not working orz
-#ifdef Q_WS_MAC
-    if (fullScreenView_)
-      resize(fullScreenView_->size());
-#else
+//#ifdef Q_WS_MAC
+//    if (fullScreenView_)
+//      resize(fullScreenView_->size());
+//#else
     resize(videoView_->size());
-#endif // Q_WS_MAC
+//#endif // Q_WS_MAC
 
   } else if (hub_->isSignalTokenMode()) {
     if (fullScreenView_)
@@ -198,7 +195,7 @@ void
 AnnotationGraphicsView::invalidatePos()
 {
   if (trackingWindow_) {
-#ifdef USE_WIN_QTWIN
+#ifdef Q_WS_WIN
     QRect r = QtWin::getWindowRect(trackingWindow_);
     if (r.isNull()) {
       if (!QtWin::isValidWindow(trackingWindow_))
@@ -208,26 +205,17 @@ AnnotationGraphicsView::invalidatePos()
       moveToGlobalPos(newPos);
       return;
     }
-#endif // USE_WIN_QTWIN
+#endif // Q_WS_WIN
   } else if (hub_->isMediaTokenMode() || hub_->isNormalPlayerMode()) {
-#ifdef Q_WS_MAC
-    if (fullScreenView_)
-      move(fullScreenView_->pos());
-    // FIXME: 10/24/2011: Screen not working orz. Failed to compute exact location
-    /*
-    QPoint g_to = videoView_->mapToGlobal(QPoint());
-    QPoint g_from = mapToGlobal(pos());
 
-    move(frameGeometry().topLeft() + pos()  // relative position
-         - QPoint(0, videoView_->height())       // Fix height taken by NSView in QMacCocoaView
-         + g_to - g_from);                  // absolute distance
-         */
-
-#else
     QPoint newPos = videoView_->mapToGlobal(QPoint());
+#ifdef Q_WS_MAC
+    // Since videoView_ could change its pos() while playing video, use its parent widget instead.
+    if (videoView_->parentWidget())
+      newPos = videoView_->parentWidget()->mapToGlobal(QPoint());
+#endif // Q_QW_MAC
     moveToGlobalPos(newPos);
 
-#endif // Q_WS_MAC
   } else if (hub_->isSignalTokenMode()) {
     move(fullScreenView_->pos());
   }
@@ -236,11 +224,17 @@ AnnotationGraphicsView::invalidatePos()
 void
 AnnotationGraphicsView::moveToGlobalPos(const QPoint &globalPos)
 {
+#ifdef Q_WS_MAC
+  QPoint newPos = mapFromGlobal(globalPos) - mapFromGlobal(QPoint());
+  if (newPos != pos())
+    move(newPos);
+#else
   // Currently only work on Windows
   QPoint newPos = frameGeometry().topLeft() + pos() // relative position
                   + globalPos - mapToGlobal(pos()); // absolute distance
   if (newPos != pos())
     move(newPos);
+#endif // Q_WS_MAC
 }
 
 void
@@ -413,7 +407,7 @@ AnnotationGraphicsView::addAnnotation(const Annotation &annot, qint64 delaysecs)
     l = annots_[pos] = new QList<AnnotationGraphicsItem*>;
   l->append(item);
 
-  if (isItemBlocked(item))
+  if (isItemFiltered(item))
       return;
 
   if (delaysecs == LLONG_MAX)
@@ -433,7 +427,7 @@ void
 AnnotationGraphicsView::showAnnotation(const Annotation &annot)
 {
   AnnotationGraphicsItem *item = new AnnotationGraphicsItem(annot, hub_, this);
-  if (!isItemBlocked(item))
+  if (!isItemFiltered(item))
     item->showMe();
 }
 
@@ -512,7 +506,7 @@ AnnotationGraphicsView::showAnnotationsAtPos(qint64 pos)
     QList<AnnotationGraphicsItem*> *l = annots_[pos];
     if (l && !l->empty())
       foreach (AnnotationGraphicsItem *item, *l)
-       if (item && !isItemBlocked(item))
+       if (item && !isItemFiltered(item))
          item->showMe();
   }
 
@@ -558,16 +552,13 @@ AnnotationGraphicsView::itemWithId(qint64 aid) const
 }
 
 bool
-AnnotationGraphicsView::isItemBlocked(const AnnotationGraphicsItem *item) const
+AnnotationGraphicsView::isItemFiltered(const AnnotationGraphicsItem *item) const
 {
   if (!item)
     return true;
 
-  if ((languages_ | Traits::AnyLanguageBit) == 0) {
-    qint32 l = item->annotation().language();
-    if (((2 << l) & languages_) == 0)
-      return true;
-  }
+  if (filter_)
+    return filter_->filter(item->annotation());
 
   return false;
 }

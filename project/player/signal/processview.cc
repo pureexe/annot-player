@@ -8,11 +8,7 @@
 #include "uistyle.h"
 #include "global.h"
 #include "logger.h"
-#ifdef USE_WIN_QTWIN
-  #include "win/qtwin/qtwin.h"
-#else
-  #error "Currently only implemented in windows."
-#endif // USE_WIN_QTWIN
+#include "win/qtwin/qtwin.h"
 #ifdef USE_WIN_QTH
   #include "win/qth/qth.h"
 #else
@@ -76,6 +72,7 @@ namespace { // anonymous
       ADD("qtcreator");
       ADD("SecureCRT");
       ADD("SetPoint");
+      ADD("sidebar");
       ADD("softinfo");
       ADD("SogouCloud");
       ADD("ssh");
@@ -145,26 +142,26 @@ ProcessView::createLayout()
 
   filterPatternLineEdit_ = new LineEdit; {
     filterPatternLineEdit_->setStyleSheet(SS_LINEEDIT);
-    filterPatternLineEdit_->setToolTip(tr("Filter pattern"));
+    filterPatternLineEdit_->setToolTip(TR(T_FILTER_PATTERN));
   }
   QLabel *filterPatternLabel = new QLabel; {
     filterPatternLabel->setStyleSheet(SS_LABEL);
     filterPatternLabel->setBuddy(filterPatternLineEdit_);
-    filterPatternLabel->setText(tr("&Filter pattern") + ":");
+    filterPatternLabel->setText(TR(T_FILTER_PATTERN) + ":");
     filterPatternLabel->setToolTip(filterPatternLineEdit_->toolTip());
   }
 
   filterSyntaxComboBox_ = new Core::Gui::ComboBox; {
     UiStyle::globalInstance()->setComboBoxStyle(filterSyntaxComboBox_);
-    filterSyntaxComboBox_->addItem(tr("Regular expression"), QRegExp::RegExp);
-    filterSyntaxComboBox_->addItem(tr("Wildcard"), QRegExp::Wildcard);
-    filterSyntaxComboBox_->addItem(tr("Fixed string"), QRegExp::FixedString);
-    filterSyntaxComboBox_->setToolTip(tr("Filter syntax"));
+    filterSyntaxComboBox_->addItem(TR(T_FILTER_REGEX), QRegExp::RegExp);
+    filterSyntaxComboBox_->addItem(TR(T_FILTER_WILDCARD), QRegExp::Wildcard);
+    filterSyntaxComboBox_->addItem(TR(T_FILTER_FIXED), QRegExp::FixedString);
+    filterSyntaxComboBox_->setToolTip(TR(T_FILTER_SYNTAX));
   }
   QLabel *filterSyntaxLabel = new QLabel; {
     filterSyntaxLabel->setStyleSheet(SS_LABEL);
     filterSyntaxLabel->setBuddy(filterSyntaxComboBox_);
-    filterSyntaxLabel->setText(tr("Filter &syntax") + ":");
+    filterSyntaxLabel->setText(TR(T_FILTER_SYNTAX) + ":");
     filterSyntaxLabel->setToolTip(filterSyntaxComboBox_->toolTip());
   }
 
@@ -172,12 +169,12 @@ ProcessView::createLayout()
     UiStyle::globalInstance()->setComboBoxStyle(filterColumnComboBox_);
     for (int i = 0; i < sourceModel_->columnCount(); i++)
       filterColumnComboBox_->addItem(sourceModel_->headerData(i, Qt::Horizontal).toString());
-    filterColumnComboBox_->setToolTip(tr("Filter column"));
+    filterColumnComboBox_->setToolTip(TR(T_FILTER_COLUMN));
   }
   QLabel *filterColumnLabel = new QLabel; {
     filterColumnLabel->setStyleSheet(SS_LABEL);
     filterColumnLabel->setBuddy(filterColumnComboBox_);
-    filterColumnLabel->setText(tr("Filter &column"));
+    filterColumnLabel->setText(TR(T_FILTER_COLUMN));
     filterColumnLabel->setToolTip(filterColumnComboBox_->toolTip());
   }
 
@@ -293,17 +290,17 @@ ProcessView::createLayout()
           SLOT(invalidateButtons()));
   connect(proxyView_, SIGNAL(clicked(QModelIndex)),
           SLOT(invalidateButtons()));
-
 }
 
 void
 ProcessView::setProcessHeaderData(QAbstractItemModel *model)
 {
-  model->setHeaderData(HD_Name, Qt::Horizontal, tr("Name"));
-  model->setHeaderData(HD_Pid, Qt::Horizontal, tr("Pid"));
-  model->setHeaderData(HD_Status, Qt::Horizontal, tr("Status"));
-  model->setHeaderData(HD_Folder, Qt::Horizontal, tr("Folder"));
-  model->setHeaderData(HD_Path, Qt::Horizontal, tr("Path"));
+  Q_ASSERT(model);
+  model->setHeaderData(HD_Name, Qt::Horizontal,TR(T_NAME));
+  model->setHeaderData(HD_Pid, Qt::Horizontal, TR(T_PID));
+  model->setHeaderData(HD_Status, Qt::Horizontal, TR(T_STATUS));
+  model->setHeaderData(HD_Folder, Qt::Horizontal, TR(T_FOLDER));
+  model->setHeaderData(HD_Path, Qt::Horizontal, TR(T_PATH));
 }
 
 void

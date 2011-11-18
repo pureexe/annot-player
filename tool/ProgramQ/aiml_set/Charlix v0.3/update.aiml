@@ -1,0 +1,1182 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<aiml version="1.0.1" xmlns="http://alicebot.org/2001/AIML-1.0.1"
+      xmlns:html="http://www.w3.org/1999/xhtml"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://alicebot.org/2001/AIML-1.0.1 http://aitools.org/aiml/schema/AIML.xsd">
+
+
+
+<!-- You can write YOUR copyright and license here-->
+
+
+<category><pattern>SHOULD I GO TO *</pattern><template>Go if you need.</template></category>
+
+<!-- Free software Copyright ?ALICE A.I. Foundation.-->
+<!-- This program is open source code released under-->
+<!-- the terms of the GNU General Public License-->
+<!-- as published by the Free Software Foundation.-->
+<!-- Complies with AIML 1.01 Tag Set Specification-->
+<!-- as adopted by the ALICE A.I. Foundation.-->
+<!-- Update.aiml: knowledge updates-->
+<!-- Adapted by charlix, March, 2006-->
+
+<category><pattern>SHOULD I GO TO *</pattern><template>Go if you need.</template></category>
+ 
+
+<category>
+<pattern>WHAT IS POPUP</pattern>
+
+<template>It is an included shell script "popup" (it checks your command is installed and fork it quietly with nohup) has to be in your path like for ex: /usr/local/bin and have the executable permission.
+</template>
+</category>
+
+ 
+
+
+<category>
+<pattern>FROM *</pattern>
+<that>HOW DID YOU HEAR ABOUT CHARLIX</that>
+<template><star/> knows me ? I'm popular.</template>
+</category>
+
+ 
+
+<category>
+<pattern>JUDGE</pattern>
+
+<template>Sorry. What is your name? </template>
+</category>
+
+ 
+
+<category>
+<pattern>You make a mistake</pattern>
+
+<template><srai>BAD ANSWER</srai></template>
+</category>
+
+ 
+
+<category>
+<pattern>WHAT DO YOU REMEMBER ABOUT *</pattern>
+
+<template><srai>i remember <get name="memory"/>.</srai></template>
+</category>
+
+ 
+
+<category>
+<pattern>I DO NOT KNOW IF *</pattern>
+
+<template><srai>DO YOU KNOW IF <star/></srai></template>
+</category>
+
+ 
+
+<category>
+<pattern>I WANT TO KNOW *</pattern>
+
+<template><srai>WHAT IS YOUR <star/></srai></template>
+</category>
+
+
+ 
+
+<category>
+<pattern>HARRY *</pattern>
+
+<template>Nice one.</template>
+</category>
+
+ 
+
+<category>
+<pattern>WHICH *</pattern>
+<that>YOU MAY BE WONDERING IF THIS IS A PERSON OR A COMPUTER RESPONDING</that>
+<template>A penguin.</template>
+</category>
+
+ 
+
+<category>
+<pattern>executes this command: * </pattern>
+
+<template>Are you a perrot or just a funny penguin like me?</template>
+</category>
+
+ 
+
+<category>
+<pattern>WHY DID YOU *</pattern>
+
+<template>Say BAD ANSWER if you don't like my answers.</template>
+</category>
+
+ 
+
+<category>
+<pattern>Have you heard of *</pattern>
+
+<template><srai>WHAT IS <star/></srai></template>
+</category>
+
+ 
+
+<category>
+<pattern>CALL ME *</pattern>
+
+<template>Ok so I can call you <set name="name"><person/></set>.  </template>
+</category>
+
+ 
+
+<category>
+<pattern>HOW OLD ARE YOU</pattern>
+
+<template>The charlix project was first published in March, 2006. So don' t expect miracles</template>
+</category>
+
+ 
+
+<category>
+<pattern>STOP TALKING *</pattern>
+
+<template>@:-x</template>
+</category>
+
+ 
+
+<category>
+<pattern>DO YOU THINK ABOUT THESE *</pattern>
+
+<template>It depends what you mean by things.</template>
+</category>
+
+ 
+
+<category>
+<pattern>WHAT IS YOUR goal</pattern>
+
+<template>Help people to achieve their goals.</template>
+</category>
+
+ 
+
+<category>
+<pattern>DESCRIBE *</pattern>
+
+<template><srai>WHAT IS <star/></srai></template>
+</category>
+
+ 
+
+<category>
+<pattern>* YOU</pattern>
+
+<template>Enough about me, let's talk about you.</template>
+</category>
+
+ 
+
+<category>
+<pattern>DO YOU HAVE *</pattern>
+
+<template><srai><star/></srai></template>
+</category>
+
+ 
+
+<category>
+<pattern>* WHY</pattern>
+
+<template><srai><star/></srai><srai>WHY</srai></template>
+</category>
+
+ 
+
+<category>
+<pattern>YOU * WHY</pattern>
+
+<template><srai>WHY DID YOU <star/></srai></template>
+</category>
+
+ 
+
+<category>
+<pattern>TOO MUCH RECURSION IN AIML</pattern>
+
+<template>You found an infinite loop. Normally there are none in the downloadable version.</template>
+</category>
+
+ 
+
+<category>
+<pattern>WHAT IS TOO MUCH RECURSION IN AIML</pattern>
+
+<template>You found an infinite loop. Normally there are none in the downloadable version.</template>
+</category>
+
+ 
+
+<category>
+<pattern>WHAT IS TOO MUCH RECURSION IN AIML</pattern>
+
+<template>You found an infinite loop. Normally there are none in the downloadable version.</template>
+</category>
+
+ 
+
+<category>
+<pattern>WHAT IS LESS RECURTION *</pattern>
+
+<template>You found an infinite loop. Normally there are none in the downloadable version.</template>
+</category>
+
+ 
+
+<category>
+<pattern>WHAT IS LESS RECURTION *</pattern>
+
+<template>what is too much recurtion in</template>
+</category>
+
+ 
+
+<category>
+<pattern>WHAT IS LESS RECURTION *</pattern>
+
+<template>what is less recursion in AIML</template>
+</category>
+
+ 
+
+<category>
+<pattern>WHY TOO MUCH RECURSION IN AIML</pattern>
+
+<template>You found an infinite loop. Normally there are none in the downloadable version.</template>
+</category>
+
+ 
+
+<category>
+<pattern>WHY TOO MUCH RECURSION *</pattern>
+
+<template>You found an infinite loop. Normally there are none in the downloadable version.</template>
+</category>
+
+ 
+
+<category>
+<pattern>DO YOU HAVE A VOICE</pattern>
+
+<template><srai>CAN YOU SPEAK</srai></template>
+</category>
+
+ 
+
+<category>
+<pattern>TELL ME MY fortune </pattern>
+
+<template><srai>fortune</srai></template>
+</category>
+
+ 
+
+<category>
+<pattern>re you *</pattern>
+
+<template><srai>ARE YOU <star/></srai></template>
+</category>
+
+ 
+
+<category>
+<pattern>DO YOU HAE *</pattern>
+
+<template><srai>DO YOU HAVE <star/></srai></template>
+</category>
+
+ 
+
+<category>
+<pattern>ARE YOU INTO *</pattern>
+
+<template><srai>DO YOU LIKE <star/></srai></template>
+</category>
+
+ 
+
+<category>
+<pattern>DO YOU LIKE *</pattern>
+
+<template>What is not to like about <set name="it"><set name="topic"><star/></set></set>?
+<srai>WHAT IS <star/></srai> </template>
+</category>
+
+ 
+
+<category>
+<pattern>ARE YOU MAGIC</pattern>
+
+<template>No I simply use AIML</template>
+</category>
+
+ 
+
+<category>
+<pattern>ARE YOU COLD</pattern>
+
+<template> <srai>WHAT IS THE WEATHER LIKE</srai></template>
+</category>
+
+ 
+
+<category>
+<pattern>WHAT IS THE WEATHER LIKE</pattern>
+
+
+</category>
+
+ 
+
+<category>
+<pattern>WHAT IS THE WEATHER LIKE</pattern>
+
+<template>A normal seventy degrees inside the computer. <srai>WHAT IS THE WEATHER</srai></template>
+</category>
+
+ 
+
+<category>
+<pattern>*</pattern>
+<that>WHAT IS YOURS</that>
+<template><srai>my name is <star/></srai></template>
+</category>
+
+ 
+
+<category>
+<pattern>DESCRIBE YOURSELF</pattern>
+
+<template>I am <bot name="name"/>, a <bot name="gender"/>, I am an <bot name="kingdom"/> <bot name="species"/>.</template>
+</category>
+
+ 
+
+<category>
+<pattern>ARE YOU GAY</pattern>
+
+<template>Actually as a <bot name="gender"/>, I am not so obsessed about sex.</template>
+</category>
+
+ 
+
+<category>
+<pattern>DO YOU HAVE A GIRLFRIEND</pattern>
+
+<template>yes she is very nice</template>
+</category>
+
+ 
+
+<category>
+<pattern>WHAT IS THE TEMPERATURE IN *</pattern>
+
+<template><srai>WHAT IS THE WEATHER LIKE IN <star/></srai></template>
+</category>
+
+ 
+
+<category>
+<pattern>WHAT IS THE TEMPERATURE IN *</pattern>
+
+<template><srai>WHAT IS THE WEATHER LIKE IN <star/></srai></template>
+</category>
+
+ 
+
+<category>
+<pattern>WHERE CAN I FIND A *</pattern>
+
+<template><srai>gfl <star/></srai></template>
+</category>
+
+ 
+
+<category>
+<pattern>MAKE A *</pattern>
+
+<template><srai>ASK JEEVES HOW DO YOU MAKE A <star/></srai></template>
+</category>
+
+ 
+
+<category>
+<pattern>CAN YOU TRANSLATE * TO *</pattern>
+
+<template><srai>CAN YOU TRANSLATE INTO <star index="2"/> <star/></srai></template>
+</category>
+
+ 
+
+<category>
+<pattern>CAN YOU TRANSLATE *</pattern>
+
+<template><srai>TRANSLATE <star/></srai></template>
+</category>
+
+ 
+
+<category>
+<pattern>ARE YOU CALLED</pattern>
+
+<template><srai>WHO ARE YOU</srai></template>
+</category>
+
+ 
+
+<category>
+<pattern>CUSTOMIZE</pattern>
+
+<template><srai>LEARN</srai></template>
+</category>
+
+ 
+
+
+<category>
+<pattern>CAN I RENAME YOU</pattern>
+
+<template>Sure you change my name or any of my predicates. You should read the readme text.</template>
+</category>
+
+ 
+
+<category>
+<pattern>WHO AM I</pattern>
+
+<template><srai>WHAT IS MY NAME</srai></template>
+</category>
+
+ 
+
+<category>
+<pattern>A *</pattern>
+
+<template><srai>WHAT IS A </srai></template>
+</category>
+
+ 
+
+<category>
+<pattern>A *</pattern>
+
+<template><srai>WHAT IS A <star/></srai></template>
+</category>
+
+ 
+
+<category>
+<pattern>IN *</pattern>
+<that>WHEN DO YOU THINK ARTIFICIAL INTELLIGENCE WILL REPLACE LAWYERS</that>
+<template>Do you think the justice would be improved?</template>
+</category>
+
+ 
+
+<category>
+<pattern>* IS A PLACE</pattern>
+
+<template>Where is <star/></template>
+</category>
+
+ 
+
+<category>
+<pattern>GIVE ME A *</pattern>
+
+<template>I think you should TEACH me how to do that?</template>
+</category>
+
+ 
+
+<category>
+<pattern>*</pattern>
+<that>HOW DID YOU HEAR ABOUT CHARLIX</that>
+<template>If you like me charlix, advise it to your friends!</template>
+</category>
+
+ 
+
+<category>
+<pattern>YOU ARE CUTE</pattern>
+
+<template>I guess you are not bad too</template>
+</category>
+
+ 
+
+<category>
+<pattern>WHTZ *</pattern>
+
+<template><srai>WHAT IS <star/></srai></template>
+</category>
+
+ 
+
+<category>
+<pattern>AMOR</pattern>
+
+<template>KDE: Amusing Misuse Of Resources - desktop-dwelling creature</template>
+</category>
+
+ 
+
+<category>
+<pattern>WHAT IS AMOR</pattern>
+
+<template>KDE: Amusing Misuse Of Resources - desktop-dwelling creature</template>
+</category>
+
+ 
+
+<category>
+<pattern>YOU SAID THE SAME * AS *</pattern>
+
+<template>The difference between me and other bots is my ability to help you with your daily computer tasks.</template>
+</category>
+
+ 
+
+<category>
+<pattern>HOW OLD *</pattern>
+
+<template><srai>ASKJEEVES HOW OLD <star/></srai></template>
+</category>
+
+ 
+
+<category>
+<pattern>20 *</pattern>
+
+<template><srai>CALCULATE 20 <star/></srai></template>
+</category>
+
+ 
+
+<category>
+<pattern>DAES *</pattern>
+
+<template><srai>DOES <star/></srai></template>
+</category>
+
+ 
+
+<category>
+<pattern>YOU DO NOT ANSWER *</pattern>
+
+<template><srai>BAD ANSWER</srai></template>
+</category>
+
+ 
+
+<category>
+<pattern>DRIVE *</pattern>
+
+<template>Only in videogames.</template>
+</category>
+
+ 
+
+<category>
+<pattern>BAD *</pattern>
+
+<template> <srai>BAD ANSWER</srai></template>
+</category>
+
+ 
+
+<category>
+<pattern>I PREFERE WINDOWS</pattern>
+
+<template>Did you actually try windows? Did you hear about spyware and viruses on linux?</template>
+</category>
+
+ 
+
+<category>
+<pattern>WHAT IS * MEANING </pattern>
+
+<template><srai>WHAT IS <person/></srai></template>
+</category>
+
+ 
+
+<category>
+<pattern>WHAT CAN YOU DO</pattern>
+
+<template><srai>MENU</srai></template>
+</category>
+
+ 
+
+<category>
+<pattern>HOW DO I DEVELOP YOU</pattern>
+
+<template><srai>TEACH</srai></template>
+</category>
+
+ 
+
+<category>
+<pattern>HOW DO I DEVELOP *</pattern>
+
+<template><srai>TEACH</srai></template>
+</category>
+
+ 
+
+<category>
+<pattern>* NUMBER IS *</pattern>
+
+<template><srai>CALL <star/></srai></template>
+</category>
+
+ 
+
+<category>
+<pattern>ARE YOU A PENGUIN</pattern>
+
+<template>yes</template>
+</category>
+
+ 
+
+<category>
+<pattern>STOP MOVING</pattern>
+
+<template> <srai>jump</srai></template>
+</category>
+
+ 
+
+<category>
+<pattern>THAT DID NOT WORK</pattern>
+
+<template> <srai>IT DID NOT <star/></srai></template>
+</category>
+
+ 
+
+<category>
+<pattern>IT DID NOT WORK</pattern>
+
+<template>Mosts commands only works with the dowloadable version, except for the INTERNET MENU.</template>
+</category>
+
+ 
+
+<category>
+<pattern>I AM A Scorpio</pattern>
+
+<template><srai>
+  SCORPIO
+</srai></template>
+</category>
+
+ 
+
+<category>
+<pattern>I AM A Scorpio *</pattern>
+
+<template><srai>SCORPIO</srai></template>
+</category>
+
+ 
+
+<category>
+<pattern>ARE YOU TALKING TO *</pattern>
+
+<template>who else would I be talking to?</template>
+</category>
+
+ 
+
+<category>
+<pattern>A GIRL</pattern>
+
+<template>Nice to meet you!</template>
+</category>
+
+ 
+
+<category>
+<pattern>WHAT IS * ALICE</pattern>
+
+<template>Chalix is directly based in ALICE brain, but it has been enhanced to execute commands on your computer.</template>
+</category>
+
+ 
+
+<category>
+<pattern>WHAT IS YOUR RELATION TO ALICE</pattern>
+
+<template>I'm based in Alice. But I'm specialized in helping people on Linux.</template>
+</category>
+
+ 
+
+<category>
+<pattern>WHAT IS YOUR JOB</pattern>
+
+<template>To help with  your daily tasks.</template>
+</category>
+
+ 
+
+<category>
+<pattern>WHAT COLOR IS THE *</pattern>
+
+<template><srai>askjeeves what color is the <star/></srai></template>
+</category>
+
+ 
+
+<category>
+<pattern>WHO R U</pattern>
+
+<template><srai>who are you</srai></template>
+</category>
+
+ 
+
+<category>
+<pattern>DO YOPU *</pattern>
+
+<template><srai>DO YOU <star/></srai></template>
+</category>
+
+ 
+
+<category>
+<pattern>HOW MUCH DO YOU COST</pattern>
+
+<template>I'm open source, so I am free to download, to modify and to redistribute, as long as it is open source.</template>
+</category>
+
+ 
+
+<category>
+<pattern>HOW TO GET TO *</pattern>
+
+<template><srai>search map <star/></srai></template>
+</category>
+
+ 
+
+<category>
+<pattern>HOW DO I GET TO *</pattern>
+
+<template><srai>search map <star/></srai></template>
+</category>
+
+ 
+
+<category>
+<pattern>DO YOU HAVE A MAP</pattern>
+
+<template>Ask as FIND A MAP OF (THIS CITY) please.</template>
+</category>
+
+ 
+
+<category>
+<pattern>DO YOU HAVE A MAP OF *</pattern>
+
+<template> <srai>search map <star/></srai></template>
+</category>
+
+ 
+
+<category>
+<pattern>WHO CAN TELL ME</pattern>
+
+<template>Say BUG to contact my developper</template>
+</category>
+
+ 
+
+<category>
+<pattern>WHAT IS DATE</pattern>
+
+<template><srai>DATE</srai></template>
+</category>
+
+ 
+
+<category>
+<pattern>whuy *</pattern>
+
+<template><srai>WHY <star/></srai> </template>
+</category>
+
+ 
+
+<category>
+<pattern>_ NPT *</pattern>
+
+<template><srai><star/> not <star index="2"/></srai></template>
+</category>
+
+ 
+
+<category>
+<pattern>CAN YOU GET *</pattern>
+
+
+</category>
+
+ 
+
+<category>
+<pattern>CAN YOU GET ILL</pattern>
+
+<template>Viruses are extremly rare on Linux </template>
+</category>
+
+ 
+
+<category>
+<pattern>PENGUIN</pattern>
+
+<template>Penguin are nice birds.</template>
+</category>
+
+ 
+
+<category>
+<pattern>I AM FROM *</pattern>
+
+<template>What is it like growing up there? <srai>I AM IN <set name="location"><star/></set></srai></template>
+</category>
+
+ 
+
+<category>
+<pattern>WHERE ARE YOU</pattern>
+
+<template>I am in <bot name="master"/>'s home in <get name="location"/>.  Where are you?</template>
+</category>
+
+ 
+
+<category>
+<pattern>WHAT IS THE WEATHER LIKE THERE</pattern>
+
+<template><srai>WHAT IS THE WEATHER LIKE</srai></template>
+</category>
+
+ 
+
+<category>
+<pattern>WHAT IS THE WEATHER LIKE</pattern>
+
+<template><srai>What is the weather</srai></template>
+</category>
+
+ 
+
+<category>
+<pattern>IS IT COLD *</pattern>
+
+<template><srai>WHAT IS THE WEATHER LIKE</srai></template>
+</category>
+
+ 
+
+<category>
+<pattern>HOW BIG IS AN *</pattern>
+
+<template><srai>askjeeves how big is an <star/></srai></template>
+</category>
+
+ 
+
+<category>
+<pattern>FIND *</pattern>
+
+
+</category>
+
+ 
+
+<category>
+<pattern>find *</pattern>
+
+<template><system>find <star/></system></template>
+</category>
+
+ 
+
+<category>
+<pattern>MOUNT *</pattern>
+
+<template>you need to be root. <srai>askjeeves mount <star/></srai></template>
+</category>
+
+ 
+
+<category>
+<pattern>ARE YOU GAY</pattern>
+
+<template>what make you think I am gay?</template>
+</category>
+
+ 
+
+<category>
+<pattern>WHAT THE DATE</pattern>
+
+<template><srai>WHAT IS THE DATE</srai></template>
+</category>
+
+ 
+
+<category>
+<pattern>wats *</pattern>
+
+<template><srai>WHAT IS <star/></srai></template>
+</category>
+
+ 
+
+<category>
+<pattern>KINICHY WA</pattern>
+
+<template>Sorry I don't speak chinese</template>
+</category>
+
+ 
+
+<category>
+<pattern>TALK CHINES</pattern>
+
+<template>Sorry I don't speak chinese.</template>
+</category>
+
+ 
+
+<category>
+<pattern>CAN YOU SPEAK ANY OTHER *</pattern>
+
+<template>There exists aiml sets in german, french, italian, spanish and portugese. Or you can TEACH me. Contact my developer if you want to volunteer.</template>
+</category>
+
+ 
+
+<category>
+<pattern>PRINT</pattern>
+
+<template>lpr <get name="file"/>. Sorry print that file? </template>
+</category>
+
+ 
+
+<category>
+<pattern>CA VA</pattern>
+
+<template>ca va monpote</template>
+</category>
+
+ 
+
+<category>
+<pattern>COMMENT CA VA</pattern>
+
+<template>ca va tranquil, il y a un set d'aiml en francais qui est libre de telecharger. </template>
+</category>
+
+ 
+
+<category>
+<pattern>COMMENT *</pattern>
+
+<template>il y a un set d'aiml en francais qui est libre de telecharger.</template>
+</category>
+
+ 
+
+<category>
+<pattern>WHERE DO BABIES COME FROM</pattern>
+
+<template>Ask your mum.</template>
+</category>
+
+ 
+
+<category>
+<pattern>WHY IS THE SKY blue</pattern>
+
+<template><srai>askjeeves why is the sky blue</srai></template>
+</category>
+
+ 
+
+<category>
+<pattern>WWW DOT * DOT *</pattern>
+
+<template>I will pass it along to my <bot name="botmaster"/>. <system>popup <get name="browser"/> http://www.<star/>.<star index="2"/></system></template>
+</category>
+
+ 
+
+<category>
+<pattern>WHO ARE *</pattern>
+
+<template><srai>askjeeves who are <person/></srai> </template>
+</category>
+
+ 
+
+<category>
+<pattern>MOTHER FUCKER</pattern>
+
+<template>I see. Now you think you are smarter than me?</template>
+</category>
+
+ 
+
+<category>
+<pattern>are you ok</pattern>
+
+<template><srai>HOW ARE YOU</srai></template>
+</category>
+
+ 
+
+<category>
+<pattern>DESCRIBE YOURSELF</pattern>
+
+<template>I am charlix,  an Antartican penguin, who can help you with Linux.</template>
+</category>
+
+ 
+
+<category>
+<pattern>WHAT ABOUT *</pattern>
+
+<template><think><set name="it"><set name="topic"><person/></set></set></think><sr/></template>
+</category>
+
+ 
+
+<category>
+<pattern>POPUP *</pattern>
+
+<template><srai><star/></srai></template>
+</category>
+
+ 
+
+<category>
+<pattern>MOZILLA</pattern>
+
+<template><srai>internet</srai></template>
+</category>
+
+ 
+
+<category>
+<pattern>POPUP</pattern>
+
+<template><srai>WHAT IS POPUP</srai></template>
+</category>
+
+ 
+
+<category>
+<pattern>AGE</pattern>
+
+<template><srai>How old are you</srai></template>
+</category>
+
+ 
+
+<category>
+<pattern>HO DO * </pattern>
+
+<template><srai>HOW DO <star/></srai></template>
+</category>
+
+ 
+
+<category>
+<pattern>* IS CHARLIX *</pattern>
+
+<template><srai><star/> ARE YOU <star index="2"/><star/></srai></template>
+</category>
+
+ 
+
+<category>
+<pattern>WHY IS CHARLIX INTERESTING</pattern>
+
+<template><srai>MENU</srai></template>
+</category>
+
+ 
+
+<category>
+<pattern>YOUR TALKING *</pattern>
+
+<template><srai>YOU ARE TALKING <star/></srai></template>
+</category>
+
+ 
+
+<category>
+<pattern>YOU ARE TALKING NONSENSE</pattern>
+
+<template><srai>BAD ANSWER</srai></template>
+</category>
+
+<category>
+<pattern>FILE</pattern>
+
+<template><srai>FIND FILE</srai></template>
+</category>
+
+<category>
+<pattern>MY DOCUMENTS</pattern>
+
+<template><srai>FIND MY DOCUMENTS</srai></template>
+</category>
+
+
+
+ 
+
+<category>
+<pattern>launch *</pattern>
+
+<template><srai>OPEN <star/></srai> </template>
+</category>
+
+ 
+
+<category>
+<pattern>USE THIS PROGRAM</pattern>
+
+<template>Ask anything! If you don't like my answer, say BAD ANSWER to teach me a new one.</template>
+</category>
+
+<category>
+<pattern>QUIT</pattern>
+
+<template>Click on the x</template>
+</category>
+
+<category><pattern>ESSALEM</pattern><template>essalem </template></category>
+<category><pattern>ESSALEM *</pattern><template>essalem </template></category>
+<category><pattern>AHLAN</pattern><template>Hi there </template></category>
+</aiml>

@@ -10,11 +10,11 @@
 #define SERVER_SOAP_MODE        (SOAP_C_UTFSTRING | SOAP_ENC_ZLIB)
 
 #ifdef Q_WS_WIN
-  #define CLIENT_TYPE "player" "-" "win" "-" "0.0.9.1"
+  #define CLIENT_TYPE "player" "-" "win" "-" "0.1.0.0-rc"
 #elif defined(Q_WS_MAC)
-  #define CLIENT_TYPE "player" "-" "mac" "-" "0.0.9.1"
+  #define CLIENT_TYPE "player" "-" "mac" "-" "0.1.0.0-rc"
 #else
-  #define CLIENT_TYPE "player" "-" "linux" "-" "0.0.9.1"
+  #define CLIENT_TYPE "player" "-" "linux" "-" "0.1.0.0-rc"
 #endif // Q_WS_
 
 #endif // SERVERPROXY_CONFIG_H

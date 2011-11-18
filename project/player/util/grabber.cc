@@ -17,9 +17,17 @@ const QString&
 Grabber::baseName() const
 { return baseName_; }
 
+const QString&
+Grabber::savePath() const
+{ return savePath_; }
+
 void
 Grabber::setBaseName(const QString &name)
 { baseName_ = name; }
+
+void
+Grabber::setSavePath(const QString &path)
+{ savePath_ = path; }
 
 // - Actions -
 
@@ -28,12 +36,13 @@ Grabber::grabDesktop()
 { grabWindow(QApplication::desktop()->winId());  }
 
 void
-Grabber::grabWindow(WId winid)
+Grabber::grabWindow(WId winId)
 {
-  QPixmap pm = QPixmap::grabWindow(winid);
+  QPixmap pm = QPixmap::grabWindow(winId);
 
   QString ts = QDateTime::currentDateTime().toString("-yyyy-mm-dd-hh-mm-ss");
   QString file = QString("%1/%2%3.png").arg(savePath_).arg(baseName_).arg(ts);
+  qDebug()<<file;
   pm.save(file, "PNG");
 }
 

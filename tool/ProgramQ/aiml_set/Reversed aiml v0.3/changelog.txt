@@ -1,0 +1,5 @@
+Better recognition of the objects and subjects of verbs. 
+Infintive verbs, tenses, numbers, dates and adverbs are better managed. 
+The topic setting is automatic.
+Lots of testing was done so, all in all some of the questions generated should be relevant. 
+Implementation  of it. (first verb's subject)

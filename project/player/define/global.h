@@ -4,6 +4,7 @@
 // global.h
 // 7/16/2011
 // Global parameters.
+#include "module/player/player_config.h"
 #include <QtGlobal>
 
 // - Alpha -
@@ -18,13 +19,17 @@ enum { ALPHA = 0 };
 #define G_PREFIXLINEEDIT_MAXWIDTH       100     // TODO: Make this auto-resize instead
 
 // - About -
+#define G_DOMAIN        "me.annot.player"
 #define G_ORGANIZATION  "Annot"
 #define G_APPLICATION   "Player"
-#define G_VERSION       "0.0.9.1"
+#define G_VERSION       "0.1.0.0-rc"
 #define G_HOMEPAGE      "http://annot.me"
+#define G_WIKIPAGE      G_HOMEPAGE "/w"
+#define G_WIKIPAGE_FAQ  G_WIKIPAGE "/index.php?title=Manual:FAQ"
 #define G_UPDATEPAGE    "http://code.google.com/p/annot-player"
 #define G_DOWNLOADPAGE  "http://code.google.com/p/annot-player/downloads"
 #define G_EMAIL         "AnnotCloud@gmail.com"
+#define G_LICENSE       "GNU GPL v3"
 
 
 // - Shared options -
@@ -38,6 +43,7 @@ enum { ALPHA = 0 };
 #define G_STARTPAGE_URL    G_HOMEPAGE
 #define G_TOKENVIEW_URL    G_HOMEPAGE
 #define G_UPDATEPAGE_URL   G_DOWNLOADPAGE
+#define G_HELPPAGE_URL     G_WIKIPAGE_FAQ
 
 #define G_FORWARD_INTERVAL  10000  // 10 sec
 #define G_BACKWARD_INTERVAL 10000  // 10 sec
@@ -52,14 +58,17 @@ enum { ALPHA = 0 };
 
 // TO BE MOVED INTO mediaplayer.h
 #define G_FORMAT_ALL            "*"
-#define G_FORMAT_AUDIO          "*.mp3 " "*.mp4 " "*.m4a " "*.m4r "
-#define G_FORMAT_VIDEO          "*.mp4 " "*.mkv " "*.rmvb " "*.rm " "*.flv " "*.avi " "*.mpg " "*.mpeg "
-#define G_FORMAT_SUBTITLE       "*.ass " "*.ssa"
-#define G_FORMAT_EXE            "*.exe " "*.lnk "
+#define G_FORMAT_AUDIO          PLAYER_FORMAT_AUDIO(" *.")
+#define G_FORMAT_VIDEO          PLAYER_FORMAT_VIDEO(" *.")
+#define G_FORMAT_PICTURE        PLAYER_FORMAT_PICTURE(" *.")
+#define G_FORMAT_SUBTITLE       PLAYER_FORMAT_SUBTITLE(" *.")
+
+#define G_FORMAT_PROGRAM_(...)  __VA_ARGS__ "exe" __VA_ARGS__ "lnk"
+#define G_FORMAT_PROGRAM        G_FORMAT_PROGRAM_(" *.")
 #ifdef USE_MODE_SIGNAL
-  #define G_FORMAT_SUPPORTED      G_FORMAT_VIDEO G_FORMAT_AUDIO G_FORMAT_EXE
+  #define G_FORMAT_SUPPORTED      G_FORMAT_VIDEO G_FORMAT_AUDIO G_FORMAT_PICTURE G_FORMAT_PROGRAM
 #else
-  #define G_FORMAT_SUPPORTED      G_FORMAT_VIDEO G_FORMAT_AUDIO
+  #define G_FORMAT_SUPPORTED      G_FORMAT_VIDEO G_FORMAT_AUDIO G_FORMAT_PICTURE
 #endif // USE_MODE_SIGNAL
 
 #define VLC_AUTOHIDE_TIMEOUT    1500    // in msecs, same as VLC
@@ -73,7 +82,7 @@ enum { ALPHA = 0 };
 #ifdef Q_WS_WIN
   #define G_PATH_LOGS   "../logs"
 #elif defined (Q_WS_MAC)
-  #define G_PATH_LOGS   "../Resources/logs" // TODO: move to ~/Library/Logs instead
+  #define G_PATH_LOGS   QtMac::homeLogsPath() + "/" G_ORGANIZATION "/" G_APPLICATION
 #else
   #define G_PATH_LOGS   "."
 #endif
@@ -82,7 +91,7 @@ enum { ALPHA = 0 };
 #ifdef Q_WS_WIN
   #define G_PATH_CACHES  "caches"
 #elif defined (Q_WS_MAC)
-  #define G_PATH_CACHES  "../Resources/caches" // TODO: move to ~/Library/Caches instead
+  #define G_PATH_CACHES  QtMac::homeCachesPath() + "/" G_ORGANIZATION "/" G_APPLICATION
 #else
   #define G_PATH_CACHES  "."
 #endif

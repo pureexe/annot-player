@@ -7,7 +7,7 @@
 
 using namespace Core::Cloud;
 
-// - Meta type -
+// - Meta types -
 
 namespace { // anonymous
   struct init_ { init_() {
@@ -15,7 +15,7 @@ namespace { // anonymous
     qRegisterMetaType<UserList>("UserList");
   } };
   init_ static_init_;
-} // anonymous
+} // anonymous namespace
 
 // - Digest -
 
@@ -33,11 +33,6 @@ bool
 Core::Cloud::User::
 isValidPassword(const QString &password)
 { return !password.isEmpty() && isLatin1String(password); }
-
-bool
-Core::Cloud::User::
-isValidEmail(const QString &email)
-{ return !email.isEmpty() && isLatin1String(email); }
 
 QByteArray
 Core::Cloud::User::

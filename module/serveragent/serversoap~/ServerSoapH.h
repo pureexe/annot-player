@@ -71,7 +71,7 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_put_int(struct soap*, const int *, const char*, c
 SOAP_FMAC3 int * SOAP_FMAC4 soap_get_int(struct soap*, int *, const char*, const char*);
 
 #ifndef SOAP_TYPE_ServerSoap_LONG64
-#define SOAP_TYPE_ServerSoap_LONG64 (87)
+#define SOAP_TYPE_ServerSoap_LONG64 (70)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default_LONG64(struct soap*, LONG64 *);
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_LONG64(struct soap*, const char*, int, const LONG64 *, const char*);
@@ -91,7 +91,7 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_put_LONG64(struct soap*, const LONG64 *, const ch
 SOAP_FMAC3 LONG64 * SOAP_FMAC4 soap_get_LONG64(struct soap*, LONG64 *, const char*, const char*);
 
 #ifndef SOAP_TYPE_ServerSoap_bool
-#define SOAP_TYPE_ServerSoap_bool (91)
+#define SOAP_TYPE_ServerSoap_bool (74)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default_bool(struct soap*, bool *);
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_bool(struct soap*, const char*, int, const bool *, const char*);
@@ -115,7 +115,7 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_put_bool(struct soap*, const bool *, const char*,
 SOAP_FMAC3 bool * SOAP_FMAC4 soap_get_bool(struct soap*, bool *, const char*, const char*);
 
 #ifndef SOAP_TYPE_ServerSoap_std__string
-#define SOAP_TYPE_ServerSoap_std__string (88)
+#define SOAP_TYPE_ServerSoap_std__string (71)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default_std__string(struct soap*, std::string *);
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_std__string(struct soap*, const std::string *);
@@ -144,7 +144,7 @@ SOAP_FMAC1 std::string * SOAP_FMAC2 soap_instantiate_std__string(struct soap*, i
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_std__string(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ServerSoap_tns__updateMediaAnnotationTextWithIdResponse
-#define SOAP_TYPE_ServerSoap_tns__updateMediaAnnotationTextWithIdResponse (86)
+#define SOAP_TYPE_ServerSoap_tns__updateMediaAnnotationTextWithIdResponse (69)
 #endif
 
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__updateMediaAnnotationTextWithIdResponse(struct soap*, const char*, int, const tns__updateMediaAnnotationTextWithIdResponse *, const char*);
@@ -170,7 +170,7 @@ SOAP_FMAC1 tns__updateMediaAnnotationTextWithIdResponse * SOAP_FMAC2 soap_instan
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__updateMediaAnnotationTextWithIdResponse(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ServerSoap_tns__updateMediaAnnotationTextWithId
-#define SOAP_TYPE_ServerSoap_tns__updateMediaAnnotationTextWithId (85)
+#define SOAP_TYPE_ServerSoap_tns__updateMediaAnnotationTextWithId (68)
 #endif
 
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__updateMediaAnnotationTextWithId(struct soap*, const char*, int, const tns__updateMediaAnnotationTextWithId *, const char*);
@@ -195,60 +195,8 @@ SOAP_FMAC3 tns__updateMediaAnnotationTextWithId * SOAP_FMAC4 soap_get_tns__updat
 SOAP_FMAC1 tns__updateMediaAnnotationTextWithId * SOAP_FMAC2 soap_instantiate_tns__updateMediaAnnotationTextWithId(struct soap*, int, const char*, const char*, size_t*);
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__updateMediaAnnotationTextWithId(struct soap*, int, int, void*, size_t, const void*, size_t);
 
-#ifndef SOAP_TYPE_ServerSoap_tns__updateGameAnnotationTextWithIdResponse
-#define SOAP_TYPE_ServerSoap_tns__updateGameAnnotationTextWithIdResponse (84)
-#endif
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__updateGameAnnotationTextWithIdResponse(struct soap*, const char*, int, const tns__updateGameAnnotationTextWithIdResponse *, const char*);
-SOAP_FMAC3 tns__updateGameAnnotationTextWithIdResponse * SOAP_FMAC4 soap_in_tns__updateGameAnnotationTextWithIdResponse(struct soap*, const char*, tns__updateGameAnnotationTextWithIdResponse *, const char*);
-
-#ifndef soap_write_tns__updateGameAnnotationTextWithIdResponse
-#define soap_write_tns__updateGameAnnotationTextWithIdResponse(soap, data) ( soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "tns:updateGameAnnotationTextWithIdResponse", NULL) || soap_end_send(soap) )
-#endif
-
-
-#ifndef soap_read_tns__updateGameAnnotationTextWithIdResponse
-#define soap_read_tns__updateGameAnnotationTextWithIdResponse(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_tns__updateGameAnnotationTextWithIdResponse(soap, data, NULL, NULL) || soap_end_recv(soap) )
-#endif
-
-SOAP_FMAC3 tns__updateGameAnnotationTextWithIdResponse * SOAP_FMAC4 soap_get_tns__updateGameAnnotationTextWithIdResponse(struct soap*, tns__updateGameAnnotationTextWithIdResponse *, const char*, const char*);
-
-#define soap_new_tns__updateGameAnnotationTextWithIdResponse(soap, n) soap_instantiate_tns__updateGameAnnotationTextWithIdResponse(soap, n, NULL, NULL, NULL)
-
-
-#define soap_delete_tns__updateGameAnnotationTextWithIdResponse(soap, p) soap_delete(soap, p)
-
-SOAP_FMAC1 tns__updateGameAnnotationTextWithIdResponse * SOAP_FMAC2 soap_instantiate_tns__updateGameAnnotationTextWithIdResponse(struct soap*, int, const char*, const char*, size_t*);
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__updateGameAnnotationTextWithIdResponse(struct soap*, int, int, void*, size_t, const void*, size_t);
-
-#ifndef SOAP_TYPE_ServerSoap_tns__updateGameAnnotationTextWithId
-#define SOAP_TYPE_ServerSoap_tns__updateGameAnnotationTextWithId (83)
-#endif
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__updateGameAnnotationTextWithId(struct soap*, const char*, int, const tns__updateGameAnnotationTextWithId *, const char*);
-SOAP_FMAC3 tns__updateGameAnnotationTextWithId * SOAP_FMAC4 soap_in_tns__updateGameAnnotationTextWithId(struct soap*, const char*, tns__updateGameAnnotationTextWithId *, const char*);
-
-#ifndef soap_write_tns__updateGameAnnotationTextWithId
-#define soap_write_tns__updateGameAnnotationTextWithId(soap, data) ( soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "tns:updateGameAnnotationTextWithId", NULL) || soap_end_send(soap) )
-#endif
-
-
-#ifndef soap_read_tns__updateGameAnnotationTextWithId
-#define soap_read_tns__updateGameAnnotationTextWithId(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_tns__updateGameAnnotationTextWithId(soap, data, NULL, NULL) || soap_end_recv(soap) )
-#endif
-
-SOAP_FMAC3 tns__updateGameAnnotationTextWithId * SOAP_FMAC4 soap_get_tns__updateGameAnnotationTextWithId(struct soap*, tns__updateGameAnnotationTextWithId *, const char*, const char*);
-
-#define soap_new_tns__updateGameAnnotationTextWithId(soap, n) soap_instantiate_tns__updateGameAnnotationTextWithId(soap, n, NULL, NULL, NULL)
-
-
-#define soap_delete_tns__updateGameAnnotationTextWithId(soap, p) soap_delete(soap, p)
-
-SOAP_FMAC1 tns__updateGameAnnotationTextWithId * SOAP_FMAC2 soap_instantiate_tns__updateGameAnnotationTextWithId(struct soap*, int, const char*, const char*, size_t*);
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__updateGameAnnotationTextWithId(struct soap*, int, int, void*, size_t, const void*, size_t);
-
 #ifndef SOAP_TYPE_ServerSoap_tns__submitMediaTokenDigestResponse
-#define SOAP_TYPE_ServerSoap_tns__submitMediaTokenDigestResponse (82)
+#define SOAP_TYPE_ServerSoap_tns__submitMediaTokenDigestResponse (67)
 #endif
 
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__submitMediaTokenDigestResponse(struct soap*, const char*, int, const tns__submitMediaTokenDigestResponse *, const char*);
@@ -274,7 +222,7 @@ SOAP_FMAC1 tns__submitMediaTokenDigestResponse * SOAP_FMAC2 soap_instantiate_tns
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__submitMediaTokenDigestResponse(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ServerSoap_tns__submitMediaTokenDigest
-#define SOAP_TYPE_ServerSoap_tns__submitMediaTokenDigest (81)
+#define SOAP_TYPE_ServerSoap_tns__submitMediaTokenDigest (66)
 #endif
 
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__submitMediaTokenDigest(struct soap*, const char*, int, const tns__submitMediaTokenDigest *, const char*);
@@ -300,7 +248,7 @@ SOAP_FMAC1 tns__submitMediaTokenDigest * SOAP_FMAC2 soap_instantiate_tns__submit
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__submitMediaTokenDigest(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ServerSoap_tns__submitMediaTokenResponse
-#define SOAP_TYPE_ServerSoap_tns__submitMediaTokenResponse (80)
+#define SOAP_TYPE_ServerSoap_tns__submitMediaTokenResponse (65)
 #endif
 
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__submitMediaTokenResponse(struct soap*, const char*, int, const tns__submitMediaTokenResponse *, const char*);
@@ -326,7 +274,7 @@ SOAP_FMAC1 tns__submitMediaTokenResponse * SOAP_FMAC2 soap_instantiate_tns__subm
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__submitMediaTokenResponse(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ServerSoap_tns__submitMediaToken
-#define SOAP_TYPE_ServerSoap_tns__submitMediaToken (79)
+#define SOAP_TYPE_ServerSoap_tns__submitMediaToken (64)
 #endif
 
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__submitMediaToken(struct soap*, const char*, int, const tns__submitMediaToken *, const char*);
@@ -352,7 +300,7 @@ SOAP_FMAC1 tns__submitMediaToken * SOAP_FMAC2 soap_instantiate_tns__submitMediaT
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__submitMediaToken(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ServerSoap_tns__submitMediaAnnotationTextWithTokenIdResponse
-#define SOAP_TYPE_ServerSoap_tns__submitMediaAnnotationTextWithTokenIdResponse (78)
+#define SOAP_TYPE_ServerSoap_tns__submitMediaAnnotationTextWithTokenIdResponse (63)
 #endif
 
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__submitMediaAnnotationTextWithTokenIdResponse(struct soap*, const char*, int, const tns__submitMediaAnnotationTextWithTokenIdResponse *, const char*);
@@ -378,7 +326,7 @@ SOAP_FMAC1 tns__submitMediaAnnotationTextWithTokenIdResponse * SOAP_FMAC2 soap_i
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__submitMediaAnnotationTextWithTokenIdResponse(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ServerSoap_tns__submitMediaAnnotationTextWithTokenId
-#define SOAP_TYPE_ServerSoap_tns__submitMediaAnnotationTextWithTokenId (77)
+#define SOAP_TYPE_ServerSoap_tns__submitMediaAnnotationTextWithTokenId (62)
 #endif
 
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__submitMediaAnnotationTextWithTokenId(struct soap*, const char*, int, const tns__submitMediaAnnotationTextWithTokenId *, const char*);
@@ -404,7 +352,7 @@ SOAP_FMAC1 tns__submitMediaAnnotationTextWithTokenId * SOAP_FMAC2 soap_instantia
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__submitMediaAnnotationTextWithTokenId(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ServerSoap_tns__submitMediaAnnotationTextAndTokenDigestResponse
-#define SOAP_TYPE_ServerSoap_tns__submitMediaAnnotationTextAndTokenDigestResponse (76)
+#define SOAP_TYPE_ServerSoap_tns__submitMediaAnnotationTextAndTokenDigestResponse (61)
 #endif
 
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__submitMediaAnnotationTextAndTokenDigestResponse(struct soap*, const char*, int, const tns__submitMediaAnnotationTextAndTokenDigestResponse *, const char*);
@@ -430,7 +378,7 @@ SOAP_FMAC1 tns__submitMediaAnnotationTextAndTokenDigestResponse * SOAP_FMAC2 soa
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__submitMediaAnnotationTextAndTokenDigestResponse(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ServerSoap_tns__submitMediaAnnotationTextAndTokenDigest
-#define SOAP_TYPE_ServerSoap_tns__submitMediaAnnotationTextAndTokenDigest (75)
+#define SOAP_TYPE_ServerSoap_tns__submitMediaAnnotationTextAndTokenDigest (60)
 #endif
 
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__submitMediaAnnotationTextAndTokenDigest(struct soap*, const char*, int, const tns__submitMediaAnnotationTextAndTokenDigest *, const char*);
@@ -456,7 +404,7 @@ SOAP_FMAC1 tns__submitMediaAnnotationTextAndTokenDigest * SOAP_FMAC2 soap_instan
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__submitMediaAnnotationTextAndTokenDigest(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ServerSoap_tns__submitMediaAnnotationResponse
-#define SOAP_TYPE_ServerSoap_tns__submitMediaAnnotationResponse (74)
+#define SOAP_TYPE_ServerSoap_tns__submitMediaAnnotationResponse (59)
 #endif
 
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__submitMediaAnnotationResponse(struct soap*, const char*, int, const tns__submitMediaAnnotationResponse *, const char*);
@@ -482,7 +430,7 @@ SOAP_FMAC1 tns__submitMediaAnnotationResponse * SOAP_FMAC2 soap_instantiate_tns_
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__submitMediaAnnotationResponse(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ServerSoap_tns__submitMediaAnnotation
-#define SOAP_TYPE_ServerSoap_tns__submitMediaAnnotation (73)
+#define SOAP_TYPE_ServerSoap_tns__submitMediaAnnotation (58)
 #endif
 
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__submitMediaAnnotation(struct soap*, const char*, int, const tns__submitMediaAnnotation *, const char*);
@@ -508,7 +456,7 @@ SOAP_FMAC1 tns__submitMediaAnnotation * SOAP_FMAC2 soap_instantiate_tns__submitM
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__submitMediaAnnotation(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ServerSoap_tns__submitMediaAliasTextWithTokenIdResponse
-#define SOAP_TYPE_ServerSoap_tns__submitMediaAliasTextWithTokenIdResponse (72)
+#define SOAP_TYPE_ServerSoap_tns__submitMediaAliasTextWithTokenIdResponse (57)
 #endif
 
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__submitMediaAliasTextWithTokenIdResponse(struct soap*, const char*, int, const tns__submitMediaAliasTextWithTokenIdResponse *, const char*);
@@ -534,7 +482,7 @@ SOAP_FMAC1 tns__submitMediaAliasTextWithTokenIdResponse * SOAP_FMAC2 soap_instan
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__submitMediaAliasTextWithTokenIdResponse(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ServerSoap_tns__submitMediaAliasTextWithTokenId
-#define SOAP_TYPE_ServerSoap_tns__submitMediaAliasTextWithTokenId (71)
+#define SOAP_TYPE_ServerSoap_tns__submitMediaAliasTextWithTokenId (56)
 #endif
 
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__submitMediaAliasTextWithTokenId(struct soap*, const char*, int, const tns__submitMediaAliasTextWithTokenId *, const char*);
@@ -560,7 +508,7 @@ SOAP_FMAC1 tns__submitMediaAliasTextWithTokenId * SOAP_FMAC2 soap_instantiate_tn
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__submitMediaAliasTextWithTokenId(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ServerSoap_tns__submitMediaAliasTextAndTokenDigestResponse
-#define SOAP_TYPE_ServerSoap_tns__submitMediaAliasTextAndTokenDigestResponse (70)
+#define SOAP_TYPE_ServerSoap_tns__submitMediaAliasTextAndTokenDigestResponse (55)
 #endif
 
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__submitMediaAliasTextAndTokenDigestResponse(struct soap*, const char*, int, const tns__submitMediaAliasTextAndTokenDigestResponse *, const char*);
@@ -586,7 +534,7 @@ SOAP_FMAC1 tns__submitMediaAliasTextAndTokenDigestResponse * SOAP_FMAC2 soap_ins
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__submitMediaAliasTextAndTokenDigestResponse(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ServerSoap_tns__submitMediaAliasTextAndTokenDigest
-#define SOAP_TYPE_ServerSoap_tns__submitMediaAliasTextAndTokenDigest (69)
+#define SOAP_TYPE_ServerSoap_tns__submitMediaAliasTextAndTokenDigest (54)
 #endif
 
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__submitMediaAliasTextAndTokenDigest(struct soap*, const char*, int, const tns__submitMediaAliasTextAndTokenDigest *, const char*);
@@ -612,7 +560,7 @@ SOAP_FMAC1 tns__submitMediaAliasTextAndTokenDigest * SOAP_FMAC2 soap_instantiate
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__submitMediaAliasTextAndTokenDigest(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ServerSoap_tns__submitMediaAliasResponse
-#define SOAP_TYPE_ServerSoap_tns__submitMediaAliasResponse (68)
+#define SOAP_TYPE_ServerSoap_tns__submitMediaAliasResponse (53)
 #endif
 
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__submitMediaAliasResponse(struct soap*, const char*, int, const tns__submitMediaAliasResponse *, const char*);
@@ -638,7 +586,7 @@ SOAP_FMAC1 tns__submitMediaAliasResponse * SOAP_FMAC2 soap_instantiate_tns__subm
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__submitMediaAliasResponse(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ServerSoap_tns__submitMediaAlias
-#define SOAP_TYPE_ServerSoap_tns__submitMediaAlias (67)
+#define SOAP_TYPE_ServerSoap_tns__submitMediaAlias (52)
 #endif
 
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__submitMediaAlias(struct soap*, const char*, int, const tns__submitMediaAlias *, const char*);
@@ -663,424 +611,8 @@ SOAP_FMAC3 tns__submitMediaAlias * SOAP_FMAC4 soap_get_tns__submitMediaAlias(str
 SOAP_FMAC1 tns__submitMediaAlias * SOAP_FMAC2 soap_instantiate_tns__submitMediaAlias(struct soap*, int, const char*, const char*, size_t*);
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__submitMediaAlias(struct soap*, int, int, void*, size_t, const void*, size_t);
 
-#ifndef SOAP_TYPE_ServerSoap_tns__submitGameTokenDigestResponse
-#define SOAP_TYPE_ServerSoap_tns__submitGameTokenDigestResponse (66)
-#endif
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__submitGameTokenDigestResponse(struct soap*, const char*, int, const tns__submitGameTokenDigestResponse *, const char*);
-SOAP_FMAC3 tns__submitGameTokenDigestResponse * SOAP_FMAC4 soap_in_tns__submitGameTokenDigestResponse(struct soap*, const char*, tns__submitGameTokenDigestResponse *, const char*);
-
-#ifndef soap_write_tns__submitGameTokenDigestResponse
-#define soap_write_tns__submitGameTokenDigestResponse(soap, data) ( soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "tns:submitGameTokenDigestResponse", NULL) || soap_end_send(soap) )
-#endif
-
-
-#ifndef soap_read_tns__submitGameTokenDigestResponse
-#define soap_read_tns__submitGameTokenDigestResponse(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_tns__submitGameTokenDigestResponse(soap, data, NULL, NULL) || soap_end_recv(soap) )
-#endif
-
-SOAP_FMAC3 tns__submitGameTokenDigestResponse * SOAP_FMAC4 soap_get_tns__submitGameTokenDigestResponse(struct soap*, tns__submitGameTokenDigestResponse *, const char*, const char*);
-
-#define soap_new_tns__submitGameTokenDigestResponse(soap, n) soap_instantiate_tns__submitGameTokenDigestResponse(soap, n, NULL, NULL, NULL)
-
-
-#define soap_delete_tns__submitGameTokenDigestResponse(soap, p) soap_delete(soap, p)
-
-SOAP_FMAC1 tns__submitGameTokenDigestResponse * SOAP_FMAC2 soap_instantiate_tns__submitGameTokenDigestResponse(struct soap*, int, const char*, const char*, size_t*);
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__submitGameTokenDigestResponse(struct soap*, int, int, void*, size_t, const void*, size_t);
-
-#ifndef SOAP_TYPE_ServerSoap_tns__submitGameTokenDigest
-#define SOAP_TYPE_ServerSoap_tns__submitGameTokenDigest (65)
-#endif
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__submitGameTokenDigest(struct soap*, const char*, int, const tns__submitGameTokenDigest *, const char*);
-SOAP_FMAC3 tns__submitGameTokenDigest * SOAP_FMAC4 soap_in_tns__submitGameTokenDigest(struct soap*, const char*, tns__submitGameTokenDigest *, const char*);
-
-#ifndef soap_write_tns__submitGameTokenDigest
-#define soap_write_tns__submitGameTokenDigest(soap, data) ( soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "tns:submitGameTokenDigest", NULL) || soap_end_send(soap) )
-#endif
-
-
-#ifndef soap_read_tns__submitGameTokenDigest
-#define soap_read_tns__submitGameTokenDigest(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_tns__submitGameTokenDigest(soap, data, NULL, NULL) || soap_end_recv(soap) )
-#endif
-
-SOAP_FMAC3 tns__submitGameTokenDigest * SOAP_FMAC4 soap_get_tns__submitGameTokenDigest(struct soap*, tns__submitGameTokenDigest *, const char*, const char*);
-
-#define soap_new_tns__submitGameTokenDigest(soap, n) soap_instantiate_tns__submitGameTokenDigest(soap, n, NULL, NULL, NULL)
-
-
-#define soap_delete_tns__submitGameTokenDigest(soap, p) soap_delete(soap, p)
-
-SOAP_FMAC1 tns__submitGameTokenDigest * SOAP_FMAC2 soap_instantiate_tns__submitGameTokenDigest(struct soap*, int, const char*, const char*, size_t*);
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__submitGameTokenDigest(struct soap*, int, int, void*, size_t, const void*, size_t);
-
-#ifndef SOAP_TYPE_ServerSoap_tns__submitGameTokenResponse
-#define SOAP_TYPE_ServerSoap_tns__submitGameTokenResponse (64)
-#endif
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__submitGameTokenResponse(struct soap*, const char*, int, const tns__submitGameTokenResponse *, const char*);
-SOAP_FMAC3 tns__submitGameTokenResponse * SOAP_FMAC4 soap_in_tns__submitGameTokenResponse(struct soap*, const char*, tns__submitGameTokenResponse *, const char*);
-
-#ifndef soap_write_tns__submitGameTokenResponse
-#define soap_write_tns__submitGameTokenResponse(soap, data) ( soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "tns:submitGameTokenResponse", NULL) || soap_end_send(soap) )
-#endif
-
-
-#ifndef soap_read_tns__submitGameTokenResponse
-#define soap_read_tns__submitGameTokenResponse(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_tns__submitGameTokenResponse(soap, data, NULL, NULL) || soap_end_recv(soap) )
-#endif
-
-SOAP_FMAC3 tns__submitGameTokenResponse * SOAP_FMAC4 soap_get_tns__submitGameTokenResponse(struct soap*, tns__submitGameTokenResponse *, const char*, const char*);
-
-#define soap_new_tns__submitGameTokenResponse(soap, n) soap_instantiate_tns__submitGameTokenResponse(soap, n, NULL, NULL, NULL)
-
-
-#define soap_delete_tns__submitGameTokenResponse(soap, p) soap_delete(soap, p)
-
-SOAP_FMAC1 tns__submitGameTokenResponse * SOAP_FMAC2 soap_instantiate_tns__submitGameTokenResponse(struct soap*, int, const char*, const char*, size_t*);
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__submitGameTokenResponse(struct soap*, int, int, void*, size_t, const void*, size_t);
-
-#ifndef SOAP_TYPE_ServerSoap_tns__submitGameToken
-#define SOAP_TYPE_ServerSoap_tns__submitGameToken (63)
-#endif
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__submitGameToken(struct soap*, const char*, int, const tns__submitGameToken *, const char*);
-SOAP_FMAC3 tns__submitGameToken * SOAP_FMAC4 soap_in_tns__submitGameToken(struct soap*, const char*, tns__submitGameToken *, const char*);
-
-#ifndef soap_write_tns__submitGameToken
-#define soap_write_tns__submitGameToken(soap, data) ( soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "tns:submitGameToken", NULL) || soap_end_send(soap) )
-#endif
-
-
-#ifndef soap_read_tns__submitGameToken
-#define soap_read_tns__submitGameToken(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_tns__submitGameToken(soap, data, NULL, NULL) || soap_end_recv(soap) )
-#endif
-
-SOAP_FMAC3 tns__submitGameToken * SOAP_FMAC4 soap_get_tns__submitGameToken(struct soap*, tns__submitGameToken *, const char*, const char*);
-
-#define soap_new_tns__submitGameToken(soap, n) soap_instantiate_tns__submitGameToken(soap, n, NULL, NULL, NULL)
-
-
-#define soap_delete_tns__submitGameToken(soap, p) soap_delete(soap, p)
-
-SOAP_FMAC1 tns__submitGameToken * SOAP_FMAC2 soap_instantiate_tns__submitGameToken(struct soap*, int, const char*, const char*, size_t*);
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__submitGameToken(struct soap*, int, int, void*, size_t, const void*, size_t);
-
-#ifndef SOAP_TYPE_ServerSoap_tns__submitGameAnnotationTextWithTokenIdResponse
-#define SOAP_TYPE_ServerSoap_tns__submitGameAnnotationTextWithTokenIdResponse (62)
-#endif
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__submitGameAnnotationTextWithTokenIdResponse(struct soap*, const char*, int, const tns__submitGameAnnotationTextWithTokenIdResponse *, const char*);
-SOAP_FMAC3 tns__submitGameAnnotationTextWithTokenIdResponse * SOAP_FMAC4 soap_in_tns__submitGameAnnotationTextWithTokenIdResponse(struct soap*, const char*, tns__submitGameAnnotationTextWithTokenIdResponse *, const char*);
-
-#ifndef soap_write_tns__submitGameAnnotationTextWithTokenIdResponse
-#define soap_write_tns__submitGameAnnotationTextWithTokenIdResponse(soap, data) ( soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "tns:submitGameAnnotationTextWithTokenIdResponse", NULL) || soap_end_send(soap) )
-#endif
-
-
-#ifndef soap_read_tns__submitGameAnnotationTextWithTokenIdResponse
-#define soap_read_tns__submitGameAnnotationTextWithTokenIdResponse(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_tns__submitGameAnnotationTextWithTokenIdResponse(soap, data, NULL, NULL) || soap_end_recv(soap) )
-#endif
-
-SOAP_FMAC3 tns__submitGameAnnotationTextWithTokenIdResponse * SOAP_FMAC4 soap_get_tns__submitGameAnnotationTextWithTokenIdResponse(struct soap*, tns__submitGameAnnotationTextWithTokenIdResponse *, const char*, const char*);
-
-#define soap_new_tns__submitGameAnnotationTextWithTokenIdResponse(soap, n) soap_instantiate_tns__submitGameAnnotationTextWithTokenIdResponse(soap, n, NULL, NULL, NULL)
-
-
-#define soap_delete_tns__submitGameAnnotationTextWithTokenIdResponse(soap, p) soap_delete(soap, p)
-
-SOAP_FMAC1 tns__submitGameAnnotationTextWithTokenIdResponse * SOAP_FMAC2 soap_instantiate_tns__submitGameAnnotationTextWithTokenIdResponse(struct soap*, int, const char*, const char*, size_t*);
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__submitGameAnnotationTextWithTokenIdResponse(struct soap*, int, int, void*, size_t, const void*, size_t);
-
-#ifndef SOAP_TYPE_ServerSoap_tns__submitGameAnnotationTextWithTokenId
-#define SOAP_TYPE_ServerSoap_tns__submitGameAnnotationTextWithTokenId (61)
-#endif
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__submitGameAnnotationTextWithTokenId(struct soap*, const char*, int, const tns__submitGameAnnotationTextWithTokenId *, const char*);
-SOAP_FMAC3 tns__submitGameAnnotationTextWithTokenId * SOAP_FMAC4 soap_in_tns__submitGameAnnotationTextWithTokenId(struct soap*, const char*, tns__submitGameAnnotationTextWithTokenId *, const char*);
-
-#ifndef soap_write_tns__submitGameAnnotationTextWithTokenId
-#define soap_write_tns__submitGameAnnotationTextWithTokenId(soap, data) ( soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "tns:submitGameAnnotationTextWithTokenId", NULL) || soap_end_send(soap) )
-#endif
-
-
-#ifndef soap_read_tns__submitGameAnnotationTextWithTokenId
-#define soap_read_tns__submitGameAnnotationTextWithTokenId(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_tns__submitGameAnnotationTextWithTokenId(soap, data, NULL, NULL) || soap_end_recv(soap) )
-#endif
-
-SOAP_FMAC3 tns__submitGameAnnotationTextWithTokenId * SOAP_FMAC4 soap_get_tns__submitGameAnnotationTextWithTokenId(struct soap*, tns__submitGameAnnotationTextWithTokenId *, const char*, const char*);
-
-#define soap_new_tns__submitGameAnnotationTextWithTokenId(soap, n) soap_instantiate_tns__submitGameAnnotationTextWithTokenId(soap, n, NULL, NULL, NULL)
-
-
-#define soap_delete_tns__submitGameAnnotationTextWithTokenId(soap, p) soap_delete(soap, p)
-
-SOAP_FMAC1 tns__submitGameAnnotationTextWithTokenId * SOAP_FMAC2 soap_instantiate_tns__submitGameAnnotationTextWithTokenId(struct soap*, int, const char*, const char*, size_t*);
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__submitGameAnnotationTextWithTokenId(struct soap*, int, int, void*, size_t, const void*, size_t);
-
-#ifndef SOAP_TYPE_ServerSoap_tns__submitGameAnnotationTextAndTokenDigestResponse
-#define SOAP_TYPE_ServerSoap_tns__submitGameAnnotationTextAndTokenDigestResponse (60)
-#endif
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__submitGameAnnotationTextAndTokenDigestResponse(struct soap*, const char*, int, const tns__submitGameAnnotationTextAndTokenDigestResponse *, const char*);
-SOAP_FMAC3 tns__submitGameAnnotationTextAndTokenDigestResponse * SOAP_FMAC4 soap_in_tns__submitGameAnnotationTextAndTokenDigestResponse(struct soap*, const char*, tns__submitGameAnnotationTextAndTokenDigestResponse *, const char*);
-
-#ifndef soap_write_tns__submitGameAnnotationTextAndTokenDigestResponse
-#define soap_write_tns__submitGameAnnotationTextAndTokenDigestResponse(soap, data) ( soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "tns:submitGameAnnotationTextAndTokenDigestResponse", NULL) || soap_end_send(soap) )
-#endif
-
-
-#ifndef soap_read_tns__submitGameAnnotationTextAndTokenDigestResponse
-#define soap_read_tns__submitGameAnnotationTextAndTokenDigestResponse(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_tns__submitGameAnnotationTextAndTokenDigestResponse(soap, data, NULL, NULL) || soap_end_recv(soap) )
-#endif
-
-SOAP_FMAC3 tns__submitGameAnnotationTextAndTokenDigestResponse * SOAP_FMAC4 soap_get_tns__submitGameAnnotationTextAndTokenDigestResponse(struct soap*, tns__submitGameAnnotationTextAndTokenDigestResponse *, const char*, const char*);
-
-#define soap_new_tns__submitGameAnnotationTextAndTokenDigestResponse(soap, n) soap_instantiate_tns__submitGameAnnotationTextAndTokenDigestResponse(soap, n, NULL, NULL, NULL)
-
-
-#define soap_delete_tns__submitGameAnnotationTextAndTokenDigestResponse(soap, p) soap_delete(soap, p)
-
-SOAP_FMAC1 tns__submitGameAnnotationTextAndTokenDigestResponse * SOAP_FMAC2 soap_instantiate_tns__submitGameAnnotationTextAndTokenDigestResponse(struct soap*, int, const char*, const char*, size_t*);
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__submitGameAnnotationTextAndTokenDigestResponse(struct soap*, int, int, void*, size_t, const void*, size_t);
-
-#ifndef SOAP_TYPE_ServerSoap_tns__submitGameAnnotationTextAndTokenDigest
-#define SOAP_TYPE_ServerSoap_tns__submitGameAnnotationTextAndTokenDigest (59)
-#endif
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__submitGameAnnotationTextAndTokenDigest(struct soap*, const char*, int, const tns__submitGameAnnotationTextAndTokenDigest *, const char*);
-SOAP_FMAC3 tns__submitGameAnnotationTextAndTokenDigest * SOAP_FMAC4 soap_in_tns__submitGameAnnotationTextAndTokenDigest(struct soap*, const char*, tns__submitGameAnnotationTextAndTokenDigest *, const char*);
-
-#ifndef soap_write_tns__submitGameAnnotationTextAndTokenDigest
-#define soap_write_tns__submitGameAnnotationTextAndTokenDigest(soap, data) ( soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "tns:submitGameAnnotationTextAndTokenDigest", NULL) || soap_end_send(soap) )
-#endif
-
-
-#ifndef soap_read_tns__submitGameAnnotationTextAndTokenDigest
-#define soap_read_tns__submitGameAnnotationTextAndTokenDigest(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_tns__submitGameAnnotationTextAndTokenDigest(soap, data, NULL, NULL) || soap_end_recv(soap) )
-#endif
-
-SOAP_FMAC3 tns__submitGameAnnotationTextAndTokenDigest * SOAP_FMAC4 soap_get_tns__submitGameAnnotationTextAndTokenDigest(struct soap*, tns__submitGameAnnotationTextAndTokenDigest *, const char*, const char*);
-
-#define soap_new_tns__submitGameAnnotationTextAndTokenDigest(soap, n) soap_instantiate_tns__submitGameAnnotationTextAndTokenDigest(soap, n, NULL, NULL, NULL)
-
-
-#define soap_delete_tns__submitGameAnnotationTextAndTokenDigest(soap, p) soap_delete(soap, p)
-
-SOAP_FMAC1 tns__submitGameAnnotationTextAndTokenDigest * SOAP_FMAC2 soap_instantiate_tns__submitGameAnnotationTextAndTokenDigest(struct soap*, int, const char*, const char*, size_t*);
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__submitGameAnnotationTextAndTokenDigest(struct soap*, int, int, void*, size_t, const void*, size_t);
-
-#ifndef SOAP_TYPE_ServerSoap_tns__submitGameAnnotationResponse
-#define SOAP_TYPE_ServerSoap_tns__submitGameAnnotationResponse (58)
-#endif
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__submitGameAnnotationResponse(struct soap*, const char*, int, const tns__submitGameAnnotationResponse *, const char*);
-SOAP_FMAC3 tns__submitGameAnnotationResponse * SOAP_FMAC4 soap_in_tns__submitGameAnnotationResponse(struct soap*, const char*, tns__submitGameAnnotationResponse *, const char*);
-
-#ifndef soap_write_tns__submitGameAnnotationResponse
-#define soap_write_tns__submitGameAnnotationResponse(soap, data) ( soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "tns:submitGameAnnotationResponse", NULL) || soap_end_send(soap) )
-#endif
-
-
-#ifndef soap_read_tns__submitGameAnnotationResponse
-#define soap_read_tns__submitGameAnnotationResponse(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_tns__submitGameAnnotationResponse(soap, data, NULL, NULL) || soap_end_recv(soap) )
-#endif
-
-SOAP_FMAC3 tns__submitGameAnnotationResponse * SOAP_FMAC4 soap_get_tns__submitGameAnnotationResponse(struct soap*, tns__submitGameAnnotationResponse *, const char*, const char*);
-
-#define soap_new_tns__submitGameAnnotationResponse(soap, n) soap_instantiate_tns__submitGameAnnotationResponse(soap, n, NULL, NULL, NULL)
-
-
-#define soap_delete_tns__submitGameAnnotationResponse(soap, p) soap_delete(soap, p)
-
-SOAP_FMAC1 tns__submitGameAnnotationResponse * SOAP_FMAC2 soap_instantiate_tns__submitGameAnnotationResponse(struct soap*, int, const char*, const char*, size_t*);
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__submitGameAnnotationResponse(struct soap*, int, int, void*, size_t, const void*, size_t);
-
-#ifndef SOAP_TYPE_ServerSoap_tns__submitGameAnnotation
-#define SOAP_TYPE_ServerSoap_tns__submitGameAnnotation (57)
-#endif
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__submitGameAnnotation(struct soap*, const char*, int, const tns__submitGameAnnotation *, const char*);
-SOAP_FMAC3 tns__submitGameAnnotation * SOAP_FMAC4 soap_in_tns__submitGameAnnotation(struct soap*, const char*, tns__submitGameAnnotation *, const char*);
-
-#ifndef soap_write_tns__submitGameAnnotation
-#define soap_write_tns__submitGameAnnotation(soap, data) ( soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "tns:submitGameAnnotation", NULL) || soap_end_send(soap) )
-#endif
-
-
-#ifndef soap_read_tns__submitGameAnnotation
-#define soap_read_tns__submitGameAnnotation(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_tns__submitGameAnnotation(soap, data, NULL, NULL) || soap_end_recv(soap) )
-#endif
-
-SOAP_FMAC3 tns__submitGameAnnotation * SOAP_FMAC4 soap_get_tns__submitGameAnnotation(struct soap*, tns__submitGameAnnotation *, const char*, const char*);
-
-#define soap_new_tns__submitGameAnnotation(soap, n) soap_instantiate_tns__submitGameAnnotation(soap, n, NULL, NULL, NULL)
-
-
-#define soap_delete_tns__submitGameAnnotation(soap, p) soap_delete(soap, p)
-
-SOAP_FMAC1 tns__submitGameAnnotation * SOAP_FMAC2 soap_instantiate_tns__submitGameAnnotation(struct soap*, int, const char*, const char*, size_t*);
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__submitGameAnnotation(struct soap*, int, int, void*, size_t, const void*, size_t);
-
-#ifndef SOAP_TYPE_ServerSoap_tns__submitGameAliasTextWithTokenIdResponse
-#define SOAP_TYPE_ServerSoap_tns__submitGameAliasTextWithTokenIdResponse (56)
-#endif
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__submitGameAliasTextWithTokenIdResponse(struct soap*, const char*, int, const tns__submitGameAliasTextWithTokenIdResponse *, const char*);
-SOAP_FMAC3 tns__submitGameAliasTextWithTokenIdResponse * SOAP_FMAC4 soap_in_tns__submitGameAliasTextWithTokenIdResponse(struct soap*, const char*, tns__submitGameAliasTextWithTokenIdResponse *, const char*);
-
-#ifndef soap_write_tns__submitGameAliasTextWithTokenIdResponse
-#define soap_write_tns__submitGameAliasTextWithTokenIdResponse(soap, data) ( soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "tns:submitGameAliasTextWithTokenIdResponse", NULL) || soap_end_send(soap) )
-#endif
-
-
-#ifndef soap_read_tns__submitGameAliasTextWithTokenIdResponse
-#define soap_read_tns__submitGameAliasTextWithTokenIdResponse(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_tns__submitGameAliasTextWithTokenIdResponse(soap, data, NULL, NULL) || soap_end_recv(soap) )
-#endif
-
-SOAP_FMAC3 tns__submitGameAliasTextWithTokenIdResponse * SOAP_FMAC4 soap_get_tns__submitGameAliasTextWithTokenIdResponse(struct soap*, tns__submitGameAliasTextWithTokenIdResponse *, const char*, const char*);
-
-#define soap_new_tns__submitGameAliasTextWithTokenIdResponse(soap, n) soap_instantiate_tns__submitGameAliasTextWithTokenIdResponse(soap, n, NULL, NULL, NULL)
-
-
-#define soap_delete_tns__submitGameAliasTextWithTokenIdResponse(soap, p) soap_delete(soap, p)
-
-SOAP_FMAC1 tns__submitGameAliasTextWithTokenIdResponse * SOAP_FMAC2 soap_instantiate_tns__submitGameAliasTextWithTokenIdResponse(struct soap*, int, const char*, const char*, size_t*);
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__submitGameAliasTextWithTokenIdResponse(struct soap*, int, int, void*, size_t, const void*, size_t);
-
-#ifndef SOAP_TYPE_ServerSoap_tns__submitGameAliasTextWithTokenId
-#define SOAP_TYPE_ServerSoap_tns__submitGameAliasTextWithTokenId (55)
-#endif
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__submitGameAliasTextWithTokenId(struct soap*, const char*, int, const tns__submitGameAliasTextWithTokenId *, const char*);
-SOAP_FMAC3 tns__submitGameAliasTextWithTokenId * SOAP_FMAC4 soap_in_tns__submitGameAliasTextWithTokenId(struct soap*, const char*, tns__submitGameAliasTextWithTokenId *, const char*);
-
-#ifndef soap_write_tns__submitGameAliasTextWithTokenId
-#define soap_write_tns__submitGameAliasTextWithTokenId(soap, data) ( soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "tns:submitGameAliasTextWithTokenId", NULL) || soap_end_send(soap) )
-#endif
-
-
-#ifndef soap_read_tns__submitGameAliasTextWithTokenId
-#define soap_read_tns__submitGameAliasTextWithTokenId(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_tns__submitGameAliasTextWithTokenId(soap, data, NULL, NULL) || soap_end_recv(soap) )
-#endif
-
-SOAP_FMAC3 tns__submitGameAliasTextWithTokenId * SOAP_FMAC4 soap_get_tns__submitGameAliasTextWithTokenId(struct soap*, tns__submitGameAliasTextWithTokenId *, const char*, const char*);
-
-#define soap_new_tns__submitGameAliasTextWithTokenId(soap, n) soap_instantiate_tns__submitGameAliasTextWithTokenId(soap, n, NULL, NULL, NULL)
-
-
-#define soap_delete_tns__submitGameAliasTextWithTokenId(soap, p) soap_delete(soap, p)
-
-SOAP_FMAC1 tns__submitGameAliasTextWithTokenId * SOAP_FMAC2 soap_instantiate_tns__submitGameAliasTextWithTokenId(struct soap*, int, const char*, const char*, size_t*);
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__submitGameAliasTextWithTokenId(struct soap*, int, int, void*, size_t, const void*, size_t);
-
-#ifndef SOAP_TYPE_ServerSoap_tns__submitGameAliasTextAndTokenDigestResponse
-#define SOAP_TYPE_ServerSoap_tns__submitGameAliasTextAndTokenDigestResponse (54)
-#endif
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__submitGameAliasTextAndTokenDigestResponse(struct soap*, const char*, int, const tns__submitGameAliasTextAndTokenDigestResponse *, const char*);
-SOAP_FMAC3 tns__submitGameAliasTextAndTokenDigestResponse * SOAP_FMAC4 soap_in_tns__submitGameAliasTextAndTokenDigestResponse(struct soap*, const char*, tns__submitGameAliasTextAndTokenDigestResponse *, const char*);
-
-#ifndef soap_write_tns__submitGameAliasTextAndTokenDigestResponse
-#define soap_write_tns__submitGameAliasTextAndTokenDigestResponse(soap, data) ( soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "tns:submitGameAliasTextAndTokenDigestResponse", NULL) || soap_end_send(soap) )
-#endif
-
-
-#ifndef soap_read_tns__submitGameAliasTextAndTokenDigestResponse
-#define soap_read_tns__submitGameAliasTextAndTokenDigestResponse(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_tns__submitGameAliasTextAndTokenDigestResponse(soap, data, NULL, NULL) || soap_end_recv(soap) )
-#endif
-
-SOAP_FMAC3 tns__submitGameAliasTextAndTokenDigestResponse * SOAP_FMAC4 soap_get_tns__submitGameAliasTextAndTokenDigestResponse(struct soap*, tns__submitGameAliasTextAndTokenDigestResponse *, const char*, const char*);
-
-#define soap_new_tns__submitGameAliasTextAndTokenDigestResponse(soap, n) soap_instantiate_tns__submitGameAliasTextAndTokenDigestResponse(soap, n, NULL, NULL, NULL)
-
-
-#define soap_delete_tns__submitGameAliasTextAndTokenDigestResponse(soap, p) soap_delete(soap, p)
-
-SOAP_FMAC1 tns__submitGameAliasTextAndTokenDigestResponse * SOAP_FMAC2 soap_instantiate_tns__submitGameAliasTextAndTokenDigestResponse(struct soap*, int, const char*, const char*, size_t*);
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__submitGameAliasTextAndTokenDigestResponse(struct soap*, int, int, void*, size_t, const void*, size_t);
-
-#ifndef SOAP_TYPE_ServerSoap_tns__submitGameAliasTextAndTokenDigest
-#define SOAP_TYPE_ServerSoap_tns__submitGameAliasTextAndTokenDigest (53)
-#endif
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__submitGameAliasTextAndTokenDigest(struct soap*, const char*, int, const tns__submitGameAliasTextAndTokenDigest *, const char*);
-SOAP_FMAC3 tns__submitGameAliasTextAndTokenDigest * SOAP_FMAC4 soap_in_tns__submitGameAliasTextAndTokenDigest(struct soap*, const char*, tns__submitGameAliasTextAndTokenDigest *, const char*);
-
-#ifndef soap_write_tns__submitGameAliasTextAndTokenDigest
-#define soap_write_tns__submitGameAliasTextAndTokenDigest(soap, data) ( soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "tns:submitGameAliasTextAndTokenDigest", NULL) || soap_end_send(soap) )
-#endif
-
-
-#ifndef soap_read_tns__submitGameAliasTextAndTokenDigest
-#define soap_read_tns__submitGameAliasTextAndTokenDigest(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_tns__submitGameAliasTextAndTokenDigest(soap, data, NULL, NULL) || soap_end_recv(soap) )
-#endif
-
-SOAP_FMAC3 tns__submitGameAliasTextAndTokenDigest * SOAP_FMAC4 soap_get_tns__submitGameAliasTextAndTokenDigest(struct soap*, tns__submitGameAliasTextAndTokenDigest *, const char*, const char*);
-
-#define soap_new_tns__submitGameAliasTextAndTokenDigest(soap, n) soap_instantiate_tns__submitGameAliasTextAndTokenDigest(soap, n, NULL, NULL, NULL)
-
-
-#define soap_delete_tns__submitGameAliasTextAndTokenDigest(soap, p) soap_delete(soap, p)
-
-SOAP_FMAC1 tns__submitGameAliasTextAndTokenDigest * SOAP_FMAC2 soap_instantiate_tns__submitGameAliasTextAndTokenDigest(struct soap*, int, const char*, const char*, size_t*);
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__submitGameAliasTextAndTokenDigest(struct soap*, int, int, void*, size_t, const void*, size_t);
-
-#ifndef SOAP_TYPE_ServerSoap_tns__submitGameAliasResponse
-#define SOAP_TYPE_ServerSoap_tns__submitGameAliasResponse (52)
-#endif
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__submitGameAliasResponse(struct soap*, const char*, int, const tns__submitGameAliasResponse *, const char*);
-SOAP_FMAC3 tns__submitGameAliasResponse * SOAP_FMAC4 soap_in_tns__submitGameAliasResponse(struct soap*, const char*, tns__submitGameAliasResponse *, const char*);
-
-#ifndef soap_write_tns__submitGameAliasResponse
-#define soap_write_tns__submitGameAliasResponse(soap, data) ( soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "tns:submitGameAliasResponse", NULL) || soap_end_send(soap) )
-#endif
-
-
-#ifndef soap_read_tns__submitGameAliasResponse
-#define soap_read_tns__submitGameAliasResponse(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_tns__submitGameAliasResponse(soap, data, NULL, NULL) || soap_end_recv(soap) )
-#endif
-
-SOAP_FMAC3 tns__submitGameAliasResponse * SOAP_FMAC4 soap_get_tns__submitGameAliasResponse(struct soap*, tns__submitGameAliasResponse *, const char*, const char*);
-
-#define soap_new_tns__submitGameAliasResponse(soap, n) soap_instantiate_tns__submitGameAliasResponse(soap, n, NULL, NULL, NULL)
-
-
-#define soap_delete_tns__submitGameAliasResponse(soap, p) soap_delete(soap, p)
-
-SOAP_FMAC1 tns__submitGameAliasResponse * SOAP_FMAC2 soap_instantiate_tns__submitGameAliasResponse(struct soap*, int, const char*, const char*, size_t*);
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__submitGameAliasResponse(struct soap*, int, int, void*, size_t, const void*, size_t);
-
-#ifndef SOAP_TYPE_ServerSoap_tns__submitGameAlias
-#define SOAP_TYPE_ServerSoap_tns__submitGameAlias (51)
-#endif
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__submitGameAlias(struct soap*, const char*, int, const tns__submitGameAlias *, const char*);
-SOAP_FMAC3 tns__submitGameAlias * SOAP_FMAC4 soap_in_tns__submitGameAlias(struct soap*, const char*, tns__submitGameAlias *, const char*);
-
-#ifndef soap_write_tns__submitGameAlias
-#define soap_write_tns__submitGameAlias(soap, data) ( soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "tns:submitGameAlias", NULL) || soap_end_send(soap) )
-#endif
-
-
-#ifndef soap_read_tns__submitGameAlias
-#define soap_read_tns__submitGameAlias(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_tns__submitGameAlias(soap, data, NULL, NULL) || soap_end_recv(soap) )
-#endif
-
-SOAP_FMAC3 tns__submitGameAlias * SOAP_FMAC4 soap_get_tns__submitGameAlias(struct soap*, tns__submitGameAlias *, const char*, const char*);
-
-#define soap_new_tns__submitGameAlias(soap, n) soap_instantiate_tns__submitGameAlias(soap, n, NULL, NULL, NULL)
-
-
-#define soap_delete_tns__submitGameAlias(soap, p) soap_delete(soap, p)
-
-SOAP_FMAC1 tns__submitGameAlias * SOAP_FMAC2 soap_instantiate_tns__submitGameAlias(struct soap*, int, const char*, const char*, size_t*);
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__submitGameAlias(struct soap*, int, int, void*, size_t, const void*, size_t);
-
 #ifndef SOAP_TYPE_ServerSoap_tns__setUserLanguageResponse
-#define SOAP_TYPE_ServerSoap_tns__setUserLanguageResponse (50)
+#define SOAP_TYPE_ServerSoap_tns__setUserLanguageResponse (51)
 #endif
 
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__setUserLanguageResponse(struct soap*, const char*, int, const tns__setUserLanguageResponse *, const char*);
@@ -1106,7 +638,7 @@ SOAP_FMAC1 tns__setUserLanguageResponse * SOAP_FMAC2 soap_instantiate_tns__setUs
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__setUserLanguageResponse(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ServerSoap_tns__setUserLanguage
-#define SOAP_TYPE_ServerSoap_tns__setUserLanguage (49)
+#define SOAP_TYPE_ServerSoap_tns__setUserLanguage (50)
 #endif
 
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__setUserLanguage(struct soap*, const char*, int, const tns__setUserLanguage *, const char*);
@@ -1132,7 +664,7 @@ SOAP_FMAC1 tns__setUserLanguage * SOAP_FMAC2 soap_instantiate_tns__setUserLangua
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__setUserLanguage(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ServerSoap_tns__setUserAnonymousResponse
-#define SOAP_TYPE_ServerSoap_tns__setUserAnonymousResponse (48)
+#define SOAP_TYPE_ServerSoap_tns__setUserAnonymousResponse (49)
 #endif
 
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__setUserAnonymousResponse(struct soap*, const char*, int, const tns__setUserAnonymousResponse *, const char*);
@@ -1158,7 +690,7 @@ SOAP_FMAC1 tns__setUserAnonymousResponse * SOAP_FMAC2 soap_instantiate_tns__setU
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__setUserAnonymousResponse(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ServerSoap_tns__setUserAnonymous
-#define SOAP_TYPE_ServerSoap_tns__setUserAnonymous (47)
+#define SOAP_TYPE_ServerSoap_tns__setUserAnonymous (48)
 #endif
 
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__setUserAnonymous(struct soap*, const char*, int, const tns__setUserAnonymous *, const char*);
@@ -1184,7 +716,7 @@ SOAP_FMAC1 tns__setUserAnonymous * SOAP_FMAC2 soap_instantiate_tns__setUserAnony
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__setUserAnonymous(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ServerSoap_tns__selectUserResponse
-#define SOAP_TYPE_ServerSoap_tns__selectUserResponse (46)
+#define SOAP_TYPE_ServerSoap_tns__selectUserResponse (47)
 #endif
 
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__selectUserResponse(struct soap*, const char*, int, const tns__selectUserResponse *, const char*);
@@ -1210,7 +742,7 @@ SOAP_FMAC1 tns__selectUserResponse * SOAP_FMAC2 soap_instantiate_tns__selectUser
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__selectUserResponse(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ServerSoap_tns__selectUser
-#define SOAP_TYPE_ServerSoap_tns__selectUser (45)
+#define SOAP_TYPE_ServerSoap_tns__selectUser (46)
 #endif
 
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__selectUser(struct soap*, const char*, int, const tns__selectUser *, const char*);
@@ -1236,7 +768,7 @@ SOAP_FMAC1 tns__selectUser * SOAP_FMAC2 soap_instantiate_tns__selectUser(struct 
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__selectUser(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ServerSoap_tns__selectRelatedMediaAnnotationsWithTokenIdResponse
-#define SOAP_TYPE_ServerSoap_tns__selectRelatedMediaAnnotationsWithTokenIdResponse (44)
+#define SOAP_TYPE_ServerSoap_tns__selectRelatedMediaAnnotationsWithTokenIdResponse (45)
 #endif
 
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__selectRelatedMediaAnnotationsWithTokenIdResponse(struct soap*, const char*, int, const tns__selectRelatedMediaAnnotationsWithTokenIdResponse *, const char*);
@@ -1262,7 +794,7 @@ SOAP_FMAC1 tns__selectRelatedMediaAnnotationsWithTokenIdResponse * SOAP_FMAC2 so
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__selectRelatedMediaAnnotationsWithTokenIdResponse(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ServerSoap_tns__selectRelatedMediaAnnotationsWithTokenId
-#define SOAP_TYPE_ServerSoap_tns__selectRelatedMediaAnnotationsWithTokenId (43)
+#define SOAP_TYPE_ServerSoap_tns__selectRelatedMediaAnnotationsWithTokenId (44)
 #endif
 
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__selectRelatedMediaAnnotationsWithTokenId(struct soap*, const char*, int, const tns__selectRelatedMediaAnnotationsWithTokenId *, const char*);
@@ -1287,60 +819,8 @@ SOAP_FMAC3 tns__selectRelatedMediaAnnotationsWithTokenId * SOAP_FMAC4 soap_get_t
 SOAP_FMAC1 tns__selectRelatedMediaAnnotationsWithTokenId * SOAP_FMAC2 soap_instantiate_tns__selectRelatedMediaAnnotationsWithTokenId(struct soap*, int, const char*, const char*, size_t*);
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__selectRelatedMediaAnnotationsWithTokenId(struct soap*, int, int, void*, size_t, const void*, size_t);
 
-#ifndef SOAP_TYPE_ServerSoap_tns__selectRelatedGameAnnotationsWithTokenIdResponse
-#define SOAP_TYPE_ServerSoap_tns__selectRelatedGameAnnotationsWithTokenIdResponse (42)
-#endif
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__selectRelatedGameAnnotationsWithTokenIdResponse(struct soap*, const char*, int, const tns__selectRelatedGameAnnotationsWithTokenIdResponse *, const char*);
-SOAP_FMAC3 tns__selectRelatedGameAnnotationsWithTokenIdResponse * SOAP_FMAC4 soap_in_tns__selectRelatedGameAnnotationsWithTokenIdResponse(struct soap*, const char*, tns__selectRelatedGameAnnotationsWithTokenIdResponse *, const char*);
-
-#ifndef soap_write_tns__selectRelatedGameAnnotationsWithTokenIdResponse
-#define soap_write_tns__selectRelatedGameAnnotationsWithTokenIdResponse(soap, data) ( soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "tns:selectRelatedGameAnnotationsWithTokenIdResponse", NULL) || soap_end_send(soap) )
-#endif
-
-
-#ifndef soap_read_tns__selectRelatedGameAnnotationsWithTokenIdResponse
-#define soap_read_tns__selectRelatedGameAnnotationsWithTokenIdResponse(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_tns__selectRelatedGameAnnotationsWithTokenIdResponse(soap, data, NULL, NULL) || soap_end_recv(soap) )
-#endif
-
-SOAP_FMAC3 tns__selectRelatedGameAnnotationsWithTokenIdResponse * SOAP_FMAC4 soap_get_tns__selectRelatedGameAnnotationsWithTokenIdResponse(struct soap*, tns__selectRelatedGameAnnotationsWithTokenIdResponse *, const char*, const char*);
-
-#define soap_new_tns__selectRelatedGameAnnotationsWithTokenIdResponse(soap, n) soap_instantiate_tns__selectRelatedGameAnnotationsWithTokenIdResponse(soap, n, NULL, NULL, NULL)
-
-
-#define soap_delete_tns__selectRelatedGameAnnotationsWithTokenIdResponse(soap, p) soap_delete(soap, p)
-
-SOAP_FMAC1 tns__selectRelatedGameAnnotationsWithTokenIdResponse * SOAP_FMAC2 soap_instantiate_tns__selectRelatedGameAnnotationsWithTokenIdResponse(struct soap*, int, const char*, const char*, size_t*);
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__selectRelatedGameAnnotationsWithTokenIdResponse(struct soap*, int, int, void*, size_t, const void*, size_t);
-
-#ifndef SOAP_TYPE_ServerSoap_tns__selectRelatedGameAnnotationsWithTokenId
-#define SOAP_TYPE_ServerSoap_tns__selectRelatedGameAnnotationsWithTokenId (41)
-#endif
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__selectRelatedGameAnnotationsWithTokenId(struct soap*, const char*, int, const tns__selectRelatedGameAnnotationsWithTokenId *, const char*);
-SOAP_FMAC3 tns__selectRelatedGameAnnotationsWithTokenId * SOAP_FMAC4 soap_in_tns__selectRelatedGameAnnotationsWithTokenId(struct soap*, const char*, tns__selectRelatedGameAnnotationsWithTokenId *, const char*);
-
-#ifndef soap_write_tns__selectRelatedGameAnnotationsWithTokenId
-#define soap_write_tns__selectRelatedGameAnnotationsWithTokenId(soap, data) ( soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "tns:selectRelatedGameAnnotationsWithTokenId", NULL) || soap_end_send(soap) )
-#endif
-
-
-#ifndef soap_read_tns__selectRelatedGameAnnotationsWithTokenId
-#define soap_read_tns__selectRelatedGameAnnotationsWithTokenId(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_tns__selectRelatedGameAnnotationsWithTokenId(soap, data, NULL, NULL) || soap_end_recv(soap) )
-#endif
-
-SOAP_FMAC3 tns__selectRelatedGameAnnotationsWithTokenId * SOAP_FMAC4 soap_get_tns__selectRelatedGameAnnotationsWithTokenId(struct soap*, tns__selectRelatedGameAnnotationsWithTokenId *, const char*, const char*);
-
-#define soap_new_tns__selectRelatedGameAnnotationsWithTokenId(soap, n) soap_instantiate_tns__selectRelatedGameAnnotationsWithTokenId(soap, n, NULL, NULL, NULL)
-
-
-#define soap_delete_tns__selectRelatedGameAnnotationsWithTokenId(soap, p) soap_delete(soap, p)
-
-SOAP_FMAC1 tns__selectRelatedGameAnnotationsWithTokenId * SOAP_FMAC2 soap_instantiate_tns__selectRelatedGameAnnotationsWithTokenId(struct soap*, int, const char*, const char*, size_t*);
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__selectRelatedGameAnnotationsWithTokenId(struct soap*, int, int, void*, size_t, const void*, size_t);
-
 #ifndef SOAP_TYPE_ServerSoap_tns__selectMediaTokenWithIdResponse
-#define SOAP_TYPE_ServerSoap_tns__selectMediaTokenWithIdResponse (40)
+#define SOAP_TYPE_ServerSoap_tns__selectMediaTokenWithIdResponse (43)
 #endif
 
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__selectMediaTokenWithIdResponse(struct soap*, const char*, int, const tns__selectMediaTokenWithIdResponse *, const char*);
@@ -1366,7 +846,7 @@ SOAP_FMAC1 tns__selectMediaTokenWithIdResponse * SOAP_FMAC2 soap_instantiate_tns
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__selectMediaTokenWithIdResponse(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ServerSoap_tns__selectMediaTokenWithId
-#define SOAP_TYPE_ServerSoap_tns__selectMediaTokenWithId (39)
+#define SOAP_TYPE_ServerSoap_tns__selectMediaTokenWithId (42)
 #endif
 
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__selectMediaTokenWithId(struct soap*, const char*, int, const tns__selectMediaTokenWithId *, const char*);
@@ -1392,7 +872,7 @@ SOAP_FMAC1 tns__selectMediaTokenWithId * SOAP_FMAC2 soap_instantiate_tns__select
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__selectMediaTokenWithId(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ServerSoap_tns__selectMediaTokenWithDigestResponse
-#define SOAP_TYPE_ServerSoap_tns__selectMediaTokenWithDigestResponse (38)
+#define SOAP_TYPE_ServerSoap_tns__selectMediaTokenWithDigestResponse (41)
 #endif
 
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__selectMediaTokenWithDigestResponse(struct soap*, const char*, int, const tns__selectMediaTokenWithDigestResponse *, const char*);
@@ -1418,7 +898,7 @@ SOAP_FMAC1 tns__selectMediaTokenWithDigestResponse * SOAP_FMAC2 soap_instantiate
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__selectMediaTokenWithDigestResponse(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ServerSoap_tns__selectMediaTokenWithDigest
-#define SOAP_TYPE_ServerSoap_tns__selectMediaTokenWithDigest (37)
+#define SOAP_TYPE_ServerSoap_tns__selectMediaTokenWithDigest (40)
 #endif
 
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__selectMediaTokenWithDigest(struct soap*, const char*, int, const tns__selectMediaTokenWithDigest *, const char*);
@@ -1444,7 +924,7 @@ SOAP_FMAC1 tns__selectMediaTokenWithDigest * SOAP_FMAC2 soap_instantiate_tns__se
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__selectMediaTokenWithDigest(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ServerSoap_tns__selectMediaAnnotationsWithTokenIdResponse
-#define SOAP_TYPE_ServerSoap_tns__selectMediaAnnotationsWithTokenIdResponse (36)
+#define SOAP_TYPE_ServerSoap_tns__selectMediaAnnotationsWithTokenIdResponse (39)
 #endif
 
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__selectMediaAnnotationsWithTokenIdResponse(struct soap*, const char*, int, const tns__selectMediaAnnotationsWithTokenIdResponse *, const char*);
@@ -1470,7 +950,7 @@ SOAP_FMAC1 tns__selectMediaAnnotationsWithTokenIdResponse * SOAP_FMAC2 soap_inst
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__selectMediaAnnotationsWithTokenIdResponse(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ServerSoap_tns__selectMediaAnnotationsWithTokenId
-#define SOAP_TYPE_ServerSoap_tns__selectMediaAnnotationsWithTokenId (35)
+#define SOAP_TYPE_ServerSoap_tns__selectMediaAnnotationsWithTokenId (38)
 #endif
 
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__selectMediaAnnotationsWithTokenId(struct soap*, const char*, int, const tns__selectMediaAnnotationsWithTokenId *, const char*);
@@ -1496,7 +976,7 @@ SOAP_FMAC1 tns__selectMediaAnnotationsWithTokenId * SOAP_FMAC2 soap_instantiate_
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__selectMediaAnnotationsWithTokenId(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ServerSoap_tns__selectMediaAliasesWithTokenIdResponse
-#define SOAP_TYPE_ServerSoap_tns__selectMediaAliasesWithTokenIdResponse (34)
+#define SOAP_TYPE_ServerSoap_tns__selectMediaAliasesWithTokenIdResponse (37)
 #endif
 
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__selectMediaAliasesWithTokenIdResponse(struct soap*, const char*, int, const tns__selectMediaAliasesWithTokenIdResponse *, const char*);
@@ -1522,7 +1002,7 @@ SOAP_FMAC1 tns__selectMediaAliasesWithTokenIdResponse * SOAP_FMAC2 soap_instanti
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__selectMediaAliasesWithTokenIdResponse(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ServerSoap_tns__selectMediaAliasesWithTokenId
-#define SOAP_TYPE_ServerSoap_tns__selectMediaAliasesWithTokenId (33)
+#define SOAP_TYPE_ServerSoap_tns__selectMediaAliasesWithTokenId (36)
 #endif
 
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__selectMediaAliasesWithTokenId(struct soap*, const char*, int, const tns__selectMediaAliasesWithTokenId *, const char*);
@@ -1547,216 +1027,8 @@ SOAP_FMAC3 tns__selectMediaAliasesWithTokenId * SOAP_FMAC4 soap_get_tns__selectM
 SOAP_FMAC1 tns__selectMediaAliasesWithTokenId * SOAP_FMAC2 soap_instantiate_tns__selectMediaAliasesWithTokenId(struct soap*, int, const char*, const char*, size_t*);
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__selectMediaAliasesWithTokenId(struct soap*, int, int, void*, size_t, const void*, size_t);
 
-#ifndef SOAP_TYPE_ServerSoap_tns__selectGameTokenWithIdResponse
-#define SOAP_TYPE_ServerSoap_tns__selectGameTokenWithIdResponse (32)
-#endif
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__selectGameTokenWithIdResponse(struct soap*, const char*, int, const tns__selectGameTokenWithIdResponse *, const char*);
-SOAP_FMAC3 tns__selectGameTokenWithIdResponse * SOAP_FMAC4 soap_in_tns__selectGameTokenWithIdResponse(struct soap*, const char*, tns__selectGameTokenWithIdResponse *, const char*);
-
-#ifndef soap_write_tns__selectGameTokenWithIdResponse
-#define soap_write_tns__selectGameTokenWithIdResponse(soap, data) ( soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "tns:selectGameTokenWithIdResponse", NULL) || soap_end_send(soap) )
-#endif
-
-
-#ifndef soap_read_tns__selectGameTokenWithIdResponse
-#define soap_read_tns__selectGameTokenWithIdResponse(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_tns__selectGameTokenWithIdResponse(soap, data, NULL, NULL) || soap_end_recv(soap) )
-#endif
-
-SOAP_FMAC3 tns__selectGameTokenWithIdResponse * SOAP_FMAC4 soap_get_tns__selectGameTokenWithIdResponse(struct soap*, tns__selectGameTokenWithIdResponse *, const char*, const char*);
-
-#define soap_new_tns__selectGameTokenWithIdResponse(soap, n) soap_instantiate_tns__selectGameTokenWithIdResponse(soap, n, NULL, NULL, NULL)
-
-
-#define soap_delete_tns__selectGameTokenWithIdResponse(soap, p) soap_delete(soap, p)
-
-SOAP_FMAC1 tns__selectGameTokenWithIdResponse * SOAP_FMAC2 soap_instantiate_tns__selectGameTokenWithIdResponse(struct soap*, int, const char*, const char*, size_t*);
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__selectGameTokenWithIdResponse(struct soap*, int, int, void*, size_t, const void*, size_t);
-
-#ifndef SOAP_TYPE_ServerSoap_tns__selectGameTokenWithId
-#define SOAP_TYPE_ServerSoap_tns__selectGameTokenWithId (31)
-#endif
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__selectGameTokenWithId(struct soap*, const char*, int, const tns__selectGameTokenWithId *, const char*);
-SOAP_FMAC3 tns__selectGameTokenWithId * SOAP_FMAC4 soap_in_tns__selectGameTokenWithId(struct soap*, const char*, tns__selectGameTokenWithId *, const char*);
-
-#ifndef soap_write_tns__selectGameTokenWithId
-#define soap_write_tns__selectGameTokenWithId(soap, data) ( soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "tns:selectGameTokenWithId", NULL) || soap_end_send(soap) )
-#endif
-
-
-#ifndef soap_read_tns__selectGameTokenWithId
-#define soap_read_tns__selectGameTokenWithId(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_tns__selectGameTokenWithId(soap, data, NULL, NULL) || soap_end_recv(soap) )
-#endif
-
-SOAP_FMAC3 tns__selectGameTokenWithId * SOAP_FMAC4 soap_get_tns__selectGameTokenWithId(struct soap*, tns__selectGameTokenWithId *, const char*, const char*);
-
-#define soap_new_tns__selectGameTokenWithId(soap, n) soap_instantiate_tns__selectGameTokenWithId(soap, n, NULL, NULL, NULL)
-
-
-#define soap_delete_tns__selectGameTokenWithId(soap, p) soap_delete(soap, p)
-
-SOAP_FMAC1 tns__selectGameTokenWithId * SOAP_FMAC2 soap_instantiate_tns__selectGameTokenWithId(struct soap*, int, const char*, const char*, size_t*);
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__selectGameTokenWithId(struct soap*, int, int, void*, size_t, const void*, size_t);
-
-#ifndef SOAP_TYPE_ServerSoap_tns__selectGameTokenWithDigestResponse
-#define SOAP_TYPE_ServerSoap_tns__selectGameTokenWithDigestResponse (30)
-#endif
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__selectGameTokenWithDigestResponse(struct soap*, const char*, int, const tns__selectGameTokenWithDigestResponse *, const char*);
-SOAP_FMAC3 tns__selectGameTokenWithDigestResponse * SOAP_FMAC4 soap_in_tns__selectGameTokenWithDigestResponse(struct soap*, const char*, tns__selectGameTokenWithDigestResponse *, const char*);
-
-#ifndef soap_write_tns__selectGameTokenWithDigestResponse
-#define soap_write_tns__selectGameTokenWithDigestResponse(soap, data) ( soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "tns:selectGameTokenWithDigestResponse", NULL) || soap_end_send(soap) )
-#endif
-
-
-#ifndef soap_read_tns__selectGameTokenWithDigestResponse
-#define soap_read_tns__selectGameTokenWithDigestResponse(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_tns__selectGameTokenWithDigestResponse(soap, data, NULL, NULL) || soap_end_recv(soap) )
-#endif
-
-SOAP_FMAC3 tns__selectGameTokenWithDigestResponse * SOAP_FMAC4 soap_get_tns__selectGameTokenWithDigestResponse(struct soap*, tns__selectGameTokenWithDigestResponse *, const char*, const char*);
-
-#define soap_new_tns__selectGameTokenWithDigestResponse(soap, n) soap_instantiate_tns__selectGameTokenWithDigestResponse(soap, n, NULL, NULL, NULL)
-
-
-#define soap_delete_tns__selectGameTokenWithDigestResponse(soap, p) soap_delete(soap, p)
-
-SOAP_FMAC1 tns__selectGameTokenWithDigestResponse * SOAP_FMAC2 soap_instantiate_tns__selectGameTokenWithDigestResponse(struct soap*, int, const char*, const char*, size_t*);
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__selectGameTokenWithDigestResponse(struct soap*, int, int, void*, size_t, const void*, size_t);
-
-#ifndef SOAP_TYPE_ServerSoap_tns__selectGameTokenWithDigest
-#define SOAP_TYPE_ServerSoap_tns__selectGameTokenWithDigest (29)
-#endif
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__selectGameTokenWithDigest(struct soap*, const char*, int, const tns__selectGameTokenWithDigest *, const char*);
-SOAP_FMAC3 tns__selectGameTokenWithDigest * SOAP_FMAC4 soap_in_tns__selectGameTokenWithDigest(struct soap*, const char*, tns__selectGameTokenWithDigest *, const char*);
-
-#ifndef soap_write_tns__selectGameTokenWithDigest
-#define soap_write_tns__selectGameTokenWithDigest(soap, data) ( soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "tns:selectGameTokenWithDigest", NULL) || soap_end_send(soap) )
-#endif
-
-
-#ifndef soap_read_tns__selectGameTokenWithDigest
-#define soap_read_tns__selectGameTokenWithDigest(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_tns__selectGameTokenWithDigest(soap, data, NULL, NULL) || soap_end_recv(soap) )
-#endif
-
-SOAP_FMAC3 tns__selectGameTokenWithDigest * SOAP_FMAC4 soap_get_tns__selectGameTokenWithDigest(struct soap*, tns__selectGameTokenWithDigest *, const char*, const char*);
-
-#define soap_new_tns__selectGameTokenWithDigest(soap, n) soap_instantiate_tns__selectGameTokenWithDigest(soap, n, NULL, NULL, NULL)
-
-
-#define soap_delete_tns__selectGameTokenWithDigest(soap, p) soap_delete(soap, p)
-
-SOAP_FMAC1 tns__selectGameTokenWithDigest * SOAP_FMAC2 soap_instantiate_tns__selectGameTokenWithDigest(struct soap*, int, const char*, const char*, size_t*);
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__selectGameTokenWithDigest(struct soap*, int, int, void*, size_t, const void*, size_t);
-
-#ifndef SOAP_TYPE_ServerSoap_tns__selectGameAnnotationsWithTokenIdResponse
-#define SOAP_TYPE_ServerSoap_tns__selectGameAnnotationsWithTokenIdResponse (28)
-#endif
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__selectGameAnnotationsWithTokenIdResponse(struct soap*, const char*, int, const tns__selectGameAnnotationsWithTokenIdResponse *, const char*);
-SOAP_FMAC3 tns__selectGameAnnotationsWithTokenIdResponse * SOAP_FMAC4 soap_in_tns__selectGameAnnotationsWithTokenIdResponse(struct soap*, const char*, tns__selectGameAnnotationsWithTokenIdResponse *, const char*);
-
-#ifndef soap_write_tns__selectGameAnnotationsWithTokenIdResponse
-#define soap_write_tns__selectGameAnnotationsWithTokenIdResponse(soap, data) ( soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "tns:selectGameAnnotationsWithTokenIdResponse", NULL) || soap_end_send(soap) )
-#endif
-
-
-#ifndef soap_read_tns__selectGameAnnotationsWithTokenIdResponse
-#define soap_read_tns__selectGameAnnotationsWithTokenIdResponse(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_tns__selectGameAnnotationsWithTokenIdResponse(soap, data, NULL, NULL) || soap_end_recv(soap) )
-#endif
-
-SOAP_FMAC3 tns__selectGameAnnotationsWithTokenIdResponse * SOAP_FMAC4 soap_get_tns__selectGameAnnotationsWithTokenIdResponse(struct soap*, tns__selectGameAnnotationsWithTokenIdResponse *, const char*, const char*);
-
-#define soap_new_tns__selectGameAnnotationsWithTokenIdResponse(soap, n) soap_instantiate_tns__selectGameAnnotationsWithTokenIdResponse(soap, n, NULL, NULL, NULL)
-
-
-#define soap_delete_tns__selectGameAnnotationsWithTokenIdResponse(soap, p) soap_delete(soap, p)
-
-SOAP_FMAC1 tns__selectGameAnnotationsWithTokenIdResponse * SOAP_FMAC2 soap_instantiate_tns__selectGameAnnotationsWithTokenIdResponse(struct soap*, int, const char*, const char*, size_t*);
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__selectGameAnnotationsWithTokenIdResponse(struct soap*, int, int, void*, size_t, const void*, size_t);
-
-#ifndef SOAP_TYPE_ServerSoap_tns__selectGameAnnotationsWithTokenId
-#define SOAP_TYPE_ServerSoap_tns__selectGameAnnotationsWithTokenId (27)
-#endif
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__selectGameAnnotationsWithTokenId(struct soap*, const char*, int, const tns__selectGameAnnotationsWithTokenId *, const char*);
-SOAP_FMAC3 tns__selectGameAnnotationsWithTokenId * SOAP_FMAC4 soap_in_tns__selectGameAnnotationsWithTokenId(struct soap*, const char*, tns__selectGameAnnotationsWithTokenId *, const char*);
-
-#ifndef soap_write_tns__selectGameAnnotationsWithTokenId
-#define soap_write_tns__selectGameAnnotationsWithTokenId(soap, data) ( soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "tns:selectGameAnnotationsWithTokenId", NULL) || soap_end_send(soap) )
-#endif
-
-
-#ifndef soap_read_tns__selectGameAnnotationsWithTokenId
-#define soap_read_tns__selectGameAnnotationsWithTokenId(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_tns__selectGameAnnotationsWithTokenId(soap, data, NULL, NULL) || soap_end_recv(soap) )
-#endif
-
-SOAP_FMAC3 tns__selectGameAnnotationsWithTokenId * SOAP_FMAC4 soap_get_tns__selectGameAnnotationsWithTokenId(struct soap*, tns__selectGameAnnotationsWithTokenId *, const char*, const char*);
-
-#define soap_new_tns__selectGameAnnotationsWithTokenId(soap, n) soap_instantiate_tns__selectGameAnnotationsWithTokenId(soap, n, NULL, NULL, NULL)
-
-
-#define soap_delete_tns__selectGameAnnotationsWithTokenId(soap, p) soap_delete(soap, p)
-
-SOAP_FMAC1 tns__selectGameAnnotationsWithTokenId * SOAP_FMAC2 soap_instantiate_tns__selectGameAnnotationsWithTokenId(struct soap*, int, const char*, const char*, size_t*);
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__selectGameAnnotationsWithTokenId(struct soap*, int, int, void*, size_t, const void*, size_t);
-
-#ifndef SOAP_TYPE_ServerSoap_tns__selectGameAliasesWithTokenIdResponse
-#define SOAP_TYPE_ServerSoap_tns__selectGameAliasesWithTokenIdResponse (26)
-#endif
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__selectGameAliasesWithTokenIdResponse(struct soap*, const char*, int, const tns__selectGameAliasesWithTokenIdResponse *, const char*);
-SOAP_FMAC3 tns__selectGameAliasesWithTokenIdResponse * SOAP_FMAC4 soap_in_tns__selectGameAliasesWithTokenIdResponse(struct soap*, const char*, tns__selectGameAliasesWithTokenIdResponse *, const char*);
-
-#ifndef soap_write_tns__selectGameAliasesWithTokenIdResponse
-#define soap_write_tns__selectGameAliasesWithTokenIdResponse(soap, data) ( soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "tns:selectGameAliasesWithTokenIdResponse", NULL) || soap_end_send(soap) )
-#endif
-
-
-#ifndef soap_read_tns__selectGameAliasesWithTokenIdResponse
-#define soap_read_tns__selectGameAliasesWithTokenIdResponse(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_tns__selectGameAliasesWithTokenIdResponse(soap, data, NULL, NULL) || soap_end_recv(soap) )
-#endif
-
-SOAP_FMAC3 tns__selectGameAliasesWithTokenIdResponse * SOAP_FMAC4 soap_get_tns__selectGameAliasesWithTokenIdResponse(struct soap*, tns__selectGameAliasesWithTokenIdResponse *, const char*, const char*);
-
-#define soap_new_tns__selectGameAliasesWithTokenIdResponse(soap, n) soap_instantiate_tns__selectGameAliasesWithTokenIdResponse(soap, n, NULL, NULL, NULL)
-
-
-#define soap_delete_tns__selectGameAliasesWithTokenIdResponse(soap, p) soap_delete(soap, p)
-
-SOAP_FMAC1 tns__selectGameAliasesWithTokenIdResponse * SOAP_FMAC2 soap_instantiate_tns__selectGameAliasesWithTokenIdResponse(struct soap*, int, const char*, const char*, size_t*);
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__selectGameAliasesWithTokenIdResponse(struct soap*, int, int, void*, size_t, const void*, size_t);
-
-#ifndef SOAP_TYPE_ServerSoap_tns__selectGameAliasesWithTokenId
-#define SOAP_TYPE_ServerSoap_tns__selectGameAliasesWithTokenId (25)
-#endif
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__selectGameAliasesWithTokenId(struct soap*, const char*, int, const tns__selectGameAliasesWithTokenId *, const char*);
-SOAP_FMAC3 tns__selectGameAliasesWithTokenId * SOAP_FMAC4 soap_in_tns__selectGameAliasesWithTokenId(struct soap*, const char*, tns__selectGameAliasesWithTokenId *, const char*);
-
-#ifndef soap_write_tns__selectGameAliasesWithTokenId
-#define soap_write_tns__selectGameAliasesWithTokenId(soap, data) ( soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "tns:selectGameAliasesWithTokenId", NULL) || soap_end_send(soap) )
-#endif
-
-
-#ifndef soap_read_tns__selectGameAliasesWithTokenId
-#define soap_read_tns__selectGameAliasesWithTokenId(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_tns__selectGameAliasesWithTokenId(soap, data, NULL, NULL) || soap_end_recv(soap) )
-#endif
-
-SOAP_FMAC3 tns__selectGameAliasesWithTokenId * SOAP_FMAC4 soap_get_tns__selectGameAliasesWithTokenId(struct soap*, tns__selectGameAliasesWithTokenId *, const char*, const char*);
-
-#define soap_new_tns__selectGameAliasesWithTokenId(soap, n) soap_instantiate_tns__selectGameAliasesWithTokenId(soap, n, NULL, NULL, NULL)
-
-
-#define soap_delete_tns__selectGameAliasesWithTokenId(soap, p) soap_delete(soap, p)
-
-SOAP_FMAC1 tns__selectGameAliasesWithTokenId * SOAP_FMAC2 soap_instantiate_tns__selectGameAliasesWithTokenId(struct soap*, int, const char*, const char*, size_t*);
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__selectGameAliasesWithTokenId(struct soap*, int, int, void*, size_t, const void*, size_t);
-
 #ifndef SOAP_TYPE_ServerSoap_tns__isConnectedResponse
-#define SOAP_TYPE_ServerSoap_tns__isConnectedResponse (24)
+#define SOAP_TYPE_ServerSoap_tns__isConnectedResponse (35)
 #endif
 
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__isConnectedResponse(struct soap*, const char*, int, const tns__isConnectedResponse *, const char*);
@@ -1782,7 +1054,7 @@ SOAP_FMAC1 tns__isConnectedResponse * SOAP_FMAC2 soap_instantiate_tns__isConnect
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__isConnectedResponse(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ServerSoap_tns__isConnected
-#define SOAP_TYPE_ServerSoap_tns__isConnected (23)
+#define SOAP_TYPE_ServerSoap_tns__isConnected (34)
 #endif
 
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__isConnected(struct soap*, const char*, int, const tns__isConnected *, const char*);
@@ -1808,7 +1080,7 @@ SOAP_FMAC1 tns__isConnected * SOAP_FMAC2 soap_instantiate_tns__isConnected(struc
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__isConnected(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ServerSoap_tns__isClientUpdatedResponse
-#define SOAP_TYPE_ServerSoap_tns__isClientUpdatedResponse (22)
+#define SOAP_TYPE_ServerSoap_tns__isClientUpdatedResponse (33)
 #endif
 
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__isClientUpdatedResponse(struct soap*, const char*, int, const tns__isClientUpdatedResponse *, const char*);
@@ -1834,7 +1106,7 @@ SOAP_FMAC1 tns__isClientUpdatedResponse * SOAP_FMAC2 soap_instantiate_tns__isCli
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__isClientUpdatedResponse(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ServerSoap_tns__isClientUpdated
-#define SOAP_TYPE_ServerSoap_tns__isClientUpdated (21)
+#define SOAP_TYPE_ServerSoap_tns__isClientUpdated (32)
 #endif
 
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__isClientUpdated(struct soap*, const char*, int, const tns__isClientUpdated *, const char*);
@@ -1859,8 +1131,164 @@ SOAP_FMAC3 tns__isClientUpdated * SOAP_FMAC4 soap_get_tns__isClientUpdated(struc
 SOAP_FMAC1 tns__isClientUpdated * SOAP_FMAC2 soap_instantiate_tns__isClientUpdated(struct soap*, int, const char*, const char*, size_t*);
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__isClientUpdated(struct soap*, int, int, void*, size_t, const void*, size_t);
 
+#ifndef SOAP_TYPE_ServerSoap_tns__curseMediaTokenWithIdResponse
+#define SOAP_TYPE_ServerSoap_tns__curseMediaTokenWithIdResponse (31)
+#endif
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__curseMediaTokenWithIdResponse(struct soap*, const char*, int, const tns__curseMediaTokenWithIdResponse *, const char*);
+SOAP_FMAC3 tns__curseMediaTokenWithIdResponse * SOAP_FMAC4 soap_in_tns__curseMediaTokenWithIdResponse(struct soap*, const char*, tns__curseMediaTokenWithIdResponse *, const char*);
+
+#ifndef soap_write_tns__curseMediaTokenWithIdResponse
+#define soap_write_tns__curseMediaTokenWithIdResponse(soap, data) ( soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "tns:curseMediaTokenWithIdResponse", NULL) || soap_end_send(soap) )
+#endif
+
+
+#ifndef soap_read_tns__curseMediaTokenWithIdResponse
+#define soap_read_tns__curseMediaTokenWithIdResponse(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_tns__curseMediaTokenWithIdResponse(soap, data, NULL, NULL) || soap_end_recv(soap) )
+#endif
+
+SOAP_FMAC3 tns__curseMediaTokenWithIdResponse * SOAP_FMAC4 soap_get_tns__curseMediaTokenWithIdResponse(struct soap*, tns__curseMediaTokenWithIdResponse *, const char*, const char*);
+
+#define soap_new_tns__curseMediaTokenWithIdResponse(soap, n) soap_instantiate_tns__curseMediaTokenWithIdResponse(soap, n, NULL, NULL, NULL)
+
+
+#define soap_delete_tns__curseMediaTokenWithIdResponse(soap, p) soap_delete(soap, p)
+
+SOAP_FMAC1 tns__curseMediaTokenWithIdResponse * SOAP_FMAC2 soap_instantiate_tns__curseMediaTokenWithIdResponse(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__curseMediaTokenWithIdResponse(struct soap*, int, int, void*, size_t, const void*, size_t);
+
+#ifndef SOAP_TYPE_ServerSoap_tns__curseMediaTokenWithId
+#define SOAP_TYPE_ServerSoap_tns__curseMediaTokenWithId (30)
+#endif
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__curseMediaTokenWithId(struct soap*, const char*, int, const tns__curseMediaTokenWithId *, const char*);
+SOAP_FMAC3 tns__curseMediaTokenWithId * SOAP_FMAC4 soap_in_tns__curseMediaTokenWithId(struct soap*, const char*, tns__curseMediaTokenWithId *, const char*);
+
+#ifndef soap_write_tns__curseMediaTokenWithId
+#define soap_write_tns__curseMediaTokenWithId(soap, data) ( soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "tns:curseMediaTokenWithId", NULL) || soap_end_send(soap) )
+#endif
+
+
+#ifndef soap_read_tns__curseMediaTokenWithId
+#define soap_read_tns__curseMediaTokenWithId(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_tns__curseMediaTokenWithId(soap, data, NULL, NULL) || soap_end_recv(soap) )
+#endif
+
+SOAP_FMAC3 tns__curseMediaTokenWithId * SOAP_FMAC4 soap_get_tns__curseMediaTokenWithId(struct soap*, tns__curseMediaTokenWithId *, const char*, const char*);
+
+#define soap_new_tns__curseMediaTokenWithId(soap, n) soap_instantiate_tns__curseMediaTokenWithId(soap, n, NULL, NULL, NULL)
+
+
+#define soap_delete_tns__curseMediaTokenWithId(soap, p) soap_delete(soap, p)
+
+SOAP_FMAC1 tns__curseMediaTokenWithId * SOAP_FMAC2 soap_instantiate_tns__curseMediaTokenWithId(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__curseMediaTokenWithId(struct soap*, int, int, void*, size_t, const void*, size_t);
+
+#ifndef SOAP_TYPE_ServerSoap_tns__curseMediaAnnotationWithIdResponse
+#define SOAP_TYPE_ServerSoap_tns__curseMediaAnnotationWithIdResponse (29)
+#endif
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__curseMediaAnnotationWithIdResponse(struct soap*, const char*, int, const tns__curseMediaAnnotationWithIdResponse *, const char*);
+SOAP_FMAC3 tns__curseMediaAnnotationWithIdResponse * SOAP_FMAC4 soap_in_tns__curseMediaAnnotationWithIdResponse(struct soap*, const char*, tns__curseMediaAnnotationWithIdResponse *, const char*);
+
+#ifndef soap_write_tns__curseMediaAnnotationWithIdResponse
+#define soap_write_tns__curseMediaAnnotationWithIdResponse(soap, data) ( soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "tns:curseMediaAnnotationWithIdResponse", NULL) || soap_end_send(soap) )
+#endif
+
+
+#ifndef soap_read_tns__curseMediaAnnotationWithIdResponse
+#define soap_read_tns__curseMediaAnnotationWithIdResponse(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_tns__curseMediaAnnotationWithIdResponse(soap, data, NULL, NULL) || soap_end_recv(soap) )
+#endif
+
+SOAP_FMAC3 tns__curseMediaAnnotationWithIdResponse * SOAP_FMAC4 soap_get_tns__curseMediaAnnotationWithIdResponse(struct soap*, tns__curseMediaAnnotationWithIdResponse *, const char*, const char*);
+
+#define soap_new_tns__curseMediaAnnotationWithIdResponse(soap, n) soap_instantiate_tns__curseMediaAnnotationWithIdResponse(soap, n, NULL, NULL, NULL)
+
+
+#define soap_delete_tns__curseMediaAnnotationWithIdResponse(soap, p) soap_delete(soap, p)
+
+SOAP_FMAC1 tns__curseMediaAnnotationWithIdResponse * SOAP_FMAC2 soap_instantiate_tns__curseMediaAnnotationWithIdResponse(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__curseMediaAnnotationWithIdResponse(struct soap*, int, int, void*, size_t, const void*, size_t);
+
+#ifndef SOAP_TYPE_ServerSoap_tns__curseMediaAnnotationWithId
+#define SOAP_TYPE_ServerSoap_tns__curseMediaAnnotationWithId (28)
+#endif
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__curseMediaAnnotationWithId(struct soap*, const char*, int, const tns__curseMediaAnnotationWithId *, const char*);
+SOAP_FMAC3 tns__curseMediaAnnotationWithId * SOAP_FMAC4 soap_in_tns__curseMediaAnnotationWithId(struct soap*, const char*, tns__curseMediaAnnotationWithId *, const char*);
+
+#ifndef soap_write_tns__curseMediaAnnotationWithId
+#define soap_write_tns__curseMediaAnnotationWithId(soap, data) ( soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "tns:curseMediaAnnotationWithId", NULL) || soap_end_send(soap) )
+#endif
+
+
+#ifndef soap_read_tns__curseMediaAnnotationWithId
+#define soap_read_tns__curseMediaAnnotationWithId(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_tns__curseMediaAnnotationWithId(soap, data, NULL, NULL) || soap_end_recv(soap) )
+#endif
+
+SOAP_FMAC3 tns__curseMediaAnnotationWithId * SOAP_FMAC4 soap_get_tns__curseMediaAnnotationWithId(struct soap*, tns__curseMediaAnnotationWithId *, const char*, const char*);
+
+#define soap_new_tns__curseMediaAnnotationWithId(soap, n) soap_instantiate_tns__curseMediaAnnotationWithId(soap, n, NULL, NULL, NULL)
+
+
+#define soap_delete_tns__curseMediaAnnotationWithId(soap, p) soap_delete(soap, p)
+
+SOAP_FMAC1 tns__curseMediaAnnotationWithId * SOAP_FMAC2 soap_instantiate_tns__curseMediaAnnotationWithId(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__curseMediaAnnotationWithId(struct soap*, int, int, void*, size_t, const void*, size_t);
+
+#ifndef SOAP_TYPE_ServerSoap_tns__curseMediaAliasWithIdResponse
+#define SOAP_TYPE_ServerSoap_tns__curseMediaAliasWithIdResponse (27)
+#endif
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__curseMediaAliasWithIdResponse(struct soap*, const char*, int, const tns__curseMediaAliasWithIdResponse *, const char*);
+SOAP_FMAC3 tns__curseMediaAliasWithIdResponse * SOAP_FMAC4 soap_in_tns__curseMediaAliasWithIdResponse(struct soap*, const char*, tns__curseMediaAliasWithIdResponse *, const char*);
+
+#ifndef soap_write_tns__curseMediaAliasWithIdResponse
+#define soap_write_tns__curseMediaAliasWithIdResponse(soap, data) ( soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "tns:curseMediaAliasWithIdResponse", NULL) || soap_end_send(soap) )
+#endif
+
+
+#ifndef soap_read_tns__curseMediaAliasWithIdResponse
+#define soap_read_tns__curseMediaAliasWithIdResponse(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_tns__curseMediaAliasWithIdResponse(soap, data, NULL, NULL) || soap_end_recv(soap) )
+#endif
+
+SOAP_FMAC3 tns__curseMediaAliasWithIdResponse * SOAP_FMAC4 soap_get_tns__curseMediaAliasWithIdResponse(struct soap*, tns__curseMediaAliasWithIdResponse *, const char*, const char*);
+
+#define soap_new_tns__curseMediaAliasWithIdResponse(soap, n) soap_instantiate_tns__curseMediaAliasWithIdResponse(soap, n, NULL, NULL, NULL)
+
+
+#define soap_delete_tns__curseMediaAliasWithIdResponse(soap, p) soap_delete(soap, p)
+
+SOAP_FMAC1 tns__curseMediaAliasWithIdResponse * SOAP_FMAC2 soap_instantiate_tns__curseMediaAliasWithIdResponse(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__curseMediaAliasWithIdResponse(struct soap*, int, int, void*, size_t, const void*, size_t);
+
+#ifndef SOAP_TYPE_ServerSoap_tns__curseMediaAliasWithId
+#define SOAP_TYPE_ServerSoap_tns__curseMediaAliasWithId (26)
+#endif
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__curseMediaAliasWithId(struct soap*, const char*, int, const tns__curseMediaAliasWithId *, const char*);
+SOAP_FMAC3 tns__curseMediaAliasWithId * SOAP_FMAC4 soap_in_tns__curseMediaAliasWithId(struct soap*, const char*, tns__curseMediaAliasWithId *, const char*);
+
+#ifndef soap_write_tns__curseMediaAliasWithId
+#define soap_write_tns__curseMediaAliasWithId(soap, data) ( soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "tns:curseMediaAliasWithId", NULL) || soap_end_send(soap) )
+#endif
+
+
+#ifndef soap_read_tns__curseMediaAliasWithId
+#define soap_read_tns__curseMediaAliasWithId(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_tns__curseMediaAliasWithId(soap, data, NULL, NULL) || soap_end_recv(soap) )
+#endif
+
+SOAP_FMAC3 tns__curseMediaAliasWithId * SOAP_FMAC4 soap_get_tns__curseMediaAliasWithId(struct soap*, tns__curseMediaAliasWithId *, const char*, const char*);
+
+#define soap_new_tns__curseMediaAliasWithId(soap, n) soap_instantiate_tns__curseMediaAliasWithId(soap, n, NULL, NULL, NULL)
+
+
+#define soap_delete_tns__curseMediaAliasWithId(soap, p) soap_delete(soap, p)
+
+SOAP_FMAC1 tns__curseMediaAliasWithId * SOAP_FMAC2 soap_instantiate_tns__curseMediaAliasWithId(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__curseMediaAliasWithId(struct soap*, int, int, void*, size_t, const void*, size_t);
+
 #ifndef SOAP_TYPE_ServerSoap_tns__chatResponse
-#define SOAP_TYPE_ServerSoap_tns__chatResponse (20)
+#define SOAP_TYPE_ServerSoap_tns__chatResponse (25)
 #endif
 
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__chatResponse(struct soap*, const char*, int, const tns__chatResponse *, const char*);
@@ -1886,7 +1314,7 @@ SOAP_FMAC1 tns__chatResponse * SOAP_FMAC2 soap_instantiate_tns__chatResponse(str
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__chatResponse(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ServerSoap_tns__chat
-#define SOAP_TYPE_ServerSoap_tns__chat (19)
+#define SOAP_TYPE_ServerSoap_tns__chat (24)
 #endif
 
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__chat(struct soap*, const char*, int, const tns__chat *, const char*);
@@ -1911,8 +1339,216 @@ SOAP_FMAC3 tns__chat * SOAP_FMAC4 soap_get_tns__chat(struct soap*, tns__chat *, 
 SOAP_FMAC1 tns__chat * SOAP_FMAC2 soap_instantiate_tns__chat(struct soap*, int, const char*, const char*, size_t*);
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__chat(struct soap*, int, int, void*, size_t, const void*, size_t);
 
+#ifndef SOAP_TYPE_ServerSoap_tns__blockUserWithIdResponse
+#define SOAP_TYPE_ServerSoap_tns__blockUserWithIdResponse (23)
+#endif
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__blockUserWithIdResponse(struct soap*, const char*, int, const tns__blockUserWithIdResponse *, const char*);
+SOAP_FMAC3 tns__blockUserWithIdResponse * SOAP_FMAC4 soap_in_tns__blockUserWithIdResponse(struct soap*, const char*, tns__blockUserWithIdResponse *, const char*);
+
+#ifndef soap_write_tns__blockUserWithIdResponse
+#define soap_write_tns__blockUserWithIdResponse(soap, data) ( soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "tns:blockUserWithIdResponse", NULL) || soap_end_send(soap) )
+#endif
+
+
+#ifndef soap_read_tns__blockUserWithIdResponse
+#define soap_read_tns__blockUserWithIdResponse(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_tns__blockUserWithIdResponse(soap, data, NULL, NULL) || soap_end_recv(soap) )
+#endif
+
+SOAP_FMAC3 tns__blockUserWithIdResponse * SOAP_FMAC4 soap_get_tns__blockUserWithIdResponse(struct soap*, tns__blockUserWithIdResponse *, const char*, const char*);
+
+#define soap_new_tns__blockUserWithIdResponse(soap, n) soap_instantiate_tns__blockUserWithIdResponse(soap, n, NULL, NULL, NULL)
+
+
+#define soap_delete_tns__blockUserWithIdResponse(soap, p) soap_delete(soap, p)
+
+SOAP_FMAC1 tns__blockUserWithIdResponse * SOAP_FMAC2 soap_instantiate_tns__blockUserWithIdResponse(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__blockUserWithIdResponse(struct soap*, int, int, void*, size_t, const void*, size_t);
+
+#ifndef SOAP_TYPE_ServerSoap_tns__blockUserWithId
+#define SOAP_TYPE_ServerSoap_tns__blockUserWithId (22)
+#endif
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__blockUserWithId(struct soap*, const char*, int, const tns__blockUserWithId *, const char*);
+SOAP_FMAC3 tns__blockUserWithId * SOAP_FMAC4 soap_in_tns__blockUserWithId(struct soap*, const char*, tns__blockUserWithId *, const char*);
+
+#ifndef soap_write_tns__blockUserWithId
+#define soap_write_tns__blockUserWithId(soap, data) ( soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "tns:blockUserWithId", NULL) || soap_end_send(soap) )
+#endif
+
+
+#ifndef soap_read_tns__blockUserWithId
+#define soap_read_tns__blockUserWithId(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_tns__blockUserWithId(soap, data, NULL, NULL) || soap_end_recv(soap) )
+#endif
+
+SOAP_FMAC3 tns__blockUserWithId * SOAP_FMAC4 soap_get_tns__blockUserWithId(struct soap*, tns__blockUserWithId *, const char*, const char*);
+
+#define soap_new_tns__blockUserWithId(soap, n) soap_instantiate_tns__blockUserWithId(soap, n, NULL, NULL, NULL)
+
+
+#define soap_delete_tns__blockUserWithId(soap, p) soap_delete(soap, p)
+
+SOAP_FMAC1 tns__blockUserWithId * SOAP_FMAC2 soap_instantiate_tns__blockUserWithId(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__blockUserWithId(struct soap*, int, int, void*, size_t, const void*, size_t);
+
+#ifndef SOAP_TYPE_ServerSoap_tns__blockMediaAnnotationWithIdResponse
+#define SOAP_TYPE_ServerSoap_tns__blockMediaAnnotationWithIdResponse (21)
+#endif
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__blockMediaAnnotationWithIdResponse(struct soap*, const char*, int, const tns__blockMediaAnnotationWithIdResponse *, const char*);
+SOAP_FMAC3 tns__blockMediaAnnotationWithIdResponse * SOAP_FMAC4 soap_in_tns__blockMediaAnnotationWithIdResponse(struct soap*, const char*, tns__blockMediaAnnotationWithIdResponse *, const char*);
+
+#ifndef soap_write_tns__blockMediaAnnotationWithIdResponse
+#define soap_write_tns__blockMediaAnnotationWithIdResponse(soap, data) ( soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "tns:blockMediaAnnotationWithIdResponse", NULL) || soap_end_send(soap) )
+#endif
+
+
+#ifndef soap_read_tns__blockMediaAnnotationWithIdResponse
+#define soap_read_tns__blockMediaAnnotationWithIdResponse(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_tns__blockMediaAnnotationWithIdResponse(soap, data, NULL, NULL) || soap_end_recv(soap) )
+#endif
+
+SOAP_FMAC3 tns__blockMediaAnnotationWithIdResponse * SOAP_FMAC4 soap_get_tns__blockMediaAnnotationWithIdResponse(struct soap*, tns__blockMediaAnnotationWithIdResponse *, const char*, const char*);
+
+#define soap_new_tns__blockMediaAnnotationWithIdResponse(soap, n) soap_instantiate_tns__blockMediaAnnotationWithIdResponse(soap, n, NULL, NULL, NULL)
+
+
+#define soap_delete_tns__blockMediaAnnotationWithIdResponse(soap, p) soap_delete(soap, p)
+
+SOAP_FMAC1 tns__blockMediaAnnotationWithIdResponse * SOAP_FMAC2 soap_instantiate_tns__blockMediaAnnotationWithIdResponse(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__blockMediaAnnotationWithIdResponse(struct soap*, int, int, void*, size_t, const void*, size_t);
+
+#ifndef SOAP_TYPE_ServerSoap_tns__blockMediaAnnotationWithId
+#define SOAP_TYPE_ServerSoap_tns__blockMediaAnnotationWithId (20)
+#endif
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__blockMediaAnnotationWithId(struct soap*, const char*, int, const tns__blockMediaAnnotationWithId *, const char*);
+SOAP_FMAC3 tns__blockMediaAnnotationWithId * SOAP_FMAC4 soap_in_tns__blockMediaAnnotationWithId(struct soap*, const char*, tns__blockMediaAnnotationWithId *, const char*);
+
+#ifndef soap_write_tns__blockMediaAnnotationWithId
+#define soap_write_tns__blockMediaAnnotationWithId(soap, data) ( soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "tns:blockMediaAnnotationWithId", NULL) || soap_end_send(soap) )
+#endif
+
+
+#ifndef soap_read_tns__blockMediaAnnotationWithId
+#define soap_read_tns__blockMediaAnnotationWithId(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_tns__blockMediaAnnotationWithId(soap, data, NULL, NULL) || soap_end_recv(soap) )
+#endif
+
+SOAP_FMAC3 tns__blockMediaAnnotationWithId * SOAP_FMAC4 soap_get_tns__blockMediaAnnotationWithId(struct soap*, tns__blockMediaAnnotationWithId *, const char*, const char*);
+
+#define soap_new_tns__blockMediaAnnotationWithId(soap, n) soap_instantiate_tns__blockMediaAnnotationWithId(soap, n, NULL, NULL, NULL)
+
+
+#define soap_delete_tns__blockMediaAnnotationWithId(soap, p) soap_delete(soap, p)
+
+SOAP_FMAC1 tns__blockMediaAnnotationWithId * SOAP_FMAC2 soap_instantiate_tns__blockMediaAnnotationWithId(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__blockMediaAnnotationWithId(struct soap*, int, int, void*, size_t, const void*, size_t);
+
+#ifndef SOAP_TYPE_ServerSoap_tns__blockMediaAliasWithIdResponse
+#define SOAP_TYPE_ServerSoap_tns__blockMediaAliasWithIdResponse (19)
+#endif
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__blockMediaAliasWithIdResponse(struct soap*, const char*, int, const tns__blockMediaAliasWithIdResponse *, const char*);
+SOAP_FMAC3 tns__blockMediaAliasWithIdResponse * SOAP_FMAC4 soap_in_tns__blockMediaAliasWithIdResponse(struct soap*, const char*, tns__blockMediaAliasWithIdResponse *, const char*);
+
+#ifndef soap_write_tns__blockMediaAliasWithIdResponse
+#define soap_write_tns__blockMediaAliasWithIdResponse(soap, data) ( soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "tns:blockMediaAliasWithIdResponse", NULL) || soap_end_send(soap) )
+#endif
+
+
+#ifndef soap_read_tns__blockMediaAliasWithIdResponse
+#define soap_read_tns__blockMediaAliasWithIdResponse(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_tns__blockMediaAliasWithIdResponse(soap, data, NULL, NULL) || soap_end_recv(soap) )
+#endif
+
+SOAP_FMAC3 tns__blockMediaAliasWithIdResponse * SOAP_FMAC4 soap_get_tns__blockMediaAliasWithIdResponse(struct soap*, tns__blockMediaAliasWithIdResponse *, const char*, const char*);
+
+#define soap_new_tns__blockMediaAliasWithIdResponse(soap, n) soap_instantiate_tns__blockMediaAliasWithIdResponse(soap, n, NULL, NULL, NULL)
+
+
+#define soap_delete_tns__blockMediaAliasWithIdResponse(soap, p) soap_delete(soap, p)
+
+SOAP_FMAC1 tns__blockMediaAliasWithIdResponse * SOAP_FMAC2 soap_instantiate_tns__blockMediaAliasWithIdResponse(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__blockMediaAliasWithIdResponse(struct soap*, int, int, void*, size_t, const void*, size_t);
+
+#ifndef SOAP_TYPE_ServerSoap_tns__blockMediaAliasWithId
+#define SOAP_TYPE_ServerSoap_tns__blockMediaAliasWithId (18)
+#endif
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__blockMediaAliasWithId(struct soap*, const char*, int, const tns__blockMediaAliasWithId *, const char*);
+SOAP_FMAC3 tns__blockMediaAliasWithId * SOAP_FMAC4 soap_in_tns__blockMediaAliasWithId(struct soap*, const char*, tns__blockMediaAliasWithId *, const char*);
+
+#ifndef soap_write_tns__blockMediaAliasWithId
+#define soap_write_tns__blockMediaAliasWithId(soap, data) ( soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "tns:blockMediaAliasWithId", NULL) || soap_end_send(soap) )
+#endif
+
+
+#ifndef soap_read_tns__blockMediaAliasWithId
+#define soap_read_tns__blockMediaAliasWithId(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_tns__blockMediaAliasWithId(soap, data, NULL, NULL) || soap_end_recv(soap) )
+#endif
+
+SOAP_FMAC3 tns__blockMediaAliasWithId * SOAP_FMAC4 soap_get_tns__blockMediaAliasWithId(struct soap*, tns__blockMediaAliasWithId *, const char*, const char*);
+
+#define soap_new_tns__blockMediaAliasWithId(soap, n) soap_instantiate_tns__blockMediaAliasWithId(soap, n, NULL, NULL, NULL)
+
+
+#define soap_delete_tns__blockMediaAliasWithId(soap, p) soap_delete(soap, p)
+
+SOAP_FMAC1 tns__blockMediaAliasWithId * SOAP_FMAC2 soap_instantiate_tns__blockMediaAliasWithId(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__blockMediaAliasWithId(struct soap*, int, int, void*, size_t, const void*, size_t);
+
+#ifndef SOAP_TYPE_ServerSoap_tns__blessMediaTokenWithIdResponse
+#define SOAP_TYPE_ServerSoap_tns__blessMediaTokenWithIdResponse (17)
+#endif
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__blessMediaTokenWithIdResponse(struct soap*, const char*, int, const tns__blessMediaTokenWithIdResponse *, const char*);
+SOAP_FMAC3 tns__blessMediaTokenWithIdResponse * SOAP_FMAC4 soap_in_tns__blessMediaTokenWithIdResponse(struct soap*, const char*, tns__blessMediaTokenWithIdResponse *, const char*);
+
+#ifndef soap_write_tns__blessMediaTokenWithIdResponse
+#define soap_write_tns__blessMediaTokenWithIdResponse(soap, data) ( soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "tns:blessMediaTokenWithIdResponse", NULL) || soap_end_send(soap) )
+#endif
+
+
+#ifndef soap_read_tns__blessMediaTokenWithIdResponse
+#define soap_read_tns__blessMediaTokenWithIdResponse(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_tns__blessMediaTokenWithIdResponse(soap, data, NULL, NULL) || soap_end_recv(soap) )
+#endif
+
+SOAP_FMAC3 tns__blessMediaTokenWithIdResponse * SOAP_FMAC4 soap_get_tns__blessMediaTokenWithIdResponse(struct soap*, tns__blessMediaTokenWithIdResponse *, const char*, const char*);
+
+#define soap_new_tns__blessMediaTokenWithIdResponse(soap, n) soap_instantiate_tns__blessMediaTokenWithIdResponse(soap, n, NULL, NULL, NULL)
+
+
+#define soap_delete_tns__blessMediaTokenWithIdResponse(soap, p) soap_delete(soap, p)
+
+SOAP_FMAC1 tns__blessMediaTokenWithIdResponse * SOAP_FMAC2 soap_instantiate_tns__blessMediaTokenWithIdResponse(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__blessMediaTokenWithIdResponse(struct soap*, int, int, void*, size_t, const void*, size_t);
+
+#ifndef SOAP_TYPE_ServerSoap_tns__blessMediaTokenWithId
+#define SOAP_TYPE_ServerSoap_tns__blessMediaTokenWithId (16)
+#endif
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__blessMediaTokenWithId(struct soap*, const char*, int, const tns__blessMediaTokenWithId *, const char*);
+SOAP_FMAC3 tns__blessMediaTokenWithId * SOAP_FMAC4 soap_in_tns__blessMediaTokenWithId(struct soap*, const char*, tns__blessMediaTokenWithId *, const char*);
+
+#ifndef soap_write_tns__blessMediaTokenWithId
+#define soap_write_tns__blessMediaTokenWithId(soap, data) ( soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "tns:blessMediaTokenWithId", NULL) || soap_end_send(soap) )
+#endif
+
+
+#ifndef soap_read_tns__blessMediaTokenWithId
+#define soap_read_tns__blessMediaTokenWithId(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_tns__blessMediaTokenWithId(soap, data, NULL, NULL) || soap_end_recv(soap) )
+#endif
+
+SOAP_FMAC3 tns__blessMediaTokenWithId * SOAP_FMAC4 soap_get_tns__blessMediaTokenWithId(struct soap*, tns__blessMediaTokenWithId *, const char*, const char*);
+
+#define soap_new_tns__blessMediaTokenWithId(soap, n) soap_instantiate_tns__blessMediaTokenWithId(soap, n, NULL, NULL, NULL)
+
+
+#define soap_delete_tns__blessMediaTokenWithId(soap, p) soap_delete(soap, p)
+
+SOAP_FMAC1 tns__blessMediaTokenWithId * SOAP_FMAC2 soap_instantiate_tns__blessMediaTokenWithId(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__blessMediaTokenWithId(struct soap*, int, int, void*, size_t, const void*, size_t);
+
 #ifndef SOAP_TYPE_ServerSoap_tns__blessMediaAnnotationWithIdResponse
-#define SOAP_TYPE_ServerSoap_tns__blessMediaAnnotationWithIdResponse (18)
+#define SOAP_TYPE_ServerSoap_tns__blessMediaAnnotationWithIdResponse (15)
 #endif
 
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__blessMediaAnnotationWithIdResponse(struct soap*, const char*, int, const tns__blessMediaAnnotationWithIdResponse *, const char*);
@@ -1938,7 +1574,7 @@ SOAP_FMAC1 tns__blessMediaAnnotationWithIdResponse * SOAP_FMAC2 soap_instantiate
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__blessMediaAnnotationWithIdResponse(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ServerSoap_tns__blessMediaAnnotationWithId
-#define SOAP_TYPE_ServerSoap_tns__blessMediaAnnotationWithId (17)
+#define SOAP_TYPE_ServerSoap_tns__blessMediaAnnotationWithId (14)
 #endif
 
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__blessMediaAnnotationWithId(struct soap*, const char*, int, const tns__blessMediaAnnotationWithId *, const char*);
@@ -1963,60 +1599,60 @@ SOAP_FMAC3 tns__blessMediaAnnotationWithId * SOAP_FMAC4 soap_get_tns__blessMedia
 SOAP_FMAC1 tns__blessMediaAnnotationWithId * SOAP_FMAC2 soap_instantiate_tns__blessMediaAnnotationWithId(struct soap*, int, const char*, const char*, size_t*);
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__blessMediaAnnotationWithId(struct soap*, int, int, void*, size_t, const void*, size_t);
 
-#ifndef SOAP_TYPE_ServerSoap_tns__blessGameAnnotationWithIdResponse
-#define SOAP_TYPE_ServerSoap_tns__blessGameAnnotationWithIdResponse (16)
+#ifndef SOAP_TYPE_ServerSoap_tns__blessMediaAliasWithIdResponse
+#define SOAP_TYPE_ServerSoap_tns__blessMediaAliasWithIdResponse (13)
 #endif
 
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__blessGameAnnotationWithIdResponse(struct soap*, const char*, int, const tns__blessGameAnnotationWithIdResponse *, const char*);
-SOAP_FMAC3 tns__blessGameAnnotationWithIdResponse * SOAP_FMAC4 soap_in_tns__blessGameAnnotationWithIdResponse(struct soap*, const char*, tns__blessGameAnnotationWithIdResponse *, const char*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__blessMediaAliasWithIdResponse(struct soap*, const char*, int, const tns__blessMediaAliasWithIdResponse *, const char*);
+SOAP_FMAC3 tns__blessMediaAliasWithIdResponse * SOAP_FMAC4 soap_in_tns__blessMediaAliasWithIdResponse(struct soap*, const char*, tns__blessMediaAliasWithIdResponse *, const char*);
 
-#ifndef soap_write_tns__blessGameAnnotationWithIdResponse
-#define soap_write_tns__blessGameAnnotationWithIdResponse(soap, data) ( soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "tns:blessGameAnnotationWithIdResponse", NULL) || soap_end_send(soap) )
-#endif
-
-
-#ifndef soap_read_tns__blessGameAnnotationWithIdResponse
-#define soap_read_tns__blessGameAnnotationWithIdResponse(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_tns__blessGameAnnotationWithIdResponse(soap, data, NULL, NULL) || soap_end_recv(soap) )
-#endif
-
-SOAP_FMAC3 tns__blessGameAnnotationWithIdResponse * SOAP_FMAC4 soap_get_tns__blessGameAnnotationWithIdResponse(struct soap*, tns__blessGameAnnotationWithIdResponse *, const char*, const char*);
-
-#define soap_new_tns__blessGameAnnotationWithIdResponse(soap, n) soap_instantiate_tns__blessGameAnnotationWithIdResponse(soap, n, NULL, NULL, NULL)
-
-
-#define soap_delete_tns__blessGameAnnotationWithIdResponse(soap, p) soap_delete(soap, p)
-
-SOAP_FMAC1 tns__blessGameAnnotationWithIdResponse * SOAP_FMAC2 soap_instantiate_tns__blessGameAnnotationWithIdResponse(struct soap*, int, const char*, const char*, size_t*);
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__blessGameAnnotationWithIdResponse(struct soap*, int, int, void*, size_t, const void*, size_t);
-
-#ifndef SOAP_TYPE_ServerSoap_tns__blessGameAnnotationWithId
-#define SOAP_TYPE_ServerSoap_tns__blessGameAnnotationWithId (15)
-#endif
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__blessGameAnnotationWithId(struct soap*, const char*, int, const tns__blessGameAnnotationWithId *, const char*);
-SOAP_FMAC3 tns__blessGameAnnotationWithId * SOAP_FMAC4 soap_in_tns__blessGameAnnotationWithId(struct soap*, const char*, tns__blessGameAnnotationWithId *, const char*);
-
-#ifndef soap_write_tns__blessGameAnnotationWithId
-#define soap_write_tns__blessGameAnnotationWithId(soap, data) ( soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "tns:blessGameAnnotationWithId", NULL) || soap_end_send(soap) )
+#ifndef soap_write_tns__blessMediaAliasWithIdResponse
+#define soap_write_tns__blessMediaAliasWithIdResponse(soap, data) ( soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "tns:blessMediaAliasWithIdResponse", NULL) || soap_end_send(soap) )
 #endif
 
 
-#ifndef soap_read_tns__blessGameAnnotationWithId
-#define soap_read_tns__blessGameAnnotationWithId(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_tns__blessGameAnnotationWithId(soap, data, NULL, NULL) || soap_end_recv(soap) )
+#ifndef soap_read_tns__blessMediaAliasWithIdResponse
+#define soap_read_tns__blessMediaAliasWithIdResponse(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_tns__blessMediaAliasWithIdResponse(soap, data, NULL, NULL) || soap_end_recv(soap) )
 #endif
 
-SOAP_FMAC3 tns__blessGameAnnotationWithId * SOAP_FMAC4 soap_get_tns__blessGameAnnotationWithId(struct soap*, tns__blessGameAnnotationWithId *, const char*, const char*);
+SOAP_FMAC3 tns__blessMediaAliasWithIdResponse * SOAP_FMAC4 soap_get_tns__blessMediaAliasWithIdResponse(struct soap*, tns__blessMediaAliasWithIdResponse *, const char*, const char*);
 
-#define soap_new_tns__blessGameAnnotationWithId(soap, n) soap_instantiate_tns__blessGameAnnotationWithId(soap, n, NULL, NULL, NULL)
+#define soap_new_tns__blessMediaAliasWithIdResponse(soap, n) soap_instantiate_tns__blessMediaAliasWithIdResponse(soap, n, NULL, NULL, NULL)
 
 
-#define soap_delete_tns__blessGameAnnotationWithId(soap, p) soap_delete(soap, p)
+#define soap_delete_tns__blessMediaAliasWithIdResponse(soap, p) soap_delete(soap, p)
 
-SOAP_FMAC1 tns__blessGameAnnotationWithId * SOAP_FMAC2 soap_instantiate_tns__blessGameAnnotationWithId(struct soap*, int, const char*, const char*, size_t*);
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__blessGameAnnotationWithId(struct soap*, int, int, void*, size_t, const void*, size_t);
+SOAP_FMAC1 tns__blessMediaAliasWithIdResponse * SOAP_FMAC2 soap_instantiate_tns__blessMediaAliasWithIdResponse(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__blessMediaAliasWithIdResponse(struct soap*, int, int, void*, size_t, const void*, size_t);
+
+#ifndef SOAP_TYPE_ServerSoap_tns__blessMediaAliasWithId
+#define SOAP_TYPE_ServerSoap_tns__blessMediaAliasWithId (12)
+#endif
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__blessMediaAliasWithId(struct soap*, const char*, int, const tns__blessMediaAliasWithId *, const char*);
+SOAP_FMAC3 tns__blessMediaAliasWithId * SOAP_FMAC4 soap_in_tns__blessMediaAliasWithId(struct soap*, const char*, tns__blessMediaAliasWithId *, const char*);
+
+#ifndef soap_write_tns__blessMediaAliasWithId
+#define soap_write_tns__blessMediaAliasWithId(soap, data) ( soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "tns:blessMediaAliasWithId", NULL) || soap_end_send(soap) )
+#endif
+
+
+#ifndef soap_read_tns__blessMediaAliasWithId
+#define soap_read_tns__blessMediaAliasWithId(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_tns__blessMediaAliasWithId(soap, data, NULL, NULL) || soap_end_recv(soap) )
+#endif
+
+SOAP_FMAC3 tns__blessMediaAliasWithId * SOAP_FMAC4 soap_get_tns__blessMediaAliasWithId(struct soap*, tns__blessMediaAliasWithId *, const char*, const char*);
+
+#define soap_new_tns__blessMediaAliasWithId(soap, n) soap_instantiate_tns__blessMediaAliasWithId(soap, n, NULL, NULL, NULL)
+
+
+#define soap_delete_tns__blessMediaAliasWithId(soap, p) soap_delete(soap, p)
+
+SOAP_FMAC1 tns__blessMediaAliasWithId * SOAP_FMAC2 soap_instantiate_tns__blessMediaAliasWithId(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__blessMediaAliasWithId(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ServerSoap_tns__user
-#define SOAP_TYPE_ServerSoap_tns__user (14)
+#define SOAP_TYPE_ServerSoap_tns__user (11)
 #endif
 
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__user(struct soap*, const char*, int, const tns__user *, const char*);
@@ -2042,7 +1678,7 @@ SOAP_FMAC1 tns__user * SOAP_FMAC2 soap_instantiate_tns__user(struct soap*, int, 
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__user(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ServerSoap_tns__mediaAlias
-#define SOAP_TYPE_ServerSoap_tns__mediaAlias (13)
+#define SOAP_TYPE_ServerSoap_tns__mediaAlias (10)
 #endif
 
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__mediaAlias(struct soap*, const char*, int, const tns__mediaAlias *, const char*);
@@ -2068,7 +1704,7 @@ SOAP_FMAC1 tns__mediaAlias * SOAP_FMAC2 soap_instantiate_tns__mediaAlias(struct 
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__mediaAlias(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ServerSoap_tns__mediaToken
-#define SOAP_TYPE_ServerSoap_tns__mediaToken (12)
+#define SOAP_TYPE_ServerSoap_tns__mediaToken (9)
 #endif
 
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__mediaToken(struct soap*, const char*, int, const tns__mediaToken *, const char*);
@@ -2094,7 +1730,7 @@ SOAP_FMAC1 tns__mediaToken * SOAP_FMAC2 soap_instantiate_tns__mediaToken(struct 
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__mediaToken(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ServerSoap_tns__mediaAnnotation
-#define SOAP_TYPE_ServerSoap_tns__mediaAnnotation (11)
+#define SOAP_TYPE_ServerSoap_tns__mediaAnnotation (8)
 #endif
 
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__mediaAnnotation(struct soap*, const char*, int, const tns__mediaAnnotation *, const char*);
@@ -2119,88 +1755,10 @@ SOAP_FMAC3 tns__mediaAnnotation * SOAP_FMAC4 soap_get_tns__mediaAnnotation(struc
 SOAP_FMAC1 tns__mediaAnnotation * SOAP_FMAC2 soap_instantiate_tns__mediaAnnotation(struct soap*, int, const char*, const char*, size_t*);
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__mediaAnnotation(struct soap*, int, int, void*, size_t, const void*, size_t);
 
-#ifndef SOAP_TYPE_ServerSoap_tns__gameAlias
-#define SOAP_TYPE_ServerSoap_tns__gameAlias (10)
-#endif
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__gameAlias(struct soap*, const char*, int, const tns__gameAlias *, const char*);
-SOAP_FMAC3 tns__gameAlias * SOAP_FMAC4 soap_in_tns__gameAlias(struct soap*, const char*, tns__gameAlias *, const char*);
-
-#ifndef soap_write_tns__gameAlias
-#define soap_write_tns__gameAlias(soap, data) ( soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "tns:gameAlias", NULL) || soap_end_send(soap) )
-#endif
-
-
-#ifndef soap_read_tns__gameAlias
-#define soap_read_tns__gameAlias(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_tns__gameAlias(soap, data, NULL, NULL) || soap_end_recv(soap) )
-#endif
-
-SOAP_FMAC3 tns__gameAlias * SOAP_FMAC4 soap_get_tns__gameAlias(struct soap*, tns__gameAlias *, const char*, const char*);
-
-#define soap_new_tns__gameAlias(soap, n) soap_instantiate_tns__gameAlias(soap, n, NULL, NULL, NULL)
-
-
-#define soap_delete_tns__gameAlias(soap, p) soap_delete(soap, p)
-
-SOAP_FMAC1 tns__gameAlias * SOAP_FMAC2 soap_instantiate_tns__gameAlias(struct soap*, int, const char*, const char*, size_t*);
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__gameAlias(struct soap*, int, int, void*, size_t, const void*, size_t);
-
-#ifndef SOAP_TYPE_ServerSoap_tns__gameToken
-#define SOAP_TYPE_ServerSoap_tns__gameToken (9)
-#endif
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__gameToken(struct soap*, const char*, int, const tns__gameToken *, const char*);
-SOAP_FMAC3 tns__gameToken * SOAP_FMAC4 soap_in_tns__gameToken(struct soap*, const char*, tns__gameToken *, const char*);
-
-#ifndef soap_write_tns__gameToken
-#define soap_write_tns__gameToken(soap, data) ( soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "tns:gameToken", NULL) || soap_end_send(soap) )
-#endif
-
-
-#ifndef soap_read_tns__gameToken
-#define soap_read_tns__gameToken(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_tns__gameToken(soap, data, NULL, NULL) || soap_end_recv(soap) )
-#endif
-
-SOAP_FMAC3 tns__gameToken * SOAP_FMAC4 soap_get_tns__gameToken(struct soap*, tns__gameToken *, const char*, const char*);
-
-#define soap_new_tns__gameToken(soap, n) soap_instantiate_tns__gameToken(soap, n, NULL, NULL, NULL)
-
-
-#define soap_delete_tns__gameToken(soap, p) soap_delete(soap, p)
-
-SOAP_FMAC1 tns__gameToken * SOAP_FMAC2 soap_instantiate_tns__gameToken(struct soap*, int, const char*, const char*, size_t*);
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__gameToken(struct soap*, int, int, void*, size_t, const void*, size_t);
-
-#ifndef SOAP_TYPE_ServerSoap_tns__gameAnnotation
-#define SOAP_TYPE_ServerSoap_tns__gameAnnotation (8)
-#endif
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__gameAnnotation(struct soap*, const char*, int, const tns__gameAnnotation *, const char*);
-SOAP_FMAC3 tns__gameAnnotation * SOAP_FMAC4 soap_in_tns__gameAnnotation(struct soap*, const char*, tns__gameAnnotation *, const char*);
-
-#ifndef soap_write_tns__gameAnnotation
-#define soap_write_tns__gameAnnotation(soap, data) ( soap_begin_send(soap) || ((data)->soap_serialize(soap), 0) || (data)->soap_put(soap, "tns:gameAnnotation", NULL) || soap_end_send(soap) )
-#endif
-
-
-#ifndef soap_read_tns__gameAnnotation
-#define soap_read_tns__gameAnnotation(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_tns__gameAnnotation(soap, data, NULL, NULL) || soap_end_recv(soap) )
-#endif
-
-SOAP_FMAC3 tns__gameAnnotation * SOAP_FMAC4 soap_get_tns__gameAnnotation(struct soap*, tns__gameAnnotation *, const char*, const char*);
-
-#define soap_new_tns__gameAnnotation(soap, n) soap_instantiate_tns__gameAnnotation(soap, n, NULL, NULL, NULL)
-
-
-#define soap_delete_tns__gameAnnotation(soap, p) soap_delete(soap, p)
-
-SOAP_FMAC1 tns__gameAnnotation * SOAP_FMAC2 soap_instantiate_tns__gameAnnotation(struct soap*, int, const char*, const char*, size_t*);
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__gameAnnotation(struct soap*, int, int, void*, size_t, const void*, size_t);
-
 #ifndef WITH_NOGLOBAL
 
 #ifndef SOAP_TYPE_ServerSoap_SOAP_ENV__Fault
-#define SOAP_TYPE_ServerSoap_SOAP_ENV__Fault (254)
+#define SOAP_TYPE_ServerSoap_SOAP_ENV__Fault (204)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default_SOAP_ENV__Fault(struct soap*, struct SOAP_ENV__Fault *);
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_SOAP_ENV__Fault(struct soap*, const struct SOAP_ENV__Fault *);
@@ -2233,7 +1791,7 @@ SOAP_FMAC3 void SOAP_FMAC4 soap_copy_SOAP_ENV__Fault(struct soap*, int, int, voi
 #ifndef WITH_NOGLOBAL
 
 #ifndef SOAP_TYPE_ServerSoap_SOAP_ENV__Reason
-#define SOAP_TYPE_ServerSoap_SOAP_ENV__Reason (253)
+#define SOAP_TYPE_ServerSoap_SOAP_ENV__Reason (203)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default_SOAP_ENV__Reason(struct soap*, struct SOAP_ENV__Reason *);
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_SOAP_ENV__Reason(struct soap*, const struct SOAP_ENV__Reason *);
@@ -2266,7 +1824,7 @@ SOAP_FMAC3 void SOAP_FMAC4 soap_copy_SOAP_ENV__Reason(struct soap*, int, int, vo
 #ifndef WITH_NOGLOBAL
 
 #ifndef SOAP_TYPE_ServerSoap_SOAP_ENV__Detail
-#define SOAP_TYPE_ServerSoap_SOAP_ENV__Detail (250)
+#define SOAP_TYPE_ServerSoap_SOAP_ENV__Detail (200)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default_SOAP_ENV__Detail(struct soap*, struct SOAP_ENV__Detail *);
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_SOAP_ENV__Detail(struct soap*, const struct SOAP_ENV__Detail *);
@@ -2299,7 +1857,7 @@ SOAP_FMAC3 void SOAP_FMAC4 soap_copy_SOAP_ENV__Detail(struct soap*, int, int, vo
 #ifndef WITH_NOGLOBAL
 
 #ifndef SOAP_TYPE_ServerSoap_SOAP_ENV__Code
-#define SOAP_TYPE_ServerSoap_SOAP_ENV__Code (248)
+#define SOAP_TYPE_ServerSoap_SOAP_ENV__Code (198)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default_SOAP_ENV__Code(struct soap*, struct SOAP_ENV__Code *);
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_SOAP_ENV__Code(struct soap*, const struct SOAP_ENV__Code *);
@@ -2332,7 +1890,7 @@ SOAP_FMAC3 void SOAP_FMAC4 soap_copy_SOAP_ENV__Code(struct soap*, int, int, void
 #ifndef WITH_NOGLOBAL
 
 #ifndef SOAP_TYPE_ServerSoap_SOAP_ENV__Header
-#define SOAP_TYPE_ServerSoap_SOAP_ENV__Header (247)
+#define SOAP_TYPE_ServerSoap_SOAP_ENV__Header (197)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default_SOAP_ENV__Header(struct soap*, struct SOAP_ENV__Header *);
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_SOAP_ENV__Header(struct soap*, const struct SOAP_ENV__Header *);
@@ -2363,7 +1921,7 @@ SOAP_FMAC3 void SOAP_FMAC4 soap_copy_SOAP_ENV__Header(struct soap*, int, int, vo
 #endif
 
 #ifndef SOAP_TYPE_ServerSoap___tns__updateMediaAnnotationTextWithId
-#define SOAP_TYPE_ServerSoap___tns__updateMediaAnnotationTextWithId (246)
+#define SOAP_TYPE_ServerSoap___tns__updateMediaAnnotationTextWithId (196)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__updateMediaAnnotationTextWithId(struct soap*, struct __tns__updateMediaAnnotationTextWithId *);
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___tns__updateMediaAnnotationTextWithId(struct soap*, const struct __tns__updateMediaAnnotationTextWithId *);
@@ -2391,37 +1949,8 @@ SOAP_FMAC3 struct __tns__updateMediaAnnotationTextWithId * SOAP_FMAC4 soap_get__
 SOAP_FMAC1 struct __tns__updateMediaAnnotationTextWithId * SOAP_FMAC2 soap_instantiate___tns__updateMediaAnnotationTextWithId(struct soap*, int, const char*, const char*, size_t*);
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__updateMediaAnnotationTextWithId(struct soap*, int, int, void*, size_t, const void*, size_t);
 
-#ifndef SOAP_TYPE_ServerSoap___tns__updateGameAnnotationTextWithId
-#define SOAP_TYPE_ServerSoap___tns__updateGameAnnotationTextWithId (242)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__updateGameAnnotationTextWithId(struct soap*, struct __tns__updateGameAnnotationTextWithId *);
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___tns__updateGameAnnotationTextWithId(struct soap*, const struct __tns__updateGameAnnotationTextWithId *);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out___tns__updateGameAnnotationTextWithId(struct soap*, const char*, int, const struct __tns__updateGameAnnotationTextWithId *, const char*);
-SOAP_FMAC3 struct __tns__updateGameAnnotationTextWithId * SOAP_FMAC4 soap_in___tns__updateGameAnnotationTextWithId(struct soap*, const char*, struct __tns__updateGameAnnotationTextWithId *, const char*);
-
-#ifndef soap_write___tns__updateGameAnnotationTextWithId
-#define soap_write___tns__updateGameAnnotationTextWithId(soap, data) ( soap_begin_send(soap) || (ServerSoap::soap_serialize___tns__updateGameAnnotationTextWithId(soap, data), 0) || ServerSoap::soap_put___tns__updateGameAnnotationTextWithId(soap, data, "-tns:updateGameAnnotationTextWithId", NULL) || soap_end_send(soap) )
-#endif
-
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put___tns__updateGameAnnotationTextWithId(struct soap*, const struct __tns__updateGameAnnotationTextWithId *, const char*, const char*);
-
-#ifndef soap_read___tns__updateGameAnnotationTextWithId
-#define soap_read___tns__updateGameAnnotationTextWithId(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get___tns__updateGameAnnotationTextWithId(soap, data, NULL, NULL) || soap_end_recv(soap) )
-#endif
-
-SOAP_FMAC3 struct __tns__updateGameAnnotationTextWithId * SOAP_FMAC4 soap_get___tns__updateGameAnnotationTextWithId(struct soap*, struct __tns__updateGameAnnotationTextWithId *, const char*, const char*);
-
-#define soap_new___tns__updateGameAnnotationTextWithId(soap, n) soap_instantiate___tns__updateGameAnnotationTextWithId(soap, n, NULL, NULL, NULL)
-
-
-#define soap_delete___tns__updateGameAnnotationTextWithId(soap, p) soap_delete(soap, p)
-
-SOAP_FMAC1 struct __tns__updateGameAnnotationTextWithId * SOAP_FMAC2 soap_instantiate___tns__updateGameAnnotationTextWithId(struct soap*, int, const char*, const char*, size_t*);
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__updateGameAnnotationTextWithId(struct soap*, int, int, void*, size_t, const void*, size_t);
-
 #ifndef SOAP_TYPE_ServerSoap___tns__submitMediaTokenDigest
-#define SOAP_TYPE_ServerSoap___tns__submitMediaTokenDigest (238)
+#define SOAP_TYPE_ServerSoap___tns__submitMediaTokenDigest (192)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__submitMediaTokenDigest(struct soap*, struct __tns__submitMediaTokenDigest *);
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___tns__submitMediaTokenDigest(struct soap*, const struct __tns__submitMediaTokenDigest *);
@@ -2450,7 +1979,7 @@ SOAP_FMAC1 struct __tns__submitMediaTokenDigest * SOAP_FMAC2 soap_instantiate___
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__submitMediaTokenDigest(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ServerSoap___tns__submitMediaToken
-#define SOAP_TYPE_ServerSoap___tns__submitMediaToken (234)
+#define SOAP_TYPE_ServerSoap___tns__submitMediaToken (188)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__submitMediaToken(struct soap*, struct __tns__submitMediaToken *);
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___tns__submitMediaToken(struct soap*, const struct __tns__submitMediaToken *);
@@ -2479,7 +2008,7 @@ SOAP_FMAC1 struct __tns__submitMediaToken * SOAP_FMAC2 soap_instantiate___tns__s
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__submitMediaToken(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ServerSoap___tns__submitMediaAnnotationTextWithTokenId
-#define SOAP_TYPE_ServerSoap___tns__submitMediaAnnotationTextWithTokenId (230)
+#define SOAP_TYPE_ServerSoap___tns__submitMediaAnnotationTextWithTokenId (184)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__submitMediaAnnotationTextWithTokenId(struct soap*, struct __tns__submitMediaAnnotationTextWithTokenId *);
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___tns__submitMediaAnnotationTextWithTokenId(struct soap*, const struct __tns__submitMediaAnnotationTextWithTokenId *);
@@ -2508,7 +2037,7 @@ SOAP_FMAC1 struct __tns__submitMediaAnnotationTextWithTokenId * SOAP_FMAC2 soap_
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__submitMediaAnnotationTextWithTokenId(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ServerSoap___tns__submitMediaAnnotationTextAndTokenDigest
-#define SOAP_TYPE_ServerSoap___tns__submitMediaAnnotationTextAndTokenDigest (226)
+#define SOAP_TYPE_ServerSoap___tns__submitMediaAnnotationTextAndTokenDigest (180)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__submitMediaAnnotationTextAndTokenDigest(struct soap*, struct __tns__submitMediaAnnotationTextAndTokenDigest *);
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___tns__submitMediaAnnotationTextAndTokenDigest(struct soap*, const struct __tns__submitMediaAnnotationTextAndTokenDigest *);
@@ -2537,7 +2066,7 @@ SOAP_FMAC1 struct __tns__submitMediaAnnotationTextAndTokenDigest * SOAP_FMAC2 so
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__submitMediaAnnotationTextAndTokenDigest(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ServerSoap___tns__submitMediaAnnotation
-#define SOAP_TYPE_ServerSoap___tns__submitMediaAnnotation (222)
+#define SOAP_TYPE_ServerSoap___tns__submitMediaAnnotation (176)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__submitMediaAnnotation(struct soap*, struct __tns__submitMediaAnnotation *);
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___tns__submitMediaAnnotation(struct soap*, const struct __tns__submitMediaAnnotation *);
@@ -2566,7 +2095,7 @@ SOAP_FMAC1 struct __tns__submitMediaAnnotation * SOAP_FMAC2 soap_instantiate___t
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__submitMediaAnnotation(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ServerSoap___tns__submitMediaAliasTextWithTokenId
-#define SOAP_TYPE_ServerSoap___tns__submitMediaAliasTextWithTokenId (218)
+#define SOAP_TYPE_ServerSoap___tns__submitMediaAliasTextWithTokenId (172)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__submitMediaAliasTextWithTokenId(struct soap*, struct __tns__submitMediaAliasTextWithTokenId *);
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___tns__submitMediaAliasTextWithTokenId(struct soap*, const struct __tns__submitMediaAliasTextWithTokenId *);
@@ -2595,7 +2124,7 @@ SOAP_FMAC1 struct __tns__submitMediaAliasTextWithTokenId * SOAP_FMAC2 soap_insta
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__submitMediaAliasTextWithTokenId(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ServerSoap___tns__submitMediaAliasTextAndTokenDigest
-#define SOAP_TYPE_ServerSoap___tns__submitMediaAliasTextAndTokenDigest (214)
+#define SOAP_TYPE_ServerSoap___tns__submitMediaAliasTextAndTokenDigest (168)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__submitMediaAliasTextAndTokenDigest(struct soap*, struct __tns__submitMediaAliasTextAndTokenDigest *);
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___tns__submitMediaAliasTextAndTokenDigest(struct soap*, const struct __tns__submitMediaAliasTextAndTokenDigest *);
@@ -2624,7 +2153,7 @@ SOAP_FMAC1 struct __tns__submitMediaAliasTextAndTokenDigest * SOAP_FMAC2 soap_in
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__submitMediaAliasTextAndTokenDigest(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ServerSoap___tns__submitMediaAlias
-#define SOAP_TYPE_ServerSoap___tns__submitMediaAlias (210)
+#define SOAP_TYPE_ServerSoap___tns__submitMediaAlias (164)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__submitMediaAlias(struct soap*, struct __tns__submitMediaAlias *);
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___tns__submitMediaAlias(struct soap*, const struct __tns__submitMediaAlias *);
@@ -2652,240 +2181,8 @@ SOAP_FMAC3 struct __tns__submitMediaAlias * SOAP_FMAC4 soap_get___tns__submitMed
 SOAP_FMAC1 struct __tns__submitMediaAlias * SOAP_FMAC2 soap_instantiate___tns__submitMediaAlias(struct soap*, int, const char*, const char*, size_t*);
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__submitMediaAlias(struct soap*, int, int, void*, size_t, const void*, size_t);
 
-#ifndef SOAP_TYPE_ServerSoap___tns__submitGameTokenDigest
-#define SOAP_TYPE_ServerSoap___tns__submitGameTokenDigest (206)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__submitGameTokenDigest(struct soap*, struct __tns__submitGameTokenDigest *);
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___tns__submitGameTokenDigest(struct soap*, const struct __tns__submitGameTokenDigest *);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out___tns__submitGameTokenDigest(struct soap*, const char*, int, const struct __tns__submitGameTokenDigest *, const char*);
-SOAP_FMAC3 struct __tns__submitGameTokenDigest * SOAP_FMAC4 soap_in___tns__submitGameTokenDigest(struct soap*, const char*, struct __tns__submitGameTokenDigest *, const char*);
-
-#ifndef soap_write___tns__submitGameTokenDigest
-#define soap_write___tns__submitGameTokenDigest(soap, data) ( soap_begin_send(soap) || (ServerSoap::soap_serialize___tns__submitGameTokenDigest(soap, data), 0) || ServerSoap::soap_put___tns__submitGameTokenDigest(soap, data, "-tns:submitGameTokenDigest", NULL) || soap_end_send(soap) )
-#endif
-
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put___tns__submitGameTokenDigest(struct soap*, const struct __tns__submitGameTokenDigest *, const char*, const char*);
-
-#ifndef soap_read___tns__submitGameTokenDigest
-#define soap_read___tns__submitGameTokenDigest(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get___tns__submitGameTokenDigest(soap, data, NULL, NULL) || soap_end_recv(soap) )
-#endif
-
-SOAP_FMAC3 struct __tns__submitGameTokenDigest * SOAP_FMAC4 soap_get___tns__submitGameTokenDigest(struct soap*, struct __tns__submitGameTokenDigest *, const char*, const char*);
-
-#define soap_new___tns__submitGameTokenDigest(soap, n) soap_instantiate___tns__submitGameTokenDigest(soap, n, NULL, NULL, NULL)
-
-
-#define soap_delete___tns__submitGameTokenDigest(soap, p) soap_delete(soap, p)
-
-SOAP_FMAC1 struct __tns__submitGameTokenDigest * SOAP_FMAC2 soap_instantiate___tns__submitGameTokenDigest(struct soap*, int, const char*, const char*, size_t*);
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__submitGameTokenDigest(struct soap*, int, int, void*, size_t, const void*, size_t);
-
-#ifndef SOAP_TYPE_ServerSoap___tns__submitGameToken
-#define SOAP_TYPE_ServerSoap___tns__submitGameToken (202)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__submitGameToken(struct soap*, struct __tns__submitGameToken *);
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___tns__submitGameToken(struct soap*, const struct __tns__submitGameToken *);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out___tns__submitGameToken(struct soap*, const char*, int, const struct __tns__submitGameToken *, const char*);
-SOAP_FMAC3 struct __tns__submitGameToken * SOAP_FMAC4 soap_in___tns__submitGameToken(struct soap*, const char*, struct __tns__submitGameToken *, const char*);
-
-#ifndef soap_write___tns__submitGameToken
-#define soap_write___tns__submitGameToken(soap, data) ( soap_begin_send(soap) || (ServerSoap::soap_serialize___tns__submitGameToken(soap, data), 0) || ServerSoap::soap_put___tns__submitGameToken(soap, data, "-tns:submitGameToken", NULL) || soap_end_send(soap) )
-#endif
-
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put___tns__submitGameToken(struct soap*, const struct __tns__submitGameToken *, const char*, const char*);
-
-#ifndef soap_read___tns__submitGameToken
-#define soap_read___tns__submitGameToken(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get___tns__submitGameToken(soap, data, NULL, NULL) || soap_end_recv(soap) )
-#endif
-
-SOAP_FMAC3 struct __tns__submitGameToken * SOAP_FMAC4 soap_get___tns__submitGameToken(struct soap*, struct __tns__submitGameToken *, const char*, const char*);
-
-#define soap_new___tns__submitGameToken(soap, n) soap_instantiate___tns__submitGameToken(soap, n, NULL, NULL, NULL)
-
-
-#define soap_delete___tns__submitGameToken(soap, p) soap_delete(soap, p)
-
-SOAP_FMAC1 struct __tns__submitGameToken * SOAP_FMAC2 soap_instantiate___tns__submitGameToken(struct soap*, int, const char*, const char*, size_t*);
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__submitGameToken(struct soap*, int, int, void*, size_t, const void*, size_t);
-
-#ifndef SOAP_TYPE_ServerSoap___tns__submitGameAnnotationTextWithTokenId
-#define SOAP_TYPE_ServerSoap___tns__submitGameAnnotationTextWithTokenId (198)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__submitGameAnnotationTextWithTokenId(struct soap*, struct __tns__submitGameAnnotationTextWithTokenId *);
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___tns__submitGameAnnotationTextWithTokenId(struct soap*, const struct __tns__submitGameAnnotationTextWithTokenId *);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out___tns__submitGameAnnotationTextWithTokenId(struct soap*, const char*, int, const struct __tns__submitGameAnnotationTextWithTokenId *, const char*);
-SOAP_FMAC3 struct __tns__submitGameAnnotationTextWithTokenId * SOAP_FMAC4 soap_in___tns__submitGameAnnotationTextWithTokenId(struct soap*, const char*, struct __tns__submitGameAnnotationTextWithTokenId *, const char*);
-
-#ifndef soap_write___tns__submitGameAnnotationTextWithTokenId
-#define soap_write___tns__submitGameAnnotationTextWithTokenId(soap, data) ( soap_begin_send(soap) || (ServerSoap::soap_serialize___tns__submitGameAnnotationTextWithTokenId(soap, data), 0) || ServerSoap::soap_put___tns__submitGameAnnotationTextWithTokenId(soap, data, "-tns:submitGameAnnotationTextWithTokenId", NULL) || soap_end_send(soap) )
-#endif
-
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put___tns__submitGameAnnotationTextWithTokenId(struct soap*, const struct __tns__submitGameAnnotationTextWithTokenId *, const char*, const char*);
-
-#ifndef soap_read___tns__submitGameAnnotationTextWithTokenId
-#define soap_read___tns__submitGameAnnotationTextWithTokenId(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get___tns__submitGameAnnotationTextWithTokenId(soap, data, NULL, NULL) || soap_end_recv(soap) )
-#endif
-
-SOAP_FMAC3 struct __tns__submitGameAnnotationTextWithTokenId * SOAP_FMAC4 soap_get___tns__submitGameAnnotationTextWithTokenId(struct soap*, struct __tns__submitGameAnnotationTextWithTokenId *, const char*, const char*);
-
-#define soap_new___tns__submitGameAnnotationTextWithTokenId(soap, n) soap_instantiate___tns__submitGameAnnotationTextWithTokenId(soap, n, NULL, NULL, NULL)
-
-
-#define soap_delete___tns__submitGameAnnotationTextWithTokenId(soap, p) soap_delete(soap, p)
-
-SOAP_FMAC1 struct __tns__submitGameAnnotationTextWithTokenId * SOAP_FMAC2 soap_instantiate___tns__submitGameAnnotationTextWithTokenId(struct soap*, int, const char*, const char*, size_t*);
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__submitGameAnnotationTextWithTokenId(struct soap*, int, int, void*, size_t, const void*, size_t);
-
-#ifndef SOAP_TYPE_ServerSoap___tns__submitGameAnnotationTextAndTokenDigest
-#define SOAP_TYPE_ServerSoap___tns__submitGameAnnotationTextAndTokenDigest (194)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__submitGameAnnotationTextAndTokenDigest(struct soap*, struct __tns__submitGameAnnotationTextAndTokenDigest *);
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___tns__submitGameAnnotationTextAndTokenDigest(struct soap*, const struct __tns__submitGameAnnotationTextAndTokenDigest *);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out___tns__submitGameAnnotationTextAndTokenDigest(struct soap*, const char*, int, const struct __tns__submitGameAnnotationTextAndTokenDigest *, const char*);
-SOAP_FMAC3 struct __tns__submitGameAnnotationTextAndTokenDigest * SOAP_FMAC4 soap_in___tns__submitGameAnnotationTextAndTokenDigest(struct soap*, const char*, struct __tns__submitGameAnnotationTextAndTokenDigest *, const char*);
-
-#ifndef soap_write___tns__submitGameAnnotationTextAndTokenDigest
-#define soap_write___tns__submitGameAnnotationTextAndTokenDigest(soap, data) ( soap_begin_send(soap) || (ServerSoap::soap_serialize___tns__submitGameAnnotationTextAndTokenDigest(soap, data), 0) || ServerSoap::soap_put___tns__submitGameAnnotationTextAndTokenDigest(soap, data, "-tns:submitGameAnnotationTextAndTokenDigest", NULL) || soap_end_send(soap) )
-#endif
-
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put___tns__submitGameAnnotationTextAndTokenDigest(struct soap*, const struct __tns__submitGameAnnotationTextAndTokenDigest *, const char*, const char*);
-
-#ifndef soap_read___tns__submitGameAnnotationTextAndTokenDigest
-#define soap_read___tns__submitGameAnnotationTextAndTokenDigest(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get___tns__submitGameAnnotationTextAndTokenDigest(soap, data, NULL, NULL) || soap_end_recv(soap) )
-#endif
-
-SOAP_FMAC3 struct __tns__submitGameAnnotationTextAndTokenDigest * SOAP_FMAC4 soap_get___tns__submitGameAnnotationTextAndTokenDigest(struct soap*, struct __tns__submitGameAnnotationTextAndTokenDigest *, const char*, const char*);
-
-#define soap_new___tns__submitGameAnnotationTextAndTokenDigest(soap, n) soap_instantiate___tns__submitGameAnnotationTextAndTokenDigest(soap, n, NULL, NULL, NULL)
-
-
-#define soap_delete___tns__submitGameAnnotationTextAndTokenDigest(soap, p) soap_delete(soap, p)
-
-SOAP_FMAC1 struct __tns__submitGameAnnotationTextAndTokenDigest * SOAP_FMAC2 soap_instantiate___tns__submitGameAnnotationTextAndTokenDigest(struct soap*, int, const char*, const char*, size_t*);
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__submitGameAnnotationTextAndTokenDigest(struct soap*, int, int, void*, size_t, const void*, size_t);
-
-#ifndef SOAP_TYPE_ServerSoap___tns__submitGameAnnotation
-#define SOAP_TYPE_ServerSoap___tns__submitGameAnnotation (190)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__submitGameAnnotation(struct soap*, struct __tns__submitGameAnnotation *);
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___tns__submitGameAnnotation(struct soap*, const struct __tns__submitGameAnnotation *);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out___tns__submitGameAnnotation(struct soap*, const char*, int, const struct __tns__submitGameAnnotation *, const char*);
-SOAP_FMAC3 struct __tns__submitGameAnnotation * SOAP_FMAC4 soap_in___tns__submitGameAnnotation(struct soap*, const char*, struct __tns__submitGameAnnotation *, const char*);
-
-#ifndef soap_write___tns__submitGameAnnotation
-#define soap_write___tns__submitGameAnnotation(soap, data) ( soap_begin_send(soap) || (ServerSoap::soap_serialize___tns__submitGameAnnotation(soap, data), 0) || ServerSoap::soap_put___tns__submitGameAnnotation(soap, data, "-tns:submitGameAnnotation", NULL) || soap_end_send(soap) )
-#endif
-
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put___tns__submitGameAnnotation(struct soap*, const struct __tns__submitGameAnnotation *, const char*, const char*);
-
-#ifndef soap_read___tns__submitGameAnnotation
-#define soap_read___tns__submitGameAnnotation(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get___tns__submitGameAnnotation(soap, data, NULL, NULL) || soap_end_recv(soap) )
-#endif
-
-SOAP_FMAC3 struct __tns__submitGameAnnotation * SOAP_FMAC4 soap_get___tns__submitGameAnnotation(struct soap*, struct __tns__submitGameAnnotation *, const char*, const char*);
-
-#define soap_new___tns__submitGameAnnotation(soap, n) soap_instantiate___tns__submitGameAnnotation(soap, n, NULL, NULL, NULL)
-
-
-#define soap_delete___tns__submitGameAnnotation(soap, p) soap_delete(soap, p)
-
-SOAP_FMAC1 struct __tns__submitGameAnnotation * SOAP_FMAC2 soap_instantiate___tns__submitGameAnnotation(struct soap*, int, const char*, const char*, size_t*);
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__submitGameAnnotation(struct soap*, int, int, void*, size_t, const void*, size_t);
-
-#ifndef SOAP_TYPE_ServerSoap___tns__submitGameAliasTextWithTokenId
-#define SOAP_TYPE_ServerSoap___tns__submitGameAliasTextWithTokenId (186)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__submitGameAliasTextWithTokenId(struct soap*, struct __tns__submitGameAliasTextWithTokenId *);
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___tns__submitGameAliasTextWithTokenId(struct soap*, const struct __tns__submitGameAliasTextWithTokenId *);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out___tns__submitGameAliasTextWithTokenId(struct soap*, const char*, int, const struct __tns__submitGameAliasTextWithTokenId *, const char*);
-SOAP_FMAC3 struct __tns__submitGameAliasTextWithTokenId * SOAP_FMAC4 soap_in___tns__submitGameAliasTextWithTokenId(struct soap*, const char*, struct __tns__submitGameAliasTextWithTokenId *, const char*);
-
-#ifndef soap_write___tns__submitGameAliasTextWithTokenId
-#define soap_write___tns__submitGameAliasTextWithTokenId(soap, data) ( soap_begin_send(soap) || (ServerSoap::soap_serialize___tns__submitGameAliasTextWithTokenId(soap, data), 0) || ServerSoap::soap_put___tns__submitGameAliasTextWithTokenId(soap, data, "-tns:submitGameAliasTextWithTokenId", NULL) || soap_end_send(soap) )
-#endif
-
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put___tns__submitGameAliasTextWithTokenId(struct soap*, const struct __tns__submitGameAliasTextWithTokenId *, const char*, const char*);
-
-#ifndef soap_read___tns__submitGameAliasTextWithTokenId
-#define soap_read___tns__submitGameAliasTextWithTokenId(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get___tns__submitGameAliasTextWithTokenId(soap, data, NULL, NULL) || soap_end_recv(soap) )
-#endif
-
-SOAP_FMAC3 struct __tns__submitGameAliasTextWithTokenId * SOAP_FMAC4 soap_get___tns__submitGameAliasTextWithTokenId(struct soap*, struct __tns__submitGameAliasTextWithTokenId *, const char*, const char*);
-
-#define soap_new___tns__submitGameAliasTextWithTokenId(soap, n) soap_instantiate___tns__submitGameAliasTextWithTokenId(soap, n, NULL, NULL, NULL)
-
-
-#define soap_delete___tns__submitGameAliasTextWithTokenId(soap, p) soap_delete(soap, p)
-
-SOAP_FMAC1 struct __tns__submitGameAliasTextWithTokenId * SOAP_FMAC2 soap_instantiate___tns__submitGameAliasTextWithTokenId(struct soap*, int, const char*, const char*, size_t*);
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__submitGameAliasTextWithTokenId(struct soap*, int, int, void*, size_t, const void*, size_t);
-
-#ifndef SOAP_TYPE_ServerSoap___tns__submitGameAliasTextAndTokenDigest
-#define SOAP_TYPE_ServerSoap___tns__submitGameAliasTextAndTokenDigest (182)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__submitGameAliasTextAndTokenDigest(struct soap*, struct __tns__submitGameAliasTextAndTokenDigest *);
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___tns__submitGameAliasTextAndTokenDigest(struct soap*, const struct __tns__submitGameAliasTextAndTokenDigest *);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out___tns__submitGameAliasTextAndTokenDigest(struct soap*, const char*, int, const struct __tns__submitGameAliasTextAndTokenDigest *, const char*);
-SOAP_FMAC3 struct __tns__submitGameAliasTextAndTokenDigest * SOAP_FMAC4 soap_in___tns__submitGameAliasTextAndTokenDigest(struct soap*, const char*, struct __tns__submitGameAliasTextAndTokenDigest *, const char*);
-
-#ifndef soap_write___tns__submitGameAliasTextAndTokenDigest
-#define soap_write___tns__submitGameAliasTextAndTokenDigest(soap, data) ( soap_begin_send(soap) || (ServerSoap::soap_serialize___tns__submitGameAliasTextAndTokenDigest(soap, data), 0) || ServerSoap::soap_put___tns__submitGameAliasTextAndTokenDigest(soap, data, "-tns:submitGameAliasTextAndTokenDigest", NULL) || soap_end_send(soap) )
-#endif
-
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put___tns__submitGameAliasTextAndTokenDigest(struct soap*, const struct __tns__submitGameAliasTextAndTokenDigest *, const char*, const char*);
-
-#ifndef soap_read___tns__submitGameAliasTextAndTokenDigest
-#define soap_read___tns__submitGameAliasTextAndTokenDigest(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get___tns__submitGameAliasTextAndTokenDigest(soap, data, NULL, NULL) || soap_end_recv(soap) )
-#endif
-
-SOAP_FMAC3 struct __tns__submitGameAliasTextAndTokenDigest * SOAP_FMAC4 soap_get___tns__submitGameAliasTextAndTokenDigest(struct soap*, struct __tns__submitGameAliasTextAndTokenDigest *, const char*, const char*);
-
-#define soap_new___tns__submitGameAliasTextAndTokenDigest(soap, n) soap_instantiate___tns__submitGameAliasTextAndTokenDigest(soap, n, NULL, NULL, NULL)
-
-
-#define soap_delete___tns__submitGameAliasTextAndTokenDigest(soap, p) soap_delete(soap, p)
-
-SOAP_FMAC1 struct __tns__submitGameAliasTextAndTokenDigest * SOAP_FMAC2 soap_instantiate___tns__submitGameAliasTextAndTokenDigest(struct soap*, int, const char*, const char*, size_t*);
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__submitGameAliasTextAndTokenDigest(struct soap*, int, int, void*, size_t, const void*, size_t);
-
-#ifndef SOAP_TYPE_ServerSoap___tns__submitGameAlias
-#define SOAP_TYPE_ServerSoap___tns__submitGameAlias (178)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__submitGameAlias(struct soap*, struct __tns__submitGameAlias *);
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___tns__submitGameAlias(struct soap*, const struct __tns__submitGameAlias *);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out___tns__submitGameAlias(struct soap*, const char*, int, const struct __tns__submitGameAlias *, const char*);
-SOAP_FMAC3 struct __tns__submitGameAlias * SOAP_FMAC4 soap_in___tns__submitGameAlias(struct soap*, const char*, struct __tns__submitGameAlias *, const char*);
-
-#ifndef soap_write___tns__submitGameAlias
-#define soap_write___tns__submitGameAlias(soap, data) ( soap_begin_send(soap) || (ServerSoap::soap_serialize___tns__submitGameAlias(soap, data), 0) || ServerSoap::soap_put___tns__submitGameAlias(soap, data, "-tns:submitGameAlias", NULL) || soap_end_send(soap) )
-#endif
-
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put___tns__submitGameAlias(struct soap*, const struct __tns__submitGameAlias *, const char*, const char*);
-
-#ifndef soap_read___tns__submitGameAlias
-#define soap_read___tns__submitGameAlias(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get___tns__submitGameAlias(soap, data, NULL, NULL) || soap_end_recv(soap) )
-#endif
-
-SOAP_FMAC3 struct __tns__submitGameAlias * SOAP_FMAC4 soap_get___tns__submitGameAlias(struct soap*, struct __tns__submitGameAlias *, const char*, const char*);
-
-#define soap_new___tns__submitGameAlias(soap, n) soap_instantiate___tns__submitGameAlias(soap, n, NULL, NULL, NULL)
-
-
-#define soap_delete___tns__submitGameAlias(soap, p) soap_delete(soap, p)
-
-SOAP_FMAC1 struct __tns__submitGameAlias * SOAP_FMAC2 soap_instantiate___tns__submitGameAlias(struct soap*, int, const char*, const char*, size_t*);
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__submitGameAlias(struct soap*, int, int, void*, size_t, const void*, size_t);
-
 #ifndef SOAP_TYPE_ServerSoap___tns__setUserLanguage
-#define SOAP_TYPE_ServerSoap___tns__setUserLanguage (174)
+#define SOAP_TYPE_ServerSoap___tns__setUserLanguage (160)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__setUserLanguage(struct soap*, struct __tns__setUserLanguage *);
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___tns__setUserLanguage(struct soap*, const struct __tns__setUserLanguage *);
@@ -2914,7 +2211,7 @@ SOAP_FMAC1 struct __tns__setUserLanguage * SOAP_FMAC2 soap_instantiate___tns__se
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__setUserLanguage(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ServerSoap___tns__setUserAnonymous
-#define SOAP_TYPE_ServerSoap___tns__setUserAnonymous (170)
+#define SOAP_TYPE_ServerSoap___tns__setUserAnonymous (156)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__setUserAnonymous(struct soap*, struct __tns__setUserAnonymous *);
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___tns__setUserAnonymous(struct soap*, const struct __tns__setUserAnonymous *);
@@ -2943,7 +2240,7 @@ SOAP_FMAC1 struct __tns__setUserAnonymous * SOAP_FMAC2 soap_instantiate___tns__s
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__setUserAnonymous(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ServerSoap___tns__selectUser
-#define SOAP_TYPE_ServerSoap___tns__selectUser (166)
+#define SOAP_TYPE_ServerSoap___tns__selectUser (152)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__selectUser(struct soap*, struct __tns__selectUser *);
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___tns__selectUser(struct soap*, const struct __tns__selectUser *);
@@ -2972,7 +2269,7 @@ SOAP_FMAC1 struct __tns__selectUser * SOAP_FMAC2 soap_instantiate___tns__selectU
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__selectUser(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ServerSoap___tns__selectRelatedMediaAnnotationsWithTokenId
-#define SOAP_TYPE_ServerSoap___tns__selectRelatedMediaAnnotationsWithTokenId (162)
+#define SOAP_TYPE_ServerSoap___tns__selectRelatedMediaAnnotationsWithTokenId (148)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__selectRelatedMediaAnnotationsWithTokenId(struct soap*, struct __tns__selectRelatedMediaAnnotationsWithTokenId *);
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___tns__selectRelatedMediaAnnotationsWithTokenId(struct soap*, const struct __tns__selectRelatedMediaAnnotationsWithTokenId *);
@@ -3000,37 +2297,8 @@ SOAP_FMAC3 struct __tns__selectRelatedMediaAnnotationsWithTokenId * SOAP_FMAC4 s
 SOAP_FMAC1 struct __tns__selectRelatedMediaAnnotationsWithTokenId * SOAP_FMAC2 soap_instantiate___tns__selectRelatedMediaAnnotationsWithTokenId(struct soap*, int, const char*, const char*, size_t*);
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__selectRelatedMediaAnnotationsWithTokenId(struct soap*, int, int, void*, size_t, const void*, size_t);
 
-#ifndef SOAP_TYPE_ServerSoap___tns__selectRelatedGameAnnotationsWithTokenId
-#define SOAP_TYPE_ServerSoap___tns__selectRelatedGameAnnotationsWithTokenId (158)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__selectRelatedGameAnnotationsWithTokenId(struct soap*, struct __tns__selectRelatedGameAnnotationsWithTokenId *);
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___tns__selectRelatedGameAnnotationsWithTokenId(struct soap*, const struct __tns__selectRelatedGameAnnotationsWithTokenId *);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out___tns__selectRelatedGameAnnotationsWithTokenId(struct soap*, const char*, int, const struct __tns__selectRelatedGameAnnotationsWithTokenId *, const char*);
-SOAP_FMAC3 struct __tns__selectRelatedGameAnnotationsWithTokenId * SOAP_FMAC4 soap_in___tns__selectRelatedGameAnnotationsWithTokenId(struct soap*, const char*, struct __tns__selectRelatedGameAnnotationsWithTokenId *, const char*);
-
-#ifndef soap_write___tns__selectRelatedGameAnnotationsWithTokenId
-#define soap_write___tns__selectRelatedGameAnnotationsWithTokenId(soap, data) ( soap_begin_send(soap) || (ServerSoap::soap_serialize___tns__selectRelatedGameAnnotationsWithTokenId(soap, data), 0) || ServerSoap::soap_put___tns__selectRelatedGameAnnotationsWithTokenId(soap, data, "-tns:selectRelatedGameAnnotationsWithTokenId", NULL) || soap_end_send(soap) )
-#endif
-
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put___tns__selectRelatedGameAnnotationsWithTokenId(struct soap*, const struct __tns__selectRelatedGameAnnotationsWithTokenId *, const char*, const char*);
-
-#ifndef soap_read___tns__selectRelatedGameAnnotationsWithTokenId
-#define soap_read___tns__selectRelatedGameAnnotationsWithTokenId(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get___tns__selectRelatedGameAnnotationsWithTokenId(soap, data, NULL, NULL) || soap_end_recv(soap) )
-#endif
-
-SOAP_FMAC3 struct __tns__selectRelatedGameAnnotationsWithTokenId * SOAP_FMAC4 soap_get___tns__selectRelatedGameAnnotationsWithTokenId(struct soap*, struct __tns__selectRelatedGameAnnotationsWithTokenId *, const char*, const char*);
-
-#define soap_new___tns__selectRelatedGameAnnotationsWithTokenId(soap, n) soap_instantiate___tns__selectRelatedGameAnnotationsWithTokenId(soap, n, NULL, NULL, NULL)
-
-
-#define soap_delete___tns__selectRelatedGameAnnotationsWithTokenId(soap, p) soap_delete(soap, p)
-
-SOAP_FMAC1 struct __tns__selectRelatedGameAnnotationsWithTokenId * SOAP_FMAC2 soap_instantiate___tns__selectRelatedGameAnnotationsWithTokenId(struct soap*, int, const char*, const char*, size_t*);
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__selectRelatedGameAnnotationsWithTokenId(struct soap*, int, int, void*, size_t, const void*, size_t);
-
 #ifndef SOAP_TYPE_ServerSoap___tns__selectMediaTokenWithId
-#define SOAP_TYPE_ServerSoap___tns__selectMediaTokenWithId (154)
+#define SOAP_TYPE_ServerSoap___tns__selectMediaTokenWithId (144)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__selectMediaTokenWithId(struct soap*, struct __tns__selectMediaTokenWithId *);
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___tns__selectMediaTokenWithId(struct soap*, const struct __tns__selectMediaTokenWithId *);
@@ -3059,7 +2327,7 @@ SOAP_FMAC1 struct __tns__selectMediaTokenWithId * SOAP_FMAC2 soap_instantiate___
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__selectMediaTokenWithId(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ServerSoap___tns__selectMediaTokenWithDigest
-#define SOAP_TYPE_ServerSoap___tns__selectMediaTokenWithDigest (150)
+#define SOAP_TYPE_ServerSoap___tns__selectMediaTokenWithDigest (140)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__selectMediaTokenWithDigest(struct soap*, struct __tns__selectMediaTokenWithDigest *);
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___tns__selectMediaTokenWithDigest(struct soap*, const struct __tns__selectMediaTokenWithDigest *);
@@ -3088,7 +2356,7 @@ SOAP_FMAC1 struct __tns__selectMediaTokenWithDigest * SOAP_FMAC2 soap_instantiat
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__selectMediaTokenWithDigest(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ServerSoap___tns__selectMediaAnnotationsWithTokenId
-#define SOAP_TYPE_ServerSoap___tns__selectMediaAnnotationsWithTokenId (146)
+#define SOAP_TYPE_ServerSoap___tns__selectMediaAnnotationsWithTokenId (136)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__selectMediaAnnotationsWithTokenId(struct soap*, struct __tns__selectMediaAnnotationsWithTokenId *);
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___tns__selectMediaAnnotationsWithTokenId(struct soap*, const struct __tns__selectMediaAnnotationsWithTokenId *);
@@ -3117,7 +2385,7 @@ SOAP_FMAC1 struct __tns__selectMediaAnnotationsWithTokenId * SOAP_FMAC2 soap_ins
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__selectMediaAnnotationsWithTokenId(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ServerSoap___tns__selectMediaAliasesWithTokenId
-#define SOAP_TYPE_ServerSoap___tns__selectMediaAliasesWithTokenId (142)
+#define SOAP_TYPE_ServerSoap___tns__selectMediaAliasesWithTokenId (132)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__selectMediaAliasesWithTokenId(struct soap*, struct __tns__selectMediaAliasesWithTokenId *);
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___tns__selectMediaAliasesWithTokenId(struct soap*, const struct __tns__selectMediaAliasesWithTokenId *);
@@ -3145,124 +2413,8 @@ SOAP_FMAC3 struct __tns__selectMediaAliasesWithTokenId * SOAP_FMAC4 soap_get___t
 SOAP_FMAC1 struct __tns__selectMediaAliasesWithTokenId * SOAP_FMAC2 soap_instantiate___tns__selectMediaAliasesWithTokenId(struct soap*, int, const char*, const char*, size_t*);
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__selectMediaAliasesWithTokenId(struct soap*, int, int, void*, size_t, const void*, size_t);
 
-#ifndef SOAP_TYPE_ServerSoap___tns__selectGameTokenWithId
-#define SOAP_TYPE_ServerSoap___tns__selectGameTokenWithId (138)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__selectGameTokenWithId(struct soap*, struct __tns__selectGameTokenWithId *);
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___tns__selectGameTokenWithId(struct soap*, const struct __tns__selectGameTokenWithId *);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out___tns__selectGameTokenWithId(struct soap*, const char*, int, const struct __tns__selectGameTokenWithId *, const char*);
-SOAP_FMAC3 struct __tns__selectGameTokenWithId * SOAP_FMAC4 soap_in___tns__selectGameTokenWithId(struct soap*, const char*, struct __tns__selectGameTokenWithId *, const char*);
-
-#ifndef soap_write___tns__selectGameTokenWithId
-#define soap_write___tns__selectGameTokenWithId(soap, data) ( soap_begin_send(soap) || (ServerSoap::soap_serialize___tns__selectGameTokenWithId(soap, data), 0) || ServerSoap::soap_put___tns__selectGameTokenWithId(soap, data, "-tns:selectGameTokenWithId", NULL) || soap_end_send(soap) )
-#endif
-
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put___tns__selectGameTokenWithId(struct soap*, const struct __tns__selectGameTokenWithId *, const char*, const char*);
-
-#ifndef soap_read___tns__selectGameTokenWithId
-#define soap_read___tns__selectGameTokenWithId(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get___tns__selectGameTokenWithId(soap, data, NULL, NULL) || soap_end_recv(soap) )
-#endif
-
-SOAP_FMAC3 struct __tns__selectGameTokenWithId * SOAP_FMAC4 soap_get___tns__selectGameTokenWithId(struct soap*, struct __tns__selectGameTokenWithId *, const char*, const char*);
-
-#define soap_new___tns__selectGameTokenWithId(soap, n) soap_instantiate___tns__selectGameTokenWithId(soap, n, NULL, NULL, NULL)
-
-
-#define soap_delete___tns__selectGameTokenWithId(soap, p) soap_delete(soap, p)
-
-SOAP_FMAC1 struct __tns__selectGameTokenWithId * SOAP_FMAC2 soap_instantiate___tns__selectGameTokenWithId(struct soap*, int, const char*, const char*, size_t*);
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__selectGameTokenWithId(struct soap*, int, int, void*, size_t, const void*, size_t);
-
-#ifndef SOAP_TYPE_ServerSoap___tns__selectGameTokenWithDigest
-#define SOAP_TYPE_ServerSoap___tns__selectGameTokenWithDigest (134)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__selectGameTokenWithDigest(struct soap*, struct __tns__selectGameTokenWithDigest *);
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___tns__selectGameTokenWithDigest(struct soap*, const struct __tns__selectGameTokenWithDigest *);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out___tns__selectGameTokenWithDigest(struct soap*, const char*, int, const struct __tns__selectGameTokenWithDigest *, const char*);
-SOAP_FMAC3 struct __tns__selectGameTokenWithDigest * SOAP_FMAC4 soap_in___tns__selectGameTokenWithDigest(struct soap*, const char*, struct __tns__selectGameTokenWithDigest *, const char*);
-
-#ifndef soap_write___tns__selectGameTokenWithDigest
-#define soap_write___tns__selectGameTokenWithDigest(soap, data) ( soap_begin_send(soap) || (ServerSoap::soap_serialize___tns__selectGameTokenWithDigest(soap, data), 0) || ServerSoap::soap_put___tns__selectGameTokenWithDigest(soap, data, "-tns:selectGameTokenWithDigest", NULL) || soap_end_send(soap) )
-#endif
-
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put___tns__selectGameTokenWithDigest(struct soap*, const struct __tns__selectGameTokenWithDigest *, const char*, const char*);
-
-#ifndef soap_read___tns__selectGameTokenWithDigest
-#define soap_read___tns__selectGameTokenWithDigest(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get___tns__selectGameTokenWithDigest(soap, data, NULL, NULL) || soap_end_recv(soap) )
-#endif
-
-SOAP_FMAC3 struct __tns__selectGameTokenWithDigest * SOAP_FMAC4 soap_get___tns__selectGameTokenWithDigest(struct soap*, struct __tns__selectGameTokenWithDigest *, const char*, const char*);
-
-#define soap_new___tns__selectGameTokenWithDigest(soap, n) soap_instantiate___tns__selectGameTokenWithDigest(soap, n, NULL, NULL, NULL)
-
-
-#define soap_delete___tns__selectGameTokenWithDigest(soap, p) soap_delete(soap, p)
-
-SOAP_FMAC1 struct __tns__selectGameTokenWithDigest * SOAP_FMAC2 soap_instantiate___tns__selectGameTokenWithDigest(struct soap*, int, const char*, const char*, size_t*);
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__selectGameTokenWithDigest(struct soap*, int, int, void*, size_t, const void*, size_t);
-
-#ifndef SOAP_TYPE_ServerSoap___tns__selectGameAnnotationsWithTokenId
-#define SOAP_TYPE_ServerSoap___tns__selectGameAnnotationsWithTokenId (130)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__selectGameAnnotationsWithTokenId(struct soap*, struct __tns__selectGameAnnotationsWithTokenId *);
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___tns__selectGameAnnotationsWithTokenId(struct soap*, const struct __tns__selectGameAnnotationsWithTokenId *);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out___tns__selectGameAnnotationsWithTokenId(struct soap*, const char*, int, const struct __tns__selectGameAnnotationsWithTokenId *, const char*);
-SOAP_FMAC3 struct __tns__selectGameAnnotationsWithTokenId * SOAP_FMAC4 soap_in___tns__selectGameAnnotationsWithTokenId(struct soap*, const char*, struct __tns__selectGameAnnotationsWithTokenId *, const char*);
-
-#ifndef soap_write___tns__selectGameAnnotationsWithTokenId
-#define soap_write___tns__selectGameAnnotationsWithTokenId(soap, data) ( soap_begin_send(soap) || (ServerSoap::soap_serialize___tns__selectGameAnnotationsWithTokenId(soap, data), 0) || ServerSoap::soap_put___tns__selectGameAnnotationsWithTokenId(soap, data, "-tns:selectGameAnnotationsWithTokenId", NULL) || soap_end_send(soap) )
-#endif
-
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put___tns__selectGameAnnotationsWithTokenId(struct soap*, const struct __tns__selectGameAnnotationsWithTokenId *, const char*, const char*);
-
-#ifndef soap_read___tns__selectGameAnnotationsWithTokenId
-#define soap_read___tns__selectGameAnnotationsWithTokenId(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get___tns__selectGameAnnotationsWithTokenId(soap, data, NULL, NULL) || soap_end_recv(soap) )
-#endif
-
-SOAP_FMAC3 struct __tns__selectGameAnnotationsWithTokenId * SOAP_FMAC4 soap_get___tns__selectGameAnnotationsWithTokenId(struct soap*, struct __tns__selectGameAnnotationsWithTokenId *, const char*, const char*);
-
-#define soap_new___tns__selectGameAnnotationsWithTokenId(soap, n) soap_instantiate___tns__selectGameAnnotationsWithTokenId(soap, n, NULL, NULL, NULL)
-
-
-#define soap_delete___tns__selectGameAnnotationsWithTokenId(soap, p) soap_delete(soap, p)
-
-SOAP_FMAC1 struct __tns__selectGameAnnotationsWithTokenId * SOAP_FMAC2 soap_instantiate___tns__selectGameAnnotationsWithTokenId(struct soap*, int, const char*, const char*, size_t*);
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__selectGameAnnotationsWithTokenId(struct soap*, int, int, void*, size_t, const void*, size_t);
-
-#ifndef SOAP_TYPE_ServerSoap___tns__selectGameAliasesWithTokenId
-#define SOAP_TYPE_ServerSoap___tns__selectGameAliasesWithTokenId (126)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__selectGameAliasesWithTokenId(struct soap*, struct __tns__selectGameAliasesWithTokenId *);
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___tns__selectGameAliasesWithTokenId(struct soap*, const struct __tns__selectGameAliasesWithTokenId *);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out___tns__selectGameAliasesWithTokenId(struct soap*, const char*, int, const struct __tns__selectGameAliasesWithTokenId *, const char*);
-SOAP_FMAC3 struct __tns__selectGameAliasesWithTokenId * SOAP_FMAC4 soap_in___tns__selectGameAliasesWithTokenId(struct soap*, const char*, struct __tns__selectGameAliasesWithTokenId *, const char*);
-
-#ifndef soap_write___tns__selectGameAliasesWithTokenId
-#define soap_write___tns__selectGameAliasesWithTokenId(soap, data) ( soap_begin_send(soap) || (ServerSoap::soap_serialize___tns__selectGameAliasesWithTokenId(soap, data), 0) || ServerSoap::soap_put___tns__selectGameAliasesWithTokenId(soap, data, "-tns:selectGameAliasesWithTokenId", NULL) || soap_end_send(soap) )
-#endif
-
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put___tns__selectGameAliasesWithTokenId(struct soap*, const struct __tns__selectGameAliasesWithTokenId *, const char*, const char*);
-
-#ifndef soap_read___tns__selectGameAliasesWithTokenId
-#define soap_read___tns__selectGameAliasesWithTokenId(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get___tns__selectGameAliasesWithTokenId(soap, data, NULL, NULL) || soap_end_recv(soap) )
-#endif
-
-SOAP_FMAC3 struct __tns__selectGameAliasesWithTokenId * SOAP_FMAC4 soap_get___tns__selectGameAliasesWithTokenId(struct soap*, struct __tns__selectGameAliasesWithTokenId *, const char*, const char*);
-
-#define soap_new___tns__selectGameAliasesWithTokenId(soap, n) soap_instantiate___tns__selectGameAliasesWithTokenId(soap, n, NULL, NULL, NULL)
-
-
-#define soap_delete___tns__selectGameAliasesWithTokenId(soap, p) soap_delete(soap, p)
-
-SOAP_FMAC1 struct __tns__selectGameAliasesWithTokenId * SOAP_FMAC2 soap_instantiate___tns__selectGameAliasesWithTokenId(struct soap*, int, const char*, const char*, size_t*);
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__selectGameAliasesWithTokenId(struct soap*, int, int, void*, size_t, const void*, size_t);
-
 #ifndef SOAP_TYPE_ServerSoap___tns__isConnected
-#define SOAP_TYPE_ServerSoap___tns__isConnected (122)
+#define SOAP_TYPE_ServerSoap___tns__isConnected (128)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__isConnected(struct soap*, struct __tns__isConnected *);
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___tns__isConnected(struct soap*, const struct __tns__isConnected *);
@@ -3291,7 +2443,7 @@ SOAP_FMAC1 struct __tns__isConnected * SOAP_FMAC2 soap_instantiate___tns__isConn
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__isConnected(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ServerSoap___tns__isClientUpdated
-#define SOAP_TYPE_ServerSoap___tns__isClientUpdated (118)
+#define SOAP_TYPE_ServerSoap___tns__isClientUpdated (124)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__isClientUpdated(struct soap*, struct __tns__isClientUpdated *);
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___tns__isClientUpdated(struct soap*, const struct __tns__isClientUpdated *);
@@ -3319,8 +2471,95 @@ SOAP_FMAC3 struct __tns__isClientUpdated * SOAP_FMAC4 soap_get___tns__isClientUp
 SOAP_FMAC1 struct __tns__isClientUpdated * SOAP_FMAC2 soap_instantiate___tns__isClientUpdated(struct soap*, int, const char*, const char*, size_t*);
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__isClientUpdated(struct soap*, int, int, void*, size_t, const void*, size_t);
 
+#ifndef SOAP_TYPE_ServerSoap___tns__curseMediaTokenWithId
+#define SOAP_TYPE_ServerSoap___tns__curseMediaTokenWithId (120)
+#endif
+SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__curseMediaTokenWithId(struct soap*, struct __tns__curseMediaTokenWithId *);
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___tns__curseMediaTokenWithId(struct soap*, const struct __tns__curseMediaTokenWithId *);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out___tns__curseMediaTokenWithId(struct soap*, const char*, int, const struct __tns__curseMediaTokenWithId *, const char*);
+SOAP_FMAC3 struct __tns__curseMediaTokenWithId * SOAP_FMAC4 soap_in___tns__curseMediaTokenWithId(struct soap*, const char*, struct __tns__curseMediaTokenWithId *, const char*);
+
+#ifndef soap_write___tns__curseMediaTokenWithId
+#define soap_write___tns__curseMediaTokenWithId(soap, data) ( soap_begin_send(soap) || (ServerSoap::soap_serialize___tns__curseMediaTokenWithId(soap, data), 0) || ServerSoap::soap_put___tns__curseMediaTokenWithId(soap, data, "-tns:curseMediaTokenWithId", NULL) || soap_end_send(soap) )
+#endif
+
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_put___tns__curseMediaTokenWithId(struct soap*, const struct __tns__curseMediaTokenWithId *, const char*, const char*);
+
+#ifndef soap_read___tns__curseMediaTokenWithId
+#define soap_read___tns__curseMediaTokenWithId(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get___tns__curseMediaTokenWithId(soap, data, NULL, NULL) || soap_end_recv(soap) )
+#endif
+
+SOAP_FMAC3 struct __tns__curseMediaTokenWithId * SOAP_FMAC4 soap_get___tns__curseMediaTokenWithId(struct soap*, struct __tns__curseMediaTokenWithId *, const char*, const char*);
+
+#define soap_new___tns__curseMediaTokenWithId(soap, n) soap_instantiate___tns__curseMediaTokenWithId(soap, n, NULL, NULL, NULL)
+
+
+#define soap_delete___tns__curseMediaTokenWithId(soap, p) soap_delete(soap, p)
+
+SOAP_FMAC1 struct __tns__curseMediaTokenWithId * SOAP_FMAC2 soap_instantiate___tns__curseMediaTokenWithId(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__curseMediaTokenWithId(struct soap*, int, int, void*, size_t, const void*, size_t);
+
+#ifndef SOAP_TYPE_ServerSoap___tns__curseMediaAnnotationWithId
+#define SOAP_TYPE_ServerSoap___tns__curseMediaAnnotationWithId (116)
+#endif
+SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__curseMediaAnnotationWithId(struct soap*, struct __tns__curseMediaAnnotationWithId *);
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___tns__curseMediaAnnotationWithId(struct soap*, const struct __tns__curseMediaAnnotationWithId *);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out___tns__curseMediaAnnotationWithId(struct soap*, const char*, int, const struct __tns__curseMediaAnnotationWithId *, const char*);
+SOAP_FMAC3 struct __tns__curseMediaAnnotationWithId * SOAP_FMAC4 soap_in___tns__curseMediaAnnotationWithId(struct soap*, const char*, struct __tns__curseMediaAnnotationWithId *, const char*);
+
+#ifndef soap_write___tns__curseMediaAnnotationWithId
+#define soap_write___tns__curseMediaAnnotationWithId(soap, data) ( soap_begin_send(soap) || (ServerSoap::soap_serialize___tns__curseMediaAnnotationWithId(soap, data), 0) || ServerSoap::soap_put___tns__curseMediaAnnotationWithId(soap, data, "-tns:curseMediaAnnotationWithId", NULL) || soap_end_send(soap) )
+#endif
+
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_put___tns__curseMediaAnnotationWithId(struct soap*, const struct __tns__curseMediaAnnotationWithId *, const char*, const char*);
+
+#ifndef soap_read___tns__curseMediaAnnotationWithId
+#define soap_read___tns__curseMediaAnnotationWithId(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get___tns__curseMediaAnnotationWithId(soap, data, NULL, NULL) || soap_end_recv(soap) )
+#endif
+
+SOAP_FMAC3 struct __tns__curseMediaAnnotationWithId * SOAP_FMAC4 soap_get___tns__curseMediaAnnotationWithId(struct soap*, struct __tns__curseMediaAnnotationWithId *, const char*, const char*);
+
+#define soap_new___tns__curseMediaAnnotationWithId(soap, n) soap_instantiate___tns__curseMediaAnnotationWithId(soap, n, NULL, NULL, NULL)
+
+
+#define soap_delete___tns__curseMediaAnnotationWithId(soap, p) soap_delete(soap, p)
+
+SOAP_FMAC1 struct __tns__curseMediaAnnotationWithId * SOAP_FMAC2 soap_instantiate___tns__curseMediaAnnotationWithId(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__curseMediaAnnotationWithId(struct soap*, int, int, void*, size_t, const void*, size_t);
+
+#ifndef SOAP_TYPE_ServerSoap___tns__curseMediaAliasWithId
+#define SOAP_TYPE_ServerSoap___tns__curseMediaAliasWithId (112)
+#endif
+SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__curseMediaAliasWithId(struct soap*, struct __tns__curseMediaAliasWithId *);
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___tns__curseMediaAliasWithId(struct soap*, const struct __tns__curseMediaAliasWithId *);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out___tns__curseMediaAliasWithId(struct soap*, const char*, int, const struct __tns__curseMediaAliasWithId *, const char*);
+SOAP_FMAC3 struct __tns__curseMediaAliasWithId * SOAP_FMAC4 soap_in___tns__curseMediaAliasWithId(struct soap*, const char*, struct __tns__curseMediaAliasWithId *, const char*);
+
+#ifndef soap_write___tns__curseMediaAliasWithId
+#define soap_write___tns__curseMediaAliasWithId(soap, data) ( soap_begin_send(soap) || (ServerSoap::soap_serialize___tns__curseMediaAliasWithId(soap, data), 0) || ServerSoap::soap_put___tns__curseMediaAliasWithId(soap, data, "-tns:curseMediaAliasWithId", NULL) || soap_end_send(soap) )
+#endif
+
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_put___tns__curseMediaAliasWithId(struct soap*, const struct __tns__curseMediaAliasWithId *, const char*, const char*);
+
+#ifndef soap_read___tns__curseMediaAliasWithId
+#define soap_read___tns__curseMediaAliasWithId(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get___tns__curseMediaAliasWithId(soap, data, NULL, NULL) || soap_end_recv(soap) )
+#endif
+
+SOAP_FMAC3 struct __tns__curseMediaAliasWithId * SOAP_FMAC4 soap_get___tns__curseMediaAliasWithId(struct soap*, struct __tns__curseMediaAliasWithId *, const char*, const char*);
+
+#define soap_new___tns__curseMediaAliasWithId(soap, n) soap_instantiate___tns__curseMediaAliasWithId(soap, n, NULL, NULL, NULL)
+
+
+#define soap_delete___tns__curseMediaAliasWithId(soap, p) soap_delete(soap, p)
+
+SOAP_FMAC1 struct __tns__curseMediaAliasWithId * SOAP_FMAC2 soap_instantiate___tns__curseMediaAliasWithId(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__curseMediaAliasWithId(struct soap*, int, int, void*, size_t, const void*, size_t);
+
 #ifndef SOAP_TYPE_ServerSoap___tns__chat
-#define SOAP_TYPE_ServerSoap___tns__chat (114)
+#define SOAP_TYPE_ServerSoap___tns__chat (108)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__chat(struct soap*, struct __tns__chat *);
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___tns__chat(struct soap*, const struct __tns__chat *);
@@ -3348,8 +2587,124 @@ SOAP_FMAC3 struct __tns__chat * SOAP_FMAC4 soap_get___tns__chat(struct soap*, st
 SOAP_FMAC1 struct __tns__chat * SOAP_FMAC2 soap_instantiate___tns__chat(struct soap*, int, const char*, const char*, size_t*);
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__chat(struct soap*, int, int, void*, size_t, const void*, size_t);
 
+#ifndef SOAP_TYPE_ServerSoap___tns__blockUserWithId
+#define SOAP_TYPE_ServerSoap___tns__blockUserWithId (104)
+#endif
+SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__blockUserWithId(struct soap*, struct __tns__blockUserWithId *);
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___tns__blockUserWithId(struct soap*, const struct __tns__blockUserWithId *);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out___tns__blockUserWithId(struct soap*, const char*, int, const struct __tns__blockUserWithId *, const char*);
+SOAP_FMAC3 struct __tns__blockUserWithId * SOAP_FMAC4 soap_in___tns__blockUserWithId(struct soap*, const char*, struct __tns__blockUserWithId *, const char*);
+
+#ifndef soap_write___tns__blockUserWithId
+#define soap_write___tns__blockUserWithId(soap, data) ( soap_begin_send(soap) || (ServerSoap::soap_serialize___tns__blockUserWithId(soap, data), 0) || ServerSoap::soap_put___tns__blockUserWithId(soap, data, "-tns:blockUserWithId", NULL) || soap_end_send(soap) )
+#endif
+
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_put___tns__blockUserWithId(struct soap*, const struct __tns__blockUserWithId *, const char*, const char*);
+
+#ifndef soap_read___tns__blockUserWithId
+#define soap_read___tns__blockUserWithId(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get___tns__blockUserWithId(soap, data, NULL, NULL) || soap_end_recv(soap) )
+#endif
+
+SOAP_FMAC3 struct __tns__blockUserWithId * SOAP_FMAC4 soap_get___tns__blockUserWithId(struct soap*, struct __tns__blockUserWithId *, const char*, const char*);
+
+#define soap_new___tns__blockUserWithId(soap, n) soap_instantiate___tns__blockUserWithId(soap, n, NULL, NULL, NULL)
+
+
+#define soap_delete___tns__blockUserWithId(soap, p) soap_delete(soap, p)
+
+SOAP_FMAC1 struct __tns__blockUserWithId * SOAP_FMAC2 soap_instantiate___tns__blockUserWithId(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__blockUserWithId(struct soap*, int, int, void*, size_t, const void*, size_t);
+
+#ifndef SOAP_TYPE_ServerSoap___tns__blockMediaAnnotationWithId
+#define SOAP_TYPE_ServerSoap___tns__blockMediaAnnotationWithId (100)
+#endif
+SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__blockMediaAnnotationWithId(struct soap*, struct __tns__blockMediaAnnotationWithId *);
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___tns__blockMediaAnnotationWithId(struct soap*, const struct __tns__blockMediaAnnotationWithId *);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out___tns__blockMediaAnnotationWithId(struct soap*, const char*, int, const struct __tns__blockMediaAnnotationWithId *, const char*);
+SOAP_FMAC3 struct __tns__blockMediaAnnotationWithId * SOAP_FMAC4 soap_in___tns__blockMediaAnnotationWithId(struct soap*, const char*, struct __tns__blockMediaAnnotationWithId *, const char*);
+
+#ifndef soap_write___tns__blockMediaAnnotationWithId
+#define soap_write___tns__blockMediaAnnotationWithId(soap, data) ( soap_begin_send(soap) || (ServerSoap::soap_serialize___tns__blockMediaAnnotationWithId(soap, data), 0) || ServerSoap::soap_put___tns__blockMediaAnnotationWithId(soap, data, "-tns:blockMediaAnnotationWithId", NULL) || soap_end_send(soap) )
+#endif
+
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_put___tns__blockMediaAnnotationWithId(struct soap*, const struct __tns__blockMediaAnnotationWithId *, const char*, const char*);
+
+#ifndef soap_read___tns__blockMediaAnnotationWithId
+#define soap_read___tns__blockMediaAnnotationWithId(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get___tns__blockMediaAnnotationWithId(soap, data, NULL, NULL) || soap_end_recv(soap) )
+#endif
+
+SOAP_FMAC3 struct __tns__blockMediaAnnotationWithId * SOAP_FMAC4 soap_get___tns__blockMediaAnnotationWithId(struct soap*, struct __tns__blockMediaAnnotationWithId *, const char*, const char*);
+
+#define soap_new___tns__blockMediaAnnotationWithId(soap, n) soap_instantiate___tns__blockMediaAnnotationWithId(soap, n, NULL, NULL, NULL)
+
+
+#define soap_delete___tns__blockMediaAnnotationWithId(soap, p) soap_delete(soap, p)
+
+SOAP_FMAC1 struct __tns__blockMediaAnnotationWithId * SOAP_FMAC2 soap_instantiate___tns__blockMediaAnnotationWithId(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__blockMediaAnnotationWithId(struct soap*, int, int, void*, size_t, const void*, size_t);
+
+#ifndef SOAP_TYPE_ServerSoap___tns__blockMediaAliasWithId
+#define SOAP_TYPE_ServerSoap___tns__blockMediaAliasWithId (96)
+#endif
+SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__blockMediaAliasWithId(struct soap*, struct __tns__blockMediaAliasWithId *);
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___tns__blockMediaAliasWithId(struct soap*, const struct __tns__blockMediaAliasWithId *);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out___tns__blockMediaAliasWithId(struct soap*, const char*, int, const struct __tns__blockMediaAliasWithId *, const char*);
+SOAP_FMAC3 struct __tns__blockMediaAliasWithId * SOAP_FMAC4 soap_in___tns__blockMediaAliasWithId(struct soap*, const char*, struct __tns__blockMediaAliasWithId *, const char*);
+
+#ifndef soap_write___tns__blockMediaAliasWithId
+#define soap_write___tns__blockMediaAliasWithId(soap, data) ( soap_begin_send(soap) || (ServerSoap::soap_serialize___tns__blockMediaAliasWithId(soap, data), 0) || ServerSoap::soap_put___tns__blockMediaAliasWithId(soap, data, "-tns:blockMediaAliasWithId", NULL) || soap_end_send(soap) )
+#endif
+
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_put___tns__blockMediaAliasWithId(struct soap*, const struct __tns__blockMediaAliasWithId *, const char*, const char*);
+
+#ifndef soap_read___tns__blockMediaAliasWithId
+#define soap_read___tns__blockMediaAliasWithId(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get___tns__blockMediaAliasWithId(soap, data, NULL, NULL) || soap_end_recv(soap) )
+#endif
+
+SOAP_FMAC3 struct __tns__blockMediaAliasWithId * SOAP_FMAC4 soap_get___tns__blockMediaAliasWithId(struct soap*, struct __tns__blockMediaAliasWithId *, const char*, const char*);
+
+#define soap_new___tns__blockMediaAliasWithId(soap, n) soap_instantiate___tns__blockMediaAliasWithId(soap, n, NULL, NULL, NULL)
+
+
+#define soap_delete___tns__blockMediaAliasWithId(soap, p) soap_delete(soap, p)
+
+SOAP_FMAC1 struct __tns__blockMediaAliasWithId * SOAP_FMAC2 soap_instantiate___tns__blockMediaAliasWithId(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__blockMediaAliasWithId(struct soap*, int, int, void*, size_t, const void*, size_t);
+
+#ifndef SOAP_TYPE_ServerSoap___tns__blessMediaTokenWithId
+#define SOAP_TYPE_ServerSoap___tns__blessMediaTokenWithId (92)
+#endif
+SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__blessMediaTokenWithId(struct soap*, struct __tns__blessMediaTokenWithId *);
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___tns__blessMediaTokenWithId(struct soap*, const struct __tns__blessMediaTokenWithId *);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out___tns__blessMediaTokenWithId(struct soap*, const char*, int, const struct __tns__blessMediaTokenWithId *, const char*);
+SOAP_FMAC3 struct __tns__blessMediaTokenWithId * SOAP_FMAC4 soap_in___tns__blessMediaTokenWithId(struct soap*, const char*, struct __tns__blessMediaTokenWithId *, const char*);
+
+#ifndef soap_write___tns__blessMediaTokenWithId
+#define soap_write___tns__blessMediaTokenWithId(soap, data) ( soap_begin_send(soap) || (ServerSoap::soap_serialize___tns__blessMediaTokenWithId(soap, data), 0) || ServerSoap::soap_put___tns__blessMediaTokenWithId(soap, data, "-tns:blessMediaTokenWithId", NULL) || soap_end_send(soap) )
+#endif
+
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_put___tns__blessMediaTokenWithId(struct soap*, const struct __tns__blessMediaTokenWithId *, const char*, const char*);
+
+#ifndef soap_read___tns__blessMediaTokenWithId
+#define soap_read___tns__blessMediaTokenWithId(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get___tns__blessMediaTokenWithId(soap, data, NULL, NULL) || soap_end_recv(soap) )
+#endif
+
+SOAP_FMAC3 struct __tns__blessMediaTokenWithId * SOAP_FMAC4 soap_get___tns__blessMediaTokenWithId(struct soap*, struct __tns__blessMediaTokenWithId *, const char*, const char*);
+
+#define soap_new___tns__blessMediaTokenWithId(soap, n) soap_instantiate___tns__blessMediaTokenWithId(soap, n, NULL, NULL, NULL)
+
+
+#define soap_delete___tns__blessMediaTokenWithId(soap, p) soap_delete(soap, p)
+
+SOAP_FMAC1 struct __tns__blessMediaTokenWithId * SOAP_FMAC2 soap_instantiate___tns__blessMediaTokenWithId(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__blessMediaTokenWithId(struct soap*, int, int, void*, size_t, const void*, size_t);
+
 #ifndef SOAP_TYPE_ServerSoap___tns__blessMediaAnnotationWithId
-#define SOAP_TYPE_ServerSoap___tns__blessMediaAnnotationWithId (110)
+#define SOAP_TYPE_ServerSoap___tns__blessMediaAnnotationWithId (88)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__blessMediaAnnotationWithId(struct soap*, struct __tns__blessMediaAnnotationWithId *);
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___tns__blessMediaAnnotationWithId(struct soap*, const struct __tns__blessMediaAnnotationWithId *);
@@ -3377,39 +2732,39 @@ SOAP_FMAC3 struct __tns__blessMediaAnnotationWithId * SOAP_FMAC4 soap_get___tns_
 SOAP_FMAC1 struct __tns__blessMediaAnnotationWithId * SOAP_FMAC2 soap_instantiate___tns__blessMediaAnnotationWithId(struct soap*, int, const char*, const char*, size_t*);
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__blessMediaAnnotationWithId(struct soap*, int, int, void*, size_t, const void*, size_t);
 
-#ifndef SOAP_TYPE_ServerSoap___tns__blessGameAnnotationWithId
-#define SOAP_TYPE_ServerSoap___tns__blessGameAnnotationWithId (106)
+#ifndef SOAP_TYPE_ServerSoap___tns__blessMediaAliasWithId
+#define SOAP_TYPE_ServerSoap___tns__blessMediaAliasWithId (84)
 #endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__blessGameAnnotationWithId(struct soap*, struct __tns__blessGameAnnotationWithId *);
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___tns__blessGameAnnotationWithId(struct soap*, const struct __tns__blessGameAnnotationWithId *);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out___tns__blessGameAnnotationWithId(struct soap*, const char*, int, const struct __tns__blessGameAnnotationWithId *, const char*);
-SOAP_FMAC3 struct __tns__blessGameAnnotationWithId * SOAP_FMAC4 soap_in___tns__blessGameAnnotationWithId(struct soap*, const char*, struct __tns__blessGameAnnotationWithId *, const char*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__blessMediaAliasWithId(struct soap*, struct __tns__blessMediaAliasWithId *);
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___tns__blessMediaAliasWithId(struct soap*, const struct __tns__blessMediaAliasWithId *);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out___tns__blessMediaAliasWithId(struct soap*, const char*, int, const struct __tns__blessMediaAliasWithId *, const char*);
+SOAP_FMAC3 struct __tns__blessMediaAliasWithId * SOAP_FMAC4 soap_in___tns__blessMediaAliasWithId(struct soap*, const char*, struct __tns__blessMediaAliasWithId *, const char*);
 
-#ifndef soap_write___tns__blessGameAnnotationWithId
-#define soap_write___tns__blessGameAnnotationWithId(soap, data) ( soap_begin_send(soap) || (ServerSoap::soap_serialize___tns__blessGameAnnotationWithId(soap, data), 0) || ServerSoap::soap_put___tns__blessGameAnnotationWithId(soap, data, "-tns:blessGameAnnotationWithId", NULL) || soap_end_send(soap) )
-#endif
-
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put___tns__blessGameAnnotationWithId(struct soap*, const struct __tns__blessGameAnnotationWithId *, const char*, const char*);
-
-#ifndef soap_read___tns__blessGameAnnotationWithId
-#define soap_read___tns__blessGameAnnotationWithId(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get___tns__blessGameAnnotationWithId(soap, data, NULL, NULL) || soap_end_recv(soap) )
+#ifndef soap_write___tns__blessMediaAliasWithId
+#define soap_write___tns__blessMediaAliasWithId(soap, data) ( soap_begin_send(soap) || (ServerSoap::soap_serialize___tns__blessMediaAliasWithId(soap, data), 0) || ServerSoap::soap_put___tns__blessMediaAliasWithId(soap, data, "-tns:blessMediaAliasWithId", NULL) || soap_end_send(soap) )
 #endif
 
-SOAP_FMAC3 struct __tns__blessGameAnnotationWithId * SOAP_FMAC4 soap_get___tns__blessGameAnnotationWithId(struct soap*, struct __tns__blessGameAnnotationWithId *, const char*, const char*);
 
-#define soap_new___tns__blessGameAnnotationWithId(soap, n) soap_instantiate___tns__blessGameAnnotationWithId(soap, n, NULL, NULL, NULL)
+SOAP_FMAC3 int SOAP_FMAC4 soap_put___tns__blessMediaAliasWithId(struct soap*, const struct __tns__blessMediaAliasWithId *, const char*, const char*);
+
+#ifndef soap_read___tns__blessMediaAliasWithId
+#define soap_read___tns__blessMediaAliasWithId(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get___tns__blessMediaAliasWithId(soap, data, NULL, NULL) || soap_end_recv(soap) )
+#endif
+
+SOAP_FMAC3 struct __tns__blessMediaAliasWithId * SOAP_FMAC4 soap_get___tns__blessMediaAliasWithId(struct soap*, struct __tns__blessMediaAliasWithId *, const char*, const char*);
+
+#define soap_new___tns__blessMediaAliasWithId(soap, n) soap_instantiate___tns__blessMediaAliasWithId(soap, n, NULL, NULL, NULL)
 
 
-#define soap_delete___tns__blessGameAnnotationWithId(soap, p) soap_delete(soap, p)
+#define soap_delete___tns__blessMediaAliasWithId(soap, p) soap_delete(soap, p)
 
-SOAP_FMAC1 struct __tns__blessGameAnnotationWithId * SOAP_FMAC2 soap_instantiate___tns__blessGameAnnotationWithId(struct soap*, int, const char*, const char*, size_t*);
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__blessGameAnnotationWithId(struct soap*, int, int, void*, size_t, const void*, size_t);
+SOAP_FMAC1 struct __tns__blessMediaAliasWithId * SOAP_FMAC2 soap_instantiate___tns__blessMediaAliasWithId(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__blessMediaAliasWithId(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef WITH_NOGLOBAL
 
 #ifndef SOAP_TYPE_ServerSoap_PointerToSOAP_ENV__Reason
-#define SOAP_TYPE_ServerSoap_PointerToSOAP_ENV__Reason (256)
+#define SOAP_TYPE_ServerSoap_PointerToSOAP_ENV__Reason (206)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerToSOAP_ENV__Reason(struct soap*, struct SOAP_ENV__Reason *const*);
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerToSOAP_ENV__Reason(struct soap*, const char *, int, struct SOAP_ENV__Reason *const*, const char *);
@@ -3432,7 +2787,7 @@ SOAP_FMAC3 struct SOAP_ENV__Reason ** SOAP_FMAC4 soap_get_PointerToSOAP_ENV__Rea
 #ifndef WITH_NOGLOBAL
 
 #ifndef SOAP_TYPE_ServerSoap_PointerToSOAP_ENV__Detail
-#define SOAP_TYPE_ServerSoap_PointerToSOAP_ENV__Detail (255)
+#define SOAP_TYPE_ServerSoap_PointerToSOAP_ENV__Detail (205)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerToSOAP_ENV__Detail(struct soap*, struct SOAP_ENV__Detail *const*);
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerToSOAP_ENV__Detail(struct soap*, const char *, int, struct SOAP_ENV__Detail *const*, const char *);
@@ -3455,7 +2810,7 @@ SOAP_FMAC3 struct SOAP_ENV__Detail ** SOAP_FMAC4 soap_get_PointerToSOAP_ENV__Det
 #ifndef WITH_NOGLOBAL
 
 #ifndef SOAP_TYPE_ServerSoap_PointerToSOAP_ENV__Code
-#define SOAP_TYPE_ServerSoap_PointerToSOAP_ENV__Code (249)
+#define SOAP_TYPE_ServerSoap_PointerToSOAP_ENV__Code (199)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerToSOAP_ENV__Code(struct soap*, struct SOAP_ENV__Code *const*);
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerToSOAP_ENV__Code(struct soap*, const char *, int, struct SOAP_ENV__Code *const*, const char *);
@@ -3476,7 +2831,7 @@ SOAP_FMAC3 struct SOAP_ENV__Code ** SOAP_FMAC4 soap_get_PointerToSOAP_ENV__Code(
 #endif
 
 #ifndef SOAP_TYPE_ServerSoap_PointerTotns__updateMediaAnnotationTextWithIdResponse
-#define SOAP_TYPE_ServerSoap_PointerTotns__updateMediaAnnotationTextWithIdResponse (244)
+#define SOAP_TYPE_ServerSoap_PointerTotns__updateMediaAnnotationTextWithIdResponse (194)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__updateMediaAnnotationTextWithIdResponse(struct soap*, tns__updateMediaAnnotationTextWithIdResponse *const*);
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__updateMediaAnnotationTextWithIdResponse(struct soap*, const char *, int, tns__updateMediaAnnotationTextWithIdResponse *const*, const char *);
@@ -3495,7 +2850,7 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__updateMediaAnnotationTextWithId
 SOAP_FMAC3 tns__updateMediaAnnotationTextWithIdResponse ** SOAP_FMAC4 soap_get_PointerTotns__updateMediaAnnotationTextWithIdResponse(struct soap*, tns__updateMediaAnnotationTextWithIdResponse **, const char*, const char*);
 
 #ifndef SOAP_TYPE_ServerSoap_PointerTotns__updateMediaAnnotationTextWithId
-#define SOAP_TYPE_ServerSoap_PointerTotns__updateMediaAnnotationTextWithId (243)
+#define SOAP_TYPE_ServerSoap_PointerTotns__updateMediaAnnotationTextWithId (193)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__updateMediaAnnotationTextWithId(struct soap*, tns__updateMediaAnnotationTextWithId *const*);
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__updateMediaAnnotationTextWithId(struct soap*, const char *, int, tns__updateMediaAnnotationTextWithId *const*, const char *);
@@ -3513,46 +2868,8 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__updateMediaAnnotationTextWithId
 
 SOAP_FMAC3 tns__updateMediaAnnotationTextWithId ** SOAP_FMAC4 soap_get_PointerTotns__updateMediaAnnotationTextWithId(struct soap*, tns__updateMediaAnnotationTextWithId **, const char*, const char*);
 
-#ifndef SOAP_TYPE_ServerSoap_PointerTotns__updateGameAnnotationTextWithIdResponse
-#define SOAP_TYPE_ServerSoap_PointerTotns__updateGameAnnotationTextWithIdResponse (240)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__updateGameAnnotationTextWithIdResponse(struct soap*, tns__updateGameAnnotationTextWithIdResponse *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__updateGameAnnotationTextWithIdResponse(struct soap*, const char *, int, tns__updateGameAnnotationTextWithIdResponse *const*, const char *);
-SOAP_FMAC3 tns__updateGameAnnotationTextWithIdResponse ** SOAP_FMAC4 soap_in_PointerTotns__updateGameAnnotationTextWithIdResponse(struct soap*, const char*, tns__updateGameAnnotationTextWithIdResponse **, const char*);
-
-#ifndef soap_write_PointerTotns__updateGameAnnotationTextWithIdResponse
-#define soap_write_PointerTotns__updateGameAnnotationTextWithIdResponse(soap, data) ( soap_begin_send(soap) || (ServerSoap::soap_serialize_PointerTotns__updateGameAnnotationTextWithIdResponse(soap, data), 0) || ServerSoap::soap_put_PointerTotns__updateGameAnnotationTextWithIdResponse(soap, data, "tns:updateGameAnnotationTextWithIdResponse", NULL) || soap_end_send(soap) )
-#endif
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__updateGameAnnotationTextWithIdResponse(struct soap*, tns__updateGameAnnotationTextWithIdResponse *const*, const char*, const char*);
-
-#ifndef soap_read_PointerTotns__updateGameAnnotationTextWithIdResponse
-#define soap_read_PointerTotns__updateGameAnnotationTextWithIdResponse(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_PointerTotns__updateGameAnnotationTextWithIdResponse(soap, data, NULL, NULL) || soap_end_recv(soap) )
-#endif
-
-SOAP_FMAC3 tns__updateGameAnnotationTextWithIdResponse ** SOAP_FMAC4 soap_get_PointerTotns__updateGameAnnotationTextWithIdResponse(struct soap*, tns__updateGameAnnotationTextWithIdResponse **, const char*, const char*);
-
-#ifndef SOAP_TYPE_ServerSoap_PointerTotns__updateGameAnnotationTextWithId
-#define SOAP_TYPE_ServerSoap_PointerTotns__updateGameAnnotationTextWithId (239)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__updateGameAnnotationTextWithId(struct soap*, tns__updateGameAnnotationTextWithId *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__updateGameAnnotationTextWithId(struct soap*, const char *, int, tns__updateGameAnnotationTextWithId *const*, const char *);
-SOAP_FMAC3 tns__updateGameAnnotationTextWithId ** SOAP_FMAC4 soap_in_PointerTotns__updateGameAnnotationTextWithId(struct soap*, const char*, tns__updateGameAnnotationTextWithId **, const char*);
-
-#ifndef soap_write_PointerTotns__updateGameAnnotationTextWithId
-#define soap_write_PointerTotns__updateGameAnnotationTextWithId(soap, data) ( soap_begin_send(soap) || (ServerSoap::soap_serialize_PointerTotns__updateGameAnnotationTextWithId(soap, data), 0) || ServerSoap::soap_put_PointerTotns__updateGameAnnotationTextWithId(soap, data, "tns:updateGameAnnotationTextWithId", NULL) || soap_end_send(soap) )
-#endif
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__updateGameAnnotationTextWithId(struct soap*, tns__updateGameAnnotationTextWithId *const*, const char*, const char*);
-
-#ifndef soap_read_PointerTotns__updateGameAnnotationTextWithId
-#define soap_read_PointerTotns__updateGameAnnotationTextWithId(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_PointerTotns__updateGameAnnotationTextWithId(soap, data, NULL, NULL) || soap_end_recv(soap) )
-#endif
-
-SOAP_FMAC3 tns__updateGameAnnotationTextWithId ** SOAP_FMAC4 soap_get_PointerTotns__updateGameAnnotationTextWithId(struct soap*, tns__updateGameAnnotationTextWithId **, const char*, const char*);
-
 #ifndef SOAP_TYPE_ServerSoap_PointerTotns__submitMediaTokenDigestResponse
-#define SOAP_TYPE_ServerSoap_PointerTotns__submitMediaTokenDigestResponse (236)
+#define SOAP_TYPE_ServerSoap_PointerTotns__submitMediaTokenDigestResponse (190)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__submitMediaTokenDigestResponse(struct soap*, tns__submitMediaTokenDigestResponse *const*);
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__submitMediaTokenDigestResponse(struct soap*, const char *, int, tns__submitMediaTokenDigestResponse *const*, const char *);
@@ -3571,7 +2888,7 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__submitMediaTokenDigestResponse(
 SOAP_FMAC3 tns__submitMediaTokenDigestResponse ** SOAP_FMAC4 soap_get_PointerTotns__submitMediaTokenDigestResponse(struct soap*, tns__submitMediaTokenDigestResponse **, const char*, const char*);
 
 #ifndef SOAP_TYPE_ServerSoap_PointerTotns__submitMediaTokenDigest
-#define SOAP_TYPE_ServerSoap_PointerTotns__submitMediaTokenDigest (235)
+#define SOAP_TYPE_ServerSoap_PointerTotns__submitMediaTokenDigest (189)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__submitMediaTokenDigest(struct soap*, tns__submitMediaTokenDigest *const*);
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__submitMediaTokenDigest(struct soap*, const char *, int, tns__submitMediaTokenDigest *const*, const char *);
@@ -3590,7 +2907,7 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__submitMediaTokenDigest(struct s
 SOAP_FMAC3 tns__submitMediaTokenDigest ** SOAP_FMAC4 soap_get_PointerTotns__submitMediaTokenDigest(struct soap*, tns__submitMediaTokenDigest **, const char*, const char*);
 
 #ifndef SOAP_TYPE_ServerSoap_PointerTotns__submitMediaTokenResponse
-#define SOAP_TYPE_ServerSoap_PointerTotns__submitMediaTokenResponse (232)
+#define SOAP_TYPE_ServerSoap_PointerTotns__submitMediaTokenResponse (186)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__submitMediaTokenResponse(struct soap*, tns__submitMediaTokenResponse *const*);
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__submitMediaTokenResponse(struct soap*, const char *, int, tns__submitMediaTokenResponse *const*, const char *);
@@ -3609,7 +2926,7 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__submitMediaTokenResponse(struct
 SOAP_FMAC3 tns__submitMediaTokenResponse ** SOAP_FMAC4 soap_get_PointerTotns__submitMediaTokenResponse(struct soap*, tns__submitMediaTokenResponse **, const char*, const char*);
 
 #ifndef SOAP_TYPE_ServerSoap_PointerTotns__submitMediaToken
-#define SOAP_TYPE_ServerSoap_PointerTotns__submitMediaToken (231)
+#define SOAP_TYPE_ServerSoap_PointerTotns__submitMediaToken (185)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__submitMediaToken(struct soap*, tns__submitMediaToken *const*);
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__submitMediaToken(struct soap*, const char *, int, tns__submitMediaToken *const*, const char *);
@@ -3628,7 +2945,7 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__submitMediaToken(struct soap*, 
 SOAP_FMAC3 tns__submitMediaToken ** SOAP_FMAC4 soap_get_PointerTotns__submitMediaToken(struct soap*, tns__submitMediaToken **, const char*, const char*);
 
 #ifndef SOAP_TYPE_ServerSoap_PointerTotns__submitMediaAnnotationTextWithTokenIdResponse
-#define SOAP_TYPE_ServerSoap_PointerTotns__submitMediaAnnotationTextWithTokenIdResponse (228)
+#define SOAP_TYPE_ServerSoap_PointerTotns__submitMediaAnnotationTextWithTokenIdResponse (182)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__submitMediaAnnotationTextWithTokenIdResponse(struct soap*, tns__submitMediaAnnotationTextWithTokenIdResponse *const*);
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__submitMediaAnnotationTextWithTokenIdResponse(struct soap*, const char *, int, tns__submitMediaAnnotationTextWithTokenIdResponse *const*, const char *);
@@ -3647,7 +2964,7 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__submitMediaAnnotationTextWithTo
 SOAP_FMAC3 tns__submitMediaAnnotationTextWithTokenIdResponse ** SOAP_FMAC4 soap_get_PointerTotns__submitMediaAnnotationTextWithTokenIdResponse(struct soap*, tns__submitMediaAnnotationTextWithTokenIdResponse **, const char*, const char*);
 
 #ifndef SOAP_TYPE_ServerSoap_PointerTotns__submitMediaAnnotationTextWithTokenId
-#define SOAP_TYPE_ServerSoap_PointerTotns__submitMediaAnnotationTextWithTokenId (227)
+#define SOAP_TYPE_ServerSoap_PointerTotns__submitMediaAnnotationTextWithTokenId (181)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__submitMediaAnnotationTextWithTokenId(struct soap*, tns__submitMediaAnnotationTextWithTokenId *const*);
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__submitMediaAnnotationTextWithTokenId(struct soap*, const char *, int, tns__submitMediaAnnotationTextWithTokenId *const*, const char *);
@@ -3666,7 +2983,7 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__submitMediaAnnotationTextWithTo
 SOAP_FMAC3 tns__submitMediaAnnotationTextWithTokenId ** SOAP_FMAC4 soap_get_PointerTotns__submitMediaAnnotationTextWithTokenId(struct soap*, tns__submitMediaAnnotationTextWithTokenId **, const char*, const char*);
 
 #ifndef SOAP_TYPE_ServerSoap_PointerTotns__submitMediaAnnotationTextAndTokenDigestResponse
-#define SOAP_TYPE_ServerSoap_PointerTotns__submitMediaAnnotationTextAndTokenDigestResponse (224)
+#define SOAP_TYPE_ServerSoap_PointerTotns__submitMediaAnnotationTextAndTokenDigestResponse (178)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__submitMediaAnnotationTextAndTokenDigestResponse(struct soap*, tns__submitMediaAnnotationTextAndTokenDigestResponse *const*);
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__submitMediaAnnotationTextAndTokenDigestResponse(struct soap*, const char *, int, tns__submitMediaAnnotationTextAndTokenDigestResponse *const*, const char *);
@@ -3685,7 +3002,7 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__submitMediaAnnotationTextAndTok
 SOAP_FMAC3 tns__submitMediaAnnotationTextAndTokenDigestResponse ** SOAP_FMAC4 soap_get_PointerTotns__submitMediaAnnotationTextAndTokenDigestResponse(struct soap*, tns__submitMediaAnnotationTextAndTokenDigestResponse **, const char*, const char*);
 
 #ifndef SOAP_TYPE_ServerSoap_PointerTotns__submitMediaAnnotationTextAndTokenDigest
-#define SOAP_TYPE_ServerSoap_PointerTotns__submitMediaAnnotationTextAndTokenDigest (223)
+#define SOAP_TYPE_ServerSoap_PointerTotns__submitMediaAnnotationTextAndTokenDigest (177)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__submitMediaAnnotationTextAndTokenDigest(struct soap*, tns__submitMediaAnnotationTextAndTokenDigest *const*);
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__submitMediaAnnotationTextAndTokenDigest(struct soap*, const char *, int, tns__submitMediaAnnotationTextAndTokenDigest *const*, const char *);
@@ -3704,7 +3021,7 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__submitMediaAnnotationTextAndTok
 SOAP_FMAC3 tns__submitMediaAnnotationTextAndTokenDigest ** SOAP_FMAC4 soap_get_PointerTotns__submitMediaAnnotationTextAndTokenDigest(struct soap*, tns__submitMediaAnnotationTextAndTokenDigest **, const char*, const char*);
 
 #ifndef SOAP_TYPE_ServerSoap_PointerTotns__submitMediaAnnotationResponse
-#define SOAP_TYPE_ServerSoap_PointerTotns__submitMediaAnnotationResponse (220)
+#define SOAP_TYPE_ServerSoap_PointerTotns__submitMediaAnnotationResponse (174)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__submitMediaAnnotationResponse(struct soap*, tns__submitMediaAnnotationResponse *const*);
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__submitMediaAnnotationResponse(struct soap*, const char *, int, tns__submitMediaAnnotationResponse *const*, const char *);
@@ -3723,7 +3040,7 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__submitMediaAnnotationResponse(s
 SOAP_FMAC3 tns__submitMediaAnnotationResponse ** SOAP_FMAC4 soap_get_PointerTotns__submitMediaAnnotationResponse(struct soap*, tns__submitMediaAnnotationResponse **, const char*, const char*);
 
 #ifndef SOAP_TYPE_ServerSoap_PointerTotns__submitMediaAnnotation
-#define SOAP_TYPE_ServerSoap_PointerTotns__submitMediaAnnotation (219)
+#define SOAP_TYPE_ServerSoap_PointerTotns__submitMediaAnnotation (173)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__submitMediaAnnotation(struct soap*, tns__submitMediaAnnotation *const*);
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__submitMediaAnnotation(struct soap*, const char *, int, tns__submitMediaAnnotation *const*, const char *);
@@ -3742,7 +3059,7 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__submitMediaAnnotation(struct so
 SOAP_FMAC3 tns__submitMediaAnnotation ** SOAP_FMAC4 soap_get_PointerTotns__submitMediaAnnotation(struct soap*, tns__submitMediaAnnotation **, const char*, const char*);
 
 #ifndef SOAP_TYPE_ServerSoap_PointerTotns__submitMediaAliasTextWithTokenIdResponse
-#define SOAP_TYPE_ServerSoap_PointerTotns__submitMediaAliasTextWithTokenIdResponse (216)
+#define SOAP_TYPE_ServerSoap_PointerTotns__submitMediaAliasTextWithTokenIdResponse (170)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__submitMediaAliasTextWithTokenIdResponse(struct soap*, tns__submitMediaAliasTextWithTokenIdResponse *const*);
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__submitMediaAliasTextWithTokenIdResponse(struct soap*, const char *, int, tns__submitMediaAliasTextWithTokenIdResponse *const*, const char *);
@@ -3761,7 +3078,7 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__submitMediaAliasTextWithTokenId
 SOAP_FMAC3 tns__submitMediaAliasTextWithTokenIdResponse ** SOAP_FMAC4 soap_get_PointerTotns__submitMediaAliasTextWithTokenIdResponse(struct soap*, tns__submitMediaAliasTextWithTokenIdResponse **, const char*, const char*);
 
 #ifndef SOAP_TYPE_ServerSoap_PointerTotns__submitMediaAliasTextWithTokenId
-#define SOAP_TYPE_ServerSoap_PointerTotns__submitMediaAliasTextWithTokenId (215)
+#define SOAP_TYPE_ServerSoap_PointerTotns__submitMediaAliasTextWithTokenId (169)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__submitMediaAliasTextWithTokenId(struct soap*, tns__submitMediaAliasTextWithTokenId *const*);
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__submitMediaAliasTextWithTokenId(struct soap*, const char *, int, tns__submitMediaAliasTextWithTokenId *const*, const char *);
@@ -3780,7 +3097,7 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__submitMediaAliasTextWithTokenId
 SOAP_FMAC3 tns__submitMediaAliasTextWithTokenId ** SOAP_FMAC4 soap_get_PointerTotns__submitMediaAliasTextWithTokenId(struct soap*, tns__submitMediaAliasTextWithTokenId **, const char*, const char*);
 
 #ifndef SOAP_TYPE_ServerSoap_PointerTotns__submitMediaAliasTextAndTokenDigestResponse
-#define SOAP_TYPE_ServerSoap_PointerTotns__submitMediaAliasTextAndTokenDigestResponse (212)
+#define SOAP_TYPE_ServerSoap_PointerTotns__submitMediaAliasTextAndTokenDigestResponse (166)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__submitMediaAliasTextAndTokenDigestResponse(struct soap*, tns__submitMediaAliasTextAndTokenDigestResponse *const*);
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__submitMediaAliasTextAndTokenDigestResponse(struct soap*, const char *, int, tns__submitMediaAliasTextAndTokenDigestResponse *const*, const char *);
@@ -3799,7 +3116,7 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__submitMediaAliasTextAndTokenDig
 SOAP_FMAC3 tns__submitMediaAliasTextAndTokenDigestResponse ** SOAP_FMAC4 soap_get_PointerTotns__submitMediaAliasTextAndTokenDigestResponse(struct soap*, tns__submitMediaAliasTextAndTokenDigestResponse **, const char*, const char*);
 
 #ifndef SOAP_TYPE_ServerSoap_PointerTotns__submitMediaAliasTextAndTokenDigest
-#define SOAP_TYPE_ServerSoap_PointerTotns__submitMediaAliasTextAndTokenDigest (211)
+#define SOAP_TYPE_ServerSoap_PointerTotns__submitMediaAliasTextAndTokenDigest (165)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__submitMediaAliasTextAndTokenDigest(struct soap*, tns__submitMediaAliasTextAndTokenDigest *const*);
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__submitMediaAliasTextAndTokenDigest(struct soap*, const char *, int, tns__submitMediaAliasTextAndTokenDigest *const*, const char *);
@@ -3818,7 +3135,7 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__submitMediaAliasTextAndTokenDig
 SOAP_FMAC3 tns__submitMediaAliasTextAndTokenDigest ** SOAP_FMAC4 soap_get_PointerTotns__submitMediaAliasTextAndTokenDigest(struct soap*, tns__submitMediaAliasTextAndTokenDigest **, const char*, const char*);
 
 #ifndef SOAP_TYPE_ServerSoap_PointerTotns__submitMediaAliasResponse
-#define SOAP_TYPE_ServerSoap_PointerTotns__submitMediaAliasResponse (208)
+#define SOAP_TYPE_ServerSoap_PointerTotns__submitMediaAliasResponse (162)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__submitMediaAliasResponse(struct soap*, tns__submitMediaAliasResponse *const*);
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__submitMediaAliasResponse(struct soap*, const char *, int, tns__submitMediaAliasResponse *const*, const char *);
@@ -3837,7 +3154,7 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__submitMediaAliasResponse(struct
 SOAP_FMAC3 tns__submitMediaAliasResponse ** SOAP_FMAC4 soap_get_PointerTotns__submitMediaAliasResponse(struct soap*, tns__submitMediaAliasResponse **, const char*, const char*);
 
 #ifndef SOAP_TYPE_ServerSoap_PointerTotns__submitMediaAlias
-#define SOAP_TYPE_ServerSoap_PointerTotns__submitMediaAlias (207)
+#define SOAP_TYPE_ServerSoap_PointerTotns__submitMediaAlias (161)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__submitMediaAlias(struct soap*, tns__submitMediaAlias *const*);
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__submitMediaAlias(struct soap*, const char *, int, tns__submitMediaAlias *const*, const char *);
@@ -3855,312 +3172,8 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__submitMediaAlias(struct soap*, 
 
 SOAP_FMAC3 tns__submitMediaAlias ** SOAP_FMAC4 soap_get_PointerTotns__submitMediaAlias(struct soap*, tns__submitMediaAlias **, const char*, const char*);
 
-#ifndef SOAP_TYPE_ServerSoap_PointerTotns__submitGameTokenDigestResponse
-#define SOAP_TYPE_ServerSoap_PointerTotns__submitGameTokenDigestResponse (204)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__submitGameTokenDigestResponse(struct soap*, tns__submitGameTokenDigestResponse *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__submitGameTokenDigestResponse(struct soap*, const char *, int, tns__submitGameTokenDigestResponse *const*, const char *);
-SOAP_FMAC3 tns__submitGameTokenDigestResponse ** SOAP_FMAC4 soap_in_PointerTotns__submitGameTokenDigestResponse(struct soap*, const char*, tns__submitGameTokenDigestResponse **, const char*);
-
-#ifndef soap_write_PointerTotns__submitGameTokenDigestResponse
-#define soap_write_PointerTotns__submitGameTokenDigestResponse(soap, data) ( soap_begin_send(soap) || (ServerSoap::soap_serialize_PointerTotns__submitGameTokenDigestResponse(soap, data), 0) || ServerSoap::soap_put_PointerTotns__submitGameTokenDigestResponse(soap, data, "tns:submitGameTokenDigestResponse", NULL) || soap_end_send(soap) )
-#endif
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__submitGameTokenDigestResponse(struct soap*, tns__submitGameTokenDigestResponse *const*, const char*, const char*);
-
-#ifndef soap_read_PointerTotns__submitGameTokenDigestResponse
-#define soap_read_PointerTotns__submitGameTokenDigestResponse(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_PointerTotns__submitGameTokenDigestResponse(soap, data, NULL, NULL) || soap_end_recv(soap) )
-#endif
-
-SOAP_FMAC3 tns__submitGameTokenDigestResponse ** SOAP_FMAC4 soap_get_PointerTotns__submitGameTokenDigestResponse(struct soap*, tns__submitGameTokenDigestResponse **, const char*, const char*);
-
-#ifndef SOAP_TYPE_ServerSoap_PointerTotns__submitGameTokenDigest
-#define SOAP_TYPE_ServerSoap_PointerTotns__submitGameTokenDigest (203)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__submitGameTokenDigest(struct soap*, tns__submitGameTokenDigest *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__submitGameTokenDigest(struct soap*, const char *, int, tns__submitGameTokenDigest *const*, const char *);
-SOAP_FMAC3 tns__submitGameTokenDigest ** SOAP_FMAC4 soap_in_PointerTotns__submitGameTokenDigest(struct soap*, const char*, tns__submitGameTokenDigest **, const char*);
-
-#ifndef soap_write_PointerTotns__submitGameTokenDigest
-#define soap_write_PointerTotns__submitGameTokenDigest(soap, data) ( soap_begin_send(soap) || (ServerSoap::soap_serialize_PointerTotns__submitGameTokenDigest(soap, data), 0) || ServerSoap::soap_put_PointerTotns__submitGameTokenDigest(soap, data, "tns:submitGameTokenDigest", NULL) || soap_end_send(soap) )
-#endif
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__submitGameTokenDigest(struct soap*, tns__submitGameTokenDigest *const*, const char*, const char*);
-
-#ifndef soap_read_PointerTotns__submitGameTokenDigest
-#define soap_read_PointerTotns__submitGameTokenDigest(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_PointerTotns__submitGameTokenDigest(soap, data, NULL, NULL) || soap_end_recv(soap) )
-#endif
-
-SOAP_FMAC3 tns__submitGameTokenDigest ** SOAP_FMAC4 soap_get_PointerTotns__submitGameTokenDigest(struct soap*, tns__submitGameTokenDigest **, const char*, const char*);
-
-#ifndef SOAP_TYPE_ServerSoap_PointerTotns__submitGameTokenResponse
-#define SOAP_TYPE_ServerSoap_PointerTotns__submitGameTokenResponse (200)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__submitGameTokenResponse(struct soap*, tns__submitGameTokenResponse *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__submitGameTokenResponse(struct soap*, const char *, int, tns__submitGameTokenResponse *const*, const char *);
-SOAP_FMAC3 tns__submitGameTokenResponse ** SOAP_FMAC4 soap_in_PointerTotns__submitGameTokenResponse(struct soap*, const char*, tns__submitGameTokenResponse **, const char*);
-
-#ifndef soap_write_PointerTotns__submitGameTokenResponse
-#define soap_write_PointerTotns__submitGameTokenResponse(soap, data) ( soap_begin_send(soap) || (ServerSoap::soap_serialize_PointerTotns__submitGameTokenResponse(soap, data), 0) || ServerSoap::soap_put_PointerTotns__submitGameTokenResponse(soap, data, "tns:submitGameTokenResponse", NULL) || soap_end_send(soap) )
-#endif
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__submitGameTokenResponse(struct soap*, tns__submitGameTokenResponse *const*, const char*, const char*);
-
-#ifndef soap_read_PointerTotns__submitGameTokenResponse
-#define soap_read_PointerTotns__submitGameTokenResponse(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_PointerTotns__submitGameTokenResponse(soap, data, NULL, NULL) || soap_end_recv(soap) )
-#endif
-
-SOAP_FMAC3 tns__submitGameTokenResponse ** SOAP_FMAC4 soap_get_PointerTotns__submitGameTokenResponse(struct soap*, tns__submitGameTokenResponse **, const char*, const char*);
-
-#ifndef SOAP_TYPE_ServerSoap_PointerTotns__submitGameToken
-#define SOAP_TYPE_ServerSoap_PointerTotns__submitGameToken (199)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__submitGameToken(struct soap*, tns__submitGameToken *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__submitGameToken(struct soap*, const char *, int, tns__submitGameToken *const*, const char *);
-SOAP_FMAC3 tns__submitGameToken ** SOAP_FMAC4 soap_in_PointerTotns__submitGameToken(struct soap*, const char*, tns__submitGameToken **, const char*);
-
-#ifndef soap_write_PointerTotns__submitGameToken
-#define soap_write_PointerTotns__submitGameToken(soap, data) ( soap_begin_send(soap) || (ServerSoap::soap_serialize_PointerTotns__submitGameToken(soap, data), 0) || ServerSoap::soap_put_PointerTotns__submitGameToken(soap, data, "tns:submitGameToken", NULL) || soap_end_send(soap) )
-#endif
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__submitGameToken(struct soap*, tns__submitGameToken *const*, const char*, const char*);
-
-#ifndef soap_read_PointerTotns__submitGameToken
-#define soap_read_PointerTotns__submitGameToken(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_PointerTotns__submitGameToken(soap, data, NULL, NULL) || soap_end_recv(soap) )
-#endif
-
-SOAP_FMAC3 tns__submitGameToken ** SOAP_FMAC4 soap_get_PointerTotns__submitGameToken(struct soap*, tns__submitGameToken **, const char*, const char*);
-
-#ifndef SOAP_TYPE_ServerSoap_PointerTotns__submitGameAnnotationTextWithTokenIdResponse
-#define SOAP_TYPE_ServerSoap_PointerTotns__submitGameAnnotationTextWithTokenIdResponse (196)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__submitGameAnnotationTextWithTokenIdResponse(struct soap*, tns__submitGameAnnotationTextWithTokenIdResponse *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__submitGameAnnotationTextWithTokenIdResponse(struct soap*, const char *, int, tns__submitGameAnnotationTextWithTokenIdResponse *const*, const char *);
-SOAP_FMAC3 tns__submitGameAnnotationTextWithTokenIdResponse ** SOAP_FMAC4 soap_in_PointerTotns__submitGameAnnotationTextWithTokenIdResponse(struct soap*, const char*, tns__submitGameAnnotationTextWithTokenIdResponse **, const char*);
-
-#ifndef soap_write_PointerTotns__submitGameAnnotationTextWithTokenIdResponse
-#define soap_write_PointerTotns__submitGameAnnotationTextWithTokenIdResponse(soap, data) ( soap_begin_send(soap) || (ServerSoap::soap_serialize_PointerTotns__submitGameAnnotationTextWithTokenIdResponse(soap, data), 0) || ServerSoap::soap_put_PointerTotns__submitGameAnnotationTextWithTokenIdResponse(soap, data, "tns:submitGameAnnotationTextWithTokenIdResponse", NULL) || soap_end_send(soap) )
-#endif
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__submitGameAnnotationTextWithTokenIdResponse(struct soap*, tns__submitGameAnnotationTextWithTokenIdResponse *const*, const char*, const char*);
-
-#ifndef soap_read_PointerTotns__submitGameAnnotationTextWithTokenIdResponse
-#define soap_read_PointerTotns__submitGameAnnotationTextWithTokenIdResponse(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_PointerTotns__submitGameAnnotationTextWithTokenIdResponse(soap, data, NULL, NULL) || soap_end_recv(soap) )
-#endif
-
-SOAP_FMAC3 tns__submitGameAnnotationTextWithTokenIdResponse ** SOAP_FMAC4 soap_get_PointerTotns__submitGameAnnotationTextWithTokenIdResponse(struct soap*, tns__submitGameAnnotationTextWithTokenIdResponse **, const char*, const char*);
-
-#ifndef SOAP_TYPE_ServerSoap_PointerTotns__submitGameAnnotationTextWithTokenId
-#define SOAP_TYPE_ServerSoap_PointerTotns__submitGameAnnotationTextWithTokenId (195)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__submitGameAnnotationTextWithTokenId(struct soap*, tns__submitGameAnnotationTextWithTokenId *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__submitGameAnnotationTextWithTokenId(struct soap*, const char *, int, tns__submitGameAnnotationTextWithTokenId *const*, const char *);
-SOAP_FMAC3 tns__submitGameAnnotationTextWithTokenId ** SOAP_FMAC4 soap_in_PointerTotns__submitGameAnnotationTextWithTokenId(struct soap*, const char*, tns__submitGameAnnotationTextWithTokenId **, const char*);
-
-#ifndef soap_write_PointerTotns__submitGameAnnotationTextWithTokenId
-#define soap_write_PointerTotns__submitGameAnnotationTextWithTokenId(soap, data) ( soap_begin_send(soap) || (ServerSoap::soap_serialize_PointerTotns__submitGameAnnotationTextWithTokenId(soap, data), 0) || ServerSoap::soap_put_PointerTotns__submitGameAnnotationTextWithTokenId(soap, data, "tns:submitGameAnnotationTextWithTokenId", NULL) || soap_end_send(soap) )
-#endif
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__submitGameAnnotationTextWithTokenId(struct soap*, tns__submitGameAnnotationTextWithTokenId *const*, const char*, const char*);
-
-#ifndef soap_read_PointerTotns__submitGameAnnotationTextWithTokenId
-#define soap_read_PointerTotns__submitGameAnnotationTextWithTokenId(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_PointerTotns__submitGameAnnotationTextWithTokenId(soap, data, NULL, NULL) || soap_end_recv(soap) )
-#endif
-
-SOAP_FMAC3 tns__submitGameAnnotationTextWithTokenId ** SOAP_FMAC4 soap_get_PointerTotns__submitGameAnnotationTextWithTokenId(struct soap*, tns__submitGameAnnotationTextWithTokenId **, const char*, const char*);
-
-#ifndef SOAP_TYPE_ServerSoap_PointerTotns__submitGameAnnotationTextAndTokenDigestResponse
-#define SOAP_TYPE_ServerSoap_PointerTotns__submitGameAnnotationTextAndTokenDigestResponse (192)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__submitGameAnnotationTextAndTokenDigestResponse(struct soap*, tns__submitGameAnnotationTextAndTokenDigestResponse *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__submitGameAnnotationTextAndTokenDigestResponse(struct soap*, const char *, int, tns__submitGameAnnotationTextAndTokenDigestResponse *const*, const char *);
-SOAP_FMAC3 tns__submitGameAnnotationTextAndTokenDigestResponse ** SOAP_FMAC4 soap_in_PointerTotns__submitGameAnnotationTextAndTokenDigestResponse(struct soap*, const char*, tns__submitGameAnnotationTextAndTokenDigestResponse **, const char*);
-
-#ifndef soap_write_PointerTotns__submitGameAnnotationTextAndTokenDigestResponse
-#define soap_write_PointerTotns__submitGameAnnotationTextAndTokenDigestResponse(soap, data) ( soap_begin_send(soap) || (ServerSoap::soap_serialize_PointerTotns__submitGameAnnotationTextAndTokenDigestResponse(soap, data), 0) || ServerSoap::soap_put_PointerTotns__submitGameAnnotationTextAndTokenDigestResponse(soap, data, "tns:submitGameAnnotationTextAndTokenDigestResponse", NULL) || soap_end_send(soap) )
-#endif
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__submitGameAnnotationTextAndTokenDigestResponse(struct soap*, tns__submitGameAnnotationTextAndTokenDigestResponse *const*, const char*, const char*);
-
-#ifndef soap_read_PointerTotns__submitGameAnnotationTextAndTokenDigestResponse
-#define soap_read_PointerTotns__submitGameAnnotationTextAndTokenDigestResponse(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_PointerTotns__submitGameAnnotationTextAndTokenDigestResponse(soap, data, NULL, NULL) || soap_end_recv(soap) )
-#endif
-
-SOAP_FMAC3 tns__submitGameAnnotationTextAndTokenDigestResponse ** SOAP_FMAC4 soap_get_PointerTotns__submitGameAnnotationTextAndTokenDigestResponse(struct soap*, tns__submitGameAnnotationTextAndTokenDigestResponse **, const char*, const char*);
-
-#ifndef SOAP_TYPE_ServerSoap_PointerTotns__submitGameAnnotationTextAndTokenDigest
-#define SOAP_TYPE_ServerSoap_PointerTotns__submitGameAnnotationTextAndTokenDigest (191)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__submitGameAnnotationTextAndTokenDigest(struct soap*, tns__submitGameAnnotationTextAndTokenDigest *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__submitGameAnnotationTextAndTokenDigest(struct soap*, const char *, int, tns__submitGameAnnotationTextAndTokenDigest *const*, const char *);
-SOAP_FMAC3 tns__submitGameAnnotationTextAndTokenDigest ** SOAP_FMAC4 soap_in_PointerTotns__submitGameAnnotationTextAndTokenDigest(struct soap*, const char*, tns__submitGameAnnotationTextAndTokenDigest **, const char*);
-
-#ifndef soap_write_PointerTotns__submitGameAnnotationTextAndTokenDigest
-#define soap_write_PointerTotns__submitGameAnnotationTextAndTokenDigest(soap, data) ( soap_begin_send(soap) || (ServerSoap::soap_serialize_PointerTotns__submitGameAnnotationTextAndTokenDigest(soap, data), 0) || ServerSoap::soap_put_PointerTotns__submitGameAnnotationTextAndTokenDigest(soap, data, "tns:submitGameAnnotationTextAndTokenDigest", NULL) || soap_end_send(soap) )
-#endif
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__submitGameAnnotationTextAndTokenDigest(struct soap*, tns__submitGameAnnotationTextAndTokenDigest *const*, const char*, const char*);
-
-#ifndef soap_read_PointerTotns__submitGameAnnotationTextAndTokenDigest
-#define soap_read_PointerTotns__submitGameAnnotationTextAndTokenDigest(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_PointerTotns__submitGameAnnotationTextAndTokenDigest(soap, data, NULL, NULL) || soap_end_recv(soap) )
-#endif
-
-SOAP_FMAC3 tns__submitGameAnnotationTextAndTokenDigest ** SOAP_FMAC4 soap_get_PointerTotns__submitGameAnnotationTextAndTokenDigest(struct soap*, tns__submitGameAnnotationTextAndTokenDigest **, const char*, const char*);
-
-#ifndef SOAP_TYPE_ServerSoap_PointerTotns__submitGameAnnotationResponse
-#define SOAP_TYPE_ServerSoap_PointerTotns__submitGameAnnotationResponse (188)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__submitGameAnnotationResponse(struct soap*, tns__submitGameAnnotationResponse *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__submitGameAnnotationResponse(struct soap*, const char *, int, tns__submitGameAnnotationResponse *const*, const char *);
-SOAP_FMAC3 tns__submitGameAnnotationResponse ** SOAP_FMAC4 soap_in_PointerTotns__submitGameAnnotationResponse(struct soap*, const char*, tns__submitGameAnnotationResponse **, const char*);
-
-#ifndef soap_write_PointerTotns__submitGameAnnotationResponse
-#define soap_write_PointerTotns__submitGameAnnotationResponse(soap, data) ( soap_begin_send(soap) || (ServerSoap::soap_serialize_PointerTotns__submitGameAnnotationResponse(soap, data), 0) || ServerSoap::soap_put_PointerTotns__submitGameAnnotationResponse(soap, data, "tns:submitGameAnnotationResponse", NULL) || soap_end_send(soap) )
-#endif
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__submitGameAnnotationResponse(struct soap*, tns__submitGameAnnotationResponse *const*, const char*, const char*);
-
-#ifndef soap_read_PointerTotns__submitGameAnnotationResponse
-#define soap_read_PointerTotns__submitGameAnnotationResponse(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_PointerTotns__submitGameAnnotationResponse(soap, data, NULL, NULL) || soap_end_recv(soap) )
-#endif
-
-SOAP_FMAC3 tns__submitGameAnnotationResponse ** SOAP_FMAC4 soap_get_PointerTotns__submitGameAnnotationResponse(struct soap*, tns__submitGameAnnotationResponse **, const char*, const char*);
-
-#ifndef SOAP_TYPE_ServerSoap_PointerTotns__submitGameAnnotation
-#define SOAP_TYPE_ServerSoap_PointerTotns__submitGameAnnotation (187)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__submitGameAnnotation(struct soap*, tns__submitGameAnnotation *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__submitGameAnnotation(struct soap*, const char *, int, tns__submitGameAnnotation *const*, const char *);
-SOAP_FMAC3 tns__submitGameAnnotation ** SOAP_FMAC4 soap_in_PointerTotns__submitGameAnnotation(struct soap*, const char*, tns__submitGameAnnotation **, const char*);
-
-#ifndef soap_write_PointerTotns__submitGameAnnotation
-#define soap_write_PointerTotns__submitGameAnnotation(soap, data) ( soap_begin_send(soap) || (ServerSoap::soap_serialize_PointerTotns__submitGameAnnotation(soap, data), 0) || ServerSoap::soap_put_PointerTotns__submitGameAnnotation(soap, data, "tns:submitGameAnnotation", NULL) || soap_end_send(soap) )
-#endif
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__submitGameAnnotation(struct soap*, tns__submitGameAnnotation *const*, const char*, const char*);
-
-#ifndef soap_read_PointerTotns__submitGameAnnotation
-#define soap_read_PointerTotns__submitGameAnnotation(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_PointerTotns__submitGameAnnotation(soap, data, NULL, NULL) || soap_end_recv(soap) )
-#endif
-
-SOAP_FMAC3 tns__submitGameAnnotation ** SOAP_FMAC4 soap_get_PointerTotns__submitGameAnnotation(struct soap*, tns__submitGameAnnotation **, const char*, const char*);
-
-#ifndef SOAP_TYPE_ServerSoap_PointerTotns__submitGameAliasTextWithTokenIdResponse
-#define SOAP_TYPE_ServerSoap_PointerTotns__submitGameAliasTextWithTokenIdResponse (184)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__submitGameAliasTextWithTokenIdResponse(struct soap*, tns__submitGameAliasTextWithTokenIdResponse *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__submitGameAliasTextWithTokenIdResponse(struct soap*, const char *, int, tns__submitGameAliasTextWithTokenIdResponse *const*, const char *);
-SOAP_FMAC3 tns__submitGameAliasTextWithTokenIdResponse ** SOAP_FMAC4 soap_in_PointerTotns__submitGameAliasTextWithTokenIdResponse(struct soap*, const char*, tns__submitGameAliasTextWithTokenIdResponse **, const char*);
-
-#ifndef soap_write_PointerTotns__submitGameAliasTextWithTokenIdResponse
-#define soap_write_PointerTotns__submitGameAliasTextWithTokenIdResponse(soap, data) ( soap_begin_send(soap) || (ServerSoap::soap_serialize_PointerTotns__submitGameAliasTextWithTokenIdResponse(soap, data), 0) || ServerSoap::soap_put_PointerTotns__submitGameAliasTextWithTokenIdResponse(soap, data, "tns:submitGameAliasTextWithTokenIdResponse", NULL) || soap_end_send(soap) )
-#endif
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__submitGameAliasTextWithTokenIdResponse(struct soap*, tns__submitGameAliasTextWithTokenIdResponse *const*, const char*, const char*);
-
-#ifndef soap_read_PointerTotns__submitGameAliasTextWithTokenIdResponse
-#define soap_read_PointerTotns__submitGameAliasTextWithTokenIdResponse(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_PointerTotns__submitGameAliasTextWithTokenIdResponse(soap, data, NULL, NULL) || soap_end_recv(soap) )
-#endif
-
-SOAP_FMAC3 tns__submitGameAliasTextWithTokenIdResponse ** SOAP_FMAC4 soap_get_PointerTotns__submitGameAliasTextWithTokenIdResponse(struct soap*, tns__submitGameAliasTextWithTokenIdResponse **, const char*, const char*);
-
-#ifndef SOAP_TYPE_ServerSoap_PointerTotns__submitGameAliasTextWithTokenId
-#define SOAP_TYPE_ServerSoap_PointerTotns__submitGameAliasTextWithTokenId (183)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__submitGameAliasTextWithTokenId(struct soap*, tns__submitGameAliasTextWithTokenId *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__submitGameAliasTextWithTokenId(struct soap*, const char *, int, tns__submitGameAliasTextWithTokenId *const*, const char *);
-SOAP_FMAC3 tns__submitGameAliasTextWithTokenId ** SOAP_FMAC4 soap_in_PointerTotns__submitGameAliasTextWithTokenId(struct soap*, const char*, tns__submitGameAliasTextWithTokenId **, const char*);
-
-#ifndef soap_write_PointerTotns__submitGameAliasTextWithTokenId
-#define soap_write_PointerTotns__submitGameAliasTextWithTokenId(soap, data) ( soap_begin_send(soap) || (ServerSoap::soap_serialize_PointerTotns__submitGameAliasTextWithTokenId(soap, data), 0) || ServerSoap::soap_put_PointerTotns__submitGameAliasTextWithTokenId(soap, data, "tns:submitGameAliasTextWithTokenId", NULL) || soap_end_send(soap) )
-#endif
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__submitGameAliasTextWithTokenId(struct soap*, tns__submitGameAliasTextWithTokenId *const*, const char*, const char*);
-
-#ifndef soap_read_PointerTotns__submitGameAliasTextWithTokenId
-#define soap_read_PointerTotns__submitGameAliasTextWithTokenId(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_PointerTotns__submitGameAliasTextWithTokenId(soap, data, NULL, NULL) || soap_end_recv(soap) )
-#endif
-
-SOAP_FMAC3 tns__submitGameAliasTextWithTokenId ** SOAP_FMAC4 soap_get_PointerTotns__submitGameAliasTextWithTokenId(struct soap*, tns__submitGameAliasTextWithTokenId **, const char*, const char*);
-
-#ifndef SOAP_TYPE_ServerSoap_PointerTotns__submitGameAliasTextAndTokenDigestResponse
-#define SOAP_TYPE_ServerSoap_PointerTotns__submitGameAliasTextAndTokenDigestResponse (180)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__submitGameAliasTextAndTokenDigestResponse(struct soap*, tns__submitGameAliasTextAndTokenDigestResponse *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__submitGameAliasTextAndTokenDigestResponse(struct soap*, const char *, int, tns__submitGameAliasTextAndTokenDigestResponse *const*, const char *);
-SOAP_FMAC3 tns__submitGameAliasTextAndTokenDigestResponse ** SOAP_FMAC4 soap_in_PointerTotns__submitGameAliasTextAndTokenDigestResponse(struct soap*, const char*, tns__submitGameAliasTextAndTokenDigestResponse **, const char*);
-
-#ifndef soap_write_PointerTotns__submitGameAliasTextAndTokenDigestResponse
-#define soap_write_PointerTotns__submitGameAliasTextAndTokenDigestResponse(soap, data) ( soap_begin_send(soap) || (ServerSoap::soap_serialize_PointerTotns__submitGameAliasTextAndTokenDigestResponse(soap, data), 0) || ServerSoap::soap_put_PointerTotns__submitGameAliasTextAndTokenDigestResponse(soap, data, "tns:submitGameAliasTextAndTokenDigestResponse", NULL) || soap_end_send(soap) )
-#endif
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__submitGameAliasTextAndTokenDigestResponse(struct soap*, tns__submitGameAliasTextAndTokenDigestResponse *const*, const char*, const char*);
-
-#ifndef soap_read_PointerTotns__submitGameAliasTextAndTokenDigestResponse
-#define soap_read_PointerTotns__submitGameAliasTextAndTokenDigestResponse(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_PointerTotns__submitGameAliasTextAndTokenDigestResponse(soap, data, NULL, NULL) || soap_end_recv(soap) )
-#endif
-
-SOAP_FMAC3 tns__submitGameAliasTextAndTokenDigestResponse ** SOAP_FMAC4 soap_get_PointerTotns__submitGameAliasTextAndTokenDigestResponse(struct soap*, tns__submitGameAliasTextAndTokenDigestResponse **, const char*, const char*);
-
-#ifndef SOAP_TYPE_ServerSoap_PointerTotns__submitGameAliasTextAndTokenDigest
-#define SOAP_TYPE_ServerSoap_PointerTotns__submitGameAliasTextAndTokenDigest (179)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__submitGameAliasTextAndTokenDigest(struct soap*, tns__submitGameAliasTextAndTokenDigest *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__submitGameAliasTextAndTokenDigest(struct soap*, const char *, int, tns__submitGameAliasTextAndTokenDigest *const*, const char *);
-SOAP_FMAC3 tns__submitGameAliasTextAndTokenDigest ** SOAP_FMAC4 soap_in_PointerTotns__submitGameAliasTextAndTokenDigest(struct soap*, const char*, tns__submitGameAliasTextAndTokenDigest **, const char*);
-
-#ifndef soap_write_PointerTotns__submitGameAliasTextAndTokenDigest
-#define soap_write_PointerTotns__submitGameAliasTextAndTokenDigest(soap, data) ( soap_begin_send(soap) || (ServerSoap::soap_serialize_PointerTotns__submitGameAliasTextAndTokenDigest(soap, data), 0) || ServerSoap::soap_put_PointerTotns__submitGameAliasTextAndTokenDigest(soap, data, "tns:submitGameAliasTextAndTokenDigest", NULL) || soap_end_send(soap) )
-#endif
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__submitGameAliasTextAndTokenDigest(struct soap*, tns__submitGameAliasTextAndTokenDigest *const*, const char*, const char*);
-
-#ifndef soap_read_PointerTotns__submitGameAliasTextAndTokenDigest
-#define soap_read_PointerTotns__submitGameAliasTextAndTokenDigest(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_PointerTotns__submitGameAliasTextAndTokenDigest(soap, data, NULL, NULL) || soap_end_recv(soap) )
-#endif
-
-SOAP_FMAC3 tns__submitGameAliasTextAndTokenDigest ** SOAP_FMAC4 soap_get_PointerTotns__submitGameAliasTextAndTokenDigest(struct soap*, tns__submitGameAliasTextAndTokenDigest **, const char*, const char*);
-
-#ifndef SOAP_TYPE_ServerSoap_PointerTotns__submitGameAliasResponse
-#define SOAP_TYPE_ServerSoap_PointerTotns__submitGameAliasResponse (176)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__submitGameAliasResponse(struct soap*, tns__submitGameAliasResponse *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__submitGameAliasResponse(struct soap*, const char *, int, tns__submitGameAliasResponse *const*, const char *);
-SOAP_FMAC3 tns__submitGameAliasResponse ** SOAP_FMAC4 soap_in_PointerTotns__submitGameAliasResponse(struct soap*, const char*, tns__submitGameAliasResponse **, const char*);
-
-#ifndef soap_write_PointerTotns__submitGameAliasResponse
-#define soap_write_PointerTotns__submitGameAliasResponse(soap, data) ( soap_begin_send(soap) || (ServerSoap::soap_serialize_PointerTotns__submitGameAliasResponse(soap, data), 0) || ServerSoap::soap_put_PointerTotns__submitGameAliasResponse(soap, data, "tns:submitGameAliasResponse", NULL) || soap_end_send(soap) )
-#endif
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__submitGameAliasResponse(struct soap*, tns__submitGameAliasResponse *const*, const char*, const char*);
-
-#ifndef soap_read_PointerTotns__submitGameAliasResponse
-#define soap_read_PointerTotns__submitGameAliasResponse(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_PointerTotns__submitGameAliasResponse(soap, data, NULL, NULL) || soap_end_recv(soap) )
-#endif
-
-SOAP_FMAC3 tns__submitGameAliasResponse ** SOAP_FMAC4 soap_get_PointerTotns__submitGameAliasResponse(struct soap*, tns__submitGameAliasResponse **, const char*, const char*);
-
-#ifndef SOAP_TYPE_ServerSoap_PointerTotns__submitGameAlias
-#define SOAP_TYPE_ServerSoap_PointerTotns__submitGameAlias (175)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__submitGameAlias(struct soap*, tns__submitGameAlias *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__submitGameAlias(struct soap*, const char *, int, tns__submitGameAlias *const*, const char *);
-SOAP_FMAC3 tns__submitGameAlias ** SOAP_FMAC4 soap_in_PointerTotns__submitGameAlias(struct soap*, const char*, tns__submitGameAlias **, const char*);
-
-#ifndef soap_write_PointerTotns__submitGameAlias
-#define soap_write_PointerTotns__submitGameAlias(soap, data) ( soap_begin_send(soap) || (ServerSoap::soap_serialize_PointerTotns__submitGameAlias(soap, data), 0) || ServerSoap::soap_put_PointerTotns__submitGameAlias(soap, data, "tns:submitGameAlias", NULL) || soap_end_send(soap) )
-#endif
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__submitGameAlias(struct soap*, tns__submitGameAlias *const*, const char*, const char*);
-
-#ifndef soap_read_PointerTotns__submitGameAlias
-#define soap_read_PointerTotns__submitGameAlias(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_PointerTotns__submitGameAlias(soap, data, NULL, NULL) || soap_end_recv(soap) )
-#endif
-
-SOAP_FMAC3 tns__submitGameAlias ** SOAP_FMAC4 soap_get_PointerTotns__submitGameAlias(struct soap*, tns__submitGameAlias **, const char*, const char*);
-
 #ifndef SOAP_TYPE_ServerSoap_PointerTotns__setUserLanguageResponse
-#define SOAP_TYPE_ServerSoap_PointerTotns__setUserLanguageResponse (172)
+#define SOAP_TYPE_ServerSoap_PointerTotns__setUserLanguageResponse (158)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__setUserLanguageResponse(struct soap*, tns__setUserLanguageResponse *const*);
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__setUserLanguageResponse(struct soap*, const char *, int, tns__setUserLanguageResponse *const*, const char *);
@@ -4179,7 +3192,7 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__setUserLanguageResponse(struct 
 SOAP_FMAC3 tns__setUserLanguageResponse ** SOAP_FMAC4 soap_get_PointerTotns__setUserLanguageResponse(struct soap*, tns__setUserLanguageResponse **, const char*, const char*);
 
 #ifndef SOAP_TYPE_ServerSoap_PointerTotns__setUserLanguage
-#define SOAP_TYPE_ServerSoap_PointerTotns__setUserLanguage (171)
+#define SOAP_TYPE_ServerSoap_PointerTotns__setUserLanguage (157)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__setUserLanguage(struct soap*, tns__setUserLanguage *const*);
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__setUserLanguage(struct soap*, const char *, int, tns__setUserLanguage *const*, const char *);
@@ -4198,7 +3211,7 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__setUserLanguage(struct soap*, t
 SOAP_FMAC3 tns__setUserLanguage ** SOAP_FMAC4 soap_get_PointerTotns__setUserLanguage(struct soap*, tns__setUserLanguage **, const char*, const char*);
 
 #ifndef SOAP_TYPE_ServerSoap_PointerTotns__setUserAnonymousResponse
-#define SOAP_TYPE_ServerSoap_PointerTotns__setUserAnonymousResponse (168)
+#define SOAP_TYPE_ServerSoap_PointerTotns__setUserAnonymousResponse (154)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__setUserAnonymousResponse(struct soap*, tns__setUserAnonymousResponse *const*);
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__setUserAnonymousResponse(struct soap*, const char *, int, tns__setUserAnonymousResponse *const*, const char *);
@@ -4217,7 +3230,7 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__setUserAnonymousResponse(struct
 SOAP_FMAC3 tns__setUserAnonymousResponse ** SOAP_FMAC4 soap_get_PointerTotns__setUserAnonymousResponse(struct soap*, tns__setUserAnonymousResponse **, const char*, const char*);
 
 #ifndef SOAP_TYPE_ServerSoap_PointerTotns__setUserAnonymous
-#define SOAP_TYPE_ServerSoap_PointerTotns__setUserAnonymous (167)
+#define SOAP_TYPE_ServerSoap_PointerTotns__setUserAnonymous (153)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__setUserAnonymous(struct soap*, tns__setUserAnonymous *const*);
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__setUserAnonymous(struct soap*, const char *, int, tns__setUserAnonymous *const*, const char *);
@@ -4236,7 +3249,7 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__setUserAnonymous(struct soap*, 
 SOAP_FMAC3 tns__setUserAnonymous ** SOAP_FMAC4 soap_get_PointerTotns__setUserAnonymous(struct soap*, tns__setUserAnonymous **, const char*, const char*);
 
 #ifndef SOAP_TYPE_ServerSoap_PointerTotns__selectUserResponse
-#define SOAP_TYPE_ServerSoap_PointerTotns__selectUserResponse (164)
+#define SOAP_TYPE_ServerSoap_PointerTotns__selectUserResponse (150)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__selectUserResponse(struct soap*, tns__selectUserResponse *const*);
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__selectUserResponse(struct soap*, const char *, int, tns__selectUserResponse *const*, const char *);
@@ -4255,7 +3268,7 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__selectUserResponse(struct soap*
 SOAP_FMAC3 tns__selectUserResponse ** SOAP_FMAC4 soap_get_PointerTotns__selectUserResponse(struct soap*, tns__selectUserResponse **, const char*, const char*);
 
 #ifndef SOAP_TYPE_ServerSoap_PointerTotns__selectUser
-#define SOAP_TYPE_ServerSoap_PointerTotns__selectUser (163)
+#define SOAP_TYPE_ServerSoap_PointerTotns__selectUser (149)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__selectUser(struct soap*, tns__selectUser *const*);
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__selectUser(struct soap*, const char *, int, tns__selectUser *const*, const char *);
@@ -4274,7 +3287,7 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__selectUser(struct soap*, tns__s
 SOAP_FMAC3 tns__selectUser ** SOAP_FMAC4 soap_get_PointerTotns__selectUser(struct soap*, tns__selectUser **, const char*, const char*);
 
 #ifndef SOAP_TYPE_ServerSoap_PointerTotns__selectRelatedMediaAnnotationsWithTokenIdResponse
-#define SOAP_TYPE_ServerSoap_PointerTotns__selectRelatedMediaAnnotationsWithTokenIdResponse (160)
+#define SOAP_TYPE_ServerSoap_PointerTotns__selectRelatedMediaAnnotationsWithTokenIdResponse (146)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__selectRelatedMediaAnnotationsWithTokenIdResponse(struct soap*, tns__selectRelatedMediaAnnotationsWithTokenIdResponse *const*);
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__selectRelatedMediaAnnotationsWithTokenIdResponse(struct soap*, const char *, int, tns__selectRelatedMediaAnnotationsWithTokenIdResponse *const*, const char *);
@@ -4293,7 +3306,7 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__selectRelatedMediaAnnotationsWi
 SOAP_FMAC3 tns__selectRelatedMediaAnnotationsWithTokenIdResponse ** SOAP_FMAC4 soap_get_PointerTotns__selectRelatedMediaAnnotationsWithTokenIdResponse(struct soap*, tns__selectRelatedMediaAnnotationsWithTokenIdResponse **, const char*, const char*);
 
 #ifndef SOAP_TYPE_ServerSoap_PointerTotns__selectRelatedMediaAnnotationsWithTokenId
-#define SOAP_TYPE_ServerSoap_PointerTotns__selectRelatedMediaAnnotationsWithTokenId (159)
+#define SOAP_TYPE_ServerSoap_PointerTotns__selectRelatedMediaAnnotationsWithTokenId (145)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__selectRelatedMediaAnnotationsWithTokenId(struct soap*, tns__selectRelatedMediaAnnotationsWithTokenId *const*);
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__selectRelatedMediaAnnotationsWithTokenId(struct soap*, const char *, int, tns__selectRelatedMediaAnnotationsWithTokenId *const*, const char *);
@@ -4311,46 +3324,8 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__selectRelatedMediaAnnotationsWi
 
 SOAP_FMAC3 tns__selectRelatedMediaAnnotationsWithTokenId ** SOAP_FMAC4 soap_get_PointerTotns__selectRelatedMediaAnnotationsWithTokenId(struct soap*, tns__selectRelatedMediaAnnotationsWithTokenId **, const char*, const char*);
 
-#ifndef SOAP_TYPE_ServerSoap_PointerTotns__selectRelatedGameAnnotationsWithTokenIdResponse
-#define SOAP_TYPE_ServerSoap_PointerTotns__selectRelatedGameAnnotationsWithTokenIdResponse (156)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__selectRelatedGameAnnotationsWithTokenIdResponse(struct soap*, tns__selectRelatedGameAnnotationsWithTokenIdResponse *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__selectRelatedGameAnnotationsWithTokenIdResponse(struct soap*, const char *, int, tns__selectRelatedGameAnnotationsWithTokenIdResponse *const*, const char *);
-SOAP_FMAC3 tns__selectRelatedGameAnnotationsWithTokenIdResponse ** SOAP_FMAC4 soap_in_PointerTotns__selectRelatedGameAnnotationsWithTokenIdResponse(struct soap*, const char*, tns__selectRelatedGameAnnotationsWithTokenIdResponse **, const char*);
-
-#ifndef soap_write_PointerTotns__selectRelatedGameAnnotationsWithTokenIdResponse
-#define soap_write_PointerTotns__selectRelatedGameAnnotationsWithTokenIdResponse(soap, data) ( soap_begin_send(soap) || (ServerSoap::soap_serialize_PointerTotns__selectRelatedGameAnnotationsWithTokenIdResponse(soap, data), 0) || ServerSoap::soap_put_PointerTotns__selectRelatedGameAnnotationsWithTokenIdResponse(soap, data, "tns:selectRelatedGameAnnotationsWithTokenIdResponse", NULL) || soap_end_send(soap) )
-#endif
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__selectRelatedGameAnnotationsWithTokenIdResponse(struct soap*, tns__selectRelatedGameAnnotationsWithTokenIdResponse *const*, const char*, const char*);
-
-#ifndef soap_read_PointerTotns__selectRelatedGameAnnotationsWithTokenIdResponse
-#define soap_read_PointerTotns__selectRelatedGameAnnotationsWithTokenIdResponse(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_PointerTotns__selectRelatedGameAnnotationsWithTokenIdResponse(soap, data, NULL, NULL) || soap_end_recv(soap) )
-#endif
-
-SOAP_FMAC3 tns__selectRelatedGameAnnotationsWithTokenIdResponse ** SOAP_FMAC4 soap_get_PointerTotns__selectRelatedGameAnnotationsWithTokenIdResponse(struct soap*, tns__selectRelatedGameAnnotationsWithTokenIdResponse **, const char*, const char*);
-
-#ifndef SOAP_TYPE_ServerSoap_PointerTotns__selectRelatedGameAnnotationsWithTokenId
-#define SOAP_TYPE_ServerSoap_PointerTotns__selectRelatedGameAnnotationsWithTokenId (155)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__selectRelatedGameAnnotationsWithTokenId(struct soap*, tns__selectRelatedGameAnnotationsWithTokenId *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__selectRelatedGameAnnotationsWithTokenId(struct soap*, const char *, int, tns__selectRelatedGameAnnotationsWithTokenId *const*, const char *);
-SOAP_FMAC3 tns__selectRelatedGameAnnotationsWithTokenId ** SOAP_FMAC4 soap_in_PointerTotns__selectRelatedGameAnnotationsWithTokenId(struct soap*, const char*, tns__selectRelatedGameAnnotationsWithTokenId **, const char*);
-
-#ifndef soap_write_PointerTotns__selectRelatedGameAnnotationsWithTokenId
-#define soap_write_PointerTotns__selectRelatedGameAnnotationsWithTokenId(soap, data) ( soap_begin_send(soap) || (ServerSoap::soap_serialize_PointerTotns__selectRelatedGameAnnotationsWithTokenId(soap, data), 0) || ServerSoap::soap_put_PointerTotns__selectRelatedGameAnnotationsWithTokenId(soap, data, "tns:selectRelatedGameAnnotationsWithTokenId", NULL) || soap_end_send(soap) )
-#endif
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__selectRelatedGameAnnotationsWithTokenId(struct soap*, tns__selectRelatedGameAnnotationsWithTokenId *const*, const char*, const char*);
-
-#ifndef soap_read_PointerTotns__selectRelatedGameAnnotationsWithTokenId
-#define soap_read_PointerTotns__selectRelatedGameAnnotationsWithTokenId(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_PointerTotns__selectRelatedGameAnnotationsWithTokenId(soap, data, NULL, NULL) || soap_end_recv(soap) )
-#endif
-
-SOAP_FMAC3 tns__selectRelatedGameAnnotationsWithTokenId ** SOAP_FMAC4 soap_get_PointerTotns__selectRelatedGameAnnotationsWithTokenId(struct soap*, tns__selectRelatedGameAnnotationsWithTokenId **, const char*, const char*);
-
 #ifndef SOAP_TYPE_ServerSoap_PointerTotns__selectMediaTokenWithIdResponse
-#define SOAP_TYPE_ServerSoap_PointerTotns__selectMediaTokenWithIdResponse (152)
+#define SOAP_TYPE_ServerSoap_PointerTotns__selectMediaTokenWithIdResponse (142)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__selectMediaTokenWithIdResponse(struct soap*, tns__selectMediaTokenWithIdResponse *const*);
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__selectMediaTokenWithIdResponse(struct soap*, const char *, int, tns__selectMediaTokenWithIdResponse *const*, const char *);
@@ -4369,7 +3344,7 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__selectMediaTokenWithIdResponse(
 SOAP_FMAC3 tns__selectMediaTokenWithIdResponse ** SOAP_FMAC4 soap_get_PointerTotns__selectMediaTokenWithIdResponse(struct soap*, tns__selectMediaTokenWithIdResponse **, const char*, const char*);
 
 #ifndef SOAP_TYPE_ServerSoap_PointerTotns__selectMediaTokenWithId
-#define SOAP_TYPE_ServerSoap_PointerTotns__selectMediaTokenWithId (151)
+#define SOAP_TYPE_ServerSoap_PointerTotns__selectMediaTokenWithId (141)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__selectMediaTokenWithId(struct soap*, tns__selectMediaTokenWithId *const*);
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__selectMediaTokenWithId(struct soap*, const char *, int, tns__selectMediaTokenWithId *const*, const char *);
@@ -4388,7 +3363,7 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__selectMediaTokenWithId(struct s
 SOAP_FMAC3 tns__selectMediaTokenWithId ** SOAP_FMAC4 soap_get_PointerTotns__selectMediaTokenWithId(struct soap*, tns__selectMediaTokenWithId **, const char*, const char*);
 
 #ifndef SOAP_TYPE_ServerSoap_PointerTotns__selectMediaTokenWithDigestResponse
-#define SOAP_TYPE_ServerSoap_PointerTotns__selectMediaTokenWithDigestResponse (148)
+#define SOAP_TYPE_ServerSoap_PointerTotns__selectMediaTokenWithDigestResponse (138)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__selectMediaTokenWithDigestResponse(struct soap*, tns__selectMediaTokenWithDigestResponse *const*);
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__selectMediaTokenWithDigestResponse(struct soap*, const char *, int, tns__selectMediaTokenWithDigestResponse *const*, const char *);
@@ -4407,7 +3382,7 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__selectMediaTokenWithDigestRespo
 SOAP_FMAC3 tns__selectMediaTokenWithDigestResponse ** SOAP_FMAC4 soap_get_PointerTotns__selectMediaTokenWithDigestResponse(struct soap*, tns__selectMediaTokenWithDigestResponse **, const char*, const char*);
 
 #ifndef SOAP_TYPE_ServerSoap_PointerTotns__selectMediaTokenWithDigest
-#define SOAP_TYPE_ServerSoap_PointerTotns__selectMediaTokenWithDigest (147)
+#define SOAP_TYPE_ServerSoap_PointerTotns__selectMediaTokenWithDigest (137)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__selectMediaTokenWithDigest(struct soap*, tns__selectMediaTokenWithDigest *const*);
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__selectMediaTokenWithDigest(struct soap*, const char *, int, tns__selectMediaTokenWithDigest *const*, const char *);
@@ -4426,7 +3401,7 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__selectMediaTokenWithDigest(stru
 SOAP_FMAC3 tns__selectMediaTokenWithDigest ** SOAP_FMAC4 soap_get_PointerTotns__selectMediaTokenWithDigest(struct soap*, tns__selectMediaTokenWithDigest **, const char*, const char*);
 
 #ifndef SOAP_TYPE_ServerSoap_PointerTotns__selectMediaAnnotationsWithTokenIdResponse
-#define SOAP_TYPE_ServerSoap_PointerTotns__selectMediaAnnotationsWithTokenIdResponse (144)
+#define SOAP_TYPE_ServerSoap_PointerTotns__selectMediaAnnotationsWithTokenIdResponse (134)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__selectMediaAnnotationsWithTokenIdResponse(struct soap*, tns__selectMediaAnnotationsWithTokenIdResponse *const*);
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__selectMediaAnnotationsWithTokenIdResponse(struct soap*, const char *, int, tns__selectMediaAnnotationsWithTokenIdResponse *const*, const char *);
@@ -4445,7 +3420,7 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__selectMediaAnnotationsWithToken
 SOAP_FMAC3 tns__selectMediaAnnotationsWithTokenIdResponse ** SOAP_FMAC4 soap_get_PointerTotns__selectMediaAnnotationsWithTokenIdResponse(struct soap*, tns__selectMediaAnnotationsWithTokenIdResponse **, const char*, const char*);
 
 #ifndef SOAP_TYPE_ServerSoap_PointerTotns__selectMediaAnnotationsWithTokenId
-#define SOAP_TYPE_ServerSoap_PointerTotns__selectMediaAnnotationsWithTokenId (143)
+#define SOAP_TYPE_ServerSoap_PointerTotns__selectMediaAnnotationsWithTokenId (133)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__selectMediaAnnotationsWithTokenId(struct soap*, tns__selectMediaAnnotationsWithTokenId *const*);
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__selectMediaAnnotationsWithTokenId(struct soap*, const char *, int, tns__selectMediaAnnotationsWithTokenId *const*, const char *);
@@ -4464,7 +3439,7 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__selectMediaAnnotationsWithToken
 SOAP_FMAC3 tns__selectMediaAnnotationsWithTokenId ** SOAP_FMAC4 soap_get_PointerTotns__selectMediaAnnotationsWithTokenId(struct soap*, tns__selectMediaAnnotationsWithTokenId **, const char*, const char*);
 
 #ifndef SOAP_TYPE_ServerSoap_PointerTotns__selectMediaAliasesWithTokenIdResponse
-#define SOAP_TYPE_ServerSoap_PointerTotns__selectMediaAliasesWithTokenIdResponse (140)
+#define SOAP_TYPE_ServerSoap_PointerTotns__selectMediaAliasesWithTokenIdResponse (130)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__selectMediaAliasesWithTokenIdResponse(struct soap*, tns__selectMediaAliasesWithTokenIdResponse *const*);
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__selectMediaAliasesWithTokenIdResponse(struct soap*, const char *, int, tns__selectMediaAliasesWithTokenIdResponse *const*, const char *);
@@ -4483,7 +3458,7 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__selectMediaAliasesWithTokenIdRe
 SOAP_FMAC3 tns__selectMediaAliasesWithTokenIdResponse ** SOAP_FMAC4 soap_get_PointerTotns__selectMediaAliasesWithTokenIdResponse(struct soap*, tns__selectMediaAliasesWithTokenIdResponse **, const char*, const char*);
 
 #ifndef SOAP_TYPE_ServerSoap_PointerTotns__selectMediaAliasesWithTokenId
-#define SOAP_TYPE_ServerSoap_PointerTotns__selectMediaAliasesWithTokenId (139)
+#define SOAP_TYPE_ServerSoap_PointerTotns__selectMediaAliasesWithTokenId (129)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__selectMediaAliasesWithTokenId(struct soap*, tns__selectMediaAliasesWithTokenId *const*);
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__selectMediaAliasesWithTokenId(struct soap*, const char *, int, tns__selectMediaAliasesWithTokenId *const*, const char *);
@@ -4501,160 +3476,8 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__selectMediaAliasesWithTokenId(s
 
 SOAP_FMAC3 tns__selectMediaAliasesWithTokenId ** SOAP_FMAC4 soap_get_PointerTotns__selectMediaAliasesWithTokenId(struct soap*, tns__selectMediaAliasesWithTokenId **, const char*, const char*);
 
-#ifndef SOAP_TYPE_ServerSoap_PointerTotns__selectGameTokenWithIdResponse
-#define SOAP_TYPE_ServerSoap_PointerTotns__selectGameTokenWithIdResponse (136)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__selectGameTokenWithIdResponse(struct soap*, tns__selectGameTokenWithIdResponse *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__selectGameTokenWithIdResponse(struct soap*, const char *, int, tns__selectGameTokenWithIdResponse *const*, const char *);
-SOAP_FMAC3 tns__selectGameTokenWithIdResponse ** SOAP_FMAC4 soap_in_PointerTotns__selectGameTokenWithIdResponse(struct soap*, const char*, tns__selectGameTokenWithIdResponse **, const char*);
-
-#ifndef soap_write_PointerTotns__selectGameTokenWithIdResponse
-#define soap_write_PointerTotns__selectGameTokenWithIdResponse(soap, data) ( soap_begin_send(soap) || (ServerSoap::soap_serialize_PointerTotns__selectGameTokenWithIdResponse(soap, data), 0) || ServerSoap::soap_put_PointerTotns__selectGameTokenWithIdResponse(soap, data, "tns:selectGameTokenWithIdResponse", NULL) || soap_end_send(soap) )
-#endif
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__selectGameTokenWithIdResponse(struct soap*, tns__selectGameTokenWithIdResponse *const*, const char*, const char*);
-
-#ifndef soap_read_PointerTotns__selectGameTokenWithIdResponse
-#define soap_read_PointerTotns__selectGameTokenWithIdResponse(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_PointerTotns__selectGameTokenWithIdResponse(soap, data, NULL, NULL) || soap_end_recv(soap) )
-#endif
-
-SOAP_FMAC3 tns__selectGameTokenWithIdResponse ** SOAP_FMAC4 soap_get_PointerTotns__selectGameTokenWithIdResponse(struct soap*, tns__selectGameTokenWithIdResponse **, const char*, const char*);
-
-#ifndef SOAP_TYPE_ServerSoap_PointerTotns__selectGameTokenWithId
-#define SOAP_TYPE_ServerSoap_PointerTotns__selectGameTokenWithId (135)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__selectGameTokenWithId(struct soap*, tns__selectGameTokenWithId *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__selectGameTokenWithId(struct soap*, const char *, int, tns__selectGameTokenWithId *const*, const char *);
-SOAP_FMAC3 tns__selectGameTokenWithId ** SOAP_FMAC4 soap_in_PointerTotns__selectGameTokenWithId(struct soap*, const char*, tns__selectGameTokenWithId **, const char*);
-
-#ifndef soap_write_PointerTotns__selectGameTokenWithId
-#define soap_write_PointerTotns__selectGameTokenWithId(soap, data) ( soap_begin_send(soap) || (ServerSoap::soap_serialize_PointerTotns__selectGameTokenWithId(soap, data), 0) || ServerSoap::soap_put_PointerTotns__selectGameTokenWithId(soap, data, "tns:selectGameTokenWithId", NULL) || soap_end_send(soap) )
-#endif
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__selectGameTokenWithId(struct soap*, tns__selectGameTokenWithId *const*, const char*, const char*);
-
-#ifndef soap_read_PointerTotns__selectGameTokenWithId
-#define soap_read_PointerTotns__selectGameTokenWithId(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_PointerTotns__selectGameTokenWithId(soap, data, NULL, NULL) || soap_end_recv(soap) )
-#endif
-
-SOAP_FMAC3 tns__selectGameTokenWithId ** SOAP_FMAC4 soap_get_PointerTotns__selectGameTokenWithId(struct soap*, tns__selectGameTokenWithId **, const char*, const char*);
-
-#ifndef SOAP_TYPE_ServerSoap_PointerTotns__selectGameTokenWithDigestResponse
-#define SOAP_TYPE_ServerSoap_PointerTotns__selectGameTokenWithDigestResponse (132)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__selectGameTokenWithDigestResponse(struct soap*, tns__selectGameTokenWithDigestResponse *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__selectGameTokenWithDigestResponse(struct soap*, const char *, int, tns__selectGameTokenWithDigestResponse *const*, const char *);
-SOAP_FMAC3 tns__selectGameTokenWithDigestResponse ** SOAP_FMAC4 soap_in_PointerTotns__selectGameTokenWithDigestResponse(struct soap*, const char*, tns__selectGameTokenWithDigestResponse **, const char*);
-
-#ifndef soap_write_PointerTotns__selectGameTokenWithDigestResponse
-#define soap_write_PointerTotns__selectGameTokenWithDigestResponse(soap, data) ( soap_begin_send(soap) || (ServerSoap::soap_serialize_PointerTotns__selectGameTokenWithDigestResponse(soap, data), 0) || ServerSoap::soap_put_PointerTotns__selectGameTokenWithDigestResponse(soap, data, "tns:selectGameTokenWithDigestResponse", NULL) || soap_end_send(soap) )
-#endif
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__selectGameTokenWithDigestResponse(struct soap*, tns__selectGameTokenWithDigestResponse *const*, const char*, const char*);
-
-#ifndef soap_read_PointerTotns__selectGameTokenWithDigestResponse
-#define soap_read_PointerTotns__selectGameTokenWithDigestResponse(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_PointerTotns__selectGameTokenWithDigestResponse(soap, data, NULL, NULL) || soap_end_recv(soap) )
-#endif
-
-SOAP_FMAC3 tns__selectGameTokenWithDigestResponse ** SOAP_FMAC4 soap_get_PointerTotns__selectGameTokenWithDigestResponse(struct soap*, tns__selectGameTokenWithDigestResponse **, const char*, const char*);
-
-#ifndef SOAP_TYPE_ServerSoap_PointerTotns__selectGameTokenWithDigest
-#define SOAP_TYPE_ServerSoap_PointerTotns__selectGameTokenWithDigest (131)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__selectGameTokenWithDigest(struct soap*, tns__selectGameTokenWithDigest *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__selectGameTokenWithDigest(struct soap*, const char *, int, tns__selectGameTokenWithDigest *const*, const char *);
-SOAP_FMAC3 tns__selectGameTokenWithDigest ** SOAP_FMAC4 soap_in_PointerTotns__selectGameTokenWithDigest(struct soap*, const char*, tns__selectGameTokenWithDigest **, const char*);
-
-#ifndef soap_write_PointerTotns__selectGameTokenWithDigest
-#define soap_write_PointerTotns__selectGameTokenWithDigest(soap, data) ( soap_begin_send(soap) || (ServerSoap::soap_serialize_PointerTotns__selectGameTokenWithDigest(soap, data), 0) || ServerSoap::soap_put_PointerTotns__selectGameTokenWithDigest(soap, data, "tns:selectGameTokenWithDigest", NULL) || soap_end_send(soap) )
-#endif
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__selectGameTokenWithDigest(struct soap*, tns__selectGameTokenWithDigest *const*, const char*, const char*);
-
-#ifndef soap_read_PointerTotns__selectGameTokenWithDigest
-#define soap_read_PointerTotns__selectGameTokenWithDigest(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_PointerTotns__selectGameTokenWithDigest(soap, data, NULL, NULL) || soap_end_recv(soap) )
-#endif
-
-SOAP_FMAC3 tns__selectGameTokenWithDigest ** SOAP_FMAC4 soap_get_PointerTotns__selectGameTokenWithDigest(struct soap*, tns__selectGameTokenWithDigest **, const char*, const char*);
-
-#ifndef SOAP_TYPE_ServerSoap_PointerTotns__selectGameAnnotationsWithTokenIdResponse
-#define SOAP_TYPE_ServerSoap_PointerTotns__selectGameAnnotationsWithTokenIdResponse (128)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__selectGameAnnotationsWithTokenIdResponse(struct soap*, tns__selectGameAnnotationsWithTokenIdResponse *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__selectGameAnnotationsWithTokenIdResponse(struct soap*, const char *, int, tns__selectGameAnnotationsWithTokenIdResponse *const*, const char *);
-SOAP_FMAC3 tns__selectGameAnnotationsWithTokenIdResponse ** SOAP_FMAC4 soap_in_PointerTotns__selectGameAnnotationsWithTokenIdResponse(struct soap*, const char*, tns__selectGameAnnotationsWithTokenIdResponse **, const char*);
-
-#ifndef soap_write_PointerTotns__selectGameAnnotationsWithTokenIdResponse
-#define soap_write_PointerTotns__selectGameAnnotationsWithTokenIdResponse(soap, data) ( soap_begin_send(soap) || (ServerSoap::soap_serialize_PointerTotns__selectGameAnnotationsWithTokenIdResponse(soap, data), 0) || ServerSoap::soap_put_PointerTotns__selectGameAnnotationsWithTokenIdResponse(soap, data, "tns:selectGameAnnotationsWithTokenIdResponse", NULL) || soap_end_send(soap) )
-#endif
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__selectGameAnnotationsWithTokenIdResponse(struct soap*, tns__selectGameAnnotationsWithTokenIdResponse *const*, const char*, const char*);
-
-#ifndef soap_read_PointerTotns__selectGameAnnotationsWithTokenIdResponse
-#define soap_read_PointerTotns__selectGameAnnotationsWithTokenIdResponse(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_PointerTotns__selectGameAnnotationsWithTokenIdResponse(soap, data, NULL, NULL) || soap_end_recv(soap) )
-#endif
-
-SOAP_FMAC3 tns__selectGameAnnotationsWithTokenIdResponse ** SOAP_FMAC4 soap_get_PointerTotns__selectGameAnnotationsWithTokenIdResponse(struct soap*, tns__selectGameAnnotationsWithTokenIdResponse **, const char*, const char*);
-
-#ifndef SOAP_TYPE_ServerSoap_PointerTotns__selectGameAnnotationsWithTokenId
-#define SOAP_TYPE_ServerSoap_PointerTotns__selectGameAnnotationsWithTokenId (127)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__selectGameAnnotationsWithTokenId(struct soap*, tns__selectGameAnnotationsWithTokenId *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__selectGameAnnotationsWithTokenId(struct soap*, const char *, int, tns__selectGameAnnotationsWithTokenId *const*, const char *);
-SOAP_FMAC3 tns__selectGameAnnotationsWithTokenId ** SOAP_FMAC4 soap_in_PointerTotns__selectGameAnnotationsWithTokenId(struct soap*, const char*, tns__selectGameAnnotationsWithTokenId **, const char*);
-
-#ifndef soap_write_PointerTotns__selectGameAnnotationsWithTokenId
-#define soap_write_PointerTotns__selectGameAnnotationsWithTokenId(soap, data) ( soap_begin_send(soap) || (ServerSoap::soap_serialize_PointerTotns__selectGameAnnotationsWithTokenId(soap, data), 0) || ServerSoap::soap_put_PointerTotns__selectGameAnnotationsWithTokenId(soap, data, "tns:selectGameAnnotationsWithTokenId", NULL) || soap_end_send(soap) )
-#endif
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__selectGameAnnotationsWithTokenId(struct soap*, tns__selectGameAnnotationsWithTokenId *const*, const char*, const char*);
-
-#ifndef soap_read_PointerTotns__selectGameAnnotationsWithTokenId
-#define soap_read_PointerTotns__selectGameAnnotationsWithTokenId(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_PointerTotns__selectGameAnnotationsWithTokenId(soap, data, NULL, NULL) || soap_end_recv(soap) )
-#endif
-
-SOAP_FMAC3 tns__selectGameAnnotationsWithTokenId ** SOAP_FMAC4 soap_get_PointerTotns__selectGameAnnotationsWithTokenId(struct soap*, tns__selectGameAnnotationsWithTokenId **, const char*, const char*);
-
-#ifndef SOAP_TYPE_ServerSoap_PointerTotns__selectGameAliasesWithTokenIdResponse
-#define SOAP_TYPE_ServerSoap_PointerTotns__selectGameAliasesWithTokenIdResponse (124)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__selectGameAliasesWithTokenIdResponse(struct soap*, tns__selectGameAliasesWithTokenIdResponse *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__selectGameAliasesWithTokenIdResponse(struct soap*, const char *, int, tns__selectGameAliasesWithTokenIdResponse *const*, const char *);
-SOAP_FMAC3 tns__selectGameAliasesWithTokenIdResponse ** SOAP_FMAC4 soap_in_PointerTotns__selectGameAliasesWithTokenIdResponse(struct soap*, const char*, tns__selectGameAliasesWithTokenIdResponse **, const char*);
-
-#ifndef soap_write_PointerTotns__selectGameAliasesWithTokenIdResponse
-#define soap_write_PointerTotns__selectGameAliasesWithTokenIdResponse(soap, data) ( soap_begin_send(soap) || (ServerSoap::soap_serialize_PointerTotns__selectGameAliasesWithTokenIdResponse(soap, data), 0) || ServerSoap::soap_put_PointerTotns__selectGameAliasesWithTokenIdResponse(soap, data, "tns:selectGameAliasesWithTokenIdResponse", NULL) || soap_end_send(soap) )
-#endif
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__selectGameAliasesWithTokenIdResponse(struct soap*, tns__selectGameAliasesWithTokenIdResponse *const*, const char*, const char*);
-
-#ifndef soap_read_PointerTotns__selectGameAliasesWithTokenIdResponse
-#define soap_read_PointerTotns__selectGameAliasesWithTokenIdResponse(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_PointerTotns__selectGameAliasesWithTokenIdResponse(soap, data, NULL, NULL) || soap_end_recv(soap) )
-#endif
-
-SOAP_FMAC3 tns__selectGameAliasesWithTokenIdResponse ** SOAP_FMAC4 soap_get_PointerTotns__selectGameAliasesWithTokenIdResponse(struct soap*, tns__selectGameAliasesWithTokenIdResponse **, const char*, const char*);
-
-#ifndef SOAP_TYPE_ServerSoap_PointerTotns__selectGameAliasesWithTokenId
-#define SOAP_TYPE_ServerSoap_PointerTotns__selectGameAliasesWithTokenId (123)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__selectGameAliasesWithTokenId(struct soap*, tns__selectGameAliasesWithTokenId *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__selectGameAliasesWithTokenId(struct soap*, const char *, int, tns__selectGameAliasesWithTokenId *const*, const char *);
-SOAP_FMAC3 tns__selectGameAliasesWithTokenId ** SOAP_FMAC4 soap_in_PointerTotns__selectGameAliasesWithTokenId(struct soap*, const char*, tns__selectGameAliasesWithTokenId **, const char*);
-
-#ifndef soap_write_PointerTotns__selectGameAliasesWithTokenId
-#define soap_write_PointerTotns__selectGameAliasesWithTokenId(soap, data) ( soap_begin_send(soap) || (ServerSoap::soap_serialize_PointerTotns__selectGameAliasesWithTokenId(soap, data), 0) || ServerSoap::soap_put_PointerTotns__selectGameAliasesWithTokenId(soap, data, "tns:selectGameAliasesWithTokenId", NULL) || soap_end_send(soap) )
-#endif
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__selectGameAliasesWithTokenId(struct soap*, tns__selectGameAliasesWithTokenId *const*, const char*, const char*);
-
-#ifndef soap_read_PointerTotns__selectGameAliasesWithTokenId
-#define soap_read_PointerTotns__selectGameAliasesWithTokenId(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_PointerTotns__selectGameAliasesWithTokenId(soap, data, NULL, NULL) || soap_end_recv(soap) )
-#endif
-
-SOAP_FMAC3 tns__selectGameAliasesWithTokenId ** SOAP_FMAC4 soap_get_PointerTotns__selectGameAliasesWithTokenId(struct soap*, tns__selectGameAliasesWithTokenId **, const char*, const char*);
-
 #ifndef SOAP_TYPE_ServerSoap_PointerTotns__isConnectedResponse
-#define SOAP_TYPE_ServerSoap_PointerTotns__isConnectedResponse (120)
+#define SOAP_TYPE_ServerSoap_PointerTotns__isConnectedResponse (126)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__isConnectedResponse(struct soap*, tns__isConnectedResponse *const*);
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__isConnectedResponse(struct soap*, const char *, int, tns__isConnectedResponse *const*, const char *);
@@ -4673,7 +3496,7 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__isConnectedResponse(struct soap
 SOAP_FMAC3 tns__isConnectedResponse ** SOAP_FMAC4 soap_get_PointerTotns__isConnectedResponse(struct soap*, tns__isConnectedResponse **, const char*, const char*);
 
 #ifndef SOAP_TYPE_ServerSoap_PointerTotns__isConnected
-#define SOAP_TYPE_ServerSoap_PointerTotns__isConnected (119)
+#define SOAP_TYPE_ServerSoap_PointerTotns__isConnected (125)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__isConnected(struct soap*, tns__isConnected *const*);
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__isConnected(struct soap*, const char *, int, tns__isConnected *const*, const char *);
@@ -4692,7 +3515,7 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__isConnected(struct soap*, tns__
 SOAP_FMAC3 tns__isConnected ** SOAP_FMAC4 soap_get_PointerTotns__isConnected(struct soap*, tns__isConnected **, const char*, const char*);
 
 #ifndef SOAP_TYPE_ServerSoap_PointerTotns__isClientUpdatedResponse
-#define SOAP_TYPE_ServerSoap_PointerTotns__isClientUpdatedResponse (116)
+#define SOAP_TYPE_ServerSoap_PointerTotns__isClientUpdatedResponse (122)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__isClientUpdatedResponse(struct soap*, tns__isClientUpdatedResponse *const*);
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__isClientUpdatedResponse(struct soap*, const char *, int, tns__isClientUpdatedResponse *const*, const char *);
@@ -4711,7 +3534,7 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__isClientUpdatedResponse(struct 
 SOAP_FMAC3 tns__isClientUpdatedResponse ** SOAP_FMAC4 soap_get_PointerTotns__isClientUpdatedResponse(struct soap*, tns__isClientUpdatedResponse **, const char*, const char*);
 
 #ifndef SOAP_TYPE_ServerSoap_PointerTotns__isClientUpdated
-#define SOAP_TYPE_ServerSoap_PointerTotns__isClientUpdated (115)
+#define SOAP_TYPE_ServerSoap_PointerTotns__isClientUpdated (121)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__isClientUpdated(struct soap*, tns__isClientUpdated *const*);
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__isClientUpdated(struct soap*, const char *, int, tns__isClientUpdated *const*, const char *);
@@ -4729,8 +3552,122 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__isClientUpdated(struct soap*, t
 
 SOAP_FMAC3 tns__isClientUpdated ** SOAP_FMAC4 soap_get_PointerTotns__isClientUpdated(struct soap*, tns__isClientUpdated **, const char*, const char*);
 
+#ifndef SOAP_TYPE_ServerSoap_PointerTotns__curseMediaTokenWithIdResponse
+#define SOAP_TYPE_ServerSoap_PointerTotns__curseMediaTokenWithIdResponse (118)
+#endif
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__curseMediaTokenWithIdResponse(struct soap*, tns__curseMediaTokenWithIdResponse *const*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__curseMediaTokenWithIdResponse(struct soap*, const char *, int, tns__curseMediaTokenWithIdResponse *const*, const char *);
+SOAP_FMAC3 tns__curseMediaTokenWithIdResponse ** SOAP_FMAC4 soap_in_PointerTotns__curseMediaTokenWithIdResponse(struct soap*, const char*, tns__curseMediaTokenWithIdResponse **, const char*);
+
+#ifndef soap_write_PointerTotns__curseMediaTokenWithIdResponse
+#define soap_write_PointerTotns__curseMediaTokenWithIdResponse(soap, data) ( soap_begin_send(soap) || (ServerSoap::soap_serialize_PointerTotns__curseMediaTokenWithIdResponse(soap, data), 0) || ServerSoap::soap_put_PointerTotns__curseMediaTokenWithIdResponse(soap, data, "tns:curseMediaTokenWithIdResponse", NULL) || soap_end_send(soap) )
+#endif
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__curseMediaTokenWithIdResponse(struct soap*, tns__curseMediaTokenWithIdResponse *const*, const char*, const char*);
+
+#ifndef soap_read_PointerTotns__curseMediaTokenWithIdResponse
+#define soap_read_PointerTotns__curseMediaTokenWithIdResponse(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_PointerTotns__curseMediaTokenWithIdResponse(soap, data, NULL, NULL) || soap_end_recv(soap) )
+#endif
+
+SOAP_FMAC3 tns__curseMediaTokenWithIdResponse ** SOAP_FMAC4 soap_get_PointerTotns__curseMediaTokenWithIdResponse(struct soap*, tns__curseMediaTokenWithIdResponse **, const char*, const char*);
+
+#ifndef SOAP_TYPE_ServerSoap_PointerTotns__curseMediaTokenWithId
+#define SOAP_TYPE_ServerSoap_PointerTotns__curseMediaTokenWithId (117)
+#endif
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__curseMediaTokenWithId(struct soap*, tns__curseMediaTokenWithId *const*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__curseMediaTokenWithId(struct soap*, const char *, int, tns__curseMediaTokenWithId *const*, const char *);
+SOAP_FMAC3 tns__curseMediaTokenWithId ** SOAP_FMAC4 soap_in_PointerTotns__curseMediaTokenWithId(struct soap*, const char*, tns__curseMediaTokenWithId **, const char*);
+
+#ifndef soap_write_PointerTotns__curseMediaTokenWithId
+#define soap_write_PointerTotns__curseMediaTokenWithId(soap, data) ( soap_begin_send(soap) || (ServerSoap::soap_serialize_PointerTotns__curseMediaTokenWithId(soap, data), 0) || ServerSoap::soap_put_PointerTotns__curseMediaTokenWithId(soap, data, "tns:curseMediaTokenWithId", NULL) || soap_end_send(soap) )
+#endif
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__curseMediaTokenWithId(struct soap*, tns__curseMediaTokenWithId *const*, const char*, const char*);
+
+#ifndef soap_read_PointerTotns__curseMediaTokenWithId
+#define soap_read_PointerTotns__curseMediaTokenWithId(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_PointerTotns__curseMediaTokenWithId(soap, data, NULL, NULL) || soap_end_recv(soap) )
+#endif
+
+SOAP_FMAC3 tns__curseMediaTokenWithId ** SOAP_FMAC4 soap_get_PointerTotns__curseMediaTokenWithId(struct soap*, tns__curseMediaTokenWithId **, const char*, const char*);
+
+#ifndef SOAP_TYPE_ServerSoap_PointerTotns__curseMediaAnnotationWithIdResponse
+#define SOAP_TYPE_ServerSoap_PointerTotns__curseMediaAnnotationWithIdResponse (114)
+#endif
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__curseMediaAnnotationWithIdResponse(struct soap*, tns__curseMediaAnnotationWithIdResponse *const*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__curseMediaAnnotationWithIdResponse(struct soap*, const char *, int, tns__curseMediaAnnotationWithIdResponse *const*, const char *);
+SOAP_FMAC3 tns__curseMediaAnnotationWithIdResponse ** SOAP_FMAC4 soap_in_PointerTotns__curseMediaAnnotationWithIdResponse(struct soap*, const char*, tns__curseMediaAnnotationWithIdResponse **, const char*);
+
+#ifndef soap_write_PointerTotns__curseMediaAnnotationWithIdResponse
+#define soap_write_PointerTotns__curseMediaAnnotationWithIdResponse(soap, data) ( soap_begin_send(soap) || (ServerSoap::soap_serialize_PointerTotns__curseMediaAnnotationWithIdResponse(soap, data), 0) || ServerSoap::soap_put_PointerTotns__curseMediaAnnotationWithIdResponse(soap, data, "tns:curseMediaAnnotationWithIdResponse", NULL) || soap_end_send(soap) )
+#endif
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__curseMediaAnnotationWithIdResponse(struct soap*, tns__curseMediaAnnotationWithIdResponse *const*, const char*, const char*);
+
+#ifndef soap_read_PointerTotns__curseMediaAnnotationWithIdResponse
+#define soap_read_PointerTotns__curseMediaAnnotationWithIdResponse(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_PointerTotns__curseMediaAnnotationWithIdResponse(soap, data, NULL, NULL) || soap_end_recv(soap) )
+#endif
+
+SOAP_FMAC3 tns__curseMediaAnnotationWithIdResponse ** SOAP_FMAC4 soap_get_PointerTotns__curseMediaAnnotationWithIdResponse(struct soap*, tns__curseMediaAnnotationWithIdResponse **, const char*, const char*);
+
+#ifndef SOAP_TYPE_ServerSoap_PointerTotns__curseMediaAnnotationWithId
+#define SOAP_TYPE_ServerSoap_PointerTotns__curseMediaAnnotationWithId (113)
+#endif
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__curseMediaAnnotationWithId(struct soap*, tns__curseMediaAnnotationWithId *const*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__curseMediaAnnotationWithId(struct soap*, const char *, int, tns__curseMediaAnnotationWithId *const*, const char *);
+SOAP_FMAC3 tns__curseMediaAnnotationWithId ** SOAP_FMAC4 soap_in_PointerTotns__curseMediaAnnotationWithId(struct soap*, const char*, tns__curseMediaAnnotationWithId **, const char*);
+
+#ifndef soap_write_PointerTotns__curseMediaAnnotationWithId
+#define soap_write_PointerTotns__curseMediaAnnotationWithId(soap, data) ( soap_begin_send(soap) || (ServerSoap::soap_serialize_PointerTotns__curseMediaAnnotationWithId(soap, data), 0) || ServerSoap::soap_put_PointerTotns__curseMediaAnnotationWithId(soap, data, "tns:curseMediaAnnotationWithId", NULL) || soap_end_send(soap) )
+#endif
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__curseMediaAnnotationWithId(struct soap*, tns__curseMediaAnnotationWithId *const*, const char*, const char*);
+
+#ifndef soap_read_PointerTotns__curseMediaAnnotationWithId
+#define soap_read_PointerTotns__curseMediaAnnotationWithId(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_PointerTotns__curseMediaAnnotationWithId(soap, data, NULL, NULL) || soap_end_recv(soap) )
+#endif
+
+SOAP_FMAC3 tns__curseMediaAnnotationWithId ** SOAP_FMAC4 soap_get_PointerTotns__curseMediaAnnotationWithId(struct soap*, tns__curseMediaAnnotationWithId **, const char*, const char*);
+
+#ifndef SOAP_TYPE_ServerSoap_PointerTotns__curseMediaAliasWithIdResponse
+#define SOAP_TYPE_ServerSoap_PointerTotns__curseMediaAliasWithIdResponse (110)
+#endif
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__curseMediaAliasWithIdResponse(struct soap*, tns__curseMediaAliasWithIdResponse *const*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__curseMediaAliasWithIdResponse(struct soap*, const char *, int, tns__curseMediaAliasWithIdResponse *const*, const char *);
+SOAP_FMAC3 tns__curseMediaAliasWithIdResponse ** SOAP_FMAC4 soap_in_PointerTotns__curseMediaAliasWithIdResponse(struct soap*, const char*, tns__curseMediaAliasWithIdResponse **, const char*);
+
+#ifndef soap_write_PointerTotns__curseMediaAliasWithIdResponse
+#define soap_write_PointerTotns__curseMediaAliasWithIdResponse(soap, data) ( soap_begin_send(soap) || (ServerSoap::soap_serialize_PointerTotns__curseMediaAliasWithIdResponse(soap, data), 0) || ServerSoap::soap_put_PointerTotns__curseMediaAliasWithIdResponse(soap, data, "tns:curseMediaAliasWithIdResponse", NULL) || soap_end_send(soap) )
+#endif
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__curseMediaAliasWithIdResponse(struct soap*, tns__curseMediaAliasWithIdResponse *const*, const char*, const char*);
+
+#ifndef soap_read_PointerTotns__curseMediaAliasWithIdResponse
+#define soap_read_PointerTotns__curseMediaAliasWithIdResponse(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_PointerTotns__curseMediaAliasWithIdResponse(soap, data, NULL, NULL) || soap_end_recv(soap) )
+#endif
+
+SOAP_FMAC3 tns__curseMediaAliasWithIdResponse ** SOAP_FMAC4 soap_get_PointerTotns__curseMediaAliasWithIdResponse(struct soap*, tns__curseMediaAliasWithIdResponse **, const char*, const char*);
+
+#ifndef SOAP_TYPE_ServerSoap_PointerTotns__curseMediaAliasWithId
+#define SOAP_TYPE_ServerSoap_PointerTotns__curseMediaAliasWithId (109)
+#endif
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__curseMediaAliasWithId(struct soap*, tns__curseMediaAliasWithId *const*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__curseMediaAliasWithId(struct soap*, const char *, int, tns__curseMediaAliasWithId *const*, const char *);
+SOAP_FMAC3 tns__curseMediaAliasWithId ** SOAP_FMAC4 soap_in_PointerTotns__curseMediaAliasWithId(struct soap*, const char*, tns__curseMediaAliasWithId **, const char*);
+
+#ifndef soap_write_PointerTotns__curseMediaAliasWithId
+#define soap_write_PointerTotns__curseMediaAliasWithId(soap, data) ( soap_begin_send(soap) || (ServerSoap::soap_serialize_PointerTotns__curseMediaAliasWithId(soap, data), 0) || ServerSoap::soap_put_PointerTotns__curseMediaAliasWithId(soap, data, "tns:curseMediaAliasWithId", NULL) || soap_end_send(soap) )
+#endif
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__curseMediaAliasWithId(struct soap*, tns__curseMediaAliasWithId *const*, const char*, const char*);
+
+#ifndef soap_read_PointerTotns__curseMediaAliasWithId
+#define soap_read_PointerTotns__curseMediaAliasWithId(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_PointerTotns__curseMediaAliasWithId(soap, data, NULL, NULL) || soap_end_recv(soap) )
+#endif
+
+SOAP_FMAC3 tns__curseMediaAliasWithId ** SOAP_FMAC4 soap_get_PointerTotns__curseMediaAliasWithId(struct soap*, tns__curseMediaAliasWithId **, const char*, const char*);
+
 #ifndef SOAP_TYPE_ServerSoap_PointerTotns__chatResponse
-#define SOAP_TYPE_ServerSoap_PointerTotns__chatResponse (112)
+#define SOAP_TYPE_ServerSoap_PointerTotns__chatResponse (106)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__chatResponse(struct soap*, tns__chatResponse *const*);
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__chatResponse(struct soap*, const char *, int, tns__chatResponse *const*, const char *);
@@ -4749,7 +3686,7 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__chatResponse(struct soap*, tns_
 SOAP_FMAC3 tns__chatResponse ** SOAP_FMAC4 soap_get_PointerTotns__chatResponse(struct soap*, tns__chatResponse **, const char*, const char*);
 
 #ifndef SOAP_TYPE_ServerSoap_PointerTotns__chat
-#define SOAP_TYPE_ServerSoap_PointerTotns__chat (111)
+#define SOAP_TYPE_ServerSoap_PointerTotns__chat (105)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__chat(struct soap*, tns__chat *const*);
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__chat(struct soap*, const char *, int, tns__chat *const*, const char *);
@@ -4767,8 +3704,160 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__chat(struct soap*, tns__chat *c
 
 SOAP_FMAC3 tns__chat ** SOAP_FMAC4 soap_get_PointerTotns__chat(struct soap*, tns__chat **, const char*, const char*);
 
+#ifndef SOAP_TYPE_ServerSoap_PointerTotns__blockUserWithIdResponse
+#define SOAP_TYPE_ServerSoap_PointerTotns__blockUserWithIdResponse (102)
+#endif
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__blockUserWithIdResponse(struct soap*, tns__blockUserWithIdResponse *const*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__blockUserWithIdResponse(struct soap*, const char *, int, tns__blockUserWithIdResponse *const*, const char *);
+SOAP_FMAC3 tns__blockUserWithIdResponse ** SOAP_FMAC4 soap_in_PointerTotns__blockUserWithIdResponse(struct soap*, const char*, tns__blockUserWithIdResponse **, const char*);
+
+#ifndef soap_write_PointerTotns__blockUserWithIdResponse
+#define soap_write_PointerTotns__blockUserWithIdResponse(soap, data) ( soap_begin_send(soap) || (ServerSoap::soap_serialize_PointerTotns__blockUserWithIdResponse(soap, data), 0) || ServerSoap::soap_put_PointerTotns__blockUserWithIdResponse(soap, data, "tns:blockUserWithIdResponse", NULL) || soap_end_send(soap) )
+#endif
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__blockUserWithIdResponse(struct soap*, tns__blockUserWithIdResponse *const*, const char*, const char*);
+
+#ifndef soap_read_PointerTotns__blockUserWithIdResponse
+#define soap_read_PointerTotns__blockUserWithIdResponse(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_PointerTotns__blockUserWithIdResponse(soap, data, NULL, NULL) || soap_end_recv(soap) )
+#endif
+
+SOAP_FMAC3 tns__blockUserWithIdResponse ** SOAP_FMAC4 soap_get_PointerTotns__blockUserWithIdResponse(struct soap*, tns__blockUserWithIdResponse **, const char*, const char*);
+
+#ifndef SOAP_TYPE_ServerSoap_PointerTotns__blockUserWithId
+#define SOAP_TYPE_ServerSoap_PointerTotns__blockUserWithId (101)
+#endif
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__blockUserWithId(struct soap*, tns__blockUserWithId *const*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__blockUserWithId(struct soap*, const char *, int, tns__blockUserWithId *const*, const char *);
+SOAP_FMAC3 tns__blockUserWithId ** SOAP_FMAC4 soap_in_PointerTotns__blockUserWithId(struct soap*, const char*, tns__blockUserWithId **, const char*);
+
+#ifndef soap_write_PointerTotns__blockUserWithId
+#define soap_write_PointerTotns__blockUserWithId(soap, data) ( soap_begin_send(soap) || (ServerSoap::soap_serialize_PointerTotns__blockUserWithId(soap, data), 0) || ServerSoap::soap_put_PointerTotns__blockUserWithId(soap, data, "tns:blockUserWithId", NULL) || soap_end_send(soap) )
+#endif
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__blockUserWithId(struct soap*, tns__blockUserWithId *const*, const char*, const char*);
+
+#ifndef soap_read_PointerTotns__blockUserWithId
+#define soap_read_PointerTotns__blockUserWithId(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_PointerTotns__blockUserWithId(soap, data, NULL, NULL) || soap_end_recv(soap) )
+#endif
+
+SOAP_FMAC3 tns__blockUserWithId ** SOAP_FMAC4 soap_get_PointerTotns__blockUserWithId(struct soap*, tns__blockUserWithId **, const char*, const char*);
+
+#ifndef SOAP_TYPE_ServerSoap_PointerTotns__blockMediaAnnotationWithIdResponse
+#define SOAP_TYPE_ServerSoap_PointerTotns__blockMediaAnnotationWithIdResponse (98)
+#endif
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__blockMediaAnnotationWithIdResponse(struct soap*, tns__blockMediaAnnotationWithIdResponse *const*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__blockMediaAnnotationWithIdResponse(struct soap*, const char *, int, tns__blockMediaAnnotationWithIdResponse *const*, const char *);
+SOAP_FMAC3 tns__blockMediaAnnotationWithIdResponse ** SOAP_FMAC4 soap_in_PointerTotns__blockMediaAnnotationWithIdResponse(struct soap*, const char*, tns__blockMediaAnnotationWithIdResponse **, const char*);
+
+#ifndef soap_write_PointerTotns__blockMediaAnnotationWithIdResponse
+#define soap_write_PointerTotns__blockMediaAnnotationWithIdResponse(soap, data) ( soap_begin_send(soap) || (ServerSoap::soap_serialize_PointerTotns__blockMediaAnnotationWithIdResponse(soap, data), 0) || ServerSoap::soap_put_PointerTotns__blockMediaAnnotationWithIdResponse(soap, data, "tns:blockMediaAnnotationWithIdResponse", NULL) || soap_end_send(soap) )
+#endif
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__blockMediaAnnotationWithIdResponse(struct soap*, tns__blockMediaAnnotationWithIdResponse *const*, const char*, const char*);
+
+#ifndef soap_read_PointerTotns__blockMediaAnnotationWithIdResponse
+#define soap_read_PointerTotns__blockMediaAnnotationWithIdResponse(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_PointerTotns__blockMediaAnnotationWithIdResponse(soap, data, NULL, NULL) || soap_end_recv(soap) )
+#endif
+
+SOAP_FMAC3 tns__blockMediaAnnotationWithIdResponse ** SOAP_FMAC4 soap_get_PointerTotns__blockMediaAnnotationWithIdResponse(struct soap*, tns__blockMediaAnnotationWithIdResponse **, const char*, const char*);
+
+#ifndef SOAP_TYPE_ServerSoap_PointerTotns__blockMediaAnnotationWithId
+#define SOAP_TYPE_ServerSoap_PointerTotns__blockMediaAnnotationWithId (97)
+#endif
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__blockMediaAnnotationWithId(struct soap*, tns__blockMediaAnnotationWithId *const*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__blockMediaAnnotationWithId(struct soap*, const char *, int, tns__blockMediaAnnotationWithId *const*, const char *);
+SOAP_FMAC3 tns__blockMediaAnnotationWithId ** SOAP_FMAC4 soap_in_PointerTotns__blockMediaAnnotationWithId(struct soap*, const char*, tns__blockMediaAnnotationWithId **, const char*);
+
+#ifndef soap_write_PointerTotns__blockMediaAnnotationWithId
+#define soap_write_PointerTotns__blockMediaAnnotationWithId(soap, data) ( soap_begin_send(soap) || (ServerSoap::soap_serialize_PointerTotns__blockMediaAnnotationWithId(soap, data), 0) || ServerSoap::soap_put_PointerTotns__blockMediaAnnotationWithId(soap, data, "tns:blockMediaAnnotationWithId", NULL) || soap_end_send(soap) )
+#endif
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__blockMediaAnnotationWithId(struct soap*, tns__blockMediaAnnotationWithId *const*, const char*, const char*);
+
+#ifndef soap_read_PointerTotns__blockMediaAnnotationWithId
+#define soap_read_PointerTotns__blockMediaAnnotationWithId(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_PointerTotns__blockMediaAnnotationWithId(soap, data, NULL, NULL) || soap_end_recv(soap) )
+#endif
+
+SOAP_FMAC3 tns__blockMediaAnnotationWithId ** SOAP_FMAC4 soap_get_PointerTotns__blockMediaAnnotationWithId(struct soap*, tns__blockMediaAnnotationWithId **, const char*, const char*);
+
+#ifndef SOAP_TYPE_ServerSoap_PointerTotns__blockMediaAliasWithIdResponse
+#define SOAP_TYPE_ServerSoap_PointerTotns__blockMediaAliasWithIdResponse (94)
+#endif
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__blockMediaAliasWithIdResponse(struct soap*, tns__blockMediaAliasWithIdResponse *const*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__blockMediaAliasWithIdResponse(struct soap*, const char *, int, tns__blockMediaAliasWithIdResponse *const*, const char *);
+SOAP_FMAC3 tns__blockMediaAliasWithIdResponse ** SOAP_FMAC4 soap_in_PointerTotns__blockMediaAliasWithIdResponse(struct soap*, const char*, tns__blockMediaAliasWithIdResponse **, const char*);
+
+#ifndef soap_write_PointerTotns__blockMediaAliasWithIdResponse
+#define soap_write_PointerTotns__blockMediaAliasWithIdResponse(soap, data) ( soap_begin_send(soap) || (ServerSoap::soap_serialize_PointerTotns__blockMediaAliasWithIdResponse(soap, data), 0) || ServerSoap::soap_put_PointerTotns__blockMediaAliasWithIdResponse(soap, data, "tns:blockMediaAliasWithIdResponse", NULL) || soap_end_send(soap) )
+#endif
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__blockMediaAliasWithIdResponse(struct soap*, tns__blockMediaAliasWithIdResponse *const*, const char*, const char*);
+
+#ifndef soap_read_PointerTotns__blockMediaAliasWithIdResponse
+#define soap_read_PointerTotns__blockMediaAliasWithIdResponse(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_PointerTotns__blockMediaAliasWithIdResponse(soap, data, NULL, NULL) || soap_end_recv(soap) )
+#endif
+
+SOAP_FMAC3 tns__blockMediaAliasWithIdResponse ** SOAP_FMAC4 soap_get_PointerTotns__blockMediaAliasWithIdResponse(struct soap*, tns__blockMediaAliasWithIdResponse **, const char*, const char*);
+
+#ifndef SOAP_TYPE_ServerSoap_PointerTotns__blockMediaAliasWithId
+#define SOAP_TYPE_ServerSoap_PointerTotns__blockMediaAliasWithId (93)
+#endif
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__blockMediaAliasWithId(struct soap*, tns__blockMediaAliasWithId *const*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__blockMediaAliasWithId(struct soap*, const char *, int, tns__blockMediaAliasWithId *const*, const char *);
+SOAP_FMAC3 tns__blockMediaAliasWithId ** SOAP_FMAC4 soap_in_PointerTotns__blockMediaAliasWithId(struct soap*, const char*, tns__blockMediaAliasWithId **, const char*);
+
+#ifndef soap_write_PointerTotns__blockMediaAliasWithId
+#define soap_write_PointerTotns__blockMediaAliasWithId(soap, data) ( soap_begin_send(soap) || (ServerSoap::soap_serialize_PointerTotns__blockMediaAliasWithId(soap, data), 0) || ServerSoap::soap_put_PointerTotns__blockMediaAliasWithId(soap, data, "tns:blockMediaAliasWithId", NULL) || soap_end_send(soap) )
+#endif
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__blockMediaAliasWithId(struct soap*, tns__blockMediaAliasWithId *const*, const char*, const char*);
+
+#ifndef soap_read_PointerTotns__blockMediaAliasWithId
+#define soap_read_PointerTotns__blockMediaAliasWithId(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_PointerTotns__blockMediaAliasWithId(soap, data, NULL, NULL) || soap_end_recv(soap) )
+#endif
+
+SOAP_FMAC3 tns__blockMediaAliasWithId ** SOAP_FMAC4 soap_get_PointerTotns__blockMediaAliasWithId(struct soap*, tns__blockMediaAliasWithId **, const char*, const char*);
+
+#ifndef SOAP_TYPE_ServerSoap_PointerTotns__blessMediaTokenWithIdResponse
+#define SOAP_TYPE_ServerSoap_PointerTotns__blessMediaTokenWithIdResponse (90)
+#endif
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__blessMediaTokenWithIdResponse(struct soap*, tns__blessMediaTokenWithIdResponse *const*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__blessMediaTokenWithIdResponse(struct soap*, const char *, int, tns__blessMediaTokenWithIdResponse *const*, const char *);
+SOAP_FMAC3 tns__blessMediaTokenWithIdResponse ** SOAP_FMAC4 soap_in_PointerTotns__blessMediaTokenWithIdResponse(struct soap*, const char*, tns__blessMediaTokenWithIdResponse **, const char*);
+
+#ifndef soap_write_PointerTotns__blessMediaTokenWithIdResponse
+#define soap_write_PointerTotns__blessMediaTokenWithIdResponse(soap, data) ( soap_begin_send(soap) || (ServerSoap::soap_serialize_PointerTotns__blessMediaTokenWithIdResponse(soap, data), 0) || ServerSoap::soap_put_PointerTotns__blessMediaTokenWithIdResponse(soap, data, "tns:blessMediaTokenWithIdResponse", NULL) || soap_end_send(soap) )
+#endif
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__blessMediaTokenWithIdResponse(struct soap*, tns__blessMediaTokenWithIdResponse *const*, const char*, const char*);
+
+#ifndef soap_read_PointerTotns__blessMediaTokenWithIdResponse
+#define soap_read_PointerTotns__blessMediaTokenWithIdResponse(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_PointerTotns__blessMediaTokenWithIdResponse(soap, data, NULL, NULL) || soap_end_recv(soap) )
+#endif
+
+SOAP_FMAC3 tns__blessMediaTokenWithIdResponse ** SOAP_FMAC4 soap_get_PointerTotns__blessMediaTokenWithIdResponse(struct soap*, tns__blessMediaTokenWithIdResponse **, const char*, const char*);
+
+#ifndef SOAP_TYPE_ServerSoap_PointerTotns__blessMediaTokenWithId
+#define SOAP_TYPE_ServerSoap_PointerTotns__blessMediaTokenWithId (89)
+#endif
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__blessMediaTokenWithId(struct soap*, tns__blessMediaTokenWithId *const*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__blessMediaTokenWithId(struct soap*, const char *, int, tns__blessMediaTokenWithId *const*, const char *);
+SOAP_FMAC3 tns__blessMediaTokenWithId ** SOAP_FMAC4 soap_in_PointerTotns__blessMediaTokenWithId(struct soap*, const char*, tns__blessMediaTokenWithId **, const char*);
+
+#ifndef soap_write_PointerTotns__blessMediaTokenWithId
+#define soap_write_PointerTotns__blessMediaTokenWithId(soap, data) ( soap_begin_send(soap) || (ServerSoap::soap_serialize_PointerTotns__blessMediaTokenWithId(soap, data), 0) || ServerSoap::soap_put_PointerTotns__blessMediaTokenWithId(soap, data, "tns:blessMediaTokenWithId", NULL) || soap_end_send(soap) )
+#endif
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__blessMediaTokenWithId(struct soap*, tns__blessMediaTokenWithId *const*, const char*, const char*);
+
+#ifndef soap_read_PointerTotns__blessMediaTokenWithId
+#define soap_read_PointerTotns__blessMediaTokenWithId(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_PointerTotns__blessMediaTokenWithId(soap, data, NULL, NULL) || soap_end_recv(soap) )
+#endif
+
+SOAP_FMAC3 tns__blessMediaTokenWithId ** SOAP_FMAC4 soap_get_PointerTotns__blessMediaTokenWithId(struct soap*, tns__blessMediaTokenWithId **, const char*, const char*);
+
 #ifndef SOAP_TYPE_ServerSoap_PointerTotns__blessMediaAnnotationWithIdResponse
-#define SOAP_TYPE_ServerSoap_PointerTotns__blessMediaAnnotationWithIdResponse (108)
+#define SOAP_TYPE_ServerSoap_PointerTotns__blessMediaAnnotationWithIdResponse (86)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__blessMediaAnnotationWithIdResponse(struct soap*, tns__blessMediaAnnotationWithIdResponse *const*);
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__blessMediaAnnotationWithIdResponse(struct soap*, const char *, int, tns__blessMediaAnnotationWithIdResponse *const*, const char *);
@@ -4787,7 +3876,7 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__blessMediaAnnotationWithIdRespo
 SOAP_FMAC3 tns__blessMediaAnnotationWithIdResponse ** SOAP_FMAC4 soap_get_PointerTotns__blessMediaAnnotationWithIdResponse(struct soap*, tns__blessMediaAnnotationWithIdResponse **, const char*, const char*);
 
 #ifndef SOAP_TYPE_ServerSoap_PointerTotns__blessMediaAnnotationWithId
-#define SOAP_TYPE_ServerSoap_PointerTotns__blessMediaAnnotationWithId (107)
+#define SOAP_TYPE_ServerSoap_PointerTotns__blessMediaAnnotationWithId (85)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__blessMediaAnnotationWithId(struct soap*, tns__blessMediaAnnotationWithId *const*);
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__blessMediaAnnotationWithId(struct soap*, const char *, int, tns__blessMediaAnnotationWithId *const*, const char *);
@@ -4805,46 +3894,46 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__blessMediaAnnotationWithId(stru
 
 SOAP_FMAC3 tns__blessMediaAnnotationWithId ** SOAP_FMAC4 soap_get_PointerTotns__blessMediaAnnotationWithId(struct soap*, tns__blessMediaAnnotationWithId **, const char*, const char*);
 
-#ifndef SOAP_TYPE_ServerSoap_PointerTotns__blessGameAnnotationWithIdResponse
-#define SOAP_TYPE_ServerSoap_PointerTotns__blessGameAnnotationWithIdResponse (104)
+#ifndef SOAP_TYPE_ServerSoap_PointerTotns__blessMediaAliasWithIdResponse
+#define SOAP_TYPE_ServerSoap_PointerTotns__blessMediaAliasWithIdResponse (82)
 #endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__blessGameAnnotationWithIdResponse(struct soap*, tns__blessGameAnnotationWithIdResponse *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__blessGameAnnotationWithIdResponse(struct soap*, const char *, int, tns__blessGameAnnotationWithIdResponse *const*, const char *);
-SOAP_FMAC3 tns__blessGameAnnotationWithIdResponse ** SOAP_FMAC4 soap_in_PointerTotns__blessGameAnnotationWithIdResponse(struct soap*, const char*, tns__blessGameAnnotationWithIdResponse **, const char*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__blessMediaAliasWithIdResponse(struct soap*, tns__blessMediaAliasWithIdResponse *const*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__blessMediaAliasWithIdResponse(struct soap*, const char *, int, tns__blessMediaAliasWithIdResponse *const*, const char *);
+SOAP_FMAC3 tns__blessMediaAliasWithIdResponse ** SOAP_FMAC4 soap_in_PointerTotns__blessMediaAliasWithIdResponse(struct soap*, const char*, tns__blessMediaAliasWithIdResponse **, const char*);
 
-#ifndef soap_write_PointerTotns__blessGameAnnotationWithIdResponse
-#define soap_write_PointerTotns__blessGameAnnotationWithIdResponse(soap, data) ( soap_begin_send(soap) || (ServerSoap::soap_serialize_PointerTotns__blessGameAnnotationWithIdResponse(soap, data), 0) || ServerSoap::soap_put_PointerTotns__blessGameAnnotationWithIdResponse(soap, data, "tns:blessGameAnnotationWithIdResponse", NULL) || soap_end_send(soap) )
-#endif
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__blessGameAnnotationWithIdResponse(struct soap*, tns__blessGameAnnotationWithIdResponse *const*, const char*, const char*);
-
-#ifndef soap_read_PointerTotns__blessGameAnnotationWithIdResponse
-#define soap_read_PointerTotns__blessGameAnnotationWithIdResponse(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_PointerTotns__blessGameAnnotationWithIdResponse(soap, data, NULL, NULL) || soap_end_recv(soap) )
+#ifndef soap_write_PointerTotns__blessMediaAliasWithIdResponse
+#define soap_write_PointerTotns__blessMediaAliasWithIdResponse(soap, data) ( soap_begin_send(soap) || (ServerSoap::soap_serialize_PointerTotns__blessMediaAliasWithIdResponse(soap, data), 0) || ServerSoap::soap_put_PointerTotns__blessMediaAliasWithIdResponse(soap, data, "tns:blessMediaAliasWithIdResponse", NULL) || soap_end_send(soap) )
 #endif
 
-SOAP_FMAC3 tns__blessGameAnnotationWithIdResponse ** SOAP_FMAC4 soap_get_PointerTotns__blessGameAnnotationWithIdResponse(struct soap*, tns__blessGameAnnotationWithIdResponse **, const char*, const char*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__blessMediaAliasWithIdResponse(struct soap*, tns__blessMediaAliasWithIdResponse *const*, const char*, const char*);
 
-#ifndef SOAP_TYPE_ServerSoap_PointerTotns__blessGameAnnotationWithId
-#define SOAP_TYPE_ServerSoap_PointerTotns__blessGameAnnotationWithId (103)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__blessGameAnnotationWithId(struct soap*, tns__blessGameAnnotationWithId *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__blessGameAnnotationWithId(struct soap*, const char *, int, tns__blessGameAnnotationWithId *const*, const char *);
-SOAP_FMAC3 tns__blessGameAnnotationWithId ** SOAP_FMAC4 soap_in_PointerTotns__blessGameAnnotationWithId(struct soap*, const char*, tns__blessGameAnnotationWithId **, const char*);
-
-#ifndef soap_write_PointerTotns__blessGameAnnotationWithId
-#define soap_write_PointerTotns__blessGameAnnotationWithId(soap, data) ( soap_begin_send(soap) || (ServerSoap::soap_serialize_PointerTotns__blessGameAnnotationWithId(soap, data), 0) || ServerSoap::soap_put_PointerTotns__blessGameAnnotationWithId(soap, data, "tns:blessGameAnnotationWithId", NULL) || soap_end_send(soap) )
+#ifndef soap_read_PointerTotns__blessMediaAliasWithIdResponse
+#define soap_read_PointerTotns__blessMediaAliasWithIdResponse(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_PointerTotns__blessMediaAliasWithIdResponse(soap, data, NULL, NULL) || soap_end_recv(soap) )
 #endif
 
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__blessGameAnnotationWithId(struct soap*, tns__blessGameAnnotationWithId *const*, const char*, const char*);
+SOAP_FMAC3 tns__blessMediaAliasWithIdResponse ** SOAP_FMAC4 soap_get_PointerTotns__blessMediaAliasWithIdResponse(struct soap*, tns__blessMediaAliasWithIdResponse **, const char*, const char*);
 
-#ifndef soap_read_PointerTotns__blessGameAnnotationWithId
-#define soap_read_PointerTotns__blessGameAnnotationWithId(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_PointerTotns__blessGameAnnotationWithId(soap, data, NULL, NULL) || soap_end_recv(soap) )
+#ifndef SOAP_TYPE_ServerSoap_PointerTotns__blessMediaAliasWithId
+#define SOAP_TYPE_ServerSoap_PointerTotns__blessMediaAliasWithId (81)
+#endif
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__blessMediaAliasWithId(struct soap*, tns__blessMediaAliasWithId *const*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__blessMediaAliasWithId(struct soap*, const char *, int, tns__blessMediaAliasWithId *const*, const char *);
+SOAP_FMAC3 tns__blessMediaAliasWithId ** SOAP_FMAC4 soap_in_PointerTotns__blessMediaAliasWithId(struct soap*, const char*, tns__blessMediaAliasWithId **, const char*);
+
+#ifndef soap_write_PointerTotns__blessMediaAliasWithId
+#define soap_write_PointerTotns__blessMediaAliasWithId(soap, data) ( soap_begin_send(soap) || (ServerSoap::soap_serialize_PointerTotns__blessMediaAliasWithId(soap, data), 0) || ServerSoap::soap_put_PointerTotns__blessMediaAliasWithId(soap, data, "tns:blessMediaAliasWithId", NULL) || soap_end_send(soap) )
 #endif
 
-SOAP_FMAC3 tns__blessGameAnnotationWithId ** SOAP_FMAC4 soap_get_PointerTotns__blessGameAnnotationWithId(struct soap*, tns__blessGameAnnotationWithId **, const char*, const char*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__blessMediaAliasWithId(struct soap*, tns__blessMediaAliasWithId *const*, const char*, const char*);
+
+#ifndef soap_read_PointerTotns__blessMediaAliasWithId
+#define soap_read_PointerTotns__blessMediaAliasWithId(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_PointerTotns__blessMediaAliasWithId(soap, data, NULL, NULL) || soap_end_recv(soap) )
+#endif
+
+SOAP_FMAC3 tns__blessMediaAliasWithId ** SOAP_FMAC4 soap_get_PointerTotns__blessMediaAliasWithId(struct soap*, tns__blessMediaAliasWithId **, const char*, const char*);
 
 #ifndef SOAP_TYPE_ServerSoap_PointerTotns__user
-#define SOAP_TYPE_ServerSoap_PointerTotns__user (102)
+#define SOAP_TYPE_ServerSoap_PointerTotns__user (80)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__user(struct soap*, tns__user *const*);
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__user(struct soap*, const char *, int, tns__user *const*, const char *);
@@ -4863,7 +3952,7 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__user(struct soap*, tns__user *c
 SOAP_FMAC3 tns__user ** SOAP_FMAC4 soap_get_PointerTotns__user(struct soap*, tns__user **, const char*, const char*);
 
 #ifndef SOAP_TYPE_ServerSoap_PointerTotns__mediaToken
-#define SOAP_TYPE_ServerSoap_PointerTotns__mediaToken (101)
+#define SOAP_TYPE_ServerSoap_PointerTotns__mediaToken (79)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__mediaToken(struct soap*, tns__mediaToken *const*);
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__mediaToken(struct soap*, const char *, int, tns__mediaToken *const*, const char *);
@@ -4882,7 +3971,7 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__mediaToken(struct soap*, tns__m
 SOAP_FMAC3 tns__mediaToken ** SOAP_FMAC4 soap_get_PointerTotns__mediaToken(struct soap*, tns__mediaToken **, const char*, const char*);
 
 #ifndef SOAP_TYPE_ServerSoap_PointerTotns__mediaAnnotation
-#define SOAP_TYPE_ServerSoap_PointerTotns__mediaAnnotation (99)
+#define SOAP_TYPE_ServerSoap_PointerTotns__mediaAnnotation (77)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__mediaAnnotation(struct soap*, tns__mediaAnnotation *const*);
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__mediaAnnotation(struct soap*, const char *, int, tns__mediaAnnotation *const*, const char *);
@@ -4901,7 +3990,7 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__mediaAnnotation(struct soap*, t
 SOAP_FMAC3 tns__mediaAnnotation ** SOAP_FMAC4 soap_get_PointerTotns__mediaAnnotation(struct soap*, tns__mediaAnnotation **, const char*, const char*);
 
 #ifndef SOAP_TYPE_ServerSoap_PointerTotns__mediaAlias
-#define SOAP_TYPE_ServerSoap_PointerTotns__mediaAlias (97)
+#define SOAP_TYPE_ServerSoap_PointerTotns__mediaAlias (75)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__mediaAlias(struct soap*, tns__mediaAlias *const*);
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__mediaAlias(struct soap*, const char *, int, tns__mediaAlias *const*, const char *);
@@ -4919,65 +4008,8 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__mediaAlias(struct soap*, tns__m
 
 SOAP_FMAC3 tns__mediaAlias ** SOAP_FMAC4 soap_get_PointerTotns__mediaAlias(struct soap*, tns__mediaAlias **, const char*, const char*);
 
-#ifndef SOAP_TYPE_ServerSoap_PointerTotns__gameToken
-#define SOAP_TYPE_ServerSoap_PointerTotns__gameToken (96)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__gameToken(struct soap*, tns__gameToken *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__gameToken(struct soap*, const char *, int, tns__gameToken *const*, const char *);
-SOAP_FMAC3 tns__gameToken ** SOAP_FMAC4 soap_in_PointerTotns__gameToken(struct soap*, const char*, tns__gameToken **, const char*);
-
-#ifndef soap_write_PointerTotns__gameToken
-#define soap_write_PointerTotns__gameToken(soap, data) ( soap_begin_send(soap) || (ServerSoap::soap_serialize_PointerTotns__gameToken(soap, data), 0) || ServerSoap::soap_put_PointerTotns__gameToken(soap, data, "tns:gameToken", NULL) || soap_end_send(soap) )
-#endif
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__gameToken(struct soap*, tns__gameToken *const*, const char*, const char*);
-
-#ifndef soap_read_PointerTotns__gameToken
-#define soap_read_PointerTotns__gameToken(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_PointerTotns__gameToken(soap, data, NULL, NULL) || soap_end_recv(soap) )
-#endif
-
-SOAP_FMAC3 tns__gameToken ** SOAP_FMAC4 soap_get_PointerTotns__gameToken(struct soap*, tns__gameToken **, const char*, const char*);
-
-#ifndef SOAP_TYPE_ServerSoap_PointerTotns__gameAnnotation
-#define SOAP_TYPE_ServerSoap_PointerTotns__gameAnnotation (94)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__gameAnnotation(struct soap*, tns__gameAnnotation *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__gameAnnotation(struct soap*, const char *, int, tns__gameAnnotation *const*, const char *);
-SOAP_FMAC3 tns__gameAnnotation ** SOAP_FMAC4 soap_in_PointerTotns__gameAnnotation(struct soap*, const char*, tns__gameAnnotation **, const char*);
-
-#ifndef soap_write_PointerTotns__gameAnnotation
-#define soap_write_PointerTotns__gameAnnotation(soap, data) ( soap_begin_send(soap) || (ServerSoap::soap_serialize_PointerTotns__gameAnnotation(soap, data), 0) || ServerSoap::soap_put_PointerTotns__gameAnnotation(soap, data, "tns:gameAnnotation", NULL) || soap_end_send(soap) )
-#endif
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__gameAnnotation(struct soap*, tns__gameAnnotation *const*, const char*, const char*);
-
-#ifndef soap_read_PointerTotns__gameAnnotation
-#define soap_read_PointerTotns__gameAnnotation(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_PointerTotns__gameAnnotation(soap, data, NULL, NULL) || soap_end_recv(soap) )
-#endif
-
-SOAP_FMAC3 tns__gameAnnotation ** SOAP_FMAC4 soap_get_PointerTotns__gameAnnotation(struct soap*, tns__gameAnnotation **, const char*, const char*);
-
-#ifndef SOAP_TYPE_ServerSoap_PointerTotns__gameAlias
-#define SOAP_TYPE_ServerSoap_PointerTotns__gameAlias (92)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__gameAlias(struct soap*, tns__gameAlias *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__gameAlias(struct soap*, const char *, int, tns__gameAlias *const*, const char *);
-SOAP_FMAC3 tns__gameAlias ** SOAP_FMAC4 soap_in_PointerTotns__gameAlias(struct soap*, const char*, tns__gameAlias **, const char*);
-
-#ifndef soap_write_PointerTotns__gameAlias
-#define soap_write_PointerTotns__gameAlias(soap, data) ( soap_begin_send(soap) || (ServerSoap::soap_serialize_PointerTotns__gameAlias(soap, data), 0) || ServerSoap::soap_put_PointerTotns__gameAlias(soap, data, "tns:gameAlias", NULL) || soap_end_send(soap) )
-#endif
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__gameAlias(struct soap*, tns__gameAlias *const*, const char*, const char*);
-
-#ifndef soap_read_PointerTotns__gameAlias
-#define soap_read_PointerTotns__gameAlias(soap, data) ( soap_begin_recv(soap) || !ServerSoap::soap_get_PointerTotns__gameAlias(soap, data, NULL, NULL) || soap_end_recv(soap) )
-#endif
-
-SOAP_FMAC3 tns__gameAlias ** SOAP_FMAC4 soap_get_PointerTotns__gameAlias(struct soap*, tns__gameAlias **, const char*, const char*);
-
 #ifndef SOAP_TYPE_ServerSoap_PointerTostd__string
-#define SOAP_TYPE_ServerSoap_PointerTostd__string (89)
+#define SOAP_TYPE_ServerSoap_PointerTostd__string (72)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTostd__string(struct soap*, std::string *const*);
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTostd__string(struct soap*, const char *, int, std::string *const*, const char *);
@@ -5040,7 +4072,7 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_put_string(struct soap*, char *const*, const char
 SOAP_FMAC3 char ** SOAP_FMAC4 soap_get_string(struct soap*, char **, const char*, const char*);
 
 #ifndef SOAP_TYPE_ServerSoap_std__vectorTemplateOfPointerTotns__mediaAnnotation
-#define SOAP_TYPE_ServerSoap_std__vectorTemplateOfPointerTotns__mediaAnnotation (100)
+#define SOAP_TYPE_ServerSoap_std__vectorTemplateOfPointerTotns__mediaAnnotation (78)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default_std__vectorTemplateOfPointerTotns__mediaAnnotation(struct soap*, std::vector<tns__mediaAnnotation * >*);
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_std__vectorTemplateOfPointerTotns__mediaAnnotation(struct soap*, const std::vector<tns__mediaAnnotation * >*);
@@ -5056,7 +4088,7 @@ SOAP_FMAC1 std::vector<tns__mediaAnnotation * > * SOAP_FMAC2 soap_instantiate_st
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_std__vectorTemplateOfPointerTotns__mediaAnnotation(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ServerSoap_std__vectorTemplateOfPointerTotns__mediaAlias
-#define SOAP_TYPE_ServerSoap_std__vectorTemplateOfPointerTotns__mediaAlias (98)
+#define SOAP_TYPE_ServerSoap_std__vectorTemplateOfPointerTotns__mediaAlias (76)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default_std__vectorTemplateOfPointerTotns__mediaAlias(struct soap*, std::vector<tns__mediaAlias * >*);
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_std__vectorTemplateOfPointerTotns__mediaAlias(struct soap*, const std::vector<tns__mediaAlias * >*);
@@ -5070,38 +4102,6 @@ SOAP_FMAC3 std::vector<tns__mediaAlias * >* SOAP_FMAC4 soap_in_std__vectorTempla
 
 SOAP_FMAC1 std::vector<tns__mediaAlias * > * SOAP_FMAC2 soap_instantiate_std__vectorTemplateOfPointerTotns__mediaAlias(struct soap*, int, const char*, const char*, size_t*);
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_std__vectorTemplateOfPointerTotns__mediaAlias(struct soap*, int, int, void*, size_t, const void*, size_t);
-
-#ifndef SOAP_TYPE_ServerSoap_std__vectorTemplateOfPointerTotns__gameAnnotation
-#define SOAP_TYPE_ServerSoap_std__vectorTemplateOfPointerTotns__gameAnnotation (95)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_default_std__vectorTemplateOfPointerTotns__gameAnnotation(struct soap*, std::vector<tns__gameAnnotation * >*);
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_std__vectorTemplateOfPointerTotns__gameAnnotation(struct soap*, const std::vector<tns__gameAnnotation * >*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_std__vectorTemplateOfPointerTotns__gameAnnotation(struct soap*, const char*, int, const std::vector<tns__gameAnnotation * >*, const char*);
-SOAP_FMAC3 std::vector<tns__gameAnnotation * >* SOAP_FMAC4 soap_in_std__vectorTemplateOfPointerTotns__gameAnnotation(struct soap*, const char*, std::vector<tns__gameAnnotation * >*, const char*);
-
-#define soap_new_std__vectorTemplateOfPointerTotns__gameAnnotation(soap, n) soap_instantiate_std__vectorTemplateOfPointerTotns__gameAnnotation(soap, n, NULL, NULL, NULL)
-
-
-#define soap_delete_std__vectorTemplateOfPointerTotns__gameAnnotation(soap, p) soap_delete(soap, p)
-
-SOAP_FMAC1 std::vector<tns__gameAnnotation * > * SOAP_FMAC2 soap_instantiate_std__vectorTemplateOfPointerTotns__gameAnnotation(struct soap*, int, const char*, const char*, size_t*);
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_std__vectorTemplateOfPointerTotns__gameAnnotation(struct soap*, int, int, void*, size_t, const void*, size_t);
-
-#ifndef SOAP_TYPE_ServerSoap_std__vectorTemplateOfPointerTotns__gameAlias
-#define SOAP_TYPE_ServerSoap_std__vectorTemplateOfPointerTotns__gameAlias (93)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_default_std__vectorTemplateOfPointerTotns__gameAlias(struct soap*, std::vector<tns__gameAlias * >*);
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_std__vectorTemplateOfPointerTotns__gameAlias(struct soap*, const std::vector<tns__gameAlias * >*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_std__vectorTemplateOfPointerTotns__gameAlias(struct soap*, const char*, int, const std::vector<tns__gameAlias * >*, const char*);
-SOAP_FMAC3 std::vector<tns__gameAlias * >* SOAP_FMAC4 soap_in_std__vectorTemplateOfPointerTotns__gameAlias(struct soap*, const char*, std::vector<tns__gameAlias * >*, const char*);
-
-#define soap_new_std__vectorTemplateOfPointerTotns__gameAlias(soap, n) soap_instantiate_std__vectorTemplateOfPointerTotns__gameAlias(soap, n, NULL, NULL, NULL)
-
-
-#define soap_delete_std__vectorTemplateOfPointerTotns__gameAlias(soap, p) soap_delete(soap, p)
-
-SOAP_FMAC1 std::vector<tns__gameAlias * > * SOAP_FMAC2 soap_instantiate_std__vectorTemplateOfPointerTotns__gameAlias(struct soap*, int, const char*, const char*, size_t*);
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_std__vectorTemplateOfPointerTotns__gameAlias(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 } // namespace ServerSoap
 

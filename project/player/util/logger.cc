@@ -19,7 +19,7 @@ void
 Logger::notify(const QString &message)
 {
   gConsole().append(
-    CORE_HTML_STYLE_OPEN(color:orange)
+    CORE_HTML_STYLE_OPEN(color:purple)
     ": " + message +
     CORE_HTML_STYLE_CLOSE() CORE_HTML_BR()
   );
@@ -29,7 +29,7 @@ void
 Logger::warn(const QString &message)
 {
   gConsole().append(
-    CORE_HTML_STYLE_OPEN(color:purple)
+    CORE_HTML_STYLE_OPEN(color:orange)
     ": " + message +
     CORE_HTML_STYLE_CLOSE() CORE_HTML_BR()
   );

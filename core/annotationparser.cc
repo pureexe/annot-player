@@ -9,7 +9,7 @@
 #include <boost/tuple/tuple.hpp>
 #include <boost/typeof/typeof.hpp>
 
-#define DEBUG "Core::AnnotationParser"
+//#define DEBUG "Core::AnnotationParser"
 #include "module/debug/debug.h"
 
 #define DEFAULT_TINY_SIZE        "10px"

@@ -1,0 +1,165 @@
+# KDE Config File
+[Config]
+PixmapPath=charlix
+Description=charlix
+Description[bg]=Тюкс
+Description[eo]=Tuĉjo
+Description[he]=טקס
+Description[hi]=टक्स
+Description[lv]=Tuksis
+Description[ru]=Тукс
+Description[ta]= Tux
+Description[tg]=Тукс
+Description[th]=ตุ๊กซ์
+Description[tr]=Penguen (Hareketli)
+Description[uz]=Такс
+Description[zh_CN]=Tux小企鹅
+About=By Frank Pieczynski\nBased on graphics of the game "pingus".
+About[af]=Deur Frank Pieczynski\nBased op grafieka van die speletjie "pingus".
+About[ar]=من فرانك بيسزينسكي\nمبنية على رسومات لعبة "pingus".
+About[az]=Frank Pieczynski tərəfindən\n"Pingus" oyunu qrafikaları əsasında.
+About[bg]=Автор Франк Пижински\nБазирано на графика от играта pingus
+About[bs]=Autor Frank Pieczynski\nBazirano na slikama iz igre "pingus".
+About[ca]=Per Frank Pieczynski\nBasat en els gràfics del joc "pingus".
+About[cs]=Autor Frank Pieczynski\nNa základě grafiky hry "pingus".
+About[cy]=Gan Frank Pieczynski\nSeiliedig ar raffegau y gêm "pingus".
+About[da]=Af Frank Pieczynski\nBaseret på grafik fra spillet "pingus".
+About[de]=Von Frank Pieczynski\nNach den Graphiken des Spiels "Pingus"
+About[el]=Από τον Frank Pieczynski\n Βασισμένο σε γραφικά από το παιχνίδι "pingus".
+About[eo]=De Frank Pieczynski\nbazita sur grafikoj de la ludo "pingus".
+About[es]=Por Frank Pieczynski\nBasado en gráficos del juego "pingus".
+About[et]=Autor: Frank Pieczynski\nAluseks mängu "pingus" graafika.
+About[eu]=Frank Pieczynskik egina\n"pingus" jokoaren irudietan oinarritua.
+About[fi]=Tehnyt Frank Pieczynski\nPerustuu "pingus" pelin grafiikoihin.
+About[fr]=Par Frank Pieczynski\nBasé sur les graphismes du jeu « pingus ».
+About[ga]=Le Frank Pieczynski\nBunaithe ar ghrafaigh an chluiche "pingus".
+About[gl]=Por Frank Pieczynski\nBasedo nos gráficos do xogo "pingus".
+About[he]=מאת פרנק פיצינקסי\nמבוסס על הגרפיקה של המשחק "pingus".
+About[hi]=फ्रेंक पाईजेंस्की द्वारा\nखेल "pingus" के चित्रों पर आधारित.
+About[hr]=Autor: Frank Pieczynski\nBazirano na grafici iz igre "pingus".
+About[hu]=Készítette: Frank Pieczynski\nA grafika a "Pingus" nevű játékból származik.
+About[is]=By Frank Pieczynski\nByggt á myndefni úr leiknum "pingus".
+About[it]=Di Frank Pieczynski.\nBasato sulla grafica del gioco "pingus".
+About[ja]=By Frank Pieczynski\nゲーム "pingus"のグラフィックに基づく。
+About[lv]=Autors - Frank Pieczynski\nBāzēts uz spēles "pingus" grafiskās idejas.
+About[nb]=Av Frank Pieczynski\nBasert på grafikk fra spillet «pingus».
+About[nl]=Door Frank Pieczynski\nGebaseerd op illustraties uit het spel "pingus".
+About[nn]=Av Frank Pieczynski\nBasert på grafikk frå spelet "pingus".
+About[pl]=Autorstwa Franka Pieczynskiego\nNa podstawie grafiki z gry "pingus".
+About[pt]=De Frank Pieczynski\nBaseado numa imagem do jogo "pingus".
+About[pt_BR]=Por Frank Pieczynski\nBaseado nos gráficos do jogo "pingus".
+About[ro]=De Frank Pieczynski\nBazat pe grafica jocului "pingus".
+About[ru]=Автор - Frank Pieczynski\nНа основе графики игры "pingus".
+About[sk]=Vytvoril Frank Pieczynski\nZaložené na grafike z hry "pingus".
+About[sl]=Od Franka Pieczynskega\nTemelji na grafiki igre "pingus".
+About[sr]=Аутор Френк Пјекзински\нБазирано на графици игре "pingus".
+About[sr@Latn]=Autor Frenk Pjekzinski\nBazirano na grafici igre "pingus".
+About[sv]=Av Frank Pieczynski\nBaserad på grafik från spelet "Pingus"
+About[ta]=பிரான்க் பிஸ்சிகி \nஅசைவுட்ட விளையாட்டு " பின்கஸ்"  லை பற்றியது.
+About[tg]=Франки Пикзунский\nТасвирҳои бозии "pingus".
+About[th]=โดย Frank Pieczynski\nโดยใช้พื้นฐานกราฟิกจากเกม "pingus"
+About[tr]=Frank Pieczynski\nPingus oyunundan esinlenilmiştir.
+About[uk]=Автор: Frank Pieczynski\nПобудовано з графіки для гри "pingus".
+About[uz]=Франк Писцински (Frank Pieczynski) яратган\nPingus ўйинининг графикасида асосланган.
+About[ven]=Nga Frank Pieczynski\nZwo di sendeka nga girafu ya mutambo "pingus".
+About[xh]=Ngu Frank Pieczynski\nyamelene nemizobo yomdlalo "pingus".
+About[zh_CN]=作者：Frank Pieczynski\n基于“pingus”游戏中的图形。
+About[zu]=Ngu Frank Pieczynski\nIsekelwe emidwebeni yomdlalo "pingus".
+Icon=pinguin.png
+Base=Talk
+Sequences=WalkLeft,WalkRight,Float,Tumble,BashLeft,BashRight,Dig,Bomb,Fly
+Focus=Float
+Blur=Bomb
+Destroy=Bomb
+
+[Base]
+Sequence=sleep1.png,sleep2.png,sleep1.png,sleep2.png
+Movement=0,0,0,0,0
+Delay=500,500,500,500
+HotspotX=16,16,16,16,16,16
+HotspotY=32,32,32,32,32,32
+
+[Fly]
+Sequence=bomber1.png,tumble8.png,bomber1.png,tumble8.png,bomber1.png,tumble8.png,bomber1.png,tumble2.png,blocker1.png,blocker2.png,blocker3.png,blocker4.png,blocker5.png,blocker6.png
+Movement=0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+Delay=200,200,200,200,200,200,200,1000,200,200,200,200,200,200
+HotspotX=16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16
+HotspotY=32,38,44,50,56,60,46,32,32,32,32,32,32,32,32,32
+
+[Float]
+Sequence=floater1.png,floater2.png,floater3.png,floater4.png,floater5.png,floater6.png,floater7.png,floater8.png,floater1.png,floater2.png,floater3.png,floater4.png,floater5.png,floater6.png,floater7.png,floater8.png
+Movement=2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2
+Delay=200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200
+HotspotX=16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16
+HotspotY=32,0,-50,-100,-60,-30,0,10,32,40,50,60,60,50,40,32
+
+[FallDown]
+Sequence=faller1.png,faller2.png,faller3.png,faller4.png,faller5.png,faller6.png,faller7.png,faller8.png
+Movement=0,0,0,0,0,0,0,0
+Delay=200,200,200,200,200,200,200,200
+HotspotX=16,16,16,16,16,16,16,16
+HotspotY=20,10,-10,-50,-130,-300,-500,-750
+#HotspotY=32,20,0,-20,-50,-80,-120,-160
+
+[FallUp]
+Sequence=faller1.png,faller2.png,faller3.png,faller4.png,faller5.png,faller6.png,faller7.png,faller8.png
+Movement=0,0,0,0,0,0,0,0
+Delay=100,100,100,100,100,100,100,100
+HotspotX=16,16,16,16,16,16,16,16
+HotspotY=750,500,250,150,100,75,50,40
+
+[Tumble]
+Sequence=tumble1.png,tumble2.png,tumble3.png,tumble4.png,tumble5.png,tumble6.png,tumble7.png,tumble8.png
+Movement=0,0,0,0,0,0,0,0
+Delay=200,200,200,200,200,200,200,200
+HotspotX=16,16,16,16,16,16,16,16
+HotspotY=32,32,32,32,32,32,32,32
+
+[WalkLeft]
+Sequence=walk_l1.png,walk_l2.png,walk_l3.png,walk_l4.png,walk_l5.png,walk_l6.png,walk_l7.png,walk_l8.png
+Movement=-8,-8,-8,-8,-8,-8,-8,-8
+Delay=300,300,300,300,300,300,300,300
+HotspotX=16,16,16,16,16,16,16,16
+HotspotY=32,32,32,32,32,32,32,32
+
+[WalkRight]
+Sequence=walk_r1.png,walk_r2.png,walk_r3.png,walk_r4.png,walk_r5.png,walk_r6.png,walk_r7.png,walk_r8.png
+Movement=8,8,8,8,8,8,8,8
+Delay=300,300,300,300,300,300,300,300
+HotspotX=16,16,16,16,16,16,16,16
+HotspotY=32,32,32,32,32,32,32,32
+
+[BashLeft]
+Sequence=bash_l1.png,bash_l2.png,bash_l3.png,bash_l4.png,bash_l5.png,bash_l6.png,bash_l7.png,bash_l8.png,bash_l9.png,bash_l10.png,bash_l11.png,bash_l12.png
+Movement=-8,-8,-8,-8,-8,-8,-8,-8,-8,-8,-8,-8
+Delay=200,200,200,200,200,200,200,200,200,200,200,200
+HotspotX=16,16,16,16,16,16,16,16,16,16,16,16
+HotspotY=32,32,32,32,32,32,32,32,32,32,32,32
+
+[BashRight]
+Sequence=bash_r1.png,bash_r2.png,bash_r3.png,bash_r4.png,bash_r5.png,bash_r6.png,bash_r7.png,bash_r8.png,bash_r9.png,bash_r10.png,bash_r11.png,bash_r12.png
+Movement=8,8,8,8,8,8,8,8,8,8,8,8
+Delay=200,200,200,200,200,200,200,200,200,200,200,200
+HotspotX=16,16,16,16,16,16,16,16,16,16,16,16
+HotspotY=32,32,32,32,32,32,32,32,32,32,32,32
+
+[Bomb]
+Sequence=bomber1.png,bomber2.png,bomber3.png,bomber4.png,bomber5.png,bomber6.png,bomber7.png,bomber8.png,bomber9.png,bomber10.png,bomber11.png,bomber12.png,bomber13.png,bomber14.png,bomber15.png,bomber16.png
+Movement=0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+Delay=100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100
+HotspotX=16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16
+HotspotY=32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32
+
+[Dig]
+Sequence=digger1.png,digger2.png,digger3.png,digger4.png,digger5.png,digger6.png,digger7.png,digger8.png,digger9.png,digger10.png,digger11.png,digger12.png,digger13.png,digger14.png
+Movement=0,0,0,0,0,0,0,0,0,0,0,0,0,0
+Delay=200,200,200,200,200,200,200,200,200,200,200,200,200,200
+HotspotX=16,16,16,16,16,16,16,16,16,16,16,16,16,16
+HotspotY=32,32,32,32,32,32,32,32,32,32,32,32,32,32
+
+[Talk]
+Sequence=faller9.png,faller8.png,faller10.png
+Movement=0,0,0
+Delay=200,200,200
+HotspotX=16,16,16
+HotspotY=32,32,32

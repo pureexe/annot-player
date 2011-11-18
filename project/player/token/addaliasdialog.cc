@@ -47,10 +47,10 @@ AddAliasDialog::AddAliasDialog(QWidget *parent)
     _label->setToolTip(_tr); \
   }
 
-  MAKE_LABEL(tagLabel, tr("Tag"))
-  MAKE_LABEL(typeLabel, tr("Type"))
-  MAKE_LABEL(languageLabel, tr("Language"))
-  MAKE_LABEL(aliasLabel, tr("Alias"))
+  MAKE_LABEL(tagLabel, TR(T_TAG))
+  MAKE_LABEL(typeLabel, TR(T_TYPE))
+  MAKE_LABEL(languageLabel, TR(T_LANGUAGE))
+  MAKE_LABEL(aliasLabel, TR(T_ALIAS))
 #undef MAKE_LABEL
 
 #define MAKE_TAG(_id) \
@@ -66,10 +66,8 @@ AddAliasDialog::AddAliasDialog(QWidget *parent)
   connect(tag##_id##Button, SIGNAL(clicked()), SLOT(tag##_id()));
 
   MAKE_TAG(BD)
-  MAKE_TAG(BDRip)
   MAKE_TAG(DVD)
-  MAKE_TAG(DVDRip)
-  MAKE_TAG(TVRip)
+  MAKE_TAG(TV)
   MAKE_TAG(Web)
 #undef MAKE_TAG
 
@@ -151,10 +149,8 @@ AddAliasDialog::AddAliasDialog(QWidget *parent)
     row3->addWidget(tagLabel);
     row3->addStretch();
     row3->addWidget(tagBDButton);
-    row3->addWidget(tagBDRipButton);
     row3->addWidget(tagDVDButton);
-    row3->addWidget(tagDVDRipButton);
-    row3->addWidget(tagTVRipButton);
+    row3->addWidget(tagTVButton);
     row3->addWidget(tagWebButton);
 
     row4->addWidget(aliasLabel);

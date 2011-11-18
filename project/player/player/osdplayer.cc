@@ -6,17 +6,17 @@
 #include "tr.h"
 #include "stylesheet.h"
 #include "uistyle.h"
-#ifdef USE_WIN_QTWIN
+#ifdef Q_WS_WIN
   #include "win/qtwin/qtwin.h"
-#endif // USE_WIN_QTWIN
+#endif // Q_WS_WIN
 #include "core/gui/toolbutton.h"
 #include <QtGui>
 
-#define DEBUG "OSDPlayerUi"
+#define DEBUG "OsdPlayerUi"
 #include "module/debug/debug.h"
 
 // - Constructions -
-OSDPlayerUi::OSDPlayerUi(SignalHub *hub, Player *player, ServerAgent *server, QWidget *parent)
+OsdPlayerUi::OsdPlayerUi(SignalHub *hub, Player *player, ServerAgent *server, QWidget *parent)
   : Base(hub, player, server, parent), menuButton_(0), trackingWindow_(0)
 {
   setWindowFlags(Qt::FramelessWindowHint);
@@ -36,10 +36,12 @@ OSDPlayerUi::OSDPlayerUi(SignalHub *hub, Player *player, ServerAgent *server, QW
   connect(lineEdit(), SIGNAL(textChanged(QString)), SLOT(resetAutoHideTimeoutWhenEditing(QString)));
   connect(prefixLineEdit(), SIGNAL(cursorPositionChanged(int,int)), SLOT(resetAutoHideTimeoutWhenEditing(int,int)));
   connect(lineEdit(), SIGNAL(cursorPositionChanged(int,int)), SLOT(resetAutoHideTimeoutWhenEditing(int,int)));
+
+  resize(0, 0); // temporarily
 }
 
 void
-OSDPlayerUi::createLayout()
+OsdPlayerUi::createLayout()
 {
   // Reset Ui style
   prefixLineEdit()->setStyleSheet(SS_PREFIXLINEEDIT_OSD);
@@ -73,7 +75,7 @@ OSDPlayerUi::createLayout()
 // - Auto hide -
 
 void
-OSDPlayerUi::autoHide()
+OsdPlayerUi::autoHide()
 {
   if (underMouse() || lineEdit()->hasFocus() || prefixLineEdit()->hasFocus())
     resetAutoHideTimeout();
@@ -82,14 +84,14 @@ OSDPlayerUi::autoHide()
 }
 
 bool
-OSDPlayerUi::autoHideEnabled() const
+OsdPlayerUi::autoHideEnabled() const
 {
   Q_ASSERT(autoHideTimer_);
   return autoHideTimer_->isActive();
 }
 
 void
-OSDPlayerUi::setAutoHideEnabled(bool enabled)
+OsdPlayerUi::setAutoHideEnabled(bool enabled)
 {
   Q_ASSERT(autoHideTimer_);
   if (enabled) {
@@ -102,7 +104,7 @@ OSDPlayerUi::setAutoHideEnabled(bool enabled)
 }
 
 void
-OSDPlayerUi::resetAutoHideTimeout()
+OsdPlayerUi::resetAutoHideTimeout()
 {
   Q_ASSERT(autoHideTimer_);
   if (autoHideTimer_->isActive())
@@ -113,10 +115,10 @@ OSDPlayerUi::resetAutoHideTimeout()
 // - Geometry -
 
 void
-OSDPlayerUi::invalidateGeometry()
+OsdPlayerUi::invalidateGeometry()
 {
   if (trackingWindow_) {
-#ifdef USE_WIN_QTWIN
+#ifdef Q_WS_WIN
     QRect r = QtWin::getWindowRect(trackingWindow_);
     if (r.isNull()) {
       if (!QtWin::isValidWindow(trackingWindow_))
@@ -134,7 +136,7 @@ OSDPlayerUi::invalidateGeometry()
 
       moveToGlobalPos(QPoint(x_left, y_bottom));
     }
-#endif // USE_WIN_QTWIN
+#endif // Q_WS_WIN
   } else if(parentWidget()) {
 
     // Invalidate size
@@ -151,7 +153,7 @@ OSDPlayerUi::invalidateGeometry()
 }
 
 void
-OSDPlayerUi::moveToGlobalPos(const QPoint &globalPos)
+OsdPlayerUi::moveToGlobalPos(const QPoint &globalPos)
 {
   // Currently only work on Windows
   QPoint newPos = frameGeometry().topLeft() + pos() // relative position
@@ -161,11 +163,11 @@ OSDPlayerUi::moveToGlobalPos(const QPoint &globalPos)
 }
 
 WId
-OSDPlayerUi::trackingWindow() const
+OsdPlayerUi::trackingWindow() const
 { return trackingWindow_; }
 
 void
-OSDPlayerUi::setTrackingWindow(WId hwnd)
+OsdPlayerUi::setTrackingWindow(WId hwnd)
 {
   if (trackingWindow_ != hwnd) {
      trackingWindow_ = hwnd;
@@ -177,21 +179,21 @@ OSDPlayerUi::setTrackingWindow(WId hwnd)
 }
 
 void
-OSDPlayerUi::startTracking()
+OsdPlayerUi::startTracking()
 {
   if (!trackingTimer_->isActive())
     trackingTimer_->start();
 }
 
 void
-OSDPlayerUi::stopTracking()
+OsdPlayerUi::stopTracking()
 {
   if (trackingTimer_->isActive())
     trackingTimer_->stop();
 }
 
 void
-OSDPlayerUi::setVisible(bool visible)
+OsdPlayerUi::setVisible(bool visible)
 {
   if (visible == isVisible())
     return;
@@ -210,11 +212,11 @@ OSDPlayerUi::setVisible(bool visible)
 // - Menu button -
 
 void
-OSDPlayerUi::setMenu(QMenu *menu)
+OsdPlayerUi::setMenu(QMenu *menu)
 { menuButton()->setMenu(menu); }
 
 QToolButton*
-OSDPlayerUi::menuButton()
+OsdPlayerUi::menuButton()
 {
   if (!menuButton_) {
     menuButton_ = new Core::Gui::ToolButton(this);
@@ -228,7 +230,7 @@ OSDPlayerUi::menuButton()
 }
 
 void
-OSDPlayerUi::popupMenu()
+OsdPlayerUi::popupMenu()
 {
   emit invalidateMenuRequested();
   menuButton()->showMenu();

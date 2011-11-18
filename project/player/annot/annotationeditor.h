@@ -52,7 +52,8 @@ protected:
 public:
   enum Mode {
     CodeMode = 0,
-    HtmlMode
+    HtmlMode,
+    ModeCount
   };
 
 public:

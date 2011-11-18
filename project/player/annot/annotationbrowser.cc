@@ -62,31 +62,31 @@ AnnotationBrowser::createLayout()
     proxyView_->setAlternatingRowColors(true);
     proxyView_->setModel(proxyModel_);
     proxyView_->setSortingEnabled(true);
-    proxyView_->setToolTip(tr("Annotations"));
+    proxyView_->setToolTip(TR(T_ANNOTATION));
   }
 
   filterPatternLineEdit_ = new LineEdit; {
     filterPatternLineEdit_->setStyleSheet(SS_LINEEDIT);
-    filterPatternLineEdit_->setToolTip(tr("Filter pattern"));
+    filterPatternLineEdit_->setToolTip(TR(T_FILTER_PATTERN));
   }
   QLabel *filterPatternLabel = new QLabel; {
     filterPatternLabel->setStyleSheet(SS_LABEL);
     filterPatternLabel->setBuddy(filterPatternLineEdit_);
-    filterPatternLabel->setText(tr("&Filter pattern") + ":");
+    filterPatternLabel->setText(TR(T_FILTER_PATTERN) + ":");
     filterPatternLabel->setToolTip(filterPatternLineEdit_->toolTip());
   }
 
   filterSyntaxComboBox_ = new Core::Gui::ComboBox; {
     UiStyle::globalInstance()->setComboBoxStyle(filterSyntaxComboBox_);
-    filterSyntaxComboBox_->addItem(tr("Regular expression"), QRegExp::RegExp);
-    filterSyntaxComboBox_->addItem(tr("Wildcard"), QRegExp::Wildcard);
-    filterSyntaxComboBox_->addItem(tr("Fixed string"), QRegExp::FixedString);
-    filterSyntaxComboBox_->setToolTip(tr("Filter syntax"));
+    filterSyntaxComboBox_->addItem(TR(T_FILTER_REGEX), QRegExp::RegExp);
+    filterSyntaxComboBox_->addItem(TR(T_FILTER_WILDCARD), QRegExp::Wildcard);
+    filterSyntaxComboBox_->addItem(TR(T_FILTER_FIXED), QRegExp::FixedString);
+    filterSyntaxComboBox_->setToolTip(TR(T_FILTER_SYNTAX));
   }
   QLabel *filterSyntaxLabel = new QLabel; {
     filterSyntaxLabel->setStyleSheet(SS_LABEL);
     filterSyntaxLabel->setBuddy(filterSyntaxComboBox_);
-    filterSyntaxLabel->setText(tr("Filter &syntax") + ":");
+    filterSyntaxLabel->setText(TR(T_FILTER_SYNTAX) + ":");
     filterSyntaxLabel->setToolTip(filterSyntaxComboBox_->toolTip());
   }
 
@@ -94,15 +94,14 @@ AnnotationBrowser::createLayout()
     UiStyle::globalInstance()->setComboBoxStyle(filterColumnComboBox_);
     for (int i = 0; i < sourceModel_->columnCount(); i++)
       filterColumnComboBox_->addItem(sourceModel_->headerData(i, Qt::Horizontal).toString());
-    filterColumnComboBox_->setToolTip(tr("Filter column"));
+    filterColumnComboBox_->setToolTip(TR(T_FILTER_COLUMN));
   }
   QLabel *filterColumnLabel = new QLabel; {
     filterColumnLabel->setStyleSheet(SS_LABEL);
     filterColumnLabel->setBuddy(filterColumnComboBox_);
-    filterColumnLabel->setText(tr("Filter &column"));
+    filterColumnLabel->setText(TR(T_FILTER_COLUMN));
     filterColumnLabel->setToolTip(filterColumnComboBox_->toolTip());
   }
-
 
   // Set layout
 
@@ -164,19 +163,20 @@ AnnotationBrowser::createActions()
 void
 AnnotationBrowser::setHeaderData(QAbstractItemModel *model)
 {
-  model->setHeaderData(HD_Text, Qt::Horizontal, tr("Text"));
-  model->setHeaderData(HD_Pos, Qt::Horizontal, tr("Pos"));
-  model->setHeaderData(HD_UserAlias, Qt::Horizontal, tr("UserAlias"));
-  model->setHeaderData(HD_CreateTime, Qt::Horizontal, tr("CreateTime"));
-  model->setHeaderData(HD_UpdateTime, Qt::Horizontal, tr("UpdateTime"));
-  model->setHeaderData(HD_Id, Qt::Horizontal, tr("ID"));
-  model->setHeaderData(HD_Language, Qt::Horizontal, tr("Language"));
-  model->setHeaderData(HD_Status, Qt::Horizontal, tr("Status"));
-  model->setHeaderData(HD_UserId, Qt::Horizontal, tr("UserID"));
-  model->setHeaderData(HD_Flags, Qt::Horizontal, tr("Flags"));
-  model->setHeaderData(HD_BlessedCount, Qt::Horizontal, tr("BlessedCount"));
-  model->setHeaderData(HD_CursedCount, Qt::Horizontal, tr("CursedCount"));
-  model->setHeaderData(HD_BlockedCount, Qt::Horizontal, tr("BlockedCount"));
+  Q_ASSERT(model);
+  model->setHeaderData(HD_Text, Qt::Horizontal, TR(T_TEXT));
+  model->setHeaderData(HD_Pos, Qt::Horizontal, TR(T_POS));
+  model->setHeaderData(HD_UserAlias, Qt::Horizontal, TR(T_USER_ALIAS));
+  model->setHeaderData(HD_CreateTime, Qt::Horizontal, TR(T_CREATETIME));
+  model->setHeaderData(HD_UpdateTime, Qt::Horizontal, TR(T_UPDATETIME));
+  model->setHeaderData(HD_Id, Qt::Horizontal, TR(T_ID));
+  model->setHeaderData(HD_Language, Qt::Horizontal, TR(T_LANGUAGE));
+  model->setHeaderData(HD_Status, Qt::Horizontal, TR(T_STATUS));
+  model->setHeaderData(HD_UserId, Qt::Horizontal, TR(T_USER_ID));
+  model->setHeaderData(HD_Flags, Qt::Horizontal, TR(T_FLAGS));
+  model->setHeaderData(HD_BlessedCount, Qt::Horizontal, TR(T_BLESSEDCOUNT));
+  model->setHeaderData(HD_CursedCount, Qt::Horizontal, TR(T_CURSEDCOUNT));
+  model->setHeaderData(HD_BlockedCount, Qt::Horizontal, TR(T_BLOCKEDCOUNT));
 }
 
 // - Properties -
@@ -276,11 +276,11 @@ AnnotationBrowser::addAnnotation(const Annotation &a)
   if (a.createTime())
     sourceModel_->setData(sourceModel_->index(0, HD_CreateTime), FORMAT_TIME(a.createTime()), Qt::DisplayRole);
   else
-    sourceModel_->setData(sourceModel_->index(0, HD_CreateTime), tr("n/a"), Qt::DisplayRole);
+    sourceModel_->setData(sourceModel_->index(0, HD_CreateTime), TR(T_NA), Qt::DisplayRole);
   if (a.updateTime())
     sourceModel_->setData(sourceModel_->index(0, HD_UpdateTime), FORMAT_TIME(a.updateTime()), Qt::DisplayRole);
   else
-    sourceModel_->setData(sourceModel_->index(0, HD_UpdateTime), tr("n/a"), Qt::DisplayRole);
+    sourceModel_->setData(sourceModel_->index(0, HD_UpdateTime), TR(T_NA), Qt::DisplayRole);
 
   sourceModel_->setData(sourceModel_->index(0, HD_Id), a.id(), Qt::DisplayRole);
   sourceModel_->setData(sourceModel_->index(0, HD_Language), FORMAT_LANGUAGE(a.language()), Qt::DisplayRole);
@@ -346,14 +346,14 @@ QString
 AnnotationBrowser::languageToString(int lang)
 {
   switch(lang) {
-  case Traits::AnyLanguage:     return tr("Any");
-  case Traits::English:         return tr("English");
-  case Traits::Japanese:        return tr("Japanese");
-  case Traits::Chinese:         return tr("Chinese");
-  case Traits::Korean:          return tr("Korean");
+  case Traits::AnyLanguage:     return TR(T_ANYLANGUAGE);
+  case Traits::English:         return TR(T_ENGLISH);
+  case Traits::Japanese:        return TR(T_JAPANESE);
+  case Traits::Chinese:         return TR(T_CHINESE);
+  case Traits::Korean:          return TR(T_KOREAN);
 
   case Traits::UnknownLanguage:
-  default : return tr("Alien");
+  default : return TR(T_ALIEN);
   }
 }
 
@@ -362,10 +362,10 @@ AnnotationBrowser::annotationFlagsToStringList(int flags)
 {
   QStringList ret;
   if (flags | Annotation::AF_Anonymous)
-    ret.append(tr("anonymous"));
+    ret.append(TR(T_ANONYMOUS));
 
   if (ret.isEmpty())
-    ret.append(tr("n/a"));
+    ret.append(TR(T_NA));
   return ret;
 }
 
@@ -373,10 +373,10 @@ QString
 AnnotationBrowser::annotationStatusToString(int status)
 {
   switch (status) {
-  case Annotation::AS_Deleted:  return tr("deleted");
-  case Annotation::AS_Active:   return tr("active");
-  case Annotation::AS_Blocked:  return tr("blocked");
-  default: return tr("n/a");
+  case Annotation::AS_Deleted:  return TR(T_DELETED);
+  case Annotation::AS_Active:   return TR(T_ACTIVE);
+  case Annotation::AS_Blocked:  return TR(T_BLOCKED);
+  default: return TR(T_NA);
   }
 }
 

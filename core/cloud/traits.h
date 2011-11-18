@@ -36,12 +36,14 @@ namespace Core { namespace Cloud {
       KoreanBit =       1L << Korean
     };
 
-    enum Type {
-      NoType = 0, // Error!
-      MediaType,
-      GameType
+    enum Entity {
+      NullEntity = 0, // Error!
+      User,
+      Token,
+      Alias,
+      Annotation
     };
-    enum { TypeCount = 2 };
+    enum { EntityCount = 4 };
 
     // - Limits -
 

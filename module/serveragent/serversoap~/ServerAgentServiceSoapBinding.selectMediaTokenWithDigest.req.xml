@@ -8,6 +8,7 @@
  <SOAP-ENV:Body>
    <tns:selectMediaTokenWithDigest>
     <arg0></arg0>
+    <arg1>0</arg1>
    </tns:selectMediaTokenWithDigest>
 
  </SOAP-ENV:Body>

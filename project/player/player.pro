@@ -37,7 +37,6 @@ win32 {
     DEFINES += USE_WIN_HOOK
     DEFINES += USE_WIN_PICKER
     DEFINES += USE_WIN_QTH
-    DEFINES += USE_WIN_QTWIN
 
     DEPENDPATH += $$ROOTDIR/win/dwm
     DEPENDPATH += $$ROOTDIR/win/hook
@@ -45,6 +44,7 @@ win32 {
     DEPENDPATH += $$ROOTDIR/win/qth
 }
 mac {
+    include($$ROOTDIR/mac/qtmac/qtmac.pri)
     include($$ROOTDIR/mac/vlckit_qt/vlckit_qt.pri)
     DEFINES += USE_MAC_VLCKIT
 }
@@ -85,6 +85,7 @@ INCLUDEPATH     += $$SUBPATH
 DEPENDPATH      += $$SUBPATH
 
 HEADERS += \
+    application.h \
     config.h \
     eventlogger.h \
     mainwindow.h \
@@ -94,9 +95,12 @@ HEADERS += \
     uistyle.h \
     annot/annotationbrowser.h \
     annot/annotationeditor.h \
+    annot/annotationfilter.h \
     annot/annotationgraphicsitem.h \
     annot/annotationgraphicsview.h \
     annot/annotationgraphicsstyle.h \
+    annot/blacklistview.h \
+    annot/blacklistviewprivate.h \
     annot/textformathandler.h \
     data/datamanager.h \
     db/db_config.h \
@@ -105,6 +109,8 @@ HEADERS += \
     define/global.h \
     define/rc.h \
     define/stylesheet.h \
+    dialog/aboutdialog.h \
+    dialog/helpdialog.h \
     dialog/livedialog.h \
     dialog/logindialog.h \
     dialog/pickdialog.h \
@@ -126,6 +132,8 @@ HEADERS += \
     token/tokenview.h \
     user/userpanel.h \
     util/closewidgetthread.h \
+    util/filteredlistview.h \
+    util/filteredtableview.h \
     util/grabber.h \
     util/lineedit.h \
     util/logger.h \
@@ -134,6 +142,7 @@ HEADERS += \
     web/commentview.h
 
 SOURCES += \
+    application.cc \
     eventlogger.cc \
     main.cc \
     mainwindow.cc \
@@ -142,12 +151,17 @@ SOURCES += \
     uistyle.cc \
     annot/annotationbrowser.cc \
     annot/annotationeditor.cc \
+    annot/annotationfilter.cc \
     annot/annotationgraphicsitem.cc \
     annot/annotationgraphicsview.cc \
     annot/annotationgraphicsstyle.cc \
+    annot/blacklistview.cc \
+    annot/blacklistviewprivate.cc \
     annot/textformathandler.cc \
     data/datamanager.cc \
     db/db.cc \
+    dialog/aboutdialog.cc \
+    dialog/helpdialog.cc \
     dialog/livedialog.cc \
     dialog/logindialog.cc \
     dialog/pickdialog.cc \
@@ -168,6 +182,8 @@ SOURCES += \
     token/addaliasdialog.cc \
     token/tokenview.cc \
     user/userpanel.cc \
+    util/filteredtableview.cc \
+    util/filteredlistview.cc \
     util/grabber.cc \
     util/lineedit.cc \
     util/logger.cc \
@@ -211,14 +227,3 @@ mac {
 }
 
 # EOF
-
-
-
-
-
-
-
-
-
-
-

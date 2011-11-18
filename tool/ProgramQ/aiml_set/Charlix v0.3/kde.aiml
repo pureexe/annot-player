@@ -1,0 +1,532 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<aiml version="1.0.1" xmlns="http://alicebot.org/2001/AIML-1.0.1"
+      xmlns:html="http://www.w3.org/1999/xhtml"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://alicebot.org/2001/AIML-1.0.1 http://aitools.org/aiml/schema/AIML.xsd">
+
+
+<!-- Free software Copyright © CHARLIX -->
+<!-- This program is open source code released under-->
+<!-- the terms of the GNU General Public License-->
+<!-- as published by the Free Software Foundation.-->
+<!-- Complies with AIML 1.01 Tag Set Specification-->
+<!-- as adopted by the ALICE A.I. Foundation.-->
+<!-- kde.aiml: based on KDE FAQ web page-->
+
+<category>
+    <pattern>_ IN KDE </pattern>
+    <template><think><set name="topic">kde</set></think><sr/></template>
+  </category>
+   
+<category>
+    <pattern> WHAT IS KDE </pattern>
+    <template> KDE is the K Desktop Environment. It is a project initiated by Matthias Ettrich in 1996. The aim of the KDE project is to connect the power of the UNIX operating systems with the comfort of a modern user interface. In short, KDE will bring UNIX to the desktop! If you want further information about KDE, have a look at What is KDE? http://www.kde.org/whatiskde/index.php  <think><set name="topic"><set name="it">kde</set></set></think>
+    </template>
+  </category>
+  
+  
+  <category>
+    <pattern> ON WHICH PLATFORMS CAN I * KDE </pattern>
+    <template> KDE is a Desktop Environment for all flavors of UNIX While it is true that most KDE developers use Linux¬ KDE runs smoothly on a wide range of systems. You may, however, need to tweak the source code a bit to get KDE to compile on a not-so-popular variant of UNIX¬ or if you are not using the GNU development tools, in particular the gcc compiler. For an almost complete list of systems KDE is running on, please refer to this list of systems for KDE.  <think><set name="topic"><set name="it">kde</set></set></think>
+    </template>
+  </category>
+  <category>
+    <pattern> IS KDE A WINDOW MANAGER </pattern>
+    <template>No, KDE is not a window manager. While KDE includes a very sophisticated window manager (KWin), KDE is much more than that.It is a full-blown Integrated Desktop Environment. KDE provides a complete desktop environment, including a web browser, a file manager, a window manager, a help system, a configuration system, uncountable tools and utilities, and an ever increasing number of applications, including but not limited to mail and news clients, drawing programs, a PostScript and a DVI viewer and so forth. <think><set name="topic"><set name="it">kde</set></set></think>
+    </template>
+  </category>
+  <category>
+    <pattern> IS KDE * WINDOWS * </pattern>
+    <template> No, KDE is not a clone. Specifically KDE is not a CDE or Windows clone. While the KDE developers have and will continue to glean the best features from all existing desktop environments, KDE is a truly unique environment that has and will continue to go its own way. <think><set name="topic"><set name="it">kde</set></set></think>
+    </template>
+  </category>
+  <category>
+    <pattern> IS KDE FREE * </pattern>
+    <template> Yes, KDE is free software according to the GNU General Public License. All KDE libraries are available under the LGPL making commercial software development for the KDE desktop possible, but all KDE applications are licensed under the GPL. KDE uses the Qt C++ crossplatform toolkit, which is also released (since version 2.2) under the GPL. It is absolutely legal to make KDE and Qt available on CD-ROM free of charge. No runtime fees of any kind are incurred. <think><set name="topic"><set name="it">kde</set></set></think>
+    </template>
+  </category>
+<category>
+    <pattern> _ PANEL</pattern>
+    <template> There are several ways to add an application to the panel, of  which the easiest is to right-click on the panel, and from the  context menu which appears, select Panel Menu->Add to Panel->Application Button and then the application for which you want to add a link. For more ways of adding buttons to the panel, refer to the Kicker Handbook.
+    </template>
+  </category>
+  <category>
+    <pattern> _ PANEL * </pattern>
+        <template><srai>_ panel</srai></template>
+  </category>
+  <category>
+    <pattern> MODIFY * BUTTONS </pattern>
+    <template> To modify icons the simplest way is to download a new icon theme with a K menu icon you prefer from http://www.kde-look.org and install it using the KDE Control Center. In order to change only the K menu icon you can overwrite the kmenu.png image for every size in an icon theme set. So, for KDE default icons this would be $KDEDIR/share/icons/default.kde/size/apps/kmenu.png, where size is one of the sizes included in the KDE icon theme.
+    </template>
+  </category>
+  <category>
+    <pattern> MODIFY * BUTTONS * </pattern>
+    <template><srai>_ buttons </srai></template>
+  </category>
+  <category>
+    <pattern> _ MENU * EMPTY * </pattern>
+    <template> In KDE 3.2 and later local modifications to the K menu are stored in $HOME/.config/menus/applications-kmenuedit.menu . Try moving this file out of the way and then issuing the command kbuildsycoca --noincremental. This should restore you to the default system menus.
+    </template>
+  </category>
+  <category>
+    <pattern> _ PANEL * DISAPPEARED * </pattern>
+    <template> The panel disappearing is usually due to it crashing. This is most often caused by loading an applet that has a fatal bug or due to a bad installation of KDE and/or the panel. The easiest way to get the panel back is to launch the Run Command window by pressing Alt+F2 and entering kicker and then pressing the OK button. If the panel continues to disappear, you may wish to either remove or edit by hand your $KDEHOME/share/config/kickerrc file, where $KDEHOME is usually ~/.kde. If you choose to edit it by hand, start by removing the applet entry groups.
+    </template>
+  </category>
+  <category>
+    <pattern> START * SYSTEM TRAY </pattern>
+    <template>Use ksystraycmd. For example, to start a Konsole hidden in the system tray, run ksystraycmd --hidden konsole. For more information about ksystraycmd, see the section advanced WindowManagement in the KDE User Guide.
+    </template>
+  </category>
+<category>
+    <pattern> _ APPLICATION * DESKTOP </pattern>
+    <template>Just choose the desired application from the K menu and drag and drop it to the Desktop. For applications not listed in the K menu, use the right mouse button on the desktop and choose Create New->File->Link to Application... and fill in the configuration for the application you want to link to.
+    </template>
+  </category>
+  <category>
+    <pattern> MOUNT * DESKTOP </pattern>
+    <template> First, make sure you are allowed to mount/umount the relevant device as a user. Then you can add any device via right mouse button on the desktop and then choosing Create New->Link to Device and then selecting the device of the type you wish to control fromthe desktop. Fill in the settings for the device in the dialog that appears and click OK. You can use the resulting desktop icon to mount/unmount the device from the desktop.
+    </template>
+  </category>
+  <category>
+    <pattern> WHERE * ICONS </pattern>
+    <template>The icons can be found only in $KDEDIRS/share/icons or $HOME/.kde/share/icons or $HOME/.kde2/share/icons. To use icons stored in other locations, you must either copy them into one of the above-mentioned fixed KDE locations or make symlinks.
+    </template>
+  </category>
+  <category>
+    <pattern> WHERE * ICONS * </pattern>
+    <template><srai>Where * icons</srai></template>
+  </category>
+  <category>
+    <pattern> _ SCROLL WHEEL </pattern>
+    <template>Mouse wheel support comes with Qt 2.0 and above, so KDE based on that will automatically support the use of the mouse scroll wheel if your system is configured correctly. Check your X-Server settings support the use of a scrollwheel if it is not working.
+    </template>
+  </category>
+  <category>
+    <pattern> _ SCROLL WHEEL * </pattern>
+    <template><srai>_ scroll wheel</srai></template>
+  </category>
+  <category>
+    <pattern> * DESKTOPS </pattern>
+    <template> Click rigth on the application window or panel button and select to desktop 1, 2, 3 or 4 to open the application in a different desktop. KDE comes with a program called kstart. To start an xterm on the second desktop and then activate it use: kstart --desktop 2 --activate --window "xterm" xterm. Note that the --window option is important. It takes an argument which is a regular expression matching the title of the window to apply the settings to. Please read kstart --help-all for more magic available with kstart (and there is an abundance).
+    </template>
+  </category>
+  <category>
+    <pattern> Where * files * desktop </pattern>
+    <template> $HOME/Desktop. You might need to refresh your desktop after you have saved your files.
+    </template>
+  </category>
+  <category>
+    <pattern> ARE THERE KEYBOARD SHORTCUTS FOR KWIN OPERATIONS </pattern>
+    <template> Yes. Please refer to "The K Window Manager Handbook" for the list of shortcuts available.
+    </template>
+  </category>
+  <category>
+    <pattern> _ KEYBOARD SHORTCUTS </pattern>
+    <template> Launch the KDE Control Center and select Regional &amp; Accessibility->Keyboard Shortcuts to configure window manager bindings like maximizing windows, etc..
+    </template>
+  </category>
+  <category>
+    <pattern> _ SIZE * WINDOWS </pattern>
+    <template> Provided your window is not already maximized, clicking on the maximize button with the left mouse button/middle mouse button/right mouse button will maximize fully/vertically/horizontally respectively.
+    </template>
+  </category>
+  <category>
+    <pattern> _ SIZE * WINDOW </pattern>
+    <template> <srai>_ size * windows</srai> </template>
+  </category>
+  <category>
+    <pattern> _ SHADING * </pattern>
+    <template> By shading a window we mean rolling up the window leaving just the title bar visible. You can do this by double clicking on the window title bar.
+    </template>
+  </category>
+  <category>
+    <pattern> _ WINDOW OPTIONS * </pattern>
+    <template>Use the kstart command. As an example, to open KCalc with the stay on Top option, use: % kstart --ontop kcalc For maximized windows, use the --maximize option, for minimized windows, use --iconify. You can see a full list of kstart options with kstart --help-all. Warning If you're using kstart to start applications at KDE startup, you should use the --window option. See the KDE User Guide, section advanced Window Management for more information about this feature.
+    </template>
+  </category>
+<category>
+    <pattern> CHANGE * FOLDER * KONQUEROR </pattern>
+    <template> Right-click the folder, select Properties, click on the large icon in the dialog which appears, and choose another icon. To change the icon displayed for entries in the K Menu, use the Menu Editor, located at Settings->Menu Editor.
+    </template>
+  </category>
+  <category>
+    <pattern> _ NON ANONYMOUS FTP *</pattern>
+    <template> Normally, if you enter a URL like ftp://ftp.somehost.com, Konqueror will attempt an anonymous login to the FTP server. If you want to login as a particular user, enter a URL like ftp://username@ftp.somehost.com instead. Konqueror will ask for your password and connect to the server.
+    </template>
+  </category>
+  <category>
+    <pattern> STARTUP FOLDER * KONQUEROR </pattern>
+    <template> Using the right mouse button, click on the Home icon and choose Properties. Under the Application tab you will probably find something like kfmclient openProfile filemanagement; just append file:/whereever/you/want with the folder you would like Konqueror to start in.
+    </template>
+  </category>
+  <category>
+    <pattern> RENAME FILES </pattern>
+    <template> Simply right click on the file and select Rename or press the keyboard shortcut F2 with a file selected.
+    </template>
+  </category>
+  <category>
+    <pattern> WHERE * DELETE * </pattern>
+    <template> In the trash can on the desktop. In KDE 3.4 the delete context menu entries that bypass the trashcan are no longer displayed by default. To enable them, go to Settings->Configure Konqueror and select Behaviour in the iconbar to the left. Tick the checkbox Show 'Delete' context menu entries which bypass the trashcan.
+    </template>
+  </category>
+  <category>
+    <pattern> WHERE * DELETED * </pattern>
+    <template> <srai> WHERE * DELETE * </srai> </template>
+
+  </category>
+  <category>
+    <pattern>CONFIGURE * OPEN * FILES</pattern>
+    <template> <srai>FILE ASSOCIATION</srai></template>
+  </category>
+  <category>
+    <pattern>_ FILE ASSOCIATION</pattern>
+      <template> <srai>FILE ASSOCIATION</srai></template>
+  </category>
+   <category>
+    <pattern>FILE ASSOCIATION</pattern>
+    <template> In order to configure file associations, you should go to the KDE Control Center and choose the item File Associations under the category KDE Components. Suppose the default PDF viewer is now KGhostView and you would prefer to use KPDF as a viewer. You would simply type pdf in the search box at the top of the dialog, choose pdf in the application group and move KPDF up. In the Embedding tab you can also choose which component other applications will use to display files (for example, when viewing files in Konqueror or using Ark's embedded viewer).
+    </template>
+  </category>
+  <category>
+    <pattern> _ INODE DIRECTORY</pattern>
+    <template> You need to make sure that the embedding settings for inode/directory are correct: 1. In Konqueror, go to Settings->Configure Konqueror and then to the File Associations page. 2. Open inode->directory in the tree view. 3. Click on the Embedding tab. Make sure that Left Click Action is set to Show file in embedded viewer, and by default Icon View (konq_iconview)is at the top of Services Preference Order.
+    </template>
+  </category>
+ <category>
+    <pattern> CONFIGURE * LANGUAGE </pattern>
+    <template> <srai>LANGUAGE SETTING</srai></template>
+  </category>
+  <category>
+    <pattern> LANGUAGE SETTING </pattern>
+    <template> There are two ways to set the language KDE uses in the messages it will display: Using the KDE Control Center Fire up the KDE Control Center and select Regional &amp; Accessibility followed by Country/Region &amp; Language. You can select your language and location here. If KDE cannot find a translation in the first language chosen, it will fall back on the default language. This is usually (American) English by default. Note Using the KDE Control Center is the preferred way of choosing languages in KDE. Using the LANG environment variable The second method uses the standard locale setting on your system. To change the language, simply set the environment variable LANG accordingly. For example, if your shell is bash, execute export LANG=de to set German as the language used. Is there any keyboard switcher for international keyboards for KDE? Yes, you can configure it using the KDE Control Center Regional &amp; Accessibility Keyboard Layout configuration page.
+    </template>
+  </category>
+  <category>
+    <pattern> _ MENU * CLICK * LEFT </pattern>
+    <template> <srai> _ menu * left click * </srai> </template>
+  </category>
+  <category>
+    <pattern> _ MENU * LEFT CLICK * </pattern>
+    <template> Open the KDE Control Center and choose Desktop->Behavior. You can now choose the behavior of mouse clicks on the desktop. To have the K menu open from a single left mouse button click, change the entry labeled Left button to say Application Menu.
+    </template>
+  </category>
+  <category>
+    <pattern> WHERE * INFORMATION * KDE </pattern>
+    <template> Go to http://kde.org/ or http://www.kde-look.org. </template>
+  </category>
+  <category>
+    <pattern> _ MIME TYPES * </pattern>
+<template> <srai> _ MIME Types </srai> </template>
+
+  </category>
+  <category>
+    <pattern> _ MIME TYPES </pattern>
+    <template> If you are using Konqueror, do this instead: first, open a Konqueror window and choose Settings->Configure Konqueror, then File Associations. Find the type you want to change (e.g. text/english or image/gif), and set the application preference order to whatever you want.<think><set name="topic"><set name="it">mime types</set></set></think>
+    </template>
+  </category>
+  <category>
+    <pattern> KDE KDM DOES NOT READ MY BASH PROFILE </pattern>
+    <template> The login managersxdm and kdm do not run a login shell, so .profile, .bash_profile, etc. are not sourced. When the user logs in, xdm runs Xstartup as root and then Xsession as user. So the normal practice is to add statements in Xsession to source the user profile. Please edit your Xsession and .xsession files.
+    </template>
+  </category>
+  <category>
+    <pattern> _ TRUETYPE FONTS * </pattern>
+    <template> You need to install TrueType font support into your X Window System configuration. Please take a look at x.themes.org for the fonts, and xfsft: TrueType Font Support For X11 or X-TrueType Server Project Home Page for the font servers. If you have a bunch of TrueType fonts from Microsoft Windows¬ edit the XF86Config file to get the fonts from the font folder. Then just tell KDE to use these new fonts with the font administrator utility.<think><set name="topic"><set name="it">truetype fonts</set></set></think>
+    </template>
+  </category>
+  <category>
+    <pattern> _ EURO SYMBOL * </pattern>
+    <template> <srai>Euro Symbol</srai> </template>
+
+  </category>
+  <category>
+    <pattern>EURO SYMBOL</pattern>
+    <template>
+               Yes and no. For details, look here:
+               http://www.koffice.org/kword/euro.php.
+    </template>
+  </category>  
+  <category>
+    <pattern> _ EURO SYMBOL </pattern>
+    <template> <srai>Euro Symbol</srai> </template></category>
+  <category>
+    <pattern> _ STARTUP * </pattern>
+    <template> <srai> _ startup </srai> </template>
+  </category>
+  <category>
+    <pattern> _ STARTUP </pattern>
+    <template> There are many ways to controle startup applications. If what you want to do is to run some scripts that would set some environment variables (for example, to start gpg-agent, ssh-agent and others), you can put these scripts into $KDEHOME/env/ and make sure their names end in .sh. $KDEHOME is usually a folder named .kde (note the period at the beginning) in your home folder. If you want scripts to be executed for all KDE users, you can put them under $KDEDIR/env/, where $KDEDIR is the prefix KDE was installed to (you can find this out using the command kde-config --prefix). If you wish to start a program after KDE has started, you may want to use the Autostart folder. To add entries to the Autostart folder: 1. Open Konqueror. 2. Select Go->Autostart from the menubar. 3. Right-click in the window view area and select Create New->File->Link to Application 4. Click on the Application tab in the window that appears and enter the name of the command to run in the Command text box.
+    </template>
+  </category>
+  <category>
+    <pattern> _ USERS * AT A TIME </pattern>
+   <template> <srai> _ user * at a time </srai> </template>
+  </category>
+<category><pattern> _ USER * AT A TIME </pattern><template> To enable more than one user to log in at one time on the same computer (sometimes referred to as last user switching you need to tell the program that logs you in that it can use more than one session (or, in X Window System terms, Display at a time. In KDE, this program is called kdm which stands for KDE Display Manager If you are not using kdm as your login screen then you will need to consult the documentation for the software you are using on how to accomplish multiple sessions. By default, this will be configured at installation time automatically if kdm supports virtual terminals on your system (currently Linux only). If it was not configured automatically, consult the kdm manual, section Specifying permanent X-Servers. After modifying kdmrc, you will have to let kdm know about it; just invoke killall -HUP kdm.
+    </template>
+  </category>
+<category><pattern> _ KPPP * </pattern>
+ <template> <srai> _ KPPP </srai> </template>
+ </category>
+  <category>
+    <pattern> _ KPPP </pattern>
+    <template> KPPP is the program which establishes Point-to-Point Protocol (PPP) internet connections (dials the modem, etc) for the K Desktop Environment (KDE). It does for KDE what DUN does for Microsoft Windows. The main authors are Bernd Johannes Wuebben, Mario Weilguni, and Harri Porten. 
+Open up the KPPP dialog box and select Setup. Choose an existing account and click Edit, or New to create a new dialup account. Select the Dial tab and click Arguments. Type what you want to change in the Argument textbox (e.g. mtu 296) and click Add. When you are satisfied, click Close. To check whether the options took do one of the following: In a terminal window, run /sbin/ifconfig ppp0 and look at the reported MTU in the output. It should match your request. Add debug and kdebug (each on a separate line) to your /etc/ppp/options file and restart your PPP session. You will find debugging messages in /var/log/messages, including MRU and MTU settings. 
+If you want, the MRU and MTU settings can be added to the options file, one complete setting per line, no quotes or dashes. KPPP connects at a slower speed than normal. The following might do the trick: Try executing setserial spd_hi. The default MTU value is 1500, which maybe too large for a dialup connection. Try changing it to a smaller value like 296 or 576. Check in your $HOME/.kde/share/config for the kppprc. Ensure the correct modem speed is actually defined there. The KPPP documentation can be accessed through the KDE Help Center. Last, but not least, the KPPP homepage is at http://ktown.kde.org/~kppp/. <system>help:kppp</system><think><set name="topic"><set name="it">kppp</set></set></think>
+    </template>
+  </category>
+  <category>
+    <pattern> WHAT IS KONSOLE </pattern>
+    <template>
+               Konsole is a terminal emulator in the K Desktop Environment which
+               runs on Unix-like operating systems. It supports a tabbed document
+               interface, history, printing, and bookmarks. <system>help:konsole</system><think><set name="topic"><set name="it">konsole</set></set></think>
+    </template>
+  </category>
+
+  <category>
+    <pattern> _ PAGE DOWN </pattern>
+    <template> Use Shift+Page Up and Shift+Pg Dn. </template>
+  </category>
+  <category>
+    <pattern> _ COPY * KONSOLE </pattern>
+    <template> Right click and select copy on your selected text </template>
+  </category>
+  <category>
+    <pattern> WHAT IS KMAIL </pattern>
+    <template>KMail is the email client in KDE. It supports folders, filtering, viewing HTML mail, and international character sets. It can send mail to any program or to an arbitrary port (normally 25) of a mail server. KMail has its own home page at http://kmail.kde.org where an FAQ is available.
+    </template>
+  </category>
+<category>
+    <pattern> THE SOUND DOES NOT WORK</pattern>
+    <template> To check that sound is working independently of aRts, make sure that artsd isn't running and then try playing sound through XMMS or another multimedia application that isn't a part of KDE. If that application doesn't play sound, then your general sound setup is probably broken and it's not a KDE problem. Try playing sound with artsplay /path/to/some/soundfile. Try various formats, ogg, mp3 and wav. Any error messages there might be useful in pointing you in the right direction. Try setting the aRts output method to OSS. In the KDE Control Center go to Sound &amp; Multimedia->Sound System. On the Hardware tab, under Select the audio device choose Open Sound System. If you are running alsa this will use the OSS emulation, which may give better or worse results. Running artsd -l 0 from a terminal will give you a lot of debug output, some of which might help you to diagnose the problem. Trying this in conjunction with using artsplay in a second terminal can give a wealth of information. If an artsd instance is already running, exit it with artsshell terminate
+    </template>
+  </category>
+<category>
+    <pattern>_ NO SOUND</pattern>
+    <template> <srai> the sound does not work</srai> </template>
+  </category>
+<category>
+    <pattern>_ ANY SOUND</pattern>
+    <template> <srai> the sound does not work</srai> </template>
+  </category>
+ <category>
+    <pattern>_ DEFAULT WEB BROWSER *</pattern>
+    <template> If you are using KDE 3.3 or later, open up the KDE Control Center and navigate to the KDE Components->Component Chooser panel. Select Web Browser from the list on the left, then select Open http and https URLs in the following browser: and type in the name of the browser (e.g. mozilla, firefox, opera, etc.) in the textbox.
+    </template>
+  </category>
+ <category>
+    <pattern> _ HANGS UP </pattern>
+    <template><srai>  HANG UP</srai></template>
+  </category>
+  <category>
+    <pattern> _ HANG UP </pattern>
+    <template><srai>  HANG UP</srai></template>
+  </category>
+  <category>
+    <pattern> HANG UP </pattern>
+    <template>
+               There is a standard keybinding (Ctrl+Alt+Esc) that gives you a
+               skull &amp; crossbones cursor. Click that cursor on a window to
+               kill it. The keybindings are viewable/changeable from the KDE
+               Control Center.
+    </template>
+  </category>
+  <category>
+    <pattern> _ PROGRAMS * MENU </pattern>
+    <template><srai>MODIFY THE MENU</srai></template>
+  </category>
+  <category>
+    <pattern> _ SOFTWARE * MENU </pattern>
+    <template><srai>MODIFY THE MENU</srai></template>
+  </category>
+  <category>
+    <pattern> _ ICON * MENU </pattern>
+    <template> <srai>MODIFY THE MENU</srai></template>
+  </category>
+  <category>
+    <pattern> _ EDIT * MENU </pattern>
+    <template><srai>MODIFY THE MENU</srai></template>
+  </category>
+  <category>
+    <pattern> _ PROGRAM * MENU </pattern>
+    <template>
+               Use kmenuedit. To access it use the right mouse button on the K
+               button and select Menu Editor.
+    </template>
+  </category>
+    <category>
+    <pattern>MODIFY * MENU </pattern>
+    <template><srai>MODIFY THE MENU</srai></template>
+  </category>
+    <category>
+    <pattern>MODIFY THE MENU </pattern>
+    <template>
+               Use kmenuedit. To access it use the right mouse button on the K
+               button and select Menu Editor.
+    </template>
+  </category>
+  
+  <category>
+    <pattern> _ FTP CLIENT </pattern>
+    <template>
+               Yes, and it is none other than your favorite file manager,
+               Konqueror. You can drag and drop remote files into local folders.
+    </template>
+  </category>
+ 
+  <category>
+    <pattern> COPY AND PASTE * </pattern>
+    <template> copy and paste </template>
+  </category>
+  <category>
+    <pattern> COPY AND PASTE </pattern>
+    <template>
+               The simplest method is to use your mouse: 1. Highlight the text
+               you want to copy by holding down the left mouse button and
+               dragging across the text. This adds the selected text to the
+               clipboard. 2. Go to the destination area; depending on your
+               configuration, you might need to click it using the left mouse
+               button to give it focus. 3. Click the middle mouse button to
+               paste. If you have a two button mouse and are emulating a three
+               button mouse, push both buttons simultaneously. For more
+               information about using the clipboard in KDE please see the
+               Klipper hand book, accessed by typing help:/klipper into the
+               Konqueror address bar.
+    </template>
+  </category>
+  <category>
+    <pattern> WHAT IS CVS </pattern>
+    <template>
+               It stands for Concurrent Versions System. It is a version control
+               system and is based on RCS (Revision Control System), but offers
+               more functionality. It is used to maintain source code under
+               development. It will keep multiple versions of things (handy if
+               you broke something and have to back up and get a clean old
+               version), and allows people remote access over the Net to pick up
+               the latest source code and even to check in new files if they have
+               permission. It is also open source (you pay for support if you
+               want it), and since it is free it is the system of choice for
+               people writing more free products, such as KDE.
+    </template>
+  </category>
+  <category>
+    <pattern> _ DUAL DISPLAY </pattern>
+    <template><srai>DUAL SCREEN</srai></template>
+  </category>
+  <category>
+    <pattern> _ DUAL MONITOR </pattern>
+    <template><srai>DUAL SCREEN</srai></template>
+  </category>
+  <category>
+    <pattern> _ DUAL SCREEN </pattern>
+    <template><srai>DUAL SCREEN</srai></template>
+  </category>
+   <category>
+    <pattern> DUAL SCREEN </pattern>
+    <template>
+               Yes, you need to have a multi-headed X server (e.g. MetroX or
+               XFree86 4.0 and above) and a KDE >= 2.2.1
+    </template>
+  </category>
+  <category>
+    <pattern> _ VERSION OF KDE * </pattern>
+    <template>
+               Fire up your KDE Control Center. It comes up with an Info Screen
+               including the version of KDE The KDE version is also included in
+               the application's About dialog.
+    </template>
+  </category>
+  <category>
+    <pattern> _ CREATE ICONS * </pattern>
+    <template> _ create themes * </template>
+  </category>
+  <category>
+    <pattern> _ CREATE THEMES * </pattern>
+    <template>
+               Go see http://artist.kde.org. There is also a more informal
+               community of KDE related artists and artwork at
+               http://kde-look.org.
+    </template>
+  </category>
+  
+
+
+ 
+ <category>
+    <pattern> WHAT IS QT </pattern>
+    <template>
+               Qt is a C++-based class library to build user interfaces. It also
+               includes many utility classes like string classes and classes to
+               handle input and output. It provides most of the widgets you will
+               see in a KDE application: menus, buttons, sliders, etc.. Qt is a
+               cross-platform library that allows you to write code that will
+               compile on UNIX® systems as well as Windows® and embedded devices.
+               You can learn more about Qt at http://www.trolltech.com. <think><set name="topic"><set name="it">qt</set></set></think>
+    </template>
+  </category>
+  <category>
+    <pattern> WHY * QT </pattern>
+    <template>
+               Qt is a very sophisticated toolkit that provides everything that
+               is needed to build a modern user interface. Qt is written in C++,
+               thus allowing object-oriented development which ensures efficiency
+               and code reuse in a project the size and scope of KDE. In our
+               opinion there is no better toolkit available for UNIX® systems and
+               that it would have been a grave mistake to try to build KDE on
+               anything but the best.<think><set name="topic"><set name="it">qt</set></set></think>
+    </template>
+  </category>
+  <category>
+    <pattern> _ QT * FREE * </pattern>
+    <template>
+               It is! As of September 4, 2000, version 2.2 of the Qt libraries
+               were licensed under the GPL, thereby fulfiling all aspects of
+               'free software'.<think><set name="topic"><set name="it">qt</set></set></think>
+    </template>
+  </category>
+  <category>
+    <pattern> _ COMMERCIAL SOFTWARE * KDE </pattern>
+    <template>
+               You can use the <set name="topic">kde</set> libraries to write 'commercial and closed
+               source' as well as 'commercial and open source' software. If you
+               write open source software you can use the Qt free edition. But
+               if you write closed source software you may not use the Qt free
+               edition; you need to obtain the Qt professional edition from
+               Troll Tech. If you want more information, please contact Troll
+               Tech directly. 
+    </template>
+  </category> 
+  
+<topic name="kde">
+ 
+ <category>
+    <pattern> GET TO KNOW ABOUT DEVELOPMENT *</pattern>
+    <template>
+               You might want to subscribe to the various KDE mailing lists
+               available, especially kde-cvs, which lists all commits done to the
+               KDE CVS repository. Check http://lists.kde.org if you want to read
+               without subscribing.
+    </template>
+  </category>
+
+   <category>
+    <pattern> _ UPGRADE TO THE LATEST VERSION </pattern>
+    <template>
+               We recommend to always use the latest stable release. If you
+               don't, it will probably be difficult to get answers to your
+               questions. If you have a problem with an old version, the answer
+               will probably be 'Please upgrade and try again'. Note that new
+               versions also sometimes fix security problems.
+    </template>
+  </category>
+
+  <category>
+    <pattern> _ INFORMATION</pattern>
+    <template> Go to http://kde.org/ or http://www.kde-look.org. </template>
+  </category>
+</topic>
+
+</aiml>
+

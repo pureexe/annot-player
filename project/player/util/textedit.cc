@@ -3,6 +3,7 @@
 
 #include "textedit.h"
 #include "uistyle.h"
+#include "stylesheet.h"
 #include <QtGui>
 
 // - Constructions -
@@ -12,6 +13,7 @@ TextEdit::TextEdit(QWidget *parent)
 {
   contextMenu_ = new QMenu(this);
   UiStyle::globalInstance()->setWindowStyle(contextMenu_);
+  setStyleSheet(SS_TEXTEDIT);
 }
 
 // - Events -

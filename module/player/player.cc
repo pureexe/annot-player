@@ -2,19 +2,21 @@
 // 6/30/2011
 
 #ifdef _MSC_VER
-  #pragma warning (disable: 4819)       // C4819: The file contains a character that cannot be represented in the current code page.
+  #pragma warning (disable:4819)       // C4819: The file contains a character that cannot be represented in the current code page.
+  #pragma warning (disable:4996)       // C4996: strncpy may be unsafe.
 #endif // _MSC_VER
 
 #include "player.h"
 #include "core/util/codec.h"
 #include <vlc/vlc.h>
-#include <QtGui>
-#include <cstring>
 #ifdef Q_WS_MAC
   #include <QMacCocoaViewContainer>
-#endif
+#endif // Q_WS_MAC
+#include <QtGui>
+#include <cstring>
+#include <memory>
 
-#define DEBUG "Player"
+//#define DEBUG "Player"
 #include "module/debug/debug.h"
 
 //#define VLC_DEBUG
@@ -122,9 +124,31 @@ namespace { // anonymous
 
 // - VLC extensions -
 // http://wiki.videolan.org/VLC_command-line_help
-#define VLC_PLUGIN_PATH         (QCoreApplication::applicationDirPath() + "/plugins").toAscii()
+
+namespace { // anonymous
+
+  // Persistent storage
+  const char *vlc_plugin_path()
+  {
+    static std::auto_ptr<char> auto_release_pool;
+    char *ret = auto_release_pool.get();
+    if (!ret) {
+      QString path = QCoreApplication::applicationDirPath() + "/plugins";
+      const char *src = path.toAscii();
+      int n = ::strlen(src);
+      Q_ASSERT(n);
+      if (n) {
+        ret = new char[n + 1];
+        ::strncpy(ret, src, n + 1); // use strncpy instead of strcpy in case sth goes wrong
+        auto_release_pool.reset(ret);
+      }
+    }
+    return ret;
+  }
+} // anonymous namespace
 
 #define VLC_ARGS_NULL           ""
+#define VLC_PLUGIN_PATH         ::vlc_plugin_path()
 #define VLC_ARGS_CONFIG         "--ignore-config"       // Don't use VLC's config
 #define VLC_ARGS_TITLE          "--no-video-title-show" // Don't display title
 #define VLC_ARGS_LIBRARY        "--no-media-library"    // メディアライブラリーを使用 (デフォルトで有効)
@@ -166,23 +190,23 @@ namespace { // anonymous
 
 // http://mailman.videolan.org/pipermail/vlc-devel/2010-April/074742.html
 // Adapt container window type
-#if defined(Q_OS_WIN)
+#ifdef Q_WS_WIN
   #define libvlc_media_player_set_drawable(_mp, _wid)   libvlc_media_player_set_hwnd(_mp, _wid)
-#elif defined(Q_OS_MAC)
+#elif defined(Q_WS_MAC)
   //#define libvlc_media_player_set_drawable(_mp, _wid)   libvlc_media_player_set_agl(_mp, _wid)
   #define libvlc_media_player_set_drawable(_mp, _wid)   libvlc_media_player_set_nsobject(_mp, _wid)
 #else //Linux
   #define libvlc_media_player_set_drawable(_mp, _wid)   libvlc_media_player_set_xwindow(_mp, _wid)
-#endif
+#endif // Q_WS_
 
-#if defined(Q_OS_WIN)
+#ifdef Q_WS_WIN
   #define libvlc_media_player_get_drawable(_mp)         libvlc_media_player_get_hwnd(_mp)
-#elif defined(Q_OS_MAC)
+#elif defined(Q_WS_MAC)
   //#define libvlc_media_player_get_drawable(_mp)         libvlc_media_player_get_agl(_mp)
   #define libvlc_media_player_get_drawable(_mp)         libvlc_media_player_get_nsobject(_mp)
 #else //Linux
   #define libvlc_media_player_get_drawable(_mp)         libvlc_media_player_get_xwindow(_mp)
-#endif
+#endif // Q_WS_
 
 // - PlayerImpl -
 
@@ -211,10 +235,10 @@ namespace { // anonymous: vlc handle
   {
     const char *vlc_argv[] = { VLC_ARGS };
     int vlc_argc = sizeof(vlc_argv)/sizeof(*vlc_argv);
-    instance_ = libvlc_new(vlc_argc, vlc_argv);
+    instance_ = ::libvlc_new(vlc_argc, vlc_argv);
     Q_ASSERT(instance_);
 
-    player_ = libvlc_media_player_new(instance_);
+    player_ = ::libvlc_media_player_new(instance_);
     Q_ASSERT(player_);
 
 #ifdef USE_VLCCORE
@@ -227,9 +251,9 @@ namespace { // anonymous: vlc handle
     // The player would be automatically released when the instance is released
     // Otherwise there will be a double-free segmentation fault.
     //if (player_)
-    //  libvlc_media_player_release(player_);
+    //  ::libvlc_media_player_release(player_);
     if (instance_)
-      libvlc_release(instance_);
+      ::libvlc_release(instance_);
   }
 
 } // anonymous namespace
@@ -246,11 +270,12 @@ namespace { // anonymous: player states
 
     QString mediaPath_;
     int subtitleId_;
+    int titleId_;
     QStringList externalSubtitles_;
 
   public:
     mp_states()
-      : paused_(false), embedded_(false), mouseEnabled_(true), keyEnabled_(false), subtitleId_(0) { }
+      : paused_(false), embedded_(false), mouseEnabled_(true), keyEnabled_(false), subtitleId_(0), titleId_(0) { }
 
     bool isPaused() const { return paused_; }
     void setPaused(bool t = true) { paused_ = t; }
@@ -272,6 +297,9 @@ namespace { // anonymous: player states
 
     int subtitleId() const { return subtitleId_; }
     void setSubtitleId(int id = 0) { subtitleId_ = id; }
+
+    int titleId() const { return titleId_; }
+    void setTitleId(int tid = 0) { titleId_ = tid; }
 
     /// Pathes of external subtitles
     QStringList &externalSubtitles() { return externalSubtitles_; }
@@ -369,14 +397,15 @@ class PlayerImpl
 namespace { // anonymous, vlc event callbacks
   namespace vlc_event_handler {
 #define VLC_EVENT_HANDLER(_signal) \
-    void _signal(const struct libvlc_event_t *event, void *media_player_instance) \
+    void \
+    _signal(const struct libvlc_event_t *event, void *media_player_instance) \
     { \
-      DOUT("signal: " #_signal ": enter"); \
+      DOUT("signal:" #_signal ":enter"); \
       Q_UNUSED(event); \
       Player *p = static_cast<Player*>(media_player_instance); \
       Q_ASSERT(p); \
       p->emit_##_signal(); \
-      DOUT("signal: " #_signal ": exit"); \
+      DOUT("signal:" #_signal ":exit"); \
     }
 
     VLC_EVENT_HANDLER(opening)
@@ -385,67 +414,110 @@ namespace { // anonymous, vlc event callbacks
     VLC_EVENT_HANDLER(stopped)
     VLC_EVENT_HANDLER(paused)
     VLC_EVENT_HANDLER(timeChanged)
-    VLC_EVENT_HANDLER(lengthChanged)
+    //VLC_EVENT_HANDLER(lengthChanged)
     VLC_EVENT_HANDLER(positionChanged)
     VLC_EVENT_HANDLER(mediaChanged)
     VLC_EVENT_HANDLER(errorEncountered)
 #undef MEDIA_PLAYER_EVENT_HANDLER
+
+    void
+    lengthChanged(const struct libvlc_event_t *event, void *media_player_instance)
+    {
+      DOUT("signal:lengthChanged:enter");
+      Q_UNUSED(event);
+      Player *p = static_cast<Player*>(media_player_instance);
+      Q_ASSERT(p);
+      p->emit_lengthChanged();
+      p->invalidateTitleId();
+      DOUT("signal:lengthChanged:exit");
+    }
   }
 } // anonymous namespace
 
 // ++ Static settings ++
 
-QStringList
+const QStringList&
 Player::supportedVideoSuffices()
-{ return QStringList() PLAYER_FORMAT_VIDEO(<<); }
+{
+  static const QStringList ret = QStringList() PLAYER_FORMAT_VIDEO(<<);
+  return ret;
+}
 
-QStringList
+const QStringList&
 Player::supportedAudioSuffices()
-{ return QStringList() PLAYER_FORMAT_AUDIO(<<); }
+{
+  static const QStringList ret = QStringList() PLAYER_FORMAT_AUDIO(<<);
+  return ret;
+}
 
-QStringList
+const QStringList&
+Player::supportedPictureSuffices()
+{
+  static const QStringList ret = QStringList() PLAYER_FORMAT_PICTURE(<<);
+  return ret;
+}
+
+const QStringList&
 Player::supportedSubtitleSuffices()
-{ return QStringList() PLAYER_FORMAT_SUBTITLE(<<); }
+{
+  static const QStringList ret = QStringList() PLAYER_FORMAT_SUBTITLE(<<);
+  return ret;
+}
 
-QStringList
+const QStringList&
 Player::supportedVideoFilters()
-{ return QStringList() PLAYER_FORMAT_VIDEO(<< "*."); }
+{
+  static const QStringList ret = QStringList() PLAYER_FORMAT_VIDEO(<< "*.");
+  return ret;
+}
 
-QStringList
+const QStringList&
 Player::supportedAudioFilters()
-{ return QStringList() PLAYER_FORMAT_AUDIO(<< "*."); }
+{
+  static const QStringList ret = QStringList() PLAYER_FORMAT_AUDIO(<< "*.");
+  return ret;
+}
 
-QStringList
+const QStringList&
+Player::supportedPictureFilters()
+{
+  static const QStringList ret = QStringList() PLAYER_FORMAT_PICTURE(<< "*.");
+  return ret;
+}
+
+const QStringList&
 Player::supportedSubtitleFilters()
-{ return QStringList() PLAYER_FORMAT_SUBTITLE(<< "*."); }
+{
+  static const QStringList ret = QStringList() PLAYER_FORMAT_SUBTITLE(<< "*.");
+  return ret;
+}
 
 // ++ Constructions ++
 
 Player::Player(QObject *parent)
   : Base(parent), impl_(0)
 {
-  DOUT("constructor: enter");
+  DOUT("constructor:enter");
   reset();
-  DOUT("constructor: exit");
+  DOUT("constructor:exit");
 }
 
 Player::~Player()
 {
-  DOUT("destructor: enter");
+  DOUT("destructor:enter");
   if (impl_)
     delete impl_;
-  DOUT("destructor: exit");
+  DOUT("destructor:exit");
 }
 
 bool
 Player::isValid() const
 { return impl_ && impl_->valid(); }
 
-
 void
 Player::reset()
 {
-  DOUT("reset: enter");
+  DOUT("reset:enter");
   if (impl_)
     delete impl_;
 
@@ -453,25 +525,26 @@ Player::reset()
   Q_ASSERT(isValid());
 
   // Set event handlers.
-  libvlc_event_manager_t *event_manager = libvlc_media_player_event_manager(impl_->player());
+  libvlc_event_manager_t *event_manager = ::libvlc_media_player_event_manager(impl_->player());
   Q_ASSERT(event_manager);
-  libvlc_event_attach(event_manager, libvlc_MediaPlayerOpening, vlc_event_handler::opening, this);
-  libvlc_event_attach(event_manager, libvlc_MediaPlayerOpening, vlc_event_handler::buffering, this);
-  libvlc_event_attach(event_manager, libvlc_MediaPlayerPlaying, vlc_event_handler::playing, this);
-  libvlc_event_attach(event_manager, libvlc_MediaPlayerPaused, vlc_event_handler::paused, this);
-  libvlc_event_attach(event_manager, libvlc_MediaPlayerStopped, vlc_event_handler::stopped, this);
-  libvlc_event_attach(event_manager, libvlc_MediaPlayerTimeChanged, vlc_event_handler::timeChanged, this);
-  libvlc_event_attach(event_manager, libvlc_MediaPlayerLengthChanged, vlc_event_handler::lengthChanged, this);
-  libvlc_event_attach(event_manager, libvlc_MediaPlayerPositionChanged, vlc_event_handler::positionChanged, this);
-  libvlc_event_attach(event_manager, libvlc_MediaPlayerMediaChanged, vlc_event_handler::mediaChanged, this);
-  libvlc_event_attach(event_manager, libvlc_MediaPlayerEncounteredError, vlc_event_handler::errorEncountered, this);
+  ::libvlc_event_attach(event_manager, libvlc_MediaPlayerOpening, vlc_event_handler::opening, this);
+  ::libvlc_event_attach(event_manager, libvlc_MediaPlayerOpening, vlc_event_handler::buffering, this);
+  ::libvlc_event_attach(event_manager, libvlc_MediaPlayerPlaying, vlc_event_handler::playing, this);
+  ::libvlc_event_attach(event_manager, libvlc_MediaPlayerPaused, vlc_event_handler::paused, this);
+  ::libvlc_event_attach(event_manager, libvlc_MediaPlayerStopped, vlc_event_handler::stopped, this);
+  ::libvlc_event_attach(event_manager, libvlc_MediaPlayerTimeChanged, vlc_event_handler::timeChanged, this);
+  //::libvlc_event_attach(event_manager, libvlc_MediaPlayerTitleChanged, vlc_event_handler::titleChanged, this);
+  ::libvlc_event_attach(event_manager, libvlc_MediaPlayerLengthChanged, vlc_event_handler::lengthChanged, this);
+  ::libvlc_event_attach(event_manager, libvlc_MediaPlayerPositionChanged, vlc_event_handler::positionChanged, this);
+  ::libvlc_event_attach(event_manager, libvlc_MediaPlayerMediaChanged, vlc_event_handler::mediaChanged, this);
+  ::libvlc_event_attach(event_manager, libvlc_MediaPlayerEncounteredError, vlc_event_handler::errorEncountered, this);
 
   // Set timer.
   //impl_->setTimer(new QTimer(this));
   //connect(impl_->timer(), SIGNAL(timeout()), SLOT(update()));
   //setUpdateInterval();
 
-  DOUT("reset: exit");
+  DOUT("reset:exit");
 }
 
 // ++ Embedding ++
@@ -483,7 +556,7 @@ Player::setEmbeddedWindowHandle(WindowHandle handle)
   Q_ASSERT(handle);
   if (handle) {
     impl_->setEmbedded();
-    libvlc_media_player_set_drawable(impl_->player(), handle);
+    ::libvlc_media_player_set_drawable(impl_->player(), handle);
   }
 }
 
@@ -492,31 +565,31 @@ Player::embeddedWindowHandle() const
 {
   Q_ASSERT(isValid());
   return static_cast<WindowHandle>(
-        libvlc_media_player_get_drawable(impl_->player())
-        );
+    ::libvlc_media_player_get_drawable(impl_->player())
+  );
 }
 
 #ifdef Q_WS_MAC
 void
 Player::embed(QMacCocoaViewContainer *w)
 {
-  DOUT("embed: enter");
+  DOUT("embed:enter");
   Q_ASSERT(isValid());
   Q_ASSERT(w);
   if (w)
     setEmbeddedWindowHandle(w->cocoaView());
-  DOUT("embed: exit");
+  DOUT("embed:exit");
 }
 #else
 void
 Player::embed(QWidget *w)
 {
-  DOUT("embed: enter");
+  DOUT("embed:enter");
   Q_ASSERT(isValid());
   Q_ASSERT(w);
   if (w)
     setEmbeddedWindowHandle(w->winId());
-  DOUT("embed: exit");
+  DOUT("embed:exit");
 }
 #endif // Q_WS_MAC
 
@@ -551,16 +624,16 @@ QByteArray
 Player::decode(const QString &input) const
 {
   return impl_ && impl_->codec() ?
-        impl_->codec()->encode(input)
-      : input.toAscii();
+    impl_->codec()->encode(input) :
+    input.toAscii();
 }
 
 QString
 Player::encode(const char *input) const
 {
   return impl_ && impl_->codec() ?
-        impl_->codec()->decode(input)
-      : QString(input);
+    impl_->codec()->decode(input) :
+    QString(input);
 }
 
 // ++ Playing states ++
@@ -568,7 +641,7 @@ bool
 Player::isPlaying() const
 {
   Q_ASSERT(isValid());
-  return libvlc_media_player_is_playing(impl_->player());
+  return ::libvlc_media_player_is_playing(impl_->player());
 }
 
 bool
@@ -585,86 +658,84 @@ Player::isStopped() const
 Player::Status
 Player::status() const
 {
-  if (isPlaying())
-    return Playing;
-  else if (isPaused())
-    return Paused;
-  else
-    return Stopped;
+  return isPlaying() ? Playing :
+         isPaused() ? Paused :
+         Stopped;
 }
 
 bool
 Player::pausable() const
-{ return hasMedia() && libvlc_media_player_can_pause(impl_->player()); }
+{ return hasMedia() && ::libvlc_media_player_can_pause(impl_->player()); }
 
 bool
 Player::seekable() const
-{ return hasMedia() && libvlc_media_player_is_seekable(impl_->player()); }
+{ return hasMedia() && ::libvlc_media_player_is_seekable(impl_->player()); }
 
 // ++ Open media ++
 
 void
 Player::clearMedia()
 {
-  DOUT("clearMedia: enter");
-  if (isValid()) {
-    if (hasMedia())
-      closeMedia();
-  }
-  DOUT("clearMedia: exit");
+  DOUT("clearMedia:enter");
+  Q_ASSERT(isValid());
+  if (hasMedia())
+    closeMedia();
+  DOUT("clearMedia:exit");
 }
 
 bool
 Player::openMedia(const QString &path)
 {
-  DOUT("openMedia: enter:" << path);
+  DOUT("openMedia:enter: path =" << path);
   Q_ASSERT(isValid());
   if (hasMedia())
     closeMedia();
 
   DOUT("openMedia: open:" << decode(path));
   impl_->setMedia(
-        //libvlc_media_new_path(impl_->instance(), path)   // local file only
-        libvlc_media_new_location(impl_->instance(), decode(path)) // URL
-        );
+     //::libvlc_media_new_path(impl_->instance(), path)   // local file only
+     ::libvlc_media_new_location(impl_->instance(), decode(path)) // URL
+   );
 
   if (!impl_->media()) {
     impl_->setMediaPath();
     DOUT("WARNING: openMedia: failed");
+    DOUT("openMedia:exit: ret = false");
     return false;
   }
 
-  libvlc_media_player_set_media(impl_->player(), impl_->media());
+  ::libvlc_media_player_set_media(impl_->player(), impl_->media());
 
   impl_->setMediaPath(path);
-  DOUT("openMedia: exit");
+  DOUT("openMedia:exit: ret = true");
   return true;
 }
 
 void
 Player::closeMedia()
 {
-  DOUT("openMedia: enter");
+  DOUT("openMedia:enter");
   Q_ASSERT(isValid());
 
   impl_->setPaused(false);
   impl_->setSubtitleId();
+  impl_->setTitleId();
   impl_->setMediaPath();
   impl_->setMedia();
   impl_->setExternalSubtitles();
 
-  libvlc_media_player_set_media(impl_->player(), 0);
+  ::libvlc_media_player_set_media(impl_->player(), 0);
 
   emit mediaClosed();
-  DOUT("closeMedia: exit");
+  DOUT("closeMedia:exit");
 }
 
 bool
 Player::hasMedia() const
 {
   Q_ASSERT(isValid());
-  return impl_->media()
-      && libvlc_media_player_get_media(impl_->player());
+  return impl_->media() &&
+         ::libvlc_media_player_get_media(impl_->player());
 }
 
 // ++ Full screen ++
@@ -672,21 +743,21 @@ void
 Player::setFullScreen(bool t)
 {
   Q_ASSERT(isValid());
-  libvlc_set_fullscreen(impl_->player(), t);
+  ::libvlc_set_fullscreen(impl_->player(), t);
 }
 
 bool
 Player::isFullScreen() const
 {
   Q_ASSERT(isValid());
-  return libvlc_get_fullscreen(impl_->player());
+  return ::libvlc_get_fullscreen(impl_->player());
 }
 
 void
 Player::toggleFullScreen()
 {
   Q_ASSERT(isValid());
-  libvlc_toggle_fullscreen(impl_->player());
+  ::libvlc_toggle_fullscreen(impl_->player());
 }
 
 // ++ Media information ++
@@ -698,12 +769,12 @@ Player::mediaTitle() const
   if (!hasMedia())
     return QString();
 
-  const char *title = libvlc_media_get_meta(impl_->media(), libvlc_meta_Title);
+  const char *title = ::libvlc_media_get_meta(impl_->media(), libvlc_meta_Title);
   // VLC i18n bug. It simpily cannot handle UTF-8 correctly.
   if (!title || ::strstr(title, "??"))
     return QString();
-  else
-    return encode(title);
+
+  return encode(title);
 }
 
 QString
@@ -718,81 +789,81 @@ Player::mediaPath() const
 void
 Player::play()
 {
-  DOUT("play: enter");
+  DOUT("play:enter");
   if (hasMedia()) {
     impl_->setPaused(false);
-    libvlc_media_player_play(impl_->player());
+    ::libvlc_media_player_play(impl_->player());
   }
-  DOUT("play: exit");
+  DOUT("play:exit");
 }
 
 void
 Player::stop()
 {
-  DOUT("stop: enter");
+  DOUT("stop:enter");
   if (hasMedia()) {
     impl_->setPaused(false);
-    libvlc_media_player_stop(impl_->player());
+    ::libvlc_media_player_stop(impl_->player());
   }
-  DOUT("stop: exit");
+  DOUT("stop:exit");
 }
 
 void
 Player::pause()
 {
-  DOUT("pause: enter");
+  DOUT("pause:enter");
   if (hasMedia() && pausable()) {
     impl_->setPaused(true);
-    libvlc_media_player_set_pause(impl_->player(), true);
+    ::libvlc_media_player_set_pause(impl_->player(), true);
   }
-  DOUT("pause: exit");
+  DOUT("pause:exit");
 }
 
 void
 Player::resume()
 {
-  DOUT("resume: enter");
+  DOUT("resume:enter");
   if (hasMedia() && pausable()) {
     impl_->setPaused(false);
-    libvlc_media_player_set_pause(impl_->player(), false);
+    ::libvlc_media_player_set_pause(impl_->player(), false);
   }
-  DOUT("resume: exit");
+  DOUT("resume:exit");
 }
 
 void
 Player::playPause()
 {
-  DOUT("playPause: enter");
+  DOUT("playPause:enter");
   if (hasMedia() && pausable()) {
     impl_->setPaused(!impl_->isPaused());
-    libvlc_media_player_pause(impl_->player());
+    ::libvlc_media_player_pause(impl_->player());
   }
-  DOUT("playPause: exit");
+  DOUT("playPause:exit");
 }
 
 void
 Player::nextFrame()
 {
-  DOUT("nextFrame: enter");
+  DOUT("nextFrame:enter");
   if (hasMedia() && pausable()) {
     impl_->setPaused();
-    libvlc_media_player_next_frame(impl_->player());
+    ::libvlc_media_player_next_frame(impl_->player());
   }
-  DOUT("nextFrame: exit");
+  DOUT("nextFrame:exit");
 }
 
 bool
 Player::snapshot(const QString &path)
 {
-  DOUT("snapshot: enter");
+  DOUT("snapshot:enter");
   if (!hasMedia()) {
     DOUT("snapshot: no media, ignored");
     return false;
   }
 
   QByteArray path_cstr = decode(path);
-  DOUT("nextFrame: exit");
-  return !libvlc_video_take_snapshot(impl_->player(), 0, path_cstr, 0, 0);
+  DOUT("nextFrame:exit");
+  return !::libvlc_video_take_snapshot(impl_->player(), 0, path_cstr, 0, 0);
 }
 
 
@@ -803,7 +874,7 @@ Player::setMouseEnabled(bool enable)
 {
   Q_ASSERT(isValid());
   impl_->setMouseEnabled(enable);
-  libvlc_video_set_mouse_input(impl_->player(), enable);
+  ::libvlc_video_set_mouse_input(impl_->player(), enable);
 }
 
 bool
@@ -818,7 +889,7 @@ Player::setKeyboardEnabled(bool enable)
 {
   Q_ASSERT(isValid());
   impl_->setKeyEnabled(enable);
-  libvlc_video_set_key_input(impl_->player(), enable);
+  ::libvlc_video_set_key_input(impl_->player(), enable);
 }
 
 bool
@@ -831,58 +902,57 @@ Player::isKeyboardEnabled() const
 void
 Player::setVolume(qreal vol)
 {
-  DOUT("setVolume: enter");
+  DOUT("setVolume:enter");
   Q_ASSERT(isValid());
-  libvlc_audio_set_volume(impl_->player(),
-                          static_cast<int>(vol * VLC_MAX_VOLUME));
+  ::libvlc_audio_set_volume(impl_->player(),
+                            static_cast<int>(vol * VLC_MAX_VOLUME));
   emit volumeChanged();
-  DOUT("setVolume: exit");
+  DOUT("setVolume:exit");
 }
 
 void
 Player::setPosition(qreal pos)
 {
-  DOUT("setPosition: enter");
+  DOUT("setPosition:enter");
   if (hasMedia())
-    libvlc_media_player_set_position(impl_->player(), pos);
-  DOUT("setPosition: exit");
+    ::libvlc_media_player_set_position(impl_->player(), pos);
+  DOUT("setPosition:exit");
 }
-
 
 qreal
 Player::volume() const
 {
   Q_ASSERT(isValid());
-  return libvlc_audio_get_volume(impl_->player()) / VLC_MAX_VOLUME;
+  return ::libvlc_audio_get_volume(impl_->player()) / VLC_MAX_VOLUME;
 }
 
 qreal
 Player::position() const
-{ return hasMedia()? libvlc_media_player_get_position(impl_->player()) : 0; }
+{ return hasMedia()? ::libvlc_media_player_get_position(impl_->player()) : 0; }
 
 // - Play time -
 qint64
 Player::mediaLength() const
 {
   Q_ASSERT(isValid());
-  return libvlc_media_player_get_length(impl_->player());
+  return ::libvlc_media_player_get_length(impl_->player());
 }
 
 qint64
 Player::time() const
 {
   Q_ASSERT(isValid());
-  return libvlc_media_player_get_time(impl_->player());
+  return ::libvlc_media_player_get_time(impl_->player());
 }
 
 void
 Player::setTime(qint64 time)
 {
-  DOUT("setTime: enter");
+  DOUT("setTime:enter");
   Q_ASSERT(isValid());
   if (hasMedia())
-    libvlc_media_player_set_time(impl_->player(), time);
-  DOUT("setTime: exit");
+    ::libvlc_media_player_set_time(impl_->player(), time);
+  DOUT("setTime:exit");
 }
 
 // - Subtitles -
@@ -927,10 +997,8 @@ Player::subtitleId() const
 {
   Q_ASSERT(isValid());
   int id = ::libvlc_video_get_spu(impl_->player());
-  if (id > 0)
-    return id - 1;
-  else
-    return impl_->subtitleId() - 1;
+  return id > 0 ? id - 1 :
+         impl_->subtitleId() - 1;
 }
 
 bool
@@ -983,7 +1051,7 @@ Player::openSubtitle(const QString &fileName)
 bool
 Player::setSubtitleFromFile(const QString &fileName)
 {
-  DOUT("setSubtitleFromFile: enter:" << fileName);
+  DOUT("setSubtitleFromFile:enter:" << fileName);
   Q_ASSERT(isValid());
 
   QString path = fileName;
@@ -994,7 +1062,7 @@ Player::setSubtitleFromFile(const QString &fileName)
   DOUT("opening subtitle:" << decode(path));
   if (impl_->externalSubtitles().indexOf(path) >= 0) {
     DOUT("subtitle already loaded");
-    DOUT("setSubtitleFromFile: exit");
+    DOUT("setSubtitleFromFile:exit");
     return true;
   }
 
@@ -1007,7 +1075,7 @@ Player::setSubtitleFromFile(const QString &fileName)
   } else
     DOUT("setSubtitleFromFile: failed");
 
-  DOUT("setSubtitleFromFile: exit");
+  DOUT("setSubtitleFromFile:exit");
   return ok;
 }
 
@@ -1038,7 +1106,7 @@ Player::loadExternalSubtitles()
 QStringList
 Player::searchExternalSubtitles() const
 {
-  DOUT("searchExternalSubtitles: enter");
+  DOUT("searchExternalSubtitles:enter");
   QStringList ret;
   if (hasMedia()) {
     QString fileName = mediaPath();
@@ -1055,8 +1123,149 @@ Player::searchExternalSubtitles() const
   }
 
   DOUT("found subtitles count:" << ret.size());
-  DOUT("searchExternalSubtitles: exit");
+  DOUT("searchExternalSubtitles:exit");
   return ret;
+}
+
+// ++ Title/Chapter ++
+
+bool
+Player::hasTitles() const
+{ return titleCount() > 0; }
+
+int
+Player::titleId() const
+{
+  DOUT("titleId:enter");
+  int ret = 0;
+  if (hasMedia())
+    ret = ::libvlc_media_player_get_title(impl_->player());
+  DOUT("titleId:exit: ret =" << ret);
+  return ret;
+}
+
+int
+Player::titleCount() const
+{
+  DOUT("titleCount:enter");
+  int ret = 0;
+  if (hasMedia())
+    ret = ::libvlc_media_player_get_title_count(impl_->player());
+  DOUT("titleCount:exit: ret =" << ret);
+  return ret;
+}
+
+void
+Player::setTitleId(int tid)
+{
+  DOUT("setTitleId:enter: tid =" << tid);
+  if (hasMedia()) {
+    ::libvlc_media_player_set_title(impl_->player(), tid);
+    invalidateTitleId();
+  }
+  DOUT("setTitleId:exit");
+}
+
+void
+Player::setPreviousTitle()
+{
+  DOUT("setPrevousTitle:enter");
+  if (hasMedia()) {
+    int tid = titleId();
+    if (tid > 0)
+      setTitleId(tid - 1);
+  }
+  DOUT("setPreviousTitle:exit");
+}
+
+void
+Player::setNextTitle()
+{
+  DOUT("setNextTitle:enter");
+  if (hasMedia()) {
+    int tid = titleId();
+    if (tid < titleCount() - 1)
+      setTitleId(tid + 1);
+  }
+  DOUT("setNextTitle:exit");
+}
+
+void
+Player::invalidateTitleId()
+{
+  DOUT("invalidateTitleId:enter");
+  if (hasMedia()) {
+    int tid = titleId();
+    if (tid != impl_->titleId()) {
+      impl_->setTitleId(tid);
+      emit titleIdChanged(tid);
+    }
+  }
+  DOUT("invalidateTitleId:exit");
+}
+
+bool
+Player::hasChapters() const
+{ return chapterCount() > 0; }
+
+int
+Player::chapterId() const
+{
+  DOUT("chapterId:enter");
+  int ret = 0;
+  if (hasMedia())
+    ret = ::libvlc_media_player_get_chapter(impl_->player());
+  DOUT("chapterId:exit: ret =" << ret);
+  return ret;
+}
+
+int
+Player::chapterCount() const
+{
+  DOUT("chapterCount:enter");
+  int ret = 0;
+  if (hasMedia())
+    ret = ::libvlc_media_player_get_chapter_count(impl_->player());
+  DOUT("chapterCount:exit: ret =" << ret);
+  return ret;
+}
+
+int
+Player::chapterCountForTitleId(int tid) const
+{
+  DOUT("chapterCountForTitleId:enter: tid =" << tid);
+  int ret = 0;
+  if (hasMedia())
+    ret = ::libvlc_media_player_get_chapter_count_for_title(impl_->player(), tid);
+  DOUT("chapterCountForTitleCount:exit: ret =" << ret);
+  return ret;
+}
+
+void
+Player::setChapterId(int cid)
+{
+  DOUT("setChapterId:enter: cid =" << cid);
+  if (hasMedia())
+    ::libvlc_media_player_set_chapter(impl_->player(), cid);
+  DOUT("setChapterId:exit");
+}
+
+void
+Player::setPreviousChapter()
+{
+  DOUT("setPreviousChapter:enter");
+  if (hasMedia())
+    ::libvlc_media_player_previous_chapter(impl_->player());
+  DOUT("setPreviousChapter:exit");
+}
+
+void
+Player::setNextChapter()
+{
+  DOUT("setNextChapter:enter");
+  if (hasMedia())
+    ::libvlc_media_player_next_chapter(impl_->player());
+  DOUT("setNextChapter:exit");
 }
 
 // EOF

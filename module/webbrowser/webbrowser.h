@@ -17,42 +17,49 @@ class WebBrowser : public QMainWindow
   typedef Ui::WebBrowserUi Form;
 
 public:
-  WEBBROWSER_EXPORT explicit WebBrowser(QWidget *parent = 0);
-  WEBBROWSER_EXPORT ~WebBrowser();
+  WEBBROWSER_API explicit WebBrowser(QWidget *parent = 0);
+  WEBBROWSER_API ~WebBrowser();
 
-  WEBBROWSER_EXPORT void newTab(const QString &url);
+  WEBBROWSER_API void newTab(const QString &url);
+
+  WEBBROWSER_API qreal textSizeMultiplier() const;
 
   // - Properties -
 public:
-  WEBBROWSER_EXPORT int tabCount() const;
-  WEBBROWSER_EXPORT const QString &homePage() const;
-  WEBBROWSER_EXPORT const QString &searchEngine() const;
+  WEBBROWSER_API int tabCount() const;
+  WEBBROWSER_API const QString &homePage() const;
+  WEBBROWSER_API const QString &searchEngine() const;
 
 public slots:
-  WEBBROWSER_EXPORT void setHomePage(const QString &url);
-  WEBBROWSER_EXPORT void setSearchEngine(const QString &url);
+  WEBBROWSER_API void setHomePage(const QString &url);
+  WEBBROWSER_API void setSearchEngine(const QString &url);
+  WEBBROWSER_API void setTextSizeMultiplier(qreal factor);
 
   // - Actions -
 public slots:
-  WEBBROWSER_EXPORT void closeTab(int index);
-  WEBBROWSER_EXPORT void newTab();
-  WEBBROWSER_EXPORT void openUrl();
-  WEBBROWSER_EXPORT void openSearch();
-  WEBBROWSER_EXPORT void reload();
-  WEBBROWSER_EXPORT void updateAddressbar();
-  WEBBROWSER_EXPORT void location();
-  WEBBROWSER_EXPORT void back();
-  WEBBROWSER_EXPORT void forward();
-  WEBBROWSER_EXPORT void updateButtons();
-  WEBBROWSER_EXPORT void handleLoadStarted();
-  WEBBROWSER_EXPORT void handleLoadFinished();
-  WEBBROWSER_EXPORT void toggleFullScreen();
+  WEBBROWSER_API void closeTab(int index);
+  WEBBROWSER_API void newTab();
+  WEBBROWSER_API void openUrl();
+  WEBBROWSER_API void openSearch();
+  WEBBROWSER_API void reload();
+  WEBBROWSER_API void updateAddressbar();
+  WEBBROWSER_API void location();
+  WEBBROWSER_API void back();
+  WEBBROWSER_API void forward();
+  WEBBROWSER_API void updateButtons();
+  WEBBROWSER_API void handleLoadStarted();
+  WEBBROWSER_API void handleLoadFinished();
+  WEBBROWSER_API void toggleFullScreen();
+
+private:
+  static QString tidyUrl(const QString &address);
 
 private:
   Form *ui_;
 
   QString homePage_;
   QString searchEngine_;
+  qreal textSizeMultiplier_;
 };
 
 #endif // WEBBROWSER_H

@@ -192,15 +192,26 @@ namespace { // anoymous, WindowsNotifier
 #ifdef USE_WINDOW_NOTIFIER
 #endif // USE_WINDOW_NOTIFIER
 
+void
+Dwm::warmUp()
+{
+  // Cache functions.
+  isCompositionEnabled();
+}
+
 bool
 Dwm::isCompositionEnabled()
 {
-  HRESULT hr = S_OK;
+  static int ret = -1;
+  if (ret < 0) {
+    HRESULT hr = S_OK;
 
-  BOOL enabled;
-  hr = DWM_API::DwmIsCompositionEnabled(&enabled);
+    BOOL enabled;
+    hr = DWM_API::DwmIsCompositionEnabled(&enabled);
 
-  return SUCCEEDED(hr) && enabled;
+    ret = SUCCEEDED(hr) && enabled ? 1 : 0;
+  }
+  return ret;
 }
 
 // http://msdn.microsoft.com/en-us/library/aa969537(v=vs.85).aspx

@@ -54,54 +54,45 @@ public:
 
   // - Submissions -
 public:
-  qint64 submitMediaToken(const Token &token, const QString &userName, const QString &password);
-  qint64 submitGameToken(const Token &token, const QString &userName, const QString &password);
+  qint64 submitToken(const Token &token, const QString &userName, const QString &password);
+  qint64 submitTokenDigest(const QString &digest, qint32 digestType, qint32 tokenType, const QString &userName, const QString &password);
 
-  qint64 submitMediaTokenDigest(const QString &digest, const QString &userName, const QString &password);
-  qint64 submitGameTokenDigest(const QString &digest, const QString &userName, const QString &password);
+  qint64 submitAlias(const Alias &alias, const QString &userName, const QString &password);
+  qint64 submitAliasTextWithTokenId(const QString &text, qint32 type, qint64 tokenId, const QString &userName, const QString &password);
+  qint64 submitAliasTextAndTokenDigest(const QString &text, qint32 type, const QString &digest, qint32 digestType, const QString &userName, const QString &password);
 
-  qint64 submitMediaAlias(const Alias &alias, const QString &userName, const QString &password);
-  qint64 submitGameAlias(const Alias &alias, const QString &userName, const QString &password);
-
-  qint64 submitMediaAliasTextWithTokenId(const QString &text, qint32 aliasType, qint64 tokenId, const QString &userName, const QString &password);
-  qint64 submitGameAliasTextWithTokenId(const QString &text, qint32 aliasType, qint64 tokenId, const QString &userName, const QString &password);
-
-  qint64 submitMediaAliasTextAndTokenDigest(const QString &text, qint32 aliasType, const QString &digest, const QString &userName, const QString &password);
-  qint64 submitGameAliasTextAndTokenDigest(const QString &text, qint32 aliasType, const QString &digest, const QString &userName, const QString &password);
-
-  qint64 submitMediaAnnotation(const Annotation &annot, const QString &userName, const QString &password);
-  qint64 submitGameAnnotation(const Annotation &annot, const QString &userName, const QString &password);
-
-  qint64 submitMediaAnnotationTextWithTokenId(const QString &text, qint64 pos, qint32 posType, qint64 tokenId, const QString &userName, const QString &password);
-  qint64 submitGameAnnotationTextWithTokenId(const QString &text, qint64 pos, qint32 posType, qint64 tokenId, const QString &userName, const QString &password);
-
-  qint64 submitMediaAnnotationTextAndTokenDigest(const QString &text, qint64 pos, qint32 posType, const QString &digest, const QString &userName, const QString &password);
-  qint64 submitGameAnnotationTextAndTokenDigest(const QString &text, qint64 pos, qint32 posType, const QString &digest, const QString &userName, const QString &password);
+  qint64 submitAnnotation(const Annotation &annot, const QString &userName, const QString &password);
+  qint64 submitAnnotationTextWithTokenId(const QString &text, qint64 pos, qint32 posType, qint64 tokenId, const QString &userName, const QString &password);
+  qint64 submitAnnotationTextAndTokenDigest(const QString &text, qint64 pos, qint32 posType, const QString &digest, qint32 digestType, const QString &userName, const QString &password);
 
   // - Update -
 public:
-  bool updateMediaAnnotationTextWithId(const QString &text, qint64 id, const QString &userName, const QString &password);
-  bool updateGameAnnotationTextWithId(const QString &text, qint64 id, const QString &userName, const QString &password);
+  bool updateAnnotationTextWithId(const QString &text, qint64 id, const QString &userName, const QString &password);
 
   // - Queries -
 public:
-  Token selectMediaTokenWithId(qint64 id);
-  Token selectGameTokenWithId(qint64 id);
-  Token selectMediaTokenWithDigest(const QString &digest);
-  Token selectGameTokenWithDigest(const QString &digest);
+  Token selectTokenWithId(qint64 id);
+  Token selectTokenWithDigest(const QString &digest, qint32 digestType);
 
-  AnnotationList selectMediaAnnotationsWithTokenId(qint64 tid);
-  AnnotationList selectGameAnnotationsWithTokenId(qint64 tid);
-  AnnotationList selectRelatedMediaAnnotationsWithTokenId(qint64 tid);
-  AnnotationList selectRelatedGameAnnotationsWithTokenId(qint64 tid);
+  AnnotationList selectAnnotationsWithTokenId(qint64 tid);
+  AnnotationList selectRelatedAnnotationsWithTokenId(qint64 tid);
 
-  AliasList selectMediaAliasesWithTokenId(qint64 tid);
-  AliasList selectGameAliasesWithTokenId(qint64 tid);
+  AliasList selectAliasesWithTokenId(qint64 tid);
 
   // - Cast -
 public:
-  bool blessMediaAnnotationWithId(qint64 id, const QString &userName, const QString &password);
-  bool blessGameAnnotationWithId(qint64 id, const QString &userName, const QString &password);
+  bool blessAnnotationWithId(qint64 id, const QString &userName, const QString &password);
+  bool curseAnnotationWithId(qint64 id, const QString &userName, const QString &password);
+  bool blockAnnotationWithId(qint64 id, const QString &userName, const QString &password);
+
+  bool blessAliasWithId(qint64 id, const QString &userName, const QString &password);
+  bool curseAliasWithId(qint64 id, const QString &userName, const QString &password);
+  bool blockAliasWithId(qint64 id, const QString &userName, const QString &password);
+
+  bool blessTokenWithId(qint64 id, const QString &userName, const QString &password);
+  bool curseTokenWithId(qint64 id, const QString &userName, const QString &password);
+
+  bool blockUserWithId(qint64 id, const QString &userName, const QString &password);
 };
 
 #endif // SERVERPROXY_H

@@ -17,6 +17,7 @@ class Player;
 class VideoView;
 class AnnotationGraphicsItem;
 class AnnotationEditor;
+class AnnotationFilter;
 
 ///  An interactive shadow view.
 class AnnotationGraphicsView : public QGraphicsView, public Core::EventListener
@@ -39,14 +40,10 @@ public:
   explicit AnnotationGraphicsView(SignalHub *hub, Player *player, VideoView *videoView, QWidget *parent = 0);
   ~AnnotationGraphicsView();
 
-
   // - Properties -
 public:
   qint64 userId() const;
   void setUserId(qint64 uid);
-
-  qint64 languages() const;
-  void setLanguages(qint64 bits);
 
   AnnotationPosition subtitlePosition() const;
   void setSubtitlePosition(AnnotationPosition ap);
@@ -126,6 +123,8 @@ signals:
 public:
   AnnotationEditor *editor() const;
 
+  void setFilter(AnnotationFilter *filter);
+
   int itemsCount() const;
   int itemsCount(int sec) const;
   int itemsCount(int from, int to) const; ///< Count of items within [from, to] in seconds
@@ -175,7 +174,7 @@ protected slots:
   void updateAnnotationText(const QString &text);
 
 public:
-  bool isItemBlocked(const AnnotationGraphicsItem *item) const;
+  bool isItemFiltered(const AnnotationGraphicsItem *item) const;
 
   // - Implementations -
 private:
@@ -184,6 +183,7 @@ private:
   WId trackingWindow_;
   SignalHub *hub_;
   Player *player_;
+  AnnotationFilter *filter_;
   bool active_;
   bool paused_;
 
@@ -197,7 +197,6 @@ private:
   QHash<qint64, QList<AnnotationGraphicsItem*>*> annots_; // indexed by secs for MediaMode or hash for SignalMode
   qint64 playTime_; // in sec
 
-  qint64 languages_;
   qint64 userId_;
 
   bool playbackEnabled_;

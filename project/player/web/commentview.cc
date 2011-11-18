@@ -31,7 +31,7 @@ CommentView::urlForTokenId(qint64 mtid)
   //       : G_STARTPAGE_URL
   //);
   Q_UNUSED(mtid);
-  return QUrl(G_STARTPAGE_URL);
+  return QString(G_STARTPAGE_URL);
 }
 
 // - Events -

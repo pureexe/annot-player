@@ -4,6 +4,7 @@
 #include "serveragent.h"
 #include "serverproxy.h"
 #include "serverproxy_config.h"
+#include "castmanager.h"
 #ifdef USE_MODULE_CLIENTAGENT
   #include "module/clientagent/clientagent.h"
 #endif // USE_MODULE_CLIENTAGENT
@@ -25,6 +26,7 @@ ServerAgent::ServerAgent(QObject *parent)
 #endif // USE_MODULE_CLIENTAGENT
 {
   proxy_ = new ServerProxy(this);
+  cast_ = new CastManager(this);
 
   connect(proxy_, SIGNAL(soapError(int)), SLOT(reportSoapError(int)));
 }
@@ -225,12 +227,7 @@ ServerAgent::submitToken(const Token &token)
     DOUT("submitToken:exit: not authorized");
     return 0;
   }
-  qint64 ret = 0;
-  switch (token.type()) {
-  case Traits::MediaType: ret = proxy_->submitMediaTokenDigest(token.digest(), user_.name(), user_.password()); break;
-  case Traits::GameType:  ret = proxy_->submitGameTokenDigest(token.digest(), user_.name(), user_.password()); break;
-  default: Q_ASSERT(0);
-  }
+  qint64 ret = proxy_->submitTokenDigest(token.digest(), token.digestType(), token.type(), user_.name(), user_.password());
   DOUT("submitToken:exit: ret =" << ret);
   return ret;
 }
@@ -247,24 +244,16 @@ ServerAgent::submitTokens(const TokenList &tokens)
 qint64
 ServerAgent::submitAlias(const Alias &alias)
 {
-  DOUT("submitAlias:enter: tid =" << alias.tokenId() << ", tt =" << alias.type());
+  DOUT("submitAlias:enter: tid =" << alias.tokenId());
   if (!isAuthorized()) {
     DOUT("submitAlias:exit: not authorized");
     return 0;
   }
   qint64 ret = 0;
   if (alias.hasTokenId())
-    switch (alias.type()) {
-    case Traits::MediaType: ret = proxy_->submitMediaAliasTextWithTokenId(alias.text(), alias.aliasType(), alias.tokenId(), user_.name(), user_.password()); break;
-    case Traits::GameType:  ret = proxy_->submitGameAliasTextWithTokenId(alias.text(), alias.aliasType(), alias.tokenId(), user_.name(), user_.password()); break;
-    default: Q_ASSERT(0);
-    }
+    ret = proxy_->submitAliasTextWithTokenId(alias.text(), alias.type(), alias.tokenId(), user_.name(), user_.password());
   else if (alias.hasTokenDigest())
-    switch (alias.type()) {
-    case Traits::MediaType: ret = proxy_->submitMediaAliasTextAndTokenDigest(alias.text(), alias.aliasType(), alias.tokenDigest(), user_.name(), user_.password()); break;
-    case Traits::GameType:  ret = proxy_->submitGameAliasTextAndTokenDigest(alias.text(), alias.aliasType(), alias.tokenDigest(), user_.name(), user_.password()); break;
-    default: Q_ASSERT(0);
-    }
+    ret = proxy_->submitAliasTextAndTokenDigest(alias.text(), alias.type(), alias.tokenDigest(), alias.tokenDigestType(), user_.name(), user_.password());
 
   DOUT("submitAlias:exit: ret =" << ret);
   return ret;
@@ -301,17 +290,9 @@ ServerAgent::submitAnnotation(const Annotation &annot)
   }
   qint64 ret = 0;
   if (annot.hasTokenId())
-    switch (annot.type()) {
-    case Traits::MediaType: ret = proxy_->submitMediaAnnotationTextWithTokenId(annot.text(), annot.pos(), annot.posType(), annot.tokenId(), user_.name(), user_.password()); break;
-    case Traits::GameType:  ret = proxy_->submitGameAnnotationTextWithTokenId(annot.text(), annot.pos(), annot.posType(), annot.tokenId(), user_.name(), user_.password()); break;
-    default: Q_ASSERT(0);
-    }
+    ret = proxy_->submitAnnotationTextWithTokenId(annot.text(), annot.pos(), annot.posType(), annot.tokenId(), user_.name(), user_.password());
   else if (annot.hasTokenDigest())
-    switch (annot.type()) {
-    case Traits::MediaType: ret = proxy_->submitMediaAnnotationTextAndTokenDigest(annot.text(), annot.pos(), annot.posType(), annot.tokenDigest(), user_.name(), user_.password()); break;
-    case Traits::GameType:  ret = proxy_->submitGameAnnotationTextAndTokenDigest(annot.text(), annot.pos(), annot.posType(), annot.tokenDigest(), user_.name(), user_.password()); break;
-    default: Q_ASSERT(0);
-    }
+    ret = proxy_->submitAnnotationTextAndTokenDigest(annot.text(), annot.pos(), annot.posType(), annot.tokenDigest(), annot.tokenDigestType(), user_.name(), user_.password());
   DOUT("submitAnnotation:exit: ret =" << ret);
   return ret;
 }
@@ -326,113 +307,112 @@ ServerAgent::submitAnnotations(const AnnotationList &tokens)
 }
 
 Token
-ServerAgent::selectTokenWithId(qint64 id, int tt)
+ServerAgent::selectTokenWithId(qint64 id)
 {
   Token ret;
-  if (!id)
-    return ret;
-
-  switch (tt) {
-  case Traits::MediaType: ret = proxy_->selectMediaTokenWithId(id); break;
-  case Traits::GameType:  ret = proxy_->selectGameTokenWithId(id); break;
-  default: Q_ASSERT(0);
-  }
+  if (id)
+    ret = proxy_->selectTokenWithId(id);
   return ret;
 }
 
 Token
-ServerAgent::selectTokenWithDigest(const QString &digest, int tt)
+ServerAgent::selectTokenWithDigest(const QString &digest, qint32 digestType)
 {
   Token ret;
-  if (digest.isEmpty())
-    return ret;
-
-  switch (tt) {
-  case Traits::MediaType: ret = proxy_->selectMediaTokenWithDigest(digest); break;
-  case Traits::GameType:  ret = proxy_->selectGameTokenWithDigest(digest); break;
-  default: Q_ASSERT(0);
-  }
+  if (!digest.isEmpty())
+    ret = proxy_->selectTokenWithDigest(digest, digestType);
   return ret;
 }
 
 AnnotationList
-ServerAgent::selectAnnotationsWithTokenId(qint64 tid, int tt)
+ServerAgent::selectAnnotationsWithTokenId(qint64 tid)
 {
   AnnotationList ret;
-  if (!tid)
-    return ret;
-
-  switch (tt) {
-  case Traits::MediaType: ret = proxy_->selectMediaAnnotationsWithTokenId(tid); break;
-  case Traits::GameType:  ret = proxy_->selectGameAnnotationsWithTokenId(tid); break;
-  default: Q_ASSERT(0);
-  }
+  if (tid)
+    ret = proxy_->selectAnnotationsWithTokenId(tid);
   return ret;
 }
 
 AnnotationList
-ServerAgent::selectRelatedAnnotationsWithTokenId(qint64 tid, int tt)
+ServerAgent::selectRelatedAnnotationsWithTokenId(qint64 tid)
 {
   AnnotationList ret;
-  if (!tid)
-    return ret;
-
-  switch (tt) {
-  case Traits::MediaType: ret = proxy_->selectRelatedMediaAnnotationsWithTokenId(tid); break;
-  case Traits::GameType:  ret = proxy_->selectRelatedGameAnnotationsWithTokenId(tid); break;
-  default: Q_ASSERT(0);
-  }
+  if (tid)
+    ret = proxy_->selectRelatedAnnotationsWithTokenId(tid);
   return ret;
 }
 
 
 AliasList
-ServerAgent::selectAliasesWithTokenId(qint64 tid, int tt)
+ServerAgent::selectAliasesWithTokenId(qint64 tid)
 {
   AliasList ret;
-  if (!tid)
-    return ret;
-
-  switch (tt) {
-  case Traits::MediaType: ret = proxy_->selectMediaAliasesWithTokenId(tid); break;
-  case Traits::GameType:  ret = proxy_->selectGameAliasesWithTokenId(tid); break;
-  default: Q_ASSERT(0);
-  }
+  if (tid)
+    ret = proxy_->selectAliasesWithTokenId(tid);
   return ret;
 }
 
 // - Cast -
 
-bool
-ServerAgent::blessAnnotationWithId(qint64 id, int tt)
-{
-  if (!isAuthorized())
-    return 0;
-  if (!id)
-    return false;
-
-  switch (tt) {
-  case Traits::MediaType: return proxy_->blessMediaAnnotationWithId(id, user_.name(), user_.password());
-  case Traits::GameType:  return proxy_->blessGameAnnotationWithId(id, user_.name(), user_.password());
-  default: Q_ASSERT(0); return false;
+#define DO_CAST(_cast, _Cast, _Entity) \
+  bool \
+  ServerAgent::_cast##_Entity##WithId(qint64 id) \
+  { \
+    if (!isAuthorized() || !id) \
+      return false; \
+ \
+    CastEvent e(CastEvent::_Cast##Event, id, Traits::_Entity); \
+    return cast_->registerEvent(e) && \
+           proxy_->_cast##_Entity##WithId(id, user_.name(), user_.password()); \
   }
-}
+
+  DO_CAST(bless, Bless, Annotation)
+  DO_CAST(curse, Curse, Annotation)
+  DO_CAST(block, Block, Annotation)
+
+  DO_CAST(bless, Bless, Alias)
+  DO_CAST(curse, Curse, Alias)
+  DO_CAST(block, Block, Alias)
+
+  DO_CAST(bless, Bless, Token)
+  DO_CAST(curse, Curse, Token)
+
+  DO_CAST(block, Block, User)
+#undef DO_CAST
+
+#define QUERY_CAST(_Cast, _Casted, _Entity) \
+  bool \
+  ServerAgent::is##_Entity##_Casted##WithId(qint64 id) const \
+  { \
+    CastEvent e(CastEvent::_Cast##Event, id, Traits::_Entity); \
+    return cast_->containsEvent(e); \
+  }
+
+  QUERY_CAST(Bless, Blessed, Annotation)
+  QUERY_CAST(Curse, Cursed, Annotation)
+  QUERY_CAST(Block, Blocked, Annotation)
+
+  QUERY_CAST(Bless, Blessed, Alias)
+  QUERY_CAST(Curse, Cursed, Alias)
+  QUERY_CAST(Block, Blocked, Alias)
+
+  QUERY_CAST(Bless, Blessed, Token)
+  QUERY_CAST(Curse, Cursed, Token)
+
+  QUERY_CAST(Block, Blocked, User)
+#undef QUERY_CAST
 
 // - Edit -
 
 bool
-ServerAgent::updateAnnotationTextWithId(const QString &text, qint64 id, int tt)
+ServerAgent::updateAnnotationTextWithId(const QString &text, qint64 id)
 {
   if (!isAuthorized())
     return 0;
   if (!id)
     return false;
 
-  switch (tt) {
-  case Traits::MediaType: return proxy_->updateMediaAnnotationTextWithId(text, id, user_.name(), user_.password());
-  case Traits::GameType:  return proxy_->updateGameAnnotationTextWithId(text, id, user_.name(), user_.password());
-  default: Q_ASSERT(0); return false;
-  }
+  return proxy_->updateAnnotationTextWithId(text, id, user_.name(), user_.password());
 }
 
 // EOF

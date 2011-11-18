@@ -1,8 +1,43 @@
 # ChangeLog
 
-Project: touch.player
-Versial: 0.0.9.0
+Project: annot.player
+Versial: 0.1.0.0
 Date: 11/?/2011
+- Improved translations.
+- Bug fix.
+
+Project: annot.player
+Versial: 0.1.0.0.rc
+Date: 11/18/2011
+- Added basic support for viewing/annotating pictures and manga.
+- CD/DVD/DVDISO support completed. DVD menu added.
+- Added basic NG support.
+- Block/bless/curse cast completed.
+- Communication module and underlying data structure redesigned.
+  Player with version# less than 0.1.0.0 might not work anymore.
+- Added support for Mac OS X Lion 10.7.
+- Added support for Mac to directly open file in Finder.
+- Added drag/drop support for Mac.
+- Mouse hook bug fixed on Windows.
+- GUI improved.
+- Translations improved.
+
+Project: annot.player
+
+Project: annot.player
+Versial: 0.0.9.2
+Date: 11/12/2011
+- Several bugfixes for Mac.
+- OSD structure redesigned for sake of Mac and Windows XP.
+- Mac OS X deployment frameworks finished.
+- Caches and logs moved to ~/Library on Mac OS X.
+- Added warming-up caches to speed up program startup.
+- Reduced slow-downs that caused by Windows XP compatible code.
+- Theming bug fixed for Windows XP.
+
+Project: annot.player
+Versial: 0.0.9.0-0.0.9.1
+Date: 11/10/2011
 - Windows XP theme redesigned.
 - Mac OS X theme redesigned.
 - Several bug fixes for Mac and Windows XP.

@@ -1,5 +1,6 @@
 # win.pro
 # Since 7/23/2011
+win32 {
 
 TEMPLATE = subdirs
 include(disk/disk.pri)
@@ -10,4 +11,5 @@ SUBDIRS += picker
 SUBDIRS += qth
 #SUBDIRS += qtith
 
+}
 # EOF

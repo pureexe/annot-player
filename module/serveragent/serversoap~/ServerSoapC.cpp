@@ -17,7 +17,7 @@ compiling, linking, and/or using OpenSSL is allowed.
 
 namespace ServerSoap {
 
-SOAP_SOURCE_STAMP("@(#) ServerSoapC.cpp ver 2.8.3 2011-11-01 20:47:41 GMT")
+SOAP_SOURCE_STAMP("@(#) ServerSoapC.cpp ver 2.8.3 2011-11-18 03:31:59 GMT")
 
 
 #ifndef WITH_NOGLOBAL
@@ -180,10 +180,6 @@ SOAP_FMAC3 void * SOAP_FMAC4 soap_getelement(struct soap *soap, int *type)
 		return soap_in_tns__updateMediaAnnotationTextWithIdResponse(soap, NULL, NULL, "tns:updateMediaAnnotationTextWithIdResponse");
 	case SOAP_TYPE_ServerSoap_tns__updateMediaAnnotationTextWithId:
 		return soap_in_tns__updateMediaAnnotationTextWithId(soap, NULL, NULL, "tns:updateMediaAnnotationTextWithId");
-	case SOAP_TYPE_ServerSoap_tns__updateGameAnnotationTextWithIdResponse:
-		return soap_in_tns__updateGameAnnotationTextWithIdResponse(soap, NULL, NULL, "tns:updateGameAnnotationTextWithIdResponse");
-	case SOAP_TYPE_ServerSoap_tns__updateGameAnnotationTextWithId:
-		return soap_in_tns__updateGameAnnotationTextWithId(soap, NULL, NULL, "tns:updateGameAnnotationTextWithId");
 	case SOAP_TYPE_ServerSoap_tns__submitMediaTokenDigestResponse:
 		return soap_in_tns__submitMediaTokenDigestResponse(soap, NULL, NULL, "tns:submitMediaTokenDigestResponse");
 	case SOAP_TYPE_ServerSoap_tns__submitMediaTokenDigest:
@@ -216,38 +212,6 @@ SOAP_FMAC3 void * SOAP_FMAC4 soap_getelement(struct soap *soap, int *type)
 		return soap_in_tns__submitMediaAliasResponse(soap, NULL, NULL, "tns:submitMediaAliasResponse");
 	case SOAP_TYPE_ServerSoap_tns__submitMediaAlias:
 		return soap_in_tns__submitMediaAlias(soap, NULL, NULL, "tns:submitMediaAlias");
-	case SOAP_TYPE_ServerSoap_tns__submitGameTokenDigestResponse:
-		return soap_in_tns__submitGameTokenDigestResponse(soap, NULL, NULL, "tns:submitGameTokenDigestResponse");
-	case SOAP_TYPE_ServerSoap_tns__submitGameTokenDigest:
-		return soap_in_tns__submitGameTokenDigest(soap, NULL, NULL, "tns:submitGameTokenDigest");
-	case SOAP_TYPE_ServerSoap_tns__submitGameTokenResponse:
-		return soap_in_tns__submitGameTokenResponse(soap, NULL, NULL, "tns:submitGameTokenResponse");
-	case SOAP_TYPE_ServerSoap_tns__submitGameToken:
-		return soap_in_tns__submitGameToken(soap, NULL, NULL, "tns:submitGameToken");
-	case SOAP_TYPE_ServerSoap_tns__submitGameAnnotationTextWithTokenIdResponse:
-		return soap_in_tns__submitGameAnnotationTextWithTokenIdResponse(soap, NULL, NULL, "tns:submitGameAnnotationTextWithTokenIdResponse");
-	case SOAP_TYPE_ServerSoap_tns__submitGameAnnotationTextWithTokenId:
-		return soap_in_tns__submitGameAnnotationTextWithTokenId(soap, NULL, NULL, "tns:submitGameAnnotationTextWithTokenId");
-	case SOAP_TYPE_ServerSoap_tns__submitGameAnnotationTextAndTokenDigestResponse:
-		return soap_in_tns__submitGameAnnotationTextAndTokenDigestResponse(soap, NULL, NULL, "tns:submitGameAnnotationTextAndTokenDigestResponse");
-	case SOAP_TYPE_ServerSoap_tns__submitGameAnnotationTextAndTokenDigest:
-		return soap_in_tns__submitGameAnnotationTextAndTokenDigest(soap, NULL, NULL, "tns:submitGameAnnotationTextAndTokenDigest");
-	case SOAP_TYPE_ServerSoap_tns__submitGameAnnotationResponse:
-		return soap_in_tns__submitGameAnnotationResponse(soap, NULL, NULL, "tns:submitGameAnnotationResponse");
-	case SOAP_TYPE_ServerSoap_tns__submitGameAnnotation:
-		return soap_in_tns__submitGameAnnotation(soap, NULL, NULL, "tns:submitGameAnnotation");
-	case SOAP_TYPE_ServerSoap_tns__submitGameAliasTextWithTokenIdResponse:
-		return soap_in_tns__submitGameAliasTextWithTokenIdResponse(soap, NULL, NULL, "tns:submitGameAliasTextWithTokenIdResponse");
-	case SOAP_TYPE_ServerSoap_tns__submitGameAliasTextWithTokenId:
-		return soap_in_tns__submitGameAliasTextWithTokenId(soap, NULL, NULL, "tns:submitGameAliasTextWithTokenId");
-	case SOAP_TYPE_ServerSoap_tns__submitGameAliasTextAndTokenDigestResponse:
-		return soap_in_tns__submitGameAliasTextAndTokenDigestResponse(soap, NULL, NULL, "tns:submitGameAliasTextAndTokenDigestResponse");
-	case SOAP_TYPE_ServerSoap_tns__submitGameAliasTextAndTokenDigest:
-		return soap_in_tns__submitGameAliasTextAndTokenDigest(soap, NULL, NULL, "tns:submitGameAliasTextAndTokenDigest");
-	case SOAP_TYPE_ServerSoap_tns__submitGameAliasResponse:
-		return soap_in_tns__submitGameAliasResponse(soap, NULL, NULL, "tns:submitGameAliasResponse");
-	case SOAP_TYPE_ServerSoap_tns__submitGameAlias:
-		return soap_in_tns__submitGameAlias(soap, NULL, NULL, "tns:submitGameAlias");
 	case SOAP_TYPE_ServerSoap_tns__setUserLanguageResponse:
 		return soap_in_tns__setUserLanguageResponse(soap, NULL, NULL, "tns:setUserLanguageResponse");
 	case SOAP_TYPE_ServerSoap_tns__setUserLanguage:
@@ -264,10 +228,6 @@ SOAP_FMAC3 void * SOAP_FMAC4 soap_getelement(struct soap *soap, int *type)
 		return soap_in_tns__selectRelatedMediaAnnotationsWithTokenIdResponse(soap, NULL, NULL, "tns:selectRelatedMediaAnnotationsWithTokenIdResponse");
 	case SOAP_TYPE_ServerSoap_tns__selectRelatedMediaAnnotationsWithTokenId:
 		return soap_in_tns__selectRelatedMediaAnnotationsWithTokenId(soap, NULL, NULL, "tns:selectRelatedMediaAnnotationsWithTokenId");
-	case SOAP_TYPE_ServerSoap_tns__selectRelatedGameAnnotationsWithTokenIdResponse:
-		return soap_in_tns__selectRelatedGameAnnotationsWithTokenIdResponse(soap, NULL, NULL, "tns:selectRelatedGameAnnotationsWithTokenIdResponse");
-	case SOAP_TYPE_ServerSoap_tns__selectRelatedGameAnnotationsWithTokenId:
-		return soap_in_tns__selectRelatedGameAnnotationsWithTokenId(soap, NULL, NULL, "tns:selectRelatedGameAnnotationsWithTokenId");
 	case SOAP_TYPE_ServerSoap_tns__selectMediaTokenWithIdResponse:
 		return soap_in_tns__selectMediaTokenWithIdResponse(soap, NULL, NULL, "tns:selectMediaTokenWithIdResponse");
 	case SOAP_TYPE_ServerSoap_tns__selectMediaTokenWithId:
@@ -284,22 +244,6 @@ SOAP_FMAC3 void * SOAP_FMAC4 soap_getelement(struct soap *soap, int *type)
 		return soap_in_tns__selectMediaAliasesWithTokenIdResponse(soap, NULL, NULL, "tns:selectMediaAliasesWithTokenIdResponse");
 	case SOAP_TYPE_ServerSoap_tns__selectMediaAliasesWithTokenId:
 		return soap_in_tns__selectMediaAliasesWithTokenId(soap, NULL, NULL, "tns:selectMediaAliasesWithTokenId");
-	case SOAP_TYPE_ServerSoap_tns__selectGameTokenWithIdResponse:
-		return soap_in_tns__selectGameTokenWithIdResponse(soap, NULL, NULL, "tns:selectGameTokenWithIdResponse");
-	case SOAP_TYPE_ServerSoap_tns__selectGameTokenWithId:
-		return soap_in_tns__selectGameTokenWithId(soap, NULL, NULL, "tns:selectGameTokenWithId");
-	case SOAP_TYPE_ServerSoap_tns__selectGameTokenWithDigestResponse:
-		return soap_in_tns__selectGameTokenWithDigestResponse(soap, NULL, NULL, "tns:selectGameTokenWithDigestResponse");
-	case SOAP_TYPE_ServerSoap_tns__selectGameTokenWithDigest:
-		return soap_in_tns__selectGameTokenWithDigest(soap, NULL, NULL, "tns:selectGameTokenWithDigest");
-	case SOAP_TYPE_ServerSoap_tns__selectGameAnnotationsWithTokenIdResponse:
-		return soap_in_tns__selectGameAnnotationsWithTokenIdResponse(soap, NULL, NULL, "tns:selectGameAnnotationsWithTokenIdResponse");
-	case SOAP_TYPE_ServerSoap_tns__selectGameAnnotationsWithTokenId:
-		return soap_in_tns__selectGameAnnotationsWithTokenId(soap, NULL, NULL, "tns:selectGameAnnotationsWithTokenId");
-	case SOAP_TYPE_ServerSoap_tns__selectGameAliasesWithTokenIdResponse:
-		return soap_in_tns__selectGameAliasesWithTokenIdResponse(soap, NULL, NULL, "tns:selectGameAliasesWithTokenIdResponse");
-	case SOAP_TYPE_ServerSoap_tns__selectGameAliasesWithTokenId:
-		return soap_in_tns__selectGameAliasesWithTokenId(soap, NULL, NULL, "tns:selectGameAliasesWithTokenId");
 	case SOAP_TYPE_ServerSoap_tns__isConnectedResponse:
 		return soap_in_tns__isConnectedResponse(soap, NULL, NULL, "tns:isConnectedResponse");
 	case SOAP_TYPE_ServerSoap_tns__isConnected:
@@ -308,18 +252,46 @@ SOAP_FMAC3 void * SOAP_FMAC4 soap_getelement(struct soap *soap, int *type)
 		return soap_in_tns__isClientUpdatedResponse(soap, NULL, NULL, "tns:isClientUpdatedResponse");
 	case SOAP_TYPE_ServerSoap_tns__isClientUpdated:
 		return soap_in_tns__isClientUpdated(soap, NULL, NULL, "tns:isClientUpdated");
+	case SOAP_TYPE_ServerSoap_tns__curseMediaTokenWithIdResponse:
+		return soap_in_tns__curseMediaTokenWithIdResponse(soap, NULL, NULL, "tns:curseMediaTokenWithIdResponse");
+	case SOAP_TYPE_ServerSoap_tns__curseMediaTokenWithId:
+		return soap_in_tns__curseMediaTokenWithId(soap, NULL, NULL, "tns:curseMediaTokenWithId");
+	case SOAP_TYPE_ServerSoap_tns__curseMediaAnnotationWithIdResponse:
+		return soap_in_tns__curseMediaAnnotationWithIdResponse(soap, NULL, NULL, "tns:curseMediaAnnotationWithIdResponse");
+	case SOAP_TYPE_ServerSoap_tns__curseMediaAnnotationWithId:
+		return soap_in_tns__curseMediaAnnotationWithId(soap, NULL, NULL, "tns:curseMediaAnnotationWithId");
+	case SOAP_TYPE_ServerSoap_tns__curseMediaAliasWithIdResponse:
+		return soap_in_tns__curseMediaAliasWithIdResponse(soap, NULL, NULL, "tns:curseMediaAliasWithIdResponse");
+	case SOAP_TYPE_ServerSoap_tns__curseMediaAliasWithId:
+		return soap_in_tns__curseMediaAliasWithId(soap, NULL, NULL, "tns:curseMediaAliasWithId");
 	case SOAP_TYPE_ServerSoap_tns__chatResponse:
 		return soap_in_tns__chatResponse(soap, NULL, NULL, "tns:chatResponse");
 	case SOAP_TYPE_ServerSoap_tns__chat:
 		return soap_in_tns__chat(soap, NULL, NULL, "tns:chat");
+	case SOAP_TYPE_ServerSoap_tns__blockUserWithIdResponse:
+		return soap_in_tns__blockUserWithIdResponse(soap, NULL, NULL, "tns:blockUserWithIdResponse");
+	case SOAP_TYPE_ServerSoap_tns__blockUserWithId:
+		return soap_in_tns__blockUserWithId(soap, NULL, NULL, "tns:blockUserWithId");
+	case SOAP_TYPE_ServerSoap_tns__blockMediaAnnotationWithIdResponse:
+		return soap_in_tns__blockMediaAnnotationWithIdResponse(soap, NULL, NULL, "tns:blockMediaAnnotationWithIdResponse");
+	case SOAP_TYPE_ServerSoap_tns__blockMediaAnnotationWithId:
+		return soap_in_tns__blockMediaAnnotationWithId(soap, NULL, NULL, "tns:blockMediaAnnotationWithId");
+	case SOAP_TYPE_ServerSoap_tns__blockMediaAliasWithIdResponse:
+		return soap_in_tns__blockMediaAliasWithIdResponse(soap, NULL, NULL, "tns:blockMediaAliasWithIdResponse");
+	case SOAP_TYPE_ServerSoap_tns__blockMediaAliasWithId:
+		return soap_in_tns__blockMediaAliasWithId(soap, NULL, NULL, "tns:blockMediaAliasWithId");
+	case SOAP_TYPE_ServerSoap_tns__blessMediaTokenWithIdResponse:
+		return soap_in_tns__blessMediaTokenWithIdResponse(soap, NULL, NULL, "tns:blessMediaTokenWithIdResponse");
+	case SOAP_TYPE_ServerSoap_tns__blessMediaTokenWithId:
+		return soap_in_tns__blessMediaTokenWithId(soap, NULL, NULL, "tns:blessMediaTokenWithId");
 	case SOAP_TYPE_ServerSoap_tns__blessMediaAnnotationWithIdResponse:
 		return soap_in_tns__blessMediaAnnotationWithIdResponse(soap, NULL, NULL, "tns:blessMediaAnnotationWithIdResponse");
 	case SOAP_TYPE_ServerSoap_tns__blessMediaAnnotationWithId:
 		return soap_in_tns__blessMediaAnnotationWithId(soap, NULL, NULL, "tns:blessMediaAnnotationWithId");
-	case SOAP_TYPE_ServerSoap_tns__blessGameAnnotationWithIdResponse:
-		return soap_in_tns__blessGameAnnotationWithIdResponse(soap, NULL, NULL, "tns:blessGameAnnotationWithIdResponse");
-	case SOAP_TYPE_ServerSoap_tns__blessGameAnnotationWithId:
-		return soap_in_tns__blessGameAnnotationWithId(soap, NULL, NULL, "tns:blessGameAnnotationWithId");
+	case SOAP_TYPE_ServerSoap_tns__blessMediaAliasWithIdResponse:
+		return soap_in_tns__blessMediaAliasWithIdResponse(soap, NULL, NULL, "tns:blessMediaAliasWithIdResponse");
+	case SOAP_TYPE_ServerSoap_tns__blessMediaAliasWithId:
+		return soap_in_tns__blessMediaAliasWithId(soap, NULL, NULL, "tns:blessMediaAliasWithId");
 	case SOAP_TYPE_ServerSoap_tns__user:
 		return soap_in_tns__user(soap, NULL, NULL, "tns:user");
 	case SOAP_TYPE_ServerSoap_tns__mediaAlias:
@@ -328,20 +300,10 @@ SOAP_FMAC3 void * SOAP_FMAC4 soap_getelement(struct soap *soap, int *type)
 		return soap_in_tns__mediaToken(soap, NULL, NULL, "tns:mediaToken");
 	case SOAP_TYPE_ServerSoap_tns__mediaAnnotation:
 		return soap_in_tns__mediaAnnotation(soap, NULL, NULL, "tns:mediaAnnotation");
-	case SOAP_TYPE_ServerSoap_tns__gameAlias:
-		return soap_in_tns__gameAlias(soap, NULL, NULL, "tns:gameAlias");
-	case SOAP_TYPE_ServerSoap_tns__gameToken:
-		return soap_in_tns__gameToken(soap, NULL, NULL, "tns:gameToken");
-	case SOAP_TYPE_ServerSoap_tns__gameAnnotation:
-		return soap_in_tns__gameAnnotation(soap, NULL, NULL, "tns:gameAnnotation");
 	case SOAP_TYPE_ServerSoap_PointerTotns__updateMediaAnnotationTextWithIdResponse:
 		return soap_in_PointerTotns__updateMediaAnnotationTextWithIdResponse(soap, NULL, NULL, "tns:updateMediaAnnotationTextWithIdResponse");
 	case SOAP_TYPE_ServerSoap_PointerTotns__updateMediaAnnotationTextWithId:
 		return soap_in_PointerTotns__updateMediaAnnotationTextWithId(soap, NULL, NULL, "tns:updateMediaAnnotationTextWithId");
-	case SOAP_TYPE_ServerSoap_PointerTotns__updateGameAnnotationTextWithIdResponse:
-		return soap_in_PointerTotns__updateGameAnnotationTextWithIdResponse(soap, NULL, NULL, "tns:updateGameAnnotationTextWithIdResponse");
-	case SOAP_TYPE_ServerSoap_PointerTotns__updateGameAnnotationTextWithId:
-		return soap_in_PointerTotns__updateGameAnnotationTextWithId(soap, NULL, NULL, "tns:updateGameAnnotationTextWithId");
 	case SOAP_TYPE_ServerSoap_PointerTotns__submitMediaTokenDigestResponse:
 		return soap_in_PointerTotns__submitMediaTokenDigestResponse(soap, NULL, NULL, "tns:submitMediaTokenDigestResponse");
 	case SOAP_TYPE_ServerSoap_PointerTotns__submitMediaTokenDigest:
@@ -374,38 +336,6 @@ SOAP_FMAC3 void * SOAP_FMAC4 soap_getelement(struct soap *soap, int *type)
 		return soap_in_PointerTotns__submitMediaAliasResponse(soap, NULL, NULL, "tns:submitMediaAliasResponse");
 	case SOAP_TYPE_ServerSoap_PointerTotns__submitMediaAlias:
 		return soap_in_PointerTotns__submitMediaAlias(soap, NULL, NULL, "tns:submitMediaAlias");
-	case SOAP_TYPE_ServerSoap_PointerTotns__submitGameTokenDigestResponse:
-		return soap_in_PointerTotns__submitGameTokenDigestResponse(soap, NULL, NULL, "tns:submitGameTokenDigestResponse");
-	case SOAP_TYPE_ServerSoap_PointerTotns__submitGameTokenDigest:
-		return soap_in_PointerTotns__submitGameTokenDigest(soap, NULL, NULL, "tns:submitGameTokenDigest");
-	case SOAP_TYPE_ServerSoap_PointerTotns__submitGameTokenResponse:
-		return soap_in_PointerTotns__submitGameTokenResponse(soap, NULL, NULL, "tns:submitGameTokenResponse");
-	case SOAP_TYPE_ServerSoap_PointerTotns__submitGameToken:
-		return soap_in_PointerTotns__submitGameToken(soap, NULL, NULL, "tns:submitGameToken");
-	case SOAP_TYPE_ServerSoap_PointerTotns__submitGameAnnotationTextWithTokenIdResponse:
-		return soap_in_PointerTotns__submitGameAnnotationTextWithTokenIdResponse(soap, NULL, NULL, "tns:submitGameAnnotationTextWithTokenIdResponse");
-	case SOAP_TYPE_ServerSoap_PointerTotns__submitGameAnnotationTextWithTokenId:
-		return soap_in_PointerTotns__submitGameAnnotationTextWithTokenId(soap, NULL, NULL, "tns:submitGameAnnotationTextWithTokenId");
-	case SOAP_TYPE_ServerSoap_PointerTotns__submitGameAnnotationTextAndTokenDigestResponse:
-		return soap_in_PointerTotns__submitGameAnnotationTextAndTokenDigestResponse(soap, NULL, NULL, "tns:submitGameAnnotationTextAndTokenDigestResponse");
-	case SOAP_TYPE_ServerSoap_PointerTotns__submitGameAnnotationTextAndTokenDigest:
-		return soap_in_PointerTotns__submitGameAnnotationTextAndTokenDigest(soap, NULL, NULL, "tns:submitGameAnnotationTextAndTokenDigest");
-	case SOAP_TYPE_ServerSoap_PointerTotns__submitGameAnnotationResponse:
-		return soap_in_PointerTotns__submitGameAnnotationResponse(soap, NULL, NULL, "tns:submitGameAnnotationResponse");
-	case SOAP_TYPE_ServerSoap_PointerTotns__submitGameAnnotation:
-		return soap_in_PointerTotns__submitGameAnnotation(soap, NULL, NULL, "tns:submitGameAnnotation");
-	case SOAP_TYPE_ServerSoap_PointerTotns__submitGameAliasTextWithTokenIdResponse:
-		return soap_in_PointerTotns__submitGameAliasTextWithTokenIdResponse(soap, NULL, NULL, "tns:submitGameAliasTextWithTokenIdResponse");
-	case SOAP_TYPE_ServerSoap_PointerTotns__submitGameAliasTextWithTokenId:
-		return soap_in_PointerTotns__submitGameAliasTextWithTokenId(soap, NULL, NULL, "tns:submitGameAliasTextWithTokenId");
-	case SOAP_TYPE_ServerSoap_PointerTotns__submitGameAliasTextAndTokenDigestResponse:
-		return soap_in_PointerTotns__submitGameAliasTextAndTokenDigestResponse(soap, NULL, NULL, "tns:submitGameAliasTextAndTokenDigestResponse");
-	case SOAP_TYPE_ServerSoap_PointerTotns__submitGameAliasTextAndTokenDigest:
-		return soap_in_PointerTotns__submitGameAliasTextAndTokenDigest(soap, NULL, NULL, "tns:submitGameAliasTextAndTokenDigest");
-	case SOAP_TYPE_ServerSoap_PointerTotns__submitGameAliasResponse:
-		return soap_in_PointerTotns__submitGameAliasResponse(soap, NULL, NULL, "tns:submitGameAliasResponse");
-	case SOAP_TYPE_ServerSoap_PointerTotns__submitGameAlias:
-		return soap_in_PointerTotns__submitGameAlias(soap, NULL, NULL, "tns:submitGameAlias");
 	case SOAP_TYPE_ServerSoap_PointerTotns__setUserLanguageResponse:
 		return soap_in_PointerTotns__setUserLanguageResponse(soap, NULL, NULL, "tns:setUserLanguageResponse");
 	case SOAP_TYPE_ServerSoap_PointerTotns__setUserLanguage:
@@ -422,10 +352,6 @@ SOAP_FMAC3 void * SOAP_FMAC4 soap_getelement(struct soap *soap, int *type)
 		return soap_in_PointerTotns__selectRelatedMediaAnnotationsWithTokenIdResponse(soap, NULL, NULL, "tns:selectRelatedMediaAnnotationsWithTokenIdResponse");
 	case SOAP_TYPE_ServerSoap_PointerTotns__selectRelatedMediaAnnotationsWithTokenId:
 		return soap_in_PointerTotns__selectRelatedMediaAnnotationsWithTokenId(soap, NULL, NULL, "tns:selectRelatedMediaAnnotationsWithTokenId");
-	case SOAP_TYPE_ServerSoap_PointerTotns__selectRelatedGameAnnotationsWithTokenIdResponse:
-		return soap_in_PointerTotns__selectRelatedGameAnnotationsWithTokenIdResponse(soap, NULL, NULL, "tns:selectRelatedGameAnnotationsWithTokenIdResponse");
-	case SOAP_TYPE_ServerSoap_PointerTotns__selectRelatedGameAnnotationsWithTokenId:
-		return soap_in_PointerTotns__selectRelatedGameAnnotationsWithTokenId(soap, NULL, NULL, "tns:selectRelatedGameAnnotationsWithTokenId");
 	case SOAP_TYPE_ServerSoap_PointerTotns__selectMediaTokenWithIdResponse:
 		return soap_in_PointerTotns__selectMediaTokenWithIdResponse(soap, NULL, NULL, "tns:selectMediaTokenWithIdResponse");
 	case SOAP_TYPE_ServerSoap_PointerTotns__selectMediaTokenWithId:
@@ -442,22 +368,6 @@ SOAP_FMAC3 void * SOAP_FMAC4 soap_getelement(struct soap *soap, int *type)
 		return soap_in_PointerTotns__selectMediaAliasesWithTokenIdResponse(soap, NULL, NULL, "tns:selectMediaAliasesWithTokenIdResponse");
 	case SOAP_TYPE_ServerSoap_PointerTotns__selectMediaAliasesWithTokenId:
 		return soap_in_PointerTotns__selectMediaAliasesWithTokenId(soap, NULL, NULL, "tns:selectMediaAliasesWithTokenId");
-	case SOAP_TYPE_ServerSoap_PointerTotns__selectGameTokenWithIdResponse:
-		return soap_in_PointerTotns__selectGameTokenWithIdResponse(soap, NULL, NULL, "tns:selectGameTokenWithIdResponse");
-	case SOAP_TYPE_ServerSoap_PointerTotns__selectGameTokenWithId:
-		return soap_in_PointerTotns__selectGameTokenWithId(soap, NULL, NULL, "tns:selectGameTokenWithId");
-	case SOAP_TYPE_ServerSoap_PointerTotns__selectGameTokenWithDigestResponse:
-		return soap_in_PointerTotns__selectGameTokenWithDigestResponse(soap, NULL, NULL, "tns:selectGameTokenWithDigestResponse");
-	case SOAP_TYPE_ServerSoap_PointerTotns__selectGameTokenWithDigest:
-		return soap_in_PointerTotns__selectGameTokenWithDigest(soap, NULL, NULL, "tns:selectGameTokenWithDigest");
-	case SOAP_TYPE_ServerSoap_PointerTotns__selectGameAnnotationsWithTokenIdResponse:
-		return soap_in_PointerTotns__selectGameAnnotationsWithTokenIdResponse(soap, NULL, NULL, "tns:selectGameAnnotationsWithTokenIdResponse");
-	case SOAP_TYPE_ServerSoap_PointerTotns__selectGameAnnotationsWithTokenId:
-		return soap_in_PointerTotns__selectGameAnnotationsWithTokenId(soap, NULL, NULL, "tns:selectGameAnnotationsWithTokenId");
-	case SOAP_TYPE_ServerSoap_PointerTotns__selectGameAliasesWithTokenIdResponse:
-		return soap_in_PointerTotns__selectGameAliasesWithTokenIdResponse(soap, NULL, NULL, "tns:selectGameAliasesWithTokenIdResponse");
-	case SOAP_TYPE_ServerSoap_PointerTotns__selectGameAliasesWithTokenId:
-		return soap_in_PointerTotns__selectGameAliasesWithTokenId(soap, NULL, NULL, "tns:selectGameAliasesWithTokenId");
 	case SOAP_TYPE_ServerSoap_PointerTotns__isConnectedResponse:
 		return soap_in_PointerTotns__isConnectedResponse(soap, NULL, NULL, "tns:isConnectedResponse");
 	case SOAP_TYPE_ServerSoap_PointerTotns__isConnected:
@@ -466,18 +376,46 @@ SOAP_FMAC3 void * SOAP_FMAC4 soap_getelement(struct soap *soap, int *type)
 		return soap_in_PointerTotns__isClientUpdatedResponse(soap, NULL, NULL, "tns:isClientUpdatedResponse");
 	case SOAP_TYPE_ServerSoap_PointerTotns__isClientUpdated:
 		return soap_in_PointerTotns__isClientUpdated(soap, NULL, NULL, "tns:isClientUpdated");
+	case SOAP_TYPE_ServerSoap_PointerTotns__curseMediaTokenWithIdResponse:
+		return soap_in_PointerTotns__curseMediaTokenWithIdResponse(soap, NULL, NULL, "tns:curseMediaTokenWithIdResponse");
+	case SOAP_TYPE_ServerSoap_PointerTotns__curseMediaTokenWithId:
+		return soap_in_PointerTotns__curseMediaTokenWithId(soap, NULL, NULL, "tns:curseMediaTokenWithId");
+	case SOAP_TYPE_ServerSoap_PointerTotns__curseMediaAnnotationWithIdResponse:
+		return soap_in_PointerTotns__curseMediaAnnotationWithIdResponse(soap, NULL, NULL, "tns:curseMediaAnnotationWithIdResponse");
+	case SOAP_TYPE_ServerSoap_PointerTotns__curseMediaAnnotationWithId:
+		return soap_in_PointerTotns__curseMediaAnnotationWithId(soap, NULL, NULL, "tns:curseMediaAnnotationWithId");
+	case SOAP_TYPE_ServerSoap_PointerTotns__curseMediaAliasWithIdResponse:
+		return soap_in_PointerTotns__curseMediaAliasWithIdResponse(soap, NULL, NULL, "tns:curseMediaAliasWithIdResponse");
+	case SOAP_TYPE_ServerSoap_PointerTotns__curseMediaAliasWithId:
+		return soap_in_PointerTotns__curseMediaAliasWithId(soap, NULL, NULL, "tns:curseMediaAliasWithId");
 	case SOAP_TYPE_ServerSoap_PointerTotns__chatResponse:
 		return soap_in_PointerTotns__chatResponse(soap, NULL, NULL, "tns:chatResponse");
 	case SOAP_TYPE_ServerSoap_PointerTotns__chat:
 		return soap_in_PointerTotns__chat(soap, NULL, NULL, "tns:chat");
+	case SOAP_TYPE_ServerSoap_PointerTotns__blockUserWithIdResponse:
+		return soap_in_PointerTotns__blockUserWithIdResponse(soap, NULL, NULL, "tns:blockUserWithIdResponse");
+	case SOAP_TYPE_ServerSoap_PointerTotns__blockUserWithId:
+		return soap_in_PointerTotns__blockUserWithId(soap, NULL, NULL, "tns:blockUserWithId");
+	case SOAP_TYPE_ServerSoap_PointerTotns__blockMediaAnnotationWithIdResponse:
+		return soap_in_PointerTotns__blockMediaAnnotationWithIdResponse(soap, NULL, NULL, "tns:blockMediaAnnotationWithIdResponse");
+	case SOAP_TYPE_ServerSoap_PointerTotns__blockMediaAnnotationWithId:
+		return soap_in_PointerTotns__blockMediaAnnotationWithId(soap, NULL, NULL, "tns:blockMediaAnnotationWithId");
+	case SOAP_TYPE_ServerSoap_PointerTotns__blockMediaAliasWithIdResponse:
+		return soap_in_PointerTotns__blockMediaAliasWithIdResponse(soap, NULL, NULL, "tns:blockMediaAliasWithIdResponse");
+	case SOAP_TYPE_ServerSoap_PointerTotns__blockMediaAliasWithId:
+		return soap_in_PointerTotns__blockMediaAliasWithId(soap, NULL, NULL, "tns:blockMediaAliasWithId");
+	case SOAP_TYPE_ServerSoap_PointerTotns__blessMediaTokenWithIdResponse:
+		return soap_in_PointerTotns__blessMediaTokenWithIdResponse(soap, NULL, NULL, "tns:blessMediaTokenWithIdResponse");
+	case SOAP_TYPE_ServerSoap_PointerTotns__blessMediaTokenWithId:
+		return soap_in_PointerTotns__blessMediaTokenWithId(soap, NULL, NULL, "tns:blessMediaTokenWithId");
 	case SOAP_TYPE_ServerSoap_PointerTotns__blessMediaAnnotationWithIdResponse:
 		return soap_in_PointerTotns__blessMediaAnnotationWithIdResponse(soap, NULL, NULL, "tns:blessMediaAnnotationWithIdResponse");
 	case SOAP_TYPE_ServerSoap_PointerTotns__blessMediaAnnotationWithId:
 		return soap_in_PointerTotns__blessMediaAnnotationWithId(soap, NULL, NULL, "tns:blessMediaAnnotationWithId");
-	case SOAP_TYPE_ServerSoap_PointerTotns__blessGameAnnotationWithIdResponse:
-		return soap_in_PointerTotns__blessGameAnnotationWithIdResponse(soap, NULL, NULL, "tns:blessGameAnnotationWithIdResponse");
-	case SOAP_TYPE_ServerSoap_PointerTotns__blessGameAnnotationWithId:
-		return soap_in_PointerTotns__blessGameAnnotationWithId(soap, NULL, NULL, "tns:blessGameAnnotationWithId");
+	case SOAP_TYPE_ServerSoap_PointerTotns__blessMediaAliasWithIdResponse:
+		return soap_in_PointerTotns__blessMediaAliasWithIdResponse(soap, NULL, NULL, "tns:blessMediaAliasWithIdResponse");
+	case SOAP_TYPE_ServerSoap_PointerTotns__blessMediaAliasWithId:
+		return soap_in_PointerTotns__blessMediaAliasWithId(soap, NULL, NULL, "tns:blessMediaAliasWithId");
 	case SOAP_TYPE_ServerSoap_PointerTotns__user:
 		return soap_in_PointerTotns__user(soap, NULL, NULL, "tns:user");
 	case SOAP_TYPE_ServerSoap_PointerTotns__mediaToken:
@@ -486,12 +424,6 @@ SOAP_FMAC3 void * SOAP_FMAC4 soap_getelement(struct soap *soap, int *type)
 		return soap_in_PointerTotns__mediaAnnotation(soap, NULL, NULL, "tns:mediaAnnotation");
 	case SOAP_TYPE_ServerSoap_PointerTotns__mediaAlias:
 		return soap_in_PointerTotns__mediaAlias(soap, NULL, NULL, "tns:mediaAlias");
-	case SOAP_TYPE_ServerSoap_PointerTotns__gameToken:
-		return soap_in_PointerTotns__gameToken(soap, NULL, NULL, "tns:gameToken");
-	case SOAP_TYPE_ServerSoap_PointerTotns__gameAnnotation:
-		return soap_in_PointerTotns__gameAnnotation(soap, NULL, NULL, "tns:gameAnnotation");
-	case SOAP_TYPE_ServerSoap_PointerTotns__gameAlias:
-		return soap_in_PointerTotns__gameAlias(soap, NULL, NULL, "tns:gameAlias");
 	case SOAP_TYPE_ServerSoap_PointerTostd__string:
 		return soap_in_PointerTostd__string(soap, NULL, NULL, "xsd:string");
 	case SOAP_TYPE_ServerSoap__QName:
@@ -519,14 +451,6 @@ SOAP_FMAC3 void * SOAP_FMAC4 soap_getelement(struct soap *soap, int *type)
 		if (!soap_match_tag(soap, t, "tns:updateMediaAnnotationTextWithId"))
 		{	*type = SOAP_TYPE_ServerSoap_tns__updateMediaAnnotationTextWithId;
 			return soap_in_tns__updateMediaAnnotationTextWithId(soap, NULL, NULL, NULL);
-		}
-		if (!soap_match_tag(soap, t, "tns:updateGameAnnotationTextWithIdResponse"))
-		{	*type = SOAP_TYPE_ServerSoap_tns__updateGameAnnotationTextWithIdResponse;
-			return soap_in_tns__updateGameAnnotationTextWithIdResponse(soap, NULL, NULL, NULL);
-		}
-		if (!soap_match_tag(soap, t, "tns:updateGameAnnotationTextWithId"))
-		{	*type = SOAP_TYPE_ServerSoap_tns__updateGameAnnotationTextWithId;
-			return soap_in_tns__updateGameAnnotationTextWithId(soap, NULL, NULL, NULL);
 		}
 		if (!soap_match_tag(soap, t, "tns:submitMediaTokenDigestResponse"))
 		{	*type = SOAP_TYPE_ServerSoap_tns__submitMediaTokenDigestResponse;
@@ -592,70 +516,6 @@ SOAP_FMAC3 void * SOAP_FMAC4 soap_getelement(struct soap *soap, int *type)
 		{	*type = SOAP_TYPE_ServerSoap_tns__submitMediaAlias;
 			return soap_in_tns__submitMediaAlias(soap, NULL, NULL, NULL);
 		}
-		if (!soap_match_tag(soap, t, "tns:submitGameTokenDigestResponse"))
-		{	*type = SOAP_TYPE_ServerSoap_tns__submitGameTokenDigestResponse;
-			return soap_in_tns__submitGameTokenDigestResponse(soap, NULL, NULL, NULL);
-		}
-		if (!soap_match_tag(soap, t, "tns:submitGameTokenDigest"))
-		{	*type = SOAP_TYPE_ServerSoap_tns__submitGameTokenDigest;
-			return soap_in_tns__submitGameTokenDigest(soap, NULL, NULL, NULL);
-		}
-		if (!soap_match_tag(soap, t, "tns:submitGameTokenResponse"))
-		{	*type = SOAP_TYPE_ServerSoap_tns__submitGameTokenResponse;
-			return soap_in_tns__submitGameTokenResponse(soap, NULL, NULL, NULL);
-		}
-		if (!soap_match_tag(soap, t, "tns:submitGameToken"))
-		{	*type = SOAP_TYPE_ServerSoap_tns__submitGameToken;
-			return soap_in_tns__submitGameToken(soap, NULL, NULL, NULL);
-		}
-		if (!soap_match_tag(soap, t, "tns:submitGameAnnotationTextWithTokenIdResponse"))
-		{	*type = SOAP_TYPE_ServerSoap_tns__submitGameAnnotationTextWithTokenIdResponse;
-			return soap_in_tns__submitGameAnnotationTextWithTokenIdResponse(soap, NULL, NULL, NULL);
-		}
-		if (!soap_match_tag(soap, t, "tns:submitGameAnnotationTextWithTokenId"))
-		{	*type = SOAP_TYPE_ServerSoap_tns__submitGameAnnotationTextWithTokenId;
-			return soap_in_tns__submitGameAnnotationTextWithTokenId(soap, NULL, NULL, NULL);
-		}
-		if (!soap_match_tag(soap, t, "tns:submitGameAnnotationTextAndTokenDigestResponse"))
-		{	*type = SOAP_TYPE_ServerSoap_tns__submitGameAnnotationTextAndTokenDigestResponse;
-			return soap_in_tns__submitGameAnnotationTextAndTokenDigestResponse(soap, NULL, NULL, NULL);
-		}
-		if (!soap_match_tag(soap, t, "tns:submitGameAnnotationTextAndTokenDigest"))
-		{	*type = SOAP_TYPE_ServerSoap_tns__submitGameAnnotationTextAndTokenDigest;
-			return soap_in_tns__submitGameAnnotationTextAndTokenDigest(soap, NULL, NULL, NULL);
-		}
-		if (!soap_match_tag(soap, t, "tns:submitGameAnnotationResponse"))
-		{	*type = SOAP_TYPE_ServerSoap_tns__submitGameAnnotationResponse;
-			return soap_in_tns__submitGameAnnotationResponse(soap, NULL, NULL, NULL);
-		}
-		if (!soap_match_tag(soap, t, "tns:submitGameAnnotation"))
-		{	*type = SOAP_TYPE_ServerSoap_tns__submitGameAnnotation;
-			return soap_in_tns__submitGameAnnotation(soap, NULL, NULL, NULL);
-		}
-		if (!soap_match_tag(soap, t, "tns:submitGameAliasTextWithTokenIdResponse"))
-		{	*type = SOAP_TYPE_ServerSoap_tns__submitGameAliasTextWithTokenIdResponse;
-			return soap_in_tns__submitGameAliasTextWithTokenIdResponse(soap, NULL, NULL, NULL);
-		}
-		if (!soap_match_tag(soap, t, "tns:submitGameAliasTextWithTokenId"))
-		{	*type = SOAP_TYPE_ServerSoap_tns__submitGameAliasTextWithTokenId;
-			return soap_in_tns__submitGameAliasTextWithTokenId(soap, NULL, NULL, NULL);
-		}
-		if (!soap_match_tag(soap, t, "tns:submitGameAliasTextAndTokenDigestResponse"))
-		{	*type = SOAP_TYPE_ServerSoap_tns__submitGameAliasTextAndTokenDigestResponse;
-			return soap_in_tns__submitGameAliasTextAndTokenDigestResponse(soap, NULL, NULL, NULL);
-		}
-		if (!soap_match_tag(soap, t, "tns:submitGameAliasTextAndTokenDigest"))
-		{	*type = SOAP_TYPE_ServerSoap_tns__submitGameAliasTextAndTokenDigest;
-			return soap_in_tns__submitGameAliasTextAndTokenDigest(soap, NULL, NULL, NULL);
-		}
-		if (!soap_match_tag(soap, t, "tns:submitGameAliasResponse"))
-		{	*type = SOAP_TYPE_ServerSoap_tns__submitGameAliasResponse;
-			return soap_in_tns__submitGameAliasResponse(soap, NULL, NULL, NULL);
-		}
-		if (!soap_match_tag(soap, t, "tns:submitGameAlias"))
-		{	*type = SOAP_TYPE_ServerSoap_tns__submitGameAlias;
-			return soap_in_tns__submitGameAlias(soap, NULL, NULL, NULL);
-		}
 		if (!soap_match_tag(soap, t, "tns:setUserLanguageResponse"))
 		{	*type = SOAP_TYPE_ServerSoap_tns__setUserLanguageResponse;
 			return soap_in_tns__setUserLanguageResponse(soap, NULL, NULL, NULL);
@@ -687,14 +547,6 @@ SOAP_FMAC3 void * SOAP_FMAC4 soap_getelement(struct soap *soap, int *type)
 		if (!soap_match_tag(soap, t, "tns:selectRelatedMediaAnnotationsWithTokenId"))
 		{	*type = SOAP_TYPE_ServerSoap_tns__selectRelatedMediaAnnotationsWithTokenId;
 			return soap_in_tns__selectRelatedMediaAnnotationsWithTokenId(soap, NULL, NULL, NULL);
-		}
-		if (!soap_match_tag(soap, t, "tns:selectRelatedGameAnnotationsWithTokenIdResponse"))
-		{	*type = SOAP_TYPE_ServerSoap_tns__selectRelatedGameAnnotationsWithTokenIdResponse;
-			return soap_in_tns__selectRelatedGameAnnotationsWithTokenIdResponse(soap, NULL, NULL, NULL);
-		}
-		if (!soap_match_tag(soap, t, "tns:selectRelatedGameAnnotationsWithTokenId"))
-		{	*type = SOAP_TYPE_ServerSoap_tns__selectRelatedGameAnnotationsWithTokenId;
-			return soap_in_tns__selectRelatedGameAnnotationsWithTokenId(soap, NULL, NULL, NULL);
 		}
 		if (!soap_match_tag(soap, t, "tns:selectMediaTokenWithIdResponse"))
 		{	*type = SOAP_TYPE_ServerSoap_tns__selectMediaTokenWithIdResponse;
@@ -728,38 +580,6 @@ SOAP_FMAC3 void * SOAP_FMAC4 soap_getelement(struct soap *soap, int *type)
 		{	*type = SOAP_TYPE_ServerSoap_tns__selectMediaAliasesWithTokenId;
 			return soap_in_tns__selectMediaAliasesWithTokenId(soap, NULL, NULL, NULL);
 		}
-		if (!soap_match_tag(soap, t, "tns:selectGameTokenWithIdResponse"))
-		{	*type = SOAP_TYPE_ServerSoap_tns__selectGameTokenWithIdResponse;
-			return soap_in_tns__selectGameTokenWithIdResponse(soap, NULL, NULL, NULL);
-		}
-		if (!soap_match_tag(soap, t, "tns:selectGameTokenWithId"))
-		{	*type = SOAP_TYPE_ServerSoap_tns__selectGameTokenWithId;
-			return soap_in_tns__selectGameTokenWithId(soap, NULL, NULL, NULL);
-		}
-		if (!soap_match_tag(soap, t, "tns:selectGameTokenWithDigestResponse"))
-		{	*type = SOAP_TYPE_ServerSoap_tns__selectGameTokenWithDigestResponse;
-			return soap_in_tns__selectGameTokenWithDigestResponse(soap, NULL, NULL, NULL);
-		}
-		if (!soap_match_tag(soap, t, "tns:selectGameTokenWithDigest"))
-		{	*type = SOAP_TYPE_ServerSoap_tns__selectGameTokenWithDigest;
-			return soap_in_tns__selectGameTokenWithDigest(soap, NULL, NULL, NULL);
-		}
-		if (!soap_match_tag(soap, t, "tns:selectGameAnnotationsWithTokenIdResponse"))
-		{	*type = SOAP_TYPE_ServerSoap_tns__selectGameAnnotationsWithTokenIdResponse;
-			return soap_in_tns__selectGameAnnotationsWithTokenIdResponse(soap, NULL, NULL, NULL);
-		}
-		if (!soap_match_tag(soap, t, "tns:selectGameAnnotationsWithTokenId"))
-		{	*type = SOAP_TYPE_ServerSoap_tns__selectGameAnnotationsWithTokenId;
-			return soap_in_tns__selectGameAnnotationsWithTokenId(soap, NULL, NULL, NULL);
-		}
-		if (!soap_match_tag(soap, t, "tns:selectGameAliasesWithTokenIdResponse"))
-		{	*type = SOAP_TYPE_ServerSoap_tns__selectGameAliasesWithTokenIdResponse;
-			return soap_in_tns__selectGameAliasesWithTokenIdResponse(soap, NULL, NULL, NULL);
-		}
-		if (!soap_match_tag(soap, t, "tns:selectGameAliasesWithTokenId"))
-		{	*type = SOAP_TYPE_ServerSoap_tns__selectGameAliasesWithTokenId;
-			return soap_in_tns__selectGameAliasesWithTokenId(soap, NULL, NULL, NULL);
-		}
 		if (!soap_match_tag(soap, t, "tns:isConnectedResponse"))
 		{	*type = SOAP_TYPE_ServerSoap_tns__isConnectedResponse;
 			return soap_in_tns__isConnectedResponse(soap, NULL, NULL, NULL);
@@ -776,6 +596,30 @@ SOAP_FMAC3 void * SOAP_FMAC4 soap_getelement(struct soap *soap, int *type)
 		{	*type = SOAP_TYPE_ServerSoap_tns__isClientUpdated;
 			return soap_in_tns__isClientUpdated(soap, NULL, NULL, NULL);
 		}
+		if (!soap_match_tag(soap, t, "tns:curseMediaTokenWithIdResponse"))
+		{	*type = SOAP_TYPE_ServerSoap_tns__curseMediaTokenWithIdResponse;
+			return soap_in_tns__curseMediaTokenWithIdResponse(soap, NULL, NULL, NULL);
+		}
+		if (!soap_match_tag(soap, t, "tns:curseMediaTokenWithId"))
+		{	*type = SOAP_TYPE_ServerSoap_tns__curseMediaTokenWithId;
+			return soap_in_tns__curseMediaTokenWithId(soap, NULL, NULL, NULL);
+		}
+		if (!soap_match_tag(soap, t, "tns:curseMediaAnnotationWithIdResponse"))
+		{	*type = SOAP_TYPE_ServerSoap_tns__curseMediaAnnotationWithIdResponse;
+			return soap_in_tns__curseMediaAnnotationWithIdResponse(soap, NULL, NULL, NULL);
+		}
+		if (!soap_match_tag(soap, t, "tns:curseMediaAnnotationWithId"))
+		{	*type = SOAP_TYPE_ServerSoap_tns__curseMediaAnnotationWithId;
+			return soap_in_tns__curseMediaAnnotationWithId(soap, NULL, NULL, NULL);
+		}
+		if (!soap_match_tag(soap, t, "tns:curseMediaAliasWithIdResponse"))
+		{	*type = SOAP_TYPE_ServerSoap_tns__curseMediaAliasWithIdResponse;
+			return soap_in_tns__curseMediaAliasWithIdResponse(soap, NULL, NULL, NULL);
+		}
+		if (!soap_match_tag(soap, t, "tns:curseMediaAliasWithId"))
+		{	*type = SOAP_TYPE_ServerSoap_tns__curseMediaAliasWithId;
+			return soap_in_tns__curseMediaAliasWithId(soap, NULL, NULL, NULL);
+		}
 		if (!soap_match_tag(soap, t, "tns:chatResponse"))
 		{	*type = SOAP_TYPE_ServerSoap_tns__chatResponse;
 			return soap_in_tns__chatResponse(soap, NULL, NULL, NULL);
@@ -783,6 +627,38 @@ SOAP_FMAC3 void * SOAP_FMAC4 soap_getelement(struct soap *soap, int *type)
 		if (!soap_match_tag(soap, t, "tns:chat"))
 		{	*type = SOAP_TYPE_ServerSoap_tns__chat;
 			return soap_in_tns__chat(soap, NULL, NULL, NULL);
+		}
+		if (!soap_match_tag(soap, t, "tns:blockUserWithIdResponse"))
+		{	*type = SOAP_TYPE_ServerSoap_tns__blockUserWithIdResponse;
+			return soap_in_tns__blockUserWithIdResponse(soap, NULL, NULL, NULL);
+		}
+		if (!soap_match_tag(soap, t, "tns:blockUserWithId"))
+		{	*type = SOAP_TYPE_ServerSoap_tns__blockUserWithId;
+			return soap_in_tns__blockUserWithId(soap, NULL, NULL, NULL);
+		}
+		if (!soap_match_tag(soap, t, "tns:blockMediaAnnotationWithIdResponse"))
+		{	*type = SOAP_TYPE_ServerSoap_tns__blockMediaAnnotationWithIdResponse;
+			return soap_in_tns__blockMediaAnnotationWithIdResponse(soap, NULL, NULL, NULL);
+		}
+		if (!soap_match_tag(soap, t, "tns:blockMediaAnnotationWithId"))
+		{	*type = SOAP_TYPE_ServerSoap_tns__blockMediaAnnotationWithId;
+			return soap_in_tns__blockMediaAnnotationWithId(soap, NULL, NULL, NULL);
+		}
+		if (!soap_match_tag(soap, t, "tns:blockMediaAliasWithIdResponse"))
+		{	*type = SOAP_TYPE_ServerSoap_tns__blockMediaAliasWithIdResponse;
+			return soap_in_tns__blockMediaAliasWithIdResponse(soap, NULL, NULL, NULL);
+		}
+		if (!soap_match_tag(soap, t, "tns:blockMediaAliasWithId"))
+		{	*type = SOAP_TYPE_ServerSoap_tns__blockMediaAliasWithId;
+			return soap_in_tns__blockMediaAliasWithId(soap, NULL, NULL, NULL);
+		}
+		if (!soap_match_tag(soap, t, "tns:blessMediaTokenWithIdResponse"))
+		{	*type = SOAP_TYPE_ServerSoap_tns__blessMediaTokenWithIdResponse;
+			return soap_in_tns__blessMediaTokenWithIdResponse(soap, NULL, NULL, NULL);
+		}
+		if (!soap_match_tag(soap, t, "tns:blessMediaTokenWithId"))
+		{	*type = SOAP_TYPE_ServerSoap_tns__blessMediaTokenWithId;
+			return soap_in_tns__blessMediaTokenWithId(soap, NULL, NULL, NULL);
 		}
 		if (!soap_match_tag(soap, t, "tns:blessMediaAnnotationWithIdResponse"))
 		{	*type = SOAP_TYPE_ServerSoap_tns__blessMediaAnnotationWithIdResponse;
@@ -792,13 +668,13 @@ SOAP_FMAC3 void * SOAP_FMAC4 soap_getelement(struct soap *soap, int *type)
 		{	*type = SOAP_TYPE_ServerSoap_tns__blessMediaAnnotationWithId;
 			return soap_in_tns__blessMediaAnnotationWithId(soap, NULL, NULL, NULL);
 		}
-		if (!soap_match_tag(soap, t, "tns:blessGameAnnotationWithIdResponse"))
-		{	*type = SOAP_TYPE_ServerSoap_tns__blessGameAnnotationWithIdResponse;
-			return soap_in_tns__blessGameAnnotationWithIdResponse(soap, NULL, NULL, NULL);
+		if (!soap_match_tag(soap, t, "tns:blessMediaAliasWithIdResponse"))
+		{	*type = SOAP_TYPE_ServerSoap_tns__blessMediaAliasWithIdResponse;
+			return soap_in_tns__blessMediaAliasWithIdResponse(soap, NULL, NULL, NULL);
 		}
-		if (!soap_match_tag(soap, t, "tns:blessGameAnnotationWithId"))
-		{	*type = SOAP_TYPE_ServerSoap_tns__blessGameAnnotationWithId;
-			return soap_in_tns__blessGameAnnotationWithId(soap, NULL, NULL, NULL);
+		if (!soap_match_tag(soap, t, "tns:blessMediaAliasWithId"))
+		{	*type = SOAP_TYPE_ServerSoap_tns__blessMediaAliasWithId;
+			return soap_in_tns__blessMediaAliasWithId(soap, NULL, NULL, NULL);
 		}
 		if (!soap_match_tag(soap, t, "tns:user"))
 		{	*type = SOAP_TYPE_ServerSoap_tns__user;
@@ -815,18 +691,6 @@ SOAP_FMAC3 void * SOAP_FMAC4 soap_getelement(struct soap *soap, int *type)
 		if (!soap_match_tag(soap, t, "tns:mediaAnnotation"))
 		{	*type = SOAP_TYPE_ServerSoap_tns__mediaAnnotation;
 			return soap_in_tns__mediaAnnotation(soap, NULL, NULL, NULL);
-		}
-		if (!soap_match_tag(soap, t, "tns:gameAlias"))
-		{	*type = SOAP_TYPE_ServerSoap_tns__gameAlias;
-			return soap_in_tns__gameAlias(soap, NULL, NULL, NULL);
-		}
-		if (!soap_match_tag(soap, t, "tns:gameToken"))
-		{	*type = SOAP_TYPE_ServerSoap_tns__gameToken;
-			return soap_in_tns__gameToken(soap, NULL, NULL, NULL);
-		}
-		if (!soap_match_tag(soap, t, "tns:gameAnnotation"))
-		{	*type = SOAP_TYPE_ServerSoap_tns__gameAnnotation;
-			return soap_in_tns__gameAnnotation(soap, NULL, NULL, NULL);
 		}
 		if (!soap_match_tag(soap, t, "xsd:byte"))
 		{	*type = SOAP_TYPE_ServerSoap_byte;
@@ -928,10 +792,6 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_putelement(struct soap *soap, const void *ptr, co
 		return ((tns__updateMediaAnnotationTextWithIdResponse *)ptr)->soap_out(soap, tag, id, "tns:updateMediaAnnotationTextWithIdResponse");
 	case SOAP_TYPE_ServerSoap_tns__updateMediaAnnotationTextWithId:
 		return ((tns__updateMediaAnnotationTextWithId *)ptr)->soap_out(soap, tag, id, "tns:updateMediaAnnotationTextWithId");
-	case SOAP_TYPE_ServerSoap_tns__updateGameAnnotationTextWithIdResponse:
-		return ((tns__updateGameAnnotationTextWithIdResponse *)ptr)->soap_out(soap, tag, id, "tns:updateGameAnnotationTextWithIdResponse");
-	case SOAP_TYPE_ServerSoap_tns__updateGameAnnotationTextWithId:
-		return ((tns__updateGameAnnotationTextWithId *)ptr)->soap_out(soap, tag, id, "tns:updateGameAnnotationTextWithId");
 	case SOAP_TYPE_ServerSoap_tns__submitMediaTokenDigestResponse:
 		return ((tns__submitMediaTokenDigestResponse *)ptr)->soap_out(soap, tag, id, "tns:submitMediaTokenDigestResponse");
 	case SOAP_TYPE_ServerSoap_tns__submitMediaTokenDigest:
@@ -964,38 +824,6 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_putelement(struct soap *soap, const void *ptr, co
 		return ((tns__submitMediaAliasResponse *)ptr)->soap_out(soap, tag, id, "tns:submitMediaAliasResponse");
 	case SOAP_TYPE_ServerSoap_tns__submitMediaAlias:
 		return ((tns__submitMediaAlias *)ptr)->soap_out(soap, tag, id, "tns:submitMediaAlias");
-	case SOAP_TYPE_ServerSoap_tns__submitGameTokenDigestResponse:
-		return ((tns__submitGameTokenDigestResponse *)ptr)->soap_out(soap, tag, id, "tns:submitGameTokenDigestResponse");
-	case SOAP_TYPE_ServerSoap_tns__submitGameTokenDigest:
-		return ((tns__submitGameTokenDigest *)ptr)->soap_out(soap, tag, id, "tns:submitGameTokenDigest");
-	case SOAP_TYPE_ServerSoap_tns__submitGameTokenResponse:
-		return ((tns__submitGameTokenResponse *)ptr)->soap_out(soap, tag, id, "tns:submitGameTokenResponse");
-	case SOAP_TYPE_ServerSoap_tns__submitGameToken:
-		return ((tns__submitGameToken *)ptr)->soap_out(soap, tag, id, "tns:submitGameToken");
-	case SOAP_TYPE_ServerSoap_tns__submitGameAnnotationTextWithTokenIdResponse:
-		return ((tns__submitGameAnnotationTextWithTokenIdResponse *)ptr)->soap_out(soap, tag, id, "tns:submitGameAnnotationTextWithTokenIdResponse");
-	case SOAP_TYPE_ServerSoap_tns__submitGameAnnotationTextWithTokenId:
-		return ((tns__submitGameAnnotationTextWithTokenId *)ptr)->soap_out(soap, tag, id, "tns:submitGameAnnotationTextWithTokenId");
-	case SOAP_TYPE_ServerSoap_tns__submitGameAnnotationTextAndTokenDigestResponse:
-		return ((tns__submitGameAnnotationTextAndTokenDigestResponse *)ptr)->soap_out(soap, tag, id, "tns:submitGameAnnotationTextAndTokenDigestResponse");
-	case SOAP_TYPE_ServerSoap_tns__submitGameAnnotationTextAndTokenDigest:
-		return ((tns__submitGameAnnotationTextAndTokenDigest *)ptr)->soap_out(soap, tag, id, "tns:submitGameAnnotationTextAndTokenDigest");
-	case SOAP_TYPE_ServerSoap_tns__submitGameAnnotationResponse:
-		return ((tns__submitGameAnnotationResponse *)ptr)->soap_out(soap, tag, id, "tns:submitGameAnnotationResponse");
-	case SOAP_TYPE_ServerSoap_tns__submitGameAnnotation:
-		return ((tns__submitGameAnnotation *)ptr)->soap_out(soap, tag, id, "tns:submitGameAnnotation");
-	case SOAP_TYPE_ServerSoap_tns__submitGameAliasTextWithTokenIdResponse:
-		return ((tns__submitGameAliasTextWithTokenIdResponse *)ptr)->soap_out(soap, tag, id, "tns:submitGameAliasTextWithTokenIdResponse");
-	case SOAP_TYPE_ServerSoap_tns__submitGameAliasTextWithTokenId:
-		return ((tns__submitGameAliasTextWithTokenId *)ptr)->soap_out(soap, tag, id, "tns:submitGameAliasTextWithTokenId");
-	case SOAP_TYPE_ServerSoap_tns__submitGameAliasTextAndTokenDigestResponse:
-		return ((tns__submitGameAliasTextAndTokenDigestResponse *)ptr)->soap_out(soap, tag, id, "tns:submitGameAliasTextAndTokenDigestResponse");
-	case SOAP_TYPE_ServerSoap_tns__submitGameAliasTextAndTokenDigest:
-		return ((tns__submitGameAliasTextAndTokenDigest *)ptr)->soap_out(soap, tag, id, "tns:submitGameAliasTextAndTokenDigest");
-	case SOAP_TYPE_ServerSoap_tns__submitGameAliasResponse:
-		return ((tns__submitGameAliasResponse *)ptr)->soap_out(soap, tag, id, "tns:submitGameAliasResponse");
-	case SOAP_TYPE_ServerSoap_tns__submitGameAlias:
-		return ((tns__submitGameAlias *)ptr)->soap_out(soap, tag, id, "tns:submitGameAlias");
 	case SOAP_TYPE_ServerSoap_tns__setUserLanguageResponse:
 		return ((tns__setUserLanguageResponse *)ptr)->soap_out(soap, tag, id, "tns:setUserLanguageResponse");
 	case SOAP_TYPE_ServerSoap_tns__setUserLanguage:
@@ -1012,10 +840,6 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_putelement(struct soap *soap, const void *ptr, co
 		return ((tns__selectRelatedMediaAnnotationsWithTokenIdResponse *)ptr)->soap_out(soap, tag, id, "tns:selectRelatedMediaAnnotationsWithTokenIdResponse");
 	case SOAP_TYPE_ServerSoap_tns__selectRelatedMediaAnnotationsWithTokenId:
 		return ((tns__selectRelatedMediaAnnotationsWithTokenId *)ptr)->soap_out(soap, tag, id, "tns:selectRelatedMediaAnnotationsWithTokenId");
-	case SOAP_TYPE_ServerSoap_tns__selectRelatedGameAnnotationsWithTokenIdResponse:
-		return ((tns__selectRelatedGameAnnotationsWithTokenIdResponse *)ptr)->soap_out(soap, tag, id, "tns:selectRelatedGameAnnotationsWithTokenIdResponse");
-	case SOAP_TYPE_ServerSoap_tns__selectRelatedGameAnnotationsWithTokenId:
-		return ((tns__selectRelatedGameAnnotationsWithTokenId *)ptr)->soap_out(soap, tag, id, "tns:selectRelatedGameAnnotationsWithTokenId");
 	case SOAP_TYPE_ServerSoap_tns__selectMediaTokenWithIdResponse:
 		return ((tns__selectMediaTokenWithIdResponse *)ptr)->soap_out(soap, tag, id, "tns:selectMediaTokenWithIdResponse");
 	case SOAP_TYPE_ServerSoap_tns__selectMediaTokenWithId:
@@ -1032,22 +856,6 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_putelement(struct soap *soap, const void *ptr, co
 		return ((tns__selectMediaAliasesWithTokenIdResponse *)ptr)->soap_out(soap, tag, id, "tns:selectMediaAliasesWithTokenIdResponse");
 	case SOAP_TYPE_ServerSoap_tns__selectMediaAliasesWithTokenId:
 		return ((tns__selectMediaAliasesWithTokenId *)ptr)->soap_out(soap, tag, id, "tns:selectMediaAliasesWithTokenId");
-	case SOAP_TYPE_ServerSoap_tns__selectGameTokenWithIdResponse:
-		return ((tns__selectGameTokenWithIdResponse *)ptr)->soap_out(soap, tag, id, "tns:selectGameTokenWithIdResponse");
-	case SOAP_TYPE_ServerSoap_tns__selectGameTokenWithId:
-		return ((tns__selectGameTokenWithId *)ptr)->soap_out(soap, tag, id, "tns:selectGameTokenWithId");
-	case SOAP_TYPE_ServerSoap_tns__selectGameTokenWithDigestResponse:
-		return ((tns__selectGameTokenWithDigestResponse *)ptr)->soap_out(soap, tag, id, "tns:selectGameTokenWithDigestResponse");
-	case SOAP_TYPE_ServerSoap_tns__selectGameTokenWithDigest:
-		return ((tns__selectGameTokenWithDigest *)ptr)->soap_out(soap, tag, id, "tns:selectGameTokenWithDigest");
-	case SOAP_TYPE_ServerSoap_tns__selectGameAnnotationsWithTokenIdResponse:
-		return ((tns__selectGameAnnotationsWithTokenIdResponse *)ptr)->soap_out(soap, tag, id, "tns:selectGameAnnotationsWithTokenIdResponse");
-	case SOAP_TYPE_ServerSoap_tns__selectGameAnnotationsWithTokenId:
-		return ((tns__selectGameAnnotationsWithTokenId *)ptr)->soap_out(soap, tag, id, "tns:selectGameAnnotationsWithTokenId");
-	case SOAP_TYPE_ServerSoap_tns__selectGameAliasesWithTokenIdResponse:
-		return ((tns__selectGameAliasesWithTokenIdResponse *)ptr)->soap_out(soap, tag, id, "tns:selectGameAliasesWithTokenIdResponse");
-	case SOAP_TYPE_ServerSoap_tns__selectGameAliasesWithTokenId:
-		return ((tns__selectGameAliasesWithTokenId *)ptr)->soap_out(soap, tag, id, "tns:selectGameAliasesWithTokenId");
 	case SOAP_TYPE_ServerSoap_tns__isConnectedResponse:
 		return ((tns__isConnectedResponse *)ptr)->soap_out(soap, tag, id, "tns:isConnectedResponse");
 	case SOAP_TYPE_ServerSoap_tns__isConnected:
@@ -1056,18 +864,46 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_putelement(struct soap *soap, const void *ptr, co
 		return ((tns__isClientUpdatedResponse *)ptr)->soap_out(soap, tag, id, "tns:isClientUpdatedResponse");
 	case SOAP_TYPE_ServerSoap_tns__isClientUpdated:
 		return ((tns__isClientUpdated *)ptr)->soap_out(soap, tag, id, "tns:isClientUpdated");
+	case SOAP_TYPE_ServerSoap_tns__curseMediaTokenWithIdResponse:
+		return ((tns__curseMediaTokenWithIdResponse *)ptr)->soap_out(soap, tag, id, "tns:curseMediaTokenWithIdResponse");
+	case SOAP_TYPE_ServerSoap_tns__curseMediaTokenWithId:
+		return ((tns__curseMediaTokenWithId *)ptr)->soap_out(soap, tag, id, "tns:curseMediaTokenWithId");
+	case SOAP_TYPE_ServerSoap_tns__curseMediaAnnotationWithIdResponse:
+		return ((tns__curseMediaAnnotationWithIdResponse *)ptr)->soap_out(soap, tag, id, "tns:curseMediaAnnotationWithIdResponse");
+	case SOAP_TYPE_ServerSoap_tns__curseMediaAnnotationWithId:
+		return ((tns__curseMediaAnnotationWithId *)ptr)->soap_out(soap, tag, id, "tns:curseMediaAnnotationWithId");
+	case SOAP_TYPE_ServerSoap_tns__curseMediaAliasWithIdResponse:
+		return ((tns__curseMediaAliasWithIdResponse *)ptr)->soap_out(soap, tag, id, "tns:curseMediaAliasWithIdResponse");
+	case SOAP_TYPE_ServerSoap_tns__curseMediaAliasWithId:
+		return ((tns__curseMediaAliasWithId *)ptr)->soap_out(soap, tag, id, "tns:curseMediaAliasWithId");
 	case SOAP_TYPE_ServerSoap_tns__chatResponse:
 		return ((tns__chatResponse *)ptr)->soap_out(soap, tag, id, "tns:chatResponse");
 	case SOAP_TYPE_ServerSoap_tns__chat:
 		return ((tns__chat *)ptr)->soap_out(soap, tag, id, "tns:chat");
+	case SOAP_TYPE_ServerSoap_tns__blockUserWithIdResponse:
+		return ((tns__blockUserWithIdResponse *)ptr)->soap_out(soap, tag, id, "tns:blockUserWithIdResponse");
+	case SOAP_TYPE_ServerSoap_tns__blockUserWithId:
+		return ((tns__blockUserWithId *)ptr)->soap_out(soap, tag, id, "tns:blockUserWithId");
+	case SOAP_TYPE_ServerSoap_tns__blockMediaAnnotationWithIdResponse:
+		return ((tns__blockMediaAnnotationWithIdResponse *)ptr)->soap_out(soap, tag, id, "tns:blockMediaAnnotationWithIdResponse");
+	case SOAP_TYPE_ServerSoap_tns__blockMediaAnnotationWithId:
+		return ((tns__blockMediaAnnotationWithId *)ptr)->soap_out(soap, tag, id, "tns:blockMediaAnnotationWithId");
+	case SOAP_TYPE_ServerSoap_tns__blockMediaAliasWithIdResponse:
+		return ((tns__blockMediaAliasWithIdResponse *)ptr)->soap_out(soap, tag, id, "tns:blockMediaAliasWithIdResponse");
+	case SOAP_TYPE_ServerSoap_tns__blockMediaAliasWithId:
+		return ((tns__blockMediaAliasWithId *)ptr)->soap_out(soap, tag, id, "tns:blockMediaAliasWithId");
+	case SOAP_TYPE_ServerSoap_tns__blessMediaTokenWithIdResponse:
+		return ((tns__blessMediaTokenWithIdResponse *)ptr)->soap_out(soap, tag, id, "tns:blessMediaTokenWithIdResponse");
+	case SOAP_TYPE_ServerSoap_tns__blessMediaTokenWithId:
+		return ((tns__blessMediaTokenWithId *)ptr)->soap_out(soap, tag, id, "tns:blessMediaTokenWithId");
 	case SOAP_TYPE_ServerSoap_tns__blessMediaAnnotationWithIdResponse:
 		return ((tns__blessMediaAnnotationWithIdResponse *)ptr)->soap_out(soap, tag, id, "tns:blessMediaAnnotationWithIdResponse");
 	case SOAP_TYPE_ServerSoap_tns__blessMediaAnnotationWithId:
 		return ((tns__blessMediaAnnotationWithId *)ptr)->soap_out(soap, tag, id, "tns:blessMediaAnnotationWithId");
-	case SOAP_TYPE_ServerSoap_tns__blessGameAnnotationWithIdResponse:
-		return ((tns__blessGameAnnotationWithIdResponse *)ptr)->soap_out(soap, tag, id, "tns:blessGameAnnotationWithIdResponse");
-	case SOAP_TYPE_ServerSoap_tns__blessGameAnnotationWithId:
-		return ((tns__blessGameAnnotationWithId *)ptr)->soap_out(soap, tag, id, "tns:blessGameAnnotationWithId");
+	case SOAP_TYPE_ServerSoap_tns__blessMediaAliasWithIdResponse:
+		return ((tns__blessMediaAliasWithIdResponse *)ptr)->soap_out(soap, tag, id, "tns:blessMediaAliasWithIdResponse");
+	case SOAP_TYPE_ServerSoap_tns__blessMediaAliasWithId:
+		return ((tns__blessMediaAliasWithId *)ptr)->soap_out(soap, tag, id, "tns:blessMediaAliasWithId");
 	case SOAP_TYPE_ServerSoap_tns__user:
 		return ((tns__user *)ptr)->soap_out(soap, tag, id, "tns:user");
 	case SOAP_TYPE_ServerSoap_tns__mediaAlias:
@@ -1076,20 +912,10 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_putelement(struct soap *soap, const void *ptr, co
 		return ((tns__mediaToken *)ptr)->soap_out(soap, tag, id, "tns:mediaToken");
 	case SOAP_TYPE_ServerSoap_tns__mediaAnnotation:
 		return ((tns__mediaAnnotation *)ptr)->soap_out(soap, tag, id, "tns:mediaAnnotation");
-	case SOAP_TYPE_ServerSoap_tns__gameAlias:
-		return ((tns__gameAlias *)ptr)->soap_out(soap, tag, id, "tns:gameAlias");
-	case SOAP_TYPE_ServerSoap_tns__gameToken:
-		return ((tns__gameToken *)ptr)->soap_out(soap, tag, id, "tns:gameToken");
-	case SOAP_TYPE_ServerSoap_tns__gameAnnotation:
-		return ((tns__gameAnnotation *)ptr)->soap_out(soap, tag, id, "tns:gameAnnotation");
 	case SOAP_TYPE_ServerSoap_PointerTotns__updateMediaAnnotationTextWithIdResponse:
 		return soap_out_PointerTotns__updateMediaAnnotationTextWithIdResponse(soap, tag, id, (tns__updateMediaAnnotationTextWithIdResponse *const*)ptr, "tns:updateMediaAnnotationTextWithIdResponse");
 	case SOAP_TYPE_ServerSoap_PointerTotns__updateMediaAnnotationTextWithId:
 		return soap_out_PointerTotns__updateMediaAnnotationTextWithId(soap, tag, id, (tns__updateMediaAnnotationTextWithId *const*)ptr, "tns:updateMediaAnnotationTextWithId");
-	case SOAP_TYPE_ServerSoap_PointerTotns__updateGameAnnotationTextWithIdResponse:
-		return soap_out_PointerTotns__updateGameAnnotationTextWithIdResponse(soap, tag, id, (tns__updateGameAnnotationTextWithIdResponse *const*)ptr, "tns:updateGameAnnotationTextWithIdResponse");
-	case SOAP_TYPE_ServerSoap_PointerTotns__updateGameAnnotationTextWithId:
-		return soap_out_PointerTotns__updateGameAnnotationTextWithId(soap, tag, id, (tns__updateGameAnnotationTextWithId *const*)ptr, "tns:updateGameAnnotationTextWithId");
 	case SOAP_TYPE_ServerSoap_PointerTotns__submitMediaTokenDigestResponse:
 		return soap_out_PointerTotns__submitMediaTokenDigestResponse(soap, tag, id, (tns__submitMediaTokenDigestResponse *const*)ptr, "tns:submitMediaTokenDigestResponse");
 	case SOAP_TYPE_ServerSoap_PointerTotns__submitMediaTokenDigest:
@@ -1122,38 +948,6 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_putelement(struct soap *soap, const void *ptr, co
 		return soap_out_PointerTotns__submitMediaAliasResponse(soap, tag, id, (tns__submitMediaAliasResponse *const*)ptr, "tns:submitMediaAliasResponse");
 	case SOAP_TYPE_ServerSoap_PointerTotns__submitMediaAlias:
 		return soap_out_PointerTotns__submitMediaAlias(soap, tag, id, (tns__submitMediaAlias *const*)ptr, "tns:submitMediaAlias");
-	case SOAP_TYPE_ServerSoap_PointerTotns__submitGameTokenDigestResponse:
-		return soap_out_PointerTotns__submitGameTokenDigestResponse(soap, tag, id, (tns__submitGameTokenDigestResponse *const*)ptr, "tns:submitGameTokenDigestResponse");
-	case SOAP_TYPE_ServerSoap_PointerTotns__submitGameTokenDigest:
-		return soap_out_PointerTotns__submitGameTokenDigest(soap, tag, id, (tns__submitGameTokenDigest *const*)ptr, "tns:submitGameTokenDigest");
-	case SOAP_TYPE_ServerSoap_PointerTotns__submitGameTokenResponse:
-		return soap_out_PointerTotns__submitGameTokenResponse(soap, tag, id, (tns__submitGameTokenResponse *const*)ptr, "tns:submitGameTokenResponse");
-	case SOAP_TYPE_ServerSoap_PointerTotns__submitGameToken:
-		return soap_out_PointerTotns__submitGameToken(soap, tag, id, (tns__submitGameToken *const*)ptr, "tns:submitGameToken");
-	case SOAP_TYPE_ServerSoap_PointerTotns__submitGameAnnotationTextWithTokenIdResponse:
-		return soap_out_PointerTotns__submitGameAnnotationTextWithTokenIdResponse(soap, tag, id, (tns__submitGameAnnotationTextWithTokenIdResponse *const*)ptr, "tns:submitGameAnnotationTextWithTokenIdResponse");
-	case SOAP_TYPE_ServerSoap_PointerTotns__submitGameAnnotationTextWithTokenId:
-		return soap_out_PointerTotns__submitGameAnnotationTextWithTokenId(soap, tag, id, (tns__submitGameAnnotationTextWithTokenId *const*)ptr, "tns:submitGameAnnotationTextWithTokenId");
-	case SOAP_TYPE_ServerSoap_PointerTotns__submitGameAnnotationTextAndTokenDigestResponse:
-		return soap_out_PointerTotns__submitGameAnnotationTextAndTokenDigestResponse(soap, tag, id, (tns__submitGameAnnotationTextAndTokenDigestResponse *const*)ptr, "tns:submitGameAnnotationTextAndTokenDigestResponse");
-	case SOAP_TYPE_ServerSoap_PointerTotns__submitGameAnnotationTextAndTokenDigest:
-		return soap_out_PointerTotns__submitGameAnnotationTextAndTokenDigest(soap, tag, id, (tns__submitGameAnnotationTextAndTokenDigest *const*)ptr, "tns:submitGameAnnotationTextAndTokenDigest");
-	case SOAP_TYPE_ServerSoap_PointerTotns__submitGameAnnotationResponse:
-		return soap_out_PointerTotns__submitGameAnnotationResponse(soap, tag, id, (tns__submitGameAnnotationResponse *const*)ptr, "tns:submitGameAnnotationResponse");
-	case SOAP_TYPE_ServerSoap_PointerTotns__submitGameAnnotation:
-		return soap_out_PointerTotns__submitGameAnnotation(soap, tag, id, (tns__submitGameAnnotation *const*)ptr, "tns:submitGameAnnotation");
-	case SOAP_TYPE_ServerSoap_PointerTotns__submitGameAliasTextWithTokenIdResponse:
-		return soap_out_PointerTotns__submitGameAliasTextWithTokenIdResponse(soap, tag, id, (tns__submitGameAliasTextWithTokenIdResponse *const*)ptr, "tns:submitGameAliasTextWithTokenIdResponse");
-	case SOAP_TYPE_ServerSoap_PointerTotns__submitGameAliasTextWithTokenId:
-		return soap_out_PointerTotns__submitGameAliasTextWithTokenId(soap, tag, id, (tns__submitGameAliasTextWithTokenId *const*)ptr, "tns:submitGameAliasTextWithTokenId");
-	case SOAP_TYPE_ServerSoap_PointerTotns__submitGameAliasTextAndTokenDigestResponse:
-		return soap_out_PointerTotns__submitGameAliasTextAndTokenDigestResponse(soap, tag, id, (tns__submitGameAliasTextAndTokenDigestResponse *const*)ptr, "tns:submitGameAliasTextAndTokenDigestResponse");
-	case SOAP_TYPE_ServerSoap_PointerTotns__submitGameAliasTextAndTokenDigest:
-		return soap_out_PointerTotns__submitGameAliasTextAndTokenDigest(soap, tag, id, (tns__submitGameAliasTextAndTokenDigest *const*)ptr, "tns:submitGameAliasTextAndTokenDigest");
-	case SOAP_TYPE_ServerSoap_PointerTotns__submitGameAliasResponse:
-		return soap_out_PointerTotns__submitGameAliasResponse(soap, tag, id, (tns__submitGameAliasResponse *const*)ptr, "tns:submitGameAliasResponse");
-	case SOAP_TYPE_ServerSoap_PointerTotns__submitGameAlias:
-		return soap_out_PointerTotns__submitGameAlias(soap, tag, id, (tns__submitGameAlias *const*)ptr, "tns:submitGameAlias");
 	case SOAP_TYPE_ServerSoap_PointerTotns__setUserLanguageResponse:
 		return soap_out_PointerTotns__setUserLanguageResponse(soap, tag, id, (tns__setUserLanguageResponse *const*)ptr, "tns:setUserLanguageResponse");
 	case SOAP_TYPE_ServerSoap_PointerTotns__setUserLanguage:
@@ -1170,10 +964,6 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_putelement(struct soap *soap, const void *ptr, co
 		return soap_out_PointerTotns__selectRelatedMediaAnnotationsWithTokenIdResponse(soap, tag, id, (tns__selectRelatedMediaAnnotationsWithTokenIdResponse *const*)ptr, "tns:selectRelatedMediaAnnotationsWithTokenIdResponse");
 	case SOAP_TYPE_ServerSoap_PointerTotns__selectRelatedMediaAnnotationsWithTokenId:
 		return soap_out_PointerTotns__selectRelatedMediaAnnotationsWithTokenId(soap, tag, id, (tns__selectRelatedMediaAnnotationsWithTokenId *const*)ptr, "tns:selectRelatedMediaAnnotationsWithTokenId");
-	case SOAP_TYPE_ServerSoap_PointerTotns__selectRelatedGameAnnotationsWithTokenIdResponse:
-		return soap_out_PointerTotns__selectRelatedGameAnnotationsWithTokenIdResponse(soap, tag, id, (tns__selectRelatedGameAnnotationsWithTokenIdResponse *const*)ptr, "tns:selectRelatedGameAnnotationsWithTokenIdResponse");
-	case SOAP_TYPE_ServerSoap_PointerTotns__selectRelatedGameAnnotationsWithTokenId:
-		return soap_out_PointerTotns__selectRelatedGameAnnotationsWithTokenId(soap, tag, id, (tns__selectRelatedGameAnnotationsWithTokenId *const*)ptr, "tns:selectRelatedGameAnnotationsWithTokenId");
 	case SOAP_TYPE_ServerSoap_PointerTotns__selectMediaTokenWithIdResponse:
 		return soap_out_PointerTotns__selectMediaTokenWithIdResponse(soap, tag, id, (tns__selectMediaTokenWithIdResponse *const*)ptr, "tns:selectMediaTokenWithIdResponse");
 	case SOAP_TYPE_ServerSoap_PointerTotns__selectMediaTokenWithId:
@@ -1190,22 +980,6 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_putelement(struct soap *soap, const void *ptr, co
 		return soap_out_PointerTotns__selectMediaAliasesWithTokenIdResponse(soap, tag, id, (tns__selectMediaAliasesWithTokenIdResponse *const*)ptr, "tns:selectMediaAliasesWithTokenIdResponse");
 	case SOAP_TYPE_ServerSoap_PointerTotns__selectMediaAliasesWithTokenId:
 		return soap_out_PointerTotns__selectMediaAliasesWithTokenId(soap, tag, id, (tns__selectMediaAliasesWithTokenId *const*)ptr, "tns:selectMediaAliasesWithTokenId");
-	case SOAP_TYPE_ServerSoap_PointerTotns__selectGameTokenWithIdResponse:
-		return soap_out_PointerTotns__selectGameTokenWithIdResponse(soap, tag, id, (tns__selectGameTokenWithIdResponse *const*)ptr, "tns:selectGameTokenWithIdResponse");
-	case SOAP_TYPE_ServerSoap_PointerTotns__selectGameTokenWithId:
-		return soap_out_PointerTotns__selectGameTokenWithId(soap, tag, id, (tns__selectGameTokenWithId *const*)ptr, "tns:selectGameTokenWithId");
-	case SOAP_TYPE_ServerSoap_PointerTotns__selectGameTokenWithDigestResponse:
-		return soap_out_PointerTotns__selectGameTokenWithDigestResponse(soap, tag, id, (tns__selectGameTokenWithDigestResponse *const*)ptr, "tns:selectGameTokenWithDigestResponse");
-	case SOAP_TYPE_ServerSoap_PointerTotns__selectGameTokenWithDigest:
-		return soap_out_PointerTotns__selectGameTokenWithDigest(soap, tag, id, (tns__selectGameTokenWithDigest *const*)ptr, "tns:selectGameTokenWithDigest");
-	case SOAP_TYPE_ServerSoap_PointerTotns__selectGameAnnotationsWithTokenIdResponse:
-		return soap_out_PointerTotns__selectGameAnnotationsWithTokenIdResponse(soap, tag, id, (tns__selectGameAnnotationsWithTokenIdResponse *const*)ptr, "tns:selectGameAnnotationsWithTokenIdResponse");
-	case SOAP_TYPE_ServerSoap_PointerTotns__selectGameAnnotationsWithTokenId:
-		return soap_out_PointerTotns__selectGameAnnotationsWithTokenId(soap, tag, id, (tns__selectGameAnnotationsWithTokenId *const*)ptr, "tns:selectGameAnnotationsWithTokenId");
-	case SOAP_TYPE_ServerSoap_PointerTotns__selectGameAliasesWithTokenIdResponse:
-		return soap_out_PointerTotns__selectGameAliasesWithTokenIdResponse(soap, tag, id, (tns__selectGameAliasesWithTokenIdResponse *const*)ptr, "tns:selectGameAliasesWithTokenIdResponse");
-	case SOAP_TYPE_ServerSoap_PointerTotns__selectGameAliasesWithTokenId:
-		return soap_out_PointerTotns__selectGameAliasesWithTokenId(soap, tag, id, (tns__selectGameAliasesWithTokenId *const*)ptr, "tns:selectGameAliasesWithTokenId");
 	case SOAP_TYPE_ServerSoap_PointerTotns__isConnectedResponse:
 		return soap_out_PointerTotns__isConnectedResponse(soap, tag, id, (tns__isConnectedResponse *const*)ptr, "tns:isConnectedResponse");
 	case SOAP_TYPE_ServerSoap_PointerTotns__isConnected:
@@ -1214,18 +988,46 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_putelement(struct soap *soap, const void *ptr, co
 		return soap_out_PointerTotns__isClientUpdatedResponse(soap, tag, id, (tns__isClientUpdatedResponse *const*)ptr, "tns:isClientUpdatedResponse");
 	case SOAP_TYPE_ServerSoap_PointerTotns__isClientUpdated:
 		return soap_out_PointerTotns__isClientUpdated(soap, tag, id, (tns__isClientUpdated *const*)ptr, "tns:isClientUpdated");
+	case SOAP_TYPE_ServerSoap_PointerTotns__curseMediaTokenWithIdResponse:
+		return soap_out_PointerTotns__curseMediaTokenWithIdResponse(soap, tag, id, (tns__curseMediaTokenWithIdResponse *const*)ptr, "tns:curseMediaTokenWithIdResponse");
+	case SOAP_TYPE_ServerSoap_PointerTotns__curseMediaTokenWithId:
+		return soap_out_PointerTotns__curseMediaTokenWithId(soap, tag, id, (tns__curseMediaTokenWithId *const*)ptr, "tns:curseMediaTokenWithId");
+	case SOAP_TYPE_ServerSoap_PointerTotns__curseMediaAnnotationWithIdResponse:
+		return soap_out_PointerTotns__curseMediaAnnotationWithIdResponse(soap, tag, id, (tns__curseMediaAnnotationWithIdResponse *const*)ptr, "tns:curseMediaAnnotationWithIdResponse");
+	case SOAP_TYPE_ServerSoap_PointerTotns__curseMediaAnnotationWithId:
+		return soap_out_PointerTotns__curseMediaAnnotationWithId(soap, tag, id, (tns__curseMediaAnnotationWithId *const*)ptr, "tns:curseMediaAnnotationWithId");
+	case SOAP_TYPE_ServerSoap_PointerTotns__curseMediaAliasWithIdResponse:
+		return soap_out_PointerTotns__curseMediaAliasWithIdResponse(soap, tag, id, (tns__curseMediaAliasWithIdResponse *const*)ptr, "tns:curseMediaAliasWithIdResponse");
+	case SOAP_TYPE_ServerSoap_PointerTotns__curseMediaAliasWithId:
+		return soap_out_PointerTotns__curseMediaAliasWithId(soap, tag, id, (tns__curseMediaAliasWithId *const*)ptr, "tns:curseMediaAliasWithId");
 	case SOAP_TYPE_ServerSoap_PointerTotns__chatResponse:
 		return soap_out_PointerTotns__chatResponse(soap, tag, id, (tns__chatResponse *const*)ptr, "tns:chatResponse");
 	case SOAP_TYPE_ServerSoap_PointerTotns__chat:
 		return soap_out_PointerTotns__chat(soap, tag, id, (tns__chat *const*)ptr, "tns:chat");
+	case SOAP_TYPE_ServerSoap_PointerTotns__blockUserWithIdResponse:
+		return soap_out_PointerTotns__blockUserWithIdResponse(soap, tag, id, (tns__blockUserWithIdResponse *const*)ptr, "tns:blockUserWithIdResponse");
+	case SOAP_TYPE_ServerSoap_PointerTotns__blockUserWithId:
+		return soap_out_PointerTotns__blockUserWithId(soap, tag, id, (tns__blockUserWithId *const*)ptr, "tns:blockUserWithId");
+	case SOAP_TYPE_ServerSoap_PointerTotns__blockMediaAnnotationWithIdResponse:
+		return soap_out_PointerTotns__blockMediaAnnotationWithIdResponse(soap, tag, id, (tns__blockMediaAnnotationWithIdResponse *const*)ptr, "tns:blockMediaAnnotationWithIdResponse");
+	case SOAP_TYPE_ServerSoap_PointerTotns__blockMediaAnnotationWithId:
+		return soap_out_PointerTotns__blockMediaAnnotationWithId(soap, tag, id, (tns__blockMediaAnnotationWithId *const*)ptr, "tns:blockMediaAnnotationWithId");
+	case SOAP_TYPE_ServerSoap_PointerTotns__blockMediaAliasWithIdResponse:
+		return soap_out_PointerTotns__blockMediaAliasWithIdResponse(soap, tag, id, (tns__blockMediaAliasWithIdResponse *const*)ptr, "tns:blockMediaAliasWithIdResponse");
+	case SOAP_TYPE_ServerSoap_PointerTotns__blockMediaAliasWithId:
+		return soap_out_PointerTotns__blockMediaAliasWithId(soap, tag, id, (tns__blockMediaAliasWithId *const*)ptr, "tns:blockMediaAliasWithId");
+	case SOAP_TYPE_ServerSoap_PointerTotns__blessMediaTokenWithIdResponse:
+		return soap_out_PointerTotns__blessMediaTokenWithIdResponse(soap, tag, id, (tns__blessMediaTokenWithIdResponse *const*)ptr, "tns:blessMediaTokenWithIdResponse");
+	case SOAP_TYPE_ServerSoap_PointerTotns__blessMediaTokenWithId:
+		return soap_out_PointerTotns__blessMediaTokenWithId(soap, tag, id, (tns__blessMediaTokenWithId *const*)ptr, "tns:blessMediaTokenWithId");
 	case SOAP_TYPE_ServerSoap_PointerTotns__blessMediaAnnotationWithIdResponse:
 		return soap_out_PointerTotns__blessMediaAnnotationWithIdResponse(soap, tag, id, (tns__blessMediaAnnotationWithIdResponse *const*)ptr, "tns:blessMediaAnnotationWithIdResponse");
 	case SOAP_TYPE_ServerSoap_PointerTotns__blessMediaAnnotationWithId:
 		return soap_out_PointerTotns__blessMediaAnnotationWithId(soap, tag, id, (tns__blessMediaAnnotationWithId *const*)ptr, "tns:blessMediaAnnotationWithId");
-	case SOAP_TYPE_ServerSoap_PointerTotns__blessGameAnnotationWithIdResponse:
-		return soap_out_PointerTotns__blessGameAnnotationWithIdResponse(soap, tag, id, (tns__blessGameAnnotationWithIdResponse *const*)ptr, "tns:blessGameAnnotationWithIdResponse");
-	case SOAP_TYPE_ServerSoap_PointerTotns__blessGameAnnotationWithId:
-		return soap_out_PointerTotns__blessGameAnnotationWithId(soap, tag, id, (tns__blessGameAnnotationWithId *const*)ptr, "tns:blessGameAnnotationWithId");
+	case SOAP_TYPE_ServerSoap_PointerTotns__blessMediaAliasWithIdResponse:
+		return soap_out_PointerTotns__blessMediaAliasWithIdResponse(soap, tag, id, (tns__blessMediaAliasWithIdResponse *const*)ptr, "tns:blessMediaAliasWithIdResponse");
+	case SOAP_TYPE_ServerSoap_PointerTotns__blessMediaAliasWithId:
+		return soap_out_PointerTotns__blessMediaAliasWithId(soap, tag, id, (tns__blessMediaAliasWithId *const*)ptr, "tns:blessMediaAliasWithId");
 	case SOAP_TYPE_ServerSoap_PointerTotns__user:
 		return soap_out_PointerTotns__user(soap, tag, id, (tns__user *const*)ptr, "tns:user");
 	case SOAP_TYPE_ServerSoap_PointerTotns__mediaToken:
@@ -1234,12 +1036,6 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_putelement(struct soap *soap, const void *ptr, co
 		return soap_out_PointerTotns__mediaAnnotation(soap, tag, id, (tns__mediaAnnotation *const*)ptr, "tns:mediaAnnotation");
 	case SOAP_TYPE_ServerSoap_PointerTotns__mediaAlias:
 		return soap_out_PointerTotns__mediaAlias(soap, tag, id, (tns__mediaAlias *const*)ptr, "tns:mediaAlias");
-	case SOAP_TYPE_ServerSoap_PointerTotns__gameToken:
-		return soap_out_PointerTotns__gameToken(soap, tag, id, (tns__gameToken *const*)ptr, "tns:gameToken");
-	case SOAP_TYPE_ServerSoap_PointerTotns__gameAnnotation:
-		return soap_out_PointerTotns__gameAnnotation(soap, tag, id, (tns__gameAnnotation *const*)ptr, "tns:gameAnnotation");
-	case SOAP_TYPE_ServerSoap_PointerTotns__gameAlias:
-		return soap_out_PointerTotns__gameAlias(soap, tag, id, (tns__gameAlias *const*)ptr, "tns:gameAlias");
 	case SOAP_TYPE_ServerSoap_PointerTostd__string:
 		return soap_out_PointerTostd__string(soap, tag, id, (std::string *const*)ptr, "xsd:string");
 	case SOAP_TYPE_ServerSoap__QName:
@@ -1265,12 +1061,6 @@ SOAP_FMAC3 void SOAP_FMAC4 soap_markelement(struct soap *soap, const void *ptr, 
 		break;
 	case SOAP_TYPE_ServerSoap_tns__updateMediaAnnotationTextWithId:
 		((tns__updateMediaAnnotationTextWithId *)ptr)->soap_serialize(soap);
-		break;
-	case SOAP_TYPE_ServerSoap_tns__updateGameAnnotationTextWithIdResponse:
-		((tns__updateGameAnnotationTextWithIdResponse *)ptr)->soap_serialize(soap);
-		break;
-	case SOAP_TYPE_ServerSoap_tns__updateGameAnnotationTextWithId:
-		((tns__updateGameAnnotationTextWithId *)ptr)->soap_serialize(soap);
 		break;
 	case SOAP_TYPE_ServerSoap_tns__submitMediaTokenDigestResponse:
 		((tns__submitMediaTokenDigestResponse *)ptr)->soap_serialize(soap);
@@ -1320,54 +1110,6 @@ SOAP_FMAC3 void SOAP_FMAC4 soap_markelement(struct soap *soap, const void *ptr, 
 	case SOAP_TYPE_ServerSoap_tns__submitMediaAlias:
 		((tns__submitMediaAlias *)ptr)->soap_serialize(soap);
 		break;
-	case SOAP_TYPE_ServerSoap_tns__submitGameTokenDigestResponse:
-		((tns__submitGameTokenDigestResponse *)ptr)->soap_serialize(soap);
-		break;
-	case SOAP_TYPE_ServerSoap_tns__submitGameTokenDigest:
-		((tns__submitGameTokenDigest *)ptr)->soap_serialize(soap);
-		break;
-	case SOAP_TYPE_ServerSoap_tns__submitGameTokenResponse:
-		((tns__submitGameTokenResponse *)ptr)->soap_serialize(soap);
-		break;
-	case SOAP_TYPE_ServerSoap_tns__submitGameToken:
-		((tns__submitGameToken *)ptr)->soap_serialize(soap);
-		break;
-	case SOAP_TYPE_ServerSoap_tns__submitGameAnnotationTextWithTokenIdResponse:
-		((tns__submitGameAnnotationTextWithTokenIdResponse *)ptr)->soap_serialize(soap);
-		break;
-	case SOAP_TYPE_ServerSoap_tns__submitGameAnnotationTextWithTokenId:
-		((tns__submitGameAnnotationTextWithTokenId *)ptr)->soap_serialize(soap);
-		break;
-	case SOAP_TYPE_ServerSoap_tns__submitGameAnnotationTextAndTokenDigestResponse:
-		((tns__submitGameAnnotationTextAndTokenDigestResponse *)ptr)->soap_serialize(soap);
-		break;
-	case SOAP_TYPE_ServerSoap_tns__submitGameAnnotationTextAndTokenDigest:
-		((tns__submitGameAnnotationTextAndTokenDigest *)ptr)->soap_serialize(soap);
-		break;
-	case SOAP_TYPE_ServerSoap_tns__submitGameAnnotationResponse:
-		((tns__submitGameAnnotationResponse *)ptr)->soap_serialize(soap);
-		break;
-	case SOAP_TYPE_ServerSoap_tns__submitGameAnnotation:
-		((tns__submitGameAnnotation *)ptr)->soap_serialize(soap);
-		break;
-	case SOAP_TYPE_ServerSoap_tns__submitGameAliasTextWithTokenIdResponse:
-		((tns__submitGameAliasTextWithTokenIdResponse *)ptr)->soap_serialize(soap);
-		break;
-	case SOAP_TYPE_ServerSoap_tns__submitGameAliasTextWithTokenId:
-		((tns__submitGameAliasTextWithTokenId *)ptr)->soap_serialize(soap);
-		break;
-	case SOAP_TYPE_ServerSoap_tns__submitGameAliasTextAndTokenDigestResponse:
-		((tns__submitGameAliasTextAndTokenDigestResponse *)ptr)->soap_serialize(soap);
-		break;
-	case SOAP_TYPE_ServerSoap_tns__submitGameAliasTextAndTokenDigest:
-		((tns__submitGameAliasTextAndTokenDigest *)ptr)->soap_serialize(soap);
-		break;
-	case SOAP_TYPE_ServerSoap_tns__submitGameAliasResponse:
-		((tns__submitGameAliasResponse *)ptr)->soap_serialize(soap);
-		break;
-	case SOAP_TYPE_ServerSoap_tns__submitGameAlias:
-		((tns__submitGameAlias *)ptr)->soap_serialize(soap);
-		break;
 	case SOAP_TYPE_ServerSoap_tns__setUserLanguageResponse:
 		((tns__setUserLanguageResponse *)ptr)->soap_serialize(soap);
 		break;
@@ -1391,12 +1133,6 @@ SOAP_FMAC3 void SOAP_FMAC4 soap_markelement(struct soap *soap, const void *ptr, 
 		break;
 	case SOAP_TYPE_ServerSoap_tns__selectRelatedMediaAnnotationsWithTokenId:
 		((tns__selectRelatedMediaAnnotationsWithTokenId *)ptr)->soap_serialize(soap);
-		break;
-	case SOAP_TYPE_ServerSoap_tns__selectRelatedGameAnnotationsWithTokenIdResponse:
-		((tns__selectRelatedGameAnnotationsWithTokenIdResponse *)ptr)->soap_serialize(soap);
-		break;
-	case SOAP_TYPE_ServerSoap_tns__selectRelatedGameAnnotationsWithTokenId:
-		((tns__selectRelatedGameAnnotationsWithTokenId *)ptr)->soap_serialize(soap);
 		break;
 	case SOAP_TYPE_ServerSoap_tns__selectMediaTokenWithIdResponse:
 		((tns__selectMediaTokenWithIdResponse *)ptr)->soap_serialize(soap);
@@ -1422,30 +1158,6 @@ SOAP_FMAC3 void SOAP_FMAC4 soap_markelement(struct soap *soap, const void *ptr, 
 	case SOAP_TYPE_ServerSoap_tns__selectMediaAliasesWithTokenId:
 		((tns__selectMediaAliasesWithTokenId *)ptr)->soap_serialize(soap);
 		break;
-	case SOAP_TYPE_ServerSoap_tns__selectGameTokenWithIdResponse:
-		((tns__selectGameTokenWithIdResponse *)ptr)->soap_serialize(soap);
-		break;
-	case SOAP_TYPE_ServerSoap_tns__selectGameTokenWithId:
-		((tns__selectGameTokenWithId *)ptr)->soap_serialize(soap);
-		break;
-	case SOAP_TYPE_ServerSoap_tns__selectGameTokenWithDigestResponse:
-		((tns__selectGameTokenWithDigestResponse *)ptr)->soap_serialize(soap);
-		break;
-	case SOAP_TYPE_ServerSoap_tns__selectGameTokenWithDigest:
-		((tns__selectGameTokenWithDigest *)ptr)->soap_serialize(soap);
-		break;
-	case SOAP_TYPE_ServerSoap_tns__selectGameAnnotationsWithTokenIdResponse:
-		((tns__selectGameAnnotationsWithTokenIdResponse *)ptr)->soap_serialize(soap);
-		break;
-	case SOAP_TYPE_ServerSoap_tns__selectGameAnnotationsWithTokenId:
-		((tns__selectGameAnnotationsWithTokenId *)ptr)->soap_serialize(soap);
-		break;
-	case SOAP_TYPE_ServerSoap_tns__selectGameAliasesWithTokenIdResponse:
-		((tns__selectGameAliasesWithTokenIdResponse *)ptr)->soap_serialize(soap);
-		break;
-	case SOAP_TYPE_ServerSoap_tns__selectGameAliasesWithTokenId:
-		((tns__selectGameAliasesWithTokenId *)ptr)->soap_serialize(soap);
-		break;
 	case SOAP_TYPE_ServerSoap_tns__isConnectedResponse:
 		((tns__isConnectedResponse *)ptr)->soap_serialize(soap);
 		break;
@@ -1458,11 +1170,53 @@ SOAP_FMAC3 void SOAP_FMAC4 soap_markelement(struct soap *soap, const void *ptr, 
 	case SOAP_TYPE_ServerSoap_tns__isClientUpdated:
 		((tns__isClientUpdated *)ptr)->soap_serialize(soap);
 		break;
+	case SOAP_TYPE_ServerSoap_tns__curseMediaTokenWithIdResponse:
+		((tns__curseMediaTokenWithIdResponse *)ptr)->soap_serialize(soap);
+		break;
+	case SOAP_TYPE_ServerSoap_tns__curseMediaTokenWithId:
+		((tns__curseMediaTokenWithId *)ptr)->soap_serialize(soap);
+		break;
+	case SOAP_TYPE_ServerSoap_tns__curseMediaAnnotationWithIdResponse:
+		((tns__curseMediaAnnotationWithIdResponse *)ptr)->soap_serialize(soap);
+		break;
+	case SOAP_TYPE_ServerSoap_tns__curseMediaAnnotationWithId:
+		((tns__curseMediaAnnotationWithId *)ptr)->soap_serialize(soap);
+		break;
+	case SOAP_TYPE_ServerSoap_tns__curseMediaAliasWithIdResponse:
+		((tns__curseMediaAliasWithIdResponse *)ptr)->soap_serialize(soap);
+		break;
+	case SOAP_TYPE_ServerSoap_tns__curseMediaAliasWithId:
+		((tns__curseMediaAliasWithId *)ptr)->soap_serialize(soap);
+		break;
 	case SOAP_TYPE_ServerSoap_tns__chatResponse:
 		((tns__chatResponse *)ptr)->soap_serialize(soap);
 		break;
 	case SOAP_TYPE_ServerSoap_tns__chat:
 		((tns__chat *)ptr)->soap_serialize(soap);
+		break;
+	case SOAP_TYPE_ServerSoap_tns__blockUserWithIdResponse:
+		((tns__blockUserWithIdResponse *)ptr)->soap_serialize(soap);
+		break;
+	case SOAP_TYPE_ServerSoap_tns__blockUserWithId:
+		((tns__blockUserWithId *)ptr)->soap_serialize(soap);
+		break;
+	case SOAP_TYPE_ServerSoap_tns__blockMediaAnnotationWithIdResponse:
+		((tns__blockMediaAnnotationWithIdResponse *)ptr)->soap_serialize(soap);
+		break;
+	case SOAP_TYPE_ServerSoap_tns__blockMediaAnnotationWithId:
+		((tns__blockMediaAnnotationWithId *)ptr)->soap_serialize(soap);
+		break;
+	case SOAP_TYPE_ServerSoap_tns__blockMediaAliasWithIdResponse:
+		((tns__blockMediaAliasWithIdResponse *)ptr)->soap_serialize(soap);
+		break;
+	case SOAP_TYPE_ServerSoap_tns__blockMediaAliasWithId:
+		((tns__blockMediaAliasWithId *)ptr)->soap_serialize(soap);
+		break;
+	case SOAP_TYPE_ServerSoap_tns__blessMediaTokenWithIdResponse:
+		((tns__blessMediaTokenWithIdResponse *)ptr)->soap_serialize(soap);
+		break;
+	case SOAP_TYPE_ServerSoap_tns__blessMediaTokenWithId:
+		((tns__blessMediaTokenWithId *)ptr)->soap_serialize(soap);
 		break;
 	case SOAP_TYPE_ServerSoap_tns__blessMediaAnnotationWithIdResponse:
 		((tns__blessMediaAnnotationWithIdResponse *)ptr)->soap_serialize(soap);
@@ -1470,11 +1224,11 @@ SOAP_FMAC3 void SOAP_FMAC4 soap_markelement(struct soap *soap, const void *ptr, 
 	case SOAP_TYPE_ServerSoap_tns__blessMediaAnnotationWithId:
 		((tns__blessMediaAnnotationWithId *)ptr)->soap_serialize(soap);
 		break;
-	case SOAP_TYPE_ServerSoap_tns__blessGameAnnotationWithIdResponse:
-		((tns__blessGameAnnotationWithIdResponse *)ptr)->soap_serialize(soap);
+	case SOAP_TYPE_ServerSoap_tns__blessMediaAliasWithIdResponse:
+		((tns__blessMediaAliasWithIdResponse *)ptr)->soap_serialize(soap);
 		break;
-	case SOAP_TYPE_ServerSoap_tns__blessGameAnnotationWithId:
-		((tns__blessGameAnnotationWithId *)ptr)->soap_serialize(soap);
+	case SOAP_TYPE_ServerSoap_tns__blessMediaAliasWithId:
+		((tns__blessMediaAliasWithId *)ptr)->soap_serialize(soap);
 		break;
 	case SOAP_TYPE_ServerSoap_tns__user:
 		((tns__user *)ptr)->soap_serialize(soap);
@@ -1488,20 +1242,8 @@ SOAP_FMAC3 void SOAP_FMAC4 soap_markelement(struct soap *soap, const void *ptr, 
 	case SOAP_TYPE_ServerSoap_tns__mediaAnnotation:
 		((tns__mediaAnnotation *)ptr)->soap_serialize(soap);
 		break;
-	case SOAP_TYPE_ServerSoap_tns__gameAlias:
-		((tns__gameAlias *)ptr)->soap_serialize(soap);
-		break;
-	case SOAP_TYPE_ServerSoap_tns__gameToken:
-		((tns__gameToken *)ptr)->soap_serialize(soap);
-		break;
-	case SOAP_TYPE_ServerSoap_tns__gameAnnotation:
-		((tns__gameAnnotation *)ptr)->soap_serialize(soap);
-		break;
 	case SOAP_TYPE_ServerSoap___tns__updateMediaAnnotationTextWithId:
 		soap_serialize___tns__updateMediaAnnotationTextWithId(soap, (const struct __tns__updateMediaAnnotationTextWithId *)ptr);
-		break;
-	case SOAP_TYPE_ServerSoap___tns__updateGameAnnotationTextWithId:
-		soap_serialize___tns__updateGameAnnotationTextWithId(soap, (const struct __tns__updateGameAnnotationTextWithId *)ptr);
 		break;
 	case SOAP_TYPE_ServerSoap___tns__submitMediaTokenDigest:
 		soap_serialize___tns__submitMediaTokenDigest(soap, (const struct __tns__submitMediaTokenDigest *)ptr);
@@ -1527,30 +1269,6 @@ SOAP_FMAC3 void SOAP_FMAC4 soap_markelement(struct soap *soap, const void *ptr, 
 	case SOAP_TYPE_ServerSoap___tns__submitMediaAlias:
 		soap_serialize___tns__submitMediaAlias(soap, (const struct __tns__submitMediaAlias *)ptr);
 		break;
-	case SOAP_TYPE_ServerSoap___tns__submitGameTokenDigest:
-		soap_serialize___tns__submitGameTokenDigest(soap, (const struct __tns__submitGameTokenDigest *)ptr);
-		break;
-	case SOAP_TYPE_ServerSoap___tns__submitGameToken:
-		soap_serialize___tns__submitGameToken(soap, (const struct __tns__submitGameToken *)ptr);
-		break;
-	case SOAP_TYPE_ServerSoap___tns__submitGameAnnotationTextWithTokenId:
-		soap_serialize___tns__submitGameAnnotationTextWithTokenId(soap, (const struct __tns__submitGameAnnotationTextWithTokenId *)ptr);
-		break;
-	case SOAP_TYPE_ServerSoap___tns__submitGameAnnotationTextAndTokenDigest:
-		soap_serialize___tns__submitGameAnnotationTextAndTokenDigest(soap, (const struct __tns__submitGameAnnotationTextAndTokenDigest *)ptr);
-		break;
-	case SOAP_TYPE_ServerSoap___tns__submitGameAnnotation:
-		soap_serialize___tns__submitGameAnnotation(soap, (const struct __tns__submitGameAnnotation *)ptr);
-		break;
-	case SOAP_TYPE_ServerSoap___tns__submitGameAliasTextWithTokenId:
-		soap_serialize___tns__submitGameAliasTextWithTokenId(soap, (const struct __tns__submitGameAliasTextWithTokenId *)ptr);
-		break;
-	case SOAP_TYPE_ServerSoap___tns__submitGameAliasTextAndTokenDigest:
-		soap_serialize___tns__submitGameAliasTextAndTokenDigest(soap, (const struct __tns__submitGameAliasTextAndTokenDigest *)ptr);
-		break;
-	case SOAP_TYPE_ServerSoap___tns__submitGameAlias:
-		soap_serialize___tns__submitGameAlias(soap, (const struct __tns__submitGameAlias *)ptr);
-		break;
 	case SOAP_TYPE_ServerSoap___tns__setUserLanguage:
 		soap_serialize___tns__setUserLanguage(soap, (const struct __tns__setUserLanguage *)ptr);
 		break;
@@ -1562,9 +1280,6 @@ SOAP_FMAC3 void SOAP_FMAC4 soap_markelement(struct soap *soap, const void *ptr, 
 		break;
 	case SOAP_TYPE_ServerSoap___tns__selectRelatedMediaAnnotationsWithTokenId:
 		soap_serialize___tns__selectRelatedMediaAnnotationsWithTokenId(soap, (const struct __tns__selectRelatedMediaAnnotationsWithTokenId *)ptr);
-		break;
-	case SOAP_TYPE_ServerSoap___tns__selectRelatedGameAnnotationsWithTokenId:
-		soap_serialize___tns__selectRelatedGameAnnotationsWithTokenId(soap, (const struct __tns__selectRelatedGameAnnotationsWithTokenId *)ptr);
 		break;
 	case SOAP_TYPE_ServerSoap___tns__selectMediaTokenWithId:
 		soap_serialize___tns__selectMediaTokenWithId(soap, (const struct __tns__selectMediaTokenWithId *)ptr);
@@ -1578,44 +1293,47 @@ SOAP_FMAC3 void SOAP_FMAC4 soap_markelement(struct soap *soap, const void *ptr, 
 	case SOAP_TYPE_ServerSoap___tns__selectMediaAliasesWithTokenId:
 		soap_serialize___tns__selectMediaAliasesWithTokenId(soap, (const struct __tns__selectMediaAliasesWithTokenId *)ptr);
 		break;
-	case SOAP_TYPE_ServerSoap___tns__selectGameTokenWithId:
-		soap_serialize___tns__selectGameTokenWithId(soap, (const struct __tns__selectGameTokenWithId *)ptr);
-		break;
-	case SOAP_TYPE_ServerSoap___tns__selectGameTokenWithDigest:
-		soap_serialize___tns__selectGameTokenWithDigest(soap, (const struct __tns__selectGameTokenWithDigest *)ptr);
-		break;
-	case SOAP_TYPE_ServerSoap___tns__selectGameAnnotationsWithTokenId:
-		soap_serialize___tns__selectGameAnnotationsWithTokenId(soap, (const struct __tns__selectGameAnnotationsWithTokenId *)ptr);
-		break;
-	case SOAP_TYPE_ServerSoap___tns__selectGameAliasesWithTokenId:
-		soap_serialize___tns__selectGameAliasesWithTokenId(soap, (const struct __tns__selectGameAliasesWithTokenId *)ptr);
-		break;
 	case SOAP_TYPE_ServerSoap___tns__isConnected:
 		soap_serialize___tns__isConnected(soap, (const struct __tns__isConnected *)ptr);
 		break;
 	case SOAP_TYPE_ServerSoap___tns__isClientUpdated:
 		soap_serialize___tns__isClientUpdated(soap, (const struct __tns__isClientUpdated *)ptr);
 		break;
+	case SOAP_TYPE_ServerSoap___tns__curseMediaTokenWithId:
+		soap_serialize___tns__curseMediaTokenWithId(soap, (const struct __tns__curseMediaTokenWithId *)ptr);
+		break;
+	case SOAP_TYPE_ServerSoap___tns__curseMediaAnnotationWithId:
+		soap_serialize___tns__curseMediaAnnotationWithId(soap, (const struct __tns__curseMediaAnnotationWithId *)ptr);
+		break;
+	case SOAP_TYPE_ServerSoap___tns__curseMediaAliasWithId:
+		soap_serialize___tns__curseMediaAliasWithId(soap, (const struct __tns__curseMediaAliasWithId *)ptr);
+		break;
 	case SOAP_TYPE_ServerSoap___tns__chat:
 		soap_serialize___tns__chat(soap, (const struct __tns__chat *)ptr);
+		break;
+	case SOAP_TYPE_ServerSoap___tns__blockUserWithId:
+		soap_serialize___tns__blockUserWithId(soap, (const struct __tns__blockUserWithId *)ptr);
+		break;
+	case SOAP_TYPE_ServerSoap___tns__blockMediaAnnotationWithId:
+		soap_serialize___tns__blockMediaAnnotationWithId(soap, (const struct __tns__blockMediaAnnotationWithId *)ptr);
+		break;
+	case SOAP_TYPE_ServerSoap___tns__blockMediaAliasWithId:
+		soap_serialize___tns__blockMediaAliasWithId(soap, (const struct __tns__blockMediaAliasWithId *)ptr);
+		break;
+	case SOAP_TYPE_ServerSoap___tns__blessMediaTokenWithId:
+		soap_serialize___tns__blessMediaTokenWithId(soap, (const struct __tns__blessMediaTokenWithId *)ptr);
 		break;
 	case SOAP_TYPE_ServerSoap___tns__blessMediaAnnotationWithId:
 		soap_serialize___tns__blessMediaAnnotationWithId(soap, (const struct __tns__blessMediaAnnotationWithId *)ptr);
 		break;
-	case SOAP_TYPE_ServerSoap___tns__blessGameAnnotationWithId:
-		soap_serialize___tns__blessGameAnnotationWithId(soap, (const struct __tns__blessGameAnnotationWithId *)ptr);
+	case SOAP_TYPE_ServerSoap___tns__blessMediaAliasWithId:
+		soap_serialize___tns__blessMediaAliasWithId(soap, (const struct __tns__blessMediaAliasWithId *)ptr);
 		break;
 	case SOAP_TYPE_ServerSoap_PointerTotns__updateMediaAnnotationTextWithIdResponse:
 		soap_serialize_PointerTotns__updateMediaAnnotationTextWithIdResponse(soap, (tns__updateMediaAnnotationTextWithIdResponse *const*)ptr);
 		break;
 	case SOAP_TYPE_ServerSoap_PointerTotns__updateMediaAnnotationTextWithId:
 		soap_serialize_PointerTotns__updateMediaAnnotationTextWithId(soap, (tns__updateMediaAnnotationTextWithId *const*)ptr);
-		break;
-	case SOAP_TYPE_ServerSoap_PointerTotns__updateGameAnnotationTextWithIdResponse:
-		soap_serialize_PointerTotns__updateGameAnnotationTextWithIdResponse(soap, (tns__updateGameAnnotationTextWithIdResponse *const*)ptr);
-		break;
-	case SOAP_TYPE_ServerSoap_PointerTotns__updateGameAnnotationTextWithId:
-		soap_serialize_PointerTotns__updateGameAnnotationTextWithId(soap, (tns__updateGameAnnotationTextWithId *const*)ptr);
 		break;
 	case SOAP_TYPE_ServerSoap_PointerTotns__submitMediaTokenDigestResponse:
 		soap_serialize_PointerTotns__submitMediaTokenDigestResponse(soap, (tns__submitMediaTokenDigestResponse *const*)ptr);
@@ -1665,54 +1383,6 @@ SOAP_FMAC3 void SOAP_FMAC4 soap_markelement(struct soap *soap, const void *ptr, 
 	case SOAP_TYPE_ServerSoap_PointerTotns__submitMediaAlias:
 		soap_serialize_PointerTotns__submitMediaAlias(soap, (tns__submitMediaAlias *const*)ptr);
 		break;
-	case SOAP_TYPE_ServerSoap_PointerTotns__submitGameTokenDigestResponse:
-		soap_serialize_PointerTotns__submitGameTokenDigestResponse(soap, (tns__submitGameTokenDigestResponse *const*)ptr);
-		break;
-	case SOAP_TYPE_ServerSoap_PointerTotns__submitGameTokenDigest:
-		soap_serialize_PointerTotns__submitGameTokenDigest(soap, (tns__submitGameTokenDigest *const*)ptr);
-		break;
-	case SOAP_TYPE_ServerSoap_PointerTotns__submitGameTokenResponse:
-		soap_serialize_PointerTotns__submitGameTokenResponse(soap, (tns__submitGameTokenResponse *const*)ptr);
-		break;
-	case SOAP_TYPE_ServerSoap_PointerTotns__submitGameToken:
-		soap_serialize_PointerTotns__submitGameToken(soap, (tns__submitGameToken *const*)ptr);
-		break;
-	case SOAP_TYPE_ServerSoap_PointerTotns__submitGameAnnotationTextWithTokenIdResponse:
-		soap_serialize_PointerTotns__submitGameAnnotationTextWithTokenIdResponse(soap, (tns__submitGameAnnotationTextWithTokenIdResponse *const*)ptr);
-		break;
-	case SOAP_TYPE_ServerSoap_PointerTotns__submitGameAnnotationTextWithTokenId:
-		soap_serialize_PointerTotns__submitGameAnnotationTextWithTokenId(soap, (tns__submitGameAnnotationTextWithTokenId *const*)ptr);
-		break;
-	case SOAP_TYPE_ServerSoap_PointerTotns__submitGameAnnotationTextAndTokenDigestResponse:
-		soap_serialize_PointerTotns__submitGameAnnotationTextAndTokenDigestResponse(soap, (tns__submitGameAnnotationTextAndTokenDigestResponse *const*)ptr);
-		break;
-	case SOAP_TYPE_ServerSoap_PointerTotns__submitGameAnnotationTextAndTokenDigest:
-		soap_serialize_PointerTotns__submitGameAnnotationTextAndTokenDigest(soap, (tns__submitGameAnnotationTextAndTokenDigest *const*)ptr);
-		break;
-	case SOAP_TYPE_ServerSoap_PointerTotns__submitGameAnnotationResponse:
-		soap_serialize_PointerTotns__submitGameAnnotationResponse(soap, (tns__submitGameAnnotationResponse *const*)ptr);
-		break;
-	case SOAP_TYPE_ServerSoap_PointerTotns__submitGameAnnotation:
-		soap_serialize_PointerTotns__submitGameAnnotation(soap, (tns__submitGameAnnotation *const*)ptr);
-		break;
-	case SOAP_TYPE_ServerSoap_PointerTotns__submitGameAliasTextWithTokenIdResponse:
-		soap_serialize_PointerTotns__submitGameAliasTextWithTokenIdResponse(soap, (tns__submitGameAliasTextWithTokenIdResponse *const*)ptr);
-		break;
-	case SOAP_TYPE_ServerSoap_PointerTotns__submitGameAliasTextWithTokenId:
-		soap_serialize_PointerTotns__submitGameAliasTextWithTokenId(soap, (tns__submitGameAliasTextWithTokenId *const*)ptr);
-		break;
-	case SOAP_TYPE_ServerSoap_PointerTotns__submitGameAliasTextAndTokenDigestResponse:
-		soap_serialize_PointerTotns__submitGameAliasTextAndTokenDigestResponse(soap, (tns__submitGameAliasTextAndTokenDigestResponse *const*)ptr);
-		break;
-	case SOAP_TYPE_ServerSoap_PointerTotns__submitGameAliasTextAndTokenDigest:
-		soap_serialize_PointerTotns__submitGameAliasTextAndTokenDigest(soap, (tns__submitGameAliasTextAndTokenDigest *const*)ptr);
-		break;
-	case SOAP_TYPE_ServerSoap_PointerTotns__submitGameAliasResponse:
-		soap_serialize_PointerTotns__submitGameAliasResponse(soap, (tns__submitGameAliasResponse *const*)ptr);
-		break;
-	case SOAP_TYPE_ServerSoap_PointerTotns__submitGameAlias:
-		soap_serialize_PointerTotns__submitGameAlias(soap, (tns__submitGameAlias *const*)ptr);
-		break;
 	case SOAP_TYPE_ServerSoap_PointerTotns__setUserLanguageResponse:
 		soap_serialize_PointerTotns__setUserLanguageResponse(soap, (tns__setUserLanguageResponse *const*)ptr);
 		break;
@@ -1736,12 +1406,6 @@ SOAP_FMAC3 void SOAP_FMAC4 soap_markelement(struct soap *soap, const void *ptr, 
 		break;
 	case SOAP_TYPE_ServerSoap_PointerTotns__selectRelatedMediaAnnotationsWithTokenId:
 		soap_serialize_PointerTotns__selectRelatedMediaAnnotationsWithTokenId(soap, (tns__selectRelatedMediaAnnotationsWithTokenId *const*)ptr);
-		break;
-	case SOAP_TYPE_ServerSoap_PointerTotns__selectRelatedGameAnnotationsWithTokenIdResponse:
-		soap_serialize_PointerTotns__selectRelatedGameAnnotationsWithTokenIdResponse(soap, (tns__selectRelatedGameAnnotationsWithTokenIdResponse *const*)ptr);
-		break;
-	case SOAP_TYPE_ServerSoap_PointerTotns__selectRelatedGameAnnotationsWithTokenId:
-		soap_serialize_PointerTotns__selectRelatedGameAnnotationsWithTokenId(soap, (tns__selectRelatedGameAnnotationsWithTokenId *const*)ptr);
 		break;
 	case SOAP_TYPE_ServerSoap_PointerTotns__selectMediaTokenWithIdResponse:
 		soap_serialize_PointerTotns__selectMediaTokenWithIdResponse(soap, (tns__selectMediaTokenWithIdResponse *const*)ptr);
@@ -1767,30 +1431,6 @@ SOAP_FMAC3 void SOAP_FMAC4 soap_markelement(struct soap *soap, const void *ptr, 
 	case SOAP_TYPE_ServerSoap_PointerTotns__selectMediaAliasesWithTokenId:
 		soap_serialize_PointerTotns__selectMediaAliasesWithTokenId(soap, (tns__selectMediaAliasesWithTokenId *const*)ptr);
 		break;
-	case SOAP_TYPE_ServerSoap_PointerTotns__selectGameTokenWithIdResponse:
-		soap_serialize_PointerTotns__selectGameTokenWithIdResponse(soap, (tns__selectGameTokenWithIdResponse *const*)ptr);
-		break;
-	case SOAP_TYPE_ServerSoap_PointerTotns__selectGameTokenWithId:
-		soap_serialize_PointerTotns__selectGameTokenWithId(soap, (tns__selectGameTokenWithId *const*)ptr);
-		break;
-	case SOAP_TYPE_ServerSoap_PointerTotns__selectGameTokenWithDigestResponse:
-		soap_serialize_PointerTotns__selectGameTokenWithDigestResponse(soap, (tns__selectGameTokenWithDigestResponse *const*)ptr);
-		break;
-	case SOAP_TYPE_ServerSoap_PointerTotns__selectGameTokenWithDigest:
-		soap_serialize_PointerTotns__selectGameTokenWithDigest(soap, (tns__selectGameTokenWithDigest *const*)ptr);
-		break;
-	case SOAP_TYPE_ServerSoap_PointerTotns__selectGameAnnotationsWithTokenIdResponse:
-		soap_serialize_PointerTotns__selectGameAnnotationsWithTokenIdResponse(soap, (tns__selectGameAnnotationsWithTokenIdResponse *const*)ptr);
-		break;
-	case SOAP_TYPE_ServerSoap_PointerTotns__selectGameAnnotationsWithTokenId:
-		soap_serialize_PointerTotns__selectGameAnnotationsWithTokenId(soap, (tns__selectGameAnnotationsWithTokenId *const*)ptr);
-		break;
-	case SOAP_TYPE_ServerSoap_PointerTotns__selectGameAliasesWithTokenIdResponse:
-		soap_serialize_PointerTotns__selectGameAliasesWithTokenIdResponse(soap, (tns__selectGameAliasesWithTokenIdResponse *const*)ptr);
-		break;
-	case SOAP_TYPE_ServerSoap_PointerTotns__selectGameAliasesWithTokenId:
-		soap_serialize_PointerTotns__selectGameAliasesWithTokenId(soap, (tns__selectGameAliasesWithTokenId *const*)ptr);
-		break;
 	case SOAP_TYPE_ServerSoap_PointerTotns__isConnectedResponse:
 		soap_serialize_PointerTotns__isConnectedResponse(soap, (tns__isConnectedResponse *const*)ptr);
 		break;
@@ -1803,11 +1443,53 @@ SOAP_FMAC3 void SOAP_FMAC4 soap_markelement(struct soap *soap, const void *ptr, 
 	case SOAP_TYPE_ServerSoap_PointerTotns__isClientUpdated:
 		soap_serialize_PointerTotns__isClientUpdated(soap, (tns__isClientUpdated *const*)ptr);
 		break;
+	case SOAP_TYPE_ServerSoap_PointerTotns__curseMediaTokenWithIdResponse:
+		soap_serialize_PointerTotns__curseMediaTokenWithIdResponse(soap, (tns__curseMediaTokenWithIdResponse *const*)ptr);
+		break;
+	case SOAP_TYPE_ServerSoap_PointerTotns__curseMediaTokenWithId:
+		soap_serialize_PointerTotns__curseMediaTokenWithId(soap, (tns__curseMediaTokenWithId *const*)ptr);
+		break;
+	case SOAP_TYPE_ServerSoap_PointerTotns__curseMediaAnnotationWithIdResponse:
+		soap_serialize_PointerTotns__curseMediaAnnotationWithIdResponse(soap, (tns__curseMediaAnnotationWithIdResponse *const*)ptr);
+		break;
+	case SOAP_TYPE_ServerSoap_PointerTotns__curseMediaAnnotationWithId:
+		soap_serialize_PointerTotns__curseMediaAnnotationWithId(soap, (tns__curseMediaAnnotationWithId *const*)ptr);
+		break;
+	case SOAP_TYPE_ServerSoap_PointerTotns__curseMediaAliasWithIdResponse:
+		soap_serialize_PointerTotns__curseMediaAliasWithIdResponse(soap, (tns__curseMediaAliasWithIdResponse *const*)ptr);
+		break;
+	case SOAP_TYPE_ServerSoap_PointerTotns__curseMediaAliasWithId:
+		soap_serialize_PointerTotns__curseMediaAliasWithId(soap, (tns__curseMediaAliasWithId *const*)ptr);
+		break;
 	case SOAP_TYPE_ServerSoap_PointerTotns__chatResponse:
 		soap_serialize_PointerTotns__chatResponse(soap, (tns__chatResponse *const*)ptr);
 		break;
 	case SOAP_TYPE_ServerSoap_PointerTotns__chat:
 		soap_serialize_PointerTotns__chat(soap, (tns__chat *const*)ptr);
+		break;
+	case SOAP_TYPE_ServerSoap_PointerTotns__blockUserWithIdResponse:
+		soap_serialize_PointerTotns__blockUserWithIdResponse(soap, (tns__blockUserWithIdResponse *const*)ptr);
+		break;
+	case SOAP_TYPE_ServerSoap_PointerTotns__blockUserWithId:
+		soap_serialize_PointerTotns__blockUserWithId(soap, (tns__blockUserWithId *const*)ptr);
+		break;
+	case SOAP_TYPE_ServerSoap_PointerTotns__blockMediaAnnotationWithIdResponse:
+		soap_serialize_PointerTotns__blockMediaAnnotationWithIdResponse(soap, (tns__blockMediaAnnotationWithIdResponse *const*)ptr);
+		break;
+	case SOAP_TYPE_ServerSoap_PointerTotns__blockMediaAnnotationWithId:
+		soap_serialize_PointerTotns__blockMediaAnnotationWithId(soap, (tns__blockMediaAnnotationWithId *const*)ptr);
+		break;
+	case SOAP_TYPE_ServerSoap_PointerTotns__blockMediaAliasWithIdResponse:
+		soap_serialize_PointerTotns__blockMediaAliasWithIdResponse(soap, (tns__blockMediaAliasWithIdResponse *const*)ptr);
+		break;
+	case SOAP_TYPE_ServerSoap_PointerTotns__blockMediaAliasWithId:
+		soap_serialize_PointerTotns__blockMediaAliasWithId(soap, (tns__blockMediaAliasWithId *const*)ptr);
+		break;
+	case SOAP_TYPE_ServerSoap_PointerTotns__blessMediaTokenWithIdResponse:
+		soap_serialize_PointerTotns__blessMediaTokenWithIdResponse(soap, (tns__blessMediaTokenWithIdResponse *const*)ptr);
+		break;
+	case SOAP_TYPE_ServerSoap_PointerTotns__blessMediaTokenWithId:
+		soap_serialize_PointerTotns__blessMediaTokenWithId(soap, (tns__blessMediaTokenWithId *const*)ptr);
 		break;
 	case SOAP_TYPE_ServerSoap_PointerTotns__blessMediaAnnotationWithIdResponse:
 		soap_serialize_PointerTotns__blessMediaAnnotationWithIdResponse(soap, (tns__blessMediaAnnotationWithIdResponse *const*)ptr);
@@ -1815,11 +1497,11 @@ SOAP_FMAC3 void SOAP_FMAC4 soap_markelement(struct soap *soap, const void *ptr, 
 	case SOAP_TYPE_ServerSoap_PointerTotns__blessMediaAnnotationWithId:
 		soap_serialize_PointerTotns__blessMediaAnnotationWithId(soap, (tns__blessMediaAnnotationWithId *const*)ptr);
 		break;
-	case SOAP_TYPE_ServerSoap_PointerTotns__blessGameAnnotationWithIdResponse:
-		soap_serialize_PointerTotns__blessGameAnnotationWithIdResponse(soap, (tns__blessGameAnnotationWithIdResponse *const*)ptr);
+	case SOAP_TYPE_ServerSoap_PointerTotns__blessMediaAliasWithIdResponse:
+		soap_serialize_PointerTotns__blessMediaAliasWithIdResponse(soap, (tns__blessMediaAliasWithIdResponse *const*)ptr);
 		break;
-	case SOAP_TYPE_ServerSoap_PointerTotns__blessGameAnnotationWithId:
-		soap_serialize_PointerTotns__blessGameAnnotationWithId(soap, (tns__blessGameAnnotationWithId *const*)ptr);
+	case SOAP_TYPE_ServerSoap_PointerTotns__blessMediaAliasWithId:
+		soap_serialize_PointerTotns__blessMediaAliasWithId(soap, (tns__blessMediaAliasWithId *const*)ptr);
 		break;
 	case SOAP_TYPE_ServerSoap_PointerTotns__user:
 		soap_serialize_PointerTotns__user(soap, (tns__user *const*)ptr);
@@ -1832,15 +1514,6 @@ SOAP_FMAC3 void SOAP_FMAC4 soap_markelement(struct soap *soap, const void *ptr, 
 		break;
 	case SOAP_TYPE_ServerSoap_PointerTotns__mediaAlias:
 		soap_serialize_PointerTotns__mediaAlias(soap, (tns__mediaAlias *const*)ptr);
-		break;
-	case SOAP_TYPE_ServerSoap_PointerTotns__gameToken:
-		soap_serialize_PointerTotns__gameToken(soap, (tns__gameToken *const*)ptr);
-		break;
-	case SOAP_TYPE_ServerSoap_PointerTotns__gameAnnotation:
-		soap_serialize_PointerTotns__gameAnnotation(soap, (tns__gameAnnotation *const*)ptr);
-		break;
-	case SOAP_TYPE_ServerSoap_PointerTotns__gameAlias:
-		soap_serialize_PointerTotns__gameAlias(soap, (tns__gameAlias *const*)ptr);
 		break;
 	case SOAP_TYPE_ServerSoap_PointerTostd__string:
 		soap_serialize_PointerTostd__string(soap, (std::string *const*)ptr);
@@ -1861,12 +1534,6 @@ SOAP_FMAC3 void * SOAP_FMAC4 ServerSoap_instantiate(struct soap *soap, int t, co
 	{
 	case SOAP_TYPE_ServerSoap_std__string:
 		return (void*)soap_instantiate_std__string(soap, -1, type, arrayType, n);
-	case SOAP_TYPE_ServerSoap_tns__gameAnnotation:
-		return (void*)soap_instantiate_tns__gameAnnotation(soap, -1, type, arrayType, n);
-	case SOAP_TYPE_ServerSoap_tns__gameToken:
-		return (void*)soap_instantiate_tns__gameToken(soap, -1, type, arrayType, n);
-	case SOAP_TYPE_ServerSoap_tns__gameAlias:
-		return (void*)soap_instantiate_tns__gameAlias(soap, -1, type, arrayType, n);
 	case SOAP_TYPE_ServerSoap_tns__mediaAnnotation:
 		return (void*)soap_instantiate_tns__mediaAnnotation(soap, -1, type, arrayType, n);
 	case SOAP_TYPE_ServerSoap_tns__mediaToken:
@@ -1875,18 +1542,46 @@ SOAP_FMAC3 void * SOAP_FMAC4 ServerSoap_instantiate(struct soap *soap, int t, co
 		return (void*)soap_instantiate_tns__mediaAlias(soap, -1, type, arrayType, n);
 	case SOAP_TYPE_ServerSoap_tns__user:
 		return (void*)soap_instantiate_tns__user(soap, -1, type, arrayType, n);
-	case SOAP_TYPE_ServerSoap_tns__blessGameAnnotationWithId:
-		return (void*)soap_instantiate_tns__blessGameAnnotationWithId(soap, -1, type, arrayType, n);
-	case SOAP_TYPE_ServerSoap_tns__blessGameAnnotationWithIdResponse:
-		return (void*)soap_instantiate_tns__blessGameAnnotationWithIdResponse(soap, -1, type, arrayType, n);
+	case SOAP_TYPE_ServerSoap_tns__blessMediaAliasWithId:
+		return (void*)soap_instantiate_tns__blessMediaAliasWithId(soap, -1, type, arrayType, n);
+	case SOAP_TYPE_ServerSoap_tns__blessMediaAliasWithIdResponse:
+		return (void*)soap_instantiate_tns__blessMediaAliasWithIdResponse(soap, -1, type, arrayType, n);
 	case SOAP_TYPE_ServerSoap_tns__blessMediaAnnotationWithId:
 		return (void*)soap_instantiate_tns__blessMediaAnnotationWithId(soap, -1, type, arrayType, n);
 	case SOAP_TYPE_ServerSoap_tns__blessMediaAnnotationWithIdResponse:
 		return (void*)soap_instantiate_tns__blessMediaAnnotationWithIdResponse(soap, -1, type, arrayType, n);
+	case SOAP_TYPE_ServerSoap_tns__blessMediaTokenWithId:
+		return (void*)soap_instantiate_tns__blessMediaTokenWithId(soap, -1, type, arrayType, n);
+	case SOAP_TYPE_ServerSoap_tns__blessMediaTokenWithIdResponse:
+		return (void*)soap_instantiate_tns__blessMediaTokenWithIdResponse(soap, -1, type, arrayType, n);
+	case SOAP_TYPE_ServerSoap_tns__blockMediaAliasWithId:
+		return (void*)soap_instantiate_tns__blockMediaAliasWithId(soap, -1, type, arrayType, n);
+	case SOAP_TYPE_ServerSoap_tns__blockMediaAliasWithIdResponse:
+		return (void*)soap_instantiate_tns__blockMediaAliasWithIdResponse(soap, -1, type, arrayType, n);
+	case SOAP_TYPE_ServerSoap_tns__blockMediaAnnotationWithId:
+		return (void*)soap_instantiate_tns__blockMediaAnnotationWithId(soap, -1, type, arrayType, n);
+	case SOAP_TYPE_ServerSoap_tns__blockMediaAnnotationWithIdResponse:
+		return (void*)soap_instantiate_tns__blockMediaAnnotationWithIdResponse(soap, -1, type, arrayType, n);
+	case SOAP_TYPE_ServerSoap_tns__blockUserWithId:
+		return (void*)soap_instantiate_tns__blockUserWithId(soap, -1, type, arrayType, n);
+	case SOAP_TYPE_ServerSoap_tns__blockUserWithIdResponse:
+		return (void*)soap_instantiate_tns__blockUserWithIdResponse(soap, -1, type, arrayType, n);
 	case SOAP_TYPE_ServerSoap_tns__chat:
 		return (void*)soap_instantiate_tns__chat(soap, -1, type, arrayType, n);
 	case SOAP_TYPE_ServerSoap_tns__chatResponse:
 		return (void*)soap_instantiate_tns__chatResponse(soap, -1, type, arrayType, n);
+	case SOAP_TYPE_ServerSoap_tns__curseMediaAliasWithId:
+		return (void*)soap_instantiate_tns__curseMediaAliasWithId(soap, -1, type, arrayType, n);
+	case SOAP_TYPE_ServerSoap_tns__curseMediaAliasWithIdResponse:
+		return (void*)soap_instantiate_tns__curseMediaAliasWithIdResponse(soap, -1, type, arrayType, n);
+	case SOAP_TYPE_ServerSoap_tns__curseMediaAnnotationWithId:
+		return (void*)soap_instantiate_tns__curseMediaAnnotationWithId(soap, -1, type, arrayType, n);
+	case SOAP_TYPE_ServerSoap_tns__curseMediaAnnotationWithIdResponse:
+		return (void*)soap_instantiate_tns__curseMediaAnnotationWithIdResponse(soap, -1, type, arrayType, n);
+	case SOAP_TYPE_ServerSoap_tns__curseMediaTokenWithId:
+		return (void*)soap_instantiate_tns__curseMediaTokenWithId(soap, -1, type, arrayType, n);
+	case SOAP_TYPE_ServerSoap_tns__curseMediaTokenWithIdResponse:
+		return (void*)soap_instantiate_tns__curseMediaTokenWithIdResponse(soap, -1, type, arrayType, n);
 	case SOAP_TYPE_ServerSoap_tns__isClientUpdated:
 		return (void*)soap_instantiate_tns__isClientUpdated(soap, -1, type, arrayType, n);
 	case SOAP_TYPE_ServerSoap_tns__isClientUpdatedResponse:
@@ -1895,22 +1590,6 @@ SOAP_FMAC3 void * SOAP_FMAC4 ServerSoap_instantiate(struct soap *soap, int t, co
 		return (void*)soap_instantiate_tns__isConnected(soap, -1, type, arrayType, n);
 	case SOAP_TYPE_ServerSoap_tns__isConnectedResponse:
 		return (void*)soap_instantiate_tns__isConnectedResponse(soap, -1, type, arrayType, n);
-	case SOAP_TYPE_ServerSoap_tns__selectGameAliasesWithTokenId:
-		return (void*)soap_instantiate_tns__selectGameAliasesWithTokenId(soap, -1, type, arrayType, n);
-	case SOAP_TYPE_ServerSoap_tns__selectGameAliasesWithTokenIdResponse:
-		return (void*)soap_instantiate_tns__selectGameAliasesWithTokenIdResponse(soap, -1, type, arrayType, n);
-	case SOAP_TYPE_ServerSoap_tns__selectGameAnnotationsWithTokenId:
-		return (void*)soap_instantiate_tns__selectGameAnnotationsWithTokenId(soap, -1, type, arrayType, n);
-	case SOAP_TYPE_ServerSoap_tns__selectGameAnnotationsWithTokenIdResponse:
-		return (void*)soap_instantiate_tns__selectGameAnnotationsWithTokenIdResponse(soap, -1, type, arrayType, n);
-	case SOAP_TYPE_ServerSoap_tns__selectGameTokenWithDigest:
-		return (void*)soap_instantiate_tns__selectGameTokenWithDigest(soap, -1, type, arrayType, n);
-	case SOAP_TYPE_ServerSoap_tns__selectGameTokenWithDigestResponse:
-		return (void*)soap_instantiate_tns__selectGameTokenWithDigestResponse(soap, -1, type, arrayType, n);
-	case SOAP_TYPE_ServerSoap_tns__selectGameTokenWithId:
-		return (void*)soap_instantiate_tns__selectGameTokenWithId(soap, -1, type, arrayType, n);
-	case SOAP_TYPE_ServerSoap_tns__selectGameTokenWithIdResponse:
-		return (void*)soap_instantiate_tns__selectGameTokenWithIdResponse(soap, -1, type, arrayType, n);
 	case SOAP_TYPE_ServerSoap_tns__selectMediaAliasesWithTokenId:
 		return (void*)soap_instantiate_tns__selectMediaAliasesWithTokenId(soap, -1, type, arrayType, n);
 	case SOAP_TYPE_ServerSoap_tns__selectMediaAliasesWithTokenIdResponse:
@@ -1927,10 +1606,6 @@ SOAP_FMAC3 void * SOAP_FMAC4 ServerSoap_instantiate(struct soap *soap, int t, co
 		return (void*)soap_instantiate_tns__selectMediaTokenWithId(soap, -1, type, arrayType, n);
 	case SOAP_TYPE_ServerSoap_tns__selectMediaTokenWithIdResponse:
 		return (void*)soap_instantiate_tns__selectMediaTokenWithIdResponse(soap, -1, type, arrayType, n);
-	case SOAP_TYPE_ServerSoap_tns__selectRelatedGameAnnotationsWithTokenId:
-		return (void*)soap_instantiate_tns__selectRelatedGameAnnotationsWithTokenId(soap, -1, type, arrayType, n);
-	case SOAP_TYPE_ServerSoap_tns__selectRelatedGameAnnotationsWithTokenIdResponse:
-		return (void*)soap_instantiate_tns__selectRelatedGameAnnotationsWithTokenIdResponse(soap, -1, type, arrayType, n);
 	case SOAP_TYPE_ServerSoap_tns__selectRelatedMediaAnnotationsWithTokenId:
 		return (void*)soap_instantiate_tns__selectRelatedMediaAnnotationsWithTokenId(soap, -1, type, arrayType, n);
 	case SOAP_TYPE_ServerSoap_tns__selectRelatedMediaAnnotationsWithTokenIdResponse:
@@ -1947,38 +1622,6 @@ SOAP_FMAC3 void * SOAP_FMAC4 ServerSoap_instantiate(struct soap *soap, int t, co
 		return (void*)soap_instantiate_tns__setUserLanguage(soap, -1, type, arrayType, n);
 	case SOAP_TYPE_ServerSoap_tns__setUserLanguageResponse:
 		return (void*)soap_instantiate_tns__setUserLanguageResponse(soap, -1, type, arrayType, n);
-	case SOAP_TYPE_ServerSoap_tns__submitGameAlias:
-		return (void*)soap_instantiate_tns__submitGameAlias(soap, -1, type, arrayType, n);
-	case SOAP_TYPE_ServerSoap_tns__submitGameAliasResponse:
-		return (void*)soap_instantiate_tns__submitGameAliasResponse(soap, -1, type, arrayType, n);
-	case SOAP_TYPE_ServerSoap_tns__submitGameAliasTextAndTokenDigest:
-		return (void*)soap_instantiate_tns__submitGameAliasTextAndTokenDigest(soap, -1, type, arrayType, n);
-	case SOAP_TYPE_ServerSoap_tns__submitGameAliasTextAndTokenDigestResponse:
-		return (void*)soap_instantiate_tns__submitGameAliasTextAndTokenDigestResponse(soap, -1, type, arrayType, n);
-	case SOAP_TYPE_ServerSoap_tns__submitGameAliasTextWithTokenId:
-		return (void*)soap_instantiate_tns__submitGameAliasTextWithTokenId(soap, -1, type, arrayType, n);
-	case SOAP_TYPE_ServerSoap_tns__submitGameAliasTextWithTokenIdResponse:
-		return (void*)soap_instantiate_tns__submitGameAliasTextWithTokenIdResponse(soap, -1, type, arrayType, n);
-	case SOAP_TYPE_ServerSoap_tns__submitGameAnnotation:
-		return (void*)soap_instantiate_tns__submitGameAnnotation(soap, -1, type, arrayType, n);
-	case SOAP_TYPE_ServerSoap_tns__submitGameAnnotationResponse:
-		return (void*)soap_instantiate_tns__submitGameAnnotationResponse(soap, -1, type, arrayType, n);
-	case SOAP_TYPE_ServerSoap_tns__submitGameAnnotationTextAndTokenDigest:
-		return (void*)soap_instantiate_tns__submitGameAnnotationTextAndTokenDigest(soap, -1, type, arrayType, n);
-	case SOAP_TYPE_ServerSoap_tns__submitGameAnnotationTextAndTokenDigestResponse:
-		return (void*)soap_instantiate_tns__submitGameAnnotationTextAndTokenDigestResponse(soap, -1, type, arrayType, n);
-	case SOAP_TYPE_ServerSoap_tns__submitGameAnnotationTextWithTokenId:
-		return (void*)soap_instantiate_tns__submitGameAnnotationTextWithTokenId(soap, -1, type, arrayType, n);
-	case SOAP_TYPE_ServerSoap_tns__submitGameAnnotationTextWithTokenIdResponse:
-		return (void*)soap_instantiate_tns__submitGameAnnotationTextWithTokenIdResponse(soap, -1, type, arrayType, n);
-	case SOAP_TYPE_ServerSoap_tns__submitGameToken:
-		return (void*)soap_instantiate_tns__submitGameToken(soap, -1, type, arrayType, n);
-	case SOAP_TYPE_ServerSoap_tns__submitGameTokenResponse:
-		return (void*)soap_instantiate_tns__submitGameTokenResponse(soap, -1, type, arrayType, n);
-	case SOAP_TYPE_ServerSoap_tns__submitGameTokenDigest:
-		return (void*)soap_instantiate_tns__submitGameTokenDigest(soap, -1, type, arrayType, n);
-	case SOAP_TYPE_ServerSoap_tns__submitGameTokenDigestResponse:
-		return (void*)soap_instantiate_tns__submitGameTokenDigestResponse(soap, -1, type, arrayType, n);
 	case SOAP_TYPE_ServerSoap_tns__submitMediaAlias:
 		return (void*)soap_instantiate_tns__submitMediaAlias(soap, -1, type, arrayType, n);
 	case SOAP_TYPE_ServerSoap_tns__submitMediaAliasResponse:
@@ -2011,32 +1654,34 @@ SOAP_FMAC3 void * SOAP_FMAC4 ServerSoap_instantiate(struct soap *soap, int t, co
 		return (void*)soap_instantiate_tns__submitMediaTokenDigest(soap, -1, type, arrayType, n);
 	case SOAP_TYPE_ServerSoap_tns__submitMediaTokenDigestResponse:
 		return (void*)soap_instantiate_tns__submitMediaTokenDigestResponse(soap, -1, type, arrayType, n);
-	case SOAP_TYPE_ServerSoap_tns__updateGameAnnotationTextWithId:
-		return (void*)soap_instantiate_tns__updateGameAnnotationTextWithId(soap, -1, type, arrayType, n);
-	case SOAP_TYPE_ServerSoap_tns__updateGameAnnotationTextWithIdResponse:
-		return (void*)soap_instantiate_tns__updateGameAnnotationTextWithIdResponse(soap, -1, type, arrayType, n);
 	case SOAP_TYPE_ServerSoap_tns__updateMediaAnnotationTextWithId:
 		return (void*)soap_instantiate_tns__updateMediaAnnotationTextWithId(soap, -1, type, arrayType, n);
 	case SOAP_TYPE_ServerSoap_tns__updateMediaAnnotationTextWithIdResponse:
 		return (void*)soap_instantiate_tns__updateMediaAnnotationTextWithIdResponse(soap, -1, type, arrayType, n);
-	case SOAP_TYPE_ServerSoap___tns__blessGameAnnotationWithId:
-		return (void*)soap_instantiate___tns__blessGameAnnotationWithId(soap, -1, type, arrayType, n);
+	case SOAP_TYPE_ServerSoap___tns__blessMediaAliasWithId:
+		return (void*)soap_instantiate___tns__blessMediaAliasWithId(soap, -1, type, arrayType, n);
 	case SOAP_TYPE_ServerSoap___tns__blessMediaAnnotationWithId:
 		return (void*)soap_instantiate___tns__blessMediaAnnotationWithId(soap, -1, type, arrayType, n);
+	case SOAP_TYPE_ServerSoap___tns__blessMediaTokenWithId:
+		return (void*)soap_instantiate___tns__blessMediaTokenWithId(soap, -1, type, arrayType, n);
+	case SOAP_TYPE_ServerSoap___tns__blockMediaAliasWithId:
+		return (void*)soap_instantiate___tns__blockMediaAliasWithId(soap, -1, type, arrayType, n);
+	case SOAP_TYPE_ServerSoap___tns__blockMediaAnnotationWithId:
+		return (void*)soap_instantiate___tns__blockMediaAnnotationWithId(soap, -1, type, arrayType, n);
+	case SOAP_TYPE_ServerSoap___tns__blockUserWithId:
+		return (void*)soap_instantiate___tns__blockUserWithId(soap, -1, type, arrayType, n);
 	case SOAP_TYPE_ServerSoap___tns__chat:
 		return (void*)soap_instantiate___tns__chat(soap, -1, type, arrayType, n);
+	case SOAP_TYPE_ServerSoap___tns__curseMediaAliasWithId:
+		return (void*)soap_instantiate___tns__curseMediaAliasWithId(soap, -1, type, arrayType, n);
+	case SOAP_TYPE_ServerSoap___tns__curseMediaAnnotationWithId:
+		return (void*)soap_instantiate___tns__curseMediaAnnotationWithId(soap, -1, type, arrayType, n);
+	case SOAP_TYPE_ServerSoap___tns__curseMediaTokenWithId:
+		return (void*)soap_instantiate___tns__curseMediaTokenWithId(soap, -1, type, arrayType, n);
 	case SOAP_TYPE_ServerSoap___tns__isClientUpdated:
 		return (void*)soap_instantiate___tns__isClientUpdated(soap, -1, type, arrayType, n);
 	case SOAP_TYPE_ServerSoap___tns__isConnected:
 		return (void*)soap_instantiate___tns__isConnected(soap, -1, type, arrayType, n);
-	case SOAP_TYPE_ServerSoap___tns__selectGameAliasesWithTokenId:
-		return (void*)soap_instantiate___tns__selectGameAliasesWithTokenId(soap, -1, type, arrayType, n);
-	case SOAP_TYPE_ServerSoap___tns__selectGameAnnotationsWithTokenId:
-		return (void*)soap_instantiate___tns__selectGameAnnotationsWithTokenId(soap, -1, type, arrayType, n);
-	case SOAP_TYPE_ServerSoap___tns__selectGameTokenWithDigest:
-		return (void*)soap_instantiate___tns__selectGameTokenWithDigest(soap, -1, type, arrayType, n);
-	case SOAP_TYPE_ServerSoap___tns__selectGameTokenWithId:
-		return (void*)soap_instantiate___tns__selectGameTokenWithId(soap, -1, type, arrayType, n);
 	case SOAP_TYPE_ServerSoap___tns__selectMediaAliasesWithTokenId:
 		return (void*)soap_instantiate___tns__selectMediaAliasesWithTokenId(soap, -1, type, arrayType, n);
 	case SOAP_TYPE_ServerSoap___tns__selectMediaAnnotationsWithTokenId:
@@ -2045,8 +1690,6 @@ SOAP_FMAC3 void * SOAP_FMAC4 ServerSoap_instantiate(struct soap *soap, int t, co
 		return (void*)soap_instantiate___tns__selectMediaTokenWithDigest(soap, -1, type, arrayType, n);
 	case SOAP_TYPE_ServerSoap___tns__selectMediaTokenWithId:
 		return (void*)soap_instantiate___tns__selectMediaTokenWithId(soap, -1, type, arrayType, n);
-	case SOAP_TYPE_ServerSoap___tns__selectRelatedGameAnnotationsWithTokenId:
-		return (void*)soap_instantiate___tns__selectRelatedGameAnnotationsWithTokenId(soap, -1, type, arrayType, n);
 	case SOAP_TYPE_ServerSoap___tns__selectRelatedMediaAnnotationsWithTokenId:
 		return (void*)soap_instantiate___tns__selectRelatedMediaAnnotationsWithTokenId(soap, -1, type, arrayType, n);
 	case SOAP_TYPE_ServerSoap___tns__selectUser:
@@ -2055,22 +1698,6 @@ SOAP_FMAC3 void * SOAP_FMAC4 ServerSoap_instantiate(struct soap *soap, int t, co
 		return (void*)soap_instantiate___tns__setUserAnonymous(soap, -1, type, arrayType, n);
 	case SOAP_TYPE_ServerSoap___tns__setUserLanguage:
 		return (void*)soap_instantiate___tns__setUserLanguage(soap, -1, type, arrayType, n);
-	case SOAP_TYPE_ServerSoap___tns__submitGameAlias:
-		return (void*)soap_instantiate___tns__submitGameAlias(soap, -1, type, arrayType, n);
-	case SOAP_TYPE_ServerSoap___tns__submitGameAliasTextAndTokenDigest:
-		return (void*)soap_instantiate___tns__submitGameAliasTextAndTokenDigest(soap, -1, type, arrayType, n);
-	case SOAP_TYPE_ServerSoap___tns__submitGameAliasTextWithTokenId:
-		return (void*)soap_instantiate___tns__submitGameAliasTextWithTokenId(soap, -1, type, arrayType, n);
-	case SOAP_TYPE_ServerSoap___tns__submitGameAnnotation:
-		return (void*)soap_instantiate___tns__submitGameAnnotation(soap, -1, type, arrayType, n);
-	case SOAP_TYPE_ServerSoap___tns__submitGameAnnotationTextAndTokenDigest:
-		return (void*)soap_instantiate___tns__submitGameAnnotationTextAndTokenDigest(soap, -1, type, arrayType, n);
-	case SOAP_TYPE_ServerSoap___tns__submitGameAnnotationTextWithTokenId:
-		return (void*)soap_instantiate___tns__submitGameAnnotationTextWithTokenId(soap, -1, type, arrayType, n);
-	case SOAP_TYPE_ServerSoap___tns__submitGameToken:
-		return (void*)soap_instantiate___tns__submitGameToken(soap, -1, type, arrayType, n);
-	case SOAP_TYPE_ServerSoap___tns__submitGameTokenDigest:
-		return (void*)soap_instantiate___tns__submitGameTokenDigest(soap, -1, type, arrayType, n);
 	case SOAP_TYPE_ServerSoap___tns__submitMediaAlias:
 		return (void*)soap_instantiate___tns__submitMediaAlias(soap, -1, type, arrayType, n);
 	case SOAP_TYPE_ServerSoap___tns__submitMediaAliasTextAndTokenDigest:
@@ -2087,8 +1714,6 @@ SOAP_FMAC3 void * SOAP_FMAC4 ServerSoap_instantiate(struct soap *soap, int t, co
 		return (void*)soap_instantiate___tns__submitMediaToken(soap, -1, type, arrayType, n);
 	case SOAP_TYPE_ServerSoap___tns__submitMediaTokenDigest:
 		return (void*)soap_instantiate___tns__submitMediaTokenDigest(soap, -1, type, arrayType, n);
-	case SOAP_TYPE_ServerSoap___tns__updateGameAnnotationTextWithId:
-		return (void*)soap_instantiate___tns__updateGameAnnotationTextWithId(soap, -1, type, arrayType, n);
 	case SOAP_TYPE_ServerSoap___tns__updateMediaAnnotationTextWithId:
 		return (void*)soap_instantiate___tns__updateMediaAnnotationTextWithId(soap, -1, type, arrayType, n);
 #ifndef WITH_NOGLOBAL
@@ -2115,10 +1740,6 @@ SOAP_FMAC3 void * SOAP_FMAC4 ServerSoap_instantiate(struct soap *soap, int t, co
 		return (void*)soap_instantiate_std__vectorTemplateOfPointerTotns__mediaAnnotation(soap, -1, type, arrayType, n);
 	case SOAP_TYPE_ServerSoap_std__vectorTemplateOfPointerTotns__mediaAlias:
 		return (void*)soap_instantiate_std__vectorTemplateOfPointerTotns__mediaAlias(soap, -1, type, arrayType, n);
-	case SOAP_TYPE_ServerSoap_std__vectorTemplateOfPointerTotns__gameAnnotation:
-		return (void*)soap_instantiate_std__vectorTemplateOfPointerTotns__gameAnnotation(soap, -1, type, arrayType, n);
-	case SOAP_TYPE_ServerSoap_std__vectorTemplateOfPointerTotns__gameAlias:
-		return (void*)soap_instantiate_std__vectorTemplateOfPointerTotns__gameAlias(soap, -1, type, arrayType, n);
 	}
 	return NULL;
 }
@@ -2131,24 +1752,6 @@ SOAP_FMAC3 int SOAP_FMAC4 ServerSoap_fdelete(struct soap_clist *p)
 			SOAP_DELETE((std::string*)p->ptr);
 		else
 			SOAP_DELETE_ARRAY((std::string*)p->ptr);
-		break;
-	case SOAP_TYPE_ServerSoap_tns__gameAnnotation:
-		if (p->size < 0)
-			SOAP_DELETE((tns__gameAnnotation*)p->ptr);
-		else
-			SOAP_DELETE_ARRAY((tns__gameAnnotation*)p->ptr);
-		break;
-	case SOAP_TYPE_ServerSoap_tns__gameToken:
-		if (p->size < 0)
-			SOAP_DELETE((tns__gameToken*)p->ptr);
-		else
-			SOAP_DELETE_ARRAY((tns__gameToken*)p->ptr);
-		break;
-	case SOAP_TYPE_ServerSoap_tns__gameAlias:
-		if (p->size < 0)
-			SOAP_DELETE((tns__gameAlias*)p->ptr);
-		else
-			SOAP_DELETE_ARRAY((tns__gameAlias*)p->ptr);
 		break;
 	case SOAP_TYPE_ServerSoap_tns__mediaAnnotation:
 		if (p->size < 0)
@@ -2174,17 +1777,17 @@ SOAP_FMAC3 int SOAP_FMAC4 ServerSoap_fdelete(struct soap_clist *p)
 		else
 			SOAP_DELETE_ARRAY((tns__user*)p->ptr);
 		break;
-	case SOAP_TYPE_ServerSoap_tns__blessGameAnnotationWithId:
+	case SOAP_TYPE_ServerSoap_tns__blessMediaAliasWithId:
 		if (p->size < 0)
-			SOAP_DELETE((tns__blessGameAnnotationWithId*)p->ptr);
+			SOAP_DELETE((tns__blessMediaAliasWithId*)p->ptr);
 		else
-			SOAP_DELETE_ARRAY((tns__blessGameAnnotationWithId*)p->ptr);
+			SOAP_DELETE_ARRAY((tns__blessMediaAliasWithId*)p->ptr);
 		break;
-	case SOAP_TYPE_ServerSoap_tns__blessGameAnnotationWithIdResponse:
+	case SOAP_TYPE_ServerSoap_tns__blessMediaAliasWithIdResponse:
 		if (p->size < 0)
-			SOAP_DELETE((tns__blessGameAnnotationWithIdResponse*)p->ptr);
+			SOAP_DELETE((tns__blessMediaAliasWithIdResponse*)p->ptr);
 		else
-			SOAP_DELETE_ARRAY((tns__blessGameAnnotationWithIdResponse*)p->ptr);
+			SOAP_DELETE_ARRAY((tns__blessMediaAliasWithIdResponse*)p->ptr);
 		break;
 	case SOAP_TYPE_ServerSoap_tns__blessMediaAnnotationWithId:
 		if (p->size < 0)
@@ -2198,6 +1801,54 @@ SOAP_FMAC3 int SOAP_FMAC4 ServerSoap_fdelete(struct soap_clist *p)
 		else
 			SOAP_DELETE_ARRAY((tns__blessMediaAnnotationWithIdResponse*)p->ptr);
 		break;
+	case SOAP_TYPE_ServerSoap_tns__blessMediaTokenWithId:
+		if (p->size < 0)
+			SOAP_DELETE((tns__blessMediaTokenWithId*)p->ptr);
+		else
+			SOAP_DELETE_ARRAY((tns__blessMediaTokenWithId*)p->ptr);
+		break;
+	case SOAP_TYPE_ServerSoap_tns__blessMediaTokenWithIdResponse:
+		if (p->size < 0)
+			SOAP_DELETE((tns__blessMediaTokenWithIdResponse*)p->ptr);
+		else
+			SOAP_DELETE_ARRAY((tns__blessMediaTokenWithIdResponse*)p->ptr);
+		break;
+	case SOAP_TYPE_ServerSoap_tns__blockMediaAliasWithId:
+		if (p->size < 0)
+			SOAP_DELETE((tns__blockMediaAliasWithId*)p->ptr);
+		else
+			SOAP_DELETE_ARRAY((tns__blockMediaAliasWithId*)p->ptr);
+		break;
+	case SOAP_TYPE_ServerSoap_tns__blockMediaAliasWithIdResponse:
+		if (p->size < 0)
+			SOAP_DELETE((tns__blockMediaAliasWithIdResponse*)p->ptr);
+		else
+			SOAP_DELETE_ARRAY((tns__blockMediaAliasWithIdResponse*)p->ptr);
+		break;
+	case SOAP_TYPE_ServerSoap_tns__blockMediaAnnotationWithId:
+		if (p->size < 0)
+			SOAP_DELETE((tns__blockMediaAnnotationWithId*)p->ptr);
+		else
+			SOAP_DELETE_ARRAY((tns__blockMediaAnnotationWithId*)p->ptr);
+		break;
+	case SOAP_TYPE_ServerSoap_tns__blockMediaAnnotationWithIdResponse:
+		if (p->size < 0)
+			SOAP_DELETE((tns__blockMediaAnnotationWithIdResponse*)p->ptr);
+		else
+			SOAP_DELETE_ARRAY((tns__blockMediaAnnotationWithIdResponse*)p->ptr);
+		break;
+	case SOAP_TYPE_ServerSoap_tns__blockUserWithId:
+		if (p->size < 0)
+			SOAP_DELETE((tns__blockUserWithId*)p->ptr);
+		else
+			SOAP_DELETE_ARRAY((tns__blockUserWithId*)p->ptr);
+		break;
+	case SOAP_TYPE_ServerSoap_tns__blockUserWithIdResponse:
+		if (p->size < 0)
+			SOAP_DELETE((tns__blockUserWithIdResponse*)p->ptr);
+		else
+			SOAP_DELETE_ARRAY((tns__blockUserWithIdResponse*)p->ptr);
+		break;
 	case SOAP_TYPE_ServerSoap_tns__chat:
 		if (p->size < 0)
 			SOAP_DELETE((tns__chat*)p->ptr);
@@ -2209,6 +1860,42 @@ SOAP_FMAC3 int SOAP_FMAC4 ServerSoap_fdelete(struct soap_clist *p)
 			SOAP_DELETE((tns__chatResponse*)p->ptr);
 		else
 			SOAP_DELETE_ARRAY((tns__chatResponse*)p->ptr);
+		break;
+	case SOAP_TYPE_ServerSoap_tns__curseMediaAliasWithId:
+		if (p->size < 0)
+			SOAP_DELETE((tns__curseMediaAliasWithId*)p->ptr);
+		else
+			SOAP_DELETE_ARRAY((tns__curseMediaAliasWithId*)p->ptr);
+		break;
+	case SOAP_TYPE_ServerSoap_tns__curseMediaAliasWithIdResponse:
+		if (p->size < 0)
+			SOAP_DELETE((tns__curseMediaAliasWithIdResponse*)p->ptr);
+		else
+			SOAP_DELETE_ARRAY((tns__curseMediaAliasWithIdResponse*)p->ptr);
+		break;
+	case SOAP_TYPE_ServerSoap_tns__curseMediaAnnotationWithId:
+		if (p->size < 0)
+			SOAP_DELETE((tns__curseMediaAnnotationWithId*)p->ptr);
+		else
+			SOAP_DELETE_ARRAY((tns__curseMediaAnnotationWithId*)p->ptr);
+		break;
+	case SOAP_TYPE_ServerSoap_tns__curseMediaAnnotationWithIdResponse:
+		if (p->size < 0)
+			SOAP_DELETE((tns__curseMediaAnnotationWithIdResponse*)p->ptr);
+		else
+			SOAP_DELETE_ARRAY((tns__curseMediaAnnotationWithIdResponse*)p->ptr);
+		break;
+	case SOAP_TYPE_ServerSoap_tns__curseMediaTokenWithId:
+		if (p->size < 0)
+			SOAP_DELETE((tns__curseMediaTokenWithId*)p->ptr);
+		else
+			SOAP_DELETE_ARRAY((tns__curseMediaTokenWithId*)p->ptr);
+		break;
+	case SOAP_TYPE_ServerSoap_tns__curseMediaTokenWithIdResponse:
+		if (p->size < 0)
+			SOAP_DELETE((tns__curseMediaTokenWithIdResponse*)p->ptr);
+		else
+			SOAP_DELETE_ARRAY((tns__curseMediaTokenWithIdResponse*)p->ptr);
 		break;
 	case SOAP_TYPE_ServerSoap_tns__isClientUpdated:
 		if (p->size < 0)
@@ -2233,54 +1920,6 @@ SOAP_FMAC3 int SOAP_FMAC4 ServerSoap_fdelete(struct soap_clist *p)
 			SOAP_DELETE((tns__isConnectedResponse*)p->ptr);
 		else
 			SOAP_DELETE_ARRAY((tns__isConnectedResponse*)p->ptr);
-		break;
-	case SOAP_TYPE_ServerSoap_tns__selectGameAliasesWithTokenId:
-		if (p->size < 0)
-			SOAP_DELETE((tns__selectGameAliasesWithTokenId*)p->ptr);
-		else
-			SOAP_DELETE_ARRAY((tns__selectGameAliasesWithTokenId*)p->ptr);
-		break;
-	case SOAP_TYPE_ServerSoap_tns__selectGameAliasesWithTokenIdResponse:
-		if (p->size < 0)
-			SOAP_DELETE((tns__selectGameAliasesWithTokenIdResponse*)p->ptr);
-		else
-			SOAP_DELETE_ARRAY((tns__selectGameAliasesWithTokenIdResponse*)p->ptr);
-		break;
-	case SOAP_TYPE_ServerSoap_tns__selectGameAnnotationsWithTokenId:
-		if (p->size < 0)
-			SOAP_DELETE((tns__selectGameAnnotationsWithTokenId*)p->ptr);
-		else
-			SOAP_DELETE_ARRAY((tns__selectGameAnnotationsWithTokenId*)p->ptr);
-		break;
-	case SOAP_TYPE_ServerSoap_tns__selectGameAnnotationsWithTokenIdResponse:
-		if (p->size < 0)
-			SOAP_DELETE((tns__selectGameAnnotationsWithTokenIdResponse*)p->ptr);
-		else
-			SOAP_DELETE_ARRAY((tns__selectGameAnnotationsWithTokenIdResponse*)p->ptr);
-		break;
-	case SOAP_TYPE_ServerSoap_tns__selectGameTokenWithDigest:
-		if (p->size < 0)
-			SOAP_DELETE((tns__selectGameTokenWithDigest*)p->ptr);
-		else
-			SOAP_DELETE_ARRAY((tns__selectGameTokenWithDigest*)p->ptr);
-		break;
-	case SOAP_TYPE_ServerSoap_tns__selectGameTokenWithDigestResponse:
-		if (p->size < 0)
-			SOAP_DELETE((tns__selectGameTokenWithDigestResponse*)p->ptr);
-		else
-			SOAP_DELETE_ARRAY((tns__selectGameTokenWithDigestResponse*)p->ptr);
-		break;
-	case SOAP_TYPE_ServerSoap_tns__selectGameTokenWithId:
-		if (p->size < 0)
-			SOAP_DELETE((tns__selectGameTokenWithId*)p->ptr);
-		else
-			SOAP_DELETE_ARRAY((tns__selectGameTokenWithId*)p->ptr);
-		break;
-	case SOAP_TYPE_ServerSoap_tns__selectGameTokenWithIdResponse:
-		if (p->size < 0)
-			SOAP_DELETE((tns__selectGameTokenWithIdResponse*)p->ptr);
-		else
-			SOAP_DELETE_ARRAY((tns__selectGameTokenWithIdResponse*)p->ptr);
 		break;
 	case SOAP_TYPE_ServerSoap_tns__selectMediaAliasesWithTokenId:
 		if (p->size < 0)
@@ -2330,18 +1969,6 @@ SOAP_FMAC3 int SOAP_FMAC4 ServerSoap_fdelete(struct soap_clist *p)
 		else
 			SOAP_DELETE_ARRAY((tns__selectMediaTokenWithIdResponse*)p->ptr);
 		break;
-	case SOAP_TYPE_ServerSoap_tns__selectRelatedGameAnnotationsWithTokenId:
-		if (p->size < 0)
-			SOAP_DELETE((tns__selectRelatedGameAnnotationsWithTokenId*)p->ptr);
-		else
-			SOAP_DELETE_ARRAY((tns__selectRelatedGameAnnotationsWithTokenId*)p->ptr);
-		break;
-	case SOAP_TYPE_ServerSoap_tns__selectRelatedGameAnnotationsWithTokenIdResponse:
-		if (p->size < 0)
-			SOAP_DELETE((tns__selectRelatedGameAnnotationsWithTokenIdResponse*)p->ptr);
-		else
-			SOAP_DELETE_ARRAY((tns__selectRelatedGameAnnotationsWithTokenIdResponse*)p->ptr);
-		break;
 	case SOAP_TYPE_ServerSoap_tns__selectRelatedMediaAnnotationsWithTokenId:
 		if (p->size < 0)
 			SOAP_DELETE((tns__selectRelatedMediaAnnotationsWithTokenId*)p->ptr);
@@ -2389,102 +2016,6 @@ SOAP_FMAC3 int SOAP_FMAC4 ServerSoap_fdelete(struct soap_clist *p)
 			SOAP_DELETE((tns__setUserLanguageResponse*)p->ptr);
 		else
 			SOAP_DELETE_ARRAY((tns__setUserLanguageResponse*)p->ptr);
-		break;
-	case SOAP_TYPE_ServerSoap_tns__submitGameAlias:
-		if (p->size < 0)
-			SOAP_DELETE((tns__submitGameAlias*)p->ptr);
-		else
-			SOAP_DELETE_ARRAY((tns__submitGameAlias*)p->ptr);
-		break;
-	case SOAP_TYPE_ServerSoap_tns__submitGameAliasResponse:
-		if (p->size < 0)
-			SOAP_DELETE((tns__submitGameAliasResponse*)p->ptr);
-		else
-			SOAP_DELETE_ARRAY((tns__submitGameAliasResponse*)p->ptr);
-		break;
-	case SOAP_TYPE_ServerSoap_tns__submitGameAliasTextAndTokenDigest:
-		if (p->size < 0)
-			SOAP_DELETE((tns__submitGameAliasTextAndTokenDigest*)p->ptr);
-		else
-			SOAP_DELETE_ARRAY((tns__submitGameAliasTextAndTokenDigest*)p->ptr);
-		break;
-	case SOAP_TYPE_ServerSoap_tns__submitGameAliasTextAndTokenDigestResponse:
-		if (p->size < 0)
-			SOAP_DELETE((tns__submitGameAliasTextAndTokenDigestResponse*)p->ptr);
-		else
-			SOAP_DELETE_ARRAY((tns__submitGameAliasTextAndTokenDigestResponse*)p->ptr);
-		break;
-	case SOAP_TYPE_ServerSoap_tns__submitGameAliasTextWithTokenId:
-		if (p->size < 0)
-			SOAP_DELETE((tns__submitGameAliasTextWithTokenId*)p->ptr);
-		else
-			SOAP_DELETE_ARRAY((tns__submitGameAliasTextWithTokenId*)p->ptr);
-		break;
-	case SOAP_TYPE_ServerSoap_tns__submitGameAliasTextWithTokenIdResponse:
-		if (p->size < 0)
-			SOAP_DELETE((tns__submitGameAliasTextWithTokenIdResponse*)p->ptr);
-		else
-			SOAP_DELETE_ARRAY((tns__submitGameAliasTextWithTokenIdResponse*)p->ptr);
-		break;
-	case SOAP_TYPE_ServerSoap_tns__submitGameAnnotation:
-		if (p->size < 0)
-			SOAP_DELETE((tns__submitGameAnnotation*)p->ptr);
-		else
-			SOAP_DELETE_ARRAY((tns__submitGameAnnotation*)p->ptr);
-		break;
-	case SOAP_TYPE_ServerSoap_tns__submitGameAnnotationResponse:
-		if (p->size < 0)
-			SOAP_DELETE((tns__submitGameAnnotationResponse*)p->ptr);
-		else
-			SOAP_DELETE_ARRAY((tns__submitGameAnnotationResponse*)p->ptr);
-		break;
-	case SOAP_TYPE_ServerSoap_tns__submitGameAnnotationTextAndTokenDigest:
-		if (p->size < 0)
-			SOAP_DELETE((tns__submitGameAnnotationTextAndTokenDigest*)p->ptr);
-		else
-			SOAP_DELETE_ARRAY((tns__submitGameAnnotationTextAndTokenDigest*)p->ptr);
-		break;
-	case SOAP_TYPE_ServerSoap_tns__submitGameAnnotationTextAndTokenDigestResponse:
-		if (p->size < 0)
-			SOAP_DELETE((tns__submitGameAnnotationTextAndTokenDigestResponse*)p->ptr);
-		else
-			SOAP_DELETE_ARRAY((tns__submitGameAnnotationTextAndTokenDigestResponse*)p->ptr);
-		break;
-	case SOAP_TYPE_ServerSoap_tns__submitGameAnnotationTextWithTokenId:
-		if (p->size < 0)
-			SOAP_DELETE((tns__submitGameAnnotationTextWithTokenId*)p->ptr);
-		else
-			SOAP_DELETE_ARRAY((tns__submitGameAnnotationTextWithTokenId*)p->ptr);
-		break;
-	case SOAP_TYPE_ServerSoap_tns__submitGameAnnotationTextWithTokenIdResponse:
-		if (p->size < 0)
-			SOAP_DELETE((tns__submitGameAnnotationTextWithTokenIdResponse*)p->ptr);
-		else
-			SOAP_DELETE_ARRAY((tns__submitGameAnnotationTextWithTokenIdResponse*)p->ptr);
-		break;
-	case SOAP_TYPE_ServerSoap_tns__submitGameToken:
-		if (p->size < 0)
-			SOAP_DELETE((tns__submitGameToken*)p->ptr);
-		else
-			SOAP_DELETE_ARRAY((tns__submitGameToken*)p->ptr);
-		break;
-	case SOAP_TYPE_ServerSoap_tns__submitGameTokenResponse:
-		if (p->size < 0)
-			SOAP_DELETE((tns__submitGameTokenResponse*)p->ptr);
-		else
-			SOAP_DELETE_ARRAY((tns__submitGameTokenResponse*)p->ptr);
-		break;
-	case SOAP_TYPE_ServerSoap_tns__submitGameTokenDigest:
-		if (p->size < 0)
-			SOAP_DELETE((tns__submitGameTokenDigest*)p->ptr);
-		else
-			SOAP_DELETE_ARRAY((tns__submitGameTokenDigest*)p->ptr);
-		break;
-	case SOAP_TYPE_ServerSoap_tns__submitGameTokenDigestResponse:
-		if (p->size < 0)
-			SOAP_DELETE((tns__submitGameTokenDigestResponse*)p->ptr);
-		else
-			SOAP_DELETE_ARRAY((tns__submitGameTokenDigestResponse*)p->ptr);
 		break;
 	case SOAP_TYPE_ServerSoap_tns__submitMediaAlias:
 		if (p->size < 0)
@@ -2582,18 +2113,6 @@ SOAP_FMAC3 int SOAP_FMAC4 ServerSoap_fdelete(struct soap_clist *p)
 		else
 			SOAP_DELETE_ARRAY((tns__submitMediaTokenDigestResponse*)p->ptr);
 		break;
-	case SOAP_TYPE_ServerSoap_tns__updateGameAnnotationTextWithId:
-		if (p->size < 0)
-			SOAP_DELETE((tns__updateGameAnnotationTextWithId*)p->ptr);
-		else
-			SOAP_DELETE_ARRAY((tns__updateGameAnnotationTextWithId*)p->ptr);
-		break;
-	case SOAP_TYPE_ServerSoap_tns__updateGameAnnotationTextWithIdResponse:
-		if (p->size < 0)
-			SOAP_DELETE((tns__updateGameAnnotationTextWithIdResponse*)p->ptr);
-		else
-			SOAP_DELETE_ARRAY((tns__updateGameAnnotationTextWithIdResponse*)p->ptr);
-		break;
 	case SOAP_TYPE_ServerSoap_tns__updateMediaAnnotationTextWithId:
 		if (p->size < 0)
 			SOAP_DELETE((tns__updateMediaAnnotationTextWithId*)p->ptr);
@@ -2606,11 +2125,11 @@ SOAP_FMAC3 int SOAP_FMAC4 ServerSoap_fdelete(struct soap_clist *p)
 		else
 			SOAP_DELETE_ARRAY((tns__updateMediaAnnotationTextWithIdResponse*)p->ptr);
 		break;
-	case SOAP_TYPE_ServerSoap___tns__blessGameAnnotationWithId:
+	case SOAP_TYPE_ServerSoap___tns__blessMediaAliasWithId:
 		if (p->size < 0)
-			SOAP_DELETE((struct __tns__blessGameAnnotationWithId*)p->ptr);
+			SOAP_DELETE((struct __tns__blessMediaAliasWithId*)p->ptr);
 		else
-			SOAP_DELETE_ARRAY((struct __tns__blessGameAnnotationWithId*)p->ptr);
+			SOAP_DELETE_ARRAY((struct __tns__blessMediaAliasWithId*)p->ptr);
 		break;
 	case SOAP_TYPE_ServerSoap___tns__blessMediaAnnotationWithId:
 		if (p->size < 0)
@@ -2618,11 +2137,53 @@ SOAP_FMAC3 int SOAP_FMAC4 ServerSoap_fdelete(struct soap_clist *p)
 		else
 			SOAP_DELETE_ARRAY((struct __tns__blessMediaAnnotationWithId*)p->ptr);
 		break;
+	case SOAP_TYPE_ServerSoap___tns__blessMediaTokenWithId:
+		if (p->size < 0)
+			SOAP_DELETE((struct __tns__blessMediaTokenWithId*)p->ptr);
+		else
+			SOAP_DELETE_ARRAY((struct __tns__blessMediaTokenWithId*)p->ptr);
+		break;
+	case SOAP_TYPE_ServerSoap___tns__blockMediaAliasWithId:
+		if (p->size < 0)
+			SOAP_DELETE((struct __tns__blockMediaAliasWithId*)p->ptr);
+		else
+			SOAP_DELETE_ARRAY((struct __tns__blockMediaAliasWithId*)p->ptr);
+		break;
+	case SOAP_TYPE_ServerSoap___tns__blockMediaAnnotationWithId:
+		if (p->size < 0)
+			SOAP_DELETE((struct __tns__blockMediaAnnotationWithId*)p->ptr);
+		else
+			SOAP_DELETE_ARRAY((struct __tns__blockMediaAnnotationWithId*)p->ptr);
+		break;
+	case SOAP_TYPE_ServerSoap___tns__blockUserWithId:
+		if (p->size < 0)
+			SOAP_DELETE((struct __tns__blockUserWithId*)p->ptr);
+		else
+			SOAP_DELETE_ARRAY((struct __tns__blockUserWithId*)p->ptr);
+		break;
 	case SOAP_TYPE_ServerSoap___tns__chat:
 		if (p->size < 0)
 			SOAP_DELETE((struct __tns__chat*)p->ptr);
 		else
 			SOAP_DELETE_ARRAY((struct __tns__chat*)p->ptr);
+		break;
+	case SOAP_TYPE_ServerSoap___tns__curseMediaAliasWithId:
+		if (p->size < 0)
+			SOAP_DELETE((struct __tns__curseMediaAliasWithId*)p->ptr);
+		else
+			SOAP_DELETE_ARRAY((struct __tns__curseMediaAliasWithId*)p->ptr);
+		break;
+	case SOAP_TYPE_ServerSoap___tns__curseMediaAnnotationWithId:
+		if (p->size < 0)
+			SOAP_DELETE((struct __tns__curseMediaAnnotationWithId*)p->ptr);
+		else
+			SOAP_DELETE_ARRAY((struct __tns__curseMediaAnnotationWithId*)p->ptr);
+		break;
+	case SOAP_TYPE_ServerSoap___tns__curseMediaTokenWithId:
+		if (p->size < 0)
+			SOAP_DELETE((struct __tns__curseMediaTokenWithId*)p->ptr);
+		else
+			SOAP_DELETE_ARRAY((struct __tns__curseMediaTokenWithId*)p->ptr);
 		break;
 	case SOAP_TYPE_ServerSoap___tns__isClientUpdated:
 		if (p->size < 0)
@@ -2635,30 +2196,6 @@ SOAP_FMAC3 int SOAP_FMAC4 ServerSoap_fdelete(struct soap_clist *p)
 			SOAP_DELETE((struct __tns__isConnected*)p->ptr);
 		else
 			SOAP_DELETE_ARRAY((struct __tns__isConnected*)p->ptr);
-		break;
-	case SOAP_TYPE_ServerSoap___tns__selectGameAliasesWithTokenId:
-		if (p->size < 0)
-			SOAP_DELETE((struct __tns__selectGameAliasesWithTokenId*)p->ptr);
-		else
-			SOAP_DELETE_ARRAY((struct __tns__selectGameAliasesWithTokenId*)p->ptr);
-		break;
-	case SOAP_TYPE_ServerSoap___tns__selectGameAnnotationsWithTokenId:
-		if (p->size < 0)
-			SOAP_DELETE((struct __tns__selectGameAnnotationsWithTokenId*)p->ptr);
-		else
-			SOAP_DELETE_ARRAY((struct __tns__selectGameAnnotationsWithTokenId*)p->ptr);
-		break;
-	case SOAP_TYPE_ServerSoap___tns__selectGameTokenWithDigest:
-		if (p->size < 0)
-			SOAP_DELETE((struct __tns__selectGameTokenWithDigest*)p->ptr);
-		else
-			SOAP_DELETE_ARRAY((struct __tns__selectGameTokenWithDigest*)p->ptr);
-		break;
-	case SOAP_TYPE_ServerSoap___tns__selectGameTokenWithId:
-		if (p->size < 0)
-			SOAP_DELETE((struct __tns__selectGameTokenWithId*)p->ptr);
-		else
-			SOAP_DELETE_ARRAY((struct __tns__selectGameTokenWithId*)p->ptr);
 		break;
 	case SOAP_TYPE_ServerSoap___tns__selectMediaAliasesWithTokenId:
 		if (p->size < 0)
@@ -2684,12 +2221,6 @@ SOAP_FMAC3 int SOAP_FMAC4 ServerSoap_fdelete(struct soap_clist *p)
 		else
 			SOAP_DELETE_ARRAY((struct __tns__selectMediaTokenWithId*)p->ptr);
 		break;
-	case SOAP_TYPE_ServerSoap___tns__selectRelatedGameAnnotationsWithTokenId:
-		if (p->size < 0)
-			SOAP_DELETE((struct __tns__selectRelatedGameAnnotationsWithTokenId*)p->ptr);
-		else
-			SOAP_DELETE_ARRAY((struct __tns__selectRelatedGameAnnotationsWithTokenId*)p->ptr);
-		break;
 	case SOAP_TYPE_ServerSoap___tns__selectRelatedMediaAnnotationsWithTokenId:
 		if (p->size < 0)
 			SOAP_DELETE((struct __tns__selectRelatedMediaAnnotationsWithTokenId*)p->ptr);
@@ -2713,54 +2244,6 @@ SOAP_FMAC3 int SOAP_FMAC4 ServerSoap_fdelete(struct soap_clist *p)
 			SOAP_DELETE((struct __tns__setUserLanguage*)p->ptr);
 		else
 			SOAP_DELETE_ARRAY((struct __tns__setUserLanguage*)p->ptr);
-		break;
-	case SOAP_TYPE_ServerSoap___tns__submitGameAlias:
-		if (p->size < 0)
-			SOAP_DELETE((struct __tns__submitGameAlias*)p->ptr);
-		else
-			SOAP_DELETE_ARRAY((struct __tns__submitGameAlias*)p->ptr);
-		break;
-	case SOAP_TYPE_ServerSoap___tns__submitGameAliasTextAndTokenDigest:
-		if (p->size < 0)
-			SOAP_DELETE((struct __tns__submitGameAliasTextAndTokenDigest*)p->ptr);
-		else
-			SOAP_DELETE_ARRAY((struct __tns__submitGameAliasTextAndTokenDigest*)p->ptr);
-		break;
-	case SOAP_TYPE_ServerSoap___tns__submitGameAliasTextWithTokenId:
-		if (p->size < 0)
-			SOAP_DELETE((struct __tns__submitGameAliasTextWithTokenId*)p->ptr);
-		else
-			SOAP_DELETE_ARRAY((struct __tns__submitGameAliasTextWithTokenId*)p->ptr);
-		break;
-	case SOAP_TYPE_ServerSoap___tns__submitGameAnnotation:
-		if (p->size < 0)
-			SOAP_DELETE((struct __tns__submitGameAnnotation*)p->ptr);
-		else
-			SOAP_DELETE_ARRAY((struct __tns__submitGameAnnotation*)p->ptr);
-		break;
-	case SOAP_TYPE_ServerSoap___tns__submitGameAnnotationTextAndTokenDigest:
-		if (p->size < 0)
-			SOAP_DELETE((struct __tns__submitGameAnnotationTextAndTokenDigest*)p->ptr);
-		else
-			SOAP_DELETE_ARRAY((struct __tns__submitGameAnnotationTextAndTokenDigest*)p->ptr);
-		break;
-	case SOAP_TYPE_ServerSoap___tns__submitGameAnnotationTextWithTokenId:
-		if (p->size < 0)
-			SOAP_DELETE((struct __tns__submitGameAnnotationTextWithTokenId*)p->ptr);
-		else
-			SOAP_DELETE_ARRAY((struct __tns__submitGameAnnotationTextWithTokenId*)p->ptr);
-		break;
-	case SOAP_TYPE_ServerSoap___tns__submitGameToken:
-		if (p->size < 0)
-			SOAP_DELETE((struct __tns__submitGameToken*)p->ptr);
-		else
-			SOAP_DELETE_ARRAY((struct __tns__submitGameToken*)p->ptr);
-		break;
-	case SOAP_TYPE_ServerSoap___tns__submitGameTokenDigest:
-		if (p->size < 0)
-			SOAP_DELETE((struct __tns__submitGameTokenDigest*)p->ptr);
-		else
-			SOAP_DELETE_ARRAY((struct __tns__submitGameTokenDigest*)p->ptr);
 		break;
 	case SOAP_TYPE_ServerSoap___tns__submitMediaAlias:
 		if (p->size < 0)
@@ -2809,12 +2292,6 @@ SOAP_FMAC3 int SOAP_FMAC4 ServerSoap_fdelete(struct soap_clist *p)
 			SOAP_DELETE((struct __tns__submitMediaTokenDigest*)p->ptr);
 		else
 			SOAP_DELETE_ARRAY((struct __tns__submitMediaTokenDigest*)p->ptr);
-		break;
-	case SOAP_TYPE_ServerSoap___tns__updateGameAnnotationTextWithId:
-		if (p->size < 0)
-			SOAP_DELETE((struct __tns__updateGameAnnotationTextWithId*)p->ptr);
-		else
-			SOAP_DELETE_ARRAY((struct __tns__updateGameAnnotationTextWithId*)p->ptr);
 		break;
 	case SOAP_TYPE_ServerSoap___tns__updateMediaAnnotationTextWithId:
 		if (p->size < 0)
@@ -2874,18 +2351,6 @@ SOAP_FMAC3 int SOAP_FMAC4 ServerSoap_fdelete(struct soap_clist *p)
 		else
 			SOAP_DELETE_ARRAY((std::vector<tns__mediaAlias * >*)p->ptr);
 		break;
-	case SOAP_TYPE_ServerSoap_std__vectorTemplateOfPointerTotns__gameAnnotation:
-		if (p->size < 0)
-			SOAP_DELETE((std::vector<tns__gameAnnotation * >*)p->ptr);
-		else
-			SOAP_DELETE_ARRAY((std::vector<tns__gameAnnotation * >*)p->ptr);
-		break;
-	case SOAP_TYPE_ServerSoap_std__vectorTemplateOfPointerTotns__gameAlias:
-		if (p->size < 0)
-			SOAP_DELETE((std::vector<tns__gameAlias * >*)p->ptr);
-		else
-			SOAP_DELETE_ARRAY((std::vector<tns__gameAlias * >*)p->ptr);
-		break;
 	default:	return SOAP_ERR;
 	}
 	return SOAP_OK;
@@ -2915,14 +2380,6 @@ SOAP_FMAC3 void SOAP_FMAC4 ServerSoap_container_insert(struct soap *soap, int st
 	case SOAP_TYPE_ServerSoap_std__vectorTemplateOfPointerTotns__mediaAlias:
 		DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Container ServerSoap_container_insert type=%d in %d location=%p object=%p len=%lu\n", st, tt, p, q, (unsigned long)len));
 		(*(std::vector<tns__mediaAlias * >*)p)[len] = *(tns__mediaAlias **)q;
-		break;
-	case SOAP_TYPE_ServerSoap_std__vectorTemplateOfPointerTotns__gameAnnotation:
-		DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Container ServerSoap_container_insert type=%d in %d location=%p object=%p len=%lu\n", st, tt, p, q, (unsigned long)len));
-		(*(std::vector<tns__gameAnnotation * >*)p)[len] = *(tns__gameAnnotation **)q;
-		break;
-	case SOAP_TYPE_ServerSoap_std__vectorTemplateOfPointerTotns__gameAlias:
-		DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Container ServerSoap_container_insert type=%d in %d location=%p object=%p len=%lu\n", st, tt, p, q, (unsigned long)len));
-		(*(std::vector<tns__gameAlias * >*)p)[len] = *(tns__gameAlias **)q;
 		break;
 	default:
 		DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Could not insert type=%d in %d\n", st, tt));
@@ -3524,310 +2981,6 @@ SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__updateMediaAnnotationTextWithId(struct
 	*(tns__updateMediaAnnotationTextWithId*)p = *(tns__updateMediaAnnotationTextWithId*)q;
 }
 
-void tns__updateGameAnnotationTextWithIdResponse::soap_default(struct soap *soap)
-{
-	this->soap = soap;
-	soap_default_bool(soap, &this->tns__updateGameAnnotationTextWithIdResponse::return_);
-	/* transient soap skipped */
-}
-
-void tns__updateGameAnnotationTextWithIdResponse::soap_serialize(struct soap *soap) const
-{
-	(void)soap; /* appease -Wall -Werror */
-	/* transient soap skipped */
-}
-
-int tns__updateGameAnnotationTextWithIdResponse::soap_out(struct soap *soap, const char *tag, int id, const char *type) const
-{
-	return soap_out_tns__updateGameAnnotationTextWithIdResponse(soap, tag, id, this, type);
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__updateGameAnnotationTextWithIdResponse(struct soap *soap, const char *tag, int id, const tns__updateGameAnnotationTextWithIdResponse *a, const char *type)
-{
-	if (soap_element_begin_out(soap, tag, soap_embedded_id(soap, id, a, SOAP_TYPE_ServerSoap_tns__updateGameAnnotationTextWithIdResponse), type))
-		return soap->error;
-	if (soap_out_bool(soap, "return", -1, &(a->tns__updateGameAnnotationTextWithIdResponse::return_), ""))
-		return soap->error;
-	/* transient soap skipped */
-	return soap_element_end_out(soap, tag);
-}
-
-void *tns__updateGameAnnotationTextWithIdResponse::soap_in(struct soap *soap, const char *tag, const char *type)
-{	return soap_in_tns__updateGameAnnotationTextWithIdResponse(soap, tag, this, type);
-}
-
-SOAP_FMAC3 tns__updateGameAnnotationTextWithIdResponse * SOAP_FMAC4 soap_in_tns__updateGameAnnotationTextWithIdResponse(struct soap *soap, const char *tag, tns__updateGameAnnotationTextWithIdResponse *a, const char *type)
-{
-	(void)type; /* appease -Wall -Werror */
-	if (soap_element_begin_in(soap, tag, 0, NULL))
-		return NULL;
-	a = (tns__updateGameAnnotationTextWithIdResponse *)soap_class_id_enter(soap, soap->id, a, SOAP_TYPE_ServerSoap_tns__updateGameAnnotationTextWithIdResponse, sizeof(tns__updateGameAnnotationTextWithIdResponse), soap->type, soap->arrayType);
-	if (!a)
-		return NULL;
-	if (soap->alloced)
-	{	a->soap_default(soap);
-		if (soap->clist->type != SOAP_TYPE_ServerSoap_tns__updateGameAnnotationTextWithIdResponse)
-		{	soap_revert(soap);
-			*soap->id = '\0';
-			return (tns__updateGameAnnotationTextWithIdResponse *)a->soap_in(soap, tag, type);
-		}
-	}
-	size_t soap_flag_return_1 = 1;
-	if (soap->body && !*soap->href)
-	{
-		for (;;)
-		{	soap->error = SOAP_TAG_MISMATCH;
-			if (soap_flag_return_1 && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_bool(soap, "return", &(a->tns__updateGameAnnotationTextWithIdResponse::return_), "xsd:boolean"))
-				{	soap_flag_return_1--;
-					continue;
-				}
-			/* transient soap skipped */
-			if (soap->error == SOAP_TAG_MISMATCH)
-				soap->error = soap_ignore_element(soap);
-			if (soap->error == SOAP_NO_TAG)
-				break;
-			if (soap->error)
-				return NULL;
-		}
-		if (soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	else
-	{	a = (tns__updateGameAnnotationTextWithIdResponse *)soap_id_forward(soap, soap->href, (void*)a, 0, SOAP_TYPE_ServerSoap_tns__updateGameAnnotationTextWithIdResponse, 0, sizeof(tns__updateGameAnnotationTextWithIdResponse), 0, soap_copy_tns__updateGameAnnotationTextWithIdResponse);
-		if (soap->body && soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	if ((soap->mode & SOAP_XML_STRICT) && (soap_flag_return_1 > 0))
-	{	soap->error = SOAP_OCCURS;
-		return NULL;
-	}
-	return a;
-}
-
-int tns__updateGameAnnotationTextWithIdResponse::soap_put(struct soap *soap, const char *tag, const  char *type) const
-{
-	register int id = soap_embed(soap, (void*)this, NULL, 0, tag, SOAP_TYPE_ServerSoap_tns__updateGameAnnotationTextWithIdResponse);
-	if (this->soap_out(soap, tag?tag:"tns:updateGameAnnotationTextWithIdResponse", id, type))
-		return soap->error;
-	return soap_putindependent(soap);
-}
-
-void *tns__updateGameAnnotationTextWithIdResponse::soap_get(struct soap *soap, const char *tag, const char *type)
-{
-	return soap_get_tns__updateGameAnnotationTextWithIdResponse(soap, this, tag, type);
-}
-
-SOAP_FMAC3 tns__updateGameAnnotationTextWithIdResponse * SOAP_FMAC4 soap_get_tns__updateGameAnnotationTextWithIdResponse(struct soap *soap, tns__updateGameAnnotationTextWithIdResponse *p, const char *tag, const char *type)
-{
-	if ((p = soap_in_tns__updateGameAnnotationTextWithIdResponse(soap, tag, p, type)))
-		if (soap_getindependent(soap))
-			return NULL;
-	return p;
-}
-
-SOAP_FMAC1 tns__updateGameAnnotationTextWithIdResponse * SOAP_FMAC2 soap_instantiate_tns__updateGameAnnotationTextWithIdResponse(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
-{
-	(void)type; (void)arrayType; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate_tns__updateGameAnnotationTextWithIdResponse(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
-	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap_tns__updateGameAnnotationTextWithIdResponse, n, ServerSoap_fdelete);
-	if (!cp)
-		return NULL;
-	if (n < 0)
-	{	cp->ptr = (void*)SOAP_NEW(tns__updateGameAnnotationTextWithIdResponse);
-		if (size)
-			*size = sizeof(tns__updateGameAnnotationTextWithIdResponse);
-		((tns__updateGameAnnotationTextWithIdResponse*)cp->ptr)->soap = soap;
-	}
-	else
-	{	cp->ptr = (void*)SOAP_NEW(tns__updateGameAnnotationTextWithIdResponse[n]);
-		if (!cp->ptr)
-		{	soap->error = SOAP_EOM;
-			return NULL;
-		}
-		if (size)
-			*size = n * sizeof(tns__updateGameAnnotationTextWithIdResponse);
-		for (int i = 0; i < n; i++)
-			((tns__updateGameAnnotationTextWithIdResponse*)cp->ptr)[i].soap = soap;
-	}
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
-	return (tns__updateGameAnnotationTextWithIdResponse*)cp->ptr;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__updateGameAnnotationTextWithIdResponse(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
-{
-	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying tns__updateGameAnnotationTextWithIdResponse %p -> %p\n", q, p));
-	*(tns__updateGameAnnotationTextWithIdResponse*)p = *(tns__updateGameAnnotationTextWithIdResponse*)q;
-}
-
-void tns__updateGameAnnotationTextWithId::soap_default(struct soap *soap)
-{
-	this->soap = soap;
-	this->tns__updateGameAnnotationTextWithId::arg0 = NULL;
-	soap_default_LONG64(soap, &this->tns__updateGameAnnotationTextWithId::arg1);
-	this->tns__updateGameAnnotationTextWithId::userName = NULL;
-	this->tns__updateGameAnnotationTextWithId::password = NULL;
-	/* transient soap skipped */
-}
-
-void tns__updateGameAnnotationTextWithId::soap_serialize(struct soap *soap) const
-{
-	(void)soap; /* appease -Wall -Werror */
-	soap_serialize_PointerTostd__string(soap, &this->tns__updateGameAnnotationTextWithId::arg0);
-	soap_serialize_PointerTostd__string(soap, &this->tns__updateGameAnnotationTextWithId::userName);
-	soap_serialize_PointerTostd__string(soap, &this->tns__updateGameAnnotationTextWithId::password);
-	/* transient soap skipped */
-}
-
-int tns__updateGameAnnotationTextWithId::soap_out(struct soap *soap, const char *tag, int id, const char *type) const
-{
-	return soap_out_tns__updateGameAnnotationTextWithId(soap, tag, id, this, type);
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__updateGameAnnotationTextWithId(struct soap *soap, const char *tag, int id, const tns__updateGameAnnotationTextWithId *a, const char *type)
-{
-	if (soap_element_begin_out(soap, tag, soap_embedded_id(soap, id, a, SOAP_TYPE_ServerSoap_tns__updateGameAnnotationTextWithId), type))
-		return soap->error;
-	if (soap_out_PointerTostd__string(soap, "arg0", -1, &(a->tns__updateGameAnnotationTextWithId::arg0), ""))
-		return soap->error;
-	if (soap_out_LONG64(soap, "arg1", -1, &(a->tns__updateGameAnnotationTextWithId::arg1), ""))
-		return soap->error;
-	if (soap_out_PointerTostd__string(soap, "userName", -1, &(a->tns__updateGameAnnotationTextWithId::userName), ""))
-		return soap->error;
-	if (soap_out_PointerTostd__string(soap, "password", -1, &(a->tns__updateGameAnnotationTextWithId::password), ""))
-		return soap->error;
-	/* transient soap skipped */
-	return soap_element_end_out(soap, tag);
-}
-
-void *tns__updateGameAnnotationTextWithId::soap_in(struct soap *soap, const char *tag, const char *type)
-{	return soap_in_tns__updateGameAnnotationTextWithId(soap, tag, this, type);
-}
-
-SOAP_FMAC3 tns__updateGameAnnotationTextWithId * SOAP_FMAC4 soap_in_tns__updateGameAnnotationTextWithId(struct soap *soap, const char *tag, tns__updateGameAnnotationTextWithId *a, const char *type)
-{
-	(void)type; /* appease -Wall -Werror */
-	if (soap_element_begin_in(soap, tag, 0, NULL))
-		return NULL;
-	a = (tns__updateGameAnnotationTextWithId *)soap_class_id_enter(soap, soap->id, a, SOAP_TYPE_ServerSoap_tns__updateGameAnnotationTextWithId, sizeof(tns__updateGameAnnotationTextWithId), soap->type, soap->arrayType);
-	if (!a)
-		return NULL;
-	if (soap->alloced)
-	{	a->soap_default(soap);
-		if (soap->clist->type != SOAP_TYPE_ServerSoap_tns__updateGameAnnotationTextWithId)
-		{	soap_revert(soap);
-			*soap->id = '\0';
-			return (tns__updateGameAnnotationTextWithId *)a->soap_in(soap, tag, type);
-		}
-	}
-	size_t soap_flag_arg01 = 1;
-	size_t soap_flag_arg11 = 1;
-	size_t soap_flag_userName1 = 1;
-	size_t soap_flag_password1 = 1;
-	if (soap->body && !*soap->href)
-	{
-		for (;;)
-		{	soap->error = SOAP_TAG_MISMATCH;
-			if (soap_flag_arg01 && (soap->error == SOAP_TAG_MISMATCH || soap->error == SOAP_NO_TAG))
-				if (soap_in_PointerTostd__string(soap, "arg0", &(a->tns__updateGameAnnotationTextWithId::arg0), "xsd:string"))
-				{	soap_flag_arg01--;
-					continue;
-				}
-			if (soap_flag_arg11 && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_LONG64(soap, "arg1", &(a->tns__updateGameAnnotationTextWithId::arg1), "xsd:long"))
-				{	soap_flag_arg11--;
-					continue;
-				}
-			if (soap_flag_userName1 && (soap->error == SOAP_TAG_MISMATCH || soap->error == SOAP_NO_TAG))
-				if (soap_in_PointerTostd__string(soap, "userName", &(a->tns__updateGameAnnotationTextWithId::userName), "xsd:string"))
-				{	soap_flag_userName1--;
-					continue;
-				}
-			if (soap_flag_password1 && (soap->error == SOAP_TAG_MISMATCH || soap->error == SOAP_NO_TAG))
-				if (soap_in_PointerTostd__string(soap, "password", &(a->tns__updateGameAnnotationTextWithId::password), "xsd:string"))
-				{	soap_flag_password1--;
-					continue;
-				}
-			/* transient soap skipped */
-			if (soap->error == SOAP_TAG_MISMATCH)
-				soap->error = soap_ignore_element(soap);
-			if (soap->error == SOAP_NO_TAG)
-				break;
-			if (soap->error)
-				return NULL;
-		}
-		if (soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	else
-	{	a = (tns__updateGameAnnotationTextWithId *)soap_id_forward(soap, soap->href, (void*)a, 0, SOAP_TYPE_ServerSoap_tns__updateGameAnnotationTextWithId, 0, sizeof(tns__updateGameAnnotationTextWithId), 0, soap_copy_tns__updateGameAnnotationTextWithId);
-		if (soap->body && soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	if ((soap->mode & SOAP_XML_STRICT) && (soap_flag_arg11 > 0))
-	{	soap->error = SOAP_OCCURS;
-		return NULL;
-	}
-	return a;
-}
-
-int tns__updateGameAnnotationTextWithId::soap_put(struct soap *soap, const char *tag, const  char *type) const
-{
-	register int id = soap_embed(soap, (void*)this, NULL, 0, tag, SOAP_TYPE_ServerSoap_tns__updateGameAnnotationTextWithId);
-	if (this->soap_out(soap, tag?tag:"tns:updateGameAnnotationTextWithId", id, type))
-		return soap->error;
-	return soap_putindependent(soap);
-}
-
-void *tns__updateGameAnnotationTextWithId::soap_get(struct soap *soap, const char *tag, const char *type)
-{
-	return soap_get_tns__updateGameAnnotationTextWithId(soap, this, tag, type);
-}
-
-SOAP_FMAC3 tns__updateGameAnnotationTextWithId * SOAP_FMAC4 soap_get_tns__updateGameAnnotationTextWithId(struct soap *soap, tns__updateGameAnnotationTextWithId *p, const char *tag, const char *type)
-{
-	if ((p = soap_in_tns__updateGameAnnotationTextWithId(soap, tag, p, type)))
-		if (soap_getindependent(soap))
-			return NULL;
-	return p;
-}
-
-SOAP_FMAC1 tns__updateGameAnnotationTextWithId * SOAP_FMAC2 soap_instantiate_tns__updateGameAnnotationTextWithId(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
-{
-	(void)type; (void)arrayType; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate_tns__updateGameAnnotationTextWithId(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
-	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap_tns__updateGameAnnotationTextWithId, n, ServerSoap_fdelete);
-	if (!cp)
-		return NULL;
-	if (n < 0)
-	{	cp->ptr = (void*)SOAP_NEW(tns__updateGameAnnotationTextWithId);
-		if (size)
-			*size = sizeof(tns__updateGameAnnotationTextWithId);
-		((tns__updateGameAnnotationTextWithId*)cp->ptr)->soap = soap;
-	}
-	else
-	{	cp->ptr = (void*)SOAP_NEW(tns__updateGameAnnotationTextWithId[n]);
-		if (!cp->ptr)
-		{	soap->error = SOAP_EOM;
-			return NULL;
-		}
-		if (size)
-			*size = n * sizeof(tns__updateGameAnnotationTextWithId);
-		for (int i = 0; i < n; i++)
-			((tns__updateGameAnnotationTextWithId*)cp->ptr)[i].soap = soap;
-	}
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
-	return (tns__updateGameAnnotationTextWithId*)cp->ptr;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__updateGameAnnotationTextWithId(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
-{
-	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying tns__updateGameAnnotationTextWithId %p -> %p\n", q, p));
-	*(tns__updateGameAnnotationTextWithId*)p = *(tns__updateGameAnnotationTextWithId*)q;
-}
-
 void tns__submitMediaTokenDigestResponse::soap_default(struct soap *soap)
 {
 	this->soap = soap;
@@ -3969,6 +3122,8 @@ void tns__submitMediaTokenDigest::soap_default(struct soap *soap)
 {
 	this->soap = soap;
 	this->tns__submitMediaTokenDigest::arg0 = NULL;
+	soap_default_int(soap, &this->tns__submitMediaTokenDigest::arg1);
+	soap_default_int(soap, &this->tns__submitMediaTokenDigest::arg2);
 	this->tns__submitMediaTokenDigest::userName = NULL;
 	this->tns__submitMediaTokenDigest::password = NULL;
 	/* transient soap skipped */
@@ -3993,6 +3148,10 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__submitMediaTokenDigest(struct soap *soap
 	if (soap_element_begin_out(soap, tag, soap_embedded_id(soap, id, a, SOAP_TYPE_ServerSoap_tns__submitMediaTokenDigest), type))
 		return soap->error;
 	if (soap_out_PointerTostd__string(soap, "arg0", -1, &(a->tns__submitMediaTokenDigest::arg0), ""))
+		return soap->error;
+	if (soap_out_int(soap, "arg1", -1, &(a->tns__submitMediaTokenDigest::arg1), ""))
+		return soap->error;
+	if (soap_out_int(soap, "arg2", -1, &(a->tns__submitMediaTokenDigest::arg2), ""))
 		return soap->error;
 	if (soap_out_PointerTostd__string(soap, "userName", -1, &(a->tns__submitMediaTokenDigest::userName), ""))
 		return soap->error;
@@ -4023,6 +3182,8 @@ SOAP_FMAC3 tns__submitMediaTokenDigest * SOAP_FMAC4 soap_in_tns__submitMediaToke
 		}
 	}
 	size_t soap_flag_arg01 = 1;
+	size_t soap_flag_arg11 = 1;
+	size_t soap_flag_arg21 = 1;
 	size_t soap_flag_userName1 = 1;
 	size_t soap_flag_password1 = 1;
 	if (soap->body && !*soap->href)
@@ -4032,6 +3193,16 @@ SOAP_FMAC3 tns__submitMediaTokenDigest * SOAP_FMAC4 soap_in_tns__submitMediaToke
 			if (soap_flag_arg01 && (soap->error == SOAP_TAG_MISMATCH || soap->error == SOAP_NO_TAG))
 				if (soap_in_PointerTostd__string(soap, "arg0", &(a->tns__submitMediaTokenDigest::arg0), "xsd:string"))
 				{	soap_flag_arg01--;
+					continue;
+				}
+			if (soap_flag_arg11 && soap->error == SOAP_TAG_MISMATCH)
+				if (soap_in_int(soap, "arg1", &(a->tns__submitMediaTokenDigest::arg1), "xsd:int"))
+				{	soap_flag_arg11--;
+					continue;
+				}
+			if (soap_flag_arg21 && soap->error == SOAP_TAG_MISMATCH)
+				if (soap_in_int(soap, "arg2", &(a->tns__submitMediaTokenDigest::arg2), "xsd:int"))
+				{	soap_flag_arg21--;
 					continue;
 				}
 			if (soap_flag_userName1 && (soap->error == SOAP_TAG_MISMATCH || soap->error == SOAP_NO_TAG))
@@ -4059,6 +3230,10 @@ SOAP_FMAC3 tns__submitMediaTokenDigest * SOAP_FMAC4 soap_in_tns__submitMediaToke
 	{	a = (tns__submitMediaTokenDigest *)soap_id_forward(soap, soap->href, (void*)a, 0, SOAP_TYPE_ServerSoap_tns__submitMediaTokenDigest, 0, sizeof(tns__submitMediaTokenDigest), 0, soap_copy_tns__submitMediaTokenDigest);
 		if (soap->body && soap_element_end_in(soap, tag))
 			return NULL;
+	}
+	if ((soap->mode & SOAP_XML_STRICT) && (soap_flag_arg11 > 0 || soap_flag_arg21 > 0))
+	{	soap->error = SOAP_OCCURS;
+		return NULL;
 	}
 	return a;
 }
@@ -4876,6 +4051,7 @@ void tns__submitMediaAnnotationTextAndTokenDigest::soap_default(struct soap *soa
 	soap_default_LONG64(soap, &this->tns__submitMediaAnnotationTextAndTokenDigest::arg1);
 	soap_default_int(soap, &this->tns__submitMediaAnnotationTextAndTokenDigest::arg2);
 	this->tns__submitMediaAnnotationTextAndTokenDigest::arg3 = NULL;
+	soap_default_int(soap, &this->tns__submitMediaAnnotationTextAndTokenDigest::arg4);
 	this->tns__submitMediaAnnotationTextAndTokenDigest::userName = NULL;
 	this->tns__submitMediaAnnotationTextAndTokenDigest::password = NULL;
 	/* transient soap skipped */
@@ -4907,6 +4083,8 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__submitMediaAnnotationTextAndTokenDigest(
 	if (soap_out_int(soap, "arg2", -1, &(a->tns__submitMediaAnnotationTextAndTokenDigest::arg2), ""))
 		return soap->error;
 	if (soap_out_PointerTostd__string(soap, "arg3", -1, &(a->tns__submitMediaAnnotationTextAndTokenDigest::arg3), ""))
+		return soap->error;
+	if (soap_out_int(soap, "arg4", -1, &(a->tns__submitMediaAnnotationTextAndTokenDigest::arg4), ""))
 		return soap->error;
 	if (soap_out_PointerTostd__string(soap, "userName", -1, &(a->tns__submitMediaAnnotationTextAndTokenDigest::userName), ""))
 		return soap->error;
@@ -4940,6 +4118,7 @@ SOAP_FMAC3 tns__submitMediaAnnotationTextAndTokenDigest * SOAP_FMAC4 soap_in_tns
 	size_t soap_flag_arg11 = 1;
 	size_t soap_flag_arg21 = 1;
 	size_t soap_flag_arg31 = 1;
+	size_t soap_flag_arg41 = 1;
 	size_t soap_flag_userName1 = 1;
 	size_t soap_flag_password1 = 1;
 	if (soap->body && !*soap->href)
@@ -4964,6 +4143,11 @@ SOAP_FMAC3 tns__submitMediaAnnotationTextAndTokenDigest * SOAP_FMAC4 soap_in_tns
 			if (soap_flag_arg31 && (soap->error == SOAP_TAG_MISMATCH || soap->error == SOAP_NO_TAG))
 				if (soap_in_PointerTostd__string(soap, "arg3", &(a->tns__submitMediaAnnotationTextAndTokenDigest::arg3), "xsd:string"))
 				{	soap_flag_arg31--;
+					continue;
+				}
+			if (soap_flag_arg41 && soap->error == SOAP_TAG_MISMATCH)
+				if (soap_in_int(soap, "arg4", &(a->tns__submitMediaAnnotationTextAndTokenDigest::arg4), "xsd:int"))
+				{	soap_flag_arg41--;
 					continue;
 				}
 			if (soap_flag_userName1 && (soap->error == SOAP_TAG_MISMATCH || soap->error == SOAP_NO_TAG))
@@ -4992,7 +4176,7 @@ SOAP_FMAC3 tns__submitMediaAnnotationTextAndTokenDigest * SOAP_FMAC4 soap_in_tns
 		if (soap->body && soap_element_end_in(soap, tag))
 			return NULL;
 	}
-	if ((soap->mode & SOAP_XML_STRICT) && (soap_flag_arg11 > 0 || soap_flag_arg21 > 0))
+	if ((soap->mode & SOAP_XML_STRICT) && (soap_flag_arg11 > 0 || soap_flag_arg21 > 0 || soap_flag_arg41 > 0))
 	{	soap->error = SOAP_OCCURS;
 		return NULL;
 	}
@@ -5802,6 +4986,7 @@ void tns__submitMediaAliasTextAndTokenDigest::soap_default(struct soap *soap)
 	this->tns__submitMediaAliasTextAndTokenDigest::arg0 = NULL;
 	soap_default_int(soap, &this->tns__submitMediaAliasTextAndTokenDigest::arg1);
 	this->tns__submitMediaAliasTextAndTokenDigest::arg2 = NULL;
+	soap_default_int(soap, &this->tns__submitMediaAliasTextAndTokenDigest::arg3);
 	this->tns__submitMediaAliasTextAndTokenDigest::userName = NULL;
 	this->tns__submitMediaAliasTextAndTokenDigest::password = NULL;
 	/* transient soap skipped */
@@ -5831,6 +5016,8 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__submitMediaAliasTextAndTokenDigest(struc
 	if (soap_out_int(soap, "arg1", -1, &(a->tns__submitMediaAliasTextAndTokenDigest::arg1), ""))
 		return soap->error;
 	if (soap_out_PointerTostd__string(soap, "arg2", -1, &(a->tns__submitMediaAliasTextAndTokenDigest::arg2), ""))
+		return soap->error;
+	if (soap_out_int(soap, "arg3", -1, &(a->tns__submitMediaAliasTextAndTokenDigest::arg3), ""))
 		return soap->error;
 	if (soap_out_PointerTostd__string(soap, "userName", -1, &(a->tns__submitMediaAliasTextAndTokenDigest::userName), ""))
 		return soap->error;
@@ -5863,6 +5050,7 @@ SOAP_FMAC3 tns__submitMediaAliasTextAndTokenDigest * SOAP_FMAC4 soap_in_tns__sub
 	size_t soap_flag_arg01 = 1;
 	size_t soap_flag_arg11 = 1;
 	size_t soap_flag_arg21 = 1;
+	size_t soap_flag_arg31 = 1;
 	size_t soap_flag_userName1 = 1;
 	size_t soap_flag_password1 = 1;
 	if (soap->body && !*soap->href)
@@ -5882,6 +5070,11 @@ SOAP_FMAC3 tns__submitMediaAliasTextAndTokenDigest * SOAP_FMAC4 soap_in_tns__sub
 			if (soap_flag_arg21 && (soap->error == SOAP_TAG_MISMATCH || soap->error == SOAP_NO_TAG))
 				if (soap_in_PointerTostd__string(soap, "arg2", &(a->tns__submitMediaAliasTextAndTokenDigest::arg2), "xsd:string"))
 				{	soap_flag_arg21--;
+					continue;
+				}
+			if (soap_flag_arg31 && soap->error == SOAP_TAG_MISMATCH)
+				if (soap_in_int(soap, "arg3", &(a->tns__submitMediaAliasTextAndTokenDigest::arg3), "xsd:int"))
+				{	soap_flag_arg31--;
 					continue;
 				}
 			if (soap_flag_userName1 && (soap->error == SOAP_TAG_MISMATCH || soap->error == SOAP_NO_TAG))
@@ -5910,7 +5103,7 @@ SOAP_FMAC3 tns__submitMediaAliasTextAndTokenDigest * SOAP_FMAC4 soap_in_tns__sub
 		if (soap->body && soap_element_end_in(soap, tag))
 			return NULL;
 	}
-	if ((soap->mode & SOAP_XML_STRICT) && (soap_flag_arg11 > 0))
+	if ((soap->mode & SOAP_XML_STRICT) && (soap_flag_arg11 > 0 || soap_flag_arg31 > 0))
 	{	soap->error = SOAP_OCCURS;
 		return NULL;
 	}
@@ -6262,2442 +5455,6 @@ SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__submitMediaAlias(struct soap *soap, in
 	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
 	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying tns__submitMediaAlias %p -> %p\n", q, p));
 	*(tns__submitMediaAlias*)p = *(tns__submitMediaAlias*)q;
-}
-
-void tns__submitGameTokenDigestResponse::soap_default(struct soap *soap)
-{
-	this->soap = soap;
-	soap_default_LONG64(soap, &this->tns__submitGameTokenDigestResponse::return_);
-	/* transient soap skipped */
-}
-
-void tns__submitGameTokenDigestResponse::soap_serialize(struct soap *soap) const
-{
-	(void)soap; /* appease -Wall -Werror */
-	/* transient soap skipped */
-}
-
-int tns__submitGameTokenDigestResponse::soap_out(struct soap *soap, const char *tag, int id, const char *type) const
-{
-	return soap_out_tns__submitGameTokenDigestResponse(soap, tag, id, this, type);
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__submitGameTokenDigestResponse(struct soap *soap, const char *tag, int id, const tns__submitGameTokenDigestResponse *a, const char *type)
-{
-	if (soap_element_begin_out(soap, tag, soap_embedded_id(soap, id, a, SOAP_TYPE_ServerSoap_tns__submitGameTokenDigestResponse), type))
-		return soap->error;
-	if (soap_out_LONG64(soap, "return", -1, &(a->tns__submitGameTokenDigestResponse::return_), ""))
-		return soap->error;
-	/* transient soap skipped */
-	return soap_element_end_out(soap, tag);
-}
-
-void *tns__submitGameTokenDigestResponse::soap_in(struct soap *soap, const char *tag, const char *type)
-{	return soap_in_tns__submitGameTokenDigestResponse(soap, tag, this, type);
-}
-
-SOAP_FMAC3 tns__submitGameTokenDigestResponse * SOAP_FMAC4 soap_in_tns__submitGameTokenDigestResponse(struct soap *soap, const char *tag, tns__submitGameTokenDigestResponse *a, const char *type)
-{
-	(void)type; /* appease -Wall -Werror */
-	if (soap_element_begin_in(soap, tag, 0, NULL))
-		return NULL;
-	a = (tns__submitGameTokenDigestResponse *)soap_class_id_enter(soap, soap->id, a, SOAP_TYPE_ServerSoap_tns__submitGameTokenDigestResponse, sizeof(tns__submitGameTokenDigestResponse), soap->type, soap->arrayType);
-	if (!a)
-		return NULL;
-	if (soap->alloced)
-	{	a->soap_default(soap);
-		if (soap->clist->type != SOAP_TYPE_ServerSoap_tns__submitGameTokenDigestResponse)
-		{	soap_revert(soap);
-			*soap->id = '\0';
-			return (tns__submitGameTokenDigestResponse *)a->soap_in(soap, tag, type);
-		}
-	}
-	size_t soap_flag_return_1 = 1;
-	if (soap->body && !*soap->href)
-	{
-		for (;;)
-		{	soap->error = SOAP_TAG_MISMATCH;
-			if (soap_flag_return_1 && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_LONG64(soap, "return", &(a->tns__submitGameTokenDigestResponse::return_), "xsd:long"))
-				{	soap_flag_return_1--;
-					continue;
-				}
-			/* transient soap skipped */
-			if (soap->error == SOAP_TAG_MISMATCH)
-				soap->error = soap_ignore_element(soap);
-			if (soap->error == SOAP_NO_TAG)
-				break;
-			if (soap->error)
-				return NULL;
-		}
-		if (soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	else
-	{	a = (tns__submitGameTokenDigestResponse *)soap_id_forward(soap, soap->href, (void*)a, 0, SOAP_TYPE_ServerSoap_tns__submitGameTokenDigestResponse, 0, sizeof(tns__submitGameTokenDigestResponse), 0, soap_copy_tns__submitGameTokenDigestResponse);
-		if (soap->body && soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	if ((soap->mode & SOAP_XML_STRICT) && (soap_flag_return_1 > 0))
-	{	soap->error = SOAP_OCCURS;
-		return NULL;
-	}
-	return a;
-}
-
-int tns__submitGameTokenDigestResponse::soap_put(struct soap *soap, const char *tag, const  char *type) const
-{
-	register int id = soap_embed(soap, (void*)this, NULL, 0, tag, SOAP_TYPE_ServerSoap_tns__submitGameTokenDigestResponse);
-	if (this->soap_out(soap, tag?tag:"tns:submitGameTokenDigestResponse", id, type))
-		return soap->error;
-	return soap_putindependent(soap);
-}
-
-void *tns__submitGameTokenDigestResponse::soap_get(struct soap *soap, const char *tag, const char *type)
-{
-	return soap_get_tns__submitGameTokenDigestResponse(soap, this, tag, type);
-}
-
-SOAP_FMAC3 tns__submitGameTokenDigestResponse * SOAP_FMAC4 soap_get_tns__submitGameTokenDigestResponse(struct soap *soap, tns__submitGameTokenDigestResponse *p, const char *tag, const char *type)
-{
-	if ((p = soap_in_tns__submitGameTokenDigestResponse(soap, tag, p, type)))
-		if (soap_getindependent(soap))
-			return NULL;
-	return p;
-}
-
-SOAP_FMAC1 tns__submitGameTokenDigestResponse * SOAP_FMAC2 soap_instantiate_tns__submitGameTokenDigestResponse(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
-{
-	(void)type; (void)arrayType; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate_tns__submitGameTokenDigestResponse(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
-	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap_tns__submitGameTokenDigestResponse, n, ServerSoap_fdelete);
-	if (!cp)
-		return NULL;
-	if (n < 0)
-	{	cp->ptr = (void*)SOAP_NEW(tns__submitGameTokenDigestResponse);
-		if (size)
-			*size = sizeof(tns__submitGameTokenDigestResponse);
-		((tns__submitGameTokenDigestResponse*)cp->ptr)->soap = soap;
-	}
-	else
-	{	cp->ptr = (void*)SOAP_NEW(tns__submitGameTokenDigestResponse[n]);
-		if (!cp->ptr)
-		{	soap->error = SOAP_EOM;
-			return NULL;
-		}
-		if (size)
-			*size = n * sizeof(tns__submitGameTokenDigestResponse);
-		for (int i = 0; i < n; i++)
-			((tns__submitGameTokenDigestResponse*)cp->ptr)[i].soap = soap;
-	}
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
-	return (tns__submitGameTokenDigestResponse*)cp->ptr;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__submitGameTokenDigestResponse(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
-{
-	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying tns__submitGameTokenDigestResponse %p -> %p\n", q, p));
-	*(tns__submitGameTokenDigestResponse*)p = *(tns__submitGameTokenDigestResponse*)q;
-}
-
-void tns__submitGameTokenDigest::soap_default(struct soap *soap)
-{
-	this->soap = soap;
-	this->tns__submitGameTokenDigest::arg0 = NULL;
-	this->tns__submitGameTokenDigest::userName = NULL;
-	this->tns__submitGameTokenDigest::password = NULL;
-	/* transient soap skipped */
-}
-
-void tns__submitGameTokenDigest::soap_serialize(struct soap *soap) const
-{
-	(void)soap; /* appease -Wall -Werror */
-	soap_serialize_PointerTostd__string(soap, &this->tns__submitGameTokenDigest::arg0);
-	soap_serialize_PointerTostd__string(soap, &this->tns__submitGameTokenDigest::userName);
-	soap_serialize_PointerTostd__string(soap, &this->tns__submitGameTokenDigest::password);
-	/* transient soap skipped */
-}
-
-int tns__submitGameTokenDigest::soap_out(struct soap *soap, const char *tag, int id, const char *type) const
-{
-	return soap_out_tns__submitGameTokenDigest(soap, tag, id, this, type);
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__submitGameTokenDigest(struct soap *soap, const char *tag, int id, const tns__submitGameTokenDigest *a, const char *type)
-{
-	if (soap_element_begin_out(soap, tag, soap_embedded_id(soap, id, a, SOAP_TYPE_ServerSoap_tns__submitGameTokenDigest), type))
-		return soap->error;
-	if (soap_out_PointerTostd__string(soap, "arg0", -1, &(a->tns__submitGameTokenDigest::arg0), ""))
-		return soap->error;
-	if (soap_out_PointerTostd__string(soap, "userName", -1, &(a->tns__submitGameTokenDigest::userName), ""))
-		return soap->error;
-	if (soap_out_PointerTostd__string(soap, "password", -1, &(a->tns__submitGameTokenDigest::password), ""))
-		return soap->error;
-	/* transient soap skipped */
-	return soap_element_end_out(soap, tag);
-}
-
-void *tns__submitGameTokenDigest::soap_in(struct soap *soap, const char *tag, const char *type)
-{	return soap_in_tns__submitGameTokenDigest(soap, tag, this, type);
-}
-
-SOAP_FMAC3 tns__submitGameTokenDigest * SOAP_FMAC4 soap_in_tns__submitGameTokenDigest(struct soap *soap, const char *tag, tns__submitGameTokenDigest *a, const char *type)
-{
-	(void)type; /* appease -Wall -Werror */
-	if (soap_element_begin_in(soap, tag, 0, NULL))
-		return NULL;
-	a = (tns__submitGameTokenDigest *)soap_class_id_enter(soap, soap->id, a, SOAP_TYPE_ServerSoap_tns__submitGameTokenDigest, sizeof(tns__submitGameTokenDigest), soap->type, soap->arrayType);
-	if (!a)
-		return NULL;
-	if (soap->alloced)
-	{	a->soap_default(soap);
-		if (soap->clist->type != SOAP_TYPE_ServerSoap_tns__submitGameTokenDigest)
-		{	soap_revert(soap);
-			*soap->id = '\0';
-			return (tns__submitGameTokenDigest *)a->soap_in(soap, tag, type);
-		}
-	}
-	size_t soap_flag_arg01 = 1;
-	size_t soap_flag_userName1 = 1;
-	size_t soap_flag_password1 = 1;
-	if (soap->body && !*soap->href)
-	{
-		for (;;)
-		{	soap->error = SOAP_TAG_MISMATCH;
-			if (soap_flag_arg01 && (soap->error == SOAP_TAG_MISMATCH || soap->error == SOAP_NO_TAG))
-				if (soap_in_PointerTostd__string(soap, "arg0", &(a->tns__submitGameTokenDigest::arg0), "xsd:string"))
-				{	soap_flag_arg01--;
-					continue;
-				}
-			if (soap_flag_userName1 && (soap->error == SOAP_TAG_MISMATCH || soap->error == SOAP_NO_TAG))
-				if (soap_in_PointerTostd__string(soap, "userName", &(a->tns__submitGameTokenDigest::userName), "xsd:string"))
-				{	soap_flag_userName1--;
-					continue;
-				}
-			if (soap_flag_password1 && (soap->error == SOAP_TAG_MISMATCH || soap->error == SOAP_NO_TAG))
-				if (soap_in_PointerTostd__string(soap, "password", &(a->tns__submitGameTokenDigest::password), "xsd:string"))
-				{	soap_flag_password1--;
-					continue;
-				}
-			/* transient soap skipped */
-			if (soap->error == SOAP_TAG_MISMATCH)
-				soap->error = soap_ignore_element(soap);
-			if (soap->error == SOAP_NO_TAG)
-				break;
-			if (soap->error)
-				return NULL;
-		}
-		if (soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	else
-	{	a = (tns__submitGameTokenDigest *)soap_id_forward(soap, soap->href, (void*)a, 0, SOAP_TYPE_ServerSoap_tns__submitGameTokenDigest, 0, sizeof(tns__submitGameTokenDigest), 0, soap_copy_tns__submitGameTokenDigest);
-		if (soap->body && soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	return a;
-}
-
-int tns__submitGameTokenDigest::soap_put(struct soap *soap, const char *tag, const  char *type) const
-{
-	register int id = soap_embed(soap, (void*)this, NULL, 0, tag, SOAP_TYPE_ServerSoap_tns__submitGameTokenDigest);
-	if (this->soap_out(soap, tag?tag:"tns:submitGameTokenDigest", id, type))
-		return soap->error;
-	return soap_putindependent(soap);
-}
-
-void *tns__submitGameTokenDigest::soap_get(struct soap *soap, const char *tag, const char *type)
-{
-	return soap_get_tns__submitGameTokenDigest(soap, this, tag, type);
-}
-
-SOAP_FMAC3 tns__submitGameTokenDigest * SOAP_FMAC4 soap_get_tns__submitGameTokenDigest(struct soap *soap, tns__submitGameTokenDigest *p, const char *tag, const char *type)
-{
-	if ((p = soap_in_tns__submitGameTokenDigest(soap, tag, p, type)))
-		if (soap_getindependent(soap))
-			return NULL;
-	return p;
-}
-
-SOAP_FMAC1 tns__submitGameTokenDigest * SOAP_FMAC2 soap_instantiate_tns__submitGameTokenDigest(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
-{
-	(void)type; (void)arrayType; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate_tns__submitGameTokenDigest(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
-	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap_tns__submitGameTokenDigest, n, ServerSoap_fdelete);
-	if (!cp)
-		return NULL;
-	if (n < 0)
-	{	cp->ptr = (void*)SOAP_NEW(tns__submitGameTokenDigest);
-		if (size)
-			*size = sizeof(tns__submitGameTokenDigest);
-		((tns__submitGameTokenDigest*)cp->ptr)->soap = soap;
-	}
-	else
-	{	cp->ptr = (void*)SOAP_NEW(tns__submitGameTokenDigest[n]);
-		if (!cp->ptr)
-		{	soap->error = SOAP_EOM;
-			return NULL;
-		}
-		if (size)
-			*size = n * sizeof(tns__submitGameTokenDigest);
-		for (int i = 0; i < n; i++)
-			((tns__submitGameTokenDigest*)cp->ptr)[i].soap = soap;
-	}
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
-	return (tns__submitGameTokenDigest*)cp->ptr;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__submitGameTokenDigest(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
-{
-	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying tns__submitGameTokenDigest %p -> %p\n", q, p));
-	*(tns__submitGameTokenDigest*)p = *(tns__submitGameTokenDigest*)q;
-}
-
-void tns__submitGameTokenResponse::soap_default(struct soap *soap)
-{
-	this->soap = soap;
-	soap_default_LONG64(soap, &this->tns__submitGameTokenResponse::return_);
-	/* transient soap skipped */
-}
-
-void tns__submitGameTokenResponse::soap_serialize(struct soap *soap) const
-{
-	(void)soap; /* appease -Wall -Werror */
-	/* transient soap skipped */
-}
-
-int tns__submitGameTokenResponse::soap_out(struct soap *soap, const char *tag, int id, const char *type) const
-{
-	return soap_out_tns__submitGameTokenResponse(soap, tag, id, this, type);
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__submitGameTokenResponse(struct soap *soap, const char *tag, int id, const tns__submitGameTokenResponse *a, const char *type)
-{
-	if (soap_element_begin_out(soap, tag, soap_embedded_id(soap, id, a, SOAP_TYPE_ServerSoap_tns__submitGameTokenResponse), type))
-		return soap->error;
-	if (soap_out_LONG64(soap, "return", -1, &(a->tns__submitGameTokenResponse::return_), ""))
-		return soap->error;
-	/* transient soap skipped */
-	return soap_element_end_out(soap, tag);
-}
-
-void *tns__submitGameTokenResponse::soap_in(struct soap *soap, const char *tag, const char *type)
-{	return soap_in_tns__submitGameTokenResponse(soap, tag, this, type);
-}
-
-SOAP_FMAC3 tns__submitGameTokenResponse * SOAP_FMAC4 soap_in_tns__submitGameTokenResponse(struct soap *soap, const char *tag, tns__submitGameTokenResponse *a, const char *type)
-{
-	(void)type; /* appease -Wall -Werror */
-	if (soap_element_begin_in(soap, tag, 0, NULL))
-		return NULL;
-	a = (tns__submitGameTokenResponse *)soap_class_id_enter(soap, soap->id, a, SOAP_TYPE_ServerSoap_tns__submitGameTokenResponse, sizeof(tns__submitGameTokenResponse), soap->type, soap->arrayType);
-	if (!a)
-		return NULL;
-	if (soap->alloced)
-	{	a->soap_default(soap);
-		if (soap->clist->type != SOAP_TYPE_ServerSoap_tns__submitGameTokenResponse)
-		{	soap_revert(soap);
-			*soap->id = '\0';
-			return (tns__submitGameTokenResponse *)a->soap_in(soap, tag, type);
-		}
-	}
-	size_t soap_flag_return_1 = 1;
-	if (soap->body && !*soap->href)
-	{
-		for (;;)
-		{	soap->error = SOAP_TAG_MISMATCH;
-			if (soap_flag_return_1 && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_LONG64(soap, "return", &(a->tns__submitGameTokenResponse::return_), "xsd:long"))
-				{	soap_flag_return_1--;
-					continue;
-				}
-			/* transient soap skipped */
-			if (soap->error == SOAP_TAG_MISMATCH)
-				soap->error = soap_ignore_element(soap);
-			if (soap->error == SOAP_NO_TAG)
-				break;
-			if (soap->error)
-				return NULL;
-		}
-		if (soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	else
-	{	a = (tns__submitGameTokenResponse *)soap_id_forward(soap, soap->href, (void*)a, 0, SOAP_TYPE_ServerSoap_tns__submitGameTokenResponse, 0, sizeof(tns__submitGameTokenResponse), 0, soap_copy_tns__submitGameTokenResponse);
-		if (soap->body && soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	if ((soap->mode & SOAP_XML_STRICT) && (soap_flag_return_1 > 0))
-	{	soap->error = SOAP_OCCURS;
-		return NULL;
-	}
-	return a;
-}
-
-int tns__submitGameTokenResponse::soap_put(struct soap *soap, const char *tag, const  char *type) const
-{
-	register int id = soap_embed(soap, (void*)this, NULL, 0, tag, SOAP_TYPE_ServerSoap_tns__submitGameTokenResponse);
-	if (this->soap_out(soap, tag?tag:"tns:submitGameTokenResponse", id, type))
-		return soap->error;
-	return soap_putindependent(soap);
-}
-
-void *tns__submitGameTokenResponse::soap_get(struct soap *soap, const char *tag, const char *type)
-{
-	return soap_get_tns__submitGameTokenResponse(soap, this, tag, type);
-}
-
-SOAP_FMAC3 tns__submitGameTokenResponse * SOAP_FMAC4 soap_get_tns__submitGameTokenResponse(struct soap *soap, tns__submitGameTokenResponse *p, const char *tag, const char *type)
-{
-	if ((p = soap_in_tns__submitGameTokenResponse(soap, tag, p, type)))
-		if (soap_getindependent(soap))
-			return NULL;
-	return p;
-}
-
-SOAP_FMAC1 tns__submitGameTokenResponse * SOAP_FMAC2 soap_instantiate_tns__submitGameTokenResponse(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
-{
-	(void)type; (void)arrayType; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate_tns__submitGameTokenResponse(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
-	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap_tns__submitGameTokenResponse, n, ServerSoap_fdelete);
-	if (!cp)
-		return NULL;
-	if (n < 0)
-	{	cp->ptr = (void*)SOAP_NEW(tns__submitGameTokenResponse);
-		if (size)
-			*size = sizeof(tns__submitGameTokenResponse);
-		((tns__submitGameTokenResponse*)cp->ptr)->soap = soap;
-	}
-	else
-	{	cp->ptr = (void*)SOAP_NEW(tns__submitGameTokenResponse[n]);
-		if (!cp->ptr)
-		{	soap->error = SOAP_EOM;
-			return NULL;
-		}
-		if (size)
-			*size = n * sizeof(tns__submitGameTokenResponse);
-		for (int i = 0; i < n; i++)
-			((tns__submitGameTokenResponse*)cp->ptr)[i].soap = soap;
-	}
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
-	return (tns__submitGameTokenResponse*)cp->ptr;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__submitGameTokenResponse(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
-{
-	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying tns__submitGameTokenResponse %p -> %p\n", q, p));
-	*(tns__submitGameTokenResponse*)p = *(tns__submitGameTokenResponse*)q;
-}
-
-void tns__submitGameToken::soap_default(struct soap *soap)
-{
-	this->soap = soap;
-	this->tns__submitGameToken::arg0 = NULL;
-	this->tns__submitGameToken::userName = NULL;
-	this->tns__submitGameToken::password = NULL;
-	/* transient soap skipped */
-}
-
-void tns__submitGameToken::soap_serialize(struct soap *soap) const
-{
-	(void)soap; /* appease -Wall -Werror */
-	soap_serialize_PointerTotns__gameToken(soap, &this->tns__submitGameToken::arg0);
-	soap_serialize_PointerTostd__string(soap, &this->tns__submitGameToken::userName);
-	soap_serialize_PointerTostd__string(soap, &this->tns__submitGameToken::password);
-	/* transient soap skipped */
-}
-
-int tns__submitGameToken::soap_out(struct soap *soap, const char *tag, int id, const char *type) const
-{
-	return soap_out_tns__submitGameToken(soap, tag, id, this, type);
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__submitGameToken(struct soap *soap, const char *tag, int id, const tns__submitGameToken *a, const char *type)
-{
-	if (soap_element_begin_out(soap, tag, soap_embedded_id(soap, id, a, SOAP_TYPE_ServerSoap_tns__submitGameToken), type))
-		return soap->error;
-	if (soap_out_PointerTotns__gameToken(soap, "arg0", -1, &(a->tns__submitGameToken::arg0), ""))
-		return soap->error;
-	if (soap_out_PointerTostd__string(soap, "userName", -1, &(a->tns__submitGameToken::userName), ""))
-		return soap->error;
-	if (soap_out_PointerTostd__string(soap, "password", -1, &(a->tns__submitGameToken::password), ""))
-		return soap->error;
-	/* transient soap skipped */
-	return soap_element_end_out(soap, tag);
-}
-
-void *tns__submitGameToken::soap_in(struct soap *soap, const char *tag, const char *type)
-{	return soap_in_tns__submitGameToken(soap, tag, this, type);
-}
-
-SOAP_FMAC3 tns__submitGameToken * SOAP_FMAC4 soap_in_tns__submitGameToken(struct soap *soap, const char *tag, tns__submitGameToken *a, const char *type)
-{
-	(void)type; /* appease -Wall -Werror */
-	if (soap_element_begin_in(soap, tag, 0, NULL))
-		return NULL;
-	a = (tns__submitGameToken *)soap_class_id_enter(soap, soap->id, a, SOAP_TYPE_ServerSoap_tns__submitGameToken, sizeof(tns__submitGameToken), soap->type, soap->arrayType);
-	if (!a)
-		return NULL;
-	if (soap->alloced)
-	{	a->soap_default(soap);
-		if (soap->clist->type != SOAP_TYPE_ServerSoap_tns__submitGameToken)
-		{	soap_revert(soap);
-			*soap->id = '\0';
-			return (tns__submitGameToken *)a->soap_in(soap, tag, type);
-		}
-	}
-	size_t soap_flag_arg01 = 1;
-	size_t soap_flag_userName1 = 1;
-	size_t soap_flag_password1 = 1;
-	if (soap->body && !*soap->href)
-	{
-		for (;;)
-		{	soap->error = SOAP_TAG_MISMATCH;
-			if (soap_flag_arg01 && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_PointerTotns__gameToken(soap, "arg0", &(a->tns__submitGameToken::arg0), "tns:gameToken"))
-				{	soap_flag_arg01--;
-					continue;
-				}
-			if (soap_flag_userName1 && (soap->error == SOAP_TAG_MISMATCH || soap->error == SOAP_NO_TAG))
-				if (soap_in_PointerTostd__string(soap, "userName", &(a->tns__submitGameToken::userName), "xsd:string"))
-				{	soap_flag_userName1--;
-					continue;
-				}
-			if (soap_flag_password1 && (soap->error == SOAP_TAG_MISMATCH || soap->error == SOAP_NO_TAG))
-				if (soap_in_PointerTostd__string(soap, "password", &(a->tns__submitGameToken::password), "xsd:string"))
-				{	soap_flag_password1--;
-					continue;
-				}
-			/* transient soap skipped */
-			if (soap->error == SOAP_TAG_MISMATCH)
-				soap->error = soap_ignore_element(soap);
-			if (soap->error == SOAP_NO_TAG)
-				break;
-			if (soap->error)
-				return NULL;
-		}
-		if (soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	else
-	{	a = (tns__submitGameToken *)soap_id_forward(soap, soap->href, (void*)a, 0, SOAP_TYPE_ServerSoap_tns__submitGameToken, 0, sizeof(tns__submitGameToken), 0, soap_copy_tns__submitGameToken);
-		if (soap->body && soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	return a;
-}
-
-int tns__submitGameToken::soap_put(struct soap *soap, const char *tag, const  char *type) const
-{
-	register int id = soap_embed(soap, (void*)this, NULL, 0, tag, SOAP_TYPE_ServerSoap_tns__submitGameToken);
-	if (this->soap_out(soap, tag?tag:"tns:submitGameToken", id, type))
-		return soap->error;
-	return soap_putindependent(soap);
-}
-
-void *tns__submitGameToken::soap_get(struct soap *soap, const char *tag, const char *type)
-{
-	return soap_get_tns__submitGameToken(soap, this, tag, type);
-}
-
-SOAP_FMAC3 tns__submitGameToken * SOAP_FMAC4 soap_get_tns__submitGameToken(struct soap *soap, tns__submitGameToken *p, const char *tag, const char *type)
-{
-	if ((p = soap_in_tns__submitGameToken(soap, tag, p, type)))
-		if (soap_getindependent(soap))
-			return NULL;
-	return p;
-}
-
-SOAP_FMAC1 tns__submitGameToken * SOAP_FMAC2 soap_instantiate_tns__submitGameToken(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
-{
-	(void)type; (void)arrayType; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate_tns__submitGameToken(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
-	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap_tns__submitGameToken, n, ServerSoap_fdelete);
-	if (!cp)
-		return NULL;
-	if (n < 0)
-	{	cp->ptr = (void*)SOAP_NEW(tns__submitGameToken);
-		if (size)
-			*size = sizeof(tns__submitGameToken);
-		((tns__submitGameToken*)cp->ptr)->soap = soap;
-	}
-	else
-	{	cp->ptr = (void*)SOAP_NEW(tns__submitGameToken[n]);
-		if (!cp->ptr)
-		{	soap->error = SOAP_EOM;
-			return NULL;
-		}
-		if (size)
-			*size = n * sizeof(tns__submitGameToken);
-		for (int i = 0; i < n; i++)
-			((tns__submitGameToken*)cp->ptr)[i].soap = soap;
-	}
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
-	return (tns__submitGameToken*)cp->ptr;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__submitGameToken(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
-{
-	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying tns__submitGameToken %p -> %p\n", q, p));
-	*(tns__submitGameToken*)p = *(tns__submitGameToken*)q;
-}
-
-void tns__submitGameAnnotationTextWithTokenIdResponse::soap_default(struct soap *soap)
-{
-	this->soap = soap;
-	soap_default_LONG64(soap, &this->tns__submitGameAnnotationTextWithTokenIdResponse::return_);
-	/* transient soap skipped */
-}
-
-void tns__submitGameAnnotationTextWithTokenIdResponse::soap_serialize(struct soap *soap) const
-{
-	(void)soap; /* appease -Wall -Werror */
-	/* transient soap skipped */
-}
-
-int tns__submitGameAnnotationTextWithTokenIdResponse::soap_out(struct soap *soap, const char *tag, int id, const char *type) const
-{
-	return soap_out_tns__submitGameAnnotationTextWithTokenIdResponse(soap, tag, id, this, type);
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__submitGameAnnotationTextWithTokenIdResponse(struct soap *soap, const char *tag, int id, const tns__submitGameAnnotationTextWithTokenIdResponse *a, const char *type)
-{
-	if (soap_element_begin_out(soap, tag, soap_embedded_id(soap, id, a, SOAP_TYPE_ServerSoap_tns__submitGameAnnotationTextWithTokenIdResponse), type))
-		return soap->error;
-	if (soap_out_LONG64(soap, "return", -1, &(a->tns__submitGameAnnotationTextWithTokenIdResponse::return_), ""))
-		return soap->error;
-	/* transient soap skipped */
-	return soap_element_end_out(soap, tag);
-}
-
-void *tns__submitGameAnnotationTextWithTokenIdResponse::soap_in(struct soap *soap, const char *tag, const char *type)
-{	return soap_in_tns__submitGameAnnotationTextWithTokenIdResponse(soap, tag, this, type);
-}
-
-SOAP_FMAC3 tns__submitGameAnnotationTextWithTokenIdResponse * SOAP_FMAC4 soap_in_tns__submitGameAnnotationTextWithTokenIdResponse(struct soap *soap, const char *tag, tns__submitGameAnnotationTextWithTokenIdResponse *a, const char *type)
-{
-	(void)type; /* appease -Wall -Werror */
-	if (soap_element_begin_in(soap, tag, 0, NULL))
-		return NULL;
-	a = (tns__submitGameAnnotationTextWithTokenIdResponse *)soap_class_id_enter(soap, soap->id, a, SOAP_TYPE_ServerSoap_tns__submitGameAnnotationTextWithTokenIdResponse, sizeof(tns__submitGameAnnotationTextWithTokenIdResponse), soap->type, soap->arrayType);
-	if (!a)
-		return NULL;
-	if (soap->alloced)
-	{	a->soap_default(soap);
-		if (soap->clist->type != SOAP_TYPE_ServerSoap_tns__submitGameAnnotationTextWithTokenIdResponse)
-		{	soap_revert(soap);
-			*soap->id = '\0';
-			return (tns__submitGameAnnotationTextWithTokenIdResponse *)a->soap_in(soap, tag, type);
-		}
-	}
-	size_t soap_flag_return_1 = 1;
-	if (soap->body && !*soap->href)
-	{
-		for (;;)
-		{	soap->error = SOAP_TAG_MISMATCH;
-			if (soap_flag_return_1 && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_LONG64(soap, "return", &(a->tns__submitGameAnnotationTextWithTokenIdResponse::return_), "xsd:long"))
-				{	soap_flag_return_1--;
-					continue;
-				}
-			/* transient soap skipped */
-			if (soap->error == SOAP_TAG_MISMATCH)
-				soap->error = soap_ignore_element(soap);
-			if (soap->error == SOAP_NO_TAG)
-				break;
-			if (soap->error)
-				return NULL;
-		}
-		if (soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	else
-	{	a = (tns__submitGameAnnotationTextWithTokenIdResponse *)soap_id_forward(soap, soap->href, (void*)a, 0, SOAP_TYPE_ServerSoap_tns__submitGameAnnotationTextWithTokenIdResponse, 0, sizeof(tns__submitGameAnnotationTextWithTokenIdResponse), 0, soap_copy_tns__submitGameAnnotationTextWithTokenIdResponse);
-		if (soap->body && soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	if ((soap->mode & SOAP_XML_STRICT) && (soap_flag_return_1 > 0))
-	{	soap->error = SOAP_OCCURS;
-		return NULL;
-	}
-	return a;
-}
-
-int tns__submitGameAnnotationTextWithTokenIdResponse::soap_put(struct soap *soap, const char *tag, const  char *type) const
-{
-	register int id = soap_embed(soap, (void*)this, NULL, 0, tag, SOAP_TYPE_ServerSoap_tns__submitGameAnnotationTextWithTokenIdResponse);
-	if (this->soap_out(soap, tag?tag:"tns:submitGameAnnotationTextWithTokenIdResponse", id, type))
-		return soap->error;
-	return soap_putindependent(soap);
-}
-
-void *tns__submitGameAnnotationTextWithTokenIdResponse::soap_get(struct soap *soap, const char *tag, const char *type)
-{
-	return soap_get_tns__submitGameAnnotationTextWithTokenIdResponse(soap, this, tag, type);
-}
-
-SOAP_FMAC3 tns__submitGameAnnotationTextWithTokenIdResponse * SOAP_FMAC4 soap_get_tns__submitGameAnnotationTextWithTokenIdResponse(struct soap *soap, tns__submitGameAnnotationTextWithTokenIdResponse *p, const char *tag, const char *type)
-{
-	if ((p = soap_in_tns__submitGameAnnotationTextWithTokenIdResponse(soap, tag, p, type)))
-		if (soap_getindependent(soap))
-			return NULL;
-	return p;
-}
-
-SOAP_FMAC1 tns__submitGameAnnotationTextWithTokenIdResponse * SOAP_FMAC2 soap_instantiate_tns__submitGameAnnotationTextWithTokenIdResponse(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
-{
-	(void)type; (void)arrayType; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate_tns__submitGameAnnotationTextWithTokenIdResponse(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
-	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap_tns__submitGameAnnotationTextWithTokenIdResponse, n, ServerSoap_fdelete);
-	if (!cp)
-		return NULL;
-	if (n < 0)
-	{	cp->ptr = (void*)SOAP_NEW(tns__submitGameAnnotationTextWithTokenIdResponse);
-		if (size)
-			*size = sizeof(tns__submitGameAnnotationTextWithTokenIdResponse);
-		((tns__submitGameAnnotationTextWithTokenIdResponse*)cp->ptr)->soap = soap;
-	}
-	else
-	{	cp->ptr = (void*)SOAP_NEW(tns__submitGameAnnotationTextWithTokenIdResponse[n]);
-		if (!cp->ptr)
-		{	soap->error = SOAP_EOM;
-			return NULL;
-		}
-		if (size)
-			*size = n * sizeof(tns__submitGameAnnotationTextWithTokenIdResponse);
-		for (int i = 0; i < n; i++)
-			((tns__submitGameAnnotationTextWithTokenIdResponse*)cp->ptr)[i].soap = soap;
-	}
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
-	return (tns__submitGameAnnotationTextWithTokenIdResponse*)cp->ptr;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__submitGameAnnotationTextWithTokenIdResponse(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
-{
-	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying tns__submitGameAnnotationTextWithTokenIdResponse %p -> %p\n", q, p));
-	*(tns__submitGameAnnotationTextWithTokenIdResponse*)p = *(tns__submitGameAnnotationTextWithTokenIdResponse*)q;
-}
-
-void tns__submitGameAnnotationTextWithTokenId::soap_default(struct soap *soap)
-{
-	this->soap = soap;
-	this->tns__submitGameAnnotationTextWithTokenId::arg0 = NULL;
-	soap_default_LONG64(soap, &this->tns__submitGameAnnotationTextWithTokenId::arg1);
-	soap_default_int(soap, &this->tns__submitGameAnnotationTextWithTokenId::arg2);
-	soap_default_LONG64(soap, &this->tns__submitGameAnnotationTextWithTokenId::arg3);
-	this->tns__submitGameAnnotationTextWithTokenId::userName = NULL;
-	this->tns__submitGameAnnotationTextWithTokenId::password = NULL;
-	/* transient soap skipped */
-}
-
-void tns__submitGameAnnotationTextWithTokenId::soap_serialize(struct soap *soap) const
-{
-	(void)soap; /* appease -Wall -Werror */
-	soap_serialize_PointerTostd__string(soap, &this->tns__submitGameAnnotationTextWithTokenId::arg0);
-	soap_serialize_PointerTostd__string(soap, &this->tns__submitGameAnnotationTextWithTokenId::userName);
-	soap_serialize_PointerTostd__string(soap, &this->tns__submitGameAnnotationTextWithTokenId::password);
-	/* transient soap skipped */
-}
-
-int tns__submitGameAnnotationTextWithTokenId::soap_out(struct soap *soap, const char *tag, int id, const char *type) const
-{
-	return soap_out_tns__submitGameAnnotationTextWithTokenId(soap, tag, id, this, type);
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__submitGameAnnotationTextWithTokenId(struct soap *soap, const char *tag, int id, const tns__submitGameAnnotationTextWithTokenId *a, const char *type)
-{
-	if (soap_element_begin_out(soap, tag, soap_embedded_id(soap, id, a, SOAP_TYPE_ServerSoap_tns__submitGameAnnotationTextWithTokenId), type))
-		return soap->error;
-	if (soap_out_PointerTostd__string(soap, "arg0", -1, &(a->tns__submitGameAnnotationTextWithTokenId::arg0), ""))
-		return soap->error;
-	if (soap_out_LONG64(soap, "arg1", -1, &(a->tns__submitGameAnnotationTextWithTokenId::arg1), ""))
-		return soap->error;
-	if (soap_out_int(soap, "arg2", -1, &(a->tns__submitGameAnnotationTextWithTokenId::arg2), ""))
-		return soap->error;
-	if (soap_out_LONG64(soap, "arg3", -1, &(a->tns__submitGameAnnotationTextWithTokenId::arg3), ""))
-		return soap->error;
-	if (soap_out_PointerTostd__string(soap, "userName", -1, &(a->tns__submitGameAnnotationTextWithTokenId::userName), ""))
-		return soap->error;
-	if (soap_out_PointerTostd__string(soap, "password", -1, &(a->tns__submitGameAnnotationTextWithTokenId::password), ""))
-		return soap->error;
-	/* transient soap skipped */
-	return soap_element_end_out(soap, tag);
-}
-
-void *tns__submitGameAnnotationTextWithTokenId::soap_in(struct soap *soap, const char *tag, const char *type)
-{	return soap_in_tns__submitGameAnnotationTextWithTokenId(soap, tag, this, type);
-}
-
-SOAP_FMAC3 tns__submitGameAnnotationTextWithTokenId * SOAP_FMAC4 soap_in_tns__submitGameAnnotationTextWithTokenId(struct soap *soap, const char *tag, tns__submitGameAnnotationTextWithTokenId *a, const char *type)
-{
-	(void)type; /* appease -Wall -Werror */
-	if (soap_element_begin_in(soap, tag, 0, NULL))
-		return NULL;
-	a = (tns__submitGameAnnotationTextWithTokenId *)soap_class_id_enter(soap, soap->id, a, SOAP_TYPE_ServerSoap_tns__submitGameAnnotationTextWithTokenId, sizeof(tns__submitGameAnnotationTextWithTokenId), soap->type, soap->arrayType);
-	if (!a)
-		return NULL;
-	if (soap->alloced)
-	{	a->soap_default(soap);
-		if (soap->clist->type != SOAP_TYPE_ServerSoap_tns__submitGameAnnotationTextWithTokenId)
-		{	soap_revert(soap);
-			*soap->id = '\0';
-			return (tns__submitGameAnnotationTextWithTokenId *)a->soap_in(soap, tag, type);
-		}
-	}
-	size_t soap_flag_arg01 = 1;
-	size_t soap_flag_arg11 = 1;
-	size_t soap_flag_arg21 = 1;
-	size_t soap_flag_arg31 = 1;
-	size_t soap_flag_userName1 = 1;
-	size_t soap_flag_password1 = 1;
-	if (soap->body && !*soap->href)
-	{
-		for (;;)
-		{	soap->error = SOAP_TAG_MISMATCH;
-			if (soap_flag_arg01 && (soap->error == SOAP_TAG_MISMATCH || soap->error == SOAP_NO_TAG))
-				if (soap_in_PointerTostd__string(soap, "arg0", &(a->tns__submitGameAnnotationTextWithTokenId::arg0), "xsd:string"))
-				{	soap_flag_arg01--;
-					continue;
-				}
-			if (soap_flag_arg11 && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_LONG64(soap, "arg1", &(a->tns__submitGameAnnotationTextWithTokenId::arg1), "xsd:long"))
-				{	soap_flag_arg11--;
-					continue;
-				}
-			if (soap_flag_arg21 && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_int(soap, "arg2", &(a->tns__submitGameAnnotationTextWithTokenId::arg2), "xsd:int"))
-				{	soap_flag_arg21--;
-					continue;
-				}
-			if (soap_flag_arg31 && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_LONG64(soap, "arg3", &(a->tns__submitGameAnnotationTextWithTokenId::arg3), "xsd:long"))
-				{	soap_flag_arg31--;
-					continue;
-				}
-			if (soap_flag_userName1 && (soap->error == SOAP_TAG_MISMATCH || soap->error == SOAP_NO_TAG))
-				if (soap_in_PointerTostd__string(soap, "userName", &(a->tns__submitGameAnnotationTextWithTokenId::userName), "xsd:string"))
-				{	soap_flag_userName1--;
-					continue;
-				}
-			if (soap_flag_password1 && (soap->error == SOAP_TAG_MISMATCH || soap->error == SOAP_NO_TAG))
-				if (soap_in_PointerTostd__string(soap, "password", &(a->tns__submitGameAnnotationTextWithTokenId::password), "xsd:string"))
-				{	soap_flag_password1--;
-					continue;
-				}
-			/* transient soap skipped */
-			if (soap->error == SOAP_TAG_MISMATCH)
-				soap->error = soap_ignore_element(soap);
-			if (soap->error == SOAP_NO_TAG)
-				break;
-			if (soap->error)
-				return NULL;
-		}
-		if (soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	else
-	{	a = (tns__submitGameAnnotationTextWithTokenId *)soap_id_forward(soap, soap->href, (void*)a, 0, SOAP_TYPE_ServerSoap_tns__submitGameAnnotationTextWithTokenId, 0, sizeof(tns__submitGameAnnotationTextWithTokenId), 0, soap_copy_tns__submitGameAnnotationTextWithTokenId);
-		if (soap->body && soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	if ((soap->mode & SOAP_XML_STRICT) && (soap_flag_arg11 > 0 || soap_flag_arg21 > 0 || soap_flag_arg31 > 0))
-	{	soap->error = SOAP_OCCURS;
-		return NULL;
-	}
-	return a;
-}
-
-int tns__submitGameAnnotationTextWithTokenId::soap_put(struct soap *soap, const char *tag, const  char *type) const
-{
-	register int id = soap_embed(soap, (void*)this, NULL, 0, tag, SOAP_TYPE_ServerSoap_tns__submitGameAnnotationTextWithTokenId);
-	if (this->soap_out(soap, tag?tag:"tns:submitGameAnnotationTextWithTokenId", id, type))
-		return soap->error;
-	return soap_putindependent(soap);
-}
-
-void *tns__submitGameAnnotationTextWithTokenId::soap_get(struct soap *soap, const char *tag, const char *type)
-{
-	return soap_get_tns__submitGameAnnotationTextWithTokenId(soap, this, tag, type);
-}
-
-SOAP_FMAC3 tns__submitGameAnnotationTextWithTokenId * SOAP_FMAC4 soap_get_tns__submitGameAnnotationTextWithTokenId(struct soap *soap, tns__submitGameAnnotationTextWithTokenId *p, const char *tag, const char *type)
-{
-	if ((p = soap_in_tns__submitGameAnnotationTextWithTokenId(soap, tag, p, type)))
-		if (soap_getindependent(soap))
-			return NULL;
-	return p;
-}
-
-SOAP_FMAC1 tns__submitGameAnnotationTextWithTokenId * SOAP_FMAC2 soap_instantiate_tns__submitGameAnnotationTextWithTokenId(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
-{
-	(void)type; (void)arrayType; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate_tns__submitGameAnnotationTextWithTokenId(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
-	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap_tns__submitGameAnnotationTextWithTokenId, n, ServerSoap_fdelete);
-	if (!cp)
-		return NULL;
-	if (n < 0)
-	{	cp->ptr = (void*)SOAP_NEW(tns__submitGameAnnotationTextWithTokenId);
-		if (size)
-			*size = sizeof(tns__submitGameAnnotationTextWithTokenId);
-		((tns__submitGameAnnotationTextWithTokenId*)cp->ptr)->soap = soap;
-	}
-	else
-	{	cp->ptr = (void*)SOAP_NEW(tns__submitGameAnnotationTextWithTokenId[n]);
-		if (!cp->ptr)
-		{	soap->error = SOAP_EOM;
-			return NULL;
-		}
-		if (size)
-			*size = n * sizeof(tns__submitGameAnnotationTextWithTokenId);
-		for (int i = 0; i < n; i++)
-			((tns__submitGameAnnotationTextWithTokenId*)cp->ptr)[i].soap = soap;
-	}
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
-	return (tns__submitGameAnnotationTextWithTokenId*)cp->ptr;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__submitGameAnnotationTextWithTokenId(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
-{
-	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying tns__submitGameAnnotationTextWithTokenId %p -> %p\n", q, p));
-	*(tns__submitGameAnnotationTextWithTokenId*)p = *(tns__submitGameAnnotationTextWithTokenId*)q;
-}
-
-void tns__submitGameAnnotationTextAndTokenDigestResponse::soap_default(struct soap *soap)
-{
-	this->soap = soap;
-	soap_default_LONG64(soap, &this->tns__submitGameAnnotationTextAndTokenDigestResponse::return_);
-	/* transient soap skipped */
-}
-
-void tns__submitGameAnnotationTextAndTokenDigestResponse::soap_serialize(struct soap *soap) const
-{
-	(void)soap; /* appease -Wall -Werror */
-	/* transient soap skipped */
-}
-
-int tns__submitGameAnnotationTextAndTokenDigestResponse::soap_out(struct soap *soap, const char *tag, int id, const char *type) const
-{
-	return soap_out_tns__submitGameAnnotationTextAndTokenDigestResponse(soap, tag, id, this, type);
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__submitGameAnnotationTextAndTokenDigestResponse(struct soap *soap, const char *tag, int id, const tns__submitGameAnnotationTextAndTokenDigestResponse *a, const char *type)
-{
-	if (soap_element_begin_out(soap, tag, soap_embedded_id(soap, id, a, SOAP_TYPE_ServerSoap_tns__submitGameAnnotationTextAndTokenDigestResponse), type))
-		return soap->error;
-	if (soap_out_LONG64(soap, "return", -1, &(a->tns__submitGameAnnotationTextAndTokenDigestResponse::return_), ""))
-		return soap->error;
-	/* transient soap skipped */
-	return soap_element_end_out(soap, tag);
-}
-
-void *tns__submitGameAnnotationTextAndTokenDigestResponse::soap_in(struct soap *soap, const char *tag, const char *type)
-{	return soap_in_tns__submitGameAnnotationTextAndTokenDigestResponse(soap, tag, this, type);
-}
-
-SOAP_FMAC3 tns__submitGameAnnotationTextAndTokenDigestResponse * SOAP_FMAC4 soap_in_tns__submitGameAnnotationTextAndTokenDigestResponse(struct soap *soap, const char *tag, tns__submitGameAnnotationTextAndTokenDigestResponse *a, const char *type)
-{
-	(void)type; /* appease -Wall -Werror */
-	if (soap_element_begin_in(soap, tag, 0, NULL))
-		return NULL;
-	a = (tns__submitGameAnnotationTextAndTokenDigestResponse *)soap_class_id_enter(soap, soap->id, a, SOAP_TYPE_ServerSoap_tns__submitGameAnnotationTextAndTokenDigestResponse, sizeof(tns__submitGameAnnotationTextAndTokenDigestResponse), soap->type, soap->arrayType);
-	if (!a)
-		return NULL;
-	if (soap->alloced)
-	{	a->soap_default(soap);
-		if (soap->clist->type != SOAP_TYPE_ServerSoap_tns__submitGameAnnotationTextAndTokenDigestResponse)
-		{	soap_revert(soap);
-			*soap->id = '\0';
-			return (tns__submitGameAnnotationTextAndTokenDigestResponse *)a->soap_in(soap, tag, type);
-		}
-	}
-	size_t soap_flag_return_1 = 1;
-	if (soap->body && !*soap->href)
-	{
-		for (;;)
-		{	soap->error = SOAP_TAG_MISMATCH;
-			if (soap_flag_return_1 && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_LONG64(soap, "return", &(a->tns__submitGameAnnotationTextAndTokenDigestResponse::return_), "xsd:long"))
-				{	soap_flag_return_1--;
-					continue;
-				}
-			/* transient soap skipped */
-			if (soap->error == SOAP_TAG_MISMATCH)
-				soap->error = soap_ignore_element(soap);
-			if (soap->error == SOAP_NO_TAG)
-				break;
-			if (soap->error)
-				return NULL;
-		}
-		if (soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	else
-	{	a = (tns__submitGameAnnotationTextAndTokenDigestResponse *)soap_id_forward(soap, soap->href, (void*)a, 0, SOAP_TYPE_ServerSoap_tns__submitGameAnnotationTextAndTokenDigestResponse, 0, sizeof(tns__submitGameAnnotationTextAndTokenDigestResponse), 0, soap_copy_tns__submitGameAnnotationTextAndTokenDigestResponse);
-		if (soap->body && soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	if ((soap->mode & SOAP_XML_STRICT) && (soap_flag_return_1 > 0))
-	{	soap->error = SOAP_OCCURS;
-		return NULL;
-	}
-	return a;
-}
-
-int tns__submitGameAnnotationTextAndTokenDigestResponse::soap_put(struct soap *soap, const char *tag, const  char *type) const
-{
-	register int id = soap_embed(soap, (void*)this, NULL, 0, tag, SOAP_TYPE_ServerSoap_tns__submitGameAnnotationTextAndTokenDigestResponse);
-	if (this->soap_out(soap, tag?tag:"tns:submitGameAnnotationTextAndTokenDigestResponse", id, type))
-		return soap->error;
-	return soap_putindependent(soap);
-}
-
-void *tns__submitGameAnnotationTextAndTokenDigestResponse::soap_get(struct soap *soap, const char *tag, const char *type)
-{
-	return soap_get_tns__submitGameAnnotationTextAndTokenDigestResponse(soap, this, tag, type);
-}
-
-SOAP_FMAC3 tns__submitGameAnnotationTextAndTokenDigestResponse * SOAP_FMAC4 soap_get_tns__submitGameAnnotationTextAndTokenDigestResponse(struct soap *soap, tns__submitGameAnnotationTextAndTokenDigestResponse *p, const char *tag, const char *type)
-{
-	if ((p = soap_in_tns__submitGameAnnotationTextAndTokenDigestResponse(soap, tag, p, type)))
-		if (soap_getindependent(soap))
-			return NULL;
-	return p;
-}
-
-SOAP_FMAC1 tns__submitGameAnnotationTextAndTokenDigestResponse * SOAP_FMAC2 soap_instantiate_tns__submitGameAnnotationTextAndTokenDigestResponse(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
-{
-	(void)type; (void)arrayType; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate_tns__submitGameAnnotationTextAndTokenDigestResponse(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
-	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap_tns__submitGameAnnotationTextAndTokenDigestResponse, n, ServerSoap_fdelete);
-	if (!cp)
-		return NULL;
-	if (n < 0)
-	{	cp->ptr = (void*)SOAP_NEW(tns__submitGameAnnotationTextAndTokenDigestResponse);
-		if (size)
-			*size = sizeof(tns__submitGameAnnotationTextAndTokenDigestResponse);
-		((tns__submitGameAnnotationTextAndTokenDigestResponse*)cp->ptr)->soap = soap;
-	}
-	else
-	{	cp->ptr = (void*)SOAP_NEW(tns__submitGameAnnotationTextAndTokenDigestResponse[n]);
-		if (!cp->ptr)
-		{	soap->error = SOAP_EOM;
-			return NULL;
-		}
-		if (size)
-			*size = n * sizeof(tns__submitGameAnnotationTextAndTokenDigestResponse);
-		for (int i = 0; i < n; i++)
-			((tns__submitGameAnnotationTextAndTokenDigestResponse*)cp->ptr)[i].soap = soap;
-	}
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
-	return (tns__submitGameAnnotationTextAndTokenDigestResponse*)cp->ptr;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__submitGameAnnotationTextAndTokenDigestResponse(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
-{
-	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying tns__submitGameAnnotationTextAndTokenDigestResponse %p -> %p\n", q, p));
-	*(tns__submitGameAnnotationTextAndTokenDigestResponse*)p = *(tns__submitGameAnnotationTextAndTokenDigestResponse*)q;
-}
-
-void tns__submitGameAnnotationTextAndTokenDigest::soap_default(struct soap *soap)
-{
-	this->soap = soap;
-	this->tns__submitGameAnnotationTextAndTokenDigest::arg0 = NULL;
-	soap_default_LONG64(soap, &this->tns__submitGameAnnotationTextAndTokenDigest::arg1);
-	soap_default_int(soap, &this->tns__submitGameAnnotationTextAndTokenDigest::arg2);
-	this->tns__submitGameAnnotationTextAndTokenDigest::arg3 = NULL;
-	this->tns__submitGameAnnotationTextAndTokenDigest::userName = NULL;
-	this->tns__submitGameAnnotationTextAndTokenDigest::password = NULL;
-	/* transient soap skipped */
-}
-
-void tns__submitGameAnnotationTextAndTokenDigest::soap_serialize(struct soap *soap) const
-{
-	(void)soap; /* appease -Wall -Werror */
-	soap_serialize_PointerTostd__string(soap, &this->tns__submitGameAnnotationTextAndTokenDigest::arg0);
-	soap_serialize_PointerTostd__string(soap, &this->tns__submitGameAnnotationTextAndTokenDigest::arg3);
-	soap_serialize_PointerTostd__string(soap, &this->tns__submitGameAnnotationTextAndTokenDigest::userName);
-	soap_serialize_PointerTostd__string(soap, &this->tns__submitGameAnnotationTextAndTokenDigest::password);
-	/* transient soap skipped */
-}
-
-int tns__submitGameAnnotationTextAndTokenDigest::soap_out(struct soap *soap, const char *tag, int id, const char *type) const
-{
-	return soap_out_tns__submitGameAnnotationTextAndTokenDigest(soap, tag, id, this, type);
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__submitGameAnnotationTextAndTokenDigest(struct soap *soap, const char *tag, int id, const tns__submitGameAnnotationTextAndTokenDigest *a, const char *type)
-{
-	if (soap_element_begin_out(soap, tag, soap_embedded_id(soap, id, a, SOAP_TYPE_ServerSoap_tns__submitGameAnnotationTextAndTokenDigest), type))
-		return soap->error;
-	if (soap_out_PointerTostd__string(soap, "arg0", -1, &(a->tns__submitGameAnnotationTextAndTokenDigest::arg0), ""))
-		return soap->error;
-	if (soap_out_LONG64(soap, "arg1", -1, &(a->tns__submitGameAnnotationTextAndTokenDigest::arg1), ""))
-		return soap->error;
-	if (soap_out_int(soap, "arg2", -1, &(a->tns__submitGameAnnotationTextAndTokenDigest::arg2), ""))
-		return soap->error;
-	if (soap_out_PointerTostd__string(soap, "arg3", -1, &(a->tns__submitGameAnnotationTextAndTokenDigest::arg3), ""))
-		return soap->error;
-	if (soap_out_PointerTostd__string(soap, "userName", -1, &(a->tns__submitGameAnnotationTextAndTokenDigest::userName), ""))
-		return soap->error;
-	if (soap_out_PointerTostd__string(soap, "password", -1, &(a->tns__submitGameAnnotationTextAndTokenDigest::password), ""))
-		return soap->error;
-	/* transient soap skipped */
-	return soap_element_end_out(soap, tag);
-}
-
-void *tns__submitGameAnnotationTextAndTokenDigest::soap_in(struct soap *soap, const char *tag, const char *type)
-{	return soap_in_tns__submitGameAnnotationTextAndTokenDigest(soap, tag, this, type);
-}
-
-SOAP_FMAC3 tns__submitGameAnnotationTextAndTokenDigest * SOAP_FMAC4 soap_in_tns__submitGameAnnotationTextAndTokenDigest(struct soap *soap, const char *tag, tns__submitGameAnnotationTextAndTokenDigest *a, const char *type)
-{
-	(void)type; /* appease -Wall -Werror */
-	if (soap_element_begin_in(soap, tag, 0, NULL))
-		return NULL;
-	a = (tns__submitGameAnnotationTextAndTokenDigest *)soap_class_id_enter(soap, soap->id, a, SOAP_TYPE_ServerSoap_tns__submitGameAnnotationTextAndTokenDigest, sizeof(tns__submitGameAnnotationTextAndTokenDigest), soap->type, soap->arrayType);
-	if (!a)
-		return NULL;
-	if (soap->alloced)
-	{	a->soap_default(soap);
-		if (soap->clist->type != SOAP_TYPE_ServerSoap_tns__submitGameAnnotationTextAndTokenDigest)
-		{	soap_revert(soap);
-			*soap->id = '\0';
-			return (tns__submitGameAnnotationTextAndTokenDigest *)a->soap_in(soap, tag, type);
-		}
-	}
-	size_t soap_flag_arg01 = 1;
-	size_t soap_flag_arg11 = 1;
-	size_t soap_flag_arg21 = 1;
-	size_t soap_flag_arg31 = 1;
-	size_t soap_flag_userName1 = 1;
-	size_t soap_flag_password1 = 1;
-	if (soap->body && !*soap->href)
-	{
-		for (;;)
-		{	soap->error = SOAP_TAG_MISMATCH;
-			if (soap_flag_arg01 && (soap->error == SOAP_TAG_MISMATCH || soap->error == SOAP_NO_TAG))
-				if (soap_in_PointerTostd__string(soap, "arg0", &(a->tns__submitGameAnnotationTextAndTokenDigest::arg0), "xsd:string"))
-				{	soap_flag_arg01--;
-					continue;
-				}
-			if (soap_flag_arg11 && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_LONG64(soap, "arg1", &(a->tns__submitGameAnnotationTextAndTokenDigest::arg1), "xsd:long"))
-				{	soap_flag_arg11--;
-					continue;
-				}
-			if (soap_flag_arg21 && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_int(soap, "arg2", &(a->tns__submitGameAnnotationTextAndTokenDigest::arg2), "xsd:int"))
-				{	soap_flag_arg21--;
-					continue;
-				}
-			if (soap_flag_arg31 && (soap->error == SOAP_TAG_MISMATCH || soap->error == SOAP_NO_TAG))
-				if (soap_in_PointerTostd__string(soap, "arg3", &(a->tns__submitGameAnnotationTextAndTokenDigest::arg3), "xsd:string"))
-				{	soap_flag_arg31--;
-					continue;
-				}
-			if (soap_flag_userName1 && (soap->error == SOAP_TAG_MISMATCH || soap->error == SOAP_NO_TAG))
-				if (soap_in_PointerTostd__string(soap, "userName", &(a->tns__submitGameAnnotationTextAndTokenDigest::userName), "xsd:string"))
-				{	soap_flag_userName1--;
-					continue;
-				}
-			if (soap_flag_password1 && (soap->error == SOAP_TAG_MISMATCH || soap->error == SOAP_NO_TAG))
-				if (soap_in_PointerTostd__string(soap, "password", &(a->tns__submitGameAnnotationTextAndTokenDigest::password), "xsd:string"))
-				{	soap_flag_password1--;
-					continue;
-				}
-			/* transient soap skipped */
-			if (soap->error == SOAP_TAG_MISMATCH)
-				soap->error = soap_ignore_element(soap);
-			if (soap->error == SOAP_NO_TAG)
-				break;
-			if (soap->error)
-				return NULL;
-		}
-		if (soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	else
-	{	a = (tns__submitGameAnnotationTextAndTokenDigest *)soap_id_forward(soap, soap->href, (void*)a, 0, SOAP_TYPE_ServerSoap_tns__submitGameAnnotationTextAndTokenDigest, 0, sizeof(tns__submitGameAnnotationTextAndTokenDigest), 0, soap_copy_tns__submitGameAnnotationTextAndTokenDigest);
-		if (soap->body && soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	if ((soap->mode & SOAP_XML_STRICT) && (soap_flag_arg11 > 0 || soap_flag_arg21 > 0))
-	{	soap->error = SOAP_OCCURS;
-		return NULL;
-	}
-	return a;
-}
-
-int tns__submitGameAnnotationTextAndTokenDigest::soap_put(struct soap *soap, const char *tag, const  char *type) const
-{
-	register int id = soap_embed(soap, (void*)this, NULL, 0, tag, SOAP_TYPE_ServerSoap_tns__submitGameAnnotationTextAndTokenDigest);
-	if (this->soap_out(soap, tag?tag:"tns:submitGameAnnotationTextAndTokenDigest", id, type))
-		return soap->error;
-	return soap_putindependent(soap);
-}
-
-void *tns__submitGameAnnotationTextAndTokenDigest::soap_get(struct soap *soap, const char *tag, const char *type)
-{
-	return soap_get_tns__submitGameAnnotationTextAndTokenDigest(soap, this, tag, type);
-}
-
-SOAP_FMAC3 tns__submitGameAnnotationTextAndTokenDigest * SOAP_FMAC4 soap_get_tns__submitGameAnnotationTextAndTokenDigest(struct soap *soap, tns__submitGameAnnotationTextAndTokenDigest *p, const char *tag, const char *type)
-{
-	if ((p = soap_in_tns__submitGameAnnotationTextAndTokenDigest(soap, tag, p, type)))
-		if (soap_getindependent(soap))
-			return NULL;
-	return p;
-}
-
-SOAP_FMAC1 tns__submitGameAnnotationTextAndTokenDigest * SOAP_FMAC2 soap_instantiate_tns__submitGameAnnotationTextAndTokenDigest(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
-{
-	(void)type; (void)arrayType; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate_tns__submitGameAnnotationTextAndTokenDigest(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
-	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap_tns__submitGameAnnotationTextAndTokenDigest, n, ServerSoap_fdelete);
-	if (!cp)
-		return NULL;
-	if (n < 0)
-	{	cp->ptr = (void*)SOAP_NEW(tns__submitGameAnnotationTextAndTokenDigest);
-		if (size)
-			*size = sizeof(tns__submitGameAnnotationTextAndTokenDigest);
-		((tns__submitGameAnnotationTextAndTokenDigest*)cp->ptr)->soap = soap;
-	}
-	else
-	{	cp->ptr = (void*)SOAP_NEW(tns__submitGameAnnotationTextAndTokenDigest[n]);
-		if (!cp->ptr)
-		{	soap->error = SOAP_EOM;
-			return NULL;
-		}
-		if (size)
-			*size = n * sizeof(tns__submitGameAnnotationTextAndTokenDigest);
-		for (int i = 0; i < n; i++)
-			((tns__submitGameAnnotationTextAndTokenDigest*)cp->ptr)[i].soap = soap;
-	}
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
-	return (tns__submitGameAnnotationTextAndTokenDigest*)cp->ptr;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__submitGameAnnotationTextAndTokenDigest(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
-{
-	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying tns__submitGameAnnotationTextAndTokenDigest %p -> %p\n", q, p));
-	*(tns__submitGameAnnotationTextAndTokenDigest*)p = *(tns__submitGameAnnotationTextAndTokenDigest*)q;
-}
-
-void tns__submitGameAnnotationResponse::soap_default(struct soap *soap)
-{
-	this->soap = soap;
-	soap_default_LONG64(soap, &this->tns__submitGameAnnotationResponse::return_);
-	/* transient soap skipped */
-}
-
-void tns__submitGameAnnotationResponse::soap_serialize(struct soap *soap) const
-{
-	(void)soap; /* appease -Wall -Werror */
-	/* transient soap skipped */
-}
-
-int tns__submitGameAnnotationResponse::soap_out(struct soap *soap, const char *tag, int id, const char *type) const
-{
-	return soap_out_tns__submitGameAnnotationResponse(soap, tag, id, this, type);
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__submitGameAnnotationResponse(struct soap *soap, const char *tag, int id, const tns__submitGameAnnotationResponse *a, const char *type)
-{
-	if (soap_element_begin_out(soap, tag, soap_embedded_id(soap, id, a, SOAP_TYPE_ServerSoap_tns__submitGameAnnotationResponse), type))
-		return soap->error;
-	if (soap_out_LONG64(soap, "return", -1, &(a->tns__submitGameAnnotationResponse::return_), ""))
-		return soap->error;
-	/* transient soap skipped */
-	return soap_element_end_out(soap, tag);
-}
-
-void *tns__submitGameAnnotationResponse::soap_in(struct soap *soap, const char *tag, const char *type)
-{	return soap_in_tns__submitGameAnnotationResponse(soap, tag, this, type);
-}
-
-SOAP_FMAC3 tns__submitGameAnnotationResponse * SOAP_FMAC4 soap_in_tns__submitGameAnnotationResponse(struct soap *soap, const char *tag, tns__submitGameAnnotationResponse *a, const char *type)
-{
-	(void)type; /* appease -Wall -Werror */
-	if (soap_element_begin_in(soap, tag, 0, NULL))
-		return NULL;
-	a = (tns__submitGameAnnotationResponse *)soap_class_id_enter(soap, soap->id, a, SOAP_TYPE_ServerSoap_tns__submitGameAnnotationResponse, sizeof(tns__submitGameAnnotationResponse), soap->type, soap->arrayType);
-	if (!a)
-		return NULL;
-	if (soap->alloced)
-	{	a->soap_default(soap);
-		if (soap->clist->type != SOAP_TYPE_ServerSoap_tns__submitGameAnnotationResponse)
-		{	soap_revert(soap);
-			*soap->id = '\0';
-			return (tns__submitGameAnnotationResponse *)a->soap_in(soap, tag, type);
-		}
-	}
-	size_t soap_flag_return_1 = 1;
-	if (soap->body && !*soap->href)
-	{
-		for (;;)
-		{	soap->error = SOAP_TAG_MISMATCH;
-			if (soap_flag_return_1 && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_LONG64(soap, "return", &(a->tns__submitGameAnnotationResponse::return_), "xsd:long"))
-				{	soap_flag_return_1--;
-					continue;
-				}
-			/* transient soap skipped */
-			if (soap->error == SOAP_TAG_MISMATCH)
-				soap->error = soap_ignore_element(soap);
-			if (soap->error == SOAP_NO_TAG)
-				break;
-			if (soap->error)
-				return NULL;
-		}
-		if (soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	else
-	{	a = (tns__submitGameAnnotationResponse *)soap_id_forward(soap, soap->href, (void*)a, 0, SOAP_TYPE_ServerSoap_tns__submitGameAnnotationResponse, 0, sizeof(tns__submitGameAnnotationResponse), 0, soap_copy_tns__submitGameAnnotationResponse);
-		if (soap->body && soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	if ((soap->mode & SOAP_XML_STRICT) && (soap_flag_return_1 > 0))
-	{	soap->error = SOAP_OCCURS;
-		return NULL;
-	}
-	return a;
-}
-
-int tns__submitGameAnnotationResponse::soap_put(struct soap *soap, const char *tag, const  char *type) const
-{
-	register int id = soap_embed(soap, (void*)this, NULL, 0, tag, SOAP_TYPE_ServerSoap_tns__submitGameAnnotationResponse);
-	if (this->soap_out(soap, tag?tag:"tns:submitGameAnnotationResponse", id, type))
-		return soap->error;
-	return soap_putindependent(soap);
-}
-
-void *tns__submitGameAnnotationResponse::soap_get(struct soap *soap, const char *tag, const char *type)
-{
-	return soap_get_tns__submitGameAnnotationResponse(soap, this, tag, type);
-}
-
-SOAP_FMAC3 tns__submitGameAnnotationResponse * SOAP_FMAC4 soap_get_tns__submitGameAnnotationResponse(struct soap *soap, tns__submitGameAnnotationResponse *p, const char *tag, const char *type)
-{
-	if ((p = soap_in_tns__submitGameAnnotationResponse(soap, tag, p, type)))
-		if (soap_getindependent(soap))
-			return NULL;
-	return p;
-}
-
-SOAP_FMAC1 tns__submitGameAnnotationResponse * SOAP_FMAC2 soap_instantiate_tns__submitGameAnnotationResponse(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
-{
-	(void)type; (void)arrayType; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate_tns__submitGameAnnotationResponse(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
-	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap_tns__submitGameAnnotationResponse, n, ServerSoap_fdelete);
-	if (!cp)
-		return NULL;
-	if (n < 0)
-	{	cp->ptr = (void*)SOAP_NEW(tns__submitGameAnnotationResponse);
-		if (size)
-			*size = sizeof(tns__submitGameAnnotationResponse);
-		((tns__submitGameAnnotationResponse*)cp->ptr)->soap = soap;
-	}
-	else
-	{	cp->ptr = (void*)SOAP_NEW(tns__submitGameAnnotationResponse[n]);
-		if (!cp->ptr)
-		{	soap->error = SOAP_EOM;
-			return NULL;
-		}
-		if (size)
-			*size = n * sizeof(tns__submitGameAnnotationResponse);
-		for (int i = 0; i < n; i++)
-			((tns__submitGameAnnotationResponse*)cp->ptr)[i].soap = soap;
-	}
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
-	return (tns__submitGameAnnotationResponse*)cp->ptr;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__submitGameAnnotationResponse(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
-{
-	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying tns__submitGameAnnotationResponse %p -> %p\n", q, p));
-	*(tns__submitGameAnnotationResponse*)p = *(tns__submitGameAnnotationResponse*)q;
-}
-
-void tns__submitGameAnnotation::soap_default(struct soap *soap)
-{
-	this->soap = soap;
-	this->tns__submitGameAnnotation::arg0 = NULL;
-	this->tns__submitGameAnnotation::userName = NULL;
-	this->tns__submitGameAnnotation::password = NULL;
-	/* transient soap skipped */
-}
-
-void tns__submitGameAnnotation::soap_serialize(struct soap *soap) const
-{
-	(void)soap; /* appease -Wall -Werror */
-	soap_serialize_PointerTotns__gameAnnotation(soap, &this->tns__submitGameAnnotation::arg0);
-	soap_serialize_PointerTostd__string(soap, &this->tns__submitGameAnnotation::userName);
-	soap_serialize_PointerTostd__string(soap, &this->tns__submitGameAnnotation::password);
-	/* transient soap skipped */
-}
-
-int tns__submitGameAnnotation::soap_out(struct soap *soap, const char *tag, int id, const char *type) const
-{
-	return soap_out_tns__submitGameAnnotation(soap, tag, id, this, type);
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__submitGameAnnotation(struct soap *soap, const char *tag, int id, const tns__submitGameAnnotation *a, const char *type)
-{
-	if (soap_element_begin_out(soap, tag, soap_embedded_id(soap, id, a, SOAP_TYPE_ServerSoap_tns__submitGameAnnotation), type))
-		return soap->error;
-	if (soap_out_PointerTotns__gameAnnotation(soap, "arg0", -1, &(a->tns__submitGameAnnotation::arg0), ""))
-		return soap->error;
-	if (soap_out_PointerTostd__string(soap, "userName", -1, &(a->tns__submitGameAnnotation::userName), ""))
-		return soap->error;
-	if (soap_out_PointerTostd__string(soap, "password", -1, &(a->tns__submitGameAnnotation::password), ""))
-		return soap->error;
-	/* transient soap skipped */
-	return soap_element_end_out(soap, tag);
-}
-
-void *tns__submitGameAnnotation::soap_in(struct soap *soap, const char *tag, const char *type)
-{	return soap_in_tns__submitGameAnnotation(soap, tag, this, type);
-}
-
-SOAP_FMAC3 tns__submitGameAnnotation * SOAP_FMAC4 soap_in_tns__submitGameAnnotation(struct soap *soap, const char *tag, tns__submitGameAnnotation *a, const char *type)
-{
-	(void)type; /* appease -Wall -Werror */
-	if (soap_element_begin_in(soap, tag, 0, NULL))
-		return NULL;
-	a = (tns__submitGameAnnotation *)soap_class_id_enter(soap, soap->id, a, SOAP_TYPE_ServerSoap_tns__submitGameAnnotation, sizeof(tns__submitGameAnnotation), soap->type, soap->arrayType);
-	if (!a)
-		return NULL;
-	if (soap->alloced)
-	{	a->soap_default(soap);
-		if (soap->clist->type != SOAP_TYPE_ServerSoap_tns__submitGameAnnotation)
-		{	soap_revert(soap);
-			*soap->id = '\0';
-			return (tns__submitGameAnnotation *)a->soap_in(soap, tag, type);
-		}
-	}
-	size_t soap_flag_arg01 = 1;
-	size_t soap_flag_userName1 = 1;
-	size_t soap_flag_password1 = 1;
-	if (soap->body && !*soap->href)
-	{
-		for (;;)
-		{	soap->error = SOAP_TAG_MISMATCH;
-			if (soap_flag_arg01 && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_PointerTotns__gameAnnotation(soap, "arg0", &(a->tns__submitGameAnnotation::arg0), "tns:gameAnnotation"))
-				{	soap_flag_arg01--;
-					continue;
-				}
-			if (soap_flag_userName1 && (soap->error == SOAP_TAG_MISMATCH || soap->error == SOAP_NO_TAG))
-				if (soap_in_PointerTostd__string(soap, "userName", &(a->tns__submitGameAnnotation::userName), "xsd:string"))
-				{	soap_flag_userName1--;
-					continue;
-				}
-			if (soap_flag_password1 && (soap->error == SOAP_TAG_MISMATCH || soap->error == SOAP_NO_TAG))
-				if (soap_in_PointerTostd__string(soap, "password", &(a->tns__submitGameAnnotation::password), "xsd:string"))
-				{	soap_flag_password1--;
-					continue;
-				}
-			/* transient soap skipped */
-			if (soap->error == SOAP_TAG_MISMATCH)
-				soap->error = soap_ignore_element(soap);
-			if (soap->error == SOAP_NO_TAG)
-				break;
-			if (soap->error)
-				return NULL;
-		}
-		if (soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	else
-	{	a = (tns__submitGameAnnotation *)soap_id_forward(soap, soap->href, (void*)a, 0, SOAP_TYPE_ServerSoap_tns__submitGameAnnotation, 0, sizeof(tns__submitGameAnnotation), 0, soap_copy_tns__submitGameAnnotation);
-		if (soap->body && soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	return a;
-}
-
-int tns__submitGameAnnotation::soap_put(struct soap *soap, const char *tag, const  char *type) const
-{
-	register int id = soap_embed(soap, (void*)this, NULL, 0, tag, SOAP_TYPE_ServerSoap_tns__submitGameAnnotation);
-	if (this->soap_out(soap, tag?tag:"tns:submitGameAnnotation", id, type))
-		return soap->error;
-	return soap_putindependent(soap);
-}
-
-void *tns__submitGameAnnotation::soap_get(struct soap *soap, const char *tag, const char *type)
-{
-	return soap_get_tns__submitGameAnnotation(soap, this, tag, type);
-}
-
-SOAP_FMAC3 tns__submitGameAnnotation * SOAP_FMAC4 soap_get_tns__submitGameAnnotation(struct soap *soap, tns__submitGameAnnotation *p, const char *tag, const char *type)
-{
-	if ((p = soap_in_tns__submitGameAnnotation(soap, tag, p, type)))
-		if (soap_getindependent(soap))
-			return NULL;
-	return p;
-}
-
-SOAP_FMAC1 tns__submitGameAnnotation * SOAP_FMAC2 soap_instantiate_tns__submitGameAnnotation(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
-{
-	(void)type; (void)arrayType; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate_tns__submitGameAnnotation(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
-	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap_tns__submitGameAnnotation, n, ServerSoap_fdelete);
-	if (!cp)
-		return NULL;
-	if (n < 0)
-	{	cp->ptr = (void*)SOAP_NEW(tns__submitGameAnnotation);
-		if (size)
-			*size = sizeof(tns__submitGameAnnotation);
-		((tns__submitGameAnnotation*)cp->ptr)->soap = soap;
-	}
-	else
-	{	cp->ptr = (void*)SOAP_NEW(tns__submitGameAnnotation[n]);
-		if (!cp->ptr)
-		{	soap->error = SOAP_EOM;
-			return NULL;
-		}
-		if (size)
-			*size = n * sizeof(tns__submitGameAnnotation);
-		for (int i = 0; i < n; i++)
-			((tns__submitGameAnnotation*)cp->ptr)[i].soap = soap;
-	}
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
-	return (tns__submitGameAnnotation*)cp->ptr;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__submitGameAnnotation(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
-{
-	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying tns__submitGameAnnotation %p -> %p\n", q, p));
-	*(tns__submitGameAnnotation*)p = *(tns__submitGameAnnotation*)q;
-}
-
-void tns__submitGameAliasTextWithTokenIdResponse::soap_default(struct soap *soap)
-{
-	this->soap = soap;
-	soap_default_LONG64(soap, &this->tns__submitGameAliasTextWithTokenIdResponse::return_);
-	/* transient soap skipped */
-}
-
-void tns__submitGameAliasTextWithTokenIdResponse::soap_serialize(struct soap *soap) const
-{
-	(void)soap; /* appease -Wall -Werror */
-	/* transient soap skipped */
-}
-
-int tns__submitGameAliasTextWithTokenIdResponse::soap_out(struct soap *soap, const char *tag, int id, const char *type) const
-{
-	return soap_out_tns__submitGameAliasTextWithTokenIdResponse(soap, tag, id, this, type);
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__submitGameAliasTextWithTokenIdResponse(struct soap *soap, const char *tag, int id, const tns__submitGameAliasTextWithTokenIdResponse *a, const char *type)
-{
-	if (soap_element_begin_out(soap, tag, soap_embedded_id(soap, id, a, SOAP_TYPE_ServerSoap_tns__submitGameAliasTextWithTokenIdResponse), type))
-		return soap->error;
-	if (soap_out_LONG64(soap, "return", -1, &(a->tns__submitGameAliasTextWithTokenIdResponse::return_), ""))
-		return soap->error;
-	/* transient soap skipped */
-	return soap_element_end_out(soap, tag);
-}
-
-void *tns__submitGameAliasTextWithTokenIdResponse::soap_in(struct soap *soap, const char *tag, const char *type)
-{	return soap_in_tns__submitGameAliasTextWithTokenIdResponse(soap, tag, this, type);
-}
-
-SOAP_FMAC3 tns__submitGameAliasTextWithTokenIdResponse * SOAP_FMAC4 soap_in_tns__submitGameAliasTextWithTokenIdResponse(struct soap *soap, const char *tag, tns__submitGameAliasTextWithTokenIdResponse *a, const char *type)
-{
-	(void)type; /* appease -Wall -Werror */
-	if (soap_element_begin_in(soap, tag, 0, NULL))
-		return NULL;
-	a = (tns__submitGameAliasTextWithTokenIdResponse *)soap_class_id_enter(soap, soap->id, a, SOAP_TYPE_ServerSoap_tns__submitGameAliasTextWithTokenIdResponse, sizeof(tns__submitGameAliasTextWithTokenIdResponse), soap->type, soap->arrayType);
-	if (!a)
-		return NULL;
-	if (soap->alloced)
-	{	a->soap_default(soap);
-		if (soap->clist->type != SOAP_TYPE_ServerSoap_tns__submitGameAliasTextWithTokenIdResponse)
-		{	soap_revert(soap);
-			*soap->id = '\0';
-			return (tns__submitGameAliasTextWithTokenIdResponse *)a->soap_in(soap, tag, type);
-		}
-	}
-	size_t soap_flag_return_1 = 1;
-	if (soap->body && !*soap->href)
-	{
-		for (;;)
-		{	soap->error = SOAP_TAG_MISMATCH;
-			if (soap_flag_return_1 && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_LONG64(soap, "return", &(a->tns__submitGameAliasTextWithTokenIdResponse::return_), "xsd:long"))
-				{	soap_flag_return_1--;
-					continue;
-				}
-			/* transient soap skipped */
-			if (soap->error == SOAP_TAG_MISMATCH)
-				soap->error = soap_ignore_element(soap);
-			if (soap->error == SOAP_NO_TAG)
-				break;
-			if (soap->error)
-				return NULL;
-		}
-		if (soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	else
-	{	a = (tns__submitGameAliasTextWithTokenIdResponse *)soap_id_forward(soap, soap->href, (void*)a, 0, SOAP_TYPE_ServerSoap_tns__submitGameAliasTextWithTokenIdResponse, 0, sizeof(tns__submitGameAliasTextWithTokenIdResponse), 0, soap_copy_tns__submitGameAliasTextWithTokenIdResponse);
-		if (soap->body && soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	if ((soap->mode & SOAP_XML_STRICT) && (soap_flag_return_1 > 0))
-	{	soap->error = SOAP_OCCURS;
-		return NULL;
-	}
-	return a;
-}
-
-int tns__submitGameAliasTextWithTokenIdResponse::soap_put(struct soap *soap, const char *tag, const  char *type) const
-{
-	register int id = soap_embed(soap, (void*)this, NULL, 0, tag, SOAP_TYPE_ServerSoap_tns__submitGameAliasTextWithTokenIdResponse);
-	if (this->soap_out(soap, tag?tag:"tns:submitGameAliasTextWithTokenIdResponse", id, type))
-		return soap->error;
-	return soap_putindependent(soap);
-}
-
-void *tns__submitGameAliasTextWithTokenIdResponse::soap_get(struct soap *soap, const char *tag, const char *type)
-{
-	return soap_get_tns__submitGameAliasTextWithTokenIdResponse(soap, this, tag, type);
-}
-
-SOAP_FMAC3 tns__submitGameAliasTextWithTokenIdResponse * SOAP_FMAC4 soap_get_tns__submitGameAliasTextWithTokenIdResponse(struct soap *soap, tns__submitGameAliasTextWithTokenIdResponse *p, const char *tag, const char *type)
-{
-	if ((p = soap_in_tns__submitGameAliasTextWithTokenIdResponse(soap, tag, p, type)))
-		if (soap_getindependent(soap))
-			return NULL;
-	return p;
-}
-
-SOAP_FMAC1 tns__submitGameAliasTextWithTokenIdResponse * SOAP_FMAC2 soap_instantiate_tns__submitGameAliasTextWithTokenIdResponse(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
-{
-	(void)type; (void)arrayType; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate_tns__submitGameAliasTextWithTokenIdResponse(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
-	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap_tns__submitGameAliasTextWithTokenIdResponse, n, ServerSoap_fdelete);
-	if (!cp)
-		return NULL;
-	if (n < 0)
-	{	cp->ptr = (void*)SOAP_NEW(tns__submitGameAliasTextWithTokenIdResponse);
-		if (size)
-			*size = sizeof(tns__submitGameAliasTextWithTokenIdResponse);
-		((tns__submitGameAliasTextWithTokenIdResponse*)cp->ptr)->soap = soap;
-	}
-	else
-	{	cp->ptr = (void*)SOAP_NEW(tns__submitGameAliasTextWithTokenIdResponse[n]);
-		if (!cp->ptr)
-		{	soap->error = SOAP_EOM;
-			return NULL;
-		}
-		if (size)
-			*size = n * sizeof(tns__submitGameAliasTextWithTokenIdResponse);
-		for (int i = 0; i < n; i++)
-			((tns__submitGameAliasTextWithTokenIdResponse*)cp->ptr)[i].soap = soap;
-	}
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
-	return (tns__submitGameAliasTextWithTokenIdResponse*)cp->ptr;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__submitGameAliasTextWithTokenIdResponse(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
-{
-	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying tns__submitGameAliasTextWithTokenIdResponse %p -> %p\n", q, p));
-	*(tns__submitGameAliasTextWithTokenIdResponse*)p = *(tns__submitGameAliasTextWithTokenIdResponse*)q;
-}
-
-void tns__submitGameAliasTextWithTokenId::soap_default(struct soap *soap)
-{
-	this->soap = soap;
-	this->tns__submitGameAliasTextWithTokenId::arg0 = NULL;
-	soap_default_int(soap, &this->tns__submitGameAliasTextWithTokenId::arg1);
-	soap_default_LONG64(soap, &this->tns__submitGameAliasTextWithTokenId::arg2);
-	this->tns__submitGameAliasTextWithTokenId::userName = NULL;
-	this->tns__submitGameAliasTextWithTokenId::password = NULL;
-	/* transient soap skipped */
-}
-
-void tns__submitGameAliasTextWithTokenId::soap_serialize(struct soap *soap) const
-{
-	(void)soap; /* appease -Wall -Werror */
-	soap_serialize_PointerTostd__string(soap, &this->tns__submitGameAliasTextWithTokenId::arg0);
-	soap_serialize_PointerTostd__string(soap, &this->tns__submitGameAliasTextWithTokenId::userName);
-	soap_serialize_PointerTostd__string(soap, &this->tns__submitGameAliasTextWithTokenId::password);
-	/* transient soap skipped */
-}
-
-int tns__submitGameAliasTextWithTokenId::soap_out(struct soap *soap, const char *tag, int id, const char *type) const
-{
-	return soap_out_tns__submitGameAliasTextWithTokenId(soap, tag, id, this, type);
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__submitGameAliasTextWithTokenId(struct soap *soap, const char *tag, int id, const tns__submitGameAliasTextWithTokenId *a, const char *type)
-{
-	if (soap_element_begin_out(soap, tag, soap_embedded_id(soap, id, a, SOAP_TYPE_ServerSoap_tns__submitGameAliasTextWithTokenId), type))
-		return soap->error;
-	if (soap_out_PointerTostd__string(soap, "arg0", -1, &(a->tns__submitGameAliasTextWithTokenId::arg0), ""))
-		return soap->error;
-	if (soap_out_int(soap, "arg1", -1, &(a->tns__submitGameAliasTextWithTokenId::arg1), ""))
-		return soap->error;
-	if (soap_out_LONG64(soap, "arg2", -1, &(a->tns__submitGameAliasTextWithTokenId::arg2), ""))
-		return soap->error;
-	if (soap_out_PointerTostd__string(soap, "userName", -1, &(a->tns__submitGameAliasTextWithTokenId::userName), ""))
-		return soap->error;
-	if (soap_out_PointerTostd__string(soap, "password", -1, &(a->tns__submitGameAliasTextWithTokenId::password), ""))
-		return soap->error;
-	/* transient soap skipped */
-	return soap_element_end_out(soap, tag);
-}
-
-void *tns__submitGameAliasTextWithTokenId::soap_in(struct soap *soap, const char *tag, const char *type)
-{	return soap_in_tns__submitGameAliasTextWithTokenId(soap, tag, this, type);
-}
-
-SOAP_FMAC3 tns__submitGameAliasTextWithTokenId * SOAP_FMAC4 soap_in_tns__submitGameAliasTextWithTokenId(struct soap *soap, const char *tag, tns__submitGameAliasTextWithTokenId *a, const char *type)
-{
-	(void)type; /* appease -Wall -Werror */
-	if (soap_element_begin_in(soap, tag, 0, NULL))
-		return NULL;
-	a = (tns__submitGameAliasTextWithTokenId *)soap_class_id_enter(soap, soap->id, a, SOAP_TYPE_ServerSoap_tns__submitGameAliasTextWithTokenId, sizeof(tns__submitGameAliasTextWithTokenId), soap->type, soap->arrayType);
-	if (!a)
-		return NULL;
-	if (soap->alloced)
-	{	a->soap_default(soap);
-		if (soap->clist->type != SOAP_TYPE_ServerSoap_tns__submitGameAliasTextWithTokenId)
-		{	soap_revert(soap);
-			*soap->id = '\0';
-			return (tns__submitGameAliasTextWithTokenId *)a->soap_in(soap, tag, type);
-		}
-	}
-	size_t soap_flag_arg01 = 1;
-	size_t soap_flag_arg11 = 1;
-	size_t soap_flag_arg21 = 1;
-	size_t soap_flag_userName1 = 1;
-	size_t soap_flag_password1 = 1;
-	if (soap->body && !*soap->href)
-	{
-		for (;;)
-		{	soap->error = SOAP_TAG_MISMATCH;
-			if (soap_flag_arg01 && (soap->error == SOAP_TAG_MISMATCH || soap->error == SOAP_NO_TAG))
-				if (soap_in_PointerTostd__string(soap, "arg0", &(a->tns__submitGameAliasTextWithTokenId::arg0), "xsd:string"))
-				{	soap_flag_arg01--;
-					continue;
-				}
-			if (soap_flag_arg11 && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_int(soap, "arg1", &(a->tns__submitGameAliasTextWithTokenId::arg1), "xsd:int"))
-				{	soap_flag_arg11--;
-					continue;
-				}
-			if (soap_flag_arg21 && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_LONG64(soap, "arg2", &(a->tns__submitGameAliasTextWithTokenId::arg2), "xsd:long"))
-				{	soap_flag_arg21--;
-					continue;
-				}
-			if (soap_flag_userName1 && (soap->error == SOAP_TAG_MISMATCH || soap->error == SOAP_NO_TAG))
-				if (soap_in_PointerTostd__string(soap, "userName", &(a->tns__submitGameAliasTextWithTokenId::userName), "xsd:string"))
-				{	soap_flag_userName1--;
-					continue;
-				}
-			if (soap_flag_password1 && (soap->error == SOAP_TAG_MISMATCH || soap->error == SOAP_NO_TAG))
-				if (soap_in_PointerTostd__string(soap, "password", &(a->tns__submitGameAliasTextWithTokenId::password), "xsd:string"))
-				{	soap_flag_password1--;
-					continue;
-				}
-			/* transient soap skipped */
-			if (soap->error == SOAP_TAG_MISMATCH)
-				soap->error = soap_ignore_element(soap);
-			if (soap->error == SOAP_NO_TAG)
-				break;
-			if (soap->error)
-				return NULL;
-		}
-		if (soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	else
-	{	a = (tns__submitGameAliasTextWithTokenId *)soap_id_forward(soap, soap->href, (void*)a, 0, SOAP_TYPE_ServerSoap_tns__submitGameAliasTextWithTokenId, 0, sizeof(tns__submitGameAliasTextWithTokenId), 0, soap_copy_tns__submitGameAliasTextWithTokenId);
-		if (soap->body && soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	if ((soap->mode & SOAP_XML_STRICT) && (soap_flag_arg11 > 0 || soap_flag_arg21 > 0))
-	{	soap->error = SOAP_OCCURS;
-		return NULL;
-	}
-	return a;
-}
-
-int tns__submitGameAliasTextWithTokenId::soap_put(struct soap *soap, const char *tag, const  char *type) const
-{
-	register int id = soap_embed(soap, (void*)this, NULL, 0, tag, SOAP_TYPE_ServerSoap_tns__submitGameAliasTextWithTokenId);
-	if (this->soap_out(soap, tag?tag:"tns:submitGameAliasTextWithTokenId", id, type))
-		return soap->error;
-	return soap_putindependent(soap);
-}
-
-void *tns__submitGameAliasTextWithTokenId::soap_get(struct soap *soap, const char *tag, const char *type)
-{
-	return soap_get_tns__submitGameAliasTextWithTokenId(soap, this, tag, type);
-}
-
-SOAP_FMAC3 tns__submitGameAliasTextWithTokenId * SOAP_FMAC4 soap_get_tns__submitGameAliasTextWithTokenId(struct soap *soap, tns__submitGameAliasTextWithTokenId *p, const char *tag, const char *type)
-{
-	if ((p = soap_in_tns__submitGameAliasTextWithTokenId(soap, tag, p, type)))
-		if (soap_getindependent(soap))
-			return NULL;
-	return p;
-}
-
-SOAP_FMAC1 tns__submitGameAliasTextWithTokenId * SOAP_FMAC2 soap_instantiate_tns__submitGameAliasTextWithTokenId(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
-{
-	(void)type; (void)arrayType; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate_tns__submitGameAliasTextWithTokenId(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
-	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap_tns__submitGameAliasTextWithTokenId, n, ServerSoap_fdelete);
-	if (!cp)
-		return NULL;
-	if (n < 0)
-	{	cp->ptr = (void*)SOAP_NEW(tns__submitGameAliasTextWithTokenId);
-		if (size)
-			*size = sizeof(tns__submitGameAliasTextWithTokenId);
-		((tns__submitGameAliasTextWithTokenId*)cp->ptr)->soap = soap;
-	}
-	else
-	{	cp->ptr = (void*)SOAP_NEW(tns__submitGameAliasTextWithTokenId[n]);
-		if (!cp->ptr)
-		{	soap->error = SOAP_EOM;
-			return NULL;
-		}
-		if (size)
-			*size = n * sizeof(tns__submitGameAliasTextWithTokenId);
-		for (int i = 0; i < n; i++)
-			((tns__submitGameAliasTextWithTokenId*)cp->ptr)[i].soap = soap;
-	}
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
-	return (tns__submitGameAliasTextWithTokenId*)cp->ptr;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__submitGameAliasTextWithTokenId(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
-{
-	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying tns__submitGameAliasTextWithTokenId %p -> %p\n", q, p));
-	*(tns__submitGameAliasTextWithTokenId*)p = *(tns__submitGameAliasTextWithTokenId*)q;
-}
-
-void tns__submitGameAliasTextAndTokenDigestResponse::soap_default(struct soap *soap)
-{
-	this->soap = soap;
-	soap_default_LONG64(soap, &this->tns__submitGameAliasTextAndTokenDigestResponse::return_);
-	/* transient soap skipped */
-}
-
-void tns__submitGameAliasTextAndTokenDigestResponse::soap_serialize(struct soap *soap) const
-{
-	(void)soap; /* appease -Wall -Werror */
-	/* transient soap skipped */
-}
-
-int tns__submitGameAliasTextAndTokenDigestResponse::soap_out(struct soap *soap, const char *tag, int id, const char *type) const
-{
-	return soap_out_tns__submitGameAliasTextAndTokenDigestResponse(soap, tag, id, this, type);
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__submitGameAliasTextAndTokenDigestResponse(struct soap *soap, const char *tag, int id, const tns__submitGameAliasTextAndTokenDigestResponse *a, const char *type)
-{
-	if (soap_element_begin_out(soap, tag, soap_embedded_id(soap, id, a, SOAP_TYPE_ServerSoap_tns__submitGameAliasTextAndTokenDigestResponse), type))
-		return soap->error;
-	if (soap_out_LONG64(soap, "return", -1, &(a->tns__submitGameAliasTextAndTokenDigestResponse::return_), ""))
-		return soap->error;
-	/* transient soap skipped */
-	return soap_element_end_out(soap, tag);
-}
-
-void *tns__submitGameAliasTextAndTokenDigestResponse::soap_in(struct soap *soap, const char *tag, const char *type)
-{	return soap_in_tns__submitGameAliasTextAndTokenDigestResponse(soap, tag, this, type);
-}
-
-SOAP_FMAC3 tns__submitGameAliasTextAndTokenDigestResponse * SOAP_FMAC4 soap_in_tns__submitGameAliasTextAndTokenDigestResponse(struct soap *soap, const char *tag, tns__submitGameAliasTextAndTokenDigestResponse *a, const char *type)
-{
-	(void)type; /* appease -Wall -Werror */
-	if (soap_element_begin_in(soap, tag, 0, NULL))
-		return NULL;
-	a = (tns__submitGameAliasTextAndTokenDigestResponse *)soap_class_id_enter(soap, soap->id, a, SOAP_TYPE_ServerSoap_tns__submitGameAliasTextAndTokenDigestResponse, sizeof(tns__submitGameAliasTextAndTokenDigestResponse), soap->type, soap->arrayType);
-	if (!a)
-		return NULL;
-	if (soap->alloced)
-	{	a->soap_default(soap);
-		if (soap->clist->type != SOAP_TYPE_ServerSoap_tns__submitGameAliasTextAndTokenDigestResponse)
-		{	soap_revert(soap);
-			*soap->id = '\0';
-			return (tns__submitGameAliasTextAndTokenDigestResponse *)a->soap_in(soap, tag, type);
-		}
-	}
-	size_t soap_flag_return_1 = 1;
-	if (soap->body && !*soap->href)
-	{
-		for (;;)
-		{	soap->error = SOAP_TAG_MISMATCH;
-			if (soap_flag_return_1 && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_LONG64(soap, "return", &(a->tns__submitGameAliasTextAndTokenDigestResponse::return_), "xsd:long"))
-				{	soap_flag_return_1--;
-					continue;
-				}
-			/* transient soap skipped */
-			if (soap->error == SOAP_TAG_MISMATCH)
-				soap->error = soap_ignore_element(soap);
-			if (soap->error == SOAP_NO_TAG)
-				break;
-			if (soap->error)
-				return NULL;
-		}
-		if (soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	else
-	{	a = (tns__submitGameAliasTextAndTokenDigestResponse *)soap_id_forward(soap, soap->href, (void*)a, 0, SOAP_TYPE_ServerSoap_tns__submitGameAliasTextAndTokenDigestResponse, 0, sizeof(tns__submitGameAliasTextAndTokenDigestResponse), 0, soap_copy_tns__submitGameAliasTextAndTokenDigestResponse);
-		if (soap->body && soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	if ((soap->mode & SOAP_XML_STRICT) && (soap_flag_return_1 > 0))
-	{	soap->error = SOAP_OCCURS;
-		return NULL;
-	}
-	return a;
-}
-
-int tns__submitGameAliasTextAndTokenDigestResponse::soap_put(struct soap *soap, const char *tag, const  char *type) const
-{
-	register int id = soap_embed(soap, (void*)this, NULL, 0, tag, SOAP_TYPE_ServerSoap_tns__submitGameAliasTextAndTokenDigestResponse);
-	if (this->soap_out(soap, tag?tag:"tns:submitGameAliasTextAndTokenDigestResponse", id, type))
-		return soap->error;
-	return soap_putindependent(soap);
-}
-
-void *tns__submitGameAliasTextAndTokenDigestResponse::soap_get(struct soap *soap, const char *tag, const char *type)
-{
-	return soap_get_tns__submitGameAliasTextAndTokenDigestResponse(soap, this, tag, type);
-}
-
-SOAP_FMAC3 tns__submitGameAliasTextAndTokenDigestResponse * SOAP_FMAC4 soap_get_tns__submitGameAliasTextAndTokenDigestResponse(struct soap *soap, tns__submitGameAliasTextAndTokenDigestResponse *p, const char *tag, const char *type)
-{
-	if ((p = soap_in_tns__submitGameAliasTextAndTokenDigestResponse(soap, tag, p, type)))
-		if (soap_getindependent(soap))
-			return NULL;
-	return p;
-}
-
-SOAP_FMAC1 tns__submitGameAliasTextAndTokenDigestResponse * SOAP_FMAC2 soap_instantiate_tns__submitGameAliasTextAndTokenDigestResponse(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
-{
-	(void)type; (void)arrayType; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate_tns__submitGameAliasTextAndTokenDigestResponse(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
-	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap_tns__submitGameAliasTextAndTokenDigestResponse, n, ServerSoap_fdelete);
-	if (!cp)
-		return NULL;
-	if (n < 0)
-	{	cp->ptr = (void*)SOAP_NEW(tns__submitGameAliasTextAndTokenDigestResponse);
-		if (size)
-			*size = sizeof(tns__submitGameAliasTextAndTokenDigestResponse);
-		((tns__submitGameAliasTextAndTokenDigestResponse*)cp->ptr)->soap = soap;
-	}
-	else
-	{	cp->ptr = (void*)SOAP_NEW(tns__submitGameAliasTextAndTokenDigestResponse[n]);
-		if (!cp->ptr)
-		{	soap->error = SOAP_EOM;
-			return NULL;
-		}
-		if (size)
-			*size = n * sizeof(tns__submitGameAliasTextAndTokenDigestResponse);
-		for (int i = 0; i < n; i++)
-			((tns__submitGameAliasTextAndTokenDigestResponse*)cp->ptr)[i].soap = soap;
-	}
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
-	return (tns__submitGameAliasTextAndTokenDigestResponse*)cp->ptr;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__submitGameAliasTextAndTokenDigestResponse(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
-{
-	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying tns__submitGameAliasTextAndTokenDigestResponse %p -> %p\n", q, p));
-	*(tns__submitGameAliasTextAndTokenDigestResponse*)p = *(tns__submitGameAliasTextAndTokenDigestResponse*)q;
-}
-
-void tns__submitGameAliasTextAndTokenDigest::soap_default(struct soap *soap)
-{
-	this->soap = soap;
-	this->tns__submitGameAliasTextAndTokenDigest::arg0 = NULL;
-	soap_default_int(soap, &this->tns__submitGameAliasTextAndTokenDigest::arg1);
-	this->tns__submitGameAliasTextAndTokenDigest::arg2 = NULL;
-	this->tns__submitGameAliasTextAndTokenDigest::userName = NULL;
-	this->tns__submitGameAliasTextAndTokenDigest::password = NULL;
-	/* transient soap skipped */
-}
-
-void tns__submitGameAliasTextAndTokenDigest::soap_serialize(struct soap *soap) const
-{
-	(void)soap; /* appease -Wall -Werror */
-	soap_serialize_PointerTostd__string(soap, &this->tns__submitGameAliasTextAndTokenDigest::arg0);
-	soap_serialize_PointerTostd__string(soap, &this->tns__submitGameAliasTextAndTokenDigest::arg2);
-	soap_serialize_PointerTostd__string(soap, &this->tns__submitGameAliasTextAndTokenDigest::userName);
-	soap_serialize_PointerTostd__string(soap, &this->tns__submitGameAliasTextAndTokenDigest::password);
-	/* transient soap skipped */
-}
-
-int tns__submitGameAliasTextAndTokenDigest::soap_out(struct soap *soap, const char *tag, int id, const char *type) const
-{
-	return soap_out_tns__submitGameAliasTextAndTokenDigest(soap, tag, id, this, type);
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__submitGameAliasTextAndTokenDigest(struct soap *soap, const char *tag, int id, const tns__submitGameAliasTextAndTokenDigest *a, const char *type)
-{
-	if (soap_element_begin_out(soap, tag, soap_embedded_id(soap, id, a, SOAP_TYPE_ServerSoap_tns__submitGameAliasTextAndTokenDigest), type))
-		return soap->error;
-	if (soap_out_PointerTostd__string(soap, "arg0", -1, &(a->tns__submitGameAliasTextAndTokenDigest::arg0), ""))
-		return soap->error;
-	if (soap_out_int(soap, "arg1", -1, &(a->tns__submitGameAliasTextAndTokenDigest::arg1), ""))
-		return soap->error;
-	if (soap_out_PointerTostd__string(soap, "arg2", -1, &(a->tns__submitGameAliasTextAndTokenDigest::arg2), ""))
-		return soap->error;
-	if (soap_out_PointerTostd__string(soap, "userName", -1, &(a->tns__submitGameAliasTextAndTokenDigest::userName), ""))
-		return soap->error;
-	if (soap_out_PointerTostd__string(soap, "password", -1, &(a->tns__submitGameAliasTextAndTokenDigest::password), ""))
-		return soap->error;
-	/* transient soap skipped */
-	return soap_element_end_out(soap, tag);
-}
-
-void *tns__submitGameAliasTextAndTokenDigest::soap_in(struct soap *soap, const char *tag, const char *type)
-{	return soap_in_tns__submitGameAliasTextAndTokenDigest(soap, tag, this, type);
-}
-
-SOAP_FMAC3 tns__submitGameAliasTextAndTokenDigest * SOAP_FMAC4 soap_in_tns__submitGameAliasTextAndTokenDigest(struct soap *soap, const char *tag, tns__submitGameAliasTextAndTokenDigest *a, const char *type)
-{
-	(void)type; /* appease -Wall -Werror */
-	if (soap_element_begin_in(soap, tag, 0, NULL))
-		return NULL;
-	a = (tns__submitGameAliasTextAndTokenDigest *)soap_class_id_enter(soap, soap->id, a, SOAP_TYPE_ServerSoap_tns__submitGameAliasTextAndTokenDigest, sizeof(tns__submitGameAliasTextAndTokenDigest), soap->type, soap->arrayType);
-	if (!a)
-		return NULL;
-	if (soap->alloced)
-	{	a->soap_default(soap);
-		if (soap->clist->type != SOAP_TYPE_ServerSoap_tns__submitGameAliasTextAndTokenDigest)
-		{	soap_revert(soap);
-			*soap->id = '\0';
-			return (tns__submitGameAliasTextAndTokenDigest *)a->soap_in(soap, tag, type);
-		}
-	}
-	size_t soap_flag_arg01 = 1;
-	size_t soap_flag_arg11 = 1;
-	size_t soap_flag_arg21 = 1;
-	size_t soap_flag_userName1 = 1;
-	size_t soap_flag_password1 = 1;
-	if (soap->body && !*soap->href)
-	{
-		for (;;)
-		{	soap->error = SOAP_TAG_MISMATCH;
-			if (soap_flag_arg01 && (soap->error == SOAP_TAG_MISMATCH || soap->error == SOAP_NO_TAG))
-				if (soap_in_PointerTostd__string(soap, "arg0", &(a->tns__submitGameAliasTextAndTokenDigest::arg0), "xsd:string"))
-				{	soap_flag_arg01--;
-					continue;
-				}
-			if (soap_flag_arg11 && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_int(soap, "arg1", &(a->tns__submitGameAliasTextAndTokenDigest::arg1), "xsd:int"))
-				{	soap_flag_arg11--;
-					continue;
-				}
-			if (soap_flag_arg21 && (soap->error == SOAP_TAG_MISMATCH || soap->error == SOAP_NO_TAG))
-				if (soap_in_PointerTostd__string(soap, "arg2", &(a->tns__submitGameAliasTextAndTokenDigest::arg2), "xsd:string"))
-				{	soap_flag_arg21--;
-					continue;
-				}
-			if (soap_flag_userName1 && (soap->error == SOAP_TAG_MISMATCH || soap->error == SOAP_NO_TAG))
-				if (soap_in_PointerTostd__string(soap, "userName", &(a->tns__submitGameAliasTextAndTokenDigest::userName), "xsd:string"))
-				{	soap_flag_userName1--;
-					continue;
-				}
-			if (soap_flag_password1 && (soap->error == SOAP_TAG_MISMATCH || soap->error == SOAP_NO_TAG))
-				if (soap_in_PointerTostd__string(soap, "password", &(a->tns__submitGameAliasTextAndTokenDigest::password), "xsd:string"))
-				{	soap_flag_password1--;
-					continue;
-				}
-			/* transient soap skipped */
-			if (soap->error == SOAP_TAG_MISMATCH)
-				soap->error = soap_ignore_element(soap);
-			if (soap->error == SOAP_NO_TAG)
-				break;
-			if (soap->error)
-				return NULL;
-		}
-		if (soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	else
-	{	a = (tns__submitGameAliasTextAndTokenDigest *)soap_id_forward(soap, soap->href, (void*)a, 0, SOAP_TYPE_ServerSoap_tns__submitGameAliasTextAndTokenDigest, 0, sizeof(tns__submitGameAliasTextAndTokenDigest), 0, soap_copy_tns__submitGameAliasTextAndTokenDigest);
-		if (soap->body && soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	if ((soap->mode & SOAP_XML_STRICT) && (soap_flag_arg11 > 0))
-	{	soap->error = SOAP_OCCURS;
-		return NULL;
-	}
-	return a;
-}
-
-int tns__submitGameAliasTextAndTokenDigest::soap_put(struct soap *soap, const char *tag, const  char *type) const
-{
-	register int id = soap_embed(soap, (void*)this, NULL, 0, tag, SOAP_TYPE_ServerSoap_tns__submitGameAliasTextAndTokenDigest);
-	if (this->soap_out(soap, tag?tag:"tns:submitGameAliasTextAndTokenDigest", id, type))
-		return soap->error;
-	return soap_putindependent(soap);
-}
-
-void *tns__submitGameAliasTextAndTokenDigest::soap_get(struct soap *soap, const char *tag, const char *type)
-{
-	return soap_get_tns__submitGameAliasTextAndTokenDigest(soap, this, tag, type);
-}
-
-SOAP_FMAC3 tns__submitGameAliasTextAndTokenDigest * SOAP_FMAC4 soap_get_tns__submitGameAliasTextAndTokenDigest(struct soap *soap, tns__submitGameAliasTextAndTokenDigest *p, const char *tag, const char *type)
-{
-	if ((p = soap_in_tns__submitGameAliasTextAndTokenDigest(soap, tag, p, type)))
-		if (soap_getindependent(soap))
-			return NULL;
-	return p;
-}
-
-SOAP_FMAC1 tns__submitGameAliasTextAndTokenDigest * SOAP_FMAC2 soap_instantiate_tns__submitGameAliasTextAndTokenDigest(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
-{
-	(void)type; (void)arrayType; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate_tns__submitGameAliasTextAndTokenDigest(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
-	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap_tns__submitGameAliasTextAndTokenDigest, n, ServerSoap_fdelete);
-	if (!cp)
-		return NULL;
-	if (n < 0)
-	{	cp->ptr = (void*)SOAP_NEW(tns__submitGameAliasTextAndTokenDigest);
-		if (size)
-			*size = sizeof(tns__submitGameAliasTextAndTokenDigest);
-		((tns__submitGameAliasTextAndTokenDigest*)cp->ptr)->soap = soap;
-	}
-	else
-	{	cp->ptr = (void*)SOAP_NEW(tns__submitGameAliasTextAndTokenDigest[n]);
-		if (!cp->ptr)
-		{	soap->error = SOAP_EOM;
-			return NULL;
-		}
-		if (size)
-			*size = n * sizeof(tns__submitGameAliasTextAndTokenDigest);
-		for (int i = 0; i < n; i++)
-			((tns__submitGameAliasTextAndTokenDigest*)cp->ptr)[i].soap = soap;
-	}
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
-	return (tns__submitGameAliasTextAndTokenDigest*)cp->ptr;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__submitGameAliasTextAndTokenDigest(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
-{
-	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying tns__submitGameAliasTextAndTokenDigest %p -> %p\n", q, p));
-	*(tns__submitGameAliasTextAndTokenDigest*)p = *(tns__submitGameAliasTextAndTokenDigest*)q;
-}
-
-void tns__submitGameAliasResponse::soap_default(struct soap *soap)
-{
-	this->soap = soap;
-	soap_default_LONG64(soap, &this->tns__submitGameAliasResponse::return_);
-	/* transient soap skipped */
-}
-
-void tns__submitGameAliasResponse::soap_serialize(struct soap *soap) const
-{
-	(void)soap; /* appease -Wall -Werror */
-	/* transient soap skipped */
-}
-
-int tns__submitGameAliasResponse::soap_out(struct soap *soap, const char *tag, int id, const char *type) const
-{
-	return soap_out_tns__submitGameAliasResponse(soap, tag, id, this, type);
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__submitGameAliasResponse(struct soap *soap, const char *tag, int id, const tns__submitGameAliasResponse *a, const char *type)
-{
-	if (soap_element_begin_out(soap, tag, soap_embedded_id(soap, id, a, SOAP_TYPE_ServerSoap_tns__submitGameAliasResponse), type))
-		return soap->error;
-	if (soap_out_LONG64(soap, "return", -1, &(a->tns__submitGameAliasResponse::return_), ""))
-		return soap->error;
-	/* transient soap skipped */
-	return soap_element_end_out(soap, tag);
-}
-
-void *tns__submitGameAliasResponse::soap_in(struct soap *soap, const char *tag, const char *type)
-{	return soap_in_tns__submitGameAliasResponse(soap, tag, this, type);
-}
-
-SOAP_FMAC3 tns__submitGameAliasResponse * SOAP_FMAC4 soap_in_tns__submitGameAliasResponse(struct soap *soap, const char *tag, tns__submitGameAliasResponse *a, const char *type)
-{
-	(void)type; /* appease -Wall -Werror */
-	if (soap_element_begin_in(soap, tag, 0, NULL))
-		return NULL;
-	a = (tns__submitGameAliasResponse *)soap_class_id_enter(soap, soap->id, a, SOAP_TYPE_ServerSoap_tns__submitGameAliasResponse, sizeof(tns__submitGameAliasResponse), soap->type, soap->arrayType);
-	if (!a)
-		return NULL;
-	if (soap->alloced)
-	{	a->soap_default(soap);
-		if (soap->clist->type != SOAP_TYPE_ServerSoap_tns__submitGameAliasResponse)
-		{	soap_revert(soap);
-			*soap->id = '\0';
-			return (tns__submitGameAliasResponse *)a->soap_in(soap, tag, type);
-		}
-	}
-	size_t soap_flag_return_1 = 1;
-	if (soap->body && !*soap->href)
-	{
-		for (;;)
-		{	soap->error = SOAP_TAG_MISMATCH;
-			if (soap_flag_return_1 && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_LONG64(soap, "return", &(a->tns__submitGameAliasResponse::return_), "xsd:long"))
-				{	soap_flag_return_1--;
-					continue;
-				}
-			/* transient soap skipped */
-			if (soap->error == SOAP_TAG_MISMATCH)
-				soap->error = soap_ignore_element(soap);
-			if (soap->error == SOAP_NO_TAG)
-				break;
-			if (soap->error)
-				return NULL;
-		}
-		if (soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	else
-	{	a = (tns__submitGameAliasResponse *)soap_id_forward(soap, soap->href, (void*)a, 0, SOAP_TYPE_ServerSoap_tns__submitGameAliasResponse, 0, sizeof(tns__submitGameAliasResponse), 0, soap_copy_tns__submitGameAliasResponse);
-		if (soap->body && soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	if ((soap->mode & SOAP_XML_STRICT) && (soap_flag_return_1 > 0))
-	{	soap->error = SOAP_OCCURS;
-		return NULL;
-	}
-	return a;
-}
-
-int tns__submitGameAliasResponse::soap_put(struct soap *soap, const char *tag, const  char *type) const
-{
-	register int id = soap_embed(soap, (void*)this, NULL, 0, tag, SOAP_TYPE_ServerSoap_tns__submitGameAliasResponse);
-	if (this->soap_out(soap, tag?tag:"tns:submitGameAliasResponse", id, type))
-		return soap->error;
-	return soap_putindependent(soap);
-}
-
-void *tns__submitGameAliasResponse::soap_get(struct soap *soap, const char *tag, const char *type)
-{
-	return soap_get_tns__submitGameAliasResponse(soap, this, tag, type);
-}
-
-SOAP_FMAC3 tns__submitGameAliasResponse * SOAP_FMAC4 soap_get_tns__submitGameAliasResponse(struct soap *soap, tns__submitGameAliasResponse *p, const char *tag, const char *type)
-{
-	if ((p = soap_in_tns__submitGameAliasResponse(soap, tag, p, type)))
-		if (soap_getindependent(soap))
-			return NULL;
-	return p;
-}
-
-SOAP_FMAC1 tns__submitGameAliasResponse * SOAP_FMAC2 soap_instantiate_tns__submitGameAliasResponse(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
-{
-	(void)type; (void)arrayType; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate_tns__submitGameAliasResponse(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
-	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap_tns__submitGameAliasResponse, n, ServerSoap_fdelete);
-	if (!cp)
-		return NULL;
-	if (n < 0)
-	{	cp->ptr = (void*)SOAP_NEW(tns__submitGameAliasResponse);
-		if (size)
-			*size = sizeof(tns__submitGameAliasResponse);
-		((tns__submitGameAliasResponse*)cp->ptr)->soap = soap;
-	}
-	else
-	{	cp->ptr = (void*)SOAP_NEW(tns__submitGameAliasResponse[n]);
-		if (!cp->ptr)
-		{	soap->error = SOAP_EOM;
-			return NULL;
-		}
-		if (size)
-			*size = n * sizeof(tns__submitGameAliasResponse);
-		for (int i = 0; i < n; i++)
-			((tns__submitGameAliasResponse*)cp->ptr)[i].soap = soap;
-	}
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
-	return (tns__submitGameAliasResponse*)cp->ptr;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__submitGameAliasResponse(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
-{
-	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying tns__submitGameAliasResponse %p -> %p\n", q, p));
-	*(tns__submitGameAliasResponse*)p = *(tns__submitGameAliasResponse*)q;
-}
-
-void tns__submitGameAlias::soap_default(struct soap *soap)
-{
-	this->soap = soap;
-	this->tns__submitGameAlias::arg0 = NULL;
-	this->tns__submitGameAlias::userName = NULL;
-	this->tns__submitGameAlias::password = NULL;
-	/* transient soap skipped */
-}
-
-void tns__submitGameAlias::soap_serialize(struct soap *soap) const
-{
-	(void)soap; /* appease -Wall -Werror */
-	soap_serialize_PointerTotns__gameAlias(soap, &this->tns__submitGameAlias::arg0);
-	soap_serialize_PointerTostd__string(soap, &this->tns__submitGameAlias::userName);
-	soap_serialize_PointerTostd__string(soap, &this->tns__submitGameAlias::password);
-	/* transient soap skipped */
-}
-
-int tns__submitGameAlias::soap_out(struct soap *soap, const char *tag, int id, const char *type) const
-{
-	return soap_out_tns__submitGameAlias(soap, tag, id, this, type);
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__submitGameAlias(struct soap *soap, const char *tag, int id, const tns__submitGameAlias *a, const char *type)
-{
-	if (soap_element_begin_out(soap, tag, soap_embedded_id(soap, id, a, SOAP_TYPE_ServerSoap_tns__submitGameAlias), type))
-		return soap->error;
-	if (soap_out_PointerTotns__gameAlias(soap, "arg0", -1, &(a->tns__submitGameAlias::arg0), ""))
-		return soap->error;
-	if (soap_out_PointerTostd__string(soap, "userName", -1, &(a->tns__submitGameAlias::userName), ""))
-		return soap->error;
-	if (soap_out_PointerTostd__string(soap, "password", -1, &(a->tns__submitGameAlias::password), ""))
-		return soap->error;
-	/* transient soap skipped */
-	return soap_element_end_out(soap, tag);
-}
-
-void *tns__submitGameAlias::soap_in(struct soap *soap, const char *tag, const char *type)
-{	return soap_in_tns__submitGameAlias(soap, tag, this, type);
-}
-
-SOAP_FMAC3 tns__submitGameAlias * SOAP_FMAC4 soap_in_tns__submitGameAlias(struct soap *soap, const char *tag, tns__submitGameAlias *a, const char *type)
-{
-	(void)type; /* appease -Wall -Werror */
-	if (soap_element_begin_in(soap, tag, 0, NULL))
-		return NULL;
-	a = (tns__submitGameAlias *)soap_class_id_enter(soap, soap->id, a, SOAP_TYPE_ServerSoap_tns__submitGameAlias, sizeof(tns__submitGameAlias), soap->type, soap->arrayType);
-	if (!a)
-		return NULL;
-	if (soap->alloced)
-	{	a->soap_default(soap);
-		if (soap->clist->type != SOAP_TYPE_ServerSoap_tns__submitGameAlias)
-		{	soap_revert(soap);
-			*soap->id = '\0';
-			return (tns__submitGameAlias *)a->soap_in(soap, tag, type);
-		}
-	}
-	size_t soap_flag_arg01 = 1;
-	size_t soap_flag_userName1 = 1;
-	size_t soap_flag_password1 = 1;
-	if (soap->body && !*soap->href)
-	{
-		for (;;)
-		{	soap->error = SOAP_TAG_MISMATCH;
-			if (soap_flag_arg01 && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_PointerTotns__gameAlias(soap, "arg0", &(a->tns__submitGameAlias::arg0), "tns:gameAlias"))
-				{	soap_flag_arg01--;
-					continue;
-				}
-			if (soap_flag_userName1 && (soap->error == SOAP_TAG_MISMATCH || soap->error == SOAP_NO_TAG))
-				if (soap_in_PointerTostd__string(soap, "userName", &(a->tns__submitGameAlias::userName), "xsd:string"))
-				{	soap_flag_userName1--;
-					continue;
-				}
-			if (soap_flag_password1 && (soap->error == SOAP_TAG_MISMATCH || soap->error == SOAP_NO_TAG))
-				if (soap_in_PointerTostd__string(soap, "password", &(a->tns__submitGameAlias::password), "xsd:string"))
-				{	soap_flag_password1--;
-					continue;
-				}
-			/* transient soap skipped */
-			if (soap->error == SOAP_TAG_MISMATCH)
-				soap->error = soap_ignore_element(soap);
-			if (soap->error == SOAP_NO_TAG)
-				break;
-			if (soap->error)
-				return NULL;
-		}
-		if (soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	else
-	{	a = (tns__submitGameAlias *)soap_id_forward(soap, soap->href, (void*)a, 0, SOAP_TYPE_ServerSoap_tns__submitGameAlias, 0, sizeof(tns__submitGameAlias), 0, soap_copy_tns__submitGameAlias);
-		if (soap->body && soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	return a;
-}
-
-int tns__submitGameAlias::soap_put(struct soap *soap, const char *tag, const  char *type) const
-{
-	register int id = soap_embed(soap, (void*)this, NULL, 0, tag, SOAP_TYPE_ServerSoap_tns__submitGameAlias);
-	if (this->soap_out(soap, tag?tag:"tns:submitGameAlias", id, type))
-		return soap->error;
-	return soap_putindependent(soap);
-}
-
-void *tns__submitGameAlias::soap_get(struct soap *soap, const char *tag, const char *type)
-{
-	return soap_get_tns__submitGameAlias(soap, this, tag, type);
-}
-
-SOAP_FMAC3 tns__submitGameAlias * SOAP_FMAC4 soap_get_tns__submitGameAlias(struct soap *soap, tns__submitGameAlias *p, const char *tag, const char *type)
-{
-	if ((p = soap_in_tns__submitGameAlias(soap, tag, p, type)))
-		if (soap_getindependent(soap))
-			return NULL;
-	return p;
-}
-
-SOAP_FMAC1 tns__submitGameAlias * SOAP_FMAC2 soap_instantiate_tns__submitGameAlias(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
-{
-	(void)type; (void)arrayType; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate_tns__submitGameAlias(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
-	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap_tns__submitGameAlias, n, ServerSoap_fdelete);
-	if (!cp)
-		return NULL;
-	if (n < 0)
-	{	cp->ptr = (void*)SOAP_NEW(tns__submitGameAlias);
-		if (size)
-			*size = sizeof(tns__submitGameAlias);
-		((tns__submitGameAlias*)cp->ptr)->soap = soap;
-	}
-	else
-	{	cp->ptr = (void*)SOAP_NEW(tns__submitGameAlias[n]);
-		if (!cp->ptr)
-		{	soap->error = SOAP_EOM;
-			return NULL;
-		}
-		if (size)
-			*size = n * sizeof(tns__submitGameAlias);
-		for (int i = 0; i < n; i++)
-			((tns__submitGameAlias*)cp->ptr)[i].soap = soap;
-	}
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
-	return (tns__submitGameAlias*)cp->ptr;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__submitGameAlias(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
-{
-	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying tns__submitGameAlias %p -> %p\n", q, p));
-	*(tns__submitGameAlias*)p = *(tns__submitGameAlias*)q;
 }
 
 void tns__setUserLanguageResponse::soap_default(struct soap *soap)
@@ -9834,274 +6591,6 @@ SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__selectRelatedMediaAnnotationsWithToken
 	*(tns__selectRelatedMediaAnnotationsWithTokenId*)p = *(tns__selectRelatedMediaAnnotationsWithTokenId*)q;
 }
 
-void tns__selectRelatedGameAnnotationsWithTokenIdResponse::soap_default(struct soap *soap)
-{
-	this->soap = soap;
-	soap_default_std__vectorTemplateOfPointerTotns__gameAnnotation(soap, &this->tns__selectRelatedGameAnnotationsWithTokenIdResponse::return_);
-	/* transient soap skipped */
-}
-
-void tns__selectRelatedGameAnnotationsWithTokenIdResponse::soap_serialize(struct soap *soap) const
-{
-	(void)soap; /* appease -Wall -Werror */
-	soap_serialize_std__vectorTemplateOfPointerTotns__gameAnnotation(soap, &this->tns__selectRelatedGameAnnotationsWithTokenIdResponse::return_);
-	/* transient soap skipped */
-}
-
-int tns__selectRelatedGameAnnotationsWithTokenIdResponse::soap_out(struct soap *soap, const char *tag, int id, const char *type) const
-{
-	return soap_out_tns__selectRelatedGameAnnotationsWithTokenIdResponse(soap, tag, id, this, type);
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__selectRelatedGameAnnotationsWithTokenIdResponse(struct soap *soap, const char *tag, int id, const tns__selectRelatedGameAnnotationsWithTokenIdResponse *a, const char *type)
-{
-	if (soap_element_begin_out(soap, tag, soap_embedded_id(soap, id, a, SOAP_TYPE_ServerSoap_tns__selectRelatedGameAnnotationsWithTokenIdResponse), type))
-		return soap->error;
-	if (soap_out_std__vectorTemplateOfPointerTotns__gameAnnotation(soap, "return", -1, &(a->tns__selectRelatedGameAnnotationsWithTokenIdResponse::return_), ""))
-		return soap->error;
-	/* transient soap skipped */
-	return soap_element_end_out(soap, tag);
-}
-
-void *tns__selectRelatedGameAnnotationsWithTokenIdResponse::soap_in(struct soap *soap, const char *tag, const char *type)
-{	return soap_in_tns__selectRelatedGameAnnotationsWithTokenIdResponse(soap, tag, this, type);
-}
-
-SOAP_FMAC3 tns__selectRelatedGameAnnotationsWithTokenIdResponse * SOAP_FMAC4 soap_in_tns__selectRelatedGameAnnotationsWithTokenIdResponse(struct soap *soap, const char *tag, tns__selectRelatedGameAnnotationsWithTokenIdResponse *a, const char *type)
-{
-	(void)type; /* appease -Wall -Werror */
-	if (soap_element_begin_in(soap, tag, 0, NULL))
-		return NULL;
-	a = (tns__selectRelatedGameAnnotationsWithTokenIdResponse *)soap_class_id_enter(soap, soap->id, a, SOAP_TYPE_ServerSoap_tns__selectRelatedGameAnnotationsWithTokenIdResponse, sizeof(tns__selectRelatedGameAnnotationsWithTokenIdResponse), soap->type, soap->arrayType);
-	if (!a)
-		return NULL;
-	if (soap->alloced)
-	{	a->soap_default(soap);
-		if (soap->clist->type != SOAP_TYPE_ServerSoap_tns__selectRelatedGameAnnotationsWithTokenIdResponse)
-		{	soap_revert(soap);
-			*soap->id = '\0';
-			return (tns__selectRelatedGameAnnotationsWithTokenIdResponse *)a->soap_in(soap, tag, type);
-		}
-	}
-	if (soap->body && !*soap->href)
-	{
-		for (;;)
-		{	soap->error = SOAP_TAG_MISMATCH;
-			if (soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_std__vectorTemplateOfPointerTotns__gameAnnotation(soap, "return", &(a->tns__selectRelatedGameAnnotationsWithTokenIdResponse::return_), "tns:gameAnnotation"))
-					continue;
-			/* transient soap skipped */
-			if (soap->error == SOAP_TAG_MISMATCH)
-				soap->error = soap_ignore_element(soap);
-			if (soap->error == SOAP_NO_TAG)
-				break;
-			if (soap->error)
-				return NULL;
-		}
-		if (soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	else
-	{	a = (tns__selectRelatedGameAnnotationsWithTokenIdResponse *)soap_id_forward(soap, soap->href, (void*)a, 0, SOAP_TYPE_ServerSoap_tns__selectRelatedGameAnnotationsWithTokenIdResponse, 0, sizeof(tns__selectRelatedGameAnnotationsWithTokenIdResponse), 0, soap_copy_tns__selectRelatedGameAnnotationsWithTokenIdResponse);
-		if (soap->body && soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	return a;
-}
-
-int tns__selectRelatedGameAnnotationsWithTokenIdResponse::soap_put(struct soap *soap, const char *tag, const  char *type) const
-{
-	register int id = soap_embed(soap, (void*)this, NULL, 0, tag, SOAP_TYPE_ServerSoap_tns__selectRelatedGameAnnotationsWithTokenIdResponse);
-	if (this->soap_out(soap, tag?tag:"tns:selectRelatedGameAnnotationsWithTokenIdResponse", id, type))
-		return soap->error;
-	return soap_putindependent(soap);
-}
-
-void *tns__selectRelatedGameAnnotationsWithTokenIdResponse::soap_get(struct soap *soap, const char *tag, const char *type)
-{
-	return soap_get_tns__selectRelatedGameAnnotationsWithTokenIdResponse(soap, this, tag, type);
-}
-
-SOAP_FMAC3 tns__selectRelatedGameAnnotationsWithTokenIdResponse * SOAP_FMAC4 soap_get_tns__selectRelatedGameAnnotationsWithTokenIdResponse(struct soap *soap, tns__selectRelatedGameAnnotationsWithTokenIdResponse *p, const char *tag, const char *type)
-{
-	if ((p = soap_in_tns__selectRelatedGameAnnotationsWithTokenIdResponse(soap, tag, p, type)))
-		if (soap_getindependent(soap))
-			return NULL;
-	return p;
-}
-
-SOAP_FMAC1 tns__selectRelatedGameAnnotationsWithTokenIdResponse * SOAP_FMAC2 soap_instantiate_tns__selectRelatedGameAnnotationsWithTokenIdResponse(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
-{
-	(void)type; (void)arrayType; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate_tns__selectRelatedGameAnnotationsWithTokenIdResponse(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
-	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap_tns__selectRelatedGameAnnotationsWithTokenIdResponse, n, ServerSoap_fdelete);
-	if (!cp)
-		return NULL;
-	if (n < 0)
-	{	cp->ptr = (void*)SOAP_NEW(tns__selectRelatedGameAnnotationsWithTokenIdResponse);
-		if (size)
-			*size = sizeof(tns__selectRelatedGameAnnotationsWithTokenIdResponse);
-		((tns__selectRelatedGameAnnotationsWithTokenIdResponse*)cp->ptr)->soap = soap;
-	}
-	else
-	{	cp->ptr = (void*)SOAP_NEW(tns__selectRelatedGameAnnotationsWithTokenIdResponse[n]);
-		if (!cp->ptr)
-		{	soap->error = SOAP_EOM;
-			return NULL;
-		}
-		if (size)
-			*size = n * sizeof(tns__selectRelatedGameAnnotationsWithTokenIdResponse);
-		for (int i = 0; i < n; i++)
-			((tns__selectRelatedGameAnnotationsWithTokenIdResponse*)cp->ptr)[i].soap = soap;
-	}
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
-	return (tns__selectRelatedGameAnnotationsWithTokenIdResponse*)cp->ptr;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__selectRelatedGameAnnotationsWithTokenIdResponse(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
-{
-	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying tns__selectRelatedGameAnnotationsWithTokenIdResponse %p -> %p\n", q, p));
-	*(tns__selectRelatedGameAnnotationsWithTokenIdResponse*)p = *(tns__selectRelatedGameAnnotationsWithTokenIdResponse*)q;
-}
-
-void tns__selectRelatedGameAnnotationsWithTokenId::soap_default(struct soap *soap)
-{
-	this->soap = soap;
-	soap_default_LONG64(soap, &this->tns__selectRelatedGameAnnotationsWithTokenId::arg0);
-	/* transient soap skipped */
-}
-
-void tns__selectRelatedGameAnnotationsWithTokenId::soap_serialize(struct soap *soap) const
-{
-	(void)soap; /* appease -Wall -Werror */
-	/* transient soap skipped */
-}
-
-int tns__selectRelatedGameAnnotationsWithTokenId::soap_out(struct soap *soap, const char *tag, int id, const char *type) const
-{
-	return soap_out_tns__selectRelatedGameAnnotationsWithTokenId(soap, tag, id, this, type);
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__selectRelatedGameAnnotationsWithTokenId(struct soap *soap, const char *tag, int id, const tns__selectRelatedGameAnnotationsWithTokenId *a, const char *type)
-{
-	if (soap_element_begin_out(soap, tag, soap_embedded_id(soap, id, a, SOAP_TYPE_ServerSoap_tns__selectRelatedGameAnnotationsWithTokenId), type))
-		return soap->error;
-	if (soap_out_LONG64(soap, "arg0", -1, &(a->tns__selectRelatedGameAnnotationsWithTokenId::arg0), ""))
-		return soap->error;
-	/* transient soap skipped */
-	return soap_element_end_out(soap, tag);
-}
-
-void *tns__selectRelatedGameAnnotationsWithTokenId::soap_in(struct soap *soap, const char *tag, const char *type)
-{	return soap_in_tns__selectRelatedGameAnnotationsWithTokenId(soap, tag, this, type);
-}
-
-SOAP_FMAC3 tns__selectRelatedGameAnnotationsWithTokenId * SOAP_FMAC4 soap_in_tns__selectRelatedGameAnnotationsWithTokenId(struct soap *soap, const char *tag, tns__selectRelatedGameAnnotationsWithTokenId *a, const char *type)
-{
-	(void)type; /* appease -Wall -Werror */
-	if (soap_element_begin_in(soap, tag, 0, NULL))
-		return NULL;
-	a = (tns__selectRelatedGameAnnotationsWithTokenId *)soap_class_id_enter(soap, soap->id, a, SOAP_TYPE_ServerSoap_tns__selectRelatedGameAnnotationsWithTokenId, sizeof(tns__selectRelatedGameAnnotationsWithTokenId), soap->type, soap->arrayType);
-	if (!a)
-		return NULL;
-	if (soap->alloced)
-	{	a->soap_default(soap);
-		if (soap->clist->type != SOAP_TYPE_ServerSoap_tns__selectRelatedGameAnnotationsWithTokenId)
-		{	soap_revert(soap);
-			*soap->id = '\0';
-			return (tns__selectRelatedGameAnnotationsWithTokenId *)a->soap_in(soap, tag, type);
-		}
-	}
-	size_t soap_flag_arg01 = 1;
-	if (soap->body && !*soap->href)
-	{
-		for (;;)
-		{	soap->error = SOAP_TAG_MISMATCH;
-			if (soap_flag_arg01 && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_LONG64(soap, "arg0", &(a->tns__selectRelatedGameAnnotationsWithTokenId::arg0), "xsd:long"))
-				{	soap_flag_arg01--;
-					continue;
-				}
-			/* transient soap skipped */
-			if (soap->error == SOAP_TAG_MISMATCH)
-				soap->error = soap_ignore_element(soap);
-			if (soap->error == SOAP_NO_TAG)
-				break;
-			if (soap->error)
-				return NULL;
-		}
-		if (soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	else
-	{	a = (tns__selectRelatedGameAnnotationsWithTokenId *)soap_id_forward(soap, soap->href, (void*)a, 0, SOAP_TYPE_ServerSoap_tns__selectRelatedGameAnnotationsWithTokenId, 0, sizeof(tns__selectRelatedGameAnnotationsWithTokenId), 0, soap_copy_tns__selectRelatedGameAnnotationsWithTokenId);
-		if (soap->body && soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	if ((soap->mode & SOAP_XML_STRICT) && (soap_flag_arg01 > 0))
-	{	soap->error = SOAP_OCCURS;
-		return NULL;
-	}
-	return a;
-}
-
-int tns__selectRelatedGameAnnotationsWithTokenId::soap_put(struct soap *soap, const char *tag, const  char *type) const
-{
-	register int id = soap_embed(soap, (void*)this, NULL, 0, tag, SOAP_TYPE_ServerSoap_tns__selectRelatedGameAnnotationsWithTokenId);
-	if (this->soap_out(soap, tag?tag:"tns:selectRelatedGameAnnotationsWithTokenId", id, type))
-		return soap->error;
-	return soap_putindependent(soap);
-}
-
-void *tns__selectRelatedGameAnnotationsWithTokenId::soap_get(struct soap *soap, const char *tag, const char *type)
-{
-	return soap_get_tns__selectRelatedGameAnnotationsWithTokenId(soap, this, tag, type);
-}
-
-SOAP_FMAC3 tns__selectRelatedGameAnnotationsWithTokenId * SOAP_FMAC4 soap_get_tns__selectRelatedGameAnnotationsWithTokenId(struct soap *soap, tns__selectRelatedGameAnnotationsWithTokenId *p, const char *tag, const char *type)
-{
-	if ((p = soap_in_tns__selectRelatedGameAnnotationsWithTokenId(soap, tag, p, type)))
-		if (soap_getindependent(soap))
-			return NULL;
-	return p;
-}
-
-SOAP_FMAC1 tns__selectRelatedGameAnnotationsWithTokenId * SOAP_FMAC2 soap_instantiate_tns__selectRelatedGameAnnotationsWithTokenId(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
-{
-	(void)type; (void)arrayType; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate_tns__selectRelatedGameAnnotationsWithTokenId(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
-	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap_tns__selectRelatedGameAnnotationsWithTokenId, n, ServerSoap_fdelete);
-	if (!cp)
-		return NULL;
-	if (n < 0)
-	{	cp->ptr = (void*)SOAP_NEW(tns__selectRelatedGameAnnotationsWithTokenId);
-		if (size)
-			*size = sizeof(tns__selectRelatedGameAnnotationsWithTokenId);
-		((tns__selectRelatedGameAnnotationsWithTokenId*)cp->ptr)->soap = soap;
-	}
-	else
-	{	cp->ptr = (void*)SOAP_NEW(tns__selectRelatedGameAnnotationsWithTokenId[n]);
-		if (!cp->ptr)
-		{	soap->error = SOAP_EOM;
-			return NULL;
-		}
-		if (size)
-			*size = n * sizeof(tns__selectRelatedGameAnnotationsWithTokenId);
-		for (int i = 0; i < n; i++)
-			((tns__selectRelatedGameAnnotationsWithTokenId*)cp->ptr)[i].soap = soap;
-	}
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
-	return (tns__selectRelatedGameAnnotationsWithTokenId*)cp->ptr;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__selectRelatedGameAnnotationsWithTokenId(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
-{
-	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying tns__selectRelatedGameAnnotationsWithTokenId %p -> %p\n", q, p));
-	*(tns__selectRelatedGameAnnotationsWithTokenId*)p = *(tns__selectRelatedGameAnnotationsWithTokenId*)q;
-}
-
 void tns__selectMediaTokenWithIdResponse::soap_default(struct soap *soap)
 {
 	this->soap = soap;
@@ -10511,6 +7000,7 @@ void tns__selectMediaTokenWithDigest::soap_default(struct soap *soap)
 {
 	this->soap = soap;
 	this->tns__selectMediaTokenWithDigest::arg0 = NULL;
+	soap_default_int(soap, &this->tns__selectMediaTokenWithDigest::arg1);
 	/* transient soap skipped */
 }
 
@@ -10531,6 +7021,8 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__selectMediaTokenWithDigest(struct soap *
 	if (soap_element_begin_out(soap, tag, soap_embedded_id(soap, id, a, SOAP_TYPE_ServerSoap_tns__selectMediaTokenWithDigest), type))
 		return soap->error;
 	if (soap_out_PointerTostd__string(soap, "arg0", -1, &(a->tns__selectMediaTokenWithDigest::arg0), ""))
+		return soap->error;
+	if (soap_out_int(soap, "arg1", -1, &(a->tns__selectMediaTokenWithDigest::arg1), ""))
 		return soap->error;
 	/* transient soap skipped */
 	return soap_element_end_out(soap, tag);
@@ -10557,6 +7049,7 @@ SOAP_FMAC3 tns__selectMediaTokenWithDigest * SOAP_FMAC4 soap_in_tns__selectMedia
 		}
 	}
 	size_t soap_flag_arg01 = 1;
+	size_t soap_flag_arg11 = 1;
 	if (soap->body && !*soap->href)
 	{
 		for (;;)
@@ -10564,6 +7057,11 @@ SOAP_FMAC3 tns__selectMediaTokenWithDigest * SOAP_FMAC4 soap_in_tns__selectMedia
 			if (soap_flag_arg01 && (soap->error == SOAP_TAG_MISMATCH || soap->error == SOAP_NO_TAG))
 				if (soap_in_PointerTostd__string(soap, "arg0", &(a->tns__selectMediaTokenWithDigest::arg0), "xsd:string"))
 				{	soap_flag_arg01--;
+					continue;
+				}
+			if (soap_flag_arg11 && soap->error == SOAP_TAG_MISMATCH)
+				if (soap_in_int(soap, "arg1", &(a->tns__selectMediaTokenWithDigest::arg1), "xsd:int"))
+				{	soap_flag_arg11--;
 					continue;
 				}
 			/* transient soap skipped */
@@ -10581,6 +7079,10 @@ SOAP_FMAC3 tns__selectMediaTokenWithDigest * SOAP_FMAC4 soap_in_tns__selectMedia
 	{	a = (tns__selectMediaTokenWithDigest *)soap_id_forward(soap, soap->href, (void*)a, 0, SOAP_TYPE_ServerSoap_tns__selectMediaTokenWithDigest, 0, sizeof(tns__selectMediaTokenWithDigest), 0, soap_copy_tns__selectMediaTokenWithDigest);
 		if (soap->body && soap_element_end_in(soap, tag))
 			return NULL;
+	}
+	if ((soap->mode & SOAP_XML_STRICT) && (soap_flag_arg11 > 0))
+	{	soap->error = SOAP_OCCURS;
+		return NULL;
 	}
 	return a;
 }
@@ -11177,1081 +7679,6 @@ SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__selectMediaAliasesWithTokenId(struct s
 	*(tns__selectMediaAliasesWithTokenId*)p = *(tns__selectMediaAliasesWithTokenId*)q;
 }
 
-void tns__selectGameTokenWithIdResponse::soap_default(struct soap *soap)
-{
-	this->soap = soap;
-	this->tns__selectGameTokenWithIdResponse::return_ = NULL;
-	/* transient soap skipped */
-}
-
-void tns__selectGameTokenWithIdResponse::soap_serialize(struct soap *soap) const
-{
-	(void)soap; /* appease -Wall -Werror */
-	soap_serialize_PointerTotns__gameToken(soap, &this->tns__selectGameTokenWithIdResponse::return_);
-	/* transient soap skipped */
-}
-
-int tns__selectGameTokenWithIdResponse::soap_out(struct soap *soap, const char *tag, int id, const char *type) const
-{
-	return soap_out_tns__selectGameTokenWithIdResponse(soap, tag, id, this, type);
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__selectGameTokenWithIdResponse(struct soap *soap, const char *tag, int id, const tns__selectGameTokenWithIdResponse *a, const char *type)
-{
-	if (soap_element_begin_out(soap, tag, soap_embedded_id(soap, id, a, SOAP_TYPE_ServerSoap_tns__selectGameTokenWithIdResponse), type))
-		return soap->error;
-	if (soap_out_PointerTotns__gameToken(soap, "return", -1, &(a->tns__selectGameTokenWithIdResponse::return_), ""))
-		return soap->error;
-	/* transient soap skipped */
-	return soap_element_end_out(soap, tag);
-}
-
-void *tns__selectGameTokenWithIdResponse::soap_in(struct soap *soap, const char *tag, const char *type)
-{	return soap_in_tns__selectGameTokenWithIdResponse(soap, tag, this, type);
-}
-
-SOAP_FMAC3 tns__selectGameTokenWithIdResponse * SOAP_FMAC4 soap_in_tns__selectGameTokenWithIdResponse(struct soap *soap, const char *tag, tns__selectGameTokenWithIdResponse *a, const char *type)
-{
-	(void)type; /* appease -Wall -Werror */
-	if (soap_element_begin_in(soap, tag, 0, NULL))
-		return NULL;
-	a = (tns__selectGameTokenWithIdResponse *)soap_class_id_enter(soap, soap->id, a, SOAP_TYPE_ServerSoap_tns__selectGameTokenWithIdResponse, sizeof(tns__selectGameTokenWithIdResponse), soap->type, soap->arrayType);
-	if (!a)
-		return NULL;
-	if (soap->alloced)
-	{	a->soap_default(soap);
-		if (soap->clist->type != SOAP_TYPE_ServerSoap_tns__selectGameTokenWithIdResponse)
-		{	soap_revert(soap);
-			*soap->id = '\0';
-			return (tns__selectGameTokenWithIdResponse *)a->soap_in(soap, tag, type);
-		}
-	}
-	size_t soap_flag_return_1 = 1;
-	if (soap->body && !*soap->href)
-	{
-		for (;;)
-		{	soap->error = SOAP_TAG_MISMATCH;
-			if (soap_flag_return_1 && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_PointerTotns__gameToken(soap, "return", &(a->tns__selectGameTokenWithIdResponse::return_), "tns:gameToken"))
-				{	soap_flag_return_1--;
-					continue;
-				}
-			/* transient soap skipped */
-			if (soap->error == SOAP_TAG_MISMATCH)
-				soap->error = soap_ignore_element(soap);
-			if (soap->error == SOAP_NO_TAG)
-				break;
-			if (soap->error)
-				return NULL;
-		}
-		if (soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	else
-	{	a = (tns__selectGameTokenWithIdResponse *)soap_id_forward(soap, soap->href, (void*)a, 0, SOAP_TYPE_ServerSoap_tns__selectGameTokenWithIdResponse, 0, sizeof(tns__selectGameTokenWithIdResponse), 0, soap_copy_tns__selectGameTokenWithIdResponse);
-		if (soap->body && soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	return a;
-}
-
-int tns__selectGameTokenWithIdResponse::soap_put(struct soap *soap, const char *tag, const  char *type) const
-{
-	register int id = soap_embed(soap, (void*)this, NULL, 0, tag, SOAP_TYPE_ServerSoap_tns__selectGameTokenWithIdResponse);
-	if (this->soap_out(soap, tag?tag:"tns:selectGameTokenWithIdResponse", id, type))
-		return soap->error;
-	return soap_putindependent(soap);
-}
-
-void *tns__selectGameTokenWithIdResponse::soap_get(struct soap *soap, const char *tag, const char *type)
-{
-	return soap_get_tns__selectGameTokenWithIdResponse(soap, this, tag, type);
-}
-
-SOAP_FMAC3 tns__selectGameTokenWithIdResponse * SOAP_FMAC4 soap_get_tns__selectGameTokenWithIdResponse(struct soap *soap, tns__selectGameTokenWithIdResponse *p, const char *tag, const char *type)
-{
-	if ((p = soap_in_tns__selectGameTokenWithIdResponse(soap, tag, p, type)))
-		if (soap_getindependent(soap))
-			return NULL;
-	return p;
-}
-
-SOAP_FMAC1 tns__selectGameTokenWithIdResponse * SOAP_FMAC2 soap_instantiate_tns__selectGameTokenWithIdResponse(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
-{
-	(void)type; (void)arrayType; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate_tns__selectGameTokenWithIdResponse(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
-	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap_tns__selectGameTokenWithIdResponse, n, ServerSoap_fdelete);
-	if (!cp)
-		return NULL;
-	if (n < 0)
-	{	cp->ptr = (void*)SOAP_NEW(tns__selectGameTokenWithIdResponse);
-		if (size)
-			*size = sizeof(tns__selectGameTokenWithIdResponse);
-		((tns__selectGameTokenWithIdResponse*)cp->ptr)->soap = soap;
-	}
-	else
-	{	cp->ptr = (void*)SOAP_NEW(tns__selectGameTokenWithIdResponse[n]);
-		if (!cp->ptr)
-		{	soap->error = SOAP_EOM;
-			return NULL;
-		}
-		if (size)
-			*size = n * sizeof(tns__selectGameTokenWithIdResponse);
-		for (int i = 0; i < n; i++)
-			((tns__selectGameTokenWithIdResponse*)cp->ptr)[i].soap = soap;
-	}
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
-	return (tns__selectGameTokenWithIdResponse*)cp->ptr;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__selectGameTokenWithIdResponse(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
-{
-	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying tns__selectGameTokenWithIdResponse %p -> %p\n", q, p));
-	*(tns__selectGameTokenWithIdResponse*)p = *(tns__selectGameTokenWithIdResponse*)q;
-}
-
-void tns__selectGameTokenWithId::soap_default(struct soap *soap)
-{
-	this->soap = soap;
-	soap_default_LONG64(soap, &this->tns__selectGameTokenWithId::arg0);
-	/* transient soap skipped */
-}
-
-void tns__selectGameTokenWithId::soap_serialize(struct soap *soap) const
-{
-	(void)soap; /* appease -Wall -Werror */
-	/* transient soap skipped */
-}
-
-int tns__selectGameTokenWithId::soap_out(struct soap *soap, const char *tag, int id, const char *type) const
-{
-	return soap_out_tns__selectGameTokenWithId(soap, tag, id, this, type);
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__selectGameTokenWithId(struct soap *soap, const char *tag, int id, const tns__selectGameTokenWithId *a, const char *type)
-{
-	if (soap_element_begin_out(soap, tag, soap_embedded_id(soap, id, a, SOAP_TYPE_ServerSoap_tns__selectGameTokenWithId), type))
-		return soap->error;
-	if (soap_out_LONG64(soap, "arg0", -1, &(a->tns__selectGameTokenWithId::arg0), ""))
-		return soap->error;
-	/* transient soap skipped */
-	return soap_element_end_out(soap, tag);
-}
-
-void *tns__selectGameTokenWithId::soap_in(struct soap *soap, const char *tag, const char *type)
-{	return soap_in_tns__selectGameTokenWithId(soap, tag, this, type);
-}
-
-SOAP_FMAC3 tns__selectGameTokenWithId * SOAP_FMAC4 soap_in_tns__selectGameTokenWithId(struct soap *soap, const char *tag, tns__selectGameTokenWithId *a, const char *type)
-{
-	(void)type; /* appease -Wall -Werror */
-	if (soap_element_begin_in(soap, tag, 0, NULL))
-		return NULL;
-	a = (tns__selectGameTokenWithId *)soap_class_id_enter(soap, soap->id, a, SOAP_TYPE_ServerSoap_tns__selectGameTokenWithId, sizeof(tns__selectGameTokenWithId), soap->type, soap->arrayType);
-	if (!a)
-		return NULL;
-	if (soap->alloced)
-	{	a->soap_default(soap);
-		if (soap->clist->type != SOAP_TYPE_ServerSoap_tns__selectGameTokenWithId)
-		{	soap_revert(soap);
-			*soap->id = '\0';
-			return (tns__selectGameTokenWithId *)a->soap_in(soap, tag, type);
-		}
-	}
-	size_t soap_flag_arg01 = 1;
-	if (soap->body && !*soap->href)
-	{
-		for (;;)
-		{	soap->error = SOAP_TAG_MISMATCH;
-			if (soap_flag_arg01 && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_LONG64(soap, "arg0", &(a->tns__selectGameTokenWithId::arg0), "xsd:long"))
-				{	soap_flag_arg01--;
-					continue;
-				}
-			/* transient soap skipped */
-			if (soap->error == SOAP_TAG_MISMATCH)
-				soap->error = soap_ignore_element(soap);
-			if (soap->error == SOAP_NO_TAG)
-				break;
-			if (soap->error)
-				return NULL;
-		}
-		if (soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	else
-	{	a = (tns__selectGameTokenWithId *)soap_id_forward(soap, soap->href, (void*)a, 0, SOAP_TYPE_ServerSoap_tns__selectGameTokenWithId, 0, sizeof(tns__selectGameTokenWithId), 0, soap_copy_tns__selectGameTokenWithId);
-		if (soap->body && soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	if ((soap->mode & SOAP_XML_STRICT) && (soap_flag_arg01 > 0))
-	{	soap->error = SOAP_OCCURS;
-		return NULL;
-	}
-	return a;
-}
-
-int tns__selectGameTokenWithId::soap_put(struct soap *soap, const char *tag, const  char *type) const
-{
-	register int id = soap_embed(soap, (void*)this, NULL, 0, tag, SOAP_TYPE_ServerSoap_tns__selectGameTokenWithId);
-	if (this->soap_out(soap, tag?tag:"tns:selectGameTokenWithId", id, type))
-		return soap->error;
-	return soap_putindependent(soap);
-}
-
-void *tns__selectGameTokenWithId::soap_get(struct soap *soap, const char *tag, const char *type)
-{
-	return soap_get_tns__selectGameTokenWithId(soap, this, tag, type);
-}
-
-SOAP_FMAC3 tns__selectGameTokenWithId * SOAP_FMAC4 soap_get_tns__selectGameTokenWithId(struct soap *soap, tns__selectGameTokenWithId *p, const char *tag, const char *type)
-{
-	if ((p = soap_in_tns__selectGameTokenWithId(soap, tag, p, type)))
-		if (soap_getindependent(soap))
-			return NULL;
-	return p;
-}
-
-SOAP_FMAC1 tns__selectGameTokenWithId * SOAP_FMAC2 soap_instantiate_tns__selectGameTokenWithId(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
-{
-	(void)type; (void)arrayType; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate_tns__selectGameTokenWithId(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
-	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap_tns__selectGameTokenWithId, n, ServerSoap_fdelete);
-	if (!cp)
-		return NULL;
-	if (n < 0)
-	{	cp->ptr = (void*)SOAP_NEW(tns__selectGameTokenWithId);
-		if (size)
-			*size = sizeof(tns__selectGameTokenWithId);
-		((tns__selectGameTokenWithId*)cp->ptr)->soap = soap;
-	}
-	else
-	{	cp->ptr = (void*)SOAP_NEW(tns__selectGameTokenWithId[n]);
-		if (!cp->ptr)
-		{	soap->error = SOAP_EOM;
-			return NULL;
-		}
-		if (size)
-			*size = n * sizeof(tns__selectGameTokenWithId);
-		for (int i = 0; i < n; i++)
-			((tns__selectGameTokenWithId*)cp->ptr)[i].soap = soap;
-	}
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
-	return (tns__selectGameTokenWithId*)cp->ptr;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__selectGameTokenWithId(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
-{
-	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying tns__selectGameTokenWithId %p -> %p\n", q, p));
-	*(tns__selectGameTokenWithId*)p = *(tns__selectGameTokenWithId*)q;
-}
-
-void tns__selectGameTokenWithDigestResponse::soap_default(struct soap *soap)
-{
-	this->soap = soap;
-	this->tns__selectGameTokenWithDigestResponse::return_ = NULL;
-	/* transient soap skipped */
-}
-
-void tns__selectGameTokenWithDigestResponse::soap_serialize(struct soap *soap) const
-{
-	(void)soap; /* appease -Wall -Werror */
-	soap_serialize_PointerTotns__gameToken(soap, &this->tns__selectGameTokenWithDigestResponse::return_);
-	/* transient soap skipped */
-}
-
-int tns__selectGameTokenWithDigestResponse::soap_out(struct soap *soap, const char *tag, int id, const char *type) const
-{
-	return soap_out_tns__selectGameTokenWithDigestResponse(soap, tag, id, this, type);
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__selectGameTokenWithDigestResponse(struct soap *soap, const char *tag, int id, const tns__selectGameTokenWithDigestResponse *a, const char *type)
-{
-	if (soap_element_begin_out(soap, tag, soap_embedded_id(soap, id, a, SOAP_TYPE_ServerSoap_tns__selectGameTokenWithDigestResponse), type))
-		return soap->error;
-	if (soap_out_PointerTotns__gameToken(soap, "return", -1, &(a->tns__selectGameTokenWithDigestResponse::return_), ""))
-		return soap->error;
-	/* transient soap skipped */
-	return soap_element_end_out(soap, tag);
-}
-
-void *tns__selectGameTokenWithDigestResponse::soap_in(struct soap *soap, const char *tag, const char *type)
-{	return soap_in_tns__selectGameTokenWithDigestResponse(soap, tag, this, type);
-}
-
-SOAP_FMAC3 tns__selectGameTokenWithDigestResponse * SOAP_FMAC4 soap_in_tns__selectGameTokenWithDigestResponse(struct soap *soap, const char *tag, tns__selectGameTokenWithDigestResponse *a, const char *type)
-{
-	(void)type; /* appease -Wall -Werror */
-	if (soap_element_begin_in(soap, tag, 0, NULL))
-		return NULL;
-	a = (tns__selectGameTokenWithDigestResponse *)soap_class_id_enter(soap, soap->id, a, SOAP_TYPE_ServerSoap_tns__selectGameTokenWithDigestResponse, sizeof(tns__selectGameTokenWithDigestResponse), soap->type, soap->arrayType);
-	if (!a)
-		return NULL;
-	if (soap->alloced)
-	{	a->soap_default(soap);
-		if (soap->clist->type != SOAP_TYPE_ServerSoap_tns__selectGameTokenWithDigestResponse)
-		{	soap_revert(soap);
-			*soap->id = '\0';
-			return (tns__selectGameTokenWithDigestResponse *)a->soap_in(soap, tag, type);
-		}
-	}
-	size_t soap_flag_return_1 = 1;
-	if (soap->body && !*soap->href)
-	{
-		for (;;)
-		{	soap->error = SOAP_TAG_MISMATCH;
-			if (soap_flag_return_1 && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_PointerTotns__gameToken(soap, "return", &(a->tns__selectGameTokenWithDigestResponse::return_), "tns:gameToken"))
-				{	soap_flag_return_1--;
-					continue;
-				}
-			/* transient soap skipped */
-			if (soap->error == SOAP_TAG_MISMATCH)
-				soap->error = soap_ignore_element(soap);
-			if (soap->error == SOAP_NO_TAG)
-				break;
-			if (soap->error)
-				return NULL;
-		}
-		if (soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	else
-	{	a = (tns__selectGameTokenWithDigestResponse *)soap_id_forward(soap, soap->href, (void*)a, 0, SOAP_TYPE_ServerSoap_tns__selectGameTokenWithDigestResponse, 0, sizeof(tns__selectGameTokenWithDigestResponse), 0, soap_copy_tns__selectGameTokenWithDigestResponse);
-		if (soap->body && soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	return a;
-}
-
-int tns__selectGameTokenWithDigestResponse::soap_put(struct soap *soap, const char *tag, const  char *type) const
-{
-	register int id = soap_embed(soap, (void*)this, NULL, 0, tag, SOAP_TYPE_ServerSoap_tns__selectGameTokenWithDigestResponse);
-	if (this->soap_out(soap, tag?tag:"tns:selectGameTokenWithDigestResponse", id, type))
-		return soap->error;
-	return soap_putindependent(soap);
-}
-
-void *tns__selectGameTokenWithDigestResponse::soap_get(struct soap *soap, const char *tag, const char *type)
-{
-	return soap_get_tns__selectGameTokenWithDigestResponse(soap, this, tag, type);
-}
-
-SOAP_FMAC3 tns__selectGameTokenWithDigestResponse * SOAP_FMAC4 soap_get_tns__selectGameTokenWithDigestResponse(struct soap *soap, tns__selectGameTokenWithDigestResponse *p, const char *tag, const char *type)
-{
-	if ((p = soap_in_tns__selectGameTokenWithDigestResponse(soap, tag, p, type)))
-		if (soap_getindependent(soap))
-			return NULL;
-	return p;
-}
-
-SOAP_FMAC1 tns__selectGameTokenWithDigestResponse * SOAP_FMAC2 soap_instantiate_tns__selectGameTokenWithDigestResponse(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
-{
-	(void)type; (void)arrayType; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate_tns__selectGameTokenWithDigestResponse(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
-	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap_tns__selectGameTokenWithDigestResponse, n, ServerSoap_fdelete);
-	if (!cp)
-		return NULL;
-	if (n < 0)
-	{	cp->ptr = (void*)SOAP_NEW(tns__selectGameTokenWithDigestResponse);
-		if (size)
-			*size = sizeof(tns__selectGameTokenWithDigestResponse);
-		((tns__selectGameTokenWithDigestResponse*)cp->ptr)->soap = soap;
-	}
-	else
-	{	cp->ptr = (void*)SOAP_NEW(tns__selectGameTokenWithDigestResponse[n]);
-		if (!cp->ptr)
-		{	soap->error = SOAP_EOM;
-			return NULL;
-		}
-		if (size)
-			*size = n * sizeof(tns__selectGameTokenWithDigestResponse);
-		for (int i = 0; i < n; i++)
-			((tns__selectGameTokenWithDigestResponse*)cp->ptr)[i].soap = soap;
-	}
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
-	return (tns__selectGameTokenWithDigestResponse*)cp->ptr;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__selectGameTokenWithDigestResponse(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
-{
-	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying tns__selectGameTokenWithDigestResponse %p -> %p\n", q, p));
-	*(tns__selectGameTokenWithDigestResponse*)p = *(tns__selectGameTokenWithDigestResponse*)q;
-}
-
-void tns__selectGameTokenWithDigest::soap_default(struct soap *soap)
-{
-	this->soap = soap;
-	this->tns__selectGameTokenWithDigest::arg0 = NULL;
-	/* transient soap skipped */
-}
-
-void tns__selectGameTokenWithDigest::soap_serialize(struct soap *soap) const
-{
-	(void)soap; /* appease -Wall -Werror */
-	soap_serialize_PointerTostd__string(soap, &this->tns__selectGameTokenWithDigest::arg0);
-	/* transient soap skipped */
-}
-
-int tns__selectGameTokenWithDigest::soap_out(struct soap *soap, const char *tag, int id, const char *type) const
-{
-	return soap_out_tns__selectGameTokenWithDigest(soap, tag, id, this, type);
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__selectGameTokenWithDigest(struct soap *soap, const char *tag, int id, const tns__selectGameTokenWithDigest *a, const char *type)
-{
-	if (soap_element_begin_out(soap, tag, soap_embedded_id(soap, id, a, SOAP_TYPE_ServerSoap_tns__selectGameTokenWithDigest), type))
-		return soap->error;
-	if (soap_out_PointerTostd__string(soap, "arg0", -1, &(a->tns__selectGameTokenWithDigest::arg0), ""))
-		return soap->error;
-	/* transient soap skipped */
-	return soap_element_end_out(soap, tag);
-}
-
-void *tns__selectGameTokenWithDigest::soap_in(struct soap *soap, const char *tag, const char *type)
-{	return soap_in_tns__selectGameTokenWithDigest(soap, tag, this, type);
-}
-
-SOAP_FMAC3 tns__selectGameTokenWithDigest * SOAP_FMAC4 soap_in_tns__selectGameTokenWithDigest(struct soap *soap, const char *tag, tns__selectGameTokenWithDigest *a, const char *type)
-{
-	(void)type; /* appease -Wall -Werror */
-	if (soap_element_begin_in(soap, tag, 0, NULL))
-		return NULL;
-	a = (tns__selectGameTokenWithDigest *)soap_class_id_enter(soap, soap->id, a, SOAP_TYPE_ServerSoap_tns__selectGameTokenWithDigest, sizeof(tns__selectGameTokenWithDigest), soap->type, soap->arrayType);
-	if (!a)
-		return NULL;
-	if (soap->alloced)
-	{	a->soap_default(soap);
-		if (soap->clist->type != SOAP_TYPE_ServerSoap_tns__selectGameTokenWithDigest)
-		{	soap_revert(soap);
-			*soap->id = '\0';
-			return (tns__selectGameTokenWithDigest *)a->soap_in(soap, tag, type);
-		}
-	}
-	size_t soap_flag_arg01 = 1;
-	if (soap->body && !*soap->href)
-	{
-		for (;;)
-		{	soap->error = SOAP_TAG_MISMATCH;
-			if (soap_flag_arg01 && (soap->error == SOAP_TAG_MISMATCH || soap->error == SOAP_NO_TAG))
-				if (soap_in_PointerTostd__string(soap, "arg0", &(a->tns__selectGameTokenWithDigest::arg0), "xsd:string"))
-				{	soap_flag_arg01--;
-					continue;
-				}
-			/* transient soap skipped */
-			if (soap->error == SOAP_TAG_MISMATCH)
-				soap->error = soap_ignore_element(soap);
-			if (soap->error == SOAP_NO_TAG)
-				break;
-			if (soap->error)
-				return NULL;
-		}
-		if (soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	else
-	{	a = (tns__selectGameTokenWithDigest *)soap_id_forward(soap, soap->href, (void*)a, 0, SOAP_TYPE_ServerSoap_tns__selectGameTokenWithDigest, 0, sizeof(tns__selectGameTokenWithDigest), 0, soap_copy_tns__selectGameTokenWithDigest);
-		if (soap->body && soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	return a;
-}
-
-int tns__selectGameTokenWithDigest::soap_put(struct soap *soap, const char *tag, const  char *type) const
-{
-	register int id = soap_embed(soap, (void*)this, NULL, 0, tag, SOAP_TYPE_ServerSoap_tns__selectGameTokenWithDigest);
-	if (this->soap_out(soap, tag?tag:"tns:selectGameTokenWithDigest", id, type))
-		return soap->error;
-	return soap_putindependent(soap);
-}
-
-void *tns__selectGameTokenWithDigest::soap_get(struct soap *soap, const char *tag, const char *type)
-{
-	return soap_get_tns__selectGameTokenWithDigest(soap, this, tag, type);
-}
-
-SOAP_FMAC3 tns__selectGameTokenWithDigest * SOAP_FMAC4 soap_get_tns__selectGameTokenWithDigest(struct soap *soap, tns__selectGameTokenWithDigest *p, const char *tag, const char *type)
-{
-	if ((p = soap_in_tns__selectGameTokenWithDigest(soap, tag, p, type)))
-		if (soap_getindependent(soap))
-			return NULL;
-	return p;
-}
-
-SOAP_FMAC1 tns__selectGameTokenWithDigest * SOAP_FMAC2 soap_instantiate_tns__selectGameTokenWithDigest(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
-{
-	(void)type; (void)arrayType; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate_tns__selectGameTokenWithDigest(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
-	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap_tns__selectGameTokenWithDigest, n, ServerSoap_fdelete);
-	if (!cp)
-		return NULL;
-	if (n < 0)
-	{	cp->ptr = (void*)SOAP_NEW(tns__selectGameTokenWithDigest);
-		if (size)
-			*size = sizeof(tns__selectGameTokenWithDigest);
-		((tns__selectGameTokenWithDigest*)cp->ptr)->soap = soap;
-	}
-	else
-	{	cp->ptr = (void*)SOAP_NEW(tns__selectGameTokenWithDigest[n]);
-		if (!cp->ptr)
-		{	soap->error = SOAP_EOM;
-			return NULL;
-		}
-		if (size)
-			*size = n * sizeof(tns__selectGameTokenWithDigest);
-		for (int i = 0; i < n; i++)
-			((tns__selectGameTokenWithDigest*)cp->ptr)[i].soap = soap;
-	}
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
-	return (tns__selectGameTokenWithDigest*)cp->ptr;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__selectGameTokenWithDigest(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
-{
-	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying tns__selectGameTokenWithDigest %p -> %p\n", q, p));
-	*(tns__selectGameTokenWithDigest*)p = *(tns__selectGameTokenWithDigest*)q;
-}
-
-void tns__selectGameAnnotationsWithTokenIdResponse::soap_default(struct soap *soap)
-{
-	this->soap = soap;
-	soap_default_std__vectorTemplateOfPointerTotns__gameAnnotation(soap, &this->tns__selectGameAnnotationsWithTokenIdResponse::return_);
-	/* transient soap skipped */
-}
-
-void tns__selectGameAnnotationsWithTokenIdResponse::soap_serialize(struct soap *soap) const
-{
-	(void)soap; /* appease -Wall -Werror */
-	soap_serialize_std__vectorTemplateOfPointerTotns__gameAnnotation(soap, &this->tns__selectGameAnnotationsWithTokenIdResponse::return_);
-	/* transient soap skipped */
-}
-
-int tns__selectGameAnnotationsWithTokenIdResponse::soap_out(struct soap *soap, const char *tag, int id, const char *type) const
-{
-	return soap_out_tns__selectGameAnnotationsWithTokenIdResponse(soap, tag, id, this, type);
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__selectGameAnnotationsWithTokenIdResponse(struct soap *soap, const char *tag, int id, const tns__selectGameAnnotationsWithTokenIdResponse *a, const char *type)
-{
-	if (soap_element_begin_out(soap, tag, soap_embedded_id(soap, id, a, SOAP_TYPE_ServerSoap_tns__selectGameAnnotationsWithTokenIdResponse), type))
-		return soap->error;
-	if (soap_out_std__vectorTemplateOfPointerTotns__gameAnnotation(soap, "return", -1, &(a->tns__selectGameAnnotationsWithTokenIdResponse::return_), ""))
-		return soap->error;
-	/* transient soap skipped */
-	return soap_element_end_out(soap, tag);
-}
-
-void *tns__selectGameAnnotationsWithTokenIdResponse::soap_in(struct soap *soap, const char *tag, const char *type)
-{	return soap_in_tns__selectGameAnnotationsWithTokenIdResponse(soap, tag, this, type);
-}
-
-SOAP_FMAC3 tns__selectGameAnnotationsWithTokenIdResponse * SOAP_FMAC4 soap_in_tns__selectGameAnnotationsWithTokenIdResponse(struct soap *soap, const char *tag, tns__selectGameAnnotationsWithTokenIdResponse *a, const char *type)
-{
-	(void)type; /* appease -Wall -Werror */
-	if (soap_element_begin_in(soap, tag, 0, NULL))
-		return NULL;
-	a = (tns__selectGameAnnotationsWithTokenIdResponse *)soap_class_id_enter(soap, soap->id, a, SOAP_TYPE_ServerSoap_tns__selectGameAnnotationsWithTokenIdResponse, sizeof(tns__selectGameAnnotationsWithTokenIdResponse), soap->type, soap->arrayType);
-	if (!a)
-		return NULL;
-	if (soap->alloced)
-	{	a->soap_default(soap);
-		if (soap->clist->type != SOAP_TYPE_ServerSoap_tns__selectGameAnnotationsWithTokenIdResponse)
-		{	soap_revert(soap);
-			*soap->id = '\0';
-			return (tns__selectGameAnnotationsWithTokenIdResponse *)a->soap_in(soap, tag, type);
-		}
-	}
-	if (soap->body && !*soap->href)
-	{
-		for (;;)
-		{	soap->error = SOAP_TAG_MISMATCH;
-			if (soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_std__vectorTemplateOfPointerTotns__gameAnnotation(soap, "return", &(a->tns__selectGameAnnotationsWithTokenIdResponse::return_), "tns:gameAnnotation"))
-					continue;
-			/* transient soap skipped */
-			if (soap->error == SOAP_TAG_MISMATCH)
-				soap->error = soap_ignore_element(soap);
-			if (soap->error == SOAP_NO_TAG)
-				break;
-			if (soap->error)
-				return NULL;
-		}
-		if (soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	else
-	{	a = (tns__selectGameAnnotationsWithTokenIdResponse *)soap_id_forward(soap, soap->href, (void*)a, 0, SOAP_TYPE_ServerSoap_tns__selectGameAnnotationsWithTokenIdResponse, 0, sizeof(tns__selectGameAnnotationsWithTokenIdResponse), 0, soap_copy_tns__selectGameAnnotationsWithTokenIdResponse);
-		if (soap->body && soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	return a;
-}
-
-int tns__selectGameAnnotationsWithTokenIdResponse::soap_put(struct soap *soap, const char *tag, const  char *type) const
-{
-	register int id = soap_embed(soap, (void*)this, NULL, 0, tag, SOAP_TYPE_ServerSoap_tns__selectGameAnnotationsWithTokenIdResponse);
-	if (this->soap_out(soap, tag?tag:"tns:selectGameAnnotationsWithTokenIdResponse", id, type))
-		return soap->error;
-	return soap_putindependent(soap);
-}
-
-void *tns__selectGameAnnotationsWithTokenIdResponse::soap_get(struct soap *soap, const char *tag, const char *type)
-{
-	return soap_get_tns__selectGameAnnotationsWithTokenIdResponse(soap, this, tag, type);
-}
-
-SOAP_FMAC3 tns__selectGameAnnotationsWithTokenIdResponse * SOAP_FMAC4 soap_get_tns__selectGameAnnotationsWithTokenIdResponse(struct soap *soap, tns__selectGameAnnotationsWithTokenIdResponse *p, const char *tag, const char *type)
-{
-	if ((p = soap_in_tns__selectGameAnnotationsWithTokenIdResponse(soap, tag, p, type)))
-		if (soap_getindependent(soap))
-			return NULL;
-	return p;
-}
-
-SOAP_FMAC1 tns__selectGameAnnotationsWithTokenIdResponse * SOAP_FMAC2 soap_instantiate_tns__selectGameAnnotationsWithTokenIdResponse(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
-{
-	(void)type; (void)arrayType; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate_tns__selectGameAnnotationsWithTokenIdResponse(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
-	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap_tns__selectGameAnnotationsWithTokenIdResponse, n, ServerSoap_fdelete);
-	if (!cp)
-		return NULL;
-	if (n < 0)
-	{	cp->ptr = (void*)SOAP_NEW(tns__selectGameAnnotationsWithTokenIdResponse);
-		if (size)
-			*size = sizeof(tns__selectGameAnnotationsWithTokenIdResponse);
-		((tns__selectGameAnnotationsWithTokenIdResponse*)cp->ptr)->soap = soap;
-	}
-	else
-	{	cp->ptr = (void*)SOAP_NEW(tns__selectGameAnnotationsWithTokenIdResponse[n]);
-		if (!cp->ptr)
-		{	soap->error = SOAP_EOM;
-			return NULL;
-		}
-		if (size)
-			*size = n * sizeof(tns__selectGameAnnotationsWithTokenIdResponse);
-		for (int i = 0; i < n; i++)
-			((tns__selectGameAnnotationsWithTokenIdResponse*)cp->ptr)[i].soap = soap;
-	}
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
-	return (tns__selectGameAnnotationsWithTokenIdResponse*)cp->ptr;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__selectGameAnnotationsWithTokenIdResponse(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
-{
-	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying tns__selectGameAnnotationsWithTokenIdResponse %p -> %p\n", q, p));
-	*(tns__selectGameAnnotationsWithTokenIdResponse*)p = *(tns__selectGameAnnotationsWithTokenIdResponse*)q;
-}
-
-void tns__selectGameAnnotationsWithTokenId::soap_default(struct soap *soap)
-{
-	this->soap = soap;
-	soap_default_LONG64(soap, &this->tns__selectGameAnnotationsWithTokenId::arg0);
-	/* transient soap skipped */
-}
-
-void tns__selectGameAnnotationsWithTokenId::soap_serialize(struct soap *soap) const
-{
-	(void)soap; /* appease -Wall -Werror */
-	/* transient soap skipped */
-}
-
-int tns__selectGameAnnotationsWithTokenId::soap_out(struct soap *soap, const char *tag, int id, const char *type) const
-{
-	return soap_out_tns__selectGameAnnotationsWithTokenId(soap, tag, id, this, type);
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__selectGameAnnotationsWithTokenId(struct soap *soap, const char *tag, int id, const tns__selectGameAnnotationsWithTokenId *a, const char *type)
-{
-	if (soap_element_begin_out(soap, tag, soap_embedded_id(soap, id, a, SOAP_TYPE_ServerSoap_tns__selectGameAnnotationsWithTokenId), type))
-		return soap->error;
-	if (soap_out_LONG64(soap, "arg0", -1, &(a->tns__selectGameAnnotationsWithTokenId::arg0), ""))
-		return soap->error;
-	/* transient soap skipped */
-	return soap_element_end_out(soap, tag);
-}
-
-void *tns__selectGameAnnotationsWithTokenId::soap_in(struct soap *soap, const char *tag, const char *type)
-{	return soap_in_tns__selectGameAnnotationsWithTokenId(soap, tag, this, type);
-}
-
-SOAP_FMAC3 tns__selectGameAnnotationsWithTokenId * SOAP_FMAC4 soap_in_tns__selectGameAnnotationsWithTokenId(struct soap *soap, const char *tag, tns__selectGameAnnotationsWithTokenId *a, const char *type)
-{
-	(void)type; /* appease -Wall -Werror */
-	if (soap_element_begin_in(soap, tag, 0, NULL))
-		return NULL;
-	a = (tns__selectGameAnnotationsWithTokenId *)soap_class_id_enter(soap, soap->id, a, SOAP_TYPE_ServerSoap_tns__selectGameAnnotationsWithTokenId, sizeof(tns__selectGameAnnotationsWithTokenId), soap->type, soap->arrayType);
-	if (!a)
-		return NULL;
-	if (soap->alloced)
-	{	a->soap_default(soap);
-		if (soap->clist->type != SOAP_TYPE_ServerSoap_tns__selectGameAnnotationsWithTokenId)
-		{	soap_revert(soap);
-			*soap->id = '\0';
-			return (tns__selectGameAnnotationsWithTokenId *)a->soap_in(soap, tag, type);
-		}
-	}
-	size_t soap_flag_arg01 = 1;
-	if (soap->body && !*soap->href)
-	{
-		for (;;)
-		{	soap->error = SOAP_TAG_MISMATCH;
-			if (soap_flag_arg01 && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_LONG64(soap, "arg0", &(a->tns__selectGameAnnotationsWithTokenId::arg0), "xsd:long"))
-				{	soap_flag_arg01--;
-					continue;
-				}
-			/* transient soap skipped */
-			if (soap->error == SOAP_TAG_MISMATCH)
-				soap->error = soap_ignore_element(soap);
-			if (soap->error == SOAP_NO_TAG)
-				break;
-			if (soap->error)
-				return NULL;
-		}
-		if (soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	else
-	{	a = (tns__selectGameAnnotationsWithTokenId *)soap_id_forward(soap, soap->href, (void*)a, 0, SOAP_TYPE_ServerSoap_tns__selectGameAnnotationsWithTokenId, 0, sizeof(tns__selectGameAnnotationsWithTokenId), 0, soap_copy_tns__selectGameAnnotationsWithTokenId);
-		if (soap->body && soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	if ((soap->mode & SOAP_XML_STRICT) && (soap_flag_arg01 > 0))
-	{	soap->error = SOAP_OCCURS;
-		return NULL;
-	}
-	return a;
-}
-
-int tns__selectGameAnnotationsWithTokenId::soap_put(struct soap *soap, const char *tag, const  char *type) const
-{
-	register int id = soap_embed(soap, (void*)this, NULL, 0, tag, SOAP_TYPE_ServerSoap_tns__selectGameAnnotationsWithTokenId);
-	if (this->soap_out(soap, tag?tag:"tns:selectGameAnnotationsWithTokenId", id, type))
-		return soap->error;
-	return soap_putindependent(soap);
-}
-
-void *tns__selectGameAnnotationsWithTokenId::soap_get(struct soap *soap, const char *tag, const char *type)
-{
-	return soap_get_tns__selectGameAnnotationsWithTokenId(soap, this, tag, type);
-}
-
-SOAP_FMAC3 tns__selectGameAnnotationsWithTokenId * SOAP_FMAC4 soap_get_tns__selectGameAnnotationsWithTokenId(struct soap *soap, tns__selectGameAnnotationsWithTokenId *p, const char *tag, const char *type)
-{
-	if ((p = soap_in_tns__selectGameAnnotationsWithTokenId(soap, tag, p, type)))
-		if (soap_getindependent(soap))
-			return NULL;
-	return p;
-}
-
-SOAP_FMAC1 tns__selectGameAnnotationsWithTokenId * SOAP_FMAC2 soap_instantiate_tns__selectGameAnnotationsWithTokenId(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
-{
-	(void)type; (void)arrayType; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate_tns__selectGameAnnotationsWithTokenId(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
-	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap_tns__selectGameAnnotationsWithTokenId, n, ServerSoap_fdelete);
-	if (!cp)
-		return NULL;
-	if (n < 0)
-	{	cp->ptr = (void*)SOAP_NEW(tns__selectGameAnnotationsWithTokenId);
-		if (size)
-			*size = sizeof(tns__selectGameAnnotationsWithTokenId);
-		((tns__selectGameAnnotationsWithTokenId*)cp->ptr)->soap = soap;
-	}
-	else
-	{	cp->ptr = (void*)SOAP_NEW(tns__selectGameAnnotationsWithTokenId[n]);
-		if (!cp->ptr)
-		{	soap->error = SOAP_EOM;
-			return NULL;
-		}
-		if (size)
-			*size = n * sizeof(tns__selectGameAnnotationsWithTokenId);
-		for (int i = 0; i < n; i++)
-			((tns__selectGameAnnotationsWithTokenId*)cp->ptr)[i].soap = soap;
-	}
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
-	return (tns__selectGameAnnotationsWithTokenId*)cp->ptr;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__selectGameAnnotationsWithTokenId(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
-{
-	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying tns__selectGameAnnotationsWithTokenId %p -> %p\n", q, p));
-	*(tns__selectGameAnnotationsWithTokenId*)p = *(tns__selectGameAnnotationsWithTokenId*)q;
-}
-
-void tns__selectGameAliasesWithTokenIdResponse::soap_default(struct soap *soap)
-{
-	this->soap = soap;
-	soap_default_std__vectorTemplateOfPointerTotns__gameAlias(soap, &this->tns__selectGameAliasesWithTokenIdResponse::return_);
-	/* transient soap skipped */
-}
-
-void tns__selectGameAliasesWithTokenIdResponse::soap_serialize(struct soap *soap) const
-{
-	(void)soap; /* appease -Wall -Werror */
-	soap_serialize_std__vectorTemplateOfPointerTotns__gameAlias(soap, &this->tns__selectGameAliasesWithTokenIdResponse::return_);
-	/* transient soap skipped */
-}
-
-int tns__selectGameAliasesWithTokenIdResponse::soap_out(struct soap *soap, const char *tag, int id, const char *type) const
-{
-	return soap_out_tns__selectGameAliasesWithTokenIdResponse(soap, tag, id, this, type);
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__selectGameAliasesWithTokenIdResponse(struct soap *soap, const char *tag, int id, const tns__selectGameAliasesWithTokenIdResponse *a, const char *type)
-{
-	if (soap_element_begin_out(soap, tag, soap_embedded_id(soap, id, a, SOAP_TYPE_ServerSoap_tns__selectGameAliasesWithTokenIdResponse), type))
-		return soap->error;
-	if (soap_out_std__vectorTemplateOfPointerTotns__gameAlias(soap, "return", -1, &(a->tns__selectGameAliasesWithTokenIdResponse::return_), ""))
-		return soap->error;
-	/* transient soap skipped */
-	return soap_element_end_out(soap, tag);
-}
-
-void *tns__selectGameAliasesWithTokenIdResponse::soap_in(struct soap *soap, const char *tag, const char *type)
-{	return soap_in_tns__selectGameAliasesWithTokenIdResponse(soap, tag, this, type);
-}
-
-SOAP_FMAC3 tns__selectGameAliasesWithTokenIdResponse * SOAP_FMAC4 soap_in_tns__selectGameAliasesWithTokenIdResponse(struct soap *soap, const char *tag, tns__selectGameAliasesWithTokenIdResponse *a, const char *type)
-{
-	(void)type; /* appease -Wall -Werror */
-	if (soap_element_begin_in(soap, tag, 0, NULL))
-		return NULL;
-	a = (tns__selectGameAliasesWithTokenIdResponse *)soap_class_id_enter(soap, soap->id, a, SOAP_TYPE_ServerSoap_tns__selectGameAliasesWithTokenIdResponse, sizeof(tns__selectGameAliasesWithTokenIdResponse), soap->type, soap->arrayType);
-	if (!a)
-		return NULL;
-	if (soap->alloced)
-	{	a->soap_default(soap);
-		if (soap->clist->type != SOAP_TYPE_ServerSoap_tns__selectGameAliasesWithTokenIdResponse)
-		{	soap_revert(soap);
-			*soap->id = '\0';
-			return (tns__selectGameAliasesWithTokenIdResponse *)a->soap_in(soap, tag, type);
-		}
-	}
-	if (soap->body && !*soap->href)
-	{
-		for (;;)
-		{	soap->error = SOAP_TAG_MISMATCH;
-			if (soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_std__vectorTemplateOfPointerTotns__gameAlias(soap, "return", &(a->tns__selectGameAliasesWithTokenIdResponse::return_), "tns:gameAlias"))
-					continue;
-			/* transient soap skipped */
-			if (soap->error == SOAP_TAG_MISMATCH)
-				soap->error = soap_ignore_element(soap);
-			if (soap->error == SOAP_NO_TAG)
-				break;
-			if (soap->error)
-				return NULL;
-		}
-		if (soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	else
-	{	a = (tns__selectGameAliasesWithTokenIdResponse *)soap_id_forward(soap, soap->href, (void*)a, 0, SOAP_TYPE_ServerSoap_tns__selectGameAliasesWithTokenIdResponse, 0, sizeof(tns__selectGameAliasesWithTokenIdResponse), 0, soap_copy_tns__selectGameAliasesWithTokenIdResponse);
-		if (soap->body && soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	return a;
-}
-
-int tns__selectGameAliasesWithTokenIdResponse::soap_put(struct soap *soap, const char *tag, const  char *type) const
-{
-	register int id = soap_embed(soap, (void*)this, NULL, 0, tag, SOAP_TYPE_ServerSoap_tns__selectGameAliasesWithTokenIdResponse);
-	if (this->soap_out(soap, tag?tag:"tns:selectGameAliasesWithTokenIdResponse", id, type))
-		return soap->error;
-	return soap_putindependent(soap);
-}
-
-void *tns__selectGameAliasesWithTokenIdResponse::soap_get(struct soap *soap, const char *tag, const char *type)
-{
-	return soap_get_tns__selectGameAliasesWithTokenIdResponse(soap, this, tag, type);
-}
-
-SOAP_FMAC3 tns__selectGameAliasesWithTokenIdResponse * SOAP_FMAC4 soap_get_tns__selectGameAliasesWithTokenIdResponse(struct soap *soap, tns__selectGameAliasesWithTokenIdResponse *p, const char *tag, const char *type)
-{
-	if ((p = soap_in_tns__selectGameAliasesWithTokenIdResponse(soap, tag, p, type)))
-		if (soap_getindependent(soap))
-			return NULL;
-	return p;
-}
-
-SOAP_FMAC1 tns__selectGameAliasesWithTokenIdResponse * SOAP_FMAC2 soap_instantiate_tns__selectGameAliasesWithTokenIdResponse(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
-{
-	(void)type; (void)arrayType; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate_tns__selectGameAliasesWithTokenIdResponse(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
-	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap_tns__selectGameAliasesWithTokenIdResponse, n, ServerSoap_fdelete);
-	if (!cp)
-		return NULL;
-	if (n < 0)
-	{	cp->ptr = (void*)SOAP_NEW(tns__selectGameAliasesWithTokenIdResponse);
-		if (size)
-			*size = sizeof(tns__selectGameAliasesWithTokenIdResponse);
-		((tns__selectGameAliasesWithTokenIdResponse*)cp->ptr)->soap = soap;
-	}
-	else
-	{	cp->ptr = (void*)SOAP_NEW(tns__selectGameAliasesWithTokenIdResponse[n]);
-		if (!cp->ptr)
-		{	soap->error = SOAP_EOM;
-			return NULL;
-		}
-		if (size)
-			*size = n * sizeof(tns__selectGameAliasesWithTokenIdResponse);
-		for (int i = 0; i < n; i++)
-			((tns__selectGameAliasesWithTokenIdResponse*)cp->ptr)[i].soap = soap;
-	}
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
-	return (tns__selectGameAliasesWithTokenIdResponse*)cp->ptr;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__selectGameAliasesWithTokenIdResponse(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
-{
-	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying tns__selectGameAliasesWithTokenIdResponse %p -> %p\n", q, p));
-	*(tns__selectGameAliasesWithTokenIdResponse*)p = *(tns__selectGameAliasesWithTokenIdResponse*)q;
-}
-
-void tns__selectGameAliasesWithTokenId::soap_default(struct soap *soap)
-{
-	this->soap = soap;
-	soap_default_LONG64(soap, &this->tns__selectGameAliasesWithTokenId::arg0);
-	/* transient soap skipped */
-}
-
-void tns__selectGameAliasesWithTokenId::soap_serialize(struct soap *soap) const
-{
-	(void)soap; /* appease -Wall -Werror */
-	/* transient soap skipped */
-}
-
-int tns__selectGameAliasesWithTokenId::soap_out(struct soap *soap, const char *tag, int id, const char *type) const
-{
-	return soap_out_tns__selectGameAliasesWithTokenId(soap, tag, id, this, type);
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__selectGameAliasesWithTokenId(struct soap *soap, const char *tag, int id, const tns__selectGameAliasesWithTokenId *a, const char *type)
-{
-	if (soap_element_begin_out(soap, tag, soap_embedded_id(soap, id, a, SOAP_TYPE_ServerSoap_tns__selectGameAliasesWithTokenId), type))
-		return soap->error;
-	if (soap_out_LONG64(soap, "arg0", -1, &(a->tns__selectGameAliasesWithTokenId::arg0), ""))
-		return soap->error;
-	/* transient soap skipped */
-	return soap_element_end_out(soap, tag);
-}
-
-void *tns__selectGameAliasesWithTokenId::soap_in(struct soap *soap, const char *tag, const char *type)
-{	return soap_in_tns__selectGameAliasesWithTokenId(soap, tag, this, type);
-}
-
-SOAP_FMAC3 tns__selectGameAliasesWithTokenId * SOAP_FMAC4 soap_in_tns__selectGameAliasesWithTokenId(struct soap *soap, const char *tag, tns__selectGameAliasesWithTokenId *a, const char *type)
-{
-	(void)type; /* appease -Wall -Werror */
-	if (soap_element_begin_in(soap, tag, 0, NULL))
-		return NULL;
-	a = (tns__selectGameAliasesWithTokenId *)soap_class_id_enter(soap, soap->id, a, SOAP_TYPE_ServerSoap_tns__selectGameAliasesWithTokenId, sizeof(tns__selectGameAliasesWithTokenId), soap->type, soap->arrayType);
-	if (!a)
-		return NULL;
-	if (soap->alloced)
-	{	a->soap_default(soap);
-		if (soap->clist->type != SOAP_TYPE_ServerSoap_tns__selectGameAliasesWithTokenId)
-		{	soap_revert(soap);
-			*soap->id = '\0';
-			return (tns__selectGameAliasesWithTokenId *)a->soap_in(soap, tag, type);
-		}
-	}
-	size_t soap_flag_arg01 = 1;
-	if (soap->body && !*soap->href)
-	{
-		for (;;)
-		{	soap->error = SOAP_TAG_MISMATCH;
-			if (soap_flag_arg01 && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_LONG64(soap, "arg0", &(a->tns__selectGameAliasesWithTokenId::arg0), "xsd:long"))
-				{	soap_flag_arg01--;
-					continue;
-				}
-			/* transient soap skipped */
-			if (soap->error == SOAP_TAG_MISMATCH)
-				soap->error = soap_ignore_element(soap);
-			if (soap->error == SOAP_NO_TAG)
-				break;
-			if (soap->error)
-				return NULL;
-		}
-		if (soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	else
-	{	a = (tns__selectGameAliasesWithTokenId *)soap_id_forward(soap, soap->href, (void*)a, 0, SOAP_TYPE_ServerSoap_tns__selectGameAliasesWithTokenId, 0, sizeof(tns__selectGameAliasesWithTokenId), 0, soap_copy_tns__selectGameAliasesWithTokenId);
-		if (soap->body && soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	if ((soap->mode & SOAP_XML_STRICT) && (soap_flag_arg01 > 0))
-	{	soap->error = SOAP_OCCURS;
-		return NULL;
-	}
-	return a;
-}
-
-int tns__selectGameAliasesWithTokenId::soap_put(struct soap *soap, const char *tag, const  char *type) const
-{
-	register int id = soap_embed(soap, (void*)this, NULL, 0, tag, SOAP_TYPE_ServerSoap_tns__selectGameAliasesWithTokenId);
-	if (this->soap_out(soap, tag?tag:"tns:selectGameAliasesWithTokenId", id, type))
-		return soap->error;
-	return soap_putindependent(soap);
-}
-
-void *tns__selectGameAliasesWithTokenId::soap_get(struct soap *soap, const char *tag, const char *type)
-{
-	return soap_get_tns__selectGameAliasesWithTokenId(soap, this, tag, type);
-}
-
-SOAP_FMAC3 tns__selectGameAliasesWithTokenId * SOAP_FMAC4 soap_get_tns__selectGameAliasesWithTokenId(struct soap *soap, tns__selectGameAliasesWithTokenId *p, const char *tag, const char *type)
-{
-	if ((p = soap_in_tns__selectGameAliasesWithTokenId(soap, tag, p, type)))
-		if (soap_getindependent(soap))
-			return NULL;
-	return p;
-}
-
-SOAP_FMAC1 tns__selectGameAliasesWithTokenId * SOAP_FMAC2 soap_instantiate_tns__selectGameAliasesWithTokenId(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
-{
-	(void)type; (void)arrayType; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate_tns__selectGameAliasesWithTokenId(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
-	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap_tns__selectGameAliasesWithTokenId, n, ServerSoap_fdelete);
-	if (!cp)
-		return NULL;
-	if (n < 0)
-	{	cp->ptr = (void*)SOAP_NEW(tns__selectGameAliasesWithTokenId);
-		if (size)
-			*size = sizeof(tns__selectGameAliasesWithTokenId);
-		((tns__selectGameAliasesWithTokenId*)cp->ptr)->soap = soap;
-	}
-	else
-	{	cp->ptr = (void*)SOAP_NEW(tns__selectGameAliasesWithTokenId[n]);
-		if (!cp->ptr)
-		{	soap->error = SOAP_EOM;
-			return NULL;
-		}
-		if (size)
-			*size = n * sizeof(tns__selectGameAliasesWithTokenId);
-		for (int i = 0; i < n; i++)
-			((tns__selectGameAliasesWithTokenId*)cp->ptr)[i].soap = soap;
-	}
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
-	return (tns__selectGameAliasesWithTokenId*)cp->ptr;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__selectGameAliasesWithTokenId(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
-{
-	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying tns__selectGameAliasesWithTokenId %p -> %p\n", q, p));
-	*(tns__selectGameAliasesWithTokenId*)p = *(tns__selectGameAliasesWithTokenId*)q;
-}
-
 void tns__isConnectedResponse::soap_default(struct soap *soap)
 {
 	this->soap = soap;
@@ -12784,6 +8211,888 @@ SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__isClientUpdated(struct soap *soap, int
 	*(tns__isClientUpdated*)p = *(tns__isClientUpdated*)q;
 }
 
+void tns__curseMediaTokenWithIdResponse::soap_default(struct soap *soap)
+{
+	this->soap = soap;
+	soap_default_bool(soap, &this->tns__curseMediaTokenWithIdResponse::return_);
+	/* transient soap skipped */
+}
+
+void tns__curseMediaTokenWithIdResponse::soap_serialize(struct soap *soap) const
+{
+	(void)soap; /* appease -Wall -Werror */
+	/* transient soap skipped */
+}
+
+int tns__curseMediaTokenWithIdResponse::soap_out(struct soap *soap, const char *tag, int id, const char *type) const
+{
+	return soap_out_tns__curseMediaTokenWithIdResponse(soap, tag, id, this, type);
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__curseMediaTokenWithIdResponse(struct soap *soap, const char *tag, int id, const tns__curseMediaTokenWithIdResponse *a, const char *type)
+{
+	if (soap_element_begin_out(soap, tag, soap_embedded_id(soap, id, a, SOAP_TYPE_ServerSoap_tns__curseMediaTokenWithIdResponse), type))
+		return soap->error;
+	if (soap_out_bool(soap, "return", -1, &(a->tns__curseMediaTokenWithIdResponse::return_), ""))
+		return soap->error;
+	/* transient soap skipped */
+	return soap_element_end_out(soap, tag);
+}
+
+void *tns__curseMediaTokenWithIdResponse::soap_in(struct soap *soap, const char *tag, const char *type)
+{	return soap_in_tns__curseMediaTokenWithIdResponse(soap, tag, this, type);
+}
+
+SOAP_FMAC3 tns__curseMediaTokenWithIdResponse * SOAP_FMAC4 soap_in_tns__curseMediaTokenWithIdResponse(struct soap *soap, const char *tag, tns__curseMediaTokenWithIdResponse *a, const char *type)
+{
+	(void)type; /* appease -Wall -Werror */
+	if (soap_element_begin_in(soap, tag, 0, NULL))
+		return NULL;
+	a = (tns__curseMediaTokenWithIdResponse *)soap_class_id_enter(soap, soap->id, a, SOAP_TYPE_ServerSoap_tns__curseMediaTokenWithIdResponse, sizeof(tns__curseMediaTokenWithIdResponse), soap->type, soap->arrayType);
+	if (!a)
+		return NULL;
+	if (soap->alloced)
+	{	a->soap_default(soap);
+		if (soap->clist->type != SOAP_TYPE_ServerSoap_tns__curseMediaTokenWithIdResponse)
+		{	soap_revert(soap);
+			*soap->id = '\0';
+			return (tns__curseMediaTokenWithIdResponse *)a->soap_in(soap, tag, type);
+		}
+	}
+	size_t soap_flag_return_1 = 1;
+	if (soap->body && !*soap->href)
+	{
+		for (;;)
+		{	soap->error = SOAP_TAG_MISMATCH;
+			if (soap_flag_return_1 && soap->error == SOAP_TAG_MISMATCH)
+				if (soap_in_bool(soap, "return", &(a->tns__curseMediaTokenWithIdResponse::return_), "xsd:boolean"))
+				{	soap_flag_return_1--;
+					continue;
+				}
+			/* transient soap skipped */
+			if (soap->error == SOAP_TAG_MISMATCH)
+				soap->error = soap_ignore_element(soap);
+			if (soap->error == SOAP_NO_TAG)
+				break;
+			if (soap->error)
+				return NULL;
+		}
+		if (soap_element_end_in(soap, tag))
+			return NULL;
+	}
+	else
+	{	a = (tns__curseMediaTokenWithIdResponse *)soap_id_forward(soap, soap->href, (void*)a, 0, SOAP_TYPE_ServerSoap_tns__curseMediaTokenWithIdResponse, 0, sizeof(tns__curseMediaTokenWithIdResponse), 0, soap_copy_tns__curseMediaTokenWithIdResponse);
+		if (soap->body && soap_element_end_in(soap, tag))
+			return NULL;
+	}
+	if ((soap->mode & SOAP_XML_STRICT) && (soap_flag_return_1 > 0))
+	{	soap->error = SOAP_OCCURS;
+		return NULL;
+	}
+	return a;
+}
+
+int tns__curseMediaTokenWithIdResponse::soap_put(struct soap *soap, const char *tag, const  char *type) const
+{
+	register int id = soap_embed(soap, (void*)this, NULL, 0, tag, SOAP_TYPE_ServerSoap_tns__curseMediaTokenWithIdResponse);
+	if (this->soap_out(soap, tag?tag:"tns:curseMediaTokenWithIdResponse", id, type))
+		return soap->error;
+	return soap_putindependent(soap);
+}
+
+void *tns__curseMediaTokenWithIdResponse::soap_get(struct soap *soap, const char *tag, const char *type)
+{
+	return soap_get_tns__curseMediaTokenWithIdResponse(soap, this, tag, type);
+}
+
+SOAP_FMAC3 tns__curseMediaTokenWithIdResponse * SOAP_FMAC4 soap_get_tns__curseMediaTokenWithIdResponse(struct soap *soap, tns__curseMediaTokenWithIdResponse *p, const char *tag, const char *type)
+{
+	if ((p = soap_in_tns__curseMediaTokenWithIdResponse(soap, tag, p, type)))
+		if (soap_getindependent(soap))
+			return NULL;
+	return p;
+}
+
+SOAP_FMAC1 tns__curseMediaTokenWithIdResponse * SOAP_FMAC2 soap_instantiate_tns__curseMediaTokenWithIdResponse(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
+{
+	(void)type; (void)arrayType; /* appease -Wall -Werror */
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate_tns__curseMediaTokenWithIdResponse(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
+	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap_tns__curseMediaTokenWithIdResponse, n, ServerSoap_fdelete);
+	if (!cp)
+		return NULL;
+	if (n < 0)
+	{	cp->ptr = (void*)SOAP_NEW(tns__curseMediaTokenWithIdResponse);
+		if (size)
+			*size = sizeof(tns__curseMediaTokenWithIdResponse);
+		((tns__curseMediaTokenWithIdResponse*)cp->ptr)->soap = soap;
+	}
+	else
+	{	cp->ptr = (void*)SOAP_NEW(tns__curseMediaTokenWithIdResponse[n]);
+		if (!cp->ptr)
+		{	soap->error = SOAP_EOM;
+			return NULL;
+		}
+		if (size)
+			*size = n * sizeof(tns__curseMediaTokenWithIdResponse);
+		for (int i = 0; i < n; i++)
+			((tns__curseMediaTokenWithIdResponse*)cp->ptr)[i].soap = soap;
+	}
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
+	return (tns__curseMediaTokenWithIdResponse*)cp->ptr;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__curseMediaTokenWithIdResponse(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
+{
+	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying tns__curseMediaTokenWithIdResponse %p -> %p\n", q, p));
+	*(tns__curseMediaTokenWithIdResponse*)p = *(tns__curseMediaTokenWithIdResponse*)q;
+}
+
+void tns__curseMediaTokenWithId::soap_default(struct soap *soap)
+{
+	this->soap = soap;
+	soap_default_LONG64(soap, &this->tns__curseMediaTokenWithId::arg0);
+	this->tns__curseMediaTokenWithId::userName = NULL;
+	this->tns__curseMediaTokenWithId::password = NULL;
+	/* transient soap skipped */
+}
+
+void tns__curseMediaTokenWithId::soap_serialize(struct soap *soap) const
+{
+	(void)soap; /* appease -Wall -Werror */
+	soap_serialize_PointerTostd__string(soap, &this->tns__curseMediaTokenWithId::userName);
+	soap_serialize_PointerTostd__string(soap, &this->tns__curseMediaTokenWithId::password);
+	/* transient soap skipped */
+}
+
+int tns__curseMediaTokenWithId::soap_out(struct soap *soap, const char *tag, int id, const char *type) const
+{
+	return soap_out_tns__curseMediaTokenWithId(soap, tag, id, this, type);
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__curseMediaTokenWithId(struct soap *soap, const char *tag, int id, const tns__curseMediaTokenWithId *a, const char *type)
+{
+	if (soap_element_begin_out(soap, tag, soap_embedded_id(soap, id, a, SOAP_TYPE_ServerSoap_tns__curseMediaTokenWithId), type))
+		return soap->error;
+	if (soap_out_LONG64(soap, "arg0", -1, &(a->tns__curseMediaTokenWithId::arg0), ""))
+		return soap->error;
+	if (soap_out_PointerTostd__string(soap, "userName", -1, &(a->tns__curseMediaTokenWithId::userName), ""))
+		return soap->error;
+	if (soap_out_PointerTostd__string(soap, "password", -1, &(a->tns__curseMediaTokenWithId::password), ""))
+		return soap->error;
+	/* transient soap skipped */
+	return soap_element_end_out(soap, tag);
+}
+
+void *tns__curseMediaTokenWithId::soap_in(struct soap *soap, const char *tag, const char *type)
+{	return soap_in_tns__curseMediaTokenWithId(soap, tag, this, type);
+}
+
+SOAP_FMAC3 tns__curseMediaTokenWithId * SOAP_FMAC4 soap_in_tns__curseMediaTokenWithId(struct soap *soap, const char *tag, tns__curseMediaTokenWithId *a, const char *type)
+{
+	(void)type; /* appease -Wall -Werror */
+	if (soap_element_begin_in(soap, tag, 0, NULL))
+		return NULL;
+	a = (tns__curseMediaTokenWithId *)soap_class_id_enter(soap, soap->id, a, SOAP_TYPE_ServerSoap_tns__curseMediaTokenWithId, sizeof(tns__curseMediaTokenWithId), soap->type, soap->arrayType);
+	if (!a)
+		return NULL;
+	if (soap->alloced)
+	{	a->soap_default(soap);
+		if (soap->clist->type != SOAP_TYPE_ServerSoap_tns__curseMediaTokenWithId)
+		{	soap_revert(soap);
+			*soap->id = '\0';
+			return (tns__curseMediaTokenWithId *)a->soap_in(soap, tag, type);
+		}
+	}
+	size_t soap_flag_arg01 = 1;
+	size_t soap_flag_userName1 = 1;
+	size_t soap_flag_password1 = 1;
+	if (soap->body && !*soap->href)
+	{
+		for (;;)
+		{	soap->error = SOAP_TAG_MISMATCH;
+			if (soap_flag_arg01 && soap->error == SOAP_TAG_MISMATCH)
+				if (soap_in_LONG64(soap, "arg0", &(a->tns__curseMediaTokenWithId::arg0), "xsd:long"))
+				{	soap_flag_arg01--;
+					continue;
+				}
+			if (soap_flag_userName1 && (soap->error == SOAP_TAG_MISMATCH || soap->error == SOAP_NO_TAG))
+				if (soap_in_PointerTostd__string(soap, "userName", &(a->tns__curseMediaTokenWithId::userName), "xsd:string"))
+				{	soap_flag_userName1--;
+					continue;
+				}
+			if (soap_flag_password1 && (soap->error == SOAP_TAG_MISMATCH || soap->error == SOAP_NO_TAG))
+				if (soap_in_PointerTostd__string(soap, "password", &(a->tns__curseMediaTokenWithId::password), "xsd:string"))
+				{	soap_flag_password1--;
+					continue;
+				}
+			/* transient soap skipped */
+			if (soap->error == SOAP_TAG_MISMATCH)
+				soap->error = soap_ignore_element(soap);
+			if (soap->error == SOAP_NO_TAG)
+				break;
+			if (soap->error)
+				return NULL;
+		}
+		if (soap_element_end_in(soap, tag))
+			return NULL;
+	}
+	else
+	{	a = (tns__curseMediaTokenWithId *)soap_id_forward(soap, soap->href, (void*)a, 0, SOAP_TYPE_ServerSoap_tns__curseMediaTokenWithId, 0, sizeof(tns__curseMediaTokenWithId), 0, soap_copy_tns__curseMediaTokenWithId);
+		if (soap->body && soap_element_end_in(soap, tag))
+			return NULL;
+	}
+	if ((soap->mode & SOAP_XML_STRICT) && (soap_flag_arg01 > 0))
+	{	soap->error = SOAP_OCCURS;
+		return NULL;
+	}
+	return a;
+}
+
+int tns__curseMediaTokenWithId::soap_put(struct soap *soap, const char *tag, const  char *type) const
+{
+	register int id = soap_embed(soap, (void*)this, NULL, 0, tag, SOAP_TYPE_ServerSoap_tns__curseMediaTokenWithId);
+	if (this->soap_out(soap, tag?tag:"tns:curseMediaTokenWithId", id, type))
+		return soap->error;
+	return soap_putindependent(soap);
+}
+
+void *tns__curseMediaTokenWithId::soap_get(struct soap *soap, const char *tag, const char *type)
+{
+	return soap_get_tns__curseMediaTokenWithId(soap, this, tag, type);
+}
+
+SOAP_FMAC3 tns__curseMediaTokenWithId * SOAP_FMAC4 soap_get_tns__curseMediaTokenWithId(struct soap *soap, tns__curseMediaTokenWithId *p, const char *tag, const char *type)
+{
+	if ((p = soap_in_tns__curseMediaTokenWithId(soap, tag, p, type)))
+		if (soap_getindependent(soap))
+			return NULL;
+	return p;
+}
+
+SOAP_FMAC1 tns__curseMediaTokenWithId * SOAP_FMAC2 soap_instantiate_tns__curseMediaTokenWithId(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
+{
+	(void)type; (void)arrayType; /* appease -Wall -Werror */
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate_tns__curseMediaTokenWithId(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
+	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap_tns__curseMediaTokenWithId, n, ServerSoap_fdelete);
+	if (!cp)
+		return NULL;
+	if (n < 0)
+	{	cp->ptr = (void*)SOAP_NEW(tns__curseMediaTokenWithId);
+		if (size)
+			*size = sizeof(tns__curseMediaTokenWithId);
+		((tns__curseMediaTokenWithId*)cp->ptr)->soap = soap;
+	}
+	else
+	{	cp->ptr = (void*)SOAP_NEW(tns__curseMediaTokenWithId[n]);
+		if (!cp->ptr)
+		{	soap->error = SOAP_EOM;
+			return NULL;
+		}
+		if (size)
+			*size = n * sizeof(tns__curseMediaTokenWithId);
+		for (int i = 0; i < n; i++)
+			((tns__curseMediaTokenWithId*)cp->ptr)[i].soap = soap;
+	}
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
+	return (tns__curseMediaTokenWithId*)cp->ptr;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__curseMediaTokenWithId(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
+{
+	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying tns__curseMediaTokenWithId %p -> %p\n", q, p));
+	*(tns__curseMediaTokenWithId*)p = *(tns__curseMediaTokenWithId*)q;
+}
+
+void tns__curseMediaAnnotationWithIdResponse::soap_default(struct soap *soap)
+{
+	this->soap = soap;
+	soap_default_bool(soap, &this->tns__curseMediaAnnotationWithIdResponse::return_);
+	/* transient soap skipped */
+}
+
+void tns__curseMediaAnnotationWithIdResponse::soap_serialize(struct soap *soap) const
+{
+	(void)soap; /* appease -Wall -Werror */
+	/* transient soap skipped */
+}
+
+int tns__curseMediaAnnotationWithIdResponse::soap_out(struct soap *soap, const char *tag, int id, const char *type) const
+{
+	return soap_out_tns__curseMediaAnnotationWithIdResponse(soap, tag, id, this, type);
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__curseMediaAnnotationWithIdResponse(struct soap *soap, const char *tag, int id, const tns__curseMediaAnnotationWithIdResponse *a, const char *type)
+{
+	if (soap_element_begin_out(soap, tag, soap_embedded_id(soap, id, a, SOAP_TYPE_ServerSoap_tns__curseMediaAnnotationWithIdResponse), type))
+		return soap->error;
+	if (soap_out_bool(soap, "return", -1, &(a->tns__curseMediaAnnotationWithIdResponse::return_), ""))
+		return soap->error;
+	/* transient soap skipped */
+	return soap_element_end_out(soap, tag);
+}
+
+void *tns__curseMediaAnnotationWithIdResponse::soap_in(struct soap *soap, const char *tag, const char *type)
+{	return soap_in_tns__curseMediaAnnotationWithIdResponse(soap, tag, this, type);
+}
+
+SOAP_FMAC3 tns__curseMediaAnnotationWithIdResponse * SOAP_FMAC4 soap_in_tns__curseMediaAnnotationWithIdResponse(struct soap *soap, const char *tag, tns__curseMediaAnnotationWithIdResponse *a, const char *type)
+{
+	(void)type; /* appease -Wall -Werror */
+	if (soap_element_begin_in(soap, tag, 0, NULL))
+		return NULL;
+	a = (tns__curseMediaAnnotationWithIdResponse *)soap_class_id_enter(soap, soap->id, a, SOAP_TYPE_ServerSoap_tns__curseMediaAnnotationWithIdResponse, sizeof(tns__curseMediaAnnotationWithIdResponse), soap->type, soap->arrayType);
+	if (!a)
+		return NULL;
+	if (soap->alloced)
+	{	a->soap_default(soap);
+		if (soap->clist->type != SOAP_TYPE_ServerSoap_tns__curseMediaAnnotationWithIdResponse)
+		{	soap_revert(soap);
+			*soap->id = '\0';
+			return (tns__curseMediaAnnotationWithIdResponse *)a->soap_in(soap, tag, type);
+		}
+	}
+	size_t soap_flag_return_1 = 1;
+	if (soap->body && !*soap->href)
+	{
+		for (;;)
+		{	soap->error = SOAP_TAG_MISMATCH;
+			if (soap_flag_return_1 && soap->error == SOAP_TAG_MISMATCH)
+				if (soap_in_bool(soap, "return", &(a->tns__curseMediaAnnotationWithIdResponse::return_), "xsd:boolean"))
+				{	soap_flag_return_1--;
+					continue;
+				}
+			/* transient soap skipped */
+			if (soap->error == SOAP_TAG_MISMATCH)
+				soap->error = soap_ignore_element(soap);
+			if (soap->error == SOAP_NO_TAG)
+				break;
+			if (soap->error)
+				return NULL;
+		}
+		if (soap_element_end_in(soap, tag))
+			return NULL;
+	}
+	else
+	{	a = (tns__curseMediaAnnotationWithIdResponse *)soap_id_forward(soap, soap->href, (void*)a, 0, SOAP_TYPE_ServerSoap_tns__curseMediaAnnotationWithIdResponse, 0, sizeof(tns__curseMediaAnnotationWithIdResponse), 0, soap_copy_tns__curseMediaAnnotationWithIdResponse);
+		if (soap->body && soap_element_end_in(soap, tag))
+			return NULL;
+	}
+	if ((soap->mode & SOAP_XML_STRICT) && (soap_flag_return_1 > 0))
+	{	soap->error = SOAP_OCCURS;
+		return NULL;
+	}
+	return a;
+}
+
+int tns__curseMediaAnnotationWithIdResponse::soap_put(struct soap *soap, const char *tag, const  char *type) const
+{
+	register int id = soap_embed(soap, (void*)this, NULL, 0, tag, SOAP_TYPE_ServerSoap_tns__curseMediaAnnotationWithIdResponse);
+	if (this->soap_out(soap, tag?tag:"tns:curseMediaAnnotationWithIdResponse", id, type))
+		return soap->error;
+	return soap_putindependent(soap);
+}
+
+void *tns__curseMediaAnnotationWithIdResponse::soap_get(struct soap *soap, const char *tag, const char *type)
+{
+	return soap_get_tns__curseMediaAnnotationWithIdResponse(soap, this, tag, type);
+}
+
+SOAP_FMAC3 tns__curseMediaAnnotationWithIdResponse * SOAP_FMAC4 soap_get_tns__curseMediaAnnotationWithIdResponse(struct soap *soap, tns__curseMediaAnnotationWithIdResponse *p, const char *tag, const char *type)
+{
+	if ((p = soap_in_tns__curseMediaAnnotationWithIdResponse(soap, tag, p, type)))
+		if (soap_getindependent(soap))
+			return NULL;
+	return p;
+}
+
+SOAP_FMAC1 tns__curseMediaAnnotationWithIdResponse * SOAP_FMAC2 soap_instantiate_tns__curseMediaAnnotationWithIdResponse(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
+{
+	(void)type; (void)arrayType; /* appease -Wall -Werror */
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate_tns__curseMediaAnnotationWithIdResponse(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
+	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap_tns__curseMediaAnnotationWithIdResponse, n, ServerSoap_fdelete);
+	if (!cp)
+		return NULL;
+	if (n < 0)
+	{	cp->ptr = (void*)SOAP_NEW(tns__curseMediaAnnotationWithIdResponse);
+		if (size)
+			*size = sizeof(tns__curseMediaAnnotationWithIdResponse);
+		((tns__curseMediaAnnotationWithIdResponse*)cp->ptr)->soap = soap;
+	}
+	else
+	{	cp->ptr = (void*)SOAP_NEW(tns__curseMediaAnnotationWithIdResponse[n]);
+		if (!cp->ptr)
+		{	soap->error = SOAP_EOM;
+			return NULL;
+		}
+		if (size)
+			*size = n * sizeof(tns__curseMediaAnnotationWithIdResponse);
+		for (int i = 0; i < n; i++)
+			((tns__curseMediaAnnotationWithIdResponse*)cp->ptr)[i].soap = soap;
+	}
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
+	return (tns__curseMediaAnnotationWithIdResponse*)cp->ptr;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__curseMediaAnnotationWithIdResponse(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
+{
+	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying tns__curseMediaAnnotationWithIdResponse %p -> %p\n", q, p));
+	*(tns__curseMediaAnnotationWithIdResponse*)p = *(tns__curseMediaAnnotationWithIdResponse*)q;
+}
+
+void tns__curseMediaAnnotationWithId::soap_default(struct soap *soap)
+{
+	this->soap = soap;
+	soap_default_LONG64(soap, &this->tns__curseMediaAnnotationWithId::arg0);
+	this->tns__curseMediaAnnotationWithId::userName = NULL;
+	this->tns__curseMediaAnnotationWithId::password = NULL;
+	/* transient soap skipped */
+}
+
+void tns__curseMediaAnnotationWithId::soap_serialize(struct soap *soap) const
+{
+	(void)soap; /* appease -Wall -Werror */
+	soap_serialize_PointerTostd__string(soap, &this->tns__curseMediaAnnotationWithId::userName);
+	soap_serialize_PointerTostd__string(soap, &this->tns__curseMediaAnnotationWithId::password);
+	/* transient soap skipped */
+}
+
+int tns__curseMediaAnnotationWithId::soap_out(struct soap *soap, const char *tag, int id, const char *type) const
+{
+	return soap_out_tns__curseMediaAnnotationWithId(soap, tag, id, this, type);
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__curseMediaAnnotationWithId(struct soap *soap, const char *tag, int id, const tns__curseMediaAnnotationWithId *a, const char *type)
+{
+	if (soap_element_begin_out(soap, tag, soap_embedded_id(soap, id, a, SOAP_TYPE_ServerSoap_tns__curseMediaAnnotationWithId), type))
+		return soap->error;
+	if (soap_out_LONG64(soap, "arg0", -1, &(a->tns__curseMediaAnnotationWithId::arg0), ""))
+		return soap->error;
+	if (soap_out_PointerTostd__string(soap, "userName", -1, &(a->tns__curseMediaAnnotationWithId::userName), ""))
+		return soap->error;
+	if (soap_out_PointerTostd__string(soap, "password", -1, &(a->tns__curseMediaAnnotationWithId::password), ""))
+		return soap->error;
+	/* transient soap skipped */
+	return soap_element_end_out(soap, tag);
+}
+
+void *tns__curseMediaAnnotationWithId::soap_in(struct soap *soap, const char *tag, const char *type)
+{	return soap_in_tns__curseMediaAnnotationWithId(soap, tag, this, type);
+}
+
+SOAP_FMAC3 tns__curseMediaAnnotationWithId * SOAP_FMAC4 soap_in_tns__curseMediaAnnotationWithId(struct soap *soap, const char *tag, tns__curseMediaAnnotationWithId *a, const char *type)
+{
+	(void)type; /* appease -Wall -Werror */
+	if (soap_element_begin_in(soap, tag, 0, NULL))
+		return NULL;
+	a = (tns__curseMediaAnnotationWithId *)soap_class_id_enter(soap, soap->id, a, SOAP_TYPE_ServerSoap_tns__curseMediaAnnotationWithId, sizeof(tns__curseMediaAnnotationWithId), soap->type, soap->arrayType);
+	if (!a)
+		return NULL;
+	if (soap->alloced)
+	{	a->soap_default(soap);
+		if (soap->clist->type != SOAP_TYPE_ServerSoap_tns__curseMediaAnnotationWithId)
+		{	soap_revert(soap);
+			*soap->id = '\0';
+			return (tns__curseMediaAnnotationWithId *)a->soap_in(soap, tag, type);
+		}
+	}
+	size_t soap_flag_arg01 = 1;
+	size_t soap_flag_userName1 = 1;
+	size_t soap_flag_password1 = 1;
+	if (soap->body && !*soap->href)
+	{
+		for (;;)
+		{	soap->error = SOAP_TAG_MISMATCH;
+			if (soap_flag_arg01 && soap->error == SOAP_TAG_MISMATCH)
+				if (soap_in_LONG64(soap, "arg0", &(a->tns__curseMediaAnnotationWithId::arg0), "xsd:long"))
+				{	soap_flag_arg01--;
+					continue;
+				}
+			if (soap_flag_userName1 && (soap->error == SOAP_TAG_MISMATCH || soap->error == SOAP_NO_TAG))
+				if (soap_in_PointerTostd__string(soap, "userName", &(a->tns__curseMediaAnnotationWithId::userName), "xsd:string"))
+				{	soap_flag_userName1--;
+					continue;
+				}
+			if (soap_flag_password1 && (soap->error == SOAP_TAG_MISMATCH || soap->error == SOAP_NO_TAG))
+				if (soap_in_PointerTostd__string(soap, "password", &(a->tns__curseMediaAnnotationWithId::password), "xsd:string"))
+				{	soap_flag_password1--;
+					continue;
+				}
+			/* transient soap skipped */
+			if (soap->error == SOAP_TAG_MISMATCH)
+				soap->error = soap_ignore_element(soap);
+			if (soap->error == SOAP_NO_TAG)
+				break;
+			if (soap->error)
+				return NULL;
+		}
+		if (soap_element_end_in(soap, tag))
+			return NULL;
+	}
+	else
+	{	a = (tns__curseMediaAnnotationWithId *)soap_id_forward(soap, soap->href, (void*)a, 0, SOAP_TYPE_ServerSoap_tns__curseMediaAnnotationWithId, 0, sizeof(tns__curseMediaAnnotationWithId), 0, soap_copy_tns__curseMediaAnnotationWithId);
+		if (soap->body && soap_element_end_in(soap, tag))
+			return NULL;
+	}
+	if ((soap->mode & SOAP_XML_STRICT) && (soap_flag_arg01 > 0))
+	{	soap->error = SOAP_OCCURS;
+		return NULL;
+	}
+	return a;
+}
+
+int tns__curseMediaAnnotationWithId::soap_put(struct soap *soap, const char *tag, const  char *type) const
+{
+	register int id = soap_embed(soap, (void*)this, NULL, 0, tag, SOAP_TYPE_ServerSoap_tns__curseMediaAnnotationWithId);
+	if (this->soap_out(soap, tag?tag:"tns:curseMediaAnnotationWithId", id, type))
+		return soap->error;
+	return soap_putindependent(soap);
+}
+
+void *tns__curseMediaAnnotationWithId::soap_get(struct soap *soap, const char *tag, const char *type)
+{
+	return soap_get_tns__curseMediaAnnotationWithId(soap, this, tag, type);
+}
+
+SOAP_FMAC3 tns__curseMediaAnnotationWithId * SOAP_FMAC4 soap_get_tns__curseMediaAnnotationWithId(struct soap *soap, tns__curseMediaAnnotationWithId *p, const char *tag, const char *type)
+{
+	if ((p = soap_in_tns__curseMediaAnnotationWithId(soap, tag, p, type)))
+		if (soap_getindependent(soap))
+			return NULL;
+	return p;
+}
+
+SOAP_FMAC1 tns__curseMediaAnnotationWithId * SOAP_FMAC2 soap_instantiate_tns__curseMediaAnnotationWithId(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
+{
+	(void)type; (void)arrayType; /* appease -Wall -Werror */
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate_tns__curseMediaAnnotationWithId(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
+	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap_tns__curseMediaAnnotationWithId, n, ServerSoap_fdelete);
+	if (!cp)
+		return NULL;
+	if (n < 0)
+	{	cp->ptr = (void*)SOAP_NEW(tns__curseMediaAnnotationWithId);
+		if (size)
+			*size = sizeof(tns__curseMediaAnnotationWithId);
+		((tns__curseMediaAnnotationWithId*)cp->ptr)->soap = soap;
+	}
+	else
+	{	cp->ptr = (void*)SOAP_NEW(tns__curseMediaAnnotationWithId[n]);
+		if (!cp->ptr)
+		{	soap->error = SOAP_EOM;
+			return NULL;
+		}
+		if (size)
+			*size = n * sizeof(tns__curseMediaAnnotationWithId);
+		for (int i = 0; i < n; i++)
+			((tns__curseMediaAnnotationWithId*)cp->ptr)[i].soap = soap;
+	}
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
+	return (tns__curseMediaAnnotationWithId*)cp->ptr;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__curseMediaAnnotationWithId(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
+{
+	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying tns__curseMediaAnnotationWithId %p -> %p\n", q, p));
+	*(tns__curseMediaAnnotationWithId*)p = *(tns__curseMediaAnnotationWithId*)q;
+}
+
+void tns__curseMediaAliasWithIdResponse::soap_default(struct soap *soap)
+{
+	this->soap = soap;
+	soap_default_bool(soap, &this->tns__curseMediaAliasWithIdResponse::return_);
+	/* transient soap skipped */
+}
+
+void tns__curseMediaAliasWithIdResponse::soap_serialize(struct soap *soap) const
+{
+	(void)soap; /* appease -Wall -Werror */
+	/* transient soap skipped */
+}
+
+int tns__curseMediaAliasWithIdResponse::soap_out(struct soap *soap, const char *tag, int id, const char *type) const
+{
+	return soap_out_tns__curseMediaAliasWithIdResponse(soap, tag, id, this, type);
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__curseMediaAliasWithIdResponse(struct soap *soap, const char *tag, int id, const tns__curseMediaAliasWithIdResponse *a, const char *type)
+{
+	if (soap_element_begin_out(soap, tag, soap_embedded_id(soap, id, a, SOAP_TYPE_ServerSoap_tns__curseMediaAliasWithIdResponse), type))
+		return soap->error;
+	if (soap_out_bool(soap, "return", -1, &(a->tns__curseMediaAliasWithIdResponse::return_), ""))
+		return soap->error;
+	/* transient soap skipped */
+	return soap_element_end_out(soap, tag);
+}
+
+void *tns__curseMediaAliasWithIdResponse::soap_in(struct soap *soap, const char *tag, const char *type)
+{	return soap_in_tns__curseMediaAliasWithIdResponse(soap, tag, this, type);
+}
+
+SOAP_FMAC3 tns__curseMediaAliasWithIdResponse * SOAP_FMAC4 soap_in_tns__curseMediaAliasWithIdResponse(struct soap *soap, const char *tag, tns__curseMediaAliasWithIdResponse *a, const char *type)
+{
+	(void)type; /* appease -Wall -Werror */
+	if (soap_element_begin_in(soap, tag, 0, NULL))
+		return NULL;
+	a = (tns__curseMediaAliasWithIdResponse *)soap_class_id_enter(soap, soap->id, a, SOAP_TYPE_ServerSoap_tns__curseMediaAliasWithIdResponse, sizeof(tns__curseMediaAliasWithIdResponse), soap->type, soap->arrayType);
+	if (!a)
+		return NULL;
+	if (soap->alloced)
+	{	a->soap_default(soap);
+		if (soap->clist->type != SOAP_TYPE_ServerSoap_tns__curseMediaAliasWithIdResponse)
+		{	soap_revert(soap);
+			*soap->id = '\0';
+			return (tns__curseMediaAliasWithIdResponse *)a->soap_in(soap, tag, type);
+		}
+	}
+	size_t soap_flag_return_1 = 1;
+	if (soap->body && !*soap->href)
+	{
+		for (;;)
+		{	soap->error = SOAP_TAG_MISMATCH;
+			if (soap_flag_return_1 && soap->error == SOAP_TAG_MISMATCH)
+				if (soap_in_bool(soap, "return", &(a->tns__curseMediaAliasWithIdResponse::return_), "xsd:boolean"))
+				{	soap_flag_return_1--;
+					continue;
+				}
+			/* transient soap skipped */
+			if (soap->error == SOAP_TAG_MISMATCH)
+				soap->error = soap_ignore_element(soap);
+			if (soap->error == SOAP_NO_TAG)
+				break;
+			if (soap->error)
+				return NULL;
+		}
+		if (soap_element_end_in(soap, tag))
+			return NULL;
+	}
+	else
+	{	a = (tns__curseMediaAliasWithIdResponse *)soap_id_forward(soap, soap->href, (void*)a, 0, SOAP_TYPE_ServerSoap_tns__curseMediaAliasWithIdResponse, 0, sizeof(tns__curseMediaAliasWithIdResponse), 0, soap_copy_tns__curseMediaAliasWithIdResponse);
+		if (soap->body && soap_element_end_in(soap, tag))
+			return NULL;
+	}
+	if ((soap->mode & SOAP_XML_STRICT) && (soap_flag_return_1 > 0))
+	{	soap->error = SOAP_OCCURS;
+		return NULL;
+	}
+	return a;
+}
+
+int tns__curseMediaAliasWithIdResponse::soap_put(struct soap *soap, const char *tag, const  char *type) const
+{
+	register int id = soap_embed(soap, (void*)this, NULL, 0, tag, SOAP_TYPE_ServerSoap_tns__curseMediaAliasWithIdResponse);
+	if (this->soap_out(soap, tag?tag:"tns:curseMediaAliasWithIdResponse", id, type))
+		return soap->error;
+	return soap_putindependent(soap);
+}
+
+void *tns__curseMediaAliasWithIdResponse::soap_get(struct soap *soap, const char *tag, const char *type)
+{
+	return soap_get_tns__curseMediaAliasWithIdResponse(soap, this, tag, type);
+}
+
+SOAP_FMAC3 tns__curseMediaAliasWithIdResponse * SOAP_FMAC4 soap_get_tns__curseMediaAliasWithIdResponse(struct soap *soap, tns__curseMediaAliasWithIdResponse *p, const char *tag, const char *type)
+{
+	if ((p = soap_in_tns__curseMediaAliasWithIdResponse(soap, tag, p, type)))
+		if (soap_getindependent(soap))
+			return NULL;
+	return p;
+}
+
+SOAP_FMAC1 tns__curseMediaAliasWithIdResponse * SOAP_FMAC2 soap_instantiate_tns__curseMediaAliasWithIdResponse(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
+{
+	(void)type; (void)arrayType; /* appease -Wall -Werror */
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate_tns__curseMediaAliasWithIdResponse(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
+	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap_tns__curseMediaAliasWithIdResponse, n, ServerSoap_fdelete);
+	if (!cp)
+		return NULL;
+	if (n < 0)
+	{	cp->ptr = (void*)SOAP_NEW(tns__curseMediaAliasWithIdResponse);
+		if (size)
+			*size = sizeof(tns__curseMediaAliasWithIdResponse);
+		((tns__curseMediaAliasWithIdResponse*)cp->ptr)->soap = soap;
+	}
+	else
+	{	cp->ptr = (void*)SOAP_NEW(tns__curseMediaAliasWithIdResponse[n]);
+		if (!cp->ptr)
+		{	soap->error = SOAP_EOM;
+			return NULL;
+		}
+		if (size)
+			*size = n * sizeof(tns__curseMediaAliasWithIdResponse);
+		for (int i = 0; i < n; i++)
+			((tns__curseMediaAliasWithIdResponse*)cp->ptr)[i].soap = soap;
+	}
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
+	return (tns__curseMediaAliasWithIdResponse*)cp->ptr;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__curseMediaAliasWithIdResponse(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
+{
+	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying tns__curseMediaAliasWithIdResponse %p -> %p\n", q, p));
+	*(tns__curseMediaAliasWithIdResponse*)p = *(tns__curseMediaAliasWithIdResponse*)q;
+}
+
+void tns__curseMediaAliasWithId::soap_default(struct soap *soap)
+{
+	this->soap = soap;
+	soap_default_LONG64(soap, &this->tns__curseMediaAliasWithId::arg0);
+	this->tns__curseMediaAliasWithId::userName = NULL;
+	this->tns__curseMediaAliasWithId::password = NULL;
+	/* transient soap skipped */
+}
+
+void tns__curseMediaAliasWithId::soap_serialize(struct soap *soap) const
+{
+	(void)soap; /* appease -Wall -Werror */
+	soap_serialize_PointerTostd__string(soap, &this->tns__curseMediaAliasWithId::userName);
+	soap_serialize_PointerTostd__string(soap, &this->tns__curseMediaAliasWithId::password);
+	/* transient soap skipped */
+}
+
+int tns__curseMediaAliasWithId::soap_out(struct soap *soap, const char *tag, int id, const char *type) const
+{
+	return soap_out_tns__curseMediaAliasWithId(soap, tag, id, this, type);
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__curseMediaAliasWithId(struct soap *soap, const char *tag, int id, const tns__curseMediaAliasWithId *a, const char *type)
+{
+	if (soap_element_begin_out(soap, tag, soap_embedded_id(soap, id, a, SOAP_TYPE_ServerSoap_tns__curseMediaAliasWithId), type))
+		return soap->error;
+	if (soap_out_LONG64(soap, "arg0", -1, &(a->tns__curseMediaAliasWithId::arg0), ""))
+		return soap->error;
+	if (soap_out_PointerTostd__string(soap, "userName", -1, &(a->tns__curseMediaAliasWithId::userName), ""))
+		return soap->error;
+	if (soap_out_PointerTostd__string(soap, "password", -1, &(a->tns__curseMediaAliasWithId::password), ""))
+		return soap->error;
+	/* transient soap skipped */
+	return soap_element_end_out(soap, tag);
+}
+
+void *tns__curseMediaAliasWithId::soap_in(struct soap *soap, const char *tag, const char *type)
+{	return soap_in_tns__curseMediaAliasWithId(soap, tag, this, type);
+}
+
+SOAP_FMAC3 tns__curseMediaAliasWithId * SOAP_FMAC4 soap_in_tns__curseMediaAliasWithId(struct soap *soap, const char *tag, tns__curseMediaAliasWithId *a, const char *type)
+{
+	(void)type; /* appease -Wall -Werror */
+	if (soap_element_begin_in(soap, tag, 0, NULL))
+		return NULL;
+	a = (tns__curseMediaAliasWithId *)soap_class_id_enter(soap, soap->id, a, SOAP_TYPE_ServerSoap_tns__curseMediaAliasWithId, sizeof(tns__curseMediaAliasWithId), soap->type, soap->arrayType);
+	if (!a)
+		return NULL;
+	if (soap->alloced)
+	{	a->soap_default(soap);
+		if (soap->clist->type != SOAP_TYPE_ServerSoap_tns__curseMediaAliasWithId)
+		{	soap_revert(soap);
+			*soap->id = '\0';
+			return (tns__curseMediaAliasWithId *)a->soap_in(soap, tag, type);
+		}
+	}
+	size_t soap_flag_arg01 = 1;
+	size_t soap_flag_userName1 = 1;
+	size_t soap_flag_password1 = 1;
+	if (soap->body && !*soap->href)
+	{
+		for (;;)
+		{	soap->error = SOAP_TAG_MISMATCH;
+			if (soap_flag_arg01 && soap->error == SOAP_TAG_MISMATCH)
+				if (soap_in_LONG64(soap, "arg0", &(a->tns__curseMediaAliasWithId::arg0), "xsd:long"))
+				{	soap_flag_arg01--;
+					continue;
+				}
+			if (soap_flag_userName1 && (soap->error == SOAP_TAG_MISMATCH || soap->error == SOAP_NO_TAG))
+				if (soap_in_PointerTostd__string(soap, "userName", &(a->tns__curseMediaAliasWithId::userName), "xsd:string"))
+				{	soap_flag_userName1--;
+					continue;
+				}
+			if (soap_flag_password1 && (soap->error == SOAP_TAG_MISMATCH || soap->error == SOAP_NO_TAG))
+				if (soap_in_PointerTostd__string(soap, "password", &(a->tns__curseMediaAliasWithId::password), "xsd:string"))
+				{	soap_flag_password1--;
+					continue;
+				}
+			/* transient soap skipped */
+			if (soap->error == SOAP_TAG_MISMATCH)
+				soap->error = soap_ignore_element(soap);
+			if (soap->error == SOAP_NO_TAG)
+				break;
+			if (soap->error)
+				return NULL;
+		}
+		if (soap_element_end_in(soap, tag))
+			return NULL;
+	}
+	else
+	{	a = (tns__curseMediaAliasWithId *)soap_id_forward(soap, soap->href, (void*)a, 0, SOAP_TYPE_ServerSoap_tns__curseMediaAliasWithId, 0, sizeof(tns__curseMediaAliasWithId), 0, soap_copy_tns__curseMediaAliasWithId);
+		if (soap->body && soap_element_end_in(soap, tag))
+			return NULL;
+	}
+	if ((soap->mode & SOAP_XML_STRICT) && (soap_flag_arg01 > 0))
+	{	soap->error = SOAP_OCCURS;
+		return NULL;
+	}
+	return a;
+}
+
+int tns__curseMediaAliasWithId::soap_put(struct soap *soap, const char *tag, const  char *type) const
+{
+	register int id = soap_embed(soap, (void*)this, NULL, 0, tag, SOAP_TYPE_ServerSoap_tns__curseMediaAliasWithId);
+	if (this->soap_out(soap, tag?tag:"tns:curseMediaAliasWithId", id, type))
+		return soap->error;
+	return soap_putindependent(soap);
+}
+
+void *tns__curseMediaAliasWithId::soap_get(struct soap *soap, const char *tag, const char *type)
+{
+	return soap_get_tns__curseMediaAliasWithId(soap, this, tag, type);
+}
+
+SOAP_FMAC3 tns__curseMediaAliasWithId * SOAP_FMAC4 soap_get_tns__curseMediaAliasWithId(struct soap *soap, tns__curseMediaAliasWithId *p, const char *tag, const char *type)
+{
+	if ((p = soap_in_tns__curseMediaAliasWithId(soap, tag, p, type)))
+		if (soap_getindependent(soap))
+			return NULL;
+	return p;
+}
+
+SOAP_FMAC1 tns__curseMediaAliasWithId * SOAP_FMAC2 soap_instantiate_tns__curseMediaAliasWithId(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
+{
+	(void)type; (void)arrayType; /* appease -Wall -Werror */
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate_tns__curseMediaAliasWithId(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
+	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap_tns__curseMediaAliasWithId, n, ServerSoap_fdelete);
+	if (!cp)
+		return NULL;
+	if (n < 0)
+	{	cp->ptr = (void*)SOAP_NEW(tns__curseMediaAliasWithId);
+		if (size)
+			*size = sizeof(tns__curseMediaAliasWithId);
+		((tns__curseMediaAliasWithId*)cp->ptr)->soap = soap;
+	}
+	else
+	{	cp->ptr = (void*)SOAP_NEW(tns__curseMediaAliasWithId[n]);
+		if (!cp->ptr)
+		{	soap->error = SOAP_EOM;
+			return NULL;
+		}
+		if (size)
+			*size = n * sizeof(tns__curseMediaAliasWithId);
+		for (int i = 0; i < n; i++)
+			((tns__curseMediaAliasWithId*)cp->ptr)[i].soap = soap;
+	}
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
+	return (tns__curseMediaAliasWithId*)cp->ptr;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__curseMediaAliasWithId(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
+{
+	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying tns__curseMediaAliasWithId %p -> %p\n", q, p));
+	*(tns__curseMediaAliasWithId*)p = *(tns__curseMediaAliasWithId*)q;
+}
+
 void tns__chatResponse::soap_default(struct soap *soap)
 {
 	this->soap = soap;
@@ -13050,6 +9359,1182 @@ SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__chat(struct soap *soap, int st, int tt
 	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
 	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying tns__chat %p -> %p\n", q, p));
 	*(tns__chat*)p = *(tns__chat*)q;
+}
+
+void tns__blockUserWithIdResponse::soap_default(struct soap *soap)
+{
+	this->soap = soap;
+	soap_default_bool(soap, &this->tns__blockUserWithIdResponse::return_);
+	/* transient soap skipped */
+}
+
+void tns__blockUserWithIdResponse::soap_serialize(struct soap *soap) const
+{
+	(void)soap; /* appease -Wall -Werror */
+	/* transient soap skipped */
+}
+
+int tns__blockUserWithIdResponse::soap_out(struct soap *soap, const char *tag, int id, const char *type) const
+{
+	return soap_out_tns__blockUserWithIdResponse(soap, tag, id, this, type);
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__blockUserWithIdResponse(struct soap *soap, const char *tag, int id, const tns__blockUserWithIdResponse *a, const char *type)
+{
+	if (soap_element_begin_out(soap, tag, soap_embedded_id(soap, id, a, SOAP_TYPE_ServerSoap_tns__blockUserWithIdResponse), type))
+		return soap->error;
+	if (soap_out_bool(soap, "return", -1, &(a->tns__blockUserWithIdResponse::return_), ""))
+		return soap->error;
+	/* transient soap skipped */
+	return soap_element_end_out(soap, tag);
+}
+
+void *tns__blockUserWithIdResponse::soap_in(struct soap *soap, const char *tag, const char *type)
+{	return soap_in_tns__blockUserWithIdResponse(soap, tag, this, type);
+}
+
+SOAP_FMAC3 tns__blockUserWithIdResponse * SOAP_FMAC4 soap_in_tns__blockUserWithIdResponse(struct soap *soap, const char *tag, tns__blockUserWithIdResponse *a, const char *type)
+{
+	(void)type; /* appease -Wall -Werror */
+	if (soap_element_begin_in(soap, tag, 0, NULL))
+		return NULL;
+	a = (tns__blockUserWithIdResponse *)soap_class_id_enter(soap, soap->id, a, SOAP_TYPE_ServerSoap_tns__blockUserWithIdResponse, sizeof(tns__blockUserWithIdResponse), soap->type, soap->arrayType);
+	if (!a)
+		return NULL;
+	if (soap->alloced)
+	{	a->soap_default(soap);
+		if (soap->clist->type != SOAP_TYPE_ServerSoap_tns__blockUserWithIdResponse)
+		{	soap_revert(soap);
+			*soap->id = '\0';
+			return (tns__blockUserWithIdResponse *)a->soap_in(soap, tag, type);
+		}
+	}
+	size_t soap_flag_return_1 = 1;
+	if (soap->body && !*soap->href)
+	{
+		for (;;)
+		{	soap->error = SOAP_TAG_MISMATCH;
+			if (soap_flag_return_1 && soap->error == SOAP_TAG_MISMATCH)
+				if (soap_in_bool(soap, "return", &(a->tns__blockUserWithIdResponse::return_), "xsd:boolean"))
+				{	soap_flag_return_1--;
+					continue;
+				}
+			/* transient soap skipped */
+			if (soap->error == SOAP_TAG_MISMATCH)
+				soap->error = soap_ignore_element(soap);
+			if (soap->error == SOAP_NO_TAG)
+				break;
+			if (soap->error)
+				return NULL;
+		}
+		if (soap_element_end_in(soap, tag))
+			return NULL;
+	}
+	else
+	{	a = (tns__blockUserWithIdResponse *)soap_id_forward(soap, soap->href, (void*)a, 0, SOAP_TYPE_ServerSoap_tns__blockUserWithIdResponse, 0, sizeof(tns__blockUserWithIdResponse), 0, soap_copy_tns__blockUserWithIdResponse);
+		if (soap->body && soap_element_end_in(soap, tag))
+			return NULL;
+	}
+	if ((soap->mode & SOAP_XML_STRICT) && (soap_flag_return_1 > 0))
+	{	soap->error = SOAP_OCCURS;
+		return NULL;
+	}
+	return a;
+}
+
+int tns__blockUserWithIdResponse::soap_put(struct soap *soap, const char *tag, const  char *type) const
+{
+	register int id = soap_embed(soap, (void*)this, NULL, 0, tag, SOAP_TYPE_ServerSoap_tns__blockUserWithIdResponse);
+	if (this->soap_out(soap, tag?tag:"tns:blockUserWithIdResponse", id, type))
+		return soap->error;
+	return soap_putindependent(soap);
+}
+
+void *tns__blockUserWithIdResponse::soap_get(struct soap *soap, const char *tag, const char *type)
+{
+	return soap_get_tns__blockUserWithIdResponse(soap, this, tag, type);
+}
+
+SOAP_FMAC3 tns__blockUserWithIdResponse * SOAP_FMAC4 soap_get_tns__blockUserWithIdResponse(struct soap *soap, tns__blockUserWithIdResponse *p, const char *tag, const char *type)
+{
+	if ((p = soap_in_tns__blockUserWithIdResponse(soap, tag, p, type)))
+		if (soap_getindependent(soap))
+			return NULL;
+	return p;
+}
+
+SOAP_FMAC1 tns__blockUserWithIdResponse * SOAP_FMAC2 soap_instantiate_tns__blockUserWithIdResponse(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
+{
+	(void)type; (void)arrayType; /* appease -Wall -Werror */
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate_tns__blockUserWithIdResponse(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
+	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap_tns__blockUserWithIdResponse, n, ServerSoap_fdelete);
+	if (!cp)
+		return NULL;
+	if (n < 0)
+	{	cp->ptr = (void*)SOAP_NEW(tns__blockUserWithIdResponse);
+		if (size)
+			*size = sizeof(tns__blockUserWithIdResponse);
+		((tns__blockUserWithIdResponse*)cp->ptr)->soap = soap;
+	}
+	else
+	{	cp->ptr = (void*)SOAP_NEW(tns__blockUserWithIdResponse[n]);
+		if (!cp->ptr)
+		{	soap->error = SOAP_EOM;
+			return NULL;
+		}
+		if (size)
+			*size = n * sizeof(tns__blockUserWithIdResponse);
+		for (int i = 0; i < n; i++)
+			((tns__blockUserWithIdResponse*)cp->ptr)[i].soap = soap;
+	}
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
+	return (tns__blockUserWithIdResponse*)cp->ptr;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__blockUserWithIdResponse(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
+{
+	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying tns__blockUserWithIdResponse %p -> %p\n", q, p));
+	*(tns__blockUserWithIdResponse*)p = *(tns__blockUserWithIdResponse*)q;
+}
+
+void tns__blockUserWithId::soap_default(struct soap *soap)
+{
+	this->soap = soap;
+	soap_default_LONG64(soap, &this->tns__blockUserWithId::arg0);
+	this->tns__blockUserWithId::userName = NULL;
+	this->tns__blockUserWithId::password = NULL;
+	/* transient soap skipped */
+}
+
+void tns__blockUserWithId::soap_serialize(struct soap *soap) const
+{
+	(void)soap; /* appease -Wall -Werror */
+	soap_serialize_PointerTostd__string(soap, &this->tns__blockUserWithId::userName);
+	soap_serialize_PointerTostd__string(soap, &this->tns__blockUserWithId::password);
+	/* transient soap skipped */
+}
+
+int tns__blockUserWithId::soap_out(struct soap *soap, const char *tag, int id, const char *type) const
+{
+	return soap_out_tns__blockUserWithId(soap, tag, id, this, type);
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__blockUserWithId(struct soap *soap, const char *tag, int id, const tns__blockUserWithId *a, const char *type)
+{
+	if (soap_element_begin_out(soap, tag, soap_embedded_id(soap, id, a, SOAP_TYPE_ServerSoap_tns__blockUserWithId), type))
+		return soap->error;
+	if (soap_out_LONG64(soap, "arg0", -1, &(a->tns__blockUserWithId::arg0), ""))
+		return soap->error;
+	if (soap_out_PointerTostd__string(soap, "userName", -1, &(a->tns__blockUserWithId::userName), ""))
+		return soap->error;
+	if (soap_out_PointerTostd__string(soap, "password", -1, &(a->tns__blockUserWithId::password), ""))
+		return soap->error;
+	/* transient soap skipped */
+	return soap_element_end_out(soap, tag);
+}
+
+void *tns__blockUserWithId::soap_in(struct soap *soap, const char *tag, const char *type)
+{	return soap_in_tns__blockUserWithId(soap, tag, this, type);
+}
+
+SOAP_FMAC3 tns__blockUserWithId * SOAP_FMAC4 soap_in_tns__blockUserWithId(struct soap *soap, const char *tag, tns__blockUserWithId *a, const char *type)
+{
+	(void)type; /* appease -Wall -Werror */
+	if (soap_element_begin_in(soap, tag, 0, NULL))
+		return NULL;
+	a = (tns__blockUserWithId *)soap_class_id_enter(soap, soap->id, a, SOAP_TYPE_ServerSoap_tns__blockUserWithId, sizeof(tns__blockUserWithId), soap->type, soap->arrayType);
+	if (!a)
+		return NULL;
+	if (soap->alloced)
+	{	a->soap_default(soap);
+		if (soap->clist->type != SOAP_TYPE_ServerSoap_tns__blockUserWithId)
+		{	soap_revert(soap);
+			*soap->id = '\0';
+			return (tns__blockUserWithId *)a->soap_in(soap, tag, type);
+		}
+	}
+	size_t soap_flag_arg01 = 1;
+	size_t soap_flag_userName1 = 1;
+	size_t soap_flag_password1 = 1;
+	if (soap->body && !*soap->href)
+	{
+		for (;;)
+		{	soap->error = SOAP_TAG_MISMATCH;
+			if (soap_flag_arg01 && soap->error == SOAP_TAG_MISMATCH)
+				if (soap_in_LONG64(soap, "arg0", &(a->tns__blockUserWithId::arg0), "xsd:long"))
+				{	soap_flag_arg01--;
+					continue;
+				}
+			if (soap_flag_userName1 && (soap->error == SOAP_TAG_MISMATCH || soap->error == SOAP_NO_TAG))
+				if (soap_in_PointerTostd__string(soap, "userName", &(a->tns__blockUserWithId::userName), "xsd:string"))
+				{	soap_flag_userName1--;
+					continue;
+				}
+			if (soap_flag_password1 && (soap->error == SOAP_TAG_MISMATCH || soap->error == SOAP_NO_TAG))
+				if (soap_in_PointerTostd__string(soap, "password", &(a->tns__blockUserWithId::password), "xsd:string"))
+				{	soap_flag_password1--;
+					continue;
+				}
+			/* transient soap skipped */
+			if (soap->error == SOAP_TAG_MISMATCH)
+				soap->error = soap_ignore_element(soap);
+			if (soap->error == SOAP_NO_TAG)
+				break;
+			if (soap->error)
+				return NULL;
+		}
+		if (soap_element_end_in(soap, tag))
+			return NULL;
+	}
+	else
+	{	a = (tns__blockUserWithId *)soap_id_forward(soap, soap->href, (void*)a, 0, SOAP_TYPE_ServerSoap_tns__blockUserWithId, 0, sizeof(tns__blockUserWithId), 0, soap_copy_tns__blockUserWithId);
+		if (soap->body && soap_element_end_in(soap, tag))
+			return NULL;
+	}
+	if ((soap->mode & SOAP_XML_STRICT) && (soap_flag_arg01 > 0))
+	{	soap->error = SOAP_OCCURS;
+		return NULL;
+	}
+	return a;
+}
+
+int tns__blockUserWithId::soap_put(struct soap *soap, const char *tag, const  char *type) const
+{
+	register int id = soap_embed(soap, (void*)this, NULL, 0, tag, SOAP_TYPE_ServerSoap_tns__blockUserWithId);
+	if (this->soap_out(soap, tag?tag:"tns:blockUserWithId", id, type))
+		return soap->error;
+	return soap_putindependent(soap);
+}
+
+void *tns__blockUserWithId::soap_get(struct soap *soap, const char *tag, const char *type)
+{
+	return soap_get_tns__blockUserWithId(soap, this, tag, type);
+}
+
+SOAP_FMAC3 tns__blockUserWithId * SOAP_FMAC4 soap_get_tns__blockUserWithId(struct soap *soap, tns__blockUserWithId *p, const char *tag, const char *type)
+{
+	if ((p = soap_in_tns__blockUserWithId(soap, tag, p, type)))
+		if (soap_getindependent(soap))
+			return NULL;
+	return p;
+}
+
+SOAP_FMAC1 tns__blockUserWithId * SOAP_FMAC2 soap_instantiate_tns__blockUserWithId(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
+{
+	(void)type; (void)arrayType; /* appease -Wall -Werror */
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate_tns__blockUserWithId(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
+	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap_tns__blockUserWithId, n, ServerSoap_fdelete);
+	if (!cp)
+		return NULL;
+	if (n < 0)
+	{	cp->ptr = (void*)SOAP_NEW(tns__blockUserWithId);
+		if (size)
+			*size = sizeof(tns__blockUserWithId);
+		((tns__blockUserWithId*)cp->ptr)->soap = soap;
+	}
+	else
+	{	cp->ptr = (void*)SOAP_NEW(tns__blockUserWithId[n]);
+		if (!cp->ptr)
+		{	soap->error = SOAP_EOM;
+			return NULL;
+		}
+		if (size)
+			*size = n * sizeof(tns__blockUserWithId);
+		for (int i = 0; i < n; i++)
+			((tns__blockUserWithId*)cp->ptr)[i].soap = soap;
+	}
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
+	return (tns__blockUserWithId*)cp->ptr;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__blockUserWithId(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
+{
+	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying tns__blockUserWithId %p -> %p\n", q, p));
+	*(tns__blockUserWithId*)p = *(tns__blockUserWithId*)q;
+}
+
+void tns__blockMediaAnnotationWithIdResponse::soap_default(struct soap *soap)
+{
+	this->soap = soap;
+	soap_default_bool(soap, &this->tns__blockMediaAnnotationWithIdResponse::return_);
+	/* transient soap skipped */
+}
+
+void tns__blockMediaAnnotationWithIdResponse::soap_serialize(struct soap *soap) const
+{
+	(void)soap; /* appease -Wall -Werror */
+	/* transient soap skipped */
+}
+
+int tns__blockMediaAnnotationWithIdResponse::soap_out(struct soap *soap, const char *tag, int id, const char *type) const
+{
+	return soap_out_tns__blockMediaAnnotationWithIdResponse(soap, tag, id, this, type);
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__blockMediaAnnotationWithIdResponse(struct soap *soap, const char *tag, int id, const tns__blockMediaAnnotationWithIdResponse *a, const char *type)
+{
+	if (soap_element_begin_out(soap, tag, soap_embedded_id(soap, id, a, SOAP_TYPE_ServerSoap_tns__blockMediaAnnotationWithIdResponse), type))
+		return soap->error;
+	if (soap_out_bool(soap, "return", -1, &(a->tns__blockMediaAnnotationWithIdResponse::return_), ""))
+		return soap->error;
+	/* transient soap skipped */
+	return soap_element_end_out(soap, tag);
+}
+
+void *tns__blockMediaAnnotationWithIdResponse::soap_in(struct soap *soap, const char *tag, const char *type)
+{	return soap_in_tns__blockMediaAnnotationWithIdResponse(soap, tag, this, type);
+}
+
+SOAP_FMAC3 tns__blockMediaAnnotationWithIdResponse * SOAP_FMAC4 soap_in_tns__blockMediaAnnotationWithIdResponse(struct soap *soap, const char *tag, tns__blockMediaAnnotationWithIdResponse *a, const char *type)
+{
+	(void)type; /* appease -Wall -Werror */
+	if (soap_element_begin_in(soap, tag, 0, NULL))
+		return NULL;
+	a = (tns__blockMediaAnnotationWithIdResponse *)soap_class_id_enter(soap, soap->id, a, SOAP_TYPE_ServerSoap_tns__blockMediaAnnotationWithIdResponse, sizeof(tns__blockMediaAnnotationWithIdResponse), soap->type, soap->arrayType);
+	if (!a)
+		return NULL;
+	if (soap->alloced)
+	{	a->soap_default(soap);
+		if (soap->clist->type != SOAP_TYPE_ServerSoap_tns__blockMediaAnnotationWithIdResponse)
+		{	soap_revert(soap);
+			*soap->id = '\0';
+			return (tns__blockMediaAnnotationWithIdResponse *)a->soap_in(soap, tag, type);
+		}
+	}
+	size_t soap_flag_return_1 = 1;
+	if (soap->body && !*soap->href)
+	{
+		for (;;)
+		{	soap->error = SOAP_TAG_MISMATCH;
+			if (soap_flag_return_1 && soap->error == SOAP_TAG_MISMATCH)
+				if (soap_in_bool(soap, "return", &(a->tns__blockMediaAnnotationWithIdResponse::return_), "xsd:boolean"))
+				{	soap_flag_return_1--;
+					continue;
+				}
+			/* transient soap skipped */
+			if (soap->error == SOAP_TAG_MISMATCH)
+				soap->error = soap_ignore_element(soap);
+			if (soap->error == SOAP_NO_TAG)
+				break;
+			if (soap->error)
+				return NULL;
+		}
+		if (soap_element_end_in(soap, tag))
+			return NULL;
+	}
+	else
+	{	a = (tns__blockMediaAnnotationWithIdResponse *)soap_id_forward(soap, soap->href, (void*)a, 0, SOAP_TYPE_ServerSoap_tns__blockMediaAnnotationWithIdResponse, 0, sizeof(tns__blockMediaAnnotationWithIdResponse), 0, soap_copy_tns__blockMediaAnnotationWithIdResponse);
+		if (soap->body && soap_element_end_in(soap, tag))
+			return NULL;
+	}
+	if ((soap->mode & SOAP_XML_STRICT) && (soap_flag_return_1 > 0))
+	{	soap->error = SOAP_OCCURS;
+		return NULL;
+	}
+	return a;
+}
+
+int tns__blockMediaAnnotationWithIdResponse::soap_put(struct soap *soap, const char *tag, const  char *type) const
+{
+	register int id = soap_embed(soap, (void*)this, NULL, 0, tag, SOAP_TYPE_ServerSoap_tns__blockMediaAnnotationWithIdResponse);
+	if (this->soap_out(soap, tag?tag:"tns:blockMediaAnnotationWithIdResponse", id, type))
+		return soap->error;
+	return soap_putindependent(soap);
+}
+
+void *tns__blockMediaAnnotationWithIdResponse::soap_get(struct soap *soap, const char *tag, const char *type)
+{
+	return soap_get_tns__blockMediaAnnotationWithIdResponse(soap, this, tag, type);
+}
+
+SOAP_FMAC3 tns__blockMediaAnnotationWithIdResponse * SOAP_FMAC4 soap_get_tns__blockMediaAnnotationWithIdResponse(struct soap *soap, tns__blockMediaAnnotationWithIdResponse *p, const char *tag, const char *type)
+{
+	if ((p = soap_in_tns__blockMediaAnnotationWithIdResponse(soap, tag, p, type)))
+		if (soap_getindependent(soap))
+			return NULL;
+	return p;
+}
+
+SOAP_FMAC1 tns__blockMediaAnnotationWithIdResponse * SOAP_FMAC2 soap_instantiate_tns__blockMediaAnnotationWithIdResponse(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
+{
+	(void)type; (void)arrayType; /* appease -Wall -Werror */
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate_tns__blockMediaAnnotationWithIdResponse(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
+	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap_tns__blockMediaAnnotationWithIdResponse, n, ServerSoap_fdelete);
+	if (!cp)
+		return NULL;
+	if (n < 0)
+	{	cp->ptr = (void*)SOAP_NEW(tns__blockMediaAnnotationWithIdResponse);
+		if (size)
+			*size = sizeof(tns__blockMediaAnnotationWithIdResponse);
+		((tns__blockMediaAnnotationWithIdResponse*)cp->ptr)->soap = soap;
+	}
+	else
+	{	cp->ptr = (void*)SOAP_NEW(tns__blockMediaAnnotationWithIdResponse[n]);
+		if (!cp->ptr)
+		{	soap->error = SOAP_EOM;
+			return NULL;
+		}
+		if (size)
+			*size = n * sizeof(tns__blockMediaAnnotationWithIdResponse);
+		for (int i = 0; i < n; i++)
+			((tns__blockMediaAnnotationWithIdResponse*)cp->ptr)[i].soap = soap;
+	}
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
+	return (tns__blockMediaAnnotationWithIdResponse*)cp->ptr;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__blockMediaAnnotationWithIdResponse(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
+{
+	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying tns__blockMediaAnnotationWithIdResponse %p -> %p\n", q, p));
+	*(tns__blockMediaAnnotationWithIdResponse*)p = *(tns__blockMediaAnnotationWithIdResponse*)q;
+}
+
+void tns__blockMediaAnnotationWithId::soap_default(struct soap *soap)
+{
+	this->soap = soap;
+	soap_default_LONG64(soap, &this->tns__blockMediaAnnotationWithId::arg0);
+	this->tns__blockMediaAnnotationWithId::userName = NULL;
+	this->tns__blockMediaAnnotationWithId::password = NULL;
+	/* transient soap skipped */
+}
+
+void tns__blockMediaAnnotationWithId::soap_serialize(struct soap *soap) const
+{
+	(void)soap; /* appease -Wall -Werror */
+	soap_serialize_PointerTostd__string(soap, &this->tns__blockMediaAnnotationWithId::userName);
+	soap_serialize_PointerTostd__string(soap, &this->tns__blockMediaAnnotationWithId::password);
+	/* transient soap skipped */
+}
+
+int tns__blockMediaAnnotationWithId::soap_out(struct soap *soap, const char *tag, int id, const char *type) const
+{
+	return soap_out_tns__blockMediaAnnotationWithId(soap, tag, id, this, type);
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__blockMediaAnnotationWithId(struct soap *soap, const char *tag, int id, const tns__blockMediaAnnotationWithId *a, const char *type)
+{
+	if (soap_element_begin_out(soap, tag, soap_embedded_id(soap, id, a, SOAP_TYPE_ServerSoap_tns__blockMediaAnnotationWithId), type))
+		return soap->error;
+	if (soap_out_LONG64(soap, "arg0", -1, &(a->tns__blockMediaAnnotationWithId::arg0), ""))
+		return soap->error;
+	if (soap_out_PointerTostd__string(soap, "userName", -1, &(a->tns__blockMediaAnnotationWithId::userName), ""))
+		return soap->error;
+	if (soap_out_PointerTostd__string(soap, "password", -1, &(a->tns__blockMediaAnnotationWithId::password), ""))
+		return soap->error;
+	/* transient soap skipped */
+	return soap_element_end_out(soap, tag);
+}
+
+void *tns__blockMediaAnnotationWithId::soap_in(struct soap *soap, const char *tag, const char *type)
+{	return soap_in_tns__blockMediaAnnotationWithId(soap, tag, this, type);
+}
+
+SOAP_FMAC3 tns__blockMediaAnnotationWithId * SOAP_FMAC4 soap_in_tns__blockMediaAnnotationWithId(struct soap *soap, const char *tag, tns__blockMediaAnnotationWithId *a, const char *type)
+{
+	(void)type; /* appease -Wall -Werror */
+	if (soap_element_begin_in(soap, tag, 0, NULL))
+		return NULL;
+	a = (tns__blockMediaAnnotationWithId *)soap_class_id_enter(soap, soap->id, a, SOAP_TYPE_ServerSoap_tns__blockMediaAnnotationWithId, sizeof(tns__blockMediaAnnotationWithId), soap->type, soap->arrayType);
+	if (!a)
+		return NULL;
+	if (soap->alloced)
+	{	a->soap_default(soap);
+		if (soap->clist->type != SOAP_TYPE_ServerSoap_tns__blockMediaAnnotationWithId)
+		{	soap_revert(soap);
+			*soap->id = '\0';
+			return (tns__blockMediaAnnotationWithId *)a->soap_in(soap, tag, type);
+		}
+	}
+	size_t soap_flag_arg01 = 1;
+	size_t soap_flag_userName1 = 1;
+	size_t soap_flag_password1 = 1;
+	if (soap->body && !*soap->href)
+	{
+		for (;;)
+		{	soap->error = SOAP_TAG_MISMATCH;
+			if (soap_flag_arg01 && soap->error == SOAP_TAG_MISMATCH)
+				if (soap_in_LONG64(soap, "arg0", &(a->tns__blockMediaAnnotationWithId::arg0), "xsd:long"))
+				{	soap_flag_arg01--;
+					continue;
+				}
+			if (soap_flag_userName1 && (soap->error == SOAP_TAG_MISMATCH || soap->error == SOAP_NO_TAG))
+				if (soap_in_PointerTostd__string(soap, "userName", &(a->tns__blockMediaAnnotationWithId::userName), "xsd:string"))
+				{	soap_flag_userName1--;
+					continue;
+				}
+			if (soap_flag_password1 && (soap->error == SOAP_TAG_MISMATCH || soap->error == SOAP_NO_TAG))
+				if (soap_in_PointerTostd__string(soap, "password", &(a->tns__blockMediaAnnotationWithId::password), "xsd:string"))
+				{	soap_flag_password1--;
+					continue;
+				}
+			/* transient soap skipped */
+			if (soap->error == SOAP_TAG_MISMATCH)
+				soap->error = soap_ignore_element(soap);
+			if (soap->error == SOAP_NO_TAG)
+				break;
+			if (soap->error)
+				return NULL;
+		}
+		if (soap_element_end_in(soap, tag))
+			return NULL;
+	}
+	else
+	{	a = (tns__blockMediaAnnotationWithId *)soap_id_forward(soap, soap->href, (void*)a, 0, SOAP_TYPE_ServerSoap_tns__blockMediaAnnotationWithId, 0, sizeof(tns__blockMediaAnnotationWithId), 0, soap_copy_tns__blockMediaAnnotationWithId);
+		if (soap->body && soap_element_end_in(soap, tag))
+			return NULL;
+	}
+	if ((soap->mode & SOAP_XML_STRICT) && (soap_flag_arg01 > 0))
+	{	soap->error = SOAP_OCCURS;
+		return NULL;
+	}
+	return a;
+}
+
+int tns__blockMediaAnnotationWithId::soap_put(struct soap *soap, const char *tag, const  char *type) const
+{
+	register int id = soap_embed(soap, (void*)this, NULL, 0, tag, SOAP_TYPE_ServerSoap_tns__blockMediaAnnotationWithId);
+	if (this->soap_out(soap, tag?tag:"tns:blockMediaAnnotationWithId", id, type))
+		return soap->error;
+	return soap_putindependent(soap);
+}
+
+void *tns__blockMediaAnnotationWithId::soap_get(struct soap *soap, const char *tag, const char *type)
+{
+	return soap_get_tns__blockMediaAnnotationWithId(soap, this, tag, type);
+}
+
+SOAP_FMAC3 tns__blockMediaAnnotationWithId * SOAP_FMAC4 soap_get_tns__blockMediaAnnotationWithId(struct soap *soap, tns__blockMediaAnnotationWithId *p, const char *tag, const char *type)
+{
+	if ((p = soap_in_tns__blockMediaAnnotationWithId(soap, tag, p, type)))
+		if (soap_getindependent(soap))
+			return NULL;
+	return p;
+}
+
+SOAP_FMAC1 tns__blockMediaAnnotationWithId * SOAP_FMAC2 soap_instantiate_tns__blockMediaAnnotationWithId(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
+{
+	(void)type; (void)arrayType; /* appease -Wall -Werror */
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate_tns__blockMediaAnnotationWithId(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
+	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap_tns__blockMediaAnnotationWithId, n, ServerSoap_fdelete);
+	if (!cp)
+		return NULL;
+	if (n < 0)
+	{	cp->ptr = (void*)SOAP_NEW(tns__blockMediaAnnotationWithId);
+		if (size)
+			*size = sizeof(tns__blockMediaAnnotationWithId);
+		((tns__blockMediaAnnotationWithId*)cp->ptr)->soap = soap;
+	}
+	else
+	{	cp->ptr = (void*)SOAP_NEW(tns__blockMediaAnnotationWithId[n]);
+		if (!cp->ptr)
+		{	soap->error = SOAP_EOM;
+			return NULL;
+		}
+		if (size)
+			*size = n * sizeof(tns__blockMediaAnnotationWithId);
+		for (int i = 0; i < n; i++)
+			((tns__blockMediaAnnotationWithId*)cp->ptr)[i].soap = soap;
+	}
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
+	return (tns__blockMediaAnnotationWithId*)cp->ptr;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__blockMediaAnnotationWithId(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
+{
+	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying tns__blockMediaAnnotationWithId %p -> %p\n", q, p));
+	*(tns__blockMediaAnnotationWithId*)p = *(tns__blockMediaAnnotationWithId*)q;
+}
+
+void tns__blockMediaAliasWithIdResponse::soap_default(struct soap *soap)
+{
+	this->soap = soap;
+	soap_default_bool(soap, &this->tns__blockMediaAliasWithIdResponse::return_);
+	/* transient soap skipped */
+}
+
+void tns__blockMediaAliasWithIdResponse::soap_serialize(struct soap *soap) const
+{
+	(void)soap; /* appease -Wall -Werror */
+	/* transient soap skipped */
+}
+
+int tns__blockMediaAliasWithIdResponse::soap_out(struct soap *soap, const char *tag, int id, const char *type) const
+{
+	return soap_out_tns__blockMediaAliasWithIdResponse(soap, tag, id, this, type);
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__blockMediaAliasWithIdResponse(struct soap *soap, const char *tag, int id, const tns__blockMediaAliasWithIdResponse *a, const char *type)
+{
+	if (soap_element_begin_out(soap, tag, soap_embedded_id(soap, id, a, SOAP_TYPE_ServerSoap_tns__blockMediaAliasWithIdResponse), type))
+		return soap->error;
+	if (soap_out_bool(soap, "return", -1, &(a->tns__blockMediaAliasWithIdResponse::return_), ""))
+		return soap->error;
+	/* transient soap skipped */
+	return soap_element_end_out(soap, tag);
+}
+
+void *tns__blockMediaAliasWithIdResponse::soap_in(struct soap *soap, const char *tag, const char *type)
+{	return soap_in_tns__blockMediaAliasWithIdResponse(soap, tag, this, type);
+}
+
+SOAP_FMAC3 tns__blockMediaAliasWithIdResponse * SOAP_FMAC4 soap_in_tns__blockMediaAliasWithIdResponse(struct soap *soap, const char *tag, tns__blockMediaAliasWithIdResponse *a, const char *type)
+{
+	(void)type; /* appease -Wall -Werror */
+	if (soap_element_begin_in(soap, tag, 0, NULL))
+		return NULL;
+	a = (tns__blockMediaAliasWithIdResponse *)soap_class_id_enter(soap, soap->id, a, SOAP_TYPE_ServerSoap_tns__blockMediaAliasWithIdResponse, sizeof(tns__blockMediaAliasWithIdResponse), soap->type, soap->arrayType);
+	if (!a)
+		return NULL;
+	if (soap->alloced)
+	{	a->soap_default(soap);
+		if (soap->clist->type != SOAP_TYPE_ServerSoap_tns__blockMediaAliasWithIdResponse)
+		{	soap_revert(soap);
+			*soap->id = '\0';
+			return (tns__blockMediaAliasWithIdResponse *)a->soap_in(soap, tag, type);
+		}
+	}
+	size_t soap_flag_return_1 = 1;
+	if (soap->body && !*soap->href)
+	{
+		for (;;)
+		{	soap->error = SOAP_TAG_MISMATCH;
+			if (soap_flag_return_1 && soap->error == SOAP_TAG_MISMATCH)
+				if (soap_in_bool(soap, "return", &(a->tns__blockMediaAliasWithIdResponse::return_), "xsd:boolean"))
+				{	soap_flag_return_1--;
+					continue;
+				}
+			/* transient soap skipped */
+			if (soap->error == SOAP_TAG_MISMATCH)
+				soap->error = soap_ignore_element(soap);
+			if (soap->error == SOAP_NO_TAG)
+				break;
+			if (soap->error)
+				return NULL;
+		}
+		if (soap_element_end_in(soap, tag))
+			return NULL;
+	}
+	else
+	{	a = (tns__blockMediaAliasWithIdResponse *)soap_id_forward(soap, soap->href, (void*)a, 0, SOAP_TYPE_ServerSoap_tns__blockMediaAliasWithIdResponse, 0, sizeof(tns__blockMediaAliasWithIdResponse), 0, soap_copy_tns__blockMediaAliasWithIdResponse);
+		if (soap->body && soap_element_end_in(soap, tag))
+			return NULL;
+	}
+	if ((soap->mode & SOAP_XML_STRICT) && (soap_flag_return_1 > 0))
+	{	soap->error = SOAP_OCCURS;
+		return NULL;
+	}
+	return a;
+}
+
+int tns__blockMediaAliasWithIdResponse::soap_put(struct soap *soap, const char *tag, const  char *type) const
+{
+	register int id = soap_embed(soap, (void*)this, NULL, 0, tag, SOAP_TYPE_ServerSoap_tns__blockMediaAliasWithIdResponse);
+	if (this->soap_out(soap, tag?tag:"tns:blockMediaAliasWithIdResponse", id, type))
+		return soap->error;
+	return soap_putindependent(soap);
+}
+
+void *tns__blockMediaAliasWithIdResponse::soap_get(struct soap *soap, const char *tag, const char *type)
+{
+	return soap_get_tns__blockMediaAliasWithIdResponse(soap, this, tag, type);
+}
+
+SOAP_FMAC3 tns__blockMediaAliasWithIdResponse * SOAP_FMAC4 soap_get_tns__blockMediaAliasWithIdResponse(struct soap *soap, tns__blockMediaAliasWithIdResponse *p, const char *tag, const char *type)
+{
+	if ((p = soap_in_tns__blockMediaAliasWithIdResponse(soap, tag, p, type)))
+		if (soap_getindependent(soap))
+			return NULL;
+	return p;
+}
+
+SOAP_FMAC1 tns__blockMediaAliasWithIdResponse * SOAP_FMAC2 soap_instantiate_tns__blockMediaAliasWithIdResponse(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
+{
+	(void)type; (void)arrayType; /* appease -Wall -Werror */
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate_tns__blockMediaAliasWithIdResponse(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
+	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap_tns__blockMediaAliasWithIdResponse, n, ServerSoap_fdelete);
+	if (!cp)
+		return NULL;
+	if (n < 0)
+	{	cp->ptr = (void*)SOAP_NEW(tns__blockMediaAliasWithIdResponse);
+		if (size)
+			*size = sizeof(tns__blockMediaAliasWithIdResponse);
+		((tns__blockMediaAliasWithIdResponse*)cp->ptr)->soap = soap;
+	}
+	else
+	{	cp->ptr = (void*)SOAP_NEW(tns__blockMediaAliasWithIdResponse[n]);
+		if (!cp->ptr)
+		{	soap->error = SOAP_EOM;
+			return NULL;
+		}
+		if (size)
+			*size = n * sizeof(tns__blockMediaAliasWithIdResponse);
+		for (int i = 0; i < n; i++)
+			((tns__blockMediaAliasWithIdResponse*)cp->ptr)[i].soap = soap;
+	}
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
+	return (tns__blockMediaAliasWithIdResponse*)cp->ptr;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__blockMediaAliasWithIdResponse(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
+{
+	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying tns__blockMediaAliasWithIdResponse %p -> %p\n", q, p));
+	*(tns__blockMediaAliasWithIdResponse*)p = *(tns__blockMediaAliasWithIdResponse*)q;
+}
+
+void tns__blockMediaAliasWithId::soap_default(struct soap *soap)
+{
+	this->soap = soap;
+	soap_default_LONG64(soap, &this->tns__blockMediaAliasWithId::arg0);
+	this->tns__blockMediaAliasWithId::userName = NULL;
+	this->tns__blockMediaAliasWithId::password = NULL;
+	/* transient soap skipped */
+}
+
+void tns__blockMediaAliasWithId::soap_serialize(struct soap *soap) const
+{
+	(void)soap; /* appease -Wall -Werror */
+	soap_serialize_PointerTostd__string(soap, &this->tns__blockMediaAliasWithId::userName);
+	soap_serialize_PointerTostd__string(soap, &this->tns__blockMediaAliasWithId::password);
+	/* transient soap skipped */
+}
+
+int tns__blockMediaAliasWithId::soap_out(struct soap *soap, const char *tag, int id, const char *type) const
+{
+	return soap_out_tns__blockMediaAliasWithId(soap, tag, id, this, type);
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__blockMediaAliasWithId(struct soap *soap, const char *tag, int id, const tns__blockMediaAliasWithId *a, const char *type)
+{
+	if (soap_element_begin_out(soap, tag, soap_embedded_id(soap, id, a, SOAP_TYPE_ServerSoap_tns__blockMediaAliasWithId), type))
+		return soap->error;
+	if (soap_out_LONG64(soap, "arg0", -1, &(a->tns__blockMediaAliasWithId::arg0), ""))
+		return soap->error;
+	if (soap_out_PointerTostd__string(soap, "userName", -1, &(a->tns__blockMediaAliasWithId::userName), ""))
+		return soap->error;
+	if (soap_out_PointerTostd__string(soap, "password", -1, &(a->tns__blockMediaAliasWithId::password), ""))
+		return soap->error;
+	/* transient soap skipped */
+	return soap_element_end_out(soap, tag);
+}
+
+void *tns__blockMediaAliasWithId::soap_in(struct soap *soap, const char *tag, const char *type)
+{	return soap_in_tns__blockMediaAliasWithId(soap, tag, this, type);
+}
+
+SOAP_FMAC3 tns__blockMediaAliasWithId * SOAP_FMAC4 soap_in_tns__blockMediaAliasWithId(struct soap *soap, const char *tag, tns__blockMediaAliasWithId *a, const char *type)
+{
+	(void)type; /* appease -Wall -Werror */
+	if (soap_element_begin_in(soap, tag, 0, NULL))
+		return NULL;
+	a = (tns__blockMediaAliasWithId *)soap_class_id_enter(soap, soap->id, a, SOAP_TYPE_ServerSoap_tns__blockMediaAliasWithId, sizeof(tns__blockMediaAliasWithId), soap->type, soap->arrayType);
+	if (!a)
+		return NULL;
+	if (soap->alloced)
+	{	a->soap_default(soap);
+		if (soap->clist->type != SOAP_TYPE_ServerSoap_tns__blockMediaAliasWithId)
+		{	soap_revert(soap);
+			*soap->id = '\0';
+			return (tns__blockMediaAliasWithId *)a->soap_in(soap, tag, type);
+		}
+	}
+	size_t soap_flag_arg01 = 1;
+	size_t soap_flag_userName1 = 1;
+	size_t soap_flag_password1 = 1;
+	if (soap->body && !*soap->href)
+	{
+		for (;;)
+		{	soap->error = SOAP_TAG_MISMATCH;
+			if (soap_flag_arg01 && soap->error == SOAP_TAG_MISMATCH)
+				if (soap_in_LONG64(soap, "arg0", &(a->tns__blockMediaAliasWithId::arg0), "xsd:long"))
+				{	soap_flag_arg01--;
+					continue;
+				}
+			if (soap_flag_userName1 && (soap->error == SOAP_TAG_MISMATCH || soap->error == SOAP_NO_TAG))
+				if (soap_in_PointerTostd__string(soap, "userName", &(a->tns__blockMediaAliasWithId::userName), "xsd:string"))
+				{	soap_flag_userName1--;
+					continue;
+				}
+			if (soap_flag_password1 && (soap->error == SOAP_TAG_MISMATCH || soap->error == SOAP_NO_TAG))
+				if (soap_in_PointerTostd__string(soap, "password", &(a->tns__blockMediaAliasWithId::password), "xsd:string"))
+				{	soap_flag_password1--;
+					continue;
+				}
+			/* transient soap skipped */
+			if (soap->error == SOAP_TAG_MISMATCH)
+				soap->error = soap_ignore_element(soap);
+			if (soap->error == SOAP_NO_TAG)
+				break;
+			if (soap->error)
+				return NULL;
+		}
+		if (soap_element_end_in(soap, tag))
+			return NULL;
+	}
+	else
+	{	a = (tns__blockMediaAliasWithId *)soap_id_forward(soap, soap->href, (void*)a, 0, SOAP_TYPE_ServerSoap_tns__blockMediaAliasWithId, 0, sizeof(tns__blockMediaAliasWithId), 0, soap_copy_tns__blockMediaAliasWithId);
+		if (soap->body && soap_element_end_in(soap, tag))
+			return NULL;
+	}
+	if ((soap->mode & SOAP_XML_STRICT) && (soap_flag_arg01 > 0))
+	{	soap->error = SOAP_OCCURS;
+		return NULL;
+	}
+	return a;
+}
+
+int tns__blockMediaAliasWithId::soap_put(struct soap *soap, const char *tag, const  char *type) const
+{
+	register int id = soap_embed(soap, (void*)this, NULL, 0, tag, SOAP_TYPE_ServerSoap_tns__blockMediaAliasWithId);
+	if (this->soap_out(soap, tag?tag:"tns:blockMediaAliasWithId", id, type))
+		return soap->error;
+	return soap_putindependent(soap);
+}
+
+void *tns__blockMediaAliasWithId::soap_get(struct soap *soap, const char *tag, const char *type)
+{
+	return soap_get_tns__blockMediaAliasWithId(soap, this, tag, type);
+}
+
+SOAP_FMAC3 tns__blockMediaAliasWithId * SOAP_FMAC4 soap_get_tns__blockMediaAliasWithId(struct soap *soap, tns__blockMediaAliasWithId *p, const char *tag, const char *type)
+{
+	if ((p = soap_in_tns__blockMediaAliasWithId(soap, tag, p, type)))
+		if (soap_getindependent(soap))
+			return NULL;
+	return p;
+}
+
+SOAP_FMAC1 tns__blockMediaAliasWithId * SOAP_FMAC2 soap_instantiate_tns__blockMediaAliasWithId(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
+{
+	(void)type; (void)arrayType; /* appease -Wall -Werror */
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate_tns__blockMediaAliasWithId(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
+	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap_tns__blockMediaAliasWithId, n, ServerSoap_fdelete);
+	if (!cp)
+		return NULL;
+	if (n < 0)
+	{	cp->ptr = (void*)SOAP_NEW(tns__blockMediaAliasWithId);
+		if (size)
+			*size = sizeof(tns__blockMediaAliasWithId);
+		((tns__blockMediaAliasWithId*)cp->ptr)->soap = soap;
+	}
+	else
+	{	cp->ptr = (void*)SOAP_NEW(tns__blockMediaAliasWithId[n]);
+		if (!cp->ptr)
+		{	soap->error = SOAP_EOM;
+			return NULL;
+		}
+		if (size)
+			*size = n * sizeof(tns__blockMediaAliasWithId);
+		for (int i = 0; i < n; i++)
+			((tns__blockMediaAliasWithId*)cp->ptr)[i].soap = soap;
+	}
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
+	return (tns__blockMediaAliasWithId*)cp->ptr;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__blockMediaAliasWithId(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
+{
+	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying tns__blockMediaAliasWithId %p -> %p\n", q, p));
+	*(tns__blockMediaAliasWithId*)p = *(tns__blockMediaAliasWithId*)q;
+}
+
+void tns__blessMediaTokenWithIdResponse::soap_default(struct soap *soap)
+{
+	this->soap = soap;
+	soap_default_bool(soap, &this->tns__blessMediaTokenWithIdResponse::return_);
+	/* transient soap skipped */
+}
+
+void tns__blessMediaTokenWithIdResponse::soap_serialize(struct soap *soap) const
+{
+	(void)soap; /* appease -Wall -Werror */
+	/* transient soap skipped */
+}
+
+int tns__blessMediaTokenWithIdResponse::soap_out(struct soap *soap, const char *tag, int id, const char *type) const
+{
+	return soap_out_tns__blessMediaTokenWithIdResponse(soap, tag, id, this, type);
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__blessMediaTokenWithIdResponse(struct soap *soap, const char *tag, int id, const tns__blessMediaTokenWithIdResponse *a, const char *type)
+{
+	if (soap_element_begin_out(soap, tag, soap_embedded_id(soap, id, a, SOAP_TYPE_ServerSoap_tns__blessMediaTokenWithIdResponse), type))
+		return soap->error;
+	if (soap_out_bool(soap, "return", -1, &(a->tns__blessMediaTokenWithIdResponse::return_), ""))
+		return soap->error;
+	/* transient soap skipped */
+	return soap_element_end_out(soap, tag);
+}
+
+void *tns__blessMediaTokenWithIdResponse::soap_in(struct soap *soap, const char *tag, const char *type)
+{	return soap_in_tns__blessMediaTokenWithIdResponse(soap, tag, this, type);
+}
+
+SOAP_FMAC3 tns__blessMediaTokenWithIdResponse * SOAP_FMAC4 soap_in_tns__blessMediaTokenWithIdResponse(struct soap *soap, const char *tag, tns__blessMediaTokenWithIdResponse *a, const char *type)
+{
+	(void)type; /* appease -Wall -Werror */
+	if (soap_element_begin_in(soap, tag, 0, NULL))
+		return NULL;
+	a = (tns__blessMediaTokenWithIdResponse *)soap_class_id_enter(soap, soap->id, a, SOAP_TYPE_ServerSoap_tns__blessMediaTokenWithIdResponse, sizeof(tns__blessMediaTokenWithIdResponse), soap->type, soap->arrayType);
+	if (!a)
+		return NULL;
+	if (soap->alloced)
+	{	a->soap_default(soap);
+		if (soap->clist->type != SOAP_TYPE_ServerSoap_tns__blessMediaTokenWithIdResponse)
+		{	soap_revert(soap);
+			*soap->id = '\0';
+			return (tns__blessMediaTokenWithIdResponse *)a->soap_in(soap, tag, type);
+		}
+	}
+	size_t soap_flag_return_1 = 1;
+	if (soap->body && !*soap->href)
+	{
+		for (;;)
+		{	soap->error = SOAP_TAG_MISMATCH;
+			if (soap_flag_return_1 && soap->error == SOAP_TAG_MISMATCH)
+				if (soap_in_bool(soap, "return", &(a->tns__blessMediaTokenWithIdResponse::return_), "xsd:boolean"))
+				{	soap_flag_return_1--;
+					continue;
+				}
+			/* transient soap skipped */
+			if (soap->error == SOAP_TAG_MISMATCH)
+				soap->error = soap_ignore_element(soap);
+			if (soap->error == SOAP_NO_TAG)
+				break;
+			if (soap->error)
+				return NULL;
+		}
+		if (soap_element_end_in(soap, tag))
+			return NULL;
+	}
+	else
+	{	a = (tns__blessMediaTokenWithIdResponse *)soap_id_forward(soap, soap->href, (void*)a, 0, SOAP_TYPE_ServerSoap_tns__blessMediaTokenWithIdResponse, 0, sizeof(tns__blessMediaTokenWithIdResponse), 0, soap_copy_tns__blessMediaTokenWithIdResponse);
+		if (soap->body && soap_element_end_in(soap, tag))
+			return NULL;
+	}
+	if ((soap->mode & SOAP_XML_STRICT) && (soap_flag_return_1 > 0))
+	{	soap->error = SOAP_OCCURS;
+		return NULL;
+	}
+	return a;
+}
+
+int tns__blessMediaTokenWithIdResponse::soap_put(struct soap *soap, const char *tag, const  char *type) const
+{
+	register int id = soap_embed(soap, (void*)this, NULL, 0, tag, SOAP_TYPE_ServerSoap_tns__blessMediaTokenWithIdResponse);
+	if (this->soap_out(soap, tag?tag:"tns:blessMediaTokenWithIdResponse", id, type))
+		return soap->error;
+	return soap_putindependent(soap);
+}
+
+void *tns__blessMediaTokenWithIdResponse::soap_get(struct soap *soap, const char *tag, const char *type)
+{
+	return soap_get_tns__blessMediaTokenWithIdResponse(soap, this, tag, type);
+}
+
+SOAP_FMAC3 tns__blessMediaTokenWithIdResponse * SOAP_FMAC4 soap_get_tns__blessMediaTokenWithIdResponse(struct soap *soap, tns__blessMediaTokenWithIdResponse *p, const char *tag, const char *type)
+{
+	if ((p = soap_in_tns__blessMediaTokenWithIdResponse(soap, tag, p, type)))
+		if (soap_getindependent(soap))
+			return NULL;
+	return p;
+}
+
+SOAP_FMAC1 tns__blessMediaTokenWithIdResponse * SOAP_FMAC2 soap_instantiate_tns__blessMediaTokenWithIdResponse(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
+{
+	(void)type; (void)arrayType; /* appease -Wall -Werror */
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate_tns__blessMediaTokenWithIdResponse(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
+	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap_tns__blessMediaTokenWithIdResponse, n, ServerSoap_fdelete);
+	if (!cp)
+		return NULL;
+	if (n < 0)
+	{	cp->ptr = (void*)SOAP_NEW(tns__blessMediaTokenWithIdResponse);
+		if (size)
+			*size = sizeof(tns__blessMediaTokenWithIdResponse);
+		((tns__blessMediaTokenWithIdResponse*)cp->ptr)->soap = soap;
+	}
+	else
+	{	cp->ptr = (void*)SOAP_NEW(tns__blessMediaTokenWithIdResponse[n]);
+		if (!cp->ptr)
+		{	soap->error = SOAP_EOM;
+			return NULL;
+		}
+		if (size)
+			*size = n * sizeof(tns__blessMediaTokenWithIdResponse);
+		for (int i = 0; i < n; i++)
+			((tns__blessMediaTokenWithIdResponse*)cp->ptr)[i].soap = soap;
+	}
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
+	return (tns__blessMediaTokenWithIdResponse*)cp->ptr;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__blessMediaTokenWithIdResponse(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
+{
+	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying tns__blessMediaTokenWithIdResponse %p -> %p\n", q, p));
+	*(tns__blessMediaTokenWithIdResponse*)p = *(tns__blessMediaTokenWithIdResponse*)q;
+}
+
+void tns__blessMediaTokenWithId::soap_default(struct soap *soap)
+{
+	this->soap = soap;
+	soap_default_LONG64(soap, &this->tns__blessMediaTokenWithId::arg0);
+	this->tns__blessMediaTokenWithId::userName = NULL;
+	this->tns__blessMediaTokenWithId::password = NULL;
+	/* transient soap skipped */
+}
+
+void tns__blessMediaTokenWithId::soap_serialize(struct soap *soap) const
+{
+	(void)soap; /* appease -Wall -Werror */
+	soap_serialize_PointerTostd__string(soap, &this->tns__blessMediaTokenWithId::userName);
+	soap_serialize_PointerTostd__string(soap, &this->tns__blessMediaTokenWithId::password);
+	/* transient soap skipped */
+}
+
+int tns__blessMediaTokenWithId::soap_out(struct soap *soap, const char *tag, int id, const char *type) const
+{
+	return soap_out_tns__blessMediaTokenWithId(soap, tag, id, this, type);
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__blessMediaTokenWithId(struct soap *soap, const char *tag, int id, const tns__blessMediaTokenWithId *a, const char *type)
+{
+	if (soap_element_begin_out(soap, tag, soap_embedded_id(soap, id, a, SOAP_TYPE_ServerSoap_tns__blessMediaTokenWithId), type))
+		return soap->error;
+	if (soap_out_LONG64(soap, "arg0", -1, &(a->tns__blessMediaTokenWithId::arg0), ""))
+		return soap->error;
+	if (soap_out_PointerTostd__string(soap, "userName", -1, &(a->tns__blessMediaTokenWithId::userName), ""))
+		return soap->error;
+	if (soap_out_PointerTostd__string(soap, "password", -1, &(a->tns__blessMediaTokenWithId::password), ""))
+		return soap->error;
+	/* transient soap skipped */
+	return soap_element_end_out(soap, tag);
+}
+
+void *tns__blessMediaTokenWithId::soap_in(struct soap *soap, const char *tag, const char *type)
+{	return soap_in_tns__blessMediaTokenWithId(soap, tag, this, type);
+}
+
+SOAP_FMAC3 tns__blessMediaTokenWithId * SOAP_FMAC4 soap_in_tns__blessMediaTokenWithId(struct soap *soap, const char *tag, tns__blessMediaTokenWithId *a, const char *type)
+{
+	(void)type; /* appease -Wall -Werror */
+	if (soap_element_begin_in(soap, tag, 0, NULL))
+		return NULL;
+	a = (tns__blessMediaTokenWithId *)soap_class_id_enter(soap, soap->id, a, SOAP_TYPE_ServerSoap_tns__blessMediaTokenWithId, sizeof(tns__blessMediaTokenWithId), soap->type, soap->arrayType);
+	if (!a)
+		return NULL;
+	if (soap->alloced)
+	{	a->soap_default(soap);
+		if (soap->clist->type != SOAP_TYPE_ServerSoap_tns__blessMediaTokenWithId)
+		{	soap_revert(soap);
+			*soap->id = '\0';
+			return (tns__blessMediaTokenWithId *)a->soap_in(soap, tag, type);
+		}
+	}
+	size_t soap_flag_arg01 = 1;
+	size_t soap_flag_userName1 = 1;
+	size_t soap_flag_password1 = 1;
+	if (soap->body && !*soap->href)
+	{
+		for (;;)
+		{	soap->error = SOAP_TAG_MISMATCH;
+			if (soap_flag_arg01 && soap->error == SOAP_TAG_MISMATCH)
+				if (soap_in_LONG64(soap, "arg0", &(a->tns__blessMediaTokenWithId::arg0), "xsd:long"))
+				{	soap_flag_arg01--;
+					continue;
+				}
+			if (soap_flag_userName1 && (soap->error == SOAP_TAG_MISMATCH || soap->error == SOAP_NO_TAG))
+				if (soap_in_PointerTostd__string(soap, "userName", &(a->tns__blessMediaTokenWithId::userName), "xsd:string"))
+				{	soap_flag_userName1--;
+					continue;
+				}
+			if (soap_flag_password1 && (soap->error == SOAP_TAG_MISMATCH || soap->error == SOAP_NO_TAG))
+				if (soap_in_PointerTostd__string(soap, "password", &(a->tns__blessMediaTokenWithId::password), "xsd:string"))
+				{	soap_flag_password1--;
+					continue;
+				}
+			/* transient soap skipped */
+			if (soap->error == SOAP_TAG_MISMATCH)
+				soap->error = soap_ignore_element(soap);
+			if (soap->error == SOAP_NO_TAG)
+				break;
+			if (soap->error)
+				return NULL;
+		}
+		if (soap_element_end_in(soap, tag))
+			return NULL;
+	}
+	else
+	{	a = (tns__blessMediaTokenWithId *)soap_id_forward(soap, soap->href, (void*)a, 0, SOAP_TYPE_ServerSoap_tns__blessMediaTokenWithId, 0, sizeof(tns__blessMediaTokenWithId), 0, soap_copy_tns__blessMediaTokenWithId);
+		if (soap->body && soap_element_end_in(soap, tag))
+			return NULL;
+	}
+	if ((soap->mode & SOAP_XML_STRICT) && (soap_flag_arg01 > 0))
+	{	soap->error = SOAP_OCCURS;
+		return NULL;
+	}
+	return a;
+}
+
+int tns__blessMediaTokenWithId::soap_put(struct soap *soap, const char *tag, const  char *type) const
+{
+	register int id = soap_embed(soap, (void*)this, NULL, 0, tag, SOAP_TYPE_ServerSoap_tns__blessMediaTokenWithId);
+	if (this->soap_out(soap, tag?tag:"tns:blessMediaTokenWithId", id, type))
+		return soap->error;
+	return soap_putindependent(soap);
+}
+
+void *tns__blessMediaTokenWithId::soap_get(struct soap *soap, const char *tag, const char *type)
+{
+	return soap_get_tns__blessMediaTokenWithId(soap, this, tag, type);
+}
+
+SOAP_FMAC3 tns__blessMediaTokenWithId * SOAP_FMAC4 soap_get_tns__blessMediaTokenWithId(struct soap *soap, tns__blessMediaTokenWithId *p, const char *tag, const char *type)
+{
+	if ((p = soap_in_tns__blessMediaTokenWithId(soap, tag, p, type)))
+		if (soap_getindependent(soap))
+			return NULL;
+	return p;
+}
+
+SOAP_FMAC1 tns__blessMediaTokenWithId * SOAP_FMAC2 soap_instantiate_tns__blessMediaTokenWithId(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
+{
+	(void)type; (void)arrayType; /* appease -Wall -Werror */
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate_tns__blessMediaTokenWithId(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
+	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap_tns__blessMediaTokenWithId, n, ServerSoap_fdelete);
+	if (!cp)
+		return NULL;
+	if (n < 0)
+	{	cp->ptr = (void*)SOAP_NEW(tns__blessMediaTokenWithId);
+		if (size)
+			*size = sizeof(tns__blessMediaTokenWithId);
+		((tns__blessMediaTokenWithId*)cp->ptr)->soap = soap;
+	}
+	else
+	{	cp->ptr = (void*)SOAP_NEW(tns__blessMediaTokenWithId[n]);
+		if (!cp->ptr)
+		{	soap->error = SOAP_EOM;
+			return NULL;
+		}
+		if (size)
+			*size = n * sizeof(tns__blessMediaTokenWithId);
+		for (int i = 0; i < n; i++)
+			((tns__blessMediaTokenWithId*)cp->ptr)[i].soap = soap;
+	}
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
+	return (tns__blessMediaTokenWithId*)cp->ptr;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__blessMediaTokenWithId(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
+{
+	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying tns__blessMediaTokenWithId %p -> %p\n", q, p));
+	*(tns__blessMediaTokenWithId*)p = *(tns__blessMediaTokenWithId*)q;
 }
 
 void tns__blessMediaAnnotationWithIdResponse::soap_default(struct soap *soap)
@@ -13346,52 +10831,52 @@ SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__blessMediaAnnotationWithId(struct soap
 	*(tns__blessMediaAnnotationWithId*)p = *(tns__blessMediaAnnotationWithId*)q;
 }
 
-void tns__blessGameAnnotationWithIdResponse::soap_default(struct soap *soap)
+void tns__blessMediaAliasWithIdResponse::soap_default(struct soap *soap)
 {
 	this->soap = soap;
-	soap_default_bool(soap, &this->tns__blessGameAnnotationWithIdResponse::return_);
+	soap_default_bool(soap, &this->tns__blessMediaAliasWithIdResponse::return_);
 	/* transient soap skipped */
 }
 
-void tns__blessGameAnnotationWithIdResponse::soap_serialize(struct soap *soap) const
+void tns__blessMediaAliasWithIdResponse::soap_serialize(struct soap *soap) const
 {
 	(void)soap; /* appease -Wall -Werror */
 	/* transient soap skipped */
 }
 
-int tns__blessGameAnnotationWithIdResponse::soap_out(struct soap *soap, const char *tag, int id, const char *type) const
+int tns__blessMediaAliasWithIdResponse::soap_out(struct soap *soap, const char *tag, int id, const char *type) const
 {
-	return soap_out_tns__blessGameAnnotationWithIdResponse(soap, tag, id, this, type);
+	return soap_out_tns__blessMediaAliasWithIdResponse(soap, tag, id, this, type);
 }
 
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__blessGameAnnotationWithIdResponse(struct soap *soap, const char *tag, int id, const tns__blessGameAnnotationWithIdResponse *a, const char *type)
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__blessMediaAliasWithIdResponse(struct soap *soap, const char *tag, int id, const tns__blessMediaAliasWithIdResponse *a, const char *type)
 {
-	if (soap_element_begin_out(soap, tag, soap_embedded_id(soap, id, a, SOAP_TYPE_ServerSoap_tns__blessGameAnnotationWithIdResponse), type))
+	if (soap_element_begin_out(soap, tag, soap_embedded_id(soap, id, a, SOAP_TYPE_ServerSoap_tns__blessMediaAliasWithIdResponse), type))
 		return soap->error;
-	if (soap_out_bool(soap, "return", -1, &(a->tns__blessGameAnnotationWithIdResponse::return_), ""))
+	if (soap_out_bool(soap, "return", -1, &(a->tns__blessMediaAliasWithIdResponse::return_), ""))
 		return soap->error;
 	/* transient soap skipped */
 	return soap_element_end_out(soap, tag);
 }
 
-void *tns__blessGameAnnotationWithIdResponse::soap_in(struct soap *soap, const char *tag, const char *type)
-{	return soap_in_tns__blessGameAnnotationWithIdResponse(soap, tag, this, type);
+void *tns__blessMediaAliasWithIdResponse::soap_in(struct soap *soap, const char *tag, const char *type)
+{	return soap_in_tns__blessMediaAliasWithIdResponse(soap, tag, this, type);
 }
 
-SOAP_FMAC3 tns__blessGameAnnotationWithIdResponse * SOAP_FMAC4 soap_in_tns__blessGameAnnotationWithIdResponse(struct soap *soap, const char *tag, tns__blessGameAnnotationWithIdResponse *a, const char *type)
+SOAP_FMAC3 tns__blessMediaAliasWithIdResponse * SOAP_FMAC4 soap_in_tns__blessMediaAliasWithIdResponse(struct soap *soap, const char *tag, tns__blessMediaAliasWithIdResponse *a, const char *type)
 {
 	(void)type; /* appease -Wall -Werror */
 	if (soap_element_begin_in(soap, tag, 0, NULL))
 		return NULL;
-	a = (tns__blessGameAnnotationWithIdResponse *)soap_class_id_enter(soap, soap->id, a, SOAP_TYPE_ServerSoap_tns__blessGameAnnotationWithIdResponse, sizeof(tns__blessGameAnnotationWithIdResponse), soap->type, soap->arrayType);
+	a = (tns__blessMediaAliasWithIdResponse *)soap_class_id_enter(soap, soap->id, a, SOAP_TYPE_ServerSoap_tns__blessMediaAliasWithIdResponse, sizeof(tns__blessMediaAliasWithIdResponse), soap->type, soap->arrayType);
 	if (!a)
 		return NULL;
 	if (soap->alloced)
 	{	a->soap_default(soap);
-		if (soap->clist->type != SOAP_TYPE_ServerSoap_tns__blessGameAnnotationWithIdResponse)
+		if (soap->clist->type != SOAP_TYPE_ServerSoap_tns__blessMediaAliasWithIdResponse)
 		{	soap_revert(soap);
 			*soap->id = '\0';
-			return (tns__blessGameAnnotationWithIdResponse *)a->soap_in(soap, tag, type);
+			return (tns__blessMediaAliasWithIdResponse *)a->soap_in(soap, tag, type);
 		}
 	}
 	size_t soap_flag_return_1 = 1;
@@ -13400,7 +10885,7 @@ SOAP_FMAC3 tns__blessGameAnnotationWithIdResponse * SOAP_FMAC4 soap_in_tns__bles
 		for (;;)
 		{	soap->error = SOAP_TAG_MISMATCH;
 			if (soap_flag_return_1 && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_bool(soap, "return", &(a->tns__blessGameAnnotationWithIdResponse::return_), "xsd:boolean"))
+				if (soap_in_bool(soap, "return", &(a->tns__blessMediaAliasWithIdResponse::return_), "xsd:boolean"))
 				{	soap_flag_return_1--;
 					continue;
 				}
@@ -13416,7 +10901,7 @@ SOAP_FMAC3 tns__blessGameAnnotationWithIdResponse * SOAP_FMAC4 soap_in_tns__bles
 			return NULL;
 	}
 	else
-	{	a = (tns__blessGameAnnotationWithIdResponse *)soap_id_forward(soap, soap->href, (void*)a, 0, SOAP_TYPE_ServerSoap_tns__blessGameAnnotationWithIdResponse, 0, sizeof(tns__blessGameAnnotationWithIdResponse), 0, soap_copy_tns__blessGameAnnotationWithIdResponse);
+	{	a = (tns__blessMediaAliasWithIdResponse *)soap_id_forward(soap, soap->href, (void*)a, 0, SOAP_TYPE_ServerSoap_tns__blessMediaAliasWithIdResponse, 0, sizeof(tns__blessMediaAliasWithIdResponse), 0, soap_copy_tns__blessMediaAliasWithIdResponse);
 		if (soap->body && soap_element_end_in(soap, tag))
 			return NULL;
 	}
@@ -13427,116 +10912,116 @@ SOAP_FMAC3 tns__blessGameAnnotationWithIdResponse * SOAP_FMAC4 soap_in_tns__bles
 	return a;
 }
 
-int tns__blessGameAnnotationWithIdResponse::soap_put(struct soap *soap, const char *tag, const  char *type) const
+int tns__blessMediaAliasWithIdResponse::soap_put(struct soap *soap, const char *tag, const  char *type) const
 {
-	register int id = soap_embed(soap, (void*)this, NULL, 0, tag, SOAP_TYPE_ServerSoap_tns__blessGameAnnotationWithIdResponse);
-	if (this->soap_out(soap, tag?tag:"tns:blessGameAnnotationWithIdResponse", id, type))
+	register int id = soap_embed(soap, (void*)this, NULL, 0, tag, SOAP_TYPE_ServerSoap_tns__blessMediaAliasWithIdResponse);
+	if (this->soap_out(soap, tag?tag:"tns:blessMediaAliasWithIdResponse", id, type))
 		return soap->error;
 	return soap_putindependent(soap);
 }
 
-void *tns__blessGameAnnotationWithIdResponse::soap_get(struct soap *soap, const char *tag, const char *type)
+void *tns__blessMediaAliasWithIdResponse::soap_get(struct soap *soap, const char *tag, const char *type)
 {
-	return soap_get_tns__blessGameAnnotationWithIdResponse(soap, this, tag, type);
+	return soap_get_tns__blessMediaAliasWithIdResponse(soap, this, tag, type);
 }
 
-SOAP_FMAC3 tns__blessGameAnnotationWithIdResponse * SOAP_FMAC4 soap_get_tns__blessGameAnnotationWithIdResponse(struct soap *soap, tns__blessGameAnnotationWithIdResponse *p, const char *tag, const char *type)
+SOAP_FMAC3 tns__blessMediaAliasWithIdResponse * SOAP_FMAC4 soap_get_tns__blessMediaAliasWithIdResponse(struct soap *soap, tns__blessMediaAliasWithIdResponse *p, const char *tag, const char *type)
 {
-	if ((p = soap_in_tns__blessGameAnnotationWithIdResponse(soap, tag, p, type)))
+	if ((p = soap_in_tns__blessMediaAliasWithIdResponse(soap, tag, p, type)))
 		if (soap_getindependent(soap))
 			return NULL;
 	return p;
 }
 
-SOAP_FMAC1 tns__blessGameAnnotationWithIdResponse * SOAP_FMAC2 soap_instantiate_tns__blessGameAnnotationWithIdResponse(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
+SOAP_FMAC1 tns__blessMediaAliasWithIdResponse * SOAP_FMAC2 soap_instantiate_tns__blessMediaAliasWithIdResponse(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
 {
 	(void)type; (void)arrayType; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate_tns__blessGameAnnotationWithIdResponse(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
-	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap_tns__blessGameAnnotationWithIdResponse, n, ServerSoap_fdelete);
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate_tns__blessMediaAliasWithIdResponse(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
+	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap_tns__blessMediaAliasWithIdResponse, n, ServerSoap_fdelete);
 	if (!cp)
 		return NULL;
 	if (n < 0)
-	{	cp->ptr = (void*)SOAP_NEW(tns__blessGameAnnotationWithIdResponse);
+	{	cp->ptr = (void*)SOAP_NEW(tns__blessMediaAliasWithIdResponse);
 		if (size)
-			*size = sizeof(tns__blessGameAnnotationWithIdResponse);
-		((tns__blessGameAnnotationWithIdResponse*)cp->ptr)->soap = soap;
+			*size = sizeof(tns__blessMediaAliasWithIdResponse);
+		((tns__blessMediaAliasWithIdResponse*)cp->ptr)->soap = soap;
 	}
 	else
-	{	cp->ptr = (void*)SOAP_NEW(tns__blessGameAnnotationWithIdResponse[n]);
+	{	cp->ptr = (void*)SOAP_NEW(tns__blessMediaAliasWithIdResponse[n]);
 		if (!cp->ptr)
 		{	soap->error = SOAP_EOM;
 			return NULL;
 		}
 		if (size)
-			*size = n * sizeof(tns__blessGameAnnotationWithIdResponse);
+			*size = n * sizeof(tns__blessMediaAliasWithIdResponse);
 		for (int i = 0; i < n; i++)
-			((tns__blessGameAnnotationWithIdResponse*)cp->ptr)[i].soap = soap;
+			((tns__blessMediaAliasWithIdResponse*)cp->ptr)[i].soap = soap;
 	}
 	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
-	return (tns__blessGameAnnotationWithIdResponse*)cp->ptr;
+	return (tns__blessMediaAliasWithIdResponse*)cp->ptr;
 }
 
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__blessGameAnnotationWithIdResponse(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__blessMediaAliasWithIdResponse(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
 {
 	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying tns__blessGameAnnotationWithIdResponse %p -> %p\n", q, p));
-	*(tns__blessGameAnnotationWithIdResponse*)p = *(tns__blessGameAnnotationWithIdResponse*)q;
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying tns__blessMediaAliasWithIdResponse %p -> %p\n", q, p));
+	*(tns__blessMediaAliasWithIdResponse*)p = *(tns__blessMediaAliasWithIdResponse*)q;
 }
 
-void tns__blessGameAnnotationWithId::soap_default(struct soap *soap)
+void tns__blessMediaAliasWithId::soap_default(struct soap *soap)
 {
 	this->soap = soap;
-	soap_default_LONG64(soap, &this->tns__blessGameAnnotationWithId::arg0);
-	this->tns__blessGameAnnotationWithId::userName = NULL;
-	this->tns__blessGameAnnotationWithId::password = NULL;
+	soap_default_LONG64(soap, &this->tns__blessMediaAliasWithId::arg0);
+	this->tns__blessMediaAliasWithId::userName = NULL;
+	this->tns__blessMediaAliasWithId::password = NULL;
 	/* transient soap skipped */
 }
 
-void tns__blessGameAnnotationWithId::soap_serialize(struct soap *soap) const
+void tns__blessMediaAliasWithId::soap_serialize(struct soap *soap) const
 {
 	(void)soap; /* appease -Wall -Werror */
-	soap_serialize_PointerTostd__string(soap, &this->tns__blessGameAnnotationWithId::userName);
-	soap_serialize_PointerTostd__string(soap, &this->tns__blessGameAnnotationWithId::password);
+	soap_serialize_PointerTostd__string(soap, &this->tns__blessMediaAliasWithId::userName);
+	soap_serialize_PointerTostd__string(soap, &this->tns__blessMediaAliasWithId::password);
 	/* transient soap skipped */
 }
 
-int tns__blessGameAnnotationWithId::soap_out(struct soap *soap, const char *tag, int id, const char *type) const
+int tns__blessMediaAliasWithId::soap_out(struct soap *soap, const char *tag, int id, const char *type) const
 {
-	return soap_out_tns__blessGameAnnotationWithId(soap, tag, id, this, type);
+	return soap_out_tns__blessMediaAliasWithId(soap, tag, id, this, type);
 }
 
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__blessGameAnnotationWithId(struct soap *soap, const char *tag, int id, const tns__blessGameAnnotationWithId *a, const char *type)
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__blessMediaAliasWithId(struct soap *soap, const char *tag, int id, const tns__blessMediaAliasWithId *a, const char *type)
 {
-	if (soap_element_begin_out(soap, tag, soap_embedded_id(soap, id, a, SOAP_TYPE_ServerSoap_tns__blessGameAnnotationWithId), type))
+	if (soap_element_begin_out(soap, tag, soap_embedded_id(soap, id, a, SOAP_TYPE_ServerSoap_tns__blessMediaAliasWithId), type))
 		return soap->error;
-	if (soap_out_LONG64(soap, "arg0", -1, &(a->tns__blessGameAnnotationWithId::arg0), ""))
+	if (soap_out_LONG64(soap, "arg0", -1, &(a->tns__blessMediaAliasWithId::arg0), ""))
 		return soap->error;
-	if (soap_out_PointerTostd__string(soap, "userName", -1, &(a->tns__blessGameAnnotationWithId::userName), ""))
+	if (soap_out_PointerTostd__string(soap, "userName", -1, &(a->tns__blessMediaAliasWithId::userName), ""))
 		return soap->error;
-	if (soap_out_PointerTostd__string(soap, "password", -1, &(a->tns__blessGameAnnotationWithId::password), ""))
+	if (soap_out_PointerTostd__string(soap, "password", -1, &(a->tns__blessMediaAliasWithId::password), ""))
 		return soap->error;
 	/* transient soap skipped */
 	return soap_element_end_out(soap, tag);
 }
 
-void *tns__blessGameAnnotationWithId::soap_in(struct soap *soap, const char *tag, const char *type)
-{	return soap_in_tns__blessGameAnnotationWithId(soap, tag, this, type);
+void *tns__blessMediaAliasWithId::soap_in(struct soap *soap, const char *tag, const char *type)
+{	return soap_in_tns__blessMediaAliasWithId(soap, tag, this, type);
 }
 
-SOAP_FMAC3 tns__blessGameAnnotationWithId * SOAP_FMAC4 soap_in_tns__blessGameAnnotationWithId(struct soap *soap, const char *tag, tns__blessGameAnnotationWithId *a, const char *type)
+SOAP_FMAC3 tns__blessMediaAliasWithId * SOAP_FMAC4 soap_in_tns__blessMediaAliasWithId(struct soap *soap, const char *tag, tns__blessMediaAliasWithId *a, const char *type)
 {
 	(void)type; /* appease -Wall -Werror */
 	if (soap_element_begin_in(soap, tag, 0, NULL))
 		return NULL;
-	a = (tns__blessGameAnnotationWithId *)soap_class_id_enter(soap, soap->id, a, SOAP_TYPE_ServerSoap_tns__blessGameAnnotationWithId, sizeof(tns__blessGameAnnotationWithId), soap->type, soap->arrayType);
+	a = (tns__blessMediaAliasWithId *)soap_class_id_enter(soap, soap->id, a, SOAP_TYPE_ServerSoap_tns__blessMediaAliasWithId, sizeof(tns__blessMediaAliasWithId), soap->type, soap->arrayType);
 	if (!a)
 		return NULL;
 	if (soap->alloced)
 	{	a->soap_default(soap);
-		if (soap->clist->type != SOAP_TYPE_ServerSoap_tns__blessGameAnnotationWithId)
+		if (soap->clist->type != SOAP_TYPE_ServerSoap_tns__blessMediaAliasWithId)
 		{	soap_revert(soap);
 			*soap->id = '\0';
-			return (tns__blessGameAnnotationWithId *)a->soap_in(soap, tag, type);
+			return (tns__blessMediaAliasWithId *)a->soap_in(soap, tag, type);
 		}
 	}
 	size_t soap_flag_arg01 = 1;
@@ -13547,17 +11032,17 @@ SOAP_FMAC3 tns__blessGameAnnotationWithId * SOAP_FMAC4 soap_in_tns__blessGameAnn
 		for (;;)
 		{	soap->error = SOAP_TAG_MISMATCH;
 			if (soap_flag_arg01 && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_LONG64(soap, "arg0", &(a->tns__blessGameAnnotationWithId::arg0), "xsd:long"))
+				if (soap_in_LONG64(soap, "arg0", &(a->tns__blessMediaAliasWithId::arg0), "xsd:long"))
 				{	soap_flag_arg01--;
 					continue;
 				}
 			if (soap_flag_userName1 && (soap->error == SOAP_TAG_MISMATCH || soap->error == SOAP_NO_TAG))
-				if (soap_in_PointerTostd__string(soap, "userName", &(a->tns__blessGameAnnotationWithId::userName), "xsd:string"))
+				if (soap_in_PointerTostd__string(soap, "userName", &(a->tns__blessMediaAliasWithId::userName), "xsd:string"))
 				{	soap_flag_userName1--;
 					continue;
 				}
 			if (soap_flag_password1 && (soap->error == SOAP_TAG_MISMATCH || soap->error == SOAP_NO_TAG))
-				if (soap_in_PointerTostd__string(soap, "password", &(a->tns__blessGameAnnotationWithId::password), "xsd:string"))
+				if (soap_in_PointerTostd__string(soap, "password", &(a->tns__blessMediaAliasWithId::password), "xsd:string"))
 				{	soap_flag_password1--;
 					continue;
 				}
@@ -13573,7 +11058,7 @@ SOAP_FMAC3 tns__blessGameAnnotationWithId * SOAP_FMAC4 soap_in_tns__blessGameAnn
 			return NULL;
 	}
 	else
-	{	a = (tns__blessGameAnnotationWithId *)soap_id_forward(soap, soap->href, (void*)a, 0, SOAP_TYPE_ServerSoap_tns__blessGameAnnotationWithId, 0, sizeof(tns__blessGameAnnotationWithId), 0, soap_copy_tns__blessGameAnnotationWithId);
+	{	a = (tns__blessMediaAliasWithId *)soap_id_forward(soap, soap->href, (void*)a, 0, SOAP_TYPE_ServerSoap_tns__blessMediaAliasWithId, 0, sizeof(tns__blessMediaAliasWithId), 0, soap_copy_tns__blessMediaAliasWithId);
 		if (soap->body && soap_element_end_in(soap, tag))
 			return NULL;
 	}
@@ -13584,60 +11069,60 @@ SOAP_FMAC3 tns__blessGameAnnotationWithId * SOAP_FMAC4 soap_in_tns__blessGameAnn
 	return a;
 }
 
-int tns__blessGameAnnotationWithId::soap_put(struct soap *soap, const char *tag, const  char *type) const
+int tns__blessMediaAliasWithId::soap_put(struct soap *soap, const char *tag, const  char *type) const
 {
-	register int id = soap_embed(soap, (void*)this, NULL, 0, tag, SOAP_TYPE_ServerSoap_tns__blessGameAnnotationWithId);
-	if (this->soap_out(soap, tag?tag:"tns:blessGameAnnotationWithId", id, type))
+	register int id = soap_embed(soap, (void*)this, NULL, 0, tag, SOAP_TYPE_ServerSoap_tns__blessMediaAliasWithId);
+	if (this->soap_out(soap, tag?tag:"tns:blessMediaAliasWithId", id, type))
 		return soap->error;
 	return soap_putindependent(soap);
 }
 
-void *tns__blessGameAnnotationWithId::soap_get(struct soap *soap, const char *tag, const char *type)
+void *tns__blessMediaAliasWithId::soap_get(struct soap *soap, const char *tag, const char *type)
 {
-	return soap_get_tns__blessGameAnnotationWithId(soap, this, tag, type);
+	return soap_get_tns__blessMediaAliasWithId(soap, this, tag, type);
 }
 
-SOAP_FMAC3 tns__blessGameAnnotationWithId * SOAP_FMAC4 soap_get_tns__blessGameAnnotationWithId(struct soap *soap, tns__blessGameAnnotationWithId *p, const char *tag, const char *type)
+SOAP_FMAC3 tns__blessMediaAliasWithId * SOAP_FMAC4 soap_get_tns__blessMediaAliasWithId(struct soap *soap, tns__blessMediaAliasWithId *p, const char *tag, const char *type)
 {
-	if ((p = soap_in_tns__blessGameAnnotationWithId(soap, tag, p, type)))
+	if ((p = soap_in_tns__blessMediaAliasWithId(soap, tag, p, type)))
 		if (soap_getindependent(soap))
 			return NULL;
 	return p;
 }
 
-SOAP_FMAC1 tns__blessGameAnnotationWithId * SOAP_FMAC2 soap_instantiate_tns__blessGameAnnotationWithId(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
+SOAP_FMAC1 tns__blessMediaAliasWithId * SOAP_FMAC2 soap_instantiate_tns__blessMediaAliasWithId(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
 {
 	(void)type; (void)arrayType; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate_tns__blessGameAnnotationWithId(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
-	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap_tns__blessGameAnnotationWithId, n, ServerSoap_fdelete);
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate_tns__blessMediaAliasWithId(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
+	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap_tns__blessMediaAliasWithId, n, ServerSoap_fdelete);
 	if (!cp)
 		return NULL;
 	if (n < 0)
-	{	cp->ptr = (void*)SOAP_NEW(tns__blessGameAnnotationWithId);
+	{	cp->ptr = (void*)SOAP_NEW(tns__blessMediaAliasWithId);
 		if (size)
-			*size = sizeof(tns__blessGameAnnotationWithId);
-		((tns__blessGameAnnotationWithId*)cp->ptr)->soap = soap;
+			*size = sizeof(tns__blessMediaAliasWithId);
+		((tns__blessMediaAliasWithId*)cp->ptr)->soap = soap;
 	}
 	else
-	{	cp->ptr = (void*)SOAP_NEW(tns__blessGameAnnotationWithId[n]);
+	{	cp->ptr = (void*)SOAP_NEW(tns__blessMediaAliasWithId[n]);
 		if (!cp->ptr)
 		{	soap->error = SOAP_EOM;
 			return NULL;
 		}
 		if (size)
-			*size = n * sizeof(tns__blessGameAnnotationWithId);
+			*size = n * sizeof(tns__blessMediaAliasWithId);
 		for (int i = 0; i < n; i++)
-			((tns__blessGameAnnotationWithId*)cp->ptr)[i].soap = soap;
+			((tns__blessMediaAliasWithId*)cp->ptr)[i].soap = soap;
 	}
 	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
-	return (tns__blessGameAnnotationWithId*)cp->ptr;
+	return (tns__blessMediaAliasWithId*)cp->ptr;
 }
 
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__blessGameAnnotationWithId(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__blessMediaAliasWithId(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
 {
 	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying tns__blessGameAnnotationWithId %p -> %p\n", q, p));
-	*(tns__blessGameAnnotationWithId*)p = *(tns__blessGameAnnotationWithId*)q;
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying tns__blessMediaAliasWithId %p -> %p\n", q, p));
+	*(tns__blessMediaAliasWithId*)p = *(tns__blessMediaAliasWithId*)q;
 }
 
 void tns__user::soap_default(struct soap *soap)
@@ -13904,7 +11389,6 @@ void tns__mediaAlias::soap_default(struct soap *soap)
 	soap_default_int(soap, &this->tns__mediaAlias::blessedCount);
 	soap_default_int(soap, &this->tns__mediaAlias::blockedCount);
 	soap_default_int(soap, &this->tns__mediaAlias::cursedCount);
-	this->tns__mediaAlias::digest = NULL;
 	soap_default_LONG64(soap, &this->tns__mediaAlias::flags);
 	soap_default_LONG64(soap, &this->tns__mediaAlias::id);
 	soap_default_int(soap, &this->tns__mediaAlias::language);
@@ -13920,7 +11404,6 @@ void tns__mediaAlias::soap_default(struct soap *soap)
 void tns__mediaAlias::soap_serialize(struct soap *soap) const
 {
 	(void)soap; /* appease -Wall -Werror */
-	soap_serialize_PointerTostd__string(soap, &this->tns__mediaAlias::digest);
 	soap_serialize_PointerTostd__string(soap, &this->tns__mediaAlias::text);
 	/* transient soap skipped */
 }
@@ -13939,8 +11422,6 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__mediaAlias(struct soap *soap, const char
 	if (soap_out_int(soap, "blockedCount", -1, &(a->tns__mediaAlias::blockedCount), ""))
 		return soap->error;
 	if (soap_out_int(soap, "cursedCount", -1, &(a->tns__mediaAlias::cursedCount), ""))
-		return soap->error;
-	if (soap_out_PointerTostd__string(soap, "digest", -1, &(a->tns__mediaAlias::digest), ""))
 		return soap->error;
 	if (soap_out_LONG64(soap, "flags", -1, &(a->tns__mediaAlias::flags), ""))
 		return soap->error;
@@ -13987,7 +11468,6 @@ SOAP_FMAC3 tns__mediaAlias * SOAP_FMAC4 soap_in_tns__mediaAlias(struct soap *soa
 	size_t soap_flag_blessedCount1 = 1;
 	size_t soap_flag_blockedCount1 = 1;
 	size_t soap_flag_cursedCount1 = 1;
-	size_t soap_flag_digest1 = 1;
 	size_t soap_flag_flags1 = 1;
 	size_t soap_flag_id1 = 1;
 	size_t soap_flag_language1 = 1;
@@ -14014,11 +11494,6 @@ SOAP_FMAC3 tns__mediaAlias * SOAP_FMAC4 soap_in_tns__mediaAlias(struct soap *soa
 			if (soap_flag_cursedCount1 && soap->error == SOAP_TAG_MISMATCH)
 				if (soap_in_int(soap, "cursedCount", &(a->tns__mediaAlias::cursedCount), "xsd:int"))
 				{	soap_flag_cursedCount1--;
-					continue;
-				}
-			if (soap_flag_digest1 && (soap->error == SOAP_TAG_MISMATCH || soap->error == SOAP_NO_TAG))
-				if (soap_in_PointerTostd__string(soap, "digest", &(a->tns__mediaAlias::digest), "xsd:string"))
-				{	soap_flag_digest1--;
 					continue;
 				}
 			if (soap_flag_flags1 && soap->error == SOAP_TAG_MISMATCH)
@@ -14153,10 +11628,12 @@ void tns__mediaToken::soap_default(struct soap *soap)
 	soap_default_LONG64(soap, &this->tns__mediaToken::createTime);
 	soap_default_int(soap, &this->tns__mediaToken::cursedCount);
 	this->tns__mediaToken::digest = NULL;
+	soap_default_int(soap, &this->tns__mediaToken::digestType);
 	soap_default_LONG64(soap, &this->tns__mediaToken::flags);
 	soap_default_LONG64(soap, &this->tns__mediaToken::id);
-	soap_default_LONG64(soap, &this->tns__mediaToken::userId);
+	soap_default_int(soap, &this->tns__mediaToken::type);
 	soap_default_int(soap, &this->tns__mediaToken::status);
+	soap_default_LONG64(soap, &this->tns__mediaToken::userId);
 	soap_default_int(soap, &this->tns__mediaToken::visitedCount);
 	/* transient soap skipped */
 }
@@ -14187,13 +11664,17 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__mediaToken(struct soap *soap, const char
 		return soap->error;
 	if (soap_out_PointerTostd__string(soap, "digest", -1, &(a->tns__mediaToken::digest), ""))
 		return soap->error;
+	if (soap_out_int(soap, "digestType", -1, &(a->tns__mediaToken::digestType), ""))
+		return soap->error;
 	if (soap_out_LONG64(soap, "flags", -1, &(a->tns__mediaToken::flags), ""))
 		return soap->error;
 	if (soap_out_LONG64(soap, "id", -1, &(a->tns__mediaToken::id), ""))
 		return soap->error;
-	if (soap_out_LONG64(soap, "userId", -1, &(a->tns__mediaToken::userId), ""))
+	if (soap_out_int(soap, "type", -1, &(a->tns__mediaToken::type), ""))
 		return soap->error;
 	if (soap_out_int(soap, "status", -1, &(a->tns__mediaToken::status), ""))
+		return soap->error;
+	if (soap_out_LONG64(soap, "userId", -1, &(a->tns__mediaToken::userId), ""))
 		return soap->error;
 	if (soap_out_int(soap, "visitedCount", -1, &(a->tns__mediaToken::visitedCount), ""))
 		return soap->error;
@@ -14226,10 +11707,12 @@ SOAP_FMAC3 tns__mediaToken * SOAP_FMAC4 soap_in_tns__mediaToken(struct soap *soa
 	size_t soap_flag_createTime1 = 1;
 	size_t soap_flag_cursedCount1 = 1;
 	size_t soap_flag_digest1 = 1;
+	size_t soap_flag_digestType1 = 1;
 	size_t soap_flag_flags1 = 1;
 	size_t soap_flag_id1 = 1;
-	size_t soap_flag_userId1 = 1;
+	size_t soap_flag_type1 = 1;
 	size_t soap_flag_status1 = 1;
+	size_t soap_flag_userId1 = 1;
 	size_t soap_flag_visitedCount1 = 1;
 	if (soap->body && !*soap->href)
 	{
@@ -14260,6 +11743,11 @@ SOAP_FMAC3 tns__mediaToken * SOAP_FMAC4 soap_in_tns__mediaToken(struct soap *soa
 				{	soap_flag_digest1--;
 					continue;
 				}
+			if (soap_flag_digestType1 && soap->error == SOAP_TAG_MISMATCH)
+				if (soap_in_int(soap, "digestType", &(a->tns__mediaToken::digestType), "xsd:int"))
+				{	soap_flag_digestType1--;
+					continue;
+				}
 			if (soap_flag_flags1 && soap->error == SOAP_TAG_MISMATCH)
 				if (soap_in_LONG64(soap, "flags", &(a->tns__mediaToken::flags), "xsd:long"))
 				{	soap_flag_flags1--;
@@ -14270,14 +11758,19 @@ SOAP_FMAC3 tns__mediaToken * SOAP_FMAC4 soap_in_tns__mediaToken(struct soap *soa
 				{	soap_flag_id1--;
 					continue;
 				}
-			if (soap_flag_userId1 && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_LONG64(soap, "userId", &(a->tns__mediaToken::userId), "xsd:long"))
-				{	soap_flag_userId1--;
+			if (soap_flag_type1 && soap->error == SOAP_TAG_MISMATCH)
+				if (soap_in_int(soap, "type", &(a->tns__mediaToken::type), "xsd:int"))
+				{	soap_flag_type1--;
 					continue;
 				}
 			if (soap_flag_status1 && soap->error == SOAP_TAG_MISMATCH)
 				if (soap_in_int(soap, "status", &(a->tns__mediaToken::status), "xsd:int"))
 				{	soap_flag_status1--;
+					continue;
+				}
+			if (soap_flag_userId1 && soap->error == SOAP_TAG_MISMATCH)
+				if (soap_in_LONG64(soap, "userId", &(a->tns__mediaToken::userId), "xsd:long"))
+				{	soap_flag_userId1--;
 					continue;
 				}
 			if (soap_flag_visitedCount1 && soap->error == SOAP_TAG_MISMATCH)
@@ -14301,7 +11794,7 @@ SOAP_FMAC3 tns__mediaToken * SOAP_FMAC4 soap_in_tns__mediaToken(struct soap *soa
 		if (soap->body && soap_element_end_in(soap, tag))
 			return NULL;
 	}
-	if ((soap->mode & SOAP_XML_STRICT) && (soap_flag_blessedCount1 > 0 || soap_flag_blockedCount1 > 0 || soap_flag_createTime1 > 0 || soap_flag_cursedCount1 > 0 || soap_flag_flags1 > 0 || soap_flag_id1 > 0 || soap_flag_userId1 > 0 || soap_flag_status1 > 0 || soap_flag_visitedCount1 > 0))
+	if ((soap->mode & SOAP_XML_STRICT) && (soap_flag_blessedCount1 > 0 || soap_flag_blockedCount1 > 0 || soap_flag_createTime1 > 0 || soap_flag_cursedCount1 > 0 || soap_flag_digestType1 > 0 || soap_flag_flags1 > 0 || soap_flag_id1 > 0 || soap_flag_type1 > 0 || soap_flag_status1 > 0 || soap_flag_userId1 > 0 || soap_flag_visitedCount1 > 0))
 	{	soap->error = SOAP_OCCURS;
 		return NULL;
 	}
@@ -14376,12 +11869,13 @@ void tns__mediaAnnotation::soap_default(struct soap *soap)
 	soap_default_int(soap, &this->tns__mediaAnnotation::language);
 	soap_default_LONG64(soap, &this->tns__mediaAnnotation::pos);
 	soap_default_int(soap, &this->tns__mediaAnnotation::posType);
-	soap_default_LONG64(soap, &this->tns__mediaAnnotation::userId);
+	soap_default_int(soap, &this->tns__mediaAnnotation::time);
 	this->tns__mediaAnnotation::userAlias = NULL;
 	soap_default_int(soap, &this->tns__mediaAnnotation::status);
 	this->tns__mediaAnnotation::text = NULL;
 	soap_default_LONG64(soap, &this->tns__mediaAnnotation::tokenId);
 	soap_default_LONG64(soap, &this->tns__mediaAnnotation::updateTime);
+	soap_default_LONG64(soap, &this->tns__mediaAnnotation::userId);
 	/* transient soap skipped */
 }
 
@@ -14420,7 +11914,7 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__mediaAnnotation(struct soap *soap, const
 		return soap->error;
 	if (soap_out_int(soap, "posType", -1, &(a->tns__mediaAnnotation::posType), ""))
 		return soap->error;
-	if (soap_out_LONG64(soap, "userId", -1, &(a->tns__mediaAnnotation::userId), ""))
+	if (soap_out_int(soap, "time", -1, &(a->tns__mediaAnnotation::time), ""))
 		return soap->error;
 	if (soap_out_PointerTostd__string(soap, "userAlias", -1, &(a->tns__mediaAnnotation::userAlias), ""))
 		return soap->error;
@@ -14431,6 +11925,8 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__mediaAnnotation(struct soap *soap, const
 	if (soap_out_LONG64(soap, "tokenId", -1, &(a->tns__mediaAnnotation::tokenId), ""))
 		return soap->error;
 	if (soap_out_LONG64(soap, "updateTime", -1, &(a->tns__mediaAnnotation::updateTime), ""))
+		return soap->error;
+	if (soap_out_LONG64(soap, "userId", -1, &(a->tns__mediaAnnotation::userId), ""))
 		return soap->error;
 	/* transient soap skipped */
 	return soap_element_end_out(soap, tag);
@@ -14465,12 +11961,13 @@ SOAP_FMAC3 tns__mediaAnnotation * SOAP_FMAC4 soap_in_tns__mediaAnnotation(struct
 	size_t soap_flag_language1 = 1;
 	size_t soap_flag_pos1 = 1;
 	size_t soap_flag_posType1 = 1;
-	size_t soap_flag_userId1 = 1;
+	size_t soap_flag_time1 = 1;
 	size_t soap_flag_userAlias1 = 1;
 	size_t soap_flag_status1 = 1;
 	size_t soap_flag_text1 = 1;
 	size_t soap_flag_tokenId1 = 1;
 	size_t soap_flag_updateTime1 = 1;
+	size_t soap_flag_userId1 = 1;
 	if (soap->body && !*soap->href)
 	{
 		for (;;)
@@ -14520,9 +12017,9 @@ SOAP_FMAC3 tns__mediaAnnotation * SOAP_FMAC4 soap_in_tns__mediaAnnotation(struct
 				{	soap_flag_posType1--;
 					continue;
 				}
-			if (soap_flag_userId1 && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_LONG64(soap, "userId", &(a->tns__mediaAnnotation::userId), "xsd:long"))
-				{	soap_flag_userId1--;
+			if (soap_flag_time1 && soap->error == SOAP_TAG_MISMATCH)
+				if (soap_in_int(soap, "time", &(a->tns__mediaAnnotation::time), "xsd:int"))
+				{	soap_flag_time1--;
 					continue;
 				}
 			if (soap_flag_userAlias1 && (soap->error == SOAP_TAG_MISMATCH || soap->error == SOAP_NO_TAG))
@@ -14550,6 +12047,11 @@ SOAP_FMAC3 tns__mediaAnnotation * SOAP_FMAC4 soap_in_tns__mediaAnnotation(struct
 				{	soap_flag_updateTime1--;
 					continue;
 				}
+			if (soap_flag_userId1 && soap->error == SOAP_TAG_MISMATCH)
+				if (soap_in_LONG64(soap, "userId", &(a->tns__mediaAnnotation::userId), "xsd:long"))
+				{	soap_flag_userId1--;
+					continue;
+				}
 			/* transient soap skipped */
 			if (soap->error == SOAP_TAG_MISMATCH)
 				soap->error = soap_ignore_element(soap);
@@ -14566,7 +12068,7 @@ SOAP_FMAC3 tns__mediaAnnotation * SOAP_FMAC4 soap_in_tns__mediaAnnotation(struct
 		if (soap->body && soap_element_end_in(soap, tag))
 			return NULL;
 	}
-	if ((soap->mode & SOAP_XML_STRICT) && (soap_flag_blessedCount1 > 0 || soap_flag_blockedCount1 > 0 || soap_flag_createTime1 > 0 || soap_flag_cursedCount1 > 0 || soap_flag_flags1 > 0 || soap_flag_id1 > 0 || soap_flag_language1 > 0 || soap_flag_pos1 > 0 || soap_flag_posType1 > 0 || soap_flag_userId1 > 0 || soap_flag_status1 > 0 || soap_flag_tokenId1 > 0 || soap_flag_updateTime1 > 0))
+	if ((soap->mode & SOAP_XML_STRICT) && (soap_flag_blessedCount1 > 0 || soap_flag_blockedCount1 > 0 || soap_flag_createTime1 > 0 || soap_flag_cursedCount1 > 0 || soap_flag_flags1 > 0 || soap_flag_id1 > 0 || soap_flag_language1 > 0 || soap_flag_pos1 > 0 || soap_flag_posType1 > 0 || soap_flag_time1 > 0 || soap_flag_status1 > 0 || soap_flag_tokenId1 > 0 || soap_flag_updateTime1 > 0 || soap_flag_userId1 > 0))
 	{	soap->error = SOAP_OCCURS;
 		return NULL;
 	}
@@ -14627,737 +12129,6 @@ SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__mediaAnnotation(struct soap *soap, int
 	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
 	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying tns__mediaAnnotation %p -> %p\n", q, p));
 	*(tns__mediaAnnotation*)p = *(tns__mediaAnnotation*)q;
-}
-
-void tns__gameAlias::soap_default(struct soap *soap)
-{
-	this->soap = soap;
-	soap_default_int(soap, &this->tns__gameAlias::blessedCount);
-	soap_default_int(soap, &this->tns__gameAlias::blockedCount);
-	soap_default_int(soap, &this->tns__gameAlias::cursedCount);
-	this->tns__gameAlias::digest = NULL;
-	soap_default_LONG64(soap, &this->tns__gameAlias::flags);
-	soap_default_LONG64(soap, &this->tns__gameAlias::id);
-	soap_default_int(soap, &this->tns__gameAlias::language);
-	soap_default_LONG64(soap, &this->tns__gameAlias::userId);
-	soap_default_int(soap, &this->tns__gameAlias::status);
-	this->tns__gameAlias::text = NULL;
-	soap_default_LONG64(soap, &this->tns__gameAlias::tokenId);
-	soap_default_int(soap, &this->tns__gameAlias::type);
-	soap_default_LONG64(soap, &this->tns__gameAlias::updateTime);
-	/* transient soap skipped */
-}
-
-void tns__gameAlias::soap_serialize(struct soap *soap) const
-{
-	(void)soap; /* appease -Wall -Werror */
-	soap_serialize_PointerTostd__string(soap, &this->tns__gameAlias::digest);
-	soap_serialize_PointerTostd__string(soap, &this->tns__gameAlias::text);
-	/* transient soap skipped */
-}
-
-int tns__gameAlias::soap_out(struct soap *soap, const char *tag, int id, const char *type) const
-{
-	return soap_out_tns__gameAlias(soap, tag, id, this, type);
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__gameAlias(struct soap *soap, const char *tag, int id, const tns__gameAlias *a, const char *type)
-{
-	if (soap_element_begin_out(soap, tag, soap_embedded_id(soap, id, a, SOAP_TYPE_ServerSoap_tns__gameAlias), type))
-		return soap->error;
-	if (soap_out_int(soap, "blessedCount", -1, &(a->tns__gameAlias::blessedCount), ""))
-		return soap->error;
-	if (soap_out_int(soap, "blockedCount", -1, &(a->tns__gameAlias::blockedCount), ""))
-		return soap->error;
-	if (soap_out_int(soap, "cursedCount", -1, &(a->tns__gameAlias::cursedCount), ""))
-		return soap->error;
-	if (soap_out_PointerTostd__string(soap, "digest", -1, &(a->tns__gameAlias::digest), ""))
-		return soap->error;
-	if (soap_out_LONG64(soap, "flags", -1, &(a->tns__gameAlias::flags), ""))
-		return soap->error;
-	if (soap_out_LONG64(soap, "id", -1, &(a->tns__gameAlias::id), ""))
-		return soap->error;
-	if (soap_out_int(soap, "language", -1, &(a->tns__gameAlias::language), ""))
-		return soap->error;
-	if (soap_out_LONG64(soap, "userId", -1, &(a->tns__gameAlias::userId), ""))
-		return soap->error;
-	if (soap_out_int(soap, "status", -1, &(a->tns__gameAlias::status), ""))
-		return soap->error;
-	if (soap_out_PointerTostd__string(soap, "text", -1, &(a->tns__gameAlias::text), ""))
-		return soap->error;
-	if (soap_out_LONG64(soap, "tokenId", -1, &(a->tns__gameAlias::tokenId), ""))
-		return soap->error;
-	if (soap_out_int(soap, "type", -1, &(a->tns__gameAlias::type), ""))
-		return soap->error;
-	if (soap_out_LONG64(soap, "updateTime", -1, &(a->tns__gameAlias::updateTime), ""))
-		return soap->error;
-	/* transient soap skipped */
-	return soap_element_end_out(soap, tag);
-}
-
-void *tns__gameAlias::soap_in(struct soap *soap, const char *tag, const char *type)
-{	return soap_in_tns__gameAlias(soap, tag, this, type);
-}
-
-SOAP_FMAC3 tns__gameAlias * SOAP_FMAC4 soap_in_tns__gameAlias(struct soap *soap, const char *tag, tns__gameAlias *a, const char *type)
-{
-	(void)type; /* appease -Wall -Werror */
-	if (soap_element_begin_in(soap, tag, 0, NULL))
-		return NULL;
-	a = (tns__gameAlias *)soap_class_id_enter(soap, soap->id, a, SOAP_TYPE_ServerSoap_tns__gameAlias, sizeof(tns__gameAlias), soap->type, soap->arrayType);
-	if (!a)
-		return NULL;
-	if (soap->alloced)
-	{	a->soap_default(soap);
-		if (soap->clist->type != SOAP_TYPE_ServerSoap_tns__gameAlias)
-		{	soap_revert(soap);
-			*soap->id = '\0';
-			return (tns__gameAlias *)a->soap_in(soap, tag, type);
-		}
-	}
-	size_t soap_flag_blessedCount1 = 1;
-	size_t soap_flag_blockedCount1 = 1;
-	size_t soap_flag_cursedCount1 = 1;
-	size_t soap_flag_digest1 = 1;
-	size_t soap_flag_flags1 = 1;
-	size_t soap_flag_id1 = 1;
-	size_t soap_flag_language1 = 1;
-	size_t soap_flag_userId1 = 1;
-	size_t soap_flag_status1 = 1;
-	size_t soap_flag_text1 = 1;
-	size_t soap_flag_tokenId1 = 1;
-	size_t soap_flag_type1 = 1;
-	size_t soap_flag_updateTime1 = 1;
-	if (soap->body && !*soap->href)
-	{
-		for (;;)
-		{	soap->error = SOAP_TAG_MISMATCH;
-			if (soap_flag_blessedCount1 && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_int(soap, "blessedCount", &(a->tns__gameAlias::blessedCount), "xsd:int"))
-				{	soap_flag_blessedCount1--;
-					continue;
-				}
-			if (soap_flag_blockedCount1 && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_int(soap, "blockedCount", &(a->tns__gameAlias::blockedCount), "xsd:int"))
-				{	soap_flag_blockedCount1--;
-					continue;
-				}
-			if (soap_flag_cursedCount1 && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_int(soap, "cursedCount", &(a->tns__gameAlias::cursedCount), "xsd:int"))
-				{	soap_flag_cursedCount1--;
-					continue;
-				}
-			if (soap_flag_digest1 && (soap->error == SOAP_TAG_MISMATCH || soap->error == SOAP_NO_TAG))
-				if (soap_in_PointerTostd__string(soap, "digest", &(a->tns__gameAlias::digest), "xsd:string"))
-				{	soap_flag_digest1--;
-					continue;
-				}
-			if (soap_flag_flags1 && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_LONG64(soap, "flags", &(a->tns__gameAlias::flags), "xsd:long"))
-				{	soap_flag_flags1--;
-					continue;
-				}
-			if (soap_flag_id1 && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_LONG64(soap, "id", &(a->tns__gameAlias::id), "xsd:long"))
-				{	soap_flag_id1--;
-					continue;
-				}
-			if (soap_flag_language1 && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_int(soap, "language", &(a->tns__gameAlias::language), "xsd:int"))
-				{	soap_flag_language1--;
-					continue;
-				}
-			if (soap_flag_userId1 && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_LONG64(soap, "userId", &(a->tns__gameAlias::userId), "xsd:long"))
-				{	soap_flag_userId1--;
-					continue;
-				}
-			if (soap_flag_status1 && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_int(soap, "status", &(a->tns__gameAlias::status), "xsd:int"))
-				{	soap_flag_status1--;
-					continue;
-				}
-			if (soap_flag_text1 && (soap->error == SOAP_TAG_MISMATCH || soap->error == SOAP_NO_TAG))
-				if (soap_in_PointerTostd__string(soap, "text", &(a->tns__gameAlias::text), "xsd:string"))
-				{	soap_flag_text1--;
-					continue;
-				}
-			if (soap_flag_tokenId1 && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_LONG64(soap, "tokenId", &(a->tns__gameAlias::tokenId), "xsd:long"))
-				{	soap_flag_tokenId1--;
-					continue;
-				}
-			if (soap_flag_type1 && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_int(soap, "type", &(a->tns__gameAlias::type), "xsd:int"))
-				{	soap_flag_type1--;
-					continue;
-				}
-			if (soap_flag_updateTime1 && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_LONG64(soap, "updateTime", &(a->tns__gameAlias::updateTime), "xsd:long"))
-				{	soap_flag_updateTime1--;
-					continue;
-				}
-			/* transient soap skipped */
-			if (soap->error == SOAP_TAG_MISMATCH)
-				soap->error = soap_ignore_element(soap);
-			if (soap->error == SOAP_NO_TAG)
-				break;
-			if (soap->error)
-				return NULL;
-		}
-		if (soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	else
-	{	a = (tns__gameAlias *)soap_id_forward(soap, soap->href, (void*)a, 0, SOAP_TYPE_ServerSoap_tns__gameAlias, 0, sizeof(tns__gameAlias), 0, soap_copy_tns__gameAlias);
-		if (soap->body && soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	if ((soap->mode & SOAP_XML_STRICT) && (soap_flag_blessedCount1 > 0 || soap_flag_blockedCount1 > 0 || soap_flag_cursedCount1 > 0 || soap_flag_flags1 > 0 || soap_flag_id1 > 0 || soap_flag_language1 > 0 || soap_flag_userId1 > 0 || soap_flag_status1 > 0 || soap_flag_tokenId1 > 0 || soap_flag_type1 > 0 || soap_flag_updateTime1 > 0))
-	{	soap->error = SOAP_OCCURS;
-		return NULL;
-	}
-	return a;
-}
-
-int tns__gameAlias::soap_put(struct soap *soap, const char *tag, const  char *type) const
-{
-	register int id = soap_embed(soap, (void*)this, NULL, 0, tag, SOAP_TYPE_ServerSoap_tns__gameAlias);
-	if (this->soap_out(soap, tag?tag:"tns:gameAlias", id, type))
-		return soap->error;
-	return soap_putindependent(soap);
-}
-
-void *tns__gameAlias::soap_get(struct soap *soap, const char *tag, const char *type)
-{
-	return soap_get_tns__gameAlias(soap, this, tag, type);
-}
-
-SOAP_FMAC3 tns__gameAlias * SOAP_FMAC4 soap_get_tns__gameAlias(struct soap *soap, tns__gameAlias *p, const char *tag, const char *type)
-{
-	if ((p = soap_in_tns__gameAlias(soap, tag, p, type)))
-		if (soap_getindependent(soap))
-			return NULL;
-	return p;
-}
-
-SOAP_FMAC1 tns__gameAlias * SOAP_FMAC2 soap_instantiate_tns__gameAlias(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
-{
-	(void)type; (void)arrayType; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate_tns__gameAlias(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
-	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap_tns__gameAlias, n, ServerSoap_fdelete);
-	if (!cp)
-		return NULL;
-	if (n < 0)
-	{	cp->ptr = (void*)SOAP_NEW(tns__gameAlias);
-		if (size)
-			*size = sizeof(tns__gameAlias);
-		((tns__gameAlias*)cp->ptr)->soap = soap;
-	}
-	else
-	{	cp->ptr = (void*)SOAP_NEW(tns__gameAlias[n]);
-		if (!cp->ptr)
-		{	soap->error = SOAP_EOM;
-			return NULL;
-		}
-		if (size)
-			*size = n * sizeof(tns__gameAlias);
-		for (int i = 0; i < n; i++)
-			((tns__gameAlias*)cp->ptr)[i].soap = soap;
-	}
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
-	return (tns__gameAlias*)cp->ptr;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__gameAlias(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
-{
-	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying tns__gameAlias %p -> %p\n", q, p));
-	*(tns__gameAlias*)p = *(tns__gameAlias*)q;
-}
-
-void tns__gameToken::soap_default(struct soap *soap)
-{
-	this->soap = soap;
-	soap_default_int(soap, &this->tns__gameToken::blessedCount);
-	soap_default_int(soap, &this->tns__gameToken::blockedCount);
-	soap_default_LONG64(soap, &this->tns__gameToken::createTime);
-	soap_default_int(soap, &this->tns__gameToken::cursedCount);
-	this->tns__gameToken::digest = NULL;
-	soap_default_LONG64(soap, &this->tns__gameToken::flags);
-	soap_default_LONG64(soap, &this->tns__gameToken::id);
-	soap_default_LONG64(soap, &this->tns__gameToken::userId);
-	soap_default_int(soap, &this->tns__gameToken::status);
-	soap_default_int(soap, &this->tns__gameToken::visitedCount);
-	/* transient soap skipped */
-}
-
-void tns__gameToken::soap_serialize(struct soap *soap) const
-{
-	(void)soap; /* appease -Wall -Werror */
-	soap_serialize_PointerTostd__string(soap, &this->tns__gameToken::digest);
-	/* transient soap skipped */
-}
-
-int tns__gameToken::soap_out(struct soap *soap, const char *tag, int id, const char *type) const
-{
-	return soap_out_tns__gameToken(soap, tag, id, this, type);
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__gameToken(struct soap *soap, const char *tag, int id, const tns__gameToken *a, const char *type)
-{
-	if (soap_element_begin_out(soap, tag, soap_embedded_id(soap, id, a, SOAP_TYPE_ServerSoap_tns__gameToken), type))
-		return soap->error;
-	if (soap_out_int(soap, "blessedCount", -1, &(a->tns__gameToken::blessedCount), ""))
-		return soap->error;
-	if (soap_out_int(soap, "blockedCount", -1, &(a->tns__gameToken::blockedCount), ""))
-		return soap->error;
-	if (soap_out_LONG64(soap, "createTime", -1, &(a->tns__gameToken::createTime), ""))
-		return soap->error;
-	if (soap_out_int(soap, "cursedCount", -1, &(a->tns__gameToken::cursedCount), ""))
-		return soap->error;
-	if (soap_out_PointerTostd__string(soap, "digest", -1, &(a->tns__gameToken::digest), ""))
-		return soap->error;
-	if (soap_out_LONG64(soap, "flags", -1, &(a->tns__gameToken::flags), ""))
-		return soap->error;
-	if (soap_out_LONG64(soap, "id", -1, &(a->tns__gameToken::id), ""))
-		return soap->error;
-	if (soap_out_LONG64(soap, "userId", -1, &(a->tns__gameToken::userId), ""))
-		return soap->error;
-	if (soap_out_int(soap, "status", -1, &(a->tns__gameToken::status), ""))
-		return soap->error;
-	if (soap_out_int(soap, "visitedCount", -1, &(a->tns__gameToken::visitedCount), ""))
-		return soap->error;
-	/* transient soap skipped */
-	return soap_element_end_out(soap, tag);
-}
-
-void *tns__gameToken::soap_in(struct soap *soap, const char *tag, const char *type)
-{	return soap_in_tns__gameToken(soap, tag, this, type);
-}
-
-SOAP_FMAC3 tns__gameToken * SOAP_FMAC4 soap_in_tns__gameToken(struct soap *soap, const char *tag, tns__gameToken *a, const char *type)
-{
-	(void)type; /* appease -Wall -Werror */
-	if (soap_element_begin_in(soap, tag, 0, NULL))
-		return NULL;
-	a = (tns__gameToken *)soap_class_id_enter(soap, soap->id, a, SOAP_TYPE_ServerSoap_tns__gameToken, sizeof(tns__gameToken), soap->type, soap->arrayType);
-	if (!a)
-		return NULL;
-	if (soap->alloced)
-	{	a->soap_default(soap);
-		if (soap->clist->type != SOAP_TYPE_ServerSoap_tns__gameToken)
-		{	soap_revert(soap);
-			*soap->id = '\0';
-			return (tns__gameToken *)a->soap_in(soap, tag, type);
-		}
-	}
-	size_t soap_flag_blessedCount1 = 1;
-	size_t soap_flag_blockedCount1 = 1;
-	size_t soap_flag_createTime1 = 1;
-	size_t soap_flag_cursedCount1 = 1;
-	size_t soap_flag_digest1 = 1;
-	size_t soap_flag_flags1 = 1;
-	size_t soap_flag_id1 = 1;
-	size_t soap_flag_userId1 = 1;
-	size_t soap_flag_status1 = 1;
-	size_t soap_flag_visitedCount1 = 1;
-	if (soap->body && !*soap->href)
-	{
-		for (;;)
-		{	soap->error = SOAP_TAG_MISMATCH;
-			if (soap_flag_blessedCount1 && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_int(soap, "blessedCount", &(a->tns__gameToken::blessedCount), "xsd:int"))
-				{	soap_flag_blessedCount1--;
-					continue;
-				}
-			if (soap_flag_blockedCount1 && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_int(soap, "blockedCount", &(a->tns__gameToken::blockedCount), "xsd:int"))
-				{	soap_flag_blockedCount1--;
-					continue;
-				}
-			if (soap_flag_createTime1 && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_LONG64(soap, "createTime", &(a->tns__gameToken::createTime), "xsd:long"))
-				{	soap_flag_createTime1--;
-					continue;
-				}
-			if (soap_flag_cursedCount1 && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_int(soap, "cursedCount", &(a->tns__gameToken::cursedCount), "xsd:int"))
-				{	soap_flag_cursedCount1--;
-					continue;
-				}
-			if (soap_flag_digest1 && (soap->error == SOAP_TAG_MISMATCH || soap->error == SOAP_NO_TAG))
-				if (soap_in_PointerTostd__string(soap, "digest", &(a->tns__gameToken::digest), "xsd:string"))
-				{	soap_flag_digest1--;
-					continue;
-				}
-			if (soap_flag_flags1 && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_LONG64(soap, "flags", &(a->tns__gameToken::flags), "xsd:long"))
-				{	soap_flag_flags1--;
-					continue;
-				}
-			if (soap_flag_id1 && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_LONG64(soap, "id", &(a->tns__gameToken::id), "xsd:long"))
-				{	soap_flag_id1--;
-					continue;
-				}
-			if (soap_flag_userId1 && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_LONG64(soap, "userId", &(a->tns__gameToken::userId), "xsd:long"))
-				{	soap_flag_userId1--;
-					continue;
-				}
-			if (soap_flag_status1 && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_int(soap, "status", &(a->tns__gameToken::status), "xsd:int"))
-				{	soap_flag_status1--;
-					continue;
-				}
-			if (soap_flag_visitedCount1 && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_int(soap, "visitedCount", &(a->tns__gameToken::visitedCount), "xsd:int"))
-				{	soap_flag_visitedCount1--;
-					continue;
-				}
-			/* transient soap skipped */
-			if (soap->error == SOAP_TAG_MISMATCH)
-				soap->error = soap_ignore_element(soap);
-			if (soap->error == SOAP_NO_TAG)
-				break;
-			if (soap->error)
-				return NULL;
-		}
-		if (soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	else
-	{	a = (tns__gameToken *)soap_id_forward(soap, soap->href, (void*)a, 0, SOAP_TYPE_ServerSoap_tns__gameToken, 0, sizeof(tns__gameToken), 0, soap_copy_tns__gameToken);
-		if (soap->body && soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	if ((soap->mode & SOAP_XML_STRICT) && (soap_flag_blessedCount1 > 0 || soap_flag_blockedCount1 > 0 || soap_flag_createTime1 > 0 || soap_flag_cursedCount1 > 0 || soap_flag_flags1 > 0 || soap_flag_id1 > 0 || soap_flag_userId1 > 0 || soap_flag_status1 > 0 || soap_flag_visitedCount1 > 0))
-	{	soap->error = SOAP_OCCURS;
-		return NULL;
-	}
-	return a;
-}
-
-int tns__gameToken::soap_put(struct soap *soap, const char *tag, const  char *type) const
-{
-	register int id = soap_embed(soap, (void*)this, NULL, 0, tag, SOAP_TYPE_ServerSoap_tns__gameToken);
-	if (this->soap_out(soap, tag?tag:"tns:gameToken", id, type))
-		return soap->error;
-	return soap_putindependent(soap);
-}
-
-void *tns__gameToken::soap_get(struct soap *soap, const char *tag, const char *type)
-{
-	return soap_get_tns__gameToken(soap, this, tag, type);
-}
-
-SOAP_FMAC3 tns__gameToken * SOAP_FMAC4 soap_get_tns__gameToken(struct soap *soap, tns__gameToken *p, const char *tag, const char *type)
-{
-	if ((p = soap_in_tns__gameToken(soap, tag, p, type)))
-		if (soap_getindependent(soap))
-			return NULL;
-	return p;
-}
-
-SOAP_FMAC1 tns__gameToken * SOAP_FMAC2 soap_instantiate_tns__gameToken(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
-{
-	(void)type; (void)arrayType; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate_tns__gameToken(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
-	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap_tns__gameToken, n, ServerSoap_fdelete);
-	if (!cp)
-		return NULL;
-	if (n < 0)
-	{	cp->ptr = (void*)SOAP_NEW(tns__gameToken);
-		if (size)
-			*size = sizeof(tns__gameToken);
-		((tns__gameToken*)cp->ptr)->soap = soap;
-	}
-	else
-	{	cp->ptr = (void*)SOAP_NEW(tns__gameToken[n]);
-		if (!cp->ptr)
-		{	soap->error = SOAP_EOM;
-			return NULL;
-		}
-		if (size)
-			*size = n * sizeof(tns__gameToken);
-		for (int i = 0; i < n; i++)
-			((tns__gameToken*)cp->ptr)[i].soap = soap;
-	}
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
-	return (tns__gameToken*)cp->ptr;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__gameToken(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
-{
-	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying tns__gameToken %p -> %p\n", q, p));
-	*(tns__gameToken*)p = *(tns__gameToken*)q;
-}
-
-void tns__gameAnnotation::soap_default(struct soap *soap)
-{
-	this->soap = soap;
-	soap_default_int(soap, &this->tns__gameAnnotation::blessedCount);
-	soap_default_int(soap, &this->tns__gameAnnotation::blockedCount);
-	soap_default_LONG64(soap, &this->tns__gameAnnotation::createTime);
-	soap_default_int(soap, &this->tns__gameAnnotation::cursedCount);
-	soap_default_LONG64(soap, &this->tns__gameAnnotation::flags);
-	soap_default_LONG64(soap, &this->tns__gameAnnotation::id);
-	soap_default_int(soap, &this->tns__gameAnnotation::language);
-	soap_default_LONG64(soap, &this->tns__gameAnnotation::pos);
-	soap_default_int(soap, &this->tns__gameAnnotation::posType);
-	soap_default_LONG64(soap, &this->tns__gameAnnotation::userId);
-	this->tns__gameAnnotation::userAlias = NULL;
-	soap_default_int(soap, &this->tns__gameAnnotation::status);
-	this->tns__gameAnnotation::text = NULL;
-	soap_default_LONG64(soap, &this->tns__gameAnnotation::tokenId);
-	soap_default_LONG64(soap, &this->tns__gameAnnotation::updateTime);
-	/* transient soap skipped */
-}
-
-void tns__gameAnnotation::soap_serialize(struct soap *soap) const
-{
-	(void)soap; /* appease -Wall -Werror */
-	soap_serialize_PointerTostd__string(soap, &this->tns__gameAnnotation::userAlias);
-	soap_serialize_PointerTostd__string(soap, &this->tns__gameAnnotation::text);
-	/* transient soap skipped */
-}
-
-int tns__gameAnnotation::soap_out(struct soap *soap, const char *tag, int id, const char *type) const
-{
-	return soap_out_tns__gameAnnotation(soap, tag, id, this, type);
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__gameAnnotation(struct soap *soap, const char *tag, int id, const tns__gameAnnotation *a, const char *type)
-{
-	if (soap_element_begin_out(soap, tag, soap_embedded_id(soap, id, a, SOAP_TYPE_ServerSoap_tns__gameAnnotation), type))
-		return soap->error;
-	if (soap_out_int(soap, "blessedCount", -1, &(a->tns__gameAnnotation::blessedCount), ""))
-		return soap->error;
-	if (soap_out_int(soap, "blockedCount", -1, &(a->tns__gameAnnotation::blockedCount), ""))
-		return soap->error;
-	if (soap_out_LONG64(soap, "createTime", -1, &(a->tns__gameAnnotation::createTime), ""))
-		return soap->error;
-	if (soap_out_int(soap, "cursedCount", -1, &(a->tns__gameAnnotation::cursedCount), ""))
-		return soap->error;
-	if (soap_out_LONG64(soap, "flags", -1, &(a->tns__gameAnnotation::flags), ""))
-		return soap->error;
-	if (soap_out_LONG64(soap, "id", -1, &(a->tns__gameAnnotation::id), ""))
-		return soap->error;
-	if (soap_out_int(soap, "language", -1, &(a->tns__gameAnnotation::language), ""))
-		return soap->error;
-	if (soap_out_LONG64(soap, "pos", -1, &(a->tns__gameAnnotation::pos), ""))
-		return soap->error;
-	if (soap_out_int(soap, "posType", -1, &(a->tns__gameAnnotation::posType), ""))
-		return soap->error;
-	if (soap_out_LONG64(soap, "userId", -1, &(a->tns__gameAnnotation::userId), ""))
-		return soap->error;
-	if (soap_out_PointerTostd__string(soap, "userAlias", -1, &(a->tns__gameAnnotation::userAlias), ""))
-		return soap->error;
-	if (soap_out_int(soap, "status", -1, &(a->tns__gameAnnotation::status), ""))
-		return soap->error;
-	if (soap_out_PointerTostd__string(soap, "text", -1, &(a->tns__gameAnnotation::text), ""))
-		return soap->error;
-	if (soap_out_LONG64(soap, "tokenId", -1, &(a->tns__gameAnnotation::tokenId), ""))
-		return soap->error;
-	if (soap_out_LONG64(soap, "updateTime", -1, &(a->tns__gameAnnotation::updateTime), ""))
-		return soap->error;
-	/* transient soap skipped */
-	return soap_element_end_out(soap, tag);
-}
-
-void *tns__gameAnnotation::soap_in(struct soap *soap, const char *tag, const char *type)
-{	return soap_in_tns__gameAnnotation(soap, tag, this, type);
-}
-
-SOAP_FMAC3 tns__gameAnnotation * SOAP_FMAC4 soap_in_tns__gameAnnotation(struct soap *soap, const char *tag, tns__gameAnnotation *a, const char *type)
-{
-	(void)type; /* appease -Wall -Werror */
-	if (soap_element_begin_in(soap, tag, 0, NULL))
-		return NULL;
-	a = (tns__gameAnnotation *)soap_class_id_enter(soap, soap->id, a, SOAP_TYPE_ServerSoap_tns__gameAnnotation, sizeof(tns__gameAnnotation), soap->type, soap->arrayType);
-	if (!a)
-		return NULL;
-	if (soap->alloced)
-	{	a->soap_default(soap);
-		if (soap->clist->type != SOAP_TYPE_ServerSoap_tns__gameAnnotation)
-		{	soap_revert(soap);
-			*soap->id = '\0';
-			return (tns__gameAnnotation *)a->soap_in(soap, tag, type);
-		}
-	}
-	size_t soap_flag_blessedCount1 = 1;
-	size_t soap_flag_blockedCount1 = 1;
-	size_t soap_flag_createTime1 = 1;
-	size_t soap_flag_cursedCount1 = 1;
-	size_t soap_flag_flags1 = 1;
-	size_t soap_flag_id1 = 1;
-	size_t soap_flag_language1 = 1;
-	size_t soap_flag_pos1 = 1;
-	size_t soap_flag_posType1 = 1;
-	size_t soap_flag_userId1 = 1;
-	size_t soap_flag_userAlias1 = 1;
-	size_t soap_flag_status1 = 1;
-	size_t soap_flag_text1 = 1;
-	size_t soap_flag_tokenId1 = 1;
-	size_t soap_flag_updateTime1 = 1;
-	if (soap->body && !*soap->href)
-	{
-		for (;;)
-		{	soap->error = SOAP_TAG_MISMATCH;
-			if (soap_flag_blessedCount1 && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_int(soap, "blessedCount", &(a->tns__gameAnnotation::blessedCount), "xsd:int"))
-				{	soap_flag_blessedCount1--;
-					continue;
-				}
-			if (soap_flag_blockedCount1 && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_int(soap, "blockedCount", &(a->tns__gameAnnotation::blockedCount), "xsd:int"))
-				{	soap_flag_blockedCount1--;
-					continue;
-				}
-			if (soap_flag_createTime1 && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_LONG64(soap, "createTime", &(a->tns__gameAnnotation::createTime), "xsd:long"))
-				{	soap_flag_createTime1--;
-					continue;
-				}
-			if (soap_flag_cursedCount1 && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_int(soap, "cursedCount", &(a->tns__gameAnnotation::cursedCount), "xsd:int"))
-				{	soap_flag_cursedCount1--;
-					continue;
-				}
-			if (soap_flag_flags1 && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_LONG64(soap, "flags", &(a->tns__gameAnnotation::flags), "xsd:long"))
-				{	soap_flag_flags1--;
-					continue;
-				}
-			if (soap_flag_id1 && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_LONG64(soap, "id", &(a->tns__gameAnnotation::id), "xsd:long"))
-				{	soap_flag_id1--;
-					continue;
-				}
-			if (soap_flag_language1 && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_int(soap, "language", &(a->tns__gameAnnotation::language), "xsd:int"))
-				{	soap_flag_language1--;
-					continue;
-				}
-			if (soap_flag_pos1 && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_LONG64(soap, "pos", &(a->tns__gameAnnotation::pos), "xsd:long"))
-				{	soap_flag_pos1--;
-					continue;
-				}
-			if (soap_flag_posType1 && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_int(soap, "posType", &(a->tns__gameAnnotation::posType), "xsd:int"))
-				{	soap_flag_posType1--;
-					continue;
-				}
-			if (soap_flag_userId1 && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_LONG64(soap, "userId", &(a->tns__gameAnnotation::userId), "xsd:long"))
-				{	soap_flag_userId1--;
-					continue;
-				}
-			if (soap_flag_userAlias1 && (soap->error == SOAP_TAG_MISMATCH || soap->error == SOAP_NO_TAG))
-				if (soap_in_PointerTostd__string(soap, "userAlias", &(a->tns__gameAnnotation::userAlias), "xsd:string"))
-				{	soap_flag_userAlias1--;
-					continue;
-				}
-			if (soap_flag_status1 && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_int(soap, "status", &(a->tns__gameAnnotation::status), "xsd:int"))
-				{	soap_flag_status1--;
-					continue;
-				}
-			if (soap_flag_text1 && (soap->error == SOAP_TAG_MISMATCH || soap->error == SOAP_NO_TAG))
-				if (soap_in_PointerTostd__string(soap, "text", &(a->tns__gameAnnotation::text), "xsd:string"))
-				{	soap_flag_text1--;
-					continue;
-				}
-			if (soap_flag_tokenId1 && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_LONG64(soap, "tokenId", &(a->tns__gameAnnotation::tokenId), "xsd:long"))
-				{	soap_flag_tokenId1--;
-					continue;
-				}
-			if (soap_flag_updateTime1 && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_LONG64(soap, "updateTime", &(a->tns__gameAnnotation::updateTime), "xsd:long"))
-				{	soap_flag_updateTime1--;
-					continue;
-				}
-			/* transient soap skipped */
-			if (soap->error == SOAP_TAG_MISMATCH)
-				soap->error = soap_ignore_element(soap);
-			if (soap->error == SOAP_NO_TAG)
-				break;
-			if (soap->error)
-				return NULL;
-		}
-		if (soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	else
-	{	a = (tns__gameAnnotation *)soap_id_forward(soap, soap->href, (void*)a, 0, SOAP_TYPE_ServerSoap_tns__gameAnnotation, 0, sizeof(tns__gameAnnotation), 0, soap_copy_tns__gameAnnotation);
-		if (soap->body && soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	if ((soap->mode & SOAP_XML_STRICT) && (soap_flag_blessedCount1 > 0 || soap_flag_blockedCount1 > 0 || soap_flag_createTime1 > 0 || soap_flag_cursedCount1 > 0 || soap_flag_flags1 > 0 || soap_flag_id1 > 0 || soap_flag_language1 > 0 || soap_flag_pos1 > 0 || soap_flag_posType1 > 0 || soap_flag_userId1 > 0 || soap_flag_status1 > 0 || soap_flag_tokenId1 > 0 || soap_flag_updateTime1 > 0))
-	{	soap->error = SOAP_OCCURS;
-		return NULL;
-	}
-	return a;
-}
-
-int tns__gameAnnotation::soap_put(struct soap *soap, const char *tag, const  char *type) const
-{
-	register int id = soap_embed(soap, (void*)this, NULL, 0, tag, SOAP_TYPE_ServerSoap_tns__gameAnnotation);
-	if (this->soap_out(soap, tag?tag:"tns:gameAnnotation", id, type))
-		return soap->error;
-	return soap_putindependent(soap);
-}
-
-void *tns__gameAnnotation::soap_get(struct soap *soap, const char *tag, const char *type)
-{
-	return soap_get_tns__gameAnnotation(soap, this, tag, type);
-}
-
-SOAP_FMAC3 tns__gameAnnotation * SOAP_FMAC4 soap_get_tns__gameAnnotation(struct soap *soap, tns__gameAnnotation *p, const char *tag, const char *type)
-{
-	if ((p = soap_in_tns__gameAnnotation(soap, tag, p, type)))
-		if (soap_getindependent(soap))
-			return NULL;
-	return p;
-}
-
-SOAP_FMAC1 tns__gameAnnotation * SOAP_FMAC2 soap_instantiate_tns__gameAnnotation(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
-{
-	(void)type; (void)arrayType; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate_tns__gameAnnotation(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
-	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap_tns__gameAnnotation, n, ServerSoap_fdelete);
-	if (!cp)
-		return NULL;
-	if (n < 0)
-	{	cp->ptr = (void*)SOAP_NEW(tns__gameAnnotation);
-		if (size)
-			*size = sizeof(tns__gameAnnotation);
-		((tns__gameAnnotation*)cp->ptr)->soap = soap;
-	}
-	else
-	{	cp->ptr = (void*)SOAP_NEW(tns__gameAnnotation[n]);
-		if (!cp->ptr)
-		{	soap->error = SOAP_EOM;
-			return NULL;
-		}
-		if (size)
-			*size = n * sizeof(tns__gameAnnotation);
-		for (int i = 0; i < n; i++)
-			((tns__gameAnnotation*)cp->ptr)[i].soap = soap;
-	}
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
-	return (tns__gameAnnotation*)cp->ptr;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__gameAnnotation(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
-{
-	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying tns__gameAnnotation %p -> %p\n", q, p));
-	*(tns__gameAnnotation*)p = *(tns__gameAnnotation*)q;
 }
 
 #ifndef WITH_NOGLOBAL
@@ -16091,101 +12862,6 @@ SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__updateMediaAnnotationTextWithId(stru
 	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
 	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying struct __tns__updateMediaAnnotationTextWithId %p -> %p\n", q, p));
 	*(struct __tns__updateMediaAnnotationTextWithId*)p = *(struct __tns__updateMediaAnnotationTextWithId*)q;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__updateGameAnnotationTextWithId(struct soap *soap, struct __tns__updateGameAnnotationTextWithId *a)
-{
-	(void)soap; (void)a; /* appease -Wall -Werror */
-	a->tns__updateGameAnnotationTextWithId_ = NULL;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___tns__updateGameAnnotationTextWithId(struct soap *soap, const struct __tns__updateGameAnnotationTextWithId *a)
-{
-	(void)soap; (void)a; /* appease -Wall -Werror */
-	soap_serialize_PointerTotns__updateGameAnnotationTextWithId(soap, &a->tns__updateGameAnnotationTextWithId_);
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out___tns__updateGameAnnotationTextWithId(struct soap *soap, const char *tag, int id, const struct __tns__updateGameAnnotationTextWithId *a, const char *type)
-{
-	if (soap_out_PointerTotns__updateGameAnnotationTextWithId(soap, "tns:updateGameAnnotationTextWithId", -1, &a->tns__updateGameAnnotationTextWithId_, ""))
-		return soap->error;
-	return SOAP_OK;
-}
-
-SOAP_FMAC3 struct __tns__updateGameAnnotationTextWithId * SOAP_FMAC4 soap_in___tns__updateGameAnnotationTextWithId(struct soap *soap, const char *tag, struct __tns__updateGameAnnotationTextWithId *a, const char *type)
-{
-	size_t soap_flag_tns__updateGameAnnotationTextWithId_ = 1;
-	short soap_flag;
-	a = (struct __tns__updateGameAnnotationTextWithId *)soap_id_enter(soap, "", a, SOAP_TYPE_ServerSoap___tns__updateGameAnnotationTextWithId, sizeof(struct __tns__updateGameAnnotationTextWithId), 0, NULL, NULL, NULL);
-	if (!a)
-		return NULL;
-	soap_default___tns__updateGameAnnotationTextWithId(soap, a);
-		for (soap_flag = 0;; soap_flag = 1)
-		{	soap->error = SOAP_TAG_MISMATCH;
-			if (soap_flag_tns__updateGameAnnotationTextWithId_ && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_PointerTotns__updateGameAnnotationTextWithId(soap, "tns:updateGameAnnotationTextWithId", &a->tns__updateGameAnnotationTextWithId_, "tns:updateGameAnnotationTextWithId"))
-				{	soap_flag_tns__updateGameAnnotationTextWithId_--;
-					continue;
-				}
-			if (soap->error == SOAP_TAG_MISMATCH)
-				if (soap_flag)
-				{	soap->error = SOAP_OK;
-					break;
-				}
-			if (soap_flag && soap->error == SOAP_NO_TAG)
-				break;
-			if (soap->error)
-				return NULL;
-		}
-	return a;
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put___tns__updateGameAnnotationTextWithId(struct soap *soap, const struct __tns__updateGameAnnotationTextWithId *a, const char *tag, const char *type)
-{
-	register int id = 0;
-	if (soap_out___tns__updateGameAnnotationTextWithId(soap, tag?tag:"-tns:updateGameAnnotationTextWithId", id, a, type))
-		return soap->error;
-	return SOAP_OK;
-}
-
-SOAP_FMAC3 struct __tns__updateGameAnnotationTextWithId * SOAP_FMAC4 soap_get___tns__updateGameAnnotationTextWithId(struct soap *soap, struct __tns__updateGameAnnotationTextWithId *p, const char *tag, const char *type)
-{
-	if ((p = soap_in___tns__updateGameAnnotationTextWithId(soap, tag, p, type)))
-		if (soap_getindependent(soap))
-			return NULL;
-	return p;
-}
-
-SOAP_FMAC1 struct __tns__updateGameAnnotationTextWithId * SOAP_FMAC2 soap_instantiate___tns__updateGameAnnotationTextWithId(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
-{
-	(void)type; (void)arrayType; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate___tns__updateGameAnnotationTextWithId(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
-	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap___tns__updateGameAnnotationTextWithId, n, ServerSoap_fdelete);
-	if (!cp)
-		return NULL;
-	if (n < 0)
-	{	cp->ptr = (void*)SOAP_NEW(struct __tns__updateGameAnnotationTextWithId);
-		if (size)
-			*size = sizeof(struct __tns__updateGameAnnotationTextWithId);
-	}
-	else
-	{	cp->ptr = (void*)SOAP_NEW(struct __tns__updateGameAnnotationTextWithId[n]);
-		if (!cp->ptr)
-		{	soap->error = SOAP_EOM;
-			return NULL;
-		}
-		if (size)
-			*size = n * sizeof(struct __tns__updateGameAnnotationTextWithId);
-	}
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
-	return (struct __tns__updateGameAnnotationTextWithId*)cp->ptr;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__updateGameAnnotationTextWithId(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
-{
-	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying struct __tns__updateGameAnnotationTextWithId %p -> %p\n", q, p));
-	*(struct __tns__updateGameAnnotationTextWithId*)p = *(struct __tns__updateGameAnnotationTextWithId*)q;
 }
 
 SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__submitMediaTokenDigest(struct soap *soap, struct __tns__submitMediaTokenDigest *a)
@@ -16948,766 +13624,6 @@ SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__submitMediaAlias(struct soap *soap, 
 	*(struct __tns__submitMediaAlias*)p = *(struct __tns__submitMediaAlias*)q;
 }
 
-SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__submitGameTokenDigest(struct soap *soap, struct __tns__submitGameTokenDigest *a)
-{
-	(void)soap; (void)a; /* appease -Wall -Werror */
-	a->tns__submitGameTokenDigest_ = NULL;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___tns__submitGameTokenDigest(struct soap *soap, const struct __tns__submitGameTokenDigest *a)
-{
-	(void)soap; (void)a; /* appease -Wall -Werror */
-	soap_serialize_PointerTotns__submitGameTokenDigest(soap, &a->tns__submitGameTokenDigest_);
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out___tns__submitGameTokenDigest(struct soap *soap, const char *tag, int id, const struct __tns__submitGameTokenDigest *a, const char *type)
-{
-	if (soap_out_PointerTotns__submitGameTokenDigest(soap, "tns:submitGameTokenDigest", -1, &a->tns__submitGameTokenDigest_, ""))
-		return soap->error;
-	return SOAP_OK;
-}
-
-SOAP_FMAC3 struct __tns__submitGameTokenDigest * SOAP_FMAC4 soap_in___tns__submitGameTokenDigest(struct soap *soap, const char *tag, struct __tns__submitGameTokenDigest *a, const char *type)
-{
-	size_t soap_flag_tns__submitGameTokenDigest_ = 1;
-	short soap_flag;
-	a = (struct __tns__submitGameTokenDigest *)soap_id_enter(soap, "", a, SOAP_TYPE_ServerSoap___tns__submitGameTokenDigest, sizeof(struct __tns__submitGameTokenDigest), 0, NULL, NULL, NULL);
-	if (!a)
-		return NULL;
-	soap_default___tns__submitGameTokenDigest(soap, a);
-		for (soap_flag = 0;; soap_flag = 1)
-		{	soap->error = SOAP_TAG_MISMATCH;
-			if (soap_flag_tns__submitGameTokenDigest_ && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_PointerTotns__submitGameTokenDigest(soap, "tns:submitGameTokenDigest", &a->tns__submitGameTokenDigest_, "tns:submitGameTokenDigest"))
-				{	soap_flag_tns__submitGameTokenDigest_--;
-					continue;
-				}
-			if (soap->error == SOAP_TAG_MISMATCH)
-				if (soap_flag)
-				{	soap->error = SOAP_OK;
-					break;
-				}
-			if (soap_flag && soap->error == SOAP_NO_TAG)
-				break;
-			if (soap->error)
-				return NULL;
-		}
-	return a;
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put___tns__submitGameTokenDigest(struct soap *soap, const struct __tns__submitGameTokenDigest *a, const char *tag, const char *type)
-{
-	register int id = 0;
-	if (soap_out___tns__submitGameTokenDigest(soap, tag?tag:"-tns:submitGameTokenDigest", id, a, type))
-		return soap->error;
-	return SOAP_OK;
-}
-
-SOAP_FMAC3 struct __tns__submitGameTokenDigest * SOAP_FMAC4 soap_get___tns__submitGameTokenDigest(struct soap *soap, struct __tns__submitGameTokenDigest *p, const char *tag, const char *type)
-{
-	if ((p = soap_in___tns__submitGameTokenDigest(soap, tag, p, type)))
-		if (soap_getindependent(soap))
-			return NULL;
-	return p;
-}
-
-SOAP_FMAC1 struct __tns__submitGameTokenDigest * SOAP_FMAC2 soap_instantiate___tns__submitGameTokenDigest(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
-{
-	(void)type; (void)arrayType; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate___tns__submitGameTokenDigest(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
-	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap___tns__submitGameTokenDigest, n, ServerSoap_fdelete);
-	if (!cp)
-		return NULL;
-	if (n < 0)
-	{	cp->ptr = (void*)SOAP_NEW(struct __tns__submitGameTokenDigest);
-		if (size)
-			*size = sizeof(struct __tns__submitGameTokenDigest);
-	}
-	else
-	{	cp->ptr = (void*)SOAP_NEW(struct __tns__submitGameTokenDigest[n]);
-		if (!cp->ptr)
-		{	soap->error = SOAP_EOM;
-			return NULL;
-		}
-		if (size)
-			*size = n * sizeof(struct __tns__submitGameTokenDigest);
-	}
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
-	return (struct __tns__submitGameTokenDigest*)cp->ptr;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__submitGameTokenDigest(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
-{
-	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying struct __tns__submitGameTokenDigest %p -> %p\n", q, p));
-	*(struct __tns__submitGameTokenDigest*)p = *(struct __tns__submitGameTokenDigest*)q;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__submitGameToken(struct soap *soap, struct __tns__submitGameToken *a)
-{
-	(void)soap; (void)a; /* appease -Wall -Werror */
-	a->tns__submitGameToken_ = NULL;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___tns__submitGameToken(struct soap *soap, const struct __tns__submitGameToken *a)
-{
-	(void)soap; (void)a; /* appease -Wall -Werror */
-	soap_serialize_PointerTotns__submitGameToken(soap, &a->tns__submitGameToken_);
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out___tns__submitGameToken(struct soap *soap, const char *tag, int id, const struct __tns__submitGameToken *a, const char *type)
-{
-	if (soap_out_PointerTotns__submitGameToken(soap, "tns:submitGameToken", -1, &a->tns__submitGameToken_, ""))
-		return soap->error;
-	return SOAP_OK;
-}
-
-SOAP_FMAC3 struct __tns__submitGameToken * SOAP_FMAC4 soap_in___tns__submitGameToken(struct soap *soap, const char *tag, struct __tns__submitGameToken *a, const char *type)
-{
-	size_t soap_flag_tns__submitGameToken_ = 1;
-	short soap_flag;
-	a = (struct __tns__submitGameToken *)soap_id_enter(soap, "", a, SOAP_TYPE_ServerSoap___tns__submitGameToken, sizeof(struct __tns__submitGameToken), 0, NULL, NULL, NULL);
-	if (!a)
-		return NULL;
-	soap_default___tns__submitGameToken(soap, a);
-		for (soap_flag = 0;; soap_flag = 1)
-		{	soap->error = SOAP_TAG_MISMATCH;
-			if (soap_flag_tns__submitGameToken_ && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_PointerTotns__submitGameToken(soap, "tns:submitGameToken", &a->tns__submitGameToken_, "tns:submitGameToken"))
-				{	soap_flag_tns__submitGameToken_--;
-					continue;
-				}
-			if (soap->error == SOAP_TAG_MISMATCH)
-				if (soap_flag)
-				{	soap->error = SOAP_OK;
-					break;
-				}
-			if (soap_flag && soap->error == SOAP_NO_TAG)
-				break;
-			if (soap->error)
-				return NULL;
-		}
-	return a;
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put___tns__submitGameToken(struct soap *soap, const struct __tns__submitGameToken *a, const char *tag, const char *type)
-{
-	register int id = 0;
-	if (soap_out___tns__submitGameToken(soap, tag?tag:"-tns:submitGameToken", id, a, type))
-		return soap->error;
-	return SOAP_OK;
-}
-
-SOAP_FMAC3 struct __tns__submitGameToken * SOAP_FMAC4 soap_get___tns__submitGameToken(struct soap *soap, struct __tns__submitGameToken *p, const char *tag, const char *type)
-{
-	if ((p = soap_in___tns__submitGameToken(soap, tag, p, type)))
-		if (soap_getindependent(soap))
-			return NULL;
-	return p;
-}
-
-SOAP_FMAC1 struct __tns__submitGameToken * SOAP_FMAC2 soap_instantiate___tns__submitGameToken(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
-{
-	(void)type; (void)arrayType; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate___tns__submitGameToken(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
-	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap___tns__submitGameToken, n, ServerSoap_fdelete);
-	if (!cp)
-		return NULL;
-	if (n < 0)
-	{	cp->ptr = (void*)SOAP_NEW(struct __tns__submitGameToken);
-		if (size)
-			*size = sizeof(struct __tns__submitGameToken);
-	}
-	else
-	{	cp->ptr = (void*)SOAP_NEW(struct __tns__submitGameToken[n]);
-		if (!cp->ptr)
-		{	soap->error = SOAP_EOM;
-			return NULL;
-		}
-		if (size)
-			*size = n * sizeof(struct __tns__submitGameToken);
-	}
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
-	return (struct __tns__submitGameToken*)cp->ptr;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__submitGameToken(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
-{
-	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying struct __tns__submitGameToken %p -> %p\n", q, p));
-	*(struct __tns__submitGameToken*)p = *(struct __tns__submitGameToken*)q;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__submitGameAnnotationTextWithTokenId(struct soap *soap, struct __tns__submitGameAnnotationTextWithTokenId *a)
-{
-	(void)soap; (void)a; /* appease -Wall -Werror */
-	a->tns__submitGameAnnotationTextWithTokenId_ = NULL;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___tns__submitGameAnnotationTextWithTokenId(struct soap *soap, const struct __tns__submitGameAnnotationTextWithTokenId *a)
-{
-	(void)soap; (void)a; /* appease -Wall -Werror */
-	soap_serialize_PointerTotns__submitGameAnnotationTextWithTokenId(soap, &a->tns__submitGameAnnotationTextWithTokenId_);
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out___tns__submitGameAnnotationTextWithTokenId(struct soap *soap, const char *tag, int id, const struct __tns__submitGameAnnotationTextWithTokenId *a, const char *type)
-{
-	if (soap_out_PointerTotns__submitGameAnnotationTextWithTokenId(soap, "tns:submitGameAnnotationTextWithTokenId", -1, &a->tns__submitGameAnnotationTextWithTokenId_, ""))
-		return soap->error;
-	return SOAP_OK;
-}
-
-SOAP_FMAC3 struct __tns__submitGameAnnotationTextWithTokenId * SOAP_FMAC4 soap_in___tns__submitGameAnnotationTextWithTokenId(struct soap *soap, const char *tag, struct __tns__submitGameAnnotationTextWithTokenId *a, const char *type)
-{
-	size_t soap_flag_tns__submitGameAnnotationTextWithTokenId_ = 1;
-	short soap_flag;
-	a = (struct __tns__submitGameAnnotationTextWithTokenId *)soap_id_enter(soap, "", a, SOAP_TYPE_ServerSoap___tns__submitGameAnnotationTextWithTokenId, sizeof(struct __tns__submitGameAnnotationTextWithTokenId), 0, NULL, NULL, NULL);
-	if (!a)
-		return NULL;
-	soap_default___tns__submitGameAnnotationTextWithTokenId(soap, a);
-		for (soap_flag = 0;; soap_flag = 1)
-		{	soap->error = SOAP_TAG_MISMATCH;
-			if (soap_flag_tns__submitGameAnnotationTextWithTokenId_ && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_PointerTotns__submitGameAnnotationTextWithTokenId(soap, "tns:submitGameAnnotationTextWithTokenId", &a->tns__submitGameAnnotationTextWithTokenId_, "tns:submitGameAnnotationTextWithTokenId"))
-				{	soap_flag_tns__submitGameAnnotationTextWithTokenId_--;
-					continue;
-				}
-			if (soap->error == SOAP_TAG_MISMATCH)
-				if (soap_flag)
-				{	soap->error = SOAP_OK;
-					break;
-				}
-			if (soap_flag && soap->error == SOAP_NO_TAG)
-				break;
-			if (soap->error)
-				return NULL;
-		}
-	return a;
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put___tns__submitGameAnnotationTextWithTokenId(struct soap *soap, const struct __tns__submitGameAnnotationTextWithTokenId *a, const char *tag, const char *type)
-{
-	register int id = 0;
-	if (soap_out___tns__submitGameAnnotationTextWithTokenId(soap, tag?tag:"-tns:submitGameAnnotationTextWithTokenId", id, a, type))
-		return soap->error;
-	return SOAP_OK;
-}
-
-SOAP_FMAC3 struct __tns__submitGameAnnotationTextWithTokenId * SOAP_FMAC4 soap_get___tns__submitGameAnnotationTextWithTokenId(struct soap *soap, struct __tns__submitGameAnnotationTextWithTokenId *p, const char *tag, const char *type)
-{
-	if ((p = soap_in___tns__submitGameAnnotationTextWithTokenId(soap, tag, p, type)))
-		if (soap_getindependent(soap))
-			return NULL;
-	return p;
-}
-
-SOAP_FMAC1 struct __tns__submitGameAnnotationTextWithTokenId * SOAP_FMAC2 soap_instantiate___tns__submitGameAnnotationTextWithTokenId(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
-{
-	(void)type; (void)arrayType; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate___tns__submitGameAnnotationTextWithTokenId(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
-	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap___tns__submitGameAnnotationTextWithTokenId, n, ServerSoap_fdelete);
-	if (!cp)
-		return NULL;
-	if (n < 0)
-	{	cp->ptr = (void*)SOAP_NEW(struct __tns__submitGameAnnotationTextWithTokenId);
-		if (size)
-			*size = sizeof(struct __tns__submitGameAnnotationTextWithTokenId);
-	}
-	else
-	{	cp->ptr = (void*)SOAP_NEW(struct __tns__submitGameAnnotationTextWithTokenId[n]);
-		if (!cp->ptr)
-		{	soap->error = SOAP_EOM;
-			return NULL;
-		}
-		if (size)
-			*size = n * sizeof(struct __tns__submitGameAnnotationTextWithTokenId);
-	}
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
-	return (struct __tns__submitGameAnnotationTextWithTokenId*)cp->ptr;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__submitGameAnnotationTextWithTokenId(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
-{
-	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying struct __tns__submitGameAnnotationTextWithTokenId %p -> %p\n", q, p));
-	*(struct __tns__submitGameAnnotationTextWithTokenId*)p = *(struct __tns__submitGameAnnotationTextWithTokenId*)q;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__submitGameAnnotationTextAndTokenDigest(struct soap *soap, struct __tns__submitGameAnnotationTextAndTokenDigest *a)
-{
-	(void)soap; (void)a; /* appease -Wall -Werror */
-	a->tns__submitGameAnnotationTextAndTokenDigest_ = NULL;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___tns__submitGameAnnotationTextAndTokenDigest(struct soap *soap, const struct __tns__submitGameAnnotationTextAndTokenDigest *a)
-{
-	(void)soap; (void)a; /* appease -Wall -Werror */
-	soap_serialize_PointerTotns__submitGameAnnotationTextAndTokenDigest(soap, &a->tns__submitGameAnnotationTextAndTokenDigest_);
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out___tns__submitGameAnnotationTextAndTokenDigest(struct soap *soap, const char *tag, int id, const struct __tns__submitGameAnnotationTextAndTokenDigest *a, const char *type)
-{
-	if (soap_out_PointerTotns__submitGameAnnotationTextAndTokenDigest(soap, "tns:submitGameAnnotationTextAndTokenDigest", -1, &a->tns__submitGameAnnotationTextAndTokenDigest_, ""))
-		return soap->error;
-	return SOAP_OK;
-}
-
-SOAP_FMAC3 struct __tns__submitGameAnnotationTextAndTokenDigest * SOAP_FMAC4 soap_in___tns__submitGameAnnotationTextAndTokenDigest(struct soap *soap, const char *tag, struct __tns__submitGameAnnotationTextAndTokenDigest *a, const char *type)
-{
-	size_t soap_flag_tns__submitGameAnnotationTextAndTokenDigest_ = 1;
-	short soap_flag;
-	a = (struct __tns__submitGameAnnotationTextAndTokenDigest *)soap_id_enter(soap, "", a, SOAP_TYPE_ServerSoap___tns__submitGameAnnotationTextAndTokenDigest, sizeof(struct __tns__submitGameAnnotationTextAndTokenDigest), 0, NULL, NULL, NULL);
-	if (!a)
-		return NULL;
-	soap_default___tns__submitGameAnnotationTextAndTokenDigest(soap, a);
-		for (soap_flag = 0;; soap_flag = 1)
-		{	soap->error = SOAP_TAG_MISMATCH;
-			if (soap_flag_tns__submitGameAnnotationTextAndTokenDigest_ && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_PointerTotns__submitGameAnnotationTextAndTokenDigest(soap, "tns:submitGameAnnotationTextAndTokenDigest", &a->tns__submitGameAnnotationTextAndTokenDigest_, "tns:submitGameAnnotationTextAndTokenDigest"))
-				{	soap_flag_tns__submitGameAnnotationTextAndTokenDigest_--;
-					continue;
-				}
-			if (soap->error == SOAP_TAG_MISMATCH)
-				if (soap_flag)
-				{	soap->error = SOAP_OK;
-					break;
-				}
-			if (soap_flag && soap->error == SOAP_NO_TAG)
-				break;
-			if (soap->error)
-				return NULL;
-		}
-	return a;
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put___tns__submitGameAnnotationTextAndTokenDigest(struct soap *soap, const struct __tns__submitGameAnnotationTextAndTokenDigest *a, const char *tag, const char *type)
-{
-	register int id = 0;
-	if (soap_out___tns__submitGameAnnotationTextAndTokenDigest(soap, tag?tag:"-tns:submitGameAnnotationTextAndTokenDigest", id, a, type))
-		return soap->error;
-	return SOAP_OK;
-}
-
-SOAP_FMAC3 struct __tns__submitGameAnnotationTextAndTokenDigest * SOAP_FMAC4 soap_get___tns__submitGameAnnotationTextAndTokenDigest(struct soap *soap, struct __tns__submitGameAnnotationTextAndTokenDigest *p, const char *tag, const char *type)
-{
-	if ((p = soap_in___tns__submitGameAnnotationTextAndTokenDigest(soap, tag, p, type)))
-		if (soap_getindependent(soap))
-			return NULL;
-	return p;
-}
-
-SOAP_FMAC1 struct __tns__submitGameAnnotationTextAndTokenDigest * SOAP_FMAC2 soap_instantiate___tns__submitGameAnnotationTextAndTokenDigest(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
-{
-	(void)type; (void)arrayType; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate___tns__submitGameAnnotationTextAndTokenDigest(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
-	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap___tns__submitGameAnnotationTextAndTokenDigest, n, ServerSoap_fdelete);
-	if (!cp)
-		return NULL;
-	if (n < 0)
-	{	cp->ptr = (void*)SOAP_NEW(struct __tns__submitGameAnnotationTextAndTokenDigest);
-		if (size)
-			*size = sizeof(struct __tns__submitGameAnnotationTextAndTokenDigest);
-	}
-	else
-	{	cp->ptr = (void*)SOAP_NEW(struct __tns__submitGameAnnotationTextAndTokenDigest[n]);
-		if (!cp->ptr)
-		{	soap->error = SOAP_EOM;
-			return NULL;
-		}
-		if (size)
-			*size = n * sizeof(struct __tns__submitGameAnnotationTextAndTokenDigest);
-	}
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
-	return (struct __tns__submitGameAnnotationTextAndTokenDigest*)cp->ptr;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__submitGameAnnotationTextAndTokenDigest(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
-{
-	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying struct __tns__submitGameAnnotationTextAndTokenDigest %p -> %p\n", q, p));
-	*(struct __tns__submitGameAnnotationTextAndTokenDigest*)p = *(struct __tns__submitGameAnnotationTextAndTokenDigest*)q;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__submitGameAnnotation(struct soap *soap, struct __tns__submitGameAnnotation *a)
-{
-	(void)soap; (void)a; /* appease -Wall -Werror */
-	a->tns__submitGameAnnotation_ = NULL;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___tns__submitGameAnnotation(struct soap *soap, const struct __tns__submitGameAnnotation *a)
-{
-	(void)soap; (void)a; /* appease -Wall -Werror */
-	soap_serialize_PointerTotns__submitGameAnnotation(soap, &a->tns__submitGameAnnotation_);
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out___tns__submitGameAnnotation(struct soap *soap, const char *tag, int id, const struct __tns__submitGameAnnotation *a, const char *type)
-{
-	if (soap_out_PointerTotns__submitGameAnnotation(soap, "tns:submitGameAnnotation", -1, &a->tns__submitGameAnnotation_, ""))
-		return soap->error;
-	return SOAP_OK;
-}
-
-SOAP_FMAC3 struct __tns__submitGameAnnotation * SOAP_FMAC4 soap_in___tns__submitGameAnnotation(struct soap *soap, const char *tag, struct __tns__submitGameAnnotation *a, const char *type)
-{
-	size_t soap_flag_tns__submitGameAnnotation_ = 1;
-	short soap_flag;
-	a = (struct __tns__submitGameAnnotation *)soap_id_enter(soap, "", a, SOAP_TYPE_ServerSoap___tns__submitGameAnnotation, sizeof(struct __tns__submitGameAnnotation), 0, NULL, NULL, NULL);
-	if (!a)
-		return NULL;
-	soap_default___tns__submitGameAnnotation(soap, a);
-		for (soap_flag = 0;; soap_flag = 1)
-		{	soap->error = SOAP_TAG_MISMATCH;
-			if (soap_flag_tns__submitGameAnnotation_ && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_PointerTotns__submitGameAnnotation(soap, "tns:submitGameAnnotation", &a->tns__submitGameAnnotation_, "tns:submitGameAnnotation"))
-				{	soap_flag_tns__submitGameAnnotation_--;
-					continue;
-				}
-			if (soap->error == SOAP_TAG_MISMATCH)
-				if (soap_flag)
-				{	soap->error = SOAP_OK;
-					break;
-				}
-			if (soap_flag && soap->error == SOAP_NO_TAG)
-				break;
-			if (soap->error)
-				return NULL;
-		}
-	return a;
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put___tns__submitGameAnnotation(struct soap *soap, const struct __tns__submitGameAnnotation *a, const char *tag, const char *type)
-{
-	register int id = 0;
-	if (soap_out___tns__submitGameAnnotation(soap, tag?tag:"-tns:submitGameAnnotation", id, a, type))
-		return soap->error;
-	return SOAP_OK;
-}
-
-SOAP_FMAC3 struct __tns__submitGameAnnotation * SOAP_FMAC4 soap_get___tns__submitGameAnnotation(struct soap *soap, struct __tns__submitGameAnnotation *p, const char *tag, const char *type)
-{
-	if ((p = soap_in___tns__submitGameAnnotation(soap, tag, p, type)))
-		if (soap_getindependent(soap))
-			return NULL;
-	return p;
-}
-
-SOAP_FMAC1 struct __tns__submitGameAnnotation * SOAP_FMAC2 soap_instantiate___tns__submitGameAnnotation(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
-{
-	(void)type; (void)arrayType; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate___tns__submitGameAnnotation(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
-	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap___tns__submitGameAnnotation, n, ServerSoap_fdelete);
-	if (!cp)
-		return NULL;
-	if (n < 0)
-	{	cp->ptr = (void*)SOAP_NEW(struct __tns__submitGameAnnotation);
-		if (size)
-			*size = sizeof(struct __tns__submitGameAnnotation);
-	}
-	else
-	{	cp->ptr = (void*)SOAP_NEW(struct __tns__submitGameAnnotation[n]);
-		if (!cp->ptr)
-		{	soap->error = SOAP_EOM;
-			return NULL;
-		}
-		if (size)
-			*size = n * sizeof(struct __tns__submitGameAnnotation);
-	}
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
-	return (struct __tns__submitGameAnnotation*)cp->ptr;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__submitGameAnnotation(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
-{
-	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying struct __tns__submitGameAnnotation %p -> %p\n", q, p));
-	*(struct __tns__submitGameAnnotation*)p = *(struct __tns__submitGameAnnotation*)q;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__submitGameAliasTextWithTokenId(struct soap *soap, struct __tns__submitGameAliasTextWithTokenId *a)
-{
-	(void)soap; (void)a; /* appease -Wall -Werror */
-	a->tns__submitGameAliasTextWithTokenId_ = NULL;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___tns__submitGameAliasTextWithTokenId(struct soap *soap, const struct __tns__submitGameAliasTextWithTokenId *a)
-{
-	(void)soap; (void)a; /* appease -Wall -Werror */
-	soap_serialize_PointerTotns__submitGameAliasTextWithTokenId(soap, &a->tns__submitGameAliasTextWithTokenId_);
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out___tns__submitGameAliasTextWithTokenId(struct soap *soap, const char *tag, int id, const struct __tns__submitGameAliasTextWithTokenId *a, const char *type)
-{
-	if (soap_out_PointerTotns__submitGameAliasTextWithTokenId(soap, "tns:submitGameAliasTextWithTokenId", -1, &a->tns__submitGameAliasTextWithTokenId_, ""))
-		return soap->error;
-	return SOAP_OK;
-}
-
-SOAP_FMAC3 struct __tns__submitGameAliasTextWithTokenId * SOAP_FMAC4 soap_in___tns__submitGameAliasTextWithTokenId(struct soap *soap, const char *tag, struct __tns__submitGameAliasTextWithTokenId *a, const char *type)
-{
-	size_t soap_flag_tns__submitGameAliasTextWithTokenId_ = 1;
-	short soap_flag;
-	a = (struct __tns__submitGameAliasTextWithTokenId *)soap_id_enter(soap, "", a, SOAP_TYPE_ServerSoap___tns__submitGameAliasTextWithTokenId, sizeof(struct __tns__submitGameAliasTextWithTokenId), 0, NULL, NULL, NULL);
-	if (!a)
-		return NULL;
-	soap_default___tns__submitGameAliasTextWithTokenId(soap, a);
-		for (soap_flag = 0;; soap_flag = 1)
-		{	soap->error = SOAP_TAG_MISMATCH;
-			if (soap_flag_tns__submitGameAliasTextWithTokenId_ && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_PointerTotns__submitGameAliasTextWithTokenId(soap, "tns:submitGameAliasTextWithTokenId", &a->tns__submitGameAliasTextWithTokenId_, "tns:submitGameAliasTextWithTokenId"))
-				{	soap_flag_tns__submitGameAliasTextWithTokenId_--;
-					continue;
-				}
-			if (soap->error == SOAP_TAG_MISMATCH)
-				if (soap_flag)
-				{	soap->error = SOAP_OK;
-					break;
-				}
-			if (soap_flag && soap->error == SOAP_NO_TAG)
-				break;
-			if (soap->error)
-				return NULL;
-		}
-	return a;
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put___tns__submitGameAliasTextWithTokenId(struct soap *soap, const struct __tns__submitGameAliasTextWithTokenId *a, const char *tag, const char *type)
-{
-	register int id = 0;
-	if (soap_out___tns__submitGameAliasTextWithTokenId(soap, tag?tag:"-tns:submitGameAliasTextWithTokenId", id, a, type))
-		return soap->error;
-	return SOAP_OK;
-}
-
-SOAP_FMAC3 struct __tns__submitGameAliasTextWithTokenId * SOAP_FMAC4 soap_get___tns__submitGameAliasTextWithTokenId(struct soap *soap, struct __tns__submitGameAliasTextWithTokenId *p, const char *tag, const char *type)
-{
-	if ((p = soap_in___tns__submitGameAliasTextWithTokenId(soap, tag, p, type)))
-		if (soap_getindependent(soap))
-			return NULL;
-	return p;
-}
-
-SOAP_FMAC1 struct __tns__submitGameAliasTextWithTokenId * SOAP_FMAC2 soap_instantiate___tns__submitGameAliasTextWithTokenId(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
-{
-	(void)type; (void)arrayType; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate___tns__submitGameAliasTextWithTokenId(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
-	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap___tns__submitGameAliasTextWithTokenId, n, ServerSoap_fdelete);
-	if (!cp)
-		return NULL;
-	if (n < 0)
-	{	cp->ptr = (void*)SOAP_NEW(struct __tns__submitGameAliasTextWithTokenId);
-		if (size)
-			*size = sizeof(struct __tns__submitGameAliasTextWithTokenId);
-	}
-	else
-	{	cp->ptr = (void*)SOAP_NEW(struct __tns__submitGameAliasTextWithTokenId[n]);
-		if (!cp->ptr)
-		{	soap->error = SOAP_EOM;
-			return NULL;
-		}
-		if (size)
-			*size = n * sizeof(struct __tns__submitGameAliasTextWithTokenId);
-	}
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
-	return (struct __tns__submitGameAliasTextWithTokenId*)cp->ptr;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__submitGameAliasTextWithTokenId(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
-{
-	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying struct __tns__submitGameAliasTextWithTokenId %p -> %p\n", q, p));
-	*(struct __tns__submitGameAliasTextWithTokenId*)p = *(struct __tns__submitGameAliasTextWithTokenId*)q;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__submitGameAliasTextAndTokenDigest(struct soap *soap, struct __tns__submitGameAliasTextAndTokenDigest *a)
-{
-	(void)soap; (void)a; /* appease -Wall -Werror */
-	a->tns__submitGameAliasTextAndTokenDigest_ = NULL;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___tns__submitGameAliasTextAndTokenDigest(struct soap *soap, const struct __tns__submitGameAliasTextAndTokenDigest *a)
-{
-	(void)soap; (void)a; /* appease -Wall -Werror */
-	soap_serialize_PointerTotns__submitGameAliasTextAndTokenDigest(soap, &a->tns__submitGameAliasTextAndTokenDigest_);
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out___tns__submitGameAliasTextAndTokenDigest(struct soap *soap, const char *tag, int id, const struct __tns__submitGameAliasTextAndTokenDigest *a, const char *type)
-{
-	if (soap_out_PointerTotns__submitGameAliasTextAndTokenDigest(soap, "tns:submitGameAliasTextAndTokenDigest", -1, &a->tns__submitGameAliasTextAndTokenDigest_, ""))
-		return soap->error;
-	return SOAP_OK;
-}
-
-SOAP_FMAC3 struct __tns__submitGameAliasTextAndTokenDigest * SOAP_FMAC4 soap_in___tns__submitGameAliasTextAndTokenDigest(struct soap *soap, const char *tag, struct __tns__submitGameAliasTextAndTokenDigest *a, const char *type)
-{
-	size_t soap_flag_tns__submitGameAliasTextAndTokenDigest_ = 1;
-	short soap_flag;
-	a = (struct __tns__submitGameAliasTextAndTokenDigest *)soap_id_enter(soap, "", a, SOAP_TYPE_ServerSoap___tns__submitGameAliasTextAndTokenDigest, sizeof(struct __tns__submitGameAliasTextAndTokenDigest), 0, NULL, NULL, NULL);
-	if (!a)
-		return NULL;
-	soap_default___tns__submitGameAliasTextAndTokenDigest(soap, a);
-		for (soap_flag = 0;; soap_flag = 1)
-		{	soap->error = SOAP_TAG_MISMATCH;
-			if (soap_flag_tns__submitGameAliasTextAndTokenDigest_ && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_PointerTotns__submitGameAliasTextAndTokenDigest(soap, "tns:submitGameAliasTextAndTokenDigest", &a->tns__submitGameAliasTextAndTokenDigest_, "tns:submitGameAliasTextAndTokenDigest"))
-				{	soap_flag_tns__submitGameAliasTextAndTokenDigest_--;
-					continue;
-				}
-			if (soap->error == SOAP_TAG_MISMATCH)
-				if (soap_flag)
-				{	soap->error = SOAP_OK;
-					break;
-				}
-			if (soap_flag && soap->error == SOAP_NO_TAG)
-				break;
-			if (soap->error)
-				return NULL;
-		}
-	return a;
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put___tns__submitGameAliasTextAndTokenDigest(struct soap *soap, const struct __tns__submitGameAliasTextAndTokenDigest *a, const char *tag, const char *type)
-{
-	register int id = 0;
-	if (soap_out___tns__submitGameAliasTextAndTokenDigest(soap, tag?tag:"-tns:submitGameAliasTextAndTokenDigest", id, a, type))
-		return soap->error;
-	return SOAP_OK;
-}
-
-SOAP_FMAC3 struct __tns__submitGameAliasTextAndTokenDigest * SOAP_FMAC4 soap_get___tns__submitGameAliasTextAndTokenDigest(struct soap *soap, struct __tns__submitGameAliasTextAndTokenDigest *p, const char *tag, const char *type)
-{
-	if ((p = soap_in___tns__submitGameAliasTextAndTokenDigest(soap, tag, p, type)))
-		if (soap_getindependent(soap))
-			return NULL;
-	return p;
-}
-
-SOAP_FMAC1 struct __tns__submitGameAliasTextAndTokenDigest * SOAP_FMAC2 soap_instantiate___tns__submitGameAliasTextAndTokenDigest(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
-{
-	(void)type; (void)arrayType; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate___tns__submitGameAliasTextAndTokenDigest(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
-	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap___tns__submitGameAliasTextAndTokenDigest, n, ServerSoap_fdelete);
-	if (!cp)
-		return NULL;
-	if (n < 0)
-	{	cp->ptr = (void*)SOAP_NEW(struct __tns__submitGameAliasTextAndTokenDigest);
-		if (size)
-			*size = sizeof(struct __tns__submitGameAliasTextAndTokenDigest);
-	}
-	else
-	{	cp->ptr = (void*)SOAP_NEW(struct __tns__submitGameAliasTextAndTokenDigest[n]);
-		if (!cp->ptr)
-		{	soap->error = SOAP_EOM;
-			return NULL;
-		}
-		if (size)
-			*size = n * sizeof(struct __tns__submitGameAliasTextAndTokenDigest);
-	}
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
-	return (struct __tns__submitGameAliasTextAndTokenDigest*)cp->ptr;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__submitGameAliasTextAndTokenDigest(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
-{
-	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying struct __tns__submitGameAliasTextAndTokenDigest %p -> %p\n", q, p));
-	*(struct __tns__submitGameAliasTextAndTokenDigest*)p = *(struct __tns__submitGameAliasTextAndTokenDigest*)q;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__submitGameAlias(struct soap *soap, struct __tns__submitGameAlias *a)
-{
-	(void)soap; (void)a; /* appease -Wall -Werror */
-	a->tns__submitGameAlias_ = NULL;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___tns__submitGameAlias(struct soap *soap, const struct __tns__submitGameAlias *a)
-{
-	(void)soap; (void)a; /* appease -Wall -Werror */
-	soap_serialize_PointerTotns__submitGameAlias(soap, &a->tns__submitGameAlias_);
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out___tns__submitGameAlias(struct soap *soap, const char *tag, int id, const struct __tns__submitGameAlias *a, const char *type)
-{
-	if (soap_out_PointerTotns__submitGameAlias(soap, "tns:submitGameAlias", -1, &a->tns__submitGameAlias_, ""))
-		return soap->error;
-	return SOAP_OK;
-}
-
-SOAP_FMAC3 struct __tns__submitGameAlias * SOAP_FMAC4 soap_in___tns__submitGameAlias(struct soap *soap, const char *tag, struct __tns__submitGameAlias *a, const char *type)
-{
-	size_t soap_flag_tns__submitGameAlias_ = 1;
-	short soap_flag;
-	a = (struct __tns__submitGameAlias *)soap_id_enter(soap, "", a, SOAP_TYPE_ServerSoap___tns__submitGameAlias, sizeof(struct __tns__submitGameAlias), 0, NULL, NULL, NULL);
-	if (!a)
-		return NULL;
-	soap_default___tns__submitGameAlias(soap, a);
-		for (soap_flag = 0;; soap_flag = 1)
-		{	soap->error = SOAP_TAG_MISMATCH;
-			if (soap_flag_tns__submitGameAlias_ && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_PointerTotns__submitGameAlias(soap, "tns:submitGameAlias", &a->tns__submitGameAlias_, "tns:submitGameAlias"))
-				{	soap_flag_tns__submitGameAlias_--;
-					continue;
-				}
-			if (soap->error == SOAP_TAG_MISMATCH)
-				if (soap_flag)
-				{	soap->error = SOAP_OK;
-					break;
-				}
-			if (soap_flag && soap->error == SOAP_NO_TAG)
-				break;
-			if (soap->error)
-				return NULL;
-		}
-	return a;
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put___tns__submitGameAlias(struct soap *soap, const struct __tns__submitGameAlias *a, const char *tag, const char *type)
-{
-	register int id = 0;
-	if (soap_out___tns__submitGameAlias(soap, tag?tag:"-tns:submitGameAlias", id, a, type))
-		return soap->error;
-	return SOAP_OK;
-}
-
-SOAP_FMAC3 struct __tns__submitGameAlias * SOAP_FMAC4 soap_get___tns__submitGameAlias(struct soap *soap, struct __tns__submitGameAlias *p, const char *tag, const char *type)
-{
-	if ((p = soap_in___tns__submitGameAlias(soap, tag, p, type)))
-		if (soap_getindependent(soap))
-			return NULL;
-	return p;
-}
-
-SOAP_FMAC1 struct __tns__submitGameAlias * SOAP_FMAC2 soap_instantiate___tns__submitGameAlias(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
-{
-	(void)type; (void)arrayType; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate___tns__submitGameAlias(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
-	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap___tns__submitGameAlias, n, ServerSoap_fdelete);
-	if (!cp)
-		return NULL;
-	if (n < 0)
-	{	cp->ptr = (void*)SOAP_NEW(struct __tns__submitGameAlias);
-		if (size)
-			*size = sizeof(struct __tns__submitGameAlias);
-	}
-	else
-	{	cp->ptr = (void*)SOAP_NEW(struct __tns__submitGameAlias[n]);
-		if (!cp->ptr)
-		{	soap->error = SOAP_EOM;
-			return NULL;
-		}
-		if (size)
-			*size = n * sizeof(struct __tns__submitGameAlias);
-	}
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
-	return (struct __tns__submitGameAlias*)cp->ptr;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__submitGameAlias(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
-{
-	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying struct __tns__submitGameAlias %p -> %p\n", q, p));
-	*(struct __tns__submitGameAlias*)p = *(struct __tns__submitGameAlias*)q;
-}
-
 SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__setUserLanguage(struct soap *soap, struct __tns__setUserLanguage *a)
 {
 	(void)soap; (void)a; /* appease -Wall -Werror */
@@ -18086,101 +14002,6 @@ SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__selectRelatedMediaAnnotationsWithTok
 	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
 	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying struct __tns__selectRelatedMediaAnnotationsWithTokenId %p -> %p\n", q, p));
 	*(struct __tns__selectRelatedMediaAnnotationsWithTokenId*)p = *(struct __tns__selectRelatedMediaAnnotationsWithTokenId*)q;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__selectRelatedGameAnnotationsWithTokenId(struct soap *soap, struct __tns__selectRelatedGameAnnotationsWithTokenId *a)
-{
-	(void)soap; (void)a; /* appease -Wall -Werror */
-	a->tns__selectRelatedGameAnnotationsWithTokenId_ = NULL;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___tns__selectRelatedGameAnnotationsWithTokenId(struct soap *soap, const struct __tns__selectRelatedGameAnnotationsWithTokenId *a)
-{
-	(void)soap; (void)a; /* appease -Wall -Werror */
-	soap_serialize_PointerTotns__selectRelatedGameAnnotationsWithTokenId(soap, &a->tns__selectRelatedGameAnnotationsWithTokenId_);
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out___tns__selectRelatedGameAnnotationsWithTokenId(struct soap *soap, const char *tag, int id, const struct __tns__selectRelatedGameAnnotationsWithTokenId *a, const char *type)
-{
-	if (soap_out_PointerTotns__selectRelatedGameAnnotationsWithTokenId(soap, "tns:selectRelatedGameAnnotationsWithTokenId", -1, &a->tns__selectRelatedGameAnnotationsWithTokenId_, ""))
-		return soap->error;
-	return SOAP_OK;
-}
-
-SOAP_FMAC3 struct __tns__selectRelatedGameAnnotationsWithTokenId * SOAP_FMAC4 soap_in___tns__selectRelatedGameAnnotationsWithTokenId(struct soap *soap, const char *tag, struct __tns__selectRelatedGameAnnotationsWithTokenId *a, const char *type)
-{
-	size_t soap_flag_tns__selectRelatedGameAnnotationsWithTokenId_ = 1;
-	short soap_flag;
-	a = (struct __tns__selectRelatedGameAnnotationsWithTokenId *)soap_id_enter(soap, "", a, SOAP_TYPE_ServerSoap___tns__selectRelatedGameAnnotationsWithTokenId, sizeof(struct __tns__selectRelatedGameAnnotationsWithTokenId), 0, NULL, NULL, NULL);
-	if (!a)
-		return NULL;
-	soap_default___tns__selectRelatedGameAnnotationsWithTokenId(soap, a);
-		for (soap_flag = 0;; soap_flag = 1)
-		{	soap->error = SOAP_TAG_MISMATCH;
-			if (soap_flag_tns__selectRelatedGameAnnotationsWithTokenId_ && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_PointerTotns__selectRelatedGameAnnotationsWithTokenId(soap, "tns:selectRelatedGameAnnotationsWithTokenId", &a->tns__selectRelatedGameAnnotationsWithTokenId_, "tns:selectRelatedGameAnnotationsWithTokenId"))
-				{	soap_flag_tns__selectRelatedGameAnnotationsWithTokenId_--;
-					continue;
-				}
-			if (soap->error == SOAP_TAG_MISMATCH)
-				if (soap_flag)
-				{	soap->error = SOAP_OK;
-					break;
-				}
-			if (soap_flag && soap->error == SOAP_NO_TAG)
-				break;
-			if (soap->error)
-				return NULL;
-		}
-	return a;
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put___tns__selectRelatedGameAnnotationsWithTokenId(struct soap *soap, const struct __tns__selectRelatedGameAnnotationsWithTokenId *a, const char *tag, const char *type)
-{
-	register int id = 0;
-	if (soap_out___tns__selectRelatedGameAnnotationsWithTokenId(soap, tag?tag:"-tns:selectRelatedGameAnnotationsWithTokenId", id, a, type))
-		return soap->error;
-	return SOAP_OK;
-}
-
-SOAP_FMAC3 struct __tns__selectRelatedGameAnnotationsWithTokenId * SOAP_FMAC4 soap_get___tns__selectRelatedGameAnnotationsWithTokenId(struct soap *soap, struct __tns__selectRelatedGameAnnotationsWithTokenId *p, const char *tag, const char *type)
-{
-	if ((p = soap_in___tns__selectRelatedGameAnnotationsWithTokenId(soap, tag, p, type)))
-		if (soap_getindependent(soap))
-			return NULL;
-	return p;
-}
-
-SOAP_FMAC1 struct __tns__selectRelatedGameAnnotationsWithTokenId * SOAP_FMAC2 soap_instantiate___tns__selectRelatedGameAnnotationsWithTokenId(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
-{
-	(void)type; (void)arrayType; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate___tns__selectRelatedGameAnnotationsWithTokenId(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
-	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap___tns__selectRelatedGameAnnotationsWithTokenId, n, ServerSoap_fdelete);
-	if (!cp)
-		return NULL;
-	if (n < 0)
-	{	cp->ptr = (void*)SOAP_NEW(struct __tns__selectRelatedGameAnnotationsWithTokenId);
-		if (size)
-			*size = sizeof(struct __tns__selectRelatedGameAnnotationsWithTokenId);
-	}
-	else
-	{	cp->ptr = (void*)SOAP_NEW(struct __tns__selectRelatedGameAnnotationsWithTokenId[n]);
-		if (!cp->ptr)
-		{	soap->error = SOAP_EOM;
-			return NULL;
-		}
-		if (size)
-			*size = n * sizeof(struct __tns__selectRelatedGameAnnotationsWithTokenId);
-	}
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
-	return (struct __tns__selectRelatedGameAnnotationsWithTokenId*)cp->ptr;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__selectRelatedGameAnnotationsWithTokenId(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
-{
-	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying struct __tns__selectRelatedGameAnnotationsWithTokenId %p -> %p\n", q, p));
-	*(struct __tns__selectRelatedGameAnnotationsWithTokenId*)p = *(struct __tns__selectRelatedGameAnnotationsWithTokenId*)q;
 }
 
 SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__selectMediaTokenWithId(struct soap *soap, struct __tns__selectMediaTokenWithId *a)
@@ -18563,386 +14384,6 @@ SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__selectMediaAliasesWithTokenId(struct
 	*(struct __tns__selectMediaAliasesWithTokenId*)p = *(struct __tns__selectMediaAliasesWithTokenId*)q;
 }
 
-SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__selectGameTokenWithId(struct soap *soap, struct __tns__selectGameTokenWithId *a)
-{
-	(void)soap; (void)a; /* appease -Wall -Werror */
-	a->tns__selectGameTokenWithId_ = NULL;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___tns__selectGameTokenWithId(struct soap *soap, const struct __tns__selectGameTokenWithId *a)
-{
-	(void)soap; (void)a; /* appease -Wall -Werror */
-	soap_serialize_PointerTotns__selectGameTokenWithId(soap, &a->tns__selectGameTokenWithId_);
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out___tns__selectGameTokenWithId(struct soap *soap, const char *tag, int id, const struct __tns__selectGameTokenWithId *a, const char *type)
-{
-	if (soap_out_PointerTotns__selectGameTokenWithId(soap, "tns:selectGameTokenWithId", -1, &a->tns__selectGameTokenWithId_, ""))
-		return soap->error;
-	return SOAP_OK;
-}
-
-SOAP_FMAC3 struct __tns__selectGameTokenWithId * SOAP_FMAC4 soap_in___tns__selectGameTokenWithId(struct soap *soap, const char *tag, struct __tns__selectGameTokenWithId *a, const char *type)
-{
-	size_t soap_flag_tns__selectGameTokenWithId_ = 1;
-	short soap_flag;
-	a = (struct __tns__selectGameTokenWithId *)soap_id_enter(soap, "", a, SOAP_TYPE_ServerSoap___tns__selectGameTokenWithId, sizeof(struct __tns__selectGameTokenWithId), 0, NULL, NULL, NULL);
-	if (!a)
-		return NULL;
-	soap_default___tns__selectGameTokenWithId(soap, a);
-		for (soap_flag = 0;; soap_flag = 1)
-		{	soap->error = SOAP_TAG_MISMATCH;
-			if (soap_flag_tns__selectGameTokenWithId_ && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_PointerTotns__selectGameTokenWithId(soap, "tns:selectGameTokenWithId", &a->tns__selectGameTokenWithId_, "tns:selectGameTokenWithId"))
-				{	soap_flag_tns__selectGameTokenWithId_--;
-					continue;
-				}
-			if (soap->error == SOAP_TAG_MISMATCH)
-				if (soap_flag)
-				{	soap->error = SOAP_OK;
-					break;
-				}
-			if (soap_flag && soap->error == SOAP_NO_TAG)
-				break;
-			if (soap->error)
-				return NULL;
-		}
-	return a;
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put___tns__selectGameTokenWithId(struct soap *soap, const struct __tns__selectGameTokenWithId *a, const char *tag, const char *type)
-{
-	register int id = 0;
-	if (soap_out___tns__selectGameTokenWithId(soap, tag?tag:"-tns:selectGameTokenWithId", id, a, type))
-		return soap->error;
-	return SOAP_OK;
-}
-
-SOAP_FMAC3 struct __tns__selectGameTokenWithId * SOAP_FMAC4 soap_get___tns__selectGameTokenWithId(struct soap *soap, struct __tns__selectGameTokenWithId *p, const char *tag, const char *type)
-{
-	if ((p = soap_in___tns__selectGameTokenWithId(soap, tag, p, type)))
-		if (soap_getindependent(soap))
-			return NULL;
-	return p;
-}
-
-SOAP_FMAC1 struct __tns__selectGameTokenWithId * SOAP_FMAC2 soap_instantiate___tns__selectGameTokenWithId(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
-{
-	(void)type; (void)arrayType; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate___tns__selectGameTokenWithId(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
-	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap___tns__selectGameTokenWithId, n, ServerSoap_fdelete);
-	if (!cp)
-		return NULL;
-	if (n < 0)
-	{	cp->ptr = (void*)SOAP_NEW(struct __tns__selectGameTokenWithId);
-		if (size)
-			*size = sizeof(struct __tns__selectGameTokenWithId);
-	}
-	else
-	{	cp->ptr = (void*)SOAP_NEW(struct __tns__selectGameTokenWithId[n]);
-		if (!cp->ptr)
-		{	soap->error = SOAP_EOM;
-			return NULL;
-		}
-		if (size)
-			*size = n * sizeof(struct __tns__selectGameTokenWithId);
-	}
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
-	return (struct __tns__selectGameTokenWithId*)cp->ptr;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__selectGameTokenWithId(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
-{
-	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying struct __tns__selectGameTokenWithId %p -> %p\n", q, p));
-	*(struct __tns__selectGameTokenWithId*)p = *(struct __tns__selectGameTokenWithId*)q;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__selectGameTokenWithDigest(struct soap *soap, struct __tns__selectGameTokenWithDigest *a)
-{
-	(void)soap; (void)a; /* appease -Wall -Werror */
-	a->tns__selectGameTokenWithDigest_ = NULL;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___tns__selectGameTokenWithDigest(struct soap *soap, const struct __tns__selectGameTokenWithDigest *a)
-{
-	(void)soap; (void)a; /* appease -Wall -Werror */
-	soap_serialize_PointerTotns__selectGameTokenWithDigest(soap, &a->tns__selectGameTokenWithDigest_);
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out___tns__selectGameTokenWithDigest(struct soap *soap, const char *tag, int id, const struct __tns__selectGameTokenWithDigest *a, const char *type)
-{
-	if (soap_out_PointerTotns__selectGameTokenWithDigest(soap, "tns:selectGameTokenWithDigest", -1, &a->tns__selectGameTokenWithDigest_, ""))
-		return soap->error;
-	return SOAP_OK;
-}
-
-SOAP_FMAC3 struct __tns__selectGameTokenWithDigest * SOAP_FMAC4 soap_in___tns__selectGameTokenWithDigest(struct soap *soap, const char *tag, struct __tns__selectGameTokenWithDigest *a, const char *type)
-{
-	size_t soap_flag_tns__selectGameTokenWithDigest_ = 1;
-	short soap_flag;
-	a = (struct __tns__selectGameTokenWithDigest *)soap_id_enter(soap, "", a, SOAP_TYPE_ServerSoap___tns__selectGameTokenWithDigest, sizeof(struct __tns__selectGameTokenWithDigest), 0, NULL, NULL, NULL);
-	if (!a)
-		return NULL;
-	soap_default___tns__selectGameTokenWithDigest(soap, a);
-		for (soap_flag = 0;; soap_flag = 1)
-		{	soap->error = SOAP_TAG_MISMATCH;
-			if (soap_flag_tns__selectGameTokenWithDigest_ && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_PointerTotns__selectGameTokenWithDigest(soap, "tns:selectGameTokenWithDigest", &a->tns__selectGameTokenWithDigest_, "tns:selectGameTokenWithDigest"))
-				{	soap_flag_tns__selectGameTokenWithDigest_--;
-					continue;
-				}
-			if (soap->error == SOAP_TAG_MISMATCH)
-				if (soap_flag)
-				{	soap->error = SOAP_OK;
-					break;
-				}
-			if (soap_flag && soap->error == SOAP_NO_TAG)
-				break;
-			if (soap->error)
-				return NULL;
-		}
-	return a;
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put___tns__selectGameTokenWithDigest(struct soap *soap, const struct __tns__selectGameTokenWithDigest *a, const char *tag, const char *type)
-{
-	register int id = 0;
-	if (soap_out___tns__selectGameTokenWithDigest(soap, tag?tag:"-tns:selectGameTokenWithDigest", id, a, type))
-		return soap->error;
-	return SOAP_OK;
-}
-
-SOAP_FMAC3 struct __tns__selectGameTokenWithDigest * SOAP_FMAC4 soap_get___tns__selectGameTokenWithDigest(struct soap *soap, struct __tns__selectGameTokenWithDigest *p, const char *tag, const char *type)
-{
-	if ((p = soap_in___tns__selectGameTokenWithDigest(soap, tag, p, type)))
-		if (soap_getindependent(soap))
-			return NULL;
-	return p;
-}
-
-SOAP_FMAC1 struct __tns__selectGameTokenWithDigest * SOAP_FMAC2 soap_instantiate___tns__selectGameTokenWithDigest(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
-{
-	(void)type; (void)arrayType; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate___tns__selectGameTokenWithDigest(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
-	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap___tns__selectGameTokenWithDigest, n, ServerSoap_fdelete);
-	if (!cp)
-		return NULL;
-	if (n < 0)
-	{	cp->ptr = (void*)SOAP_NEW(struct __tns__selectGameTokenWithDigest);
-		if (size)
-			*size = sizeof(struct __tns__selectGameTokenWithDigest);
-	}
-	else
-	{	cp->ptr = (void*)SOAP_NEW(struct __tns__selectGameTokenWithDigest[n]);
-		if (!cp->ptr)
-		{	soap->error = SOAP_EOM;
-			return NULL;
-		}
-		if (size)
-			*size = n * sizeof(struct __tns__selectGameTokenWithDigest);
-	}
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
-	return (struct __tns__selectGameTokenWithDigest*)cp->ptr;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__selectGameTokenWithDigest(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
-{
-	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying struct __tns__selectGameTokenWithDigest %p -> %p\n", q, p));
-	*(struct __tns__selectGameTokenWithDigest*)p = *(struct __tns__selectGameTokenWithDigest*)q;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__selectGameAnnotationsWithTokenId(struct soap *soap, struct __tns__selectGameAnnotationsWithTokenId *a)
-{
-	(void)soap; (void)a; /* appease -Wall -Werror */
-	a->tns__selectGameAnnotationsWithTokenId_ = NULL;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___tns__selectGameAnnotationsWithTokenId(struct soap *soap, const struct __tns__selectGameAnnotationsWithTokenId *a)
-{
-	(void)soap; (void)a; /* appease -Wall -Werror */
-	soap_serialize_PointerTotns__selectGameAnnotationsWithTokenId(soap, &a->tns__selectGameAnnotationsWithTokenId_);
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out___tns__selectGameAnnotationsWithTokenId(struct soap *soap, const char *tag, int id, const struct __tns__selectGameAnnotationsWithTokenId *a, const char *type)
-{
-	if (soap_out_PointerTotns__selectGameAnnotationsWithTokenId(soap, "tns:selectGameAnnotationsWithTokenId", -1, &a->tns__selectGameAnnotationsWithTokenId_, ""))
-		return soap->error;
-	return SOAP_OK;
-}
-
-SOAP_FMAC3 struct __tns__selectGameAnnotationsWithTokenId * SOAP_FMAC4 soap_in___tns__selectGameAnnotationsWithTokenId(struct soap *soap, const char *tag, struct __tns__selectGameAnnotationsWithTokenId *a, const char *type)
-{
-	size_t soap_flag_tns__selectGameAnnotationsWithTokenId_ = 1;
-	short soap_flag;
-	a = (struct __tns__selectGameAnnotationsWithTokenId *)soap_id_enter(soap, "", a, SOAP_TYPE_ServerSoap___tns__selectGameAnnotationsWithTokenId, sizeof(struct __tns__selectGameAnnotationsWithTokenId), 0, NULL, NULL, NULL);
-	if (!a)
-		return NULL;
-	soap_default___tns__selectGameAnnotationsWithTokenId(soap, a);
-		for (soap_flag = 0;; soap_flag = 1)
-		{	soap->error = SOAP_TAG_MISMATCH;
-			if (soap_flag_tns__selectGameAnnotationsWithTokenId_ && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_PointerTotns__selectGameAnnotationsWithTokenId(soap, "tns:selectGameAnnotationsWithTokenId", &a->tns__selectGameAnnotationsWithTokenId_, "tns:selectGameAnnotationsWithTokenId"))
-				{	soap_flag_tns__selectGameAnnotationsWithTokenId_--;
-					continue;
-				}
-			if (soap->error == SOAP_TAG_MISMATCH)
-				if (soap_flag)
-				{	soap->error = SOAP_OK;
-					break;
-				}
-			if (soap_flag && soap->error == SOAP_NO_TAG)
-				break;
-			if (soap->error)
-				return NULL;
-		}
-	return a;
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put___tns__selectGameAnnotationsWithTokenId(struct soap *soap, const struct __tns__selectGameAnnotationsWithTokenId *a, const char *tag, const char *type)
-{
-	register int id = 0;
-	if (soap_out___tns__selectGameAnnotationsWithTokenId(soap, tag?tag:"-tns:selectGameAnnotationsWithTokenId", id, a, type))
-		return soap->error;
-	return SOAP_OK;
-}
-
-SOAP_FMAC3 struct __tns__selectGameAnnotationsWithTokenId * SOAP_FMAC4 soap_get___tns__selectGameAnnotationsWithTokenId(struct soap *soap, struct __tns__selectGameAnnotationsWithTokenId *p, const char *tag, const char *type)
-{
-	if ((p = soap_in___tns__selectGameAnnotationsWithTokenId(soap, tag, p, type)))
-		if (soap_getindependent(soap))
-			return NULL;
-	return p;
-}
-
-SOAP_FMAC1 struct __tns__selectGameAnnotationsWithTokenId * SOAP_FMAC2 soap_instantiate___tns__selectGameAnnotationsWithTokenId(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
-{
-	(void)type; (void)arrayType; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate___tns__selectGameAnnotationsWithTokenId(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
-	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap___tns__selectGameAnnotationsWithTokenId, n, ServerSoap_fdelete);
-	if (!cp)
-		return NULL;
-	if (n < 0)
-	{	cp->ptr = (void*)SOAP_NEW(struct __tns__selectGameAnnotationsWithTokenId);
-		if (size)
-			*size = sizeof(struct __tns__selectGameAnnotationsWithTokenId);
-	}
-	else
-	{	cp->ptr = (void*)SOAP_NEW(struct __tns__selectGameAnnotationsWithTokenId[n]);
-		if (!cp->ptr)
-		{	soap->error = SOAP_EOM;
-			return NULL;
-		}
-		if (size)
-			*size = n * sizeof(struct __tns__selectGameAnnotationsWithTokenId);
-	}
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
-	return (struct __tns__selectGameAnnotationsWithTokenId*)cp->ptr;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__selectGameAnnotationsWithTokenId(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
-{
-	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying struct __tns__selectGameAnnotationsWithTokenId %p -> %p\n", q, p));
-	*(struct __tns__selectGameAnnotationsWithTokenId*)p = *(struct __tns__selectGameAnnotationsWithTokenId*)q;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__selectGameAliasesWithTokenId(struct soap *soap, struct __tns__selectGameAliasesWithTokenId *a)
-{
-	(void)soap; (void)a; /* appease -Wall -Werror */
-	a->tns__selectGameAliasesWithTokenId_ = NULL;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___tns__selectGameAliasesWithTokenId(struct soap *soap, const struct __tns__selectGameAliasesWithTokenId *a)
-{
-	(void)soap; (void)a; /* appease -Wall -Werror */
-	soap_serialize_PointerTotns__selectGameAliasesWithTokenId(soap, &a->tns__selectGameAliasesWithTokenId_);
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out___tns__selectGameAliasesWithTokenId(struct soap *soap, const char *tag, int id, const struct __tns__selectGameAliasesWithTokenId *a, const char *type)
-{
-	if (soap_out_PointerTotns__selectGameAliasesWithTokenId(soap, "tns:selectGameAliasesWithTokenId", -1, &a->tns__selectGameAliasesWithTokenId_, ""))
-		return soap->error;
-	return SOAP_OK;
-}
-
-SOAP_FMAC3 struct __tns__selectGameAliasesWithTokenId * SOAP_FMAC4 soap_in___tns__selectGameAliasesWithTokenId(struct soap *soap, const char *tag, struct __tns__selectGameAliasesWithTokenId *a, const char *type)
-{
-	size_t soap_flag_tns__selectGameAliasesWithTokenId_ = 1;
-	short soap_flag;
-	a = (struct __tns__selectGameAliasesWithTokenId *)soap_id_enter(soap, "", a, SOAP_TYPE_ServerSoap___tns__selectGameAliasesWithTokenId, sizeof(struct __tns__selectGameAliasesWithTokenId), 0, NULL, NULL, NULL);
-	if (!a)
-		return NULL;
-	soap_default___tns__selectGameAliasesWithTokenId(soap, a);
-		for (soap_flag = 0;; soap_flag = 1)
-		{	soap->error = SOAP_TAG_MISMATCH;
-			if (soap_flag_tns__selectGameAliasesWithTokenId_ && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_PointerTotns__selectGameAliasesWithTokenId(soap, "tns:selectGameAliasesWithTokenId", &a->tns__selectGameAliasesWithTokenId_, "tns:selectGameAliasesWithTokenId"))
-				{	soap_flag_tns__selectGameAliasesWithTokenId_--;
-					continue;
-				}
-			if (soap->error == SOAP_TAG_MISMATCH)
-				if (soap_flag)
-				{	soap->error = SOAP_OK;
-					break;
-				}
-			if (soap_flag && soap->error == SOAP_NO_TAG)
-				break;
-			if (soap->error)
-				return NULL;
-		}
-	return a;
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put___tns__selectGameAliasesWithTokenId(struct soap *soap, const struct __tns__selectGameAliasesWithTokenId *a, const char *tag, const char *type)
-{
-	register int id = 0;
-	if (soap_out___tns__selectGameAliasesWithTokenId(soap, tag?tag:"-tns:selectGameAliasesWithTokenId", id, a, type))
-		return soap->error;
-	return SOAP_OK;
-}
-
-SOAP_FMAC3 struct __tns__selectGameAliasesWithTokenId * SOAP_FMAC4 soap_get___tns__selectGameAliasesWithTokenId(struct soap *soap, struct __tns__selectGameAliasesWithTokenId *p, const char *tag, const char *type)
-{
-	if ((p = soap_in___tns__selectGameAliasesWithTokenId(soap, tag, p, type)))
-		if (soap_getindependent(soap))
-			return NULL;
-	return p;
-}
-
-SOAP_FMAC1 struct __tns__selectGameAliasesWithTokenId * SOAP_FMAC2 soap_instantiate___tns__selectGameAliasesWithTokenId(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
-{
-	(void)type; (void)arrayType; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate___tns__selectGameAliasesWithTokenId(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
-	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap___tns__selectGameAliasesWithTokenId, n, ServerSoap_fdelete);
-	if (!cp)
-		return NULL;
-	if (n < 0)
-	{	cp->ptr = (void*)SOAP_NEW(struct __tns__selectGameAliasesWithTokenId);
-		if (size)
-			*size = sizeof(struct __tns__selectGameAliasesWithTokenId);
-	}
-	else
-	{	cp->ptr = (void*)SOAP_NEW(struct __tns__selectGameAliasesWithTokenId[n]);
-		if (!cp->ptr)
-		{	soap->error = SOAP_EOM;
-			return NULL;
-		}
-		if (size)
-			*size = n * sizeof(struct __tns__selectGameAliasesWithTokenId);
-	}
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
-	return (struct __tns__selectGameAliasesWithTokenId*)cp->ptr;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__selectGameAliasesWithTokenId(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
-{
-	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying struct __tns__selectGameAliasesWithTokenId %p -> %p\n", q, p));
-	*(struct __tns__selectGameAliasesWithTokenId*)p = *(struct __tns__selectGameAliasesWithTokenId*)q;
-}
-
 SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__isConnected(struct soap *soap, struct __tns__isConnected *a)
 {
 	(void)soap; (void)a; /* appease -Wall -Werror */
@@ -19133,6 +14574,291 @@ SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__isClientUpdated(struct soap *soap, i
 	*(struct __tns__isClientUpdated*)p = *(struct __tns__isClientUpdated*)q;
 }
 
+SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__curseMediaTokenWithId(struct soap *soap, struct __tns__curseMediaTokenWithId *a)
+{
+	(void)soap; (void)a; /* appease -Wall -Werror */
+	a->tns__curseMediaTokenWithId_ = NULL;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___tns__curseMediaTokenWithId(struct soap *soap, const struct __tns__curseMediaTokenWithId *a)
+{
+	(void)soap; (void)a; /* appease -Wall -Werror */
+	soap_serialize_PointerTotns__curseMediaTokenWithId(soap, &a->tns__curseMediaTokenWithId_);
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out___tns__curseMediaTokenWithId(struct soap *soap, const char *tag, int id, const struct __tns__curseMediaTokenWithId *a, const char *type)
+{
+	if (soap_out_PointerTotns__curseMediaTokenWithId(soap, "tns:curseMediaTokenWithId", -1, &a->tns__curseMediaTokenWithId_, ""))
+		return soap->error;
+	return SOAP_OK;
+}
+
+SOAP_FMAC3 struct __tns__curseMediaTokenWithId * SOAP_FMAC4 soap_in___tns__curseMediaTokenWithId(struct soap *soap, const char *tag, struct __tns__curseMediaTokenWithId *a, const char *type)
+{
+	size_t soap_flag_tns__curseMediaTokenWithId_ = 1;
+	short soap_flag;
+	a = (struct __tns__curseMediaTokenWithId *)soap_id_enter(soap, "", a, SOAP_TYPE_ServerSoap___tns__curseMediaTokenWithId, sizeof(struct __tns__curseMediaTokenWithId), 0, NULL, NULL, NULL);
+	if (!a)
+		return NULL;
+	soap_default___tns__curseMediaTokenWithId(soap, a);
+		for (soap_flag = 0;; soap_flag = 1)
+		{	soap->error = SOAP_TAG_MISMATCH;
+			if (soap_flag_tns__curseMediaTokenWithId_ && soap->error == SOAP_TAG_MISMATCH)
+				if (soap_in_PointerTotns__curseMediaTokenWithId(soap, "tns:curseMediaTokenWithId", &a->tns__curseMediaTokenWithId_, "tns:curseMediaTokenWithId"))
+				{	soap_flag_tns__curseMediaTokenWithId_--;
+					continue;
+				}
+			if (soap->error == SOAP_TAG_MISMATCH)
+				if (soap_flag)
+				{	soap->error = SOAP_OK;
+					break;
+				}
+			if (soap_flag && soap->error == SOAP_NO_TAG)
+				break;
+			if (soap->error)
+				return NULL;
+		}
+	return a;
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_put___tns__curseMediaTokenWithId(struct soap *soap, const struct __tns__curseMediaTokenWithId *a, const char *tag, const char *type)
+{
+	register int id = 0;
+	if (soap_out___tns__curseMediaTokenWithId(soap, tag?tag:"-tns:curseMediaTokenWithId", id, a, type))
+		return soap->error;
+	return SOAP_OK;
+}
+
+SOAP_FMAC3 struct __tns__curseMediaTokenWithId * SOAP_FMAC4 soap_get___tns__curseMediaTokenWithId(struct soap *soap, struct __tns__curseMediaTokenWithId *p, const char *tag, const char *type)
+{
+	if ((p = soap_in___tns__curseMediaTokenWithId(soap, tag, p, type)))
+		if (soap_getindependent(soap))
+			return NULL;
+	return p;
+}
+
+SOAP_FMAC1 struct __tns__curseMediaTokenWithId * SOAP_FMAC2 soap_instantiate___tns__curseMediaTokenWithId(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
+{
+	(void)type; (void)arrayType; /* appease -Wall -Werror */
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate___tns__curseMediaTokenWithId(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
+	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap___tns__curseMediaTokenWithId, n, ServerSoap_fdelete);
+	if (!cp)
+		return NULL;
+	if (n < 0)
+	{	cp->ptr = (void*)SOAP_NEW(struct __tns__curseMediaTokenWithId);
+		if (size)
+			*size = sizeof(struct __tns__curseMediaTokenWithId);
+	}
+	else
+	{	cp->ptr = (void*)SOAP_NEW(struct __tns__curseMediaTokenWithId[n]);
+		if (!cp->ptr)
+		{	soap->error = SOAP_EOM;
+			return NULL;
+		}
+		if (size)
+			*size = n * sizeof(struct __tns__curseMediaTokenWithId);
+	}
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
+	return (struct __tns__curseMediaTokenWithId*)cp->ptr;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__curseMediaTokenWithId(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
+{
+	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying struct __tns__curseMediaTokenWithId %p -> %p\n", q, p));
+	*(struct __tns__curseMediaTokenWithId*)p = *(struct __tns__curseMediaTokenWithId*)q;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__curseMediaAnnotationWithId(struct soap *soap, struct __tns__curseMediaAnnotationWithId *a)
+{
+	(void)soap; (void)a; /* appease -Wall -Werror */
+	a->tns__curseMediaAnnotationWithId_ = NULL;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___tns__curseMediaAnnotationWithId(struct soap *soap, const struct __tns__curseMediaAnnotationWithId *a)
+{
+	(void)soap; (void)a; /* appease -Wall -Werror */
+	soap_serialize_PointerTotns__curseMediaAnnotationWithId(soap, &a->tns__curseMediaAnnotationWithId_);
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out___tns__curseMediaAnnotationWithId(struct soap *soap, const char *tag, int id, const struct __tns__curseMediaAnnotationWithId *a, const char *type)
+{
+	if (soap_out_PointerTotns__curseMediaAnnotationWithId(soap, "tns:curseMediaAnnotationWithId", -1, &a->tns__curseMediaAnnotationWithId_, ""))
+		return soap->error;
+	return SOAP_OK;
+}
+
+SOAP_FMAC3 struct __tns__curseMediaAnnotationWithId * SOAP_FMAC4 soap_in___tns__curseMediaAnnotationWithId(struct soap *soap, const char *tag, struct __tns__curseMediaAnnotationWithId *a, const char *type)
+{
+	size_t soap_flag_tns__curseMediaAnnotationWithId_ = 1;
+	short soap_flag;
+	a = (struct __tns__curseMediaAnnotationWithId *)soap_id_enter(soap, "", a, SOAP_TYPE_ServerSoap___tns__curseMediaAnnotationWithId, sizeof(struct __tns__curseMediaAnnotationWithId), 0, NULL, NULL, NULL);
+	if (!a)
+		return NULL;
+	soap_default___tns__curseMediaAnnotationWithId(soap, a);
+		for (soap_flag = 0;; soap_flag = 1)
+		{	soap->error = SOAP_TAG_MISMATCH;
+			if (soap_flag_tns__curseMediaAnnotationWithId_ && soap->error == SOAP_TAG_MISMATCH)
+				if (soap_in_PointerTotns__curseMediaAnnotationWithId(soap, "tns:curseMediaAnnotationWithId", &a->tns__curseMediaAnnotationWithId_, "tns:curseMediaAnnotationWithId"))
+				{	soap_flag_tns__curseMediaAnnotationWithId_--;
+					continue;
+				}
+			if (soap->error == SOAP_TAG_MISMATCH)
+				if (soap_flag)
+				{	soap->error = SOAP_OK;
+					break;
+				}
+			if (soap_flag && soap->error == SOAP_NO_TAG)
+				break;
+			if (soap->error)
+				return NULL;
+		}
+	return a;
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_put___tns__curseMediaAnnotationWithId(struct soap *soap, const struct __tns__curseMediaAnnotationWithId *a, const char *tag, const char *type)
+{
+	register int id = 0;
+	if (soap_out___tns__curseMediaAnnotationWithId(soap, tag?tag:"-tns:curseMediaAnnotationWithId", id, a, type))
+		return soap->error;
+	return SOAP_OK;
+}
+
+SOAP_FMAC3 struct __tns__curseMediaAnnotationWithId * SOAP_FMAC4 soap_get___tns__curseMediaAnnotationWithId(struct soap *soap, struct __tns__curseMediaAnnotationWithId *p, const char *tag, const char *type)
+{
+	if ((p = soap_in___tns__curseMediaAnnotationWithId(soap, tag, p, type)))
+		if (soap_getindependent(soap))
+			return NULL;
+	return p;
+}
+
+SOAP_FMAC1 struct __tns__curseMediaAnnotationWithId * SOAP_FMAC2 soap_instantiate___tns__curseMediaAnnotationWithId(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
+{
+	(void)type; (void)arrayType; /* appease -Wall -Werror */
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate___tns__curseMediaAnnotationWithId(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
+	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap___tns__curseMediaAnnotationWithId, n, ServerSoap_fdelete);
+	if (!cp)
+		return NULL;
+	if (n < 0)
+	{	cp->ptr = (void*)SOAP_NEW(struct __tns__curseMediaAnnotationWithId);
+		if (size)
+			*size = sizeof(struct __tns__curseMediaAnnotationWithId);
+	}
+	else
+	{	cp->ptr = (void*)SOAP_NEW(struct __tns__curseMediaAnnotationWithId[n]);
+		if (!cp->ptr)
+		{	soap->error = SOAP_EOM;
+			return NULL;
+		}
+		if (size)
+			*size = n * sizeof(struct __tns__curseMediaAnnotationWithId);
+	}
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
+	return (struct __tns__curseMediaAnnotationWithId*)cp->ptr;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__curseMediaAnnotationWithId(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
+{
+	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying struct __tns__curseMediaAnnotationWithId %p -> %p\n", q, p));
+	*(struct __tns__curseMediaAnnotationWithId*)p = *(struct __tns__curseMediaAnnotationWithId*)q;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__curseMediaAliasWithId(struct soap *soap, struct __tns__curseMediaAliasWithId *a)
+{
+	(void)soap; (void)a; /* appease -Wall -Werror */
+	a->tns__curseMediaAliasWithId_ = NULL;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___tns__curseMediaAliasWithId(struct soap *soap, const struct __tns__curseMediaAliasWithId *a)
+{
+	(void)soap; (void)a; /* appease -Wall -Werror */
+	soap_serialize_PointerTotns__curseMediaAliasWithId(soap, &a->tns__curseMediaAliasWithId_);
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out___tns__curseMediaAliasWithId(struct soap *soap, const char *tag, int id, const struct __tns__curseMediaAliasWithId *a, const char *type)
+{
+	if (soap_out_PointerTotns__curseMediaAliasWithId(soap, "tns:curseMediaAliasWithId", -1, &a->tns__curseMediaAliasWithId_, ""))
+		return soap->error;
+	return SOAP_OK;
+}
+
+SOAP_FMAC3 struct __tns__curseMediaAliasWithId * SOAP_FMAC4 soap_in___tns__curseMediaAliasWithId(struct soap *soap, const char *tag, struct __tns__curseMediaAliasWithId *a, const char *type)
+{
+	size_t soap_flag_tns__curseMediaAliasWithId_ = 1;
+	short soap_flag;
+	a = (struct __tns__curseMediaAliasWithId *)soap_id_enter(soap, "", a, SOAP_TYPE_ServerSoap___tns__curseMediaAliasWithId, sizeof(struct __tns__curseMediaAliasWithId), 0, NULL, NULL, NULL);
+	if (!a)
+		return NULL;
+	soap_default___tns__curseMediaAliasWithId(soap, a);
+		for (soap_flag = 0;; soap_flag = 1)
+		{	soap->error = SOAP_TAG_MISMATCH;
+			if (soap_flag_tns__curseMediaAliasWithId_ && soap->error == SOAP_TAG_MISMATCH)
+				if (soap_in_PointerTotns__curseMediaAliasWithId(soap, "tns:curseMediaAliasWithId", &a->tns__curseMediaAliasWithId_, "tns:curseMediaAliasWithId"))
+				{	soap_flag_tns__curseMediaAliasWithId_--;
+					continue;
+				}
+			if (soap->error == SOAP_TAG_MISMATCH)
+				if (soap_flag)
+				{	soap->error = SOAP_OK;
+					break;
+				}
+			if (soap_flag && soap->error == SOAP_NO_TAG)
+				break;
+			if (soap->error)
+				return NULL;
+		}
+	return a;
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_put___tns__curseMediaAliasWithId(struct soap *soap, const struct __tns__curseMediaAliasWithId *a, const char *tag, const char *type)
+{
+	register int id = 0;
+	if (soap_out___tns__curseMediaAliasWithId(soap, tag?tag:"-tns:curseMediaAliasWithId", id, a, type))
+		return soap->error;
+	return SOAP_OK;
+}
+
+SOAP_FMAC3 struct __tns__curseMediaAliasWithId * SOAP_FMAC4 soap_get___tns__curseMediaAliasWithId(struct soap *soap, struct __tns__curseMediaAliasWithId *p, const char *tag, const char *type)
+{
+	if ((p = soap_in___tns__curseMediaAliasWithId(soap, tag, p, type)))
+		if (soap_getindependent(soap))
+			return NULL;
+	return p;
+}
+
+SOAP_FMAC1 struct __tns__curseMediaAliasWithId * SOAP_FMAC2 soap_instantiate___tns__curseMediaAliasWithId(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
+{
+	(void)type; (void)arrayType; /* appease -Wall -Werror */
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate___tns__curseMediaAliasWithId(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
+	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap___tns__curseMediaAliasWithId, n, ServerSoap_fdelete);
+	if (!cp)
+		return NULL;
+	if (n < 0)
+	{	cp->ptr = (void*)SOAP_NEW(struct __tns__curseMediaAliasWithId);
+		if (size)
+			*size = sizeof(struct __tns__curseMediaAliasWithId);
+	}
+	else
+	{	cp->ptr = (void*)SOAP_NEW(struct __tns__curseMediaAliasWithId[n]);
+		if (!cp->ptr)
+		{	soap->error = SOAP_EOM;
+			return NULL;
+		}
+		if (size)
+			*size = n * sizeof(struct __tns__curseMediaAliasWithId);
+	}
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
+	return (struct __tns__curseMediaAliasWithId*)cp->ptr;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__curseMediaAliasWithId(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
+{
+	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying struct __tns__curseMediaAliasWithId %p -> %p\n", q, p));
+	*(struct __tns__curseMediaAliasWithId*)p = *(struct __tns__curseMediaAliasWithId*)q;
+}
+
 SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__chat(struct soap *soap, struct __tns__chat *a)
 {
 	(void)soap; (void)a; /* appease -Wall -Werror */
@@ -19226,6 +14952,386 @@ SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__chat(struct soap *soap, int st, int 
 	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
 	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying struct __tns__chat %p -> %p\n", q, p));
 	*(struct __tns__chat*)p = *(struct __tns__chat*)q;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__blockUserWithId(struct soap *soap, struct __tns__blockUserWithId *a)
+{
+	(void)soap; (void)a; /* appease -Wall -Werror */
+	a->tns__blockUserWithId_ = NULL;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___tns__blockUserWithId(struct soap *soap, const struct __tns__blockUserWithId *a)
+{
+	(void)soap; (void)a; /* appease -Wall -Werror */
+	soap_serialize_PointerTotns__blockUserWithId(soap, &a->tns__blockUserWithId_);
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out___tns__blockUserWithId(struct soap *soap, const char *tag, int id, const struct __tns__blockUserWithId *a, const char *type)
+{
+	if (soap_out_PointerTotns__blockUserWithId(soap, "tns:blockUserWithId", -1, &a->tns__blockUserWithId_, ""))
+		return soap->error;
+	return SOAP_OK;
+}
+
+SOAP_FMAC3 struct __tns__blockUserWithId * SOAP_FMAC4 soap_in___tns__blockUserWithId(struct soap *soap, const char *tag, struct __tns__blockUserWithId *a, const char *type)
+{
+	size_t soap_flag_tns__blockUserWithId_ = 1;
+	short soap_flag;
+	a = (struct __tns__blockUserWithId *)soap_id_enter(soap, "", a, SOAP_TYPE_ServerSoap___tns__blockUserWithId, sizeof(struct __tns__blockUserWithId), 0, NULL, NULL, NULL);
+	if (!a)
+		return NULL;
+	soap_default___tns__blockUserWithId(soap, a);
+		for (soap_flag = 0;; soap_flag = 1)
+		{	soap->error = SOAP_TAG_MISMATCH;
+			if (soap_flag_tns__blockUserWithId_ && soap->error == SOAP_TAG_MISMATCH)
+				if (soap_in_PointerTotns__blockUserWithId(soap, "tns:blockUserWithId", &a->tns__blockUserWithId_, "tns:blockUserWithId"))
+				{	soap_flag_tns__blockUserWithId_--;
+					continue;
+				}
+			if (soap->error == SOAP_TAG_MISMATCH)
+				if (soap_flag)
+				{	soap->error = SOAP_OK;
+					break;
+				}
+			if (soap_flag && soap->error == SOAP_NO_TAG)
+				break;
+			if (soap->error)
+				return NULL;
+		}
+	return a;
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_put___tns__blockUserWithId(struct soap *soap, const struct __tns__blockUserWithId *a, const char *tag, const char *type)
+{
+	register int id = 0;
+	if (soap_out___tns__blockUserWithId(soap, tag?tag:"-tns:blockUserWithId", id, a, type))
+		return soap->error;
+	return SOAP_OK;
+}
+
+SOAP_FMAC3 struct __tns__blockUserWithId * SOAP_FMAC4 soap_get___tns__blockUserWithId(struct soap *soap, struct __tns__blockUserWithId *p, const char *tag, const char *type)
+{
+	if ((p = soap_in___tns__blockUserWithId(soap, tag, p, type)))
+		if (soap_getindependent(soap))
+			return NULL;
+	return p;
+}
+
+SOAP_FMAC1 struct __tns__blockUserWithId * SOAP_FMAC2 soap_instantiate___tns__blockUserWithId(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
+{
+	(void)type; (void)arrayType; /* appease -Wall -Werror */
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate___tns__blockUserWithId(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
+	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap___tns__blockUserWithId, n, ServerSoap_fdelete);
+	if (!cp)
+		return NULL;
+	if (n < 0)
+	{	cp->ptr = (void*)SOAP_NEW(struct __tns__blockUserWithId);
+		if (size)
+			*size = sizeof(struct __tns__blockUserWithId);
+	}
+	else
+	{	cp->ptr = (void*)SOAP_NEW(struct __tns__blockUserWithId[n]);
+		if (!cp->ptr)
+		{	soap->error = SOAP_EOM;
+			return NULL;
+		}
+		if (size)
+			*size = n * sizeof(struct __tns__blockUserWithId);
+	}
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
+	return (struct __tns__blockUserWithId*)cp->ptr;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__blockUserWithId(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
+{
+	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying struct __tns__blockUserWithId %p -> %p\n", q, p));
+	*(struct __tns__blockUserWithId*)p = *(struct __tns__blockUserWithId*)q;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__blockMediaAnnotationWithId(struct soap *soap, struct __tns__blockMediaAnnotationWithId *a)
+{
+	(void)soap; (void)a; /* appease -Wall -Werror */
+	a->tns__blockMediaAnnotationWithId_ = NULL;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___tns__blockMediaAnnotationWithId(struct soap *soap, const struct __tns__blockMediaAnnotationWithId *a)
+{
+	(void)soap; (void)a; /* appease -Wall -Werror */
+	soap_serialize_PointerTotns__blockMediaAnnotationWithId(soap, &a->tns__blockMediaAnnotationWithId_);
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out___tns__blockMediaAnnotationWithId(struct soap *soap, const char *tag, int id, const struct __tns__blockMediaAnnotationWithId *a, const char *type)
+{
+	if (soap_out_PointerTotns__blockMediaAnnotationWithId(soap, "tns:blockMediaAnnotationWithId", -1, &a->tns__blockMediaAnnotationWithId_, ""))
+		return soap->error;
+	return SOAP_OK;
+}
+
+SOAP_FMAC3 struct __tns__blockMediaAnnotationWithId * SOAP_FMAC4 soap_in___tns__blockMediaAnnotationWithId(struct soap *soap, const char *tag, struct __tns__blockMediaAnnotationWithId *a, const char *type)
+{
+	size_t soap_flag_tns__blockMediaAnnotationWithId_ = 1;
+	short soap_flag;
+	a = (struct __tns__blockMediaAnnotationWithId *)soap_id_enter(soap, "", a, SOAP_TYPE_ServerSoap___tns__blockMediaAnnotationWithId, sizeof(struct __tns__blockMediaAnnotationWithId), 0, NULL, NULL, NULL);
+	if (!a)
+		return NULL;
+	soap_default___tns__blockMediaAnnotationWithId(soap, a);
+		for (soap_flag = 0;; soap_flag = 1)
+		{	soap->error = SOAP_TAG_MISMATCH;
+			if (soap_flag_tns__blockMediaAnnotationWithId_ && soap->error == SOAP_TAG_MISMATCH)
+				if (soap_in_PointerTotns__blockMediaAnnotationWithId(soap, "tns:blockMediaAnnotationWithId", &a->tns__blockMediaAnnotationWithId_, "tns:blockMediaAnnotationWithId"))
+				{	soap_flag_tns__blockMediaAnnotationWithId_--;
+					continue;
+				}
+			if (soap->error == SOAP_TAG_MISMATCH)
+				if (soap_flag)
+				{	soap->error = SOAP_OK;
+					break;
+				}
+			if (soap_flag && soap->error == SOAP_NO_TAG)
+				break;
+			if (soap->error)
+				return NULL;
+		}
+	return a;
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_put___tns__blockMediaAnnotationWithId(struct soap *soap, const struct __tns__blockMediaAnnotationWithId *a, const char *tag, const char *type)
+{
+	register int id = 0;
+	if (soap_out___tns__blockMediaAnnotationWithId(soap, tag?tag:"-tns:blockMediaAnnotationWithId", id, a, type))
+		return soap->error;
+	return SOAP_OK;
+}
+
+SOAP_FMAC3 struct __tns__blockMediaAnnotationWithId * SOAP_FMAC4 soap_get___tns__blockMediaAnnotationWithId(struct soap *soap, struct __tns__blockMediaAnnotationWithId *p, const char *tag, const char *type)
+{
+	if ((p = soap_in___tns__blockMediaAnnotationWithId(soap, tag, p, type)))
+		if (soap_getindependent(soap))
+			return NULL;
+	return p;
+}
+
+SOAP_FMAC1 struct __tns__blockMediaAnnotationWithId * SOAP_FMAC2 soap_instantiate___tns__blockMediaAnnotationWithId(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
+{
+	(void)type; (void)arrayType; /* appease -Wall -Werror */
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate___tns__blockMediaAnnotationWithId(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
+	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap___tns__blockMediaAnnotationWithId, n, ServerSoap_fdelete);
+	if (!cp)
+		return NULL;
+	if (n < 0)
+	{	cp->ptr = (void*)SOAP_NEW(struct __tns__blockMediaAnnotationWithId);
+		if (size)
+			*size = sizeof(struct __tns__blockMediaAnnotationWithId);
+	}
+	else
+	{	cp->ptr = (void*)SOAP_NEW(struct __tns__blockMediaAnnotationWithId[n]);
+		if (!cp->ptr)
+		{	soap->error = SOAP_EOM;
+			return NULL;
+		}
+		if (size)
+			*size = n * sizeof(struct __tns__blockMediaAnnotationWithId);
+	}
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
+	return (struct __tns__blockMediaAnnotationWithId*)cp->ptr;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__blockMediaAnnotationWithId(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
+{
+	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying struct __tns__blockMediaAnnotationWithId %p -> %p\n", q, p));
+	*(struct __tns__blockMediaAnnotationWithId*)p = *(struct __tns__blockMediaAnnotationWithId*)q;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__blockMediaAliasWithId(struct soap *soap, struct __tns__blockMediaAliasWithId *a)
+{
+	(void)soap; (void)a; /* appease -Wall -Werror */
+	a->tns__blockMediaAliasWithId_ = NULL;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___tns__blockMediaAliasWithId(struct soap *soap, const struct __tns__blockMediaAliasWithId *a)
+{
+	(void)soap; (void)a; /* appease -Wall -Werror */
+	soap_serialize_PointerTotns__blockMediaAliasWithId(soap, &a->tns__blockMediaAliasWithId_);
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out___tns__blockMediaAliasWithId(struct soap *soap, const char *tag, int id, const struct __tns__blockMediaAliasWithId *a, const char *type)
+{
+	if (soap_out_PointerTotns__blockMediaAliasWithId(soap, "tns:blockMediaAliasWithId", -1, &a->tns__blockMediaAliasWithId_, ""))
+		return soap->error;
+	return SOAP_OK;
+}
+
+SOAP_FMAC3 struct __tns__blockMediaAliasWithId * SOAP_FMAC4 soap_in___tns__blockMediaAliasWithId(struct soap *soap, const char *tag, struct __tns__blockMediaAliasWithId *a, const char *type)
+{
+	size_t soap_flag_tns__blockMediaAliasWithId_ = 1;
+	short soap_flag;
+	a = (struct __tns__blockMediaAliasWithId *)soap_id_enter(soap, "", a, SOAP_TYPE_ServerSoap___tns__blockMediaAliasWithId, sizeof(struct __tns__blockMediaAliasWithId), 0, NULL, NULL, NULL);
+	if (!a)
+		return NULL;
+	soap_default___tns__blockMediaAliasWithId(soap, a);
+		for (soap_flag = 0;; soap_flag = 1)
+		{	soap->error = SOAP_TAG_MISMATCH;
+			if (soap_flag_tns__blockMediaAliasWithId_ && soap->error == SOAP_TAG_MISMATCH)
+				if (soap_in_PointerTotns__blockMediaAliasWithId(soap, "tns:blockMediaAliasWithId", &a->tns__blockMediaAliasWithId_, "tns:blockMediaAliasWithId"))
+				{	soap_flag_tns__blockMediaAliasWithId_--;
+					continue;
+				}
+			if (soap->error == SOAP_TAG_MISMATCH)
+				if (soap_flag)
+				{	soap->error = SOAP_OK;
+					break;
+				}
+			if (soap_flag && soap->error == SOAP_NO_TAG)
+				break;
+			if (soap->error)
+				return NULL;
+		}
+	return a;
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_put___tns__blockMediaAliasWithId(struct soap *soap, const struct __tns__blockMediaAliasWithId *a, const char *tag, const char *type)
+{
+	register int id = 0;
+	if (soap_out___tns__blockMediaAliasWithId(soap, tag?tag:"-tns:blockMediaAliasWithId", id, a, type))
+		return soap->error;
+	return SOAP_OK;
+}
+
+SOAP_FMAC3 struct __tns__blockMediaAliasWithId * SOAP_FMAC4 soap_get___tns__blockMediaAliasWithId(struct soap *soap, struct __tns__blockMediaAliasWithId *p, const char *tag, const char *type)
+{
+	if ((p = soap_in___tns__blockMediaAliasWithId(soap, tag, p, type)))
+		if (soap_getindependent(soap))
+			return NULL;
+	return p;
+}
+
+SOAP_FMAC1 struct __tns__blockMediaAliasWithId * SOAP_FMAC2 soap_instantiate___tns__blockMediaAliasWithId(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
+{
+	(void)type; (void)arrayType; /* appease -Wall -Werror */
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate___tns__blockMediaAliasWithId(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
+	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap___tns__blockMediaAliasWithId, n, ServerSoap_fdelete);
+	if (!cp)
+		return NULL;
+	if (n < 0)
+	{	cp->ptr = (void*)SOAP_NEW(struct __tns__blockMediaAliasWithId);
+		if (size)
+			*size = sizeof(struct __tns__blockMediaAliasWithId);
+	}
+	else
+	{	cp->ptr = (void*)SOAP_NEW(struct __tns__blockMediaAliasWithId[n]);
+		if (!cp->ptr)
+		{	soap->error = SOAP_EOM;
+			return NULL;
+		}
+		if (size)
+			*size = n * sizeof(struct __tns__blockMediaAliasWithId);
+	}
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
+	return (struct __tns__blockMediaAliasWithId*)cp->ptr;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__blockMediaAliasWithId(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
+{
+	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying struct __tns__blockMediaAliasWithId %p -> %p\n", q, p));
+	*(struct __tns__blockMediaAliasWithId*)p = *(struct __tns__blockMediaAliasWithId*)q;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__blessMediaTokenWithId(struct soap *soap, struct __tns__blessMediaTokenWithId *a)
+{
+	(void)soap; (void)a; /* appease -Wall -Werror */
+	a->tns__blessMediaTokenWithId_ = NULL;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___tns__blessMediaTokenWithId(struct soap *soap, const struct __tns__blessMediaTokenWithId *a)
+{
+	(void)soap; (void)a; /* appease -Wall -Werror */
+	soap_serialize_PointerTotns__blessMediaTokenWithId(soap, &a->tns__blessMediaTokenWithId_);
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out___tns__blessMediaTokenWithId(struct soap *soap, const char *tag, int id, const struct __tns__blessMediaTokenWithId *a, const char *type)
+{
+	if (soap_out_PointerTotns__blessMediaTokenWithId(soap, "tns:blessMediaTokenWithId", -1, &a->tns__blessMediaTokenWithId_, ""))
+		return soap->error;
+	return SOAP_OK;
+}
+
+SOAP_FMAC3 struct __tns__blessMediaTokenWithId * SOAP_FMAC4 soap_in___tns__blessMediaTokenWithId(struct soap *soap, const char *tag, struct __tns__blessMediaTokenWithId *a, const char *type)
+{
+	size_t soap_flag_tns__blessMediaTokenWithId_ = 1;
+	short soap_flag;
+	a = (struct __tns__blessMediaTokenWithId *)soap_id_enter(soap, "", a, SOAP_TYPE_ServerSoap___tns__blessMediaTokenWithId, sizeof(struct __tns__blessMediaTokenWithId), 0, NULL, NULL, NULL);
+	if (!a)
+		return NULL;
+	soap_default___tns__blessMediaTokenWithId(soap, a);
+		for (soap_flag = 0;; soap_flag = 1)
+		{	soap->error = SOAP_TAG_MISMATCH;
+			if (soap_flag_tns__blessMediaTokenWithId_ && soap->error == SOAP_TAG_MISMATCH)
+				if (soap_in_PointerTotns__blessMediaTokenWithId(soap, "tns:blessMediaTokenWithId", &a->tns__blessMediaTokenWithId_, "tns:blessMediaTokenWithId"))
+				{	soap_flag_tns__blessMediaTokenWithId_--;
+					continue;
+				}
+			if (soap->error == SOAP_TAG_MISMATCH)
+				if (soap_flag)
+				{	soap->error = SOAP_OK;
+					break;
+				}
+			if (soap_flag && soap->error == SOAP_NO_TAG)
+				break;
+			if (soap->error)
+				return NULL;
+		}
+	return a;
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_put___tns__blessMediaTokenWithId(struct soap *soap, const struct __tns__blessMediaTokenWithId *a, const char *tag, const char *type)
+{
+	register int id = 0;
+	if (soap_out___tns__blessMediaTokenWithId(soap, tag?tag:"-tns:blessMediaTokenWithId", id, a, type))
+		return soap->error;
+	return SOAP_OK;
+}
+
+SOAP_FMAC3 struct __tns__blessMediaTokenWithId * SOAP_FMAC4 soap_get___tns__blessMediaTokenWithId(struct soap *soap, struct __tns__blessMediaTokenWithId *p, const char *tag, const char *type)
+{
+	if ((p = soap_in___tns__blessMediaTokenWithId(soap, tag, p, type)))
+		if (soap_getindependent(soap))
+			return NULL;
+	return p;
+}
+
+SOAP_FMAC1 struct __tns__blessMediaTokenWithId * SOAP_FMAC2 soap_instantiate___tns__blessMediaTokenWithId(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
+{
+	(void)type; (void)arrayType; /* appease -Wall -Werror */
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate___tns__blessMediaTokenWithId(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
+	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap___tns__blessMediaTokenWithId, n, ServerSoap_fdelete);
+	if (!cp)
+		return NULL;
+	if (n < 0)
+	{	cp->ptr = (void*)SOAP_NEW(struct __tns__blessMediaTokenWithId);
+		if (size)
+			*size = sizeof(struct __tns__blessMediaTokenWithId);
+	}
+	else
+	{	cp->ptr = (void*)SOAP_NEW(struct __tns__blessMediaTokenWithId[n]);
+		if (!cp->ptr)
+		{	soap->error = SOAP_EOM;
+			return NULL;
+		}
+		if (size)
+			*size = n * sizeof(struct __tns__blessMediaTokenWithId);
+	}
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
+	return (struct __tns__blessMediaTokenWithId*)cp->ptr;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__blessMediaTokenWithId(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
+{
+	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying struct __tns__blessMediaTokenWithId %p -> %p\n", q, p));
+	*(struct __tns__blessMediaTokenWithId*)p = *(struct __tns__blessMediaTokenWithId*)q;
 }
 
 SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__blessMediaAnnotationWithId(struct soap *soap, struct __tns__blessMediaAnnotationWithId *a)
@@ -19323,38 +15429,38 @@ SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__blessMediaAnnotationWithId(struct so
 	*(struct __tns__blessMediaAnnotationWithId*)p = *(struct __tns__blessMediaAnnotationWithId*)q;
 }
 
-SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__blessGameAnnotationWithId(struct soap *soap, struct __tns__blessGameAnnotationWithId *a)
+SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__blessMediaAliasWithId(struct soap *soap, struct __tns__blessMediaAliasWithId *a)
 {
 	(void)soap; (void)a; /* appease -Wall -Werror */
-	a->tns__blessGameAnnotationWithId_ = NULL;
+	a->tns__blessMediaAliasWithId_ = NULL;
 }
 
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___tns__blessGameAnnotationWithId(struct soap *soap, const struct __tns__blessGameAnnotationWithId *a)
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___tns__blessMediaAliasWithId(struct soap *soap, const struct __tns__blessMediaAliasWithId *a)
 {
 	(void)soap; (void)a; /* appease -Wall -Werror */
-	soap_serialize_PointerTotns__blessGameAnnotationWithId(soap, &a->tns__blessGameAnnotationWithId_);
+	soap_serialize_PointerTotns__blessMediaAliasWithId(soap, &a->tns__blessMediaAliasWithId_);
 }
 
-SOAP_FMAC3 int SOAP_FMAC4 soap_out___tns__blessGameAnnotationWithId(struct soap *soap, const char *tag, int id, const struct __tns__blessGameAnnotationWithId *a, const char *type)
+SOAP_FMAC3 int SOAP_FMAC4 soap_out___tns__blessMediaAliasWithId(struct soap *soap, const char *tag, int id, const struct __tns__blessMediaAliasWithId *a, const char *type)
 {
-	if (soap_out_PointerTotns__blessGameAnnotationWithId(soap, "tns:blessGameAnnotationWithId", -1, &a->tns__blessGameAnnotationWithId_, ""))
+	if (soap_out_PointerTotns__blessMediaAliasWithId(soap, "tns:blessMediaAliasWithId", -1, &a->tns__blessMediaAliasWithId_, ""))
 		return soap->error;
 	return SOAP_OK;
 }
 
-SOAP_FMAC3 struct __tns__blessGameAnnotationWithId * SOAP_FMAC4 soap_in___tns__blessGameAnnotationWithId(struct soap *soap, const char *tag, struct __tns__blessGameAnnotationWithId *a, const char *type)
+SOAP_FMAC3 struct __tns__blessMediaAliasWithId * SOAP_FMAC4 soap_in___tns__blessMediaAliasWithId(struct soap *soap, const char *tag, struct __tns__blessMediaAliasWithId *a, const char *type)
 {
-	size_t soap_flag_tns__blessGameAnnotationWithId_ = 1;
+	size_t soap_flag_tns__blessMediaAliasWithId_ = 1;
 	short soap_flag;
-	a = (struct __tns__blessGameAnnotationWithId *)soap_id_enter(soap, "", a, SOAP_TYPE_ServerSoap___tns__blessGameAnnotationWithId, sizeof(struct __tns__blessGameAnnotationWithId), 0, NULL, NULL, NULL);
+	a = (struct __tns__blessMediaAliasWithId *)soap_id_enter(soap, "", a, SOAP_TYPE_ServerSoap___tns__blessMediaAliasWithId, sizeof(struct __tns__blessMediaAliasWithId), 0, NULL, NULL, NULL);
 	if (!a)
 		return NULL;
-	soap_default___tns__blessGameAnnotationWithId(soap, a);
+	soap_default___tns__blessMediaAliasWithId(soap, a);
 		for (soap_flag = 0;; soap_flag = 1)
 		{	soap->error = SOAP_TAG_MISMATCH;
-			if (soap_flag_tns__blessGameAnnotationWithId_ && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_PointerTotns__blessGameAnnotationWithId(soap, "tns:blessGameAnnotationWithId", &a->tns__blessGameAnnotationWithId_, "tns:blessGameAnnotationWithId"))
-				{	soap_flag_tns__blessGameAnnotationWithId_--;
+			if (soap_flag_tns__blessMediaAliasWithId_ && soap->error == SOAP_TAG_MISMATCH)
+				if (soap_in_PointerTotns__blessMediaAliasWithId(soap, "tns:blessMediaAliasWithId", &a->tns__blessMediaAliasWithId_, "tns:blessMediaAliasWithId"))
+				{	soap_flag_tns__blessMediaAliasWithId_--;
 					continue;
 				}
 			if (soap->error == SOAP_TAG_MISMATCH)
@@ -19370,52 +15476,52 @@ SOAP_FMAC3 struct __tns__blessGameAnnotationWithId * SOAP_FMAC4 soap_in___tns__b
 	return a;
 }
 
-SOAP_FMAC3 int SOAP_FMAC4 soap_put___tns__blessGameAnnotationWithId(struct soap *soap, const struct __tns__blessGameAnnotationWithId *a, const char *tag, const char *type)
+SOAP_FMAC3 int SOAP_FMAC4 soap_put___tns__blessMediaAliasWithId(struct soap *soap, const struct __tns__blessMediaAliasWithId *a, const char *tag, const char *type)
 {
 	register int id = 0;
-	if (soap_out___tns__blessGameAnnotationWithId(soap, tag?tag:"-tns:blessGameAnnotationWithId", id, a, type))
+	if (soap_out___tns__blessMediaAliasWithId(soap, tag?tag:"-tns:blessMediaAliasWithId", id, a, type))
 		return soap->error;
 	return SOAP_OK;
 }
 
-SOAP_FMAC3 struct __tns__blessGameAnnotationWithId * SOAP_FMAC4 soap_get___tns__blessGameAnnotationWithId(struct soap *soap, struct __tns__blessGameAnnotationWithId *p, const char *tag, const char *type)
+SOAP_FMAC3 struct __tns__blessMediaAliasWithId * SOAP_FMAC4 soap_get___tns__blessMediaAliasWithId(struct soap *soap, struct __tns__blessMediaAliasWithId *p, const char *tag, const char *type)
 {
-	if ((p = soap_in___tns__blessGameAnnotationWithId(soap, tag, p, type)))
+	if ((p = soap_in___tns__blessMediaAliasWithId(soap, tag, p, type)))
 		if (soap_getindependent(soap))
 			return NULL;
 	return p;
 }
 
-SOAP_FMAC1 struct __tns__blessGameAnnotationWithId * SOAP_FMAC2 soap_instantiate___tns__blessGameAnnotationWithId(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
+SOAP_FMAC1 struct __tns__blessMediaAliasWithId * SOAP_FMAC2 soap_instantiate___tns__blessMediaAliasWithId(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
 {
 	(void)type; (void)arrayType; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate___tns__blessGameAnnotationWithId(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
-	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap___tns__blessGameAnnotationWithId, n, ServerSoap_fdelete);
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate___tns__blessMediaAliasWithId(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
+	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap___tns__blessMediaAliasWithId, n, ServerSoap_fdelete);
 	if (!cp)
 		return NULL;
 	if (n < 0)
-	{	cp->ptr = (void*)SOAP_NEW(struct __tns__blessGameAnnotationWithId);
+	{	cp->ptr = (void*)SOAP_NEW(struct __tns__blessMediaAliasWithId);
 		if (size)
-			*size = sizeof(struct __tns__blessGameAnnotationWithId);
+			*size = sizeof(struct __tns__blessMediaAliasWithId);
 	}
 	else
-	{	cp->ptr = (void*)SOAP_NEW(struct __tns__blessGameAnnotationWithId[n]);
+	{	cp->ptr = (void*)SOAP_NEW(struct __tns__blessMediaAliasWithId[n]);
 		if (!cp->ptr)
 		{	soap->error = SOAP_EOM;
 			return NULL;
 		}
 		if (size)
-			*size = n * sizeof(struct __tns__blessGameAnnotationWithId);
+			*size = n * sizeof(struct __tns__blessMediaAliasWithId);
 	}
 	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
-	return (struct __tns__blessGameAnnotationWithId*)cp->ptr;
+	return (struct __tns__blessMediaAliasWithId*)cp->ptr;
 }
 
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__blessGameAnnotationWithId(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__blessMediaAliasWithId(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
 {
 	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying struct __tns__blessGameAnnotationWithId %p -> %p\n", q, p));
-	*(struct __tns__blessGameAnnotationWithId*)p = *(struct __tns__blessGameAnnotationWithId*)q;
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying struct __tns__blessMediaAliasWithId %p -> %p\n", q, p));
+	*(struct __tns__blessMediaAliasWithId*)p = *(struct __tns__blessMediaAliasWithId*)q;
 }
 
 #ifndef WITH_NOGLOBAL
@@ -19688,116 +15794,6 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__updateMediaAnnotationTextWithId
 SOAP_FMAC3 tns__updateMediaAnnotationTextWithId ** SOAP_FMAC4 soap_get_PointerTotns__updateMediaAnnotationTextWithId(struct soap *soap, tns__updateMediaAnnotationTextWithId **p, const char *tag, const char *type)
 {
 	if ((p = soap_in_PointerTotns__updateMediaAnnotationTextWithId(soap, tag, p, type)))
-		if (soap_getindependent(soap))
-			return NULL;
-	return p;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__updateGameAnnotationTextWithIdResponse(struct soap *soap, tns__updateGameAnnotationTextWithIdResponse *const*a)
-{
-	if (!soap_reference(soap, *a, SOAP_TYPE_ServerSoap_tns__updateGameAnnotationTextWithIdResponse))
-		(*a)->soap_serialize(soap);
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__updateGameAnnotationTextWithIdResponse(struct soap *soap, const char *tag, int id, tns__updateGameAnnotationTextWithIdResponse *const*a, const char *type)
-{
-	id = soap_element_id(soap, tag, id, *a, NULL, 0, type, SOAP_TYPE_ServerSoap_tns__updateGameAnnotationTextWithIdResponse);
-	if (id < 0)
-		return soap->error;
-	return (*a)->soap_out(soap, tag, id, type);
-}
-
-SOAP_FMAC3 tns__updateGameAnnotationTextWithIdResponse ** SOAP_FMAC4 soap_in_PointerTotns__updateGameAnnotationTextWithIdResponse(struct soap *soap, const char *tag, tns__updateGameAnnotationTextWithIdResponse **a, const char *type)
-{
-	if (soap_element_begin_in(soap, tag, 1, NULL))
-		return NULL;
-	if (!a)
-		if (!(a = (tns__updateGameAnnotationTextWithIdResponse **)soap_malloc(soap, sizeof(tns__updateGameAnnotationTextWithIdResponse *))))
-			return NULL;
-	*a = NULL;
-	if (!soap->null && *soap->href != '#')
-	{	soap_revert(soap);
-		if (!(*a = (tns__updateGameAnnotationTextWithIdResponse *)soap_instantiate_tns__updateGameAnnotationTextWithIdResponse(soap, -1, soap->type, soap->arrayType, NULL)))
-			return NULL;
-		(*a)->soap_default(soap);
-		if (!(*a)->soap_in(soap, tag, NULL))
-			return NULL;
-	}
-	else
-	{	tns__updateGameAnnotationTextWithIdResponse ** p = (tns__updateGameAnnotationTextWithIdResponse **)soap_id_lookup(soap, soap->href, (void**)a, SOAP_TYPE_ServerSoap_tns__updateGameAnnotationTextWithIdResponse, sizeof(tns__updateGameAnnotationTextWithIdResponse), 0);
-		a = p;
-		if (soap->body && soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	return a;
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__updateGameAnnotationTextWithIdResponse(struct soap *soap, tns__updateGameAnnotationTextWithIdResponse *const*a, const char *tag, const char *type)
-{
-	register int id = soap_embed(soap, (void*)a, NULL, 0, tag, SOAP_TYPE_ServerSoap_PointerTotns__updateGameAnnotationTextWithIdResponse);
-	if (soap_out_PointerTotns__updateGameAnnotationTextWithIdResponse(soap, tag?tag:"tns:updateGameAnnotationTextWithIdResponse", id, a, type))
-		return soap->error;
-	return soap_putindependent(soap);
-}
-
-SOAP_FMAC3 tns__updateGameAnnotationTextWithIdResponse ** SOAP_FMAC4 soap_get_PointerTotns__updateGameAnnotationTextWithIdResponse(struct soap *soap, tns__updateGameAnnotationTextWithIdResponse **p, const char *tag, const char *type)
-{
-	if ((p = soap_in_PointerTotns__updateGameAnnotationTextWithIdResponse(soap, tag, p, type)))
-		if (soap_getindependent(soap))
-			return NULL;
-	return p;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__updateGameAnnotationTextWithId(struct soap *soap, tns__updateGameAnnotationTextWithId *const*a)
-{
-	if (!soap_reference(soap, *a, SOAP_TYPE_ServerSoap_tns__updateGameAnnotationTextWithId))
-		(*a)->soap_serialize(soap);
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__updateGameAnnotationTextWithId(struct soap *soap, const char *tag, int id, tns__updateGameAnnotationTextWithId *const*a, const char *type)
-{
-	id = soap_element_id(soap, tag, id, *a, NULL, 0, type, SOAP_TYPE_ServerSoap_tns__updateGameAnnotationTextWithId);
-	if (id < 0)
-		return soap->error;
-	return (*a)->soap_out(soap, tag, id, type);
-}
-
-SOAP_FMAC3 tns__updateGameAnnotationTextWithId ** SOAP_FMAC4 soap_in_PointerTotns__updateGameAnnotationTextWithId(struct soap *soap, const char *tag, tns__updateGameAnnotationTextWithId **a, const char *type)
-{
-	if (soap_element_begin_in(soap, tag, 1, NULL))
-		return NULL;
-	if (!a)
-		if (!(a = (tns__updateGameAnnotationTextWithId **)soap_malloc(soap, sizeof(tns__updateGameAnnotationTextWithId *))))
-			return NULL;
-	*a = NULL;
-	if (!soap->null && *soap->href != '#')
-	{	soap_revert(soap);
-		if (!(*a = (tns__updateGameAnnotationTextWithId *)soap_instantiate_tns__updateGameAnnotationTextWithId(soap, -1, soap->type, soap->arrayType, NULL)))
-			return NULL;
-		(*a)->soap_default(soap);
-		if (!(*a)->soap_in(soap, tag, NULL))
-			return NULL;
-	}
-	else
-	{	tns__updateGameAnnotationTextWithId ** p = (tns__updateGameAnnotationTextWithId **)soap_id_lookup(soap, soap->href, (void**)a, SOAP_TYPE_ServerSoap_tns__updateGameAnnotationTextWithId, sizeof(tns__updateGameAnnotationTextWithId), 0);
-		a = p;
-		if (soap->body && soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	return a;
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__updateGameAnnotationTextWithId(struct soap *soap, tns__updateGameAnnotationTextWithId *const*a, const char *tag, const char *type)
-{
-	register int id = soap_embed(soap, (void*)a, NULL, 0, tag, SOAP_TYPE_ServerSoap_PointerTotns__updateGameAnnotationTextWithId);
-	if (soap_out_PointerTotns__updateGameAnnotationTextWithId(soap, tag?tag:"tns:updateGameAnnotationTextWithId", id, a, type))
-		return soap->error;
-	return soap_putindependent(soap);
-}
-
-SOAP_FMAC3 tns__updateGameAnnotationTextWithId ** SOAP_FMAC4 soap_get_PointerTotns__updateGameAnnotationTextWithId(struct soap *soap, tns__updateGameAnnotationTextWithId **p, const char *tag, const char *type)
-{
-	if ((p = soap_in_PointerTotns__updateGameAnnotationTextWithId(soap, tag, p, type)))
 		if (soap_getindependent(soap))
 			return NULL;
 	return p;
@@ -20683,886 +16679,6 @@ SOAP_FMAC3 tns__submitMediaAlias ** SOAP_FMAC4 soap_get_PointerTotns__submitMedi
 	return p;
 }
 
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__submitGameTokenDigestResponse(struct soap *soap, tns__submitGameTokenDigestResponse *const*a)
-{
-	if (!soap_reference(soap, *a, SOAP_TYPE_ServerSoap_tns__submitGameTokenDigestResponse))
-		(*a)->soap_serialize(soap);
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__submitGameTokenDigestResponse(struct soap *soap, const char *tag, int id, tns__submitGameTokenDigestResponse *const*a, const char *type)
-{
-	id = soap_element_id(soap, tag, id, *a, NULL, 0, type, SOAP_TYPE_ServerSoap_tns__submitGameTokenDigestResponse);
-	if (id < 0)
-		return soap->error;
-	return (*a)->soap_out(soap, tag, id, type);
-}
-
-SOAP_FMAC3 tns__submitGameTokenDigestResponse ** SOAP_FMAC4 soap_in_PointerTotns__submitGameTokenDigestResponse(struct soap *soap, const char *tag, tns__submitGameTokenDigestResponse **a, const char *type)
-{
-	if (soap_element_begin_in(soap, tag, 1, NULL))
-		return NULL;
-	if (!a)
-		if (!(a = (tns__submitGameTokenDigestResponse **)soap_malloc(soap, sizeof(tns__submitGameTokenDigestResponse *))))
-			return NULL;
-	*a = NULL;
-	if (!soap->null && *soap->href != '#')
-	{	soap_revert(soap);
-		if (!(*a = (tns__submitGameTokenDigestResponse *)soap_instantiate_tns__submitGameTokenDigestResponse(soap, -1, soap->type, soap->arrayType, NULL)))
-			return NULL;
-		(*a)->soap_default(soap);
-		if (!(*a)->soap_in(soap, tag, NULL))
-			return NULL;
-	}
-	else
-	{	tns__submitGameTokenDigestResponse ** p = (tns__submitGameTokenDigestResponse **)soap_id_lookup(soap, soap->href, (void**)a, SOAP_TYPE_ServerSoap_tns__submitGameTokenDigestResponse, sizeof(tns__submitGameTokenDigestResponse), 0);
-		a = p;
-		if (soap->body && soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	return a;
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__submitGameTokenDigestResponse(struct soap *soap, tns__submitGameTokenDigestResponse *const*a, const char *tag, const char *type)
-{
-	register int id = soap_embed(soap, (void*)a, NULL, 0, tag, SOAP_TYPE_ServerSoap_PointerTotns__submitGameTokenDigestResponse);
-	if (soap_out_PointerTotns__submitGameTokenDigestResponse(soap, tag?tag:"tns:submitGameTokenDigestResponse", id, a, type))
-		return soap->error;
-	return soap_putindependent(soap);
-}
-
-SOAP_FMAC3 tns__submitGameTokenDigestResponse ** SOAP_FMAC4 soap_get_PointerTotns__submitGameTokenDigestResponse(struct soap *soap, tns__submitGameTokenDigestResponse **p, const char *tag, const char *type)
-{
-	if ((p = soap_in_PointerTotns__submitGameTokenDigestResponse(soap, tag, p, type)))
-		if (soap_getindependent(soap))
-			return NULL;
-	return p;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__submitGameTokenDigest(struct soap *soap, tns__submitGameTokenDigest *const*a)
-{
-	if (!soap_reference(soap, *a, SOAP_TYPE_ServerSoap_tns__submitGameTokenDigest))
-		(*a)->soap_serialize(soap);
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__submitGameTokenDigest(struct soap *soap, const char *tag, int id, tns__submitGameTokenDigest *const*a, const char *type)
-{
-	id = soap_element_id(soap, tag, id, *a, NULL, 0, type, SOAP_TYPE_ServerSoap_tns__submitGameTokenDigest);
-	if (id < 0)
-		return soap->error;
-	return (*a)->soap_out(soap, tag, id, type);
-}
-
-SOAP_FMAC3 tns__submitGameTokenDigest ** SOAP_FMAC4 soap_in_PointerTotns__submitGameTokenDigest(struct soap *soap, const char *tag, tns__submitGameTokenDigest **a, const char *type)
-{
-	if (soap_element_begin_in(soap, tag, 1, NULL))
-		return NULL;
-	if (!a)
-		if (!(a = (tns__submitGameTokenDigest **)soap_malloc(soap, sizeof(tns__submitGameTokenDigest *))))
-			return NULL;
-	*a = NULL;
-	if (!soap->null && *soap->href != '#')
-	{	soap_revert(soap);
-		if (!(*a = (tns__submitGameTokenDigest *)soap_instantiate_tns__submitGameTokenDigest(soap, -1, soap->type, soap->arrayType, NULL)))
-			return NULL;
-		(*a)->soap_default(soap);
-		if (!(*a)->soap_in(soap, tag, NULL))
-			return NULL;
-	}
-	else
-	{	tns__submitGameTokenDigest ** p = (tns__submitGameTokenDigest **)soap_id_lookup(soap, soap->href, (void**)a, SOAP_TYPE_ServerSoap_tns__submitGameTokenDigest, sizeof(tns__submitGameTokenDigest), 0);
-		a = p;
-		if (soap->body && soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	return a;
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__submitGameTokenDigest(struct soap *soap, tns__submitGameTokenDigest *const*a, const char *tag, const char *type)
-{
-	register int id = soap_embed(soap, (void*)a, NULL, 0, tag, SOAP_TYPE_ServerSoap_PointerTotns__submitGameTokenDigest);
-	if (soap_out_PointerTotns__submitGameTokenDigest(soap, tag?tag:"tns:submitGameTokenDigest", id, a, type))
-		return soap->error;
-	return soap_putindependent(soap);
-}
-
-SOAP_FMAC3 tns__submitGameTokenDigest ** SOAP_FMAC4 soap_get_PointerTotns__submitGameTokenDigest(struct soap *soap, tns__submitGameTokenDigest **p, const char *tag, const char *type)
-{
-	if ((p = soap_in_PointerTotns__submitGameTokenDigest(soap, tag, p, type)))
-		if (soap_getindependent(soap))
-			return NULL;
-	return p;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__submitGameTokenResponse(struct soap *soap, tns__submitGameTokenResponse *const*a)
-{
-	if (!soap_reference(soap, *a, SOAP_TYPE_ServerSoap_tns__submitGameTokenResponse))
-		(*a)->soap_serialize(soap);
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__submitGameTokenResponse(struct soap *soap, const char *tag, int id, tns__submitGameTokenResponse *const*a, const char *type)
-{
-	id = soap_element_id(soap, tag, id, *a, NULL, 0, type, SOAP_TYPE_ServerSoap_tns__submitGameTokenResponse);
-	if (id < 0)
-		return soap->error;
-	return (*a)->soap_out(soap, tag, id, type);
-}
-
-SOAP_FMAC3 tns__submitGameTokenResponse ** SOAP_FMAC4 soap_in_PointerTotns__submitGameTokenResponse(struct soap *soap, const char *tag, tns__submitGameTokenResponse **a, const char *type)
-{
-	if (soap_element_begin_in(soap, tag, 1, NULL))
-		return NULL;
-	if (!a)
-		if (!(a = (tns__submitGameTokenResponse **)soap_malloc(soap, sizeof(tns__submitGameTokenResponse *))))
-			return NULL;
-	*a = NULL;
-	if (!soap->null && *soap->href != '#')
-	{	soap_revert(soap);
-		if (!(*a = (tns__submitGameTokenResponse *)soap_instantiate_tns__submitGameTokenResponse(soap, -1, soap->type, soap->arrayType, NULL)))
-			return NULL;
-		(*a)->soap_default(soap);
-		if (!(*a)->soap_in(soap, tag, NULL))
-			return NULL;
-	}
-	else
-	{	tns__submitGameTokenResponse ** p = (tns__submitGameTokenResponse **)soap_id_lookup(soap, soap->href, (void**)a, SOAP_TYPE_ServerSoap_tns__submitGameTokenResponse, sizeof(tns__submitGameTokenResponse), 0);
-		a = p;
-		if (soap->body && soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	return a;
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__submitGameTokenResponse(struct soap *soap, tns__submitGameTokenResponse *const*a, const char *tag, const char *type)
-{
-	register int id = soap_embed(soap, (void*)a, NULL, 0, tag, SOAP_TYPE_ServerSoap_PointerTotns__submitGameTokenResponse);
-	if (soap_out_PointerTotns__submitGameTokenResponse(soap, tag?tag:"tns:submitGameTokenResponse", id, a, type))
-		return soap->error;
-	return soap_putindependent(soap);
-}
-
-SOAP_FMAC3 tns__submitGameTokenResponse ** SOAP_FMAC4 soap_get_PointerTotns__submitGameTokenResponse(struct soap *soap, tns__submitGameTokenResponse **p, const char *tag, const char *type)
-{
-	if ((p = soap_in_PointerTotns__submitGameTokenResponse(soap, tag, p, type)))
-		if (soap_getindependent(soap))
-			return NULL;
-	return p;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__submitGameToken(struct soap *soap, tns__submitGameToken *const*a)
-{
-	if (!soap_reference(soap, *a, SOAP_TYPE_ServerSoap_tns__submitGameToken))
-		(*a)->soap_serialize(soap);
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__submitGameToken(struct soap *soap, const char *tag, int id, tns__submitGameToken *const*a, const char *type)
-{
-	id = soap_element_id(soap, tag, id, *a, NULL, 0, type, SOAP_TYPE_ServerSoap_tns__submitGameToken);
-	if (id < 0)
-		return soap->error;
-	return (*a)->soap_out(soap, tag, id, type);
-}
-
-SOAP_FMAC3 tns__submitGameToken ** SOAP_FMAC4 soap_in_PointerTotns__submitGameToken(struct soap *soap, const char *tag, tns__submitGameToken **a, const char *type)
-{
-	if (soap_element_begin_in(soap, tag, 1, NULL))
-		return NULL;
-	if (!a)
-		if (!(a = (tns__submitGameToken **)soap_malloc(soap, sizeof(tns__submitGameToken *))))
-			return NULL;
-	*a = NULL;
-	if (!soap->null && *soap->href != '#')
-	{	soap_revert(soap);
-		if (!(*a = (tns__submitGameToken *)soap_instantiate_tns__submitGameToken(soap, -1, soap->type, soap->arrayType, NULL)))
-			return NULL;
-		(*a)->soap_default(soap);
-		if (!(*a)->soap_in(soap, tag, NULL))
-			return NULL;
-	}
-	else
-	{	tns__submitGameToken ** p = (tns__submitGameToken **)soap_id_lookup(soap, soap->href, (void**)a, SOAP_TYPE_ServerSoap_tns__submitGameToken, sizeof(tns__submitGameToken), 0);
-		a = p;
-		if (soap->body && soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	return a;
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__submitGameToken(struct soap *soap, tns__submitGameToken *const*a, const char *tag, const char *type)
-{
-	register int id = soap_embed(soap, (void*)a, NULL, 0, tag, SOAP_TYPE_ServerSoap_PointerTotns__submitGameToken);
-	if (soap_out_PointerTotns__submitGameToken(soap, tag?tag:"tns:submitGameToken", id, a, type))
-		return soap->error;
-	return soap_putindependent(soap);
-}
-
-SOAP_FMAC3 tns__submitGameToken ** SOAP_FMAC4 soap_get_PointerTotns__submitGameToken(struct soap *soap, tns__submitGameToken **p, const char *tag, const char *type)
-{
-	if ((p = soap_in_PointerTotns__submitGameToken(soap, tag, p, type)))
-		if (soap_getindependent(soap))
-			return NULL;
-	return p;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__submitGameAnnotationTextWithTokenIdResponse(struct soap *soap, tns__submitGameAnnotationTextWithTokenIdResponse *const*a)
-{
-	if (!soap_reference(soap, *a, SOAP_TYPE_ServerSoap_tns__submitGameAnnotationTextWithTokenIdResponse))
-		(*a)->soap_serialize(soap);
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__submitGameAnnotationTextWithTokenIdResponse(struct soap *soap, const char *tag, int id, tns__submitGameAnnotationTextWithTokenIdResponse *const*a, const char *type)
-{
-	id = soap_element_id(soap, tag, id, *a, NULL, 0, type, SOAP_TYPE_ServerSoap_tns__submitGameAnnotationTextWithTokenIdResponse);
-	if (id < 0)
-		return soap->error;
-	return (*a)->soap_out(soap, tag, id, type);
-}
-
-SOAP_FMAC3 tns__submitGameAnnotationTextWithTokenIdResponse ** SOAP_FMAC4 soap_in_PointerTotns__submitGameAnnotationTextWithTokenIdResponse(struct soap *soap, const char *tag, tns__submitGameAnnotationTextWithTokenIdResponse **a, const char *type)
-{
-	if (soap_element_begin_in(soap, tag, 1, NULL))
-		return NULL;
-	if (!a)
-		if (!(a = (tns__submitGameAnnotationTextWithTokenIdResponse **)soap_malloc(soap, sizeof(tns__submitGameAnnotationTextWithTokenIdResponse *))))
-			return NULL;
-	*a = NULL;
-	if (!soap->null && *soap->href != '#')
-	{	soap_revert(soap);
-		if (!(*a = (tns__submitGameAnnotationTextWithTokenIdResponse *)soap_instantiate_tns__submitGameAnnotationTextWithTokenIdResponse(soap, -1, soap->type, soap->arrayType, NULL)))
-			return NULL;
-		(*a)->soap_default(soap);
-		if (!(*a)->soap_in(soap, tag, NULL))
-			return NULL;
-	}
-	else
-	{	tns__submitGameAnnotationTextWithTokenIdResponse ** p = (tns__submitGameAnnotationTextWithTokenIdResponse **)soap_id_lookup(soap, soap->href, (void**)a, SOAP_TYPE_ServerSoap_tns__submitGameAnnotationTextWithTokenIdResponse, sizeof(tns__submitGameAnnotationTextWithTokenIdResponse), 0);
-		a = p;
-		if (soap->body && soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	return a;
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__submitGameAnnotationTextWithTokenIdResponse(struct soap *soap, tns__submitGameAnnotationTextWithTokenIdResponse *const*a, const char *tag, const char *type)
-{
-	register int id = soap_embed(soap, (void*)a, NULL, 0, tag, SOAP_TYPE_ServerSoap_PointerTotns__submitGameAnnotationTextWithTokenIdResponse);
-	if (soap_out_PointerTotns__submitGameAnnotationTextWithTokenIdResponse(soap, tag?tag:"tns:submitGameAnnotationTextWithTokenIdResponse", id, a, type))
-		return soap->error;
-	return soap_putindependent(soap);
-}
-
-SOAP_FMAC3 tns__submitGameAnnotationTextWithTokenIdResponse ** SOAP_FMAC4 soap_get_PointerTotns__submitGameAnnotationTextWithTokenIdResponse(struct soap *soap, tns__submitGameAnnotationTextWithTokenIdResponse **p, const char *tag, const char *type)
-{
-	if ((p = soap_in_PointerTotns__submitGameAnnotationTextWithTokenIdResponse(soap, tag, p, type)))
-		if (soap_getindependent(soap))
-			return NULL;
-	return p;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__submitGameAnnotationTextWithTokenId(struct soap *soap, tns__submitGameAnnotationTextWithTokenId *const*a)
-{
-	if (!soap_reference(soap, *a, SOAP_TYPE_ServerSoap_tns__submitGameAnnotationTextWithTokenId))
-		(*a)->soap_serialize(soap);
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__submitGameAnnotationTextWithTokenId(struct soap *soap, const char *tag, int id, tns__submitGameAnnotationTextWithTokenId *const*a, const char *type)
-{
-	id = soap_element_id(soap, tag, id, *a, NULL, 0, type, SOAP_TYPE_ServerSoap_tns__submitGameAnnotationTextWithTokenId);
-	if (id < 0)
-		return soap->error;
-	return (*a)->soap_out(soap, tag, id, type);
-}
-
-SOAP_FMAC3 tns__submitGameAnnotationTextWithTokenId ** SOAP_FMAC4 soap_in_PointerTotns__submitGameAnnotationTextWithTokenId(struct soap *soap, const char *tag, tns__submitGameAnnotationTextWithTokenId **a, const char *type)
-{
-	if (soap_element_begin_in(soap, tag, 1, NULL))
-		return NULL;
-	if (!a)
-		if (!(a = (tns__submitGameAnnotationTextWithTokenId **)soap_malloc(soap, sizeof(tns__submitGameAnnotationTextWithTokenId *))))
-			return NULL;
-	*a = NULL;
-	if (!soap->null && *soap->href != '#')
-	{	soap_revert(soap);
-		if (!(*a = (tns__submitGameAnnotationTextWithTokenId *)soap_instantiate_tns__submitGameAnnotationTextWithTokenId(soap, -1, soap->type, soap->arrayType, NULL)))
-			return NULL;
-		(*a)->soap_default(soap);
-		if (!(*a)->soap_in(soap, tag, NULL))
-			return NULL;
-	}
-	else
-	{	tns__submitGameAnnotationTextWithTokenId ** p = (tns__submitGameAnnotationTextWithTokenId **)soap_id_lookup(soap, soap->href, (void**)a, SOAP_TYPE_ServerSoap_tns__submitGameAnnotationTextWithTokenId, sizeof(tns__submitGameAnnotationTextWithTokenId), 0);
-		a = p;
-		if (soap->body && soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	return a;
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__submitGameAnnotationTextWithTokenId(struct soap *soap, tns__submitGameAnnotationTextWithTokenId *const*a, const char *tag, const char *type)
-{
-	register int id = soap_embed(soap, (void*)a, NULL, 0, tag, SOAP_TYPE_ServerSoap_PointerTotns__submitGameAnnotationTextWithTokenId);
-	if (soap_out_PointerTotns__submitGameAnnotationTextWithTokenId(soap, tag?tag:"tns:submitGameAnnotationTextWithTokenId", id, a, type))
-		return soap->error;
-	return soap_putindependent(soap);
-}
-
-SOAP_FMAC3 tns__submitGameAnnotationTextWithTokenId ** SOAP_FMAC4 soap_get_PointerTotns__submitGameAnnotationTextWithTokenId(struct soap *soap, tns__submitGameAnnotationTextWithTokenId **p, const char *tag, const char *type)
-{
-	if ((p = soap_in_PointerTotns__submitGameAnnotationTextWithTokenId(soap, tag, p, type)))
-		if (soap_getindependent(soap))
-			return NULL;
-	return p;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__submitGameAnnotationTextAndTokenDigestResponse(struct soap *soap, tns__submitGameAnnotationTextAndTokenDigestResponse *const*a)
-{
-	if (!soap_reference(soap, *a, SOAP_TYPE_ServerSoap_tns__submitGameAnnotationTextAndTokenDigestResponse))
-		(*a)->soap_serialize(soap);
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__submitGameAnnotationTextAndTokenDigestResponse(struct soap *soap, const char *tag, int id, tns__submitGameAnnotationTextAndTokenDigestResponse *const*a, const char *type)
-{
-	id = soap_element_id(soap, tag, id, *a, NULL, 0, type, SOAP_TYPE_ServerSoap_tns__submitGameAnnotationTextAndTokenDigestResponse);
-	if (id < 0)
-		return soap->error;
-	return (*a)->soap_out(soap, tag, id, type);
-}
-
-SOAP_FMAC3 tns__submitGameAnnotationTextAndTokenDigestResponse ** SOAP_FMAC4 soap_in_PointerTotns__submitGameAnnotationTextAndTokenDigestResponse(struct soap *soap, const char *tag, tns__submitGameAnnotationTextAndTokenDigestResponse **a, const char *type)
-{
-	if (soap_element_begin_in(soap, tag, 1, NULL))
-		return NULL;
-	if (!a)
-		if (!(a = (tns__submitGameAnnotationTextAndTokenDigestResponse **)soap_malloc(soap, sizeof(tns__submitGameAnnotationTextAndTokenDigestResponse *))))
-			return NULL;
-	*a = NULL;
-	if (!soap->null && *soap->href != '#')
-	{	soap_revert(soap);
-		if (!(*a = (tns__submitGameAnnotationTextAndTokenDigestResponse *)soap_instantiate_tns__submitGameAnnotationTextAndTokenDigestResponse(soap, -1, soap->type, soap->arrayType, NULL)))
-			return NULL;
-		(*a)->soap_default(soap);
-		if (!(*a)->soap_in(soap, tag, NULL))
-			return NULL;
-	}
-	else
-	{	tns__submitGameAnnotationTextAndTokenDigestResponse ** p = (tns__submitGameAnnotationTextAndTokenDigestResponse **)soap_id_lookup(soap, soap->href, (void**)a, SOAP_TYPE_ServerSoap_tns__submitGameAnnotationTextAndTokenDigestResponse, sizeof(tns__submitGameAnnotationTextAndTokenDigestResponse), 0);
-		a = p;
-		if (soap->body && soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	return a;
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__submitGameAnnotationTextAndTokenDigestResponse(struct soap *soap, tns__submitGameAnnotationTextAndTokenDigestResponse *const*a, const char *tag, const char *type)
-{
-	register int id = soap_embed(soap, (void*)a, NULL, 0, tag, SOAP_TYPE_ServerSoap_PointerTotns__submitGameAnnotationTextAndTokenDigestResponse);
-	if (soap_out_PointerTotns__submitGameAnnotationTextAndTokenDigestResponse(soap, tag?tag:"tns:submitGameAnnotationTextAndTokenDigestResponse", id, a, type))
-		return soap->error;
-	return soap_putindependent(soap);
-}
-
-SOAP_FMAC3 tns__submitGameAnnotationTextAndTokenDigestResponse ** SOAP_FMAC4 soap_get_PointerTotns__submitGameAnnotationTextAndTokenDigestResponse(struct soap *soap, tns__submitGameAnnotationTextAndTokenDigestResponse **p, const char *tag, const char *type)
-{
-	if ((p = soap_in_PointerTotns__submitGameAnnotationTextAndTokenDigestResponse(soap, tag, p, type)))
-		if (soap_getindependent(soap))
-			return NULL;
-	return p;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__submitGameAnnotationTextAndTokenDigest(struct soap *soap, tns__submitGameAnnotationTextAndTokenDigest *const*a)
-{
-	if (!soap_reference(soap, *a, SOAP_TYPE_ServerSoap_tns__submitGameAnnotationTextAndTokenDigest))
-		(*a)->soap_serialize(soap);
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__submitGameAnnotationTextAndTokenDigest(struct soap *soap, const char *tag, int id, tns__submitGameAnnotationTextAndTokenDigest *const*a, const char *type)
-{
-	id = soap_element_id(soap, tag, id, *a, NULL, 0, type, SOAP_TYPE_ServerSoap_tns__submitGameAnnotationTextAndTokenDigest);
-	if (id < 0)
-		return soap->error;
-	return (*a)->soap_out(soap, tag, id, type);
-}
-
-SOAP_FMAC3 tns__submitGameAnnotationTextAndTokenDigest ** SOAP_FMAC4 soap_in_PointerTotns__submitGameAnnotationTextAndTokenDigest(struct soap *soap, const char *tag, tns__submitGameAnnotationTextAndTokenDigest **a, const char *type)
-{
-	if (soap_element_begin_in(soap, tag, 1, NULL))
-		return NULL;
-	if (!a)
-		if (!(a = (tns__submitGameAnnotationTextAndTokenDigest **)soap_malloc(soap, sizeof(tns__submitGameAnnotationTextAndTokenDigest *))))
-			return NULL;
-	*a = NULL;
-	if (!soap->null && *soap->href != '#')
-	{	soap_revert(soap);
-		if (!(*a = (tns__submitGameAnnotationTextAndTokenDigest *)soap_instantiate_tns__submitGameAnnotationTextAndTokenDigest(soap, -1, soap->type, soap->arrayType, NULL)))
-			return NULL;
-		(*a)->soap_default(soap);
-		if (!(*a)->soap_in(soap, tag, NULL))
-			return NULL;
-	}
-	else
-	{	tns__submitGameAnnotationTextAndTokenDigest ** p = (tns__submitGameAnnotationTextAndTokenDigest **)soap_id_lookup(soap, soap->href, (void**)a, SOAP_TYPE_ServerSoap_tns__submitGameAnnotationTextAndTokenDigest, sizeof(tns__submitGameAnnotationTextAndTokenDigest), 0);
-		a = p;
-		if (soap->body && soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	return a;
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__submitGameAnnotationTextAndTokenDigest(struct soap *soap, tns__submitGameAnnotationTextAndTokenDigest *const*a, const char *tag, const char *type)
-{
-	register int id = soap_embed(soap, (void*)a, NULL, 0, tag, SOAP_TYPE_ServerSoap_PointerTotns__submitGameAnnotationTextAndTokenDigest);
-	if (soap_out_PointerTotns__submitGameAnnotationTextAndTokenDigest(soap, tag?tag:"tns:submitGameAnnotationTextAndTokenDigest", id, a, type))
-		return soap->error;
-	return soap_putindependent(soap);
-}
-
-SOAP_FMAC3 tns__submitGameAnnotationTextAndTokenDigest ** SOAP_FMAC4 soap_get_PointerTotns__submitGameAnnotationTextAndTokenDigest(struct soap *soap, tns__submitGameAnnotationTextAndTokenDigest **p, const char *tag, const char *type)
-{
-	if ((p = soap_in_PointerTotns__submitGameAnnotationTextAndTokenDigest(soap, tag, p, type)))
-		if (soap_getindependent(soap))
-			return NULL;
-	return p;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__submitGameAnnotationResponse(struct soap *soap, tns__submitGameAnnotationResponse *const*a)
-{
-	if (!soap_reference(soap, *a, SOAP_TYPE_ServerSoap_tns__submitGameAnnotationResponse))
-		(*a)->soap_serialize(soap);
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__submitGameAnnotationResponse(struct soap *soap, const char *tag, int id, tns__submitGameAnnotationResponse *const*a, const char *type)
-{
-	id = soap_element_id(soap, tag, id, *a, NULL, 0, type, SOAP_TYPE_ServerSoap_tns__submitGameAnnotationResponse);
-	if (id < 0)
-		return soap->error;
-	return (*a)->soap_out(soap, tag, id, type);
-}
-
-SOAP_FMAC3 tns__submitGameAnnotationResponse ** SOAP_FMAC4 soap_in_PointerTotns__submitGameAnnotationResponse(struct soap *soap, const char *tag, tns__submitGameAnnotationResponse **a, const char *type)
-{
-	if (soap_element_begin_in(soap, tag, 1, NULL))
-		return NULL;
-	if (!a)
-		if (!(a = (tns__submitGameAnnotationResponse **)soap_malloc(soap, sizeof(tns__submitGameAnnotationResponse *))))
-			return NULL;
-	*a = NULL;
-	if (!soap->null && *soap->href != '#')
-	{	soap_revert(soap);
-		if (!(*a = (tns__submitGameAnnotationResponse *)soap_instantiate_tns__submitGameAnnotationResponse(soap, -1, soap->type, soap->arrayType, NULL)))
-			return NULL;
-		(*a)->soap_default(soap);
-		if (!(*a)->soap_in(soap, tag, NULL))
-			return NULL;
-	}
-	else
-	{	tns__submitGameAnnotationResponse ** p = (tns__submitGameAnnotationResponse **)soap_id_lookup(soap, soap->href, (void**)a, SOAP_TYPE_ServerSoap_tns__submitGameAnnotationResponse, sizeof(tns__submitGameAnnotationResponse), 0);
-		a = p;
-		if (soap->body && soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	return a;
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__submitGameAnnotationResponse(struct soap *soap, tns__submitGameAnnotationResponse *const*a, const char *tag, const char *type)
-{
-	register int id = soap_embed(soap, (void*)a, NULL, 0, tag, SOAP_TYPE_ServerSoap_PointerTotns__submitGameAnnotationResponse);
-	if (soap_out_PointerTotns__submitGameAnnotationResponse(soap, tag?tag:"tns:submitGameAnnotationResponse", id, a, type))
-		return soap->error;
-	return soap_putindependent(soap);
-}
-
-SOAP_FMAC3 tns__submitGameAnnotationResponse ** SOAP_FMAC4 soap_get_PointerTotns__submitGameAnnotationResponse(struct soap *soap, tns__submitGameAnnotationResponse **p, const char *tag, const char *type)
-{
-	if ((p = soap_in_PointerTotns__submitGameAnnotationResponse(soap, tag, p, type)))
-		if (soap_getindependent(soap))
-			return NULL;
-	return p;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__submitGameAnnotation(struct soap *soap, tns__submitGameAnnotation *const*a)
-{
-	if (!soap_reference(soap, *a, SOAP_TYPE_ServerSoap_tns__submitGameAnnotation))
-		(*a)->soap_serialize(soap);
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__submitGameAnnotation(struct soap *soap, const char *tag, int id, tns__submitGameAnnotation *const*a, const char *type)
-{
-	id = soap_element_id(soap, tag, id, *a, NULL, 0, type, SOAP_TYPE_ServerSoap_tns__submitGameAnnotation);
-	if (id < 0)
-		return soap->error;
-	return (*a)->soap_out(soap, tag, id, type);
-}
-
-SOAP_FMAC3 tns__submitGameAnnotation ** SOAP_FMAC4 soap_in_PointerTotns__submitGameAnnotation(struct soap *soap, const char *tag, tns__submitGameAnnotation **a, const char *type)
-{
-	if (soap_element_begin_in(soap, tag, 1, NULL))
-		return NULL;
-	if (!a)
-		if (!(a = (tns__submitGameAnnotation **)soap_malloc(soap, sizeof(tns__submitGameAnnotation *))))
-			return NULL;
-	*a = NULL;
-	if (!soap->null && *soap->href != '#')
-	{	soap_revert(soap);
-		if (!(*a = (tns__submitGameAnnotation *)soap_instantiate_tns__submitGameAnnotation(soap, -1, soap->type, soap->arrayType, NULL)))
-			return NULL;
-		(*a)->soap_default(soap);
-		if (!(*a)->soap_in(soap, tag, NULL))
-			return NULL;
-	}
-	else
-	{	tns__submitGameAnnotation ** p = (tns__submitGameAnnotation **)soap_id_lookup(soap, soap->href, (void**)a, SOAP_TYPE_ServerSoap_tns__submitGameAnnotation, sizeof(tns__submitGameAnnotation), 0);
-		a = p;
-		if (soap->body && soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	return a;
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__submitGameAnnotation(struct soap *soap, tns__submitGameAnnotation *const*a, const char *tag, const char *type)
-{
-	register int id = soap_embed(soap, (void*)a, NULL, 0, tag, SOAP_TYPE_ServerSoap_PointerTotns__submitGameAnnotation);
-	if (soap_out_PointerTotns__submitGameAnnotation(soap, tag?tag:"tns:submitGameAnnotation", id, a, type))
-		return soap->error;
-	return soap_putindependent(soap);
-}
-
-SOAP_FMAC3 tns__submitGameAnnotation ** SOAP_FMAC4 soap_get_PointerTotns__submitGameAnnotation(struct soap *soap, tns__submitGameAnnotation **p, const char *tag, const char *type)
-{
-	if ((p = soap_in_PointerTotns__submitGameAnnotation(soap, tag, p, type)))
-		if (soap_getindependent(soap))
-			return NULL;
-	return p;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__submitGameAliasTextWithTokenIdResponse(struct soap *soap, tns__submitGameAliasTextWithTokenIdResponse *const*a)
-{
-	if (!soap_reference(soap, *a, SOAP_TYPE_ServerSoap_tns__submitGameAliasTextWithTokenIdResponse))
-		(*a)->soap_serialize(soap);
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__submitGameAliasTextWithTokenIdResponse(struct soap *soap, const char *tag, int id, tns__submitGameAliasTextWithTokenIdResponse *const*a, const char *type)
-{
-	id = soap_element_id(soap, tag, id, *a, NULL, 0, type, SOAP_TYPE_ServerSoap_tns__submitGameAliasTextWithTokenIdResponse);
-	if (id < 0)
-		return soap->error;
-	return (*a)->soap_out(soap, tag, id, type);
-}
-
-SOAP_FMAC3 tns__submitGameAliasTextWithTokenIdResponse ** SOAP_FMAC4 soap_in_PointerTotns__submitGameAliasTextWithTokenIdResponse(struct soap *soap, const char *tag, tns__submitGameAliasTextWithTokenIdResponse **a, const char *type)
-{
-	if (soap_element_begin_in(soap, tag, 1, NULL))
-		return NULL;
-	if (!a)
-		if (!(a = (tns__submitGameAliasTextWithTokenIdResponse **)soap_malloc(soap, sizeof(tns__submitGameAliasTextWithTokenIdResponse *))))
-			return NULL;
-	*a = NULL;
-	if (!soap->null && *soap->href != '#')
-	{	soap_revert(soap);
-		if (!(*a = (tns__submitGameAliasTextWithTokenIdResponse *)soap_instantiate_tns__submitGameAliasTextWithTokenIdResponse(soap, -1, soap->type, soap->arrayType, NULL)))
-			return NULL;
-		(*a)->soap_default(soap);
-		if (!(*a)->soap_in(soap, tag, NULL))
-			return NULL;
-	}
-	else
-	{	tns__submitGameAliasTextWithTokenIdResponse ** p = (tns__submitGameAliasTextWithTokenIdResponse **)soap_id_lookup(soap, soap->href, (void**)a, SOAP_TYPE_ServerSoap_tns__submitGameAliasTextWithTokenIdResponse, sizeof(tns__submitGameAliasTextWithTokenIdResponse), 0);
-		a = p;
-		if (soap->body && soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	return a;
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__submitGameAliasTextWithTokenIdResponse(struct soap *soap, tns__submitGameAliasTextWithTokenIdResponse *const*a, const char *tag, const char *type)
-{
-	register int id = soap_embed(soap, (void*)a, NULL, 0, tag, SOAP_TYPE_ServerSoap_PointerTotns__submitGameAliasTextWithTokenIdResponse);
-	if (soap_out_PointerTotns__submitGameAliasTextWithTokenIdResponse(soap, tag?tag:"tns:submitGameAliasTextWithTokenIdResponse", id, a, type))
-		return soap->error;
-	return soap_putindependent(soap);
-}
-
-SOAP_FMAC3 tns__submitGameAliasTextWithTokenIdResponse ** SOAP_FMAC4 soap_get_PointerTotns__submitGameAliasTextWithTokenIdResponse(struct soap *soap, tns__submitGameAliasTextWithTokenIdResponse **p, const char *tag, const char *type)
-{
-	if ((p = soap_in_PointerTotns__submitGameAliasTextWithTokenIdResponse(soap, tag, p, type)))
-		if (soap_getindependent(soap))
-			return NULL;
-	return p;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__submitGameAliasTextWithTokenId(struct soap *soap, tns__submitGameAliasTextWithTokenId *const*a)
-{
-	if (!soap_reference(soap, *a, SOAP_TYPE_ServerSoap_tns__submitGameAliasTextWithTokenId))
-		(*a)->soap_serialize(soap);
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__submitGameAliasTextWithTokenId(struct soap *soap, const char *tag, int id, tns__submitGameAliasTextWithTokenId *const*a, const char *type)
-{
-	id = soap_element_id(soap, tag, id, *a, NULL, 0, type, SOAP_TYPE_ServerSoap_tns__submitGameAliasTextWithTokenId);
-	if (id < 0)
-		return soap->error;
-	return (*a)->soap_out(soap, tag, id, type);
-}
-
-SOAP_FMAC3 tns__submitGameAliasTextWithTokenId ** SOAP_FMAC4 soap_in_PointerTotns__submitGameAliasTextWithTokenId(struct soap *soap, const char *tag, tns__submitGameAliasTextWithTokenId **a, const char *type)
-{
-	if (soap_element_begin_in(soap, tag, 1, NULL))
-		return NULL;
-	if (!a)
-		if (!(a = (tns__submitGameAliasTextWithTokenId **)soap_malloc(soap, sizeof(tns__submitGameAliasTextWithTokenId *))))
-			return NULL;
-	*a = NULL;
-	if (!soap->null && *soap->href != '#')
-	{	soap_revert(soap);
-		if (!(*a = (tns__submitGameAliasTextWithTokenId *)soap_instantiate_tns__submitGameAliasTextWithTokenId(soap, -1, soap->type, soap->arrayType, NULL)))
-			return NULL;
-		(*a)->soap_default(soap);
-		if (!(*a)->soap_in(soap, tag, NULL))
-			return NULL;
-	}
-	else
-	{	tns__submitGameAliasTextWithTokenId ** p = (tns__submitGameAliasTextWithTokenId **)soap_id_lookup(soap, soap->href, (void**)a, SOAP_TYPE_ServerSoap_tns__submitGameAliasTextWithTokenId, sizeof(tns__submitGameAliasTextWithTokenId), 0);
-		a = p;
-		if (soap->body && soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	return a;
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__submitGameAliasTextWithTokenId(struct soap *soap, tns__submitGameAliasTextWithTokenId *const*a, const char *tag, const char *type)
-{
-	register int id = soap_embed(soap, (void*)a, NULL, 0, tag, SOAP_TYPE_ServerSoap_PointerTotns__submitGameAliasTextWithTokenId);
-	if (soap_out_PointerTotns__submitGameAliasTextWithTokenId(soap, tag?tag:"tns:submitGameAliasTextWithTokenId", id, a, type))
-		return soap->error;
-	return soap_putindependent(soap);
-}
-
-SOAP_FMAC3 tns__submitGameAliasTextWithTokenId ** SOAP_FMAC4 soap_get_PointerTotns__submitGameAliasTextWithTokenId(struct soap *soap, tns__submitGameAliasTextWithTokenId **p, const char *tag, const char *type)
-{
-	if ((p = soap_in_PointerTotns__submitGameAliasTextWithTokenId(soap, tag, p, type)))
-		if (soap_getindependent(soap))
-			return NULL;
-	return p;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__submitGameAliasTextAndTokenDigestResponse(struct soap *soap, tns__submitGameAliasTextAndTokenDigestResponse *const*a)
-{
-	if (!soap_reference(soap, *a, SOAP_TYPE_ServerSoap_tns__submitGameAliasTextAndTokenDigestResponse))
-		(*a)->soap_serialize(soap);
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__submitGameAliasTextAndTokenDigestResponse(struct soap *soap, const char *tag, int id, tns__submitGameAliasTextAndTokenDigestResponse *const*a, const char *type)
-{
-	id = soap_element_id(soap, tag, id, *a, NULL, 0, type, SOAP_TYPE_ServerSoap_tns__submitGameAliasTextAndTokenDigestResponse);
-	if (id < 0)
-		return soap->error;
-	return (*a)->soap_out(soap, tag, id, type);
-}
-
-SOAP_FMAC3 tns__submitGameAliasTextAndTokenDigestResponse ** SOAP_FMAC4 soap_in_PointerTotns__submitGameAliasTextAndTokenDigestResponse(struct soap *soap, const char *tag, tns__submitGameAliasTextAndTokenDigestResponse **a, const char *type)
-{
-	if (soap_element_begin_in(soap, tag, 1, NULL))
-		return NULL;
-	if (!a)
-		if (!(a = (tns__submitGameAliasTextAndTokenDigestResponse **)soap_malloc(soap, sizeof(tns__submitGameAliasTextAndTokenDigestResponse *))))
-			return NULL;
-	*a = NULL;
-	if (!soap->null && *soap->href != '#')
-	{	soap_revert(soap);
-		if (!(*a = (tns__submitGameAliasTextAndTokenDigestResponse *)soap_instantiate_tns__submitGameAliasTextAndTokenDigestResponse(soap, -1, soap->type, soap->arrayType, NULL)))
-			return NULL;
-		(*a)->soap_default(soap);
-		if (!(*a)->soap_in(soap, tag, NULL))
-			return NULL;
-	}
-	else
-	{	tns__submitGameAliasTextAndTokenDigestResponse ** p = (tns__submitGameAliasTextAndTokenDigestResponse **)soap_id_lookup(soap, soap->href, (void**)a, SOAP_TYPE_ServerSoap_tns__submitGameAliasTextAndTokenDigestResponse, sizeof(tns__submitGameAliasTextAndTokenDigestResponse), 0);
-		a = p;
-		if (soap->body && soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	return a;
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__submitGameAliasTextAndTokenDigestResponse(struct soap *soap, tns__submitGameAliasTextAndTokenDigestResponse *const*a, const char *tag, const char *type)
-{
-	register int id = soap_embed(soap, (void*)a, NULL, 0, tag, SOAP_TYPE_ServerSoap_PointerTotns__submitGameAliasTextAndTokenDigestResponse);
-	if (soap_out_PointerTotns__submitGameAliasTextAndTokenDigestResponse(soap, tag?tag:"tns:submitGameAliasTextAndTokenDigestResponse", id, a, type))
-		return soap->error;
-	return soap_putindependent(soap);
-}
-
-SOAP_FMAC3 tns__submitGameAliasTextAndTokenDigestResponse ** SOAP_FMAC4 soap_get_PointerTotns__submitGameAliasTextAndTokenDigestResponse(struct soap *soap, tns__submitGameAliasTextAndTokenDigestResponse **p, const char *tag, const char *type)
-{
-	if ((p = soap_in_PointerTotns__submitGameAliasTextAndTokenDigestResponse(soap, tag, p, type)))
-		if (soap_getindependent(soap))
-			return NULL;
-	return p;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__submitGameAliasTextAndTokenDigest(struct soap *soap, tns__submitGameAliasTextAndTokenDigest *const*a)
-{
-	if (!soap_reference(soap, *a, SOAP_TYPE_ServerSoap_tns__submitGameAliasTextAndTokenDigest))
-		(*a)->soap_serialize(soap);
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__submitGameAliasTextAndTokenDigest(struct soap *soap, const char *tag, int id, tns__submitGameAliasTextAndTokenDigest *const*a, const char *type)
-{
-	id = soap_element_id(soap, tag, id, *a, NULL, 0, type, SOAP_TYPE_ServerSoap_tns__submitGameAliasTextAndTokenDigest);
-	if (id < 0)
-		return soap->error;
-	return (*a)->soap_out(soap, tag, id, type);
-}
-
-SOAP_FMAC3 tns__submitGameAliasTextAndTokenDigest ** SOAP_FMAC4 soap_in_PointerTotns__submitGameAliasTextAndTokenDigest(struct soap *soap, const char *tag, tns__submitGameAliasTextAndTokenDigest **a, const char *type)
-{
-	if (soap_element_begin_in(soap, tag, 1, NULL))
-		return NULL;
-	if (!a)
-		if (!(a = (tns__submitGameAliasTextAndTokenDigest **)soap_malloc(soap, sizeof(tns__submitGameAliasTextAndTokenDigest *))))
-			return NULL;
-	*a = NULL;
-	if (!soap->null && *soap->href != '#')
-	{	soap_revert(soap);
-		if (!(*a = (tns__submitGameAliasTextAndTokenDigest *)soap_instantiate_tns__submitGameAliasTextAndTokenDigest(soap, -1, soap->type, soap->arrayType, NULL)))
-			return NULL;
-		(*a)->soap_default(soap);
-		if (!(*a)->soap_in(soap, tag, NULL))
-			return NULL;
-	}
-	else
-	{	tns__submitGameAliasTextAndTokenDigest ** p = (tns__submitGameAliasTextAndTokenDigest **)soap_id_lookup(soap, soap->href, (void**)a, SOAP_TYPE_ServerSoap_tns__submitGameAliasTextAndTokenDigest, sizeof(tns__submitGameAliasTextAndTokenDigest), 0);
-		a = p;
-		if (soap->body && soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	return a;
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__submitGameAliasTextAndTokenDigest(struct soap *soap, tns__submitGameAliasTextAndTokenDigest *const*a, const char *tag, const char *type)
-{
-	register int id = soap_embed(soap, (void*)a, NULL, 0, tag, SOAP_TYPE_ServerSoap_PointerTotns__submitGameAliasTextAndTokenDigest);
-	if (soap_out_PointerTotns__submitGameAliasTextAndTokenDigest(soap, tag?tag:"tns:submitGameAliasTextAndTokenDigest", id, a, type))
-		return soap->error;
-	return soap_putindependent(soap);
-}
-
-SOAP_FMAC3 tns__submitGameAliasTextAndTokenDigest ** SOAP_FMAC4 soap_get_PointerTotns__submitGameAliasTextAndTokenDigest(struct soap *soap, tns__submitGameAliasTextAndTokenDigest **p, const char *tag, const char *type)
-{
-	if ((p = soap_in_PointerTotns__submitGameAliasTextAndTokenDigest(soap, tag, p, type)))
-		if (soap_getindependent(soap))
-			return NULL;
-	return p;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__submitGameAliasResponse(struct soap *soap, tns__submitGameAliasResponse *const*a)
-{
-	if (!soap_reference(soap, *a, SOAP_TYPE_ServerSoap_tns__submitGameAliasResponse))
-		(*a)->soap_serialize(soap);
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__submitGameAliasResponse(struct soap *soap, const char *tag, int id, tns__submitGameAliasResponse *const*a, const char *type)
-{
-	id = soap_element_id(soap, tag, id, *a, NULL, 0, type, SOAP_TYPE_ServerSoap_tns__submitGameAliasResponse);
-	if (id < 0)
-		return soap->error;
-	return (*a)->soap_out(soap, tag, id, type);
-}
-
-SOAP_FMAC3 tns__submitGameAliasResponse ** SOAP_FMAC4 soap_in_PointerTotns__submitGameAliasResponse(struct soap *soap, const char *tag, tns__submitGameAliasResponse **a, const char *type)
-{
-	if (soap_element_begin_in(soap, tag, 1, NULL))
-		return NULL;
-	if (!a)
-		if (!(a = (tns__submitGameAliasResponse **)soap_malloc(soap, sizeof(tns__submitGameAliasResponse *))))
-			return NULL;
-	*a = NULL;
-	if (!soap->null && *soap->href != '#')
-	{	soap_revert(soap);
-		if (!(*a = (tns__submitGameAliasResponse *)soap_instantiate_tns__submitGameAliasResponse(soap, -1, soap->type, soap->arrayType, NULL)))
-			return NULL;
-		(*a)->soap_default(soap);
-		if (!(*a)->soap_in(soap, tag, NULL))
-			return NULL;
-	}
-	else
-	{	tns__submitGameAliasResponse ** p = (tns__submitGameAliasResponse **)soap_id_lookup(soap, soap->href, (void**)a, SOAP_TYPE_ServerSoap_tns__submitGameAliasResponse, sizeof(tns__submitGameAliasResponse), 0);
-		a = p;
-		if (soap->body && soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	return a;
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__submitGameAliasResponse(struct soap *soap, tns__submitGameAliasResponse *const*a, const char *tag, const char *type)
-{
-	register int id = soap_embed(soap, (void*)a, NULL, 0, tag, SOAP_TYPE_ServerSoap_PointerTotns__submitGameAliasResponse);
-	if (soap_out_PointerTotns__submitGameAliasResponse(soap, tag?tag:"tns:submitGameAliasResponse", id, a, type))
-		return soap->error;
-	return soap_putindependent(soap);
-}
-
-SOAP_FMAC3 tns__submitGameAliasResponse ** SOAP_FMAC4 soap_get_PointerTotns__submitGameAliasResponse(struct soap *soap, tns__submitGameAliasResponse **p, const char *tag, const char *type)
-{
-	if ((p = soap_in_PointerTotns__submitGameAliasResponse(soap, tag, p, type)))
-		if (soap_getindependent(soap))
-			return NULL;
-	return p;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__submitGameAlias(struct soap *soap, tns__submitGameAlias *const*a)
-{
-	if (!soap_reference(soap, *a, SOAP_TYPE_ServerSoap_tns__submitGameAlias))
-		(*a)->soap_serialize(soap);
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__submitGameAlias(struct soap *soap, const char *tag, int id, tns__submitGameAlias *const*a, const char *type)
-{
-	id = soap_element_id(soap, tag, id, *a, NULL, 0, type, SOAP_TYPE_ServerSoap_tns__submitGameAlias);
-	if (id < 0)
-		return soap->error;
-	return (*a)->soap_out(soap, tag, id, type);
-}
-
-SOAP_FMAC3 tns__submitGameAlias ** SOAP_FMAC4 soap_in_PointerTotns__submitGameAlias(struct soap *soap, const char *tag, tns__submitGameAlias **a, const char *type)
-{
-	if (soap_element_begin_in(soap, tag, 1, NULL))
-		return NULL;
-	if (!a)
-		if (!(a = (tns__submitGameAlias **)soap_malloc(soap, sizeof(tns__submitGameAlias *))))
-			return NULL;
-	*a = NULL;
-	if (!soap->null && *soap->href != '#')
-	{	soap_revert(soap);
-		if (!(*a = (tns__submitGameAlias *)soap_instantiate_tns__submitGameAlias(soap, -1, soap->type, soap->arrayType, NULL)))
-			return NULL;
-		(*a)->soap_default(soap);
-		if (!(*a)->soap_in(soap, tag, NULL))
-			return NULL;
-	}
-	else
-	{	tns__submitGameAlias ** p = (tns__submitGameAlias **)soap_id_lookup(soap, soap->href, (void**)a, SOAP_TYPE_ServerSoap_tns__submitGameAlias, sizeof(tns__submitGameAlias), 0);
-		a = p;
-		if (soap->body && soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	return a;
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__submitGameAlias(struct soap *soap, tns__submitGameAlias *const*a, const char *tag, const char *type)
-{
-	register int id = soap_embed(soap, (void*)a, NULL, 0, tag, SOAP_TYPE_ServerSoap_PointerTotns__submitGameAlias);
-	if (soap_out_PointerTotns__submitGameAlias(soap, tag?tag:"tns:submitGameAlias", id, a, type))
-		return soap->error;
-	return soap_putindependent(soap);
-}
-
-SOAP_FMAC3 tns__submitGameAlias ** SOAP_FMAC4 soap_get_PointerTotns__submitGameAlias(struct soap *soap, tns__submitGameAlias **p, const char *tag, const char *type)
-{
-	if ((p = soap_in_PointerTotns__submitGameAlias(soap, tag, p, type)))
-		if (soap_getindependent(soap))
-			return NULL;
-	return p;
-}
-
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__setUserLanguageResponse(struct soap *soap, tns__setUserLanguageResponse *const*a)
 {
 	if (!soap_reference(soap, *a, SOAP_TYPE_ServerSoap_tns__setUserLanguageResponse))
@@ -21998,116 +17114,6 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__selectRelatedMediaAnnotationsWi
 SOAP_FMAC3 tns__selectRelatedMediaAnnotationsWithTokenId ** SOAP_FMAC4 soap_get_PointerTotns__selectRelatedMediaAnnotationsWithTokenId(struct soap *soap, tns__selectRelatedMediaAnnotationsWithTokenId **p, const char *tag, const char *type)
 {
 	if ((p = soap_in_PointerTotns__selectRelatedMediaAnnotationsWithTokenId(soap, tag, p, type)))
-		if (soap_getindependent(soap))
-			return NULL;
-	return p;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__selectRelatedGameAnnotationsWithTokenIdResponse(struct soap *soap, tns__selectRelatedGameAnnotationsWithTokenIdResponse *const*a)
-{
-	if (!soap_reference(soap, *a, SOAP_TYPE_ServerSoap_tns__selectRelatedGameAnnotationsWithTokenIdResponse))
-		(*a)->soap_serialize(soap);
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__selectRelatedGameAnnotationsWithTokenIdResponse(struct soap *soap, const char *tag, int id, tns__selectRelatedGameAnnotationsWithTokenIdResponse *const*a, const char *type)
-{
-	id = soap_element_id(soap, tag, id, *a, NULL, 0, type, SOAP_TYPE_ServerSoap_tns__selectRelatedGameAnnotationsWithTokenIdResponse);
-	if (id < 0)
-		return soap->error;
-	return (*a)->soap_out(soap, tag, id, type);
-}
-
-SOAP_FMAC3 tns__selectRelatedGameAnnotationsWithTokenIdResponse ** SOAP_FMAC4 soap_in_PointerTotns__selectRelatedGameAnnotationsWithTokenIdResponse(struct soap *soap, const char *tag, tns__selectRelatedGameAnnotationsWithTokenIdResponse **a, const char *type)
-{
-	if (soap_element_begin_in(soap, tag, 1, NULL))
-		return NULL;
-	if (!a)
-		if (!(a = (tns__selectRelatedGameAnnotationsWithTokenIdResponse **)soap_malloc(soap, sizeof(tns__selectRelatedGameAnnotationsWithTokenIdResponse *))))
-			return NULL;
-	*a = NULL;
-	if (!soap->null && *soap->href != '#')
-	{	soap_revert(soap);
-		if (!(*a = (tns__selectRelatedGameAnnotationsWithTokenIdResponse *)soap_instantiate_tns__selectRelatedGameAnnotationsWithTokenIdResponse(soap, -1, soap->type, soap->arrayType, NULL)))
-			return NULL;
-		(*a)->soap_default(soap);
-		if (!(*a)->soap_in(soap, tag, NULL))
-			return NULL;
-	}
-	else
-	{	tns__selectRelatedGameAnnotationsWithTokenIdResponse ** p = (tns__selectRelatedGameAnnotationsWithTokenIdResponse **)soap_id_lookup(soap, soap->href, (void**)a, SOAP_TYPE_ServerSoap_tns__selectRelatedGameAnnotationsWithTokenIdResponse, sizeof(tns__selectRelatedGameAnnotationsWithTokenIdResponse), 0);
-		a = p;
-		if (soap->body && soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	return a;
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__selectRelatedGameAnnotationsWithTokenIdResponse(struct soap *soap, tns__selectRelatedGameAnnotationsWithTokenIdResponse *const*a, const char *tag, const char *type)
-{
-	register int id = soap_embed(soap, (void*)a, NULL, 0, tag, SOAP_TYPE_ServerSoap_PointerTotns__selectRelatedGameAnnotationsWithTokenIdResponse);
-	if (soap_out_PointerTotns__selectRelatedGameAnnotationsWithTokenIdResponse(soap, tag?tag:"tns:selectRelatedGameAnnotationsWithTokenIdResponse", id, a, type))
-		return soap->error;
-	return soap_putindependent(soap);
-}
-
-SOAP_FMAC3 tns__selectRelatedGameAnnotationsWithTokenIdResponse ** SOAP_FMAC4 soap_get_PointerTotns__selectRelatedGameAnnotationsWithTokenIdResponse(struct soap *soap, tns__selectRelatedGameAnnotationsWithTokenIdResponse **p, const char *tag, const char *type)
-{
-	if ((p = soap_in_PointerTotns__selectRelatedGameAnnotationsWithTokenIdResponse(soap, tag, p, type)))
-		if (soap_getindependent(soap))
-			return NULL;
-	return p;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__selectRelatedGameAnnotationsWithTokenId(struct soap *soap, tns__selectRelatedGameAnnotationsWithTokenId *const*a)
-{
-	if (!soap_reference(soap, *a, SOAP_TYPE_ServerSoap_tns__selectRelatedGameAnnotationsWithTokenId))
-		(*a)->soap_serialize(soap);
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__selectRelatedGameAnnotationsWithTokenId(struct soap *soap, const char *tag, int id, tns__selectRelatedGameAnnotationsWithTokenId *const*a, const char *type)
-{
-	id = soap_element_id(soap, tag, id, *a, NULL, 0, type, SOAP_TYPE_ServerSoap_tns__selectRelatedGameAnnotationsWithTokenId);
-	if (id < 0)
-		return soap->error;
-	return (*a)->soap_out(soap, tag, id, type);
-}
-
-SOAP_FMAC3 tns__selectRelatedGameAnnotationsWithTokenId ** SOAP_FMAC4 soap_in_PointerTotns__selectRelatedGameAnnotationsWithTokenId(struct soap *soap, const char *tag, tns__selectRelatedGameAnnotationsWithTokenId **a, const char *type)
-{
-	if (soap_element_begin_in(soap, tag, 1, NULL))
-		return NULL;
-	if (!a)
-		if (!(a = (tns__selectRelatedGameAnnotationsWithTokenId **)soap_malloc(soap, sizeof(tns__selectRelatedGameAnnotationsWithTokenId *))))
-			return NULL;
-	*a = NULL;
-	if (!soap->null && *soap->href != '#')
-	{	soap_revert(soap);
-		if (!(*a = (tns__selectRelatedGameAnnotationsWithTokenId *)soap_instantiate_tns__selectRelatedGameAnnotationsWithTokenId(soap, -1, soap->type, soap->arrayType, NULL)))
-			return NULL;
-		(*a)->soap_default(soap);
-		if (!(*a)->soap_in(soap, tag, NULL))
-			return NULL;
-	}
-	else
-	{	tns__selectRelatedGameAnnotationsWithTokenId ** p = (tns__selectRelatedGameAnnotationsWithTokenId **)soap_id_lookup(soap, soap->href, (void**)a, SOAP_TYPE_ServerSoap_tns__selectRelatedGameAnnotationsWithTokenId, sizeof(tns__selectRelatedGameAnnotationsWithTokenId), 0);
-		a = p;
-		if (soap->body && soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	return a;
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__selectRelatedGameAnnotationsWithTokenId(struct soap *soap, tns__selectRelatedGameAnnotationsWithTokenId *const*a, const char *tag, const char *type)
-{
-	register int id = soap_embed(soap, (void*)a, NULL, 0, tag, SOAP_TYPE_ServerSoap_PointerTotns__selectRelatedGameAnnotationsWithTokenId);
-	if (soap_out_PointerTotns__selectRelatedGameAnnotationsWithTokenId(soap, tag?tag:"tns:selectRelatedGameAnnotationsWithTokenId", id, a, type))
-		return soap->error;
-	return soap_putindependent(soap);
-}
-
-SOAP_FMAC3 tns__selectRelatedGameAnnotationsWithTokenId ** SOAP_FMAC4 soap_get_PointerTotns__selectRelatedGameAnnotationsWithTokenId(struct soap *soap, tns__selectRelatedGameAnnotationsWithTokenId **p, const char *tag, const char *type)
-{
-	if ((p = soap_in_PointerTotns__selectRelatedGameAnnotationsWithTokenId(soap, tag, p, type)))
 		if (soap_getindependent(soap))
 			return NULL;
 	return p;
@@ -22553,446 +17559,6 @@ SOAP_FMAC3 tns__selectMediaAliasesWithTokenId ** SOAP_FMAC4 soap_get_PointerTotn
 	return p;
 }
 
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__selectGameTokenWithIdResponse(struct soap *soap, tns__selectGameTokenWithIdResponse *const*a)
-{
-	if (!soap_reference(soap, *a, SOAP_TYPE_ServerSoap_tns__selectGameTokenWithIdResponse))
-		(*a)->soap_serialize(soap);
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__selectGameTokenWithIdResponse(struct soap *soap, const char *tag, int id, tns__selectGameTokenWithIdResponse *const*a, const char *type)
-{
-	id = soap_element_id(soap, tag, id, *a, NULL, 0, type, SOAP_TYPE_ServerSoap_tns__selectGameTokenWithIdResponse);
-	if (id < 0)
-		return soap->error;
-	return (*a)->soap_out(soap, tag, id, type);
-}
-
-SOAP_FMAC3 tns__selectGameTokenWithIdResponse ** SOAP_FMAC4 soap_in_PointerTotns__selectGameTokenWithIdResponse(struct soap *soap, const char *tag, tns__selectGameTokenWithIdResponse **a, const char *type)
-{
-	if (soap_element_begin_in(soap, tag, 1, NULL))
-		return NULL;
-	if (!a)
-		if (!(a = (tns__selectGameTokenWithIdResponse **)soap_malloc(soap, sizeof(tns__selectGameTokenWithIdResponse *))))
-			return NULL;
-	*a = NULL;
-	if (!soap->null && *soap->href != '#')
-	{	soap_revert(soap);
-		if (!(*a = (tns__selectGameTokenWithIdResponse *)soap_instantiate_tns__selectGameTokenWithIdResponse(soap, -1, soap->type, soap->arrayType, NULL)))
-			return NULL;
-		(*a)->soap_default(soap);
-		if (!(*a)->soap_in(soap, tag, NULL))
-			return NULL;
-	}
-	else
-	{	tns__selectGameTokenWithIdResponse ** p = (tns__selectGameTokenWithIdResponse **)soap_id_lookup(soap, soap->href, (void**)a, SOAP_TYPE_ServerSoap_tns__selectGameTokenWithIdResponse, sizeof(tns__selectGameTokenWithIdResponse), 0);
-		a = p;
-		if (soap->body && soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	return a;
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__selectGameTokenWithIdResponse(struct soap *soap, tns__selectGameTokenWithIdResponse *const*a, const char *tag, const char *type)
-{
-	register int id = soap_embed(soap, (void*)a, NULL, 0, tag, SOAP_TYPE_ServerSoap_PointerTotns__selectGameTokenWithIdResponse);
-	if (soap_out_PointerTotns__selectGameTokenWithIdResponse(soap, tag?tag:"tns:selectGameTokenWithIdResponse", id, a, type))
-		return soap->error;
-	return soap_putindependent(soap);
-}
-
-SOAP_FMAC3 tns__selectGameTokenWithIdResponse ** SOAP_FMAC4 soap_get_PointerTotns__selectGameTokenWithIdResponse(struct soap *soap, tns__selectGameTokenWithIdResponse **p, const char *tag, const char *type)
-{
-	if ((p = soap_in_PointerTotns__selectGameTokenWithIdResponse(soap, tag, p, type)))
-		if (soap_getindependent(soap))
-			return NULL;
-	return p;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__selectGameTokenWithId(struct soap *soap, tns__selectGameTokenWithId *const*a)
-{
-	if (!soap_reference(soap, *a, SOAP_TYPE_ServerSoap_tns__selectGameTokenWithId))
-		(*a)->soap_serialize(soap);
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__selectGameTokenWithId(struct soap *soap, const char *tag, int id, tns__selectGameTokenWithId *const*a, const char *type)
-{
-	id = soap_element_id(soap, tag, id, *a, NULL, 0, type, SOAP_TYPE_ServerSoap_tns__selectGameTokenWithId);
-	if (id < 0)
-		return soap->error;
-	return (*a)->soap_out(soap, tag, id, type);
-}
-
-SOAP_FMAC3 tns__selectGameTokenWithId ** SOAP_FMAC4 soap_in_PointerTotns__selectGameTokenWithId(struct soap *soap, const char *tag, tns__selectGameTokenWithId **a, const char *type)
-{
-	if (soap_element_begin_in(soap, tag, 1, NULL))
-		return NULL;
-	if (!a)
-		if (!(a = (tns__selectGameTokenWithId **)soap_malloc(soap, sizeof(tns__selectGameTokenWithId *))))
-			return NULL;
-	*a = NULL;
-	if (!soap->null && *soap->href != '#')
-	{	soap_revert(soap);
-		if (!(*a = (tns__selectGameTokenWithId *)soap_instantiate_tns__selectGameTokenWithId(soap, -1, soap->type, soap->arrayType, NULL)))
-			return NULL;
-		(*a)->soap_default(soap);
-		if (!(*a)->soap_in(soap, tag, NULL))
-			return NULL;
-	}
-	else
-	{	tns__selectGameTokenWithId ** p = (tns__selectGameTokenWithId **)soap_id_lookup(soap, soap->href, (void**)a, SOAP_TYPE_ServerSoap_tns__selectGameTokenWithId, sizeof(tns__selectGameTokenWithId), 0);
-		a = p;
-		if (soap->body && soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	return a;
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__selectGameTokenWithId(struct soap *soap, tns__selectGameTokenWithId *const*a, const char *tag, const char *type)
-{
-	register int id = soap_embed(soap, (void*)a, NULL, 0, tag, SOAP_TYPE_ServerSoap_PointerTotns__selectGameTokenWithId);
-	if (soap_out_PointerTotns__selectGameTokenWithId(soap, tag?tag:"tns:selectGameTokenWithId", id, a, type))
-		return soap->error;
-	return soap_putindependent(soap);
-}
-
-SOAP_FMAC3 tns__selectGameTokenWithId ** SOAP_FMAC4 soap_get_PointerTotns__selectGameTokenWithId(struct soap *soap, tns__selectGameTokenWithId **p, const char *tag, const char *type)
-{
-	if ((p = soap_in_PointerTotns__selectGameTokenWithId(soap, tag, p, type)))
-		if (soap_getindependent(soap))
-			return NULL;
-	return p;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__selectGameTokenWithDigestResponse(struct soap *soap, tns__selectGameTokenWithDigestResponse *const*a)
-{
-	if (!soap_reference(soap, *a, SOAP_TYPE_ServerSoap_tns__selectGameTokenWithDigestResponse))
-		(*a)->soap_serialize(soap);
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__selectGameTokenWithDigestResponse(struct soap *soap, const char *tag, int id, tns__selectGameTokenWithDigestResponse *const*a, const char *type)
-{
-	id = soap_element_id(soap, tag, id, *a, NULL, 0, type, SOAP_TYPE_ServerSoap_tns__selectGameTokenWithDigestResponse);
-	if (id < 0)
-		return soap->error;
-	return (*a)->soap_out(soap, tag, id, type);
-}
-
-SOAP_FMAC3 tns__selectGameTokenWithDigestResponse ** SOAP_FMAC4 soap_in_PointerTotns__selectGameTokenWithDigestResponse(struct soap *soap, const char *tag, tns__selectGameTokenWithDigestResponse **a, const char *type)
-{
-	if (soap_element_begin_in(soap, tag, 1, NULL))
-		return NULL;
-	if (!a)
-		if (!(a = (tns__selectGameTokenWithDigestResponse **)soap_malloc(soap, sizeof(tns__selectGameTokenWithDigestResponse *))))
-			return NULL;
-	*a = NULL;
-	if (!soap->null && *soap->href != '#')
-	{	soap_revert(soap);
-		if (!(*a = (tns__selectGameTokenWithDigestResponse *)soap_instantiate_tns__selectGameTokenWithDigestResponse(soap, -1, soap->type, soap->arrayType, NULL)))
-			return NULL;
-		(*a)->soap_default(soap);
-		if (!(*a)->soap_in(soap, tag, NULL))
-			return NULL;
-	}
-	else
-	{	tns__selectGameTokenWithDigestResponse ** p = (tns__selectGameTokenWithDigestResponse **)soap_id_lookup(soap, soap->href, (void**)a, SOAP_TYPE_ServerSoap_tns__selectGameTokenWithDigestResponse, sizeof(tns__selectGameTokenWithDigestResponse), 0);
-		a = p;
-		if (soap->body && soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	return a;
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__selectGameTokenWithDigestResponse(struct soap *soap, tns__selectGameTokenWithDigestResponse *const*a, const char *tag, const char *type)
-{
-	register int id = soap_embed(soap, (void*)a, NULL, 0, tag, SOAP_TYPE_ServerSoap_PointerTotns__selectGameTokenWithDigestResponse);
-	if (soap_out_PointerTotns__selectGameTokenWithDigestResponse(soap, tag?tag:"tns:selectGameTokenWithDigestResponse", id, a, type))
-		return soap->error;
-	return soap_putindependent(soap);
-}
-
-SOAP_FMAC3 tns__selectGameTokenWithDigestResponse ** SOAP_FMAC4 soap_get_PointerTotns__selectGameTokenWithDigestResponse(struct soap *soap, tns__selectGameTokenWithDigestResponse **p, const char *tag, const char *type)
-{
-	if ((p = soap_in_PointerTotns__selectGameTokenWithDigestResponse(soap, tag, p, type)))
-		if (soap_getindependent(soap))
-			return NULL;
-	return p;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__selectGameTokenWithDigest(struct soap *soap, tns__selectGameTokenWithDigest *const*a)
-{
-	if (!soap_reference(soap, *a, SOAP_TYPE_ServerSoap_tns__selectGameTokenWithDigest))
-		(*a)->soap_serialize(soap);
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__selectGameTokenWithDigest(struct soap *soap, const char *tag, int id, tns__selectGameTokenWithDigest *const*a, const char *type)
-{
-	id = soap_element_id(soap, tag, id, *a, NULL, 0, type, SOAP_TYPE_ServerSoap_tns__selectGameTokenWithDigest);
-	if (id < 0)
-		return soap->error;
-	return (*a)->soap_out(soap, tag, id, type);
-}
-
-SOAP_FMAC3 tns__selectGameTokenWithDigest ** SOAP_FMAC4 soap_in_PointerTotns__selectGameTokenWithDigest(struct soap *soap, const char *tag, tns__selectGameTokenWithDigest **a, const char *type)
-{
-	if (soap_element_begin_in(soap, tag, 1, NULL))
-		return NULL;
-	if (!a)
-		if (!(a = (tns__selectGameTokenWithDigest **)soap_malloc(soap, sizeof(tns__selectGameTokenWithDigest *))))
-			return NULL;
-	*a = NULL;
-	if (!soap->null && *soap->href != '#')
-	{	soap_revert(soap);
-		if (!(*a = (tns__selectGameTokenWithDigest *)soap_instantiate_tns__selectGameTokenWithDigest(soap, -1, soap->type, soap->arrayType, NULL)))
-			return NULL;
-		(*a)->soap_default(soap);
-		if (!(*a)->soap_in(soap, tag, NULL))
-			return NULL;
-	}
-	else
-	{	tns__selectGameTokenWithDigest ** p = (tns__selectGameTokenWithDigest **)soap_id_lookup(soap, soap->href, (void**)a, SOAP_TYPE_ServerSoap_tns__selectGameTokenWithDigest, sizeof(tns__selectGameTokenWithDigest), 0);
-		a = p;
-		if (soap->body && soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	return a;
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__selectGameTokenWithDigest(struct soap *soap, tns__selectGameTokenWithDigest *const*a, const char *tag, const char *type)
-{
-	register int id = soap_embed(soap, (void*)a, NULL, 0, tag, SOAP_TYPE_ServerSoap_PointerTotns__selectGameTokenWithDigest);
-	if (soap_out_PointerTotns__selectGameTokenWithDigest(soap, tag?tag:"tns:selectGameTokenWithDigest", id, a, type))
-		return soap->error;
-	return soap_putindependent(soap);
-}
-
-SOAP_FMAC3 tns__selectGameTokenWithDigest ** SOAP_FMAC4 soap_get_PointerTotns__selectGameTokenWithDigest(struct soap *soap, tns__selectGameTokenWithDigest **p, const char *tag, const char *type)
-{
-	if ((p = soap_in_PointerTotns__selectGameTokenWithDigest(soap, tag, p, type)))
-		if (soap_getindependent(soap))
-			return NULL;
-	return p;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__selectGameAnnotationsWithTokenIdResponse(struct soap *soap, tns__selectGameAnnotationsWithTokenIdResponse *const*a)
-{
-	if (!soap_reference(soap, *a, SOAP_TYPE_ServerSoap_tns__selectGameAnnotationsWithTokenIdResponse))
-		(*a)->soap_serialize(soap);
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__selectGameAnnotationsWithTokenIdResponse(struct soap *soap, const char *tag, int id, tns__selectGameAnnotationsWithTokenIdResponse *const*a, const char *type)
-{
-	id = soap_element_id(soap, tag, id, *a, NULL, 0, type, SOAP_TYPE_ServerSoap_tns__selectGameAnnotationsWithTokenIdResponse);
-	if (id < 0)
-		return soap->error;
-	return (*a)->soap_out(soap, tag, id, type);
-}
-
-SOAP_FMAC3 tns__selectGameAnnotationsWithTokenIdResponse ** SOAP_FMAC4 soap_in_PointerTotns__selectGameAnnotationsWithTokenIdResponse(struct soap *soap, const char *tag, tns__selectGameAnnotationsWithTokenIdResponse **a, const char *type)
-{
-	if (soap_element_begin_in(soap, tag, 1, NULL))
-		return NULL;
-	if (!a)
-		if (!(a = (tns__selectGameAnnotationsWithTokenIdResponse **)soap_malloc(soap, sizeof(tns__selectGameAnnotationsWithTokenIdResponse *))))
-			return NULL;
-	*a = NULL;
-	if (!soap->null && *soap->href != '#')
-	{	soap_revert(soap);
-		if (!(*a = (tns__selectGameAnnotationsWithTokenIdResponse *)soap_instantiate_tns__selectGameAnnotationsWithTokenIdResponse(soap, -1, soap->type, soap->arrayType, NULL)))
-			return NULL;
-		(*a)->soap_default(soap);
-		if (!(*a)->soap_in(soap, tag, NULL))
-			return NULL;
-	}
-	else
-	{	tns__selectGameAnnotationsWithTokenIdResponse ** p = (tns__selectGameAnnotationsWithTokenIdResponse **)soap_id_lookup(soap, soap->href, (void**)a, SOAP_TYPE_ServerSoap_tns__selectGameAnnotationsWithTokenIdResponse, sizeof(tns__selectGameAnnotationsWithTokenIdResponse), 0);
-		a = p;
-		if (soap->body && soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	return a;
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__selectGameAnnotationsWithTokenIdResponse(struct soap *soap, tns__selectGameAnnotationsWithTokenIdResponse *const*a, const char *tag, const char *type)
-{
-	register int id = soap_embed(soap, (void*)a, NULL, 0, tag, SOAP_TYPE_ServerSoap_PointerTotns__selectGameAnnotationsWithTokenIdResponse);
-	if (soap_out_PointerTotns__selectGameAnnotationsWithTokenIdResponse(soap, tag?tag:"tns:selectGameAnnotationsWithTokenIdResponse", id, a, type))
-		return soap->error;
-	return soap_putindependent(soap);
-}
-
-SOAP_FMAC3 tns__selectGameAnnotationsWithTokenIdResponse ** SOAP_FMAC4 soap_get_PointerTotns__selectGameAnnotationsWithTokenIdResponse(struct soap *soap, tns__selectGameAnnotationsWithTokenIdResponse **p, const char *tag, const char *type)
-{
-	if ((p = soap_in_PointerTotns__selectGameAnnotationsWithTokenIdResponse(soap, tag, p, type)))
-		if (soap_getindependent(soap))
-			return NULL;
-	return p;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__selectGameAnnotationsWithTokenId(struct soap *soap, tns__selectGameAnnotationsWithTokenId *const*a)
-{
-	if (!soap_reference(soap, *a, SOAP_TYPE_ServerSoap_tns__selectGameAnnotationsWithTokenId))
-		(*a)->soap_serialize(soap);
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__selectGameAnnotationsWithTokenId(struct soap *soap, const char *tag, int id, tns__selectGameAnnotationsWithTokenId *const*a, const char *type)
-{
-	id = soap_element_id(soap, tag, id, *a, NULL, 0, type, SOAP_TYPE_ServerSoap_tns__selectGameAnnotationsWithTokenId);
-	if (id < 0)
-		return soap->error;
-	return (*a)->soap_out(soap, tag, id, type);
-}
-
-SOAP_FMAC3 tns__selectGameAnnotationsWithTokenId ** SOAP_FMAC4 soap_in_PointerTotns__selectGameAnnotationsWithTokenId(struct soap *soap, const char *tag, tns__selectGameAnnotationsWithTokenId **a, const char *type)
-{
-	if (soap_element_begin_in(soap, tag, 1, NULL))
-		return NULL;
-	if (!a)
-		if (!(a = (tns__selectGameAnnotationsWithTokenId **)soap_malloc(soap, sizeof(tns__selectGameAnnotationsWithTokenId *))))
-			return NULL;
-	*a = NULL;
-	if (!soap->null && *soap->href != '#')
-	{	soap_revert(soap);
-		if (!(*a = (tns__selectGameAnnotationsWithTokenId *)soap_instantiate_tns__selectGameAnnotationsWithTokenId(soap, -1, soap->type, soap->arrayType, NULL)))
-			return NULL;
-		(*a)->soap_default(soap);
-		if (!(*a)->soap_in(soap, tag, NULL))
-			return NULL;
-	}
-	else
-	{	tns__selectGameAnnotationsWithTokenId ** p = (tns__selectGameAnnotationsWithTokenId **)soap_id_lookup(soap, soap->href, (void**)a, SOAP_TYPE_ServerSoap_tns__selectGameAnnotationsWithTokenId, sizeof(tns__selectGameAnnotationsWithTokenId), 0);
-		a = p;
-		if (soap->body && soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	return a;
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__selectGameAnnotationsWithTokenId(struct soap *soap, tns__selectGameAnnotationsWithTokenId *const*a, const char *tag, const char *type)
-{
-	register int id = soap_embed(soap, (void*)a, NULL, 0, tag, SOAP_TYPE_ServerSoap_PointerTotns__selectGameAnnotationsWithTokenId);
-	if (soap_out_PointerTotns__selectGameAnnotationsWithTokenId(soap, tag?tag:"tns:selectGameAnnotationsWithTokenId", id, a, type))
-		return soap->error;
-	return soap_putindependent(soap);
-}
-
-SOAP_FMAC3 tns__selectGameAnnotationsWithTokenId ** SOAP_FMAC4 soap_get_PointerTotns__selectGameAnnotationsWithTokenId(struct soap *soap, tns__selectGameAnnotationsWithTokenId **p, const char *tag, const char *type)
-{
-	if ((p = soap_in_PointerTotns__selectGameAnnotationsWithTokenId(soap, tag, p, type)))
-		if (soap_getindependent(soap))
-			return NULL;
-	return p;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__selectGameAliasesWithTokenIdResponse(struct soap *soap, tns__selectGameAliasesWithTokenIdResponse *const*a)
-{
-	if (!soap_reference(soap, *a, SOAP_TYPE_ServerSoap_tns__selectGameAliasesWithTokenIdResponse))
-		(*a)->soap_serialize(soap);
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__selectGameAliasesWithTokenIdResponse(struct soap *soap, const char *tag, int id, tns__selectGameAliasesWithTokenIdResponse *const*a, const char *type)
-{
-	id = soap_element_id(soap, tag, id, *a, NULL, 0, type, SOAP_TYPE_ServerSoap_tns__selectGameAliasesWithTokenIdResponse);
-	if (id < 0)
-		return soap->error;
-	return (*a)->soap_out(soap, tag, id, type);
-}
-
-SOAP_FMAC3 tns__selectGameAliasesWithTokenIdResponse ** SOAP_FMAC4 soap_in_PointerTotns__selectGameAliasesWithTokenIdResponse(struct soap *soap, const char *tag, tns__selectGameAliasesWithTokenIdResponse **a, const char *type)
-{
-	if (soap_element_begin_in(soap, tag, 1, NULL))
-		return NULL;
-	if (!a)
-		if (!(a = (tns__selectGameAliasesWithTokenIdResponse **)soap_malloc(soap, sizeof(tns__selectGameAliasesWithTokenIdResponse *))))
-			return NULL;
-	*a = NULL;
-	if (!soap->null && *soap->href != '#')
-	{	soap_revert(soap);
-		if (!(*a = (tns__selectGameAliasesWithTokenIdResponse *)soap_instantiate_tns__selectGameAliasesWithTokenIdResponse(soap, -1, soap->type, soap->arrayType, NULL)))
-			return NULL;
-		(*a)->soap_default(soap);
-		if (!(*a)->soap_in(soap, tag, NULL))
-			return NULL;
-	}
-	else
-	{	tns__selectGameAliasesWithTokenIdResponse ** p = (tns__selectGameAliasesWithTokenIdResponse **)soap_id_lookup(soap, soap->href, (void**)a, SOAP_TYPE_ServerSoap_tns__selectGameAliasesWithTokenIdResponse, sizeof(tns__selectGameAliasesWithTokenIdResponse), 0);
-		a = p;
-		if (soap->body && soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	return a;
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__selectGameAliasesWithTokenIdResponse(struct soap *soap, tns__selectGameAliasesWithTokenIdResponse *const*a, const char *tag, const char *type)
-{
-	register int id = soap_embed(soap, (void*)a, NULL, 0, tag, SOAP_TYPE_ServerSoap_PointerTotns__selectGameAliasesWithTokenIdResponse);
-	if (soap_out_PointerTotns__selectGameAliasesWithTokenIdResponse(soap, tag?tag:"tns:selectGameAliasesWithTokenIdResponse", id, a, type))
-		return soap->error;
-	return soap_putindependent(soap);
-}
-
-SOAP_FMAC3 tns__selectGameAliasesWithTokenIdResponse ** SOAP_FMAC4 soap_get_PointerTotns__selectGameAliasesWithTokenIdResponse(struct soap *soap, tns__selectGameAliasesWithTokenIdResponse **p, const char *tag, const char *type)
-{
-	if ((p = soap_in_PointerTotns__selectGameAliasesWithTokenIdResponse(soap, tag, p, type)))
-		if (soap_getindependent(soap))
-			return NULL;
-	return p;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__selectGameAliasesWithTokenId(struct soap *soap, tns__selectGameAliasesWithTokenId *const*a)
-{
-	if (!soap_reference(soap, *a, SOAP_TYPE_ServerSoap_tns__selectGameAliasesWithTokenId))
-		(*a)->soap_serialize(soap);
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__selectGameAliasesWithTokenId(struct soap *soap, const char *tag, int id, tns__selectGameAliasesWithTokenId *const*a, const char *type)
-{
-	id = soap_element_id(soap, tag, id, *a, NULL, 0, type, SOAP_TYPE_ServerSoap_tns__selectGameAliasesWithTokenId);
-	if (id < 0)
-		return soap->error;
-	return (*a)->soap_out(soap, tag, id, type);
-}
-
-SOAP_FMAC3 tns__selectGameAliasesWithTokenId ** SOAP_FMAC4 soap_in_PointerTotns__selectGameAliasesWithTokenId(struct soap *soap, const char *tag, tns__selectGameAliasesWithTokenId **a, const char *type)
-{
-	if (soap_element_begin_in(soap, tag, 1, NULL))
-		return NULL;
-	if (!a)
-		if (!(a = (tns__selectGameAliasesWithTokenId **)soap_malloc(soap, sizeof(tns__selectGameAliasesWithTokenId *))))
-			return NULL;
-	*a = NULL;
-	if (!soap->null && *soap->href != '#')
-	{	soap_revert(soap);
-		if (!(*a = (tns__selectGameAliasesWithTokenId *)soap_instantiate_tns__selectGameAliasesWithTokenId(soap, -1, soap->type, soap->arrayType, NULL)))
-			return NULL;
-		(*a)->soap_default(soap);
-		if (!(*a)->soap_in(soap, tag, NULL))
-			return NULL;
-	}
-	else
-	{	tns__selectGameAliasesWithTokenId ** p = (tns__selectGameAliasesWithTokenId **)soap_id_lookup(soap, soap->href, (void**)a, SOAP_TYPE_ServerSoap_tns__selectGameAliasesWithTokenId, sizeof(tns__selectGameAliasesWithTokenId), 0);
-		a = p;
-		if (soap->body && soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	return a;
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__selectGameAliasesWithTokenId(struct soap *soap, tns__selectGameAliasesWithTokenId *const*a, const char *tag, const char *type)
-{
-	register int id = soap_embed(soap, (void*)a, NULL, 0, tag, SOAP_TYPE_ServerSoap_PointerTotns__selectGameAliasesWithTokenId);
-	if (soap_out_PointerTotns__selectGameAliasesWithTokenId(soap, tag?tag:"tns:selectGameAliasesWithTokenId", id, a, type))
-		return soap->error;
-	return soap_putindependent(soap);
-}
-
-SOAP_FMAC3 tns__selectGameAliasesWithTokenId ** SOAP_FMAC4 soap_get_PointerTotns__selectGameAliasesWithTokenId(struct soap *soap, tns__selectGameAliasesWithTokenId **p, const char *tag, const char *type)
-{
-	if ((p = soap_in_PointerTotns__selectGameAliasesWithTokenId(soap, tag, p, type)))
-		if (soap_getindependent(soap))
-			return NULL;
-	return p;
-}
-
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__isConnectedResponse(struct soap *soap, tns__isConnectedResponse *const*a)
 {
 	if (!soap_reference(soap, *a, SOAP_TYPE_ServerSoap_tns__isConnectedResponse))
@@ -23213,6 +17779,336 @@ SOAP_FMAC3 tns__isClientUpdated ** SOAP_FMAC4 soap_get_PointerTotns__isClientUpd
 	return p;
 }
 
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__curseMediaTokenWithIdResponse(struct soap *soap, tns__curseMediaTokenWithIdResponse *const*a)
+{
+	if (!soap_reference(soap, *a, SOAP_TYPE_ServerSoap_tns__curseMediaTokenWithIdResponse))
+		(*a)->soap_serialize(soap);
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__curseMediaTokenWithIdResponse(struct soap *soap, const char *tag, int id, tns__curseMediaTokenWithIdResponse *const*a, const char *type)
+{
+	id = soap_element_id(soap, tag, id, *a, NULL, 0, type, SOAP_TYPE_ServerSoap_tns__curseMediaTokenWithIdResponse);
+	if (id < 0)
+		return soap->error;
+	return (*a)->soap_out(soap, tag, id, type);
+}
+
+SOAP_FMAC3 tns__curseMediaTokenWithIdResponse ** SOAP_FMAC4 soap_in_PointerTotns__curseMediaTokenWithIdResponse(struct soap *soap, const char *tag, tns__curseMediaTokenWithIdResponse **a, const char *type)
+{
+	if (soap_element_begin_in(soap, tag, 1, NULL))
+		return NULL;
+	if (!a)
+		if (!(a = (tns__curseMediaTokenWithIdResponse **)soap_malloc(soap, sizeof(tns__curseMediaTokenWithIdResponse *))))
+			return NULL;
+	*a = NULL;
+	if (!soap->null && *soap->href != '#')
+	{	soap_revert(soap);
+		if (!(*a = (tns__curseMediaTokenWithIdResponse *)soap_instantiate_tns__curseMediaTokenWithIdResponse(soap, -1, soap->type, soap->arrayType, NULL)))
+			return NULL;
+		(*a)->soap_default(soap);
+		if (!(*a)->soap_in(soap, tag, NULL))
+			return NULL;
+	}
+	else
+	{	tns__curseMediaTokenWithIdResponse ** p = (tns__curseMediaTokenWithIdResponse **)soap_id_lookup(soap, soap->href, (void**)a, SOAP_TYPE_ServerSoap_tns__curseMediaTokenWithIdResponse, sizeof(tns__curseMediaTokenWithIdResponse), 0);
+		a = p;
+		if (soap->body && soap_element_end_in(soap, tag))
+			return NULL;
+	}
+	return a;
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__curseMediaTokenWithIdResponse(struct soap *soap, tns__curseMediaTokenWithIdResponse *const*a, const char *tag, const char *type)
+{
+	register int id = soap_embed(soap, (void*)a, NULL, 0, tag, SOAP_TYPE_ServerSoap_PointerTotns__curseMediaTokenWithIdResponse);
+	if (soap_out_PointerTotns__curseMediaTokenWithIdResponse(soap, tag?tag:"tns:curseMediaTokenWithIdResponse", id, a, type))
+		return soap->error;
+	return soap_putindependent(soap);
+}
+
+SOAP_FMAC3 tns__curseMediaTokenWithIdResponse ** SOAP_FMAC4 soap_get_PointerTotns__curseMediaTokenWithIdResponse(struct soap *soap, tns__curseMediaTokenWithIdResponse **p, const char *tag, const char *type)
+{
+	if ((p = soap_in_PointerTotns__curseMediaTokenWithIdResponse(soap, tag, p, type)))
+		if (soap_getindependent(soap))
+			return NULL;
+	return p;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__curseMediaTokenWithId(struct soap *soap, tns__curseMediaTokenWithId *const*a)
+{
+	if (!soap_reference(soap, *a, SOAP_TYPE_ServerSoap_tns__curseMediaTokenWithId))
+		(*a)->soap_serialize(soap);
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__curseMediaTokenWithId(struct soap *soap, const char *tag, int id, tns__curseMediaTokenWithId *const*a, const char *type)
+{
+	id = soap_element_id(soap, tag, id, *a, NULL, 0, type, SOAP_TYPE_ServerSoap_tns__curseMediaTokenWithId);
+	if (id < 0)
+		return soap->error;
+	return (*a)->soap_out(soap, tag, id, type);
+}
+
+SOAP_FMAC3 tns__curseMediaTokenWithId ** SOAP_FMAC4 soap_in_PointerTotns__curseMediaTokenWithId(struct soap *soap, const char *tag, tns__curseMediaTokenWithId **a, const char *type)
+{
+	if (soap_element_begin_in(soap, tag, 1, NULL))
+		return NULL;
+	if (!a)
+		if (!(a = (tns__curseMediaTokenWithId **)soap_malloc(soap, sizeof(tns__curseMediaTokenWithId *))))
+			return NULL;
+	*a = NULL;
+	if (!soap->null && *soap->href != '#')
+	{	soap_revert(soap);
+		if (!(*a = (tns__curseMediaTokenWithId *)soap_instantiate_tns__curseMediaTokenWithId(soap, -1, soap->type, soap->arrayType, NULL)))
+			return NULL;
+		(*a)->soap_default(soap);
+		if (!(*a)->soap_in(soap, tag, NULL))
+			return NULL;
+	}
+	else
+	{	tns__curseMediaTokenWithId ** p = (tns__curseMediaTokenWithId **)soap_id_lookup(soap, soap->href, (void**)a, SOAP_TYPE_ServerSoap_tns__curseMediaTokenWithId, sizeof(tns__curseMediaTokenWithId), 0);
+		a = p;
+		if (soap->body && soap_element_end_in(soap, tag))
+			return NULL;
+	}
+	return a;
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__curseMediaTokenWithId(struct soap *soap, tns__curseMediaTokenWithId *const*a, const char *tag, const char *type)
+{
+	register int id = soap_embed(soap, (void*)a, NULL, 0, tag, SOAP_TYPE_ServerSoap_PointerTotns__curseMediaTokenWithId);
+	if (soap_out_PointerTotns__curseMediaTokenWithId(soap, tag?tag:"tns:curseMediaTokenWithId", id, a, type))
+		return soap->error;
+	return soap_putindependent(soap);
+}
+
+SOAP_FMAC3 tns__curseMediaTokenWithId ** SOAP_FMAC4 soap_get_PointerTotns__curseMediaTokenWithId(struct soap *soap, tns__curseMediaTokenWithId **p, const char *tag, const char *type)
+{
+	if ((p = soap_in_PointerTotns__curseMediaTokenWithId(soap, tag, p, type)))
+		if (soap_getindependent(soap))
+			return NULL;
+	return p;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__curseMediaAnnotationWithIdResponse(struct soap *soap, tns__curseMediaAnnotationWithIdResponse *const*a)
+{
+	if (!soap_reference(soap, *a, SOAP_TYPE_ServerSoap_tns__curseMediaAnnotationWithIdResponse))
+		(*a)->soap_serialize(soap);
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__curseMediaAnnotationWithIdResponse(struct soap *soap, const char *tag, int id, tns__curseMediaAnnotationWithIdResponse *const*a, const char *type)
+{
+	id = soap_element_id(soap, tag, id, *a, NULL, 0, type, SOAP_TYPE_ServerSoap_tns__curseMediaAnnotationWithIdResponse);
+	if (id < 0)
+		return soap->error;
+	return (*a)->soap_out(soap, tag, id, type);
+}
+
+SOAP_FMAC3 tns__curseMediaAnnotationWithIdResponse ** SOAP_FMAC4 soap_in_PointerTotns__curseMediaAnnotationWithIdResponse(struct soap *soap, const char *tag, tns__curseMediaAnnotationWithIdResponse **a, const char *type)
+{
+	if (soap_element_begin_in(soap, tag, 1, NULL))
+		return NULL;
+	if (!a)
+		if (!(a = (tns__curseMediaAnnotationWithIdResponse **)soap_malloc(soap, sizeof(tns__curseMediaAnnotationWithIdResponse *))))
+			return NULL;
+	*a = NULL;
+	if (!soap->null && *soap->href != '#')
+	{	soap_revert(soap);
+		if (!(*a = (tns__curseMediaAnnotationWithIdResponse *)soap_instantiate_tns__curseMediaAnnotationWithIdResponse(soap, -1, soap->type, soap->arrayType, NULL)))
+			return NULL;
+		(*a)->soap_default(soap);
+		if (!(*a)->soap_in(soap, tag, NULL))
+			return NULL;
+	}
+	else
+	{	tns__curseMediaAnnotationWithIdResponse ** p = (tns__curseMediaAnnotationWithIdResponse **)soap_id_lookup(soap, soap->href, (void**)a, SOAP_TYPE_ServerSoap_tns__curseMediaAnnotationWithIdResponse, sizeof(tns__curseMediaAnnotationWithIdResponse), 0);
+		a = p;
+		if (soap->body && soap_element_end_in(soap, tag))
+			return NULL;
+	}
+	return a;
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__curseMediaAnnotationWithIdResponse(struct soap *soap, tns__curseMediaAnnotationWithIdResponse *const*a, const char *tag, const char *type)
+{
+	register int id = soap_embed(soap, (void*)a, NULL, 0, tag, SOAP_TYPE_ServerSoap_PointerTotns__curseMediaAnnotationWithIdResponse);
+	if (soap_out_PointerTotns__curseMediaAnnotationWithIdResponse(soap, tag?tag:"tns:curseMediaAnnotationWithIdResponse", id, a, type))
+		return soap->error;
+	return soap_putindependent(soap);
+}
+
+SOAP_FMAC3 tns__curseMediaAnnotationWithIdResponse ** SOAP_FMAC4 soap_get_PointerTotns__curseMediaAnnotationWithIdResponse(struct soap *soap, tns__curseMediaAnnotationWithIdResponse **p, const char *tag, const char *type)
+{
+	if ((p = soap_in_PointerTotns__curseMediaAnnotationWithIdResponse(soap, tag, p, type)))
+		if (soap_getindependent(soap))
+			return NULL;
+	return p;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__curseMediaAnnotationWithId(struct soap *soap, tns__curseMediaAnnotationWithId *const*a)
+{
+	if (!soap_reference(soap, *a, SOAP_TYPE_ServerSoap_tns__curseMediaAnnotationWithId))
+		(*a)->soap_serialize(soap);
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__curseMediaAnnotationWithId(struct soap *soap, const char *tag, int id, tns__curseMediaAnnotationWithId *const*a, const char *type)
+{
+	id = soap_element_id(soap, tag, id, *a, NULL, 0, type, SOAP_TYPE_ServerSoap_tns__curseMediaAnnotationWithId);
+	if (id < 0)
+		return soap->error;
+	return (*a)->soap_out(soap, tag, id, type);
+}
+
+SOAP_FMAC3 tns__curseMediaAnnotationWithId ** SOAP_FMAC4 soap_in_PointerTotns__curseMediaAnnotationWithId(struct soap *soap, const char *tag, tns__curseMediaAnnotationWithId **a, const char *type)
+{
+	if (soap_element_begin_in(soap, tag, 1, NULL))
+		return NULL;
+	if (!a)
+		if (!(a = (tns__curseMediaAnnotationWithId **)soap_malloc(soap, sizeof(tns__curseMediaAnnotationWithId *))))
+			return NULL;
+	*a = NULL;
+	if (!soap->null && *soap->href != '#')
+	{	soap_revert(soap);
+		if (!(*a = (tns__curseMediaAnnotationWithId *)soap_instantiate_tns__curseMediaAnnotationWithId(soap, -1, soap->type, soap->arrayType, NULL)))
+			return NULL;
+		(*a)->soap_default(soap);
+		if (!(*a)->soap_in(soap, tag, NULL))
+			return NULL;
+	}
+	else
+	{	tns__curseMediaAnnotationWithId ** p = (tns__curseMediaAnnotationWithId **)soap_id_lookup(soap, soap->href, (void**)a, SOAP_TYPE_ServerSoap_tns__curseMediaAnnotationWithId, sizeof(tns__curseMediaAnnotationWithId), 0);
+		a = p;
+		if (soap->body && soap_element_end_in(soap, tag))
+			return NULL;
+	}
+	return a;
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__curseMediaAnnotationWithId(struct soap *soap, tns__curseMediaAnnotationWithId *const*a, const char *tag, const char *type)
+{
+	register int id = soap_embed(soap, (void*)a, NULL, 0, tag, SOAP_TYPE_ServerSoap_PointerTotns__curseMediaAnnotationWithId);
+	if (soap_out_PointerTotns__curseMediaAnnotationWithId(soap, tag?tag:"tns:curseMediaAnnotationWithId", id, a, type))
+		return soap->error;
+	return soap_putindependent(soap);
+}
+
+SOAP_FMAC3 tns__curseMediaAnnotationWithId ** SOAP_FMAC4 soap_get_PointerTotns__curseMediaAnnotationWithId(struct soap *soap, tns__curseMediaAnnotationWithId **p, const char *tag, const char *type)
+{
+	if ((p = soap_in_PointerTotns__curseMediaAnnotationWithId(soap, tag, p, type)))
+		if (soap_getindependent(soap))
+			return NULL;
+	return p;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__curseMediaAliasWithIdResponse(struct soap *soap, tns__curseMediaAliasWithIdResponse *const*a)
+{
+	if (!soap_reference(soap, *a, SOAP_TYPE_ServerSoap_tns__curseMediaAliasWithIdResponse))
+		(*a)->soap_serialize(soap);
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__curseMediaAliasWithIdResponse(struct soap *soap, const char *tag, int id, tns__curseMediaAliasWithIdResponse *const*a, const char *type)
+{
+	id = soap_element_id(soap, tag, id, *a, NULL, 0, type, SOAP_TYPE_ServerSoap_tns__curseMediaAliasWithIdResponse);
+	if (id < 0)
+		return soap->error;
+	return (*a)->soap_out(soap, tag, id, type);
+}
+
+SOAP_FMAC3 tns__curseMediaAliasWithIdResponse ** SOAP_FMAC4 soap_in_PointerTotns__curseMediaAliasWithIdResponse(struct soap *soap, const char *tag, tns__curseMediaAliasWithIdResponse **a, const char *type)
+{
+	if (soap_element_begin_in(soap, tag, 1, NULL))
+		return NULL;
+	if (!a)
+		if (!(a = (tns__curseMediaAliasWithIdResponse **)soap_malloc(soap, sizeof(tns__curseMediaAliasWithIdResponse *))))
+			return NULL;
+	*a = NULL;
+	if (!soap->null && *soap->href != '#')
+	{	soap_revert(soap);
+		if (!(*a = (tns__curseMediaAliasWithIdResponse *)soap_instantiate_tns__curseMediaAliasWithIdResponse(soap, -1, soap->type, soap->arrayType, NULL)))
+			return NULL;
+		(*a)->soap_default(soap);
+		if (!(*a)->soap_in(soap, tag, NULL))
+			return NULL;
+	}
+	else
+	{	tns__curseMediaAliasWithIdResponse ** p = (tns__curseMediaAliasWithIdResponse **)soap_id_lookup(soap, soap->href, (void**)a, SOAP_TYPE_ServerSoap_tns__curseMediaAliasWithIdResponse, sizeof(tns__curseMediaAliasWithIdResponse), 0);
+		a = p;
+		if (soap->body && soap_element_end_in(soap, tag))
+			return NULL;
+	}
+	return a;
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__curseMediaAliasWithIdResponse(struct soap *soap, tns__curseMediaAliasWithIdResponse *const*a, const char *tag, const char *type)
+{
+	register int id = soap_embed(soap, (void*)a, NULL, 0, tag, SOAP_TYPE_ServerSoap_PointerTotns__curseMediaAliasWithIdResponse);
+	if (soap_out_PointerTotns__curseMediaAliasWithIdResponse(soap, tag?tag:"tns:curseMediaAliasWithIdResponse", id, a, type))
+		return soap->error;
+	return soap_putindependent(soap);
+}
+
+SOAP_FMAC3 tns__curseMediaAliasWithIdResponse ** SOAP_FMAC4 soap_get_PointerTotns__curseMediaAliasWithIdResponse(struct soap *soap, tns__curseMediaAliasWithIdResponse **p, const char *tag, const char *type)
+{
+	if ((p = soap_in_PointerTotns__curseMediaAliasWithIdResponse(soap, tag, p, type)))
+		if (soap_getindependent(soap))
+			return NULL;
+	return p;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__curseMediaAliasWithId(struct soap *soap, tns__curseMediaAliasWithId *const*a)
+{
+	if (!soap_reference(soap, *a, SOAP_TYPE_ServerSoap_tns__curseMediaAliasWithId))
+		(*a)->soap_serialize(soap);
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__curseMediaAliasWithId(struct soap *soap, const char *tag, int id, tns__curseMediaAliasWithId *const*a, const char *type)
+{
+	id = soap_element_id(soap, tag, id, *a, NULL, 0, type, SOAP_TYPE_ServerSoap_tns__curseMediaAliasWithId);
+	if (id < 0)
+		return soap->error;
+	return (*a)->soap_out(soap, tag, id, type);
+}
+
+SOAP_FMAC3 tns__curseMediaAliasWithId ** SOAP_FMAC4 soap_in_PointerTotns__curseMediaAliasWithId(struct soap *soap, const char *tag, tns__curseMediaAliasWithId **a, const char *type)
+{
+	if (soap_element_begin_in(soap, tag, 1, NULL))
+		return NULL;
+	if (!a)
+		if (!(a = (tns__curseMediaAliasWithId **)soap_malloc(soap, sizeof(tns__curseMediaAliasWithId *))))
+			return NULL;
+	*a = NULL;
+	if (!soap->null && *soap->href != '#')
+	{	soap_revert(soap);
+		if (!(*a = (tns__curseMediaAliasWithId *)soap_instantiate_tns__curseMediaAliasWithId(soap, -1, soap->type, soap->arrayType, NULL)))
+			return NULL;
+		(*a)->soap_default(soap);
+		if (!(*a)->soap_in(soap, tag, NULL))
+			return NULL;
+	}
+	else
+	{	tns__curseMediaAliasWithId ** p = (tns__curseMediaAliasWithId **)soap_id_lookup(soap, soap->href, (void**)a, SOAP_TYPE_ServerSoap_tns__curseMediaAliasWithId, sizeof(tns__curseMediaAliasWithId), 0);
+		a = p;
+		if (soap->body && soap_element_end_in(soap, tag))
+			return NULL;
+	}
+	return a;
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__curseMediaAliasWithId(struct soap *soap, tns__curseMediaAliasWithId *const*a, const char *tag, const char *type)
+{
+	register int id = soap_embed(soap, (void*)a, NULL, 0, tag, SOAP_TYPE_ServerSoap_PointerTotns__curseMediaAliasWithId);
+	if (soap_out_PointerTotns__curseMediaAliasWithId(soap, tag?tag:"tns:curseMediaAliasWithId", id, a, type))
+		return soap->error;
+	return soap_putindependent(soap);
+}
+
+SOAP_FMAC3 tns__curseMediaAliasWithId ** SOAP_FMAC4 soap_get_PointerTotns__curseMediaAliasWithId(struct soap *soap, tns__curseMediaAliasWithId **p, const char *tag, const char *type)
+{
+	if ((p = soap_in_PointerTotns__curseMediaAliasWithId(soap, tag, p, type)))
+		if (soap_getindependent(soap))
+			return NULL;
+	return p;
+}
+
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__chatResponse(struct soap *soap, tns__chatResponse *const*a)
 {
 	if (!soap_reference(soap, *a, SOAP_TYPE_ServerSoap_tns__chatResponse))
@@ -23318,6 +18214,446 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__chat(struct soap *soap, tns__ch
 SOAP_FMAC3 tns__chat ** SOAP_FMAC4 soap_get_PointerTotns__chat(struct soap *soap, tns__chat **p, const char *tag, const char *type)
 {
 	if ((p = soap_in_PointerTotns__chat(soap, tag, p, type)))
+		if (soap_getindependent(soap))
+			return NULL;
+	return p;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__blockUserWithIdResponse(struct soap *soap, tns__blockUserWithIdResponse *const*a)
+{
+	if (!soap_reference(soap, *a, SOAP_TYPE_ServerSoap_tns__blockUserWithIdResponse))
+		(*a)->soap_serialize(soap);
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__blockUserWithIdResponse(struct soap *soap, const char *tag, int id, tns__blockUserWithIdResponse *const*a, const char *type)
+{
+	id = soap_element_id(soap, tag, id, *a, NULL, 0, type, SOAP_TYPE_ServerSoap_tns__blockUserWithIdResponse);
+	if (id < 0)
+		return soap->error;
+	return (*a)->soap_out(soap, tag, id, type);
+}
+
+SOAP_FMAC3 tns__blockUserWithIdResponse ** SOAP_FMAC4 soap_in_PointerTotns__blockUserWithIdResponse(struct soap *soap, const char *tag, tns__blockUserWithIdResponse **a, const char *type)
+{
+	if (soap_element_begin_in(soap, tag, 1, NULL))
+		return NULL;
+	if (!a)
+		if (!(a = (tns__blockUserWithIdResponse **)soap_malloc(soap, sizeof(tns__blockUserWithIdResponse *))))
+			return NULL;
+	*a = NULL;
+	if (!soap->null && *soap->href != '#')
+	{	soap_revert(soap);
+		if (!(*a = (tns__blockUserWithIdResponse *)soap_instantiate_tns__blockUserWithIdResponse(soap, -1, soap->type, soap->arrayType, NULL)))
+			return NULL;
+		(*a)->soap_default(soap);
+		if (!(*a)->soap_in(soap, tag, NULL))
+			return NULL;
+	}
+	else
+	{	tns__blockUserWithIdResponse ** p = (tns__blockUserWithIdResponse **)soap_id_lookup(soap, soap->href, (void**)a, SOAP_TYPE_ServerSoap_tns__blockUserWithIdResponse, sizeof(tns__blockUserWithIdResponse), 0);
+		a = p;
+		if (soap->body && soap_element_end_in(soap, tag))
+			return NULL;
+	}
+	return a;
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__blockUserWithIdResponse(struct soap *soap, tns__blockUserWithIdResponse *const*a, const char *tag, const char *type)
+{
+	register int id = soap_embed(soap, (void*)a, NULL, 0, tag, SOAP_TYPE_ServerSoap_PointerTotns__blockUserWithIdResponse);
+	if (soap_out_PointerTotns__blockUserWithIdResponse(soap, tag?tag:"tns:blockUserWithIdResponse", id, a, type))
+		return soap->error;
+	return soap_putindependent(soap);
+}
+
+SOAP_FMAC3 tns__blockUserWithIdResponse ** SOAP_FMAC4 soap_get_PointerTotns__blockUserWithIdResponse(struct soap *soap, tns__blockUserWithIdResponse **p, const char *tag, const char *type)
+{
+	if ((p = soap_in_PointerTotns__blockUserWithIdResponse(soap, tag, p, type)))
+		if (soap_getindependent(soap))
+			return NULL;
+	return p;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__blockUserWithId(struct soap *soap, tns__blockUserWithId *const*a)
+{
+	if (!soap_reference(soap, *a, SOAP_TYPE_ServerSoap_tns__blockUserWithId))
+		(*a)->soap_serialize(soap);
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__blockUserWithId(struct soap *soap, const char *tag, int id, tns__blockUserWithId *const*a, const char *type)
+{
+	id = soap_element_id(soap, tag, id, *a, NULL, 0, type, SOAP_TYPE_ServerSoap_tns__blockUserWithId);
+	if (id < 0)
+		return soap->error;
+	return (*a)->soap_out(soap, tag, id, type);
+}
+
+SOAP_FMAC3 tns__blockUserWithId ** SOAP_FMAC4 soap_in_PointerTotns__blockUserWithId(struct soap *soap, const char *tag, tns__blockUserWithId **a, const char *type)
+{
+	if (soap_element_begin_in(soap, tag, 1, NULL))
+		return NULL;
+	if (!a)
+		if (!(a = (tns__blockUserWithId **)soap_malloc(soap, sizeof(tns__blockUserWithId *))))
+			return NULL;
+	*a = NULL;
+	if (!soap->null && *soap->href != '#')
+	{	soap_revert(soap);
+		if (!(*a = (tns__blockUserWithId *)soap_instantiate_tns__blockUserWithId(soap, -1, soap->type, soap->arrayType, NULL)))
+			return NULL;
+		(*a)->soap_default(soap);
+		if (!(*a)->soap_in(soap, tag, NULL))
+			return NULL;
+	}
+	else
+	{	tns__blockUserWithId ** p = (tns__blockUserWithId **)soap_id_lookup(soap, soap->href, (void**)a, SOAP_TYPE_ServerSoap_tns__blockUserWithId, sizeof(tns__blockUserWithId), 0);
+		a = p;
+		if (soap->body && soap_element_end_in(soap, tag))
+			return NULL;
+	}
+	return a;
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__blockUserWithId(struct soap *soap, tns__blockUserWithId *const*a, const char *tag, const char *type)
+{
+	register int id = soap_embed(soap, (void*)a, NULL, 0, tag, SOAP_TYPE_ServerSoap_PointerTotns__blockUserWithId);
+	if (soap_out_PointerTotns__blockUserWithId(soap, tag?tag:"tns:blockUserWithId", id, a, type))
+		return soap->error;
+	return soap_putindependent(soap);
+}
+
+SOAP_FMAC3 tns__blockUserWithId ** SOAP_FMAC4 soap_get_PointerTotns__blockUserWithId(struct soap *soap, tns__blockUserWithId **p, const char *tag, const char *type)
+{
+	if ((p = soap_in_PointerTotns__blockUserWithId(soap, tag, p, type)))
+		if (soap_getindependent(soap))
+			return NULL;
+	return p;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__blockMediaAnnotationWithIdResponse(struct soap *soap, tns__blockMediaAnnotationWithIdResponse *const*a)
+{
+	if (!soap_reference(soap, *a, SOAP_TYPE_ServerSoap_tns__blockMediaAnnotationWithIdResponse))
+		(*a)->soap_serialize(soap);
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__blockMediaAnnotationWithIdResponse(struct soap *soap, const char *tag, int id, tns__blockMediaAnnotationWithIdResponse *const*a, const char *type)
+{
+	id = soap_element_id(soap, tag, id, *a, NULL, 0, type, SOAP_TYPE_ServerSoap_tns__blockMediaAnnotationWithIdResponse);
+	if (id < 0)
+		return soap->error;
+	return (*a)->soap_out(soap, tag, id, type);
+}
+
+SOAP_FMAC3 tns__blockMediaAnnotationWithIdResponse ** SOAP_FMAC4 soap_in_PointerTotns__blockMediaAnnotationWithIdResponse(struct soap *soap, const char *tag, tns__blockMediaAnnotationWithIdResponse **a, const char *type)
+{
+	if (soap_element_begin_in(soap, tag, 1, NULL))
+		return NULL;
+	if (!a)
+		if (!(a = (tns__blockMediaAnnotationWithIdResponse **)soap_malloc(soap, sizeof(tns__blockMediaAnnotationWithIdResponse *))))
+			return NULL;
+	*a = NULL;
+	if (!soap->null && *soap->href != '#')
+	{	soap_revert(soap);
+		if (!(*a = (tns__blockMediaAnnotationWithIdResponse *)soap_instantiate_tns__blockMediaAnnotationWithIdResponse(soap, -1, soap->type, soap->arrayType, NULL)))
+			return NULL;
+		(*a)->soap_default(soap);
+		if (!(*a)->soap_in(soap, tag, NULL))
+			return NULL;
+	}
+	else
+	{	tns__blockMediaAnnotationWithIdResponse ** p = (tns__blockMediaAnnotationWithIdResponse **)soap_id_lookup(soap, soap->href, (void**)a, SOAP_TYPE_ServerSoap_tns__blockMediaAnnotationWithIdResponse, sizeof(tns__blockMediaAnnotationWithIdResponse), 0);
+		a = p;
+		if (soap->body && soap_element_end_in(soap, tag))
+			return NULL;
+	}
+	return a;
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__blockMediaAnnotationWithIdResponse(struct soap *soap, tns__blockMediaAnnotationWithIdResponse *const*a, const char *tag, const char *type)
+{
+	register int id = soap_embed(soap, (void*)a, NULL, 0, tag, SOAP_TYPE_ServerSoap_PointerTotns__blockMediaAnnotationWithIdResponse);
+	if (soap_out_PointerTotns__blockMediaAnnotationWithIdResponse(soap, tag?tag:"tns:blockMediaAnnotationWithIdResponse", id, a, type))
+		return soap->error;
+	return soap_putindependent(soap);
+}
+
+SOAP_FMAC3 tns__blockMediaAnnotationWithIdResponse ** SOAP_FMAC4 soap_get_PointerTotns__blockMediaAnnotationWithIdResponse(struct soap *soap, tns__blockMediaAnnotationWithIdResponse **p, const char *tag, const char *type)
+{
+	if ((p = soap_in_PointerTotns__blockMediaAnnotationWithIdResponse(soap, tag, p, type)))
+		if (soap_getindependent(soap))
+			return NULL;
+	return p;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__blockMediaAnnotationWithId(struct soap *soap, tns__blockMediaAnnotationWithId *const*a)
+{
+	if (!soap_reference(soap, *a, SOAP_TYPE_ServerSoap_tns__blockMediaAnnotationWithId))
+		(*a)->soap_serialize(soap);
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__blockMediaAnnotationWithId(struct soap *soap, const char *tag, int id, tns__blockMediaAnnotationWithId *const*a, const char *type)
+{
+	id = soap_element_id(soap, tag, id, *a, NULL, 0, type, SOAP_TYPE_ServerSoap_tns__blockMediaAnnotationWithId);
+	if (id < 0)
+		return soap->error;
+	return (*a)->soap_out(soap, tag, id, type);
+}
+
+SOAP_FMAC3 tns__blockMediaAnnotationWithId ** SOAP_FMAC4 soap_in_PointerTotns__blockMediaAnnotationWithId(struct soap *soap, const char *tag, tns__blockMediaAnnotationWithId **a, const char *type)
+{
+	if (soap_element_begin_in(soap, tag, 1, NULL))
+		return NULL;
+	if (!a)
+		if (!(a = (tns__blockMediaAnnotationWithId **)soap_malloc(soap, sizeof(tns__blockMediaAnnotationWithId *))))
+			return NULL;
+	*a = NULL;
+	if (!soap->null && *soap->href != '#')
+	{	soap_revert(soap);
+		if (!(*a = (tns__blockMediaAnnotationWithId *)soap_instantiate_tns__blockMediaAnnotationWithId(soap, -1, soap->type, soap->arrayType, NULL)))
+			return NULL;
+		(*a)->soap_default(soap);
+		if (!(*a)->soap_in(soap, tag, NULL))
+			return NULL;
+	}
+	else
+	{	tns__blockMediaAnnotationWithId ** p = (tns__blockMediaAnnotationWithId **)soap_id_lookup(soap, soap->href, (void**)a, SOAP_TYPE_ServerSoap_tns__blockMediaAnnotationWithId, sizeof(tns__blockMediaAnnotationWithId), 0);
+		a = p;
+		if (soap->body && soap_element_end_in(soap, tag))
+			return NULL;
+	}
+	return a;
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__blockMediaAnnotationWithId(struct soap *soap, tns__blockMediaAnnotationWithId *const*a, const char *tag, const char *type)
+{
+	register int id = soap_embed(soap, (void*)a, NULL, 0, tag, SOAP_TYPE_ServerSoap_PointerTotns__blockMediaAnnotationWithId);
+	if (soap_out_PointerTotns__blockMediaAnnotationWithId(soap, tag?tag:"tns:blockMediaAnnotationWithId", id, a, type))
+		return soap->error;
+	return soap_putindependent(soap);
+}
+
+SOAP_FMAC3 tns__blockMediaAnnotationWithId ** SOAP_FMAC4 soap_get_PointerTotns__blockMediaAnnotationWithId(struct soap *soap, tns__blockMediaAnnotationWithId **p, const char *tag, const char *type)
+{
+	if ((p = soap_in_PointerTotns__blockMediaAnnotationWithId(soap, tag, p, type)))
+		if (soap_getindependent(soap))
+			return NULL;
+	return p;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__blockMediaAliasWithIdResponse(struct soap *soap, tns__blockMediaAliasWithIdResponse *const*a)
+{
+	if (!soap_reference(soap, *a, SOAP_TYPE_ServerSoap_tns__blockMediaAliasWithIdResponse))
+		(*a)->soap_serialize(soap);
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__blockMediaAliasWithIdResponse(struct soap *soap, const char *tag, int id, tns__blockMediaAliasWithIdResponse *const*a, const char *type)
+{
+	id = soap_element_id(soap, tag, id, *a, NULL, 0, type, SOAP_TYPE_ServerSoap_tns__blockMediaAliasWithIdResponse);
+	if (id < 0)
+		return soap->error;
+	return (*a)->soap_out(soap, tag, id, type);
+}
+
+SOAP_FMAC3 tns__blockMediaAliasWithIdResponse ** SOAP_FMAC4 soap_in_PointerTotns__blockMediaAliasWithIdResponse(struct soap *soap, const char *tag, tns__blockMediaAliasWithIdResponse **a, const char *type)
+{
+	if (soap_element_begin_in(soap, tag, 1, NULL))
+		return NULL;
+	if (!a)
+		if (!(a = (tns__blockMediaAliasWithIdResponse **)soap_malloc(soap, sizeof(tns__blockMediaAliasWithIdResponse *))))
+			return NULL;
+	*a = NULL;
+	if (!soap->null && *soap->href != '#')
+	{	soap_revert(soap);
+		if (!(*a = (tns__blockMediaAliasWithIdResponse *)soap_instantiate_tns__blockMediaAliasWithIdResponse(soap, -1, soap->type, soap->arrayType, NULL)))
+			return NULL;
+		(*a)->soap_default(soap);
+		if (!(*a)->soap_in(soap, tag, NULL))
+			return NULL;
+	}
+	else
+	{	tns__blockMediaAliasWithIdResponse ** p = (tns__blockMediaAliasWithIdResponse **)soap_id_lookup(soap, soap->href, (void**)a, SOAP_TYPE_ServerSoap_tns__blockMediaAliasWithIdResponse, sizeof(tns__blockMediaAliasWithIdResponse), 0);
+		a = p;
+		if (soap->body && soap_element_end_in(soap, tag))
+			return NULL;
+	}
+	return a;
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__blockMediaAliasWithIdResponse(struct soap *soap, tns__blockMediaAliasWithIdResponse *const*a, const char *tag, const char *type)
+{
+	register int id = soap_embed(soap, (void*)a, NULL, 0, tag, SOAP_TYPE_ServerSoap_PointerTotns__blockMediaAliasWithIdResponse);
+	if (soap_out_PointerTotns__blockMediaAliasWithIdResponse(soap, tag?tag:"tns:blockMediaAliasWithIdResponse", id, a, type))
+		return soap->error;
+	return soap_putindependent(soap);
+}
+
+SOAP_FMAC3 tns__blockMediaAliasWithIdResponse ** SOAP_FMAC4 soap_get_PointerTotns__blockMediaAliasWithIdResponse(struct soap *soap, tns__blockMediaAliasWithIdResponse **p, const char *tag, const char *type)
+{
+	if ((p = soap_in_PointerTotns__blockMediaAliasWithIdResponse(soap, tag, p, type)))
+		if (soap_getindependent(soap))
+			return NULL;
+	return p;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__blockMediaAliasWithId(struct soap *soap, tns__blockMediaAliasWithId *const*a)
+{
+	if (!soap_reference(soap, *a, SOAP_TYPE_ServerSoap_tns__blockMediaAliasWithId))
+		(*a)->soap_serialize(soap);
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__blockMediaAliasWithId(struct soap *soap, const char *tag, int id, tns__blockMediaAliasWithId *const*a, const char *type)
+{
+	id = soap_element_id(soap, tag, id, *a, NULL, 0, type, SOAP_TYPE_ServerSoap_tns__blockMediaAliasWithId);
+	if (id < 0)
+		return soap->error;
+	return (*a)->soap_out(soap, tag, id, type);
+}
+
+SOAP_FMAC3 tns__blockMediaAliasWithId ** SOAP_FMAC4 soap_in_PointerTotns__blockMediaAliasWithId(struct soap *soap, const char *tag, tns__blockMediaAliasWithId **a, const char *type)
+{
+	if (soap_element_begin_in(soap, tag, 1, NULL))
+		return NULL;
+	if (!a)
+		if (!(a = (tns__blockMediaAliasWithId **)soap_malloc(soap, sizeof(tns__blockMediaAliasWithId *))))
+			return NULL;
+	*a = NULL;
+	if (!soap->null && *soap->href != '#')
+	{	soap_revert(soap);
+		if (!(*a = (tns__blockMediaAliasWithId *)soap_instantiate_tns__blockMediaAliasWithId(soap, -1, soap->type, soap->arrayType, NULL)))
+			return NULL;
+		(*a)->soap_default(soap);
+		if (!(*a)->soap_in(soap, tag, NULL))
+			return NULL;
+	}
+	else
+	{	tns__blockMediaAliasWithId ** p = (tns__blockMediaAliasWithId **)soap_id_lookup(soap, soap->href, (void**)a, SOAP_TYPE_ServerSoap_tns__blockMediaAliasWithId, sizeof(tns__blockMediaAliasWithId), 0);
+		a = p;
+		if (soap->body && soap_element_end_in(soap, tag))
+			return NULL;
+	}
+	return a;
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__blockMediaAliasWithId(struct soap *soap, tns__blockMediaAliasWithId *const*a, const char *tag, const char *type)
+{
+	register int id = soap_embed(soap, (void*)a, NULL, 0, tag, SOAP_TYPE_ServerSoap_PointerTotns__blockMediaAliasWithId);
+	if (soap_out_PointerTotns__blockMediaAliasWithId(soap, tag?tag:"tns:blockMediaAliasWithId", id, a, type))
+		return soap->error;
+	return soap_putindependent(soap);
+}
+
+SOAP_FMAC3 tns__blockMediaAliasWithId ** SOAP_FMAC4 soap_get_PointerTotns__blockMediaAliasWithId(struct soap *soap, tns__blockMediaAliasWithId **p, const char *tag, const char *type)
+{
+	if ((p = soap_in_PointerTotns__blockMediaAliasWithId(soap, tag, p, type)))
+		if (soap_getindependent(soap))
+			return NULL;
+	return p;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__blessMediaTokenWithIdResponse(struct soap *soap, tns__blessMediaTokenWithIdResponse *const*a)
+{
+	if (!soap_reference(soap, *a, SOAP_TYPE_ServerSoap_tns__blessMediaTokenWithIdResponse))
+		(*a)->soap_serialize(soap);
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__blessMediaTokenWithIdResponse(struct soap *soap, const char *tag, int id, tns__blessMediaTokenWithIdResponse *const*a, const char *type)
+{
+	id = soap_element_id(soap, tag, id, *a, NULL, 0, type, SOAP_TYPE_ServerSoap_tns__blessMediaTokenWithIdResponse);
+	if (id < 0)
+		return soap->error;
+	return (*a)->soap_out(soap, tag, id, type);
+}
+
+SOAP_FMAC3 tns__blessMediaTokenWithIdResponse ** SOAP_FMAC4 soap_in_PointerTotns__blessMediaTokenWithIdResponse(struct soap *soap, const char *tag, tns__blessMediaTokenWithIdResponse **a, const char *type)
+{
+	if (soap_element_begin_in(soap, tag, 1, NULL))
+		return NULL;
+	if (!a)
+		if (!(a = (tns__blessMediaTokenWithIdResponse **)soap_malloc(soap, sizeof(tns__blessMediaTokenWithIdResponse *))))
+			return NULL;
+	*a = NULL;
+	if (!soap->null && *soap->href != '#')
+	{	soap_revert(soap);
+		if (!(*a = (tns__blessMediaTokenWithIdResponse *)soap_instantiate_tns__blessMediaTokenWithIdResponse(soap, -1, soap->type, soap->arrayType, NULL)))
+			return NULL;
+		(*a)->soap_default(soap);
+		if (!(*a)->soap_in(soap, tag, NULL))
+			return NULL;
+	}
+	else
+	{	tns__blessMediaTokenWithIdResponse ** p = (tns__blessMediaTokenWithIdResponse **)soap_id_lookup(soap, soap->href, (void**)a, SOAP_TYPE_ServerSoap_tns__blessMediaTokenWithIdResponse, sizeof(tns__blessMediaTokenWithIdResponse), 0);
+		a = p;
+		if (soap->body && soap_element_end_in(soap, tag))
+			return NULL;
+	}
+	return a;
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__blessMediaTokenWithIdResponse(struct soap *soap, tns__blessMediaTokenWithIdResponse *const*a, const char *tag, const char *type)
+{
+	register int id = soap_embed(soap, (void*)a, NULL, 0, tag, SOAP_TYPE_ServerSoap_PointerTotns__blessMediaTokenWithIdResponse);
+	if (soap_out_PointerTotns__blessMediaTokenWithIdResponse(soap, tag?tag:"tns:blessMediaTokenWithIdResponse", id, a, type))
+		return soap->error;
+	return soap_putindependent(soap);
+}
+
+SOAP_FMAC3 tns__blessMediaTokenWithIdResponse ** SOAP_FMAC4 soap_get_PointerTotns__blessMediaTokenWithIdResponse(struct soap *soap, tns__blessMediaTokenWithIdResponse **p, const char *tag, const char *type)
+{
+	if ((p = soap_in_PointerTotns__blessMediaTokenWithIdResponse(soap, tag, p, type)))
+		if (soap_getindependent(soap))
+			return NULL;
+	return p;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__blessMediaTokenWithId(struct soap *soap, tns__blessMediaTokenWithId *const*a)
+{
+	if (!soap_reference(soap, *a, SOAP_TYPE_ServerSoap_tns__blessMediaTokenWithId))
+		(*a)->soap_serialize(soap);
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__blessMediaTokenWithId(struct soap *soap, const char *tag, int id, tns__blessMediaTokenWithId *const*a, const char *type)
+{
+	id = soap_element_id(soap, tag, id, *a, NULL, 0, type, SOAP_TYPE_ServerSoap_tns__blessMediaTokenWithId);
+	if (id < 0)
+		return soap->error;
+	return (*a)->soap_out(soap, tag, id, type);
+}
+
+SOAP_FMAC3 tns__blessMediaTokenWithId ** SOAP_FMAC4 soap_in_PointerTotns__blessMediaTokenWithId(struct soap *soap, const char *tag, tns__blessMediaTokenWithId **a, const char *type)
+{
+	if (soap_element_begin_in(soap, tag, 1, NULL))
+		return NULL;
+	if (!a)
+		if (!(a = (tns__blessMediaTokenWithId **)soap_malloc(soap, sizeof(tns__blessMediaTokenWithId *))))
+			return NULL;
+	*a = NULL;
+	if (!soap->null && *soap->href != '#')
+	{	soap_revert(soap);
+		if (!(*a = (tns__blessMediaTokenWithId *)soap_instantiate_tns__blessMediaTokenWithId(soap, -1, soap->type, soap->arrayType, NULL)))
+			return NULL;
+		(*a)->soap_default(soap);
+		if (!(*a)->soap_in(soap, tag, NULL))
+			return NULL;
+	}
+	else
+	{	tns__blessMediaTokenWithId ** p = (tns__blessMediaTokenWithId **)soap_id_lookup(soap, soap->href, (void**)a, SOAP_TYPE_ServerSoap_tns__blessMediaTokenWithId, sizeof(tns__blessMediaTokenWithId), 0);
+		a = p;
+		if (soap->body && soap_element_end_in(soap, tag))
+			return NULL;
+	}
+	return a;
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__blessMediaTokenWithId(struct soap *soap, tns__blessMediaTokenWithId *const*a, const char *tag, const char *type)
+{
+	register int id = soap_embed(soap, (void*)a, NULL, 0, tag, SOAP_TYPE_ServerSoap_PointerTotns__blessMediaTokenWithId);
+	if (soap_out_PointerTotns__blessMediaTokenWithId(soap, tag?tag:"tns:blessMediaTokenWithId", id, a, type))
+		return soap->error;
+	return soap_putindependent(soap);
+}
+
+SOAP_FMAC3 tns__blessMediaTokenWithId ** SOAP_FMAC4 soap_get_PointerTotns__blessMediaTokenWithId(struct soap *soap, tns__blessMediaTokenWithId **p, const char *tag, const char *type)
+{
+	if ((p = soap_in_PointerTotns__blessMediaTokenWithId(soap, tag, p, type)))
 		if (soap_getindependent(soap))
 			return NULL;
 	return p;
@@ -23433,38 +18769,38 @@ SOAP_FMAC3 tns__blessMediaAnnotationWithId ** SOAP_FMAC4 soap_get_PointerTotns__
 	return p;
 }
 
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__blessGameAnnotationWithIdResponse(struct soap *soap, tns__blessGameAnnotationWithIdResponse *const*a)
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__blessMediaAliasWithIdResponse(struct soap *soap, tns__blessMediaAliasWithIdResponse *const*a)
 {
-	if (!soap_reference(soap, *a, SOAP_TYPE_ServerSoap_tns__blessGameAnnotationWithIdResponse))
+	if (!soap_reference(soap, *a, SOAP_TYPE_ServerSoap_tns__blessMediaAliasWithIdResponse))
 		(*a)->soap_serialize(soap);
 }
 
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__blessGameAnnotationWithIdResponse(struct soap *soap, const char *tag, int id, tns__blessGameAnnotationWithIdResponse *const*a, const char *type)
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__blessMediaAliasWithIdResponse(struct soap *soap, const char *tag, int id, tns__blessMediaAliasWithIdResponse *const*a, const char *type)
 {
-	id = soap_element_id(soap, tag, id, *a, NULL, 0, type, SOAP_TYPE_ServerSoap_tns__blessGameAnnotationWithIdResponse);
+	id = soap_element_id(soap, tag, id, *a, NULL, 0, type, SOAP_TYPE_ServerSoap_tns__blessMediaAliasWithIdResponse);
 	if (id < 0)
 		return soap->error;
 	return (*a)->soap_out(soap, tag, id, type);
 }
 
-SOAP_FMAC3 tns__blessGameAnnotationWithIdResponse ** SOAP_FMAC4 soap_in_PointerTotns__blessGameAnnotationWithIdResponse(struct soap *soap, const char *tag, tns__blessGameAnnotationWithIdResponse **a, const char *type)
+SOAP_FMAC3 tns__blessMediaAliasWithIdResponse ** SOAP_FMAC4 soap_in_PointerTotns__blessMediaAliasWithIdResponse(struct soap *soap, const char *tag, tns__blessMediaAliasWithIdResponse **a, const char *type)
 {
 	if (soap_element_begin_in(soap, tag, 1, NULL))
 		return NULL;
 	if (!a)
-		if (!(a = (tns__blessGameAnnotationWithIdResponse **)soap_malloc(soap, sizeof(tns__blessGameAnnotationWithIdResponse *))))
+		if (!(a = (tns__blessMediaAliasWithIdResponse **)soap_malloc(soap, sizeof(tns__blessMediaAliasWithIdResponse *))))
 			return NULL;
 	*a = NULL;
 	if (!soap->null && *soap->href != '#')
 	{	soap_revert(soap);
-		if (!(*a = (tns__blessGameAnnotationWithIdResponse *)soap_instantiate_tns__blessGameAnnotationWithIdResponse(soap, -1, soap->type, soap->arrayType, NULL)))
+		if (!(*a = (tns__blessMediaAliasWithIdResponse *)soap_instantiate_tns__blessMediaAliasWithIdResponse(soap, -1, soap->type, soap->arrayType, NULL)))
 			return NULL;
 		(*a)->soap_default(soap);
 		if (!(*a)->soap_in(soap, tag, NULL))
 			return NULL;
 	}
 	else
-	{	tns__blessGameAnnotationWithIdResponse ** p = (tns__blessGameAnnotationWithIdResponse **)soap_id_lookup(soap, soap->href, (void**)a, SOAP_TYPE_ServerSoap_tns__blessGameAnnotationWithIdResponse, sizeof(tns__blessGameAnnotationWithIdResponse), 0);
+	{	tns__blessMediaAliasWithIdResponse ** p = (tns__blessMediaAliasWithIdResponse **)soap_id_lookup(soap, soap->href, (void**)a, SOAP_TYPE_ServerSoap_tns__blessMediaAliasWithIdResponse, sizeof(tns__blessMediaAliasWithIdResponse), 0);
 		a = p;
 		if (soap->body && soap_element_end_in(soap, tag))
 			return NULL;
@@ -23472,54 +18808,54 @@ SOAP_FMAC3 tns__blessGameAnnotationWithIdResponse ** SOAP_FMAC4 soap_in_PointerT
 	return a;
 }
 
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__blessGameAnnotationWithIdResponse(struct soap *soap, tns__blessGameAnnotationWithIdResponse *const*a, const char *tag, const char *type)
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__blessMediaAliasWithIdResponse(struct soap *soap, tns__blessMediaAliasWithIdResponse *const*a, const char *tag, const char *type)
 {
-	register int id = soap_embed(soap, (void*)a, NULL, 0, tag, SOAP_TYPE_ServerSoap_PointerTotns__blessGameAnnotationWithIdResponse);
-	if (soap_out_PointerTotns__blessGameAnnotationWithIdResponse(soap, tag?tag:"tns:blessGameAnnotationWithIdResponse", id, a, type))
+	register int id = soap_embed(soap, (void*)a, NULL, 0, tag, SOAP_TYPE_ServerSoap_PointerTotns__blessMediaAliasWithIdResponse);
+	if (soap_out_PointerTotns__blessMediaAliasWithIdResponse(soap, tag?tag:"tns:blessMediaAliasWithIdResponse", id, a, type))
 		return soap->error;
 	return soap_putindependent(soap);
 }
 
-SOAP_FMAC3 tns__blessGameAnnotationWithIdResponse ** SOAP_FMAC4 soap_get_PointerTotns__blessGameAnnotationWithIdResponse(struct soap *soap, tns__blessGameAnnotationWithIdResponse **p, const char *tag, const char *type)
+SOAP_FMAC3 tns__blessMediaAliasWithIdResponse ** SOAP_FMAC4 soap_get_PointerTotns__blessMediaAliasWithIdResponse(struct soap *soap, tns__blessMediaAliasWithIdResponse **p, const char *tag, const char *type)
 {
-	if ((p = soap_in_PointerTotns__blessGameAnnotationWithIdResponse(soap, tag, p, type)))
+	if ((p = soap_in_PointerTotns__blessMediaAliasWithIdResponse(soap, tag, p, type)))
 		if (soap_getindependent(soap))
 			return NULL;
 	return p;
 }
 
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__blessGameAnnotationWithId(struct soap *soap, tns__blessGameAnnotationWithId *const*a)
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__blessMediaAliasWithId(struct soap *soap, tns__blessMediaAliasWithId *const*a)
 {
-	if (!soap_reference(soap, *a, SOAP_TYPE_ServerSoap_tns__blessGameAnnotationWithId))
+	if (!soap_reference(soap, *a, SOAP_TYPE_ServerSoap_tns__blessMediaAliasWithId))
 		(*a)->soap_serialize(soap);
 }
 
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__blessGameAnnotationWithId(struct soap *soap, const char *tag, int id, tns__blessGameAnnotationWithId *const*a, const char *type)
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__blessMediaAliasWithId(struct soap *soap, const char *tag, int id, tns__blessMediaAliasWithId *const*a, const char *type)
 {
-	id = soap_element_id(soap, tag, id, *a, NULL, 0, type, SOAP_TYPE_ServerSoap_tns__blessGameAnnotationWithId);
+	id = soap_element_id(soap, tag, id, *a, NULL, 0, type, SOAP_TYPE_ServerSoap_tns__blessMediaAliasWithId);
 	if (id < 0)
 		return soap->error;
 	return (*a)->soap_out(soap, tag, id, type);
 }
 
-SOAP_FMAC3 tns__blessGameAnnotationWithId ** SOAP_FMAC4 soap_in_PointerTotns__blessGameAnnotationWithId(struct soap *soap, const char *tag, tns__blessGameAnnotationWithId **a, const char *type)
+SOAP_FMAC3 tns__blessMediaAliasWithId ** SOAP_FMAC4 soap_in_PointerTotns__blessMediaAliasWithId(struct soap *soap, const char *tag, tns__blessMediaAliasWithId **a, const char *type)
 {
 	if (soap_element_begin_in(soap, tag, 1, NULL))
 		return NULL;
 	if (!a)
-		if (!(a = (tns__blessGameAnnotationWithId **)soap_malloc(soap, sizeof(tns__blessGameAnnotationWithId *))))
+		if (!(a = (tns__blessMediaAliasWithId **)soap_malloc(soap, sizeof(tns__blessMediaAliasWithId *))))
 			return NULL;
 	*a = NULL;
 	if (!soap->null && *soap->href != '#')
 	{	soap_revert(soap);
-		if (!(*a = (tns__blessGameAnnotationWithId *)soap_instantiate_tns__blessGameAnnotationWithId(soap, -1, soap->type, soap->arrayType, NULL)))
+		if (!(*a = (tns__blessMediaAliasWithId *)soap_instantiate_tns__blessMediaAliasWithId(soap, -1, soap->type, soap->arrayType, NULL)))
 			return NULL;
 		(*a)->soap_default(soap);
 		if (!(*a)->soap_in(soap, tag, NULL))
 			return NULL;
 	}
 	else
-	{	tns__blessGameAnnotationWithId ** p = (tns__blessGameAnnotationWithId **)soap_id_lookup(soap, soap->href, (void**)a, SOAP_TYPE_ServerSoap_tns__blessGameAnnotationWithId, sizeof(tns__blessGameAnnotationWithId), 0);
+	{	tns__blessMediaAliasWithId ** p = (tns__blessMediaAliasWithId **)soap_id_lookup(soap, soap->href, (void**)a, SOAP_TYPE_ServerSoap_tns__blessMediaAliasWithId, sizeof(tns__blessMediaAliasWithId), 0);
 		a = p;
 		if (soap->body && soap_element_end_in(soap, tag))
 			return NULL;
@@ -23527,17 +18863,17 @@ SOAP_FMAC3 tns__blessGameAnnotationWithId ** SOAP_FMAC4 soap_in_PointerTotns__bl
 	return a;
 }
 
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__blessGameAnnotationWithId(struct soap *soap, tns__blessGameAnnotationWithId *const*a, const char *tag, const char *type)
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__blessMediaAliasWithId(struct soap *soap, tns__blessMediaAliasWithId *const*a, const char *tag, const char *type)
 {
-	register int id = soap_embed(soap, (void*)a, NULL, 0, tag, SOAP_TYPE_ServerSoap_PointerTotns__blessGameAnnotationWithId);
-	if (soap_out_PointerTotns__blessGameAnnotationWithId(soap, tag?tag:"tns:blessGameAnnotationWithId", id, a, type))
+	register int id = soap_embed(soap, (void*)a, NULL, 0, tag, SOAP_TYPE_ServerSoap_PointerTotns__blessMediaAliasWithId);
+	if (soap_out_PointerTotns__blessMediaAliasWithId(soap, tag?tag:"tns:blessMediaAliasWithId", id, a, type))
 		return soap->error;
 	return soap_putindependent(soap);
 }
 
-SOAP_FMAC3 tns__blessGameAnnotationWithId ** SOAP_FMAC4 soap_get_PointerTotns__blessGameAnnotationWithId(struct soap *soap, tns__blessGameAnnotationWithId **p, const char *tag, const char *type)
+SOAP_FMAC3 tns__blessMediaAliasWithId ** SOAP_FMAC4 soap_get_PointerTotns__blessMediaAliasWithId(struct soap *soap, tns__blessMediaAliasWithId **p, const char *tag, const char *type)
 {
-	if ((p = soap_in_PointerTotns__blessGameAnnotationWithId(soap, tag, p, type)))
+	if ((p = soap_in_PointerTotns__blessMediaAliasWithId(soap, tag, p, type)))
 		if (soap_getindependent(soap))
 			return NULL;
 	return p;
@@ -23758,171 +19094,6 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__mediaAlias(struct soap *soap, t
 SOAP_FMAC3 tns__mediaAlias ** SOAP_FMAC4 soap_get_PointerTotns__mediaAlias(struct soap *soap, tns__mediaAlias **p, const char *tag, const char *type)
 {
 	if ((p = soap_in_PointerTotns__mediaAlias(soap, tag, p, type)))
-		if (soap_getindependent(soap))
-			return NULL;
-	return p;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__gameToken(struct soap *soap, tns__gameToken *const*a)
-{
-	if (!soap_reference(soap, *a, SOAP_TYPE_ServerSoap_tns__gameToken))
-		(*a)->soap_serialize(soap);
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__gameToken(struct soap *soap, const char *tag, int id, tns__gameToken *const*a, const char *type)
-{
-	id = soap_element_id(soap, tag, id, *a, NULL, 0, type, SOAP_TYPE_ServerSoap_tns__gameToken);
-	if (id < 0)
-		return soap->error;
-	return (*a)->soap_out(soap, tag, id, type);
-}
-
-SOAP_FMAC3 tns__gameToken ** SOAP_FMAC4 soap_in_PointerTotns__gameToken(struct soap *soap, const char *tag, tns__gameToken **a, const char *type)
-{
-	if (soap_element_begin_in(soap, tag, 1, NULL))
-		return NULL;
-	if (!a)
-		if (!(a = (tns__gameToken **)soap_malloc(soap, sizeof(tns__gameToken *))))
-			return NULL;
-	*a = NULL;
-	if (!soap->null && *soap->href != '#')
-	{	soap_revert(soap);
-		if (!(*a = (tns__gameToken *)soap_instantiate_tns__gameToken(soap, -1, soap->type, soap->arrayType, NULL)))
-			return NULL;
-		(*a)->soap_default(soap);
-		if (!(*a)->soap_in(soap, tag, NULL))
-			return NULL;
-	}
-	else
-	{	tns__gameToken ** p = (tns__gameToken **)soap_id_lookup(soap, soap->href, (void**)a, SOAP_TYPE_ServerSoap_tns__gameToken, sizeof(tns__gameToken), 0);
-		a = p;
-		if (soap->body && soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	return a;
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__gameToken(struct soap *soap, tns__gameToken *const*a, const char *tag, const char *type)
-{
-	register int id = soap_embed(soap, (void*)a, NULL, 0, tag, SOAP_TYPE_ServerSoap_PointerTotns__gameToken);
-	if (soap_out_PointerTotns__gameToken(soap, tag?tag:"tns:gameToken", id, a, type))
-		return soap->error;
-	return soap_putindependent(soap);
-}
-
-SOAP_FMAC3 tns__gameToken ** SOAP_FMAC4 soap_get_PointerTotns__gameToken(struct soap *soap, tns__gameToken **p, const char *tag, const char *type)
-{
-	if ((p = soap_in_PointerTotns__gameToken(soap, tag, p, type)))
-		if (soap_getindependent(soap))
-			return NULL;
-	return p;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__gameAnnotation(struct soap *soap, tns__gameAnnotation *const*a)
-{
-	if (!soap_reference(soap, *a, SOAP_TYPE_ServerSoap_tns__gameAnnotation))
-		(*a)->soap_serialize(soap);
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__gameAnnotation(struct soap *soap, const char *tag, int id, tns__gameAnnotation *const*a, const char *type)
-{
-	id = soap_element_id(soap, tag, id, *a, NULL, 0, type, SOAP_TYPE_ServerSoap_tns__gameAnnotation);
-	if (id < 0)
-		return soap->error;
-	return (*a)->soap_out(soap, tag, id, type);
-}
-
-SOAP_FMAC3 tns__gameAnnotation ** SOAP_FMAC4 soap_in_PointerTotns__gameAnnotation(struct soap *soap, const char *tag, tns__gameAnnotation **a, const char *type)
-{
-	if (soap_element_begin_in(soap, tag, 1, NULL))
-		return NULL;
-	if (!a)
-		if (!(a = (tns__gameAnnotation **)soap_malloc(soap, sizeof(tns__gameAnnotation *))))
-			return NULL;
-	*a = NULL;
-	if (!soap->null && *soap->href != '#')
-	{	soap_revert(soap);
-		if (!(*a = (tns__gameAnnotation *)soap_instantiate_tns__gameAnnotation(soap, -1, soap->type, soap->arrayType, NULL)))
-			return NULL;
-		(*a)->soap_default(soap);
-		if (!(*a)->soap_in(soap, tag, NULL))
-			return NULL;
-	}
-	else
-	{	tns__gameAnnotation ** p = (tns__gameAnnotation **)soap_id_lookup(soap, soap->href, (void**)a, SOAP_TYPE_ServerSoap_tns__gameAnnotation, sizeof(tns__gameAnnotation), 0);
-		a = p;
-		if (soap->body && soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	return a;
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__gameAnnotation(struct soap *soap, tns__gameAnnotation *const*a, const char *tag, const char *type)
-{
-	register int id = soap_embed(soap, (void*)a, NULL, 0, tag, SOAP_TYPE_ServerSoap_PointerTotns__gameAnnotation);
-	if (soap_out_PointerTotns__gameAnnotation(soap, tag?tag:"tns:gameAnnotation", id, a, type))
-		return soap->error;
-	return soap_putindependent(soap);
-}
-
-SOAP_FMAC3 tns__gameAnnotation ** SOAP_FMAC4 soap_get_PointerTotns__gameAnnotation(struct soap *soap, tns__gameAnnotation **p, const char *tag, const char *type)
-{
-	if ((p = soap_in_PointerTotns__gameAnnotation(soap, tag, p, type)))
-		if (soap_getindependent(soap))
-			return NULL;
-	return p;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__gameAlias(struct soap *soap, tns__gameAlias *const*a)
-{
-	if (!soap_reference(soap, *a, SOAP_TYPE_ServerSoap_tns__gameAlias))
-		(*a)->soap_serialize(soap);
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__gameAlias(struct soap *soap, const char *tag, int id, tns__gameAlias *const*a, const char *type)
-{
-	id = soap_element_id(soap, tag, id, *a, NULL, 0, type, SOAP_TYPE_ServerSoap_tns__gameAlias);
-	if (id < 0)
-		return soap->error;
-	return (*a)->soap_out(soap, tag, id, type);
-}
-
-SOAP_FMAC3 tns__gameAlias ** SOAP_FMAC4 soap_in_PointerTotns__gameAlias(struct soap *soap, const char *tag, tns__gameAlias **a, const char *type)
-{
-	if (soap_element_begin_in(soap, tag, 1, NULL))
-		return NULL;
-	if (!a)
-		if (!(a = (tns__gameAlias **)soap_malloc(soap, sizeof(tns__gameAlias *))))
-			return NULL;
-	*a = NULL;
-	if (!soap->null && *soap->href != '#')
-	{	soap_revert(soap);
-		if (!(*a = (tns__gameAlias *)soap_instantiate_tns__gameAlias(soap, -1, soap->type, soap->arrayType, NULL)))
-			return NULL;
-		(*a)->soap_default(soap);
-		if (!(*a)->soap_in(soap, tag, NULL))
-			return NULL;
-	}
-	else
-	{	tns__gameAlias ** p = (tns__gameAlias **)soap_id_lookup(soap, soap->href, (void**)a, SOAP_TYPE_ServerSoap_tns__gameAlias, sizeof(tns__gameAlias), 0);
-		a = p;
-		if (soap->body && soap_element_end_in(soap, tag))
-			return NULL;
-	}
-	return a;
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__gameAlias(struct soap *soap, tns__gameAlias *const*a, const char *tag, const char *type)
-{
-	register int id = soap_embed(soap, (void*)a, NULL, 0, tag, SOAP_TYPE_ServerSoap_PointerTotns__gameAlias);
-	if (soap_out_PointerTotns__gameAlias(soap, tag?tag:"tns:gameAlias", id, a, type))
-		return soap->error;
-	return soap_putindependent(soap);
-}
-
-SOAP_FMAC3 tns__gameAlias ** SOAP_FMAC4 soap_get_PointerTotns__gameAlias(struct soap *soap, tns__gameAlias **p, const char *tag, const char *type)
-{
-	if ((p = soap_in_PointerTotns__gameAlias(soap, tag, p, type)))
 		if (soap_getindependent(soap))
 			return NULL;
 	return p;
@@ -24222,182 +19393,6 @@ SOAP_FMAC3 void SOAP_FMAC4 soap_copy_std__vectorTemplateOfPointerTotns__mediaAli
 	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
 	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying std::vector<tns__mediaAlias * > %p -> %p\n", q, p));
 	*(std::vector<tns__mediaAlias * >*)p = *(std::vector<tns__mediaAlias * >*)q;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_default_std__vectorTemplateOfPointerTotns__gameAnnotation(struct soap *soap, std::vector<tns__gameAnnotation * >*p)
-{
-	p->clear();
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_std__vectorTemplateOfPointerTotns__gameAnnotation(struct soap *soap, const std::vector<tns__gameAnnotation * >*a)
-{
-	for (std::vector<tns__gameAnnotation * >::const_iterator i = a->begin(); i != a->end(); ++i)
-		soap_serialize_PointerTotns__gameAnnotation(soap, &(*i));
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_std__vectorTemplateOfPointerTotns__gameAnnotation(struct soap *soap, const char *tag, int id, const std::vector<tns__gameAnnotation * >*a, const char *type)
-{
-	for (std::vector<tns__gameAnnotation * >::const_iterator i = a->begin(); i != a->end(); ++i)
-	{
-		if (soap_out_PointerTotns__gameAnnotation(soap, tag, id, &(*i), ""))
-			return soap->error;
-	}
-	return SOAP_OK;
-}
-
-SOAP_FMAC3 std::vector<tns__gameAnnotation * >* SOAP_FMAC4 soap_in_std__vectorTemplateOfPointerTotns__gameAnnotation(struct soap *soap, const char *tag, std::vector<tns__gameAnnotation * >*a, const char *type)
-{
-	(void)type; /* appease -Wall -Werror */
-	if (soap_element_begin_in(soap, tag, 1, NULL))
-		return NULL;
-	if (!a && !(a = soap_new_std__vectorTemplateOfPointerTotns__gameAnnotation(soap, -1)))
-		return NULL;
-	tns__gameAnnotation *n;
-	short soap_flag = 0;
-	do
-	{	if (tag && *tag != '-')
-			soap_revert(soap);
-		n = NULL;
-		if (*soap->id || *soap->href)
-		{	if (!soap_container_id_forward(soap, *soap->id?soap->id:soap->href, a, (size_t)a->size(), SOAP_TYPE_ServerSoap_tns__gameAnnotation, SOAP_TYPE_ServerSoap_std__vectorTemplateOfPointerTotns__gameAnnotation, sizeof(tns__gameAnnotation), 1))
-				break;
-			if (!soap_in_PointerTotns__gameAnnotation(soap, tag, NULL, "tns:gameAnnotation"))
-				break;
-		}
-		else
-		{
-			if (!soap_in_PointerTotns__gameAnnotation(soap, tag, &n, "tns:gameAnnotation"))
-				break;
-		}
-		a->push_back(n);
-		soap_flag = 1;
-	}
-	while (tag && *tag != '-' && !soap_element_begin_in(soap, tag, 1, NULL));
-	if (soap_flag && (soap->error == SOAP_TAG_MISMATCH || soap->error == SOAP_NO_TAG))
-	{	soap->error = SOAP_OK;
-		return a;
-	}
-	return NULL;
-}
-
-SOAP_FMAC1 std::vector<tns__gameAnnotation * > * SOAP_FMAC2 soap_instantiate_std__vectorTemplateOfPointerTotns__gameAnnotation(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
-{
-	(void)type; (void)arrayType; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate_std__vectorTemplateOfPointerTotns__gameAnnotation(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
-	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap_std__vectorTemplateOfPointerTotns__gameAnnotation, n, ServerSoap_fdelete);
-	if (!cp)
-		return NULL;
-	if (n < 0)
-	{	cp->ptr = (void*)SOAP_NEW(std::vector<tns__gameAnnotation * >);
-		if (size)
-			*size = sizeof(std::vector<tns__gameAnnotation * >);
-	}
-	else
-	{	cp->ptr = (void*)SOAP_NEW(std::vector<tns__gameAnnotation * >[n]);
-		if (!cp->ptr)
-		{	soap->error = SOAP_EOM;
-			return NULL;
-		}
-		if (size)
-			*size = n * sizeof(std::vector<tns__gameAnnotation * >);
-	}
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
-	return (std::vector<tns__gameAnnotation * >*)cp->ptr;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_std__vectorTemplateOfPointerTotns__gameAnnotation(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
-{
-	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying std::vector<tns__gameAnnotation * > %p -> %p\n", q, p));
-	*(std::vector<tns__gameAnnotation * >*)p = *(std::vector<tns__gameAnnotation * >*)q;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_default_std__vectorTemplateOfPointerTotns__gameAlias(struct soap *soap, std::vector<tns__gameAlias * >*p)
-{
-	p->clear();
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_std__vectorTemplateOfPointerTotns__gameAlias(struct soap *soap, const std::vector<tns__gameAlias * >*a)
-{
-	for (std::vector<tns__gameAlias * >::const_iterator i = a->begin(); i != a->end(); ++i)
-		soap_serialize_PointerTotns__gameAlias(soap, &(*i));
-}
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_std__vectorTemplateOfPointerTotns__gameAlias(struct soap *soap, const char *tag, int id, const std::vector<tns__gameAlias * >*a, const char *type)
-{
-	for (std::vector<tns__gameAlias * >::const_iterator i = a->begin(); i != a->end(); ++i)
-	{
-		if (soap_out_PointerTotns__gameAlias(soap, tag, id, &(*i), ""))
-			return soap->error;
-	}
-	return SOAP_OK;
-}
-
-SOAP_FMAC3 std::vector<tns__gameAlias * >* SOAP_FMAC4 soap_in_std__vectorTemplateOfPointerTotns__gameAlias(struct soap *soap, const char *tag, std::vector<tns__gameAlias * >*a, const char *type)
-{
-	(void)type; /* appease -Wall -Werror */
-	if (soap_element_begin_in(soap, tag, 1, NULL))
-		return NULL;
-	if (!a && !(a = soap_new_std__vectorTemplateOfPointerTotns__gameAlias(soap, -1)))
-		return NULL;
-	tns__gameAlias *n;
-	short soap_flag = 0;
-	do
-	{	if (tag && *tag != '-')
-			soap_revert(soap);
-		n = NULL;
-		if (*soap->id || *soap->href)
-		{	if (!soap_container_id_forward(soap, *soap->id?soap->id:soap->href, a, (size_t)a->size(), SOAP_TYPE_ServerSoap_tns__gameAlias, SOAP_TYPE_ServerSoap_std__vectorTemplateOfPointerTotns__gameAlias, sizeof(tns__gameAlias), 1))
-				break;
-			if (!soap_in_PointerTotns__gameAlias(soap, tag, NULL, "tns:gameAlias"))
-				break;
-		}
-		else
-		{
-			if (!soap_in_PointerTotns__gameAlias(soap, tag, &n, "tns:gameAlias"))
-				break;
-		}
-		a->push_back(n);
-		soap_flag = 1;
-	}
-	while (tag && *tag != '-' && !soap_element_begin_in(soap, tag, 1, NULL));
-	if (soap_flag && (soap->error == SOAP_TAG_MISMATCH || soap->error == SOAP_NO_TAG))
-	{	soap->error = SOAP_OK;
-		return a;
-	}
-	return NULL;
-}
-
-SOAP_FMAC1 std::vector<tns__gameAlias * > * SOAP_FMAC2 soap_instantiate_std__vectorTemplateOfPointerTotns__gameAlias(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
-{
-	(void)type; (void)arrayType; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate_std__vectorTemplateOfPointerTotns__gameAlias(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
-	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap_std__vectorTemplateOfPointerTotns__gameAlias, n, ServerSoap_fdelete);
-	if (!cp)
-		return NULL;
-	if (n < 0)
-	{	cp->ptr = (void*)SOAP_NEW(std::vector<tns__gameAlias * >);
-		if (size)
-			*size = sizeof(std::vector<tns__gameAlias * >);
-	}
-	else
-	{	cp->ptr = (void*)SOAP_NEW(std::vector<tns__gameAlias * >[n]);
-		if (!cp->ptr)
-		{	soap->error = SOAP_EOM;
-			return NULL;
-		}
-		if (size)
-			*size = n * sizeof(std::vector<tns__gameAlias * >);
-	}
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
-	return (std::vector<tns__gameAlias * >*)cp->ptr;
-}
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_std__vectorTemplateOfPointerTotns__gameAlias(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
-{
-	(void)soap; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
-	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying std::vector<tns__gameAlias * > %p -> %p\n", q, p));
-	*(std::vector<tns__gameAlias * >*)p = *(std::vector<tns__gameAlias * >*)q;
 }
 
 } // namespace ServerSoap

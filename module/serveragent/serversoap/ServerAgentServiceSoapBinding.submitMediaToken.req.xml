@@ -13,10 +13,12 @@
      <createTime>0</createTime>
      <cursedCount>0</cursedCount>
      <digest></digest>
+     <digestType>0</digestType>
      <flags>0</flags>
      <id>0</id>
-     <userId>0</userId>
+     <type>0</type>
      <status>0</status>
+     <userId>0</userId>
      <visitedCount>0</visitedCount>
     </arg0>
     <userName></userName>

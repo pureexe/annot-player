@@ -1,7 +1,7 @@
 #ifndef CLOUDVIEW_H
 #define CLOUDVIEW_H
 
-// trendview.h
+// cloudview.h
 // 7/15/2011
 // TODO: make this a tabbed browser?
 

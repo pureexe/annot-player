@@ -31,6 +31,16 @@ inline QString core_html_br_open()      { return CORE_HTML_BR_OPEN(); }
 inline QString core_html_br_close()     { return CORE_HTML_BR_CLOSE(); }
 inline QString core_html_br()           { return CORE_HTML_BR(); }
 
+// - <center> -
+
+#define CORE_HTML_CENTER_OPEN()             CORE_HTML_TAG_OPEN(center)
+#define CORE_HTML_CENTER_CLOSE()            CORE_HTML_TAG_CLOSE(center)
+#define CORE_HTML_CENTER()                  CORE_HTML_TAG(center)
+
+inline QString core_html_center_open()      { return CORE_HTML_CENTER_OPEN(); }
+inline QString core_html_center_close()     { return CORE_HTML_CENTER_CLOSE(); }
+inline QString core_html_center()           { return CORE_HTML_CENTER(); }
+
 // - <font> -
 // Note: Font tag is deprecated since HTML 4.01, and removed in HTML 5
 
@@ -45,6 +55,20 @@ inline QString core_html_font_close() { return CORE_HTML_FONT_CLOSE(); }
 
 inline QString core_html_font(const QString &content = "", const QString &attr = "")
 { return core_html_font_open(attr) + content + core_html_font_close(); }
+
+// - <a> -
+
+#define CORE_HTML_A_OPEN(_href)         "<a href=\"" _href "\">"
+#define CORE_HTML_A_CLOSE()             CORE_HTML_TAG_CLOSE(a)
+#define CORE_HTML_A(_qs, _href)         (CORE_HTML_A_OPEN(_href) + (_qs) + CORE_HTML_A_CLOSE())
+
+inline QString core_html_a_open(const QString &href = "")
+{ return CORE_HTML_A_OPEN(+ href +); }
+
+inline QString core_html_a_close() { return CORE_HTML_A_CLOSE(); }
+
+inline QString core_html_a(const QString &content = "", const QString &href = "")
+{ return core_html_a_open(href) + content + core_html_a_close(); }
 
 // - <div> -
 
@@ -71,7 +95,6 @@ inline QString core_html_span_close() { return CORE_HTML_SPAN_CLOSE(); }
 
 inline QString core_html_span(const QString &content = "", const QString &style = "")
 { return core_html_span_open(style) + content + core_html_span_close(); }
-
 
 //#define CORE_HTML_DUMMY_OPEN()       CORE_HTML_DIV_OPEN(display:inline)
 #define CORE_HTML_DUMMY_OPEN()       CORE_HTML_TAG_OPEN(span)

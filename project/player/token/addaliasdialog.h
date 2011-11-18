@@ -32,10 +32,8 @@ protected slots:
   void cancel();
 
   void tagBD()          { tag("BD"); }
-  void tagBDRip()       { tag("BDRip"); }
   void tagDVD()         { tag("DVD"); }
-  void tagDVDRip()      { tag("DVDRip"); }
-  void tagTVRip()       { tag("TVDRip"); }
+  void tagTV()          { tag("TV"); }
   void tagWeb()         { tag("Web"); }
 
   void invalidateOKButton();

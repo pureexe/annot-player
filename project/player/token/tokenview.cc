@@ -8,11 +8,14 @@
 #include "stylesheet.h"
 #include "uistyle.h"
 #include "global.h"
+#include "logger.h"
+#include "module/serveragent/serveragent.h"
 #include "core/gui/combobox.h"
 #include "core/gui/toolbutton.h"
 #include <QtGui>
 
 using namespace Core::Cloud;
+using namespace Logger;
 
 // - Constructions -
 
@@ -24,9 +27,10 @@ using namespace Core::Cloud;
   Qt::WindowMinMaxButtonsHint | \
   Qt::WindowCloseButtonHint )
 
-TokenView::TokenView(QWidget *parent)
-  : Base(parent, WINDOW_FLAGS), userId_(0)
+TokenView::TokenView(ServerAgent *server, QWidget *parent)
+  : Base(parent, WINDOW_FLAGS), server_(server)
 {
+  Q_ASSERT(server_);
   setWindowTitle(TR(T_TITLE_TOKENVIEW));
   UiStyle::globalInstance()->setWindowStyle(this);
 
@@ -56,26 +60,26 @@ TokenView::TokenView(QWidget *parent)
 
   filterPatternLineEdit_ = new LineEdit; {
     filterPatternLineEdit_->setStyleSheet(SS_LINEEDIT);
-    filterPatternLineEdit_->setToolTip(tr("Filter pattern"));
+    filterPatternLineEdit_->setToolTip(TR(T_FILTER_PATTERN));
   }
   QLabel *filterPatternLabel = new QLabel; {
     filterPatternLabel->setStyleSheet(SS_LABEL);
     filterPatternLabel->setBuddy(filterPatternLineEdit_);
-    filterPatternLabel->setText(tr("&Filter pattern") + ":");
+    filterPatternLabel->setText(TR(T_FILTER_PATTERN) + ":");
     filterPatternLabel->setToolTip(filterPatternLineEdit_->toolTip());
   }
 
   filterSyntaxComboBox_ = new Core::Gui::ComboBox; {
     UiStyle::globalInstance()->setComboBoxStyle(filterSyntaxComboBox_);
-    filterSyntaxComboBox_->addItem(tr("Regular expression"), QRegExp::RegExp);
-    filterSyntaxComboBox_->addItem(tr("Wildcard"), QRegExp::Wildcard);
-    filterSyntaxComboBox_->addItem(tr("Fixed string"), QRegExp::FixedString);
-    filterSyntaxComboBox_->setToolTip(tr("Filter syntax"));
+    filterSyntaxComboBox_->addItem(TR(T_FILTER_REGEX), QRegExp::RegExp);
+    filterSyntaxComboBox_->addItem(TR(T_FILTER_WILDCARD), QRegExp::Wildcard);
+    filterSyntaxComboBox_->addItem(TR(T_FILTER_FIXED), QRegExp::FixedString);
+    filterSyntaxComboBox_->setToolTip(TR(T_FILTER_SYNTAX));
   }
   QLabel *filterSyntaxLabel = new QLabel; {
     filterSyntaxLabel->setStyleSheet(SS_LABEL);
     filterSyntaxLabel->setBuddy(filterSyntaxComboBox_);
-    filterSyntaxLabel->setText(tr("Filter &syntax") + ":");
+    filterSyntaxLabel->setText(TR(T_FILTER_SYNTAX) + ":");
     filterSyntaxLabel->setToolTip(filterSyntaxComboBox_->toolTip());
   }
 
@@ -83,12 +87,12 @@ TokenView::TokenView(QWidget *parent)
     UiStyle::globalInstance()->setComboBoxStyle(filterColumnComboBox_);
     for (int i = 0; i < sourceModel_->columnCount(); i++)
       filterColumnComboBox_->addItem(sourceModel_->headerData(i, Qt::Horizontal).toString());
-    filterColumnComboBox_->setToolTip(tr("Filter column"));
+    filterColumnComboBox_->setToolTip(TR(T_FILTER_COLUMN));
   }
   QLabel *filterColumnLabel = new QLabel; {
     filterColumnLabel->setStyleSheet(SS_LABEL);
     filterColumnLabel->setBuddy(filterColumnComboBox_);
-    filterColumnLabel->setText(tr("Filter &column"));
+    filterColumnLabel->setText(TR(T_FILTER_COLUMN));
     filterColumnLabel->setToolTip(filterColumnComboBox_->toolTip());
   }
 
@@ -145,17 +149,11 @@ TokenView::TokenView(QWidget *parent)
 
     layout->addWidget(blessedCountBuddy, ++r, c=0);
     layout->addWidget(blessedCountLabel_, r, ++c);
-    if (ALPHA)
-      layout->addWidget(blessButton, r, ++c);
-    else
-      delete blessButton;
+    layout->addWidget(blessButton, r, ++c);
 
     layout->addWidget(cursedCountBuddy, ++r, c=0);
     layout->addWidget(cursedCountLabel_, r, ++c);
-    if (ALPHA)
-      layout->addWidget(curseButton, r, ++c);
-    else
-
+    layout->addWidget(curseButton, r, ++c);
 
     layout->addWidget(aliasBuddy, ++r, c=0);
     ++c;
@@ -193,26 +191,19 @@ TokenView::TokenView(QWidget *parent)
   filterPatternLineEdit_->setFocus();
 }
 
-qint64
-TokenView::userId() const
-{ return userId_; }
-
-void
-TokenView::setUserId(qint64 uid)
-{ userId_ = uid; }
-
 void
 TokenView::setAliasHeaderData(QAbstractItemModel *model)
 {
-  model->setHeaderData(HD_Text, Qt::Horizontal, tr("Text"));
-  model->setHeaderData(HD_Type, Qt::Horizontal, tr("Type"));
-  model->setHeaderData(HD_UpdateTime, Qt::Horizontal, tr("UpdateTime"));
-  model->setHeaderData(HD_Language, Qt::Horizontal, tr("Language"));
-  model->setHeaderData(HD_Status, Qt::Horizontal, tr("Status"));
-  model->setHeaderData(HD_Flags, Qt::Horizontal, tr("Flags"));
-  model->setHeaderData(HD_BlessedCount, Qt::Horizontal, tr("BlessedCount"));
-  model->setHeaderData(HD_CursedCount, Qt::Horizontal, tr("CursedCount"));
-  model->setHeaderData(HD_BlockedCount, Qt::Horizontal, tr("BlockedCount"));
+  Q_ASSERT(model);
+  model->setHeaderData(HD_Text, Qt::Horizontal, TR(T_TEXT));
+  model->setHeaderData(HD_Type, Qt::Horizontal, TR(T_TYPE));
+  model->setHeaderData(HD_UpdateTime, Qt::Horizontal, TR(T_UPDATETIME));
+  model->setHeaderData(HD_Language, Qt::Horizontal, TR(T_LANGUAGE));
+  model->setHeaderData(HD_Status, Qt::Horizontal, TR(T_STATUS));
+  model->setHeaderData(HD_Flags, Qt::Horizontal, TR(T_FLAGS));
+  model->setHeaderData(HD_BlessedCount, Qt::Horizontal, TR(T_BLESSEDCOUNT));
+  model->setHeaderData(HD_CursedCount, Qt::Horizontal, TR(T_CURSEDCOUNT));
+  model->setHeaderData(HD_BlockedCount, Qt::Horizontal, TR(T_BLOCKEDCOUNT));
 }
 
 // - Properties -
@@ -261,7 +252,7 @@ TokenView::addAlias(const Alias &a)
 
   sourceModel_->insertRow(0);
   sourceModel_->setData(sourceModel_->index(0, HD_Text), a.text());
-  sourceModel_->setData(sourceModel_->index(0, HD_Type), FORMAT_TYPE(a.aliasType()));
+  sourceModel_->setData(sourceModel_->index(0, HD_Type), FORMAT_TYPE(a.type()));
   sourceModel_->setData(sourceModel_->index(0, HD_UpdateTime), FORMAT_TIME(a.updateTime()));
   sourceModel_->setData(sourceModel_->index(0, HD_Language), FORMAT_LANGUAGE(a.language()));
   sourceModel_->setData(sourceModel_->index(0, HD_Status), FORMAT_STATUS(a.status()));
@@ -286,10 +277,12 @@ TokenView::submitAlias(const QString &alias, int type, quint32 language)
 {
   Alias a;
   a.setTokenId(token_.id());
-  a.setAliasType(type);
+  a.setTokenDigest(token_.digest());
+  a.setTokenDigestType(token_.digestType());
+  a.setType(type);
   a.setLanguage(language);
   a.setText(alias);
-  a.setUserId(userId_);
+  a.setUserId(server_->user().id());
   a.setUpdateTime(QDateTime::currentMSecsSinceEpoch() / 1000);
 
   addAlias(a);
@@ -368,13 +361,53 @@ TokenView::invalidateTokenLabels()
 void
 TokenView::bless()
 {
-  // TODO
+  if (!hasToken())
+    return;
+
+  if (!server_->isConnected() || !server_->isAuthorized()) {
+    warn(tr("cannot perform cast when offline"));
+    return;
+  }
+
+  qint64 tid = token_.id();
+  if (server_->isTokenBlessedWithId(tid)) {
+    log(tr("token is already blessed"));
+    return;
+  }
+
+  bool ok;
+  qint64 count = blessedCountLabel_->text().toUInt(&ok);
+  if (!ok)
+    count = 0;
+  blessedCountLabel_->setText(QString::number(++count));
+
+  emit tokenBlessedWithId(tid);
 }
 
 void
 TokenView::curse()
 {
-  // TODO
+  if (!hasToken())
+    return;
+
+  if (!server_->isConnected() || !server_->isAuthorized()) {
+    warn(tr("cannot perform cast when offline"));
+    return;
+  }
+
+  qint64 tid = token_.id();
+  if (server_->isTokenCursedWithId(tid)) {
+    log(tr("token is already cursed"));
+    return;
+  }
+
+  bool ok;
+  qint64 count = cursedCountLabel_->text().toUInt(&ok);
+  if (!ok)
+    count = 0;
+  cursedCountLabel_->setText(QString::number(++count));
+
+  emit tokenCursedWithId(tid);
 }
 
 void
@@ -389,14 +422,14 @@ QString
 TokenView::languageToString(int lang)
 {
   switch(lang) {
-  case Traits::AnyLanguage:     return tr("Any");
-  case Traits::English:         return tr("English");
-  case Traits::Japanese:        return tr("Japanese");
-  case Traits::Chinese:         return tr("Chinese");
-  case Traits::Korean:          return tr("Korean");
+  case Traits::AnyLanguage:     return TR(T_ANYLANGUAGE);
+  case Traits::English:         return TR(T_ENGLISH);
+  case Traits::Japanese:        return TR(T_JAPANESE);
+  case Traits::Chinese:         return TR(T_CHINESE);
+  case Traits::Korean:          return TR(T_KOREAN);
 
   case Traits::UnknownLanguage:
-  default : return tr("Alien");
+  default : return TR(T_ALIEN);
   }
 }
 
@@ -404,17 +437,17 @@ QStringList
 TokenView::aliasFlagsToStringList(int flags)
 {
   Q_UNUSED(flags);
-  return QStringList(tr("n/a"));
+  return QStringList(TR(T_NA));
 }
 
 QString
 TokenView::aliasStatusToString(int status)
 {
   switch (status) {
-  case Alias::AS_Deleted:  return tr("deleted");
-  case Alias::AS_Active:   return tr("active");
-  case Alias::AS_Blocked:  return tr("blocked");
-  default: return tr("n/a");
+  case Alias::AS_Deleted:  return TR(T_DELETED);
+  case Alias::AS_Active:   return TR(T_ACTIVE);
+  case Alias::AS_Blocked:  return TR(T_BLOCKED);
+  default: return TR(T_NA);
   }
 }
 
@@ -425,7 +458,7 @@ TokenView::aliasTypeToString(int type)
   case Alias::AT_Name:  return tr("name");
   case Alias::AT_Source:return tr("source");
   case Alias::AT_Tag:   return tr("tag");
-  default: return tr("n/a");
+  default: return TR(T_NA);
   }
 }
 

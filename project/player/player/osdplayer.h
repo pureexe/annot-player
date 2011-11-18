@@ -10,14 +10,14 @@ QT_FORWARD_DECLARE_CLASS(QTimer)
 QT_FORWARD_DECLARE_CLASS(QMenu)
 QT_FORWARD_DECLARE_CLASS(QToolButton)
 
-class OSDPlayerUi : public PlayerUi
+class OsdPlayerUi : public PlayerUi
 {
   Q_OBJECT
-  typedef OSDPlayerUi Self;
+  typedef OsdPlayerUi Self;
   typedef PlayerUi Base;
 
 public:
-  explicit OSDPlayerUi(SignalHub *hub, Player *player, ServerAgent *server, QWidget *parent = 0);
+  explicit OsdPlayerUi(SignalHub *hub, Player *player, ServerAgent *server, QWidget *parent = 0);
 
 signals:
   void invalidateMenuRequested();
@@ -37,7 +37,7 @@ public slots:
   void autoHide();
 
   void invalidateGeometry();    ///< Automatically adjust from its parent.
-  void resetAutoHideTimeout();  ///< Reset timeout for autohide OSDPlayer
+  void resetAutoHideTimeout();  ///< Reset timeout for autohide OsdPlayer
 
   void resetAutoHideTimeoutWhenEditing(const QString&) { return resetAutoHideTimeout(); }
   void resetAutoHideTimeoutWhenEditing(int, int) { return resetAutoHideTimeout(); }

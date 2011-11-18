@@ -18,13 +18,20 @@
   Qt::WindowMinMaxButtonsHint | \
   Qt::WindowCloseButtonHint )
 
+#define TEXT_SIZE_SCALE 0.9
+
 CloudView::CloudView(QWidget *parent)
   : Base(parent)
 {
   setWindowTitle(TR(T_TITLE_CLOUDVIEW));
-
   setWindowFlags(WINDOW_FLAGS);
-  setContentsMargins(0, 0, 0, 0);
+  setTextSizeMultiplier(TEXT_SIZE_SCALE);
+
+#ifdef Q_WS_MAC
+  // void setContentsMargins(int left, int top, int right, int bottom);
+  setContentsMargins(4, 2, 4, 2);
+#endif // Q_WS_MAC
+
   setHomePage(G_STARTPAGE_URL);
 
   UiStyle::globalInstance()->setWindowStyle(this);

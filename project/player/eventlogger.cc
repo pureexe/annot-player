@@ -27,6 +27,7 @@ EventLogger::EventLogger(Player *player, QObject *parent)
 void
 EventLogger::createConnections()
 {
+  //connect(player_, SIGNAL(titleIdChanged(int)), SLOT(logTitleChanged()));
   connect(player_, SIGNAL(mediaChanged()), SLOT(logMediaChanged()));
   connect(player_, SIGNAL(mediaClosed()), SLOT(logMediaClosed()));
   //connect(player_, SIGNAL(volumeChanged()), SLOT(logVolumeChanged()));
@@ -101,7 +102,11 @@ EventLogger::logUntilPlaying()
 
 void
 EventLogger::logMediaChanged()
-{ log(tr("media changed: ")); }
+{ log(tr("media changed")); }
+
+void
+EventLogger::logTitleChanged()
+{ log(tr("title changed")); }
 
 void
 EventLogger::logMediaClosed()

@@ -6,11 +6,25 @@
 #include <QtGui>
 #include <QtWebKit>
 
+// - Helpers -
+
+QString
+WebBrowser::tidyUrl(const QString &url)
+{
+  QString ret = url;
+  if (ret.startsWith("http://", Qt::CaseInsensitive))
+    ret = ret.mid(7); // strlen("http://") = 8
+  if (ret.endsWith('/'))
+    ret.chop(1);
+  return ret;
+}
+
 // - Constructions -
 
 WebBrowser::WebBrowser(QWidget *parent)
   : Base(parent), ui_(new Form),
-    homePage_(WEBBROWSER_HOMEPAGE), searchEngine_(WEBBROWSER_SEARCHENGINE)
+    homePage_(WEBBROWSER_HOMEPAGE), searchEngine_(WEBBROWSER_SEARCHENGINE),
+    textSizeMultiplier_(0)
 {
   ui_->setupUi(this);
 
@@ -21,9 +35,9 @@ WebBrowser::WebBrowser(QWidget *parent)
   // TODO: mvoe newTabButton into UI form
   QToolButton *newTabButton = new QToolButton(this);
   newTabButton->setStyleSheet(
-    "QToolButton{border-image: url(:/images/newtab.png); border:2px;}"
-    "QToolButton:hover{border-image: url(:/images/newtab_hover.png);}"
-    "QToolButton:pressed{border-image: url(:/images/newtab_pressed.png);}"
+    "QToolButton{border-image:url(:/images/newtab.png);border:2px;}"
+    "QToolButton:hover{border-image:url(:/images/newtab_hover.png);}"
+    "QToolButton:pressed{border-image url(:/images/newtab_pressed.png);}"
   );
 
   ui_->tabWidget->setCornerWidget(newTabButton, Qt::TopRightCorner);
@@ -44,8 +58,8 @@ WebBrowser::WebBrowser(QWidget *parent)
 
   QShortcut *locationShortcut = new QShortcut(QKeySequence("Ctrl+L"), this);
   QShortcut *fullScreenShortcut = new QShortcut(QKeySequence("F11"), this);
-  connect(locationShortcut , SIGNAL(activated()), this , SLOT(location()));
-  connect(fullScreenShortcut , SIGNAL(activated()), this , SLOT(toggleFullScreen()));
+  connect(locationShortcut , SIGNAL(activated()), SLOT(location()));
+  connect(fullScreenShortcut , SIGNAL(activated()), SLOT(toggleFullScreen()));
 
   // Focus:
   ui_->addressLine->setFocus();
@@ -55,6 +69,14 @@ WebBrowser::~WebBrowser()
 { delete ui_; }
 
 // - Properties -
+
+qreal
+WebBrowser::textSizeMultiplier() const
+{ return textSizeMultiplier_; }
+
+void
+WebBrowser::setTextSizeMultiplier(qreal factor)
+{ textSizeMultiplier_ = factor; }
 
 int
 WebBrowser::tabCount() const
@@ -156,7 +178,11 @@ WebBrowser::newTab()
 void
 WebBrowser::newTab(const QString &url)
 {
-  QWebView *view = new QWebView(this);
+  QWebView *view = new QWebView(this); {
+    if (textSizeMultiplier_)
+      view->setTextSizeMultiplier(textSizeMultiplier_);
+  }
+
   connect(view, SIGNAL(urlChanged(QUrl)), SLOT(updateAddressbar()));
   connect(view, SIGNAL(loadStarted()), SLOT(handleLoadStarted()));
   connect(view, SIGNAL(loadFinished(bool)), SLOT(handleLoadFinished()));
@@ -164,7 +190,6 @@ WebBrowser::newTab(const QString &url)
   ui_->tabWidget->addTab(view, url);
   view->setUrl(url);
 }
-
 
 void
 WebBrowser::reload()
@@ -180,6 +205,7 @@ WebBrowser::updateAddressbar()
   QWebView *view = qobject_cast<QWebView*>(ui_->tabWidget->currentWidget());
   if (view) {
     QString address = view->url().toString();
+    address = tidyUrl(address);
     ui_->addressLine->setText(address);
     ui_->tabWidget->setTabText(ui_->tabWidget->currentIndex(), address);
     updateButtons();

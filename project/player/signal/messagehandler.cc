@@ -12,7 +12,7 @@
 #include "core/cmd.h"
 #include <QtCore>
 
-#define DEBUG "MessageHandler"
+//#define DEBUG "MessageHandler"
 #include "module/debug/debug.h"
 
 using namespace Core::Cloud;

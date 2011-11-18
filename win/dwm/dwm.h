@@ -12,6 +12,9 @@
 ///  Access desktop window manager through dwmapi.dll. Resolve this at runtime to fit old windows XP.
 namespace Dwm {
 
+  ///  Optional init procedure responsible for load caches to speed up function calls.
+  void warmUp();
+
   bool isCompositionEnabled();
 
   ///  Window notifier is not used.

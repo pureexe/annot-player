@@ -92,6 +92,19 @@ namespace { // anonymous, annotation display
 
 // - Constructions -
 
+void
+AnnotationGraphicsItem::warmUp()
+{
+#ifdef Q_WS_MAC
+  QGraphicsTextItem dummy;
+  QFont font(ANNOTATION_FONT_DEFAULT, ANNOTATION_SIZE_DEFAULT); {
+    font.setStyleStrategy(QFont::PreferAntialias);
+    font.setWeight(QFont::DemiBold);
+  }
+  dummy.setFont(font);
+#endif // Q_WS_MAC
+}
+
 AnnotationGraphicsItem::AnnotationGraphicsItem(const Annotation &annotation, SignalHub *hub, AnnotationGraphicsView *view)
   : view_(view), hub_(hub), style_(FlyStyle), dragPos_(BAD_POS)
 {
@@ -190,8 +203,6 @@ AnnotationGraphicsItem::setDefaultStyle()
   setToolTip(TR(T_TOOLTIP_ANNOTATIONITEM)); // TODO: Make this dynamically determined.
 
   setDefaultTextColor(ANNOTATION_COLOR_DEFAULT);
-
-
 
   //QGraphicsDropShadowEffect *shadow = QGraphicsDropShadowEffect(this));
   //setGraphicsEffect(shadow);

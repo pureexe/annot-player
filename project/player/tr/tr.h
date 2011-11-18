@@ -39,6 +39,7 @@
 #define T_WORDCOUNT     0x20d
 #define T_UNKNOWN       0x20e
 #define T_SUBTITLE      0x20f
+#define T_SECTION       0x210
 
 #define T_BLESS         0x211
 #define T_CURSE         0x212
@@ -117,6 +118,68 @@
 #define T_TOOLTIP_SIMPLIFIEDCHINESE    T_TIP_SIMPLIFIEDCHINESE
 #define T_STATUSTIP_SIMPLIFIEDCHINESE  T_TIP_SIMPLIFIEDCHINESE
 
+#define T_FILTER_PATTERN        0x401
+#define T_FILTER_SYNTAX         0x402
+#define T_FILTER_COLUMN         0x403
+#define T_FILTER_REGEX          0x404
+#define T_FILTER_WILDCARD       0x405
+#define T_FILTER_FIXED          0x406
+
+#define T_ACTIVE        0x411
+#define T_DELETED       0x412
+#define T_BLOCKED       0x413
+#define T_NA            0x414
+#define T_ANONYMOUS     0x415
+
+#define T_PREVIOUS      0x416
+#define T_NEXT          0x417
+
+#define T_MENUTEXT_PREVIOUS         T_PREVIOUS
+#define T_TIP_PREVIOUS              T_MENUTEXT_PREVIOUS
+#define T_TOOLTIP_PREVIOUS          T_TIP_PREVIOUS
+#define T_STATUSTIP_PREVIOUS        T_TIP_PREVIOUS
+
+#define T_MENUTEXT_NEXT         T_NEXT
+#define T_TIP_NEXT              T_MENUTEXT_NEXT
+#define T_TOOLTIP_NEXT          T_TIP_NEXT
+#define T_STATUSTIP_NEXT        T_TIP_NEXT
+
+#define T_MENUTEXT_PREVIOUSSECTION        T_MENUTEXT_PREVIOUS
+#define T_TIP_PREVIOUSSECTION             T_TIP_PREVIOUS
+#define T_TOOLTIP_PREVIOUSSECTION         T_TIP_PREVIOUSSECTION
+#define T_STATUSTIP_PREVIOUSSECTION       T_TIP_PREVIOUSSECTION
+
+#define T_MENUTEXT_NEXTSECTION        T_MENUTEXT_NEXT
+#define T_TIP_NEXTSECTION             T_TIP_NEXT
+#define T_TOOLTIP_NEXTSECTION         T_TIP_NEXTSECTION
+#define T_STATUSTIP_NEXTSECTION       T_TIP_NEXTSECTION
+
+
+#define T_ID            0x500
+#define T_USER_ID       0x501
+#define T_USER_ALIAS    0x502
+#define T_TOKEN_ID      0x503
+#define T_HASH          0x504
+#define T_TEXT          0x505
+#define T_POS           0x506
+#define T_CREATETIME    0x507
+#define T_UPDATETIME    0x508
+#define T_LANGUAGE      0x509
+#define T_STATUS        0x50a
+#define T_FLAGS         0x50b
+#define T_BLESSEDCOUNT  0x50c
+#define T_CURSEDCOUNT   0x50d
+#define T_BLOCKEDCOUNT  0x50e
+#define T_VISITEDCOUNT  0x50f
+#define T_TYPE          0x510
+#define T_ALIAS         0x511
+#define T_TAG           0x512
+#define T_ANNOTATION    0x513
+#define T_PID           0x514
+#define T_NAME          0x515
+#define T_FOLDER        0x516
+#define T_PATH          0x517
+
 // - Defaults -
 #define T_DEFAULT_USERNAME      0xa
 #define T_DEFAULT_PASSWORD      0x11
@@ -192,8 +255,9 @@
 #define T_FORMAT_SUPPORTED     0x72
 #define T_FORMAT_VIDEO         0x73
 #define T_FORMAT_AUDIO         0x74
-#define T_FORMAT_SUBTITLE      0x75
-#define T_FORMAT_EXE           0x76
+#define T_FORMAT_PICTURE       0x75
+#define T_FORMAT_SUBTITLE      0x76
+#define T_FORMAT_PROGRAM       0x77
 
 // - Actions -
 
@@ -711,6 +775,11 @@
 #define T_TOOLTIP_SUBTITLEONTOP     T_TIP_SUBTITLEONTOP
 #define T_STATUSTIP_SUBTITLEONTOP   T_TIP_SUBTITLEONTOP
 
+#define T_MENUTEXT_SECTION      0x15f
+#define T_TIP_SECTION           0x160
+#define T_TOOLTIP_SECTION       T_TIP_SECTION
+#define T_STATUSTIP_SECTION     T_TIP_SECTION
+
 #define T_MENUTEXT_SUBTITLESTYLE          0x161
 #define T_TIP_SUBTITLESTYLE               0x162
 #define T_TOOLTIP_SUBTITLESTYLE           T_TIP_SUBTITLESTYLE
@@ -724,6 +793,17 @@
 #define T_DEFAULT       0x165
 #define T_RANDOM        0x166
 #define T_WINDOWS       0x167
+
+#define T_REMOVE        0x168
+#define T_CLEAR         0x169
+#define T_ENABLE        0x16a
+#define T_BLACKLIST     0x16b
+
+#define T_TITLE_BLACKLIST         T_BLACKLIST
+#define T_MENUTEXT_BLACKLIST         T_BLACKLIST
+#define T_TIP_BLACKLIST              T_BLACKLIST
+#define T_TOOLTIP_BLACKLIST          T_TIP_BLACKLIST
+#define T_STATUSTIP_BLACKLIST        T_TIP_BLACKLIST
 
 #define T_MENUTEXT_DEFAULTCOLOR         T_DEFAULT
 #define T_TIP_DEFAULTCOLOR              T_MENUTEXT_DEFAULTCOLOR
@@ -863,5 +943,10 @@
 #define T_TIP_WINDOWSTHEME2             T_MENUTEXT_WINDOWSTHEME2
 #define T_TOOLTIP_WINDOWSTHEME2         T_TIP_WINDOWSTHEME2
 #define T_STATUSTIP_WINDOWSTHEME2       T_TIP_WINDOWSTHEME2
+
+#define T_MENUTEXT_BROWSE       0x191
+#define T_TIP_BROWSE            0x192
+#define T_TOOLTIP_BROWSE        T_TIP_BROWSE
+#define T_STATUSTIP_BROWSE      T_TIP_BROWSE
 
 #endif // TR_H

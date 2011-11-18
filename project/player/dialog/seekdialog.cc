@@ -21,10 +21,14 @@ using namespace Logger;
 
 #define BAD_TIME    -1
 
-// - Panel -
+// - Constructions -
+
 SeekDialog::SeekDialog(QWidget *parent)
   : Base(parent)
 {
+#ifdef Q_WS_MAC
+  setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
+#endif // Q_WS_MAC
   setWindowTitle(TR(T_TITLE_SEEK));
   UiStyle::globalInstance()->setWindowStyle(this);
   setContentsMargins(0, 0, 0, 0);

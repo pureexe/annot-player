@@ -38,7 +38,7 @@ DataManager::submitToken(const Token &token)
   if (server_->isConnected() && server_->isAuthorized())
     id = server_->submitToken(token);
   else if (cache_->isValid())
-    id = cache_->selectTokenWithDigest(token.digest()).id();
+    id = cache_->selectTokenWithDigest(token.digest(), token.digestType()).id();
   DOUT("submitToken:exit: ret =" << id);
   return id;
 }
@@ -96,7 +96,7 @@ DataManager::submitTokenAndAlias(const Token &token, const Alias &alias)
 {
   DOUT("submitTokenAndAlias:enter");
   qint64 tid = submitToken(token);
-  if (tid) {
+  if (tid && alias.hasText()) {
     Alias a = alias;
     a.setTokenId(tid);;
     submitAlias(a);
@@ -143,12 +143,12 @@ DataManager::submitAnnotations(const AnnotationList &annots)
 // - Update -
 
 bool
-DataManager::updateAnnotationTextWithId(const QString &text, qint64 id, int tt)
+DataManager::updateAnnotationTextWithId(const QString &text, qint64 id)
 {
   DOUT("udpateAnnotationTextWithId:enter: text =" << text);
   bool ret = false;
   if (server_->isConnected() && server_->isAuthorized())
-    ret = server_->updateAnnotationTextWithId(text, id, tt);
+    ret = server_->updateAnnotationTextWithId(text, id);
   DOUT("udpateAnnotationTextWithId:exit: ret =" << ret);
   return ret;
 }
@@ -156,87 +156,87 @@ DataManager::updateAnnotationTextWithId(const QString &text, qint64 id, int tt)
 // - Queries -
 
 Token
-DataManager::selectTokenWithId(qint64 id, int tt)
+DataManager::selectTokenWithId(qint64 id)
 {
   DOUT("selectTokenWithId:enter: id =" << id);
   Token ret;
   if (server_->isConnected()) {
-    ret = server_->selectTokenWithId(id, tt);
+    ret = server_->selectTokenWithId(id);
     if (ret.isValid() && cache_->isValid()) {
-      cache_->deleteTokenWithId(ret.id(), ret.type());
+      cache_->deleteTokenWithId(ret.id());
       cache_->insertToken(ret);
     }
   } else if (cache_->isValid())
-    ret = cache_->selectTokenWithId(id, tt);
+    ret = cache_->selectTokenWithId(id);
   DOUT("selectTokenWithId:exit: tid =" << ret.id());
   return ret;
 }
 
 Token
-DataManager::selectTokenWithDigest(const QString &digest, int tt)
+DataManager::selectTokenWithDigest(const QString &digest, qint32 digestType)
 {
   DOUT("selectTokenWithDigest:enter: digest =" << digest);
   Token ret;
   if (server_->isConnected()) {
-    ret = server_->selectTokenWithDigest(digest, tt);
+    ret = server_->selectTokenWithDigest(digest, digestType);
     if (ret.isValid() && cache_->isValid()) {
-      cache_->deleteTokenWithId(ret.id(), ret.type());
+      cache_->deleteTokenWithId(ret.id());
       cache_->insertToken(ret);
     }
   } else if (cache_->isValid())
-    ret = cache_->selectTokenWithDigest(digest);
+    ret = cache_->selectTokenWithDigest(digest, digestType);
   DOUT("selectTokenWithDigest:exit: tid =" << ret.id());
   return ret;
 }
 
 AnnotationList
-DataManager::selectAnnotationsWithTokenId(qint64 tid, int tt)
+DataManager::selectAnnotationsWithTokenId(qint64 tid)
 {
   DOUT("selectAnnotationsWithTokenId:enter: tid =" << tid);
   AnnotationList ret;
   if (server_->isConnected()) {
-    ret = server_->selectAnnotationsWithTokenId(tid, tt);
+    ret = server_->selectAnnotationsWithTokenId(tid);
     if (!ret.isEmpty() && cache_->isValid()) {
-      cache_->deleteAnnotationsWithTokenId(tid, tt);
+      cache_->deleteAnnotationsWithTokenId(tid);
       cache_->insertAnnotations(ret);
     }
   } else if (cache_->isValid())
-    ret = cache_->selectAnnotationsWithTokenId(tid, tt);;
+    ret = cache_->selectAnnotationsWithTokenId(tid);;
   DOUT("selectAnnotationsWithTokenId:exit: count =" << ret.size());
   return ret;
 }
 
 AliasList
-DataManager::selectAliasesWithTokenId(qint64 tid, int tt)
+DataManager::selectAliasesWithTokenId(qint64 tid)
 {
   DOUT("selectAliasesWithTokenId:enter: tid =" << tid);
   AliasList ret;
   if (server_->isConnected()) {
-    ret = server_->selectAliasesWithTokenId(tid, tt);
+    ret = server_->selectAliasesWithTokenId(tid);
     if (!ret.isEmpty() && cache_->isValid()) {
-      cache_->deleteAliasesWithTokenId(tid, tt);
+      cache_->deleteAliasesWithTokenId(tid);
       cache_->insertAliases(ret);
     }
   } else if (cache_->isValid())
-    ret = cache_->selectAliasesWithTokenId(tid, tt);;
+    ret = cache_->selectAliasesWithTokenId(tid);;
   DOUT("selectAliasesWithTokenId:exit: count =" << ret.size());
   return ret;
 }
 
 AnnotationList
-DataManager::selectRelatedAnnotationsWithTokenId(qint64 tid, int tt)
+DataManager::selectRelatedAnnotationsWithTokenId(qint64 tid)
 {
   DOUT("selectRelatedAnnotationsWithTokenId:enter: tid =" << tid);
   AnnotationList ret;
   if (server_->isConnected()) {
-    ret = server_->selectRelatedAnnotationsWithTokenId(tid, tt);
+    ret = server_->selectRelatedAnnotationsWithTokenId(tid);
     if (!ret.isEmpty() && cache_->isValid())
       foreach (Annotation a, ret) {
-        cache_->deleteAnnotationWithId(a.id(), tt);
+        cache_->deleteAnnotationWithId(a.id());
         cache_->insertAnnotation(a);
       }
   } else if (cache_->isValid())
-    ret = cache_->selectAnnotationsWithTokenId(tid, tt);
+    ret = cache_->selectAnnotationsWithTokenId(tid);
   DOUT("selectRelatedAnnotationsWithTokenId:exit: count =" << ret.size());
   return ret;
 }
@@ -247,9 +247,9 @@ DataManager::selectAliasesWithToken(const Token &token)
   DOUT("selectAliasesWithToken:enter");
   AliasList ret;
   if (token.isValid())
-    ret = selectAliasesWithTokenId(token.id(), token.type());
+    ret = selectAliasesWithTokenId(token.id());
   else if (token.hasDigest() && cache_->isValid())
-    ret = cache_->selectAliasesWithTokenDigest(token.digest());
+    ret = cache_->selectAliasesWithTokenDigest(token.digest(), token.digestType());
   DOUT("selectAliasesWithToken:exit");
   return ret;
 }
@@ -260,9 +260,9 @@ DataManager::selectAnnotationsWithToken(const Token &token)
   DOUT("selectAnnotationsWithToken:enter");
   AnnotationList ret;
   if (token.isValid())
-    ret = selectAnnotationsWithTokenId(token.id(), token.type());
+    ret = selectAnnotationsWithTokenId(token.id());
   else if (token.hasDigest() && cache_->isValid())
-    ret = cache_->selectAnnotationsWithTokenDigest(token.digest());
+    ret = cache_->selectAnnotationsWithTokenDigest(token.digest(), token.digestType());
   DOUT("selectAnnotationsWithToken:exit: count =" << ret.size());
   return ret;
 }

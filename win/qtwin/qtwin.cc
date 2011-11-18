@@ -6,7 +6,7 @@
 
 #ifndef Q_WS_WIN
   #error "This file is for windows only."
-#endif
+#endif // Q_WS_WIN
 
 #include <qt_windows.h>
 #include <TlHelp32.h>
@@ -59,6 +59,17 @@ namespace { // anonymous
   }
 
 } // anonymous namespace
+
+// - Maintence -
+
+void
+QtWin::warmUp()
+{
+  // Load cached functions
+  isWindowsXpOrLater();
+  isWindowsVistaOrLater();
+}
+
 
 // - Threads and processes -
 
@@ -320,7 +331,18 @@ QtWin::getChildWindow(HWND hwnd)
   if (!hwnd)
     return 0;
   HWND child = ::GetWindow(hwnd, GW_CHILD);
-  return child && ::IsWindow(child)? child : 0;
+  return child && ::IsWindow(child) ? child : 0;
+}
+
+QList<HWND>
+QtWin::getChildWindows(HWND hwnd)
+{
+  QList<HWND> ret;
+  HWND h = hwnd;
+  if (h)
+    while (h = QtWin::getChildWindow(h))
+      ret.append(h);
+  return ret;
 }
 
 HWND

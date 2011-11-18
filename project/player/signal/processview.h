@@ -69,7 +69,6 @@ protected slots:
 public:
   virtual void setVisible(bool t); ///< \override
 
-
 protected:
   virtual void contextMenuEvent(QContextMenuEvent *event); ///< \override
 
