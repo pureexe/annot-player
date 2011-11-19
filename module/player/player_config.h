@@ -16,7 +16,8 @@
     __VA_ARGS__ "rm" \
     __VA_ARGS__ "rmvb" \
     __VA_ARGS__ "flv" \
-    __VA_ARGS__ "vob"
+    __VA_ARGS__ "vob" \
+    __VA_ARGS__ "wmv"
 
 #define PLAYER_FORMAT_AUDIO(...) \
     __VA_ARGS__ "ape" \
@@ -24,7 +25,9 @@
     __VA_ARGS__ "m4a" \
     __VA_ARGS__ "m4r" \
     __VA_ARGS__ "mp3" \
-    __VA_ARGS__ "tta"
+    __VA_ARGS__ "tta" \
+    __VA_ARGS__ "wav" \
+    __VA_ARGS__ "wma"
 
 #define PLAYER_FORMAT_PICTURE(...) \
     __VA_ARGS__ "bmp" \

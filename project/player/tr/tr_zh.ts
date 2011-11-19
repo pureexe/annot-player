@@ -563,17 +563,17 @@
     <message>
         <location filename="../mainwindow.cc" line="3300"/>
         <source>process was attached</source>
-        <translation>侦听使魔：进程已被监听</translation>
+        <translation>侦听使魔：进程已同步</translation>
     </message>
     <message>
         <location filename="../mainwindow.cc" line="3304"/>
         <source>process attached</source>
-        <translation>侦听使魔：监听进程成功</translation>
+        <translation>侦听使魔：同步进程成功</translation>
     </message>
     <message>
         <location filename="../mainwindow.cc" line="3307"/>
         <source>failed to attach process </source>
-        <translation>侦听使魔：监听进程失败</translation>
+        <translation>侦听使魔：同步进程失败</translation>
     </message>
     <message>
         <location filename="../mainwindow.cc" line="3309"/>
@@ -832,12 +832,12 @@
     <message>
         <location filename="../signal/processview.cc" line="500"/>
         <source>process attached</source>
-        <translation>侦听使魔：进程监听成功</translation>
+        <translation>侦听使魔：进程同步成功</translation>
     </message>
     <message>
         <location filename="../signal/processview.cc" line="502"/>
         <source>failed to attach process </source>
-        <translation>侦听使魔：进程监听失败</translation>
+        <translation>侦听使魔：进程同步失败</translation>
     </message>
     <message>
         <location filename="../signal/processview.cc" line="504"/>
@@ -862,7 +862,7 @@
     <message>
         <location filename="../signal/processview.cc" line="522"/>
         <source>failed to detach process</source>
-        <translation>侦听使魔：停止侦听进程失败</translation>
+        <translation>侦听使魔：停止监听进程失败</translation>
     </message>
 </context>
 <context>
@@ -1373,22 +1373,22 @@
     <message>
         <location filename="translatormanager.cc" line="167"/>
         <source>Attach</source>
-        <translation>监听</translation>
+        <translation>同步</translation>
     </message>
     <message>
         <location filename="translatormanager.cc" line="168"/>
         <source>Detach</source>
-        <translation>取消监听</translation>
+        <translation>取消同步</translation>
     </message>
     <message>
         <location filename="translatormanager.cc" line="169"/>
         <source>Attached</source>
-        <translation>监听成功</translation>
+        <translation>同步成功</translation>
     </message>
     <message>
         <location filename="translatormanager.cc" line="170"/>
         <source>Detached</source>
-        <translation>监听取消</translation>
+        <translation>同步取消</translation>
     </message>
     <message>
         <location filename="translatormanager.cc" line="171"/>
@@ -2205,14 +2205,14 @@
         <location filename="translatormanager.cc" line="444"/>
         <source>Attach process</source>
         <oldsource>&amp;Attach process</oldsource>
-        <translation>监听进程</translation>
+        <translation>同步进程</translation>
     </message>
     <message>
         <location filename="translatormanager.cc" line="446"/>
         <location filename="translatormanager.cc" line="447"/>
         <source>Detach process</source>
         <oldsource>&amp;Detach process</oldsource>
-        <translation>取消监听进程</translation>
+        <translation>进程同步连接断开</translation>
     </message>
     <message>
         <location filename="translatormanager.cc" line="449"/>

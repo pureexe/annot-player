@@ -100,7 +100,8 @@ FilteredListView::createLayout()
     layout->addWidget(proxyView_);
     layout->addWidget(filterPatternLineEdit_);
 
-    //layout->setContentsMargins(0, 0, 0, 0);
+    layout->setContentsMargins(0, 0, 0, 0);
+    setContentsMargins(0, 0, 0, 0);
   }
   setLayout(layout);
 

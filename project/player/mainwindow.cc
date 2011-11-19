@@ -2496,7 +2496,8 @@ MainWindow::invalidateContextMenu()
     contextMenu_->addAction(toggleWindowPickDialogVisibleAct_);
 #endif // USE_WIN_PICKER
 
-    contextMenu_->addMenu(annotationLanguageMenu_);
+    if (annotationFilter_->isEnabled())
+      contextMenu_->addMenu(annotationLanguageMenu_);
 
     // Subtitle menu
     if (hub_->isSignalTokenMode() &&

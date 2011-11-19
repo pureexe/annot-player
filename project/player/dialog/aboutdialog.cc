@@ -13,7 +13,11 @@
 
 // - Constructions -
 
-#define WINDOW_SIZE   QSize(270, 160)
+#ifdef Q_WS_MAC
+  #define WINDOW_SIZE   QSize(300, 200)
+#else
+  #define WINDOW_SIZE   QSize(270, 160)
+#endif // Q_WS_MAC
 
 QString
 AboutDialog::text()
@@ -80,8 +84,11 @@ AboutDialog::AboutDialog(QWidget *parent)
   setLayout(col);
 
   // l, t, r, b
-  col->setContentsMargins(0, 0, 0, 0);
-  setContentsMargins(4, 4, 4, 0);
+  int patch = 0;
+  if (!UiStyle::isAeroAvailable())
+    patch = 4;
+  col->setContentsMargins(patch, patch, patch, 0);
+  setContentsMargins(4, 4, 4, patch);
 
   resize(WINDOW_SIZE);
 

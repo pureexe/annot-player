@@ -27,6 +27,23 @@
 #define SK_RECENT(_i)   "Recent" #_i
 namespace { enum { RECENT_COUNT = 10 }; }
 
+// - Helpers -
+
+namespace { // anonymous
+
+  template <typename T>
+  inline QList<T>
+  uniqueList(const QList<T> &l)
+  {
+    QList<T> ret;
+    foreach (T t, l)
+      if (!ret.contains(t))
+        ret.append(t);
+    return ret;
+  }
+
+} // anonymous namespace
+
 // - Constructions -
 
 Settings*
@@ -131,7 +148,6 @@ void
 Settings::setAnnotationLanguages(qint64 bits)
 { setValue(SK_ANNOTLANGUAGES, bits); }
 
-
 bool
 Settings::isQueueEmpty() const
 { return value(SK_QUEUEEMPTY).toBool(); }
@@ -172,6 +188,9 @@ Settings::recent() const
   r = value(SK_RECENT(7)).toString(); if (!r.isEmpty()) ret.append(r);
   r = value(SK_RECENT(8)).toString(); if (!r.isEmpty()) ret.append(r);
   r = value(SK_RECENT(9)).toString(); if (!r.isEmpty()) ret.append(r);
+
+  if (!ret.isEmpty())
+    ret = ::uniqueList(ret);
 
   return ret;
 }

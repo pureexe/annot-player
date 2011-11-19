@@ -37,6 +37,7 @@ BlacklistView::BlacklistView(AnnotationFilter *filter, QWidget *parent)
   createLayout();
 
   invalidateTab();
+  invalidateFilter();
 
   QLineEdit *edit = currentLineEdit();
   if (edit)
@@ -185,15 +186,6 @@ BlacklistView::createTabs()
 
   MAKE_CHECKABLE_BUTTON(enableButton_, TR(T_ENABLE), tr("Enable blacklist"), SLOT(setFilterEnabled(bool))) {
     enableButton_->setEnabled(true);
-    connect(enableButton_, SIGNAL(clicked(bool)), addButton_, SLOT(setEnabled(bool)));
-    connect(enableButton_, SIGNAL(clicked(bool)), clearButton_, SLOT(setEnabled(bool)));
-    connect(enableButton_, SIGNAL(clicked(bool)), removeButton_, SLOT(setEnabled(bool)));
-    connect(enableButton_, SIGNAL(clicked(bool)), textTab_, SLOT(setEnabled(bool)));
-    connect(enableButton_, SIGNAL(clicked(bool)), userTab_, SLOT(setEnabled(bool)));
-    connect(enableButton_, SIGNAL(clicked(bool)), annotationTab_, SLOT(setEnabled(bool)));
-    connect(enableButton_, SIGNAL(clicked(bool)), textTabButton_, SLOT(setEnabled(bool)));
-    connect(enableButton_, SIGNAL(clicked(bool)), userTabButton_, SLOT(setEnabled(bool)));
-    connect(enableButton_, SIGNAL(clicked(bool)), annotationTabButton_, SLOT(setEnabled(bool)));
   }
 
 #undef MAKE_TAB_BUTTON
@@ -214,7 +206,13 @@ BlacklistView::createLayout()
 
     header->addWidget(textTabButton_);
     header->addWidget(userTabButton_);
-    header->addWidget(annotationTabButton_);
+    if (ALPHA)
+      header->addWidget(annotationTabButton_);
+    else {
+      annotationTabButton_->resize(0, 0);
+      annotationTabButton_->setParent(this);
+      annotationTabButton_->hide();
+    }
 
     footer->addWidget(enableButton_);
     footer->addWidget(clearButton_);
@@ -222,15 +220,15 @@ BlacklistView::createLayout()
     footer->addWidget(addButton_);
     footer->addWidget(removeButton_);
 
-    // left, top, right, bottom
     int patch = 0;
     if (!UiStyle::isAeroAvailable())
       patch = 9;
 
+    // left, top, right, bottom
     stackedLayout_->setContentsMargins(0, 0, 0, 0);
     header->setContentsMargins(0, 0, 0, 0);
     rows->setContentsMargins(0, 0, 0, 0);
-    setContentsMargins(0, patch, 0, patch);
+    setContentsMargins(9, patch, 9, patch);
   }
   setLayout(rows);
 }
@@ -250,8 +248,18 @@ BlacklistView::refresh()
 void
 BlacklistView::invalidateFilter()
 {
-  enableButton_->setChecked(filter_->isEnabled());
-  stackedLayout_->setEnabled(filter_->isEnabled());
+  bool enabled = filter_->isEnabled();
+
+  enableButton_->setChecked(enabled);
+  addButton_->setEnabled(enabled);
+  clearButton_->setEnabled(enabled);
+  removeButton_->setEnabled(enabled);
+  textTab_->setEnabled(enabled);
+  userTab_->setEnabled(enabled);
+  annotationTab_->setEnabled(enabled);
+  textTabButton_->setEnabled(enabled);
+  userTabButton_->setEnabled(enabled);
+  annotationTabButton_->setEnabled(enabled);
 }
 
 void

@@ -11,7 +11,7 @@ using namespace Core::Cloud;
 // - Constructions -
 
 AnnotationFilter::AnnotationFilter(QObject *parent)
-  : Base(parent), enabled_(true), languages_(0)
+  : Base(parent), enabled_(false), languages_(0)
 { }
 
 // - Properties -

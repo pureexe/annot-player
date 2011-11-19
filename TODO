@@ -1,22 +1,30 @@
-0.1.0.0 -- stable
+upgrade boost
+
+finish english version wiki
+finish japanese version wiki
+
+push to 2ch niji
+push to hf 4chan
 
 server:
 - fixme: server email not sent
 
+0.1.0.1 -- stable
 client:
-- Move stuff from main to Application
-- add openFile function in windows through register
 - move current Annotations/Token/Alias into DataManager from TokenView and AnnotationView
 - replace annotborowser/processview/tokenview with filteredTableView
 - compact context menu
-- Finish bless/block user/annots/aliases at client side
-  - add block/bless/curse user
+- add openFile function in windows through register
 - save ng list to settings
 - debug offline mode to see if token/annot/alias offline submission works or not
 - reduce dout files, only focus on specific files to debug
 - fixme: make mainwindow as root again in windows
 - fixme: DVD play in mac: mouse single click not working
 - fixme: edit time, edit comments, etc; otherwise, make them readonly
+- fixme: recent filt bug
+- minmize button in context menu, then restore at tray
+- Finish bless/block user/annots/aliases at client side
+  - add block/bless/curse user
 
 wiki:
 - mension manga/picture support
@@ -26,28 +34,36 @@ publish to ktxp.com s1-2b caso xueku-sc
 publish to hf 4chan
 publish to 2ch niji
 
-## NextStep
+## NextStep:
 
-## server
-## client
+(0.2.0.0)
+LIVE MODE
+- try ppstream on windows with my player
+- make default UI as open channel, and as FIRST live channel
+  every chat is received
+- PPStream support for chjunjiewanhui!
+- chunjiewanhui channel
+- support for user to create open channel
+  for example: synchronzing games while playing multi-player game
 
 server:
-- add comment page for each token
-- add trend: list latest added token, alias, annot, etc
+COMMENT
+- comment for each token
+USER ADS
 
 client:
+MANGA ANNOT
 - add winzip extraction to view picture
  using quazip:http://quazip.sourceforge.net/
  directly open unzipped binaries and pass it to vlc
+CD ANNOT
 - ape/cue next track previous/track
   add playlist view
 
-- minmize button in context menu, then restore at tray
+(0.3.0.0)
+SYNC MODE (next next step, after more and more people start using this
+  to avoid the idea being stolen by bilibili)
 
-server:
-- comment for each token
-- LIVE MODE using polling BEFORE SPRING FESTEVAL
-  中国网络电视台 2012 春节晚会
 
 ## NextProject
 
