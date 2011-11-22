@@ -17,6 +17,7 @@ FilteredTableView::FilteredTableView(QStandardItemModel *sourceModel, QWidget *p
   : Base(parent), sourceModel_(sourceModel)
 {
   Q_ASSERT(sourceModel_);
+  setContentsMargins(0, 0, 0, 0);
 
   //setWindowTitle(tr("Process view"));
   //UiStyle::globalInstance()->setWindowStyle(this);
@@ -90,7 +91,7 @@ FilteredTableView::createLayout()
   QLabel *filterColumnLabel = new QLabel; {
     filterColumnLabel->setStyleSheet(SS_LABEL);
     filterColumnLabel->setBuddy(filterColumnComboBox_);
-    filterColumnLabel->setText(TR(T_FILTER_COLUMN));
+    filterColumnLabel->setText(TR(T_FILTER_COLUMN) + ":");
     filterColumnLabel->setToolTip(filterColumnComboBox_->toolTip());
   }
 
@@ -111,7 +112,8 @@ FilteredTableView::createLayout()
     layout->addWidget(filterColumnLabel, ++r, c=0);
     layout->addWidget(filterColumnComboBox_, r, ++c, 1, 2);
 
-    //layout->setContentsMargins(0, 0, 0, 0);
+    layout->setContentsMargins(0, 0, 0, 0);
+    setContentsMargins(0, 0, 0, 0);
   }
   setLayout(layout);
 
@@ -141,7 +143,16 @@ FilteredTableView::removeCurrentRow()
     proxyModel_->removeRow(mi.row());
 }
 
+void
+FilteredTableView::setCurrentColumn(int col)
+{ filterColumnComboBox_->setCurrentIndex(col); }
+
+void
+FilteredTableView::sortByColumn(int col, Qt::SortOrder order)
+{ proxyView_->sortByColumn(col, order); }
+
 // - Slots -
+
 
 void
 FilteredTableView::clear()

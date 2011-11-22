@@ -27,6 +27,7 @@
 #define SK_RECENT(_i)   "Recent" #_i
 namespace { enum { RECENT_COUNT = 10 }; }
 
+
 // - Helpers -
 
 namespace { // anonymous
@@ -176,6 +177,8 @@ Settings::setSubtitleStaysOnTop(bool t)
 QStringList
 Settings::recent() const
 {
+  Q_ASSERT(RECENT_COUNT == G_RECENT_COUNT);
+
   QStringList ret;
   QString
   r = value(SK_RECENT(0)).toString(); if (!r.isEmpty()) ret.append(r);
@@ -199,6 +202,8 @@ Settings::recent() const
 void
 Settings::clearRecent()
 {
+  Q_ASSERT(RECENT_COUNT == G_RECENT_COUNT);
+
   setValue(SK_RECENT(0), QString());
   setValue(SK_RECENT(1), QString());
   setValue(SK_RECENT(2), QString());
@@ -214,6 +219,8 @@ Settings::clearRecent()
 void
 Settings::setRecent(const QStringList &l)
 {
+  Q_ASSERT(RECENT_COUNT == G_RECENT_COUNT);
+
   if (l.isEmpty()) {
     clearRecent();
     return;

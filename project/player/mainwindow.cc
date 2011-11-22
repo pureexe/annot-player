@@ -213,6 +213,7 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags f)
 
   // Load settings
   recentFiles_ = Settings::globalInstance()->recent();
+  invalidateRecentMenu();
 
   setTranslateEnabled(Settings::globalInstance()->isTranslateEnabled());
   setSubtitleStaysOnTop(Settings::globalInstance()->isSubtitleStaysOnTop());
@@ -235,9 +236,6 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags f)
 void
 MainWindow::createComponents()
 {
-  // Signal hub
-  hub_ = new SignalHub(this);
-
   // Systemt tray icon
   if (QSystemTrayIcon::isSystemTrayAvailable())
     tray_ = new Tray(this);
@@ -280,6 +278,9 @@ MainWindow::createComponents()
     //player_->setEncoding("UTF-8");
   }
   //assert(isValid()); // TODO: fix this using a pop up dialog and then exit
+
+  // Signal hub
+  hub_ = new SignalHub(player_, this);
 
   // Logger
   logger_ = new EventLogger(player_, this);
@@ -666,16 +667,6 @@ MainWindow::createActions()
   MAKE_ACTION(forward10mAct_,   FORWARD10M,     this,   SLOT(forward10m()))
   MAKE_ACTION(backward10mAct_,  BACKWARD10M,    this,   SLOT(backward10m()))
 
-  MAKE_ACTION(recent0Act_,      RECENTFILE,     this,   SLOT(openRecent0()))
-  MAKE_ACTION(recent1Act_,      RECENTFILE,     this,   SLOT(openRecent1()))
-  MAKE_ACTION(recent2Act_,      RECENTFILE,     this,   SLOT(openRecent2()))
-  MAKE_ACTION(recent3Act_,      RECENTFILE,     this,   SLOT(openRecent3()))
-  MAKE_ACTION(recent4Act_,      RECENTFILE,     this,   SLOT(openRecent4()))
-  MAKE_ACTION(recent5Act_,      RECENTFILE,     this,   SLOT(openRecent5()))
-  MAKE_ACTION(recent6Act_,      RECENTFILE,     this,   SLOT(openRecent6()))
-  MAKE_ACTION(recent7Act_,      RECENTFILE,     this,   SLOT(openRecent7()))
-  MAKE_ACTION(recent8Act_,      RECENTFILE,     this,   SLOT(openRecent8()))
-  MAKE_ACTION(recent9Act_,      RECENTFILE,     this,   SLOT(openRecent9()))
   MAKE_ACTION(clearRecentAct_,  CLEARRECENT,    this,   SLOT(clearRecent()))
 
   MAKE_ACTION(previousSectionAct_, PREVIOUSSECTION, player_,  SLOT(setPreviousTitle()))
@@ -1513,16 +1504,16 @@ MainWindow::volumeUp(qreal delta)
     if (delta == 0)
       delta = G_VOLUME_DELTA;
 
-    qreal v_old = player_->volume();
+    qreal v_old = hub_->volume();
     qreal v_new = delta + v_old;
     if (v_new <= 0) {
       if (v_old > 0)
-        player_->setVolume(0);
+        hub_->setVolume(0);
     } else if (v_new >= 1) {
       if (v_old < 1)
-        player_->setVolume(1);
+        hub_->setVolume(1);
     } else
-      player_->setVolume(v_new);
+      hub_->setVolume(v_new);
     break;
   }
 }
@@ -1930,19 +1921,24 @@ MainWindow::setToken(const QString &input, bool async)
 
     token.setDigest(digest);
 
-    QString fileName = QFileInfo(path).fileName();
-    int tt = fileType(fileName);
-    token.setType(tt);
+    QFileInfo fi(path);
+    if (!fi.isDir()) {
+      QString fileName = fi.fileName();
+      if (!fileName.isEmpty()) {
+        int tt = fileType(fileName);
+        token.setType(tt);
 
-    if (fileName.size() > Traits::MAX_ALIAS_LENGTH) {
-      fileName = fileName.mid(0, Traits::MAX_ALIAS_LENGTH);
-      warn(TR(T_WARNING_LONG_STRING_TRUNCATED) + ": " + fileName);
+        if (fileName.size() > Traits::MAX_ALIAS_LENGTH) {
+          fileName = fileName.mid(0, Traits::MAX_ALIAS_LENGTH);
+          warn(TR(T_WARNING_LONG_STRING_TRUNCATED) + ": " + fileName);
+        }
+
+        alias.setType(Alias::AT_Source);
+        alias.setLanguage(server_->user().language());
+        alias.setText(fileName);
+        alias.setUpdateTime(QDateTime::currentMSecsSinceEpoch() / 1000);
+      }
     }
-
-    alias.setType(Alias::AT_Source);
-    alias.setLanguage(server_->user().language());
-    alias.setText(fileName);
-    alias.setUpdateTime(QDateTime::currentMSecsSinceEpoch() / 1000);
   }
 
   token.setCreateTime(QDateTime::currentMSecsSinceEpoch() / 1000);
@@ -2356,10 +2352,10 @@ void
 MainWindow::wheelEvent(QWheelEvent *event)
 {
   if (event && event->orientation() == Qt::Vertical) {
-    qreal vol = player_->volume();
+    qreal vol = hub_->volume();
     vol += event->delta() / (8 * 360.0);
     vol = (vol > 1)? 1 : (vol < 0)? 0 : vol;
-    player_->setVolume(vol);
+    hub_->setVolume(vol);
     event->accept();
   }
 
@@ -2382,6 +2378,12 @@ void
 MainWindow::invalidateContextMenu()
 {
   contextMenu_->clear();
+  if (!contextMenuActions_.isEmpty()) {
+    foreach (QAction *a, contextMenuActions_)
+      if (a)
+        a->deleteLater();
+    contextMenuActions_.clear();
+  }
 
   // Open
   {
@@ -2391,13 +2393,15 @@ MainWindow::invalidateContextMenu()
     contextMenu_->addAction(openFileAct_);
 
 #ifdef USE_MODE_SIGNAL
+    if (!(player_->hasMedia() && !player_->isStopped())) {
 #ifdef USE_WIN_PICKER
-     toggleProcessPickDialogVisibleAct_->setChecked(processPickDialog_->isVisible());
-     contextMenu_->addAction(toggleProcessPickDialogVisibleAct_);
+      toggleProcessPickDialogVisibleAct_->setChecked(processPickDialog_->isVisible());
+      contextMenu_->addAction(toggleProcessPickDialogVisibleAct_);
 #endif // USE_WIN_PICKER
 
-    toggleSignalViewVisibleAct_->setChecked(signalView_->isVisible());
-    contextMenu_->addAction(toggleSignalViewVisibleAct_ );
+      toggleSignalViewVisibleAct_->setChecked(signalView_->isVisible());
+      contextMenu_->addAction(toggleSignalViewVisibleAct_ );
+    }
 
     if (hub_->isSignalTokenMode()) {
       toggleRecentMessageViewVisibleAct_->setChecked(recentMessageView_->isVisible());
@@ -2418,37 +2422,8 @@ MainWindow::invalidateContextMenu()
 
     // Recent
     invalidateRecent();
-    if (!recentFiles_.isEmpty()) {
-      recentMenu_->clear();
-      QList<QAction*> l;
-#define ADD_RECENT(_i) \
-        if (recentFiles_.size() > _i) { \
-          QString path = recentFiles_[_i]; \
-          QFileInfo fi(path); \
-          QString name = fi.fileName(); \
-          if (name.isEmpty()) { \
-            name = QDir(path).dirName(); \
-            if (name.isEmpty()) \
-              name = path; \
-          } \
-          recent##_i##Act_->setText(name); \
-          recent##_i##Act_->setToolTip(path); \
-          l.prepend(recent##_i##Act_); \
-        }
-
-        ADD_RECENT(9) ADD_RECENT(8) ADD_RECENT(7)
-        ADD_RECENT(6) ADD_RECENT(5) ADD_RECENT(4)
-        ADD_RECENT(3) ADD_RECENT(2) ADD_RECENT(1)
-        ADD_RECENT(0)
-#undef ADD_RECENT
-      if (!l.isEmpty()) {
-        recentMenu_->addActions(l);
-        recentMenu_->addSeparator();
-        recentMenu_->addAction(clearRecentAct_);
-
-        contextMenu_->addMenu(recentMenu_);
-      }
-    }
+    if (!recentFiles_.isEmpty())
+      contextMenu_->addMenu(recentMenu_);
 
     // DVD sections
     if (hub_->isMediaTokenMode() && player_->hasMedia() &&
@@ -2465,51 +2440,18 @@ MainWindow::invalidateContextMenu()
 
       for (int tid = 0; tid < player_->titleCount(); tid++) {
         QString text = TR(T_SECTION) + " " + QString::number(tid);
-        BOOST_AUTO(action, new Core::Gui::ActionWithId(tid, text, sectionMenu_));
+        BOOST_AUTO(a, new Core::Gui::ActionWithId(tid, text, sectionMenu_));
+        contextMenuActions_.append(a);
         if (tid == player_->titleId())
-          action->setIcon(QIcon(RC_IMAGE_CURRENTSUBTITLE));
-        connect(action, SIGNAL(triggeredWithId(int)), player_, SLOT(setTitleId(int)));
-        sectionMenu_->addAction(action);
+          a->setIcon(QIcon(RC_IMAGE_CURRENTSUBTITLE));
+        connect(a, SIGNAL(triggeredWithId(int)), player_, SLOT(setTitleId(int)));
+        sectionMenu_->addAction(a);
       }
 
       contextMenu_->addMenu(sectionMenu_);
     }
-  }
-
-  // Annotation
-  {
-    contextMenu_->addSeparator();
-    if (annotationView_->isPlaybackEnabled()) {
-      toggleAnnotationVisibleAct_->setChecked(true);
-      toggleAnnotationVisibleAct_->setText(TR(T_MENUTEXT_SHOWANNOT));
-    } else {
-      toggleAnnotationVisibleAct_->setChecked(false);
-      toggleAnnotationVisibleAct_->setText(TR(T_MENUTEXT_HIDEANNOT));
-    }
-    contextMenu_->addAction(toggleAnnotationVisibleAct_ );
-
-    toggleBlacklistViewVisibleAct_->setChecked(blacklistView_->isVisible());
-    contextMenu_->addAction(toggleBlacklistViewVisibleAct_);
-
-#ifdef USE_WIN_PICKER
-    toggleWindowPickDialogVisibleAct_->setChecked(windowPickDialog_->isVisible());
-    contextMenu_->addAction(toggleWindowPickDialogVisibleAct_);
-#endif // USE_WIN_PICKER
-
-    if (annotationFilter_->isEnabled())
-      contextMenu_->addMenu(annotationLanguageMenu_);
 
     // Subtitle menu
-    if (hub_->isSignalTokenMode() &&
-        server_->isConnected() && server_->isAuthorized()) {
-      contextMenu_->addSeparator();
-      contextMenu_->addAction(toggleTranslateAct_);
-    }
-    toggleSubtitleStaysOnTopAct_->setChecked(isSubtitleStaysOnTop());
-    contextMenu_->addAction(toggleSubtitleStaysOnTopAct_);
-
-    contextMenu_->addMenu(subtitleStyleMenu_);
-
     if (hub_->isMediaTokenMode() && player_->hasMedia()) {
       contextMenu_->addSeparator();
 
@@ -2529,11 +2471,12 @@ MainWindow::invalidateContextMenu()
         QStringList l = player_->subtitleDescriptions();
         int id = 0;
         foreach (const QString &subtitle, l) {
-          BOOST_AUTO(action, new Core::Gui::ActionWithId(id, subtitle, subtitleMenu_));
+          BOOST_AUTO(a, new Core::Gui::ActionWithId(id, subtitle, subtitleMenu_));
+          contextMenuActions_.append(a);
           if (id == player_->subtitleId())
-            action->setIcon(QIcon(RC_IMAGE_CURRENTSUBTITLE));
-          connect(action, SIGNAL(triggeredWithId(int)), player_, SLOT(setSubtitleId(int)));
-          subtitleMenu_->addAction(action);
+            a->setIcon(QIcon(RC_IMAGE_CURRENTSUBTITLE));
+          connect(a, SIGNAL(triggeredWithId(int)), player_, SLOT(setSubtitleId(int)));
+          subtitleMenu_->addAction(a);
           id++;
         }
 
@@ -2541,38 +2484,7 @@ MainWindow::invalidateContextMenu()
       }
       subtitleMenu_->addAction(openSubtitleAct_);
       contextMenu_->addMenu(subtitleMenu_);
-
-      toggleSubtitleStaysOnTopAct_->setChecked(isSubtitleStaysOnTop());
-      contextMenu_->addAction(toggleSubtitleStaysOnTopAct_);
     }
-  }
-
-  if (player_->hasMedia()
-#ifdef USE_MODE_SIGNAL
-      && hub_->isMediaTokenMode()
-#endif // USE_MODE_SIGNAL
-      ) {
-    // Sync mode
-    if (ALPHA) {
-      contextMenu_->addSeparator();
-
-      toggleSyncModeAct_->setChecked(hub_->isSyncPlayMode());
-      contextMenu_->addAction(toggleSyncModeAct_);
-
-      toggleSyncDialogVisibleAct_->setChecked(syncDialog_->isVisible());
-      contextMenu_->addAction(toggleSyncDialogVisibleAct_);
-    }
-    /*
-    { // Live mode
-      contextMenu_->addSeparator();
-
-      toggleLiveModeAct_->setChecked(isLiveMode());
-      contextMenu_->addAction(toggleLiveModeAct_);
-
-      toggleLiveDialogVisibleAct_->setChecked(liveDialog_->isVisible());
-      contextMenu_->addAction(toggleLiveDialogVisibleAct_);
-    }
-    */
   }
 
   if (hub_->isSignalTokenMode()
@@ -2618,6 +2530,72 @@ MainWindow::invalidateContextMenu()
 
     toggleSeekDialogVisibleAct_->setChecked(seekDialog_->isVisible());
     contextMenu_->addAction(toggleSeekDialogVisibleAct_);
+  }
+
+  // Annotation
+  {
+    contextMenu_->addSeparator();
+    if (annotationView_->isPlaybackEnabled()) {
+      toggleAnnotationVisibleAct_->setChecked(true);
+      toggleAnnotationVisibleAct_->setText(TR(T_MENUTEXT_SHOWANNOT));
+    } else {
+      toggleAnnotationVisibleAct_->setChecked(false);
+      toggleAnnotationVisibleAct_->setText(TR(T_MENUTEXT_HIDEANNOT));
+    }
+    contextMenu_->addAction(toggleAnnotationVisibleAct_ );
+
+    toggleBlacklistViewVisibleAct_->setChecked(blacklistView_->isVisible());
+    contextMenu_->addAction(toggleBlacklistViewVisibleAct_);
+
+#ifdef USE_WIN_PICKER
+    toggleWindowPickDialogVisibleAct_->setChecked(windowPickDialog_->isVisible());
+    contextMenu_->addAction(toggleWindowPickDialogVisibleAct_);
+#endif // USE_WIN_PICKER
+
+    if (annotationFilter_->isEnabled())
+      contextMenu_->addMenu(annotationLanguageMenu_);
+
+    // Subtitle menu
+    if (hub_->isSignalTokenMode() &&
+        server_->isConnected() && server_->isAuthorized()) {
+      contextMenu_->addSeparator();
+      contextMenu_->addAction(toggleTranslateAct_);
+    }
+    toggleSubtitleStaysOnTopAct_->setChecked(isSubtitleStaysOnTop());
+    contextMenu_->addAction(toggleSubtitleStaysOnTopAct_);
+
+    contextMenu_->addMenu(subtitleStyleMenu_);
+
+    toggleSubtitleStaysOnTopAct_->setChecked(isSubtitleStaysOnTop());
+    contextMenu_->addAction(toggleSubtitleStaysOnTopAct_);
+  }
+
+  if (player_->hasMedia()
+#ifdef USE_MODE_SIGNAL
+      && hub_->isMediaTokenMode()
+#endif // USE_MODE_SIGNAL
+      ) {
+    // Sync mode
+    if (ALPHA) {
+      contextMenu_->addSeparator();
+
+      toggleSyncModeAct_->setChecked(hub_->isSyncPlayMode());
+      contextMenu_->addAction(toggleSyncModeAct_);
+
+      toggleSyncDialogVisibleAct_->setChecked(syncDialog_->isVisible());
+      contextMenu_->addAction(toggleSyncDialogVisibleAct_);
+    }
+    /*
+    { // Live mode
+      contextMenu_->addSeparator();
+
+      toggleLiveModeAct_->setChecked(isLiveMode());
+      contextMenu_->addAction(toggleLiveModeAct_);
+
+      toggleLiveDialogVisibleAct_->setChecked(liveDialog_->isVisible());
+      contextMenu_->addAction(toggleLiveDialogVisibleAct_);
+    }
+    */
   }
 
   // Toggles
@@ -2913,6 +2891,7 @@ MainWindow::closeEvent(QCloseEvent *event)
   if (tray_)
     tray_->hide();
 
+  //invalidateRecent();
   Settings::globalInstance()->setRecent(recentFiles_);
 
   Settings::globalInstance()->setThemeId(UiStyle::globalInstance()->theme());
@@ -3605,41 +3584,78 @@ MainWindow::invalidateRecent()
 {
   if (recentFiles_.isEmpty())
     return;
+  bool update = false;
 
   BOOST_AUTO(p, recentFiles_.begin());
   while (p != recentFiles_.end()) {
     QFileInfo fi(*p);
     if (fi.exists())
       ++p;
-    else
+    else {
       p = recentFiles_.erase(p);
+      update = true;
+    }
   }
 
-  //if (!recentFiles_.isEmpty())
-  //  for (int i = recentFiles_.size() - 1; i >= 0; i--) {
-  //    QFileInfo fi(recentFiles_[i]);
-  //    if (!fi.exists())
-  //      recentFiles_.removeAt(i);
-  //  }
+  // FIXME
+  if (!recentFiles_.isEmpty()) {
+     QStringList unique = ::uniqueList(recentFiles_);
+     if (unique.size() != recentFiles_.size()) {
+       recentFiles_ = unique;
+       update = true;
+     }
+  }
 
-  //if (!recentFiles_.isEmpty()) {
-  //  QStringList bak = recentFiles_;
-  //  recentFiles_.clear();
-  //  foreach (QString path, bak) {
-  //    QFileInfo fi(path);
-  //    if (fi.exists())
-  //      recentFiles_.append(path);
-  //  }
-  //}
+  if (update)
+    invalidateRecentMenu();
+}
+
+void
+MainWindow::invalidateRecentMenu()
+{
+  QList<QAction*> l = recentMenu_->actions();
+  foreach (QAction *a, l)
+    if (a && a != clearRecentAct_)
+      a->deleteLater();
+  recentMenu_->clear();
+
+  if (!recentFiles_.isEmpty()) {
+    int i = 0;
+    foreach (QString f, recentFiles_) {
+      if (i >= G_RECENT_COUNT)
+        break;
+
+      QString text = QFileInfo(f).fileName();
+      if (text.isEmpty()) {
+        text = QDir(f).dirName();
+        if (text.isEmpty())
+          text = f;
+      }
+      BOOST_AUTO(a, new Core::Gui::ActionWithId(i++, text, recentMenu_));
+      connect(a, SIGNAL(triggeredWithId(int)), SLOT(openRecent(int)));
+
+      recentMenu_->addAction(a);
+    }
+
+    recentMenu_->addSeparator();
+    recentMenu_->addAction(clearRecentAct_);
+  }
 }
 
 void
 MainWindow::clearRecent()
-{ recentFiles_.clear(); }
+{
+  recentFiles_.clear();
+  invalidateRecentMenu();
+}
 
 void
-MainWindow::openRecent(const QString &path)
-{ openSource(path); }
+MainWindow::openRecent(int i)
+{
+  if (i >= 0 && i < recentFiles_.size()) {
+    openSource(recentFiles_[i]);
+  }
+}
 
 void
 MainWindow::openSource(const QString &path)
@@ -3678,18 +3694,9 @@ MainWindow::addRecent(const QString &path)
   if (!recentFiles_.isEmpty())
     recentFiles_.removeAll(path);
   recentFiles_.prepend(path);
-}
 
-void MainWindow::openRecent0() { if (recentFiles_.size() > 0) openRecent(recentFiles_[0]); }
-void MainWindow::openRecent1() { if (recentFiles_.size() > 1) openRecent(recentFiles_[1]); }
-void MainWindow::openRecent2() { if (recentFiles_.size() > 2) openRecent(recentFiles_[2]); }
-void MainWindow::openRecent3() { if (recentFiles_.size() > 3) openRecent(recentFiles_[3]); }
-void MainWindow::openRecent4() { if (recentFiles_.size() > 4) openRecent(recentFiles_[4]); }
-void MainWindow::openRecent5() { if (recentFiles_.size() > 5) openRecent(recentFiles_[5]); }
-void MainWindow::openRecent6() { if (recentFiles_.size() > 6) openRecent(recentFiles_[6]); }
-void MainWindow::openRecent7() { if (recentFiles_.size() > 7) openRecent(recentFiles_[7]); }
-void MainWindow::openRecent8() { if (recentFiles_.size() > 8) openRecent(recentFiles_[8]); }
-void MainWindow::openRecent9() { if (recentFiles_.size() > 9) openRecent(recentFiles_[9]); }
+  invalidateRecentMenu();
+}
 
 // - Translate -
 

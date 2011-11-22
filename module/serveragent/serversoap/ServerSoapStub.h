@@ -91,6 +91,7 @@ public:
 class SOAP_CMAC tns__mediaToken
 {
 public:
+	int annotCount;	/* required element of type xsd:int */
 	int blessedCount;	/* required element of type xsd:int */
 	int blockedCount;	/* required element of type xsd:int */
 	LONG64 createTime;	/* required element of type xsd:long */
@@ -155,6 +156,7 @@ public:
 class SOAP_CMAC tns__user
 {
 public:
+	int annotCount;	/* required element of type xsd:int */
 	int blessedCount;	/* required element of type xsd:int */
 	int blockedCount;	/* required element of type xsd:int */
 	LONG64 createTime;	/* required element of type xsd:long */

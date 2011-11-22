@@ -277,6 +277,7 @@ ServerProxy::selectUser(const QString &userName, const QString &password)
     ret.setBlessedCount(p->blessedCount);
     ret.setCursedCount(p->cursedCount);
     ret.setBlockedCount(p->blockedCount);
+    ret.setAnnotCount(p->annotCount);
 
     if (p->name)
       ret.setName(QString::fromStdString(*p->name));
@@ -317,6 +318,7 @@ ServerProxy::submitToken(const Token &token, const QString &userName, const QStr
   arg0.cursedCount = token.cursedCount();
   arg0.blockedCount = token.blockedCount();
   arg0.visitedCount = token.visitedCount();
+  arg0.annotCount = token.annotCount();
 
   tns__submitMediaToken request;
   request.arg0 = &arg0;
@@ -701,8 +703,8 @@ ServerProxy::selectTokenWithId(qint64 id)
     ret.setCursedCount(p->cursedCount);
     ret.setBlockedCount(p->blockedCount);
     ret.setVisitedCount(p->visitedCount);
+    ret.setAnnotCount(p->annotCount);
   }
-
   DOUT("selectTokenWithId:exit: tid =" << ret.id());
   return ret;
 }
@@ -743,6 +745,7 @@ ServerProxy::selectTokenWithDigest(const QString &digest, int digestType)
     ret.setCursedCount(p->cursedCount);
     ret.setBlockedCount(p->blockedCount);
     ret.setVisitedCount(p->visitedCount);
+    ret.setAnnotCount(p->annotCount);
   }
 
   DOUT("selectTokenWithId:exit: tid =" << ret.id());

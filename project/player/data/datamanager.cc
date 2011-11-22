@@ -59,6 +59,10 @@ qint64
 DataManager::submitAlias(const Alias &alias)
 {
   DOUT("submitAlias:enter");
+  if (!alias.hasText()) {
+    DOUT("submitAlias:exit: missing text");
+    return 0;
+  }
   qint64 id = 0;
   if (server_->isConnected() && server_->isAuthorized()) {
     id = server_->submitAlias(alias);

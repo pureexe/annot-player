@@ -3,12 +3,11 @@
 
 #include "annotationbrowser.h"
 #include "annotationeditor.h"
-#include "lineedit.h"
 #include "uistyle.h"
 #include "stylesheet.h"
 #include "logger.h"
 #include "tr.h"
-#include "core/gui/combobox.h"
+#include "filteredtableview.h"
 #include "core/util/datetime.h"
 #include "core/cloud/traits.h"
 #include <QtGui>
@@ -31,107 +30,36 @@ AnnotationBrowser::AnnotationBrowser(QWidget *parent)
 {
   setWindowTitle(TR(T_TITLE_ANNOTATIONBROWSER));
   UiStyle::globalInstance()->setWindowStyle(this);
-  setContentsMargins(0, 0, 0, 0);
+  setAcceptDrops(true);
+
+  sourceModel_ = new QStandardItemModel(0, HD_Count, this);
+  setHeaderData(sourceModel_);
+  tableView_ = new FilteredTableView(sourceModel_, this);
 
   editor_ = new AnnotationEditor(this);
   connect(editor_, SIGNAL(textSaved(QString)), SLOT(saveAnnotationText(QString)));
 
   createLayout();
   createActions();
-
-  filterPatternLineEdit_->setFocus();
 }
 
 void
 AnnotationBrowser::createLayout()
 {
-  // Initialize attributes
-
-  sourceModel_ = new QStandardItemModel(0, HD_Count, this);
-  setHeaderData(sourceModel_);
-
-  proxyModel_ = new QSortFilterProxyModel; {
-    proxyModel_->setSourceModel(sourceModel_);
-    proxyModel_->setDynamicSortFilter(true);
-    proxyModel_->setSortCaseSensitivity(Qt::CaseInsensitive);
-  }
-
-  proxyView_ = new QTreeView; {
-    proxyView_->setStyleSheet(SS_TREEVIEW);
-    proxyView_->setRootIsDecorated(true);
-    proxyView_->setAlternatingRowColors(true);
-    proxyView_->setModel(proxyModel_);
-    proxyView_->setSortingEnabled(true);
-    proxyView_->setToolTip(TR(T_ANNOTATION));
-  }
-
-  filterPatternLineEdit_ = new LineEdit; {
-    filterPatternLineEdit_->setStyleSheet(SS_LINEEDIT);
-    filterPatternLineEdit_->setToolTip(TR(T_FILTER_PATTERN));
-  }
-  QLabel *filterPatternLabel = new QLabel; {
-    filterPatternLabel->setStyleSheet(SS_LABEL);
-    filterPatternLabel->setBuddy(filterPatternLineEdit_);
-    filterPatternLabel->setText(TR(T_FILTER_PATTERN) + ":");
-    filterPatternLabel->setToolTip(filterPatternLineEdit_->toolTip());
-  }
-
-  filterSyntaxComboBox_ = new Core::Gui::ComboBox; {
-    UiStyle::globalInstance()->setComboBoxStyle(filterSyntaxComboBox_);
-    filterSyntaxComboBox_->addItem(TR(T_FILTER_REGEX), QRegExp::RegExp);
-    filterSyntaxComboBox_->addItem(TR(T_FILTER_WILDCARD), QRegExp::Wildcard);
-    filterSyntaxComboBox_->addItem(TR(T_FILTER_FIXED), QRegExp::FixedString);
-    filterSyntaxComboBox_->setToolTip(TR(T_FILTER_SYNTAX));
-  }
-  QLabel *filterSyntaxLabel = new QLabel; {
-    filterSyntaxLabel->setStyleSheet(SS_LABEL);
-    filterSyntaxLabel->setBuddy(filterSyntaxComboBox_);
-    filterSyntaxLabel->setText(TR(T_FILTER_SYNTAX) + ":");
-    filterSyntaxLabel->setToolTip(filterSyntaxComboBox_->toolTip());
-  }
-
-  filterColumnComboBox_ = new Core::Gui::ComboBox; {
-    UiStyle::globalInstance()->setComboBoxStyle(filterColumnComboBox_);
-    for (int i = 0; i < sourceModel_->columnCount(); i++)
-      filterColumnComboBox_->addItem(sourceModel_->headerData(i, Qt::Horizontal).toString());
-    filterColumnComboBox_->setToolTip(TR(T_FILTER_COLUMN));
-  }
-  QLabel *filterColumnLabel = new QLabel; {
-    filterColumnLabel->setStyleSheet(SS_LABEL);
-    filterColumnLabel->setBuddy(filterColumnComboBox_);
-    filterColumnLabel->setText(TR(T_FILTER_COLUMN));
-    filterColumnLabel->setToolTip(filterColumnComboBox_->toolTip());
-  }
-
   // Set layout
 
-  QGridLayout *layout = new QGridLayout; {
-    int r, c;
-    layout->addWidget(proxyView_, r=0, c=0, 1, 3);
+  QLayout *layout = new QStackedLayout; {
+    layout->addWidget(tableView_);
 
-    layout->addWidget(filterPatternLabel, ++r, c=0);
-    layout->addWidget(filterPatternLineEdit_, r, ++c, 1, 2);
-
-    layout->addWidget(filterSyntaxLabel, ++r, c=0);
-    layout->addWidget(filterSyntaxComboBox_, r, ++c, 1, 2);
-
-    layout->addWidget(filterColumnLabel, ++r, c=0);
-    layout->addWidget(filterColumnComboBox_, r, ++c, 1, 2);
+    layout->setContentsMargins(0, 0, 0, 0);
+    setContentsMargins(9, 9, 9, 9);
   }
   setLayout(layout);
 
-  // Create connections
-  connect(filterPatternLineEdit_, SIGNAL(textChanged(QString)),
-          SLOT(invalidateFilterRegExp()));
-  connect(filterSyntaxComboBox_, SIGNAL(currentIndexChanged(int)),
-          SLOT(invalidateFilterRegExp()));
-  connect(filterColumnComboBox_, SIGNAL(currentIndexChanged(int)),
-          SLOT(invalidateFilterColumn()));
-
   // Set initial states
 
-  proxyView_->sortByColumn(HD_CreateTime, Qt::DescendingOrder);
-  filterColumnComboBox_->setCurrentIndex(HD_Text);
+  tableView_->sortByColumn(HD_CreateTime, Qt::DescendingOrder);
+  tableView_->setCurrentColumn(HD_Text);
 }
 
 void
@@ -183,7 +111,7 @@ AnnotationBrowser::setHeaderData(QAbstractItemModel *model)
 
 QModelIndex
 AnnotationBrowser::currentIndex() const
-{ return proxyView_->currentIndex(); }
+{ return tableView_->currentIndex(); }
 
 qint64
 AnnotationBrowser::currentId() const
@@ -312,33 +240,7 @@ AnnotationBrowser::addAnnotations(const AnnotationList &l)
 
 void
 AnnotationBrowser::clear()
-{
-  //if (isEmpty())
-  //  return;
-  //sourceModel_->clear();
-  //setHeaderData(sourceModel_);
-
-  while (sourceModel_->rowCount())
-    sourceModel_->removeRow(0);
-}
-
-// - Slots -
-
-void
-AnnotationBrowser::invalidateFilterRegExp()
-{
-  QRegExp::PatternSyntax syntax =
-      QRegExp::PatternSyntax(
-        filterSyntaxComboBox_->itemData(
-          filterSyntaxComboBox_->currentIndex()).toInt());
-
-  QRegExp regExp(filterPatternLineEdit_->text(), Qt::CaseInsensitive, syntax);
-  proxyModel_->setFilterRegExp(regExp);
-}
-
-void
-AnnotationBrowser::invalidateFilterColumn()
-{ proxyModel_->setFilterKeyColumn(filterColumnComboBox_->currentIndex()); }
+{ tableView_->clear(); }
 
 // - Formatter -
 

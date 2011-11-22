@@ -5,7 +5,10 @@
 // 10/16/2011
 #include <QObject>
 
+class Player;
+
 // TODO: Gradually replace signals connections in MainWindow, ServerAgent and Player with this hub
+// Use SignalHub to wrap Player
 class SignalHub : public QObject
 {
   Q_OBJECT
@@ -14,7 +17,15 @@ class SignalHub : public QObject
 
   // - Constructions -
 public:
-  explicit SignalHub(QObject *parent);
+  explicit SignalHub(Player *player, QObject *parent);
+
+  // - Properties -
+signals:
+  void volumeChanged(qreal volume);
+
+public:
+  qreal volume() const; ///< [0, 1], or -1 if failed
+  void setVolume(qreal percentage);
 
   // - States -
 public:
@@ -113,6 +124,8 @@ public slots:
 
   // - Implementations -
 private:
+  Player *player_;
+
   TokenMode tokenMode_;
   PlayMode playMode_;
   PlayerMode playerMode_;

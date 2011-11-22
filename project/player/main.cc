@@ -111,20 +111,6 @@ main(int argc, char *argv[])
   // Set OS encoding to UTF-8 before application starts.
   QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
   QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));
-  // Directory
-  {
-#ifdef USE_MODE_DEBUG
-    QDir logs(G_PATH_LOGS);
-    if (!logs.exists())
-      logs.mkpath(logs.absolutePath());
-#endif // USE_MODE_DEBUG
-
-    QDir caches(G_PATH_CACHES);
-    if (!caches.exists())
-      caches.mkpath(caches.absolutePath());
-  }
-  // Set global random seed.
-  ::qsrand((uint)QDateTime::currentMSecsSinceEpoch());
 
   // Applications
   Application a(argc, argv);
@@ -142,6 +128,23 @@ main(int argc, char *argv[])
   }
 #endif // Q_WS_WIN
 
+  // Directory
+  {
+#ifdef USE_MODE_DEBUG
+    QDir logs(G_PATH_LOGS);
+    if (!logs.exists())
+      logs.mkpath(logs.absolutePath());
+#endif // USE_MODE_DEBUG
+
+    QDir caches(G_PATH_CACHES);
+    if (!caches.exists())
+      caches.mkpath(caches.absolutePath());
+  }
+
+  // Set global random seed.
+  ::qsrand((uint)QDateTime::currentMSecsSinceEpoch());
+
+  // Register meta types.
   ::registerMetaTypes();
 
 #ifdef USE_MODE_DEBUG
@@ -181,7 +184,16 @@ main(int argc, char *argv[])
     DOUT("main: app language =" << lang);
   }
 
-  Settings::globalInstance()->setVersion(G_VERSION);
+  if (Settings::globalInstance()->version() != G_VERSION) {
+    DOUT("main: update from old version");
+    QFileInfo cachedb(G_PATH_CACHEDB),
+              queuedb(G_PATH_QUEUEDB);
+    if (cachedb.exists())
+      QFile::remove(cachedb.filePath());
+    if (queuedb.exists())
+      QFile::remove(queuedb.filePath());
+    Settings::globalInstance()->setVersion(G_VERSION);
+  }
 
   // Hashes
   //qDebug() << qHash(QString("\\sub"));

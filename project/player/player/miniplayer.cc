@@ -31,6 +31,7 @@ MiniPlayerUi::MiniPlayerUi(SignalHub *hub, Player *player, ServerAgent *server, 
   setWindowFlags(WINDOW_FLAGS);
   setContentsMargins(0, 0, 0, 0);
   UiStyle::globalInstance()->setWindowStyle(this);
+  setAcceptDrops(true);
 
   createLayout();
 }

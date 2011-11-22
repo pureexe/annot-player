@@ -10,7 +10,6 @@
 #include <QHash>
 
 QT_BEGIN_NAMESPACE
-class QAbstractItemModel;
 class QComboBox;
 class QLineEdit;
 class QMenu;
@@ -45,6 +44,9 @@ public:
   // - Slots -
 public slots:
   void clear();
+  void setCurrentColumn(int col);
+  void sortByColumn(int col, Qt::SortOrder order);
+
 private slots:
   void invalidateFilterRegExp();
   void invalidateFilterColumn();

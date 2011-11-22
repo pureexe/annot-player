@@ -17,7 +17,7 @@ compiling, linking, and/or using OpenSSL is allowed.
 
 namespace ServerSoap {
 
-SOAP_SOURCE_STAMP("@(#) ServerSoapC.cpp ver 2.8.3 2011-11-18 03:31:59 GMT")
+SOAP_SOURCE_STAMP("@(#) ServerSoapC.cpp ver 2.8.3 2011-11-18 10:37:25 GMT")
 
 
 #ifndef WITH_NOGLOBAL

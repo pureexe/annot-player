@@ -108,6 +108,16 @@ namespace QtWin {
   ///  Prompt using hwnd if target to return is not valid.
   QString resolveLink(const QString &lnkPath, WId winId = 0);
 
+  // - Devices -
+
+#if 0
+  ///  \param vol variate in [0, 1]. Return if succeedded.
+  bool setWaveVolume(qreal vol);
+
+  ///  Return [0, 1] if succeeded, or-1 if failed.
+  qreal getWaveVolume();
+#endif // 0
+
 } // namespace QtWin
 
 #endif // QTWIN_H

@@ -2,19 +2,18 @@
 // 10/16/2011
 
 #include "processview.h"
-#include "lineedit.h"
 #include "tr.h"
 #include "stylesheet.h"
 #include "uistyle.h"
 #include "global.h"
 #include "logger.h"
+#include "filteredtableview.h"
 #include "win/qtwin/qtwin.h"
 #ifdef USE_WIN_QTH
   #include "win/qth/qth.h"
 #else
   #error "QTH is indispensible"
 #endif // USE_WIN_QTH
-#include "core/gui/combobox.h"
 #include "core/gui/toolbutton.h"
 #include <QtGui>
 
@@ -29,59 +28,24 @@ namespace { // anonymous
     static QStringList blacklist;
     if (blacklist.isEmpty()) {
 #define ADD(_app)       blacklist.append(_app)
-      ADD("Activator");
-      ADD("ApMsgFwd");
-      ADD("Apntex");
-      ADD("Apoint");
-      ADD("AutoHotkey");
-      ADD("BoonSutazio");
-      ADD("Bootcamp");
-      ADD("BtStackServer");
-      ADD("BTTray");
+      ADD("Activator"); ADD("ApMsgFwd"); ADD("Apntex"); ADD("Apoint"); ADD("AutoHotkey");
+      ADD("BoonSutazio"); ADD("Bootcamp"); ADD("BtStackServer"); ADD("BTTray");
       ADD("chrome");
-      ADD("Dropbox");
-      ADD("DTLite");
-      ADD("eclipse");
-      ADD("Evernote");
-      ADD("EvernoteTray");
-      ADD("firefox");
-      ADD("foobar2000");
-      ADD("GoogleIMEJaConverter");
-      ADD("GoogleIMEJaRenderer");
-      ADD("gvim");
-      ADD("Hamana");
-      ADD("HidFind");
-      ADD("IELowutil");
-      ADD("IEXPLOR");
-      ADD("iTunes");
-      ADD("iTunesHelper");
-      ADD("java");
-      ADD("javaw");
-      ADD("KHALMNPR");
-      ADD("KMPlayer");
-      ADD("MacDrive");
-      ADD("Maxthon");
-      ADD("MouseGesture");
-      ADD("mspdbsrv");
-      ADD("mysql");
-      ADD("oacrmonitor");
-      ADD("ONENOTEM");
-      ADD("opera");
+      ADD("Dropbox"); ADD("DTLite");
+      ADD("eclipse"); ADD("Evernote"); ADD("EvernoteTray");
+      ADD("firefox"); ADD("foobar2000");
+      ADD("GoogleIMEJaConverter"); ADD("GoogleIMEJaRenderer"); ADD("gvim");
+      ADD("Hamana"); ADD("HidFind");
+      ADD("IELowutil"); ADD("IEXPLOR"); ADD("iTunes"); ADD("iTunesHelper");
+      ADD("java"); ADD("javaw");
+      ADD("KHALMNPR"); ADD("KMPlayer");
+      ADD("MacDrive"); ADD("Maxthon"); ADD("MouseGesture"); ADD("mspdbsrv"); ADD("mysql");
+      ADD("oacrmonitor"); ADD("ONENOTEM"); ADD("opera");
       ADD("php-cgi");
-      ADD("QQ");
-      ADD("qtcreator");
-      ADD("SecureCRT");
-      ADD("SetPoint");
-      ADD("sidebar");
-      ADD("softinfo");
-      ADD("SogouCloud");
-      ADD("ssh");
-      ADD("sttray");
-      ADD("Switcher");
-      ADD("thunderbird");
-      ADD("TXPlatform");
-      ADD("vim");
-      ADD("volumouse");
+      ADD("QQ"); ADD("qtcreator");
+      ADD("SecureCRT"); ADD("SetPoint"); ADD("sidebar"); ADD("softinfo"); ADD("SogouCloud"); ADD("ssh"); ADD("sttray"); ADD("Switcher");
+      ADD("thunderbird"); ADD("TXPlatform");
+      ADD("vim"); ADD("volumouse");
 #undef ADD
     }
     return blacklist.indexOf(procName) >= 0;
@@ -105,107 +69,24 @@ ProcessView::ProcessView(QWidget *parent)
   setWindowTitle(tr("Process view"));
   UiStyle::globalInstance()->setWindowStyle(this);
 
+  // Create models
+  sourceModel_ = new QStandardItemModel(0, HD_Count, this);
+  setProcessHeaderData(sourceModel_);
+
+  tableView_ = new FilteredTableView(sourceModel_, this);
+  connect(tableView_, SIGNAL(currentIndexChanged(QModelIndex)), SLOT(invalidateButtons()));
+
   createLayout();
   createActions();
 
   // Set initial states
-  proxyView_->sortByColumn(HD_Status, Qt::DescendingOrder);
-  filterColumnComboBox_->setCurrentIndex(HD_Name);
-
-  filterPatternLineEdit_->setFocus();
+  tableView_->sortByColumn(HD_Status, Qt::DescendingOrder);
+  tableView_->setCurrentColumn(HD_Name);
 }
 
 void
 ProcessView::createLayout()
 {
-  // Create models
-
-  sourceModel_ = new QStandardItemModel(0, HD_Count, this);
-  setProcessHeaderData(sourceModel_);
-
-  proxyModel_ = new QSortFilterProxyModel; {
-    proxyModel_->setSourceModel(sourceModel_);
-    proxyModel_->setDynamicSortFilter(true);
-    proxyModel_->setSortCaseSensitivity(Qt::CaseInsensitive);
-  }
-
-  // Create widgets
-
-  proxyView_ = new QTreeView; {
-    proxyView_->setStyleSheet(SS_TREEVIEW);
-    proxyView_->setRootIsDecorated(true);
-    proxyView_->setAlternatingRowColors(true);
-    proxyView_->setSortingEnabled(true);
-    proxyView_->setModel(proxyModel_);
-    proxyView_->setToolTip(tr("Running processes"));
-  }
-
-  filterPatternLineEdit_ = new LineEdit; {
-    filterPatternLineEdit_->setStyleSheet(SS_LINEEDIT);
-    filterPatternLineEdit_->setToolTip(TR(T_FILTER_PATTERN));
-  }
-  QLabel *filterPatternLabel = new QLabel; {
-    filterPatternLabel->setStyleSheet(SS_LABEL);
-    filterPatternLabel->setBuddy(filterPatternLineEdit_);
-    filterPatternLabel->setText(TR(T_FILTER_PATTERN) + ":");
-    filterPatternLabel->setToolTip(filterPatternLineEdit_->toolTip());
-  }
-
-  filterSyntaxComboBox_ = new Core::Gui::ComboBox; {
-    UiStyle::globalInstance()->setComboBoxStyle(filterSyntaxComboBox_);
-    filterSyntaxComboBox_->addItem(TR(T_FILTER_REGEX), QRegExp::RegExp);
-    filterSyntaxComboBox_->addItem(TR(T_FILTER_WILDCARD), QRegExp::Wildcard);
-    filterSyntaxComboBox_->addItem(TR(T_FILTER_FIXED), QRegExp::FixedString);
-    filterSyntaxComboBox_->setToolTip(TR(T_FILTER_SYNTAX));
-  }
-  QLabel *filterSyntaxLabel = new QLabel; {
-    filterSyntaxLabel->setStyleSheet(SS_LABEL);
-    filterSyntaxLabel->setBuddy(filterSyntaxComboBox_);
-    filterSyntaxLabel->setText(TR(T_FILTER_SYNTAX) + ":");
-    filterSyntaxLabel->setToolTip(filterSyntaxComboBox_->toolTip());
-  }
-
-  filterColumnComboBox_ = new Core::Gui::ComboBox; {
-    UiStyle::globalInstance()->setComboBoxStyle(filterColumnComboBox_);
-    for (int i = 0; i < sourceModel_->columnCount(); i++)
-      filterColumnComboBox_->addItem(sourceModel_->headerData(i, Qt::Horizontal).toString());
-    filterColumnComboBox_->setToolTip(TR(T_FILTER_COLUMN));
-  }
-  QLabel *filterColumnLabel = new QLabel; {
-    filterColumnLabel->setStyleSheet(SS_LABEL);
-    filterColumnLabel->setBuddy(filterColumnComboBox_);
-    filterColumnLabel->setText(TR(T_FILTER_COLUMN));
-    filterColumnLabel->setToolTip(filterColumnComboBox_->toolTip());
-  }
-
-  /*
-#define MAKE_TOKEN_LABEL(_id, _styleid) \
-  _id##Label_ = new QLabel; { \
-    _id##Label_->setStyleSheet(SS_LABEL); \
-    _id##Label_->setText(TR(T_UNKNOWN)); \
-    _id##Label_->setToolTip(TR(T_TOOLTIP_##_styleid)); \
-  } \
-  QLabel *_id##Buddy = new QLabel; { \
-    _id##Buddy->setStyleSheet(SS_LABEL); \
-    _id##Buddy->setBuddy(_id##Label_); \
-    _id##Buddy->setText(TR(T_LABEL_##_styleid)); \
-    _id##Buddy->setToolTip(TR(T_TOOLTIP_##_styleid)); \
-  }
-
-  MAKE_TOKEN_LABEL(createDate, CREATEDATE)
-  MAKE_TOKEN_LABEL(blessedCount, BLESSEDCOUNT)
-  MAKE_TOKEN_LABEL(cursedCount, CURSEDCOUNT)
-  MAKE_TOKEN_LABEL(visitedCount, VISITEDCOUNT)
-#undef MAKE_TOKEN_LABEL
-
-  QLabel *aliasBuddy = new QLabel; {
-    aliasBuddy->setStyleSheet(SS_LABEL);
-    aliasBuddy->setBuddy(addAliasButton);
-    aliasBuddy->setText(TR(T_LABEL_ALIAS));
-    aliasBuddy->setToolTip(TR(T_TOOLTIP_ALIAS));
-  }
-  */
-
 #define MAKE_BUTTON(_button, _text, _tip, _slot) \
   _button = new Core::Gui::ToolButton; { \
     _button->setText(QString("[ %1 ]").arg(_text)); \
@@ -223,73 +104,21 @@ ProcessView::createLayout()
 
   // Set layout
 
-  QGridLayout *layout = new QGridLayout; {
-    // (row, col, rowspan, colspan, alignment)
-    int r, c;
+  QVBoxLayout *rows = new QVBoxLayout; {
+    QHBoxLayout *header = new QHBoxLayout;
+    header->addWidget(attachButton_);
+    header->addWidget(detachButton_);
+    header->addStretch();
+    header->addWidget(refreshButton);
 
-    layout->addWidget(attachButton_, r=0, c=0);
-    layout->addWidget(detachButton_, r, ++c);
-    layout->addWidget(refreshButton, r, ++c);
+    rows->addLayout(header);
+    rows->addWidget(tableView_);
 
-    layout->addWidget(proxyView_, ++r, c=0, 1, 3);
-
-    layout->addWidget(filterPatternLabel, ++r, c=0);
-    layout->addWidget(filterPatternLineEdit_, r, ++c, 1, 2);
-
-    layout->addWidget(filterSyntaxLabel, ++r, c=0);
-    layout->addWidget(filterSyntaxComboBox_, r, ++c, 1, 2);
-
-    layout->addWidget(filterColumnLabel, ++r, c=0);
-    layout->addWidget(filterColumnComboBox_, r, ++c, 1, 2);
-
-    //layout->setContentsMargins(0, 0, 0, 0);
+    header->setContentsMargins(0, 0, 0, 0);
+    rows->setContentsMargins(0, 0, 0, 0);
+    setContentsMargins(0, 0, 0, 0);
   }
-  setLayout(layout);
-
-  //QVBoxLayout *rows = new QVBoxLayout; {
-  //  // (row, col, rowspan, colspan, alignment)
-  //  QHBoxLayout *header = new QHBoxLayout,
-  //              *filterPatternRow = new QHBoxLayout,
-  //              *filterSyntaxRow = new QHBoxLayout,
-  //              *filterColumnRow = new QHBoxLayout;
-  //  rows->addLayout(header);
-  //  rows->addWidget(proxyView_);
-  //  rows->addLayout(filterPatternRow);
-  //  rows->addLayout(filterSyntaxRow);
-  //  rows->addLayout(filterColumnRow);
-  //
-  //  header->addWidget(attachButton_);
-  //  header->addWidget(detachButton_);
-  //  header->addStretch();
-  //  header->addWidget(refreshButton);
-  //
-  //  filterPatternRow->addWidget(filterPatternLabel);
-  //  filterPatternRow->addWidget(filterPatternLineEdit_);
-  //
-  //  filterSyntaxRow->addWidget(filterSyntaxLabel);
-  //  filterSyntaxRow->addWidget(filterSyntaxComboBox_);
-  //  filterSyntaxRow->addStretch();
-  //
-  //  filterColumnRow->addWidget(filterColumnLabel);
-  //  filterColumnRow->addWidget(filterColumnComboBox_);
-  //  filterColumnRow->addStretch();
-  //
-  //  //layout->setContentsMargins(0, 0, 0, 0);
-  //}
-  //setLayout(rows);
-
-  // Set up connections
-  connect(filterPatternLineEdit_, SIGNAL(textChanged(QString)),
-          SLOT(invalidateFilterRegExp()));
-  connect(filterSyntaxComboBox_, SIGNAL(currentIndexChanged(int)),
-          SLOT(invalidateFilterRegExp()));
-  connect(filterColumnComboBox_, SIGNAL(currentIndexChanged(int)),
-          SLOT(invalidateFilterColumn()));
-
-  connect(proxyView_, SIGNAL(activated(QModelIndex)),
-          SLOT(invalidateButtons()));
-  connect(proxyView_, SIGNAL(clicked(QModelIndex)),
-          SLOT(invalidateButtons()));
+  setLayout(rows);
 }
 
 void
@@ -327,7 +156,7 @@ ProcessView::createActions()
 
 QModelIndex
 ProcessView::currentIndex() const
-{ return proxyView_->currentIndex(); }
+{ return tableView_->currentIndex(); }
 
 ulong
 ProcessView::currentPid() const
@@ -445,34 +274,11 @@ ProcessView::invalidateSourceModel(bool showAll)
 void
 ProcessView::clear()
 {
-  //if (sourceModel_->rowCount() == 0)
-  //  return;
-  //sourceModel_->clear();
-  //setProcessHeaderData(sourceModel_);
-
   pis_.clear();
-
-  while (sourceModel_->rowCount())
-    sourceModel_->removeRow(0);
+  tableView_->clear();
 }
 
 // - Slots -
-
-void
-ProcessView::invalidateFilterRegExp()
-{
-  QRegExp::PatternSyntax syntax =
-      QRegExp::PatternSyntax(
-        filterSyntaxComboBox_->itemData(
-          filterSyntaxComboBox_->currentIndex()).toInt());
-
-  QRegExp regExp(filterPatternLineEdit_->text(), Qt::CaseInsensitive, syntax);
-  proxyModel_->setFilterRegExp(regExp);
-}
-
-void
-ProcessView::invalidateFilterColumn()
-{ proxyModel_->setFilterKeyColumn(filterColumnComboBox_->currentIndex()); }
 
 void
 ProcessView::invalidateButtons()
@@ -542,7 +348,7 @@ ProcessView::setCurrentItemAttached(bool attached)
   if (attached)
     value = TR(T_ATTACHED);
 
-  proxyModel_->setData(mi, value);
+  tableView_->proxyModel()->setData(mi, value);
 }
 
 void

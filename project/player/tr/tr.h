@@ -128,11 +128,12 @@
 #define T_ACTIVE        0x411
 #define T_DELETED       0x412
 #define T_BLOCKED       0x413
-#define T_NA            0x414
-#define T_ANONYMOUS     0x415
+#define T_ANNOT         0x414
+#define T_NA            0x415
+#define T_ANONYMOUS     0x416
 
-#define T_PREVIOUS      0x416
-#define T_NEXT          0x417
+#define T_PREVIOUS      0x417
+#define T_NEXT          0x418
 
 #define T_MENUTEXT_PREVIOUS         T_PREVIOUS
 #define T_TIP_PREVIOUS              T_MENUTEXT_PREVIOUS
@@ -171,14 +172,15 @@
 #define T_CURSEDCOUNT   0x50d
 #define T_BLOCKEDCOUNT  0x50e
 #define T_VISITEDCOUNT  0x50f
-#define T_TYPE          0x510
-#define T_ALIAS         0x511
-#define T_TAG           0x512
-#define T_ANNOTATION    0x513
-#define T_PID           0x514
-#define T_NAME          0x515
-#define T_FOLDER        0x516
-#define T_PATH          0x517
+#define T_ANNOTCOUNT    0x510
+#define T_TYPE          0x511
+#define T_ALIAS         0x512
+#define T_TAG           0x513
+#define T_ANNOTATION    0x514
+#define T_PID           0x515
+#define T_NAME          0x516
+#define T_FOLDER        0x517
+#define T_PATH          0x518
 
 // - Defaults -
 #define T_DEFAULT_USERNAME      0xa
@@ -665,6 +667,11 @@
 #define T_TIP_ALIAS             0x12e
 #define T_TOOLTIP_ALIAS         T_TIP_ALIAS
 #define T_STATUSTIP_ALIAS       T_TIP_ALIAS
+
+#define T_LABEL_ANNOTCOUNT     0x12f
+#define T_TIP_ANNOTCOUNT       0x130
+#define T_TOOLTIP_ANNOTCOUNT   T_TIP_ANNOTCOUNT
+#define T_STATUSTIP_ANNOTCOUNT T_TIP_ANNOTCOUNT
 
 #define T_MENUTEXT_BLESSTHISTOKEN   0x131
 #define T_TIP_BLESSTHISTOKEN        0x132

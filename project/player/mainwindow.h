@@ -10,9 +10,9 @@
   #include "processinfo.h"
 #endif // USE_MODE_SIGNAL
 #include <QMainWindow>
-#include <QStringList>
 #include <QUrl>
 #include <QMutex>
+#include <QStringList>
 #include <QFileInfoList>
 
 QT_FORWARD_DECLARE_CLASS(QUrl)
@@ -278,13 +278,10 @@ public slots:
   // - Recent -
 protected slots:
   void addRecent(const QString &path);
-  void openRecent(const QString &path);
-  void openRecent0(); void openRecent1(); void openRecent2();
-  void openRecent3(); void openRecent4(); void openRecent5();
-  void openRecent6(); void openRecent7(); void openRecent8();
-  void openRecent9();
+  void openRecent(int i);
   void clearRecent();
   void invalidateRecent();
+  void invalidateRecentMenu();
 
   // - Events -
 public slots:
@@ -472,6 +469,7 @@ private:
         *annotationLanguageMenu_,
         *themeMenu_,
         *subtitleStyleMenu_;
+  QList<QAction*> contextMenuActions_;
 
   QAction *previousSectionAct_,
           *nextSectionAct_,
@@ -548,11 +546,7 @@ private:
           *forward10mAct_,
           *backward10mAct_;
 
-  QAction *recent0Act_, *recent1Act_, *recent2Act_,
-          *recent3Act_, *recent4Act_, *recent5Act_,
-          *recent6Act_, *recent7Act_, *recent8Act_,
-          *recent9Act_,
-          *clearRecentAct_;
+  QAction *clearRecentAct_;
 
   QAction *setAppLanguageToEnglishAct_,
           *setAppLanguageToJapaneseAct_,

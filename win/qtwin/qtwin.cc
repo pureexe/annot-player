@@ -24,6 +24,8 @@
 
 // - Helpers -
 
+#define MAKEDWORD(_a, _b)       ((DWORD)(((WORD)(((DWORD_PTR)(_a)) & 0xffff)) | ((DWORD)((WORD)(((DWORD_PTR)(_b)) & 0xffff))) << 16))
+
 namespace { // anonymous
 
   // Conversions between qt and win32 data structures
@@ -601,6 +603,40 @@ QtWin::resolveLink(const QString &lnkPath, WId winId)
     ret = QString::fromWCharArray(szGotPath);
   return ret;
 }
+
+// - Devices -
+
+#if 0
+// Require Winmm.lib.
+bool
+QtWin::setWaveVolume(qreal percentage)
+{
+  enum { MAX_VOLUME = 0xff };
+  if (percentage < 0)
+    percentage = 0;
+  else if (percentage > 1)
+    percentage = 1;
+
+  WORD w = MAX_VOLUME * percentage;
+  DWORD dw = MAKEDWORD(w, w);
+  return ::waveOutSetVolume(0, dw) == MMSYSERR_NOERROR;
+}
+
+// Require Winmm.lib.
+qreal
+QtWin::getWaveVolume()
+{
+  enum { MAX_VOLUME = 0xff };
+
+  qreal ret = -1;
+  DWORD dwVolume;
+  if (::waveOutGetVolume(0, &dwVolume) == MMSYSERR_NOERROR)
+    ret = (LOWORD(dwVolume) + HIWORD(dwVolume)) / (2.0 * MAX_VOLUME);
+
+  return ret;
+}
+
+#endif // 0
 
 // EOF
 

@@ -1,19 +1,17 @@
-upgrade boost
+server
+- make annot.me look better
+- finish japanese version wiki
+- replace screen shots to avoid copyright problem!!!!
 
-finish english version wiki
-finish japanese version wiki
-
-push to 2ch niji
+push to 2ch nijiura
 push to hf 4chan
 
-server:
-- fixme: server email not sent
-
-0.1.0.1 -- stable
+0.1.0.2 -- stable
 client:
-- move current Annotations/Token/Alias into DataManager from TokenView and AnnotationView
-- replace annotborowser/processview/tokenview with filteredTableView
+- minmize button in context menu, then restore at tray
+- Fixed recent file menu bug.
 - compact context menu
+- move current Annotations/Token/Alias into DataManager from TokenView and AnnotationView
 - add openFile function in windows through register
 - save ng list to settings
 - debug offline mode to see if token/annot/alias offline submission works or not
@@ -22,9 +20,9 @@ client:
 - fixme: DVD play in mac: mouse single click not working
 - fixme: edit time, edit comments, etc; otherwise, make them readonly
 - fixme: recent filt bug
-- minmize button in context menu, then restore at tray
 - Finish bless/block user/annots/aliases at client side
   - add block/bless/curse user
+- listen to activity of process, restore normal mode if not active
 
 wiki:
 - mension manga/picture support

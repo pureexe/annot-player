@@ -17,7 +17,7 @@ compiling, linking, and/or using OpenSSL is allowed.
 
 namespace ServerSoap {
 
-SOAP_SOURCE_STAMP("@(#) ServerSoapC.cpp ver 2.8.3 2011-11-18 10:37:25 GMT")
+SOAP_SOURCE_STAMP("@(#) ServerSoapC.cpp ver 2.8.3 2011-11-21 22:37:12 GMT")
 
 
 #ifndef WITH_NOGLOBAL
@@ -11128,6 +11128,7 @@ SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__blessMediaAliasWithId(struct soap *soa
 void tns__user::soap_default(struct soap *soap)
 {
 	this->soap = soap;
+	soap_default_int(soap, &this->tns__user::annotCount);
 	soap_default_int(soap, &this->tns__user::blessedCount);
 	soap_default_int(soap, &this->tns__user::blockedCount);
 	soap_default_LONG64(soap, &this->tns__user::createTime);
@@ -11163,6 +11164,8 @@ int tns__user::soap_out(struct soap *soap, const char *tag, int id, const char *
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__user(struct soap *soap, const char *tag, int id, const tns__user *a, const char *type)
 {
 	if (soap_element_begin_out(soap, tag, soap_embedded_id(soap, id, a, SOAP_TYPE_ServerSoap_tns__user), type))
+		return soap->error;
+	if (soap_out_int(soap, "annotCount", -1, &(a->tns__user::annotCount), ""))
 		return soap->error;
 	if (soap_out_int(soap, "blessedCount", -1, &(a->tns__user::blessedCount), ""))
 		return soap->error;
@@ -11216,6 +11219,7 @@ SOAP_FMAC3 tns__user * SOAP_FMAC4 soap_in_tns__user(struct soap *soap, const cha
 			return (tns__user *)a->soap_in(soap, tag, type);
 		}
 	}
+	size_t soap_flag_annotCount1 = 1;
 	size_t soap_flag_blessedCount1 = 1;
 	size_t soap_flag_blockedCount1 = 1;
 	size_t soap_flag_createTime1 = 1;
@@ -11234,6 +11238,11 @@ SOAP_FMAC3 tns__user * SOAP_FMAC4 soap_in_tns__user(struct soap *soap, const cha
 	{
 		for (;;)
 		{	soap->error = SOAP_TAG_MISMATCH;
+			if (soap_flag_annotCount1 && soap->error == SOAP_TAG_MISMATCH)
+				if (soap_in_int(soap, "annotCount", &(a->tns__user::annotCount), "xsd:int"))
+				{	soap_flag_annotCount1--;
+					continue;
+				}
 			if (soap_flag_blessedCount1 && soap->error == SOAP_TAG_MISMATCH)
 				if (soap_in_int(soap, "blessedCount", &(a->tns__user::blessedCount), "xsd:int"))
 				{	soap_flag_blessedCount1--;
@@ -11320,7 +11329,7 @@ SOAP_FMAC3 tns__user * SOAP_FMAC4 soap_in_tns__user(struct soap *soap, const cha
 		if (soap->body && soap_element_end_in(soap, tag))
 			return NULL;
 	}
-	if ((soap->mode & SOAP_XML_STRICT) && (soap_flag_blessedCount1 > 0 || soap_flag_blockedCount1 > 0 || soap_flag_createTime1 > 0 || soap_flag_cursedCount1 > 0 || soap_flag_flags1 > 0 || soap_flag_groupId1 > 0 || soap_flag_id1 > 0 || soap_flag_language1 > 0 || soap_flag_loginTime1 > 0 || soap_flag_status1 > 0))
+	if ((soap->mode & SOAP_XML_STRICT) && (soap_flag_annotCount1 > 0 || soap_flag_blessedCount1 > 0 || soap_flag_blockedCount1 > 0 || soap_flag_createTime1 > 0 || soap_flag_cursedCount1 > 0 || soap_flag_flags1 > 0 || soap_flag_groupId1 > 0 || soap_flag_id1 > 0 || soap_flag_language1 > 0 || soap_flag_loginTime1 > 0 || soap_flag_status1 > 0))
 	{	soap->error = SOAP_OCCURS;
 		return NULL;
 	}
@@ -11623,6 +11632,7 @@ SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__mediaAlias(struct soap *soap, int st, 
 void tns__mediaToken::soap_default(struct soap *soap)
 {
 	this->soap = soap;
+	soap_default_int(soap, &this->tns__mediaToken::annotCount);
 	soap_default_int(soap, &this->tns__mediaToken::blessedCount);
 	soap_default_int(soap, &this->tns__mediaToken::blockedCount);
 	soap_default_LONG64(soap, &this->tns__mediaToken::createTime);
@@ -11653,6 +11663,8 @@ int tns__mediaToken::soap_out(struct soap *soap, const char *tag, int id, const 
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__mediaToken(struct soap *soap, const char *tag, int id, const tns__mediaToken *a, const char *type)
 {
 	if (soap_element_begin_out(soap, tag, soap_embedded_id(soap, id, a, SOAP_TYPE_ServerSoap_tns__mediaToken), type))
+		return soap->error;
+	if (soap_out_int(soap, "annotCount", -1, &(a->tns__mediaToken::annotCount), ""))
 		return soap->error;
 	if (soap_out_int(soap, "blessedCount", -1, &(a->tns__mediaToken::blessedCount), ""))
 		return soap->error;
@@ -11702,6 +11714,7 @@ SOAP_FMAC3 tns__mediaToken * SOAP_FMAC4 soap_in_tns__mediaToken(struct soap *soa
 			return (tns__mediaToken *)a->soap_in(soap, tag, type);
 		}
 	}
+	size_t soap_flag_annotCount1 = 1;
 	size_t soap_flag_blessedCount1 = 1;
 	size_t soap_flag_blockedCount1 = 1;
 	size_t soap_flag_createTime1 = 1;
@@ -11718,6 +11731,11 @@ SOAP_FMAC3 tns__mediaToken * SOAP_FMAC4 soap_in_tns__mediaToken(struct soap *soa
 	{
 		for (;;)
 		{	soap->error = SOAP_TAG_MISMATCH;
+			if (soap_flag_annotCount1 && soap->error == SOAP_TAG_MISMATCH)
+				if (soap_in_int(soap, "annotCount", &(a->tns__mediaToken::annotCount), "xsd:int"))
+				{	soap_flag_annotCount1--;
+					continue;
+				}
 			if (soap_flag_blessedCount1 && soap->error == SOAP_TAG_MISMATCH)
 				if (soap_in_int(soap, "blessedCount", &(a->tns__mediaToken::blessedCount), "xsd:int"))
 				{	soap_flag_blessedCount1--;
@@ -11794,7 +11812,7 @@ SOAP_FMAC3 tns__mediaToken * SOAP_FMAC4 soap_in_tns__mediaToken(struct soap *soa
 		if (soap->body && soap_element_end_in(soap, tag))
 			return NULL;
 	}
-	if ((soap->mode & SOAP_XML_STRICT) && (soap_flag_blessedCount1 > 0 || soap_flag_blockedCount1 > 0 || soap_flag_createTime1 > 0 || soap_flag_cursedCount1 > 0 || soap_flag_digestType1 > 0 || soap_flag_flags1 > 0 || soap_flag_id1 > 0 || soap_flag_type1 > 0 || soap_flag_status1 > 0 || soap_flag_userId1 > 0 || soap_flag_visitedCount1 > 0))
+	if ((soap->mode & SOAP_XML_STRICT) && (soap_flag_annotCount1 > 0 || soap_flag_blessedCount1 > 0 || soap_flag_blockedCount1 > 0 || soap_flag_createTime1 > 0 || soap_flag_cursedCount1 > 0 || soap_flag_digestType1 > 0 || soap_flag_flags1 > 0 || soap_flag_id1 > 0 || soap_flag_type1 > 0 || soap_flag_status1 > 0 || soap_flag_userId1 > 0 || soap_flag_visitedCount1 > 0))
 	{	soap->error = SOAP_OCCURS;
 		return NULL;
 	}

@@ -127,12 +127,18 @@ namespace Core { namespace Cloud {
     void setBlockedCount(quint32 count)  { blocked_ = count; }
     bool isBlocked() const               { return blocked_; }
 
+  private: quint32 annot_;
+  public:
+    quint32 annotCount() const           { return annot_; }
+    void setAnnotCount(quint32 count)    { annot_ = count; }
+    bool isAnnotated() const             { return annot_; }
+
     // - Constructions -
   public:
     User()
       : id_(0), groupId_(0), status_(0), flags_(0), language_(0),
         createTime_(0), loginTime_(0),
-        blessed_(0), cursed_(0), blocked_(0)
+        blessed_(0), cursed_(0), blocked_(0), annot_(0)
     { }
 
     bool isValid() const { return hasId(); }

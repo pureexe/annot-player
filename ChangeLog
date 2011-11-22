@@ -1,6 +1,13 @@
 # ChangeLog
 
 Project: annot.player
+Versial: 0.1.0.1
+Date: 11/?/2011
+- Added annotation counting.
+- Delete Caches script removed. Caches will be automatically invalidated if required.
+- Minor bug fix.
+
+Project: annot.player
 Versial: 0.1.0.0
 Date: 11/18/2011
 - Improved translations.

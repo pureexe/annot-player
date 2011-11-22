@@ -249,6 +249,10 @@ ServerAgent::submitAlias(const Alias &alias)
     DOUT("submitAlias:exit: not authorized");
     return 0;
   }
+  if (!alias.hasText()) {
+    DOUT("submitAlias:exit: missing text");
+    return 0;
+  }
   qint64 ret = 0;
   if (alias.hasTokenId())
     ret = proxy_->submitAliasTextWithTokenId(alias.text(), alias.type(), alias.tokenId(), user_.name(), user_.password());
@@ -288,6 +292,10 @@ ServerAgent::submitAnnotation(const Annotation &annot)
     DOUT("submitAnnotation:exit: not authorized");
     return 0;
   }
+  if (!annot.hasText()) {
+    DOUT("submitAnnotation:exit: missing text");
+    return 0;
+  }
   qint64 ret = 0;
   if (annot.hasTokenId())
     ret = proxy_->submitAnnotationTextWithTokenId(annot.text(), annot.pos(), annot.posType(), annot.tokenId(), user_.name(), user_.password());
@@ -312,6 +320,7 @@ ServerAgent::selectTokenWithId(qint64 id)
   Token ret;
   if (id)
     ret = proxy_->selectTokenWithId(id);
+
   return ret;
 }
 

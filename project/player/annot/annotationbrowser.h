@@ -9,17 +9,13 @@
 #include <QModelIndex>
 
 QT_BEGIN_NAMESPACE
-class QAbstractItemModel;
 class QStandardItemModel;
-class QComboBox;
-class QLineEdit;
-class QSortFilterProxyModel;
-class QTreeView;
 class QMenu;
 class QAction;
 QT_END_NAMESPACE
 
 class AnnotationEditor;
+class FilteredTableView;
 
 typedef Core::Gui::Dialog AnnotationBrowserBase;
 class AnnotationBrowser : public AnnotationBrowserBase
@@ -94,9 +90,6 @@ signals:
 
   // - Implementations -
 protected slots:
-  void invalidateFilterRegExp();
-  void invalidateFilterColumn();
-
   void editAnnotation();
   void copyAnnotation();
   void hideAnnotation();
@@ -128,12 +121,7 @@ private:
 
   // - Modes and UI components -
   QStandardItemModel *sourceModel_;
-  QSortFilterProxyModel *proxyModel_;
-  QTreeView *proxyView_;
-
-  QLineEdit *filterPatternLineEdit_;
-  QComboBox *filterSyntaxComboBox_;
-  QComboBox *filterColumnComboBox_;
+  FilteredTableView *tableView_;
 
   // - Menus and actions -
   QMenu *contextMenu_;

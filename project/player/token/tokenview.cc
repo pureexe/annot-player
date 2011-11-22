@@ -2,15 +2,14 @@
 // 8/13/2011
 
 #include "tokenview.h"
-#include "lineedit.h"
 #include "addaliasdialog.h"
 #include "tr.h"
 #include "stylesheet.h"
 #include "uistyle.h"
 #include "global.h"
 #include "logger.h"
+#include "filteredtableview.h"
 #include "module/serveragent/serveragent.h"
-#include "core/gui/combobox.h"
 #include "core/gui/toolbutton.h"
 #include <QtGui>
 
@@ -33,68 +32,17 @@ TokenView::TokenView(ServerAgent *server, QWidget *parent)
   Q_ASSERT(server_);
   setWindowTitle(TR(T_TITLE_TOKENVIEW));
   UiStyle::globalInstance()->setWindowStyle(this);
+  setAcceptDrops(true);
 
   // Create models
 
   sourceModel_ = new QStandardItemModel(0, HD_Count, this);
   setAliasHeaderData(sourceModel_);
-
-  proxyModel_ = new QSortFilterProxyModel; {
-    proxyModel_->setSourceModel(sourceModel_);
-    proxyModel_->setDynamicSortFilter(true);
-    proxyModel_->setSortCaseSensitivity(Qt::CaseInsensitive);
-  }
+  tableView_ = new FilteredTableView(sourceModel_, this);
 
   // Create widgets
   aliasDialog_ = new AddAliasDialog(this);
   connect(aliasDialog_, SIGNAL(aliasAdded(QString,int,quint32)), SLOT(submitAlias(QString,int,quint32)));
-
-  proxyView_ = new QTreeView; {
-    proxyView_->setStyleSheet(SS_TREEVIEW);
-    proxyView_->setRootIsDecorated(true);
-    proxyView_->setAlternatingRowColors(true);
-    proxyView_->setModel(proxyModel_);
-    proxyView_->setSortingEnabled(true);
-    proxyView_->setToolTip(tr("Token information"));
-  }
-
-  filterPatternLineEdit_ = new LineEdit; {
-    filterPatternLineEdit_->setStyleSheet(SS_LINEEDIT);
-    filterPatternLineEdit_->setToolTip(TR(T_FILTER_PATTERN));
-  }
-  QLabel *filterPatternLabel = new QLabel; {
-    filterPatternLabel->setStyleSheet(SS_LABEL);
-    filterPatternLabel->setBuddy(filterPatternLineEdit_);
-    filterPatternLabel->setText(TR(T_FILTER_PATTERN) + ":");
-    filterPatternLabel->setToolTip(filterPatternLineEdit_->toolTip());
-  }
-
-  filterSyntaxComboBox_ = new Core::Gui::ComboBox; {
-    UiStyle::globalInstance()->setComboBoxStyle(filterSyntaxComboBox_);
-    filterSyntaxComboBox_->addItem(TR(T_FILTER_REGEX), QRegExp::RegExp);
-    filterSyntaxComboBox_->addItem(TR(T_FILTER_WILDCARD), QRegExp::Wildcard);
-    filterSyntaxComboBox_->addItem(TR(T_FILTER_FIXED), QRegExp::FixedString);
-    filterSyntaxComboBox_->setToolTip(TR(T_FILTER_SYNTAX));
-  }
-  QLabel *filterSyntaxLabel = new QLabel; {
-    filterSyntaxLabel->setStyleSheet(SS_LABEL);
-    filterSyntaxLabel->setBuddy(filterSyntaxComboBox_);
-    filterSyntaxLabel->setText(TR(T_FILTER_SYNTAX) + ":");
-    filterSyntaxLabel->setToolTip(filterSyntaxComboBox_->toolTip());
-  }
-
-  filterColumnComboBox_ = new Core::Gui::ComboBox; {
-    UiStyle::globalInstance()->setComboBoxStyle(filterColumnComboBox_);
-    for (int i = 0; i < sourceModel_->columnCount(); i++)
-      filterColumnComboBox_->addItem(sourceModel_->headerData(i, Qt::Horizontal).toString());
-    filterColumnComboBox_->setToolTip(TR(T_FILTER_COLUMN));
-  }
-  QLabel *filterColumnLabel = new QLabel; {
-    filterColumnLabel->setStyleSheet(SS_LABEL);
-    filterColumnLabel->setBuddy(filterColumnComboBox_);
-    filterColumnLabel->setText(TR(T_FILTER_COLUMN));
-    filterColumnLabel->setToolTip(filterColumnComboBox_->toolTip());
-  }
 
 #define MAKE_TOKEN_LABEL(_id, _styleid) \
   _id##Label_ = new QLabel; { \
@@ -113,6 +61,7 @@ TokenView::TokenView(ServerAgent *server, QWidget *parent)
   MAKE_TOKEN_LABEL(blessedCount, BLESSEDCOUNT)
   MAKE_TOKEN_LABEL(cursedCount, CURSEDCOUNT)
   MAKE_TOKEN_LABEL(visitedCount, VISITEDCOUNT)
+  MAKE_TOKEN_LABEL(annotCount, ANNOTCOUNT)
 #undef MAKE_TOKEN_LABEL
 
 #define MAKE_BUTTON(_button, _text, _tip, _slot) \
@@ -147,6 +96,9 @@ TokenView::TokenView(ServerAgent *server, QWidget *parent)
     layout->addWidget(visitedCountBuddy, ++r, c=0);
     layout->addWidget(visitedCountLabel_, r, ++c);
 
+    layout->addWidget(annotCountBuddy, ++r, c=0);
+    layout->addWidget(annotCountLabel_, r, ++c);
+
     layout->addWidget(blessedCountBuddy, ++r, c=0);
     layout->addWidget(blessedCountLabel_, r, ++c);
     layout->addWidget(blessButton, r, ++c);
@@ -159,36 +111,17 @@ TokenView::TokenView(ServerAgent *server, QWidget *parent)
     ++c;
     layout->addWidget(addAliasButton, r, ++c);
 
-    layout->addWidget(proxyView_, ++r, c=0, 1, 3);
-
-    layout->addWidget(filterPatternLabel, ++r, c=0);
-    layout->addWidget(filterPatternLineEdit_, r, ++c, 1, 2);
-
-    layout->addWidget(filterSyntaxLabel, ++r, c=0);
-    layout->addWidget(filterSyntaxComboBox_, r, ++c, 1, 2);
-
-    layout->addWidget(filterColumnLabel, ++r, c=0);
-    layout->addWidget(filterColumnComboBox_, r, ++c, 1, 2);
+    layout->addWidget(tableView_, ++r, c=0, 1, 3);
 
     //layout->setContentsMargins(0, 0, 0, 0);
+    //setContentsMargins(0, 0, 0, 0);
   }
   setLayout(layout);
 
-  // Set up connections
-  connect(filterPatternLineEdit_, SIGNAL(textChanged(QString)),
-          SLOT(invalidateFilterRegExp()));
-  connect(filterSyntaxComboBox_, SIGNAL(currentIndexChanged(int)),
-          SLOT(invalidateFilterRegExp()));
-  connect(filterColumnComboBox_, SIGNAL(currentIndexChanged(int)),
-          SLOT(invalidateFilterColumn()));
-
   // Set initial states
 
-  proxyView_->sortByColumn(HD_Type, Qt::AscendingOrder);
-  filterColumnComboBox_->setCurrentIndex(HD_Text);
-
-  // Focus:
-  filterPatternLineEdit_->setFocus();
+  tableView_->sortByColumn(HD_Type, Qt::AscendingOrder);
+  tableView_->setCurrentColumn(HD_Text);
 }
 
 void
@@ -210,7 +143,7 @@ TokenView::setAliasHeaderData(QAbstractItemModel *model)
 
 QModelIndex
 TokenView::currentIndex() const
-{ return proxyView_->currentIndex(); }
+{ return tableView_->currentIndex(); }
 
 const Token&
 TokenView::token() const
@@ -300,35 +233,7 @@ TokenView::addAliases(const AliasList &l)
 
 void
 TokenView::clearAliases()
-{
-  //if (sourceModel_->rowCount() == 0)
-  //  return;
-  //sourceModel_->clear();
-  //setAliasHeaderData(sourceModel_);
-
-  while (sourceModel_->rowCount())
-    sourceModel_->removeRow(0);
-}
-
-// - Slots -
-
-void
-TokenView::invalidateFilterRegExp()
-{
-  QRegExp::PatternSyntax syntax =
-      QRegExp::PatternSyntax(
-        filterSyntaxComboBox_->itemData(
-          filterSyntaxComboBox_->currentIndex()).toInt());
-
-  QRegExp regExp(filterPatternLineEdit_->text(), Qt::CaseInsensitive, syntax);
-  proxyModel_->setFilterRegExp(regExp);
-}
-
-void
-TokenView::invalidateFilterColumn()
-{
-  proxyModel_->setFilterKeyColumn(filterColumnComboBox_->currentIndex());
-}
+{ tableView_->clear(); }
 
 // - Events -
 
@@ -351,6 +256,7 @@ TokenView::invalidateTokenLabels()
     createDateLabel_->setText(TR(T_UNKNOWN));
 
   visitedCountLabel_->setText(FORMAT_COUNT(token_.visitedCount()));
+  annotCountLabel_->setText(FORMAT_COUNT(token_.annotCount()));
   blessedCountLabel_->setText(FORMAT_COUNT(token_.blessedCount()));
   cursedCountLabel_->setText(FORMAT_COUNT(token_.cursedCount()));
 
@@ -413,8 +319,6 @@ TokenView::curse()
 void
 TokenView::addAlias()
 { aliasDialog_->show(); }
-
-// - Format -
 
 // - Formatter -
 

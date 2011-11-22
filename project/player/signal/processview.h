@@ -10,17 +10,14 @@
 #include <QHash>
 
 QT_BEGIN_NAMESPACE
-class QAbstractItemModel;
 class QAction;
-class QComboBox;
 class QLabel;
-class QLineEdit;
 class QMenu;
 class QStandardItemModel;
-class QSortFilterProxyModel;
-class QTreeView;
 class QToolButton;
 QT_END_NAMESPACE
+
+class FilteredTableView;
 
 typedef Core::Gui::Dialog ProcessViewBase;
 class ProcessView : public ProcessViewBase
@@ -86,8 +83,8 @@ signals:
 
   // - Slots -
 private slots:
-  void invalidateFilterRegExp();
-  void invalidateFilterColumn();
+  //void invalidateFilterRegExp();
+  //void invalidateFilterColumn();
 
   void invalidateSourceModel(bool showAll = false);
 
@@ -105,15 +102,11 @@ private:
   void createActions();
 
 private:
+  FilteredTableView *tableView_; // process table
+
   QHash<ulong, ProcessInfo> pis_;
 
   QStandardItemModel *sourceModel_;
-  QSortFilterProxyModel *proxyModel_;
-  QTreeView *proxyView_;
-
-  QLineEdit *filterPatternLineEdit_;
-  QComboBox *filterSyntaxComboBox_;
-  QComboBox *filterColumnComboBox_;
 
   QToolButton *attachButton_, *detachButton_;
 

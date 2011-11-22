@@ -11,16 +11,13 @@
 
 QT_BEGIN_NAMESPACE
 class QAbstractItemModel;
-class QComboBox;
 class QLabel;
-class QLineEdit;
 class QStandardItemModel;
-class QSortFilterProxyModel;
-class QTreeView;
 QT_END_NAMESPACE
 
 class AddAliasDialog;
 class ServerAgent;
+class FilteredTableView;
 
 typedef Core::Gui::Dialog TokenViewBase;
 
@@ -111,25 +108,17 @@ protected:
   static QString aliasStatusToString(int flags);
 
   // - Implementations -
-private slots:
-  void invalidateFilterRegExp();
-  void invalidateFilterColumn();
-
 protected:
   static void setAliasHeaderData(QAbstractItemModel *model);
 
 private:
   ServerAgent *server_;
   //qint64 userId_;
-  QStandardItemModel *sourceModel_;
-  QSortFilterProxyModel *proxyModel_;
-  QTreeView *proxyView_;
-
-  QLineEdit *filterPatternLineEdit_;
-  QComboBox *filterSyntaxComboBox_;
-  QComboBox *filterColumnComboBox_;
+  QStandardItemModel *sourceModel_; // for alias
+  FilteredTableView *tableView_; // for alias
 
   QLabel *createDateLabel_,
+         *annotCountLabel_,
          *blessedCountLabel_,
          *cursedCountLabel_,
          *visitedCountLabel_;

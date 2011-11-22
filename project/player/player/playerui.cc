@@ -110,12 +110,14 @@ PlayerUi::createConnections()
   void \
   PlayerUi::_connect##Hub() \
   { \
-    connect(openButton(), SIGNAL(clicked()), hub_, SLOT(open())); \
-    connect(togglePlayModeButton(), SIGNAL(clicked(bool)), hub_, SLOT(setFullScreenVideoMode(bool))); \
-    connect(toggleMiniModeButton(), SIGNAL(clicked(bool)), hub_, SLOT(setMiniPlayerMode(bool))); \
-    connect(hub_, SIGNAL(playModeChanged(SignalHub::PlayMode)), this, SLOT(invalidatePlayButton())); \
-    connect(hub_, SIGNAL(playModeChanged(SignalHub::PlayMode)), this, SLOT(invalidateStopButton())); \
-    connect(hub_, SIGNAL(playModeChanged(SignalHub::PlayMode)), this, SLOT(invalidatePositionSlider())); \
+    _connect(openButton(), SIGNAL(clicked()), hub_, SLOT(open())); \
+    _connect(togglePlayModeButton(), SIGNAL(clicked(bool)), hub_, SLOT(setFullScreenVideoMode(bool))); \
+    _connect(toggleMiniModeButton(), SIGNAL(clicked(bool)), hub_, SLOT(setMiniPlayerMode(bool))); \
+    _connect(hub_, SIGNAL(playModeChanged(SignalHub::PlayMode)), this, SLOT(invalidatePlayButton())); \
+    _connect(hub_, SIGNAL(playModeChanged(SignalHub::PlayMode)), this, SLOT(invalidateStopButton())); \
+    _connect(hub_, SIGNAL(playModeChanged(SignalHub::PlayMode)), this, SLOT(invalidatePositionSlider())); \
+    _connect(hub_, SIGNAL(volumeChanged(qreal)), this, SLOT(invalidateVolumeSlider())); \
+    _connect(hub_, SIGNAL(tokenModeChanged(SignalHub::TokenMode)), this, SLOT(invalidateVolumeSlider())); \
 \
     static const char *status_signals[] = { \
       SIGNAL(played()), SIGNAL(paused()), SIGNAL(stopped()) \
@@ -149,7 +151,6 @@ PlayerUi::createConnections()
     _connect(player_, SIGNAL(lengthChanged()), this, SLOT(invalidatePositionButton())); \
     _connect(player_, SIGNAL(timeChanged()), this, SLOT(invalidatePositionButton())); \
     _connect(player_, SIGNAL(positionChanged()), this, SLOT(invalidatePositionSlider())); \
-    _connect(player_, SIGNAL(volumeChanged()), this, SLOT(invalidateVolumeSlider())); \
  \
     static const char *status_signals[] = { \
       SIGNAL(playing()), SIGNAL(paused()), SIGNAL(stopped()) \
@@ -307,7 +308,9 @@ PlayerUi::server() const
 
 void
 PlayerUi::setVolume(int vol)
-{ player_->setVolume(vol / G_VOLUME_MAX); }
+{
+  hub_->setVolume(vol / G_VOLUME_MAX);
+}
 
 void
 PlayerUi::setPosition(int pos)
@@ -316,15 +319,27 @@ PlayerUi::setPosition(int pos)
 void
 PlayerUi::invalidateVolumeSlider()
 {
-  qreal vol = player_->volume();
-  volumeSlider()->setSliderPosition(
-        static_cast<int>(vol * G_VOLUME_MAX)
-        );
+  QSlider *slider = volumeSlider();
+  if (hub_->isSignalTokenMode()) {
+    slider->setSliderPosition(0);
+    slider->setEnabled(false);
+    return;
+  }
+
+  slider->setEnabled(true);
+
+  qreal vol = hub_->volume();
+  slider->setSliderPosition(
+    static_cast<int>(vol * G_VOLUME_MAX)
+  );
 
   // Update tool tip.
   int percentage = qRound(vol * 100);
-  volumeSlider()->setToolTip(
-        TR(T_VOLUME) + " " + QString::number(percentage) + "%");
+  slider->setToolTip(
+    QString("%1 %2%")
+      .arg(TR(T_VOLUME))
+      .arg(QString::number(percentage))
+  );
 }
 
 void
@@ -334,6 +349,7 @@ PlayerUi::invalidatePositionSlider()
 
   if (hub_->isSignalTokenMode()) {
     //slider->hide();
+    slider->setSliderPosition(0);
     slider->setEnabled(false);
     return;
   }
@@ -345,10 +361,10 @@ PlayerUi::invalidatePositionSlider()
       slider->setEnabled(true);
 
     if (!slider->isSliderDown()) {
-      qreal  pos = player_->position();
+      qreal pos = player_->position();
       slider->setSliderPosition(
-            static_cast<int>(pos * G_POSITION_MAX)
-            );
+        static_cast<int>(pos * G_POSITION_MAX)
+      );
     }
 
     // Update slider's tool tip and label's text.
@@ -382,7 +398,6 @@ PlayerUi::invalidateUserButton()
   }
 }
 
-
 void
 PlayerUi::invalidatePositionButton()
 {
@@ -401,7 +416,11 @@ PlayerUi::invalidatePositionButton()
     QTime current = Core::msecs2time(current_msecs),
           total = Core::msecs2time(total_msecs);
 
-    button->setText(current.toString() + " / " + total.toString());
+    button->setText(
+      QString("%1 / %2")
+        .arg(current.toString())
+        .arg(total.toString())
+    );
 
   } else {
     if (button->isEnabled())

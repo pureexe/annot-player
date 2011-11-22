@@ -10,7 +10,6 @@
 #include <QHash>
 
 QT_BEGIN_NAMESPACE
-class QAbstractItemModel;
 //class QComboBox;
 class QLineEdit;
 class QMenu;

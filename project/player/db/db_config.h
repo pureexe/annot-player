@@ -26,7 +26,8 @@
     "user_login_time " "DATETIME NOT NULL," \
     "user_blessed_count " "INT UNSIGNED NOT NULL DEFAULT 0," \
     "user_cursed_count "  "INT UNSIGNED NOT NULL DEFAULT 0," \
-    "user_blocked_count " "INT UNSIGNED NOT NULL DEFAULT 0" \
+    "user_blocked_count " "INT UNSIGNED NOT NULL DEFAULT 0," \
+    "user_annot_count "   "INT UNSIGNED NOT NULL DEFAULT 0" \
     /*"INDEX(user_name)"*/ \
   ")"
   //"user_email "       "VARCHAR(160) NOT NULL UNIQUE," /* 320 = 64 + 1 + 255 is the maximum, but not allowd to be unique by mysql */
@@ -44,7 +45,8 @@
     "token_blessed_count " "INT UNSIGNED NOT NULL DEFAULT 0," \
     "token_cursed_count "  "INT UNSIGNED NOT NULL DEFAULT 0," \
     "token_blocked_count " "INT UNSIGNED NOT NULL DEFAULT 0," \
-    "token_visited_count " "INT UNSIGNED NOT NULL DEFAULT 0" \
+    "token_visited_count " "INT UNSIGNED NOT NULL DEFAULT 0," \
+    "token_annot_count "   "INT UNSIGNED NOT NULL DEFAULT 0" \
     /*"INDEX(token_digest)"*/ \
     /*"FOREIGN KEY(user_id) REFERENCES user(user_id) "*/ \
     /*  "ON DELETE CASCADE ON UPDATE CASCADE"*/ \
@@ -119,7 +121,8 @@
       "user_login_time,"        /* 9 */ \
       "user_blessed_count,"     /* 10 */ \
       "user_cursed_count,"      /* 11 */ \
-      "user_blocked_count"      /* 12 */ \
+      "user_blocked_count,"     /* 12 */ \
+      "user_annot_count"        /* 13 */ \
     ") VALUES (" \
       "?,"      /* 0: user_status */ \
       "?,"      /* 1: user_flags */ \
@@ -133,7 +136,8 @@
       DB_FROM_UNIXTIME("?") "," /* 9: user_login_time */ \
       "?,"      /* 10: user_blessed_count */ \
       "?,"      /* 11: user_cursed_count */ \
-      "?"       /* 12: user_blocked_count */ \
+      "?,"      /* 12: user_blocked_count */ \
+      "?"       /* 13: user_annot_count */ \
     ")" \
   ); \
   (_query).addBindValue((_user).status());       /* 0 */ \
@@ -149,6 +153,7 @@
   (_query).addBindValue((_user).blessedCount()); /* 10 */ \
   (_query).addBindValue((_user).cursedCount());  /* 11 */ \
   (_query).addBindValue((_user).blockedCount()); /* 12 */ \
+  (_query).addBindValue((_user).annotCount());   /* 13 */ \
 }
 
 #define DB_INSERT_TOKEN(_token, _query) \
@@ -166,7 +171,8 @@
       "token_blessed_count,"    /* 8 */ \
       "token_cursed_count,"     /* 9 */ \
       "token_blocked_count,"    /* 10 */ \
-      "token_visited_count"     /* 11 */ \
+      "token_visited_count,"    /* 11 */ \
+      "token_annot_count"       /* 12 */ \
     ") VALUES (" \
       "?,"      /* 0: token_status */ \
       "?,"      /* 1: token_flags */ \
@@ -179,7 +185,8 @@
       "?,"      /* 8: token_blessed_count */ \
       "?,"      /* 9: token_cursed_count */ \
       "?,"      /* 10: token_blocked_count */ \
-      "?"       /* 11: token_visited_count */ \
+      "?,"      /* 11: token_visited_count */ \
+      "?"       /* 12: token_annot_count */ \
     ")" \
   ); \
   (_query).addBindValue((_token).status());       /* 0 */ \
@@ -194,6 +201,7 @@
   (_query).addBindValue((_token).cursedCount());  /* 9 */ \
   (_query).addBindValue((_token).blockedCount()); /* 10 */ \
   (_query).addBindValue((_token).visitedCount()); /* 11 */ \
+  (_query).addBindValue((_token).annotCount());   /* 12 */ \
 }
 
 #define DB_INSERT_ALIAS(_alias, _query) \
@@ -326,7 +334,8 @@
     DB_UNIX_TIMESTAMP("user_login_time") ","  /* 9 */ \
     "user_blessed_count," /* 10 */ \
     "user_cursed_count,"  /* 11 */ \
-    "user_blocked_count " /* 12 */ \
+    "user_blocked_count," /* 12 */ \
+    "user_annot_count "   /* 13 */ \
   "FROM user "
 
 #define DB_SET_USER(_user, _query) \
@@ -355,6 +364,8 @@
   Q_ASSERT(ok); \
   (_user).setBlockedCount((_query).value(12).toUInt(&ok)); \
   Q_ASSERT(ok); \
+  (_user).setAnnotCount((_query).value(13).toUInt(&ok)); \
+  Q_ASSERT(ok); \
 }
 
 #define DB_SELECT_TOKEN \
@@ -370,7 +381,8 @@
     "token_blessed_count," /* 8 */ \
     "token_cursed_count,"  /* 9 */ \
     "token_blocked_count," /* 10 */ \
-    "token_visited_count " /* 11 */ \
+    "token_visited_count," /* 11 */ \
+    "token_annot_count "   /* 12 */ \
   "FROM token "
 
 #define DB_SET_TOKEN(_token, _query) \
@@ -398,6 +410,8 @@
   (_token).setBlockedCount((_query).value(10).toUInt(&ok)); \
   Q_ASSERT(ok); \
   (_token).setVisitedCount((_query).value(11).toUInt(&ok)); \
+  Q_ASSERT(ok); \
+  (_token).setAnnotCount((_query).value(12).toUInt(&ok)); \
   Q_ASSERT(ok); \
 }
 

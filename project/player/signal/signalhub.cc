@@ -2,6 +2,7 @@
 // 10/16/2011
 #include "signalhub.h"
 #include "logger.h"
+#include "module/player/player.h"
 #include <QtCore>
 
 //#define DEBUG "SignalHub"
@@ -10,14 +11,61 @@
 using namespace Logger;
 
 // - Constructions -
-SignalHub::SignalHub(QObject *parent)
+SignalHub::SignalHub(Player *player, QObject *parent)
   : Base(parent),
+    player_(player),
     tokenMode_(MediaTokenMode),
     playMode_(NormalPlayMode),
     playerMode_(NormalPlayerMode),
     videoMode_(NormalVideoMode),
     playing_(false), paused_(false), stopped_(true)
-{ }
+{
+  Q_ASSERT(player_);
+}
+
+// - Properties -
+
+qreal
+SignalHub::volume() const
+{
+  switch (tokenMode_) {
+  case MediaTokenMode:
+    return player_->volume();
+
+  case SignalTokenMode:
+#ifdef Q_WS_WIN
+    //return QtWin::getWaveVolume();
+    return 0;
+#else
+    return 0;
+#endif // Q_WS_WIN
+
+  default: Q_ASSERT(0); return 0;
+  }
+}
+
+void
+SignalHub::setVolume(qreal percentage)
+{
+  if (percentage < 0)
+    percentage = 0;
+  else if (percentage > 1)
+    percentage = 1;
+
+  switch (tokenMode_) {
+  case MediaTokenMode:
+    player_->setVolume(percentage);
+    emit volumeChanged(percentage);
+    break;
+
+  case SignalTokenMode:
+#ifdef Q_WS_WIN
+    //QtWin::setWaveVolume(percentage);
+    emit volumeChanged(percentage);
+#endif // Q_WS_WIN
+    break;
+  }
+}
 
 // - States -
 
@@ -136,34 +184,34 @@ SignalHub::setLivePlayMode(bool t)
 void
 SignalHub::play()
 {
-  if (!playing_) {
+  //if (!playing_) {
     playing_ = true;
     stopped_ = false;
     paused_ = false;
     emit played();
-  }
+  //}
 }
 
 void
 SignalHub::pause()
 {
-  if (!paused_) {
+  //if (!paused_) {
     paused_ = true;
     playing_ = false;
     stopped_ = false;
     emit paused();
-  }
+  //}
 }
 
 void
 SignalHub::stop()
 {
-  if (!stopped_) {
+  //if (!stopped_) {
     stopped_ = true;
     playing_ = false;
     paused_ = false;
     emit stopped();
-  }
+  //}
 }
 
 void

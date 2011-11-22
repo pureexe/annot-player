@@ -231,6 +231,16 @@ namespace { // anonymous
     return ret;
   }
 
+  template <typename T>
+  inline QList<T>
+  uniqueList(const QList<T> &l)
+  {
+    QList<T> ret;
+    foreach (T t, l)
+      if (!ret.contains(t))
+        ret.append(t);
+    return ret;
+  }
 } // anonymous namespace
 
 #endif // MAINWINDOWPRIVATE_H

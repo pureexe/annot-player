@@ -27,6 +27,7 @@ SignalView::SignalView(QWidget *parent)
   setWindowTitle(TR(T_TITLE_SIGNALVIEW));
   UiStyle::globalInstance()->setWindowStyle(this);
   setContentsMargins(0, 0, 0, 0);
+  setAcceptDrops(true);
 
   // Views
   processView_ = new ProcessView;

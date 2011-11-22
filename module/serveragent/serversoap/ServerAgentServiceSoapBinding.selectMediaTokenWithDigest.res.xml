@@ -8,6 +8,7 @@
  <SOAP-ENV:Body>
   <tns:selectMediaTokenWithDigestResponse>
    <return>
+    <annotCount>0</annotCount>
     <blessedCount>0</blessedCount>
     <blockedCount>0</blockedCount>
     <createTime>0</createTime>

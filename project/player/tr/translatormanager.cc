@@ -428,7 +428,7 @@ TranslatorManager::translate(int tid) const
   case T_TIP_COMMENTVIEW:       return tr("Show comment browser");
 
   // case T_MENUTEXT_CLOUDVIEW:    return tr("Cloud");
-  case T_MENUTEXT_CLOUDVIEW:    return tr("Annot Cloud");
+  case T_MENUTEXT_CLOUDVIEW:    return tr("Register");
   case T_TIP_CLOUDVIEW:         return tr("Show cloud browser");
 
   case T_MENUTEXT_EDIT:         return tr("Edit");
@@ -492,6 +492,8 @@ TranslatorManager::translate(int tid) const
   case T_TIP_BLOCKEDCOUNT:      return tr("Blocked count");
   case T_LABEL_VISITEDCOUNT:    return tr("Visited");
   case T_TIP_VISITEDCOUNT:      return tr("Visited count");
+  case T_LABEL_ANNOTCOUNT:      return tr("Annot");
+  case T_TIP_ANNOTCOUNT:        return tr("Annotation count");
 
   case T_LABEL_ALIAS:           return tr("Alias");
   case T_TIP_ALIAS:             return tr("Alias");
@@ -573,6 +575,7 @@ TranslatorManager::translate(int tid) const
   case T_BLESSEDCOUNT:  return tr("BlessedCount");
   case T_CURSEDCOUNT:   return tr("CursedCount");
   case T_BLOCKEDCOUNT:  return tr("BlockedCount");
+  case T_ANNOTCOUNT:    return tr("AnnotCount");
   case T_VISITEDCOUNT:  return tr("VisitedCount");
 
   case T_PID:           return tr("PID");
@@ -582,6 +585,7 @@ TranslatorManager::translate(int tid) const
   case T_ACTIVE:        return tr("Active");
   case T_DELETED:       return tr("Deleted");
   case T_BLOCKED:       return tr("Blocked");
+  case T_ANNOT:         return tr("Annot");
   case T_NA:            return tr("n/a");
   case T_ANONYMOUS:     return tr("Anonymous");
 

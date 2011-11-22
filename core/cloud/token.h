@@ -117,11 +117,17 @@ namespace Core { namespace Cloud {
     void setVisitedCount(quint32 count) { visited_ = count; }
     bool isVisited() const              { return visited_; }
 
+  private: quint32 annot_;
+  public:
+    quint32 annotCount() const           { return annot_; }
+    void setAnnotCount(quint32 count)    { annot_ = count; }
+    bool isAnnotated() const             { return annot_; }
+
     // - Constructions -
   public:
     Token()
       : id_(0), type_(0), userId_(0), digestType_(0), status_(0), flags_(0), createTime_(0),
-        blessed_(0), cursed_(0), blocked_(0), visited_(0)
+        blessed_(0), cursed_(0), blocked_(0), visited_(0), annot_(0)
     { }
 
     bool isValid() const { return hasId(); } //&& hasType
