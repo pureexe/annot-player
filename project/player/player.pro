@@ -13,7 +13,9 @@ include($$ROOTDIR/module/serveragent/serveragent.pri)
 #include($$ROOTDIR/module/clientagent/clientagent.pri)
 include($$ROOTDIR/module/gsoap/gsoap.pri)       # would static linking cause license conflicts?
 include($$ROOTDIR/module/translator/translator.pri)
-include($$ROOTDIR/module/webbrowser/webbrowser.pri)
+
+!unix:  include($$ROOTDIR/module/webbrowser/webbrowser.pri)
+unix:   include($$ROOTDIR/module/webbrowser/webbrowser_static.pri)
 
 DEFINES += USE_MODE_DEBUG
 
@@ -48,6 +50,9 @@ mac {
     include($$ROOTDIR/mac/vlckit_qt/vlckit_qt.pri)
     DEFINES += USE_MAC_VLCKIT
 }
+unix {
+    include($$ROOTDIR/unix/qtx/qtx.pri)
+}
 
 QT      += core gui sql webkit
 
@@ -61,7 +66,7 @@ QT      += core gui sql webkit
 
 TEMPLATE      = app
 win32: TARGET = player
-linux: TARGET = annotplayer
+unix: TARGET = annot-player
 mac:   TARGET = "Annot Player"
 
 win32: CONFIG += windows
@@ -211,6 +216,12 @@ win32 {
 RESOURCES += player.qrc
 
 OTHER_FILES += \
+    annot-player.desktop \
+    debian.rules \
+    debian.control \
+    deploy-debian.sh \
+    deploy-mac.sh \
+    deploy-win.cmd \
     Info.plist \
     player.rc \
     player.ico \
@@ -224,6 +235,23 @@ win32 {
 mac {
     ICON = player.icns
     QMAKE_INFO_PLIST = Info.plist
+}
+
+# Deployment
+
+unix {
+    INSTALLS += target desktop
+
+    target.path =$$BINDIR
+
+    desktop.path = $$DATADIR/applications
+    desktop.files += $${TARGET}.desktop
+
+    #service.path = $$DATADIR/dbus-1/services
+    #service.files += $${TARGET}.service
+
+    #icon64.path = $$DATADIR/icons/hicolor/64x64/apps
+    #icon64.files += ../data/64x64/$${TARGET}.png
 }
 
 # EOF

@@ -21,6 +21,7 @@
 #define SK_TRANSLATE    "Translate"
 #define SK_SUBTITLEONTOP "SubtitleStaysOnTop"
 #define SK_UPDATEDATE   "UpdateDate"
+#define SK_RECENTPATH   "RecentPath"
 
 #define SK_QUEUEEMPTY   "QueueEmpty"
 
@@ -173,9 +174,16 @@ void
 Settings::setSubtitleStaysOnTop(bool t)
 { setValue(SK_SUBTITLEONTOP, t); }
 
+QString
+Settings::recentPath() const
+{ return value(SK_RECENTPATH).toString(); }
+
+void
+Settings::setRecentPath(const QString &path)
+{ setValue(SK_RECENTPATH, path); }
 
 QStringList
-Settings::recent() const
+Settings::recentFiles() const
 {
   Q_ASSERT(RECENT_COUNT == G_RECENT_COUNT);
 
@@ -200,7 +208,7 @@ Settings::recent() const
 
 
 void
-Settings::clearRecent()
+Settings::clearRecentFiles()
 {
   Q_ASSERT(RECENT_COUNT == G_RECENT_COUNT);
 
@@ -217,12 +225,12 @@ Settings::clearRecent()
 }
 
 void
-Settings::setRecent(const QStringList &l)
+Settings::setRecentFiles(const QStringList &l)
 {
   Q_ASSERT(RECENT_COUNT == G_RECENT_COUNT);
 
   if (l.isEmpty()) {
-    clearRecent();
+    clearRecentFiles();
     return;
   }
 

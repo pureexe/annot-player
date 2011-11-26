@@ -2,7 +2,7 @@
 // 10/14/2011
 #include "ith/main.h"
 
-#define DEBUG "ith:inject"
+//#define DEBUG "ith:inject"
 #include "module/debug/debug.h"
 
 static WCHAR EngineName[]=L"ITH_engine.dll";
@@ -15,19 +15,20 @@ DWORD Inject(HANDLE hProc)
   LPVOID lpvAllocAddr = 0;
   DWORD dwWrite = 0x1000;
   HANDLE hTH;
-  if (!IthCheckFile(EngineName)) return -1;
-  if (!IthCheckFile(DllName)) return -1;
+  // jichi: Assume existent of ITH*.dll
+  //if (!IthCheckFile(EngineName)) return -1;
+  //if (!IthCheckFile(DllName)) return -1;
 
-  NtAllocateVirtualMemory(hProc, &lpvAllocAddr, 0, &dwWrite, MEM_COMMIT, PAGE_READWRITE);
+  ::NtAllocateVirtualMemory(hProc, &lpvAllocAddr, 0, &dwWrite, MEM_COMMIT, PAGE_READWRITE);
   if (lpvAllocAddr == 0) return -1;
   wcscpy(current_dir, DllName);
   CheckThreadStart();
   NtWriteVirtualMemory(hProc, lpvAllocAddr, file_path + 4, 2 * MAX_PATH, &dwWrite);
   DOUT("Inject: dll =" << QString::fromWCharArray(file_path));
   hTH=IthCreateThread(LoadLibrary, (DWORD)lpvAllocAddr, hProc);
-  if (hTH==0||hTH == INVALID_HANDLE_VALUE)
-  {
-    ConsoleOutput(ErrorRemoteThread);
+  if (hTH==0||hTH == INVALID_HANDLE_VALUE) {
+    //ConsoleOutput(ErrorRemoteThread);
+    DOUT("Inject: cannot create remote thread");
     return -1;
   }
   NtWaitForSingleObject(hTH, 0, 0);
@@ -38,9 +39,9 @@ DWORD Inject(HANDLE hProc)
   NtWriteVirtualMemory(hProc, lpvAllocAddr, file_path + 4, 2 * MAX_PATH, &dwWrite);
   hTH = IthCreateThread(LoadLibrary, (DWORD)lpvAllocAddr, hProc);
   if (hTH == 0 ||
-    hTH == INVALID_HANDLE_VALUE)
-  {
-    ConsoleOutput(ErrorRemoteThread);
+    hTH == INVALID_HANDLE_VALUE) {
+    //ConsoleOutput(ErrorRemoteThread);
+    DOUT("Inject: cannot create remote thread");
     return -1;
   }
   NtWaitForSingleObject(hTH, 0, 0);
@@ -77,8 +78,10 @@ DWORD PIDByName(LPWSTR pwcTarget)
       break;
     }
   }
-  if (dwPid == 0)
-    ConsoleOutput(ErrorNoProcess);
+  if (dwPid == 0) {
+    //ConsoleOutput(ErrorNoProcess);
+    //DOUT("PICByName: process not found");
+  }
   delete pbBuffer;
   return dwPid;
 }
@@ -88,12 +91,14 @@ DWORD InjectByPID(DWORD pid)
   DWORD s;
   if (pid == current_process_id)
   {
-    ConsoleOutput(SelfAttach);
+    //ConsoleOutput(SelfAttach);
+    DOUT("InjectByPID: skip attach to my process");
     return -1;
   }
   if (GetModuleByPID(pid))
   {
-    ConsoleOutput(AlreadyAttach);
+    //ConsoleOutput(AlreadyAttach);
+    DOUT("InjectByPID: process already attached");
     return -1;
   }
   swprintf(str, L"ITH_HOOKMAN_%.4d", pid);
@@ -113,7 +118,8 @@ DWORD InjectByPID(DWORD pid)
     PROCESS_VM_WRITE,
     &oa, &id)))
   {
-    ConsoleOutput(ErrorOpenProcess);
+    //ConsoleOutput(ErrorOpenProcess);
+    DOUT("failed to open process");
     return -1;
   }
   DWORD module = Inject(hProc);
@@ -121,8 +127,9 @@ DWORD InjectByPID(DWORD pid)
   NtClose(hProc);
   if (module == -1) return -1;
 
-  swprintf(str, FormatInject, pid, module);
-  ConsoleOutput(str);
+  //swprintf(str, FormatInject, pid, module);
+  //ConsoleOutput(str);
+  //DOUT("InjectByPID: attached");
   return module;
 }
 // EOF

@@ -76,6 +76,9 @@
   #include "mac/qtmac/qtmac.h"
   #include "mac/qtstep/qtstep.h"
 #endif // Q_WS_MAC
+#ifdef Q_WS_X11
+  #include "unix/qtx/qtx.h"
+#endif // Q_WS_X11
 #include "core/os.h"
 #include "core/cmd.h"
 #include "core/annotationparser.h"
@@ -144,8 +147,6 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags f)
   : Base(parent, f),
     tray_(0),
     dragPos_(BAD_POS),
-    lastOpenedPath_(INIT_OPEN_PATH),
-
     themeMenu_(0),
     setThemeToDefaultAct_(0), setThemeToRandomAct_(0),
     setThemeToBlack1Act_(0), setThemeToBlack2Act_(0),
@@ -160,11 +161,14 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags f)
     setThemeToYellow1Act_(0), setThemeToYellow2Act_(0)
 {
   UiStyle::globalInstance()->setMainWindowStyle(this);
-#ifndef Q_WS_MAC
+#ifndef Q_WS_WIN
   // Not created by default, and hence no need to hide.
   //if (menuBar())
   //  menuBar()->hide();
-#endif // Q_WS_MAC
+#endif // !Q_WS_WIN
+
+  setWindowIcon(QIcon(RC_IMAGE_APP)); // X11 require setting icon at runtime
+  //setWindowFlags(windowFlags() | Qt::WindowStaysOnTopHint);
 
   setWindowTitle(TR(T_TITLE_PROGRAM));
   setContentsMargins(0, 0, 0, 0);
@@ -212,11 +216,15 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags f)
   setSubtitleColorToOrange();
 
   // Load settings
-  recentFiles_ = Settings::globalInstance()->recent();
+  Settings *settings = Settings::globalInstance();
+
+  recentFiles_ = settings->recentFiles();
   invalidateRecentMenu();
 
-  setTranslateEnabled(Settings::globalInstance()->isTranslateEnabled());
-  setSubtitleStaysOnTop(Settings::globalInstance()->isSubtitleStaysOnTop());
+  recentPath_ = settings->recentPath();
+
+  setTranslateEnabled(settings->isTranslateEnabled());
+  setSubtitleStaysOnTop(settings->isSubtitleStaysOnTop());
 
   invalidateAnnotationLanguages();
 
@@ -274,7 +282,7 @@ MainWindow::createComponents()
   // Player
   player_ = new Player(this); {
     //player_->setKeyboardEnabled(false);
-    //player_->setMouseEnabled(false);
+    //player_->setMouseEnabled(true);
     //player_->setEncoding("UTF-8");
   }
   //assert(isValid()); // TODO: fix this using a pop up dialog and then exit
@@ -891,7 +899,7 @@ MainWindow::createMenus()
   }
 
 
-#ifdef Q_WS_MAC
+#ifndef Q_WS_WIN
   // Use menuBar_ instead MainWindow::menuBar() to enable customization.
   // It is important to create the menubar WITHOUT PARENT, so that diff windows could share the same menubar.
   // See: http://doc.qt.nokia.com/latest/mac-differences.html#menu-bar
@@ -899,8 +907,8 @@ MainWindow::createMenus()
 
   // jichi 11/11/11:  It's important not to use act like quitAct_ or aboutAct_ with translations.
 
-  menuBar_ = new QMenuBar;
-  fileMenu_ = menuBar_->addMenu(tr("&File")); {
+  //menuBar_ = new QMenuBar;
+  fileMenu_ = menuBar()->addMenu(tr("&File")); {
     fileMenu_->addAction(openAct_);
     fileMenu_->addAction(openSubtitleAct_);
     fileMenu_->addAction(openDeviceAct_);
@@ -908,7 +916,7 @@ MainWindow::createMenus()
     fileMenu_->addAction(tr("&Quit"), this, SLOT(close())); // DO NOT TRANSLATE ME
   }
 
-  //editMenu = menuBar_->addMenu(tr("&Edit"));
+  //editMenu = menuBar()->addMenu(tr("&Edit"));
   //editMenu->addAction(undoAct);
   //editMenu->addAction(insertAct);
   //editMenu->addAction(analyzeAct);
@@ -917,13 +925,13 @@ MainWindow::createMenus()
   //editMenu->addAction(generateAct);
   //editMenu->addAction(clearAct);
 
-  //viewMenu_ = menuBar_->addMenu(tr("&View"));
+  //viewMenu_ = menuBar()->addMenu(tr("&View"));
 
-  helpMenu_ = menuBar_->addMenu(tr("&Help"));
+  helpMenu_ = menuBar()->addMenu(tr("&Help"));
   helpMenu_->addAction(tr("&Help"), this, SLOT(help())); // DO NOT TRANSLATE ME
   helpMenu_->addAction(tr("&About"), this, SLOT(about())); // DO NOT TRANSLATE ME
 
-#endif // Q_WS_MAC
+#endif // !Q_WS_WIN
 }
 
 // jichi:10/17/2011: TODO: Totally remove dock widgets; use layout instead
@@ -1052,7 +1060,14 @@ MainWindow::updateVideoMode()
 #ifdef USE_WIN_DWM
     if (UiStyle::isAeroAvailable())
       UiStyle::globalInstance()->setWindowDwmEnabled(this, false);
+    else
 #endif // USE_WIN_DWM
+
+#ifdef Q_WS_X11
+    if (hub_->isMediaTokenMode() && player_->hasMedia())
+      UiStyle::globalInstance()->setBlackBackground(this);
+#endif // Q_WS_X11
+
     if (mainPlayer_->isVisible())
       mainPlayer_->hide();
 
@@ -1081,7 +1096,9 @@ MainWindow::updateVideoMode()
 #ifdef USE_WIN_DWM
     if (UiStyle::isAeroAvailable())
       UiStyle::globalInstance()->setWindowDwmEnabled(this, true);
+    else
 #endif // USE_WIN_DWM
+      UiStyle::globalInstance()->setWindowBackground(this, false); // persistent is false
     break;
   }
 }
@@ -1100,8 +1117,8 @@ MainWindow::open()
 void
 MainWindow::openFile()
 {
-  if (!QDir(lastOpenedPath_).exists())
-    lastOpenedPath_.clear();
+  if (!QDir(recentPath_).exists())
+    recentPath_.clear();
 
   static const QString filter =
       TR(T_FORMAT_SUPPORTED) + ("(" G_FORMAT_SUPPORTED ")" ";;")
@@ -1114,10 +1131,10 @@ MainWindow::openFile()
     + TR(T_FORMAT_ALL)       + ("(" G_FORMAT_ALL ")");
 
   QString fileName = QFileDialog::getOpenFileName(
-        this, TR(T_TITLE_OPENFILE), lastOpenedPath_, filter);
+        this, TR(T_TITLE_OPENFILE), recentPath_, filter);
 
   if (!fileName.isEmpty()) {
-    lastOpenedPath_ = QFileInfo(fileName).absolutePath();
+    recentPath_ = QFileInfo(fileName).absolutePath();
     openSource(fileName);
   }
 }
@@ -1153,14 +1170,14 @@ MainWindow::isDevicePath(const QString &path)
 void
 MainWindow::openDevice()
 {
-  if (!QDir(lastOpenedPath_).exists())
-    lastOpenedPath_.clear();
+  if (!QDir(recentPath_).exists())
+    recentPath_.clear();
 
   QString path = QFileDialog::getExistingDirectory(
-        this, TR(T_TITLE_OPENDEVICE), lastOpenedPath_);
+        this, TR(T_TITLE_OPENDEVICE), recentPath_);
 
   if (!path.isEmpty()) {
-    lastOpenedPath_ = path;
+    recentPath_ = path;
 
     if (isDevicePath(path))
       openPath(path);
@@ -1172,14 +1189,14 @@ MainWindow::openDevice()
 void
 MainWindow::openDirectory()
 {
-  if (!QDir(lastOpenedPath_).exists())
-    lastOpenedPath_.clear();
+  if (!QDir(recentPath_).exists())
+    recentPath_.clear();
 
   QString path = QFileDialog::getExistingDirectory(
-        this, TR(T_TITLE_OPENDEVICE), lastOpenedPath_);
+        this, TR(T_TITLE_OPENDEVICE), recentPath_);
 
   if (!path.isEmpty()) {
-    lastOpenedPath_ = path;
+    recentPath_ = path;
     openPath(path);
   }
 }
@@ -1187,18 +1204,18 @@ MainWindow::openDirectory()
 void
 MainWindow::openSubtitle()
 {
-  if (!QDir(lastOpenedPath_).exists())
-    lastOpenedPath_.clear();
+  if (!QDir(recentPath_).exists())
+    recentPath_.clear();
 
   static const QString filter =
       TR(T_FORMAT_SUBTITLE)  + ("(" G_FORMAT_SUBTITLE ")" ";;")
     + TR(T_FORMAT_ALL)       + ("(" G_FORMAT_ALL ")");
 
   QString fileName = QFileDialog::getOpenFileName(
-        this, TR(T_TITLE_OPENFILE), lastOpenedPath_, filter);
+        this, TR(T_TITLE_OPENFILE), recentPath_, filter);
 
   if (!fileName.isEmpty()) {
-    lastOpenedPath_ = QFileInfo(fileName).absolutePath();
+    recentPath_ = QFileInfo(fileName).absolutePath();
     openSubtitlePath(fileName);
   }
 }
@@ -1270,6 +1287,11 @@ MainWindow::openPath(const QString &path, bool checkPath)
       hub_->setFullScreenPlayerMode(true);
     }
 #endif // Q_WS_MAC
+
+#ifdef Q_WS_X11
+    if (hub_->isFullScreenVideoMode())
+      UiStyle::globalInstance()->setBlackBackground(this);
+#endif // Q_WS_X11
   }
 }
 
@@ -1851,22 +1873,22 @@ int
 MainWindow::fileType(const QString &fileName)
 {
   foreach (QString suffix, Player::supportedVideoSuffices())
-    if (fileName.endsWith("." + suffix))
+    if (fileName.endsWith("." + suffix, Qt::CaseInsensitive))
       return Token::TT_Video;
 
   foreach (QString suffix, Player::supportedAudioSuffices())
-    if (fileName.endsWith("." + suffix))
+    if (fileName.endsWith("." + suffix, Qt::CaseInsensitive))
       return Token::TT_Audio;
 
   foreach (QString suffix, Player::supportedPictureSuffices())
-    if (fileName.endsWith("." + suffix))
+    if (fileName.endsWith("." + suffix, Qt::CaseInsensitive))
       return Token::TT_Picture;
 
 #ifdef USE_MODE_SIGNAL
   static const QStringList supportedProgramSuffices =
       QStringList() G_FORMAT_PROGRAM_(<<);
   foreach (QString suffix, supportedProgramSuffices)
-    if (fileName.endsWith("." + suffix))
+    if (fileName.endsWith("." + suffix, Qt::CaseInsensitive))
       return Token::TT_Program;
 #endif // USE_MODE_SIGNAL
 
@@ -2089,8 +2111,8 @@ MainWindow::submitText(const QString &text, bool async)
   switch (hub_->tokenMode()) {
   case SignalHub::MediaTokenMode:
     annot.setPos(
-     tokenView_->token().type() == Token::TT_Picture ? 0 :
-                                                       player_->time()
+      tokenView_->token().type() == Token::TT_Picture ?
+        0 : player_->time()
     );
     break;
   case SignalHub::SignalTokenMode:
@@ -2223,6 +2245,9 @@ MainWindow::say(const QString &text, const QString &color)
 void
 MainWindow::mousePressEvent(QMouseEvent *event)
 {
+  //if (contextMenu_->isVisible())
+  //  contextMenu_->hide();
+
 #ifdef Q_WS_MAC
   if (hub_->isFullScreenVideoMode()) {
     // Prevent auto hide osd player.
@@ -2262,10 +2287,11 @@ MainWindow::mousePressEvent(QMouseEvent *event)
       event->accept();
       break;
 
-    //case Qt::RightButton:
-    //  open();
-    //  event->accept();
-    //  break;
+    case Qt::RightButton: {
+        QContextMenuEvent cm(QContextMenuEvent::Mouse, event->pos(), event->globalPos(), event->modifiers());
+        QCoreApplication::sendEvent(this, &cm);
+        event->accept();
+      } break;
 
     default: break;
     }
@@ -2442,8 +2468,14 @@ MainWindow::invalidateContextMenu()
         QString text = TR(T_SECTION) + " " + QString::number(tid);
         BOOST_AUTO(a, new Core::Gui::ActionWithId(tid, text, sectionMenu_));
         contextMenuActions_.append(a);
-        if (tid == player_->titleId())
+        if (tid == player_->titleId()) {
+#ifdef Q_WS_X11
+          a->setCheckable(true);
+          a->setChecked(true);
+#else
           a->setIcon(QIcon(RC_IMAGE_CURRENTSUBTITLE));
+#endif // Q_WS_X11
+        }
         connect(a, SIGNAL(triggeredWithId(int)), player_, SLOT(setTitleId(int)));
         sectionMenu_->addAction(a);
       }
@@ -2473,8 +2505,14 @@ MainWindow::invalidateContextMenu()
         foreach (const QString &subtitle, l) {
           BOOST_AUTO(a, new Core::Gui::ActionWithId(id, subtitle, subtitleMenu_));
           contextMenuActions_.append(a);
-          if (id == player_->subtitleId())
+          if (id == player_->subtitleId()) {
+#ifdef Q_WS_X11
+            a->setCheckable(true);
+            a->setChecked(true);
+#else
             a->setIcon(QIcon(RC_IMAGE_CURRENTSUBTITLE));
+#endif // Q_WS_X11
+          }
           connect(a, SIGNAL(triggeredWithId(int)), player_, SLOT(setSubtitleId(int)));
           subtitleMenu_->addAction(a);
           id++;
@@ -2679,26 +2717,26 @@ MainWindow::invalidateContextMenu()
       UiStyle::Theme t = UiStyle::globalInstance()->theme();
       setThemeToDefaultAct_->setChecked(t == UiStyle::DefaultTheme);
       setThemeToRandomAct_->setChecked(t == UiStyle::RandomTheme);
-      setThemeToBlack1Act_->setChecked(t == UiStyle::BlackTheme1);
-      setThemeToBlack2Act_->setChecked(t == UiStyle::BlackTheme2);
-      setThemeToBlue1Act_->setChecked(t == UiStyle::BlueTheme1);
-      setThemeToBlue2Act_->setChecked(t == UiStyle::BlueTheme2);
-      setThemeToBrown1Act_->setChecked(t == UiStyle::BrownTheme1);
-      setThemeToBrown2Act_->setChecked(t == UiStyle::BrownTheme2);
-      setThemeToGreen1Act_->setChecked(t == UiStyle::GreenTheme1);
-      setThemeToGreen2Act_->setChecked(t == UiStyle::GreenTheme2);
-      setThemeToLightBlue1Act_->setChecked(t == UiStyle::LightBlueTheme1);
-      setThemeToLightBlue2Act_->setChecked(t == UiStyle::LightBlueTheme2);
-      setThemeToOrange1Act_->setChecked(t == UiStyle::OrangeTheme1);
-      setThemeToOrange2Act_->setChecked(t == UiStyle::OrangeTheme2);
-      setThemeToPink1Act_->setChecked(t == UiStyle::PinkTheme1);
-      setThemeToPink2Act_->setChecked(t == UiStyle::PinkTheme2);
-      setThemeToPurple1Act_->setChecked(t == UiStyle::PurpleTheme1);
-      setThemeToPurple2Act_->setChecked(t == UiStyle::PurpleTheme2);
-      setThemeToRed1Act_->setChecked(t == UiStyle::RedTheme1);
-      setThemeToRed2Act_->setChecked(t == UiStyle::RedTheme2);
-      setThemeToYellow1Act_->setChecked(t == UiStyle::YellowTheme1);
-      setThemeToYellow2Act_->setChecked(t == UiStyle::YellowTheme2);
+      setThemeToBlack1Act_->setChecked(t == UiStyle::Black1Theme);
+      setThemeToBlack2Act_->setChecked(t == UiStyle::Black2Theme);
+      setThemeToBlue1Act_->setChecked(t == UiStyle::Blue1Theme);
+      setThemeToBlue2Act_->setChecked(t == UiStyle::Blue2Theme);
+      setThemeToBrown1Act_->setChecked(t == UiStyle::Brown1Theme);
+      setThemeToBrown2Act_->setChecked(t == UiStyle::Brown2Theme);
+      setThemeToGreen1Act_->setChecked(t == UiStyle::Green1Theme);
+      setThemeToGreen2Act_->setChecked(t == UiStyle::Green2Theme);
+      setThemeToLightBlue1Act_->setChecked(t == UiStyle::LightBlue1Theme);
+      setThemeToLightBlue2Act_->setChecked(t == UiStyle::LightBlue2Theme);
+      setThemeToOrange1Act_->setChecked(t == UiStyle::Orange1Theme);
+      setThemeToOrange2Act_->setChecked(t == UiStyle::Orange2Theme);
+      setThemeToPink1Act_->setChecked(t == UiStyle::Pink1Theme);
+      setThemeToPink2Act_->setChecked(t == UiStyle::Pink2Theme);
+      setThemeToPurple1Act_->setChecked(t == UiStyle::Purple1Theme);
+      setThemeToPurple2Act_->setChecked(t == UiStyle::Purple2Theme);
+      setThemeToRed1Act_->setChecked(t == UiStyle::Red1Theme);
+      setThemeToRed2Act_->setChecked(t == UiStyle::Red2Theme);
+      setThemeToYellow1Act_->setChecked(t == UiStyle::Yellow1Theme);
+      setThemeToYellow2Act_->setChecked(t == UiStyle::Yellow2Theme);
     }
 
     // Language
@@ -2767,13 +2805,21 @@ MainWindow::resizeEvent(QResizeEvent *event)
 void
 MainWindow::changeEvent(QEvent *event)
 {
-  // Enable full screen since it is buggy.
-  //if (event &&
-  //    event->type() == QEvent::WindowStateChange &&
-  //    windowState() == Qt::WindowMaximized)
-  //  hub_->setFullScreenVideoMode();
-  //else
-    Base::changeEvent(event);
+  Q_ASSERT(event);
+  Base::changeEvent(event);
+
+  switch (event->type()) {
+  case QEvent::WindowStateChange:
+#ifdef Q_WS_X11
+    if (windowState() == Qt::WindowFullScreen)
+      QtX::setWindowInputShape(osdWindow_->winId(), osdPlayer_->pos(), osdPlayer_->rect());
+    else
+      QtX::zeroWindowInputShape(osdWindow_->winId());
+#endif // Q_WS_X11
+    break;
+
+  default: break;
+  }
 }
 
 // - Keyboard events -
@@ -2891,17 +2937,23 @@ MainWindow::closeEvent(QCloseEvent *event)
   if (tray_)
     tray_->hide();
 
-  //invalidateRecent();
-  Settings::globalInstance()->setRecent(recentFiles_);
+  // Save settings
+  Settings *settings = Settings::globalInstance();
 
-  Settings::globalInstance()->setThemeId(UiStyle::globalInstance()->theme());
+  //invalidateRecent();
+  settings->setRecentFiles(recentFiles_);
+
+  settings->setRecentPath(recentPath_);
+
+  settings->setThemeId(UiStyle::globalInstance()->theme());
+
+  settings->setThemeId(UiStyle::globalInstance()->theme());
 
   // Disabled for saving closing time orz
   //if (server_->isConnected() && server_->isAuthorized())
   //  server_->logout();
 
-  // Save settings
-  Settings::globalInstance()->setTranslateEnabled(isTranslateEnabled());
+  settings->setTranslateEnabled(isTranslateEnabled());
 
   // Wait for thread pool
   if (QThreadPool::globalInstance()->activeThreadCount()) {
@@ -3211,7 +3263,7 @@ MainWindow::login(const QString &userName, const QString &encryptedPassword, boo
     if (Settings::globalInstance()->updateDate() != today) {
       bool updated = server_->isSoftwareUpdated();
       if (!updated)
-        warn(tr("new version released, check here: ") + G_UPDATEPAGE_URL);
+        warn(tr("new version released, check here: ") + "\n" + G_UPDATEPAGE_URL);
 
       Settings::globalInstance()->setUpdateDate(today);
     }
@@ -3323,6 +3375,8 @@ MainWindow::openProcessPath(const QString &path)
     pid = QTH->getProcessIdByName(processName);
   }
 
+  addRecent(path);
+
   signalView_->processView()->refresh();
   if (!pid) {
     warn(tr("failed to start process") + QString(" (name = %1)").arg(processName));
@@ -3333,7 +3387,6 @@ MainWindow::openProcessPath(const QString &path)
     auto *slot = new MainWindow_slot_::OpenProcessId(pid, this);
     QTimer::singleShot(G_OPENPROCESS_TIMEOUT, slot, SLOT(openProcessId()));
   }
-  addRecent(path);
 }
 
 void
@@ -3673,8 +3726,8 @@ MainWindow::openSource(const QString &path)
   if (fi.suffix().compare("lnk", Qt::CaseInsensitive) == 0) {
     QString lnk = QtWin::resolveLink(path, winId());
     if (!lnk.isEmpty()) {
-      openSource(lnk);
       addRecent(path);
+      openSource(lnk);
     } else
       warn(tr("invalid lnk") + ": " + path );
   } else
@@ -3786,28 +3839,30 @@ MainWindow::setSubtitleColorToDefault()
 
 // - Themes -
 
-void MainWindow::setThemeToDefault() { UiStyle::globalInstance()->setTheme(UiStyle::DefaultTheme); }
-void MainWindow::setThemeToRandom() { UiStyle::globalInstance()->setTheme(UiStyle::RandomTheme); }
-void MainWindow::setThemeToBlack1() { UiStyle::globalInstance()->setTheme(UiStyle::BlackTheme1); }
-void MainWindow::setThemeToBlack2() { UiStyle::globalInstance()->setTheme(UiStyle::BlackTheme2); }
-void MainWindow::setThemeToBlue1() { UiStyle::globalInstance()->setTheme(UiStyle::BlueTheme1); }
-void MainWindow::setThemeToBlue2() { UiStyle::globalInstance()->setTheme(UiStyle::BlueTheme2); }
-void MainWindow::setThemeToBrown1() { UiStyle::globalInstance()->setTheme(UiStyle::BrownTheme1); }
-void MainWindow::setThemeToBrown2() { UiStyle::globalInstance()->setTheme(UiStyle::BrownTheme2); }
-void MainWindow::setThemeToGreen1() { UiStyle::globalInstance()->setTheme(UiStyle::GreenTheme1); }
-void MainWindow::setThemeToGreen2() { UiStyle::globalInstance()->setTheme(UiStyle::GreenTheme2); }
-void MainWindow::setThemeToLightBlue1() { UiStyle::globalInstance()->setTheme(UiStyle::LightBlueTheme1); }
-void MainWindow::setThemeToLightBlue2() { UiStyle::globalInstance()->setTheme(UiStyle::LightBlueTheme2); }
-void MainWindow::setThemeToOrange1() { UiStyle::globalInstance()->setTheme(UiStyle::OrangeTheme1); }
-void MainWindow::setThemeToOrange2() { UiStyle::globalInstance()->setTheme(UiStyle::OrangeTheme2); }
-void MainWindow::setThemeToPink1() { UiStyle::globalInstance()->setTheme(UiStyle::PinkTheme1); }
-void MainWindow::setThemeToPink2() { UiStyle::globalInstance()->setTheme(UiStyle::PinkTheme2); }
-void MainWindow::setThemeToPurple1() { UiStyle::globalInstance()->setTheme(UiStyle::PurpleTheme1); }
-void MainWindow::setThemeToPurple2() { UiStyle::globalInstance()->setTheme(UiStyle::PurpleTheme2); }
-void MainWindow::setThemeToRed1() { UiStyle::globalInstance()->setTheme(UiStyle::RedTheme1); }
-void MainWindow::setThemeToRed2() { UiStyle::globalInstance()->setTheme(UiStyle::RedTheme2); }
-void MainWindow::setThemeToYellow1() { UiStyle::globalInstance()->setTheme(UiStyle::YellowTheme1); }
-void MainWindow::setThemeToYellow2() { UiStyle::globalInstance()->setTheme(UiStyle::YellowTheme2); }
+#define SET_THEME_TO(_theme) \
+  void \
+  MainWindow::setThemeTo##_theme() \
+  { \
+    UiStyle::globalInstance()->setTheme(UiStyle::_theme##Theme); \
+\
+    if (hub_->isMediaTokenMode() && hub_->isFullScreenPlayerMode() && \
+        player_->hasMedia() && \
+        !UiStyle::isAeroAvailable()) \
+      UiStyle::globalInstance()->setBlackBackground(this); \
+  }
+
+  SET_THEME_TO(Default) SET_THEME_TO(Random)
+  SET_THEME_TO(Black1)  SET_THEME_TO(Black2)
+  SET_THEME_TO(Blue1)   SET_THEME_TO(Blue2)
+  SET_THEME_TO(Brown1)  SET_THEME_TO(Brown2)
+  SET_THEME_TO(Green1)  SET_THEME_TO(Green2)
+  SET_THEME_TO(LightBlue1) SET_THEME_TO(LightBlue2)
+  SET_THEME_TO(Orange1) SET_THEME_TO(Orange2)
+  SET_THEME_TO(Pink1)   SET_THEME_TO(Pink2)
+  SET_THEME_TO(Purple1) SET_THEME_TO(Purple2)
+  SET_THEME_TO(Red1)    SET_THEME_TO(Red2)
+  SET_THEME_TO(Yellow1) SET_THEME_TO(Yellow2)
+#undef SET_THEME_TO
 
 void
 MainWindow::enableWindowTransparency()

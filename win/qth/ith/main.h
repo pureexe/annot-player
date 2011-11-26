@@ -2,10 +2,10 @@
 // iht/main.h  10/14/2011
 #include "ith/common.h"
 #include "ith/sys.h"
-#include "language.h"
-#pragma comment(linker,"/manifestdependency:\"type='win32' "\
-  "name='Microsoft.Windows.Common-Controls' version='6.0.0.0' "\
-  "processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
+
+//#pragma comment(linker,"/manifestdependency:\"type='win32' "\
+//  "name='Microsoft.Windows.Common-Controls' version='6.0.0.0' "\
+//  "processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
 
 #define GLOBAL extern
 #define SHIFT_JIS 0x3A4
@@ -39,8 +39,8 @@ GLOBAL CRITICAL_SECTION detach_cs;
 DWORD WINAPI RecvThread(LPVOID lpThreadParameter);
 DWORD WINAPI CmdThread(LPVOID lpThreadParameter);
 
-void CopyToClipboard(void* str,bool unicode, int len);
-void ConsoleOutput(LPCWSTR text);
+//void CopyToClipboard(void* str,bool unicode, int len);
+//void ConsoleOutput(LPCWSTR text);
 DWORD  GetCurrentPID();
 DWORD  GetPIDByHandle(HANDLE h);
 DWORD  GetHookManByPID(DWORD pid);

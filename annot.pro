@@ -9,6 +9,7 @@ SUBDIRS = \
     module
 win32:  SUBDIRS += win
 mac:    SUBDIRS += mac
+unix:   SUBDIRS += unix
 
 OTHER_FILES = \
   ChangeLog \

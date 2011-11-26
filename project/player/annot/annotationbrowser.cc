@@ -53,8 +53,8 @@ AnnotationBrowser::createLayout()
 
     layout->setContentsMargins(0, 0, 0, 0);
     setContentsMargins(9, 9, 9, 9);
-  }
-  setLayout(layout);
+
+  } setLayout(layout);
 
   // Set initial states
 

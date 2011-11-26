@@ -7,7 +7,7 @@
 #include "ith/sys.h"
 #include <qt_windows.h>
 
-#define DEBUG "ith:sys"
+//#define DEBUG "ith:sys"
 #include "module/debug/debug.h"
 
 // - Global variables -
@@ -26,7 +26,7 @@ HANDLE root_obj;
 HANDLE codepage_section, thread_man_section;
 HANDLE thread_man_mutex;
 
-BYTE launch_time[0x10];
+//BYTE launch_time[0x10];
 
 BYTE LeadByteTable[0x100]={
   1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
@@ -78,6 +78,22 @@ namespace { // anonymous, functions
     push -2
     call dword ptr [NtTerminateThread]
   } }
+
+  inline DWORD GetHash(LPSTR str)
+  {
+    DWORD hash = 0;
+    for (;*str;str++)
+      hash = ((hash>>7)|(hash<<25)) + (*str);
+    return hash;
+  }
+
+  inline DWORD GetHash(LPWSTR str)
+  {
+    DWORD hash = 0;
+    for (;*str;str++)
+      hash = ((hash>>7)|(hash<<25)) + (*str);
+    return hash;
+  }
 
 } // anonymous namespace
 
@@ -503,6 +519,7 @@ IthCloseSystemService()
   NtClose(thread_man_section);
 
 }
+/*
 //Check for existence of a file in current folder.
 //For ITH main module, it's ITH folder. For target process it's the target process's current folder.
 BOOL IthCheckFile(LPWSTR file)
@@ -603,6 +620,7 @@ HANDLE IthCreateFile(LPWSTR name, DWORD option, DWORD share, DWORD disposition)
     return hFile;
   else return INVALID_HANDLE_VALUE;
 }
+
 //Create a directory file in current folder.
 HANDLE IthCreateDirectory(LPWSTR name)
 {
@@ -618,6 +636,7 @@ HANDLE IthCreateDirectory(LPWSTR name)
     return hFile;
   else return INVALID_HANDLE_VALUE;
 }
+
 //Analogous to IthCreateFile, but with full NT path.
 HANDLE IthCreateFileFullPath(LPWSTR full_path, DWORD option, DWORD share, DWORD disposition)
 {
@@ -636,7 +655,6 @@ HANDLE IthCreateFileFullPath(LPWSTR full_path, DWORD option, DWORD share, DWORD 
   else return INVALID_HANDLE_VALUE;
 }
 
-/*
 //Prompt for file name.
 HANDLE IthPromptCreateFile(DWORD option, DWORD share, DWORD disposition)
 {
@@ -744,47 +762,51 @@ HANDLE IthCreateMutex(LPWSTR name, BOOL InitialOwner, DWORD* exist)
   else
     return INVALID_HANDLE_VALUE;
 }
-HANDLE IthOpenMutex(LPWSTR name)
+
+HANDLE
+IthOpenMutex(LPWSTR name)
 {
   UNICODE_STRING us;
-  RtlInitUnicodeString(&us,name);
-  OBJECT_ATTRIBUTES oa={sizeof(oa),root_obj,&us,0,0,0};
+  ::RtlInitUnicodeString(&us,name);
+  OBJECT_ATTRIBUTES oa = { sizeof(oa), root_obj, &us, 0, 0, 0 };
   HANDLE hMutex;
-  if (NT_SUCCESS(NtOpenMutant(&hMutex,MUTEX_ALL_ACCESS,&oa)))
+  if (NT_SUCCESS(::NtOpenMutant(&hMutex, MUTEX_ALL_ACCESS, &oa)))
     return hMutex;
-  else return INVALID_HANDLE_VALUE;
-}
-BOOL IthReleaseMutex(HANDLE hMutex)
-{
-  return NT_SUCCESS(NtReleaseMutant(hMutex,0));
-}
-DWORD IthWaitForSingleObject(HANDLE hObject, DWORD dwTime)
-{
-  __asm{
-    sub esp,0x8
-    xor ecx,ecx
-    cmp dwTime,-1
-    cmove eax,ecx
-    je _wait
-    mov eax,0x2710
-    mov ecx,dwTime
-    mul ecx
-    neg eax
-    adc edx,0
-    neg edx
-    mov [esp],eax
-    mov [esp+4],edx
-    mov eax,esp
-_wait:
-    push eax
-    push 0
-    push hObject
-    call dword ptr [NtWaitForSingleObject]
-    add esp,0x8
-  }
+  else
+    return INVALID_HANDLE_VALUE;
 }
 
-HANDLE IthCreateThread(LPVOID lpStartAddress, DWORD dwParam, HANDLE hProc)
+BOOL
+IthReleaseMutex(HANDLE hMutex)
+{ return NT_SUCCESS(::NtReleaseMutant(hMutex, 0)); }
+
+DWORD
+IthWaitForSingleObject(HANDLE hObject, DWORD dwTime)
+{ __asm{
+  sub esp,0x8
+  xor ecx,ecx
+  cmp dwTime,-1
+  cmove eax,ecx
+  je _wait
+  mov eax,0x2710
+  mov ecx,dwTime
+  mul ecx
+  neg eax
+  adc edx,0
+  neg edx
+  mov [esp],eax
+  mov [esp+4],edx
+  mov eax,esp
+_wait:
+  push eax
+  push 0
+  push hObject
+  call dword ptr [NtWaitForSingleObject]
+  add esp,0x8
+} }
+
+HANDLE
+IthCreateThread(LPVOID lpStartAddress, DWORD dwParam, HANDLE hProc)
 {
   DOUT("IthCreateThread:enter");
   HANDLE hThread; // return value
@@ -928,7 +950,8 @@ HANDLE IthCreateThread(LPVOID lpStartAddress, DWORD dwParam, HANDLE hProc)
 
 //Query module export table. Return function address if find.
 //Similar to GetProcAddress
-DWORD GetExportAddress(DWORD hModule,DWORD hash)
+DWORD
+GetExportAddress(DWORD hModule,DWORD hash)
 {
   IMAGE_DOS_HEADER *DosHdr;
   IMAGE_NT_HEADERS *NtHdr;
@@ -937,61 +960,56 @@ DWORD GetExportAddress(DWORD hModule,DWORD hash)
   char* pcExportAddr,*pcFuncPtr,*pcBuffer;
   DWORD dwReadAddr,dwFuncAddr,dwFuncName;
   WORD wOrd;
-  DosHdr=(IMAGE_DOS_HEADER*)hModule;
-  if (IMAGE_DOS_SIGNATURE==DosHdr->e_magic)
-  {
-    dwReadAddr=hModule+DosHdr->e_lfanew;
-    NtHdr=(IMAGE_NT_HEADERS*)dwReadAddr;
-    if (IMAGE_NT_SIGNATURE==NtHdr->Signature)
-    {
-      pcExportAddr=(char*)((DWORD)hModule+
-        (DWORD)NtHdr->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_EXPORT].VirtualAddress);
-      if (pcExportAddr==0) return 0;
-      ExtDir=(IMAGE_EXPORT_DIRECTORY*)pcExportAddr;
-      pcExportAddr=(char*)((DWORD)hModule+(DWORD)ExtDir->AddressOfNames);
 
-      for (uj=0;uj<ExtDir->NumberOfNames;uj++)
-      {
-        dwFuncName=*(DWORD*)pcExportAddr;
-        pcBuffer=(char*)((DWORD)hModule+dwFuncName);
-        if (GetHash(pcBuffer)==hash)
-        {
-          pcFuncPtr=(char*)((DWORD)hModule+(DWORD)ExtDir->AddressOfNameOrdinals+(uj*sizeof(WORD)));
-          wOrd=*(WORD*)pcFuncPtr;
-          pcFuncPtr=(char*)((DWORD)hModule+(DWORD)ExtDir->AddressOfFunctions+(wOrd*sizeof(DWORD)));
-          dwFuncAddr=*(DWORD*)pcFuncPtr;
-          return hModule+dwFuncAddr;
+  DosHdr = (IMAGE_DOS_HEADER*)hModule;
+  if (IMAGE_DOS_SIGNATURE == DosHdr->e_magic) {
+    dwReadAddr = hModule+DosHdr->e_lfanew;
+    NtHdr = (IMAGE_NT_HEADERS*)dwReadAddr;
+    if (IMAGE_NT_SIGNATURE == NtHdr->Signature) {
+      pcExportAddr = (char*)((DWORD)hModule+
+        (DWORD)NtHdr->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_EXPORT].VirtualAddress);
+      if (pcExportAddr == 0)
+        return 0;
+      ExtDir = (IMAGE_EXPORT_DIRECTORY*)pcExportAddr;
+      pcExportAddr = (char*)((DWORD)hModule + (DWORD)ExtDir->AddressOfNames);
+
+      for (uj = 0; uj < ExtDir->NumberOfNames; uj++) {
+        dwFuncName = *(DWORD*)pcExportAddr;
+        pcBuffer = (char*)((DWORD)hModule + dwFuncName);
+        if (GetHash(pcBuffer) == hash) {
+          pcFuncPtr = (char*)((DWORD)hModule + (DWORD)ExtDir->AddressOfNameOrdinals + (uj*sizeof(WORD)));
+          wOrd = *(WORD*)pcFuncPtr;
+          pcFuncPtr = (char*)((DWORD)hModule + (DWORD)ExtDir->AddressOfFunctions + (wOrd*sizeof(DWORD)));
+          dwFuncAddr = *(DWORD*)pcFuncPtr;
+          return hModule + dwFuncAddr;
         }
-        pcExportAddr+=sizeof(DWORD);
+        pcExportAddr += sizeof(DWORD);
       }
     }
   }
   return 0;
 }
 
-void IthSleep(int time)
-{
-  __asm
-  {
-    mov eax,0x2710
-    mov ecx,time
-    mul ecx
-    neg eax
-    adc edx,0
-    neg edx
-    push edx
-    push eax
-    push esp
-    push 0
-    call dword ptr [NtDelayExecution]
-    add esp,8
-  }
-}
+void
+IthSleep(int time)
+{ __asm {
+  mov eax,0x2710
+  mov ecx,time
+  mul ecx
+  neg eax
+  adc edx,0
+  neg edx
+  push edx
+  push eax
+  push esp
+  push 0
+  call dword ptr [NtDelayExecution]
+  add esp,8
+} }
 
-void IthSystemTimeToLocalTime(LARGE_INTEGER* time)
-{
-  time->QuadPart-=GetTimeBias()->QuadPart;
-}
+void
+IthSystemTimeToLocalTime(LARGE_INTEGER *time)
+{ time->QuadPart -= GetTimeBias()->QuadPart; }
 
 } // extern "C"
 

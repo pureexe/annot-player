@@ -619,7 +619,6 @@ Player::setEncoding(const QString &encoding)
   emit encodingChanged();
 }
 
-
 QByteArray
 Player::decode(const QString &input) const
 {

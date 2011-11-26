@@ -259,6 +259,26 @@ main(int argc, char *argv[])
   //w.openPath("d:/i/sample.mp4");
   //w.openPath("file:///d:/i/sample.mp4");
   //w.openPath("/Volumes/local/i/sample.mp4");
+
+  /*
+  Display *dpy = QX11Info::display();
+  XEvent xev;
+  Atom wm_state = XInternAtom(dpy, "_NET_WM_STATE", False);
+  Atom fullscreen = XInternAtom(dpy, "_NET_WM_STATE_FULLSCREEN", False);
+
+  memset(&xev, 0, sizeof(xev));
+  xev.type = ClientMessage;
+  xev.xclient.window = w.winId();
+  xev.xclient.message_type = wm_state;
+  xev.xclient.format = 32;
+  xev.xclient.data.l[0] = 1;
+  xev.xclient.data.l[1] = fullscreen;
+  xev.xclient.data.l[2] = 0;
+
+  XSendEvent(dpy, DefaultRootWindow(dpy), False,
+  SubstructureNotifyMask, &xev);
+  */
+
   return a.exec();
 }
 

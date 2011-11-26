@@ -60,8 +60,8 @@ LiveDialog::LiveDialog(QWidget *parent)
     row1->addWidget(comboBox_);
     row2->addWidget(okButton);
     row2->addWidget(cancelButton);
-  }
-  setLayout(rows);
+
+  } setLayout(rows);
 
   /*
   QGridLayout *layout = new QGridLayout; {

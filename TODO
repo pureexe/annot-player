@@ -1,36 +1,43 @@
+upload 0.1.0.2 -- final version
+
 server
-- make annot.me look better
-- finish japanese version wiki
 - replace screen shots to avoid copyright problem!!!!
+- make annot.me look better
 
-push to 2ch nijiura
-push to hf 4chan
-
-0.1.0.2 -- stable
 client:
+- mac
+  - fixme: DVD play in mac: mouse single click not working
+  - need send event to child window
+- linux:
+  - CHECKPOINT deploy
+   - https://wiki.kubuntu.org/PackagingGuide/QtApplication
+    - http://wiki.freegeek.org/index.php/Basic_Debian_Packaging
+    - https://wiki.ubuntu.com/PackagingGuide/Basic?action=show&redirect=HowToBuildDebianPackagesFromScratch
+    - https://wiki.ubuntu.com/PackagingGuide/Complete
+  - todo: annot-player.desktop and icon
+
+publish to 2ch nijiura
+publish to hf 4chan
+
+0.1.0.3 -- stable
+client:
+- todo: windows hook: directly send windows event to root instead of make qevent myself
+- fixme: ubuntu11 full screen hide unity top bar
+- fixme: ubuntu minimize - restore error
 - minmize button in context menu, then restore at tray
 - Fixed recent file menu bug.
 - compact context menu
 - move current Annotations/Token/Alias into DataManager from TokenView and AnnotationView
-- add openFile function in windows through register
+- add openFile function in windows through registry
 - save ng list to settings
 - debug offline mode to see if token/annot/alias offline submission works or not
 - reduce dout files, only focus on specific files to debug
 - fixme: make mainwindow as root again in windows
-- fixme: DVD play in mac: mouse single click not working
 - fixme: edit time, edit comments, etc; otherwise, make them readonly
 - fixme: recent filt bug
 - Finish bless/block user/annots/aliases at client side
   - add block/bless/curse user
 - listen to activity of process, restore normal mode if not active
-
-wiki:
-- mension manga/picture support
-- japanese/chinese introduction
-
-publish to ktxp.com s1-2b caso xueku-sc
-publish to hf 4chan
-publish to 2ch niji
 
 ## NextStep:
 
@@ -74,7 +81,7 @@ window2window to streaming galgame
 - server: linux, xrdp + wine
   xming open source
 
-## FixMes
+## FIXMEs
 change soap back to rest
 add another rest module on server side
 

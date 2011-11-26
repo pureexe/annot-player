@@ -78,11 +78,13 @@ struct HookParam //0x24
   WORD length_offset;
   BYTE hook_len,recover_len;
 };
+
 struct SendParam
 {
   DWORD type;
   HookParam hp;
 };
+
 class Hook //0x80
 {
 public:
@@ -99,8 +101,7 @@ protected:
   BYTE original[0x10];
 };
 
-extern HANDLE hHeap;
-
+//extern HANDLE hHeap;
 
 // jichi: 10/15/2011: FIXME: This overload will infect the entire program,
 // even source files that exclude this header, which is unexpected.

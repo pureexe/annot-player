@@ -1,10 +1,10 @@
-// iht/pipe.cc
+// ith/pipe.cc
 // 10/14/2011
 #include "ith/main.h"
 #include "ith/hookman.h"
 #include "ith/cmdq.h"
 
-#define DEBUG "ith:pipe"
+//#define DEBUG "ith:pipe"
 #include "module/debug/debug.h"
 
 #define NAMED_PIPE_DISCONNECT 1
@@ -17,22 +17,23 @@ CRITICAL_SECTION detach_cs;
 HANDLE hDetachEvent;
 extern HANDLE hPipeExist;
 
-BYTE* Filter(BYTE *str, int len)
-{
-  WORD s;
-  while (1)
+namespace { // anonymous
+  BYTE* Filter(BYTE *str, int len)
   {
-    s=*(WORD*)str;
-    if (len>=2)
-    {
-      if (s==0x4081||s==0x3000||s<=0x20) {str+=2;len-=2;}
+    WORD s;
+    while (true) {
+      s = *(WORD*)str;
+      if (len >= 2) {
+        if (s==0x4081 || s==0x3000 || s<=0x20) { str+=2; len-=2; }
+        else break;
+      }
+      else if (str[0]<=0x20) { str++; len--; }
       else break;
     }
-    else if (str[0]<=0x20) {str++;len--;}
-    else break;
+    return str;
   }
-  return str;
-}
+} // anonymous namespace
+
 void CreateNewPipe()
 {
   DWORD acl[7]={0x1C0002,1,0x140000,GENERIC_READ|GENERIC_WRITE|SYNCHRONIZE,0x101,0x1000000,0};
@@ -45,11 +46,19 @@ void CreateNewPipe()
   LARGE_INTEGER time={-500000,-1};
   if (!NT_SUCCESS(NtCreateNamedPipeFile(&hTextPipe,GENERIC_READ|SYNCHRONIZE,&oa,&ios,
     FILE_SHARE_WRITE,FILE_OPEN_IF,FILE_SYNCHRONOUS_IO_NONALERT,1,1,0,-1,0x1000,0x1000,&time)))
-  {ConsoleOutput(ErrorCreatePipe);return;}
+  {
+    //ConsoleOutput(ErrorCreatePipe);
+    DOUT("CreateNewPipe: error");
+    return;
+  }
   RtlInitUnicodeString(&us,command);
   if (!NT_SUCCESS(NtCreateNamedPipeFile(&hCmdPipe,GENERIC_WRITE|SYNCHRONIZE,&oa,&ios,
     FILE_SHARE_READ,FILE_OPEN_IF,FILE_SYNCHRONOUS_IO_NONALERT,1,1,0,-1,0x1000,0x1000,&time)))
-  {ConsoleOutput(ErrorCreatePipe);return;}
+  {
+    //ConsoleOutput(ErrorCreatePipe);
+    DOUT("CreateNewPipe: error");
+    return;
+  }
   hThread=IthCreateThread(RecvThread,(DWORD)hTextPipe);
   man->RegisterPipe(hTextPipe,hCmdPipe,hThread);
 }
@@ -77,12 +86,14 @@ void DetachFromProcess(DWORD pid)
   NtSetEvent(hDetachEvent,0);
   NtSetEvent(hPipeExist,0);
 }
+/*
 void OutputDWORD(DWORD d)
 {
   WCHAR str[0x20];
   swprintf(str,L"%.8X",d);
   ConsoleOutput(str);
 }
+*/
 DWORD WINAPI RecvThread(LPVOID lpThreadParameter)
 {
   HANDLE hTextPipe=(HANDLE)lpThreadParameter, hDisconnect;
@@ -138,7 +149,7 @@ DWORD WINAPI RecvThread(LPVOID lpThreadParameter)
       case -1:
         swprintf((LPWSTR)buff,L"%.4d:",pid);
         buff[0xA]=0x20;
-        ConsoleOutput((LPWSTR)buff);
+        //ConsoleOutput((LPWSTR)buff);
         break;
       }
     }
@@ -156,18 +167,20 @@ DWORD WINAPI RecvThread(LPVOID lpThreadParameter)
   man->UnRegisterProcess(pid);
   NtClearEvent(hDetachEvent);
   LeaveCriticalSection(&detach_cs);
-  if (running)
-  {
-    swprintf((LPWSTR)buff,FormatDetach,pid);
-    ConsoleOutput((LPWSTR)buff);
-  }
+  //if (running)
+  //{
+  //  swprintf((LPWSTR)buff,FormatDetach,pid);
+  //  ConsoleOutput((LPWSTR)buff);
+  //}
+  //DOUT("succeed");
   delete buff;
   return 0;
 }
 DWORD WINAPI CmdThread(LPVOID lpThreadParameter)
 {
-  CommandQueue* q=(CommandQueue*)lpThreadParameter;
-  while (running) q->SendCommand();
+  CommandQueue *q = (CommandQueue*)lpThreadParameter;
+  while (running)
+    q->SendCommand();
   return 0;
 }
 
@@ -196,17 +209,23 @@ CommandQueue::~CommandQueue()
 }
 void CommandQueue::AddRequest(const SendParam& sp, DWORD pid)
 {
-  if (current==used) ConsoleOutput(ErrorCmdQueueFull);
+  if (current==used) {
+    //ConsoleOutput(ErrorCmdQueueFull);
+    DOUT("AddRequiest: command queue is full");
+  }
   EnterCriticalSection(&rw);
   queue[current]=sp;
-  if (pid) pid_associate[current++]=pid;
+  if (pid)
+    pid_associate[current++]=pid;
   else
   {
     pid=man->GetCurrentPID();
-    if (pid) pid_associate[current++]=pid;
+    if (pid)
+      pid_associate[current++]=pid;
     else
     {
-      ConsoleOutput(ErrorNoAttach);
+      //ConsoleOutput(ErrorNoAttach);
+      DOUT("AddRequest:error: not attached ");
       goto _request_exit;
     }
   }

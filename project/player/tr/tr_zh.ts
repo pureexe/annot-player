@@ -303,7 +303,7 @@
     <message>
         <location filename="../eventlogger.cc" line="89"/>
         <source>caching fonts on first launch ... this could take up to 10min, don&apos;t panic!</source>
-        <translation>播放使魔：正在缓冲字体，可能会花费10分钟以上...主人坐下喝杯茶吧！</translation>
+        <translation>播放使魔：正在缓冲媒体，可能会花费10分钟以上...主人坐下喝杯茶吧！</translation>
     </message>
     <message>
         <location filename="../eventlogger.cc" line="98"/>
@@ -601,57 +601,57 @@
         <translation>侦听使魔：刚刚让程序启动</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3328"/>
+        <location filename="../mainwindow.cc" line="3330"/>
         <source>failed to start process</source>
         <translation>侦听使魔：开始程序失败</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3332"/>
+        <location filename="../mainwindow.cc" line="3334"/>
         <source>wait %1 seconds for process to start ...</source>
         <translation>侦听使魔：等待%1秒程序启动...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3346"/>
+        <location filename="../mainwindow.cc" line="3347"/>
         <source>openning process</source>
         <translation>播放使魔：正在打开程序</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3434"/>
+        <location filename="../mainwindow.cc" line="3435"/>
         <source>connecting server to change anonymous status ...</source>
         <translation>通信使魔：远程魔法修改匿名属性中...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3446"/>
+        <location filename="../mainwindow.cc" line="3447"/>
         <source>failed to change user anonymous state</source>
         <translation>通信使魔：远程魔法修改匿名属性失败</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3456"/>
+        <location filename="../mainwindow.cc" line="3457"/>
         <source>you are anonymous now</source>
         <translation>通信使魔：主人已经匿名了</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3458"/>
+        <location filename="../mainwindow.cc" line="3459"/>
         <source>you are not anonymous now</source>
         <translation>通信使魔：主人不再匿名了</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3471"/>
+        <location filename="../mainwindow.cc" line="3472"/>
         <source>connecting server to change language ...</source>
         <translation>通信使魔：远程魔法修改语言属性中...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3483"/>
+        <location filename="../mainwindow.cc" line="3484"/>
         <source>failed to change user language</source>
         <translation>通信使魔：远程魔法修改语言属性失败</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3492"/>
+        <location filename="../mainwindow.cc" line="3493"/>
         <source>your language is </source>
         <translation>通信属性：主人的语言属性是</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3561"/>
+        <location filename="../mainwindow.cc" line="3562"/>
         <source>restart the app to use the new language</source>
         <translation>播放使魔：使用新的语言需要重启播放器</translation>
     </message>
@@ -680,12 +680,12 @@
         <translation type="obsolete">火星文</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3668"/>
+        <location filename="../mainwindow.cc" line="3669"/>
         <source>file does not exist</source>
         <translation>播放使魔：文件不存在</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3679"/>
+        <location filename="../mainwindow.cc" line="3680"/>
         <source>invalid lnk</source>
         <translation>播放使魔：快捷方式好像无效</translation>
     </message>
@@ -900,52 +900,52 @@
 <context>
     <name>SignalHub</name>
     <message>
-        <location filename="../signal/signalhub.cc" line="80"/>
+        <location filename="../signal/signalhub.cc" line="81"/>
         <source>switched to signal mode</source>
         <translation>播放使魔：切换到信号模式</translation>
     </message>
     <message>
-        <location filename="../signal/signalhub.cc" line="81"/>
+        <location filename="../signal/signalhub.cc" line="82"/>
         <source>switched to media mode</source>
         <translation>播放使魔：切换到媒体模式</translation>
     </message>
     <message>
-        <location filename="../signal/signalhub.cc" line="105"/>
+        <location filename="../signal/signalhub.cc" line="106"/>
         <source>switched to normal player mode</source>
         <translation>播放使魔：切换到通常播放界面</translation>
     </message>
     <message>
-        <location filename="../signal/signalhub.cc" line="106"/>
+        <location filename="../signal/signalhub.cc" line="107"/>
         <source>switched to full screen player mode</source>
         <translation>播放使魔：切换到透明播放界面</translation>
     </message>
     <message>
-        <location filename="../signal/signalhub.cc" line="107"/>
+        <location filename="../signal/signalhub.cc" line="108"/>
         <source>switched to mini player mode</source>
         <translation>播放使魔：切换到mini播放界面</translation>
     </message>
     <message>
-        <location filename="../signal/signalhub.cc" line="141"/>
+        <location filename="../signal/signalhub.cc" line="142"/>
         <source>switched to normal video mode</source>
         <translation>播放使魔：切换到通常电影模式</translation>
     </message>
     <message>
-        <location filename="../signal/signalhub.cc" line="142"/>
+        <location filename="../signal/signalhub.cc" line="143"/>
         <source>switched to full screen video mode</source>
         <translation>播放使魔：切换到全屏电影模式</translation>
     </message>
     <message>
-        <location filename="../signal/signalhub.cc" line="166"/>
+        <location filename="../signal/signalhub.cc" line="167"/>
         <source>switched to normal play mode</source>
         <translation>播放使魔：切换到通常播放模式</translation>
     </message>
     <message>
-        <location filename="../signal/signalhub.cc" line="167"/>
+        <location filename="../signal/signalhub.cc" line="168"/>
         <source>switched to synchronized play mode</source>
         <translation>播放使魔：切换到同步播放模式</translation>
     </message>
     <message>
-        <location filename="../signal/signalhub.cc" line="168"/>
+        <location filename="../signal/signalhub.cc" line="169"/>
         <source>switched to live play mode</source>
         <translation>播放使魔：切换到生播放模式</translation>
     </message>

@@ -1,5 +1,5 @@
 # VLCKit.pri
-# Since 7/30/2011
+# 7/30/2011
 # TODO: Make this into a framework!
 
 INCLUDEPATH += $$PWD/..

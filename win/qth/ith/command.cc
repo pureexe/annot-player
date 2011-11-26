@@ -1,23 +1,27 @@
-// iht/command.cc
+// ith/command.cc
 // 10/14/2011
 #include "ith/cmdq.h"
 //#include "hookman.h"
 //#include <intrin.h>
 
+//#define DEBUG "ith:command"
+#include "module/debug/debug.h"
+
 #define IthTIMING
 #ifdef IthTIMING
-#define TestTime(x) {\
-      LARGE_INTEGER fre,begin,end;\
-      NtQueryPerformanceCounter(&begin,&fre);\
-      x;\
-      NtQueryPerformanceCounter(&end,0);\
-      WCHAR str[0x40];\
-      swprintf(str,L"Time spent: %.6lfs",(end.QuadPart-begin.QuadPart)/(double)fre.QuadPart);\
-      ConsoleOutput(str);\
-      }
+  #define TestTime(x) \
+  { \
+    LARGE_INTEGER fre,begin,end;\
+    NtQueryPerformanceCounter(&begin,&fre);\
+    x;\
+    NtQueryPerformanceCounter(&end,0);\
+    WCHAR str[0x40];\
+    swprintf(str,L"Time spent: %.6lfs",(end.QuadPart-begin.QuadPart)/(double)fre.QuadPart);\
+    ConsoleOutput(str);\
+  }
 #else
-#define TestTime(x) x;
-#endif
+  #define TestTime(x) x;
+#endif // IthTIMING
 static const DWORD table[]={0x100,0x100,0x100,0x100};
 BYTE* GetSystemInformation()
 {
@@ -67,7 +71,7 @@ bool PerformSingleThread(DWORD pid, DWORD &dwBase, DWORD addr=0, ThreadOperation
     {
     case OutputInformation:
     {
-      WCHAR name[0x100],str[0x100];
+      WCHAR name[0x100];//str[0x100];
       id.UniqueProcess = pid;
       id.UniqueThread = 0;
       if (!NT_SUCCESS(NtOpenProcess(&hProc, PROCESS_QUERY_INFORMATION, &att, &id)))
@@ -75,8 +79,8 @@ bool PerformSingleThread(DWORD pid, DWORD &dwBase, DWORD addr=0, ThreadOperation
       if (!NT_SUCCESS(NtQueryVirtualMemory(hProc, address. Win32StartAddress,
         MemorySectionName, name, 0x200, 0))) return false;
 
-      swprintf(str, L"%.4X 0x%.8X:%s",dwTid, address.Win32StartAddress, wcsrchr(name, L'\\') + 1);
-      ConsoleOutput(str);
+      //swprintf(str, L"%.4X 0x%.8X:%s",dwTid, address.Win32StartAddress, wcsrchr(name, L'\\') + 1);
+      //ConsoleOutput(str);
       status = 0;
     }
     break;
@@ -269,7 +273,8 @@ bool GetProcessPath(DWORD pid, LPWSTR path)
     return flag;
   }
   else return false;
-};
+}
+/*
 int OutputProcessList(int all=0)
 {
   BYTE *pbBuffer = GetSystemInformation();
@@ -313,6 +318,7 @@ int OutputProcessList(int all=0)
   delete pbBuffer;
   return 1;
 }
+*/
 int Convert(LPWSTR str, DWORD *num, LPWSTR delim)
 {
   if (num == 0) return -1;
@@ -358,7 +364,8 @@ bool Parse(LPWSTR cmd, HookParam& hp)
     if (t < 0)
     {
 _error:
-      ConsoleOutput(L"Syntax error.");
+      //ConsoleOutput(L"Syntax error.");
+      DOUT("Syntax error");
       return false;
     }
     offset = wcschr(offset , delim[t]);
@@ -527,7 +534,8 @@ DWORD CommandQueue::ProcessCommand(LPWSTR cmd, DWORD pid)
       }
       break;
     default:
-      ConsoleOutput(ErrorSyntax);
+      //ConsoleOutput(ErrorSyntax);
+      DOUT("AddLink: syntax error");
     }
     break;
   /*}
@@ -609,8 +617,8 @@ DWORD CommandQueue::ProcessCommand(LPWSTR cmd, DWORD pid)
       case L'a': t = 1; break;
       case L'l': break;
       }
-      ConsoleOutput(L"Process list:");
-      TestTime(OutputProcessList(t));
+      //ConsoleOutput(L"Process list:");
+      //TestTime(OutputProcessList(t));
       break;
     }
   case L'l':

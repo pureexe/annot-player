@@ -1,5 +1,5 @@
 // vlckit_qt.mm
-// Since 7/30/2011
+// 7/30/2011
 
 #include "vlckit_qt.h"
 #import "VLCKit/VLCKit.h"

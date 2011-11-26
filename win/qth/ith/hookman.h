@@ -3,6 +3,7 @@
 #include "ith/text.h"
 #include "ith/AVL.h"
 #include <qt_windows.h>
+
 class BitMap
 {
 public:
@@ -28,7 +29,6 @@ public:
   void Set(WORD number);
   void Clear(WORD number);
   void Traverse(CustomFilterCallBack callback);
-
 };
 
 class CustomFilterMultiByte : public BitMap

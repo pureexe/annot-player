@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
         <key>CFBundleIconFile</key>
-        <string>@ICON@</string>
+        <string>player</string>
         <key>CFBundlePackageType</key>
         <string>APPL</string>
         <key>CFBundleGetInfoString</key>
@@ -11,11 +11,11 @@
         <key>CFBundleSignature</key>
         <string>????</string>
         <key>CFBundleVersion</key>
-        <string>0.1.0.1</string>
+        <string>0.1.0.2</string>
         <key>CFBundleIdentifier</key>
         <string>me.annot.player</string>
         <key>CFBundleExecutable</key>
-        <string>@EXECUTABLE@</string>
+        <string>Annot Player</string>
         <key>LSArchitecturePriority</key>
         <array>
                 <string>x86_64</string>

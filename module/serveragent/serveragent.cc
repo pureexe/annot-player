@@ -98,7 +98,7 @@ ServerAgent::login(const QString &userName, const QString &passwordDigest)
   bool updated = isSoftwareUpdated();
 #ifndef DEBUG
   Q_UNUSED(updated);
-#endif DEBUG
+#endif // DEBUG
   DOUT("login: isSoftwareUpdated =" << updated);
 
   user_ = proxy_->selectUser(userName, passwordDigest);

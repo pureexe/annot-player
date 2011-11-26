@@ -134,4 +134,4 @@ private:
   bool playing_, paused_, stopped_;
 };
 
-#endif SIGNALHUB_H
+#endif // SIGNALHUB_H

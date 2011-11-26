@@ -279,7 +279,7 @@
     <message>
         <location filename="../eventlogger.cc" line="89"/>
         <source>caching fonts on first launch ... this could take up to 10min, don&apos;t panic!</source>
-        <translation>魔法使い：フォントカシューを準備中…しばらくお待ちください！</translation>
+        <translation>魔法使い：カシューを準備中…しばらくお待ちください！</translation>
     </message>
     <message>
         <location filename="../eventlogger.cc" line="98"/>
@@ -589,57 +589,57 @@
         <translation>呪術使い：プロセスを起動しました</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3328"/>
+        <location filename="../mainwindow.cc" line="3330"/>
         <source>failed to start process</source>
         <translation>呪術使い：プロセスの起動に失敗した</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3332"/>
+        <location filename="../mainwindow.cc" line="3334"/>
         <source>wait %1 seconds for process to start ...</source>
         <translation>呪術使い：%1秒待つ…</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3346"/>
+        <location filename="../mainwindow.cc" line="3347"/>
         <source>openning process</source>
         <translation>魔法使い：プロセスを起動中</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3434"/>
+        <location filename="../mainwindow.cc" line="3435"/>
         <source>connecting server to change anonymous status ...</source>
         <translation>通信使い：匿名の設定を変更中…</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3446"/>
+        <location filename="../mainwindow.cc" line="3447"/>
         <source>failed to change user anonymous state</source>
         <translation>通信使い：匿名の変更に失敗した</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3456"/>
+        <location filename="../mainwindow.cc" line="3457"/>
         <source>you are anonymous now</source>
         <translation>通信使い：匿名状態になった</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3458"/>
+        <location filename="../mainwindow.cc" line="3459"/>
         <source>you are not anonymous now</source>
         <translation>通信使い：公開状態になった</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3471"/>
+        <location filename="../mainwindow.cc" line="3472"/>
         <source>connecting server to change language ...</source>
         <translation>通信使い：言語設定を変更中…</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3483"/>
+        <location filename="../mainwindow.cc" line="3484"/>
         <source>failed to change user language</source>
         <translation>通信使い：言語の変更に失敗した</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3492"/>
+        <location filename="../mainwindow.cc" line="3493"/>
         <source>your language is </source>
         <translation>通信使い：今の言語は</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3561"/>
+        <location filename="../mainwindow.cc" line="3562"/>
         <source>restart the app to use the new language</source>
         <translation>魔法使い：プログラムを再起動してください</translation>
     </message>
@@ -668,12 +668,12 @@
         <translation type="obsolete">エイリアン語</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3668"/>
+        <location filename="../mainwindow.cc" line="3669"/>
         <source>file does not exist</source>
         <translation>魔法使い：ファイルが見つかりません</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3679"/>
+        <location filename="../mainwindow.cc" line="3680"/>
         <source>invalid lnk</source>
         <translation>魔法使い：lnkのターゲットファイルが見つかりません</translation>
     </message>
@@ -832,52 +832,52 @@
 <context>
     <name>SignalHub</name>
     <message>
-        <location filename="../signal/signalhub.cc" line="80"/>
+        <location filename="../signal/signalhub.cc" line="81"/>
         <source>switched to signal mode</source>
         <translation>魔法使い：ゲーム・モードに変更</translation>
     </message>
     <message>
-        <location filename="../signal/signalhub.cc" line="81"/>
+        <location filename="../signal/signalhub.cc" line="82"/>
         <source>switched to media mode</source>
         <translation>魔法使い：メデア・モードに変更</translation>
     </message>
     <message>
-        <location filename="../signal/signalhub.cc" line="105"/>
+        <location filename="../signal/signalhub.cc" line="106"/>
         <source>switched to normal player mode</source>
         <translation>魔法使い：ノーマルに変更</translation>
     </message>
     <message>
-        <location filename="../signal/signalhub.cc" line="106"/>
+        <location filename="../signal/signalhub.cc" line="107"/>
         <source>switched to full screen player mode</source>
         <translation>魔法使い：フルスクリーンに変更</translation>
     </message>
     <message>
-        <location filename="../signal/signalhub.cc" line="107"/>
+        <location filename="../signal/signalhub.cc" line="108"/>
         <source>switched to mini player mode</source>
         <translation>魔法使い：Miniモードに変更</translation>
     </message>
     <message>
-        <location filename="../signal/signalhub.cc" line="141"/>
+        <location filename="../signal/signalhub.cc" line="142"/>
         <source>switched to normal video mode</source>
         <translation>魔法使い：ノーマルに変更</translation>
     </message>
     <message>
-        <location filename="../signal/signalhub.cc" line="142"/>
+        <location filename="../signal/signalhub.cc" line="143"/>
         <source>switched to full screen video mode</source>
         <translation>魔法使い：フルスクリーンに変更</translation>
     </message>
     <message>
-        <location filename="../signal/signalhub.cc" line="166"/>
+        <location filename="../signal/signalhub.cc" line="167"/>
         <source>switched to normal play mode</source>
         <translation>魔法使い：ノーマルに変更</translation>
     </message>
     <message>
-        <location filename="../signal/signalhub.cc" line="167"/>
+        <location filename="../signal/signalhub.cc" line="168"/>
         <source>switched to synchronized play mode</source>
         <translation>魔法使い：同期モードに変更</translation>
     </message>
     <message>
-        <location filename="../signal/signalhub.cc" line="168"/>
+        <location filename="../signal/signalhub.cc" line="169"/>
         <source>switched to live play mode</source>
         <translation>魔法使い：生モードに変更</translation>
     </message>
@@ -1309,7 +1309,7 @@
     <message>
         <location filename="translatormanager.cc" line="180"/>
         <source>Annot Player</source>
-        <translation></translation>
+        <translation>弾幕プレーヤー</translation>
     </message>
     <message>
         <location filename="translatormanager.cc" line="183"/>

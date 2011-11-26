@@ -1,5 +1,5 @@
 # vlckit_qt.pri
-# Since 6/30/2011
+# 6/30/2011
 
 include(../../config.pri)
 include($$ROOTDIR/mac/qtstep/qtstep.pri)

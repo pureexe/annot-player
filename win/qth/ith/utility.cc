@@ -4,7 +4,7 @@
 #include "ith/hookman.h"
 #include <QtCore>
 
-#define DEBUG "ith:utility"
+//#define DEBUG "ith:utility"
 #include "module/debug/debug.h"
 
 #define MAX_ENTRY 0x40
@@ -774,7 +774,7 @@ void HookManager::RegisterProcess(DWORD pid, DWORD hookman, DWORD module, DWORD 
     &oa,&id))) record[register_count-1].process_handle=hProc;
   else
   {
-    man->AddConsoleOutput(ErrorOpenProcess);
+    //man->AddConsoleOutput(ErrorOpenProcess);
     return;
   }
 
@@ -863,20 +863,23 @@ void HookManager::AddLink(WORD from, WORD to)
   if (to_thread&&from_thread)
   {
     if (from_thread->Link()==to_thread)
-      AddConsoleOutput(ErrorLinkExist);
+      //AddConsoleOutput(ErrorLinkExist);
+      DOUT("AddLink: link already exists");
     else if (to_thread->CheckCycle(from_thread))
-      AddConsoleOutput(ErrorCylicLink);
+      //AddConsoleOutput(ErrorCylicLink);
+      DOUT("AddLink: cyclic link");
     else
     {
       from_thread->Link()=to_thread;
       from_thread->LinkNumber()=to;
-      WCHAR str[0x40];
-      swprintf(str,FormatLink,from,to);
-      AddConsoleOutput(str);
+      //WCHAR str[0x40];
+      //swprintf(str,FormatLink,from,to);
+      //AddConsoleOutput(str);
     }
   }
   else
-    AddConsoleOutput(ErrorLink);
+    //AddConsoleOutput(ErrorLink);
+    DOUT("AddLink: error link");
   LeaveCriticalSection(&hmcs);
 }
 void HookManager::DispatchText(DWORD pid, BYTE* text, DWORD hook, DWORD retn, DWORD spl, int len)
@@ -1876,10 +1879,13 @@ void TextThread::CopyLastSentence(LPWSTR str)
     }
   }
 }
+/*
 void TextThread::CopyLastToClipboard()
 {
   CopyToClipboard(storage+last_sentence,(status&USING_UNICODE)>0,used-last_sentence);
 }
+*/
+/*
 void TextThread::ExportTextToFile(LPWSTR filename)
 {
   HANDLE hFile=IthCreateFile(filename,FILE_WRITE_DATA,0,FILE_OPEN_IF);
@@ -1904,6 +1910,7 @@ void TextThread::ExportTextToFile(LPWSTR filename)
   NtClose(hFile);
   LeaveCriticalSection(&cs_store);
 }
+*/
 void TextThread::SetComment(LPWSTR str)
 {
   if (comment) delete comment;
@@ -1973,6 +1980,8 @@ DWORD Hash(LPWSTR module, int length)
   }
   return hash;
 }
+
+/*
 static char clipboard_buffer[0x400];
 void CopyToClipboard(void* str,bool unicode, int len)
 {
@@ -1983,7 +1992,6 @@ void CopyToClipboard(void* str,bool unicode, int len)
     else
       DOUT(QString(":(%1)").arg(unicode) << QString::fromLocal8Bit((LPSTR)str, len));
   }
-  /*
   //if (clipboard_flag)
   if (str)
   {
@@ -2014,13 +2022,14 @@ void CopyToClipboard(void* str,bool unicode, int len)
       //CloseClipboard();
     }
   }
-  */
   DOUT("CopyToClipboard:exit");
 }
-void ConsoleOutput(const LPCWSTR text)
-{
-  if (running) man->AddConsoleOutput(text);
-}
+*/
+
+//void ConsoleOutput(const LPCWSTR text)
+//{
+//  //if (running) man->AddConsoleOutput(text);
+//}
 DWORD  GetCurrentPID()
 {
   return man->GetCurrentPID();

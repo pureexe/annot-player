@@ -52,10 +52,8 @@ HEADERS += \
     ith/cmdq.h \
     ith/common.h \
     ith/hookman.h \
-    ith/language.h \
     ith/main.h \
     ith/main_template.h \
-    ith/resource.h \
     ith/sys.h \
     ith/text.h
 
@@ -64,7 +62,6 @@ SOURCES += \
     qth.cc \
     ith/command.cc \
     ith/inject.cc \
-    ith/language.cc \
     ith/pipe.cc \
     ith/utility.cc \
     ith/sys.cc
@@ -80,3 +77,6 @@ OTHER_FILES += \
     test.pro
 
 # EOF
+
+
+

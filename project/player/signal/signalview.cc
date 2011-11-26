@@ -81,8 +81,7 @@ SignalView::SignalView(QWidget *parent)
     header->setContentsMargins(0, 0, 0, 0);
     center->setContentsMargins(0, 0, 0, 0);
     rows->setContentsMargins(4, 0, 4, 4);
-  }
-  setLayout(rows);
+  } setLayout(rows);
 
   connect(messageView_, SIGNAL(hookSelected(int)), SLOT(selectHookAndHide(int)));
 

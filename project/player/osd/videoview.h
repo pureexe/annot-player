@@ -30,11 +30,16 @@ public:
   explicit VideoView(QWidget *parent = 0);
   ~VideoView();
 
-public slots:
+protected:
+  //virtual bool event(QEvent *event); ///< \override
   //virtual void mousePressEvent(QMouseEvent *event);
   //virtual void mouseMoveEvent(QMouseEvent *event);
   //virtual void mouseReleaseEvent(QMouseEvent *event);
   //virtual void mouseDoubleClickEvent(QMouseEvent *event);
+
+#ifdef Q_WS_X11
+  virtual bool x11Event(XEvent *event); ///< \override
+#endif // Q_WS_X11
 
 #ifdef USE_WIN_HOOK
   // Be careful to add child widget to this class!!

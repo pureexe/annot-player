@@ -96,8 +96,7 @@ SeekDialog::SeekDialog(QWidget *parent)
 
     row2->addWidget(okButton);
     row2->addWidget(cancelButton);
-  }
-  setLayout(rows);
+  } setLayout(rows);
 
   setTabOrder(ssEdit_, mmEdit_);
   setTabOrder(mmEdit_, hhEdit_);

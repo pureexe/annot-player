@@ -158,8 +158,7 @@ AddAliasDialog::AddAliasDialog(QWidget *parent)
 
     row5->addWidget(okButton_);
     row5->addWidget(cancelButton_);
-  }
-  setLayout(rows);
+  } setLayout(rows);
 
   // Initial status
   invalidateOKButton();

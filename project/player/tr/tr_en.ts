@@ -490,67 +490,67 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3328"/>
+        <location filename="../mainwindow.cc" line="3330"/>
         <source>failed to start process</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3332"/>
+        <location filename="../mainwindow.cc" line="3334"/>
         <source>wait %1 seconds for process to start ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3346"/>
+        <location filename="../mainwindow.cc" line="3347"/>
         <source>openning process</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3434"/>
+        <location filename="../mainwindow.cc" line="3435"/>
         <source>connecting server to change anonymous status ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3446"/>
+        <location filename="../mainwindow.cc" line="3447"/>
         <source>failed to change user anonymous state</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3456"/>
+        <location filename="../mainwindow.cc" line="3457"/>
         <source>you are anonymous now</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3458"/>
+        <location filename="../mainwindow.cc" line="3459"/>
         <source>you are not anonymous now</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3471"/>
+        <location filename="../mainwindow.cc" line="3472"/>
         <source>connecting server to change language ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3483"/>
+        <location filename="../mainwindow.cc" line="3484"/>
         <source>failed to change user language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3492"/>
+        <location filename="../mainwindow.cc" line="3493"/>
         <source>your language is </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3561"/>
+        <location filename="../mainwindow.cc" line="3562"/>
         <source>restart the app to use the new language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3668"/>
+        <location filename="../mainwindow.cc" line="3669"/>
         <source>file does not exist</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3679"/>
+        <location filename="../mainwindow.cc" line="3680"/>
         <source>invalid lnk</source>
         <translation type="unfinished"></translation>
     </message>
@@ -705,52 +705,52 @@
 <context>
     <name>SignalHub</name>
     <message>
-        <location filename="../signal/signalhub.cc" line="80"/>
+        <location filename="../signal/signalhub.cc" line="81"/>
         <source>switched to signal mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../signal/signalhub.cc" line="81"/>
+        <location filename="../signal/signalhub.cc" line="82"/>
         <source>switched to media mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../signal/signalhub.cc" line="105"/>
+        <location filename="../signal/signalhub.cc" line="106"/>
         <source>switched to normal player mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../signal/signalhub.cc" line="106"/>
+        <location filename="../signal/signalhub.cc" line="107"/>
         <source>switched to full screen player mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../signal/signalhub.cc" line="107"/>
+        <location filename="../signal/signalhub.cc" line="108"/>
         <source>switched to mini player mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../signal/signalhub.cc" line="141"/>
+        <location filename="../signal/signalhub.cc" line="142"/>
         <source>switched to normal video mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../signal/signalhub.cc" line="142"/>
+        <location filename="../signal/signalhub.cc" line="143"/>
         <source>switched to full screen video mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../signal/signalhub.cc" line="166"/>
+        <location filename="../signal/signalhub.cc" line="167"/>
         <source>switched to normal play mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../signal/signalhub.cc" line="167"/>
+        <location filename="../signal/signalhub.cc" line="168"/>
         <source>switched to synchronized play mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../signal/signalhub.cc" line="168"/>
+        <location filename="../signal/signalhub.cc" line="169"/>
         <source>switched to live play mode</source>
         <translation type="unfinished"></translation>
     </message>

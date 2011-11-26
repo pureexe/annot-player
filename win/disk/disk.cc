@@ -75,12 +75,13 @@ Disk::geometryForHandle(void *handle)
   DWORD dwBytesReturned;
   HANDLE hDevice = (HANDLE)handle;
   BOOL bResult = ::DeviceIoControl(
-        hDevice, // device to be queried
-        IOCTL_DISK_GET_DRIVE_GEOMETRY, // operation to perform
-        0, 0, // no input buffer
-        &dgDisk, sizeof(dgDisk), // output buffer
-        &dwBytesReturned, // # bytes returned
-        (LPOVERLAPPED)0 ); // synchronous I/O
+    hDevice, // device to be queried
+    IOCTL_DISK_GET_DRIVE_GEOMETRY, // operation to perform
+    0, 0, // no input buffer
+    &dgDisk, sizeof(dgDisk), // output buffer
+    &dwBytesReturned, // # bytes returned
+    (LPOVERLAPPED)0 // synchronous I/O
+  );
 
   if (bResult) {
     Q_ASSERT(dwBytesReturned == sizeof(dgDisk));
@@ -166,13 +167,14 @@ Disk::open(OpenMode mode)
   Q_ASSERT(isValidDeviceFileName(fileName_));
 
   HANDLE hDisk = ::CreateFileA(
-        fileName_.toAscii(), // device file name
-        GENERIC_READ, // Read-only
-        FILE_SHARE_READ, // Read-only
-        0, // Default security attributes
-        OPEN_EXISTING,
-        0, // File attribute
-        0); // Template file
+    fileName_.toAscii(), // device file name
+    GENERIC_READ, // Read-only
+    FILE_SHARE_READ, // Read-only
+    0, // Default security attributes
+    OPEN_EXISTING,
+    0, // File attribute
+    0 // Template file
+  );
 
   if (hDisk != INVALID_HANDLE_VALUE) {
     DOUT("open: succeeded");

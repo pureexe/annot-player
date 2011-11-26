@@ -54,9 +54,12 @@ public:
   qint64 annotationLanguages() const; ///< Annotation language
   void setAnnotationLanguages(qint64 lang);
 
-  QStringList recent() const;
-  void setRecent(const QStringList &files);
-  void clearRecent();
+  QStringList recentFiles() const;
+  void setRecentFiles(const QStringList &files);
+  void clearRecentFiles();
+
+  QString recentPath() const;
+  void setRecentPath(const QString &path);
 
   // - Constructions -
 protected:

@@ -229,8 +229,8 @@ BlacklistView::createLayout()
     header->setContentsMargins(0, 0, 0, 0);
     rows->setContentsMargins(0, 0, 0, 0);
     setContentsMargins(9, patch, 9, patch);
-  }
-  setLayout(rows);
+
+  } setLayout(rows);
 }
 
 void

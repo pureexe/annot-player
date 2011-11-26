@@ -3,6 +3,9 @@
 
 #include "osdwindow.h"
 #include "core/eventlistener.h"
+#ifdef Q_WS_X11
+  #include "unix/qtx/qtx.h"
+#endif // Q_WS_X11
 #include <QtGui>
 
 #define DEBUG "OsdWindow"
@@ -10,19 +13,28 @@
 
 // - Constructions -
 
-#define WINDOW_FLAGS ( \
+#define WINDOW_FLAGS \
+( \
   Qt::SplashScreen | \
   Qt::FramelessWindowHint | \
   Qt::CustomizeWindowHint | \
-  Qt::WindowStaysOnTopHint )
+  Qt::WindowStaysOnTopHint \
+)
 
 OsdWindow::OsdWindow(QWidget *parent)
   : Base(parent, WINDOW_FLAGS), listener_(0)
 {
   setContentsMargins(0, 0, 0, 0);
-
   setAttribute(Qt::WA_TranslucentBackground);
   //setAttribute(Qt::WA_MacNoClickThrough);
+
+  // FIXME: As a trade off, dragging annot etc not working for mouse event anymore
+  // Need a machanism similar to global hook.
+#ifdef Q_WS_X11
+  //setAttribute(Qt::WA_TransparentForMouseEvents);
+  //setAttribute(Qt::WA_X11DoNotAcceptFocus);
+  //setFocusPolicy(Qt::NoFocus);
+#endif // Q_WS_X11
 
   //poller_ = new QTimer(this);
   //connect(poller_, SIGNAL(timeout()), SLOT(repaint()));
@@ -51,20 +63,35 @@ OsdWindow::closeEvent(QCloseEvent *event)
     event->ignore();
 }
 
+
+void
+OsdWindow::resizeEvent(QResizeEvent *event)
+{
+  Base::resizeEvent(event);
+#ifdef Q_WS_X11
+  QtX::zeroWindowInputShape(winId());
+#endif // Q_WS_X11
+}
+
 // - OSD -
+
 void
 OsdWindow::showInOsdMode()
 {
+#ifdef Q_WS_WIN
+  showFullScreen();
+#else
+  QRect fullScreen =
 #ifdef Q_WS_MAC
-  QRect fullScreen = QApplication::desktop()->screenGeometry(this);
+      QApplication::desktop()->screenGeometry(this)
+#else
+      QApplication::desktop()->availableGeometry(this)
+#endif // Q_WS_MAC
+  ;
   setGeometry(fullScreen);
   move(0, 0); // make sure it is sitting at (0, 0)
   show();
-
-#else
-  showFullScreen();
-#endif // Q_WS_MAC
-
+#endif // Q_WS_WIN
 }
 
 // EOF

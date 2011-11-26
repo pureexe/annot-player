@@ -12,7 +12,7 @@ enum { ALPHA = 0 };
 
 // - Options -
 #define INIT_WINDOW_SIZE   QSize(640, 480)
-#define INIT_OPEN_PATH     QDir::homePath()
+//#define INIT_OPEN_PATH     QDir::homePath()
 
 //#define USE_MODE_DEBUG
 
@@ -22,7 +22,7 @@ enum { ALPHA = 0 };
 #define G_DOMAIN        "me.annot.player"
 #define G_ORGANIZATION  "Annot"
 #define G_APPLICATION   "Player"
-#define G_VERSION       "0.1.0.1"
+#define G_VERSION       "0.1.0.2"
 #define G_HOMEPAGE      "http://annot.me"
 #define G_WIKIPAGE      G_HOMEPAGE "/w"
 #define G_WIKIPAGE_FAQ  G_WIKIPAGE "/index.php?title=Manual:FAQ"
@@ -30,7 +30,6 @@ enum { ALPHA = 0 };
 #define G_DOWNLOADPAGE  "http://code.google.com/p/annot-player/downloads"
 #define G_EMAIL         "AnnotCloud@gmail.com"
 #define G_LICENSE       "GNU GPL v3"
-
 
 // - Shared options -
 #define G_POLLING_TIMEOUT  100     // In msecs
@@ -67,10 +66,11 @@ enum { ALPHA = 0 };
 
 #define G_FORMAT_PROGRAM_(...)  __VA_ARGS__ "exe" __VA_ARGS__ "lnk"
 #define G_FORMAT_PROGRAM        G_FORMAT_PROGRAM_(" *.")
+#define G_FORMAT_MEDIA          G_FORMAT_VIDEO G_FORMAT_AUDIO G_FORMAT_PICTURE
 #ifdef USE_MODE_SIGNAL
-  #define G_FORMAT_SUPPORTED      G_FORMAT_VIDEO G_FORMAT_AUDIO G_FORMAT_PICTURE G_FORMAT_PROGRAM
+  #define G_FORMAT_SUPPORTED    G_FORMAT_PROGRAM G_FORMAT_MEDIA
 #else
-  #define G_FORMAT_SUPPORTED      G_FORMAT_VIDEO G_FORMAT_AUDIO G_FORMAT_PICTURE
+  #define G_FORMAT_SUPPORTED    G_FORMAT_MEDIA
 #endif // USE_MODE_SIGNAL
 
 #define VLC_AUTOHIDE_TIMEOUT    1500    // in msecs, same as VLC
@@ -86,7 +86,7 @@ enum { ALPHA = 0 };
 #elif defined (Q_WS_MAC)
   #define G_PATH_LOGS   QtMac::homeLogsPath() + "/" G_ORGANIZATION "/" G_APPLICATION
 #else
-  #define G_PATH_LOGS   "."
+  #define G_PATH_LOGS   QDir::homePath() + "/.annot/player"
 #endif
 #define G_PATH_DEBUG    G_PATH_LOGS "/" "debug.txt"
 

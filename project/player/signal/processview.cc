@@ -117,8 +117,7 @@ ProcessView::createLayout()
     header->setContentsMargins(0, 0, 0, 0);
     rows->setContentsMargins(0, 0, 0, 0);
     setContentsMargins(0, 0, 0, 0);
-  }
-  setLayout(rows);
+  } setLayout(rows);
 }
 
 void

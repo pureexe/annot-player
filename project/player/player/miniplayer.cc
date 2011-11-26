@@ -68,10 +68,6 @@ MiniPlayerUi::createLayout()
     row2->addWidget(prefixLineEdit());
     row2->addWidget(lineEdit());
 
-    int top = 0;
-    if (UiStyle::isAeroAvailable())
-      top = 9;
-
     // void setContentsMargins(int left, int top, int right, int bottom);
     rows->setContentsMargins(9, 9, 9, 0);
     row0->setContentsMargins(0, 0, 0, 0);

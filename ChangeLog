@@ -1,8 +1,16 @@
 # ChangeLog
 
 Project: annot.player
+Versial: 0.1.0.2
+Date: 11/25/2011
+- Added support for playing disc images such as ISO/MDF/BIN/IMG.
+- Added support for Ubuntu 11.
+- Improved mouse hook in windows to reduce GUI blocking.
+- Minor bug fix.
+
+Project: annot.player
 Versial: 0.1.0.1
-Date: 11/?/2011
+Date: 11/22/2011
 - Added annotation counting.
 - Delete Caches script removed. Caches will be automatically invalidated if required.
 - Minor bug fix.

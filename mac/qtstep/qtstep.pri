@@ -1,5 +1,5 @@
 # qtstep.pri
-# Since 6/30/2011
+# 6/30/2011
 
 INCLUDEPATH += $$PWD
 

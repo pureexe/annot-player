@@ -9,6 +9,7 @@
 #endif // _MSC_VER
 #ifdef __GNUC__
   #pragma GCC diagnostic ignored "-Wunused-parameter" // unused function parameters
+  #pragma GCC diagnostic ignored "-Wsequence-point" // soap::bufidx
 #endif // __GNUC__
 
 #endif // SOAPDEFS_H

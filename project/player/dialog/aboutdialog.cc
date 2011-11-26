@@ -80,8 +80,7 @@ AboutDialog::AboutDialog(QWidget *parent)
   QVBoxLayout *col = new QVBoxLayout; {
     col->addWidget(textEdit_);
     col->addWidget(okButton, 0, Qt::AlignHCenter); // stretch = 0
-  }
-  setLayout(col);
+  } setLayout(col);
 
   // l, t, r, b
   int patch = 0;

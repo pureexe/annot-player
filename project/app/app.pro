@@ -39,10 +39,10 @@ win32 {
     RC_FILE += app.rc
 }
 
-mac {
-    ICON = app.icns
-    QMAKE_INFO_PLIST = Info.plist
-}
+#mac {
+#    ICON = app.icns
+#    QMAKE_INFO_PLIST = Info.plist
+#}
 
 
 # EOF

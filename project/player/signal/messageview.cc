@@ -111,8 +111,7 @@ MessageView::MessageView(QWidget *parent)
     // left, top, right, bottom
     header->setContentsMargins(0, 0, 0, 0);
     rows->setContentsMargins(9, 6, 9, 9);
-  }
-  setLayout(rows);
+  } setLayout(rows);
 
   // Start up status
   clear();

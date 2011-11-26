@@ -4,6 +4,7 @@
 // mainwindow.h
 // 6/30/2011
 
+#include "config.h"
 #include "core/cloud/alias.h"
 #include "core/cloud/annotation.h"
 #ifdef USE_MODE_SIGNAL
@@ -442,18 +443,18 @@ private:
 
   QPoint dragPos_;
 
-  QString lastOpenedPath_;
+  QString recentPath_;
 
   Grabber *grabber_;
 
   // - Menus and actions -
 
-#ifdef Q_WS_MAC
-  QMenuBar *menuBar_;
+#ifndef Q_WS_WIN
+  //QMenuBar *menuBar_;
   QMenu *fileMenu_,
         //*viewMenu_,
         *helpMenu_;
-#endif // Q_WS_MAC
+#endif // !Q_WS_WIN
 
   QMenu *contextMenu_,
         *advancedMenu_,

@@ -11,6 +11,8 @@ include(serveragent/serveragent.pri)
 include(translator/translator.pri)
 
 TEMPLATE = subdirs
-SUBDIRS = webbrowser
+
+!unix: SUBDIRS = webbrowser
+unix:include(webbrowser/webbrowser_static.pri)
 
 # EOF

@@ -134,7 +134,6 @@ namespace { // anoymous, WindowsNotifier
 
 // - DesktopWindowManager -
 
-
 #ifdef USE_STATIC_LIB
   #define DWM_API
 #else

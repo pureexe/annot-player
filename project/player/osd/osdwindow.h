@@ -29,13 +29,16 @@ public slots:
 protected:
   void forward(QEvent *event);
 
+  //virtual bool event(QEvent *event); ///< \override
+
   virtual void contextMenuEvent(QContextMenuEvent *event); ///< override
   virtual void mouseMoveEvent(QMouseEvent *event); ///< override
   virtual void mousePressEvent(QMouseEvent *event); ///< override
   virtual void mouseReleaseEvent(QMouseEvent *event); ///< override
   virtual void mouseDoubleClickEvent(QMouseEvent *event); ///< override
 
-  virtual void closeEvent(QCloseEvent *event); ///< override
+  virtual void closeEvent(QCloseEvent *event); ///< \override
+  virtual void resizeEvent(QResizeEvent *event); ///< \override
 };
 
 #endif // OSDWINDOW_H

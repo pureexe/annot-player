@@ -1,0 +1,24 @@
+# debian/control
+# 11/26/2011
+Source: annot-player
+Standards-Version: 0.1.0.2
+Section: video
+Maintainer: Annot Cloud <annotcloud@gmail.com>
+Priority: optional
+Build-Depends: debhelper (>= 8.0.0), libvlc-dev (>= 1.1.12), qt-sdk
+Homepage: http://annot.me
+Vcs-Git: git://code.google.com/p/annot-player
+Vcs-Browser: http://code.google.com/p/annot-player/source/checkout
+#Recommends:
+#Suggests:
+#Breaks:
+#Replaces:
+#Provides:
+
+Package: annot-player
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, vlc (>= 1.1.12), libqtcore4(>= 4.7.4), libqtgui4(>= 4.7.4), libqtwebkit4(>= 4.7.4), libqt4-dbus(>= 4.7.4), libqt4-network(>= 4.7.4), libqt4-sql(>= 4.7.4), libqt4-xml(>= 4.7.4)
+Description: media and annot player
+ Annot Player is a software for sharing annotations while playing movies, music, pictures, and games (esp. Japanese AVG).
+ All annotations are saved onto the Cloud at http://annot.me.
+ Official wiki: http://annot.me/w.

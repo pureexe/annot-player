@@ -4,8 +4,10 @@
 
 #include "ith/main.h"
 #include "ith/main_template.h"
-#include <QObject>
-QT_FORWARD_DECLARE_CLASS(QTimer)
+
+//#include <QObject>
+//QT_FORWARD_DECLARE_CLASS(QTimer)
+
 class TextBuffer : public MyVector<BYTE, 0x800>
 {
 public:
@@ -64,8 +66,8 @@ public:
   void ComboSelectCurrent();
   void GetEntryString(LPWSTR str);
   void CopyLastSentence(LPWSTR str);
-  void CopyLastToClipboard();
-  void ExportTextToFile(LPWSTR filename);
+  //void CopyLastToClipboard();
+  //void ExportTextToFile(LPWSTR filename);
   void AdjustPrevRepeat(DWORD len);
   void PrevRepeatLength(DWORD &len);
   void SetComment(LPWSTR);
@@ -106,4 +108,5 @@ private:
   DWORD status,repeat_detect_limit;
   DWORD last_sentence,prev_sentence,sentence_length,repeat_index,last_time;
 };
+
 // EOF

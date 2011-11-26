@@ -39,28 +39,28 @@ UiStyle::backgroundImagePath() const
 
   const char *rc = 0;
   switch (t) {
-  case BlackTheme1:     rc = RC_IMAGE_AERO_BLACK1; break;
-  case BlackTheme2:     rc = RC_IMAGE_AERO_BLACK2; break;
-  case BlueTheme1:      rc = RC_IMAGE_AERO_BLUE1; break;
-  case BlueTheme2:      rc = RC_IMAGE_AERO_BLUE2; break;
-  case BrownTheme1:     rc = RC_IMAGE_AERO_BROWN1; break;
-  case BrownTheme2:     rc = RC_IMAGE_AERO_BROWN2; break;
-  case GreenTheme1:     rc = RC_IMAGE_AERO_GREEN1; break;
-  case GreenTheme2:     rc = RC_IMAGE_AERO_GREEN2; break;
-  case LightBlueTheme1: rc = RC_IMAGE_AERO_LIGHTBLUE1; break;
-  case LightBlueTheme2: rc = RC_IMAGE_AERO_LIGHTBLUE2; break;
-  case OrangeTheme1:    rc = RC_IMAGE_AERO_ORANGE1; break;
-  case OrangeTheme2:    rc = RC_IMAGE_AERO_ORANGE2; break;
-  case PinkTheme1:      rc = RC_IMAGE_AERO_PINK1; break;
-  case PinkTheme2:      rc = RC_IMAGE_AERO_PINK2; break;
-  case PurpleTheme1:    rc = RC_IMAGE_AERO_PURPLE1; break;
-  case PurpleTheme2:    rc = RC_IMAGE_AERO_PURPLE2; break;
-  case RedTheme1:       rc = RC_IMAGE_AERO_RED1; break;
-  case RedTheme2:       rc = RC_IMAGE_AERO_RED2; break;
-  case YellowTheme1:    rc = RC_IMAGE_AERO_YELLOW1; break;
-  case YellowTheme2:    rc = RC_IMAGE_AERO_YELLOW2; break;
-  case WindowsTheme1:   rc = RC_IMAGE_AERO_WIN1; break;
-  case WindowsTheme2:   rc = RC_IMAGE_AERO_WIN2; break;
+  case Black1Theme:     rc = RC_IMAGE_AERO_BLACK1; break;
+  case Black2Theme:     rc = RC_IMAGE_AERO_BLACK2; break;
+  case Blue1Theme:      rc = RC_IMAGE_AERO_BLUE1; break;
+  case Blue2Theme:      rc = RC_IMAGE_AERO_BLUE2; break;
+  case Brown1Theme:     rc = RC_IMAGE_AERO_BROWN1; break;
+  case Brown2Theme:     rc = RC_IMAGE_AERO_BROWN2; break;
+  case Green1Theme:     rc = RC_IMAGE_AERO_GREEN1; break;
+  case Green2Theme:     rc = RC_IMAGE_AERO_GREEN2; break;
+  case LightBlue1Theme: rc = RC_IMAGE_AERO_LIGHTBLUE1; break;
+  case LightBlue2Theme: rc = RC_IMAGE_AERO_LIGHTBLUE2; break;
+  case Orange1Theme:    rc = RC_IMAGE_AERO_ORANGE1; break;
+  case Orange2Theme:    rc = RC_IMAGE_AERO_ORANGE2; break;
+  case Pink1Theme:      rc = RC_IMAGE_AERO_PINK1; break;
+  case Pink2Theme:      rc = RC_IMAGE_AERO_PINK2; break;
+  case Purple1Theme:    rc = RC_IMAGE_AERO_PURPLE1; break;
+  case Purple2Theme:    rc = RC_IMAGE_AERO_PURPLE2; break;
+  case Red1Theme:       rc = RC_IMAGE_AERO_RED1; break;
+  case Red2Theme:       rc = RC_IMAGE_AERO_RED2; break;
+  case Yellow1Theme:    rc = RC_IMAGE_AERO_YELLOW1; break;
+  case Yellow2Theme:    rc = RC_IMAGE_AERO_YELLOW2; break;
+  case Windows1Theme:   rc = RC_IMAGE_AERO_WIN1; break;
+  case Windows2Theme:   rc = RC_IMAGE_AERO_WIN2; break;
 
   case DefaultTheme:
   case RandomTheme:
@@ -107,6 +107,16 @@ UiStyle::setMainWindowStyle(QWidget *w)
 }
 
 void
+UiStyle::setBlackBackground(QWidget *w)
+{
+  Q_ASSERT(w);
+  if (w) {
+    w->ensurePolished();
+    w->setPalette(QColor("black"));
+  }
+}
+
+void
 UiStyle::setWindowBackground(QWidget *w, bool persistent)
 {
   Q_ASSERT(w);
@@ -134,11 +144,11 @@ UiStyle::setMenuBackground(QMenu *m, bool persistent)
   if (!m)
     return;
 
-#ifdef Q_WS_MAC
+//#ifdef Q_WS_MAC
   if (theme_ == DefaultTheme)
     m->setStyleSheet(QString());
   else
-#endif // Q_WS_MAC
+//#endif // Q_WS_MAC
   {
     QString rc = backgroundImagePath();
     m->setStyleSheet(

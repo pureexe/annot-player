@@ -52,18 +52,17 @@ SyncDialog::SyncDialog(QWidget *parent)
   }
 
   // Layouts
-  QVBoxLayout *col = new QVBoxLayout; {
+  QVBoxLayout *rows = new QVBoxLayout; {
     QHBoxLayout *row1 = new QHBoxLayout,
                 *row2 = new QHBoxLayout;
-    col->addLayout(row1);
-    col->addLayout(row2);
+    rows->addLayout(row1);
+    rows->addLayout(row2);
 
     row1->addWidget(comboBoxLabel);
     row1->addWidget(comboBox_);
     row2->addWidget(okButton);
     row2->addWidget(cancelButton);
-  }
-  setLayout(col);
+  } setLayout(rows);
 
   /*
   QGridLayout *layout = new QGridLayout; {

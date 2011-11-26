@@ -4,6 +4,7 @@
 // annotationgraphicsitem.h
 // 7/16/2011
 
+#include "config.h"
 #include "core/cloud/annotation.h"
 #include <QGraphicsTextItem>
 #include <QEasingCurve>

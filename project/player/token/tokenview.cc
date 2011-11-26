@@ -87,36 +87,35 @@ TokenView::TokenView(ServerAgent *server, QWidget *parent)
 
   // Set layout
 
-  QGridLayout *layout = new QGridLayout; {
+  QGridLayout *grid = new QGridLayout; {
     // (row, col, rowspan, colspan, alignment)
     int r, c;
-    layout->addWidget(createDateBuddy, r=0, c=0);
-    layout->addWidget(createDateLabel_, r, ++c);
+    grid->addWidget(createDateBuddy, r=0, c=0);
+    grid->addWidget(createDateLabel_, r, ++c);
 
-    layout->addWidget(visitedCountBuddy, ++r, c=0);
-    layout->addWidget(visitedCountLabel_, r, ++c);
+    grid->addWidget(visitedCountBuddy, ++r, c=0);
+    grid->addWidget(visitedCountLabel_, r, ++c);
 
-    layout->addWidget(annotCountBuddy, ++r, c=0);
-    layout->addWidget(annotCountLabel_, r, ++c);
+    grid->addWidget(annotCountBuddy, ++r, c=0);
+    grid->addWidget(annotCountLabel_, r, ++c);
 
-    layout->addWidget(blessedCountBuddy, ++r, c=0);
-    layout->addWidget(blessedCountLabel_, r, ++c);
-    layout->addWidget(blessButton, r, ++c);
+    grid->addWidget(blessedCountBuddy, ++r, c=0);
+    grid->addWidget(blessedCountLabel_, r, ++c);
+    grid->addWidget(blessButton, r, ++c);
 
-    layout->addWidget(cursedCountBuddy, ++r, c=0);
-    layout->addWidget(cursedCountLabel_, r, ++c);
-    layout->addWidget(curseButton, r, ++c);
+    grid->addWidget(cursedCountBuddy, ++r, c=0);
+    grid->addWidget(cursedCountLabel_, r, ++c);
+    grid->addWidget(curseButton, r, ++c);
 
-    layout->addWidget(aliasBuddy, ++r, c=0);
+    grid->addWidget(aliasBuddy, ++r, c=0);
     ++c;
-    layout->addWidget(addAliasButton, r, ++c);
+    grid->addWidget(addAliasButton, r, ++c);
 
-    layout->addWidget(tableView_, ++r, c=0, 1, 3);
+    grid->addWidget(tableView_, ++r, c=0, 1, 3);
 
-    //layout->setContentsMargins(0, 0, 0, 0);
+    //grid->setContentsMargins(0, 0, 0, 0);
     //setContentsMargins(0, 0, 0, 0);
-  }
-  setLayout(layout);
+  } setLayout(grid);
 
   // Set initial states
 

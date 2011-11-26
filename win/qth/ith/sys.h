@@ -13,13 +13,13 @@ extern "C" {
   void IthInitSystemService();
   void IthCloseSystemService();
   DWORD IthGetMemoryRange(LPVOID mem, DWORD* base, DWORD* size);
-  BOOL IthCheckFile(LPWSTR file);
-  BOOL IthFindFile(LPWSTR file);
-  BOOL IthGetFileInfo(LPWSTR file, LPVOID info);
-  BOOL IthCheckFileFullPath(LPWSTR file);
-  HANDLE IthCreateFile(LPWSTR name, DWORD option, DWORD share, DWORD disposition);
-  HANDLE IthCreateDirectory(LPWSTR name);
-  HANDLE IthCreateFileFullPath(LPWSTR full_path, DWORD option, DWORD share, DWORD disposition);
+  //BOOL IthCheckFile(LPWSTR file);
+  //BOOL IthFindFile(LPWSTR file);
+  //BOOL IthGetFileInfo(LPWSTR file, LPVOID info);
+  //BOOL IthCheckFileFullPath(LPWSTR file);
+  //HANDLE IthCreateFile(LPWSTR name, DWORD option, DWORD share, DWORD disposition);
+  //HANDLE IthCreateDirectory(LPWSTR name);
+  //HANDLE IthCreateFileFullPath(LPWSTR full_path, DWORD option, DWORD share, DWORD disposition);
   //HANDLE IthPromptCreateFile(DWORD option, DWORD share, DWORD disposition);
   HANDLE IthCreateSection(LPWSTR name, DWORD size, DWORD right);
   HANDLE IthCreateEvent(LPWSTR name, DWORD auto_reset=0, DWORD init_state=0);
@@ -38,28 +38,10 @@ extern "C" {
   void CheckThreadStart();
 } // extern "C"
 
-extern HANDLE hHeap;
+//extern HANDLE hHeap;
 extern DWORD current_process_id,nt_flag;
 extern BYTE LeadByteTable[];
-extern LPVOID page;
-extern BYTE launch_time[];
-inline DWORD GetHash(LPSTR str)
-{
-  DWORD hash=0;
-  for (;*str;str++)
-  {
-    hash=((hash>>7)|(hash<<25))+(*str);
-  }
-  return hash;
-}
-inline DWORD GetHash(LPWSTR str)
-{
-  DWORD hash=0;
-  for (;*str;str++)
-  {
-    hash=((hash>>7)|(hash<<25))+(*str);
-  }
-  return hash;
-}
+//extern LPVOID page;
+//extern BYTE launch_time[];
 
 // EOF

@@ -208,12 +208,19 @@ AnnotationGraphicsView::invalidatePos()
 #endif // Q_WS_WIN
   } else if (hub_->isMediaTokenMode() || hub_->isNormalPlayerMode()) {
 
-    QPoint newPos = videoView_->mapToGlobal(QPoint());
+    QPoint newPos;
 #ifdef Q_WS_MAC
     // Since videoView_ could change its pos() while playing video, use its parent widget instead.
     if (videoView_->parentWidget())
       newPos = videoView_->parentWidget()->mapToGlobal(QPoint());
+    else
 #endif // Q_QW_MAC
+#ifdef Q_WS_X11
+    if (hub_->isFullScreenPlayerMode() && fullScreenView_)
+      newPos = fullScreenView_->mapToGlobal(QPoint());
+    else
+#endif // Q_WS_X11
+    newPos = videoView_->mapToGlobal(QPoint());
     moveToGlobalPos(newPos);
 
   } else if (hub_->isSignalTokenMode()) {

@@ -1,5 +1,5 @@
 # qtmac.pri
-# Since 11/11/2011
+# 11/11/2011
 
 INCLUDEPATH += $$PWD
 

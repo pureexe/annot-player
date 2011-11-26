@@ -6,11 +6,11 @@
 ROOTDIR = $$PWD
 BUILDDIR = $$ROOTDIR/../annot-build-desktop
 
-win32:  DESTDIR         = $$BUILDDIR/build.win32
-linux:  DESTDIR         = $$BUILDDIR/build.linux
+win32:  DESTDIR         = $$BUILDDIR/build.win
+unix:   DESTDIR         = $$BUILDDIR/build.unix
 mac:    DESTDIR         = $$BUILDDIR/build.mac
-win32:  DESTDIR_TARGET  = $$BUILDDIR/release.win32
-linux:  DESTDIR_TARGET  = $$BUILDDIR/release.linux
+win32:  DESTDIR_TARGET  = $$BUILDDIR/release.win
+unix:   DESTDIR_TARGET  = $$BUILDDIR/release.unix
 mac:    DESTDIR_TARGET  = $$BUILDDIR/release.mac
 
 LIBS            += -L$$DESTDIR
@@ -18,7 +18,7 @@ mac:  LIBS      += -F$$DESTDIR
 INCLUDEPATH     += $$ROOTDIR
 mac:    INCLUDEPATH     += $$ROOTDIR/mac
 win32:  INCLUDEPATH     += $$ROOTDIR/win
-linux:  INCLUDEPATH     += $$ROOTDIR/linux
+unix:   INCLUDEPATH     += $$ROOTDIR/unix
 
 ## Compiling options
 
@@ -26,10 +26,23 @@ DEFINES += UNICODE
 
 # C++0x
 win32:  QMAKE_CXXFLAGS  += -Zc:auto
-linux:  QMAKE_CXXFLAGS  += -std=c++0x
+unix:   QMAKE_CXXFLAGS  += -std=c++0x
 #mac:    QMAKE_CXXFLAGS  += -std=c++0x
 
 #QMAKE_LFLAGS +=
+
+## Deploy
+# See: http://wiki.maemo.org/Packaging_a_Qt_application
+# See: http://www.developer.nokia.com/Community/Wiki/Creating_Debian_packages_for_Maemo_5_Qt_applications_and_showing_in_the_application_menu
+# See: https://wiki.kubuntu.org/PackagingGuide/QtApplication
+
+unix {
+  isEmpty(PREFIX): PREFIX = /usr
+  BINDIR = $$PREFIX/bin
+  DATADIR = $$PREFIX/share
+
+  DEFINES += DATADIR=\\\"$$DATADIR\\\" PKGDATADIR=\\\"$$PKGDATADIR\\\"
+}
 
 ## External libraries
 
@@ -63,7 +76,7 @@ mac {
     ZLIB_HOME           = /usr
 }
 
-linux {
+unix {
     VLC_HOME            = /usr
     #WSF_HOME            = ${HOME}/opt/wso2/wsf
     #CDIO_HOME          = /usr

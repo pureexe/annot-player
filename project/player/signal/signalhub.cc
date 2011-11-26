@@ -4,6 +4,7 @@
 #include "logger.h"
 #include "module/player/player.h"
 #include <QtCore>
+#include <cmath>
 
 //#define DEBUG "SignalHub"
 //#include "module/debug/debug.h"
@@ -28,25 +29,34 @@ SignalHub::SignalHub(Player *player, QObject *parent)
 qreal
 SignalHub::volume() const
 {
+  qreal ret = 0;
   switch (tokenMode_) {
   case MediaTokenMode:
-    return player_->volume();
+    ret = player_->volume();
+    break;
 
   case SignalTokenMode:
-#ifdef Q_WS_WIN
-    //return QtWin::getWaveVolume();
-    return 0;
-#else
-    return 0;
-#endif // Q_WS_WIN
+    break;
 
-  default: Q_ASSERT(0); return 0;
+  default: Q_ASSERT(0); break;
   }
+
+#ifdef Q_WS_X11
+  // de-expand percentage
+  if (ret > 0)
+    ret = ::sqrt(ret);
+#endif // Q_WS_X11
+  return ret;
 }
 
 void
 SignalHub::setVolume(qreal percentage)
 {
+#ifdef Q_WS_X11
+  // expand percentage
+  percentage = percentage * percentage;
+#endif // Q_WS_X11
+
   if (percentage < 0)
     percentage = 0;
   else if (percentage > 1)

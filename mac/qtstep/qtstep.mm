@@ -1,5 +1,5 @@
 // qtstep.mm
-// Since 7/30/2011
+// 7/30/2011
 
 #include "qtstep.h"
 #include <QtGlobal>

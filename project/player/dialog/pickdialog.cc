@@ -9,7 +9,7 @@
 #include "global.h"
 #ifdef USE_WIN_PICKER
   #include "win/picker/picker.h"
-#endif USE_WIN_PICKER
+#endif // USE_WIN_PICKER
 #include "core/gui/toolbutton.h"
 #include <QtGui>
 
@@ -45,11 +45,10 @@ PickDialog::PickDialog(QWidget *parent)
   }
 
   // Layouts
-  QVBoxLayout *layout = new QVBoxLayout; {
-    layout->addWidget(messageLabel_, 0, Qt::AlignCenter);
-    layout->addWidget(cancelButton, 0, Qt::AlignCenter);
-  }
-  setLayout(layout);
+  QVBoxLayout *rows = new QVBoxLayout; {
+    rows->addWidget(messageLabel_, 0, Qt::AlignCenter);
+    rows->addWidget(cancelButton, 0, Qt::AlignCenter);
+  } setLayout(rows);
 
   // Connections
   connect(cancelButton, SIGNAL(clicked()), SLOT(cancel()));
@@ -72,7 +71,7 @@ PickDialog::setActive(bool t)
       connect(PICKER, SIGNAL(windowPicked(WId)), SLOT(pickWindow(WId)));
     else
       disconnect(PICKER, SIGNAL(windowPicked(WId)), this, SLOT(pickWindow(WId)));
-#endif USE_WIN_PICKER
+#endif // USE_WIN_PICKER
     active_ = t;
   }
 }
@@ -117,7 +116,7 @@ PickDialog::startPicking()
   DOUT("startPicking:enter");
 #ifdef USE_WIN_PICKER
   PICKER->singleShot();
-#endif USE_WIN_PICKER
+#endif // USE_WIN_PICKER
   DOUT("startPicking:exit");
 }
 
@@ -127,7 +126,7 @@ PickDialog::stopPicking()
   DOUT("startPicking:enter");
 #ifdef USE_WIN_PICKER
   PICKER->stop();
-#endif USE_WIN_PICKER
+#endif // USE_WIN_PICKER
   DOUT("startPicking:exit");
 }
 

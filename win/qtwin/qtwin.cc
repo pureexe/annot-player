@@ -619,6 +619,7 @@ QtWin::setWaveVolume(qreal percentage)
 
   WORD w = MAX_VOLUME * percentage;
   DWORD dw = MAKEDWORD(w, w);
+
   return ::waveOutSetVolume(0, dw) == MMSYSERR_NOERROR;
 }
 

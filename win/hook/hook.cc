@@ -70,9 +70,11 @@ namespace { // anonymous, hook callbacks
           pos -= QPoint(rect.left, rect.top);
       }
 
-      QMouseEvent event(QEvent::MouseMove, pos, globalPos, Qt::NoButton, Qt::NoButton, Qt::NoModifier);
-      //HOOK_MANAGER->mouseEvent(&event);
-      QCoreApplication::sendEvent(HOOK_MANAGER, &event);
+      // jichi 11/25/2011: Replace sendEvent with postEvent to avoid blocking main thread, which might incur out-of-order event q.
+      //QCoreApplication::sendEvent(HOOK_MANAGER, event);
+      QCoreApplication::postEvent(HOOK_MANAGER,
+        new QMouseEvent(QEvent::MouseMove, pos, globalPos, Qt::NoButton, Qt::NoButton, Qt::NoModifier)
+      );
     }
 
     return NEXT;
@@ -208,7 +210,7 @@ namespace { // anonymous, low level mouse procedure with double-click support
   // Example: http://msdn.microsoft.com/en-us/library/ms644986(v=vs.85).aspx
   // Struct: http://msdn.microsoft.com/en-us/library/ms644970(v=vs.85).aspx
   //
-  // LRESULT CALLBACKtypedef struct tagMSLLHOOKSTRUCT {
+  // typedef struct tagMSLLHOOKSTRUCT {
   //   POINT     pt;
   //   DWORD     mouseData;
   //   DWORD     flags;
@@ -298,7 +300,7 @@ namespace { // anonymous, low level mouse procedure with double-click support
         pos -= QPoint(rect.left, rect.top);
     }
 
-    bool accepted = false; // if sent event is accepted
+    //bool accepted = false; // if sent event is accepted
     bool matched = true; // If mouse event matched
 
     // QMouseEvent
@@ -364,16 +366,15 @@ namespace { // anonymous, low level mouse procedure with double-click support
       default:                  event = new QMouseEvent(type, pos, globalPos, button, buttons, modifiers);
       }
 
-      QCoreApplication::sendEvent(HOOK_MANAGER, event);
-      accepted = event->isAccepted();
-
-      delete event;
+      QCoreApplication::postEvent(HOOK_MANAGER, event);
+      //QCoreApplication::sendEvent(HOOK_MANAGER, event);
+      //accepted = event->isAccepted();
+      //delete event;
     }
 
-    if (!accepted)
-      return NEXT;
-    else
-      return 0;
+    //if (accepted)
+    //  return 0;
+    return NEXT;
     #undef NEXT
   }
 } // anonymous namespace
@@ -430,8 +431,6 @@ namespace { // anonymous, keyboard hook
     bool released = lparam & KF_UP;
     int key = 0;
 
-    // See VK code: http://msdn.micros0-15	The repeat count. The value is the number of times the keystroke is repeated as a result of the user's holding down the key.
-
     // TODO: fill out other keys
     switch (wparam) {
     case VK_ESCAPE:
@@ -442,8 +441,9 @@ namespace { // anonymous, keyboard hook
     if (key) {
       QEvent::Type type = released ? QEvent::KeyRelease : QEvent::KeyPress;
       Qt::KeyboardModifiers modifiers = Qt::NoModifier;
-      QKeyEvent event(type, key, modifiers);
-      QCoreApplication::sendEvent(HOOK_MANAGER, &event);
+      QCoreApplication::postEvent(HOOK_MANAGER,
+        new QKeyEvent(type, key, modifiers)
+      );
       if (event.isAccepted())
         return 0;
     }

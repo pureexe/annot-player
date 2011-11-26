@@ -58,34 +58,31 @@ LoginDialog::LoginDialog(QWidget *parent)
   QLabel *userNameLabel = new QLabel; {
     userNameLabel->setBuddy(userNameEdit_);
     userNameLabel->setStyleSheet(SS_LABEL);
-    userNameLabel->setText(TR(T_LABEL_USERNAME));
+    userNameLabel->setText(TR(T_LABEL_USERNAME) + ":");
     userNameLabel->setToolTip(TR(T_TOOLTIP_USERNAME));
   }
 
   QLabel *passwordLabel = new QLabel; {
     passwordLabel->setBuddy(passwordEdit_);
     passwordLabel->setStyleSheet(SS_LABEL);
-    passwordLabel->setText(TR(T_LABEL_PASSWORD));
+    passwordLabel->setText(TR(T_LABEL_PASSWORD) + ":");
     passwordLabel->setToolTip(TR(T_TOOLTIP_PASSWORD));
   }
 
   // Layouts
-  QVBoxLayout *rows = new QVBoxLayout; {
-    QHBoxLayout *row1 = new QHBoxLayout,
-                *row2 = new QHBoxLayout,
-                *row3 = new QHBoxLayout;
-    rows->addLayout(row1);
-    rows->addLayout(row2);
-    rows->addLayout(row3);
+  QGridLayout *grid = new QGridLayout; {
+    // (row, col, rowspan, colspan, alignment)
+    int r, c;
+    grid->addWidget(userNameLabel, r=0, c=0);
+    grid->addWidget(userNameEdit_, r, ++c);
 
-    row1->addWidget(userNameLabel);
-    row1->addWidget(userNameEdit_);
-    row2->addWidget(passwordLabel);
-    row2->addWidget(passwordEdit_);
-    row3->addWidget(loginButton);
-    row3->addWidget(cancelButton);
-  }
-  setLayout(rows);
+    grid->addWidget(passwordLabel, ++r, c=0);
+    grid->addWidget(passwordEdit_, r, ++c);
+
+    grid->addWidget(loginButton, ++r, c=0);
+    grid->addWidget(cancelButton, r, ++c);
+
+  } setLayout(grid);
 
   setTabOrder(userNameEdit_, passwordEdit_);
 

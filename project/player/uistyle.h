@@ -25,17 +25,17 @@ class UiStyle : public QObject
 public:
   enum Theme {
     DefaultTheme = 0, RandomTheme,
-    BlackTheme1, BlackTheme2,
-    BlueTheme1, BlueTheme2,
-    BrownTheme1, BrownTheme2,
-    GreenTheme1, GreenTheme2,
-    LightBlueTheme1, LightBlueTheme2,
-    OrangeTheme1, OrangeTheme2,
-    PinkTheme1, PinkTheme2,
-    PurpleTheme1, PurpleTheme2,
-    RedTheme1, RedTheme2,
-    YellowTheme1, YellowTheme2,
-    WindowsTheme1, WindowsTheme2,
+    Black1Theme, Black2Theme,
+    Blue1Theme, Blue2Theme,
+    Brown1Theme, Brown2Theme,
+    Green1Theme, Green2Theme,
+    LightBlue1Theme, LightBlue2Theme,
+    Orange1Theme, Orange2Theme,
+    Pink1Theme, Pink2Theme,
+    Purple1Theme, Purple2Theme,
+    Red1Theme, Red2Theme,
+    Yellow1Theme, Yellow2Theme,
+    Windows1Theme, Windows2Theme,
     ThemeCount
   };
 
@@ -61,6 +61,7 @@ public:
 
   void setWindowBackground(QWidget *w, bool persistent); ///< If the widget is persistant
   void setMenuBackground(QMenu *m, bool persistent); ///< If the widget is persistant
+  void setBlackBackground(QWidget *w);
 
 public slots:
   void invalidateBackground();
