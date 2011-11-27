@@ -11,7 +11,7 @@
         <key>CFBundleSignature</key>
         <string>????</string>
         <key>CFBundleVersion</key>
-        <string>0.1.0.2</string>
+        <string>0.1.0.3</string>
         <key>CFBundleIdentifier</key>
         <string>me.annot.app</string>
         <key>CFBundleExecutable</key>

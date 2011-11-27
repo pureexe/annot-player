@@ -1,16 +1,19 @@
 #!/bin/bash -v
 # 11/12/2011
 
-cd ~/protected
+test -e ~/tmp || mkdir ~/tmp
+cd ~/tmp || exit 1
 
 ## environment
 
 COLOR=blue
+VERSION=0.1.0.3
 
 TARGET="Annot Player"
 TARGET_DMG=$TARGET.dmg
-TARGET_ZIP=$TARGET_DMG.zip
+TARGET_ZIP=annot-player-$VERSION-mac.zip
 
+APP_SRC="/Volumes/local/project/annot"
 APP_BUILD="/Volumes/local/project/annot-build-desktop/build.mac"
 QT_BUILD=/opt/local/share/qt4
 VLC_BUILD=$HOME/opt/vlc
@@ -22,20 +25,33 @@ APP_CONTENTS=$APP/Contents
 APP_MACOS=$APP_CONTENTS/MacOS
 APP_FRAMEWORKS=$APP_CONTENTS/Frameworks
 APP_PLUGINS=$APP_CONTENTS/PlugIns
+APP_INFO=$APP_CONTENTS/Info.plist
 APP_BIN=$APP_MACOS/$APP_NAME
 APP_RESORUCES=$APP_CONTENTS/Resources
 
-cd "$TARGET" || exit 1
-test -e "$APP" || exit 1
 
-## copy plist
-cp "/Volumes/local/project/annot/project/player/Info.plist" "$APP_CONTENTS"/ || exit 1
+## copy package
+
+test -e "$TARGET" && finder-remove "$TARGET"
+test -e "$TARGET" && exit 1
+mkdir -p "$TARGET"
+cd "$TARGET" || exit 1
+
+cp -Rv "$APP_SRC"/licenses Licenses
+cp -v "$APP_SRC"/README "Read Me.txt"
+dos2unix "Read Me.txt"
+
+cp -Rv "$APP_BUILD/$APP" "$APP"
+test -e "$APP" || exit 1
+rm -Rf "$APP_MACOS"/*
+
+#cp -v "$APP_BUILD/$APP_INFO" "$APP_INFO"/ || exit 1
 
 ## redeploy qt frameworks
 
-rm -Rfv "$APP_FRAMEWORKS"
-rm -Rfv "$APP_PLUGINS"
-rm -fv "$APP_RESORUCES"/qt.conf
+#rm -Rfv "$APP_FRAMEWORKS"
+#rm -Rfv "$APP_PLUGINS"
+#rm -fv "$APP_RESORUCES"/qt.conf
 
 cp -v "$APP_BUILD/$APP_BIN" "$APP_BIN" || exit 1
 macdeployqt "$APP"
@@ -102,7 +118,7 @@ change_vlc_lib()
   done
 }
 
-rm -Rfv "$APP_MACOS"/{lua,plugins}
+#rm -Rfv "$APP_MACOS"/{lua,plugins}
 cp -Rv "$VLC_BUILD"/lua "$APP_MACOS"/
 cp -Rv "$VLC_BUILD"/plugins "$APP_MACOS"/
 rm -f "$VLC_BUILD"/plugins/*.dat
@@ -161,12 +177,11 @@ change_all_libs
 
 ## finalize
 
-repair-permissions "$APP"
+repair-permissions
+remove-thumbnails
 chlabel $COLOR "$APP"
 
-
 cd ..
-RemoveThumbnails
 
 chlabel $COLOR "$TARGET"
 test -e "$TARGET_DMG" && finder-remove "$TARGET_DMG"

@@ -199,8 +199,8 @@ MessageView::clear()
   texts_.clear();
 
   hookComboBox_->addItem("0");
-  hooks_.push_back(0);
-  texts_.push_back(QStringList());
+  hooks_.append(0);
+  texts_.append(QStringList());
 
   textEdit_->clear();
 
@@ -243,12 +243,14 @@ MessageView::processHookedText(const QString &text, int hookId)
   int index = hooks_.indexOf(hookId);
   if (index < 0) {
     index = hooks_.size();
-    hooks_.push_back(hookId);
-    texts_.push_back(QStringList());
+    hooks_.append(hookId);
+    texts_.append(QStringList());
     hookComboBox_->addItem(QString::number(index));
     invalidateHookCountLabel();
 
     log(tr("new signal discovered") + QString(" (hid = %1)").arg(QString::number(hookId, 16)));
+
+    setCurrentIndex(index);
   }
 
   texts_[index].append(text);

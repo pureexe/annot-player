@@ -8,11 +8,13 @@ SUBDIRS = \
     project \
     module
 win32:  SUBDIRS += win
-mac:    SUBDIRS += mac
 unix:   SUBDIRS += unix
+mac:    SUBDIRS += mac
 
 OTHER_FILES = \
   ChangeLog \
-  TODO
+  README \
+  TODO \
+  licenses/annot-player.txt
 
 # EOF

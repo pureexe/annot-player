@@ -16,9 +16,9 @@ mac:    DESTDIR_TARGET  = $$BUILDDIR/release.mac
 LIBS            += -L$$DESTDIR
 mac:  LIBS      += -F$$DESTDIR
 INCLUDEPATH     += $$ROOTDIR
-mac:    INCLUDEPATH     += $$ROOTDIR/mac
 win32:  INCLUDEPATH     += $$ROOTDIR/win
 unix:   INCLUDEPATH     += $$ROOTDIR/unix
+mac:    INCLUDEPATH     += $$ROOTDIR/mac
 
 ## Compiling options
 
@@ -27,7 +27,7 @@ DEFINES += UNICODE
 # C++0x
 win32:  QMAKE_CXXFLAGS  += -Zc:auto
 unix:   QMAKE_CXXFLAGS  += -std=c++0x
-#mac:    QMAKE_CXXFLAGS  += -std=c++0x
+mac:    QMAKE_CXXFLAGS  -= -std=c++0x
 
 #QMAKE_LFLAGS +=
 
@@ -36,12 +36,21 @@ unix:   QMAKE_CXXFLAGS  += -std=c++0x
 # See: http://www.developer.nokia.com/Community/Wiki/Creating_Debian_packages_for_Maemo_5_Qt_applications_and_showing_in_the_application_menu
 # See: https://wiki.kubuntu.org/PackagingGuide/QtApplication
 
-unix {
-  isEmpty(PREFIX): PREFIX = /usr
-  BINDIR = $$PREFIX/bin
-  DATADIR = $$PREFIX/share
-
-  DEFINES += DATADIR=\\\"$$DATADIR\\\" PKGDATADIR=\\\"$$PKGDATADIR\\\"
+unix:!mac {
+    isEmpty(PREFIX): PREFIX = /usr
+    BINDIR = $$PREFIX/bin
+    DATADIR = $$PREFIX/share
+    DEFINES += \
+        BINDIR=\\\"$$BINDIR\\\" \
+        DATADIR=\\\"$$DATADIR\\\"
+}
+mac {
+    isEmpty(PREFIX): PREFIX = /opt/annot
+    BINDIR = $$PREFIX/bin
+    DATADIR = $$PREFIX/share
+    DEFINES += \
+        BINDIR=\\\"$$BINDIR\\\" \
+        DATADIR=\\\"$$DATADIR\\\"
 }
 
 ## External libraries
@@ -66,16 +75,6 @@ win32 {
     LIBS               += -L$$WDK_HOME/lib
 }
 
-mac {
-    VLC_HOME            = ${HOME}/opt/vlc
-    #WSF_HOME            = ${HOME}/opt/wso2/wsf
-    #CDIO_HOME          = ${HOME}/opt/libcdio
-    POPPLER_HOME        = ${HOME}/opt/poppler
-    BOOST_HOME          = ${HOME}/opt/local
-    GSOAP_HOME          = ${HOME}/opt/local
-    ZLIB_HOME           = /usr
-}
-
 unix {
     VLC_HOME            = /usr
     #WSF_HOME            = ${HOME}/opt/wso2/wsf
@@ -83,6 +82,16 @@ unix {
     POPPLER_HOME        = ${HOME}/opt/poppler
     BOOST_HOME          = /usr
     GSOAP_HOME          = /usr
+    ZLIB_HOME           = /usr
+}
+
+mac {
+    VLC_HOME            = ${HOME}/opt/vlc
+    #WSF_HOME            = ${HOME}/opt/wso2/wsf
+    #CDIO_HOME          = ${HOME}/opt/libcdio
+    POPPLER_HOME        = ${HOME}/opt/poppler
+    BOOST_HOME          = ${HOME}/opt/local
+    GSOAP_HOME          = ${HOME}/opt/local
     ZLIB_HOME           = /usr
 }
 

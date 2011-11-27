@@ -70,10 +70,12 @@ namespace { // anonymous, hook callbacks
           pos -= QPoint(rect.left, rect.top);
       }
 
-      // jichi 11/25/2011: Replace sendEvent with postEvent to avoid blocking main thread, which might incur out-of-order event q.
-      //QCoreApplication::sendEvent(HOOK_MANAGER, event);
-      QCoreApplication::postEvent(HOOK_MANAGER,
-        new QMouseEvent(QEvent::MouseMove, pos, globalPos, Qt::NoButton, Qt::NoButton, Qt::NoModifier)
+      // jichi 11/26/2011: Use sendEvent instead of postEvent, which caused troubles if events were sent out of order.
+      //QCoreApplication::postEvent(HOOK_MANAGER,
+      //  new QMouseEvent(QEvent::MouseMove, pos, globalPos, Qt::NoButton, Qt::NoButton, Qt::NoModifier)
+      //);
+      QCoreApplication::sendEvent(HOOK_MANAGER,
+        &QMouseEvent(QEvent::MouseMove, pos, globalPos, Qt::NoButton, Qt::NoButton, Qt::NoModifier)
       );
     }
 
@@ -300,7 +302,7 @@ namespace { // anonymous, low level mouse procedure with double-click support
         pos -= QPoint(rect.left, rect.top);
     }
 
-    //bool accepted = false; // if sent event is accepted
+    bool accepted = false; // if sent event is accepted
     bool matched = true; // If mouse event matched
 
     // QMouseEvent
@@ -366,15 +368,18 @@ namespace { // anonymous, low level mouse procedure with double-click support
       default:                  event = new QMouseEvent(type, pos, globalPos, button, buttons, modifiers);
       }
 
-      QCoreApplication::postEvent(HOOK_MANAGER, event);
-      //QCoreApplication::sendEvent(HOOK_MANAGER, event);
-      //accepted = event->isAccepted();
-      //delete event;
+      // jichi 11/26/2011: Use sendEvent instead of postEvent, which caused troubles if events were sent out of order.
+      //QCoreApplication::postEvent(HOOK_MANAGER, event);
+      //accepted = true; // Always accept forwarded events
+      QCoreApplication::sendEvent(HOOK_MANAGER, event);
+      accepted = event->isAccepted();
+      delete event;
     }
 
-    //if (accepted)
-    //  return 0;
-    return NEXT;
+    if (accepted)
+      return 0;
+    else
+      return NEXT;
     #undef NEXT
   }
 } // anonymous namespace

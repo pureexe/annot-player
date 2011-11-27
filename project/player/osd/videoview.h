@@ -31,11 +31,7 @@ public:
   ~VideoView();
 
 protected:
-  //virtual bool event(QEvent *event); ///< \override
-  //virtual void mousePressEvent(QMouseEvent *event);
-  //virtual void mouseMoveEvent(QMouseEvent *event);
-  //virtual void mouseReleaseEvent(QMouseEvent *event);
-  //virtual void mouseDoubleClickEvent(QMouseEvent *event);
+  //virtual bool macEvent(EventHandlerCallRef caller, EventRef event); ///< \override
 
 #ifdef Q_WS_X11
   virtual bool x11Event(XEvent *event); ///< \override
@@ -57,6 +53,12 @@ private:
 public:
   void *view() const;
   bool isViewVisible() const;
+
+  void setViewMousePressPos(const QPoint &globalPos);
+  void setViewMouseReleasePos(const QPoint &globalPos);
+  void setViewMouseMovePos(const QPoint &globalPos);
+  QPoint viewMapFromGlobal(const QPoint &globalPos);
+
 public slots:
   void setViewVisible(bool visible = true);
   void showView();

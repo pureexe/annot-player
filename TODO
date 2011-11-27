@@ -4,25 +4,18 @@ server
 - replace screen shots to avoid copyright problem!!!!
 - make annot.me look better
 
-client:
-- mac
-  - fixme: DVD play in mac: mouse single click not working
-  - need send event to child window
-- linux:
-  - CHECKPOINT deploy
-   - https://wiki.kubuntu.org/PackagingGuide/QtApplication
-    - http://wiki.freegeek.org/index.php/Basic_Debian_Packaging
-    - https://wiki.ubuntu.com/PackagingGuide/Basic?action=show&redirect=HowToBuildDebianPackagesFromScratch
-    - https://wiki.ubuntu.com/PackagingGuide/Complete
-  - todo: annot-player.desktop and icon
-
 publish to 2ch nijiura
 publish to hf 4chan
 
+
 0.1.0.3 -- stable
 client:
+- mac
+  - fixme: DVD play in mac: mouse tracking not working
+- linux
+  - fixme: ubuntu11 full screen hide unity top bar
+  - submit to ubuntu app market
 - todo: windows hook: directly send windows event to root instead of make qevent myself
-- fixme: ubuntu11 full screen hide unity top bar
 - fixme: ubuntu minimize - restore error
 - minmize button in context menu, then restore at tray
 - Fixed recent file menu bug.

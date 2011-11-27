@@ -28,6 +28,8 @@ OsdWindow::OsdWindow(QWidget *parent)
   setAttribute(Qt::WA_TranslucentBackground);
   //setAttribute(Qt::WA_MacNoClickThrough);
 
+  //setMouseTracking(true);
+
   // FIXME: As a trade off, dragging annot etc not working for mouse event anymore
   // Need a machanism similar to global hook.
 #ifdef Q_WS_X11
@@ -62,7 +64,6 @@ OsdWindow::closeEvent(QCloseEvent *event)
   if (event && isVisible())
     event->ignore();
 }
-
 
 void
 OsdWindow::resizeEvent(QResizeEvent *event)

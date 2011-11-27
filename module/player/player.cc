@@ -8,13 +8,20 @@
 
 #include "player.h"
 #include "core/util/codec.h"
-#include <vlc/vlc.h>
+extern "C" {
+  #include <vlc/vlc.h>
+} // extern "C"
 #ifdef Q_WS_MAC
   #include <QMacCocoaViewContainer>
 #endif // Q_WS_MAC
 #include <QtGui>
 #include <cstring>
 #include <memory>
+
+#ifdef Q_WS_MAC
+//#include <Carbon/Carbon.h>
+//#include <HIToolbox/HIToolbox.h>
+#endif // Q_WS_MAC
 
 //#define DEBUG "Player"
 #include "module/debug/debug.h"
@@ -28,7 +35,7 @@
 // Enable core hacks by default.
 #ifdef USE_VLCCORE
 #ifndef MODULE_STRING
-  #define MODULE_STRING "dummy"
+  #define MODULE_STRING "main"  // needed by mac os x
 #endif
 #include <inttypes.h>
 #include <vlc_vout.h>
@@ -158,8 +165,10 @@ namespace { // anonymous
 #define VLC_ARGS_PLUGIN_PATH    "--plugin-path", VLC_PLUGIN_PATH
 #define VLC_ARGS_VERBOSE(_lvl)  "--verbose=" #_lvl     // >= 0
 
-#define VLC_ARGS_MAC            "--vout=minimal_macosx", "--opengl-provider=minimal_macosx"
-                                // http://forums.techarena.in/windows-software/1403280.htm
+// http://forums.techarena.in/windows-software/1403280.htm
+//#define VLC_ARGS_MAC            "--vout=minimal_macosx", "--opengl-provider=minimal_macosx"
+#define VLC_ARGS_MAC            "--opengl-provider=minimal_macosx"
+//#define VLC_ARGS_MAC            VLC_ARGS_NULL // use default macosx filter
 #ifdef Q_WS_MAC
   #define VLC_ARGS_OS           VLC_ARGS_MAC
 #else
@@ -195,7 +204,7 @@ namespace { // anonymous
 #elif defined(Q_WS_MAC)
   //#define libvlc_media_player_set_drawable(_mp, _wid)   libvlc_media_player_set_agl(_mp, _wid)
   #define libvlc_media_player_set_drawable(_mp, _wid)   libvlc_media_player_set_nsobject(_mp, _wid)
-#else //Linux
+#else // Linux
   #define libvlc_media_player_set_drawable(_mp, _wid)   libvlc_media_player_set_xwindow(_mp, _wid)
 #endif // Q_WS_
 
@@ -873,7 +882,7 @@ Player::setMouseEnabled(bool enable)
 {
   Q_ASSERT(isValid());
   impl_->setMouseEnabled(enable);
-  ::libvlc_video_set_mouse_input(impl_->player(), enable);
+  ::libvlc_video_set_mouse_input(impl_->player(), enable ? 1 : 0);
 }
 
 bool
@@ -888,7 +897,7 @@ Player::setKeyboardEnabled(bool enable)
 {
   Q_ASSERT(isValid());
   impl_->setKeyEnabled(enable);
-  ::libvlc_video_set_key_input(impl_->player(), enable);
+  ::libvlc_video_set_key_input(impl_->player(), enable ? 1 : 0);
 }
 
 bool

@@ -1,0 +1,37 @@
+﻿== ENGLISH ==
+
+Product:	Annot Player
+Version:	0.1.0.3
+Release:	2011/11/26
+Homepage:	http://annot.me
+Help (Wiki):	http://annot.me/wiki/FAQ
+Download:	http://code.google.com/p/annot-player/downloads
+Source (Git):	https://code.google.com/p/annot-player
+License:	GNU GPL v3
+Contact:	AnnotCloud@gmail.com
+
+Requirements:
+- Microsoft Windows XP SP3/Vista/7
+- Mac OS X 10.6/10.7
+- Linux (Debian/Ubunutu)
+
+WHAT'S NEW?
+- Fixed a severe bug in annot-player-0.1.0.2-win that might cause significant delay while showing context menu.
+- Added support for navigating DVD menu on Mac OS X.
+- Added app desktop/icon on linux.
+
+
+== 日本語 ==
+
+ｱｶｳﾝﾄ新規登録：	http://annot.me
+よくある質問：	http://annot.me/wiki/Manual:FAQ/ja
+
+ソフトウェアの不具合と思われる場合は、私（AnnotCloud@gmail.com）に連絡 してください。
+
+
+== 中文 ==
+
+Wiki：	http://annot.me/wiki/首页
+FAQ：	http://annot.me/wiki/Manual:FAQ/zh
+
+有各种bug或者希望和建议欢迎联系AnnotCloud@gmail.com。

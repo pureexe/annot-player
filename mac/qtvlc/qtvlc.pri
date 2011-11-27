@@ -1,8 +1,9 @@
-# vlckit_qt.pri
+# qtvlc.pri
 # 6/30/2011
 
 include(../../config.pri)
 include($$ROOTDIR/mac/qtstep/qtstep.pri)
+include($$PWD/minimal_macosx/minimal_macosx.pri)
 
 # Static link mostly because framework would complicate deployment on mac
 # Esp. it also required VLC plugins.
@@ -11,12 +12,16 @@ include($$ROOTDIR/mac/qtstep/qtstep.pri)
 include($$ROOTDIR/mac/VLCKit/VLCKit_static.pri)
 
 HEADERS += \
-    $$PWD/vlckit_qt.h \
+    $$PWD/qtvlc.h
 
 SOURCES += \
-   $$PWD/vlckit_qt.mm
+   $$PWD/qtvlc.mm
 
 QT      += core
 LIBS    += -framework Foundation
+
+DEFINES += WITH_VLCCORE
+LIBS    += -lvlccore
+INCLUDEPATH  += $$VLC_HOME/include/vlc/plugins
 
 # EOF

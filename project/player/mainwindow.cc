@@ -74,7 +74,8 @@
 #endif // USE_WIN_PICKER
 #ifdef Q_WS_MAC
   #include "mac/qtmac/qtmac.h"
-  #include "mac/qtstep/qtstep.h"
+  //#include "mac/qtstep/qtstep.h"
+  #include "mac/qtvlc/qtvlc.h"
 #endif // Q_WS_MAC
 #ifdef Q_WS_X11
   #include "unix/qtx/qtx.h"
@@ -281,11 +282,11 @@ MainWindow::createComponents()
 
   // Player
   player_ = new Player(this); {
-    //player_->setKeyboardEnabled(false);
-    //player_->setMouseEnabled(true);
-    //player_->setEncoding("UTF-8");
+    //player_->setKeyboardEnabled(true);  // default true
+    //player_->setMouseEnabled(true);     // default true
+    //player_->setEncoding("UTF-8");      // default do nothing
   }
-  //assert(isValid()); // TODO: fix this using a pop up dialog and then exit
+  Q_ASSERT(isValid());
 
   // Signal hub
   hub_ = new SignalHub(player_, this);
@@ -2245,9 +2246,9 @@ MainWindow::say(const QString &text, const QString &color)
 void
 MainWindow::mousePressEvent(QMouseEvent *event)
 {
+  //DOUT("mousePressEvent:enter");
   //if (contextMenu_->isVisible())
   //  contextMenu_->hide();
-
 #ifdef Q_WS_MAC
   if (hub_->isFullScreenVideoMode()) {
     // Prevent auto hide osd player.
@@ -2270,12 +2271,8 @@ MainWindow::mousePressEvent(QMouseEvent *event)
     switch (event->button()) {
     case Qt::LeftButton:
 #ifdef Q_WS_MAC
-      // FIXME: not working
-      // Need to figure out which nsview to send
-      if (videoView_->isViewVisible()) {
-        //QtStep::mouseClickEvent((nsview_t*)videoView_->view(), event->pos());
-        //QtStep::mouseClickEvent((nsview_t*)videoView_->view(), event->globalPos());
-      }
+      if (videoView_->isViewVisible())
+        videoView_->setViewMousePressPos(event->globalPos());
 #endif // Q_WS_MAC
       if (!isFullScreen() && dragPos_ == BAD_POS) {
         dragPos_ = event->globalPos() - frameGeometry().topLeft();
@@ -2287,16 +2284,40 @@ MainWindow::mousePressEvent(QMouseEvent *event)
       event->accept();
       break;
 
-    case Qt::RightButton: {
+    case Qt::RightButton:
+#ifdef Q_WS_X11
+      if (!contextMenu_->isVisible()) {
         QContextMenuEvent cm(QContextMenuEvent::Mouse, event->pos(), event->globalPos(), event->modifiers());
         QCoreApplication::sendEvent(this, &cm);
         event->accept();
-      } break;
+      }
+#endif // Q_WS_X11
+      break;
 
     default: break;
     }
 
   Base::mousePressEvent(event);
+  //DOUT("mousePressEvent:exit");
+}
+
+void
+MainWindow::mouseReleaseEvent(QMouseEvent *event)
+{
+  //DOUT("mouseReleaseEvent:enter");
+  dragPos_ = BAD_POS;
+
+#ifdef Q_WS_MAC
+  if (event && event->button() == Qt::LeftButton && // event->buttons() is always zero, qt4 bug?
+      videoView_->isViewVisible())
+    videoView_->setViewMouseReleasePos(event->globalPos());
+#endif // Q_WS_MAC
+
+  if (event)
+    event->accept();
+
+  Base::mouseReleaseEvent(event);
+  //DOUT("mouseReleaseEvent:exit");
 }
 
 bool
@@ -2313,6 +2334,8 @@ MainWindow::isGlobalPosNearOsdPlayer(const QPoint &pos) const
 void
 MainWindow::mouseMoveEvent(QMouseEvent *event)
 {
+  //DOUT("mouseMoveEvent:enter");
+
   // Prevent auto hide osd player.
   if (hub_->isFullScreenPlayerMode())
     if (!event || isGlobalPosNearOsdPlayer(event->globalPos())) {
@@ -2321,6 +2344,11 @@ MainWindow::mouseMoveEvent(QMouseEvent *event)
       else if (osdPlayer_->isVisible())
         osdPlayer_->resetAutoHideTimeout();
     }
+
+#ifdef Q_WS_MAC
+   if (event && videoView_->isViewVisible())
+     videoView_->setViewMouseMovePos(event->globalPos());
+#endif // Q_WS_MAC
 
   // Move the main window
   if (event && event->buttons() & Qt::LeftButton
@@ -2338,33 +2366,13 @@ MainWindow::mouseMoveEvent(QMouseEvent *event)
   }
 
   Base::mouseMoveEvent(event);
-}
-
-void
-MainWindow::mouseReleaseEvent(QMouseEvent *event)
-{
-  dragPos_ = BAD_POS;
-
-#ifdef Q_WS_MAC
-  //annotationView_->invalidatePos();
-
-  //if (event && event->button() == Qt::RightButton) {
-  //  QContextMenuEvent cm(QContextMenuEvent::Mouse, event->pos(), event->globalPos(), event->modifiers());
-  //  //QApplication::sendEvent(this, &cm);
-  //  contextMenuEvent(&cm);
-  //  return;
-  //}
-#endif // Q_WS_MAC
-
-  if (event)
-    event->accept();
-
-  Base::mouseReleaseEvent(event);
+  //DOUT("mouseMoveEvent:exit");
 }
 
 void
 MainWindow::mouseDoubleClickEvent(QMouseEvent *event)
 {
+  //DOUT("mouseDoubleClickEvent:enter");
   if (event)
     switch (event->button()) {
     case Qt::LeftButton: hub_->toggleFullScreenVideoMode(); event->accept(); break;
@@ -2372,11 +2380,13 @@ MainWindow::mouseDoubleClickEvent(QMouseEvent *event)
     }
 
   Base::mouseDoubleClickEvent(event);
+  //DOUT("mouseDoubleClickEvent:exit");
 }
 
 void
 MainWindow::wheelEvent(QWheelEvent *event)
 {
+  //DOUT("wheelEvent:enter");
   if (event && event->orientation() == Qt::Vertical) {
     qreal vol = hub_->volume();
     vol += event->delta() / (8 * 360.0);
@@ -2386,23 +2396,26 @@ MainWindow::wheelEvent(QWheelEvent *event)
   }
 
   Base::wheelEvent(event);
+  //DOUT("wheelEvent:exit");
 }
 
 void
 MainWindow::contextMenuEvent(QContextMenuEvent *event)
 {
+  //DOUT("contextMenuEvent:enter");
   if (event) {
     invalidateContextMenu();
     contextMenu_->popup(event->globalPos());
-    event->accept();
-  }
+    event->accept(); }
 
   //Base::contextMenuEvent(event);
+  //DOUT("contextMenuEvent:exit");
 }
 
 void
 MainWindow::invalidateContextMenu()
 {
+  //DOUT("invalidateContextMenu:enter");
   contextMenu_->clear();
   if (!contextMenuActions_.isEmpty()) {
     foreach (QAction *a, contextMenuActions_)
@@ -2768,6 +2781,7 @@ MainWindow::invalidateContextMenu()
     contextMenu_->addAction(aboutAct_);
     contextMenu_->addAction(quitAct_);
   }
+  //DOUT("invalidateContextMenu:exit");
 }
 
 // - Move and resize events -

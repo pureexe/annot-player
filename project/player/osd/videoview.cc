@@ -3,14 +3,14 @@
 
 #include "videoview.h"
 #include "global.h"
-#ifdef USE_MAC_VLCKIT
-  #include "mac/vlckit_qt/vlckit_qt.h"
-  #include "mac/qtstep/qtstep.h"
-#endif // USE_MAC_VLCKIT
 #ifdef USE_WIN_HOOK
   #include "win/hook/hook.h"
   #include "win/qtwin/qtwin.h"
 #endif // USE_WIN_HOOK
+#ifdef Q_WS_MAC
+  #include "mac/qtvlc/qtvlc.h"
+  #include "mac/qtstep/qtstep.h"
+#endif // Q_WS_MAC
 #include <QtGui>
 #ifdef Q_WS_X11
   //#include <QX11Info>
@@ -32,10 +32,11 @@ VideoView::VideoView(QWidget *parent)
   //setWindowOpacity(1.0); // opaque
   //setMouseTracking(true);
 
-#ifdef USE_MAC_VLCKIT
+#ifdef Q_WS_MAC
+  //setMouseTracking(true);
   view_ = ::vlcvideoview_new();
   //setCocoaView(view_);
-#endif // USE_MAC_VLCKIT
+#endif // Q_WS_MAC
 
 #ifdef Q_WS_X11
   //connect(this, SIGNAL(clientIsEmbedded()), SLOT(invalidateClientWindow()));
@@ -46,10 +47,10 @@ VideoView::VideoView(QWidget *parent)
 
 VideoView::~VideoView()
 {
-#ifdef USE_MAC_VLCKIT
+#ifdef Q_WS_MAC
   if (view_)
     ::vlcvideoview_release((vlcvideoview_t*)view_);
-#endif // USE_MAC_VLCKIT
+#endif // Q_WS_MAC
 }
 
 // - Mac OS X Cocoa View -
@@ -90,6 +91,75 @@ VideoView::showView()
 void
 VideoView::hideView()
 { setViewVisible(false); }
+
+QPoint
+VideoView::viewMapFromGlobal(const QPoint &globalPos)
+{
+  QPoint ret;
+  if (!view_)
+    return ret;
+  vlcglview_t *glview = ::vlcvideoview_glview((vlcvideoview_t*)view_);
+  if (!glview)
+    return ret;
+  vlcvout_t *vout = ::vlcglview_vout(glview);
+  if (!vout)
+    return ret;
+
+  QPoint voutPos = mapToGlobal(QPoint());
+  if (isViewVisible())
+    voutPos.ry() -= height(); // video view and cocoaView doesn't overlap
+  QRect voutRect(voutPos, size());
+  ret = ::vlcvout_map_from_global(vout, globalPos, voutRect);
+  return ret;
+}
+
+void
+VideoView::setViewMousePressPos(const QPoint &globalPos)
+{
+  if (!view_)
+    return;
+  vlcglview_t *glview = ::vlcvideoview_glview((vlcvideoview_t*)view_);
+  if (!glview)
+    return;
+  vlcvout_t *vout = ::vlcglview_vout(glview);
+  if (!vout)
+    return;
+
+  QPoint pos = viewMapFromGlobal(globalPos);
+  ::vlcvout_mouse_down(vout, pos);
+}
+
+void
+VideoView::setViewMouseReleasePos(const QPoint &globalPos)
+{
+  if (!view_)
+    return;
+  vlcglview_t *glview = ::vlcvideoview_glview((vlcvideoview_t*)view_);
+  if (!glview)
+    return;
+  vlcvout_t *vout = ::vlcglview_vout(glview);
+  if (!vout)
+    return;
+
+  QPoint pos = viewMapFromGlobal(globalPos);
+  ::vlcvout_mouse_up(vout, pos);
+}
+
+void
+VideoView::setViewMouseMovePos(const QPoint &globalPos)
+{
+  if (!view_)
+    return;
+  vlcglview_t *glview = ::vlcvideoview_glview((vlcvideoview_t*)view_);
+  if (!glview)
+    return;
+  vlcvout_t *vout = ::vlcglview_vout(glview);
+  if (!vout)
+    return;
+
+  QPoint pos = viewMapFromGlobal(globalPos);
+  ::vlcvout_mouse_moved(vout, pos);
+}
 
 #endif // Q_WS_MAC
 
@@ -288,26 +358,10 @@ VideoView::x11Event(XEvent *event)
 // EOF
 
 /*
-
-void
-VideoView::mouseMoveEvent(QMouseEvent *event)
+bool
+VideoView::macEvent(EventHandlerCallRef caller, EventRef event)
 {
-  if (event && event->buttons() & Qt::LeftButton) {
-    QPoint newPos = event->globalPos() - dragPos_;
-    move(newPos);
-    event->accept();
-  }
-}
-
-void
-VideoView::mouseReleaseEvent(QMouseEvent *event)
-{ Q_UNUSED(event); }
-
-void
-VideoView::mouseDoubleClickEvent(QMouseEvent *event)
-{
-  if (event)
-    event->accept();
+  qDebug()<<11111;
+  return Base::macEvent(caller, event);
 }
 */
-

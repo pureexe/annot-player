@@ -1,11 +1,18 @@
 # ChangeLog
 
 Project: annot.player
+Versial: 0.1.0.3
+Date: 11/26/2011
+- Fixed a severe bug in annot-player-0.1.0.2-win that might cause significant delay for displaying context menu.
+- Added support for navigating DVD menu on Mac OS X.
+- Added app desktop/icon on linux.
+
+Project: annot.player
 Versial: 0.1.0.2
 Date: 11/25/2011
 - Added support for playing disc images such as ISO/MDF/BIN/IMG.
 - Added support for Ubuntu 11.
-- Improved mouse hook in windows to reduce GUI blocking.
+- Improved mouse hook in windows to reduce GUI hanging.
 - Minor bug fix.
 
 Project: annot.player
