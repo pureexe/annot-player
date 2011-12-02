@@ -1,5 +1,5 @@
 # core.pri
-# Since 6/28/2011
+# 6/28/2011
 
 INCLUDEPATH += $$PWD
 

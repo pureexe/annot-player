@@ -1,5 +1,5 @@
 # core.pri
-# Since 6/28/2011
+# 6/28/2011
 
 include(../config.pri)
 
@@ -24,6 +24,7 @@ HEADERS += \
     $$PWD/gui/toolbutton.h \
     $$PWD/gui/webdialog.h \
     $$PWD/util/codec.h \
+    $$PWD/util/countdowntimer.h \
     $$PWD/util/crypt.h \
     $$PWD/util/datetime.h \
     $$PWD/util/hash.h
@@ -43,13 +44,16 @@ SOURCES += \
     $$PWD/gui/toolbutton.cc \
     $$PWD/gui/webdialog.cc \
     $$PWD/util/codec.cc \
+    $$PWD/util/countdowntimer.cc \
     $$PWD/util/crypt.cc \
     $$PWD/util/datetime.cc
 
 QT      += core gui xml network webkit
 
-# TODO: Create a generate disk class!! not only for win32
-win32:  include($$ROOTDIR/win/disk/disk.pri)
+win32 {
+    include($$ROOTDIR/win/disk/disk.pri)
+    DEFINES += USE_WIN_DISK
+}
 
 # EOF
 

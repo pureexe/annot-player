@@ -6,6 +6,8 @@
 
 #include <QSystemTrayIcon>
 
+QT_FORWARD_DECLARE_CLASS(QAction)
+
 class MainWindow;
 
 class Tray : public QSystemTrayIcon
@@ -19,11 +21,17 @@ public:
   explicit Tray(MainWindow *w, QObject *parent = 0);
 
   // - Implementations -
+protected slots:
+  void activate(QSystemTrayIcon::ActivationReason reason);
+  void invalidateContextMenu();
 private:
   void createActions();
 
 private:
   MainWindow *w_;
+
+  QAction *minimizeAct_,
+          *restoreAct_;
 };
 
 #endif // TRAY_H

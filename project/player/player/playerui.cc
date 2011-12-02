@@ -75,8 +75,9 @@ PlayerUi::PlayerUi(SignalHub *hub, Player *player, ServerAgent *server, QWidget 
   // Post fix: remove blurred graphics effects for text buttons
   userButton()->setGraphicsEffect(0);
 
+  toggleEmbedModeButton()->setCheckable(true);
   toggleMiniModeButton()->setCheckable(true);
-  togglePlayModeButton()->setCheckable(true);
+  toggleFullScreenModeButton()->setCheckable(true);
 
   setTabOrder(lineEdit(), prefixLineEdit());
   setTabOrder(prefixLineEdit(), lineEdit());
@@ -93,13 +94,16 @@ PlayerUi::createConnections()
   connect(stopButton(), SIGNAL(clicked()), SLOT(stop()));
   connect(nextFrameButton(), SIGNAL(clicked()), SLOT(nextFrame()));
 
-  connect(userButton(), SIGNAL(clicked()), SLOT(requestShowUserPanel()));
-  connect(positionButton(), SIGNAL(clicked()), SLOT(requestShowPositionPanel()));
+  connect(userButton(), SIGNAL(clicked()), SLOT(clickUserButton()));
+  connect(positionButton(), SIGNAL(clicked()), SIGNAL(showPositionPanelRequested()));
 
   connect(positionSlider(), SIGNAL(valueChanged(int)), SLOT(setPosition(int)));
   connect(volumeSlider(), SIGNAL(valueChanged(int)), SLOT(setVolume(int)));
 
   connect(lineEdit(), SIGNAL(returnPressed()), SLOT(postAnnotation()));
+
+  // Always connected
+  connect(hub_, SIGNAL(tokenModeChanged(SignalHub::TokenMode)), SLOT(invalidateVisibleWidgets())); \
 
   CommandLineEdit *p = dynamic_cast<CommandLineEdit*>(prefixLineEdit());
   if (p)
@@ -111,13 +115,13 @@ PlayerUi::createConnections()
   PlayerUi::_connect##Hub() \
   { \
     _connect(openButton(), SIGNAL(clicked()), hub_, SLOT(open())); \
-    _connect(togglePlayModeButton(), SIGNAL(clicked(bool)), hub_, SLOT(setFullScreenVideoMode(bool))); \
+    _connect(toggleFullScreenModeButton(), SIGNAL(clicked(bool)), hub_, SLOT(setFullScreenWindowMode(bool))); \
     _connect(toggleMiniModeButton(), SIGNAL(clicked(bool)), hub_, SLOT(setMiniPlayerMode(bool))); \
+    _connect(toggleEmbedModeButton(), SIGNAL(clicked(bool)), hub_, SLOT(setEmbeddedPlayerMode(bool))); \
     _connect(hub_, SIGNAL(playModeChanged(SignalHub::PlayMode)), this, SLOT(invalidatePlayButton())); \
     _connect(hub_, SIGNAL(playModeChanged(SignalHub::PlayMode)), this, SLOT(invalidateStopButton())); \
     _connect(hub_, SIGNAL(playModeChanged(SignalHub::PlayMode)), this, SLOT(invalidatePositionSlider())); \
     _connect(hub_, SIGNAL(volumeChanged(qreal)), this, SLOT(invalidateVolumeSlider())); \
-    _connect(hub_, SIGNAL(tokenModeChanged(SignalHub::TokenMode)), this, SLOT(invalidateVolumeSlider())); \
 \
     static const char *status_signals[] = { \
       SIGNAL(played()), SIGNAL(paused()), SIGNAL(stopped()) \
@@ -211,7 +215,7 @@ PlayerUi::setActive(bool active)
     invalidateStopButton();
     invalidateNextFrameButton();
     invalidatePlayerModeToggler();
-    invalidateVideoModeToggler();
+    invalidateWindowModeToggler();
 
     invalidateUserButton();
 
@@ -320,6 +324,7 @@ void
 PlayerUi::invalidateVolumeSlider()
 {
   QSlider *slider = volumeSlider();
+
   if (hub_->isSignalTokenMode()) {
     slider->setSliderPosition(0);
     slider->setEnabled(false);
@@ -549,12 +554,15 @@ PlayerUi::postAnnotation()
 // - Requests -
 
 void
-PlayerUi::requestShowUserPanel()
-{ emit showUserPanelRequested(); }
-
-void
-PlayerUi::requestShowPositionPanel()
-{ emit showPositionPanelRequested(); }
+PlayerUi::clickUserButton()
+{
+  if (!server_->isAuthorized())
+    emit loginRequested();
+  else {
+    emit invalidateUserMenuRequested();
+    userButton()->showMenu();
+  }
+}
 
 void
 PlayerUi::setAnnotationEnabled(bool enabled)
@@ -570,10 +578,26 @@ PlayerUi::setAnnotationEnabled(bool enabled)
 
 void
 PlayerUi::invalidatePlayerModeToggler()
-{ toggleMiniModeButton()->setChecked(hub_->isMiniPlayerMode()); }
+{
+  toggleMiniModeButton()->setChecked(hub_->isMiniPlayerMode());
+  toggleEmbedModeButton()->setChecked(hub_->isEmbeddedPlayerMode());
+}
 
 void
-PlayerUi::invalidateVideoModeToggler()
-{ togglePlayModeButton()->setChecked(hub_->isFullScreenVideoMode()); }
+PlayerUi::invalidateWindowModeToggler()
+{ toggleFullScreenModeButton()->setChecked(hub_->isFullScreenWindowMode()); }
+
+void
+PlayerUi::invalidateVisibleWidgets()
+{
+  bool v = !hub_->isSignalTokenMode();
+  volumeSlider()->setVisible(v);
+  positionSlider()->setVisible(v);
+  positionButton()->setVisible(v);
+
+  previousButton()->setVisible(v);
+  nextButton()->setVisible(v);
+  nextFrameButton()->setVisible(v);
+}
 
 // EOF

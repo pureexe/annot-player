@@ -60,8 +60,11 @@ MiniPlayerUi::createLayout()
     row1->addWidget(nextFrameButton());
     row1->addWidget(stopButton());
     row1->addWidget(openButton());
+    row1->addWidget(previousButton());
+    row1->addWidget(nextButton());
+    row1->addWidget(toggleEmbedModeButton());
     row1->addWidget(toggleMiniModeButton());
-    row1->addWidget(togglePlayModeButton());
+    row1->addWidget(toggleFullScreenModeButton());
     row1->addWidget(volumeSlider());
 
     row2->addWidget(userButton());
@@ -80,6 +83,7 @@ MiniPlayerUi::createLayout()
   // TOD jichi 7/26/2011: This is really a bad hotfix. Need a better design for PlayerUI class do to this in an efficient way.
   // Note: there is no textChanged event in QLabel.
   positionButton()->hide(); // always hide - it is better to disable this label rather than hide it.
+  positionButton()->resize(0, 0);
 }
 
 void
@@ -176,7 +180,7 @@ void
 MiniPlayerUi::mouseDoubleClickEvent(QMouseEvent *event)
 {
   if (event && event->buttons() == Qt::LeftButton) {
-    hub()->toggleFullScreenVideoMode();
+    hub()->toggleFullScreenWindowMode();
     event->accept();
   }
 }
@@ -260,7 +264,7 @@ void
 MiniPlayerDock::mouseDoubleClickEvent(QMouseEvent *event)
 {
   if (event && event->buttons() == Qt::LeftButton) {
-    emit togglePlayModeRequested();
+    emit toggleFullScreenModeRequested();
     event->accept();
   }
 }

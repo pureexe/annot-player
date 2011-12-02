@@ -3,9 +3,9 @@
 
 #include "core/cloud/token.h"
 #include "core/util/crypt.h"
-#ifdef Q_WS_WIN
+#ifdef USE_WIN_DISK
   #include "win/disk/disk.h"
-#endif // Q_WS_WIN
+#endif // USE_WIN_DISK
 #include <QtCore>
 
 #define DEBUG "Core::Token"
@@ -43,10 +43,10 @@ Token::digestFromFile(const QString &input)
     if (!QFileInfo(filePath).exists())
       filePath = dir + "/VIDEO_TS/VIDEO_TS.BUP";
     if (!QFileInfo(filePath).exists())
-      filePath = QString();
+      filePath.clear();
   }
 
-#ifdef Q_WS_WIN
+#ifdef USE_WIN_DISK
   if (filePath.isEmpty()) {
     QString deviceFileName = Disk::guessDeviceFileName(input);
     if (Disk::isValidDeviceFileName(deviceFileName)) {
@@ -60,7 +60,7 @@ Token::digestFromFile(const QString &input)
       disk.close();
     }
   } else
-#endif // Q_WS_WIN
+#endif // USE_WIN_DISK
   if (!filePath.isEmpty()) {
     QFile file(filePath);
     bool succeed = file.open(QIODevice::ReadOnly);

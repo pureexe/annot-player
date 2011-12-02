@@ -1,6 +1,4 @@
 #pragma once
-#ifndef QTWIN_H
-#define QTWIN_H
 
 // qtwin.h
 // 7/21/2011
@@ -120,4 +118,4 @@ namespace QtWin {
 
 } // namespace QtWin
 
-#endif // QTWIN_H
+// EOF

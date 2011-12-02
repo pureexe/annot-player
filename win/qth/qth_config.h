@@ -1,6 +1,4 @@
 #pragma once
-#ifndef QTH_CONFIG_H
-#define QTH_CONFIG_H
 
 // qth_config.h
 // 10/20/2011
@@ -19,4 +17,4 @@
   #define QTHAPI Q_DECL_IMPORT
 #endif // QTH_LIB
 
-#endif // QTH_CONFIG_H
+// EOF

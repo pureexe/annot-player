@@ -217,19 +217,20 @@ main(int argc, char *argv[])
     UiStyle::globalInstance()->setTheme(tid);
   }
 
-#ifdef USE_MODE_SIGNAL
-  // Root window
-  QMainWindow root; // Persistant visible root widget to prevent Qt from automatic closing invisible windows
-  root.setWindowFlags(root.windowFlags() | Qt::WindowStaysOnTopHint);
-  root.resize(0, 0);
-
-  // Main window
-  MainWindow w(&root, WINDOW_FLAGS);
-  root.show();
-#else
+//#ifdef USE_MODE_SIGNAL
+//  // Root window
+//  QMainWindow root; // Persistant visible root widget to prevent Qt from automatic closing invisible windows
+//  root.setWindowFlags(root.windowFlags() | Qt::WindowStaysOnTopHint);
+//  root.resize(0, 0);
+//
+//  // Main window
+//  MainWindow w(&root, WINDOW_FLAGS);
+//  root.show();
+//#else
+//  MainWindow w;
+//
+//#endif // USE_MODE_SIGNAL
   MainWindow w;
-
-#endif // USE_MODE_SIGNAL
   Q_ASSERT(w.isValid());
 
 #ifdef USE_WIN_QTH
@@ -258,7 +259,10 @@ main(int argc, char *argv[])
   //w.openPath("d:\\i\\sample.mp4");
   //w.openPath("d:/i/sample.mp4");
   //w.openPath("file:///d:/i/sample.mp4");
+  //w.openPath("X:", false);
   //w.openPath("/Volumes/local/i/sample.mp4");
+  //w.openPath("dvd://X:", false);
+  //w.openPath("cdda://X:", false);
 
   /*
   Display *dpy = QX11Info::display();
@@ -278,6 +282,15 @@ main(int argc, char *argv[])
   XSendEvent(dpy, DefaultRootWindow(dpy), False,
   SubstructureNotifyMask, &xev);
   */
+
+#if defined(USE_MODE_SIGNAL) && defined(Q_WS_WIN)
+  // jichi 11/29/2011: Use as a persistent top level window.
+  // FIXME: The app would close when there is no visible window after hijacking another process.
+  QWidget dummy; // Dummy widget as a persistent visible zero-sized window.
+  dummy.resize(QSize());
+  QObject::connect(&w, SIGNAL(windowClosed()), &dummy, SLOT(close()));
+  dummy.show();
+#endif // USE_MODE_SIGNAL && Q_WS_WIN
 
   return a.exec();
 }

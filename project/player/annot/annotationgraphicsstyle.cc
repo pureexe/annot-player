@@ -10,6 +10,7 @@ namespace { // anonymous, static initializers
 
   struct parser_config {
 
+    // Potential run time error if this class is linked before PARSER get initialized.
     parser_config()
     {
       Q_ASSERT(PARSER);

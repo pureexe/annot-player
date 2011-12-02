@@ -1,6 +1,4 @@
 #pragma once
-#ifndef HOOK_H
-#define HOOK_H
 
 // hook.h
 // 7/10/2011
@@ -179,7 +177,7 @@ public:
   //HOOKAPI bool empty() const; ///< No threads and no listeners
   HOOKAPI void clear();       ///< removeAllThreads and removeAllListneres
 
-  // - Implementations -
+  // - Implementation -
 protected:
   explicit WindowsHookManager(QObject *parent = 0);   ///< \internal
   ~WindowsHookManager();  ///< \internal
@@ -196,4 +194,4 @@ public:
   void removeAllHooks();  ///< \internal
 };
 
-#endif // HOOK_H
+// EOF

@@ -45,38 +45,38 @@ signals:
   void tokenModeChanged(SignalHub::TokenMode mode);
 
 public:
-  enum PlayerMode { NormalPlayerMode = 0, MiniPlayerMode, FullScreenPlayerMode };
+  enum PlayerMode { NormalPlayerMode = 0, MiniPlayerMode, EmbeddedPlayerMode };
   PlayerMode playerMode() const         { return playerMode_; }
   bool isNormalPlayerMode() const       { return playerMode() == NormalPlayerMode; }
   bool isMiniPlayerMode() const         { return playerMode() == MiniPlayerMode; }
-  bool isFullScreenPlayerMode() const   { return playerMode() == FullScreenPlayerMode; }
+  bool isEmbeddedPlayerMode() const     { return playerMode() == EmbeddedPlayerMode; }
 public slots:
   void setPlayerMode(PlayerMode mode);
   void setNormalPlayerMode();
   void setMiniPlayerMode(bool t = true);
-  void setFullScreenPlayerMode(bool t = true);
+  void setEmbeddedPlayerMode(bool t = true);
   void toggleMiniPlayerMode()           { setMiniPlayerMode(!isMiniPlayerMode()); }
-  void toggleFullScreenPlayerMode()     { setFullScreenPlayerMode(!isFullScreenPlayerMode()); }
+  void toggleEmbeddedPlayerMode()       { setEmbeddedPlayerMode(!isEmbeddedPlayerMode()); }
   void stopMiniPlayerMode()             { setMiniPlayerMode(false); }
-  void stopFullScreenPlayerMode()       { setFullScreenPlayerMode(false); }
+  void stopEmbeddedPlayerMode()         { setEmbeddedPlayerMode(false); }
 signals:
   void playerModeChanged(SignalHub::PlayerMode mode);
 
 public:
-  enum VideoMode { NormalVideoMode = 0, FullScreenVideoMode };
-  VideoMode videoMode() const           { return videoMode_; }
-  bool isNormalVideoMode() const        { return videoMode() == NormalVideoMode; }
-  bool isFullScreenVideoMode() const    { return videoMode() == FullScreenVideoMode; }
+  enum WindowMode { NormalWindowMode = 0, FullScreenWindowMode };
+  WindowMode windowMode() const          { return windowMode_; }
+  bool isNormalWindowMode() const        { return windowMode() == NormalWindowMode; }
+  bool isFullScreenWindowMode() const    { return windowMode() == FullScreenWindowMode; }
 public slots:
-  void setVideoMode(VideoMode mode);
-  void setNormalVideoMode(bool t = true);
-  void setFullScreenVideoMode(bool t = true);
-  void toggleNormalVideoMode()          { setNormalVideoMode(!isNormalVideoMode()); }
-  void toggleFullScreenVideoMode()      { setFullScreenVideoMode(!isFullScreenVideoMode()); }
-  void stopNormalVideoMode()            { setNormalVideoMode(false); }
-  void stopFullScreenVideoMode()        { setFullScreenVideoMode(false); }
+  void setWindowMode(WindowMode mode);
+  void setNormalWindowMode(bool t = true);
+  void setFullScreenWindowMode(bool t = true);
+  void toggleNormalWindowMode()          { setNormalWindowMode(!isNormalWindowMode()); }
+  void toggleFullScreenWindowMode()      { setFullScreenWindowMode(!isFullScreenWindowMode()); }
+  void stopNormalWindowMode()            { setNormalWindowMode(false); }
+  void stopFullScreenWindowMode()        { setFullScreenWindowMode(false); }
 signals:
-  void videoModeChanged(SignalHub::VideoMode mode);
+  void windowModeChanged(SignalHub::WindowMode mode);
 
 public:
   enum PlayMode { NormalPlayMode = 0, SyncPlayMode, LivePlayMode };
@@ -129,7 +129,7 @@ private:
   TokenMode tokenMode_;
   PlayMode playMode_;
   PlayerMode playerMode_;
-  VideoMode videoMode_;
+  WindowMode windowMode_;
 
   bool playing_, paused_, stopped_;
 };

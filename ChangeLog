@@ -1,5 +1,24 @@
 # ChangeLog
 
+Project: annot.x
+Versial: 0.0.0.0
+Date: 11/30/2011
+- Project launched.
+
+Project: annot.player
+Versial: 0.1.1.0
+Date: 12/2/2011
+- Windows global mouse hook removed and replaced with native vlcore calls.
+  Less mouse hanging in Windows when the app is busy.
+- Added support to play cue file.
+- Added support to play cdda. Fixed bug while openning CD on Windows.
+- Added embedded mode.
+  Able to embed/play vidoe/annots in any window, such as Notepad, Photoshop, or PPStream.
+- Able to select embedded player on the top or bottom.
+- Player buttons and menues extended.
+- Added task bar icon for Windows 7.
+- Added Dwm notifier in Windows 7 to watch aero composition changes.
+
 Project: annot.player
 Versial: 0.1.0.3
 Date: 11/26/2011

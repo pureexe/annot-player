@@ -1,6 +1,4 @@
 #pragma once
-#ifndef ITH_H
-#define ITH_H
 
 // ith.h  10/15/2011
 
@@ -27,4 +25,4 @@ namespace Ith {
 
 } // namespace Ith
 
-#endif // ITH_H
+// EOF

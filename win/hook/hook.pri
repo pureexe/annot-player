@@ -1,5 +1,5 @@
 # hook.pri
-# Since 7/20/2011
+# 7/20/2011
 
 INCLUDEPATH += $$PWD
 

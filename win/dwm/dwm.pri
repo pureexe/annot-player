@@ -1,5 +1,5 @@
 # dwm.pri
-# Since 7/10/2011
+# 7/10/2011
 
 INCLUDEPATH += $$PWD
 
@@ -9,8 +9,10 @@ HEADERS += \
 SOURCES += \
     $$PWD/dwm.cc
 
+DEFINES += USE_DWM_NOTIFIER
+
 CONFIG(dwmapi_static) {
-    DEFINES += USE_STATIC_LIB
+    DEFINES += USE_DWM_STATIC
     LIBS += -Ldwmapi
 }
 

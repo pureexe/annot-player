@@ -1,5 +1,5 @@
 # clientsoap.pri
-# Since 10/6/2011
+# 10/6/2011
 
 ## TODO: Automatic generate this pri file!!
 

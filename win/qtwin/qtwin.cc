@@ -30,16 +30,16 @@ namespace { // anonymous
 
   // Conversions between qt and win32 data structures
 
-  inline QPoint POINT2QPoint_(const POINT &pt)
+  inline QPoint POINT2QPoint(const POINT &pt)
   { return QPoint((int)pt.x, (int)pt.y); }
 
-  inline POINT QPoint2POINT_(const QPoint &pos)
+  inline POINT QPoint2POINT(const QPoint &pos)
   { POINT ret = { pos.x(), pos.y() }; return ret; }
 
-  inline QRect RECT2QRect_(const RECT &rect)
+  inline QRect RECT2QRect(const RECT &rect)
   { return QRect((int)rect.left, (int)rect.top, int(rect.right - rect.left), int(rect.bottom - rect.top)); } // QRect(x, y, w, h)
 
-  inline RECT QRect2RECT_(const QRect &r)
+  inline RECT QRect2RECT(const QRect &r)
   { RECT ret = { r.x(), r.y(), r.right(), r.bottom() }; return ret; } // RECT { x1, y1, x2, y2 }
 
   // Return ached OS version info
@@ -100,7 +100,7 @@ QtWin::getThreadIdsByProcessId(DWORD dwOwnerPID)
   if (hSnapshot == INVALID_HANDLE_VALUE)
     return ret;
 
-  THREADENTRY32 te32 = {0};
+  THREADENTRY32 te32 = { };
   te32.dwSize = sizeof(THREADENTRY32); // Fill in the size of the structure before using it.
 
   // Walk   the   hread snapshot to find all threads of the process.
@@ -129,7 +129,7 @@ QtWin::getProcessIdsByParentProcessId(DWORD dwOwnerPID)
   if (hSnapshot == INVALID_HANDLE_VALUE)
     return ret;
 
-  PROCESSENTRY32 pe = {0};
+  PROCESSENTRY32 pe = { };
   pe.dwSize = sizeof(pe); // Fill in the size of the structure before using it.
 
   if (::Process32First(hSnapshot, &pe)) {
@@ -152,7 +152,7 @@ QtWin::getProcessIdsByName(const QString &processName)
   if (hSnapshot == INVALID_HANDLE_VALUE)
     return ret;
 
-  PROCESSENTRY32 pe = {0};
+  PROCESSENTRY32 pe = { };
   pe.dwSize = sizeof(pe); // Fill in the size of the structure before using it.
 
   if (::Process32First(hSnapshot, &pe)) {
@@ -177,7 +177,7 @@ QtWin::getProcessIdByName(const QString &processName)
   if (hSnapshot == INVALID_HANDLE_VALUE)
     return ret;
 
-  PROCESSENTRY32 pe = {0};
+  PROCESSENTRY32 pe = { };
   pe.dwSize = sizeof(pe); // Fill in the size of the structure before using it.
 
   if (::Process32First(hSnapshot, &pe)) {
@@ -202,7 +202,7 @@ QtWin::getProcessesInfo()
   if (hSnapshot == INVALID_HANDLE_VALUE)
     return ret;
 
-  PROCESSENTRY32 pe = {0};
+  PROCESSENTRY32 pe = { };
   pe.dwSize = sizeof(pe); // Fill in the size of the structure before using it.
 
   if (::Process32First(hSnapshot, &pe)) {
@@ -244,7 +244,7 @@ QtWin::getModulesInfo()
   if (hSnapshot == INVALID_HANDLE_VALUE)
     return ret;
 
-  MODULEENTRY32 me = {0};
+  MODULEENTRY32 me = { };
   me.dwSize = sizeof(me); // Fill in the size of the structure before using it.
 
   if (::Module32First(hSnapshot, &me)) {
@@ -349,11 +349,11 @@ QtWin::getChildWindows(HWND hwnd)
 
 HWND
 QtWin::getWindowAtPos(const QPoint &globalPos)
-{ return ::WindowFromPoint(::QPoint2POINT_(globalPos)); }
+{ return ::WindowFromPoint(::QPoint2POINT(globalPos)); }
 
 HWND
 QtWin::getChildWindowAtPos(const QPoint &globalPos, HWND parent)
-{ return ::ChildWindowFromPoint(parent, ::QPoint2POINT_(globalPos)); }
+{ return ::ChildWindowFromPoint(parent, ::QPoint2POINT(globalPos)); }
 
 QRect
 QtWin::getWindowRect(HWND hwnd)
@@ -361,7 +361,7 @@ QtWin::getWindowRect(HWND hwnd)
   QRect ret;
   RECT rect;
   if (::GetWindowRect(hwnd, &rect))
-    ret = ::RECT2QRect_(rect);
+    ret = ::RECT2QRect(rect);
   return ret;
 }
 

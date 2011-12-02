@@ -1,5 +1,5 @@
 # serveragent.pri
-# Since 9/10/2011
+# 9/10/2011
 
 include(../../config.pri)
 #include($$ROOTDIR/module/gsoap/gsoap.pri)

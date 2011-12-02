@@ -1,5 +1,5 @@
 # tr.pri
-# Since 9/16/2011
+# 9/16/2011
 
 HEADERS += \
     tr.h \

@@ -1,6 +1,4 @@
 #pragma once
-#ifndef QTH_H
-#define QTH_H
 
 // qth.h  10/14/2011
 
@@ -57,4 +55,4 @@ private:
   QList<ulong> pids_;
 };
 
-#endif // QTH_H
+// EOF

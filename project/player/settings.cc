@@ -20,8 +20,10 @@
 #define SK_THEME        "Theme"
 #define SK_TRANSLATE    "Translate"
 #define SK_SUBTITLEONTOP "SubtitleStaysOnTop"
+#define SK_EMBEDONTOP   "EmbedOnTop"
 #define SK_UPDATEDATE   "UpdateDate"
 #define SK_RECENTPATH   "RecentPath"
+#define SK_AUTOPLAYNEXT "AutoPlayNext"
 
 #define SK_QUEUEEMPTY   "QueueEmpty"
 
@@ -173,6 +175,22 @@ Settings::isSubtitleStaysOnTop() const
 void
 Settings::setSubtitleStaysOnTop(bool t)
 { setValue(SK_SUBTITLEONTOP, t); }
+
+bool
+Settings::isEmbeddedPlayerStaysOnTop() const
+{ return value(SK_EMBEDONTOP).toBool(); }
+
+void
+Settings::setEmbeddedPlayerStaysOnTop(bool t)
+{ setValue(SK_EMBEDONTOP, t); }
+
+bool
+Settings::isAutoPlayNext() const
+{ return value(SK_AUTOPLAYNEXT).toBool(); }
+
+void
+Settings::setAutoPlayNext(bool t)
+{ setValue(SK_AUTOPLAYNEXT, t); }
 
 QString
 Settings::recentPath() const

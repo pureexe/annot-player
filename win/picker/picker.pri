@@ -1,5 +1,5 @@
 # picker.pri
-# Since 10/30/2011
+# 10/30/2011
 
 INCLUDEPATH += $$PWD
 

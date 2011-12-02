@@ -22,7 +22,6 @@
 #define T_OK            0x6
 #define T_SAVE          0x7
 #define T_CANCEL        0x8
-#define T_ADD           0x9
 
 #define T_COLOR         0x201
 #define T_BOLD          0x202
@@ -51,6 +50,7 @@
 #define T_DETACHED      0x217
 #define T_REFRESH       0x218
 #define T_RESET         0x219
+#define T_ADD           0x21a
 
 #define T_BLACK         0x301
 #define T_BLUE          0x302
@@ -183,19 +183,20 @@
 #define T_PATH          0x518
 
 // - Defaults -
-#define T_DEFAULT_USERNAME      0xa
-#define T_DEFAULT_PASSWORD      0x11
+#define T_DEFAULT_USERNAME      0x9
+#define T_DEFAULT_PASSWORD      0xa
 
 // - Titles -
 
-#define T_TITLE_PROGRAM         0x12
-#define T_TITLE_USER            0x13
-#define T_TITLE_LOGIN           0x14
-#define T_TITLE_SEEK            0x15
+#define T_TITLE_PROGRAM         0xb
+#define T_TITLE_USER            0xc
+#define T_TITLE_LOGIN           0xd
+#define T_TITLE_SEEK            0xe
 
-#define T_TITLE_OPENFILE        0x16
-#define T_TITLE_OPENDEVICE      0x17
-#define T_TITLE_OPENSUBTITLE    0x18
+#define T_TITLE_OPENFILE        0x11
+#define T_TITLE_OPENVIDEODEVICE 0x12
+#define T_TITLE_OPENAUDIODEVICE 0x13
+#define T_TITLE_OPENSUBTITLE    0x14
 
 #define T_TITLE_ANNOTATIONBROWSER       0x19
 #define T_TITLE_TOKENVIEW       0x1a
@@ -263,76 +264,86 @@
 
 // - Actions -
 
-#define T_MENUTEXT_OPEN        0x81
-#define T_TIP_OPEN             0x82
+#define T_MENUTEXT_OPEN        0x80
+#define T_TIP_OPEN             0x81
 #define T_TOOLTIP_OPEN         T_TIP_OPEN
 #define T_STATUSTIP_OPEN       T_TIP_OPEN
 
-#define T_MENUTEXT_OPENFILE    0x83
-#define T_TIP_OPENFILE         0x84
+#define T_MENUTEXT_OPENFILE    0x82
+#define T_TIP_OPENFILE         0x83
 #define T_TOOLTIP_OPENFILE     T_TIP_OPENFILE
 #define T_STATUSTIP_OPENFILE   T_TIP_OPENFILE
 
-#define T_MENUTEXT_OPENDEVICE  0x85
-#define T_TIP_OPENDEVICE       0x86
+#define T_MENUTEXT_OPENDEVICE  0x84
+#define T_TIP_OPENDEVICE       0x85
 #define T_TOOLTIP_OPENDEVICE   T_TIP_OPENDEVICE
 #define T_STATUSTIP_OPENDEVICE T_TIP_OPENDEVICE
 
-#define T_MENUTEXT_OPENSUBTITLE  0x87
-#define T_TIP_OPENSUBTITLE       0x88
+#define T_MENUTEXT_OPENVIDEODEVICE  0x86
+#define T_TIP_OPENVIDEODEVICE       0x87
+#define T_TOOLTIP_OPENVIDEODEVICE   T_TIP_OPENVIDEODEVICE
+#define T_STATUSTIP_OPENVIDEODEVICE T_TIP_OPENVIDEODEVICE
+
+#define T_MENUTEXT_OPENAUDIODEVICE  0x88
+#define T_TIP_OPENAUDIODEVICE       0x89
+#define T_TOOLTIP_OPENAUDIODEVICE   T_TIP_OPENAUDIODEVICE
+#define T_STATUSTIP_OPENAUDIODEVICE T_TIP_OPENAUDIODEVICE
+
+#define T_MENUTEXT_OPENSUBTITLE  0x8a
+#define T_TIP_OPENSUBTITLE       0x8b
 #define T_TOOLTIP_OPENSUBTITLE   T_TIP_OPENSUBTITLE
 #define T_STATUSTIP_OPENSUBTITLE T_TIP_OPENSUBTITLE
 
-#define T_MENUTEXT_OPENCONTEXTMENU  0x89
-#define T_TIP_OPENCONTEXTMENU       0x8a
+#define T_MENUTEXT_OPENCONTEXTMENU  0x8c
+#define T_TIP_OPENCONTEXTMENU       0x8d
 #define T_TOOLTIP_OPENCONTEXTMENU   T_TIP_OPENCONTEXTMENU
 #define T_STATUSTIP_OPENCONTEXTMENU T_TIP_OPENCONTEXTMENU
 
-#define T_MENUTEXT_PLAY         0x8b
-#define T_TIP_PLAY              0x8c
+#define T_MENUTEXT_PLAY         0x8e
+#define T_TIP_PLAY              0x8f
 #define T_TOOLTIP_PLAY          T_TIP_PLAY
 #define T_STATUSTIP_PLAY        T_TIP_PLAY
 
-#define T_MENUTEXT_PAUSE        0x8e
-#define T_TIP_PAUSE             0x8f
+#define T_MENUTEXT_PAUSE        0x90
+#define T_TIP_PAUSE             0x91
 #define T_TOOLTIP_PAUSE         T_TIP_PAUSE
 #define T_STATUSTIP_PAUSE       T_TIP_PAUSE
 
-#define T_MENUTEXT_STOP         0x91
-#define T_TIP_STOP              0x92
+#define T_MENUTEXT_STOP         0x92
+#define T_TIP_STOP              0x93
 #define T_TOOLTIP_STOP          T_TIP_STOP
 #define T_STATUSTIP_STOP        T_TIP_STOP
 
-#define T_MENUTEXT_NEXTFRAME    0x93
-#define T_TIP_NEXTFRAME         0x94
+#define T_MENUTEXT_NEXTFRAME    0x94
+#define T_TIP_NEXTFRAME         0x95
 #define T_TOOLTIP_NEXTFRAME     T_TIP_NEXTFRAME
 #define T_STATUSTIP_NEXTFRAME   T_TIP_NEXTFRAME
 
-#define T_MENUTEXT_REPLAY       0x95
-#define T_TIP_REPLAY            0x96
+#define T_MENUTEXT_REPLAY       0x96
+#define T_TIP_REPLAY            0x97
 #define T_TOOLTIP_REPLAY        T_TIP_REPLAY
 #define T_STATUSTIP_REPLAY      T_TIP_REPLAY
 
-#define T_MENUTEXT_MINI         0x97
-#define T_TIP_MINI              0x98
+#define T_MENUTEXT_MINI         0x98
+#define T_TIP_MINI              0x99
 #define T_TOOLTIP_MINI          T_TIP_MINI
 #define T_STATUSTIP_MINI        T_TIP_MINI
 
-#define T_MENUTEXT_FULLSCREEN   0x99
-#define T_TIP_FULLSCREEN        0x9a
+#define T_MENUTEXT_FULLSCREEN   0x9a
+#define T_TIP_FULLSCREEN        0x9b
 #define T_TOOLTIP_FULLSCREEN    T_TIP_FULLSCREEN
 #define T_STATUSTIP_FULLSCREEN  T_TIP_FULLSCREEN
 
-#define T_MENUTEXT_SNAPSHOT     0x9b
-#define T_TIP_SNAPSHOT          0x9c
+#define T_MENUTEXT_SNAPSHOT     0x9c
+#define T_TIP_SNAPSHOT          0x9d
 #define T_TOOLTIP_SNAPSHOT      T_TIP_SNAPSHOT
 #define T_STATUSTIP_SNAPSHOT    T_TIP_SNAPSHOT
 
-#define T_MENUTEXT_ANNOT        0x9d
-#define T_TIP_ANNOT             0x9e
+#define T_MENUTEXT_ANNOT        0x9e
+#define T_TIP_ANNOT             0x9f
 #define T_TOOLTIP_ANNOT         T_TIP_ANNOT
 #define T_STATUSTIP_ANNOT       T_TIP_ANNOT
-#define T_MENUTEXT_SHOWANNOT    0x9f
+#define T_MENUTEXT_SHOWANNOT    0xa0
 #define T_TIP_SHOWANNOT         0xa1
 #define T_TOOLTIP_SHOWANNOT     T_TIP_SHOWANNOT
 #define T_STATUSTIP_SHOWANNOT   T_TIP_SHOWANNOT
@@ -806,11 +817,30 @@
 #define T_ENABLE        0x16a
 #define T_BLACKLIST     0x16b
 
-#define T_TITLE_BLACKLIST         T_BLACKLIST
-#define T_MENUTEXT_BLACKLIST         T_BLACKLIST
-#define T_TIP_BLACKLIST              T_BLACKLIST
-#define T_TOOLTIP_BLACKLIST          T_TIP_BLACKLIST
-#define T_STATUSTIP_BLACKLIST        T_TIP_BLACKLIST
+#define T_MAXIMIZE      0x16c
+#define T_MINIMIZE      0x16d
+#define T_RESTORE       0x16e
+
+#define T_MENUTEXT_RESTORE            T_RESTORE
+#define T_TIP_RESTORE                 T_RESTORE
+#define T_TOOLTIP_RESTORE             T_TIP_RESTORE
+#define T_STATUSTIP_RESTORE           T_TIP_RESTORE
+
+#define T_MENUTEXT_MAXIMIZE            T_MAXIMIZE
+#define T_TIP_MAXIMIZE                 T_MAXIMIZE
+#define T_TOOLTIP_MAXIMIZE             T_TIP_MAXIMIZE
+#define T_STATUSTIP_MAXIMIZE           T_TIP_MAXIMIZE
+
+#define T_MENUTEXT_MINIMIZE            T_MINIMIZE
+#define T_TIP_MINIMIZE                 T_MINIMIZE
+#define T_TOOLTIP_MINIMIZE             T_TIP_MINIMIZE
+#define T_STATUSTIP_MINIMIZE           T_TIP_MINIMIZE
+
+#define T_TITLE_BLACKLIST               T_BLACKLIST
+#define T_MENUTEXT_BLACKLIST            T_BLACKLIST
+#define T_TIP_BLACKLIST                 T_BLACKLIST
+#define T_TOOLTIP_BLACKLIST             T_TIP_BLACKLIST
+#define T_STATUSTIP_BLACKLIST           T_TIP_BLACKLIST
 
 #define T_MENUTEXT_DEFAULTCOLOR         T_DEFAULT
 #define T_TIP_DEFAULTCOLOR              T_MENUTEXT_DEFAULTCOLOR
@@ -955,5 +985,25 @@
 #define T_TIP_BROWSE            0x192
 #define T_TOOLTIP_BROWSE        T_TIP_BROWSE
 #define T_STATUSTIP_BROWSE      T_TIP_BROWSE
+
+#define T_MENUTEXT_EMBED         0x193
+#define T_TIP_EMBED              0x194
+#define T_TOOLTIP_EMBED          T_TIP_EMBED
+#define T_STATUSTIP_EMBED        T_TIP_EMBED
+
+#define T_MENUTEXT_EMBEDONTOP    0x195
+#define T_TIP_EMBEDONTOP         0x196
+#define T_TOOLTIP_EMBEDONTOP     T_TIP_EMBEDONTOP
+#define T_STATUSTIP_EMBEDONTOP   T_TIP_EMBEDONTOP
+
+#define T_MENUTEXT_TRACK         0x197
+#define T_TIP_TRACK              0x198
+#define T_TOOLTIP_TRACK          T_TIP_TRACK
+#define T_STATUSTIP_TRACK        T_TIP_TRACK
+
+#define T_MENUTEXT_AUTOPLAYNEXT         0x199
+#define T_TIP_AUTOPLAYNEXT              0x19a
+#define T_TOOLTIP_AUTOPLAYNEXT          T_TIP_AUTOPLAYNEXT
+#define T_STATUSTIP_AUTOPLAYNEXT        T_TIP_AUTOPLAYNEXT
 
 #endif // TR_H

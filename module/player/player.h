@@ -13,6 +13,7 @@ QT_FORWARD_DECLARE_CLASS(QMacCocoaViewContainer)
 #endif // Q_WS_MAC
 
 class PlayerImpl; ///< \internal
+struct libvlc_media_t;
 // Player
 /**
  *  \brief  Media player controller
@@ -34,11 +35,32 @@ public:
   static const QStringList &supportedVideoSuffices();
   static const QStringList &supportedPictureSuffices();
   static const QStringList &supportedSubtitleSuffices();
+  static const QStringList &supportedPlaylistSuffices();
 
   static const QStringList &supportedAudioFilters();
   static const QStringList &supportedVideoFilters();
   static const QStringList &supportedPictureFilters();
   static const QStringList &supportedSubtitleFilters();
+  static const QStringList &supportedPlaylistFilters();
+
+  static bool isSupportedAudio(const QString &fileName);
+  static bool isSupportedVideo(const QString &fileName);
+  static bool isSupportedPicture(const QString &fileName);
+  static bool isSupportedSubtitle(const QString &fileName);
+  static bool isSupportedPlaylist(const QString &fileName);
+
+  // - Types -
+public:
+
+  enum Status { Stopped = 0, Playing = 1, Paused = 2 };
+
+  struct MediaInfo {
+    QString path; // MRL
+    QString title;
+    int track;
+
+    MediaInfo() : track(0) { }
+  };
 
   // - Constructions -
 private:
@@ -60,7 +82,6 @@ public:
   bool isMouseEnabled() const;
   bool isKeyboardEnabled() const;
 
-  enum Status { Stopped = 0, Playing = 1, Paused = 2 };
   Status status() const;
   bool isPlaying() const;
   bool isPaused() const;
@@ -68,8 +89,14 @@ public:
   bool pausable() const;      // some media cannot be paused
   bool seekable() const;      // some media cannot be paused
 
+  MediaInfo mediaInfo() const;
   QString mediaTitle() const;
   QString mediaPath() const;
+  int trackNumber() const;
+
+  int trackCount() const;
+  bool hasPlaylist() const;
+  QList<MediaInfo> playlist() const;
 
   /**
    *  \brief  Total play time in msecs.
@@ -84,12 +111,19 @@ public:
 
 public:
 #ifdef Q_WS_MAC
-  typedef void *WindowHandle; // NSObject
+  typedef void *WindowHandle; ///< NSView
 #else
   typedef WId WindowHandle;
 #endif // Q_WS_MAC
-  void setEmbeddedWindowHandle(WindowHandle wid);
-  WindowHandle embeddedWindowHandle() const;
+  WindowHandle embeddedWindow() const;
+
+public slots:
+  // Do not use WindowHandle to bypass qMetatype registration.
+#ifdef Q_WS_MAC
+  void setEmbeddedWindow(void *cocoaView);
+#else
+  void setEmbeddedWindow(WId winId);
+#endif // Q_WS_MAC
 
   ///  A shortcut of setWinId for QWidget.
 #ifdef Q_WS_MAC
@@ -98,6 +132,7 @@ public:
   void embed(QWidget *w);
 #endif // Q_WS_MAC
 
+public:
   ///  Save the current frame as picture. Return if succeed.
   bool snapshot(const QString &savePath);
 
@@ -143,7 +178,9 @@ public slots:
    *  - udp:[[<source address>]@[<bind address>][:<bind port>]]
    */
   bool openMedia(const QString &url);
+  bool openMediaAsCD(const QString &url);
   void closeMedia();
+
 
   void setEncoding(const QString &encoding); ///< See \c Encoding for details.
 
@@ -155,6 +192,9 @@ public slots:
 
   void setMouseEnabled(bool enabled = true);
   void setKeyboardEnabled(bool enabled = true);
+
+  void setMouseEventEnabled(bool enabled = true);
+  bool isMouseEventEnabled() const;
 
   void play();
   void stop();
@@ -186,6 +226,19 @@ public slots:
 
   void loadExternalSubtitles(); ///< try to automatically load external subtitles
 
+  void setTrackNumber(int track); ///< play track
+  void setTrackNumber(); ///< default track is the current track number
+  void nextTrack();
+  void previousTrack();
+
+protected slots:
+  void invalidateVout(); ///< only works if vlccore is used
+  void startVoutTimer();
+  void stopVoutTimer();
+
+public:
+  void handleError(); ///< \internal
+
   // - Signals -
 signals:
   void opening();
@@ -202,6 +255,7 @@ signals:
   void encodingChanged();
   void errorEncountered();
   void subtitleChanged();
+  void endReached();
 
   // FIXME: This is not a good style to expose emit outside.
   // It could be better to use event to trigger emittion!!!!!!!!!!!!!!!!1
@@ -222,17 +276,25 @@ public:
     ADD_SIGNAL(positionChanged())
     ADD_SIGNAL(volumeChanged())
     ADD_SIGNAL(encodingChanged())
-    ADD_SIGNAL(errorEncountered())
+    ADD_SIGNAL(endReached())
+    //ADD_SIGNAL(errorEncountered())
 #undef ADD_SIGNAL
   //@}
 
 signals:
   void titleIdChanged(int tid);
+  void trackNumberChanged(int track);
 
   // - Implementations -
+public:
+  Impl *impl() const { return impl_; } ///< \internal
+
 protected:
   QByteArray decode(const QString &utf) const;
   QString encode(const char *ascii) const;
+private:
+  QList<libvlc_media_t*> parsePlaylist(const QString &fileName) const;
+  QList<libvlc_media_t*> parsePlaylist(libvlc_media_t *md) const;
 };
 
 

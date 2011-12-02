@@ -1,5 +1,5 @@
 # VLCKit.pro
-# Since 10/26/2011
+# 10/26/2011
 include(../../config.pri)
 
 CONFIG      -= qt

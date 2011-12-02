@@ -1,13 +1,16 @@
 // picker.cc
 // 10/30/2011
 
+#ifdef _MSC_VER
+  #pragma warning (disable:4819)       // C4819: The file contains a character that cannot be represented in the current code page.
+#endif // _MSC_VER
+
 #include "picker.h"
 #include "qtwin/qtwin.h"
 #include <qt_windows.h>
 #include <QtCore>
 
 #define DEBUG "Picker"
-//#define USE_MODE_DEBUG
 #include "module/debug/debug.h"
 
 #ifndef PICKER_DLL_NAME
@@ -18,10 +21,11 @@
 #define PICKER  WindowPicker::globalInstance()
 
 // - Hook implementation -
-namespace { // anonymous, picker callbacks
+
+namespace { // anonymous, hook callbacks
 
   LRESULT CALLBACK
-  LowLevelMouseProc(__in int nCode, __in WPARAM wparam, __in LPARAM lparam)
+  MouseProc(__in int nCode, __in WPARAM wparam, __in LPARAM lparam)
   {
     #define NEXT ::CallNextHookEx(hHook, nCode, wparam, lparam)
     HHOOK hHook = (HHOOK)PICKER->hook();
@@ -40,6 +44,7 @@ namespace { // anonymous, picker callbacks
     }
 
     LPMOUSEHOOKSTRUCT lpMouseEvent = (LPMOUSEHOOKSTRUCT)lparam;
+    Q_ASSERT(lpMouseEvent);
     HWND hwnd = lpMouseEvent->hwnd;
     if (!hwnd)
       hwnd = ::WindowFromPoint(lpMouseEvent->pt);
@@ -69,7 +74,8 @@ WindowPicker::globalInstance()
 { static Self g; return &g; }
 
 WindowPicker::WindowPicker(QObject *parent)
-  : Base(parent) { impl_ = new Impl; }
+  : Base(parent)
+{ impl_ = new Impl; }
 
 WindowPicker::~WindowPicker()
 {
@@ -138,7 +144,8 @@ WindowPicker::start()
       return;
   }
 
-  impl_->hook = ::SetWindowsHookEx(WH_MOUSE_LL, ::LowLevelMouseProc, hInstance, 0);
+  // Global mode
+  impl_->hook = ::SetWindowsHookEx(WH_MOUSE_LL, ::MouseProc, hInstance, 0);
   DOUT("WindowPicker:start: started");
 }
 

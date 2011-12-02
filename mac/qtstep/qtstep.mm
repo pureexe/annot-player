@@ -13,8 +13,8 @@
   #define GetCurrentEventTime()   nil
 #endif // USE_MAC_CARBON
 
-#define DEBUG "qtstep"
-#include "module/debug/debug.h"
+//#define DEBUG "qtstep"
+//#include "module/debug/debug.h"
 
 // -- Helpers --
 namespace { // anonymous, cast

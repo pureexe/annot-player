@@ -3,19 +3,17 @@
 // CD-ROM: http://support.microsoft.com/kb/q138434/
 
 #include "disk.h"
-#include <windows.h>
+#include <qt_windows.h>
+#include <winioctl.h>
+#include <ntddcdrm.h>
 #include <QtCore>
+#include <climits>
 #include <cstring>
-#include <limits>
 #include <memory>
 
-//#define DEBUG
+#define DEBUG "Disk"
+#include "module/debug/debug.h"
 
-#ifdef DEBUG
-  #define DOUT(_msg)    qDebug() << "Disk:" << _msg
-#else
-  #define DOUT(_msg)    ;
-#endif // DEBUG
 
 // - Geometry -
 
@@ -32,7 +30,7 @@ Disk::Geometry::clear()
 QString
 Disk::guessDeviceFileName(const QString &hint)
 {
-  if (hint.isNull())
+  if (hint.isEmpty())
     return QString();
 
   QString normalized = hint.trimmed().toUpper();
@@ -53,10 +51,7 @@ Disk::guessDeviceFileName(const QString &hint)
 
 bool
 Disk::isValidDeviceFileName(const QString &fileName)
-{
-  return !fileName.isNull()
-      && fileName.contains(QRegExp("^\\\\\\\\\\.\\\\[A-Z]:$"));
-}
+{ return fileName.contains(QRegExp("^\\\\\\\\\\.\\\\[A-Z]:$", Qt::CaseInsensitive)); }
 
 Disk::Geometry
 Disk::geometryForHandle(void *handle)
@@ -103,8 +98,14 @@ Disk::geometryForHandle(void *handle)
 
 // - Construction -
 
+Disk::~Disk()
+{
+  Q_ASSERT(!handle_);
+  Q_ASSERT(!pmr_);
+}
+
 Disk::Disk(QObject *parent)
-  : Base(parent), handle_(0)
+  : Base(parent), handle_(0), pmr_(0)
 {
   DOUT("Disk: enter");
   DOUT("fileName: " + fileName_);
@@ -149,7 +150,7 @@ Disk::isOpen() const
 { return handle_; }
 
 bool
-Disk::open(OpenMode mode)
+Disk::open(OpenMode mode, bool lock)
 {
   DOUT("open: enter");
   if (handle_) {
@@ -172,19 +173,22 @@ Disk::open(OpenMode mode)
     FILE_SHARE_READ, // Read-only
     0, // Default security attributes
     OPEN_EXISTING,
-    0, // File attribute
+    FILE_ATTRIBUTE_NORMAL, // File attribute
     0 // Template file
   );
 
   if (hDisk != INVALID_HANDLE_VALUE) {
     DOUT("open: succeeded");
 
+    if (lock)
+      setRemovableMediaLocked(lock);
+
     handle_ = hDisk;
     geometry_ = geometryForHandle(handle_);
 
     Q_ASSERT(!geometry_.isNull());
-    DOUT("Media type:" << geometry_.mediaType);
-    DOUT("Media size:" << geometry_.size());
+    DOUT("open: media type =" << geometry_.mediaType);
+    DOUT("open media size =" << geometry_.size());
   } else
     DOUT("open: failed with error:" << ::GetLastError());
 
@@ -204,6 +208,8 @@ Disk::close()
 
   Q_ASSERT(handle_ != INVALID_HANDLE_VALUE);
   if (handle_ != INVALID_HANDLE_VALUE) {
+    if (isRemovableMediaLocked())
+      setRemovableMediaLocked(false);
     BOOL bResult = ::CloseHandle((HANDLE)handle_);
     Q_ASSERT(bResult);
     Q_UNUSED(bResult);
@@ -280,20 +286,21 @@ Disk::read(int maxSize)
 
   DWORD dwReturnBytes = (DWORD)qMin((qint64)maxSize, size());
   DWORD dwBufferBytes = (dwReturnBytes / geometry_.bytesPerSector + 1) * geometry_.bytesPerSector;
+  DOUT("read: dwReturnBytes =" << dwReturnBytes <<
+       ", dwBufferBytes =" << dwBufferBytes <<
+       ", bytesPerSector =" << geometry_.bytesPerSector);
   Q_ASSERT(dwBufferBytes >= dwReturnBytes);
   std::auto_ptr<char> buffer(new char[dwBufferBytes]);
 
   DWORD dwReadBytes;
   BOOL bResult = ::ReadFile(hDisk, buffer.get(), dwBufferBytes, &dwReadBytes, (LPOVERLAPPED)0); // read sector
-  if (!bResult) {
+  DOUT("read: bResult = " << bResult << ", dwReadBytes =" << dwReadBytes);
+  if (!bResult || !dwReadBytes) {
     DOUT("read: failed to read file with error:" << ::GetLastError());
     DOUT("read: exit");
     return QByteArray();
   }
   DOUT("read: succeeded");
-  DOUT("dwReturnBytes =" << dwReturnBytes);
-  DOUT("dwBufferBytes =" << dwBufferBytes);
-  DOUT("dwReadBytes =" << dwReadBytes);
 
   if (dwReadBytes < dwReturnBytes)
     dwReturnBytes = dwReadBytes;
@@ -303,7 +310,51 @@ Disk::read(int maxSize)
   }
 
   DOUT("read: exit");
-  return QByteArray(buffer.get(), (int)dwReturnBytes);
+  return QByteArray(buffer.get(), dwReturnBytes);
+}
+
+// - Lock/unlock removable media -
+
+bool
+Disk::isRemovableMediaLocked() const
+{ return pmr_; }
+
+void
+Disk::setRemovableMediaLocked(bool t)
+{
+  DOUT("setRemovableMediaLocked:enter: toLock =" << t);
+  if (t == isRemovableMediaLocked()) {
+    DOUT("setRemovableMediaLocked:exit: no changes");
+    return;
+  }
+
+  HANDLE hDisk = (HANDLE)handle_;
+  if (hDisk == INVALID_HANDLE_VALUE) {
+    DOUT("setRemovableMediaLocked:exit: invalid disk handle");
+    return;
+  }
+
+  PREVENT_MEDIA_REMOVAL *pmr = (PREVENT_MEDIA_REMOVAL*)pmr_; // type-cast
+  if (!pmr)
+    pmr = new PREVENT_MEDIA_REMOVAL;
+  pmr->PreventMediaRemoval = t ? TRUE : FALSE; // TRUE: lock, FALSE: unlock
+
+  DWORD dwBytesReturned; // unused
+  BOOL bResult = ::DeviceIoControl(
+    (HANDLE)hDisk,
+    IOCTL_CDROM_MEDIA_REMOVAL,
+    pmr, sizeof(*pmr),
+    0, 0, &dwBytesReturned, 0
+  );
+
+  if (!t || !bResult) { // if unlock or failed to lock, delete pmr
+    delete pmr;
+    pmr = 0;
+  }
+
+  pmr_ = pmr;
+
+  DOUT("setRemovableMediaLocked:exit: locked =" << (bool)pmr_);
 }
 
 // EOF

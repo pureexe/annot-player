@@ -357,13 +357,13 @@ AnnotationEditor::createActions()
 #define MAKE_ACTION(_action, _tr, _slot) \
   _action = new QAction(this); \
   _action->setText(_tr); \
-  _action->setStatusTip(_tr); \
+  _action->setToolTip(_tr); \
   connect(_action, SIGNAL(triggered()), _slot);
 
 #define MAKE_TOGGLE(_action, _tr, _slot) \
   _action = new QAction(this); \
   _action->setText(_tr); \
-  _action->setStatusTip(_tr); \
+  _action->setToolTip(_tr); \
   _action->setCheckable(true); \
   connect(_action, SIGNAL(triggered(bool)), _slot);
 

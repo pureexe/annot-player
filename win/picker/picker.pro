@@ -1,5 +1,5 @@
 # picker.pro
-# Since 10/30/2011
+# 10/30/2011
 include(../../config.pri)
 
 QT      += core gui

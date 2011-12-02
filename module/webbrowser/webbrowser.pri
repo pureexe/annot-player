@@ -1,5 +1,5 @@
 # webbrowser.pri
-# Since 10/9/2011
+# 10/9/2011
 
 INCLUDEPATH += $$PWD
 

@@ -1,5 +1,5 @@
 # translator.pri
-# Since 11/2/2011
+# 11/2/2011
 
 include(../../config.pri)
 

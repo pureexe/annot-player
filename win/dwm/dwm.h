@@ -1,6 +1,4 @@
 #pragma once
-#ifndef DWM_H
-#define DWM_H
 
 // dwm.h
 // 7/10/2011
@@ -31,4 +29,4 @@ namespace Dwm {
 
 } // namespace Dwm
 
-#endif // DWM_H
+// EOF

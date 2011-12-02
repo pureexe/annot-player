@@ -1,16 +1,31 @@
 :: annot-player.update.cmd
 :: 11/5/2011
-cd /d d:\protected\releases\player || exit 1
+setlocal
+cd /d d:\project\publish\releases\player || exit 1
+test -e "Delete Caches.cmd" || exit 1
 
-set SOURCE=d:\project\annot-build-desktop\build.win
-cd annot-player
-cd modules
-copy /y "%SOURCE%"\*.exe
-copy /y "%SOURCE%"\*.dll
-del "Annot Player.exe"
+set BUILD=/Volumes/local/project/annot-build-desktop/build.win
+set SOURCE=/Volumes/local/project/annot
+
+cd annot-player || exit 1
+cd modules || exit 1
+
+cp -v "%BUILD%"/*.{exe,dll} .
+
+rm -fv "Annot Player.exe"
+rm -fv hook.dll
+
 cd ..
-copy /y "%SOURCE%\Annot Player.exe"
+
+cp -v "%BUILD%/Annot Player.exe" .
+
+cp -v "%SOURCE%/README" "Read Me.txt"
+unix2dos "Read Me.txt"
+
+rm -Rf licenses
+cp -R "%SOURCE%/licenses" .
+
 cd ..
 call "Delete Caches.cmd"
 
-pause
+:: EOF

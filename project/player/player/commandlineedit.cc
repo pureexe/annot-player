@@ -27,7 +27,7 @@ CommandLineEdit::createActions()
 {
 #define MAKE_ACTION(_action, _styleid, _slot) \
   _action = new QAction(QIcon(RC_IMAGE_##_styleid), TR(T_MENUTEXT_##_styleid), this); \
-  _action->setStatusTip(TR(T_STATUSTIP_##_styleid)); \
+  _action->setToolTip(TR(T_TOOLTIP_##_styleid)); \
   connect(_action, SIGNAL(triggered()), _slot);
 
   MAKE_ACTION(editAct_,  EDIT, SLOT(edit()))

@@ -216,7 +216,10 @@ UiStyle::setWindowStyle(QWidget *w, bool persistent)
 
 #ifdef USE_WIN_DWM
   if (isAeroAvailable()) {
-    DWM_ENABLE_AERO_WIDGET(w);
+    if (persistent)
+      DWM_ENABLE_AERO_WIDGET(w)
+    else
+      DWM_ENABLE_ONETIME_AERO_WIDGET(w)
     return;
 
     //if (qss) {
@@ -274,35 +277,38 @@ UiStyle::setMenuStyle(QMenu *menu)
 */
 
 void
-UiStyle::setContextMenuStyle(QMenu *m, bool persistent)
+UiStyle::setContextMenuStyle(QMenu *w, bool persistent)
 {
-  Q_ASSERT(m);
-  if (!m)
+  Q_ASSERT(w);
+  if (!w)
     return;
 
 #ifdef USE_WIN_DWM
   if (isAeroAvailable()) {
-    DWM_ENABLE_ONETIME_AERO_WIDGET(m);
+    if (persistent)
+      DWM_ENABLE_AERO_WIDGET(w)
+    else
+      DWM_ENABLE_ONETIME_AERO_WIDGET(w)
     //if (qss)
-    //  m->setStyleSheet(SS_CONTEXTMENU_DWM);
+    //  w->setStyleSheet(SS_CONTEXTMENU_DWM);
 
-    QGraphicsColorizeEffect *effect = new QGraphicsColorizeEffect(m);
+    QGraphicsColorizeEffect *effect = new QGraphicsColorizeEffect(w);
     effect->setColor(G_CONTEXTMENU_COLOR);
     effect->setStrength(G_CONTEXTMENU_COLOR_STRENGTH);
-    m->setGraphicsEffect(effect);
+    w->setGraphicsEffect(effect);
 
     return;
   }
 #endif // USE_WIN_DWM
 
-  setMenuBackground(m, persistent);
-  m->setWindowOpacity(G_CONTEXTMENU_OPACITY);
+  setMenuBackground(w, persistent);
+  w->setWindowOpacity(G_CONTEXTMENU_OPACITY);
 
-  //QGraphicsOpacityEffect *transparent = new QGraphicsOpacityEffect(m);
-  //m->setGraphicsEffect(transparent);
+  //QGraphicsOpacityEffect *transparent = new QGraphicsOpacityEffect(w);
+  //w->setGraphicsEffect(transparent);
 
-  //QGraphicsBlurEffect *blur = new QGraphicsBlurEffect(m);
-  //m->setGraphicsEffect(blur);
+  //QGraphicsBlurEffect *blur = new QGraphicsBlurEffect(w);
+  //w->setGraphicsEffect(blur);
 }
 
 void

@@ -8,8 +8,8 @@
 #endif
 
 VS_VERSION_INFO VERSIONINFO
-        FILEVERSION 0,0,1,0
-        PRODUCTVERSION 0,0,1,0
+        FILEVERSION 0,1,0,0
+        PRODUCTVERSION 0,1,0,0
         FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
         FILEFLAGS VS_FF_DEBUG
@@ -26,10 +26,10 @@ VS_VERSION_INFO VERSIONINFO
                         BEGIN
                                 VALUE "CompanyName", "Annot Cloud\0"
                                 VALUE "FileDescription", "Annot Browser\0"
-                                VALUE "FileVersion", "0.0.1.0\0"
+                                VALUE "FileVersion", VERSION
                                 VALUE "LegalCopyright", "Copyright\0"
                                 VALUE "OriginalFilename", "webbrowser.dll\0"
-                                VALUE "ProductName", "webbrowser\0"
+                                VALUE "ProductName", VERSION
                         END
                 END
         END

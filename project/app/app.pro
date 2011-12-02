@@ -1,5 +1,7 @@
 # app.pro
-# Since 9/3/2011
+# 9/3/2011
+
+VERSION = 0.1.1.0
 
 include(../../config.pri)
 

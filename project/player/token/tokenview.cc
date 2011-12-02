@@ -148,6 +148,10 @@ const Token&
 TokenView::token() const
 { return token_; }
 
+Token&
+TokenView::token()
+{ return token_; }
+
 void
 TokenView::setToken(const Token &token)
 {

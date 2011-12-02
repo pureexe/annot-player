@@ -1,6 +1,4 @@
 #pragma once
-#ifndef DWM_CONFIG_H
-#define DWM_CONFIG_H
 
 // dwm_config.h
 // 7/24/2011
@@ -24,4 +22,4 @@
 // If not defined, dwmapi will be resolved at runtime through QLibrary.
 //#define USE_STATIC_LIB
 
-#endif // DWM_CONFIG_H
+// EOF

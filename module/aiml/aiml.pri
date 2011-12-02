@@ -1,5 +1,5 @@
 # aiml.pri
-# Since 6/31/2011
+# 6/31/2011
 
 INCLUDEPATH += $$PWD
 

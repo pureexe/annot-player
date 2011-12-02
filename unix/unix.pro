@@ -1,5 +1,5 @@
 # win.pro
-# Since 7/23/2011
+# 7/23/2011
 unix {
 
 TEMPLATE = subdirs

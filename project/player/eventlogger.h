@@ -35,6 +35,7 @@ public slots:
   void logPaused();
   void logStopped();
   void logPlayerError();
+  void logTrackNumberChanged(int track);
 
   void logTranslatorNetworkError(const QString &message);
 
@@ -47,6 +48,8 @@ public slots:
   void logSeeked(qint64 msecs);
 
   void logCacheCleared();
+
+  void logTrackedWindowDestroyed();
 
   void logServerAgentConnectionError();
   void logServerAgentServerError();

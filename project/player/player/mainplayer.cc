@@ -57,8 +57,11 @@ MainPlayerUi::createLayout()
     row1->addWidget(nextFrameButton());
     row1->addWidget(stopButton());
     row1->addWidget(openButton());
+    row1->addWidget(previousButton());
+    row1->addWidget(nextButton());
+    row1->addWidget(toggleEmbedModeButton());
     row1->addWidget(toggleMiniModeButton());
-    row1->addWidget(togglePlayModeButton());
+    row1->addWidget(toggleFullScreenModeButton());
     row1->addStretch(1);
     row1->addWidget(volumeSlider());
     row1->addWidget(positionButton());

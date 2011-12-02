@@ -43,9 +43,9 @@ namespace { // anonymous
       ADD("oacrmonitor"); ADD("ONENOTEM"); ADD("opera");
       ADD("php-cgi");
       ADD("QQ"); ADD("qtcreator");
-      ADD("SecureCRT"); ADD("SetPoint"); ADD("sidebar"); ADD("softinfo"); ADD("SogouCloud"); ADD("ssh"); ADD("sttray"); ADD("Switcher");
+      ADD("SecureCRT"); ADD("SetPoint"); ADD("sidebar"); ADD("softinfo"); ADD("SogouCloud"); ADD("sttray"); ADD("Switcher");
       ADD("thunderbird"); ADD("TXPlatform");
-      ADD("vim"); ADD("volumouse");
+      ADD("volumouse");
 #undef ADD
     }
     return blacklist.indexOf(procName) >= 0;
@@ -136,7 +136,7 @@ ProcessView::createActions()
 {
 #define MAKE_ACTION(_action, _styleid, _slot) \
   _action = new QAction(QIcon(RC_IMAGE_##_styleid), TR(T_MENUTEXT_##_styleid), this); \
-  _action->setStatusTip(TR(T_STATUSTIP_##_styleid)); \
+  _action->setToolTip(TR(T_TOOLTIP_##_styleid)); \
   connect(_action, SIGNAL(triggered()), _slot);
 
   MAKE_ACTION(attachAct_,  ATTACHPROCESS, SLOT(detachProcess()))

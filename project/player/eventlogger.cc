@@ -38,6 +38,8 @@ EventLogger::createConnections()
   connect(player_, SIGNAL(paused()), SLOT(logPaused()));
   connect(player_, SIGNAL(stopped()), SLOT(logStopped()));
   connect(player_, SIGNAL(errorEncountered()), SLOT(logPlayerError()));
+  connect(player_, SIGNAL(errorEncountered()), SLOT(stopLogUntilPlaying()));
+  connect(player_, SIGNAL(trackNumberChanged(int)), SLOT(logTrackNumberChanged(int)));
 
   connect(player_, SIGNAL(buffering()), SLOT(startLogUntilPlaying()));
   connect(player_, SIGNAL(stopped()), SLOT(stopLogUntilPlaying()));
@@ -155,6 +157,10 @@ void
 EventLogger::logPlayerError()
 { warn(tr("player error")); }
 
+void
+EventLogger::logTrackNumberChanged(int track)
+{ log(tr("openning track %1").arg(QString::number(track))); }
+
 // - Server -
 
 void
@@ -184,6 +190,10 @@ EventLogger::logSeeked(qint64 msecs)
 void
 EventLogger::logCacheCleared()
 { log(tr("offline cache removed")); }
+
+void
+EventLogger::logTrackedWindowDestroyed()
+{ log(tr("tracked window closed")); }
 
 void
 EventLogger::logServerAgentConnectionError()

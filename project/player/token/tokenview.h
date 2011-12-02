@@ -63,6 +63,7 @@ signals:
   // - Properties -
 public:
   const Token &token() const;
+  Token &token();
   bool hasToken() const;
 
 protected:

@@ -30,8 +30,25 @@ using namespace Logger;
 
 namespace { // anonymous, annotation display
 
+  inline QFont
+  default_annot_font_()
+  {
+    QFont font(ANNOTATION_FONT_DEFAULT, ANNOTATION_SIZE_DEFAULT);
+    font.setWeight(QFont::DemiBold);
+
+    //font.setStyle(QFont::StyleOblique);
+    //font.setStyleStrategy(QFont::PreferAntialias);
+    //font.setStyleStrategy(QFont::PreferOutline);
+    font.setStyleStrategy((QFont::StyleStrategy)(
+      QFont::ForceOutline | QFont::PreferQuality
+    ));
+
+    return font;
+  }
+
   // Use std time() rather than QTime::currentTime() to improve performance.
-  inline int next_y_(int window_height, int visible_time, AnnotationGraphicsItem::Style style, const SignalHub *hub_)
+  inline int
+  next_y_(int window_height, int visible_time, AnnotationGraphicsItem::Style style, const SignalHub *hub_)
   {
     Q_ASSERT(hub_);
     enum { lane_height = ANNOTATION_SIZE_DEFAULT + ANNOTATION_SIZE_MARGIN * 2 }; // height of a piece of danmu
@@ -79,7 +96,7 @@ namespace { // anonymous, annotation display
     last_time_[best_lane] = current_time;
 
     int window_header = 0;
-    if (hub_->isSignalTokenMode() && hub_->isFullScreenPlayerMode())
+    if (hub_->isSignalTokenMode() && hub_->isEmbeddedPlayerMode())
       window_header = 40;
 
     switch (style) {
@@ -97,10 +114,12 @@ AnnotationGraphicsItem::warmUp()
 {
 #ifdef Q_WS_MAC
   QGraphicsTextItem dummy;
-  QFont font(ANNOTATION_FONT_DEFAULT, ANNOTATION_SIZE_DEFAULT); {
-    font.setStyleStrategy(QFont::PreferAntialias);
-    font.setWeight(QFont::DemiBold);
-  }
+  QFont font = ::default_annot_font_();
+
+  font.setWeight(QFont::DemiBold);
+  dummy.setFont(font);
+
+  font.setWeight(QFont::Bold);
   dummy.setFont(font);
 #endif // Q_WS_MAC
 }
@@ -219,10 +238,7 @@ AnnotationGraphicsItem::setDefaultStyle()
 //#endif // ANNOTATION_OPACITY
 
   // Font
-  QFont font(ANNOTATION_FONT_DEFAULT, ANNOTATION_SIZE_DEFAULT);
-  //font.setStyle(QFont::StyleOblique);
-  font.setStyleStrategy(QFont::PreferAntialias);
-  font.setWeight(QFont::DemiBold);
+  QFont font = ::default_annot_font_();
 
   // if the annotation is made by user or doll, add underline
   //font.setUnderline(true);

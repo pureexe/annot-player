@@ -1,5 +1,5 @@
 # doll.pri
-# Since 6/31/2011
+# 6/31/2011
 
 include(../../config.pri)
 include($$ROOTDIR/module/aiml/aiml.pri)

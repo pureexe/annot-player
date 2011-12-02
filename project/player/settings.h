@@ -41,6 +41,12 @@ public:
   bool isSubtitleStaysOnTop() const;
   void setSubtitleStaysOnTop(bool t);
 
+  bool isEmbeddedPlayerStaysOnTop() const;
+  void setEmbeddedPlayerStaysOnTop(bool t);
+
+  bool isAutoPlayNext() const;
+  void setAutoPlayNext(bool t);
+
   QDate updateDate() const;
   void setUpdateDate(const QDate &date);
 

@@ -183,7 +183,8 @@ TranslatorManager::translate(int tid) const
   case T_TITLE_SEEK:            return tr("Seek");
 
   case T_TITLE_OPENFILE:        return tr("Open media file");
-  case T_TITLE_OPENDEVICE:      return tr("Open media device");
+  case T_TITLE_OPENVIDEODEVICE: return tr("Open video device");
+  case T_TITLE_OPENAUDIODEVICE: return tr("Open audio device");
   case T_TITLE_OPENSUBTITLE:    return tr("Open subtitle");
   case T_TITLE_ANNOTATIONBROWSER:       return tr("Annots");
   case T_TITLE_ANNOTATIONEDITOR:        return tr("Annot Editor");
@@ -204,7 +205,7 @@ TranslatorManager::translate(int tid) const
   case T_ERROR_BAD_POS:                 return tr("invalid time format");
   case T_ERROR_BAD_TOKEN:               return tr("invalid token");
   case T_ERROR_BAD_DEVICEPATH:          return tr("invalid device path");
-  case T_ERROR_BAD_FILEPATH:            return tr("file not existed");
+  case T_ERROR_BAD_FILEPATH:            return tr("file does not exist");
   case T_ERROR_BAD_SUBTITLE:            return tr("failed to load subtitle");
   case T_ERROR_CLIPBOARD_UNAVAILABLE:   return tr("clipboard not available");
   case T_ERROR_SUBMIT_TOKEN:            return tr("failed to submit token");
@@ -248,8 +249,11 @@ TranslatorManager::translate(int tid) const
   case T_MENUTEXT_OPENFILE:     return tr("Open file");
   case T_TIP_OPENFILE:          return tr("Open media file");
 
-  case T_MENUTEXT_OPENDEVICE:   return tr("Open CD/DVD");
-  case T_TIP_OPENDEVICE:        return tr("Open media device");
+  case T_MENUTEXT_OPENVIDEODEVICE:   return tr("Open DVD/VCD");
+  case T_TIP_OPENVIDEODEVICE:        return tr("Open video device");
+
+  case T_MENUTEXT_OPENAUDIODEVICE:   return tr("Open CD");
+  case T_TIP_OPENAUDIODEVICE:        return tr("Open audio device");
 
   case T_MENUTEXT_OPENSUBTITLE: return tr("Open subtitle");
   case T_TIP_OPENSUBTITLE:      return tr("Load subtitle from file");
@@ -277,6 +281,12 @@ TranslatorManager::translate(int tid) const
 
   case T_MENUTEXT_MINI:         return tr("Mini player");
   case T_TIP_MINI:              return tr("Show mini player");
+
+  case T_MENUTEXT_EMBED:        return tr("Embed player");
+  case T_TIP_EMBED:             return tr("Embed player window");
+
+  case T_MENUTEXT_EMBEDONTOP:   return tr("Embed on top");
+  case T_TIP_EMBEDONTOP:        return tr("Embed player window on the top");
 
   case T_MENUTEXT_LIVE:         return tr("Live mode");
   case T_TIP_LIVE:              return tr("Toggle live mode");
@@ -327,7 +337,7 @@ TranslatorManager::translate(int tid) const
   case T_MENUTEXT_PICKDIALOG:   return tr("Pick window");
   case T_TIP_PICKDIALOG:        return tr("Show pick dialog");
 
-  case T_MENUTEXT_PROCESSPICKDIALOG:   return tr("Open window");
+  case T_MENUTEXT_PROCESSPICKDIALOG:   return tr("Pick process window");
   case T_TIP_PROCESSPICKDIALOG:        return tr("Select process window");
 
   case T_MENUTEXT_WINDOWPICKDIALOG:   return tr("Select annots window");
@@ -522,8 +532,14 @@ TranslatorManager::translate(int tid) const
   case T_MENUTEXT_CLEARRECENT:  return tr("Clear");
   case T_TIP_CLEARRECENT:       return tr("Clear recent files");
 
-  case T_MENUTEXT_BROWSE:      return tr("Browse");
-  case T_TIP_BROWSE:           return tr("Files in the same folder");
+  case T_MENUTEXT_BROWSE:       return tr("Browse");
+  case T_TIP_BROWSE:            return tr("Files in the same folder");
+
+  case T_MENUTEXT_TRACK:        return tr("Tracks");
+  case T_TIP_TRACK:             return tr("Media tracks");
+
+  case T_MENUTEXT_AUTOPLAYNEXT: return tr("Auto play next media");
+  case T_TIP_AUTOPLAYNEXT:      return tr("Automatically play next media");
 
   case T_MENUTEXT_BLACKTHEME1:  return SELF(T_BLACK) + "1";
   case T_MENUTEXT_BLACKTHEME2:  return SELF(T_BLACK) + "2";
@@ -588,6 +604,10 @@ TranslatorManager::translate(int tid) const
   case T_ANNOT:         return tr("Annot");
   case T_NA:            return tr("n/a");
   case T_ANONYMOUS:     return tr("Anonymous");
+
+  case T_MAXIMIZE:      return tr("Maximize");
+  case T_MINIMIZE:      return tr("Minimize");
+  case T_RESTORE:       return tr("Restore");
 
   default:
     qWarning() << "TranslatorManager:translate: Unknown tid =" << tid;

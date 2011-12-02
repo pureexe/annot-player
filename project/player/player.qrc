@@ -26,6 +26,11 @@
         <file>images/live_disabled.png</file>
         <file>images/live_hover.png</file>
         <file>images/live_pressed.png</file>
+        <file>images/maximize.png</file>
+        <file>images/maximize_checked.png</file>
+        <file>images/maximize_disabled.png</file>
+        <file>images/maximize_hover.png</file>
+        <file>images/maximize_pressed.png</file>
         <file>images/menu.png</file>
         <file>images/menu_checked.png</file>
         <file>images/menu_disabled.png</file>
@@ -36,6 +41,11 @@
         <file>images/mini_disabled.png</file>
         <file>images/mini_hover.png</file>
         <file>images/mini_pressed.png</file>
+        <file>images/minimize.png</file>
+        <file>images/minimize_checked.png</file>
+        <file>images/minimize_disabled.png</file>
+        <file>images/minimize_hover.png</file>
+        <file>images/minimize_pressed.png</file>
         <file>images/next.png</file>
         <file>images/next_checked.png</file>
         <file>images/next_disabled.png</file>
@@ -66,6 +76,11 @@
         <file>images/previous_disabled.png</file>
         <file>images/previous_hover.png</file>
         <file>images/previous_pressed.png</file>
+        <file>images/restore.png</file>
+        <file>images/restore_checked.png</file>
+        <file>images/restore_disabled.png</file>
+        <file>images/restore_hover.png</file>
+        <file>images/restore_pressed.png</file>
         <file>images/stop.png</file>
         <file>images/stop_checked.png</file>
         <file>images/stop_disabled.png</file>
@@ -81,6 +96,21 @@
         <file>images/uparrow_disabled.png</file>
         <file>images/uparrow_hover.png</file>
         <file>images/uparrow_pressed.png</file>
+        <file>images/E.png</file>
+        <file>images/E_checked.png</file>
+        <file>images/E_disabled.png</file>
+        <file>images/E_hover.png</file>
+        <file>images/E_pressed.png</file>
+        <file>images/F.png</file>
+        <file>images/F_checked.png</file>
+        <file>images/F_disabled.png</file>
+        <file>images/F_hover.png</file>
+        <file>images/F_pressed.png</file>
+        <file>images/M.png</file>
+        <file>images/M_checked.png</file>
+        <file>images/M_disabled.png</file>
+        <file>images/M_hover.png</file>
+        <file>images/M_pressed.png</file>
         <file>images/app.png</file>
         <file>images/aero.png</file>
         <file>images/aero_thumbnail.png</file>

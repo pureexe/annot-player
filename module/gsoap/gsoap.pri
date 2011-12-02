@@ -1,5 +1,5 @@
 # gsoap.pri
-# Since 9/10/2011
+# 9/10/2011
 
 INCLUDEPATH += $$PWD
 INCLUDEPATH += $$PWD/env

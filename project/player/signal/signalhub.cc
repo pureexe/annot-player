@@ -18,7 +18,7 @@ SignalHub::SignalHub(Player *player, QObject *parent)
     tokenMode_(MediaTokenMode),
     playMode_(NormalPlayMode),
     playerMode_(NormalPlayerMode),
-    videoMode_(NormalVideoMode),
+    windowMode_(NormalWindowMode),
     playing_(false), paused_(false), stopped_(true)
 {
   Q_ASSERT(player_);
@@ -113,7 +113,7 @@ SignalHub::setPlayerMode(PlayerMode mode)
 #ifdef DEBUG
     switch (mode) {
     case NormalPlayerMode: log(tr("switched to normal player mode")); break;
-    case FullScreenPlayerMode: log(tr("switched to full screen player mode")); break;
+    case EmbeddedPlayerMode: log(tr("switched to embedded player mode")); break;
     case MiniPlayerMode: log(tr("switched to mini player mode")); break;
     }
 #endif // DEBUG
@@ -131,38 +131,38 @@ SignalHub::setMiniPlayerMode(bool t)
   if (t)
     setPlayerMode(MiniPlayerMode);
   else
-    setPlayerMode(isFullScreenVideoMode() ? FullScreenPlayerMode : NormalPlayerMode);
+    setPlayerMode(isFullScreenWindowMode() ? EmbeddedPlayerMode : NormalPlayerMode);
 }
 
 void
-SignalHub::setFullScreenPlayerMode(bool t)
-{ setPlayerMode(t ? FullScreenPlayerMode : NormalPlayerMode); }
+SignalHub::setEmbeddedPlayerMode(bool t)
+{ setPlayerMode(t ? EmbeddedPlayerMode : NormalPlayerMode); }
 
-// + VideoMode +
+// + WindowMode +
 
 void
-SignalHub::setVideoMode(VideoMode mode)
+SignalHub::setWindowMode(WindowMode mode)
 {
-  if (videoMode_ != mode) {
-    videoMode_ = mode;
+  if (windowMode_ != mode) {
+    windowMode_ = mode;
 
 #ifdef DEBUG
     switch (mode) {
-    case NormalVideoMode: log(tr("switched to normal video mode")); break;
-    case FullScreenVideoMode: log(tr("switched to full screen video mode")); break;
+    case NormalWindowMode: log(tr("switched to normal video mode")); break;
+    case FullScreenWindowMode: log(tr("switched to full screen video mode")); break;
     }
 #endif // DEBUG
-    emit videoModeChanged(mode);
+    emit windowModeChanged(mode);
   }
 }
 
 void
-SignalHub::setNormalVideoMode(bool t)
-{ setVideoMode(t ? NormalVideoMode : FullScreenVideoMode); }
+SignalHub::setNormalWindowMode(bool t)
+{ setWindowMode(t ? NormalWindowMode : FullScreenWindowMode); }
 
 void
-SignalHub::setFullScreenVideoMode(bool t)
-{ setVideoMode(t ? FullScreenVideoMode : NormalVideoMode); }
+SignalHub::setFullScreenWindowMode(bool t)
+{ setWindowMode(t ? FullScreenWindowMode : NormalWindowMode); }
 
 // + PlayMode +
 

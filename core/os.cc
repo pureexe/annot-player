@@ -13,7 +13,10 @@ desktopPath()
   QString path;
 
 #ifdef Q_WS_WIN
-  QSettings reg("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders", QSettings::NativeFormat);
+  QSettings reg(
+    "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders",
+    QSettings::NativeFormat
+  );
   path = reg.value("Desktop").toString();
 #else
   path = QDir::homePath() + "/Desktop";

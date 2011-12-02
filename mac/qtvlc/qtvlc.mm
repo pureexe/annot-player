@@ -1,21 +1,15 @@
 // qtvlc.mm
 // 7/30/2011
+//
+// Assume that global NSAutoreleasePool is already defined in qtstep module.
 
 #include "qtvlc.h"
+#import "qtvlcprivate.h"
 #import "VLCKit/VLCKit.h"
-
-#import "minimal_macosx/voutgl.h" // declaration for vout_sys_t
-extern "C" {
-  #ifndef MODULE_STRING
-    #define MODULE_STRING "main" // VLC module string, defined in VLC's Makefile
-  #endif // MODULE_STRING
-  #include <vlc/plugins/vlc_vout.h> // declaration of vout_thread_t
-} // extern "C"
-
 #include <QtGlobal>
-#include <objc/runtime.h>
+//#include <objc/runtime.h>
 
-#define DEBUG "qtvlc"
+//#define DEBUG "qtvlc"
 #include "module/debug/debug.h"
 
 // - Helpers: Type cast -
@@ -88,26 +82,6 @@ vlcvideoview_glview(vlcvideoview_t *handle)
   return ret;
 }
 
-// - VLCOpenGLVoutView -
-
-extern "C" { // Objective C
-
-// See: minimal_macosx/VLCOpenGLVoutView.h
-// Used for hacking VLCOpenGLVoutView
-@interface VLCOpenGLVoutView_public : NSOpenGLView
-{
-@public
-  id <VLCOpenGLVoutEmbedding> container;
-  vout_thread_t * p_vout;
-  NSLock *objectLock;
-}
-@end
-
-@implementation VLCOpenGLVoutView_public
-@end
-
-} // extern "C"
-
 vlcvout_t*
 vlcglview_vout(vlcglview_t *handle)
 {
@@ -123,10 +97,9 @@ QPoint
 vlcvout_map_from_global(vlcvout_t *vout, const QPoint &globalPos, const QRect &voutRect)
 {
   Q_ASSERT(vout);
-  QPoint ret;
   if (!vout ||
       !voutRect.width() || !voutRect.height())
-    return ret;
+    return QPoint();
 
   // jichi 11/26/2011 FIXME: All coordinates in p_sys are zero.
   // p_sys is not properly initialized.
@@ -140,13 +113,14 @@ vlcvout_map_from_global(vlcvout_t *vout, const QPoint &globalPos, const QRect &v
   //    y = (pos.y() - i_y) * vout->render.i_height / i_height;
 
   // offset
-  ret = globalPos - voutRect.topLeft();
+  int x = globalPos.x() - voutRect.x(),
+      y = globalPos.y() - voutRect.y();
 
   // scale
-  ret.rx() *= (double)vout->render.i_width / voutRect.width();
-  ret.ry() *= (double)vout->render.i_height / voutRect.height();
+  x = (x * vout->render.i_width) / voutRect.width();
+  y = (y * vout->render.i_height) / voutRect.height();
 
-  return ret;
+  return QPoint(x, y);
 }
 
 // See: minimal_macosx/voutagl.m and maxosx/vout.m
@@ -183,7 +157,7 @@ vlcvout_mouse_up(vlcvout_t *vout, const QPoint &pos, vlcbutton button)
   //if (!pos.isNull())
   vlcvout_mouse_moved(vout, pos);
 
-  int x, y;
+  int32_t x, y;
   ::var_GetCoords(vout, "mouse-moved", &x, &y);
   ::var_SetCoords(vout, "mouse-clicked", x, y);
 

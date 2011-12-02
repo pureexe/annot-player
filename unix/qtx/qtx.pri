@@ -1,6 +1,5 @@
 # qtx.pri
 # 11/25/2011
-
 INCLUDEPATH += $$PWD
 
 HEADERS += $$PWD/qtx.h

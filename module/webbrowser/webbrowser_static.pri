@@ -1,6 +1,5 @@
 # webbrowser_static.pri
-# Since 10/9/2011
-
+# 10/9/2011
 include(../../config.pri)
 INCLUDEPATH += $$PWD
 

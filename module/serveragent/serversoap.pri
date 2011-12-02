@@ -1,5 +1,5 @@
 # soap.pri
-# Since 9/10/2011
+# 9/10/2011
 
 ## TODO: Automatic generate this pri file!!
 

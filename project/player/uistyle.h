@@ -5,7 +5,7 @@
 // 7/30/2011
 
 #include <QWidget>
-#include <QList>
+#include <QWidgetList>
 
 QT_BEGIN_NAMESPACE
 class QDialog;
@@ -80,7 +80,7 @@ protected:
 private:
   static Self *global_;
   Theme theme_;
-  QList<QWidget*> windows_; // windows with customized background
+  QWidgetList windows_; // windows with customized background
   QList<QMenu*> menus_; // menus with customized background
 };
 

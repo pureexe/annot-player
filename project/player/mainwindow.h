@@ -45,13 +45,11 @@ class MiniPlayerUi;
 //class OsdDock;
 class OsdWindow;
 class OsdConsole;
-class OsdPlayerUi;
+class EmbeddedPlayerUi;
 class PlayerUi;
 class MessageView;
 class SignalView;
 class TokenView;
-class UserPanel;
-class UserPanelDock;
 class VideoView;
 
 // Dialogs
@@ -76,11 +74,6 @@ class MainWindow : public QMainWindow
   typedef Core::Cloud::Annotation Annotation;
   typedef Core::Cloud::AnnotationList AnnotationList;
 
-  // - Helpers -
-public:
-  static bool isMimeDataSupported(const QMimeData *urls);
-  static bool isDevicePath(const QString &path);
-
   // - Constructions -
 public:
   explicit MainWindow(QWidget *parent = 0, Qt::WindowFlags f = 0);
@@ -92,6 +85,7 @@ signals:
   void responded(const QString &text);
   void said(const QString &text, const QString &color);
   void showTextRequested(const QString &text);
+  void windowClosed();
 
   void seeked();
   void addAndShowAnnotationRequested(const Annotation &a);
@@ -111,6 +105,8 @@ public:
   bool isTranslateEnabled() const;
   bool isSubtitleStaysOnTop() const;
 
+  bool isAutoPlayNext() const;
+
 public slots:
   void setTranslateEnabled(bool enabled);
   void translate(const QString &text);
@@ -128,6 +124,8 @@ private:
 public slots:
   void onFocusedWidgetChanged(QWidget *w_old, QWidget *w_new);
 
+  void setEmbeddedWindow(WId winId);
+
   void about();
   void help();
 
@@ -140,7 +138,8 @@ public slots:
   void openFile();
   void openProcess();
   void openWindow();
-  void openDevice();
+  void openAudioDevice();
+  void openVideoDevice();
   void openSubtitle();
   void openDirectory();
   void openPath(const QString &path, bool checkPath = true); ///< \param checkPath determines if validate input \param path, such as existance
@@ -158,6 +157,7 @@ public slots:
 
   void previous();
   void next();
+  void autoPlayNext();
 
   void seek(qint64 msecs);
   void forward(qint64 msecs = 0);  ///< If <=0, default delta time is used.
@@ -195,12 +195,11 @@ public slots:
 
   //void setWindowStaysOnTop(bool enabled = true); // TODO
 
+protected slots:
+  void invalidateMediaAndPlay();
+
   // - Dialogs -
 public slots:
-  void showUserPanel();
-  void hideUserPanel();
-  void setUserPanelVisible(bool visible);
-
   void showLoginDialog();
   void hideLoginDialog();
   void setLoginDialogVisible(bool visible);
@@ -247,6 +246,10 @@ protected slots:
 
   void invalidateAnnotationLanguages();
 
+  // - Error handling -
+protected slots:
+  void handlePlayerError();
+
   // - Annotations -
 public slots:
   void eval(const QString &cmd);
@@ -286,7 +289,7 @@ protected slots:
 
   // - Events -
 public slots:
-  //virtual void setVisible(bool visible); ///< \override
+  virtual void setVisible(bool visible); ///< \override
 protected:
   virtual void mousePressEvent(QMouseEvent *event); ///< \override
   virtual void mouseMoveEvent(QMouseEvent *event); ///< \override
@@ -312,15 +315,19 @@ protected slots:
   virtual void dropEvent(QDropEvent *event); ///< \override
 
   void invalidateContextMenu();
+  void invalidateUserMenu();
+  void invalidateTrackMenu();
 
 protected:
-  bool isGlobalPosNearOsdPlayer(const QPoint &pos) const;
+  bool isGlobalPosNearEmbeddedPlayer(const QPoint &pos) const;
 
 public slots:
   void updatePlayMode();
   void updatePlayerMode();
   void updateTokenMode();
-  void updateVideoMode();
+  void updateWindowMode();
+
+  void invalidatePlayerMode();
 
   // - Themes -
 public slots:
@@ -375,9 +382,15 @@ private:
 #endif // USE_MODE_SIGNAL
 
   // - Helpers -
-  static QString languageToString(int lang);
+protected:
+  static bool isMimeDataSupported(const QMimeData *urls);
+  static bool isDevicePath(const QString &path);
+  static QString removeUrlPrefix(const QString &url);
 
+  static QString languageToString(int lang);
   static int fileType(const QString &fileName);
+
+  bool isDigestReady(const QString &fileName) const;
 
   // - Members for initialization. -
 private:
@@ -421,7 +434,7 @@ private:
 
   MainPlayerUi *mainPlayer_;
   MiniPlayerUi *miniPlayer_;
-  OsdPlayerUi *osdPlayer_;
+  EmbeddedPlayerUi *embeddedPlayer_;
 
   AnnotationGraphicsView *annotationView_;
   AnnotationBrowser *annotationBrowser_;
@@ -459,9 +472,11 @@ private:
   QMenu *contextMenu_,
         *advancedMenu_,
         *recentMenu_,
+        *userMenu_,
         *openMenu_,
         *subtitleMenu_,
         *browseMenu_,
+        *trackMenu_,
         *sectionMenu_,
         *backwardMenu_,
         *forwardMenu_,
@@ -486,7 +501,8 @@ private:
 
   QAction *openAct_,
           *openFileAct_,
-          *openDeviceAct_,
+          *openVideoDeviceAct_,
+          *openAudioDeviceAct_,
           *openSubtitleAct_,
           *playAct_,
           *pauseAct_,
@@ -498,12 +514,15 @@ private:
           *snapshotAct_,
           *toggleAnnotationVisibleAct_,
           *toggleFullScreenModeAct_,
+          *toggleEmbeddedModeAct_,
           *toggleMiniModeAct_,
           *toggleLiveModeAct_,
           *toggleSyncModeAct_,
           *toggleSubtitleVisibleAct_,
           *toggleTranslateAct_,
-          *toggleSubtitleStaysOnTopAct_;
+          *toggleSubtitleStaysOnTopAct_,
+          *toggleEmbeddedPlayerOnTopAct_,
+          *toggleAutoPlayNextAct_;
 
   QAction *toggleWindowStaysOnTopAct_;
 
@@ -525,7 +544,7 @@ private:
           *toggleProcessPickDialogVisibleAct_,
           *toggleSeekDialogVisibleAct_,
           *toggleSyncDialogVisibleAct_,
-          *toggleUserPanelVisibleAct_,
+          //*toggleUserPanelVisibleAct_,
           *toggleBlacklistViewVisibleAct_;
 
   QAction *toggleUserAnonymousAct_;
@@ -579,7 +598,10 @@ private:
           *setThemeToRed1Act_, *setThemeToRed2Act_,
           *setThemeToYellow1Act_, *setThemeToYellow2Act_;
 
-  QAction *helpAct_,
+  QAction *showMaximizedAct_,
+          *showMinimizedAct_,
+          *showNormalAct_,
+          *helpAct_,
           *aboutAct_,
           *quitAct_;
 };

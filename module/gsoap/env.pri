@@ -1,5 +1,5 @@
 # env.pri
-# Since 10/7/2011
+# 10/7/2011
 
 ## TODO: Automatic generate this pri file!!
 

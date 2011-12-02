@@ -1,6 +1,4 @@
 #pragma once
-#ifndef DISK_H
-#define DISK_H
 
 // disk.h
 // 8/17/2011
@@ -73,7 +71,7 @@ public:
   /**
    * Some examples of accepted valid device names:
    * - X:
-   * - \.\X:
+   * - \\.\X:
    *
    * See: http://support.microsoft.com/kb/100027
    */
@@ -86,6 +84,7 @@ public:
 public:
   explicit Disk(const QString &fileName, QObject *parent = 0);
   explicit Disk(QObject *parent = 0);
+  ~Disk();
 
   QString fileName() const;
   void setFileName(const QString &fileName);
@@ -98,17 +97,24 @@ public:
   // - I/O -
 public:
   bool isOpen() const;
-  virtual bool open (OpenMode mode);    ///< Must be ReadOnly
+  virtual bool open(OpenMode mode, bool lockRemovableMedia = true); ///< Must be ReadOnly
   virtual void close();
   QByteArray read(int maxSize);
 
   virtual qint64 pos() const;
   virtual bool seek(qint64 pos);
 
+  // - Implementation -
+protected:
+  bool isRemovableMediaLocked() const;
+  void setRemovableMediaLocked(bool t);
+
 private:
   QString fileName_;
-  void *handle_;
+  void *handle_; // HANDLE
+  void *pmr_; // PREVENT_MEDIA_REMOVAL
   Geometry geometry_;
 };
 
-#endif // DISK_H
+
+// EOF

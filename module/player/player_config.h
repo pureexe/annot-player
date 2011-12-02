@@ -4,7 +4,7 @@
 // player_config.h
 // 7/30/2011
 
-//#define DEBUG
+// - Format -
 
 #define PLAYER_FORMAT_IMAGE(...) \
     __VA_ARGS__ "bin" \
@@ -67,6 +67,7 @@
     __VA_ARGS__ "asx" \
     __VA_ARGS__ "ape" \
     __VA_ARGS__ "axa" \
+    __VA_ARGS__ "cda" \
     __VA_ARGS__ "dts" \
     __VA_ARGS__ "flac" \
     __VA_ARGS__ "it" \
@@ -74,6 +75,7 @@
     __VA_ARGS__ "m4a" \
     __VA_ARGS__ "m4r" \
     __VA_ARGS__ "mid" \
+    __VA_ARGS__ "midi" \
     __VA_ARGS__ "mlp" \
     __VA_ARGS__ "mod" \
     __VA_ARGS__ "mp1" \
@@ -123,5 +125,27 @@
     __VA_ARGS__ "sub" \
     __VA_ARGS__ "usf" \
     __VA_ARGS__ "utf"
+
+#define PLAYER_FORMAT_PLAYLIST(...) \
+    __VA_ARGS__ "cue"
+
+// FIXME: m3u/m3u8 do not work. Other playlist types are not tested yet.
+/*
+    __VA_ARGS__ "asx" \
+    __VA_ARGS__ "b4s" \
+    __VA_ARGS__ "cue" \
+    __VA_ARGS__ "gvp" \
+    __VA_ARGS__ "m3u" \
+    __VA_ARGS__ "m3u8" \
+    __VA_ARGS__ "pls" \
+    __VA_ARGS__ "vlc" \
+    __VA_ARGS__ "xspf"
+*/
+
+// - MRL -
+
+#define PLAYER_URL_CD   "cdda://"
+#define PLAYER_URL_DVD  "dvd://"
+#define PLAYER_URL_VCD  "vcd://"
 
 #endif // PLAYER_CONFIG_H

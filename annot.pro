@@ -1,5 +1,5 @@
-# touch.pro
-# Since 7/23/2011
+# annot.pro
+# 7/23/2011
 
 TEMPLATE = subdirs
 

@@ -34,6 +34,28 @@ namespace MainWindow_slot_ { // anonymous slot_
     }
   };
 
+  /*
+  class SetWindowDwmEnabled : public QObject {
+    Q_OBJECT
+    typedef QObject Base;
+
+    MainWindow *w_;
+    bool t_;
+
+  public:
+    SetWindowDwmEnabled(bool t, MainWindow *w)
+      : Base(w), w_(w), t_(t)
+    { Q_ASSERT(w_); }
+
+  public slots:
+    void setWindowDwmEnabled()
+    {
+      w_->setWindowDwmEnabled(t_);
+      QTimer::singleShot(0, this, SLOT(deleteLater()));
+    }
+  };
+  */
+
 #ifdef USE_MODE_SIGNAL
   class OpenProcessId : public QObject
   {

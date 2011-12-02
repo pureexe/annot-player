@@ -1,5 +1,5 @@
 # module.pro
-# Since 7/31/2011
+# 7/31/2011
 
 include(aiml/aiml.pri)
 include(debug/debug.pri)

@@ -1,6 +1,4 @@
 #pragma once
-#ifndef HOOK_CONFIG_H
-#define HOOK_CONFIG_H
 
 // hook_config.h
 // 7/22/2011
@@ -19,4 +17,4 @@
   #define HOOKAPI Q_DECL_IMPORT
 #endif // HOOK_LIB
 
-#endif // HOOK_CONFIG_H
+// EOF

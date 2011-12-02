@@ -1,5 +1,5 @@
-# config.pri
-# Since 9/3/2011
+# annot.pri
+# 9/3/2011
 
 ## Config
 
@@ -29,6 +29,8 @@ win32:  QMAKE_CXXFLAGS  += -Zc:auto
 unix:   QMAKE_CXXFLAGS  += -std=c++0x
 mac:    QMAKE_CXXFLAGS  -= -std=c++0x
 
+# GCC
+
 #QMAKE_LFLAGS +=
 
 ## Deploy
@@ -57,6 +59,7 @@ mac {
 
 win32 {
     VLC_HOME            = c:/dev/vlc
+    VLC_SRC             = $$VLC_HOME/src
     #WSF_HOME            = c:/dev/wso2
     #CDIO_HOME          = c:/dev/cdio
     POPPLER_HOME        = c:/dev/poppler
@@ -71,12 +74,14 @@ win32 {
 
     #INCLUDEPATH        += $$ITH_HOME/include
     LIBS               += -L$$ITH_HOME/lib
+
     #INCLUDEPATH        += $$WDK_HOME/include
     LIBS               += -L$$WDK_HOME/lib
 }
 
 unix {
     VLC_HOME            = /usr
+    VLC_SRC             = ${HOME}/opt/src
     #WSF_HOME            = ${HOME}/opt/wso2/wsf
     #CDIO_HOME          = /usr
     POPPLER_HOME        = ${HOME}/opt/poppler
@@ -87,6 +92,7 @@ unix {
 
 mac {
     VLC_HOME            = ${HOME}/opt/vlc
+    VLC_SRC             = ${HOME}/opt/src
     #WSF_HOME            = ${HOME}/opt/wso2/wsf
     #CDIO_HOME          = ${HOME}/opt/libcdio
     POPPLER_HOME        = ${HOME}/opt/poppler
@@ -96,6 +102,8 @@ mac {
 }
 
 INCLUDEPATH     += $$VLC_HOME/include
+INCLUDEPATH     += $$VLC_HOME/include/vlc/plugins
+INCLUDEPATH     += $$VLC_SRC
 LIBS            += -L$$VLC_HOME/lib
 #INCLUDEPATH     += $$WSF_HOME/include
 #LIBS            += -L$$WSF_HOME/lib
@@ -114,9 +122,11 @@ CONFIG(release) {
     #DEFINES += QT_NO_DEBUG_OUTPUT QT_NO_WARNING_OUTPUT
 }
 
-## DEBUG
+## Debug
 
 include($$ROOTDIR/module/debug/debug.pri)
+
+DEFINES += VERSION=\\\"$$VERSION\\\"
 
 # EOF
 

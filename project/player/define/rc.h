@@ -109,11 +109,17 @@
 #define RC_IMAGE_NEXTFRAME_DISABLED     RC_PREFIX_IMAGE "nextframe_disabled.png"
 #define RC_IMAGE_NEXTFRAME_CHECKED      RC_PREFIX_IMAGE "nextframe_checked.png"
 #define RC_IMAGE_NEXTFRAME_CHECKED_HOVER RC_IMAGE_NEXTFRAME_HOVER
-#define RC_IMAGE_MINI           RC_PREFIX_IMAGE "mini.png"
-#define RC_IMAGE_MINI_HOVER     RC_PREFIX_IMAGE "mini_hover.png"
-#define RC_IMAGE_MINI_PRESSED   RC_PREFIX_IMAGE "mini_pressed.png"
-#define RC_IMAGE_MINI_DISABLED  RC_PREFIX_IMAGE "mini_disabled.png"
-#define RC_IMAGE_MINI_CHECKED   RC_PREFIX_IMAGE "mini_checked.png"
+#define RC_IMAGE_EMBED          RC_PREFIX_IMAGE "E.png"
+#define RC_IMAGE_EMBED_HOVER    RC_PREFIX_IMAGE "E_hover.png"
+#define RC_IMAGE_EMBED_PRESSED  RC_PREFIX_IMAGE "E_pressed.png"
+#define RC_IMAGE_EMBED_DISABLED RC_PREFIX_IMAGE "E_disabled.png"
+#define RC_IMAGE_EMBED_CHECKED  RC_PREFIX_IMAGE "E_checked.png"
+#define RC_IMAGE_EMBED_CHECKED_HOVER RC_IMAGE_EMBED_HOVER
+#define RC_IMAGE_MINI           RC_PREFIX_IMAGE "M.png"
+#define RC_IMAGE_MINI_HOVER     RC_PREFIX_IMAGE "M_hover.png"
+#define RC_IMAGE_MINI_PRESSED   RC_PREFIX_IMAGE "M_pressed.png"
+#define RC_IMAGE_MINI_DISABLED  RC_PREFIX_IMAGE "M_disabled.png"
+#define RC_IMAGE_MINI_CHECKED   RC_PREFIX_IMAGE "M_checked.png"
 #define RC_IMAGE_MINI_CHECKED_HOVER RC_IMAGE_MINI_HOVER
 #define RC_IMAGE_LIVE           RC_PREFIX_IMAGE "live.png"
 #define RC_IMAGE_LIVE_HOVER     RC_PREFIX_IMAGE "live_hover.png"
@@ -127,11 +133,11 @@
 #define RC_IMAGE_SYNC_DISABLED  RC_PREFIX_IMAGE "sync_disabled.png"
 #define RC_IMAGE_SYNC_CHECKED   RC_PREFIX_IMAGE "sync_checked.png"
 #define RC_IMAGE_SYNC_CHECKED_HOVER RC_IMAGE_SYNC_HOVER
-#define RC_IMAGE_FULLSCREEN             RC_PREFIX_IMAGE "fullscreen.png"
-#define RC_IMAGE_FULLSCREEN_HOVER       RC_PREFIX_IMAGE "fullscreen_hover.png"
-#define RC_IMAGE_FULLSCREEN_PRESSED     RC_PREFIX_IMAGE "fullscreen_pressed.png"
-#define RC_IMAGE_FULLSCREEN_DISABLED    RC_PREFIX_IMAGE "fullscreen_disabled.png"
-#define RC_IMAGE_FULLSCREEN_CHECKED     RC_PREFIX_IMAGE "fullscreen_checked.png"
+#define RC_IMAGE_FULLSCREEN             RC_PREFIX_IMAGE "F.png"
+#define RC_IMAGE_FULLSCREEN_HOVER       RC_PREFIX_IMAGE "F_hover.png"
+#define RC_IMAGE_FULLSCREEN_PRESSED     RC_PREFIX_IMAGE "F_pressed.png"
+#define RC_IMAGE_FULLSCREEN_DISABLED    RC_PREFIX_IMAGE "F_disabled.png"
+#define RC_IMAGE_FULLSCREEN_CHECKED     RC_PREFIX_IMAGE "F_checked.png"
 #define RC_IMAGE_FULLSCREEN_CHECKED_HOVER RC_IMAGE_FULLSCREEN_HOVER
 #define RC_IMAGE_ANNOT                  RC_PREFIX_IMAGE "comment.png"
 #define RC_IMAGE_ANNOT_HOVER            RC_PREFIX_IMAGE "comment_hover.png"
@@ -182,8 +188,6 @@
 #define RC_IMAGE_NEXT_CHECKED           RC_PREFIX_IMAGE "next_checked.png"
 #define RC_IMAGE_NEXT_CHECKED_HOVER RC_IMAGE_NEXT_HOVER
 
-// - Buttons -
-
 #define RC_IMAGE_DOWNARROW              RC_PREFIX_IMAGE "downarrow.png"
 #define RC_IMAGE_DOWNARROW_HOVER        RC_PREFIX_IMAGE "downarrow_hover.png"
 #define RC_IMAGE_DOWNARROW_PRESSED      RC_PREFIX_IMAGE "downarrow_pressed.png"
@@ -197,6 +201,27 @@
 #define RC_IMAGE_UPARROW_DISABLED       RC_PREFIX_IMAGE "uparrow_disabled.png"
 #define RC_IMAGE_UPARROW_CHECKED        RC_PREFIX_IMAGE "uparrow_checked.png"
 #define RC_IMAGE_UPARROW_CHECKED_HOVER RC_IMAGE_UPARROW_HOVER
+
+#define RC_IMAGE_MAXIMIZE                RC_PREFIX_IMAGE "maximize.png"
+#define RC_IMAGE_MAXIMIZE_HOVER          RC_PREFIX_IMAGE "maximize_hover.png"
+#define RC_IMAGE_MAXIMIZE_PRESSED        RC_PREFIX_IMAGE "maximize_pressed.png"
+#define RC_IMAGE_MAXIMIZE_DISABLED       RC_PREFIX_IMAGE "maximize_disabled.png"
+#define RC_IMAGE_MAXIMIZE_CHECKED        RC_PREFIX_IMAGE "maximize_checked.png"
+#define RC_IMAGE_MAXIMIZE_CHECKED_HOVER RC_IMAGE_MAXIMIZE_HOVER
+
+#define RC_IMAGE_MINIMIZE                RC_PREFIX_IMAGE "minimize.png"
+#define RC_IMAGE_MINIMIZE_HOVER          RC_PREFIX_IMAGE "minimize_hover.png"
+#define RC_IMAGE_MINIMIZE_PRESSED        RC_PREFIX_IMAGE "minimize_pressed.png"
+#define RC_IMAGE_MINIMIZE_DISABLED       RC_PREFIX_IMAGE "minimize_disabled.png"
+#define RC_IMAGE_MINIMIZE_CHECKED        RC_PREFIX_IMAGE "minimize_checked.png"
+#define RC_IMAGE_MINIMIZE_CHECKED_HOVER RC_IMAGE_MINIMIZE_HOVER
+
+#define RC_IMAGE_RESTORE                RC_PREFIX_IMAGE "restore.png"
+#define RC_IMAGE_RESTORE_HOVER          RC_PREFIX_IMAGE "restore_hover.png"
+#define RC_IMAGE_RESTORE_PRESSED        RC_PREFIX_IMAGE "restore_pressed.png"
+#define RC_IMAGE_RESTORE_DISABLED       RC_PREFIX_IMAGE "restore_disabled.png"
+#define RC_IMAGE_RESTORE_CHECKED        RC_PREFIX_IMAGE "restore_checked.png"
+#define RC_IMAGE_RESTORE_CHECKED_HOVER RC_IMAGE_RESTORE_HOVER
 
 // TODO
 #define RC_IMAGE_SEEK           RC_IMAGE_NULL
@@ -213,6 +238,7 @@
 #define RC_IMAGE_HIDESUBTITLE   RC_IMAGE_SUBTITLE
 #define RC_IMAGE_CURRENTSUBTITLE RC_IMAGE_PLAY
 #define RC_IMAGE_CURRENTFILE    RC_IMAGE_PLAY
+#define RC_IMAGE_CURRENTTRACK   RC_IMAGE_PLAY
 
 #define RC_IMAGE_FORWARD        RC_IMAGE_NULL
 #define RC_IMAGE_BACKWARD       RC_IMAGE_NULL
@@ -258,7 +284,8 @@
 
 #define RC_IMAGE_OPENCONTEXTMENU RC_IMAGE_NULL
 #define RC_IMAGE_OPENFILE       RC_IMAGE_OPEN
-#define RC_IMAGE_OPENDEVICE     RC_IMAGE_NULL
+#define RC_IMAGE_OPENVIDEODEVICE RC_IMAGE_NULL
+#define RC_IMAGE_OPENAUDIODEVICE RC_IMAGE_NULL
 #define RC_IMAGE_OPENSUBTITLE   RC_IMAGE_NULL
 
 #define RC_IMAGE_ADVANCED       RC_IMAGE_NULL
@@ -268,6 +295,7 @@
 #define RC_IMAGE_DISCONNECT     RC_IMAGE_NULL
 
 #define RC_IMAGE_WINDOWSTAYSONTOP RC_IMAGE_NULL
+#define RC_IMAGE_EMBEDONTOP     RC_IMAGE_NULL
 
 #define RC_IMAGE_ANNOTATIONBROWSER RC_IMAGE_NULL
 #define RC_IMAGE_ANNOTATIONEDITOR RC_IMAGE_NULL

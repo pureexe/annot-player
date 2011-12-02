@@ -1,5 +1,5 @@
 # clientdelegate.pri
-# Since 10/6/2011
+# 10/6/2011
 
 include(../../config.pri)
 #include($$ROOTDIR/module/gsoap/gsoap.pri)

@@ -1,13 +1,10 @@
 #pragma once
-#ifndef PICKER_H
-#define PICKER_H
 
 // picker.h
 // 10/30/2011
 
 #include "picker_config.h"
 #include <QWidget>
-#include <QRect>
 
 class WindowPickerImpl; ///< \internal
 
@@ -38,7 +35,7 @@ public slots:
 
   PICKERAPI void setSingleShot(bool t); ///< Property setter
 
-  // - Implementations -
+  // - Implementation -
 protected:
   explicit WindowPicker(QObject *parent = 0);   ///< \internal
   ~WindowPicker();  ///< \internal
@@ -51,4 +48,4 @@ private:
   Impl *impl_;
 };
 
-#endif // PICKER_H
+// EOF

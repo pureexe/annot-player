@@ -23,7 +23,7 @@ public:
   virtual void setVisible(bool visible); // stop polling when hidden
 
 signals:
-  void togglePlayModeRequested();
+  void toggleFullScreenModeRequested();
   void toggleMiniModeRequested();
 
 protected:

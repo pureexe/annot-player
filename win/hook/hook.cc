@@ -24,6 +24,18 @@ enum HOOK_PROC_TYPE {
   HOOK_PROC_COUNT
 };
 
+// - Helper -
+
+namespace { // anonymous, type-cast
+
+  inline QPoint POINT2QPoint(const POINT &pt)
+  { return QPoint((int)pt.x, (int)pt.y); }
+
+  inline POINT QPoint2POINT(const QPoint &pos)
+  { POINT ret = { pos.x(), pos.y() }; return ret; }
+
+} // anonymous namespace
+
 // - Hook implementation -
 // Specification: http://msdn.microsoft.com/en-us/library/ms632589(v=vs.85).aspx
 // Tutorial: http://msdn.microsoft.com/en-us/library/ms644960(v=vs.85).aspx
@@ -57,12 +69,12 @@ namespace { // anonymous, hook callbacks
       return NEXT;
 
     LPMOUSEHOOKSTRUCT lpMouseEvent = (LPMOUSEHOOKSTRUCT)lparam;
+    Q_ASSERT(lpMouseEvent);
     HWND hwnd = lpMouseEvent->hwnd;
     if (!HOOK_MANAGER->isWindowsFilterEnabled()
         || HOOK_MANAGER->containsWinId(hwnd)) {
 
-      POINT pt = lpMouseEvent->pt;
-      QPoint globalPos(pt.x, pt.y);
+      QPoint globalPos = ::POINT2QPoint(lpMouseEvent->pt);
       QPoint pos = globalPos;
       if (hwnd) {
         RECT rect;
@@ -74,9 +86,10 @@ namespace { // anonymous, hook callbacks
       //QCoreApplication::postEvent(HOOK_MANAGER,
       //  new QMouseEvent(QEvent::MouseMove, pos, globalPos, Qt::NoButton, Qt::NoButton, Qt::NoModifier)
       //);
-      QCoreApplication::sendEvent(HOOK_MANAGER,
-        &QMouseEvent(QEvent::MouseMove, pos, globalPos, Qt::NoButton, Qt::NoButton, Qt::NoModifier)
-      );
+      QMouseEvent e(QEvent::MouseMove, pos, globalPos, Qt::NoButton, Qt::NoButton, Qt::NoModifier);
+      QCoreApplication::sendEvent(HOOK_MANAGER, &e);
+      if (e.isAccepted())
+        return 0;
     }
 
     return NEXT;
@@ -235,6 +248,7 @@ namespace { // anonymous, low level mouse procedure with double-click support
       return NEXT;
 
     LPMSLLHOOKSTRUCT lpMouseEvent = (LPMSLLHOOKSTRUCT)lparam;
+    Q_ASSERT(lpMouseEvent);
     POINT pt = lpMouseEvent->pt;
 
     HWND hwnd = 0;

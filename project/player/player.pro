@@ -1,5 +1,7 @@
 # player.pro
-# Since 6/30/2011
+# 6/30/2011
+
+VERSION = 0.1.1.0
 
 include(../../config.pri)
 include(tr/tr.pri)
@@ -15,8 +17,8 @@ include($$ROOTDIR/module/gsoap/gsoap.pri)       # would static linking cause lic
 include($$ROOTDIR/module/translator/translator.pri)
 
 unix:!mac:  include($$ROOTDIR/module/webbrowser/webbrowser_static.pri)
+win32:      include($$ROOTDIR/module/webbrowser/webbrowser.pri)
 mac:        include($$ROOTDIR/module/webbrowser/webbrowser.pri)
-!unix:      include($$ROOTDIR/module/webbrowser/webbrowser.pri)
 
 DEFINES += USE_MODE_DEBUG
 
@@ -27,22 +29,25 @@ DEFINES += USE_MODULE_SERVERAGENT
 win32 {
      DEPENDPATH += $$ROOTDIR/core
      DEPENDPATH += $$ROOTDIR/module/mediaplayer
-     DEPENDPATH += $$ROOTDIR/module/doll
+     #DEPENDPATH += $$ROOTDIR/module/doll
 }
 
 win32 {
     include($$ROOTDIR/win/dwm/dwm.pri)
-    include($$ROOTDIR/win/hook/hook.pri)
+    #include($$ROOTDIR/win/hook/hook.pri)
+    include($$ROOTDIR/win/mousehook/mousehook.pri)
     include($$ROOTDIR/win/picker/picker.pri)
     include($$ROOTDIR/win/qth/qth.pri)
     include($$ROOTDIR/win/qtwin/qtwin.pri)
     DEFINES += USE_WIN_DWM
-    DEFINES += USE_WIN_HOOK
+    #DEFINES += USE_WIN_HOOK
+    DEFINES += USE_WIN_MOUSEHOOK
     DEFINES += USE_WIN_PICKER
     DEFINES += USE_WIN_QTH
 
     DEPENDPATH += $$ROOTDIR/win/dwm
-    DEPENDPATH += $$ROOTDIR/win/hook
+    #DEPENDPATH += $$ROOTDIR/win/hook
+    DEPENDPATH += $$ROOTDIR/win/mousehook
     DEPENDPATH += $$ROOTDIR/win/qtwin
     DEPENDPATH += $$ROOTDIR/win/qth
 }
@@ -67,7 +72,7 @@ QT      += core gui sql webkit
 TEMPLATE      = app
 win32:  TARGET = player
 unix:   TARGET = annot-player
-mac:    TARGET = "Annot Player"
+mac:   TARGET = "Annot Player"
 
 win32: CONFIG += windows
 
@@ -127,7 +132,7 @@ HEADERS += \
     player/commandlineedit.h \
     player/mainplayer.h \
     player/miniplayer.h \
-    player/osdplayer.h \
+    player/embeddedplayer.h \
     player/playerpanel.h \
     player/playerui.h \
     player/prefixlineedit.h \
@@ -178,7 +183,7 @@ SOURCES += \
     player/commandlineedit.cc \
     player/mainplayer.cc \
     player/miniplayer.cc \
-    player/osdplayer.cc \
+    player/embeddedplayer.cc \
     player/playerui.cc \
     player/playerpanel.cc \
     player/prefixlineedit.cc \

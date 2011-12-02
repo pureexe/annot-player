@@ -51,22 +51,29 @@ public:
   void setSubtitlePrefix(const QString &prefix);
   const QString &subtitlePrefix() const;
 
+signals:
+  void fullScreenModeChanged(bool);
+public:
   /**
    *  Only used to measure the current full screen geometry.
    *  \param  w  any widget which is never null and is always in full screen mode
    */
   void setFullScreenView(QWidget *w);
+  bool isFullScreenMode() const;
+public slots:
+  void setFullScreenMode(bool t = true);
 
   /**
    *  Set the windows to track.
    *  Currently only works on Windows.
    */
 signals:
-  void trackingWindowChanged(WId winId);
+  void trackedWindowDestroyed();
+  void trackedWindowChanged(WId winId);
 public:
-  WId trackingWindow() const;
+  WId trackedWindow() const;
 public slots:
-  void setTrackingWindow(WId winId);
+  void setTrackedWindow(WId winId);
 
 signals:
   void posChanged(); ///< current pos changed by show at pos, not the pos of the widget
@@ -78,6 +85,7 @@ public slots:
 protected slots:
   void startTracking();
   void stopTracking();
+  void invalidateTrackingTimer();
 
 public:
   // - Events -
@@ -180,12 +188,13 @@ public:
 private:
   VideoView *videoView_;
   QWidget *fullScreenView_;
-  WId trackingWindow_;
+  WId trackedWindow_;
   SignalHub *hub_;
   Player *player_;
   AnnotationFilter *filter_;
   bool active_;
   bool paused_;
+  bool fullScreen_;
 
   QString subtilePrefix_;
 

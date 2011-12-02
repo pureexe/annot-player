@@ -22,7 +22,7 @@ enum { ALPHA = 0 };
 #define G_DOMAIN        "me.annot.player"
 #define G_ORGANIZATION  "Annot"
 #define G_APPLICATION   "Player"
-#define G_VERSION       "0.1.0.3"
+#define G_VERSION       VERSION
 #define G_HOMEPAGE      "http://annot.me"
 #define G_WIKIPAGE      G_HOMEPAGE "/w"
 #define G_WIKIPAGE_FAQ  G_WIKIPAGE "/index.php?title=Manual:FAQ"
@@ -59,7 +59,7 @@ enum { ALPHA = 0 };
 
 // TO BE MOVED INTO mediaplayer.h
 #define G_FORMAT_ALL            "*"
-#define G_FORMAT_AUDIO          PLAYER_FORMAT_AUDIO(" *.")
+#define G_FORMAT_AUDIO          PLAYER_FORMAT_PLAYLIST(" *.") PLAYER_FORMAT_AUDIO(" *.")
 #define G_FORMAT_VIDEO          PLAYER_FORMAT_VIDEO(" *.")
 #define G_FORMAT_PICTURE        PLAYER_FORMAT_PICTURE(" *.")
 #define G_FORMAT_SUBTITLE       PLAYER_FORMAT_SUBTITLE(" *.")

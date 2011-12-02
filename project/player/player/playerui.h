@@ -47,8 +47,9 @@ public:
 
 signals:
   void commandEntered(const QString &command);
-  void showUserPanelRequested();
+  void loginRequested();
   void showPositionPanelRequested();
+  void invalidateUserMenuRequested();
 
 public slots:
   // - Player -
@@ -76,10 +77,11 @@ public slots:
   void invalidateNextFrameButton();
 
   void invalidatePlayerModeToggler();
-  void invalidateVideoModeToggler();
+  void invalidateWindowModeToggler();
 
-  void requestShowUserPanel();
-  void requestShowPositionPanel();
+  void clickUserButton();
+
+  void invalidateVisibleWidgets();
 
   // - Comments -
   void postAnnotation(); ///< Post annotation in lineEdit()

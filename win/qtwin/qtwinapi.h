@@ -1,6 +1,4 @@
 #pragma once
-#ifndef QTWINAPI_H
-#define QTWINAPI_H
 
 #include <qt_windows.h>
 
@@ -49,4 +47,4 @@ typedef HRESULT (WINAPI *FpDwmGetColorizationColor)(DWORD *pcrColorization, BOOL
 
 } } // namespace Api, QtWin
 
-#endif // QTWINAPI_H
+// EOF
