@@ -84,6 +84,8 @@ win32 {
     #INCLUDEPATH        += $$ITH_HOME/include
     LIBS               += -L$$ITH_HOME/lib
 
+    # wdk/inc/api/sal.h MUST be removed.
+    # See:  http://stackoverflow.com/questions/1356653/multiple-compiling-errors-with-basic-c-application-on-vs2010-beta-1
     INCLUDEPATH        += $$WDK_HOME/include
     LIBS               += -L$$WDK_HOME/lib
 }

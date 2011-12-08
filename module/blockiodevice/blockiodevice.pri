@@ -3,7 +3,7 @@
 
 include(../../config.pri)
 
-win32: INCLUDEPATH += $$PWD/wdk
+win32: INCLUDEPATH += $$WDK_HOME/include/api
 
 INCLUDEPATH += $$PWD
 HEADERS += $$PWD/blockiodevice.h

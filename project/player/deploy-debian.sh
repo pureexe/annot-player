@@ -19,7 +19,7 @@ SRC_PREFIX=/Volumes/local/project/annot
 SRC_RULES="$SRC_PREFIX/project/player/debian.rules"
 SRC_CONTROL="$SRC_PREFIX/project/player/debian.control"
 SRC_COPYRIGHT="$SRC_PREFIX/licenses/annot-player.txt"
-SRC_COPYING="$SRC_PREFIX/licenses/COPYING.txt"
+SRC_CHANGELOG="$SRC_PREFIX/ChangeLog"
 BUILD_PREFIX=$HOME/tmp/annot-player
 BUILD_SRC="$BUILD_PREFIX/$PACKAGE_NAME-$PACKAGE_VERSION"
 BUILD_DEBIAN="$BUILD_SRC/debian"
@@ -44,7 +44,7 @@ rm -f "$BUILD_DEBIAN"/*.{ex,EX}
 cp "$SRC_RULES" "$BUILD_SRC"/debian/rules || exit 1
 cp "$SRC_CONTROL" "$BUILD_SRC"/debian/control || exit 1
 cp "$SRC_COPYRIGHT" "$BUILD_SRC"/debian/copyright || exit 1
-cp "$SRC_COPYING" "$BUILD_SRC"/COPYING || exit 1
+#cp "$SRC_CHANGELOG" "$BUILD_SRC"/debian/changelog || exit 1
 #test -e "$BUILD_SRC"/debian/files || cat > "$BUILD_SRC"/debian/files << EOF
 #${PACKAGE_NAME}_${PACKAGE_VERSION}-1_${PACKAGE_ARCH}.deb $PACKAGE_SECTION $PACKAGE_PRIORITY
 #EOF

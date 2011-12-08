@@ -5,6 +5,9 @@
 #ifdef Q_OS_WIN
   #include "win/qtwin/qtwin.h"
 #endif // Q_OS_WIN
+#ifdef Q_OS_MAC
+  #include "mac/qtmac/qtmac.h"
+#endif // Q_OS_MAC
 #include <QtGui>
 #ifdef Q_OS_UNIX
 extern "C" {
@@ -33,6 +36,7 @@ namespace { // anonymous, debug
     case QtWarningMsg:  output = QString("%1: warning: %2\n").arg(TIMESTAMP).arg(msg); break;
     case QtCriticalMsg: output = QString("%1: critical: %2\n").arg(TIMESTAMP).arg(msg); break;
     case QtFatalMsg:    output = QString("%1: fatal: %2\n").arg(TIMESTAMP).arg(msg); break;
+    default: return;
     }
 
     QFile file(G_PATH_DEBUG);
@@ -95,7 +99,7 @@ Application::isSingleInstance() const
   // See: http://www.linuxquestions.org/questions/programming-9/restricting-multiple-instance-of-a-program-242069/
   static int fd_lock = -1;
   if (fd_lock < 0) {
-    fd_lock = ::open(G_PATH_LOCK_RUNNING, O_WRONLY|O_CREAT, 0666));
+    fd_lock = ::open((G_PATH_LOCK_RUNNING).toAscii(), O_WRONLY|O_CREAT, 0666);
     if (fd_lock >= 0) {
       flock fl; {
         fl.l_type = F_WRLCK;

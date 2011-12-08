@@ -5,10 +5,6 @@ server
 publish to 2ch nijiura
 publish to hf 4chan
 
-restore ntddk bya n
-http://stackoverflow.com/questions/1356653/multiple-compiling-errors-with-basic-c-application-on-vs2010-beta-1
-\inc\api\sal.h
-
 ## annot.cloud
 - make website look better
 - add male/female option and save it as 2 user flags
