@@ -12,45 +12,10 @@
 //#define DEBUG "qtvlc"
 #include "module/debug/debug.h"
 
-// - Helpers: Type cast -
+// - Type cast -
 
-namespace { // anonymous, cast
-
-  template <typename To, typename From>
-  To vlcobject_cast(From x)
-  { return __undefined_cast__(x); }
-
-  template <>
-  VLCVideoView*
-  vlcobject_cast<VLCVideoView*>(vlcvideoview_t *handle)
-  { return reinterpret_cast<objc_object*>(handle); }
-
-  template <>
-  vlcvideoview_t*
-  vlcobject_cast<vlcvideoview_t*>(VLCVideoView *obj)
-  { return reinterpret_cast<vlcvideoview_t*>(obj); }
-
-  template <>
-  vlcvideoview_t*
-  vlcobject_cast<vlcvideoview_t*>(objc_object *obj)
-  { return reinterpret_cast<vlcvideoview_t*>(obj); }
-
-  template <>
-  VLCOpenGLVoutView*
-  vlcobject_cast<VLCOpenGLVoutView*>(vlcglview_t *handle)
-  { return reinterpret_cast<objc_object*>(handle); }
-
-  template <>
-  vlcglview_t*
-  vlcobject_cast<vlcglview_t*>(VLCOpenGLVoutView *obj)
-  { return reinterpret_cast<vlcglview_t*>(obj); }
-
-  template <>
-  vlcglview_t*
-  vlcobject_cast<vlcglview_t*>(objc_object *obj)
-  { return reinterpret_cast<vlcglview_t*>(obj); }
-
-} // anonymous namespace
+VLCOBJECT_TYPE_REGISTER(vlcvideoview_t, VLCVideoView)
+VLCOBJECT_TYPE_REGISTER(vlcglview_t, VLCOpenGLVoutView)
 
 // - VLCVideoView -
 
@@ -64,7 +29,6 @@ vlcvideoview_new()
 void
 vlcvideoview_release(vlcvideoview_t *handle)
 {
-  Q_ASSERT(handle);
   VLCVideoView *obj = vlcobject_cast<VLCVideoView*>(handle);
   [obj release] ;
 }
@@ -72,7 +36,6 @@ vlcvideoview_release(vlcvideoview_t *handle)
 vlcglview_t*
 vlcvideoview_glview(vlcvideoview_t *handle)
 {
-  Q_ASSERT(handle);
   vlcglview_t *ret = 0;
   VLCVideoView *view = vlcobject_cast<VLCVideoView*>(handle);
   if (view.subviews.count) {
@@ -85,7 +48,6 @@ vlcvideoview_glview(vlcvideoview_t *handle)
 vlcvout_t*
 vlcglview_vout(vlcglview_t *handle)
 {
-  Q_ASSERT(handle);
   VLCOpenGLVoutView *view = vlcobject_cast<VLCOpenGLVoutView*>(handle);
   VLCOpenGLVoutView_public *glview = reinterpret_cast<VLCOpenGLVoutView_public*>(view);
 
@@ -96,7 +58,6 @@ vlcglview_vout(vlcglview_t *handle)
 QPoint
 vlcvout_map_from_global(vlcvout_t *vout, const QPoint &globalPos, const QRect &voutRect)
 {
-  Q_ASSERT(vout);
   if (!vout ||
       !voutRect.width() || !voutRect.height())
     return QPoint();
@@ -131,7 +92,6 @@ vlcvout_mouse_down(vlcvout_t *vout, const QPoint &pos, vlcbutton button)
   Q_UNUSED(vout);
 #else
   DOUT("vlcvout_mouse_down:enter");
-  Q_ASSERT(vout);
 
   //if (!pos.isNull())
   vlcvout_mouse_moved(vout, pos);
@@ -152,7 +112,6 @@ vlcvout_mouse_up(vlcvout_t *vout, const QPoint &pos, vlcbutton button)
   Q_UNUSED(vout);
 #else
   DOUT("vlcvout_mouse_up:enter");
-  Q_ASSERT(vout);
 
   //if (!pos.isNull())
   vlcvout_mouse_moved(vout, pos);
@@ -178,7 +137,6 @@ vlcvout_mouse_moved(vlcvout_t *vout, const QPoint &pos)
   Q_UNUSED(pos);
 #else
   DOUT("vlcvout_mouse_moved:enter: pos =" << pos);
-  Q_ASSERT(vout);
   if (vout)
     ::var_SetCoords(vout, "mouse-moved", pos.x(), pos.y());
 

@@ -1,269 +1,204 @@
-# ChangeLog
+ChangeLog
+Annot Project
+Since 6/18/2011
 
-Project: annot.x
-Versial: 0.0.0.0
-Date: 11/30/2011
-- Project launched.
+12/7/2011	annot.player	0.1.1.1
+        * Added Fedora support.
+        * Added CD/DVD device dialog. CD/DVD buffering performance improved.
+        * Fixed sqlite cache creation bug in Linux.
+        * Menubar enabled to all OSes.
+        * Forward token digest to reduce delay on openning media.
+        * Added playlist to open multiple files or folder.
+        * Switched to GNU ChangeLog format.
 
-Project: annot.player
-Versial: 0.1.1.0
-Date: 12/2/2011
-- Windows global mouse hook removed and replaced with native vlcore calls.
-  Less mouse hanging in Windows when the app is busy.
-- Added support to play cue file.
-- Added support to play cdda. Fixed bug while openning CD on Windows.
-- Added embedded mode.
-  Able to embed/play vidoe/annots in any window, such as Notepad, Photoshop, or PPStream.
-- Able to select embedded player on the top or bottom.
-- Player buttons and menues extended.
-- Added task bar icon for Windows 7.
-- Added Dwm notifier in Windows 7 to watch aero composition changes.
+12/2/2011	annot.player	0.1.1.0
+        * Windows global mouse hook removed and replaced with native vlcore calls.
+        Less mouse hanging in Windows when the app is busy.
+        * Added support to play cue file.
+        * Added support to play cdda. Fixed bug while openning CD on Windows.
+        * Added embedded mode.
+        Able to embed/play vidoe/annots in any window, such as Notepad, Photoshop, or PPStream.
+        * Able to select embedded player on the top or bottom.
+        * Player buttons and menues extended.
+        * Added task bar icon for Windows 7.
+        * Added Dwm notifier in Windows 7 to watch aero composition changes.
 
-Project: annot.player
-Versial: 0.1.0.3
-Date: 11/26/2011
-- Fixed a severe bug in annot-player-0.1.0.2-win that might cause significant delay for displaying context menu.
-- Added support for navigating DVD menu on Mac OS X.
-- Added app desktop/icon on linux.
+11/26/2011	annot.player	0.1.0.3
+        * Fixed a severe bug in annot-player-0.1.0.2-win that might cause significant delay for displaying context menu.
+        * Added support for navigating DVD menu on Mac OS X.
+        * Added app desktop/icon on linux.
 
-Project: annot.player
-Versial: 0.1.0.2
-Date: 11/25/2011
-- Added support for playing disc images such as ISO/MDF/BIN/IMG.
-- Added support for Ubuntu 11.
-- Improved mouse hook in windows to reduce GUI hanging.
-- Minor bug fix.
+11/25/2011	annot.player	0.1.0.2
+        * Added support for playing disc images such as ISO/MDF/BIN/IMG.
+        * Added support for Ubuntu 11.
+        * Improved mouse hook in windows to reduce GUI hanging.
+        * Minor bug fix.
 
-Project: annot.player
-Versial: 0.1.0.1
-Date: 11/22/2011
-- Added annotation counting.
-- Delete Caches script removed. Caches will be automatically invalidated if required.
-- Minor bug fix.
+11/22/2011	annot.player	0.1.0.1
+        * Added annotation counting.
+        * Delete Caches script removed. Caches will be automatically invalidated if required.
+        * Minor bug fix.
 
-Project: annot.player
-Versial: 0.1.0.0
-Date: 11/18/2011
-- Improved translations.
-- Minor bug fix.
+11/18/2011	annot.player	0.1.0.0
+        * Improved translations.
+        * Minor bug fix.
 
-Project: annot.player
-Versial: 0.1.0.0.rc
-Date: 11/18/2011
-- Added basic support for viewing/annotating pictures and manga.
-- CD/DVD/DVDISO support completed. DVD menu added.
-- Added basic NG support.
-- Block/bless/curse cast completed.
-- Communication module and underlying data structure redesigned.
-  Player with version# less than 0.1.0.0 might not work anymore.
-- Added support for Mac OS X Lion 10.7.
-- Added support for Mac to directly open file in Finder.
-- Added drag/drop support for Mac.
-- Mouse hook bug fixed on Windows.
-- GUI improved.
-- Translations improved.
+11/18/2011	annot.player	0.1.0.0.rc
+        * Added basic support for viewing/annotating pictures and manga.
+        * CD/DVD/DVDISO support completed. DVD menu added.
+        * Added basic NG support.
+        * Block/bless/curse cast completed.
+        * Communication module and underlying data structure redesigned.
+        Player with version# less than 0.1.0.0 might not work anymore.
+        * Added support for Mac OS X Lion 10.7.
+        * Added support for Mac to directly open file in Finder.
+        * Added drag/drop support for Mac.
+        * Mouse hook bug fixed on Windows.
+        * GUI improved.
+        * Translations improved.
 
-Project: annot.player
+11/12/2011	annot.player	0.0.9.2
+        * Several bugfixes for Mac.
+        * OSD structure redesigned for sake of Mac and Windows XP.
+        * Mac OS X deployment frameworks finished.
+        * Caches and logs moved to ~/Library on Mac OS X.
+        * Added warming-up caches to speed up program startup.
+        * Reduced slow-downs that caused by Windows XP compatible code.
+        * Theming bug fixed for Windows XP.
 
-Project: annot.player
-Versial: 0.0.9.2
-Date: 11/12/2011
-- Several bugfixes for Mac.
-- OSD structure redesigned for sake of Mac and Windows XP.
-- Mac OS X deployment frameworks finished.
-- Caches and logs moved to ~/Library on Mac OS X.
-- Added warming-up caches to speed up program startup.
-- Reduced slow-downs that caused by Windows XP compatible code.
-- Theming bug fixed for Windows XP.
+11/10/2011	annot.player	0.0.9.0-0.0.9.1
+        * Windows XP theme redesigned.
+        * Mac OS X theme redesigned.
+        * Several bug fixes for Mac and Windows XP.
+        * Added Chinese translation.
 
-Project: annot.player
-Versial: 0.0.9.0-0.0.9.1
-Date: 11/10/2011
-- Windows XP theme redesigned.
-- Mac OS X theme redesigned.
-- Several bug fixes for Mac and Windows XP.
-- Added Chinese translation.
+11/8/2011	touch.player	0.0.8.4
+        * Open file context menu item now could open game exe as well.
+        * Finished update module.
+        * HTML editor sibling bug fixed.
+        * Subtitle color is now customizable. Long subtitle is splitted.
 
-Project: touch.player
-Versial: 0.0.8.4
-Date: 11/8/2011
-- Open file context menu item now could open game exe as well.
-- Finished update module.
-- HTML editor sibling bug fixed.
-- Subtitle color is now customizable. Long subtitle is splitted.
+11/4/2011	touch.player	0.0.8.3
+        * NtCreateThreadEx replaced by synchronized NtCreatThread for Windows XP support.
 
-Project: touch.player
-Versial: 0.0.8.3
-Date: 11/4/2011
-- NtCreateThreadEx replaced by synchronized NtCreatThread for Windows XP support.
+11/3/2011	touch.player	0.0.8.2
+        * Added missed qtxml.
 
-Project: touch.player
-Versial: 0.0.8.2
-Date: 11/3/2011
-- Added missed qtxml.
+11/2/2011	touch.player	0.0.8.1
+        * Added in translate module.
+        * Added subtitle position settings.
 
-Project: touch.player
-Versial: 0.0.8.1
-Date: 11/2/2011
-- Added in translate module.
-- Added subtitle position settings.
+11/1/2011	touch.player	0.0.8.0
+        * Communication approach with server changed.
 
-Project: touch.player
-Versial: 0.0.8.0
-Date: 11/1/2011
-- Communication approach with server changed.
+10/30/2011	touch.player	0.0.7.2
+        * Added window picker (windows only).
+        * Enable attach process by window (windows only).
+        * Enable attach OSDPlayer to other window (windows only).
+        * TokenView removed from SignalView.
 
-Project: touch.player
-Versial: 0.0.7.2
-Date: 10/30/2011
-- Added window picker (windows only).
-- Enable attach process by window (windows only).
-- Enable attach OSDPlayer to other window (windows only).
-- TokenView removed from SignalView.
+10/29/2011	touch.player	0.0.7.1
+        * Asynchronized communication.
+        * Annotation scheduling algorithm changed.
 
-Project: touch.player
-Versial: 0.0.7.1
-Date: 10/29/2011
-- Asynchronized communication.
-- Annotation scheduling algorithm changed.
+10/27/2011	touch.player	0.0.7.0
+        * Added debug output.
+        * Added system tray.
+        * Removed ALPHA features.
+        * Added single application feature.
+        * Added font caching notification.
+        * Game annotation hashing algorithm changed.
 
-Project: touch.player
-Versial: 0.0.7.0
-Date: 10/27/2011
-- Added debug output.
-- Added system tray.
-- Removed ALPHA features.
-- Added single application feature.
-- Added font caching notification.
-- Game annotation hashing algorithm changed.
+10/26/2011	touch.player	0.0.6.0
+        * Get local caching work, ready for publish.
 
-Project: touch.player
-Versial: 0.0.6.0
-Date: 10/26/2011
-- Get local caching work, ready for publish.
+10/24/2011	touch.player	0.0.5.1
+        * Mac theme and mouse events fixed
 
-Project: touch.player
-Versial: 0.0.5.1
-Date: 10/24/2011
-- Mac theme and mouse events fixed
+10/23/2011	touch.player	0.0.5.0
+        * Renamed from touch to annot
+        * Start using google code.
+        * Added language selection.
+        * Added annot filter.
+        * Finished annot editing.
+        * Finished alias editing.
+        * Token tag, name and file merged into alias.
+        * Game and media type merged into one.
+        * Most client-side componets finished except sync mode and local cache.
+        * Ready for publishing.
 
-Project: touch.player
-Versial: 0.0.5.0
-Date: 10/23/2011
-- Renamed from touch to annot
-- Start using google code.
-- Added language selection.
-- Added annot filter.
-- Finished annot editing.
-- Finished alias editing.
-- Token tag, name and file merged into alias.
-- Game and media type merged into one.
-- Most client-side componets finished except sync mode and local cache.
-- Ready for publishing.
+10/16/2011	touch.player	0.0.4.2
+        * Added client side signal mode.
 
-Project: touch.player
-Versial: 0.0.4.2
-Date: 10/16/2011
-- Added client side signal mode.
+10/16/2011	touch.player	0.0.4.1
+        * Finished GTH and process monitor module
 
-Project: touch.player
-Versial: 0.0.4.1
-Date: 10/16/2011
-- Finished GTH and process monitor module
+10/12/2011	touch.player	0.0.4
+        * Start with ITH
 
-Project: touch.player
-Versial: 0.0.4
-Date: 10/12/2011
-- Start with ITH
+9/15/2011	touch.player	0.0.3.1
+        * Added local cache using SQLite to implement SOAP client functions.
+        * Added persistant storage.
+        * Added licences
 
-Project: touch.player
-Version: 0.0.3.1
-Date: 9/15/2011
-- Added local cache using SQLite to implement SOAP client functions.
-- Added persistant storage.
-- Added licences
+9/10/2011	touch.player	0.0.3
+        * Replaced REST xml parser with SOAP RPC.
 
-Project: touch.player
-Version: 0.0.3
-Date: 9/10/2011
-- Replaced REST xml parser with SOAP RPC.
+9/3/2011	touch.app	0.0.0.1
+        * Project start.
 
-Project: touch.app
-Version: 0.0.0.1
-Date: 9/3/2011
-- Project start.
+9/3/2011	touch.player	0.0.2.1
+        * Add subtitle support
 
-Project: touch.player
-Version: 0.0.2.1
-Date: 9/3/2011
-- Add subtitle support
+8/26/2011	touch.player	0.0.2.0
+        * First server side support (annotation/token/user)
+        * Mac OS X new GUI
+        * Several bug fixed. Stable release.
+        * Support LaTeX style commands
+        * Disc basic support in Windows.
 
-Project: touch.player
-Version: 0.0.2.0
-Date: 8/26/2011
-- First server side support (annotation/token/user)
-- Mac OS X new GUI
-- Several bug fixed. Stable release.
-- Support LaTeX style commands
-- Disc basic support in Windows.
+7/31/2011	touch.player	0.0.1.3
+        * Added AIML module.
 
-Project: touch.player
-Version: 0.0.1.3
-Date: 7/31/2011
-- Added AIML module.
+7/30/2011	touch.player	0.0.1.2
+        * Mac OS X support using VLCKit!
 
-Project: touch.player
-Version: 0.0.1.2
-Date: 7/30/2011
-- Mac OS X support using VLCKit!
+7/27/2011	touch.player	0.0.1.1
+        * Several bug fixed. Stable release.
+        * Improved command line edit.
+        * Using event filter in Windows hook
 
-Project: touch.player
-Version: 0.0.1.1
-Hook version: 0.0.0.2
-Date: 7/27/2011
-- Several bug fixed. Stable release.
-- Improved command line edit.
-- Using event filter in Windows hook
+7/26/2011	touch.player	0.0.1.0
+        * Most GUI issue solved.
+        - DWM aero
+        - Mouse hook on Windows
+        - OSD display
+        - Graphics view animation
+        - Text encoding
+        - QSS and UI style
 
-Project: touch.player
-Version: 0.0.1.0
-Hook version: 0.0.0.1
-Date: 7/26/2011
+        * Directory structure changed a lot.
+        - Moved common packages into Core
+        - Moved Windows stuff into win32
+        - Put VLC wrapper (MediaPlayer) alone.
+        - Combined with touch.reader.
 
-- Most GUI issue solved.
-  - DWM aero
-  - Mouse hook on Windows
-  - OSD display
-  - Graphics view animation
-  - Text encoding
-  - QSS and UI style
+        * Work under Linux.
+        But only tested for Windows.
+        Missing VLC 1.1.x for Mac.
 
-- Directory structure changed a lot.
-  - Moved common packages into Core
-  - Moved Windows stuff into win32
-  - Put VLC wrapper (MediaPlayer) alone.
-  - Combined with touch.reader.
+        * Major Missing component
+        - Database
+        - User
+        - Network
+        - Platform other then win7
 
-- Work under Linux.
-  But only tested for Windows.
-  Missing VLC 1.1.x for Mac.
+6/30/2011	touch.player	0.0.0.0
+        * Project launched.
 
-- Major Missing component
-  - Database
-  - User
-  - Network
-  - Platform other then win7
+6/18/2011	touch.reader	0.0.0.0
+        * Project launched.
 
-Project: touch.player
-Version: 0.0.0.0
-Date: 6/30/2011
-
-- Project start.
-
-Project: touch.reader
-Version: 0.0.0.0
-Date: 6/18/2011
-
-- Project start.
-
-# EOF
+Copyright 2011, Annot Cloud
+Copying and distribution of this file, with or without modification, are
+permitted provided the copyright notice and this notice are preserved.

@@ -3,10 +3,11 @@
 
 #include "core/cloud/token.h"
 #include "core/util/crypt.h"
-#ifdef USE_WIN_DISK
-  #include "win/disk/disk.h"
-#endif // USE_WIN_DISK
+#ifdef USE_MODULE_IOUTIL
+  #include "module/ioutil/ioutil.h"
+#endif // USE_MODULE_IOUTIL
 #include <QtCore>
+#include <memory>
 
 #define DEBUG "Core::Token"
 #include "module/debug/debug.h"
@@ -32,7 +33,7 @@ QString
 Core::Cloud::
 Token::digestFromFile(const QString &input)
 {
-  DOUT("digestFromFile: enter:" << input);
+  DOUT("digestFromFile:enter:" << input);
 
   QByteArray data;
   QString filePath = input;
@@ -43,46 +44,32 @@ Token::digestFromFile(const QString &input)
     if (!QFileInfo(filePath).exists())
       filePath = dir + "/VIDEO_TS/VIDEO_TS.BUP";
     if (!QFileInfo(filePath).exists())
-      filePath.clear();
+      filePath = input;
   }
 
-#ifdef USE_WIN_DISK
-  if (filePath.isEmpty()) {
-    QString deviceFileName = Disk::guessDeviceFileName(input);
-    if (Disk::isValidDeviceFileName(deviceFileName)) {
-      Disk disk(deviceFileName);
-      bool succeed = disk.open(QIODevice::ReadOnly);
-      if (!succeed) {
-        DOUT("digestFromFile: Failed to open device disk for hashing: " << input);
-        return QByteArray();
-      }
-      data = disk.read(DIGEST_SIZE);
-      disk.close();
-    }
-  } else
-#endif // USE_WIN_DISK
   if (!filePath.isEmpty()) {
+#ifdef USE_MODULE_BLOCKIODEVICE
+    data = IOUtil::readBytes(filePath, DIGEST_SIZE);
+#else
     QFile file(filePath);
-    bool succeed = file.open(QIODevice::ReadOnly);
-    if (!succeed) {
-      DOUT("digestFromFile: Failed to open file for hashing: " << filePath);
+    bool ok = file.open(QIODevice::ReadOnly);
+    if (!ok) {
+      DOUT("digestFromFile:exit: Failed to open file for hashing: " << filePath);
       return QByteArray();
     }
 
-    if (file.size() <= DIGEST_SIZE)
-      data = file.readAll();
-    else
-      data = file.read(DIGEST_SIZE);
+    data = file.read(DIGEST_SIZE);
     file.close();
+#endif // USE_MODULE_BLOCKIODEVICE
   }
 
   if (data.isEmpty()) {
-    DOUT("digestFromFile: Error: get empty data to hash: " << filePath);
+    DOUT("digestFromFile:exit: Error: get empty data to hash: " << filePath);
     return QByteArray();
   }
 
   QByteArray ret = DIGEST(data);
-  DOUT("digestFromFile: exit");
+  DOUT("digestFromFile:exit");
   return ret.toHex().toUpper();
 }
 

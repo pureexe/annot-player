@@ -16,102 +16,143 @@
 //#define DEBUG "qtstep"
 //#include "module/debug/debug.h"
 
-// -- Helpers --
-namespace { // anonymous, cast
+// - Type cast -
 
-  template <typename To, typename From>
-  To nsobject_cast(From x)
-  { return __undefined_cast__(x); }
+NSOBJECT_TYPE_REGISTER(nsobject_t, NSObject)
+NSOBJECT_TYPE_REGISTER(nsresponder_t, NSResponder)
+NSOBJECT_TYPE_REGISTER(nswindow_t, NSWindow)
+NSOBJECT_TYPE_REGISTER(nsview_t, NSView)
 
-  template <>
-  NSView*
-  nsobject_cast<NSView*>(nsview_t *handle)
-  { return reinterpret_cast<objc_object*>(handle); }
+// - Static initialization -
 
-  template <>
-  nsview_t*
-  nsobject_cast<nsview_t*>(NSView *obj)
-  { return reinterpret_cast<nsview_t*>(obj); }
-
-  template <>
-  nsview_t*
-  nsobject_cast<nsview_t*>(objc_object *obj)
-  { return reinterpret_cast<nsview_t*>(obj); }
-
-  template <>
-  const NSView*
-  nsobject_cast<const NSView*>(const nsview_t *handle)
-  { return reinterpret_cast<const objc_object*>(handle); }
-
-  template <>
-  const nsview_t*
-  nsobject_cast<const nsview_t*>(const NSView *obj)
-  { return reinterpret_cast<const nsview_t*>(obj); }
-
-  template <>
-  const nsview_t*
-  nsobject_cast<const nsview_t*>(const objc_object *obj)
-  { return reinterpret_cast<const nsview_t*>(obj); }
-
-} // anonymous namespace
-
-// -- Static initialization/destruction --
 namespace { // anonymous, static
-
-  class qtstep_global_
-  {
-    NSAutoreleasePool *pool;
-
+  class qtstep_global_ {
+    NSAutoreleasePool *pool_;
   public:
-    qtstep_global_()  { pool = [NSAutoreleasePool new]; }
-    ~qtstep_global_() { [pool drain]; }
-
+    qtstep_global_()  { pool_ = [NSAutoreleasePool new]; }
+    ~qtstep_global_() { [pool_ drain]; }
   };
   qtstep_global_ global_;
-
 } // anonymous namespace
 
-// -- Public API --
+// - NSObject -
+
+nsobject_t*
+nsobject_new()
+{
+  NSObject *obj = [NSObject new];
+  return nsobject_cast<nsobject_t*>(obj);
+}
+
+void
+nsobject_release(nsobject_t *handle)
+{
+  NSObject *obj = nsobject_cast<NSObject*>(handle);
+  [obj release] ;
+}
+
+// - NSResponder -
+
+nsresponder_t*
+nsresponder_new()
+{
+  NSResponder *obj = [NSResponder new];
+  return nsobject_cast<nsresponder_t*>(obj);
+}
+
+void
+nsresonder_release(nsresponder_t *handle)
+{
+  NSResponder *obj = nsobject_cast<NSResponder*>(handle);
+  [obj release] ;
+}
+
+// - NSWindow -
+
+nswindow_t*
+nswindow_new()
+{
+  NSWindow *obj = [NSWindow new];
+  return nsobject_cast<nswindow_t*>(obj);
+}
+
+void
+nswindow_release(nswindow_t *handle)
+{
+  NSWindow *obj = nsobject_cast<NSWindow*>(handle);
+  [obj release] ;
+}
+
+bool
+nswindow_accepts_mouse_moved_events(const nswindow_t *handle)
+{
+  NSWindow *w = nsobject_cast<NSWindow*>(handle);
+  return [w acceptsMouseMovedEvents] ;
+}
+
+void
+nswindow_set_accepts_mouse_moved_events(nswindow_t *handle, bool t)
+{
+  NSWindow *w = nsobject_cast<NSWindow*>(handle);
+  [w setAcceptsMouseMovedEvents:t] ;
+}
+
+// - NSView -
+
 nsview_t*
 nsview_new()
 {
-  NSView *view = [NSView new];
-  return nsobject_cast<nsview_t*>(view);
+  NSView *obj = [NSView new];
+  return nsobject_cast<nsview_t*>(obj);
 }
 
 void
 nsview_release(nsview_t *handle)
 {
-  Q_ASSERT(handle);
-  NSView *view = nsobject_cast<NSView*>(handle);
-  [view release] ;
+  NSView *obj = nsobject_cast<NSView*>(handle);
+  [obj release] ;
 }
 
 bool
 nsview_is_hidden(const nsview_t *handle)
 {
-  Q_ASSERT(handle);
-  const NSView *view = nsobject_cast<const NSView*>(handle);
+  NSView *view = nsobject_cast<NSView*>(handle);
   return [view isHidden] ;
 }
 
 void
 nsview_set_hidden(nsview_t *handle, bool hidden)
 {
-  Q_ASSERT(handle);
   NSView *view = nsobject_cast<NSView*>(handle);
   [view setHidden:hidden] ;
 }
+
+nswindow_t*
+nsview_window(nsview_t *handle)
+{
+  NSView *view = nsobject_cast<NSView*>(handle);
+  NSWindow *window = [view window];
+  return nsobject_cast<nswindow_t*>(window);
+}
+
+const nswindow_t*
+nsview_window(const nsview_t *handle)
+{
+  NSView *view = nsobject_cast<NSView*>(handle);
+  NSWindow *window = [view window];
+  return nsobject_cast<nswindow_t*>(window);
+}
+
+// - QtStep -
 
 // See: http://www.cocoadev.com/index.pl?NSEvent
 // See: http://stackoverflow.com/questions/3873688/send-a-mouseevent-to-a-nsview-webview-from-code
 void
 QtStep::mouseClickEvent(nsview_t *handle, const QPoint &pos)
 {
-  Q_ASSERT(handle);
   NSView *view = nsobject_cast<NSView*>(handle);
 
-  id mouseDownEvent = [NSEvent
+  NSEvent *mouseDownEvent = [NSEvent
     mouseEventWithType:NSLeftMouseDown
     location:NSMakePoint(pos.x(), pos.y())
     modifierFlags:nil
@@ -124,7 +165,7 @@ QtStep::mouseClickEvent(nsview_t *handle, const QPoint &pos)
   ];
   [view mouseDown:mouseDownEvent];
 
-  id mouseUpEvent = [NSEvent
+  NSEvent *mouseUpEvent = [NSEvent
     mouseEventWithType:NSLeftMouseUp
     location:NSMakePoint(pos.x(), pos.y())
     modifierFlags:nil

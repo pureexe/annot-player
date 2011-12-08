@@ -44,6 +44,12 @@ public:
   bool isEmbeddedPlayerStaysOnTop() const;
   void setEmbeddedPlayerStaysOnTop(bool t);
 
+  bool isMenuBarVisible() const;
+  void setMenuBarVisible(bool t);
+
+  bool isAnnotationFilterEnabled() const;
+  void setAnnotationFilterEnabled(bool t);
+
   bool isAutoPlayNext() const;
   void setAutoPlayNext(bool t);
 

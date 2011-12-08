@@ -24,6 +24,10 @@ unix2dos "Read Me.txt"
 
 rm -Rf licenses
 cp -R "%SOURCE%/licenses" .
+cp "%SOURCE%/COPYING" licenses/COPYING.txt
+cp "%SOURCE%/ChangeLog" licenses/ChangeLog.txt
+
+unix2dos licenses/ChangeLog.txt
 
 cd ..
 call "Delete Caches.cmd"

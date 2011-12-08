@@ -3,7 +3,7 @@
 win32 {
 
 TEMPLATE = subdirs
-include(disk/disk.pri)
+#include(disk/disk.pri)
 include(dwm/dwm.pri)
 include(qtwin/qtwin.pri)
 SUBDIRS += hook

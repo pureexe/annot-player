@@ -33,7 +33,7 @@ VideoView::VideoView(QWidget *parent)
   //setMouseTracking(true);
 
 #ifdef Q_WS_MAC
-  //setMouseTracking(true);
+  //setMouseTracking(true); // No effect since this is not a top-level window
   view_ = ::vlcvideoview_new();
   //setCocoaView(view_);
 #endif // Q_WS_MAC
@@ -49,17 +49,13 @@ VideoView::~VideoView()
 {
 #ifdef Q_WS_MAC
   if (view_)
-    ::vlcvideoview_release((vlcvideoview_t*)view_);
+    ::vlcvideoview_release(view_);
 #endif // Q_WS_MAC
 }
 
 // - Mac OS X Cocoa View -
 
 #ifdef Q_WS_MAC
-
-void*
-VideoView::view() const
-{ return view_; }
 
 bool
 VideoView::isViewVisible() const
@@ -98,7 +94,7 @@ VideoView::viewMapFromGlobal(const QPoint &globalPos)
   QPoint ret;
   if (!view_)
     return ret;
-  vlcglview_t *glview = ::vlcvideoview_glview((vlcvideoview_t*)view_);
+  vlcglview_t *glview = ::vlcvideoview_glview(view_);
   if (!glview)
     return ret;
   vlcvout_t *vout = ::vlcglview_vout(glview);
@@ -118,7 +114,7 @@ VideoView::setViewMousePressPos(const QPoint &globalPos)
 {
   if (!view_)
     return;
-  vlcglview_t *glview = ::vlcvideoview_glview((vlcvideoview_t*)view_);
+  vlcglview_t *glview = ::vlcvideoview_glview(view_);
   if (!glview)
     return;
   vlcvout_t *vout = ::vlcglview_vout(glview);
@@ -134,7 +130,7 @@ VideoView::setViewMouseReleasePos(const QPoint &globalPos)
 {
   if (!view_)
     return;
-  vlcglview_t *glview = ::vlcvideoview_glview((vlcvideoview_t*)view_);
+  vlcglview_t *glview = ::vlcvideoview_glview(view_);
   if (!glview)
     return;
   vlcvout_t *vout = ::vlcglview_vout(glview);
@@ -150,7 +146,7 @@ VideoView::setViewMouseMovePos(const QPoint &globalPos)
 {
   if (!view_)
     return;
-  vlcglview_t *glview = ::vlcvideoview_glview((vlcvideoview_t*)view_);
+  vlcglview_t *glview = ::vlcvideoview_glview(view_);
   if (!glview)
     return;
   vlcvout_t *vout = ::vlcglview_vout(glview);
@@ -361,7 +357,6 @@ VideoView::x11Event(XEvent *event)
 bool
 VideoView::macEvent(EventHandlerCallRef caller, EventRef event)
 {
-  qDebug()<<11111;
   return Base::macEvent(caller, event);
 }
 */

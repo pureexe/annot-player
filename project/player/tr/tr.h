@@ -51,6 +51,7 @@
 #define T_REFRESH       0x218
 #define T_RESET         0x219
 #define T_ADD           0x21a
+#define T_MESSAGE       0x21b
 
 #define T_BLACK         0x301
 #define T_BLUE          0x302
@@ -194,9 +195,10 @@
 #define T_TITLE_SEEK            0xe
 
 #define T_TITLE_OPENFILE        0x11
-#define T_TITLE_OPENVIDEODEVICE 0x12
-#define T_TITLE_OPENAUDIODEVICE 0x13
-#define T_TITLE_OPENSUBTITLE    0x14
+#define T_TITLE_OPENDEVICE      0x12
+#define T_TITLE_OPENVIDEODEVICE 0x13
+#define T_TITLE_OPENAUDIODEVICE 0x14
+#define T_TITLE_OPENSUBTITLE    0x15
 
 #define T_TITLE_ANNOTATIONBROWSER       0x19
 #define T_TITLE_TOKENVIEW       0x1a
@@ -224,6 +226,7 @@
 #define T_ERROR_SUBMIT_ANNOTATION       0x2d
 #define T_ERROR_SYNC_FAILURE            0x2e
 #define T_ERROR_LOGINFROMCACHE_FAILURE  0x2f
+#define T_ERROR_NO_MEDIA                0x30
 
 #define T_SUCCEED_SNAPSHOT_SAVED        0x41
 #define T_SUCCEED_ANNOTATION_COPIED     0x42
@@ -753,6 +756,7 @@
 #define T_TIP_CLEARRECENT       0x14e
 #define T_TOOLTIP_CLEARRECENT   T_TIP_CLEARRECENT
 #define T_STATUSTIP_CLEARRECENT T_TIP_CLEARRECENT
+
 #define T_MENUTEXT_RECENT       0x151
 #define T_TIP_RECENT            0x152
 #define T_TOOLTIP_RECENT        T_TIP_RECENT
@@ -820,6 +824,8 @@
 #define T_MAXIMIZE      0x16c
 #define T_MINIMIZE      0x16d
 #define T_RESTORE       0x16e
+
+#define T_OPEN       0x16f
 
 #define T_MENUTEXT_RESTORE            T_RESTORE
 #define T_TIP_RESTORE                 T_RESTORE
@@ -1005,5 +1011,20 @@
 #define T_TIP_AUTOPLAYNEXT              0x19a
 #define T_TOOLTIP_AUTOPLAYNEXT          T_TIP_AUTOPLAYNEXT
 #define T_STATUSTIP_AUTOPLAYNEXT        T_TIP_AUTOPLAYNEXT
+
+#define T_MENUTEXT_SHOWMENUBAR         0x19b
+#define T_TIP_SHOWMENUBAR              0x19c
+#define T_TOOLTIP_SHOWMENUBAR          T_TIP_SHOWMENUBAR
+#define T_STATUSTIP_SHOWMENUBAR        T_TIP_SHOWMENUBAR
+
+#define T_MENUTEXT_PLAYLIST       0x19d
+#define T_TIP_PLAYLIST            0x19e
+#define T_TOOLTIP_PLAYLIST        T_TIP_PLAYLIST
+#define T_STATUSTIP_PLAYLIST      T_TIP_PLAYLIST
+
+#define T_MENUTEXT_CLEARPLAYLIST  T_CLEAR
+#define T_TIP_CLEARPLAYLIST       T_CLEAR
+#define T_TOOLTIP_CLEARPLAYLIST   T_TIP_CLEARPLAYLIST
+#define T_STATUSTIP_CLEARPLAYLIST T_TIP_CLEARPLAYLIST
 
 #endif // TR_H

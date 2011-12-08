@@ -5,90 +5,80 @@ server
 publish to 2ch nijiura
 publish to hf 4chan
 
-NextProject: use new ubuntu 11 and my dell d620 windows xp with cygwin to develop
-- improve libssh2 x2 performance
-  - change to c++
-  - improve perf using buffer, etc
-- try global sound
-- fix d3dx dll display error later
-- fix sound work again?
-  add sound support as wine dll later
-  http://forum.audacityteam.org/viewtopic.php?f=14&t=7486
-   esd -public -tcp -port PORT
-   esddsp -s <client's IP address>:PORT audacity &
-   NEED IP!!!
-   http://www.straightrunning.com/XmingNotes/
+restore ntddk bya n
+http://stackoverflow.com/questions/1356653/multiple-compiling-errors-with-basic-c-application-on-vs2010-beta-1
+\inc\api\sal.h
 
- alternative
- http://ubuntuforums.org/showthread.php?t=1763277
+## annot.cloud
+- make website look better
+- add male/female option and save it as 2 user flags
+  has sex
+  male or female
+- start implement LIVE mode
+- look into annotd source code
 
- local sound server: ssh -L 5901:localhost:5901 -L 1234:localhost:1234 <remote sound client>
- remote sound client: mkfifo output.wav
- remote sound client: parec | sox -t raw -r 44100 -s -L -b 16 -c 2 - "output.wav" & cat output.wav | nc -l 1234
- local sound server: mkfifo fifo.wav
- local sound server: paplay --volume=48000 -v fifo.wav & nc localhost 1234 >fifo.wav
-
- As you can see, I use port 5901 for VNC and port 1234 to forward sound. The only thing is it takes at least 30 seconds before it plays on the speakers.
-
-  Any ideas why such a huge latency? I am guessing it has something to do with parec.
-- directx work?
-- redhat work?
-- network speed?
-- multi user?
-  - limits to 10 guest at first
-- user profile?
-
-##
-
-0.1.1.0
-- linux:
-  - fix minimize/restore error
-  - check if embedded work well
-
-0.1.1.1
-- change ChangeLog format
-mac&linux:
-  - DVD/CD support to directly read /dev
-  - keyboard event listener + find window under mouse to pick window to embed
-linux:
-  - fixme: ubuntu11 full screen hide unity top bar
-- mac:
+## annot.player
+0.1.1.2
+- debug offline mode to see if token/annot/alias offline submission works or not
+- kill disc if wrong disc type
+- font outline doesn't work, need to figure out a workaround to make it clearer
+  - download a free contoured font, that supporting chinese/japanese
+- keyboard event listener + find window under mouse to pick window to embed
+  implement without hook
+- clean up code
+  - rename open family methods
+  - clean up main() with application
+  - clean up player module, esp vlc part
+  - finish dataManager
+    - use dataManager to connect dataServer instead of MainWindow
+    - use dataManager to save current User as well?
+- linux
+  - FIXME: Read CD partially working before 120
+  - prevent opening multiple instance
+  - ubuntu:
+    - fixme: ubuntu11 full screen hide unity top bar
+  - fedora:
+    - fixme: stucking on fedora -- caused by qt4.8?
+    - fixme: DVD menu hang on fedora -- caused by threading?
+    - osdWindow not on top? or hanged?
+- mac
   - enable mouse tracking on cocoaview
+    possible reason cause problem:
+    - mouse event not cached
+    - mouse event cached by vlckit
+      or videoview
+      or minimal_macos
+  - recognize /Volumes, /media and /mnt as well
+  - recognize arbitorary mountpoint as well
 - win
-  - FIXME: cannot read CD format disk
-  - FIXME: double click event ignored when to fast
+  - FIXME: double click event ignored when too fast
     in vlccore, figure out where I could find double click
   - FIXME: The app would close when there is no visible window after injecting another process.
     such as, select process window, and press cancel
   - associate with filetype
     QSettings("HKEY_CURRENT_USER\Software\Classes\blergcorp.blergapp.v1\shell\open\command", null, @"c:\path\to\app.exe \"%1\"");
     QSettings("HKEY_CURRENT_USER\Software\Classes\.blerg", null, "blergcorp.blergapp.v1");
-- debug offline mode to see if token/annot/alias offline submission works or not
+- add male/female to user's flags
+  add "female" falgs to annot flats
+  and add client side filter.
+- Open folder
+  play the first item in the folder
+- ng list to settings
 - Fixed recent file menu bug.
-- move current Annotations/Token/Alias into DataManager from TokenView and AnnotationView
-- clean up main() with application
-- clean up player module, esp vlc part
-- download a free contoured font, that supporting chinese/japanese
-- font outline doesn't work, need to figure out a workaround to make it clearer
 - FIXME: m3u/m3u8 which doesn't get media path correctly
-- save ng list to settings
 - Finish bless/block user/annots/aliases at client side
   - add block/bless/curse user
   - view user info from annot
-
-0.1.1.2
 - ubuntu
   - submit to ubuntu app market
-- enable \bookmark annot, which people can click! such as. service scene
 - fixme: edit time, edit comments, etc; otherwise, make them readonly
 
 ## NextStep:
 
 (0.1.2.?)
-FRIENDS
-- friends' annot directly displayed in osdconsole
-LIVE MODE
+LIVE MODE (annot not saved)
 - try ppstream on windows with my player
+  make sure todou work
 - make default UI as open channel, and as FIRST live channel
   every chat is received
 - PPStream support for chjunjiewanhui!
@@ -102,10 +92,7 @@ LIVE MODE
   http://sourceforge.net/projects/qup/
   http://stackoverflow.com/questions/2077550/how-can-i-enable-auto-updates-in-a-qt-cross-platform-app
 
-server:
-COMMENT
-- comment for each token
-USER ADS
+- SUPPORT TUDOU's LIVE CHANNEL
 
 client:
 MANGA ANNOT
@@ -115,10 +102,19 @@ MANGA ANNOT
 - add thumbnail view
 CD ANNOT
 - add playlist view
+- enable \bookmark annot, which people can click! such as. service scene
 
 (0.1.3.?)
-SYNC MODE (next next step, after more and more people start using this
+FRIENDS
+- friends' annot directly displayed in osdconsole
+SYNC MODE (annot saved, next next step, after more and more people start using this)
   to avoid the idea being stolen by bilibili)
+
+server:
+COMMENT
+- comment for each token
+USER ADS
+
 
 
 ## NextProject

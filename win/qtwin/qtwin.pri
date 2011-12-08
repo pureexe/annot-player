@@ -13,6 +13,6 @@ SOURCES += \
     $$PWD/qtwinapi.cc
 
 QT      += core gui
-LIBS    += -luser32 -lpsapi -lole32 #-lwinmm
+LIBS    += -lkernel32 -luser32 -lpsapi -lole32 #-lwinmm
 
 # EOF

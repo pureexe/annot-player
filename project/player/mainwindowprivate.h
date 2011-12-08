@@ -86,6 +86,14 @@ namespace MainWindow_slot_ { // anonymous slot_
 
 namespace { namespace task_ { // anonymous
 
+  class invalidateMediaAndPlay : public QRunnable
+  {
+    MainWindow *w_;
+    virtual void run() { w_->invalidateMediaAndPlay(false); } // \override, async = false
+  public:
+    explicit invalidateMediaAndPlay(MainWindow *w) : w_(w) { Q_ASSERT(w_); }
+  };
+
   class login : public QRunnable
   {
     MainWindow *w_;

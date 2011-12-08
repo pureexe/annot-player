@@ -8,6 +8,7 @@
 #ifdef Q_WS_MAC
   #include <QMacCocoaViewContainer>
   typedef QMacCocoaViewContainer VideoViewBase;
+  struct vlcvideoview_t;
 #elif defined(Q_WS_X11)
   #include <QX11EmbedContainer>
   typedef QX11EmbedContainer VideoViewBase;
@@ -49,9 +50,9 @@ private:
 
 #ifdef Q_WS_MAC
 private:
-  void *view_; // cocoa view
+  vlcvideoview_t *view_; // cocoa view
 public:
-  void *view() const;
+  vlcvideoview_t *view() const { return view_; }
   bool isViewVisible() const;
 
   void setViewMousePressPos(const QPoint &globalPos);

@@ -61,6 +61,7 @@ public slots:
   void setAnnotations(const AnnotationList &l);
   void addAnnotation(const Annotation &annot);
   void addAnnotations(const AnnotationList &l);
+  void removeAnnotations();
   void clear();
 
 protected slots:

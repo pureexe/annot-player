@@ -4,6 +4,7 @@ unix {
 
 TEMPLATE = subdirs
 include(qtx/qtx.pri)
+include(qtunix/qtunix.pri)
 #SUBDIRS += qtx
 
 }

@@ -5,7 +5,7 @@
 
 #include <QApplication>
 
-class MainWindow;
+QT_FORWARD_DECLARE_CLASS(QWidget)
 
 class Application : public QApplication
 {
@@ -13,18 +13,27 @@ class Application : public QApplication
   typedef Application Self;
   typedef QApplication Base;
 
-  MainWindow *w_;
+  QWidget *w_;
 
   // - Constructions -
 public:
   Application(int &argc, char **argv );
 
-  MainWindow *mainWindow() const;
-  void setMainWindow(MainWindow *w);
+  void startLoggingDebugMessage(); // invoke only once
+
+  // - Properties -
+  QWidget *mainWindow() const { return w_; }
+  void setMainWindow(QWidget *w) { w_ = w; }
+
+  bool isSingleInstance() const;
 
   // - Events -
 protected:
   virtual bool event(QEvent *e); ///< \override
+
+  // - Implementation -
+private:
+  void createDirectories();
 };
 
 #endif // APPLICATION_H

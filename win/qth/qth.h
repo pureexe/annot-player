@@ -17,13 +17,9 @@ class Qth : public QObject
 
   // - Constructions -
 public:
-  QTHAPI static Self *globalInstance(); ///< default return null;
+  QTHAPI static Self *globalInstance();
 
-protected:
-  explicit Qth(QObject *parent = 0);
-  ~Qth();
-
-signals:
+signals: // No import/export needed for Qt signals.
   void textReceived(const QString &text, int hookId, qint64 tsMsecs);
 
   // - Properties -
@@ -47,10 +43,12 @@ public:
   QTHAPI ulong getProcessIdByName(const QString &name) const;
 
   // - Implementations -
+protected:
+  explicit Qth(QObject *parent = 0);
+  ~Qth();
 public:
   // FIXME: bad design pattern. It is better to pass the callback function to each TextThread.
-  QTHAPI void emit_textReceived(const QString &text, int hookId, qint64 tsMsecs); ///< Ith callback
-
+  void emit_textReceived(const QString &text, int hookId, qint64 tsMsecs); ///< Ith callback
 private:
   QList<ulong> pids_;
 };

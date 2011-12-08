@@ -28,7 +28,7 @@ ServerProxy::reset()
     new ServerSoapProxy(SERVER_SOAP_MODE)
   );
 #ifdef WITH_GZIP
-  proxy_->z_level = 9; // compression level, default is 1 (fastest), max is 9
+  proxy_->z_level = 6; // compression level, default is 1 (fastest), max is 9
 #endif // WIZH_GZIP
   mutex_.unlock();
   DOUT("reset:exit");

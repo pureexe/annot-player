@@ -3,6 +3,9 @@
 
 include(../config.pri)
 
+include($$ROOTDIR/module/ioutil/ioutil.pri)
+DEFINES += USE_MODULE_IOUTIL
+
 HEADERS += \
     $$PWD/annotationparser.h \
     $$PWD/cmd.h \
@@ -48,12 +51,7 @@ SOURCES += \
     $$PWD/util/crypt.cc \
     $$PWD/util/datetime.cc
 
-QT      += core gui xml network webkit
-
-win32 {
-    include($$ROOTDIR/win/disk/disk.pri)
-    DEFINES += USE_WIN_DISK
-}
+QT +=   core gui xml network webkit
 
 # EOF
 

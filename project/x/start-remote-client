@@ -1,0 +1,12 @@
+#!/bin/sh -v
+# 2011
+APPLET_HOST=applet.me
+ssh -L 5901:localhost:5901 -L 1234:localhost:1234 $APPLET_HOST  \
+"\
+  pulseaudio --start; \
+  cd ~/services && \
+  rm -f output.wav && \
+  mkfifo output.wav && \
+  parec | sox -t raw -r 44100 -s -L -b 16 -c 2 - "output.wav" & cat output.wav | nc -l 1234; \
+  rm -f output.wav \
+"

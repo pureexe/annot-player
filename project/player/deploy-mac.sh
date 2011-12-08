@@ -7,7 +7,7 @@ cd ~/tmp || exit 1
 ## environment
 
 COLOR=blue
-VERSION=0.1.1.0
+VERSION=0.1.1.1
 
 TARGET="Annot Player"
 TARGET_DMG=$TARGET.dmg
@@ -38,8 +38,11 @@ mkdir -p "$TARGET"
 cd "$TARGET" || exit 1
 
 cp -Rv "$APP_SRC"/licenses Licenses
+cp -v "$APP_SRC"/COPYING Licenses/COPYING.txt
+cp -v "$APP_SRC"/ChangeLog ChangeLog.txt
 cp -v "$APP_SRC"/README "Read Me.txt"
 dos2unix "Read Me.txt"
+dos2unix ChangeLog.txt
 
 cp -Rv "$APP_BUILD/$APP" "$APP"
 test -e "$APP" || exit 1

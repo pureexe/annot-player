@@ -143,9 +143,10 @@ void
 EmbeddedPlayerUi::resetAutoHideTimeout()
 {
   Q_ASSERT(autoHideTimer_);
-  if (autoHideTimer_->isActive())
-    autoHideTimer_->stop();
-  autoHideTimer_->start();
+  //if (autoHideTimer_->isActive())
+  //  autoHideTimer_->stop();
+  //autoHideTimer_->start();
+  QTimer::singleShot(0, autoHideTimer_, SLOT(start()));
 }
 
 // - Geometry -

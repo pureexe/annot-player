@@ -600,7 +600,7 @@ Player::openMedia(const QString &path)
         qDebug()<<fi.absolutePath();
         impl_->setTrackNumber(track1 - 1);
         bool ret = openMediaAsCD(fi.absolutePath());
-        DOUT("openMedia: exit from cda branch: ret =" << ret);
+        DOUT("openMedia: exit from cda code path: ret =" << ret);
         return ret;
       }
     }

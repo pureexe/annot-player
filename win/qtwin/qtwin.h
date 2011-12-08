@@ -93,7 +93,8 @@ namespace QtWin {
   void sendMouseClick(const QPoint& globalPos, Qt::MouseButton button);
 
   // - Environments -
-  QString getWinDir();
+  QString getWinDirPath();
+  QString getAppDataPath();
 
   bool isWindowsVistaOrLater();
   bool isWindowsXpOrLater();
@@ -108,6 +109,23 @@ namespace QtWin {
 
   // - Devices -
 
+  ///  Consistent with GetDriveType, http://msdn.microsoft.com/en-us/library/windows/desktop/aa364939(v=vs.85).aspx
+  enum DriveType {
+    UnknownDrive = 0,   // DRIVE_UNKNOWN = 0    The drive type cannot be determined.
+    NoRootDirDrive,     // DRIVE_NO_ROOT_DIR = 1  The root path is invalid; for example, there is no volume mounted at the specified path.
+    RemovableDrive,     // DRIVE_REMOVABLE = 2  The drive has removable media; for example, a floppy drive, thumb drive, or flash card reader.
+    FixedDrive,         // DRIVE_FIXED = 3      The drive has fixed media; for example, a hard disk drive or flash drive.
+    RemoteDrive,        // DRIVE_REMOTE = 4     The drive is a remote (network) drive.
+    CdRomDrive,         // DRIVE_CDROM = 5      The drive is a CD-ROM drive.
+    RamDiskDrive,       // DRIVE_RAMDISK = 6    The drive is a RAM
+    DriveTypeCount
+  };
+
+// Drive string would look like: "C:\", which takes 3 characters and ends with ":\"
+  QStringList getLogicalDrives();
+  DriveType getDriveType(const QString &driveLetter);
+  QStringList getLogicalDrivesWithType(DriveType type);
+
 #if 0
   ///  \param vol variate in [0, 1]. Return if succeedded.
   bool setWaveVolume(qreal vol);
@@ -115,6 +133,9 @@ namespace QtWin {
   ///  Return [0, 1] if succeeded, or-1 if failed.
   qreal getWaveVolume();
 #endif // 0
+
+  QString guessDeviceFileName(const QString &hint);
+  bool isValidDeviceFileName(const QString &fileName);
 
 } // namespace QtWin
 

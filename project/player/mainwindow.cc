@@ -6,6 +6,7 @@
 
 #include "db.h"
 #include "datamanager.h"
+#include "dataserver.h"
 #include "logger.h"
 #include "eventlogger.h"
 #include "grabber.h"
@@ -32,6 +33,7 @@
 #include "translatormanager.h"
 #include "aboutdialog.h"
 #include "blacklistview.h"
+#include "devicedialog.h"
 #include "helpdialog.h"
 #include "logindialog.h"
 #include "pickdialog.h"
@@ -78,21 +80,20 @@
 #ifdef Q_WS_MAC
   #include "mac/qtmac/qtmac.h"
   //#include "mac/qtstep/qtstep.h"
-  #include "mac/qtvlc/qtvlc.h"
+  //#include "mac/qtvlc/qtvlc.h"
 #endif // Q_WS_MAC
 #ifdef Q_WS_X11
   #include "unix/qtx/qtx.h"
 #endif // Q_WS_X11
+#ifdef Q_OS_UNIX
+  #include "unix/qtunix/qtunix.h"
+#endif // Q_OS_UNIX
 #include "core/os.h"
 #include "core/cmd.h"
 #include "core/annotationparser.h"
 #include "core/util/datetime.h"
 #include "core/htmltag.h"
 #include "core/gui/actionwithid.h"
-#include "core/cloud/traits.h"
-#include "core/cloud/alias.h"
-#include "core/cloud/token.h"
-#include "core/cloud/annotation.h"
 #include <QtGui>
 #include <boost/foreach.hpp>
 #include <boost/tuple/tuple.hpp>
@@ -152,7 +153,7 @@ MainWindow::prefixLineEditHasFocus() const
 MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags f)
   : Base(parent, f),
     tray_(0),
-    dragPos_(BAD_POS),
+    dragPos_(BAD_POS), tokenType_(0),
     themeMenu_(0),
     setThemeToDefaultAct_(0), setThemeToRandomAct_(0),
     setThemeToBlack1Act_(0), setThemeToBlack2Act_(0),
@@ -175,11 +176,7 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags f)
   setContentsMargins(0, 0, 0, 0);
   UiStyle::globalInstance()->setMainWindowStyle(this);
 
-#ifndef Q_WS_WIN
-  // Not created by default, and hence no need to hide.
-  //if (menuBar())
-  //  menuBar()->hide();
-#endif // !Q_WS_WIN
+  menuBar()->setVisible(Settings::globalInstance()->isMenuBarVisible());
 
   createComponents();
 
@@ -243,6 +240,8 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags f)
 
   embeddedPlayer_->setOnTop(settings->isEmbeddedPlayerStaysOnTop());
 
+  annotationFilter_->setEnabled(settings->isAnnotationFilterEnabled());
+
   invalidateAnnotationLanguages();
 
   // Initial focus
@@ -286,8 +285,11 @@ MainWindow::createComponents()
   client_->setServerAgent(server_);
 #endif // USE_MODULE_CLIENTAGENT
 
+  // Data server
+  dataServer_ = new DataServer(server_, cache_, queue_, this);
+
   // Data manager
-  dataManager_ = new DataManager(server_, cache_, queue_, this);
+  dataManager_ = new DataManager(this);
 
   // Qth
 #ifdef USE_WIN_QTH
@@ -385,6 +387,8 @@ MainWindow::createComponents()
   //userPanel_->hide(); // TODO!!!!!!
 
   blacklistView_ = new BlacklistView(annotationFilter_, this);
+
+  deviceDialog_ = new DeviceDialog(this);
 
   loginDialog_ = new LoginDialog(this);
   seekDialog_ = new SeekDialog(this);
@@ -485,6 +489,24 @@ MainWindow::createConnections()
   connect(tokenView_, SIGNAL(aliasSubmitted(Alias)), SLOT(submitAlias(Alias)));
   connect(tokenView_, SIGNAL(tokenBlessedWithId(qint64)), SLOT(blessTokenWithId(qint64)));
   connect(tokenView_, SIGNAL(tokenCursedWithId(qint64)), SLOT(curseTokenWithId(qint64)));
+
+  // Data manager
+  connect(dataManager_, SIGNAL(tokenChanged(Token)), tokenView_, SLOT(setToken(Token)));
+  connect(dataManager_, SIGNAL(aliasesChanged(AliasList)), tokenView_, SLOT(setAliases(AliasList)));
+  connect(tokenView_, SIGNAL(aliasSubmitted(Alias)), dataManager_, SLOT(addAlias(Alias)));
+
+  connect(annotationView_, SIGNAL(annotationAdded(Annotation)), dataManager_, SLOT(addAnnotation(Annotation)));
+  connect(annotationView_, SIGNAL(annotationsRemoved()), dataManager_, SLOT(removeAnnotations()));
+
+  connect(dataManager_, SIGNAL(annotationsChanged(AnnotationList)), annotationBrowser_, SLOT(setAnnotations(AnnotationList)));
+  connect(dataManager_, SIGNAL(annotationAdded(Annotation)), annotationBrowser_, SLOT(addAnnotation(Annotation)));
+
+  // Forward drag/drop event
+  connect(tokenView_, SIGNAL(dragEnterEventReceived(QDragEnterEvent*)), SLOT(dragEnterEvent(QDragEnterEvent*)));
+  connect(tokenView_, SIGNAL(dragLeaveEventReceived(QDragLeaveEvent*)), SLOT(dragLeaveEvent(QDragLeaveEvent*)));
+  connect(tokenView_, SIGNAL(dragMoveEventReceived(QDragMoveEvent*)), SLOT(dragMoveEvent(QDragMoveEvent*)));
+  connect(tokenView_, SIGNAL(dropEventReceived(QDropEvent*)), SLOT(dropEvent(QDropEvent*)));
+
 #ifdef USE_MODE_SIGNAL
   //connect(signalView_->tokenView(), SIGNAL(aliasSubmitted(Alias)), SLOT(submitAlias(Alias)));
 
@@ -494,10 +516,6 @@ MainWindow::createConnections()
   connect(signalView_, SIGNAL(dropEventReceived(QDropEvent*)), SLOT(dropEvent(QDropEvent*)));
 #endif // USE_MODE_SIGNAL
 
-  connect(tokenView_, SIGNAL(dragEnterEventReceived(QDragEnterEvent*)), SLOT(dragEnterEvent(QDragEnterEvent*)));
-  connect(tokenView_, SIGNAL(dragLeaveEventReceived(QDragLeaveEvent*)), SLOT(dragLeaveEvent(QDragLeaveEvent*)));
-  connect(tokenView_, SIGNAL(dragMoveEventReceived(QDragMoveEvent*)), SLOT(dragMoveEvent(QDragMoveEvent*)));
-  connect(tokenView_, SIGNAL(dropEventReceived(QDropEvent*)), SLOT(dropEvent(QDropEvent*)));
 
   connect(annotationBrowser_, SIGNAL(dragEnterEventReceived(QDragEnterEvent*)), SLOT(dragEnterEvent(QDragEnterEvent*)));
   connect(annotationBrowser_, SIGNAL(dragLeaveEventReceived(QDragLeaveEvent*)), SLOT(dragLeaveEvent(QDragLeaveEvent*)));
@@ -566,8 +584,10 @@ MainWindow::createConnections()
   connect(loginDialog_, SIGNAL(loginRequested(QString, QString)), SLOT(login(QString, QString)));
   connect(seekDialog_, SIGNAL(seekRequested(qint64)), SLOT(seek(qint64)));
 
+  connect(deviceDialog_, SIGNAL(deviceSelected(QString,bool)), SLOT(openDevicePath(QString,bool)));
+
 #ifdef Q_WS_MAC
-  connect(player_, SIGNAL(playing()), videoView_, SLOT(showView()));
+  connect(player_, SIGNAL(playing()), SLOT(showVideoViewIfAvailable()));
   connect(player_, SIGNAL(stopped()), videoView_, SLOT(hideView()));
 #endif // Q_WS_MAC
 
@@ -651,8 +671,9 @@ MainWindow::createActions()
 
   MAKE_ACTION(openAct_,         OPEN,           hub_,           SLOT(open()))
   MAKE_ACTION(openFileAct_,     OPENFILE,       this,           SLOT(openFile()))
-  MAKE_ACTION(openVideoDeviceAct_, OPENVIDEODEVICE,  this,           SLOT(openVideoDevice()))
-  MAKE_ACTION(openAudioDeviceAct_, OPENAUDIODEVICE,  this,           SLOT(openAudioDevice()))
+  MAKE_ACTION(openDeviceAct_,   OPENDEVICE,     this,           SLOT(openDevice()))
+  MAKE_ACTION(openVideoDeviceAct_, OPENVIDEODEVICE,  this,      SLOT(openVideoDevice()))
+  MAKE_ACTION(openAudioDeviceAct_, OPENAUDIODEVICE,  this,      SLOT(openAudioDevice()))
   MAKE_ACTION(openSubtitleAct_, OPENSUBTITLE,   this,           SLOT(openSubtitle()))
   MAKE_ACTION(playAct_,         PLAY,           hub_,           SLOT(play()))
   MAKE_ACTION(pauseAct_,        PAUSE,          hub_,           SLOT(pause()))
@@ -663,6 +684,7 @@ MainWindow::createActions()
   MAKE_ACTION(replayAct_,       REPLAY,         this,           SLOT(replay()))
   MAKE_ACTION(snapshotAct_,     SNAPSHOT,       this,           SLOT(snapshot()))
   MAKE_TOGGLE(toggleFullScreenModeAct_, FULLSCREEN, hub_,       SLOT(setFullScreenWindowMode(bool)))
+  MAKE_TOGGLE(toggleMenuBarVisibleAct_, SHOWMENUBAR, menuBar(), SLOT(setVisible(bool)))
   MAKE_TOGGLE(toggleEmbeddedModeAct_, EMBED,    hub_,           SLOT(setEmbeddedPlayerMode(bool)))
   MAKE_TOGGLE(toggleMiniModeAct_, MINI,         hub_,           SLOT(setMiniPlayerMode(bool)))
   MAKE_TOGGLE(toggleLiveModeAct_, LIVE,         hub_,           SLOT(setLivePlayMode(bool)))
@@ -721,6 +743,9 @@ MainWindow::createActions()
   MAKE_ACTION(backward10mAct_,  BACKWARD10M,    this,   SLOT(backward10m()))
 
   MAKE_ACTION(clearRecentAct_,  CLEARRECENT,    this,   SLOT(clearRecent()))
+  MAKE_ACTION(clearPlaylistAct_,CLEARPLAYLIST,  this,   SLOT(clearPlaylist()))
+  MAKE_ACTION(nextPlaylistItemAct_,NEXT,        this,   SLOT(openNextPlaylistItem()))
+  MAKE_ACTION(previousPlaylistItemAct_,PREVIOUS,this,   SLOT(openPreviousPlaylistItem()))
 
   MAKE_ACTION(previousSectionAct_, PREVIOUSSECTION, player_,  SLOT(setPreviousTitle()))
   MAKE_ACTION(nextSectionAct_,     NEXTSECTION,    player_,   SLOT(setNextTitle()))
@@ -923,6 +948,12 @@ MainWindow::createMenus()
     recentMenu_->setToolTip(TR(T_TOOLTIP_RECENT));
   }
 
+  playlistMenu_ = new QMenu(this); {
+    UiStyle::globalInstance()->setContextMenuStyle(playlistMenu_, true); // persistent = true
+    playlistMenu_->setTitle(TR(T_MENUTEXT_PLAYLIST));
+    playlistMenu_->setToolTip(TR(T_TOOLTIP_PLAYLIST));
+  }
+
   backwardMenu_ = new QMenu(this); {
     backwardMenu_->setIcon(QIcon(RC_IMAGE_BACKWARD));
     backwardMenu_->setTitle(TR(T_MENUTEXT_BACKWARD));
@@ -971,7 +1002,7 @@ MainWindow::createMenus()
   }
 
 
-#ifndef Q_WS_WIN
+//#ifndef Q_WS_WIN
   // Use menuBar_ instead MainWindow::menuBar() to enable customization.
   // It is important to create the menubar WITHOUT PARENT, so that diff windows could share the same menubar.
   // See: http://doc.qt.nokia.com/latest/mac-differences.html#menu-bar
@@ -982,7 +1013,9 @@ MainWindow::createMenus()
   //menuBar_ = new QMenuBar;
   fileMenu_ = menuBar()->addMenu(tr("&File")); {
     fileMenu_->addAction(openAct_);
+    fileMenu_->addSeparator();
     fileMenu_->addAction(openSubtitleAct_);
+    fileMenu_->addAction(openDeviceAct_);
     fileMenu_->addAction(openVideoDeviceAct_);
 #ifdef Q_WS_WIN // TODO add support for Mac/Linux
     fileMenu_->addAction(openAudioDeviceAct_);
@@ -1005,10 +1038,7 @@ MainWindow::createMenus()
   helpMenu_ = menuBar()->addMenu(tr("&Help"));
   helpMenu_->addAction(tr("&Help"), this, SLOT(help())); // DO NOT TRANSLATE ME
   helpMenu_->addAction(tr("&About"), this, SLOT(about())); // DO NOT TRANSLATE ME
-#endif // !Q_WS_WIN
-//#ifdef Q_WS_WIN
-//  menuBar()->hide();
-//#endif // Q_WS_WIN
+//#endif // !Q_WS_WIN
 }
 
 // jichi:10/17/2011: TODO: Totally remove dock widgets; use layout instead
@@ -1222,10 +1252,13 @@ MainWindow::openFile()
     + TR(T_FORMAT_PICTURE)   + ("(" G_FORMAT_PICTURE ")" ";;")
     + TR(T_FORMAT_ALL)       + ("(" G_FORMAT_ALL ")");
 
-  QString fileName = QFileDialog::getOpenFileName(
+  QStringList l = QFileDialog::getOpenFileNames(
         this, TR(T_TITLE_OPENFILE), recentPath_, filter);
 
-  if (!fileName.isEmpty()) {
+  if (!l.isEmpty()) {
+    playlist_ = l;
+
+    QString fileName = l.front();
     recentPath_ = QFileInfo(fileName).absolutePath();
     openSource(fileName);
   }
@@ -1250,16 +1283,21 @@ MainWindow::openWindow()
 bool
 MainWindow::isDevicePath(const QString &path)
 {
-  Q_UNUSED(path);
-  return true;
-//#ifdef Q_WS_WIN
-//  return path.contains(QRegExp("^[a-zA-Z]:$"))
-//      || path.contains(QRegExp("^[a-zA-Z]:\\\\$"));
-//#else
-//  Q_UNUSED(path)
-//  return true;
-//#endif // Q_WS_WIN
+#ifdef Q_WS_WIN
+  if (path.contains(QRegExp("^[a-zA-Z]:$")) ||
+      path.contains(QRegExp("^[a-zA-Z]:\\\\$")))
+    return true;
+#endif // Q_WS_MAC
+#ifdef Q_OS_UNIX
+  if (QtUnix::isDeviceFile(path))
+    return true;
+#endif // Q_OS_UNIX
+  return false;
 }
+
+void
+MainWindow::openDevice()
+{ deviceDialog_->show(); }
 
 void
 MainWindow::openVideoDevice()
@@ -1271,13 +1309,10 @@ MainWindow::openVideoDevice()
         this, TR(T_TITLE_OPENVIDEODEVICE), recentPath_);
 
   if (!path.isEmpty()) {
-    recentPath_ = path;
+    playlist_.clear();
 
-    if (isDevicePath(path)) {
-      tokenView_->token().setType(Token::TT_Video);
-      openPath(path);
-    } else
-      warn(TR(T_ERROR_BAD_DEVICEPATH) + ": " + path);
+    recentPath_ = path;
+    openDevicePath(path, false); // isCDDA == false
   }
 }
 
@@ -1291,14 +1326,30 @@ MainWindow::openAudioDevice()
         this, TR(T_TITLE_OPENAUDIODEVICE), recentPath_);
 
   if (!path.isEmpty()) {
-    recentPath_ = path;
+    playlist_.clear();
 
-    if (isDevicePath(path)) {
-      tokenView_->token().setType(Token::TT_Audio);
-      openPath(PLAYER_URL_CD + path);
-    } else
-      warn(TR(T_ERROR_BAD_DEVICEPATH) + ": " + path);
+    recentPath_ = path;
+    openDevicePath(path, true); // isCDDA == true
   }
+}
+
+void
+MainWindow::openDevicePath(const QString &path, bool isCDDA)
+{
+  //if (!isDevicePath(path)) {
+  //  warn(TR(T_ERROR_BAD_DEVICEPATH) + ": " + path);
+  //  return;
+  //}
+
+  playlist_.clear();
+
+  tokenType_ = isCDDA ? Token::TT_Audio : Token::TT_Video;
+
+  QString mrl = path;
+  if (isCDDA && !mrl.startsWith(PLAYER_URL_CD, Qt::CaseInsensitive))
+    mrl = PLAYER_URL_CD + path;
+
+  openPath(mrl);
 }
 
 void
@@ -1311,6 +1362,8 @@ MainWindow::openDirectory()
         this, TR(T_TITLE_OPENAUDIODEVICE), recentPath_);
 
   if (!path.isEmpty()) {
+    playlist_.clear();
+
     recentPath_ = path;
     openPath(path);
   }
@@ -1326,12 +1379,13 @@ MainWindow::openSubtitle()
       TR(T_FORMAT_SUBTITLE)  + ("(" G_FORMAT_SUBTITLE ")" ";;")
     + TR(T_FORMAT_ALL)       + ("(" G_FORMAT_ALL ")");
 
-  QString fileName = QFileDialog::getOpenFileName(
-        this, TR(T_TITLE_OPENFILE), recentPath_, filter);
+  QStringList l = QFileDialog::getOpenFileNames(
+        this, TR(T_TITLE_OPENSUBTITLE), recentPath_, filter);
 
-  if (!fileName.isEmpty()) {
-    recentPath_ = QFileInfo(fileName).absolutePath();
-    openSubtitlePath(fileName);
+  if (!l.isEmpty()) {
+    recentPath_ = QFileInfo(l.front()).absolutePath();
+    foreach (QString fileName, l)
+      openSubtitlePath(fileName);
   }
 }
 
@@ -1353,8 +1407,12 @@ MainWindow::openUrls(const QList<QUrl> &urls)
 {
   // FIXME: add to playlist rather then this approach!!!!!
   if (!urls.empty()) {
-    //foreach (const QUrl &url, urls)
-    //  openUrl(url);
+    playlist_.clear();
+    foreach (const QUrl &url, urls) {
+      QString path = url.toLocalFile();
+      if (!path.isEmpty())
+        playlist_.append(path);
+    }
     openUrl(urls.front());
   }
 }
@@ -1366,12 +1424,25 @@ MainWindow::openMimeData(const QMimeData *mime)
     openUrls(mime->urls());
 }
 
+
+void
+MainWindow::setRecentOpenedFile(const QString &path)
+{
+  recentOpenedFile_ = path;
+  if (playlist_.size() > 1)
+    invalidatePlaylistMenu();
+}
+
 void
 MainWindow::openPath(const QString &path, bool checkPath)
 {
   if (hub_->isSignalTokenMode())
     hub_->stop();
   hub_->setMediaTokenMode();
+
+  recentDigest_.clear();
+
+  setRecentOpenedFile(path);
 
   setBrowsedFile(path);
 
@@ -1383,14 +1454,28 @@ MainWindow::openPath(const QString &path, bool checkPath)
     }
   }
 
+  // Forward computing tokenType_
+  {
+    bool isCDDA = path.startsWith(PLAYER_URL_CD, Qt::CaseInsensitive);
+    if (isCDDA)
+      tokenType_ = Token::TT_Audio;
+    else  {
+      int tt = fileType(path);
+      if (tt)
+        tokenType_ = tt;
+    }
+  }
+
   player_->openMedia(path);
 
   addRecent(path);
   if (player_->hasPlaylist())
     return;
 
-  if (player_->hasMedia())
+  if (player_->hasMedia()) {
+    recentDigest_.clear();
     invalidateMediaAndPlay();
+  }
 }
 
 
@@ -1402,30 +1487,76 @@ MainWindow::isDigestReady(const QString &path) const
   if (path.endsWith(".cda", Qt::CaseInsensitive))
     return false;
 
-#ifdef Q_WS_WIN
-  // FIXME: CDFS digest on windows not working. Please check win/disk module.
-  if (path.endsWith(':') || path.endsWith(":\\") || path.endsWith(":/"))
-    if (path.startsWith(PLAYER_URL_CD) ||
-        tokenView_->token().type() == Token::TT_Audio)
-      return false;
-#endif // Q_WS_WIN
+//#ifdef Q_WS_WIN
+//  if (path.endsWith(':') || path.endsWith(":\\") || path.endsWith(":/"))
+//    if (path.startsWith(PLAYER_URL_CD) ||
+//        dataManager_->token().type() == Token::TT_Audio)
+//      return false;
+//#endif // Q_WS_WIN
 
   return true;
 }
-void
-MainWindow::invalidateMediaAndPlay()
+
+bool
+MainWindow::isAliasReady(const QString &path) const
 {
+  QFileInfo fi(path);
+  if (fi.isDir())
+    return false;
+
+#ifdef Q_OS_UNIX
+  if (path.startsWith("/dev/"))
+    return false;
+#endif // Q_OS_UNIX
+
+  return true;
+}
+
+QString
+MainWindow::digestFromFile(const QString &path)
+{
+  QString digest = Token::digestFromFile(path);
+  if (digest.isEmpty()) {
+    QString localPath = QUrl(path).toLocalFile();
+    QString decodedLocalPath = QUrl::fromPercentEncoding(localPath.toAscii());
+    digest = Token::digestFromFile(decodedLocalPath);
+  }
+  return digest;
+}
+
+void
+MainWindow::invalidateMediaAndPlay(bool async)
+{
+  DOUT("invalidateMediaAndPlay:enter: async =" << async);
   if (player_->hasMedia()) {
+    if (async &&
+        recentDigest_.isEmpty() &&
+        isDigestReady(player_->mediaPath())) {
+      log(tr("analyzing media ..."));
+      QThreadPool::globalInstance()->start(new task_::invalidateMediaAndPlay(this));
+      DOUT("invalidateMediaAndPlay:exit: returned from async branch");
+      return;
+    }
+
+    DOUT("invalidateMediaAndPlay: playerMutex locking");
+    playerMutex_.lock();
+    DOUT("invalidateMediaAndPlay: playerMutex locked");
+
     QString path = player_->mediaPath();
+    if (isDigestReady(path)) {
+      if (recentDigest_.isEmpty())
+        recentDigest_ = digestFromFile(removeUrlPrefix(path));
+      if (!recentDigest_.isEmpty())
+        setToken(path);
+    }
 
     addRecent(path);
     //if (mode_ == NormalPlayMode)
     //  videoView_->resize(INIT_WINDOW_SIZE);
-    if (isDigestReady(path))
-      setToken(path);
 
-    QTimer::singleShot(0, player_, SLOT(loadExternalSubtitles()));
     player_->play();
+    QTimer::singleShot(0, player_, SLOT(loadExternalSubtitles())); // load external subtitles later
+
     invalidateWindowTitle();
 
 #ifdef Q_WS_MAC
@@ -1442,13 +1573,24 @@ MainWindow::invalidateMediaAndPlay()
       UiStyle::globalInstance()->setBlackBackground(this);
 #endif // Q_WS_X11
 
-    invalidateTrackMenu();
+    // SingleShot only because of multi-threading problem.
+    QTimer::singleShot(0, this, SLOT(invalidateTrackMenu()));
+
+    DOUT("invalidateMediaAndPlay: playerMutex unlocking");
+    playerMutex_.unlock();
+    DOUT("invalidateMediaAndPlay: playerMutex unlocked");
   }
+  DOUT("invalidateMediaAndPlay:exit");
 }
 
 void
 MainWindow::openSubtitlePath(const QString &path)
 {
+  if (!player_->hasMedia()) {
+    log(TR(T_ERROR_NO_MEDIA))   ;
+    return;
+  }
+
   if (!QFileInfo(path).exists()) {
     warn(TR(T_ERROR_BAD_FILEPATH) + ": " + path);
     return;
@@ -1944,8 +2086,8 @@ MainWindow::hideCommentView()
 void
 MainWindow::setCommentViewVisible(bool visible)
 {
-  if (visible && tokenView_->hasToken())
-    commentView_->setTokenId(tokenView_->token().id());
+  if (visible && dataManager_->hasToken())
+    commentView_->setTokenId(dataManager_->token().id());
   commentView_->setVisible(visible);
   if (visible)
     commentView_->raise();
@@ -1984,21 +2126,21 @@ MainWindow::submitAlias(const Alias &input, bool async)
     return;
   }
 
-  DOUT("submitAlias: mutex locking");
-  mutex_.lock();
-  DOUT("submitAlias: mutex locked");
+  DOUT("submitAlias: inetMutex locking");
+  inetMutex_.lock();
+  DOUT("submitAlias: inetMutex locked");
 
   Alias a = input;
   //bool id = server_->submitAlias(a);
-  dataManager_->submitAlias(a);
+  dataServer_->submitAlias(a);
   //if (id)
     log(tr("alias saved") + ": " + a.text());
   //else
   //  warn(tr("failed to update alias text") + ": " + a.text());
 
-  DOUT("submitAlias: mutex unlocking");
-  mutex_.unlock();
-  DOUT("submitAlias: mutex unlocked");
+  DOUT("submitAlias: inetMutex unlocking");
+  inetMutex_.unlock();
+  DOUT("submitAlias: inetMutex unlocked");
   DOUT("submitAlias:exit");
 }
 
@@ -2056,6 +2198,15 @@ MainWindow::invalidateToken()
 { setToken(QString()); }
 
 void
+MainWindow::showVideoViewIfAvailable()
+{
+#ifdef Q_WS_MAC
+  if (tokenType_ != Token::TT_Audio)
+    videoView_->showView();
+#endif // Q_WS_MAC
+}
+
+void
 MainWindow::setToken(const QString &input, bool async)
 {
   DOUT("setToken:enter: async =" << async << ", path =" << input);
@@ -2066,12 +2217,12 @@ MainWindow::setToken(const QString &input, bool async)
     return;
   }
 
-  DOUT("setToken: mutex locking");
-  mutex_.lock();
-  DOUT("setToken: mutex locked");
+  DOUT("setToken: inetMutex locking");
+  inetMutex_.lock();
+  DOUT("setToken: inetMutex locked");
 
-  Token token = tokenView_->token();
-  tokenView_->clearToken();
+  Token token = dataManager_->token();
+  dataManager_->removeToken();
 
   Alias alias;
 
@@ -2083,33 +2234,19 @@ MainWindow::setToken(const QString &input, bool async)
     // Following logic is messed up.
 
     QString path = removeUrlPrefix(input);
-    QString digest = Token::digestFromFile(path);
-    if (digest.isEmpty()) {
-      QString localPath = QUrl(path).toLocalFile();
-      QString decodedLocalPath = QUrl::fromPercentEncoding(localPath.toAscii());
-      path = decodedLocalPath;
+    token.setDigest(recentDigest_);
 
-      digest = Token::digestFromFile(path);
-      if (digest.isEmpty()) {
-        warn(TR(T_ERROR_HASH_TOKEN) + ": " + path);
-        DOUT("setToken: mutex unlocking");
-        mutex_.unlock();
-        DOUT("setToken: mutex unlocked");
-        DOUT("setToken:exit: empty digest skipped");
-        return;
-      }
-    }
-
-    token.setDigest(digest);
-
-    QFileInfo fi(path);
-    if (fi.isDir()) {
-      // Keep token's original tt from tokenView_
-    }  else {
-      QString fileName = fi.fileName();
+    // If isAliasReady, make fileName as alias and guess tt.
+    // Otherwise, keep token's original tt from tokenView_
+    if (isAliasReady(path)) {
+      QString fileName = QFileInfo(path).fileName();
       if (!fileName.isEmpty()) {
-        int tt = fileType(fileName);
-        token.setType(tt);
+        tokenType_ = fileType(fileName);
+//#ifdef Q_WS_MAC
+//        if (tt == Token::TT_Audio)
+//          videoView_->hideView();
+//#endif // Q_WS_MAC
+        token.setType(tokenType_);
 
         if (fileName.size() > Traits::MAX_ALIAS_LENGTH) {
           fileName = fileName.mid(0, Traits::MAX_ALIAS_LENGTH);
@@ -2122,6 +2259,14 @@ MainWindow::setToken(const QString &input, bool async)
         alias.setUpdateTime(QDateTime::currentMSecsSinceEpoch() / 1000);
       }
     }
+  }
+
+  if (!token.hasDigest()) {
+    DOUT("setToken: inetMutex unlocking");
+    inetMutex_.unlock();
+    DOUT("setToken: inetMutex unlocked");
+    DOUT("setToken:exit from empty digest branch");
+    return;
   }
 
   token.setCreateTime(QDateTime::currentMSecsSinceEpoch() / 1000);
@@ -2140,11 +2285,11 @@ MainWindow::setToken(const QString &input, bool async)
 
   AliasList aliases;
 
-  qint64 tid = dataManager_->submitTokenAndAlias(token, alias);
+  qint64 tid = dataServer_->submitTokenAndAlias(token, alias);
   if (tid) {
-    Token t = dataManager_->selectTokenWithId(tid);
+    Token t = dataServer_->selectTokenWithId(tid);
     if (t.isValid()) {
-      aliases = dataManager_->selectAliasesWithTokenId(tid);
+      aliases = dataServer_->selectAliasesWithTokenId(tid);
       token = t;
     } else
       warn(TR(T_ERROR_SUBMIT_TOKEN) + ": " + input);
@@ -2155,10 +2300,10 @@ MainWindow::setToken(const QString &input, bool async)
     token = cache_->selectTokenWithDigest(token.digest(), token.digestType());
   }
 
-  aliases = dataManager_->selectAliasesWithToken(token);
+  aliases = dataServer_->selectAliasesWithToken(token);
 
-  tokenView_->setToken(token);
-  tokenView_->setAliases(aliases);
+  dataManager_->setToken(token);
+  dataManager_->setAliases(aliases);
 
   if (ALPHA)
     commentView_->setTokenId(token.id());
@@ -2166,8 +2311,8 @@ MainWindow::setToken(const QString &input, bool async)
   //signalView_->tokenView()->setAliases(aliases);
 #endif // USE_MODE_SIGNAL
 
-  AnnotationList annots = dataManager_->selectAnnotationsWithToken(token);
-  annotationBrowser_->setAnnotations(annots);
+  AnnotationList annots = dataServer_->selectAnnotationsWithToken(token);
+  //annotationBrowser_->setAnnotations(annots);
   //annotationView_->setAnnotations(annots);
   emit setAnnotationsRequested(annots);
 
@@ -2186,9 +2331,9 @@ MainWindow::setToken(const QString &input, bool async)
     server_->queryAnnotationsByTokenId(t.id());
   */
 
-  DOUT("setToken: mutex unlocking");
-  mutex_.unlock();
-  DOUT("setToken: mutex unlocked");
+  DOUT("setToken: inetMutex unlocking");
+  inetMutex_.unlock();
+  DOUT("setToken: inetMutex unlocked");
   DOUT("setToken:exit");
 }
 
@@ -2243,7 +2388,7 @@ MainWindow::submitText(const QString &text, bool async)
 {
   DOUT("submitText:enter: async =" << async << ", text =" << text);
   if (!server_->isAuthorized() ||
-      !tokenView_->hasToken() ||
+      !dataManager_->hasToken() ||
       hub_->isMediaTokenMode() && !player_->hasMedia()
 #ifdef USE_MODE_SIGNAL
       || hub_->isSignalTokenMode() && !messageHandler_->lastMessageHash().isValid()
@@ -2261,14 +2406,14 @@ MainWindow::submitText(const QString &text, bool async)
     return;
   }
 
-  DOUT("submitText: mutex locking");
-  mutex_.lock();
-  DOUT("submitText: mutex locked");
+  DOUT("submitText: inetMutex locking");
+  inetMutex_.lock();
+  DOUT("submitText: inetMutex locked");
 
   Annotation annot;
-  annot.setTokenId(tokenView_->token().id());
-  annot.setTokenDigest(tokenView_->token().digest());
-  annot.setTokenDigestType(tokenView_->token().digestType());
+  annot.setTokenId(dataManager_->token().id());
+  annot.setTokenDigest(dataManager_->token().digest());
+  annot.setTokenDigestType(dataManager_->token().digestType());
   annot.setUserId(server_->user().id());
   annot.setUserAlias(server_->user().name());
   annot.setUserAnonymous(server_->user().isAnonymous());
@@ -2277,7 +2422,7 @@ MainWindow::submitText(const QString &text, bool async)
   switch (hub_->tokenMode()) {
   case SignalHub::MediaTokenMode:
     annot.setPos(
-      tokenView_->token().type() == Token::TT_Picture ?
+      tokenType_ == Token::TT_Picture ?
         0 : player_->time()
     );
     break;
@@ -2296,19 +2441,21 @@ MainWindow::submitText(const QString &text, bool async)
     warn(TR(T_WARNING_LONG_STRING_TRUNCATED) + ": " + annot.text());
   }
 
-  qint64 id = dataManager_->submitAnnotation(annot);
+  qint64 id = dataServer_->submitAnnotation(annot);
   if (id)
     annot.setId(id);
   else
     warn(TR(T_ERROR_SUBMIT_ANNOTATION) + ": " + text);
 
-  annotationBrowser_->addAnnotation(annot);
+  //annotationBrowser_->addAnnotation(annot);
   //annotationView_->addAndShowAnnotation(annot);
+  dataManager_->token().annotCount()++;
+  dataManager_->invalidateToken();
   emit addAndShowAnnotationRequested(annot);
 
-  DOUT("submitText: mutex unlocking");
-  mutex_.unlock();
-  DOUT("submitText: mutex unlocked");
+  DOUT("submitText: inetMutex unlocking");
+  inetMutex_.unlock();
+  DOUT("submitText: inetMutex unlocked");
   DOUT("submitText: exit");
 }
 
@@ -2359,9 +2506,9 @@ MainWindow::chat(const QString &input, bool async)
     return;
   }
 
-  DOUT("chat: mutex locking");
-  mutex_.lock();
-  DOUT("chat: mutex locked");
+  DOUT("chat: inetMutex locking");
+  inetMutex_.lock();
+  DOUT("chat: inetMutex locked");
 
   emit showTextRequested(CORE_CMD_COLOR_BLUE " " + text);
   emit said(text, "blue");
@@ -2374,9 +2521,9 @@ MainWindow::chat(const QString &input, bool async)
     emit responded(server_->chat(text));
 #endif // USE_MODULE_DOLL
 
-  DOUT("chat: mutex unlocking");
-  mutex_.unlock();
-  DOUT("chat: mutex unlocked");
+  DOUT("chat: inetMutex unlocking");
+  inetMutex_.unlock();
+  DOUT("chat: inetMutex unlocked");
   DOUT("chat:exit");
 }
 
@@ -2403,6 +2550,26 @@ MainWindow::say(const QString &text, const QString &color)
 }
 
 // - Events -
+
+bool
+MainWindow::event(QEvent *e)
+{
+  bool accept = true;
+  switch (e->type()) {
+  case QEvent::FileOpen: { // See: http://www.qtcentre.org/wiki/index.php?title=Opening_documents_in_the_Mac_OS_X_Finder
+      QFileOpenEvent *fe = dynamic_cast<QFileOpenEvent*>(e);
+      Q_ASSERT(fe);
+      if (fe) {
+        QString url = fe->file();
+        QTimer::singleShot(0, new MainWindow_slot_::OpenSource(url, this), SLOT(openSource()));
+      }
+    } break;
+
+  default: accept = Base::event(e);
+  }
+
+  return accept;
+}
 
 /*
 void
@@ -2449,6 +2616,7 @@ MainWindow::mousePressEvent(QMouseEvent *event)
       osdWindow_->raise();
     } else if (embeddedPlayer_->isVisible())
       embeddedPlayer_->resetAutoHideTimeout();
+      //QTimer::singleShot(0, embeddedPlayer_, SLOT(resetAutoHideTimeout()));
 
     // Alternative to windows hook:
     //if (isPlaying())
@@ -2536,6 +2704,7 @@ MainWindow::mouseMoveEvent(QMouseEvent *event)
         embeddedPlayer_->show();
       else if (embeddedPlayer_->isVisible())
         embeddedPlayer_->resetAutoHideTimeout();
+        //QTimer::singleShot(0, embeddedPlayer_, SLOT(resetAutoHideTimeout()));
     }
 
 #ifdef Q_WS_MAC
@@ -2647,8 +2816,11 @@ MainWindow::invalidateContextMenu()
 #endif // USE_MODE_SIGNAL
 
     openMenu_->clear(); {
-      if (hub_->isMediaTokenMode() && player_->hasMedia())
+      if (hub_->isMediaTokenMode() && player_->hasMedia()) {
         openMenu_->addAction(openSubtitleAct_);
+        openMenu_->addSeparator();
+      }
+      openMenu_->addAction(openDeviceAct_);
       openMenu_->addAction(openVideoDeviceAct_);
 #ifdef Q_WS_WIN // TODO add support for Mac/Linux
       openMenu_->addAction(openAudioDeviceAct_);
@@ -2665,9 +2837,15 @@ MainWindow::invalidateContextMenu()
     if (!recentFiles_.isEmpty())
       contextMenu_->addMenu(recentMenu_);
 
+    // - Playlist
+    //invalidatePlaylist();
+    if (playlist_.size() > 1 && hub_->isMediaTokenMode())
+      contextMenu_->addMenu(playlistMenu_);
+
     // Tracks
     if (hub_->isMediaTokenMode() && player_->hasMedia() &&
         player_->hasPlaylist())
+      //invalidateTrackMenu();
       contextMenu_->addMenu(trackMenu_);
 
     // DVD sections
@@ -2676,11 +2854,10 @@ MainWindow::invalidateContextMenu()
 
       sectionMenu_->clear();
 
-      previousSectionAct_->setEnabled(player_->titleId() > 0);
-      nextSectionAct_->setEnabled(player_->titleId() < player_->titleCount() - 1);
-
-      sectionMenu_->addAction(previousSectionAct_);
-      sectionMenu_->addAction(nextSectionAct_);
+      if (player_->titleId() > 0)
+        sectionMenu_->addAction(previousSectionAct_);
+      if (player_->titleId() < player_->titleCount() - 1)
+        sectionMenu_->addAction(nextSectionAct_);
       sectionMenu_->addSeparator();
 
       for (int tid = 0; tid < player_->titleCount(); tid++) {
@@ -2963,6 +3140,9 @@ MainWindow::invalidateContextMenu()
 
     contextMenu_->addAction(showMinimizedAct_);
 
+    toggleMenuBarVisibleAct_->setChecked(menuBar()->isVisible());
+    contextMenu_->addAction(toggleMenuBarVisibleAct_);
+
     contextMenu_->addAction(helpAct_);
     contextMenu_->addAction(aboutAct_);
     contextMenu_->addAction(quitAct_);
@@ -3021,12 +3201,18 @@ MainWindow::invalidateTrackMenu()
 
   foreach (Player::MediaInfo mi, player_->playlist()) {
     QString text = QString("%1. %2").arg(QString::number(mi.track + 1)).arg(mi.title);
-    BOOST_AUTO(action, new Core::Gui::ActionWithId(mi.track, text, trackMenu_));
-    action->setToolTip(mi.path);
-    if (mi.track == player_->trackNumber())
-      action->setIcon(QIcon(RC_IMAGE_CURRENTTRACK));
-    connect(action, SIGNAL(triggeredWithId(int)), player_, SLOT(setTrackNumber(int)));
-    trackMenu_->addAction(action);
+    BOOST_AUTO(a, new Core::Gui::ActionWithId(mi.track, text, trackMenu_));
+    a->setToolTip(mi.path);
+    if (mi.track == player_->trackNumber()) {
+#ifdef Q_WS_X11
+      a->setCheckable(true);
+      a->setChecked(true);
+#else
+      a->setIcon(QIcon(RC_IMAGE_CURRENTTRACK));
+#endif // Q_WS_X11
+    }
+    connect(a, SIGNAL(triggeredWithId(int)), player_, SLOT(setTrackNumber(int)));
+    trackMenu_->addAction(a);
   }
 
   trackMenu_->addSeparator();
@@ -3119,6 +3305,7 @@ MainWindow::keyPressEvent(QKeyEvent *event)
         embeddedPlayer_->show();
       else if (embeddedPlayer_->isVisible())
         embeddedPlayer_->resetAutoHideTimeout();
+        //QTimer::singleShot(0, embeddedPlayer_, SLOT(resetAutoHideTimeout()));
     }
     if (hasVisiblePlayer()
         && !visiblePlayer()->lineEdit()->hasFocus()) {
@@ -3214,6 +3401,10 @@ MainWindow::closeEvent(QCloseEvent *event)
 
   settings->setThemeId(UiStyle::globalInstance()->theme());
 
+  settings->setMenuBarVisible(menuBar()->isVisible());
+
+  settings->setAnnotationFilterEnabled(annotationFilter_->isEnabled());
+
   // Disabled for saving closing time orz
   //if (server_->isConnected() && server_->isAuthorized())
   //  server_->logout();
@@ -3249,9 +3440,10 @@ MainWindow::closeEvent(QCloseEvent *event)
     QThreadPool::globalInstance()->waitForDone();
   }
 
-  if (parentWidget())
-    QTimer::singleShot(0, parentWidget(), SLOT(close()));
+  //if (parentWidget())
+  //  QTimer::singleShot(0, parentWidget(), SLOT(close()));
 
+  QTimer::singleShot(0, qApp, SLOT(quit())); // ensure quit app and clean up zombie threads
   Base::closeEvent(event);
 
   emit windowClosed();
@@ -3328,19 +3520,23 @@ MainWindow::blessTokenWithId(qint64 id, bool async)
     return;
   }
 
-  DOUT("blessTokenWithId: mutex locking");
-  mutex_.lock();
-  DOUT("blessTokenWithId: mutex locked");
+  DOUT("blessTokenWithId: inetMutex locking");
+  inetMutex_.lock();
+  DOUT("blessTokenWithId: inetMutex locked");
 
   bool ok = server_->blessTokenWithId(id);
-  if (ok)
+  if (ok) {
     log("token blessed");
-  else
+    if (dataManager_->token().id() == id) {
+      dataManager_->token().blessedCount()++;
+      //dataManager_->invalidateToken();
+    }
+  } else
     warn("failed to bless token");
 
-  DOUT("blessTokenWithId: mutex unlocking");
-  mutex_.unlock();
-  DOUT("blessTokenWithId: mutex unlocked");
+  DOUT("blessTokenWithId: inetMutex unlocking");
+  inetMutex_.unlock();
+  DOUT("blessTokenWithId: inetMutex unlocked");
   DOUT("blessTokenWithId:exit: async =" << async);
 }
 
@@ -3367,19 +3563,23 @@ MainWindow::curseTokenWithId(qint64 id, bool async)
     return;
   }
 
-  DOUT("curseTokenWithId: mutex locking");
-  mutex_.lock();
-  DOUT("curseTokenWithId: mutex locked");
+  DOUT("curseTokenWithId: inetMutex locking");
+  inetMutex_.lock();
+  DOUT("curseTokenWithId: inetMutex locked");
 
   bool ok = server_->curseTokenWithId(id);
-  if (ok)
+  if (ok) {
     log("token curseed");
-  else
+    if (dataManager_->token().id() == id) {
+      dataManager_->token().cursedCount()++;
+      //dataManager_->invalidateToken();
+    }
+  } else
     warn("failed to curse token");
 
-  DOUT("curseTokenWithId: mutex unlocking");
-  mutex_.unlock();
-  DOUT("curseTokenWithId: mutex unlocked");
+  DOUT("curseTokenWithId: inetMutex unlocking");
+  inetMutex_.unlock();
+  DOUT("curseTokenWithId: inetMutex unlocked");
   DOUT("curseTokenWithId:exit: async =" << async);
 }
 
@@ -3438,16 +3638,21 @@ MainWindow::logout(bool async)
     return;
   }
 
-  DOUT("logout: mutex locking");
-  mutex_.lock();
-  DOUT("logout: mutex locked");
+  DOUT("logout: inetMutex locking");
+  inetMutex_.lock();
+  DOUT("logout: inetMutex locked");
 
   annotationBrowser_->setUserId(0);
   server_->logout();
 
-  DOUT("logout: mutex unlocking");
-  mutex_.unlock();
-  DOUT("logout: mutex unlocked");
+  DOUT("logout: inetMutex unlocking");
+  inetMutex_.unlock();
+  DOUT("logout: inetMutex unlocked");
+
+  Settings *s = Settings::globalInstance();
+  //s->setUserName(QString());
+  s->setPassword(QString());
+
   DOUT("logout:exit: async =" << async);
 }
 
@@ -3461,9 +3666,9 @@ MainWindow::login(const QString &userName, const QString &encryptedPassword, boo
     return;
   }
 
-  DOUT("login: mutex locking");
-  mutex_.lock();
-  DOUT("login: mutex locked");
+  DOUT("login: inetMutex locking");
+  inetMutex_.lock();
+  DOUT("login: inetMutex locked");
   // CHECKPOINT: Multithreading here, break this function into two parts
   server_->updateConnected();
   if (!server_->isConnected() && cache_->isValid()) {
@@ -3478,9 +3683,9 @@ MainWindow::login(const QString &userName, const QString &encryptedPassword, boo
     } else
       warn(TR(T_ERROR_LOGINFROMCACHE_FAILURE));
 
-    DOUT("login: mutex unlocking");
-    mutex_.unlock();
-    DOUT("login: mutex unlocked");
+    DOUT("login: inetMutex unlocking");
+    inetMutex_.unlock();
+    DOUT("login: inetMutex unlocked");
     DOUT("login:exit from offline branch");
     return;
   }
@@ -3540,11 +3745,11 @@ MainWindow::login(const QString &userName, const QString &encryptedPassword, boo
     }
   }
 
-  dataManager_->commitQueue();
+  dataServer_->commitQueue();
 
-  DOUT("login: mutex unlocking");
-  mutex_.unlock();
-  DOUT("login: mutex unlocked");
+  DOUT("login: inetMutex unlocking");
+  inetMutex_.unlock();
+  DOUT("login: inetMutex unlocked");
   DOUT("login:exit");
 }
 
@@ -3676,6 +3881,7 @@ MainWindow::openProcessHook(int hookId, const ProcessInfo &pi)
     miniPlayer_->setWindowTitle(title); // TODO: move to invalidateTitle!!! or hub_();
 
     addRecent(pi.executablePath);
+    setRecentOpenedFile(pi.executablePath);
 
     if (hookId != messageHandler_->hookId())
       messageHandler_->clearRecentMessages();
@@ -3685,8 +3891,11 @@ MainWindow::openProcessHook(int hookId, const ProcessInfo &pi)
   }
 
   hub_->setSignalTokenMode();
-  if (pi.isValid())
-    setToken(pi.executablePath);
+  if (pi.isValid()) {
+    recentDigest_ = digestFromFile(pi.executablePath);
+    if (!recentDigest_.isEmpty())
+      setToken(pi.executablePath);
+  }
 
   hub_->play();
 }
@@ -3761,17 +3970,17 @@ MainWindow::setUserAnonymous(bool t, bool async)
       return;
     }
 
-    DOUT("setUserAnonymous: mutex locking");
-    mutex_.lock();
-    DOUT("setUserAnonymous: mutex locked");
+    DOUT("setUserAnonymous: inetMutex locking");
+    inetMutex_.lock();
+    DOUT("setUserAnonymous: inetMutex locked");
 
     bool ok = server_->setUserAnonymous(t);
     if (!ok)
       warn(tr("failed to change user anonymous state"));
 
-    DOUT("setUserAnonymous: mutex unlocking");
-    mutex_.unlock();
-    DOUT("setUserAnonymous: mutex unlocked");
+    DOUT("setUserAnonymous: inetMutex unlocking");
+    inetMutex_.unlock();
+    DOUT("setUserAnonymous: inetMutex unlocked");
 
   } else
     server_->user().setAnonymous(t);
@@ -3798,17 +4007,17 @@ MainWindow::setUserLanguage(int lang, bool async)
       return;
     }
 
-    DOUT("setUserLanguage: mutex locking");
-    mutex_.lock();
-    DOUT("setUserLanguage: mutex locked");
+    DOUT("setUserLanguage: inetMutex locking");
+    inetMutex_.lock();
+    DOUT("setUserLanguage: inetMutex locked");
 
     bool ok = server_->setUserLanguage(lang);
     if (!ok)
       warn(tr("failed to change user language"));
 
-    DOUT("setUserLanguage: mutex unlocking");
-    mutex_.unlock();
-    DOUT("setUserLanguage: mutex unlocked");
+    DOUT("setUserLanguage: inetMutex unlocking");
+    inetMutex_.unlock();
+    DOUT("setUserLanguage: inetMutex unlocked");
 
   } else
     server_->user().setLanguage(lang);
@@ -3898,6 +4107,114 @@ MainWindow::languageToString(int lang)
 
   case Traits::UnknownLanguage:
   default : return TR(T_ALIEN);
+  }
+}
+
+
+// - Playlist -
+
+void
+MainWindow::openPlaylistItem(int i)
+{
+  if (i >= 0 && i < playlist_.size())
+    openSource(playlist_[i]);
+}
+
+void
+MainWindow::clearPlaylist()
+{
+  playlist_.clear();
+  invalidatePlaylistMenu();
+}
+
+void
+MainWindow::invalidatePlaylist()
+{
+  if (playlist_.isEmpty())
+    return;
+  bool update = false;
+
+  BOOST_AUTO(p, playlist_.begin());
+  while (p != playlist_.end()) {
+    QFileInfo fi(removeUrlPrefix(*p));
+    if (fi.exists())
+      ++p;
+    else {
+      p = playlist_.erase(p);
+      update = true;
+    }
+  }
+  if (update)
+    invalidatePlaylistMenu();
+}
+
+void
+MainWindow::openNextPlaylistItem()
+{
+  if (playlist_.size() <= 1)
+    return;
+
+  int i = playlist_.indexOf(recentOpenedFile_);
+  i++;
+  if (i < 0 || i >= playlist_.size())
+    i = 0;
+  openSource(playlist_[i]);
+}
+
+void
+MainWindow::openPreviousPlaylistItem()
+{
+  if (playlist_.size() <= 1)
+    return;
+  if (playlist_.size() <= 1)
+    return;
+
+  int i = playlist_.indexOf(recentOpenedFile_);
+  i--;
+  if (i < 0 || i >= playlist_.size())
+    i = 0;
+  openSource(playlist_[i]);
+}
+
+void
+MainWindow::invalidatePlaylistMenu()
+{
+  QList<QAction*> l = playlistMenu_->actions();
+  foreach (QAction *a, l)
+    if (a && a != clearPlaylistAct_)
+      a->deleteLater();
+  playlistMenu_->clear();
+
+  if (!playlist_.isEmpty()) {
+    int i = playlist_.indexOf(recentOpenedFile_);
+    playlistMenu_->addAction(clearPlaylistAct_);
+    if (i > 0)
+      playlistMenu_->addAction(previousPlaylistItemAct_);
+    if (i < playlist_.size() - 1)
+      playlistMenu_->addAction(nextPlaylistItemAct_);
+    playlistMenu_->addSeparator();
+
+    foreach (QString f, playlist_) {
+      QString path = removeUrlPrefix(f);
+      QString text = QFileInfo(path).fileName();
+      if (text.isEmpty()) {
+        text = QDir(path).dirName();
+        if (text.isEmpty())
+          text = f;
+      }
+      BOOST_AUTO(a, new Core::Gui::ActionWithId(i++, text, playlistMenu_));
+      if (f == recentOpenedFile_) {
+#ifdef Q_WS_X11
+        a->setCheckable(true);
+        a->setChecked(true);
+#else
+        a->setIcon(QIcon(RC_IMAGE_CURRENTFILE));
+#endif // Q_WS_X11
+      }
+      connect(a, SIGNAL(triggeredWithId(int)), SLOT(openPlaylistItem(int)));
+
+      playlistMenu_->addAction(a);
+    }
   }
 }
 
@@ -4019,7 +4336,8 @@ MainWindow::addRecent(const QString &path)
     recentFiles_.removeAll(path);
   recentFiles_.prepend(path);
 
-  invalidateRecentMenu();
+  // SingleShot to avoid multi-threading issue.
+  QTimer::singleShot(0, this, SLOT(invalidateRecentMenu()));
 }
 
 // - Translate -
@@ -4179,11 +4497,17 @@ MainWindow::setBrowsedFile(const QString &filePath)
 
   int id = 0;
   foreach (QFileInfo f, browsedFiles_) {
-    BOOST_AUTO(action, new Core::Gui::ActionWithId(id++, f.fileName(), browseMenu_));
-    if (f.fileName() == fi.fileName())
-      action->setIcon(QIcon(RC_IMAGE_CURRENTFILE));
-    connect(action, SIGNAL(triggeredWithId(int)), SLOT(openBrowsedFile(int)));
-    browseMenu_->addAction(action);
+    BOOST_AUTO(a, new Core::Gui::ActionWithId(id++, f.fileName(), browseMenu_));
+    if (f.fileName() == fi.fileName()) {
+#ifdef Q_WS_X11
+      a->setCheckable(true);
+      a->setChecked(true);
+#else
+      a->setIcon(QIcon(RC_IMAGE_CURRENTFILE));
+#endif // Q_WS_X11
+    }
+    connect(a, SIGNAL(triggeredWithId(int)), SLOT(openBrowsedFile(int)));
+    browseMenu_->addAction(a);
   }
 }
 
@@ -4244,6 +4568,8 @@ MainWindow::previous()
     //  player_->setPreviousChapter();
     else if (player_->hasTitles())
       player_->setPreviousTitle();
+    else if (playlist_.size() > 1)
+      openPreviousPlaylistItem();
     else if (browsedFiles_.size() > 1)
       openPreviousFile();
   }
@@ -4259,6 +4585,8 @@ MainWindow::next()
     //  player_->setNextChapter();
     else if (player_->hasTitles())
       player_->setNextTitle();
+    else if (playlist_.size() > 1)
+      openNextPlaylistItem();
     else if (browsedFiles_.size() > 1)
       openNextFile();
   }

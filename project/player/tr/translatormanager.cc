@@ -103,6 +103,7 @@ TranslatorManager::translate(int tid) const
   case T_NULL:          return QString();
 
   case T_WINDOWS:       return tr("Windows");
+  case T_OPEN:          return tr("Open");
   case T_BLACKLIST:     return tr("Blacklist");
   case T_DEFAULT:       return tr("Default");
   case T_RANDOM:        return tr("Random");
@@ -132,6 +133,7 @@ TranslatorManager::translate(int tid) const
   case T_BLESS:         return tr("Bless");
   case T_CURSE:         return tr("Curse");
   case T_BLOCK:         return tr("Block");
+  case T_MESSAGE:       return tr("Message");
 
   case T_COLOR:         return tr("Color");
   case T_FOREGROUNDCOLOR: return tr("Foreground color");
@@ -183,6 +185,7 @@ TranslatorManager::translate(int tid) const
   case T_TITLE_SEEK:            return tr("Seek");
 
   case T_TITLE_OPENFILE:        return tr("Open media file");
+  case T_TITLE_OPENDEVICE:      return tr("Select media device");
   case T_TITLE_OPENVIDEODEVICE: return tr("Open video device");
   case T_TITLE_OPENAUDIODEVICE: return tr("Open audio device");
   case T_TITLE_OPENSUBTITLE:    return tr("Open subtitle");
@@ -211,6 +214,7 @@ TranslatorManager::translate(int tid) const
   case T_ERROR_SUBMIT_TOKEN:            return tr("failed to submit token");
   case T_ERROR_SUBMIT_ANNOTATION:       return tr("failed to submit annotation");
   case T_ERROR_SYNC_FAILURE:            return tr("failed to synchronize offline queue,:return try later");
+  case T_ERROR_NO_MEDIA:                return tr("no media");
 
   case T_SUCCEED_SNAPSHOT_SAVED:        return tr("snapshot saved on desktop");
   case T_SUCCEED_ANNOTATION_COPIED:     return tr("comment copied to clipboard");
@@ -249,11 +253,14 @@ TranslatorManager::translate(int tid) const
   case T_MENUTEXT_OPENFILE:     return tr("Open file");
   case T_TIP_OPENFILE:          return tr("Open media file");
 
-  case T_MENUTEXT_OPENVIDEODEVICE:   return tr("Open DVD/VCD");
-  case T_TIP_OPENVIDEODEVICE:        return tr("Open video device");
+  case T_MENUTEXT_OPENDEVICE:   return tr("Open DVD/VCD/CD device");
+  case T_TIP_OPENDEVICE:        return tr("Open media device");
 
-  case T_MENUTEXT_OPENAUDIODEVICE:   return tr("Open CD");
-  case T_TIP_OPENAUDIODEVICE:        return tr("Open audio device");
+  case T_MENUTEXT_OPENVIDEODEVICE:   return tr("Open DVD/VCD folder");
+  case T_TIP_OPENVIDEODEVICE:        return tr("Open video folder");
+
+  case T_MENUTEXT_OPENAUDIODEVICE:   return tr("Open CD folder");
+  case T_TIP_OPENAUDIODEVICE:        return tr("Open audio folder");
 
   case T_MENUTEXT_OPENSUBTITLE: return tr("Open subtitle");
   case T_TIP_OPENSUBTITLE:      return tr("Load subtitle from file");
@@ -462,6 +469,9 @@ TranslatorManager::translate(int tid) const
   case T_MENUTEXT_RECENTMESSAGES: return tr("Select channel");
   case T_TIP_RECENTMESSAGES:    return tr("Select channel");
 
+  case T_MENUTEXT_PLAYLIST:     return tr("Playlist");
+  case T_TIP_PLAYLIST:          return tr("Playlist");
+
   case T_MENUTEXT_APPLANGUAGE:  return tr("Application language");
   case T_TIP_APPLANGUAGE:       return tr("Choose application language");
 
@@ -540,6 +550,9 @@ TranslatorManager::translate(int tid) const
 
   case T_MENUTEXT_AUTOPLAYNEXT: return tr("Auto play next media");
   case T_TIP_AUTOPLAYNEXT:      return tr("Automatically play next media");
+
+  case T_MENUTEXT_SHOWMENUBAR:  return tr("Show menubar");
+  case T_TIP_SHOWMENUBAR:       return tr("Show menubar");
 
   case T_MENUTEXT_BLACKTHEME1:  return SELF(T_BLACK) + "1";
   case T_MENUTEXT_BLACKTHEME2:  return SELF(T_BLACK) + "2";

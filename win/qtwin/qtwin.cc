@@ -411,8 +411,12 @@ QtWin::sendMouseClick(const QPoint& globalPos, Qt::MouseButton button)
 // - Environments -
 
 QString
-QtWin::getWinDir()
+QtWin::getWinDirPath()
 { return ::getenv("windir"); }
+
+QString
+QtWin::getAppDataPath()
+{ return ::getenv("AppData"); }
 
 // See: http://msdn.microsoft.com/en-us/library/ms724451(v=VS.85).aspx
 // See: http://msdn.microsoft.com/en-us/library/ms724833(VS.85).aspx
@@ -605,6 +609,81 @@ QtWin::resolveLink(const QString &lnkPath, WId winId)
 }
 
 // - Devices -
+
+// See: http://www.codeguru.com/forum/archive/index.php/t-252784.html
+QStringList
+QtWin::getLogicalDrives()
+{
+  QStringList ret;
+
+  enum { BufSize = 3 * 26 }; // At most 26 drives, each take 3 chars such as "C:\"
+  char szBuffer[BufSize];
+
+  DWORD dwReturnSize = ::GetLogicalDriveStringsA(BufSize, szBuffer);
+  if (dwReturnSize) {
+    char *pch = szBuffer;
+    while (*pch) {
+      ret.append(pch);
+      pch += ::strlen(pch) + 1;
+    }
+  }
+
+  return ret;
+}
+
+QtWin::DriveType
+QtWin::getDriveType(const QString &driveLetter)
+{
+  return (DriveType)
+      ::GetDriveTypeA(driveLetter.toAscii());
+}
+
+QStringList
+QtWin::getLogicalDrivesWithType(DriveType type)
+{
+  QStringList ret;
+
+  enum { BufSize = 3 * 26 }; // At most 26 drives, each take 3 chars such as "C:\"
+  char szBuffer[BufSize];
+
+  DWORD dwReturnSize = ::GetLogicalDriveStringsA(BufSize, szBuffer);
+  if (dwReturnSize) {
+    char *pch = szBuffer;
+    while (*pch) {
+      if (::GetDriveTypeA(pch) == type)
+        ret.append(pch);
+      pch += ::strlen(pch) + 1;
+    }
+  }
+
+  return ret;
+}
+
+QString
+QtWin::guessDeviceFileName(const QString &hint)
+{
+  if (hint.isEmpty())
+    return QString();
+
+  QString normalized = hint.trimmed().toUpper();
+  if (normalized.isEmpty())
+    return QString();
+
+  else if (normalized.contains(QRegExp("^\\\\\\\\\\.\\\\[A-Z]:$")))
+    return normalized;
+  else if (normalized.contains(QRegExp("^[A-Z]:$")))
+    return "\\\\.\\" + normalized;
+  else if (normalized.contains(QRegExp("^[A-Z]:\\\\$"))) {
+    normalized.chop(1);
+    return "\\\\.\\" + normalized;
+  }
+  else
+    return QString();
+}
+
+bool
+QtWin::isValidDeviceFileName(const QString &fileName)
+{ return fileName.contains(QRegExp("^\\\\\\\\\\.\\\\[A-Z]:$", Qt::CaseInsensitive)); }
 
 #if 0
 // Require Winmm.lib.

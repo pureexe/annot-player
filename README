@@ -1,8 +1,8 @@
 ﻿== ENGLISH ==
 
 Product:	Annot Player
-Version:	0.1.1.0
-Release:	2011/12/2
+Version:	0.1.1.1
+Release:	2011/12/7
 Homepage:	http://annot.me
 Help (Wiki):	http://annot.me/wiki/FAQ
 Download:	http://code.google.com/p/annot-player/downloads
@@ -13,19 +13,17 @@ Contact:	AnnotCloud@gmail.com
 Requirements:
 - Microsoft Windows XP SP3/Vista/7
 - Mac OS X 10.6/10.7
-- Linux (Debian/Ubunutu)
+- Linux (Debian/Ubuntu/Fedora)
 
 WHAT'S NEW?
-- Windows global mouse hook removed and replaced with native vlcore calls.
-  Less mouse hanging in Windows when the app is busy.
-- Added support to play cue file.
-- Added support to play cdda. Fixed bug while openning CD on Windows.
-- Added embedded mode.
-  Able to embed/play vidoe/annots in any window, such as Notepad, Photoshop, or PPStream.
-- Able to select embedded player on the top or bottom.
-- Player buttons and menues extended.
-- Added task bar icon for Windows 7.
-- Added Dwm notifier in Windows 7 to watch aero composition changes.
+- Added Fedora support.
+- Added CD/DVD device dialog. CD/DVD buffering performance improved.
+- Fixed sqlite cache creation bug in Linux.
+- Menubar enabled to all OSes.
+- Forward token digest to reduce delay on openning files and disc.
+- Added playlist to open multiple files or folder.
+- Switched to GNU ChangeLog format.
+
 
 == 日本語 ==
 

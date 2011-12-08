@@ -1,0 +1,7 @@
+#!/bin/sh -v
+# http://forum.audacityteam.org/viewtopic.php?f=14&t=7486
+# 12/1/2011
+cd ~/services || exit
+rm -f fifo.wav
+mkfifo fifo.wav && paplay --volume=48000 -v fifo.wav & nc localhost 1234 >fifo.wav
+rm -f fifo.wav

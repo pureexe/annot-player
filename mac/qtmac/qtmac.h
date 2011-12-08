@@ -13,6 +13,7 @@ namespace QtMac {
   QString homeLibraryPath();
   QString homeCachesPath();
   QString homeLogsPath();
+  QString homeApplicationSupportPath();
 
 } // namespace QtMac
 

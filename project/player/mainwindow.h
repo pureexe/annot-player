@@ -24,6 +24,7 @@ class AnnotationFilter;
 class ClientAgent;
 class Database;
 class DataManager;
+class DataServer;
 class EventLogger;
 class Grabber;
 class Player;
@@ -55,6 +56,7 @@ class VideoView;
 // Dialogs
 class AboutDialog;
 class BlacklistView;
+class DeviceDialog;
 class HelpDialog;
 class LiveDialog;
 class LoginDialog;
@@ -138,6 +140,8 @@ public slots:
   void openFile();
   void openProcess();
   void openWindow();
+  void openDevice();
+  void openDevicePath(const QString &path, bool isCDDA);
   void openAudioDevice();
   void openVideoDevice();
   void openSubtitle();
@@ -195,8 +199,10 @@ public slots:
 
   //void setWindowStaysOnTop(bool enabled = true); // TODO
 
-protected slots:
-  void invalidateMediaAndPlay();
+  void showVideoViewIfAvailable();
+
+public slots:
+  void invalidateMediaAndPlay(bool async = true);
 
   // - Dialogs -
 public slots:
@@ -287,10 +293,21 @@ protected slots:
   void invalidateRecent();
   void invalidateRecentMenu();
 
+  // - Playlist -
+protected slots:
+  void setRecentOpenedFile(const QString &path);
+  void openPlaylistItem(int i);
+  void openNextPlaylistItem();
+  void openPreviousPlaylistItem();
+  void clearPlaylist();
+  void invalidatePlaylist();
+  void invalidatePlaylistMenu();
+
   // - Events -
 public slots:
   virtual void setVisible(bool visible); ///< \override
 protected:
+  virtual bool event(QEvent *event); ///< \override
   virtual void mousePressEvent(QMouseEvent *event); ///< \override
   virtual void mouseMoveEvent(QMouseEvent *event); ///< \override
   virtual void mouseReleaseEvent(QMouseEvent *event); ///< \override
@@ -387,10 +404,13 @@ protected:
   static bool isDevicePath(const QString &path);
   static QString removeUrlPrefix(const QString &url);
 
+  static QString digestFromFile(const QString &path);
+
   static QString languageToString(int lang);
   static int fileType(const QString &fileName);
 
-  bool isDigestReady(const QString &fileName) const;
+  bool isDigestReady(const QString &path) const;
+  bool isAliasReady(const QString &path) const;
 
   // - Members for initialization. -
 private:
@@ -402,7 +422,8 @@ private:
 
   // - Attributes -
 private:
-  QMutex mutex_;
+  QMutex inetMutex_;    // mutext for remote communication
+  QMutex playerMutex_;  // mutex for local player
   Tray *tray_;
   SignalHub *hub_;
 
@@ -423,6 +444,7 @@ private:
   Database *cache_;
   Database *queue_;
   DataManager *dataManager_;
+  DataServer *dataServer_;
 
   EventLogger *logger_;
   OsdConsole *globalOsdConsole_;
@@ -450,24 +472,31 @@ private:
   PickDialog *processPickDialog_;
   SeekDialog *seekDialog_;
   SyncDialog *syncDialog_;
+  DeviceDialog *deviceDialog_;
 
   CloudView *cloudView_;
   CommentView *commentView_;
 
   QPoint dragPos_;
 
-  QString recentPath_;
+  qint32 tokenType_; // current token type tt
 
   Grabber *grabber_;
 
+  QString recentOpenedFile_;
+  QString recentPath_;
+  QString recentDigest_;
+
+  QStringList playlist_;
+
   // - Menus and actions -
 
-#ifndef Q_WS_WIN
+//#ifndef Q_WS_WIN
   //QMenuBar *menuBar_;
   QMenu *fileMenu_,
         //*viewMenu_,
         *helpMenu_;
-#endif // !Q_WS_WIN
+//#endif // !Q_WS_WIN
 
   QMenu *contextMenu_,
         *advancedMenu_,
@@ -484,6 +513,7 @@ private:
         *userLanguageMenu_,
         *annotationLanguageMenu_,
         *themeMenu_,
+        *playlistMenu_,
         *subtitleStyleMenu_;
   QList<QAction*> contextMenuActions_;
 
@@ -501,6 +531,7 @@ private:
 
   QAction *openAct_,
           *openFileAct_,
+          *openDeviceAct_,
           *openVideoDeviceAct_,
           *openAudioDeviceAct_,
           *openSubtitleAct_,
@@ -513,6 +544,7 @@ private:
           *nextAct_,
           *snapshotAct_,
           *toggleAnnotationVisibleAct_,
+          *toggleMenuBarVisibleAct_,
           *toggleFullScreenModeAct_,
           *toggleEmbeddedModeAct_,
           *toggleMiniModeAct_,
@@ -567,6 +599,9 @@ private:
           *backward10mAct_;
 
   QAction *clearRecentAct_;
+  QAction *clearPlaylistAct_,
+          *nextPlaylistItemAct_,
+          *previousPlaylistItemAct_;
 
   QAction *setAppLanguageToEnglishAct_,
           *setAppLanguageToJapaneseAct_,

@@ -4,7 +4,7 @@
 # See: https://wiki.kubuntu.org/PackagingGuide/QtApplication
 
 ## environment
-VERSION=0.1.1.0
+VERSION=0.1.1.1
 
 PACKAGE_AUTHOR="Annot Cloud"
 PACKAGE_EMAIL=annotcloud@gmail.com
@@ -32,18 +32,19 @@ rm -Rf "$BUILD_PREFIX"
 test -e "$BUILD_PREFIX" || mkdir -p "$BUILD_PREFIX"
 test -e "$BUILD_PREFIX" || exit 1
 
-cp -Rv "$SRC_PREFIX" "$BUILD_SRC"
-rm -f "$BUILD_SRC"/{TODO,ChangeLog}
+#cp -R "$SRC_PREFIX" "$BUILD_SRC" || exit 1
+cp -R "$SRC_PREFIX" "$BUILD_SRC"
+rm -f "$BUILD_SRC"/TODO
 
-# build
+## build
 cd "$BUILD_SRC" || exit 1
 #qmake-qt4 -config release PREFIX=/usr ../annot.pro
 echo | dh_make --createorig --single -e "$PACKAGE_EMAIL" -c "$PACKAGE_LICENSE"
 rm -f "$BUILD_DEBIAN"/*.{ex,EX}
-cp "$SRC_RULES" "$BUILD_SRC"/debian/rules
-cp "$SRC_CONTROL" "$BUILD_SRC"/debian/control
-cp "$SRC_COPYRIGHT" "$BUILD_SRC"/debian/copyright
-cp "$SRC_COPYING" "$BUILD_SRC"/COPYING
+cp "$SRC_RULES" "$BUILD_SRC"/debian/rules || exit 1
+cp "$SRC_CONTROL" "$BUILD_SRC"/debian/control || exit 1
+cp "$SRC_COPYRIGHT" "$BUILD_SRC"/debian/copyright || exit 1
+cp "$SRC_COPYING" "$BUILD_SRC"/COPYING || exit 1
 #test -e "$BUILD_SRC"/debian/files || cat > "$BUILD_SRC"/debian/files << EOF
 #${PACKAGE_NAME}_${PACKAGE_VERSION}-1_${PACKAGE_ARCH}.deb $PACKAGE_SECTION $PACKAGE_PRIORITY
 #EOF

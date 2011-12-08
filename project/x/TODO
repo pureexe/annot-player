@@ -1,0 +1,38 @@
+- make openssh work
+  - japanese font problem
+  - make pulseaudio work on cygwin
+    or implement one by myself using waveinput
+  - make esd work
+    - fix sound work again?
+      add sound support as wine dll later
+      http://forum.audacityteam.org/viewtopic.php?f=14&t=7486
+       esd -public -tcp -port PORT
+       esddsp -s <client's IP address>:PORT audacity &
+       NEED IP!!!
+       http://www.straightrunning.com/XmingNotes/
+
+       local sound server: ssh -L 5901:localhost:5901 -L 1234:localhost:1234 <remote sound client>
+       remote sound client: mkfifo output.wav
+       remote sound client: parec | sox -t raw -r 44100 -s -L -b 16 -c 2 - "output.wav" & cat output.wav | nc -l 1234
+       local sound server: mkfifo fifo.wav
+       local sound server: paplay --volume=48000 -v fifo.wav & nc localhost 1234 >fifo.wav
+
+       As you can see, I use port 5901 for VNC and port 1234 to forward sound. The only thing is it takes at least 30 seconds before it plays on the speakers.
+
+        Any ideas why such a huge latency? I am guessing it has something to do with parec.
+  - make proper services
+    - sound
+    - wine
+
+- tweak openssh client and server source code for speedup
+  - disable encryption
+  - increase buffer
+  - use more than pipelined connections
+  - stream sound/picture in other service
+ alternative
+ http://ubuntuforums.org/showthread.php?t=1763277
+- reduce CPU/memory consumption!!!!
+- multiple client profile problem
+  - same wine, same user, but diff windows account and diff DISPLAY
+- restrict wine access
+ http://www.bobulous.org.uk/misc/Spotify-Linux-Wine.html

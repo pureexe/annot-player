@@ -2,6 +2,7 @@
 # 7/31/2011
 
 include(aiml/aiml.pri)
+include(blockiodevice/blockiodevice.pri)
 include(debug/debug.pri)
 include(clientagent/clientagent.pri)
 include(doll/doll.pri)

@@ -29,6 +29,15 @@ win32:  QMAKE_CXXFLAGS  += -Zc:auto
 unix:   QMAKE_CXXFLAGS  += -std=c++0x
 mac:    QMAKE_CXXFLAGS  -= -std=c++0x
 
+# MSVC
+win32 {
+    # Disable checked iterator and compiler warning.
+    # SCL: http://msdn.microsoft.com/en-us/library/aa985896.aspx
+    # SCL Warning: http://msdn.microsoft.com/en-us/library/aa985974.aspx
+    # Performance comparison: http://askldjd.wordpress.com/2009/09/13/stl-performance-comparison-vc71-vc90-and-stlport/
+    DEFINES += _SECURE_SCL=0 _SCL_SECURE_NO_WARNINGS
+}
+
 # GCC
 
 #QMAKE_LFLAGS +=
@@ -75,7 +84,7 @@ win32 {
     #INCLUDEPATH        += $$ITH_HOME/include
     LIBS               += -L$$ITH_HOME/lib
 
-    #INCLUDEPATH        += $$WDK_HOME/include
+    INCLUDEPATH        += $$WDK_HOME/include
     LIBS               += -L$$WDK_HOME/lib
 }
 
@@ -125,6 +134,8 @@ CONFIG(release) {
 ## Debug
 
 include($$ROOTDIR/module/debug/debug.pri)
+
+## Deploy
 
 DEFINES += VERSION=\\\"$$VERSION\\\"
 

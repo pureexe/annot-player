@@ -1,6 +1,11 @@
 // qtx.cc
 // 11/25/2011
 
+#include <QtGlobal>
+#ifndef Q_WS_X11
+  #error "This file is for X11 only."
+#endif // Q_WS_X11
+
 #include "qtx.h"
 #include <QtGui>
 #include <QX11Info>

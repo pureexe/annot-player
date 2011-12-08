@@ -81,25 +81,37 @@ enum { ALPHA = 0 };
 
 // - Path -
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
+  #define G_PATH_PROFILE        QtWin::getAppDataPath() + "/" G_ORGANIZATION "/" G_APPLICATION
+#elif defined(Q_OS_MAC)
+  #define G_PATH_PROFILE        QtMac::homeApplicationSupportPath() + "/" G_ORGANIZATION "/" G_APPLICATION
+#else
+  #define G_PATH_PROFILE        QDir::homePath() + "/.annot/player"
+#endif // Q_OS_WIN
+
+#ifdef Q_OS_WIN
   #define G_PATH_LOGS   "../logs"
-#elif defined (Q_WS_MAC)
+#elif defined (Q_OS_MAC)
   #define G_PATH_LOGS   QtMac::homeLogsPath() + "/" G_ORGANIZATION "/" G_APPLICATION
 #else
-  #define G_PATH_LOGS   QDir::homePath() + "/.annot/player"
-#endif
+  #define G_PATH_LOGS   G_PATH_PROFILE
+#endif // Q_OS_
 #define G_PATH_DEBUG    G_PATH_LOGS "/" "debug.txt"
 
-#ifdef Q_WS_WIN
-  #define G_PATH_CACHES  "caches"
-#elif defined (Q_WS_MAC)
+#ifdef Q_OS_WIN
+  #define G_PATH_CACHES  "./caches"
+#elif defined (Q_OS_MAC)
   #define G_PATH_CACHES  QtMac::homeCachesPath() + "/" G_ORGANIZATION "/" G_APPLICATION
 #else
-  #define G_PATH_CACHES  "."
-#endif
+  #define G_PATH_CACHES  G_PATH_PROFILE
+#endif // Q_OS_
+
+#define G_PATH_LOCK     G_PATH_PROFILE
+
 #define G_PATH_CACHEDB  G_PATH_CACHES "/" "cache.db"
 #define G_PATH_QUEUEDB  G_PATH_CACHES "/" "queue.db"
 
+#define G_PATH_LOCK_RUNNING  G_PATH_LOCK "/" "running.lock"
 
 // - UI Style -
 

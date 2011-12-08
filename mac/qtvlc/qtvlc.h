@@ -10,6 +10,22 @@
 
 // - Types -
 
+template <typename To, typename From>
+inline To
+vlcobject_cast(From x)
+{ return __undefined_cast__(x); }
+
+#define VLCOBJECT_TYPE_REGISTER(_type, _obj) \
+  template <> \
+  inline _obj *vlcobject_cast<_obj*>(_type *handle) \
+  { return reinterpret_cast<objc_object*>(handle); } \
+  template <> \
+  inline _type *vlcobject_cast<_type*>(_obj *obj) \
+  { return reinterpret_cast<_type*>(obj); } \
+  template <> \
+  inline _type *vlcobject_cast<_type*>(objc_object *obj) \
+  { return reinterpret_cast<_type*>(obj); }
+
 struct vout_thread_t; ///< livlc native type
 typedef vout_thread_t vlcvout_t;
 

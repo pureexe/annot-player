@@ -84,9 +84,9 @@ OsdWindow::showInOsdMode()
 #else
   QRect fullScreen =
 #ifdef Q_WS_MAC
-      QApplication::desktop()->screenGeometry(this)
+    QApplication::desktop()->screenGeometry(this)
 #else
-      QApplication::desktop()->availableGeometry(this)
+    QApplication::desktop()->availableGeometry(this)
 #endif // Q_WS_MAC
   ;
   setGeometry(fullScreen);

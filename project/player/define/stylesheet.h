@@ -75,6 +75,18 @@
 
 // - Buttons -
 
+// Radio buttons
+
+#define SS_RADIOBUTTON_TEXT_(_color) \
+  SS_BEGIN(QRadioButton) \
+    SS_TRANSPARENT \
+    SS_COLOR(_color) \
+  SS_END \
+
+#define SS_RADIOBUTTON_TEXT     SS_RADIOBUTTON_TEXT_(blue)
+
+// Tool buttons
+
 #define SS_TOOLBUTTON_(_id) \
   SS_BEGIN(QToolButton) \
     SS_BORDER_IMAGE_URL(RC_IMAGE_##_id) \

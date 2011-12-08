@@ -128,14 +128,16 @@ namespace Core { namespace Cloud {
   private: quint32 cursed_;
   public:
     quint32 cursedCount() const         { return cursed_; }
+    quint32 &cursedCount()              { return cursed_; }
     void setCursedCount(quint32 count)  { cursed_ = count; }
     bool isCursed() const               { return cursed_; }
 
   private: quint32 blocked_;
   public:
-    quint32 blockedCount() const         { return blocked_; }
-    void setBlockedCount(quint32 count)  { blocked_ = count; }
-    bool isBlocked() const               { return blocked_; }
+    quint32 blockedCount() const        { return blocked_; }
+    quint32 &blockedCount()             { return blocked_; }
+    void setBlockedCount(quint32 count) { blocked_ = count; }
+    bool isBlocked() const              { return blocked_; }
 
     // - Constructions -
   public:

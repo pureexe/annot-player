@@ -210,7 +210,7 @@ void
 ProcessView::invalidateSourceModel(bool showAll)
 {
   //using QtWin::ProcessInfo;
-  static QString windir = QtWin::getWinDir();
+  static QString windir = QtWin::getWinDirPath();
 
   clear();
 

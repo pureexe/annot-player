@@ -1,6 +1,9 @@
 // main.cc
 // 6/30/2011
 
+// 12/5/2011 TODO: clean up this file.
+// Gradually move things that might be reusable into Application.
+
 #include "application.h"
 #include "mainwindow.h"
 #include "settings.h"
@@ -14,58 +17,32 @@
 #ifdef USE_WIN_DWM
   #include "win/dwm/dwm.h"
 #endif // USE_WIN_DWM
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
   #include "win/qtwin/qtwin.h"
-#endif // W_WS_WIN
-#ifdef Q_WS_MAC
+#endif // Q_OS_WIN
+#ifdef Q_OS_MAC
   #include "mac/qtmac/qtmac.h"
-#endif // Q_WS_MAC
+#endif // Q_OS_MAC
 #include <QtGui>
 #include <QtWebKit>
 
 #define DEBUG "main"
 #include "module/debug/debug.h"
 
-// - Debug -
 
-namespace { // anonymous, debug
-
-  // See: http://www.cppblog.com/lauer3912/archive/2011/04/10/143870.html
-  void
-  debugMessageHandler(QtMsgType type, const char *msg)
-  {
-#define TIMESTAMP QDateTime::currentDateTime().toString("MM:dd: hh:mm:ss")
-    QString output;
-    switch (type) {
-    case QtDebugMsg:    output = QString("%1: %2\n").arg(TIMESTAMP).arg(msg); break;
-    case QtWarningMsg:  output = QString("%1: warning: %2\n").arg(TIMESTAMP).arg(msg); break;
-    case QtCriticalMsg: output = QString("%1: critical: %2\n").arg(TIMESTAMP).arg(msg); break;
-    case QtFatalMsg:    output = QString("%1: fatal: %2\n").arg(TIMESTAMP).arg(msg); break;
-    }
-
-    QFile file(G_PATH_DEBUG);
-    if (file.open(QIODevice::WriteOnly | QIODevice::Append))
-      QTextStream(&file) << output;
-#undef TIMESTAMP
-  }
-
-} // anonymous namespace
-
-// - Meta types -
+// - Startup stages -
 
 namespace { // anonymous
+
+  // Meta types
   inline void registerMetaTypes()
   {
     //qRegisterMetaType<WId>("WId");
   }
-} // anonymous namespace
 
-// - i18n -
-
-/*
-namespace { // anonymous
-
-  inline bool setTranslator(QTranslator /&t)
+  // i18n
+  /*
+  inline bool setTranslator(QTranslator &t)
   {
     QString qm;
     switch (QLocale::system().language()) {
@@ -87,9 +64,24 @@ namespace { // anonymous
 
     return t.load(qm);
   }
+  */
 
-} // anonymous namespace
-*/
+  // Warm up
+  inline void warmUp()
+  {
+#ifdef Q_OS_WIN
+    QtWin::warmUp();
+#endif // Q_OS_WIN
+
+#ifdef USE_WIN_DWM
+    Dwm::warmUp();
+#endif // USE_WIN_DWM
+
+    // Cache fonts needed to render annotations
+    AnnotationGraphicsItem::warmUp();
+  }
+
+} // namespace anonymous
 
 // - Main -
 
@@ -114,32 +106,15 @@ main(int argc, char *argv[])
 
   // Applications
   Application a(argc, argv);
-#ifdef Q_WS_WIN
-  {
-    QFileInfo fi(QCoreApplication::applicationFilePath());
-    QString processName = fi.fileName();
-    //DOUT("main: looking for process, processName =" << processName);
-    QList<ulong> pids = QtWin::getProcessIdsByName(processName);
-    if (pids.size() > 1) {
-      //DOUT("main: multple processes detected, count =" << pids.size());
-      //DOUT("main:exit: ret = 0");
-      return 0;
-    }
-  }
-#endif // Q_WS_WIN
+  if (!a.isSingleInstance())
+    return 0;
 
-  // Directory
-  {
 #ifdef USE_MODE_DEBUG
-    QDir logs(G_PATH_LOGS);
-    if (!logs.exists())
-      logs.mkpath(logs.absolutePath());
+  //a.startLoggingDebugMessage();
 #endif // USE_MODE_DEBUG
 
-    QDir caches(G_PATH_CACHES);
-    if (!caches.exists())
-      caches.mkpath(caches.absolutePath());
-  }
+  Settings *settings = Settings::globalInstance(); // Global settings
+  Q_ASSERT(settings);
 
   // Set global random seed.
   ::qsrand((uint)QDateTime::currentMSecsSinceEpoch());
@@ -147,44 +122,23 @@ main(int argc, char *argv[])
   // Register meta types.
   ::registerMetaTypes();
 
-#ifdef USE_MODE_DEBUG
-  {
-    QFile debug(G_PATH_DEBUG);
-    if (debug.open(QIODevice::WriteOnly | QIODevice::Append)) {
-      QTextStream(&debug)
-        << "\n--------------------------------------------------------------------------------\n\n";
-      debug.close();
-
-      qInstallMsgHandler(debugMessageHandler);
-      DOUT("main: debug message handler installed");
-    }
-  }
-#endif // USE_MODE_DEBUG
-
-#ifdef Q_WS_WIN
-  QtWin::warmUp();
-#endif // Q_WS_WIN
-
-#ifdef USE_WIN_DWM
-  Dwm::warmUp();
-#endif // USE_WIN_DWM
-
-  // Cache needed fonts in Mac OS X
-  AnnotationGraphicsItem::warmUp();
+  // Warm up startup caches
+  ::warmUp();
 
   // Initialize translator
   {
-    int lang = Settings::globalInstance()->language();
+    int lang = settings->language();
     if (!lang) {
       lang =  QLocale::system().language();
-      Settings::globalInstance()->setLanguage(lang);
+      settings->setLanguage(lang);
     }
     TranslatorManager::globalInstance()->setLanguage(lang, false); // auto-update translator = false
     TranslatorManager::globalInstance()->installCurrentTranslator(&a);
     DOUT("main: app language =" << lang);
   }
 
-  if (Settings::globalInstance()->version() != G_VERSION) {
+  // Rebuild caches on update.
+  if (settings->version() != G_VERSION) {
     DOUT("main: update from old version");
     QFileInfo cachedb(G_PATH_CACHEDB),
               queuedb(G_PATH_QUEUEDB);
@@ -192,7 +146,7 @@ main(int argc, char *argv[])
       QFile::remove(cachedb.filePath());
     if (queuedb.exists())
       QFile::remove(queuedb.filePath());
-    Settings::globalInstance()->setVersion(G_VERSION);
+    settings->setVersion(G_VERSION);
   }
 
   // Hashes
@@ -213,7 +167,7 @@ main(int argc, char *argv[])
 
   // Set theme.
   {
-    int tid = Settings::globalInstance()->themeId();
+    int tid = settings->themeId();
     UiStyle::globalInstance()->setTheme(tid);
   }
 
@@ -230,26 +184,31 @@ main(int argc, char *argv[])
 //  MainWindow w;
 //
 //#endif // USE_MODE_SIGNAL
-  MainWindow w;
-  Q_ASSERT(w.isValid());
+  MainWindow w; {
+    Q_ASSERT(w.isValid());
+    if (!w.isValid()) {
+      DOUT("FATAL ERROR: failed to initialize MainWindow, please contact " G_EMAIL);
+      return -1;
+    }
 
 #ifdef USE_WIN_QTH
-  QTH->setParentWinId(w.winId());
+    QTH->setParentWinId(w.winId());
 #endif // USE_WIN_QTH
 
-  a.setMainWindow(&w);
+    a.setMainWindow(&w);
 
-  // Show main window
-  w.resize(INIT_WINDOW_SIZE);
-  w.show();
+    // Show main window
+    w.resize(INIT_WINDOW_SIZE);
+    w.show();
 
-  // Automatic login
-  QString userName = Settings::globalInstance()->userName(),
-          password = Settings::globalInstance()->password();
-  if (!userName.isEmpty() && !password.isEmpty())
-    w.login(userName, password);
+    // Automatic login
+    QString userName = settings->userName(),
+            password = settings->password();
+    if (!userName.isEmpty() && !password.isEmpty())
+      w.login(userName, password);
 
-  w.parseArguments(a.arguments());
+    w.parseArguments(a.arguments());
+  }
 
   //QWidget t;
   //t.setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint);
@@ -263,6 +222,7 @@ main(int argc, char *argv[])
   //w.openPath("/Volumes/local/i/sample.mp4");
   //w.openPath("dvd://X:", false);
   //w.openPath("cdda://X:", false);
+  //w.openPath("/dev/rdisk1", false);
 
   /*
   Display *dpy = QX11Info::display();
@@ -283,14 +243,14 @@ main(int argc, char *argv[])
   SubstructureNotifyMask, &xev);
   */
 
-#if defined(USE_MODE_SIGNAL) && defined(Q_WS_WIN)
+#if defined(USE_MODE_SIGNAL) && defined(Q_OS_WIN)
   // jichi 11/29/2011: Use as a persistent top level window.
   // FIXME: The app would close when there is no visible window after hijacking another process.
   QWidget dummy; // Dummy widget as a persistent visible zero-sized window.
   dummy.resize(QSize());
   QObject::connect(&w, SIGNAL(windowClosed()), &dummy, SLOT(close()));
   dummy.show();
-#endif // USE_MODE_SIGNAL && Q_WS_WIN
+#endif // USE_MODE_SIGNAL && Q_OS_WIN
 
   return a.exec();
 }

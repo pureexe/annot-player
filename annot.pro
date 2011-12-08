@@ -13,6 +13,7 @@ mac:    SUBDIRS += mac
 
 OTHER_FILES = \
   ChangeLog \
+  COPYING \
   README \
   TODO \
   licenses/annot-player.txt

@@ -2,17 +2,25 @@
 // 11/30/2011
 // http://www.libssh2.org/examples/x11.html
 
+#define ME "x"
+#define APPLET_IP       "184.168.90.152"
+#define APPLET_USERNAME "jichi"
+#define APPLET_PASSWORD ""
+//#define APPLET_IP       "129.115.26.69"
+
 #include "x.h"
-#include <libssh2.h>
-#include <sys/ioctl.h>
-#include <sys/socket.h>
-#include <sys/types.h>
-#include <sys/un.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <fcntl.h>
-#include <termios.h>
-#include <unistd.h>
+extern "C" {
+  #include <libssh2.h>
+  #include <sys/ioctl.h>
+  #include <sys/socket.h>
+  #include <sys/types.h>
+  #include <sys/un.h>
+  #include <netinet/in.h>
+  #include <arpa/inet.h>
+  #include <fcntl.h>
+  #include <termios.h>
+  #include <unistd.h>
+} // extern "C"
 //#include <QtCore> // for debug use only -- TO BE REMOVED
 #include <cerrno>
 #include <cstdio>
@@ -34,45 +42,41 @@ libssh2_session_handshake(LIBSSH2_SESSION *session, libssh2_socket_t socket)
 
 //#define DEBUG "x"
 //#include "module/debug/debug.h"
-
-/*
- * Chained list that contains channels and associated X11 socket for each X11
- * connections
- */
-struct chan_X11_list {
-  LIBSSH2_CHANNEL  *chan;
-  int         sock;
-  struct chan_X11_list *next;
-};
-
-struct chan_X11_list * gp_x11_chan = NULL;
-struct termios     _saved_tio;
+//
 
 namespace { // anonymous
 
+  // Chained list that contains channels and associated X11 socket for each X11 connections
+  struct chan_X11_list {
+    LIBSSH2_CHANNEL  *chan;
+    int         sock;
+    chan_X11_list *next;
+  };
+
+  termios     _saved_tio;
+
+  chan_X11_list *gp_x11_chan = NULL;
+
   // Utility function to remove a Node of the chained list
-  void remove_node(struct chan_X11_list *elem)
+  void remove_node(chan_X11_list *elem)
   {
-    struct chan_X11_list *current_node = NULL;
+    chan_X11_list *current_node = NULL;
 
-    current_node = gp_x11_chan;
+    current_node = ::gp_x11_chan;
 
-    if (gp_x11_chan == elem) {
+    if (::gp_x11_chan == elem) {
       /* Removing the only one element in the list */
-      free(gp_x11_chan);
-      gp_x11_chan = NULL;
+      free(::gp_x11_chan);
+      ::gp_x11_chan = NULL;
     }
 
-    while( current_node->next != NULL) {
-      if (current_node->next ==elem) {
-        current_node->next = current_node->next->next;
-        current_node = current_node->next;
-        free(current_node);
-        break;
-      }
+    if (current_node && current_node->next &&
+      current_node->next ==elem) {
+      current_node->next = current_node->next->next;
+      current_node = current_node->next;
+      free(current_node);
     }
   }
-
 
   void session_shutdown(LIBSSH2_SESSION *session)
   {
@@ -84,7 +88,7 @@ namespace { // anonymous
   int _raw_mode(void)
   {
     int rc;
-    struct termios tio;
+    termios tio;
 
     rc = tcgetattr(fileno(stdin), &tio);
     if (rc != -1) {
@@ -115,25 +119,25 @@ namespace { // anonymous
     int   display_port = 0;
     int   sock     = 0;
     int   rc       = 0;
-    struct sockaddr_un addr;
-    struct chan_X11_list *new_;
-    struct chan_X11_list *chan_iter;
+    chan_X11_list *new_;
+    chan_X11_list *chan_iter;
+    static sockaddr_un addr;
 
     /*
      * Connect to the display
      * Inspired by x11_connect_display in openssh
      */
-    display = getenv("DISPLAY");
+    display = ::getenv("DISPLAY");
     if (strcmp("127.0.0.1:0,0", display) == 0)
       display = ":0";
-    if ( display != NULL) {
-      if (strncmp( display, "unix:", 5) == 0 ||
+    if (display != NULL) {
+      if (strncmp(display, "unix:", 5) == 0 ||
         display[0] == ':') {
         /* Connect to the local unix domain */
         ptr = (char*)strrchr(display, ':');
         temp_buff = (char *) calloc(strlen(ptr+1), sizeof(char));
         if (!temp_buff) {
-          perror("calloc");
+          ::perror("calloc");
           return;
         }
         memcpy(temp_buff, ptr+1, strlen(ptr+1));
@@ -147,25 +151,25 @@ namespace { // anonymous
         addr.sun_family = AF_UNIX;
         snprintf(addr.sun_path, sizeof(addr.sun_path),
              _PATH_UNIX_X, display_port);
-        rc = connect(sock, (struct sockaddr *) &addr, sizeof(addr));
+        rc = connect(sock, (sockaddr *) &addr, sizeof(addr));
 
         if (rc != -1){
           /* Connection Successfull */
-          if (gp_x11_chan == NULL) {
-            /* Calloc ensure that gp_X11_chan is full of 0 */
-            gp_x11_chan = (struct chan_X11_list *)
-              calloc(1, sizeof(struct chan_X11_list));
-            gp_x11_chan->sock = sock;
-            gp_x11_chan->chan = channel;
-            gp_x11_chan->next = NULL;
+          if (::gp_x11_chan == NULL) {
+            /* Calloc ensure that ::gp_x11_chan is full of 0 */
+            ::gp_x11_chan = (chan_X11_list *)
+              calloc(1, sizeof(chan_X11_list));
+            ::gp_x11_chan->sock = sock;
+            ::gp_x11_chan->chan = channel;
+            ::gp_x11_chan->next = NULL;
           }
           else {
-            chan_iter = gp_x11_chan;
+            chan_iter = ::gp_x11_chan;
             while (chan_iter->next != NULL)
               chan_iter = chan_iter->next;
             /* Create the new Node */
-            new_ = (struct chan_X11_list *)
-              malloc(sizeof(struct chan_X11_list));
+            new_ = (chan_X11_list *)
+              malloc(sizeof(chan_X11_list));
             new_->sock = sock;
             new_->chan = channel;
             new_->next = NULL;
@@ -183,61 +187,51 @@ namespace { // anonymous
   // Send and receive Data for the X11 channel.
   // If the connection is closed, returns -1, 0 either.
 
+  // Not reentrant, not thread-safe!
   int x11_send_receive(LIBSSH2_CHANNEL *channel, int sock)
   {
-    char *buf      = NULL;
-    int  bufsize    = 8192;
-    int  rc       = 0;
-    int  nfds     = 1;
-    LIBSSH2_POLLFD  *fds    = NULL;
-    fd_set set;
-    struct timeval timeval_out;
-    timeval_out.tv_sec = 0;
-    timeval_out.tv_usec = 0;
+    enum { bufsize    = 8192 };
+    static char buf[bufsize];
 
-    FD_ZERO(&set);
-    FD_SET(sock,&set);
-
-    if ((buf = (char*)calloc (bufsize, sizeof(char))) == NULL)
-      return 0;
-
-    if ((fds = (LIBSSH2_POLLFD*)malloc (sizeof (LIBSSH2_POLLFD))) == NULL) {
-      free(buf);
-      return 0;
+    static timeval timeval_out; {
+      timeval_out.tv_sec = 0;
+      timeval_out.tv_usec = 0;
     }
 
-    fds[0].type = LIBSSH2_POLLFD_CHANNEL;
-    fds[0].fd.channel = channel;
-    fds[0].events = LIBSSH2_POLLFD_POLLIN;
-    fds[0].revents = LIBSSH2_POLLFD_POLLIN;
-
-    rc = libssh2_poll(fds, nfds, 0);
-
-    if (rc >0) {
-      rc = libssh2_channel_read(channel, buf,sizeof(buf));
-
-      rc = write(sock, buf, rc);
+    static fd_set set; {
+      FD_ZERO(&set);
+      FD_SET(sock, &set);
     }
 
-    rc = select(sock+1,&set,NULL,NULL,&timeval_out);
+    enum { nfds = 1 };
+    static LIBSSH2_POLLFD  fds[nfds]; {
+      fds[0].type = LIBSSH2_POLLFD_CHANNEL;
+      fds[0].fd.channel = channel;
+      fds[0].events = LIBSSH2_POLLFD_POLLIN;
+      fds[0].revents = LIBSSH2_POLLFD_POLLIN;
+    }
+
+    int rc = ::libssh2_poll(fds, nfds, 0);
     if (rc > 0) {
-      memset((void *)buf,0,bufsize);
+      rc = ::libssh2_channel_read(channel, buf,sizeof(buf));
+      rc = ::write(sock, buf, rc);
+    }
 
-      /* Data in sock*/
-      rc = read(sock, buf,sizeof(buf));
+    rc = ::select(sock+1,&set,NULL,NULL,&timeval_out);
+    if (rc > 0) {
+      ::memset(buf, 0, bufsize);
+
+      // Data in sock
+      rc = ::read(sock, buf, sizeof(buf));
       if (rc > 0)
-        rc = libssh2_channel_write(channel,buf, rc);
-
+        rc = ::libssh2_channel_write(channel, buf, rc);
       else
         return -1;
     }
 
-    free(fds);
-    free(buf);
-    if (libssh2_channel_eof (channel) == 1) {
-
+    if (::libssh2_channel_eof(channel) == 1)
       return -1;
-    }
+
     return 0;
   }
 
@@ -247,235 +241,189 @@ namespace { // anonymous
 int
 main(int argc, char *argv[])
 {
-  char display0[] = "DISPLAY=:0";
+  // - Settings -
+  const char *username = APPLET_USERNAME;
+  const char *password = APPLET_PASSWORD;
+  char env_DISPLAY[] = "DISPLAY=:0"; // default DISPLAY if not set
+  char env_LC_ALL[] = "LC_ALL=" APPLET_LOCALE;
+  char env_LANG[] = "LANG=" APPLET_LOCALE;
+
+  enum { bufsize = 8193 };
+  bool o_debug = false;
+  bool o_output = true;
+
   if (!::getenv("DISPLAY"))
-    ::putenv(display0);
+    ::putenv(env_DISPLAY);
+  ::putenv(env_LC_ALL);
+  ::putenv(env_LANG);
 
-  int sock = 0;
-  int rc = 0;
-  LIBSSH2_SESSION *session;
-  LIBSSH2_CHANNEL *channel;
-  in_addr_t hostaddr = ::inet_addr("129.115.26.69");
-  struct sockaddr_in sin;
-  const char *username = "root";
-  const char *password = "bear&dear";
-  size_t bufsiz = 8193;
-  char *buf = NULL;
-  int set_debug_on = 0;
-  int nfds = 1;
-  LIBSSH2_POLLFD *fds = NULL;
+  fprintf(stderr, ME ": O_DEBUG = %d\n", (int)o_debug);
+  fprintf(stderr, ME ": O_OUTPUT = %d\n", (int)o_output);
+  fprintf(stderr, ME ": DISPLAY = %s\n", env_DISPLAY);
+  fprintf(stderr, ME ": LOCALE = %s\n", env_LC_ALL);
 
+  // - Init -
 
-  /* Chan List struct */
-  struct chan_X11_list *current_node = NULL;
+  int rc; // temp return code
 
-  /* Struct winsize for term size */
-  struct winsize w_size;
-  struct winsize w_size_bck;
-
-  /* For select on stdin */
-  fd_set set;
-  struct timeval timeval_out;
-  timeval_out.tv_sec = 0;
-  timeval_out.tv_usec = 10;
-
-  //if (argc > 3) {
-  //  hostaddr = inet_addr(argv[1]);
-  //  username = argv[2];
-  //  password = argv[3];
-  //}
-  //else {
-  //  fprintf(stderr, "Usage: %s destination username password",
-  //      argv[0]);
-  //  return -1;
-  //}
-
-  //if (argc > 4) {
-    set_debug_on = 1;
-    fprintf (stderr, "DEBUG is ON: %d\n", set_debug_on);
-  //}
-
-  rc = libssh2_init (0);
-
-  if (rc != 0) {
-    fprintf (stderr, "libssh2 initialization failed (%d)\n", rc);
+  rc = ::libssh2_init(0);
+  if (rc) {
+    perror("libssh2 initialization failed\n");
     return 1;
   }
 
-  sock = socket (AF_INET, SOCK_STREAM, 0);
-
-  sin.sin_family = AF_INET;
-  sin.sin_port = htons (22);
-  sin.sin_addr.s_addr = hostaddr;
-
-  rc = ::connect(sock, (struct sockaddr *) &sin,
-         sizeof(struct sockaddr_in));
-  if (rc != 0) {
-    fprintf (stderr, "Failed to established connection!\n");
-    return -1;
+  sockaddr_in sin = { }; {
+    sin.sin_family = AF_INET;
+    sin.sin_port = htons(22);
+    sin.sin_addr.s_addr = ::inet_addr(APPLET_IP);
   }
-  /* Open a session */
-  session = libssh2_session_init();
 
-  rc    = libssh2_session_handshake(session, sock);
+  int sock = ::socket(AF_INET, SOCK_STREAM, 0);
 
-  if (rc != 0) {
-    fprintf(stderr, "Failed Start the SSH session\n");
+  if (::connect(sock, (sockaddr *)&sin, sizeof(sin))) {
+    ::perror("failed to established connection\n");
     return -1;
   }
 
-  if (set_debug_on == 1)
-    libssh2_trace(session, LIBSSH2_TRACE_CONN);
+  // Open SSH session
+  LIBSSH2_SESSION *session = ::libssh2_session_init();
 
-
-  /* Set X11 Callback */
-  libssh2_session_callback_set(session, LIBSSH2_CALLBACK_X11,
-                 (void *)x11_callback);
-
-  /* Authenticate via password */
-  rc = libssh2_userauth_password(session, username, password);
-
-  if (rc != 0) {
-    fprintf(stderr, "Failed to authenticate\n");
-    session_shutdown(session);
-    close(sock);
+  if (::libssh2_session_handshake(session, sock)) {
+    ::perror("failed Start the SSH session\n");
     return -1;
   }
 
-  /* Open a channel */
-  channel  = libssh2_channel_open_session(session);
+  if (o_debug)
+    ::libssh2_trace(session, LIBSSH2_TRACE_CONN);
 
-  if ( channel == NULL ) {
-    fprintf(stderr, "Failed to open a new channel\n");
-    session_shutdown(session);
-    close(sock);
+  // Set x11 callback
+  ::libssh2_session_callback_set(session, LIBSSH2_CALLBACK_X11, (void *)x11_callback);
+
+  // Authenticate via password
+  if (::libssh2_userauth_password(session, username, password)) {
+    ::perror("failed to authenticate\n");
+    ::session_shutdown(session);
+    ::close(sock);
     return -1;
   }
 
-
-  /* Request a PTY */
-  rc = libssh2_channel_request_pty( channel, "xterm");
-
-  if (rc != 0) {
-    fprintf(stderr, "Failed to request a pty\n");
-    session_shutdown(session);
-    close(sock);
+  // Open a channel
+  LIBSSH2_CHANNEL *channel = ::libssh2_channel_open_session(session);
+  if (!channel) {
+    ::perror("failed to open a new channel\n");
+    ::session_shutdown(session);
+    ::close(sock);
     return -1;
   }
 
-  /* Request X11 */
-  rc = libssh2_channel_x11_req(channel,0);
-  if(rc!=0) {
-    fprintf(stderr, "Failed to request X11 forwarding\n");
-    session_shutdown(session);
-    close(sock);
+  // Request a PTY
+  if (::libssh2_channel_request_pty(channel, "xterm")) {
+    ::perror("failed to request a pty\n");
+    ::session_shutdown(session);
+    ::close(sock);
+    return -1;
+  }
+
+  // Request X11
+  if (::libssh2_channel_x11_req(channel, 0)) {
+    ::perror("failed to request X11 forwarding\n");
+    ::session_shutdown(session);
+    ::close(sock);
     return -1;
   }
 
   /* Request a shell */
-  rc = libssh2_channel_shell(channel);
-
-  if (rc!=0) {
-    fprintf(stderr, "Failed to open a shell\n");
-    session_shutdown(session);
-    close(sock);
+  if (::libssh2_channel_shell(channel)) {
+    ::perror("failed to open a shell\n");
+    ::session_shutdown(session);
+    ::close(sock);
     return -1;
   }
 
-  rc = _raw_mode();
-  if (rc != 0) {
-    fprintf(stderr, "Failed to entered in raw mode\n");
-    session_shutdown(session);
-    close(sock);
+  if (_raw_mode()) {
+    ::perror("failed to enter in raw mode\n");
+    ::session_shutdown(session);
+    ::close(sock);
     return -1;
   }
 
-  while (1) {
+  // - Service loop -
 
-    FD_ZERO(&set);
-    FD_SET(fileno(stdin),&set);
+  // Struct winsize for term size
+  winsize w_size = { };
+  winsize w_size_bck = { };
+
+  chan_X11_list *current_node = 0; // Chan List struct
+
+  char *buf = 0;
+  //char buf[bufsize];
+  do {
+    fd_set set; { // For select on stdin
+      FD_ZERO(&set);
+      FD_SET(::fileno(stdin), &set);
+    }
 
     /* Search if a resize pty has to be send */
-    ioctl(fileno(stdin), TIOCGWINSZ, &w_size);
-    if ((w_size.ws_row != w_size_bck.ws_row) ||
-      (w_size.ws_col != w_size_bck.ws_col))   {
+    ::ioctl(::fileno(stdin), TIOCGWINSZ, &w_size);
+    if (w_size.ws_row != w_size_bck.ws_row ||
+        w_size.ws_col != w_size_bck.ws_col) {
       w_size_bck = w_size;
 
-      libssh2_channel_request_pty_size(channel,
-
-                       w_size.ws_col,
-                       w_size.ws_row);
+      ::libssh2_channel_request_pty_size(channel, w_size.ws_col, w_size.ws_row);
     }
 
-    if ((buf = (char*)calloc (bufsiz, sizeof(char))) == NULL)
+    buf = (char*)calloc (bufsize, sizeof(char));
+    if (!buf)
       break;
 
-    if ((fds = (LIBSSH2_POLLFD*)malloc (sizeof (LIBSSH2_POLLFD))) == NULL) {
-      free(buf);
-      break;
+    enum { nfds = 1 };
+    LIBSSH2_POLLFD fds[nfds]; {
+      fds[0].type = LIBSSH2_POLLFD_CHANNEL;
+      fds[0].fd.channel = channel;
+      fds[0].events = LIBSSH2_POLLFD_POLLIN;
+      fds[0].revents = LIBSSH2_POLLFD_POLLIN;
+    }
+    rc = ::libssh2_poll(fds, nfds, 0);
+    if (rc > 0) {
+      rc = ::libssh2_channel_read(channel, buf, sizeof(buf));
+      if (o_output) {
+        ::fprintf(stdout, "%s", buf);
+        ::fflush(stdout);
+      }
     }
 
-    fds[0].type = LIBSSH2_POLLFD_CHANNEL;
-    fds[0].fd.channel = channel;
-    fds[0].events = LIBSSH2_POLLFD_POLLIN;
-    fds[0].revents = LIBSSH2_POLLFD_POLLIN;
-
-    rc = libssh2_poll(fds, nfds, 0);
-
-    if (rc >0) {
-      rc = libssh2_channel_read(channel, buf,sizeof(buf));
-
-      fprintf(stdout, "%s", buf);
-      fflush(stdout);
-    }
-
-    /* Looping on X clients */
-    if (gp_x11_chan != NULL) {
-      current_node = gp_x11_chan;
-    }
-    else
-      current_node = NULL;
-
-    while (current_node != NULL) {
-      struct chan_X11_list *next_node;
+    // Looping on X clients
+    current_node = ::gp_x11_chan;
+    while (current_node) {
+      chan_X11_list *next_node;
       rc = x11_send_receive(current_node->chan, current_node->sock);
       next_node = current_node->next;
       if (rc == -1){
-        shutdown(current_node->sock,SHUT_RDWR);
-        close(current_node->sock);
+        ::shutdown(current_node->sock,SHUT_RDWR);
+        ::close(current_node->sock);
         remove_node(current_node);
       }
-
       current_node = next_node;
-    }
+   }
 
 
-    rc = select(fileno(stdin)+1,&set,NULL,NULL,&timeval_out);
-    if (rc > 0) {
-      /* Data in stdin*/
-      rc = read(fileno(stdin), buf,1);
-      if (rc > 0)
-        libssh2_channel_write(channel,buf, sizeof(buf));
+   timeval timeval_out = { };
+   if (::select(fileno(stdin)+1,&set,NULL,NULL,&timeval_out) > 0 &&
+       ::read(fileno(stdin), buf,1) > 0) // Data in stdin
+     ::libssh2_channel_write(channel, buf, sizeof(buf));
 
-    }
+    //free(fds);
+    ::free(buf);
+  } while (::libssh2_channel_eof(channel) != 1);
 
-    free (fds);
-    free (buf);
+  // - Clean up -
 
-    if (libssh2_channel_eof (channel) == 1) {
+  if (channel)
+    ::libssh2_channel_free(channel);
 
-      break;
-    }
-  }
-
-  if (channel) {
-    libssh2_channel_free (channel);
-
-    channel = NULL;
-  }
   _normal_mode();
 
-  libssh2_exit();
+  ::libssh2_exit();
 
   return 0;
 }

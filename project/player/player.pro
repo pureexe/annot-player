@@ -1,7 +1,7 @@
 # player.pro
 # 6/30/2011
 
-VERSION = 0.1.1.0
+VERSION = 0.1.1.1
 
 include(../../config.pri)
 include(tr/tr.pri)
@@ -50,6 +50,9 @@ win32 {
     DEPENDPATH += $$ROOTDIR/win/mousehook
     DEPENDPATH += $$ROOTDIR/win/qtwin
     DEPENDPATH += $$ROOTDIR/win/qth
+}
+unix: {
+    include($$ROOTDIR/unix/qtunix/qtunix.pri)
 }
 unix:!mac {
     include($$ROOTDIR/unix/qtx/qtx.pri)
@@ -113,6 +116,7 @@ HEADERS += \
     annot/blacklistviewprivate.h \
     annot/textformathandler.h \
     data/datamanager.h \
+    data/dataserver.h \
     db/db_config.h \
     db/db.h \
     define/config.h \
@@ -120,6 +124,7 @@ HEADERS += \
     define/rc.h \
     define/stylesheet.h \
     dialog/aboutdialog.h \
+    dialog/devicedialog.h \
     dialog/helpdialog.h \
     dialog/livedialog.h \
     dialog/logindialog.h \
@@ -169,8 +174,10 @@ SOURCES += \
     annot/blacklistviewprivate.cc \
     annot/textformathandler.cc \
     data/datamanager.cc \
+    data/dataserver.cc \
     db/db.cc \
     dialog/aboutdialog.cc \
+    dialog/devicedialog.cc \
     dialog/helpdialog.cc \
     dialog/livedialog.cc \
     dialog/logindialog.cc \
@@ -225,12 +232,14 @@ OTHER_FILES += \
     debian.rules \
     debian.control \
     deploy-debian.sh \
+    deploy-fedora.sh \
     deploy-mac.sh \
     deploy-win.cmd \
     Info.plist \
     player.rc \
     player.ico \
-    player.icns
+    player.icns \
+    rpm.spec
 
 win32 {
     !wince*: LIBS += -lshell32
@@ -245,12 +254,15 @@ mac {
 # Deployment
 
 unix:!mac {
-    INSTALLS += target desktop icon
+    INSTALLS += target desktop desktop-kde icon
 
     target.path = $$BINDIR
 
     desktop.path = $$DATADIR/applications
     desktop.files += $${TARGET}.desktop
+
+    desktop-kde.path = $$DATADIR/kde4/apps/solid/actions
+    desktop-kde.files += $${TARGET}.desktop
 
     #service.path = $$DATADIR/dbus-1/services
     #service.files += $${TARGET}.service

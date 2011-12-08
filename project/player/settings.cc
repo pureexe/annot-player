@@ -15,8 +15,10 @@
 #define SK_USERNAME     "UserName"
 #define SK_PASSWORD     "Password"
 
-#define SK_ANNOTLANGUAGES "AnnotationLanguages"
+#define SK_ANNOTLANGUAGES "AnnotLanguages"
+#define SK_ANNOTFILTER  "AnnotFilter"
 #define SK_LANGUAGE     "Language"
+#define SK_MENUBAR      "MenuBar"
 #define SK_THEME        "Theme"
 #define SK_TRANSLATE    "Translate"
 #define SK_SUBTITLEONTOP "SubtitleStaysOnTop"
@@ -185,12 +187,28 @@ Settings::setEmbeddedPlayerStaysOnTop(bool t)
 { setValue(SK_EMBEDONTOP, t); }
 
 bool
+Settings::isAnnotationFilterEnabled() const
+{ return value(SK_ANNOTFILTER).toBool(); }
+
+void
+Settings::setAnnotationFilterEnabled(bool t)
+{ setValue(SK_ANNOTFILTER, t); }
+
+bool
 Settings::isAutoPlayNext() const
 { return value(SK_AUTOPLAYNEXT).toBool(); }
 
 void
 Settings::setAutoPlayNext(bool t)
 { setValue(SK_AUTOPLAYNEXT, t); }
+
+bool
+Settings::isMenuBarVisible() const
+{ return value(SK_MENUBAR).toBool(); }
+
+void
+Settings::setMenuBarVisible(bool t)
+{ setValue(SK_MENUBAR, t); }
 
 QString
 Settings::recentPath() const

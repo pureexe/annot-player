@@ -34,7 +34,7 @@ PickDialog::PickDialog(QWidget *parent)
 
   messageLabel_ = new QLabel; {
     messageLabel_->setStyleSheet(SS_LABEL);
-    messageLabel_->setToolTip(tr("Message"));
+    messageLabel_->setToolTip(TR(T_MESSAGE));
   }
 
   QToolButton *cancelButton = new Core::Gui::ToolButton; {

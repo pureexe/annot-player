@@ -239,8 +239,12 @@ AnnotationBrowser::addAnnotations(const AnnotationList &l)
 }
 
 void
-AnnotationBrowser::clear()
+AnnotationBrowser::removeAnnotations()
 { tableView_->clear(); }
+
+void
+AnnotationBrowser::clear()
+{ removeAnnotations(); }
 
 // - Formatter -
 

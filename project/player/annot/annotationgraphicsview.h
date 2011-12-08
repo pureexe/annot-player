@@ -120,6 +120,11 @@ protected:
 
   AnnotationList annotationsAtPos(qint64 pos) const; ///< slow
 
+signals:
+  void annotationAdded(const Annotation &annot);
+  //void annotationsChanged(const AnnotationList &annots);
+  void annotationsRemoved();
+
 public:
   bool isPaused() const;
 signals:
@@ -177,7 +182,7 @@ public slots:
   //void addAnnotations(const Core::AnnotationList &l);
 
 protected slots:
-  void clearAnnotations(); // delete annotation without reading ones
+  void removeAnnotations(); // delete annotation without reading ones
 
   void updateAnnotationText(const QString &text);
 

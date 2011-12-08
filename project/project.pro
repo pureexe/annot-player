@@ -4,9 +4,9 @@
 TEMPLATE = subdirs
 SUBDIRS = \
     player
-    #x
     #reader
 
-win32: SUBDIRS += app
+win32:  SUBDIRS += app
+#unix:   SUBDIRS += x
 
 # EOF

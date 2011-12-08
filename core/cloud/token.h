@@ -96,32 +96,37 @@ namespace Core { namespace Cloud {
   private: quint32 blessed_;
   public:
     quint32 blessedCount() const        { return blessed_; }
+    quint32 &blessedCount()             { return blessed_; }
     void setBlessedCount(quint32 count) { blessed_ = count; }
     bool isBlessed() const              { return blessed_; }
 
   private: quint32 cursed_;
   public:
     quint32 cursedCount() const         { return cursed_; }
+    quint32 &cursedCount()              { return cursed_; }
     void setCursedCount(quint32 count)  { cursed_ = count; }
     bool isCursed() const               { return cursed_; }
 
   private: quint32 blocked_;
   public:
     quint32 blockedCount() const        { return blocked_; }
-    void setBlockedCount(quint32 count)  { blocked_ = count; }
-    bool isBlocked() const               { return blocked_; }
+    quint32 &blockedCount()             { return blocked_; }
+    void setBlockedCount(quint32 count) { blocked_ = count; }
+    bool isBlocked() const              { return blocked_; }
 
   private: quint32 visited_;
   public:
     quint32 visitedCount() const        { return visited_; }
+    quint32 &visitedCount()             { return visited_; }
     void setVisitedCount(quint32 count) { visited_ = count; }
     bool isVisited() const              { return visited_; }
 
   private: quint32 annot_;
   public:
-    quint32 annotCount() const           { return annot_; }
-    void setAnnotCount(quint32 count)    { annot_ = count; }
-    bool isAnnotated() const             { return annot_; }
+    quint32 annotCount() const          { return annot_; }
+    quint32 &annotCount()               { return annot_; }
+    void setAnnotCount(quint32 count)   { annot_ = count; }
+    bool isAnnotated() const            { return annot_; }
 
     // - Constructions -
   public:

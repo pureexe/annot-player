@@ -60,7 +60,7 @@ AnnotationGraphicsView::AnnotationGraphicsView(SignalHub *hub, Player *player, V
 }
 
 AnnotationGraphicsView::~AnnotationGraphicsView()
-{ clearAnnotations(); }
+{ removeAnnotations(); }
 
 void
 AnnotationGraphicsView::setFilter(AnnotationFilter *filter)
@@ -114,7 +114,7 @@ AnnotationGraphicsView::isFullScreenMode() const
 { return fullScreen_; }
 
 void
-AnnotationGraphicsView::clearAnnotations()
+AnnotationGraphicsView::removeAnnotations()
 {
   if (!annots_.empty()) {
     QGraphicsScene *s = scene();
@@ -132,13 +132,15 @@ AnnotationGraphicsView::clearAnnotations()
       }
 
     annots_.clear();
+
+    emit annotationsRemoved();
   }
 }
 
 void
 AnnotationGraphicsView::setAnnotations(const AnnotationList &annots)
 {
-  clearAnnotations();
+  removeAnnotations();
   addAnnotations(annots);
 }
 
@@ -173,8 +175,8 @@ AnnotationGraphicsView::annotationsAtPos(qint64 pos) const
 void
 AnnotationGraphicsView::invalidateGeometry()
 {
-  invalidateSize();
   invalidatePos();
+  invalidateSize();
 }
 
 void
@@ -219,9 +221,9 @@ AnnotationGraphicsView::invalidateSize()
 void
 AnnotationGraphicsView::invalidatePos()
 {
-  if (fullScreen_ && fullScreenView_) {
+  if (fullScreen_ && fullScreenView_)
     move(fullScreenView_->pos());
-  } else if (trackedWindow_) {
+  else if (trackedWindow_) {
 #ifdef Q_WS_WIN
     QRect r = QtWin::getWindowRect(trackedWindow_);
     if (r.isNull()) {
@@ -243,16 +245,16 @@ AnnotationGraphicsView::invalidatePos()
     else
 #endif // Q_QW_MAC
 #ifdef Q_WS_X11
-    if (hub_->isEmbeddedPlayerMode() && fullScreenView_)
+    // FIXME: Hot fix for Ubuntu Unity top bar. TO BE REMOVED!
+    if (fullScreen_ && fullScreenView_ && hub_->isEmbeddedPlayerMode())
       newPos = fullScreenView_->mapToGlobal(QPoint());
     else
 #endif // Q_WS_X11
     newPos = videoView_->mapToGlobal(QPoint());
     moveToGlobalPos(newPos);
 
-  } else if (hub_->isSignalTokenMode() && fullScreenView_) {
+  } else if (hub_->isSignalTokenMode() && fullScreenView_)
     move(fullScreenView_->pos());
-  }
 }
 
 void
@@ -407,7 +409,7 @@ AnnotationGraphicsView::invalidatePlayTime()
 void
 AnnotationGraphicsView::invalidateAnnotations()
 {
-  clearAnnotations();
+  removeAnnotations();
   /*
   if (player_->hasMedia()) {
     qint64 msecs = player_->mediaLength();
@@ -456,6 +458,9 @@ AnnotationGraphicsView::addAnnotation(const Annotation &annot, qint64 delaysecs)
     if (secsdiff >= 0 && secsdiff <= delaysecs)
       item->showMe();
   }
+
+  emit annotationAdded(annot);
+  DOUT("addAnnotation:exit");
 }
 
 void
