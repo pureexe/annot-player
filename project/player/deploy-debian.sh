@@ -4,7 +4,7 @@
 # See: https://wiki.kubuntu.org/PackagingGuide/QtApplication
 
 ## environment
-VERSION=0.1.1.1
+VERSION=0.1.1.2
 
 PACKAGE_AUTHOR="Annot Cloud"
 PACKAGE_EMAIL=annotcloud@gmail.com
@@ -15,7 +15,7 @@ PACKAGE_ARCH=i386
 PACKAGE_SECTION=video
 PACKAGE_PRIORITY=optional
 
-SRC_PREFIX=/Volumes/local/project/annot
+SRC_PREFIX=/Volumes/local/devel/annot
 SRC_RULES="$SRC_PREFIX/project/player/debian.rules"
 SRC_CONTROL="$SRC_PREFIX/project/player/debian.control"
 SRC_COPYRIGHT="$SRC_PREFIX/licenses/annot-player.txt"

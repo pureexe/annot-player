@@ -16,7 +16,7 @@
 #include <cstring>
 #include <memory>
 
-#define DEBUG "Disk"
+#define DEBUG "disk"
 #include "module/debug/debug.h"
 
 namespace { // anonymous
@@ -64,7 +64,7 @@ Disk::isValidDeviceFileName(const QString &fileName)
 Disk::Geometry
 Disk::geometryForHandle(void *handle)
 {
-  DOUT("geometryForHandle: enter");
+  DOUT("enter");
 
   // DISK_GEOMETRY: http://social.msdn.microsoft.com/Forums/en/vclanguage/thread/92a092c8-87a9-4fb8-8d25-e6d15d4266ed
   // http://support.microsoft.com/kb/q138434/
@@ -89,7 +89,7 @@ Disk::geometryForHandle(void *handle)
   if (bResult) {
     Q_ASSERT(dwBytesReturned == sizeof(dgDisk));
 
-    DOUT("geometryForHandle: succeeded");
+    DOUT("succeeded");
 
     ret.mediaType = (Disk::MediaType)dgDisk.MediaType;
     ret.cylinders = dgDisk.Cylinders.QuadPart;
@@ -98,9 +98,9 @@ Disk::geometryForHandle(void *handle)
     ret.bytesPerSector = dgDisk.BytesPerSector;
 
   } else
-    DOUT("geometryForHandle: failed with error:" << ::GetLastError());
+    DOUT("failed with error:" << ::GetLastError());
 
-  DOUT("geometryForHandle: exit");
+  DOUT("exit");
   return ret;
 }
 
@@ -115,17 +115,17 @@ Disk::~Disk()
 Disk::Disk(QObject *parent)
   : Base(parent), handle_(0), pmr_(0)
 {
-  DOUT("Disk: enter");
+  DOUT("enter");
   DOUT("fileName: " + fileName_);
-  DOUT("Disk: exit");
+  DOUT("exit");
 }
 
 Disk::Disk(const QString &fileName, QObject *parent)
   : Base(parent), fileName_(fileName), handle_(0), pmr_(0)
 {
-  DOUT("Disk: enter");
+  DOUT("enter");
   DOUT("fileName:" << fileName_);
-  DOUT("Disk: exit");
+  DOUT("exit");
 }
 
 const QString &
@@ -160,7 +160,7 @@ Disk::isOpen() const
 bool
 Disk::open(OpenMode mode, bool lock)
 {
-  DOUT("open: enter");
+  DOUT("enter");
   if (handle_) {
     handle_ = 0;
     Q_ASSERT(0);
@@ -169,7 +169,7 @@ Disk::open(OpenMode mode, bool lock)
 
   if (mode != QIODevice::ReadOnly) {
     Q_ASSERT(0);
-    DOUT("open: exit: Invalid OpenMode");
+    DOUT("exit: Invalid OpenMode");
     return false;
   }
 
@@ -186,7 +186,7 @@ Disk::open(OpenMode mode, bool lock)
   );
 
   if (hDisk != INVALID_HANDLE_VALUE) {
-    DOUT("open: succeeded");
+    DOUT("succeeded");
 
     if (lock)
       setRemovableMediaLocked(lock);
@@ -195,22 +195,22 @@ Disk::open(OpenMode mode, bool lock)
     geometry_ = geometryForHandle(handle_);
 
     Q_ASSERT(!geometry_.isNull());
-    DOUT("open: media type =" << geometry_.mediaType);
+    DOUT("media type =" << geometry_.mediaType);
     DOUT("open media size =" << geometry_.size());
   } else
-    DOUT("open: failed with error:" << ::GetLastError());
+    DOUT("failed with error:" << ::GetLastError());
 
-  DOUT("open: exit");
+  DOUT("exit");
   return handle_;
 }
 
 void
 Disk::close()
 {
-  DOUT("close: enter");
+  DOUT("enter");
   if (!handle_) {
     Q_ASSERT(0);
-    DOUT("close: exit");
+    DOUT("exit");
     return;
   }
 
@@ -224,7 +224,7 @@ Disk::close()
   }
 
   handle_ = 0;
-  DOUT("close: exit");
+  DOUT("exit");
 }
 
 // See: http://www.cplusplus.com/forum/windows/30402/
@@ -275,17 +275,17 @@ Disk::seek(qint64 pos)
 QByteArray
 Disk::read(int maxSize)
 {
-  DOUT("read: enter: maxSize =" << maxSize);
+  DOUT("enter: maxSize =" << maxSize);
   if (maxSize <= 0) {
-    DOUT("read: exit");
+    DOUT("exit");
     return QByteArray();
   }
 
   if (!handle_ || geometry_.isNull()
       || !geometry_.bytesPerSector) {
-    DOUT("read: Invalid handle or geometry");
+    DOUT("Invalid handle or geometry");
     Q_ASSERT(0);
-    DOUT("read: exit");
+    DOUT("exit");
     return QByteArray();
   }
 
@@ -297,7 +297,7 @@ Disk::read(int maxSize)
   DWORD dwBlockSize = geometry_.bytesPerSector;
   if (dwBufferBytes % dwBlockSize)
       dwBufferBytes = (dwBufferBytes / dwBlockSize + 1) * dwBlockSize;
-  DOUT("read: dwReturnBytes =" << dwReturnBytes <<
+  DOUT(" dwReturnBytes =" << dwReturnBytes <<
        ", dwBufferBytes =" << dwBufferBytes <<
        ", dwBlockSize =" << dwBlockSize);
   Q_ASSERT(dwBufferBytes >= dwReturnBytes);
@@ -353,13 +353,13 @@ Disk::read(int maxSize)
 
   DWORD dwReadBytes;
   BOOL bResult = ::ReadFile(hDisk, buffer.get(), dwBufferBytes, &dwReadBytes, (LPOVERLAPPED)0); // read sector
-  DOUT("read: bResult = " << bResult << ", dwReadBytes =" << dwReadBytes);
+  DOUT("bResult = " << bResult << ", dwReadBytes =" << dwReadBytes);
   if (!bResult || !dwReadBytes) {
-    DOUT("read: failed to read file with error:" << ::GetLastError());
-    DOUT("read: exit");
+    DOUT("failed to read file with error:" << ::GetLastError());
+    DOUT("exit");
     return QByteArray();
   }
-  DOUT("read: succeeded");
+  DOUT("succeeded");
 
   if (dwReadBytes < dwReturnBytes)
     dwReturnBytes = dwReadBytes;
@@ -368,7 +368,7 @@ Disk::read(int maxSize)
     seek(dwReturnBytes);
   }
 
-  DOUT("read: exit");
+  DOUT("exit");
   return QByteArray(buffer.get(), dwReturnBytes);
 }
 
@@ -381,15 +381,15 @@ Disk::isRemovableMediaLocked() const
 void
 Disk::setRemovableMediaLocked(bool t)
 {
-  DOUT("setRemovableMediaLocked:enter: toLock =" << t);
+  DOUT("enter: toLock =" << t);
   if (t == isRemovableMediaLocked()) {
-    DOUT("setRemovableMediaLocked:exit: no changes");
+    DOUT("exit: no changes");
     return;
   }
 
   HANDLE hDisk = (HANDLE)handle_;
   if (hDisk == INVALID_HANDLE_VALUE) {
-    DOUT("setRemovableMediaLocked:exit: invalid disk handle");
+    DOUT("exit: invalid disk handle");
     return;
   }
 
@@ -413,7 +413,7 @@ Disk::setRemovableMediaLocked(bool t)
 
   pmr_ = pmr;
 
-  DOUT("setRemovableMediaLocked:exit: locked =" << (bool)pmr_);
+  DOUT("exit: locked =" << (bool)pmr_);
 }
 
 // EOF

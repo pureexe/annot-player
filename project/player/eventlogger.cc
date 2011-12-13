@@ -11,7 +11,7 @@
 #include "module/serveragent/serveragent.h"
 #include <QtCore>
 
-#define DEBUG "EventLogger"
+#define DEBUG "eventlogger"
 #include "module/debug/debug.h"
 
 using namespace Logger;
@@ -50,7 +50,7 @@ EventLogger::createConnections()
 void
 EventLogger::startLogUntilPlaying()
 {
-  DOUT("startLogUntilPlaying:enter");
+  DOUT("enter");
 
   if (player_->hasMedia()) {
     logCount_ = 0;
@@ -63,17 +63,17 @@ EventLogger::startLogUntilPlaying()
       logUntilPlayingTimer_->start();
   }
 
-  DOUT("startLogUntilPlaying:exit");
+  DOUT("exit");
 }
 
 void
 EventLogger::stopLogUntilPlaying()
 {
-  DOUT("stopLogUntilPlaying:enter");
+  DOUT("enter");
   Q_ASSERT(logUntilPlayingTimer_);
   if (logUntilPlayingTimer_ && logUntilPlayingTimer_->isActive())
     logUntilPlayingTimer_->stop();
-  DOUT("stopLogUntilPlaying:exit");
+  DOUT("exit");
 }
 
 void

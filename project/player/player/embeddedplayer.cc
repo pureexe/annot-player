@@ -13,7 +13,7 @@
 #include "core/gui/toolbutton.h"
 #include <QtGui>
 
-#define DEBUG "EmbeddedPlayerUi"
+#define DEBUG "embeddedplayerui"
 #include "module/debug/debug.h"
 
 // - Constructions -
@@ -185,7 +185,8 @@ EmbeddedPlayerUi::invalidateGeometry()
         resize(newSize);
 
       //int window_header_height = hub()->isSignalTokenMode() ? 40 : 0;
-      enum { window_header_height = 40 };
+      //enum { window_header_height = 40 };
+      enum { window_header_height = 0 };
 
       int x_left = r.x();
       int y = top_ ? r.top() + window_header_height : r.bottom() - height();

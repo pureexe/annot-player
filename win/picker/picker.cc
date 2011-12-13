@@ -10,7 +10,7 @@
 #include <qt_windows.h>
 #include <QtCore>
 
-#define DEBUG "Picker"
+#define DEBUG "picker"
 #include "module/debug/debug.h"
 
 #ifndef PICKER_DLL_NAME
@@ -105,12 +105,12 @@ WindowPicker::setSingleShot(bool t)
 void
 WindowPicker::pickWindow(WId hwnd)
 {
-  DOUT("WindowPicker:pickWindow:enter: WId =" << hwnd);
+  DOUT("enter: WId =" << hwnd);
   if (isSingleShot())
     stop();
 
   emit windowPicked(hwnd);
-  DOUT("WindowPicker:pickWindow:exit");
+  DOUT("exit");
 }
 
 void
@@ -136,7 +136,7 @@ WindowPicker::start()
     return;
 
   if (!hInstance) {
-    DOUT("WindowPicker:start: DLL name:" << PICKER_MODULE_NAME);
+    DOUT("start: DLL name:" << PICKER_MODULE_NAME);
     hInstance = ::GetModuleHandle(PICKER_MODULE_NAME);
 
     Q_ASSERT(hInstance);
@@ -146,7 +146,7 @@ WindowPicker::start()
 
   // Global mode
   impl_->hook = ::SetWindowsHookEx(WH_MOUSE_LL, ::MouseProc, hInstance, 0);
-  DOUT("WindowPicker:start: started");
+  DOUT("start: started");
 }
 
 void
@@ -155,7 +155,7 @@ WindowPicker::stop()
   if (impl_->hook) {
     ::UnhookWindowsHookEx((HHOOK)impl_->hook);
     impl_->hook = 0;
-    DOUT("WindowPicker:stop: stoppped");
+    DOUT("stop: stoppped");
   }
 }
 

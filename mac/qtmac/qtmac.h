@@ -15,6 +15,12 @@ namespace QtMac {
   QString homeLogsPath();
   QString homeApplicationSupportPath();
 
+  // - Devices -
+
+#ifdef WITH_IOKIT
+  QStringList getCDMediaPaths();
+#endif // WITH_IOKIT
+
 } // namespace QtMac
 
 #endif // QTMAC_H

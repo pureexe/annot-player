@@ -127,27 +127,33 @@ inline void __cdecl operator delete(void *pBlock)
 inline void __cdecl operator delete[](void* pBlock)
 { ::RtlFreeHeap(::hHeap, 0, pBlock); }
 */
-#include <memory>
-inline void *operator new(size_t size) throw()
+#include <cstdlib>
+inline void * __cdecl operator new(size_t size) throw()
 {
-  void *p = ::malloc(size);
+  if (!size)    // When the value of the expression in a direct-new-declarator is zero,
+    size = 4;   // the allocation function is called to allocatean array with no elements.(ISO)
+
+  void *p = malloc(size);
   if (p)
-    ::memset(p, 0, size);
+    memset(p, 0, size);
   return p;
 }
 
-inline void *operator new[](size_t size) throw()
+inline void * __cdecl operator new[](size_t size) throw()
 {
-  void *p = ::malloc(size);
+  if (!size)    // When the value of the expression in a direct-new-declarator is zero,
+    size = 4;   // the allocation function is called to allocatean array with no elements.(ISO)
+
+  void *p = malloc(size);
   if (p)
-    ::memset(p, 0, size);
+    memset(p, 0, size);
   return p;
 }
 
-inline void operator delete(void *p) throw()
-{ ::free(p); }
+inline void __cdecl operator delete(void *p) throw()
+{ free(p); }
 
-inline void operator delete[](void *p) throw()
-{ ::free(p); }
+inline void __cdecl operator delete[](void *p) throw()
+{ free(p); }
 
 // EOF

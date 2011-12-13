@@ -9,7 +9,7 @@
 #include "annotationeditor.h"
 #include <QtGui>
 
-#define DEBUG "CommandLineEdit"
+#define DEBUG "commandlineedit"
 #include "module/debug/debug.h"
 
 // - Constructions -
@@ -90,25 +90,25 @@ CommandLineEdit::keyPressEvent(QKeyEvent *event)
   // Do not pass escape key to parent.
   switch (event->key()) {
   case Qt::Key_Escape:
-    DOUT("keyPressEvent: Key_Escape");
+    DOUT("Key_Escape");
     clearFocus();    // FIXME: after clear focus, which window get new focus?
     event->accept();
     return;
 
   case Qt::Key_Return:
-    DOUT("keyPressEvent: Key_Return");
+    DOUT("Key_Return");
     event->accept();
     emit returnPressed();
     return;
 
   case Qt::Key_Up:
-    DOUT("keyPressEvent: Key_Up");
+    DOUT("Key_Up");
     previous();
     event->accept();
     return;
 
   case Qt::Key_Down:
-    DOUT("keyPressEvent: Key_Down");
+    DOUT("Key_Down");
     next();
     event->accept();
     return;

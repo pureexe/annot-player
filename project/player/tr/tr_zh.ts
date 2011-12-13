@@ -331,6 +331,11 @@
         <source>bottom</source>
         <translation type="obsolete">底部</translation>
     </message>
+    <message>
+        <location filename="../dialog/devicedialog.cc" line="80"/>
+        <source>auto</source>
+        <translation>自动</translation>
+    </message>
 </context>
 <context>
     <name>EventLogger</name>
@@ -531,22 +536,22 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1526"/>
+        <location filename="../mainwindow.cc" line="1535"/>
         <source>analyzing media ...</source>
         <translation>播放使魔：媒体分析中...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1713"/>
+        <location filename="../mainwindow.cc" line="1723"/>
         <source>snapshot saved on the destop</source>
         <translation>播放使魔：截图保存到了桌面上</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2113"/>
+        <location filename="../mainwindow.cc" line="2123"/>
         <source>connecting server to submit alias ...</source>
         <translation>通信使魔：正在连接服务器提交别名...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2127"/>
+        <location filename="../mainwindow.cc" line="2137"/>
         <source>alias saved</source>
         <translation>通信使魔：别名已保存</translation>
     </message>
@@ -555,152 +560,152 @@
         <translation type="obsolete">通信使魔：修改别名失败</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2142"/>
+        <location filename="../mainwindow.cc" line="2152"/>
         <source>annotation saved</source>
         <translation>通信使魔：弹幕已保存</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2144"/>
+        <location filename="../mainwindow.cc" line="2154"/>
         <source>failed to update annotation text</source>
         <translation>通信使魔：远程魔法修改弹幕失败</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2204"/>
+        <location filename="../mainwindow.cc" line="2214"/>
         <source>connecting server to query media/game token ...</source>
         <translation>通信使魔：远程魔法搜索弹幕中...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2285"/>
+        <location filename="../mainwindow.cc" line="2299"/>
         <source>searching for token in cache ...</source>
         <translation>通信使魔：正在本地缓冲中搜索弹幕信息...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2389"/>
+        <location filename="../mainwindow.cc" line="2403"/>
         <source>connecting server to submit annot ...</source>
         <translation>通信使魔：远程魔法提交弹幕中...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3482"/>
+        <location filename="../mainwindow.cc" line="3517"/>
         <source>submit bless cast to token ...</source>
         <translation>通信使魔：施展祝福魔法中...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3525"/>
+        <location filename="../mainwindow.cc" line="3560"/>
         <source>submit curse cast to token ...</source>
         <translation>通信使魔：施展诅咒魔法中...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3600"/>
+        <location filename="../mainwindow.cc" line="3635"/>
         <source>connecting server to logout ...</source>
         <translation>通信使魔：远程魔法退出登录中...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3707"/>
+        <location filename="../mainwindow.cc" line="3742"/>
         <source>new version released, check here: </source>
         <translation>通信使魔：新版魔导书发现，下载地址：</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3774"/>
+        <location filename="../mainwindow.cc" line="3809"/>
         <source>found process id for window</source>
         <translation>侦听使魔：发现窗口的进程</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3777"/>
+        <location filename="../mainwindow.cc" line="3812"/>
         <source>process id for window was not found</source>
         <translation>侦听使魔：窗口的进程没有找到</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3788"/>
+        <location filename="../mainwindow.cc" line="3823"/>
         <source>process was attached</source>
         <translation>侦听使魔：进程已同步</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3792"/>
+        <location filename="../mainwindow.cc" line="3827"/>
         <source>process attached</source>
         <translation>侦听使魔：同步进程成功</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3795"/>
+        <location filename="../mainwindow.cc" line="3830"/>
         <source>failed to attach process </source>
         <translation>侦听使魔：同步进程失败</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3797"/>
+        <location filename="../mainwindow.cc" line="3832"/>
         <source>Is the process running now?</source>
         <translation>侦听使魔：程序真的开了吗？</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3799"/>
+        <location filename="../mainwindow.cc" line="3834"/>
         <source>Run me as administrator and try again (o^^o)</source>
         <translation>侦听使魔：换成管理员的身份试试吧</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3801"/>
+        <location filename="../mainwindow.cc" line="3836"/>
         <source>Restart the target process might help -_-</source>
         <translation>侦听使魔：可能需要重启一下程序</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3812"/>
+        <location filename="../mainwindow.cc" line="3847"/>
         <source>process was started</source>
         <translation>侦听使魔：程序已经启动</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3815"/>
+        <location filename="../mainwindow.cc" line="3850"/>
         <source>told process to start</source>
         <translation>侦听使魔：刚刚让程序启动</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3823"/>
+        <location filename="../mainwindow.cc" line="3858"/>
         <source>failed to start process</source>
         <translation>侦听使魔：开始程序失败</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3827"/>
+        <location filename="../mainwindow.cc" line="3862"/>
         <source>wait %1 seconds for process to start ...</source>
         <translation>侦听使魔：等待%1秒程序启动...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3840"/>
+        <location filename="../mainwindow.cc" line="3875"/>
         <source>openning process</source>
         <translation>播放使魔：正在打开程序</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3932"/>
+        <location filename="../mainwindow.cc" line="3967"/>
         <source>connecting server to change anonymous status ...</source>
         <translation>通信使魔：远程魔法修改匿名属性中...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3944"/>
+        <location filename="../mainwindow.cc" line="3979"/>
         <source>failed to change user anonymous state</source>
         <translation>通信使魔：远程魔法修改匿名属性失败</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3954"/>
+        <location filename="../mainwindow.cc" line="3989"/>
         <source>you are anonymous now</source>
         <translation>通信使魔：主人已经匿名了</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3956"/>
+        <location filename="../mainwindow.cc" line="3991"/>
         <source>you are not anonymous now</source>
         <translation>通信使魔：主人不再匿名了</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3969"/>
+        <location filename="../mainwindow.cc" line="4004"/>
         <source>connecting server to change language ...</source>
         <translation>通信使魔：远程魔法修改语言属性中...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3981"/>
+        <location filename="../mainwindow.cc" line="4016"/>
         <source>failed to change user language</source>
         <translation>通信使魔：远程魔法修改语言属性失败</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3990"/>
+        <location filename="../mainwindow.cc" line="4025"/>
         <source>your language is </source>
         <translation>通信属性：主人的语言属性是</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4059"/>
+        <location filename="../mainwindow.cc" line="4094"/>
         <source>restart the app to use the new language</source>
         <translation>播放使魔：使用新的语言需要重启播放器</translation>
     </message>
@@ -733,7 +738,7 @@
         <translation type="obsolete">播放使魔：文件不存在</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4285"/>
+        <location filename="../mainwindow.cc" line="4320"/>
         <source>invalid lnk</source>
         <translation>播放使魔：快捷方式好像无效</translation>
     </message>

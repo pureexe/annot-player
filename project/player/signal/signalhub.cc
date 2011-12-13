@@ -6,7 +6,7 @@
 #include <QtCore>
 #include <cmath>
 
-//#define DEBUG "SignalHub"
+//#define DEBUG "signalhub"
 //#include "module/debug/debug.h"
 
 using namespace Logger;

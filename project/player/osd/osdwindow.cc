@@ -8,7 +8,7 @@
 #endif // Q_WS_X11
 #include <QtGui>
 
-#define DEBUG "OsdWindow"
+#define DEBUG "osdwindow"
 #include "module/debug/debug.h"
 
 // - Constructions -
@@ -52,11 +52,11 @@ OsdWindow::setEventListener(Core::EventListener *listener)
 
 // - Events -
 
-void OsdWindow::contextMenuEvent(QContextMenuEvent *event) { DOUT("contextMenuEvent");     if (listener_) listener_->sendContextMenuEvent(event); }
-void OsdWindow::mouseMoveEvent(QMouseEvent *event)         { DOUT("mouseMoveEvent");       if (listener_) listener_->sendMouseMoveEvent(event); }
-void OsdWindow::mousePressEvent(QMouseEvent *event)        { DOUT("mousePressEvent");      if (listener_) listener_->sendMousePressEvent(event); }
-void OsdWindow::mouseReleaseEvent(QMouseEvent *event)      { DOUT("mouseReleaseEvent");    if (listener_) listener_->sendMouseReleaseEvent(event); }
-void OsdWindow::mouseDoubleClickEvent(QMouseEvent *event)  { DOUT("mouseDoubleClickEvent");if (listener_) listener_->sendMouseDoubleClickEvent(event); }
+void OsdWindow::contextMenuEvent(QContextMenuEvent *event) { DOUT("enter"); if (listener_) listener_->sendContextMenuEvent(event);      DOUT("exit"); }
+void OsdWindow::mouseMoveEvent(QMouseEvent *event)         { DOUT("enter"); if (listener_) listener_->sendMouseMoveEvent(event);        DOUT("exit"); }
+void OsdWindow::mousePressEvent(QMouseEvent *event)        { DOUT("enter"); if (listener_) listener_->sendMousePressEvent(event);       DOUT("exit"); }
+void OsdWindow::mouseReleaseEvent(QMouseEvent *event)      { DOUT("enter"); if (listener_) listener_->sendMouseReleaseEvent(event);     DOUT("exit"); }
+void OsdWindow::mouseDoubleClickEvent(QMouseEvent *event)  { DOUT("enter"); if (listener_) listener_->sendMouseDoubleClickEvent(event); DOUT("exit"); }
 
 void
 OsdWindow::closeEvent(QCloseEvent *event)

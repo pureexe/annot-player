@@ -7,7 +7,7 @@
 #include <QtNetwork>
 #include <QtXml>
 
-#define DEBUG "Translator"
+#define DEBUG "translator"
 #include "module/debug/debug.h"
 
 // - Constructions -
@@ -43,11 +43,11 @@ Translator::translationQuery(const QString &text, const QString &to, const QStri
 void
 Translator::translate(const QString &text, const QString &to, const QString &from) const
 {
-  DOUT("translate:enter");
+  DOUT("enter");
   QUrl query = translationQuery(text, to, from);
-  DOUT("translate: query =" << query);
+  DOUT("query =" << query);
   qnam_->get(QNetworkRequest(query));
-  DOUT("translate:exit");
+  DOUT("exit");
 }
 
 // Sample request: http://api.microsofttranslator.com/v2/Http.svc/Translate?appId=FCB48AFBE3CB7B0E7AA146C950762FC87EA13FBB&text=hello&from=en&to=ja
@@ -55,13 +55,13 @@ Translator::translate(const QString &text, const QString &to, const QString &fro
 void
 Translator::processNetworkReply(QNetworkReply *reply)
 {
-  DOUT("processNetworkReply:enter");
+  DOUT("enter");
   Q_ASSERT(reply);
   reply->deleteLater();
 
   if (!reply->isFinished() || reply->error() != QNetworkReply::NoError) {
     emit networkError(reply->errorString());
-    DOUT("processNetworkReply:exit: error =" << reply->error());
+    DOUT("exit: error =" << reply->error());
     return;
   }
 
@@ -69,7 +69,7 @@ Translator::processNetworkReply(QNetworkReply *reply)
   doc.setContent(reply->readAll());
   if (doc.isNull()) {
     emit networkError(tr("invalid server reply with null document root"));
-    DOUT("processNetworkReply:exit: error, invalid document root");
+    DOUT("exit: error, invalid document root");
     return;
   }
 
@@ -77,14 +77,14 @@ Translator::processNetworkReply(QNetworkReply *reply)
 
   if (e.tagName() != "string") {
     emit networkError(tr("server reply with root tag") + QString(" (tag = %1)").arg(e.tagName()));
-    DOUT("processNetworkReply:exit: error, invalid root tag =" << e.tagName());
+    DOUT("exit: error, invalid root tag =" << e.tagName());
     return;
   }
 
   QString received = e.text();
-  DOUT("processNetworkReply: received =" << received);
+  DOUT("received =" << received);
   emit translated(received);
-  DOUT("processNetworkReply:exit");
+  DOUT("exit");
 }
 
 // EOF

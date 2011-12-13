@@ -9,7 +9,7 @@
 #endif // USE_MODULE_SERVERAGENT
 #include <QtCore>
 
-#define DEBUG "ClientAgent"
+#define DEBUG "clientagent"
 #include "module/debug/debug.h"
 
 using namespace Core::Universe;
@@ -22,16 +22,16 @@ ClientAgent::ClientAgent(QObject *parent)
   , server_(0)
 #endif // USE_MODULE_SERVERAGENT
 {
-  DOUT("ClientAgent:enter");
+  DOUT("enter");
   qsrand(QDateTime::currentMSecsSinceEpoch());
   randomizePrivateKey();
 
-  DOUT("ClientAgent: try start service");
+  DOUT("try start service");
   service_ = new ClientService(this);
   service_->setDelegate(this);
 
   randomizeServicePort();
-  DOUT("ClientAgent:exit");
+  DOUT("exit");
 
   service_->start();
 }
@@ -127,14 +127,14 @@ ClientAgent::chat(const QString &text)
 void
 ClientAgent::reportSoapError(int err)
 {
-  DOUT("reportSoapError:enter: err =" << err);
+  DOUT("enter: err =" << err);
   switch (err) {
   case 28:      emit connectionError(); break;
   case 404:     emit error404(); break;
   case 500:     emit clientError(); break;
   default:      emit unknownError();
   }
-  DOUT("reportSoapError:exit");
+  DOUT("exit");
 }
 
 // - Login -
@@ -161,21 +161,21 @@ ClientAgent::setUser(const User &user)
 bool
 ClientAgent::login(const QString &userName, const QString &passwordDigest)
 {
-  DOUT("login:enter");
+  DOUT("enter");
   emit loginRequested(userName);
   user_.setName(userName);
   user_.setPassword(passwordDigest);
   authorized_ = delegate_->login(userName, passwordDigest);
 
   if (authorized_) {
-    DOUT("login:update my user");
+    DOUT("update my user");
     user_ = delegate_->getUser();
     //Q_ASSERT(user_.id());
-    DOUT("login: new user id =" << user_.id());
+    DOUT("new user id =" << user_.id());
     emit loginSucceeded(userName);
   } else
     emit loginFailed(userName);
-  DOUT("login:exit: ret =" << authorized_);
+  DOUT("exit: ret =" << authorized_);
   emit userChanged();
   return authorized_;
 }

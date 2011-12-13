@@ -12,7 +12,7 @@
 #include "core/gui/toolbutton.h"
 #include <QtGui>
 
-#define DEBUG "SeekDialog"
+#define DEBUG "seekdialog"
 #include "module/debug/debug.h"
 
 using namespace Logger;

@@ -2,6 +2,12 @@ ChangeLog
 Annot Project
 Since 6/18/2011
 
+12/13/2011	annot.player	0.1.1.2
+        * Windows tool chain updated. Qt library rebuilt. gSOAP updated.
+        * Added disc type automatic detection.
+        * Launcher dependency on msvcrt removed.
+        * Offline annotation caching improved.
+
 12/7/2011	annot.player	0.1.1.1
         * Added Fedora support.
         * Added CD/DVD device dialog. CD/DVD buffering performance improved.

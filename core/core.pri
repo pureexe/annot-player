@@ -3,9 +3,6 @@
 
 include(../config.pri)
 
-include($$ROOTDIR/module/ioutil/ioutil.pri)
-DEFINES += USE_MODULE_IOUTIL
-
 HEADERS += \
     $$PWD/annotationparser.h \
     $$PWD/cmd.h \

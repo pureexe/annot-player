@@ -42,7 +42,6 @@ Grabber::grabWindow(WId winId)
 
   QString ts = QDateTime::currentDateTime().toString("-yyyy-mm-dd-hh-mm-ss");
   QString file = QString("%1/%2%3.png").arg(savePath_).arg(baseName_).arg(ts);
-  qDebug()<<file;
   pm.save(file, "PNG");
 }
 

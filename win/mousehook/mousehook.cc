@@ -6,7 +6,7 @@
 #include <qt_windows.h>
 #include <QtGui>
 
-#define DEBUG "MouseHook"
+#define DEBUG "mousehook"
 #include "module/debug/debug.h"
 
 #ifndef MOUSEHOOK_DLL_NAME
@@ -142,7 +142,7 @@ MouseHook::start()
     return;
 
   if (!hInstance) {
-    DOUT("MouseHook:start: DLL name:" << MOUSEHOOK_MODULE_NAME);
+    DOUT("start: DLL name:" << MOUSEHOOK_MODULE_NAME);
     hInstance = ::GetModuleHandle(MOUSEHOOK_MODULE_NAME);
 
     Q_ASSERT(hInstance);
@@ -152,7 +152,7 @@ MouseHook::start()
 
   // Global mode
   impl_->hook = ::SetWindowsHookEx(WH_MOUSE_LL, ::MouseProc, hInstance, 0);
-  DOUT("MouseHook:start: started");
+  DOUT("start: started");
 }
 
 void
@@ -161,7 +161,7 @@ MouseHook::stop()
   if (impl_->hook) {
     ::UnhookWindowsHookEx((HHOOK)impl_->hook);
     impl_->hook = 0;
-    DOUT("MouseHook:stop: stoppped");
+    DOUT("stop: stoppped");
   }
 }
 

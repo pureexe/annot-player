@@ -535,7 +535,7 @@ DWORD CommandQueue::ProcessCommand(LPWSTR cmd, DWORD pid)
       break;
     default:
       //ConsoleOutput(ErrorSyntax);
-      DOUT("AddLink: syntax error");
+      DOUT("syntax error");
     }
     break;
   /*}

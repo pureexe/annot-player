@@ -181,9 +181,9 @@ public slots:
   // TODO
   //void addAnnotations(const Core::AnnotationList &l);
 
-protected slots:
   void removeAnnotations(); // delete annotation without reading ones
 
+protected slots:
   void updateAnnotationText(const QString &text);
 
 public:

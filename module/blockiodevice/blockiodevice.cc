@@ -33,7 +33,7 @@ extern "C" {
 #endif // Q_OS_UNIX
 } // extern "C"
 
-#define DEBUG "BlockIODevice"
+#define DEBUG "blockiodevice"
 #include "module/debug/debug.h"
 
 #ifdef Q_OS_MAC
@@ -80,6 +80,11 @@ namespace { // anonymous, CD access
         && cdd.DiskData == CDROM_DISK_AUDIO_TRACK;
 #elif defined(Q_OS_LINUX)
     ret = ::ioctl(fd, CDROM_DISC_STATUS, 0) == CDS_AUDIO;
+#elif defined (Q_OS_MAC)
+    // FIXME: need a to figure out how to get disk type through ioctl on Mac OS X
+    u_int32_t blockSize;
+    if (::ioctl(fd, IOCTL_BLOCKSIZE, &blockSize) >= 0)
+      ret = blockSize == CD_FRAMESIZE_RAW;
 #else
     Q_UNUSED(fd);
 #endif // Q_OS_
@@ -107,7 +112,7 @@ namespace { // anonymous, CD access
       if (bResult)
         ret = dgDisk.SectorsPerTrack;
       else
-        DOUT("getBlockSize_: DeviceIoControl error:" << ::GetLastError());
+        DOUT("DeviceIoControl error:" << ::GetLastError());
     }
 #else // UNIX
   #ifdef IOCTL_BLOCKSIZE
@@ -119,6 +124,12 @@ namespace { // anonymous, CD access
   }
 
 } // anonymous namespace
+
+// - Properties -
+
+bool
+BlockIODevice::isAudioCD() const
+{ return fd_ >= 0 ? ::isAudioCD_(fd_) : false; }
 
 // - Open/close -
 
@@ -190,7 +201,7 @@ BlockIODevice::readData(char *data, qint64 maxSize)
     DOUT("readData: WARNING: maxSize is not blocked");
   else
 #ifdef Q_OS_WIN
-  if (::isAudioCD_(fd_)) {
+  if (isAudioCD()) {
     DOUT("readData: take windows audio CD code path");
     // Largest possible number tested on win7. No idea if it is portable.
     enum { blocks_per_req = 55 };
@@ -249,7 +260,7 @@ BlockIODevice::readData(char *data, qint64 maxSize)
   }
 #elif defined(Q_OS_UNIX)
 #ifdef Q_OS_LINUX
-  if (::isAudioCD_(fd_)) {
+  if (isAudioCD()) {
     DOUT("readData: take linux audio CD code path");
     qint64 blockCount = maxSize / blockSize_;
     enum { blocks_per_req = 20 }; // nframes, must in range [1 75]

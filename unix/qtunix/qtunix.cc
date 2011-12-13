@@ -7,7 +7,12 @@
 #include "qtunix.h"
 #include <QtCore>
 
-#define DEVICE_PREFIX "/dev/"
+#ifdef Q_OS_MAC
+  #include <paths.h>
+  #define DEVICE_PREFIX _PATH_DEV
+#else
+  #define DEVICE_PREFIX "/dev/"
+#endif // Q_OS_MAC
 
 QStringList
 QtUnix::getDevicesWithType(DeviceType type)

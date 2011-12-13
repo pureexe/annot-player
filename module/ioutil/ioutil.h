@@ -10,6 +10,8 @@ namespace IOUtil {
 
   QByteArray readBytes(const QString &filePath, qint64 readSize);
 
+  bool isAudioCD(const QString &filePath);
+
 } // namespace IOUtil
 
 #endif // IOUTIL_H

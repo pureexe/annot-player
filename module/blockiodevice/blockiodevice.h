@@ -21,7 +21,7 @@ public:
   explicit BlockIODevice(const QString &fileName, QObject *parent = 0)
     : Base(parent), fd_((fd_t)-1), blockSize_(0), fileName_(fileName) { }
 
-  virtual ~BlockIODevice() { Q_ASSERT(!isOpen()); } ///< \override
+  virtual ~BlockIODevice() { if (isOpen()) close(); } ///< \override
 
   // - Properties -
 public:
@@ -30,6 +30,8 @@ public:
 
   ///< Return sector size if the file is a block device.
   int blockSize() const { return blockSize_; }
+
+  bool isAudioCD() const;
 
   // - Overriden -
 public:

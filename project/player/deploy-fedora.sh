@@ -3,12 +3,12 @@
 # See: http://fedoraproject.org/wiki/How_to_create_an_RPM_package
 
 ## environment
-VERSION=0.1.1.1
+VERSION=0.1.1.2
 
 PACKAGE_NAME=annot-player
 PACKAGE_VERSION=$VERSION
 
-SRC_PREFIX=/Volumes/local/project/annot
+SRC_PREFIX=/Volumes/local/devel/annot
 SRC_SPEC="$SRC_PREFIX/project/player/rpm.spec"
 BUILD_PREFIX=$HOME/rpmbuild
 BUILD_SRC="$BUILD_PREFIX/SOURCES/$PACKAGE_NAME-$PACKAGE_VERSION"

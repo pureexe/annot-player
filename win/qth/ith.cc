@@ -8,7 +8,7 @@
 #include <string>  // std::wstring
 #include <cstdlib> // ::atexit
 
-#define DEBUG "Ith"
+#define DEBUG "ith"
 #include "module/debug/debug.h"
 
 #define ITH_RUNNING_MUTEX       L"ITH_RUNNING"
@@ -26,13 +26,13 @@ namespace { // anonymous
   {
     IthBackgroundService()
     {
-      DOUT("IthBackgroundService: initializing system service (fn:IthInitSystemService) ...");
+      DOUT("initializing system service (fn:IthInitSystemService) ...");
       ::IthInitSystemService(); // So that Ith- work normally.
     }
 
     ~IthBackgroundService()
     {
-      DOUT("~IthBackgroundService: closing system service (fn:IthCloseSystemService) ..." );
+      DOUT("closing system service (fn:IthCloseSystemService) ..." );
       ::IthCloseSystemService();
     }
   };
@@ -76,7 +76,7 @@ namespace { // anonymous, handlers
   LONG WINAPI
   ExceptionFilter(EXCEPTION_POINTERS *e)
   {
-    DOUT("ExceptionFiler:enter");
+    DOUT("enter");
     //WCHAR str[0x40],name[0x100];
 
     //::swprintf(str, L"Exception code: 0x%.8X\r\nAddress: 0x%.8X",
@@ -102,8 +102,8 @@ namespace { // anonymous, handlers
 
     //QMessageBox::warning(0, "Exception", msg);
     //NtTerminateProcess(NtCurrentProcess(),0);
-    DOUT("ExceptionFilter:" << msg);
-    DOUT("ExceptionFiler:exit");
+    DOUT(msg);
+    DOUT("exit");
     return 0;
   }
 
@@ -150,7 +150,7 @@ Ith::init()
 
   ::hMainWnd = 0;
 
-  DOUT("init: initializing system service (fn:IthInitSystemService) ...");
+  DOUT("initializing system service (fn:IthInitSystemService) ...");
   ::IthInitSystemService(); // So that Ith- work normally.
 
   DWORD dwDummy;
@@ -158,78 +158,78 @@ Ith::init()
   ::hPipeExist=::IthCreateEvent(ITH_RUNNING_EVENT);
   ::NtSetEvent(::hPipeExist, NULL);
 
-  DOUT("init: installing exception filer ...");
+  DOUT("installing exception filer ...");
   ::SetUnhandledExceptionFilter(ExceptionFilter);
 
-  //DOUT("init: creating hidden windows ...");
+  //DOUT("creating hidden windows ...");
   //createHiddenWindows(hIns);
 
   ::InitializeCriticalSection(&detach_cs);
 
-  DOUT("init: allocating mb_filter ...");
+  DOUT("allocating mb_filter ...");
   ::mb_filter = new CustomFilterMultiByte;
 
-  DOUT("init: allocating uni_filter ...");
+  DOUT("allocating uni_filter ...");
   ::uni_filter = new CustomFilterUnicode;
 
-  DOUT("init: allocating pid_map ...");
+  DOUT("allocating pid_map ...");
   ::pid_map = new BitMap(0x100);
 
-  DOUT("init: allocating texts ...");
+  DOUT("allocating texts ...");
   ::texts = new TextBuffer;
 
-  DOUT("init: allocating man ...");
+  DOUT("allocating man ...");
   ::man = new HookManager;
 
-  //DOUT("init: allocating pfman ...");
+  //DOUT("allocating pfman ...");
   //::pfman = new ProfileManager;
 
-  DOUT("init: allocating cmdq ...");
+  DOUT("allocating cmdq ...");
   ::cmdq = new CommandQueue;
 
-  DOUT("init: creating new pipe (fn:CreateNewPipe) ...");
+  DOUT("creating new pipe (fn:CreateNewPipe) ...");
   ::CreateNewPipe();
 
-  DOUT("init:exit");
+  DOUT("exit");
 }
 
 void
 Ith::destroy()
 {
-  DOUT("destroy:enter");
+  DOUT("enter");
 
-  DOUT("destroy: clearing running pipe event ..." );
+  DOUT("clearing running pipe event ..." );
   ::NtClearEvent(hPipeExist);
 
-  DOUT("destroy: deleting cmdq ..." );
+  DOUT("deleting cmdq ..." );
   delete cmdq;
 
-  //DOUT("destroy: deleting pfman ..." );
+  //DOUT("deleting pfman ..." );
   //delete pfman;
 
-  DOUT("destroy: deleting man ..." );
+  DOUT("deleting man ..." );
   delete man;
 
-  DOUT("destroy: deleting texts ..." );
+  DOUT("deleting texts ..." );
   delete texts;
 
-  DOUT("destroy: deleting mb_filter ..." );
+  DOUT("deleting mb_filter ..." );
   delete mb_filter;
 
-  DOUT("destroy: deleting uni_filter ..." );
+  DOUT("deleting uni_filter ..." );
   delete uni_filter;
 
-  DOUT("destroy: deleting pid_map ..." );
+  DOUT("deleting pid_map ..." );
   //delete pid_map;
 
-  DOUT("destroy: deleting static_large_buffer if valid ..." );
+  DOUT("deleting static_large_buffer if valid ..." );
   if (static_large_buffer)
     delete static_large_buffer;
 
-  DOUT("destroy: closing system service (fn:IthCloseSystemService) ..." );
+  DOUT("closing system service (fn:IthCloseSystemService) ..." );
   ::IthCloseSystemService();
 
-  DOUT("destroy:exit");
+  DOUT("exit");
 }
 
 // - Injections -
@@ -247,7 +247,7 @@ Ith::detachProcess(ulong pid)
 bool
 Ith::isElevated()
 {
-  DOUT("isElevated:enter");
+  DOUT("enter");
   bool ret;
   HANDLE hToken;
   DWORD dwRet;
@@ -259,7 +259,7 @@ Ith::isElevated()
   ret = !::NtAdjustPrivilegesToken(hToken, FALSE, &priv, sizeof(priv), NULL, &dwRet);
   ::NtClose(hToken);
 
-  DOUT("isElevated:exit: ret =" << ret);
+  DOUT("exit: ret =" << ret);
   return ret;
 }
 

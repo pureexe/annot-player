@@ -18,7 +18,7 @@ extern "C" {
 } // extern "C"
 #endif // Q_OS_UNIX
 
-#define DEBUG "Application"
+#define DEBUG "application"
 #include "module/debug/debug.h"
 
 // - Debug -
@@ -145,7 +145,7 @@ Application::startLoggingDebugMessage()
     debug.close();
 
     qInstallMsgHandler(::debugMessageHandler);
-    DOUT("main: debug message handler installed");
+    DOUT("debug message handler installed");
   }
 }
 

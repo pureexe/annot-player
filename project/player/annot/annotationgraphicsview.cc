@@ -18,7 +18,7 @@
 #include <boost/typeof/typeof.hpp>
 #include <climits>
 
-//#define DEBUG "AnnotationGraphicsView"
+//#define DEBUG "annotationgraphicsview"
 #include "module/debug/debug.h"
 
 using namespace Core::Cloud;
@@ -426,17 +426,17 @@ AnnotationGraphicsView::invalidateAnnotations()
 void
 AnnotationGraphicsView::addAnnotations(const AnnotationList &annots)
 {
-  DOUT("addAnnotations:enter: size =" << annots.size());
+  DOUT("enter: size =" << annots.size());
   if (!annots.empty())
     foreach (const Annotation &a, annots)
       addAnnotation(a);
-  DOUT("addAnnotations:exit");
+  DOUT("exit");
 }
 
 void
 AnnotationGraphicsView::addAnnotation(const Annotation &annot, qint64 delaysecs)
 {
-  DOUT("addAnnotation:enter: aid =" << annot.id() << ", pos =" << annot.pos());
+  DOUT("enter: aid =" << annot.id() << ", pos =" << annot.pos());
   AnnotationGraphicsItem *item = new AnnotationGraphicsItem(annot, hub_, this);
 
   qint64 pos = annot.pos();
@@ -460,7 +460,7 @@ AnnotationGraphicsView::addAnnotation(const Annotation &annot, qint64 delaysecs)
   }
 
   emit annotationAdded(annot);
-  DOUT("addAnnotation:exit");
+  DOUT("exit");
 }
 
 void
@@ -516,14 +516,14 @@ AnnotationGraphicsView::itemsCount(int from, int to) const
   void \
   AnnotationGraphicsView::_sender(_event *event) \
   { \
-    DOUT(# _event ": enter"); \
+    DOUT("enter"); \
     if (event) { \
       QGraphicsItem *item = itemAt(mapFromGlobal(event->globalPos())); \
       AnnotationGraphicsItem *annot = dynamic_cast<AnnotationGraphicsItem*>(item); \
       if (annot) \
         annot->_receiver(event); \
     } \
-    DOUT(# _event ": exit"); \
+    DOUT("exit"); \
   }
 
   SEND_EVENT(sendContextMenuEvent, contextMenuEvent, QContextMenuEvent)
@@ -539,14 +539,14 @@ AnnotationGraphicsView::itemsCount(int from, int to) const
 void
 AnnotationGraphicsView::showAnnotationsAtPos(qint64 pos)
 {
-  DOUT("showAnnotationsAtPos:enter: pos =" << pos);
+  DOUT("enter: pos =" << pos);
   if (hub_->isMediaTokenMode())
     pos = pos / 1000; // msecs => secs
 
   //qDebug() << annots_.keys();
 
   if (annots_.contains(pos)) {
-    DOUT("showAnnotationsAtPos: found annotations at pos =" << pos);
+    DOUT("found annotations at pos =" << pos);
     QList<AnnotationGraphicsItem*> *l = annots_[pos];
     if (l && !l->empty())
       foreach (AnnotationGraphicsItem *item, *l)
@@ -556,7 +556,7 @@ AnnotationGraphicsView::showAnnotationsAtPos(qint64 pos)
 
   emit posChanged();
 
-  DOUT("showAnnotationsAtPos:exit");
+  DOUT("exit");
 }
 
 void

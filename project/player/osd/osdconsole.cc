@@ -8,7 +8,7 @@
 #include "uistyle.h"
 #include <QtGui>
 
-#define DEBUG "OsdConsole"
+#define DEBUG "osdconsole"
 #include "module/debug/debug.h"
 
 // - Constructions -
@@ -105,7 +105,7 @@ OsdConsole::operator<<(const QString &text)
 void
 OsdConsole::mousePressEvent(QMouseEvent *event)
 {
-  DOUT("mousePressEvent: enter");
+  DOUT("enter");
   restartAutoClearTimer();
   Base::mousePressEvent(event);
   //if (event && event->button() == Qt::LeftButton
@@ -113,13 +113,13 @@ OsdConsole::mousePressEvent(QMouseEvent *event)
   //  dragPos_ = event->globalPos() - frameGeometry().topLeft();
   //  event->accept();
   //}
-  DOUT("mousePressEvent: exit");
+  DOUT("exit");
 }
 
 void
 OsdConsole::mouseMoveEvent(QMouseEvent *event)
 {
-  DOUT("mouseMoveEvent: enter");
+  DOUT("enter");
   restartAutoClearTimer();
   Base::mousePressEvent(event);
   //if (event && event->buttons() & Qt::LeftButton
@@ -128,33 +128,33 @@ OsdConsole::mouseMoveEvent(QMouseEvent *event)
   //  move(newPos);
   //  event->accept();
   //}
-  DOUT("mouseMoveEvent: exit");
+  DOUT("exit");
 }
 
 void
 OsdConsole::mouseReleaseEvent(QMouseEvent *event)
 {
-  DOUT("mouseReleaseEvent: begin");
+  DOUT("begin");
   restartAutoClearTimer();
   Base::mouseReleaseEvent(event);
   //dragPos_ = BAD_POS;
   //if (event)
   //  event->accept();
-  DOUT("mouseReleaseEvent: end");
+  DOUT("end");
 }
 
 void
 OsdConsole::mouseDoubleClickEvent(QMouseEvent *event)
 {
-  DOUT("mouseDoubleClickEvent: begin");
+  DOUT("begin");
   Base::mouseDoubleClickEvent(event);
-  DOUT("mouseDoubleClickEvent: end");
+  DOUT("end");
 }
 
 void
 OsdConsole::contextMenuEvent(QContextMenuEvent *event)
 {
-  DOUT("contexrMenuEvent: enter");
+  DOUT("enter");
   Base::contextMenuEvent(event);
   //Q_ASSERT(contextMenu_);
   //Q_ASSERT(timer_);
@@ -167,7 +167,7 @@ OsdConsole::contextMenuEvent(QContextMenuEvent *event)
   //  contextMenu_->popup(event->globalPos());
   //  event->accept();
   //}
-  DOUT("contexrMenuEvent: exit");
+  DOUT("exit");
 }
 */
 

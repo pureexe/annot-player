@@ -11,7 +11,7 @@ extern WCHAR file_path[];
 extern LPWSTR current_dir;
 DWORD Inject(HANDLE hProc)
 {
-  DOUT("Inject:enter");
+  DOUT("enter");
   LPVOID lpvAllocAddr = 0;
   DWORD dwWrite = 0x1000;
   HANDLE hTH;
@@ -24,11 +24,11 @@ DWORD Inject(HANDLE hProc)
   wcscpy(current_dir, DllName);
   CheckThreadStart();
   NtWriteVirtualMemory(hProc, lpvAllocAddr, file_path + 4, 2 * MAX_PATH, &dwWrite);
-  DOUT("Inject: dll =" << QString::fromWCharArray(file_path));
+  DOUT("dll =" << QString::fromWCharArray(file_path));
   hTH=IthCreateThread(LoadLibrary, (DWORD)lpvAllocAddr, hProc);
   if (hTH==0||hTH == INVALID_HANDLE_VALUE) {
     //ConsoleOutput(ErrorRemoteThread);
-    DOUT("Inject: cannot create remote thread");
+    DOUT("cannot create remote thread");
     return -1;
   }
   NtWaitForSingleObject(hTH, 0, 0);
@@ -41,14 +41,14 @@ DWORD Inject(HANDLE hProc)
   if (hTH == 0 ||
     hTH == INVALID_HANDLE_VALUE) {
     //ConsoleOutput(ErrorRemoteThread);
-    DOUT("Inject: cannot create remote thread");
+    DOUT("cannot create remote thread");
     return -1;
   }
   NtWaitForSingleObject(hTH, 0, 0);
   NtClose(hTH);
   dwWrite = 0;
   NtFreeVirtualMemory(hProc, &lpvAllocAddr, &dwWrite, MEM_RELEASE);
-  DOUT("Inject:exit: ret =" << info.ExitStatus);
+  DOUT("exit: ret =" << info.ExitStatus);
   return info.ExitStatus;
 }
 DWORD PIDByName(LPWSTR pwcTarget)
@@ -80,7 +80,7 @@ DWORD PIDByName(LPWSTR pwcTarget)
   }
   if (dwPid == 0) {
     //ConsoleOutput(ErrorNoProcess);
-    //DOUT("PICByName: process not found");
+    //DOUT("process not found");
   }
   delete pbBuffer;
   return dwPid;
@@ -92,13 +92,13 @@ DWORD InjectByPID(DWORD pid)
   if (pid == current_process_id)
   {
     //ConsoleOutput(SelfAttach);
-    DOUT("InjectByPID: skip attach to my process");
+    DOUT("skip attach to my process");
     return -1;
   }
   if (GetModuleByPID(pid))
   {
     //ConsoleOutput(AlreadyAttach);
-    DOUT("InjectByPID: process already attached");
+    DOUT("process already attached");
     return -1;
   }
   swprintf(str, L"ITH_HOOKMAN_%.4d", pid);
@@ -129,7 +129,7 @@ DWORD InjectByPID(DWORD pid)
 
   //swprintf(str, FormatInject, pid, module);
   //ConsoleOutput(str);
-  //DOUT("InjectByPID: attached");
+  //DOUT("attached");
   return module;
 }
 // EOF

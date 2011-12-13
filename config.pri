@@ -130,7 +130,26 @@ INCLUDEPATH     += $$GSOAP_HOME/include
 LIBS            += -L$$GSOAP_HOME/lib
 
 CONFIG(release) {
-    #DEFINES += QT_NO_DEBUG_OUTPUT QT_NO_WARNING_OUTPUT
+  #DEFINES += QT_NO_DEBUG_OUTPUT QT_NO_WARNING_OUTPUT
+}
+
+CONFIG(noqt) {
+  CONFIG -= qt
+  QT     -= core gui
+  LIBS   -= -lQtCore -lQtGui
+}
+
+CONFIG(nocrt) {
+  win32 {
+    QMAKE_CFLAGS                -= -MD -MDd
+    QMAKE_CFLAGS_DEBUG          -= -MD -MDd
+    QMAKE_CFLAGS_RELEASE        -= -MD -MDd
+    QMAKE_CFLAGS_RELEASE_WITH_DEBUGINFO -= -MD -MDd
+    QMAKE_CXXFLAGS              -= -MD -MDd
+    QMAKE_CXXFLAGS_DEBUG        -= -MD -MDd
+    QMAKE_CXXFLAGS_RELEASE      -= -MD -MDd
+    QMAKE_CXXFLAGS_RELEASE_WITH_DEBUGINFO -= -MD -MDd
+  }
 }
 
 ## Debug

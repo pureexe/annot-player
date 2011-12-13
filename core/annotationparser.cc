@@ -9,7 +9,7 @@
 #include <boost/tuple/tuple.hpp>
 #include <boost/typeof/typeof.hpp>
 
-//#define DEBUG "Core::AnnotationParser"
+//#define DEBUG "core::annotationparser"
 #include "module/debug/debug.h"
 
 #define DEFAULT_TINY_SIZE        "10px"
@@ -111,11 +111,11 @@ namespace Core {
   std::pair<QString, QStringList>
   AnnotationParser::renderToHtml(const QString &text) const
   {
-    DOUT("parse:enter: text=" << text);
+    DOUT("enter: text=" << text);
 
     typedef std::pair<QString, QStringList> RETURN;
     if (text.isEmpty()) {
-      DOUT("parse:exit");
+      DOUT("exit");
       return RETURN();
     }
 
@@ -137,13 +137,13 @@ namespace Core {
     if (text.startsWith(CORE_CMD_VERBATIM)) {
       parsed = text.mid(QString(CORE_CMD_VERBATIM).size());
       tags.prepend(CORE_CMD_VERBATIM);
-      DOUT("parse:exit: parsed (verbatim) =" << parsed);
+      DOUT("exit: parsed (verbatim) =" << parsed);
       return RETURN(parsed.trimmed(), tags);
     }
     if (text.startsWith(CORE_CMD_V " ")) { // \verbatim alias
       parsed = text.mid(QString(CORE_CMD_V " ").size());
       tags.prepend(CORE_CMD_V);
-      DOUT("parse:exit: parsed (verbatim) =" << parsed);
+      DOUT("exit: parsed (verbatim) =" << parsed);
       return RETURN(parsed.trimmed(), tags);
     }
 
@@ -213,7 +213,7 @@ namespace Core {
       switch (current_ch) {
       case '}':
         if (stack.empty()) {
-          DOUT("parse: exit: '{}' mismatched");
+          DOUT("exit: '{}' mismatched");
           return RETURN();
         } else {
           // REDUCE until '{'
@@ -284,7 +284,7 @@ namespace Core {
 
       case ']':
         if (stack.empty()) {
-          DOUT("parse: exit: '[]' mismatched");
+          DOUT("exit: '[]' mismatched");
           return RETURN();
         } else {
           // REDUCE until '['
@@ -339,7 +339,7 @@ namespace Core {
 
     } while (!stack.empty());
 
-    DOUT("parse:exit: parsed =" << parsed);
+    DOUT("exit: parsed =" << parsed);
     return RETURN(parsed, tags);
   }
 
@@ -348,7 +348,7 @@ namespace Core {
                               const QStringList &params,
                               const QStringList &attrs) const
   {
-    DOUT("translate:enter: tag =" << tag);
+    DOUT("enter: tag =" << tag);
     #ifdef DEBUG
     {
       qDebug() << "- attrs:";
@@ -596,6 +596,7 @@ namespace Core {
     case H_TextIt:
       RETURN_HTML_TAG(em)
 
+    case H_B:
     case H_Bf:
     case H_Strong:
     case H_TextBf:
@@ -694,7 +695,7 @@ namespace Core {
   QString
   AnnotationParser::reduceHtml(const QString &html) const
   {
-    DOUT("reduceHtml:enter: input html follows");
+    DOUT("enter: input html follows");
     DOUT(html);
     if (html.trimmed().isEmpty())
       return "";
@@ -744,7 +745,7 @@ namespace Core {
           innerHtml = "<span>" + innerHtml + "</span>";
           e.setInnerXml(innerHtml);
         }
-        DOUT("reduceHtmlElement: new html body follows");
+        DOUT("new html body follows");
         DOUT(innerHtml);
 
       } else IFTAG(t, "p")

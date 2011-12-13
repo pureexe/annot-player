@@ -24,7 +24,7 @@ public:
   explicit DeviceDialog(QWidget *parent = 0);
 
 signals:
-  void deviceSelected(const QString &path, bool isCDDA);
+  void deviceSelected(const QString &path, bool isAudioCD);
 
   // - Helpers -
 public:
@@ -52,7 +52,8 @@ protected slots:
 private:
   QToolButton *okButton_;
   QComboBox *pathComboBox_; // device path
-  QRadioButton *dvdRadioButton_, // device type
+  QRadioButton *autoRadioButton_, // device type
+               *dvdRadioButton_,
                *cdRadioButton_;
 };
 

@@ -12,7 +12,7 @@
 #include "core/cmd.h"
 #include <QtCore>
 
-//#define DEBUG "MessageHandler"
+//#define DEBUG "messagehandler"
 #include "module/debug/debug.h"
 
 using namespace Core::Cloud;
@@ -105,10 +105,10 @@ void
 MessageHandler::processTextMessage(const QString &text, int hookId, qint64 tsMsecs)
 {
   Q_UNUSED(tsMsecs);
-  DOUT("processTextMessage:enter: hookId =" << hookId << ", text =" << text);
+  DOUT("enter: hookId =" << hookId << ", text =" << text);
   if (hookId != hookId_) {
     //lastMessageHash_.clear();
-    DOUT("processTextMessage:exit: hook mismatch, hookId_ =" << hookId_);
+    DOUT("exit: hook mismatch, hookId_ =" << hookId_);
     return;
   }
 
@@ -117,7 +117,7 @@ MessageHandler::processTextMessage(const QString &text, int hookId, qint64 tsMse
   lastMessageHash_.clear();
 
   if (text.trimmed().isEmpty()) {
-    DOUT("processTextMessage:exit: skipping empty text");
+    DOUT("exit: skipping empty text");
     return;
   }
 
@@ -162,7 +162,7 @@ MessageHandler::processTextMessage(const QString &text, int hookId, qint64 tsMse
   lastMessageHash_.count = count;
 
   emit messageReceivedWithId(h);
-  DOUT("processTextMessage:exit: hashCount =" << count << ", h =" << h);
+  DOUT("exit: hashCount =" << count << ", h =" << h);
 }
 
 // - Helpers -

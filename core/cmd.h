@@ -51,6 +51,7 @@
 #define CORE_CMD_HTML_SPAN              CORE_CMDSTR "span"
 #define CORE_CMD_HTML_EM                CORE_CMDSTR "em"
 #define CORE_CMD_HTML_STRONG            CORE_CMDSTR "strong"
+#define CORE_CMD_HTML_B                 CORE_CMDSTR "b"
 
 #define CORE_CMD_STYLE                  CORE_CMDSTR "style"     // \style[color:red]{anything}
 
@@ -139,6 +140,7 @@ namespace Core {
 
     // - HTML style -
 
+    H_B =               1570,           // CORE_CMD_HTML_B
     H_Br =              25234,          // CORE_CMD_HTML_BR
     H_Em =              25277,          // CORE_CMD_HTML_EM
     H_Div =             404230,         // CORE_CMD_HTML_DIV
@@ -234,6 +236,7 @@ namespace Core {
 
         // - HTML style -
 
+        Q_ASSERT(H_B ==         qHash(QString(CORE_CMD_HTML_B)));
         Q_ASSERT(H_Br ==        qHash(QString(CORE_CMD_HTML_BR)));
         Q_ASSERT(H_Div ==       qHash(QString(CORE_CMD_HTML_DIV)));
         Q_ASSERT(H_Em ==        qHash(QString(CORE_CMD_HTML_EM)));

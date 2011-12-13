@@ -9,7 +9,7 @@
 #include <QtCore>
 #include <memory>
 
-#define DEBUG "Core::Token"
+#define DEBUG "core::token"
 #include "module/debug/debug.h"
 
 #define DIGEST(_bytes)  Core::Crypt::md5(_bytes)
@@ -33,7 +33,7 @@ QString
 Core::Cloud::
 Token::digestFromFile(const QString &input)
 {
-  DOUT("digestFromFile:enter:" << input);
+  DOUT("enter:" << input);
 
   QByteArray data;
   QString filePath = input;
@@ -54,7 +54,7 @@ Token::digestFromFile(const QString &input)
     QFile file(filePath);
     bool ok = file.open(QIODevice::ReadOnly);
     if (!ok) {
-      DOUT("digestFromFile:exit: Failed to open file for hashing: " << filePath);
+      DOUT("exit: Failed to open file for hashing: " << filePath);
       return QByteArray();
     }
 
@@ -64,12 +64,12 @@ Token::digestFromFile(const QString &input)
   }
 
   if (data.isEmpty()) {
-    DOUT("digestFromFile:exit: Error: get empty data to hash: " << filePath);
+    DOUT("exit: Error: get empty data to hash: " << filePath);
     return QByteArray();
   }
 
   QByteArray ret = DIGEST(data);
-  DOUT("digestFromFile:exit");
+  DOUT("exit");
   return ret.toHex().toUpper();
 }
 

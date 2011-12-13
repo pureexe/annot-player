@@ -141,7 +141,7 @@ public slots:
   void openProcess();
   void openWindow();
   void openDevice();
-  void openDevicePath(const QString &path, bool isCDDA);
+  void openDevicePath(const QString &path, bool isAudioCD);
   void openAudioDevice();
   void openVideoDevice();
   void openSubtitle();
@@ -500,6 +500,7 @@ private:
 
   QMenu *contextMenu_,
         *advancedMenu_,
+        *helpContextMenu_,
         *recentMenu_,
         *userMenu_,
         *openMenu_,

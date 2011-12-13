@@ -8,7 +8,7 @@
 #include "core/universe/traits.h"
 #include <QtCore>
 
-#define DEBUG "ClientService"
+#define DEBUG "clientservice"
 #include "module/debug/debug.h"
 
 using namespace Core::Universe;
@@ -45,19 +45,19 @@ ClientServant::setPort(int port)
 void
 ClientServant::run()
 {
-  DOUT("ClientServant:run:enter");
+  DOUT("enter");
   int err = SoapBase::run(port_);
   Q_UNUSED(err);
-  DOUT("ClientServant:run:exit, errcode =" << err);
+  DOUT("exit, errcode =" << err);
 }
 
 int
 ClientServant::authorize(tns__authorize *request, tns__authorizeResponse *response)
 {
-  DOUT("ClientServant:authorize:enter");
+  DOUT("enter");
   if (delegate_)
     response->return_ = delegate_->authorize(request->arg0);
-  DOUT("ClientServant:authorize:exit");
+  DOUT("exit");
   return SOAP_OK;
 }
 
@@ -66,10 +66,10 @@ ClientServant::deauthorize(tns__deauthorize *request, tns__deauthorizeResponse *
 {
   Q_UNUSED(request);
   Q_UNUSED(response);
-  DOUT("ClientServant:deauthorize:enter");
+  DOUT("enter");
   if (delegate_)
     delegate_->deauthorize();
-  DOUT("ClientServant:deauthorize:exit");
+  DOUT("exit");
   return SOAP_OK;
 }
 
@@ -77,10 +77,10 @@ int
 ClientServant::isAuthorized(tns__isAuthorized *request, tns__isAuthorizedResponse *response)
 {
   Q_UNUSED(request);
-  DOUT("ClientServant:isAuthorize:enter");
+  DOUT("enter");
   if (delegate_)
     response->return_ = delegate_->isAuthorized();
-  DOUT("ClientServant:isAuthorize:exit");
+  DOUT("exit");
   return SOAP_OK;
 }
 
@@ -88,10 +88,10 @@ int
 ClientServant::isConnected(tns__isConnected *request, tns__isConnectedResponse *response)
 {
   Q_UNUSED(request);
-  DOUT("ClientServant:isConnected:enter");
+  DOUT("enter");
   if (delegate_)
     response->return_ = delegate_->isConnected();
-  DOUT("ClientServant:isConnected:exit");
+  DOUT("exit");
   return SOAP_OK;
 }
 
@@ -99,14 +99,14 @@ int
 ClientServant::chat(tns__chat *request, tns__chatResponse *response)
 {
   Q_UNUSED(response);
-  DOUT("ClientServant:chat:enter");
+  DOUT("enter");
   if (delegate_) {
     if (request->arg0)
       delegate_->chat(QString::fromStdString(*request->arg0));
     else
       delegate_->chat(QString());
   }
-  DOUT("ClientServant:chat:exit");
+  DOUT("exit");
   return SOAP_OK;
 }
 
@@ -120,12 +120,12 @@ ClientService::ClientService(QObject *parent)
 
 ClientService::~ClientService()
 {
-  DOUT("~ClientService:enter");
+  DOUT("enter");
   if (isRunning()) {
-    DOUT("~ClientService: try stopping running service");
+    DOUT("try stopping running service");
     stop();
   }
-  DOUT("~ClientService:exit");
+  DOUT("exit");
 }
 
 // ++ Properties ++
@@ -145,7 +145,7 @@ ClientService::port() const
 void
 ClientService::setPort(int port)
 {
-  DOUT("setPort: old port_ =" << port_ << ", new port =" << port);
+  DOUT("old port_ =" << port_ << ", new port =" << port);
   port_ = port;
 }
 
@@ -158,43 +158,43 @@ ClientService::isRunning() const
 void
 ClientService::start()
 {
-  DOUT("start:enter");
+  DOUT("enter");
   if (isRunning()) {
-    DOUT("start:exit: WARNING: service is already running");
+    DOUT("exit: WARNING: service is already running");
     return;
   }
 
-  DOUT("start: try starting service, port =" << port_);
+  DOUT("try starting service, port =" << port_);
   servant_ = new ClientServant(this);
   servant_->setDelegate(delegate_);
   servant_->setPort(port_);
   servant_->start();
-  DOUT("start:exit");
+  DOUT("exit");
 }
 
 void
 ClientService::stop(long msecs)
 {
-  DOUT("stop:enter");
+  DOUT("enter");
   if (isRunning()) {
-    DOUT("stop: try stopping running service");
+    DOUT("try stopping running service");
     servant_->terminate();
     servant_->wait(msecs);
   } else
-    DOUT("stop: WARNING: service is not running");
+    DOUT("WARNING: service is not running");
 
-  DOUT("stop:exit");
+  DOUT("exit");
 }
 
 void
 ClientService::restart()
 {
-  DOUT("restart:enter");
+  DOUT("enter");
   if (isRunning())
     stop();
   if (!isRunning())
     start();
-  DOUT("restart:exit");
+  DOUT("exit");
 }
 
 /*
@@ -203,7 +203,7 @@ ClientService::restart()
 bool
 ClientService::login(const QString &userName, const QString &password)
 {
-  DOUT("login:enter: userName =" << userName);
+  DOUT("enter: userName =" << userName);
   std::string arg0 = userName.toStdString(),
               arg1 = password.toStdString();
 
@@ -214,77 +214,77 @@ ClientService::login(const QString &userName, const QString &password)
   ns1__loginResponse response;
   int err = soap_.__ns1__login(&request, &response);
   if (err) {
-    DOUT("login: soap error, err =" << err);
+    DOUT("soap error, err =" << err);
     emit soapError(err);
-    DOUT("login:exit");
+    DOUT("exit");
     return false;
   }
 
   bool ret = response.return_;
-  DOUT("login:exit: ret =" << ret);
+  DOUT("exit: ret =" << ret);
   return ret;
 }
 
 bool
 ClientService::logout()
 {
-  DOUT("logout:enter");
+  DOUT("enter");
   ns1__logout request;
   ns1__logoutResponse response;
   int err = soap_.__ns1__logout(&request, &response);
   if (err) {
-    DOUT("logout: soap error, err =" << err);
+    DOUT("soap error, err =" << err);
     emit soapError(err);
-    DOUT("logout:exit");
+    DOUT("exit");
     return false;
   }
 
-  DOUT("logout:exit: ret =" << true);
+  DOUT("exit: ret =" << true);
   return true;
 }
 
 bool
 ClientService::getConnected()
 {
-  DOUT("getConnected:enter");
+  DOUT("enter");
   ns1__isConnected request;
   ns1__isConnectedResponse response;
   int err = soap_.__ns1__isConnected(&request, &response);
   if (err) {
-    DOUT("getConnected: soap error, err =" << err);
+    DOUT("soap error, err =" << err);
     emit soapError(err);
-    DOUT("getConnected:exit");
+    DOUT("exit");
     return false;
   }
 
   bool ret = response.return_;
-  DOUT("getConnected:exit: ret =" << ret);
+  DOUT("exit: ret =" << ret);
   return ret;
 }
 
 bool
 ClientService::getAuthorized()
 {
-  DOUT("getAuthorized:enter");
+  DOUT("enter");
   ns1__isAuthorized request;
   ns1__isAuthorizedResponse response;
   int err = soap_.__ns1__isAuthorized(&request, &response);
   if (err) {
-    DOUT("getAuthorized: soap error, err =" << err);
+    DOUT("soap error, err =" << err);
     emit soapError(err);
-    DOUT("getAuthorized:exit");
+    DOUT("exit");
     return false;
   }
 
   bool ret = response.return_;
-  DOUT("getAuthorized:exit: ret =" << ret);
+  DOUT("exit: ret =" << ret);
   return ret;
 }
 
 QString
 ClientService::chat(const QString &message)
 {
-  DOUT("chat:enter");
+  DOUT("enter");
 
   std::string arg0 = message.toStdString();
 
@@ -294,9 +294,9 @@ ClientService::chat(const QString &message)
   ns1__chatResponse response;
   int err = soap_.__ns1__chat(&request, &response);
   if (err) {
-    DOUT("chat: soap error, err =" << err);
+    DOUT("soap error, err =" << err);
     emit soapError(err);
-    DOUT("chat:exit");
+    DOUT("exit");
     return QString();
   }
 
@@ -304,23 +304,23 @@ ClientService::chat(const QString &message)
   if (response.return_)
     ret = QString::fromStdString(*response.return_);
 
-  DOUT("chat:exit: ret =" << ret);
+  DOUT("exit: ret =" << ret);
   return ret;
 }
 
 User
 ClientService::getUser()
 {
-  DOUT("getUser:enter");
+  DOUT("enter");
   User ret;
 
   ns1__getUser request;
   ns1__getUserResponse response;
   int err = soap_.__ns1__getUser(&request, &response);
   if (err) {
-    DOUT("getUser: soap error, err =" << err);
+    DOUT("soap error, err =" << err);
     emit soapError(err);
-    DOUT("getUser:exit");
+    DOUT("exit");
     return ret;
   }
 
@@ -347,21 +347,21 @@ ClientService::getUser()
       ret.setPassword(QString::fromStdString(*p->password));
   }
 
-  DOUT("getUser:exit: username =" << ret.name() << ", id =" << ret.id());
+  DOUT("exit: username =" << ret.name() << ", id =" << ret.id());
   return ret;
 }
 
 qint64
 ClientService::submitToken(const Token &token, const QString &alias)
 {
-  DOUT("submitToken:enter");
+  DOUT("enter");
 
   if (!token.hasDigest() || token.digest().length() != Traits::MEDIA_TOKEN_DIGEST_LENGTH) {
-    DOUT("submitToken:exit: error: invalid digest =" << token.digest());
+    DOUT("exit: error: invalid digest =" << token.digest());
     return 0;
   }
   if (alias.size() > Traits::MAX_MEDIA_TOKEN_ALIAS_LENGTH) {
-    DOUT("submitToken:exit: error: alias too long, size =" << alias.size());
+    DOUT("exit: error: alias too long, size =" << alias.size());
     return 0;
   }
 
@@ -390,28 +390,28 @@ ClientService::submitToken(const Token &token, const QString &alias)
   ns1__submitMediaTokenResponse response;
   int err = soap_.__ns1__submitMediaToken(&request, &response);
   if (err) {
-    DOUT("submitToken: soap error, err =" << err);
+    DOUT("soap error, err =" << err);
     emit soapError(err);
-    DOUT("submitToken:exit");
+    DOUT("exit");
     return 0;
   }
 
   qint64 ret = response.return_;
-  DOUT("submitToken:exit: tid =" << ret);
+  DOUT("exit: tid =" << ret);
   return ret;
 }
 
 qint64
 ClientService::submitAnnotation(const Annotation &annot)
 {
-  DOUT("submitAnnotation:enter");
+  DOUT("enter");
 
   if (!annot.hasText()) {
-    DOUT("submitAnnotation:exit: error: missing text");
+    DOUT("exit: error: missing text");
     return 0;
   }
   if (annot.text().size() > Traits::MAX_MEDIA_ANNOT_TEXT_LENGTH) {
-    DOUT("submitAnnotation:exit: error: text too long, size =" << annot.text().size());
+    DOUT("exit: error: text too long, size =" << annot.text().size());
     return 0;
   }
 
@@ -440,21 +440,21 @@ ClientService::submitAnnotation(const Annotation &annot)
   ns1__submitMediaAnnotationResponse response;
   int err = soap_.__ns1__submitMediaAnnotation(&request, &response);
   if (err) {
-    DOUT("submitAnnotation: soap error, err =" << err);
+    DOUT("soap error, err =" << err);
     emit soapError(err);
-    DOUT("submitAnnotation:exit");
+    DOUT("exit");
     return 0;
   }
 
   qint64 ret = response.return_;
-  DOUT("submitAnnotation:exit: aid =" << ret);
+  DOUT("exit: aid =" << ret);
   return ret;
 }
 
 Token
 ClientService::selectTokenWithId(qint64 id)
 {
-  DOUT("selectTokenWithId:enter");
+  DOUT("enter");
   Token ret;
 
   ns1__selectMediaTokenWithId request;
@@ -463,9 +463,9 @@ ClientService::selectTokenWithId(qint64 id)
   ns1__selectMediaTokenWithIdResponse response;
   int err = soap_.__ns1__selectMediaTokenWithId(&request, &response);
   if (err) {
-    DOUT("selectTokenWithId: soap error, err =" << err);
+    DOUT("soap error, err =" << err);
     emit soapError(err);
-    DOUT("selectTokenWithId:exit");
+    DOUT("exit");
     return ret;
   }
 
@@ -484,14 +484,14 @@ ClientService::selectTokenWithId(qint64 id)
     ret.setVisitedCount(p->visitedCount);
   }
 
-  DOUT("selectTokenWithId:exit: tid =" << ret.id());
+  DOUT("exit: tid =" << ret.id());
   return ret;
 }
 
 Token
 ClientService::selectTokenWithDigest(const QString &digest)
 {
-  DOUT("selectTokenWithId:enter");
+  DOUT("enter");
   Token ret;
 
   ns1__selectMediaTokenWithDigest request;
@@ -501,9 +501,9 @@ ClientService::selectTokenWithDigest(const QString &digest)
   ns1__selectMediaTokenWithDigestResponse response;
   int err = soap_.__ns1__selectMediaTokenWithDigest(&request, &response);
   if (err) {
-    DOUT("selectTokenWithId: soap error, err =" << err);
+    DOUT("soap error, err =" << err);
     emit soapError(err);
-    DOUT("selectTokenWithId:exit");
+    DOUT("exit");
     return ret;
   }
 
@@ -521,14 +521,14 @@ ClientService::selectTokenWithDigest(const QString &digest)
     ret.setVisitedCount(p->visitedCount);
   }
 
-  DOUT("selectTokenWithId:exit: tid =" << ret.id());
+  DOUT("exit: tid =" << ret.id());
   return ret;
 }
 
 AnnotationList
 ClientService::selectAnnotationsWithTokenId(qint64 tid)
 {
-  DOUT("selectAnnotationsWithTokenId:enter: tid =" << tid);
+  DOUT("enter: tid =" << tid);
   AnnotationList ret;
 
   ns1__selectMediaAnnotationsWithTokenId request;
@@ -537,9 +537,9 @@ ClientService::selectAnnotationsWithTokenId(qint64 tid)
   ns1__selectMediaAnnotationsWithTokenIdResponse response;
   int err = soap_.__ns1__selectMediaAnnotationsWithTokenId(&request, &response);
   if (err) {
-    DOUT("selectAnnotationsWithTokenId: soap error, err =" << err);
+    DOUT("soap error, err =" << err);
     emit soapError(err);
-    DOUT("selectAnnotationsWithTokenId:exit");
+    DOUT("exit");
     return ret;
   }
 
@@ -567,7 +567,7 @@ ClientService::selectAnnotationsWithTokenId(qint64 tid)
         ret.append(a);
       }
 
-  DOUT("selectAnnotationsWithTokenId:exit: count =" << ret.size());
+  DOUT("exit: count =" << ret.size());
   return ret;
 }
 
@@ -576,7 +576,7 @@ ClientService::selectAnnotationsWithTokenId(qint64 tid)
 bool
 ClientService::blessAnnotationWithId(qint64 id)
 {
-  DOUT("blessAnnotationWithId:enter: id =" << id);
+  DOUT("enter: id =" << id);
 
   ns1__blessMediaAnnotationWithId request;
   request.arg0 = id;
@@ -584,14 +584,14 @@ ClientService::blessAnnotationWithId(qint64 id)
   ns1__blessMediaAnnotationWithIdResponse response;
   int err = soap_.__ns1__blessMediaAnnotationWithId(&request, &response);
   if (err) {
-    DOUT("blessAnnotationWithId: soap error, err =" << err);
+    DOUT("soap error, err =" << err);
     emit soapError(err);
-    DOUT("blessAnnotationWithId:exit");
+    DOUT("exit");
     return false;
   }
 
   bool ret = response.return_;
-  DOUT("blessAnnotationWithId:exit: ret =" << ret);
+  DOUT("exit: ret =" << ret);
   return ret;
 }
 */

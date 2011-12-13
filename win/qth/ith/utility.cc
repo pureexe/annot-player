@@ -81,7 +81,7 @@ int GetHookString(LPWSTR str, DWORD pid, DWORD hook_addr, DWORD status)
 
 void CALLBACK NewLineBuff(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime)
 {
-  DOUT("NewLineBuff:enter");
+  DOUT("enter");
   KillTimer(hwnd,idEvent);
   TextThread *id=(TextThread*)idEvent;
 
@@ -94,12 +94,12 @@ void CALLBACK NewLineBuff(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime)
 
   //qDebug() << QString::fromAscii((LPSTR)id->Storage());
   //CopyToClipboard(storage+last_sentence,(status&USING_UNICODE)>0,used-last_sentence);
-  DOUT("NewLineBuff:exit");
+  DOUT("exit");
 }
 /*
 void CALLBACK NewLineConsole(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime)
 {
-  DOUT("NewLineConsole:enter");
+  DOUT("enter");
   KillTimer(hwnd,idEvent);
   TextThread *id=(TextThread*)idEvent;
   Q_ASSERT(id);
@@ -109,12 +109,12 @@ void CALLBACK NewLineConsole(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTim
   {
     texts->SetLine();
   }
-  DOUT("NewLineConsole:exit");
+  DOUT("exit");
 }
 
 DWORD WINAPI FlushThread(LPVOID lpThreadParameter)
 {
-  DOUT("FlushThread:enter";
+  DOUT("enter";
   LARGE_INTEGER sleep_interval={-100000,-1};
   while (hwndEdit==0) NtDelayExecution(0,&sleep_interval);
   TextBuffer* t=(TextBuffer*)lpThreadParameter;
@@ -122,7 +122,7 @@ DWORD WINAPI FlushThread(LPVOID lpThreadParameter)
     t->Flush();
     NtDelayExecution(0,&sleep_interval);
   }
-  DOUT("FlushThread:exit";
+  DOUT("exit";
   return 0;
 }
 */
@@ -360,9 +360,9 @@ void CustomFilterMultiByte::Traverse(CustomFilterCallBack callback)
 
 TextBuffer::TextBuffer():line(false),unicode(false)
 {
-  DOUT("TextBuffer:enter: this =" << this);
+  DOUT("enter: this =" << this);
   //NtClose(IthCreateThread(FlushThread,(DWORD)this));
-  DOUT("TextBuffer:exit");
+  DOUT("exit");
 
 }
 TextBuffer::~TextBuffer()
@@ -536,7 +536,7 @@ int TLen::operator()(ThreadParameter* t) {return 0;}
 //Class member of HookManger
 HookManager::HookManager()
 {
-  DOUT("HookManager:HookManager:enter");
+  DOUT("enter");
   TextThread* entry;
   head.key=new ThreadParameter;
   head.key->pid=0;
@@ -558,21 +558,21 @@ HookManager::HookManager()
 
   InitializeCriticalSection(&hmcs);
   destroy_event=IthCreateEvent(0,0,0);
-  DOUT("HookManager:HookManager:exit");
+  DOUT("exit");
 }
 HookManager::~HookManager()
 {
-  DOUT("HookManager:~HookManager:enter");
+  DOUT("enter");
   LARGE_INTEGER timeout={-1000*1000,-1};
   NtWaitForSingleObject(destroy_event,0,&timeout);
 
-  DOUT("HookManager:~HookManager: FIXME: skip deleting text threads");
+  DOUT("FIXME: skip deleting text threads");
   // jichi:10/15/2011: double-free error after eliminating profile module
   //delete thread_table;
 
   delete head.key;
   DeleteCriticalSection(&hmcs);
-  DOUT("HookManager:~HookManager:exit");
+  DOUT("exit");
 }
 TextThread* HookManager::FindSingle(DWORD pid, DWORD hook, DWORD retn, DWORD split)
 {
@@ -864,10 +864,10 @@ void HookManager::AddLink(WORD from, WORD to)
   {
     if (from_thread->Link()==to_thread)
       //AddConsoleOutput(ErrorLinkExist);
-      DOUT("AddLink: link already exists");
+      DOUT("link already exists");
     else if (to_thread->CheckCycle(from_thread))
       //AddConsoleOutput(ErrorCylicLink);
-      DOUT("AddLink: cyclic link");
+      DOUT("cyclic link");
     else
     {
       from_thread->Link()=to_thread;
@@ -879,7 +879,7 @@ void HookManager::AddLink(WORD from, WORD to)
   }
   else
     //AddConsoleOutput(ErrorLink);
-    DOUT("AddLink: error link");
+    DOUT("error link");
   LeaveCriticalSection(&hmcs);
 }
 void HookManager::DispatchText(DWORD pid, BYTE* text, DWORD hook, DWORD retn, DWORD spl, int len)
@@ -1108,7 +1108,7 @@ static DWORD MIN_REDETECT=0x80;
 void
 TextThread::qth_sendText()
 {
-  DOUT("TextThread:qth_sendText:enter");
+  DOUT("enter");
   qint64 ts = QDateTime::currentMSecsSinceEpoch();
   int myid = (int)this;
 
@@ -1124,20 +1124,20 @@ TextThread::qth_sendText()
   }
 
   if (text.trimmed().isEmpty()) {
-     DOUT("TextThread:qth_sendText:end: empty text skipped");
+     DOUT("exit: empty text skipped");
      return;
   }
 
   if (Qth::globalInstance())
     Qth::globalInstance()->emit_textReceived(text, myid, ts);
-  DOUT("TextThread:qth_sendText:end: text =" << text);
+  DOUT("exit: text =" << text);
 }
 
 // - QTH END -
 
 TextThread::TextThread(DWORD id, DWORD hook, DWORD retn, DWORD spl, WORD num) : number(num)
 {
-  DOUT("TextThread:TextThread:enter");
+  DOUT("enter");
   tp.pid=id;
   tp.hook=hook;
   tp.retn=retn;
@@ -1226,12 +1226,12 @@ TextThread::TextThread(DWORD id, DWORD hook, DWORD retn, DWORD spl, WORD num) : 
     }
     */
   }
-  DOUT("TextThread:TextThread:exit");
+  DOUT("exit");
 }
 
 TextThread::~TextThread()
 {
-  DOUT("TextThread:~TextThread:enter");
+  DOUT("enter");
 
   KillTimer(hMainWnd,timer);
   RepeatCountNode *t=head,*tt;
@@ -1244,7 +1244,7 @@ TextThread::~TextThread()
   head=0;
   if (comment) {delete comment;comment=0;}
   if (thread_string) {delete thread_string;thread_string=0;}
-  DOUT("TextThread:~TextThread:exit");
+  DOUT("exit");
 }
 void TextThread::Reset()
 {
@@ -1923,12 +1923,12 @@ void TextThread::SetNewLineFlag()
 }
 void TextThread::SetNewLineTimer()
 {
-  //DOUT("SetNewLineTimer:enter: split_time =" << split_time);
+  //DOUT("enter: split_time =" << split_time);
   //if (number)
   //  timer=SetTimer(hMainWnd,(UINT_PTR)this,split_time,NewLineConsole);
   //else
     timer=SetTimer(hMainWnd,(UINT_PTR)this,split_time,NewLineBuff);
-  //DOUT("SetNewLineTimer:exit: timer =" << timer);
+  //DOUT("exit: timer =" << timer);
 }
 bool TextThread::AddToCombo()
 {
@@ -1985,7 +1985,7 @@ DWORD Hash(LPWSTR module, int length)
 static char clipboard_buffer[0x400];
 void CopyToClipboard(void* str,bool unicode, int len)
 {
-  DOUT("CopyToClipboard:enter");
+  DOUT("enter");
   if (str) {
     if (unicode)
       DOUT(QString(":(%1)").arg(unicode) << QString::fromWCharArray((LPWSTR)str, len));
@@ -2022,7 +2022,7 @@ void CopyToClipboard(void* str,bool unicode, int len)
       //CloseClipboard();
     }
   }
-  DOUT("CopyToClipboard:exit");
+  DOUT("exit");
 }
 */
 

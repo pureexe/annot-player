@@ -1,8 +1,9 @@
 # app.pro
 # 9/3/2011
 
-VERSION = 0.1.1.0
+VERSION = 0.1.1.2
 
+CONFIG += noqt nocrt
 include(../../config.pri)
 
 ## Libraries
@@ -12,18 +13,12 @@ include(../../config.pri)
 ## Sources
 
 TEMPLATE    = app
+win32: CONFIG += windows
 TARGET      = "Annot Player"
 
-CONFIG -= qt
-QT     -= core gui
-LIBS   -= -lQtCore -lQtGui
-
-win32 {
-  CONFIG += windows
-}
-
 HEADERS += \
-    config.h
+    config.h \
+    mscex.h
 
 SOURCES += \
     main.cc

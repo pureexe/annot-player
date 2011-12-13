@@ -1,7 +1,7 @@
 # player.pro
 # 6/30/2011
 
-VERSION = 0.1.1.1
+VERSION = 0.1.1.2
 
 include(../../config.pri)
 include(tr/tr.pri)
@@ -15,11 +15,13 @@ include($$ROOTDIR/module/serveragent/serveragent.pri)
 #include($$ROOTDIR/module/clientagent/clientagent.pri)
 include($$ROOTDIR/module/gsoap/gsoap.pri)       # would static linking cause license conflicts?
 include($$ROOTDIR/module/translator/translator.pri)
+include($$ROOTDIR/module/ioutil/ioutil.pri)
 
-unix:!mac:  include($$ROOTDIR/module/webbrowser/webbrowser_static.pri)
+# shared link gave me so many trouble on mac and linux
+unix:       include($$ROOTDIR/module/webbrowser/webbrowser_static.pri)
 win32:      include($$ROOTDIR/module/webbrowser/webbrowser.pri)
-mac:        include($$ROOTDIR/module/webbrowser/webbrowser.pri)
 
+DEFINES += USE_MODULE_IOUTIL
 DEFINES += USE_MODE_DEBUG
 
 #DEFINES += USE_MODULE_DOLL

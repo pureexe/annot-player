@@ -7,7 +7,7 @@
 #include "core/cloud/traits.h"
 #include <QtCore>
 
-#define DEBUG "ServerProxy"
+#define DEBUG "serverproxy"
 #include "module/debug/debug.h"
 
 using namespace Core::Cloud;
@@ -22,7 +22,7 @@ ServerProxy::ServerProxy(QObject *parent)
 void
 ServerProxy::reset()
 {
-  DOUT("reset:enter");
+  DOUT("enter");
   mutex_.lock();
   proxy_.reset(
     new ServerSoapProxy(SERVER_SOAP_MODE)
@@ -31,7 +31,7 @@ ServerProxy::reset()
   proxy_->z_level = 6; // compression level, default is 1 (fastest), max is 9
 #endif // WIZH_GZIP
   mutex_.unlock();
-  DOUT("reset:exit");
+  DOUT("exit");
 }
 
 // - User -
@@ -39,7 +39,7 @@ ServerProxy::reset()
 bool
 ServerProxy::setUserAnonymous(bool t, const QString &userName, const QString &password)
 {
-  DOUT("setUserAnonymous:enter: anonymous =" << t);
+  DOUT("enter: anonymous =" << t);
 
   tns__setUserAnonymous request;
   request.arg0 = t;
@@ -53,21 +53,21 @@ ServerProxy::setUserAnonymous(bool t, const QString &userName, const QString &pa
   int err = proxy_->setUserAnonymous(&request, &response);
   mutex_.unlock();
   if (err) {
-    DOUT("setUserAnonymous: soap error, err =" << err);
+    DOUT("soap error, err =" << err);
     emit soapError(err);
-    DOUT("setUserAnonymous:exit");
+    DOUT("exit");
     return false;
   }
 
   bool ret = response.return_;
-  DOUT("setUserAnonymous:exit: ret =" << ret);
+  DOUT("exit: ret =" << ret);
   return ret;
 }
 
 bool
 ServerProxy::setUserLanguage(qint32 language, const QString &userName, const QString &password)
 {
-  DOUT("setUserLanguage:enter: language =" << language);
+  DOUT("enter: language =" << language);
 
   tns__setUserLanguage request;
   request.arg0 = language;
@@ -81,21 +81,21 @@ ServerProxy::setUserLanguage(qint32 language, const QString &userName, const QSt
   int err = proxy_->setUserLanguage(&request, &response);
   mutex_.unlock();
   if (err) {
-    DOUT("setUserLanguage: soap error, err =" << err);
+    DOUT("soap error, err =" << err);
     emit soapError(err);
-    DOUT("setUserLanguage:exit");
+    DOUT("exit");
     return false;
   }
 
   bool ret = response.return_;
-  DOUT("setUserLanguage:exit: ret =" << ret);
+  DOUT("exit: ret =" << ret);
   return ret;
 }
 
 bool
 ServerProxy::isClientUpdated(const QString &version)
 {
-  DOUT("isClientUpdated:enter: version =" << version);
+  DOUT("enter: version =" << version);
 
   tns__isClientUpdated request;
   std::string arg0 = version.toStdString();
@@ -106,14 +106,14 @@ ServerProxy::isClientUpdated(const QString &version)
   int err = proxy_->isClientUpdated(&request, &response);
   mutex_.unlock();
   if (err) {
-    DOUT("isClientUpdated: soap error, err =" << err);
+    DOUT("soap error, err =" << err);
     emit soapError(err);
-    DOUT("isClientUpdated:exit");
+    DOUT("exit");
     return false;
   }
 
   bool ret = response.return_;
-  DOUT("isClientUpdated:exit: ret =" << ret);
+  DOUT("exit: ret =" << ret);
   return ret;
 }
 
@@ -123,7 +123,7 @@ ServerProxy::isClientUpdated(const QString &version)
 bool
 ServerProxy::login(const QString &userName, const QString &password)
 {
-  DOUT("login:enter: userName =" << userName);
+  DOUT("enter: userName =" << userName);
   std::string arg0 = userName.toStdString(),
               arg1 = password.toStdString();
 
@@ -136,34 +136,34 @@ ServerProxy::login(const QString &userName, const QString &password)
   int err = proxy_->login(&request, &response);
   mutex_.unlock();
   if (err) {
-    DOUT("login: soap error, err =" << err);
+    DOUT("soap error, err =" << err);
     emit soapError(err);
-    DOUT("login:exit");
+    DOUT("exit");
     return false;
   }
 
   bool ret = response.return_;
-  DOUT("login:exit: ret =" << ret);
+  DOUT("exit: ret =" << ret);
   return ret;
 }
 
 bool
 ServerProxy::logout()
 {
-  DOUT("logout:enter");
+  DOUT("enter");
   tns__logout request;
   tns__logoutResponse response;
   mutex_.lock();
   int err = proxy_->logout(&request, &response);
   mutex_.unlock();
   if (err) {
-    DOUT("logout: soap error, err =" << err);
+    DOUT("soap error, err =" << err);
     emit soapError(err);
-    DOUT("logout:exit");
+    DOUT("exit");
     return false;
   }
 
-  DOUT("logout:exit: ret =" << true);
+  DOUT("exit: ret =" << true);
   return true;
 }
 */
@@ -171,21 +171,21 @@ ServerProxy::logout()
 bool
 ServerProxy::getConnected()
 {
-  DOUT("getConnected:enter");
+  DOUT("enter");
   tns__isConnected request;
   tns__isConnectedResponse response;
   mutex_.lock();
   int err = proxy_->isConnected(&request, &response);
   mutex_.unlock();
   if (err) {
-    DOUT("getConnected: soap error, err =" << err);
+    DOUT("soap error, err =" << err);
     emit soapError(err);
-    DOUT("getConnected:exit");
+    DOUT("exit");
     return false;
   }
 
   bool ret = response.return_;
-  DOUT("getConnected:exit: ret =" << ret);
+  DOUT("exit: ret =" << ret);
   return ret;
 }
 
@@ -193,21 +193,21 @@ ServerProxy::getConnected()
 bool
 ServerProxy::getAuthorized()
 {
-  DOUT("getAuthorized:enter");
+  DOUT("enter");
   tns__isAuthorized request;
   tns__isAuthorizedResponse response;
   mutex_.lock();
   int err = proxy_->isAuthorized(&request, &response);
   mutex_.unlock();
   if (err) {
-    DOUT("getAuthorized: soap error, err =" << err);
+    DOUT("soap error, err =" << err);
     emit soapError(err);
-    DOUT("getAuthorized:exit");
+    DOUT("exit");
     return false;
   }
 
   bool ret = response.return_;
-  DOUT("getAuthorized:exit: ret =" << ret);
+  DOUT("exit: ret =" << ret);
   return ret;
 }
 */
@@ -215,7 +215,7 @@ ServerProxy::getAuthorized()
 QString
 ServerProxy::chat(const QString &message)
 {
-  DOUT("chat:enter");
+  DOUT("enter");
 
   std::string arg0 = message.toStdString();
 
@@ -227,9 +227,9 @@ ServerProxy::chat(const QString &message)
   int err = proxy_->chat(&request, &response);
   mutex_.unlock();
   if (err) {
-    DOUT("chat: soap error, err =" << err);
+    DOUT("soap error, err =" << err);
     emit soapError(err);
-    DOUT("chat:exit");
+    DOUT("exit");
     return QString();
   }
 
@@ -237,14 +237,14 @@ ServerProxy::chat(const QString &message)
   if (response.return_)
     ret = QString::fromStdString(*response.return_);
 
-  DOUT("chat:exit: ret =" << ret);
+  DOUT("exit: ret =" << ret);
   return ret;
 }
 
 User
 ServerProxy::selectUser(const QString &userName, const QString &password)
 {
-  DOUT("selectUser:enter: userName =" << userName);
+  DOUT("enter: userName =" << userName);
   User ret;
 
   tns__selectUser request;
@@ -259,9 +259,9 @@ ServerProxy::selectUser(const QString &userName, const QString &password)
   int err = proxy_->selectUser(&request, &response);
   mutex_.unlock();
   if (err) {
-    DOUT("selectUser: soap error, err =" << err);
+    DOUT("soap error, err =" << err);
     emit soapError(err);
-    DOUT("selectUser:exit");
+    DOUT("exit");
     return ret;
   }
 
@@ -288,7 +288,7 @@ ServerProxy::selectUser(const QString &userName, const QString &password)
     ret.setPassword(password);
   }
 
-  DOUT("selectUser:exit: username =" << ret.name() << ", id =" << ret.id());
+  DOUT("exit: username =" << ret.name() << ", id =" << ret.id());
   return ret;
 }
 
@@ -297,10 +297,10 @@ ServerProxy::selectUser(const QString &userName, const QString &password)
 qint64
 ServerProxy::submitToken(const Token &token, const QString &userName, const QString &password)
 {
-  DOUT("submitToken:enter");
+  DOUT("enter");
 
   if (!token.hasDigest() || token.digest().length() != Traits::TOKEN_DIGEST_LENGTH) {
-    DOUT("submitToken:exit: error: invalid digest =" << token.digest());
+    DOUT("exit: error: invalid digest =" << token.digest());
     return 0;
   }
 
@@ -332,27 +332,27 @@ ServerProxy::submitToken(const Token &token, const QString &userName, const QStr
   int err = proxy_->submitMediaToken(&request, &response);
   mutex_.unlock();
   if (err) {
-    DOUT("submitToken: soap error, err =" << err);
+    DOUT("soap error, err =" << err);
     emit soapError(err);
-    DOUT("submitToken:exit");
+    DOUT("exit");
     return 0;
   }
 
   qint64 ret = response.return_;
-  DOUT("submitToken:exit: tid =" << ret);
+  DOUT("exit: tid =" << ret);
   return ret;
 }
 
 qint64
 ServerProxy::submitTokenDigest(const QString &digest, qint32 digestType, qint32 tokenType, const QString &userName, const QString &password)
 {
-  DOUT("submitTokenDigest:enter: tokenType =" << tokenType);
+  DOUT("enter: tokenType =" << tokenType);
   //if (tokenType < 0) {
-  //  DOUT("submitTokenDigest:exit: error: invalid tokenType =" << tokenType);
+  //  DOUT("exit: error: invalid tokenType =" << tokenType);
   //  return 0;
   //}
   if (digest.length() != Traits::TOKEN_DIGEST_LENGTH) {
-    DOUT("submitTokenDigest:exit: error: invalid digest =" << digest);
+    DOUT("exit: error: invalid digest =" << digest);
     return 0;
   }
 
@@ -371,28 +371,28 @@ ServerProxy::submitTokenDigest(const QString &digest, qint32 digestType, qint32 
   int err = proxy_->submitMediaTokenDigest(&request, &response);
   mutex_.unlock();
   if (err) {
-    DOUT("submitTokenDigest: soap error, err =" << err);
+    DOUT("soap error, err =" << err);
     emit soapError(err);
-    DOUT("submitTokenDigest:exit");
+    DOUT("exit");
     return 0;
   }
 
   qint64 ret = response.return_;
-  DOUT("submitToken:exit: tid =" << ret);
+  DOUT("exit: tid =" << ret);
   return ret;
 }
 
 qint64
 ServerProxy::submitAlias(const Alias &alias, const QString &userName, const QString &password)
 {
-  DOUT("submitAlias:enter");
+  DOUT("enter");
 
   if (!alias.hasText()) {
-    DOUT("submitAlias:exit: error: missing text");
+    DOUT("exit: error: missing text");
     return 0;
   }
   if (alias.text().size() > Traits::MAX_ANNOT_LENGTH) {
-    DOUT("submitAlias:exit: error: text too long, size =" << alias.text().size());
+    DOUT("exit: error: text too long, size =" << alias.text().size());
     return 0;
   }
 
@@ -423,28 +423,28 @@ ServerProxy::submitAlias(const Alias &alias, const QString &userName, const QStr
   int err = proxy_->submitMediaAlias(&request, &response);
   mutex_.unlock();
   if (err) {
-    DOUT("submitAlias: soap error, err =" << err);
+    DOUT("soap error, err =" << err);
     emit soapError(err);
-    DOUT("submitAlias:exit");
+    DOUT("exit");
     return 0;
   }
 
   qint64 ret = response.return_;
-  DOUT("submitAlias:exit: aid =" << ret);
+  DOUT("exit: aid =" << ret);
   return ret;
 }
 
 qint64
 ServerProxy::submitAliasTextWithTokenId(const QString &text, qint32 type, qint64 tokenId, const QString &userName, const QString &password)
 {
-  DOUT("submitAliasTextWithTokenId:enter");
+  DOUT("enter");
 
   if (text.isEmpty()) {
-    DOUT("submitAliasTextWithTokenId:exit: error: missing text");
+    DOUT("exit: error: missing text");
     return 0;
   }
   if (text.size() > Traits::MAX_ANNOT_LENGTH) {
-    DOUT("submitAliasTextWithTokenId:exit: error: text too long, size =" << text.size());
+    DOUT("exit: error: text too long, size =" << text.size());
     return 0;
   }
 
@@ -463,14 +463,14 @@ ServerProxy::submitAliasTextWithTokenId(const QString &text, qint32 type, qint64
   int err = proxy_->submitMediaAliasTextWithTokenId(&request, &response);
   mutex_.unlock();
   if (err) {
-    DOUT("submitAliasTextWithTokenId: soap error, err =" << err);
+    DOUT("soap error, err =" << err);
     emit soapError(err);
-    DOUT("submitAliasTextWithTokenId:exit");
+    DOUT("exit");
     return 0;
   }
 
   qint64 ret = response.return_;
-  DOUT("submitAliasTextWithTokenId:exit: aid =" << ret);
+  DOUT("exit: aid =" << ret);
   return ret;
 }
 
@@ -478,18 +478,18 @@ ServerProxy::submitAliasTextWithTokenId(const QString &text, qint32 type, qint64
 qint64
 ServerProxy::submitAliasTextAndTokenDigest(const QString &text, qint32 type, const QString &digest, qint32 digestType, const QString &userName, const QString &password)
 {
-  DOUT("submitAliasTextAndTokenDigest:enter: digestType =" << digestType);
+  DOUT("enter: digestType =" << digestType);
 
   if (text.isEmpty()) {
-    DOUT("submitAliasTextAndTokenDigest:exit: error: missing text");
+    DOUT("exit: error: missing text");
     return 0;
   }
   if (text.size() > Traits::MAX_ANNOT_LENGTH) {
-    DOUT("submitAliasTextAndTokenDigest:exit: error: text too long, size =" << text.size());
+    DOUT("exit: error: text too long, size =" << text.size());
     return 0;
   }
   if (digest.size() != Traits::TOKEN_DIGEST_LENGTH) {
-    DOUT("submitAliasTextAndTokenDigest:exit: invalid digest size =" << digest.size());
+    DOUT("exit: invalid digest size =" << digest.size());
     return 0;
   }
 
@@ -510,28 +510,28 @@ ServerProxy::submitAliasTextAndTokenDigest(const QString &text, qint32 type, con
   int err = proxy_->submitMediaAliasTextAndTokenDigest(&request, &response);
   mutex_.unlock();
   if (err) {
-    DOUT("submitAliasTextAndTokenDigest: soap error, err =" << err);
+    DOUT("soap error, err =" << err);
     emit soapError(err);
-    DOUT("submitAliasTextAndTokenDigest:exit");
+    DOUT("exit");
     return 0;
   }
 
   qint64 ret = response.return_;
-  DOUT("submitAliasTextAndTokenDigest:exit: aid =" << ret);
+  DOUT("exit: aid =" << ret);
   return ret;
 }
 
 qint64
 ServerProxy::submitAnnotation(const Annotation &annot, const QString &userName, const QString &password)
 {
-  DOUT("submitAnnotation:enter");
+  DOUT("enter");
 
   if (!annot.hasText()) {
-    DOUT("submitAnnotation:exit: error: missing text");
+    DOUT("exit: error: missing text");
     return 0;
   }
   if (annot.text().size() > Traits::MAX_ANNOT_LENGTH) {
-    DOUT("submitAnnotation:exit: error: text too long, size =" << annot.text().size());
+    DOUT("exit: error: text too long, size =" << annot.text().size());
     return 0;
   }
 
@@ -567,28 +567,28 @@ ServerProxy::submitAnnotation(const Annotation &annot, const QString &userName, 
   int err = proxy_->submitMediaAnnotation(&request, &response);
   mutex_.unlock();
   if (err) {
-    DOUT("submitAnnotation: soap error, err =" << err);
+    DOUT("soap error, err =" << err);
     emit soapError(err);
-    DOUT("submitAnnotation:exit");
+    DOUT("exit");
     return 0;
   }
 
   qint64 ret = response.return_;
-  DOUT("submitAnnotation:exit: aid =" << ret);
+  DOUT("exit: aid =" << ret);
   return ret;
 }
 
 qint64
 ServerProxy::submitAnnotationTextWithTokenId(const QString &text, qint64 pos, qint32 posType, qint64 tokenId, const QString &userName, const QString &password)
 {
-  DOUT("submitAnnotationTextWithTokenId:enter");
+  DOUT("enter");
 
   if (text.isEmpty()) {
-    DOUT("submitAnnotationTextWithTokenId:exit: error: missing text");
+    DOUT("exit: error: missing text");
     return 0;
   }
   if (text.size() > Traits::MAX_ANNOT_LENGTH) {
-    DOUT("submitAnnotationTextWithTokenId:exit: error: text too long, size =" << text.size());
+    DOUT("exit: error: text too long, size =" << text.size());
     return 0;
   }
 
@@ -608,32 +608,32 @@ ServerProxy::submitAnnotationTextWithTokenId(const QString &text, qint64 pos, qi
   int err = proxy_->submitMediaAnnotationTextWithTokenId(&request, &response);
   mutex_.unlock();
   if (err) {
-    DOUT("submitAnnotationTextWithTokenId: soap error, err =" << err);
+    DOUT(" soap error, err =" << err);
     emit soapError(err);
-    DOUT("submitAnnotationTextWithTokenId:exit");
+    DOUT("exit");
     return 0;
   }
 
   qint64 ret = response.return_;
-  DOUT("submitAnnotationTextWithTokenId:exit: aid =" << ret);
+  DOUT("exit: aid =" << ret);
   return ret;
 }
 
 qint64
 ServerProxy::submitAnnotationTextAndTokenDigest(const QString &text, qint64 pos, qint32 posType, const QString &digest, qint32 digestType, const QString &userName, const QString &password)
 {
-  DOUT("submitAnnotationTextAndTokenDigest:enter: digestType =" << digestType);
+  DOUT("enter: digestType =" << digestType);
 
   if (text.isEmpty()) {
-    DOUT("submitAnnotationTextAndTokenDigest:exit: error: missing text");
+    DOUT("exit: error: missing text");
     return 0;
   }
   if (text.size() > Traits::MAX_ANNOT_LENGTH) {
-    DOUT("submitAnnotationTextAndTokenDigest:exit: error: text too long, size =" << text.size());
+    DOUT("exit: error: text too long, size =" << text.size());
     return 0;
   }
   if (digest.size() != Traits::TOKEN_DIGEST_LENGTH) {
-    DOUT("submitAnnotationTextAndTokenDigest:exit: error: text too long, size =" << text.size());
+    DOUT("exit: error: text too long, size =" << text.size());
     return 0;
   }
 
@@ -655,14 +655,14 @@ ServerProxy::submitAnnotationTextAndTokenDigest(const QString &text, qint64 pos,
   int err = proxy_->submitMediaAnnotationTextAndTokenDigest(&request, &response);
   mutex_.unlock();
   if (err) {
-    DOUT("submitAnnotationTextAndTokenDigest: soap error, err =" << err);
+    DOUT("soap error, err =" << err);
     emit soapError(err);
-    DOUT("submitAnnotationTextAndTokenDigest:exit");
+    DOUT("exit");
     return 0;
   }
 
   qint64 ret = response.return_;
-  DOUT("submitAnnotationTextAndTokenDigest:exit: aid =" << ret);
+  DOUT("exit: aid =" << ret);
   return ret;
 }
 
@@ -671,7 +671,7 @@ ServerProxy::submitAnnotationTextAndTokenDigest(const QString &text, qint64 pos,
 Token
 ServerProxy::selectTokenWithId(qint64 id)
 {
-  DOUT("selectTokenWithId:enter");
+  DOUT("enter");
   Token ret;
 
   tns__selectMediaTokenWithId request;
@@ -682,9 +682,9 @@ ServerProxy::selectTokenWithId(qint64 id)
   int err = proxy_->selectMediaTokenWithId(&request, &response);
   mutex_.unlock();
   if (err) {
-    DOUT("selectTokenWithId: soap error, err =" << err);
+    DOUT("soap error, err =" << err);
     emit soapError(err);
-    DOUT("selectTokenWithId:exit");
+    DOUT("exit");
     return ret;
   }
 
@@ -705,14 +705,14 @@ ServerProxy::selectTokenWithId(qint64 id)
     ret.setVisitedCount(p->visitedCount);
     ret.setAnnotCount(p->annotCount);
   }
-  DOUT("selectTokenWithId:exit: tid =" << ret.id());
+  DOUT("exit: tid =" << ret.id());
   return ret;
 }
 
 Token
 ServerProxy::selectTokenWithDigest(const QString &digest, int digestType)
 {
-  DOUT("selectTokenWithDigest:enter: digestType =" << digestType);
+  DOUT("enter: digestType =" << digestType);
   Token ret;
 
   tns__selectMediaTokenWithDigest request;
@@ -725,9 +725,9 @@ ServerProxy::selectTokenWithDigest(const QString &digest, int digestType)
   int err = proxy_->selectMediaTokenWithDigest(&request, &response);
   mutex_.unlock();
   if (err) {
-    DOUT("selectTokenWithDigest: soap error, err =" << err);
+    DOUT("soap error, err =" << err);
     emit soapError(err);
-    DOUT("selectTokenWithDigest:exit");
+    DOUT("exit");
     return ret;
   }
 
@@ -748,14 +748,14 @@ ServerProxy::selectTokenWithDigest(const QString &digest, int digestType)
     ret.setAnnotCount(p->annotCount);
   }
 
-  DOUT("selectTokenWithId:exit: tid =" << ret.id());
+  DOUT("exit: tid =" << ret.id());
   return ret;
 }
 
 AliasList
 ServerProxy::selectAliasesWithTokenId(qint64 tid)
 {
-  DOUT("selectAliasesWithTokenId:enter: tid =" << tid);
+  DOUT("enter: tid =" << tid);
   AliasList ret;
 
   tns__selectMediaAliasesWithTokenId request;
@@ -766,9 +766,9 @@ ServerProxy::selectAliasesWithTokenId(qint64 tid)
   int err = proxy_->selectMediaAliasesWithTokenId(&request, &response);
   mutex_.unlock();
   if (err) {
-    DOUT("selectAliasesWithTokenId: soap error, err =" << err);
+    DOUT("soap error, err =" << err);
     emit soapError(err);
-    DOUT("selectAliasesWithTokenId:exit");
+    DOUT("exit");
     return ret;
   }
 
@@ -793,14 +793,14 @@ ServerProxy::selectAliasesWithTokenId(qint64 tid)
         ret.append(a);
       }
 
-  DOUT("selectAliasesWithTokenId:exit: count =" << ret.size());
+  DOUT("exit: count =" << ret.size());
   return ret;
 }
 
 AnnotationList
 ServerProxy::selectAnnotationsWithTokenId(qint64 tid)
 {
-  DOUT("selectAnnotationsWithTokenId:enter: tid =" << tid);
+  DOUT("enter: tid =" << tid);
   AnnotationList ret;
 
   tns__selectMediaAnnotationsWithTokenId request;
@@ -811,9 +811,9 @@ ServerProxy::selectAnnotationsWithTokenId(qint64 tid)
   int err = proxy_->selectMediaAnnotationsWithTokenId(&request, &response);
   mutex_.unlock();
   if (err) {
-    DOUT("selectAnnotationsWithTokenId: soap error, err =" << err);
+    DOUT("soap error, err =" << err);
     emit soapError(err);
-    DOUT("selectAnnotationsWithTokenId:exit");
+    DOUT("exit");
     return ret;
   }
 
@@ -843,14 +843,14 @@ ServerProxy::selectAnnotationsWithTokenId(qint64 tid)
         ret.append(a);
       }
 
-  DOUT("selectAnnotationsWithTokenId:exit: count =" << ret.size());
+  DOUT("exit: count =" << ret.size());
   return ret;
 }
 
 AnnotationList
 ServerProxy::selectRelatedAnnotationsWithTokenId(qint64 tid)
 {
-  DOUT("selectRelatedAnnotationsWithTokenId:enter: tid =" << tid);
+  DOUT("enter: tid =" << tid);
   AnnotationList ret;
 
   tns__selectRelatedMediaAnnotationsWithTokenId request;
@@ -861,9 +861,9 @@ ServerProxy::selectRelatedAnnotationsWithTokenId(qint64 tid)
   int err = proxy_->selectRelatedMediaAnnotationsWithTokenId(&request, &response);
   mutex_.unlock();
   if (err) {
-    DOUT("selectRelatedAnnotationsWithTokenId: soap error, err =" << err);
+    DOUT("soap error, err =" << err);
     emit soapError(err);
-    DOUT("selectRelatedAnnotationsWithTokenId:exit");
+    DOUT("exit");
     return ret;
   }
 
@@ -893,7 +893,7 @@ ServerProxy::selectRelatedAnnotationsWithTokenId(qint64 tid)
         ret.append(a);
       }
 
-  DOUT("selectRelatedAnnotationsWithTokenId:exit: count =" << ret.size());
+  DOUT("exit: count =" << ret.size());
   return ret;
 }
 
@@ -903,7 +903,7 @@ ServerProxy::selectRelatedAnnotationsWithTokenId(qint64 tid)
   bool \
   ServerProxy::_cast##_entity##WithId(qint64 id, const QString &userName, const QString &password) \
   { \
-    DOUT(#_cast #_entity "WithId:enter: id =" << id); \
+    DOUT("enter: id =" << id); \
  \
     tns__##_cast##Media##_entity##WithId request; \
     request.arg0 = id; \
@@ -917,14 +917,14 @@ ServerProxy::selectRelatedAnnotationsWithTokenId(qint64 tid)
     int err = proxy_->_cast##Media##_entity##WithId(&request, &response); \
     mutex_.unlock(); \
     if (err) { \
-      DOUT(#_cast #_entity "WithId: soap error, err =" << err); \
+      DOUT("soap error, err =" << err); \
       emit soapError(err); \
-      DOUT(#_cast #_entity "WithId:exit"); \
+      DOUT("exit"); \
       return false; \
     } \
  \
     bool ret = response.return_; \
-    DOUT(#_cast #_entity "WithId:exit: ret =" << ret); \
+    DOUT("exit: ret =" << ret); \
     return ret; \
   }
 
@@ -944,7 +944,7 @@ ServerProxy::selectRelatedAnnotationsWithTokenId(qint64 tid)
   bool \
   ServerProxy::_cast##_entity##WithId(qint64 id, const QString &userName, const QString &password) \
   { \
-    DOUT(#_cast #_entity "WithId:enter: id =" << id); \
+    DOUT("enter: id =" << id); \
  \
     tns__##_cast##_entity##WithId request; \
     request.arg0 = id; \
@@ -958,14 +958,14 @@ ServerProxy::selectRelatedAnnotationsWithTokenId(qint64 tid)
     int err = proxy_->_cast##_entity##WithId(&request, &response); \
     mutex_.unlock(); \
     if (err) { \
-      DOUT(#_cast #_entity "WithId: soap error, err =" << err); \
+      DOUT("soap error, err =" << err); \
       emit soapError(err); \
-      DOUT(#_cast #_entity "WithId:exit"); \
+      DOUT("exit"); \
       return false; \
     } \
  \
     bool ret = response.return_; \
-    DOUT(#_cast #_entity "WithId:exit: ret =" << ret); \
+    DOUT("exit: ret =" << ret); \
     return ret; \
   }
 
@@ -977,7 +977,7 @@ ServerProxy::selectRelatedAnnotationsWithTokenId(qint64 tid)
 bool
 ServerProxy::updateAnnotationTextWithId(const QString &text, qint64 id, const QString &userName, const QString &password)
 {
-  DOUT("updateAnnotationTextWithId:enter: id =" << id << ", text =" << text);
+  DOUT("enter: id =" << id << ", text =" << text);
 
   tns__updateMediaAnnotationTextWithId request;
   std::string arg0 = text.toStdString();
@@ -993,14 +993,14 @@ ServerProxy::updateAnnotationTextWithId(const QString &text, qint64 id, const QS
   int err = proxy_->updateMediaAnnotationTextWithId(&request, &response);
   mutex_.unlock();
   if (err) {
-    DOUT("updateAnnotationTextWithId: soap error, err =" << err);
+    DOUT("soap error, err =" << err);
     emit soapError(err);
-    DOUT("updateAnnotationTextWithId:exit");
+    DOUT("exit");
     return false;
   }
 
   bool ret = response.return_;
-  DOUT("updateAnnotationTextWithId:exit: ret =" << ret);
+  DOUT("exit: ret =" << ret);
   return ret;
 }
 

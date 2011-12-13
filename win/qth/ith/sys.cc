@@ -808,7 +808,7 @@ _wait:
 HANDLE
 IthCreateThread(LPVOID lpStartAddress, DWORD dwParam, HANDLE hProc)
 {
-  DOUT("IthCreateThread:enter");
+  DOUT("enter");
   HANDLE hThread; // return value
 
 //#if _WIN32_WINNT == _WIN32_WINNT_WINXP
@@ -940,10 +940,10 @@ IthCreateThread(LPVOID lpStartAddress, DWORD dwParam, HANDLE hProc)
 #endif // WINVER
 
   if (NT_SUCCESS(status)) {
-    DOUT("IthCreateThread:exit: ret =" << hThread);
+    DOUT("exit: ret =" << hThread);
     return hThread;
   } else {
-    DOUT("IthCreateThread:exit: WARNING: failed to create native thread, addr =" << lpStartAddress);
+    DOUT("exit: WARNING: failed to create native thread, addr =" << lpStartAddress);
     return INVALID_HANDLE_VALUE;
   }
 }

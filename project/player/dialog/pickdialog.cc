@@ -13,7 +13,7 @@
 #include "core/gui/toolbutton.h"
 #include <QtGui>
 
-#define DEBUG "PickDialog"
+#define DEBUG "pickdialog"
 #include "module/debug/debug.h"
 
 using namespace Logger;
@@ -87,19 +87,19 @@ PickDialog::setMessage(const QString &text)
 void
 PickDialog::cancel()
 {
-  DOUT("cancel:enter");
+  DOUT("enter");
   hide();
   log(tr("window picking canceled"));
-  DOUT("cancel:exit");
+  DOUT("exit");
 }
 
 void
 PickDialog::pickWindow(WId winId)
 {
-  DOUT("pickWindow:enter");
+  DOUT("enter");
   if (winId == this->winId()) {
     startPicking();
-    DOUT("pickWindow:exit: skip picking myself");
+    DOUT("exit: skip picking myself");
     return;
   }
 
@@ -107,27 +107,27 @@ PickDialog::pickWindow(WId winId)
 
   hide();
   emit windowPicked(winId);
-  DOUT("pickWindow:exit");
+  DOUT("exit");
 }
 
 void
 PickDialog::startPicking()
 {
-  DOUT("startPicking:enter");
+  DOUT("enter");
 #ifdef USE_WIN_PICKER
   PICKER->singleShot();
 #endif // USE_WIN_PICKER
-  DOUT("startPicking:exit");
+  DOUT("exit");
 }
 
 void
 PickDialog::stopPicking()
 {
-  DOUT("startPicking:enter");
+  DOUT("enter");
 #ifdef USE_WIN_PICKER
   PICKER->stop();
 #endif // USE_WIN_PICKER
-  DOUT("startPicking:exit");
+  DOUT("exit");
 }
 
 // - Events -

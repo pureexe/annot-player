@@ -18,7 +18,7 @@
 #include <QtGui>
 #include <ctime>
 
-#define DEBUG "AnnotationGraphicsItem"
+#define DEBUG "annotationgraphicsitem"
 #include "module/debug/debug.h"
 
 using namespace Core::Cloud;
@@ -552,7 +552,7 @@ AnnotationGraphicsItem::fly(const QPointF &from, const QPointF &to, int msecs, Q
 void
 AnnotationGraphicsItem::contextMenuEvent(QContextMenuEvent *event)
 {
-  DOUT("contexrMenuEvent: enter");
+  DOUT("enter");
   if (event) {
     bool paused = isPaused();
     if (!paused)
@@ -572,7 +572,7 @@ AnnotationGraphicsItem::contextMenuEvent(QContextMenuEvent *event)
     if (!paused)
       resume();
   }
-  DOUT("contexrMenuEvent: exit");
+  DOUT("exit");
 }
 
 void

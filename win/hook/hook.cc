@@ -7,7 +7,7 @@
 #include <QtGui>
 #include <tuple>
 
-#define DEBUG "Hook"
+#define DEBUG "hook"
 //#define USE_MODE_DEBUG
 #include "module/debug/debug.h"
 

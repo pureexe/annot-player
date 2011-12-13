@@ -2,6 +2,7 @@
 // 9/3/2011
 
 #include "config.h"
+#include "mscex.h"
 #include <string>
 #include <memory>
 
@@ -40,6 +41,10 @@ namespace { // anonymous
 int CALLBACK
 WinMain(__in HINSTANCE hInstance, __in HINSTANCE hPrevInstance, __in LPSTR lpCmdLine, __in int nCmdShow)
 {
+  UNUSED(hInstance);
+  UNUSED(hPrevInstance);
+  UNUSED(nCmdShow);
+
   enum { BUFFER_SIZE = MAX_PATH * 3 };
   WCHAR wszBuffer[BUFFER_SIZE]; {
     int nSize = ::GetModuleFileNameW(0, wszBuffer, BUFFER_SIZE);

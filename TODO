@@ -1,33 +1,40 @@
 server
-- replace screen shots to avoid copyright problem!!!!
-- make annot.me look better
 
+## annot.cloud
+- make annot.me website look better
+  - add more links, short description, screenshot
+- make annot.wiki better
+  replace screen shots to avoid copyright problem!!!!
+- finish 0.1.1.2 and
 publish to 2ch nijiura
 publish to hf 4chan
 
-## annot.cloud
-- make website look better
-- add male/female option and save it as 2 user flags
-  has sex
-  male or female
 - start implement LIVE mode
 - look into annotd source code
 
 ## annot.player
-0.1.1.2
-- debug offline mode to see if token/annot/alias offline submission works or not
-- kill disc if wrong disc type
-- font outline doesn't work, need to figure out a workaround to make it clearer
+0.1.1.3
+- font outline does n't work, need to figure out a workaround to make it clearer
   - download a free contoured font, that supporting chinese/japanese
-- keyboard event listener + find window under mouse to pick window to embed
-  implement without hook
 - clean up code
   - rename open family methods
   - clean up main() with application
   - clean up player module, esp vlc part
+  - clean up tr.h, rc.h
   - finish dataManager
     - use dataManager to connect dataServer instead of MainWindow
     - use dataManager to save current User as well?
+- use BOOST_SCOPE_EXIT to improve performance
+- fixme: edit time, edit comments, etc; otherwise, make them readonly
+- server side: add male/female option and save it as 2 user flags
+  has sex
+  male or female
+- add male/female to user's flags
+  add "female" flags to annot flats
+  and add client side filter.
+- start implementing LIVE MODE?? after publish to Japan
+- keyboard event listener + find window under mouse to pick window to embed
+  implement without hook
 - linux
   - FIXME: Read CD partially working before 120
   - prevent opening multiple instance
@@ -54,9 +61,6 @@ publish to hf 4chan
   - associate with filetype
     QSettings("HKEY_CURRENT_USER\Software\Classes\blergcorp.blergapp.v1\shell\open\command", null, @"c:\path\to\app.exe \"%1\"");
     QSettings("HKEY_CURRENT_USER\Software\Classes\.blerg", null, "blergcorp.blergapp.v1");
-- add male/female to user's flags
-  add "female" falgs to annot flats
-  and add client side filter.
 - Open folder
   play the first item in the folder
 - ng list to settings
@@ -67,7 +71,6 @@ publish to hf 4chan
   - view user info from annot
 - ubuntu
   - submit to ubuntu app market
-- fixme: edit time, edit comments, etc; otherwise, make them readonly
 
 ## NextStep:
 
@@ -110,7 +113,6 @@ server:
 COMMENT
 - comment for each token
 USER ADS
-
 
 
 ## NextProject

@@ -42,7 +42,7 @@ protected:
 
 public:
   void *hook() const; ///< \internal Return global hook handle
-  void pickWindow(WId hwnd);
+  void pickWindow(WId hwnd); ///< \internal Emit windowPicked signal
 
 private:
   Impl *impl_;

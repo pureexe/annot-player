@@ -29,7 +29,6 @@
 #define DEBUG "main"
 #include "module/debug/debug.h"
 
-
 // - Startup stages -
 
 namespace { // anonymous
@@ -134,12 +133,12 @@ main(int argc, char *argv[])
     }
     TranslatorManager::globalInstance()->setLanguage(lang, false); // auto-update translator = false
     TranslatorManager::globalInstance()->installCurrentTranslator(&a);
-    DOUT("main: app language =" << lang);
+    DOUT("app language =" << lang);
   }
 
   // Rebuild caches on update.
   if (settings->version() != G_VERSION) {
-    DOUT("main: update from old version");
+    DOUT("update from old version");
     QFileInfo cachedb(G_PATH_CACHEDB),
               queuedb(G_PATH_QUEUEDB);
     if (cachedb.exists())
@@ -151,7 +150,8 @@ main(int argc, char *argv[])
 
   // Hashes
   //qDebug() << qHash(QString("\\sub"));
-  //qDebug() << qHash(QString("\\subtitle"));
+  //qDebug() << qHash(QString("\\bookmark"));
+  //qDebug() << qHash(QString("\\b"));
 
   // Load persistant settings
 

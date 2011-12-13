@@ -5,7 +5,7 @@
 #include "win/qtwin/qtwin.h"
 #include <QtCore>
 
-#define DEBUG "Qth"
+#define DEBUG "qth"
 #include "module/debug/debug.h"
 
 // - Constructions -
@@ -19,18 +19,18 @@ Qth *Qth::globalInstance() { static Self global; return &global; }
 Qth::Qth(QObject *parent)
   : Base(parent)
 {
-  DOUT("Qth:enter");
+  DOUT("enter");
   Ith::init();
-  DOUT("Qth:exit");
+  DOUT("exit");
 }
 
 Qth::~Qth()
 {
-  DOUT("~Qth:enter");
+  DOUT("enter");
   clear();
   // FIXME: need wait for detaching processes before destroying ITH
   Ith::destroy();
-  DOUT("~Qth:exit");
+  DOUT("exit");
 }
 
 void
@@ -46,20 +46,20 @@ Qth::isEmpty() const
 void
 Qth::clear()
 {
-  DOUT("clear:enter");
+  DOUT("enter");
   foreach (ulong pid, pids_)
     detachProcess(pid);
-  DOUT("clear:exit");
+  DOUT("exit");
 }
 
 bool
 Qth::attachProcess(ulong pid, bool checkActive)
 {
-  DOUT("attachProcess:enter: pid =" << pid);
-  DOUT("attachProcess: isAttached =" << isProcessAttached(pid));
+  DOUT("enter: pid =" << pid);
+  DOUT("isAttached =" << isProcessAttached(pid));
 
   if (checkActive && !QtWin::isProcessActiveWithId(pid)) {
-    DOUT("attachProcess:exit: ret = false, isActive = false");
+    DOUT("exit: ret = false, isActive = false");
     return false;
   }
 
@@ -67,25 +67,25 @@ Qth::attachProcess(ulong pid, bool checkActive)
   if (ret && !isProcessAttached(pid))
     pids_.append(pid);
 
-  DOUT("attachProcess:exit: ret =" << ret);
+  DOUT("exit: ret =" << ret);
   return ret;
 }
 
 bool
 Qth::detachProcess(ulong pid, bool checkActive)
 {
-  DOUT("detachProcess:enter: pid =" << pid);
-  DOUT("detachProcess: isAttached =" << isProcessAttached(pid));
+  DOUT("enter: pid =" << pid);
+  DOUT("isAttached =" << isProcessAttached(pid));
 
   pids_.removeAll(pid);
 
   if (checkActive && !QtWin::isProcessActiveWithId(pid)) {
-    DOUT("detachProcess:exit: ret = false, isActive = false");
+    DOUT("exit: ret = false, isActive = false");
     return false;
   }
 
   bool ret = Ith::detachProcess(pid);
-  DOUT("detachProcess:exit: ret =" << ret);
+  DOUT("exit: ret =" << ret);
   return ret;
 }
 
@@ -98,9 +98,9 @@ Qth::isProcessAttached(ulong pid) const
 void
 Qth::emit_textReceived(const QString &text, int hookId, qint64 tsMsecs) ///< Ith callback
 {
-  DOUT("emit_textReceived:enter: text =" << text);
+  DOUT("enter: text =" << text);
   emit textReceived(text, hookId, tsMsecs);
-  DOUT("emit_textReceived:exit");
+  DOUT("exit");
 }
 
 // - Helpers -

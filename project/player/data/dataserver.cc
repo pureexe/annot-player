@@ -15,7 +15,7 @@
 using namespace Core::Cloud;
 using namespace Logger;
 
-#define DEBUG "DataServer"
+#define DEBUG "dataserver"
 #include "module/debug/debug.h"
 
 // - Constructions -
@@ -33,34 +33,34 @@ DataServer::DataServer(ServerAgent *server, Database *cache, Database *queue, QO
 qint64
 DataServer::submitToken(const Token &token)
 {
-  DOUT("submitToken:enter");
+  DOUT("enter");
   qint64 id = 0;
   if (server_->isConnected() && server_->isAuthorized())
     id = server_->submitToken(token);
   else if (cache_->isValid())
     id = cache_->selectTokenWithDigest(token.digest(), token.digestType()).id();
-  DOUT("submitToken:exit: ret =" << id);
+  DOUT("exit: ret =" << id);
   return id;
 }
 
 bool
 DataServer::submitTokens(const TokenList &tokens)
 {
-  DOUT("submitTokens:exit: count =" << tokens.size());
+  DOUT("exit: count =" << tokens.size());
   bool ret = true;
   if (!tokens.isEmpty())
     foreach (Token t, tokens)
       ret = ret && submitToken(t);
-  DOUT("submitTokens:exit: ret =" << ret);
+  DOUT("exit: ret =" << ret);
   return ret;
 }
 
 qint64
 DataServer::submitAlias(const Alias &alias)
 {
-  DOUT("submitAlias:enter");
+  DOUT("enter");
   if (!alias.hasText()) {
-    DOUT("submitAlias:exit: missing text");
+    DOUT("exit: missing text");
     return 0;
   }
   qint64 id = 0;
@@ -79,40 +79,40 @@ DataServer::submitAlias(const Alias &alias)
     } else
       cache_->insertAlias(alias);
   }
-  DOUT("submitAlias:exit: id =" << id);
+  DOUT("exit: id =" << id);
   return id;
 }
 
 bool
 DataServer::submitAliases(const AliasList &aliases)
 {
-  DOUT("submitAliases:enter: count =" << aliases.size());
+  DOUT("enter: count =" << aliases.size());
   bool ret = true;
   if (!aliases.isEmpty())
     foreach (Alias a, aliases)
       ret = ret && submitAlias(a);
-  DOUT("submitAliases:exit: ret =" << ret);
+  DOUT("exit: ret =" << ret);
   return ret;
 }
 
 qint64
 DataServer::submitTokenAndAlias(const Token &token, const Alias &alias)
 {
-  DOUT("submitTokenAndAlias:enter");
+  DOUT("enter");
   qint64 tid = submitToken(token);
   if (tid && alias.hasText()) {
     Alias a = alias;
     a.setTokenId(tid);;
     submitAlias(a);
   }
-  DOUT("submitTokenAndAlias:exit: ret =" << tid);
+  DOUT("exit: ret =" << tid);
   return tid;
 }
 
 qint64
 DataServer::submitAnnotation(const Annotation &annot)
 {
-  DOUT("submitAnnotation:enter");
+  DOUT("enter");
   qint64 id = 0;
   if (server_->isConnected() && server_->isAuthorized()) {
     id = server_->submitAnnotation(annot);
@@ -128,19 +128,19 @@ DataServer::submitAnnotation(const Annotation &annot)
     } else
       cache_->insertAnnotation(annot);
   }
-  DOUT("submitAnnotation:exit: ret =" << id);
+  DOUT("exit: ret =" << id);
   return id;
 }
 
 bool
 DataServer::submitAnnotations(const AnnotationList &annots)
 {
-  DOUT("submitAnnotations:enter: count =" << annots.size());
+  DOUT("enter: count =" << annots.size());
   bool ret = true;
   if (!annots.isEmpty())
     foreach (Annotation a, annots)
       ret = ret && submitAnnotation(a);
-  DOUT("submitAnnotations:exit: ret =" << ret);
+  DOUT("exit: ret =" << ret);
   return ret;
 }
 
@@ -149,11 +149,11 @@ DataServer::submitAnnotations(const AnnotationList &annots)
 bool
 DataServer::updateAnnotationTextWithId(const QString &text, qint64 id)
 {
-  DOUT("udpateAnnotationTextWithId:enter: text =" << text);
+  DOUT("enter: text =" << text);
   bool ret = false;
   if (server_->isConnected() && server_->isAuthorized())
     ret = server_->updateAnnotationTextWithId(text, id);
-  DOUT("udpateAnnotationTextWithId:exit: ret =" << ret);
+  DOUT("exit: ret =" << ret);
   return ret;
 }
 
@@ -162,7 +162,7 @@ DataServer::updateAnnotationTextWithId(const QString &text, qint64 id)
 Token
 DataServer::selectTokenWithId(qint64 id)
 {
-  DOUT("selectTokenWithId:enter: id =" << id);
+  DOUT("enter: id =" << id);
   Token ret;
   if (server_->isConnected()) {
     ret = server_->selectTokenWithId(id);
@@ -172,14 +172,14 @@ DataServer::selectTokenWithId(qint64 id)
     }
   } else if (cache_->isValid())
     ret = cache_->selectTokenWithId(id);
-  DOUT("selectTokenWithId:exit: tid =" << ret.id());
+  DOUT("exit: tid =" << ret.id());
   return ret;
 }
 
 Token
 DataServer::selectTokenWithDigest(const QString &digest, qint32 digestType)
 {
-  DOUT("selectTokenWithDigest:enter: digest =" << digest);
+  DOUT("enter: digest =" << digest);
   Token ret;
   if (server_->isConnected()) {
     ret = server_->selectTokenWithDigest(digest, digestType);
@@ -189,14 +189,14 @@ DataServer::selectTokenWithDigest(const QString &digest, qint32 digestType)
     }
   } else if (cache_->isValid())
     ret = cache_->selectTokenWithDigest(digest, digestType);
-  DOUT("selectTokenWithDigest:exit: tid =" << ret.id());
+  DOUT("exit: tid =" << ret.id());
   return ret;
 }
 
 AnnotationList
 DataServer::selectAnnotationsWithTokenId(qint64 tid)
 {
-  DOUT("selectAnnotationsWithTokenId:enter: tid =" << tid);
+  DOUT("enter: tid =" << tid);
   AnnotationList ret;
   if (server_->isConnected()) {
     ret = server_->selectAnnotationsWithTokenId(tid);
@@ -206,14 +206,14 @@ DataServer::selectAnnotationsWithTokenId(qint64 tid)
     }
   } else if (cache_->isValid())
     ret = cache_->selectAnnotationsWithTokenId(tid);;
-  DOUT("selectAnnotationsWithTokenId:exit: count =" << ret.size());
+  DOUT("exit: count =" << ret.size());
   return ret;
 }
 
 AliasList
 DataServer::selectAliasesWithTokenId(qint64 tid)
 {
-  DOUT("selectAliasesWithTokenId:enter: tid =" << tid);
+  DOUT("enter: tid =" << tid);
   AliasList ret;
   if (server_->isConnected()) {
     ret = server_->selectAliasesWithTokenId(tid);
@@ -223,14 +223,14 @@ DataServer::selectAliasesWithTokenId(qint64 tid)
     }
   } else if (cache_->isValid())
     ret = cache_->selectAliasesWithTokenId(tid);;
-  DOUT("selectAliasesWithTokenId:exit: count =" << ret.size());
+  DOUT("exit: count =" << ret.size());
   return ret;
 }
 
 AnnotationList
 DataServer::selectRelatedAnnotationsWithTokenId(qint64 tid)
 {
-  DOUT("selectRelatedAnnotationsWithTokenId:enter: tid =" << tid);
+  DOUT("enter: tid =" << tid);
   AnnotationList ret;
   if (server_->isConnected()) {
     ret = server_->selectRelatedAnnotationsWithTokenId(tid);
@@ -241,33 +241,33 @@ DataServer::selectRelatedAnnotationsWithTokenId(qint64 tid)
       }
   } else if (cache_->isValid())
     ret = cache_->selectAnnotationsWithTokenId(tid);
-  DOUT("selectRelatedAnnotationsWithTokenId:exit: count =" << ret.size());
+  DOUT("exit: count =" << ret.size());
   return ret;
 }
 
 AliasList
 DataServer::selectAliasesWithToken(const Token &token)
 {
-  DOUT("selectAliasesWithToken:enter");
+  DOUT("enter");
   AliasList ret;
   if (token.isValid())
     ret = selectAliasesWithTokenId(token.id());
   else if (token.hasDigest() && cache_->isValid())
     ret = cache_->selectAliasesWithTokenDigest(token.digest(), token.digestType());
-  DOUT("selectAliasesWithToken:exit");
+  DOUT("exit");
   return ret;
 }
 
 AnnotationList
 DataServer::selectAnnotationsWithToken(const Token &token)
 {
-  DOUT("selectAnnotationsWithToken:enter");
+  DOUT("enter");
   AnnotationList ret;
   if (token.isValid())
     ret = selectAnnotationsWithTokenId(token.id());
   else if (token.hasDigest() && cache_->isValid())
     ret = cache_->selectAnnotationsWithTokenDigest(token.digest(), token.digestType());
-  DOUT("selectAnnotationsWithToken:exit: count =" << ret.size());
+  DOUT("exit: count =" << ret.size());
   return ret;
 }
 
@@ -276,14 +276,14 @@ DataServer::selectAnnotationsWithToken(const Token &token)
 bool
 DataServer::commitQueue()
 {
-  DOUT("commitQueue:enter");
-  if (!Settings::globalInstance()->isQueueEmpty()) {
-    DOUT("commitQueue:exit: no changes, ret =" << true);
+  DOUT("enter");
+  if (Settings::globalInstance()->isQueueEmpty()) {
+    DOUT("exit: no changes, ret =" << true);
     return true;
   }
 
   if (!server_->isConnected() || !server_->isAuthorized() || !queue_->isValid()) {
-    DOUT("commitQueue:exit: not connected or queue corrupted, ret =" << false);
+    DOUT("exit: not connected or queue corrupted, ret =" << false);
     return false;
   }
 
@@ -314,7 +314,7 @@ DataServer::commitQueue()
   if (empty)
     Settings::globalInstance()->setQueueEmpty(true);
 
-  DOUT("commitQueue:exit: ret =" << empty);
+  DOUT("exit: ret =" << empty);
   return empty;
 }
 // EOF

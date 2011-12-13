@@ -7,14 +7,14 @@ cd ~/tmp || exit 1
 ## environment
 
 COLOR=blue
-VERSION=0.1.1.1
+VERSION=0.1.1.2
 
 TARGET="Annot Player"
 TARGET_DMG=$TARGET.dmg
 TARGET_ZIP=annot-player-$VERSION-mac.zip
 
-APP_SRC="/Volumes/local/project/annot"
-APP_BUILD="/Volumes/local/project/annot-build-desktop/build.mac"
+APP_SRC="/Volumes/local/devel/annot"
+APP_BUILD="/Volumes/local/devel/annot-build-desktop/build.mac"
 QT_BUILD=/opt/local/share/qt4
 VLC_BUILD=$HOME/opt/vlc
 VLC_FRAMEWORKS=$VLC_BUILD/Frameworks

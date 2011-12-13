@@ -16,14 +16,6 @@
 
 using namespace Core::Cloud;
 
-//#define DEBUG
-
-#ifdef DEBUG
-  #define DOUT(_msg)    qDebug() << "AddAliasDialog: " << _msg
-#else
-  #define DOUT(_dummy)
-#endif // DEBUG
-
 // - Panel -
 AddAliasDialog::AddAliasDialog(QWidget *parent)
   : Base(parent)

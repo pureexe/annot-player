@@ -15,9 +15,12 @@
 #ifdef Q_OS_UNIX
   #include "unix/qtunix/qtunix.h"
 #endif // Q_OS_UNIX
+#ifdef USE_MODULE_IOUTIL
+  #include "module/ioutil/ioutil.h"
+#endif // USE_MODULE_IOUTIL
 #include <QtGui>
 
-#define DEBUG "DeviceDialog"
+#define DEBUG "devicedialog"
 #include "module/debug/debug.h"
 
 #define COMBOBOX_MINWIDTH      100
@@ -74,6 +77,7 @@ DeviceDialog::DeviceDialog(QWidget *parent)
     _button->setToolTip(_text); \
   }
 
+  MAKE_RADIOBUTTON(autoRadioButton_, tr("auto"))
   MAKE_RADIOBUTTON(dvdRadioButton_, "DVD")
   MAKE_RADIOBUTTON(cdRadioButton_, "CD")
 #undef MAKE_RADIOBUTTON
@@ -103,11 +107,12 @@ DeviceDialog::DeviceDialog(QWidget *parent)
 
     path->addWidget(pathComboBox_);
     path->addStretch();
+    path->addWidget(autoRadioButton_);
     path->addWidget(dvdRadioButton_);
     path->addWidget(cdRadioButton_);
-    path->addWidget(refreshButton);
 
     buttons->addWidget(okButton_);
+    buttons->addWidget(refreshButton);
     buttons->addWidget(cancelButton);
   } setLayout(rows);
 
@@ -116,7 +121,7 @@ DeviceDialog::DeviceDialog(QWidget *parent)
   connect(pathComboBox_, SIGNAL(editTextChanged(QString)), SLOT(invalidateButtons()));
 
   // Post behaviors
-  dvdRadioButton_->setChecked(true);
+  autoRadioButton_->setChecked(true);
   okButton_->setFocus();
 }
 
@@ -147,8 +152,14 @@ DeviceDialog::ok()
     return;
   }
 
-  bool isCDDA = cdRadioButton_->isChecked();
-  emit deviceSelected(path, isCDDA);
+  bool isAudioCD;
+#if USE_MODULE_IOUTIL
+  if (autoRadioButton_->isChecked())
+    isAudioCD = IOUtil::isAudioCD(path);
+  else
+#endif // USE_MODULE_IOUTIL
+  isAudioCD = cdRadioButton_->isChecked();
+  emit deviceSelected(path, isAudioCD);
 }
 
 void

@@ -15,7 +15,7 @@
 #include <boost/tuple/tuple.hpp>
 #include <QtGui>
 
-//#define DEBUG "AnnotationEditor"
+//#define DEBUG "annotationeditor"
 #include "module/debug/debug.h"
 
 #define WINDOW_FLAGS ( \
@@ -503,7 +503,7 @@ AnnotationEditor::setText(const QString &text)
 void
 AnnotationEditor::code2html()
 {
-  DOUT("code2html:enter: text follows");
+  DOUT("enter: text follows");
   DOUT(textEdit_->toPlainText());
   QString html;
   QStringList tags;
@@ -512,28 +512,28 @@ AnnotationEditor::code2html()
     html = tags.join("") + " " + html.trimmed();
 
   textEdit_->setHtml(html);
-  DOUT("code2html:tags follows");
+  DOUT("tags follows");
   DOUT(tags);
-  DOUT("code2html:html follows");
+  DOUT("html follows");
   DOUT(html);
-  DOUT("code2html:exit: html follows");
+  DOUT("exit: html follows");
 }
 
 void
 AnnotationEditor::html2code()
 {
-  DOUT("html2code:enter: tidy =" << isTidyEnabled());
+  DOUT("enter: tidy =" << isTidyEnabled());
   QString html = textEdit_->toHtml();
-  DOUT("html2code: html follows");
+  DOUT("html follows");
   DOUT(html);
   if (isTidyEnabled())
     textEdit_->setPlainText(ANNOT_REDUCE_HTML(html));
   else
     textEdit_->setPlainText(html);
-  DOUT("html2code: text follows");
+  DOUT("text follows");
   DOUT(textEdit_->toPlainText());
   clearFormat();
-  DOUT("html2code:exit");
+  DOUT("exit");
 }
 
 // - Slots -

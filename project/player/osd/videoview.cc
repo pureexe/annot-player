@@ -163,7 +163,7 @@ VideoView::setViewMouseMovePos(const QPoint &globalPos)
 
 #ifdef USE_WIN_HOOK
 
-//#define DEBUG "VideoView"
+//#define DEBUG "videoview"
 #include "module/debug/debug.h"
 
 // This function is re-entrant, and \var tries is not synchornized
@@ -175,12 +175,12 @@ VideoView::addToWindowsHook()
   enum { MAX_TRIES = 50 }; // in total 10 secs
   static int tries = 0; // retries count
 
-  DOUT("addToWindowsHook:enter: tries =" << tries);
+  DOUT("enter: tries =" << tries);
   //if (children_.size() >= VLC_CHILDREN_COUNT) {
   if (tries > MAX_TRIES || children_.size() >= 2 * VLC_CHILDREN_COUNT) {
     // This should never happen.
     //Q_ASSERT(0);
-    DOUT("addToWindowsHook:exit: max tries/children already reached");
+    DOUT("exit: max tries/children already reached");
     tries = 0;
     return;
   }
@@ -206,20 +206,20 @@ VideoView::addToWindowsHook()
     DOUT("max number of tries/children reached, stop watching child windows");
   }
 
-  DOUT("addToWindowsHook:exit");
+  DOUT("exit");
 }
 
 void
 VideoView::removeFromWindowsHook()
 {
-  DOUT("removeFromWindowsHook:enter");
+  DOUT("enter");
   if (!children_.empty()) {
     foreach (WId hwnd, children_)
       HOOK->removeWinId(hwnd);
     children_.clear();
     DOUT("hooked hwnd removed");
   }
-  DOUT("removeFromWindowsHook:exit");
+  DOUT("exit");
 }
 
 bool

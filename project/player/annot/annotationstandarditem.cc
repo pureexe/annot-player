@@ -6,13 +6,8 @@
 
 using namespace Core::Universe;
 
-//#define DEBUG
-
-#ifdef DEBUG
-  #define DOUT(_msg)    qDebug() << "AnnotationStandardItem:" << _msg
-#else
-  #define DOUT(_dummy)
-#endif // DEBUG
+//#define DEBUG "annotationstandarditem"
+#include "module/debug/debug.h"
 
 // - Constructions -
 

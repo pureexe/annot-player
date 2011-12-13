@@ -48,7 +48,7 @@ void CreateNewPipe()
     FILE_SHARE_WRITE,FILE_OPEN_IF,FILE_SYNCHRONOUS_IO_NONALERT,1,1,0,-1,0x1000,0x1000,&time)))
   {
     //ConsoleOutput(ErrorCreatePipe);
-    DOUT("CreateNewPipe: error");
+    DOUT("error");
     return;
   }
   RtlInitUnicodeString(&us,command);
@@ -56,7 +56,7 @@ void CreateNewPipe()
     FILE_SHARE_READ,FILE_OPEN_IF,FILE_SYNCHRONOUS_IO_NONALERT,1,1,0,-1,0x1000,0x1000,&time)))
   {
     //ConsoleOutput(ErrorCreatePipe);
-    DOUT("CreateNewPipe: error");
+    DOUT("error");
     return;
   }
   hThread=IthCreateThread(RecvThread,(DWORD)hTextPipe);
@@ -186,18 +186,18 @@ DWORD WINAPI CmdThread(LPVOID lpThreadParameter)
 
 CommandQueue::CommandQueue():used(0),current(1)
 {
-  DOUT("CommandQueue:CommandQueue:enter");
+  DOUT("enter");
   InitializeCriticalSection(&rw);
   NtCreateSemaphore(&hSemaphore,SEMAPHORE_ALL_ACCESS,0,0,QUEUE_MAX);
   hThread=IthCreateThread(CmdThread,(DWORD)this);
-  DOUT("CommandQueue:CommandQueue:exit");
+  DOUT("exit");
 }
 CommandQueue::~CommandQueue()
 {
-  DOUT("CommandQueue:~CommandQueue:enter");
+  DOUT("enter");
   NtReleaseSemaphore(hSemaphore,1,0);
 
-  DOUT("CommandQueue:~CommandQueue: FIXME: termating hanging hThread ...");
+  DOUT("FIXME: termating hanging hThread ...");
   // jichi:10/15/2011: hanged orz
   //NtWaitForSingleObject(hThread,0,0);
   NtTerminateThread(hThread, 0);
@@ -205,13 +205,13 @@ CommandQueue::~CommandQueue()
   NtClose(hSemaphore);
   NtClose(hThread);
   DeleteCriticalSection(&rw);
-  DOUT("CommandQueue:~CommandQueue:exit");
+  DOUT("exit");
 }
 void CommandQueue::AddRequest(const SendParam& sp, DWORD pid)
 {
   if (current==used) {
     //ConsoleOutput(ErrorCmdQueueFull);
-    DOUT("AddRequiest: command queue is full");
+    DOUT("command queue is full");
   }
   EnterCriticalSection(&rw);
   queue[current]=sp;
@@ -225,7 +225,7 @@ void CommandQueue::AddRequest(const SendParam& sp, DWORD pid)
     else
     {
       //ConsoleOutput(ErrorNoAttach);
-      DOUT("AddRequest:error: not attached ");
+      DOUT("error: not attached ");
       goto _request_exit;
     }
   }

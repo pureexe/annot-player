@@ -26,6 +26,7 @@ namespace QtUnix {
 
   bool isDeviceFile(const QString &path);
 
+
 } // namespace QtUnix
 
 #endif // QTUNIX_H

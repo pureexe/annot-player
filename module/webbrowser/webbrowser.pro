@@ -3,8 +3,6 @@
 # See: http://bezstellar.blog.163.com/blog/static/1748687802010101844811643/
 # Original since: 27. jul 14:00:10 2009, by qmake (2.01a) ma
 
-VERSION = 0.0.1.0
-
 include(../../config.pri)
 
 QT += core gui webkit

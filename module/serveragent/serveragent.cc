@@ -10,7 +10,7 @@
 #endif // USE_MODULE_CLIENTAGENT
 #include <QtCore>
 
-#define DEBUG "ServerAgent"
+#define DEBUG "serveragent"
 #include "module/debug/debug.h"
 
 using namespace Core::Cloud;
@@ -40,14 +40,14 @@ ServerAgent::setClientAgent(ClientAgent *client)
 void
 ServerAgent::reportSoapError(int err)
 {
-  DOUT("reportSoapError:enter: err =" << err);
+  DOUT("enter: err =" << err);
   switch (err) {
   case 28:      emit connectionError(); break;
   case 404:     emit error404(); break;
   case 500:     emit serverError(); break;
   default:      emit unknownError();
   }
-  DOUT("reportSoapError:exit");
+  DOUT("exit");
 }
 
 // - Login -
@@ -89,17 +89,17 @@ ServerAgent::setUser(const User &user)
 bool
 ServerAgent::login(const QString &userName, const QString &passwordDigest)
 {
-  DOUT("login:enter");
-  DOUT("login: mutex locking");
+  DOUT("enter");
+  DOUT("mutex locking");
   mutex_.lock();
-  DOUT("login: mutex locked");
+  DOUT("mutex locked");
   emit loginRequested(userName);
 
   bool updated = isSoftwareUpdated();
 #ifndef DEBUG
   Q_UNUSED(updated);
 #endif // DEBUG
-  DOUT("login: isSoftwareUpdated =" << updated);
+  DOUT("isSoftwareUpdated =" << updated);
 
   user_ = proxy_->selectUser(userName, passwordDigest);
   user_.setName(userName);
@@ -108,28 +108,28 @@ ServerAgent::login(const QString &userName, const QString &passwordDigest)
   authorized_ = user_.isValid();
 
   if (authorized_) {
-    //DOUT("login:update my user");
+    //DOUT("update my user");
     //user_ = proxy_->getUser();
     //Q_ASSERT(user_.id());
-    DOUT("login: new user id =" << user_.id());
+    DOUT("new user id =" << user_.id());
 
 #ifdef USE_MODULE_CLIENTAGENT
     if (client_ && client_->isReady()) {
-      DOUT("login: client service is ready, try setCallback");
+      DOUT("client service is ready, try setCallback");
       proxy_->setCallback(client_->port(), client_->nextPublicKey());
       // TODO: try call back again in 5 secs
     } else
-      DOUT("login: client service is not ready, skip setCallback TODO!!!!!");
+      DOUT("client service is not ready, skip setCallback TODO!!!!!");
 #endif // USE_MODULE_CLIENTAGENT
 
     emit loginSucceeded(userName);
   } else
     emit loginFailed(userName);
-  DOUT("login:exit: ret =" << authorized_);
+  DOUT("exit: ret =" << authorized_);
   emit userChanged();
-  DOUT("login: mutex unlocking");
+  DOUT("mutex unlocking");
   mutex_.unlock();
-  DOUT("login: mutex unlocked");
+  DOUT("mutex unlocked");
   return authorized_;
 }
 
@@ -140,19 +140,19 @@ ServerAgent::login()
 void
 ServerAgent::logout()
 {
-  DOUT("logout:enter");
-  DOUT("logout: mutex locking");
+  DOUT("enter");
+  DOUT("mutex locking");
   //mutex_.lock();
-  DOUT("logout: mutex locked");
+  DOUT("mutex locked");
   emit logoutRequested();
   authorized_ = false;
   //proxy_->logout();
   emit logoutFinished();
   emit userChanged();
-  DOUT("logout: mutex unlocking");
+  DOUT("mutex unlocking");
   //mutex_.unlock();
-  DOUT("logout: mutex unlocked");
-  DOUT("logout:exit");
+  DOUT("mutex unlocked");
+  DOUT("exit");
 }
 
 void
@@ -222,13 +222,13 @@ ServerAgent::chat(const QString &message)
 qint64
 ServerAgent::submitToken(const Token &token)
 {
-  DOUT("submitToken:enter: tt =" << token.type());
+  DOUT("enter: tt =" << token.type());
   if (!isAuthorized()) {
-    DOUT("submitToken:exit: not authorized");
+    DOUT("exit: not authorized");
     return 0;
   }
   qint64 ret = proxy_->submitTokenDigest(token.digest(), token.digestType(), token.type(), user_.name(), user_.password());
-  DOUT("submitToken:exit: ret =" << ret);
+  DOUT("exit: ret =" << ret);
   return ret;
 }
 
@@ -244,13 +244,13 @@ ServerAgent::submitTokens(const TokenList &tokens)
 qint64
 ServerAgent::submitAlias(const Alias &alias)
 {
-  DOUT("submitAlias:enter: tid =" << alias.tokenId());
+  DOUT("enter: tid =" << alias.tokenId());
   if (!isAuthorized()) {
-    DOUT("submitAlias:exit: not authorized");
+    DOUT("exit: not authorized");
     return 0;
   }
   if (!alias.hasText()) {
-    DOUT("submitAlias:exit: missing text");
+    DOUT("exit: missing text");
     return 0;
   }
   qint64 ret = 0;
@@ -259,7 +259,7 @@ ServerAgent::submitAlias(const Alias &alias)
   else if (alias.hasTokenDigest())
     ret = proxy_->submitAliasTextAndTokenDigest(alias.text(), alias.type(), alias.tokenDigest(), alias.tokenDigestType(), user_.name(), user_.password());
 
-  DOUT("submitAlias:exit: ret =" << ret);
+  DOUT("exit: ret =" << ret);
   return ret;
 }
 
@@ -287,13 +287,17 @@ ServerAgent::submitTokenAndAlias(const Token &token, const Alias &alias)
 qint64
 ServerAgent::submitAnnotation(const Annotation &annot)
 {
-  DOUT("submitAnnotation:enter: tid =" << annot.tokenId());
+  DOUT("enter: tid =" << annot.tokenId() << ", uid =" << annot.userId());
   if (!isAuthorized()) {
-    DOUT("submitAnnotation:exit: not authorized");
+    DOUT("exit: not authorized");
     return 0;
   }
   if (!annot.hasText()) {
-    DOUT("submitAnnotation:exit: missing text");
+    DOUT("exit: missing text");
+    return 0;
+  }
+  if (!annot.hasUserId() || user_.id() != annot.userId()) {
+    DOUT("exit: mismatched userId");
     return 0;
   }
   qint64 ret = 0;
@@ -301,7 +305,7 @@ ServerAgent::submitAnnotation(const Annotation &annot)
     ret = proxy_->submitAnnotationTextWithTokenId(annot.text(), annot.pos(), annot.posType(), annot.tokenId(), user_.name(), user_.password());
   else if (annot.hasTokenDigest())
     ret = proxy_->submitAnnotationTextAndTokenDigest(annot.text(), annot.pos(), annot.posType(), annot.tokenDigest(), annot.tokenDigestType(), user_.name(), user_.password());
-  DOUT("submitAnnotation:exit: ret =" << ret);
+  DOUT("exit: ret =" << ret);
   return ret;
 }
 

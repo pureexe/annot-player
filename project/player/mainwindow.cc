@@ -107,7 +107,7 @@
 using namespace Core::Cloud;
 using namespace Logger;
 
-#define DEBUG "MainWindow"
+#define DEBUG "mainwindow"
 #include "module/debug/debug.h"
 
 // - Focus -
@@ -637,6 +637,7 @@ MainWindow::createConnections()
 #ifdef USE_MODE_SIGNAL
   connect(signalView_, SIGNAL(hookSelected(int,ProcessInfo)), SLOT(openProcessHook(int,ProcessInfo)));
   connect(recentMessageView_, SIGNAL(hookSelected(int)), SLOT(openProcessHook(int)));
+  connect(recentMessageView_, SIGNAL(hookSelected(int)), recentMessageView_, SLOT(hide()));
   connect(messageHandler_, SIGNAL(messageReceivedWithId(qint64)), annotationView_, SLOT(showAnnotationsAtPos(qint64)));
   connect(messageHandler_, SIGNAL(messageReceivedWithText(QString)), SLOT(translate(QString)));
 #endif // USE_MODE_SIGNAL
@@ -836,6 +837,15 @@ MainWindow::createMenus()
       p->userButton()->setMenu(userMenu_);
       connect(p, SIGNAL(invalidateUserMenuRequested()), SLOT(invalidateUserMenu()));
     }
+  }
+
+  helpContextMenu_ = new QMenu(this); {
+    UiStyle::globalInstance()->setContextMenuStyle(helpContextMenu_, true); // persistent = true
+    helpContextMenu_->setTitle(TR(T_MENUTEXT_HELP));
+    helpContextMenu_->setToolTip(TR(T_TOOLTIP_HELP));
+
+    helpContextMenu_->addAction(helpAct_);
+    helpContextMenu_->addAction(aboutAct_);
   }
 
   appLanguageMenu_ = new QMenu(this); {
@@ -1312,7 +1322,7 @@ MainWindow::openVideoDevice()
     playlist_.clear();
 
     recentPath_ = path;
-    openDevicePath(path, false); // isCDDA == false
+    openDevicePath(path, false); // isAudioCD == false
   }
 }
 
@@ -1329,12 +1339,12 @@ MainWindow::openAudioDevice()
     playlist_.clear();
 
     recentPath_ = path;
-    openDevicePath(path, true); // isCDDA == true
+    openDevicePath(path, true); // isAudioCD == true
   }
 }
 
 void
-MainWindow::openDevicePath(const QString &path, bool isCDDA)
+MainWindow::openDevicePath(const QString &path, bool isAudioCD)
 {
   //if (!isDevicePath(path)) {
   //  warn(TR(T_ERROR_BAD_DEVICEPATH) + ": " + path);
@@ -1343,10 +1353,10 @@ MainWindow::openDevicePath(const QString &path, bool isCDDA)
 
   playlist_.clear();
 
-  tokenType_ = isCDDA ? Token::TT_Audio : Token::TT_Video;
+  tokenType_ = isAudioCD ? Token::TT_Audio : Token::TT_Video;
 
   QString mrl = path;
-  if (isCDDA && !mrl.startsWith(PLAYER_URL_CD, Qt::CaseInsensitive))
+  if (isAudioCD && !mrl.startsWith(PLAYER_URL_CD, Qt::CaseInsensitive))
     mrl = PLAYER_URL_CD + path;
 
   openPath(mrl);
@@ -1456,8 +1466,8 @@ MainWindow::openPath(const QString &path, bool checkPath)
 
   // Forward computing tokenType_
   {
-    bool isCDDA = path.startsWith(PLAYER_URL_CD, Qt::CaseInsensitive);
-    if (isCDDA)
+    bool isAudioCD = path.startsWith(PLAYER_URL_CD, Qt::CaseInsensitive);
+    if (isAudioCD)
       tokenType_ = Token::TT_Audio;
     else  {
       int tt = fileType(path);
@@ -1527,20 +1537,24 @@ MainWindow::digestFromFile(const QString &path)
 void
 MainWindow::invalidateMediaAndPlay(bool async)
 {
-  DOUT("invalidateMediaAndPlay:enter: async =" << async);
+  DOUT("enter: async =" << async);
   if (player_->hasMedia()) {
     if (async &&
         recentDigest_.isEmpty() &&
         isDigestReady(player_->mediaPath())) {
       log(tr("analyzing media ..."));
       QThreadPool::globalInstance()->start(new task_::invalidateMediaAndPlay(this));
-      DOUT("invalidateMediaAndPlay:exit: returned from async branch");
+      DOUT("exit: returned from async branch");
       return;
     }
 
-    DOUT("invalidateMediaAndPlay: playerMutex locking");
+    DOUT("playerMutex locking");
     playerMutex_.lock();
-    DOUT("invalidateMediaAndPlay: playerMutex locked");
+    DOUT("playerMutex locked");
+
+    dataManager_->token().setId(0);
+    dataManager_->removeAliases();
+    annotationView_->removeAnnotations();
 
     QString path = player_->mediaPath();
     if (isDigestReady(path)) {
@@ -1576,11 +1590,11 @@ MainWindow::invalidateMediaAndPlay(bool async)
     // SingleShot only because of multi-threading problem.
     QTimer::singleShot(0, this, SLOT(invalidateTrackMenu()));
 
-    DOUT("invalidateMediaAndPlay: playerMutex unlocking");
+    DOUT("playerMutex unlocking");
     playerMutex_.unlock();
-    DOUT("invalidateMediaAndPlay: playerMutex unlocked");
+    DOUT("playerMutex unlocked");
   }
-  DOUT("invalidateMediaAndPlay:exit");
+  DOUT("exit");
 }
 
 void
@@ -1745,7 +1759,7 @@ MainWindow::snapshot()
 void
 MainWindow::seek(qint64 time)
 {
-  DOUT("seek: enter: time =" << time);
+  DOUT("enter: time =" << time);
 
   if (hub_->isSignalTokenMode())
     return;
@@ -1757,7 +1771,7 @@ MainWindow::seek(qint64 time)
     //pause();
     //player_->setTime(0);
     replay();
-    DOUT("seek: exit: time <=0, time =" << time);
+    DOUT("exit: time <=0, time =" << time);
     return;
   }
 
@@ -1766,7 +1780,7 @@ MainWindow::seek(qint64 time)
     //pause();
     //player_->setTime(length - 1);
     stop();
-    DOUT("seek: exit: time >= length, length =" << length << ", time =" << time);
+    DOUT("exit: time >= length, length =" << length << ", time =" << time);
     return;
   }
 
@@ -1774,7 +1788,7 @@ MainWindow::seek(qint64 time)
   emit seeked();
 
   logger_->logSeeked(time);
-  DOUT("seek: exit: time =" << time);
+  DOUT("exit: time =" << time);
 }
 
 void
@@ -2118,17 +2132,17 @@ MainWindow::setProcessPickDialogVisible(bool visible)
 void
 MainWindow::submitAlias(const Alias &input, bool async)
 {
-  DOUT("submitAlias:enter: async =" << async << ", text =" << input.text());
+  DOUT("enter: async =" << async << ", text =" << input.text());
   if (async) {
     log(tr("connecting server to submit alias ..."));
     QThreadPool::globalInstance()->start(new task_::submitAlias(input, this));
-    DOUT("submitText:exit: returned from async branch");
+    DOUT("exit: returned from async branch");
     return;
   }
 
-  DOUT("submitAlias: inetMutex locking");
+  DOUT("inetMutex locking");
   inetMutex_.lock();
-  DOUT("submitAlias: inetMutex locked");
+  DOUT("inetMutex locked");
 
   Alias a = input;
   //bool id = server_->submitAlias(a);
@@ -2138,10 +2152,10 @@ MainWindow::submitAlias(const Alias &input, bool async)
   //else
   //  warn(tr("failed to update alias text") + ": " + a.text());
 
-  DOUT("submitAlias: inetMutex unlocking");
+  DOUT("inetMutex unlocking");
   inetMutex_.unlock();
-  DOUT("submitAlias: inetMutex unlocked");
-  DOUT("submitAlias:exit");
+  DOUT("inetMutex unlocked");
+  DOUT("exit");
 }
 
 void
@@ -2209,17 +2223,17 @@ MainWindow::showVideoViewIfAvailable()
 void
 MainWindow::setToken(const QString &input, bool async)
 {
-  DOUT("setToken:enter: async =" << async << ", path =" << input);
+  DOUT("enter: async =" << async << ", path =" << input);
   if (async) {
     log(tr("connecting server to query media/game token ..."));
     QThreadPool::globalInstance()->start(new task_::setToken(input, this));
-    DOUT("setToken:exit: returned from async branch");
+    DOUT("exit: returned from async branch");
     return;
   }
 
-  DOUT("setToken: inetMutex locking");
+  DOUT("inetMutex locking");
   inetMutex_.lock();
-  DOUT("setToken: inetMutex locked");
+  DOUT("inetMutex locked");
 
   Token token = dataManager_->token();
   dataManager_->removeToken();
@@ -2262,10 +2276,10 @@ MainWindow::setToken(const QString &input, bool async)
   }
 
   if (!token.hasDigest()) {
-    DOUT("setToken: inetMutex unlocking");
+    DOUT("inetMutex unlocking");
     inetMutex_.unlock();
-    DOUT("setToken: inetMutex unlocked");
-    DOUT("setToken:exit from empty digest branch");
+    DOUT("inetMutex unlocked");
+    DOUT("exit from empty digest branch");
     return;
   }
 
@@ -2291,13 +2305,15 @@ MainWindow::setToken(const QString &input, bool async)
     if (t.isValid()) {
       aliases = dataServer_->selectAliasesWithTokenId(tid);
       token = t;
-    } else
-      warn(TR(T_ERROR_SUBMIT_TOKEN) + ": " + input);
+    } //else
+      //warn(TR(T_ERROR_SUBMIT_TOKEN) + ": " + input);
   }
 
   if (!token.isValid() && cache_->isValid() && token.hasDigest()) {
     log(tr("searching for token in cache ..."));
-    token = cache_->selectTokenWithDigest(token.digest(), token.digestType());
+    Token t = cache_->selectTokenWithDigest(token.digest(), token.digestType());
+    if (t.isValid())
+      token = t;
   }
 
   aliases = dataServer_->selectAliasesWithToken(token);
@@ -2331,16 +2347,16 @@ MainWindow::setToken(const QString &input, bool async)
     server_->queryAnnotationsByTokenId(t.id());
   */
 
-  DOUT("setToken: inetMutex unlocking");
+  DOUT("inetMutex unlocking");
   inetMutex_.unlock();
-  DOUT("setToken: inetMutex unlocked");
-  DOUT("setToken:exit");
+  DOUT("inetMutex unlocked");
+  DOUT("exit");
 }
 
 void
 MainWindow::showText(const QString &text)
 {
-  DOUT("showText:enter: text =" << text);
+  DOUT("enter: text =" << text);
   Annotation annot;
   if (server_->isAuthorized()) {
     annot.setUserId(server_->user().id());
@@ -2350,7 +2366,7 @@ MainWindow::showText(const QString &text)
   annot.setLanguage(Traits::AnyLanguage);
   annot.setText(text);
   annotationView_->showAnnotation(annot);
-  DOUT("showText:exit");
+  DOUT("exit");
 }
 
 void
@@ -2386,66 +2402,68 @@ MainWindow::showTextAsSubtitle(const QString &input)
 void
 MainWindow::submitText(const QString &text, bool async)
 {
-  DOUT("submitText:enter: async =" << async << ", text =" << text);
+  DOUT("enter: async =" << async << ", text =" << text);
   if (!server_->isAuthorized() ||
-      !dataManager_->hasToken() ||
+      !dataManager_->token().hasDigest() ||
       hub_->isMediaTokenMode() && !player_->hasMedia()
 #ifdef USE_MODE_SIGNAL
       || hub_->isSignalTokenMode() && !messageHandler_->lastMessageHash().isValid()
 #endif // USE_MODE_SIGNAL
      ) {
+
     showText(text);
-    DOUT("submitText:exit: returned from showText branch");
+    DOUT("exit: returned from showText branch");
     return;
   }
 
   if (async) {
     log(tr("connecting server to submit annot ..."));
     QThreadPool::globalInstance()->start(new task_::submitText(text, this));
-    DOUT("submitText:exit: returned from async branch");
+    DOUT("exit: returned from async branch");
     return;
   }
 
-  DOUT("submitText: inetMutex locking");
+  DOUT("inetMutex locking");
   inetMutex_.lock();
-  DOUT("submitText: inetMutex locked");
+  DOUT("inetMutex locked");
 
-  Annotation annot;
-  annot.setTokenId(dataManager_->token().id());
-  annot.setTokenDigest(dataManager_->token().digest());
-  annot.setTokenDigestType(dataManager_->token().digestType());
-  annot.setUserId(server_->user().id());
-  annot.setUserAlias(server_->user().name());
-  annot.setUserAnonymous(server_->user().isAnonymous());
-  annot.setLanguage(server_->user().language());
-  annot.setCreateTime(QDateTime::currentMSecsSinceEpoch() / 1000);
-  switch (hub_->tokenMode()) {
-  case SignalHub::MediaTokenMode:
-    annot.setPos(
-      tokenType_ == Token::TT_Picture ?
-        0 : player_->time()
-    );
-    break;
-  case SignalHub::SignalTokenMode:
-#ifdef USE_MODE_SIGNAL
-    annot.setPos(messageHandler_->lastMessageHash().hash);
-    annot.setPosType(messageHandler_->lastMessageHash().count);
-#endif // USE_MODE_SIGNAL
-    break;
-  }
+  Annotation annot; {
+    annot.setTokenId(dataManager_->token().id());
+    annot.setTokenDigest(dataManager_->token().digest());
+    annot.setTokenDigestType(dataManager_->token().digestType());
+    annot.setUserId(server_->user().id());
+    annot.setUserAlias(server_->user().name());
+    annot.setUserAnonymous(server_->user().isAnonymous());
+    annot.setLanguage(server_->user().language());
+    annot.setCreateTime(QDateTime::currentMSecsSinceEpoch() / 1000);
+    switch (hub_->tokenMode()) {
+    case SignalHub::MediaTokenMode:
+      annot.setPos(
+        tokenType_ == Token::TT_Picture ?
+          0 : player_->time()
+      );
+      break;
+    case SignalHub::SignalTokenMode:
+  #ifdef USE_MODE_SIGNAL
+      annot.setPos(messageHandler_->lastMessageHash().hash);
+      annot.setPosType(messageHandler_->lastMessageHash().count);
+  #endif // USE_MODE_SIGNAL
+      break;
+    }
 
-  if (text.size() <= Traits::MAX_ANNOT_LENGTH)
-    annot.setText(text);
-  else {
-    annot.setText(text.mid(0, Traits::MAX_ANNOT_LENGTH));
-    warn(TR(T_WARNING_LONG_STRING_TRUNCATED) + ": " + annot.text());
+    if (text.size() <= Traits::MAX_ANNOT_LENGTH)
+      annot.setText(text);
+    else {
+      annot.setText(text.mid(0, Traits::MAX_ANNOT_LENGTH));
+      warn(TR(T_WARNING_LONG_STRING_TRUNCATED) + ": " + annot.text());
+    }
   }
 
   qint64 id = dataServer_->submitAnnotation(annot);
   if (id)
     annot.setId(id);
-  else
-    warn(TR(T_ERROR_SUBMIT_ANNOTATION) + ": " + text);
+  //else
+  //  warn(TR(T_ERROR_SUBMIT_ANNOTATION) + ": " + text);
 
   //annotationBrowser_->addAnnotation(annot);
   //annotationView_->addAndShowAnnotation(annot);
@@ -2453,10 +2471,10 @@ MainWindow::submitText(const QString &text, bool async)
   dataManager_->invalidateToken();
   emit addAndShowAnnotationRequested(annot);
 
-  DOUT("submitText: inetMutex unlocking");
+  DOUT("inetMutex unlocking");
   inetMutex_.unlock();
-  DOUT("submitText: inetMutex unlocked");
-  DOUT("submitText: exit");
+  DOUT("inetMutex unlocked");
+  DOUT("exit");
 }
 
 void
@@ -2492,23 +2510,23 @@ MainWindow::eval(const QString &input)
 void
 MainWindow::chat(const QString &input, bool async)
 {
-  DOUT("chat:enter: async =" << async << ", text =" << input);
+  DOUT("enter: async =" << async << ", text =" << input);
   QString text = input.trimmed();
   if (text.isEmpty()) {
-    DOUT("chat:exit: empty text skipped");
+    DOUT("exit: empty text skipped");
     return;
   }
 
   if (async) {
     //log(tr("connecting server to submit chat text ..."));
     QThreadPool::globalInstance()->start(new task_::chat(input, this));
-    DOUT("chat:exit: returned from async branch");
+    DOUT("exit: returned from async branch");
     return;
   }
 
-  DOUT("chat: inetMutex locking");
+  DOUT("inetMutex locking");
   inetMutex_.lock();
-  DOUT("chat: inetMutex locked");
+  DOUT("inetMutex locked");
 
   emit showTextRequested(CORE_CMD_COLOR_BLUE " " + text);
   emit said(text, "blue");
@@ -2521,32 +2539,32 @@ MainWindow::chat(const QString &input, bool async)
     emit responded(server_->chat(text));
 #endif // USE_MODULE_DOLL
 
-  DOUT("chat: inetMutex unlocking");
+  DOUT("inetMutex unlocking");
   inetMutex_.unlock();
-  DOUT("chat: inetMutex unlocked");
-  DOUT("chat:exit");
+  DOUT("inetMutex unlocked");
+  DOUT("exit");
 }
 
 void
 MainWindow::respond(const QString &text)
 {
-  DOUT("respond:enter: text =" << text);
+  DOUT("enter: text =" << text);
   showText(CORE_CMD_COLOR_PURPLE " " + text);
   say(text, "purple");
-  DOUT("respond:exit");
+  DOUT("exit");
 }
 
 void
 MainWindow::say(const QString &text, const QString &color)
 {
-  DOUT("say:enter: color =" << color << ", text =" << text);
+  DOUT("enter: color =" << color << ", text =" << text);
   if (text.isEmpty()) {
-    DOUT("say:exit: empty text");
+    DOUT("exit: empty text");
     return;
   }
 
   gConsole() << core_html_style(text, "color:" + color) + core_html_br();
-  DOUT("say:exit");
+  DOUT("exit");
 }
 
 // - Events -
@@ -2603,7 +2621,7 @@ MainWindow::setVisible(bool visible)
 void
 MainWindow::mousePressEvent(QMouseEvent *event)
 {
-  //DOUT("mousePressEvent:enter");
+  //DOUT("enter");
   //if (contextMenu_->isVisible())
   //  contextMenu_->hide();
 #ifdef Q_WS_MAC
@@ -2655,13 +2673,13 @@ MainWindow::mousePressEvent(QMouseEvent *event)
     }
 
   Base::mousePressEvent(event);
-  //DOUT("mousePressEvent:exit");
+  //DOUT("exit");
 }
 
 void
 MainWindow::mouseReleaseEvent(QMouseEvent *event)
 {
-  //DOUT("mouseReleaseEvent:enter");
+  //DOUT("enter");
   dragPos_ = BAD_POS;
 
 #ifdef Q_WS_MAC
@@ -2674,7 +2692,7 @@ MainWindow::mouseReleaseEvent(QMouseEvent *event)
     event->accept();
 
   Base::mouseReleaseEvent(event);
-  //DOUT("mouseReleaseEvent:exit");
+  //DOUT("exit");
 }
 
 bool
@@ -2695,7 +2713,7 @@ MainWindow::isGlobalPosNearEmbeddedPlayer(const QPoint &pos) const
 void
 MainWindow::mouseMoveEvent(QMouseEvent *event)
 {
-  //DOUT("mouseMoveEvent:enter");
+  //DOUT("enter");
 
   // Prevent auto hide osd player.
   if (hub_->isEmbeddedPlayerMode())
@@ -2728,13 +2746,13 @@ MainWindow::mouseMoveEvent(QMouseEvent *event)
   }
 
   Base::mouseMoveEvent(event);
-  //DOUT("mouseMoveEvent:exit");
+  //DOUT("exit");
 }
 
 void
 MainWindow::mouseDoubleClickEvent(QMouseEvent *event)
 {
-  //DOUT("mouseDoubleClickEvent:enter");
+  //DOUT("enter");
   if (event)
     switch (event->button()) {
     case Qt::LeftButton: hub_->toggleFullScreenWindowMode(); event->accept(); break;
@@ -2742,13 +2760,13 @@ MainWindow::mouseDoubleClickEvent(QMouseEvent *event)
     }
 
   Base::mouseDoubleClickEvent(event);
-  //DOUT("mouseDoubleClickEvent:exit");
+  //DOUT("exit");
 }
 
 void
 MainWindow::wheelEvent(QWheelEvent *event)
 {
-  //DOUT("wheelEvent:enter");
+  //DOUT("enter");
   if (event && event->orientation() == Qt::Vertical) {
     qreal vol = hub_->volume();
     vol += event->delta() / (8 * 360.0);
@@ -2758,26 +2776,26 @@ MainWindow::wheelEvent(QWheelEvent *event)
   }
 
   Base::wheelEvent(event);
-  //DOUT("wheelEvent:exit");
+  //DOUT("exit");
 }
 
 void
 MainWindow::contextMenuEvent(QContextMenuEvent *event)
 {
-  //DOUT("contextMenuEvent:enter");
+  //DOUT("enter");
   if (event) {
     invalidateContextMenu();
     contextMenu_->popup(event->globalPos());
     event->accept(); }
 
   //Base::contextMenuEvent(event);
-  //DOUT("contextMenuEvent:exit");
+  //DOUT("exit");
 }
 
 void
 MainWindow::invalidateContextMenu()
 {
-  //DOUT("invalidateContextMenu:enter");
+  //DOUT("enter");
   contextMenu_->clear();
   if (!contextMenuActions_.isEmpty()) {
     foreach (QAction *a, contextMenuActions_)
@@ -2792,6 +2810,7 @@ MainWindow::invalidateContextMenu()
 
     //contextMenu_->addAction(openAct_);
     contextMenu_->addAction(openFileAct_);
+    contextMenu_->addAction(openDeviceAct_);
 
 #ifdef USE_WIN_PICKER
     toggleWindowPickDialogVisibleAct_->setChecked(windowPickDialog_->isVisible());
@@ -2820,7 +2839,6 @@ MainWindow::invalidateContextMenu()
         openMenu_->addAction(openSubtitleAct_);
         openMenu_->addSeparator();
       }
-      openMenu_->addAction(openDeviceAct_);
       openMenu_->addAction(openVideoDeviceAct_);
 #ifdef Q_WS_WIN // TODO add support for Mac/Linux
       openMenu_->addAction(openAudioDeviceAct_);
@@ -3143,14 +3161,11 @@ MainWindow::invalidateContextMenu()
     toggleMenuBarVisibleAct_->setChecked(menuBar()->isVisible());
     contextMenu_->addAction(toggleMenuBarVisibleAct_);
 
-    contextMenu_->addAction(helpAct_);
-    contextMenu_->addAction(aboutAct_);
+    contextMenu_->addMenu(helpContextMenu_);
     contextMenu_->addAction(quitAct_);
   }
-  //DOUT("invalidateContextMenu:exit");
+  //DOUT("exit");
 }
-
-
 
 void
 MainWindow::invalidateUserMenu()
@@ -3328,29 +3343,29 @@ MainWindow::isMimeDataSupported(const QMimeData *mime)
 void
 MainWindow::dragEnterEvent(QDragEnterEvent *event)
 {
-  DOUT("dragEnterEvent:enter");
+  DOUT("enter");
   Q_ASSERT(event);
   if (isMimeDataSupported(event->mimeData()))
     event->acceptProposedAction();
   Base::dragEnterEvent(event);
-  DOUT("dragEnterEvent:exit");
+  DOUT("exit");
 }
 
 void
 MainWindow::dragMoveEvent(QDragMoveEvent *event)
 {
-  DOUT("dragMoveEvent:enter");
+  DOUT("enter");
   Q_ASSERT(event);
   //if (isMimeDataSupported(event->mimeData()))
     event->acceptProposedAction();
   Base::dragMoveEvent(event);
-  DOUT("dragMoveEvent:exit");
+  DOUT("exit");
 }
 
 void
 MainWindow::dropEvent(QDropEvent *event)
 {
-  DOUT("dropEvent:enter");
+  DOUT("enter");
   Q_ASSERT(event);
   if (isMimeDataSupported(event->mimeData())) {
     setFocus();
@@ -3358,23 +3373,23 @@ MainWindow::dropEvent(QDropEvent *event)
     openMimeData(event->mimeData());
   }
   Base::dropEvent(event);
-  DOUT("dropEvent:exit");
+  DOUT("exit");
 }
 
 void
 MainWindow::dragLeaveEvent(QDragLeaveEvent *event)
 {
-  DOUT("dragLeaveEvent:enter");
+  DOUT("enter");
   event->accept();
   Base::dragLeaveEvent(event);
-  DOUT("dragLeaveEvent:exit");
+  DOUT("exit");
 }
 
 // - Close -
 void
 MainWindow::closeEvent(QCloseEvent *event)
 {
-  DOUT("closeEvent:enter");
+  DOUT("enter");
   //respond(tr("yin: ...")); // crash on mac
   log("closing application ...");
 
@@ -3447,7 +3462,7 @@ MainWindow::closeEvent(QCloseEvent *event)
   Base::closeEvent(event);
 
   emit windowClosed();
-  DOUT("closeEvent:exit");
+  DOUT("exit");
 }
 
 // - Stays on top -
@@ -3500,29 +3515,29 @@ MainWindow::setWindowStaysOnTop(bool enabled)
 void
 MainWindow::blessTokenWithId(qint64 id, bool async)
 {
-  DOUT("blessTokenWithId:enter: async =" << async);
+  DOUT("enter: async =" << async);
   if (!id) {
     warn("invalid cast id");
-    DOUT("blessTokenWithId:exit from invalid parameter branch");
+    DOUT("exit from invalid parameter branch");
     return;
   }
 
   if (!server_->isConnected() || !server_->isAuthorized()) {
     warn("cannot perform cast when offline");
-    DOUT("blessTokenWithId:exit from offline branch");
+    DOUT("exit from offline branch");
     return;
   }
 
   if (async) {
     log(tr("submit bless cast to token ..."));
     QThreadPool::globalInstance()->start(new task_::blessTokenWithId(id, this));
-    DOUT("blessTokenWithId:exit: returned from async branch");
+    DOUT("exit: returned from async branch");
     return;
   }
 
-  DOUT("blessTokenWithId: inetMutex locking");
+  DOUT("inetMutex locking");
   inetMutex_.lock();
-  DOUT("blessTokenWithId: inetMutex locked");
+  DOUT("inetMutex locked");
 
   bool ok = server_->blessTokenWithId(id);
   if (ok) {
@@ -3534,38 +3549,38 @@ MainWindow::blessTokenWithId(qint64 id, bool async)
   } else
     warn("failed to bless token");
 
-  DOUT("blessTokenWithId: inetMutex unlocking");
+  DOUT("inetMutex unlocking");
   inetMutex_.unlock();
-  DOUT("blessTokenWithId: inetMutex unlocked");
-  DOUT("blessTokenWithId:exit: async =" << async);
+  DOUT("inetMutex unlocked");
+  DOUT("exit: async =" << async);
 }
 
 void
 MainWindow::curseTokenWithId(qint64 id, bool async)
 {
-  DOUT("curseTokenWithId:enter: async =" << async);
+  DOUT("enter: async =" << async);
   if (!id) {
     warn("invalid cast id");
-    DOUT("curseTokenWithId:exit from invalid parameter branch");
+    DOUT("exit from invalid parameter branch");
     return;
   }
 
   if (!server_->isConnected() || !server_->isAuthorized()) {
     warn("cannot perform cast when offline");
-    DOUT("curseTokenWithId:exit from offline branch");
+    DOUT("exit from offline branch");
     return;
   }
 
   if (async) {
     log(tr("submit curse cast to token ..."));
     QThreadPool::globalInstance()->start(new task_::curseTokenWithId(id, this));
-    DOUT("curseTokenWithId:exit: returned from async branch");
+    DOUT("exit: returned from async branch");
     return;
   }
 
-  DOUT("curseTokenWithId: inetMutex locking");
+  DOUT("inetMutex locking");
   inetMutex_.lock();
-  DOUT("curseTokenWithId: inetMutex locked");
+  DOUT("inetMutex locked");
 
   bool ok = server_->curseTokenWithId(id);
   if (ok) {
@@ -3577,10 +3592,10 @@ MainWindow::curseTokenWithId(qint64 id, bool async)
   } else
     warn("failed to curse token");
 
-  DOUT("curseTokenWithId: inetMutex unlocking");
+  DOUT("inetMutex unlocking");
   inetMutex_.unlock();
-  DOUT("curseTokenWithId: inetMutex unlocked");
-  DOUT("curseTokenWithId:exit: async =" << async);
+  DOUT("inetMutex unlocked");
+  DOUT("exit: async =" << async);
 }
 
 void
@@ -3630,45 +3645,45 @@ MainWindow::blockAliasWithId(qint64 tid, bool async)
 void
 MainWindow::logout(bool async)
 {
-  DOUT("logout:enter: async =" << async);
+  DOUT("enter: async =" << async);
   if (async) {
     log(tr("connecting server to logout ..."));
     QThreadPool::globalInstance()->start(new task_::logout(this));
-    DOUT("logout:exit: returned from async branch");
+    DOUT("exit: returned from async branch");
     return;
   }
 
-  DOUT("logout: inetMutex locking");
+  DOUT("inetMutex locking");
   inetMutex_.lock();
-  DOUT("logout: inetMutex locked");
+  DOUT("inetMutex locked");
 
   annotationBrowser_->setUserId(0);
   server_->logout();
 
-  DOUT("logout: inetMutex unlocking");
+  DOUT("inetMutex unlocking");
   inetMutex_.unlock();
-  DOUT("logout: inetMutex unlocked");
+  DOUT("inetMutex unlocked");
 
   Settings *s = Settings::globalInstance();
   //s->setUserName(QString());
   s->setPassword(QString());
 
-  DOUT("logout:exit: async =" << async);
+  DOUT("exit: async =" << async);
 }
 
 void
 MainWindow::login(const QString &userName, const QString &encryptedPassword, bool async)
 {
-  DOUT("login:enter: async =" << async << ", userName =" << userName);
+  DOUT("enter: async =" << async << ", userName =" << userName);
   if (async) {
     QThreadPool::globalInstance()->start(new task_::login(userName, encryptedPassword, this));
-    DOUT("login:exit: returned from async branch");
+    DOUT("exit: returned from async branch");
     return;
   }
 
-  DOUT("login: inetMutex locking");
+  DOUT("inetMutex locking");
   inetMutex_.lock();
-  DOUT("login: inetMutex locked");
+  DOUT("inetMutex locked");
   // CHECKPOINT: Multithreading here, break this function into two parts
   server_->updateConnected();
   if (!server_->isConnected() && cache_->isValid()) {
@@ -3683,10 +3698,10 @@ MainWindow::login(const QString &userName, const QString &encryptedPassword, boo
     } else
       warn(TR(T_ERROR_LOGINFROMCACHE_FAILURE));
 
-    DOUT("login: inetMutex unlocking");
+    DOUT("inetMutex unlocking");
     inetMutex_.unlock();
-    DOUT("login: inetMutex unlocked");
-    DOUT("login:exit from offline branch");
+    DOUT("inetMutex unlocked");
+    DOUT("exit from offline branch");
     return;
   }
 
@@ -3732,9 +3747,9 @@ MainWindow::login(const QString &userName, const QString &encryptedPassword, boo
       toggleAnnotationLanguageToEnglishAct_->setChecked(true);
     }
     invalidateAnnotationLanguages();
-  }
 
-  if (server_->isConnected() && server_->isAuthorized()) {
+
+
     QDate today = QDate::currentDate();
     if (Settings::globalInstance()->updateDate() != today) {
       bool updated = server_->isSoftwareUpdated();
@@ -3743,14 +3758,14 @@ MainWindow::login(const QString &userName, const QString &encryptedPassword, boo
 
       Settings::globalInstance()->setUpdateDate(today);
     }
+
+    dataServer_->commitQueue();
   }
 
-  dataServer_->commitQueue();
-
-  DOUT("login: inetMutex unlocking");
+  DOUT("inetMutex unlocking");
   inetMutex_.unlock();
-  DOUT("login: inetMutex unlocked");
-  DOUT("login:exit");
+  DOUT("inetMutex unlocked");
+  DOUT("exit");
 }
 
 // - Sync mode -
@@ -3891,6 +3906,11 @@ MainWindow::openProcessHook(int hookId, const ProcessInfo &pi)
   }
 
   hub_->setSignalTokenMode();
+
+  dataManager_->token().setId(0);
+  dataManager_->removeAliases();
+  annotationView_->removeAnnotations();
+
   if (pi.isValid()) {
     recentDigest_ = digestFromFile(pi.executablePath);
     if (!recentDigest_.isEmpty())
@@ -3959,28 +3979,28 @@ MainWindow::setRecentMessageViewVisible(bool visible)
 void
 MainWindow::setUserAnonymous(bool t, bool async)
 {
-  DOUT("setUserAnonymous:enter: async =" << async);
+  DOUT("enter: async =" << async);
 
   if (server_->isConnected() && server_->isAuthorized()) {
 
     if (async) {
       log(tr("connecting server to change anonymous status ..."));
       QThreadPool::globalInstance()->start(new task_::setUserAnonymous(t, this));
-      DOUT("setUserAnonymous:exit: returned from async branch");
+      DOUT("exit: returned from async branch");
       return;
     }
 
-    DOUT("setUserAnonymous: inetMutex locking");
+    DOUT("inetMutex locking");
     inetMutex_.lock();
-    DOUT("setUserAnonymous: inetMutex locked");
+    DOUT("inetMutex locked");
 
     bool ok = server_->setUserAnonymous(t);
     if (!ok)
       warn(tr("failed to change user anonymous state"));
 
-    DOUT("setUserAnonymous: inetMutex unlocking");
+    DOUT("inetMutex unlocking");
     inetMutex_.unlock();
-    DOUT("setUserAnonymous: inetMutex unlocked");
+    DOUT("inetMutex unlocked");
 
   } else
     server_->user().setAnonymous(t);
@@ -3990,41 +4010,41 @@ MainWindow::setUserAnonymous(bool t, bool async)
   else
     log(tr("you are not anonymous now"));
 
-  DOUT("setUserAnonymous:exit");
+  DOUT("exit");
 }
 
 void
 MainWindow::setUserLanguage(int lang, bool async)
 {
-  DOUT("setUserLanguage:enter: async =" << async);
+  DOUT("enter: async =" << async);
 
   if (server_->isConnected() && server_->isAuthorized()) {
 
     if (async) {
       log(tr("connecting server to change language ..."));
       QThreadPool::globalInstance()->start(new task_::setUserLanguage(lang, this));
-      DOUT("setUserLanguage:exit: returned from async branch");
+      DOUT("exit: returned from async branch");
       return;
     }
 
-    DOUT("setUserLanguage: inetMutex locking");
+    DOUT("inetMutex locking");
     inetMutex_.lock();
-    DOUT("setUserLanguage: inetMutex locked");
+    DOUT("inetMutex locked");
 
     bool ok = server_->setUserLanguage(lang);
     if (!ok)
       warn(tr("failed to change user language"));
 
-    DOUT("setUserLanguage: inetMutex unlocking");
+    DOUT("inetMutex unlocking");
     inetMutex_.unlock();
-    DOUT("setUserLanguage: inetMutex unlocked");
+    DOUT("inetMutex unlocked");
 
   } else
     server_->user().setLanguage(lang);
 
   log(tr("your language is ") + languageToString(server_->user().language()));
 
-  DOUT("setUserLanguage:exit");
+  DOUT("exit");
 }
 
 void MainWindow::setUserLanguageToEnglish()     { setUserLanguage(Traits::English); }
@@ -4618,8 +4638,7 @@ MainWindow::setEmbeddedWindow(WId winId)
 
 void
 MainWindow::handlePlayerError()
-{
-}
+{ }
 
 // EOF
 

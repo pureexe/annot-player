@@ -17,7 +17,7 @@
 #include "core/gui/combobox.h"
 #include <QtGui>
 
-//#define DEBUG "MessageView"
+//#define DEBUG "messageview"
 #include "module/debug/debug.h"
 
 using namespace Logger;
@@ -238,7 +238,7 @@ MessageView::selectHookIndex(int index)
 void
 MessageView::processHookedText(const QString &text, int hookId)
 {
-  DOUT("processHookedText:enter: hookId =" << hookId << ", text =" << text);
+  DOUT("enter: hookId =" << hookId << ", text =" << text);
 
   int index = hooks_.indexOf(hookId);
   if (index < 0) {
@@ -263,7 +263,7 @@ MessageView::processHookedText(const QString &text, int hookId)
   else if (ci == 0)
     setTextList(texts_[0]);
 
-  DOUT("processHookedText:exit");
+  DOUT("exit");
 }
 
 void

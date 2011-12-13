@@ -11,4 +11,7 @@ SOURCES += \
 
 QT      += core gui
 
+#LIBS    += -lIOKit
+#DEFINES += WITH_IOKIT
+
 # EOF
