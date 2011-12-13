@@ -5,15 +5,13 @@ server
   - add more links, short description, screenshot
 - make annot.wiki better
   replace screen shots to avoid copyright problem!!!!
-- finish 0.1.1.2 and
 publish to 2ch nijiura
 publish to hf 4chan
 
-- start implement LIVE mode
-- look into annotd source code
-
 ## annot.player
-0.1.1.3
+0.1.2.0
+- start implement LIVE mode
+
 - font outline does n't work, need to figure out a workaround to make it clearer
   - download a free contoured font, that supporting chinese/japanese
 - clean up code

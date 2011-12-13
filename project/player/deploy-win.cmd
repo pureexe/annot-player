@@ -7,7 +7,9 @@ test -e "Delete Caches.cmd" || exit 1
 set VERSION=0.1.1.2
 set APP=annot-player
 set ZIPFILE=%APP%-%VERSION%-win.zip
-set ZIP=zip -9
+
+set MSVC_HOME=/Volumes/win/Windows/System32
+set MSVC_DLLS=msvcp100.dll,msvcr100.dll
 
 set QT_HOME=/Volumes/win/qt/sdk
 set QT_DLLS=QtCore4.dll,QtGui4.dll,QtNetwork4.dll,QtSql4.dll,QtWebkit4.dll,QtXml4.dll,phonon4.dll
@@ -55,6 +57,7 @@ cp -v "%QT_HOME%"/plugins/sqldrivers/qsqlite4.dll sqldrivers
 
 cp -v "%QT_HOME%"/bin/{%QT_DLLS%} . | exit 1
 
+cp -v "%MSVC_HOME%"/{%MSVC_DLLS%} . | exit 1
 cp -v "%ITH_HOME%"/bin/{%ITH_DLLS%} . | exit 1
 cp -v "%ZLIB_HOME%"/bin/%ZLIB_DLL% . | exit 1
 
@@ -79,6 +82,6 @@ chmod -R 755 .
 cd ..
 
 rm -f "%ZIPFILE%"
-%ZIP% -r "%ZIPFILE%" "%APP%" > nul
+zip -9r "%ZIPFILE%" "%APP%" > nul
 
 :: EOF

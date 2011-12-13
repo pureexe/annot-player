@@ -1,8 +1,8 @@
 ﻿== ENGLISH ==
 
 Product:	Annot Player
-Version:	0.1.1.1
-Release:	2011/12/7
+Version:	0.1.1.2
+Release:	2011/12/13
 Homepage:	http://annot.me
 Help (Wiki):	http://annot.me/wiki/FAQ
 Download:	http://code.google.com/p/annot-player/downloads
@@ -16,14 +16,10 @@ Requirements:
 - Linux (Debian/Ubuntu/Fedora)
 
 WHAT'S NEW?
-- Added Fedora support.
-- Added CD/DVD device dialog. CD/DVD buffering performance improved.
-- Fixed sqlite cache creation bug in Linux.
-- Menubar enabled to all OSes.
-- Forward token digest to reduce delay on openning files and disc.
-- Added playlist to open multiple files or folder.
-- Switched to GNU ChangeLog format.
-
+- Windows tool chain updated. Qt library rebuilt. gSOAP updated.
+- Added disc type automatic detection.
+- Launcher dependency on msvcrt removed.
+- Offline annotation caching improved.
 
 == 日本語 ==
 
