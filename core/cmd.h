@@ -38,6 +38,7 @@
 #define CORE_CMD_CTRL_WARN              CORE_CMDSTR "warn"
 
 #define CORE_CMD_VIEW_FLY               CORE_CMDSTR "fly"
+#define CORE_CMD_VIEW_FLOAT             CORE_CMDSTR "float"
 #define CORE_CMD_VIEW_TOP               CORE_CMDSTR "top"
 #define CORE_CMD_VIEW_BOTTOM            CORE_CMDSTR "bottom"
 #define CORE_CMD_SUB                    CORE_CMDSTR "sub"
@@ -54,6 +55,9 @@
 #define CORE_CMD_HTML_B                 CORE_CMDSTR "b"
 
 #define CORE_CMD_STYLE                  CORE_CMDSTR "style"     // \style[color:red]{anything}
+
+#define CORE_CMD_STYLE_BOLD             CORE_CMDSTR "bold"
+#define CORE_CMD_STYLE_ITALIC           CORE_CMDSTR "italic"
 
 #define CORE_CMD_STYLE_BLINK            CORE_CMDSTR "blink"
 #define CORE_CMD_STYLE_LINETHROUGH      CORE_CMDSTR "linethrough"
@@ -85,6 +89,7 @@
 #define CORE_CMD_LATEX_TINY             CORE_CMDSTR "tiny"
 #define CORE_CMD_LATEX_SMALL            CORE_CMDSTR "small"
 #define CORE_CMD_LATEX_NORMAL           CORE_CMDSTR "normalsize"
+#define CORE_CMD_LATEX_BIG              CORE_CMDSTR "big"
 #define CORE_CMD_LATEX_LARGE            CORE_CMDSTR "large"
 #define CORE_CMD_LATEX_HUGE             CORE_CMDSTR "huge"
 
@@ -132,6 +137,7 @@ namespace Core {
     H_Warn =            6543502,        // CORE_CMD_CTRL_WARN
 
     H_Fly =             404793,         // CORE_CMD_ANNOT_FLY
+    H_Float =           103626116,      // CORE_CMD_ANNOT_FLOAT
     H_Top =             408416,         // CORE_CMD_ANNOT_TOP
     H_Bottom =          43432861,       // CORE_CMD_ANNOT_BOTTOM
     H_Sub =             408242,         // CORE_CMD_ANNOT_SUB
@@ -150,12 +156,15 @@ namespace Core {
 
     H_Style =           104513573,      // CORE_CMD_STYLE
 
-    H_Blink =           103362635,      // CORE_CMD_HTML_BLINK
-    H_Lowercase =       231013973,      // CORE_CMD_HTML_LOWERCASE
-    H_LineThrough =     111108696,      // CORE_CMD_HTML_LINETHROUGH
-    H_Strike =          61575381,       // CORE_CMD_HTML_STRIKE
-    H_StrikeOut =       151909284,      // CORE_CMD_HTML_STRIKEOUT
-    H_Uppercase =       113565813,      // CORE_CMD_HTML_UPPERCASE
+    H_Bold =            6460964,        // CORE_CMD_STYLE_BOLD
+    H_Italic =          51020339,       // CORE_CMD_STYLE_ITALIC
+
+    H_Blink =           103362635,      // CORE_CMD_STYLE_BLINK
+    H_Lowercase =       231013973,      // CORE_CMD_STYLE_LOWERCASE
+    H_LineThrough =     111108696,      // CORE_CMD_STYLE_LINETHROUGH
+    H_Strike =          61575381,       // CORE_CMD_STYLE_STRIKE
+    H_StrikeOut =       151909284,      // CORE_CMD_STYLE_STRIKEOUT
+    H_Uppercase =       113565813,      // CORE_CMD_STYLE_UPPERCASE
 
     H_Url =             408716,         // CORE_CMD_STYLE_URL
 
@@ -190,6 +199,7 @@ namespace Core {
     H_Tiny =            6533209,        // CORE_CMD_LATEX_TINY
     H_Small =           104478764,      // CORE_CMD_LATEX_SMALL
     H_Normal =          63261733,       // CORE_CMD_LATEX_NORMAL
+    H_Big =             403703,         // CORE_CMD_LATEX_BIG
     H_Large =           103975125,      // CORE_CMD_LATEX_LARGE
     H_Huge =            6486997,        // CORE_CMD_LATEX_HUGE
 
@@ -229,6 +239,7 @@ namespace Core {
         Q_ASSERT(H_Warn ==      qHash(QString(CORE_CMD_CTRL_WARN)));
 
         Q_ASSERT(H_Fly ==       qHash(QString(CORE_CMD_ANNOT_FLY)));
+        Q_ASSERT(H_Float ==     qHash(QString(CORE_CMD_ANNOT_FLOAT)));
         Q_ASSERT(H_Top ==       qHash(QString(CORE_CMD_ANNOT_TOP)));
         Q_ASSERT(H_Bottom ==    qHash(QString(CORE_CMD_ANNOT_BOTTOM)));
         Q_ASSERT(H_Sub ==       qHash(QString(CORE_CMD_ANNOT_SUB)));
@@ -245,6 +256,9 @@ namespace Core {
         Q_ASSERT(H_Strong ==    qHash(QString(CORE_CMD_HTML_STRONG)));
 
         Q_ASSERT(H_Style ==     qHash(QString(CORE_CMD_STYLE)));
+
+        Q_ASSERT(H_Bold ==      qHash(QString(CORE_CMD_STYLE_BOLD)));
+        Q_ASSERT(H_Italic ==    qHash(QString(CORE_CMD_STYLE_ITALIC)));
 
         Q_ASSERT(H_Blink ==     qHash(QString(CORE_CMD_STYLE_BLINK)));
         Q_ASSERT(H_Lowercase == qHash(QString(CORE_CMD_STYLE_LOWERCASE)));
@@ -282,6 +296,7 @@ namespace Core {
         Q_ASSERT(H_Tiny ==      qHash(QString(CORE_CMD_LATEX_TINY)));
         Q_ASSERT(H_Small ==     qHash(QString(CORE_CMD_LATEX_SMALL)));
         Q_ASSERT(H_Normal ==    qHash(QString(CORE_CMD_LATEX_NORMAL)));
+        Q_ASSERT(H_Big ==       qHash(QString(CORE_CMD_LATEX_BIG)));
         Q_ASSERT(H_Large ==     qHash(QString(CORE_CMD_LATEX_LARGE)));
         Q_ASSERT(H_Huge ==      qHash(QString(CORE_CMD_LATEX_HUGE)));
 

@@ -11,6 +11,7 @@
 #include "logger.h"
 #include "global.h"
 #include "module/player/player.h"
+//#include "module/serveragent/serveragent.h"
 #ifdef Q_WS_WIN
   #include "win/qtwin/qtwin.h"
 #endif // Q_WS_WIN
@@ -26,12 +27,18 @@ using namespace Logger;
 
 // - Constructions -
 
-AnnotationGraphicsView::AnnotationGraphicsView(SignalHub *hub, Player *player, VideoView *view, QWidget *parent)
+AnnotationGraphicsView::AnnotationGraphicsView(
+  SignalHub *hub,
+  ServerAgent *server,
+  Player *player,
+  VideoView *view,
+  QWidget *parent)
   : Base(parent), videoView_(view), fullScreenView_(0), trackedWindow_(0),
-    hub_(hub), player_(player), filter_(0), active_(false), paused_(false), fullScreen_(false),
+    hub_(hub), server_(server), player_(player), filter_(0), active_(false), paused_(false), fullScreen_(false),
     playTime_(-1), userId_(0), playbackEnabled_(true), subtitlePosition_(AP_Bottom)
 {
   Q_ASSERT(hub_);
+  Q_ASSERT(server_);
   Q_ASSERT(player_);
   Q_ASSERT(videoView_);
 
@@ -437,7 +444,7 @@ void
 AnnotationGraphicsView::addAnnotation(const Annotation &annot, qint64 delaysecs)
 {
   DOUT("enter: aid =" << annot.id() << ", pos =" << annot.pos());
-  AnnotationGraphicsItem *item = new AnnotationGraphicsItem(annot, hub_, this);
+  AnnotationGraphicsItem *item = new AnnotationGraphicsItem(annot, hub_, server_, this);
 
   qint64 pos = annot.pos();
   if (hub_->isMediaTokenMode())
@@ -470,7 +477,7 @@ AnnotationGraphicsView::addAndShowAnnotation(const Annotation &annot)
 void
 AnnotationGraphicsView::showAnnotation(const Annotation &annot)
 {
-  AnnotationGraphicsItem *item = new AnnotationGraphicsItem(annot, hub_, this);
+  AnnotationGraphicsItem *item = new AnnotationGraphicsItem(annot, hub_, server_, this);
   if (!isItemFiltered(item))
     item->showMe();
 }

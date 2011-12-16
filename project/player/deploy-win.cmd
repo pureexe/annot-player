@@ -4,7 +4,7 @@ setlocal
 cd /d d:/devel/releases/player || exit 1
 test -e "Delete Caches.cmd" || exit 1
 
-set VERSION=0.1.1.2
+set VERSION=0.1.1.3
 set APP=annot-player
 set ZIPFILE=%APP%-%VERSION%-win.zip
 

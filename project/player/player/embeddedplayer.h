@@ -39,6 +39,7 @@ protected:
   QToolButton *menuButton();
 protected slots:
   void popupMenu();
+  void showWhenEmbedded();
 
 public slots:
   void setAutoHideEnabled(bool enabled = true);
@@ -46,9 +47,6 @@ public slots:
 
   void invalidateGeometry();    ///< Automatically adjust from its parent.
   void resetAutoHideTimeout();  ///< Reset timeout for autohide EmbeddedPlayer
-
-  void resetAutoHideTimeoutWhenEditing(const QString&) { return resetAutoHideTimeout(); }
-  void resetAutoHideTimeoutWhenEditing(int, int) { return resetAutoHideTimeout(); }
 
   void setContainerWindow(WId winId);
   void setContainerWidget(QWidget *w);

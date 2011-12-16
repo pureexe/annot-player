@@ -16,7 +16,7 @@ enum { ALPHA = 0 };
 
 //#define USE_MODE_DEBUG
 
-#define G_PREFIXLINEEDIT_MAXWIDTH       100     // TODO: Make this auto-resize instead
+#define G_PREFIXLINE_MAXWIDTH       100     // TODO: Make this auto-resize instead
 
 // - About -
 #define G_DOMAIN        "me.annot.player"

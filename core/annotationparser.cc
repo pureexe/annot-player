@@ -593,11 +593,13 @@ namespace Core {
 
     case H_Em:
     case H_Emph:
+    case H_Italic:
     case H_TextIt:
       RETURN_HTML_TAG(em)
 
     case H_B:
     case H_Bf:
+    case H_Bold:
     case H_Strong:
     case H_TextBf:
       RETURN_HTML_TAG(strong)
@@ -678,6 +680,7 @@ namespace Core {
     CASE_SIZE(Tiny,       tinySize_)
     CASE_SIZE(Small,      smallSize_)
     CASE_SIZE(Normal,     normalSize_)
+    CASE_SIZE(Big,        largeSize_)
     CASE_SIZE(Large,      largeSize_)
     CASE_SIZE(Huge,       hugeSize_)
   #undef CASE_SIZE

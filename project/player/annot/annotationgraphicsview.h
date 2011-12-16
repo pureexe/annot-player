@@ -13,6 +13,7 @@
 QT_FORWARD_DECLARE_CLASS(QTimer)
 
 class SignalHub;
+class ServerAgent;
 class Player;
 class VideoView;
 class AnnotationGraphicsItem;
@@ -37,7 +38,9 @@ public:
 
   // - Constructions -
 public:
-  explicit AnnotationGraphicsView(SignalHub *hub, Player *player, VideoView *videoView, QWidget *parent = 0);
+  explicit AnnotationGraphicsView(
+    SignalHub *hub, ServerAgent *server, Player *player,
+    VideoView *videoView, QWidget *parent = 0);
   ~AnnotationGraphicsView();
 
   // - Properties -
@@ -195,6 +198,7 @@ private:
   QWidget *fullScreenView_;
   WId trackedWindow_;
   SignalHub *hub_;
+  ServerAgent *server_;
   Player *player_;
   AnnotationFilter *filter_;
   bool active_;

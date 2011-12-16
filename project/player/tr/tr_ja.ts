@@ -5,7 +5,7 @@
 <context>
     <name>AddAliasDialog</name>
     <message>
-        <location filename="../token/addaliasdialog.cc" line="31"/>
+        <location filename="../token/addaliasdialog.cc" line="23"/>
         <source>Add Alias</source>
         <translation>別名を追加</translation>
     </message>
@@ -26,27 +26,27 @@
         <translation type="obsolete">別名</translation>
     </message>
     <message>
-        <location filename="../token/addaliasdialog.cc" line="106"/>
+        <location filename="../token/addaliasdialog.cc" line="98"/>
         <source>name</source>
         <translation>name</translation>
     </message>
     <message>
-        <location filename="../token/addaliasdialog.cc" line="106"/>
+        <location filename="../token/addaliasdialog.cc" line="98"/>
         <source>Add a name to the token</source>
         <translation>名前を追加</translation>
     </message>
     <message>
-        <location filename="../token/addaliasdialog.cc" line="107"/>
+        <location filename="../token/addaliasdialog.cc" line="99"/>
         <source>tag</source>
         <translation>tag</translation>
     </message>
     <message>
-        <location filename="../token/addaliasdialog.cc" line="107"/>
+        <location filename="../token/addaliasdialog.cc" line="99"/>
         <source>Add a tag to the token</source>
         <translation>タッグを追加</translation>
     </message>
     <message>
-        <location filename="../token/addaliasdialog.cc" line="225"/>
+        <location filename="../token/addaliasdialog.cc" line="217"/>
         <source>Please select alias language</source>
         <translation>言語を選択してください</translation>
     </message>
@@ -125,19 +125,23 @@
         <translation>スタイル</translation>
     </message>
     <message>
-        <location filename="../annot/annotationeditor.cc" line="110"/>
         <source>fly</source>
-        <translation>飛行</translation>
+        <translation type="obsolete">飛行</translation>
+    </message>
+    <message>
+        <location filename="../annot/annotationeditor.cc" line="110"/>
+        <source>float</source>
+        <translation>流す</translation>
     </message>
     <message>
         <location filename="../annot/annotationeditor.cc" line="111"/>
         <source>top</source>
-        <translation>トップに</translation>
+        <translation>上</translation>
     </message>
     <message>
         <location filename="../annot/annotationeditor.cc" line="112"/>
         <source>bottom</source>
-        <translation>下に</translation>
+        <translation>下</translation>
     </message>
     <message>
         <location filename="../annot/annotationeditor.cc" line="146"/>
@@ -233,7 +237,7 @@
 <context>
     <name>AnnotationGraphicsView</name>
     <message>
-        <location filename="../annot/annotationgraphicsview.cc" line="572"/>
+        <location filename="../annot/annotationgraphicsview.cc" line="579"/>
         <source>cannot edit other&apos;s annotation text</source>
         <translation>通信使い：ほかのユーザーの編集しないでください</translation>
     </message>
@@ -475,6 +479,14 @@
     </message>
 </context>
 <context>
+    <name>InputComboBox</name>
+    <message>
+        <location filename="../command/inputcombobox.cc" line="13"/>
+        <source>Konichiwa!</source>
+        <translation>こんにちは！</translation>
+    </message>
+</context>
+<context>
     <name>MainWindow</name>
     <message>
         <location filename="../mainwindow.cc" line="398"/>
@@ -503,43 +515,43 @@
         <translation type="obsolete">ソフトについて</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1014"/>
+        <location filename="../mainwindow.cc" line="1026"/>
         <source>&amp;File</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1024"/>
+        <location filename="../mainwindow.cc" line="1036"/>
         <source>&amp;Quit</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1038"/>
-        <location filename="../mainwindow.cc" line="1039"/>
+        <location filename="../mainwindow.cc" line="1050"/>
+        <location filename="../mainwindow.cc" line="1051"/>
         <source>&amp;Help</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1040"/>
+        <location filename="../mainwindow.cc" line="1052"/>
         <source>&amp;About</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1535"/>
+        <location filename="../mainwindow.cc" line="1547"/>
         <source>analyzing media ...</source>
         <translation>魔法使い：メデアを分析中…</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1723"/>
+        <location filename="../mainwindow.cc" line="1739"/>
         <source>snapshot saved on the destop</source>
         <translation>魔法使い：スナップショットが保存された</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2123"/>
+        <location filename="../mainwindow.cc" line="2139"/>
         <source>connecting server to submit alias ...</source>
         <translation>通信使い：別名を保存中…</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2137"/>
+        <location filename="../mainwindow.cc" line="2153"/>
         <source>alias saved</source>
         <translation>通信使い：別名をセーブしました</translation>
     </message>
@@ -548,152 +560,152 @@
         <translation type="obsolete">通信使い：別名のセーブに失敗した</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2152"/>
+        <location filename="../mainwindow.cc" line="2168"/>
         <source>annotation saved</source>
         <translation>通信使い：コメントをセーブした</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2154"/>
+        <location filename="../mainwindow.cc" line="2170"/>
         <source>failed to update annotation text</source>
         <translation>通信使い：コメントのセーブに失敗した</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2214"/>
+        <location filename="../mainwindow.cc" line="2230"/>
         <source>connecting server to query media/game token ...</source>
         <translation>通信使い：コメントを準備中…</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2299"/>
+        <location filename="../mainwindow.cc" line="2315"/>
         <source>searching for token in cache ...</source>
         <translation>通信使い：カシューで捜索中…</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2403"/>
+        <location filename="../mainwindow.cc" line="2422"/>
         <source>connecting server to submit annot ...</source>
         <translation>通信使い：コメントを保存中…</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3517"/>
+        <location filename="../mainwindow.cc" line="3535"/>
         <source>submit bless cast to token ...</source>
         <translation>通信使い：トーケンに祝福をかける…</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3560"/>
+        <location filename="../mainwindow.cc" line="3578"/>
         <source>submit curse cast to token ...</source>
         <translation>通信使い：トーケンに呪いをかける…</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3635"/>
+        <location filename="../mainwindow.cc" line="3653"/>
         <source>connecting server to logout ...</source>
         <translation>通信使い：ログアウト中…</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3742"/>
+        <location filename="../mainwindow.cc" line="3760"/>
         <source>new version released, check here: </source>
         <translation>通信使い：新しいバージョンの魔道書を見つかりました：</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3809"/>
+        <location filename="../mainwindow.cc" line="3827"/>
         <source>found process id for window</source>
         <translation>呪術使い：プロセスが発見されまいた</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3812"/>
+        <location filename="../mainwindow.cc" line="3830"/>
         <source>process id for window was not found</source>
         <translation>呪術使い：プロセスが見つかりません</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3823"/>
+        <location filename="../mainwindow.cc" line="3841"/>
         <source>process was attached</source>
         <translation>呪術使い：プロセスがアタッチしました</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3827"/>
+        <location filename="../mainwindow.cc" line="3845"/>
         <source>process attached</source>
         <translation>呪術使い：プロセスがアタッチしました</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3830"/>
+        <location filename="../mainwindow.cc" line="3848"/>
         <source>failed to attach process </source>
         <translation>呪術使い：プロセスのアタッチに失敗した</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3832"/>
+        <location filename="../mainwindow.cc" line="3850"/>
         <source>Is the process running now?</source>
         <translation>呪術使い：プログラムが有効なの？</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3834"/>
+        <location filename="../mainwindow.cc" line="3852"/>
         <source>Run me as administrator and try again (o^^o)</source>
         <translation>呪術使い：管理者としても一度実行してください</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3836"/>
+        <location filename="../mainwindow.cc" line="3854"/>
         <source>Restart the target process might help -_-</source>
         <translation>呪術使い：プロセスを再起動してください</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3847"/>
+        <location filename="../mainwindow.cc" line="3865"/>
         <source>process was started</source>
         <translation>呪術使い：プロセスがすでに起動しました</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3850"/>
+        <location filename="../mainwindow.cc" line="3868"/>
         <source>told process to start</source>
         <translation>呪術使い：プロセスを起動しました</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3858"/>
+        <location filename="../mainwindow.cc" line="3876"/>
         <source>failed to start process</source>
         <translation>呪術使い：プロセスの起動に失敗した</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3862"/>
+        <location filename="../mainwindow.cc" line="3880"/>
         <source>wait %1 seconds for process to start ...</source>
         <translation>呪術使い：%1秒待つ…</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3875"/>
+        <location filename="../mainwindow.cc" line="3893"/>
         <source>openning process</source>
         <translation>魔法使い：プロセスを起動中</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3967"/>
+        <location filename="../mainwindow.cc" line="3990"/>
         <source>connecting server to change anonymous status ...</source>
         <translation>通信使い：匿名の設定を変更中…</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3979"/>
+        <location filename="../mainwindow.cc" line="4002"/>
         <source>failed to change user anonymous state</source>
         <translation>通信使い：匿名の変更に失敗した</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3989"/>
+        <location filename="../mainwindow.cc" line="4012"/>
         <source>you are anonymous now</source>
         <translation>通信使い：匿名状態になった</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3991"/>
+        <location filename="../mainwindow.cc" line="4014"/>
         <source>you are not anonymous now</source>
         <translation>通信使い：公開状態になった</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4004"/>
+        <location filename="../mainwindow.cc" line="4027"/>
         <source>connecting server to change language ...</source>
         <translation>通信使い：言語設定を変更中…</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4016"/>
+        <location filename="../mainwindow.cc" line="4039"/>
         <source>failed to change user language</source>
         <translation>通信使い：言語の変更に失敗した</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4025"/>
+        <location filename="../mainwindow.cc" line="4048"/>
         <source>your language is </source>
         <translation>通信使い：今の言語は</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4094"/>
+        <location filename="../mainwindow.cc" line="4117"/>
         <source>restart the app to use the new language</source>
         <translation>魔法使い：プログラムを再起動してください</translation>
     </message>
@@ -726,7 +738,7 @@
         <translation type="obsolete">魔法使い：ファイルが見つかりません</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4320"/>
+        <location filename="../mainwindow.cc" line="4343"/>
         <source>invalid lnk</source>
         <translation>魔法使い：lnkのターゲットファイルが見つかりません</translation>
     </message>
@@ -1449,7 +1461,7 @@
     </message>
     <message>
         <location filename="translatormanager.cc" line="197"/>
-        <location filename="translatormanager.cc" line="458"/>
+        <location filename="translatormanager.cc" line="461"/>
         <source>Select process signal</source>
         <translation>信号を選択</translation>
     </message>
@@ -1590,14 +1602,14 @@
         <translation>コメント</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="234"/>
         <source>Input command</source>
-        <translation>コメント</translation>
+        <translation type="obsolete">コメント</translation>
     </message>
     <message>
         <location filename="translatormanager.cc" line="235"/>
-        <source>Input prefix</source>
-        <translation>プレフィックス</translation>
+        <source>Annotation prefix</source>
+        <oldsource>Input prefix</oldsource>
+        <translation>仕様</translation>
     </message>
     <message>
         <location filename="translatormanager.cc" line="240"/>
@@ -2188,366 +2200,368 @@
         <translation>編集</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="454"/>
-        <location filename="translatormanager.cc" line="455"/>
+        <location filename="translatormanager.cc" line="457"/>
+        <location filename="translatormanager.cc" line="458"/>
         <source>Add alias</source>
         <translation>別名を追加</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="457"/>
+        <location filename="translatormanager.cc" line="460"/>
         <source>Select process</source>
         <translation>プロセスを選択</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="460"/>
-        <location filename="translatormanager.cc" line="461"/>
+        <location filename="translatormanager.cc" line="463"/>
+        <location filename="translatormanager.cc" line="464"/>
         <source>Attach process</source>
         <translation>プロセスをアタッチ</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="463"/>
-        <location filename="translatormanager.cc" line="464"/>
+        <location filename="translatormanager.cc" line="466"/>
+        <location filename="translatormanager.cc" line="467"/>
         <source>Detach process</source>
         <translation>プロセスをデタッチ</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="466"/>
-        <location filename="translatormanager.cc" line="467"/>
+        <location filename="translatormanager.cc" line="469"/>
+        <location filename="translatormanager.cc" line="470"/>
         <source>Refresh process</source>
         <translation>プロセスをリフレッシュ</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="469"/>
-        <location filename="translatormanager.cc" line="470"/>
+        <location filename="translatormanager.cc" line="472"/>
+        <location filename="translatormanager.cc" line="473"/>
         <source>Select channel</source>
         <translation>チャンネルを選択</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="472"/>
-        <location filename="translatormanager.cc" line="473"/>
+        <location filename="translatormanager.cc" line="475"/>
+        <location filename="translatormanager.cc" line="476"/>
         <source>Playlist</source>
         <translation>再生リスト</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="475"/>
+        <location filename="translatormanager.cc" line="478"/>
         <source>Application language</source>
         <translation>言語</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="476"/>
+        <location filename="translatormanager.cc" line="479"/>
         <source>Choose application language</source>
         <translation>言語を選択</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="478"/>
+        <location filename="translatormanager.cc" line="481"/>
         <source>Any language</source>
         <translation>全ての言語</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="479"/>
+        <location filename="translatormanager.cc" line="482"/>
         <source>All</source>
         <translation>全ての言語</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="480"/>
+        <location filename="translatormanager.cc" line="483"/>
         <source>Choose all languages</source>
         <translation>全ての言語</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="482"/>
+        <location filename="translatormanager.cc" line="485"/>
         <source>Annot languages</source>
         <translation>コメントの言語</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="483"/>
+        <location filename="translatormanager.cc" line="486"/>
         <source>Choose annotation language</source>
         <translation>コメントの言語</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="485"/>
+        <location filename="translatormanager.cc" line="488"/>
         <source>User language</source>
         <translation>ユーザーの言語</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="486"/>
+        <location filename="translatormanager.cc" line="489"/>
         <source>Choose user language</source>
         <translation>ユーザーの言語</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="488"/>
-        <location filename="translatormanager.cc" line="619"/>
+        <location filename="translatormanager.cc" line="491"/>
+        <location filename="translatormanager.cc" line="622"/>
         <source>Anonymous</source>
         <translation>匿名</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="489"/>
+        <location filename="translatormanager.cc" line="492"/>
         <source>User anonymous</source>
         <translation>匿名</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="491"/>
+        <location filename="translatormanager.cc" line="494"/>
         <source>Show translation</source>
         <translation>翻訳</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="492"/>
+        <location filename="translatormanager.cc" line="495"/>
         <source>Display translation</source>
         <translation>翻訳</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="494"/>
+        <location filename="translatormanager.cc" line="497"/>
         <source>Subtitle on top</source>
         <translation>字幕をトップに</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="495"/>
+        <location filename="translatormanager.cc" line="498"/>
         <source>Display subtitle on the top/bottom</source>
         <translation>字幕をトップに</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="497"/>
+        <location filename="translatormanager.cc" line="500"/>
         <source>Subtitle color</source>
         <translation>字幕の色</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="498"/>
+        <location filename="translatormanager.cc" line="501"/>
         <source>Select subtitle color</source>
         <translation>字幕の色</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="500"/>
+        <location filename="translatormanager.cc" line="503"/>
         <source>Theme</source>
         <translation>テーマ</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="501"/>
+        <location filename="translatormanager.cc" line="504"/>
         <source>Select GUI theme</source>
         <translation>テーマ</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="503"/>
+        <location filename="translatormanager.cc" line="506"/>
         <source>Create</source>
         <translation>作成日時</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="504"/>
+        <location filename="translatormanager.cc" line="507"/>
         <source>Create date</source>
         <translation>作成日時</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="505"/>
+        <location filename="translatormanager.cc" line="508"/>
         <source>Update</source>
         <translation>更新日時</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="506"/>
+        <location filename="translatormanager.cc" line="509"/>
         <source>Update date</source>
         <translation>更新日時</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="507"/>
+        <location filename="translatormanager.cc" line="510"/>
         <source>Blessed</source>
         <translation>祝福数</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="508"/>
+        <location filename="translatormanager.cc" line="511"/>
         <source>Blessed count</source>
         <translation>祝福数</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="509"/>
+        <location filename="translatormanager.cc" line="512"/>
         <source>Cursed</source>
         <translation>呪い数</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="510"/>
+        <location filename="translatormanager.cc" line="513"/>
         <source>Cursed count</source>
         <translation>呪い数</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="511"/>
-        <location filename="translatormanager.cc" line="616"/>
+        <location filename="translatormanager.cc" line="514"/>
+        <location filename="translatormanager.cc" line="619"/>
         <source>Blocked</source>
         <translation>NG数</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="512"/>
+        <location filename="translatormanager.cc" line="515"/>
         <source>Blocked count</source>
         <translation>NG数</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="513"/>
+        <location filename="translatormanager.cc" line="516"/>
         <source>Visited</source>
         <translation>再生数</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="514"/>
+        <location filename="translatormanager.cc" line="517"/>
         <source>Visited count</source>
         <translation>再生数</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="515"/>
-        <location filename="translatormanager.cc" line="617"/>
+        <location filename="translatormanager.cc" line="518"/>
+        <location filename="translatormanager.cc" line="620"/>
         <source>Annot</source>
         <translation>コメ数</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="516"/>
+        <location filename="translatormanager.cc" line="519"/>
         <source>Annotation count</source>
         <translation>コメント数</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="518"/>
-        <location filename="translatormanager.cc" line="519"/>
-        <location filename="translatormanager.cc" line="592"/>
+        <location filename="translatormanager.cc" line="521"/>
+        <location filename="translatormanager.cc" line="522"/>
+        <location filename="translatormanager.cc" line="595"/>
         <source>Alias</source>
         <translation>別名</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="521"/>
+        <location filename="translatormanager.cc" line="524"/>
         <source>Backward</source>
         <translation>戻る</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="522"/>
+        <location filename="translatormanager.cc" line="525"/>
         <source>Forward</source>
         <translation>進む</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="523"/>
+        <location filename="translatormanager.cc" line="526"/>
         <source>Forward 5 sec</source>
         <translation>5秒進む</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="524"/>
+        <location filename="translatormanager.cc" line="527"/>
         <source>Backward 5 sec</source>
         <translation>5秒戻る</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="525"/>
+        <location filename="translatormanager.cc" line="528"/>
         <source>Forward 10 sec</source>
         <translation>10秒進む</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="526"/>
+        <location filename="translatormanager.cc" line="529"/>
         <source>Backward 10 sec</source>
         <translation>10秒戻る</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="527"/>
+        <location filename="translatormanager.cc" line="530"/>
         <source>Forward 30 sec</source>
         <translation>10秒進む</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="528"/>
+        <location filename="translatormanager.cc" line="531"/>
         <source>Backward 30 sec</source>
         <translation>30秒戻る</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="529"/>
+        <location filename="translatormanager.cc" line="532"/>
         <source>Forward 60 sec</source>
         <translation>60秒進む</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="530"/>
+        <location filename="translatormanager.cc" line="533"/>
         <source>Backward 60 sec</source>
         <translation>60秒戻る</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="531"/>
+        <location filename="translatormanager.cc" line="534"/>
         <source>Forward 90 sec</source>
         <translation>90秒進む</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="532"/>
+        <location filename="translatormanager.cc" line="535"/>
         <source>Backward 90 sec</source>
         <translation>90秒戻る</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="533"/>
+        <location filename="translatormanager.cc" line="536"/>
         <source>Forward 1 min</source>
         <translation>1分進む</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="534"/>
+        <location filename="translatormanager.cc" line="537"/>
         <source>Backward 1 min</source>
         <translation>1分戻る</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="535"/>
+        <location filename="translatormanager.cc" line="538"/>
         <source>Forward 5 min</source>
         <translation>5分進む</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="536"/>
+        <location filename="translatormanager.cc" line="539"/>
         <source>Backward 5 min</source>
         <translation>5分戻る</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="537"/>
+        <location filename="translatormanager.cc" line="540"/>
         <source>Forward 10 min</source>
         <translation>10分進む</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="538"/>
+        <location filename="translatormanager.cc" line="541"/>
         <source>Backward 10 min</source>
         <translation>10分戻る</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="540"/>
+        <location filename="translatormanager.cc" line="543"/>
         <source>Recent</source>
         <translation>最近使ったファイル</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="541"/>
+        <location filename="translatormanager.cc" line="544"/>
         <source>Recent file</source>
         <oldsource>Recent files</oldsource>
         <translation>最近使ったファイル</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="548"/>
+        <location filename="translatormanager.cc" line="551"/>
         <source>Tracks</source>
         <translation>トラック</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="549"/>
+        <location filename="translatormanager.cc" line="552"/>
         <source>Media tracks</source>
         <translation>トラック</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="551"/>
+        <location filename="translatormanager.cc" line="554"/>
         <source>Auto play next media</source>
         <translation>次のメデアを自動再生</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="552"/>
+        <location filename="translatormanager.cc" line="555"/>
         <source>Automatically play next media</source>
         <translation>次のメデアを自動的に再生</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="554"/>
-        <location filename="translatormanager.cc" line="555"/>
+        <location filename="translatormanager.cc" line="557"/>
+        <location filename="translatormanager.cc" line="558"/>
         <source>Show menubar</source>
         <translation>メニュバーを表示</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="621"/>
+        <location filename="translatormanager.cc" line="624"/>
         <source>Maximize</source>
         <translation>最大化</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="622"/>
+        <location filename="translatormanager.cc" line="625"/>
         <source>Minimize</source>
         <translation>最小化</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="623"/>
+        <location filename="translatormanager.cc" line="626"/>
         <source>Restore</source>
         <translation>元に戻す</translation>
     </message>
     <message>
         <location filename="translatormanager.cc" line="120"/>
-        <location filename="translatormanager.cc" line="542"/>
+        <location filename="translatormanager.cc" line="454"/>
+        <location filename="translatormanager.cc" line="455"/>
+        <location filename="translatormanager.cc" line="545"/>
         <source>Clear</source>
         <translation>消す</translation>
     </message>
@@ -2561,183 +2575,184 @@
         <translation>プロセス・ウィンドウを選択</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="543"/>
+        <location filename="translatormanager.cc" line="546"/>
         <source>Clear recent files</source>
         <translation>リストを削除</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="545"/>
+        <location filename="translatormanager.cc" line="548"/>
         <source>Browse</source>
         <translation>ファイル一覧</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="546"/>
+        <location filename="translatormanager.cc" line="549"/>
         <source>Files in the same folder</source>
         <translation>同じフォルダのファイル</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="580"/>
+        <location filename="translatormanager.cc" line="583"/>
         <source>Filter pattern</source>
         <translation>パータン</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="581"/>
+        <location filename="translatormanager.cc" line="584"/>
         <source>Filter syntax</source>
         <translation>シンタックス</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="582"/>
+        <location filename="translatormanager.cc" line="585"/>
         <source>Filter column</source>
         <translation>列</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="583"/>
+        <location filename="translatormanager.cc" line="586"/>
         <source>Regular expression</source>
         <translation>正規表現</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="584"/>
+        <location filename="translatormanager.cc" line="587"/>
         <source>Wildcard</source>
         <translation>ワイルドカード</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="585"/>
+        <location filename="translatormanager.cc" line="588"/>
         <source>Fixed string</source>
         <translation>テキストのみ</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="587"/>
+        <location filename="translatormanager.cc" line="590"/>
         <source>ID</source>
         <translation>ID</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="588"/>
+        <location filename="translatormanager.cc" line="591"/>
         <source>Name</source>
         <translation>名前</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="589"/>
+        <location filename="translatormanager.cc" line="592"/>
         <source>Type</source>
         <translation>種類</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="590"/>
+        <location filename="translatormanager.cc" line="593"/>
         <source>Tag</source>
         <translation>タッグ</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="591"/>
+        <location filename="translatormanager.cc" line="234"/>
+        <location filename="translatormanager.cc" line="594"/>
         <source>Annotation</source>
         <translation>コメント</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="593"/>
+        <location filename="translatormanager.cc" line="596"/>
         <source>UserID</source>
         <translation>ユーザーID</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="594"/>
+        <location filename="translatormanager.cc" line="597"/>
         <source>UserAlias</source>
         <translation>ユーザー別名</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="595"/>
+        <location filename="translatormanager.cc" line="598"/>
         <source>TokenId</source>
         <oldsource>TokeId</oldsource>
         <translation>トーケンID</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="596"/>
+        <location filename="translatormanager.cc" line="599"/>
         <source>Hash</source>
         <translation>ハッシュ</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="597"/>
+        <location filename="translatormanager.cc" line="600"/>
         <source>Text</source>
         <translation>テキスト</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="598"/>
+        <location filename="translatormanager.cc" line="601"/>
         <source>Pos</source>
         <translation>位置</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="599"/>
+        <location filename="translatormanager.cc" line="602"/>
         <source>CreateTime</source>
         <translation>作成日時</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="600"/>
+        <location filename="translatormanager.cc" line="603"/>
         <source>UpdateTime</source>
         <translation>更新日時</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="601"/>
+        <location filename="translatormanager.cc" line="604"/>
         <source>Language</source>
         <translation>言語</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="602"/>
+        <location filename="translatormanager.cc" line="605"/>
         <source>Status</source>
         <translation>状態</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="603"/>
+        <location filename="translatormanager.cc" line="606"/>
         <source>Flags</source>
         <translation>フラッグ</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="604"/>
+        <location filename="translatormanager.cc" line="607"/>
         <source>BlessedCount</source>
         <translation>祝福数</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="605"/>
+        <location filename="translatormanager.cc" line="608"/>
         <source>CursedCount</source>
         <translation>呪い数</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="606"/>
+        <location filename="translatormanager.cc" line="609"/>
         <source>BlockedCount</source>
         <translation>NG数</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="607"/>
+        <location filename="translatormanager.cc" line="610"/>
         <source>AnnotCount</source>
         <translation>コメ数</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="608"/>
+        <location filename="translatormanager.cc" line="611"/>
         <source>VisitedCount</source>
         <translation>再生数</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="610"/>
+        <location filename="translatormanager.cc" line="613"/>
         <source>PID</source>
         <translation>プロセスID</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="611"/>
+        <location filename="translatormanager.cc" line="614"/>
         <source>Folder</source>
         <translation>フォルダ</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="612"/>
+        <location filename="translatormanager.cc" line="615"/>
         <source>Path</source>
         <translation>位置</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="614"/>
+        <location filename="translatormanager.cc" line="617"/>
         <source>Active</source>
         <translation>有効</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="615"/>
+        <location filename="translatormanager.cc" line="618"/>
         <source>Deleted</source>
         <translation>削除</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="618"/>
+        <location filename="translatormanager.cc" line="621"/>
         <source>n/a</source>
         <translation>未知</translation>
     </message>

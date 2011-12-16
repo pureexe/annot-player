@@ -101,8 +101,8 @@ public:
   bool hasVisiblePlayer() const;
   PlayerUi *visiblePlayer(); // One of three player Uis, or nullptr.
 
-  bool commandLineEditHasFocus() const;
-  bool prefixLineEditHasFocus() const;
+  bool inputLineHasFocus() const;
+  bool prefixLineHasFocus() const;
 
   bool isTranslateEnabled() const;
   bool isSubtitleStaysOnTop() const;
@@ -115,6 +115,7 @@ public slots:
 
   void setSubtitleStaysOnTop(bool t);
   void setSubtitleColorToDefault();
+  void setSubtitleColorToWhite();
   void setSubtitleColorToBlue();
   void setSubtitleColorToRed();
   void setSubtitleColorToPurple();
@@ -191,8 +192,8 @@ public slots:
   //void help(); // TODO
 
   void invalidateWindowTitle();
-  void syncLineEditText(const QString &text);
-  void syncPrefixLineEditText(const QString &text);
+  void syncInputLineText(const QString &text);
+  void syncPrefixLineText(const QString &text);
 
   void enableWindowTransparency();
   void disableWindowTransparency();
@@ -524,6 +525,7 @@ private:
           *nextFileAct_;
 
   QAction *setSubtitleColorToDefaultAct_,
+          *setSubtitleColorToWhiteAct_,
           *setSubtitleColorToBlueAct_,
           *setSubtitleColorToRedAct_,
           *setSubtitleColorToPurpleAct_,

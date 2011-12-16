@@ -1,19 +1,21 @@
 server
 
 ## annot.cloud
-- make annot.me website look better
-  - add more links, short description, screenshot
-- make annot.wiki better
-  replace screen shots to avoid copyright problem!!!!
-publish to 2ch nijiura
-publish to hf 4chan
+- post to 2ch
+  http://anago.2ch.net/software/
+publish to nijiura
+publish to 4chan
+publish to hf
+back to kf for spring fes
 
 ## annot.player
 0.1.2.0
 - start implement LIVE mode
-
+- Qt 4.8?
+- Spring fes special edition?
 - font outline does n't work, need to figure out a workaround to make it clearer
   - download a free contoured font, that supporting chinese/japanese
+- webbrowser: open link in new tab
 - clean up code
   - rename open family methods
   - clean up main() with application
@@ -25,12 +27,9 @@ publish to hf 4chan
 - use BOOST_SCOPE_EXIT to improve performance
 - fixme: edit time, edit comments, etc; otherwise, make them readonly
 - server side: add male/female option and save it as 2 user flags
-  has sex
-  male or female
 - add male/female to user's flags
   add "female" flags to annot flats
   and add client side filter.
-- start implementing LIVE MODE?? after publish to Japan
 - keyboard event listener + find window under mouse to pick window to embed
   implement without hook
 - linux
@@ -85,7 +84,7 @@ LIVE MODE (annot not saved)
 
 - set up repository for deb and fedora
 
-- update framework
+- self-update framework
   http://sourceforge.net/projects/qup/
   http://stackoverflow.com/questions/2077550/how-can-i-enable-auto-updates-in-a-qt-cross-platform-app
 
@@ -102,6 +101,7 @@ CD ANNOT
 - enable \bookmark annot, which people can click! such as. service scene
 
 (0.1.3.?)
+CONNECT WITH twitter(\t) facebook (\f) ?
 FRIENDS
 - friends' annot directly displayed in osdconsole
 SYNC MODE (annot saved, next next step, after more and more people start using this)
@@ -112,17 +112,6 @@ COMMENT
 - comment for each token
 USER ADS
 
-
-## NextProject
-
-recompile wined3d.dll
-
-window2window to streaming galgame
-- client
-  - rdp: rdesktop, opensource, with annots; but requiring X11 libs
-  - mstsc: close source, no annots
-- server: linux, xrdp + wine
-  xming open source
 
 ## FIXMEs
 change soap back to rest
@@ -353,13 +342,6 @@ FIXME: open/drag second movie contextmenu doesn't work
 TODO: in annotationeditor: add helpButton: show help!!!!
 
 textEditor
-- need a HTML unparser to cleanup html and convert it to my own code style
-  NEED unparse and CLEANUP HTML CODE!!!!!!!!!!!!!!!
-   - http://stackoverflow.com/questions/2179477/best-way-to-parse-html-in-qt
-   use QWebKit to unparse HTML
-   the difficulty is how to deal with CSS
-- use annotationparser to parse read text
-- finish html/code dual mode
 - BECAREFULL of 255 limits! or I SHOULD LARGER the limits on annotation1!!!
 
 annotationEditor
@@ -540,8 +522,6 @@ FIXME: use UiStyle to remember DWM effect instead of MainWindow::dialogs_
   - chat
   - synchronzied watch
 
-ask jankins: it is unsafe to keep password in the registry!!!!
-
 change a better default font
 
 webbrowser widget
@@ -593,8 +573,6 @@ programmable change the color/size of qslider according to # of comments
 
 ##
 
-zhibo chunjie wanhui! live!!!!
-
 ##
 
 Major components that are missing at client side:
@@ -617,11 +595,6 @@ need:
 - userView
 - mediaView to get hotspot??
 
-
-unknown=>huoxing
-english
-japanese
-Chinese
 
 ##j
 - design friends relation!! in server side
@@ -876,8 +849,6 @@ fixme: gconsole conflicts with commentview -- need to figout who is the receiver
   need to put gconsole into lowest
 clipboard action
 
-fixme: trembling for mp4
-
 qslider style: transparent handle
 
 server:add verification to param using java
@@ -925,8 +896,6 @@ http://sourceforge.net/projects/ukagaka/
 commentitemview -- comment selection
 tokenview -- token selection
 
-avoid using firstChildElemeent(wfewfe) to search to improve performance
-
 See example
 
 make another Core::MediaToken/Core::MediaAnnot class?
@@ -966,53 +935,6 @@ so that we can know who from where is watching this video! just like google
 try to collect everything we could! maybe make use of it later
 
 collect ip for users as well to prevent scam!! and in the future,
-
-media_annot_spell
-annot_spell_id
-user_id
-
-annot_spell_timestamp
-annot_spell_annot_id -- too_verbose!!
-annot_spell_type: none=0, bless=1, curse=-1, ban=-2
-
-media_token_visit -- track the visit for each user!!
-visit_id
-user_id
-visit_timestamp
-visit_ip -- used to resolve location
-
-media_token_info -- use multimap?
-
-media_token_spell
-token_spell_id
-token_spell_type: none=0, bless=1, curse=-1, touch=2
-
-user
-user_id
-user_name
-user_password
-user_email
-user_status
-
-user_stat
-user_blessed
-user_cursed
-user_banned
-
-user_spell
-user_spell_id
-user_spell_timestamp
-from_user_id
-to_user_id target_id?
-user_spell_type: none=0, bless=1, curse=-1, ban=-2, friend (use a verb instead)?
-
-user_group -- multi-map!
-
-group
-
-ban channel
-
-error XML
 
 oss window a separate window than dock
 
@@ -1080,8 +1002,6 @@ schedule stay life
 
 use transpacency + graphics blur effects to simulate aero on no wdm environtment (xp, mac, etc)
 
-
-\font \size, etc like latex, allow making/editing subtitle
 
 rewrite aboutdialog,helpdialog using sth similar to userpanel
 make userpanel a generic my own type of dialog, create touchplayer/dialog/dialog, etc
@@ -1203,15 +1123,6 @@ top level:
   projects/touchplayer
   projects/touchreader
 
-- open directory
-        QDir dir("aiml_set");
-        QStringList subdirs = dir.entryList("*", QDir::Dirs);
-        subdirs.remove(".");
-        subdirs.remove("..");
-
-- pause comment?
-
-- mac fixes
 fixme: fix computation for osdplayer and commentview!
 again, need to tweak qmaccocaviewcontainer's nsview to send mouse events!
 use background paper to simulate aeora
@@ -1290,16 +1201,6 @@ figure out the major purpose/usage
 - so that it is easier to make subtitle (drag, etc....)
 
 - different mode: normal mode, subtitle maker mode,
-
-
-- enable grammar:
-  \color \red \blue
-  \style \big \small
-  \fly \bottom \top \up \down
-
-  \h \help
-
-- when dwmapi not avaible, use qss to set an aero background, and drag it when moving window.
 
 
 ####
@@ -1426,10 +1327,6 @@ write cv
   using QWebKit to browse website like touch.reader?
   a desktop toy as well?
 
-- make qtwin a singleton
-
-- FIX mac/linux version
-
 
 remove poppler from header file.
 remove vlc from header file.
@@ -1520,8 +1417,6 @@ autohide minidock/mouse
   so that the things based on it are closed source and linked as dll
   i.e. split opensourced engine from the gui
 
-- fix parallel problem at once!
-
 - fixme doxygen.pdf on mac doesn't work.
 
 - use qwebkit widget copy code from assistant.centerwidget
@@ -1590,3 +1485,5 @@ autohide minidock/mouse
 
 ## future
 use libpng,ziplib, to read from zip file
+
+# EOF

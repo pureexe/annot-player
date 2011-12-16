@@ -3,7 +3,6 @@
 
 #include "miniplayer.h"
 #include "global.h"
-#include "stylesheet.h"
 #include "signalhub.h"
 #include "uistyle.h"
 #include "module/player/player.h"    // TO BE REMOVED; added due to bad design of playerui.
@@ -39,10 +38,6 @@ MiniPlayerUi::MiniPlayerUi(SignalHub *hub, Player *player, ServerAgent *server, 
 void
 MiniPlayerUi::createLayout()
 {
-  // Reset Ui style
-  prefixLineEdit()->setStyleSheet(SS_PREFIXLINEEDIT_MINI);
-  lineEdit()->setStyleSheet(SS_LINEEDIT_MINI);
-
   // Set layout
   QVBoxLayout *rows = new QVBoxLayout; {
     QHBoxLayout *row0 = new QHBoxLayout,
@@ -68,8 +63,8 @@ MiniPlayerUi::createLayout()
     row1->addWidget(volumeSlider());
 
     row2->addWidget(userButton());
-    row2->addWidget(prefixLineEdit());
-    row2->addWidget(lineEdit());
+    row2->addWidget(prefixComboBox());
+    row2->addWidget(inputComboBox());
 
     // void setContentsMargins(int left, int top, int right, int bottom);
     rows->setContentsMargins(9, 9, 9, 0);

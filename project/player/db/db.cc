@@ -14,7 +14,7 @@
 #include <QtCore>
 #include <QtSql>
 
-#define DEBUG "database"
+//#define DEBUG "database"
 #include "module/debug/debug.h"
 
 using namespace Core::Cloud;

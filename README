@@ -1,8 +1,8 @@
 ﻿== ENGLISH ==
 
 Product:	Annot Player
-Version:	0.1.1.2
-Release:	2011/12/13
+Version:	0.1.1.3
+Release:	2011/12/16
 Homepage:	http://annot.me
 Help (Wiki):	http://annot.me/wiki/FAQ
 Download:	http://code.google.com/p/annot-player/downloads
@@ -16,10 +16,8 @@ Requirements:
 - Linux (Debian/Ubuntu/Fedora)
 
 WHAT'S NEW?
-- Windows tool chain updated. Qt library rebuilt. gSOAP updated.
-- Added disc type automatic detection.
-- Launcher dependency on msvcrt removed.
-- Offline annotation caching improved.
+- Added input line history.
+- Added pre-defined command to input line.
 
 == 日本語 ==
 

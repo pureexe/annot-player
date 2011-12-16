@@ -67,6 +67,15 @@ namespace { // anonymous, CD access
 
   typedef BlockIODevice::fd_t fd_t;
 
+  inline bool isValidFd_(fd_t fd)
+  {
+#ifdef Q_OS_WIN
+    return fd != INVALID_HANDLE_VALUE;
+#else
+    return fd >= 0;
+#endif // Q_OS_WIN
+  }
+
   inline bool isAudioCD_(fd_t fd)
   {
     bool ret = false;
@@ -93,7 +102,7 @@ namespace { // anonymous, CD access
 
   inline int getBlockSize_(fd_t fd)
   {
-    Q_ASSERT(fd >= 0);
+    Q_ASSERT(::isValidFd_(fd));
     uint ret;
     if (isAudioCD_(fd))
       ret = CD_FRAMESIZE_RAW; // 2352
@@ -129,7 +138,7 @@ namespace { // anonymous, CD access
 
 bool
 BlockIODevice::isAudioCD() const
-{ return fd_ >= 0 ? ::isAudioCD_(fd_) : false; }
+{ return ::isValidFd_(fd_ ) ? ::isAudioCD_(fd_) : false; }
 
 // - Open/close -
 
@@ -137,7 +146,7 @@ bool
 BlockIODevice::open(OpenMode mode)
 {
   DOUT("open:enter: mode =" << mode << ", fileName_ =" << fileName_);
-  Q_ASSERT(!isOpen() && fd_ < 0);
+  Q_ASSERT(!isOpen() && !::isValidFd_(fd_));
   Q_ASSERT(mode == ReadOnly);
   if (mode != ReadOnly) {
     DOUT("open:exit: ret = false, exit from non ReadOnly path");
@@ -158,7 +167,7 @@ BlockIODevice::open(OpenMode mode)
 #else
   fd_ = ::open(fileName_.toAscii(), O_RDONLY | O_NONBLOCK);
 #endif // Q_OS_WIN
-  if (fd_ >= 0) { // succeedded
+  if (::isValidFd_(fd_)) { // succeedded
     setOpenMode(mode);
     blockSize_ = ::getBlockSize_(fd_);
     if (!blockSize_)
@@ -174,8 +183,8 @@ void
 BlockIODevice::close()
 {
   DOUT("close:enter: isOpen =" << isOpen() << ", fd_ =" << fd_);
-  Q_ASSERT(isOpen() && fd_ >= 0);
-  if (fd_ >= 0) {
+  Q_ASSERT(isOpen() && ::isValidFd_(fd_ ));
+  if (::isValidFd_(fd_)) {
 #ifdef Q_OS_WIN
     ::CloseHandle((HANDLE)fd_);
 #else
@@ -192,7 +201,7 @@ BlockIODevice::close()
 qint64
 BlockIODevice::readData(char *data, qint64 maxSize)
 {
-  Q_ASSERT(isOpen() && fd_ >= 0);
+  Q_ASSERT(isOpen() && ::isValidFd_(fd_));
   Q_ASSERT(maxSize);
   DOUT("readData:enter: maxSize =" << maxSize);
 
@@ -316,7 +325,7 @@ BlockIODevice::readData(char *data, qint64 maxSize)
 qint64
 BlockIODevice::writeData(const char *data, qint64 maxSize)
 {
-  Q_ASSERT(isOpen() && fd_ >= 0);
+  Q_ASSERT(isOpen() && ::isValidFd_(fd_));
   DOUT("writeData:enter: maxSize =" << maxSize);
   qint64 ret = 0;
 #ifdef Q_OS_UNIX

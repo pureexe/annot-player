@@ -117,7 +117,7 @@ MainWindow::onFocusedWidgetChanged(QWidget *w_old, QWidget *w_new)
 {
 #ifdef Q_WS_WIN
   // When EmbeddedPlayer's lineEdit cleared its focus.
-  if (!w_new && w_old == embeddedPlayer_->lineEdit())
+  if (!w_new && w_old == embeddedPlayer_->inputComboBox())
     QtWin::sendMouseClick(QPoint(0, 0), Qt::LeftButton);
 #else
   Q_UNUSED(w_old);
@@ -128,24 +128,24 @@ MainWindow::onFocusedWidgetChanged(QWidget *w_old, QWidget *w_new)
 bool
 MainWindow::isEditing() const
 {
-  return commandLineEditHasFocus()
-      && prefixLineEditHasFocus();
+  return inputLineHasFocus()
+      && prefixLineHasFocus();
 }
 
 bool
-MainWindow::commandLineEditHasFocus() const
+MainWindow::inputLineHasFocus() const
 {
-  return mainPlayer_->lineEdit()->hasFocus()
-      || miniPlayer_->lineEdit()->hasFocus()
-      || embeddedPlayer_->lineEdit()->hasFocus();
+  return mainPlayer_->inputComboBox()->hasFocus()
+      || miniPlayer_->inputComboBox()->hasFocus()
+      || embeddedPlayer_->inputComboBox()->hasFocus();
 }
 
 bool
-MainWindow::prefixLineEditHasFocus() const
+MainWindow::prefixLineHasFocus() const
 {
-  return mainPlayer_->prefixLineEdit()->hasFocus()
-      || miniPlayer_->prefixLineEdit()->hasFocus()
-      || embeddedPlayer_->prefixLineEdit()->hasFocus();
+  return mainPlayer_->prefixComboBox()->hasFocus()
+      || miniPlayer_->prefixComboBox()->hasFocus()
+      || embeddedPlayer_->prefixComboBox()->hasFocus();
 }
 
 // - Constructions -
@@ -245,7 +245,7 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags f)
   invalidateAnnotationLanguages();
 
   // Initial focus
-  mainPlayer_->lineEdit()->setFocus();
+  mainPlayer_->inputComboBox()->setFocus();
 
   // System tray icon
   if (tray_)
@@ -319,7 +319,7 @@ MainWindow::createComponents()
   videoView_ = new VideoView(this);
   osdWindow_ = new OsdWindow(this);
 
-  annotationView_ = new AnnotationGraphicsView(hub_,  player_, videoView_, osdWindow_);
+  annotationView_ = new AnnotationGraphicsView(hub_, server_, player_, videoView_, osdWindow_);
   annotationView_->setFullScreenView(osdWindow_);
 #ifdef USE_WIN_DWM
   {
@@ -455,11 +455,11 @@ MainWindow::createConnections()
   // Player UI
 
   #define CONNECT(_playerui) \
-    connect(_playerui, SIGNAL(commandEntered(QString)), SLOT(eval(QString))); \
+    connect(_playerui, SIGNAL(textEntered(QString)), SLOT(eval(QString))); \
     connect(_playerui, SIGNAL(loginRequested()), SLOT(showLoginDialog())); \
     connect(_playerui, SIGNAL(showPositionPanelRequested()), SLOT(showSeekDialog())); \
-    connect(_playerui->lineEdit(), SIGNAL(textChanged(QString)), SLOT(syncLineEditText(QString))); \
-    connect(_playerui->prefixLineEdit(), SIGNAL(textChanged(QString)), SLOT(syncPrefixLineEditText(QString))); \
+    connect(_playerui->inputComboBox()->lineEdit(), SIGNAL(textChanged(QString)), SLOT(syncInputLineText(QString))); \
+    connect(_playerui->prefixComboBox()->lineEdit(), SIGNAL(textChanged(QString)), SLOT(syncPrefixLineText(QString))); \
     connect(_playerui->toggleAnnotationButton(), SIGNAL(clicked()), annotationView_, SLOT(togglePlaybackEnabled())); \
     connect(_playerui->previousButton(), SIGNAL(clicked()), SLOT(previous())); \
     connect(_playerui->nextButton(), SIGNAL(clicked()), SLOT(next())); \
@@ -716,6 +716,7 @@ MainWindow::createActions()
   MAKE_ACTION(connectAct_,      CONNECT,        server_,        SLOT(updateConnected()))
   MAKE_ACTION(disconnectAct_,   DISCONNECT,     server_,        SLOT(disconnect()))
   MAKE_TOGGLE(setSubtitleColorToDefaultAct_, DEFAULTCOLOR, this, SLOT(setSubtitleColorToDefault()))
+  MAKE_TOGGLE(setSubtitleColorToWhiteAct_, WHITECOLOR, this, SLOT(setSubtitleColorToWhite()))
   MAKE_TOGGLE(setSubtitleColorToBlueAct_, BLUECOLOR, this, SLOT(setSubtitleColorToBlue()))
   MAKE_TOGGLE(setSubtitleColorToOrangeAct_, ORANGECOLOR, this, SLOT(setSubtitleColorToOrange()))
   MAKE_TOGGLE(setSubtitleColorToPurpleAct_, PURPLECOLOR, this, SLOT(setSubtitleColorToPurple()))
@@ -931,6 +932,7 @@ MainWindow::createMenus()
 
     subtitleStyleMenu_->addAction(setSubtitleColorToDefaultAct_);
     subtitleStyleMenu_->addSeparator();
+    subtitleStyleMenu_->addAction(setSubtitleColorToWhiteAct_);
     subtitleStyleMenu_->addAction(setSubtitleColorToBlueAct_);
     subtitleStyleMenu_->addAction(setSubtitleColorToPurpleAct_);
     subtitleStyleMenu_->addAction(setSubtitleColorToRedAct_);
@@ -1995,25 +1997,25 @@ MainWindow::invalidateWindowTitle()
 }
 
 void
-MainWindow::syncLineEditText(const QString &text)
+MainWindow::syncInputLineText(const QString &text)
 {
-  if (!mainPlayer_->lineEdit()->hasFocus())
-    mainPlayer_->lineEdit()->setText(text);
-  if (!miniPlayer_->lineEdit()->hasFocus())
-    miniPlayer_->lineEdit()->setText(text);
-  if (!embeddedPlayer_->lineEdit()->hasFocus())
-    embeddedPlayer_->lineEdit()->setText(text);
+  if (!mainPlayer_->inputComboBox()->hasFocus())
+    mainPlayer_->inputComboBox()->lineEdit()->setText(text);
+  if (!miniPlayer_->inputComboBox()->hasFocus())
+    miniPlayer_->inputComboBox()->lineEdit()->setText(text);
+  if (!embeddedPlayer_->inputComboBox()->hasFocus())
+    embeddedPlayer_->inputComboBox()->lineEdit()->setText(text);
 }
 
 void
-MainWindow::syncPrefixLineEditText(const QString &text)
+MainWindow::syncPrefixLineText(const QString &text)
 {
-  if (!mainPlayer_->prefixLineEdit()->hasFocus())
-    mainPlayer_->prefixLineEdit()->setText(text);
-  if (!miniPlayer_->prefixLineEdit()->hasFocus())
-    miniPlayer_->prefixLineEdit()->setText(text);
-  if (!embeddedPlayer_->prefixLineEdit()->hasFocus())
-    embeddedPlayer_->prefixLineEdit()->setText(text);
+  if (!mainPlayer_->prefixComboBox()->hasFocus())
+    mainPlayer_->prefixComboBox()->lineEdit()->setText(text);
+  if (!miniPlayer_->prefixComboBox()->hasFocus())
+    miniPlayer_->prefixComboBox()->lineEdit()->setText(text);
+  if (!embeddedPlayer_->prefixComboBox()->hasFocus())
+    embeddedPlayer_->prefixComboBox()->lineEdit()->setText(text);
 }
 
 // - Dialogs -
@@ -3323,11 +3325,12 @@ MainWindow::keyPressEvent(QKeyEvent *event)
         //QTimer::singleShot(0, embeddedPlayer_, SLOT(resetAutoHideTimeout()));
     }
     if (hasVisiblePlayer()
-        && !visiblePlayer()->lineEdit()->hasFocus()) {
+        && !visiblePlayer()->inputComboBox()->hasFocus()
+        && !visiblePlayer()->prefixComboBox()->hasFocus()) {
 #ifdef Q_WS_WIN
-      QtWin::setFocus(visiblePlayer()->lineEdit());
+      QtWin::setFocus(visiblePlayer()->inputComboBox());
 #else
-      visiblePlayer()->lineEdit()->setFocus();
+      visiblePlayer()->inputComboBox()->setFocus();
 #endif // Q_WS_WIN
     }
     Base::keyPressEvent(event);
@@ -4412,6 +4415,7 @@ void
 MainWindow::uncheckSubtitleColorActions()
 {
   setSubtitleColorToDefaultAct_->setChecked(false);
+  setSubtitleColorToWhiteAct_->setChecked(false);
   setSubtitleColorToBlueAct_->setChecked(false);
   setSubtitleColorToPurpleAct_->setChecked(false);
   setSubtitleColorToBlackAct_->setChecked(false);
@@ -4438,6 +4442,7 @@ MainWindow::setSubtitleColorToDefault()
     setSubtitleColorTo##_Color##Act_->setChecked(true); \
   }
 
+  SET_SUBTITLE_COLOR(White, WHITE)
   SET_SUBTITLE_COLOR(Black, BLACK)
   SET_SUBTITLE_COLOR(Blue, BLUE)
   SET_SUBTITLE_COLOR(Orange, ORANGE)

@@ -9,8 +9,8 @@
 
 #if defined(DEBUG) && defined(USE_MODE_DEBUG)
   #include <QDebug>
-  //#define DOUT(_msg)    qDebug() << __FILE__ << _msg
-  #define DOUT(_msg)    qDebug() << QString("%1:%2:").arg(DEBUG).arg(__FUNCTION__) << _msg
+  #define DOUT(_msg)    qDebug() << QString("%1:%2:").arg(DEBUG).arg(__FUNCTION__) \
+                                 << _msg
 #else
   #define DOUT(_dummy)  (void)0
 

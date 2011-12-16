@@ -23,6 +23,7 @@ HEADERS += \
     $$PWD/gui/slider.h \
     $$PWD/gui/toolbutton.h \
     $$PWD/gui/webdialog.h \
+    $$PWD/gui/withsizehint.h \
     $$PWD/util/codec.h \
     $$PWD/util/countdowntimer.h \
     $$PWD/util/crypt.h \

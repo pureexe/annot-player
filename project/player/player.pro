@@ -1,7 +1,7 @@
 # player.pro
 # 6/30/2011
 
-VERSION = 0.1.1.2
+VERSION = 0.1.1.3
 
 include(../../config.pri)
 include(tr/tr.pri)
@@ -84,6 +84,7 @@ win32: CONFIG += windows
 SUBPATH = \
     $$PWD \
     $$PWD/annot \
+    $$PWD/command \
     $$PWD/data \
     $$PWD/db \
     $$PWD/define \
@@ -117,6 +118,10 @@ HEADERS += \
     annot/blacklistview.h \
     annot/blacklistviewprivate.h \
     annot/textformathandler.h \
+    command/comboboxedit.h \
+    command/comboboxeditprivate.h \
+    command/inputcombobox.h \
+    command/prefixcombobox.h \
     data/datamanager.h \
     data/dataserver.h \
     db/db_config.h \
@@ -136,13 +141,11 @@ HEADERS += \
     osd/osdconsole.h \
     osd/osdwindow.h \
     osd/videoview.h \
-    player/commandlineedit.h \
     player/mainplayer.h \
     player/miniplayer.h \
     player/embeddedplayer.h \
     player/playerpanel.h \
     player/playerui.h \
-    player/prefixlineedit.h \
     player/userlabel.h \
     signal/signalhub.h \
     token/addaliasdialog.h \
@@ -175,6 +178,9 @@ SOURCES += \
     annot/blacklistview.cc \
     annot/blacklistviewprivate.cc \
     annot/textformathandler.cc \
+    command/comboboxedit.cc \
+    command/inputcombobox.cc \
+    command/prefixcombobox.cc \
     data/datamanager.cc \
     data/dataserver.cc \
     db/db.cc \
@@ -189,13 +195,11 @@ SOURCES += \
     osd/osdconsole.cc \
     osd/osdwindow.cc \
     osd/videoview.cc \
-    player/commandlineedit.cc \
     player/mainplayer.cc \
     player/miniplayer.cc \
     player/embeddedplayer.cc \
     player/playerui.cc \
     player/playerpanel.cc \
-    player/prefixlineedit.cc \
     player/userlabel.cc \
     signal/signalhub.cc \
     token/addaliasdialog.cc \

@@ -5,7 +5,6 @@
 #include "global.h"
 #include "stylesheet.h"
 #include "tr.h"
-#include "commandlineedit.h"
 #include "signalhub.h"
 #include "module/player/player.h"
 #include "module/serveragent/serveragent.h"
@@ -79,12 +78,12 @@ PlayerUi::PlayerUi(SignalHub *hub, Player *player, ServerAgent *server, QWidget 
   toggleMiniModeButton()->setCheckable(true);
   toggleFullScreenModeButton()->setCheckable(true);
 
-  setTabOrder(lineEdit(), prefixLineEdit());
-  setTabOrder(prefixLineEdit(), lineEdit());
+  setTabOrder(inputComboBox(), prefixComboBox());
+  setTabOrder(prefixComboBox(), inputComboBox());
 
   createConnections();
 
-  lineEdit()->setFocus();
+  inputComboBox()->setFocus();
 }
 
 void
@@ -100,14 +99,14 @@ PlayerUi::createConnections()
   connect(positionSlider(), SIGNAL(valueChanged(int)), SLOT(setPosition(int)));
   connect(volumeSlider(), SIGNAL(valueChanged(int)), SLOT(setVolume(int)));
 
-  connect(lineEdit(), SIGNAL(returnPressed()), SLOT(postAnnotation()));
+  connect(inputComboBox()->lineEdit(), SIGNAL(returnPressed()), SLOT(postAnnotation()));
 
   // Always connected
   connect(hub_, SIGNAL(tokenModeChanged(SignalHub::TokenMode)), SLOT(invalidateVisibleWidgets())); \
 
-  CommandLineEdit *p = dynamic_cast<CommandLineEdit*>(prefixLineEdit());
-  if (p)
-    connect(lineEdit(), SIGNAL(returnPressed()), p, SLOT(addCurrentTextToHistory()));
+  //CommandLineEdit *p = dynamic_cast<CommandLineEdit*>(prefixLineEdit());
+  //if (p)
+  //  connect(lineEdit(), SIGNAL(returnPressed()), p, SLOT(addCurrentTextToHistory()));
 }
 
 #define CREATE_HUB_CONNECTIONS(_connect) \
@@ -536,19 +535,23 @@ PlayerUi::invalidateNextFrameButton()
 void
 PlayerUi::postAnnotation()
 {
-  QString text = lineEdit()->text();
+  QString text = inputComboBox()->currentText();
   if (text.isEmpty())
     return;
 
-  lineEdit()->clear();
+  inputComboBox()->clearEditText();
 
-  QString prefix = prefixLineEdit()->text();
-  if (!prefix.trimmed().isEmpty())
+  QString prefix = prefixComboBox()->currentText();
+  if (!prefix.trimmed().isEmpty()) {
     text = prefix + " " + text;
+
+    QKeyEvent e(QEvent::KeyPress, Qt::Key_Return, Qt::NoModifier);
+    QCoreApplication::sendEvent(prefixComboBox()->lineEdit(), &e);
+  }
 
   // TODO: use command filter rather than annnotation filter here
   if (Annotation::isValidText(text))
-    emit commandEntered(text);
+    emit textEntered(text);
 }
 
 // - Requests -

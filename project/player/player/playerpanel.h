@@ -10,7 +10,7 @@ QT_BEGIN_NAMESPACE
 class QSlider;
 class QToolButton;
 class QLabel;
-class QLineEdit;
+class QComboBox;
 QT_END_NAMESPACE
 
 class PlayerPanel: public QWidget
@@ -40,8 +40,10 @@ public:
   ADD_WIDGET(QToolButton, positionButton)
   ADD_WIDGET(QToolButton, previousButton)
   ADD_WIDGET(QToolButton, nextButton)
-  ADD_WIDGET(QLineEdit, lineEdit)
-  ADD_WIDGET(QLineEdit, prefixLineEdit)
+  //ADD_WIDGET(QLineEdit, lineEdit)
+  //ADD_WIDGET(QLineEdit, prefixLineEdit)
+  ADD_WIDGET(QComboBox, inputComboBox)
+  ADD_WIDGET(QComboBox, prefixComboBox)
 #undef ADD_WIDGET
 };
 

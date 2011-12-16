@@ -46,7 +46,7 @@ public:
   bool isActive() const; ///< This status is used to track if media player is connected
 
 signals:
-  void commandEntered(const QString &command);
+  void textEntered(const QString &text);
   void loginRequested();
   void showPositionPanelRequested();
   void invalidateUserMenuRequested();

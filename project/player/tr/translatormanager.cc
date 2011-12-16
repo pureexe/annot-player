@@ -231,8 +231,8 @@ TranslatorManager::translate(int tid) const
   case T_PASSWORD:              return tr("Password");
 
   case T_TOOLTIP_ANNOTATIONITEM:return tr("Comment"); // TO BE GENERATED DYNAMICALL
-  case T_TOOLTIP_COMMANDLINE:   return tr("Input command");
-  case T_TOOLTIP_PREFIXLINE:    return tr("Input prefix");
+  case T_TOOLTIP_INPUTLINE:     return tr("Annotation");
+  case T_TOOLTIP_PREFIXLINE:    return tr("Annotation prefix");
 
   case T_SEEK:                  return tr("Seek");
 
@@ -450,6 +450,9 @@ TranslatorManager::translate(int tid) const
 
   case T_MENUTEXT_EDIT:         return tr("Edit");
   case T_TIP_EDIT:              return tr("Edit");
+
+  case T_MENUTEXT_CLEAR:        return tr("Clear");
+  case T_TIP_CLEAR:             return tr("Clear");
 
   case T_MENUTEXT_ADDALIAS:     return tr("Add alias");
   case T_TIP_ADDALIAS:          return tr("Add alias");

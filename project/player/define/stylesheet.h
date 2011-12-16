@@ -4,6 +4,7 @@
 // stylesheet.h
 // 7/15/2011
 // See: http://doc.qt.nokia.com/stable/stylesheet-examples.html
+// See: http://doc.qt.nokia.com/4.7/stylesheet-reference.html
 
 #include "rc.h"
 #include "core/ss.h"
@@ -167,10 +168,6 @@
     SS_COLOR(gray) \
   SS_END
 
-#define SS_LABEL_MAIN   SS_LABEL
-#define SS_LABEL_MINI   SS_LABEL
-#define SS_LABEL_OSD    SS_LABEL
-
 // - Lines -
 
 #define SS_LINEEDIT \
@@ -182,26 +179,18 @@
     SS_COLOR(black) \
   SS_END
 
-#define SS_LINEEDIT_MAIN        SS_LINEEDIT
-#define SS_LINEEDIT_MINI        SS_LINEEDIT
-
-#define SS_LINEEDIT_OSD \
-  SS_BEGIN(QLineEdit) \
-    SS_TRANSPARENT \
-    SS_BORDER(1px groove purple) \
-    SS_COLOR(blue) \
-  SS_END \
-  SS_BEGIN(QLineEdit::hover) \
-    SS_BORDER_IMAGE_URL(RC_IMAGE_LINEEDIT) \
-    SS_BORDER(1px groove) \
-    SS_BORDER_WIDTH(4px) \
-    SS_COLOR(black) \
-  SS_END
-
-#define SS_PREFIXLINEEDIT       SS_LINEEDIT
-#define SS_PREFIXLINEEDIT_MAIN  SS_LINEEDIT_MAIN
-#define SS_PREFIXLINEEDIT_MINI  SS_LINEEDIT_MINI
-#define SS_PREFIXLINEEDIT_OSD   SS_LINEEDIT_OSD
+//#define SS_LINEEDIT_OSD
+//  SS_BEGIN(QLineEdit)
+//    SS_TRANSPARENT
+//    SS_BORDER(1px groove purple)
+//    SS_COLOR(blue)
+//  SS_END
+//  SS_BEGIN(QLineEdit::hover)
+//    SS_BORDER_IMAGE_URL(RC_IMAGE_LINEEDIT)
+//    SS_BORDER(1px groove)
+//    SS_BORDER_WIDTH(4px)
+//    SS_COLOR(black)
+//  SS_END
 
 // - Boxes -
 
@@ -219,8 +208,28 @@
   SS_BEGIN(QComboBox::down-arrow) \
     SS_TRANSPARENT \
   SS_END \
+  SS_BEGIN(QComboBox::down-arrow:pressed) \
+    SS_TRANSPARENT \
+  SS_END \
   SS_BEGIN(QComboBox QAbstractItemView) \
   SS_END
+
+//#define SS_COMBOBOX_OSD
+//  SS_LINEEDIT_OSD
+//  SS_BEGIN(QComboBox)
+//    SS_TRANSPARENT
+//    SS_BORDER(1px groove purple)
+//    SS_COLOR(blue)
+//  SS_END
+//  SS_BEGIN(QComboBox::drop-down)
+//    SS_TRANSPARENT
+//  SS_END
+//  SS_BEGIN(QComboBox::down-arrow)
+//    SS_TRANSPARENT
+//  SS_END
+//  SS_BEGIN(QComboBox QAbstractItemView)
+//    SS_BORDER_IMAGE_URL(RC_IMAGE_BACKGROUND)
+//  SS_END
 
 // - Item views -
 

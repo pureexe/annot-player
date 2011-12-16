@@ -11,10 +11,36 @@
   #include "win/qtwin/qtwin.h"
 #endif // Q_WS_WIN
 #include "core/gui/toolbutton.h"
+#include "core/gui/withsizehint.h"
 #include <QtGui>
 
 #define DEBUG "embeddedplayerui"
 #include "module/debug/debug.h"
+
+#define G_INPUTLINE_MINWIDTH    400
+#define G_INPUTLINE_MINHEIGHT   25
+
+#define SS_COMBOBOX_OSD \
+  SS_BEGIN(QComboBox) \
+    SS_TRANSPARENT \
+    SS_COLOR(blue) \
+  SS_END \
+  SS_BEGIN(QComboBox::drop-down) \
+  SS_END \
+  SS_BEGIN(QComboBox QAbstractItemView) \
+    SS_BORDER_IMAGE_URL(RC_IMAGE_BACKGROUND) \
+  SS_END
+#define SS_LINEEDIT_OSD \
+  SS_BEGIN(QLineEdit) \
+    SS_TRANSPARENT \
+    SS_BORDER(1px groove purple) \
+    SS_COLOR(blue) \
+  SS_END \
+  SS_BEGIN(QLineEdit::hover) \
+    SS_BORDER_IMAGE_URL(RC_IMAGE_LINEEDIT) \
+    SS_BORDER(1px groove black) \
+    SS_COLOR(black) \
+  SS_END
 
 // - Constructions -
 EmbeddedPlayerUi::EmbeddedPlayerUi(SignalHub *hub, Player *player, ServerAgent *server, QWidget *parent)
@@ -35,10 +61,13 @@ EmbeddedPlayerUi::EmbeddedPlayerUi(SignalHub *hub, Player *player, ServerAgent *
   trackingTimer_->setInterval(G_TRACKING_INTERVAL);
   connect(trackingTimer_, SIGNAL(timeout()), SLOT(invalidateGeometry()));
 
-  connect(prefixLineEdit(), SIGNAL(textChanged(QString)), SLOT(resetAutoHideTimeoutWhenEditing(QString)));
-  connect(lineEdit(), SIGNAL(textChanged(QString)), SLOT(resetAutoHideTimeoutWhenEditing(QString)));
-  connect(prefixLineEdit(), SIGNAL(cursorPositionChanged(int,int)), SLOT(resetAutoHideTimeoutWhenEditing(int,int)));
-  connect(lineEdit(), SIGNAL(cursorPositionChanged(int,int)), SLOT(resetAutoHideTimeoutWhenEditing(int,int)));
+#define CONNECT_TO_AUTOHIDE(_obj, _signal) \
+  connect(_obj, _signal, SLOT(resetAutoHideTimeout())); \
+  connect(_obj, _signal, SLOT(showWhenEmbedded()));
+
+  CONNECT_TO_AUTOHIDE(prefixComboBox()->lineEdit(), SIGNAL(cursorPositionChanged(int,int)));
+  CONNECT_TO_AUTOHIDE(inputComboBox()->lineEdit(), SIGNAL(cursorPositionChanged(int,int)));
+#undef CONNECT_TO_AUTOHIDE
 
   resize(0, 0); // temporarily
 }
@@ -47,8 +76,18 @@ void
 EmbeddedPlayerUi::createLayout()
 {
   // Reset Ui style
-  prefixLineEdit()->setStyleSheet(SS_PREFIXLINEEDIT_OSD);
-  lineEdit()->setStyleSheet(SS_LINEEDIT_OSD);
+  inputComboBox()->setStyleSheet(SS_COMBOBOX_OSD);
+  inputComboBox()->lineEdit()->setStyleSheet(SS_LINEEDIT_OSD);
+  prefixComboBox()->setStyleSheet(SS_COMBOBOX_OSD);
+  prefixComboBox()->lineEdit()->setStyleSheet(SS_LINEEDIT_OSD);
+
+  Core::Gui::WithSizeHint*
+  w = dynamic_cast<Core::Gui::WithSizeHint*>(inputComboBox());
+  if (w)
+    w->setSizeHint(QSize(G_INPUTLINE_MINWIDTH, G_INPUTLINE_MINHEIGHT));
+  w = dynamic_cast<Core::Gui::WithSizeHint*>(prefixComboBox());
+  if (w)
+    w->setSizeHint(QSize(G_PREFIXLINE_MAXWIDTH, G_INPUTLINE_MINHEIGHT));
 
   // Set layout
   QVBoxLayout *rows = new QVBoxLayout; {
@@ -69,8 +108,9 @@ EmbeddedPlayerUi::createLayout()
     row->addWidget(toggleFullScreenModeButton());
     row->addStretch();
     row->addWidget(userButton());
-    row->addWidget(prefixLineEdit());
-    row->addWidget(lineEdit());
+    row->addWidget(prefixComboBox());
+    row->addWidget(inputComboBox());
+    //row->addStretch();
     row->addWidget(volumeSlider());
     row->addWidget(positionButton());
   }
@@ -113,7 +153,8 @@ EmbeddedPlayerUi::setOnTop(bool t)
 void
 EmbeddedPlayerUi::autoHide()
 {
-  if (underMouse() || lineEdit()->hasFocus() || prefixLineEdit()->hasFocus())
+  if (underMouse() ||
+      inputComboBox()->hasFocus() || prefixComboBox()->hasFocus())
     resetAutoHideTimeout();
   else if (isVisible())
     hide();
@@ -288,6 +329,13 @@ EmbeddedPlayerUi::setVisible(bool visible)
   Base::setVisible(visible);
 
   invalidateTrackingTimer();
+}
+
+void
+EmbeddedPlayerUi::showWhenEmbedded()
+{
+  if (!isVisible() && hub()->isEmbeddedPlayerMode())
+    show();
 }
 
 // - Menu button -

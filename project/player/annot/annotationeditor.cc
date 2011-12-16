@@ -107,7 +107,7 @@ AnnotationEditor::createRibons()
     moveStyleComboBox_->setToolTip(tr("Style tag"));
 
     // Must be consistent with MoveStyleIndex
-    moveStyleComboBox_->addItem(tr("fly"));
+    moveStyleComboBox_->addItem(tr("float"));
     moveStyleComboBox_->addItem(tr("top"));
     moveStyleComboBox_->addItem(tr("bottom"));
   }

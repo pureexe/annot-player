@@ -2,7 +2,6 @@
 // 6/30/2011
 
 #include "mainplayer.h"
-#include "stylesheet.h"
 #include <QtGui>
 
 // + MainPlayerDock +
@@ -39,10 +38,6 @@ MainPlayerUi::MainPlayerUi(SignalHub *hub, Player *player, ServerAgent *server, 
 void
 MainPlayerUi::createLayout()
 {
-  // Reset Ui style
-  prefixLineEdit()->setStyleSheet(SS_PREFIXLINEEDIT_MAIN);
-  lineEdit()->setStyleSheet(SS_LINEEDIT_MAIN);
-
   // Set layout
   QVBoxLayout *rows = new QVBoxLayout; {
     QHBoxLayout *row1 = new QHBoxLayout,
@@ -67,8 +62,8 @@ MainPlayerUi::createLayout()
     row1->addWidget(positionButton());
 
     row2->addWidget(userButton());
-    row2->addWidget(prefixLineEdit());
-    row2->addWidget(lineEdit());
+    row2->addWidget(prefixComboBox());
+    row2->addWidget(inputComboBox());
 
     // margins (px): left, top, right, down
     rows->setContentsMargins(9, 0, 9, 0);

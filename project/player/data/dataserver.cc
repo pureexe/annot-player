@@ -15,7 +15,7 @@
 using namespace Core::Cloud;
 using namespace Logger;
 
-#define DEBUG "dataserver"
+//#define DEBUG "dataserver"
 #include "module/debug/debug.h"
 
 // - Constructions -

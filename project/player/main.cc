@@ -149,7 +149,6 @@ main(int argc, char *argv[])
   }
 
   // Hashes
-  //qDebug() << qHash(QString("\\sub"));
   //qDebug() << qHash(QString("\\bookmark"));
   //qDebug() << qHash(QString("\\b"));
 

@@ -2,8 +2,8 @@
 // 7/15/2011
 
 #include "playerpanel.h"
-#include "commandlineedit.h"
-#include "prefixlineedit.h"
+#include "inputcombobox.h"
+#include "prefixcombobox.h"
 #include "userlabel.h"
 #include "global.h"
 #include "stylesheet.h"
@@ -27,7 +27,7 @@ PlayerPanel::PlayerPanel(QWidget *parent)
     playButton_(0), stopButton_(0), openButton_(0), nextFrameButton_(0),
     toggleFullScreenModeButton_(0), toggleMiniModeButton_(0), toggleEmbedModeButton_(0), toggleAnnotationButton_(0),
     userButton_(0), positionButton_(0), previousButton_(0), nextButton_(0),
-    lineEdit_(0), prefixLineEdit_(0)
+    inputComboBox_(0), prefixComboBox_(0)
 {
   setContentsMargins(0, 0, 0, 0);
   setStyleSheet(SS_ALL);
@@ -89,25 +89,25 @@ PlayerPanel::volumeSlider()
 
 // - Line edits -
 
-QLineEdit*
-PlayerPanel::lineEdit()
+QComboBox*
+PlayerPanel::inputComboBox()
 {
-  if (!lineEdit_) {
-    lineEdit_ = new CommandLineEdit(this);
-    lineEdit_->setStyleSheet(SS_LINEEDIT);
-    lineEdit_->setToolTip(TR(T_TOOLTIP_COMMANDLINE));
-  } return lineEdit_;
+  if (!inputComboBox_) {
+    inputComboBox_ = new InputComboBox(this);
+    inputComboBox_->setStyleSheet(SS_COMBOBOX);
+    inputComboBox_->setToolTip(TR(T_TOOLTIP_INPUTLINE));
+  } return inputComboBox_;
 }
 
-QLineEdit*
-PlayerPanel::prefixLineEdit()
+QComboBox*
+PlayerPanel::prefixComboBox()
 {
-  if (!prefixLineEdit_) {
-    prefixLineEdit_ = new PrefixLineEdit(this);
-    prefixLineEdit_->setStyleSheet(SS_PREFIXLINEEDIT);
-    prefixLineEdit_->setToolTip(TR(T_TOOLTIP_PREFIXLINE));
-    prefixLineEdit_->setMaximumWidth(G_PREFIXLINEEDIT_MAXWIDTH);
-  } return prefixLineEdit_;
+  if (!prefixComboBox_) {
+    prefixComboBox_ = new PrefixComboBox(this);
+    prefixComboBox_->setStyleSheet(SS_COMBOBOX);
+    prefixComboBox_->setToolTip(TR(T_TOOLTIP_PREFIXLINE));
+    prefixComboBox_->setMaximumWidth(G_PREFIXLINE_MAXWIDTH);
+  } return prefixComboBox_;
 }
 
 // EOF

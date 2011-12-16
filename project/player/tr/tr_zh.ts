@@ -5,7 +5,7 @@
 <context>
     <name>AddAliasDialog</name>
     <message>
-        <location filename="../token/addaliasdialog.cc" line="31"/>
+        <location filename="../token/addaliasdialog.cc" line="23"/>
         <source>Add Alias</source>
         <translation>添加别名</translation>
     </message>
@@ -26,27 +26,27 @@
         <translation type="obsolete">别名</translation>
     </message>
     <message>
-        <location filename="../token/addaliasdialog.cc" line="106"/>
+        <location filename="../token/addaliasdialog.cc" line="98"/>
         <source>name</source>
         <translation>name</translation>
     </message>
     <message>
-        <location filename="../token/addaliasdialog.cc" line="106"/>
+        <location filename="../token/addaliasdialog.cc" line="98"/>
         <source>Add a name to the token</source>
         <translation>添加名字</translation>
     </message>
     <message>
-        <location filename="../token/addaliasdialog.cc" line="107"/>
+        <location filename="../token/addaliasdialog.cc" line="99"/>
         <source>tag</source>
         <translation>tag</translation>
     </message>
     <message>
-        <location filename="../token/addaliasdialog.cc" line="107"/>
+        <location filename="../token/addaliasdialog.cc" line="99"/>
         <source>Add a tag to the token</source>
         <translation>添加标签</translation>
     </message>
     <message>
-        <location filename="../token/addaliasdialog.cc" line="225"/>
+        <location filename="../token/addaliasdialog.cc" line="217"/>
         <source>Please select alias language</source>
         <translation>请选择语言</translation>
     </message>
@@ -149,9 +149,13 @@
         <translation>风格标签</translation>
     </message>
     <message>
-        <location filename="../annot/annotationeditor.cc" line="110"/>
         <source>fly</source>
-        <translation>飞行</translation>
+        <translation type="obsolete">飞行</translation>
+    </message>
+    <message>
+        <location filename="../annot/annotationeditor.cc" line="110"/>
+        <source>float</source>
+        <translation>漂流</translation>
     </message>
     <message>
         <location filename="../annot/annotationeditor.cc" line="111"/>
@@ -257,7 +261,7 @@
 <context>
     <name>AnnotationGraphicsView</name>
     <message>
-        <location filename="../annot/annotationgraphicsview.cc" line="572"/>
+        <location filename="../annot/annotationgraphicsview.cc" line="579"/>
         <source>cannot edit other&apos;s annotation text</source>
         <translation>通信使魔：无法编辑别人的弹幕</translation>
     </message>
@@ -499,6 +503,14 @@
     </message>
 </context>
 <context>
+    <name>InputComboBox</name>
+    <message>
+        <location filename="../command/inputcombobox.cc" line="13"/>
+        <source>Konichiwa!</source>
+        <translation>无路赛！无路赛！无路赛！</translation>
+    </message>
+</context>
+<context>
     <name>MainWindow</name>
     <message>
         <location filename="../mainwindow.cc" line="398"/>
@@ -511,7 +523,7 @@
         <translation>侦听使魔：选择需要监听的进程窗口</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1014"/>
+        <location filename="../mainwindow.cc" line="1026"/>
         <source>&amp;File</source>
         <translation></translation>
     </message>
@@ -520,38 +532,38 @@
         <translation type="obsolete">视图</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1024"/>
+        <location filename="../mainwindow.cc" line="1036"/>
         <source>&amp;Quit</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1038"/>
-        <location filename="../mainwindow.cc" line="1039"/>
+        <location filename="../mainwindow.cc" line="1050"/>
+        <location filename="../mainwindow.cc" line="1051"/>
         <source>&amp;Help</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1040"/>
+        <location filename="../mainwindow.cc" line="1052"/>
         <source>&amp;About</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1535"/>
+        <location filename="../mainwindow.cc" line="1547"/>
         <source>analyzing media ...</source>
         <translation>播放使魔：媒体分析中...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1723"/>
+        <location filename="../mainwindow.cc" line="1739"/>
         <source>snapshot saved on the destop</source>
         <translation>播放使魔：截图保存到了桌面上</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2123"/>
+        <location filename="../mainwindow.cc" line="2139"/>
         <source>connecting server to submit alias ...</source>
         <translation>通信使魔：正在连接服务器提交别名...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2137"/>
+        <location filename="../mainwindow.cc" line="2153"/>
         <source>alias saved</source>
         <translation>通信使魔：别名已保存</translation>
     </message>
@@ -560,152 +572,152 @@
         <translation type="obsolete">通信使魔：修改别名失败</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2152"/>
+        <location filename="../mainwindow.cc" line="2168"/>
         <source>annotation saved</source>
         <translation>通信使魔：弹幕已保存</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2154"/>
+        <location filename="../mainwindow.cc" line="2170"/>
         <source>failed to update annotation text</source>
         <translation>通信使魔：远程魔法修改弹幕失败</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2214"/>
+        <location filename="../mainwindow.cc" line="2230"/>
         <source>connecting server to query media/game token ...</source>
         <translation>通信使魔：远程魔法搜索弹幕中...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2299"/>
+        <location filename="../mainwindow.cc" line="2315"/>
         <source>searching for token in cache ...</source>
         <translation>通信使魔：正在本地缓冲中搜索弹幕信息...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2403"/>
+        <location filename="../mainwindow.cc" line="2422"/>
         <source>connecting server to submit annot ...</source>
         <translation>通信使魔：远程魔法提交弹幕中...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3517"/>
+        <location filename="../mainwindow.cc" line="3535"/>
         <source>submit bless cast to token ...</source>
         <translation>通信使魔：施展祝福魔法中...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3560"/>
+        <location filename="../mainwindow.cc" line="3578"/>
         <source>submit curse cast to token ...</source>
         <translation>通信使魔：施展诅咒魔法中...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3635"/>
+        <location filename="../mainwindow.cc" line="3653"/>
         <source>connecting server to logout ...</source>
         <translation>通信使魔：远程魔法退出登录中...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3742"/>
+        <location filename="../mainwindow.cc" line="3760"/>
         <source>new version released, check here: </source>
         <translation>通信使魔：新版魔导书发现，下载地址：</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3809"/>
+        <location filename="../mainwindow.cc" line="3827"/>
         <source>found process id for window</source>
         <translation>侦听使魔：发现窗口的进程</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3812"/>
+        <location filename="../mainwindow.cc" line="3830"/>
         <source>process id for window was not found</source>
         <translation>侦听使魔：窗口的进程没有找到</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3823"/>
+        <location filename="../mainwindow.cc" line="3841"/>
         <source>process was attached</source>
         <translation>侦听使魔：进程已同步</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3827"/>
+        <location filename="../mainwindow.cc" line="3845"/>
         <source>process attached</source>
         <translation>侦听使魔：同步进程成功</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3830"/>
+        <location filename="../mainwindow.cc" line="3848"/>
         <source>failed to attach process </source>
         <translation>侦听使魔：同步进程失败</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3832"/>
+        <location filename="../mainwindow.cc" line="3850"/>
         <source>Is the process running now?</source>
         <translation>侦听使魔：程序真的开了吗？</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3834"/>
+        <location filename="../mainwindow.cc" line="3852"/>
         <source>Run me as administrator and try again (o^^o)</source>
         <translation>侦听使魔：换成管理员的身份试试吧</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3836"/>
+        <location filename="../mainwindow.cc" line="3854"/>
         <source>Restart the target process might help -_-</source>
         <translation>侦听使魔：可能需要重启一下程序</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3847"/>
+        <location filename="../mainwindow.cc" line="3865"/>
         <source>process was started</source>
         <translation>侦听使魔：程序已经启动</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3850"/>
+        <location filename="../mainwindow.cc" line="3868"/>
         <source>told process to start</source>
         <translation>侦听使魔：刚刚让程序启动</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3858"/>
+        <location filename="../mainwindow.cc" line="3876"/>
         <source>failed to start process</source>
         <translation>侦听使魔：开始程序失败</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3862"/>
+        <location filename="../mainwindow.cc" line="3880"/>
         <source>wait %1 seconds for process to start ...</source>
         <translation>侦听使魔：等待%1秒程序启动...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3875"/>
+        <location filename="../mainwindow.cc" line="3893"/>
         <source>openning process</source>
         <translation>播放使魔：正在打开程序</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3967"/>
+        <location filename="../mainwindow.cc" line="3990"/>
         <source>connecting server to change anonymous status ...</source>
         <translation>通信使魔：远程魔法修改匿名属性中...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3979"/>
+        <location filename="../mainwindow.cc" line="4002"/>
         <source>failed to change user anonymous state</source>
         <translation>通信使魔：远程魔法修改匿名属性失败</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3989"/>
+        <location filename="../mainwindow.cc" line="4012"/>
         <source>you are anonymous now</source>
         <translation>通信使魔：主人已经匿名了</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3991"/>
+        <location filename="../mainwindow.cc" line="4014"/>
         <source>you are not anonymous now</source>
         <translation>通信使魔：主人不再匿名了</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4004"/>
+        <location filename="../mainwindow.cc" line="4027"/>
         <source>connecting server to change language ...</source>
         <translation>通信使魔：远程魔法修改语言属性中...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4016"/>
+        <location filename="../mainwindow.cc" line="4039"/>
         <source>failed to change user language</source>
         <translation>通信使魔：远程魔法修改语言属性失败</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4025"/>
+        <location filename="../mainwindow.cc" line="4048"/>
         <source>your language is </source>
         <translation>通信属性：主人的语言属性是</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4094"/>
+        <location filename="../mainwindow.cc" line="4117"/>
         <source>restart the app to use the new language</source>
         <translation>播放使魔：使用新的语言需要重启播放器</translation>
     </message>
@@ -738,7 +750,7 @@
         <translation type="obsolete">播放使魔：文件不存在</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4320"/>
+        <location filename="../mainwindow.cc" line="4343"/>
         <source>invalid lnk</source>
         <translation>播放使魔：快捷方式好像无效</translation>
     </message>
@@ -1541,7 +1553,7 @@
     </message>
     <message>
         <location filename="translatormanager.cc" line="197"/>
-        <location filename="translatormanager.cc" line="458"/>
+        <location filename="translatormanager.cc" line="461"/>
         <source>Select process signal</source>
         <translation>选择信号源</translation>
     </message>
@@ -1682,14 +1694,14 @@
         <translation>评论</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="234"/>
         <source>Input command</source>
-        <translation>输入命令</translation>
+        <translation type="obsolete">输入命令</translation>
     </message>
     <message>
         <location filename="translatormanager.cc" line="235"/>
-        <source>Input prefix</source>
-        <translation>输入命令前缀</translation>
+        <source>Annotation prefix</source>
+        <oldsource>Input prefix</oldsource>
+        <translation>弹幕式样</translation>
     </message>
     <message>
         <location filename="translatormanager.cc" line="240"/>
@@ -2324,380 +2336,382 @@
         <translation>编辑</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="454"/>
-        <location filename="translatormanager.cc" line="455"/>
+        <location filename="translatormanager.cc" line="457"/>
+        <location filename="translatormanager.cc" line="458"/>
         <source>Add alias</source>
         <oldsource>&amp;Add alias</oldsource>
         <translation>添加别名</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="457"/>
+        <location filename="translatormanager.cc" line="460"/>
         <source>Select process</source>
         <oldsource>Select &amp;process</oldsource>
         <translation>选择进程</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="460"/>
-        <location filename="translatormanager.cc" line="461"/>
+        <location filename="translatormanager.cc" line="463"/>
+        <location filename="translatormanager.cc" line="464"/>
         <source>Attach process</source>
         <oldsource>&amp;Attach process</oldsource>
         <translation>同步进程</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="463"/>
-        <location filename="translatormanager.cc" line="464"/>
+        <location filename="translatormanager.cc" line="466"/>
+        <location filename="translatormanager.cc" line="467"/>
         <source>Detach process</source>
         <oldsource>&amp;Detach process</oldsource>
         <translation>进程同步连接断开</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="466"/>
-        <location filename="translatormanager.cc" line="467"/>
+        <location filename="translatormanager.cc" line="469"/>
+        <location filename="translatormanager.cc" line="470"/>
         <source>Refresh process</source>
         <oldsource>&amp;Refresh process</oldsource>
         <translation>刷新进程</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="469"/>
-        <location filename="translatormanager.cc" line="470"/>
+        <location filename="translatormanager.cc" line="472"/>
+        <location filename="translatormanager.cc" line="473"/>
         <source>Select channel</source>
         <oldsource>Select &amp;channel</oldsource>
         <translation>选择监听频道</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="472"/>
-        <location filename="translatormanager.cc" line="473"/>
+        <location filename="translatormanager.cc" line="475"/>
+        <location filename="translatormanager.cc" line="476"/>
         <source>Playlist</source>
         <translation>播放列表</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="475"/>
+        <location filename="translatormanager.cc" line="478"/>
         <source>Application language</source>
         <oldsource>Application &amp;language</oldsource>
         <translation>程序语言</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="476"/>
+        <location filename="translatormanager.cc" line="479"/>
         <source>Choose application language</source>
         <translation>选择程序语言</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="478"/>
+        <location filename="translatormanager.cc" line="481"/>
         <source>Any language</source>
         <translation>所有语种</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="479"/>
+        <location filename="translatormanager.cc" line="482"/>
         <source>All</source>
         <oldsource>&amp;All</oldsource>
         <translation>所有</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="480"/>
+        <location filename="translatormanager.cc" line="483"/>
         <source>Choose all languages</source>
         <translation>选择所有语言</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="482"/>
+        <location filename="translatormanager.cc" line="485"/>
         <source>Annot languages</source>
         <translation>弹幕语言</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="483"/>
+        <location filename="translatormanager.cc" line="486"/>
         <source>Choose annotation language</source>
         <translation>选择弹幕语言</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="485"/>
+        <location filename="translatormanager.cc" line="488"/>
         <source>User language</source>
         <oldsource>User &amp;language</oldsource>
         <translation>用户语言</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="486"/>
+        <location filename="translatormanager.cc" line="489"/>
         <source>Choose user language</source>
         <translation>选择用户语言</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="488"/>
-        <location filename="translatormanager.cc" line="619"/>
+        <location filename="translatormanager.cc" line="491"/>
+        <location filename="translatormanager.cc" line="622"/>
         <source>Anonymous</source>
         <translation>匿名</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="489"/>
+        <location filename="translatormanager.cc" line="492"/>
         <source>User anonymous</source>
         <translation>用户匿名</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="491"/>
+        <location filename="translatormanager.cc" line="494"/>
         <source>Show translation</source>
         <oldsource>Show &amp;translation</oldsource>
         <translation>显示翻译</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="492"/>
+        <location filename="translatormanager.cc" line="495"/>
         <source>Display translation</source>
         <translation>显示翻译</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="494"/>
+        <location filename="translatormanager.cc" line="497"/>
         <source>Subtitle on top</source>
         <oldsource>Subtitle on &amp;top</oldsource>
         <translation>字幕置顶</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="495"/>
+        <location filename="translatormanager.cc" line="498"/>
         <source>Display subtitle on the top/bottom</source>
         <translation>在顶端显示字幕</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="497"/>
+        <location filename="translatormanager.cc" line="500"/>
         <source>Subtitle color</source>
         <oldsource>Subtitle &amp;color</oldsource>
         <translation>字幕颜色</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="498"/>
+        <location filename="translatormanager.cc" line="501"/>
         <source>Select subtitle color</source>
         <translation>选择字幕颜色</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="500"/>
+        <location filename="translatormanager.cc" line="503"/>
         <source>Theme</source>
         <oldsource>&amp;Theme</oldsource>
         <translation>界面主题</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="501"/>
+        <location filename="translatormanager.cc" line="504"/>
         <source>Select GUI theme</source>
         <translation>选择见面主题</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="503"/>
+        <location filename="translatormanager.cc" line="506"/>
         <source>Create</source>
         <translation>创建时间</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="504"/>
+        <location filename="translatormanager.cc" line="507"/>
         <source>Create date</source>
         <translation>创建日期</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="505"/>
+        <location filename="translatormanager.cc" line="508"/>
         <source>Update</source>
         <translation>更新日期</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="506"/>
+        <location filename="translatormanager.cc" line="509"/>
         <source>Update date</source>
         <translation>更新日期</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="507"/>
+        <location filename="translatormanager.cc" line="510"/>
         <source>Blessed</source>
         <translation>祝福数</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="508"/>
+        <location filename="translatormanager.cc" line="511"/>
         <source>Blessed count</source>
         <translation>祝福数</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="509"/>
+        <location filename="translatormanager.cc" line="512"/>
         <source>Cursed</source>
         <translation>诅咒数</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="510"/>
+        <location filename="translatormanager.cc" line="513"/>
         <source>Cursed count</source>
         <translation>诅咒数</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="511"/>
-        <location filename="translatormanager.cc" line="616"/>
+        <location filename="translatormanager.cc" line="514"/>
+        <location filename="translatormanager.cc" line="619"/>
         <source>Blocked</source>
         <translation>NG数</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="512"/>
+        <location filename="translatormanager.cc" line="515"/>
         <source>Blocked count</source>
         <translation>NG数</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="513"/>
+        <location filename="translatormanager.cc" line="516"/>
         <source>Visited</source>
         <translation>再生数</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="514"/>
+        <location filename="translatormanager.cc" line="517"/>
         <source>Visited count</source>
         <translation>再生数</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="515"/>
-        <location filename="translatormanager.cc" line="617"/>
+        <location filename="translatormanager.cc" line="518"/>
+        <location filename="translatormanager.cc" line="620"/>
         <source>Annot</source>
         <translation>弹幕数</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="516"/>
+        <location filename="translatormanager.cc" line="519"/>
         <source>Annotation count</source>
         <translation>弹幕数</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="518"/>
-        <location filename="translatormanager.cc" line="519"/>
-        <location filename="translatormanager.cc" line="592"/>
+        <location filename="translatormanager.cc" line="521"/>
+        <location filename="translatormanager.cc" line="522"/>
+        <location filename="translatormanager.cc" line="595"/>
         <source>Alias</source>
         <translation>别名</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="521"/>
+        <location filename="translatormanager.cc" line="524"/>
         <source>Backward</source>
         <oldsource>&amp;Backward</oldsource>
         <translation>后退</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="522"/>
+        <location filename="translatormanager.cc" line="525"/>
         <source>Forward</source>
         <oldsource>&amp;Forward</oldsource>
         <translation>前进</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="523"/>
+        <location filename="translatormanager.cc" line="526"/>
         <source>Forward 5 sec</source>
         <translation>前进5秒</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="524"/>
+        <location filename="translatormanager.cc" line="527"/>
         <source>Backward 5 sec</source>
         <translation>后退5秒</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="525"/>
+        <location filename="translatormanager.cc" line="528"/>
         <source>Forward 10 sec</source>
         <translation>前进10秒</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="526"/>
+        <location filename="translatormanager.cc" line="529"/>
         <source>Backward 10 sec</source>
         <translation>后退10秒</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="527"/>
+        <location filename="translatormanager.cc" line="530"/>
         <source>Forward 30 sec</source>
         <translation>前进30秒</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="528"/>
+        <location filename="translatormanager.cc" line="531"/>
         <source>Backward 30 sec</source>
         <translation>后退30秒</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="529"/>
+        <location filename="translatormanager.cc" line="532"/>
         <source>Forward 60 sec</source>
         <translation>前进60秒</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="530"/>
+        <location filename="translatormanager.cc" line="533"/>
         <source>Backward 60 sec</source>
         <translation>后退60秒</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="531"/>
+        <location filename="translatormanager.cc" line="534"/>
         <source>Forward 90 sec</source>
         <translation>前进90秒</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="532"/>
+        <location filename="translatormanager.cc" line="535"/>
         <source>Backward 90 sec</source>
         <translation>后退90秒</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="533"/>
+        <location filename="translatormanager.cc" line="536"/>
         <source>Forward 1 min</source>
         <translation>前进1分钟</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="534"/>
+        <location filename="translatormanager.cc" line="537"/>
         <source>Backward 1 min</source>
         <translation>后退1分钟</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="535"/>
+        <location filename="translatormanager.cc" line="538"/>
         <source>Forward 5 min</source>
         <translation>潜进5分钟</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="536"/>
+        <location filename="translatormanager.cc" line="539"/>
         <source>Backward 5 min</source>
         <translation>后退5分钟</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="537"/>
+        <location filename="translatormanager.cc" line="540"/>
         <source>Forward 10 min</source>
         <translation>潜进10分钟</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="538"/>
+        <location filename="translatormanager.cc" line="541"/>
         <source>Backward 10 min</source>
         <translation>后退10分钟</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="540"/>
+        <location filename="translatormanager.cc" line="543"/>
         <source>Recent</source>
         <translation>最近打开的文件</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="541"/>
+        <location filename="translatormanager.cc" line="544"/>
         <source>Recent file</source>
         <translation>最近的文件</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="548"/>
+        <location filename="translatormanager.cc" line="551"/>
         <source>Tracks</source>
         <translation>音轨</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="549"/>
+        <location filename="translatormanager.cc" line="552"/>
         <source>Media tracks</source>
         <translation>音轨</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="551"/>
+        <location filename="translatormanager.cc" line="554"/>
         <source>Auto play next media</source>
         <translation>自动播放下一个</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="552"/>
+        <location filename="translatormanager.cc" line="555"/>
         <source>Automatically play next media</source>
         <translation>自动播放下一个媒体</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="554"/>
-        <location filename="translatormanager.cc" line="555"/>
+        <location filename="translatormanager.cc" line="557"/>
+        <location filename="translatormanager.cc" line="558"/>
         <source>Show menubar</source>
         <translation>显示菜单栏</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="621"/>
+        <location filename="translatormanager.cc" line="624"/>
         <source>Maximize</source>
         <translation>最大化</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="622"/>
+        <location filename="translatormanager.cc" line="625"/>
         <source>Minimize</source>
         <translation>最小化</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="623"/>
+        <location filename="translatormanager.cc" line="626"/>
         <source>Restore</source>
         <translation>恢复</translation>
     </message>
     <message>
         <location filename="translatormanager.cc" line="120"/>
-        <location filename="translatormanager.cc" line="542"/>
+        <location filename="translatormanager.cc" line="454"/>
+        <location filename="translatormanager.cc" line="455"/>
+        <location filename="translatormanager.cc" line="545"/>
         <source>Clear</source>
         <translation>清空</translation>
     </message>
@@ -2706,183 +2720,184 @@
         <translation type="obsolete">打开CD</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="543"/>
+        <location filename="translatormanager.cc" line="546"/>
         <source>Clear recent files</source>
         <translation>清空最近的文件</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="545"/>
+        <location filename="translatormanager.cc" line="548"/>
         <source>Browse</source>
         <translation>浏览文件</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="546"/>
+        <location filename="translatormanager.cc" line="549"/>
         <source>Files in the same folder</source>
         <translation>相同文件夹里的文件</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="580"/>
+        <location filename="translatormanager.cc" line="583"/>
         <source>Filter pattern</source>
         <translation>过滤文本</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="581"/>
+        <location filename="translatormanager.cc" line="584"/>
         <source>Filter syntax</source>
         <translation>过滤语法</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="582"/>
+        <location filename="translatormanager.cc" line="585"/>
         <source>Filter column</source>
         <translation>过滤的列</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="583"/>
+        <location filename="translatormanager.cc" line="586"/>
         <source>Regular expression</source>
         <translation>正则表达式</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="584"/>
+        <location filename="translatormanager.cc" line="587"/>
         <source>Wildcard</source>
         <translation>通配符</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="585"/>
+        <location filename="translatormanager.cc" line="588"/>
         <source>Fixed string</source>
         <translation>通常字符串</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="587"/>
+        <location filename="translatormanager.cc" line="590"/>
         <source>ID</source>
         <translation>ID</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="588"/>
+        <location filename="translatormanager.cc" line="591"/>
         <source>Name</source>
         <translation>名字</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="589"/>
+        <location filename="translatormanager.cc" line="592"/>
         <source>Type</source>
         <translation>类型</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="590"/>
+        <location filename="translatormanager.cc" line="593"/>
         <source>Tag</source>
         <translation>标签</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="591"/>
+        <location filename="translatormanager.cc" line="234"/>
+        <location filename="translatormanager.cc" line="594"/>
         <source>Annotation</source>
         <translation>弹幕</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="593"/>
+        <location filename="translatormanager.cc" line="596"/>
         <source>UserID</source>
         <translation>魔法师ID</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="594"/>
+        <location filename="translatormanager.cc" line="597"/>
         <source>UserAlias</source>
         <translation>魔法师别名</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="595"/>
+        <location filename="translatormanager.cc" line="598"/>
         <source>TokenId</source>
         <oldsource>TokeId</oldsource>
         <translation>标记ID</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="596"/>
+        <location filename="translatormanager.cc" line="599"/>
         <source>Hash</source>
         <translation>Hash</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="597"/>
+        <location filename="translatormanager.cc" line="600"/>
         <source>Text</source>
         <translation>文本</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="598"/>
+        <location filename="translatormanager.cc" line="601"/>
         <source>Pos</source>
         <translation>位置</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="599"/>
+        <location filename="translatormanager.cc" line="602"/>
         <source>CreateTime</source>
         <translation>创建时间</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="600"/>
+        <location filename="translatormanager.cc" line="603"/>
         <source>UpdateTime</source>
         <translation>更新时间</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="601"/>
+        <location filename="translatormanager.cc" line="604"/>
         <source>Language</source>
         <translation>语言</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="602"/>
+        <location filename="translatormanager.cc" line="605"/>
         <source>Status</source>
         <translation>监听状态</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="603"/>
+        <location filename="translatormanager.cc" line="606"/>
         <source>Flags</source>
         <translation>Flags</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="604"/>
+        <location filename="translatormanager.cc" line="607"/>
         <source>BlessedCount</source>
         <translation>祝福数</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="605"/>
+        <location filename="translatormanager.cc" line="608"/>
         <source>CursedCount</source>
         <translation>诅咒数</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="606"/>
+        <location filename="translatormanager.cc" line="609"/>
         <source>BlockedCount</source>
         <translation>屏蔽数</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="607"/>
+        <location filename="translatormanager.cc" line="610"/>
         <source>AnnotCount</source>
         <translation>弹幕数</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="608"/>
+        <location filename="translatormanager.cc" line="611"/>
         <source>VisitedCount</source>
         <translation>访问数</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="610"/>
+        <location filename="translatormanager.cc" line="613"/>
         <source>PID</source>
         <translation>进程号</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="611"/>
+        <location filename="translatormanager.cc" line="614"/>
         <source>Folder</source>
         <translation>文件夹</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="612"/>
+        <location filename="translatormanager.cc" line="615"/>
         <source>Path</source>
         <translation>路径</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="614"/>
+        <location filename="translatormanager.cc" line="617"/>
         <source>Active</source>
         <translation>有效</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="615"/>
+        <location filename="translatormanager.cc" line="618"/>
         <source>Deleted</source>
         <translation>删除</translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="618"/>
+        <location filename="translatormanager.cc" line="621"/>
         <source>n/a</source>
         <translation>未知</translation>
     </message>

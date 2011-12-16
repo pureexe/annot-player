@@ -11,6 +11,7 @@
 #include "global.h"
 #include "logger.h"
 #include "signalhub.h"
+#include "module/serveragent/serveragent.h"
 #include "core/cmd.h"
 #include "core/htmltag.h"
 #include "core/annotationparser.h"
@@ -59,12 +60,12 @@ namespace { // anonymous, annotation display
                   last_time_bottom_[lane_count];
 
     Q_ASSERT(visible_time > 0);
-    //int wait_time = style == AnnotationGraphicsItem::FlyStyle ? (visible_time / 4 + 1) : visible_time;
+    //int wait_time = style == AnnotationGraphicsItem::FloatStyle ? (visible_time / 4 + 1) : visible_time;
     int wait_time = visible_time / 4 + 1;
 
     time_t *last_time_;
     switch (style) {
-    case AnnotationGraphicsItem::FlyStyle:      last_time_ = last_time_fly_; break;
+    case AnnotationGraphicsItem::FloatStyle:    last_time_ = last_time_fly_; break;
     case AnnotationGraphicsItem::TopStyle:      last_time_ = last_time_top_; break;
     case AnnotationGraphicsItem::BottomStyle:   last_time_ = last_time_bottom_; break;
     default : Q_ASSERT(0);      last_time_ = last_time_fly_;
@@ -116,18 +117,32 @@ AnnotationGraphicsItem::warmUp()
   QGraphicsTextItem dummy;
   QFont font = ::default_annot_font_();
 
+  font.setWeight(QFont::Light);
+  dummy.setFont(font);
+
+  font.setWeight(QFont::Normal);
+  dummy.setFont(font);
+
   font.setWeight(QFont::DemiBold);
   dummy.setFont(font);
 
   font.setWeight(QFont::Bold);
   dummy.setFont(font);
+
+  font.setWeight(QFont::Black);
+  dummy.setFont(font);
 #endif // Q_WS_MAC
 }
 
-AnnotationGraphicsItem::AnnotationGraphicsItem(const Annotation &annotation, SignalHub *hub, AnnotationGraphicsView *view)
-  : view_(view), hub_(hub), style_(FlyStyle), dragPos_(BAD_POS)
+AnnotationGraphicsItem::AnnotationGraphicsItem(
+  const Annotation &annotation,
+  SignalHub *hub,
+  ServerAgent *server,
+  AnnotationGraphicsView *view)
+  : view_(view), hub_(hub), server_(server), style_(FloatStyle), dragPos_(BAD_POS)
 {
   Q_ASSERT(hub_);
+  Q_ASSERT(server_);
   Q_ASSERT(view_);
   scene_ = view_->scene();
   Q_ASSERT(scene_);
@@ -200,7 +215,8 @@ AnnotationGraphicsItem::setTags(const QStringList &tags)
     foreach (const QString &tag, tags) {
       switch (qHash(tag)) {
       case Core::H_Verbatim: continue;
-      case Core::H_Fly: setStyle(FlyStyle); break;
+      case Core::H_Fly:
+      case Core::H_Float: setStyle(FloatStyle); break;
       case Core::H_Top: setStyle(TopStyle); break;
       case Core::H_Bottom: setStyle(BottomStyle); break;
 
@@ -208,6 +224,9 @@ AnnotationGraphicsItem::setTags(const QStringList &tags)
       case Core::H_Subtitle: setStyle(SubtitleStyle); break;
 #ifdef DEBUG
       default:
+        // Warn if the annot is submitted by current user
+        if (!annotation_.hasUserId() && !annotation_.hasUserAlias() ||
+            server_->isAuthorized() && server_->user().id() == annotation_.id())
         warn(TR(T_ERROR_UNKNOWN_COMMAND) + ": " + tag);
 #endif // DEBUG
       }
@@ -273,8 +292,8 @@ AnnotationGraphicsItem::parse(const QString &input)
   if (hash == Core::H_Verbatim)
     return text;
 
-  else if (hash == Core::H_Fly) {
-    setStyle(Fly);
+  else if (hash == Core::H_Float) {
+    setStyle(Float);
     return SELF(left);
   } else if (hash == Core::H_Top) {
     setStyle(Top);
@@ -380,7 +399,7 @@ AnnotationGraphicsItem::removeMe()
 void AnnotationGraphicsItem::showMe()
 {
   switch (style_) {
-  case FlyStyle:
+  case FloatStyle:
     fly(); break;
 
   case TopStyle:
@@ -411,7 +430,7 @@ AnnotationGraphicsItem::isPaused() const
   Q_ASSERT(ani_);
   Q_ASSERT(autoRemoveTimer_);
   switch (style_) {
-  case FlyStyle:
+  case FloatStyle:
     return ani_->state() == QAbstractAnimation::Paused;
 
   case TopStyle:
@@ -433,7 +452,7 @@ AnnotationGraphicsItem::pause()
   Q_ASSERT(ani_);
   Q_ASSERT(autoRemoveTimer_);
   switch (style_) {
-  case FlyStyle:
+  case FloatStyle:
     if (ani_->state() == QAbstractAnimation::Running)
       ani_->pause();
     break;
@@ -458,7 +477,7 @@ AnnotationGraphicsItem::resume()
   Q_ASSERT(ani_);
   Q_ASSERT(autoRemoveTimer_);
   switch (style_) {
-  case FlyStyle:
+  case FloatStyle:
     if (ani_->state() == QAbstractAnimation::Paused)
       ani_->resume();
     break;
@@ -522,7 +541,7 @@ AnnotationGraphicsItem::fly()
 {
   Q_ASSERT(view_);
   int msecs = flyTime();
-  int y = ::next_y_(view_->height(), msecs, FlyStyle, hub_);
+  int y = ::next_y_(view_->height(), msecs, FloatStyle, hub_);
 
   QPoint from(view_->width(), y);
   QPoint to(- boundingRect().width(), y);
