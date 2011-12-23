@@ -6,7 +6,7 @@
 #include "tr.h"
 #include "stylesheet.h"
 #include "logger.h"
-#include "global.h"
+#include "defines.h"
 #ifdef USE_WIN_PICKER
   #include "win/picker/picker.h"
 #endif // USE_WIN_PICKER

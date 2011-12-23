@@ -1,7 +1,7 @@
-#ifndef GLOBAL_H
-#define GLOBAL_H
+#ifndef DEFINES_H
+#define DEFINES_H
 
-// global.h
+// defines.h
 // 7/16/2011
 // Global parameters.
 #include "module/player/player_config.h"
@@ -195,4 +195,4 @@ enum { ALPHA = 0 };
   #define DWM_ENABLE_ONETIME_AERO_WIDGET(_w) ({ })
 #endif // USE_WIN_DWM
 
-#endif // GLOBAL_H
+#endif // DEFINES_H

@@ -3,7 +3,7 @@
 
 #include "aboutdialog.h"
 #include "uistyle.h"
-#include "global.h"
+#include "defines.h"
 #include "tr.h"
 #include "stylesheet.h"
 #include "util/textedit.h"

@@ -2,7 +2,7 @@
 // 7/17/2011
 
 #include "playerui.h"
-#include "global.h"
+#include "defines.h"
 #include "stylesheet.h"
 #include "tr.h"
 #include "signalhub.h"

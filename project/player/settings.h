@@ -56,6 +56,9 @@ public:
   QDate updateDate() const;
   void setUpdateDate(const QDate &date);
 
+  int subtitleColor() const;
+  void setSubtitleColor(int colorId);
+
   int language() const; ///< Application language
   void setLanguage(int lang);
 

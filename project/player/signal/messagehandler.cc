@@ -2,7 +2,7 @@
 // 10/19/2011
 
 #include "messagehandler.h"
-#include "global.h"
+#include "defines.h"
 #ifdef USE_WIN_QTH
   #include "win/qth/qth.h"
 #else

@@ -2,7 +2,7 @@
 // 7/30/2011
 
 #include "uistyle.h"
-#include "global.h"
+#include "defines.h"
 #include "stylesheet.h"
 #ifdef USE_WIN_DWM
   #include "win/dwm/dwm.h"

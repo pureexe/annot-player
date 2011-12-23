@@ -1,8 +1,8 @@
 ﻿== ENGLISH ==
 
 Product:	Annot Player
-Version:	0.1.1.3
-Release:	2011/12/16
+Version:	0.1.1.4
+Release:	2011/12/22
 Homepage:	http://annot.me
 Help (Wiki):	http://annot.me/wiki/FAQ
 Download:	http://code.google.com/p/annot-player/downloads
@@ -15,9 +15,6 @@ Requirements:
 - Mac OS X 10.6/10.7
 - Linux (Debian/Ubuntu/Fedora)
 
-WHAT'S NEW?
-- Added input line history.
-- Added pre-defined command to input line.
 
 == 日本語 ==
 

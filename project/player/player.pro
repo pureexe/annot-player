@@ -1,7 +1,7 @@
 # player.pro
 # 6/30/2011
 
-VERSION = 0.1.1.3
+VERSION = 0.1.1.4
 
 include(../../config.pri)
 include(tr/tr.pri)
@@ -127,7 +127,7 @@ HEADERS += \
     db/db_config.h \
     db/db.h \
     define/config.h \
-    define/global.h \
+    define/defines.h \
     define/rc.h \
     define/stylesheet.h \
     dialog/aboutdialog.h \

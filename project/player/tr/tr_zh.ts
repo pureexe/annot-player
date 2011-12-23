@@ -261,7 +261,7 @@
 <context>
     <name>AnnotationGraphicsView</name>
     <message>
-        <location filename="../annot/annotationgraphicsview.cc" line="579"/>
+        <location filename="../annot/annotationgraphicsview.cc" line="581"/>
         <source>cannot edit other&apos;s annotation text</source>
         <translation>通信使魔：无法编辑别人的弹幕</translation>
     </message>
@@ -505,7 +505,7 @@
 <context>
     <name>InputComboBox</name>
     <message>
-        <location filename="../command/inputcombobox.cc" line="13"/>
+        <location filename="../command/inputcombobox.cc" line="14"/>
         <source>Konichiwa!</source>
         <translation>无路赛！无路赛！无路赛！</translation>
     </message>
@@ -513,17 +513,17 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../mainwindow.cc" line="398"/>
+        <location filename="../mainwindow.cc" line="396"/>
         <source>Select annots window</source>
         <translation>侦听使魔：选择再生窗口</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="401"/>
+        <location filename="../mainwindow.cc" line="399"/>
         <source>Select process window to open</source>
         <translation>侦听使魔：选择需要监听的进程窗口</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1026"/>
+        <location filename="../mainwindow.cc" line="1024"/>
         <source>&amp;File</source>
         <translation></translation>
     </message>
@@ -532,38 +532,38 @@
         <translation type="obsolete">视图</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1036"/>
+        <location filename="../mainwindow.cc" line="1034"/>
         <source>&amp;Quit</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1050"/>
-        <location filename="../mainwindow.cc" line="1051"/>
+        <location filename="../mainwindow.cc" line="1048"/>
+        <location filename="../mainwindow.cc" line="1049"/>
         <source>&amp;Help</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1052"/>
+        <location filename="../mainwindow.cc" line="1050"/>
         <source>&amp;About</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1547"/>
+        <location filename="../mainwindow.cc" line="1542"/>
         <source>analyzing media ...</source>
         <translation>播放使魔：媒体分析中...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1739"/>
+        <location filename="../mainwindow.cc" line="1734"/>
         <source>snapshot saved on the destop</source>
         <translation>播放使魔：截图保存到了桌面上</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2139"/>
+        <location filename="../mainwindow.cc" line="2134"/>
         <source>connecting server to submit alias ...</source>
         <translation>通信使魔：正在连接服务器提交别名...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2153"/>
+        <location filename="../mainwindow.cc" line="2148"/>
         <source>alias saved</source>
         <translation>通信使魔：别名已保存</translation>
     </message>
@@ -572,27 +572,27 @@
         <translation type="obsolete">通信使魔：修改别名失败</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2168"/>
+        <location filename="../mainwindow.cc" line="2163"/>
         <source>annotation saved</source>
         <translation>通信使魔：弹幕已保存</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2170"/>
+        <location filename="../mainwindow.cc" line="2165"/>
         <source>failed to update annotation text</source>
         <translation>通信使魔：远程魔法修改弹幕失败</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2230"/>
+        <location filename="../mainwindow.cc" line="2231"/>
         <source>connecting server to query media/game token ...</source>
         <translation>通信使魔：远程魔法搜索弹幕中...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2315"/>
+        <location filename="../mainwindow.cc" line="2312"/>
         <source>searching for token in cache ...</source>
         <translation>通信使魔：正在本地缓冲中搜索弹幕信息...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2422"/>
+        <location filename="../mainwindow.cc" line="2419"/>
         <source>connecting server to submit annot ...</source>
         <translation>通信使魔：远程魔法提交弹幕中...</translation>
     </message>
@@ -823,7 +823,7 @@
 <context>
     <name>ProcessView</name>
     <message>
-        <location filename="../signal/processview.cc" line="69"/>
+        <location filename="../signal/processview.cc" line="70"/>
         <source>Process view</source>
         <translation>进程的信息</translation>
     </message>
@@ -888,42 +888,42 @@
         <translation type="obsolete">路径</translation>
     </message>
     <message>
-        <location filename="../signal/processview.cc" line="204"/>
+        <location filename="../signal/processview.cc" line="205"/>
         <source>refreshing process list ...</source>
         <translation>侦听使魔：正在刷新进程...</translation>
     </message>
     <message>
-        <location filename="../signal/processview.cc" line="305"/>
+        <location filename="../signal/processview.cc" line="306"/>
         <source>process attached</source>
         <translation>侦听使魔：进程同步成功</translation>
     </message>
     <message>
-        <location filename="../signal/processview.cc" line="307"/>
+        <location filename="../signal/processview.cc" line="308"/>
         <source>failed to attach process </source>
         <translation>侦听使魔：进程同步失败</translation>
     </message>
     <message>
-        <location filename="../signal/processview.cc" line="309"/>
+        <location filename="../signal/processview.cc" line="310"/>
         <source>Is the process running now?</source>
         <translation>侦听使魔：程序正在运行吗？</translation>
     </message>
     <message>
-        <location filename="../signal/processview.cc" line="311"/>
+        <location filename="../signal/processview.cc" line="312"/>
         <source>Run me as administrator and try again &amp;gt;_&amp;lt;</source>
         <translation>通信使魔：大概需要以管理员的身份运行</translation>
     </message>
     <message>
-        <location filename="../signal/processview.cc" line="313"/>
+        <location filename="../signal/processview.cc" line="314"/>
         <source>Restart the target process might help -_-</source>
         <translation>通信使魔：可能需要重新启动程序一下</translation>
     </message>
     <message>
-        <location filename="../signal/processview.cc" line="325"/>
+        <location filename="../signal/processview.cc" line="326"/>
         <source>process detached</source>
         <translation>侦听使魔：停止监听进程</translation>
     </message>
     <message>
-        <location filename="../signal/processview.cc" line="327"/>
+        <location filename="../signal/processview.cc" line="328"/>
         <source>failed to detach process</source>
         <translation>侦听使魔：停止监听进程失败</translation>
     </message>
@@ -2372,9 +2372,9 @@
     <message>
         <location filename="translatormanager.cc" line="472"/>
         <location filename="translatormanager.cc" line="473"/>
-        <source>Select channel</source>
-        <oldsource>Select &amp;channel</oldsource>
-        <translation>选择监听频道</translation>
+        <source>Switch channel</source>
+        <oldsource>Select channel</oldsource>
+        <translation>变更监听频道</translation>
     </message>
     <message>
         <location filename="translatormanager.cc" line="475"/>

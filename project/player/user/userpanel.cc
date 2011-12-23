@@ -4,7 +4,7 @@
 #include "userpanel.h"
 #include "uistyle.h"
 #include "tr.h"
-#include "global.h"
+#include "defines.h"
 #include "stylesheet.h"
 #include "core/gui/toolbutton.h"
 #include <QtGui>

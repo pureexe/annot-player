@@ -2,7 +2,7 @@
 // 7/16/2011
 
 #include "embeddedplayer.h"
-#include "global.h"
+#include "defines.h"
 #include "tr.h"
 #include "stylesheet.h"
 #include "uistyle.h"

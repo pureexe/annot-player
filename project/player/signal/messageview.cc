@@ -5,7 +5,7 @@
 #include "textedit.h"
 #include "uistyle.h"
 #include "tr.h"
-#include "global.h"
+#include "defines.h"
 #include "stylesheet.h"
 #include "logger.h"
 #include "core/htmltag.h"

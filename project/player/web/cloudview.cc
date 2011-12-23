@@ -2,7 +2,7 @@
 // 7/15/2011
 
 #include "cloudview.h"
-#include "global.h"
+#include "defines.h"
 #include "uistyle.h"
 #include "tr.h"
 #include <QtGui>

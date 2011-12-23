@@ -469,8 +469,8 @@ TranslatorManager::translate(int tid) const
   case T_MENUTEXT_REFRESHPROCESS: return tr("Refresh process");
   case T_TIP_REFRESHPROCESS:    return tr("Refresh process");
 
-  case T_MENUTEXT_RECENTMESSAGES: return tr("Select channel");
-  case T_TIP_RECENTMESSAGES:    return tr("Select channel");
+  case T_MENUTEXT_RECENTMESSAGES: return tr("Switch channel");
+  case T_TIP_RECENTMESSAGES:    return tr("Switch channel");
 
   case T_MENUTEXT_PLAYLIST:     return tr("Playlist");
   case T_TIP_PLAYLIST:          return tr("Playlist");

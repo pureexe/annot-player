@@ -2,7 +2,7 @@
 // 7/30/2011
 
 #include "settings.h"
-#include "global.h"
+#include "defines.h"
 #include <QtCore>
 
 // - Settings keys -
@@ -21,6 +21,7 @@
 #define SK_MENUBAR      "MenuBar"
 #define SK_THEME        "Theme"
 #define SK_TRANSLATE    "Translate"
+#define SK_SUBTITLECOLOR "SubtitleColor"
 #define SK_SUBTITLEONTOP "SubtitleStaysOnTop"
 #define SK_EMBEDONTOP   "EmbedOnTop"
 #define SK_UPDATEDATE   "UpdateDate"
@@ -139,6 +140,20 @@ Settings::language() const
 void
 Settings::setLanguage(int language)
 { setValue(SK_LANGUAGE, language); }
+
+int
+Settings::subtitleColor() const
+{
+  bool ok;
+  int ret = value(SK_SUBTITLECOLOR).toInt(&ok);
+  if (!ok)
+    return 0;
+  return ret;
+}
+
+void
+Settings::setSubtitleColor(int colorId)
+{ setValue(SK_SUBTITLECOLOR, colorId); }
 
 qint64
 Settings::annotationLanguages() const

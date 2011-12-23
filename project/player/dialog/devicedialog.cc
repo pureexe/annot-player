@@ -5,7 +5,7 @@
 #include "uistyle.h"
 #include "tr.h"
 #include "stylesheet.h"
-#include "global.h"
+#include "defines.h"
 #include "logger.h"
 #include "core/gui/toolbutton.h"
 #include "core/gui/combobox.h"

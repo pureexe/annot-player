@@ -4,7 +4,7 @@
 #include "seekdialog.h"
 #include "uistyle.h"
 #include "tr.h"
-#include "global.h"
+#include "defines.h"
 #include "stylesheet.h"
 #include "lineedit.h"
 #include "logger.h"

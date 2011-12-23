@@ -169,7 +169,7 @@
 <context>
     <name>AnnotationGraphicsView</name>
     <message>
-        <location filename="../annot/annotationgraphicsview.cc" line="579"/>
+        <location filename="../annot/annotationgraphicsview.cc" line="581"/>
         <source>cannot edit other&apos;s annotation text</source>
         <translation type="unfinished"></translation>
     </message>
@@ -367,7 +367,7 @@
 <context>
     <name>InputComboBox</name>
     <message>
-        <location filename="../command/inputcombobox.cc" line="13"/>
+        <location filename="../command/inputcombobox.cc" line="14"/>
         <source>Konichiwa!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -375,78 +375,78 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../mainwindow.cc" line="398"/>
+        <location filename="../mainwindow.cc" line="396"/>
         <source>Select annots window</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="401"/>
+        <location filename="../mainwindow.cc" line="399"/>
         <source>Select process window to open</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1026"/>
+        <location filename="../mainwindow.cc" line="1024"/>
         <source>&amp;File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1036"/>
+        <location filename="../mainwindow.cc" line="1034"/>
         <source>&amp;Quit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1050"/>
-        <location filename="../mainwindow.cc" line="1051"/>
+        <location filename="../mainwindow.cc" line="1048"/>
+        <location filename="../mainwindow.cc" line="1049"/>
         <source>&amp;Help</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1052"/>
+        <location filename="../mainwindow.cc" line="1050"/>
         <source>&amp;About</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1547"/>
+        <location filename="../mainwindow.cc" line="1542"/>
         <source>analyzing media ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1739"/>
+        <location filename="../mainwindow.cc" line="1734"/>
         <source>snapshot saved on the destop</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2139"/>
+        <location filename="../mainwindow.cc" line="2134"/>
         <source>connecting server to submit alias ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2153"/>
+        <location filename="../mainwindow.cc" line="2148"/>
         <source>alias saved</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2168"/>
+        <location filename="../mainwindow.cc" line="2163"/>
         <source>annotation saved</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2170"/>
+        <location filename="../mainwindow.cc" line="2165"/>
         <source>failed to update annotation text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2230"/>
+        <location filename="../mainwindow.cc" line="2231"/>
         <source>connecting server to query media/game token ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2315"/>
+        <location filename="../mainwindow.cc" line="2312"/>
         <source>searching for token in cache ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2422"/>
+        <location filename="../mainwindow.cc" line="2419"/>
         <source>connecting server to submit annot ...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -645,47 +645,47 @@
 <context>
     <name>ProcessView</name>
     <message>
-        <location filename="../signal/processview.cc" line="69"/>
+        <location filename="../signal/processview.cc" line="70"/>
         <source>Process view</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../signal/processview.cc" line="204"/>
+        <location filename="../signal/processview.cc" line="205"/>
         <source>refreshing process list ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../signal/processview.cc" line="305"/>
+        <location filename="../signal/processview.cc" line="306"/>
         <source>process attached</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../signal/processview.cc" line="307"/>
+        <location filename="../signal/processview.cc" line="308"/>
         <source>failed to attach process </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../signal/processview.cc" line="309"/>
+        <location filename="../signal/processview.cc" line="310"/>
         <source>Is the process running now?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../signal/processview.cc" line="311"/>
+        <location filename="../signal/processview.cc" line="312"/>
         <source>Run me as administrator and try again &amp;gt;_&amp;lt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../signal/processview.cc" line="313"/>
+        <location filename="../signal/processview.cc" line="314"/>
         <source>Restart the target process might help -_-</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../signal/processview.cc" line="325"/>
+        <location filename="../signal/processview.cc" line="326"/>
         <source>process detached</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../signal/processview.cc" line="327"/>
+        <location filename="../signal/processview.cc" line="328"/>
         <source>failed to detach process</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1986,7 +1986,8 @@
     <message>
         <location filename="translatormanager.cc" line="472"/>
         <location filename="translatormanager.cc" line="473"/>
-        <source>Select channel</source>
+        <source>Switch channel</source>
+        <oldsource>Select channel</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>

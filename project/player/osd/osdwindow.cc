@@ -8,7 +8,7 @@
 #endif // Q_WS_X11
 #include <QtGui>
 
-#define DEBUG "osdwindow"
+//#define DEBUG "osdwindow"
 #include "module/debug/debug.h"
 
 // - Constructions -

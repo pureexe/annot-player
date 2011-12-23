@@ -2,7 +2,7 @@
 // 10/9/2011
 
 #include "commentview.h"
-#include "global.h"
+#include "defines.h"
 
 #include <QtGui>
 #include <QtWebKit>

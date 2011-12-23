@@ -2,7 +2,7 @@
 // 7/10/2011
 
 #include "videoview.h"
-#include "global.h"
+#include "defines.h"
 #ifdef USE_WIN_HOOK
   #include "win/hook/hook.h"
   #include "win/qtwin/qtwin.h"

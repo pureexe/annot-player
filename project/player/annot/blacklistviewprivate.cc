@@ -6,7 +6,7 @@
 #include "filteredlistview.h"
 #include "uistyle.h"
 #include "tr.h"
-#include "global.h"
+#include "defines.h"
 #include "stylesheet.h"
 #include "lineedit.h"
 #include "annotationbrowser.h" // TO BE REMOVED

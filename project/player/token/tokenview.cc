@@ -6,7 +6,7 @@
 #include "tr.h"
 #include "stylesheet.h"
 #include "uistyle.h"
-#include "global.h"
+#include "defines.h"
 #include "logger.h"
 #include "filteredtableview.h"
 #include "module/serveragent/serveragent.h"

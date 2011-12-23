@@ -1,7 +1,7 @@
 // application.cc
 // 11/18/2011
 #include "application.h"
-#include "global.h"
+#include "defines.h"
 #ifdef Q_OS_WIN
   #include "win/qtwin/qtwin.h"
 #endif // Q_OS_WIN
@@ -141,7 +141,7 @@ Application::startLoggingDebugMessage()
   QFile debug(G_PATH_DEBUG);
   if (debug.open(QIODevice::WriteOnly | QIODevice::Append)) {
     QTextStream(&debug)
-      << "\n--------------------------------------------------------------------------------\n\n";
+      << "\n################################################################################\n\n";
     debug.close();
 
     qInstallMsgHandler(::debugMessageHandler);

@@ -9,7 +9,7 @@
 #include "signalhub.h"
 #include "videoview.h"
 #include "logger.h"
-#include "global.h"
+#include "defines.h"
 #include "module/player/player.h"
 //#include "module/serveragent/serveragent.h"
 #ifdef Q_WS_WIN
@@ -352,8 +352,10 @@ AnnotationGraphicsView::isPlaybackEnabled() const
 void
 AnnotationGraphicsView::setPlaybackEnabled(bool enabled)
 {
-  playbackEnabled_ = enabled;
-  emit playbackEnabledChanged(enabled);
+  if (playbackEnabled_ != enabled) {
+    playbackEnabled_= enabled;
+    emit playbackEnabledChanged(enabled);
+  }
 }
 
 void

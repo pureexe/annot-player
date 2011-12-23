@@ -2,7 +2,7 @@
 // 11/16/2011
 
 #include "helpdialog.h"
-#include "global.h"
+#include "defines.h"
 #include "tr.h"
 #include "settings.h"
 

@@ -6,7 +6,7 @@
 #include "tr.h"
 #include "stylesheet.h"
 #include "uistyle.h"
-#include "global.h"
+#include "defines.h"
 #include "core/gui/combobox.h"
 #include "core/gui/toolbutton.h"
 #include <QtGui>

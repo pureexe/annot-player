@@ -4,7 +4,7 @@ setlocal
 cd /d d:/devel/releases/player || exit 1
 test -e "Delete Caches.cmd" || exit 1
 
-set VERSION=0.1.1.3
+set VERSION=0.1.1.4
 set APP=annot-player
 set ZIPFILE=%APP%-%VERSION%-win.zip
 
@@ -38,12 +38,12 @@ cp -v "%BUILD%/Annot Player.exe" .
 cp -v "%SOURCE%/README" "Read Me.txt"
 unix2dos "Read Me.txt"
 
+cp -v "%SOURCE%/ChangeLog" ChangeLog.txt
+unix2dos ChangeLog.txt
+
 rm -Rf licenses
 cp -R "%SOURCE%/licenses" .
 cp "%SOURCE%/COPYING" licenses/COPYING.txt
-cp "%SOURCE%/ChangeLog" licenses/ChangeLog.txt
-
-unix2dos licenses/ChangeLog.txt
 
 :: deploy modules
 mkdir modules

@@ -7,7 +7,7 @@
 #include "application.h"
 #include "mainwindow.h"
 #include "settings.h"
-#include "global.h"
+#include "defines.h"
 #include "uistyle.h"
 #include "translatormanager.h"
 #include "annotationgraphicsitem.h"
@@ -199,6 +199,7 @@ main(int argc, char *argv[])
     // Show main window
     w.resize(INIT_WINDOW_SIZE);
     w.show();
+    //QTimer::singleShot(0, &w, SLOT(show()));
 
     // Automatic login
     QString userName = settings->userName(),
@@ -249,6 +250,7 @@ main(int argc, char *argv[])
   dummy.resize(QSize());
   QObject::connect(&w, SIGNAL(windowClosed()), &dummy, SLOT(close()));
   dummy.show();
+  //QTimer::singleShot(0, &dummy, SLOT(show()));
 #endif // USE_MODE_SIGNAL && Q_OS_WIN
 
   return a.exec();

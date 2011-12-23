@@ -45,9 +45,9 @@ namespace { // anonymous, DwmApi
     QLibrary dwmLib_;
   public:
     // http://msdn.microsoft.com/en-us/library/aa969512(v=vs.85).aspx
-    typedef HRESULT (WINAPI *PtrDwmIsCompositionEnabled)(BOOL* pfEnabled);
-    typedef HRESULT (WINAPI *PtrDwmExtendFrameIntoClientArea)(HWND hWnd, const MARGINS* pMarInset);
-    typedef HRESULT (WINAPI *PtrDwmEnableBlurBehindWindow)(HWND hWnd, const DWM_BLURBEHIND* pBlurBehind);
+    typedef HRESULT (WINAPI *PtrDwmIsCompositionEnabled)(BOOL *pfEnabled);
+    typedef HRESULT (WINAPI *PtrDwmExtendFrameIntoClientArea)(HWND hWnd, const MARGINS *pMarInset);
+    typedef HRESULT (WINAPI *PtrDwmEnableBlurBehindWindow)(HWND hWnd, const DWM_BLURBEHIND *pBlurBehind);
     typedef HRESULT (WINAPI *PtrDwmGetColorizationColor)(DWORD *pcrColorization, BOOL *pfOpaqueBlend);
 
     PtrDwmIsCompositionEnabled pDwmIsCompositionEnabled;
@@ -77,7 +77,8 @@ namespace { // anonymous, DwmApi
 #ifdef USE_DWM_NOTIFIER
 namespace { // anoymous, WindowsNotifier
 
-  // Inherit QWidget to access protected \fn WinEvent.
+  // Invisible background window.
+  // Inherit QWidget to access protected \fn winEvent.
   class WindowNotifier : public QWidget
   {
     // Q_OBJECT
@@ -87,7 +88,7 @@ namespace { // anoymous, WindowsNotifier
     QWidgetList widgets_;
 
   public:
-    WindowNotifier() { winId(); }
+    WindowNotifier() { winId(); } // enforce a valid hwnd
 
     inline void addWidget(QWidget *widget);
     inline void removeWidget(QWidget *widget);
@@ -147,7 +148,8 @@ namespace { // anoymous, WindowsNotifier
   namespace { namespace dwmapi_ { // anonymous
     inline DwmApi *api() { static DwmApi g; return &g; }
 
-    inline HRESULT WINAPI DwmIsCompositionEnabled(__out BOOL* pfEnabled)
+    inline HRESULT WINAPI
+    DwmIsCompositionEnabled(__out BOOL* pfEnabled)
     {
       Q_ASSERT(api()->pDwmIsCompositionEnabled);
       if (!api()->pDwmIsCompositionEnabled)
@@ -156,7 +158,8 @@ namespace { // anoymous, WindowsNotifier
         return api()->pDwmIsCompositionEnabled(pfEnabled);
     }
 
-    inline HRESULT WINAPI DwmExtendFrameIntoClientArea(HWND hWnd, __in const MARGINS* pMarInset)
+    inline HRESULT WINAPI
+    DwmExtendFrameIntoClientArea(HWND hWnd, __in const MARGINS *pMarInset)
     {
       Q_ASSERT(api()->pDwmExtendFrameIntoClientArea);
       if (!api()->pDwmExtendFrameIntoClientArea)
@@ -165,7 +168,8 @@ namespace { // anoymous, WindowsNotifier
         return api()->pDwmExtendFrameIntoClientArea(hWnd, pMarInset);
     }
 
-    inline HRESULT WINAPI DwmEnableBlurBehindWindow(HWND hWnd, __in const DWM_BLURBEHIND* pBlurBehind)
+    inline HRESULT WINAPI
+    DwmEnableBlurBehindWindow(HWND hWnd, __in const DWM_BLURBEHIND *pBlurBehind)
     {
       Q_ASSERT(api()->pDwmEnableBlurBehindWindow);
       if (!api()->pDwmEnableBlurBehindWindow)
@@ -174,7 +178,8 @@ namespace { // anoymous, WindowsNotifier
         return api()->pDwmEnableBlurBehindWindow(hWnd, pBlurBehind);
     }
 
-    inline HRESULT WINAPI DwmGetColorizationColor(__out DWORD *pcrColorization, __out BOOL *pfOpaqueBlend)
+    inline HRESULT WINAPI
+    DwmGetColorizationColor(__out DWORD *pcrColorization, __out BOOL *pfOpaqueBlend)
     {
       Q_ASSERT(api()->pDwmGetColorizationColor);
       if (!api()->pDwmGetColorizationColor)
@@ -243,21 +248,21 @@ Dwm::enableBlurBehindWindow(QWidget *widget, bool enable)
   //widget->setAttribute(Qt::WA_TranslucentBackground, enable);
   //widget->setAttribute(Qt::WA_NoSystemBackground, enable);
 
-  bool succeed = enableBlurBehindWindow(widget->winId(), enable);
+  bool ok = enableBlurBehindWindow(widget->winId(), enable);
   #ifdef USE_DWM_NOTIFIER
-  if (enable && succeed)
-    DWM_NOTIFIER->addWidget(widget);
   if (!enable)
     DWM_NOTIFIER->removeWidget(widget);
+  else if (ok)
+    DWM_NOTIFIER->addWidget(widget);
   #endif // USE_DWM_NOTIFIER
-  return succeed;
+  return ok;
 }
 
 // http://msdn.microsoft.com/en-us/library/aa969537(v=vs.85).aspx bool
 bool
 Dwm::extendFrameIntoClientArea(WId hwnd, int left, int top, int right, int bottom)
 {
-  MARGINS m = {left, top, right, bottom};
+  MARGINS m = { left, top, right, bottom };
   HRESULT hr = DWMAPI::DwmExtendFrameIntoClientArea(hwnd, &m);
   return SUCCEEDED(hr);
 }
@@ -269,22 +274,22 @@ Dwm::extendFrameIntoClientArea(QWidget *widget, int left, int top, int right, in
   if (!widget)
     return false;
 
-  bool succeed = extendFrameIntoClientArea(widget->winId(), left, top, right, bottom);
+  bool ok = extendFrameIntoClientArea(widget->winId(), left, top, right, bottom);
   //widget->setAttribute(Qt::WA_TranslucentBackground, enable);
 
 #ifdef USE_DWM_NOTIFIER
   // If the margin is 0, disable the frame.
   bool enable = left || top || right || bottom;
-  if (enable && succeed)
-    DWM_NOTIFIER->addWidget(widget);
   if (!enable)
     DWM_NOTIFIER->removeWidget(widget);
+  else if (ok)
+    DWM_NOTIFIER->addWidget(widget);
 #endif // USE_DWM_NOTIFIER
-  return succeed;
+  return ok;
 }
 
 QColor
-Dwm::colorizatinColor()
+Dwm::colorizationColor()
 {
   QColor ret = QApplication::palette().window().color();
   DWORD color = 0;
@@ -293,8 +298,7 @@ Dwm::colorizatinColor()
   HRESULT hr = DWMAPI::DwmGetColorizationColor(&color, &opaque);
   if (!SUCCEEDED(hr))
     return ret;
-  else
-    return QColor(color);
+  return QColor(color);
 }
 
 // EOF

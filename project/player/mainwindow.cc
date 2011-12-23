@@ -41,7 +41,7 @@
 #include "livedialog.h"
 #include "syncdialog.h"
 #include "settings.h"
-#include "global.h"
+#include "defines.h"
 #ifdef USE_MODE_SIGNAL
   #include "signalview.h"
   #include "messageview.h"
@@ -223,12 +223,10 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags f)
   MouseHook::globalInstance()->start();
 #endif // USE_WIN_MOUSEHOOK
 
-  // Use default subtitle color
-  //setSubtitleColorToDefaultAct_->setChecked(true);
-  setSubtitleColorToOrange();
-
   // Load settings
   Settings *settings = Settings::globalInstance();
+
+  setSubtitleColor(settings->subtitleColor());
 
   recentFiles_ = settings->recentFiles();
   invalidateRecentMenu();
@@ -1355,8 +1353,6 @@ MainWindow::openDevicePath(const QString &path, bool isAudioCD)
 
   playlist_.clear();
 
-  tokenType_ = isAudioCD ? Token::TT_Audio : Token::TT_Video;
-
   QString mrl = path;
   if (isAudioCD && !mrl.startsWith(PLAYER_URL_CD, Qt::CaseInsensitive))
     mrl = PLAYER_URL_CD + path;
@@ -1466,17 +1462,7 @@ MainWindow::openPath(const QString &path, bool checkPath)
     }
   }
 
-  // Forward computing tokenType_
-  {
-    bool isAudioCD = path.startsWith(PLAYER_URL_CD, Qt::CaseInsensitive);
-    if (isAudioCD)
-      tokenType_ = Token::TT_Audio;
-    else  {
-      int tt = fileType(path);
-      if (tt)
-        tokenType_ = tt;
-    }
-  }
+  tokenType_ = fileType(path);
 
   player_->openMedia(path);
 
@@ -1490,6 +1476,19 @@ MainWindow::openPath(const QString &path, bool checkPath)
   }
 }
 
+bool
+MainWindow::isPosOutOfScreen(const QPoint &globalPos) const
+{
+  QRect screen = QApplication::desktop()->availableGeometry(this);
+  return !screen.contains(globalPos);
+}
+
+bool
+MainWindow::isRectOutOfScreen(const QRect &globalRect) const
+{
+  QRect screen = QApplication::desktop()->availableGeometry(this);
+  return !screen.intersects(globalRect);
+}
 
 bool
 MainWindow::isDigestReady(const QString &path) const
@@ -1515,12 +1514,8 @@ MainWindow::isAliasReady(const QString &path) const
   QFileInfo fi(path);
   if (fi.isDir())
     return false;
-
-#ifdef Q_OS_UNIX
-  if (path.startsWith("/dev/"))
+  if (isDevicePath(path))
     return false;
-#endif // Q_OS_UNIX
-
   return true;
 }
 
@@ -2188,6 +2183,12 @@ MainWindow::removeUrlPrefix(const QString &url)
 int
 MainWindow::fileType(const QString &fileName)
 {
+  if (fileName.startsWith(PLAYER_URL_CD, Qt::CaseInsensitive))
+    return Token::TT_Audio;
+
+  if (isDevicePath(fileName))
+    return Token::TT_Video;
+
 #ifdef USE_MODE_SIGNAL
   static const QStringList supportedProgramSuffices =
       QStringList() G_FORMAT_PROGRAM_(<<);
@@ -2243,11 +2244,9 @@ MainWindow::setToken(const QString &input, bool async)
   Alias alias;
 
   if (!input.isEmpty()) {
-    token.setDigestType(0); // reset previous digest if exists
+    token.setType(tokenType_ = fileType(input));
 
-    // Always assume path pointed a local file.
-    // TODO: Add support for token with remote URL by streaming
-    // Following logic is messed up.
+    token.setDigestType(0);
 
     QString path = removeUrlPrefix(input);
     token.setDigest(recentDigest_);
@@ -2257,12 +2256,10 @@ MainWindow::setToken(const QString &input, bool async)
     if (isAliasReady(path)) {
       QString fileName = QFileInfo(path).fileName();
       if (!fileName.isEmpty()) {
-        tokenType_ = fileType(fileName);
 //#ifdef Q_WS_MAC
 //        if (tt == Token::TT_Audio)
 //          videoView_->hideView();
 //#endif // Q_WS_MAC
-        token.setType(tokenType_);
 
         if (fileName.size() > Traits::MAX_ALIAS_LENGTH) {
           fileName = fileName.mid(0, Traits::MAX_ALIAS_LENGTH);
@@ -2733,11 +2730,13 @@ MainWindow::mouseMoveEvent(QMouseEvent *event)
 #endif // Q_WS_MAC
 
   // Move the main window
-  if (event && event->buttons() & Qt::LeftButton
-      && dragPos_ != BAD_POS && !isFullScreen()) {
-    QPoint newPos = event->globalPos() - dragPos_;
-    // use QApplication::postEvent is more elegant but less efficient
-    move(newPos);
+  if (event && event->buttons() & Qt::LeftButton &&
+      dragPos_ != BAD_POS && !isFullScreen()) {
+    QPoint globalPos = event->globalPos();
+    // FIXME: not working
+    //QRect globalRect(globalPos, size());
+    //if (!isRectOutOfScreen(globalRect))
+      move(globalPos - dragPos_);
 
     annotationView_->invalidatePos();
 //#ifdef Q_WS_MAC // FIXME: solve the postion tracking problem....
@@ -3357,12 +3356,12 @@ MainWindow::dragEnterEvent(QDragEnterEvent *event)
 void
 MainWindow::dragMoveEvent(QDragMoveEvent *event)
 {
-  DOUT("enter");
+  //DOUT("enter");
   Q_ASSERT(event);
   //if (isMimeDataSupported(event->mimeData()))
     event->acceptProposedAction();
   Base::dragMoveEvent(event);
-  DOUT("exit");
+  //DOUT("exit");
 }
 
 void
@@ -3422,6 +3421,8 @@ MainWindow::closeEvent(QCloseEvent *event)
   settings->setMenuBarVisible(menuBar()->isVisible());
 
   settings->setAnnotationFilterEnabled(annotationFilter_->isEnabled());
+
+  settings->setSubtitleColor(subtitleColor());
 
   // Disabled for saving closing time orz
   //if (server_->isConnected() && server_->isAuthorized())
@@ -4449,6 +4450,41 @@ MainWindow::setSubtitleColorToDefault()
   SET_SUBTITLE_COLOR(Purple, PURPLE)
   SET_SUBTITLE_COLOR(Red, RED)
 #undef SET_SUBTITLE_COLOR
+
+void
+MainWindow::setSubtitleColor(int c)
+{
+  switch (c) {
+  case Black:   setSubtitleColorToBlack(); break;
+  case White:   setSubtitleColorToWhite(); break;
+  case Blue:    setSubtitleColorToBlue(); break;
+  case Red:     setSubtitleColorToRed(); break;
+  case Orange:  setSubtitleColorToOrange(); break;
+  case Purple:  setSubtitleColorToPurple(); break;
+  case DefaultColor:
+  default:      setSubtitleColorToDefault();
+  }
+}
+
+int
+MainWindow::subtitleColor() const
+{
+  if (setSubtitleColorToWhiteAct_->isChecked())
+    return White;
+  if (setSubtitleColorToBlackAct_->isChecked())
+    return Black;
+  if (setSubtitleColorToBlueAct_->isChecked())
+    return Blue;
+  if (setSubtitleColorToRedAct_->isChecked())
+    return Red;
+  if (setSubtitleColorToOrangeAct_->isChecked())
+    return Orange;
+  if (setSubtitleColorToPurpleAct_->isChecked())
+    return Purple;
+  if (setSubtitleColorToDefaultAct_->isChecked())
+    return DefaultColor;
+  return DefaultColor;
+}
 
 
 // - Themes -

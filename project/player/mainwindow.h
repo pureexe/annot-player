@@ -76,6 +76,13 @@ class MainWindow : public QMainWindow
   typedef Core::Cloud::Annotation Annotation;
   typedef Core::Cloud::AnnotationList AnnotationList;
 
+  // - Types -
+public:
+  enum Color {
+    DefaultColor = 0,
+    White, Black, Blue, Red, Purple, Orange
+  };
+
   // - Constructions -
 public:
   explicit MainWindow(QWidget *parent = 0, Qt::WindowFlags f = 0);
@@ -121,6 +128,8 @@ public slots:
   void setSubtitleColorToPurple();
   void setSubtitleColorToOrange();
   void setSubtitleColorToBlack();
+  int subtitleColor() const;
+  void setSubtitleColor(int colorId);
 private:
   void uncheckSubtitleColorActions();
 
@@ -409,6 +418,9 @@ protected:
 
   static QString languageToString(int lang);
   static int fileType(const QString &fileName);
+
+  bool isPosOutOfScreen(const QPoint &globalPos) const;
+  bool isRectOutOfScreen(const QRect &globalRect) const;
 
   bool isDigestReady(const QString &path) const;
   bool isAliasReady(const QString &path) const;

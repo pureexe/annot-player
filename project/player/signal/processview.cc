@@ -5,7 +5,7 @@
 #include "tr.h"
 #include "stylesheet.h"
 #include "uistyle.h"
-#include "global.h"
+#include "defines.h"
 #include "logger.h"
 #include "filteredtableview.h"
 #include "win/qtwin/qtwin.h"
@@ -28,23 +28,24 @@ namespace { // anonymous
     static QStringList blacklist;
     if (blacklist.isEmpty()) {
 #define ADD(_app)       blacklist.append(_app)
-      ADD("Activator"); ADD("ApMsgFwd"); ADD("Apntex"); ADD("Apoint"); ADD("AutoHotkey");
-      ADD("BoonSutazio"); ADD("Bootcamp"); ADD("BtStackServer"); ADD("BTTray");
-      ADD("chrome");
+      ADD("Activator"); ADD("ApMsgFwd"); ADD("Apntex"); ADD("Apoint"); ADD("APSDaemon"); ADD("AutoHotkey"); ADD("ApplePhotoStreams");
+      ADD("BookmarkDAV_client"); ADD("BoonSutazio"); ADD("Bootcamp"); ADD("BtStackServer"); ADD("BTTray");
+      ADD("CamtasiaStudio"); ADD("chrome");
       ADD("Dropbox"); ADD("DTLite");
       ADD("eclipse"); ADD("Evernote"); ADD("EvernoteTray");
       ADD("firefox"); ADD("foobar2000");
       ADD("GoogleIMEJaConverter"); ADD("GoogleIMEJaRenderer"); ADD("gvim");
       ADD("Hamana"); ADD("HidFind");
-      ADD("IELowutil"); ADD("IEXPLOR"); ADD("iTunes"); ADD("iTunesHelper");
+      ADD("iCloudServices"); ADD("IELowutil"); ADD("IEXPLOR"); ADD("iTunes"); ADD("iTunesHelper");
       ADD("java"); ADD("javaw");
       ADD("KHALMNPR"); ADD("KMPlayer");
       ADD("MacDrive"); ADD("Maxthon"); ADD("MouseGesture"); ADD("mspdbsrv"); ADD("mysql");
+      ADD("netdrive");
       ADD("oacrmonitor"); ADD("ONENOTEM"); ADD("opera");
       ADD("php-cgi");
       ADD("QQ"); ADD("qtcreator");
       ADD("SecureCRT"); ADD("SetPoint"); ADD("sidebar"); ADD("softinfo"); ADD("SogouCloud"); ADD("sttray"); ADD("Switcher");
-      ADD("thunderbird"); ADD("TXPlatform");
+      ADD("thunderbird"); ADD("TSCHelper"); ADD("TXPlatform");
       ADD("volumouse");
 #undef ADD
     }

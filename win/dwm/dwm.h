@@ -25,7 +25,7 @@ namespace Dwm {
   ///  Window notifier is used.
   bool extendFrameIntoClientArea(QWidget *widget, int left = -1, int top = -1, int right = -1, int bottom = -1);
 
-  QColor colorizatinColor();
+  QColor colorizationColor();
 
 } // namespace Dwm
 

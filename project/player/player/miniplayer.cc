@@ -2,7 +2,7 @@
 // 7/11/2011
 
 #include "miniplayer.h"
-#include "global.h"
+#include "defines.h"
 #include "signalhub.h"
 #include "uistyle.h"
 #include "module/player/player.h"    // TO BE REMOVED; added due to bad design of playerui.

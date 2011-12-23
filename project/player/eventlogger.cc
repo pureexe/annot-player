@@ -3,7 +3,7 @@
 
 #include "eventlogger.h"
 #include "osdconsole.h"
-#include "global.h"
+#include "defines.h"
 #include "logger.h"
 #include "core/htmltag.h"
 #include "core/util/datetime.h"
@@ -87,9 +87,9 @@ EventLogger::logUntilPlaying()
     return;
   }
 
-  if (logCount_ == 0) {
+  if (!logCount_)
     log(tr("caching fonts on first launch ... this could take up to 10min, don't panic!"));
-  } else {
+  else {
     int msecs = logCount_ * G_LOGGER_PLAYING_WAITER_TIMEOUT;
     QTime t = Core::msecs2time(msecs);
     QString s = QString("%1 / %2").arg(t.toString("m:ss"));

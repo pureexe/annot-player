@@ -8,7 +8,7 @@
 //#include "textformathandler.h"
 #include "uistyle.h"
 #include "tr.h"
-#include "global.h"
+#include "defines.h"
 #include "logger.h"
 #include "signalhub.h"
 #include "module/serveragent/serveragent.h"

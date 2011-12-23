@@ -4,7 +4,7 @@
 #include "osdconsole.h"
 #include "tr.h"
 #include "rc.h"
-#include "global.h"
+#include "defines.h"
 #include "uistyle.h"
 #include <QtGui>
 

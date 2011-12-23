@@ -5,7 +5,7 @@
 #include "textedit.h"
 #include "uistyle.h"
 #include "tr.h"
-#include "global.h"
+#include "defines.h"
 #include "stylesheet.h"
 #include "core/cmd.h"
 #include "core/annotationparser.h"

@@ -1,9 +1,7 @@
 // core/gui/webdialog.cc
 // 10/9/2011
 
-#include "commentview.h"
-#include "global.h"
-
+#include "core/gui/webdialog.h"
 #include <QtGui>
 #include <QtWebKit>
 

@@ -5,7 +5,7 @@
 #include "inputcombobox.h"
 #include "prefixcombobox.h"
 #include "userlabel.h"
-#include "global.h"
+#include "defines.h"
 #include "stylesheet.h"
 #include "uistyle.h"
 #include "tr.h"
