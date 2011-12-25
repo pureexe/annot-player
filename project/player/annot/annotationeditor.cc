@@ -593,7 +593,10 @@ void
 AnnotationEditor::save()
 {
   hide();
-  emit textSaved(text());
+
+  QString t = text();
+  if (!t.isEmpty())
+    emit textSaved(t);
 }
 
 void

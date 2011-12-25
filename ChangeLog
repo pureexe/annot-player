@@ -1,6 +1,10 @@
 ChangeLog
 Annot Project
-Since 6/18/2011
+6/18/2011
+
+12/25/2011	annot.player	0.1.1.5
+        * Fixed a bug fix while clustering annotations.
+        * Fixed a bug fix in annotation editor.
 
 12/22/2011	annot.player	0.1.1.4
         * Fixed a bug while playing DVD.

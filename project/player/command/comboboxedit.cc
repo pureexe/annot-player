@@ -52,7 +52,7 @@ ComboBoxEdit::editor() const
   if (!editor_) {
     Self *self = const_cast<Self*>(this);
     AnnotationEditor *ret = new AnnotationEditor(self);
-    connect(ret, SIGNAL(textSaved(QString)), SLOT(addItem(QString)));
+    connect(ret, SIGNAL(textSaved(QString)), SLOT(setEditText(QString)));
     self->editor_ = ret;
   }
   return editor_;

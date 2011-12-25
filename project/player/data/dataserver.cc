@@ -264,7 +264,7 @@ DataServer::selectAnnotationsWithToken(const Token &token)
   DOUT("enter");
   AnnotationList ret;
   if (token.isValid())
-    ret = selectAnnotationsWithTokenId(token.id());
+    ret = selectRelatedAnnotationsWithTokenId(token.id());
   else if (token.hasDigest() && cache_->isValid())
     ret = cache_->selectAnnotationsWithTokenDigest(token.digest(), token.digestType());
   DOUT("exit: count =" << ret.size());

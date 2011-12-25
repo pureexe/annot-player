@@ -2479,6 +2479,7 @@ MainWindow::submitText(const QString &text, bool async)
 void
 MainWindow::eval(const QString &input)
 {
+  qDebug()<<11111111;
   QString text = input.trimmed();
   if (text.isEmpty())
     return;
@@ -2818,23 +2819,6 @@ MainWindow::invalidateContextMenu()
     contextMenu_->addAction(toggleWindowPickDialogVisibleAct_);
 #endif // USE_WIN_PICKER
 
-#ifdef USE_MODE_SIGNAL
-    if (!(player_->hasMedia() && !player_->isStopped())) {
-#ifdef USE_WIN_PICKER
-      toggleProcessPickDialogVisibleAct_->setChecked(processPickDialog_->isVisible());
-      contextMenu_->addAction(toggleProcessPickDialogVisibleAct_);
-#endif // USE_WIN_PICKER
-
-      toggleSignalViewVisibleAct_->setChecked(signalView_->isVisible());
-      contextMenu_->addAction(toggleSignalViewVisibleAct_ );
-    }
-
-    if (hub_->isSignalTokenMode()) {
-      toggleRecentMessageViewVisibleAct_->setChecked(recentMessageView_->isVisible());
-      contextMenu_->addAction(toggleRecentMessageViewVisibleAct_ );
-    }
-#endif // USE_MODE_SIGNAL
-
     openMenu_->clear(); {
       if (hub_->isMediaTokenMode() && player_->hasMedia()) {
         openMenu_->addAction(openSubtitleAct_);
@@ -2897,6 +2881,24 @@ MainWindow::invalidateContextMenu()
 
       contextMenu_->addMenu(sectionMenu_);
     }
+
+#ifdef USE_MODE_SIGNAL
+    if (!(player_->hasMedia() && !player_->isStopped())) {
+      contextMenu_->addSeparator();
+#ifdef USE_WIN_PICKER
+      toggleProcessPickDialogVisibleAct_->setChecked(processPickDialog_->isVisible());
+      contextMenu_->addAction(toggleProcessPickDialogVisibleAct_);
+#endif // USE_WIN_PICKER
+
+       toggleSignalViewVisibleAct_->setChecked(signalView_->isVisible());
+       contextMenu_->addAction(toggleSignalViewVisibleAct_ );
+
+       if (hub_->isSignalTokenMode()) {
+         toggleRecentMessageViewVisibleAct_->setChecked(recentMessageView_->isVisible());
+         contextMenu_->addAction(toggleRecentMessageViewVisibleAct_ );
+       }
+     }
+#endif // USE_MODE_SIGNAL
 
     // Subtitle menu
     if (hub_->isMediaTokenMode() && player_->hasMedia()) {
@@ -3456,7 +3458,11 @@ MainWindow::closeEvent(QCloseEvent *event)
     globalOsdConsole_->hide();
     //if (parentWidget())
     //  parentWidget()->hide();
+
+    // FIXME: use waitForDone with timeout in Qt 4.8
     QThreadPool::globalInstance()->waitForDone();
+    //QThreadPool::globalInstance()->waitForDone(5000);
+    //DOUT("WARNING: killing active threads; will be fixed in Qt 4.8");
   }
 
   //if (parentWidget())

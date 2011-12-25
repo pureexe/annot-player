@@ -1,6 +1,3 @@
-server
-
-- record video
 - upload to nico
   - post to 2ch
   - post to dec.2chan.net/b/futaba.htm ?? maybe not
@@ -9,24 +6,13 @@ server
 - upload to youtube
   - post to 4chan
 
-## annot.cloud
-- post to 2ch
-  http://anago.2ch.net/software/
-
-- http://anago.2ch.net/test/read.cgi/software/1324041581/
-- http://may.2chan.net/b/res/91944939.htm
-
-publish to 4chan
-publish to hf
-back to kf jap ban
-
 ## annot.player
-0.1.1.4
-- FIXME: dragging annot bug!
-- ?
 0.1.2.0
+- Qt 4.8
+  - WaitForDone(timeout = 5000)!!!
+- large number of annotations performance
+- FIXME: dragging window disappear bug
 - start implement LIVE mode
-- Qt 4.8?
 - make a global VERION file to read in
 - Spring fes special edition?
 - font outline does n't work, need to figure out a workaround to make it clearer
