@@ -2632,6 +2632,7 @@ MainWindow::mousePressEvent(QMouseEvent *event)
       embeddedPlayer_->show();
       //osdDock_->raise();
       osdWindow_->raise();
+      osdWindow_->setFocus(Qt::MouseFocusReason);
     } else if (embeddedPlayer_->isVisible())
       embeddedPlayer_->resetAutoHideTimeout();
       //QTimer::singleShot(0, embeddedPlayer_, SLOT(resetAutoHideTimeout()));

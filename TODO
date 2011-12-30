@@ -1,20 +1,50 @@
-- upload to nico
-  - post to 2ch
-  - post to dec.2chan.net/b/futaba.htm ?? maybe not
-- upload to bilibili.tv
-  - aim at spring fes?
-- upload to youtube
-  - post to 4chan
+# TODO
+# 6/18/2011
+
+start translate goei2!
+- start with mai/akemi route
+- need annot deletion support
+- debug annot edit support
+- need wiki-like subtitle edit support
+- add group to annot/user???
+
+## annot.cloud
+- finish website design
+- add server support for annot deletion
+- continue project appcloud
+- continue project doll
 
 ## annot.player
+- STOP publishing new version!
+  - keep improving next version
+    focus on adho translation
+
 0.1.2.0
+- add annot deletion - delete my own annot
+  - extend serverside protocol to enable delete annot
+- in windows, disable alwaysontop in full screen video mode
+- start translate goei2
 - Qt 4.8
   - WaitForDone(timeout = 5000)!!!
-- large number of annotations performance
 - FIXME: dragging window disappear bug
+
+- add outdated state
+  add an wiki subtitle edit window
+  enable editing other people's subtitle in wiki mode,
+  other subtitle simulate moditified/replaced, but not deleted
+  alwayhs be able to get old subtitle - add an outdated attribute
+  make editable an attribute? a share ttribute
+  subtitile are default having shared attirbute
+  shared subtitle could be marked as outdated or restored
+
+
+0.1.2.x
+- add male/female/chaos to user's flags
+  add "female" flags to annot flats
+  and add client side filter.
+- large number of annotations performance
 - start implement LIVE mode
 - make a global VERION file to read in
-- Spring fes special edition?
 - font outline does n't work, need to figure out a workaround to make it clearer
   - download a free contoured font, that supporting chinese/japanese
 - webbrowser: open link in new tab
@@ -26,12 +56,8 @@
   - finish dataManager
     - use dataManager to connect dataServer instead of MainWindow
     - use dataManager to save current User as well?
-- use BOOST_SCOPE_EXIT to improve performance
 - fixme: edit time, edit comments, etc; otherwise, make them readonly
 - server side: add male/female option and save it as 2 user flags
-- add male/female to user's flags
-  add "female" flags to annot flats
-  and add client side filter.
 - keyboard event listener + find window under mouse to pick window to embed
   implement without hook
 - linux

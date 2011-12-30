@@ -229,7 +229,7 @@
         <translation>HTMLを整理します</translation>
     </message>
     <message>
-        <location filename="../annot/annotationeditor.cc" line="831"/>
+        <location filename="../annot/annotationeditor.cc" line="834"/>
         <source>Text is too long &gt;_&lt;</source>
         <translation>魔法使い：テキストが長すぎる</translation>
     </message>
@@ -585,127 +585,127 @@
         <translation>通信使い：コメントを保存中…</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3535"/>
+        <location filename="../mainwindow.cc" line="3542"/>
         <source>submit bless cast to token ...</source>
         <translation>通信使い：トーケンに祝福をかける…</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3578"/>
+        <location filename="../mainwindow.cc" line="3585"/>
         <source>submit curse cast to token ...</source>
         <translation>通信使い：トーケンに呪いをかける…</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3653"/>
+        <location filename="../mainwindow.cc" line="3660"/>
         <source>connecting server to logout ...</source>
         <translation>通信使い：ログアウト中…</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3760"/>
+        <location filename="../mainwindow.cc" line="3767"/>
         <source>new version released, check here: </source>
         <translation>通信使い：新しいバージョンの魔道書を見つかりました：</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3827"/>
+        <location filename="../mainwindow.cc" line="3834"/>
         <source>found process id for window</source>
         <translation>呪術使い：プロセスが発見されまいた</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3830"/>
+        <location filename="../mainwindow.cc" line="3837"/>
         <source>process id for window was not found</source>
         <translation>呪術使い：プロセスが見つかりません</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3841"/>
+        <location filename="../mainwindow.cc" line="3848"/>
         <source>process was attached</source>
         <translation>呪術使い：プロセスがアタッチしました</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3845"/>
+        <location filename="../mainwindow.cc" line="3852"/>
         <source>process attached</source>
         <translation>呪術使い：プロセスがアタッチしました</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3848"/>
+        <location filename="../mainwindow.cc" line="3855"/>
         <source>failed to attach process </source>
         <translation>呪術使い：プロセスのアタッチに失敗した</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3850"/>
+        <location filename="../mainwindow.cc" line="3857"/>
         <source>Is the process running now?</source>
         <translation>呪術使い：プログラムが有効なの？</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3852"/>
+        <location filename="../mainwindow.cc" line="3859"/>
         <source>Run me as administrator and try again (o^^o)</source>
         <translation>呪術使い：管理者としても一度実行してください</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3854"/>
+        <location filename="../mainwindow.cc" line="3861"/>
         <source>Restart the target process might help -_-</source>
         <translation>呪術使い：プロセスを再起動してください</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3865"/>
+        <location filename="../mainwindow.cc" line="3872"/>
         <source>process was started</source>
         <translation>呪術使い：プロセスがすでに起動しました</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3868"/>
+        <location filename="../mainwindow.cc" line="3875"/>
         <source>told process to start</source>
         <translation>呪術使い：プロセスを起動しました</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3876"/>
+        <location filename="../mainwindow.cc" line="3883"/>
         <source>failed to start process</source>
         <translation>呪術使い：プロセスの起動に失敗した</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3880"/>
+        <location filename="../mainwindow.cc" line="3887"/>
         <source>wait %1 seconds for process to start ...</source>
         <translation>呪術使い：%1秒待つ…</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3893"/>
+        <location filename="../mainwindow.cc" line="3900"/>
         <source>openning process</source>
         <translation>魔法使い：プロセスを起動中</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3990"/>
+        <location filename="../mainwindow.cc" line="3997"/>
         <source>connecting server to change anonymous status ...</source>
         <translation>通信使い：匿名の設定を変更中…</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4002"/>
+        <location filename="../mainwindow.cc" line="4009"/>
         <source>failed to change user anonymous state</source>
         <translation>通信使い：匿名の変更に失敗した</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4012"/>
+        <location filename="../mainwindow.cc" line="4019"/>
         <source>you are anonymous now</source>
         <translation>通信使い：匿名状態になった</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4014"/>
+        <location filename="../mainwindow.cc" line="4021"/>
         <source>you are not anonymous now</source>
         <translation>通信使い：公開状態になった</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4027"/>
+        <location filename="../mainwindow.cc" line="4034"/>
         <source>connecting server to change language ...</source>
         <translation>通信使い：言語設定を変更中…</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4039"/>
+        <location filename="../mainwindow.cc" line="4046"/>
         <source>failed to change user language</source>
         <translation>通信使い：言語の変更に失敗した</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4048"/>
+        <location filename="../mainwindow.cc" line="4055"/>
         <source>your language is </source>
         <translation>通信使い：今の言語は</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4117"/>
+        <location filename="../mainwindow.cc" line="4124"/>
         <source>restart the app to use the new language</source>
         <translation>魔法使い：プログラムを再起動してください</translation>
     </message>
@@ -738,7 +738,7 @@
         <translation type="obsolete">魔法使い：ファイルが見つかりません</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4343"/>
+        <location filename="../mainwindow.cc" line="4350"/>
         <source>invalid lnk</source>
         <translation>魔法使い：lnkのターゲットファイルが見つかりません</translation>
     </message>
@@ -2449,7 +2449,7 @@
     <message>
         <location filename="translatormanager.cc" line="530"/>
         <source>Forward 30 sec</source>
-        <translation>10秒進む</translation>
+        <translation>30秒進む</translation>
     </message>
     <message>
         <location filename="translatormanager.cc" line="531"/>

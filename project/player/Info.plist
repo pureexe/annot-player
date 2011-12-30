@@ -235,7 +235,6 @@
                         <key>CFBundleTypeExtensions</key>
                         <array>
                                 <string>ram</string>
-                                <string>rm</string>
                                 <string>rmvb</string>
                         </array>
                         <key>CFBundleTypeIconFile</key>
