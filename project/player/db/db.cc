@@ -754,7 +754,7 @@ Database::selectAnnotations() const
 
 // - Deletion -
 
-void
+bool
 Database::deleteUserWithId(qint64 id)
 {
   DOUT("enter: id =" << id);
@@ -764,9 +764,10 @@ Database::deleteUserWithId(qint64 id)
   query.addBindValue(id);
   query.exec();
   DOUT("exit: affected rows =" << query.numRowsAffected());
+  return query.numRowsAffected();
 }
 
-void
+bool
 Database::deleteTokenWithId(qint64 id)
 {
   DOUT("enter: id =" << id);
@@ -776,6 +777,7 @@ Database::deleteTokenWithId(qint64 id)
   query.addBindValue(id);
   query.exec();
   DOUT("exit: affected rows =" << query.numRowsAffected());
+  return query.numRowsAffected();
 }
 
 void
@@ -791,7 +793,7 @@ Database::deleteTokenWithDigest(const QString &digest, qint32 digestType)
   DOUT("exit: affected rows =" << query.numRowsAffected());
 }
 
-void
+bool
 Database::deleteAliasWithId(qint64 id)
 {
   DOUT("enter: id =" << id);
@@ -801,6 +803,7 @@ Database::deleteAliasWithId(qint64 id)
   query.addBindValue(id);
   query.exec();
   DOUT("exit: affected rows =" << query.numRowsAffected());
+  return query.numRowsAffected();
 }
 
 void
@@ -828,7 +831,7 @@ Database::deleteAliasesWithTokenDigest(const QString &digest, qint32 digestType)
   DOUT("exit: affected rows =" << query.numRowsAffected());
 }
 
-void
+bool
 Database::deleteAnnotationWithId(qint64 id)
 {
   DOUT("enter: id =" << id);
@@ -838,6 +841,7 @@ Database::deleteAnnotationWithId(qint64 id)
   query.addBindValue(id);
   query.exec();
   DOUT("exit: affected rows =" << query.numRowsAffected());
+  return query.numRowsAffected();
 }
 
 void

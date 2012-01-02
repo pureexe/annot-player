@@ -1,12 +1,15 @@
 # TODO
 # 6/18/2011
 
-start translate goei2!
+# CHECKPOINT
+start translate goei2
 - start with mai/akemi route
-- need annot deletion support
-- debug annot edit support
 - need wiki-like subtitle edit support
-- add group to annot/user???
+  - subtitles set "shared" flag by default
+  - edit other's annot flagged as shared
+    would make others annot invisible instead of deleted
+  - need a dialog to show all annot in current FRAME including hidden ones
+    reuse/extend annotBrowser
 
 ## annot.cloud
 - finish website design
@@ -15,20 +18,9 @@ start translate goei2!
 - continue project doll
 
 ## annot.player
-- STOP publishing new version!
-  - keep improving next version
-    focus on adho translation
-
-0.1.2.0
-- add annot deletion - delete my own annot
-  - extend serverside protocol to enable delete annot
-- in windows, disable alwaysontop in full screen video mode
-- start translate goei2
-- Qt 4.8
-  - WaitForDone(timeout = 5000)!!!
+0.1.2.1
 - FIXME: dragging window disappear bug
-
-- add outdated state
+- add outdated state into media_annot
   add an wiki subtitle edit window
   enable editing other people's subtitle in wiki mode,
   other subtitle simulate moditified/replaced, but not deleted
@@ -36,7 +28,7 @@ start translate goei2!
   make editable an attribute? a share ttribute
   subtitile are default having shared attirbute
   shared subtitle could be marked as outdated or restored
-
+- webbrowser: open link in new tab
 
 0.1.2.x
 - add male/female/chaos to user's flags
@@ -47,7 +39,6 @@ start translate goei2!
 - make a global VERION file to read in
 - font outline does n't work, need to figure out a workaround to make it clearer
   - download a free contoured font, that supporting chinese/japanese
-- webbrowser: open link in new tab
 - clean up code
   - rename open family methods
   - clean up main() with application
@@ -195,10 +186,6 @@ i.e. tracking next MOUSE CLICK for hook
   - add another mousehook for getting window under mouse click
 
 ####
-
-global php
-
-set global error_page
 
 soving black screen problem!!
 write my own tuturail

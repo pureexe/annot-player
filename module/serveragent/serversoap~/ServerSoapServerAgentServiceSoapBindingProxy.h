@@ -102,6 +102,14 @@ class SOAP_CMAC ServerAgentServiceSoapBindingProxy : public soap
 	virtual	int curseMediaTokenWithId(tns__curseMediaTokenWithId *tns__curseMediaTokenWithId_, tns__curseMediaTokenWithIdResponse *tns__curseMediaTokenWithIdResponse_) { return curseMediaTokenWithId(NULL, NULL, tns__curseMediaTokenWithId_, tns__curseMediaTokenWithIdResponse_); }
 	virtual	int curseMediaTokenWithId(const char *endpoint, const char *soap_action, tns__curseMediaTokenWithId *tns__curseMediaTokenWithId_, tns__curseMediaTokenWithIdResponse *tns__curseMediaTokenWithIdResponse_);
 
+	/// Web service operation 'deleteMediaAliasWithId' (returns error code or SOAP_OK)
+	virtual	int deleteMediaAliasWithId(tns__deleteMediaAliasWithId *tns__deleteMediaAliasWithId_, tns__deleteMediaAliasWithIdResponse *tns__deleteMediaAliasWithIdResponse_) { return deleteMediaAliasWithId(NULL, NULL, tns__deleteMediaAliasWithId_, tns__deleteMediaAliasWithIdResponse_); }
+	virtual	int deleteMediaAliasWithId(const char *endpoint, const char *soap_action, tns__deleteMediaAliasWithId *tns__deleteMediaAliasWithId_, tns__deleteMediaAliasWithIdResponse *tns__deleteMediaAliasWithIdResponse_);
+
+	/// Web service operation 'deleteMediaAnnotationWithId' (returns error code or SOAP_OK)
+	virtual	int deleteMediaAnnotationWithId(tns__deleteMediaAnnotationWithId *tns__deleteMediaAnnotationWithId_, tns__deleteMediaAnnotationWithIdResponse *tns__deleteMediaAnnotationWithIdResponse_) { return deleteMediaAnnotationWithId(NULL, NULL, tns__deleteMediaAnnotationWithId_, tns__deleteMediaAnnotationWithIdResponse_); }
+	virtual	int deleteMediaAnnotationWithId(const char *endpoint, const char *soap_action, tns__deleteMediaAnnotationWithId *tns__deleteMediaAnnotationWithId_, tns__deleteMediaAnnotationWithIdResponse *tns__deleteMediaAnnotationWithIdResponse_);
+
 	/// Web service operation 'isClientUpdated' (returns error code or SOAP_OK)
 	virtual	int isClientUpdated(tns__isClientUpdated *tns__isClientUpdated_, tns__isClientUpdatedResponse *tns__isClientUpdatedResponse_) { return isClientUpdated(NULL, NULL, tns__isClientUpdated_, tns__isClientUpdatedResponse_); }
 	virtual	int isClientUpdated(const char *endpoint, const char *soap_action, tns__isClientUpdated *tns__isClientUpdated_, tns__isClientUpdatedResponse *tns__isClientUpdatedResponse_);

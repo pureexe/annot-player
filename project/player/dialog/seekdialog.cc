@@ -81,8 +81,8 @@ SeekDialog::SeekDialog(QWidget *parent)
 
   // Layouts
   QVBoxLayout *rows = new QVBoxLayout; {
-    QHBoxLayout *row1 = new QHBoxLayout,
-                *row2 = new QHBoxLayout;
+    QLayout *row1 = new QHBoxLayout,
+            *row2 = new QHBoxLayout;
     rows->addLayout(row1);
     rows->addLayout(row2);
 

@@ -31,7 +31,8 @@ private:
   MainWindow *w_;
 
   QAction *minimizeAct_,
-          *restoreAct_;
+          *restoreAct_,
+          *toggleWindowOnTopAct_;
 };
 
 #endif // TRAY_H

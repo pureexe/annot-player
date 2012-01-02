@@ -22,7 +22,6 @@ class QMouseEvent;
 QT_END_NAMESPACE
 
 class SignalHub;
-class ServerAgent;
 class AnnotationGraphicsView;
 
 class AnnotationGraphicsItem : public QGraphicsTextItem
@@ -35,7 +34,7 @@ class AnnotationGraphicsItem : public QGraphicsTextItem
 
   typedef Core::Cloud::Annotation Annotation;
 
-  Annotation annotation_;
+  Annotation annot_;
 
 public:
   enum { AnnotationGraphicsItemType = UserType + 1 };
@@ -44,19 +43,21 @@ public:
   static void warmUp(); ///< optional, caching fonts on first load
 
 public:
-  explicit AnnotationGraphicsItem(
-    const Annotation &annotation,
-    SignalHub *hub, ServerAgent *server,
-    AnnotationGraphicsView *viewWithScene);
+  AnnotationGraphicsItem(const Annotation &annot, SignalHub *hub, AnnotationGraphicsView *viewWithScene);
   //explicit AnnotationGraphicsItem(AnnotationGraphicsView *viewWithScene);
 
-  const Annotation &annotation() const;
+  const Annotation &annotation() const { return annot_; }
+  Annotation &annotation() { return annot_; }
+
   void setAnnotation(const Annotation &annot);
+  void invalidateAnnotation();
+
+  const QString &richText() const { return richText_; } ///< tidied HTML
 
   ///  Override
   virtual int type() const { return AnnotationGraphicsItemType; }
-  Style style() const;
-  void setStyle(Style style);
+  Style style() const { return style_; }
+  void setStyle(Style style) { style_ = style; }
 
   bool isPaused() const;
 
@@ -64,12 +65,16 @@ public:
   //virtual bool contains(const QPointF &point) const
   //{ return Base::boundingRect().contains(point); }
 
+  bool isSubtitle() const { return style_ == SubtitleStyle; }
+
 protected:
   //QString parse(const QString &text);
+  static bool isSubtitle(const QString &text);
 
 public slots:
   void addMe();
   void removeMe(); // Remove me from graphics scene
+  void deleteMe(); // Delete corresponding annotation
   void showMe();   // Add me to graphics scene, and autmatic remove me.
 
 protected slots:
@@ -116,13 +121,13 @@ private:
   AnnotationGraphicsView *view_;
   QGraphicsScene *scene_;
   SignalHub *hub_;
-  ServerAgent *server_;
 
   QTimer *autoRemoveTimer_;
   Style style_;
   QPropertyAnimation *ani_;
 
   QPoint dragPos_;
+  QString richText_;
 };
 
 #endif // ANNOTATIONGRAPHICSITEM_H

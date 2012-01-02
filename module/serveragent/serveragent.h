@@ -43,8 +43,9 @@ public:
 
   // - Login -
 public:
-  bool isAuthorized() const; ///< If is logged in as an authorized user
-  bool isConnected() const;
+  ///  If is logged in as an authorized user
+  bool isAuthorized() const { return authorized_; }
+  bool isConnected() const { return connected_; }
 
   const User &user() const; ///< Logged in user
   User &user(); ///< Used for hacking offline mode
@@ -116,6 +117,11 @@ public:
 
  ///  Clustered at server based on token's aliases
   AnnotationList selectRelatedAnnotationsWithTokenId(qint64 tid);
+
+  // - Deletion -
+public:
+  bool deleteAnnotationWithId(qint64 id);
+  bool deleteAliasWithId(qint64 id);
 
   // - Cast -
 public:

@@ -56,6 +56,20 @@ DataManager::updateAlias(const Alias &alias)
   emit aliasUpdated(alias);
 }
 
+void
+DataManager::removeAliasWithId(qint64 id)
+{
+  if (!aliases_.isEmpty() && id) {
+    BOOST_AUTO(p, aliases_.begin());
+    while (p != aliases_.end())
+      if (p->id() == id)
+        p = aliases_.erase(p);
+      else
+        ++p;
+  }
+  emit aliasRemovedWithId(id);
+}
+
 
 // - Annotation -
 
@@ -86,6 +100,39 @@ DataManager::updateAnnotation(const Annotation &annot)
   }
   annots_.append(annot);
   emit annotationUpdated(annot);
+}
+
+void
+DataManager::removeAnnotationWithId(qint64 id)
+{
+  if (!annots_.isEmpty() && id) {
+    BOOST_AUTO(p, annots_.begin());
+    while (p != annots_.end())
+      if (p->id() == id)
+        p = annots_.erase(p);
+      else
+        ++p;
+  }
+  emit annotationRemovedWithId(id);
+}
+
+// - Update -
+
+void
+DataManager::updateAnnotationTextWithId(const QString &text, qint64 id)
+{
+  if (!annots_.isEmpty() && id) {
+    BOOST_AUTO(p, annots_.begin());
+    while (p != annots_.end())
+      if (p->id() == id) {
+        p->setText(text);
+        p->setUpdateTime(QDateTime::currentMSecsSinceEpoch() / 1000);
+        break;
+      } else
+        ++p;
+
+    emit annotationTextUpdatedWithId(text, id);
+  }
 }
 
 // EOF

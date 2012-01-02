@@ -203,6 +203,16 @@ UiStyle::setWindowDwmEnabled(WId wid, bool t)
     Dwm::extendFrameIntoClientArea(wid, 0, 0, 0, 0);
   }
 }
+
+void
+UiStyle::setDwmEnabled(bool t)
+{
+  foreach (QWidget *w, dwmEnabledWindows_)
+    if (t)
+      DWM_ENABLE_AERO_WIDGET(w)
+    else
+      DWM_DISABLE_AERO_WIDGET(w)
+}
 #endif // USE_WIN_DWM
 
 void
@@ -216,9 +226,10 @@ UiStyle::setWindowStyle(QWidget *w, bool persistent)
 
 #ifdef USE_WIN_DWM
   if (isAeroAvailable()) {
-    if (persistent)
+    if (persistent) {
       DWM_ENABLE_AERO_WIDGET(w)
-    else
+      dwmEnabledWindows_.append(w);
+    } else
       DWM_ENABLE_ONETIME_AERO_WIDGET(w)
     return;
 

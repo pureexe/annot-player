@@ -52,7 +52,7 @@ public:
 
   QString chat(const QString &message);
 
-  // - Submissions -
+  // - Submission -
 public:
   qint64 submitToken(const Token &token, const QString &userName, const QString &password);
   qint64 submitTokenDigest(const QString &digest, qint32 digestType, qint32 tokenType, const QString &userName, const QString &password);
@@ -64,6 +64,11 @@ public:
   qint64 submitAnnotation(const Annotation &annot, const QString &userName, const QString &password);
   qint64 submitAnnotationTextWithTokenId(const QString &text, qint64 pos, qint32 posType, qint64 tokenId, const QString &userName, const QString &password);
   qint64 submitAnnotationTextAndTokenDigest(const QString &text, qint64 pos, qint32 posType, const QString &digest, qint32 digestType, const QString &userName, const QString &password);
+
+  // - Deletion -
+public:
+  bool deleteAnnotationWithId(qint64 id, const QString &userName, const QString &password);
+  bool deleteAliasWithId(qint64 id, const QString &userName, const QString &password);
 
   // - Update -
 public:

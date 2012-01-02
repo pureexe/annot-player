@@ -41,9 +41,8 @@ protected:
   void disconnectServer();
 
 public:
-  ///  Override
-  virtual void setVisible(bool visible); // stop polling when hidden
-  bool isActive() const; ///< This status is used to track if media player is connected
+  virtual void setVisible(bool visible); ///< \override
+  bool isActive() const { return active_; }
 
 signals:
   void textEntered(const QString &text);

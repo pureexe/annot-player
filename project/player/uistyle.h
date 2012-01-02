@@ -70,6 +70,10 @@ public slots:
 public slots:
   void setWindowDwmEnabled(QWidget *w, bool t = true);
   void setWindowDwmEnabled(WId wid, bool t = true);
+
+  void setDwmEnabled(bool t); ///< global
+private:
+  QWidgetList dwmEnabledWindows_;
 #endif // USE_WIN_DWM
 
   // - Implementations -

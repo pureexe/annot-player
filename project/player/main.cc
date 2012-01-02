@@ -185,14 +185,14 @@ main(int argc, char *argv[])
 //#endif // USE_MODE_SIGNAL
   MainWindow w; {
     Q_ASSERT(w.isValid());
-    if (!w.isValid()) {
-      DOUT("FATAL ERROR: failed to initialize MainWindow, please contact " G_EMAIL);
-      return -1;
-    }
+    //if (!w.isValid()) {
+    //  DOUT("FATAL ERROR: failed to initialize MainWindow, please contact " G_EMAIL);
+    //  return -1;
+    //}
 
-#ifdef USE_WIN_QTH
-    QTH->setParentWinId(w.winId());
-#endif // USE_WIN_QTH
+//#ifdef USE_WIN_QTH
+//    QTH->setParentWinId(w.winId());
+//#endif // USE_WIN_QTH
 
     a.setMainWindow(&w);
 
@@ -244,13 +244,18 @@ main(int argc, char *argv[])
   */
 
 #if defined(USE_MODE_SIGNAL) && defined(Q_OS_WIN)
-  // jichi 11/29/2011: Use as a persistent top level window.
-  // FIXME: The app would close when there is no visible window after hijacking another process.
-  QWidget dummy; // Dummy widget as a persistent visible zero-sized window.
-  dummy.resize(QSize());
+  // jichi 11/29/2011: Use as a PERSISTENT hidden top level window.
+  QWidget dummy;
+  dummy.resize(QSize()); // zero-sized to be hidden
   QObject::connect(&w, SIGNAL(windowClosed()), &dummy, SLOT(close()));
+
+#ifdef USE_WIN_QTH
+  QTH->setParentWinId(dummy.winId());
+#endif // USE_WIN_QTH
+
   dummy.show();
   //QTimer::singleShot(0, &dummy, SLOT(show()));
+
 #endif // USE_MODE_SIGNAL && Q_OS_WIN
 
   return a.exec();

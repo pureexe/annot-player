@@ -154,6 +154,8 @@ PlayerUi::createConnections()
     _connect(player_, SIGNAL(lengthChanged()), this, SLOT(invalidatePositionButton())); \
     _connect(player_, SIGNAL(timeChanged()), this, SLOT(invalidatePositionButton())); \
     _connect(player_, SIGNAL(positionChanged()), this, SLOT(invalidatePositionSlider())); \
+\
+    _connect(player_, SIGNAL(playing()), this, SLOT(invalidateVolumeSlider())); \
  \
     static const char *status_signals[] = { \
       SIGNAL(playing()), SIGNAL(paused()), SIGNAL(stopped()) \
@@ -185,7 +187,7 @@ PlayerUi::createConnections()
 
 bool
 PlayerUi::isValid() const
-{ return hub_ && player_ && player_->isValid() && server_; }
+{ return hub_ && player_ && server_; }
 
 void
 PlayerUi::setTitle(const QString &title)
@@ -197,10 +199,6 @@ PlayerUi::setVisible(bool visible)
   setActive(visible);
   Base::setVisible(visible);
 }
-
-bool
-PlayerUi::isActive() const
-{ return active_; }
 
 void
 PlayerUi::setActive(bool active)
@@ -248,7 +246,7 @@ PlayerUi::play()
   case SignalHub::MediaTokenMode:
     if (!player_->hasMedia())
       hub_->open();
-    else
+    else if (player_->isValid())
       switch (player_->status()) {
       case Player::Playing:
         player_->pause();
@@ -290,9 +288,9 @@ PlayerUi::stop()
 void
 PlayerUi::nextFrame()
 {
-  if (hub_->isMediaTokenMode())
-    if (player_->hasMedia())
-      player_->nextFrame();
+  if (hub_->isMediaTokenMode() &&
+      player_->hasMedia())
+    player_->nextFrame();
 }
 
 // - Set/get properties -
@@ -317,20 +315,25 @@ PlayerUi::setVolume(int vol)
 
 void
 PlayerUi::setPosition(int pos)
-{ player_->setPosition(pos / G_POSITION_MAX); }
+{
+  if (player_->hasMedia())
+    player_->setPosition(pos / G_POSITION_MAX);
+}
 
 void
 PlayerUi::invalidateVolumeSlider()
 {
   QSlider *slider = volumeSlider();
 
-  if (hub_->isSignalTokenMode()) {
+  if (hub_->isSignalTokenMode() || !player_->isValid()) {
     slider->setSliderPosition(0);
-    slider->setEnabled(false);
+    if (slider->isEnabled())
+      slider->setEnabled(false);
     return;
   }
 
-  slider->setEnabled(true);
+  if (!slider->isEnabled())
+    slider->setEnabled(true);
 
   qreal vol = hub_->volume();
   slider->setSliderPosition(
@@ -351,10 +354,11 @@ PlayerUi::invalidatePositionSlider()
 {
   QSlider *slider = positionSlider();
 
-  if (hub_->isSignalTokenMode()) {
+  if (hub_->isSignalTokenMode() || !player_->isValid()) {
     //slider->hide();
     slider->setSliderPosition(0);
-    slider->setEnabled(false);
+    if (slider->isEnabled())
+      slider->setEnabled(false);
     return;
   }
 
@@ -458,11 +462,12 @@ PlayerUi::invalidateTitle()
 void
 PlayerUi::invalidatePlayButton()
 {
+  QToolButton *button = playButton();
   switch (hub_->tokenMode()) {
   case SignalHub::SignalTokenMode:
     if (hub_->isPlaying()) {
-      playButton()->setStyleSheet(SS_TOOLBUTTON_PAUSE);
-      playButton()->setToolTip(TR(T_TOOLTIP_PAUSE));
+      button->setStyleSheet(SS_TOOLBUTTON_PAUSE);
+      button->setToolTip(TR(T_TOOLTIP_PAUSE));
     } else {
       playButton()->setStyleSheet(SS_TOOLBUTTON_PLAY);
       playButton()->setToolTip(TR(T_TOOLTIP_PLAY));
@@ -472,13 +477,13 @@ PlayerUi::invalidatePlayButton()
   case SignalHub::MediaTokenMode:
     switch (player_->status()) {
     case Player::Playing:
-      playButton()->setStyleSheet(SS_TOOLBUTTON_PAUSE);
-      playButton()->setToolTip(TR(T_TOOLTIP_PAUSE));
+      button->setStyleSheet(SS_TOOLBUTTON_PAUSE);
+      button->setToolTip(TR(T_TOOLTIP_PAUSE));
       break;
     case Player::Stopped:
     case Player::Paused:
-      playButton()->setStyleSheet(SS_TOOLBUTTON_PLAY);
-      playButton()->setToolTip(TR(T_TOOLTIP_PLAY));
+      button->setStyleSheet(SS_TOOLBUTTON_PLAY);
+      button->setToolTip(TR(T_TOOLTIP_PLAY));
       break;
     }
     break;

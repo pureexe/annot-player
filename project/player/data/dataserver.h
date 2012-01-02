@@ -40,8 +40,15 @@ public:
   bool submitAnnotations(const AnnotationList &annots);
 
   // - Update -
-public:
+public slots:
   bool updateAnnotationTextWithId(const QString &text, qint64 id);
+
+  // - Deletion -
+public slots:
+  bool deleteAlias(const Alias &alias);
+  bool deleteAliasWithId(qint64 id);
+  bool deleteAnnotation(const Annotation &annot);
+  bool deleteAnnotationWithId(qint64 id);
 
   // - Queries -
 public:

@@ -231,10 +231,12 @@ public slots:
   void nextTrack();
   void previousTrack();
 
-protected slots:
-  void invalidateVout(); ///< only works if vlccore is used
+public slots:
+  ///  Only work if mouseEvent is enabled.
   void startVoutTimer();
   void stopVoutTimer();
+protected slots:
+  void invalidateVout(); ///< only works if vlccore is used
 
 public:
   void handleError(); ///< \internal

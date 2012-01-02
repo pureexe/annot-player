@@ -897,7 +897,7 @@ ServerProxy::selectRelatedAnnotationsWithTokenId(qint64 tid)
   return ret;
 }
 
-// - Cast -
+// - Cast/Delete -
 
 #define CAST_MEDIA(_cast, _entity) \
   bool \
@@ -938,6 +938,9 @@ ServerProxy::selectRelatedAnnotationsWithTokenId(qint64 tid)
 
   CAST_MEDIA(bless, Token)
   CAST_MEDIA(curse, Token)
+
+  CAST_MEDIA(delete, Annotation)
+  CAST_MEDIA(delete, Alias)
 #undef CAST_MEDIA
 
 #define CAST(_cast, _entity) \

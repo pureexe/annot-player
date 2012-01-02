@@ -84,6 +84,9 @@ EventLogger::logUntilPlaying()
 
   if (player_->isPlaying() || player_->isPaused()) {
     stopLogUntilPlaying();
+    // FIXME: to be moved to other player_!!
+    if (player_->isMouseEventEnabled())
+      player_->startVoutTimer();
     return;
   }
 

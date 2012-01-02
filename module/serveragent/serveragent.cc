@@ -52,14 +52,6 @@ ServerAgent::reportSoapError(int err)
 
 // - Login -
 
-bool
-ServerAgent::isConnected() const
-{ return connected_; }
-
-bool
-ServerAgent::isAuthorized() const
-{ return authorized_; }
-
 const User&
 ServerAgent::user() const
 { return user_; }
@@ -363,6 +355,26 @@ ServerAgent::selectAliasesWithTokenId(qint64 tid)
   if (tid)
     ret = proxy_->selectAliasesWithTokenId(tid);
   return ret;
+}
+
+// - Deletion -
+
+bool
+ServerAgent::deleteAnnotationWithId(qint64 id)
+{
+  bool ok = false;
+  if (id && isAuthorized())
+    ok = proxy_->deleteAnnotationWithId(id, user_.name(), user_.password());
+  return ok;
+}
+
+bool
+ServerAgent::deleteAliasWithId(qint64 id)
+{
+  bool ok = false;
+  if (id && isAuthorized())
+    ok = proxy_->deleteAliasWithId(id, user_.name(), user_.password());
+  return ok;
 }
 
 // - Cast -

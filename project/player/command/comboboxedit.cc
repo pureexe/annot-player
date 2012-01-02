@@ -46,23 +46,15 @@ ComboBoxEdit::createActions()
 
 // - Properties -
 
-AnnotationEditor*
-ComboBoxEdit::editor() const
-{
-  if (!editor_) {
-    Self *self = const_cast<Self*>(this);
-    AnnotationEditor *ret = new AnnotationEditor(self);
-    connect(ret, SIGNAL(textSaved(QString)), SLOT(setEditText(QString)));
-    self->editor_ = ret;
-  }
-  return editor_;
-}
-
 void
 ComboBoxEdit::edit()
 {
-  editor()->setText(currentText());
-  editor()->show();
+  if (!editor_) {
+    editor_ = new AnnotationEditor(this);
+    connect(editor_, SIGNAL(textSaved(QString)), SLOT(setEditText(QString)));
+  }
+  editor_->setText(currentText());
+  editor_->show();
 }
 
 // - Actions -

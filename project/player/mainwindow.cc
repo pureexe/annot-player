@@ -33,6 +33,7 @@
 #include "translatormanager.h"
 #include "aboutdialog.h"
 #include "blacklistview.h"
+#include "backlogview.h"
 #include "devicedialog.h"
 #include "helpdialog.h"
 #include "logindialog.h"
@@ -150,9 +151,36 @@ MainWindow::prefixLineHasFocus() const
 
 // - Constructions -
 
+void
+MainWindow::resetPlayer()
+{
+  Q_ASSERT(player_);
+  player_->reset();
+
+#ifdef Q_WS_WIN
+  player_->setMouseEventEnabled();
+#endif // Q_WS_WIN
+  //player_->setKeyboardEnabled(true);  // default true
+  //player_->setMouseEnabled(true);     // default true
+  //player_->setEncoding("UTF-8");      // default do nothing
+
+#ifdef Q_WS_MAC
+  videoView_->showView();
+  player_->setEmbeddedWindow(videoView_->view());
+  QTimer::singleShot(0, videoView_, SLOT(hideView()));
+  //videoView_->hideView();
+#else
+  player_->embed(videoView_);
+#endif // Q_WS_MAC
+  player_->setFullScreen(false);
+}
+
 MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags f)
   : Base(parent, f),
     tray_(0),
+    annotationEditor_(0), blacklistView_(0), cloudView_(0), commentView_(0), backlogView_(0),
+    aboutDialog_(0), deviceDialog_(0), helpDialog_(0), loginDialog_(0),
+    processPickDialog_(0), seekDialog_(0), syncDialog_(0), windowPickDialog_(0),
     dragPos_(BAD_POS), tokenType_(0),
     themeMenu_(0),
     setThemeToDefaultAct_(0), setThemeToRandomAct_(0),
@@ -167,9 +195,9 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags f)
     setThemeToRed1Act_(0), setThemeToRed2Act_(0),
     setThemeToYellow1Act_(0), setThemeToYellow2Act_(0)
 {
-#ifdef USE_WIN_PICKER
-  setWindowFlags(windowFlags() | Qt::WindowStaysOnTopHint);
-#endif // USE_WIN_PICKER
+//#ifdef USE_WIN_PICKER
+//  setWindowFlags(windowFlags() | Qt::WindowStaysOnTopHint);
+//#endif // USE_WIN_PICKER
 
   setWindowIcon(QIcon(RC_IMAGE_APP)); // X11 require setting icon at runtime
   setWindowTitle(TR(T_TITLE_PROGRAM));
@@ -234,13 +262,23 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags f)
   recentPath_ = settings->recentPath();
 
   setTranslateEnabled(settings->isTranslateEnabled());
-  setSubtitleStaysOnTop(settings->isSubtitleStaysOnTop());
+  setSubtitleOnTop(settings->isSubtitleOnTop());
 
-  embeddedPlayer_->setOnTop(settings->isEmbeddedPlayerStaysOnTop());
+  embeddedPlayer_->setOnTop(settings->isEmbeddedPlayerOnTop());
 
   annotationFilter_->setEnabled(settings->isAnnotationFilterEnabled());
 
   invalidateAnnotationLanguages();
+
+#ifdef Q_WS_WIN
+  //connect(annotationView_, SIGNAL(posChanged()), SLOT(ensureWindowOnTop()));
+#endif // Q_WS_WIN
+
+#ifdef Q_WS_MAC
+  // Forward reset player on Mac OS X
+  if (!player_->isValid())
+    resetPlayer();
+#endif // Q_WS_MAC
 
   // Initial focus
   mainPlayer_->inputComboBox()->setFocus();
@@ -297,15 +335,7 @@ MainWindow::createComponents()
 #endif // USE_WIN_QTH
 
   // Player
-  player_ = new Player(this); {
-    //player_->setKeyboardEnabled(true);  // default true
-    //player_->setMouseEnabled(true);     // default true
-    //player_->setEncoding("UTF-8");      // default do nothing
-#ifdef Q_WS_WIN
-    player_->setMouseEventEnabled();
-#endif // Q_WS_WIN
-  }
-  Q_ASSERT(isValid());
+  player_ = new Player(this);
 
   // Signal hub
   hub_ = new SignalHub(player_, this);
@@ -317,16 +347,16 @@ MainWindow::createComponents()
   videoView_ = new VideoView(this);
   osdWindow_ = new OsdWindow(this);
 
-  annotationView_ = new AnnotationGraphicsView(hub_, server_, player_, videoView_, osdWindow_);
+  annotationView_ = new AnnotationGraphicsView(hub_,  player_, videoView_, osdWindow_);
   annotationView_->setFullScreenView(osdWindow_);
-#ifdef USE_WIN_DWM
-  {
-    QWidget *w = annotationView_->editor();
-    w->setParent(this, w->windowFlags()); // hot fix for dwm displaying issue
-    UiStyle::globalInstance()->setWindowDwmEnabled(w->winId(), false);
-    UiStyle::globalInstance()->setWindowDwmEnabled(w->winId(), true);
-  }
-#endif // USE_WIN_DWM
+//#ifdef USE_WIN_DWM
+//  {
+//    QWidget *w = annotationView_->editor();
+//    w->setParent(this, w->windowFlags()); // hot fix for dwm displaying issue
+//    UiStyle::globalInstance()->setWindowDwmEnabled(w->winId(), false);
+//    UiStyle::globalInstance()->setWindowDwmEnabled(w->winId(), true);
+//  }
+//#endif // USE_WIN_DWM
 //#ifdef Q_WS_MAC // remove background in annotation view
 //  annotationView_->setStyleSheet(
 //    SS_BEGIN(QWidget)
@@ -367,14 +397,14 @@ MainWindow::createComponents()
   mainPlayer_ = new MainPlayerUi(hub_, player_, server_, this);
   miniPlayer_ = new MiniPlayerUi(hub_, player_, server_, this);
 
-#ifdef Q_WS_MAC
-  videoView_->showView();
-  player_->setEmbeddedWindow(videoView_->view());
-  QTimer::singleShot(0, videoView_, SLOT(hideView()));
-#else
-  player_->embed(videoView_);
-#endif // Q_WS_MAC
-  player_->setFullScreen(false);
+//#ifdef Q_WS_MAC
+//  videoView_->showView();
+//  player_->setEmbeddedWindow(videoView_->view());
+//  QTimer::singleShot(0, videoView_, SLOT(hideView()));
+//#else
+//  player_->embed(videoView_);
+//#endif // Q_WS_MAC
+//  player_->setFullScreen(false);
 
   // Translator
   translator_ = new Translator(this);
@@ -384,35 +414,8 @@ MainWindow::createComponents()
   //userPanel_ = new UserPanel(this);
   //userPanel_->hide(); // TODO!!!!!!
 
-  blacklistView_ = new BlacklistView(annotationFilter_, this);
-
-  deviceDialog_ = new DeviceDialog(this);
-
-  loginDialog_ = new LoginDialog(this);
-  seekDialog_ = new SeekDialog(this);
-  syncDialog_ = new SyncDialog(this);
-
-  windowPickDialog_ = new PickDialog(this);
-  windowPickDialog_->setMessage(tr("Select annots window"));
-
-  processPickDialog_ = new PickDialog(this);
-  processPickDialog_->setMessage(tr("Select process window to open"));
-
-  //liveDialog_ = new LiveDialog(this);
-  //liveDialog_ = 0; // TODO
-
-  aboutDialog_ = new AboutDialog(this);
-  helpDialog_ = new HelpDialog(this);
-
   tokenView_ = new TokenView(server_, this);
   annotationBrowser_ = new AnnotationBrowser(this);
-  annotationEditor_ = new AnnotationEditor(this);
-  cloudView_ = new CloudView(this);
-
-  if (ALPHA)
-    commentView_ = new CommentView(this);
-  else
-    commentView_ = 0;
 
 #ifdef USE_MODE_SIGNAL
   messageHandler_ = new MessageHandler(this);
@@ -424,6 +427,10 @@ MainWindow::createComponents()
   doll_ = new Doll(this);
   connect(doll_, SIGNAL(said(QString)), SLOT(respond(QString)));
 #endif // USE_MODULE_DOLL
+
+  windowStaysOnTopTimer_ = new QTimer(this);
+  windowStaysOnTopTimer_->setInterval(G_WINDOWONTOP_TIMEOUT);
+  connect(windowStaysOnTopTimer_, SIGNAL(timeout()), SLOT(setWindowOnTop()));
 }
 
 void
@@ -458,10 +465,10 @@ MainWindow::createConnections()
     connect(_playerui, SIGNAL(showPositionPanelRequested()), SLOT(showSeekDialog())); \
     connect(_playerui->inputComboBox()->lineEdit(), SIGNAL(textChanged(QString)), SLOT(syncInputLineText(QString))); \
     connect(_playerui->prefixComboBox()->lineEdit(), SIGNAL(textChanged(QString)), SLOT(syncPrefixLineText(QString))); \
-    connect(_playerui->toggleAnnotationButton(), SIGNAL(clicked()), annotationView_, SLOT(togglePlaybackEnabled())); \
+    connect(_playerui->toggleAnnotationButton(), SIGNAL(clicked()), annotationView_, SLOT(toggleVisible())); \
     connect(_playerui->previousButton(), SIGNAL(clicked()), SLOT(previous())); \
     connect(_playerui->nextButton(), SIGNAL(clicked()), SLOT(next())); \
-    connect(annotationView_, SIGNAL(playbackEnabledChanged(bool)), _playerui, SLOT(setAnnotationEnabled(bool)));
+    connect(annotationView_, SIGNAL(visibleChanged(bool)), _playerui, SLOT(setAnnotationEnabled(bool)));
 
     CONNECT(mainPlayer_)
     CONNECT(miniPlayer_)
@@ -493,11 +500,28 @@ MainWindow::createConnections()
   connect(dataManager_, SIGNAL(aliasesChanged(AliasList)), tokenView_, SLOT(setAliases(AliasList)));
   connect(tokenView_, SIGNAL(aliasSubmitted(Alias)), dataManager_, SLOT(addAlias(Alias)));
 
+  connect(dataManager_, SIGNAL(aliasRemovedWithId(qint64)), dataServer_, SLOT(deleteAliasWithId(qint64)));
+  connect(dataManager_, SIGNAL(annotationRemovedWithId(qint64)), dataServer_, SLOT(deleteAnnotationWithId(qint64)));
+  connect(dataManager_, SIGNAL(annotationTextUpdatedWithId(QString,qint64)), dataServer_, SLOT(updateAnnotationTextWithId(QString,qint64)));
+
   connect(annotationView_, SIGNAL(annotationAdded(Annotation)), dataManager_, SLOT(addAnnotation(Annotation)));
   connect(annotationView_, SIGNAL(annotationsRemoved()), dataManager_, SLOT(removeAnnotations()));
 
   connect(dataManager_, SIGNAL(annotationsChanged(AnnotationList)), annotationBrowser_, SLOT(setAnnotations(AnnotationList)));
   connect(dataManager_, SIGNAL(annotationAdded(Annotation)), annotationBrowser_, SLOT(addAnnotation(Annotation)));
+
+  connect(tokenView_, SIGNAL(aliasDeletedWithId(qint64)), dataManager_, SLOT(removeAliasWithId(qint64)));
+
+  connect(annotationBrowser_, SIGNAL(annotationDeletedWithId(qint64)), dataManager_, SLOT(removeAnnotationWithId(qint64)));
+  connect(annotationBrowser_, SIGNAL(annotationDeletedWithId(qint64)), annotationView_, SLOT(removeAnnotationWithId(qint64)));
+
+  connect(annotationView_, SIGNAL(annotationDeletedWithId(qint64)), dataManager_, SLOT(removeAnnotationWithId(qint64)));
+  connect(annotationView_, SIGNAL(annotationDeletedWithId(qint64)), annotationBrowser_, SLOT(removeAnnotationWithId(qint64)));
+
+  connect(annotationBrowser_, SIGNAL(annotationTextUpdatedWithId(QString,qint64)), annotationView_, SLOT(updateAnnotationTextWithId(QString,qint64)));
+  connect(annotationView_, SIGNAL(annotationTextUpdatedWithId(QString,qint64)), annotationBrowser_, SLOT(updateAnnotationTextWithId(QString,qint64)));
+  connect(annotationBrowser_, SIGNAL(annotationTextUpdatedWithId(QString,qint64)), dataManager_, SLOT(updateAnnotationTextWithId(QString,qint64)));
+  connect(annotationView_, SIGNAL(annotationTextUpdatedWithId(QString,qint64)), dataManager_, SLOT(updateAnnotationTextWithId(QString,qint64)));
 
   // Forward drag/drop event
   connect(tokenView_, SIGNAL(dragEnterEventReceived(QDragEnterEvent*)), SLOT(dragEnterEvent(QDragEnterEvent*)));
@@ -525,11 +549,6 @@ MainWindow::createConnections()
   connect(miniPlayer_, SIGNAL(dragMoveEventReceived(QDragMoveEvent*)), SLOT(dragMoveEvent(QDragMoveEvent*)));
   connect(miniPlayer_, SIGNAL(dropEventReceived(QDropEvent*)), SLOT(dropEvent(QDropEvent*)));
 
-  // Annotations:
-  connect(annotationEditor_, SIGNAL(textSaved(QString)), SLOT(eval(QString)));
-  connect(annotationBrowser_, SIGNAL(annotationTextUpdated(QString,qint64)), SLOT(updateAnnotationTextWithId(QString,qint64)));
-  connect(annotationView_, SIGNAL(annotationTextUpdated(QString,qint64)), SLOT(updateAnnotationTextWithId(QString,qint64)));
-
   //connect(miniPlayer_, SIGNAL(togglePlayModeRequested()), hub_, SLOT(toggleFullScreenWindowMode()));
   //connect(miniPlayer_, SIGNAL(toggleMiniModeRequested()), hub_, SLOT(toggleMiniPlayerMode()));
 
@@ -548,11 +567,6 @@ MainWindow::createConnections()
   connect(this, SIGNAL(seeked()), hub_, SLOT(stopSyncPlayMode()));
 
   // Tracked window
-  connect(windowPickDialog_, SIGNAL(windowPicked(WId)), annotationView_, SLOT(setTrackedWindow(WId)));
-  connect(processPickDialog_, SIGNAL(windowPicked(WId)), annotationView_, SLOT(setTrackedWindow(WId)));
-#ifdef USE_MODE_SIGNAL
-  connect(processPickDialog_, SIGNAL(windowPicked(WId)), SLOT(openProcessWindow(WId)));
-#endif // USE_MODE_SIGNAL
   connect(annotationView_, SIGNAL(trackedWindowChanged(WId)), embeddedPlayer_, SLOT(setContainerWindow(WId)));
 
 #ifdef Q_WS_WIN
@@ -578,11 +592,6 @@ MainWindow::createConnections()
   //        annotationView_, SLOT(addAnnotations(AnnotationList)));
   //connect(server_, SIGNAL(tokensReceived(TokenList)),
   //        this, SLOT(processTokens(TokenList)));
-
-  connect(loginDialog_, SIGNAL(loginRequested(QString, QString)), SLOT(login(QString, QString)));
-  connect(seekDialog_, SIGNAL(seekRequested(qint64)), SLOT(seek(qint64)));
-
-  connect(deviceDialog_, SIGNAL(deviceSelected(QString,bool)), SLOT(openDevicePath(QString,bool)));
 
 #ifdef Q_WS_MAC
   connect(player_, SIGNAL(playing()), SLOT(showVideoViewIfAvailable()));
@@ -638,7 +647,11 @@ MainWindow::createConnections()
   connect(recentMessageView_, SIGNAL(hookSelected(int)), recentMessageView_, SLOT(hide()));
   connect(messageHandler_, SIGNAL(messageReceivedWithId(qint64)), annotationView_, SLOT(showAnnotationsAtPos(qint64)));
   connect(messageHandler_, SIGNAL(messageReceivedWithText(QString)), SLOT(translate(QString)));
+
+  // Ensure backlogView enabled in signal mode.
+  connect(signalView_, SIGNAL(hookSelected(int,ProcessInfo)), SLOT(backlogView()));
 #endif // USE_MODE_SIGNAL
+  //connect(player_, SIGNAL(opening()), SLOT(backlogView()));
 }
 
 void
@@ -688,12 +701,13 @@ MainWindow::createActions()
   MAKE_TOGGLE(toggleMiniModeAct_, MINI,         hub_,           SLOT(setMiniPlayerMode(bool)))
   MAKE_TOGGLE(toggleLiveModeAct_, LIVE,         hub_,           SLOT(setLivePlayMode(bool)))
   MAKE_TOGGLE(toggleSyncModeAct_, SYNC,         hub_,           SLOT(setSyncPlayMode(bool)))
-  MAKE_TOGGLE(toggleAnnotationVisibleAct_, SHOWANNOT, annotationView_, SLOT(setPlaybackEnabled(bool)))
+  MAKE_TOGGLE(toggleAnnotationVisibleAct_, SHOWANNOT, annotationView_, SLOT(setVisible(bool)))
   MAKE_TOGGLE(toggleSubtitleVisibleAct_, SHOWSUBTITLE, player_, SLOT(setSubtitleVisible(bool)))
-  //MAKE_TOGGLE(toggleWindowStaysOnTopAct_, WINDOWSTAYSONTOP, this, SLOT(setWindowStaysOnTop(bool)))
+  MAKE_TOGGLE(toggleWindowOnTopAct_, WINDOWSTAYSONTOP, this, SLOT(setWindowOnTop(bool)))
   MAKE_TOGGLE(toggleUserAnonymousAct_,  ANONYMOUS,       this,         SLOT(setUserAnonymous(bool)))
   //MAKE_TOGGLE(toggleUserPanelVisibleAct_, USER,          this,         SLOT(setUserPanelVisible(bool)))
-  MAKE_TOGGLE(toggleBlacklistViewVisibleAct_, BLACKLIST,          blacklistView_,    SLOT(setVisible(bool)))
+  MAKE_TOGGLE(toggleBlacklistViewVisibleAct_, BLACKLIST,   this,    SLOT(setBlacklistViewVisible(bool)))
+  MAKE_TOGGLE(toggleBacklogViewVisibleAct_, BACKLOG,   this,    SLOT(setBacklogViewVisible(bool)))
   MAKE_TOGGLE(toggleLoginDialogVisibleAct_, LOGINDIALOG, this,         SLOT(setLoginDialogVisible(bool)))
   MAKE_TOGGLE(toggleWindowPickDialogVisibleAct_,  WINDOWPICKDIALOG,  this,         SLOT(setWindowPickDialogVisible(bool)))
   MAKE_TOGGLE(toggleProcessPickDialogVisibleAct_, PROCESSPICKDIALOG, this,         SLOT(setProcessPickDialogVisible(bool)))
@@ -701,12 +715,12 @@ MainWindow::createActions()
   MAKE_TOGGLE(toggleLiveDialogVisibleAct_,  LIVEDIALOG,  this,         SLOT(setLiveDialogVisible(bool)))
   MAKE_TOGGLE(toggleSyncDialogVisibleAct_,  SYNCDIALOG,  this,         SLOT(setSyncDialogVisible(bool)))
   MAKE_TOGGLE(toggleAnnotationBrowserVisibleAct_, ANNOTATIONBROWSER, annotationBrowser_, SLOT(setVisible(bool)))
-  MAKE_TOGGLE(toggleAnnotationEditorVisibleAct_, ANNOTATIONEDITOR, annotationEditor_, SLOT(setVisible(bool)))
+  MAKE_TOGGLE(toggleAnnotationEditorVisibleAct_, ANNOTATIONEDITOR, this, SLOT(setAnnotationEditorVisible(bool)))
   MAKE_TOGGLE(toggleTokenViewVisibleAct_, TOKENVIEW, tokenView_, SLOT(setVisible(bool)))
   MAKE_TOGGLE(toggleCommentViewVisibleAct_, COMMENTVIEW, this, SLOT(setCommentViewVisible(bool)))
-  MAKE_TOGGLE(toggleCloudViewVisibleAct_, CLOUDVIEW, cloudView_, SLOT(setVisible(bool)))
+  MAKE_TOGGLE(toggleCloudViewVisibleAct_, CLOUDVIEW, this, SLOT(setCloudViewVisible(bool)))
   MAKE_TOGGLE(toggleTranslateAct_, TRANSLATE,   this,           SLOT(setTranslateEnabled(bool)))
-  MAKE_TOGGLE(toggleSubtitleStaysOnTopAct_, SUBTITLEONTOP,   this,  SLOT(setSubtitleStaysOnTop(bool)))
+  MAKE_TOGGLE(toggleSubtitleOnTopAct_, SUBTITLEONTOP,   this,  SLOT(setSubtitleOnTop(bool)))
   MAKE_TOGGLE(toggleEmbeddedPlayerOnTopAct_, EMBEDONTOP,   embeddedPlayer_,  SLOT(setOnTop(bool)))
   MAKE_ACTION(loginAct_,        LOGIN,          this,           SLOT(showLoginDialog()))
   MAKE_ACTION(logoutAct_,       LOGOUT,         this,           SLOT(logout()))
@@ -1121,7 +1135,8 @@ MainWindow::invalidatePlayerMode()
     break;
   case SignalHub::EmbeddedPlayerMode:
     if (!annotationView_->trackedWindow())
-      hub_->setNormalPlayerMode();
+      //hub_->setNormalPlayerMode();
+      hub_->stop();
     break;
   }
 }
@@ -1307,7 +1322,13 @@ MainWindow::isDevicePath(const QString &path)
 
 void
 MainWindow::openDevice()
-{ deviceDialog_->show(); }
+{
+  if (!deviceDialog_) {
+    deviceDialog_ = new DeviceDialog(this);
+    connect(deviceDialog_, SIGNAL(deviceSelected(QString,bool)), SLOT(openDevicePath(QString,bool)));
+  }
+  deviceDialog_->show();
+}
 
 void
 MainWindow::openVideoDevice()
@@ -1464,6 +1485,8 @@ MainWindow::openPath(const QString &path, bool checkPath)
 
   tokenType_ = fileType(path);
 
+  if (!player_->isValid())
+    resetPlayer();
   player_->openMedia(path);
 
   addRecent(path);
@@ -1648,10 +1671,11 @@ MainWindow::stop()
 #ifdef USE_MODE_SIGNAL
     messageHandler_->setActive(false);
 #endif // USE_MODE_SIGNAL
+    hub_->setNormalPlayerMode();
     break;
 
   case SignalHub::MediaTokenMode:
-    if (!player_->isStopped())
+    if (player_->hasMedia() && !player_->isStopped())
       player_->stop();
     break;
   }
@@ -1954,12 +1978,21 @@ MainWindow::setMiniMode(bool visible)
 
 void
 MainWindow::about()
-{ aboutDialog_->show(); }
+{
+  if (!aboutDialog_)
+    aboutDialog_ = new AboutDialog(this);
+  aboutDialog_->show();
+}
+
 
 // TODO
 void
 MainWindow::help()
-{ helpDialog_->show(); }
+{
+  if (!helpDialog_)
+    helpDialog_ = new HelpDialog(this);
+  helpDialog_->show();
+}
 
 // - Update -
 
@@ -2026,6 +2059,10 @@ MainWindow::hideLoginDialog()
 void
 MainWindow::setLoginDialogVisible(bool visible)
 {
+  if (!loginDialog_) {
+    loginDialog_ = new LoginDialog(this);
+    connect(loginDialog_, SIGNAL(loginRequested(QString, QString)), SLOT(login(QString, QString)));
+  }
   if (visible) {
     loginDialog_->setUserName(server_->user().name());
     loginDialog_->setPassword(server_->user().password());
@@ -2033,6 +2070,53 @@ MainWindow::setLoginDialogVisible(bool visible)
     loginDialog_->raise();
   } else
     loginDialog_->hide();
+}
+
+void
+MainWindow::setBlacklistViewVisible(bool visible)
+{
+  if (!blacklistView_)
+    blacklistView_ = new BlacklistView(annotationFilter_, this);
+  blacklistView_->setVisible(visible);
+}
+
+
+BacklogView*
+MainWindow::backlogView()
+{
+  if (!backlogView_) {
+    backlogView_ = new BacklogView(this);
+    connect(hub_, SIGNAL(tokenModeChanged(SignalHub::TokenMode)), backlogView_, SLOT(clear()));
+    connect(player_, SIGNAL(mediaChanged()), backlogView_, SLOT(clear()));
+    connect(annotationView_, SIGNAL(subtitleAdded(QString)), backlogView_, SLOT(appendSubtitle(QString)));
+    connect(annotationView_, SIGNAL(annotationAdded(QString)), backlogView_, SLOT(appendAnnotation(QString)));
+#ifdef USE_MODE_SIGNAL
+    connect(messageHandler_, SIGNAL(messageReceivedWithText(QString)), backlogView_, SLOT(appendText(QString)));
+#endif // USE_MODE_SIGNAL
+  }
+  return backlogView_;
+}
+
+void
+MainWindow::setBacklogViewVisible(bool visible)
+{ backlogView()->setVisible(visible); }
+
+void
+MainWindow::setAnnotationEditorVisible(bool visible)
+{
+  if (!annotationEditor_) {
+    annotationEditor_ = new AnnotationEditor(this);
+    connect(annotationEditor_, SIGNAL(textSaved(QString)), SLOT(eval(QString)));
+  }
+  annotationEditor_->setVisible(visible);
+}
+
+void
+MainWindow::setCloudViewVisible(bool visible)
+{
+  if (!cloudView_)
+    cloudView_ = new CloudView(this);
+  cloudView_->setVisible(visible);
 }
 
 void
@@ -2046,8 +2130,14 @@ MainWindow::hideSeekDialog()
 void
 MainWindow::setSeekDialogVisible(bool visible)
 {
+  if (!seekDialog_) {
+    seekDialog_ = new SeekDialog(this);
+    connect(seekDialog_, SIGNAL(seekRequested(qint64)), SLOT(seek(qint64)));
+  }
+
   if (visible) {
-    seekDialog_->setTime(player_->time());
+    qint64 t = player_->hasMedia() ? player_->time() : 0;
+    seekDialog_->setTime(t);
     seekDialog_->show();
     seekDialog_->raise();
   } else
@@ -2081,6 +2171,9 @@ MainWindow::hideSyncDialog()
 void
 MainWindow::setSyncDialogVisible(bool visible)
 {
+  if (!syncDialog_)
+    syncDialog_ = new SyncDialog(this);
+
   syncDialog_->setVisible(visible);
   if (visible)
     syncDialog_->raise();
@@ -2097,6 +2190,9 @@ MainWindow::hideCommentView()
 void
 MainWindow::setCommentViewVisible(bool visible)
 {
+  if (!commentView_)
+    commentView_ = new CommentView(this);
+
   if (visible && dataManager_->hasToken())
     commentView_->setTokenId(dataManager_->token().id());
   commentView_->setVisible(visible);
@@ -2111,6 +2207,12 @@ MainWindow::showWindowPickDialog()
 void
 MainWindow::setWindowPickDialogVisible(bool visible)
 {
+  if (!windowPickDialog_) {
+    windowPickDialog_ = new PickDialog(this);
+    windowPickDialog_->setMessage(tr("Select annots window"));
+    connect(windowPickDialog_, SIGNAL(windowPicked(WId)), annotationView_, SLOT(setTrackedWindow(WId)));
+    connect(windowPickDialog_, SIGNAL(windowPicked(WId)), SLOT(setWindowOnTop()));
+  }
   windowPickDialog_->setVisible(visible);
   if (visible)
     windowPickDialog_->raise();
@@ -2119,6 +2221,16 @@ MainWindow::setWindowPickDialogVisible(bool visible)
 void
 MainWindow::setProcessPickDialogVisible(bool visible)
 {
+  if (!processPickDialog_) {
+    processPickDialog_ = new PickDialog(this);
+    processPickDialog_->setMessage(tr("Select process window to open"));
+
+    connect(processPickDialog_, SIGNAL(windowPicked(WId)), annotationView_, SLOT(setTrackedWindow(WId)));
+#ifdef USE_MODE_SIGNAL
+    connect(processPickDialog_, SIGNAL(windowPicked(WId)), SLOT(openProcessWindow(WId)));
+#endif // USE_MODE_SIGNAL
+    connect(processPickDialog_, SIGNAL(windowPicked(WId)), SLOT(setWindowOnTop()));
+  }
   processPickDialog_->setVisible(visible);
   if (visible)
     processPickDialog_->raise();
@@ -2153,16 +2265,6 @@ MainWindow::submitAlias(const Alias &input, bool async)
   inetMutex_.unlock();
   DOUT("inetMutex unlocked");
   DOUT("exit");
-}
-
-void
-MainWindow::updateAnnotationTextWithId(const QString &text, qint64 id)
-{
-  bool ok = server_->updateAnnotationTextWithId(text, id);
-  if (ok)
-    log(tr("annotation saved") + ": " + text);
-  else
-    warn(tr("failed to update annotation text") + ": " + text);
 }
 
 QString
@@ -2320,7 +2422,7 @@ MainWindow::setToken(const QString &input, bool async)
   dataManager_->setToken(token);
   dataManager_->setAliases(aliases);
 
-  if (ALPHA)
+  if (commentView_)
     commentView_->setTokenId(token.id());
 #ifdef USE_MODE_SIGNAL
   //signalView_->tokenView()->setAliases(aliases);
@@ -2353,23 +2455,26 @@ MainWindow::setToken(const QString &input, bool async)
 }
 
 void
-MainWindow::showText(const QString &text)
+MainWindow::showText(const QString &text, bool isSigned)
 {
   DOUT("enter: text =" << text);
   Annotation annot;
-  if (server_->isAuthorized()) {
+  if (isSigned && server_->isAuthorized()) {
     annot.setUserId(server_->user().id());
     annot.setUserAlias(server_->user().name());
     annot.setUserAnonymous(server_->user().isAnonymous());
   }
-  annot.setLanguage(Traits::AnyLanguage);
+  annot.setLanguage(server_->isAuthorized() ?
+    server_->user().language() :
+    Traits::AnyLanguage
+  );
   annot.setText(text);
   annotationView_->showAnnotation(annot);
   DOUT("exit");
 }
 
 void
-MainWindow::showTextAsSubtitle(const QString &input)
+MainWindow::showTextAsSubtitle(const QString &input, bool isSigned)
 {
   if (input.isEmpty())
     return;
@@ -2384,12 +2489,15 @@ MainWindow::showTextAsSubtitle(const QString &input)
   }
 
   Annotation annot;
-  if (server_->isAuthorized()) {
+  if (isSigned && server_->isAuthorized()) {
     annot.setUserId(server_->user().id());
     annot.setUserAlias(server_->user().name());
     annot.setUserAnonymous(server_->user().isAnonymous());
   }
-  annot.setLanguage(Traits::AnyLanguage);
+  annot.setLanguage(server_->isAuthorized() ?
+    server_->user().language() :
+    Traits::AnyLanguage
+  );
   QString sub = CORE_CMD_SUB " " + text;
   annot.setText(sub)    ;
   annotationView_->showAnnotation(annot);
@@ -2410,7 +2518,7 @@ MainWindow::submitText(const QString &text, bool async)
 #endif // USE_MODE_SIGNAL
      ) {
 
-    showText(text);
+    showText(text, true); // isSigned = true
     DOUT("exit: returned from showText branch");
     return;
   }
@@ -2438,8 +2546,9 @@ MainWindow::submitText(const QString &text, bool async)
     switch (hub_->tokenMode()) {
     case SignalHub::MediaTokenMode:
       annot.setPos(
-        tokenType_ == Token::TT_Picture ?
-          0 : player_->time()
+        !player_->hasMedia() ? 0 :
+        tokenType_ == Token::TT_Picture ? 0 :
+        player_->time()
       );
       break;
     case SignalHub::SignalTokenMode:
@@ -2479,7 +2588,6 @@ MainWindow::submitText(const QString &text, bool async)
 void
 MainWindow::eval(const QString &input)
 {
-  qDebug()<<11111111;
   QString text = input.trimmed();
   if (text.isEmpty())
     return;
@@ -2500,7 +2608,7 @@ MainWindow::eval(const QString &input)
       return;
     }
 
-  if (hub_->isSignalTokenMode() ||
+  if (hub_->isSignalTokenMode() && !hub_->isStopped() ||
       player_->hasMedia() && !player_->isStopped())
     submitText(text);
   else
@@ -2816,7 +2924,7 @@ MainWindow::invalidateContextMenu()
     contextMenu_->addAction(openDeviceAct_);
 
 #ifdef USE_WIN_PICKER
-    toggleWindowPickDialogVisibleAct_->setChecked(windowPickDialog_->isVisible());
+    toggleWindowPickDialogVisibleAct_->setChecked(windowPickDialog_ && windowPickDialog_->isVisible());
     contextMenu_->addAction(toggleWindowPickDialogVisibleAct_);
 #endif // USE_WIN_PICKER
 
@@ -2884,10 +2992,10 @@ MainWindow::invalidateContextMenu()
     }
 
 #ifdef USE_MODE_SIGNAL
-    if (!(player_->hasMedia() && !player_->isStopped())) {
+    if (!player_->hasMedia() || player_->isStopped()) {
       contextMenu_->addSeparator();
 #ifdef USE_WIN_PICKER
-      toggleProcessPickDialogVisibleAct_->setChecked(processPickDialog_->isVisible());
+      toggleProcessPickDialogVisibleAct_->setChecked(processPickDialog_ && processPickDialog_->isVisible());
       contextMenu_->addAction(toggleProcessPickDialogVisibleAct_);
 #endif // USE_WIN_PICKER
 
@@ -2986,23 +3094,21 @@ MainWindow::invalidateContextMenu()
     contextMenu_->addMenu(backwardMenu_);
     contextMenu_->addMenu(forwardMenu_);
 
-    toggleSeekDialogVisibleAct_->setChecked(seekDialog_->isVisible());
+    toggleSeekDialogVisibleAct_->setChecked(seekDialog_ && seekDialog_->isVisible());
     contextMenu_->addAction(toggleSeekDialogVisibleAct_);
   }
 
   // Annotation
   {
     contextMenu_->addSeparator();
-    if (annotationView_->isPlaybackEnabled()) {
-      toggleAnnotationVisibleAct_->setChecked(true);
-      toggleAnnotationVisibleAct_->setText(TR(T_MENUTEXT_SHOWANNOT));
-    } else {
-      toggleAnnotationVisibleAct_->setChecked(false);
-      toggleAnnotationVisibleAct_->setText(TR(T_MENUTEXT_HIDEANNOT));
-    }
+
+    toggleBacklogViewVisibleAct_->setChecked(backlogView_ && backlogView_->isVisible());
+    contextMenu_->addAction(toggleBacklogViewVisibleAct_);
+
+    toggleAnnotationVisibleAct_->setChecked(annotationView_ && annotationView_->isVisible());
     contextMenu_->addAction(toggleAnnotationVisibleAct_ );
 
-    toggleBlacklistViewVisibleAct_->setChecked(blacklistView_->isVisible());
+    toggleBlacklistViewVisibleAct_->setChecked(blacklistView_ && blacklistView_->isVisible());
     contextMenu_->addAction(toggleBlacklistViewVisibleAct_);
 
     if (annotationFilter_->isEnabled())
@@ -3014,13 +3120,13 @@ MainWindow::invalidateContextMenu()
       contextMenu_->addSeparator();
       contextMenu_->addAction(toggleTranslateAct_);
     }
-    toggleSubtitleStaysOnTopAct_->setChecked(isSubtitleStaysOnTop());
-    contextMenu_->addAction(toggleSubtitleStaysOnTopAct_);
+    toggleSubtitleOnTopAct_->setChecked(isSubtitleOnTop());
+    contextMenu_->addAction(toggleSubtitleOnTopAct_);
 
     contextMenu_->addMenu(subtitleStyleMenu_);
 
-    toggleSubtitleStaysOnTopAct_->setChecked(isSubtitleStaysOnTop());
-    contextMenu_->addAction(toggleSubtitleStaysOnTopAct_);
+    toggleSubtitleOnTopAct_->setChecked(isSubtitleOnTop());
+    contextMenu_->addAction(toggleSubtitleOnTopAct_);
   }
 
   if (player_->hasMedia()
@@ -3035,7 +3141,7 @@ MainWindow::invalidateContextMenu()
       toggleSyncModeAct_->setChecked(hub_->isSyncPlayMode());
       contextMenu_->addAction(toggleSyncModeAct_);
 
-      toggleSyncDialogVisibleAct_->setChecked(syncDialog_->isVisible());
+      toggleSyncDialogVisibleAct_->setChecked(syncDialog_ && syncDialog_->isVisible());
       contextMenu_->addAction(toggleSyncDialogVisibleAct_);
     }
     /*
@@ -3068,7 +3174,7 @@ MainWindow::invalidateContextMenu()
       contextMenu_->addAction(toggleEmbeddedPlayerOnTopAct_);
     }
 
-    toggleAnnotationEditorVisibleAct_->setChecked(annotationEditor_->isVisible());
+    toggleAnnotationEditorVisibleAct_->setChecked(annotationEditor_ && annotationEditor_->isVisible());
     contextMenu_->addAction(toggleAnnotationEditorVisibleAct_ );
 
     if (hub_->isSignalTokenMode() || player_->hasMedia()) {
@@ -3079,12 +3185,12 @@ MainWindow::invalidateContextMenu()
       contextMenu_->addAction(toggleTokenViewVisibleAct_ );
     }
 
-    if (ALPHA) if (commentView_->tokenId()) {
-      toggleCommentViewVisibleAct_->setChecked(commentView_->isVisible());
+    if (ALPHA) if (commentView_ && commentView_->tokenId()) {
+      toggleCommentViewVisibleAct_->setChecked(commentView_ && commentView_->isVisible());
       contextMenu_->addAction(toggleCommentViewVisibleAct_ );
     }
 
-    toggleCloudViewVisibleAct_->setChecked(cloudView_->isVisible());
+    toggleCloudViewVisibleAct_->setChecked(cloudView_ && cloudView_->isVisible());
     contextMenu_->addAction(toggleCloudViewVisibleAct_ );
   }
 
@@ -3098,7 +3204,7 @@ MainWindow::invalidateContextMenu()
   {
     //if (!isFullScreenMode()) {
     //  contextMenu_->addSeparator();
-    //  contextMenu_->addAction(toggleWindowStaysOnTopAct_);
+    //  contextMenu_->addAction(toggleWindowOnTopAct_);
     //}
   }
 
@@ -3160,7 +3266,10 @@ MainWindow::invalidateContextMenu()
   {
     contextMenu_->addSeparator();
 
-    contextMenu_->addAction(showMinimizedAct_);
+    //contextMenu_->addAction(showMinimizedAct_);
+
+    toggleWindowOnTopAct_->setChecked(isWindowOnTop());
+    contextMenu_->addAction(toggleWindowOnTopAct_);
 
     toggleMenuBarVisibleAct_->setChecked(menuBar()->isVisible());
     contextMenu_->addAction(toggleMenuBarVisibleAct_);
@@ -3215,7 +3324,7 @@ void
 MainWindow::invalidateTrackMenu()
 {
   trackMenu_->clear();
-  if (!player_->hasPlaylist())
+  if (!player_->hasMedia() || !player_->hasPlaylist())
     return;
 
   foreach (Player::MediaInfo mi, player_->playlist()) {
@@ -3433,7 +3542,7 @@ MainWindow::closeEvent(QCloseEvent *event)
 
   settings->setTranslateEnabled(isTranslateEnabled());
 
-  settings->setEmbeddedPlayerStaysOnTop(embeddedPlayer_->isOnTop());
+  settings->setEmbeddedPlayerOnTop(embeddedPlayer_->isOnTop());
 
   settings->setAutoPlayNext(isAutoPlayNext());
 
@@ -3448,7 +3557,7 @@ MainWindow::closeEvent(QCloseEvent *event)
       HOOK->stop();
 #endif // USE_WIN_HOOK
     if (!hub_->isStopped()) {
-      if (hub_->isMediaTokenMode())
+      if (hub_->isMediaTokenMode() && player_->isValid())
         player_->setVolume(0);
       hub_->stop();
     }
@@ -3461,9 +3570,13 @@ MainWindow::closeEvent(QCloseEvent *event)
     //  parentWidget()->hide();
 
     // FIXME: use waitForDone with timeout in Qt 4.8
-    QThreadPool::globalInstance()->waitForDone();
-    //QThreadPool::globalInstance()->waitForDone(5000);
+#if QT_VERSION >= 0x040800
+    // wait for at most 5 seconds ant kill all threads
+    QThreadPool::globalInstance()->waitForDone(5000);
+#else
     //DOUT("WARNING: killing active threads; will be fixed in Qt 4.8");
+    QThreadPool::globalInstance()->waitForDone();
+#endif  // QT_VERSION
   }
 
   //if (parentWidget())
@@ -3476,50 +3589,58 @@ MainWindow::closeEvent(QCloseEvent *event)
   DOUT("exit");
 }
 
-// - Stays on top -
+// - Window on top -
 
-//bool
-//MainWindow::isWindowStaysOnTop() const
-//{ return windowFlags() & Qt::WindowStaysOnTopHint; }
+bool
+MainWindow::isWindowOnTop() const
+{ return windowFlags() & Qt::WindowStaysOnTopHint; }
 
-/*
 void
-MainWindow::setWindowStaysOnTop(bool enabled)
+MainWindow::setWindowOnTop(bool t)
 {
-  say(": " + TR(T_MESSAGE_ENABLE_WINDOWSTAYSONTOP));
-  if (isWindowStaysOnTop() != enabled) {
+  if (t != isWindowOnTop()) {
+//#ifdef USE_WIN_DWM
+//    UiStyle::globalInstance()->setDwmEnabled(false);
+//#endif // USE_WIN_DWM
     bool visible = isVisible();
-    if (visible)
-      hide();
-#ifdef USE_WIN_DWM
-    bool aeroEnabled = isAeroStyleEnabled();
-    if (aeroEnabled)
-      setAeroStyleEnabled(false);
-
-    foreach (QWidget *w, dialogs_)
-      DWM_DISABLE_AERO_WIDGET(w);
-
-#endif // USE_WIN_DWM
-    if (enabled)
+    if (t)
       setWindowFlags(windowFlags() | Qt::WindowStaysOnTopHint);
     else
       setWindowFlags(windowFlags() & ~Qt::WindowStaysOnTopHint);
 
+//#ifdef USE_WIN_QTH
+//    QTH->setParentWinId(winId());
+//#endif // USE_WIN_QTH
+
 #ifdef USE_WIN_DWM
-    if (aeroEnabled)
-      setAeroStyleEnabled(true);
-
-    foreach (QWidget *w, dialogs_)
-      DWM_ENABLE_AERO_WIDGET(w);
+    UiStyle::globalInstance()->setDwmEnabled(true);
 #endif // USE_WIN_DWM
+    if (visible) {
+      if (hub_->isFullScreenWindowMode())
+        showFullScreen();
+      else
+        show();
+    }
 
-    // FIXME: correctly raise OsdWindow!!!
-
-    if (visible)
-      show();
+    if (t)
+      log(tr("always on top enabled"));
+    else
+      log(tr("always on top disabled"));
   }
+
+#ifdef Q_WS_WIN
+  if (t) {
+    if (hub_->isSignalTokenMode() && annotationView_->trackedWindow() &&
+        !QtWin::isWindowAboveWindow(winId(), annotationView_->trackedWindow()))
+      QtWin::setTopWindow(winId());
+    if (!windowStaysOnTopTimer_->isActive())
+      windowStaysOnTopTimer_->start();
+  } else {
+    if (windowStaysOnTopTimer_->isActive())
+      windowStaysOnTopTimer_->stop();
+  }
+#endif // Q_WS_WIN
 }
-*/
 
 // - Synchronize -
 
@@ -3695,6 +3816,9 @@ MainWindow::login(const QString &userName, const QString &encryptedPassword, boo
   DOUT("inetMutex locking");
   inetMutex_.lock();
   DOUT("inetMutex locked");
+
+  Settings *settings = Settings::globalInstance();
+
   // CHECKPOINT: Multithreading here, break this function into two parts
   server_->updateConnected();
   if (!server_->isConnected() && cache_->isValid()) {
@@ -3702,6 +3826,9 @@ MainWindow::login(const QString &userName, const QString &encryptedPassword, boo
     log(TR(T_MESSAGE_TRY_LOGINFROMCACHE));
     User user = cache_->selectUserWithNameAndPassword(userName, encryptedPassword);
     if (user.isValid()) {
+      settings->setUserName(userName);
+      settings->setPassword(encryptedPassword);
+
       server_->setAuthorized(true);
       server_->setUser(user);
       annotationBrowser_->setUserId(user.id());
@@ -3716,7 +3843,6 @@ MainWindow::login(const QString &userName, const QString &encryptedPassword, boo
     return;
   }
 
-  Settings *settings = Settings::globalInstance();
   settings->setUserName(userName);
   settings->setPassword(encryptedPassword);
 
@@ -3765,7 +3891,7 @@ MainWindow::login(const QString &userName, const QString &encryptedPassword, boo
     if (Settings::globalInstance()->updateDate() != today) {
       bool updated = server_->isSoftwareUpdated();
       if (!updated)
-        warn(tr("new version released, check here: ") + "\n" + G_UPDATEPAGE_URL);
+        warn(tr("new version released, check here: ") + CORE_HTML_BR() ": " + G_UPDATEPAGE_URL);
 
       Settings::globalInstance()->setUpdateDate(today);
     }
@@ -4406,17 +4532,17 @@ MainWindow::translate(const QString &text)
 // - Subtitle -
 
 void
-MainWindow::setSubtitleStaysOnTop(bool t)
+MainWindow::setSubtitleOnTop(bool t)
 {
   annotationView_->setSubtitlePosition(
         t ? AnnotationGraphicsView::AP_Top
           : AnnotationGraphicsView::AP_Bottom);
 
-  Settings::globalInstance()->setSubtitleStaysOnTop(t);
+  Settings::globalInstance()->setSubtitleOnTop(t);
 }
 
 bool
-MainWindow::isSubtitleStaysOnTop() const
+MainWindow::isSubtitleOnTop() const
 { return annotationView_->subtitlePosition() == AnnotationGraphicsView::AP_Top; }
 
 void
@@ -4672,6 +4798,9 @@ MainWindow::autoPlayNext()
 void
 MainWindow::setEmbeddedWindow(WId winId)
 {
+  if (!player_->isValid())
+    return;
+
   if (!winId)
     player_->embed(videoView_);
   else {
@@ -4738,4 +4867,3 @@ void DropSiteWindow::updateFormatsTable(const QMimeData *mimeData)
 }
 //! [updateFormatsTable() part4]
 */
-

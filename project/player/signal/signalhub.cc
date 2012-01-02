@@ -20,9 +20,7 @@ SignalHub::SignalHub(Player *player, QObject *parent)
     playerMode_(NormalPlayerMode),
     windowMode_(NormalWindowMode),
     playing_(false), paused_(false), stopped_(true)
-{
-  Q_ASSERT(player_);
-}
+{ Q_ASSERT(player_); }
 
 // - Properties -
 
@@ -32,7 +30,7 @@ SignalHub::volume() const
   qreal ret = 0;
   switch (tokenMode_) {
   case MediaTokenMode:
-    ret = player_->volume();
+    ret = player_->isValid() ? player_->volume() : 0;
     break;
 
   case SignalTokenMode:
@@ -64,9 +62,10 @@ SignalHub::setVolume(qreal percentage)
 
   switch (tokenMode_) {
   case MediaTokenMode:
-    player_->setVolume(percentage);
-    emit volumeChanged(percentage);
-    break;
+    if (player_->isValid()) {
+      player_->setVolume(percentage);
+      emit volumeChanged(percentage);
+    } break;
 
   case SignalTokenMode:
 #ifdef Q_WS_WIN

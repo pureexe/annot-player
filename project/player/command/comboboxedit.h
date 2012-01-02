@@ -36,8 +36,6 @@ public:
 protected:
   QStringList &defaultItems() { return defaultItems_; }
 
-  AnnotationEditor *editor() const;
-
   // - History -
 protected slots:
   //void previous();

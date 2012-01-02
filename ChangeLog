@@ -2,8 +2,20 @@ ChangeLog
 Annot Project
 6/18/2011
 
-?/?/2012	annot.player	0.1.2.0
-        * Able to delete annotations.
+1/1/2012	annot.player	0.1.2.0
+        * Able to delete annotations and alias.
+        * Fixed bugs while editing annotations.
+        * Adopted on-demand window creation to improve performance.
+        * Startup popups eliminated.
+        * Ensure player always on top of DirectX windows in full screen mode.
+        * Window-always-on-top disabled by default.
+        * Stop listening to process if required or on process close.
+        * Performance improved on large number of annotations.
+        * Updated to Qt 4.8 on Windows. Several improvements using new APIs.
+        * Added backlog view for annotations/translations.
+        * Annotation font rendered with contoured shadow.
+        * Mac OS X upgraded to 10.7. Tool chain updated.
+          No more support for 10.6 in the future.
 
 12/25/2011	annot.player	0.1.1.5
         * Fixed a bug while clustering annotations.

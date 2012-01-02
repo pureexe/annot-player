@@ -49,20 +49,24 @@ public:
   explicit AnnotationBrowser(QWidget *parent = 0);
 
 signals:
-  void annotationTextUpdated(QString text, qint64 id);
+  void annotationTextUpdatedWithId(QString text, qint64 id);
+  void annotationDeletedWithId(qint64 id);
 
   // - Properties -
 public:
   bool isEmpty() const;
-  qint64 userId() const;
+  qint64 userId() const { return userId_; }
 
 public slots:
-  void setUserId(qint64 uid);
+  void setUserId(qint64 uid) { userId_ = uid; }
   void setAnnotations(const AnnotationList &l);
   void addAnnotation(const Annotation &annot);
   void addAnnotations(const AnnotationList &l);
+  void removeAnnotationWithId(qint64 id);
   void removeAnnotations();
   void clear();
+
+  void updateAnnotationTextWithId(const QString &text, qint64 id);
 
 protected slots:
   void saveAnnotationText(const QString &text);
@@ -72,6 +76,8 @@ protected:
   qint64 currentId() const;
   qint64 currentUserId() const;
   QString currentText() const;
+
+  int rowWithId(qint64 aid) const;
 
   // - Events -
 protected:
@@ -92,6 +98,7 @@ signals:
   // - Implementations -
 protected slots:
   void editAnnotation();
+  void deleteAnnotation();
   void copyAnnotation();
   void hideAnnotation();
   void showAnnotation();
@@ -114,6 +121,8 @@ private:
   void createLayout();
   void createActions();
 
+  AnnotationEditor *editor() const;
+
 private:
   qint64 userId_;
 
@@ -130,6 +139,7 @@ private:
   QAction *editAnnotAct_,
           *copyAnnotAct_,
           *blockAnnotAct_,
+          *deleteAnnotAct_,
           *hideAnnotAct_,
           *showAnnotAct_,
           *blessAnnotAct_,

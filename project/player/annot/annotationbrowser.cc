@@ -26,7 +26,7 @@ using namespace Logger;
   Qt::WindowCloseButtonHint )
 
 AnnotationBrowser::AnnotationBrowser(QWidget *parent)
-  : Base(parent, WINDOW_FLAGS), userId_(0)
+  : Base(parent, WINDOW_FLAGS), userId_(0), editor_(0)
 {
   setWindowTitle(TR(T_TITLE_ANNOTATIONBROWSER));
   UiStyle::globalInstance()->setWindowStyle(this);
@@ -35,9 +35,6 @@ AnnotationBrowser::AnnotationBrowser(QWidget *parent)
   sourceModel_ = new QStandardItemModel(0, HD_Count, this);
   setHeaderData(sourceModel_);
   tableView_ = new FilteredTableView(sourceModel_, this);
-
-  editor_ = new AnnotationEditor(this);
-  connect(editor_, SIGNAL(textSaved(QString)), SLOT(saveAnnotationText(QString)));
 
   createLayout();
   createActions();
@@ -71,6 +68,7 @@ AnnotationBrowser::createActions()
   connect(_action, SIGNAL(triggered()), _slot);
 
   MAKE_ACTION(editAnnotAct_,  EDITTHISANNOT,  SLOT(editAnnotation()))
+  MAKE_ACTION(deleteAnnotAct_,DELETETHISANNOT,SLOT(deleteAnnotation()))
   MAKE_ACTION(copyAnnotAct_,  COPYTHISANNOT,  SLOT(copyAnnotation()))
   MAKE_ACTION(blessAnnotAct_, BLESSTHISANNOT, SLOT(blessAnnotation()))
   MAKE_ACTION(curseAnnotAct_, CURSETHISANNOT, SLOT(curseAnnotation()))
@@ -108,6 +106,18 @@ AnnotationBrowser::setHeaderData(QAbstractItemModel *model)
 }
 
 // - Properties -
+
+AnnotationEditor*
+AnnotationBrowser::editor() const
+{
+  if (!editor_) {
+    Self *self = const_cast<Self*>(this);
+    AnnotationEditor *ret= new AnnotationEditor(self);
+    connect(ret, SIGNAL(textSaved(QString)), SLOT(saveAnnotationText(QString)));
+    self->editor_ = ret;
+  }
+  return editor_;
+}
 
 QModelIndex
 AnnotationBrowser::currentIndex() const
@@ -165,15 +175,6 @@ AnnotationBrowser::currentText() const
 
   return index.data().toString();
 }
-
-
-qint64
-AnnotationBrowser::userId() const
-{ return userId_; }
-
-void
-AnnotationBrowser::setUserId(qint64 uid)
-{ userId_ = uid; }
 
 void
 AnnotationBrowser::setAnnotations(const AnnotationList &l)
@@ -246,6 +247,28 @@ void
 AnnotationBrowser::clear()
 { removeAnnotations(); }
 
+void
+AnnotationBrowser::removeAnnotationWithId(qint64 id)
+{
+  int row = rowWithId(id);
+  if (row>= 0)
+    sourceModel_->removeRow(row);
+}
+
+int
+AnnotationBrowser::rowWithId(qint64 id) const
+{
+  for (int row = 0; row < sourceModel_->rowCount(); row++) {
+    QModelIndex index = sourceModel_->index(row, HD_Id);
+    bool ok;
+    qint64 rowId = sourceModel_->data(index).toLongLong(&ok);
+    if (ok && rowId == id)
+      return row;
+  }
+  return -1;
+}
+
+
 // - Formatter -
 
 QString
@@ -294,19 +317,32 @@ AnnotationBrowser::saveAnnotationText(const QString &text)
   if (!editedIndex_.isValid())
     return;
 
-  if (currentUserId() != userId_)
+  if (!userId_ || currentUserId() != userId_) {
     warn(tr("cannot edit other's annotation"));
+    return;
+  }
 
   int row = editedIndex_.row();
 
   QModelIndex mi = editedIndex_.sibling(row, HD_Text);
 
   sourceModel_->setData(mi, text, Qt::DisplayRole);
-  qint64 id = editor_->id();
+  qint64 id = editor()->id();
 
-  sourceModel_->setData(editedIndex_.sibling(row, HD_UpdateTime), QDateTime::currentDateTime(), Qt::DisplayRole);
+  if (id) {
+    updateAnnotationTextWithId(text, id);
+    emit annotationTextUpdatedWithId(text, id);
+  }
+}
 
-  emit annotationTextUpdated(text, id);
+void
+AnnotationBrowser::updateAnnotationTextWithId(const QString &text, qint64 id)
+{
+  int row = rowWithId(id);
+  if (row >= 0) {
+    sourceModel_->setData(sourceModel_->index(row, HD_Text), text, Qt::DisplayRole);
+    sourceModel_->setData(sourceModel_->index(row, HD_UpdateTime), QDateTime::currentDateTime(), Qt::DisplayRole);
+  }
 }
 
 void
@@ -319,13 +355,15 @@ AnnotationBrowser::editAnnotation()
 
   editedIndex_ = currentIndex();
 
-  editor_->setId(id);
-  editor_->setText(currentText());
-  editor_->show();
+  AnnotationEditor *e = editor();
+  e->setId(id);
+  e->setText(currentText());
+  e->show();
 }
 
 void
-AnnotationBrowser::copyAnnotation() {
+AnnotationBrowser::copyAnnotation()
+{
   QString text = currentText();
   if (text.isEmpty())
     return;
@@ -333,9 +371,24 @@ AnnotationBrowser::copyAnnotation() {
   QClipboard *clipboard = QApplication::clipboard();
   if (clipboard) {
     clipboard->setText(text);
-    log(TR(T_SUCCEED_ANNOTATION_COPIED) + ": " + text);
+    log(TR(T_SUCCEED_COPIED) + ": " + text);
   } else
     warn(TR(T_ERROR_CLIPBOARD_UNAVAILABLE));
+}
+
+void
+AnnotationBrowser::deleteAnnotation()
+{
+  if (!userId_ || currentUserId() != userId_) {
+    warn(tr("cannot delete other's annotation"));
+    return;
+  }
+
+  qint64 id = currentId();
+  tableView_->removeCurrentRow();
+
+  if (id)
+    emit annotationDeletedWithId(id);
 }
 
 void
@@ -356,7 +409,6 @@ AnnotationBrowser::blockUser() { /* TODO */ }
 
 // - Events -
 
-// TODO: Dynamically compose menu content
 void
 AnnotationBrowser::contextMenuEvent(QContextMenuEvent *event)
 {
@@ -367,10 +419,8 @@ AnnotationBrowser::contextMenuEvent(QContextMenuEvent *event)
   contextMenu_->clear();
 
 
-  // Annotation
-  if (currentIndex().isValid()) {
-    // Edit
-    {
+  // Edit
+  {
     contextMenu_->addAction(editAnnotAct_);
     if (!currentText().isEmpty())
       contextMenu_->addAction(copyAnnotAct_);
@@ -378,14 +428,16 @@ AnnotationBrowser::contextMenuEvent(QContextMenuEvent *event)
 
     // Cast: TODO
     if (currentId()) {
-      //contextMenu_->addSeparator();
+      if (userId_ && userId_ == currentUserId()) {
+        contextMenu_->addSeparator();
+        contextMenu_->addAction(deleteAnnotAct_);
+      }
 
-      //contextMenu_->addAction(blessAnnotAct_);
-      //contextMenu_->addAction(curseAnnotAct_);
-      //contextMenu_->addAction(hideAnnotAct_);
-      //contextMenu_->addAction(blockAnnotAct_);
-      //contextMenu_->addAction(showAnnotAct_);
-    }
+    //contextMenu_->addAction(blessAnnotAct_);
+    //contextMenu_->addAction(curseAnnotAct_);
+    //contextMenu_->addAction(hideAnnotAct_);
+    //contextMenu_->addAction(blockAnnotAct_);
+    //contextMenu_->addAction(showAnnotAct_);
   }
 
   // User

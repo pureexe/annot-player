@@ -117,6 +117,9 @@ TokenView::TokenView(ServerAgent *server, QWidget *parent)
     //setContentsMargins(0, 0, 0, 0);
   } setLayout(grid);
 
+  // Create context menu
+  createActions();
+
   // Set initial states
 
   tableView_->sortByColumn(HD_Type, Qt::AscendingOrder);
@@ -133,9 +136,29 @@ TokenView::setAliasHeaderData(QAbstractItemModel *model)
   model->setHeaderData(HD_Language, Qt::Horizontal, TR(T_LANGUAGE));
   model->setHeaderData(HD_Status, Qt::Horizontal, TR(T_STATUS));
   model->setHeaderData(HD_Flags, Qt::Horizontal, TR(T_FLAGS));
+  model->setHeaderData(HD_Id, Qt::Horizontal, TR(T_ID));
+  model->setHeaderData(HD_UserId, Qt::Horizontal, TR(T_USER_ID));
   model->setHeaderData(HD_BlessedCount, Qt::Horizontal, TR(T_BLESSEDCOUNT));
   model->setHeaderData(HD_CursedCount, Qt::Horizontal, TR(T_CURSEDCOUNT));
   model->setHeaderData(HD_BlockedCount, Qt::Horizontal, TR(T_BLOCKEDCOUNT));
+}
+
+void
+TokenView::createActions()
+{
+#define MAKE_ACTION(_action, _styleid, _slot) \
+  _action = new QAction(QIcon(RC_IMAGE_##_styleid), TR(T_MENUTEXT_##_styleid), this); \
+  _action->setToolTip(TR(T_TOOLTIP_##_styleid)); \
+  connect(_action, SIGNAL(triggered()), _slot);
+
+  MAKE_ACTION(copyAliasAct_,  COPY,  SLOT(copyAlias()))
+  MAKE_ACTION(deleteAliasAct_,DELETE,SLOT(deleteAlias()))
+
+#undef MAKE_ACTION
+
+  // Create menus
+  contextMenu_ = new QMenu(TR(T_TITLE_TOKENVIEW), this);
+  UiStyle::globalInstance()->setContextMenuStyle(contextMenu_, true); // persistent = true
 }
 
 // - Properties -
@@ -144,13 +167,58 @@ QModelIndex
 TokenView::currentIndex() const
 { return tableView_->currentIndex(); }
 
-const Token&
-TokenView::token() const
-{ return token_; }
+QString
+TokenView::currentAliasText() const
+{
+  QModelIndex index = currentIndex();
+  if (!index.isValid())
+    return QString();
 
-Token&
-TokenView::token()
-{ return token_; }
+  int row = index.row();
+  index = index.sibling(row, HD_Text);
+  if (!index.isValid())
+    return QString();
+
+  return index.data().toString();
+}
+
+qint64
+TokenView::currentAliasId() const
+{
+  QModelIndex index = currentIndex();
+  if (!index.isValid())
+    return 0;
+
+  int row = index.row();
+  index = index.sibling(row, HD_Id);
+  if (!index.isValid())
+    return 0;
+  bool ok;
+  qint64 ret = index.data().toLongLong(&ok);
+  if (!ok)
+    return 0;
+
+  return ret;
+}
+
+qint64
+TokenView::currentAliasUserId() const
+{
+  QModelIndex index = currentIndex();
+  if (!index.isValid())
+    return 0;
+
+  int row = index.row();
+  index = index.sibling(row, HD_UserId);
+  if (!index.isValid())
+    return 0;
+  bool ok;
+  qint64 ret = index.data().toLongLong(&ok);
+  if (!ok)
+    return 0;
+
+  return ret;
+}
 
 void
 TokenView::setToken(const Token &token)
@@ -193,6 +261,8 @@ TokenView::addAlias(const Alias &a)
   sourceModel_->setData(sourceModel_->index(0, HD_Language), FORMAT_LANGUAGE(a.language()));
   sourceModel_->setData(sourceModel_->index(0, HD_Status), FORMAT_STATUS(a.status()));
   sourceModel_->setData(sourceModel_->index(0, HD_Flags), FORMAT_FLAGS(a.flags()));
+  sourceModel_->setData(sourceModel_->index(0, HD_Id), a.id());
+  sourceModel_->setData(sourceModel_->index(0, HD_UserId), a.userId());
   sourceModel_->setData(sourceModel_->index(0, HD_BlessedCount), a.blessedCount());
   sourceModel_->setData(sourceModel_->index(0, HD_CursedCount), a.cursedCount());
   sourceModel_->setData(sourceModel_->index(0, HD_BlockedCount), a.blockedCount());
@@ -367,6 +437,59 @@ TokenView::aliasTypeToString(int type)
   case Alias::AT_Tag:   return tr("tag");
   default: return TR(T_NA);
   }
+}
+
+// - Context menu -
+
+void
+TokenView::deleteAlias()
+{
+  qint64 id = currentAliasId();
+  if (id) {
+    qint64 userId = server_->user().id();
+    if (!userId || userId != currentAliasUserId()) {
+      tr("cannot delete other's alias");
+      return;
+    }
+    tableView_->removeCurrentRow();
+    emit aliasDeletedWithId(id);
+  }
+}
+
+void
+TokenView::copyAlias()
+{
+  QString text = currentAliasText();
+  if (text.isEmpty())
+    return;
+
+  QClipboard *clipboard = QApplication::clipboard();
+  if (clipboard) {
+    clipboard->setText(text);
+    log(TR(T_SUCCEED_COPIED) + ": " + text);
+  } else
+    warn(TR(T_ERROR_CLIPBOARD_UNAVAILABLE));
+}
+
+void
+TokenView::contextMenuEvent(QContextMenuEvent *event)
+{
+  if (!event)
+    return;
+  if (!currentIndex().isValid())
+    return;
+
+  contextMenu_->clear();
+
+  contextMenu_->addAction(copyAliasAct_);
+
+  qint64 userId = server_->user().id();
+  if (userId && userId == currentAliasUserId())
+    contextMenu_->addAction(deleteAliasAct_);
+
+  // Pop up
+  contextMenu_->popup(event->globalPos());
+  event->accept();
 }
 
 // EOF

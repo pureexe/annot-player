@@ -153,6 +153,99 @@ DataServer::updateAnnotationTextWithId(const QString &text, qint64 id)
   bool ret = false;
   if (server_->isConnected() && server_->isAuthorized())
     ret = server_->updateAnnotationTextWithId(text, id);
+  if (ret)
+    log(tr("annotation saved") + ": " + text);
+  else
+    warn(tr("failed to update annotation text") + ": " + text);
+  DOUT("exit: ret =" << ret);
+  return ret;
+}
+
+// - Deletion -
+
+bool
+DataServer::deleteAnnotation(const Annotation &a)
+{
+  DOUT("enter: text =" << a.text());
+  if (!a.hasId()) {
+    warn("cannot delete offline annotation");
+    DOUT("exit: failed");
+    return false;
+  }
+  if (!a.hasUserId() || a.userId() != server_->user().id()) {
+    warn("cannot delete other's annotation");
+    DOUT("exit: failed");
+    return false;
+  }
+
+  bool ret = deleteAnnotationWithId(a.id());
+  DOUT("exit: ret =" << ret);
+  return ret;
+}
+
+bool
+DataServer::deleteAnnotationWithId(qint64 id)
+{
+  DOUT("enter: id =" << id);
+  if (!id) {
+    DOUT("exit: failed, invalid id 0");
+    return false;
+  }
+
+  bool ret = true;
+  if (server_->isConnected() && server_->isAuthorized())
+    ret = server_->deleteAnnotationWithId(id);
+  if (cache_->isValid())
+    cache_->deleteAnnotationWithId(id);
+
+  if (ret)
+    log(tr("annotation deleted"));
+  else
+    warn(tr("failed to delete annotation"));
+  DOUT("exit: ret =" << ret);
+  return ret;
+}
+
+bool
+DataServer::deleteAlias(const Alias &a)
+{
+  DOUT("enter: text =" << a.text());
+  if (!a.hasId()) {
+    warn("cannot delete offline alias");
+    DOUT("exit: failed");
+    return false;
+  }
+  if (!a.hasUserId() || a.userId() != server_->user().id()) {
+    warn("cannot delete other's alias");
+    DOUT("exit: failed");
+    return false;
+  }
+
+  bool ret = deleteAliasWithId(a.id());
+  DOUT("exit: ret =" << ret);
+  return ret;
+}
+
+bool
+DataServer::deleteAliasWithId(qint64 id)
+{
+  DOUT("enter: id =" << id);
+  if (!id) {
+    DOUT("exit: failed, invalid id 0");
+    return false;
+  }
+
+  bool ret = true;
+  if (server_->isConnected() && server_->isAuthorized())
+    ret = server_->deleteAliasWithId(id);
+
+  if (cache_->isValid())
+    cache_->deleteAliasWithId(id);
+
+  if (ret)
+    log(tr("alias deleted"));
+  else
+    warn(tr("failed to delete alias"));
   DOUT("exit: ret =" << ret);
   return ret;
 }

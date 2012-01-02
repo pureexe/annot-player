@@ -38,6 +38,7 @@ enum { ALPHA = 0 };
 #define G_POSITION_STEP    100
 
 #define G_OPENPROCESS_TIMEOUT 5000 // 5 sec
+#define G_WINDOWONTOP_TIMEOUT 4000 // 4 sec
 
 #define G_STARTPAGE_URL    G_HOMEPAGE
 #define G_TOKENVIEW_URL    G_HOMEPAGE

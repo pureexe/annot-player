@@ -13,6 +13,8 @@ QT_BEGIN_NAMESPACE
 class QAbstractItemModel;
 class QLabel;
 class QStandardItemModel;
+class QAction;
+class QMenu;
 QT_END_NAMESPACE
 
 class AddAliasDialog;
@@ -43,6 +45,8 @@ protected:
     HD_Language,
     HD_Status,
     HD_Flags,
+    HD_Id,
+    HD_UserId,
     HD_BlessedCount,
     HD_CursedCount,
     HD_BlockedCount,
@@ -57,13 +61,14 @@ public:
 
 signals:
   void aliasSubmitted(const Alias &alias);
+  void aliasDeletedWithId(qint64 id);
   void tokenBlessedWithId(qint64 tid);
   void tokenCursedWithId(qint64 tid);
 
   // - Properties -
 public:
-  const Token &token() const;
-  Token &token();
+  const Token &token() const { return token_; }
+  Token &token() { return token_; }
   bool hasToken() const;
 
 protected:
@@ -95,6 +100,8 @@ protected slots:
   virtual void dragLeaveEvent(QDragLeaveEvent *event); ///< \override
   virtual void dropEvent(QDropEvent *event); ///< \override
 
+  virtual void contextMenuEvent(QContextMenuEvent *event); ///< \override
+
 signals:
   void dragEnterEventReceived(QDragEnterEvent *event);
   void dragMoveEventReceived(QDragMoveEvent *event);
@@ -108,9 +115,21 @@ protected:
   static QStringList aliasFlagsToStringList(int flags);
   static QString aliasStatusToString(int flags);
 
+  // - Context menu -
+protected slots:
+  void deleteAlias();
+  void copyAlias();
+
+  qint64 currentAliasId() const;
+  qint64 currentAliasUserId() const;
+  QString currentAliasText() const;
+
   // - Implementations -
 protected:
   static void setAliasHeaderData(QAbstractItemModel *model);
+
+private:
+  void createActions();
 
 private:
   ServerAgent *server_;
@@ -123,6 +142,14 @@ private:
          *blessedCountLabel_,
          *cursedCountLabel_,
          *visitedCountLabel_;
+
+  QMenu *contextMenu_;
+  QAction *copyAliasAct_,
+          *deleteAliasAct_;
+          //*editAliasAct_,
+          //*blockAliasAct_,
+          //*blessAliasAct_,
+          //*curseAliasAct_;
 
   AddAliasDialog *aliasDialog_;
 };

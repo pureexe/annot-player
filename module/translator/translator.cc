@@ -7,7 +7,7 @@
 #include <QtNetwork>
 #include <QtXml>
 
-#define DEBUG "translator"
+//#define DEBUG "translator"
 #include "module/debug/debug.h"
 
 // - Constructions -

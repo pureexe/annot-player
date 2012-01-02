@@ -64,32 +64,33 @@ AnnotationEditor::AnnotationEditor(QWidget *parent)
 void
 AnnotationEditor::createRibons()
 {
-#define MAKE_RIBON_BUTTON(_button, _tr, _slot) \
+#define MAKE_RIBON_BUTTON(_button, _text, _slot) \
   _button = new Core::Gui::ToolButton; { \
     _button->setStyleSheet(SS_TOOLBUTTON_TEXT); \
     _button->setToolButtonStyle(Qt::ToolButtonTextOnly); \
-    _button->setText(QString("- %1 -").arg(_tr)); \
+    _button->setText(QString("- %1 -").arg(_text)); \
+    _button->setToolTip(_text); \
     _button->setCheckable(true); \
     connect(_button, SIGNAL(clicked()), _slot); \
   }
 
 #define MAKE_UNCHECKABLE_BUTTON(_button, _title, _tip, _slot) \
-    _button = new Core::Gui::ToolButton; { \
-      _button->setStyleSheet(SS_TOOLBUTTON_TEXT); \
-      _button->setToolButtonStyle(Qt::ToolButtonTextOnly); \
-      _button->setText(_title); \
-      _button->setToolTip(_tip); \
-      connect(_button, SIGNAL(clicked()), _slot); \
-    }
+  _button = new Core::Gui::ToolButton; { \
+    _button->setStyleSheet(SS_TOOLBUTTON_TEXT); \
+    _button->setToolButtonStyle(Qt::ToolButtonTextOnly); \
+    _button->setText(_title); \
+    _button->setToolTip(_tip); \
+    connect(_button, SIGNAL(clicked()), _slot); \
+  }
 #define MAKE_CHECKABLE_BUTTON(_button, _title, _tip, _slot) \
-    _button = new Core::Gui::ToolButton; { \
-      _button->setStyleSheet(SS_TOOLBUTTON_TEXT); \
-      _button->setToolButtonStyle(Qt::ToolButtonTextOnly); \
-      _button->setText(_title); \
-      _button->setToolTip(_tip); \
-      _button->setCheckable(true); \
-      connect(_button, SIGNAL(clicked(bool)), _slot); \
-    }
+  _button = new Core::Gui::ToolButton; { \
+    _button->setStyleSheet(SS_TOOLBUTTON_TEXT); \
+    _button->setToolButtonStyle(Qt::ToolButtonTextOnly); \
+    _button->setText(_title); \
+    _button->setToolTip(_tip); \
+    _button->setCheckable(true); \
+    connect(_button, SIGNAL(clicked(bool)), _slot); \
+  }
 
   // Code ribon
 

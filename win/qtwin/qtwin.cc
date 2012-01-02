@@ -369,6 +369,42 @@ bool
 QtWin::isValidWindow(HWND hwnd)
 { return ::IsWindow(hwnd); }
 
+bool
+QtWin::setTopWindow(HWND hwnd)
+{ return ::BringWindowToTop(hwnd); }
+
+HWND
+QtWin::getTopWindow(HWND hwnd)
+{ return ::GetTopWindow(hwnd); }
+
+HWND
+QtWin::getPreviousWindow(HWND hwnd)
+{ return ::GetNextWindow(hwnd, GW_HWNDPREV); }
+
+HWND
+QtWin::getNextWindow(HWND hwnd)
+{ return ::GetNextWindow(hwnd, GW_HWNDNEXT); }
+
+bool
+QtWin::isWindowAboveWindow(WId parent, WId target)
+{
+  WId next = parent;
+  while (next = ::GetNextWindow(next, GW_HWNDNEXT))
+    if (next == target)
+      return true;
+  return false;
+}
+
+bool
+QtWin::isWindowBelowWindow(WId parent, WId target)
+{
+  WId next = parent;
+  while (next = ::GetNextWindow(next, GW_HWNDPREV))
+    if (next == target)
+      return true;
+  return false;
+}
+
 DWORD
 QtWin::getWindowThreadId(HWND hwnd)
 { return ::GetWindowThreadProcessId(hwnd, 0); }
@@ -510,7 +546,7 @@ QtWin::createLink(const QString &lnkPath, const QString &targetPath, const QStri
 
 // Requiring Ole32.dll.
 QString
-QtWin::resolveLink(const QString &lnkPath, WId winId)
+QtWin::resolveLink(const QString &lnkPath, HWND hwnd)
 {
   QString ret;
   if (lnkPath.isEmpty())
@@ -538,8 +574,6 @@ QtWin::resolveLink(const QString &lnkPath, WId winId)
   LPCWSTR lpszLinkFile = wszLnkPath.c_str();
   //LPWSTR lpszPath = wszRet;
   //int iPathBufferSize = sizeof(wszRet) / sizeof(*wszRet);
-
-  HWND hwnd = (HWND)winId;
 
   HRESULT hres;
   IShellLink *psl;

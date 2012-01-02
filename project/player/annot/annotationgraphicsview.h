@@ -13,7 +13,6 @@
 QT_FORWARD_DECLARE_CLASS(QTimer)
 
 class SignalHub;
-class ServerAgent;
 class Player;
 class VideoView;
 class AnnotationGraphicsItem;
@@ -38,21 +37,19 @@ public:
 
   // - Constructions -
 public:
-  explicit AnnotationGraphicsView(
-    SignalHub *hub, ServerAgent *server, Player *player,
-    VideoView *videoView, QWidget *parent = 0);
-  ~AnnotationGraphicsView();
+  AnnotationGraphicsView(SignalHub *hub, Player *player, VideoView *videoView, QWidget *parent = 0);
+  //~AnnotationGraphicsView();
 
   // - Properties -
 public:
-  qint64 userId() const;
-  void setUserId(qint64 uid);
+  qint64 userId() const { return userId_; }
+  void setUserId(qint64 uid) { userId_ = uid; }
 
-  AnnotationPosition subtitlePosition() const;
-  void setSubtitlePosition(AnnotationPosition ap);
+  AnnotationPosition subtitlePosition() const { return subtitlePosition_; }
+  void setSubtitlePosition(AnnotationPosition ap) { subtitlePosition_ = ap; }
 
-  void setSubtitlePrefix(const QString &prefix);
-  const QString &subtitlePrefix() const;
+  void setSubtitlePrefix(const QString &prefix) { subtitlePrefix_ = prefix; }
+  const QString &subtitlePrefix() const { return subtitlePrefix_; }
 
 signals:
   void fullScreenModeChanged(bool);
@@ -79,8 +76,15 @@ public slots:
   void setTrackedWindow(WId winId);
 
 signals:
-  void posChanged(); ///< current pos changed by show at pos, not the pos of the widget
-  void annotationTextUpdated(const QString &text, qint64 id);
+  void annotationPosChanged(); ///< current pos changed by show at pos, not the pos of the widget
+
+  void subtitleAdded(const QString &richText);
+  void annotationAdded(const QString &richText);
+
+  void posChanged(); ///< manually moved
+  void sizeChanged(); ///< manually resized
+  void annotationTextUpdatedWithId(const QString &text, qint64 id);
+  void annotationDeletedWithId(qint64 id);
 
 public slots:
   void invalidateAnnotationPos(); ///< emit posChanged
@@ -113,6 +117,7 @@ protected:
   void moveToGlobalPos(const QPoint &globalPos);
 
   AnnotationGraphicsItem *itemWithId(qint64 aid) const;
+  Annotation *annotationWithId(qint64 aid) const;
 
 //public:
 //  qint64 playTime() const;
@@ -121,7 +126,7 @@ protected:
   ///  Generate list of annotations in the view (slow).
   AnnotationList annotations() const;
 
-  AnnotationList annotationsAtPos(qint64 pos) const; ///< slow
+  const AnnotationList &annotationsAtPos(qint64 pos) const; ///< slow
 
 signals:
   void annotationAdded(const Annotation &annot);
@@ -134,6 +139,7 @@ signals:
   void paused();
   void resumed();
   void playbackEnabledChanged(bool enabled);
+  void visibleChanged(bool visible);
 
   // - Properties -
 public:
@@ -145,12 +151,15 @@ public:
   int itemsCount(int sec) const;
   int itemsCount(int from, int to) const; ///< Count of items within [from, to] in seconds
 
-  bool isActive() const;
-  bool isPlaybackEnabled() const;
+  bool isActive() const { return active_; }
+  bool isPlaybackEnabled() const {  return playbackEnabled_; }
+
 public slots:
   void setActive(bool active); // start polling when active
   void setPlaybackEnabled(bool enabled);
-  void togglePlaybackEnabled();
+  void togglePlaybackEnabled() { setPlaybackEnabled(!playbackEnabled_); }
+  void toggleVisible() { setVisible(!isVisible()); }
+
 
   // Video view tracker
   void invalidateGeometry();
@@ -184,10 +193,13 @@ public slots:
   // TODO
   //void addAnnotations(const Core::AnnotationList &l);
 
+  ///  Emit deletion signal if deleteAnnot is true
+  void removeAnnotationWithId(qint64 id, bool deleteAnnot = false);
   void removeAnnotations(); // delete annotation without reading ones
 
 protected slots:
   void updateAnnotationText(const QString &text);
+  void updateAnnotationTextWithId(const QString &text, qint64 aid);
 
 public:
   bool isItemFiltered(const AnnotationGraphicsItem *item) const;
@@ -197,22 +209,22 @@ private:
   VideoView *videoView_;
   QWidget *fullScreenView_;
   WId trackedWindow_;
+  AnnotationEditor *editor_;
   SignalHub *hub_;
-  ServerAgent *server_;
   Player *player_;
   AnnotationFilter *filter_;
   bool active_;
   bool paused_;
   bool fullScreen_;
 
-  QString subtilePrefix_;
+  QString subtitlePrefix_;
 
   QTimer *trackingTimer_;
 
-  AnnotationEditor *editor_;
-
   // Though not quint64, the time is not supposed to be negative.
-  QHash<qint64, QList<AnnotationGraphicsItem*>*> annots_; // indexed by secs for MediaMode or hash for SignalMode
+  //QHash<qint64, QList<AnnotationGraphicsItem*>*> annots_; // indexed by secs for MediaMode or hash for SignalMode
+  typedef QHash<qint64, AnnotationList> AnnotationHash;
+  AnnotationHash hash_; // indexed by secs for MediaMode or hash for SignalMode
   qint64 playTime_; // in sec
 
   qint64 userId_;

@@ -95,7 +95,7 @@ namespace { // anonymous
 
 namespace { // anonymous: vlc handle
 
-  class mp_handles_ {
+  class mp_handle_ {
     typedef QList<libvlc_media_t*> MediaList;
 
     libvlc_instance_t *instance_;     // library handle
@@ -117,13 +117,32 @@ namespace { // anonymous: vlc handle
     bool valid() const { return instance_ && player_; }
 
   public:
-    mp_handles_();
-    ~mp_handles_();
+    mp_handle_();
+    ~mp_handle_();
+
+    void reset();
   };
 
-  mp_handles_::mp_handles_()
-    : media_(0)
+  mp_handle_::mp_handle_()
+    : instance_(0), player_(0), media_(0)
   {
+    //reset();
+  }
+
+  mp_handle_::~mp_handle_()
+  {
+    // The player would be automatically released when the instance is released
+    // Otherwise there will be a double-free segmentation fault.
+    if (instance_)
+      ::libvlc_release(instance_);
+  }
+
+  void
+  mp_handle_::reset()
+  {
+    if (instance_)
+      ::libvlc_release(instance_);
+
     const char *vlc_argv[] = { VLC_ARGS };
     int vlc_argc = sizeof(vlc_argv)/sizeof(*vlc_argv);
     instance_ = ::libvlc_new(vlc_argc, vlc_argv);
@@ -132,17 +151,11 @@ namespace { // anonymous: vlc handle
     player_ = ::libvlc_media_player_new(instance_);
     Q_ASSERT(player_);
 
+    media_ = 0;
+
     //list_player_ = ::libvlc_media_list_player_new(instance_);
     //Q_ASSERT(list_player_);
     //::libvlc_media_list_player_set_media_player(list_player_, player_);
-  }
-
-  mp_handles_::~mp_handles_()
-  {
-    // The player would be automatically released when the instance is released
-    // Otherwise there will be a double-free segmentation fault.
-    if (instance_)
-      ::libvlc_release(instance_);
   }
 
 } // anonymous namespace

@@ -29,6 +29,11 @@ Tray::createActions()
   _action = new QAction(QIcon(RC_IMAGE_##_styleid), TR(T_MENUTEXT_##_styleid), this); \
   _action->setStatusTip(TR(T_STATUSTIP_##_styleid)); \
   connect(_action, SIGNAL(triggered()), _receiver, _slot);
+#define MAKE_TOGGLE(_action, _styleid, _receiver, _slot) \
+  _action = new QAction(QIcon(RC_IMAGE_##_styleid), TR(T_MENUTEXT_##_styleid), this); \
+  _action->setToolTip(TR(T_TOOLTIP_##_styleid)); \
+  _action->setCheckable(true); \
+  connect(_action, SIGNAL(triggered(bool)), _receiver, _slot);
 
   QAction *MAKE_ACTION(openAct,         OPENFILE,       w_,     SLOT(open()))
   QAction *MAKE_ACTION(openFileAct,     OPENFILE,       w_,     SLOT(openFile()))
@@ -40,10 +45,13 @@ Tray::createActions()
   MAKE_ACTION(minimizeAct_,     MINIMIZE,       w_,     SLOT(showMinimized()))
   MAKE_ACTION(restoreAct_,      RESTORE,        w_,      SLOT(showNormal()))
 
+  MAKE_TOGGLE(toggleWindowOnTopAct_, WINDOWSTAYSONTOP, w_, SLOT(setWindowOnTop(bool)))
+
   openAct->setShortcuts(QKeySequence::Open);
   helpAct->setShortcuts(QKeySequence::HelpContents);
   quitAct->setShortcuts(QKeySequence::Quit);
 #undef MAKE_ACTION
+#undef MAKE_TOGGLE
 
   // Menu
   QMenu *menu = new QMenu(w_); {
@@ -57,6 +65,7 @@ Tray::createActions()
     menu->addSeparator();
     menu->addAction(aboutAct);
     menu->addAction(helpAct);
+    menu->addAction(toggleWindowOnTopAct_);
     menu->addAction(minimizeAct_);
     menu->addAction(restoreAct_);
     menu->addAction(quitAct);
@@ -90,6 +99,29 @@ Tray::invalidateContextMenu()
 {
   minimizeAct_->setVisible(!w_->isMinimized());
   restoreAct_->setVisible(!w_->isVisible() || w_->isMinimized());
+
+  toggleWindowOnTopAct_->setChecked(w_->isWindowOnTop());
 }
 
 // EOF
+
+/*
+void
+Tray::setWindowStaysOnTop(bool t)
+{
+  if (t != w_->isWindowStaysOnTop()) {
+    const char *slot = t ? SLOT(setWindowStaysOnTopToTrue())
+                         : SLOT(setWindowStaysOnTopToFalse());
+    QTimer::singleShot(0, this, slot);
+  }
+}
+
+void
+Tray::setWindowStaysOnTopToTrue()
+{ w_->setWindowStaysOnTop(true); }
+
+void
+Tray::setWindowStaysOnTopToFalse()
+{ w_->setWindowStaysOnTop(false); }
+
+*/

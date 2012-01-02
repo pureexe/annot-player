@@ -81,16 +81,16 @@ public:
   AnnotationList selectAnnotationsWithTokenDigest(const QString &digest, qint32 digestType) const;
   AnnotationList selectAnnotations() const;
 
-  void deleteUserWithId(qint64 id);
+  bool deleteUserWithId(qint64 id);
   void deleteUsers();
-  void deleteTokenWithId(qint64 id);
+  bool deleteTokenWithId(qint64 id);
   void deleteTokenWithDigest(const QString &digest, qint32 digestType);
   void deleteTokens();
-  void deleteAliasWithId(qint64 id);
+  bool deleteAliasWithId(qint64 id);
   void deleteAliasesWithTokenId(qint64 tid);
   void deleteAliasesWithTokenDigest(const QString &digest, qint32 digestType);
   void deleteAliases();
-  void deleteAnnotationWithId(qint64 id);
+  bool deleteAnnotationWithId(qint64 id);
   void deleteAnnotationsWithTokenId(qint64 tid);
   void deleteAnnotationsWithTokenDigest(const QString &digest, qint32 digestType);
   void deleteAnnotations();

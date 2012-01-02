@@ -38,11 +38,11 @@ public:
   bool isTranslateEnabled() const; ///< If use translation in game mode
   void setTranslateEnabled(bool enabled);
 
-  bool isSubtitleStaysOnTop() const;
-  void setSubtitleStaysOnTop(bool t);
+  bool isSubtitleOnTop() const;
+  void setSubtitleOnTop(bool t);
 
-  bool isEmbeddedPlayerStaysOnTop() const;
-  void setEmbeddedPlayerStaysOnTop(bool t);
+  bool isEmbeddedPlayerOnTop() const;
+  void setEmbeddedPlayerOnTop(bool t);
 
   bool isMenuBarVisible() const;
   void setMenuBarVisible(bool t);

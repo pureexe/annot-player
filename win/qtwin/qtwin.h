@@ -89,6 +89,15 @@ namespace QtWin {
 
   bool isValidWindow(WId hwnd);
 
+  bool setTopWindow(WId hwnd);
+  WId getTopWindow(WId hwnd = 0); ///< return top window on the desktop if hwnd is null
+
+  WId getPreviousWindow(WId hwnd); ///< below accordint to Z-order
+  WId getNextWindow(WId hwnd);     ///< above accordint to Z-order
+
+  bool isWindowAboveWindow(WId parent, WId below);
+  bool isWindowBelowWindow(WId parent, WId above);
+
   // - Mouse and keyboard -
   void sendMouseClick(const QPoint& globalPos, Qt::MouseButton button);
 

@@ -54,7 +54,7 @@ namespace { // anonymous
 // - PlayerImpl -
 
 class PlayerImpl
-  : public mp_handles_,
+  : public mp_handle_,
     public mp_states_,
     public mp_trackers_,
     public mp_intl_
@@ -378,9 +378,7 @@ Player::Player(QObject *parent)
   : Base(parent), impl_(0)
 {
   DOUT("enter");
-
-  reset();
-
+  //reset();
   DOUT("exit");
 }
 
@@ -404,6 +402,7 @@ Player::reset()
     delete impl_;
 
   impl_ = new Impl;
+  impl_->reset();
   Q_ASSERT(isValid());
 
   // Set event handlers.
@@ -524,17 +523,11 @@ Player::encode(const char *input) const
 // - Playing states -
 bool
 Player::isPlaying() const
-{
-  Q_ASSERT(isValid());
-  return ::libvlc_media_player_is_playing(impl_->player());
-}
+{ return isValid() && ::libvlc_media_player_is_playing(impl_->player()); }
 
 bool
 Player::isPaused() const
-{
-  Q_ASSERT(isValid());
-  return impl_->isPaused();
-}
+{ return isValid() && impl_->isPaused(); }
 
 bool
 Player::isStopped() const
@@ -543,7 +536,8 @@ Player::isStopped() const
 Player::Status
 Player::status() const
 {
-  return isPlaying() ? Playing :
+  return !isValid() ? Stopped :
+         isPlaying() ? Playing :
          isPaused() ? Paused :
          Stopped;
 }
@@ -637,8 +631,8 @@ Player::openMedia(const QString &path)
 
   ::libvlc_media_player_set_media(impl_->player(), impl_->media());
 
-  if (isMouseEventEnabled())
-    startVoutTimer();
+  //if (isMouseEventEnabled())
+  //  startVoutTimer();
 
   DOUT("exit: ret = true");
   return true;
@@ -670,8 +664,7 @@ Player::closeMedia()
 bool
 Player::hasMedia() const
 {
-  Q_ASSERT(isValid());
-  return impl_->media() &&
+  return isValid() && impl_->media() &&
          ::libvlc_media_player_get_media(impl_->player());
 }
 
@@ -1265,13 +1258,11 @@ Player::setMouseEventEnabled(bool enabled)
   Q_UNUSED(enabled);
   return;
 #else
-  if (enabled != impl_->isMouseEventEnabled()) {
-    impl_->setMouseEventEnabled(enabled);
-    if (enabled)
-      startVoutTimer();
-    else
-      stopVoutTimer();
-  }
+  impl_->setMouseEventEnabled(enabled);
+  //if (enabled)
+  //  startVoutTimer();
+  //else
+  //  stopVoutTimer();
 #endif // WITH_VLCCORE
 }
 

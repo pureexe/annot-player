@@ -16,6 +16,7 @@
 #include <QStringList>
 #include <QFileInfoList>
 
+QT_FORWARD_DECLARE_CLASS(QTimer)
 QT_FORWARD_DECLARE_CLASS(QUrl)
 QT_FORWARD_DECLARE_CLASS(QMimeData)
 
@@ -50,6 +51,7 @@ class EmbeddedPlayerUi;
 class PlayerUi;
 class MessageView;
 class SignalView;
+class BacklogView;
 class TokenView;
 class VideoView;
 
@@ -105,6 +107,8 @@ public:
   bool isPlaying() const;
   bool isEditing() const;
 
+  bool isWindowOnTop() const;
+
   bool hasVisiblePlayer() const;
   PlayerUi *visiblePlayer(); // One of three player Uis, or nullptr.
 
@@ -112,7 +116,7 @@ public:
   bool prefixLineHasFocus() const;
 
   bool isTranslateEnabled() const;
-  bool isSubtitleStaysOnTop() const;
+  bool isSubtitleOnTop() const;
 
   bool isAutoPlayNext() const;
 
@@ -120,7 +124,10 @@ public slots:
   void setTranslateEnabled(bool enabled);
   void translate(const QString &text);
 
-  void setSubtitleStaysOnTop(bool t);
+  void setWindowOnTop(bool t = true);
+  //void ensureWindowOnTop();
+
+  void setSubtitleOnTop(bool t);
   void setSubtitleColorToDefault();
   void setSubtitleColorToWhite();
   void setSubtitleColorToBlue();
@@ -207,8 +214,6 @@ public slots:
   void enableWindowTransparency();
   void disableWindowTransparency();
 
-  //void setWindowStaysOnTop(bool enabled = true); // TODO
-
   void showVideoViewIfAvailable();
 
 public slots:
@@ -219,6 +224,10 @@ public slots:
   void showLoginDialog();
   void hideLoginDialog();
   void setLoginDialogVisible(bool visible);
+
+  void setAnnotationEditorVisible(bool visible);
+  void setCloudViewVisible(bool visible);
+  void setBlacklistViewVisible(bool visible);
 
   void showSeekDialog();
   void hideSeekDialog();
@@ -240,6 +249,10 @@ public slots:
   void setWindowPickDialogVisible(bool visible);
 
   void setProcessPickDialogVisible(bool visible);
+
+  void setBacklogViewVisible(bool visible);
+protected slots:
+  BacklogView *backlogView();
 
   // - User -
 public slots:
@@ -274,9 +287,9 @@ public slots:
   void say(const QString &text, const QString &color = "blue");
 
   void submitText(const QString &text, bool async = true);
-  void showText(const QString &text);
+  void showText(const QString &text, bool isSigned = false);
 
-  void showTextAsSubtitle(const QString &text);
+  void showTextAsSubtitle(const QString &text, bool isSigned = false);
 
   void setToken(const QString &filePath, bool async = true);
   void invalidateToken();
@@ -292,8 +305,6 @@ public slots:
   void blessAnnotationWithId(qint64 tid, bool async = true);
   void curseAnnotationWithId(qint64 tid, bool async = true);
   void blockAnnotationWithId(qint64 tid, bool async = true);
-
-  void updateAnnotationTextWithId(const QString &text, qint64 id);
 
   // - Recent -
 protected slots:
@@ -427,6 +438,7 @@ protected:
 
   // - Members for initialization. -
 private:
+  void resetPlayer();
   void createComponents();
   void createActions();
   void createMenus();
@@ -439,6 +451,10 @@ private:
   QMutex playerMutex_;  // mutex for local player
   Tray *tray_;
   SignalHub *hub_;
+
+  QTimer *windowStaysOnTopTimer_;
+
+  //QTimer *windowStaysOnTopTimer_;
 
   QStringList recentFiles_;
   QFileInfoList browsedFiles_;
@@ -476,19 +492,20 @@ private:
   AnnotationEditor *annotationEditor_;
   AnnotationFilter *annotationFilter_;
 
-  AboutDialog *aboutDialog_;
   BlacklistView *blacklistView_;
+  CloudView *cloudView_;
+  CommentView *commentView_;
+  BacklogView *backlogView_;
+
+  AboutDialog *aboutDialog_;
+  DeviceDialog *deviceDialog_;
   HelpDialog *helpDialog_;
   LoginDialog *loginDialog_;
   LiveDialog *liveDialog_;
-  PickDialog *windowPickDialog_;
   PickDialog *processPickDialog_;
   SeekDialog *seekDialog_;
   SyncDialog *syncDialog_;
-  DeviceDialog *deviceDialog_;
-
-  CloudView *cloudView_;
-  CommentView *commentView_;
+  PickDialog *windowPickDialog_;
 
   QPoint dragPos_;
 
@@ -567,11 +584,11 @@ private:
           *toggleSyncModeAct_,
           *toggleSubtitleVisibleAct_,
           *toggleTranslateAct_,
-          *toggleSubtitleStaysOnTopAct_,
+          *toggleSubtitleOnTopAct_,
           *toggleEmbeddedPlayerOnTopAct_,
           *toggleAutoPlayNextAct_;
 
-  QAction *toggleWindowStaysOnTopAct_;
+  QAction *toggleWindowOnTopAct_;
 
   QAction *loginAct_,
           *logoutAct_,
@@ -592,7 +609,8 @@ private:
           *toggleSeekDialogVisibleAct_,
           *toggleSyncDialogVisibleAct_,
           //*toggleUserPanelVisibleAct_,
-          *toggleBlacklistViewVisibleAct_;
+          *toggleBlacklistViewVisibleAct_,
+          *toggleBacklogViewVisibleAct_;
 
   QAction *toggleUserAnonymousAct_;
 

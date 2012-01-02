@@ -16,6 +16,7 @@ Dialog::Dialog(QWidget *parent, Qt::WindowFlags f)
   : Base(parent, f ? f : WINDOW_FLAGS),
     draggable_(true), dragPos_(BAD_POS)
 { }
+
 bool
 Core::Gui::
 Dialog::draggable() const

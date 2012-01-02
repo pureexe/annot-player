@@ -115,6 +115,8 @@ TranslatorManager::translate(int tid) const
   case T_SAVE:          return tr("Save");
   case T_CANCEL:        return tr("Cancel");
   case T_ADD:           return tr("Add");
+  case T_DELETE:        return tr("Delete");
+  case T_BACKLOG:       return tr("Backlog");
   case T_REMOVE:        return tr("Remove");
   case T_ENABLE:        return tr("Enable");
   case T_CLEAR:         return tr("Clear");
@@ -217,7 +219,7 @@ TranslatorManager::translate(int tid) const
   case T_ERROR_NO_MEDIA:                return tr("no media");
 
   case T_SUCCEED_SNAPSHOT_SAVED:        return tr("snapshot saved on desktop");
-  case T_SUCCEED_ANNOTATION_COPIED:     return tr("comment copied to clipboard");
+  case T_SUCCEED_COPIED:                return tr("copied to clipboard");
 
   case T_WARNING_LONG_STRING_TRUNCATED:  return tr("long string got truncated");
   case T_MESSAGE_ENABLE_WINDOWSTAYSONTOP:       return tr("window always on top");
@@ -394,6 +396,9 @@ TranslatorManager::translate(int tid) const
   case T_MENUTEXT_EDITTHISANNOT:return tr("Edit annot");
   case T_TIP_EDITTHISANNOT:     return tr("Edit annotation");
 
+  case T_MENUTEXT_DELETETHISANNOT:return tr("Delete annot");
+  case T_TIP_DELETETHISANNOT:     return tr("Delete annotation");
+
   case T_MENUTEXT_BLOCKTHISANNOT:return tr("Block annot");
   case T_TIP_BLOCKTHISANNOT:    return tr("Block annotation");
 
@@ -420,6 +425,10 @@ TranslatorManager::translate(int tid) const
 
   case T_MENUTEXT_VIEWTHISUSER: return tr("Display user");
   case T_TIP_VIEWTHISUSER:      return tr("Display user");
+
+  case T_TITLE_SUBTITLEVIEW:    return tr("Subtitle history");
+  case T_MENUTEXT_SUBTITLEVIEW: return tr("Subtitle history");
+  case T_TIP_SUBTITLEVIEW:      return tr("Show subtitle history");
 
   case T_MENUTEXT_BLOCKTHISUSER:return tr("Block user");
   case T_TIP_BLOCKTHISUSER:     return tr("Block user");

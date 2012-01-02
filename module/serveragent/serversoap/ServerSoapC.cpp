@@ -17,7 +17,7 @@ compiling, linking, and/or using OpenSSL is allowed.
 
 namespace ServerSoap {
 
-SOAP_SOURCE_STAMP("@(#) ServerSoapC.cpp ver 2.8.5 2011-12-24 21:03:48 GMT")
+SOAP_SOURCE_STAMP("@(#) ServerSoapC.cpp ver 2.8.5 2012-01-02 00:39:32 GMT")
 
 
 #ifndef WITH_NOGLOBAL
@@ -252,6 +252,14 @@ SOAP_FMAC3 void * SOAP_FMAC4 soap_getelement(struct soap *soap, int *type)
 		return soap_in_tns__isClientUpdatedResponse(soap, NULL, NULL, "tns:isClientUpdatedResponse");
 	case SOAP_TYPE_ServerSoap_tns__isClientUpdated:
 		return soap_in_tns__isClientUpdated(soap, NULL, NULL, "tns:isClientUpdated");
+	case SOAP_TYPE_ServerSoap_tns__deleteMediaAnnotationWithIdResponse:
+		return soap_in_tns__deleteMediaAnnotationWithIdResponse(soap, NULL, NULL, "tns:deleteMediaAnnotationWithIdResponse");
+	case SOAP_TYPE_ServerSoap_tns__deleteMediaAnnotationWithId:
+		return soap_in_tns__deleteMediaAnnotationWithId(soap, NULL, NULL, "tns:deleteMediaAnnotationWithId");
+	case SOAP_TYPE_ServerSoap_tns__deleteMediaAliasWithIdResponse:
+		return soap_in_tns__deleteMediaAliasWithIdResponse(soap, NULL, NULL, "tns:deleteMediaAliasWithIdResponse");
+	case SOAP_TYPE_ServerSoap_tns__deleteMediaAliasWithId:
+		return soap_in_tns__deleteMediaAliasWithId(soap, NULL, NULL, "tns:deleteMediaAliasWithId");
 	case SOAP_TYPE_ServerSoap_tns__curseMediaTokenWithIdResponse:
 		return soap_in_tns__curseMediaTokenWithIdResponse(soap, NULL, NULL, "tns:curseMediaTokenWithIdResponse");
 	case SOAP_TYPE_ServerSoap_tns__curseMediaTokenWithId:
@@ -376,6 +384,14 @@ SOAP_FMAC3 void * SOAP_FMAC4 soap_getelement(struct soap *soap, int *type)
 		return soap_in_PointerTotns__isClientUpdatedResponse(soap, NULL, NULL, "tns:isClientUpdatedResponse");
 	case SOAP_TYPE_ServerSoap_PointerTotns__isClientUpdated:
 		return soap_in_PointerTotns__isClientUpdated(soap, NULL, NULL, "tns:isClientUpdated");
+	case SOAP_TYPE_ServerSoap_PointerTotns__deleteMediaAnnotationWithIdResponse:
+		return soap_in_PointerTotns__deleteMediaAnnotationWithIdResponse(soap, NULL, NULL, "tns:deleteMediaAnnotationWithIdResponse");
+	case SOAP_TYPE_ServerSoap_PointerTotns__deleteMediaAnnotationWithId:
+		return soap_in_PointerTotns__deleteMediaAnnotationWithId(soap, NULL, NULL, "tns:deleteMediaAnnotationWithId");
+	case SOAP_TYPE_ServerSoap_PointerTotns__deleteMediaAliasWithIdResponse:
+		return soap_in_PointerTotns__deleteMediaAliasWithIdResponse(soap, NULL, NULL, "tns:deleteMediaAliasWithIdResponse");
+	case SOAP_TYPE_ServerSoap_PointerTotns__deleteMediaAliasWithId:
+		return soap_in_PointerTotns__deleteMediaAliasWithId(soap, NULL, NULL, "tns:deleteMediaAliasWithId");
 	case SOAP_TYPE_ServerSoap_PointerTotns__curseMediaTokenWithIdResponse:
 		return soap_in_PointerTotns__curseMediaTokenWithIdResponse(soap, NULL, NULL, "tns:curseMediaTokenWithIdResponse");
 	case SOAP_TYPE_ServerSoap_PointerTotns__curseMediaTokenWithId:
@@ -595,6 +611,22 @@ SOAP_FMAC3 void * SOAP_FMAC4 soap_getelement(struct soap *soap, int *type)
 		if (!soap_match_tag(soap, t, "tns:isClientUpdated"))
 		{	*type = SOAP_TYPE_ServerSoap_tns__isClientUpdated;
 			return soap_in_tns__isClientUpdated(soap, NULL, NULL, NULL);
+		}
+		if (!soap_match_tag(soap, t, "tns:deleteMediaAnnotationWithIdResponse"))
+		{	*type = SOAP_TYPE_ServerSoap_tns__deleteMediaAnnotationWithIdResponse;
+			return soap_in_tns__deleteMediaAnnotationWithIdResponse(soap, NULL, NULL, NULL);
+		}
+		if (!soap_match_tag(soap, t, "tns:deleteMediaAnnotationWithId"))
+		{	*type = SOAP_TYPE_ServerSoap_tns__deleteMediaAnnotationWithId;
+			return soap_in_tns__deleteMediaAnnotationWithId(soap, NULL, NULL, NULL);
+		}
+		if (!soap_match_tag(soap, t, "tns:deleteMediaAliasWithIdResponse"))
+		{	*type = SOAP_TYPE_ServerSoap_tns__deleteMediaAliasWithIdResponse;
+			return soap_in_tns__deleteMediaAliasWithIdResponse(soap, NULL, NULL, NULL);
+		}
+		if (!soap_match_tag(soap, t, "tns:deleteMediaAliasWithId"))
+		{	*type = SOAP_TYPE_ServerSoap_tns__deleteMediaAliasWithId;
+			return soap_in_tns__deleteMediaAliasWithId(soap, NULL, NULL, NULL);
 		}
 		if (!soap_match_tag(soap, t, "tns:curseMediaTokenWithIdResponse"))
 		{	*type = SOAP_TYPE_ServerSoap_tns__curseMediaTokenWithIdResponse;
@@ -864,6 +896,14 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_putelement(struct soap *soap, const void *ptr, co
 		return ((tns__isClientUpdatedResponse *)ptr)->soap_out(soap, tag, id, "tns:isClientUpdatedResponse");
 	case SOAP_TYPE_ServerSoap_tns__isClientUpdated:
 		return ((tns__isClientUpdated *)ptr)->soap_out(soap, tag, id, "tns:isClientUpdated");
+	case SOAP_TYPE_ServerSoap_tns__deleteMediaAnnotationWithIdResponse:
+		return ((tns__deleteMediaAnnotationWithIdResponse *)ptr)->soap_out(soap, tag, id, "tns:deleteMediaAnnotationWithIdResponse");
+	case SOAP_TYPE_ServerSoap_tns__deleteMediaAnnotationWithId:
+		return ((tns__deleteMediaAnnotationWithId *)ptr)->soap_out(soap, tag, id, "tns:deleteMediaAnnotationWithId");
+	case SOAP_TYPE_ServerSoap_tns__deleteMediaAliasWithIdResponse:
+		return ((tns__deleteMediaAliasWithIdResponse *)ptr)->soap_out(soap, tag, id, "tns:deleteMediaAliasWithIdResponse");
+	case SOAP_TYPE_ServerSoap_tns__deleteMediaAliasWithId:
+		return ((tns__deleteMediaAliasWithId *)ptr)->soap_out(soap, tag, id, "tns:deleteMediaAliasWithId");
 	case SOAP_TYPE_ServerSoap_tns__curseMediaTokenWithIdResponse:
 		return ((tns__curseMediaTokenWithIdResponse *)ptr)->soap_out(soap, tag, id, "tns:curseMediaTokenWithIdResponse");
 	case SOAP_TYPE_ServerSoap_tns__curseMediaTokenWithId:
@@ -988,6 +1028,14 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_putelement(struct soap *soap, const void *ptr, co
 		return soap_out_PointerTotns__isClientUpdatedResponse(soap, tag, id, (tns__isClientUpdatedResponse *const*)ptr, "tns:isClientUpdatedResponse");
 	case SOAP_TYPE_ServerSoap_PointerTotns__isClientUpdated:
 		return soap_out_PointerTotns__isClientUpdated(soap, tag, id, (tns__isClientUpdated *const*)ptr, "tns:isClientUpdated");
+	case SOAP_TYPE_ServerSoap_PointerTotns__deleteMediaAnnotationWithIdResponse:
+		return soap_out_PointerTotns__deleteMediaAnnotationWithIdResponse(soap, tag, id, (tns__deleteMediaAnnotationWithIdResponse *const*)ptr, "tns:deleteMediaAnnotationWithIdResponse");
+	case SOAP_TYPE_ServerSoap_PointerTotns__deleteMediaAnnotationWithId:
+		return soap_out_PointerTotns__deleteMediaAnnotationWithId(soap, tag, id, (tns__deleteMediaAnnotationWithId *const*)ptr, "tns:deleteMediaAnnotationWithId");
+	case SOAP_TYPE_ServerSoap_PointerTotns__deleteMediaAliasWithIdResponse:
+		return soap_out_PointerTotns__deleteMediaAliasWithIdResponse(soap, tag, id, (tns__deleteMediaAliasWithIdResponse *const*)ptr, "tns:deleteMediaAliasWithIdResponse");
+	case SOAP_TYPE_ServerSoap_PointerTotns__deleteMediaAliasWithId:
+		return soap_out_PointerTotns__deleteMediaAliasWithId(soap, tag, id, (tns__deleteMediaAliasWithId *const*)ptr, "tns:deleteMediaAliasWithId");
 	case SOAP_TYPE_ServerSoap_PointerTotns__curseMediaTokenWithIdResponse:
 		return soap_out_PointerTotns__curseMediaTokenWithIdResponse(soap, tag, id, (tns__curseMediaTokenWithIdResponse *const*)ptr, "tns:curseMediaTokenWithIdResponse");
 	case SOAP_TYPE_ServerSoap_PointerTotns__curseMediaTokenWithId:
@@ -1170,6 +1218,18 @@ SOAP_FMAC3 void SOAP_FMAC4 soap_markelement(struct soap *soap, const void *ptr, 
 	case SOAP_TYPE_ServerSoap_tns__isClientUpdated:
 		((tns__isClientUpdated *)ptr)->soap_serialize(soap);
 		break;
+	case SOAP_TYPE_ServerSoap_tns__deleteMediaAnnotationWithIdResponse:
+		((tns__deleteMediaAnnotationWithIdResponse *)ptr)->soap_serialize(soap);
+		break;
+	case SOAP_TYPE_ServerSoap_tns__deleteMediaAnnotationWithId:
+		((tns__deleteMediaAnnotationWithId *)ptr)->soap_serialize(soap);
+		break;
+	case SOAP_TYPE_ServerSoap_tns__deleteMediaAliasWithIdResponse:
+		((tns__deleteMediaAliasWithIdResponse *)ptr)->soap_serialize(soap);
+		break;
+	case SOAP_TYPE_ServerSoap_tns__deleteMediaAliasWithId:
+		((tns__deleteMediaAliasWithId *)ptr)->soap_serialize(soap);
+		break;
 	case SOAP_TYPE_ServerSoap_tns__curseMediaTokenWithIdResponse:
 		((tns__curseMediaTokenWithIdResponse *)ptr)->soap_serialize(soap);
 		break;
@@ -1298,6 +1358,12 @@ SOAP_FMAC3 void SOAP_FMAC4 soap_markelement(struct soap *soap, const void *ptr, 
 		break;
 	case SOAP_TYPE_ServerSoap___tns__isClientUpdated:
 		soap_serialize___tns__isClientUpdated(soap, (const struct __tns__isClientUpdated *)ptr);
+		break;
+	case SOAP_TYPE_ServerSoap___tns__deleteMediaAnnotationWithId:
+		soap_serialize___tns__deleteMediaAnnotationWithId(soap, (const struct __tns__deleteMediaAnnotationWithId *)ptr);
+		break;
+	case SOAP_TYPE_ServerSoap___tns__deleteMediaAliasWithId:
+		soap_serialize___tns__deleteMediaAliasWithId(soap, (const struct __tns__deleteMediaAliasWithId *)ptr);
 		break;
 	case SOAP_TYPE_ServerSoap___tns__curseMediaTokenWithId:
 		soap_serialize___tns__curseMediaTokenWithId(soap, (const struct __tns__curseMediaTokenWithId *)ptr);
@@ -1443,6 +1509,18 @@ SOAP_FMAC3 void SOAP_FMAC4 soap_markelement(struct soap *soap, const void *ptr, 
 	case SOAP_TYPE_ServerSoap_PointerTotns__isClientUpdated:
 		soap_serialize_PointerTotns__isClientUpdated(soap, (tns__isClientUpdated *const*)ptr);
 		break;
+	case SOAP_TYPE_ServerSoap_PointerTotns__deleteMediaAnnotationWithIdResponse:
+		soap_serialize_PointerTotns__deleteMediaAnnotationWithIdResponse(soap, (tns__deleteMediaAnnotationWithIdResponse *const*)ptr);
+		break;
+	case SOAP_TYPE_ServerSoap_PointerTotns__deleteMediaAnnotationWithId:
+		soap_serialize_PointerTotns__deleteMediaAnnotationWithId(soap, (tns__deleteMediaAnnotationWithId *const*)ptr);
+		break;
+	case SOAP_TYPE_ServerSoap_PointerTotns__deleteMediaAliasWithIdResponse:
+		soap_serialize_PointerTotns__deleteMediaAliasWithIdResponse(soap, (tns__deleteMediaAliasWithIdResponse *const*)ptr);
+		break;
+	case SOAP_TYPE_ServerSoap_PointerTotns__deleteMediaAliasWithId:
+		soap_serialize_PointerTotns__deleteMediaAliasWithId(soap, (tns__deleteMediaAliasWithId *const*)ptr);
+		break;
 	case SOAP_TYPE_ServerSoap_PointerTotns__curseMediaTokenWithIdResponse:
 		soap_serialize_PointerTotns__curseMediaTokenWithIdResponse(soap, (tns__curseMediaTokenWithIdResponse *const*)ptr);
 		break;
@@ -1582,6 +1660,14 @@ SOAP_FMAC3 void * SOAP_FMAC4 ServerSoap_instantiate(struct soap *soap, int t, co
 		return (void*)soap_instantiate_tns__curseMediaTokenWithId(soap, -1, type, arrayType, n);
 	case SOAP_TYPE_ServerSoap_tns__curseMediaTokenWithIdResponse:
 		return (void*)soap_instantiate_tns__curseMediaTokenWithIdResponse(soap, -1, type, arrayType, n);
+	case SOAP_TYPE_ServerSoap_tns__deleteMediaAliasWithId:
+		return (void*)soap_instantiate_tns__deleteMediaAliasWithId(soap, -1, type, arrayType, n);
+	case SOAP_TYPE_ServerSoap_tns__deleteMediaAliasWithIdResponse:
+		return (void*)soap_instantiate_tns__deleteMediaAliasWithIdResponse(soap, -1, type, arrayType, n);
+	case SOAP_TYPE_ServerSoap_tns__deleteMediaAnnotationWithId:
+		return (void*)soap_instantiate_tns__deleteMediaAnnotationWithId(soap, -1, type, arrayType, n);
+	case SOAP_TYPE_ServerSoap_tns__deleteMediaAnnotationWithIdResponse:
+		return (void*)soap_instantiate_tns__deleteMediaAnnotationWithIdResponse(soap, -1, type, arrayType, n);
 	case SOAP_TYPE_ServerSoap_tns__isClientUpdated:
 		return (void*)soap_instantiate_tns__isClientUpdated(soap, -1, type, arrayType, n);
 	case SOAP_TYPE_ServerSoap_tns__isClientUpdatedResponse:
@@ -1678,6 +1764,10 @@ SOAP_FMAC3 void * SOAP_FMAC4 ServerSoap_instantiate(struct soap *soap, int t, co
 		return (void*)soap_instantiate___tns__curseMediaAnnotationWithId(soap, -1, type, arrayType, n);
 	case SOAP_TYPE_ServerSoap___tns__curseMediaTokenWithId:
 		return (void*)soap_instantiate___tns__curseMediaTokenWithId(soap, -1, type, arrayType, n);
+	case SOAP_TYPE_ServerSoap___tns__deleteMediaAliasWithId:
+		return (void*)soap_instantiate___tns__deleteMediaAliasWithId(soap, -1, type, arrayType, n);
+	case SOAP_TYPE_ServerSoap___tns__deleteMediaAnnotationWithId:
+		return (void*)soap_instantiate___tns__deleteMediaAnnotationWithId(soap, -1, type, arrayType, n);
 	case SOAP_TYPE_ServerSoap___tns__isClientUpdated:
 		return (void*)soap_instantiate___tns__isClientUpdated(soap, -1, type, arrayType, n);
 	case SOAP_TYPE_ServerSoap___tns__isConnected:
@@ -1896,6 +1986,30 @@ SOAP_FMAC3 int SOAP_FMAC4 ServerSoap_fdelete(struct soap_clist *p)
 			SOAP_DELETE((tns__curseMediaTokenWithIdResponse*)p->ptr);
 		else
 			SOAP_DELETE_ARRAY((tns__curseMediaTokenWithIdResponse*)p->ptr);
+		break;
+	case SOAP_TYPE_ServerSoap_tns__deleteMediaAliasWithId:
+		if (p->size < 0)
+			SOAP_DELETE((tns__deleteMediaAliasWithId*)p->ptr);
+		else
+			SOAP_DELETE_ARRAY((tns__deleteMediaAliasWithId*)p->ptr);
+		break;
+	case SOAP_TYPE_ServerSoap_tns__deleteMediaAliasWithIdResponse:
+		if (p->size < 0)
+			SOAP_DELETE((tns__deleteMediaAliasWithIdResponse*)p->ptr);
+		else
+			SOAP_DELETE_ARRAY((tns__deleteMediaAliasWithIdResponse*)p->ptr);
+		break;
+	case SOAP_TYPE_ServerSoap_tns__deleteMediaAnnotationWithId:
+		if (p->size < 0)
+			SOAP_DELETE((tns__deleteMediaAnnotationWithId*)p->ptr);
+		else
+			SOAP_DELETE_ARRAY((tns__deleteMediaAnnotationWithId*)p->ptr);
+		break;
+	case SOAP_TYPE_ServerSoap_tns__deleteMediaAnnotationWithIdResponse:
+		if (p->size < 0)
+			SOAP_DELETE((tns__deleteMediaAnnotationWithIdResponse*)p->ptr);
+		else
+			SOAP_DELETE_ARRAY((tns__deleteMediaAnnotationWithIdResponse*)p->ptr);
 		break;
 	case SOAP_TYPE_ServerSoap_tns__isClientUpdated:
 		if (p->size < 0)
@@ -2184,6 +2298,18 @@ SOAP_FMAC3 int SOAP_FMAC4 ServerSoap_fdelete(struct soap_clist *p)
 			SOAP_DELETE((struct __tns__curseMediaTokenWithId*)p->ptr);
 		else
 			SOAP_DELETE_ARRAY((struct __tns__curseMediaTokenWithId*)p->ptr);
+		break;
+	case SOAP_TYPE_ServerSoap___tns__deleteMediaAliasWithId:
+		if (p->size < 0)
+			SOAP_DELETE((struct __tns__deleteMediaAliasWithId*)p->ptr);
+		else
+			SOAP_DELETE_ARRAY((struct __tns__deleteMediaAliasWithId*)p->ptr);
+		break;
+	case SOAP_TYPE_ServerSoap___tns__deleteMediaAnnotationWithId:
+		if (p->size < 0)
+			SOAP_DELETE((struct __tns__deleteMediaAnnotationWithId*)p->ptr);
+		else
+			SOAP_DELETE_ARRAY((struct __tns__deleteMediaAnnotationWithId*)p->ptr);
 		break;
 	case SOAP_TYPE_ServerSoap___tns__isClientUpdated:
 		if (p->size < 0)
@@ -8208,6 +8334,594 @@ SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__isClientUpdated(struct soap *soap, int
 	(void)soap; (void)tt; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
 	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying tns__isClientUpdated %p -> %p\n", q, p));
 	*(tns__isClientUpdated*)p = *(tns__isClientUpdated*)q;
+}
+
+void tns__deleteMediaAnnotationWithIdResponse::soap_default(struct soap *soap)
+{
+	this->soap = soap;
+	soap_default_bool(soap, &this->tns__deleteMediaAnnotationWithIdResponse::return_);
+	/* transient soap skipped */
+}
+
+void tns__deleteMediaAnnotationWithIdResponse::soap_serialize(struct soap *soap) const
+{
+	(void)soap; /* appease -Wall -Werror */
+	/* transient soap skipped */
+}
+
+int tns__deleteMediaAnnotationWithIdResponse::soap_out(struct soap *soap, const char *tag, int id, const char *type) const
+{
+	return soap_out_tns__deleteMediaAnnotationWithIdResponse(soap, tag, id, this, type);
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__deleteMediaAnnotationWithIdResponse(struct soap *soap, const char *tag, int id, const tns__deleteMediaAnnotationWithIdResponse *a, const char *type)
+{
+	if (soap_element_begin_out(soap, tag, soap_embedded_id(soap, id, a, SOAP_TYPE_ServerSoap_tns__deleteMediaAnnotationWithIdResponse), type))
+		return soap->error;
+	if (soap_out_bool(soap, "return", -1, &(a->tns__deleteMediaAnnotationWithIdResponse::return_), ""))
+		return soap->error;
+	/* transient soap skipped */
+	return soap_element_end_out(soap, tag);
+}
+
+void *tns__deleteMediaAnnotationWithIdResponse::soap_in(struct soap *soap, const char *tag, const char *type)
+{	return soap_in_tns__deleteMediaAnnotationWithIdResponse(soap, tag, this, type);
+}
+
+SOAP_FMAC3 tns__deleteMediaAnnotationWithIdResponse * SOAP_FMAC4 soap_in_tns__deleteMediaAnnotationWithIdResponse(struct soap *soap, const char *tag, tns__deleteMediaAnnotationWithIdResponse *a, const char *type)
+{
+	(void)type; /* appease -Wall -Werror */
+	if (soap_element_begin_in(soap, tag, 0, NULL))
+		return NULL;
+	a = (tns__deleteMediaAnnotationWithIdResponse *)soap_class_id_enter(soap, soap->id, a, SOAP_TYPE_ServerSoap_tns__deleteMediaAnnotationWithIdResponse, sizeof(tns__deleteMediaAnnotationWithIdResponse), soap->type, soap->arrayType);
+	if (!a)
+		return NULL;
+	if (soap->alloced)
+	{	a->soap_default(soap);
+		if (soap->clist->type != SOAP_TYPE_ServerSoap_tns__deleteMediaAnnotationWithIdResponse)
+		{	soap_revert(soap);
+			*soap->id = '\0';
+			return (tns__deleteMediaAnnotationWithIdResponse *)a->soap_in(soap, tag, type);
+		}
+	}
+	size_t soap_flag_return_1 = 1;
+	if (soap->body && !*soap->href)
+	{
+		for (;;)
+		{	soap->error = SOAP_TAG_MISMATCH;
+			if (soap_flag_return_1 && soap->error == SOAP_TAG_MISMATCH)
+				if (soap_in_bool(soap, "return", &(a->tns__deleteMediaAnnotationWithIdResponse::return_), "xsd:boolean"))
+				{	soap_flag_return_1--;
+					continue;
+				}
+			/* transient soap skipped */
+			if (soap->error == SOAP_TAG_MISMATCH)
+				soap->error = soap_ignore_element(soap);
+			if (soap->error == SOAP_NO_TAG)
+				break;
+			if (soap->error)
+				return NULL;
+		}
+		if (soap_element_end_in(soap, tag))
+			return NULL;
+	}
+	else
+	{	a = (tns__deleteMediaAnnotationWithIdResponse *)soap_id_forward(soap, soap->href, (void*)a, 0, SOAP_TYPE_ServerSoap_tns__deleteMediaAnnotationWithIdResponse, 0, sizeof(tns__deleteMediaAnnotationWithIdResponse), 0, soap_copy_tns__deleteMediaAnnotationWithIdResponse);
+		if (soap->body && soap_element_end_in(soap, tag))
+			return NULL;
+	}
+	if ((soap->mode & SOAP_XML_STRICT) && (soap_flag_return_1 > 0))
+	{	soap->error = SOAP_OCCURS;
+		return NULL;
+	}
+	return a;
+}
+
+int tns__deleteMediaAnnotationWithIdResponse::soap_put(struct soap *soap, const char *tag, const  char *type) const
+{
+	register int id = soap_embed(soap, (void*)this, NULL, 0, tag, SOAP_TYPE_ServerSoap_tns__deleteMediaAnnotationWithIdResponse);
+	if (this->soap_out(soap, tag?tag:"tns:deleteMediaAnnotationWithIdResponse", id, type))
+		return soap->error;
+	return soap_putindependent(soap);
+}
+
+void *tns__deleteMediaAnnotationWithIdResponse::soap_get(struct soap *soap, const char *tag, const char *type)
+{
+	return soap_get_tns__deleteMediaAnnotationWithIdResponse(soap, this, tag, type);
+}
+
+SOAP_FMAC3 tns__deleteMediaAnnotationWithIdResponse * SOAP_FMAC4 soap_get_tns__deleteMediaAnnotationWithIdResponse(struct soap *soap, tns__deleteMediaAnnotationWithIdResponse *p, const char *tag, const char *type)
+{
+	if ((p = soap_in_tns__deleteMediaAnnotationWithIdResponse(soap, tag, p, type)))
+		if (soap_getindependent(soap))
+			return NULL;
+	return p;
+}
+
+SOAP_FMAC1 tns__deleteMediaAnnotationWithIdResponse * SOAP_FMAC2 soap_instantiate_tns__deleteMediaAnnotationWithIdResponse(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
+{
+	(void)type; (void)arrayType; /* appease -Wall -Werror */
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate_tns__deleteMediaAnnotationWithIdResponse(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
+	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap_tns__deleteMediaAnnotationWithIdResponse, n, ServerSoap_fdelete);
+	if (!cp)
+		return NULL;
+	if (n < 0)
+	{	cp->ptr = (void*)SOAP_NEW(tns__deleteMediaAnnotationWithIdResponse);
+		if (size)
+			*size = sizeof(tns__deleteMediaAnnotationWithIdResponse);
+		((tns__deleteMediaAnnotationWithIdResponse*)cp->ptr)->soap = soap;
+	}
+	else
+	{	cp->ptr = (void*)SOAP_NEW(tns__deleteMediaAnnotationWithIdResponse[n]);
+		if (!cp->ptr)
+		{	soap->error = SOAP_EOM;
+			return NULL;
+		}
+		if (size)
+			*size = n * sizeof(tns__deleteMediaAnnotationWithIdResponse);
+		for (int i = 0; i < n; i++)
+			((tns__deleteMediaAnnotationWithIdResponse*)cp->ptr)[i].soap = soap;
+	}
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
+	return (tns__deleteMediaAnnotationWithIdResponse*)cp->ptr;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__deleteMediaAnnotationWithIdResponse(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
+{
+	(void)soap; (void)tt; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying tns__deleteMediaAnnotationWithIdResponse %p -> %p\n", q, p));
+	*(tns__deleteMediaAnnotationWithIdResponse*)p = *(tns__deleteMediaAnnotationWithIdResponse*)q;
+}
+
+void tns__deleteMediaAnnotationWithId::soap_default(struct soap *soap)
+{
+	this->soap = soap;
+	soap_default_LONG64(soap, &this->tns__deleteMediaAnnotationWithId::arg0);
+	this->tns__deleteMediaAnnotationWithId::userName = NULL;
+	this->tns__deleteMediaAnnotationWithId::password = NULL;
+	/* transient soap skipped */
+}
+
+void tns__deleteMediaAnnotationWithId::soap_serialize(struct soap *soap) const
+{
+	(void)soap; /* appease -Wall -Werror */
+	soap_serialize_PointerTostd__string(soap, &this->tns__deleteMediaAnnotationWithId::userName);
+	soap_serialize_PointerTostd__string(soap, &this->tns__deleteMediaAnnotationWithId::password);
+	/* transient soap skipped */
+}
+
+int tns__deleteMediaAnnotationWithId::soap_out(struct soap *soap, const char *tag, int id, const char *type) const
+{
+	return soap_out_tns__deleteMediaAnnotationWithId(soap, tag, id, this, type);
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__deleteMediaAnnotationWithId(struct soap *soap, const char *tag, int id, const tns__deleteMediaAnnotationWithId *a, const char *type)
+{
+	if (soap_element_begin_out(soap, tag, soap_embedded_id(soap, id, a, SOAP_TYPE_ServerSoap_tns__deleteMediaAnnotationWithId), type))
+		return soap->error;
+	if (soap_out_LONG64(soap, "arg0", -1, &(a->tns__deleteMediaAnnotationWithId::arg0), ""))
+		return soap->error;
+	if (soap_out_PointerTostd__string(soap, "userName", -1, &(a->tns__deleteMediaAnnotationWithId::userName), ""))
+		return soap->error;
+	if (soap_out_PointerTostd__string(soap, "password", -1, &(a->tns__deleteMediaAnnotationWithId::password), ""))
+		return soap->error;
+	/* transient soap skipped */
+	return soap_element_end_out(soap, tag);
+}
+
+void *tns__deleteMediaAnnotationWithId::soap_in(struct soap *soap, const char *tag, const char *type)
+{	return soap_in_tns__deleteMediaAnnotationWithId(soap, tag, this, type);
+}
+
+SOAP_FMAC3 tns__deleteMediaAnnotationWithId * SOAP_FMAC4 soap_in_tns__deleteMediaAnnotationWithId(struct soap *soap, const char *tag, tns__deleteMediaAnnotationWithId *a, const char *type)
+{
+	(void)type; /* appease -Wall -Werror */
+	if (soap_element_begin_in(soap, tag, 0, NULL))
+		return NULL;
+	a = (tns__deleteMediaAnnotationWithId *)soap_class_id_enter(soap, soap->id, a, SOAP_TYPE_ServerSoap_tns__deleteMediaAnnotationWithId, sizeof(tns__deleteMediaAnnotationWithId), soap->type, soap->arrayType);
+	if (!a)
+		return NULL;
+	if (soap->alloced)
+	{	a->soap_default(soap);
+		if (soap->clist->type != SOAP_TYPE_ServerSoap_tns__deleteMediaAnnotationWithId)
+		{	soap_revert(soap);
+			*soap->id = '\0';
+			return (tns__deleteMediaAnnotationWithId *)a->soap_in(soap, tag, type);
+		}
+	}
+	size_t soap_flag_arg01 = 1;
+	size_t soap_flag_userName1 = 1;
+	size_t soap_flag_password1 = 1;
+	if (soap->body && !*soap->href)
+	{
+		for (;;)
+		{	soap->error = SOAP_TAG_MISMATCH;
+			if (soap_flag_arg01 && soap->error == SOAP_TAG_MISMATCH)
+				if (soap_in_LONG64(soap, "arg0", &(a->tns__deleteMediaAnnotationWithId::arg0), "xsd:long"))
+				{	soap_flag_arg01--;
+					continue;
+				}
+			if (soap_flag_userName1 && (soap->error == SOAP_TAG_MISMATCH || soap->error == SOAP_NO_TAG))
+				if (soap_in_PointerTostd__string(soap, "userName", &(a->tns__deleteMediaAnnotationWithId::userName), "xsd:string"))
+				{	soap_flag_userName1--;
+					continue;
+				}
+			if (soap_flag_password1 && (soap->error == SOAP_TAG_MISMATCH || soap->error == SOAP_NO_TAG))
+				if (soap_in_PointerTostd__string(soap, "password", &(a->tns__deleteMediaAnnotationWithId::password), "xsd:string"))
+				{	soap_flag_password1--;
+					continue;
+				}
+			/* transient soap skipped */
+			if (soap->error == SOAP_TAG_MISMATCH)
+				soap->error = soap_ignore_element(soap);
+			if (soap->error == SOAP_NO_TAG)
+				break;
+			if (soap->error)
+				return NULL;
+		}
+		if (soap_element_end_in(soap, tag))
+			return NULL;
+	}
+	else
+	{	a = (tns__deleteMediaAnnotationWithId *)soap_id_forward(soap, soap->href, (void*)a, 0, SOAP_TYPE_ServerSoap_tns__deleteMediaAnnotationWithId, 0, sizeof(tns__deleteMediaAnnotationWithId), 0, soap_copy_tns__deleteMediaAnnotationWithId);
+		if (soap->body && soap_element_end_in(soap, tag))
+			return NULL;
+	}
+	if ((soap->mode & SOAP_XML_STRICT) && (soap_flag_arg01 > 0))
+	{	soap->error = SOAP_OCCURS;
+		return NULL;
+	}
+	return a;
+}
+
+int tns__deleteMediaAnnotationWithId::soap_put(struct soap *soap, const char *tag, const  char *type) const
+{
+	register int id = soap_embed(soap, (void*)this, NULL, 0, tag, SOAP_TYPE_ServerSoap_tns__deleteMediaAnnotationWithId);
+	if (this->soap_out(soap, tag?tag:"tns:deleteMediaAnnotationWithId", id, type))
+		return soap->error;
+	return soap_putindependent(soap);
+}
+
+void *tns__deleteMediaAnnotationWithId::soap_get(struct soap *soap, const char *tag, const char *type)
+{
+	return soap_get_tns__deleteMediaAnnotationWithId(soap, this, tag, type);
+}
+
+SOAP_FMAC3 tns__deleteMediaAnnotationWithId * SOAP_FMAC4 soap_get_tns__deleteMediaAnnotationWithId(struct soap *soap, tns__deleteMediaAnnotationWithId *p, const char *tag, const char *type)
+{
+	if ((p = soap_in_tns__deleteMediaAnnotationWithId(soap, tag, p, type)))
+		if (soap_getindependent(soap))
+			return NULL;
+	return p;
+}
+
+SOAP_FMAC1 tns__deleteMediaAnnotationWithId * SOAP_FMAC2 soap_instantiate_tns__deleteMediaAnnotationWithId(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
+{
+	(void)type; (void)arrayType; /* appease -Wall -Werror */
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate_tns__deleteMediaAnnotationWithId(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
+	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap_tns__deleteMediaAnnotationWithId, n, ServerSoap_fdelete);
+	if (!cp)
+		return NULL;
+	if (n < 0)
+	{	cp->ptr = (void*)SOAP_NEW(tns__deleteMediaAnnotationWithId);
+		if (size)
+			*size = sizeof(tns__deleteMediaAnnotationWithId);
+		((tns__deleteMediaAnnotationWithId*)cp->ptr)->soap = soap;
+	}
+	else
+	{	cp->ptr = (void*)SOAP_NEW(tns__deleteMediaAnnotationWithId[n]);
+		if (!cp->ptr)
+		{	soap->error = SOAP_EOM;
+			return NULL;
+		}
+		if (size)
+			*size = n * sizeof(tns__deleteMediaAnnotationWithId);
+		for (int i = 0; i < n; i++)
+			((tns__deleteMediaAnnotationWithId*)cp->ptr)[i].soap = soap;
+	}
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
+	return (tns__deleteMediaAnnotationWithId*)cp->ptr;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__deleteMediaAnnotationWithId(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
+{
+	(void)soap; (void)tt; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying tns__deleteMediaAnnotationWithId %p -> %p\n", q, p));
+	*(tns__deleteMediaAnnotationWithId*)p = *(tns__deleteMediaAnnotationWithId*)q;
+}
+
+void tns__deleteMediaAliasWithIdResponse::soap_default(struct soap *soap)
+{
+	this->soap = soap;
+	soap_default_bool(soap, &this->tns__deleteMediaAliasWithIdResponse::return_);
+	/* transient soap skipped */
+}
+
+void tns__deleteMediaAliasWithIdResponse::soap_serialize(struct soap *soap) const
+{
+	(void)soap; /* appease -Wall -Werror */
+	/* transient soap skipped */
+}
+
+int tns__deleteMediaAliasWithIdResponse::soap_out(struct soap *soap, const char *tag, int id, const char *type) const
+{
+	return soap_out_tns__deleteMediaAliasWithIdResponse(soap, tag, id, this, type);
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__deleteMediaAliasWithIdResponse(struct soap *soap, const char *tag, int id, const tns__deleteMediaAliasWithIdResponse *a, const char *type)
+{
+	if (soap_element_begin_out(soap, tag, soap_embedded_id(soap, id, a, SOAP_TYPE_ServerSoap_tns__deleteMediaAliasWithIdResponse), type))
+		return soap->error;
+	if (soap_out_bool(soap, "return", -1, &(a->tns__deleteMediaAliasWithIdResponse::return_), ""))
+		return soap->error;
+	/* transient soap skipped */
+	return soap_element_end_out(soap, tag);
+}
+
+void *tns__deleteMediaAliasWithIdResponse::soap_in(struct soap *soap, const char *tag, const char *type)
+{	return soap_in_tns__deleteMediaAliasWithIdResponse(soap, tag, this, type);
+}
+
+SOAP_FMAC3 tns__deleteMediaAliasWithIdResponse * SOAP_FMAC4 soap_in_tns__deleteMediaAliasWithIdResponse(struct soap *soap, const char *tag, tns__deleteMediaAliasWithIdResponse *a, const char *type)
+{
+	(void)type; /* appease -Wall -Werror */
+	if (soap_element_begin_in(soap, tag, 0, NULL))
+		return NULL;
+	a = (tns__deleteMediaAliasWithIdResponse *)soap_class_id_enter(soap, soap->id, a, SOAP_TYPE_ServerSoap_tns__deleteMediaAliasWithIdResponse, sizeof(tns__deleteMediaAliasWithIdResponse), soap->type, soap->arrayType);
+	if (!a)
+		return NULL;
+	if (soap->alloced)
+	{	a->soap_default(soap);
+		if (soap->clist->type != SOAP_TYPE_ServerSoap_tns__deleteMediaAliasWithIdResponse)
+		{	soap_revert(soap);
+			*soap->id = '\0';
+			return (tns__deleteMediaAliasWithIdResponse *)a->soap_in(soap, tag, type);
+		}
+	}
+	size_t soap_flag_return_1 = 1;
+	if (soap->body && !*soap->href)
+	{
+		for (;;)
+		{	soap->error = SOAP_TAG_MISMATCH;
+			if (soap_flag_return_1 && soap->error == SOAP_TAG_MISMATCH)
+				if (soap_in_bool(soap, "return", &(a->tns__deleteMediaAliasWithIdResponse::return_), "xsd:boolean"))
+				{	soap_flag_return_1--;
+					continue;
+				}
+			/* transient soap skipped */
+			if (soap->error == SOAP_TAG_MISMATCH)
+				soap->error = soap_ignore_element(soap);
+			if (soap->error == SOAP_NO_TAG)
+				break;
+			if (soap->error)
+				return NULL;
+		}
+		if (soap_element_end_in(soap, tag))
+			return NULL;
+	}
+	else
+	{	a = (tns__deleteMediaAliasWithIdResponse *)soap_id_forward(soap, soap->href, (void*)a, 0, SOAP_TYPE_ServerSoap_tns__deleteMediaAliasWithIdResponse, 0, sizeof(tns__deleteMediaAliasWithIdResponse), 0, soap_copy_tns__deleteMediaAliasWithIdResponse);
+		if (soap->body && soap_element_end_in(soap, tag))
+			return NULL;
+	}
+	if ((soap->mode & SOAP_XML_STRICT) && (soap_flag_return_1 > 0))
+	{	soap->error = SOAP_OCCURS;
+		return NULL;
+	}
+	return a;
+}
+
+int tns__deleteMediaAliasWithIdResponse::soap_put(struct soap *soap, const char *tag, const  char *type) const
+{
+	register int id = soap_embed(soap, (void*)this, NULL, 0, tag, SOAP_TYPE_ServerSoap_tns__deleteMediaAliasWithIdResponse);
+	if (this->soap_out(soap, tag?tag:"tns:deleteMediaAliasWithIdResponse", id, type))
+		return soap->error;
+	return soap_putindependent(soap);
+}
+
+void *tns__deleteMediaAliasWithIdResponse::soap_get(struct soap *soap, const char *tag, const char *type)
+{
+	return soap_get_tns__deleteMediaAliasWithIdResponse(soap, this, tag, type);
+}
+
+SOAP_FMAC3 tns__deleteMediaAliasWithIdResponse * SOAP_FMAC4 soap_get_tns__deleteMediaAliasWithIdResponse(struct soap *soap, tns__deleteMediaAliasWithIdResponse *p, const char *tag, const char *type)
+{
+	if ((p = soap_in_tns__deleteMediaAliasWithIdResponse(soap, tag, p, type)))
+		if (soap_getindependent(soap))
+			return NULL;
+	return p;
+}
+
+SOAP_FMAC1 tns__deleteMediaAliasWithIdResponse * SOAP_FMAC2 soap_instantiate_tns__deleteMediaAliasWithIdResponse(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
+{
+	(void)type; (void)arrayType; /* appease -Wall -Werror */
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate_tns__deleteMediaAliasWithIdResponse(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
+	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap_tns__deleteMediaAliasWithIdResponse, n, ServerSoap_fdelete);
+	if (!cp)
+		return NULL;
+	if (n < 0)
+	{	cp->ptr = (void*)SOAP_NEW(tns__deleteMediaAliasWithIdResponse);
+		if (size)
+			*size = sizeof(tns__deleteMediaAliasWithIdResponse);
+		((tns__deleteMediaAliasWithIdResponse*)cp->ptr)->soap = soap;
+	}
+	else
+	{	cp->ptr = (void*)SOAP_NEW(tns__deleteMediaAliasWithIdResponse[n]);
+		if (!cp->ptr)
+		{	soap->error = SOAP_EOM;
+			return NULL;
+		}
+		if (size)
+			*size = n * sizeof(tns__deleteMediaAliasWithIdResponse);
+		for (int i = 0; i < n; i++)
+			((tns__deleteMediaAliasWithIdResponse*)cp->ptr)[i].soap = soap;
+	}
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
+	return (tns__deleteMediaAliasWithIdResponse*)cp->ptr;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__deleteMediaAliasWithIdResponse(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
+{
+	(void)soap; (void)tt; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying tns__deleteMediaAliasWithIdResponse %p -> %p\n", q, p));
+	*(tns__deleteMediaAliasWithIdResponse*)p = *(tns__deleteMediaAliasWithIdResponse*)q;
+}
+
+void tns__deleteMediaAliasWithId::soap_default(struct soap *soap)
+{
+	this->soap = soap;
+	soap_default_LONG64(soap, &this->tns__deleteMediaAliasWithId::arg0);
+	this->tns__deleteMediaAliasWithId::userName = NULL;
+	this->tns__deleteMediaAliasWithId::password = NULL;
+	/* transient soap skipped */
+}
+
+void tns__deleteMediaAliasWithId::soap_serialize(struct soap *soap) const
+{
+	(void)soap; /* appease -Wall -Werror */
+	soap_serialize_PointerTostd__string(soap, &this->tns__deleteMediaAliasWithId::userName);
+	soap_serialize_PointerTostd__string(soap, &this->tns__deleteMediaAliasWithId::password);
+	/* transient soap skipped */
+}
+
+int tns__deleteMediaAliasWithId::soap_out(struct soap *soap, const char *tag, int id, const char *type) const
+{
+	return soap_out_tns__deleteMediaAliasWithId(soap, tag, id, this, type);
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__deleteMediaAliasWithId(struct soap *soap, const char *tag, int id, const tns__deleteMediaAliasWithId *a, const char *type)
+{
+	if (soap_element_begin_out(soap, tag, soap_embedded_id(soap, id, a, SOAP_TYPE_ServerSoap_tns__deleteMediaAliasWithId), type))
+		return soap->error;
+	if (soap_out_LONG64(soap, "arg0", -1, &(a->tns__deleteMediaAliasWithId::arg0), ""))
+		return soap->error;
+	if (soap_out_PointerTostd__string(soap, "userName", -1, &(a->tns__deleteMediaAliasWithId::userName), ""))
+		return soap->error;
+	if (soap_out_PointerTostd__string(soap, "password", -1, &(a->tns__deleteMediaAliasWithId::password), ""))
+		return soap->error;
+	/* transient soap skipped */
+	return soap_element_end_out(soap, tag);
+}
+
+void *tns__deleteMediaAliasWithId::soap_in(struct soap *soap, const char *tag, const char *type)
+{	return soap_in_tns__deleteMediaAliasWithId(soap, tag, this, type);
+}
+
+SOAP_FMAC3 tns__deleteMediaAliasWithId * SOAP_FMAC4 soap_in_tns__deleteMediaAliasWithId(struct soap *soap, const char *tag, tns__deleteMediaAliasWithId *a, const char *type)
+{
+	(void)type; /* appease -Wall -Werror */
+	if (soap_element_begin_in(soap, tag, 0, NULL))
+		return NULL;
+	a = (tns__deleteMediaAliasWithId *)soap_class_id_enter(soap, soap->id, a, SOAP_TYPE_ServerSoap_tns__deleteMediaAliasWithId, sizeof(tns__deleteMediaAliasWithId), soap->type, soap->arrayType);
+	if (!a)
+		return NULL;
+	if (soap->alloced)
+	{	a->soap_default(soap);
+		if (soap->clist->type != SOAP_TYPE_ServerSoap_tns__deleteMediaAliasWithId)
+		{	soap_revert(soap);
+			*soap->id = '\0';
+			return (tns__deleteMediaAliasWithId *)a->soap_in(soap, tag, type);
+		}
+	}
+	size_t soap_flag_arg01 = 1;
+	size_t soap_flag_userName1 = 1;
+	size_t soap_flag_password1 = 1;
+	if (soap->body && !*soap->href)
+	{
+		for (;;)
+		{	soap->error = SOAP_TAG_MISMATCH;
+			if (soap_flag_arg01 && soap->error == SOAP_TAG_MISMATCH)
+				if (soap_in_LONG64(soap, "arg0", &(a->tns__deleteMediaAliasWithId::arg0), "xsd:long"))
+				{	soap_flag_arg01--;
+					continue;
+				}
+			if (soap_flag_userName1 && (soap->error == SOAP_TAG_MISMATCH || soap->error == SOAP_NO_TAG))
+				if (soap_in_PointerTostd__string(soap, "userName", &(a->tns__deleteMediaAliasWithId::userName), "xsd:string"))
+				{	soap_flag_userName1--;
+					continue;
+				}
+			if (soap_flag_password1 && (soap->error == SOAP_TAG_MISMATCH || soap->error == SOAP_NO_TAG))
+				if (soap_in_PointerTostd__string(soap, "password", &(a->tns__deleteMediaAliasWithId::password), "xsd:string"))
+				{	soap_flag_password1--;
+					continue;
+				}
+			/* transient soap skipped */
+			if (soap->error == SOAP_TAG_MISMATCH)
+				soap->error = soap_ignore_element(soap);
+			if (soap->error == SOAP_NO_TAG)
+				break;
+			if (soap->error)
+				return NULL;
+		}
+		if (soap_element_end_in(soap, tag))
+			return NULL;
+	}
+	else
+	{	a = (tns__deleteMediaAliasWithId *)soap_id_forward(soap, soap->href, (void*)a, 0, SOAP_TYPE_ServerSoap_tns__deleteMediaAliasWithId, 0, sizeof(tns__deleteMediaAliasWithId), 0, soap_copy_tns__deleteMediaAliasWithId);
+		if (soap->body && soap_element_end_in(soap, tag))
+			return NULL;
+	}
+	if ((soap->mode & SOAP_XML_STRICT) && (soap_flag_arg01 > 0))
+	{	soap->error = SOAP_OCCURS;
+		return NULL;
+	}
+	return a;
+}
+
+int tns__deleteMediaAliasWithId::soap_put(struct soap *soap, const char *tag, const  char *type) const
+{
+	register int id = soap_embed(soap, (void*)this, NULL, 0, tag, SOAP_TYPE_ServerSoap_tns__deleteMediaAliasWithId);
+	if (this->soap_out(soap, tag?tag:"tns:deleteMediaAliasWithId", id, type))
+		return soap->error;
+	return soap_putindependent(soap);
+}
+
+void *tns__deleteMediaAliasWithId::soap_get(struct soap *soap, const char *tag, const char *type)
+{
+	return soap_get_tns__deleteMediaAliasWithId(soap, this, tag, type);
+}
+
+SOAP_FMAC3 tns__deleteMediaAliasWithId * SOAP_FMAC4 soap_get_tns__deleteMediaAliasWithId(struct soap *soap, tns__deleteMediaAliasWithId *p, const char *tag, const char *type)
+{
+	if ((p = soap_in_tns__deleteMediaAliasWithId(soap, tag, p, type)))
+		if (soap_getindependent(soap))
+			return NULL;
+	return p;
+}
+
+SOAP_FMAC1 tns__deleteMediaAliasWithId * SOAP_FMAC2 soap_instantiate_tns__deleteMediaAliasWithId(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
+{
+	(void)type; (void)arrayType; /* appease -Wall -Werror */
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate_tns__deleteMediaAliasWithId(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
+	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap_tns__deleteMediaAliasWithId, n, ServerSoap_fdelete);
+	if (!cp)
+		return NULL;
+	if (n < 0)
+	{	cp->ptr = (void*)SOAP_NEW(tns__deleteMediaAliasWithId);
+		if (size)
+			*size = sizeof(tns__deleteMediaAliasWithId);
+		((tns__deleteMediaAliasWithId*)cp->ptr)->soap = soap;
+	}
+	else
+	{	cp->ptr = (void*)SOAP_NEW(tns__deleteMediaAliasWithId[n]);
+		if (!cp->ptr)
+		{	soap->error = SOAP_EOM;
+			return NULL;
+		}
+		if (size)
+			*size = n * sizeof(tns__deleteMediaAliasWithId);
+		for (int i = 0; i < n; i++)
+			((tns__deleteMediaAliasWithId*)cp->ptr)[i].soap = soap;
+	}
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
+	return (tns__deleteMediaAliasWithId*)cp->ptr;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__deleteMediaAliasWithId(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
+{
+	(void)soap; (void)tt; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying tns__deleteMediaAliasWithId %p -> %p\n", q, p));
+	*(tns__deleteMediaAliasWithId*)p = *(tns__deleteMediaAliasWithId*)q;
 }
 
 void tns__curseMediaTokenWithIdResponse::soap_default(struct soap *soap)
@@ -14591,6 +15305,196 @@ SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__isClientUpdated(struct soap *soap, i
 	*(struct __tns__isClientUpdated*)p = *(struct __tns__isClientUpdated*)q;
 }
 
+SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__deleteMediaAnnotationWithId(struct soap *soap, struct __tns__deleteMediaAnnotationWithId *a)
+{
+	(void)soap; (void)a; /* appease -Wall -Werror */
+	a->tns__deleteMediaAnnotationWithId_ = NULL;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___tns__deleteMediaAnnotationWithId(struct soap *soap, const struct __tns__deleteMediaAnnotationWithId *a)
+{
+	(void)soap; (void)a; /* appease -Wall -Werror */
+	soap_serialize_PointerTotns__deleteMediaAnnotationWithId(soap, &a->tns__deleteMediaAnnotationWithId_);
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out___tns__deleteMediaAnnotationWithId(struct soap *soap, const char *tag, int id, const struct __tns__deleteMediaAnnotationWithId *a, const char *type)
+{	(void)soap; (void)tag; (void)id; (void)type;
+	if (soap_out_PointerTotns__deleteMediaAnnotationWithId(soap, "tns:deleteMediaAnnotationWithId", -1, &a->tns__deleteMediaAnnotationWithId_, ""))
+		return soap->error;
+	return SOAP_OK;
+}
+
+SOAP_FMAC3 struct __tns__deleteMediaAnnotationWithId * SOAP_FMAC4 soap_in___tns__deleteMediaAnnotationWithId(struct soap *soap, const char *tag, struct __tns__deleteMediaAnnotationWithId *a, const char *type)
+{
+	size_t soap_flag_tns__deleteMediaAnnotationWithId_ = 1;
+	short soap_flag;
+	a = (struct __tns__deleteMediaAnnotationWithId *)soap_id_enter(soap, "", a, SOAP_TYPE_ServerSoap___tns__deleteMediaAnnotationWithId, sizeof(struct __tns__deleteMediaAnnotationWithId), 0, NULL, NULL, NULL);
+	if (!a)
+		return NULL;
+	soap_default___tns__deleteMediaAnnotationWithId(soap, a);
+		for (soap_flag = 0;; soap_flag = 1)
+		{	soap->error = SOAP_TAG_MISMATCH;
+			if (soap_flag_tns__deleteMediaAnnotationWithId_ && soap->error == SOAP_TAG_MISMATCH)
+				if (soap_in_PointerTotns__deleteMediaAnnotationWithId(soap, "tns:deleteMediaAnnotationWithId", &a->tns__deleteMediaAnnotationWithId_, "tns:deleteMediaAnnotationWithId"))
+				{	soap_flag_tns__deleteMediaAnnotationWithId_--;
+					continue;
+				}
+			if (soap->error == SOAP_TAG_MISMATCH)
+				if (soap_flag)
+				{	soap->error = SOAP_OK;
+					break;
+				}
+			if (soap_flag && soap->error == SOAP_NO_TAG)
+				break;
+			if (soap->error)
+				return NULL;
+		}
+	return a;
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_put___tns__deleteMediaAnnotationWithId(struct soap *soap, const struct __tns__deleteMediaAnnotationWithId *a, const char *tag, const char *type)
+{
+	register int id = 0;
+	if (soap_out___tns__deleteMediaAnnotationWithId(soap, tag?tag:"-tns:deleteMediaAnnotationWithId", id, a, type))
+		return soap->error;
+	return SOAP_OK;
+}
+
+SOAP_FMAC3 struct __tns__deleteMediaAnnotationWithId * SOAP_FMAC4 soap_get___tns__deleteMediaAnnotationWithId(struct soap *soap, struct __tns__deleteMediaAnnotationWithId *p, const char *tag, const char *type)
+{
+	if ((p = soap_in___tns__deleteMediaAnnotationWithId(soap, tag, p, type)))
+		if (soap_getindependent(soap))
+			return NULL;
+	return p;
+}
+
+SOAP_FMAC1 struct __tns__deleteMediaAnnotationWithId * SOAP_FMAC2 soap_instantiate___tns__deleteMediaAnnotationWithId(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
+{
+	(void)type; (void)arrayType; /* appease -Wall -Werror */
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate___tns__deleteMediaAnnotationWithId(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
+	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap___tns__deleteMediaAnnotationWithId, n, ServerSoap_fdelete);
+	if (!cp)
+		return NULL;
+	if (n < 0)
+	{	cp->ptr = (void*)SOAP_NEW(struct __tns__deleteMediaAnnotationWithId);
+		if (size)
+			*size = sizeof(struct __tns__deleteMediaAnnotationWithId);
+	}
+	else
+	{	cp->ptr = (void*)SOAP_NEW(struct __tns__deleteMediaAnnotationWithId[n]);
+		if (!cp->ptr)
+		{	soap->error = SOAP_EOM;
+			return NULL;
+		}
+		if (size)
+			*size = n * sizeof(struct __tns__deleteMediaAnnotationWithId);
+	}
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
+	return (struct __tns__deleteMediaAnnotationWithId*)cp->ptr;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__deleteMediaAnnotationWithId(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
+{
+	(void)soap; (void)tt; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying struct __tns__deleteMediaAnnotationWithId %p -> %p\n", q, p));
+	*(struct __tns__deleteMediaAnnotationWithId*)p = *(struct __tns__deleteMediaAnnotationWithId*)q;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__deleteMediaAliasWithId(struct soap *soap, struct __tns__deleteMediaAliasWithId *a)
+{
+	(void)soap; (void)a; /* appease -Wall -Werror */
+	a->tns__deleteMediaAliasWithId_ = NULL;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___tns__deleteMediaAliasWithId(struct soap *soap, const struct __tns__deleteMediaAliasWithId *a)
+{
+	(void)soap; (void)a; /* appease -Wall -Werror */
+	soap_serialize_PointerTotns__deleteMediaAliasWithId(soap, &a->tns__deleteMediaAliasWithId_);
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out___tns__deleteMediaAliasWithId(struct soap *soap, const char *tag, int id, const struct __tns__deleteMediaAliasWithId *a, const char *type)
+{	(void)soap; (void)tag; (void)id; (void)type;
+	if (soap_out_PointerTotns__deleteMediaAliasWithId(soap, "tns:deleteMediaAliasWithId", -1, &a->tns__deleteMediaAliasWithId_, ""))
+		return soap->error;
+	return SOAP_OK;
+}
+
+SOAP_FMAC3 struct __tns__deleteMediaAliasWithId * SOAP_FMAC4 soap_in___tns__deleteMediaAliasWithId(struct soap *soap, const char *tag, struct __tns__deleteMediaAliasWithId *a, const char *type)
+{
+	size_t soap_flag_tns__deleteMediaAliasWithId_ = 1;
+	short soap_flag;
+	a = (struct __tns__deleteMediaAliasWithId *)soap_id_enter(soap, "", a, SOAP_TYPE_ServerSoap___tns__deleteMediaAliasWithId, sizeof(struct __tns__deleteMediaAliasWithId), 0, NULL, NULL, NULL);
+	if (!a)
+		return NULL;
+	soap_default___tns__deleteMediaAliasWithId(soap, a);
+		for (soap_flag = 0;; soap_flag = 1)
+		{	soap->error = SOAP_TAG_MISMATCH;
+			if (soap_flag_tns__deleteMediaAliasWithId_ && soap->error == SOAP_TAG_MISMATCH)
+				if (soap_in_PointerTotns__deleteMediaAliasWithId(soap, "tns:deleteMediaAliasWithId", &a->tns__deleteMediaAliasWithId_, "tns:deleteMediaAliasWithId"))
+				{	soap_flag_tns__deleteMediaAliasWithId_--;
+					continue;
+				}
+			if (soap->error == SOAP_TAG_MISMATCH)
+				if (soap_flag)
+				{	soap->error = SOAP_OK;
+					break;
+				}
+			if (soap_flag && soap->error == SOAP_NO_TAG)
+				break;
+			if (soap->error)
+				return NULL;
+		}
+	return a;
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_put___tns__deleteMediaAliasWithId(struct soap *soap, const struct __tns__deleteMediaAliasWithId *a, const char *tag, const char *type)
+{
+	register int id = 0;
+	if (soap_out___tns__deleteMediaAliasWithId(soap, tag?tag:"-tns:deleteMediaAliasWithId", id, a, type))
+		return soap->error;
+	return SOAP_OK;
+}
+
+SOAP_FMAC3 struct __tns__deleteMediaAliasWithId * SOAP_FMAC4 soap_get___tns__deleteMediaAliasWithId(struct soap *soap, struct __tns__deleteMediaAliasWithId *p, const char *tag, const char *type)
+{
+	if ((p = soap_in___tns__deleteMediaAliasWithId(soap, tag, p, type)))
+		if (soap_getindependent(soap))
+			return NULL;
+	return p;
+}
+
+SOAP_FMAC1 struct __tns__deleteMediaAliasWithId * SOAP_FMAC2 soap_instantiate___tns__deleteMediaAliasWithId(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
+{
+	(void)type; (void)arrayType; /* appease -Wall -Werror */
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate___tns__deleteMediaAliasWithId(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
+	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap___tns__deleteMediaAliasWithId, n, ServerSoap_fdelete);
+	if (!cp)
+		return NULL;
+	if (n < 0)
+	{	cp->ptr = (void*)SOAP_NEW(struct __tns__deleteMediaAliasWithId);
+		if (size)
+			*size = sizeof(struct __tns__deleteMediaAliasWithId);
+	}
+	else
+	{	cp->ptr = (void*)SOAP_NEW(struct __tns__deleteMediaAliasWithId[n]);
+		if (!cp->ptr)
+		{	soap->error = SOAP_EOM;
+			return NULL;
+		}
+		if (size)
+			*size = n * sizeof(struct __tns__deleteMediaAliasWithId);
+	}
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
+	return (struct __tns__deleteMediaAliasWithId*)cp->ptr;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__deleteMediaAliasWithId(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
+{
+	(void)soap; (void)tt; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying struct __tns__deleteMediaAliasWithId %p -> %p\n", q, p));
+	*(struct __tns__deleteMediaAliasWithId*)p = *(struct __tns__deleteMediaAliasWithId*)q;
+}
+
 SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__curseMediaTokenWithId(struct soap *soap, struct __tns__curseMediaTokenWithId *a)
 {
 	(void)soap; (void)a; /* appease -Wall -Werror */
@@ -17791,6 +18695,226 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__isClientUpdated(struct soap *so
 SOAP_FMAC3 tns__isClientUpdated ** SOAP_FMAC4 soap_get_PointerTotns__isClientUpdated(struct soap *soap, tns__isClientUpdated **p, const char *tag, const char *type)
 {
 	if ((p = soap_in_PointerTotns__isClientUpdated(soap, tag, p, type)))
+		if (soap_getindependent(soap))
+			return NULL;
+	return p;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__deleteMediaAnnotationWithIdResponse(struct soap *soap, tns__deleteMediaAnnotationWithIdResponse *const*a)
+{
+	if (!soap_reference(soap, *a, SOAP_TYPE_ServerSoap_tns__deleteMediaAnnotationWithIdResponse))
+		(*a)->soap_serialize(soap);
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__deleteMediaAnnotationWithIdResponse(struct soap *soap, const char *tag, int id, tns__deleteMediaAnnotationWithIdResponse *const*a, const char *type)
+{
+	id = soap_element_id(soap, tag, id, *a, NULL, 0, type, SOAP_TYPE_ServerSoap_tns__deleteMediaAnnotationWithIdResponse);
+	if (id < 0)
+		return soap->error;
+	return (*a)->soap_out(soap, tag, id, type);
+}
+
+SOAP_FMAC3 tns__deleteMediaAnnotationWithIdResponse ** SOAP_FMAC4 soap_in_PointerTotns__deleteMediaAnnotationWithIdResponse(struct soap *soap, const char *tag, tns__deleteMediaAnnotationWithIdResponse **a, const char *type)
+{
+	if (soap_element_begin_in(soap, tag, 1, NULL))
+		return NULL;
+	if (!a)
+		if (!(a = (tns__deleteMediaAnnotationWithIdResponse **)soap_malloc(soap, sizeof(tns__deleteMediaAnnotationWithIdResponse *))))
+			return NULL;
+	*a = NULL;
+	if (!soap->null && *soap->href != '#')
+	{	soap_revert(soap);
+		if (!(*a = (tns__deleteMediaAnnotationWithIdResponse *)soap_instantiate_tns__deleteMediaAnnotationWithIdResponse(soap, -1, soap->type, soap->arrayType, NULL)))
+			return NULL;
+		(*a)->soap_default(soap);
+		if (!(*a)->soap_in(soap, tag, NULL))
+			return NULL;
+	}
+	else
+	{	tns__deleteMediaAnnotationWithIdResponse ** p = (tns__deleteMediaAnnotationWithIdResponse **)soap_id_lookup(soap, soap->href, (void**)a, SOAP_TYPE_ServerSoap_tns__deleteMediaAnnotationWithIdResponse, sizeof(tns__deleteMediaAnnotationWithIdResponse), 0);
+		a = p;
+		if (soap->body && soap_element_end_in(soap, tag))
+			return NULL;
+	}
+	return a;
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__deleteMediaAnnotationWithIdResponse(struct soap *soap, tns__deleteMediaAnnotationWithIdResponse *const*a, const char *tag, const char *type)
+{
+	register int id = soap_embed(soap, (void*)a, NULL, 0, tag, SOAP_TYPE_ServerSoap_PointerTotns__deleteMediaAnnotationWithIdResponse);
+	if (soap_out_PointerTotns__deleteMediaAnnotationWithIdResponse(soap, tag?tag:"tns:deleteMediaAnnotationWithIdResponse", id, a, type))
+		return soap->error;
+	return soap_putindependent(soap);
+}
+
+SOAP_FMAC3 tns__deleteMediaAnnotationWithIdResponse ** SOAP_FMAC4 soap_get_PointerTotns__deleteMediaAnnotationWithIdResponse(struct soap *soap, tns__deleteMediaAnnotationWithIdResponse **p, const char *tag, const char *type)
+{
+	if ((p = soap_in_PointerTotns__deleteMediaAnnotationWithIdResponse(soap, tag, p, type)))
+		if (soap_getindependent(soap))
+			return NULL;
+	return p;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__deleteMediaAnnotationWithId(struct soap *soap, tns__deleteMediaAnnotationWithId *const*a)
+{
+	if (!soap_reference(soap, *a, SOAP_TYPE_ServerSoap_tns__deleteMediaAnnotationWithId))
+		(*a)->soap_serialize(soap);
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__deleteMediaAnnotationWithId(struct soap *soap, const char *tag, int id, tns__deleteMediaAnnotationWithId *const*a, const char *type)
+{
+	id = soap_element_id(soap, tag, id, *a, NULL, 0, type, SOAP_TYPE_ServerSoap_tns__deleteMediaAnnotationWithId);
+	if (id < 0)
+		return soap->error;
+	return (*a)->soap_out(soap, tag, id, type);
+}
+
+SOAP_FMAC3 tns__deleteMediaAnnotationWithId ** SOAP_FMAC4 soap_in_PointerTotns__deleteMediaAnnotationWithId(struct soap *soap, const char *tag, tns__deleteMediaAnnotationWithId **a, const char *type)
+{
+	if (soap_element_begin_in(soap, tag, 1, NULL))
+		return NULL;
+	if (!a)
+		if (!(a = (tns__deleteMediaAnnotationWithId **)soap_malloc(soap, sizeof(tns__deleteMediaAnnotationWithId *))))
+			return NULL;
+	*a = NULL;
+	if (!soap->null && *soap->href != '#')
+	{	soap_revert(soap);
+		if (!(*a = (tns__deleteMediaAnnotationWithId *)soap_instantiate_tns__deleteMediaAnnotationWithId(soap, -1, soap->type, soap->arrayType, NULL)))
+			return NULL;
+		(*a)->soap_default(soap);
+		if (!(*a)->soap_in(soap, tag, NULL))
+			return NULL;
+	}
+	else
+	{	tns__deleteMediaAnnotationWithId ** p = (tns__deleteMediaAnnotationWithId **)soap_id_lookup(soap, soap->href, (void**)a, SOAP_TYPE_ServerSoap_tns__deleteMediaAnnotationWithId, sizeof(tns__deleteMediaAnnotationWithId), 0);
+		a = p;
+		if (soap->body && soap_element_end_in(soap, tag))
+			return NULL;
+	}
+	return a;
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__deleteMediaAnnotationWithId(struct soap *soap, tns__deleteMediaAnnotationWithId *const*a, const char *tag, const char *type)
+{
+	register int id = soap_embed(soap, (void*)a, NULL, 0, tag, SOAP_TYPE_ServerSoap_PointerTotns__deleteMediaAnnotationWithId);
+	if (soap_out_PointerTotns__deleteMediaAnnotationWithId(soap, tag?tag:"tns:deleteMediaAnnotationWithId", id, a, type))
+		return soap->error;
+	return soap_putindependent(soap);
+}
+
+SOAP_FMAC3 tns__deleteMediaAnnotationWithId ** SOAP_FMAC4 soap_get_PointerTotns__deleteMediaAnnotationWithId(struct soap *soap, tns__deleteMediaAnnotationWithId **p, const char *tag, const char *type)
+{
+	if ((p = soap_in_PointerTotns__deleteMediaAnnotationWithId(soap, tag, p, type)))
+		if (soap_getindependent(soap))
+			return NULL;
+	return p;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__deleteMediaAliasWithIdResponse(struct soap *soap, tns__deleteMediaAliasWithIdResponse *const*a)
+{
+	if (!soap_reference(soap, *a, SOAP_TYPE_ServerSoap_tns__deleteMediaAliasWithIdResponse))
+		(*a)->soap_serialize(soap);
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__deleteMediaAliasWithIdResponse(struct soap *soap, const char *tag, int id, tns__deleteMediaAliasWithIdResponse *const*a, const char *type)
+{
+	id = soap_element_id(soap, tag, id, *a, NULL, 0, type, SOAP_TYPE_ServerSoap_tns__deleteMediaAliasWithIdResponse);
+	if (id < 0)
+		return soap->error;
+	return (*a)->soap_out(soap, tag, id, type);
+}
+
+SOAP_FMAC3 tns__deleteMediaAliasWithIdResponse ** SOAP_FMAC4 soap_in_PointerTotns__deleteMediaAliasWithIdResponse(struct soap *soap, const char *tag, tns__deleteMediaAliasWithIdResponse **a, const char *type)
+{
+	if (soap_element_begin_in(soap, tag, 1, NULL))
+		return NULL;
+	if (!a)
+		if (!(a = (tns__deleteMediaAliasWithIdResponse **)soap_malloc(soap, sizeof(tns__deleteMediaAliasWithIdResponse *))))
+			return NULL;
+	*a = NULL;
+	if (!soap->null && *soap->href != '#')
+	{	soap_revert(soap);
+		if (!(*a = (tns__deleteMediaAliasWithIdResponse *)soap_instantiate_tns__deleteMediaAliasWithIdResponse(soap, -1, soap->type, soap->arrayType, NULL)))
+			return NULL;
+		(*a)->soap_default(soap);
+		if (!(*a)->soap_in(soap, tag, NULL))
+			return NULL;
+	}
+	else
+	{	tns__deleteMediaAliasWithIdResponse ** p = (tns__deleteMediaAliasWithIdResponse **)soap_id_lookup(soap, soap->href, (void**)a, SOAP_TYPE_ServerSoap_tns__deleteMediaAliasWithIdResponse, sizeof(tns__deleteMediaAliasWithIdResponse), 0);
+		a = p;
+		if (soap->body && soap_element_end_in(soap, tag))
+			return NULL;
+	}
+	return a;
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__deleteMediaAliasWithIdResponse(struct soap *soap, tns__deleteMediaAliasWithIdResponse *const*a, const char *tag, const char *type)
+{
+	register int id = soap_embed(soap, (void*)a, NULL, 0, tag, SOAP_TYPE_ServerSoap_PointerTotns__deleteMediaAliasWithIdResponse);
+	if (soap_out_PointerTotns__deleteMediaAliasWithIdResponse(soap, tag?tag:"tns:deleteMediaAliasWithIdResponse", id, a, type))
+		return soap->error;
+	return soap_putindependent(soap);
+}
+
+SOAP_FMAC3 tns__deleteMediaAliasWithIdResponse ** SOAP_FMAC4 soap_get_PointerTotns__deleteMediaAliasWithIdResponse(struct soap *soap, tns__deleteMediaAliasWithIdResponse **p, const char *tag, const char *type)
+{
+	if ((p = soap_in_PointerTotns__deleteMediaAliasWithIdResponse(soap, tag, p, type)))
+		if (soap_getindependent(soap))
+			return NULL;
+	return p;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__deleteMediaAliasWithId(struct soap *soap, tns__deleteMediaAliasWithId *const*a)
+{
+	if (!soap_reference(soap, *a, SOAP_TYPE_ServerSoap_tns__deleteMediaAliasWithId))
+		(*a)->soap_serialize(soap);
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__deleteMediaAliasWithId(struct soap *soap, const char *tag, int id, tns__deleteMediaAliasWithId *const*a, const char *type)
+{
+	id = soap_element_id(soap, tag, id, *a, NULL, 0, type, SOAP_TYPE_ServerSoap_tns__deleteMediaAliasWithId);
+	if (id < 0)
+		return soap->error;
+	return (*a)->soap_out(soap, tag, id, type);
+}
+
+SOAP_FMAC3 tns__deleteMediaAliasWithId ** SOAP_FMAC4 soap_in_PointerTotns__deleteMediaAliasWithId(struct soap *soap, const char *tag, tns__deleteMediaAliasWithId **a, const char *type)
+{
+	if (soap_element_begin_in(soap, tag, 1, NULL))
+		return NULL;
+	if (!a)
+		if (!(a = (tns__deleteMediaAliasWithId **)soap_malloc(soap, sizeof(tns__deleteMediaAliasWithId *))))
+			return NULL;
+	*a = NULL;
+	if (!soap->null && *soap->href != '#')
+	{	soap_revert(soap);
+		if (!(*a = (tns__deleteMediaAliasWithId *)soap_instantiate_tns__deleteMediaAliasWithId(soap, -1, soap->type, soap->arrayType, NULL)))
+			return NULL;
+		(*a)->soap_default(soap);
+		if (!(*a)->soap_in(soap, tag, NULL))
+			return NULL;
+	}
+	else
+	{	tns__deleteMediaAliasWithId ** p = (tns__deleteMediaAliasWithId **)soap_id_lookup(soap, soap->href, (void**)a, SOAP_TYPE_ServerSoap_tns__deleteMediaAliasWithId, sizeof(tns__deleteMediaAliasWithId), 0);
+		a = p;
+		if (soap->body && soap_element_end_in(soap, tag))
+			return NULL;
+	}
+	return a;
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__deleteMediaAliasWithId(struct soap *soap, tns__deleteMediaAliasWithId *const*a, const char *tag, const char *type)
+{
+	register int id = soap_embed(soap, (void*)a, NULL, 0, tag, SOAP_TYPE_ServerSoap_PointerTotns__deleteMediaAliasWithId);
+	if (soap_out_PointerTotns__deleteMediaAliasWithId(soap, tag?tag:"tns:deleteMediaAliasWithId", id, a, type))
+		return soap->error;
+	return soap_putindependent(soap);
+}
+
+SOAP_FMAC3 tns__deleteMediaAliasWithId ** SOAP_FMAC4 soap_get_PointerTotns__deleteMediaAliasWithId(struct soap *soap, tns__deleteMediaAliasWithId **p, const char *tag, const char *type)
+{
+	if ((p = soap_in_PointerTotns__deleteMediaAliasWithId(soap, tag, p, type)))
 		if (soap_getindependent(soap))
 			return NULL;
 	return p;

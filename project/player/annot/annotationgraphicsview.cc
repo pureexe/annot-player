@@ -11,7 +11,6 @@
 #include "logger.h"
 #include "defines.h"
 #include "module/player/player.h"
-//#include "module/serveragent/serveragent.h"
 #ifdef Q_WS_WIN
   #include "win/qtwin/qtwin.h"
 #endif // Q_WS_WIN
@@ -25,20 +24,20 @@
 using namespace Core::Cloud;
 using namespace Logger;
 
+#define MAX_SUBTITLE_HISTORY    30
+
 // - Constructions -
 
 AnnotationGraphicsView::AnnotationGraphicsView(
   SignalHub *hub,
-  ServerAgent *server,
   Player *player,
   VideoView *view,
   QWidget *parent)
-  : Base(parent), videoView_(view), fullScreenView_(0), trackedWindow_(0),
-    hub_(hub), server_(server), player_(player), filter_(0), active_(false), paused_(false), fullScreen_(false),
+  : Base(parent), videoView_(view), fullScreenView_(0), trackedWindow_(0), editor_(0),
+    hub_(hub), player_(player), filter_(0), active_(false), paused_(false), fullScreen_(false),
     playTime_(-1), userId_(0), playbackEnabled_(true), subtitlePosition_(AP_Bottom)
 {
   Q_ASSERT(hub_);
-  Q_ASSERT(server_);
   Q_ASSERT(player_);
   Q_ASSERT(videoView_);
 
@@ -56,9 +55,6 @@ AnnotationGraphicsView::AnnotationGraphicsView(
   QGraphicsScene *scene = new QGraphicsScene(this);
   setScene(scene);
 
-  editor_ = new AnnotationEditor(this);
-  connect(editor_, SIGNAL(textSaved(QString)), SLOT(updateAnnotationText(QString)));
-
   trackingTimer_ = new QTimer(this);
   trackingTimer_->setInterval(G_TRACKING_INTERVAL);
   connect(trackingTimer_, SIGNAL(timeout()), SLOT(invalidateGeometry()));
@@ -66,40 +62,25 @@ AnnotationGraphicsView::AnnotationGraphicsView(
   //centerOn(0, 0);
 }
 
-AnnotationGraphicsView::~AnnotationGraphicsView()
-{ removeAnnotations(); }
+//AnnotationGraphicsView::~AnnotationGraphicsView()
+//{ removeAnnotations(); }
 
 void
 AnnotationGraphicsView::setFilter(AnnotationFilter *filter)
 { filter_ = filter; }
 
-const QString&
-AnnotationGraphicsView::subtitlePrefix() const
-{ return subtilePrefix_; }
-
-void
-AnnotationGraphicsView::setSubtitlePrefix(const QString &prefix)
-{ subtilePrefix_ = prefix; }
-
-AnnotationGraphicsView::AnnotationPosition
-AnnotationGraphicsView::subtitlePosition() const
-{ return subtitlePosition_; }
-
-void
-AnnotationGraphicsView::setSubtitlePosition(AnnotationPosition ap)
-{ subtitlePosition_ = ap; }
-
-qint64
-AnnotationGraphicsView::userId() const
-{ return userId_; }
-
-void
-AnnotationGraphicsView::setUserId(qint64 uid)
-{ userId_ = uid; }
-
 AnnotationEditor*
 AnnotationGraphicsView::editor() const
-{ return editor_; }
+{
+  if (!editor_) {
+    Self *self = const_cast<Self*>(this);
+    AnnotationEditor *ret = new AnnotationEditor(self);
+    connect(ret, SIGNAL(textSaved(QString)), SLOT(updateAnnotationText(QString)));
+    self->editor_ = ret;
+  }
+
+  return editor_;
+}
 
 void
 AnnotationGraphicsView::setFullScreenView(QWidget *w)
@@ -121,24 +102,71 @@ AnnotationGraphicsView::isFullScreenMode() const
 { return fullScreen_; }
 
 void
+AnnotationGraphicsView::removeAnnotationWithId(qint64 id, bool deleteAnnot)
+{
+  if (id && !hash_.empty()) {
+    AnnotationGraphicsItem *item = itemWithId(id);
+    if (item)
+      item->removeMe();
+
+    bool found = false;
+    for (AnnotationHash::Iterator h = hash_.begin(); h != hash_.end() && !found; ++h) {
+      AnnotationList &l = h.value();
+      for (AnnotationList::Iterator p = l.begin(); p != l.end() && !found; ++p)
+        if (p->id() == id) {
+          l.erase(p);
+          found = true;
+        }
+    }
+
+    if (found && deleteAnnot)
+      emit annotationDeletedWithId(id);
+
+    //bool found = false;
+    //foreach (QList<AnnotationGraphicsItem*> *l, annots_.values()) {
+    //  if (l && !l->empty())
+    //    foreach (AnnotationGraphicsItem *item, *l)
+    //      if (item && item->annotation().id() == id) {
+    //        l->removeAll(item);
+    //        QTimer::singleShot(0, item, SLOT(deleteLater()));
+    //        found = true;
+    //        break;
+    //      }
+    //
+    //  if (found) {
+    //    if (deleteAnnot)
+    //      emit annotationDeletedWithId(id);
+    //    break;
+    //  }
+    //}
+  }
+}
+
+
+void
 AnnotationGraphicsView::removeAnnotations()
 {
-  if (!annots_.empty()) {
+  if (!hash_.empty()) {
     QGraphicsScene *s = scene();
     Q_ASSERT(s);
-    foreach (QGraphicsItem *item, s->items())
-      s->removeItem(item);
+    foreach (QGraphicsItem *item, s->items()) {
+      BOOST_AUTO(a, dynamic_cast<AnnotationGraphicsItem*>(item));
+      if (a)
+        a->removeMe();
+      else
+        s->removeItem(item);
+    }
 
-    foreach (QList<AnnotationGraphicsItem*> *l, annots_.values())
-      if (l) {
-        if (!l->empty())
-          foreach (AnnotationGraphicsItem *item, *l)
-            if (item)
-              delete item;
-        delete l;
-      }
+    //foreach (QList<AnnotationGraphicsItem*> *l, annots_.values())
+    //  if (l) {
+    //    if (!l->empty())
+    //      foreach (AnnotationGraphicsItem *item, *l)
+    //        if (item)
+    //          delete item;
+    //    delete l;
+    //  }
 
-    annots_.clear();
+    hash_.clear();
 
     emit annotationsRemoved();
   }
@@ -155,26 +183,35 @@ AnnotationList
 AnnotationGraphicsView::annotations() const
 {
   AnnotationList ret;
-  if (!annots_.empty())
-    foreach (QList<AnnotationGraphicsItem*> *l, annots_.values())
-      if (l && !l->empty())
-        foreach (AnnotationGraphicsItem *item, *l)
-          if (item)
-            ret.append(item->annotation());
+  //if (!annots_.empty())
+  //  foreach (QList<AnnotationGraphicsItem*> *l, annots_.values())
+  //    if (l && !l->empty())
+  //      foreach (AnnotationGraphicsItem *item, *l)
+  //        if (item)
+  //          ret.append(item->annotation());
+  if (!hash_.empty())
+    for (BOOST_AUTO(p, hash_.begin()); p != hash_.end(); ++p)
+      ret.append(p.value());
   return ret;
 }
 
-AnnotationList
+const AnnotationList&
 AnnotationGraphicsView::annotationsAtPos(qint64 pos) const
 {
-  AnnotationList ret;
-  if (annots_.contains(pos)) {
-    QList<AnnotationGraphicsItem*> *l = annots_[pos];
-    if (l && !l->empty())
-      foreach (AnnotationGraphicsItem *item, *l)
-        ret.append(item->annotation());
-  }
-  return ret;
+  static const AnnotationList null;
+
+  BOOST_AUTO(p, hash_.find(pos));
+  if (p!= hash_.end())
+    return p.value();
+  else
+    return null;
+  //if (annots_.contains(pos)) {
+  //  QList<AnnotationGraphicsItem*> *l = annots_[pos];
+  //  if (l && !l->empty())
+  //    foreach (AnnotationGraphicsItem *item, *l)
+  //      ret.append(item->annotation());
+  //}
+  //return ret;
 }
 
 // - View tracking -
@@ -221,16 +258,19 @@ AnnotationGraphicsView::invalidateSize()
     update = true;
   }
 
-  if (update)
+  if (update) {
     setSceneRect(0, 0, width(), height());
+    emit sizeChanged();
+  }
 }
 
 void
 AnnotationGraphicsView::invalidatePos()
 {
-  if (fullScreen_ && fullScreenView_)
+  if (fullScreen_ && fullScreenView_) {
     move(fullScreenView_->pos());
-  else if (trackedWindow_) {
+    emit posChanged();
+  } else if (trackedWindow_) {
 #ifdef Q_WS_WIN
     QRect r = QtWin::getWindowRect(trackedWindow_);
     if (r.isNull()) {
@@ -260,24 +300,28 @@ AnnotationGraphicsView::invalidatePos()
     newPos = videoView_->mapToGlobal(QPoint());
     moveToGlobalPos(newPos);
 
-  } else if (hub_->isSignalTokenMode() && fullScreenView_)
+  } else if (hub_->isSignalTokenMode() && fullScreenView_) {
     move(fullScreenView_->pos());
+    emit posChanged();
+  }
 }
 
 void
 AnnotationGraphicsView::moveToGlobalPos(const QPoint &globalPos)
 {
+  QPoint newPos =
 #ifdef Q_WS_MAC
-  QPoint newPos = mapFromGlobal(globalPos) - mapFromGlobal(QPoint());
-  if (newPos != pos())
-    move(newPos);
+      mapFromGlobal(globalPos) - mapFromGlobal(QPoint())
 #else
-  // Currently only work on Windows
-  QPoint newPos = frameGeometry().topLeft() + pos() // relative position
-                  + globalPos - mapToGlobal(pos()); // absolute distance
-  if (newPos != pos())
-    move(newPos);
+      // Currently only work on Windows
+      frameGeometry().topLeft() + pos() + // relative position
+      globalPos - mapToGlobal(pos()) // absolute distance
 #endif // Q_WS_MAC
+  ;
+  if (newPos != pos()) {
+    move(newPos);
+    emit posChanged();
+  }
 }
 
 void
@@ -292,6 +336,8 @@ AnnotationGraphicsView::setVisible(bool visible)
   Base::setVisible(visible);
 
   invalidateTrackingTimer();
+
+  emit visibleChanged(visible);
 }
 
 // - Player connections -
@@ -326,10 +372,6 @@ AnnotationGraphicsView::setVisible(bool visible)
   SET_HUB_CONNECTIONS(disconnect)
 #undef HUB_CONNECTIONS
 
-bool
-AnnotationGraphicsView::isActive() const
-{ return active_; }
-
 void
 AnnotationGraphicsView::setActive(bool active)
 {
@@ -345,10 +387,6 @@ AnnotationGraphicsView::setActive(bool active)
   }
 }
 
-bool
-AnnotationGraphicsView::isPlaybackEnabled() const
-{ return playbackEnabled_; }
-
 void
 AnnotationGraphicsView::setPlaybackEnabled(bool enabled)
 {
@@ -357,10 +395,6 @@ AnnotationGraphicsView::setPlaybackEnabled(bool enabled)
     emit playbackEnabledChanged(enabled);
   }
 }
-
-void
-AnnotationGraphicsView::togglePlaybackEnabled()
-{ setPlaybackEnabled(!playbackEnabled_); }
 
 // - Pause/resme -
 
@@ -419,15 +453,13 @@ void
 AnnotationGraphicsView::invalidateAnnotations()
 {
   removeAnnotations();
-  /*
-  if (player_->hasMedia()) {
-    qint64 msecs = player_->mediaLength();
-    if (msecs < 0)
-      return;
-    int secs = ::msecs2secs(msecs);
-    annots_.resize(secs + 1); // +1 to make sure the last seconds can be held
-  }
-  */
+  //if (player_->hasMedia()) {
+  //  qint64 msecs = player_->mediaLength();
+  //  if (msecs < 0)
+  //    return;
+  //  int secs = ::msecs2secs(msecs);
+  //  annots_.resize(secs + 1); // +1 to make sure the last seconds can be held
+  //}
 
   playTime_ = -1;
 }
@@ -446,27 +478,32 @@ void
 AnnotationGraphicsView::addAnnotation(const Annotation &annot, qint64 delaysecs)
 {
   DOUT("enter: aid =" << annot.id() << ", pos =" << annot.pos());
-  AnnotationGraphicsItem *item = new AnnotationGraphicsItem(annot, hub_, server_, this);
 
   qint64 pos = annot.pos();
   if (hub_->isMediaTokenMode())
     pos = pos / 1000; // msecs => secs, cluster media annotation by seconds
 
-  QList<AnnotationGraphicsItem*> *l = annots_[pos];
-  if (!l)
-    l = annots_[pos] = new QList<AnnotationGraphicsItem*>;
-  l->append(item);
+  //QList<AnnotationGraphicsItem*> *l = annots_[pos];
+  //if (!l)
+  //  l = annots_[pos] = new QList<AnnotationGraphicsItem*>;
+  //l->append(item);
+  hash_[pos].append(annot);
 
-  if (isItemFiltered(item))
-      return;
+  if (filter_->filter(annot))
+    return;
 
+
+  bool show = false;
   if (delaysecs == LLONG_MAX)
-    item->showMe();
+    show = true;
   else if (hub_->isMediaTokenMode() && player_->hasMedia()) {
     qint64 secsdiff =  player_->time() / 1000 - annot.pos() / 1000;
     if (secsdiff >= 0 && secsdiff <= delaysecs)
-      item->showMe();
+      show = true;
   }
+
+  if (show)
+    showAnnotation(annot);
 
   emit annotationAdded(annot);
   DOUT("exit");
@@ -479,9 +516,14 @@ AnnotationGraphicsView::addAndShowAnnotation(const Annotation &annot)
 void
 AnnotationGraphicsView::showAnnotation(const Annotation &annot)
 {
-  AnnotationGraphicsItem *item = new AnnotationGraphicsItem(annot, hub_, server_, this);
-  if (!isItemFiltered(item))
+  if (!filter_->filter(annot)) {
+    AnnotationGraphicsItem *item = new AnnotationGraphicsItem(annot, hub_, this);
     item->showMe();
+    if (item->isSubtitle())
+      emit subtitleAdded(item->richText());
+    else
+      emit annotationAdded(item->richText());
+  }
 }
 
 // - Queries -
@@ -490,9 +532,9 @@ int
 AnnotationGraphicsView::itemsCount() const
 {
   int ret = 0;
-  foreach (QList<AnnotationGraphicsItem*> *l, annots_.values())
-    if (l)
-      ret += l->size();
+  if (!hash_.isEmpty())
+    for (BOOST_AUTO(p, hash_.begin()); p != hash_.end(); ++p)
+      ret += p.value().size();
 
   return ret;
 }
@@ -500,14 +542,15 @@ AnnotationGraphicsView::itemsCount() const
 int
 AnnotationGraphicsView::itemsCount(int time) const
 {
-  int ret = 0;
-  BOOST_AUTO(it, annots_.find(time));
-  if (it != annots_.end()) {
-    BOOST_AUTO(l, *it);
-    if (l)
-      ret = l->size();
-  }
-  return ret;
+  //int ret = 0;
+  //BOOST_AUTO(it, annots_.find(time));
+  //if (it != annots_.end()) {
+  //  BOOST_AUTO(l, *it);
+  //  if (l)
+  //    ret = l->size();
+  //}
+  //return ret;
+  return annotationsAtPos(time).size();
 }
 
 int
@@ -554,53 +597,86 @@ AnnotationGraphicsView::showAnnotationsAtPos(qint64 pos)
 
   //qDebug() << annots_.keys();
 
-  if (annots_.contains(pos)) {
-    DOUT("found annotations at pos =" << pos);
-    QList<AnnotationGraphicsItem*> *l = annots_[pos];
-    if (l && !l->empty())
-      foreach (AnnotationGraphicsItem *item, *l)
-       if (item && !isItemFiltered(item))
-         item->showMe();
-  }
+  emit annotationPosChanged();
 
-  emit posChanged();
+  //if (annots_.contains(pos)) {
+  //  DOUT("found annotations at pos =" << pos);
+  //  QList<AnnotationGraphicsItem*> *l = annots_[pos];
+  //  if (l && !l->empty())
+  //    foreach (AnnotationGraphicsItem *item, *l)
+  //     if (item && !isItemFiltered(item))
+  //       item->showMe();
+  //}
+  //
+  //foreach (Annotation a, l)
+  //  showAnnotation(a);
+  const AnnotationList &l = annotationsAtPos(pos);
+  if (!l.isEmpty())
+    for (BOOST_AUTO(p, l.begin()); p != l.end(); ++p)
+      showAnnotation(*p);
 
   DOUT("exit");
 }
 
 void
 AnnotationGraphicsView::invalidateAnnotationPos()
-{ emit posChanged(); }
+{ emit annotationPosChanged(); }
 
 void
 AnnotationGraphicsView::updateAnnotationText(const QString &text)
 {
-  qint64 id = editor_->id();
+  qint64 id = editor()->id();
   if (id) {
-    if (id != userId_) {
-      warn(tr("cannot edit other's annotation text"));
-      return;
-    }
+    updateAnnotationTextWithId(text, id);
+    emit annotationTextUpdatedWithId(text, id);
+  }
+}
 
-    AnnotationGraphicsItem *item = itemWithId(id);
-    if (item) {
-      Annotation a = item->annotation();
-      a.setText(text);
-      item->setAnnotation(a);
-    }
-    emit annotationTextUpdated(text, id);
+void
+AnnotationGraphicsView::updateAnnotationTextWithId(const QString &text, qint64 id)
+{
+  AnnotationGraphicsItem *item = itemWithId(id);
+  if (item) {
+    item->annotation().setText(text);
+    item->annotation().setUpdateTime(QDateTime::currentMSecsSinceEpoch() / 1000);
+    item->invalidateAnnotation();
+  }
+
+  Annotation *a = annotationWithId(id);
+  if (a) {
+    a->setText(text);
+    a->setUpdateTime(QDateTime::currentMSecsSinceEpoch());
   }
 }
 
 AnnotationGraphicsItem*
-AnnotationGraphicsView::itemWithId(qint64 aid) const
+AnnotationGraphicsView::itemWithId(qint64 id) const
 {
-  if (!annots_.empty())
-    foreach (QList<AnnotationGraphicsItem*> *l, annots_.values())
-      if (l && !l->empty())
-        foreach (AnnotationGraphicsItem *item, *l)
-          if (item && item->annotation().id() == aid)
-            return item;
+  //if (!annots_.empty())
+  //  foreach (QList<AnnotationGraphicsItem*> *l, annots_.values())
+  //    if (l && !l->empty())
+  //      foreach (AnnotationGraphicsItem *item, *l)
+  //        if (item && item->annotation().id() == id)
+  //          return item;
+  //return 0;
+  foreach (QGraphicsItem *item, scene()->items()) {
+    BOOST_AUTO(a, dynamic_cast<AnnotationGraphicsItem*>(item));
+    if (a && a->annotation().id() == id)
+      return a;
+  }
+  return 0;
+}
+
+Annotation*
+AnnotationGraphicsView::annotationWithId(qint64 id) const
+{
+  Self *self = const_cast<Self*>(this);
+  for (AnnotationHash::Iterator h = self->hash_.begin(); h != self->hash_.end(); ++h) {
+    AnnotationList &l = h.value();
+    for (AnnotationList::Iterator p = l.begin(); p != l.end(); ++p)
+      if (p->id() == id)
+        return &*p;
+  }
   return 0;
 }
 

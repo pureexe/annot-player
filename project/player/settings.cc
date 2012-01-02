@@ -22,7 +22,7 @@
 #define SK_THEME        "Theme"
 #define SK_TRANSLATE    "Translate"
 #define SK_SUBTITLECOLOR "SubtitleColor"
-#define SK_SUBTITLEONTOP "SubtitleStaysOnTop"
+#define SK_SUBTITLEONTOP "SubtitleOnTop"
 #define SK_EMBEDONTOP   "EmbedOnTop"
 #define SK_UPDATEDATE   "UpdateDate"
 #define SK_RECENTPATH   "RecentPath"
@@ -186,19 +186,19 @@ Settings::setTranslateEnabled(bool enabled)
 { setValue(SK_TRANSLATE, enabled); }
 
 bool
-Settings::isSubtitleStaysOnTop() const
+Settings::isSubtitleOnTop() const
 { return value(SK_SUBTITLEONTOP).toBool(); }
 
 void
-Settings::setSubtitleStaysOnTop(bool t)
+Settings::setSubtitleOnTop(bool t)
 { setValue(SK_SUBTITLEONTOP, t); }
 
 bool
-Settings::isEmbeddedPlayerStaysOnTop() const
+Settings::isEmbeddedPlayerOnTop() const
 { return value(SK_EMBEDONTOP).toBool(); }
 
 void
-Settings::setEmbeddedPlayerStaysOnTop(bool t)
+Settings::setEmbeddedPlayerOnTop(bool t)
 { setValue(SK_EMBEDONTOP, t); }
 
 bool

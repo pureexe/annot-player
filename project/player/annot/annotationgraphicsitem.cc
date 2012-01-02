@@ -11,7 +11,6 @@
 #include "defines.h"
 #include "logger.h"
 #include "signalhub.h"
-#include "module/serveragent/serveragent.h"
 #include "core/cmd.h"
 #include "core/htmltag.h"
 #include "core/annotationparser.h"
@@ -19,7 +18,7 @@
 #include <QtGui>
 #include <ctime>
 
-#define DEBUG "annotationgraphicsitem"
+//#define DEBUG "annotationgraphicsitem"
 #include "module/debug/debug.h"
 
 using namespace Core::Cloud;
@@ -32,19 +31,24 @@ using namespace Logger;
 namespace { // anonymous, annotation display
 
   inline QFont
-  default_annot_font_()
+  default_annot_font_(int language)
   {
-    QFont font(ANNOTATION_FONT_DEFAULT, ANNOTATION_SIZE_DEFAULT);
-    font.setWeight(QFont::DemiBold);
+    if (language == Traits::Chinese) {
+      QFont font(ANNOTATION_FONT_CHINESE, ANNOTATION_SIZE_DEFAULT);
+      font.setWeight(QFont::DemiBold);
+      font.setStyleStrategy((QFont::StyleStrategy)(
+        QFont::ForceOutline | QFont::PreferQuality
+      ));
+      return font;
 
-    //font.setStyle(QFont::StyleOblique);
-    //font.setStyleStrategy(QFont::PreferAntialias);
-    //font.setStyleStrategy(QFont::PreferOutline);
-    font.setStyleStrategy((QFont::StyleStrategy)(
-      QFont::ForceOutline | QFont::PreferQuality
-    ));
-
-    return font;
+    } else {
+      QFont font(ANNOTATION_FONT_JAPANESE, ANNOTATION_SIZE_DEFAULT);
+      font.setWeight(QFont::DemiBold);
+      font.setStyleStrategy((QFont::StyleStrategy)(
+        QFont::ForceOutline | QFont::PreferQuality
+      ));
+      return font;
+    }
   }
 
   // Use std time() rather than QTime::currentTime() to improve performance.
@@ -98,7 +102,7 @@ namespace { // anonymous, annotation display
 
     int window_header = 0;
     if (hub_->isSignalTokenMode() && hub_->isEmbeddedPlayerMode())
-      window_header = 40;
+      window_header = 50;
 
     switch (style) {
     case AnnotationGraphicsItem::BottomStyle:   return window_height - (best_lane + 2) * lane_height;
@@ -115,34 +119,35 @@ AnnotationGraphicsItem::warmUp()
 {
 #ifdef Q_WS_MAC
   QGraphicsTextItem dummy;
-  QFont font = ::default_annot_font_();
 
-  font.setWeight(QFont::Light);
-  dummy.setFont(font);
+  QFont j = ::default_annot_font_(Traits::Japanese),
+        c = ::default_annot_font_(Traits::Chinese);
 
-  font.setWeight(QFont::Normal);
-  dummy.setFont(font);
+  j.setWeight(QFont::Light); dummy.setFont(j);
+  c.setWeight(QFont::Light); dummy.setFont(c);
 
-  font.setWeight(QFont::DemiBold);
-  dummy.setFont(font);
+  j.setWeight(QFont::Normal); dummy.setFont(j);
+  c.setWeight(QFont::Normal); dummy.setFont(c);
 
-  font.setWeight(QFont::Bold);
-  dummy.setFont(font);
+  j.setWeight(QFont::DemiBold); dummy.setFont(j);
+  c.setWeight(QFont::DemiBold); dummy.setFont(c);
 
-  font.setWeight(QFont::Black);
-  dummy.setFont(font);
+  j.setWeight(QFont::Bold); dummy.setFont(j);
+  c.setWeight(QFont::Bold); dummy.setFont(c);
+
+  j.setWeight(QFont::Black); dummy.setFont(j);
+  c.setWeight(QFont::Black); dummy.setFont(c);
 #endif // Q_WS_MAC
 }
 
 AnnotationGraphicsItem::AnnotationGraphicsItem(
-  const Annotation &annotation,
+  const Annotation &annot,
   SignalHub *hub,
-  ServerAgent *server,
   AnnotationGraphicsView *view)
-  : view_(view), hub_(hub), server_(server), style_(FloatStyle), dragPos_(BAD_POS)
+  : view_(view), hub_(hub), style_(FloatStyle), dragPos_(BAD_POS)
 {
+  DOUT("enter: text =" << annot.text());
   Q_ASSERT(hub_);
-  Q_ASSERT(server_);
   Q_ASSERT(view_);
   scene_ = view_->scene();
   Q_ASSERT(scene_);
@@ -154,31 +159,50 @@ AnnotationGraphicsItem::AnnotationGraphicsItem(
   ani_ = new QPropertyAnimation(this, "pos");
   connect(ani_, SIGNAL(finished()), SLOT(removeMe()));
 
-  setDefaultStyle();
-  setAnnotation(annotation);
+  setAnnotation(annot);
+  DOUT("exit");
 }
-
-const Annotation&
-AnnotationGraphicsItem::annotation() const
-{ return annotation_; }
 
 void
 AnnotationGraphicsItem::setAnnotation(const Annotation &annot)
 {
-  annotation_ = annot;
+  annot_ = annot;
+  invalidateAnnotation();
+}
 
-  QString text = annotation_.text();
-  if (text.contains(CORE_CMD_SUB " ") || text.contains(CORE_CMD_SUBTITLE " "))
+bool
+AnnotationGraphicsItem::isSubtitle(const QString &text)
+{
+  // FIXME: deal with subtitle
+  //if (text.contains(CORE_CMD_SUB) || text.contains(CORE_CMD_SUBTITLE))
+  return text.contains(CORE_CMD_SUB);
+}
+
+void
+AnnotationGraphicsItem::invalidateAnnotation()
+{
+  setDefaultStyle();
+
+  QFont font = ::default_annot_font_(annot_.language());
+  if (annot_.userId() == view_->userId())
+    font.setUnderline(true);
+  setFont(font);
+
+  QString text = annot_.text();
+  if (isSubtitle(text))
     text = view_->subtitlePrefix() + text;
 
   QString code;
   QStringList tags;
   boost::tie(code, tags) = ANNOT_PARSE_CODE(text);
   setTags(tags);
-  if (!tags.empty() && tags.contains(CORE_CMD_VERBATIM))
-    setPlainText(code);
-  else
-    setText(code);
+  if (tags.contains(CORE_CMD_VERBATIM))
+    setPlainText(richText_ = text);
+  else {
+    setText(richText_ = code);
+    if (annot_.userId() == view_->userId())
+      richText_ = CORE_CMD_LATEX_ULINE " " + richText_;
+  }
 }
 
 // TODO: How to use QTextCharFormat to set advanced format:
@@ -222,13 +246,11 @@ AnnotationGraphicsItem::setTags(const QStringList &tags)
 
       case Core::H_Sub:
       case Core::H_Subtitle: setStyle(SubtitleStyle); break;
-#ifdef DEBUG
       default:
         // Warn if the annot is submitted by current user
-        if (!annotation_.hasUserId() && !annotation_.hasUserAlias() ||
-            server_->isAuthorized() && server_->user().id() == annotation_.id())
+        if (!annot_.hasUserId() && !annot_.hasUserAlias() ||
+            view_->userId() == annot_.userId())
         warn(TR(T_ERROR_UNKNOWN_COMMAND) + ": " + tag);
-#endif // DEBUG
       }
     }
 }
@@ -236,14 +258,19 @@ AnnotationGraphicsItem::setTags(const QStringList &tags)
 void
 AnnotationGraphicsItem::setDefaultStyle()
 {
+  setStyle(FloatStyle);
   setFlags(QGraphicsItem::ItemIsMovable); // Doesn't work when view_ is embedded in dock window orz
 
   setToolTip(TR(T_TOOLTIP_ANNOTATIONITEM)); // TODO: Make this dynamically determined.
 
   setDefaultTextColor(ANNOTATION_COLOR_DEFAULT);
 
-  //QGraphicsDropShadowEffect *shadow = QGraphicsDropShadowEffect(this));
-  //setGraphicsEffect(shadow);
+  // Add outline to fonts
+  QGraphicsDropShadowEffect *shadow = new QGraphicsDropShadowEffect(this); {
+    shadow->setBlurRadius(2); // in pixels
+    shadow->setOffset(1); // in pixels
+    shadow->setColor(QColor("black"));
+  } setGraphicsEffect(shadow);
 
   //QGraphicsBlurEffect *blur = new QGraphicsBlurEffect(this);
   //blur->setBlurHints(QGraphicsBlurEffect::PerformanceHint);
@@ -251,27 +278,11 @@ AnnotationGraphicsItem::setDefaultStyle()
   //setGraphicsEffect(blur);
 
 //#if ANNOTATION_OPACITY < 1
-  QGraphicsOpacityEffect *effect = new QGraphicsOpacityEffect(this);
-  effect->setOpacity(ANNOTATION_OPACITY);
-  setGraphicsEffect(effect);
+  //QGraphicsOpacityEffect *effect = new QGraphicsOpacityEffect(this);
+  //effect->setOpacity(ANNOTATION_OPACITY);
+  //setGraphicsEffect(effect);
 //#endif // ANNOTATION_OPACITY
-
-  // Font
-  QFont font = ::default_annot_font_();
-
-  // if the annotation is made by user or doll, add underline
-  //font.setUnderline(true);
-
-  setFont(font);
 }
-
-AnnotationGraphicsItem::Style
-AnnotationGraphicsItem::style() const
-{ return style_; }
-
-void
-AnnotationGraphicsItem::setStyle(Style style)
-{ style_ = style; }
 
 /*
 QString
@@ -380,23 +391,38 @@ AnnotationGraphicsItem::addMe()
   if (style_ == SubtitleStyle &&
       hub_->isSignalTokenMode() &&
       !hub_->isStopped())
-    connect(view_, SIGNAL(posChanged()), SLOT(removeMe()));
+    connect(view_, SIGNAL(annotationPosChanged()), SLOT(removeMe()));
+
   scene_->addItem(this);
 }
 
 void
 AnnotationGraphicsItem::removeMe()
 {
-  if (style_ == SubtitleStyle &&
-      hub_->isSignalTokenMode() &&
-      !hub_->isStopped())
-    disconnect(view_, SIGNAL(posChanged()), this, SLOT(removeMe()));
+  // Always try to disconnect to avoid segmentation fault
+  //if (style_ == SubtitleStyle &&
+  //    hub_->isSignalTokenMode() &&
+  //    !hub_->isStopped())
+  if (hub_->isSignalTokenMode())
+    disconnect(view_, SIGNAL(annotationPosChanged()), this, SLOT(removeMe()));
   disconnect(view_, SIGNAL(paused()), this, SLOT(pause()));
   disconnect(view_, SIGNAL(resumed()), this, SLOT(resume()));
   scene_->removeItem(this);
+
+  QTimer::singleShot(0, this, SLOT(deleteLater()));
 }
 
-void AnnotationGraphicsItem::showMe()
+void
+AnnotationGraphicsItem::deleteMe()
+{
+  if (annot_.hasId())
+    view_->removeAnnotationWithId(annot_.id(), true); // deleteAnnot = true
+  else
+    removeMe();
+}
+
+void
+AnnotationGraphicsItem::showMe()
 {
   switch (style_) {
   case FloatStyle:
@@ -584,6 +610,8 @@ AnnotationGraphicsItem::contextMenuEvent(QContextMenuEvent *event)
     menu.addAction(TR(T_MENUTEXT_COPY), this, SLOT(copyToClipboard()));
     menu.addSeparator();
     menu.addAction(TR(T_MENUTEXT_REMOVEANNOTATION), this, SLOT(removeMe()));
+    if (annot_.hasId())
+      menu.addAction(TR(T_MENUTEXT_DELETETHISANNOT), this, SLOT(deleteMe()));
 
     menu.exec(event->globalPos());
     event->accept();
@@ -666,8 +694,8 @@ AnnotationGraphicsItem::copyToClipboard() const
 {
   QClipboard *clipboard = QApplication::clipboard();
   if (clipboard) {
-    clipboard->setText(annotation_.text());
-    log(TR(T_SUCCEED_ANNOTATION_COPIED) + ": " + annotation_.text());
+    clipboard->setText(annot_.text());
+    log(TR(T_SUCCEED_COPIED) + ": " + annot_.text());
   } else
     warn(TR(T_ERROR_CLIPBOARD_UNAVAILABLE));
 }
@@ -675,8 +703,13 @@ AnnotationGraphicsItem::copyToClipboard() const
 void
 AnnotationGraphicsItem::edit()
 {
-  view_->editor()->setText(annotation_.text());
-  view_->editor()->setId(annotation_.id());
+  if (annot_.userId() != view_->userId()) {
+    warn(tr("cannot edit other's annotation text"));
+    return;
+  }
+
+  view_->editor()->setText(annot_.text());
+  view_->editor()->setId(annot_.id());
   view_->editor()->show();
 }
 

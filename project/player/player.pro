@@ -131,6 +131,7 @@ HEADERS += \
     define/rc.h \
     define/stylesheet.h \
     dialog/aboutdialog.h \
+    dialog/backlogview.h \
     dialog/devicedialog.h \
     dialog/helpdialog.h \
     dialog/livedialog.h \
@@ -138,6 +139,8 @@ HEADERS += \
     dialog/pickdialog.h \
     dialog/seekdialog.h \
     dialog/syncdialog.h \
+    dialog/textview.h \
+    dialog/textview.h \
     osd/osdconsole.h \
     osd/osdwindow.h \
     osd/videoview.h \
@@ -185,6 +188,7 @@ SOURCES += \
     data/dataserver.cc \
     db/db.cc \
     dialog/aboutdialog.cc \
+    dialog/backlogview.cc \
     dialog/devicedialog.cc \
     dialog/helpdialog.cc \
     dialog/livedialog.cc \
@@ -192,6 +196,7 @@ SOURCES += \
     dialog/pickdialog.cc \
     dialog/seekdialog.cc \
     dialog/syncdialog.cc \
+    dialog/textview.cc \
     osd/osdconsole.cc \
     osd/osdwindow.cc \
     osd/videoview.cc \
