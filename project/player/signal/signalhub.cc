@@ -67,6 +67,7 @@ SignalHub::setVolume(qreal percentage)
       emit volumeChanged(percentage);
     } break;
 
+  case LiveTokenMode:
   case SignalTokenMode:
 #ifdef Q_WS_WIN
     //QtWin::setWaveVolume(percentage);

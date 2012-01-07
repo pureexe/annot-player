@@ -22,6 +22,7 @@ start translate goei2
 
 ## annot.player
 0.1.2.2
+- Updated to Qt 4.8 on Mac OS X.
 - FIXME: dragging window disappear bug
 - add outdated state into media_annot
   add an wiki subtitle edit window

@@ -33,7 +33,7 @@ DEPENDPATH  += Internal
 INCLUDEPATH += Config
 DEPENDPATH  += Config
 
-HEADERS += \
+OBJECTIVE_HEADERS += \
     VLCAudio.h \
     VLCKit.h \
     VLCLibrary.h \
@@ -55,7 +55,7 @@ HEADERS += \
     Internal/VLCLibVLCBridging.h \
     Internal/VLCVideoCommon.h
 
-SOURCES += \
+OBJECTIVE_SOURCES += \
     Sources/VLCAudio.m \
     Sources/VLCEventManager.m \
     Sources/VLCLibrary.m \

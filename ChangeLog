@@ -6,7 +6,6 @@ Annot Project
         * Added Spring Festival channel.
         * Ensure buttons repaint correctly in Windows.
         * Fixed crash on exit in Mac OS X caused by unreleased nsobject.
-        * Updated to Qt 4.8 on Mac OS X.
 
 1/1/2012	annot.player	0.1.2.0
         * Able to delete annotations and alias.
