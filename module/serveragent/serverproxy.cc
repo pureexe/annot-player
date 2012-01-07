@@ -7,7 +7,7 @@
 #include "core/cloud/traits.h"
 #include <QtCore>
 
-#define DEBUG "serverproxy"
+//#define DEBUG "serverproxy"
 #include "module/debug/debug.h"
 
 using namespace Core::Cloud;
@@ -1004,6 +1004,130 @@ ServerProxy::updateAnnotationTextWithId(const QString &text, qint64 id, const QS
 
   bool ret = response.return_;
   DOUT("exit: ret =" << ret);
+  return ret;
+}
+
+// - Live -
+
+qint32
+ServerProxy::selectLiveTokenIntervalWithId(qint64 tid)
+{
+  DOUT("enter: tid =" << tid);
+  qint32 ret = 0;
+
+  // Revert live token ID
+  if (tid < 0)
+    tid = - tid;
+
+  tns__selectLiveTokenWithId request;
+  request.arg0 = tid;
+
+  tns__selectLiveTokenWithIdResponse response;
+  mutex_.lock();
+  int err = proxy_->selectLiveTokenWithId(&request, &response);
+  mutex_.unlock();
+  if (err) {
+    DOUT("soap error, err =" << err);
+    emit soapError(err);
+    DOUT("exit");
+    return ret;
+  }
+
+  tns__liveToken *p = response.return_;
+  if (p && p->id)
+    ret = p->interval;
+
+  DOUT("exit: ret =" << ret);
+  return ret;
+}
+
+AnnotationList
+ServerProxy::selectLiveAnnotationsWithTokenId(qint64 tid)
+{
+  DOUT("enter: tid =" << tid);
+  AnnotationList ret;
+
+  // Revert live token ID
+  if (tid < 0)
+    tid = - tid;
+
+  tns__selectLiveAnnotationsWithTokenId request;
+  request.arg0 = tid;
+
+  tns__selectLiveAnnotationsWithTokenIdResponse response;
+  mutex_.lock();
+  int err = proxy_->selectLiveAnnotationsWithTokenId(&request, &response);
+  mutex_.unlock();
+  if (err) {
+    DOUT("soap error, err =" << err);
+    emit soapError(err);
+    DOUT("exit");
+    return ret;
+  }
+
+  if (!response.return_.empty())
+    foreach (tns__liveAnnotation *p, response.return_)
+      if (p) {
+        Annotation a;
+        a.setStatus(p->status);
+        a.setFlags(p->flags);
+        a.setId(p->id);
+        a.setTokenId(p->tokenId > 0 ? - p->tokenId : p->tokenId); // Revert
+        a.setUserId(p->userId);
+        if (p->userAlias)
+          a.setUserAlias(QString::fromStdString(*p->userAlias));
+        a.setLanguage(p->language);
+        if (p->text)
+          a.setText(QString::fromStdString(*p->text));
+        a.setCreateTime(p->createTime);
+
+        ret.append(a);
+      }
+
+  DOUT("exit: count =" << ret.size());
+  return ret;
+}
+
+qint64
+ServerProxy::submitLiveAnnotationTextWithTokenId(const QString &text, qint64 tokenId, const QString &userName, const QString &password)
+{
+  DOUT("enter");
+
+  if (text.isEmpty()) {
+    DOUT("exit: error: missing text");
+    return 0;
+  }
+  if (text.size() > Traits::MAX_ANNOT_LENGTH) {
+    DOUT("exit: error: text too long, size =" << text.size());
+    return 0;
+  }
+
+  // Revert live token ID
+  if (tokenId < 0)
+    tokenId = - tokenId;
+
+  tns__submitLiveAnnotationTextWithTokenId request;
+  std::string arg0 = text.toStdString();
+  request.arg0 = &arg0;
+  request.arg1 = tokenId;
+  std::string s_userName = userName.toStdString();
+  request.userName = &s_userName;
+  std::string s_password = password.toStdString();
+  request.password = &s_password;
+
+  tns__submitLiveAnnotationTextWithTokenIdResponse response;
+  mutex_.lock();
+  int err = proxy_->submitLiveAnnotationTextWithTokenId(&request, &response);
+  mutex_.unlock();
+  if (err) {
+    DOUT(" soap error, err =" << err);
+    emit soapError(err);
+    DOUT("exit");
+    return 0;
+  }
+
+  qint64 ret = response.return_;
+  DOUT("exit: aid =" << ret);
   return ret;
 }
 

@@ -154,7 +154,13 @@ public:
   bool isActive() const { return active_; }
   bool isPlaybackEnabled() const {  return playbackEnabled_; }
 
+  bool isStarted() const;
 public slots:
+  void setInterval(int msecs);
+  void start();
+  void stop();
+  void tick();
+
   void setActive(bool active); // start polling when active
   void setPlaybackEnabled(bool enabled);
   void togglePlaybackEnabled() { setPlaybackEnabled(!playbackEnabled_); }
@@ -167,7 +173,7 @@ public slots:
   void invalidatePos();
 
   // Stream control
-  void invalidatePlayTime();
+  void invalidateCurrentTime();
   void invalidateAnnotations();       // reset annotations from database!
 
   void pause();
@@ -186,6 +192,10 @@ public slots:
   void showAnnotation(const Annotation &annot);
   void addAnnotations(const AnnotationList &annots);
   void setAnnotations(const AnnotationList &annots);
+  void showAnnotationOnce(const Annotation &annot);
+
+  ///  Add at [currentTime, currentTime+interval/1000)
+  void appendAnnotations(const AnnotationList &annots);
 
   // Message mode:
   void showAnnotationsAtPos(qint64 pos);
@@ -202,7 +212,7 @@ protected slots:
   void updateAnnotationTextWithId(const QString &text, qint64 aid);
 
 public:
-  bool isItemFiltered(const AnnotationGraphicsItem *item) const;
+  bool isAnnotationFiltered(const Annotation &a) const;
 
   // - Implementations -
 private:
@@ -219,18 +229,22 @@ private:
 
   QString subtitlePrefix_;
 
+  QTimer *timer_; // live timer
   QTimer *trackingTimer_;
 
   // Though not quint64, the time is not supposed to be negative.
   //QHash<qint64, QList<AnnotationGraphicsItem*>*> annots_; // indexed by secs for MediaMode or hash for SignalMode
   typedef QHash<qint64, AnnotationList> AnnotationHash;
   AnnotationHash hash_; // indexed by secs for MediaMode or hash for SignalMode
-  qint64 playTime_; // in sec
+  qint64 currentTime_; // in secs
+  int interval_; // in msecs, but will be rounded to seconds
 
   qint64 userId_;
 
   bool playbackEnabled_;
   AnnotationPosition subtitlePosition_;
+
+  QList<qint64> filteredAnnotationIds_;
 };
 
 #endif // ANNOTATIONGRAPHICSVIEW_H

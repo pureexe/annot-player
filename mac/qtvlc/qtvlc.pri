@@ -12,10 +12,12 @@ include($$ROOTDIR/mac/qtstep/qtstep.pri)
 include($$ROOTDIR/mac/VLCKit/VLCKit_static.pri)
 
 HEADERS += \
-    $$PWD/qtvlc.h \
+    $$PWD/qtvlc.h
+
+OBJECTIVE_HEADERS += \
     $$PWD/qtvlcprivate.h
 
-SOURCES += \
+OBJECTIVE_SOURCES += \
    $$PWD/qtvlc.mm
 
 QT      += core

@@ -197,7 +197,7 @@ TranslatorManager::translate(int tid) const
   case T_TITLE_COMMENTVIEW:     return tr("Comments");
   case T_TITLE_CLOUDVIEW:       return tr("Annot Cloud");
   case T_TITLE_SIGNALVIEW:      return tr("Select process signal");
-  case T_TITLE_LIVE:            return tr("Live Mode");
+  case T_TITLE_LIVE:            return tr("Live Channel");
   case T_TITLE_SYNC:            return tr("Sync Mode");
 
   // Messages:
@@ -217,6 +217,7 @@ TranslatorManager::translate(int tid) const
   case T_ERROR_SUBMIT_ANNOTATION:       return tr("failed to submit annotation");
   case T_ERROR_SYNC_FAILURE:            return tr("failed to synchronize offline queue,:return try later");
   case T_ERROR_NO_MEDIA:                return tr("no media");
+  case T_ERROR_NETWORK:                 return tr("network error");
 
   case T_SUCCEED_SNAPSHOT_SAVED:        return tr("snapshot saved on desktop");
   case T_SUCCEED_COPIED:                return tr("copied to clipboard");
@@ -297,7 +298,7 @@ TranslatorManager::translate(int tid) const
   case T_MENUTEXT_EMBEDONTOP:   return tr("Embed on top");
   case T_TIP_EMBEDONTOP:        return tr("Embed player window on the top");
 
-  case T_MENUTEXT_LIVE:         return tr("Live mode");
+  case T_MENUTEXT_LIVE:         return tr("Live channel");
   case T_TIP_LIVE:              return tr("Toggle live mode");
 
   case T_MENUTEXT_SYNC:         return tr("Sync mode");

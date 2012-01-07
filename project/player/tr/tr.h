@@ -227,6 +227,7 @@
 #define T_ERROR_SYNC_FAILURE            0x2e
 #define T_ERROR_LOGINFROMCACHE_FAILURE  0x2f
 #define T_ERROR_NO_MEDIA                0x30
+#define T_ERROR_NETWORK                 0x31
 
 #define T_SUCCEED_SNAPSHOT_SAVED        0x41
 #define T_SUCCEED_COPIED                0x42

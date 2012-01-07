@@ -2,7 +2,10 @@
 # 6/18/2011
 
 # CHECKPOINT
+spring fest special
+
 start translate goei2
+- automatically recognize process' signal through ith's control signal
 - start with mai/akemi route
 - need wiki-like subtitle edit support
   - subtitles set "shared" flag by default
@@ -18,7 +21,7 @@ start translate goei2
 - continue project doll
 
 ## annot.player
-0.1.2.1
+0.1.2.2
 - FIXME: dragging window disappear bug
 - add outdated state into media_annot
   add an wiki subtitle edit window
@@ -29,6 +32,9 @@ start translate goei2
   subtitile are default having shared attirbute
   shared subtitle could be marked as outdated or restored
 - webbrowser: open link in new tab
+- enable annot annot time
+  utilizing annot.time msecs
+  editing annot time
 
 0.1.2.x
 - add male/female/chaos to user's flags

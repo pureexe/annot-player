@@ -917,6 +917,7 @@
                         <key>CFBundleTypeExtensions</key>
                         <array>
                                 <string>m4a</string>
+                                <string>m4r</string>
                         </array>
                         <key>CFBundleTypeIconFile</key>
                         <string>m4a.icns</string>

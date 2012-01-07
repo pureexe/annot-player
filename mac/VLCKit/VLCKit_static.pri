@@ -11,7 +11,7 @@ DEPENDPATH  += $$PWD/Internal
 INCLUDEPATH += $$PWD/Config
 DEPENDPATH  += $$PWD/Config
 
-HEADERS += \
+OBJECTIVE_HEADERS += \
     $$PWD/VLCAudio.h \
     $$PWD/VLCKit.h \
     $$PWD/VLCLibrary.h \
@@ -33,7 +33,7 @@ HEADERS += \
     $$PWD/Internal/VLCLibVLCBridging.h \
     $$PWD/Internal/VLCVideoCommon.h
 
-SOURCES += \
+OBJECTIVE_SOURCES += \
     $$PWD/Sources/VLCAudio.m \
     $$PWD/Sources/VLCEventManager.m \
     $$PWD/Sources/VLCLibrary.m \

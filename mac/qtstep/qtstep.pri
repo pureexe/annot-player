@@ -3,9 +3,11 @@
 
 INCLUDEPATH += $$PWD
 
-HEADERS += $$PWD/qtstep.h
+HEADERS += \
+    $$PWD/qtstep.h
 
-SOURCES += $$PWD/qtstep.mm
+OBJECTIVE_SOURCES += \
+    $$PWD/qtstep.mm
 
 QT      += core gui
 LIBS    += -framework Foundation -framework AppKit

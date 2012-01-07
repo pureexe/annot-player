@@ -10,6 +10,9 @@
 #include "module/serveragent/serveragent.h"
 #include "core/util/datetime.h"
 #include "core/cloud/annotation.h"
+#ifdef Q_WS_WIN
+  #include "win/qtwin/qtwin.h"
+#endif // Q_WS_WIN
 #include "boost/foreach.hpp"
 #include <map>
 #include <QtGui>
@@ -236,6 +239,7 @@ void
 PlayerUi::play()
 {
   switch (hub_->tokenMode()) {
+  case SignalHub::LiveTokenMode:
   case SignalHub::SignalTokenMode:
     if (hub_->isPlaying())
       hub_->pause();
@@ -268,6 +272,11 @@ PlayerUi::stop()
   switch (hub_->tokenMode()) {
   case SignalHub::SignalTokenMode:
     hub_->stop();
+    break;
+
+  case SignalHub::LiveTokenMode:
+    hub_->stop();
+    hub_->setMediaTokenMode();
     break;
 
   case SignalHub::MediaTokenMode:
@@ -309,9 +318,7 @@ PlayerUi::server() const
 
 void
 PlayerUi::setVolume(int vol)
-{
-  hub_->setVolume(vol / G_VOLUME_MAX);
-}
+{ hub_->setVolume(vol / G_VOLUME_MAX); }
 
 void
 PlayerUi::setPosition(int pos)
@@ -325,10 +332,13 @@ PlayerUi::invalidateVolumeSlider()
 {
   QSlider *slider = volumeSlider();
 
-  if (hub_->isSignalTokenMode() || !player_->isValid()) {
+  if (!hub_->isMediaTokenMode() || !player_->isValid()) {
     slider->setSliderPosition(0);
     if (slider->isEnabled())
       slider->setEnabled(false);
+//#ifdef Q_WS_WIN
+//    QtWin::repaintWindow(slider->winId());
+//#endif // Q_WS_WIN
     return;
   }
 
@@ -347,6 +357,10 @@ PlayerUi::invalidateVolumeSlider()
       .arg(TR(T_VOLUME))
       .arg(QString::number(percentage))
   );
+
+//#ifdef Q_WS_WIN
+//  QtWin::repaintWindow(slider->winId());
+//#endif // Q_WS_WIN
 }
 
 void
@@ -354,11 +368,14 @@ PlayerUi::invalidatePositionSlider()
 {
   QSlider *slider = positionSlider();
 
-  if (hub_->isSignalTokenMode() || !player_->isValid()) {
+  if (!hub_->isMediaTokenMode() || !player_->isValid()) {
     //slider->hide();
     slider->setSliderPosition(0);
     if (slider->isEnabled())
       slider->setEnabled(false);
+//#ifdef Q_WS_WIN
+//    QtWin::repaintWindow(slider->winId());
+//#endif // Q_WS_WIN
     return;
   }
 
@@ -392,18 +409,25 @@ PlayerUi::invalidatePositionSlider()
     QString zero = QTime(0, 0, 0).toString();
     slider->setToolTip(zero + " / -" + zero);
   }
+#ifdef Q_WS_WIN
+  //QtWin::repaintWindow(slider->winId());
+#endif // Q_WS_WIN
 }
 
 void
 PlayerUi::invalidateUserButton()
 {
+  QToolButton *button = userButton();
   if (server_->isAuthorized()) {
-    userButton()->setStyleSheet(SS_TOOLBUTTON_TEXT_NORMAL);
-    userButton()->setText(server_->user().name());
+    button->setStyleSheet(SS_TOOLBUTTON_TEXT_NORMAL);
+    button->setText(server_->user().name());
   } else {
-    userButton()->setStyleSheet(SS_TOOLBUTTON_TEXT_HIGHLIGHT);
-    userButton()->setText(TR(T_LOGIN));
+    button->setStyleSheet(SS_TOOLBUTTON_TEXT_HIGHLIGHT);
+    button->setText(TR(T_LOGIN));
   }
+#ifdef Q_WS_WIN
+  QtWin::repaintWindow(button->winId());
+#endif // Q_WS_WIN
 }
 
 void
@@ -437,12 +461,15 @@ PlayerUi::invalidatePositionButton()
     QString zero = QTime(0, 0, 0).toString();
     button->setText(zero + " / " + zero);
   }
+#ifdef Q_WS_WIN
+  QtWin::repaintWindow(button->winId());
+#endif // Q_WS_WIN
 }
 
 void
 PlayerUi::invalidateTitle()
 {
-  if (hub_->isSignalTokenMode())
+  if (!hub_->isMediaTokenMode())
     return;
   if (player_->hasMedia()) {
     QString title = player_->mediaTitle();
@@ -464,13 +491,14 @@ PlayerUi::invalidatePlayButton()
 {
   QToolButton *button = playButton();
   switch (hub_->tokenMode()) {
+  case SignalHub::LiveTokenMode:
   case SignalHub::SignalTokenMode:
     if (hub_->isPlaying()) {
       button->setStyleSheet(SS_TOOLBUTTON_PAUSE);
       button->setToolTip(TR(T_TOOLTIP_PAUSE));
     } else {
-      playButton()->setStyleSheet(SS_TOOLBUTTON_PLAY);
-      playButton()->setToolTip(TR(T_TOOLTIP_PLAY));
+      button->setStyleSheet(SS_TOOLBUTTON_PLAY);
+      button->setToolTip(TR(T_TOOLTIP_PLAY));
     }
     break;
 
@@ -488,35 +516,36 @@ PlayerUi::invalidatePlayButton()
     }
     break;
   }
+
+#ifdef Q_WS_WIN
+  QtWin::repaintWindow(button->winId());
+#endif // Q_WS_WIN
 }
 
 void
 PlayerUi::invalidateStopButton()
 {
+  QToolButton *button = stopButton();
   switch (hub_->tokenMode()) {
+  case SignalHub::LiveTokenMode:
   case SignalHub::SignalTokenMode:
-    stopButton()->setEnabled(!hub_->isStopped());
+    button->setEnabled(!hub_->isStopped());
     break;
 
   case SignalHub::MediaTokenMode:
-    switch (player_->status()) {
-    case Player::Playing:
-    case Player::Paused:
-      stopButton()->setEnabled(true);
-      break;
-    case Player::Stopped:
-      stopButton()->setEnabled(false);
-      break;
-    }
+    button->setEnabled(!player_->isStopped());
     break;
   }
+#ifdef Q_WS_WIN
+  QtWin::repaintWindow(button->winId());
+#endif // Q_WS_WIN
 }
 
 void
 PlayerUi::invalidateNextFrameButton()
 {
   QToolButton *button = nextFrameButton();
-  if (hub_->isSignalTokenMode()) {
+  if (!hub_->isMediaTokenMode()) {
     button->hide();
     button->setEnabled(false);
     return;
@@ -533,6 +562,9 @@ PlayerUi::invalidateNextFrameButton()
     button->setEnabled(false);
     break;
   }
+#ifdef Q_WS_WIN
+  QtWin::repaintWindow(button->winId());
+#endif // Q_WS_WIN
 }
 
 // - Annotations -
@@ -575,13 +607,17 @@ PlayerUi::clickUserButton()
 void
 PlayerUi::setAnnotationEnabled(bool enabled)
 {
+  QToolButton *button = toggleAnnotationButton();
   if (enabled) {
-    toggleAnnotationButton()->setStyleSheet(SS_TOOLBUTTON_HIDEANNOT);
-    toggleAnnotationButton()->setToolTip(TR(T_TOOLTIP_HIDEANNOT));
+    button->setStyleSheet(SS_TOOLBUTTON_HIDEANNOT);
+    button->setToolTip(TR(T_TOOLTIP_HIDEANNOT));
   } else {
-    toggleAnnotationButton()->setStyleSheet(SS_TOOLBUTTON_SHOWANNOT);
-    toggleAnnotationButton()->setToolTip(TR(T_TOOLTIP_SHOWANNOT));
+    button->setStyleSheet(SS_TOOLBUTTON_SHOWANNOT);
+    button->setToolTip(TR(T_TOOLTIP_SHOWANNOT));
   }
+#ifdef Q_WS_WIN
+  QtWin::repaintWindow(button->winId());
+#endif // Q_WS_WIN
 }
 
 void
@@ -598,7 +634,7 @@ PlayerUi::invalidateWindowModeToggler()
 void
 PlayerUi::invalidateVisibleWidgets()
 {
-  bool v = !hub_->isSignalTokenMode();
+  bool v = hub_->isMediaTokenMode();
   volumeSlider()->setVisible(v);
   positionSlider()->setVisible(v);
   positionButton()->setVisible(v);

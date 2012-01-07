@@ -34,6 +34,10 @@ namespace Core { namespace Cloud {
     enum TokenFlag {
     };
 
+    enum TokenId {
+      TI_Public = -1L
+    };
+
     // - Properties -
 
     // id > 0: made by human; id < 0: made by doll
@@ -136,6 +140,7 @@ namespace Core { namespace Cloud {
     { }
 
     bool isValid() const { return hasId(); } //&& hasType
+    bool isLive() const { return id() < 0; }
 
     void clear() { (*this) = Self(); }
 

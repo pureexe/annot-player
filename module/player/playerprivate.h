@@ -131,8 +131,15 @@ namespace { // anonymous: vlc handle
 
   mp_handle_::~mp_handle_()
   {
-    // The player would be automatically released when the instance is released
-    // Otherwise there will be a double-free segmentation fault.
+    if (!media_list_.isEmpty())
+      foreach (libvlc_media_t *m, media_list_)
+        if (m  && m != media_)
+          ::libvlc_media_release(m);
+
+    if (media_)
+      ::libvlc_media_release(media_);
+    if (player_)
+      ::libvlc_media_player_release(player_);
     if (instance_)
       ::libvlc_release(instance_);
   }

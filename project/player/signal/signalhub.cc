@@ -83,11 +83,15 @@ SignalHub::setVolume(qreal percentage)
 void
 SignalHub::setTokenMode(TokenMode mode)
 {
+  if (!isStopped())
+    stop();
+
   if (tokenMode_ != mode) {
     tokenMode_ = mode;
     switch (mode) {
+    case MediaTokenMode:  log(tr("switched to media mode")); break;
+    case LiveTokenMode:   log(tr("switched to live mode")); break;
     case SignalTokenMode: log(tr("switched to signal mode")); break;
-    case MediaTokenMode: log(tr("switched to media mode")); break;
     }
     emit tokenModeChanged(mode);
   }
@@ -96,6 +100,10 @@ SignalHub::setTokenMode(TokenMode mode)
 void
 SignalHub::setMediaTokenMode(bool t)
 { setTokenMode(t ? MediaTokenMode : SignalTokenMode); }
+
+void
+SignalHub::setLiveTokenMode(bool t)
+{ setTokenMode(t ? LiveTokenMode : MediaTokenMode); }
 
 void
 SignalHub::setSignalTokenMode(bool t)
@@ -193,34 +201,34 @@ SignalHub::setLivePlayMode(bool t)
 void
 SignalHub::play()
 {
-  //if (!playing_) {
+  if (!playing_) {
     playing_ = true;
     stopped_ = false;
     paused_ = false;
     emit played();
-  //}
+  }
 }
 
 void
 SignalHub::pause()
 {
-  //if (!paused_) {
+  if (!paused_) {
     paused_ = true;
     playing_ = false;
     stopped_ = false;
     emit paused();
-  //}
+  }
 }
 
 void
 SignalHub::stop()
 {
-  //if (!stopped_) {
+  if (!stopped_) {
     stopped_ = true;
     playing_ = false;
     paused_ = false;
     emit stopped();
-  //}
+  }
 }
 
 void

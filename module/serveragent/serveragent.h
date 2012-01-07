@@ -51,8 +51,6 @@ public:
   User &user(); ///< Used for hacking offline mode
   void setUser(const User &user); ///< \internal
 
-  QString chat(const QString &message);
-
 signals:
   void userChanged();
 
@@ -150,6 +148,17 @@ public:
   bool isTokenCursedWithId(qint64 id) const;
 
   bool isUserBlockedWithId(qint64 id) const;
+
+  // - Live -
+public:
+  QString chat(const QString &message);
+
+  qint64 submitLiveAnnotation(const Annotation &annot);
+  qint64 submitLiveAnnotationText(const QString &text);
+
+  AnnotationList selectLiveAnnotations();
+
+  qint32 selectLiveTokenInterval();
 
   // - Implementations -
 private:

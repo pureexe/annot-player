@@ -176,7 +176,7 @@ namespace { // anonymous, callbacks
 
   namespace vout_callback_ { // Consisent with vlc_callback_t
 
-    enum { DOUBLE_CLICK_TIMEOUT = 1000 }; // time between D and DUD, in msecs
+    enum { DOUBLE_CLICK_TIMEOUT = 1500 }; // time between D and DUD, in msecs
 
     qint64 recentClickTime_ = 0; // in msecs
 
@@ -197,6 +197,8 @@ namespace { // anonymous, callbacks
       Q_UNUSED(psz_var); // Q_ASSERT(psz_var == "mouse-moved");
       Q_UNUSED(oldval);
 
+      recentClickTime_ = 0;
+
       Player *player = reinterpret_cast<Player*>(p_data);
       Q_ASSERT(player);
       if (!player || !player->isMouseEventEnabled())
@@ -209,8 +211,6 @@ namespace { // anonymous, callbacks
       QWidget *w = player->impl()->voutWindow();
       if (!w)
         return 0;
-
-      recentClickTime_ = 0;
 
       vlc_value_t btval = { };
       ::var_Get(vout, "mouse-button-down", &btval);
@@ -236,7 +236,7 @@ namespace { // anonymous, callbacks
     mouse_button_down(vlc_object_t *p_this, char const *psz_var,
                       vlc_value_t oldval, vlc_value_t newval, void *p_data)
     {
-      //Debug() << "mouse-button-down" << newval.i_int;
+      //qDebug() << "mouse-button-down" << newval.i_int;
       Q_UNUSED(psz_var); // Q_ASSERT(psz_var == "mouse-button-down");
       //Q_UNUSED(oldval);
 
@@ -631,8 +631,8 @@ Player::openMedia(const QString &path)
 
   ::libvlc_media_player_set_media(impl_->player(), impl_->media());
 
-  //if (isMouseEventEnabled())
-  //  startVoutTimer();
+  if (isMouseEventEnabled())
+    startVoutTimer();
 
   DOUT("exit: ret = true");
   return true;
@@ -650,11 +650,19 @@ Player::closeMedia()
   impl_->setSubtitleId();
   impl_->setTitleId();
   impl_->setMediaPath();
-  impl_->setMedia();
-  impl_->setMediaList();
   impl_->setTrackNumber();
   impl_->setExternalSubtitles();
 
+  if (!impl_->mediaList().isEmpty())
+    foreach (libvlc_media_t *m, impl_->mediaList())
+      if (m  && m != impl_->media())
+        ::libvlc_media_release(m);
+  impl_->setMediaList();
+
+  if (impl_->media())
+    ::libvlc_media_release(impl_->media());
+
+  impl_->setMedia();
   ::libvlc_media_player_set_media(impl_->player(), 0);
 
   emit mediaClosed();
@@ -960,8 +968,10 @@ Player::subtitleDescriptions() const
     first = first->p_next;
 
   while (first) {
-    if (first && first->psz_name)
+    if (first->psz_name)
       ret.append(encode(first->psz_name));
+    else
+      ret.append(QString());
     first = first->p_next;
   }
 
@@ -1356,6 +1366,8 @@ Player::parsePlaylist(const QString &fileName) const
     Q_ASSERT(md);
     ret.append(parsePlaylist(md));
   }
+
+  ::libvlc_media_list_release(ml);
 
   return ret;
 }

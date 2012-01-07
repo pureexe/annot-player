@@ -111,6 +111,8 @@ using namespace Logger;
 #define DEBUG "mainwindow"
 #include "module/debug/debug.h"
 
+#define DEFAULT_LIVE_INTERVAL   3000    // 3 seconds
+
 // - Focus -
 
 void
@@ -177,6 +179,7 @@ MainWindow::resetPlayer()
 
 MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags f)
   : Base(parent, f),
+    liveInterval_(DEFAULT_LIVE_INTERVAL),
     tray_(0),
     annotationEditor_(0), blacklistView_(0), cloudView_(0), commentView_(0), backlogView_(0),
     aboutDialog_(0), deviceDialog_(0), helpDialog_(0), loginDialog_(0),
@@ -431,6 +434,9 @@ MainWindow::createComponents()
   windowStaysOnTopTimer_ = new QTimer(this);
   windowStaysOnTopTimer_->setInterval(G_WINDOWONTOP_TIMEOUT);
   connect(windowStaysOnTopTimer_, SIGNAL(timeout()), SLOT(setWindowOnTop()));
+
+  liveTimer_ = new QTimer(this);
+  connect(liveTimer_, SIGNAL(timeout()), SLOT(updateLiveAnnotations()));
 }
 
 void
@@ -488,6 +494,15 @@ MainWindow::createConnections()
           Qt::QueuedConnection);
   connect(this, SIGNAL(setAnnotationsRequested(AnnotationList)),
           annotationView_, SLOT(setAnnotations(AnnotationList)),
+          Qt::QueuedConnection);
+  connect(this, SIGNAL(appendAnnotationsRequested(AnnotationList)),
+          annotationView_, SLOT(appendAnnotations(AnnotationList)),
+          Qt::QueuedConnection);
+  connect(this, SIGNAL(showAnnotationRequested(Annotation)),
+          annotationView_, SLOT(showAnnotation(Annotation)),
+          Qt::QueuedConnection);
+  connect(this, SIGNAL(showAnnotationOnceRequested(Annotation)),
+          annotationView_, SLOT(showAnnotationOnce(Annotation)),
           Qt::QueuedConnection);
 
   // Tokens:
@@ -699,7 +714,7 @@ MainWindow::createActions()
   MAKE_TOGGLE(toggleMenuBarVisibleAct_, SHOWMENUBAR, menuBar(), SLOT(setVisible(bool)))
   MAKE_TOGGLE(toggleEmbeddedModeAct_, EMBED,    hub_,           SLOT(setEmbeddedPlayerMode(bool)))
   MAKE_TOGGLE(toggleMiniModeAct_, MINI,         hub_,           SLOT(setMiniPlayerMode(bool)))
-  MAKE_TOGGLE(toggleLiveModeAct_, LIVE,         hub_,           SLOT(setLivePlayMode(bool)))
+  MAKE_TOGGLE(toggleLiveModeAct_, LIVE,         hub_,           SLOT(setLiveTokenMode(bool)))
   MAKE_TOGGLE(toggleSyncModeAct_, SYNC,         hub_,           SLOT(setSyncPlayMode(bool)))
   MAKE_TOGGLE(toggleAnnotationVisibleAct_, SHOWANNOT, annotationView_, SLOT(setVisible(bool)))
   MAKE_TOGGLE(toggleSubtitleVisibleAct_, SHOWSUBTITLE, player_, SLOT(setSubtitleVisible(bool)))
@@ -1103,25 +1118,47 @@ MainWindow::createDockWindows()
 void
 MainWindow::updateTokenMode()
 {
-  // Update player mode
+  // Stop
+  if (hub_->isMediaTokenMode() && !player_->isStopped())
+    player_->stop();
+
+#ifdef USE_WIN_QTH
+  if (!hub_->isSignalTokenMode())
+    messageHandler_->setActive(false);
+#endif // USE_WIN_QTH
+
+  if (!hub_->isLiveTokenMode())
+    closeChannel();
+
+  annotationView_->invalidateAnnotations();
+
+  // Restart
+
   switch (hub_->tokenMode()) {
   case SignalHub::MediaTokenMode:
     break;
+  case SignalHub::LiveTokenMode:
   case SignalHub::SignalTokenMode:
     if (annotationView_->trackedWindow())
       hub_->setEmbeddedPlayerMode();
     break;
   }
 
-#ifdef USE_WIN_QTH
-  messageHandler_->setActive(!hub_->isMediaTokenMode());
-#endif // USE_WIN_QTH
+  if (!hub_->isMediaTokenMode())
+    hub_->play();
 }
 
 void
 MainWindow::updatePlayMode()
 {
-  // TODO
+  //switch (hub_->playerMode()) {
+  //case SignalHub::LivePlayMode:
+  //  openChannel();
+  //  break;
+  //case SignalHub::NormalPlayMode:
+  //default:
+  //  closeChannel();
+  //}
 }
 
 void
@@ -1144,7 +1181,6 @@ MainWindow::invalidatePlayerMode()
 void
 MainWindow::updatePlayerMode()
 {
-  //bool m = hub_->isMediaTokenMode();
   switch (hub_->playerMode()) {
   case SignalHub::NormalPlayerMode:
     embeddedPlayer_->hide();
@@ -1171,7 +1207,8 @@ MainWindow::updatePlayerMode()
 
   case SignalHub::EmbeddedPlayerMode:
     //setVisible(m);
-    if (annotationView_->trackedWindow())
+    if (annotationView_->trackedWindow() ||
+        hub_->isLiveTokenMode() && hub_->isFullScreenWindowMode())
       hide();
     mainPlayer_->hide();
     miniPlayer_->hide();
@@ -1207,6 +1244,7 @@ MainWindow::updateWindowMode()
         hub_->setEmbeddedPlayerMode();
       annotationView_->setFullScreenMode();
       break;
+    case SignalHub::LiveTokenMode:
     case SignalHub::SignalTokenMode:
       hub_->setEmbeddedPlayerMode(); // always embed in full screen signal mode
       annotationView_->setFullScreenMode();
@@ -1256,6 +1294,7 @@ void
 MainWindow::open()
 {
   switch (hub_->tokenMode()) {
+  case SignalHub::LiveTokenMode:
   case SignalHub::MediaTokenMode: openFile(); break;
   case SignalHub::SignalTokenMode: openProcess(); break;
   }
@@ -1465,8 +1504,6 @@ MainWindow::setRecentOpenedFile(const QString &path)
 void
 MainWindow::openPath(const QString &path, bool checkPath)
 {
-  if (hub_->isSignalTokenMode())
-    hub_->stop();
   hub_->setMediaTokenMode();
 
   recentDigest_.clear();
@@ -1495,6 +1532,8 @@ MainWindow::openPath(const QString &path, bool checkPath)
 
   if (player_->hasMedia()) {
     recentDigest_.clear();
+    if (player_->isMouseEventEnabled())
+      player_->startVoutTimer();
     invalidateMediaAndPlay();
   }
 }
@@ -1574,7 +1613,7 @@ MainWindow::invalidateMediaAndPlay(bool async)
 
     dataManager_->token().setId(0);
     dataManager_->removeAliases();
-    annotationView_->removeAnnotations();
+    annotationView_->invalidateAnnotations();
 
     QString path = player_->mediaPath();
     if (isDigestReady(path)) {
@@ -1653,12 +1692,13 @@ void
 MainWindow::pause()
 {
   switch (hub_->tokenMode()) {
-  case SignalHub::SignalTokenMode:
-    break;
-
   case SignalHub::MediaTokenMode:
     if (player_->isPlaying())
       player_->pause();
+    break;
+
+  case SignalHub::SignalTokenMode:
+  case SignalHub::LiveTokenMode:
     break;
   }
 }
@@ -1667,18 +1707,24 @@ void
 MainWindow::stop()
 {
   switch (hub_->tokenMode()) {
+  case SignalHub::MediaTokenMode:
+    if (player_->hasMedia() && !player_->isStopped())
+      player_->stop();
+    break;
+
+  case SignalHub::LiveTokenMode:
+    closeChannel();
+    //hub_->setMediaTokenMode();
+    break;
+
   case SignalHub::SignalTokenMode:
 #ifdef USE_MODE_SIGNAL
     messageHandler_->setActive(false);
 #endif // USE_MODE_SIGNAL
     hub_->setNormalPlayerMode();
     break;
-
-  case SignalHub::MediaTokenMode:
-    if (player_->hasMedia() && !player_->isStopped())
-      player_->stop();
-    break;
   }
+
 }
 
 bool
@@ -1689,17 +1735,22 @@ void
 MainWindow::play()
 {
   switch (hub_->tokenMode()) {
-  case SignalHub::SignalTokenMode:
-#ifdef USE_MODE_SIGNAL
-    messageHandler_->setActive(true);
-#endif // USE_MODE_SIGNAL
-    break;
-
   case SignalHub::MediaTokenMode:
     if (player_->hasMedia())
       player_->play();
     else
       open();
+    break;
+
+  case SignalHub::LiveTokenMode:
+    if (!annotationView_->isStarted() || !liveTimer_->isActive())
+      openChannel();
+    break;
+
+  case SignalHub::SignalTokenMode:
+#ifdef USE_MODE_SIGNAL
+    messageHandler_->setActive(true);
+#endif // USE_MODE_SIGNAL
     break;
   }
 }
@@ -1708,18 +1759,19 @@ void
 MainWindow::playPause()
 {
   switch (hub_->tokenMode()) {
-  case SignalHub::SignalTokenMode:
-    if (hub_->isPlaying())
-      hub_->pause();
-    else
-      hub_->play();
-    break;
-
   case SignalHub::MediaTokenMode:
     if (player_->hasMedia())
       player_->playPause();
     else
       open();
+    break;
+
+  case SignalHub::LiveTokenMode:
+  case SignalHub::SignalTokenMode:
+    if (hub_->isPlaying())
+      hub_->pause();
+    else
+      hub_->play();
     break;
   }
 }
@@ -1727,7 +1779,7 @@ MainWindow::playPause()
 void
 MainWindow::replay()
 {
-  if (hub_->isSignalTokenMode()) {
+  if (!hub_->isMediaTokenMode()) {
     play();
     return;
   }
@@ -1750,14 +1802,6 @@ void
 MainWindow::snapshot()
 {
   switch (hub_->tokenMode()) {
-  case SignalHub::SignalTokenMode:
-    if (annotationView_->trackedWindow())
-      grabber_->grabWindow(annotationView_->trackedWindow());
-    else
-      grabber_->grabDesktop();
-    log(tr("snapshot saved on the destop"));
-    break;
-
   case SignalHub::MediaTokenMode:
     if (player_->hasMedia() && !player_->isStopped()) {
 
@@ -1774,6 +1818,15 @@ MainWindow::snapshot()
         say(": " + TR(T_ERROR_SNAPSHOT_FAILED) + ": " + savePath, "red");
     }
     break;
+
+  case SignalHub::LiveTokenMode:
+  case SignalHub::SignalTokenMode:
+    if (annotationView_->trackedWindow())
+      grabber_->grabWindow(annotationView_->trackedWindow());
+    else
+      grabber_->grabDesktop();
+    log(tr("snapshot saved on the destop"));
+    break;
   }
 }
 
@@ -1782,7 +1835,7 @@ MainWindow::seek(qint64 time)
 {
   DOUT("enter: time =" << time);
 
-  if (hub_->isSignalTokenMode())
+  if (!hub_->isMediaTokenMode())
     return;
 
   if (!player_->hasMedia() || !player_->seekable())
@@ -1849,27 +1902,24 @@ MainWindow::backward(qint64 delta)
 void
 MainWindow::volumeUp(qreal delta)
 {
-  switch (hub_->tokenMode()) {
-  case SignalHub::SignalTokenMode:
-    // TODO: volume
-    break;
-
-  case SignalHub::MediaTokenMode:
-    if (delta == 0)
-      delta = G_VOLUME_DELTA;
-
-    qreal v_old = hub_->volume();
-    qreal v_new = delta + v_old;
-    if (v_new <= 0) {
-      if (v_old > 0)
-        hub_->setVolume(0);
-    } else if (v_new >= 1) {
-      if (v_old < 1)
-        hub_->setVolume(1);
-    } else
-      hub_->setVolume(v_new);
-    break;
+  if (!hub_->isMediaTokenMode()) {
+    // TODO: change system volume
+    return;
   }
+
+  if (delta == 0)
+    delta = G_VOLUME_DELTA;
+
+  qreal v_old = hub_->volume();
+  qreal v_new = delta + v_old;
+  if (v_new <= 0) {
+    if (v_old > 0)
+      hub_->setVolume(0);
+  } else if (v_new >= 1) {
+    if (v_old < 1)
+      hub_->setVolume(1);
+  } else
+    hub_->setVolume(v_new);
 }
 
 void
@@ -1884,17 +1934,8 @@ MainWindow::volumeDown(qreal delta)
 bool
 MainWindow::isPlaying() const
 {
-  switch (hub_->tokenMode()) {
-  case SignalHub::SignalTokenMode:
-    return hub_->isPlaying();
-
-  case SignalHub::MediaTokenMode:
-    return player_->isPlaying();
-
-  default:
-    Q_ASSERT(0);
-    return false;
-  }
+  return hub_->isMediaTokenMode() ? player_->isPlaying() :
+         hub_->isPlaying();
 }
 
  // - Play mode -
@@ -2004,6 +2045,10 @@ MainWindow::invalidateWindowTitle()
 #ifdef USE_MODE_SIGNAL
     setWindowTitle(messageHandler_->processInfo().processName);
 #endif // USE_MODE_SIGNAL
+    break;
+
+  case SignalHub::LiveTokenMode:
+    setWindowTitle(TR(T_TITLE_LIVE));
     break;
 
   case SignalHub::MediaTokenMode:
@@ -2506,6 +2551,64 @@ MainWindow::showTextAsSubtitle(const QString &input, bool isSigned)
     showTextAsSubtitle(rest);
 }
 
+void MainWindow::submitLiveText(const QString &text, bool async)
+{
+  DOUT("enter: async =" << async << ", text =" << text);
+  if (!server_->isConnected() || !server_->isAuthorized()) {
+    showText(text, true); // isSigned = true
+    DOUT("exit: returned from showText branch");
+    return;
+  }
+
+  if (async) {
+    log(tr("connecting server to submit annot ..."));
+    QThreadPool::globalInstance()->start(new task_::submitLiveText(text, this));
+    DOUT("exit: returned from async branch");
+    return;
+  }
+
+  DOUT("inetMutex locking");
+  inetMutex_.lock();
+  DOUT("inetMutex locked");
+
+  Annotation annot; {
+    annot.setTokenId(Token::TI_Public);
+    annot.setUserId(server_->user().id());
+    annot.setUserAlias(server_->user().name());
+    annot.setUserAnonymous(server_->user().isAnonymous());
+    annot.setLanguage(server_->user().language());
+    annot.setCreateTime(QDateTime::currentMSecsSinceEpoch() / 1000);
+    annot.setPos(annot.createTime());
+    if (text.size() <= Traits::MAX_ANNOT_LENGTH)
+      annot.setText(text);
+    else {
+      annot.setText(text.mid(0, Traits::MAX_ANNOT_LENGTH));
+      warn(TR(T_WARNING_LONG_STRING_TRUNCATED) + ": " + annot.text());
+    }
+  }
+
+  qint64 id = server_->submitLiveAnnotation(annot);
+
+  if (id)
+    annot.setId(id);
+  else
+    warn(TR(T_ERROR_SUBMIT_ANNOTATION) + ": " + text);
+
+  //annotationBrowser_->addAnnotation(annot);
+  //annotationView_->addAndShowAnnotation(annot);
+  //dataManager_->token().annotCount()++;
+  //dataManager_->invalidateToken();
+  if (id && annot.userId() == User::UI_Guest)
+    emit showAnnotationOnceRequested(annot);
+  else
+    emit showAnnotationRequested(annot);
+
+  DOUT("inetMutex unlocking");
+  inetMutex_.unlock();
+  DOUT("inetMutex unlocked");
+  DOUT("exit");
+}
+
 void
 MainWindow::submitText(const QString &text, bool async)
 {
@@ -2522,6 +2625,8 @@ MainWindow::submitText(const QString &text, bool async)
     DOUT("exit: returned from showText branch");
     return;
   }
+
+  Q_ASSERT(!hub_->isLiveTokenMode());
 
   if (async) {
     log(tr("connecting server to submit annot ..."));
@@ -2550,6 +2655,9 @@ MainWindow::submitText(const QString &text, bool async)
         tokenType_ == Token::TT_Picture ? 0 :
         player_->time()
       );
+      break;
+    case SignalHub::LiveTokenMode:
+      Q_ASSERT(0);
       break;
     case SignalHub::SignalTokenMode:
   #ifdef USE_MODE_SIGNAL
@@ -2611,6 +2719,8 @@ MainWindow::eval(const QString &input)
   if (hub_->isSignalTokenMode() && !hub_->isStopped() ||
       player_->hasMedia() && !player_->isStopped())
     submitText(text);
+  else if (hub_->isLiveTokenMode() && server_->isConnected() && server_->isAuthorized())
+    submitLiveText(text);
   else
     chat(text);
 }
@@ -2915,6 +3025,20 @@ MainWindow::invalidateContextMenu()
     contextMenuActions_.clear();
   }
 
+  bool online = server_->isConnected() && server_->isAuthorized();
+
+  // Live mode
+  if (online &&
+      !hub_->isSignalTokenMode() && player_->isStopped()) {
+    toggleLiveModeAct_->setChecked(hub_->isLiveTokenMode());
+    contextMenu_->addAction(toggleLiveModeAct_);
+
+    //toggleLiveDialogVisibleAct_->setChecked(liveDialog_->isVisible());
+    //contextMenu_->addAction(toggleLiveDialogVisibleAct_);
+
+    contextMenu_->addSeparator();
+  }
+
   // Open
   {
     //contextMenu_->addSeparator();
@@ -2977,12 +3101,12 @@ MainWindow::invalidateContextMenu()
         BOOST_AUTO(a, new Core::Gui::ActionWithId(tid, text, sectionMenu_));
         contextMenuActions_.append(a);
         if (tid == player_->titleId()) {
-#ifdef Q_WS_X11
+#ifdef Q_WS_WIN
+          a->setIcon(QIcon(RC_IMAGE_CURRENTSECTION));
+#else
           a->setCheckable(true);
           a->setChecked(true);
-#else
-          a->setIcon(QIcon(RC_IMAGE_CURRENTSUBTITLE));
-#endif // Q_WS_X11
+#endif // Q_WS_WIN
         }
         connect(a, SIGNAL(triggeredWithId(int)), player_, SLOT(setTitleId(int)));
         sectionMenu_->addAction(a);
@@ -3028,16 +3152,18 @@ MainWindow::invalidateContextMenu()
 
         QStringList l = player_->subtitleDescriptions();
         int id = 0;
-        foreach (const QString &subtitle, l) {
+        foreach (QString subtitle, l) {
+          if (subtitle.isEmpty())
+            subtitle = TR(T_SUBTITLE);
           BOOST_AUTO(a, new Core::Gui::ActionWithId(id, subtitle, subtitleMenu_));
           contextMenuActions_.append(a);
           if (id == player_->subtitleId()) {
-#ifdef Q_WS_X11
+#ifdef Q_WS_WIN
+            a->setIcon(QIcon(RC_IMAGE_CURRENTSUBTITLE));
+#else
             a->setCheckable(true);
             a->setChecked(true);
-#else
-            a->setIcon(QIcon(RC_IMAGE_CURRENTSUBTITLE));
-#endif // Q_WS_X11
+#endif // Q_WS_WIN
           }
           connect(a, SIGNAL(triggeredWithId(int)), player_, SLOT(setSubtitleId(int)));
           subtitleMenu_->addAction(a);
@@ -3051,24 +3177,20 @@ MainWindow::invalidateContextMenu()
     }
   }
 
-  if (hub_->isSignalTokenMode()
-      || hub_->isMediaTokenMode() && player_->hasMedia()) {
+  if (!hub_->isMediaTokenMode() || player_->hasMedia()) {
     // Basic control
     contextMenu_->addSeparator();
 
-    if (hub_->isSignalTokenMode() && !hub_->isPlaying() ||
-        hub_->isMediaTokenMode() && !player_->isPlaying())
+    if (!isPlaying())
       contextMenu_->addAction(playAct_);
-
-    if (hub_->isSignalTokenMode() && hub_->isPlaying() ||
-        hub_->isMediaTokenMode() && player_->isPlaying())
+    else
       contextMenu_->addAction(pauseAct_);
 
     // jichi 11/18/2011: Removed from context menu only in order to save space ....
     //if (hub_->isMediaTokenMode())
     //  contextMenu_->addAction(nextFrameAct_);
 
-    if (hub_->isSignalTokenMode() && !hub_->isStopped() ||
+    if (!hub_->isMediaTokenMode() && !hub_->isStopped() ||
         hub_->isMediaTokenMode() && !player_->isStopped())
     contextMenu_->addAction(stopAct_);
 
@@ -3082,8 +3204,7 @@ MainWindow::invalidateContextMenu()
       contextMenu_->addAction(toggleAutoPlayNextAct_);
     }
 
-    if (hub_->isMediaTokenMode() && !player_->isStopped() ||
-        hub_->isSignalTokenMode())
+    if (!hub_->isMediaTokenMode() || !player_->isStopped())
       contextMenu_->addAction(snapshotAct_);
   }
 
@@ -3115,8 +3236,7 @@ MainWindow::invalidateContextMenu()
       contextMenu_->addMenu(annotationLanguageMenu_);
 
     // Subtitle menu
-    if (hub_->isSignalTokenMode() &&
-        server_->isConnected() && server_->isAuthorized()) {
+    if (hub_->isSignalTokenMode() && online) {
       contextMenu_->addSeparator();
       contextMenu_->addAction(toggleTranslateAct_);
     }
@@ -3129,33 +3249,21 @@ MainWindow::invalidateContextMenu()
     contextMenu_->addAction(toggleSubtitleOnTopAct_);
   }
 
-  if (player_->hasMedia()
-#ifdef USE_MODE_SIGNAL
-      && hub_->isMediaTokenMode()
-#endif // USE_MODE_SIGNAL
-      ) {
-    // Sync mode
-    if (ALPHA) {
-      contextMenu_->addSeparator();
-
-      toggleSyncModeAct_->setChecked(hub_->isSyncPlayMode());
-      contextMenu_->addAction(toggleSyncModeAct_);
-
-      toggleSyncDialogVisibleAct_->setChecked(syncDialog_ && syncDialog_->isVisible());
-      contextMenu_->addAction(toggleSyncDialogVisibleAct_);
-    }
-    /*
-    { // Live mode
-      contextMenu_->addSeparator();
-
-      toggleLiveModeAct_->setChecked(isLiveMode());
-      contextMenu_->addAction(toggleLiveModeAct_);
-
-      toggleLiveDialogVisibleAct_->setChecked(liveDialog_->isVisible());
-      contextMenu_->addAction(toggleLiveDialogVisibleAct_);
-    }
-    */
-  }
+//  if (ALPHA)
+//  if (player_->hasMedia()
+//#ifdef USE_MODE_SIGNAL
+//      && hub_->isMediaTokenMode()
+//#endif // USE_MODE_SIGNAL
+//      ) {
+//    // Sync mode
+//    contextMenu_->addSeparator();
+//
+//    toggleSyncModeAct_->setChecked(hub_->isSyncPlayMode());
+//    contextMenu_->addAction(toggleSyncModeAct_);
+//
+//    toggleSyncDialogVisibleAct_->setChecked(syncDialog_ && syncDialog_->isVisible());
+//    contextMenu_->addAction(toggleSyncDialogVisibleAct_);
+//  }
 
   // Toggles
   {
@@ -3177,7 +3285,7 @@ MainWindow::invalidateContextMenu()
     toggleAnnotationEditorVisibleAct_->setChecked(annotationEditor_ && annotationEditor_->isVisible());
     contextMenu_->addAction(toggleAnnotationEditorVisibleAct_ );
 
-    if (hub_->isSignalTokenMode() || player_->hasMedia()) {
+    if (!hub_->isMediaTokenMode() || player_->hasMedia()) {
       toggleAnnotationBrowserVisibleAct_->setChecked(annotationBrowser_->isVisible());
       contextMenu_->addAction(toggleAnnotationBrowserVisibleAct_ );
 
@@ -3242,7 +3350,8 @@ MainWindow::invalidateContextMenu()
     }
 
     // Language
-    {
+    if (player_->isStopped() && hub_->isStopped() ||
+        hub_->isLiveTokenMode()) {
       contextMenu_->addMenu(appLanguageMenu_);
 
       //int l = TranslatorManager::globalInstance()->language();
@@ -3546,6 +3655,8 @@ MainWindow::closeEvent(QCloseEvent *event)
 
   settings->setAutoPlayNext(isAutoPlayNext());
 
+  settings->setLive(hub_->isLiveTokenMode());
+
   // Wait for thread pool
   if (QThreadPool::globalInstance()->activeThreadCount()) {
 #ifdef USE_WIN_PICKER
@@ -3556,11 +3667,14 @@ MainWindow::closeEvent(QCloseEvent *event)
     if (HOOK->isActive())
       HOOK->stop();
 #endif // USE_WIN_HOOK
-    if (!hub_->isStopped()) {
-      if (hub_->isMediaTokenMode() && player_->isValid())
-        player_->setVolume(0);
-      hub_->stop();
+    if (!player_->isStopped()) {
+      player_->setVolume(0);
+      player_->stop();
     }
+    if (player_->hasMedia())
+      player_->closeMedia();
+    if (!hub_->isStopped())
+      hub_->stop();
     hide();
     osdWindow_->hide();
     //osdDock_->hide();
@@ -3630,7 +3744,7 @@ MainWindow::setWindowOnTop(bool t)
 
 #ifdef Q_WS_WIN
   if (t) {
-    if (hub_->isSignalTokenMode() && annotationView_->trackedWindow() &&
+    if (!hub_->isMediaTokenMode() && annotationView_->trackedWindow() &&
         !QtWin::isWindowAboveWindow(winId(), annotationView_->trackedWindow()))
       QtWin::setTopWindow(winId());
     if (!windowStaysOnTopTimer_->isActive())
@@ -3735,21 +3849,21 @@ MainWindow::blessAnnotationWithId(qint64 tid, bool async)
 {
   Q_UNUSED(tid);
   Q_UNUSED(async);
-  // CHECKPOINT
+  // TODO
 }
 void
 MainWindow::curseAnnotationWithId(qint64 tid, bool async)
 {
   Q_UNUSED(tid);
   Q_UNUSED(async);
-  // CHECKPOINT
+  // TODO
 }
 void
 MainWindow::blockAnnotationWithId(qint64 tid, bool async)
 {
   Q_UNUSED(tid);
   Q_UNUSED(async);
-  // CHECKPOINT
+  // TODO
 }
 
 void
@@ -3757,21 +3871,21 @@ MainWindow::blessAliasWithId(qint64 tid, bool async)
 {
   Q_UNUSED(tid);
   Q_UNUSED(async);
-  // CHECKPOINT
+  // TODO
 }
 void
 MainWindow::curseAliasWithId(qint64 tid, bool async)
 {
   Q_UNUSED(tid);
   Q_UNUSED(async);
-  // CHECKPOINT
+  // TODO
 }
 void
 MainWindow::blockAliasWithId(qint64 tid, bool async)
 {
   Q_UNUSED(tid);
   Q_UNUSED(async);
-  // CHECKPOINT
+  // TODO
 }
 
 void
@@ -3819,7 +3933,7 @@ MainWindow::login(const QString &userName, const QString &encryptedPassword, boo
 
   Settings *settings = Settings::globalInstance();
 
-  // CHECKPOINT: Multithreading here, break this function into two parts
+  // TODO: Multithreading here, break this function into two parts
   server_->updateConnected();
   if (!server_->isConnected() && cache_->isValid()) {
     // login from cache
@@ -3848,7 +3962,11 @@ MainWindow::login(const QString &userName, const QString &encryptedPassword, boo
 
   server_->login(userName, encryptedPassword);
 
-  if (server_->isConnected() && server_->isAuthorized()) {
+  bool online = server_->isConnected() && server_->isAuthorized();
+  if (online) {
+    liveInterval_ = server_->selectLiveTokenInterval();
+    if (liveInterval_ <= 0)
+      liveInterval_ = DEFAULT_LIVE_INTERVAL;
 
     //if (!server_->user().hasLanguage())
     //  server_->setUserLanguage(Traits::UnknownLanguage);
@@ -3886,7 +4004,6 @@ MainWindow::login(const QString &userName, const QString &encryptedPassword, boo
     invalidateAnnotationLanguages();
 
 
-
     QDate today = QDate::currentDate();
     if (Settings::globalInstance()->updateDate() != today) {
       bool updated = server_->isSoftwareUpdated();
@@ -3902,6 +4019,10 @@ MainWindow::login(const QString &userName, const QString &encryptedPassword, boo
   DOUT("inetMutex unlocking");
   inetMutex_.unlock();
   DOUT("inetMutex unlocked");
+
+  if (online && settings->isLive() && !hub_->isSignalTokenMode() && !player_->hasMedia())
+    QTimer::singleShot(0, hub_, SLOT(setLiveTokenMode()));
+
   DOUT("exit");
 }
 
@@ -4046,7 +4167,7 @@ MainWindow::openProcessHook(int hookId, const ProcessInfo &pi)
 
   dataManager_->token().setId(0);
   dataManager_->removeAliases();
-  annotationView_->removeAnnotations();
+  annotationView_->invalidateAnnotations();
 
   if (pi.isValid()) {
     recentDigest_ = digestFromFile(pi.executablePath);
@@ -4809,6 +4930,58 @@ MainWindow::setEmbeddedWindow(WId winId)
     player_->setEmbeddedWindow(winId);
 #endif // !Q_WS_MAC
   }
+}
+
+// - Live mode -
+
+void
+MainWindow::openChannel()
+{
+  Q_ASSERT(liveInterval_ > 0);
+  annotationView_->setInterval(liveInterval_);
+  liveTimer_->setInterval(liveInterval_);
+
+  annotationView_->start();
+  liveTimer_->start();
+}
+
+void
+MainWindow::closeChannel()
+{
+  liveTimer_->stop();
+  annotationView_->stop();
+}
+
+void
+MainWindow::updateLiveAnnotations(bool async)
+{
+  if (!server_->isConnected() || !server_->isAuthorized())
+    return;
+  //DOUT("enter: async =" << async);
+
+  if (async) {
+    //log(tr("connecting server to update annot ..."));
+    QThreadPool::globalInstance()->start(new task_::updateLiveAnnotations(this));
+    //DOUT("exit: returned from async branch");
+    return;
+  }
+
+  //DOUT("inetMutex locking");
+  inetMutex_.lock();
+  //DOUT("inetMutex locked");
+
+  AnnotationList l = server_->selectLiveAnnotations();
+  //DOUT("annots.count =" << l.size());
+
+  if (!l.isEmpty())
+    //annotationView_->appendAnnotations(l);
+    emit appendAnnotationsRequested(l);
+
+  //DOUT("inetMutex unlocking");
+  inetMutex_.unlock();
+  //DOUT("inetMutex unlocked");
+
+  //DOUT("exit");
 }
 
 // - Error handling -

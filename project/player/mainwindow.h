@@ -100,7 +100,10 @@ signals:
 
   void seeked();
   void addAndShowAnnotationRequested(const Annotation &a);
+  void showAnnotationRequested(const Annotation &a);
+  void showAnnotationOnceRequested(const Annotation &a);
   void setAnnotationsRequested(const AnnotationList &l);
+  void appendAnnotationsRequested(const AnnotationList &l);
 
   // - States -
 public:
@@ -219,6 +222,12 @@ public slots:
 public slots:
   void invalidateMediaAndPlay(bool async = true);
 
+  // - Live -
+public slots:
+  void openChannel();
+  void closeChannel();
+  void updateLiveAnnotations(bool async = true);
+
   // - Dialogs -
 public slots:
   void showLoginDialog();
@@ -288,6 +297,8 @@ public slots:
 
   void submitText(const QString &text, bool async = true);
   void showText(const QString &text, bool isSigned = false);
+
+  void submitLiveText(const QString &text, bool async = true);
 
   void showTextAsSubtitle(const QString &text, bool isSigned = false);
 
@@ -447,11 +458,13 @@ private:
 
   // - Attributes -
 private:
+  int liveInterval_; // TO BE REMOVED
   QMutex inetMutex_;    // mutext for remote communication
   QMutex playerMutex_;  // mutex for local player
   Tray *tray_;
   SignalHub *hub_;
 
+  QTimer *liveTimer_;
   QTimer *windowStaysOnTopTimer_;
 
   //QTimer *windowStaysOnTopTimer_;
@@ -665,6 +678,7 @@ private:
           *setThemeToPurple1Act_, *setThemeToPurple2Act_,
           *setThemeToRed1Act_, *setThemeToRed2Act_,
           *setThemeToYellow1Act_, *setThemeToYellow2Act_;
+
 
   QAction *showMaximizedAct_,
           *showMinimizedAct_,

@@ -861,6 +861,114 @@ int ServerAgentServiceSoapBindingProxy::isConnected(const char *endpoint, const 
 	return soap_closesock(soap);
 }
 
+int ServerAgentServiceSoapBindingProxy::selectLiveAnnotationsWithTokenId(const char *endpoint, const char *soap_action, tns__selectLiveAnnotationsWithTokenId *tns__selectLiveAnnotationsWithTokenId_, tns__selectLiveAnnotationsWithTokenIdResponse *tns__selectLiveAnnotationsWithTokenIdResponse_)
+{	struct soap *soap = this;
+	struct __tns__selectLiveAnnotationsWithTokenId soap_tmp___tns__selectLiveAnnotationsWithTokenId;
+	if (endpoint)
+		soap_endpoint = endpoint;
+	if (!soap_endpoint)
+		soap_endpoint = "http://annot.me/services/ServerAgentPort";
+	if (!soap_action)
+		soap_action = "";
+	soap->encodingStyle = NULL;
+	soap_tmp___tns__selectLiveAnnotationsWithTokenId.tns__selectLiveAnnotationsWithTokenId_ = tns__selectLiveAnnotationsWithTokenId_;
+	soap_begin(soap);
+	soap_serializeheader(soap);
+	soap_serialize___tns__selectLiveAnnotationsWithTokenId(soap, &soap_tmp___tns__selectLiveAnnotationsWithTokenId);
+	if (soap_begin_count(soap))
+		return soap->error;
+	if (soap->mode & SOAP_IO_LENGTH)
+	{	if (soap_envelope_begin_out(soap)
+		 || soap_putheader(soap)
+		 || soap_body_begin_out(soap)
+		 || soap_put___tns__selectLiveAnnotationsWithTokenId(soap, &soap_tmp___tns__selectLiveAnnotationsWithTokenId, "-tns:selectLiveAnnotationsWithTokenId", NULL)
+		 || soap_body_end_out(soap)
+		 || soap_envelope_end_out(soap))
+			 return soap->error;
+	}
+	if (soap_end_count(soap))
+		return soap->error;
+	if (soap_connect(soap, soap_endpoint, soap_action)
+	 || soap_envelope_begin_out(soap)
+	 || soap_putheader(soap)
+	 || soap_body_begin_out(soap)
+	 || soap_put___tns__selectLiveAnnotationsWithTokenId(soap, &soap_tmp___tns__selectLiveAnnotationsWithTokenId, "-tns:selectLiveAnnotationsWithTokenId", NULL)
+	 || soap_body_end_out(soap)
+	 || soap_envelope_end_out(soap)
+	 || soap_end_send(soap))
+		return soap_closesock(soap);
+	if (!tns__selectLiveAnnotationsWithTokenIdResponse_)
+		return soap_closesock(soap);
+	tns__selectLiveAnnotationsWithTokenIdResponse_->soap_default(soap);
+	if (soap_begin_recv(soap)
+	 || soap_envelope_begin_in(soap)
+	 || soap_recv_header(soap)
+	 || soap_body_begin_in(soap))
+		return soap_closesock(soap);
+	tns__selectLiveAnnotationsWithTokenIdResponse_->soap_get(soap, "tns:selectLiveAnnotationsWithTokenIdResponse", "tns:selectLiveAnnotationsWithTokenIdResponse");
+	if (soap->error)
+		return soap_recv_fault(soap, 0);
+	if (soap_body_end_in(soap)
+	 || soap_envelope_end_in(soap)
+	 || soap_end_recv(soap))
+		return soap_closesock(soap);
+	return soap_closesock(soap);
+}
+
+int ServerAgentServiceSoapBindingProxy::selectLiveTokenWithId(const char *endpoint, const char *soap_action, tns__selectLiveTokenWithId *tns__selectLiveTokenWithId_, tns__selectLiveTokenWithIdResponse *tns__selectLiveTokenWithIdResponse_)
+{	struct soap *soap = this;
+	struct __tns__selectLiveTokenWithId soap_tmp___tns__selectLiveTokenWithId;
+	if (endpoint)
+		soap_endpoint = endpoint;
+	if (!soap_endpoint)
+		soap_endpoint = "http://annot.me/services/ServerAgentPort";
+	if (!soap_action)
+		soap_action = "";
+	soap->encodingStyle = NULL;
+	soap_tmp___tns__selectLiveTokenWithId.tns__selectLiveTokenWithId_ = tns__selectLiveTokenWithId_;
+	soap_begin(soap);
+	soap_serializeheader(soap);
+	soap_serialize___tns__selectLiveTokenWithId(soap, &soap_tmp___tns__selectLiveTokenWithId);
+	if (soap_begin_count(soap))
+		return soap->error;
+	if (soap->mode & SOAP_IO_LENGTH)
+	{	if (soap_envelope_begin_out(soap)
+		 || soap_putheader(soap)
+		 || soap_body_begin_out(soap)
+		 || soap_put___tns__selectLiveTokenWithId(soap, &soap_tmp___tns__selectLiveTokenWithId, "-tns:selectLiveTokenWithId", NULL)
+		 || soap_body_end_out(soap)
+		 || soap_envelope_end_out(soap))
+			 return soap->error;
+	}
+	if (soap_end_count(soap))
+		return soap->error;
+	if (soap_connect(soap, soap_endpoint, soap_action)
+	 || soap_envelope_begin_out(soap)
+	 || soap_putheader(soap)
+	 || soap_body_begin_out(soap)
+	 || soap_put___tns__selectLiveTokenWithId(soap, &soap_tmp___tns__selectLiveTokenWithId, "-tns:selectLiveTokenWithId", NULL)
+	 || soap_body_end_out(soap)
+	 || soap_envelope_end_out(soap)
+	 || soap_end_send(soap))
+		return soap_closesock(soap);
+	if (!tns__selectLiveTokenWithIdResponse_)
+		return soap_closesock(soap);
+	tns__selectLiveTokenWithIdResponse_->soap_default(soap);
+	if (soap_begin_recv(soap)
+	 || soap_envelope_begin_in(soap)
+	 || soap_recv_header(soap)
+	 || soap_body_begin_in(soap))
+		return soap_closesock(soap);
+	tns__selectLiveTokenWithIdResponse_->soap_get(soap, "tns:selectLiveTokenWithIdResponse", "tns:selectLiveTokenWithIdResponse");
+	if (soap->error)
+		return soap_recv_fault(soap, 0);
+	if (soap_body_end_in(soap)
+	 || soap_envelope_end_in(soap)
+	 || soap_end_recv(soap))
+		return soap_closesock(soap);
+	return soap_closesock(soap);
+}
+
 int ServerAgentServiceSoapBindingProxy::selectMediaAliasesWithTokenId(const char *endpoint, const char *soap_action, tns__selectMediaAliasesWithTokenId *tns__selectMediaAliasesWithTokenId_, tns__selectMediaAliasesWithTokenIdResponse *tns__selectMediaAliasesWithTokenIdResponse_)
 {	struct soap *soap = this;
 	struct __tns__selectMediaAliasesWithTokenId soap_tmp___tns__selectMediaAliasesWithTokenId;
@@ -1284,6 +1392,60 @@ int ServerAgentServiceSoapBindingProxy::setUserLanguage(const char *endpoint, co
 	 || soap_body_begin_in(soap))
 		return soap_closesock(soap);
 	tns__setUserLanguageResponse_->soap_get(soap, "tns:setUserLanguageResponse", "tns:setUserLanguageResponse");
+	if (soap->error)
+		return soap_recv_fault(soap, 0);
+	if (soap_body_end_in(soap)
+	 || soap_envelope_end_in(soap)
+	 || soap_end_recv(soap))
+		return soap_closesock(soap);
+	return soap_closesock(soap);
+}
+
+int ServerAgentServiceSoapBindingProxy::submitLiveAnnotationTextWithTokenId(const char *endpoint, const char *soap_action, tns__submitLiveAnnotationTextWithTokenId *tns__submitLiveAnnotationTextWithTokenId_, tns__submitLiveAnnotationTextWithTokenIdResponse *tns__submitLiveAnnotationTextWithTokenIdResponse_)
+{	struct soap *soap = this;
+	struct __tns__submitLiveAnnotationTextWithTokenId soap_tmp___tns__submitLiveAnnotationTextWithTokenId;
+	if (endpoint)
+		soap_endpoint = endpoint;
+	if (!soap_endpoint)
+		soap_endpoint = "http://annot.me/services/ServerAgentPort";
+	if (!soap_action)
+		soap_action = "";
+	soap->encodingStyle = NULL;
+	soap_tmp___tns__submitLiveAnnotationTextWithTokenId.tns__submitLiveAnnotationTextWithTokenId_ = tns__submitLiveAnnotationTextWithTokenId_;
+	soap_begin(soap);
+	soap_serializeheader(soap);
+	soap_serialize___tns__submitLiveAnnotationTextWithTokenId(soap, &soap_tmp___tns__submitLiveAnnotationTextWithTokenId);
+	if (soap_begin_count(soap))
+		return soap->error;
+	if (soap->mode & SOAP_IO_LENGTH)
+	{	if (soap_envelope_begin_out(soap)
+		 || soap_putheader(soap)
+		 || soap_body_begin_out(soap)
+		 || soap_put___tns__submitLiveAnnotationTextWithTokenId(soap, &soap_tmp___tns__submitLiveAnnotationTextWithTokenId, "-tns:submitLiveAnnotationTextWithTokenId", NULL)
+		 || soap_body_end_out(soap)
+		 || soap_envelope_end_out(soap))
+			 return soap->error;
+	}
+	if (soap_end_count(soap))
+		return soap->error;
+	if (soap_connect(soap, soap_endpoint, soap_action)
+	 || soap_envelope_begin_out(soap)
+	 || soap_putheader(soap)
+	 || soap_body_begin_out(soap)
+	 || soap_put___tns__submitLiveAnnotationTextWithTokenId(soap, &soap_tmp___tns__submitLiveAnnotationTextWithTokenId, "-tns:submitLiveAnnotationTextWithTokenId", NULL)
+	 || soap_body_end_out(soap)
+	 || soap_envelope_end_out(soap)
+	 || soap_end_send(soap))
+		return soap_closesock(soap);
+	if (!tns__submitLiveAnnotationTextWithTokenIdResponse_)
+		return soap_closesock(soap);
+	tns__submitLiveAnnotationTextWithTokenIdResponse_->soap_default(soap);
+	if (soap_begin_recv(soap)
+	 || soap_envelope_begin_in(soap)
+	 || soap_recv_header(soap)
+	 || soap_body_begin_in(soap))
+		return soap_closesock(soap);
+	tns__submitLiveAnnotationTextWithTokenIdResponse_->soap_get(soap, "tns:submitLiveAnnotationTextWithTokenIdResponse", "tns:submitLiveAnnotationTextWithTokenIdResponse");
 	if (soap->error)
 		return soap_recv_fault(soap, 0);
 	if (soap_body_end_in(soap)

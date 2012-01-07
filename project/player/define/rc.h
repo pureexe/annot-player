@@ -121,18 +121,6 @@
 #define RC_IMAGE_MINI_DISABLED  RC_PREFIX_IMAGE "M_disabled.png"
 #define RC_IMAGE_MINI_CHECKED   RC_PREFIX_IMAGE "M_checked.png"
 #define RC_IMAGE_MINI_CHECKED_HOVER RC_IMAGE_MINI_HOVER
-#define RC_IMAGE_LIVE           RC_PREFIX_IMAGE "live.png"
-#define RC_IMAGE_LIVE_HOVER     RC_PREFIX_IMAGE "live_hover.png"
-#define RC_IMAGE_LIVE_PRESSED   RC_PREFIX_IMAGE "live_pressed.png"
-#define RC_IMAGE_LIVE_DISABLED  RC_PREFIX_IMAGE "live_disabled.png"
-#define RC_IMAGE_LIVE_CHECKED   RC_PREFIX_IMAGE "live_checked.png"
-#define RC_IMAGE_LIVE_CHECKED_HOVER RC_IMAGE_LIVE_HOVER
-#define RC_IMAGE_SYNC           RC_PREFIX_IMAGE "sync.png"
-#define RC_IMAGE_SYNC_HOVER     RC_PREFIX_IMAGE "sync_hover.png"
-#define RC_IMAGE_SYNC_PRESSED   RC_PREFIX_IMAGE "sync_pressed.png"
-#define RC_IMAGE_SYNC_DISABLED  RC_PREFIX_IMAGE "sync_disabled.png"
-#define RC_IMAGE_SYNC_CHECKED   RC_PREFIX_IMAGE "sync_checked.png"
-#define RC_IMAGE_SYNC_CHECKED_HOVER RC_IMAGE_SYNC_HOVER
 #define RC_IMAGE_FULLSCREEN             RC_PREFIX_IMAGE "F.png"
 #define RC_IMAGE_FULLSCREEN_HOVER       RC_PREFIX_IMAGE "F_hover.png"
 #define RC_IMAGE_FULLSCREEN_PRESSED     RC_PREFIX_IMAGE "F_pressed.png"
@@ -187,6 +175,19 @@
 #define RC_IMAGE_NEXT_DISABLED          RC_PREFIX_IMAGE "next_disabled.png"
 #define RC_IMAGE_NEXT_CHECKED           RC_PREFIX_IMAGE "next_checked.png"
 #define RC_IMAGE_NEXT_CHECKED_HOVER RC_IMAGE_NEXT_HOVER
+#define RC_IMAGE_SYNC           RC_PREFIX_IMAGE "sync.png"
+#define RC_IMAGE_SYNC_HOVER     RC_PREFIX_IMAGE "sync_hover.png"
+#define RC_IMAGE_SYNC_PRESSED   RC_PREFIX_IMAGE "sync_pressed.png"
+#define RC_IMAGE_SYNC_DISABLED  RC_PREFIX_IMAGE "sync_disabled.png"
+#define RC_IMAGE_SYNC_CHECKED   RC_PREFIX_IMAGE "sync_checked.png"
+#define RC_IMAGE_SYNC_CHECKED_HOVER RC_IMAGE_SYNC_HOVER
+//#define RC_IMAGE_LIVE           RC_PREFIX_IMAGE "live.png"
+//#define RC_IMAGE_LIVE_HOVER     RC_PREFIX_IMAGE "live_hover.png"
+//#define RC_IMAGE_LIVE_PRESSED   RC_PREFIX_IMAGE "live_pressed.png"
+//#define RC_IMAGE_LIVE_DISABLED  RC_PREFIX_IMAGE "live_disabled.png"
+//#define RC_IMAGE_LIVE_CHECKED   RC_PREFIX_IMAGE "live_checked.png"
+//#define RC_IMAGE_LIVE_CHECKED_HOVER RC_IMAGE_LIVE_HOVER
+#define RC_IMAGE_LIVE   RC_IMAGE_NULL
 
 #define RC_IMAGE_DOWNARROW              RC_PREFIX_IMAGE "downarrow.png"
 #define RC_IMAGE_DOWNARROW_HOVER        RC_PREFIX_IMAGE "downarrow_hover.png"

@@ -10,7 +10,7 @@
 #endif // USE_MODULE_CLIENTAGENT
 #include <QtCore>
 
-#define DEBUG "serveragent"
+//#define DEBUG "serveragent"
 #include "module/debug/debug.h"
 
 using namespace Core::Cloud;
@@ -438,6 +438,61 @@ ServerAgent::updateAnnotationTextWithId(const QString &text, qint64 id)
     return false;
 
   return proxy_->updateAnnotationTextWithId(text, id, user_.name(), user_.password());
+}
+
+// - Live -
+
+qint64
+ServerAgent::submitLiveAnnotation(const Annotation &annot)
+{
+  if (!isAuthorized()) {
+    DOUT("exit: not authorized");
+    return 0;
+  }
+  if (!annot.hasUserId() || user_.id() != annot.userId()) {
+    DOUT("exit: mismatched userId");
+    return 0;
+  }
+  if (!annot.hasText()) {
+    DOUT("exit: missing text");
+    return 0;
+  }
+
+  qint64 ret = proxy_->submitLiveAnnotationTextWithTokenId(annot.text(), Token::TI_Public, user_.name(), user_.password());
+  DOUT("exit: ret =" << ret);
+  return ret;
+}
+
+qint64
+ServerAgent::submitLiveAnnotationText(const QString &text)
+{
+  if (!isAuthorized()) {
+    DOUT("exit: not authorized");
+    return 0;
+  }
+  if (text.isEmpty()) {
+    DOUT("exit: missing text");
+    return 0;
+  }
+
+  qint64 ret = proxy_->submitLiveAnnotationTextWithTokenId(text, Token::TI_Public, user_.name(), user_.password());
+  DOUT("exit: ret =" << ret);
+  return ret;
+}
+
+
+AnnotationList
+ServerAgent::selectLiveAnnotations()
+{
+  AnnotationList ret = proxy_->selectLiveAnnotationsWithTokenId(Token::TI_Public);
+  return ret;
+}
+
+qint32
+ServerAgent::selectLiveTokenInterval()
+{
+  qint32 ret = proxy_->selectLiveTokenIntervalWithId(Token::TI_Public);
+  return ret;
 }
 
 // EOF

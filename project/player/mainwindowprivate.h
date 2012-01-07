@@ -139,6 +139,23 @@ namespace { namespace task_ { // anonymous
     chat(const QString &text, MainWindow *w) : w_(w), text_(text) { Q_ASSERT(w_); }
   };
 
+  class updateLiveAnnotations : public QRunnable
+  {
+    MainWindow *w_;
+    virtual void run() { w_->updateLiveAnnotations(false); } // \override, async = false
+  public:
+    explicit updateLiveAnnotations(MainWindow *w) : w_(w) { Q_ASSERT(w_); }
+  };
+
+  class submitLiveText : public QRunnable
+  {
+    MainWindow *w_;
+    QString text_;
+    virtual void run() { w_->submitLiveText(text_, false); } // \override, async = false
+  public:
+    submitLiveText(const QString &text, MainWindow *w) : w_(w), text_(text) { Q_ASSERT(w_); }
+  };
+
   class submitText : public QRunnable
   {
     MainWindow *w_;

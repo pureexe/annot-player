@@ -76,6 +76,8 @@ namespace QtWin {
   bool setFocus(QWidget *w);
   bool setFocus(WId hwnd); // Same as windows version.
 
+  void repaintWindow(WId hwnd);
+
   WId getChildWindow(WId hwnd);
   QList<WId> getChildWindows(WId hwnd);
 

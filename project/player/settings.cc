@@ -18,6 +18,7 @@
 #define SK_ANNOTLANGUAGES "AnnotLanguages"
 #define SK_ANNOTFILTER  "AnnotFilter"
 #define SK_LANGUAGE     "Language"
+#define SK_LIVE         "Live"
 #define SK_MENUBAR      "MenuBar"
 #define SK_THEME        "Theme"
 #define SK_TRANSLATE    "Translate"
@@ -224,6 +225,14 @@ Settings::isMenuBarVisible() const
 void
 Settings::setMenuBarVisible(bool t)
 { setValue(SK_MENUBAR, t); }
+
+bool
+Settings::isLive() const
+{ return value(SK_LIVE).toBool(); }
+
+void
+Settings::setLive(bool t)
+{ setValue(SK_LIVE, t); }
 
 QString
 Settings::recentPath() const

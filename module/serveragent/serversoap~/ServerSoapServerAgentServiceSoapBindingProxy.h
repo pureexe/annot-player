@@ -118,6 +118,14 @@ class SOAP_CMAC ServerAgentServiceSoapBindingProxy : public soap
 	virtual	int isConnected(tns__isConnected *tns__isConnected_, tns__isConnectedResponse *tns__isConnectedResponse_) { return isConnected(NULL, NULL, tns__isConnected_, tns__isConnectedResponse_); }
 	virtual	int isConnected(const char *endpoint, const char *soap_action, tns__isConnected *tns__isConnected_, tns__isConnectedResponse *tns__isConnectedResponse_);
 
+	/// Web service operation 'selectLiveAnnotationsWithTokenId' (returns error code or SOAP_OK)
+	virtual	int selectLiveAnnotationsWithTokenId(tns__selectLiveAnnotationsWithTokenId *tns__selectLiveAnnotationsWithTokenId_, tns__selectLiveAnnotationsWithTokenIdResponse *tns__selectLiveAnnotationsWithTokenIdResponse_) { return selectLiveAnnotationsWithTokenId(NULL, NULL, tns__selectLiveAnnotationsWithTokenId_, tns__selectLiveAnnotationsWithTokenIdResponse_); }
+	virtual	int selectLiveAnnotationsWithTokenId(const char *endpoint, const char *soap_action, tns__selectLiveAnnotationsWithTokenId *tns__selectLiveAnnotationsWithTokenId_, tns__selectLiveAnnotationsWithTokenIdResponse *tns__selectLiveAnnotationsWithTokenIdResponse_);
+
+	/// Web service operation 'selectLiveTokenWithId' (returns error code or SOAP_OK)
+	virtual	int selectLiveTokenWithId(tns__selectLiveTokenWithId *tns__selectLiveTokenWithId_, tns__selectLiveTokenWithIdResponse *tns__selectLiveTokenWithIdResponse_) { return selectLiveTokenWithId(NULL, NULL, tns__selectLiveTokenWithId_, tns__selectLiveTokenWithIdResponse_); }
+	virtual	int selectLiveTokenWithId(const char *endpoint, const char *soap_action, tns__selectLiveTokenWithId *tns__selectLiveTokenWithId_, tns__selectLiveTokenWithIdResponse *tns__selectLiveTokenWithIdResponse_);
+
 	/// Web service operation 'selectMediaAliasesWithTokenId' (returns error code or SOAP_OK)
 	virtual	int selectMediaAliasesWithTokenId(tns__selectMediaAliasesWithTokenId *tns__selectMediaAliasesWithTokenId_, tns__selectMediaAliasesWithTokenIdResponse *tns__selectMediaAliasesWithTokenIdResponse_) { return selectMediaAliasesWithTokenId(NULL, NULL, tns__selectMediaAliasesWithTokenId_, tns__selectMediaAliasesWithTokenIdResponse_); }
 	virtual	int selectMediaAliasesWithTokenId(const char *endpoint, const char *soap_action, tns__selectMediaAliasesWithTokenId *tns__selectMediaAliasesWithTokenId_, tns__selectMediaAliasesWithTokenIdResponse *tns__selectMediaAliasesWithTokenIdResponse_);
@@ -149,6 +157,10 @@ class SOAP_CMAC ServerAgentServiceSoapBindingProxy : public soap
 	/// Web service operation 'setUserLanguage' (returns error code or SOAP_OK)
 	virtual	int setUserLanguage(tns__setUserLanguage *tns__setUserLanguage_, tns__setUserLanguageResponse *tns__setUserLanguageResponse_) { return setUserLanguage(NULL, NULL, tns__setUserLanguage_, tns__setUserLanguageResponse_); }
 	virtual	int setUserLanguage(const char *endpoint, const char *soap_action, tns__setUserLanguage *tns__setUserLanguage_, tns__setUserLanguageResponse *tns__setUserLanguageResponse_);
+
+	/// Web service operation 'submitLiveAnnotationTextWithTokenId' (returns error code or SOAP_OK)
+	virtual	int submitLiveAnnotationTextWithTokenId(tns__submitLiveAnnotationTextWithTokenId *tns__submitLiveAnnotationTextWithTokenId_, tns__submitLiveAnnotationTextWithTokenIdResponse *tns__submitLiveAnnotationTextWithTokenIdResponse_) { return submitLiveAnnotationTextWithTokenId(NULL, NULL, tns__submitLiveAnnotationTextWithTokenId_, tns__submitLiveAnnotationTextWithTokenIdResponse_); }
+	virtual	int submitLiveAnnotationTextWithTokenId(const char *endpoint, const char *soap_action, tns__submitLiveAnnotationTextWithTokenId *tns__submitLiveAnnotationTextWithTokenId_, tns__submitLiveAnnotationTextWithTokenIdResponse *tns__submitLiveAnnotationTextWithTokenIdResponse_);
 
 	/// Web service operation 'submitMediaAlias' (returns error code or SOAP_OK)
 	virtual	int submitMediaAlias(tns__submitMediaAlias *tns__submitMediaAlias_, tns__submitMediaAliasResponse *tns__submitMediaAliasResponse_) { return submitMediaAlias(NULL, NULL, tns__submitMediaAlias_, tns__submitMediaAliasResponse_); }

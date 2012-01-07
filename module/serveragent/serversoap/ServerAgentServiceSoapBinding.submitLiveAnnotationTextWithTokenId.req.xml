@@ -6,24 +6,12 @@
  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
  xmlns:tns="http://service.annot.me/">
  <SOAP-ENV:Body>
-   <tns:submitMediaAlias>
-    <arg0>
-     <blessedCount>0</blessedCount>
-     <blockedCount>0</blockedCount>
-     <cursedCount>0</cursedCount>
-     <flags>0</flags>
-     <id>0</id>
-     <language>0</language>
-     <status>0</status>
-     <text></text>
-     <tokenId>0</tokenId>
-     <type>0</type>
-     <updateTime>0</updateTime>
-     <userId>0</userId>
-    </arg0>
+   <tns:submitLiveAnnotationTextWithTokenId>
+    <arg0></arg0>
+    <arg1>0</arg1>
     <userName></userName>
     <password></password>
-   </tns:submitMediaAlias>
+   </tns:submitLiveAnnotationTextWithTokenId>
 
  </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>

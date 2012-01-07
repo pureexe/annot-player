@@ -1,10 +1,9 @@
 :: annot-player.update.cmd
 :: 11/5/2011
 setlocal
-cd /d d:/devel/releases/player || exit 1
-test -e "Delete Caches.cmd" || exit 1
+cd /d d:/devel/releases/player || exit /b 1
 
-set VERSION=0.1.2.0
+set VERSION=0.1.2.1
 set APP=annot-player
 set ZIPFILE=%APP%-%VERSION%-win.zip
 
@@ -31,41 +30,42 @@ set SOURCE=/Volumes/local/devel/annot
 
 rm -Rf "%APP%"
 mkdir "%APP%"
-cd "%APP%" || exit 1
+cd "%APP%" || exit /b 1
 
-cp -v "%BUILD%/Annot Player.exe" . | exit 1
+cp -v "%BUILD%/Annot Player.exe" . || exit /b 1
 
-cp -v "%SOURCE%/README" "Read Me.txt" | exit 1
+cp -v "%SOURCE%/README" "Read Me.txt" || exit /b 1
 unix2dos "Read Me.txt"
 
-cp -v "%SOURCE%/ChangeLog" ChangeLog.txt | exit 1
+cp -v "%SOURCE%/ChangeLog" ChangeLog.txt || exit /b 1
 unix2dos ChangeLog.txt
 
 rm -Rf licenses
 cp -R "%SOURCE%/licenses" .
-cp "%SOURCE%/COPYING" licenses/COPYING.txt | exit 1
+cp "%SOURCE%/COPYING" licenses/COPYING.txt || exit /b 1
 
 :: deploy modules
 mkdir modules
-cd modules || exit 1
+cd modules || exit /b 1
 
 mkdir imageformats
-cp -v "%QT_HOME%"/plugins/imageformats/*4.dll imageformats/ | exit 1
+cp -v "%QT_HOME%"/plugins/imageformats/*4.dll imageformats/ || exit /b 1
 rm -f imageformats/*d4.dll
 
 mkdir sqldrivers
-cp -v "%QT_HOME%"/plugins/sqldrivers/qsqlite4.dll sqldrivers/ | exit 1
+cp -v "%QT_HOME%"/plugins/sqldrivers/qsqlite4.dll sqldrivers/ || exit /b 1
 
-cp -v "%QT_HOME%"/bin/{%QT_DLLS%} . | exit 1
+cp -v "%QT_HOME%"/bin/{%QT_DLLS%} . || exit /b 1
 
-cp -v "%MSVC_HOME%"/{%MSVC_DLLS%} . | exit 1
-cp -v "%ITH_HOME%"/bin/{%ITH_DLLS%} . | exit 1
-cp -v "%ZLIB_HOME%"/bin/%ZLIB_DLL% . | exit 1
+cp -v "%MSVC_HOME%"/{%MSVC_DLLS%} . || exit /b 1
+cp -v "%ITH_HOME%"/bin/{%ITH_DLLS%} . || exit /b 1
+cp -v "%ZLIB_HOME%"/bin/%ZLIB_DLL% . || exit /b 1
 
-cp -Rv "%VLC_HOME%"/{%VLC_PLUGINS%} . | exit 1
+cp -Rv "%VLC_HOME%"/{%VLC_PLUGINS%} . || exit /b 1
 rm -fv plugins/*.dat*
 
-cp -v "%BUILD%"/*.{exe,dll} . | exit 1
+::cp -v "%BUILD%"/*.{exe,dll} . || exit /b 1
+cp -v "%BUILD%"/*.{exe,dll} .
 
 rm -f "Annot Player.exe"
 rm -fv hook.dll

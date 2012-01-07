@@ -25,6 +25,7 @@ using namespace Core::Cloud;
 using namespace Logger;
 
 #define MAX_SUBTITLE_HISTORY    30
+#define TIMER_INTERVAL        1000 // 1 second
 
 // - Constructions -
 
@@ -35,7 +36,7 @@ AnnotationGraphicsView::AnnotationGraphicsView(
   QWidget *parent)
   : Base(parent), videoView_(view), fullScreenView_(0), trackedWindow_(0), editor_(0),
     hub_(hub), player_(player), filter_(0), active_(false), paused_(false), fullScreen_(false),
-    playTime_(-1), userId_(0), playbackEnabled_(true), subtitlePosition_(AP_Bottom)
+    currentTime_(-1), interval_(TIMER_INTERVAL), userId_(0), playbackEnabled_(true), subtitlePosition_(AP_Bottom)
 {
   Q_ASSERT(hub_);
   Q_ASSERT(player_);
@@ -54,6 +55,10 @@ AnnotationGraphicsView::AnnotationGraphicsView(
 
   QGraphicsScene *scene = new QGraphicsScene(this);
   setScene(scene);
+
+  timer_ = new QTimer(this);
+  timer_->setInterval(TIMER_INTERVAL);
+  connect(timer_, SIGNAL(timeout()), SLOT(tick()));
 
   trackingTimer_ = new QTimer(this);
   trackingTimer_->setInterval(G_TRACKING_INTERVAL);
@@ -243,7 +248,7 @@ AnnotationGraphicsView::invalidateSize()
       update = true;
     }
 #endif // Q_WS_WIN
-  } else if (hub_->isMediaTokenMode() || hub_->isNormalPlayerMode()) {
+  } else if (!hub_->isSignalTokenMode() || hub_->isNormalPlayerMode()) {
     // FIXME: 10/24/2011: Screen not working orz
 //#ifdef Q_WS_MAC
 //    if (fullScreenView_)
@@ -282,7 +287,7 @@ AnnotationGraphicsView::invalidatePos()
       return;
     }
 #endif // Q_WS_WIN
-  } else if (hub_->isMediaTokenMode() || hub_->isNormalPlayerMode()) {
+  } else if (!hub_->isSignalTokenMode() || hub_->isNormalPlayerMode()) {
 
     QPoint newPos;
 #ifdef Q_WS_MAC
@@ -347,7 +352,7 @@ AnnotationGraphicsView::setVisible(bool visible)
   AnnotationGraphicsView::_connect##Player() \
   { \
     _connect(player_, SIGNAL(mediaChanged()), this, SLOT(invalidateAnnotations())); \
-    _connect(player_, SIGNAL(timeChanged()), this, SLOT(invalidatePlayTime())); \
+    _connect(player_, SIGNAL(timeChanged()), this, SLOT(invalidateCurrentTime())); \
     _connect(player_, SIGNAL(paused()), this, SLOT(pause())); \
     _connect(player_, SIGNAL(playing()), this, SLOT(resume())); \
     _connect(player_, SIGNAL(stopped()), this, SLOT(resume())); \
@@ -431,7 +436,7 @@ AnnotationGraphicsView::resume()
 //{ playTime_ = time; }
 
 void
-AnnotationGraphicsView::invalidatePlayTime()
+AnnotationGraphicsView::invalidateCurrentTime()
 {
   if (!player_->hasMedia()
       || !playbackEnabled_)
@@ -443,9 +448,9 @@ AnnotationGraphicsView::invalidatePlayTime()
 
   // jichi 7/27/2011: Expect this to be a problem
   qint64 secs = msecs / 1000;
-  if (secs != playTime_) { // playTime_ is used to prevent the same seconds being double displayed
-    playTime_ = secs;
-    showAnnotationsAtPos(secs * 1000);
+  if (secs != currentTime_) { // currentTime_ is used to prevent the same seconds being double displayed
+    currentTime_ = secs;
+    showAnnotationsAtPos(msecs);
   }
 }
 
@@ -461,7 +466,9 @@ AnnotationGraphicsView::invalidateAnnotations()
   //  annots_.resize(secs + 1); // +1 to make sure the last seconds can be held
   //}
 
-  playTime_ = -1;
+  filteredAnnotationIds_.clear();
+
+  currentTime_ = -1;
 }
 
 void
@@ -479,8 +486,10 @@ AnnotationGraphicsView::addAnnotation(const Annotation &annot, qint64 delaysecs)
 {
   DOUT("enter: aid =" << annot.id() << ", pos =" << annot.pos());
 
+  // CHECKPOINT LIVE
+
   qint64 pos = annot.pos();
-  if (hub_->isMediaTokenMode())
+  if (!hub_->isSignalTokenMode())
     pos = pos / 1000; // msecs => secs, cluster media annotation by seconds
 
   //QList<AnnotationGraphicsItem*> *l = annots_[pos];
@@ -489,9 +498,8 @@ AnnotationGraphicsView::addAnnotation(const Annotation &annot, qint64 delaysecs)
   //l->append(item);
   hash_[pos].append(annot);
 
-  if (filter_->filter(annot))
+  if (isAnnotationFiltered(annot))
     return;
-
 
   bool show = false;
   if (delaysecs == LLONG_MAX)
@@ -516,7 +524,7 @@ AnnotationGraphicsView::addAndShowAnnotation(const Annotation &annot)
 void
 AnnotationGraphicsView::showAnnotation(const Annotation &annot)
 {
-  if (!filter_->filter(annot)) {
+  if (!isAnnotationFiltered(annot)) {
     AnnotationGraphicsItem *item = new AnnotationGraphicsItem(annot, hub_, this);
     item->showMe();
     if (item->isSubtitle())
@@ -524,6 +532,14 @@ AnnotationGraphicsView::showAnnotation(const Annotation &annot)
     else
       emit annotationAdded(item->richText());
   }
+}
+
+void
+AnnotationGraphicsView::showAnnotationOnce(const Annotation &annot)
+{
+  showAnnotation(annot);
+  if (annot.hasId())
+    filteredAnnotationIds_.append(annot.id());
 }
 
 // - Queries -
@@ -591,11 +607,10 @@ AnnotationGraphicsView::itemsCount(int from, int to) const
 void
 AnnotationGraphicsView::showAnnotationsAtPos(qint64 pos)
 {
+    // CHECKPOINT LIVE
   DOUT("enter: pos =" << pos);
-  if (hub_->isMediaTokenMode())
+  if (!hub_->isSignalTokenMode())
     pos = pos / 1000; // msecs => secs
-
-  //qDebug() << annots_.keys();
 
   emit annotationPosChanged();
 
@@ -681,14 +696,12 @@ AnnotationGraphicsView::annotationWithId(qint64 id) const
 }
 
 bool
-AnnotationGraphicsView::isItemFiltered(const AnnotationGraphicsItem *item) const
+AnnotationGraphicsView::isAnnotationFiltered(const Annotation &a) const
 {
-  if (!item)
+  if (a.hasId() && filteredAnnotationIds_.contains(a.id()))
     return true;
-
   if (filter_)
-    return filter_->filter(item->annotation());
-
+    return filter_->filter(a);
   return false;
 }
 
@@ -747,5 +760,66 @@ AnnotationGraphicsView::globalRect() const
   QPoint topLeft = mapToGlobal(QPoint());
   return QRect(topLeft, size());
 }
+
+// - Live mode -
+
+bool
+AnnotationGraphicsView::isStarted() const
+{ return timer_->isActive(); }
+
+void
+AnnotationGraphicsView::setInterval(int msecs)
+{
+  if (interval_ != msecs)
+    interval_ = msecs;
+  Q_ASSERT(interval_ >= 1000); // at least 1 secons
+}
+
+void
+AnnotationGraphicsView::start()
+{ timer_->start(); }
+
+void
+AnnotationGraphicsView::stop()
+{
+  if (timer_->isActive())
+    timer_->stop();
+}
+
+void
+AnnotationGraphicsView::tick()
+{
+  if (playbackEnabled_)
+    showAnnotationsAtPos(currentTime_ * 1000);
+  currentTime_++;
+}
+
+void
+AnnotationGraphicsView::appendAnnotations(const AnnotationList &annots)
+{
+  if (annots.isEmpty())
+    return;
+  BOOST_AUTO(p, annots.begin());
+
+  int n = annots.size();
+  int k = interval_ / 1000;
+  if (k <= 0)
+    k = 1;
+  int part = n / k;
+  if (part)
+    for (int i = 0; i < k; i++) {
+      AnnotationList &l = hash_[currentTime_ + i];
+      for (int j = 0; j < part; j++)
+        l.append(*p++);
+    }
+
+  AnnotationList &l = hash_[currentTime_+ k - 1];
+  while (p != annots.end())
+    l.append(*p++);
+
+  foreach (Annotation a, annots)
+    emit annotationAdded(a);
+}
+
 
 // EOF

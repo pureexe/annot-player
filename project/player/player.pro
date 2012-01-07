@@ -1,7 +1,7 @@
 # player.pro
 # 6/30/2011
 
-VERSION = 0.1.2.0
+VERSION = 0.1.2.1
 
 include(../../config.pri)
 include(tr/tr.pri)
@@ -245,6 +245,7 @@ OTHER_FILES += \
     deploy-debian.sh \
     deploy-fedora.sh \
     deploy-mac.sh \
+    deploy-mac-10.6.sh \
     deploy-win.cmd \
     Info.plist \
     player.rc \

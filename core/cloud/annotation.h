@@ -205,6 +205,16 @@ namespace Core { namespace Cloud {
 
   typedef QList<Annotation> AnnotationList;
 
+  // - Comparison -
+
+  inline bool
+  orderByAnnotationId(const Annotation &x, const Annotation &y)
+  { return x.id() < y.id(); }
+
+  inline bool
+  orderByAnnotationPos(const Annotation &x, const Annotation &y)
+  { return x.pos() < y.pos(); }
+
 } } // namespace Cloud, Core
 
 using namespace Core::Cloud; // TO BE REMOVED!

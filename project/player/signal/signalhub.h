@@ -29,17 +29,21 @@ public:
 
   // - States -
 public:
-  enum TokenMode { MediaTokenMode = 0, SignalTokenMode };
+  enum TokenMode { MediaTokenMode = 0, LiveTokenMode, SignalTokenMode };
   TokenMode tokenMode() const           { return tokenMode_; }
   bool isMediaTokenMode() const         { return tokenMode() == MediaTokenMode; }
+  bool isLiveTokenMode() const          { return tokenMode() == LiveTokenMode; }
   bool isSignalTokenMode() const        { return tokenMode() == SignalTokenMode; }
 public slots:
   void setTokenMode(TokenMode mode);
   void setMediaTokenMode(bool t = true);
+  void setLiveTokenMode(bool t = true);
   void setSignalTokenMode(bool t = true);
   void toggleMediaTokenMode()           { setMediaTokenMode(!isMediaTokenMode()); }
+  void toggleLiveTokenMode()            { setLiveTokenMode(!isLiveTokenMode()); }
   void toggleSignalTokenMode()          { setSignalTokenMode(!isSignalTokenMode()); }
   void stopMediaTokenMode()             { setMediaTokenMode(false); }
+  void stopLiveTokenMode()              { setLiveTokenMode(false); }
   void stopSignalTokenMode()            { setSignalTokenMode(false); }
 signals:
   void tokenModeChanged(SignalHub::TokenMode mode);

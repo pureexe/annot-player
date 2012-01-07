@@ -65,7 +65,7 @@ namespace { // anonymous, annotation display
 
     Q_ASSERT(visible_time > 0);
     //int wait_time = style == AnnotationGraphicsItem::FloatStyle ? (visible_time / 4 + 1) : visible_time;
-    int wait_time = visible_time / 4 + 1;
+    int wait_time = visible_time / 2 + 1;
 
     time_t *last_time_;
     switch (style) {
@@ -101,7 +101,7 @@ namespace { // anonymous, annotation display
     last_time_[best_lane] = current_time;
 
     int window_header = 0;
-    if (hub_->isSignalTokenMode() && hub_->isEmbeddedPlayerMode())
+    if (!hub_->isMediaTokenMode() && hub_->isEmbeddedPlayerMode())
       window_header = 50;
 
     switch (style) {
@@ -183,8 +183,11 @@ AnnotationGraphicsItem::invalidateAnnotation()
 {
   setDefaultStyle();
 
+  bool isOwner = annot_.userId() == view_->userId() &&
+                 annot_.userId() != User::UI_Guest;
+
   QFont font = ::default_annot_font_(annot_.language());
-  if (annot_.userId() == view_->userId())
+  if (isOwner)
     font.setUnderline(true);
   setFont(font);
 
@@ -200,9 +203,11 @@ AnnotationGraphicsItem::invalidateAnnotation()
     setPlainText(richText_ = text);
   else {
     setText(richText_ = code);
-    if (annot_.userId() == view_->userId())
+    if (isOwner)
       richText_ = CORE_CMD_LATEX_ULINE " " + richText_;
   }
+
+  invalidateGraphicsEffect();
 }
 
 // TODO: How to use QTextCharFormat to set advanced format:
@@ -264,24 +269,28 @@ AnnotationGraphicsItem::setDefaultStyle()
   setToolTip(TR(T_TOOLTIP_ANNOTATIONITEM)); // TODO: Make this dynamically determined.
 
   setDefaultTextColor(ANNOTATION_COLOR_DEFAULT);
+}
 
+void
+AnnotationGraphicsItem::invalidateGraphicsEffect()
+{
   // Add outline to fonts
-  QGraphicsDropShadowEffect *shadow = new QGraphicsDropShadowEffect(this); {
+  if (isSubtitle() || hub_->isSignalTokenMode()) {
+    QGraphicsDropShadowEffect *shadow = new QGraphicsDropShadowEffect(this);
     shadow->setBlurRadius(2); // in pixels
     shadow->setOffset(1); // in pixels
     shadow->setColor(QColor("black"));
-  } setGraphicsEffect(shadow);
+    setGraphicsEffect(shadow);
+  } else {
+    QGraphicsOpacityEffect *transp = new QGraphicsOpacityEffect(this);
+    transp->setOpacity(ANNOTATION_OPACITY);
+    setGraphicsEffect(transp);
+  }
 
   //QGraphicsBlurEffect *blur = new QGraphicsBlurEffect(this);
   //blur->setBlurHints(QGraphicsBlurEffect::PerformanceHint);
   //blur->setBlurRadius(1.2);
   //setGraphicsEffect(blur);
-
-//#if ANNOTATION_OPACITY < 1
-  //QGraphicsOpacityEffect *effect = new QGraphicsOpacityEffect(this);
-  //effect->setOpacity(ANNOTATION_OPACITY);
-  //setGraphicsEffect(effect);
-//#endif // ANNOTATION_OPACITY
 }
 
 /*
@@ -442,7 +451,6 @@ void
 AnnotationGraphicsItem::autoRemove(int msecs)
 { autoRemoveTimer_->start(msecs); }
 
-
 // - Show up -
 
 bool
@@ -558,7 +566,7 @@ AnnotationGraphicsItem::stay(const QPointF &pos, int msecs)
   setPos(pos);
   addMe();
   if (hub_->isMediaTokenMode() ||
-      hub_->isSignalTokenMode() && !hub_->isStopped() && msecs >= 0)
+      !hub_->isStopped() && msecs >= 0)
     autoRemove(msecs);
 }
 
@@ -606,11 +614,12 @@ AnnotationGraphicsItem::contextMenuEvent(QContextMenuEvent *event)
     QMenu menu;
     UiStyle::globalInstance()->setContextMenuStyle(&menu, false); // persistent = false
 
-    menu.addAction(TR(T_MENUTEXT_EDIT), this, SLOT(edit()));
+    if (!hub_->isLiveTokenMode())
+      menu.addAction(TR(T_MENUTEXT_EDIT), this, SLOT(edit()));
     menu.addAction(TR(T_MENUTEXT_COPY), this, SLOT(copyToClipboard()));
     menu.addSeparator();
     menu.addAction(TR(T_MENUTEXT_REMOVEANNOTATION), this, SLOT(removeMe()));
-    if (annot_.hasId())
+    if (annot_.hasId() && !hub_->isLiveTokenMode())
       menu.addAction(TR(T_MENUTEXT_DELETETHISANNOT), this, SLOT(deleteMe()));
 
     menu.exec(event->globalPos());

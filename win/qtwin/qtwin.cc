@@ -327,6 +327,10 @@ bool
 QtWin::setFocus(HWND hwnd)
 { return hwnd && ::SetFocus(hwnd); }
 
+void
+QtWin::repaintWindow(WId hwnd)
+{ ::InvalidateRect(hwnd, NULL, TRUE); }
+
 HWND
 QtWin::getChildWindow(HWND hwnd)
 {

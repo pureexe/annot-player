@@ -50,8 +50,6 @@ public:
 
   bool isClientUpdated(const QString &clientVersion);
 
-  QString chat(const QString &message);
-
   // - Submission -
 public:
   qint64 submitToken(const Token &token, const QString &userName, const QString &password);
@@ -83,6 +81,16 @@ public:
   AnnotationList selectRelatedAnnotationsWithTokenId(qint64 tid);
 
   AliasList selectAliasesWithTokenId(qint64 tid);
+
+  // - Live -
+public:
+  QString chat(const QString &message);
+
+  qint64 submitLiveAnnotationTextWithTokenId(const QString &text, qint64 tokenId, const QString &userName, const QString &password);
+
+  AnnotationList selectLiveAnnotationsWithTokenId(qint64 tid);
+
+  qint32 selectLiveTokenIntervalWithId(qint64 tid);
 
   // - Cast -
 public:

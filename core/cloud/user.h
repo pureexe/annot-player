@@ -32,6 +32,10 @@ namespace Core { namespace Cloud {
       UF_Anonymous = 0x1L
     };
 
+    enum UserId {
+      UI_Guest = 4L
+    };
+
     // - Properties -
 
     // id > 0: made by human; id < 0: made by doll

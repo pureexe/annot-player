@@ -76,6 +76,7 @@ public slots:
   void removeMe(); // Remove me from graphics scene
   void deleteMe(); // Delete corresponding annotation
   void showMe();   // Add me to graphics scene, and autmatic remove me.
+  void invalidateGraphicsEffect();
 
 protected slots:
   void pause();
