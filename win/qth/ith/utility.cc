@@ -1,7 +1,9 @@
 // ith/utility.cc
 // 10/14/2011
+// TODO: clean up this file
 #include "qth.h"
 #include "ith/hookman.h"
+#include "ith/query.h"
 #include <QtCore>
 
 //#define DEBUG "ith:utility"
@@ -15,7 +17,7 @@ static BYTE static_small_buffer[0x100];
 static DWORD zeros[4]={0,0,0,0};
 extern BYTE* static_large_buffer;
 extern DWORD repeat_count;
-LPWSTR HookNameInitTable[]={
+LPWSTR HookNameInitTable[] = {
   L"ConsoleOutput",
   L"GetTextExtentPoint32A",
   L"GetGlyphOutlineA",
@@ -31,8 +33,69 @@ LPWSTR HookNameInitTable[]={
   L"GetCharABCWidthsW",
   L"DrawTextW",
   L"DrawTextExW"
-  };
+};
 LPVOID DefaultHookAddr[14];
+
+// - Helpers -
+
+namespace { namespace callback_ {
+
+  void CALLBACK
+  NewLineBuff(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime)
+  {
+    DOUT("enter");
+    Q_UNUSED(uMsg);
+    Q_UNUSED(dwTime);
+    Q_ASSERT(idEvent);
+
+    ::KillTimer(hwnd, idEvent);
+
+    auto p = reinterpret_cast<TextThread*>(idEvent);
+    //if (p->Status()&CURRENT_SELECT)
+    {
+      ::texts->SetLine();
+      p->sendText();
+    }
+    p->SetNewLineFlag();
+
+    //qDebug() << QString::fromAscii((LPSTR)p->Storage());
+    //CopyToClipboard(storage+last_sentence,(status&USING_UNICODE)>0,used-last_sentence);
+    DOUT("exit");
+  }
+
+  /*
+  void CALLBACK NewLineConsole(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime)
+  {
+    DOUT("enter");
+    KillTimer(hwnd,idEvent);
+    TextThread *id=(TextThread*)idEvent;
+    Q_ASSERT(id);
+    if (id->Status()&USING_UNICODE)
+      id->AddToStore((BYTE*)L"\r\n",4,true,true);
+    if (id->Status()&CURRENT_SELECT)
+    {
+      ::texts->SetLine();
+    }
+    DOUT("exit");
+  }
+
+  DWORD WINAPI FlushThread(LPVOID lpThreadParameter)
+  {
+    DOUT("enter";
+    LARGE_INTEGER sleep_interval={-100000,-1};
+    while (hwndEdit==0) NtDelayExecution(0,&sleep_interval);
+    TextBuffer* t=(TextBuffer*)lpThreadParameter;
+    while (running) {
+      t->Flush();
+      NtDelayExecution(0,&sleep_interval);
+    }
+    DOUT("exit";
+    return 0;
+  }
+  */
+
+} } // anonymous namespace callback
+
 int GetHookName(LPWSTR str, DWORD pid, DWORD hook_addr)
 {
   if (pid==0)
@@ -42,7 +105,7 @@ int GetHookName(LPWSTR str, DWORD pid, DWORD hook_addr)
   }
   DWORD len=0;
   man->LockProcessHookman(pid);
-  Hook* hks=(Hook*)man->RemoteHook(pid);
+  Hook *hks=(Hook*)man->RemoteHook(pid);
   for (int i=0;i<MAX_HOOK;i++)
   {
     if (hks[i].Address()==hook_addr)
@@ -78,54 +141,6 @@ int GetHookString(LPWSTR str, DWORD pid, DWORD hook_addr, DWORD status)
   str+=GetHookName(str,pid,hook_addr);
   return str-begin;
 }
-
-void CALLBACK NewLineBuff(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime)
-{
-  DOUT("enter");
-  KillTimer(hwnd,idEvent);
-  TextThread *id=(TextThread*)idEvent;
-
-  //if (id->Status()&CURRENT_SELECT)
-  {
-    texts->SetLine();
-    id->qth_sendText();
-  }
-  id->SetNewLineFlag();
-
-  //qDebug() << QString::fromAscii((LPSTR)id->Storage());
-  //CopyToClipboard(storage+last_sentence,(status&USING_UNICODE)>0,used-last_sentence);
-  DOUT("exit");
-}
-/*
-void CALLBACK NewLineConsole(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime)
-{
-  DOUT("enter");
-  KillTimer(hwnd,idEvent);
-  TextThread *id=(TextThread*)idEvent;
-  Q_ASSERT(id);
-  if (id->Status()&USING_UNICODE)
-    id->AddToStore((BYTE*)L"\r\n",4,true,true);
-  if (id->Status()&CURRENT_SELECT)
-  {
-    texts->SetLine();
-  }
-  DOUT("exit");
-}
-
-DWORD WINAPI FlushThread(LPVOID lpThreadParameter)
-{
-  DOUT("enter";
-  LARGE_INTEGER sleep_interval={-100000,-1};
-  while (hwndEdit==0) NtDelayExecution(0,&sleep_interval);
-  TextBuffer* t=(TextBuffer*)lpThreadParameter;
-  while (running) {
-    t->Flush();
-    NtDelayExecution(0,&sleep_interval);
-  }
-  DOUT("exit";
-  return 0;
-}
-*/
 
 BitMap::BitMap(): size(0x20)
 {
@@ -358,58 +373,20 @@ void CustomFilterMultiByte::Traverse(CustomFilterCallBack callback)
   }
 }
 
-TextBuffer::TextBuffer():line(false),unicode(false)
-{
-  DOUT("enter: this =" << this);
-  //NtClose(IthCreateThread(FlushThread,(DWORD)this));
-  DOUT("exit");
+// - TextBuffer -
 
-}
-TextBuffer::~TextBuffer()
+void
+TextBuffer::AddText(PBYTE text, int len, bool newLine)
 {
+  if (text && len > 0) {
+    AddToStore(text, len);
+    line_ = newLine;
+  }
 }
-void TextBuffer::AddText(BYTE* text,int len, bool l=false)
-{
-  if (text==0||len==0) return;
-  AddToStore(text,len);
-  line=l;
-}
-void TextBuffer::AddNewLIne()
-{
 
-}
-void TextBuffer::ReplaceSentence(BYTE* text, int len)
-{
-  if (len==0) return;
-  //EnterCriticalSection(&cs_store);
-  Flush();
-  //DWORD t,l;
-  //t=GetWindowTextLength(hwndEdit);
-  //if (unicode)
-  //{
-  //  SendMessage(hwndEdit,EM_SETSEL,t-(len>>1),t);
-  //  SendMessage(hwndEdit,WM_CLEAR,0,0);
-  //}
-  //else
-  //{
-  //  l=MB_WC_count((char*)text,len);
-  //  SendMessage(hwndEdit,EM_SETSEL,t-l,t);
-  //  SendMessage(hwndEdit,WM_CLEAR,0,0);
-  //}
-  //LeaveCriticalSection(&cs_store);
-}
-void TextBuffer::ClearBuffer()
-{
-  Reset();
-  line=false;
-}
-void TextBuffer::SetUnicode(bool mode)
-{
-  unicode=mode;
-}
 void TextBuffer::Flush()
 {
-  if (line||used==0) return;
+  if (line_ || used==0) return;
   //DWORD t;
   //t=SendMessage(hwndEdit,WM_GETTEXTLENGTH,0,0);
   //SendMessage(hwndEdit,EM_SETSEL,t,-1);
@@ -433,10 +410,6 @@ void TextBuffer::Flush()
   used=0;
   LeaveCriticalSection(&cs_store);
 }
-void TextBuffer::SetLine()
-{
-  line=true;
-}
 
 void ThreadTable::SetThread(DWORD num, TextThread* ptr)
 {
@@ -444,10 +417,10 @@ void ThreadTable::SetThread(DWORD num, TextThread* ptr)
   if (number>=size)
   {
     while (number>=size) size<<=1;
-    TextThread** temp;
+    TextThread **temp;
     if (size<0x10000)
     {
-      temp=new TextThread*[size];
+      temp = new TextThread*[size];
       memcpy(temp,storage,used*sizeof(TextThread*));
     }
     delete []storage;
@@ -461,7 +434,7 @@ void ThreadTable::SetThread(DWORD num, TextThread* ptr)
   }
   else if (number>=used) used=number+1;
 }
-TextThread* ThreadTable::FindThread(DWORD number)
+TextThread *ThreadTable::FindThread(DWORD number)
 {
   if ((int)number<=used)
     return storage[number];
@@ -546,10 +519,10 @@ HookManager::HookManager()
   head.data=0;
   thread_table=new ThreadTable;
   entry=new TextThread(0, -1,-1,-1, new_thread_number++);
-  thread_table->SetThread(0,entry);
+  RegisterThread(entry, 0);
   SetCurrent(entry);
   entry->Status()|=USING_UNICODE;
-  texts->SetUnicode(true);
+  //::texts->SetUnicode(true);
   entry->AddToCombo();
   entry->ComboSelectCurrent();
   //entry->AddToStore((BYTE*)version,wcslen(version)<<1,0,1);
@@ -732,13 +705,17 @@ void HookManager::RemoveProcessContext(DWORD pid)
 }
 void HookManager::RegisterThread(TextThread* it, DWORD num)
 {
+  if (it)
+    it->setId(num);
   thread_table->SetThread(num,it);
 }
-void HookManager::RegisterPipe(HANDLE text, HANDLE cmd, HANDLE thread)
+
+void
+HookManager::RegisterPipe(HANDLE text, HANDLE cmd, HANDLE thread)
 {
-  text_pipes[register_count]=text;
-  cmd_pipes[register_count]=cmd;
-  recv_threads[register_count]=thread;
+  text_pipes[register_count] = text;
+  cmd_pipes[register_count] = cmd;
+  recv_threads[register_count] = thread;
   register_count++;
   if (register_count==1) NtSetEvent(destroy_event,0);
   else NtClearEvent(destroy_event);
@@ -757,8 +734,8 @@ void HookManager::RegisterProcess(DWORD pid, DWORD hookman, DWORD module, DWORD 
   DWORD map_size=0x1000;
   NtMapViewOfSection(hSection,NtCurrentProcess(),&map,0,
     0x1000,0,&map_size,ViewUnmap,0,PAGE_READONLY);
-  record[register_count-1].hookman_section=hSection;
-  record[register_count-1].hookman_map=map;
+  record[register_count-1].hookman_section = hSection;
+  record[register_count-1].hookman_map = map;
   HANDLE hProc;
   CLIENT_ID id;
   id.UniqueProcess=pid;
@@ -778,7 +755,7 @@ void HookManager::RegisterProcess(DWORD pid, DWORD hookman, DWORD module, DWORD 
     return;
   }
 
-  swprintf(str,L"ITH_HOOKMAN_%.4d",pid);
+  HookManager::setMutexNameForPid(str, pid);
   record[register_count-1].hookman_mutex=IthOpenMutex(str);
   if (GetProcessPath(pid,path)==false) path[0]=0;
   swprintf(str,L"%.4d:%s",pid,wcsrchr(path,L'\\')+1);
@@ -817,7 +794,7 @@ void HookManager::UnRegisterProcess(DWORD pid)
     NtClose(record[i].hookman_mutex);
     NtClose(record[i].process_handle);
     NtClose(record[i].hookman_section);
-    NtUnmapViewOfSection(NtCurrentProcess(),record[i].hookman_map);
+    NtUnmapViewOfSection(::NtCurrentProcess(), record[i].hookman_map);
     for (;i<MAX_REGISTER;i++)
     {
       record[i]=record[i+1];
@@ -1009,10 +986,10 @@ bool HookManager::GetProcessName(DWORD pid, LPWSTR str)
 }
 LPVOID HookManager::RemoteHook(DWORD pid)
 {
-  int i;
-  for (i=0;i<MAX_REGISTER;i++)
-    if (record[i].pid_register==pid) break;
-  return i<MAX_REGISTER?record[i].hookman_map:0;
+  for (int i = 0; i<MAX_REGISTER; i++)
+    if (record[i].pid_register == pid)
+      return record[i].hookman_map;
+  return 0;
 }
 DWORD HookManager::GetProcessIDByPath(LPWSTR str)
 {
@@ -1105,12 +1082,17 @@ static DWORD MIN_REDETECT=0x80;
 
 // - QTH BEGIN -
 
+QTextDecoder*
+TextThread::textDecoder_ = QTextCodec::codecForName("SHIFT-JIS")->makeDecoder();
+
 void
-TextThread::qth_sendText()
+TextThread::sendText()
 {
   DOUT("enter");
-  qint64 ts = QDateTime::currentMSecsSinceEpoch();
-  int myid = (int)this;
+  //if (!isEnabled()) {
+  //  DOUT("exit: disabled");
+  //  return;
+  //}
 
   QString text; {
     bool unicode = status & USING_UNICODE;
@@ -1118,9 +1100,11 @@ TextThread::qth_sendText()
     int len = used - last_sentence;
 
     if (unicode)
-      text = QString::fromWCharArray((LPWSTR)str, len);
+      //text = QString::fromWCharArray((LPCWSTR)str, len);
+      text = decodeWText((LPWSTR)str, len);
     else
-      text = QString::fromLocal8Bit((LPSTR)str, len);
+      //text = QString::fromLocal8Bit((LPCSTR)str, len);
+      text = decodeText((LPSTR)str, len);
   }
 
   if (text.trimmed().isEmpty()) {
@@ -1128,17 +1112,30 @@ TextThread::qth_sendText()
      return;
   }
 
-  if (Qth::globalInstance())
-    Qth::globalInstance()->emit_textReceived(text, myid, ts);
-  DOUT("exit: text =" << text);
+  ulong hookId = (ulong)this;
+  Qth::globalInstance()->sendText(text, hookId, tp.pid, name());
+  DOUT("exit: hid =" << this << ", pid =" << tp.pid << ", name =" << name() << ", text =" << text);
+}
+
+void
+TextThread::invalidateName()
+{
+  name_.clear();
+  WCHAR buf[0x200];
+  if (tp.pid && tp.hook) {
+    int len = ::GetHookName(buf, tp.pid, tp.hook);
+    if (len > 0)
+      name_ = QString::fromWCharArray(buf);
+  }
 }
 
 // - QTH END -
 
-TextThread::TextThread(DWORD id, DWORD hook, DWORD retn, DWORD spl, WORD num) : number(num)
+TextThread::TextThread(DWORD pid, DWORD hook, DWORD retn, DWORD spl, WORD num)
+  : id_(-1), size_(sizeof(Self)), number(num)
 {
   DOUT("enter");
-  tp.pid=id;
+  tp.pid=pid;
   tp.hook=hook;
   tp.retn=retn;
   tp.spl=spl;
@@ -1150,8 +1147,8 @@ TextThread::TextThread(DWORD id, DWORD hook, DWORD retn, DWORD spl, WORD num) : 
   {
     AddToCombo();
     man->RegisterThread(this,num);
-    man->LockProcessHookman(id);
-    LPVOID temp=man->RemoteHook(id);
+    man->LockProcessHookman(pid);
+    LPVOID temp=man->RemoteHook(pid);
     TextHook* hookman=(TextHook*)temp;
     TextHook* hookend=hookman+MAX_HOOK;
     while (hookman!=hookend)
@@ -1163,10 +1160,10 @@ TextThread::TextThread(DWORD id, DWORD hook, DWORD retn, DWORD spl, WORD num) : 
       }
       hookman++;
     }
-    man->UnlockProcessHookman(id);
+    man->UnlockProcessHookman(pid);
     WCHAR path[MAX_PATH];
     //ThreadParam *tpm; int i,j;
-    man->GetProcessPath(id,path);
+    man->GetProcessPath(pid, path);
     /*
     ProfileNode* pfn=pfman->GetProfile(path);
     if (pfn)
@@ -1417,8 +1414,9 @@ void TextThread::RemoveCyclicRepeat(BYTE* &con, int &len)
         status&=~REPEAT_DETECT;
         status|=REPEAT_SUPPRESS;
 
-        if (status&CURRENT_SELECT)
-          texts->ReplaceSentence(storage+last_sentence+half_length,repeat_index);
+        // FIXME: replace repeat
+        //if (status&CURRENT_SELECT)
+        //  ::texts->ReplaceSentence(storage+last_sentence+half_length,repeat_index);
         ClearMemory(last_sentence+half_length,repeat_index);
         used-=repeat_index;
         repeat_index=0;
@@ -1455,8 +1453,8 @@ void TextThread::RemoveCyclicRepeat(BYTE* &con, int &len)
           ClearMemory(u,used-u);
           used=u;
           repeat_index=0;
-          if (status&CURRENT_SELECT)
-            texts->ReplaceSentence(storage+last_sentence,used-u);
+          //if (status&CURRENT_SELECT)
+          //  ::texts->ReplaceSentence(storage+last_sentence,used-u);
           status|=REPEAT_SUPPRESS;
           len=0;
         }
@@ -1522,8 +1520,8 @@ _again:
               last_sentence=index;
 
               index+=sentence_length;
-              if (status&CURRENT_SELECT)
-                texts->ReplaceSentence(storage+index,used-index);
+              //if (status&CURRENT_SELECT)
+              //  ::texts->ReplaceSentence(storage+index,used-index);
 
               ClearMemory(index,used-index);
               //memset(storage+index,0,used-index);
@@ -1568,15 +1566,15 @@ void TextThread::AddLineBreak()
     sentence_length=0;
     if (status&USING_UNICODE)
     {
-      MyVector::AddToStore((BYTE*)L"\r\n\r\n",8);
+      MyVector::AddToStore((PBYTE)L"\r\n\r\n",8);
       if (status&CURRENT_SELECT)
-        texts->AddText((BYTE*)L"\r\n\r\n",8,true);
+        ::texts->AddText((PBYTE)L"\r\n\r\n",8,true);
     }
     else
     {
-      MyVector::AddToStore((BYTE*)"\r\n\r\n",4);
+      MyVector::AddToStore((PBYTE)"\r\n\r\n",4);
       if (status&CURRENT_SELECT)
-        texts->AddText((BYTE*)"\r\n\r\n",4,true);
+        ::texts->AddText((PBYTE)"\r\n\r\n",4,true);
     }
     last_sentence=used;
     status&=~BUFF_NEWLINE;
@@ -1718,7 +1716,7 @@ void TextThread::AddToStore(BYTE* con,int len, bool new_line,bool console)
 
   }
   if (status&CURRENT_SELECT) {
-  texts->AddText((BYTE*)con,len);
+    ::texts->AddText((BYTE*)con,len);
   }
 }
 void TextThread::ResetEditText()
@@ -1760,9 +1758,9 @@ void TextThread::ResetEditText()
   LeaveCriticalSection(&cs_store);
   if (man)
   man->SetCurrent(this);
-  texts->SetUnicode(uni);
-  texts->ClearBuffer();
-  texts->SetLine();
+  //::texts->SetUnicode(uni);
+  ::texts->ClearBuffer();
+  ::texts->SetLine();
 
   //SendMessage(hwndEdit, WM_SETTEXT, 0, (LPARAM)wc);
   //len=SendMessage(hwndEdit, EM_GETLINECOUNT, 0, 0);
@@ -1772,26 +1770,18 @@ void TextThread::ResetEditText()
   {
     if (uni)
     {
-      MyVector::AddToStore((BYTE*)L"\r\n\r\n",8);
-      texts->AddText((BYTE*)L"\r\n\r\n",8,true);
+      MyVector::AddToStore((PBYTE)L"\r\n\r\n",8);
+      ::texts->AddText((PBYTE)L"\r\n\r\n",8,true);
     }
     else
     {
-      MyVector::AddToStore((BYTE*)"\r\n\r\n",4);
-      texts->AddText((BYTE*)"\r\n\r\n",4,true);
+      MyVector::AddToStore((PBYTE)"\r\n\r\n",4);
+      ::texts->AddText((PBYTE)"\r\n\r\n",4,true);
     }
   }
   if (wc!=null) delete wc;
 }
-void TextThread::ComboSelectCurrent()
-{
-  //int index;
-  //WCHAR temp[0x200];
-  //GetEntryString(temp);
-  //index=SendMessage(hwndCombo, CB_FINDSTRINGEXACT , 0 , (LPARAM)temp);
-  //if (index==CB_ERR) return;
-  //SendMessage(hwndCombo, CB_SETCURSEL, index , 0);
-}
+
 void TextThread::GetEntryString(LPWSTR str)
 {
   if (str)
@@ -1884,8 +1874,6 @@ void TextThread::CopyLastToClipboard()
 {
   CopyToClipboard(storage+last_sentence,(status&USING_UNICODE)>0,used-last_sentence);
 }
-*/
-/*
 void TextThread::ExportTextToFile(LPWSTR filename)
 {
   HANDLE hFile=IthCreateFile(filename,FILE_WRITE_DATA,0,FILE_OPEN_IF);
@@ -1921,14 +1909,15 @@ void TextThread::SetNewLineFlag()
 {
   status|=BUFF_NEWLINE;
 }
-void TextThread::SetNewLineTimer()
+void
+TextThread::SetNewLineTimer()
 {
-  //DOUT("enter: split_time =" << split_time);
   //if (number)
   //  timer=SetTimer(hMainWnd,(UINT_PTR)this,split_time,NewLineConsole);
   //else
-    timer=SetTimer(hMainWnd,(UINT_PTR)this,split_time,NewLineBuff);
-  //DOUT("exit: timer =" << timer);
+  Q_ASSERT(::hMainWnd);
+  if (::hMainWnd)
+    timer = ::SetTimer(::hMainWnd, (UINT_PTR)this, split_time, callback_::NewLineBuff);
 }
 bool TextThread::AddToCombo()
 {
@@ -1965,11 +1954,6 @@ inline void TextThread::SetRepeatFlag() {status|=CYCLIC_REPEAT;}
 inline void TextThread::ClearNewLineFlag() {status&=~BUFF_NEWLINE;}
 inline void TextThread::ClearRepeatFlag() {status&=~CYCLIC_REPEAT;}
 
-MK_FUNDA_TYPE(DWORD)
-MK_FUNDA_TYPE(BYTE)
-MK_FUNDA_TYPE(LPVOID)
-MK_FUNDA_TYPE(ThreadParameter)
-
 DWORD Hash(LPWSTR module, int length)
 {
   bool flag=(length==-1);
@@ -1980,6 +1964,8 @@ DWORD Hash(LPWSTR module, int length)
   }
   return hash;
 }
+
+// EOF
 
 /*
 static char clipboard_buffer[0x400];
@@ -2024,47 +2010,10 @@ void CopyToClipboard(void* str,bool unicode, int len)
   }
   DOUT("exit");
 }
-*/
 
-//void ConsoleOutput(const LPCWSTR text)
-//{
-//  //if (running) man->AddConsoleOutput(text);
-//}
-DWORD  GetCurrentPID()
+void ConsoleOutput(const LPCWSTR text)
 {
-  return man->GetCurrentPID();
-}
-DWORD  GetPIDByHandle(HANDLE h)
-{
-  return man->GetPIDByHandle(h);
-}
-DWORD  GetHookManByPID(DWORD pid)
-{
-  return man->GetHookManByPID(pid);
-}
-DWORD  GetModuleByPID(DWORD pid)
-{
-  return man->GetModuleByPID(pid);
-}
-DWORD  GetEngineByPID(DWORD pid)
-{
-  return man->GetEngineByPID(pid);
-}
-HANDLE  GetTextHandleByPID(DWORD pid)
-{
-  return man->GetTextHandleByPID(pid);
-}
-HANDLE  GetCmdHandleByPID(DWORD pid)
-{
-  return man->GetCmdHandleByPID(pid);
-}
-HANDLE  GetMutexByPID(DWORD pid)
-{
-  return man->GetMutexByPID(pid);
-}
-HANDLE  GetProcessByPID(DWORD pid)
-{
-  return man->GetProcessByPID(pid);
+  //if (running) man->AddConsoleOutput(text);
 }
 void GetCode(const HookParam& hp, LPWSTR buffer, DWORD pid)
 {
@@ -2124,5 +2073,25 @@ void GetCode(const HookParam& hp, LPWSTR buffer, DWORD pid)
     ptr+=swprintf(ptr,L"@%X",hp.addr);
 
 }
-void AddLink(WORD from, WORD to) {man->AddLink(from,to);}
-// EOF
+
+void TextBuffer::ReplaceSentence(BYTE* text, int len)
+{
+  if (len==0) return;
+  //EnterCriticalSection(&cs_store);
+  Flush();
+  //DWORD t,l;
+  //t=GetWindowTextLength(hwndEdit);
+  //if (unicode)
+  //{
+  //  SendMessage(hwndEdit,EM_SETSEL,t-(len>>1),t);
+  //  SendMessage(hwndEdit,WM_CLEAR,0,0);
+  //}
+  //else
+  //{
+  //  l=MB_WC_count((char*)text,len);
+  //  SendMessage(hwndEdit,EM_SETSEL,t-l,t);
+  //  SendMessage(hwndEdit,WM_CLEAR,0,0);
+  //}
+  //LeaveCriticalSection(&cs_store);
+}
+*/

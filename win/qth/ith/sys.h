@@ -1,5 +1,7 @@
 #pragma once
-// iht/sys.h 10/14/2011
+// iht/sys.h
+// 10/14/2011
+// TODO: clean up this file
 
 #include <qt_windows.h>
 

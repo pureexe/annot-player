@@ -1,29 +1,35 @@
 #pragma once
 
-// ith/text.h  10/14/2011
+// ith/text.h
+// 10/14/2011
+// TODO: clean up this file
 
 #include "ith/main.h"
 #include "ith/main_template.h"
 
-//#include <QObject>
-//QT_FORWARD_DECLARE_CLASS(QTimer)
+#include <QString>
+#include <QTextDecoder>
+//QT_FORWARD_DECLARE_CLASS(QTextDecoder)
 
 class TextBuffer : public MyVector<BYTE, 0x800>
 {
+  bool line_; // EOL
 public:
-  TextBuffer();
-  virtual ~TextBuffer();
-  void AddText(BYTE* text,int len,bool);
-  void AddNewLIne();
-  void ReplaceSentence(BYTE* text, int len);
+  TextBuffer() : line_(false)
+  {
+    //NtClose(IthCreateThread(FlushThread,(DWORD)this));
+  }
+
+  void SetLine() { line_ = true; }
+
+public:
+  void AddText(PBYTE text, int len, bool newLine = false);
   void Flush();
-  void ClearBuffer();
-  void SetUnicode(bool mode);
-  void SetLine();
-private:
-  bool line;
-  bool unicode;
+
+  void ClearBuffer()
+  { Reset(); line_ = false; }
 };
+
 struct RepeatCountNode
 {
   short repeat;
@@ -41,15 +47,54 @@ struct ThreadParameter
   DWORD hook;
   DWORD pid;*/
 };
+MK_FUNDA_TYPE(ThreadParameter)
+
 #define COUNT_PER_FOWARD 0x200
 #define REPEAT_DETECT 0x10000
 #define REPEAT_SUPPRESS 0x20000
 #define REPEAT_NEWLINE 0x40000
 class TextThread : public MyVector<BYTE, 0x200>
 {
+  typedef TextThread Self;
+
+  static QTextDecoder *textDecoder_;
+
   // - Qth instruments -
+  int size_; // used for validation
+  int id_;
+  QString name_;
+
 public:
-  void qth_sendText();
+  void sendText();
+
+  void setId(int id) { id_ = id; }
+  int id() const { return id_; }
+
+  bool good() const { return size_ == sizeof(Self); }
+
+  const QString &name() const
+  {
+    if (name_.isEmpty())
+      const_cast<Self*>(this)->invalidateName();
+    return name_;
+  }
+
+protected:
+  void invalidateName();
+
+  static QString decodeWText(LPCWSTR lp, int len = 0)
+  { return QString::fromWCharArray(lp, len); }
+
+  static QString decodeText(LPCSTR lp, int len = 0)
+  {
+    //QString ret;
+    //if (lp && len > 0)
+    //  ret = textDecoder_ ? textDecoder_->toUnicode(lp, len)
+    //                     : QString::fromLocal8Bit(lp, len);
+    //return ret;
+    Q_ASSERT(textDecoder_);
+    return textDecoder_->toUnicode(lp, len);
+  }
 
   // - Original implementations -
 public:
@@ -63,7 +108,17 @@ public:
   void ResetRepeatStatus();
   void AddLineBreak();
   void ResetEditText();
-  void ComboSelectCurrent();
+
+  void ComboSelectCurrent()
+  {
+    //int index;
+    //WCHAR temp[0x200];
+    //GetEntryString(temp);
+    //index=SendMessage(hwndCombo, CB_FINDSTRINGEXACT , 0 , (LPARAM)temp);
+    //if (index==CB_ERR) return;
+    //SendMessage(hwndCombo, CB_SETCURSEL, index , 0);
+  }
+
   void GetEntryString(LPWSTR str);
   void CopyLastSentence(LPWSTR str);
   //void CopyLastToClipboard();
@@ -76,20 +131,23 @@ public:
   bool CheckCycle(TextThread* start);
   void SetNewLineFlag();
   void SetNewLineTimer();
-  inline DWORD PID() const {return tp.pid;}
-  inline DWORD Addr() const {return tp.hook;}
-  inline DWORD& Status() {return status;}
-  inline WORD Number() const {return number;}
-  inline WORD& Last() {return last;}
-  inline WORD& LinkNumber() {return link_number;}
-  inline UINT_PTR& Timer() {return timer;}
-  inline ThreadParameter* GetThreadParameter() {return &tp;}
-  inline TextThread*& Link() {return link;}
 
-  inline void SetRepeatFlag();
-  inline void ClearNewLineFlag();
-  inline void ClearRepeatFlag();
-  inline LPWSTR GetComment() {return comment;}
+  // - Properties -
+
+  DWORD PID() const {return tp.pid;}
+  DWORD Addr() const {return tp.hook;}
+  DWORD& Status() {return status;}
+  WORD Number() const {return number;}
+  WORD& Last() {return last;}
+  WORD& LinkNumber() {return link_number;}
+  UINT_PTR& Timer() {return timer;}
+  ThreadParameter* GetThreadParameter() {return &tp;}
+  TextThread*& Link() {return link;}
+
+  void SetRepeatFlag();
+  void ClearNewLineFlag();
+  void ClearRepeatFlag();
+  LPWSTR GetComment() {return comment;}
 
 private:
   ThreadParameter tp;

@@ -1,12 +1,18 @@
 #pragma once
 // iht/main_template.h  10/14/2011
 #include <qt_windows.h>
-#include <QtCore>
+
 template <typename T>
-void Release(const T& p) {delete p;}
+  inline void
+  Release(const T& p) { delete p; }
 #define MK_FUNDA_TYPE(T) \
-template<> \
- void Release<T>(const T& p) {}
+  template<> \
+    inline void \
+    Release<T>(const T& p) { }
+MK_FUNDA_TYPE(DWORD)
+MK_FUNDA_TYPE(BYTE)
+MK_FUNDA_TYPE(LPVOID)
+
 template<class T>
 class BinaryEqual
 {
@@ -26,7 +32,7 @@ public:
   }
   virtual ~MyVector()
   {
-    if (storage) delete []storage;
+    if (storage) delete[] storage;
     DeleteCriticalSection(&cs_store);
     storage=0;
   }

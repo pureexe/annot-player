@@ -45,13 +45,15 @@ HEADERS += \
     $$PWD/ith.h \
     $$PWD/qth.h \
     $$PWD/ith/AVL.h \
-    $$PWD/ith/cmdq.h \
     $$PWD/ith/common.h \
     $$PWD/ith/hookman.h \
+    $$PWD/ith/inject.h \
     $$PWD/ith/language.h \
     $$PWD/ith/main.h \
     $$PWD/ith/main_template.h \
-    $$PWD/ith/resource.h \
+    $$PWD/ith/pipe.h \
+    $$PWD/ith/protocol.h \
+    $$PWD/ith/query.h \
     $$PWD/ith/sys.h \
     $$PWD/ith/text.h
 
@@ -59,10 +61,10 @@ SOURCES += \
     $$PWD/ith.cc \
     $$PWD/qth.cc \
     $$PWD/test.cc \
-    $$PWD/ith/command.cc \
     $$PWD/ith/inject.cc \
     $$PWD/ith/language.cc \
     $$PWD/ith/pipe.cc \
+    $$PWD/ith/query.cc \
     $$PWD/ith/utility.cc \
     $$PWD/ith/sys.cc
 

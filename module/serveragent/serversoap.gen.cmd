@@ -9,7 +9,8 @@ set BASE=ss
 set HEADER=_serversoap.h
 set PREFIX=serverSoap
 ::set WSDL_URL=http://localhost/services/ServerAgentPort?wsdl
-set WSDL_URL=http://annot.me/services/ServerAgentPort?wsdl
+::set WSDL_URL=http://annot.me/services/ServerAgentPort?wsdl
+set WSDL_URL=http://annotcloud.com/services/ServerAgentPort?wsdl
 set TYPEMAP_URL=%~dp0\wsdl\typemap.dat
 set GSOAP_HOME=c:/dev/gsoap
 set GSOAP_INCLUDE=%GSOAP_HOME%/include
@@ -40,6 +41,6 @@ wsdl2h -q%NAMESPACE% -o"%HEADER%" "%WSDL_URL%" && soapcpp2 -C -i -1 -I"%GSOAP_IN
 
 echo %ERRORLEVEL%
 
-dos2unix *
+dos2unix * 2>nul
 popd
 pause

@@ -1,5 +1,7 @@
 #pragma once
-// ith/common.h  10/14/2011
+// ith/common.h
+// 10/14/2011
+// TODO: clean up this file
 #include "ntdll.h"
 #include <string>
 //extern "C" {
@@ -69,7 +71,7 @@
 
 #define MAX_HOOK 32
 
-struct HookParam //0x24
+struct HookParam // 0x24
 {
   DWORD addr;
   DWORD off,ind,split,split_ind;
@@ -85,20 +87,21 @@ struct SendParam
   HookParam hp;
 };
 
-class Hook //0x80
+///  Readonly
+class Hook // 0x80
 {
-public:
-  inline DWORD Address() const {return hp.addr;}
-  inline DWORD Type() const {return hp.type;}
-  inline WORD Length() const {return hp.hook_len;}
-  inline LPWSTR Name() const {return hook_name;}
-  inline int NameLength() const {return name_length;}
-protected:
   HookParam hp;
   LPWSTR hook_name;
   int name_length;
-  BYTE recover[0x68-sizeof(HookParam)];
+  BYTE recover[0x68 - sizeof(HookParam)];
   BYTE original[0x10];
+
+public:
+  DWORD Address() const { return hp.addr; }
+  DWORD Type() const    { return hp.type; }
+  WORD Length() const   { return hp.hook_len; }
+  LPWSTR Name() const   { return hook_name; }
+  int NameLength() const{ return name_length; }
 };
 
 //extern HANDLE hHeap;
@@ -150,10 +153,8 @@ inline void * __cdecl operator new[](size_t size) throw()
   return p;
 }
 
-inline void __cdecl operator delete(void *p) throw()
-{ free(p); }
+inline void __cdecl operator delete(void *p) throw() { free(p); }
 
-inline void __cdecl operator delete[](void *p) throw()
-{ free(p); }
+inline void __cdecl operator delete[](void *p) throw() { free(p); }
 
 // EOF

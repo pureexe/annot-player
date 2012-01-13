@@ -5,7 +5,7 @@
 #include "win/qtwin/qtwin.h"
 #include <QtCore>
 
-#define DEBUG "qth"
+//#define DEBUG "qth"
 #include "module/debug/debug.h"
 
 // - Constructions -
@@ -33,22 +33,36 @@ Qth::~Qth()
   DOUT("exit");
 }
 
+// - Properties -
+
+WId
+Qth::parentWinId() const
+{ return Ith::parentWindow(); }
+
 void
 Qth::setParentWinId(WId hwnd)
-{ Ith::setWindowHandle(hwnd); }
+{ Ith::setParentWindow(hwnd); }
 
-// - Actions -
+int
+Qth::interval() const
+{ return Ith::messageInterval(); }
+
+void
+Qth::setInterval(int msecs)
+{ Ith::setMessageInterval(msecs); }
 
 bool
 Qth::isEmpty() const
 { return pids_.empty(); }
 
+// - Injection -
+
 void
 Qth::clear()
 {
   DOUT("enter");
-  foreach (ulong pid, pids_)
-    detachProcess(pid);
+  if (!isEmpty())
+    detachAllProcesses();
   DOUT("exit");
 }
 
@@ -89,19 +103,18 @@ Qth::detachProcess(ulong pid, bool checkActive)
   return ret;
 }
 
+void
+Qth::detachAllProcesses()
+{
+  DOUT("enter");
+  foreach (ulong pid, pids_)
+    detachProcess(pid);
+  DOUT("exit");
+}
+
 bool
 Qth::isProcessAttached(ulong pid) const
 { return pids_.indexOf(pid) >= 0; }
-
-// - Signals -
-
-void
-Qth::emit_textReceived(const QString &text, int hookId, qint64 tsMsecs) ///< Ith callback
-{
-  DOUT("enter: text =" << text);
-  emit textReceived(text, hookId, tsMsecs);
-  DOUT("exit");
-}
 
 // - Helpers -
 
@@ -114,8 +127,57 @@ Qth::isElevated() const
   return ret;
 }
 
+bool
+Qth::isStandardHookName(const QString &name) const
+{
+  static QSet<uint> hashes;
+  if (hashes.isEmpty()) {
+#define ADD(_text)  hashes.insert(qHash(QString(_text)))
+    ADD("ConsoleOutput");
+    ADD("GetTextExtentPoint32A");
+    ADD("GetGlyphOutlineA");
+    ADD("ExtTextOutA");
+    ADD("TextOutA");
+    ADD("GetCharABCWidthsA");
+    ADD("DrawTextA");
+    ADD("DrawTextExA");
+    ADD("GetTextExtentPoint32W");
+    ADD("GetGlyphOutlineW");
+    ADD("ExtTextOutW");
+    ADD("TextOutW");
+    ADD("GetCharABCWidthsW");
+    ADD("DrawTextW");
+    ADD("DrawTextExW");
+#undef ADD
+  }
+  uint h = qHash(name);
+  return hashes.contains(h);
+}
+
+bool
+Qth::isKnownHookForProcess(const QString &hook, const QString &proc) const
+{
+  // TODO: update database on line periodically
+  qDebug() << "qth::isKnownHookForProcess: hook ="  << hook << ", proc =" << proc;
+
+  static QSet<uint> hashes;
+  if (hashes.isEmpty()) {
+#define ADD(_hook, _proc)  hashes.insert(qHash(QString(_hook) + "\n" + _proc))
+    ADD("Malie", "malie"); // light
+    ADD("GetGlyphOutlineA", "STEINSGATE");
+    ADD("StuffScriptEngine", "EVOLIMIT");
+#undef ADD
+  }
+  uint h = qHash(hook + "\n" + proc);
+  return hashes.contains(h);
+}
+
 ulong
-Qth::getProcessIdByName(const QString &name) const
+Qth::processIdByName(const QString &name) const
 { return Ith::getProcessIdByName(name); }
+
+QString
+Qth::hookNameById(ulong hookId) const
+{ return Ith::getHookNameById(hookId); }
 
 // EOF

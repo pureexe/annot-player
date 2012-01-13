@@ -44,8 +44,11 @@ protected:
 public:
   explicit ProcessView(QWidget *parent = 0);
 
-  // - Properties -
+signals:
+  void attached(ProcessInfo pi);
+  void detached(ProcessInfo pi);
 
+  // - Properties -
 public:
   ProcessInfo attachedProcessInfo() const;
 

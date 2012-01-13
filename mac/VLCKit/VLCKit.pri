@@ -36,7 +36,7 @@ HEADERS += \
 #   $$PWD/Internal/VLCLibVLCBridging.h \
 #   $$PWD/Internal/VLCVideoCommon.h
 
-#SOURCES += \
+#OBJECTIVE_SOURCES += \
 #    $$PWD/Sources/VLCAudio.m \
 #    $$PWD/Sources/VLCEventManager.m \
 #    $$PWD/Sources/VLCLibrary.m \

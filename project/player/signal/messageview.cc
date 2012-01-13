@@ -65,6 +65,16 @@ MessageView::MessageView(QWidget *parent)
   connect(hookComboBox_, SIGNAL(activated(int)), SLOT(selectHookIndex(int)));
   connect(hookComboBox_, SIGNAL(currentIndexChanged(int)), SLOT(invalidateSelectButton()));
 
+  autoButton_  = new Core::Gui::ToolButton; {
+    autoButton_->setStyleSheet(SS_TOOLBUTTON_TEXT);
+    autoButton_->setToolButtonStyle(Qt::ToolButtonTextOnly);
+    autoButton_->setText(QString("[ %1 ]").arg(TR(T_AUTO)));
+    autoButton_->setToolTip(tr("Auto-detect signal"));
+    autoButton_->setCheckable(true);
+    autoButton_->setChecked(true);
+  }
+  connect(autoButton_, SIGNAL(clicked(bool)), SLOT(invalidateCurrentHook()));
+
   QToolButton *resetButton  = new Core::Gui::ToolButton; {
     resetButton->setStyleSheet(SS_TOOLBUTTON_TEXT);
     resetButton->setToolButtonStyle(Qt::ToolButtonTextOnly);
@@ -80,14 +90,6 @@ MessageView::MessageView(QWidget *parent)
     selectButton_->setToolTip(tr("Use selected signal"));
   }
   connect(selectButton_, SIGNAL(clicked()), SLOT(selectCurrentHook()));
-
-  //cancelButton_ = new Core::Gui::ToolButton; {
-  //  cancelButton_->setStyleSheet(SS_TOOLBUTTON_TEXT);
-  //  cancelButton_->setToolButtonStyle(Qt::ToolButtonTextOnly);
-  //  cancelButton_->setText(QString("[ %1 ]").arg(TR(T_CANCEL)));
-  //  cancelButton_->setToolTip(TR(T_CANCEL));
-  //}
-  //connect(cancelButton_, SIGNAL(clicked()), SLOT(hide()));
 
   hookCountLabel_ = new QLabel; {
     hookCountLabel_->setStyleSheet(SS_LABEL);
@@ -106,6 +108,7 @@ MessageView::MessageView(QWidget *parent)
     header->addWidget(hookCountLabel_);
     header->addWidget(selectButton_);
     header->addStretch();
+    header->addWidget(autoButton_);
     header->addWidget(resetButton);
 
     // left, top, right, bottom
@@ -124,10 +127,6 @@ MessageView::MessageView(QWidget *parent)
 
 // - Properties -
 
-bool
-MessageView::isActive() const
-{ return active_; }
-
 void
 MessageView::setActive(bool active)
 {
@@ -135,11 +134,11 @@ MessageView::setActive(bool active)
 #ifdef USE_WIN_QTH
   Q_ASSERT(QTH);
   if (active_)
-    connect(QTH, SIGNAL(textReceived(QString,int,qint64)),
-            this, SLOT(processHookedText(QString,int)));
+    connect(QTH, SIGNAL(textReceived(QString,ulong,ulong,QString)),
+            this, SLOT(processHookedText(QString,ulong)));
   else
-    disconnect(QTH, SIGNAL(textReceived(QString,int,qint64)),
-               this, SLOT(processHookedText(QString,int)));
+    disconnect(QTH, SIGNAL(textReceived(QString,ulong,ulong,QString)),
+               this, SLOT(processHookedText(QString,ulong)));
 #endif USE_WIN_QTH
 }
 
@@ -162,7 +161,7 @@ MessageView::setCurrentIndex(int index)
   invalidateSelectButton();
 }
 
-int
+ulong
 MessageView::currentHookId() const
 {
   int hookIndex = currentIndex();
@@ -175,7 +174,7 @@ MessageView::currentHookId() const
 // - Actions -
 
 void
-MessageView::addMessages(QStringList &messages, int hookId)
+MessageView::addMessages(QStringList &messages, ulong hookId)
 {
   foreach (QString text, messages)
     processHookedText(text, hookId);
@@ -184,9 +183,9 @@ MessageView::addMessages(QStringList &messages, int hookId)
 void
 MessageView::selectCurrentHook()
 {
-  int hookId = currentHookId();
+  ulong hookId = currentHookId();
   if (hookId) {
-    log(tr("process signal selected") + QString(" (hid = %1)").arg(QString::number(hookId, 16)));
+    log(QString("%1 (hid = %2)").arg(tr("process signal selected")).arg(QString::number(hookId, 16)));
     emit hookSelected(hookId);
   }
 }
@@ -218,11 +217,8 @@ MessageView::invalidateHookCountLabel()
 void
 MessageView::invalidateSelectButton()
 {
-  int hookId = currentHookId();
-  if (hookId)
-    selectButton_->setEnabled(true);
-  else
-    selectButton_->setEnabled(false);
+  ulong hookId = currentHookId();
+  selectButton_->setEnabled(hookId);
 }
 
 void
@@ -235,8 +231,23 @@ MessageView::selectHookIndex(int index)
   setTextList(texts_[index]);
 }
 
+bool
+MessageView::isBetterHook(ulong goodHookId, ulong badHookId)
+{
+  QString badHookName = QTH->hookNameById(badHookId);
+  if (badHookName.isEmpty())
+    return true;
+  QString goodHookName = QTH->hookNameById(goodHookId);
+  if (goodHookName.isEmpty())
+    return false;
+
+  if (QTH->isStandardHookName(badHookName))
+    return true;
+  return !QTH->isStandardHookName(goodHookName);
+}
+
 void
-MessageView::processHookedText(const QString &text, int hookId)
+MessageView::processHookedText(const QString &text, ulong hookId)
 {
   DOUT("enter: hookId =" << hookId << ", text =" << text);
 
@@ -248,9 +259,10 @@ MessageView::processHookedText(const QString &text, int hookId)
     hookComboBox_->addItem(QString::number(index));
     invalidateHookCountLabel();
 
-    log(tr("new signal discovered") + QString(" (hid = %1)").arg(QString::number(hookId, 16)));
+    log(QString("%1 (hid = %2)").arg(tr("new signal discovered")).arg(QString::number(hookId, 16)));
 
-    setCurrentIndex(index);
+    if (isBetterHook(hookId, currentHookId()))
+      setCurrentIndex(index);
   }
 
   texts_[index].append(text);
@@ -263,7 +275,21 @@ MessageView::processHookedText(const QString &text, int hookId)
   else if (ci == 0)
     setTextList(texts_[0]);
 
+  invalidateCurrentHook();
+
   DOUT("exit");
+}
+
+void
+MessageView::invalidateCurrentHook()
+{
+  if (!autoButton_->isChecked() || processName_.isEmpty())
+    return;
+
+  ulong hid = currentHookId();
+  QString hookName = QTH->hookNameById(hid);
+  if (!hookName.isEmpty() && QTH->isKnownHookForProcess(hookName, processName_))
+    selectCurrentHook();
 }
 
 void

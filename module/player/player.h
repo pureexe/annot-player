@@ -237,6 +237,7 @@ public slots:
   void stopVoutTimer();
 protected slots:
   void invalidateVout(); ///< only works if vlccore is used
+  void destroy();
 
 public:
   void handleError(); ///< \internal

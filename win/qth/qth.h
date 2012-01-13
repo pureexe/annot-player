@@ -20,35 +20,46 @@ public:
   QTHAPI static Self *globalInstance();
 
 signals: // No import/export needed for Qt signals.
-  void textReceived(const QString &text, int hookId, qint64 tsMsecs);
+  void textReceived(const QString &text, ulong hookId, ulong processId, const QString &hookName);
 
   // - Properties -
 public:
+  QTHAPI WId parentWinId() const;
   QTHAPI void setParentWinId(WId hwnd); ///< Must be set to a valid window so that ::SetTimer works
 
+  QTHAPI int interval() const;
+  QTHAPI void setInterval(int msecs); ///< Interval to differentiate sentence
+
+  // - Queries -
+public:
   QTHAPI bool isElevated() const;
 
-  // - Injections -
+  QTHAPI bool isStandardHookName(const QString &name) const;
+  QTHAPI bool isKnownHookForProcess(const QString &hookName, const QString &processName) const;
+
+  QTHAPI QString hookNameById(ulong hookId) const;
+
+  QTHAPI ulong processIdByName(const QString &name) const;
+
+  // - Injection -
 public:
   QTHAPI bool attachProcess(ulong pid, bool checkActive = false);
   QTHAPI bool detachProcess(ulong pid, bool checkActive = false);
+  QTHAPI void detachAllProcesses();
   QTHAPI bool isProcessAttached(ulong pid) const;
   QTHAPI bool isEmpty() const;
 
 public slots:
   QTHAPI void clear();
 
-  // - Debugging -
-public:
-  QTHAPI ulong getProcessIdByName(const QString &name) const;
-
   // - Implementations -
 protected:
   explicit Qth(QObject *parent = 0);
   ~Qth();
 public:
-  // FIXME: bad design pattern. It is better to pass the callback function to each TextThread.
-  void emit_textReceived(const QString &text, int hookId, qint64 tsMsecs); ///< Ith callback
+  void sendText(const QString &text, ulong threadId, ulong pid, const QString &hookName) // Ith callback
+  { emit textReceived(text, threadId, pid, hookName); }
+
 private:
   QList<ulong> pids_;
 };

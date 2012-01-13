@@ -82,7 +82,7 @@ class MainWindow : public QMainWindow
 public:
   enum Color {
     DefaultColor = 0,
-    White, Black, Blue, Red, Purple, Orange
+    White, Cyan, Blue, Red, Purple, Orange, Black
   };
 
   // - Constructions -
@@ -133,6 +133,7 @@ public slots:
   void setSubtitleOnTop(bool t);
   void setSubtitleColorToDefault();
   void setSubtitleColorToWhite();
+  void setSubtitleColorToCyan();
   void setSubtitleColorToBlue();
   void setSubtitleColorToRed();
   void setSubtitleColorToPurple();
@@ -404,9 +405,12 @@ protected:
 
   // - Signal mode -
 #ifdef USE_WIN_QTH
+signals:
+  void attached(ProcessInfo pi);
+  void detached(ProcessInfo pi);
 public slots:
   void openProcessPath(const QString &path);
-  void openProcessHook(int hookId, const ProcessInfo &pi = ProcessInfo());
+  void openProcessHook(ulong hHook, const ProcessInfo &pi = ProcessInfo());
   void openProcessWindow(WId hwnd);
   void openProcessId(ulong pid);
 #endif // USE_WIN_QTH
@@ -568,6 +572,7 @@ private:
 
   QAction *setSubtitleColorToDefaultAct_,
           *setSubtitleColorToWhiteAct_,
+          *setSubtitleColorToCyanAct_,
           *setSubtitleColorToBlueAct_,
           *setSubtitleColorToRedAct_,
           *setSubtitleColorToPurpleAct_,

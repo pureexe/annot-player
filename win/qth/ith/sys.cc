@@ -1,5 +1,6 @@
 // ith/sys.c
 // 10/14/2011
+// TODO: clean up this file
 
 // TODO: 10/15/2011: clean-up this file
 
@@ -489,8 +490,9 @@ IthInitSystemService()
     size=0;
     NtMapViewOfSection(codepage_section,::NtCurrentProcess(),&page,0,0,0,&size,ViewUnmap,0,PAGE_READONLY);
   }
+
   wcscpy(file_path+4,GetModulePath());
-  current_dir=wcsrchr(file_path,L'\\')+1;
+  current_dir = wcsrchr(file_path, L'\\')+1;
 
   RtlInitUnicodeString(&us,L"ITH_SysSection");
   NtCreateSection(&thread_man_section,SECTION_ALL_ACCESS,&oa,&sec_size,

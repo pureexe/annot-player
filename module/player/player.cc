@@ -385,8 +385,7 @@ Player::Player(QObject *parent)
 Player::~Player()
 {
   DOUT("enter");
-  if (impl_)
-    delete impl_;
+  destroy();
   DOUT("exit");
 }
 
@@ -394,12 +393,23 @@ bool
 Player::isValid() const
 { return impl_ && impl_->valid(); }
 
+
+void
+Player::destroy()
+{
+  if (impl_) {
+    if (impl_->codec())
+      delete impl_->codec();
+    delete impl_;
+  }
+}
+
 void
 Player::reset()
 {
   DOUT("enter");
-  if (impl_)
-    delete impl_;
+
+  destroy();
 
   impl_ = new Impl;
   impl_->reset();
@@ -500,7 +510,7 @@ Player::setEncoding(const QString &encoding)
 
   if (impl_->codec())
     delete impl_->codec();
-  impl_->setCodec(new Core::Codec(encoding, this));
+  impl_->setCodec(new Core::TextCodec(encoding));
   emit encodingChanged();
 }
 

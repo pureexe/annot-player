@@ -4,6 +4,7 @@
 // messageview.h
 // 10/16/2011
 
+#include "processinfo.h"
 #include "core/gui/dialog.h"
 #include <QTextCharFormat>
 #include <QColor>
@@ -32,14 +33,27 @@ public:
   explicit MessageView(QWidget *parent = 0);
 
 signals:
-  void hookSelected(int hookId);
+  void hookSelected(ulong hookId);
 
   // - Properties -
 public:
-   bool isActive() const;
+   bool isActive() const { return active_; }
+
+   const QString &processName() const { return processName_; }
+public slots:
+   void setProcessName(const QString &name) { processName_ = name; }
+   void clearProcessName() { processName_.clear(); }
+
+   void setProcessNameFromProcessInfo(const ProcessInfo &pi)
+   {
+     if (pi.isValid())
+       setProcessName(pi.processName);
+     else
+       clearProcessName();
+   }
 
 protected:
-  int currentHookId() const;
+  ulong currentHookId() const;
   int currentIndex() const;
 
   // - Actions -
@@ -47,11 +61,11 @@ protected:
 public slots:
   void clear();
   void selectCurrentHook();
-  void processHookedText(const QString &text, int hookId);
+  void processHookedText(const QString &text, ulong hookId);
 
   void setActive(bool active);
 
-  void addMessages(QStringList &messages, int hookId);
+  void addMessages(QStringList &messages, ulong hookId);
   void setCurrentIndex(int index);
 
 protected slots:
@@ -60,6 +74,7 @@ protected slots:
   void invalidateHookCountLabel();
   void invalidateCurrentCharFormat();
   void invalidateSelectButton();
+  void invalidateCurrentHook();
 
   // - Events -
 public:
@@ -77,16 +92,21 @@ signals:
   void dragLeaveEventReceived(QDragLeaveEvent *event);
   void dropEventReceived(QDropEvent *event);
 
+  // - Implementation -
+protected:
+  static bool isBetterHook(ulong goodHookId, ulong badHookId);
+
 private:
   bool active_;
+  QString processName_;
   QComboBox *hookComboBox_;
   QTextEdit *textEdit_;
   QLabel *hookCountLabel_;
 
-  QVector<int> hooks_;
+  QVector<ulong> hooks_;
   QVector<QStringList> texts_;
 
-  QToolButton *selectButton_;
+  QToolButton *autoButton_, *selectButton_;
 };
 
 #endif // MESSAGEVIEW_H

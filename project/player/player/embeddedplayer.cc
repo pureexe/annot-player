@@ -154,7 +154,13 @@ void
 EmbeddedPlayerUi::autoHide()
 {
   if (underMouse() ||
-      inputComboBox()->hasFocus() || prefixComboBox()->hasFocus())
+      inputComboBox()->hasFocus() || prefixComboBox()->hasFocus()
+#ifndef Q_WS_WIN
+      // Always keep embedded player visible in live mode
+      // Because mouse hook is missing in non-windows platform.
+      || (hub()->isLiveTokenMode() && hub()->isEmbeddedPlayerMode())
+#endif // Q_WS_WIN
+      )
     resetAutoHideTimeout();
   else if (isVisible())
     hide();

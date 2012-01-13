@@ -1,9 +1,11 @@
-#ifndef _CORE_CODEC_H
-#define _CORE_CODEC_H
+#ifndef _CORE_TEXTCODEC_H
+#define _CORE_TEXTCODEC_H
 
-#include <QObject>
 #include <QString>
 #include <QStringList>
+
+QT_FORWARD_DECLARE_CLASS(QTextCodec)
+QT_FORWARD_DECLARE_CLASS(QTextDecoder)
 
 // core/codec.h
 // 7/18/2011
@@ -11,14 +13,9 @@ namespace Core {
 
   // - Codec -
 
-  class CodecImpl;
-
-  class Codec : public QObject
+  class TextCodec
   {
-    Q_OBJECT
-    typedef Codec Self;
-    typedef QObject Base;
-    typedef CodecImpl Impl;
+    typedef TextCodec Self;
 
     // - Available encodings -
   public:
@@ -31,28 +28,40 @@ namespace Core {
 
     // - Constructions -
   public:
-    explicit Codec(const QString &encoding, QObject *parent = 0);
-    ~Codec();
+    explicit TextCodec(const QString &encoding)
+      : type_(Default), codec_(0), decoder_(0)
+    { setEncoding(encoding); }
 
+    explicit TextCodec(Type type)
+      : type_(Default), codec_(0), decoder_(0)
+    { setType(type); }
+
+    // - Properties -
+  public:
     Type type() const { return type_; }
-    void setType(Type type) { type_ = type; }
+    void setType(Type type);
 
     const char *encoding() const { return encoding(type()); }
     QString description() const { return description(type()); }
 
     void setEncoding(const QString &encoding);
 
-    bool valid() const { return impl_; }
-
-    // - Decoding -
+    // - Decode -
   public:
     QByteArray encode(const QString &unicode) const;
     QString decode(const char *ascii) const;
 
+    // - Implementation -
+  protected:
+    void invalidateCodec();
+
   private:
     Type type_;
-    Impl *impl_;
+    QTextCodec *codec_;
+    QTextDecoder *decoder_;
+
   };
 
 } // namespace Core
-#endif // _CORE_CODEC_H
+
+#endif // _CORE_TEXTCODEC_H

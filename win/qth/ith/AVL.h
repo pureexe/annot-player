@@ -1,6 +1,8 @@
 #pragma once
 
-// ith/AVL.h    10/14/2011
+// ith/AVL.h
+// 10/14/2011
+// TODO: clean up this file
 
 #define STACK_SIZE 32
 #ifndef ITH_STACK

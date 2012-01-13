@@ -2,7 +2,7 @@
 
 // ith.h  10/15/2011
 
-#include <QtGlobal>
+#include <QWidget>
 #include <QString>
 
 namespace Ith {
@@ -13,15 +13,23 @@ namespace Ith {
 
   void init();
   void destroy();
-  void setWindowHandle(void *hwnd);
+
+  // - Properties -
+
+  WId parentWindow();
+  void setParentWindow(WId hwnd);
+
+  int messageInterval();
+  void setMessageInterval(int msecs);
 
   // - Injections -
   bool attachProcess(ulong pid);
   bool detachProcess(ulong pid);
 
-  // - Helpers -
+  // - Queries -
   bool isElevated();
   ulong getProcessIdByName(const QString &name);
+  QString getHookNameById(ulong hookId);
 
 } // namespace Ith
 

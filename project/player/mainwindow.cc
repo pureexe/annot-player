@@ -424,6 +424,12 @@ MainWindow::createComponents()
   messageHandler_ = new MessageHandler(this);
   signalView_ = new SignalView(this);
   recentMessageView_ = new MessageView(this);
+
+  connect(this, SIGNAL(attached(ProcessInfo)), signalView_->processView(), SIGNAL(attached(ProcessInfo)));
+  connect(this, SIGNAL(detached(ProcessInfo)), signalView_->processView(), SIGNAL(detached(ProcessInfo)));
+
+  connect(signalView_->processView(), SIGNAL(attached(ProcessInfo)), recentMessageView_, SLOT(setProcessNameFromProcessInfo(ProcessInfo)));
+  connect(signalView_->processView(), SIGNAL(detached(ProcessInfo)), recentMessageView_, SLOT(clearProcessName()));
 #endif // USE_MODE_SIGNAL
 
 #ifdef USE_MODULE_DOLL
@@ -657,14 +663,14 @@ MainWindow::createConnections()
 #endif // USE_MODULE_CLIENTAGENT
 
 #ifdef USE_MODE_SIGNAL
-  connect(signalView_, SIGNAL(hookSelected(int,ProcessInfo)), SLOT(openProcessHook(int,ProcessInfo)));
-  connect(recentMessageView_, SIGNAL(hookSelected(int)), SLOT(openProcessHook(int)));
-  connect(recentMessageView_, SIGNAL(hookSelected(int)), recentMessageView_, SLOT(hide()));
+  connect(signalView_, SIGNAL(hookSelected(ulong,ProcessInfo)), SLOT(openProcessHook(ulong,ProcessInfo)));
+  connect(recentMessageView_, SIGNAL(hookSelected(ulong)), SLOT(openProcessHook(ulong)));
+  connect(recentMessageView_, SIGNAL(hookSelected(ulong)), recentMessageView_, SLOT(hide()));
   connect(messageHandler_, SIGNAL(messageReceivedWithId(qint64)), annotationView_, SLOT(showAnnotationsAtPos(qint64)));
   connect(messageHandler_, SIGNAL(messageReceivedWithText(QString)), SLOT(translate(QString)));
 
   // Ensure backlogView enabled in signal mode.
-  connect(signalView_, SIGNAL(hookSelected(int,ProcessInfo)), SLOT(backlogView()));
+  connect(signalView_, SIGNAL(hookSelected(ulong,ProcessInfo)), SLOT(backlogView()));
 #endif // USE_MODE_SIGNAL
   //connect(player_, SIGNAL(opening()), SLOT(backlogView()));
 }
@@ -744,6 +750,7 @@ MainWindow::createActions()
   MAKE_ACTION(disconnectAct_,   DISCONNECT,     server_,        SLOT(disconnect()))
   MAKE_TOGGLE(setSubtitleColorToDefaultAct_, DEFAULTCOLOR, this, SLOT(setSubtitleColorToDefault()))
   MAKE_TOGGLE(setSubtitleColorToWhiteAct_, WHITECOLOR, this, SLOT(setSubtitleColorToWhite()))
+  MAKE_TOGGLE(setSubtitleColorToCyanAct_, CYANCOLOR, this, SLOT(setSubtitleColorToCyan()))
   MAKE_TOGGLE(setSubtitleColorToBlueAct_, BLUECOLOR, this, SLOT(setSubtitleColorToBlue()))
   MAKE_TOGGLE(setSubtitleColorToOrangeAct_, ORANGECOLOR, this, SLOT(setSubtitleColorToOrange()))
   MAKE_TOGGLE(setSubtitleColorToPurpleAct_, PURPLECOLOR, this, SLOT(setSubtitleColorToPurple()))
@@ -960,6 +967,7 @@ MainWindow::createMenus()
     subtitleStyleMenu_->addAction(setSubtitleColorToDefaultAct_);
     subtitleStyleMenu_->addSeparator();
     subtitleStyleMenu_->addAction(setSubtitleColorToWhiteAct_);
+    subtitleStyleMenu_->addAction(setSubtitleColorToCyanAct_);
     subtitleStyleMenu_->addAction(setSubtitleColorToBlueAct_);
     subtitleStyleMenu_->addAction(setSubtitleColorToPurpleAct_);
     subtitleStyleMenu_->addAction(setSubtitleColorToRedAct_);
@@ -1504,7 +1512,12 @@ MainWindow::setRecentOpenedFile(const QString &path)
 void
 MainWindow::openPath(const QString &path, bool checkPath)
 {
+  bool fullScreen = hub_->isLiveTokenMode() && hub_->isEmbeddedPlayerMode();
   hub_->setMediaTokenMode();
+  if (fullScreen) {
+    hub_->setFullScreenWindowMode();
+    updateWindowMode();
+  }
 
   recentDigest_.clear();
 
@@ -4099,6 +4112,9 @@ MainWindow::openProcessId(ulong pid)
     if (ok) {
       log(tr("process attached") + QString(" (pid = %1)").arg(QString::number(pid)));
       signalView_->processView()->refresh();
+      ProcessInfo pi = signalView_->processView()->attachedProcessInfo();
+      if (pi.isValid() && pid == pi.processId)
+        emit attached(pi);
     } else {
       error(tr("failed to attach process ") + QString(" (pid = %1)").arg(QString::number(pid)));
       if (!QtWin::isProcessActiveWithId(pid))
@@ -4115,13 +4131,13 @@ void
 MainWindow::openProcessPath(const QString &path)
 {
   QString processName = QFileInfo(path).fileName();
-  ulong pid = QTH->getProcessIdByName(processName);
+  ulong pid = QTH->processIdByName(processName);
   if (pid) {
     log(tr("process was started") + QString(" (pid = %1)").arg(pid));
   } else {
     QtWin::createProcessWithExecutablePath(path);
     log(tr("told process to start") + QString(" (name = %1)").arg(processName));
-    pid = QTH->getProcessIdByName(processName);
+    pid = QTH->processIdByName(processName);
   }
 
   addRecent(path);
@@ -4139,7 +4155,7 @@ MainWindow::openProcessPath(const QString &path)
 }
 
 void
-MainWindow::openProcessHook(int hookId, const ProcessInfo &pi)
+MainWindow::openProcessHook(ulong hookId, const ProcessInfo &pi)
 {
   if (player_->hasMedia() && !player_->isStopped())
     stop();
@@ -4671,6 +4687,7 @@ MainWindow::uncheckSubtitleColorActions()
 {
   setSubtitleColorToDefaultAct_->setChecked(false);
   setSubtitleColorToWhiteAct_->setChecked(false);
+  setSubtitleColorToCyanAct_->setChecked(false);
   setSubtitleColorToBlueAct_->setChecked(false);
   setSubtitleColorToPurpleAct_->setChecked(false);
   setSubtitleColorToBlackAct_->setChecked(false);
@@ -4698,6 +4715,7 @@ MainWindow::setSubtitleColorToDefault()
   }
 
   SET_SUBTITLE_COLOR(White, WHITE)
+  SET_SUBTITLE_COLOR(Cyan, CYAN)
   SET_SUBTITLE_COLOR(Black, BLACK)
   SET_SUBTITLE_COLOR(Blue, BLUE)
   SET_SUBTITLE_COLOR(Orange, ORANGE)
@@ -4711,6 +4729,7 @@ MainWindow::setSubtitleColor(int c)
   switch (c) {
   case Black:   setSubtitleColorToBlack(); break;
   case White:   setSubtitleColorToWhite(); break;
+  case Cyan:    setSubtitleColorToCyan(); break;
   case Blue:    setSubtitleColorToBlue(); break;
   case Red:     setSubtitleColorToRed(); break;
   case Orange:  setSubtitleColorToOrange(); break;
@@ -4725,6 +4744,8 @@ MainWindow::subtitleColor() const
 {
   if (setSubtitleColorToWhiteAct_->isChecked())
     return White;
+  if (setSubtitleColorToCyanAct_->isChecked())
+    return Cyan;
   if (setSubtitleColorToBlackAct_->isChecked())
     return Black;
   if (setSubtitleColorToBlueAct_->isChecked())

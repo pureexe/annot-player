@@ -1,29 +1,91 @@
-// ith/command.cc
+// ith/query.cc
 // 10/14/2011
-#include "ith/cmdq.h"
-//#include "hookman.h"
+#include "ith/query.h"
+#include "ith/main.h"
 //#include <intrin.h>
 
 //#define DEBUG "ith:command"
 #include "module/debug/debug.h"
 
-#define IthTIMING
-#ifdef IthTIMING
-  #define TestTime(x) \
-  { \
-    LARGE_INTEGER fre,begin,end;\
-    NtQueryPerformanceCounter(&begin,&fre);\
-    x;\
-    NtQueryPerformanceCounter(&end,0);\
-    WCHAR str[0x40];\
-    swprintf(str,L"Time spent: %.6lfs",(end.QuadPart-begin.QuadPart)/(double)fre.QuadPart);\
-    ConsoleOutput(str);\
+bool
+GetProcessPath(HANDLE hProc, LPWSTR path)
+{
+  PROCESS_BASIC_INFORMATION info;
+  LDR_DATA_TABLE_ENTRY entry;
+  PEB_LDR_DATA ldr;
+  PEB peb;
+
+  return
+    NT_SUCCESS(::NtQueryInformationProcess(hProc, ProcessBasicInformation, &info, sizeof(info), 0)) &&
+    info.PebBaseAddress &&
+    NT_SUCCESS(::NtReadVirtualMemory(hProc, info.PebBaseAddress, &peb,sizeof(peb), 0)) &&
+    NT_SUCCESS(::NtReadVirtualMemory(hProc, peb.Ldr, &ldr, sizeof(ldr), 0)) &&
+    NT_SUCCESS(::NtReadVirtualMemory(hProc, (LPVOID)ldr.InLoadOrderModuleList.Flink, &entry, sizeof(LDR_DATA_TABLE_ENTRY), 0)) &&
+    NT_SUCCESS(::NtReadVirtualMemory(hProc, entry.FullDllName.Buffer, path, MAX_PATH * 2, 0));
+}
+
+bool
+GetProcessPath(DWORD pid, LPWSTR path)
+{
+  HANDLE hProc;
+
+  CLIENT_ID id; {
+    id.UniqueProcess = pid;
+    id.UniqueThread = 0;
   }
-#else
-  #define TestTime(x) x;
-#endif // IthTIMING
-static const DWORD table[]={0x100,0x100,0x100,0x100};
-BYTE* GetSystemInformation()
+
+  OBJECT_ATTRIBUTES oa = { }; { oa.uLength = sizeof(oa); }
+
+  NTSTATUS status = ::NtOpenProcess(&hProc , PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, &oa, &id);
+  if (!NT_SUCCESS(status))
+    return false;
+
+  bool ret = ::GetProcessPath(hProc, path);
+  ::NtClose(hProc);
+  return ret;
+}
+
+DWORD
+PIDByName(LPWSTR pwcTarget)
+{
+  DWORD dwSize = 0x20000;
+  BYTE *pbBuffer;
+  DWORD dwPid = 0;
+  DWORD dwStatus;
+
+  while (true) { // busy querying ... orz
+    pbBuffer = new BYTE[dwSize];
+    dwStatus = ::NtQuerySystemInformation(SystemProcessInformation, pbBuffer, dwSize, 0);
+    if (dwStatus == 0)
+      break;
+    delete pbBuffer;
+    if (dwStatus != STATUS_INFO_LENGTH_MISMATCH)
+      return 0;
+    dwSize <<= 1;
+  }
+
+  auto spiProcessInfo = reinterpret_cast<PSYSTEM_PROCESS_INFORMATION>(pbBuffer);
+  while (spiProcessInfo->dNext) {
+    spiProcessInfo = reinterpret_cast<PSYSTEM_PROCESS_INFORMATION>
+      ((DWORD)spiProcessInfo + spiProcessInfo->dNext);
+    if (!::_wcsicmp(pwcTarget, spiProcessInfo->usName.Buffer)) {
+      dwPid = spiProcessInfo->dUniqueProcessId;
+      break;
+    }
+  }
+  //if (!dwPid) {
+  //  ConsoleOutput(ErrorNoProcess);
+  //  DOUT("process not found");
+  //}
+  delete pbBuffer;
+  return dwPid;
+}
+
+// EOF
+
+/*
+
+static BYTE *GetSystemInformation()
 {
   DWORD dwSize;
   BYTE *pbBuffer;
@@ -114,7 +176,7 @@ SYSTEM_PROCESS_INFORMATION* GetBaseByPid(BYTE* pbBuffer,DWORD dwPid)
     return 0;
   return spiProcessInfo;
 }
-int PerformThread(DWORD dwPid, DWORD addr=0,ThreadOperation op=OutputInformation)
+static int PerformThread(DWORD dwPid, DWORD addr=0,ThreadOperation op=OutputInformation)
 {
   BYTE *pbBuffer = GetSystemInformation();
   if (pbBuffer == 0) return 0;
@@ -156,8 +218,36 @@ int GetProcessMemory1(HANDLE hProc, DWORD& size, DWORD& ws)
   delete buffer;
   return 1;
 }
+int Convert(LPWSTR str, DWORD *num, LPWSTR delim)
+{
+  if (num == 0) return -1;
+  WCHAR t = *str,tc = *(str+0xF);
+  WCHAR temp[0x10]={};
+  LPWSTR it = temp,istr = str,id = temp;
+  if (delim)
+  {
+    id=wcschr(delim, t);
+    str[0xF] = delim[0];
+  }
+  else str[0xF] = 0;
+  while (id == 0 && t)
+  {
+    *it = t;
+    it++; istr++;
+    t = *istr;
+    if (delim) id = wcschr(delim, t);
+  }
+  swscanf(temp, L"%x", num);
+  str[0xF] = tc;
+  if (id == 0 || istr - str == 0xF) return -1;
+  if (t == 0) return istr - str;
+  else return id - delim;
+}
+
 int GetProcessMemory(HANDLE hProc, DWORD& mem_size, DWORD& ws)
 {
+  static const DWORD table[] = { 0x100,0x100,0x100,0x100 };
+
   DWORD len,retl,s;
   LPVOID buffer = 0;
   NTSTATUS status;
@@ -240,41 +330,6 @@ sse_calc:
   NtFreeVirtualMemory(NtCurrentProcess(), &buffer, &s, MEM_RELEASE);
   return 1;
 }
-bool GetProcessPath(HANDLE hProc, LPWSTR path)
-{
-  PROCESS_BASIC_INFORMATION info;
-  LDR_DATA_TABLE_ENTRY entry;
-  PEB_LDR_DATA ldr;
-  PEB peb;
-  if (NT_SUCCESS(NtQueryInformationProcess(hProc, ProcessBasicInformation, &info, sizeof(info), 0)))
-  if (info.PebBaseAddress)
-  if (NT_SUCCESS(NtReadVirtualMemory(hProc, info.PebBaseAddress, &peb,sizeof(peb), 0)))
-  if (NT_SUCCESS(NtReadVirtualMemory(hProc, peb.Ldr, &ldr, sizeof(ldr), 0)))
-  if (NT_SUCCESS(NtReadVirtualMemory(hProc, (LPVOID)ldr.InLoadOrderModuleList.Flink,
-    &entry, sizeof(LDR_DATA_TABLE_ENTRY), 0)))
-  if (NT_SUCCESS(NtReadVirtualMemory(hProc, entry.FullDllName.Buffer,
-    path, MAX_PATH * 2, 0))) return true;
-  return false;
-}
-bool GetProcessPath(DWORD pid, LPWSTR path)
-{
-  CLIENT_ID id;
-  OBJECT_ATTRIBUTES oa = {};
-  HANDLE hProc;
-  NTSTATUS status;
-  id.UniqueProcess = pid;
-  id.UniqueThread = 0;
-  oa.uLength = sizeof(oa);
-  status = NtOpenProcess(&hProc , PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, &oa, &id);
-  if (NT_SUCCESS(status))
-  {
-    bool flag = GetProcessPath(hProc, path);
-    NtClose(hProc);
-    return flag;
-  }
-  else return false;
-}
-/*
 int OutputProcessList(int all=0)
 {
   BYTE *pbBuffer = GetSystemInformation();
@@ -318,32 +373,23 @@ int OutputProcessList(int all=0)
   delete pbBuffer;
   return 1;
 }
-*/
-int Convert(LPWSTR str, DWORD *num, LPWSTR delim)
-{
-  if (num == 0) return -1;
-  WCHAR t = *str,tc = *(str+0xF);
-  WCHAR temp[0x10]={};
-  LPWSTR it = temp,istr = str,id = temp;
-  if (delim)
-  {
-    id=wcschr(delim, t);
-    str[0xF] = delim[0];
+
+#define IthTIMING
+#ifdef IthTIMING
+  #define TestTime(x) \
+  { \
+    LARGE_INTEGER fre,begin,end;\
+    NtQueryPerformanceCounter(&begin,&fre);\
+    x;\
+    NtQueryPerformanceCounter(&end,0);\
+    WCHAR str[0x40];\
+    swprintf(str,L"Time spent: %.6lfs",(end.QuadPart-begin.QuadPart)/(double)fre.QuadPart);\
+    ConsoleOutput(str);\
   }
-  else str[0xF] = 0;
-  while (id == 0 && t)
-  {
-    *it = t;
-    it++; istr++;
-    t = *istr;
-    if (delim) id = wcschr(delim, t);
-  }
-  swscanf(temp, L"%x", num);
-  str[0xF] = tc;
-  if (id == 0 || istr - str == 0xF) return -1;
-  if (t == 0) return istr - str;
-  else return id - delim;
-}
+#else
+  #define TestTime(x) x;
+#endif // IthTIMING
+
 bool Parse(LPWSTR cmd, HookParam& hp)
 {
   int t;
@@ -468,37 +514,7 @@ _error:
   //ConsoleOutput(L"Try to insert additional hook.");
   return true;
 }
-BOOL ActiveDetachProcess(DWORD pid)
-{
-  DWORD module, engine, dwWrite;
-  HANDLE hProc, hThread;
-  hProc = GetProcessByPID(pid);
-  module = GetModuleByPID(pid);
-  if (module == 0) return FALSE;
-  engine = GetEngineByPID(pid);
-  engine &= ~0xFF;
-  SendParam sp = {};
-  sp.type = 4;
-  cmdq->AddRequest(sp, pid);
-  dwWrite = 0x1000;
-  hThread = IthCreateThread(LdrUnloadDll, engine, hProc);
-  if (hThread == 0 ||
-    hThread == INVALID_HANDLE_VALUE) return FALSE;
-  NtWaitForSingleObject(hThread, 0, 0);
-  NtClose(hThread);
-  hThread = IthCreateThread(LdrUnloadDll, module, hProc);
-  if (hThread == 0 ||
-    hThread == INVALID_HANDLE_VALUE) return FALSE;
-  NtWaitForSingleObject(hThread, 0, 0);
-  THREAD_BASIC_INFORMATION info;
-  NtQueryInformationThread(hThread, ThreadBasicInformation, &info, sizeof(info), 0);
-  NtClose(hThread);
-  NtSetEvent(hPipeExist, 0);
-  FreeThreadStart(hProc);
-  dwWrite = 0x1000;
-  return info.ExitStatus;
-}
-void AddLink(WORD from, WORD to);
+
 DWORD CommandQueue::ProcessCommand(LPWSTR cmd, DWORD pid)
 {
   int t;
@@ -509,36 +525,30 @@ DWORD CommandQueue::ProcessCommand(LPWSTR cmd, DWORD pid)
   //DWORD pid=0,current_pid=GetCurrentPID();
   //WCHAR str[0x200];
 
-  switch (cmd[0])
-  {
+  switch (cmd[0]) {
   case L'/':
-    switch (cmd[1])
-    {
+    switch (cmd[1]) {
     case L'p':
-      {
-        if (cmd[2] == L'n')
-        {
-          pid = PIDByName(cmd + 3);
-          if (pid == 0) break;
-        }
-        else
-          swscanf(cmd + 2, L"%d", &pid);
-        t = InjectByPID(pid);
-      }
+      if (cmd[2] == L'n') {
+        pid = PIDByName(cmd + 3);
+        if (pid == 0) break;
+      } else
+        swscanf(cmd + 2, L"%d", &pid);
+      t = (DWORD)InjectByPID(pid);
       break;
     case L'h':
       {
         SendParam sp;
         sp.type = 0;
-        if (Parse(cmd + 2, sp.hp)) AddRequest(sp);
-      }
-      break;
+        if (Parse(cmd + 2, sp.hp))
+          AddRequest(sp);
+      } break;
     default:
       //ConsoleOutput(ErrorSyntax);
       DOUT("syntax error");
     }
     break;
-  /*}
+  }
   case L'm':
     if (current_pid==0)
       ConsoleOutput(L"No process hooked.");
@@ -608,7 +618,7 @@ DWORD CommandQueue::ProcessCommand(LPWSTR cmd, DWORD pid)
       else
         ConsoleOutput(L"Process is not injected.");
     }
-    break;*/
+    break;
   case L'p':
     {
       int t = 0;
@@ -621,14 +631,15 @@ DWORD CommandQueue::ProcessCommand(LPWSTR cmd, DWORD pid)
       //TestTime(OutputProcessList(t));
       break;
     }
+
   case L'l':
     {
       DWORD from, to;
       swscanf(cmd+1, L"%x-%x", &from, &to);
-      AddLink(from & 0xFFFF, to & 0xFFFF);
+      HookManager::addLink(from & 0xFFFF, to & 0xFFFF);
     }
     break;
-  /*
+
   case L'?':
     ConsoleOutput(L"Command list:");
     ConsoleOutput(L"h: Display this help.");
@@ -641,8 +652,11 @@ DWORD CommandQueue::ProcessCommand(LPWSTR cmd, DWORD pid)
     ConsoleOutput(L"t{t/s/r}[addr]:Operate on thread with start address equal addr.");
     ConsoleOutput(L"t-Terminate s-Suspend r-Resume.");
     ConsoleOutput(L"m: Get a list of module loaded by the current select process.");
-    break;*/
+    break;
+
+  default:
+    DOUT("unrecognized command:" << QString::fromWCharArray(cmd));
   }
   return 0;
 }
-// EOF
+*/

@@ -10,7 +10,7 @@
 // 11/26/2011
 
 #include "player.h"
-#include "core/util/codec.h"
+#include "core/util/textcodec.h"
 #include "core/util/countdowntimer.h"
 #include <QObject>
 #include <QList>
@@ -246,14 +246,14 @@ namespace { // anonymous: player states
 
   class mp_intl_
   {
-    Core::Codec *codec_;
+    Core::TextCodec *codec_;
 
   public:
     mp_intl_() : codec_(0) { }
 
   public:
-    Core::Codec *codec() const { return codec_; }
-    void setCodec(Core::Codec *codec) { codec_ = codec; }
+    Core::TextCodec *codec() const { return codec_; }
+    void setCodec(Core::TextCodec *codec) { codec_ = codec; }
   };
 
 } // anonymous namespace

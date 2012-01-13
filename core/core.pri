@@ -24,7 +24,7 @@ HEADERS += \
     $$PWD/gui/toolbutton.h \
     $$PWD/gui/webdialog.h \
     $$PWD/gui/withsizehint.h \
-    $$PWD/util/codec.h \
+    $$PWD/util/textcodec.h \
     $$PWD/util/countdowntimer.h \
     $$PWD/util/crypt.h \
     $$PWD/util/datetime.h \
@@ -44,7 +44,7 @@ SOURCES += \
     $$PWD/gui/slider.cc \
     $$PWD/gui/toolbutton.cc \
     $$PWD/gui/webdialog.cc \
-    $$PWD/util/codec.cc \
+    $$PWD/util/textcodec.cc \
     $$PWD/util/countdowntimer.cc \
     $$PWD/util/crypt.cc \
     $$PWD/util/datetime.cc

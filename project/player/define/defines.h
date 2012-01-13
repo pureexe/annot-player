@@ -23,7 +23,8 @@ enum { ALPHA = 0 };
 #define G_ORGANIZATION  "Annot"
 #define G_APPLICATION   "Player"
 #define G_VERSION       VERSION
-#define G_HOMEPAGE      "http://annot.me"
+//#define G_HOMEPAGE      "http://annot.me"
+#define G_HOMEPAGE      "http://annotcloud.com"
 #define G_WIKIPAGE      G_HOMEPAGE "/w"
 #define G_WIKIPAGE_FAQ  G_WIKIPAGE "/index.php?title=Manual:FAQ"
 #define G_UPDATEPAGE    "http://code.google.com/p/annot-player"
@@ -150,10 +151,12 @@ enum { ALPHA = 0 };
 
 // - QTH -
 #ifdef USE_WIN_QTH
-  #define QTH          Qth::globalInstance()
+  #define QTH           Qth::globalInstance()
 #else
-  #define QTH          #error "Hook is not used"
+  #define QTH           #error "Hook is not used"
 #endif // USE_WIN_HOOK
+#define QTH_INTERVAL    1000    // 1 second
+//#define QTH_INTERVAL    200     // 0.2 second
 
 // - DWM -
 #ifdef USE_WIN_DWM

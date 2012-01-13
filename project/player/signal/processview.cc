@@ -303,7 +303,8 @@ ProcessView::attachProcess()
   if (pid && QTH->attachProcess(pid)) {
     setCurrentItemAttached(true);
     invalidateButtons();
-    log(tr("process attached") + QString(" (pid = %1)").arg(QString::number(pid)));
+    log(QString("%1 (pid = %2)").arg(tr("process attached")).arg(QString::number(pid)));
+    emit attached(pis_[pid]);
   } else {
     error(tr("failed to attach process ") + QString(" (pid = %1)").arg(QString::number(pid)));
     if (!QtWin::isProcessActiveWithId(pid))
@@ -319,13 +320,17 @@ void
 ProcessView::detachProcess()
 {
   ulong pid = currentPid();
-  if (pid)
+  ProcessInfo pi;
+  if (pid) {
+    pi = pis_[pid];
     setCurrentItemAttached(false);
+  }
   if (pid && QTH->detachProcess(pid)) {
     invalidateButtons();
     log(tr("process detached") + QString(" (pid = %1)").arg(QString::number(pid)));
   } else
     warn(tr("failed to detach process") + QString(" (pid = %1)").arg(QString::number(pid)));
+  emit detached(pi);
 }
 
 // - Events -

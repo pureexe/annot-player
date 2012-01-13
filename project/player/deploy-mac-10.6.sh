@@ -7,7 +7,7 @@ cd ~/tmp || exit 1
 ## environment
 
 COLOR=purple
-VERSION=0.1.2.1
+VERSION=0.1.2.2
 
 TARGET="Annot Player"
 TARGET_DMG=$TARGET.dmg

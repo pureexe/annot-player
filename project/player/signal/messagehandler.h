@@ -37,37 +37,37 @@ signals:
 
   // - Properties -
 public:
-  bool isActive() const;
-  int hookId() const;
-  const ProcessInfo &processInfo() const;
+  bool isActive() const { return active_; }
+  ulong hookId() const { return hookId_; }
+  const ProcessInfo &processInfo() const { return pi_; }
 
   ///  Most recent on the top.
-  const QStringList &recentMessages() const;
-  int recentMessageCapacity() const;
+  const QStringList &recentMessages() const { return messages_; }
+  int recentMessageCapacity() const { return messageCount_; }
 
-  const MessageHash &lastMessageHash() const;
+  const MessageHash &lastMessageHash() const { return lastMessageHash_; }
 
 public slots:
   void setActive(bool active);
-  void setHookId(int hid);
-  void setProcessInfo(const ProcessInfo &pi);
+  void setHookId(ulong hid) { hookId_ = hid; }
+  void setProcessInfo(const ProcessInfo &pi) { pi_ = pi; }
 
   void clearRecentMessages();
 
   // - Actions
 protected slots:
-  void processTextMessage(const QString &text, int hookId, qint64 tsMsecs);
+  void processTextMessage(const QString &text, ulong hookId);
 
   void connectTextHook();
   void disconnectTextHook();
 
   // - Implementations -
-protected:
-  static bool isSubtitle(const QString &text);
+//protected:
+//  static bool isSubtitle(const QString &text);
 
 private:
   bool active_;
-  int hookId_;
+  ulong hookId_;
   ProcessInfo pi_;
 
   QStringList messages_; // recent messages queue

@@ -1,28 +1,23 @@
 # TODO
 # 6/18/2011
 
-# CHECKPOINT
-spring fest special
+- fix ith encoding in Chinese! OS
+- change to serverangine to annotcloud.com
+  publish 0.1.2.2
 
-start translate goei2
-- automatically recognize process' signal through ith's control signal
-- start with mai/akemi route
+## annot.player
+0.1.2.3
+- move isKnownHookForProcess to Settings, and update it every 7 days
+  - update database online
+- update database online
+ - enable others to commit database?
 - need wiki-like subtitle edit support
   - subtitles set "shared" flag by default
   - edit other's annot flagged as shared
     would make others annot invisible instead of deleted
   - need a dialog to show all annot in current FRAME including hidden ones
     reuse/extend annotBrowser
-
-## annot.cloud
-- finish website design
-- add server support for annot deletion
-- continue project appcloud
-- continue project doll
-
-## annot.player
-0.1.2.2
-- Updated to Qt 4.8 on Mac OS X.
+- Updated to Qt 4.8 on Mac OS X. FIXME: WebKit confliction.
 - FIXME: dragging window disappear bug
 - add outdated state into media_annot
   add an wiki subtitle edit window

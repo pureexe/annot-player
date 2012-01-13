@@ -83,7 +83,10 @@ SignalView::SignalView(QWidget *parent)
     rows->setContentsMargins(4, 0, 4, 4);
   } setLayout(rows);
 
-  connect(messageView_, SIGNAL(hookSelected(int)), SLOT(selectHookAndHide(int)));
+  connect(messageView_, SIGNAL(hookSelected(ulong)), SLOT(selectHookAndHide(ulong)));
+
+  connect(processView_, SIGNAL(attached(ProcessInfo)), messageView_, SLOT(setProcessNameFromProcessInfo(ProcessInfo)));
+  connect(processView_, SIGNAL(detached(ProcessInfo)), messageView_, SLOT(clearProcessName()));
 
   connect(messageView_, SIGNAL(dragEnterEventReceived(QDragEnterEvent*)), SLOT(dragEnterEvent(QDragEnterEvent*)));
   connect(messageView_, SIGNAL(dragLeaveEventReceived(QDragLeaveEvent*)), SLOT(dragLeaveEvent(QDragLeaveEvent*)));
@@ -111,19 +114,10 @@ SignalView::SignalView(QWidget *parent)
 //SignalView::tokenView() const
 //{ return tokenView_; }
 
-ProcessView*
-SignalView::processView() const
-{ return processView_; }
-
-MessageView*
-SignalView::messageView() const
-{ return messageView_; }
-
-
 // - Events -
 
 void
-SignalView::selectHookAndHide(int hookId)
+SignalView::selectHookAndHide(ulong hookId)
 {
   hide();
   ProcessInfo pi = processView_->attachedProcessInfo();

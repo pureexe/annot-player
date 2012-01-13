@@ -9,6 +9,7 @@
 #include "settings.h"
 #include "defines.h"
 #include "uistyle.h"
+#include "processinfo.h"
 #include "translatormanager.h"
 #include "annotationgraphicsitem.h"
 #ifdef USE_WIN_QTH
@@ -36,7 +37,7 @@ namespace { // anonymous
   // Meta types
   inline void registerMetaTypes()
   {
-    //qRegisterMetaType<WId>("WId");
+    qRegisterMetaType<ProcessInfo>("ProcessInfo");
   }
 
   // i18n
@@ -251,6 +252,7 @@ main(int argc, char *argv[])
 
 #ifdef USE_WIN_QTH
   QTH->setParentWinId(dummy.winId());
+  QTH->setInterval(QTH_INTERVAL);
 #endif // USE_WIN_QTH
 
   dummy.show();

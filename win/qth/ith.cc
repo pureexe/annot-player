@@ -2,8 +2,9 @@
 
 #include "ith.h"
 #include "ith/main.h"
-#include "ith/cmdq.h"
 #include "ith/hookman.h"
+#include "ith/pipe.h"
+#include "ith/inject.h"
 #include <QtCore>
 #include <string>  // std::wstring
 #include <cstdlib> // ::atexit
@@ -64,7 +65,7 @@ HWND hMainWnd;
 TextBuffer *texts;
 HookManager *man;
 //ProfileManager  *pfman;
-CommandQueue *cmdq;
+//CommandQueue *cmdq;
 BitMap *pid_map;
 CustomFilterMultiByte *mb_filter;
 CustomFilterUnicode *uni_filter;
@@ -107,7 +108,7 @@ namespace { // anonymous, handlers
     return 0;
   }
 
-}
+} // anonymous namespace
 
 // - Initializations -
 
@@ -139,9 +140,21 @@ Ith::stopService()
 }
 */
 
+HWND
+Ith::parentWindow()
+{ return ::hMainWnd; }
+
 void
-Ith::setWindowHandle(void *hwnd)
-{ ::hMainWnd = (HWND)hwnd; }
+Ith::setParentWindow(HWND hwnd)
+{ ::hMainWnd = hwnd; }
+
+int
+Ith::messageInterval()
+{ return ::split_time; }
+
+void
+Ith::setMessageInterval(int msecs)
+{ ::split_time = msecs; }
 
 void
 Ith::init()
@@ -164,8 +177,6 @@ Ith::init()
   //DOUT("creating hidden windows ...");
   //createHiddenWindows(hIns);
 
-  ::InitializeCriticalSection(&detach_cs);
-
   DOUT("allocating mb_filter ...");
   ::mb_filter = new CustomFilterMultiByte;
 
@@ -184,11 +195,11 @@ Ith::init()
   //DOUT("allocating pfman ...");
   //::pfman = new ProfileManager;
 
-  DOUT("allocating cmdq ...");
-  ::cmdq = new CommandQueue;
+  //DOUT("allocating cmdq ...");
+  //::cmdq = new CommandQueue;
 
-  DOUT("creating new pipe (fn:CreateNewPipe) ...");
-  ::CreateNewPipe();
+  DOUT("creating pipes ...");
+  ::OpenPipe();
 
   DOUT("exit");
 }
@@ -201,8 +212,8 @@ Ith::destroy()
   DOUT("clearing running pipe event ..." );
   ::NtClearEvent(hPipeExist);
 
-  DOUT("deleting cmdq ..." );
-  delete cmdq;
+  //DOUT("deleting cmdq ..." );
+  //delete cmdq;
 
   //DOUT("deleting pfman ..." );
   //delete pfman;
@@ -236,13 +247,13 @@ Ith::destroy()
 
 bool
 Ith::attachProcess(ulong pid)
-{ return ::InjectByPID(pid) != -1; }
+{ return ::InjectProcessByPid(pid) != INVALID_HANDLE_VALUE; }
 
 bool
 Ith::detachProcess(ulong pid)
-{ return ::ActiveDetachProcess(pid) == 0; }
+{ return !::DetachProcessByPid(pid); }
 
-// - Helpers -
+// - Queries -
 
 bool
 Ith::isElevated()
@@ -273,6 +284,18 @@ Ith::getProcessIdByName(const QString &name)
   LPWSTR lp = const_cast<LPWSTR>(wstr.c_str());
   Q_ASSERT(lp);
   return ::PIDByName(lp);
+}
+
+QString
+Ith::getHookNameById(ulong hookId)
+{
+  QString ret;
+  if (hookId) {
+    auto p = reinterpret_cast<TextThread*>(hookId);
+    if (p->good())
+      ret = p->name();
+  }
+  return ret;
 }
 
 // EOF

@@ -5,6 +5,7 @@
 // 10/18/2011
 
 #include <QString>
+#include <QMetaType>
 
 struct ProcessInfo
 {
@@ -12,11 +13,9 @@ struct ProcessInfo
   QString processName;
   QString executablePath;
 
-  //QString hash;
-  //qint64 tokenId;
-
   ProcessInfo() : processId(0) { }
   bool isValid() const { return processId; }
 };
+Q_DECLARE_METATYPE(ProcessInfo);
 
 #endif // PROCESSINFO_H

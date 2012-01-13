@@ -1,5 +1,7 @@
 #pragma once
-// iht/main.h  10/14/2011
+// iht/main.h
+// 10/14/2011
+// TODO: clean up this file
 #include "ith/common.h"
 #include "ith/sys.h"
 
@@ -35,28 +37,15 @@ GLOBAL HANDLE hPipeExist;
 GLOBAL DWORD split_time, process_time;// inject_delay, insert_delay;
 //GLOBAL DWORD auto_inject, auto_insert;
 GLOBAL DWORD cyclic_remove,global_filter;
-GLOBAL CRITICAL_SECTION detach_cs;
-DWORD WINAPI RecvThread(LPVOID lpThreadParameter);
-DWORD WINAPI CmdThread(LPVOID lpThreadParameter);
+//DWORD WINAPI RecvThread(LPVOID lpThreadParameter);
+//DWORD WINAPI CmdThread(LPVOID lpThreadParameter);
 
 //void CopyToClipboard(void* str,bool unicode, int len);
 //void ConsoleOutput(LPCWSTR text);
-DWORD  GetCurrentPID();
-DWORD  GetPIDByHandle(HANDLE h);
-DWORD  GetHookManByPID(DWORD pid);
-DWORD  GetModuleByPID(DWORD pid);
-DWORD  GetEngineByPID(DWORD pid);
-DWORD  GetProcessIDByPath(LPWSTR str);
-HANDLE  GetTextHandleByPID(DWORD pid);
-HANDLE  GetCmdHandleByPID(DWORD pid);
-HANDLE  GetMutexByPID(DWORD pid);
-HANDLE  GetProcessByPID(DWORD pid);
-DWORD  Inject(HANDLE hProc);
-DWORD  InjectByPID(DWORD pid);
-DWORD  PIDByName(LPWSTR target);
-DWORD  Hash(LPWSTR module, int length=-1);
-BOOL ActiveDetachProcess(DWORD pid);
-BOOL CheckFile(LPWSTR file);
-bool GetProcessPath(HANDLE hProc, LPWSTR path);
-bool GetProcessPath(DWORD pid, LPWSTR path);
+
+DWORD PIDByName(LPWSTR target);
+DWORD Hash(LPWSTR module, int length=-1);
+
+int GetHookName(LPWSTR str, DWORD pid, DWORD hook_addr);
+
 // EOF

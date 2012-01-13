@@ -277,7 +277,9 @@ AnnotationGraphicsItem::invalidateGraphicsEffect()
   // Add outline to fonts
   if (isSubtitle() || hub_->isSignalTokenMode()) {
     QGraphicsDropShadowEffect *shadow = new QGraphicsDropShadowEffect(this);
-    shadow->setBlurRadius(2); // in pixels
+    //shadow->setBlurRadius(2); // in pixels
+    //shadow->setOffset(1); // in pixels
+    shadow->setBlurRadius(10); // in pixels
     shadow->setOffset(1); // in pixels
     shadow->setColor(QColor("black"));
     setGraphicsEffect(shadow);

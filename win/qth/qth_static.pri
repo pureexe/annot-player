@@ -45,23 +45,25 @@ HEADERS += \
     qth_config.h \
     qth.h \
     ith/AVL.h \
-    ith/cmdq.h \
     ith/common.h \
     ith/hookman.h \
+    ith/inject.h \
     ith/language.h \
     ith/main.h \
     ith/main_template.h \
-    ith/resource.h \
+    ith/pipe.h \
+    ith/protocol.h \
+    ith/query.h \
     ith/sys.h \
     ith/text.h
 
 SOURCES += \
     ith.cc \
     qth.cc \
-    ith/command.cc \
     ith/inject.cc \
     ith/language.cc \
     ith/pipe.cc \
+    ith/query.cc \
     ith/utility.cc \
     ith/sys.cc
 

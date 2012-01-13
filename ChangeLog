@@ -2,6 +2,13 @@ ChangeLog
 Annot Project
 6/18/2011
 
+1/12/2012	annot.player	0.1.2.2
+        * Enforce Japanese encoding to decode Galgame text in Windows.
+        * Service domain changed.
+        * Added automatic game signal detection.
+          Current database only supports galgame from light and a few other games.
+        * Subtitle rendering improved.
+
 1/6/2012	annot.player	0.1.2.1 (Spring Festival Edition)
         * Added Spring Festival channel.
         * Ensure buttons repaint correctly in Windows.

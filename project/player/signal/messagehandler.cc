@@ -27,9 +27,7 @@ using namespace Core::Cloud;
 //  - if repeat, hash count = min(repeat count, 4)
 //
 
-namespace { // anonymous
-enum { HASH_COUNT = 4};
-} // anonymous namespace
+namespace { enum { HASH_COUNT = 4}; }
 
 // - Constructions -
 
@@ -40,21 +38,13 @@ MessageHandler::MessageHandler(QObject *parent)
 
 void
 MessageHandler::connectTextHook()
-{ connect(QTH, SIGNAL(textReceived(QString,int,qint64)), SLOT(processTextMessage(QString,int,qint64))); }
+{ connect(QTH, SIGNAL(textReceived(QString,ulong,ulong,QString)), SLOT(processTextMessage(QString,ulong))); }
 
 void
 MessageHandler::disconnectTextHook()
-{ disconnect(QTH, SIGNAL(textReceived(QString,int,qint64)), this, SLOT(processTextMessage(QString,int,qint64))); }
+{ disconnect(QTH, SIGNAL(textReceived(QString,ulong,ulong,QString)), this, SLOT(processTextMessage(QString,ulong))); }
 
 // - Properties -
-
-const MessageHandler::MessageHash&
-MessageHandler::lastMessageHash() const
-{ return lastMessageHash_; }
-
-bool
-MessageHandler::isActive() const
-{ return active_; }
 
 void
 MessageHandler::setActive(bool active)
@@ -70,30 +60,6 @@ MessageHandler::setActive(bool active)
   }
 }
 
-int
-MessageHandler::hookId() const
-{ return hookId_; }
-
-void
-MessageHandler::setHookId(int hid)
-{ hookId_ = hid; }
-
-const ProcessInfo&
-MessageHandler::processInfo() const
-{ return pi_; }
-
-void
-MessageHandler::setProcessInfo(const ProcessInfo &pi)
-{ pi_ = pi; }
-
-const QStringList&
-MessageHandler::recentMessages() const
-{ return messages_; }
-
-int
-MessageHandler::recentMessageCapacity() const
-{ return messageCount_; }
-
 void
 MessageHandler::clearRecentMessages()
 {
@@ -102,13 +68,12 @@ MessageHandler::clearRecentMessages()
 }
 
 void
-MessageHandler::processTextMessage(const QString &text, int hookId, qint64 tsMsecs)
+MessageHandler::processTextMessage(const QString &text, ulong hookId)
 {
-  Q_UNUSED(tsMsecs);
   DOUT("enter: hookId =" << hookId << ", text =" << text);
   if (hookId != hookId_) {
     //lastMessageHash_.clear();
-    DOUT("exit: hook mismatch, hookId_ =" << hookId_);
+    DOUT("exit: hook mismatch");
     return;
   }
 
@@ -167,12 +132,12 @@ MessageHandler::processTextMessage(const QString &text, int hookId, qint64 tsMse
 
 // - Helpers -
 
-bool
-MessageHandler::isSubtitle(const QString &text)
-{
-  return text.contains(CORE_CMD_SUB " ")
-      || text.contains(CORE_CMD_SUBTITLE " ");
-}
+//bool
+//MessageHandler::isSubtitle(const QString &text)
+//{
+//  return text.contains(CORE_CMD_SUB " ")
+//      || text.contains(CORE_CMD_SUBTITLE " ");
+//}
 
 // EOF
 

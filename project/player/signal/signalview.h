@@ -26,12 +26,12 @@ class SignalView : public SignalViewBase
 public:
   explicit SignalView(QWidget *parent = 0);
 
-  //TokenView *tokenView() const;
-  ProcessView *processView() const;
-  MessageView *messageView() const;
+  //TokenView *tokenView() const { return tokenView_; }
+  ProcessView *processView() const { return processView_; }
+  MessageView *messageView() const { return messageView_; }
 
 signals:
-  void hookSelected(int hookId, ProcessInfo pi);
+  void hookSelected(ulong hookId, ProcessInfo pi);
 
   // - Events -
 public:
@@ -50,7 +50,7 @@ signals:
   void dropEventReceived(QDropEvent *event);
 
 private slots:
-  void selectHookAndHide(int hookId);
+  void selectHookAndHide(ulong hookId);
 };
 
 #endif // SIGNALVIEW_H

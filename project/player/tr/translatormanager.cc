@@ -118,6 +118,7 @@ TranslatorManager::translate(int tid) const
   case T_DELETE:        return tr("Delete");
   case T_BACKLOG:       return tr("Backlog");
   case T_REMOVE:        return tr("Remove");
+  case T_AUTO:          return tr("Auto");
   case T_ENABLE:        return tr("Enable");
   case T_CLEAR:         return tr("Clear");
   case T_MENU:          return tr("Menu");

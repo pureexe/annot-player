@@ -1,5 +1,7 @@
 #pragma once
-// iht/hookman.h  10/14/2011
+// iht/hookman.h
+// 10/14/2011
+// TODO: clean up this file
 #include "ith/text.h"
 #include "ith/AVL.h"
 #include <qt_windows.h>
@@ -82,6 +84,15 @@ public:
 
 class HookManager : public AVLTree<ThreadParameter,DWORD,TCmp,TCpy,TLen>
 {
+  typedef HookManager Self;
+
+public:
+  // - Helpers -
+  static void setMutexNameForPid(PWSTR wszName, DWORD pid)
+  { ::swprintf(wszName, L"ITH_HOOKMAN_%.4d", pid); }
+
+  static Self *globalInstance() { return man; }
+
 public:
   HookManager();
   ~HookManager();
@@ -138,5 +149,7 @@ private:
   HANDLE recv_threads[MAX_REGISTER+1];
   WORD register_count, new_thread_number;
 };
+
+int GetHookNameByIndex(LPWSTR str, DWORD pid, DWORD index);
 
 // EOF

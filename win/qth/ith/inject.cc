@@ -1,135 +1,175 @@
 // iht/inject.cc
 // 10/14/2011
+#include "ith/inject.h"
 #include "ith/main.h"
+#include "ith/hookman.h"
 
 //#define DEBUG "ith:inject"
 #include "module/debug/debug.h"
 
-static WCHAR EngineName[]=L"ITH_engine.dll";
-static WCHAR DllName[]=L"ITH.dll";
+#define ITH_MODULE_DLL  L"ITH.dll"        // first step injection
+#define ITH_ENGINE_DLL  L"ITH_engine.dll" // second step injection
+
+// defined in sys.cc
 extern WCHAR file_path[];
-extern LPWSTR current_dir;
-DWORD Inject(HANDLE hProc)
+extern LPWSTR current_dir; // a pointer pointed to the end of file_path
+
+#define HOOKMAN HookManager::globalInstance()
+
+// - Inject -
+
+HANDLE
+InjectProcess(HANDLE hProc)
 {
   DOUT("enter");
+
+  HANDLE hModule = INVALID_HANDLE_VALUE; // injected module handle to return
+
+  // jichi: Assume existent of ITH*.dll in the current dir
+  //if (!IthCheckFile(ITH_MODULE_DLL)) return -1;
+  //if (!IthCheckFile(ITH_ENGINE_DLL)) return -1;
+
   LPVOID lpvAllocAddr = 0;
   DWORD dwWrite = 0x1000;
-  HANDLE hTH;
-  // jichi: Assume existent of ITH*.dll
-  //if (!IthCheckFile(EngineName)) return -1;
-  //if (!IthCheckFile(DllName)) return -1;
-
   ::NtAllocateVirtualMemory(hProc, &lpvAllocAddr, 0, &dwWrite, MEM_COMMIT, PAGE_READWRITE);
-  if (lpvAllocAddr == 0) return -1;
-  wcscpy(current_dir, DllName);
-  CheckThreadStart();
-  NtWriteVirtualMemory(hProc, lpvAllocAddr, file_path + 4, 2 * MAX_PATH, &dwWrite);
-  DOUT("dll =" << QString::fromWCharArray(file_path));
-  hTH=IthCreateThread(LoadLibrary, (DWORD)lpvAllocAddr, hProc);
-  if (hTH==0||hTH == INVALID_HANDLE_VALUE) {
-    //ConsoleOutput(ErrorRemoteThread);
-    DOUT("cannot create remote thread");
-    return -1;
-  }
-  NtWaitForSingleObject(hTH, 0, 0);
-  THREAD_BASIC_INFORMATION info;
-  NtQueryInformationThread(hTH, ThreadBasicInformation, &info, sizeof(info), &dwWrite);
-  NtClose(hTH);
-  wcscpy(current_dir, EngineName);
-  NtWriteVirtualMemory(hProc, lpvAllocAddr, file_path + 4, 2 * MAX_PATH, &dwWrite);
-  hTH = IthCreateThread(LoadLibrary, (DWORD)lpvAllocAddr, hProc);
-  if (hTH == 0 ||
-    hTH == INVALID_HANDLE_VALUE) {
-    //ConsoleOutput(ErrorRemoteThread);
-    DOUT("cannot create remote thread");
-    return -1;
-  }
-  NtWaitForSingleObject(hTH, 0, 0);
-  NtClose(hTH);
-  dwWrite = 0;
-  NtFreeVirtualMemory(hProc, &lpvAllocAddr, &dwWrite, MEM_RELEASE);
-  DOUT("exit: ret =" << info.ExitStatus);
-  return info.ExitStatus;
-}
-DWORD PIDByName(LPWSTR pwcTarget)
-{
-  DWORD dwSize = 0x20000;
-  BYTE *pbBuffer;
-  SYSTEM_PROCESS_INFORMATION *spiProcessInfo;
-  DWORD dwPid = 0;
-  DWORD dwStatus;
-  while (1)
+  if (!lpvAllocAddr)
+    return INVALID_HANDLE_VALUE;
+
+  // STEP 1: Load ITH_MODULE_DLL
+  ::wcscpy(::current_dir, ITH_MODULE_DLL);
+  ::CheckThreadStart();
+  ::NtWriteVirtualMemory(hProc, lpvAllocAddr, ::file_path + 4, 2 * MAX_PATH, &dwWrite);
   {
-    pbBuffer = new BYTE[dwSize];
-    dwStatus = NtQuerySystemInformation(SystemProcessInformation, pbBuffer, dwSize, 0);
-    if (dwStatus == 0) break;
-    delete pbBuffer;
-    if (dwStatus != STATUS_INFO_LENGTH_MISMATCH) return 0;
-    dwSize <<= 1;
+    HANDLE hThread = ::IthCreateThread(::LoadLibraryW, (DWORD)lpvAllocAddr, hProc);
+    if (!hThread || hThread == INVALID_HANDLE_VALUE) {
+      DOUT("ERROR: failed to create remote hook thread");
+      dwWrite = 0; // region size = 0
+      ::NtFreeVirtualMemory(hProc, &lpvAllocAddr, &dwWrite, MEM_RELEASE);
+      return INVALID_HANDLE_VALUE;
+    }
+    ::NtWaitForSingleObject(hThread, 0, 0);
+
+    THREAD_BASIC_INFORMATION info; // hooked remote thread info
+    NTSTATUS status = ::NtQueryInformationThread(hThread, ThreadBasicInformation, &info, sizeof(info), 0); // 0: &dwReturn
+    if (NT_SUCCESS(status))
+      hModule = (HANDLE)info.ExitStatus;
+
+    ::NtClose(hThread);
   }
 
-  for (spiProcessInfo = (SYSTEM_PROCESS_INFORMATION*)pbBuffer; spiProcessInfo->dNext;)
+  // STEP 2: Load ITH_ENGINE_DLL
+  ::wcscpy(::current_dir, ITH_ENGINE_DLL);
+  ::NtWriteVirtualMemory(hProc, lpvAllocAddr, ::file_path + 4, 2 * MAX_PATH, &dwWrite);
   {
-    spiProcessInfo = (SYSTEM_PROCESS_INFORMATION*)
-      ((DWORD)spiProcessInfo + spiProcessInfo->dNext);
-    if (_wcsicmp(pwcTarget, spiProcessInfo->usName.Buffer) == 0)
-    {
-      dwPid = spiProcessInfo->dUniqueProcessId;
-      break;
+    HANDLE hThread = ::IthCreateThread(::LoadLibraryW, (DWORD)lpvAllocAddr, hProc);
+    if (!hThread || hThread == INVALID_HANDLE_VALUE) {
+      DOUT("ERROR: failed to create remote hook thread");
+      dwWrite = 0; // region size = 0
+      ::NtFreeVirtualMemory(hProc, &lpvAllocAddr, &dwWrite, MEM_RELEASE);
+      return INVALID_HANDLE_VALUE;
     }
+    ::NtWaitForSingleObject(hThread, 0, 0);
+    ::NtClose(hThread);
   }
-  if (dwPid == 0) {
-    //ConsoleOutput(ErrorNoProcess);
-    //DOUT("process not found");
-  }
-  delete pbBuffer;
-  return dwPid;
+
+  dwWrite = 0; // region size = 0
+  ::NtFreeVirtualMemory(hProc, &lpvAllocAddr, &dwWrite, MEM_RELEASE);
+
+  DOUT("exit: ret =" << hModule);
+  return hModule;
 }
-DWORD InjectByPID(DWORD pid)
+
+HANDLE
+InjectProcessByPid(DWORD pid)
 {
-  WCHAR str[0x80];
-  DWORD s;
-  if (pid == current_process_id)
-  {
+  if (pid == ::current_process_id) {
     //ConsoleOutput(SelfAttach);
     DOUT("skip attach to my process");
-    return -1;
+    return INVALID_HANDLE_VALUE;
   }
-  if (GetModuleByPID(pid))
-  {
+
+  if (HOOKMAN->GetModuleByPID(pid)) {
     //ConsoleOutput(AlreadyAttach);
     DOUT("process already attached");
-    return -1;
+    return INVALID_HANDLE_VALUE;
   }
-  swprintf(str, L"ITH_HOOKMAN_%.4d", pid);
-  NtClose(IthCreateMutex(str, 0, &s));
-  if (s) return -1;
-  CLIENT_ID id;
-  OBJECT_ATTRIBUTES oa = {};
+
+  DWORD dwReturn; // mutex return code
+  WCHAR wszMutex[0x40];
+  HookManager::setMutexNameForPid(wszMutex, pid);
+  ::NtClose(::IthCreateMutex(wszMutex, 0, &dwReturn));
+  if (dwReturn)
+    return INVALID_HANDLE_VALUE;
+
+  CLIENT_ID id; {
+    id.UniqueProcess = pid;
+    id.UniqueThread = 0;
+  }
+  OBJECT_ATTRIBUTES oa = { }; { oa.uLength=sizeof(oa); }
   HANDLE hProc;
-  id.UniqueProcess = pid;
-  id.UniqueThread = 0;
-  oa.uLength=sizeof(oa);
-  if (!NT_SUCCESS(NtOpenProcess(&hProc,
-    PROCESS_QUERY_INFORMATION|
-    PROCESS_CREATE_THREAD|
-    PROCESS_VM_OPERATION|
-    PROCESS_VM_READ|
-    PROCESS_VM_WRITE,
-    &oa, &id)))
-  {
+  NTSTATUS status = ::NtOpenProcess(&hProc,
+      PROCESS_QUERY_INFORMATION |
+      PROCESS_CREATE_THREAD |
+      PROCESS_VM_OPERATION |
+      PROCESS_VM_READ |
+      PROCESS_VM_WRITE,
+      &oa, &id);
+  if (!NT_SUCCESS(status)) {
     //ConsoleOutput(ErrorOpenProcess);
     DOUT("failed to open process");
-    return -1;
+    return INVALID_HANDLE_VALUE;
   }
-  DWORD module = Inject(hProc);
 
-  NtClose(hProc);
-  if (module == -1) return -1;
-
-  //swprintf(str, FormatInject, pid, module);
-  //ConsoleOutput(str);
-  //DOUT("attached");
-  return module;
+  HANDLE hModule = ::InjectProcess(hProc);
+  ::NtClose(hProc);
+  return hModule;
 }
+
+// - Detach -
+
+BOOL
+DetachProcessByPid(DWORD pid)
+{
+  HANDLE hProc = HOOKMAN->GetProcessByPID(pid);
+
+  DWORD hIthModule = HOOKMAN->GetModuleByPID(pid);
+  if (!hIthModule)
+    return FALSE;
+
+  DWORD hIthEngine = HOOKMAN->GetEngineByPID(pid);
+  hIthEngine &= ~0xFF;
+
+  //SendParam sp = { }; { sp.type = 4; }
+  //cmdq->AddRequest(sp, pid);
+
+  // STEP 2: Detach engine dll
+  {
+    HANDLE hThread = ::IthCreateThread(::LdrUnloadDll, hIthEngine, hProc);
+    if (!!hThread == 0 || hThread == INVALID_HANDLE_VALUE)
+      return FALSE;
+    ::NtWaitForSingleObject(hThread, 0, 0);
+    ::NtClose(hThread);
+  }
+
+  // STEP 1: Detach module dll
+  BOOL ret = FALSE;
+  {
+    HANDLE hThread = ::IthCreateThread(::LdrUnloadDll, hIthModule, hProc);
+    if (!hThread || hThread == INVALID_HANDLE_VALUE)
+      return FALSE;
+
+    ::NtWaitForSingleObject(hThread, 0, 0);
+    THREAD_BASIC_INFORMATION info;
+    NTSTATUS status = ::NtQueryInformationThread(hThread, ThreadBasicInformation, &info, sizeof(info), 0);
+    ::NtClose(hThread);
+    if (NT_SUCCESS(status))
+      ret = info.ExitStatus;
+  }
+
+  ::NtSetEvent(::hPipeExist, 0);
+  ::FreeThreadStart(hProc);
+
+  return ret;
+}
+
 // EOF

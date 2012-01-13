@@ -864,6 +864,11 @@
 #define T_TOOLTIP_WHITECOLOR            T_TIP_WHITECOLOR
 #define T_STATUSTIP_WHITECOLOR          T_TIP_WHITECOLOR
 
+#define T_MENUTEXT_CYANCOLOR            T_CYAN
+#define T_TIP_CYANCOLOR                 T_MENUTEXT_CYANCOLOR
+#define T_TOOLTIP_CYANCOLOR             T_TIP_CYANCOLOR
+#define T_STATUSTIP_CYANCOLOR           T_TIP_CYANCOLOR
+
 #define T_MENUTEXT_BLUECOLOR            T_BLUE
 #define T_TIP_BLUECOLOR                 T_MENUTEXT_BLUECOLOR
 #define T_TOOLTIP_BLUECOLOR             T_TIP_BLUECOLOR
@@ -1061,5 +1066,7 @@
 #define T_TIP_BACKLOG           T_BACKLOG
 #define T_TOOLTIP_BACKLOG       T_TIP_BACKLOG
 #define T_STATUSTIP_BACKLOG     T_TIP_BACKLOG
+
+#define T_AUTO                  0x1a8
 
 #endif // TR_H
