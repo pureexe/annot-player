@@ -934,6 +934,7 @@ MainWindow::createMenus()
     helpContextMenu_->setTitle(TR(T_MENUTEXT_HELP));
     helpContextMenu_->setToolTip(TR(T_TOOLTIP_HELP));
 
+    helpContextMenu_->addAction(toggleCloudViewVisibleAct_ );
     helpContextMenu_->addAction(helpAct_);
     helpContextMenu_->addAction(aboutAct_);
   }
@@ -3400,7 +3401,25 @@ MainWindow::invalidateContextMenu()
   if (!hub_->isMediaTokenMode() || !player_->isStopped())
     contextMenu_->addAction(snapshotAct_);
 
-  // Annotation
+  // Modes
+  {
+    contextMenu_->addSeparator();
+
+    toggleFullScreenModeAct_->setChecked(hub_->isFullScreenWindowMode());
+    contextMenu_->addAction(toggleFullScreenModeAct_);
+
+    toggleMiniModeAct_->setChecked(hub_->isMiniPlayerMode());
+    contextMenu_->addAction(toggleMiniModeAct_);
+
+    toggleEmbeddedModeAct_->setChecked(hub_->isEmbeddedPlayerMode());
+    contextMenu_->addAction(toggleEmbeddedModeAct_);
+    if (hub_->isEmbeddedPlayerMode()) {
+      toggleEmbeddedPlayerOnTopAct_->setChecked(embeddedPlayer_->isOnTop());
+      contextMenu_->addAction(toggleEmbeddedPlayerOnTopAct_);
+    }
+  }
+
+  // Annotations
   {
     contextMenu_->addSeparator();
 
@@ -3430,6 +3449,28 @@ MainWindow::invalidateContextMenu()
       toggleTranslateAct_->setEnabled(t && online);
       contextMenu_->addAction(toggleTranslateAct_);
     }
+
+    toggleAnnotationEditorVisibleAct_->setChecked(annotationEditor_ && annotationEditor_->isVisible());
+    contextMenu_->addAction(toggleAnnotationEditorVisibleAct_ );
+
+    if (!hub_->isMediaTokenMode() || player_->hasMedia()) {
+      toggleAnnotationBrowserVisibleAct_->setChecked(annotationBrowser_->isVisible());
+      contextMenu_->addAction(toggleAnnotationBrowserVisibleAct_ );
+
+      toggleTokenViewVisibleAct_->setChecked(tokenView_->isVisible());
+      contextMenu_->addAction(toggleTokenViewVisibleAct_ );
+    }
+
+    if (ALPHA) if (commentView_ && commentView_->tokenId()) {
+      toggleCommentViewVisibleAct_->setChecked(commentView_ && commentView_->isVisible());
+      contextMenu_->addAction(toggleCommentViewVisibleAct_ );
+    }
+  }
+
+  // User
+  if (!server_->isAuthorized()) {
+    contextMenu_->addSeparator();
+    contextMenu_->addAction(loginAct_);
   }
 
 //  if (ALPHA)
@@ -3447,57 +3488,6 @@ MainWindow::invalidateContextMenu()
 //    toggleSyncDialogVisibleAct_->setChecked(syncDialog_ && syncDialog_->isVisible());
 //    contextMenu_->addAction(toggleSyncDialogVisibleAct_);
 //  }
-
-  // Toggles
-  {
-    contextMenu_->addSeparator();
-
-    toggleFullScreenModeAct_->setChecked(hub_->isFullScreenWindowMode());
-    contextMenu_->addAction(toggleFullScreenModeAct_);
-
-    toggleMiniModeAct_->setChecked(hub_->isMiniPlayerMode());
-    contextMenu_->addAction(toggleMiniModeAct_);
-
-    toggleEmbeddedModeAct_->setChecked(hub_->isEmbeddedPlayerMode());
-    contextMenu_->addAction(toggleEmbeddedModeAct_);
-    if (hub_->isEmbeddedPlayerMode()) {
-      toggleEmbeddedPlayerOnTopAct_->setChecked(embeddedPlayer_->isOnTop());
-      contextMenu_->addAction(toggleEmbeddedPlayerOnTopAct_);
-    }
-
-    toggleAnnotationEditorVisibleAct_->setChecked(annotationEditor_ && annotationEditor_->isVisible());
-    contextMenu_->addAction(toggleAnnotationEditorVisibleAct_ );
-
-    if (!hub_->isMediaTokenMode() || player_->hasMedia()) {
-      toggleAnnotationBrowserVisibleAct_->setChecked(annotationBrowser_->isVisible());
-      contextMenu_->addAction(toggleAnnotationBrowserVisibleAct_ );
-
-      toggleTokenViewVisibleAct_->setChecked(tokenView_->isVisible());
-      contextMenu_->addAction(toggleTokenViewVisibleAct_ );
-    }
-
-    if (ALPHA) if (commentView_ && commentView_->tokenId()) {
-      toggleCommentViewVisibleAct_->setChecked(commentView_ && commentView_->isVisible());
-      contextMenu_->addAction(toggleCommentViewVisibleAct_ );
-    }
-
-    toggleCloudViewVisibleAct_->setChecked(cloudView_ && cloudView_->isVisible());
-    contextMenu_->addAction(toggleCloudViewVisibleAct_ );
-  }
-
-  // User
-  if (!server_->isAuthorized()) {
-    contextMenu_->addSeparator();
-    contextMenu_->addAction(loginAct_);
-  }
-
-  // Toggles
-  {
-    //if (!isFullScreenMode()) {
-    //  contextMenu_->addSeparator();
-    //  contextMenu_->addAction(toggleWindowOnTopAct_);
-    //}
-  }
 
   // App
   {
@@ -3571,7 +3561,9 @@ MainWindow::invalidateContextMenu()
     contextMenu_->addAction(toggleMenuBarVisibleAct_);
 #endif // Q_WS_MAC
 
+    toggleCloudViewVisibleAct_->setChecked(cloudView_ && cloudView_->isVisible());
     contextMenu_->addMenu(helpContextMenu_);
+
     contextMenu_->addAction(quitAct_);
   }
   //DOUT("exit");
@@ -3802,7 +3794,7 @@ MainWindow::closeEvent(QCloseEvent *event)
 {
   DOUT("enter");
   //respond(tr("yin: ...")); // crash on mac
-  log("closing application ...");
+  log(tr("closing application ..."));
 
   //hide();
   //if (parentWidget())

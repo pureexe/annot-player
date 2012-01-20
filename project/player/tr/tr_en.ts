@@ -522,6 +522,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../mainwindow.cc" line="3805"/>
+        <source>closing application ...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../mainwindow.cc" line="3932"/>
         <source>always on top enabled</source>
         <translation type="unfinished"></translation>

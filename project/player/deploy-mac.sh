@@ -9,6 +9,7 @@ cd "$PREFIX"  || exit 1
 
 COLOR=orange
 VERSION=0.1.2.3
+DMG_SIZE=120m
 
 TARGET="Annot Player"
 TARGET_DMG=$TARGET.dmg
@@ -217,11 +218,11 @@ cd ..
 
 chlabel $COLOR "$TARGET"
 test -e "$TARGET_DMG" && finder-remove "$TARGET_DMG"
-hdiutil create -srcdir "$TARGET" "$TARGET_DMG"
+hdiutil create -size $DMG_SIZE -srcdir "$TARGET" "$TARGET_DMG" || exit 1
 
 chlabel $COLOR "$TARGET_DMG"
 test -e "$TARGET_ZIP" && finder-remove "$TARGET_ZIP"
-zip -9 "$TARGET_ZIP" "$TARGET_DMG"
+zip -9 "$TARGET_ZIP" "$TARGET_DMG" || exit 1
 
 test -e "/Volumes/$TARGET" && {
   pushd /Volumes/

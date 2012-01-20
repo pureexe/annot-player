@@ -749,6 +749,11 @@
         <translation>播放菜单</translation>
     </message>
     <message>
+        <location filename="../mainwindow.cc" line="3805"/>
+        <source>closing application ...</source>
+        <translation>播放使魔：程序退出中...</translation>
+    </message>
+    <message>
         <location filename="../mainwindow.cc" line="4063"/>
         <location filename="../mainwindow.cc" line="4108"/>
         <location filename="../mainwindow.cc" line="4153"/>

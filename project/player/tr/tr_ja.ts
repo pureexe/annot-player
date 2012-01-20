@@ -737,6 +737,11 @@
         <translation>再生メニュー</translation>
     </message>
     <message>
+        <location filename="../mainwindow.cc" line="3805"/>
+        <source>closing application ...</source>
+        <translation>魔法使い：終了…</translation>
+    </message>
+    <message>
         <location filename="../mainwindow.cc" line="4063"/>
         <location filename="../mainwindow.cc" line="4108"/>
         <location filename="../mainwindow.cc" line="4153"/>
