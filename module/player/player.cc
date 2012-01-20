@@ -955,7 +955,8 @@ int
 Player::subtitleCount() const
 {
   Q_ASSERT(isValid());
-  return ::libvlc_video_get_spu_count(impl_->player());
+  return hasMedia() ? ::libvlc_video_get_spu_count(impl_->player())
+                    : 0;
 }
 
 bool
@@ -1448,6 +1449,68 @@ Player::previousTrack()
   setTrackNumber(track);
 }
 
+// - Audio tracks -
+
+int
+Player::audioTrackCount() const
+{
+  Q_ASSERT(isValid());
+  int ret = ::libvlc_audio_get_track_count(impl_->player()) - 1;
+  if (ret < 0)
+    ret = 0;
+  return ret;
+}
+
+bool
+Player::hasAudioTracks() const
+{
+  Q_ASSERT(isValid());
+  return audioTrackCount() > 1;
+}
+
+QStringList
+Player::audioTrackDescriptions() const
+{
+  Q_ASSERT(isValid());
+  QStringList ret;
+
+  libvlc_track_description_t *first = ::libvlc_audio_get_track_description(impl_->player());
+
+  /// Skip first disabled track.
+  if (first)
+    first = first->p_next;
+
+  while (first) {
+    if (first->psz_name)
+      ret.append(encode(first->psz_name));
+    else
+      ret.append(QString());
+    first = first->p_next;
+  }
+
+  return ret;
+}
+
+int
+Player::audioTrackId() const
+{
+  Q_ASSERT(isValid());
+  int ret = ::libvlc_audio_get_track(impl_->player()) - 1;
+  if (ret < 0)
+    ret = 0;
+  return ret;
+}
+
+void
+Player::setAudioTrackId(int id)
+{
+  Q_ASSERT(isValid());
+  Q_ASSERT(0 <= id && id < audioTrackCount());
+  bool ok = ::libvlc_audio_set_track(impl_->player(), id + 1);
+  if (ok)
+    emit audioTrackChanged();
+}
+
 // EOF
 
 // - PlayerListener -
@@ -1484,9 +1547,7 @@ PlayerListener::PlayerListener(Player *player, QObject *parent)
   CONNECTED_SIGNAL(encodingChanged)
 
 #undef CONNECTED_SIGNAL
-*/
 
-/*
 void
 Player::setUpdateInterval(int milliseconds)
 {

@@ -6,9 +6,16 @@
 
 // - SQLite helpers -
 
-// See: http://www.sqlite.org/lang_datefunc.html
-#define DB_UNIX_TIMESTAMP(_t)   "strftime('%s'," _t ")"
-#define DB_FROM_UNIXTIME(_ts)   "datetime(" _ts ",'unixepoch')"
+#ifdef DB_WITH_DATETIME
+  // See: http://www.sqlite.org/lang_datefunc.html
+  #define DB_UNIX_TIMESTAMP(_t) "strftime('%s'," _t ")"
+  #define DB_FROM_UNIXTIME(_ts) "datetime(" _ts ",'unixepoch')"
+  #define DB_DATETIME           "DATETIME"
+#else
+  #define DB_UNIX_TIMESTAMP(_t) _t
+  #define DB_FROM_UNIXTIME(_ts) _ts
+  #define DB_DATETIME           "BIGINT"
+#endif // DB_WITH_DATETIME
 
 // - Creation -
 
@@ -19,18 +26,18 @@
     "user_name "        "VARCHAR(64) NOT NULL UNIQUE," /* 64 is the maximum allowed for email username */ \
     "user_password "    "CHAR(40),"     /* SHA1 */ \
     "user_nickname "    "VARCHAR(255)," \
+    "user_email "       "VARCHAR(160) NOT NULL UNIQUE," /* 320 = 64 + 1 + 255 is the maximum, but not allowd to be unique by mysql */ \
     "user_status "      "INT NOT NULL DEFAULT 0," \
     "user_flags "       "BIGINT UNSIGNED NOT NULL DEFAULT 0," \
     "user_language "    "INT NOT NULL DEFAULT 0," \
-    "user_create_time " "DATETIME NOT NULL," \
-    "user_login_time " "DATETIME NOT NULL," \
+    "user_create_time " DB_DATETIME " NOT NULL," \
+    "user_login_time "  DB_DATETIME " NOT NULL," \
     "user_blessed_count " "INT UNSIGNED NOT NULL DEFAULT 0," \
     "user_cursed_count "  "INT UNSIGNED NOT NULL DEFAULT 0," \
     "user_blocked_count " "INT UNSIGNED NOT NULL DEFAULT 0," \
     "user_annot_count "   "INT UNSIGNED NOT NULL DEFAULT 0" \
     /*"INDEX(user_name)"*/ \
   ")"
-  //"user_email "       "VARCHAR(160) NOT NULL UNIQUE," /* 320 = 64 + 1 + 255 is the maximum, but not allowd to be unique by mysql */
 
 #define DB_CREATE_TABLE_TOKEN \
   "CREATE TABLE token(" \
@@ -41,7 +48,7 @@
     "token_digest_type ""INT NOT NULL DEFAULT 0," \
     "token_status "     "INT NOT NULL DEFAULT 0," \
     "token_flags "      "BIGINT UNSIGNED NOT NULL DEFAULT 0," \
-    "token_create_time " "DATETIME NOT NULL," \
+    "token_create_time " DB_DATETIME " NOT NULL," \
     "token_blessed_count " "INT UNSIGNED NOT NULL DEFAULT 0," \
     "token_cursed_count "  "INT UNSIGNED NOT NULL DEFAULT 0," \
     "token_blocked_count " "INT UNSIGNED NOT NULL DEFAULT 0," \
@@ -64,7 +71,7 @@
     "alias_flags "      "BIGINT UNSIGNED NOT NULL DEFAULT 0," \
     "alias_status "     "INT NOT NULL DEFAULT 0," \
     "alias_language "   "INT NOT NULL DEFAULT 0," \
-    "alias_update_time " "DATETIME NOT NULL," \
+    "alias_update_time " DB_DATETIME " NOT NULL," \
     "alias_blessed_count " "INT UNSIGNED NOT NULL DEFAULT 0," \
     "alias_cursed_count "  "INT UNSIGNED NOT NULL DEFAULT 0," \
     "alias_blocked_count " "INT UNSIGNED NOT NULL DEFAULT 0" \
@@ -87,8 +94,8 @@
     "annot_status "     "INT NOT NULL DEFAULT 0," \
     "annot_flags "      "BIGINT UNSIGNED NOT NULL DEFAULT 0," \
     "annot_language "   "INT NOT NULL DEFAULT 0," \
-    "annot_create_time " "DATETIME NOT NULL," \
-    "annot_update_time " "DATETIME," \
+    "annot_create_time " DB_DATETIME " NOT NULL," \
+    "annot_update_time " DB_DATETIME "," \
     "annot_pos "        "BIGINT NOT NULL DEFAULT 0," \
     "annot_pos_type "   "INT NOT NULL DEFAULT 0," \
     "annot_time "       "INT NOT NULL DEFAULT 0," \
@@ -116,13 +123,14 @@
       "user_name,"              /* 4 */ \
       "user_password,"          /* 5 */ \
       "user_nickname,"          /* 6 */ \
-      "user_language,"          /* 7 */ \
-      "user_create_time,"       /* 8 */ \
-      "user_login_time,"        /* 9 */ \
-      "user_blessed_count,"     /* 10 */ \
-      "user_cursed_count,"      /* 11 */ \
-      "user_blocked_count,"     /* 12 */ \
-      "user_annot_count"        /* 13 */ \
+      "user_email,"             /* 7 */ \
+      "user_language,"          /* 8 */ \
+      "user_create_time,"       /* 9 */ \
+      "user_login_time,"        /* 10 */ \
+      "user_blessed_count,"     /* 11 */ \
+      "user_cursed_count,"      /* 12 */ \
+      "user_blocked_count,"     /* 13 */ \
+      "user_annot_count"        /* 14 */ \
     ") VALUES (" \
       "?,"      /* 0: user_status */ \
       "?,"      /* 1: user_flags */ \
@@ -131,13 +139,14 @@
       "?,"      /* 4: user_name */ \
       "?,"      /* 5: user_password */ \
       "?,"      /* 6: user_nickname */ \
-      "?,"      /* 7: user_language */ \
-      DB_FROM_UNIXTIME("?") "," /* 8: user_create_time */ \
-      DB_FROM_UNIXTIME("?") "," /* 9: user_login_time */ \
-      "?,"      /* 10: user_blessed_count */ \
-      "?,"      /* 11: user_cursed_count */ \
-      "?,"      /* 12: user_blocked_count */ \
-      "?"       /* 13: user_annot_count */ \
+      "?,"      /* 7: user_email */ \
+      "?,"      /* 8: user_language */ \
+      DB_FROM_UNIXTIME("?") "," /* 9: user_create_time */ \
+      DB_FROM_UNIXTIME("?") "," /* 10: user_login_time */ \
+      "?,"      /* 11: user_blessed_count */ \
+      "?,"      /* 12: user_cursed_count */ \
+      "?,"      /* 13: user_blocked_count */ \
+      "?"       /* 14: user_annot_count */ \
     ")" \
   ); \
   (_query).addBindValue((_user).status());       /* 0 */ \
@@ -147,13 +156,14 @@
   (_query).addBindValue((_user).name());         /* 4 */ \
   (_query).addBindValue((_user).password());     /* 5 */ \
   (_query).addBindValue((_user).nickname());     /* 6 */ \
-  (_query).addBindValue((_user).language());     /* 7 */ \
-  (_query).addBindValue((_user).createTime());   /* 8 */ \
-  (_query).addBindValue((_user).loginTime());    /* 9 */ \
-  (_query).addBindValue((_user).blessedCount()); /* 10 */ \
-  (_query).addBindValue((_user).cursedCount());  /* 11 */ \
-  (_query).addBindValue((_user).blockedCount()); /* 12 */ \
-  (_query).addBindValue((_user).annotCount());   /* 13 */ \
+  (_query).addBindValue((_user).email());        /* 7 */ \
+  (_query).addBindValue((_user).language());     /* 8 */ \
+  (_query).addBindValue((_user).createTime());   /* 9 */ \
+  (_query).addBindValue((_user).loginTime());    /* 10 */ \
+  (_query).addBindValue((_user).blessedCount()); /* 11 */ \
+  (_query).addBindValue((_user).cursedCount());  /* 12 */ \
+  (_query).addBindValue((_user).blockedCount()); /* 13 */ \
+  (_query).addBindValue((_user).annotCount());   /* 14 */ \
 }
 
 #define DB_INSERT_TOKEN(_token, _query) \
@@ -329,13 +339,14 @@
     "user_name,"      /* 4 */ \
     "user_password,"  /* 5 */ \
     "user_nickname,"  /* 6 */ \
-    "user_language,"  /* 7 */ \
-    DB_UNIX_TIMESTAMP("user_create_time") "," /* 8 */ \
-    DB_UNIX_TIMESTAMP("user_login_time") ","  /* 9 */ \
-    "user_blessed_count," /* 10 */ \
-    "user_cursed_count,"  /* 11 */ \
-    "user_blocked_count," /* 12 */ \
-    "user_annot_count "   /* 13 */ \
+    "user_email,"     /* 7 */ \
+    "user_language,"  /* 8 */ \
+    DB_UNIX_TIMESTAMP("user_create_time") "," /* 9 */ \
+    DB_UNIX_TIMESTAMP("user_login_time") ","  /* 10 */ \
+    "user_blessed_count," /* 11 */ \
+    "user_cursed_count,"  /* 12 */ \
+    "user_blocked_count," /* 13 */ \
+    "user_annot_count "   /* 14 */ \
   "FROM user "
 
 #define DB_SET_USER(_user, _query) \
@@ -352,19 +363,20 @@
   (_user).setName((_query).value(4).toString()); \
   (_user).setPassword((_query).value(5).toString()); \
   (_user).setNickname((_query).value(6).toString()); \
-  (_user).setLanguage((_query).value(7).toInt(&ok)); \
+  (_user).setEmail((_query).value(7).toString()); \
+  (_user).setLanguage((_query).value(8).toInt(&ok)); \
   Q_ASSERT(ok); \
-  (_user).setCreateTime((_query).value(8).toULongLong(&ok)); \
+  (_user).setCreateTime((_query).value(9).toULongLong(&ok)); \
   Q_ASSERT(ok); \
-  (_user).setLoginTime((_query).value(9).toULongLong(&ok)); \
+  (_user).setLoginTime((_query).value(10).toULongLong(&ok)); \
   Q_ASSERT(ok); \
-  (_user).setBlessedCount((_query).value(10).toUInt(&ok)); \
+  (_user).setBlessedCount((_query).value(11).toUInt(&ok)); \
   Q_ASSERT(ok); \
-  (_user).setCursedCount((_query).value(11).toUInt(&ok)); \
+  (_user).setCursedCount((_query).value(12).toUInt(&ok)); \
   Q_ASSERT(ok); \
-  (_user).setBlockedCount((_query).value(12).toUInt(&ok)); \
+  (_user).setBlockedCount((_query).value(13).toUInt(&ok)); \
   Q_ASSERT(ok); \
-  (_user).setAnnotCount((_query).value(13).toUInt(&ok)); \
+  (_user).setAnnotCount((_query).value(14).toUInt(&ok)); \
   Q_ASSERT(ok); \
 }
 
@@ -377,7 +389,7 @@
     "user_id,"             /* 4 */ \
     "token_digest,"        /* 5 */ \
     "token_digest_type,"   /* 6 */ \
-    "strftime('%s',token_create_time)," /* 7 */ \
+    DB_UNIX_TIMESTAMP("token_create_time") "," /* 7 */ \
     "token_blessed_count," /* 8 */ \
     "token_cursed_count,"  /* 9 */ \
     "token_blocked_count," /* 10 */ \
@@ -427,7 +439,7 @@
     "alias_type,"          /* 7 */ \
     "alias_text,"          /* 8 */ \
     "alias_language,"      /* 9 */ \
-    "strftime('%s',alias_update_time)," /* 10 */ \
+    DB_UNIX_TIMESTAMP("alias_update_time") "," /* 10 */ \
     "alias_blessed_count," /* 11 */ \
     "alias_cursed_count,"  /* 12 */ \
     "alias_blocked_count " /* 13 */ \

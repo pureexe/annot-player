@@ -2,6 +2,16 @@ ChangeLog
 Annot Project
 6/18/2011
 
+1/19/2012	annot.player	0.1.2.3
+        * Adjusted for Akatsuki no Goei 2
+        * Added support to play commentary audio tracks in BD video.
+        * Performance improved while handling large amount of annots/subtitles.
+        * Cast (bless/curse/block) to annotation and user added.
+        * Shortcuts assigned to switch play modes.
+        * Filters added to to annotation browser.
+        * Added basic user view.
+        * Several bug fixes.
+
 1/12/2012	annot.player	0.1.2.2
         * Enforce Japanese encoding to decode Galgame text in Windows.
         * Service domain changed.

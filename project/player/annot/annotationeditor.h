@@ -10,6 +10,7 @@
 
 QT_BEGIN_NAMESPACE
 class QAction;
+class QShortcut;
 class QComboBox;
 class QFontComboBox;
 class QLabel;
@@ -194,6 +195,8 @@ private:
           *strikeOutAct_;
   QAction *colorAct_,
           *backgroundColorAct_;
+
+  QShortcut *saveShortcut_;
 };
 
 #endif // ANNOTATIONEDITOR_H

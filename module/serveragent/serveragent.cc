@@ -402,7 +402,9 @@ ServerAgent::deleteAliasWithId(qint64 id)
   DO_CAST(bless, Bless, Token)
   DO_CAST(curse, Curse, Token)
 
+  DO_CAST(bless, Bless, User)
   DO_CAST(block, Block, User)
+  DO_CAST(curse, Curse, User)
 #undef DO_CAST
 
 #define QUERY_CAST(_Cast, _Casted, _Entity) \

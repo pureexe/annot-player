@@ -13,10 +13,11 @@
 
 // - Constructions -
 
-FilteredTableView::FilteredTableView(QStandardItemModel *sourceModel, QWidget *parent)
-  : Base(parent), sourceModel_(sourceModel)
+FilteredTableView::FilteredTableView(QStandardItemModel *sourceModel, QSortFilterProxyModel *proxyModel, QWidget *parent)
+  : Base(parent), sourceModel_(sourceModel), proxyModel_(proxyModel)
 {
   Q_ASSERT(sourceModel_);
+  Q_ASSERT(proxyModel_);
   setContentsMargins(0, 0, 0, 0);
 
   //setWindowTitle(tr("Process view"));
@@ -40,11 +41,11 @@ FilteredTableView::createLayout()
   //sourceModel_ = new QStandardItemModel(0, HD_Count, this);
   //setProcessHeaderData(sourceModel_);
 
-  proxyModel_ = new QSortFilterProxyModel; {
-    proxyModel_->setSourceModel(sourceModel_);
-    proxyModel_->setDynamicSortFilter(true);
-    proxyModel_->setSortCaseSensitivity(Qt::CaseInsensitive);
-  }
+  //proxyModel_ = new QSortFilterProxyModel; {
+  //  proxyModel_->setSourceModel(sourceModel_);
+  //  proxyModel_->setDynamicSortFilter(true);
+  //  proxyModel_->setSortCaseSensitivity(Qt::CaseInsensitive);
+  //}
 
   // Create widgets
 
@@ -152,7 +153,6 @@ FilteredTableView::sortByColumn(int col, Qt::SortOrder order)
 { proxyView_->sortByColumn(col, order); }
 
 // - Slots -
-
 
 void
 FilteredTableView::clear()

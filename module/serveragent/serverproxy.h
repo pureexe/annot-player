@@ -105,7 +105,9 @@ public:
   bool blessTokenWithId(qint64 id, const QString &userName, const QString &password);
   bool curseTokenWithId(qint64 id, const QString &userName, const QString &password);
 
+  bool blessUserWithId(qint64 id, const QString &userName, const QString &password);
   bool blockUserWithId(qint64 id, const QString &userName, const QString &password);
+  bool curseUserWithId(qint64 id, const QString &userName, const QString &password);
 };
 
 #endif // SERVERPROXY_H

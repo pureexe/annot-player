@@ -68,7 +68,7 @@ MessageView::MessageView(QWidget *parent)
   autoButton_  = new Core::Gui::ToolButton; {
     autoButton_->setStyleSheet(SS_TOOLBUTTON_TEXT);
     autoButton_->setToolButtonStyle(Qt::ToolButtonTextOnly);
-    autoButton_->setText(QString("[ %1 ]").arg(TR(T_AUTO)));
+    autoButton_->setText(QString("| %1 |").arg(TR(T_AUTO)));
     autoButton_->setToolTip(tr("Auto-detect signal"));
     autoButton_->setCheckable(true);
     autoButton_->setChecked(true);

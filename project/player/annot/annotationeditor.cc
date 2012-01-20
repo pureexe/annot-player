@@ -31,6 +31,12 @@
 #define ALIGNCOMBOBOX_MAXWIDTH          60
 #define MOVESTYLECOMBOBOX_MAXWIDTH      60
 
+#ifdef Q_OS_MAC
+  #define SAVE_SHORTCUT "CMD+S"
+#else
+  #define SAVE_SHORTCUT "CTRL+S"
+#endif // Q_OS_MAC
+
 // - Constructions -
 
 AnnotationEditor::AnnotationEditor(QWidget *parent)
@@ -323,7 +329,7 @@ AnnotationEditor::createRibons()
   tidyButton_ = new Core::Gui::ToolButton; {
     tidyButton_->setStyleSheet(SS_TOOLBUTTON_TEXT);
     tidyButton_->setToolButtonStyle(Qt::ToolButtonTextOnly);
-    tidyButton_->setText(tr("tidy"));
+    tidyButton_->setText(QString("| %1 |").arg(tr("tidy")));
     tidyButton_->setToolTip(tr("Tidy HTML"));
     tidyButton_->setCheckable(true);
     tidyButton_->setChecked(true);
@@ -334,7 +340,7 @@ AnnotationEditor::createRibons()
     saveButton_->setStyleSheet(SS_TOOLBUTTON_TEXT);
     saveButton_->setToolButtonStyle(Qt::ToolButtonTextOnly);
     saveButton_->setText(QString("[ %1 ]").arg(TR(T_SAVE)));
-    saveButton_->setToolTip(TR(T_SAVE));
+    saveButton_->setToolTip(TR(T_SAVE) + " [" SAVE_SHORTCUT "]");
   }
   connect(saveButton_, SIGNAL(clicked()), SLOT(save()));
 
@@ -342,10 +348,9 @@ AnnotationEditor::createRibons()
     cancelButton_->setStyleSheet(SS_TOOLBUTTON_TEXT);
     cancelButton_->setToolButtonStyle(Qt::ToolButtonTextOnly);
     cancelButton_->setText(QString("[ %1 ]").arg(TR(T_CANCEL)));
-    cancelButton_->setToolTip(TR(T_CANCEL));
+    cancelButton_->setToolTip(TR(T_CANCEL) + " [ESC]");
   }
   connect(cancelButton_, SIGNAL(clicked()), SLOT(cancel()));
-
 
 #undef MAKE_RIBON_BUTTON
 #undef MAKE_UNCHECKABLE_BUTTON
@@ -378,6 +383,13 @@ AnnotationEditor::createActions()
 
 #undef MAKE_ACTION
 #undef MAKE_TOGGLE
+
+  // Shortcuts
+  saveShortcut_ = new QShortcut(QKeySequence::Save, this);
+  connect(saveShortcut_, SIGNAL(activated()), SLOT(save()));
+
+  QShortcut *cancelShortcut = new QShortcut(QKeySequence("Esc"), this);
+  connect(cancelShortcut, SIGNAL(activated()), SLOT(cancel()));
 }
 
 void
@@ -837,14 +849,19 @@ AnnotationEditor::invalidateCount()
     if (saveButton_->isEnabled()) {
       saveButton_->setEnabled(false);
       saveButton_->setToolTip(warning);
+
+      saveShortcut_->setEnabled(false);
     }
   } else {
     countLabel_->setToolTip(TR(T_WORDCOUNT));
     if (!saveButton_->isEnabled()) {
       saveButton_->setEnabled(true);
       saveButton_->setToolTip(TR(T_SAVE));
+
+      saveShortcut_->setEnabled(true);
     }
   }
+
 }
 
 // - Helpers -

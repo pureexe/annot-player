@@ -802,8 +802,8 @@ namespace Core {
         QString textdec = e.styleProperty("text-decoration", QWebElement::InlineStyle);
         if (!textdec.isEmpty()) {
 #define IFTEXTDEC(_dec, _tag) if (!textdec.compare(_dec, Qt::CaseInsensitive)) { ret.append(_tag "{"); tail.prepend("}"); }
-          IFTEXTDEC("underline", "\\uline")
-          else IFTEXTDEC("line-through", "\\strike")
+          IFTEXTDEC("underline", CORE_CMD_LATEX_ULINE)
+          else IFTEXTDEC("line-through", CORE_CMD_STYLE_STRIKE)
 #undef IFTEXTDEC
         }
 

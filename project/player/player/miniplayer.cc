@@ -33,6 +33,13 @@ MiniPlayerUi::MiniPlayerUi(SignalHub *hub, Player *player, ServerAgent *server, 
   setAcceptDrops(true);
 
   createLayout();
+
+  QShortcut *e = new QShortcut(QKeySequence("F2"), this);
+  connect(e, SIGNAL(activated()), hub, SLOT(toggleEmbeddedPlayerMode()));
+  QShortcut *m = new QShortcut(QKeySequence("F3"), this);
+  connect(m, SIGNAL(activated()), hub, SLOT(toggleMiniPlayerMode()));
+  QShortcut *f = new QShortcut(QKeySequence("F11"), this);
+  connect(f, SIGNAL(activated()), hub, SLOT(toggleFullScreenWindowMode()));
 }
 
 void

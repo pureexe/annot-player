@@ -65,6 +65,7 @@ class LoginDialog;
 class PickDialog;
 class SeekDialog;
 class SyncDialog;
+class UserView;
 
 // MainWindow
 class MainWindow : public QMainWindow
@@ -95,6 +96,7 @@ public:
 signals:
   void responded(const QString &text);
   void said(const QString &text, const QString &color);
+  void logged(const QString &text);
   void showTextRequested(const QString &text);
   void windowClosed();
 
@@ -104,6 +106,8 @@ signals:
   void showAnnotationOnceRequested(const Annotation &a);
   void setAnnotationsRequested(const AnnotationList &l);
   void appendAnnotationsRequested(const AnnotationList &l);
+
+  void userChanged(User user);
 
   // - States -
 public:
@@ -152,9 +156,11 @@ public slots:
   void about();
   void help();
 
-  // PlayMode
   void login(const QString &userName, const QString &encryptedPassword, bool async = true);
   void logout(bool async = true);
+
+  void checkInternetConnection(bool async = true);
+  void deleteCaches();
 
   void openSource(const QString &source);
   void open();  ///< By default the same as openFile()
@@ -235,6 +241,8 @@ public slots:
   void hideLoginDialog();
   void setLoginDialogVisible(bool visible);
 
+  void setUserViewVisible(bool visible);
+
   void setAnnotationEditorVisible(bool visible);
   void setCloudViewVisible(bool visible);
   void setBlacklistViewVisible(bool visible);
@@ -295,6 +303,7 @@ public slots:
   void chat(const QString &text, bool async = true);
   void respond(const QString &text);
   void say(const QString &text, const QString &color = "blue");
+  void log(const QString &text);
 
   void submitText(const QString &text, bool async = true);
   void showText(const QString &text, bool isSigned = false);
@@ -309,6 +318,10 @@ public slots:
 
   void blessTokenWithId(qint64 tid, bool async = true);
   void curseTokenWithId(qint64 tid, bool async = true);
+
+  void blessUserWithId(qint64 tid, bool async = true);
+  void curseUserWithId(qint64 tid, bool async = true);
+  void blockUserWithId(qint64 tid, bool async = true);
 
   void blessAliasWithId(qint64 tid, bool async = true);
   void curseAliasWithId(qint64 tid, bool async = true);
@@ -365,6 +378,7 @@ protected slots:
   virtual void dropEvent(QDropEvent *event); ///< \override
 
   void invalidateContextMenu();
+  void invalidateAnnotationSubtitleMenu();
   void invalidateUserMenu();
   void invalidateTrackMenu();
 
@@ -462,6 +476,7 @@ private:
 
   // - Attributes -
 private:
+  bool disposed_;
   int liveInterval_; // TO BE REMOVED
   QMutex inetMutex_;    // mutext for remote communication
   QMutex playerMutex_;  // mutex for local player
@@ -523,6 +538,7 @@ private:
   SeekDialog *seekDialog_;
   SyncDialog *syncDialog_;
   PickDialog *windowPickDialog_;
+  UserView *userView_;
 
   QPoint dragPos_;
 
@@ -551,7 +567,9 @@ private:
         *recentMenu_,
         *userMenu_,
         *openMenu_,
+        *playMenu_,
         *subtitleMenu_,
+        *audioTrackMenu_,
         *browseMenu_,
         *trackMenu_,
         *sectionMenu_,
@@ -562,13 +580,17 @@ private:
         *annotationLanguageMenu_,
         *themeMenu_,
         *playlistMenu_,
-        *subtitleStyleMenu_;
+        *subtitleStyleMenu_,
+        *annotationSubtitleMenu_;
   QList<QAction*> contextMenuActions_;
 
   QAction *previousSectionAct_,
           *nextSectionAct_,
           *previousFileAct_,
           *nextFileAct_;
+
+  QAction *checkInternetConnectionAct_;
+  QAction *deleteCachesAct_;
 
   QAction *setSubtitleColorToDefaultAct_,
           *setSubtitleColorToWhiteAct_,
@@ -601,6 +623,8 @@ private:
           *toggleLiveModeAct_,
           *toggleSyncModeAct_,
           *toggleSubtitleVisibleAct_,
+          *toggleSubtitleAnnotationVisibleAct_,
+          *toggleNonSubtitleAnnotationVisibleAct_,
           *toggleTranslateAct_,
           *toggleSubtitleOnTopAct_,
           *toggleEmbeddedPlayerOnTopAct_,
@@ -626,7 +650,7 @@ private:
           *toggleProcessPickDialogVisibleAct_,
           *toggleSeekDialogVisibleAct_,
           *toggleSyncDialogVisibleAct_,
-          //*toggleUserPanelVisibleAct_,
+          *toggleUserViewVisibleAct_,
           *toggleBlacklistViewVisibleAct_,
           *toggleBacklogViewVisibleAct_;
 

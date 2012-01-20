@@ -20,12 +20,11 @@ using namespace Logger;
 
 // - Constructions -
 
-DataServer::DataServer(ServerAgent *server, Database *cache, Database *queue, QObject *parent)
-  : Base(parent), server_(server), cache_(cache), queue_(queue)
+void
+DataServer::dispose()
 {
-  Q_ASSERT(server_);
-  Q_ASSERT(cache_);
-  Q_ASSERT(queue_);
+  cache_->dispose();
+  queue_->dispose();
 }
 
 // - Submission -
@@ -327,11 +326,12 @@ DataServer::selectRelatedAnnotationsWithTokenId(qint64 tid)
   AnnotationList ret;
   if (server_->isConnected()) {
     ret = server_->selectRelatedAnnotationsWithTokenId(tid);
-    if (!ret.isEmpty() && cache_->isValid())
-      foreach (Annotation a, ret) {
-        cache_->deleteAnnotationWithId(a.id());
-        cache_->insertAnnotation(a);
-      }
+    if (!ret.isEmpty() && cache_->isValid()) {
+      if (ret.size() > 20) // async for large amount of annots
+        cache_->updateAnnotations(ret, true); // async = true
+      else
+        cache_->updateAnnotations(ret, false); // async =false
+    }
   } else if (cache_->isValid())
     ret = cache_->selectAnnotationsWithTokenId(tid);
   DOUT("exit: count =" << ret.size());

@@ -16,7 +16,7 @@ PrefixComboBox::PrefixComboBox(QWidget *parent)
     l.append(CORE_CMD_LATEX_BIG);
     l.append(CORE_CMD_COLOR_RED); l.append(CORE_CMD_COLOR_BLUE); l.append(CORE_CMD_COLOR_YELLOW);
     l.append(CORE_CMD_LATEX_UNDERLINE); l.append(CORE_CMD_STYLE_STRIKE);
-    l.append(CORE_CMD_SUBTITLE);
+    l.append(CORE_CMD_SUB);
     l.append(CORE_CMD_VERBATIM);
   }
   setDefaultItems(l);

@@ -8,7 +8,7 @@
 #include "ith/main_template.h"
 
 #include <QString>
-#include <QTextDecoder>
+//#include <QTextDecoder>
 //QT_FORWARD_DECLARE_CLASS(QTextDecoder)
 
 class TextBuffer : public MyVector<BYTE, 0x800>
@@ -57,7 +57,7 @@ class TextThread : public MyVector<BYTE, 0x200>
 {
   typedef TextThread Self;
 
-  static QTextDecoder *textDecoder_;
+  //static QTextDecoder *textDecoder_;
 
   // - Qth instruments -
   int size_; // used for validation
@@ -92,8 +92,7 @@ protected:
     //  ret = textDecoder_ ? textDecoder_->toUnicode(lp, len)
     //                     : QString::fromLocal8Bit(lp, len);
     //return ret;
-    Q_ASSERT(textDecoder_);
-    return textDecoder_->toUnicode(lp, len);
+    return QString::fromLocal8Bit(lp, len);
   }
 
   // - Original implementations -

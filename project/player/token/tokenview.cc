@@ -38,7 +38,14 @@ TokenView::TokenView(ServerAgent *server, QWidget *parent)
 
   sourceModel_ = new QStandardItemModel(0, HD_Count, this);
   setAliasHeaderData(sourceModel_);
-  tableView_ = new FilteredTableView(sourceModel_, this);
+
+  proxyModel_ = new QSortFilterProxyModel; {
+    proxyModel_->setSourceModel(sourceModel_);
+    proxyModel_->setDynamicSortFilter(true);
+    proxyModel_->setSortCaseSensitivity(Qt::CaseInsensitive);
+  }
+
+  tableView_ = new FilteredTableView(sourceModel_, proxyModel_, this);
 
   // Create widgets
   aliasDialog_ = new AddAliasDialog(this);

@@ -3,6 +3,8 @@
 
 #include "settings.h"
 #include "defines.h"
+#include "mainwindow.h"
+#include "core/cloud/traits.h"
 #include <QtCore>
 
 // - Settings keys -
@@ -16,7 +18,6 @@
 #define SK_PASSWORD     "Password"
 
 #define SK_ANNOTLANGUAGES "AnnotLanguages"
-#define SK_ANNOTFILTER  "AnnotFilter"
 #define SK_LANGUAGE     "Language"
 #define SK_LIVE         "Live"
 #define SK_MENUBAR      "MenuBar"
@@ -28,12 +29,14 @@
 #define SK_UPDATEDATE   "UpdateDate"
 #define SK_RECENTPATH   "RecentPath"
 #define SK_AUTOPLAYNEXT "AutoPlayNext"
+#define SK_ANNOTFILTER  "AnnotFilter"
+#define SK_BLOCKEDUSERS "BlockedUsers"
+#define SK_BLOCKEDKEYS  "BlockedKeywords"
 
 #define SK_QUEUEEMPTY   "QueueEmpty"
 
 #define SK_RECENT(_i)   "Recent" #_i
 namespace { enum { RECENT_COUNT = 10 }; }
-
 
 // - Helpers -
 
@@ -145,10 +148,11 @@ Settings::setLanguage(int language)
 int
 Settings::subtitleColor() const
 {
+  enum { defval = MainWindow::Cyan };
   bool ok;
-  int ret = value(SK_SUBTITLECOLOR).toInt(&ok);
+  int ret = value(SK_SUBTITLECOLOR, defval).toInt(&ok);
   if (!ok)
-    return 0;
+    ret = defval;
   return ret;
 }
 
@@ -159,10 +163,11 @@ Settings::setSubtitleColor(int colorId)
 qint64
 Settings::annotationLanguages() const
 {
+  enum { defval = Core::Cloud::Traits::AnyLanguageBit };
   bool ok;
-  qint64 ret = value(SK_ANNOTLANGUAGES).toLongLong(&ok);
+  qint64 ret = value(SK_ANNOTLANGUAGES, defval).toLongLong(&ok);
   if (!ok)
-    return 0;
+    ret = defval;
   return ret;
 }
 
@@ -306,5 +311,21 @@ Settings::setRecentFiles(const QStringList &l)
   r = l.size() <= 8 ? QString() : l[8]; setValue(SK_RECENT(8), r);
   r = l.size() <= 9 ? QString() : l[9]; setValue(SK_RECENT(9), r);
 }
+
+void
+Settings::setBlockedKeywords(const QStringList &l)
+{ setValue(SK_BLOCKEDKEYS, l); }
+
+QStringList
+Settings::blockedKeywords() const
+{ return value(SK_BLOCKEDKEYS).toStringList(); }
+
+void
+Settings::setBlockedUserNames(const QStringList &l)
+{ setValue(SK_BLOCKEDUSERS, l); }
+
+QStringList
+Settings::blockedUserNames() const
+{ return value(SK_BLOCKEDUSERS).toStringList(); }
 
 // EOF

@@ -27,16 +27,13 @@ class FilteredListView : public QWidget
   typedef QWidget Base;
 
 public:
-  explicit FilteredListView(QStandardItemModel *sourceModel, QWidget *parent = 0);
+  FilteredListView(QStandardItemModel *sourceModel, QSortFilterProxyModel *proxyModel, QWidget *parent = 0);
 
 signals:
   void currentIndexChanged(QModelIndex index);
 
   // - Properties -
 public:
-  ///  Never return null
-  QSortFilterProxyModel *proxyModel() const       { return proxyModel_; }
-
   QLineEdit *lineEdit() const                     { return filterPatternLineEdit_; }
 
   QModelIndex currentIndex() const;

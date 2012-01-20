@@ -134,7 +134,9 @@ public:
   bool blessTokenWithId(qint64 id);
   bool curseTokenWithId(qint64 id);
 
+  bool blessUserWithId(qint64 id);
   bool blockUserWithId(qint64 id);
+  bool curseUserWithId(qint64 id);
 
   bool isAnnotationBlessedWithId(qint64 id) const;
   bool isAnnotationCursedWithId(qint64 id) const;

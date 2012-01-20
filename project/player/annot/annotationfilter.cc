@@ -16,18 +16,6 @@ AnnotationFilter::AnnotationFilter(QObject *parent)
 
 // - Properties -
 
-qint64
-AnnotationFilter::languages() const
-{ return languages_; }
-
-void
-AnnotationFilter::setLanguages(qint64 bits)
-{ languages_ = bits; }
-
-bool
-AnnotationFilter::isEnabled() const
-{ return enabled_; }
-
 void
 AnnotationFilter::setEnabled(bool enabled)
 {
@@ -36,18 +24,6 @@ AnnotationFilter::setEnabled(bool enabled)
     emit enabledChanged(enabled_);
   }
 }
-
-const AnnotationList&
-AnnotationFilter::blockedAnnotations() const
-{ return blockedAnnotations_; }
-
-const QStringList&
-AnnotationFilter::blockedUserAliases() const
-{ return blockedUserAliases_; }
-
-const QStringList&
-AnnotationFilter::blockedTexts() const
-{ return blockedTexts_; }
 
 void
 AnnotationFilter::clear()

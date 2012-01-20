@@ -1082,8 +1082,9 @@ static DWORD MIN_REDETECT=0x80;
 
 // - QTH BEGIN -
 
-QTextDecoder*
-TextThread::textDecoder_ = QTextCodec::codecForName("SHIFT-JIS")->makeDecoder();
+//QTextDecoder*
+//TextThread::textDecoder_ =
+//    QTextCodec::codecForName("SHIFT-JIS")->makeDecoder();
 
 void
 TextThread::sendText()
@@ -1099,15 +1100,17 @@ TextThread::sendText()
     void *str = storage + last_sentence;
     int len = used - last_sentence;
 
-    if (unicode)
-      //text = QString::fromWCharArray((LPCWSTR)str, len);
-      text = decodeWText((LPWSTR)str, len);
-    else
-      //text = QString::fromLocal8Bit((LPCSTR)str, len);
-      text = decodeText((LPSTR)str, len);
+    if (len > 0) {
+      if (unicode)
+        //text = QString::fromWCharArray((LPWSTR)str, len);
+        text = decodeWText((LPWSTR)str, len);
+      else
+        //text = QString::fromLocal8Bit((LPSTR)str, len);
+        text = decodeText((LPSTR)str, len);
+    }
   }
 
-  if (text.trimmed().isEmpty()) {
+  if (text.isEmpty()) {
      DOUT("exit: empty text skipped");
      return;
   }

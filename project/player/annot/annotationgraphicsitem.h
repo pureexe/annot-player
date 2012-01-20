@@ -67,6 +67,8 @@ public:
 
   bool isSubtitle() const { return style_ == SubtitleStyle; }
 
+  QString abstract() const;
+
 protected:
   //QString parse(const QString &text);
   static bool isSubtitle(const QString &text);
@@ -93,6 +95,11 @@ protected slots:
   void setText(const QString &text); ///< The default way to set text
   void setTags(const QStringList &tags); ///< Apply tags.
 
+  void blessMe();
+  void curseMe();
+  void blockMe();
+  void blockUser();
+
 protected:
   void fly(const QPointF &from, const QPointF &to, int msecs,
            QEasingCurve::Type type = QEasingCurve::Linear);
@@ -117,6 +124,8 @@ protected:
 
 private:
   void setDefaultStyle();
+
+  int nextY(int visibleTime, Style style) const;
 
 private:
   AnnotationGraphicsView *view_;

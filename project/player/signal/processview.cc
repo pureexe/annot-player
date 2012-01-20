@@ -70,19 +70,29 @@ ProcessView::ProcessView(QWidget *parent)
   setWindowTitle(tr("Process view"));
   UiStyle::globalInstance()->setWindowStyle(this);
 
-  // Create models
-  sourceModel_ = new QStandardItemModel(0, HD_Count, this);
-  setProcessHeaderData(sourceModel_);
-
-  tableView_ = new FilteredTableView(sourceModel_, this);
-  connect(tableView_, SIGNAL(currentIndexChanged(QModelIndex)), SLOT(invalidateButtons()));
-
+  createModel();
   createLayout();
   createActions();
 
   // Set initial states
   tableView_->sortByColumn(HD_Status, Qt::DescendingOrder);
   tableView_->setCurrentColumn(HD_Name);
+}
+
+void
+ProcessView::createModel()
+{
+  sourceModel_ = new QStandardItemModel(0, HD_Count, this);
+  setProcessHeaderData(sourceModel_);
+
+  proxyModel_ = new QSortFilterProxyModel; {
+    proxyModel_->setSourceModel(sourceModel_);
+    proxyModel_->setDynamicSortFilter(true);
+    proxyModel_->setSortCaseSensitivity(Qt::CaseInsensitive);
+  }
+
+  tableView_ = new FilteredTableView(sourceModel_, proxyModel_, this);
+  connect(tableView_, SIGNAL(currentIndexChanged(QModelIndex)), SLOT(invalidateButtons()));
 }
 
 void
@@ -353,7 +363,7 @@ ProcessView::setCurrentItemAttached(bool attached)
   if (attached)
     value = TR(T_ATTACHED);
 
-  tableView_->proxyModel()->setData(mi, value);
+  proxyModel_->setData(mi, value);
 }
 
 void

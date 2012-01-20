@@ -55,22 +55,27 @@ namespace Core { namespace Cloud {
   public:
     const QString &name() const         { return name_; }
     void setName(const QString &name)   { name_ = name; }
-    bool hasName() const                { return !name_.isNull(); }
+    bool hasName() const                { return !name_.isEmpty(); }
     bool hasValidName() const           { return isValidName(name_); }
 
   private: QString nickname_;
   public:
     const QString &nickname() const     { return nickname_; }
     void setNickname(const QString &name) { nickname_ = name; }
-    bool hasNickname() const            { return !nickname_.isNull(); }
+    bool hasNickname() const            { return !nickname_.isEmpty(); }
 
-  public:
     // Password encoded as SHA1 hex string.
   private: QString password_;
   public:
     const QString &password() const     { return password_; }
     void setPassword(const QString &hex) { password_ = hex; }
-    bool hasPassword() const            { return !password_.isNull(); }
+    bool hasPassword() const            { return !password_.isEmpty(); }
+
+  private: QString email_;
+  public:
+    const QString &email() const        { return email_; }
+    void setEmail(const QString &email) { email_ = email; }
+    bool hasEmail() const               { return !email_.isEmpty(); }
 
   private: qint32 status_;
   public:
@@ -150,8 +155,13 @@ namespace Core { namespace Cloud {
     { }
 
     bool isValid() const { return hasId(); }
+    bool isGuest() const { return id() == UI_Guest; }
 
     void clear() { (*this) = Self(); }
+
+    // - Operators -
+    bool operator==(const Self &that) { return !operator!=(that); }
+    bool operator!=(const Self &that) { return ::memcmp(this, &that, sizeof(Self)); }
 
     // - Helpers -
   public:

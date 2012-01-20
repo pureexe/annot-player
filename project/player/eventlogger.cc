@@ -32,6 +32,7 @@ EventLogger::createConnections()
   connect(player_, SIGNAL(mediaClosed()), SLOT(logMediaClosed()));
   //connect(player_, SIGNAL(volumeChanged()), SLOT(logVolumeChanged()));
   connect(player_, SIGNAL(subtitleChanged()), SLOT(logSubtitleChanged()));
+  connect(player_, SIGNAL(audioTrackChanged()), SLOT(logAudioTrackChanged()));
   connect(player_, SIGNAL(opening()), SLOT(logOpening()));
   connect(player_, SIGNAL(buffering()), SLOT(logBuffering()));
   connect(player_, SIGNAL(playing()), SLOT(logPlaying()));
@@ -124,6 +125,10 @@ EventLogger::logVolumeChanged()
 void
 EventLogger::logSubtitleChanged()
 { log(tr("subtitle changed")); }
+
+void
+EventLogger::logAudioTrackChanged()
+{ log(tr("audio track changed")); }
 
 void
 EventLogger::logOpening()

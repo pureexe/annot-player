@@ -9,6 +9,7 @@
 #include "core/cloud/alias.h"
 #include "core/cloud/annotation.h"
 #include <QObject>
+#include <QMutex>
 #include <QSqlDatabase>
 
 /**
@@ -24,6 +25,8 @@ class Database : public QObject
   typedef QObject Base;
 
   QSqlDatabase db_;
+  mutable QMutex mutex_;
+  bool disposed_;
 
   typedef Core::Cloud::User User;
   typedef Core::Cloud::UserList UserList;
@@ -34,12 +37,13 @@ class Database : public QObject
   typedef Core::Cloud::Annotation Annotation;
   typedef Core::Cloud::AnnotationList AnnotationList;
 
-  // - Constructions -
+  // - Construction -
 public:
   explicit Database(const QString &filePath, QObject *parent = 0);
   ~Database();
 
-  bool isValid() const;
+  bool isValid() const { return db_.isOpen(); }
+  bool isDisposed() const { return disposed_; }
 
   ///  Remove all contents saved in the database.
 signals:
@@ -48,8 +52,9 @@ signals:
 public slots:
   void clear();
 
+  void dispose();
+
 protected:
-  const QSqlDatabase &db() const;
   bool open(const QString &filePath);
   bool createTables(); ///< Format current db by creating needed tables
 
@@ -81,6 +86,11 @@ public:
   AnnotationList selectAnnotationsWithTokenDigest(const QString &digest, qint32 digestType) const;
   AnnotationList selectAnnotations() const;
 
+  ///  Return -1 if not annotation id not exist
+  qint64 selectAnnotationUpdateTimeWithId(qint64 id) const;
+
+  // - Update -
+public:
   bool deleteUserWithId(qint64 id);
   void deleteUsers();
   bool deleteTokenWithId(qint64 id);
@@ -94,6 +104,19 @@ public:
   void deleteAnnotationsWithTokenId(qint64 tid);
   void deleteAnnotationsWithTokenDigest(const QString &digest, qint32 digestType);
   void deleteAnnotations();
+
+  qint64 updateUser(const User &u)
+  { deleteUserWithId(u.id()); return insertUser(u); }
+
+  qint64 updateToken(const Token &t)
+  { deleteTokenWithId(t.id()); return insertToken(t); }
+
+  qint64 updateAlias(const Alias &a)
+  { deleteAliasWithId(a.id()); return insertAlias(a); }
+
+  ///  Insert annotation if not exist, or replace the old one. Return updated aid.
+  void updateAnnotation(const Annotation &annot);
+  void updateAnnotations(const AnnotationList &l, bool async = false);
 };
 
 #endif // DB_H

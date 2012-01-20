@@ -45,7 +45,7 @@ LoginDialog::LoginDialog(QWidget *parent)
     loginButton->setStyleSheet(SS_TOOLBUTTON_TEXT);
     loginButton->setToolButtonStyle(Qt::ToolButtonTextOnly);
     loginButton->setText(QString("[ %1 ]").arg(TR(T_LOGIN)));
-    loginButton->setToolTip(TR(T_LOGIN));
+    loginButton->setToolTip(TR(T_LOGIN) + " [ENTER]");
   }
 
   QToolButton *cancelButton = new Core::Gui::ToolButton; {
@@ -99,10 +99,14 @@ LoginDialog::LoginDialog(QWidget *parent)
   */
 
   // Connections
-  connect(cancelButton, SIGNAL(clicked()), SLOT(cancel()));
+  connect(cancelButton, SIGNAL(clicked()), SLOT(hide()));
   connect(loginButton, SIGNAL(clicked()), SLOT(login()));
   connect(userNameEdit_, SIGNAL(returnPressed()), SLOT(login()));
   connect(passwordEdit_, SIGNAL(returnPressed()), SLOT(login()));
+
+  // Shortcuts
+  QShortcut *cancelShortcut = new QShortcut(QKeySequence("Esc"), this);
+  connect(cancelShortcut, SIGNAL(activated()), SLOT(hide()));
 
   // Focus
   userNameEdit_->setFocus();
@@ -149,9 +153,5 @@ LoginDialog::login()
   hide();
   emit loginRequested(name, pass);
 }
-
-void
-LoginDialog::cancel()
-{ hide(); }
 
 // EOF

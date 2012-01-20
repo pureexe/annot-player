@@ -17,6 +17,7 @@
 #include <boost/tuple/tuple.hpp>
 #include <QtGui>
 #include <ctime>
+#include <cmath>
 
 //#define DEBUG "annotationgraphicsitem"
 #include "module/debug/debug.h"
@@ -56,7 +57,7 @@ namespace { // anonymous, annotation display
   next_y_(int window_height, int visible_time, AnnotationGraphicsItem::Style style, const SignalHub *hub_)
   {
     Q_ASSERT(hub_);
-    enum { lane_height = ANNOTATION_SIZE_DEFAULT + ANNOTATION_SIZE_MARGIN * 2 }; // height of a piece of danmu
+    enum { lane_height = ANNOTATION_SIZE_DEFAULT + ANNOTATION_SIZE_MARGIN * 2 + 5 }; // height of a piece of danmu
     enum { lane_count = 100 };                      // number of vertical lanes, large enough
 
     static time_t last_time_fly_[lane_count],
@@ -65,7 +66,7 @@ namespace { // anonymous, annotation display
 
     Q_ASSERT(visible_time > 0);
     //int wait_time = style == AnnotationGraphicsItem::FloatStyle ? (visible_time / 4 + 1) : visible_time;
-    int wait_time = visible_time / 2 + 1;
+    int wait_time = (style == AnnotationGraphicsItem::FloatStyle ? visible_time/2 : visible_time) + 500;
 
     time_t *last_time_;
     switch (style) {
@@ -100,17 +101,32 @@ namespace { // anonymous, annotation display
 
     last_time_[best_lane] = current_time;
 
-    int window_header = 0;
-    if (!hub_->isMediaTokenMode() && hub_->isEmbeddedPlayerMode())
-      window_header = 50;
-
     switch (style) {
-    case AnnotationGraphicsItem::BottomStyle:   return window_height - (best_lane + 2) * lane_height;
-    default:                    return best_lane * lane_height + window_header;
+    case AnnotationGraphicsItem::BottomStyle:
+      {
+        int window_footer = !hub_->isNormalPlayerMode() ? (lane_height+lane_height/2)   : 0;
+        return window_height - (best_lane + 2) * lane_height - window_footer;
+      }
+    default:
+      {
+        int window_header = !hub_->isNormalPlayerMode() && !hub_->isMediaTokenMode() ? 50 : 0;
+        return best_lane * lane_height + window_header;
+      }
     }
   }
 
 } // anonymous namespace
+
+int
+AnnotationGraphicsItem::nextY(int msecs, Style style) const
+{
+
+  int ret = ::next_y_(view_->height(), msecs, style, hub_);
+  int max = view_->height() - boundingRect().height() ;
+  if (ret > max - 5)
+    ret = max;
+  return ret;
+}
 
 // - Constructions -
 
@@ -200,7 +216,7 @@ AnnotationGraphicsItem::invalidateAnnotation()
   boost::tie(code, tags) = ANNOT_PARSE_CODE(text);
   setTags(tags);
   if (tags.contains(CORE_CMD_VERBATIM))
-    setPlainText(richText_ = text);
+    setPlainText(richText_ = code);
   else {
     setText(richText_ = code);
     if (isOwner)
@@ -402,7 +418,7 @@ AnnotationGraphicsItem::addMe()
   if (style_ == SubtitleStyle &&
       hub_->isSignalTokenMode() &&
       !hub_->isStopped())
-    connect(view_, SIGNAL(annotationPosChanged()), SLOT(removeMe()));
+    connect(view_, SIGNAL(removeItemRequested()), SLOT(removeMe()));
 
   scene_->addItem(this);
 }
@@ -415,7 +431,7 @@ AnnotationGraphicsItem::removeMe()
   //    hub_->isSignalTokenMode() &&
   //    !hub_->isStopped())
   if (hub_->isSignalTokenMode())
-    disconnect(view_, SIGNAL(annotationPosChanged()), this, SLOT(removeMe()));
+    disconnect(view_, SIGNAL(removeItemRequested()), this, SLOT(removeMe()));
   disconnect(view_, SIGNAL(paused()), this, SLOT(pause()));
   disconnect(view_, SIGNAL(resumed()), this, SLOT(resume()));
   scene_->removeItem(this);
@@ -530,15 +546,27 @@ AnnotationGraphicsItem::resume()
 int
 AnnotationGraphicsItem::stayTime(Style style) const
 {
-  switch (style) {
-  case SubtitleStyle:   return ANNOTATION_STAY_TIME_SUBTITLE;
-  default:              return ANNOTATION_STAY_TIME;
-  }
+  int t = style == SubtitleStyle ? ANNOTATION_STAY_TIME_SUBTITLE
+                                 : ANNOTATION_STAY_TIME;
+  int w0 = qMax(view_->width(), 100),
+      w = qMax((int)boundingRect().width(), 50),
+      h = qMax((int)boundingRect().height(), 20);
+  float f = (float)(w0 + 200)/ (w + 200),
+        g = (float)(h + 20) / (ANNOTATION_SIZE_DEFAULT + 20);
+  float q = hub_->isSignalTokenMode() ? 1.0f : 0.8f;
+  int ret = t * ::pow(f, 0.3f)* g * q + ANNOTATION_STAY_TIME_MIN;
+  return qMin(ret, ANNOTATION_STAY_TIME_MAX);
 }
 
 int
 AnnotationGraphicsItem::flyTime() const
-{ return ANNOTATION_FLY_TIME * (qMax(view_->width(), 100) + 200) / (qMax((int)boundingRect().width(), 50) + 200); }
+{
+  int w0 = qMax(view_->width(), 100),
+      w = qMax((int)boundingRect().width(), 50);
+  float f = (float)(w0 + 200) / (w + 200);
+  int ret = ANNOTATION_FLY_TIME * ::pow(f, 0.2f) + ANNOTATION_FLY_TIME_MIN;
+  return qMin(ret, ANNOTATION_FLY_TIME_MAX);
+}
 
 void
 AnnotationGraphicsItem::stay(Style style)
@@ -553,7 +581,7 @@ AnnotationGraphicsItem::stay(Style style)
     }
 
   int x = (view_->width() - boundingRect().width()) / 2,
-      y = ::next_y_(view_->height(), msecs, posStyle, hub_);
+      y = nextY(msecs, posStyle);
 
   if (style_ == SubtitleStyle &&
       hub_->isSignalTokenMode() &&
@@ -577,7 +605,7 @@ AnnotationGraphicsItem::fly()
 {
   Q_ASSERT(view_);
   int msecs = flyTime();
-  int y = ::next_y_(view_->height(), msecs, FloatStyle, hub_);
+  int y = nextY(msecs, FloatStyle);
 
   QPoint from(view_->width(), y);
   QPoint to(- boundingRect().width(), y);
@@ -619,10 +647,25 @@ AnnotationGraphicsItem::contextMenuEvent(QContextMenuEvent *event)
     if (!hub_->isLiveTokenMode())
       menu.addAction(TR(T_MENUTEXT_EDIT), this, SLOT(edit()));
     menu.addAction(TR(T_MENUTEXT_COPY), this, SLOT(copyToClipboard()));
-    menu.addSeparator();
     menu.addAction(TR(T_MENUTEXT_REMOVEANNOTATION), this, SLOT(removeMe()));
-    if (annot_.hasId() && !hub_->isLiveTokenMode())
-      menu.addAction(TR(T_MENUTEXT_DELETETHISANNOT), this, SLOT(deleteMe()));
+    menu.addSeparator();
+
+    if (annot_.userId() == view_->userId()) {
+      if (annot_.hasId() && !hub_->isLiveTokenMode())
+        menu.addAction(TR(T_MENUTEXT_DELETETHISANNOT), this, SLOT(deleteMe()));
+
+    } else {
+      QString text = abstract();
+      if (annot_.hasId() && !hub_->isLiveTokenMode()) {
+        menu.addAction(TR(T_BLESS) + ": " + text, this, SLOT(blessMe()));
+        menu.addAction(TR(T_CURSE) + ": " + text, this, SLOT(curseMe()));
+      }
+      menu.addAction(TR(T_BLOCK) + ": " + text, this, SLOT(blockMe()));
+      if (annot_.hasUserAlias()) {
+        menu.addSeparator();
+        menu.addAction(TR(T_MENUTEXT_BLOCKUSER) + ": " + annot_.userAlias(), this, SLOT(blockUser()));
+      }
+    }
 
     menu.exec(event->globalPos());
     event->accept();
@@ -723,5 +766,55 @@ AnnotationGraphicsItem::edit()
   view_->editor()->setId(annot_.id());
   view_->editor()->show();
 }
+
+void
+AnnotationGraphicsItem::blessMe()
+{
+  if (annot_.hasId() && !hub_->isLiveTokenMode())
+    view_->blessAnnotationWithId(annot_.id());
+  if (annot_.hasUserId())
+    view_->blessUserWithId(annot_.userId());
+}
+
+void
+AnnotationGraphicsItem::curseMe()
+{
+  if (annot_.hasId() && !hub_->isLiveTokenMode())
+    view_->curseAnnotationWithId(annot_.id());
+  if (annot_.hasUserId())
+    view_->curseUserWithId(annot_.userId());
+}
+
+void
+AnnotationGraphicsItem::blockMe()
+{
+  hide();
+  if (annot_.hasText())
+    view_->blockAnnotationWithText(annot_.text());
+  if (annot_.hasId() && !hub_->isLiveTokenMode())
+    view_->blockAnnotationWithId(annot_.id());
+}
+
+void
+AnnotationGraphicsItem::blockUser()
+{
+  hide();
+  if (annot_.hasUserAlias())
+    view_->blockUserWithAlias(annot_.userAlias());
+  if (annot_.hasUserId())
+    view_->blockUserWithId(annot_.userId());
+}
+
+
+QString
+AnnotationGraphicsItem::abstract() const
+{
+  enum { length = 11 } ;
+  QString ret = annot_.text();
+  if (ret.size() > length)
+    ret = ret.left(length - 6) + "..." + ret.right(3);
+  return ret;
+}
+
 
 // EOF

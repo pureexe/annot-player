@@ -25,6 +25,7 @@ public:
 
 public slots:
   void logSubtitleChanged();
+  void logAudioTrackChanged();
   void logVolumeChanged();
   void logMediaChanged();
   void logMediaClosed();

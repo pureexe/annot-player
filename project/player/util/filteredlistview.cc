@@ -13,10 +13,11 @@
 
 // - Constructions -
 
-FilteredListView::FilteredListView(QStandardItemModel *sourceModel, QWidget *parent)
-  : Base(parent), sourceModel_(sourceModel)
+FilteredListView::FilteredListView(QStandardItemModel *sourceModel, QSortFilterProxyModel *proxyModel, QWidget *parent)
+  : Base(parent), sourceModel_(sourceModel), proxyModel_(proxyModel)
 {
   Q_ASSERT(sourceModel_);
+  Q_ASSERT(proxyModel_);
 
   //setWindowTitle(tr("Process view"));
   //UiStyle::globalInstance()->setWindowStyle(this);
@@ -39,11 +40,11 @@ FilteredListView::createLayout()
   //sourceModel_ = new QStandardItemModel(0, HD_Count, this);
   //setProcessHeaderData(sourceModel_);
 
-  proxyModel_ = new QSortFilterProxyModel; {
-    proxyModel_->setSourceModel(sourceModel_);
-    proxyModel_->setDynamicSortFilter(true);
-    proxyModel_->setSortCaseSensitivity(Qt::CaseInsensitive);
-  }
+  //proxyModel_ = new QSortFilterProxyModel; {
+  //  proxyModel_->setSourceModel(sourceModel_);
+  //  proxyModel_->setDynamicSortFilter(true);
+  //  proxyModel_->setSortCaseSensitivity(Qt::CaseInsensitive);
+  //}
 
   // Create widgets
 

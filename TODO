@@ -1,26 +1,32 @@
 # TODO
 # 6/18/2011
 
-- fix ith encoding in Chinese! OS
-- change to serverangine to annotcloud.com
-  publish 0.1.2.2
-
 ## annot.player
-0.1.2.3
+- live channel echo bug
+- improve performance to play BDRip movie -- increase buffer? render mode?
+- FIXME: dragging window disappear bug
+- Updated to Qt 4.8 on Mac OS X. FIXME: WebKit conflict.
+- need to hack ith_engine commit database for identifying goei2?
+- ability to directly play bilibili's xml annots
+- able to edit sub prefix, such as font size
+- able to lock ur own annot
+- FIXME: crash on exit sometime in Windows
+- check if bless/block/curse work or not
+  - selectUserWithId at server side
+- popup to show my own information
+- show specific user info popup as well
+- FIXME: annotation view disappeared after process window minimized
+
+0.1.2.4
+- add delete cache menu context menu
+- able to edit other's subtitle??
+  also PREVENT guest from editing subtitle
+- context menu to clean cache
+- annot graphics item bounding rect height to avoid out of screen
+  use height to get propper lane
 - move isKnownHookForProcess to Settings, and update it every 7 days
   - update database online
-- update database online
- - enable others to commit database?
-- need wiki-like subtitle edit support
-  - subtitles set "shared" flag by default
-  - edit other's annot flagged as shared
-    would make others annot invisible instead of deleted
-  - need a dialog to show all annot in current FRAME including hidden ones
-    reuse/extend annotBrowser
-- Updated to Qt 4.8 on Mac OS X. FIXME: WebKit confliction.
-- FIXME: dragging window disappear bug
-- add outdated state into media_annot
-  add an wiki subtitle edit window
+  - enable others subtitle edit window
   enable editing other people's subtitle in wiki mode,
   other subtitle simulate moditified/replaced, but not deleted
   alwayhs be able to get old subtitle - add an outdated attribute
@@ -28,7 +34,7 @@
   subtitile are default having shared attirbute
   shared subtitle could be marked as outdated or restored
 - webbrowser: open link in new tab
-- enable annot annot time
+- enable annot time
   utilizing annot.time msecs
   editing annot time
 

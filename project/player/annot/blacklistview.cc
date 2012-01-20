@@ -37,7 +37,6 @@ BlacklistView::BlacklistView(AnnotationFilter *filter, QWidget *parent)
   createLayout();
 
   invalidateTab();
-  invalidateFilter();
 
   QLineEdit *edit = currentLineEdit();
   if (edit)
@@ -260,6 +259,10 @@ BlacklistView::invalidateFilter()
   textTabButton_->setEnabled(enabled);
   userTabButton_->setEnabled(enabled);
   annotationTabButton_->setEnabled(enabled);
+
+  textTab_->setRows(filter_->blockedTexts());
+  userTab_->setRows(filter_->blockedUserAliases());
+  annotationTab_->setRows(filter_->blockedAnnotations());
 }
 
 void

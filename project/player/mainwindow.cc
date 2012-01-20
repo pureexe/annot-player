@@ -32,6 +32,7 @@
 #include "tr.h"
 #include "translatormanager.h"
 #include "aboutdialog.h"
+#include "userview.h"
 #include "blacklistview.h"
 #include "backlogview.h"
 #include "devicedialog.h"
@@ -178,16 +179,16 @@ MainWindow::resetPlayer()
 }
 
 MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags f)
-  : Base(parent, f),
+  : Base(parent, f), disposed_(false),
     liveInterval_(DEFAULT_LIVE_INTERVAL),
     tray_(0),
     annotationEditor_(0), blacklistView_(0), cloudView_(0), commentView_(0), backlogView_(0),
     aboutDialog_(0), deviceDialog_(0), helpDialog_(0), loginDialog_(0),
-    processPickDialog_(0), seekDialog_(0), syncDialog_(0), windowPickDialog_(0),
+    processPickDialog_(0), seekDialog_(0), syncDialog_(0), windowPickDialog_(0),userView_(0),
     dragPos_(BAD_POS), tokenType_(0),
     themeMenu_(0),
     setThemeToDefaultAct_(0), setThemeToRandomAct_(0),
-    setThemeToBlack1Act_(0), setThemeToBlack2Act_(0),
+    setThemeToBlack1Act_(0), setThemeToBlack2Act_(0)  ,
     setThemeToBlue1Act_(0), setThemeToBlue2Act_(0),
     setThemeToBrown1Act_(0), setThemeToBrown2Act_(0),
     setThemeToGreen1Act_(0), setThemeToGreen2Act_(0),
@@ -270,6 +271,8 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags f)
   embeddedPlayer_->setOnTop(settings->isEmbeddedPlayerOnTop());
 
   annotationFilter_->setEnabled(settings->isAnnotationFilterEnabled());
+  annotationFilter_->setBlockedTexts(settings->blockedKeywords());
+  annotationFilter_->setBlockedUserAliases(settings->blockedUserNames());
 
   invalidateAnnotationLanguages();
 
@@ -418,7 +421,7 @@ MainWindow::createComponents()
   //userPanel_->hide(); // TODO!!!!!!
 
   tokenView_ = new TokenView(server_, this);
-  annotationBrowser_ = new AnnotationBrowser(this);
+  annotationBrowser_ = new AnnotationBrowser(hub_, this);
 
 #ifdef USE_MODE_SIGNAL
   messageHandler_ = new MessageHandler(this);
@@ -494,6 +497,8 @@ MainWindow::createConnections()
   connect(this, SIGNAL(said(QString,QString)), SLOT(say(QString,QString)), Qt::QueuedConnection);
   connect(this, SIGNAL(showTextRequested(QString)), SLOT(showText(QString)), Qt::QueuedConnection);
 
+  connect(this, SIGNAL(logged(QString)), SLOT(log(QString)), Qt::QueuedConnection);
+
   // Annotation graphics view
   connect(this, SIGNAL(addAndShowAnnotationRequested(Annotation)),
           annotationView_, SLOT(addAndShowAnnotation(Annotation)),
@@ -511,10 +516,35 @@ MainWindow::createConnections()
           annotationView_, SLOT(showAnnotationOnce(Annotation)),
           Qt::QueuedConnection);
 
-  // Tokens:
+  // Tokens
   connect(tokenView_, SIGNAL(aliasSubmitted(Alias)), SLOT(submitAlias(Alias)));
   connect(tokenView_, SIGNAL(tokenBlessedWithId(qint64)), SLOT(blessTokenWithId(qint64)));
   connect(tokenView_, SIGNAL(tokenCursedWithId(qint64)), SLOT(curseTokenWithId(qint64)));
+
+  // Cast
+  connect(annotationView_, SIGNAL(userBlessedWithId(qint64)), SLOT(blessUserWithId(qint64)));
+  connect(annotationView_, SIGNAL(userCursedWithId(qint64)), SLOT(curseUserWithId(qint64)));
+  connect(annotationView_, SIGNAL(userBlockedWithId(qint64)), SLOT(blockUserWithId(qint64)));
+
+  connect(annotationView_, SIGNAL(userBlockedWithAlias(QString)), annotationFilter_, SLOT(addBlockedUserAlias(QString)));
+
+  connect(annotationView_, SIGNAL(annotationBlessedWithId(qint64)), SLOT(blessAnnotationWithId(qint64)));
+  connect(annotationView_, SIGNAL(annotationCursedWithId(qint64)), SLOT(curseAnnotationWithId(qint64)));
+  connect(annotationView_, SIGNAL(annotationBlockedWithId(qint64)), SLOT(blockAnnotationWithId(qint64)));
+
+  connect(annotationView_, SIGNAL(annotationBlockedWithText(QString)), annotationFilter_, SLOT(addBlockedText(QString)));
+
+  connect(annotationBrowser_, SIGNAL(userBlessedWithId(qint64)), SLOT(blessUserWithId(qint64)));
+  connect(annotationBrowser_, SIGNAL(userCursedWithId(qint64)), SLOT(curseUserWithId(qint64)));
+  connect(annotationBrowser_, SIGNAL(userBlockedWithId(qint64)), SLOT(blockUserWithId(qint64)));
+
+  connect(annotationBrowser_, SIGNAL(userBlockedWithAlias(QString)), annotationFilter_, SLOT(addBlockedUserAlias(QString)));
+
+  connect(annotationBrowser_, SIGNAL(annotationBlessedWithId(qint64)), SLOT(blessAnnotationWithId(qint64)));
+  connect(annotationBrowser_, SIGNAL(annotationCursedWithId(qint64)), SLOT(curseAnnotationWithId(qint64)));
+  connect(annotationBrowser_, SIGNAL(annotationBlockedWithId(qint64)), SLOT(blockAnnotationWithId(qint64)));
+
+  connect(annotationBrowser_, SIGNAL(annotationBlockedWithText(QString)), annotationFilter_, SLOT(addBlockedText(QString)));
 
   // Data manager
   connect(dataManager_, SIGNAL(tokenChanged(Token)), tokenView_, SLOT(setToken(Token)));
@@ -662,6 +692,8 @@ MainWindow::createConnections()
   connect(client_, SIGNAL(authorizationError()), logger_, SLOT(logClientAgentAuthorizationError()));
 #endif // USE_MODULE_CLIENTAGENT
 
+  connect(annotationView_, SIGNAL(annotationPosChanged(qint64)), annotationBrowser_, SLOT(setAnnotationPos(qint64)));
+
 #ifdef USE_MODE_SIGNAL
   connect(signalView_, SIGNAL(hookSelected(ulong,ProcessInfo)), SLOT(openProcessHook(ulong,ProcessInfo)));
   connect(recentMessageView_, SIGNAL(hookSelected(ulong)), SLOT(openProcessHook(ulong)));
@@ -669,10 +701,15 @@ MainWindow::createConnections()
   connect(messageHandler_, SIGNAL(messageReceivedWithId(qint64)), annotationView_, SLOT(showAnnotationsAtPos(qint64)));
   connect(messageHandler_, SIGNAL(messageReceivedWithText(QString)), SLOT(translate(QString)));
 
+  connect(messageHandler_, SIGNAL(messageReceivedWithId(qint64)), annotationBrowser_, SLOT(setAnnotationPos(qint64)));
+
   // Ensure backlogView enabled in signal mode.
   connect(signalView_, SIGNAL(hookSelected(ulong,ProcessInfo)), SLOT(backlogView()));
 #endif // USE_MODE_SIGNAL
   //connect(player_, SIGNAL(opening()), SLOT(backlogView()));
+
+  // - Close
+  //connect(this, SIGNAL(closing()), db_, SLOT(dispose));
 }
 
 void
@@ -716,6 +753,8 @@ MainWindow::createActions()
   MAKE_ACTION(stopAct_,         STOP,           hub_,           SLOT(stop()))
   MAKE_ACTION(replayAct_,       REPLAY,         this,           SLOT(replay()))
   MAKE_ACTION(snapshotAct_,     SNAPSHOT,       this,           SLOT(snapshot()))
+  MAKE_ACTION(checkInternetConnectionAct_,     CHECKINTERNET,   this, SLOT(checkInternetConnection()))
+  MAKE_ACTION(deleteCachesAct_, DELETECACHE,   this, SLOT(deleteCaches()))
   MAKE_TOGGLE(toggleFullScreenModeAct_, FULLSCREEN, hub_,       SLOT(setFullScreenWindowMode(bool)))
   MAKE_TOGGLE(toggleMenuBarVisibleAct_, SHOWMENUBAR, menuBar(), SLOT(setVisible(bool)))
   MAKE_TOGGLE(toggleEmbeddedModeAct_, EMBED,    hub_,           SLOT(setEmbeddedPlayerMode(bool)))
@@ -724,9 +763,11 @@ MainWindow::createActions()
   MAKE_TOGGLE(toggleSyncModeAct_, SYNC,         hub_,           SLOT(setSyncPlayMode(bool)))
   MAKE_TOGGLE(toggleAnnotationVisibleAct_, SHOWANNOT, annotationView_, SLOT(setVisible(bool)))
   MAKE_TOGGLE(toggleSubtitleVisibleAct_, SHOWSUBTITLE, player_, SLOT(setSubtitleVisible(bool)))
+  MAKE_TOGGLE(toggleSubtitleAnnotationVisibleAct_, SUBANNOT, annotationView_, SLOT(setSubtitleVisible(bool)))
+  MAKE_TOGGLE(toggleNonSubtitleAnnotationVisibleAct_, NONSUBANNOT, annotationView_, SLOT(setNonSubtitleVisible(bool)))
   MAKE_TOGGLE(toggleWindowOnTopAct_, WINDOWSTAYSONTOP, this, SLOT(setWindowOnTop(bool)))
   MAKE_TOGGLE(toggleUserAnonymousAct_,  ANONYMOUS,       this,         SLOT(setUserAnonymous(bool)))
-  //MAKE_TOGGLE(toggleUserPanelVisibleAct_, USER,          this,         SLOT(setUserPanelVisible(bool)))
+  MAKE_TOGGLE(toggleUserViewVisibleAct_, USER,          this,         SLOT(setUserViewVisible(bool)))
   MAKE_TOGGLE(toggleBlacklistViewVisibleAct_, BLACKLIST,   this,    SLOT(setBlacklistViewVisible(bool)))
   MAKE_TOGGLE(toggleBacklogViewVisibleAct_, BACKLOG,   this,    SLOT(setBacklogViewVisible(bool)))
   MAKE_TOGGLE(toggleLoginDialogVisibleAct_, LOGINDIALOG, this,         SLOT(setLoginDialogVisible(bool)))
@@ -854,6 +895,20 @@ MainWindow::createActions()
   quitAct_->setShortcuts(QKeySequence::Quit);
 
 #undef MAKE_ACTION
+
+  // Shortcuts
+  QShortcut *openShortcut = new QShortcut(QKeySequence::Open, this);
+  connect(openShortcut, SIGNAL(activated()), SLOT(open()));
+
+  QShortcut *helpShortcut = new QShortcut(QKeySequence::HelpContents, this);
+  connect(helpShortcut, SIGNAL(activated()), SLOT(help()));
+
+  QShortcut *e = new QShortcut(QKeySequence("F2"), this);
+  connect(e, SIGNAL(activated()), hub_, SLOT(toggleEmbeddedPlayerMode()));
+  QShortcut *m = new QShortcut(QKeySequence("F3"), this);
+  connect(m, SIGNAL(activated()), hub_, SLOT(toggleMiniPlayerMode()));
+  QShortcut *f = new QShortcut(QKeySequence("F11"), this);
+  connect(f, SIGNAL(activated()), hub_, SLOT(toggleFullScreenWindowMode()));
 }
 
 void
@@ -1041,13 +1096,38 @@ MainWindow::createMenus()
     UiStyle::globalInstance()->setContextMenuStyle(subtitleMenu_, true); // persistent = true
   }
 
+  playMenu_ = new QMenu(this); {
+    playMenu_->setTitle(tr("Play"));
+    playMenu_->setToolTip(tr("Play menu"));
+    UiStyle::globalInstance()->setContextMenuStyle(playMenu_, true); // persistent = true
+  }
+
+  audioTrackMenu_ = new QMenu(this); {
+    audioTrackMenu_->setIcon(QIcon(RC_IMAGE_AUDIOTRACK));
+    audioTrackMenu_->setTitle(TR(T_MENUTEXT_AUDIOTRACK));
+    audioTrackMenu_->setToolTip(TR(T_TOOLTIP_AUDIOTRACK));
+    UiStyle::globalInstance()->setContextMenuStyle(audioTrackMenu_, true); // persistent = true
+  }
+
+  annotationSubtitleMenu_ = new QMenu(this); {
+    annotationSubtitleMenu_->setIcon(QIcon(RC_IMAGE_ANNOTSUBTITLE));
+    annotationSubtitleMenu_->setTitle(TR(T_MENUTEXT_ANNOTSUBTITLE));
+    annotationSubtitleMenu_->setToolTip(TR(T_TOOLTIP_ANNOTSUBTITLE));
+    UiStyle::globalInstance()->setContextMenuStyle(annotationSubtitleMenu_, true); // persistent = true
+
+    annotationSubtitleMenu_->addAction(toggleSubtitleAnnotationVisibleAct_);
+    annotationSubtitleMenu_->addSeparator();
+    annotationSubtitleMenu_->addAction(toggleNonSubtitleAnnotationVisibleAct_);
+    annotationSubtitleMenu_->addAction(toggleSubtitleOnTopAct_);
+    annotationSubtitleMenu_->addMenu(subtitleStyleMenu_);
+  }
+
   sectionMenu_ = new QMenu(this); {
     sectionMenu_->setIcon(QIcon(RC_IMAGE_SECTION));
     sectionMenu_->setTitle(TR(T_MENUTEXT_SECTION));
     sectionMenu_->setToolTip(TR(T_TOOLTIP_SECTION));
     UiStyle::globalInstance()->setContextMenuStyle(sectionMenu_, true); // persistent = true
   }
-
 
 //#ifndef Q_WS_WIN
   // Use menuBar_ instead MainWindow::menuBar() to enable customization.
@@ -1610,6 +1690,11 @@ void
 MainWindow::invalidateMediaAndPlay(bool async)
 {
   DOUT("enter: async =" << async);
+  if (disposed_) {
+    DOUT("exit: returned from disposed branch");
+    return;
+  }
+
   if (player_->hasMedia()) {
     if (async &&
         recentDigest_.isEmpty() &&
@@ -1733,6 +1818,8 @@ MainWindow::stop()
   case SignalHub::SignalTokenMode:
 #ifdef USE_MODE_SIGNAL
     messageHandler_->setActive(false);
+    log(": " + tr("detaching all processes ..."));
+    QTH->detachAllProcesses();
 #endif // USE_MODE_SIGNAL
     hub_->setNormalPlayerMode();
     break;
@@ -2131,6 +2218,25 @@ MainWindow::setLoginDialogVisible(bool visible)
 }
 
 void
+MainWindow::setUserViewVisible(bool visible)
+{
+  if (!userView_) {
+    userView_ = new UserView(this);
+    userView_->setUser(server_->user());
+
+    connect(this, SIGNAL(userChanged(User)), userView_, SLOT(setUser(User)));
+  }
+  //if (visible) {
+  //  loginDialog_->setUserName(server_->user().name());
+  //  loginDialog_->setPassword(server_->user().password());
+  //  loginDialog_->show();
+  //  loginDialog_->raise();
+  //} else
+  //  loginDialog_->hide();
+  userView_->setVisible(visible);
+}
+
+void
 MainWindow::setBlacklistViewVisible(bool visible)
 {
   if (!blacklistView_)
@@ -2300,6 +2406,10 @@ void
 MainWindow::submitAlias(const Alias &input, bool async)
 {
   DOUT("enter: async =" << async << ", text =" << input.text());
+  if (disposed_) {
+    DOUT("exit: returned from disposed branch");
+    return;
+  }
   if (async) {
     log(tr("connecting server to submit alias ..."));
     QThreadPool::globalInstance()->start(new task_::submitAlias(input, this));
@@ -2387,6 +2497,10 @@ void
 MainWindow::setToken(const QString &input, bool async)
 {
   DOUT("enter: async =" << async << ", path =" << input);
+  if (disposed_) {
+    DOUT("exit: returned from disposed branch");
+    return;
+  }
   if (async) {
     log(tr("connecting server to query media/game token ..."));
     QThreadPool::globalInstance()->start(new task_::setToken(input, this));
@@ -2446,10 +2560,10 @@ MainWindow::setToken(const QString &input, bool async)
 
   if (hub_->isMediaTokenMode() && player_->hasMedia()) {
     int tid = 0;
-    if (player_->hasPlaylist())
-      tid = player_->trackNumber();
-    else if (player_->hasTitles())
+    if (player_->hasTitles())
       tid = player_->titleId();
+    //else if (player_->hasPlaylist())
+    //  tid = player_->trackNumber();
 
     if (tid < 0)
       tid = 0;
@@ -2567,6 +2681,10 @@ MainWindow::showTextAsSubtitle(const QString &input, bool isSigned)
 void MainWindow::submitLiveText(const QString &text, bool async)
 {
   DOUT("enter: async =" << async << ", text =" << text);
+  if (disposed_) {
+    DOUT("exit: returned from disposed branch");
+    return;
+  }
   if (!server_->isConnected() || !server_->isAuthorized()) {
     showText(text, true); // isSigned = true
     DOUT("exit: returned from showText branch");
@@ -2626,6 +2744,10 @@ void
 MainWindow::submitText(const QString &text, bool async)
 {
   DOUT("enter: async =" << async << ", text =" << text);
+  if (disposed_) {
+    DOUT("exit: returned from disposed branch");
+    return;
+  }
   if (!server_->isAuthorized() ||
       !dataManager_->token().hasDigest() ||
       hub_->isMediaTokenMode() && !player_->hasMedia()
@@ -2742,6 +2864,10 @@ void
 MainWindow::chat(const QString &input, bool async)
 {
   DOUT("enter: async =" << async << ", text =" << input);
+  if (disposed_) {
+    DOUT("exit: returned from disposed branch");
+    return;
+  }
   QString text = input.trimmed();
   if (text.isEmpty()) {
     DOUT("exit: empty text skipped");
@@ -2794,9 +2920,16 @@ MainWindow::say(const QString &text, const QString &color)
     return;
   }
 
-  gConsole() << core_html_style(text, "color:" + color) + core_html_br();
+  if (color.isEmpty())
+    log(text);
+  else
+    log(core_html_style(text, "color:" + color) + core_html_br());
   DOUT("exit");
 }
+
+void
+MainWindow::log(const QString &text)
+{ Logger::log(text); }
 
 // - Events -
 
@@ -3027,6 +3160,18 @@ MainWindow::contextMenuEvent(QContextMenuEvent *event)
 }
 
 void
+MainWindow::invalidateAnnotationSubtitleMenu()
+{
+  toggleSubtitleAnnotationVisibleAct_->setChecked(annotationView_->isSubtitleVisible());
+  toggleNonSubtitleAnnotationVisibleAct_->setChecked(annotationView_->isNonSubtitleVisible());
+  toggleSubtitleOnTopAct_->setChecked(isSubtitleOnTop());
+
+  bool t = toggleSubtitleAnnotationVisibleAct_->isChecked();
+  toggleSubtitleOnTopAct_->setEnabled(t);
+  subtitleStyleMenu_->setEnabled(t);
+}
+
+void
 MainWindow::invalidateContextMenu()
 {
   //DOUT("enter");
@@ -3042,7 +3187,7 @@ MainWindow::invalidateContextMenu()
 
   // Live mode
   if (online &&
-      !hub_->isSignalTokenMode() && player_->isStopped()) {
+      (hub_->isLiveTokenMode() || hub_->isStopped() && player_->isStopped())) {
     toggleLiveModeAct_->setChecked(hub_->isLiveTokenMode());
     contextMenu_->addAction(toggleLiveModeAct_);
 
@@ -3146,9 +3291,10 @@ MainWindow::invalidateContextMenu()
      }
 #endif // USE_MODE_SIGNAL
 
-    // Subtitle menu
     if (hub_->isMediaTokenMode() && player_->hasMedia()) {
       contextMenu_->addSeparator();
+
+      // Subtitle menu
 
       subtitleMenu_->clear();
       if (player_->hasSubtitles()) {
@@ -3167,7 +3313,7 @@ MainWindow::invalidateContextMenu()
         int id = 0;
         foreach (QString subtitle, l) {
           if (subtitle.isEmpty())
-            subtitle = TR(T_SUBTITLE);
+            subtitle = TR(T_SUBTITLE) + " " + QString::number(id);
           BOOST_AUTO(a, new Core::Gui::ActionWithId(id, subtitle, subtitleMenu_));
           contextMenuActions_.append(a);
           if (id == player_->subtitleId()) {
@@ -3187,50 +3333,72 @@ MainWindow::invalidateContextMenu()
       }
       subtitleMenu_->addAction(openSubtitleAct_);
       contextMenu_->addMenu(subtitleMenu_);
+
+      // Audio track menu
+      if (player_->hasAudioTracks()) {
+        audioTrackMenu_->clear();
+
+        QStringList l = player_->audioTrackDescriptions();
+        int id = 0;
+        foreach (QString name, l) {
+          if (name.isEmpty())
+            name = TR(T_AUDIOTRACK) + " " + QString::number(id);
+          BOOST_AUTO(a, new Core::Gui::ActionWithId(id, name, audioTrackMenu_));
+          contextMenuActions_.append(a);
+          if (id == player_->audioTrackId()) {
+#ifdef Q_WS_WIN
+            a->setIcon(QIcon(RC_IMAGE_CURRENTTRACK));
+#else
+            a->setCheckable(true);
+            a->setChecked(true);
+#endif // Q_WS_WIN
+          }
+          connect(a, SIGNAL(triggeredWithId(int)), player_, SLOT(setAudioTrackId(int)));
+          audioTrackMenu_->addAction(a);
+          id++;
+        }
+
+        contextMenu_->addMenu(audioTrackMenu_);
+      }
     }
   }
 
+  // Basic control
+  contextMenu_->addSeparator();
   if (!hub_->isMediaTokenMode() || player_->hasMedia()) {
-    // Basic control
-    contextMenu_->addSeparator();
+    playMenu_->clear();
 
     if (!isPlaying())
-      contextMenu_->addAction(playAct_);
+      playMenu_->addAction(playAct_);
     else
-      contextMenu_->addAction(pauseAct_);
+      playMenu_->addAction(pauseAct_);
 
-    // jichi 11/18/2011: Removed from context menu only in order to save space ....
+    // jichi 11/18/2011: Removed from play menu only in order to save space ....
     //if (hub_->isMediaTokenMode())
-    //  contextMenu_->addAction(nextFrameAct_);
+    //  playMenu_->addAction(nextFrameAct_);
 
     if (!hub_->isMediaTokenMode() && !hub_->isStopped() ||
         hub_->isMediaTokenMode() && !player_->isStopped())
-    contextMenu_->addAction(stopAct_);
+    playMenu_->addAction(stopAct_);
 
     if (hub_->isMediaTokenMode()) {
-      contextMenu_->addAction(replayAct_);
-
-      contextMenu_->addAction(previousAct_);
-
-      contextMenu_->addAction(nextAct_);
-
-      contextMenu_->addAction(toggleAutoPlayNextAct_);
+      playMenu_->addAction(replayAct_);
+      playMenu_->addAction(previousAct_);
+      playMenu_->addAction(nextAct_);
+      playMenu_->addAction(toggleAutoPlayNextAct_);
     }
 
-    if (!hub_->isMediaTokenMode() || !player_->isStopped())
-      contextMenu_->addAction(snapshotAct_);
+    contextMenu_->addMenu(playMenu_);
   }
-
-  // Forward/backward
   if (hub_->isMediaTokenMode() && player_->hasMedia()) {
-    contextMenu_->addSeparator();
-
     contextMenu_->addMenu(backwardMenu_);
     contextMenu_->addMenu(forwardMenu_);
 
     toggleSeekDialogVisibleAct_->setChecked(seekDialog_ && seekDialog_->isVisible());
     contextMenu_->addAction(toggleSeekDialogVisibleAct_);
   }
+  if (!hub_->isMediaTokenMode() || !player_->isStopped())
+    contextMenu_->addAction(snapshotAct_);
 
   // Annotation
   {
@@ -3242,24 +3410,26 @@ MainWindow::invalidateContextMenu()
     toggleAnnotationVisibleAct_->setChecked(annotationView_ && annotationView_->isVisible());
     contextMenu_->addAction(toggleAnnotationVisibleAct_ );
 
+    bool t = toggleAnnotationVisibleAct_->isChecked();
+
+    toggleBlacklistViewVisibleAct_->setEnabled(t);
     toggleBlacklistViewVisibleAct_->setChecked(blacklistView_ && blacklistView_->isVisible());
     contextMenu_->addAction(toggleBlacklistViewVisibleAct_);
 
-    if (annotationFilter_->isEnabled())
+    if (annotationFilter_->isEnabled()) {
+      annotationLanguageMenu_->setEnabled(t);
       contextMenu_->addMenu(annotationLanguageMenu_);
+    }
 
-    // Subtitle menu
-    if (hub_->isSignalTokenMode() && online) {
-      contextMenu_->addSeparator();
+    if (t)
+      invalidateAnnotationSubtitleMenu();
+    annotationSubtitleMenu_->setEnabled(t);
+    contextMenu_->addMenu(annotationSubtitleMenu_);
+
+    if (hub_->isSignalTokenMode()) {
+      toggleTranslateAct_->setEnabled(t && online);
       contextMenu_->addAction(toggleTranslateAct_);
     }
-    toggleSubtitleOnTopAct_->setChecked(isSubtitleOnTop());
-    contextMenu_->addAction(toggleSubtitleOnTopAct_);
-
-    contextMenu_->addMenu(subtitleStyleMenu_);
-
-    toggleSubtitleOnTopAct_->setChecked(isSubtitleOnTop());
-    contextMenu_->addAction(toggleSubtitleOnTopAct_);
   }
 
 //  if (ALPHA)
@@ -3389,12 +3559,17 @@ MainWindow::invalidateContextMenu()
     contextMenu_->addSeparator();
 
     //contextMenu_->addAction(showMinimizedAct_);
+    contextMenu_->addAction(checkInternetConnectionAct_);
+    //if (hub_->isStopped() && player_->isStopped())
+    //  contextMenu_->addAction(deleteCachesAct_);
 
     toggleWindowOnTopAct_->setChecked(isWindowOnTop());
     contextMenu_->addAction(toggleWindowOnTopAct_);
 
+#ifndef Q_WS_MAC
     toggleMenuBarVisibleAct_->setChecked(menuBar()->isVisible());
     contextMenu_->addAction(toggleMenuBarVisibleAct_);
+#endif // Q_WS_MAC
 
     contextMenu_->addMenu(helpContextMenu_);
     contextMenu_->addAction(quitAct_);
@@ -3416,13 +3591,13 @@ MainWindow::invalidateUserMenu()
     userMenu_->addMenu(userLanguageMenu_);
 
     userMenu_->addSeparator();
+    userMenu_->addAction(toggleUserViewVisibleAct_);
     userMenu_->addAction(logoutAct_);
   }
 
+  toggleUserViewVisibleAct_->setChecked(userView_ && userView_->isVisible());
+
   //if (ALPHA) {
-  //  //toggleUserPanelVisibleAct_->setChecked(loginDialog_->isVisible());
-  //  //userMenu_->addAction(toggleUserPanelVisibleAct_);
-//
   //  if (server_->isConnected())
   //    userMenu_->addAction(disconnectAct_);
   //  else
@@ -3640,6 +3815,8 @@ MainWindow::closeEvent(QCloseEvent *event)
   if (tray_)
     tray_->hide();
 
+  dataServer_->dispose();
+
   // Save settings
   Settings *settings = Settings::globalInstance();
 
@@ -3655,6 +3832,8 @@ MainWindow::closeEvent(QCloseEvent *event)
   settings->setMenuBarVisible(menuBar()->isVisible());
 
   settings->setAnnotationFilterEnabled(annotationFilter_->isEnabled());
+  settings->setBlockedKeywords(annotationFilter_->blockedTexts());
+  settings->setBlockedUserNames(annotationFilter_->blockedUserAliases());
 
   settings->setSubtitleColor(subtitleColor());
 
@@ -3775,14 +3954,18 @@ void
 MainWindow::blessTokenWithId(qint64 id, bool async)
 {
   DOUT("enter: async =" << async);
+  if (disposed_) {
+    DOUT("exit: returned from disposed branch");
+    return;
+  }
   if (!id) {
-    warn("invalid cast id");
+    warn(tr("invalid cast id"));
     DOUT("exit from invalid parameter branch");
     return;
   }
 
   if (!server_->isConnected() || !server_->isAuthorized()) {
-    warn("cannot perform cast when offline");
+    warn(tr("cannot perform cast when offline"));
     DOUT("exit from offline branch");
     return;
   }
@@ -3800,13 +3983,13 @@ MainWindow::blessTokenWithId(qint64 id, bool async)
 
   bool ok = server_->blessTokenWithId(id);
   if (ok) {
-    log("token blessed");
+    log(tr("token blessed"));
     if (dataManager_->token().id() == id) {
       dataManager_->token().blessedCount()++;
       //dataManager_->invalidateToken();
     }
   } else
-    warn("failed to bless token");
+    warn(tr("failed to bless token"));
 
   DOUT("inetMutex unlocking");
   inetMutex_.unlock();
@@ -3819,13 +4002,13 @@ MainWindow::curseTokenWithId(qint64 id, bool async)
 {
   DOUT("enter: async =" << async);
   if (!id) {
-    warn("invalid cast id");
+    warn(tr("invalid cast id"));
     DOUT("exit from invalid parameter branch");
     return;
   }
 
   if (!server_->isConnected() || !server_->isAuthorized()) {
-    warn("cannot perform cast when offline");
+    warn(tr("cannot perform cast when offline"));
     DOUT("exit from offline branch");
     return;
   }
@@ -3843,13 +4026,13 @@ MainWindow::curseTokenWithId(qint64 id, bool async)
 
   bool ok = server_->curseTokenWithId(id);
   if (ok) {
-    log("token curseed");
+    log(tr("token cursed"));
     if (dataManager_->token().id() == id) {
       dataManager_->token().cursedCount()++;
       //dataManager_->invalidateToken();
     }
   } else
-    warn("failed to curse token");
+    warn(tr("failed to curse token"));
 
   DOUT("inetMutex unlocking");
   inetMutex_.unlock();
@@ -3858,56 +4041,33 @@ MainWindow::curseTokenWithId(qint64 id, bool async)
 }
 
 void
-MainWindow::blessAnnotationWithId(qint64 tid, bool async)
-{
-  Q_UNUSED(tid);
-  Q_UNUSED(async);
-  // TODO
-}
-void
-MainWindow::curseAnnotationWithId(qint64 tid, bool async)
-{
-  Q_UNUSED(tid);
-  Q_UNUSED(async);
-  // TODO
-}
-void
-MainWindow::blockAnnotationWithId(qint64 tid, bool async)
-{
-  Q_UNUSED(tid);
-  Q_UNUSED(async);
-  // TODO
-}
-
-void
-MainWindow::blessAliasWithId(qint64 tid, bool async)
-{
-  Q_UNUSED(tid);
-  Q_UNUSED(async);
-  // TODO
-}
-void
-MainWindow::curseAliasWithId(qint64 tid, bool async)
-{
-  Q_UNUSED(tid);
-  Q_UNUSED(async);
-  // TODO
-}
-void
-MainWindow::blockAliasWithId(qint64 tid, bool async)
-{
-  Q_UNUSED(tid);
-  Q_UNUSED(async);
-  // TODO
-}
-
-void
-MainWindow::logout(bool async)
+MainWindow::blessUserWithId(qint64 id, bool async)
 {
   DOUT("enter: async =" << async);
+  if (disposed_) {
+    DOUT("exit: returned from disposed branch");
+    return;
+  }
+  if (!id) {
+    warn(tr("invalid cast id"));
+    DOUT("exit from invalid parameter branch");
+    return;
+  }
+
+  if (!server_->isConnected() || !server_->isAuthorized()) {
+    warn(tr("cannot perform cast when offline"));
+    DOUT("exit from offline branch");
+    return;
+  }
+  if (id == server_->user().id()) {
+    warn(tr("cannot perform cast to yourself"));
+    DOUT("exit from self branch");
+    return;
+  }
+
   if (async) {
-    log(tr("connecting server to logout ..."));
-    QThreadPool::globalInstance()->start(new task_::logout(this));
+    log(tr("blessing user ..."));
+    QThreadPool::globalInstance()->start(new task_::blessUserWithId(id, this));
     DOUT("exit: returned from async branch");
     return;
   }
@@ -3916,12 +4076,181 @@ MainWindow::logout(bool async)
   inetMutex_.lock();
   DOUT("inetMutex locked");
 
-  annotationBrowser_->setUserId(0);
-  server_->logout();
+  server_->blessUserWithId(id);
+  log(tr("user blessed"));
 
   DOUT("inetMutex unlocking");
   inetMutex_.unlock();
   DOUT("inetMutex unlocked");
+  DOUT("exit: async =" << async);
+}
+
+void
+MainWindow::curseUserWithId(qint64 id, bool async)
+{
+  DOUT("enter: async =" << async);
+  if (disposed_) {
+    DOUT("exit: returned from disposed branch");
+    return;
+  }
+  if (!id) {
+    warn(tr("invalid cast id"));
+    DOUT("exit from invalid parameter branch");
+    return;
+  }
+
+  if (!server_->isConnected() || !server_->isAuthorized()) {
+    warn(tr("cannot perform cast when offline"));
+    DOUT("exit from offline branch");
+    return;
+  }
+  if (id == server_->user().id()) {
+    warn(tr("cannot perform cast to yourself"));
+    DOUT("exit from self branch");
+    return;
+  }
+
+  if (async) {
+    log(tr("cursing user ..."));
+    QThreadPool::globalInstance()->start(new task_::curseUserWithId(id, this));
+    DOUT("exit: returned from async branch");
+    return;
+  }
+
+  DOUT("inetMutex locking");
+  inetMutex_.lock();
+  DOUT("inetMutex locked");
+
+  server_->curseUserWithId(id);
+  log(tr("user cursed"));
+
+  DOUT("inetMutex unlocking");
+  inetMutex_.unlock();
+  DOUT("inetMutex unlocked");
+  DOUT("exit: async =" << async);
+}
+
+void
+MainWindow::blockUserWithId(qint64 id, bool async)
+{
+  DOUT("enter: async =" << async);
+  if (disposed_) {
+    DOUT("exit: returned from disposed branch");
+    return;
+  }
+  if (!id) {
+    warn(tr("invalid cast id"));
+    DOUT("exit from invalid parameter branch");
+    return;
+  }
+
+  if (!server_->isConnected() || !server_->isAuthorized()) {
+    warn(tr("cannot perform cast when offline"));
+    DOUT("exit from offline branch");
+    return;
+  }
+  if (id == server_->user().id()) {
+    warn(tr("cannot perform cast to yourself"));
+    DOUT("exit from self branch");
+    return;
+  }
+
+  if (async) {
+    log(tr("blocking user ..."));
+    QThreadPool::globalInstance()->start(new task_::blockUserWithId(id, this));
+    DOUT("exit: returned from async branch");
+    return;
+  }
+
+  DOUT("inetMutex locking");
+  inetMutex_.lock();
+  DOUT("inetMutex locked");
+
+  server_->blockUserWithId(id);
+  log(tr("user blocked"));
+
+  DOUT("inetMutex unlocking");
+  inetMutex_.unlock();
+  DOUT("inetMutex unlocked");
+  DOUT("exit: async =" << async);
+}
+
+#define CAST(_cast, _annot) \
+  void \
+  MainWindow::_cast##_annot##WithId(qint64 id, bool async) \
+  { \
+    DOUT("enter: async =" << async); \
+    if (disposed_) { \
+      DOUT("exit: returned from disposed branch"); \
+      return; \
+    } \
+    if (!id) { \
+      warn(tr("invalid cast id")); \
+      DOUT("exit from invalid parameter branch"); \
+      return; \
+    } \
+\
+    if (!server_->isConnected() || !server_->isAuthorized()) { \
+      warn(tr("cannot perform cast when offline")); \
+      DOUT("exit from offline branch"); \
+      return; \
+    } \
+\
+    if (async) { \
+      log(tr("casting spell to target ...")); \
+      QThreadPool::globalInstance()->start(new task_::blockUserWithId(id, this)); \
+      DOUT("exit: returned from async branch"); \
+      return; \
+    } \
+\
+    DOUT("inetMutex locking"); \
+    inetMutex_.lock(); \
+    DOUT("inetMutex locked"); \
+\
+    server_->_cast##_annot##WithId(id); \
+\
+    DOUT("inetMutex unlocking"); \
+    inetMutex_.unlock(); \
+    DOUT("inetMutex unlocked"); \
+    DOUT("exit: async =" << async); \
+  }
+
+ CAST(bless, Annotation)
+ CAST(block, Annotation)
+ CAST(curse, Annotation)
+ CAST(bless, Alias)
+ CAST(block, Alias)
+ CAST(curse, Alias)
+#undef CAST
+
+void
+MainWindow::logout(bool async)
+{
+  DOUT("enter: async =" << async);
+  if (disposed_) {
+    DOUT("exit: returned from disposed branch");
+    return;
+  }
+  Q_UNUSED(async);
+  //if (async) {
+  //  log(tr("connecting server to logout ..."));
+  //  QThreadPool::globalInstance()->start(new task_logout(this));
+  //  DOUT("exit: returned from async branch");
+  //  return;
+  //}
+
+  //DOUT("inetMutex locking");
+  //inetMutex_.lock();
+  //DOUT("inetMutex locked");
+
+  annotationBrowser_->setUserId(0);
+  server_->logout();
+
+  //DOUT("inetMutex unlocking");
+  //inetMutex_.unlock();
+  //DOUT("inetMutex unlocked");
+
+  emit userChanged(User());
 
   Settings *s = Settings::globalInstance();
   //s->setUserName(QString());
@@ -3931,9 +4260,52 @@ MainWindow::logout(bool async)
 }
 
 void
+MainWindow::checkInternetConnection(bool async)
+{
+  DOUT("enter: async =" << async << "connect =" << server_->isConnected());
+  if (disposed_) {
+    DOUT("exit: returned from disposed branch");
+    return;
+  }
+  if (async) {
+    log(tr("connecting to server ..."));
+    QThreadPool::globalInstance()->start(new task_::checkInternetConnection(this));
+    DOUT("exit: returned from async branch");
+    return;
+  }
+
+  DOUT("inetMutex locking");
+  inetMutex_.lock();
+  DOUT("inetMutex locked");
+
+  server_->updateConnected();
+
+  DOUT("inetMutex unlocking");
+  inetMutex_.unlock();
+  DOUT("inetMutex unlocked");
+
+  if (server_->isConnected())
+    emit logged(tr("server connected"));
+  else
+    emit logged(tr("server disconnected"));
+
+  DOUT("exit");
+}
+
+void
+MainWindow::deleteCaches()
+{
+  // TODO
+}
+
+void
 MainWindow::login(const QString &userName, const QString &encryptedPassword, bool async)
 {
   DOUT("enter: async =" << async << ", userName =" << userName);
+  if (disposed_) {
+    DOUT("exit: returned from disposed branch");
+    return;
+  }
   if (async) {
     QThreadPool::globalInstance()->start(new task_::login(userName, encryptedPassword, this));
     DOUT("exit: returned from async branch");
@@ -3946,8 +4318,12 @@ MainWindow::login(const QString &userName, const QString &encryptedPassword, boo
 
   Settings *settings = Settings::globalInstance();
 
-  // TODO: Multithreading here, break this function into two parts
   server_->updateConnected();
+  if (disposed_) {
+    DOUT("inetMutex locking"); inetMutex_.lock(); DOUT("inetMutex locked");
+    DOUT("exit: returned from disposed branch");
+    return;
+  }
   if (!server_->isConnected() && cache_->isValid()) {
     // login from cache
     log(TR(T_MESSAGE_TRY_LOGINFROMCACHE));
@@ -3974,10 +4350,20 @@ MainWindow::login(const QString &userName, const QString &encryptedPassword, boo
   settings->setPassword(encryptedPassword);
 
   server_->login(userName, encryptedPassword);
+  if (disposed_) {
+    DOUT("inetMutex locking"); inetMutex_.lock(); DOUT("inetMutex locked");
+    DOUT("exit: returned from disposed branch");
+    return;
+  }
 
   bool online = server_->isConnected() && server_->isAuthorized();
   if (online) {
     liveInterval_ = server_->selectLiveTokenInterval();
+    if (disposed_) {
+      DOUT("inetMutex locking"); inetMutex_.lock(); DOUT("inetMutex locked");
+      DOUT("exit: returned from disposed branch");
+      return;
+    }
     if (liveInterval_ <= 0)
       liveInterval_ = DEFAULT_LIVE_INTERVAL;
 
@@ -3990,10 +4376,8 @@ MainWindow::login(const QString &userName, const QString &encryptedPassword, boo
     annotationView_->setUserId(uid);
     annotationBrowser_->setUserId(uid);
 
-    if (cache_->isValid()) {
-      cache_->deleteUserWithId(uid);
-      cache_->insertUser(server_->user());
-    }
+    if (cache_->isValid())
+      cache_->updateUser(server_->user());
 
     // Languages
     switch (server_->user().language()) {
@@ -4026,6 +4410,11 @@ MainWindow::login(const QString &userName, const QString &encryptedPassword, boo
       Settings::globalInstance()->setUpdateDate(today);
     }
 
+    if (disposed_) {
+      DOUT("inetMutex locking"); inetMutex_.lock(); DOUT("inetMutex locked");
+      DOUT("exit: returned from disposed branch");
+      return;
+    }
     dataServer_->commitQueue();
   }
 
@@ -4033,7 +4422,10 @@ MainWindow::login(const QString &userName, const QString &encryptedPassword, boo
   inetMutex_.unlock();
   DOUT("inetMutex unlocked");
 
-  if (online && settings->isLive() && !hub_->isSignalTokenMode() && !player_->hasMedia())
+  emit userChanged(server_->user());
+
+  if (!disposed_ && online &&
+      settings->isLive() && !hub_->isSignalTokenMode() && !player_->hasMedia())
     QTimer::singleShot(0, hub_, SLOT(setLiveTokenMode()));
 
   DOUT("exit");
@@ -4254,6 +4646,10 @@ void
 MainWindow::setUserAnonymous(bool t, bool async)
 {
   DOUT("enter: async =" << async);
+  if (disposed_) {
+    DOUT("exit: returned from disposed branch");
+    return;
+  }
 
   if (server_->isConnected() && server_->isAuthorized()) {
 
@@ -4291,6 +4687,10 @@ void
 MainWindow::setUserLanguage(int lang, bool async)
 {
   DOUT("enter: async =" << async);
+  if (disposed_) {
+    DOUT("exit: returned from disposed branch");
+    return;
+  }
 
   if (server_->isConnected() && server_->isAuthorized()) {
 
@@ -4976,6 +5376,10 @@ MainWindow::closeChannel()
 void
 MainWindow::updateLiveAnnotations(bool async)
 {
+  if (disposed_) {
+    DOUT("exit: returned from disposed branch");
+    return;
+  }
   if (!server_->isConnected() || !server_->isAuthorized())
     return;
   //DOUT("enter: async =" << async);

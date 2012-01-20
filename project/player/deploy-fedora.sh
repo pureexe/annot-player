@@ -3,7 +3,7 @@
 # See: http://fedoraproject.org/wiki/How_to_create_an_RPM_package
 
 ## environment
-VERSION=0.1.2.2
+VERSION=0.1.2.3
 
 PACKAGE_NAME=annot-player
 PACKAGE_VERSION=$VERSION
@@ -16,13 +16,14 @@ BUILD_SPEC="$BUILD_PREFIX/SPECS/$PACKAGE_NAME-$PACKAGE_VERSION.spec"
 
 ## copy
 
-rm -Rf "$BUILD_PREFIX"
-rpmdev-setuptree
+#rm -Rf "$BUILD_PREFIX"
+#rpmdev-setuptree
 test -e "$BUILD_PREFIX" || exit 1
 
 #cp -R "$SRC_PREFIX" "$BUILD_SRC" || exit 1
 cp -R "$SRC_PREFIX" "$BUILD_SRC"
 rm -f "$BUILD_SRC"/TODO
+rm -f "$BUILD_SRC"/*.user
 repair-permissions
 
 cd "$BUILD_PREFIX/SOURCES" || exit 1

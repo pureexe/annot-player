@@ -3,6 +3,7 @@
 :: Update TRANSLATIONS
 setlocal
 
-cd .. && lrelease player.pro
+cd ..
+lrelease player.pro
 
 pause

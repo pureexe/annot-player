@@ -153,6 +153,11 @@ public:
   int chapterCount() const;
   int chapterCountForTitleId(int tid) const;
 
+  int audioTrackCount() const;  ///< Number of audio tracks
+  int audioTrackId() const;     ///< Return current audio track
+  bool hasAudioTracks() const;
+  QStringList audioTrackDescriptions() const; ///< Return list of available audio tracks
+
   // - Slots -
 public slots:
 
@@ -215,6 +220,8 @@ public slots:
   void hideSubtitle();
   void setSubtitleVisible(bool visible);
 
+  void setAudioTrackId(int id);   ///< id of available subtitles
+
   void setChapterId(int cid);
   void setPreviousChapter();
   void setNextChapter();
@@ -258,6 +265,7 @@ signals:
   void encodingChanged();
   void errorEncountered();
   void subtitleChanged();
+  void audioTrackChanged();
   void endReached();
 
   // FIXME: This is not a good style to expose emit outside.

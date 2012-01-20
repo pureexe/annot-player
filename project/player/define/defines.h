@@ -155,8 +155,8 @@ enum { ALPHA = 0 };
 #else
   #define QTH           #error "Hook is not used"
 #endif // USE_WIN_HOOK
-#define QTH_INTERVAL    1000    // 1 second
-//#define QTH_INTERVAL    200     // 0.2 second
+//#define QTH_INTERVAL    1000    // 1 second
+#define QTH_INTERVAL    200     // 0.2 second
 
 // - DWM -
 #ifdef USE_WIN_DWM

@@ -36,6 +36,7 @@ AnnotationGraphicsView::AnnotationGraphicsView(
   QWidget *parent)
   : Base(parent), videoView_(view), fullScreenView_(0), trackedWindow_(0), editor_(0),
     hub_(hub), player_(player), filter_(0), active_(false), paused_(false), fullScreen_(false),
+    subtitleVisible_(true), nonSubtitleVisible_(true),
     currentTime_(-1), interval_(TIMER_INTERVAL), userId_(0), playbackEnabled_(true), subtitlePosition_(AP_Bottom)
 {
   Q_ASSERT(hub_);
@@ -356,7 +357,7 @@ AnnotationGraphicsView::setVisible(bool visible)
     _connect(player_, SIGNAL(paused()), this, SLOT(pause())); \
     _connect(player_, SIGNAL(playing()), this, SLOT(resume())); \
     _connect(player_, SIGNAL(stopped()), this, SLOT(resume())); \
-    _connect(player_, SIGNAL(stopped()), this, SLOT(invalidateAnnotationPos())); \
+    _connect(player_, SIGNAL(stopped()), this, SIGNAL(removeItemRequested())); \
   }
 
   SET_PLAYER_CONNECTIONS(connect)
@@ -370,7 +371,7 @@ AnnotationGraphicsView::setVisible(bool visible)
     _connect(hub_, SIGNAL(paused()), this, SLOT(pause())); \
     _connect(hub_, SIGNAL(played()), this, SLOT(resume())); \
     _connect(hub_, SIGNAL(stopped()), this, SLOT(resume())); \
-    _connect(hub_, SIGNAL(stopped()), this, SLOT(invalidateAnnotationPos())); \
+    _connect(hub_, SIGNAL(stopped()), this, SIGNAL(removeItemRequested())); \
   }
 
   SET_HUB_CONNECTIONS(connect)
@@ -469,6 +470,7 @@ AnnotationGraphicsView::invalidateAnnotations()
   filteredAnnotationIds_.clear();
 
   currentTime_ = -1;
+  emit annotationPosChanged(0);
 }
 
 void
@@ -498,7 +500,7 @@ AnnotationGraphicsView::addAnnotation(const Annotation &annot, qint64 delaysecs)
   //l->append(item);
   hash_[pos].append(annot);
 
-  if (isAnnotationFiltered(annot))
+  if (isAnnotationBlocked(annot))
     return;
 
   bool show = false;
@@ -524,13 +526,14 @@ AnnotationGraphicsView::addAndShowAnnotation(const Annotation &annot)
 void
 AnnotationGraphicsView::showAnnotation(const Annotation &annot)
 {
-  if (!isAnnotationFiltered(annot)) {
+  if (!isAnnotationBlocked(annot)) {
     AnnotationGraphicsItem *item = new AnnotationGraphicsItem(annot, hub_, this);
-    item->showMe();
+    if (!isItemBlocked(item))
+      item->showMe();
     if (item->isSubtitle())
       emit subtitleAdded(item->richText());
     else
-      emit annotationAdded(item->richText());
+      emit annotationAdded(item->richText()); // non-subtitle added
   }
 }
 
@@ -607,19 +610,20 @@ AnnotationGraphicsView::itemsCount(int from, int to) const
 void
 AnnotationGraphicsView::showAnnotationsAtPos(qint64 pos)
 {
-    // CHECKPOINT LIVE
   DOUT("enter: pos =" << pos);
+  emit removeItemRequested();
+
+  emit annotationPosChanged(pos);
+
   if (!hub_->isSignalTokenMode())
     pos = pos / 1000; // msecs => secs
-
-  emit annotationPosChanged();
 
   //if (annots_.contains(pos)) {
   //  DOUT("found annotations at pos =" << pos);
   //  QList<AnnotationGraphicsItem*> *l = annots_[pos];
   //  if (l && !l->empty())
   //    foreach (AnnotationGraphicsItem *item, *l)
-  //     if (item && !isItemFiltered(item))
+  //     if (item && !isItemBlocked(item))
   //       item->showMe();
   //}
   //
@@ -632,10 +636,6 @@ AnnotationGraphicsView::showAnnotationsAtPos(qint64 pos)
 
   DOUT("exit");
 }
-
-void
-AnnotationGraphicsView::invalidateAnnotationPos()
-{ emit annotationPosChanged(); }
 
 void
 AnnotationGraphicsView::updateAnnotationText(const QString &text)
@@ -696,13 +696,20 @@ AnnotationGraphicsView::annotationWithId(qint64 id) const
 }
 
 bool
-AnnotationGraphicsView::isAnnotationFiltered(const Annotation &a) const
+AnnotationGraphicsView::isAnnotationBlocked(const Annotation &a) const
 {
-  if (a.hasId() && filteredAnnotationIds_.contains(a.id()))
-    return true;
-  if (filter_)
-    return filter_->filter(a);
-  return false;
+  return
+      a.isHidden() ||
+      a.hasId() && filteredAnnotationIds_.contains(a.id()) ||
+      filter_ && filter_->filter(a);
+}
+
+bool
+AnnotationGraphicsView::isItemBlocked(const AnnotationGraphicsItem *item) const
+{
+  return !item ||
+      !subtitleVisible_ && item->isSubtitle() ||
+      !nonSubtitleVisible_ && !item->isSubtitle();
 }
 
 // - Tracking -

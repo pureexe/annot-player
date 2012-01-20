@@ -26,7 +26,11 @@ class DataServer : public QObject
   typedef Core::Cloud::AnnotationList AnnotationList;
 
 public:
-  DataServer(ServerAgent *server, Database *cache, Database *queue, QObject *parent = 0);
+  DataServer(ServerAgent *server, Database *cache, Database *queue, QObject *parent = 0)
+    : Base(parent), server_(server), cache_(cache), queue_(queue) { }
+
+public slots:
+  void dispose();
 
   // - Submission -
 public:

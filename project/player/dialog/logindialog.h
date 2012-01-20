@@ -34,7 +34,6 @@ public slots:
 
 protected slots:
   void login();
-  void cancel();
 
 protected:
   //virtual void mouseDoubleClickEvent(QMouseEvent *event);

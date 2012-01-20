@@ -27,17 +27,13 @@ class FilteredTableView : public QWidget
   typedef QWidget Base;
 
 public:
-  explicit FilteredTableView(QStandardItemModel *sourceModel, QWidget *parent = 0);
+  FilteredTableView(QStandardItemModel *sourceModel, QSortFilterProxyModel *proxyModel, QWidget *parent = 0);
 
 signals:
   void currentIndexChanged(QModelIndex index);
 
   // - Properties -
 public:
-  ///  Never return null
-  QSortFilterProxyModel *proxyModel()                   { return proxyModel_; }
-  const QSortFilterProxyModel *proxyModel() const       { return proxyModel_; }
-
   QModelIndex currentIndex() const;
   void removeCurrentRow();
 

@@ -13,6 +13,7 @@ QT_BEGIN_NAMESPACE
 class QAbstractItemModel;
 class QLabel;
 class QStandardItemModel;
+class QSortFilterProxyModel;
 class QAction;
 class QMenu;
 QT_END_NAMESPACE
@@ -135,6 +136,7 @@ private:
   ServerAgent *server_;
   //qint64 userId_;
   QStandardItemModel *sourceModel_; // for alias
+  QSortFilterProxyModel *proxyModel_;
   FilteredTableView *tableView_; // for alias
 
   QLabel *createDateLabel_,

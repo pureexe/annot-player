@@ -35,9 +35,13 @@
 #define ANNOTATION_FONT_JAPANESE        "MS Gothic"
 #define ANNOTATION_FONT_DEFAULT         ANNOTATION_FONT_JAPANESE
 
-#define ANNOTATION_STAY_TIME            4500
-#define ANNOTATION_STAY_TIME_SUBTITLE   6000
-#define ANNOTATION_FLY_TIME             2000 // the larger the slower
+#define ANNOTATION_STAY_TIME            2000
+#define ANNOTATION_STAY_TIME_SUBTITLE   3000
+#define ANNOTATION_STAY_TIME_MIN        1000
+#define ANNOTATION_STAY_TIME_MAX        10000
+#define ANNOTATION_FLY_TIME             6000 // the larger the slower
+#define ANNOTATION_FLY_TIME_MIN         1000
+#define ANNOTATION_FLY_TIME_MAX         10000
 
 #define ANNOTATION_OPACITY          0.9 // [0, 1]
 

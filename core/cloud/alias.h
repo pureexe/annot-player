@@ -60,7 +60,7 @@ namespace Core { namespace Cloud {
   public:
     QString tokenDigest() const             { return tokenDigest_; }
     void setTokenDigest(const QString &hex) { tokenDigest_ = hex; }
-    bool hasTokenDigest() const             { return !tokenDigest_.isNull(); }
+    bool hasTokenDigest() const             { return !tokenDigest_.isEmpty(); }
 
     ///  Used only in offline mode
   private: qint32 tokenDigestType_;
@@ -111,7 +111,7 @@ namespace Core { namespace Cloud {
   public:
     QString text() const                { return text_; }
     void setText(const QString &text)   { text_ = text; }
-    bool hasText() const                { return !text_.isNull(); }
+    bool hasText() const                { return !text_.isEmpty(); }
 
   private: qint64 updateTime_;
   public:
@@ -150,6 +150,10 @@ namespace Core { namespace Cloud {
     bool isValid() const { return hasId() && hasType(); }
 
     void clear() { (*this) = Self(); }
+
+    // - Operators -
+    bool operator==(const Self &that) { return !operator!=(that); }
+    bool operator!=(const Self &that) { return ::memcmp(this, &that, sizeof(Self)); }
   };
 
   typedef QList<Alias> AliasList;

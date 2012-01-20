@@ -110,6 +110,8 @@ TranslatorManager::translate(int tid) const
   case T_POSITION:      return tr("Progress");
   case T_VOLUME:        return tr("Volume");
   case T_USER:          return tr("User");
+  case T_NICKNAME:      return tr("Nickname");
+  case T_EMAIL:         return tr("Email");
   case T_LOGIN:         return tr("Login");
   case T_OK:            return tr("OK");
   case T_SAVE:          return tr("Save");
@@ -130,6 +132,7 @@ TranslatorManager::translate(int tid) const
   case T_NEXT:          return tr("Next");
   case T_VERBATIM:      return tr("Verbatim");
   case T_SUBTITLE:      return tr("Subtitle");
+  case T_AUDIOTRACK:    return tr("Audio track");
   case T_SECTION:       return tr("Section");
   case T_WORDCOUNT:     return tr("Word count");
   case T_UNKNOWN:       return tr("unknown");
@@ -272,14 +275,14 @@ TranslatorManager::translate(int tid) const
   case T_MENUTEXT_OPENCONTEXTMENU: return tr("Open ...");
   case T_TIP_OPENCONTEXTMENU:      return tr("Open ...");
 
-  case T_MENUTEXT_PLAY:         return tr("Play");
-  case T_TIP_PLAY:              return tr("Play media");
+  case T_MENUTEXT_PLAY:         return tr("Play") + " [SPACE]";
+  case T_TIP_PLAY:              return tr("Play media") + " [SPACE]";
 
   case T_MENUTEXT_MENU:         return tr("Menu");
   case T_TIP_MENU:              return tr("Show menu");
 
-  case T_MENUTEXT_PAUSE:        return tr("Pause");
-  case T_TIP_PAUSE:             return tr("Pause playing");
+  case T_MENUTEXT_PAUSE:        return tr("Pause") + " [SPACE]";
+  case T_TIP_PAUSE:             return tr("Pause playing") + " [SPACE]";
 
   case T_MENUTEXT_STOP:         return tr("Stop");
   case T_TIP_STOP:              return tr("Stop playing");
@@ -290,11 +293,11 @@ TranslatorManager::translate(int tid) const
   case T_MENUTEXT_REPLAY:       return tr("Replay");
   case T_TIP_REPLAY:            return tr("Restart playing");
 
-  case T_MENUTEXT_MINI:         return tr("Mini player");
-  case T_TIP_MINI:              return tr("Show mini player");
+  case T_MENUTEXT_MINI:         return tr("Mini player") + " [F3/ESC]";
+  case T_TIP_MINI:              return tr("Show mini player") + " [F3/ESC]";
 
-  case T_MENUTEXT_EMBED:        return tr("Embed player");
-  case T_TIP_EMBED:             return tr("Embed player window");
+  case T_MENUTEXT_EMBED:        return tr("Embed player") + " [F2]";
+  case T_TIP_EMBED:             return tr("Embed player window") + " [F2]";
 
   case T_MENUTEXT_EMBEDONTOP:   return tr("Embed on top");
   case T_TIP_EMBEDONTOP:        return tr("Embed player window on the top");
@@ -305,8 +308,8 @@ TranslatorManager::translate(int tid) const
   case T_MENUTEXT_SYNC:         return tr("Sync mode");
   case T_TIP_SYNC:              return tr("Toggle Sync mode");
 
-  case T_MENUTEXT_FULLSCREEN:   return tr("Fullscreen");
-  case T_TIP_FULLSCREEN:        return tr("Show fullscreen");
+  case T_MENUTEXT_FULLSCREEN:   return tr("Fullscreen") + " [F11/ENTER]";
+  case T_TIP_FULLSCREEN:        return tr("Show fullscreen") + " [F11/ENTER]";
 
   case T_MENUTEXT_SNAPSHOT:     return tr("Snapshot");
   case T_TIP_SNAPSHOT:          return tr("Taks a snapshot of current frame");
@@ -371,6 +374,9 @@ TranslatorManager::translate(int tid) const
   case T_MENUTEXT_SUBTITLE:     return tr("Subtitle");
   case T_TIP_SUBTITLE:          return tr("Subtitle");
 
+  case T_MENUTEXT_ANNOTSUBTITLE: return tr("Annot subtitle");
+  case T_TIP_ANNOTSUBTITLE:      return tr("Annotation as subtitle");
+
   case T_MENUTEXT_SECTION:      return tr("DVD sections");
   case T_TIP_SECTION:           return tr("Select DVD sections");
 
@@ -379,6 +385,12 @@ TranslatorManager::translate(int tid) const
 
   case T_MENUTEXT_HIDESUBTITLE: return tr("Hide subtitle");
   case T_TIP_HIDESUBTITLE:      return tr("Hide subtitle");
+
+  case T_MENUTEXT_SUBANNOT:     return tr("Show subtitle annot");
+  case T_TIP_SUBANNOT:          return tr("Show subtitle annot");
+
+  case T_MENUTEXT_NONSUBANNOT:  return tr("Show non-sub annot");
+  case T_TIP_NONSUBANNOT:       return tr("Show non-sub annot");
 
   case T_MENUTEXT_REMOVEANNOTATION:   return tr("Hide");
   case T_TIP_REMOVEANNOTATION:        return tr("Hide");
@@ -394,6 +406,15 @@ TranslatorManager::translate(int tid) const
 
   case T_MENUTEXT_ADVANCED:     return tr("Advanced");
   case T_TIP_ADVANCED:          return tr("Advanced menu");
+
+  case T_MENUTEXT_BLESSUSER:    return tr("Bless user");
+  case T_TIP_BLESSUSER:         return tr("Bless user");
+
+  case T_MENUTEXT_CURSEUSER:    return tr("Curse user");
+  case T_TIP_CURSEUSER:         return tr("Curse user");
+
+  case T_MENUTEXT_BLOCKUSER:    return tr("Block user");
+  case T_TIP_BLOCKUSER:         return tr("Block user");
 
   case T_MENUTEXT_EDITTHISANNOT:return tr("Edit annot");
   case T_TIP_EDITTHISANNOT:     return tr("Edit annotation");
@@ -456,7 +477,7 @@ TranslatorManager::translate(int tid) const
   case T_TIP_COMMENTVIEW:       return tr("Show comment browser");
 
   // case T_MENUTEXT_CLOUDVIEW:    return tr("Cloud");
-  case T_MENUTEXT_CLOUDVIEW:    return tr("Register");
+  case T_MENUTEXT_CLOUDVIEW:    return tr("Homepage");
   case T_TIP_CLOUDVIEW:         return tr("Show cloud browser");
 
   case T_MENUTEXT_EDIT:         return tr("Edit");
@@ -568,6 +589,12 @@ TranslatorManager::translate(int tid) const
   case T_MENUTEXT_SHOWMENUBAR:  return tr("Show menubar");
   case T_TIP_SHOWMENUBAR:       return tr("Show menubar");
 
+  case T_MENUTEXT_CHECKINTERNET:return tr("Check Internet");
+  case T_TIP_CHECKINTERNET:     return tr("Check Internet connection");
+
+  case T_MENUTEXT_DELETECACHE:  return tr("Remove caches");
+  case T_TIP_DELETECACHE:       return tr("Remove offline caches");
+
   case T_MENUTEXT_BLACKTHEME1:  return SELF(T_BLACK) + "1";
   case T_MENUTEXT_BLACKTHEME2:  return SELF(T_BLACK) + "2";
   case T_MENUTEXT_BLUETHEME1:  return SELF(T_BLUE) + "1";
@@ -611,6 +638,7 @@ TranslatorManager::translate(int tid) const
   case T_TEXT:          return tr("Text");
   case T_POS:           return tr("Pos");
   case T_CREATETIME:    return tr("CreateTime");
+  case T_LOGINTIME:     return tr("LoginTime");
   case T_UPDATETIME:    return tr("UpdateTime");
   case T_LANGUAGE:      return tr("Language");
   case T_STATUS:        return tr("Status");

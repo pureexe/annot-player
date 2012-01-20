@@ -11,6 +11,7 @@
 QT_BEGIN_NAMESPACE
 class QAbstractItemModel;
 class QStandardItemModel;
+class QSortFilterProxyModel;
 class QAction;
 class QLineEdit;
 QT_END_NAMESPACE
@@ -52,6 +53,7 @@ protected:
 private:
   FilteredListView *tableView_;
   QStandardItemModel *sourceModel_;
+  QSortFilterProxyModel *proxyModel_;
 };
 
 // User filter table
@@ -88,6 +90,7 @@ protected:
 private:
   FilteredListView *tableView_;
   QStandardItemModel *sourceModel_;
+  QSortFilterProxyModel *proxyModel_;
 };
 
 // Annotation filter table
@@ -136,6 +139,7 @@ protected:
 private:
   FilteredTableView *tableView_;
   QStandardItemModel *sourceModel_;
+  QSortFilterProxyModel *proxyModel_;
 };
 
 #endif // BLACKLISTVIEWPRIVATE_H

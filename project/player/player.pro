@@ -1,7 +1,7 @@
 # player.pro
 # 6/30/2011
 
-VERSION = 0.1.2.2
+VERSION = 0.1.2.3
 
 include(../../config.pri)
 include(tr/tr.pri)
@@ -153,7 +153,7 @@ HEADERS += \
     signal/signalhub.h \
     token/addaliasdialog.h \
     token/tokenview.h \
-    user/userpanel.h \
+    user/userview.h \
     util/closewidgetthread.h \
     util/filteredlistview.h \
     util/filteredtableview.h \
@@ -209,7 +209,7 @@ SOURCES += \
     signal/signalhub.cc \
     token/addaliasdialog.cc \
     token/tokenview.cc \
-    user/userpanel.cc \
+    user/userview.cc \
     util/filteredtableview.cc \
     util/filteredlistview.cc \
     util/grabber.cc \

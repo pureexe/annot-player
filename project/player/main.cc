@@ -101,8 +101,9 @@ main(int argc, char *argv[])
 //#endif // USE_WIN_QTH
 
   // Set OS encoding to UTF-8 before application starts.
-  QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
-  QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));
+  QTextCodec *codec = QTextCodec::codecForName("UTF-8");
+  QTextCodec::setCodecForCStrings(codec);
+  QTextCodec::setCodecForTr(codec);
 
   // Applications
   Application a(argc, argv);
@@ -207,6 +208,8 @@ main(int argc, char *argv[])
             password = settings->password();
     if (!userName.isEmpty() && !password.isEmpty())
       w.login(userName, password);
+    else
+      w.checkInternetConnection();
 
     w.parseArguments(a.arguments());
   }

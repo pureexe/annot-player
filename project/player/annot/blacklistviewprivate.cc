@@ -25,7 +25,13 @@ TextFilterView::TextFilterView(QWidget *parent)
   sourceModel_ = new QStandardItemModel(0, HD_Count, this);
   setHeaderData(sourceModel_);
 
-  tableView_ = new FilteredListView(sourceModel_, this);
+  proxyModel_ = new QSortFilterProxyModel; {
+    proxyModel_->setSourceModel(sourceModel_);
+    proxyModel_->setDynamicSortFilter(true);
+    proxyModel_->setSortCaseSensitivity(Qt::CaseInsensitive);
+  }
+
+  tableView_ = new FilteredListView(sourceModel_, proxyModel_, this);
 
   // Layout
   QLayout *layout = new QHBoxLayout; {
@@ -92,7 +98,13 @@ UserFilterView::UserFilterView(QWidget *parent)
   sourceModel_ = new QStandardItemModel(0, HD_Count, this);
   setHeaderData(sourceModel_);
 
-  tableView_ = new FilteredListView(sourceModel_, this);
+  proxyModel_ = new QSortFilterProxyModel; {
+    proxyModel_->setSourceModel(sourceModel_);
+    proxyModel_->setDynamicSortFilter(true);
+    proxyModel_->setSortCaseSensitivity(Qt::CaseInsensitive);
+  }
+
+  tableView_ = new FilteredListView(sourceModel_, proxyModel_, this);
 
   // Layout
   QLayout *layout = new QHBoxLayout; {
@@ -159,7 +171,13 @@ AnnotationFilterView::AnnotationFilterView(QWidget *parent)
   sourceModel_ = new QStandardItemModel(0, HD_Count, this);
   setHeaderData(sourceModel_);
 
-  tableView_ = new FilteredTableView(sourceModel_, this);
+  proxyModel_ = new QSortFilterProxyModel; {
+    proxyModel_->setSourceModel(sourceModel_);
+    proxyModel_->setDynamicSortFilter(true);
+    proxyModel_->setSortCaseSensitivity(Qt::CaseInsensitive);
+  }
+
+  tableView_ = new FilteredTableView(sourceModel_, proxyModel_, this);
 
   // Layout
   QLayout *layout = new QHBoxLayout; {

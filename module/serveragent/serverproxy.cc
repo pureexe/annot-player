@@ -46,7 +46,7 @@ ServerProxy::setUserAnonymous(bool t, const QString &userName, const QString &pa
   std::string s_userName = userName.toStdString();
   request.userName = &s_userName;
   std::string s_password = password.toStdString();
-  request.userName = &s_password;
+  request.password = &s_password;
 
   tns__setUserAnonymousResponse response;
   mutex_.lock();
@@ -283,6 +283,8 @@ ServerProxy::selectUser(const QString &userName, const QString &password)
       ret.setName(QString::fromStdString(*p->name));
     if (p->nickname)
       ret.setNickname(QString::fromStdString(*p->nickname));
+    if (p->email)
+      ret.setEmail(QString::fromStdString(*p->email));
     //if (p->password)
     //  ret.setPassword(QString::fromStdString(*p->password));
     ret.setPassword(password);
@@ -972,7 +974,9 @@ ServerProxy::selectRelatedAnnotationsWithTokenId(qint64 tid)
     return ret; \
   }
 
+  CAST(bless, User)
   CAST(block, User)
+  CAST(curse, User)
 #undef CAST
 
 // - Update -

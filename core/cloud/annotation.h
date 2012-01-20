@@ -4,11 +4,13 @@
 // core/cloud/annotation.h
 // 7/24/2011
 
+#include "core/cmd.h"
 #include "core/cloud/traits.h"
 #include "core/cloud/user.h"
 #include <QString>
 #include <QMetaType>
 #include <QList>
+#include <cstring>
 
 namespace Core { namespace Cloud {
 
@@ -23,7 +25,8 @@ namespace Core { namespace Cloud {
     enum AnnotationStatus {
       AS_Active = 0,
       AS_Deleted = -1,
-      AS_Blocked = -2
+      AS_Blocked = -2,
+      AS_Hidden = -3
     };
 
     enum AnnotationFlag {
@@ -56,7 +59,7 @@ namespace Core { namespace Cloud {
   public:
     const QString &tokenDigest() const      { return tokenDigest_; }
     void setTokenDigest(const QString &hex) { tokenDigest_ = hex; }
-    bool hasTokenDigest() const             { return !tokenDigest_.isNull(); }
+    bool hasTokenDigest() const             { return !tokenDigest_.isEmpty(); }
 
     ///  Used only in offline mode
   private: qint32 tokenDigestType_;
@@ -75,7 +78,7 @@ namespace Core { namespace Cloud {
   public:
     const QString &userAlias() const    { return userAlias_; }
     void setUserAlias(const QString &alias) { userAlias_ = alias; }
-    bool hasUserAlias() const           { return userAlias_.isEmpty(); }
+    bool hasUserAlias() const           { return !userAlias_.isEmpty(); }
 
   private: qint32 status_;
   public:
@@ -145,7 +148,7 @@ namespace Core { namespace Cloud {
   public:
     const QString &text() const         { return text_; }
     void setText(const QString &text)   { text_ = text; }
-    bool hasText() const                { return !text_.isNull(); }
+    bool hasText() const                { return !text_.isEmpty(); }
 
   private: quint32 blessed_;
   public:
@@ -175,8 +178,15 @@ namespace Core { namespace Cloud {
     { }
 
     bool isValid() const { return hasId(); }
+    bool isVisible() const { return status() >= 0; }
+    bool isHidden() const { return status() < 0; }
+    bool isSubtitle() const { return hasText() && text().contains(CORE_CMD_SUB); } // FIXME
 
     void clear() { (*this) = Self(); }
+
+    // - Operators -
+    bool operator==(const Self &that) { return !operator!=(that); }
+    bool operator!=(const Self &that) { return ::memcmp(this, &that, sizeof(Self)); }
 
     // Static helpers
   public:

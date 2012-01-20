@@ -94,6 +94,15 @@ namespace { namespace task_ { // anonymous
     explicit invalidateMediaAndPlay(MainWindow *w) : w_(w) { Q_ASSERT(w_); }
   };
 
+  class checkInternetConnection : public QRunnable
+  {
+    MainWindow *w_;
+    virtual void run() { w_->checkInternetConnection(false); } // \override, async = false
+  public:
+    explicit checkInternetConnection(MainWindow *w)
+      : w_(w) { Q_ASSERT(w_); }
+  };
+
   class login : public QRunnable
   {
     MainWindow *w_;
@@ -193,8 +202,10 @@ namespace { namespace task_ { // anonymous
     _cast##_entity##WithId(qint64 id, MainWindow *w) : w_(w), id_(id) { Q_ASSERT(w_); } \
   };
 
-  CAST(bless, Token)
-  CAST(curse, Token)
+  CAST(bless, Token) CAST(curse, Token)
+  CAST(bless, User) CAST(block, User) CAST(curse, User)
+  CAST(bless, Alias) CAST(block, Alias) CAST(curse, Alias)
+  CAST(bless, Annotation) CAST(block, Annotation) CAST(curse, Annotation)
 #undef CAST
 
 } } // anonymous namespace task_

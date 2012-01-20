@@ -69,7 +69,14 @@ EmbeddedPlayerUi::EmbeddedPlayerUi(SignalHub *hub, Player *player, ServerAgent *
   CONNECT_TO_AUTOHIDE(inputComboBox()->lineEdit(), SIGNAL(cursorPositionChanged(int,int)));
 #undef CONNECT_TO_AUTOHIDE
 
-  resize(0, 0); // temporarily
+  resize(QSize()); // temporarily
+
+  QShortcut *e = new QShortcut(QKeySequence("F2"), this);
+  connect(e, SIGNAL(activated()), hub, SLOT(toggleEmbeddedPlayerMode()));
+  QShortcut *m = new QShortcut(QKeySequence("F3"), this);
+  connect(m, SIGNAL(activated()), hub, SLOT(toggleMiniPlayerMode()));
+  QShortcut *f = new QShortcut(QKeySequence("F11"), this);
+  connect(f, SIGNAL(activated()), hub, SLOT(toggleFullScreenWindowMode()));
 }
 
 void

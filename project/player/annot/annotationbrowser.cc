@@ -8,8 +8,11 @@
 #include "logger.h"
 #include "tr.h"
 #include "filteredtableview.h"
+#include "signalhub.h"
+#include "core/gui/toolbutton.h"
 #include "core/util/datetime.h"
 #include "core/cloud/traits.h"
+#include "core/cmd.h"
 #include <QtGui>
 
 using namespace Core::Cloud;
@@ -25,19 +28,55 @@ using namespace Logger;
   Qt::WindowMinMaxButtonsHint | \
   Qt::WindowCloseButtonHint )
 
-AnnotationBrowser::AnnotationBrowser(QWidget *parent)
-  : Base(parent, WINDOW_FLAGS), userId_(0), editor_(0)
+AnnotationBrowser::AnnotationBrowser(SignalHub *hub, QWidget *parent)
+  : Base(parent, WINDOW_FLAGS), hub_(hub), userId_(0), annotationPos_(0), editor_(0)
 {
+  Q_ASSERT(hub_);
+
   setWindowTitle(TR(T_TITLE_ANNOTATIONBROWSER));
   UiStyle::globalInstance()->setWindowStyle(this);
   setAcceptDrops(true);
 
-  sourceModel_ = new QStandardItemModel(0, HD_Count, this);
-  setHeaderData(sourceModel_);
-  tableView_ = new FilteredTableView(sourceModel_, this);
-
+  createModel();
   createLayout();
   createActions();
+
+  tableView_->sortByColumn(HD_CreateTime, Qt::DescendingOrder);
+  tableView_->setCurrentColumn(HD_Text);
+}
+
+void
+AnnotationBrowser::createModel()
+{
+  sourceModel_ = new QStandardItemModel(0, HD_Count, this);
+  setHeaderData(sourceModel_);
+
+  filterMeModel_ = new QSortFilterProxyModel; {
+    filterMeModel_->setSourceModel(sourceModel_);
+    filterMeModel_->setDynamicSortFilter(true);
+    filterMeModel_->setSortCaseSensitivity(Qt::CaseInsensitive);
+    filterMeModel_->setFilterKeyColumn(HD_UserId);
+  }
+  filterNowModel_ = new QSortFilterProxyModel; {
+    filterNowModel_->setSourceModel(filterMeModel_);
+    filterNowModel_->setDynamicSortFilter(true);
+    filterNowModel_->setSortCaseSensitivity(Qt::CaseInsensitive);
+    filterNowModel_->setFilterKeyColumn(HD_Pos);
+  }
+  filterSubtitleModel_ = new QSortFilterProxyModel; {
+    filterSubtitleModel_->setSourceModel(filterNowModel_);
+    filterSubtitleModel_->setDynamicSortFilter(true);
+    filterSubtitleModel_->setSortCaseSensitivity(Qt::CaseInsensitive);
+    filterSubtitleModel_->setFilterKeyColumn(HD_Text);
+  }
+
+  proxyModel_ = new QSortFilterProxyModel; {
+    proxyModel_->setSourceModel(filterSubtitleModel_);
+    proxyModel_->setDynamicSortFilter(true);
+    proxyModel_->setSortCaseSensitivity(Qt::CaseInsensitive);
+  }
+
+  tableView_ = new FilteredTableView(sourceModel_, proxyModel_, this);
 }
 
 void
@@ -45,18 +84,40 @@ AnnotationBrowser::createLayout()
 {
   // Set layout
 
-  QLayout *layout = new QStackedLayout; {
-    layout->addWidget(tableView_);
+#define MAKE_TOGGLE(_button, _text, _tip, _slot) \
+  _button = new Core::Gui::ToolButton; { \
+    _button->setStyleSheet(SS_TOOLBUTTON_TEXT); \
+    _button->setToolButtonStyle(Qt::ToolButtonTextOnly); \
+    _button->setText(QString("| %1 |").arg(_text)); \
+    _button->setToolTip(_tip); \
+    _button->setCheckable(true); \
+    connect(_button, SIGNAL(clicked(bool)), _slot); \
+  }
 
-    layout->setContentsMargins(0, 0, 0, 0);
+  MAKE_TOGGLE(meButton_, tr("Mine"), tr("Display my annotations only"), SLOT(setMe(bool)))
+  MAKE_TOGGLE(nowButton_, tr("Now"), tr("Display annotations at the time only"), SLOT(setNow(bool)))
+  MAKE_TOGGLE(subtitleButton_, TR(T_SUBTITLE), tr("Display subtitles only"), SLOT(setSubtitle(bool)))
+
+  QVBoxLayout *rows = new QVBoxLayout; {
+    QLayout *header = new QHBoxLayout;
+    rows->addLayout(header);
+    rows->addWidget(tableView_);
+
+    header->addWidget(meButton_);
+    header->addWidget(nowButton_);
+    header->addWidget(subtitleButton_);
+
+    rows->setContentsMargins(0, 0, 0, 0);
     setContentsMargins(9, 9, 9, 9);
 
-  } setLayout(layout);
+  } setLayout(rows);
 
   // Set initial states
 
   tableView_->sortByColumn(HD_CreateTime, Qt::DescendingOrder);
   tableView_->setCurrentColumn(HD_Text);
+
+#undef MAKE_TOGGLE
 }
 
 void
@@ -73,8 +134,6 @@ AnnotationBrowser::createActions()
   MAKE_ACTION(blessAnnotAct_, BLESSTHISANNOT, SLOT(blessAnnotation()))
   MAKE_ACTION(curseAnnotAct_, CURSETHISANNOT, SLOT(curseAnnotation()))
   MAKE_ACTION(blockAnnotAct_, BLOCKTHISANNOT, SLOT(blockAnnotation()))
-  MAKE_ACTION(hideAnnotAct_,  HIDETHISANNOT,  SLOT(hideAnnotation()))
-  MAKE_ACTION(showAnnotAct_,  SHOWTHISANNOT,  SLOT(showAnnotation()))
 
   MAKE_ACTION(viewUserAct_,   VIEWTHISUSER,   SLOT(viewUser()))
   MAKE_ACTION(blockUserAct_,  BLOCKTHISUSER,  SLOT(blockUser()))
@@ -162,6 +221,20 @@ AnnotationBrowser::currentUserId() const
 }
 
 QString
+AnnotationBrowser::currentUserAlias() const
+{
+  QModelIndex index = currentIndex();
+  if (!index.isValid())
+    return QString();
+
+  int row = index.row();
+  index = index.sibling(row, HD_UserAlias);
+  if (!index.isValid())
+    return QString();
+  return index.data().toString();
+}
+
+QString
 AnnotationBrowser::currentText() const
 {
   QModelIndex index = currentIndex();
@@ -198,9 +271,11 @@ AnnotationBrowser::addAnnotation(const Annotation &a)
 
   sourceModel_->insertRow(0);
 
-
   sourceModel_->setData(sourceModel_->index(0, HD_Text), a.text(), Qt::DisplayRole);
-  sourceModel_->setData(sourceModel_->index(0, HD_Pos), FORMAT_POS(a.pos()), Qt::DisplayRole);
+  if (hub_->isMediaTokenMode())
+    sourceModel_->setData(sourceModel_->index(0, HD_Pos), FORMAT_POS(a.pos()), Qt::DisplayRole);
+  else
+    sourceModel_->setData(sourceModel_->index(0, HD_Pos), a.pos(), Qt::DisplayRole);
   sourceModel_->setData(sourceModel_->index(0, HD_UserAlias), a.userAlias(), Qt::DisplayRole);
   if (a.createTime())
     sourceModel_->setData(sourceModel_->index(0, HD_CreateTime), FORMAT_TIME(a.createTime()), Qt::DisplayRole);
@@ -290,7 +365,7 @@ QStringList
 AnnotationBrowser::annotationFlagsToStringList(int flags)
 {
   QStringList ret;
-  if (flags | Annotation::AF_Anonymous)
+  if (flags & Annotation::AF_Anonymous)
     ret.append(TR(T_ANONYMOUS));
 
   if (ret.isEmpty())
@@ -392,22 +467,64 @@ AnnotationBrowser::deleteAnnotation()
 }
 
 void
-AnnotationBrowser::showAnnotation() { /* TODO */ }
-void
-AnnotationBrowser::hideAnnotation() { /* TODO */ }
-void
-AnnotationBrowser::blessAnnotation() { /* TODO */ }
-void
-AnnotationBrowser::curseAnnotation() { /* TODO */ }
-void
-AnnotationBrowser::blockAnnotation() { /* TODO */ }
+AnnotationBrowser::blessAnnotation()
+{
+  qint64 id = currentId();
+  if (id)
+    emit annotationBlessedWithId(id);
+  qint64 uid = currentUserId();
+  if (uid)
+    emit userBlessedWithId(uid);
+}
 
 void
-AnnotationBrowser::viewUser() { /* TODO */ }
+AnnotationBrowser::curseAnnotation()
+{
+  qint64 id = currentId();
+  if (id)
+    emit annotationCursedWithId(id);
+  qint64 uid = currentUserId();
+  if (uid)
+    emit userCursedWithId(uid);
+}
+
 void
-AnnotationBrowser::blockUser() { /* TODO */ }
+AnnotationBrowser::blockAnnotation()
+{
+  QString text = currentText();
+  if (!text.isEmpty())
+    emit annotationBlockedWithText(text);
+  qint64 id = currentId();
+  if (id)
+    emit annotationBlockedWithId(id);
+}
+
+void
+AnnotationBrowser::viewUser()
+{
+  // CHECKPOINT
+}
+
+void
+AnnotationBrowser::blockUser()
+{
+  QString text = currentUserAlias();
+  if (!text.isEmpty())
+    emit userBlockedWithAlias(text);
+  qint64 uid = currentUserId();
+  if (uid)
+    emit userBlockedWithId(uid);
+}
 
 // - Events -
+
+void
+AnnotationBrowser::setVisible(bool visible)
+{
+  if (visible)
+    invalidateFilters();
+  Base::setVisible(visible);
+}
 
 void
 AnnotationBrowser::contextMenuEvent(QContextMenuEvent *event)
@@ -416,35 +533,35 @@ AnnotationBrowser::contextMenuEvent(QContextMenuEvent *event)
     return;
   if (!currentIndex().isValid())
     return;
+
   contextMenu_->clear();
 
+  qint64 cuid = currentUserId();
 
   // Edit
   {
     contextMenu_->addAction(editAnnotAct_);
     if (!currentText().isEmpty())
       contextMenu_->addAction(copyAnnotAct_);
-    }
 
     // Cast: TODO
     if (currentId()) {
-      if (userId_ && userId_ == currentUserId()) {
+      if (userId_ == cuid) {
         contextMenu_->addSeparator();
         contextMenu_->addAction(deleteAnnotAct_);
+      } else {
+        contextMenu_->addSeparator();
+        contextMenu_->addAction(blessAnnotAct_);
+        contextMenu_->addAction(curseAnnotAct_);
+        contextMenu_->addAction(blockAnnotAct_);
       }
-
-    //contextMenu_->addAction(blessAnnotAct_);
-    //contextMenu_->addAction(curseAnnotAct_);
-    //contextMenu_->addAction(hideAnnotAct_);
-    //contextMenu_->addAction(blockAnnotAct_);
-    //contextMenu_->addAction(showAnnotAct_);
+    }
   }
 
   // User
-  {
+  if (cuid != userId_) {
     contextMenu_->addSeparator();
-
-    contextMenu_->addAction(viewUserAct_);
+    //contextMenu_->addAction(viewUserAct_);
     contextMenu_->addAction(blockUserAct_);
   }
 
@@ -457,6 +574,53 @@ void AnnotationBrowser::dragEnterEvent(QDragEnterEvent *event)     { emit dragEn
 void AnnotationBrowser::dragMoveEvent(QDragMoveEvent *event)       { emit dragMoveEventReceived(event); }
 void AnnotationBrowser::dragLeaveEvent(QDragLeaveEvent *event)     { emit dragLeaveEventReceived(event); }
 void AnnotationBrowser::dropEvent(QDropEvent *event)               { emit dropEventReceived(event); }
+
+// - Filters -
+
+void
+AnnotationBrowser::setAnnotationPos(qint64 pos)
+{
+  annotationPos_ = pos;
+  if (isVisible())
+    invalidateFilters();
+}
+
+void
+AnnotationBrowser::setNow(bool t)
+{
+  QString s;
+  if (t)
+    s = hub_->isMediaTokenMode() ?
+      Core::msecs2time(annotationPos_).toString() :
+      QString::number(annotationPos_);
+
+  filterNowModel_->setFilterFixedString(s);
+}
+
+void
+AnnotationBrowser::setMe(bool t)
+{
+  QString s;
+  if (t)
+    s = QString::number(userId_);
+  filterMeModel_->setFilterFixedString(s);
+}
+
+void
+AnnotationBrowser::setSubtitle(bool t)
+{
+  QString s;
+  if (t)
+    s = CORE_CMD_SUB;
+  filterSubtitleModel_->setFilterFixedString(s);
+}
+
+void
+AnnotationBrowser::invalidateFilters()
+{
+  if (nowButton_->isChecked())
+    setNow(true);
+}
 
 // EOF
 /*
@@ -579,9 +743,7 @@ void TextEdit::setupEditActions()
     actionPaste->setEnabled(md->hasText());
 #endif
 }
-*/
 
-/*
 void TextEdit::setCurrentFileName(const QString &fileName)
 {
   this->fileName = fileName;

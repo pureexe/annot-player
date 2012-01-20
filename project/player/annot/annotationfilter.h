@@ -33,16 +33,16 @@ signals:
   void blockedTextsChanged(const QStringList &blacklist);
 
 public:
-  bool isEnabled() const;
-  qint64 languages() const; ///< Allowed languages
+  bool isEnabled() const { return enabled_; }
+  qint64 languages() const { return languages_; } ///< Allowed languages
 
-  const AnnotationList &blockedAnnotations() const;
-  const QStringList &blockedUserAliases() const;
-  const QStringList &blockedTexts() const;
+  const AnnotationList &blockedAnnotations() const { return blockedAnnotations_; }
+  const QStringList &blockedUserAliases() const { return blockedUserAliases_; }
+  const QStringList &blockedTexts() const { return blockedTexts_; }
 
 public slots:
   void setEnabled(bool enabled);
-  void setLanguages(qint64 bits);
+  void setLanguages(qint64 bits) { languages_ = bits; }
 
   void clearBlockedAnnotations();
   void clearBlockedUserAliases();

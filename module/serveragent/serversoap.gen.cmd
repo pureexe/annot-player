@@ -4,6 +4,8 @@
 ::echo off
 setlocal
 
+cd /d %~dp0 || exit 1
+
 set SRC=serversoap
 set BASE=ss
 set HEADER=_serversoap.h

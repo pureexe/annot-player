@@ -14,6 +14,7 @@ class QAction;
 class QLabel;
 class QMenu;
 class QStandardItemModel;
+class QSortFilterProxyModel;
 class QToolButton;
 QT_END_NAMESPACE
 
@@ -101,6 +102,7 @@ protected:
   static void setProcessHeaderData(QAbstractItemModel *model);
 
 private:
+  void createModel();
   void createLayout();
   void createActions();
 
@@ -110,6 +112,7 @@ private:
   QHash<ulong, ProcessInfo> pis_;
 
   QStandardItemModel *sourceModel_;
+  QSortFilterProxyModel *proxyModel_;
 
   QToolButton *attachButton_, *detachButton_;
 

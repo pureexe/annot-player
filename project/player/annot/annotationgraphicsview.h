@@ -51,6 +51,9 @@ public:
   void setSubtitlePrefix(const QString &prefix) { subtitlePrefix_ = prefix; }
   const QString &subtitlePrefix() const { return subtitlePrefix_; }
 
+  bool isSubtitleVisible() const { return subtitleVisible_; }
+  bool isNonSubtitleVisible() const { return nonSubtitleVisible_; }
+
 signals:
   void fullScreenModeChanged(bool);
 public:
@@ -62,6 +65,9 @@ public:
   bool isFullScreenMode() const;
 public slots:
   void setFullScreenMode(bool t = true);
+
+  void setSubtitleVisible(bool t) { subtitleVisible_ = t; }
+  void setNonSubtitleVisible(bool t) { nonSubtitleVisible_ = t; }
 
   /**
    *  Set the windows to track.
@@ -76,7 +82,8 @@ public slots:
   void setTrackedWindow(WId winId);
 
 signals:
-  void annotationPosChanged(); ///< current pos changed by show at pos, not the pos of the widget
+  void removeItemRequested();
+  void annotationPosChanged(qint64 msecs); ///< current pos changed by show at pos, not the pos of the widget
 
   void subtitleAdded(const QString &richText);
   void annotationAdded(const QString &richText);
@@ -86,8 +93,26 @@ signals:
   void annotationTextUpdatedWithId(const QString &text, qint64 id);
   void annotationDeletedWithId(qint64 id);
 
+  void userBlessedWithId(qint64 uid);
+  void userCursedWithId(qint64 uid);
+  void userBlockedWithId(qint64 uid);
+  void userBlockedWithAlias(QString alias);
+
+  void annotationBlessedWithId(qint64 aid);
+  void annotationCursedWithId(qint64 aid);
+  void annotationBlockedWithId(qint64 aid);
+  void annotationBlockedWithText(QString alias);
+
 public slots:
-  void invalidateAnnotationPos(); ///< emit posChanged
+  void blessUserWithId(qint64 uid) { emit userBlessedWithId(uid); }
+  void curseUserWithId(qint64 uid) { emit userCursedWithId(uid); }
+  void blockUserWithId(qint64 uid) { emit userBlockedWithId(uid); }
+  void blockUserWithAlias(QString alias) { emit userBlockedWithAlias(alias); }
+
+  void blessAnnotationWithId(qint64 uid) { emit annotationBlessedWithId(uid); }
+  void curseAnnotationWithId(qint64 uid) { emit annotationCursedWithId(uid); }
+  void blockAnnotationWithId(qint64 uid) { emit annotationBlockedWithId(uid); }
+  void blockAnnotationWithText(QString text) { emit annotationBlockedWithText(text); }
 
 protected slots:
   void startTracking();
@@ -119,10 +144,7 @@ protected:
   AnnotationGraphicsItem *itemWithId(qint64 aid) const;
   Annotation *annotationWithId(qint64 aid) const;
 
-//public:
-//  qint64 playTime() const;
-//  void setPlayTime(qint64 sec);
-
+public:
   ///  Generate list of annotations in the view (slow).
   AnnotationList annotations() const;
 
@@ -212,7 +234,8 @@ protected slots:
   void updateAnnotationTextWithId(const QString &text, qint64 aid);
 
 public:
-  bool isAnnotationFiltered(const Annotation &a) const;
+  bool isAnnotationBlocked(const Annotation &a) const;
+  bool isItemBlocked(const AnnotationGraphicsItem *item) const;
 
   // - Implementations -
 private:
@@ -226,6 +249,7 @@ private:
   bool active_;
   bool paused_;
   bool fullScreen_;
+  bool subtitleVisible_, nonSubtitleVisible_;
 
   QString subtitlePrefix_;
 

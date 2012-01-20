@@ -63,7 +63,7 @@ namespace Core { namespace Cloud {
   public:
     const QString &digest() const       { return digest_; }
     void setDigest(const QString &hex)  { digest_ = hex; }
-    bool hasDigest() const              { return !digest_.isNull(); }
+    bool hasDigest() const              { return !digest_.isEmpty(); }
 
   private: qint32 digestType_;
   public:
@@ -143,6 +143,11 @@ namespace Core { namespace Cloud {
     bool isLive() const { return id() < 0; }
 
     void clear() { (*this) = Self(); }
+
+    // - Operators -
+
+    bool operator==(const Self &that) { return !operator!=(that); }
+    bool operator!=(const Self &that) { return ::memcmp(this, &that, sizeof(Self)); }
 
     // - Helpers -
   public:

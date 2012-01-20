@@ -4,7 +4,7 @@
 # See: https://wiki.kubuntu.org/PackagingGuide/QtApplication
 
 ## environment
-VERSION=0.1.2.2
+VERSION=0.1.2.3
 
 PACKAGE_AUTHOR="Annot Cloud"
 PACKAGE_EMAIL=annotcloud@gmail.com
@@ -20,7 +20,7 @@ SRC_RULES="$SRC_PREFIX/project/player/debian.rules"
 SRC_CONTROL="$SRC_PREFIX/project/player/debian.control"
 SRC_COPYRIGHT="$SRC_PREFIX/licenses/annot-player.txt"
 SRC_CHANGELOG="$SRC_PREFIX/ChangeLog"
-BUILD_PREFIX=$HOME/tmp/annot-player
+BUILD_PREFIX=$HOME/build/annot-player
 BUILD_SRC="$BUILD_PREFIX/$PACKAGE_NAME-$PACKAGE_VERSION"
 BUILD_DEBIAN="$BUILD_SRC/debian"
 

@@ -1,13 +1,14 @@
 #!/bin/bash -v
 # 11/12/2011
 
-test -e ~/tmp || mkdir ~/tmp
-cd ~/tmp || exit 1
+PREFIX=$HOME/build
+test -e "$PREFIX" || mkdir "$PREFIX"
+cd "$PREFIX"  || exit 1
 
 ## environment
 
 COLOR=purple
-VERSION=0.1.2.2
+VERSION=0.1.2.3
 
 TARGET="Annot Player"
 TARGET_DMG=$TARGET.dmg
