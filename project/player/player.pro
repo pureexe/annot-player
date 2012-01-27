@@ -1,7 +1,7 @@
 # player.pro
 # 6/30/2011
 
-VERSION = 0.1.2.3
+VERSION = 0.1.2.4
 
 include(../../config.pri)
 include(tr/tr.pri)
