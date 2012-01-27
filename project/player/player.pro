@@ -15,6 +15,7 @@ include($$ROOTDIR/module/serveragent/serveragent.pri)
 #include($$ROOTDIR/module/clientagent/clientagent.pri)
 include($$ROOTDIR/module/gsoap/gsoap.pri)       # would static linking cause license conflicts?
 include($$ROOTDIR/module/translator/translator.pri)
+include($$ROOTDIR/module/mrlresolver/mrlresolver.pri)
 include($$ROOTDIR/module/ioutil/ioutil.pri)
 
 # shared link gave me so many trouble on mac and linux
@@ -140,7 +141,7 @@ HEADERS += \
     dialog/seekdialog.h \
     dialog/syncdialog.h \
     dialog/textview.h \
-    dialog/textview.h \
+    dialog/urldialog.h \
     osd/osdconsole.h \
     osd/osdwindow.h \
     osd/videoview.h \
@@ -197,6 +198,7 @@ SOURCES += \
     dialog/seekdialog.cc \
     dialog/syncdialog.cc \
     dialog/textview.cc \
+    dialog/urldialog.cc \
     osd/osdconsole.cc \
     osd/osdwindow.cc \
     osd/videoview.cc \
@@ -245,7 +247,6 @@ OTHER_FILES += \
     deploy-debian.sh \
     deploy-fedora.sh \
     deploy-mac.sh \
-    deploy-mac-10.6.sh \
     deploy-win.cmd \
     Info.plist \
     player.rc \

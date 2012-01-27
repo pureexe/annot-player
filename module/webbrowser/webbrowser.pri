@@ -5,7 +5,8 @@ INCLUDEPATH += $$PWD
 
 HEADERS += \
     $$PWD/webbrowser_config.h \
-    $$PWD/webbrowser.h
+    $$PWD/webbrowser.h \
+    $$PWD/webbrowserprivate.h
 
 !mac: LIBS  += -lwebbrowser
 mac:  LIBS  += -framework WebBrowser

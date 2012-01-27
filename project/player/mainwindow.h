@@ -65,6 +65,7 @@ class LoginDialog;
 class PickDialog;
 class SeekDialog;
 class SyncDialog;
+class UrlDialog;
 class UserView;
 
 // MainWindow
@@ -165,6 +166,8 @@ public slots:
   void openSource(const QString &source);
   void open();  ///< By default the same as openFile()
   void openFile();
+  void openUrl();
+  void openUrl(const QString &url);
   void openProcess();
   void openWindow();
   void openDevice();
@@ -173,11 +176,13 @@ public slots:
   void openVideoDevice();
   void openSubtitle();
   void openDirectory();
-  void openPath(const QString &path, bool checkPath = true); ///< \param checkPath determines if validate input \param path, such as existance
-  void openUrl(const QUrl &url);
-  void openUrls(const QList<QUrl> &urls);
+  void openMrl(const QString &path, bool checkPath = true);
+  void openRemoteUrls(const QStringList &urls, const QString &href = QString(), const QString &title = QString());
+  void openLocalUrl(const QUrl &url);
+  void openLocalUrls(const QList<QUrl> &urls);
   void openMimeData(const QMimeData *urls);
   void openSubtitlePath(const QString &path);
+  void closeMedia();
   void play();
   void playPause();
   void replay(); /// Restart from the beginning.
@@ -226,6 +231,8 @@ public slots:
 
   void showVideoViewIfAvailable();
 
+  void openInWebBrowser();
+
 public slots:
   void invalidateMediaAndPlay(bool async = true);
 
@@ -244,8 +251,10 @@ public slots:
   void setUserViewVisible(bool visible);
 
   void setAnnotationEditorVisible(bool visible);
-  void setCloudViewVisible(bool visible);
   void setBlacklistViewVisible(bool visible);
+
+  void openInCloudView(const QString &url);
+  void openHomePage();
 
   void showSeekDialog();
   void hideSeekDialog();
@@ -304,6 +313,7 @@ public slots:
   void respond(const QString &text);
   void say(const QString &text, const QString &color = "blue");
   void log(const QString &text);
+  void warn(const QString &text);
 
   void submitText(const QString &text, bool async = true);
   void showText(const QString &text, bool isSigned = false);
@@ -312,8 +322,8 @@ public slots:
 
   void showTextAsSubtitle(const QString &text, bool isSigned = false);
 
-  void setToken(const QString &filePath, bool async = true);
-  void invalidateToken();
+  void setToken(const QString &filePath = QString(), bool async = true);
+  void invalidateToken(const QString &mrl = QString());
   void submitAlias(const Alias &alias, bool async = true);
 
   void blessTokenWithId(qint64 tid, bool async = true);
@@ -340,6 +350,8 @@ protected slots:
   void invalidateRecentMenu();
 
   // - Playlist -
+protected:
+  int currentPlaylistIndex() const;
 protected slots:
   void setRecentOpenedFile(const QString &path);
   void openPlaylistItem(int i);
@@ -459,6 +471,10 @@ protected:
   static QString languageToString(int lang);
   static int fileType(const QString &fileName);
 
+  static QString shortenText(const QString &text);
+
+  static bool isRemoteMrl(const QString &mrl);
+
   bool isPosOutOfScreen(const QPoint &globalPos) const;
   bool isRectOutOfScreen(const QRect &globalRect) const;
 
@@ -538,6 +554,7 @@ private:
   SeekDialog *seekDialog_;
   SyncDialog *syncDialog_;
   PickDialog *windowPickDialog_;
+  UrlDialog *urlDialog_;
   UserView *userView_;
 
   QPoint dragPos_;
@@ -549,6 +566,9 @@ private:
   QString recentOpenedFile_;
   QString recentPath_;
   QString recentDigest_;
+  QString recentSource_;
+
+  bool recentSourceLocked_;
 
   QStringList playlist_;
 
@@ -603,6 +623,7 @@ private:
 
   QAction *openAct_,
           *openFileAct_,
+          *openUrlAct_,
           *openDeviceAct_,
           *openVideoDeviceAct_,
           *openAudioDeviceAct_,
@@ -631,6 +652,8 @@ private:
           *toggleAutoPlayNextAct_;
 
   QAction *toggleWindowOnTopAct_;
+  QAction *openInWebBrowserAct_,
+          *openHomePageAct_;
 
   QAction *loginAct_,
           *logoutAct_,
@@ -643,7 +666,6 @@ private:
           *toggleAnnotationEditorVisibleAct_,
           *toggleCommentViewVisibleAct_,
           *toggleTokenViewVisibleAct_,
-          *toggleCloudViewVisibleAct_,
           *toggleLiveDialogVisibleAct_,
           *toggleLoginDialogVisibleAct_,
           *toggleWindowPickDialogVisibleAct_,

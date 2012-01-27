@@ -9,7 +9,7 @@
 namespace Core {
   namespace Os {
 
-    QString desktopPath();
+    //QString desktopPath();
 
   } // namespace Os
 } // namespace Core

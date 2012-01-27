@@ -31,8 +31,8 @@
 #include "rc.h"
 #include "tr.h"
 #include "translatormanager.h"
+#include "settings.h"
 #include "aboutdialog.h"
-#include "userview.h"
 #include "blacklistview.h"
 #include "backlogview.h"
 #include "devicedialog.h"
@@ -42,7 +42,8 @@
 #include "seekdialog.h"
 #include "livedialog.h"
 #include "syncdialog.h"
-#include "settings.h"
+#include "urldialog.h"
+#include "userview.h"
 #include "defines.h"
 #ifdef USE_MODE_SIGNAL
   #include "signalview.h"
@@ -51,6 +52,7 @@
   #include "messagehandler.h"
 #endif // USE_MODE_SIGNAL
 #include "module/player/player.h"
+#include "module/mrlresolver/mrlresolvermanager.h"
 #include "module/translator/translator.h"
 #ifdef USE_MODULE_SERVERAGENT
   #include "module/serveragent/serveragent.h"
@@ -90,7 +92,7 @@
 #ifdef Q_OS_UNIX
   #include "unix/qtunix/qtunix.h"
 #endif // Q_OS_UNIX
-#include "core/os.h"
+//#include "core/os.h"
 #include "core/cmd.h"
 #include "core/annotationparser.h"
 #include "core/util/datetime.h"
@@ -184,8 +186,8 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags f)
     tray_(0),
     annotationEditor_(0), blacklistView_(0), cloudView_(0), commentView_(0), backlogView_(0),
     aboutDialog_(0), deviceDialog_(0), helpDialog_(0), loginDialog_(0),
-    processPickDialog_(0), seekDialog_(0), syncDialog_(0), windowPickDialog_(0),userView_(0),
-    dragPos_(BAD_POS), tokenType_(0),
+    processPickDialog_(0), seekDialog_(0), syncDialog_(0), windowPickDialog_(0), urlDialog_(0), userView_(0),
+    dragPos_(BAD_POS), tokenType_(0), recentSourceLocked_(false),
     themeMenu_(0),
     setThemeToDefaultAct_(0), setThemeToRandomAct_(0),
     setThemeToBlack1Act_(0), setThemeToBlack2Act_(0)  ,
@@ -307,8 +309,11 @@ MainWindow::createComponents()
     tray_ = new Tray(this);
 
   // Utilities
-  grabber_ = new Grabber(this);
-  grabber_->setSavePath(Core::Os::desktopPath());
+  grabber_ = new Grabber(this); {
+    QString desktopPath = QDesktopServices::storageLocation(QDesktopServices::DesktopLocation);
+    if (!desktopPath.isEmpty())
+      grabber_->setSavePath(desktopPath);
+  }
 
   // Caches
   cache_ = new Database(G_PATH_CACHEDB, this);
@@ -461,6 +466,7 @@ MainWindow::createConnections()
   connect(player_, SIGNAL(errorEncountered()), SLOT(handlePlayerError()));
   connect(player_, SIGNAL(trackNumberChanged(int)), SLOT(invalidateMediaAndPlay()));
   connect(player_, SIGNAL(endReached()), SLOT(autoPlayNext()));
+  connect(player_, SIGNAL(mediaTitleChanged(QString)), SLOT(setWindowTitle(QString)));
 
   // Hub
   connect(hub_, SIGNAL(playModeChanged(SignalHub::PlayMode)), SLOT(updatePlayMode()));
@@ -708,6 +714,13 @@ MainWindow::createConnections()
 #endif // USE_MODE_SIGNAL
   //connect(player_, SIGNAL(opening()), SLOT(backlogView()));
 
+
+  // MRL resolver
+  MrlResolverManager *rm = MrlResolverManager::globalInstance();
+  connect(rm, SIGNAL(resolved(QStringList,QString,QString)), SLOT(openRemoteUrls(QStringList,QString,QString)));
+  connect(rm, SIGNAL(messageReceived(QString)), SLOT(log(QString)));
+  connect(rm, SIGNAL(errorReceived(QString)), SLOT(warn(QString)));
+
   // - Close
   //connect(this, SIGNAL(closing()), db_, SLOT(dispose));
 }
@@ -718,8 +731,8 @@ MainWindow::parseArguments(const QStringList &args)
   if (args.size() <= 1)
     return;
 
-  // TODO
-  openPath(args.back());
+  playlist_ = args;
+  openMrl(args.back());
 }
 
 bool
@@ -741,7 +754,9 @@ MainWindow::createActions()
 
   MAKE_ACTION(openAct_,         OPEN,           hub_,           SLOT(open()))
   MAKE_ACTION(openFileAct_,     OPENFILE,       this,           SLOT(openFile()))
+  MAKE_ACTION(openUrlAct_,      OPENURL,        this,           SLOT(openUrl()))
   MAKE_ACTION(openDeviceAct_,   OPENDEVICE,     this,           SLOT(openDevice()))
+  MAKE_ACTION(openInWebBrowserAct_,OPENINWEBBROWSER, this,      SLOT(openInWebBrowser()))
   MAKE_ACTION(openVideoDeviceAct_, OPENVIDEODEVICE,  this,      SLOT(openVideoDevice()))
   MAKE_ACTION(openAudioDeviceAct_, OPENAUDIODEVICE,  this,      SLOT(openAudioDevice()))
   MAKE_ACTION(openSubtitleAct_, OPENSUBTITLE,   this,           SLOT(openSubtitle()))
@@ -780,7 +795,7 @@ MainWindow::createActions()
   MAKE_TOGGLE(toggleAnnotationEditorVisibleAct_, ANNOTATIONEDITOR, this, SLOT(setAnnotationEditorVisible(bool)))
   MAKE_TOGGLE(toggleTokenViewVisibleAct_, TOKENVIEW, tokenView_, SLOT(setVisible(bool)))
   MAKE_TOGGLE(toggleCommentViewVisibleAct_, COMMENTVIEW, this, SLOT(setCommentViewVisible(bool)))
-  MAKE_TOGGLE(toggleCloudViewVisibleAct_, CLOUDVIEW, this, SLOT(setCloudViewVisible(bool)))
+  MAKE_ACTION(openHomePageAct_, CLOUDVIEW, this, SLOT(openHomePage()))
   MAKE_TOGGLE(toggleTranslateAct_, TRANSLATE,   this,           SLOT(setTranslateEnabled(bool)))
   MAKE_TOGGLE(toggleSubtitleOnTopAct_, SUBTITLEONTOP,   this,  SLOT(setSubtitleOnTop(bool)))
   MAKE_TOGGLE(toggleEmbeddedPlayerOnTopAct_, EMBEDONTOP,   embeddedPlayer_,  SLOT(setOnTop(bool)))
@@ -934,7 +949,7 @@ MainWindow::createMenus()
     helpContextMenu_->setTitle(TR(T_MENUTEXT_HELP));
     helpContextMenu_->setToolTip(TR(T_TOOLTIP_HELP));
 
-    helpContextMenu_->addAction(toggleCloudViewVisibleAct_ );
+    helpContextMenu_->addAction(openHomePageAct_);
     helpContextMenu_->addAction(helpAct_);
     helpContextMenu_->addAction(aboutAct_);
   }
@@ -1390,6 +1405,27 @@ MainWindow::open()
 }
 
 void
+MainWindow::openUrl()
+{
+  if (!urlDialog_) {
+    urlDialog_ = new UrlDialog(this);
+    connect(urlDialog_, SIGNAL(urlEntered(QString)), SLOT(openUrl(QString)));
+  }
+  urlDialog_->show();
+}
+
+void
+MainWindow::openUrl(const QString &url)
+{
+  if (!MrlResolverManager::globalInstance()->resolve(url)) {
+    if (isRemoteMrl(url))
+      openMrl(url, false); // checkPath = false
+    else
+      openLocalUrl(url);
+  }
+}
+
+void
 MainWindow::openFile()
 {
   if (!QDir(recentPath_).exists())
@@ -1506,7 +1542,8 @@ MainWindow::openDevicePath(const QString &path, bool isAudioCD)
   if (isAudioCD && !mrl.startsWith(PLAYER_URL_CD, Qt::CaseInsensitive))
     mrl = PLAYER_URL_CD + path;
 
-  openPath(mrl);
+  recentSourceLocked_ = false;
+  openMrl(mrl);
 }
 
 void
@@ -1522,7 +1559,8 @@ MainWindow::openDirectory()
     playlist_.clear();
 
     recentPath_ = path;
-    openPath(path);
+    recentSourceLocked_ = false;
+    openMrl(path);
   }
 }
 
@@ -1547,20 +1585,21 @@ MainWindow::openSubtitle()
 }
 
 void
-MainWindow::openUrl(const QUrl &url)
+MainWindow::openLocalUrl(const QUrl &url)
 {
   if (!url.isValid())
     return;
 
+  recentSourceLocked_ = false;
   QString path = url.toLocalFile();
   if (!path.isEmpty())
     openSource(path);
   else
-    openPath(url.toEncoded(), false); // check path = false
+    openMrl(url.toEncoded(), false); // check path = false
 }
 
 void
-MainWindow::openUrls(const QList<QUrl> &urls)
+MainWindow::openLocalUrls(const QList<QUrl> &urls)
 {
   // FIXME: add to playlist rather then this approach!!!!!
   if (!urls.empty()) {
@@ -1570,15 +1609,16 @@ MainWindow::openUrls(const QList<QUrl> &urls)
       if (!path.isEmpty())
         playlist_.append(path);
     }
-    openUrl(urls.front());
+    openLocalUrl(urls.front());
   }
 }
 
 void
 MainWindow::openMimeData(const QMimeData *mime)
 {
+  recentSourceLocked_ = false;
   if (mime && mime->hasUrls())
-    openUrls(mime->urls());
+    openLocalUrls(mime->urls());
 }
 
 
@@ -1591,8 +1631,46 @@ MainWindow::setRecentOpenedFile(const QString &path)
 }
 
 void
-MainWindow::openPath(const QString &path, bool checkPath)
+MainWindow::openRemoteUrls(const QStringList &urls, const QString &href, const QString &title)
 {
+  recentSourceLocked_ = false;
+  playlist_.clear();
+  if (urls.isEmpty())
+    return;
+  if (urls.size() > 1)
+    playlist_ = urls;
+  openMrl(urls.front(), false); // checkPath = false
+  if (!title.isEmpty() && !isRemoteMrl(title)) {
+    if (!player_->isValid())
+      resetPlayer();
+    player_->setMediaTitle(title);
+  }
+
+  recentDigest_.clear();
+  recentSource_.clear();
+  if (!href.isEmpty()) {
+    addRecent(href);
+    recentSource_ = href;
+    recentSourceLocked_ = true;
+    setToken();
+  }
+}
+
+void
+MainWindow::closeMedia()
+{
+  if (player_->hasMedia())
+    player_->closeMedia();
+
+  dataManager_->token().setId(0);
+  dataManager_->removeAliases();
+  annotationView_->invalidateAnnotations();
+}
+
+void
+MainWindow::openMrl(const QString &path, bool checkPath)
+{
+  DOUT("enter: path =" << path);
   bool fullScreen = hub_->isLiveTokenMode() && hub_->isEmbeddedPlayerMode();
   hub_->setMediaTokenMode();
   if (fullScreen) {
@@ -1601,15 +1679,18 @@ MainWindow::openPath(const QString &path, bool checkPath)
   }
 
   recentDigest_.clear();
+  if (!recentSourceLocked_)
+    recentSource_.clear();
 
   setRecentOpenedFile(path);
 
   setBrowsedFile(path);
 
-  if (checkPath) {
+  if (checkPath && !isRemoteMrl(path)) {
     QFileInfo fi(removeUrlPrefix(path));
     if (!fi.exists()) {
       warn(TR(T_ERROR_BAD_FILEPATH) + ": " + path);
+      DOUT("exit: path not exist: " + path);
       return;
     }
   }
@@ -1618,18 +1699,27 @@ MainWindow::openPath(const QString &path, bool checkPath)
 
   if (!player_->isValid())
     resetPlayer();
+
+  DOUT("invoke openMedia");
+  if (player_->hasMedia())
+    closeMedia();
   player_->openMedia(path);
 
-  addRecent(path);
-  if (player_->hasPlaylist())
+  if (!isRemoteMrl(path))
+    addRecent(path);
+  if (player_->hasPlaylist()) {
+    DOUT("exit: media has playlist");
     return;
+  }
 
   if (player_->hasMedia()) {
-    recentDigest_.clear();
     if (player_->isMouseEventEnabled())
       player_->startVoutTimer();
+    DOUT("invoke invalidateMediaAndPlay");
     invalidateMediaAndPlay();
   }
+
+  DOUT("exit");
 }
 
 bool
@@ -1649,6 +1739,10 @@ MainWindow::isRectOutOfScreen(const QRect &globalRect) const
 bool
 MainWindow::isDigestReady(const QString &path) const
 {
+  if (path.isEmpty())
+    return false;
+  if (isRemoteMrl(path))
+    return false;
   if (Player::isSupportedPlaylist(path))
     return false;
   if (path.endsWith(".cda", Qt::CaseInsensitive))
@@ -1697,9 +1791,7 @@ MainWindow::invalidateMediaAndPlay(bool async)
   }
 
   if (player_->hasMedia()) {
-    if (async &&
-        recentDigest_.isEmpty() &&
-        isDigestReady(player_->mediaPath())) {
+    if (async) {
       log(tr("analyzing media ..."));
       QThreadPool::globalInstance()->start(new task_::invalidateMediaAndPlay(this));
       DOUT("exit: returned from async branch");
@@ -1710,24 +1802,17 @@ MainWindow::invalidateMediaAndPlay(bool async)
     playerMutex_.lock();
     DOUT("playerMutex locked");
 
-    dataManager_->token().setId(0);
-    dataManager_->removeAliases();
-    annotationView_->invalidateAnnotations();
-
     QString path = player_->mediaPath();
-    if (isDigestReady(path)) {
-      if (recentDigest_.isEmpty())
-        recentDigest_ = digestFromFile(removeUrlPrefix(path));
-      if (!recentDigest_.isEmpty())
-        setToken(path);
-    }
+    invalidateToken(path);
 
-    addRecent(path);
+    if (!isRemoteMrl(path))
+      addRecent(path);
     //if (mode_ == NormalPlayMode)
     //  videoView_->resize(INIT_WINDOW_SIZE);
 
     player_->play();
-    QTimer::singleShot(0, player_, SLOT(loadExternalSubtitles())); // load external subtitles later
+    if (!isRemoteMrl(path))
+      QTimer::singleShot(0, player_, SLOT(loadExternalSubtitles())); // load external subtitles later
 
     invalidateWindowTitle();
 
@@ -1910,7 +1995,7 @@ MainWindow::snapshot()
       QTime time = Core::msecs2time(player_->time());
 
       QString saveName = mediaName + "__" + time.toString("hh_mm_ss_zzz") + ".png";
-      QString savePath = Core::Os::desktopPath() + "/" + saveName;
+      QString savePath = grabber_->savePath() + "/" + saveName;
 
       bool succeed = player_->snapshot(savePath);
       if (succeed)
@@ -2277,12 +2362,17 @@ MainWindow::setAnnotationEditorVisible(bool visible)
 }
 
 void
-MainWindow::setCloudViewVisible(bool visible)
+MainWindow::openInCloudView(const QString &url)
 {
   if (!cloudView_)
     cloudView_ = new CloudView(this);
-  cloudView_->setVisible(visible);
+  cloudView_->openUrl(url);
+  cloudView_->show();
 }
+
+void
+MainWindow::openHomePage()
+{ openInCloudView(G_HOMEPAGE); }
 
 void
 MainWindow::showSeekDialog()
@@ -2482,8 +2572,30 @@ MainWindow::fileType(const QString &fileName)
 }
 
 void
-MainWindow::invalidateToken()
-{ setToken(QString()); }
+MainWindow::invalidateToken(const QString &mrl)
+{
+  if (!recentDigest_.isEmpty() || isDigestReady(mrl)) {
+    dataManager_->token().setId(0);
+    dataManager_->removeAliases();
+    annotationView_->invalidateAnnotations();
+
+    if (recentDigest_.isEmpty())
+      recentDigest_ = digestFromFile(removeUrlPrefix(mrl));
+    if (!recentDigest_.isEmpty())
+      setToken(mrl);
+
+  } else if (!recentSource_.isEmpty()) {
+    dataManager_->token().setId(0);
+    dataManager_->removeAliases();
+    annotationView_->invalidateAnnotations();
+    setToken();
+
+  } else if (player_->trackCount() != 1) {
+    dataManager_->token().setId(0);
+    dataManager_->removeAliases();
+    annotationView_->invalidateAnnotations();
+  }
+}
 
 void
 MainWindow::showVideoViewIfAvailable()
@@ -2513,43 +2625,59 @@ MainWindow::setToken(const QString &input, bool async)
   inetMutex_.lock();
   DOUT("inetMutex locked");
 
-  Token token = dataManager_->token();
+  //Token token = dataManager_->token();
   dataManager_->removeToken();
 
+  Token token;
   Alias alias;
 
   if (!input.isEmpty()) {
     token.setType(tokenType_ = fileType(input));
 
-    token.setDigestType(0);
-
     QString path = removeUrlPrefix(input);
-    token.setDigest(recentDigest_);
+    Q_ASSERT(!recentDigest_.isEmpty());
+    if (recentDigest_.isEmpty() && isDigestReady(path))
+      recentDigest_ = digestFromFile(path);
 
-    // If isAliasReady, make fileName as alias and guess tt.
-    // Otherwise, keep token's original tt from tokenView_
-    if (isAliasReady(path)) {
-      QString fileName = QFileInfo(path).fileName();
-      if (!fileName.isEmpty()) {
-//#ifdef Q_WS_MAC
-//        if (tt == Token::TT_Audio)
-//          videoView_->hideView();
-//#endif // Q_WS_MAC
+    if (!recentDigest_.isEmpty()) {
+      token.setDigest(recentDigest_);
 
-        if (fileName.size() > Traits::MAX_ALIAS_LENGTH) {
-          fileName = fileName.mid(0, Traits::MAX_ALIAS_LENGTH);
-          warn(TR(T_WARNING_LONG_STRING_TRUNCATED) + ": " + fileName);
+      // If isAliasReady, make fileName as alias and guess tt.
+      // Otherwise, keep token's original tt from tokenView_
+      if (isAliasReady(path)) {
+        QString fileName = QFileInfo(path).fileName();
+        if (!fileName.isEmpty()) {
+          if (fileName.size() > Traits::MAX_ALIAS_LENGTH) {
+            fileName = fileName.mid(0, Traits::MAX_ALIAS_LENGTH);
+            warn(TR(T_WARNING_LONG_STRING_TRUNCATED) + ": " + fileName);
+          }
+
+          alias.setType(Alias::AT_Source);
+          alias.setLanguage(server_->user().language());
+          alias.setText(fileName);
+          alias.setUpdateTime(QDateTime::currentMSecsSinceEpoch() / 1000);
         }
-
-        alias.setType(Alias::AT_Source);
-        alias.setLanguage(server_->user().language());
-        alias.setText(fileName);
-        alias.setUpdateTime(QDateTime::currentMSecsSinceEpoch() / 1000);
       }
+    }
+  } else if (!recentDigest_.isEmpty()) {
+    token.setDigest(recentDigest_);
+  } else if (!recentSource_.isEmpty()) {
+    token.setSource(recentSource_);
+    token.setType(tokenType_ = Token::TT_Video);
+    int part = currentPlaylistIndex();
+    if (part < 0)
+      part = 0;
+    token.setPart(part);
+    QString title = player_->mediaTitle();
+    if (!title.isEmpty() && !isRemoteMrl(title)) {
+      alias.setType(Alias::AT_Name);
+      alias.setLanguage(server_->user().language());
+      alias.setText(title);
+      alias.setUpdateTime(QDateTime::currentMSecsSinceEpoch() / 1000);
     }
   }
 
-  if (!token.hasDigest()) {
+ if (!token.hasDigest() && !token.hasSource()) {
     DOUT("inetMutex unlocking");
     inetMutex_.unlock();
     DOUT("inetMutex unlocked");
@@ -2559,21 +2687,22 @@ MainWindow::setToken(const QString &input, bool async)
 
   token.setCreateTime(QDateTime::currentMSecsSinceEpoch() / 1000);
 
-  if (hub_->isMediaTokenMode() && player_->hasMedia()) {
-    int tid = 0;
+  if (hub_->isMediaTokenMode() && player_->hasMedia() && token.hasDigest()) {
+    int part = 0;
     if (player_->hasTitles())
-      tid = player_->titleId();
+      part = player_->titleId();
     //else if (player_->hasPlaylist())
-    //  tid = player_->trackNumber();
+    //  part = player_->trackNumber();
 
-    if (tid < 0)
-      tid = 0;
-    token.setDigestType(tid);
+    if (part < 0)
+      part = 0;
+    token.setPart(part);
   }
 
   AliasList aliases;
 
   qint64 tid = dataServer_->submitTokenAndAlias(token, alias);
+  //alias.setTokenId(tid)
   if (tid) {
     Token t = dataServer_->selectTokenWithId(tid);
     if (t.isValid()) {
@@ -2585,7 +2714,7 @@ MainWindow::setToken(const QString &input, bool async)
 
   if (!token.isValid() && cache_->isValid() && token.hasDigest()) {
     log(tr("searching for token in cache ..."));
-    Token t = cache_->selectTokenWithDigest(token.digest(), token.digestType());
+    Token t = cache_->selectTokenWithDigest(token.digest(), token.part());
     if (t.isValid())
       token = t;
   }
@@ -2750,7 +2879,7 @@ MainWindow::submitText(const QString &text, bool async)
     return;
   }
   if (!server_->isAuthorized() ||
-      !dataManager_->token().hasDigest() ||
+      !dataManager_->token().hasDigest() && !dataManager_->token().hasSource() ||
       hub_->isMediaTokenMode() && !player_->hasMedia()
 #ifdef USE_MODE_SIGNAL
       || hub_->isSignalTokenMode() && !messageHandler_->lastMessageHash().isValid()
@@ -2774,11 +2903,10 @@ MainWindow::submitText(const QString &text, bool async)
   DOUT("inetMutex locking");
   inetMutex_.lock();
   DOUT("inetMutex locked");
-
   Annotation annot; {
     annot.setTokenId(dataManager_->token().id());
     annot.setTokenDigest(dataManager_->token().digest());
-    annot.setTokenDigestType(dataManager_->token().digestType());
+    annot.setTokenPart(dataManager_->token().part());
     annot.setUserId(server_->user().id());
     annot.setUserAlias(server_->user().name());
     annot.setUserAnonymous(server_->user().isAnonymous());
@@ -2931,6 +3059,10 @@ MainWindow::say(const QString &text, const QString &color)
 void
 MainWindow::log(const QString &text)
 { Logger::log(text); }
+
+void
+MainWindow::warn(const QString &text)
+{ Logger::warn(text); }
 
 // - Events -
 
@@ -3198,12 +3330,18 @@ MainWindow::invalidateContextMenu()
     contextMenu_->addSeparator();
   }
 
+  if (!recentSource_.isEmpty()) {
+    contextMenu_->addAction(openInWebBrowserAct_);
+    contextMenu_->addSeparator();
+  }
+
   // Open
   {
     //contextMenu_->addSeparator();
 
     //contextMenu_->addAction(openAct_);
     contextMenu_->addAction(openFileAct_);
+    contextMenu_->addAction(openUrlAct_);
     contextMenu_->addAction(openDeviceAct_);
 
 #ifdef USE_WIN_PICKER
@@ -3239,7 +3377,7 @@ MainWindow::invalidateContextMenu()
 
     // Tracks
     if (hub_->isMediaTokenMode() && player_->hasMedia() &&
-        player_->hasPlaylist())
+        player_->trackCount() > 1)
       //invalidateTrackMenu();
       contextMenu_->addMenu(trackMenu_);
 
@@ -3315,6 +3453,8 @@ MainWindow::invalidateContextMenu()
         foreach (QString subtitle, l) {
           if (subtitle.isEmpty())
             subtitle = TR(T_SUBTITLE) + " " + QString::number(id);
+          else
+            subtitle = QString::number(id) + ". " + subtitle;
           BOOST_AUTO(a, new Core::Gui::ActionWithId(id, subtitle, subtitleMenu_));
           contextMenuActions_.append(a);
           if (id == player_->subtitleId()) {
@@ -3344,6 +3484,8 @@ MainWindow::invalidateContextMenu()
         foreach (QString name, l) {
           if (name.isEmpty())
             name = TR(T_AUDIOTRACK) + " " + QString::number(id);
+          else
+            name = QString::number(id) + ". " + name;
           BOOST_AUTO(a, new Core::Gui::ActionWithId(id, name, audioTrackMenu_));
           contextMenuActions_.append(a);
           if (id == player_->audioTrackId()) {
@@ -3561,7 +3703,6 @@ MainWindow::invalidateContextMenu()
     contextMenu_->addAction(toggleMenuBarVisibleAct_);
 #endif // Q_WS_MAC
 
-    toggleCloudViewVisibleAct_->setChecked(cloudView_ && cloudView_->isVisible());
     contextMenu_->addMenu(helpContextMenu_);
 
     contextMenu_->addAction(quitAct_);
@@ -4565,15 +4706,12 @@ MainWindow::openProcessHook(ulong hookId, const ProcessInfo &pi)
 
   hub_->setSignalTokenMode();
 
-  dataManager_->token().setId(0);
-  dataManager_->removeAliases();
-  annotationView_->invalidateAnnotations();
-
-  if (pi.isValid()) {
-    recentDigest_ = digestFromFile(pi.executablePath);
-    if (!recentDigest_.isEmpty())
-      setToken(pi.executablePath);
-  }
+  QString mrl;
+  if (pi.isValid())
+    mrl = pi.executablePath;
+  recentDigest_.clear();
+  recentSource_.clear();
+  invalidateToken(mrl);
 
   hub_->play();
 }
@@ -4847,6 +4985,10 @@ MainWindow::openNextPlaylistItem()
   openSource(playlist_[i]);
 }
 
+int
+MainWindow::currentPlaylistIndex() const
+{ return playlist_.indexOf(recentOpenedFile_); }
+
 void
 MainWindow::openPreviousPlaylistItem()
 {
@@ -4867,7 +5009,7 @@ MainWindow::invalidatePlaylistMenu()
 {
   QList<QAction*> l = playlistMenu_->actions();
   foreach (QAction *a, l)
-    if (a && a != clearPlaylistAct_)
+    if (a && a != clearPlaylistAct_ && a != previousPlaylistItemAct_ && a != nextPlaylistItemAct_)
       a->deleteLater();
   playlistMenu_->clear();
 
@@ -4880,6 +5022,7 @@ MainWindow::invalidatePlaylistMenu()
       playlistMenu_->addAction(nextPlaylistItemAct_);
     playlistMenu_->addSeparator();
 
+    int index = 0;
     foreach (QString f, playlist_) {
       QString path = removeUrlPrefix(f);
       QString text = QFileInfo(path).fileName();
@@ -4888,6 +5031,7 @@ MainWindow::invalidatePlaylistMenu()
         if (text.isEmpty())
           text = f;
       }
+      text = QString::number(index++) + ". " + shortenText(text);
       BOOST_AUTO(a, new Core::Gui::ActionWithId(i++, text, playlistMenu_));
       if (f == recentOpenedFile_) {
 #ifdef Q_WS_X11
@@ -4915,8 +5059,8 @@ MainWindow::invalidateRecent()
 
   BOOST_AUTO(p, recentFiles_.begin());
   while (p != recentFiles_.end()) {
-    QFileInfo fi(removeUrlPrefix(*p));
-    if (fi.exists())
+    if (isRemoteMrl(*p)
+        || QFileInfo(removeUrlPrefix(*p)).exists())
       ++p;
     else {
       p = recentFiles_.erase(p);
@@ -4952,13 +5096,20 @@ MainWindow::invalidateRecentMenu()
       if (i >= G_RECENT_COUNT)
         break;
 
-      QString path = removeUrlPrefix(f);
-      QString text = QFileInfo(path).fileName();
-      if (text.isEmpty()) {
-        text = QDir(path).dirName();
-        if (text.isEmpty())
-          text = f;
+      QString text;
+      if (isRemoteMrl(f))
+        text = f;
+      else {
+        QString path = removeUrlPrefix(f);
+        text = QFileInfo(path).fileName();
+        if (text.isEmpty()) {
+          text = QDir(path).dirName();
+          if (text.isEmpty())
+            text = f;
+        }
       }
+      Q_ASSERT(!text.isEmpty());
+      text = QString::number(i) + ". " + shortenText(text);
       BOOST_AUTO(a, new Core::Gui::ActionWithId(i++, text, recentMenu_));
       connect(a, SIGNAL(triggeredWithId(int)), SLOT(openRecent(int)));
 
@@ -4990,6 +5141,11 @@ MainWindow::openSource(const QString &path)
   if (path.isEmpty())
     return;
 
+  if (isRemoteMrl(path)) {
+    openUrl(path);
+    return;
+  }
+
   QFileInfo fi(removeUrlPrefix(path));
   if (!fi.exists()) {
     warn(TR(T_ERROR_BAD_FILEPATH) + ": " + path);
@@ -5011,7 +5167,7 @@ MainWindow::openSource(const QString &path)
     openProcessPath(path);
   else
 #endif // USE_MODE_SIGNAL
-  openPath(path, true);
+  openMrl(path, true);
 }
 
 void
@@ -5248,7 +5404,7 @@ MainWindow::openBrowsedFile(int id)
     id = 0;
 
   if (id >= 0 && id < browsedFiles_.size())
-    openPath(browsedFiles_[id].absoluteFilePath());
+    openMrl(browsedFiles_[id].absoluteFilePath());
 }
 
 int
@@ -5401,11 +5557,36 @@ MainWindow::updateLiveAnnotations(bool async)
   //DOUT("exit");
 }
 
+// - Source -
+
+void
+MainWindow::openInWebBrowser()
+{
+  if (recentSource_.isEmpty())
+    return;
+  openInCloudView(recentSource_);
+}
+
 // - Error handling -
 
 void
 MainWindow::handlePlayerError()
 { }
+
+// - Helpers -
+
+QString
+MainWindow::shortenText(const QString &text)
+{
+  if (text.size() <= 30)
+    return text;
+  else
+    return text.left(17) + "..." + text.right(10);
+}
+
+bool
+MainWindow::isRemoteMrl(const QString& mrl)
+{ return mrl.contains("tp://", Qt::CaseInsensitive); }
 
 // EOF
 

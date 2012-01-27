@@ -52,4 +52,4 @@ private:
          *blockedCountLabel_;
 };
 
-#endif // TOKENVIEW_H
+#endif // USERVIEW_H

@@ -75,15 +75,15 @@ public:
   User selectUserWithId(qint64 id) const;
   UserList selectUsers() const;
   Token selectTokenWithId(qint64 id) const;
-  Token selectTokenWithDigest(const QString &digest, qint32 digestType) const;
+  Token selectTokenWithDigest(const QString &digest, qint32 part) const;
   TokenList selectTokens() const;
   Alias selectAliasWithId(qint64 id) const;
   AliasList selectAliasesWithTokenId(qint64 tid) const;
-  AliasList selectAliasesWithTokenDigest(const QString &digest, qint32 digestType);
+  AliasList selectAliasesWithTokenDigest(const QString &digest, qint32 part);
   AliasList selectAliases() const;
   Annotation selectAnnotationWithId(qint64 id) const;
   AnnotationList selectAnnotationsWithTokenId(qint64 tid) const;
-  AnnotationList selectAnnotationsWithTokenDigest(const QString &digest, qint32 digestType) const;
+  AnnotationList selectAnnotationsWithTokenDigest(const QString &digest, qint32 part) const;
   AnnotationList selectAnnotations() const;
 
   ///  Return -1 if not annotation id not exist
@@ -94,15 +94,15 @@ public:
   bool deleteUserWithId(qint64 id);
   void deleteUsers();
   bool deleteTokenWithId(qint64 id);
-  void deleteTokenWithDigest(const QString &digest, qint32 digestType);
+  void deleteTokenWithDigest(const QString &digest, qint32 part);
   void deleteTokens();
   bool deleteAliasWithId(qint64 id);
   void deleteAliasesWithTokenId(qint64 tid);
-  void deleteAliasesWithTokenDigest(const QString &digest, qint32 digestType);
+  void deleteAliasesWithTokenDigest(const QString &digest, qint32 part);
   void deleteAliases();
   bool deleteAnnotationWithId(qint64 id);
   void deleteAnnotationsWithTokenId(qint64 tid);
-  void deleteAnnotationsWithTokenDigest(const QString &digest, qint32 digestType);
+  void deleteAnnotationsWithTokenDigest(const QString &digest, qint32 part);
   void deleteAnnotations();
 
   qint64 updateUser(const User &u)

@@ -28,358 +28,328 @@ URL syntax:
   vlc://pause:<seconds>          Special item to pause the playlist for a certain time
   vlc://quit                     Special item to quit VLC
 
-一致するモジュールが見つかりませんでした。--listまたは、--list-verboseオプションを指定して使用可能なモジュールを確認してください。
+No matching module found. Use --list or --list-verbose to list available modules.
 
- オーディオ
-      --audio, --no-audio        オーディオの有効化 (デフォルト??
-                                 ?有効)
-      --volume=<整数 [0 .. 1024]>
-                                 デフォルトのオーディオ音量
-      --spdif, --no-spdif        使用可能な場合、S/PDIFを使用
-                                 (デフォルトで無効)
-      --force-dolby-surround={0 (自動), 1 (オン), 2 (オフ)}
-                                 ドルビーサラウンドの検出
-      --audio-replay-gain-mode={none,track,album}
-                                 再生ゲインモード
-      --audio-replay-gain-preamp=<浮動小数点>
-                                 デフォルトプリアンプ
-      --audio-replay-gain-default=<浮動小数点>
-                                 デフォルト再生ゲイン
+ Audio
+      --audio, --no-audio        Enable audio (default enabled)
+      --volume <integer [0 .. 1024]>
+                                 Default audio volume
+      --spdif, --no-spdif        Use S/PDIF when available (default disabled)
+      --force-dolby-surround {0 (Auto), 1 (On), 2 (Off)}
+                                 Force detection of Dolby Surround
+      --audio-replay-gain-mode {none,track,album}
+                                 Replay gain mode
+      --audio-replay-gain-preamp <float>
+                                 Replay preamp
+      --audio-replay-gain-default <float>
+                                 Default replay gain
       --audio-time-stretch, --no-audio-time-stretch
-                                 オーディオのタイムストレッチの?
-                                 ??効化 (デフォルトで有効)
-      --audio-filter=<文字列> オーディオフィルター
-      --audio-visual=<文字列> オーディオの視覚化
+                                 Enable time streching audio (default enabled)
+      --audio-filter <string>    Audio filters
+      --audio-visual <string>    Audio visualizations 
 
- ビデオ
+ Video
   -f, --fullscreen, --no-fullscreen
-                                 全画面ビデオ出力 (デフォルトで??
-                                 ?効)
-      --overlay, --no-overlay    オーバーレイビデオ出力 (デフォ??
-                                 ?トで有効)
+                                 Fullscreen video output (default disabled)
       --video-on-top, --no-video-on-top
-                                 常に最前面 (デフォルトで無効)
+                                 Always on top (default disabled)
       --video-wallpaper, --no-video-wallpaper
-                                 壁紙モードの有効化 (デフォルト??
-                                 ?無効)
+                                 Enable wallpaper mode  (default disabled)
       --video-title-show, --no-video-title-show
-                                 ビデオにメディアタイトルを表示
-                                 (デフォルトで有効)
-      --video-title-timeout=<整数>
-                                 ビデオタイトルを表示する時間を?
-                                 ??リ秒で指定
-      --video-title-position={0 (中央), 1 (左), 2 (右), 4 (上), 8 (下), 5 (左上), 6 (右上), 9 (左下), 10 (右下)}
-                                 ビデオタイトルの位置
-      --mouse-hide-timeout=<整数>
-                                 カーソルと全画面表示コントロー?
-                                 ??ーを隠すまでの時間をミリ秒で??
-                                 ?定
-   スナップショット:
-      --snapshot-path=<文字列>
-                                 ビデオスナップショットのディレ?
-                                 ??トリ(またはファイル名)
-      --snapshot-prefix=<文字列>
-                                 ビデオスナップショットファイル?
-                                 ??のプレフィックス
-      --snapshot-format={png,jpg}
-                                 ビデオスナップショットの形式
+                                 Show media title on video (default enabled)
+      --video-title-timeout <integer>
+                                 Show video title for x milliseconds
+      --video-title-position {0 (Center), 1 (Left), 2 (Right), 4 (Top), 8 (Bottom), 5 (Top-Left), 6 (Top-Right), 9 (Bottom-Left), 10 (Bottom-Right)}
+                                 Position of video title
+      --mouse-hide-timeout <integer>
+                                 Hide cursor and fullscreen controller after x
+                                 milliseconds
+   Snapshot:
+      --snapshot-path <string>   Video snapshot directory (or filename)
+      --snapshot-prefix <string> Video snapshot file prefix
+      --snapshot-format {png,jpg}
+                                 Video snapshot format
       --snapshot-preview, --no-snapshot-preview
-                                 ビデオのスナップショットを表示
-                                 (デフォルトで有効)
+                                 Display video snapshot preview (default
+                                 enabled)
       --snapshot-sequential, --no-snapshot-sequential
-                                 ファイル名にタイムスタンプの代?
-                                 ??りに連番を使用 (デフォルトで無
-                                 効)
-   ウィンドウプロパティ:
-      --crop=<文字列>         ビデオクロッピング
-      --custom-crop-ratios=<文字列>
-                                 カスタムのクロッピング比率リス?
-                                 ??
-      --aspect-ratio=<文字列> ソースのアスペクト比
+                                 Use sequential numbers instead of timestamps
+                                 (default disabled)
+   Window properties:
+      --crop <string>            Video cropping
+      --custom-crop-ratios <string>
+                                 Custom crop ratios list
+      --aspect-ratio <string>    Source aspect ratio
       --autoscale, --no-autoscale
-                                 ビデオ自動スケーリング (デフォ??
-                                 ?トで有効)
-      --scale=<浮動小数点>  ビデオスケーリング係数
-      --custom-aspect-ratios=<文字列>
-                                 カスタムのアスペクト比リスト
-      --deinterlace={0 (オフ), -1 (自動), 1 (オン)}
-                                 デインターレース
-      --deinterlace-mode={discard,blend,mean,bob,linear,x,yadif,yadif2x}
-                                 デインターレースモード
-      --video-filter=<文字列> ビデオフィルターモジュール
-      --vout-filter=<文字列>  ビデオ出力フィルターモジュール
+                                 Video Auto Scaling (default enabled)
+      --scale <float>            Video scaling factor
+      --custom-aspect-ratios <string>
+                                 Custom aspect ratios list
+      --deinterlace {0 (Off), -1 (Automatic), 1 (On)}
+                                 Deinterlace
+      --deinterlace-mode {discard,blend,mean,bob,linear,x,yadif,yadif2x}
+                                 Deinterlace mode
+      --video-filter <string>    Video filter module
+      --vout-filter <string>     Video output filter module
 
- サブピクチャー
-   オンスクリーンディスプレイ(OSD):
-      --osd, --no-osd            オンスクリーンディスプレイ(OSD)
-                                 (デフォルトで有効)
-   字幕:
-      --sub-file=<文字列>     字幕ファイルを使用
+ Subpictures
+   On Screen Display:
+      --osd, --no-osd            On Screen Display (default enabled)
+   Subtitles:
+      --sub-file <string>        Use subtitle file
       --sub-autodetect-file, --no-sub-autodetect-file
-                                 字幕ファイルの自動検出 (デフォ??
-                                 ?トで有効)
-   オーバーレイ:
-      --sub-filter=<文字列>   サブピクチャーフィルターモジュ?
-                                 ??ル
-   トラック設定:
-      --audio-language=<文字列>
-                                 オーディオ言語
-      --sub-language=<文字列> 字幕の言語
-   再生制御:
-      --input-repeat=<整数>    入力ストリームの繰り返し
+                                 Autodetect subtitle files (default enabled)
+   Overlays:
+      --sub-filter <string>      Subpictures filter module
+   Track settings:
+      --audio-language <string>  Audio language
+      --sub-language <string>    Subtitle language
+   Playback control:
+      --input-repeat <integer>   Input repetitions
       --input-fast-seek, --no-input-fast-seek
-                                 高速シーク (デフォルトで無効)
-      --rate=<浮動小数点>   再生速度
-   デフォルトデバイス:
-      --dvd=<文字列>          DVDデバイス
-      --vcd=<文字列>          VCDデバイス
-      --cd-audio=<文字列>     オーディオCDデバイス
-   ネットワーク設定:
-      --server-port=<整数>     UDPポート
-  -6, --ipv6, --no-ipv6          IPv6を使用 (デフォルトで無効)
-  -4, --ipv4, --no-ipv4          IPv4を使用 (デフォルトで無効)
+                                 Fast seek (default disabled)
+      --rate <float>             Playback speed
+   Default devices:
+      --dvd <string>             DVD device
+      --vcd <string>             VCD device
+      --cd-audio <string>        Audio CD device
+   Network settings:
+      --server-port <integer>    UDP port
+  -6, --ipv6, --no-ipv6          Force IPv6 (default disabled)
+  -4, --ipv4, --no-ipv4          Force IPv4 (default disabled)
 
- 入力
-   詳細設定:
+ Input
+   Advanced:
       --prefer-system-codecs, --no-prefer-system-codecs
-                                 VLC上でシステムプラグインを優先
-                                 (デフォルトで無効)
-      --stream-filter=<文字列>
-                                 ストリームフィルターモジュール
-   パフォーマンスオプション:
-      --high-priority, --no-high-priority
-                                 プロセスの優先度を高くする
-                                 (デフォルトで無効)
+                                 Prefer system plugins over VLC (default
+                                 disabled)
+      --stream-filter <string>   Stream filter module
 
- プレイリスト
-  -Z, --random, --no-random      ファイルをランダムに再生
-                                 (デフォルトで無効)
-  -L, --loop, --no-loop          すべてをリピート (デフォルトで??
-                                 ?効)
-  -R, --repeat, --no-repeat      再生中タイトルをリピート
-                                 (デフォルトで無効)
+ Playlist
+   Performance options:
+  -Z, --random, --no-random      Play files randomly forever (default disabled)
+  -L, --loop, --no-loop          Repeat all (default disabled)
+  -R, --repeat, --no-repeat      Repeat current item (default disabled)
       --play-and-exit, --no-play-and-exit
-                                 再生と終了 (デフォルトで無効)
+                                 Play and exit (default disabled)
       --play-and-stop, --no-play-and-stop
-                                 再生と停止 (デフォルトで無効)
+                                 Play and stop (default disabled)
       --media-library, --no-media-library
-                                 メディアライブラリーを使用
-                                 (デフォルトで有効)
+                                 Use media library (default enabled)
       --playlist-tree, --no-playlist-tree
-                                 プレイリストのツリー表示
-                                 (デフォルトで無効)
-      --open=<文字列>         デフォルトのストリーム
+                                 Display playlist tree (default disabled)
+      --open <string>            Default stream
       --auto-preparse, --no-auto-preparse
-                                 ファイルの自動的な事前解析
-                                 (デフォルトで有効)
-      --album-art={0 (手動でのダウンロードのみ), 1 (トラックの再生を開始した時), 2 (トラックの追加時、即時に)}
-                                 アルバムアートのポリシー
-  -S, --services-discovery=<文字列>
-                                 サービス検出モジュール
-  -v, --verbose=<整数>         メッセージの出力レベル(0,1,2)
-      --verbose-objects=<文字列>
-                                 デバッグメッセージを表示するオ?
-                                 ??ジェクトの選択
-      --language={auto,en,ar,bn,pt_BR,en_GB,el,bg,ca,zh_TW,cs,da,nl,eu,fi,fr,ga,gl,ka,de,he,hr,hu,hy,id,is,it,ja,ko,lt,mn,ms,nn,kk,km,oc,fa,pl,pt_PT,pa,ro,ru,zh_CN,si,sr,sk,sl,ckb,es,sv,tr,uk,vi,wa}
-                                 言語
-      --advanced, --no-advanced  拡張オプションを表示 (デフォル??
-                                 ?で無効)
-      --interact, --no-interact  対話的なインターフェース
-                                 (デフォルトで有効)
-  -I, --intf=<文字列>         インターフェースモジュール
-      --extraintf=<文字列>    拡張インターフェースモジュール
-      --control=<文字列>      制御インターフェース
+                                 Automatically preparse files (default enabled)
+      --album-art {0 (Manual download only), 1 (When track starts playing), 2 (As soon as track is added)}
+                                 Album art policy
+  -S, --services-discovery <string>
+                                 Services discovery modules
+  -v, --verbose <integer>        Verbosity (0,1,2)
+      --verbose-objects <string> Choose which objects should print debug
+                                 message
+      --pidfile <string>         Write process id to file
+      --language {auto,en,ar,bn,pt_BR,en_GB,el,bg,ca,zh_TW,cs,da,nl,eu,fi,fr,ga,gl,ka,de,he,hr,hu,hy,id,is,it,ja,ko,lt,mn,ms,nn,kk,km,oc,fa,pl,pt_PT,pa,ro,ru,zh_CN,si,sr,sk,sl,ckb,es,sv,tr,uk,vi,wa}
+                                 Language
+      --advanced, --no-advanced  Show advanced options (default disabled)
+      --interact, --no-interact  Interface interaction (default enabled)
+  -I, --intf <string>            Interface module
+      --extraintf <string>       Extra interface modules
+      --control <string>         Control interfaces
 
- ホットキー
-      --key-toggle-fullscreen=<整数>
-                                 全画面表示
-      --global-key-toggle-fullscreen=<整数>
-                                 全画面表示
-      --key-leave-fullscreen=<整数>
-                                 全画面表示解除
-      --global-key-leave-fullscreen=<整数>
-                                 全画面表示解除
-      --key-play-pause=<整数>  再生/一時停止
-      --global-key-play-pause=<整数>
-                                 再生/一時停止
-      --key-faster=<整数>      速く
-      --global-key-faster=<整数>
-                                 速く
-      --key-slower=<整数>      ゆっくり
-      --global-key-slower=<整数>
-                                 ゆっくり
-      --key-rate-normal=<整数> 通常レート
-      --global-key-rate-normal=<整数>
-                                 通常レート
-      --key-rate-faster-fine=<整数>
-                                 少しだけ速く
-      --global-key-rate-faster-fine=<整数>
-                                 少しだけ速く
-      --key-rate-slower-fine=<整数>
-                                 少しだけゆっくり
-      --global-key-rate-slower-fine=<整数>
-                                 少しだけゆっくり
-      --key-next=<整数>        次へ
-      --global-key-next=<整数> 次へ
-      --key-prev=<整数>        前へ
-      --global-key-prev=<整数> 前へ
-      --key-stop=<整数>        停止
-      --global-key-stop=<整数> 停止
-      --key-jump-extrashort=<整数>
-                                 ほんの少し前に戻る
-      --global-key-jump-extrashort=<整数>
-                                 ほんの少し前に戻る
-      --key-jump+extrashort=<整数>
-                                 ほんの少し先に進む
-      --global-key-jump+extrashort=<整数>
-                                 ほんの少し先に進む
-      --key-jump-short=<整数>  少し前に戻る
-      --global-key-jump-short=<整数>
-                                 少し前に戻る
-      --key-jump+short=<整数>  少し先に進む
-      --global-key-jump+short=<整数>
-                                 少し先に進む
-      --key-jump-medium=<整数> 前に戻る
-      --global-key-jump-medium=<整数>
-                                 前に戻る
-      --key-jump+medium=<整数> 先に進む
-      --global-key-jump+medium=<整数>
-                                 先に進む
-      --key-jump-long=<整数>   かなり前に戻る
-      --global-key-jump-long=<整数>
-                                 かなり前に戻る
-      --key-jump+long=<整数>   かなり先に進む
-      --global-key-jump+long=<整数>
-                                 かなり先に進む
-      --key-frame-next=<整数>  次のフレーム
-      --global-key-frame-next=<整数>
-                                 次のフレーム
-      --key-quit=<整数>        終了
-      --global-key-quit=<整数> 終了
-      --key-vol-up=<整数>      音量を上げる
-      --global-key-vol-up=<整数>
-                                 音量を上げる
-      --key-vol-down=<整数>    音量を下げる
-      --global-key-vol-down=<整数>
-                                 音量を下げる
-      --key-vol-mute=<整数>    ミュート
-      --global-key-vol-mute=<整数>
-                                 ミュート
-      --key-audio-track=<整数> オーディオトラックの切り替え
-      --global-key-audio-track=<整数>
-                                 オーディオトラックの切り替え
-      --key-audiodevice-cycle=<整数>
-                                 オーディオデバイスの切り替え
-      --global-key-audiodevice-cycle=<整数>
-                                 オーディオデバイスの切り替え
-      --key-subtitle-track=<整数>
-                                 字幕トラックの切り替え
-      --global-key-subtitle-track=<整数>
-                                 字幕トラックの切り替え
-      --key-aspect-ratio=<整数>
-                                 ソースのアスペクト比の切り替え
-      --global-key-aspect-ratio=<整数>
-                                 ソースのアスペクト比の切り替え
-      --key-crop=<整数>        ビデオのクロッピングの切り替え
-      --global-key-crop=<整数> ビデオのクロッピングの切り替え
-      --key-toggle-autoscale=<整数>
-                                 自動スケーリングの切り替え
-      --global-key-toggle-autoscale=<整数>
-                                 自動スケーリングの切り替え
-      --key-incr-scalefactor=<整数>
-                                 スケーリング係数の増加
-      --global-key-incr-scalefactor=<整数>
-                                 スケーリング係数の増加
-      --key-decr-scalefactor=<整数>
-                                 スケーリング係数の減少
-      --global-key-decr-scalefactor=<整数>
-                                 スケーリング係数の減少
-      --key-deinterlace=<整数> デインターレースモードの切り替?
-                                 ??
-      --global-key-deinterlace=<整数>
-                                 デインターレースモードの切り替?
-                                 ??
-      --key-wallpaper=<整数>   ビデオ出力の壁紙モードの切り替?
-                                 ??
-      --global-key-wallpaper=<整数>
-                                 ビデオ出力の壁紙モードの切り替?
-                                 ??
-      --key-random=<整数>      ランダム再生
-      --global-key-random=<整数>
-                                 ランダム再生
-      --key-loop=<整数>        通常再生/リピート/ループ
-      --global-key-loop=<整数> 通常再生/リピート/ループ
-   拡大:
-      --key-zoom-quarter=<整数>
-                                 1:4 1/4
-      --global-key-zoom-quarter=<整数>
-                                 1:4 1/4
-      --key-zoom-half=<整数>   1:2 1/2
-      --global-key-zoom-half=<整数>
-                                 1:2 1/2
-      --key-zoom-original=<整数>
-                                 1:1 オリジナル
-      --global-key-zoom-original=<整数>
-                                 1:1 オリジナル
-      --key-zoom-double=<整数> 2:1 二倍
-      --global-key-zoom-double=<整数>
-                                 2:1 二倍
-   ジャンプする長さ:
-      --extrashort-jump-size=<整数>
-                                 ほんの少し戻ったり、進んだりす?
-                                 ??長さ
-      --short-jump-size=<整数> 少し戻ったり、進んだりする長さ
-      --medium-jump-size=<整数>
-                                 戻ったり、進んだりする長さ
-      --long-jump-size=<整数>  かなり戻ったり、進んだりする長?
-                                 ??
-      --bookmark1=<文字列>    プレイリストのブックマーク1
-      --bookmark2=<文字列>    プレイリストのブックマーク2
-      --bookmark3=<文字列>    プレイリストのブックマーク3
-      --bookmark4=<文字列>    プレイリストのブックマーク4
-      --bookmark5=<文字列>    プレイリストのブックマーク5
-      --bookmark6=<文字列>    プレイリストのブックマーク6
-      --bookmark7=<文字列>    プレイリストのブックマーク7
-      --bookmark8=<文字列>    プレイリストのブックマーク8
-      --bookmark9=<文字列>    プレイリストのブックマーク9
-      --bookmark10=<文字列>   プレイリストのブックマーク10
-  -h, --help, --no-help          VLCのヘルプの表示(--advancedと--help-v
-                                 erboseを組み合わせ可能) (デフォル?
-                                 ??で無効)
+ Hot keys
+      --key-toggle-fullscreen <integer>
+                                 Fullscreen
+      --global-key-toggle-fullscreen <integer>
+                                 Fullscreen
+      --key-leave-fullscreen <integer>
+                                 Leave fullscreen
+      --global-key-leave-fullscreen <integer>
+                                 Leave fullscreen
+      --key-play-pause <integer> Play/Pause
+      --global-key-play-pause <integer>
+                                 Play/Pause
+      --key-faster <integer>     Faster
+      --global-key-faster <integer>
+                                 Faster
+      --key-slower <integer>     Slower
+      --global-key-slower <integer>
+                                 Slower
+      --key-rate-normal <integer>
+                                 Normal rate
+      --global-key-rate-normal <integer>
+                                 Normal rate
+      --key-rate-faster-fine <integer>
+                                 Faster (fine)
+      --global-key-rate-faster-fine <integer>
+                                 Faster (fine)
+      --key-rate-slower-fine <integer>
+                                 Slower (fine)
+      --global-key-rate-slower-fine <integer>
+                                 Slower (fine)
+      --key-next <integer>       Next
+      --global-key-next <integer>
+                                 Next
+      --key-prev <integer>       Previous
+      --global-key-prev <integer>
+                                 Previous
+      --key-stop <integer>       Stop
+      --global-key-stop <integer>
+                                 Stop
+      --key-jump-extrashort <integer>
+                                 Very short backwards jump
+      --global-key-jump-extrashort <integer>
+                                 Very short backwards jump
+      --key-jump+extrashort <integer>
+                                 Very short forward jump
+      --global-key-jump+extrashort <integer>
+                                 Very short forward jump
+      --key-jump-short <integer> Short backwards jump
+      --global-key-jump-short <integer>
+                                 Short backwards jump
+      --key-jump+short <integer> Short forward jump
+      --global-key-jump+short <integer>
+                                 Short forward jump
+      --key-jump-medium <integer>
+                                 Medium backwards jump
+      --global-key-jump-medium <integer>
+                                 Medium backwards jump
+      --key-jump+medium <integer>
+                                 Medium forward jump
+      --global-key-jump+medium <integer>
+                                 Medium forward jump
+      --key-jump-long <integer>  Long backwards jump
+      --global-key-jump-long <integer>
+                                 Long backwards jump
+      --key-jump+long <integer>  Long forward jump
+      --global-key-jump+long <integer>
+                                 Long forward jump
+      --key-frame-next <integer> Next frame
+      --global-key-frame-next <integer>
+                                 Next frame
+      --key-quit <integer>       Quit
+      --global-key-quit <integer>
+                                 Quit
+      --key-vol-up <integer>     Volume up
+      --global-key-vol-up <integer>
+                                 Volume up
+      --key-vol-down <integer>   Volume down
+      --global-key-vol-down <integer>
+                                 Volume down
+      --key-vol-mute <integer>   Mute
+      --global-key-vol-mute <integer>
+                                 Mute
+      --key-audio-track <integer>
+                                 Cycle audio track
+      --global-key-audio-track <integer>
+                                 Cycle audio track
+      --key-audiodevice-cycle <integer>
+                                 Cycle through audio devices
+      --global-key-audiodevice-cycle <integer>
+                                 Cycle through audio devices
+      --key-subtitle-track <integer>
+                                 Cycle subtitle track
+      --global-key-subtitle-track <integer>
+                                 Cycle subtitle track
+      --key-aspect-ratio <integer>
+                                 Cycle source aspect ratio
+      --global-key-aspect-ratio <integer>
+                                 Cycle source aspect ratio
+      --key-crop <integer>       Cycle video crop
+      --global-key-crop <integer>
+                                 Cycle video crop
+      --key-toggle-autoscale <integer>
+                                 Toggle autoscaling
+      --global-key-toggle-autoscale <integer>
+                                 Toggle autoscaling
+      --key-incr-scalefactor <integer>
+                                 Increase scale factor
+      --global-key-incr-scalefactor <integer>
+                                 Increase scale factor
+      --key-decr-scalefactor <integer>
+                                 Decrease scale factor
+      --global-key-decr-scalefactor <integer>
+                                 Decrease scale factor
+      --key-deinterlace <integer>
+                                 Cycle deinterlace modes
+      --global-key-deinterlace <integer>
+                                 Cycle deinterlace modes
+      --key-wallpaper <integer>  Toggle wallpaper mode in video output
+      --global-key-wallpaper <integer>
+                                 Toggle wallpaper mode in video output
+      --key-random <integer>     Random
+      --global-key-random <integer>
+                                 Random
+      --key-loop <integer>       Normal/Repeat/Loop
+      --global-key-loop <integer>
+                                 Normal/Repeat/Loop
+   Zoom:
+      --key-zoom-quarter <integer>
+                                 1:4 Quarter
+      --global-key-zoom-quarter <integer>
+                                 1:4 Quarter
+      --key-zoom-half <integer>  1:2 Half
+      --global-key-zoom-half <integer>
+                                 1:2 Half
+      --key-zoom-original <integer>
+                                 1:1 Original
+      --global-key-zoom-original <integer>
+                                 1:1 Original
+      --key-zoom-double <integer>
+                                 2:1 Double
+      --global-key-zoom-double <integer>
+                                 2:1 Double
+   Jump sizes:
+      --extrashort-jump-size <integer>
+                                 Very short jump length
+      --short-jump-size <integer>
+                                 Short jump length
+      --medium-jump-size <integer>
+                                 Medium jump length
+      --long-jump-size <integer> Long jump length
+      --bookmark1 <string>       Playlist bookmark 1
+      --bookmark2 <string>       Playlist bookmark 2
+      --bookmark3 <string>       Playlist bookmark 3
+      --bookmark4 <string>       Playlist bookmark 4
+      --bookmark5 <string>       Playlist bookmark 5
+      --bookmark6 <string>       Playlist bookmark 6
+      --bookmark7 <string>       Playlist bookmark 7
+      --bookmark8 <string>       Playlist bookmark 8
+      --bookmark9 <string>       Playlist bookmark 9
+      --bookmark10 <string>      Playlist bookmark 10
+  -h, --help, --no-help          print help for VLC (can be combined with
+                                 --advanced and --help-verbose) (default
+                                 disabled)
   -H, --full-help, --no-full-help
-                                 VLCとそのモジュールの網羅的なヘ?
-                                 ??プ (デフォルトで無効)
-      --longhelp, --no-longhelp  VLCとすべてのモジュールのヘルプ?
-                                 ??表示(--advancedと--help-verboseを組み?
-                                 ??わせ可能) (デフォルトで無効)
+                                 Exhaustive help for VLC and its modules
+                                 (default disabled)
+      --longhelp, --no-longhelp  print help for VLC and all its modules (can
+                                 be combined with --advanced and
+                                 --help-verbose) (default disabled)
       --help-verbose, --no-help-verbose
-                                 ヘルプ表示の際の冗長表示
-                                 (デフォルトで無効)
-  -l, --list, --no-list          有効なモジュールの一覧を表示
-                                 (デフォルトで無効)
+                                 ask for extra verbosity when displaying help
+                                 (default disabled)
+  -l, --list, --no-list          print a list of available modules (default
+                                 disabled)
       --list-verbose, --no-list-verbose
-                                 詳細情報を伴って有効なモジュー?
-                                 ??の一覧を表示 (デフォルトで無効
-                                 )
-  -p, --module=<文字列>       特定モジュールのヘルプを表示
-                                 (--advancedと--help-verboseオプションを
-                                 組み合わせ可能)モジュール名のプ
-                                 レフィックスに一致するものを表?
-                                 ??
+                                 print a list of available modules with extra
+                                 detail (default disabled)
+  -p, --module <string>          print help on a specific module (can be
+                                 combined with --advanced and --help-verbose).
+                                 Prefix the module name with = for strict
+                                 matches.
       --ignore-config, --no-ignore-config
-                                 すべての設定オプションを読み込?
-                                 ??ない、また、設定を保存しない
-                                 (デフォルトで有効)
+                                 no configuration option will be loaded nor
+                                 saved to config file (default enabled)
       --reset-config, --no-reset-config
-                                 現在の設定を既定値にリセットす?
-                                 ?? (デフォルトで無効)
+                                 reset the current config to the default
+                                 values (default disabled)
       --reset-plugins-cache, --no-reset-plugins-cache
-                                 現在のプラグインキャッシュをリ?
-                                 ??ット (デフォルトで無効)
-      --version, --no-version    バージョン情報の表示 (デフォル??
-                                 ?で無効)
-      --config=<文字列>       別の設定ファイルを使う
+                                 resets the current plugins cache (default
+                                 disabled)
+      --version, --no-version    print version information (default disabled)
+      --config <string>          use alternate config file
 
-注釈: --advancedをコマンドラインに付加すると拡張オプションが表示されます。
+Note: add --advanced to your command line to see advanced options.
 
-網羅的なヘルプを表示するためには、'-H'オプションを指定してください。
+To get exhaustive help, use '-H'.

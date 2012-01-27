@@ -5,7 +5,7 @@
 
 include(../../config.pri)
 
-QT += core gui webkit
+QT += core gui network webkit
 
 TEMPLATE = lib
 
@@ -29,6 +29,7 @@ FORMS += webbrowser.ui
 
 HEADERS += \
     webbrowser.h \
+    webbrowserprivate.h \
     webbrowser_config.h
 
 SOURCES += \

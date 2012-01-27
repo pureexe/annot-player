@@ -10,27 +10,27 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../token/addaliasdialog.cc" line="98"/>
+        <location filename="../token/addaliasdialog.cc" line="97"/>
         <source>name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../token/addaliasdialog.cc" line="98"/>
+        <location filename="../token/addaliasdialog.cc" line="97"/>
         <source>Add a name to the token</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../token/addaliasdialog.cc" line="99"/>
+        <location filename="../token/addaliasdialog.cc" line="98"/>
         <source>tag</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../token/addaliasdialog.cc" line="99"/>
+        <location filename="../token/addaliasdialog.cc" line="98"/>
         <source>Add a tag to the token</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../token/addaliasdialog.cc" line="217"/>
+        <location filename="../token/addaliasdialog.cc" line="216"/>
         <source>Please select alias language</source>
         <translation type="unfinished"></translation>
     </message>
@@ -440,314 +440,314 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../mainwindow.cc" line="2376"/>
+        <location filename="../mainwindow.cc" line="2454"/>
         <source>Select annots window</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2390"/>
+        <location filename="../mainwindow.cc" line="2468"/>
         <source>Select process window to open</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1141"/>
+        <location filename="../mainwindow.cc" line="1157"/>
         <source>&amp;File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1100"/>
+        <location filename="../mainwindow.cc" line="1116"/>
         <source>Play</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1101"/>
+        <location filename="../mainwindow.cc" line="1117"/>
         <source>Play menu</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1151"/>
+        <location filename="../mainwindow.cc" line="1167"/>
         <source>&amp;Quit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1165"/>
-        <location filename="../mainwindow.cc" line="1166"/>
+        <location filename="../mainwindow.cc" line="1181"/>
+        <location filename="../mainwindow.cc" line="1182"/>
         <source>&amp;Help</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1167"/>
+        <location filename="../mainwindow.cc" line="1183"/>
         <source>&amp;About</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1702"/>
+        <location filename="../mainwindow.cc" line="1782"/>
         <source>analyzing media ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1821"/>
+        <location filename="../mainwindow.cc" line="1894"/>
         <source>detaching all processes ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1928"/>
+        <location filename="../mainwindow.cc" line="2001"/>
         <source>snapshot saved on the destop</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2414"/>
+        <location filename="../mainwindow.cc" line="2492"/>
         <source>connecting server to submit alias ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2428"/>
+        <location filename="../mainwindow.cc" line="2506"/>
         <source>alias saved</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2505"/>
+        <location filename="../mainwindow.cc" line="2605"/>
         <source>connecting server to query media/game token ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2586"/>
+        <location filename="../mainwindow.cc" line="2700"/>
         <source>searching for token in cache ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2695"/>
-        <location filename="../mainwindow.cc" line="2767"/>
+        <location filename="../mainwindow.cc" line="2809"/>
+        <location filename="../mainwindow.cc" line="2881"/>
         <source>connecting server to submit annot ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3805"/>
+        <location filename="../mainwindow.cc" line="3922"/>
         <source>closing application ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3932"/>
+        <location filename="../mainwindow.cc" line="4049"/>
         <source>always on top enabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3934"/>
+        <location filename="../mainwindow.cc" line="4051"/>
         <source>always on top disabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3962"/>
-        <location filename="../mainwindow.cc" line="4005"/>
-        <location filename="../mainwindow.cc" line="4052"/>
-        <location filename="../mainwindow.cc" line="4097"/>
-        <location filename="../mainwindow.cc" line="4142"/>
+        <location filename="../mainwindow.cc" line="4079"/>
+        <location filename="../mainwindow.cc" line="4122"/>
+        <location filename="../mainwindow.cc" line="4169"/>
+        <location filename="../mainwindow.cc" line="4214"/>
+        <location filename="../mainwindow.cc" line="4259"/>
         <source>invalid cast id</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3968"/>
-        <location filename="../mainwindow.cc" line="4011"/>
-        <location filename="../mainwindow.cc" line="4058"/>
-        <location filename="../mainwindow.cc" line="4103"/>
-        <location filename="../mainwindow.cc" line="4148"/>
+        <location filename="../mainwindow.cc" line="4085"/>
+        <location filename="../mainwindow.cc" line="4128"/>
+        <location filename="../mainwindow.cc" line="4175"/>
+        <location filename="../mainwindow.cc" line="4220"/>
+        <location filename="../mainwindow.cc" line="4265"/>
         <source>cannot perform cast when offline</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3974"/>
+        <location filename="../mainwindow.cc" line="4091"/>
         <source>submit bless cast to token ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3986"/>
+        <location filename="../mainwindow.cc" line="4103"/>
         <source>token blessed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3992"/>
+        <location filename="../mainwindow.cc" line="4109"/>
         <source>failed to bless token</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4017"/>
+        <location filename="../mainwindow.cc" line="4134"/>
         <source>submit curse cast to token ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4029"/>
+        <location filename="../mainwindow.cc" line="4146"/>
         <source>token cursed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4035"/>
+        <location filename="../mainwindow.cc" line="4152"/>
         <source>failed to curse token</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4063"/>
-        <location filename="../mainwindow.cc" line="4108"/>
-        <location filename="../mainwindow.cc" line="4153"/>
+        <location filename="../mainwindow.cc" line="4180"/>
+        <location filename="../mainwindow.cc" line="4225"/>
+        <location filename="../mainwindow.cc" line="4270"/>
         <source>cannot perform cast to yourself</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4069"/>
+        <location filename="../mainwindow.cc" line="4186"/>
         <source>blessing user ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4080"/>
+        <location filename="../mainwindow.cc" line="4197"/>
         <source>user blessed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4114"/>
+        <location filename="../mainwindow.cc" line="4231"/>
         <source>cursing user ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4125"/>
+        <location filename="../mainwindow.cc" line="4242"/>
         <source>user cursed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4159"/>
+        <location filename="../mainwindow.cc" line="4276"/>
         <source>blocking user ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4170"/>
+        <location filename="../mainwindow.cc" line="4287"/>
         <source>user blocked</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4271"/>
+        <location filename="../mainwindow.cc" line="4388"/>
         <source>connecting to server ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4288"/>
+        <location filename="../mainwindow.cc" line="4405"/>
         <source>server connected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4290"/>
+        <location filename="../mainwindow.cc" line="4407"/>
         <source>server disconnected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4408"/>
+        <location filename="../mainwindow.cc" line="4525"/>
         <source>new version released, check here: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4487"/>
+        <location filename="../mainwindow.cc" line="4604"/>
         <source>found process id for window</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4490"/>
+        <location filename="../mainwindow.cc" line="4607"/>
         <source>process id for window was not found</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4501"/>
+        <location filename="../mainwindow.cc" line="4618"/>
         <source>process was attached</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4505"/>
+        <location filename="../mainwindow.cc" line="4622"/>
         <source>process attached</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4511"/>
+        <location filename="../mainwindow.cc" line="4628"/>
         <source>failed to attach process </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4513"/>
+        <location filename="../mainwindow.cc" line="4630"/>
         <source>Is the process running now?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4515"/>
+        <location filename="../mainwindow.cc" line="4632"/>
         <source>Run me as administrator and try again (o^^o)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4517"/>
+        <location filename="../mainwindow.cc" line="4634"/>
         <source>Restart the target process might help -_-</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4528"/>
+        <location filename="../mainwindow.cc" line="4645"/>
         <source>process was started</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4531"/>
+        <location filename="../mainwindow.cc" line="4648"/>
         <source>told process to start</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4539"/>
+        <location filename="../mainwindow.cc" line="4656"/>
         <source>failed to start process</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4543"/>
+        <location filename="../mainwindow.cc" line="4660"/>
         <source>wait %1 seconds for process to start ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4556"/>
+        <location filename="../mainwindow.cc" line="4673"/>
         <source>openning process</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4657"/>
+        <location filename="../mainwindow.cc" line="4771"/>
         <source>connecting server to change anonymous status ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4669"/>
+        <location filename="../mainwindow.cc" line="4783"/>
         <source>failed to change user anonymous state</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4679"/>
+        <location filename="../mainwindow.cc" line="4793"/>
         <source>you are anonymous now</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4681"/>
+        <location filename="../mainwindow.cc" line="4795"/>
         <source>you are not anonymous now</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4698"/>
+        <location filename="../mainwindow.cc" line="4812"/>
         <source>connecting server to change language ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4710"/>
+        <location filename="../mainwindow.cc" line="4824"/>
         <source>failed to change user language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4719"/>
+        <location filename="../mainwindow.cc" line="4833"/>
         <source>your language is </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4788"/>
+        <location filename="../mainwindow.cc" line="4902"/>
         <source>restart the app to use the new language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5014"/>
+        <location filename="../mainwindow.cc" line="5146"/>
         <source>invalid lnk</source>
         <translation type="unfinished"></translation>
     </message>
@@ -869,32 +869,32 @@
 <context>
     <name>SeekDialog</name>
     <message>
-        <location filename="../dialog/seekdialog.cc" line="65"/>
+        <location filename="../dialog/seekdialog.cc" line="64"/>
         <source>ss</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialog/seekdialog.cc" line="65"/>
+        <location filename="../dialog/seekdialog.cc" line="64"/>
         <source>seconds</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialog/seekdialog.cc" line="66"/>
+        <location filename="../dialog/seekdialog.cc" line="65"/>
         <source>mm</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialog/seekdialog.cc" line="66"/>
+        <location filename="../dialog/seekdialog.cc" line="65"/>
         <source>minutes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialog/seekdialog.cc" line="67"/>
+        <location filename="../dialog/seekdialog.cc" line="66"/>
         <source>hh</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialog/seekdialog.cc" line="67"/>
+        <location filename="../dialog/seekdialog.cc" line="66"/>
         <source>hours</source>
         <translation type="unfinished"></translation>
     </message>
@@ -973,38 +973,43 @@
 <context>
     <name>TokenView</name>
     <message>
-        <location filename="../token/tokenview.cc" line="354"/>
-        <location filename="../token/tokenview.cc" line="380"/>
+        <location filename="../token/tokenview.cc" line="381"/>
+        <location filename="../token/tokenview.cc" line="407"/>
         <source>cannot perform cast when offline</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../token/tokenview.cc" line="360"/>
+        <location filename="../token/tokenview.cc" line="387"/>
         <source>token is already blessed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../token/tokenview.cc" line="386"/>
+        <location filename="../token/tokenview.cc" line="413"/>
         <source>token is already cursed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../token/tokenview.cc" line="442"/>
+        <location filename="../token/tokenview.cc" line="469"/>
         <source>name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../token/tokenview.cc" line="443"/>
+        <location filename="../token/tokenview.cc" line="470"/>
         <source>source</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../token/tokenview.cc" line="444"/>
+        <location filename="../token/tokenview.cc" line="471"/>
         <source>tag</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../token/tokenview.cc" line="458"/>
+        <location filename="../token/tokenview.cc" line="472"/>
+        <source>title</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../token/tokenview.cc" line="486"/>
         <source>cannot delete other&apos;s alias</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1030,1799 +1035,1857 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="107"/>
+        <location filename="translatormanager.cc" line="108"/>
         <source>Blacklist</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="108"/>
+        <location filename="translatormanager.cc" line="109"/>
         <source>Default</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="109"/>
+        <location filename="translatormanager.cc" line="110"/>
         <source>Random</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="110"/>
+        <location filename="translatormanager.cc" line="111"/>
         <source>Progress</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="111"/>
+        <location filename="translatormanager.cc" line="112"/>
         <source>Volume</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="112"/>
-        <location filename="translatormanager.cc" line="189"/>
+        <location filename="translatormanager.cc" line="113"/>
+        <location filename="translatormanager.cc" line="190"/>
         <source>User</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="115"/>
-        <location filename="translatormanager.cc" line="190"/>
-        <location filename="translatormanager.cc" line="333"/>
+        <location filename="translatormanager.cc" line="116"/>
+        <location filename="translatormanager.cc" line="191"/>
         <location filename="translatormanager.cc" line="339"/>
+        <location filename="translatormanager.cc" line="345"/>
         <source>Login</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="116"/>
+        <location filename="translatormanager.cc" line="117"/>
         <source>OK</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="117"/>
+        <location filename="translatormanager.cc" line="118"/>
         <source>Save</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="118"/>
+        <location filename="translatormanager.cc" line="119"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="119"/>
+        <location filename="translatormanager.cc" line="120"/>
         <source>Add</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="122"/>
+        <location filename="translatormanager.cc" line="123"/>
         <source>Remove</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="124"/>
+        <location filename="translatormanager.cc" line="125"/>
         <source>Enable</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="126"/>
-        <location filename="translatormanager.cc" line="281"/>
+        <location filename="translatormanager.cc" line="127"/>
+        <location filename="translatormanager.cc" line="287"/>
         <source>Menu</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="127"/>
+        <location filename="translatormanager.cc" line="128"/>
         <source>HTML</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="128"/>
+        <location filename="translatormanager.cc" line="129"/>
         <source>Rich</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="129"/>
+        <location filename="translatormanager.cc" line="130"/>
         <source>Code</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="130"/>
+        <location filename="translatormanager.cc" line="131"/>
         <source>Slot</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="131"/>
+        <location filename="translatormanager.cc" line="132"/>
         <source>Previous</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="132"/>
+        <location filename="translatormanager.cc" line="133"/>
         <source>Next</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="133"/>
+        <location filename="translatormanager.cc" line="134"/>
         <source>Verbatim</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="134"/>
-        <location filename="translatormanager.cc" line="252"/>
-        <location filename="translatormanager.cc" line="374"/>
-        <location filename="translatormanager.cc" line="375"/>
+        <location filename="translatormanager.cc" line="135"/>
+        <location filename="translatormanager.cc" line="253"/>
+        <location filename="translatormanager.cc" line="379"/>
+        <location filename="translatormanager.cc" line="380"/>
         <source>Subtitle</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="136"/>
+        <location filename="translatormanager.cc" line="137"/>
         <source>Section</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="137"/>
+        <location filename="translatormanager.cc" line="138"/>
         <source>Word count</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="138"/>
+        <location filename="translatormanager.cc" line="139"/>
         <source>unknown</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="139"/>
+        <location filename="translatormanager.cc" line="140"/>
         <source>Bless</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="140"/>
+        <location filename="translatormanager.cc" line="141"/>
         <source>Curse</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="141"/>
+        <location filename="translatormanager.cc" line="142"/>
         <source>Block</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="144"/>
+        <location filename="translatormanager.cc" line="145"/>
         <source>Color</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="145"/>
+        <location filename="translatormanager.cc" line="146"/>
         <source>Foreground color</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="146"/>
+        <location filename="translatormanager.cc" line="147"/>
         <source>Background color</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="147"/>
+        <location filename="translatormanager.cc" line="148"/>
         <source>Bold</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="148"/>
+        <location filename="translatormanager.cc" line="149"/>
         <source>Strike out</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="149"/>
+        <location filename="translatormanager.cc" line="150"/>
         <source>Italic</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="150"/>
+        <location filename="translatormanager.cc" line="151"/>
         <source>Underline</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="152"/>
+        <location filename="translatormanager.cc" line="153"/>
         <source>Black</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="153"/>
+        <location filename="translatormanager.cc" line="154"/>
         <source>Blue</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="154"/>
+        <location filename="translatormanager.cc" line="155"/>
         <source>Brown</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="155"/>
+        <location filename="translatormanager.cc" line="156"/>
         <source>Cyan</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="156"/>
+        <location filename="translatormanager.cc" line="157"/>
         <source>Gray</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="157"/>
+        <location filename="translatormanager.cc" line="158"/>
         <source>Green</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="158"/>
+        <location filename="translatormanager.cc" line="159"/>
         <source>Magenta</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="159"/>
+        <location filename="translatormanager.cc" line="160"/>
         <source>Orange</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="160"/>
+        <location filename="translatormanager.cc" line="161"/>
         <source>Pink</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="161"/>
+        <location filename="translatormanager.cc" line="162"/>
         <source>Purple</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="162"/>
+        <location filename="translatormanager.cc" line="163"/>
         <source>Red</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="163"/>
+        <location filename="translatormanager.cc" line="164"/>
         <source>White</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="164"/>
+        <location filename="translatormanager.cc" line="165"/>
         <source>Yellow</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="165"/>
+        <location filename="translatormanager.cc" line="166"/>
         <source>Light blue</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="167"/>
+        <location filename="translatormanager.cc" line="168"/>
         <source>Alien</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="168"/>
+        <location filename="translatormanager.cc" line="169"/>
         <source>English</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="169"/>
+        <location filename="translatormanager.cc" line="170"/>
         <source>Japanese</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="170"/>
+        <location filename="translatormanager.cc" line="171"/>
         <source>Chinese</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="171"/>
+        <location filename="translatormanager.cc" line="172"/>
         <source>Traditional Chinese</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="172"/>
+        <location filename="translatormanager.cc" line="173"/>
         <source>Simplified Chinese</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="173"/>
+        <location filename="translatormanager.cc" line="174"/>
         <source>Korean</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="175"/>
+        <location filename="translatormanager.cc" line="176"/>
         <source>Attach</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="176"/>
+        <location filename="translatormanager.cc" line="177"/>
         <source>Detach</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="177"/>
+        <location filename="translatormanager.cc" line="178"/>
         <source>Attached</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="178"/>
+        <location filename="translatormanager.cc" line="179"/>
         <source>Detached</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="179"/>
+        <location filename="translatormanager.cc" line="180"/>
         <source>Refresh</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="180"/>
+        <location filename="translatormanager.cc" line="181"/>
         <source>Reset</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="188"/>
+        <location filename="translatormanager.cc" line="189"/>
         <source>Annot Player</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="191"/>
-        <location filename="translatormanager.cc" line="244"/>
-        <location filename="translatormanager.cc" line="330"/>
-        <location filename="translatormanager.cc" line="348"/>
+        <location filename="translatormanager.cc" line="192"/>
+        <location filename="translatormanager.cc" line="245"/>
+        <location filename="translatormanager.cc" line="336"/>
+        <location filename="translatormanager.cc" line="354"/>
         <source>Seek</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="193"/>
-        <location filename="translatormanager.cc" line="261"/>
+        <location filename="translatormanager.cc" line="194"/>
+        <location filename="translatormanager.cc" line="262"/>
         <source>Open media file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="195"/>
+        <location filename="translatormanager.cc" line="196"/>
         <source>Open video device</source>
         <oldsource>Open media device</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="196"/>
+        <location filename="translatormanager.cc" line="197"/>
         <source>Open audio device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="197"/>
-        <location filename="translatormanager.cc" line="272"/>
+        <location filename="translatormanager.cc" line="198"/>
+        <location filename="translatormanager.cc" line="276"/>
         <source>Open subtitle</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="198"/>
-        <location filename="translatormanager.cc" line="467"/>
+        <location filename="translatormanager.cc" line="199"/>
+        <location filename="translatormanager.cc" line="472"/>
         <source>Annots</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="199"/>
+        <location filename="translatormanager.cc" line="200"/>
         <source>Annot Editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="200"/>
-        <location filename="translatormanager.cc" line="473"/>
+        <location filename="translatormanager.cc" line="201"/>
+        <location filename="translatormanager.cc" line="478"/>
         <source>Token</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="201"/>
-        <location filename="translatormanager.cc" line="476"/>
+        <location filename="translatormanager.cc" line="202"/>
+        <location filename="translatormanager.cc" line="481"/>
         <source>Comments</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="202"/>
+        <location filename="translatormanager.cc" line="203"/>
         <source>Annot Cloud</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="203"/>
-        <location filename="translatormanager.cc" line="493"/>
+        <location filename="translatormanager.cc" line="204"/>
+        <location filename="translatormanager.cc" line="498"/>
         <source>Select process signal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="204"/>
+        <location filename="translatormanager.cc" line="205"/>
         <source>Live Channel</source>
         <oldsource>Live Mode</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="205"/>
+        <location filename="translatormanager.cc" line="206"/>
         <source>Sync Mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="209"/>
+        <location filename="translatormanager.cc" line="210"/>
         <source>unrecognized command</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="210"/>
+        <location filename="translatormanager.cc" line="211"/>
         <source>failed to take snapshots</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="211"/>
+        <location filename="translatormanager.cc" line="212"/>
         <source>failed to hash token</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="212"/>
+        <location filename="translatormanager.cc" line="213"/>
         <source>invalid username</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="213"/>
+        <location filename="translatormanager.cc" line="214"/>
         <source>invalid password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="214"/>
+        <location filename="translatormanager.cc" line="215"/>
         <source>invalid time format</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="215"/>
+        <location filename="translatormanager.cc" line="216"/>
         <source>invalid token</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="216"/>
+        <location filename="translatormanager.cc" line="217"/>
         <source>invalid device path</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="217"/>
+        <location filename="translatormanager.cc" line="218"/>
         <source>file does not exist</source>
         <oldsource>file not existed</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="218"/>
+        <location filename="translatormanager.cc" line="219"/>
         <source>failed to load subtitle</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="219"/>
+        <location filename="translatormanager.cc" line="220"/>
         <source>clipboard not available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="220"/>
+        <location filename="translatormanager.cc" line="221"/>
         <source>failed to submit token</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="221"/>
+        <location filename="translatormanager.cc" line="222"/>
         <source>failed to submit annotation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="222"/>
+        <location filename="translatormanager.cc" line="223"/>
         <source>failed to synchronize offline queue,:return try later</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="226"/>
+        <location filename="translatormanager.cc" line="227"/>
         <source>snapshot saved on desktop</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="229"/>
+        <location filename="translatormanager.cc" line="230"/>
         <source>long string got truncated</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="230"/>
+        <location filename="translatormanager.cc" line="231"/>
         <source>window always on top</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="232"/>
+        <location filename="translatormanager.cc" line="233"/>
         <source>try to get user information from cache</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="233"/>
+        <location filename="translatormanager.cc" line="234"/>
         <source>succeeded to login user from cache</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="234"/>
+        <location filename="translatormanager.cc" line="235"/>
         <source>failed to login user from cache</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="237"/>
+        <location filename="translatormanager.cc" line="238"/>
         <source>Username</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="238"/>
+        <location filename="translatormanager.cc" line="239"/>
         <source>Password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="240"/>
+        <location filename="translatormanager.cc" line="241"/>
         <source>Comment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="242"/>
+        <location filename="translatormanager.cc" line="243"/>
         <source>Annotation prefix</source>
         <oldsource>Input prefix</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="247"/>
+        <location filename="translatormanager.cc" line="248"/>
         <source>All files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="248"/>
+        <location filename="translatormanager.cc" line="249"/>
         <source>All supported</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="249"/>
+        <location filename="translatormanager.cc" line="250"/>
         <source>Video</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="250"/>
+        <location filename="translatormanager.cc" line="251"/>
         <source>Audio</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="251"/>
+        <location filename="translatormanager.cc" line="252"/>
         <source>Picture</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="253"/>
+        <location filename="translatormanager.cc" line="254"/>
         <source>Program</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="106"/>
-        <location filename="translatormanager.cc" line="257"/>
+        <location filename="translatormanager.cc" line="107"/>
+        <location filename="translatormanager.cc" line="258"/>
         <source>Open</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="113"/>
-        <source>Nickname</source>
+        <location filename="translatormanager.cc" line="106"/>
+        <source>Source</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="translatormanager.cc" line="114"/>
+        <source>Nickname</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="translatormanager.cc" line="115"/>
         <source>Email</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="120"/>
+        <location filename="translatormanager.cc" line="121"/>
         <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="121"/>
+        <location filename="translatormanager.cc" line="122"/>
         <source>Backlog</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="123"/>
+        <location filename="translatormanager.cc" line="124"/>
         <source>Auto</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="135"/>
+        <location filename="translatormanager.cc" line="136"/>
         <source>Audio track</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="142"/>
+        <location filename="translatormanager.cc" line="143"/>
         <source>Message</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="194"/>
+        <location filename="translatormanager.cc" line="195"/>
         <source>Select media device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="223"/>
+        <location filename="translatormanager.cc" line="224"/>
         <source>no media</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="224"/>
+        <location filename="translatormanager.cc" line="225"/>
         <source>network error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="227"/>
+        <location filename="translatormanager.cc" line="228"/>
         <source>copied to clipboard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="258"/>
+        <location filename="translatormanager.cc" line="259"/>
         <source>Open media file or game process</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="260"/>
+        <location filename="translatormanager.cc" line="261"/>
         <source>Open file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="263"/>
-        <source>Open DVD/VCD/CD device</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="translatormanager.cc" line="264"/>
-        <source>Open media device</source>
+        <source>Open media URL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="266"/>
-        <source>Open DVD/VCD folder</source>
+        <location filename="translatormanager.cc" line="265"/>
+        <source>Open media from Internet or local URL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="translatormanager.cc" line="267"/>
-        <source>Open video folder</source>
+        <source>Open DVD/VCD/CD device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="269"/>
-        <source>Open CD folder</source>
+        <location filename="translatormanager.cc" line="268"/>
+        <source>Open media device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="translatormanager.cc" line="270"/>
-        <source>Open audio folder</source>
+        <source>Open DVD/VCD folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="translatormanager.cc" line="271"/>
+        <source>Open video folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="translatormanager.cc" line="273"/>
+        <source>Open CD folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="translatormanager.cc" line="274"/>
+        <source>Open audio folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="translatormanager.cc" line="277"/>
         <source>Load subtitle from file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="275"/>
-        <location filename="translatormanager.cc" line="276"/>
+        <location filename="translatormanager.cc" line="279"/>
+        <location filename="translatormanager.cc" line="280"/>
         <source>Open ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="278"/>
-        <source>Play</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="translatormanager.cc" line="279"/>
-        <source>Play media</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="translatormanager.cc" line="282"/>
-        <source>Show menu</source>
+        <source>Open in web browser</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="translatormanager.cc" line="284"/>
-        <source>Pause</source>
+        <source>Play</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="translatormanager.cc" line="285"/>
-        <source>Pause playing</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="translatormanager.cc" line="287"/>
-        <source>Stop</source>
+        <source>Play media</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="translatormanager.cc" line="288"/>
-        <source>Stop playing</source>
+        <source>Show menu</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="translatormanager.cc" line="290"/>
+        <source>Pause</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="translatormanager.cc" line="291"/>
-        <source>Next frame</source>
+        <source>Pause playing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="translatormanager.cc" line="293"/>
-        <source>Replay</source>
+        <source>Stop</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="translatormanager.cc" line="294"/>
-        <source>Restart playing</source>
+        <source>Stop playing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="translatormanager.cc" line="296"/>
-        <source>Mini player</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="translatormanager.cc" line="297"/>
-        <source>Show mini player</source>
+        <source>Next frame</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="translatormanager.cc" line="299"/>
-        <source>Embed player</source>
+        <source>Replay</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="translatormanager.cc" line="300"/>
-        <source>Embed player window</source>
+        <source>Restart playing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="translatormanager.cc" line="302"/>
-        <source>Embed on top</source>
+        <source>Mini player</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="translatormanager.cc" line="303"/>
-        <source>Embed player window on the top</source>
+        <source>Show mini player</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="translatormanager.cc" line="305"/>
+        <source>Embed player</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="translatormanager.cc" line="306"/>
+        <source>Embed player window</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="translatormanager.cc" line="308"/>
+        <source>Embed on top</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="translatormanager.cc" line="309"/>
+        <source>Embed player window on the top</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="translatormanager.cc" line="311"/>
         <source>Live channel</source>
         <oldsource>Live mode</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="306"/>
+        <location filename="translatormanager.cc" line="312"/>
         <source>Toggle live mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="308"/>
+        <location filename="translatormanager.cc" line="314"/>
         <source>Sync mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="309"/>
+        <location filename="translatormanager.cc" line="315"/>
         <source>Toggle Sync mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="311"/>
+        <location filename="translatormanager.cc" line="317"/>
         <source>Fullscreen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="312"/>
+        <location filename="translatormanager.cc" line="318"/>
         <source>Show fullscreen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="314"/>
+        <location filename="translatormanager.cc" line="320"/>
         <source>Snapshot</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="315"/>
+        <location filename="translatormanager.cc" line="321"/>
         <source>Taks a snapshot of current frame</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="317"/>
+        <location filename="translatormanager.cc" line="323"/>
         <source>Toggle annot</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="318"/>
+        <location filename="translatormanager.cc" line="324"/>
         <source>Toggle annotations</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="319"/>
-        <location filename="translatormanager.cc" line="320"/>
+        <location filename="translatormanager.cc" line="325"/>
+        <location filename="translatormanager.cc" line="326"/>
         <source>Show annots</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="321"/>
+        <location filename="translatormanager.cc" line="327"/>
         <source>Hide annots</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="322"/>
+        <location filename="translatormanager.cc" line="328"/>
         <source>Hide annotations</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="324"/>
+        <location filename="translatormanager.cc" line="330"/>
         <source>Exit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="325"/>
+        <location filename="translatormanager.cc" line="331"/>
         <source>Quit the application</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="327"/>
+        <location filename="translatormanager.cc" line="333"/>
         <source>User panel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="328"/>
+        <location filename="translatormanager.cc" line="334"/>
         <source>Show user panel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="331"/>
+        <location filename="translatormanager.cc" line="337"/>
         <source>Seek position</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="334"/>
         <location filename="translatormanager.cc" line="340"/>
+        <location filename="translatormanager.cc" line="346"/>
         <source>Show login dialog</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="336"/>
-        <location filename="translatormanager.cc" line="337"/>
+        <location filename="translatormanager.cc" line="342"/>
+        <location filename="translatormanager.cc" line="343"/>
         <source>Logout</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="342"/>
+        <location filename="translatormanager.cc" line="348"/>
         <source>Choose live time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="343"/>
+        <location filename="translatormanager.cc" line="349"/>
         <source>Show live mode dialog</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="345"/>
+        <location filename="translatormanager.cc" line="351"/>
         <source>Choose sync time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="346"/>
+        <location filename="translatormanager.cc" line="352"/>
         <source>Show sync mode dialog</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="349"/>
+        <location filename="translatormanager.cc" line="355"/>
         <source>Show seek dialog</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="351"/>
+        <location filename="translatormanager.cc" line="357"/>
         <source>Pick window</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="352"/>
+        <location filename="translatormanager.cc" line="358"/>
         <source>Show pick dialog</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="355"/>
+        <location filename="translatormanager.cc" line="361"/>
         <source>Select process window</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="357"/>
+        <location filename="translatormanager.cc" line="363"/>
         <source>Select annots window</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="358"/>
+        <location filename="translatormanager.cc" line="364"/>
         <source>Select window to show annots</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="360"/>
-        <location filename="translatormanager.cc" line="361"/>
+        <location filename="translatormanager.cc" line="366"/>
+        <location filename="translatormanager.cc" line="367"/>
         <source>About</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="362"/>
+        <location filename="translatormanager.cc" line="368"/>
         <source>About us</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="364"/>
-        <location filename="translatormanager.cc" line="365"/>
-        <location filename="translatormanager.cc" line="366"/>
+        <location filename="translatormanager.cc" line="370"/>
+        <location filename="translatormanager.cc" line="371"/>
+        <location filename="translatormanager.cc" line="372"/>
         <source>Help</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="368"/>
-        <location filename="translatormanager.cc" line="369"/>
+        <location filename="translatormanager.cc" line="374"/>
         <source>Copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="371"/>
-        <location filename="translatormanager.cc" line="372"/>
+        <location filename="translatormanager.cc" line="375"/>
         <source>Paste</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="translatormanager.cc" line="377"/>
+        <source>Example</source>
+        <translation type="unfinished">Example URL: http://www.youtube.com/watch?v=-DJqnomZoLk</translation>
+    </message>
+    <message>
+        <location filename="translatormanager.cc" line="382"/>
         <source>Annot subtitle</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="378"/>
+        <location filename="translatormanager.cc" line="383"/>
         <source>Annotation as subtitle</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="380"/>
+        <location filename="translatormanager.cc" line="385"/>
         <source>DVD sections</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="381"/>
+        <location filename="translatormanager.cc" line="386"/>
         <source>Select DVD sections</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="383"/>
-        <location filename="translatormanager.cc" line="384"/>
+        <location filename="translatormanager.cc" line="388"/>
+        <location filename="translatormanager.cc" line="389"/>
         <source>Show subtitle</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="386"/>
-        <location filename="translatormanager.cc" line="387"/>
+        <location filename="translatormanager.cc" line="391"/>
+        <location filename="translatormanager.cc" line="392"/>
         <source>Hide subtitle</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="389"/>
-        <location filename="translatormanager.cc" line="390"/>
+        <location filename="translatormanager.cc" line="394"/>
+        <location filename="translatormanager.cc" line="395"/>
         <source>Show subtitle annot</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="392"/>
-        <location filename="translatormanager.cc" line="393"/>
+        <location filename="translatormanager.cc" line="397"/>
+        <location filename="translatormanager.cc" line="398"/>
         <source>Show non-sub annot</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="395"/>
-        <location filename="translatormanager.cc" line="396"/>
+        <location filename="translatormanager.cc" line="400"/>
+        <location filename="translatormanager.cc" line="401"/>
         <source>Hide</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="398"/>
+        <location filename="translatormanager.cc" line="403"/>
         <source>Auto clear console</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="399"/>
+        <location filename="translatormanager.cc" line="404"/>
         <source>Enable auto clear console</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="401"/>
+        <location filename="translatormanager.cc" line="406"/>
         <source>Stick console</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="402"/>
+        <location filename="translatormanager.cc" line="407"/>
         <source>Disable auto clear console</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="404"/>
+        <location filename="translatormanager.cc" line="409"/>
         <source>Always on top</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="405"/>
+        <location filename="translatormanager.cc" line="410"/>
         <source>Show window on top</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="407"/>
+        <location filename="translatormanager.cc" line="412"/>
         <source>Advanced</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="408"/>
+        <location filename="translatormanager.cc" line="413"/>
         <source>Advanced menu</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="410"/>
-        <location filename="translatormanager.cc" line="411"/>
+        <location filename="translatormanager.cc" line="415"/>
+        <location filename="translatormanager.cc" line="416"/>
         <source>Bless user</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="413"/>
-        <location filename="translatormanager.cc" line="414"/>
+        <location filename="translatormanager.cc" line="418"/>
+        <location filename="translatormanager.cc" line="419"/>
         <source>Curse user</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="419"/>
+        <location filename="translatormanager.cc" line="424"/>
         <source>Edit annot</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="420"/>
+        <location filename="translatormanager.cc" line="425"/>
         <source>Edit annotation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="422"/>
+        <location filename="translatormanager.cc" line="427"/>
         <source>Delete annot</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="423"/>
+        <location filename="translatormanager.cc" line="428"/>
         <source>Delete annotation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="425"/>
+        <location filename="translatormanager.cc" line="430"/>
         <source>Block annot</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="426"/>
+        <location filename="translatormanager.cc" line="431"/>
         <source>Block annotation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="428"/>
+        <location filename="translatormanager.cc" line="433"/>
         <source>Bless annot</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="429"/>
+        <location filename="translatormanager.cc" line="434"/>
         <source>Bless annotation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="431"/>
+        <location filename="translatormanager.cc" line="436"/>
         <source>Curse annot</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="432"/>
+        <location filename="translatormanager.cc" line="437"/>
         <source>Curse annotation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="434"/>
-        <location filename="translatormanager.cc" line="435"/>
+        <location filename="translatormanager.cc" line="439"/>
+        <location filename="translatormanager.cc" line="440"/>
         <source>Bless token</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="437"/>
-        <location filename="translatormanager.cc" line="438"/>
+        <location filename="translatormanager.cc" line="442"/>
+        <location filename="translatormanager.cc" line="443"/>
         <source>Curse token</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="440"/>
+        <location filename="translatormanager.cc" line="445"/>
         <source>Hide annot</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="441"/>
+        <location filename="translatormanager.cc" line="446"/>
         <source>Hide annotation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="443"/>
+        <location filename="translatormanager.cc" line="448"/>
         <source>Show annot</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="444"/>
+        <location filename="translatormanager.cc" line="449"/>
         <source>Show annotation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="446"/>
+        <location filename="translatormanager.cc" line="451"/>
         <source>Copy annot</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="447"/>
+        <location filename="translatormanager.cc" line="452"/>
         <source>Copy annotation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="449"/>
-        <location filename="translatormanager.cc" line="450"/>
+        <location filename="translatormanager.cc" line="454"/>
+        <location filename="translatormanager.cc" line="455"/>
         <source>Display user</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="452"/>
-        <location filename="translatormanager.cc" line="453"/>
+        <location filename="translatormanager.cc" line="457"/>
+        <location filename="translatormanager.cc" line="458"/>
         <source>Subtitle history</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="454"/>
+        <location filename="translatormanager.cc" line="459"/>
         <source>Show subtitle history</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="416"/>
-        <location filename="translatormanager.cc" line="417"/>
-        <location filename="translatormanager.cc" line="456"/>
-        <location filename="translatormanager.cc" line="457"/>
+        <location filename="translatormanager.cc" line="421"/>
+        <location filename="translatormanager.cc" line="422"/>
+        <location filename="translatormanager.cc" line="461"/>
+        <location filename="translatormanager.cc" line="462"/>
         <source>Block user</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="459"/>
+        <location filename="translatormanager.cc" line="464"/>
         <source>Clear offline cache</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="460"/>
+        <location filename="translatormanager.cc" line="465"/>
         <source>Remove offline cache</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="462"/>
+        <location filename="translatormanager.cc" line="467"/>
         <source>Synchronize with server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="463"/>
+        <location filename="translatormanager.cc" line="468"/>
         <source>Connect to server and synchronize local cache</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="464"/>
+        <location filename="translatormanager.cc" line="469"/>
         <source>Disconnect from server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="465"/>
+        <location filename="translatormanager.cc" line="470"/>
         <source>Disconnect from server and use local cache only</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="468"/>
+        <location filename="translatormanager.cc" line="473"/>
         <source>Show annotation browser</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="470"/>
+        <location filename="translatormanager.cc" line="475"/>
         <source>Annot editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="471"/>
+        <location filename="translatormanager.cc" line="476"/>
         <source>Show annotation editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="474"/>
+        <location filename="translatormanager.cc" line="479"/>
         <source>Show token view</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="477"/>
+        <location filename="translatormanager.cc" line="482"/>
         <source>Show comment browser</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="481"/>
+        <location filename="translatormanager.cc" line="486"/>
         <source>Show cloud browser</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="483"/>
-        <location filename="translatormanager.cc" line="484"/>
+        <location filename="translatormanager.cc" line="488"/>
+        <location filename="translatormanager.cc" line="489"/>
         <source>Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="489"/>
-        <location filename="translatormanager.cc" line="490"/>
+        <location filename="translatormanager.cc" line="494"/>
+        <location filename="translatormanager.cc" line="495"/>
         <source>Add alias</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="492"/>
+        <location filename="translatormanager.cc" line="497"/>
         <source>Select process</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="495"/>
-        <location filename="translatormanager.cc" line="496"/>
+        <location filename="translatormanager.cc" line="500"/>
+        <location filename="translatormanager.cc" line="501"/>
         <source>Attach process</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="498"/>
-        <location filename="translatormanager.cc" line="499"/>
+        <location filename="translatormanager.cc" line="503"/>
+        <location filename="translatormanager.cc" line="504"/>
         <source>Detach process</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="501"/>
-        <location filename="translatormanager.cc" line="502"/>
+        <location filename="translatormanager.cc" line="506"/>
+        <location filename="translatormanager.cc" line="507"/>
         <source>Refresh process</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="504"/>
-        <location filename="translatormanager.cc" line="505"/>
+        <location filename="translatormanager.cc" line="509"/>
+        <location filename="translatormanager.cc" line="510"/>
         <source>Switch channel</source>
         <oldsource>Select channel</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="507"/>
-        <location filename="translatormanager.cc" line="508"/>
+        <location filename="translatormanager.cc" line="512"/>
+        <location filename="translatormanager.cc" line="513"/>
         <source>Playlist</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="510"/>
+        <location filename="translatormanager.cc" line="515"/>
         <source>Application language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="511"/>
+        <location filename="translatormanager.cc" line="516"/>
         <source>Choose application language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="513"/>
+        <location filename="translatormanager.cc" line="518"/>
         <source>Any language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="514"/>
+        <location filename="translatormanager.cc" line="519"/>
         <source>All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="515"/>
+        <location filename="translatormanager.cc" line="520"/>
         <source>Choose all languages</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="517"/>
+        <location filename="translatormanager.cc" line="522"/>
         <source>Annot languages</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="518"/>
+        <location filename="translatormanager.cc" line="523"/>
         <source>Choose annotation language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="520"/>
+        <location filename="translatormanager.cc" line="525"/>
         <source>User language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="521"/>
+        <location filename="translatormanager.cc" line="526"/>
         <source>Choose user language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="523"/>
-        <location filename="translatormanager.cc" line="661"/>
+        <location filename="translatormanager.cc" line="528"/>
+        <location filename="translatormanager.cc" line="666"/>
         <source>Anonymous</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="524"/>
+        <location filename="translatormanager.cc" line="529"/>
         <source>User anonymous</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="526"/>
+        <location filename="translatormanager.cc" line="531"/>
         <source>Show translation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="527"/>
+        <location filename="translatormanager.cc" line="532"/>
         <source>Display translation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="529"/>
+        <location filename="translatormanager.cc" line="534"/>
         <source>Subtitle on top</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="530"/>
+        <location filename="translatormanager.cc" line="535"/>
         <source>Display subtitle on the top/bottom</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="532"/>
+        <location filename="translatormanager.cc" line="537"/>
         <source>Subtitle color</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="533"/>
+        <location filename="translatormanager.cc" line="538"/>
         <source>Select subtitle color</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="535"/>
+        <location filename="translatormanager.cc" line="540"/>
         <source>Theme</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="536"/>
+        <location filename="translatormanager.cc" line="541"/>
         <source>Select GUI theme</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="538"/>
+        <location filename="translatormanager.cc" line="543"/>
         <source>Create</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="539"/>
+        <location filename="translatormanager.cc" line="544"/>
         <source>Create date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="540"/>
+        <location filename="translatormanager.cc" line="545"/>
         <source>Update</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="541"/>
+        <location filename="translatormanager.cc" line="546"/>
         <source>Update date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="542"/>
+        <location filename="translatormanager.cc" line="547"/>
         <source>Blessed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="543"/>
+        <location filename="translatormanager.cc" line="548"/>
         <source>Blessed count</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="544"/>
+        <location filename="translatormanager.cc" line="549"/>
         <source>Cursed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="545"/>
+        <location filename="translatormanager.cc" line="550"/>
         <source>Cursed count</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="546"/>
-        <location filename="translatormanager.cc" line="658"/>
+        <location filename="translatormanager.cc" line="551"/>
+        <location filename="translatormanager.cc" line="663"/>
         <source>Blocked</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="547"/>
+        <location filename="translatormanager.cc" line="552"/>
         <source>Blocked count</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="548"/>
+        <location filename="translatormanager.cc" line="553"/>
         <source>Visited</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="549"/>
+        <location filename="translatormanager.cc" line="554"/>
         <source>Visited count</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="550"/>
-        <location filename="translatormanager.cc" line="659"/>
+        <location filename="translatormanager.cc" line="555"/>
+        <location filename="translatormanager.cc" line="664"/>
         <source>Annot</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="551"/>
+        <location filename="translatormanager.cc" line="556"/>
         <source>Annotation count</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="553"/>
-        <location filename="translatormanager.cc" line="554"/>
-        <location filename="translatormanager.cc" line="633"/>
+        <location filename="translatormanager.cc" line="558"/>
+        <location filename="translatormanager.cc" line="559"/>
+        <location filename="translatormanager.cc" line="638"/>
         <source>Alias</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="556"/>
+        <location filename="translatormanager.cc" line="561"/>
         <source>Backward</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="557"/>
+        <location filename="translatormanager.cc" line="562"/>
         <source>Forward</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="558"/>
+        <location filename="translatormanager.cc" line="563"/>
         <source>Forward 5 sec</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="559"/>
+        <location filename="translatormanager.cc" line="564"/>
         <source>Backward 5 sec</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="560"/>
+        <location filename="translatormanager.cc" line="565"/>
         <source>Forward 10 sec</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="561"/>
+        <location filename="translatormanager.cc" line="566"/>
         <source>Backward 10 sec</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="562"/>
+        <location filename="translatormanager.cc" line="567"/>
         <source>Forward 30 sec</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="563"/>
+        <location filename="translatormanager.cc" line="568"/>
         <source>Backward 30 sec</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="564"/>
+        <location filename="translatormanager.cc" line="569"/>
         <source>Forward 60 sec</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="565"/>
+        <location filename="translatormanager.cc" line="570"/>
         <source>Backward 60 sec</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="566"/>
+        <location filename="translatormanager.cc" line="571"/>
         <source>Forward 90 sec</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="567"/>
+        <location filename="translatormanager.cc" line="572"/>
         <source>Backward 90 sec</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="568"/>
+        <location filename="translatormanager.cc" line="573"/>
         <source>Forward 1 min</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="569"/>
+        <location filename="translatormanager.cc" line="574"/>
         <source>Backward 1 min</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="570"/>
+        <location filename="translatormanager.cc" line="575"/>
         <source>Forward 5 min</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="571"/>
+        <location filename="translatormanager.cc" line="576"/>
         <source>Backward 5 min</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="572"/>
+        <location filename="translatormanager.cc" line="577"/>
         <source>Forward 10 min</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="573"/>
+        <location filename="translatormanager.cc" line="578"/>
         <source>Backward 10 min</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="575"/>
+        <location filename="translatormanager.cc" line="580"/>
         <source>Recent</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="576"/>
+        <location filename="translatormanager.cc" line="581"/>
         <source>Recent file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="583"/>
+        <location filename="translatormanager.cc" line="588"/>
         <source>Tracks</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="584"/>
+        <location filename="translatormanager.cc" line="589"/>
         <source>Media tracks</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="586"/>
+        <location filename="translatormanager.cc" line="591"/>
         <source>Auto play next media</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="587"/>
+        <location filename="translatormanager.cc" line="592"/>
         <source>Automatically play next media</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="589"/>
-        <location filename="translatormanager.cc" line="590"/>
+        <location filename="translatormanager.cc" line="594"/>
+        <location filename="translatormanager.cc" line="595"/>
         <source>Show menubar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="592"/>
+        <location filename="translatormanager.cc" line="597"/>
         <source>Check Internet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="593"/>
+        <location filename="translatormanager.cc" line="598"/>
         <source>Check Internet connection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="595"/>
+        <location filename="translatormanager.cc" line="600"/>
         <source>Remove caches</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="596"/>
+        <location filename="translatormanager.cc" line="601"/>
         <source>Remove offline caches</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="641"/>
+        <location filename="translatormanager.cc" line="646"/>
         <source>LoginTime</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="663"/>
+        <location filename="translatormanager.cc" line="668"/>
         <source>Maximize</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="664"/>
+        <location filename="translatormanager.cc" line="669"/>
         <source>Minimize</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="665"/>
+        <location filename="translatormanager.cc" line="670"/>
         <source>Restore</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="125"/>
-        <location filename="translatormanager.cc" line="486"/>
-        <location filename="translatormanager.cc" line="487"/>
-        <location filename="translatormanager.cc" line="577"/>
+        <location filename="translatormanager.cc" line="126"/>
+        <location filename="translatormanager.cc" line="491"/>
+        <location filename="translatormanager.cc" line="492"/>
+        <location filename="translatormanager.cc" line="582"/>
         <source>Clear</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="354"/>
+        <location filename="translatormanager.cc" line="360"/>
         <source>Pick process window</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="578"/>
+        <location filename="translatormanager.cc" line="583"/>
         <source>Clear recent files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="580"/>
+        <location filename="translatormanager.cc" line="585"/>
         <source>Browse</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="581"/>
+        <location filename="translatormanager.cc" line="586"/>
         <source>Files in the same folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="621"/>
+        <location filename="translatormanager.cc" line="626"/>
         <source>Filter pattern</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="622"/>
+        <location filename="translatormanager.cc" line="627"/>
         <source>Filter syntax</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="623"/>
+        <location filename="translatormanager.cc" line="628"/>
         <source>Filter column</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="624"/>
+        <location filename="translatormanager.cc" line="629"/>
         <source>Regular expression</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="625"/>
+        <location filename="translatormanager.cc" line="630"/>
         <source>Wildcard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="626"/>
+        <location filename="translatormanager.cc" line="631"/>
         <source>Fixed string</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="628"/>
+        <location filename="translatormanager.cc" line="633"/>
         <source>ID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="629"/>
+        <location filename="translatormanager.cc" line="634"/>
         <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="630"/>
+        <location filename="translatormanager.cc" line="635"/>
         <source>Type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="631"/>
+        <location filename="translatormanager.cc" line="636"/>
         <source>Tag</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="241"/>
-        <location filename="translatormanager.cc" line="632"/>
+        <location filename="translatormanager.cc" line="242"/>
+        <location filename="translatormanager.cc" line="637"/>
         <source>Annotation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="480"/>
+        <location filename="translatormanager.cc" line="485"/>
         <source>Homepage</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="634"/>
+        <location filename="translatormanager.cc" line="639"/>
         <source>UserID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="635"/>
+        <location filename="translatormanager.cc" line="640"/>
         <source>UserAlias</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="636"/>
+        <location filename="translatormanager.cc" line="641"/>
         <source>TokenId</source>
         <oldsource>TokeId</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="637"/>
+        <location filename="translatormanager.cc" line="642"/>
         <source>Hash</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="638"/>
+        <location filename="translatormanager.cc" line="643"/>
         <source>Text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="639"/>
+        <location filename="translatormanager.cc" line="644"/>
         <source>Pos</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="640"/>
+        <location filename="translatormanager.cc" line="645"/>
         <source>CreateTime</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="642"/>
+        <location filename="translatormanager.cc" line="647"/>
         <source>UpdateTime</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="643"/>
+        <location filename="translatormanager.cc" line="648"/>
         <source>Language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="644"/>
+        <location filename="translatormanager.cc" line="649"/>
         <source>Status</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="645"/>
+        <location filename="translatormanager.cc" line="650"/>
         <source>Flags</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="646"/>
+        <location filename="translatormanager.cc" line="651"/>
         <source>BlessedCount</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="647"/>
+        <location filename="translatormanager.cc" line="652"/>
         <source>CursedCount</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="648"/>
+        <location filename="translatormanager.cc" line="653"/>
         <source>BlockedCount</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="649"/>
+        <location filename="translatormanager.cc" line="654"/>
         <source>AnnotCount</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="650"/>
+        <location filename="translatormanager.cc" line="655"/>
         <source>VisitedCount</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="652"/>
+        <location filename="translatormanager.cc" line="657"/>
         <source>PID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="653"/>
+        <location filename="translatormanager.cc" line="658"/>
         <source>Folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="654"/>
+        <location filename="translatormanager.cc" line="659"/>
         <source>Path</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="656"/>
+        <location filename="translatormanager.cc" line="661"/>
         <source>Active</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="657"/>
+        <location filename="translatormanager.cc" line="662"/>
         <source>Deleted</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="660"/>
+        <location filename="translatormanager.cc" line="665"/>
         <source>n/a</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>UrlDialog</name>
+    <message>
+        <location filename="../dialog/urldialog.cc" line="25"/>
+        <source>Open Media URL</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialog/urldialog.cc" line="43"/>
+        <source>Click to paste the URL example</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialog/urldialog.cc" line="134"/>
+        <source>http://www.youtube.com/watch?v=-DJqnomZoLk</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Example</source>
+        <translation type="obsolete">Example URL: http://www.youtube.com/watch?v=-DJqnomZoLk</translation>
+    </message>
+    <message>
+        <location filename="../dialog/urldialog.cc" line="36"/>
+        <source>Enter local or Internet media URL</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>WebBrowser</name>
+    <message>
+        <location filename="../../../module/webbrowser/webbrowser.cc" line="240"/>
+        <source>New tab</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2836,7 +2899,7 @@
     </message>
     <message>
         <location filename="../../../module/webbrowser/webbrowser.ui" line="166"/>
-        <source>http://qt.nokia.com</source>
+        <source>http://annot.me</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2852,6 +2915,38 @@
     <message>
         <location filename="../../../module/webbrowser/webbrowser.ui" line="227"/>
         <source>Function</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>YoukuMrlResolver</name>
+    <message>
+        <location filename="../../../module/mrlresolver/youkumrlresolver.cc" line="47"/>
+        <location filename="../../../module/mrlresolver/youkumrlresolver.cc" line="68"/>
+        <source>failed to resolve URL</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../module/mrlresolver/youkumrlresolver.cc" line="57"/>
+        <source>resolving media URL ...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../module/mrlresolver/youkumrlresolver.cc" line="74"/>
+        <source>network error, failed to resolve media URL</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>YoutubeMrlResolver</name>
+    <message>
+        <location filename="../../../module/mrlresolver/youtubemrlresolver.cc" line="29"/>
+        <source>failed to resolve URL</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../module/mrlresolver/youtubemrlresolver.cc" line="43"/>
+        <source>resolving media URL ...</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

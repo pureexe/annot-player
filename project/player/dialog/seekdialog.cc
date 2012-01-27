@@ -42,7 +42,6 @@ SeekDialog::SeekDialog(QWidget *parent)
 
 #define MAKE_EDIT(_edit) \
   _edit = new LineEdit; { \
-    _edit->setStyleSheet(SS_LINEEDIT); \
     _edit->setAlignment(Qt::AlignRight); \
     _edit->setToolTip(TR(T_TOOLTIP_SEEK)); \
     _edit->setText("0"); \

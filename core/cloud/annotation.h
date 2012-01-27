@@ -62,11 +62,11 @@ namespace Core { namespace Cloud {
     bool hasTokenDigest() const             { return !tokenDigest_.isEmpty(); }
 
     ///  Used only in offline mode
-  private: qint32 tokenDigestType_;
+  private: qint32 tokenPart_;
   public:
-    qint32 tokenDigestType() const          { return tokenDigestType_; }
-    void setTokenDigestType(qint32 type)    { tokenDigestType_ = type; }
-    bool hasTokenDigestType() const         { return tokenDigestType_; }
+    qint32 tokenPart() const          { return tokenPart_; }
+    void setTokenPart(qint32 part)    { tokenPart_ = part; }
+    bool hasTokenPart() const         { return tokenPart_; }
 
   private: qint64 userId_;
   public:
@@ -171,7 +171,7 @@ namespace Core { namespace Cloud {
     // - Constructions -
   public:
     Annotation()
-      : id_(0), tokenId_(0), tokenDigestType_(0), userId_(0), status_(0), flags_(0), language_(0),
+      : id_(0), tokenId_(0), tokenPart_(0), userId_(0), status_(0), flags_(0), language_(0),
         createTime_(0), updateTime_(0),
         pos_(0), posType_(0), time_(0),
         blessed_(0), cursed_(0), blocked_(0)

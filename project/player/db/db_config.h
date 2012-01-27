@@ -26,7 +26,7 @@
     "user_name "        "VARCHAR(64) NOT NULL UNIQUE," /* 64 is the maximum allowed for email username */ \
     "user_password "    "CHAR(40),"     /* SHA1 */ \
     "user_nickname "    "VARCHAR(255)," \
-    "user_email "       "VARCHAR(160) NOT NULL UNIQUE," /* 320 = 64 + 1 + 255 is the maximum, but not allowd to be unique by mysql */ \
+    "user_email "       "VARCHAR(160) DEFAULT NULL," /* 320 = 64 + 1 + 255 is the maximum, but not allowd to be unique by mysql */ \
     "user_status "      "INT NOT NULL DEFAULT 0," \
     "user_flags "       "BIGINT UNSIGNED NOT NULL DEFAULT 0," \
     "user_language "    "INT NOT NULL DEFAULT 0," \
@@ -44,8 +44,9 @@
     "token_id "         "BIGINT NOT NULL," /* PRIMARY KEY AUTO_INCREMENT */ \
     "user_id "          "BIGINT NOT NULL DEFAULT 0," \
     "token_type "       "INT NOT NULL DEFAULT 0," \
-    "token_digest "     "CHAR(32) NOT NULL," /* MD5, since unhex not supported in SQLite */ \
-    "token_digest_type ""INT NOT NULL DEFAULT 0," \
+    "token_digest "     "CHAR(32) DEFAULT NULL," /* MD5, since unhex not supported in SQLite */ \
+    "token_source "     "VARCHAR(255) DEFAULT NULL," \
+    "token_part "       "INT NOT NULL DEFAULT 0," \
     "token_status "     "INT NOT NULL DEFAULT 0," \
     "token_flags "      "BIGINT UNSIGNED NOT NULL DEFAULT 0," \
     "token_create_time " DB_DATETIME " NOT NULL," \
@@ -63,8 +64,8 @@
   "CREATE TABLE alias(" \
     "alias_id "         "BIGINT NOT NULL," /* PRIMARY KEY AUTO_INCREMENT */ \
     "token_id "         "BIGINT NOT NULL DEFAULT 0," /* AUTO_INCREMENT */ \
-    "token_digest "     "CHAR(32)," /* MD5, since unhex not supported in SQLite */ \
-    "token_digest_type ""INT NOT NULL DEFAULT 0," \
+    "token_digest "     "CHAR(32) DEFAULT NULL," /* MD5, since unhex not supported in SQLite */ \
+    "token_part "       "INT NOT NULL DEFAULT 0," \
     "user_id "          "BIGINT NOT NULL DEFAULT 0," \
     "alias_type "       "INT NOT NULL DEFAULT 0," \
     "alias_text "       "VARCHAR(255)," \
@@ -87,8 +88,8 @@
   "CREATE TABLE annot(" \
     "annot_id "         "BIGINT NOT NULL DEFAULT 0," /* PRIMARY KEY AUTO_INCREMENT */ \
     "token_id "         "BIGINT NOT NULL DEFAULT 0," \
-    "token_digest "     "CHAR(32)," /* MD5, since unhex not supported in SQLite */ \
-    "token_digest_type ""INT NOT NULL DEFAULT 0," \
+    "token_digest "     "CHAR(32) DEFAULT NULL," /* MD5, since unhex not supported in SQLite */ \
+    "token_part "       "INT NOT NULL DEFAULT 0," \
     "user_id "          "BIGINT NOT NULL DEFAULT 0," \
     "user_alias "       "VARCHAR(64)," /* the same length as user_name */ \
     "annot_status "     "INT NOT NULL DEFAULT 0," \
@@ -176,13 +177,14 @@
       "token_type,"             /* 3 */ \
       "user_id,"                /* 4 */ \
       "token_digest,"           /* 5 */ \
-      "token_digest_type,"      /* 6 */ \
-      "token_create_time,"      /* 7 */ \
-      "token_blessed_count,"    /* 8 */ \
-      "token_cursed_count,"     /* 9 */ \
-      "token_blocked_count,"    /* 10 */ \
-      "token_visited_count,"    /* 11 */ \
-      "token_annot_count"       /* 12 */ \
+      "token_source,"           /* 6 */ \
+      "token_part,"             /* 7 */ \
+      "token_create_time,"      /* 8 */ \
+      "token_blessed_count,"    /* 9 */ \
+      "token_cursed_count,"     /* 10 */ \
+      "token_blocked_count,"    /* 11 */ \
+      "token_visited_count,"    /* 12 */ \
+      "token_annot_count"       /* 13 */ \
     ") VALUES (" \
       "?,"      /* 0: token_status */ \
       "?,"      /* 1: token_flags */ \
@@ -190,13 +192,14 @@
       "?,"      /* 3: token_type */ \
       "?,"      /* 4: user_id */ \
       "?,"      /* 5: token_digest */ \
-      "?,"      /* 6: token_digest_type */ \
-      DB_FROM_UNIXTIME("?") "," /* 7: token_create_time */ \
-      "?,"      /* 8: token_blessed_count */ \
-      "?,"      /* 9: token_cursed_count */ \
-      "?,"      /* 10: token_blocked_count */ \
-      "?,"      /* 11: token_visited_count */ \
-      "?"       /* 12: token_annot_count */ \
+      "?,"      /* 6: token_digest */ \
+      "?,"      /* 7: token_part */ \
+      DB_FROM_UNIXTIME("?") "," /* 8: token_create_time */ \
+      "?,"      /* 9: token_blessed_count */ \
+      "?,"      /* 10: token_cursed_count */ \
+      "?,"      /* 11: token_blocked_count */ \
+      "?,"      /* 12: token_visited_count */ \
+      "?"       /* 13: token_annot_count */ \
     ")" \
   ); \
   (_query).addBindValue((_token).status());       /* 0 */ \
@@ -205,13 +208,14 @@
   (_query).addBindValue((_token).type());         /* 3 */ \
   (_query).addBindValue((_token).userId());       /* 4 */ \
   (_query).addBindValue((_token).digest());       /* 5 */ \
-  (_query).addBindValue((_token).digestType());   /* 6 */ \
-  (_query).addBindValue((_token).createTime());   /* 7 */ \
-  (_query).addBindValue((_token).blessedCount()); /* 8 */ \
-  (_query).addBindValue((_token).cursedCount());  /* 9 */ \
-  (_query).addBindValue((_token).blockedCount()); /* 10 */ \
-  (_query).addBindValue((_token).visitedCount()); /* 11 */ \
-  (_query).addBindValue((_token).annotCount());   /* 12 */ \
+  (_query).addBindValue((_token).source());       /* 6 */ \
+  (_query).addBindValue((_token).part());         /* 7 */ \
+  (_query).addBindValue((_token).createTime());   /* 8 */ \
+  (_query).addBindValue((_token).blessedCount()); /* 9 */ \
+  (_query).addBindValue((_token).cursedCount());  /* 10 */ \
+  (_query).addBindValue((_token).blockedCount()); /* 11 */ \
+  (_query).addBindValue((_token).visitedCount()); /* 12 */ \
+  (_query).addBindValue((_token).annotCount());   /* 13 */ \
 }
 
 #define DB_INSERT_ALIAS(_alias, _query) \
@@ -223,7 +227,7 @@
       "alias_id,"               /* 2 */ \
       "token_id,"               /* 3 */ \
       "token_digest,"           /* 4 */ \
-      "token_digest_type,"      /* 5 */ \
+      "token_part,"             /* 5 */ \
       "user_id,"                /* 6 */ \
       "alias_type,"             /* 7 */ \
       "alias_text,"             /* 8 */ \
@@ -238,7 +242,7 @@
       "?,"      /* 2: alias_id */ \
       "?,"      /* 3: token_id */ \
       "?,"      /* 4: token_digest */ \
-      "?,"      /* 5: token_digest_type */ \
+      "?,"      /* 5: token_part */ \
       "?,"      /* 6: user_id */ \
       "?,"      /* 7: alias_type */ \
       "?,"      /* 8: alias_text */ \
@@ -254,7 +258,7 @@
   (_query).addBindValue((_alias).id());           /* 2 */ \
   (_query).addBindValue((_alias).tokenId());      /* 3 */ \
   (_query).addBindValue((_alias).tokenDigest());  /* 4 */ \
-  (_query).addBindValue((_alias).tokenDigestType()); /* 5 */ \
+  (_query).addBindValue((_alias).tokenPart());    /* 5 */ \
   (_query).addBindValue((_alias).userId());       /* 6 */ \
   (_query).addBindValue((_alias).type());         /* 7 */ \
   (_query).addBindValue((_alias).text());         /* 8 */ \
@@ -274,7 +278,7 @@
       "annot_id,"       /* 2 */ \
       "token_id,"       /* 3 */ \
       "token_digest,"   /* 4 */ \
-      "token_digest_type," /* 5 */ \
+      "token_part,"     /* 5 */ \
       "user_id,"        /* 6 */ \
       "user_alias,"     /* 7 */ \
       "annot_pos,"      /* 8 */ \
@@ -293,7 +297,7 @@
       "?,"      /* 2: annot_id */ \
       "?,"      /* 3: token_id */ \
       "?,"      /* 4: token_digest */ \
-      "?,"      /* 5: token_digest_type */ \
+      "?,"      /* 5: token_part */ \
       "?,"      /* 6: user_id */ \
       "?,"      /* 7: user_alias */ \
       "?,"      /* 8: annot_pos */ \
@@ -313,7 +317,7 @@
   (_query).addBindValue((_annot).id());           /* 2 */ \
   (_query).addBindValue((_annot).tokenId());      /* 3 */ \
   (_query).addBindValue((_annot).tokenDigest());  /* 4 */ \
-  (_query).addBindValue((_annot).tokenDigestType()); /* 5 */ \
+  (_query).addBindValue((_annot).tokenPart());    /* 5 */ \
   (_query).addBindValue((_annot).userId());       /* 6 */ \
   (_query).addBindValue((_annot).userAlias());    /* 7 */ \
   (_query).addBindValue((_annot).pos());          /* 8 */ \
@@ -388,13 +392,14 @@
     "token_type,"          /* 3 */ \
     "user_id,"             /* 4 */ \
     "token_digest,"        /* 5 */ \
-    "token_digest_type,"   /* 6 */ \
-    DB_UNIX_TIMESTAMP("token_create_time") "," /* 7 */ \
-    "token_blessed_count," /* 8 */ \
-    "token_cursed_count,"  /* 9 */ \
-    "token_blocked_count," /* 10 */ \
-    "token_visited_count," /* 11 */ \
-    "token_annot_count "   /* 12 */ \
+    "token_source,"        /* 6 */ \
+    "token_part,"          /* 7 */ \
+    DB_UNIX_TIMESTAMP("token_create_time") "," /* 8 */ \
+    "token_blessed_count," /* 9 */ \
+    "token_cursed_count,"  /* 10 */ \
+    "token_blocked_count," /* 11 */ \
+    "token_visited_count," /* 12 */ \
+    "token_annot_count "   /* 13 */ \
   "FROM token "
 
 #define DB_SET_TOKEN(_token, _query) \
@@ -411,19 +416,20 @@
   (_token).setUserId((_query).value(4).toLongLong()); \
   Q_ASSERT(ok); \
   (_token).setDigest((_query).value(5).toString()); \
-  (_token).setDigestType((_query).value(6).toInt(&ok)); \
+  (_token).setSource((_query).value(6).toString()); \
+  (_token).setPart((_query).value(7).toInt(&ok)); \
   Q_ASSERT(ok); \
-  (_token).setCreateTime((_query).value(7).toLongLong(&ok)); \
+  (_token).setCreateTime((_query).value(8).toLongLong(&ok)); \
   Q_ASSERT(ok); \
-  (_token).setBlessedCount((_query).value(8).toUInt(&ok)); \
+  (_token).setBlessedCount((_query).value(9).toUInt(&ok)); \
   Q_ASSERT(ok); \
-  (_token).setCursedCount((_query).value(9).toUInt(&ok)); \
+  (_token).setCursedCount((_query).value(10).toUInt(&ok)); \
   Q_ASSERT(ok); \
-  (_token).setBlockedCount((_query).value(10).toUInt(&ok)); \
+  (_token).setBlockedCount((_query).value(11).toUInt(&ok)); \
   Q_ASSERT(ok); \
-  (_token).setVisitedCount((_query).value(11).toUInt(&ok)); \
+  (_token).setVisitedCount((_query).value(12).toUInt(&ok)); \
   Q_ASSERT(ok); \
-  (_token).setAnnotCount((_query).value(12).toUInt(&ok)); \
+  (_token).setAnnotCount((_query).value(13).toUInt(&ok)); \
   Q_ASSERT(ok); \
 }
 
@@ -434,7 +440,7 @@
     "alias_id,"            /* 2 */ \
     "token_id,"            /* 3 */ \
     "token_digest,"        /* 4 */ \
-    "token_digest_type,"   /* 5 */ \
+    "token_part,"          /* 5 */ \
     "user_id,"             /* 6 */ \
     "alias_type,"          /* 7 */ \
     "alias_text,"          /* 8 */ \
@@ -457,7 +463,7 @@
   (_alias).setTokenId((_query).value(3).toLongLong()); \
   Q_ASSERT(ok); \
   (_alias).setTokenDigest((_query).value(4).toString()); \
-  (_alias).setTokenDigestType((_query).value(5).toInt(&ok)); \
+  (_alias).setTokenPart((_query).value(5).toInt(&ok)); \
   Q_ASSERT(ok); \
   (_alias).setUserId((_query).value(6).toLongLong()); \
   Q_ASSERT(ok); \
@@ -483,7 +489,7 @@
     "annot_id,"        /* 2 */ \
     "token_id,"        /* 3 */ \
     "token_digest,"    /* 4 */ \
-    "token_digest_type," /* 5 */ \
+    "token_part,"      /* 5 */ \
     "user_id,"         /* 6 */ \
     "user_alias,"      /* 7 */ \
     "annot_pos,"       /* 8 */ \
@@ -510,7 +516,7 @@
   (_annot).setTokenId((_query).value(3).toLongLong(&ok)); \
   Q_ASSERT(ok); \
   (_annot).setTokenDigest((_query).value(4).toString()); \
-  (_annot).setTokenDigestType((_query).value(5).toInt(&ok)); \
+  (_annot).setTokenPart((_query).value(5).toInt(&ok)); \
   Q_ASSERT(ok); \
   (_annot).setUserId((_query).value(6).toLongLong(&ok)); \
   Q_ASSERT(ok); \

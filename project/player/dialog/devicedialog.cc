@@ -119,6 +119,11 @@ DeviceDialog::DeviceDialog(QWidget *parent)
   // Connections
   connect(pathComboBox_, SIGNAL(currentIndexChanged(int)), SLOT(invalidateButtons()));
   connect(pathComboBox_, SIGNAL(editTextChanged(QString)), SLOT(invalidateButtons()));
+  connect(pathComboBox_->lineEdit(), SIGNAL(returnPressed()), SLOT(ok()));
+
+  // Shortcuts
+  QShortcut *cancelShortcut = new QShortcut(QKeySequence("Esc"), this);
+  connect(cancelShortcut, SIGNAL(activated()), SLOT(hide()));
 
   // Post behaviors
   autoRadioButton_->setChecked(true);
@@ -145,7 +150,6 @@ DeviceDialog::ok()
 {
   hide();
 
-  // TODO: validate exsistent of path here
   QString path = currentPath();
   if (!QFileInfo(path).exists()) {
     warn(TR(T_ERROR_BAD_FILEPATH) + ": " + path);

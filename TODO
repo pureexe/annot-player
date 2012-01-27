@@ -1,13 +1,100 @@
 # TODO
 # 6/18/2011
 
+# 0.1.2.5
+- FIXME: minimize restore aero bug in game mode
+- split CORE module into independent seperate modules
+- pop up agreement dialog on first launch for youtube/youku
+- add Download video context menu
+- QDesktopServices to openUrl instead of link
+- change qDebug()<< to qDebug(....)
+- FIXME: live channel echo bug
+
+- Achieve download through http proxy server at localhost
+- ability to play bilibili's xml annots offline
+
+## 0.1.3
+
+- How to aggregate media?
+  - create a webbrowser for it?
+  - add search engine?
+  - through sns?
+
+- UI extended
+
+- SNS
+- Comment
+
 ## annot.player
-- live channel echo bug
+- monitor clipboard for youtube and youku
+- decode nicovideo
+- decode sina, tudou -- extend http_access, through lua or imem module
+  - See: TdCom.java
+- decode bilibili/acfun video
+
+- cache movie to local disk
+  - save movies from adobe flash
+    using qnetwork cookies jar
+  - manage all saved video
+    into caches
+
+- decode nicovideo video
+  - See: NicoVideoJp.java
+    http://flapi.nicovideo.jp/api/getflv/sm16690269
+    http://smile-cln41.nicovideo.jp/smile?m=16690269.29722
+
+- decode/import nico's annotation -- require authenticated browser with cookies
+- decode/import bilibili/acfun's annotation
+
+## pass data in mem to vlc
+libvlc imem
+http://forum.videolan.org/viewtopic.php?f=32&t=81529
+libvlc_exception_t ex;
+libvlc_instance_t* inst;
+static const char* args[] = {
+                                   "--codec", "invmem",
+                                   "-vvvvv",
+                                   "-I", "dummy",
+                                   "--no-ipv6",
+                                   "--ipv4",
+                                   "--file-logging",
+                                   "--drop-late-frames",
+                                   "--skip-frames",
+                                   "--no-sout-transcode-hurry-up",
+                                   "--logfile", "/var/log/mylogfile"
+                                   };
+
+libvlc_exception_init(&ex);
+inst = libvlc_new(argv, args, &ex);
+if(inst == NULL || libvlc_exception_raised(&ex)) {
+  //your error handler
+}
+
+char swidth[50], sheight[50], slock[50], sunlock[50], sdata[50];
+char sinput[10];
+
+sprintf(swidth, ":invmem-width=%d", 800);
+sprintf(sheight, ":invmem-height=%d", 600);
+sprintf(slock, ":invmem-lock=%lld", your_lock_function_ptr);
+sprintf(sunlock, ":invmem-unlock=%lld", your_unlock_function_ptr);
+sprintf(sdata, ":invmem-data=%lld", your_lock_unlock_functions_param_ptr);
+
+const char* argvideo[] = {
+                                    swidth,
+                                    sheight,
+                                    slock,
+                                    sunlock,
+                                    sdata
+                                };
+
+sprintf(sinput, "fake://");
+
+
+## annot.player
 - improve performance to play BDRip movie -- increase buffer? render mode?
 - FIXME: dragging window disappear bug
 - Updated to Qt 4.8 on Mac OS X. FIXME: WebKit conflict.
 - need to hack ith_engine commit database for identifying goei2?
-- ability to directly play bilibili's xml annots
 - able to edit sub prefix, such as font size
 - able to lock ur own annot
 - FIXME: crash on exit sometime in Windows
@@ -17,7 +104,6 @@
 - show specific user info popup as well
 - FIXME: annotation view disappeared after process window minimized
 
-0.1.2.4
 - add delete cache menu context menu
 - able to edit other's subtitle??
   also PREVENT guest from editing subtitle
@@ -38,7 +124,6 @@
   utilizing annot.time msecs
   editing annot time
 
-0.1.2.x
 - add male/female/chaos to user's flags
   add "female" flags to annot flats
   and add client side filter.

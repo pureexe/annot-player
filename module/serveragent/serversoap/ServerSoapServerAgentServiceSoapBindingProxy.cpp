@@ -1995,6 +1995,60 @@ int ServerAgentServiceSoapBindingProxy::submitMediaTokenDigest(const char *endpo
 	return soap_closesock(soap);
 }
 
+int ServerAgentServiceSoapBindingProxy::submitMediaTokenSource(const char *endpoint, const char *soap_action, tns__submitMediaTokenSource *tns__submitMediaTokenSource_, tns__submitMediaTokenSourceResponse *tns__submitMediaTokenSourceResponse_)
+{	struct soap *soap = this;
+	struct __tns__submitMediaTokenSource soap_tmp___tns__submitMediaTokenSource;
+	if (endpoint)
+		soap_endpoint = endpoint;
+	if (!soap_endpoint)
+		soap_endpoint = "http://annotcloud.com/services/ServerAgentPort";
+	if (!soap_action)
+		soap_action = "";
+	soap->encodingStyle = NULL;
+	soap_tmp___tns__submitMediaTokenSource.tns__submitMediaTokenSource_ = tns__submitMediaTokenSource_;
+	soap_begin(soap);
+	soap_serializeheader(soap);
+	soap_serialize___tns__submitMediaTokenSource(soap, &soap_tmp___tns__submitMediaTokenSource);
+	if (soap_begin_count(soap))
+		return soap->error;
+	if (soap->mode & SOAP_IO_LENGTH)
+	{	if (soap_envelope_begin_out(soap)
+		 || soap_putheader(soap)
+		 || soap_body_begin_out(soap)
+		 || soap_put___tns__submitMediaTokenSource(soap, &soap_tmp___tns__submitMediaTokenSource, "-tns:submitMediaTokenSource", NULL)
+		 || soap_body_end_out(soap)
+		 || soap_envelope_end_out(soap))
+			 return soap->error;
+	}
+	if (soap_end_count(soap))
+		return soap->error;
+	if (soap_connect(soap, soap_endpoint, soap_action)
+	 || soap_envelope_begin_out(soap)
+	 || soap_putheader(soap)
+	 || soap_body_begin_out(soap)
+	 || soap_put___tns__submitMediaTokenSource(soap, &soap_tmp___tns__submitMediaTokenSource, "-tns:submitMediaTokenSource", NULL)
+	 || soap_body_end_out(soap)
+	 || soap_envelope_end_out(soap)
+	 || soap_end_send(soap))
+		return soap_closesock(soap);
+	if (!tns__submitMediaTokenSourceResponse_)
+		return soap_closesock(soap);
+	tns__submitMediaTokenSourceResponse_->soap_default(soap);
+	if (soap_begin_recv(soap)
+	 || soap_envelope_begin_in(soap)
+	 || soap_recv_header(soap)
+	 || soap_body_begin_in(soap))
+		return soap_closesock(soap);
+	tns__submitMediaTokenSourceResponse_->soap_get(soap, "tns:submitMediaTokenSourceResponse", "tns:submitMediaTokenSourceResponse");
+	if (soap->error)
+		return soap_recv_fault(soap, 0);
+	if (soap_body_end_in(soap)
+	 || soap_envelope_end_in(soap)
+	 || soap_end_recv(soap))
+		return soap_closesock(soap);
+	return soap_closesock(soap);
+}
+
 int ServerAgentServiceSoapBindingProxy::updateMediaAnnotationTextWithId(const char *endpoint, const char *soap_action, tns__updateMediaAnnotationTextWithId *tns__updateMediaAnnotationTextWithId_, tns__updateMediaAnnotationTextWithIdResponse *tns__updateMediaAnnotationTextWithIdResponse_)
 {	struct soap *soap = this;
 	struct __tns__updateMediaAnnotationTextWithId soap_tmp___tns__updateMediaAnnotationTextWithId;

@@ -108,7 +108,7 @@ public:
   // - Queries -
 public:
   Token selectTokenWithId(qint64 id);
-  Token selectTokenWithDigest(const QString &digest, qint32 digestType);
+  Token selectTokenWithDigest(const QString &digest, qint32 part);
 
   AnnotationList selectAnnotationsWithTokenId(qint64 tid);
   AliasList selectAliasesWithTokenId(qint64 tid);

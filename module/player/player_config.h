@@ -19,6 +19,7 @@
     __VA_ARGS__ "axv" \
     __VA_ARGS__ "dixv" \
     __VA_ARGS__ "dv" \
+    __VA_ARGS__ "f4v" \
     __VA_ARGS__ "flv" \
     __VA_ARGS__ "gxf" \
     __VA_ARGS__ "m1v" \
@@ -146,5 +147,7 @@
 #define PLAYER_URL_CD   "cdda://"
 #define PLAYER_URL_DVD  "dvd://"
 #define PLAYER_URL_VCD  "vcd://"
+
+#define PLAYER_USER_AGENT "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0)" // Default HTTP USER_AGENT
 
 #endif // PLAYER_CONFIG_H

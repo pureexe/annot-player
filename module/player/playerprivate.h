@@ -30,7 +30,7 @@ extern "C" {
 
 namespace { // anonymous
 
-  // Persistent storage
+  // Persistent storage, for Windows & Mac OS X
   const char *vlc_plugin_path()
   {
     static std::auto_ptr<char> auto_release_pool;
@@ -48,10 +48,31 @@ namespace { // anonymous
     }
     return ret;
   }
+
+  // Persistent storage, for Mac OS X
+  const char *vlc_data_path()
+  {
+    static std::auto_ptr<char> auto_release_pool;
+    char *ret = auto_release_pool.get();
+    if (!ret) {
+      QString path = QCoreApplication::applicationDirPath() + "/share";
+      const char *src = path.toAscii();
+      int n = ::strlen(src);
+      Q_ASSERT(n);
+      if (n) {
+        ret = new char[n + 1];
+        ::strncpy(ret, src, n + 1); // use strncpy instead of strcpy in case sth goes wrong
+        auto_release_pool.reset(ret);
+      }
+    }
+    return ret;
+  }
+
 } // anonymous namespace
 
 #define VLC_ARGS_NULL           ""
 #define VLC_PLUGIN_PATH         ::vlc_plugin_path()
+#define VLC_DATA_PATH           ::vlc_data_path()
 #define VLC_ARGS_CONFIG         "--ignore-config"       // Don't use VLC's config
 #define VLC_ARGS_TITLE          "--no-video-title-show" // Don't display title
 #define VLC_ARGS_LIBRARY        "--no-media-library"    // メディアライブラリーを使用 (デフォルトで有効)
@@ -59,6 +80,7 @@ namespace { // anonymous
 #define VLC_ARGS_INTERFACE      "-I", "dummy"           // Don't use any interface
 #define VLC_ARGS_LOG            "--extraintf=logger"    // display log window
 #define VLC_ARGS_PLUGIN_PATH    "--plugin-path", VLC_PLUGIN_PATH
+#define VLC_ARGS_DATA_PATH      "--data-path", VLC_DATA_PATH
 #define VLC_ARGS_VERBOSE(_lvl)  "--verbose=" #_lvl     // >= 0
 
 // http://forums.techarena.in/windows-software/1403280.htm
@@ -66,14 +88,19 @@ namespace { // anonymous
 #define VLC_ARGS_MAC            "--opengl-provider=minimal_macosx"
 //#define VLC_ARGS_MAC            VLC_ARGS_NULL // use default macosx filter
 #ifdef Q_WS_MAC
-  #define VLC_ARGS_OS           VLC_ARGS_MAC
+  #define VLC_ARGS_OS \
+    VLC_ARGS_PLUGIN_PATH, \
+    VLC_ARGS_DATA_PATH, \
+    VLC_ARGS_MAC
+#elif defined(Q_WS_WIN)
+  #define VLC_ARGS_OS \
+    VLC_ARGS_PLUGIN_PATH
 #else
   #define VLC_ARGS_OS           VLC_ARGS_NULL
 #endif // Q_WS_MAC
 
 #define VLC_ARGS_RELEASE \
   VLC_ARGS_CONFIG, \
-  VLC_ARGS_PLUGIN_PATH, \
   VLC_ARGS_INTERFACE, \
   VLC_ARGS_TITLE, \
   VLC_ARGS_LIBRARY, \
@@ -179,10 +206,13 @@ namespace { // anonymous: player states
     bool mouseEventEnabled_;
 
     QString mediaPath_;
+    QString mediaTitle_;
     int subtitleId_;
     int titleId_;
     int trackNumber_;
     QStringList externalSubtitles_;
+
+    QString userAgent_;
 
     QWidget *voutWindow_; // vout container
 
@@ -214,6 +244,12 @@ namespace { // anonymous: player states
 
     const QString &mediaPath() const { return mediaPath_; }
     void setMediaPath(const QString &path = QString()) { mediaPath_ = path; }
+
+    const QString &mediaTitle() const { return mediaTitle_; }
+    void setMediaTitle(const QString &title = QString()) { mediaTitle_ = title; }
+
+    const QString &userAgent() const { return userAgent_; }
+    void setUserAgent(const QString &agent = QString()) { userAgent_ = agent; }
 
     int trackNumber() const { return trackNumber_; }
     void setTrackNumber(int track = 0) { trackNumber_ = track; }

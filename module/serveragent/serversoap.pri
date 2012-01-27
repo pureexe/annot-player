@@ -22,6 +22,6 @@ SOURCES += \
     #$$SERVER_SOAP_HOME/$${SERVER_SOAP_PREFIX}ClientLib.cpp
 
 OTHER_FILES += \
-    $$PWD/serversoap.gen.cmd
+    $$PWD/serversoap.update.cmd
 
 # EOF

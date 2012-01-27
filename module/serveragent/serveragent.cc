@@ -219,7 +219,12 @@ ServerAgent::submitToken(const Token &token)
     DOUT("exit: not authorized");
     return 0;
   }
-  qint64 ret = proxy_->submitTokenDigest(token.digest(), token.digestType(), token.type(), user_.name(), user_.password());
+
+  qint64 ret = 0;
+  if (token.hasDigest())
+    ret = proxy_->submitTokenDigest(token.digest(), token.part(), token.type(), user_.name(), user_.password());
+  else if (token.hasSource())
+    ret = proxy_->submitTokenSource(token.source(), token.part(), token.type(), user_.name(), user_.password());
   DOUT("exit: ret =" << ret);
   return ret;
 }
@@ -249,7 +254,7 @@ ServerAgent::submitAlias(const Alias &alias)
   if (alias.hasTokenId())
     ret = proxy_->submitAliasTextWithTokenId(alias.text(), alias.type(), alias.tokenId(), user_.name(), user_.password());
   else if (alias.hasTokenDigest())
-    ret = proxy_->submitAliasTextAndTokenDigest(alias.text(), alias.type(), alias.tokenDigest(), alias.tokenDigestType(), user_.name(), user_.password());
+    ret = proxy_->submitAliasTextAndTokenDigest(alias.text(), alias.type(), alias.tokenDigest(), alias.tokenPart(), user_.name(), user_.password());
 
   DOUT("exit: ret =" << ret);
   return ret;
@@ -296,7 +301,7 @@ ServerAgent::submitAnnotation(const Annotation &annot)
   if (annot.hasTokenId())
     ret = proxy_->submitAnnotationTextWithTokenId(annot.text(), annot.pos(), annot.posType(), annot.tokenId(), user_.name(), user_.password());
   else if (annot.hasTokenDigest())
-    ret = proxy_->submitAnnotationTextAndTokenDigest(annot.text(), annot.pos(), annot.posType(), annot.tokenDigest(), annot.tokenDigestType(), user_.name(), user_.password());
+    ret = proxy_->submitAnnotationTextAndTokenDigest(annot.text(), annot.pos(), annot.posType(), annot.tokenDigest(), annot.tokenPart(), user_.name(), user_.password());
   DOUT("exit: ret =" << ret);
   return ret;
 }
@@ -321,11 +326,11 @@ ServerAgent::selectTokenWithId(qint64 id)
 }
 
 Token
-ServerAgent::selectTokenWithDigest(const QString &digest, qint32 digestType)
+ServerAgent::selectTokenWithDigest(const QString &digest, qint32 part)
 {
   Token ret;
   if (!digest.isEmpty())
-    ret = proxy_->selectTokenWithDigest(digest, digestType);
+    ret = proxy_->selectTokenWithDigest(digest, part);
   return ret;
 }
 

@@ -301,8 +301,12 @@ ServerProxy::submitToken(const Token &token, const QString &userName, const QStr
 {
   DOUT("enter");
 
-  if (!token.hasDigest() || token.digest().length() != Traits::TOKEN_DIGEST_LENGTH) {
+  if (token.hasDigest() && token.digest().size() != Traits::TOKEN_DIGEST_LENGTH) {
     DOUT("exit: error: invalid digest =" << token.digest());
+    return 0;
+  }
+  if (token.hasSource() && token.source().size() != Traits::MAX_SOURCE_LENGTH) {
+    DOUT("exit: error: source too long =" << token.source());
     return 0;
   }
 
@@ -312,9 +316,17 @@ ServerProxy::submitToken(const Token &token, const QString &userName, const QStr
   arg0.id = token.id();
   arg0.type = token.type();
   arg0.userId = token.userId();
-  std::string digest = token.digest().toStdString();
-  arg0.digest = &digest;
-  arg0.digestType = token.digestType();
+  std::string digest;
+  if (token.hasDigest()) {
+    digest = token.digest().toStdString();
+    arg0.digest = &digest;
+  }
+  std::string source;
+  if (token.hasSource()) {
+    source = token.source().toStdString();
+    arg0.source = &source;
+  }
+  arg0.part = token.part();
   arg0.createTime = token.createTime();
   arg0.blessedCount = token.blessedCount();
   arg0.cursedCount = token.cursedCount();
@@ -346,14 +358,14 @@ ServerProxy::submitToken(const Token &token, const QString &userName, const QStr
 }
 
 qint64
-ServerProxy::submitTokenDigest(const QString &digest, qint32 digestType, qint32 tokenType, const QString &userName, const QString &password)
+ServerProxy::submitTokenDigest(const QString &digest, qint32 part, qint32 tokenType, const QString &userName, const QString &password)
 {
   DOUT("enter: tokenType =" << tokenType);
   //if (tokenType < 0) {
   //  DOUT("exit: error: invalid tokenType =" << tokenType);
   //  return 0;
   //}
-  if (digest.length() != Traits::TOKEN_DIGEST_LENGTH) {
+  if (digest.size() != Traits::TOKEN_DIGEST_LENGTH) {
     DOUT("exit: error: invalid digest =" << digest);
     return 0;
   }
@@ -361,7 +373,7 @@ ServerProxy::submitTokenDigest(const QString &digest, qint32 digestType, qint32 
   tns__submitMediaTokenDigest request;
   std::string arg0 = digest.toStdString();
   request.arg0 = &arg0;
-  request.arg1 = digestType;
+  request.arg1 = part;
   request.arg2 = tokenType;
   std::string s_userName = userName.toStdString();
   request.userName = &s_userName;
@@ -371,6 +383,45 @@ ServerProxy::submitTokenDigest(const QString &digest, qint32 digestType, qint32 
   tns__submitMediaTokenDigestResponse response;
   mutex_.lock();
   int err = proxy_->submitMediaTokenDigest(&request, &response);
+  mutex_.unlock();
+  if (err) {
+    DOUT("soap error, err =" << err);
+    emit soapError(err);
+    DOUT("exit");
+    return 0;
+  }
+
+  qint64 ret = response.return_;
+  DOUT("exit: tid =" << ret);
+  return ret;
+}
+
+qint64
+ServerProxy::submitTokenSource(const QString &source, qint32 part, qint32 tokenType, const QString &userName, const QString &password)
+{
+  DOUT("enter: tokenType =" << tokenType);
+  //if (tokenType < 0) {
+  //  DOUT("exit: error: invalid tokenType =" << tokenType);
+  //  return 0;
+  //}
+  if (source.isEmpty() || source.size() > Traits::MAX_SOURCE_LENGTH) {
+    DOUT("exit: error: invalid source =" << source);
+    return 0;
+  }
+
+  tns__submitMediaTokenSource request;
+  std::string arg0 = source.toStdString();
+  request.arg0 = &arg0;
+  request.arg1 = part;
+  request.arg2 = tokenType;
+  std::string s_userName = userName.toStdString();
+  request.userName = &s_userName;
+  std::string s_password = password.toStdString();
+  request.password = &s_password;
+
+  tns__submitMediaTokenSourceResponse response;
+  mutex_.lock();
+  int err = proxy_->submitMediaTokenSource(&request, &response);
   mutex_.unlock();
   if (err) {
     DOUT("soap error, err =" << err);
@@ -478,9 +529,9 @@ ServerProxy::submitAliasTextWithTokenId(const QString &text, qint32 type, qint64
 
 
 qint64
-ServerProxy::submitAliasTextAndTokenDigest(const QString &text, qint32 type, const QString &digest, qint32 digestType, const QString &userName, const QString &password)
+ServerProxy::submitAliasTextAndTokenDigest(const QString &text, qint32 type, const QString &digest, qint32 part, const QString &userName, const QString &password)
 {
-  DOUT("enter: digestType =" << digestType);
+  DOUT("enter: part =" << part);
 
   if (text.isEmpty()) {
     DOUT("exit: error: missing text");
@@ -501,7 +552,7 @@ ServerProxy::submitAliasTextAndTokenDigest(const QString &text, qint32 type, con
   request.arg0 = &arg0;
   request.arg1 = type;
   request.arg2 = &arg2;
-  request.arg3 = digestType;
+  request.arg3 = part;
   std::string s_userName = userName.toStdString();
   request.userName = &s_userName;
   std::string s_password = password.toStdString();
@@ -622,9 +673,9 @@ ServerProxy::submitAnnotationTextWithTokenId(const QString &text, qint64 pos, qi
 }
 
 qint64
-ServerProxy::submitAnnotationTextAndTokenDigest(const QString &text, qint64 pos, qint32 posType, const QString &digest, qint32 digestType, const QString &userName, const QString &password)
+ServerProxy::submitAnnotationTextAndTokenDigest(const QString &text, qint64 pos, qint32 posType, const QString &digest, qint32 part, const QString &userName, const QString &password)
 {
-  DOUT("enter: digestType =" << digestType);
+  DOUT("enter: part =" << part);
 
   if (text.isEmpty()) {
     DOUT("exit: error: missing text");
@@ -646,7 +697,7 @@ ServerProxy::submitAnnotationTextAndTokenDigest(const QString &text, qint64 pos,
   request.arg1 = pos;
   request.arg2 = posType;
   request.arg3 = &arg3;
-  request.arg4 = digestType;
+  request.arg4 = part;
   std::string s_userName = userName.toStdString();
   request.userName = &s_userName;
   std::string s_password = password.toStdString();
@@ -699,7 +750,9 @@ ServerProxy::selectTokenWithId(qint64 id)
     ret.setUserId(p->userId);
     if (p->digest)
       ret.setDigest(QString::fromStdString(*p->digest));
-    ret.setDigestType(p->digestType);
+    if (p->source)
+      ret.setSource(QString::fromStdString(*p->source));
+    ret.setPart(p->part);
     ret.setCreateTime(p->createTime);
     ret.setBlessedCount(p->blessedCount);
     ret.setCursedCount(p->cursedCount);
@@ -712,15 +765,15 @@ ServerProxy::selectTokenWithId(qint64 id)
 }
 
 Token
-ServerProxy::selectTokenWithDigest(const QString &digest, int digestType)
+ServerProxy::selectTokenWithDigest(const QString &digest, int part)
 {
-  DOUT("enter: digestType =" << digestType);
+  DOUT("enter: part =" << part);
   Token ret;
 
   tns__selectMediaTokenWithDigest request;
   std::string arg0 = digest.toStdString();
   request.arg0 = &arg0;
-  request.arg1 = digestType;
+  request.arg1 = part;
 
   tns__selectMediaTokenWithDigestResponse response;
   mutex_.lock();
@@ -741,7 +794,9 @@ ServerProxy::selectTokenWithDigest(const QString &digest, int digestType)
     ret.setType(p->type);
     ret.setUserId(p->userId);
     ret.setDigest(digest);
-    ret.setDigestType(p->digestType);
+    if (p->source)
+      ret.setSource(QString::fromStdString(*p->source));
+    ret.setPart(p->part);
     ret.setCreateTime(p->createTime);
     ret.setBlessedCount(p->blessedCount);
     ret.setCursedCount(p->cursedCount);

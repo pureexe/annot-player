@@ -16,9 +16,7 @@ class CloudView: public WebBrowser
 public:
   explicit CloudView(QWidget *parent = 0);
 
-  // - Events -
-public slots:
-  virtual void setVisible(bool visible); ///< \override
+  //virtual void setVisible(bool visible); ///< \override
 };
 
 #endif // CLOUDVIEW_H

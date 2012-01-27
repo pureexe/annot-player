@@ -10,7 +10,8 @@ FORMS   += \
 
 HEADERS += \
     $$PWD/webbrowser_config.h \
-    $$PWD/webbrowser.h
+    $$PWD/webbrowser.h \
+    $$PWD/webbrowserprivate.h
 
 SOURCES += \
     $$PWD/webbrowser.cc
@@ -18,7 +19,7 @@ SOURCES += \
 RESOURCES += \
     $$PWD/webbrowser.qrc
 
-QT += core gui webkit
+QT += core gui network webkit
 
 #mac:  LIBS  += -framework WebBrowser
 

@@ -2,6 +2,13 @@ ChangeLog
 Annot Project
 6/18/2011
 
+1/27/2012	annot.player	0.1.2.4
+        * Now support playing Youtube/Youku video online, with annotation support.
+          Example URLs follow:
+          http://www.youtube.com/watch?v=-DJqnomZoLk
+          http://v.youku.com/v_show/id_XMzQzNTkzNDY0.html
+
+
 1/20/2012	annot.player	0.1.2.3
         * Adjusted for Akatsuki no Goei 2
         * Added support to play commentary audio tracks in BD video.

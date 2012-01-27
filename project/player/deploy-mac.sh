@@ -8,7 +8,7 @@ cd "$PREFIX"  || exit 1
 ## environment
 
 COLOR=orange
-VERSION=0.1.2.3
+VERSION=0.1.2.4
 DMG_SIZE=120m
 
 TARGET="Annot Player"
@@ -31,7 +31,6 @@ APP_INFO=$APP_CONTENTS/Info.plist
 APP_BIN=$APP_MACOS/$APP_NAME
 APP_RESORUCES=$APP_CONTENTS/Resources
 
-
 ## copy package
 
 test -e "$TARGET" && finder-remove "$TARGET"
@@ -39,15 +38,14 @@ test -e "$TARGET" && exit 1
 mkdir -p "$TARGET"
 cd "$TARGET" || exit 1
 
-cp -Rv "$APP_SRC"/licenses Licenses
-cp -v "$APP_SRC"/COPYING Licenses/COPYING.txt
-cp -v "$APP_SRC"/ChangeLog ChangeLog.txt
-cp -v "$APP_SRC"/README "Read Me.txt"
+cp -Rv "$APP_SRC"/licenses Licenses || exit 1
+cp -v "$APP_SRC"/COPYING Licenses/COPYING.txt || exit 1
+cp -v "$APP_SRC"/ChangeLog ChangeLog.txt || exit 1
+cp -v "$APP_SRC"/README "Read Me.txt" || exit 1
 dos2unix "Read Me.txt"
 dos2unix ChangeLog.txt
 
-cp -Rv "$APP_BUILD/$APP" "$APP"
-test -e "$APP" || exit 1
+cp -Rv "$APP_BUILD/$APP" "$APP" || exit 1
 rm -Rf "$APP_MACOS"/*
 
 #cp -v "$APP_BUILD/$APP_INFO" "$APP_INFO"/ || exit 1
@@ -152,9 +150,13 @@ change_vlc_lib()
 }
 
 #rm -Rfv "$APP_MACOS"/{lua,plugins}
-cp -Rv "$VLC_BUILD"/lua "$APP_MACOS"/
-cp -Rv "$VLC_BUILD"/plugins "$APP_MACOS"/
+cp -Rv "$VLC_BUILD"/plugins "$APP_MACOS"/ || exit 1
 rm -f "$VLC_BUILD"/plugins/*.dat
+
+cp -Rv "$VLC_BUILD"/share/vlc/lua "$APP_MACOS"/share || exit 1
+cp -Rv "$VLC_BUILD"/share/locale "$APP_MACOS"/share/ || exit 1
+
+#luac -s -o "$APP_MACOS"/lua/playlist/youtube.luac "$APP_SRC"/module/player/lua/playlist/youtube.lua  || exit 1
 
 for i in "$APP_MACOS"/plugins/*.dylib; do
   change_vlc_lib "$i"

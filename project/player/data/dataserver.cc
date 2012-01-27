@@ -36,8 +36,8 @@ DataServer::submitToken(const Token &token)
   qint64 id = 0;
   if (server_->isConnected() && server_->isAuthorized())
     id = server_->submitToken(token);
-  else if (cache_->isValid())
-    id = cache_->selectTokenWithDigest(token.digest(), token.digestType()).id();
+  else if (cache_->isValid() && token.hasDigest())
+    id = cache_->selectTokenWithDigest(token.digest(), token.part()).id();
   DOUT("exit: ret =" << id);
   return id;
 }
@@ -269,18 +269,18 @@ DataServer::selectTokenWithId(qint64 id)
 }
 
 Token
-DataServer::selectTokenWithDigest(const QString &digest, qint32 digestType)
+DataServer::selectTokenWithDigest(const QString &digest, qint32 part)
 {
   DOUT("enter: digest =" << digest);
   Token ret;
   if (server_->isConnected()) {
-    ret = server_->selectTokenWithDigest(digest, digestType);
+    ret = server_->selectTokenWithDigest(digest, part);
     if (ret.isValid() && cache_->isValid()) {
       cache_->deleteTokenWithId(ret.id());
       cache_->insertToken(ret);
     }
   } else if (cache_->isValid())
-    ret = cache_->selectTokenWithDigest(digest, digestType);
+    ret = cache_->selectTokenWithDigest(digest, part);
   DOUT("exit: tid =" << ret.id());
   return ret;
 }
@@ -346,7 +346,7 @@ DataServer::selectAliasesWithToken(const Token &token)
   if (token.isValid())
     ret = selectAliasesWithTokenId(token.id());
   else if (token.hasDigest() && cache_->isValid())
-    ret = cache_->selectAliasesWithTokenDigest(token.digest(), token.digestType());
+    ret = cache_->selectAliasesWithTokenDigest(token.digest(), token.part());
   DOUT("exit");
   return ret;
 }
@@ -359,7 +359,7 @@ DataServer::selectAnnotationsWithToken(const Token &token)
   if (token.isValid())
     ret = selectRelatedAnnotationsWithTokenId(token.id());
   else if (token.hasDigest() && cache_->isValid())
-    ret = cache_->selectAnnotationsWithTokenDigest(token.digest(), token.digestType());
+    ret = cache_->selectAnnotationsWithTokenDigest(token.digest(), token.part());
   DOUT("exit: count =" << ret.size());
   return ret;
 }

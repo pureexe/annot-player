@@ -146,6 +146,7 @@ PlayerUi::createConnections()
   PlayerUi::_connect##Player() \
   { \
     _connect(player_, SIGNAL(encodingChanged()), this, SLOT(invalidateTitle())); \
+    _connect(player_, SIGNAL(mediaTitleChanged(QString)), this, SLOT(invalidateTitle())); \
 \
     _connect(player_, SIGNAL(mediaChanged()), this, SLOT(invalidateTitle())); \
     _connect(player_, SIGNAL(mediaClosed()), this, SLOT(invalidateTitle())); \

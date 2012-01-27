@@ -53,15 +53,16 @@ public:
   // - Submission -
 public:
   qint64 submitToken(const Token &token, const QString &userName, const QString &password);
-  qint64 submitTokenDigest(const QString &digest, qint32 digestType, qint32 tokenType, const QString &userName, const QString &password);
+  qint64 submitTokenDigest(const QString &digest, qint32 part, qint32 tokenType, const QString &userName, const QString &password);
+  qint64 submitTokenSource(const QString &source, qint32 part, qint32 tokenType, const QString &userName, const QString &password);
 
   qint64 submitAlias(const Alias &alias, const QString &userName, const QString &password);
   qint64 submitAliasTextWithTokenId(const QString &text, qint32 type, qint64 tokenId, const QString &userName, const QString &password);
-  qint64 submitAliasTextAndTokenDigest(const QString &text, qint32 type, const QString &digest, qint32 digestType, const QString &userName, const QString &password);
+  qint64 submitAliasTextAndTokenDigest(const QString &text, qint32 type, const QString &digest, qint32 part, const QString &userName, const QString &password);
 
   qint64 submitAnnotation(const Annotation &annot, const QString &userName, const QString &password);
   qint64 submitAnnotationTextWithTokenId(const QString &text, qint64 pos, qint32 posType, qint64 tokenId, const QString &userName, const QString &password);
-  qint64 submitAnnotationTextAndTokenDigest(const QString &text, qint64 pos, qint32 posType, const QString &digest, qint32 digestType, const QString &userName, const QString &password);
+  qint64 submitAnnotationTextAndTokenDigest(const QString &text, qint64 pos, qint32 posType, const QString &digest, qint32 part, const QString &userName, const QString &password);
 
   // - Deletion -
 public:
@@ -75,7 +76,7 @@ public:
   // - Queries -
 public:
   Token selectTokenWithId(qint64 id);
-  Token selectTokenWithDigest(const QString &digest, qint32 digestType);
+  Token selectTokenWithDigest(const QString &digest, qint32 part);
 
   AnnotationList selectAnnotationsWithTokenId(qint64 tid);
   AnnotationList selectRelatedAnnotationsWithTokenId(qint64 tid);

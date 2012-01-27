@@ -405,15 +405,26 @@
 #define T_TOOLTIP_HELP          T_TIP_HELP
 #define T_STATUSTIP_HELP        T_TIP_HELP
 
-#define T_MENUTEXT_COPY         0xb9
-#define T_TIP_COPY              0xba
+#define T_COPY  0xb9
+#define T_MENUTEXT_COPY         T_COPY
+#define T_TIP_COPY              T_COPY
 #define T_TOOLTIP_COPY          T_TIP_COPY
 #define T_STATUSTIP_COPY        T_TIP_COPY
 
-#define T_MENUTEXT_PASTE        0xbb
-#define T_TIP_PASTE             0xbc
+#define T_PASTE 0xba
+#define T_MENUTEXT_PASTE        T_PASTE
+#define T_TIP_PASTE             T_PASTE
 #define T_TOOLTIP_PASTE         T_TIP_PASTE
 #define T_STATUSTIP_PASTE       T_TIP_PASTE
+
+#define T_SOURCE                0xbb
+#define T_LABEL_SOURCE          T_SOURCE
+#define T_MENUTEXT_SOURCE       T_SOURCE
+#define T_TIP_SOURCE            T_SOURCE
+#define T_TOOLTIP_SOURCE        T_TIP_SOURCE
+#define T_STATUSTIP_SOURCE      T_TIP_SOURCE
+
+#define T_AUTO                  0xbc
 
 #define T_MENUTEXT_SUBTITLE     0xbd
 #define T_TIP_SUBTITLE          0xbe
@@ -1069,8 +1080,6 @@
 #define T_TOOLTIP_BACKLOG       T_TIP_BACKLOG
 #define T_STATUSTIP_BACKLOG     T_TIP_BACKLOG
 
-#define T_AUTO                  0x1a8
-
 #define T_MENUTEXT_ANNOTSUBTITLE  0x1a9
 #define T_TIP_ANNOTSUBTITLE       0x1aa
 #define T_TOOLTIP_ANNOTSUBTITLE   T_TIP_ANNOTSUBTITLE
@@ -1119,5 +1128,18 @@
 #define T_TIP_DELETECACHE       0x1bb
 #define T_TOOLTIP_DELETECACHE     T_TIP_DELETECACHE
 #define T_STATUSTIP_DELETECACHE   T_TIP_DELETECACHE
+
+#define T_MENUTEXT_OPENURL      0x1bc
+#define T_TIP_OPENURL           0x1bd
+#define T_TOOLTIP_OPENURL       T_TIP_OPENURL
+#define T_STATUSTIP_OPENURL     T_TIP_OPENURL
+
+#define T_EXAMPLE     0x1be
+
+#define T_OPENINWEBBROWSER      0x1bf
+#define T_MENUTEXT_OPENINWEBBROWSER    T_OPENINWEBBROWSER
+#define T_TIP_OPENINWEBBROWSER         T_OPENINWEBBROWSER
+#define T_TOOLTIP_OPENINWEBBROWSER     T_TIP_OPENINWEBBROWSER
+#define T_STATUSTIP_OPENINWEBBROWSER   T_TIP_OPENINWEBBROWSER
 
 #endif // TR_H

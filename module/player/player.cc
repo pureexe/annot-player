@@ -393,7 +393,6 @@ bool
 Player::isValid() const
 { return impl_ && impl_->valid(); }
 
-
 void
 Player::destroy()
 {
@@ -414,6 +413,8 @@ Player::reset()
   impl_ = new Impl;
   impl_->reset();
   Q_ASSERT(isValid());
+
+  setUserAgent();
 
   // Set event handlers.
   libvlc_event_manager_t *event_manager = ::libvlc_media_player_event_manager(impl_->player());
@@ -660,6 +661,7 @@ Player::closeMedia()
   impl_->setSubtitleId();
   impl_->setTitleId();
   impl_->setMediaPath();
+  impl_->setMediaTitle();
   impl_->setTrackNumber();
   impl_->setExternalSubtitles();
 
@@ -713,7 +715,10 @@ Player::toggleFullScreen()
 QString
 Player::mediaTitle() const
 {
-  Q_ASSERT(isValid());
+  //Q_ASSERT(isValid());
+  if (!impl_->mediaTitle().isEmpty())
+    return impl_->mediaTitle();
+
   if (!hasMedia())
     return QString();
 
@@ -1509,6 +1514,44 @@ Player::setAudioTrackId(int id)
   bool ok = ::libvlc_audio_set_track(impl_->player(), id + 1);
   if (ok)
     emit audioTrackChanged();
+}
+
+// - User agent -
+
+QString
+Player::defaultUserAgent()
+{ return PLAYER_USER_AGENT; }
+
+QString
+Player::userAgent() const
+{
+  Q_ASSERT(isValid());
+  return impl_->userAgent();
+}
+
+void
+Player::setUserAgent(const QString &agent)
+{
+  Q_ASSERT(isValid());
+  if (agent.isEmpty()) {
+    impl_->setUserAgent(PLAYER_USER_AGENT);
+    ::libvlc_set_user_agent(impl_->instance(), PLAYER_USER_AGENT, PLAYER_USER_AGENT);
+  } else {
+    impl_->setUserAgent(agent);
+    ::libvlc_set_user_agent(impl_->instance(), PLAYER_USER_AGENT, impl_->userAgent().toAscii());
+  }
+}
+
+// - Title -
+
+void
+Player::setMediaTitle(const QString &t)
+{
+  Q_ASSERT(isValid());
+  if (t != impl_->mediaTitle()) {
+    impl_->setMediaTitle(t);
+    emit mediaTitleChanged(t);
+  }
 }
 
 // EOF

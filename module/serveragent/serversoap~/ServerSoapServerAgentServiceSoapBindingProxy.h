@@ -74,6 +74,10 @@ class SOAP_CMAC ServerAgentServiceSoapBindingProxy : public soap
 	virtual	int blessMediaTokenWithId(tns__blessMediaTokenWithId *tns__blessMediaTokenWithId_, tns__blessMediaTokenWithIdResponse *tns__blessMediaTokenWithIdResponse_) { return blessMediaTokenWithId(NULL, NULL, tns__blessMediaTokenWithId_, tns__blessMediaTokenWithIdResponse_); }
 	virtual	int blessMediaTokenWithId(const char *endpoint, const char *soap_action, tns__blessMediaTokenWithId *tns__blessMediaTokenWithId_, tns__blessMediaTokenWithIdResponse *tns__blessMediaTokenWithIdResponse_);
 
+	/// Web service operation 'blessUserWithId' (returns error code or SOAP_OK)
+	virtual	int blessUserWithId(tns__blessUserWithId *tns__blessUserWithId_, tns__blessUserWithIdResponse *tns__blessUserWithIdResponse_) { return blessUserWithId(NULL, NULL, tns__blessUserWithId_, tns__blessUserWithIdResponse_); }
+	virtual	int blessUserWithId(const char *endpoint, const char *soap_action, tns__blessUserWithId *tns__blessUserWithId_, tns__blessUserWithIdResponse *tns__blessUserWithIdResponse_);
+
 	/// Web service operation 'blockMediaAliasWithId' (returns error code or SOAP_OK)
 	virtual	int blockMediaAliasWithId(tns__blockMediaAliasWithId *tns__blockMediaAliasWithId_, tns__blockMediaAliasWithIdResponse *tns__blockMediaAliasWithIdResponse_) { return blockMediaAliasWithId(NULL, NULL, tns__blockMediaAliasWithId_, tns__blockMediaAliasWithIdResponse_); }
 	virtual	int blockMediaAliasWithId(const char *endpoint, const char *soap_action, tns__blockMediaAliasWithId *tns__blockMediaAliasWithId_, tns__blockMediaAliasWithIdResponse *tns__blockMediaAliasWithIdResponse_);
@@ -101,6 +105,10 @@ class SOAP_CMAC ServerAgentServiceSoapBindingProxy : public soap
 	/// Web service operation 'curseMediaTokenWithId' (returns error code or SOAP_OK)
 	virtual	int curseMediaTokenWithId(tns__curseMediaTokenWithId *tns__curseMediaTokenWithId_, tns__curseMediaTokenWithIdResponse *tns__curseMediaTokenWithIdResponse_) { return curseMediaTokenWithId(NULL, NULL, tns__curseMediaTokenWithId_, tns__curseMediaTokenWithIdResponse_); }
 	virtual	int curseMediaTokenWithId(const char *endpoint, const char *soap_action, tns__curseMediaTokenWithId *tns__curseMediaTokenWithId_, tns__curseMediaTokenWithIdResponse *tns__curseMediaTokenWithIdResponse_);
+
+	/// Web service operation 'curseUserWithId' (returns error code or SOAP_OK)
+	virtual	int curseUserWithId(tns__curseUserWithId *tns__curseUserWithId_, tns__curseUserWithIdResponse *tns__curseUserWithIdResponse_) { return curseUserWithId(NULL, NULL, tns__curseUserWithId_, tns__curseUserWithIdResponse_); }
+	virtual	int curseUserWithId(const char *endpoint, const char *soap_action, tns__curseUserWithId *tns__curseUserWithId_, tns__curseUserWithIdResponse *tns__curseUserWithIdResponse_);
 
 	/// Web service operation 'deleteMediaAliasWithId' (returns error code or SOAP_OK)
 	virtual	int deleteMediaAliasWithId(tns__deleteMediaAliasWithId *tns__deleteMediaAliasWithId_, tns__deleteMediaAliasWithIdResponse *tns__deleteMediaAliasWithIdResponse_) { return deleteMediaAliasWithId(NULL, NULL, tns__deleteMediaAliasWithId_, tns__deleteMediaAliasWithIdResponse_); }
@@ -193,6 +201,10 @@ class SOAP_CMAC ServerAgentServiceSoapBindingProxy : public soap
 	/// Web service operation 'submitMediaTokenDigest' (returns error code or SOAP_OK)
 	virtual	int submitMediaTokenDigest(tns__submitMediaTokenDigest *tns__submitMediaTokenDigest_, tns__submitMediaTokenDigestResponse *tns__submitMediaTokenDigestResponse_) { return submitMediaTokenDigest(NULL, NULL, tns__submitMediaTokenDigest_, tns__submitMediaTokenDigestResponse_); }
 	virtual	int submitMediaTokenDigest(const char *endpoint, const char *soap_action, tns__submitMediaTokenDigest *tns__submitMediaTokenDigest_, tns__submitMediaTokenDigestResponse *tns__submitMediaTokenDigestResponse_);
+
+	/// Web service operation 'submitMediaTokenSource' (returns error code or SOAP_OK)
+	virtual	int submitMediaTokenSource(tns__submitMediaTokenSource *tns__submitMediaTokenSource_, tns__submitMediaTokenSourceResponse *tns__submitMediaTokenSourceResponse_) { return submitMediaTokenSource(NULL, NULL, tns__submitMediaTokenSource_, tns__submitMediaTokenSourceResponse_); }
+	virtual	int submitMediaTokenSource(const char *endpoint, const char *soap_action, tns__submitMediaTokenSource *tns__submitMediaTokenSource_, tns__submitMediaTokenSourceResponse *tns__submitMediaTokenSourceResponse_);
 
 	/// Web service operation 'updateMediaAnnotationTextWithId' (returns error code or SOAP_OK)
 	virtual	int updateMediaAnnotationTextWithId(tns__updateMediaAnnotationTextWithId *tns__updateMediaAnnotationTextWithId_, tns__updateMediaAnnotationTextWithIdResponse *tns__updateMediaAnnotationTextWithIdResponse_) { return updateMediaAnnotationTextWithId(NULL, NULL, tns__updateMediaAnnotationTextWithId_, tns__updateMediaAnnotationTextWithIdResponse_); }

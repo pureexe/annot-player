@@ -1,9 +1,6 @@
 // main.cc
 // 6/30/2011
 
-// 12/5/2011 TODO: clean up this file.
-// Gradually move things that might be reusable into Application.
-
 #include "application.h"
 #include "mainwindow.h"
 #include "settings.h"
@@ -26,6 +23,8 @@
 #endif // Q_OS_MAC
 #include <QtGui>
 #include <QtWebKit>
+#include <ctime>
+#include <cstdlib>
 
 #define DEBUG "main"
 #include "module/debug/debug.h"
@@ -96,10 +95,6 @@ namespace { // anonymous
 int
 main(int argc, char *argv[])
 {
-//#ifdef USE_WIN_QTH
-//  Qth::startService();
-//#endif // USE_WIN_QTH
-
   // Set OS encoding to UTF-8 before application starts.
   QTextCodec *codec = QTextCodec::codecForName("UTF-8");
   QTextCodec::setCodecForCStrings(codec);
@@ -117,7 +112,8 @@ main(int argc, char *argv[])
   Settings *settings = Settings::globalInstance(); // Global settings
   Q_ASSERT(settings);
 
-  // Set global random seed.
+  // Seed global random generator.
+  ::srand((uint)::time(0));
   ::qsrand((uint)QDateTime::currentMSecsSinceEpoch());
 
   // Register meta types.
@@ -164,7 +160,15 @@ main(int argc, char *argv[])
   //  a.installTranslator(&t);
 
   // Set webkit settings
-  QWebSettings::globalSettings()->setAttribute(QWebSettings::PluginsEnabled, true);
+  {
+    QWebSettings *ws = QWebSettings::globalSettings();
+
+    ws->setAttribute(QWebSettings::PluginsEnabled, true);
+    ws->setAttribute(QWebSettings::AutoLoadImages, true);
+    ws->setAttribute(QWebSettings::JavascriptEnabled, true);
+
+    //g->setMaximumPagesInCache(10);
+  }
 
   // Set theme.
   {

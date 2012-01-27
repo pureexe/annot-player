@@ -3,7 +3,7 @@
 setlocal
 cd /d d:/devel/releases/player || exit /b 1
 
-set VERSION=0.1.2.3
+set VERSION=0.1.2.4
 set APP=annot-player
 set ZIPFILE=%APP%-%VERSION%-win.zip
 
@@ -11,7 +11,7 @@ set MSVC_HOME=/Volumes/win/Windows/System32
 set MSVC_DLLS=msvcp100.dll,msvcr100.dll
 
 set QT_HOME=/Volumes/win/qt/current
-set QT_DLLS=QtCore4.dll,QtGui4.dll,QtNetwork4.dll,QtSql4.dll,QtWebkit4.dll,QtXml4.dll,phonon4.dll
+set QT_DLLS=QtCore4.dll,QtGui4.dll,QtNetwork4.dll,QtScript4.dll,QtSql4.dll,QtWebkit4.dll,QtXml4.dll,phonon4.dll
 
 set ITH_HOME=/Volumes/win/dev/ith
 set ITH_DLLS=ITH.dll,ITH_engine.dll
@@ -21,7 +21,7 @@ set ZLIB_DLL=zlib1.dll
 
 set VLC_HOME=/Volumes/win/Program Files/VideoLAN/VLC
 set VLC_DLLS=libvlc.dll,libvlccore.dll
-set VLC_PLUGINS=plugins,lua
+set VLC_PLUGINS=plugins,lua,locale
 
 set BUILD=/Volumes/local/devel/annot-build-desktop/build.win
 set SOURCE=/Volumes/local/devel/annot

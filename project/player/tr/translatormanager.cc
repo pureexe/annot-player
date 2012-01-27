@@ -103,6 +103,7 @@ TranslatorManager::translate(int tid) const
   case T_NULL:          return QString();
 
   case T_WINDOWS:       return tr("Windows");
+  case T_SOURCE:        return tr("Source");
   case T_OPEN:          return tr("Open");
   case T_BLACKLIST:     return tr("Blacklist");
   case T_DEFAULT:       return tr("Default");
@@ -260,6 +261,9 @@ TranslatorManager::translate(int tid) const
   case T_MENUTEXT_OPENFILE:     return tr("Open file");
   case T_TIP_OPENFILE:          return tr("Open media file");
 
+  case T_MENUTEXT_OPENURL:     return tr("Open media URL");
+  case T_TIP_OPENURL:          return tr("Open media from Internet or local URL");
+
   case T_MENUTEXT_OPENDEVICE:   return tr("Open DVD/VCD/CD device");
   case T_TIP_OPENDEVICE:        return tr("Open media device");
 
@@ -274,6 +278,8 @@ TranslatorManager::translate(int tid) const
 
   case T_MENUTEXT_OPENCONTEXTMENU: return tr("Open ...");
   case T_TIP_OPENCONTEXTMENU:      return tr("Open ...");
+
+  case T_OPENINWEBBROWSER:      return tr("Open in web browser");
 
   case T_MENUTEXT_PLAY:         return tr("Play") + " [SPACE]";
   case T_TIP_PLAY:              return tr("Play media") + " [SPACE]";
@@ -365,11 +371,10 @@ TranslatorManager::translate(int tid) const
   case T_MENUTEXT_HELP:         return tr("Help");
   case T_TIP_HELP:              return tr("Help");
 
-  case T_MENUTEXT_COPY:         return tr("Copy");
-  case T_TIP_COPY:              return tr("Copy");
+  case T_COPY:         return tr("Copy");
+  case T_PASTE:        return tr("Paste");
 
-  case T_MENUTEXT_PASTE:        return tr("Paste");
-  case T_TIP_PASTE:             return tr("Paste");
+  case T_EXAMPLE:      return tr("Example");
 
   case T_MENUTEXT_SUBTITLE:     return tr("Subtitle");
   case T_TIP_SUBTITLE:          return tr("Subtitle");

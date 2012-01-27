@@ -29,13 +29,11 @@ LoginDialog::LoginDialog(QWidget *parent)
   // Widgets
 
   userNameEdit_ = new LineEdit; {
-    userNameEdit_->setStyleSheet(SS_LINEEDIT);
     userNameEdit_->setToolTip(TR(T_TOOLTIP_USERNAME));
     userNameEdit_->setText(TR(T_DEFAULT_USERNAME));
   }
 
   passwordEdit_ = new LineEdit; {
-    passwordEdit_->setStyleSheet(SS_LINEEDIT);
     passwordEdit_->setToolTip(TR(T_TOOLTIP_PASSWORD));
     passwordEdit_->setEchoMode(QLineEdit::Password);
     passwordEdit_->setText(TR(T_DEFAULT_PASSWORD));

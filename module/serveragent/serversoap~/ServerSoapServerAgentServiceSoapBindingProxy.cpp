@@ -111,7 +111,7 @@ int ServerAgentServiceSoapBindingProxy::blessMediaAliasWithId(const char *endpoi
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (!soap_endpoint)
-		soap_endpoint = "http://annotcloud.com/services/ServerAgentPort";
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
 	if (!soap_action)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -165,7 +165,7 @@ int ServerAgentServiceSoapBindingProxy::blessMediaAnnotationWithId(const char *e
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (!soap_endpoint)
-		soap_endpoint = "http://annotcloud.com/services/ServerAgentPort";
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
 	if (!soap_action)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -219,7 +219,7 @@ int ServerAgentServiceSoapBindingProxy::blessMediaTokenWithId(const char *endpoi
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (!soap_endpoint)
-		soap_endpoint = "http://annotcloud.com/services/ServerAgentPort";
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
 	if (!soap_action)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -267,13 +267,67 @@ int ServerAgentServiceSoapBindingProxy::blessMediaTokenWithId(const char *endpoi
 	return soap_closesock(soap);
 }
 
+int ServerAgentServiceSoapBindingProxy::blessUserWithId(const char *endpoint, const char *soap_action, tns__blessUserWithId *tns__blessUserWithId_, tns__blessUserWithIdResponse *tns__blessUserWithIdResponse_)
+{	struct soap *soap = this;
+	struct __tns__blessUserWithId soap_tmp___tns__blessUserWithId;
+	if (endpoint)
+		soap_endpoint = endpoint;
+	if (!soap_endpoint)
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
+	if (!soap_action)
+		soap_action = "";
+	soap->encodingStyle = NULL;
+	soap_tmp___tns__blessUserWithId.tns__blessUserWithId_ = tns__blessUserWithId_;
+	soap_begin(soap);
+	soap_serializeheader(soap);
+	soap_serialize___tns__blessUserWithId(soap, &soap_tmp___tns__blessUserWithId);
+	if (soap_begin_count(soap))
+		return soap->error;
+	if (soap->mode & SOAP_IO_LENGTH)
+	{	if (soap_envelope_begin_out(soap)
+		 || soap_putheader(soap)
+		 || soap_body_begin_out(soap)
+		 || soap_put___tns__blessUserWithId(soap, &soap_tmp___tns__blessUserWithId, "-tns:blessUserWithId", NULL)
+		 || soap_body_end_out(soap)
+		 || soap_envelope_end_out(soap))
+			 return soap->error;
+	}
+	if (soap_end_count(soap))
+		return soap->error;
+	if (soap_connect(soap, soap_endpoint, soap_action)
+	 || soap_envelope_begin_out(soap)
+	 || soap_putheader(soap)
+	 || soap_body_begin_out(soap)
+	 || soap_put___tns__blessUserWithId(soap, &soap_tmp___tns__blessUserWithId, "-tns:blessUserWithId", NULL)
+	 || soap_body_end_out(soap)
+	 || soap_envelope_end_out(soap)
+	 || soap_end_send(soap))
+		return soap_closesock(soap);
+	if (!tns__blessUserWithIdResponse_)
+		return soap_closesock(soap);
+	tns__blessUserWithIdResponse_->soap_default(soap);
+	if (soap_begin_recv(soap)
+	 || soap_envelope_begin_in(soap)
+	 || soap_recv_header(soap)
+	 || soap_body_begin_in(soap))
+		return soap_closesock(soap);
+	tns__blessUserWithIdResponse_->soap_get(soap, "tns:blessUserWithIdResponse", "tns:blessUserWithIdResponse");
+	if (soap->error)
+		return soap_recv_fault(soap, 0);
+	if (soap_body_end_in(soap)
+	 || soap_envelope_end_in(soap)
+	 || soap_end_recv(soap))
+		return soap_closesock(soap);
+	return soap_closesock(soap);
+}
+
 int ServerAgentServiceSoapBindingProxy::blockMediaAliasWithId(const char *endpoint, const char *soap_action, tns__blockMediaAliasWithId *tns__blockMediaAliasWithId_, tns__blockMediaAliasWithIdResponse *tns__blockMediaAliasWithIdResponse_)
 {	struct soap *soap = this;
 	struct __tns__blockMediaAliasWithId soap_tmp___tns__blockMediaAliasWithId;
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (!soap_endpoint)
-		soap_endpoint = "http://annotcloud.com/services/ServerAgentPort";
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
 	if (!soap_action)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -327,7 +381,7 @@ int ServerAgentServiceSoapBindingProxy::blockMediaAnnotationWithId(const char *e
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (!soap_endpoint)
-		soap_endpoint = "http://annotcloud.com/services/ServerAgentPort";
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
 	if (!soap_action)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -381,7 +435,7 @@ int ServerAgentServiceSoapBindingProxy::blockUserWithId(const char *endpoint, co
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (!soap_endpoint)
-		soap_endpoint = "http://annotcloud.com/services/ServerAgentPort";
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
 	if (!soap_action)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -435,7 +489,7 @@ int ServerAgentServiceSoapBindingProxy::chat(const char *endpoint, const char *s
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (!soap_endpoint)
-		soap_endpoint = "http://annotcloud.com/services/ServerAgentPort";
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
 	if (!soap_action)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -489,7 +543,7 @@ int ServerAgentServiceSoapBindingProxy::curseMediaAliasWithId(const char *endpoi
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (!soap_endpoint)
-		soap_endpoint = "http://annotcloud.com/services/ServerAgentPort";
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
 	if (!soap_action)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -543,7 +597,7 @@ int ServerAgentServiceSoapBindingProxy::curseMediaAnnotationWithId(const char *e
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (!soap_endpoint)
-		soap_endpoint = "http://annotcloud.com/services/ServerAgentPort";
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
 	if (!soap_action)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -597,7 +651,7 @@ int ServerAgentServiceSoapBindingProxy::curseMediaTokenWithId(const char *endpoi
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (!soap_endpoint)
-		soap_endpoint = "http://annotcloud.com/services/ServerAgentPort";
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
 	if (!soap_action)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -645,13 +699,67 @@ int ServerAgentServiceSoapBindingProxy::curseMediaTokenWithId(const char *endpoi
 	return soap_closesock(soap);
 }
 
+int ServerAgentServiceSoapBindingProxy::curseUserWithId(const char *endpoint, const char *soap_action, tns__curseUserWithId *tns__curseUserWithId_, tns__curseUserWithIdResponse *tns__curseUserWithIdResponse_)
+{	struct soap *soap = this;
+	struct __tns__curseUserWithId soap_tmp___tns__curseUserWithId;
+	if (endpoint)
+		soap_endpoint = endpoint;
+	if (!soap_endpoint)
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
+	if (!soap_action)
+		soap_action = "";
+	soap->encodingStyle = NULL;
+	soap_tmp___tns__curseUserWithId.tns__curseUserWithId_ = tns__curseUserWithId_;
+	soap_begin(soap);
+	soap_serializeheader(soap);
+	soap_serialize___tns__curseUserWithId(soap, &soap_tmp___tns__curseUserWithId);
+	if (soap_begin_count(soap))
+		return soap->error;
+	if (soap->mode & SOAP_IO_LENGTH)
+	{	if (soap_envelope_begin_out(soap)
+		 || soap_putheader(soap)
+		 || soap_body_begin_out(soap)
+		 || soap_put___tns__curseUserWithId(soap, &soap_tmp___tns__curseUserWithId, "-tns:curseUserWithId", NULL)
+		 || soap_body_end_out(soap)
+		 || soap_envelope_end_out(soap))
+			 return soap->error;
+	}
+	if (soap_end_count(soap))
+		return soap->error;
+	if (soap_connect(soap, soap_endpoint, soap_action)
+	 || soap_envelope_begin_out(soap)
+	 || soap_putheader(soap)
+	 || soap_body_begin_out(soap)
+	 || soap_put___tns__curseUserWithId(soap, &soap_tmp___tns__curseUserWithId, "-tns:curseUserWithId", NULL)
+	 || soap_body_end_out(soap)
+	 || soap_envelope_end_out(soap)
+	 || soap_end_send(soap))
+		return soap_closesock(soap);
+	if (!tns__curseUserWithIdResponse_)
+		return soap_closesock(soap);
+	tns__curseUserWithIdResponse_->soap_default(soap);
+	if (soap_begin_recv(soap)
+	 || soap_envelope_begin_in(soap)
+	 || soap_recv_header(soap)
+	 || soap_body_begin_in(soap))
+		return soap_closesock(soap);
+	tns__curseUserWithIdResponse_->soap_get(soap, "tns:curseUserWithIdResponse", "tns:curseUserWithIdResponse");
+	if (soap->error)
+		return soap_recv_fault(soap, 0);
+	if (soap_body_end_in(soap)
+	 || soap_envelope_end_in(soap)
+	 || soap_end_recv(soap))
+		return soap_closesock(soap);
+	return soap_closesock(soap);
+}
+
 int ServerAgentServiceSoapBindingProxy::deleteMediaAliasWithId(const char *endpoint, const char *soap_action, tns__deleteMediaAliasWithId *tns__deleteMediaAliasWithId_, tns__deleteMediaAliasWithIdResponse *tns__deleteMediaAliasWithIdResponse_)
 {	struct soap *soap = this;
 	struct __tns__deleteMediaAliasWithId soap_tmp___tns__deleteMediaAliasWithId;
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (!soap_endpoint)
-		soap_endpoint = "http://annotcloud.com/services/ServerAgentPort";
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
 	if (!soap_action)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -705,7 +813,7 @@ int ServerAgentServiceSoapBindingProxy::deleteMediaAnnotationWithId(const char *
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (!soap_endpoint)
-		soap_endpoint = "http://annotcloud.com/services/ServerAgentPort";
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
 	if (!soap_action)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -759,7 +867,7 @@ int ServerAgentServiceSoapBindingProxy::isClientUpdated(const char *endpoint, co
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (!soap_endpoint)
-		soap_endpoint = "http://annotcloud.com/services/ServerAgentPort";
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
 	if (!soap_action)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -813,7 +921,7 @@ int ServerAgentServiceSoapBindingProxy::isConnected(const char *endpoint, const 
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (!soap_endpoint)
-		soap_endpoint = "http://annotcloud.com/services/ServerAgentPort";
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
 	if (!soap_action)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -867,7 +975,7 @@ int ServerAgentServiceSoapBindingProxy::selectLiveAnnotationsWithTokenId(const c
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (!soap_endpoint)
-		soap_endpoint = "http://annotcloud.com/services/ServerAgentPort";
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
 	if (!soap_action)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -921,7 +1029,7 @@ int ServerAgentServiceSoapBindingProxy::selectLiveTokenWithId(const char *endpoi
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (!soap_endpoint)
-		soap_endpoint = "http://annotcloud.com/services/ServerAgentPort";
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
 	if (!soap_action)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -975,7 +1083,7 @@ int ServerAgentServiceSoapBindingProxy::selectMediaAliasesWithTokenId(const char
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (!soap_endpoint)
-		soap_endpoint = "http://annotcloud.com/services/ServerAgentPort";
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
 	if (!soap_action)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -1029,7 +1137,7 @@ int ServerAgentServiceSoapBindingProxy::selectMediaAnnotationsWithTokenId(const 
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (!soap_endpoint)
-		soap_endpoint = "http://annotcloud.com/services/ServerAgentPort";
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
 	if (!soap_action)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -1083,7 +1191,7 @@ int ServerAgentServiceSoapBindingProxy::selectMediaTokenWithDigest(const char *e
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (!soap_endpoint)
-		soap_endpoint = "http://annotcloud.com/services/ServerAgentPort";
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
 	if (!soap_action)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -1137,7 +1245,7 @@ int ServerAgentServiceSoapBindingProxy::selectMediaTokenWithId(const char *endpo
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (!soap_endpoint)
-		soap_endpoint = "http://annotcloud.com/services/ServerAgentPort";
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
 	if (!soap_action)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -1191,7 +1299,7 @@ int ServerAgentServiceSoapBindingProxy::selectRelatedMediaAnnotationsWithTokenId
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (!soap_endpoint)
-		soap_endpoint = "http://annotcloud.com/services/ServerAgentPort";
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
 	if (!soap_action)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -1245,7 +1353,7 @@ int ServerAgentServiceSoapBindingProxy::selectUser(const char *endpoint, const c
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (!soap_endpoint)
-		soap_endpoint = "http://annotcloud.com/services/ServerAgentPort";
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
 	if (!soap_action)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -1299,7 +1407,7 @@ int ServerAgentServiceSoapBindingProxy::setUserAnonymous(const char *endpoint, c
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (!soap_endpoint)
-		soap_endpoint = "http://annotcloud.com/services/ServerAgentPort";
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
 	if (!soap_action)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -1353,7 +1461,7 @@ int ServerAgentServiceSoapBindingProxy::setUserLanguage(const char *endpoint, co
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (!soap_endpoint)
-		soap_endpoint = "http://annotcloud.com/services/ServerAgentPort";
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
 	if (!soap_action)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -1407,7 +1515,7 @@ int ServerAgentServiceSoapBindingProxy::submitLiveAnnotationTextWithTokenId(cons
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (!soap_endpoint)
-		soap_endpoint = "http://annotcloud.com/services/ServerAgentPort";
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
 	if (!soap_action)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -1461,7 +1569,7 @@ int ServerAgentServiceSoapBindingProxy::submitMediaAlias(const char *endpoint, c
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (!soap_endpoint)
-		soap_endpoint = "http://annotcloud.com/services/ServerAgentPort";
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
 	if (!soap_action)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -1515,7 +1623,7 @@ int ServerAgentServiceSoapBindingProxy::submitMediaAliasTextAndTokenDigest(const
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (!soap_endpoint)
-		soap_endpoint = "http://annotcloud.com/services/ServerAgentPort";
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
 	if (!soap_action)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -1569,7 +1677,7 @@ int ServerAgentServiceSoapBindingProxy::submitMediaAliasTextWithTokenId(const ch
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (!soap_endpoint)
-		soap_endpoint = "http://annotcloud.com/services/ServerAgentPort";
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
 	if (!soap_action)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -1623,7 +1731,7 @@ int ServerAgentServiceSoapBindingProxy::submitMediaAnnotation(const char *endpoi
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (!soap_endpoint)
-		soap_endpoint = "http://annotcloud.com/services/ServerAgentPort";
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
 	if (!soap_action)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -1677,7 +1785,7 @@ int ServerAgentServiceSoapBindingProxy::submitMediaAnnotationTextAndTokenDigest(
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (!soap_endpoint)
-		soap_endpoint = "http://annotcloud.com/services/ServerAgentPort";
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
 	if (!soap_action)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -1731,7 +1839,7 @@ int ServerAgentServiceSoapBindingProxy::submitMediaAnnotationTextWithTokenId(con
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (!soap_endpoint)
-		soap_endpoint = "http://annotcloud.com/services/ServerAgentPort";
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
 	if (!soap_action)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -1785,7 +1893,7 @@ int ServerAgentServiceSoapBindingProxy::submitMediaToken(const char *endpoint, c
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (!soap_endpoint)
-		soap_endpoint = "http://annotcloud.com/services/ServerAgentPort";
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
 	if (!soap_action)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -1839,7 +1947,7 @@ int ServerAgentServiceSoapBindingProxy::submitMediaTokenDigest(const char *endpo
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (!soap_endpoint)
-		soap_endpoint = "http://annotcloud.com/services/ServerAgentPort";
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
 	if (!soap_action)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -1887,13 +1995,67 @@ int ServerAgentServiceSoapBindingProxy::submitMediaTokenDigest(const char *endpo
 	return soap_closesock(soap);
 }
 
+int ServerAgentServiceSoapBindingProxy::submitMediaTokenSource(const char *endpoint, const char *soap_action, tns__submitMediaTokenSource *tns__submitMediaTokenSource_, tns__submitMediaTokenSourceResponse *tns__submitMediaTokenSourceResponse_)
+{	struct soap *soap = this;
+	struct __tns__submitMediaTokenSource soap_tmp___tns__submitMediaTokenSource;
+	if (endpoint)
+		soap_endpoint = endpoint;
+	if (!soap_endpoint)
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
+	if (!soap_action)
+		soap_action = "";
+	soap->encodingStyle = NULL;
+	soap_tmp___tns__submitMediaTokenSource.tns__submitMediaTokenSource_ = tns__submitMediaTokenSource_;
+	soap_begin(soap);
+	soap_serializeheader(soap);
+	soap_serialize___tns__submitMediaTokenSource(soap, &soap_tmp___tns__submitMediaTokenSource);
+	if (soap_begin_count(soap))
+		return soap->error;
+	if (soap->mode & SOAP_IO_LENGTH)
+	{	if (soap_envelope_begin_out(soap)
+		 || soap_putheader(soap)
+		 || soap_body_begin_out(soap)
+		 || soap_put___tns__submitMediaTokenSource(soap, &soap_tmp___tns__submitMediaTokenSource, "-tns:submitMediaTokenSource", NULL)
+		 || soap_body_end_out(soap)
+		 || soap_envelope_end_out(soap))
+			 return soap->error;
+	}
+	if (soap_end_count(soap))
+		return soap->error;
+	if (soap_connect(soap, soap_endpoint, soap_action)
+	 || soap_envelope_begin_out(soap)
+	 || soap_putheader(soap)
+	 || soap_body_begin_out(soap)
+	 || soap_put___tns__submitMediaTokenSource(soap, &soap_tmp___tns__submitMediaTokenSource, "-tns:submitMediaTokenSource", NULL)
+	 || soap_body_end_out(soap)
+	 || soap_envelope_end_out(soap)
+	 || soap_end_send(soap))
+		return soap_closesock(soap);
+	if (!tns__submitMediaTokenSourceResponse_)
+		return soap_closesock(soap);
+	tns__submitMediaTokenSourceResponse_->soap_default(soap);
+	if (soap_begin_recv(soap)
+	 || soap_envelope_begin_in(soap)
+	 || soap_recv_header(soap)
+	 || soap_body_begin_in(soap))
+		return soap_closesock(soap);
+	tns__submitMediaTokenSourceResponse_->soap_get(soap, "tns:submitMediaTokenSourceResponse", "tns:submitMediaTokenSourceResponse");
+	if (soap->error)
+		return soap_recv_fault(soap, 0);
+	if (soap_body_end_in(soap)
+	 || soap_envelope_end_in(soap)
+	 || soap_end_recv(soap))
+		return soap_closesock(soap);
+	return soap_closesock(soap);
+}
+
 int ServerAgentServiceSoapBindingProxy::updateMediaAnnotationTextWithId(const char *endpoint, const char *soap_action, tns__updateMediaAnnotationTextWithId *tns__updateMediaAnnotationTextWithId_, tns__updateMediaAnnotationTextWithIdResponse *tns__updateMediaAnnotationTextWithIdResponse_)
 {	struct soap *soap = this;
 	struct __tns__updateMediaAnnotationTextWithId soap_tmp___tns__updateMediaAnnotationTextWithId;
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (!soap_endpoint)
-		soap_endpoint = "http://annotcloud.com/services/ServerAgentPort";
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
 	if (!soap_action)
 		soap_action = "";
 	soap->encodingStyle = NULL;

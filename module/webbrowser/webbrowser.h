@@ -7,6 +7,8 @@
 #include "webbrowser_config.h"
 #include <QMainWindow>
 
+QT_FORWARD_DECLARE_CLASS(QNetworkReply)
+
 namespace Ui { class WebBrowserUi; }
 
 class WebBrowser : public QMainWindow
@@ -19,8 +21,6 @@ class WebBrowser : public QMainWindow
 public:
   WEBBROWSER_API explicit WebBrowser(QWidget *parent = 0);
   WEBBROWSER_API ~WebBrowser();
-
-  WEBBROWSER_API void newTab(const QString &url);
 
   WEBBROWSER_API qreal textSizeMultiplier() const;
 
@@ -51,6 +51,9 @@ public slots:
   WEBBROWSER_API void handleLoadFinished();
   WEBBROWSER_API void toggleFullScreen();
 
+  WEBBROWSER_API void openUrl(const QString &url);
+
+  // - Implementations -
 private:
   static QString tidyUrl(const QString &address);
 

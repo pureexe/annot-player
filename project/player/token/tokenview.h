@@ -15,6 +15,7 @@ class QLabel;
 class QStandardItemModel;
 class QSortFilterProxyModel;
 class QAction;
+class QToolButton;
 class QMenu;
 QT_END_NAMESPACE
 
@@ -80,6 +81,8 @@ public slots:
   void setToken(const Token &token);
   void clearToken(); ///< Clear token
 
+  void setSource(const QString &source);
+
   void setAliases(const AliasList &l);
   void addAlias(const Alias &alias);
   void addAliases(const AliasList &l);
@@ -120,6 +123,7 @@ protected:
 protected slots:
   void deleteAlias();
   void copyAlias();
+  void openSource();
 
   qint64 currentAliasId() const;
   qint64 currentAliasUserId() const;
@@ -144,6 +148,8 @@ private:
          *blessedCountLabel_,
          *cursedCountLabel_,
          *visitedCountLabel_;
+
+  QToolButton *sourceButton_;
 
   QMenu *contextMenu_;
   QAction *copyAliasAct_,

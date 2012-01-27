@@ -458,6 +458,22 @@ QString
 QtWin::getAppDataPath()
 { return ::getenv("AppData"); }
 
+QString
+QtWin::getDesktopPath()
+{
+  QString ret;
+
+  QSettings reg(
+    "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders",
+    QSettings::NativeFormat
+  );
+  ret = reg.value("Desktop").toString();
+  if (QDir(ret).exists())
+    return ret;
+  else
+    return QString();
+}
+
 // See: http://msdn.microsoft.com/en-us/library/ms724451(v=VS.85).aspx
 // See: http://msdn.microsoft.com/en-us/library/ms724833(VS.85).aspx
 bool

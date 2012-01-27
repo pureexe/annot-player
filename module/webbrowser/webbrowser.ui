@@ -163,7 +163,7 @@ QToolButton:hover {
        </sizepolicy>
       </property>
       <property name="text">
-       <string>http://qt.nokia.com</string>
+       <string>http://annot.me</string>
       </property>
      </widget>
     </item>

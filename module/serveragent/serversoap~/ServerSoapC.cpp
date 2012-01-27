@@ -17,7 +17,7 @@ compiling, linking, and/or using OpenSSL is allowed.
 
 namespace ServerSoap {
 
-SOAP_SOURCE_STAMP("@(#) ServerSoapC.cpp ver 2.8.6 2012-01-16 20:43:06 GMT")
+SOAP_SOURCE_STAMP("@(#) ServerSoapC.cpp ver 2.8.6 2012-01-26 05:44:45 GMT")
 
 
 #ifndef WITH_NOGLOBAL
@@ -201,6 +201,10 @@ SOAP_FMAC3 void * SOAP_FMAC4 soap_getelement(struct soap *soap, int *type)
 		return soap_in_tns__updateMediaAnnotationTextWithIdResponse(soap, NULL, NULL, "tns:updateMediaAnnotationTextWithIdResponse");
 	case SOAP_TYPE_ServerSoap_tns__updateMediaAnnotationTextWithId:
 		return soap_in_tns__updateMediaAnnotationTextWithId(soap, NULL, NULL, "tns:updateMediaAnnotationTextWithId");
+	case SOAP_TYPE_ServerSoap_tns__submitMediaTokenSourceResponse:
+		return soap_in_tns__submitMediaTokenSourceResponse(soap, NULL, NULL, "tns:submitMediaTokenSourceResponse");
+	case SOAP_TYPE_ServerSoap_tns__submitMediaTokenSource:
+		return soap_in_tns__submitMediaTokenSource(soap, NULL, NULL, "tns:submitMediaTokenSource");
 	case SOAP_TYPE_ServerSoap_tns__submitMediaTokenDigestResponse:
 		return soap_in_tns__submitMediaTokenDigestResponse(soap, NULL, NULL, "tns:submitMediaTokenDigestResponse");
 	case SOAP_TYPE_ServerSoap_tns__submitMediaTokenDigest:
@@ -293,6 +297,10 @@ SOAP_FMAC3 void * SOAP_FMAC4 soap_getelement(struct soap *soap, int *type)
 		return soap_in_tns__deleteMediaAliasWithIdResponse(soap, NULL, NULL, "tns:deleteMediaAliasWithIdResponse");
 	case SOAP_TYPE_ServerSoap_tns__deleteMediaAliasWithId:
 		return soap_in_tns__deleteMediaAliasWithId(soap, NULL, NULL, "tns:deleteMediaAliasWithId");
+	case SOAP_TYPE_ServerSoap_tns__curseUserWithIdResponse:
+		return soap_in_tns__curseUserWithIdResponse(soap, NULL, NULL, "tns:curseUserWithIdResponse");
+	case SOAP_TYPE_ServerSoap_tns__curseUserWithId:
+		return soap_in_tns__curseUserWithId(soap, NULL, NULL, "tns:curseUserWithId");
 	case SOAP_TYPE_ServerSoap_tns__curseMediaTokenWithIdResponse:
 		return soap_in_tns__curseMediaTokenWithIdResponse(soap, NULL, NULL, "tns:curseMediaTokenWithIdResponse");
 	case SOAP_TYPE_ServerSoap_tns__curseMediaTokenWithId:
@@ -321,6 +329,10 @@ SOAP_FMAC3 void * SOAP_FMAC4 soap_getelement(struct soap *soap, int *type)
 		return soap_in_tns__blockMediaAliasWithIdResponse(soap, NULL, NULL, "tns:blockMediaAliasWithIdResponse");
 	case SOAP_TYPE_ServerSoap_tns__blockMediaAliasWithId:
 		return soap_in_tns__blockMediaAliasWithId(soap, NULL, NULL, "tns:blockMediaAliasWithId");
+	case SOAP_TYPE_ServerSoap_tns__blessUserWithIdResponse:
+		return soap_in_tns__blessUserWithIdResponse(soap, NULL, NULL, "tns:blessUserWithIdResponse");
+	case SOAP_TYPE_ServerSoap_tns__blessUserWithId:
+		return soap_in_tns__blessUserWithId(soap, NULL, NULL, "tns:blessUserWithId");
 	case SOAP_TYPE_ServerSoap_tns__blessMediaTokenWithIdResponse:
 		return soap_in_tns__blessMediaTokenWithIdResponse(soap, NULL, NULL, "tns:blessMediaTokenWithIdResponse");
 	case SOAP_TYPE_ServerSoap_tns__blessMediaTokenWithId:
@@ -349,6 +361,10 @@ SOAP_FMAC3 void * SOAP_FMAC4 soap_getelement(struct soap *soap, int *type)
 		return soap_in_PointerTotns__updateMediaAnnotationTextWithIdResponse(soap, NULL, NULL, "tns:updateMediaAnnotationTextWithIdResponse");
 	case SOAP_TYPE_ServerSoap_PointerTotns__updateMediaAnnotationTextWithId:
 		return soap_in_PointerTotns__updateMediaAnnotationTextWithId(soap, NULL, NULL, "tns:updateMediaAnnotationTextWithId");
+	case SOAP_TYPE_ServerSoap_PointerTotns__submitMediaTokenSourceResponse:
+		return soap_in_PointerTotns__submitMediaTokenSourceResponse(soap, NULL, NULL, "tns:submitMediaTokenSourceResponse");
+	case SOAP_TYPE_ServerSoap_PointerTotns__submitMediaTokenSource:
+		return soap_in_PointerTotns__submitMediaTokenSource(soap, NULL, NULL, "tns:submitMediaTokenSource");
 	case SOAP_TYPE_ServerSoap_PointerTotns__submitMediaTokenDigestResponse:
 		return soap_in_PointerTotns__submitMediaTokenDigestResponse(soap, NULL, NULL, "tns:submitMediaTokenDigestResponse");
 	case SOAP_TYPE_ServerSoap_PointerTotns__submitMediaTokenDigest:
@@ -441,6 +457,10 @@ SOAP_FMAC3 void * SOAP_FMAC4 soap_getelement(struct soap *soap, int *type)
 		return soap_in_PointerTotns__deleteMediaAliasWithIdResponse(soap, NULL, NULL, "tns:deleteMediaAliasWithIdResponse");
 	case SOAP_TYPE_ServerSoap_PointerTotns__deleteMediaAliasWithId:
 		return soap_in_PointerTotns__deleteMediaAliasWithId(soap, NULL, NULL, "tns:deleteMediaAliasWithId");
+	case SOAP_TYPE_ServerSoap_PointerTotns__curseUserWithIdResponse:
+		return soap_in_PointerTotns__curseUserWithIdResponse(soap, NULL, NULL, "tns:curseUserWithIdResponse");
+	case SOAP_TYPE_ServerSoap_PointerTotns__curseUserWithId:
+		return soap_in_PointerTotns__curseUserWithId(soap, NULL, NULL, "tns:curseUserWithId");
 	case SOAP_TYPE_ServerSoap_PointerTotns__curseMediaTokenWithIdResponse:
 		return soap_in_PointerTotns__curseMediaTokenWithIdResponse(soap, NULL, NULL, "tns:curseMediaTokenWithIdResponse");
 	case SOAP_TYPE_ServerSoap_PointerTotns__curseMediaTokenWithId:
@@ -469,6 +489,10 @@ SOAP_FMAC3 void * SOAP_FMAC4 soap_getelement(struct soap *soap, int *type)
 		return soap_in_PointerTotns__blockMediaAliasWithIdResponse(soap, NULL, NULL, "tns:blockMediaAliasWithIdResponse");
 	case SOAP_TYPE_ServerSoap_PointerTotns__blockMediaAliasWithId:
 		return soap_in_PointerTotns__blockMediaAliasWithId(soap, NULL, NULL, "tns:blockMediaAliasWithId");
+	case SOAP_TYPE_ServerSoap_PointerTotns__blessUserWithIdResponse:
+		return soap_in_PointerTotns__blessUserWithIdResponse(soap, NULL, NULL, "tns:blessUserWithIdResponse");
+	case SOAP_TYPE_ServerSoap_PointerTotns__blessUserWithId:
+		return soap_in_PointerTotns__blessUserWithId(soap, NULL, NULL, "tns:blessUserWithId");
 	case SOAP_TYPE_ServerSoap_PointerTotns__blessMediaTokenWithIdResponse:
 		return soap_in_PointerTotns__blessMediaTokenWithIdResponse(soap, NULL, NULL, "tns:blessMediaTokenWithIdResponse");
 	case SOAP_TYPE_ServerSoap_PointerTotns__blessMediaTokenWithId:
@@ -520,6 +544,14 @@ SOAP_FMAC3 void * SOAP_FMAC4 soap_getelement(struct soap *soap, int *type)
 		if (!soap_match_tag(soap, t, "tns:updateMediaAnnotationTextWithId"))
 		{	*type = SOAP_TYPE_ServerSoap_tns__updateMediaAnnotationTextWithId;
 			return soap_in_tns__updateMediaAnnotationTextWithId(soap, NULL, NULL, NULL);
+		}
+		if (!soap_match_tag(soap, t, "tns:submitMediaTokenSourceResponse"))
+		{	*type = SOAP_TYPE_ServerSoap_tns__submitMediaTokenSourceResponse;
+			return soap_in_tns__submitMediaTokenSourceResponse(soap, NULL, NULL, NULL);
+		}
+		if (!soap_match_tag(soap, t, "tns:submitMediaTokenSource"))
+		{	*type = SOAP_TYPE_ServerSoap_tns__submitMediaTokenSource;
+			return soap_in_tns__submitMediaTokenSource(soap, NULL, NULL, NULL);
 		}
 		if (!soap_match_tag(soap, t, "tns:submitMediaTokenDigestResponse"))
 		{	*type = SOAP_TYPE_ServerSoap_tns__submitMediaTokenDigestResponse;
@@ -705,6 +737,14 @@ SOAP_FMAC3 void * SOAP_FMAC4 soap_getelement(struct soap *soap, int *type)
 		{	*type = SOAP_TYPE_ServerSoap_tns__deleteMediaAliasWithId;
 			return soap_in_tns__deleteMediaAliasWithId(soap, NULL, NULL, NULL);
 		}
+		if (!soap_match_tag(soap, t, "tns:curseUserWithIdResponse"))
+		{	*type = SOAP_TYPE_ServerSoap_tns__curseUserWithIdResponse;
+			return soap_in_tns__curseUserWithIdResponse(soap, NULL, NULL, NULL);
+		}
+		if (!soap_match_tag(soap, t, "tns:curseUserWithId"))
+		{	*type = SOAP_TYPE_ServerSoap_tns__curseUserWithId;
+			return soap_in_tns__curseUserWithId(soap, NULL, NULL, NULL);
+		}
 		if (!soap_match_tag(soap, t, "tns:curseMediaTokenWithIdResponse"))
 		{	*type = SOAP_TYPE_ServerSoap_tns__curseMediaTokenWithIdResponse;
 			return soap_in_tns__curseMediaTokenWithIdResponse(soap, NULL, NULL, NULL);
@@ -760,6 +800,14 @@ SOAP_FMAC3 void * SOAP_FMAC4 soap_getelement(struct soap *soap, int *type)
 		if (!soap_match_tag(soap, t, "tns:blockMediaAliasWithId"))
 		{	*type = SOAP_TYPE_ServerSoap_tns__blockMediaAliasWithId;
 			return soap_in_tns__blockMediaAliasWithId(soap, NULL, NULL, NULL);
+		}
+		if (!soap_match_tag(soap, t, "tns:blessUserWithIdResponse"))
+		{	*type = SOAP_TYPE_ServerSoap_tns__blessUserWithIdResponse;
+			return soap_in_tns__blessUserWithIdResponse(soap, NULL, NULL, NULL);
+		}
+		if (!soap_match_tag(soap, t, "tns:blessUserWithId"))
+		{	*type = SOAP_TYPE_ServerSoap_tns__blessUserWithId;
+			return soap_in_tns__blessUserWithId(soap, NULL, NULL, NULL);
 		}
 		if (!soap_match_tag(soap, t, "tns:blessMediaTokenWithIdResponse"))
 		{	*type = SOAP_TYPE_ServerSoap_tns__blessMediaTokenWithIdResponse;
@@ -909,6 +957,10 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_putelement(struct soap *soap, const void *ptr, co
 		return ((tns__updateMediaAnnotationTextWithIdResponse *)ptr)->soap_out(soap, tag, id, "tns:updateMediaAnnotationTextWithIdResponse");
 	case SOAP_TYPE_ServerSoap_tns__updateMediaAnnotationTextWithId:
 		return ((tns__updateMediaAnnotationTextWithId *)ptr)->soap_out(soap, tag, id, "tns:updateMediaAnnotationTextWithId");
+	case SOAP_TYPE_ServerSoap_tns__submitMediaTokenSourceResponse:
+		return ((tns__submitMediaTokenSourceResponse *)ptr)->soap_out(soap, tag, id, "tns:submitMediaTokenSourceResponse");
+	case SOAP_TYPE_ServerSoap_tns__submitMediaTokenSource:
+		return ((tns__submitMediaTokenSource *)ptr)->soap_out(soap, tag, id, "tns:submitMediaTokenSource");
 	case SOAP_TYPE_ServerSoap_tns__submitMediaTokenDigestResponse:
 		return ((tns__submitMediaTokenDigestResponse *)ptr)->soap_out(soap, tag, id, "tns:submitMediaTokenDigestResponse");
 	case SOAP_TYPE_ServerSoap_tns__submitMediaTokenDigest:
@@ -1001,6 +1053,10 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_putelement(struct soap *soap, const void *ptr, co
 		return ((tns__deleteMediaAliasWithIdResponse *)ptr)->soap_out(soap, tag, id, "tns:deleteMediaAliasWithIdResponse");
 	case SOAP_TYPE_ServerSoap_tns__deleteMediaAliasWithId:
 		return ((tns__deleteMediaAliasWithId *)ptr)->soap_out(soap, tag, id, "tns:deleteMediaAliasWithId");
+	case SOAP_TYPE_ServerSoap_tns__curseUserWithIdResponse:
+		return ((tns__curseUserWithIdResponse *)ptr)->soap_out(soap, tag, id, "tns:curseUserWithIdResponse");
+	case SOAP_TYPE_ServerSoap_tns__curseUserWithId:
+		return ((tns__curseUserWithId *)ptr)->soap_out(soap, tag, id, "tns:curseUserWithId");
 	case SOAP_TYPE_ServerSoap_tns__curseMediaTokenWithIdResponse:
 		return ((tns__curseMediaTokenWithIdResponse *)ptr)->soap_out(soap, tag, id, "tns:curseMediaTokenWithIdResponse");
 	case SOAP_TYPE_ServerSoap_tns__curseMediaTokenWithId:
@@ -1029,6 +1085,10 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_putelement(struct soap *soap, const void *ptr, co
 		return ((tns__blockMediaAliasWithIdResponse *)ptr)->soap_out(soap, tag, id, "tns:blockMediaAliasWithIdResponse");
 	case SOAP_TYPE_ServerSoap_tns__blockMediaAliasWithId:
 		return ((tns__blockMediaAliasWithId *)ptr)->soap_out(soap, tag, id, "tns:blockMediaAliasWithId");
+	case SOAP_TYPE_ServerSoap_tns__blessUserWithIdResponse:
+		return ((tns__blessUserWithIdResponse *)ptr)->soap_out(soap, tag, id, "tns:blessUserWithIdResponse");
+	case SOAP_TYPE_ServerSoap_tns__blessUserWithId:
+		return ((tns__blessUserWithId *)ptr)->soap_out(soap, tag, id, "tns:blessUserWithId");
 	case SOAP_TYPE_ServerSoap_tns__blessMediaTokenWithIdResponse:
 		return ((tns__blessMediaTokenWithIdResponse *)ptr)->soap_out(soap, tag, id, "tns:blessMediaTokenWithIdResponse");
 	case SOAP_TYPE_ServerSoap_tns__blessMediaTokenWithId:
@@ -1057,6 +1117,10 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_putelement(struct soap *soap, const void *ptr, co
 		return soap_out_PointerTotns__updateMediaAnnotationTextWithIdResponse(soap, tag, id, (tns__updateMediaAnnotationTextWithIdResponse *const*)ptr, "tns:updateMediaAnnotationTextWithIdResponse");
 	case SOAP_TYPE_ServerSoap_PointerTotns__updateMediaAnnotationTextWithId:
 		return soap_out_PointerTotns__updateMediaAnnotationTextWithId(soap, tag, id, (tns__updateMediaAnnotationTextWithId *const*)ptr, "tns:updateMediaAnnotationTextWithId");
+	case SOAP_TYPE_ServerSoap_PointerTotns__submitMediaTokenSourceResponse:
+		return soap_out_PointerTotns__submitMediaTokenSourceResponse(soap, tag, id, (tns__submitMediaTokenSourceResponse *const*)ptr, "tns:submitMediaTokenSourceResponse");
+	case SOAP_TYPE_ServerSoap_PointerTotns__submitMediaTokenSource:
+		return soap_out_PointerTotns__submitMediaTokenSource(soap, tag, id, (tns__submitMediaTokenSource *const*)ptr, "tns:submitMediaTokenSource");
 	case SOAP_TYPE_ServerSoap_PointerTotns__submitMediaTokenDigestResponse:
 		return soap_out_PointerTotns__submitMediaTokenDigestResponse(soap, tag, id, (tns__submitMediaTokenDigestResponse *const*)ptr, "tns:submitMediaTokenDigestResponse");
 	case SOAP_TYPE_ServerSoap_PointerTotns__submitMediaTokenDigest:
@@ -1149,6 +1213,10 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_putelement(struct soap *soap, const void *ptr, co
 		return soap_out_PointerTotns__deleteMediaAliasWithIdResponse(soap, tag, id, (tns__deleteMediaAliasWithIdResponse *const*)ptr, "tns:deleteMediaAliasWithIdResponse");
 	case SOAP_TYPE_ServerSoap_PointerTotns__deleteMediaAliasWithId:
 		return soap_out_PointerTotns__deleteMediaAliasWithId(soap, tag, id, (tns__deleteMediaAliasWithId *const*)ptr, "tns:deleteMediaAliasWithId");
+	case SOAP_TYPE_ServerSoap_PointerTotns__curseUserWithIdResponse:
+		return soap_out_PointerTotns__curseUserWithIdResponse(soap, tag, id, (tns__curseUserWithIdResponse *const*)ptr, "tns:curseUserWithIdResponse");
+	case SOAP_TYPE_ServerSoap_PointerTotns__curseUserWithId:
+		return soap_out_PointerTotns__curseUserWithId(soap, tag, id, (tns__curseUserWithId *const*)ptr, "tns:curseUserWithId");
 	case SOAP_TYPE_ServerSoap_PointerTotns__curseMediaTokenWithIdResponse:
 		return soap_out_PointerTotns__curseMediaTokenWithIdResponse(soap, tag, id, (tns__curseMediaTokenWithIdResponse *const*)ptr, "tns:curseMediaTokenWithIdResponse");
 	case SOAP_TYPE_ServerSoap_PointerTotns__curseMediaTokenWithId:
@@ -1177,6 +1245,10 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_putelement(struct soap *soap, const void *ptr, co
 		return soap_out_PointerTotns__blockMediaAliasWithIdResponse(soap, tag, id, (tns__blockMediaAliasWithIdResponse *const*)ptr, "tns:blockMediaAliasWithIdResponse");
 	case SOAP_TYPE_ServerSoap_PointerTotns__blockMediaAliasWithId:
 		return soap_out_PointerTotns__blockMediaAliasWithId(soap, tag, id, (tns__blockMediaAliasWithId *const*)ptr, "tns:blockMediaAliasWithId");
+	case SOAP_TYPE_ServerSoap_PointerTotns__blessUserWithIdResponse:
+		return soap_out_PointerTotns__blessUserWithIdResponse(soap, tag, id, (tns__blessUserWithIdResponse *const*)ptr, "tns:blessUserWithIdResponse");
+	case SOAP_TYPE_ServerSoap_PointerTotns__blessUserWithId:
+		return soap_out_PointerTotns__blessUserWithId(soap, tag, id, (tns__blessUserWithId *const*)ptr, "tns:blessUserWithId");
 	case SOAP_TYPE_ServerSoap_PointerTotns__blessMediaTokenWithIdResponse:
 		return soap_out_PointerTotns__blessMediaTokenWithIdResponse(soap, tag, id, (tns__blessMediaTokenWithIdResponse *const*)ptr, "tns:blessMediaTokenWithIdResponse");
 	case SOAP_TYPE_ServerSoap_PointerTotns__blessMediaTokenWithId:
@@ -1226,6 +1298,12 @@ SOAP_FMAC3 void SOAP_FMAC4 soap_markelement(struct soap *soap, const void *ptr, 
 		break;
 	case SOAP_TYPE_ServerSoap_tns__updateMediaAnnotationTextWithId:
 		((tns__updateMediaAnnotationTextWithId *)ptr)->soap_serialize(soap);
+		break;
+	case SOAP_TYPE_ServerSoap_tns__submitMediaTokenSourceResponse:
+		((tns__submitMediaTokenSourceResponse *)ptr)->soap_serialize(soap);
+		break;
+	case SOAP_TYPE_ServerSoap_tns__submitMediaTokenSource:
+		((tns__submitMediaTokenSource *)ptr)->soap_serialize(soap);
 		break;
 	case SOAP_TYPE_ServerSoap_tns__submitMediaTokenDigestResponse:
 		((tns__submitMediaTokenDigestResponse *)ptr)->soap_serialize(soap);
@@ -1365,6 +1443,12 @@ SOAP_FMAC3 void SOAP_FMAC4 soap_markelement(struct soap *soap, const void *ptr, 
 	case SOAP_TYPE_ServerSoap_tns__deleteMediaAliasWithId:
 		((tns__deleteMediaAliasWithId *)ptr)->soap_serialize(soap);
 		break;
+	case SOAP_TYPE_ServerSoap_tns__curseUserWithIdResponse:
+		((tns__curseUserWithIdResponse *)ptr)->soap_serialize(soap);
+		break;
+	case SOAP_TYPE_ServerSoap_tns__curseUserWithId:
+		((tns__curseUserWithId *)ptr)->soap_serialize(soap);
+		break;
 	case SOAP_TYPE_ServerSoap_tns__curseMediaTokenWithIdResponse:
 		((tns__curseMediaTokenWithIdResponse *)ptr)->soap_serialize(soap);
 		break;
@@ -1407,6 +1491,12 @@ SOAP_FMAC3 void SOAP_FMAC4 soap_markelement(struct soap *soap, const void *ptr, 
 	case SOAP_TYPE_ServerSoap_tns__blockMediaAliasWithId:
 		((tns__blockMediaAliasWithId *)ptr)->soap_serialize(soap);
 		break;
+	case SOAP_TYPE_ServerSoap_tns__blessUserWithIdResponse:
+		((tns__blessUserWithIdResponse *)ptr)->soap_serialize(soap);
+		break;
+	case SOAP_TYPE_ServerSoap_tns__blessUserWithId:
+		((tns__blessUserWithId *)ptr)->soap_serialize(soap);
+		break;
 	case SOAP_TYPE_ServerSoap_tns__blessMediaTokenWithIdResponse:
 		((tns__blessMediaTokenWithIdResponse *)ptr)->soap_serialize(soap);
 		break;
@@ -1445,6 +1535,9 @@ SOAP_FMAC3 void SOAP_FMAC4 soap_markelement(struct soap *soap, const void *ptr, 
 		break;
 	case SOAP_TYPE_ServerSoap___tns__updateMediaAnnotationTextWithId:
 		soap_serialize___tns__updateMediaAnnotationTextWithId(soap, (const struct __tns__updateMediaAnnotationTextWithId *)ptr);
+		break;
+	case SOAP_TYPE_ServerSoap___tns__submitMediaTokenSource:
+		soap_serialize___tns__submitMediaTokenSource(soap, (const struct __tns__submitMediaTokenSource *)ptr);
 		break;
 	case SOAP_TYPE_ServerSoap___tns__submitMediaTokenDigest:
 		soap_serialize___tns__submitMediaTokenDigest(soap, (const struct __tns__submitMediaTokenDigest *)ptr);
@@ -1515,6 +1608,9 @@ SOAP_FMAC3 void SOAP_FMAC4 soap_markelement(struct soap *soap, const void *ptr, 
 	case SOAP_TYPE_ServerSoap___tns__deleteMediaAliasWithId:
 		soap_serialize___tns__deleteMediaAliasWithId(soap, (const struct __tns__deleteMediaAliasWithId *)ptr);
 		break;
+	case SOAP_TYPE_ServerSoap___tns__curseUserWithId:
+		soap_serialize___tns__curseUserWithId(soap, (const struct __tns__curseUserWithId *)ptr);
+		break;
 	case SOAP_TYPE_ServerSoap___tns__curseMediaTokenWithId:
 		soap_serialize___tns__curseMediaTokenWithId(soap, (const struct __tns__curseMediaTokenWithId *)ptr);
 		break;
@@ -1536,6 +1632,9 @@ SOAP_FMAC3 void SOAP_FMAC4 soap_markelement(struct soap *soap, const void *ptr, 
 	case SOAP_TYPE_ServerSoap___tns__blockMediaAliasWithId:
 		soap_serialize___tns__blockMediaAliasWithId(soap, (const struct __tns__blockMediaAliasWithId *)ptr);
 		break;
+	case SOAP_TYPE_ServerSoap___tns__blessUserWithId:
+		soap_serialize___tns__blessUserWithId(soap, (const struct __tns__blessUserWithId *)ptr);
+		break;
 	case SOAP_TYPE_ServerSoap___tns__blessMediaTokenWithId:
 		soap_serialize___tns__blessMediaTokenWithId(soap, (const struct __tns__blessMediaTokenWithId *)ptr);
 		break;
@@ -1550,6 +1649,12 @@ SOAP_FMAC3 void SOAP_FMAC4 soap_markelement(struct soap *soap, const void *ptr, 
 		break;
 	case SOAP_TYPE_ServerSoap_PointerTotns__updateMediaAnnotationTextWithId:
 		soap_serialize_PointerTotns__updateMediaAnnotationTextWithId(soap, (tns__updateMediaAnnotationTextWithId *const*)ptr);
+		break;
+	case SOAP_TYPE_ServerSoap_PointerTotns__submitMediaTokenSourceResponse:
+		soap_serialize_PointerTotns__submitMediaTokenSourceResponse(soap, (tns__submitMediaTokenSourceResponse *const*)ptr);
+		break;
+	case SOAP_TYPE_ServerSoap_PointerTotns__submitMediaTokenSource:
+		soap_serialize_PointerTotns__submitMediaTokenSource(soap, (tns__submitMediaTokenSource *const*)ptr);
 		break;
 	case SOAP_TYPE_ServerSoap_PointerTotns__submitMediaTokenDigestResponse:
 		soap_serialize_PointerTotns__submitMediaTokenDigestResponse(soap, (tns__submitMediaTokenDigestResponse *const*)ptr);
@@ -1689,6 +1794,12 @@ SOAP_FMAC3 void SOAP_FMAC4 soap_markelement(struct soap *soap, const void *ptr, 
 	case SOAP_TYPE_ServerSoap_PointerTotns__deleteMediaAliasWithId:
 		soap_serialize_PointerTotns__deleteMediaAliasWithId(soap, (tns__deleteMediaAliasWithId *const*)ptr);
 		break;
+	case SOAP_TYPE_ServerSoap_PointerTotns__curseUserWithIdResponse:
+		soap_serialize_PointerTotns__curseUserWithIdResponse(soap, (tns__curseUserWithIdResponse *const*)ptr);
+		break;
+	case SOAP_TYPE_ServerSoap_PointerTotns__curseUserWithId:
+		soap_serialize_PointerTotns__curseUserWithId(soap, (tns__curseUserWithId *const*)ptr);
+		break;
 	case SOAP_TYPE_ServerSoap_PointerTotns__curseMediaTokenWithIdResponse:
 		soap_serialize_PointerTotns__curseMediaTokenWithIdResponse(soap, (tns__curseMediaTokenWithIdResponse *const*)ptr);
 		break;
@@ -1730,6 +1841,12 @@ SOAP_FMAC3 void SOAP_FMAC4 soap_markelement(struct soap *soap, const void *ptr, 
 		break;
 	case SOAP_TYPE_ServerSoap_PointerTotns__blockMediaAliasWithId:
 		soap_serialize_PointerTotns__blockMediaAliasWithId(soap, (tns__blockMediaAliasWithId *const*)ptr);
+		break;
+	case SOAP_TYPE_ServerSoap_PointerTotns__blessUserWithIdResponse:
+		soap_serialize_PointerTotns__blessUserWithIdResponse(soap, (tns__blessUserWithIdResponse *const*)ptr);
+		break;
+	case SOAP_TYPE_ServerSoap_PointerTotns__blessUserWithId:
+		soap_serialize_PointerTotns__blessUserWithId(soap, (tns__blessUserWithId *const*)ptr);
 		break;
 	case SOAP_TYPE_ServerSoap_PointerTotns__blessMediaTokenWithIdResponse:
 		soap_serialize_PointerTotns__blessMediaTokenWithIdResponse(soap, (tns__blessMediaTokenWithIdResponse *const*)ptr);
@@ -1810,6 +1927,10 @@ SOAP_FMAC3 void * SOAP_FMAC4 ServerSoap_instantiate(struct soap *soap, int t, co
 		return (void*)soap_instantiate_tns__blessMediaTokenWithId(soap, -1, type, arrayType, n);
 	case SOAP_TYPE_ServerSoap_tns__blessMediaTokenWithIdResponse:
 		return (void*)soap_instantiate_tns__blessMediaTokenWithIdResponse(soap, -1, type, arrayType, n);
+	case SOAP_TYPE_ServerSoap_tns__blessUserWithId:
+		return (void*)soap_instantiate_tns__blessUserWithId(soap, -1, type, arrayType, n);
+	case SOAP_TYPE_ServerSoap_tns__blessUserWithIdResponse:
+		return (void*)soap_instantiate_tns__blessUserWithIdResponse(soap, -1, type, arrayType, n);
 	case SOAP_TYPE_ServerSoap_tns__blockMediaAliasWithId:
 		return (void*)soap_instantiate_tns__blockMediaAliasWithId(soap, -1, type, arrayType, n);
 	case SOAP_TYPE_ServerSoap_tns__blockMediaAliasWithIdResponse:
@@ -1838,6 +1959,10 @@ SOAP_FMAC3 void * SOAP_FMAC4 ServerSoap_instantiate(struct soap *soap, int t, co
 		return (void*)soap_instantiate_tns__curseMediaTokenWithId(soap, -1, type, arrayType, n);
 	case SOAP_TYPE_ServerSoap_tns__curseMediaTokenWithIdResponse:
 		return (void*)soap_instantiate_tns__curseMediaTokenWithIdResponse(soap, -1, type, arrayType, n);
+	case SOAP_TYPE_ServerSoap_tns__curseUserWithId:
+		return (void*)soap_instantiate_tns__curseUserWithId(soap, -1, type, arrayType, n);
+	case SOAP_TYPE_ServerSoap_tns__curseUserWithIdResponse:
+		return (void*)soap_instantiate_tns__curseUserWithIdResponse(soap, -1, type, arrayType, n);
 	case SOAP_TYPE_ServerSoap_tns__deleteMediaAliasWithId:
 		return (void*)soap_instantiate_tns__deleteMediaAliasWithId(soap, -1, type, arrayType, n);
 	case SOAP_TYPE_ServerSoap_tns__deleteMediaAliasWithIdResponse:
@@ -1930,6 +2055,10 @@ SOAP_FMAC3 void * SOAP_FMAC4 ServerSoap_instantiate(struct soap *soap, int t, co
 		return (void*)soap_instantiate_tns__submitMediaTokenDigest(soap, -1, type, arrayType, n);
 	case SOAP_TYPE_ServerSoap_tns__submitMediaTokenDigestResponse:
 		return (void*)soap_instantiate_tns__submitMediaTokenDigestResponse(soap, -1, type, arrayType, n);
+	case SOAP_TYPE_ServerSoap_tns__submitMediaTokenSource:
+		return (void*)soap_instantiate_tns__submitMediaTokenSource(soap, -1, type, arrayType, n);
+	case SOAP_TYPE_ServerSoap_tns__submitMediaTokenSourceResponse:
+		return (void*)soap_instantiate_tns__submitMediaTokenSourceResponse(soap, -1, type, arrayType, n);
 	case SOAP_TYPE_ServerSoap_tns__updateMediaAnnotationTextWithId:
 		return (void*)soap_instantiate_tns__updateMediaAnnotationTextWithId(soap, -1, type, arrayType, n);
 	case SOAP_TYPE_ServerSoap_tns__updateMediaAnnotationTextWithIdResponse:
@@ -1940,6 +2069,8 @@ SOAP_FMAC3 void * SOAP_FMAC4 ServerSoap_instantiate(struct soap *soap, int t, co
 		return (void*)soap_instantiate___tns__blessMediaAnnotationWithId(soap, -1, type, arrayType, n);
 	case SOAP_TYPE_ServerSoap___tns__blessMediaTokenWithId:
 		return (void*)soap_instantiate___tns__blessMediaTokenWithId(soap, -1, type, arrayType, n);
+	case SOAP_TYPE_ServerSoap___tns__blessUserWithId:
+		return (void*)soap_instantiate___tns__blessUserWithId(soap, -1, type, arrayType, n);
 	case SOAP_TYPE_ServerSoap___tns__blockMediaAliasWithId:
 		return (void*)soap_instantiate___tns__blockMediaAliasWithId(soap, -1, type, arrayType, n);
 	case SOAP_TYPE_ServerSoap___tns__blockMediaAnnotationWithId:
@@ -1954,6 +2085,8 @@ SOAP_FMAC3 void * SOAP_FMAC4 ServerSoap_instantiate(struct soap *soap, int t, co
 		return (void*)soap_instantiate___tns__curseMediaAnnotationWithId(soap, -1, type, arrayType, n);
 	case SOAP_TYPE_ServerSoap___tns__curseMediaTokenWithId:
 		return (void*)soap_instantiate___tns__curseMediaTokenWithId(soap, -1, type, arrayType, n);
+	case SOAP_TYPE_ServerSoap___tns__curseUserWithId:
+		return (void*)soap_instantiate___tns__curseUserWithId(soap, -1, type, arrayType, n);
 	case SOAP_TYPE_ServerSoap___tns__deleteMediaAliasWithId:
 		return (void*)soap_instantiate___tns__deleteMediaAliasWithId(soap, -1, type, arrayType, n);
 	case SOAP_TYPE_ServerSoap___tns__deleteMediaAnnotationWithId:
@@ -2000,6 +2133,8 @@ SOAP_FMAC3 void * SOAP_FMAC4 ServerSoap_instantiate(struct soap *soap, int t, co
 		return (void*)soap_instantiate___tns__submitMediaToken(soap, -1, type, arrayType, n);
 	case SOAP_TYPE_ServerSoap___tns__submitMediaTokenDigest:
 		return (void*)soap_instantiate___tns__submitMediaTokenDigest(soap, -1, type, arrayType, n);
+	case SOAP_TYPE_ServerSoap___tns__submitMediaTokenSource:
+		return (void*)soap_instantiate___tns__submitMediaTokenSource(soap, -1, type, arrayType, n);
 	case SOAP_TYPE_ServerSoap___tns__updateMediaAnnotationTextWithId:
 		return (void*)soap_instantiate___tns__updateMediaAnnotationTextWithId(soap, -1, type, arrayType, n);
 #ifndef WITH_NOGLOBAL
@@ -2113,6 +2248,18 @@ SOAP_FMAC3 int SOAP_FMAC4 ServerSoap_fdelete(struct soap_clist *p)
 		else
 			SOAP_DELETE_ARRAY((tns__blessMediaTokenWithIdResponse*)p->ptr);
 		break;
+	case SOAP_TYPE_ServerSoap_tns__blessUserWithId:
+		if (p->size < 0)
+			SOAP_DELETE((tns__blessUserWithId*)p->ptr);
+		else
+			SOAP_DELETE_ARRAY((tns__blessUserWithId*)p->ptr);
+		break;
+	case SOAP_TYPE_ServerSoap_tns__blessUserWithIdResponse:
+		if (p->size < 0)
+			SOAP_DELETE((tns__blessUserWithIdResponse*)p->ptr);
+		else
+			SOAP_DELETE_ARRAY((tns__blessUserWithIdResponse*)p->ptr);
+		break;
 	case SOAP_TYPE_ServerSoap_tns__blockMediaAliasWithId:
 		if (p->size < 0)
 			SOAP_DELETE((tns__blockMediaAliasWithId*)p->ptr);
@@ -2196,6 +2343,18 @@ SOAP_FMAC3 int SOAP_FMAC4 ServerSoap_fdelete(struct soap_clist *p)
 			SOAP_DELETE((tns__curseMediaTokenWithIdResponse*)p->ptr);
 		else
 			SOAP_DELETE_ARRAY((tns__curseMediaTokenWithIdResponse*)p->ptr);
+		break;
+	case SOAP_TYPE_ServerSoap_tns__curseUserWithId:
+		if (p->size < 0)
+			SOAP_DELETE((tns__curseUserWithId*)p->ptr);
+		else
+			SOAP_DELETE_ARRAY((tns__curseUserWithId*)p->ptr);
+		break;
+	case SOAP_TYPE_ServerSoap_tns__curseUserWithIdResponse:
+		if (p->size < 0)
+			SOAP_DELETE((tns__curseUserWithIdResponse*)p->ptr);
+		else
+			SOAP_DELETE_ARRAY((tns__curseUserWithIdResponse*)p->ptr);
 		break;
 	case SOAP_TYPE_ServerSoap_tns__deleteMediaAliasWithId:
 		if (p->size < 0)
@@ -2473,6 +2632,18 @@ SOAP_FMAC3 int SOAP_FMAC4 ServerSoap_fdelete(struct soap_clist *p)
 		else
 			SOAP_DELETE_ARRAY((tns__submitMediaTokenDigestResponse*)p->ptr);
 		break;
+	case SOAP_TYPE_ServerSoap_tns__submitMediaTokenSource:
+		if (p->size < 0)
+			SOAP_DELETE((tns__submitMediaTokenSource*)p->ptr);
+		else
+			SOAP_DELETE_ARRAY((tns__submitMediaTokenSource*)p->ptr);
+		break;
+	case SOAP_TYPE_ServerSoap_tns__submitMediaTokenSourceResponse:
+		if (p->size < 0)
+			SOAP_DELETE((tns__submitMediaTokenSourceResponse*)p->ptr);
+		else
+			SOAP_DELETE_ARRAY((tns__submitMediaTokenSourceResponse*)p->ptr);
+		break;
 	case SOAP_TYPE_ServerSoap_tns__updateMediaAnnotationTextWithId:
 		if (p->size < 0)
 			SOAP_DELETE((tns__updateMediaAnnotationTextWithId*)p->ptr);
@@ -2502,6 +2673,12 @@ SOAP_FMAC3 int SOAP_FMAC4 ServerSoap_fdelete(struct soap_clist *p)
 			SOAP_DELETE((struct __tns__blessMediaTokenWithId*)p->ptr);
 		else
 			SOAP_DELETE_ARRAY((struct __tns__blessMediaTokenWithId*)p->ptr);
+		break;
+	case SOAP_TYPE_ServerSoap___tns__blessUserWithId:
+		if (p->size < 0)
+			SOAP_DELETE((struct __tns__blessUserWithId*)p->ptr);
+		else
+			SOAP_DELETE_ARRAY((struct __tns__blessUserWithId*)p->ptr);
 		break;
 	case SOAP_TYPE_ServerSoap___tns__blockMediaAliasWithId:
 		if (p->size < 0)
@@ -2544,6 +2721,12 @@ SOAP_FMAC3 int SOAP_FMAC4 ServerSoap_fdelete(struct soap_clist *p)
 			SOAP_DELETE((struct __tns__curseMediaTokenWithId*)p->ptr);
 		else
 			SOAP_DELETE_ARRAY((struct __tns__curseMediaTokenWithId*)p->ptr);
+		break;
+	case SOAP_TYPE_ServerSoap___tns__curseUserWithId:
+		if (p->size < 0)
+			SOAP_DELETE((struct __tns__curseUserWithId*)p->ptr);
+		else
+			SOAP_DELETE_ARRAY((struct __tns__curseUserWithId*)p->ptr);
 		break;
 	case SOAP_TYPE_ServerSoap___tns__deleteMediaAliasWithId:
 		if (p->size < 0)
@@ -2682,6 +2865,12 @@ SOAP_FMAC3 int SOAP_FMAC4 ServerSoap_fdelete(struct soap_clist *p)
 			SOAP_DELETE((struct __tns__submitMediaTokenDigest*)p->ptr);
 		else
 			SOAP_DELETE_ARRAY((struct __tns__submitMediaTokenDigest*)p->ptr);
+		break;
+	case SOAP_TYPE_ServerSoap___tns__submitMediaTokenSource:
+		if (p->size < 0)
+			SOAP_DELETE((struct __tns__submitMediaTokenSource*)p->ptr);
+		else
+			SOAP_DELETE_ARRAY((struct __tns__submitMediaTokenSource*)p->ptr);
 		break;
 	case SOAP_TYPE_ServerSoap___tns__updateMediaAnnotationTextWithId:
 		if (p->size < 0)
@@ -3378,6 +3567,319 @@ SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__updateMediaAnnotationTextWithId(struct
 	(void)soap; (void)tt; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
 	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying tns__updateMediaAnnotationTextWithId %p -> %p\n", q, p));
 	*(tns__updateMediaAnnotationTextWithId*)p = *(tns__updateMediaAnnotationTextWithId*)q;
+}
+
+void tns__submitMediaTokenSourceResponse::soap_default(struct soap *soap)
+{
+	this->soap = soap;
+	soap_default_LONG64(soap, &this->tns__submitMediaTokenSourceResponse::return_);
+	/* transient soap skipped */
+}
+
+void tns__submitMediaTokenSourceResponse::soap_serialize(struct soap *soap) const
+{
+	(void)soap; /* appease -Wall -Werror */
+	/* transient soap skipped */
+}
+
+int tns__submitMediaTokenSourceResponse::soap_out(struct soap *soap, const char *tag, int id, const char *type) const
+{
+	return soap_out_tns__submitMediaTokenSourceResponse(soap, tag, id, this, type);
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__submitMediaTokenSourceResponse(struct soap *soap, const char *tag, int id, const tns__submitMediaTokenSourceResponse *a, const char *type)
+{
+	if (soap_element_begin_out(soap, tag, soap_embedded_id(soap, id, a, SOAP_TYPE_ServerSoap_tns__submitMediaTokenSourceResponse), type))
+		return soap->error;
+	if (soap_out_LONG64(soap, "return", -1, &(a->tns__submitMediaTokenSourceResponse::return_), ""))
+		return soap->error;
+	/* transient soap skipped */
+	return soap_element_end_out(soap, tag);
+}
+
+void *tns__submitMediaTokenSourceResponse::soap_in(struct soap *soap, const char *tag, const char *type)
+{	return soap_in_tns__submitMediaTokenSourceResponse(soap, tag, this, type);
+}
+
+SOAP_FMAC3 tns__submitMediaTokenSourceResponse * SOAP_FMAC4 soap_in_tns__submitMediaTokenSourceResponse(struct soap *soap, const char *tag, tns__submitMediaTokenSourceResponse *a, const char *type)
+{
+	(void)type; /* appease -Wall -Werror */
+	if (soap_element_begin_in(soap, tag, 0, NULL))
+		return NULL;
+	a = (tns__submitMediaTokenSourceResponse *)soap_class_id_enter(soap, soap->id, a, SOAP_TYPE_ServerSoap_tns__submitMediaTokenSourceResponse, sizeof(tns__submitMediaTokenSourceResponse), soap->type, soap->arrayType);
+	if (!a)
+		return NULL;
+	if (soap->alloced)
+	{	a->soap_default(soap);
+		if (soap->clist->type != SOAP_TYPE_ServerSoap_tns__submitMediaTokenSourceResponse)
+		{	soap_revert(soap);
+			*soap->id = '\0';
+			return (tns__submitMediaTokenSourceResponse *)a->soap_in(soap, tag, type);
+		}
+	}
+	size_t soap_flag_return_1 = 1;
+	if (soap->body && !*soap->href)
+	{
+		for (;;)
+		{	soap->error = SOAP_TAG_MISMATCH;
+			if (soap_flag_return_1 && soap->error == SOAP_TAG_MISMATCH)
+				if (soap_in_LONG64(soap, "return", &(a->tns__submitMediaTokenSourceResponse::return_), "xsd:long"))
+				{	soap_flag_return_1--;
+					continue;
+				}
+			/* transient soap skipped */
+			if (soap->error == SOAP_TAG_MISMATCH)
+				soap->error = soap_ignore_element(soap);
+			if (soap->error == SOAP_NO_TAG)
+				break;
+			if (soap->error)
+				return NULL;
+		}
+		if (soap_element_end_in(soap, tag))
+			return NULL;
+	}
+	else
+	{	a = (tns__submitMediaTokenSourceResponse *)soap_id_forward(soap, soap->href, (void*)a, 0, SOAP_TYPE_ServerSoap_tns__submitMediaTokenSourceResponse, 0, sizeof(tns__submitMediaTokenSourceResponse), 0, soap_copy_tns__submitMediaTokenSourceResponse);
+		if (soap->body && soap_element_end_in(soap, tag))
+			return NULL;
+	}
+	if ((soap->mode & SOAP_XML_STRICT) && (soap_flag_return_1 > 0))
+	{	soap->error = SOAP_OCCURS;
+		return NULL;
+	}
+	return a;
+}
+
+int tns__submitMediaTokenSourceResponse::soap_put(struct soap *soap, const char *tag, const  char *type) const
+{
+	register int id = soap_embed(soap, (void*)this, NULL, 0, tag, SOAP_TYPE_ServerSoap_tns__submitMediaTokenSourceResponse);
+	if (this->soap_out(soap, tag?tag:"tns:submitMediaTokenSourceResponse", id, type))
+		return soap->error;
+	return soap_putindependent(soap);
+}
+
+void *tns__submitMediaTokenSourceResponse::soap_get(struct soap *soap, const char *tag, const char *type)
+{
+	return soap_get_tns__submitMediaTokenSourceResponse(soap, this, tag, type);
+}
+
+SOAP_FMAC3 tns__submitMediaTokenSourceResponse * SOAP_FMAC4 soap_get_tns__submitMediaTokenSourceResponse(struct soap *soap, tns__submitMediaTokenSourceResponse *p, const char *tag, const char *type)
+{
+	if ((p = soap_in_tns__submitMediaTokenSourceResponse(soap, tag, p, type)))
+		if (soap_getindependent(soap))
+			return NULL;
+	return p;
+}
+
+SOAP_FMAC1 tns__submitMediaTokenSourceResponse * SOAP_FMAC2 soap_instantiate_tns__submitMediaTokenSourceResponse(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
+{
+	(void)type; (void)arrayType; /* appease -Wall -Werror */
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate_tns__submitMediaTokenSourceResponse(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
+	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap_tns__submitMediaTokenSourceResponse, n, ServerSoap_fdelete);
+	if (!cp)
+		return NULL;
+	if (n < 0)
+	{	cp->ptr = (void*)SOAP_NEW(tns__submitMediaTokenSourceResponse);
+		if (size)
+			*size = sizeof(tns__submitMediaTokenSourceResponse);
+		((tns__submitMediaTokenSourceResponse*)cp->ptr)->soap = soap;
+	}
+	else
+	{	cp->ptr = (void*)SOAP_NEW(tns__submitMediaTokenSourceResponse[n]);
+		if (!cp->ptr)
+		{	soap->error = SOAP_EOM;
+			return NULL;
+		}
+		if (size)
+			*size = n * sizeof(tns__submitMediaTokenSourceResponse);
+		for (int i = 0; i < n; i++)
+			((tns__submitMediaTokenSourceResponse*)cp->ptr)[i].soap = soap;
+	}
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
+	return (tns__submitMediaTokenSourceResponse*)cp->ptr;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__submitMediaTokenSourceResponse(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
+{
+	(void)soap; (void)tt; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying tns__submitMediaTokenSourceResponse %p -> %p\n", q, p));
+	*(tns__submitMediaTokenSourceResponse*)p = *(tns__submitMediaTokenSourceResponse*)q;
+}
+
+void tns__submitMediaTokenSource::soap_default(struct soap *soap)
+{
+	this->soap = soap;
+	this->tns__submitMediaTokenSource::arg0 = NULL;
+	soap_default_int(soap, &this->tns__submitMediaTokenSource::arg1);
+	soap_default_int(soap, &this->tns__submitMediaTokenSource::arg2);
+	this->tns__submitMediaTokenSource::userName = NULL;
+	this->tns__submitMediaTokenSource::password = NULL;
+	/* transient soap skipped */
+}
+
+void tns__submitMediaTokenSource::soap_serialize(struct soap *soap) const
+{
+	(void)soap; /* appease -Wall -Werror */
+	soap_serialize_PointerTostd__string(soap, &this->tns__submitMediaTokenSource::arg0);
+	soap_serialize_PointerTostd__string(soap, &this->tns__submitMediaTokenSource::userName);
+	soap_serialize_PointerTostd__string(soap, &this->tns__submitMediaTokenSource::password);
+	/* transient soap skipped */
+}
+
+int tns__submitMediaTokenSource::soap_out(struct soap *soap, const char *tag, int id, const char *type) const
+{
+	return soap_out_tns__submitMediaTokenSource(soap, tag, id, this, type);
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__submitMediaTokenSource(struct soap *soap, const char *tag, int id, const tns__submitMediaTokenSource *a, const char *type)
+{
+	if (soap_element_begin_out(soap, tag, soap_embedded_id(soap, id, a, SOAP_TYPE_ServerSoap_tns__submitMediaTokenSource), type))
+		return soap->error;
+	if (soap_out_PointerTostd__string(soap, "arg0", -1, &(a->tns__submitMediaTokenSource::arg0), ""))
+		return soap->error;
+	if (soap_out_int(soap, "arg1", -1, &(a->tns__submitMediaTokenSource::arg1), ""))
+		return soap->error;
+	if (soap_out_int(soap, "arg2", -1, &(a->tns__submitMediaTokenSource::arg2), ""))
+		return soap->error;
+	if (soap_out_PointerTostd__string(soap, "userName", -1, &(a->tns__submitMediaTokenSource::userName), ""))
+		return soap->error;
+	if (soap_out_PointerTostd__string(soap, "password", -1, &(a->tns__submitMediaTokenSource::password), ""))
+		return soap->error;
+	/* transient soap skipped */
+	return soap_element_end_out(soap, tag);
+}
+
+void *tns__submitMediaTokenSource::soap_in(struct soap *soap, const char *tag, const char *type)
+{	return soap_in_tns__submitMediaTokenSource(soap, tag, this, type);
+}
+
+SOAP_FMAC3 tns__submitMediaTokenSource * SOAP_FMAC4 soap_in_tns__submitMediaTokenSource(struct soap *soap, const char *tag, tns__submitMediaTokenSource *a, const char *type)
+{
+	(void)type; /* appease -Wall -Werror */
+	if (soap_element_begin_in(soap, tag, 0, NULL))
+		return NULL;
+	a = (tns__submitMediaTokenSource *)soap_class_id_enter(soap, soap->id, a, SOAP_TYPE_ServerSoap_tns__submitMediaTokenSource, sizeof(tns__submitMediaTokenSource), soap->type, soap->arrayType);
+	if (!a)
+		return NULL;
+	if (soap->alloced)
+	{	a->soap_default(soap);
+		if (soap->clist->type != SOAP_TYPE_ServerSoap_tns__submitMediaTokenSource)
+		{	soap_revert(soap);
+			*soap->id = '\0';
+			return (tns__submitMediaTokenSource *)a->soap_in(soap, tag, type);
+		}
+	}
+	size_t soap_flag_arg01 = 1;
+	size_t soap_flag_arg11 = 1;
+	size_t soap_flag_arg21 = 1;
+	size_t soap_flag_userName1 = 1;
+	size_t soap_flag_password1 = 1;
+	if (soap->body && !*soap->href)
+	{
+		for (;;)
+		{	soap->error = SOAP_TAG_MISMATCH;
+			if (soap_flag_arg01 && (soap->error == SOAP_TAG_MISMATCH || soap->error == SOAP_NO_TAG))
+				if (soap_in_PointerTostd__string(soap, "arg0", &(a->tns__submitMediaTokenSource::arg0), "xsd:string"))
+				{	soap_flag_arg01--;
+					continue;
+				}
+			if (soap_flag_arg11 && soap->error == SOAP_TAG_MISMATCH)
+				if (soap_in_int(soap, "arg1", &(a->tns__submitMediaTokenSource::arg1), "xsd:int"))
+				{	soap_flag_arg11--;
+					continue;
+				}
+			if (soap_flag_arg21 && soap->error == SOAP_TAG_MISMATCH)
+				if (soap_in_int(soap, "arg2", &(a->tns__submitMediaTokenSource::arg2), "xsd:int"))
+				{	soap_flag_arg21--;
+					continue;
+				}
+			if (soap_flag_userName1 && (soap->error == SOAP_TAG_MISMATCH || soap->error == SOAP_NO_TAG))
+				if (soap_in_PointerTostd__string(soap, "userName", &(a->tns__submitMediaTokenSource::userName), "xsd:string"))
+				{	soap_flag_userName1--;
+					continue;
+				}
+			if (soap_flag_password1 && (soap->error == SOAP_TAG_MISMATCH || soap->error == SOAP_NO_TAG))
+				if (soap_in_PointerTostd__string(soap, "password", &(a->tns__submitMediaTokenSource::password), "xsd:string"))
+				{	soap_flag_password1--;
+					continue;
+				}
+			/* transient soap skipped */
+			if (soap->error == SOAP_TAG_MISMATCH)
+				soap->error = soap_ignore_element(soap);
+			if (soap->error == SOAP_NO_TAG)
+				break;
+			if (soap->error)
+				return NULL;
+		}
+		if (soap_element_end_in(soap, tag))
+			return NULL;
+	}
+	else
+	{	a = (tns__submitMediaTokenSource *)soap_id_forward(soap, soap->href, (void*)a, 0, SOAP_TYPE_ServerSoap_tns__submitMediaTokenSource, 0, sizeof(tns__submitMediaTokenSource), 0, soap_copy_tns__submitMediaTokenSource);
+		if (soap->body && soap_element_end_in(soap, tag))
+			return NULL;
+	}
+	if ((soap->mode & SOAP_XML_STRICT) && (soap_flag_arg11 > 0 || soap_flag_arg21 > 0))
+	{	soap->error = SOAP_OCCURS;
+		return NULL;
+	}
+	return a;
+}
+
+int tns__submitMediaTokenSource::soap_put(struct soap *soap, const char *tag, const  char *type) const
+{
+	register int id = soap_embed(soap, (void*)this, NULL, 0, tag, SOAP_TYPE_ServerSoap_tns__submitMediaTokenSource);
+	if (this->soap_out(soap, tag?tag:"tns:submitMediaTokenSource", id, type))
+		return soap->error;
+	return soap_putindependent(soap);
+}
+
+void *tns__submitMediaTokenSource::soap_get(struct soap *soap, const char *tag, const char *type)
+{
+	return soap_get_tns__submitMediaTokenSource(soap, this, tag, type);
+}
+
+SOAP_FMAC3 tns__submitMediaTokenSource * SOAP_FMAC4 soap_get_tns__submitMediaTokenSource(struct soap *soap, tns__submitMediaTokenSource *p, const char *tag, const char *type)
+{
+	if ((p = soap_in_tns__submitMediaTokenSource(soap, tag, p, type)))
+		if (soap_getindependent(soap))
+			return NULL;
+	return p;
+}
+
+SOAP_FMAC1 tns__submitMediaTokenSource * SOAP_FMAC2 soap_instantiate_tns__submitMediaTokenSource(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
+{
+	(void)type; (void)arrayType; /* appease -Wall -Werror */
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate_tns__submitMediaTokenSource(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
+	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap_tns__submitMediaTokenSource, n, ServerSoap_fdelete);
+	if (!cp)
+		return NULL;
+	if (n < 0)
+	{	cp->ptr = (void*)SOAP_NEW(tns__submitMediaTokenSource);
+		if (size)
+			*size = sizeof(tns__submitMediaTokenSource);
+		((tns__submitMediaTokenSource*)cp->ptr)->soap = soap;
+	}
+	else
+	{	cp->ptr = (void*)SOAP_NEW(tns__submitMediaTokenSource[n]);
+		if (!cp->ptr)
+		{	soap->error = SOAP_EOM;
+			return NULL;
+		}
+		if (size)
+			*size = n * sizeof(tns__submitMediaTokenSource);
+		for (int i = 0; i < n; i++)
+			((tns__submitMediaTokenSource*)cp->ptr)[i].soap = soap;
+	}
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
+	return (tns__submitMediaTokenSource*)cp->ptr;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__submitMediaTokenSource(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
+{
+	(void)soap; (void)tt; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying tns__submitMediaTokenSource %p -> %p\n", q, p));
+	*(tns__submitMediaTokenSource*)p = *(tns__submitMediaTokenSource*)q;
 }
 
 void tns__submitMediaTokenDigestResponse::soap_default(struct soap *soap)
@@ -10041,6 +10543,300 @@ SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__deleteMediaAliasWithId(struct soap *so
 	*(tns__deleteMediaAliasWithId*)p = *(tns__deleteMediaAliasWithId*)q;
 }
 
+void tns__curseUserWithIdResponse::soap_default(struct soap *soap)
+{
+	this->soap = soap;
+	soap_default_bool(soap, &this->tns__curseUserWithIdResponse::return_);
+	/* transient soap skipped */
+}
+
+void tns__curseUserWithIdResponse::soap_serialize(struct soap *soap) const
+{
+	(void)soap; /* appease -Wall -Werror */
+	/* transient soap skipped */
+}
+
+int tns__curseUserWithIdResponse::soap_out(struct soap *soap, const char *tag, int id, const char *type) const
+{
+	return soap_out_tns__curseUserWithIdResponse(soap, tag, id, this, type);
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__curseUserWithIdResponse(struct soap *soap, const char *tag, int id, const tns__curseUserWithIdResponse *a, const char *type)
+{
+	if (soap_element_begin_out(soap, tag, soap_embedded_id(soap, id, a, SOAP_TYPE_ServerSoap_tns__curseUserWithIdResponse), type))
+		return soap->error;
+	if (soap_out_bool(soap, "return", -1, &(a->tns__curseUserWithIdResponse::return_), ""))
+		return soap->error;
+	/* transient soap skipped */
+	return soap_element_end_out(soap, tag);
+}
+
+void *tns__curseUserWithIdResponse::soap_in(struct soap *soap, const char *tag, const char *type)
+{	return soap_in_tns__curseUserWithIdResponse(soap, tag, this, type);
+}
+
+SOAP_FMAC3 tns__curseUserWithIdResponse * SOAP_FMAC4 soap_in_tns__curseUserWithIdResponse(struct soap *soap, const char *tag, tns__curseUserWithIdResponse *a, const char *type)
+{
+	(void)type; /* appease -Wall -Werror */
+	if (soap_element_begin_in(soap, tag, 0, NULL))
+		return NULL;
+	a = (tns__curseUserWithIdResponse *)soap_class_id_enter(soap, soap->id, a, SOAP_TYPE_ServerSoap_tns__curseUserWithIdResponse, sizeof(tns__curseUserWithIdResponse), soap->type, soap->arrayType);
+	if (!a)
+		return NULL;
+	if (soap->alloced)
+	{	a->soap_default(soap);
+		if (soap->clist->type != SOAP_TYPE_ServerSoap_tns__curseUserWithIdResponse)
+		{	soap_revert(soap);
+			*soap->id = '\0';
+			return (tns__curseUserWithIdResponse *)a->soap_in(soap, tag, type);
+		}
+	}
+	size_t soap_flag_return_1 = 1;
+	if (soap->body && !*soap->href)
+	{
+		for (;;)
+		{	soap->error = SOAP_TAG_MISMATCH;
+			if (soap_flag_return_1 && soap->error == SOAP_TAG_MISMATCH)
+				if (soap_in_bool(soap, "return", &(a->tns__curseUserWithIdResponse::return_), "xsd:boolean"))
+				{	soap_flag_return_1--;
+					continue;
+				}
+			/* transient soap skipped */
+			if (soap->error == SOAP_TAG_MISMATCH)
+				soap->error = soap_ignore_element(soap);
+			if (soap->error == SOAP_NO_TAG)
+				break;
+			if (soap->error)
+				return NULL;
+		}
+		if (soap_element_end_in(soap, tag))
+			return NULL;
+	}
+	else
+	{	a = (tns__curseUserWithIdResponse *)soap_id_forward(soap, soap->href, (void*)a, 0, SOAP_TYPE_ServerSoap_tns__curseUserWithIdResponse, 0, sizeof(tns__curseUserWithIdResponse), 0, soap_copy_tns__curseUserWithIdResponse);
+		if (soap->body && soap_element_end_in(soap, tag))
+			return NULL;
+	}
+	if ((soap->mode & SOAP_XML_STRICT) && (soap_flag_return_1 > 0))
+	{	soap->error = SOAP_OCCURS;
+		return NULL;
+	}
+	return a;
+}
+
+int tns__curseUserWithIdResponse::soap_put(struct soap *soap, const char *tag, const  char *type) const
+{
+	register int id = soap_embed(soap, (void*)this, NULL, 0, tag, SOAP_TYPE_ServerSoap_tns__curseUserWithIdResponse);
+	if (this->soap_out(soap, tag?tag:"tns:curseUserWithIdResponse", id, type))
+		return soap->error;
+	return soap_putindependent(soap);
+}
+
+void *tns__curseUserWithIdResponse::soap_get(struct soap *soap, const char *tag, const char *type)
+{
+	return soap_get_tns__curseUserWithIdResponse(soap, this, tag, type);
+}
+
+SOAP_FMAC3 tns__curseUserWithIdResponse * SOAP_FMAC4 soap_get_tns__curseUserWithIdResponse(struct soap *soap, tns__curseUserWithIdResponse *p, const char *tag, const char *type)
+{
+	if ((p = soap_in_tns__curseUserWithIdResponse(soap, tag, p, type)))
+		if (soap_getindependent(soap))
+			return NULL;
+	return p;
+}
+
+SOAP_FMAC1 tns__curseUserWithIdResponse * SOAP_FMAC2 soap_instantiate_tns__curseUserWithIdResponse(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
+{
+	(void)type; (void)arrayType; /* appease -Wall -Werror */
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate_tns__curseUserWithIdResponse(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
+	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap_tns__curseUserWithIdResponse, n, ServerSoap_fdelete);
+	if (!cp)
+		return NULL;
+	if (n < 0)
+	{	cp->ptr = (void*)SOAP_NEW(tns__curseUserWithIdResponse);
+		if (size)
+			*size = sizeof(tns__curseUserWithIdResponse);
+		((tns__curseUserWithIdResponse*)cp->ptr)->soap = soap;
+	}
+	else
+	{	cp->ptr = (void*)SOAP_NEW(tns__curseUserWithIdResponse[n]);
+		if (!cp->ptr)
+		{	soap->error = SOAP_EOM;
+			return NULL;
+		}
+		if (size)
+			*size = n * sizeof(tns__curseUserWithIdResponse);
+		for (int i = 0; i < n; i++)
+			((tns__curseUserWithIdResponse*)cp->ptr)[i].soap = soap;
+	}
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
+	return (tns__curseUserWithIdResponse*)cp->ptr;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__curseUserWithIdResponse(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
+{
+	(void)soap; (void)tt; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying tns__curseUserWithIdResponse %p -> %p\n", q, p));
+	*(tns__curseUserWithIdResponse*)p = *(tns__curseUserWithIdResponse*)q;
+}
+
+void tns__curseUserWithId::soap_default(struct soap *soap)
+{
+	this->soap = soap;
+	soap_default_LONG64(soap, &this->tns__curseUserWithId::arg0);
+	this->tns__curseUserWithId::userName = NULL;
+	this->tns__curseUserWithId::password = NULL;
+	/* transient soap skipped */
+}
+
+void tns__curseUserWithId::soap_serialize(struct soap *soap) const
+{
+	(void)soap; /* appease -Wall -Werror */
+	soap_serialize_PointerTostd__string(soap, &this->tns__curseUserWithId::userName);
+	soap_serialize_PointerTostd__string(soap, &this->tns__curseUserWithId::password);
+	/* transient soap skipped */
+}
+
+int tns__curseUserWithId::soap_out(struct soap *soap, const char *tag, int id, const char *type) const
+{
+	return soap_out_tns__curseUserWithId(soap, tag, id, this, type);
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__curseUserWithId(struct soap *soap, const char *tag, int id, const tns__curseUserWithId *a, const char *type)
+{
+	if (soap_element_begin_out(soap, tag, soap_embedded_id(soap, id, a, SOAP_TYPE_ServerSoap_tns__curseUserWithId), type))
+		return soap->error;
+	if (soap_out_LONG64(soap, "arg0", -1, &(a->tns__curseUserWithId::arg0), ""))
+		return soap->error;
+	if (soap_out_PointerTostd__string(soap, "userName", -1, &(a->tns__curseUserWithId::userName), ""))
+		return soap->error;
+	if (soap_out_PointerTostd__string(soap, "password", -1, &(a->tns__curseUserWithId::password), ""))
+		return soap->error;
+	/* transient soap skipped */
+	return soap_element_end_out(soap, tag);
+}
+
+void *tns__curseUserWithId::soap_in(struct soap *soap, const char *tag, const char *type)
+{	return soap_in_tns__curseUserWithId(soap, tag, this, type);
+}
+
+SOAP_FMAC3 tns__curseUserWithId * SOAP_FMAC4 soap_in_tns__curseUserWithId(struct soap *soap, const char *tag, tns__curseUserWithId *a, const char *type)
+{
+	(void)type; /* appease -Wall -Werror */
+	if (soap_element_begin_in(soap, tag, 0, NULL))
+		return NULL;
+	a = (tns__curseUserWithId *)soap_class_id_enter(soap, soap->id, a, SOAP_TYPE_ServerSoap_tns__curseUserWithId, sizeof(tns__curseUserWithId), soap->type, soap->arrayType);
+	if (!a)
+		return NULL;
+	if (soap->alloced)
+	{	a->soap_default(soap);
+		if (soap->clist->type != SOAP_TYPE_ServerSoap_tns__curseUserWithId)
+		{	soap_revert(soap);
+			*soap->id = '\0';
+			return (tns__curseUserWithId *)a->soap_in(soap, tag, type);
+		}
+	}
+	size_t soap_flag_arg01 = 1;
+	size_t soap_flag_userName1 = 1;
+	size_t soap_flag_password1 = 1;
+	if (soap->body && !*soap->href)
+	{
+		for (;;)
+		{	soap->error = SOAP_TAG_MISMATCH;
+			if (soap_flag_arg01 && soap->error == SOAP_TAG_MISMATCH)
+				if (soap_in_LONG64(soap, "arg0", &(a->tns__curseUserWithId::arg0), "xsd:long"))
+				{	soap_flag_arg01--;
+					continue;
+				}
+			if (soap_flag_userName1 && (soap->error == SOAP_TAG_MISMATCH || soap->error == SOAP_NO_TAG))
+				if (soap_in_PointerTostd__string(soap, "userName", &(a->tns__curseUserWithId::userName), "xsd:string"))
+				{	soap_flag_userName1--;
+					continue;
+				}
+			if (soap_flag_password1 && (soap->error == SOAP_TAG_MISMATCH || soap->error == SOAP_NO_TAG))
+				if (soap_in_PointerTostd__string(soap, "password", &(a->tns__curseUserWithId::password), "xsd:string"))
+				{	soap_flag_password1--;
+					continue;
+				}
+			/* transient soap skipped */
+			if (soap->error == SOAP_TAG_MISMATCH)
+				soap->error = soap_ignore_element(soap);
+			if (soap->error == SOAP_NO_TAG)
+				break;
+			if (soap->error)
+				return NULL;
+		}
+		if (soap_element_end_in(soap, tag))
+			return NULL;
+	}
+	else
+	{	a = (tns__curseUserWithId *)soap_id_forward(soap, soap->href, (void*)a, 0, SOAP_TYPE_ServerSoap_tns__curseUserWithId, 0, sizeof(tns__curseUserWithId), 0, soap_copy_tns__curseUserWithId);
+		if (soap->body && soap_element_end_in(soap, tag))
+			return NULL;
+	}
+	if ((soap->mode & SOAP_XML_STRICT) && (soap_flag_arg01 > 0))
+	{	soap->error = SOAP_OCCURS;
+		return NULL;
+	}
+	return a;
+}
+
+int tns__curseUserWithId::soap_put(struct soap *soap, const char *tag, const  char *type) const
+{
+	register int id = soap_embed(soap, (void*)this, NULL, 0, tag, SOAP_TYPE_ServerSoap_tns__curseUserWithId);
+	if (this->soap_out(soap, tag?tag:"tns:curseUserWithId", id, type))
+		return soap->error;
+	return soap_putindependent(soap);
+}
+
+void *tns__curseUserWithId::soap_get(struct soap *soap, const char *tag, const char *type)
+{
+	return soap_get_tns__curseUserWithId(soap, this, tag, type);
+}
+
+SOAP_FMAC3 tns__curseUserWithId * SOAP_FMAC4 soap_get_tns__curseUserWithId(struct soap *soap, tns__curseUserWithId *p, const char *tag, const char *type)
+{
+	if ((p = soap_in_tns__curseUserWithId(soap, tag, p, type)))
+		if (soap_getindependent(soap))
+			return NULL;
+	return p;
+}
+
+SOAP_FMAC1 tns__curseUserWithId * SOAP_FMAC2 soap_instantiate_tns__curseUserWithId(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
+{
+	(void)type; (void)arrayType; /* appease -Wall -Werror */
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate_tns__curseUserWithId(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
+	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap_tns__curseUserWithId, n, ServerSoap_fdelete);
+	if (!cp)
+		return NULL;
+	if (n < 0)
+	{	cp->ptr = (void*)SOAP_NEW(tns__curseUserWithId);
+		if (size)
+			*size = sizeof(tns__curseUserWithId);
+		((tns__curseUserWithId*)cp->ptr)->soap = soap;
+	}
+	else
+	{	cp->ptr = (void*)SOAP_NEW(tns__curseUserWithId[n]);
+		if (!cp->ptr)
+		{	soap->error = SOAP_EOM;
+			return NULL;
+		}
+		if (size)
+			*size = n * sizeof(tns__curseUserWithId);
+		for (int i = 0; i < n; i++)
+			((tns__curseUserWithId*)cp->ptr)[i].soap = soap;
+	}
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
+	return (tns__curseUserWithId*)cp->ptr;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__curseUserWithId(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
+{
+	(void)soap; (void)tt; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying tns__curseUserWithId %p -> %p\n", q, p));
+	*(tns__curseUserWithId*)p = *(tns__curseUserWithId*)q;
+}
+
 void tns__curseMediaTokenWithIdResponse::soap_default(struct soap *soap)
 {
 	this->soap = soap;
@@ -12073,6 +12869,300 @@ SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__blockMediaAliasWithId(struct soap *soa
 	*(tns__blockMediaAliasWithId*)p = *(tns__blockMediaAliasWithId*)q;
 }
 
+void tns__blessUserWithIdResponse::soap_default(struct soap *soap)
+{
+	this->soap = soap;
+	soap_default_bool(soap, &this->tns__blessUserWithIdResponse::return_);
+	/* transient soap skipped */
+}
+
+void tns__blessUserWithIdResponse::soap_serialize(struct soap *soap) const
+{
+	(void)soap; /* appease -Wall -Werror */
+	/* transient soap skipped */
+}
+
+int tns__blessUserWithIdResponse::soap_out(struct soap *soap, const char *tag, int id, const char *type) const
+{
+	return soap_out_tns__blessUserWithIdResponse(soap, tag, id, this, type);
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__blessUserWithIdResponse(struct soap *soap, const char *tag, int id, const tns__blessUserWithIdResponse *a, const char *type)
+{
+	if (soap_element_begin_out(soap, tag, soap_embedded_id(soap, id, a, SOAP_TYPE_ServerSoap_tns__blessUserWithIdResponse), type))
+		return soap->error;
+	if (soap_out_bool(soap, "return", -1, &(a->tns__blessUserWithIdResponse::return_), ""))
+		return soap->error;
+	/* transient soap skipped */
+	return soap_element_end_out(soap, tag);
+}
+
+void *tns__blessUserWithIdResponse::soap_in(struct soap *soap, const char *tag, const char *type)
+{	return soap_in_tns__blessUserWithIdResponse(soap, tag, this, type);
+}
+
+SOAP_FMAC3 tns__blessUserWithIdResponse * SOAP_FMAC4 soap_in_tns__blessUserWithIdResponse(struct soap *soap, const char *tag, tns__blessUserWithIdResponse *a, const char *type)
+{
+	(void)type; /* appease -Wall -Werror */
+	if (soap_element_begin_in(soap, tag, 0, NULL))
+		return NULL;
+	a = (tns__blessUserWithIdResponse *)soap_class_id_enter(soap, soap->id, a, SOAP_TYPE_ServerSoap_tns__blessUserWithIdResponse, sizeof(tns__blessUserWithIdResponse), soap->type, soap->arrayType);
+	if (!a)
+		return NULL;
+	if (soap->alloced)
+	{	a->soap_default(soap);
+		if (soap->clist->type != SOAP_TYPE_ServerSoap_tns__blessUserWithIdResponse)
+		{	soap_revert(soap);
+			*soap->id = '\0';
+			return (tns__blessUserWithIdResponse *)a->soap_in(soap, tag, type);
+		}
+	}
+	size_t soap_flag_return_1 = 1;
+	if (soap->body && !*soap->href)
+	{
+		for (;;)
+		{	soap->error = SOAP_TAG_MISMATCH;
+			if (soap_flag_return_1 && soap->error == SOAP_TAG_MISMATCH)
+				if (soap_in_bool(soap, "return", &(a->tns__blessUserWithIdResponse::return_), "xsd:boolean"))
+				{	soap_flag_return_1--;
+					continue;
+				}
+			/* transient soap skipped */
+			if (soap->error == SOAP_TAG_MISMATCH)
+				soap->error = soap_ignore_element(soap);
+			if (soap->error == SOAP_NO_TAG)
+				break;
+			if (soap->error)
+				return NULL;
+		}
+		if (soap_element_end_in(soap, tag))
+			return NULL;
+	}
+	else
+	{	a = (tns__blessUserWithIdResponse *)soap_id_forward(soap, soap->href, (void*)a, 0, SOAP_TYPE_ServerSoap_tns__blessUserWithIdResponse, 0, sizeof(tns__blessUserWithIdResponse), 0, soap_copy_tns__blessUserWithIdResponse);
+		if (soap->body && soap_element_end_in(soap, tag))
+			return NULL;
+	}
+	if ((soap->mode & SOAP_XML_STRICT) && (soap_flag_return_1 > 0))
+	{	soap->error = SOAP_OCCURS;
+		return NULL;
+	}
+	return a;
+}
+
+int tns__blessUserWithIdResponse::soap_put(struct soap *soap, const char *tag, const  char *type) const
+{
+	register int id = soap_embed(soap, (void*)this, NULL, 0, tag, SOAP_TYPE_ServerSoap_tns__blessUserWithIdResponse);
+	if (this->soap_out(soap, tag?tag:"tns:blessUserWithIdResponse", id, type))
+		return soap->error;
+	return soap_putindependent(soap);
+}
+
+void *tns__blessUserWithIdResponse::soap_get(struct soap *soap, const char *tag, const char *type)
+{
+	return soap_get_tns__blessUserWithIdResponse(soap, this, tag, type);
+}
+
+SOAP_FMAC3 tns__blessUserWithIdResponse * SOAP_FMAC4 soap_get_tns__blessUserWithIdResponse(struct soap *soap, tns__blessUserWithIdResponse *p, const char *tag, const char *type)
+{
+	if ((p = soap_in_tns__blessUserWithIdResponse(soap, tag, p, type)))
+		if (soap_getindependent(soap))
+			return NULL;
+	return p;
+}
+
+SOAP_FMAC1 tns__blessUserWithIdResponse * SOAP_FMAC2 soap_instantiate_tns__blessUserWithIdResponse(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
+{
+	(void)type; (void)arrayType; /* appease -Wall -Werror */
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate_tns__blessUserWithIdResponse(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
+	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap_tns__blessUserWithIdResponse, n, ServerSoap_fdelete);
+	if (!cp)
+		return NULL;
+	if (n < 0)
+	{	cp->ptr = (void*)SOAP_NEW(tns__blessUserWithIdResponse);
+		if (size)
+			*size = sizeof(tns__blessUserWithIdResponse);
+		((tns__blessUserWithIdResponse*)cp->ptr)->soap = soap;
+	}
+	else
+	{	cp->ptr = (void*)SOAP_NEW(tns__blessUserWithIdResponse[n]);
+		if (!cp->ptr)
+		{	soap->error = SOAP_EOM;
+			return NULL;
+		}
+		if (size)
+			*size = n * sizeof(tns__blessUserWithIdResponse);
+		for (int i = 0; i < n; i++)
+			((tns__blessUserWithIdResponse*)cp->ptr)[i].soap = soap;
+	}
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
+	return (tns__blessUserWithIdResponse*)cp->ptr;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__blessUserWithIdResponse(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
+{
+	(void)soap; (void)tt; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying tns__blessUserWithIdResponse %p -> %p\n", q, p));
+	*(tns__blessUserWithIdResponse*)p = *(tns__blessUserWithIdResponse*)q;
+}
+
+void tns__blessUserWithId::soap_default(struct soap *soap)
+{
+	this->soap = soap;
+	soap_default_LONG64(soap, &this->tns__blessUserWithId::arg0);
+	this->tns__blessUserWithId::userName = NULL;
+	this->tns__blessUserWithId::password = NULL;
+	/* transient soap skipped */
+}
+
+void tns__blessUserWithId::soap_serialize(struct soap *soap) const
+{
+	(void)soap; /* appease -Wall -Werror */
+	soap_serialize_PointerTostd__string(soap, &this->tns__blessUserWithId::userName);
+	soap_serialize_PointerTostd__string(soap, &this->tns__blessUserWithId::password);
+	/* transient soap skipped */
+}
+
+int tns__blessUserWithId::soap_out(struct soap *soap, const char *tag, int id, const char *type) const
+{
+	return soap_out_tns__blessUserWithId(soap, tag, id, this, type);
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__blessUserWithId(struct soap *soap, const char *tag, int id, const tns__blessUserWithId *a, const char *type)
+{
+	if (soap_element_begin_out(soap, tag, soap_embedded_id(soap, id, a, SOAP_TYPE_ServerSoap_tns__blessUserWithId), type))
+		return soap->error;
+	if (soap_out_LONG64(soap, "arg0", -1, &(a->tns__blessUserWithId::arg0), ""))
+		return soap->error;
+	if (soap_out_PointerTostd__string(soap, "userName", -1, &(a->tns__blessUserWithId::userName), ""))
+		return soap->error;
+	if (soap_out_PointerTostd__string(soap, "password", -1, &(a->tns__blessUserWithId::password), ""))
+		return soap->error;
+	/* transient soap skipped */
+	return soap_element_end_out(soap, tag);
+}
+
+void *tns__blessUserWithId::soap_in(struct soap *soap, const char *tag, const char *type)
+{	return soap_in_tns__blessUserWithId(soap, tag, this, type);
+}
+
+SOAP_FMAC3 tns__blessUserWithId * SOAP_FMAC4 soap_in_tns__blessUserWithId(struct soap *soap, const char *tag, tns__blessUserWithId *a, const char *type)
+{
+	(void)type; /* appease -Wall -Werror */
+	if (soap_element_begin_in(soap, tag, 0, NULL))
+		return NULL;
+	a = (tns__blessUserWithId *)soap_class_id_enter(soap, soap->id, a, SOAP_TYPE_ServerSoap_tns__blessUserWithId, sizeof(tns__blessUserWithId), soap->type, soap->arrayType);
+	if (!a)
+		return NULL;
+	if (soap->alloced)
+	{	a->soap_default(soap);
+		if (soap->clist->type != SOAP_TYPE_ServerSoap_tns__blessUserWithId)
+		{	soap_revert(soap);
+			*soap->id = '\0';
+			return (tns__blessUserWithId *)a->soap_in(soap, tag, type);
+		}
+	}
+	size_t soap_flag_arg01 = 1;
+	size_t soap_flag_userName1 = 1;
+	size_t soap_flag_password1 = 1;
+	if (soap->body && !*soap->href)
+	{
+		for (;;)
+		{	soap->error = SOAP_TAG_MISMATCH;
+			if (soap_flag_arg01 && soap->error == SOAP_TAG_MISMATCH)
+				if (soap_in_LONG64(soap, "arg0", &(a->tns__blessUserWithId::arg0), "xsd:long"))
+				{	soap_flag_arg01--;
+					continue;
+				}
+			if (soap_flag_userName1 && (soap->error == SOAP_TAG_MISMATCH || soap->error == SOAP_NO_TAG))
+				if (soap_in_PointerTostd__string(soap, "userName", &(a->tns__blessUserWithId::userName), "xsd:string"))
+				{	soap_flag_userName1--;
+					continue;
+				}
+			if (soap_flag_password1 && (soap->error == SOAP_TAG_MISMATCH || soap->error == SOAP_NO_TAG))
+				if (soap_in_PointerTostd__string(soap, "password", &(a->tns__blessUserWithId::password), "xsd:string"))
+				{	soap_flag_password1--;
+					continue;
+				}
+			/* transient soap skipped */
+			if (soap->error == SOAP_TAG_MISMATCH)
+				soap->error = soap_ignore_element(soap);
+			if (soap->error == SOAP_NO_TAG)
+				break;
+			if (soap->error)
+				return NULL;
+		}
+		if (soap_element_end_in(soap, tag))
+			return NULL;
+	}
+	else
+	{	a = (tns__blessUserWithId *)soap_id_forward(soap, soap->href, (void*)a, 0, SOAP_TYPE_ServerSoap_tns__blessUserWithId, 0, sizeof(tns__blessUserWithId), 0, soap_copy_tns__blessUserWithId);
+		if (soap->body && soap_element_end_in(soap, tag))
+			return NULL;
+	}
+	if ((soap->mode & SOAP_XML_STRICT) && (soap_flag_arg01 > 0))
+	{	soap->error = SOAP_OCCURS;
+		return NULL;
+	}
+	return a;
+}
+
+int tns__blessUserWithId::soap_put(struct soap *soap, const char *tag, const  char *type) const
+{
+	register int id = soap_embed(soap, (void*)this, NULL, 0, tag, SOAP_TYPE_ServerSoap_tns__blessUserWithId);
+	if (this->soap_out(soap, tag?tag:"tns:blessUserWithId", id, type))
+		return soap->error;
+	return soap_putindependent(soap);
+}
+
+void *tns__blessUserWithId::soap_get(struct soap *soap, const char *tag, const char *type)
+{
+	return soap_get_tns__blessUserWithId(soap, this, tag, type);
+}
+
+SOAP_FMAC3 tns__blessUserWithId * SOAP_FMAC4 soap_get_tns__blessUserWithId(struct soap *soap, tns__blessUserWithId *p, const char *tag, const char *type)
+{
+	if ((p = soap_in_tns__blessUserWithId(soap, tag, p, type)))
+		if (soap_getindependent(soap))
+			return NULL;
+	return p;
+}
+
+SOAP_FMAC1 tns__blessUserWithId * SOAP_FMAC2 soap_instantiate_tns__blessUserWithId(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
+{
+	(void)type; (void)arrayType; /* appease -Wall -Werror */
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate_tns__blessUserWithId(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
+	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap_tns__blessUserWithId, n, ServerSoap_fdelete);
+	if (!cp)
+		return NULL;
+	if (n < 0)
+	{	cp->ptr = (void*)SOAP_NEW(tns__blessUserWithId);
+		if (size)
+			*size = sizeof(tns__blessUserWithId);
+		((tns__blessUserWithId*)cp->ptr)->soap = soap;
+	}
+	else
+	{	cp->ptr = (void*)SOAP_NEW(tns__blessUserWithId[n]);
+		if (!cp->ptr)
+		{	soap->error = SOAP_EOM;
+			return NULL;
+		}
+		if (size)
+			*size = n * sizeof(tns__blessUserWithId);
+		for (int i = 0; i < n; i++)
+			((tns__blessUserWithId*)cp->ptr)[i].soap = soap;
+	}
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
+	return (tns__blessUserWithId*)cp->ptr;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy_tns__blessUserWithId(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
+{
+	(void)soap; (void)tt; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying tns__blessUserWithId %p -> %p\n", q, p));
+	*(tns__blessUserWithId*)p = *(tns__blessUserWithId*)q;
+}
+
 void tns__blessMediaTokenWithIdResponse::soap_default(struct soap *soap)
 {
 	this->soap = soap;
@@ -13468,7 +14558,8 @@ void tns__mediaToken::soap_default(struct soap *soap)
 	soap_default_LONG64(soap, &this->tns__mediaToken::createTime);
 	soap_default_int(soap, &this->tns__mediaToken::cursedCount);
 	this->tns__mediaToken::digest = NULL;
-	soap_default_int(soap, &this->tns__mediaToken::digestType);
+	this->tns__mediaToken::source = NULL;
+	soap_default_int(soap, &this->tns__mediaToken::part);
 	soap_default_LONG64(soap, &this->tns__mediaToken::flags);
 	soap_default_LONG64(soap, &this->tns__mediaToken::id);
 	soap_default_int(soap, &this->tns__mediaToken::type);
@@ -13482,6 +14573,7 @@ void tns__mediaToken::soap_serialize(struct soap *soap) const
 {
 	(void)soap; /* appease -Wall -Werror */
 	soap_serialize_PointerTostd__string(soap, &this->tns__mediaToken::digest);
+	soap_serialize_PointerTostd__string(soap, &this->tns__mediaToken::source);
 	/* transient soap skipped */
 }
 
@@ -13506,7 +14598,9 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__mediaToken(struct soap *soap, const char
 		return soap->error;
 	if (soap_out_PointerTostd__string(soap, "digest", -1, &(a->tns__mediaToken::digest), ""))
 		return soap->error;
-	if (soap_out_int(soap, "digestType", -1, &(a->tns__mediaToken::digestType), ""))
+	if (soap_out_PointerTostd__string(soap, "source", -1, &(a->tns__mediaToken::source), ""))
+		return soap->error;
+	if (soap_out_int(soap, "part", -1, &(a->tns__mediaToken::part), ""))
 		return soap->error;
 	if (soap_out_LONG64(soap, "flags", -1, &(a->tns__mediaToken::flags), ""))
 		return soap->error;
@@ -13550,7 +14644,8 @@ SOAP_FMAC3 tns__mediaToken * SOAP_FMAC4 soap_in_tns__mediaToken(struct soap *soa
 	size_t soap_flag_createTime1 = 1;
 	size_t soap_flag_cursedCount1 = 1;
 	size_t soap_flag_digest1 = 1;
-	size_t soap_flag_digestType1 = 1;
+	size_t soap_flag_source1 = 1;
+	size_t soap_flag_part1 = 1;
 	size_t soap_flag_flags1 = 1;
 	size_t soap_flag_id1 = 1;
 	size_t soap_flag_type1 = 1;
@@ -13591,9 +14686,14 @@ SOAP_FMAC3 tns__mediaToken * SOAP_FMAC4 soap_in_tns__mediaToken(struct soap *soa
 				{	soap_flag_digest1--;
 					continue;
 				}
-			if (soap_flag_digestType1 && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_int(soap, "digestType", &(a->tns__mediaToken::digestType), "xsd:int"))
-				{	soap_flag_digestType1--;
+			if (soap_flag_source1 && (soap->error == SOAP_TAG_MISMATCH || soap->error == SOAP_NO_TAG))
+				if (soap_in_PointerTostd__string(soap, "source", &(a->tns__mediaToken::source), "xsd:string"))
+				{	soap_flag_source1--;
+					continue;
+				}
+			if (soap_flag_part1 && soap->error == SOAP_TAG_MISMATCH)
+				if (soap_in_int(soap, "part", &(a->tns__mediaToken::part), "xsd:int"))
+				{	soap_flag_part1--;
 					continue;
 				}
 			if (soap_flag_flags1 && soap->error == SOAP_TAG_MISMATCH)
@@ -13642,7 +14742,7 @@ SOAP_FMAC3 tns__mediaToken * SOAP_FMAC4 soap_in_tns__mediaToken(struct soap *soa
 		if (soap->body && soap_element_end_in(soap, tag))
 			return NULL;
 	}
-	if ((soap->mode & SOAP_XML_STRICT) && (soap_flag_annotCount1 > 0 || soap_flag_blessedCount1 > 0 || soap_flag_blockedCount1 > 0 || soap_flag_createTime1 > 0 || soap_flag_cursedCount1 > 0 || soap_flag_digestType1 > 0 || soap_flag_flags1 > 0 || soap_flag_id1 > 0 || soap_flag_type1 > 0 || soap_flag_status1 > 0 || soap_flag_userId1 > 0 || soap_flag_visitedCount1 > 0))
+	if ((soap->mode & SOAP_XML_STRICT) && (soap_flag_annotCount1 > 0 || soap_flag_blessedCount1 > 0 || soap_flag_blockedCount1 > 0 || soap_flag_createTime1 > 0 || soap_flag_cursedCount1 > 0 || soap_flag_part1 > 0 || soap_flag_flags1 > 0 || soap_flag_id1 > 0 || soap_flag_type1 > 0 || soap_flag_status1 > 0 || soap_flag_userId1 > 0 || soap_flag_visitedCount1 > 0))
 	{	soap->error = SOAP_OCCURS;
 		return NULL;
 	}
@@ -15073,6 +16173,102 @@ SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__updateMediaAnnotationTextWithId(stru
 	(void)soap; (void)tt; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
 	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying struct __tns__updateMediaAnnotationTextWithId %p -> %p\n", q, p));
 	*(struct __tns__updateMediaAnnotationTextWithId*)p = *(struct __tns__updateMediaAnnotationTextWithId*)q;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__submitMediaTokenSource(struct soap *soap, struct __tns__submitMediaTokenSource *a)
+{
+	(void)soap; (void)a; /* appease -Wall -Werror */
+	a->tns__submitMediaTokenSource_ = NULL;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___tns__submitMediaTokenSource(struct soap *soap, const struct __tns__submitMediaTokenSource *a)
+{
+	(void)soap; (void)a; /* appease -Wall -Werror */
+	soap_serialize_PointerTotns__submitMediaTokenSource(soap, &a->tns__submitMediaTokenSource_);
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out___tns__submitMediaTokenSource(struct soap *soap, const char *tag, int id, const struct __tns__submitMediaTokenSource *a, const char *type)
+{
+	(void)soap; (void)tag; (void)id; (void)type;
+	if (soap_out_PointerTotns__submitMediaTokenSource(soap, "tns:submitMediaTokenSource", -1, &a->tns__submitMediaTokenSource_, ""))
+		return soap->error;
+	return SOAP_OK;
+}
+
+SOAP_FMAC3 struct __tns__submitMediaTokenSource * SOAP_FMAC4 soap_in___tns__submitMediaTokenSource(struct soap *soap, const char *tag, struct __tns__submitMediaTokenSource *a, const char *type)
+{
+	size_t soap_flag_tns__submitMediaTokenSource_ = 1;
+	short soap_flag;
+	a = (struct __tns__submitMediaTokenSource *)soap_id_enter(soap, "", a, SOAP_TYPE_ServerSoap___tns__submitMediaTokenSource, sizeof(struct __tns__submitMediaTokenSource), 0, NULL, NULL, NULL);
+	if (!a)
+		return NULL;
+	soap_default___tns__submitMediaTokenSource(soap, a);
+		for (soap_flag = 0;; soap_flag = 1)
+		{	soap->error = SOAP_TAG_MISMATCH;
+			if (soap_flag_tns__submitMediaTokenSource_ && soap->error == SOAP_TAG_MISMATCH)
+				if (soap_in_PointerTotns__submitMediaTokenSource(soap, "tns:submitMediaTokenSource", &a->tns__submitMediaTokenSource_, "tns:submitMediaTokenSource"))
+				{	soap_flag_tns__submitMediaTokenSource_--;
+					continue;
+				}
+			if (soap->error == SOAP_TAG_MISMATCH)
+				if (soap_flag)
+				{	soap->error = SOAP_OK;
+					break;
+				}
+			if (soap_flag && soap->error == SOAP_NO_TAG)
+				break;
+			if (soap->error)
+				return NULL;
+		}
+	return a;
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_put___tns__submitMediaTokenSource(struct soap *soap, const struct __tns__submitMediaTokenSource *a, const char *tag, const char *type)
+{
+	register int id = 0;
+	if (soap_out___tns__submitMediaTokenSource(soap, tag?tag:"-tns:submitMediaTokenSource", id, a, type))
+		return soap->error;
+	return SOAP_OK;
+}
+
+SOAP_FMAC3 struct __tns__submitMediaTokenSource * SOAP_FMAC4 soap_get___tns__submitMediaTokenSource(struct soap *soap, struct __tns__submitMediaTokenSource *p, const char *tag, const char *type)
+{
+	if ((p = soap_in___tns__submitMediaTokenSource(soap, tag, p, type)))
+		if (soap_getindependent(soap))
+			return NULL;
+	return p;
+}
+
+SOAP_FMAC1 struct __tns__submitMediaTokenSource * SOAP_FMAC2 soap_instantiate___tns__submitMediaTokenSource(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
+{
+	(void)type; (void)arrayType; /* appease -Wall -Werror */
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate___tns__submitMediaTokenSource(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
+	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap___tns__submitMediaTokenSource, n, ServerSoap_fdelete);
+	if (!cp)
+		return NULL;
+	if (n < 0)
+	{	cp->ptr = (void*)SOAP_NEW(struct __tns__submitMediaTokenSource);
+		if (size)
+			*size = sizeof(struct __tns__submitMediaTokenSource);
+	}
+	else
+	{	cp->ptr = (void*)SOAP_NEW(struct __tns__submitMediaTokenSource[n]);
+		if (!cp->ptr)
+		{	soap->error = SOAP_EOM;
+			return NULL;
+		}
+		if (size)
+			*size = n * sizeof(struct __tns__submitMediaTokenSource);
+	}
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
+	return (struct __tns__submitMediaTokenSource*)cp->ptr;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__submitMediaTokenSource(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
+{
+	(void)soap; (void)tt; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying struct __tns__submitMediaTokenSource %p -> %p\n", q, p));
+	*(struct __tns__submitMediaTokenSource*)p = *(struct __tns__submitMediaTokenSource*)q;
 }
 
 SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__submitMediaTokenDigest(struct soap *soap, struct __tns__submitMediaTokenDigest *a)
@@ -17283,6 +18479,102 @@ SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__deleteMediaAliasWithId(struct soap *
 	*(struct __tns__deleteMediaAliasWithId*)p = *(struct __tns__deleteMediaAliasWithId*)q;
 }
 
+SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__curseUserWithId(struct soap *soap, struct __tns__curseUserWithId *a)
+{
+	(void)soap; (void)a; /* appease -Wall -Werror */
+	a->tns__curseUserWithId_ = NULL;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___tns__curseUserWithId(struct soap *soap, const struct __tns__curseUserWithId *a)
+{
+	(void)soap; (void)a; /* appease -Wall -Werror */
+	soap_serialize_PointerTotns__curseUserWithId(soap, &a->tns__curseUserWithId_);
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out___tns__curseUserWithId(struct soap *soap, const char *tag, int id, const struct __tns__curseUserWithId *a, const char *type)
+{
+	(void)soap; (void)tag; (void)id; (void)type;
+	if (soap_out_PointerTotns__curseUserWithId(soap, "tns:curseUserWithId", -1, &a->tns__curseUserWithId_, ""))
+		return soap->error;
+	return SOAP_OK;
+}
+
+SOAP_FMAC3 struct __tns__curseUserWithId * SOAP_FMAC4 soap_in___tns__curseUserWithId(struct soap *soap, const char *tag, struct __tns__curseUserWithId *a, const char *type)
+{
+	size_t soap_flag_tns__curseUserWithId_ = 1;
+	short soap_flag;
+	a = (struct __tns__curseUserWithId *)soap_id_enter(soap, "", a, SOAP_TYPE_ServerSoap___tns__curseUserWithId, sizeof(struct __tns__curseUserWithId), 0, NULL, NULL, NULL);
+	if (!a)
+		return NULL;
+	soap_default___tns__curseUserWithId(soap, a);
+		for (soap_flag = 0;; soap_flag = 1)
+		{	soap->error = SOAP_TAG_MISMATCH;
+			if (soap_flag_tns__curseUserWithId_ && soap->error == SOAP_TAG_MISMATCH)
+				if (soap_in_PointerTotns__curseUserWithId(soap, "tns:curseUserWithId", &a->tns__curseUserWithId_, "tns:curseUserWithId"))
+				{	soap_flag_tns__curseUserWithId_--;
+					continue;
+				}
+			if (soap->error == SOAP_TAG_MISMATCH)
+				if (soap_flag)
+				{	soap->error = SOAP_OK;
+					break;
+				}
+			if (soap_flag && soap->error == SOAP_NO_TAG)
+				break;
+			if (soap->error)
+				return NULL;
+		}
+	return a;
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_put___tns__curseUserWithId(struct soap *soap, const struct __tns__curseUserWithId *a, const char *tag, const char *type)
+{
+	register int id = 0;
+	if (soap_out___tns__curseUserWithId(soap, tag?tag:"-tns:curseUserWithId", id, a, type))
+		return soap->error;
+	return SOAP_OK;
+}
+
+SOAP_FMAC3 struct __tns__curseUserWithId * SOAP_FMAC4 soap_get___tns__curseUserWithId(struct soap *soap, struct __tns__curseUserWithId *p, const char *tag, const char *type)
+{
+	if ((p = soap_in___tns__curseUserWithId(soap, tag, p, type)))
+		if (soap_getindependent(soap))
+			return NULL;
+	return p;
+}
+
+SOAP_FMAC1 struct __tns__curseUserWithId * SOAP_FMAC2 soap_instantiate___tns__curseUserWithId(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
+{
+	(void)type; (void)arrayType; /* appease -Wall -Werror */
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate___tns__curseUserWithId(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
+	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap___tns__curseUserWithId, n, ServerSoap_fdelete);
+	if (!cp)
+		return NULL;
+	if (n < 0)
+	{	cp->ptr = (void*)SOAP_NEW(struct __tns__curseUserWithId);
+		if (size)
+			*size = sizeof(struct __tns__curseUserWithId);
+	}
+	else
+	{	cp->ptr = (void*)SOAP_NEW(struct __tns__curseUserWithId[n]);
+		if (!cp->ptr)
+		{	soap->error = SOAP_EOM;
+			return NULL;
+		}
+		if (size)
+			*size = n * sizeof(struct __tns__curseUserWithId);
+	}
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
+	return (struct __tns__curseUserWithId*)cp->ptr;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__curseUserWithId(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
+{
+	(void)soap; (void)tt; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying struct __tns__curseUserWithId %p -> %p\n", q, p));
+	*(struct __tns__curseUserWithId*)p = *(struct __tns__curseUserWithId*)q;
+}
+
 SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__curseMediaTokenWithId(struct soap *soap, struct __tns__curseMediaTokenWithId *a)
 {
 	(void)soap; (void)a; /* appease -Wall -Werror */
@@ -17955,6 +19247,102 @@ SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__blockMediaAliasWithId(struct soap *s
 	*(struct __tns__blockMediaAliasWithId*)p = *(struct __tns__blockMediaAliasWithId*)q;
 }
 
+SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__blessUserWithId(struct soap *soap, struct __tns__blessUserWithId *a)
+{
+	(void)soap; (void)a; /* appease -Wall -Werror */
+	a->tns__blessUserWithId_ = NULL;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize___tns__blessUserWithId(struct soap *soap, const struct __tns__blessUserWithId *a)
+{
+	(void)soap; (void)a; /* appease -Wall -Werror */
+	soap_serialize_PointerTotns__blessUserWithId(soap, &a->tns__blessUserWithId_);
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out___tns__blessUserWithId(struct soap *soap, const char *tag, int id, const struct __tns__blessUserWithId *a, const char *type)
+{
+	(void)soap; (void)tag; (void)id; (void)type;
+	if (soap_out_PointerTotns__blessUserWithId(soap, "tns:blessUserWithId", -1, &a->tns__blessUserWithId_, ""))
+		return soap->error;
+	return SOAP_OK;
+}
+
+SOAP_FMAC3 struct __tns__blessUserWithId * SOAP_FMAC4 soap_in___tns__blessUserWithId(struct soap *soap, const char *tag, struct __tns__blessUserWithId *a, const char *type)
+{
+	size_t soap_flag_tns__blessUserWithId_ = 1;
+	short soap_flag;
+	a = (struct __tns__blessUserWithId *)soap_id_enter(soap, "", a, SOAP_TYPE_ServerSoap___tns__blessUserWithId, sizeof(struct __tns__blessUserWithId), 0, NULL, NULL, NULL);
+	if (!a)
+		return NULL;
+	soap_default___tns__blessUserWithId(soap, a);
+		for (soap_flag = 0;; soap_flag = 1)
+		{	soap->error = SOAP_TAG_MISMATCH;
+			if (soap_flag_tns__blessUserWithId_ && soap->error == SOAP_TAG_MISMATCH)
+				if (soap_in_PointerTotns__blessUserWithId(soap, "tns:blessUserWithId", &a->tns__blessUserWithId_, "tns:blessUserWithId"))
+				{	soap_flag_tns__blessUserWithId_--;
+					continue;
+				}
+			if (soap->error == SOAP_TAG_MISMATCH)
+				if (soap_flag)
+				{	soap->error = SOAP_OK;
+					break;
+				}
+			if (soap_flag && soap->error == SOAP_NO_TAG)
+				break;
+			if (soap->error)
+				return NULL;
+		}
+	return a;
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_put___tns__blessUserWithId(struct soap *soap, const struct __tns__blessUserWithId *a, const char *tag, const char *type)
+{
+	register int id = 0;
+	if (soap_out___tns__blessUserWithId(soap, tag?tag:"-tns:blessUserWithId", id, a, type))
+		return soap->error;
+	return SOAP_OK;
+}
+
+SOAP_FMAC3 struct __tns__blessUserWithId * SOAP_FMAC4 soap_get___tns__blessUserWithId(struct soap *soap, struct __tns__blessUserWithId *p, const char *tag, const char *type)
+{
+	if ((p = soap_in___tns__blessUserWithId(soap, tag, p, type)))
+		if (soap_getindependent(soap))
+			return NULL;
+	return p;
+}
+
+SOAP_FMAC1 struct __tns__blessUserWithId * SOAP_FMAC2 soap_instantiate___tns__blessUserWithId(struct soap *soap, int n, const char *type, const char *arrayType, size_t *size)
+{
+	(void)type; (void)arrayType; /* appease -Wall -Werror */
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "soap_instantiate___tns__blessUserWithId(%d, %s, %s)\n", n, type?type:"", arrayType?arrayType:""));
+	struct soap_clist *cp = soap_link(soap, NULL, SOAP_TYPE_ServerSoap___tns__blessUserWithId, n, ServerSoap_fdelete);
+	if (!cp)
+		return NULL;
+	if (n < 0)
+	{	cp->ptr = (void*)SOAP_NEW(struct __tns__blessUserWithId);
+		if (size)
+			*size = sizeof(struct __tns__blessUserWithId);
+	}
+	else
+	{	cp->ptr = (void*)SOAP_NEW(struct __tns__blessUserWithId[n]);
+		if (!cp->ptr)
+		{	soap->error = SOAP_EOM;
+			return NULL;
+		}
+		if (size)
+			*size = n * sizeof(struct __tns__blessUserWithId);
+	}
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Instantiated location=%p\n", cp->ptr));
+	return (struct __tns__blessUserWithId*)cp->ptr;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy___tns__blessUserWithId(struct soap *soap, int st, int tt, void *p, size_t len, const void *q, size_t n)
+{
+	(void)soap; (void)tt; (void)st; (void)len; (void)n; /* appease -Wall -Werror */
+	DBGLOG(TEST, SOAP_MESSAGE(fdebug, "Copying struct __tns__blessUserWithId %p -> %p\n", q, p));
+	*(struct __tns__blessUserWithId*)p = *(struct __tns__blessUserWithId*)q;
+}
+
 SOAP_FMAC3 void SOAP_FMAC4 soap_default___tns__blessMediaTokenWithId(struct soap *soap, struct __tns__blessMediaTokenWithId *a)
 {
 	(void)soap; (void)a; /* appease -Wall -Werror */
@@ -18513,6 +19901,116 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__updateMediaAnnotationTextWithId
 SOAP_FMAC3 tns__updateMediaAnnotationTextWithId ** SOAP_FMAC4 soap_get_PointerTotns__updateMediaAnnotationTextWithId(struct soap *soap, tns__updateMediaAnnotationTextWithId **p, const char *tag, const char *type)
 {
 	if ((p = soap_in_PointerTotns__updateMediaAnnotationTextWithId(soap, tag, p, type)))
+		if (soap_getindependent(soap))
+			return NULL;
+	return p;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__submitMediaTokenSourceResponse(struct soap *soap, tns__submitMediaTokenSourceResponse *const*a)
+{
+	if (!soap_reference(soap, *a, SOAP_TYPE_ServerSoap_tns__submitMediaTokenSourceResponse))
+		(*a)->soap_serialize(soap);
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__submitMediaTokenSourceResponse(struct soap *soap, const char *tag, int id, tns__submitMediaTokenSourceResponse *const*a, const char *type)
+{
+	id = soap_element_id(soap, tag, id, *a, NULL, 0, type, SOAP_TYPE_ServerSoap_tns__submitMediaTokenSourceResponse);
+	if (id < 0)
+		return soap->error;
+	return (*a)->soap_out(soap, tag, id, type);
+}
+
+SOAP_FMAC3 tns__submitMediaTokenSourceResponse ** SOAP_FMAC4 soap_in_PointerTotns__submitMediaTokenSourceResponse(struct soap *soap, const char *tag, tns__submitMediaTokenSourceResponse **a, const char *type)
+{
+	if (soap_element_begin_in(soap, tag, 1, NULL))
+		return NULL;
+	if (!a)
+		if (!(a = (tns__submitMediaTokenSourceResponse **)soap_malloc(soap, sizeof(tns__submitMediaTokenSourceResponse *))))
+			return NULL;
+	*a = NULL;
+	if (!soap->null && *soap->href != '#')
+	{	soap_revert(soap);
+		if (!(*a = (tns__submitMediaTokenSourceResponse *)soap_instantiate_tns__submitMediaTokenSourceResponse(soap, -1, soap->type, soap->arrayType, NULL)))
+			return NULL;
+		(*a)->soap_default(soap);
+		if (!(*a)->soap_in(soap, tag, NULL))
+			return NULL;
+	}
+	else
+	{	tns__submitMediaTokenSourceResponse ** p = (tns__submitMediaTokenSourceResponse **)soap_id_lookup(soap, soap->href, (void**)a, SOAP_TYPE_ServerSoap_tns__submitMediaTokenSourceResponse, sizeof(tns__submitMediaTokenSourceResponse), 0);
+		a = p;
+		if (soap->body && soap_element_end_in(soap, tag))
+			return NULL;
+	}
+	return a;
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__submitMediaTokenSourceResponse(struct soap *soap, tns__submitMediaTokenSourceResponse *const*a, const char *tag, const char *type)
+{
+	register int id = soap_embed(soap, (void*)a, NULL, 0, tag, SOAP_TYPE_ServerSoap_PointerTotns__submitMediaTokenSourceResponse);
+	if (soap_out_PointerTotns__submitMediaTokenSourceResponse(soap, tag?tag:"tns:submitMediaTokenSourceResponse", id, a, type))
+		return soap->error;
+	return soap_putindependent(soap);
+}
+
+SOAP_FMAC3 tns__submitMediaTokenSourceResponse ** SOAP_FMAC4 soap_get_PointerTotns__submitMediaTokenSourceResponse(struct soap *soap, tns__submitMediaTokenSourceResponse **p, const char *tag, const char *type)
+{
+	if ((p = soap_in_PointerTotns__submitMediaTokenSourceResponse(soap, tag, p, type)))
+		if (soap_getindependent(soap))
+			return NULL;
+	return p;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__submitMediaTokenSource(struct soap *soap, tns__submitMediaTokenSource *const*a)
+{
+	if (!soap_reference(soap, *a, SOAP_TYPE_ServerSoap_tns__submitMediaTokenSource))
+		(*a)->soap_serialize(soap);
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__submitMediaTokenSource(struct soap *soap, const char *tag, int id, tns__submitMediaTokenSource *const*a, const char *type)
+{
+	id = soap_element_id(soap, tag, id, *a, NULL, 0, type, SOAP_TYPE_ServerSoap_tns__submitMediaTokenSource);
+	if (id < 0)
+		return soap->error;
+	return (*a)->soap_out(soap, tag, id, type);
+}
+
+SOAP_FMAC3 tns__submitMediaTokenSource ** SOAP_FMAC4 soap_in_PointerTotns__submitMediaTokenSource(struct soap *soap, const char *tag, tns__submitMediaTokenSource **a, const char *type)
+{
+	if (soap_element_begin_in(soap, tag, 1, NULL))
+		return NULL;
+	if (!a)
+		if (!(a = (tns__submitMediaTokenSource **)soap_malloc(soap, sizeof(tns__submitMediaTokenSource *))))
+			return NULL;
+	*a = NULL;
+	if (!soap->null && *soap->href != '#')
+	{	soap_revert(soap);
+		if (!(*a = (tns__submitMediaTokenSource *)soap_instantiate_tns__submitMediaTokenSource(soap, -1, soap->type, soap->arrayType, NULL)))
+			return NULL;
+		(*a)->soap_default(soap);
+		if (!(*a)->soap_in(soap, tag, NULL))
+			return NULL;
+	}
+	else
+	{	tns__submitMediaTokenSource ** p = (tns__submitMediaTokenSource **)soap_id_lookup(soap, soap->href, (void**)a, SOAP_TYPE_ServerSoap_tns__submitMediaTokenSource, sizeof(tns__submitMediaTokenSource), 0);
+		a = p;
+		if (soap->body && soap_element_end_in(soap, tag))
+			return NULL;
+	}
+	return a;
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__submitMediaTokenSource(struct soap *soap, tns__submitMediaTokenSource *const*a, const char *tag, const char *type)
+{
+	register int id = soap_embed(soap, (void*)a, NULL, 0, tag, SOAP_TYPE_ServerSoap_PointerTotns__submitMediaTokenSource);
+	if (soap_out_PointerTotns__submitMediaTokenSource(soap, tag?tag:"tns:submitMediaTokenSource", id, a, type))
+		return soap->error;
+	return soap_putindependent(soap);
+}
+
+SOAP_FMAC3 tns__submitMediaTokenSource ** SOAP_FMAC4 soap_get_PointerTotns__submitMediaTokenSource(struct soap *soap, tns__submitMediaTokenSource **p, const char *tag, const char *type)
+{
+	if ((p = soap_in_PointerTotns__submitMediaTokenSource(soap, tag, p, type)))
 		if (soap_getindependent(soap))
 			return NULL;
 	return p;
@@ -21048,6 +22546,116 @@ SOAP_FMAC3 tns__deleteMediaAliasWithId ** SOAP_FMAC4 soap_get_PointerTotns__dele
 	return p;
 }
 
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__curseUserWithIdResponse(struct soap *soap, tns__curseUserWithIdResponse *const*a)
+{
+	if (!soap_reference(soap, *a, SOAP_TYPE_ServerSoap_tns__curseUserWithIdResponse))
+		(*a)->soap_serialize(soap);
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__curseUserWithIdResponse(struct soap *soap, const char *tag, int id, tns__curseUserWithIdResponse *const*a, const char *type)
+{
+	id = soap_element_id(soap, tag, id, *a, NULL, 0, type, SOAP_TYPE_ServerSoap_tns__curseUserWithIdResponse);
+	if (id < 0)
+		return soap->error;
+	return (*a)->soap_out(soap, tag, id, type);
+}
+
+SOAP_FMAC3 tns__curseUserWithIdResponse ** SOAP_FMAC4 soap_in_PointerTotns__curseUserWithIdResponse(struct soap *soap, const char *tag, tns__curseUserWithIdResponse **a, const char *type)
+{
+	if (soap_element_begin_in(soap, tag, 1, NULL))
+		return NULL;
+	if (!a)
+		if (!(a = (tns__curseUserWithIdResponse **)soap_malloc(soap, sizeof(tns__curseUserWithIdResponse *))))
+			return NULL;
+	*a = NULL;
+	if (!soap->null && *soap->href != '#')
+	{	soap_revert(soap);
+		if (!(*a = (tns__curseUserWithIdResponse *)soap_instantiate_tns__curseUserWithIdResponse(soap, -1, soap->type, soap->arrayType, NULL)))
+			return NULL;
+		(*a)->soap_default(soap);
+		if (!(*a)->soap_in(soap, tag, NULL))
+			return NULL;
+	}
+	else
+	{	tns__curseUserWithIdResponse ** p = (tns__curseUserWithIdResponse **)soap_id_lookup(soap, soap->href, (void**)a, SOAP_TYPE_ServerSoap_tns__curseUserWithIdResponse, sizeof(tns__curseUserWithIdResponse), 0);
+		a = p;
+		if (soap->body && soap_element_end_in(soap, tag))
+			return NULL;
+	}
+	return a;
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__curseUserWithIdResponse(struct soap *soap, tns__curseUserWithIdResponse *const*a, const char *tag, const char *type)
+{
+	register int id = soap_embed(soap, (void*)a, NULL, 0, tag, SOAP_TYPE_ServerSoap_PointerTotns__curseUserWithIdResponse);
+	if (soap_out_PointerTotns__curseUserWithIdResponse(soap, tag?tag:"tns:curseUserWithIdResponse", id, a, type))
+		return soap->error;
+	return soap_putindependent(soap);
+}
+
+SOAP_FMAC3 tns__curseUserWithIdResponse ** SOAP_FMAC4 soap_get_PointerTotns__curseUserWithIdResponse(struct soap *soap, tns__curseUserWithIdResponse **p, const char *tag, const char *type)
+{
+	if ((p = soap_in_PointerTotns__curseUserWithIdResponse(soap, tag, p, type)))
+		if (soap_getindependent(soap))
+			return NULL;
+	return p;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__curseUserWithId(struct soap *soap, tns__curseUserWithId *const*a)
+{
+	if (!soap_reference(soap, *a, SOAP_TYPE_ServerSoap_tns__curseUserWithId))
+		(*a)->soap_serialize(soap);
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__curseUserWithId(struct soap *soap, const char *tag, int id, tns__curseUserWithId *const*a, const char *type)
+{
+	id = soap_element_id(soap, tag, id, *a, NULL, 0, type, SOAP_TYPE_ServerSoap_tns__curseUserWithId);
+	if (id < 0)
+		return soap->error;
+	return (*a)->soap_out(soap, tag, id, type);
+}
+
+SOAP_FMAC3 tns__curseUserWithId ** SOAP_FMAC4 soap_in_PointerTotns__curseUserWithId(struct soap *soap, const char *tag, tns__curseUserWithId **a, const char *type)
+{
+	if (soap_element_begin_in(soap, tag, 1, NULL))
+		return NULL;
+	if (!a)
+		if (!(a = (tns__curseUserWithId **)soap_malloc(soap, sizeof(tns__curseUserWithId *))))
+			return NULL;
+	*a = NULL;
+	if (!soap->null && *soap->href != '#')
+	{	soap_revert(soap);
+		if (!(*a = (tns__curseUserWithId *)soap_instantiate_tns__curseUserWithId(soap, -1, soap->type, soap->arrayType, NULL)))
+			return NULL;
+		(*a)->soap_default(soap);
+		if (!(*a)->soap_in(soap, tag, NULL))
+			return NULL;
+	}
+	else
+	{	tns__curseUserWithId ** p = (tns__curseUserWithId **)soap_id_lookup(soap, soap->href, (void**)a, SOAP_TYPE_ServerSoap_tns__curseUserWithId, sizeof(tns__curseUserWithId), 0);
+		a = p;
+		if (soap->body && soap_element_end_in(soap, tag))
+			return NULL;
+	}
+	return a;
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__curseUserWithId(struct soap *soap, tns__curseUserWithId *const*a, const char *tag, const char *type)
+{
+	register int id = soap_embed(soap, (void*)a, NULL, 0, tag, SOAP_TYPE_ServerSoap_PointerTotns__curseUserWithId);
+	if (soap_out_PointerTotns__curseUserWithId(soap, tag?tag:"tns:curseUserWithId", id, a, type))
+		return soap->error;
+	return soap_putindependent(soap);
+}
+
+SOAP_FMAC3 tns__curseUserWithId ** SOAP_FMAC4 soap_get_PointerTotns__curseUserWithId(struct soap *soap, tns__curseUserWithId **p, const char *tag, const char *type)
+{
+	if ((p = soap_in_PointerTotns__curseUserWithId(soap, tag, p, type)))
+		if (soap_getindependent(soap))
+			return NULL;
+	return p;
+}
+
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__curseMediaTokenWithIdResponse(struct soap *soap, tns__curseMediaTokenWithIdResponse *const*a)
 {
 	if (!soap_reference(soap, *a, SOAP_TYPE_ServerSoap_tns__curseMediaTokenWithIdResponse))
@@ -21813,6 +23421,116 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__blockMediaAliasWithId(struct so
 SOAP_FMAC3 tns__blockMediaAliasWithId ** SOAP_FMAC4 soap_get_PointerTotns__blockMediaAliasWithId(struct soap *soap, tns__blockMediaAliasWithId **p, const char *tag, const char *type)
 {
 	if ((p = soap_in_PointerTotns__blockMediaAliasWithId(soap, tag, p, type)))
+		if (soap_getindependent(soap))
+			return NULL;
+	return p;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__blessUserWithIdResponse(struct soap *soap, tns__blessUserWithIdResponse *const*a)
+{
+	if (!soap_reference(soap, *a, SOAP_TYPE_ServerSoap_tns__blessUserWithIdResponse))
+		(*a)->soap_serialize(soap);
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__blessUserWithIdResponse(struct soap *soap, const char *tag, int id, tns__blessUserWithIdResponse *const*a, const char *type)
+{
+	id = soap_element_id(soap, tag, id, *a, NULL, 0, type, SOAP_TYPE_ServerSoap_tns__blessUserWithIdResponse);
+	if (id < 0)
+		return soap->error;
+	return (*a)->soap_out(soap, tag, id, type);
+}
+
+SOAP_FMAC3 tns__blessUserWithIdResponse ** SOAP_FMAC4 soap_in_PointerTotns__blessUserWithIdResponse(struct soap *soap, const char *tag, tns__blessUserWithIdResponse **a, const char *type)
+{
+	if (soap_element_begin_in(soap, tag, 1, NULL))
+		return NULL;
+	if (!a)
+		if (!(a = (tns__blessUserWithIdResponse **)soap_malloc(soap, sizeof(tns__blessUserWithIdResponse *))))
+			return NULL;
+	*a = NULL;
+	if (!soap->null && *soap->href != '#')
+	{	soap_revert(soap);
+		if (!(*a = (tns__blessUserWithIdResponse *)soap_instantiate_tns__blessUserWithIdResponse(soap, -1, soap->type, soap->arrayType, NULL)))
+			return NULL;
+		(*a)->soap_default(soap);
+		if (!(*a)->soap_in(soap, tag, NULL))
+			return NULL;
+	}
+	else
+	{	tns__blessUserWithIdResponse ** p = (tns__blessUserWithIdResponse **)soap_id_lookup(soap, soap->href, (void**)a, SOAP_TYPE_ServerSoap_tns__blessUserWithIdResponse, sizeof(tns__blessUserWithIdResponse), 0);
+		a = p;
+		if (soap->body && soap_element_end_in(soap, tag))
+			return NULL;
+	}
+	return a;
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__blessUserWithIdResponse(struct soap *soap, tns__blessUserWithIdResponse *const*a, const char *tag, const char *type)
+{
+	register int id = soap_embed(soap, (void*)a, NULL, 0, tag, SOAP_TYPE_ServerSoap_PointerTotns__blessUserWithIdResponse);
+	if (soap_out_PointerTotns__blessUserWithIdResponse(soap, tag?tag:"tns:blessUserWithIdResponse", id, a, type))
+		return soap->error;
+	return soap_putindependent(soap);
+}
+
+SOAP_FMAC3 tns__blessUserWithIdResponse ** SOAP_FMAC4 soap_get_PointerTotns__blessUserWithIdResponse(struct soap *soap, tns__blessUserWithIdResponse **p, const char *tag, const char *type)
+{
+	if ((p = soap_in_PointerTotns__blessUserWithIdResponse(soap, tag, p, type)))
+		if (soap_getindependent(soap))
+			return NULL;
+	return p;
+}
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTotns__blessUserWithId(struct soap *soap, tns__blessUserWithId *const*a)
+{
+	if (!soap_reference(soap, *a, SOAP_TYPE_ServerSoap_tns__blessUserWithId))
+		(*a)->soap_serialize(soap);
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTotns__blessUserWithId(struct soap *soap, const char *tag, int id, tns__blessUserWithId *const*a, const char *type)
+{
+	id = soap_element_id(soap, tag, id, *a, NULL, 0, type, SOAP_TYPE_ServerSoap_tns__blessUserWithId);
+	if (id < 0)
+		return soap->error;
+	return (*a)->soap_out(soap, tag, id, type);
+}
+
+SOAP_FMAC3 tns__blessUserWithId ** SOAP_FMAC4 soap_in_PointerTotns__blessUserWithId(struct soap *soap, const char *tag, tns__blessUserWithId **a, const char *type)
+{
+	if (soap_element_begin_in(soap, tag, 1, NULL))
+		return NULL;
+	if (!a)
+		if (!(a = (tns__blessUserWithId **)soap_malloc(soap, sizeof(tns__blessUserWithId *))))
+			return NULL;
+	*a = NULL;
+	if (!soap->null && *soap->href != '#')
+	{	soap_revert(soap);
+		if (!(*a = (tns__blessUserWithId *)soap_instantiate_tns__blessUserWithId(soap, -1, soap->type, soap->arrayType, NULL)))
+			return NULL;
+		(*a)->soap_default(soap);
+		if (!(*a)->soap_in(soap, tag, NULL))
+			return NULL;
+	}
+	else
+	{	tns__blessUserWithId ** p = (tns__blessUserWithId **)soap_id_lookup(soap, soap->href, (void**)a, SOAP_TYPE_ServerSoap_tns__blessUserWithId, sizeof(tns__blessUserWithId), 0);
+		a = p;
+		if (soap->body && soap_element_end_in(soap, tag))
+			return NULL;
+	}
+	return a;
+}
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTotns__blessUserWithId(struct soap *soap, tns__blessUserWithId *const*a, const char *tag, const char *type)
+{
+	register int id = soap_embed(soap, (void*)a, NULL, 0, tag, SOAP_TYPE_ServerSoap_PointerTotns__blessUserWithId);
+	if (soap_out_PointerTotns__blessUserWithId(soap, tag?tag:"tns:blessUserWithId", id, a, type))
+		return soap->error;
+	return soap_putindependent(soap);
+}
+
+SOAP_FMAC3 tns__blessUserWithId ** SOAP_FMAC4 soap_get_PointerTotns__blessUserWithId(struct soap *soap, tns__blessUserWithId **p, const char *tag, const char *type)
+{
+	if ((p = soap_in_PointerTotns__blessUserWithId(soap, tag, p, type)))
 		if (soap_getindependent(soap))
 			return NULL;
 	return p;

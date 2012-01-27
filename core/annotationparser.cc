@@ -53,6 +53,15 @@ namespace Core {
     if (text.isEmpty() || text[0] != CORE_CMDCH)
       return std::make_pair(QString(), QString());
 
+    // TODO: use while
+    //int index = 0;
+    //foreach (QChar c, text)
+    //  if (isSeparator(c))
+    //    break;
+    //  else
+    //    index++;
+    //if (index >= text.size())
+
     int index = text.indexOf(' ');
     if (index < 0)
       return std::make_pair(text, QString());

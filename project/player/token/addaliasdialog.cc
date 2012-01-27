@@ -27,7 +27,6 @@ AddAliasDialog::AddAliasDialog(QWidget *parent)
   // Widgets
 
   aliasEdit_ = new LineEdit; {
-    aliasEdit_->setStyleSheet(SS_LINEEDIT);
     aliasEdit_->setToolTip(TR(T_TOOLTIP_ADDALIAS));
   }
   connect(aliasEdit_, SIGNAL(returnPressed()), SLOT(ok()));

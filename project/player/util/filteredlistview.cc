@@ -58,7 +58,6 @@ FilteredListView::createLayout()
   }
 
   filterPatternLineEdit_ = new LineEdit; {
-    filterPatternLineEdit_->setStyleSheet(SS_LINEEDIT);
     filterPatternLineEdit_->setToolTip(TR(T_FILTER_PATTERN));
   }
   //QLabel *filterPatternLabel = new QLabel; {

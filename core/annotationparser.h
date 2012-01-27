@@ -73,6 +73,17 @@ namespace Core {
     /// Parse "rgb(r,g,b)".
     static QColor parseRGBColor(const QString &rgb);
 
+  protected:
+    static bool isSeparator(QChar c)
+    {
+      switch (c.unicode()) {
+      case ' ': case '\n': case '\t':
+        return true;
+      default:
+        return false;
+      }
+    }
+
   };
 
 } // namespace Core

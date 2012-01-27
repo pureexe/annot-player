@@ -37,6 +37,7 @@ Tray::createActions()
 
   QAction *MAKE_ACTION(openAct,         OPENFILE,       w_,     SLOT(open()))
   QAction *MAKE_ACTION(openFileAct,     OPENFILE,       w_,     SLOT(openFile()))
+  QAction *MAKE_ACTION(openUrlAct,      OPENURL,        w_,     SLOT(openUrl()))
   QAction *MAKE_ACTION(openWindowAct,   PROCESSPICKDIALOG,w_,   SLOT(openWindow()))
   QAction *MAKE_ACTION(pickWindowAct,   WINDOWPICKDIALOG, w_,   SLOT(showWindowPickDialog()))
   QAction *MAKE_ACTION(aboutAct,        ABOUT,          w_,     SLOT(about()))

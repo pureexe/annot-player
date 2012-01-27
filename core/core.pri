@@ -9,7 +9,6 @@ HEADERS += \
     $$PWD/eventlistener.h \
     $$PWD/htmltag.h \
     $$PWD/macro.h \
-    $$PWD/os.h \
     $$PWD/ss.h \
     $$PWD/cloud/alias.h \
     $$PWD/cloud/annotation.h \
@@ -32,7 +31,6 @@ HEADERS += \
 
 SOURCES += \
     $$PWD/annotationparser.cc \
-    $$PWD/os.cc \
     $$PWD/cloud/alias.cc \
     $$PWD/cloud/annotation.cc \
     $$PWD/cloud/token.cc \

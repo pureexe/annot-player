@@ -64,6 +64,7 @@ TokenView::TokenView(ServerAgent *server, QWidget *parent)
     _id##Buddy->setToolTip(TR(T_TOOLTIP_##_styleid)); \
   }
 
+  //MAKE_TOKEN_LABEL(source, SOURCE)
   MAKE_TOKEN_LABEL(createDate, CREATEDATE)
   MAKE_TOKEN_LABEL(blessedCount, BLESSEDCOUNT)
   MAKE_TOKEN_LABEL(cursedCount, CURSEDCOUNT)
@@ -85,19 +86,36 @@ TokenView::TokenView(ServerAgent *server, QWidget *parent)
   QToolButton *MAKE_BUTTON(addAliasButton, TR(T_ADD), TR(T_TOOLTIP_CURSETHISTOKEN), SLOT(addAlias()))
 #undef MAKE_BUTTON
 
+  QLabel *sourceBuddy = new QLabel; {
+    sourceBuddy->setStyleSheet(SS_LABEL);
+    sourceBuddy->setBuddy(addAliasButton);
+    sourceBuddy->setText(TR(T_LABEL_SOURCE));
+    sourceBuddy->setToolTip(TR(T_TOOLTIP_SOURCE));
+  }
   QLabel *aliasBuddy = new QLabel; {
     aliasBuddy->setStyleSheet(SS_LABEL);
     aliasBuddy->setBuddy(addAliasButton);
     aliasBuddy->setText(TR(T_LABEL_ALIAS));
     aliasBuddy->setToolTip(TR(T_TOOLTIP_ALIAS));
   }
+  sourceButton_ = new Core::Gui::ToolButton; {
+    sourceButton_->setToolTip(TR(T_SOURCE));
+    sourceButton_->setStyleSheet(SS_TOOLBUTTON_TEXT);
+    sourceButton_->setToolButtonStyle(Qt::ToolButtonTextOnly);
+    sourceButton_->setCheckable(true);
+    sourceButton_->setChecked(true);
+  }
+  connect(sourceButton_, SIGNAL(clicked(bool)), SLOT(openSource()));
 
   // Set layout
 
   QGridLayout *grid = new QGridLayout; {
     // (row, col, rowspan, colspan, alignment)
     int r, c;
-    grid->addWidget(createDateBuddy, r=0, c=0);
+    grid->addWidget(sourceBuddy, r=0, c=0);
+    grid->addWidget(sourceButton_, r, ++c);
+
+    grid->addWidget(createDateBuddy, ++r, c=0);
     grid->addWidget(createDateLabel_, r, ++c);
 
     grid->addWidget(visitedCountBuddy, ++r, c=0);
@@ -291,7 +309,7 @@ TokenView::submitAlias(const QString &alias, int type, quint32 language)
   Alias a;
   a.setTokenId(token_.id());
   a.setTokenDigest(token_.digest());
-  a.setTokenDigestType(token_.digestType());
+  a.setTokenPart(token_.part());
   a.setType(type);
   a.setLanguage(language);
   a.setText(alias);
@@ -330,6 +348,8 @@ TokenView::invalidateTokenLabels()
   if (!hasToken())
     return;
 
+  sourceButton_->setText(token_.source());
+
   if (token_.hasCreateTime())
     createDateLabel_->setText(FORMAT_TIME(token_.createTime()));
   else
@@ -342,6 +362,13 @@ TokenView::invalidateTokenLabels()
 
 #undef FORMAT_TIME
 #undef FORMAT_COUNT
+}
+
+void
+TokenView::setSource(const QString &source)
+{
+  token_.setSource(source);
+  sourceButton_->setText(source);
 }
 
 void
@@ -442,6 +469,7 @@ TokenView::aliasTypeToString(int type)
   case Alias::AT_Name:  return tr("name");
   case Alias::AT_Source:return tr("source");
   case Alias::AT_Tag:   return tr("tag");
+  case Alias::AT_Title: return tr("title");
   default: return TR(T_NA);
   }
 }
@@ -497,6 +525,17 @@ TokenView::contextMenuEvent(QContextMenuEvent *event)
   // Pop up
   contextMenu_->popup(event->globalPos());
   event->accept();
+}
+
+void
+TokenView::openSource()
+{
+  sourceButton_->setChecked(true);
+  QString url = sourceButton_->text();
+  if (!url.isEmpty()) {
+    log(TR(T_MENUTEXT_OPENURL) + ": " + url);
+    QDesktopServices::openUrl(url);
+  }
 }
 
 // EOF

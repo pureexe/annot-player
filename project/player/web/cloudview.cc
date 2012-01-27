@@ -38,14 +38,15 @@ CloudView::CloudView(QWidget *parent)
   setWindowOpacity(1.0); // window is opaque
 }
 
-// - Events -
+// EOF
 
+/*
 void
 CloudView::setVisible(bool visible)
 {
-  Base::setVisible(visible);
   if (visible && tabCount() == 0)
-    newTab();
-}
+    openUrl(homePage());
 
-// EOF
+  Base::setVisible(visible);
+}
+*/

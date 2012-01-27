@@ -2,6 +2,7 @@
 // 7/20/2011
 
 #include "webbrowser.h"
+#include "webbrowserprivate.h"
 #include "ui_webbrowser.h"
 #include <QtGui>
 #include <QtWebKit>
@@ -52,7 +53,7 @@ WebBrowser::WebBrowser(QWidget *parent)
   connect(ui_->reloadButton, SIGNAL(clicked()), SLOT(reload()));
 
   ui_->tabWidget->removeTab(0);
-  //newTab();
+  newTab();
 
   updateButtons();
 
@@ -101,9 +102,43 @@ WebBrowser::setSearchEngine(const QString &url)
 // - Actions -
 
 void
+WebBrowser::openUrl(const QString &url)
+{
+  if (tabCount() == 0)
+    newTab();
+
+  QWebView *view = qobject_cast<QWebView*>(ui_->tabWidget->currentWidget());
+  if (view) {
+    ui_->addressLine->setText(url);
+    ui_->tabWidget->setTabText(ui_->tabWidget->currentIndex(), url);
+
+    QWebPage *page = view->page();
+    QNetworkAccessManager *manager = page->networkAccessManager();
+
+    view->setUrl(url);
+
+    QString cacheDir = QDesktopServices::storageLocation(QDesktopServices::CacheLocation);
+    if (!cacheDir.isEmpty()) {
+      // Enable persistent disk cache
+      // See: http://www.qtcentre.org/threads/24354-using-QWebView-cache-with-QNetworkDiskCache
+      QNetworkDiskCache *cache = new QNetworkDiskCache(view);
+      cache->setCacheDirectory(cacheDir);
+      manager->setCache(cache);
+
+      //QNetworkRequest req;
+      //req.setAttribute(QNetworkRequest::CacheLoadControlAttribute, QNetworkRequest::PreferCache);
+      //req.setUrl(address);
+      //manager->get(req);
+    }
+
+    view->setUrl(url);
+  }
+}
+
+void
 WebBrowser::openUrl()
 {
-  if (ui_->tabWidget->count() == 0)
+  if (tabCount() == 0)
     newTab();
 
   QWebView *view = qobject_cast<QWebView*>(ui_->tabWidget->currentWidget());
@@ -113,8 +148,29 @@ WebBrowser::openUrl()
       address.prepend("http://");
       ui_->addressLine->setText(address);
     }
-    view->setUrl(address);
     ui_->tabWidget->setTabText(ui_->tabWidget->currentIndex(), address);
+
+    QWebPage *page = view->page();
+    QNetworkAccessManager *manager = page->networkAccessManager();
+    connect(manager, SIGNAL(finished(QNetworkReply*)), SLOT(completeNetworkReply(QNetworkReply*)));
+
+    view->setUrl(address);
+
+    QString cacheDir = QDesktopServices::storageLocation(QDesktopServices::CacheLocation);
+    if (!cacheDir.isEmpty()) {
+      // Enable persistent disk cache
+      // See: http://www.qtcentre.org/threads/24354-using-QWebView-cache-with-QNetworkDiskCache
+      QNetworkDiskCache *cache = new QNetworkDiskCache(view);
+      cache->setCacheDirectory(cacheDir);
+      manager->setCache(cache);
+
+      //QNetworkRequest req;
+      //req.setAttribute(QNetworkRequest::CacheLoadControlAttribute, QNetworkRequest::PreferCache);
+      //req.setUrl(address);
+      //manager->get(req);
+    }
+
+    view->setUrl(address);
   }
 }
 
@@ -172,12 +228,6 @@ WebBrowser::forward()
 void
 WebBrowser::newTab()
 {
-  newTab(homePage());
-}
-
-void
-WebBrowser::newTab(const QString &url)
-{
   QWebView *view = new QWebView(this); {
     if (textSizeMultiplier_)
       view->setTextSizeMultiplier(textSizeMultiplier_);
@@ -187,8 +237,12 @@ WebBrowser::newTab(const QString &url)
   connect(view, SIGNAL(loadStarted()), SLOT(handleLoadStarted()));
   connect(view, SIGNAL(loadFinished(bool)), SLOT(handleLoadFinished()));
 
-  ui_->tabWidget->addTab(view, url);
-  view->setUrl(url);
+  int index = ui_->tabWidget->addTab(view, tr("New tab"));
+
+  connect(view, SIGNAL(titleChanged(QString)),
+          new slot_::SetTabText(ui_->tabWidget, index), SLOT(setTabText(QString)));
+
+  view->setUrl(QString());
 }
 
 void

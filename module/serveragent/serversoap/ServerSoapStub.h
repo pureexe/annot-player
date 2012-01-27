@@ -148,7 +148,8 @@ public:
 	LONG64 createTime;	/* required element of type xsd:long */
 	int cursedCount;	/* required element of type xsd:int */
 	std::string *digest;	/* optional element of type xsd:string */
-	int digestType;	/* required element of type xsd:int */
+	std::string *source;	/* optional element of type xsd:string */
+	int part;	/* required element of type xsd:int */
 	LONG64 flags;	/* required element of type xsd:long */
 	LONG64 id;	/* required element of type xsd:long */
 	int type;	/* required element of type xsd:int */
@@ -1770,8 +1771,54 @@ public:
 };
 #endif
 
+#ifndef SOAP_TYPE_ServerSoap_tns__submitMediaTokenSource
+#define SOAP_TYPE_ServerSoap_tns__submitMediaTokenSource (84)
+/* tns:submitMediaTokenSource */
+class SOAP_CMAC tns__submitMediaTokenSource
+{
+public:
+	std::string *arg0;	/* optional element of type xsd:string */
+	int arg1;	/* required element of type xsd:int */
+	int arg2;	/* required element of type xsd:int */
+	std::string *userName;	/* optional element of type xsd:string */
+	std::string *password;	/* optional element of type xsd:string */
+	struct soap *soap;	/* transient */
+public:
+	virtual int soap_type() const { return 84; } /* = unique id SOAP_TYPE_ServerSoap_tns__submitMediaTokenSource */
+	virtual void soap_default(struct soap*);
+	virtual void soap_serialize(struct soap*) const;
+	virtual int soap_put(struct soap*, const char*, const char*) const;
+	virtual int soap_out(struct soap*, const char*, int, const char*) const;
+	virtual void *soap_get(struct soap*, const char*, const char*);
+	virtual void *soap_in(struct soap*, const char*, const char*);
+	         tns__submitMediaTokenSource() { tns__submitMediaTokenSource::soap_default(NULL); }
+	virtual ~tns__submitMediaTokenSource() { }
+};
+#endif
+
+#ifndef SOAP_TYPE_ServerSoap_tns__submitMediaTokenSourceResponse
+#define SOAP_TYPE_ServerSoap_tns__submitMediaTokenSourceResponse (85)
+/* tns:submitMediaTokenSourceResponse */
+class SOAP_CMAC tns__submitMediaTokenSourceResponse
+{
+public:
+	LONG64 return_;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* required element of type xsd:long */
+	struct soap *soap;	/* transient */
+public:
+	virtual int soap_type() const { return 85; } /* = unique id SOAP_TYPE_ServerSoap_tns__submitMediaTokenSourceResponse */
+	virtual void soap_default(struct soap*);
+	virtual void soap_serialize(struct soap*) const;
+	virtual int soap_put(struct soap*, const char*, const char*) const;
+	virtual int soap_out(struct soap*, const char*, int, const char*) const;
+	virtual void *soap_get(struct soap*, const char*, const char*);
+	virtual void *soap_in(struct soap*, const char*, const char*);
+	         tns__submitMediaTokenSourceResponse() { tns__submitMediaTokenSourceResponse::soap_default(NULL); }
+	virtual ~tns__submitMediaTokenSourceResponse() { }
+};
+#endif
+
 #ifndef SOAP_TYPE_ServerSoap_tns__updateMediaAnnotationTextWithId
-#define SOAP_TYPE_ServerSoap_tns__updateMediaAnnotationTextWithId (84)
+#define SOAP_TYPE_ServerSoap_tns__updateMediaAnnotationTextWithId (86)
 /* tns:updateMediaAnnotationTextWithId */
 class SOAP_CMAC tns__updateMediaAnnotationTextWithId
 {
@@ -1782,7 +1829,7 @@ public:
 	std::string *password;	/* optional element of type xsd:string */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 84; } /* = unique id SOAP_TYPE_ServerSoap_tns__updateMediaAnnotationTextWithId */
+	virtual int soap_type() const { return 86; } /* = unique id SOAP_TYPE_ServerSoap_tns__updateMediaAnnotationTextWithId */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -1795,7 +1842,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_ServerSoap_tns__updateMediaAnnotationTextWithIdResponse
-#define SOAP_TYPE_ServerSoap_tns__updateMediaAnnotationTextWithIdResponse (85)
+#define SOAP_TYPE_ServerSoap_tns__updateMediaAnnotationTextWithIdResponse (87)
 /* tns:updateMediaAnnotationTextWithIdResponse */
 class SOAP_CMAC tns__updateMediaAnnotationTextWithIdResponse
 {
@@ -1803,7 +1850,7 @@ public:
 	bool return_;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* required element of type xsd:boolean */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 85; } /* = unique id SOAP_TYPE_ServerSoap_tns__updateMediaAnnotationTextWithIdResponse */
+	virtual int soap_type() const { return 87; } /* = unique id SOAP_TYPE_ServerSoap_tns__updateMediaAnnotationTextWithIdResponse */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -1816,7 +1863,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_ServerSoap___tns__blessMediaAliasWithId
-#define SOAP_TYPE_ServerSoap___tns__blessMediaAliasWithId (103)
+#define SOAP_TYPE_ServerSoap___tns__blessMediaAliasWithId (105)
 /* Operation wrapper: */
 struct __tns__blessMediaAliasWithId
 {
@@ -1826,7 +1873,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_ServerSoap___tns__blessMediaAnnotationWithId
-#define SOAP_TYPE_ServerSoap___tns__blessMediaAnnotationWithId (107)
+#define SOAP_TYPE_ServerSoap___tns__blessMediaAnnotationWithId (109)
 /* Operation wrapper: */
 struct __tns__blessMediaAnnotationWithId
 {
@@ -1836,7 +1883,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_ServerSoap___tns__blessMediaTokenWithId
-#define SOAP_TYPE_ServerSoap___tns__blessMediaTokenWithId (111)
+#define SOAP_TYPE_ServerSoap___tns__blessMediaTokenWithId (113)
 /* Operation wrapper: */
 struct __tns__blessMediaTokenWithId
 {
@@ -1846,7 +1893,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_ServerSoap___tns__blessUserWithId
-#define SOAP_TYPE_ServerSoap___tns__blessUserWithId (115)
+#define SOAP_TYPE_ServerSoap___tns__blessUserWithId (117)
 /* Operation wrapper: */
 struct __tns__blessUserWithId
 {
@@ -1856,7 +1903,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_ServerSoap___tns__blockMediaAliasWithId
-#define SOAP_TYPE_ServerSoap___tns__blockMediaAliasWithId (119)
+#define SOAP_TYPE_ServerSoap___tns__blockMediaAliasWithId (121)
 /* Operation wrapper: */
 struct __tns__blockMediaAliasWithId
 {
@@ -1866,7 +1913,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_ServerSoap___tns__blockMediaAnnotationWithId
-#define SOAP_TYPE_ServerSoap___tns__blockMediaAnnotationWithId (123)
+#define SOAP_TYPE_ServerSoap___tns__blockMediaAnnotationWithId (125)
 /* Operation wrapper: */
 struct __tns__blockMediaAnnotationWithId
 {
@@ -1876,7 +1923,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_ServerSoap___tns__blockUserWithId
-#define SOAP_TYPE_ServerSoap___tns__blockUserWithId (127)
+#define SOAP_TYPE_ServerSoap___tns__blockUserWithId (129)
 /* Operation wrapper: */
 struct __tns__blockUserWithId
 {
@@ -1886,7 +1933,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_ServerSoap___tns__chat
-#define SOAP_TYPE_ServerSoap___tns__chat (131)
+#define SOAP_TYPE_ServerSoap___tns__chat (133)
 /* Operation wrapper: */
 struct __tns__chat
 {
@@ -1896,7 +1943,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_ServerSoap___tns__curseMediaAliasWithId
-#define SOAP_TYPE_ServerSoap___tns__curseMediaAliasWithId (135)
+#define SOAP_TYPE_ServerSoap___tns__curseMediaAliasWithId (137)
 /* Operation wrapper: */
 struct __tns__curseMediaAliasWithId
 {
@@ -1906,7 +1953,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_ServerSoap___tns__curseMediaAnnotationWithId
-#define SOAP_TYPE_ServerSoap___tns__curseMediaAnnotationWithId (139)
+#define SOAP_TYPE_ServerSoap___tns__curseMediaAnnotationWithId (141)
 /* Operation wrapper: */
 struct __tns__curseMediaAnnotationWithId
 {
@@ -1916,7 +1963,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_ServerSoap___tns__curseMediaTokenWithId
-#define SOAP_TYPE_ServerSoap___tns__curseMediaTokenWithId (143)
+#define SOAP_TYPE_ServerSoap___tns__curseMediaTokenWithId (145)
 /* Operation wrapper: */
 struct __tns__curseMediaTokenWithId
 {
@@ -1926,7 +1973,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_ServerSoap___tns__curseUserWithId
-#define SOAP_TYPE_ServerSoap___tns__curseUserWithId (147)
+#define SOAP_TYPE_ServerSoap___tns__curseUserWithId (149)
 /* Operation wrapper: */
 struct __tns__curseUserWithId
 {
@@ -1936,7 +1983,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_ServerSoap___tns__deleteMediaAliasWithId
-#define SOAP_TYPE_ServerSoap___tns__deleteMediaAliasWithId (151)
+#define SOAP_TYPE_ServerSoap___tns__deleteMediaAliasWithId (153)
 /* Operation wrapper: */
 struct __tns__deleteMediaAliasWithId
 {
@@ -1946,7 +1993,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_ServerSoap___tns__deleteMediaAnnotationWithId
-#define SOAP_TYPE_ServerSoap___tns__deleteMediaAnnotationWithId (155)
+#define SOAP_TYPE_ServerSoap___tns__deleteMediaAnnotationWithId (157)
 /* Operation wrapper: */
 struct __tns__deleteMediaAnnotationWithId
 {
@@ -1956,7 +2003,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_ServerSoap___tns__isClientUpdated
-#define SOAP_TYPE_ServerSoap___tns__isClientUpdated (159)
+#define SOAP_TYPE_ServerSoap___tns__isClientUpdated (161)
 /* Operation wrapper: */
 struct __tns__isClientUpdated
 {
@@ -1966,7 +2013,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_ServerSoap___tns__isConnected
-#define SOAP_TYPE_ServerSoap___tns__isConnected (163)
+#define SOAP_TYPE_ServerSoap___tns__isConnected (165)
 /* Operation wrapper: */
 struct __tns__isConnected
 {
@@ -1976,7 +2023,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_ServerSoap___tns__selectLiveAnnotationsWithTokenId
-#define SOAP_TYPE_ServerSoap___tns__selectLiveAnnotationsWithTokenId (167)
+#define SOAP_TYPE_ServerSoap___tns__selectLiveAnnotationsWithTokenId (169)
 /* Operation wrapper: */
 struct __tns__selectLiveAnnotationsWithTokenId
 {
@@ -1986,7 +2033,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_ServerSoap___tns__selectLiveTokenWithId
-#define SOAP_TYPE_ServerSoap___tns__selectLiveTokenWithId (171)
+#define SOAP_TYPE_ServerSoap___tns__selectLiveTokenWithId (173)
 /* Operation wrapper: */
 struct __tns__selectLiveTokenWithId
 {
@@ -1996,7 +2043,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_ServerSoap___tns__selectMediaAliasesWithTokenId
-#define SOAP_TYPE_ServerSoap___tns__selectMediaAliasesWithTokenId (175)
+#define SOAP_TYPE_ServerSoap___tns__selectMediaAliasesWithTokenId (177)
 /* Operation wrapper: */
 struct __tns__selectMediaAliasesWithTokenId
 {
@@ -2006,7 +2053,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_ServerSoap___tns__selectMediaAnnotationsWithTokenId
-#define SOAP_TYPE_ServerSoap___tns__selectMediaAnnotationsWithTokenId (179)
+#define SOAP_TYPE_ServerSoap___tns__selectMediaAnnotationsWithTokenId (181)
 /* Operation wrapper: */
 struct __tns__selectMediaAnnotationsWithTokenId
 {
@@ -2016,7 +2063,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_ServerSoap___tns__selectMediaTokenWithDigest
-#define SOAP_TYPE_ServerSoap___tns__selectMediaTokenWithDigest (183)
+#define SOAP_TYPE_ServerSoap___tns__selectMediaTokenWithDigest (185)
 /* Operation wrapper: */
 struct __tns__selectMediaTokenWithDigest
 {
@@ -2026,7 +2073,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_ServerSoap___tns__selectMediaTokenWithId
-#define SOAP_TYPE_ServerSoap___tns__selectMediaTokenWithId (187)
+#define SOAP_TYPE_ServerSoap___tns__selectMediaTokenWithId (189)
 /* Operation wrapper: */
 struct __tns__selectMediaTokenWithId
 {
@@ -2036,7 +2083,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_ServerSoap___tns__selectRelatedMediaAnnotationsWithTokenId
-#define SOAP_TYPE_ServerSoap___tns__selectRelatedMediaAnnotationsWithTokenId (191)
+#define SOAP_TYPE_ServerSoap___tns__selectRelatedMediaAnnotationsWithTokenId (193)
 /* Operation wrapper: */
 struct __tns__selectRelatedMediaAnnotationsWithTokenId
 {
@@ -2046,7 +2093,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_ServerSoap___tns__selectUser
-#define SOAP_TYPE_ServerSoap___tns__selectUser (195)
+#define SOAP_TYPE_ServerSoap___tns__selectUser (197)
 /* Operation wrapper: */
 struct __tns__selectUser
 {
@@ -2056,7 +2103,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_ServerSoap___tns__setUserAnonymous
-#define SOAP_TYPE_ServerSoap___tns__setUserAnonymous (199)
+#define SOAP_TYPE_ServerSoap___tns__setUserAnonymous (201)
 /* Operation wrapper: */
 struct __tns__setUserAnonymous
 {
@@ -2066,7 +2113,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_ServerSoap___tns__setUserLanguage
-#define SOAP_TYPE_ServerSoap___tns__setUserLanguage (203)
+#define SOAP_TYPE_ServerSoap___tns__setUserLanguage (205)
 /* Operation wrapper: */
 struct __tns__setUserLanguage
 {
@@ -2076,7 +2123,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_ServerSoap___tns__submitLiveAnnotationTextWithTokenId
-#define SOAP_TYPE_ServerSoap___tns__submitLiveAnnotationTextWithTokenId (207)
+#define SOAP_TYPE_ServerSoap___tns__submitLiveAnnotationTextWithTokenId (209)
 /* Operation wrapper: */
 struct __tns__submitLiveAnnotationTextWithTokenId
 {
@@ -2086,7 +2133,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_ServerSoap___tns__submitMediaAlias
-#define SOAP_TYPE_ServerSoap___tns__submitMediaAlias (211)
+#define SOAP_TYPE_ServerSoap___tns__submitMediaAlias (213)
 /* Operation wrapper: */
 struct __tns__submitMediaAlias
 {
@@ -2096,7 +2143,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_ServerSoap___tns__submitMediaAliasTextAndTokenDigest
-#define SOAP_TYPE_ServerSoap___tns__submitMediaAliasTextAndTokenDigest (215)
+#define SOAP_TYPE_ServerSoap___tns__submitMediaAliasTextAndTokenDigest (217)
 /* Operation wrapper: */
 struct __tns__submitMediaAliasTextAndTokenDigest
 {
@@ -2106,7 +2153,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_ServerSoap___tns__submitMediaAliasTextWithTokenId
-#define SOAP_TYPE_ServerSoap___tns__submitMediaAliasTextWithTokenId (219)
+#define SOAP_TYPE_ServerSoap___tns__submitMediaAliasTextWithTokenId (221)
 /* Operation wrapper: */
 struct __tns__submitMediaAliasTextWithTokenId
 {
@@ -2116,7 +2163,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_ServerSoap___tns__submitMediaAnnotation
-#define SOAP_TYPE_ServerSoap___tns__submitMediaAnnotation (223)
+#define SOAP_TYPE_ServerSoap___tns__submitMediaAnnotation (225)
 /* Operation wrapper: */
 struct __tns__submitMediaAnnotation
 {
@@ -2126,7 +2173,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_ServerSoap___tns__submitMediaAnnotationTextAndTokenDigest
-#define SOAP_TYPE_ServerSoap___tns__submitMediaAnnotationTextAndTokenDigest (227)
+#define SOAP_TYPE_ServerSoap___tns__submitMediaAnnotationTextAndTokenDigest (229)
 /* Operation wrapper: */
 struct __tns__submitMediaAnnotationTextAndTokenDigest
 {
@@ -2136,7 +2183,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_ServerSoap___tns__submitMediaAnnotationTextWithTokenId
-#define SOAP_TYPE_ServerSoap___tns__submitMediaAnnotationTextWithTokenId (231)
+#define SOAP_TYPE_ServerSoap___tns__submitMediaAnnotationTextWithTokenId (233)
 /* Operation wrapper: */
 struct __tns__submitMediaAnnotationTextWithTokenId
 {
@@ -2146,7 +2193,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_ServerSoap___tns__submitMediaToken
-#define SOAP_TYPE_ServerSoap___tns__submitMediaToken (235)
+#define SOAP_TYPE_ServerSoap___tns__submitMediaToken (237)
 /* Operation wrapper: */
 struct __tns__submitMediaToken
 {
@@ -2156,7 +2203,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_ServerSoap___tns__submitMediaTokenDigest
-#define SOAP_TYPE_ServerSoap___tns__submitMediaTokenDigest (239)
+#define SOAP_TYPE_ServerSoap___tns__submitMediaTokenDigest (241)
 /* Operation wrapper: */
 struct __tns__submitMediaTokenDigest
 {
@@ -2165,8 +2212,18 @@ public:
 };
 #endif
 
+#ifndef SOAP_TYPE_ServerSoap___tns__submitMediaTokenSource
+#define SOAP_TYPE_ServerSoap___tns__submitMediaTokenSource (245)
+/* Operation wrapper: */
+struct __tns__submitMediaTokenSource
+{
+public:
+	tns__submitMediaTokenSource *tns__submitMediaTokenSource_;	/* optional element of type tns:submitMediaTokenSource */
+};
+#endif
+
 #ifndef SOAP_TYPE_ServerSoap___tns__updateMediaAnnotationTextWithId
-#define SOAP_TYPE_ServerSoap___tns__updateMediaAnnotationTextWithId (243)
+#define SOAP_TYPE_ServerSoap___tns__updateMediaAnnotationTextWithId (249)
 /* Operation wrapper: */
 struct __tns__updateMediaAnnotationTextWithId
 {
@@ -2178,7 +2235,7 @@ public:
 #ifndef WITH_NOGLOBAL
 
 #ifndef SOAP_TYPE_ServerSoap_SOAP_ENV__Header
-#define SOAP_TYPE_ServerSoap_SOAP_ENV__Header (244)
+#define SOAP_TYPE_ServerSoap_SOAP_ENV__Header (250)
 /* SOAP Header: */
 struct SOAP_ENV__Header
 {
@@ -2194,7 +2251,7 @@ private:
 #ifndef WITH_NOGLOBAL
 
 #ifndef SOAP_TYPE_ServerSoap_SOAP_ENV__Code
-#define SOAP_TYPE_ServerSoap_SOAP_ENV__Code (245)
+#define SOAP_TYPE_ServerSoap_SOAP_ENV__Code (251)
 /* SOAP Fault Code: */
 struct SOAP_ENV__Code
 {
@@ -2209,7 +2266,7 @@ public:
 #ifndef WITH_NOGLOBAL
 
 #ifndef SOAP_TYPE_ServerSoap_SOAP_ENV__Detail
-#define SOAP_TYPE_ServerSoap_SOAP_ENV__Detail (247)
+#define SOAP_TYPE_ServerSoap_SOAP_ENV__Detail (253)
 /* SOAP-ENV:Detail */
 struct SOAP_ENV__Detail
 {
@@ -2225,7 +2282,7 @@ public:
 #ifndef WITH_NOGLOBAL
 
 #ifndef SOAP_TYPE_ServerSoap_SOAP_ENV__Reason
-#define SOAP_TYPE_ServerSoap_SOAP_ENV__Reason (250)
+#define SOAP_TYPE_ServerSoap_SOAP_ENV__Reason (256)
 /* SOAP-ENV:Reason */
 struct SOAP_ENV__Reason
 {
@@ -2239,7 +2296,7 @@ public:
 #ifndef WITH_NOGLOBAL
 
 #ifndef SOAP_TYPE_ServerSoap_SOAP_ENV__Fault
-#define SOAP_TYPE_ServerSoap_SOAP_ENV__Fault (251)
+#define SOAP_TYPE_ServerSoap_SOAP_ENV__Fault (257)
 /* SOAP Fault: */
 struct SOAP_ENV__Fault
 {

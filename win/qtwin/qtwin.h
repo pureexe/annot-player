@@ -107,6 +107,9 @@ namespace QtWin {
   QString getWinDirPath();
   QString getAppDataPath();
 
+  QString getDesktopPath();
+
+
   bool isWindowsVistaOrLater();
   bool isWindowsXpOrLater();
 

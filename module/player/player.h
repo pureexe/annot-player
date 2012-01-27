@@ -49,6 +49,9 @@ public:
   static bool isSupportedSubtitle(const QString &fileName);
   static bool isSupportedPlaylist(const QString &fileName);
 
+  static QString defaultUserAgent();
+  QString userAgent() const;
+
   // - Types -
 public:
 
@@ -132,6 +135,8 @@ public slots:
   void embed(QWidget *w);
 #endif // Q_WS_MAC
 
+  void setUserAgent(const QString &agent = QString());
+
 public:
   ///  Save the current frame as picture. Return if succeed.
   bool snapshot(const QString &savePath);
@@ -166,6 +171,8 @@ public slots:
 
   ///  Restore status before opening media. Should be used for error recovery only.
   void clearMedia();
+
+  void setMediaTitle(const QString &t); ///< override default title
 
   /**
    *  Play the specified file.
@@ -257,6 +264,7 @@ signals:
   void paused();
   void stopped();
   void mediaChanged();  // Actually mediaAdded
+  void mediaTitleChanged(const QString &title);
   void mediaClosed();
   void timeChanged();
   void lengthChanged(); // Due to deficency of VLC, the length is changed after mediaChangd.

@@ -55,18 +55,19 @@ namespace Core { namespace Cloud {
 
     // user:
     enum { SER_PASSWORD_LENGTH = SHA1_DIGEST_LENGTH * 2 };
-    enum { MAX_USER_NAME_LENGTH = 64 - 1 };
-    enum { MAX_USER_NICKNAME_LENGTH = 255 - 1 } ;
-    enum { MAX_USER_EMAIL_LENGTH = 160 - 1 };
+    enum { MAX_USER_NAME_LENGTH = 64 };
+    enum { MAX_USER_NICKNAME_LENGTH = 255 } ;
+    enum { MAX_USER_EMAIL_LENGTH = 160 };
 
     // token:
     enum { TOKEN_DIGEST_LENGTH = MD5_DIGEST_LENGTH * 2 };
+    enum { MAX_SOURCE_LENGTH = 255 };
 
     // alias:
-    enum { MAX_ALIAS_LENGTH = 255 - 1 };
+    enum { MAX_ALIAS_LENGTH = 255 };
 
     // annot:
-    enum { MAX_ANNOT_LENGTH = 255 - 1 };
+    enum { MAX_ANNOT_LENGTH = 255 };
 
     // misc:
     enum { MAX_SENDER_NAME_LENGTH = MAX_USER_NAME_LENGTH };

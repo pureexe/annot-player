@@ -6,6 +6,9 @@
 
 // - Directories -
 
+// EOF
+
+/*
 QString
 Core::Os::
 desktopPath()
@@ -27,5 +30,4 @@ desktopPath()
   else
     return  QDir::homePath();
 }
-
-// EOF
+*/
