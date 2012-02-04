@@ -24,10 +24,10 @@ public:
   bool match(const QString &href) const; ///< \override
 
 public slots:
-  void resolve(const QString &href); ///< \override
+  void resolveMedia(const QString &href); ///< \override
 
 protected slots:
-  void resolve(QNetworkReply *reply);
+  void resolveMedia(QNetworkReply *reply);
 
 private:
   static QString newSid();

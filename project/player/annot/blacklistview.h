@@ -4,7 +4,7 @@
 // blacklistview.h
 // 11/16/2011
 
-#include "core/gui/dialog.h"
+#include "module/qtext/dialog.h"
 
 QT_BEGIN_NAMESPACE
 class QAction;
@@ -20,7 +20,7 @@ class TextFilterView;
 class UserFilterView;
 class AnnotationFilterView;
 
-typedef Core::Gui::Dialog BlacklistViewBase;
+typedef QtExt::Dialog BlacklistViewBase;
 class BlacklistView : public BlacklistViewBase
 {
   Q_OBJECT

@@ -8,13 +8,13 @@
 #include "defines.h"
 #include "stylesheet.h"
 #include "logger.h"
-#include "core/htmltag.h"
 #ifdef USE_WIN_QTH
   #include "win/qth/qth.h"
 #endif // USE_WIN_QTH
-#include "core/cmd.h"
-#include "core/gui/toolbutton.h"
-#include "core/gui/combobox.h"
+#include "module/annotcloud/cmd.h"
+#include "module/qtext/htmltag.h"
+#include "module/qtext/toolbutton.h"
+#include "module/qtext/combobox.h"
 #include <QtGui>
 
 //#define DEBUG "messageview"
@@ -53,7 +53,7 @@ MessageView::MessageView(QWidget *parent)
   }
   connect(textEdit_, SIGNAL(cursorPositionChanged()), SLOT(invalidateCurrentCharFormat()));
 
-  hookComboBox_ = new Core::Gui::ComboBox; {
+  hookComboBox_ = new QtExt::ComboBox; {
     UiStyle::globalInstance()->setComboBoxStyle(hookComboBox_);
     hookComboBox_->setEditable(false);
     hookComboBox_->setMinimumWidth(HOOKCOMBOBOX_MINWIDTH);
@@ -65,7 +65,7 @@ MessageView::MessageView(QWidget *parent)
   connect(hookComboBox_, SIGNAL(activated(int)), SLOT(selectHookIndex(int)));
   connect(hookComboBox_, SIGNAL(currentIndexChanged(int)), SLOT(invalidateSelectButton()));
 
-  autoButton_  = new Core::Gui::ToolButton; {
+  autoButton_  = new QtExt::ToolButton; {
     autoButton_->setStyleSheet(SS_TOOLBUTTON_TEXT);
     autoButton_->setToolButtonStyle(Qt::ToolButtonTextOnly);
     autoButton_->setText(QString("| %1 |").arg(TR(T_AUTO)));
@@ -75,7 +75,7 @@ MessageView::MessageView(QWidget *parent)
   }
   connect(autoButton_, SIGNAL(clicked(bool)), SLOT(invalidateCurrentHook()));
 
-  QToolButton *resetButton  = new Core::Gui::ToolButton; {
+  QToolButton *resetButton  = new QtExt::ToolButton; {
     resetButton->setStyleSheet(SS_TOOLBUTTON_TEXT);
     resetButton->setToolButtonStyle(Qt::ToolButtonTextOnly);
     resetButton->setText(QString("[ %1 ]").arg(TR(T_RESET)));
@@ -83,7 +83,7 @@ MessageView::MessageView(QWidget *parent)
   }
   connect(resetButton, SIGNAL(clicked()), SLOT(clear()));
 
-  selectButton_ = new Core::Gui::ToolButton; {
+  selectButton_ = new QtExt::ToolButton; {
     selectButton_->setStyleSheet(SS_TOOLBUTTON_TEXT);
     selectButton_->setToolButtonStyle(Qt::ToolButtonTextOnly);
     selectButton_->setText(QString("[ %1 ]").arg(TR(T_OK)));
@@ -165,10 +165,8 @@ ulong
 MessageView::currentHookId() const
 {
   int hookIndex = currentIndex();
-  if (hookIndex >= 0 && hookIndex < hooks_.size())
-    return hooks_[hookIndex];
-  else
-    return 0;
+  return hookIndex < 0 || hookIndex >= hooks_.size() ? 0
+       : hooks_[hookIndex];
 }
 
 // - Actions -
@@ -299,12 +297,12 @@ MessageView::setTextList(const QStringList &l)
   int i = 0;
   foreach (QString s, l) {
     if (i++ % 2)
-      html.append(CORE_HTML_STYLE(s, color:purple));
+      html.append(HTML_STYLE(s, color:purple));
     else
-      html.append(CORE_HTML_STYLE(s, color:blue));
+      html.append(HTML_STYLE(s, color:blue));
 
     if (i != l.size())
-      html.append(CORE_HTML_BR() CORE_HTML_BR());
+      html.append(HTML_BR() HTML_BR());
   }
 
   textEdit_->setHtml(html);

@@ -4,12 +4,12 @@
 // livedialog.h
 // 10/7/2011
 
-#include "core/gui/dialog.h"
+#include "module/qtext/dialog.h"
 #include <QList>
 
 QT_FORWARD_DECLARE_CLASS(QComboBox)
 
-typedef Core::Gui::Dialog LiveDialogBase;
+typedef QtExt::Dialog LiveDialogBase;
 class LiveDialog : public LiveDialogBase
 {
   Q_OBJECT

@@ -4,12 +4,12 @@
 // aboutdialog.h
 // 11/13/2011
 
-#include "core/gui/dialog.h"
+#include "qtext/dialog.h"
 #include <QString>
 
 QT_FORWARD_DECLARE_CLASS(QTextEdit)
 
-typedef Core::Gui::Dialog AboutDialogBase;
+typedef QtExt::Dialog AboutDialogBase;
 class AboutDialog : public AboutDialogBase
 {
   Q_OBJECT

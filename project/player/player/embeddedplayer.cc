@@ -10,8 +10,8 @@
 #ifdef Q_WS_WIN
   #include "win/qtwin/qtwin.h"
 #endif // Q_WS_WIN
-#include "core/gui/toolbutton.h"
-#include "core/gui/withsizehint.h"
+#include "module/qtext/toolbutton.h"
+#include "module/qtext/withsizehint.h"
 #include <QtGui>
 
 #define DEBUG "embeddedplayerui"
@@ -88,11 +88,11 @@ EmbeddedPlayerUi::createLayout()
   prefixComboBox()->setStyleSheet(SS_COMBOBOX_OSD);
   prefixComboBox()->lineEdit()->setStyleSheet(SS_LINEEDIT_OSD);
 
-  Core::Gui::WithSizeHint*
-  w = dynamic_cast<Core::Gui::WithSizeHint*>(inputComboBox());
+  QtExt::WithSizeHint*
+  w = dynamic_cast<QtExt::WithSizeHint*>(inputComboBox());
   if (w)
     w->setSizeHint(QSize(G_INPUTLINE_MINWIDTH, G_INPUTLINE_MINHEIGHT));
-  w = dynamic_cast<Core::Gui::WithSizeHint*>(prefixComboBox());
+  w = dynamic_cast<QtExt::WithSizeHint*>(prefixComboBox());
   if (w)
     w->setSizeHint(QSize(G_PREFIXLINE_MAXWIDTH, G_INPUTLINE_MINHEIGHT));
 
@@ -361,7 +361,7 @@ QToolButton*
 EmbeddedPlayerUi::menuButton()
 {
   if (!menuButton_) {
-    menuButton_ = new Core::Gui::ToolButton(this);
+    menuButton_ = new QtExt::ToolButton(this);
     menuButton_->setStyleSheet(SS_TOOLBUTTON_MENU);
     menuButton_->setToolTip(TR(T_TOOLTIP_MENU));
     UiStyle::globalInstance()->setToolButtonStyle(menuButton_);

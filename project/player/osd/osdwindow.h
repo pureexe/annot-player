@@ -6,7 +6,7 @@
 
 #include <QWidget>
 
-namespace Core { class EventListener; }
+namespace QtExt { class EventListener; }
 
 ///  Provide an Osd layer
 class OsdWindow : public QWidget
@@ -15,13 +15,13 @@ class OsdWindow : public QWidget
   typedef OsdWindow Self;
   typedef QWidget Base;
 
-  Core::EventListener *listener_;
+  QtExt::EventListener *listener_;
 
 public:
   explicit OsdWindow(QWidget *parent = 0);
 
-  Core::EventListener *eventListener() const;
-  void setEventListener(Core::EventListener *listener);
+  QtExt::EventListener *eventListener() const;
+  void setEventListener(QtExt::EventListener *listener);
 
 public slots:
   void showInOsdMode();

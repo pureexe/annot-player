@@ -7,11 +7,11 @@
 #include "tr.h"
 #include "defines.h"
 #include "stylesheet.h"
-#include "core/cmd.h"
-#include "core/annotationparser.h"
-#include "core/gui/toolbutton.h"
-#include "core/gui/combobox.h"
-#include "core/gui/fontcombobox.h"
+#include "module/annotcloud/cmd.h"
+#include "module/annotcloud/annotationparser.h"
+#include "module/qtext/toolbutton.h"
+#include "module/qtext/combobox.h"
+#include "module/qtext/fontcombobox.h"
 #include <boost/tuple/tuple.hpp>
 #include <QtGui>
 
@@ -71,7 +71,7 @@ void
 AnnotationEditor::createRibons()
 {
 #define MAKE_RIBON_BUTTON(_button, _text, _slot) \
-  _button = new Core::Gui::ToolButton; { \
+  _button = new QtExt::ToolButton; { \
     _button->setStyleSheet(SS_TOOLBUTTON_TEXT); \
     _button->setToolButtonStyle(Qt::ToolButtonTextOnly); \
     _button->setText(QString("- %1 -").arg(_text)); \
@@ -81,7 +81,7 @@ AnnotationEditor::createRibons()
   }
 
 #define MAKE_UNCHECKABLE_BUTTON(_button, _title, _tip, _slot) \
-  _button = new Core::Gui::ToolButton; { \
+  _button = new QtExt::ToolButton; { \
     _button->setStyleSheet(SS_TOOLBUTTON_TEXT); \
     _button->setToolButtonStyle(Qt::ToolButtonTextOnly); \
     _button->setText(_title); \
@@ -89,7 +89,7 @@ AnnotationEditor::createRibons()
     connect(_button, SIGNAL(clicked()), _slot); \
   }
 #define MAKE_CHECKABLE_BUTTON(_button, _title, _tip, _slot) \
-  _button = new Core::Gui::ToolButton; { \
+  _button = new QtExt::ToolButton; { \
     _button->setStyleSheet(SS_TOOLBUTTON_TEXT); \
     _button->setToolButtonStyle(Qt::ToolButtonTextOnly); \
     _button->setText(_title); \
@@ -107,7 +107,7 @@ AnnotationEditor::createRibons()
   MAKE_UNCHECKABLE_BUTTON(subtitleButton_, tr("subtitle"), TR(T_SUBTITLE), SLOT(setSubtitle()))
 
   // - moveStyleComboBox_
-  moveStyleComboBox_ = new Core::Gui::ComboBox; {
+  moveStyleComboBox_ = new QtExt::ComboBox; {
     UiStyle::globalInstance()->setComboBoxStyle(moveStyleComboBox_);
     moveStyleComboBox_->setEditable(true);
     moveStyleComboBox_->setMaximumWidth(MOVESTYLECOMBOBOX_MAXWIDTH);
@@ -178,21 +178,21 @@ AnnotationEditor::createRibons()
   }
 
   // - colorButton_
-  colorButton_ = new Core::Gui::ToolButton; {
+  colorButton_ = new QtExt::ToolButton; {
     colorButton_->setStyleSheet(SS_TRANSPARENT);
     colorButton_->setToolTip(TR(T_FOREGROUNDCOLOR));
   }
   connect(colorButton_, SIGNAL(clicked()), SLOT(showColorDialog()));
 
   // - backgroundColorButton_
-  backgroundColorButton_ = new Core::Gui::ToolButton; {
+  backgroundColorButton_ = new QtExt::ToolButton; {
     backgroundColorButton_->setStyleSheet(SS_TRANSPARENT);
     backgroundColorButton_->setToolTip(TR(T_BACKGROUNDCOLOR));
   }
   connect(backgroundColorButton_, SIGNAL(clicked()), SLOT(showBackgroundColorDialog()));
 
   // - alignComboBox_
-  alignComboBox_ = new Core::Gui::ComboBox; {
+  alignComboBox_ = new QtExt::ComboBox; {
     UiStyle::globalInstance()->setComboBoxStyle(alignComboBox_);
     alignComboBox_->setEditable(false);
     alignComboBox_->setMaximumWidth(ALIGNCOMBOBOX_MAXWIDTH);
@@ -207,7 +207,7 @@ AnnotationEditor::createRibons()
   connect(alignComboBox_, SIGNAL(activated(int)), SLOT(setAlignment(int)));
 
   // - fontComboBox_
-  fontComboBox_ = new Core::Gui::FontComboBox; {
+  fontComboBox_ = new QtExt::FontComboBox; {
     UiStyle::globalInstance()->setComboBoxStyle(fontComboBox_);
     fontComboBox_->setEditable(true);
     fontComboBox_->setMaximumWidth(FONTCOMBOBOX_MAXWIDTH);
@@ -216,7 +216,7 @@ AnnotationEditor::createRibons()
   connect(fontComboBox_, SIGNAL(activated(QString)), SLOT(setFontFamily(QString)));
 
   // - sizeComboBox_
-  fontSizeComboBox_ = new Core::Gui::ComboBox; {
+  fontSizeComboBox_ = new QtExt::ComboBox; {
     UiStyle::globalInstance()->setComboBoxStyle(fontSizeComboBox_);
     fontSizeComboBox_->setEditable(true);
     fontSizeComboBox_->setMaximumWidth(FONTSIZECOMBOBOX_MAXWIDTH);
@@ -274,7 +274,7 @@ AnnotationEditor::createRibons()
   MAKE_RIBON_BUTTON(codeRibonButton_, tr("tex"), SLOT(setCodeMode()))
   MAKE_RIBON_BUTTON(htmlRibonButton_, tr("html"), SLOT(setHtmlMode()))
 
-  formatButton_ = new Core::Gui::ToolButton; {
+  formatButton_ = new QtExt::ToolButton; {
     formatButton_->setStyleSheet(SS_TOOLBUTTON_TEXT);
     formatButton_->setToolButtonStyle(Qt::ToolButtonTextOnly);
     formatButton_->setText(QString("%1 ").arg(tr("format")));
@@ -326,7 +326,7 @@ AnnotationEditor::createRibons()
     countLabel_->setToolTip(TR(T_WORDCOUNT));
   }
 
-  tidyButton_ = new Core::Gui::ToolButton; {
+  tidyButton_ = new QtExt::ToolButton; {
     tidyButton_->setStyleSheet(SS_TOOLBUTTON_TEXT);
     tidyButton_->setToolButtonStyle(Qt::ToolButtonTextOnly);
     tidyButton_->setText(QString("| %1 |").arg(tr("tidy")));
@@ -336,7 +336,7 @@ AnnotationEditor::createRibons()
   }
   connect(tidyButton_, SIGNAL(clicked(bool)),SLOT(setTidyEnabled(bool)));
 
-  saveButton_ = new Core::Gui::ToolButton; {
+  saveButton_ = new QtExt::ToolButton; {
     saveButton_->setStyleSheet(SS_TOOLBUTTON_TEXT);
     saveButton_->setToolButtonStyle(Qt::ToolButtonTextOnly);
     saveButton_->setText(QString("[ %1 ]").arg(TR(T_SAVE)));
@@ -344,7 +344,7 @@ AnnotationEditor::createRibons()
   }
   connect(saveButton_, SIGNAL(clicked()), SLOT(save()));
 
-  cancelButton_ = new Core::Gui::ToolButton; {
+  cancelButton_ = new QtExt::ToolButton; {
     cancelButton_->setStyleSheet(SS_TOOLBUTTON_TEXT);
     cancelButton_->setToolButtonStyle(Qt::ToolButtonTextOnly);
     cancelButton_->setText(QString("[ %1 ]").arg(TR(T_CANCEL)));

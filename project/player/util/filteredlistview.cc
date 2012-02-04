@@ -7,8 +7,8 @@
 #include "stylesheet.h"
 #include "uistyle.h"
 #include "defines.h"
-//#include "core/gui/combobox.h"
-#include "core/gui/toolbutton.h"
+//#include "module/qtext/combobox.h"
+#include "module/qtext/toolbutton.h"
 #include <QtGui>
 
 // - Constructions -
@@ -67,7 +67,7 @@ FilteredListView::createLayout()
   //  filterPatternLabel->setToolTip(filterPatternLineEdit_->toolTip());
   //}
 
-  //filterSyntaxComboBox_ = new Core::Gui::ComboBox; {
+  //filterSyntaxComboBox_ = new QtExt::ComboBox; {
   //  UiStyle::globalInstance()->setComboBoxStyle(filterSyntaxComboBox_);
   //  filterSyntaxComboBox_->addItem(TR(T_FILTER_REGEX), QRegExp::RegExp);
   //  filterSyntaxComboBox_->addItem(TR(T_FILTER_WILDCARD), QRegExp::Wildcard);
@@ -81,7 +81,7 @@ FilteredListView::createLayout()
   //  filterSyntaxLabel->setToolTip(filterSyntaxComboBox_->toolTip());
   //}
 
-  //filterColumnComboBox_ = new Core::Gui::ComboBox; {
+  //filterColumnComboBox_ = new QtExt::ComboBox; {
   //  UiStyle::globalInstance()->setComboBoxStyle(filterColumnComboBox_);
   //  for (int i = 0; i < sourceModel_->columnCount(); i++)
   //    filterColumnComboBox_->addItem(sourceModel_->headerData(i, Qt::Horizontal).toString());

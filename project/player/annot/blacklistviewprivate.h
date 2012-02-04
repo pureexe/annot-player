@@ -4,7 +4,7 @@
 // blacklistviewprivate.h
 // 11/16/2011
 
-#include "core/cloud/annotation.h"
+#include "module/annotcloud/annotation.h"
 #include <QWidget>
 #include <QStringList>
 
@@ -100,8 +100,8 @@ class AnnotationFilterView : public QWidget
   typedef UserFilterView Self;
   typedef QWidget Base;
 
-  typedef Core::Cloud::Annotation Annotation;
-  typedef Core::Cloud::AnnotationList AnnotationList;
+  typedef AnnotCloud::Annotation Annotation;
+  typedef AnnotCloud::AnnotationList AnnotationList;
 
   // - Constructions -
   // TODO: code reuse!!!!!! these codes are duplicated with annotationbrowser.

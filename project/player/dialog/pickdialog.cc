@@ -10,7 +10,7 @@
 #ifdef USE_WIN_PICKER
   #include "win/picker/picker.h"
 #endif // USE_WIN_PICKER
-#include "core/gui/toolbutton.h"
+#include "module/qtext/toolbutton.h"
 #include <QtGui>
 
 #define DEBUG "pickdialog"
@@ -37,7 +37,7 @@ PickDialog::PickDialog(QWidget *parent)
     messageLabel_->setToolTip(TR(T_MESSAGE));
   }
 
-  QToolButton *cancelButton = new Core::Gui::ToolButton; {
+  QToolButton *cancelButton = new QtExt::ToolButton; {
     cancelButton->setStyleSheet(SS_TOOLBUTTON_TEXT);
     cancelButton->setToolButtonStyle(Qt::ToolButtonTextOnly);
     cancelButton->setText(QString("[ %1 ]").arg(TR(T_CANCEL)));

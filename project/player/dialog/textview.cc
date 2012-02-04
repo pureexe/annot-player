@@ -6,8 +6,7 @@
 #include "uistyle.h"
 #include "stylesheet.h"
 #include "tr.h"
-#include "core/gui/toolbutton.h"
-#include "core/htmltag.h"
+#include "module/qtext/htmltag.h"
 #include <QtGui>
 
 //#define DEBUG "textview"
@@ -53,11 +52,11 @@ TextView::setText(const QStringList &l)
   QString t;
   foreach (QString s, l) {
     if (line_++ % 2)
-      t.append(CORE_HTML_STYLE(s, color:purple));
+      t.append(HTML_STYLE(s, color:purple));
     else
-      t.append(CORE_HTML_STYLE(s, color:blue));
+      t.append(HTML_STYLE(s, color:blue));
     if (line_ != l.size())
-      t.append(CORE_HTML_BR());
+      t.append(HTML_BR());
   }
 
   setText(t);
@@ -69,9 +68,9 @@ TextView::append(const QString &text)
   if (!isEmpty())
     Base::append(QString());
   if (line_++ % 2)
-    Base::append(CORE_HTML_STYLE(text, color:purple));
+    Base::append(HTML_STYLE(text, color:purple));
   else
-    Base::append(CORE_HTML_STYLE(text, color:blue));
+    Base::append(HTML_STYLE(text, color:blue));
   moveCursorToBottom();
 }
 

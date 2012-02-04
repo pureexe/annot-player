@@ -3,7 +3,6 @@
 
 TEMPLATE = subdirs
 
-include(core/core.pri)
 SUBDIRS = \
     project \
     module

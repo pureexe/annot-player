@@ -5,7 +5,7 @@
 // 7/16/2011
 
 #include "config.h"
-#include "core/cloud/annotation.h"
+#include "module/annotcloud/annotation.h"
 #include <QGraphicsTextItem>
 #include <QEasingCurve>
 #include <QStringList>
@@ -32,7 +32,7 @@ class AnnotationGraphicsItem : public QGraphicsTextItem
   typedef AnnotationGraphicsItem Self;
   typedef QGraphicsTextItem Base;
 
-  typedef Core::Cloud::Annotation Annotation;
+  typedef AnnotCloud::Annotation Annotation;
 
   Annotation annot_;
 

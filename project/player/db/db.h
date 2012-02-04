@@ -4,10 +4,10 @@
 // db.h
 // 9/12/2011
 
-#include "core/cloud/user.h"
-#include "core/cloud/token.h"
-#include "core/cloud/alias.h"
-#include "core/cloud/annotation.h"
+#include "module/annotcloud/user.h"
+#include "module/annotcloud/token.h"
+#include "module/annotcloud/alias.h"
+#include "module/annotcloud/annotation.h"
 #include <QObject>
 #include <QMutex>
 #include <QSqlDatabase>
@@ -28,14 +28,14 @@ class Database : public QObject
   mutable QMutex mutex_;
   bool disposed_;
 
-  typedef Core::Cloud::User User;
-  typedef Core::Cloud::UserList UserList;
-  typedef Core::Cloud::Token Token;
-  typedef Core::Cloud::TokenList TokenList;
-  typedef Core::Cloud::Alias Alias;
-  typedef Core::Cloud::AliasList AliasList;
-  typedef Core::Cloud::Annotation Annotation;
-  typedef Core::Cloud::AnnotationList AnnotationList;
+  typedef AnnotCloud::User User;
+  typedef AnnotCloud::UserList UserList;
+  typedef AnnotCloud::Token Token;
+  typedef AnnotCloud::TokenList TokenList;
+  typedef AnnotCloud::Alias Alias;
+  typedef AnnotCloud::AliasList AliasList;
+  typedef AnnotCloud::Annotation Annotation;
+  typedef AnnotCloud::AnnotationList AnnotationList;
 
   // - Construction -
 public:

@@ -3,7 +3,7 @@
 // annotationfilter.h
 // 11/15/2011
 
-#include "core/cloud/annotation.h"
+#include "module/annotcloud/annotation.h"
 #include <QObject>
 #include <QStringList>
 
@@ -13,8 +13,8 @@ class AnnotationFilter : public QObject
   typedef AnnotationFilter Self;
   typedef QObject Base;
 
-  typedef Core::Cloud::Annotation Annotation;
-  typedef Core::Cloud::AnnotationList AnnotationList;
+  typedef AnnotCloud::Annotation Annotation;
+  typedef AnnotCloud::AnnotationList AnnotationList;
 
   // - Constructions -
 public:

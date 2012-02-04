@@ -16,6 +16,6 @@ struct ProcessInfo
   ProcessInfo() : processId(0) { }
   bool isValid() const { return processId; }
 };
-Q_DECLARE_METATYPE(ProcessInfo);
+Q_DECLARE_METATYPE(ProcessInfo)
 
 #endif // PROCESSINFO_H

@@ -8,8 +8,8 @@
 #include "stylesheet.h"
 #include "lineedit.h"
 #include "logger.h"
-#include "core/util/datetime.h"
-#include "core/gui/toolbutton.h"
+#include "module/qtext/datetime.h"
+#include "module/qtext/toolbutton.h"
 #include <QtGui>
 
 #define DEBUG "seekdialog"
@@ -67,7 +67,7 @@ SeekDialog::SeekDialog(QWidget *parent)
 #undef MAKE_LABEL
 
 #define MAKE_BUTTON(_button, _text, _tip) \
-  QToolButton *_button = new Core::Gui::ToolButton; { \
+  QToolButton *_button = new QtExt::ToolButton; { \
     _button->setStyleSheet(SS_TOOLBUTTON_TEXT); \
     _button->setToolButtonStyle(Qt::ToolButtonTextOnly); \
     _button->setText(_text); \
@@ -134,7 +134,7 @@ SeekDialog::time() const
 void
 SeekDialog::setTime(qint64 msecs)
 {
-  QTime t = Core::msecs2time(msecs);
+  QTime t = QtExt::msecs2time(msecs);
   if (!t.isValid())
     return;
 

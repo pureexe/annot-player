@@ -4,9 +4,9 @@
 // dataserver.h
 // 10/24/2011
 
-#include "core/cloud/token.h"
-#include "core/cloud/annotation.h"
-#include "core/cloud/alias.h"
+#include "module/annotcloud/token.h"
+#include "module/annotcloud/annotation.h"
+#include "module/annotcloud/alias.h"
 #include <QObject>
 
 class Database;
@@ -18,12 +18,12 @@ class DataServer : public QObject
   typedef DataServer Self;
   typedef QObject Base;
 
-  typedef Core::Cloud::Token Token;
-  typedef Core::Cloud::TokenList TokenList;
-  typedef Core::Cloud::Alias Alias;
-  typedef Core::Cloud::AliasList AliasList;
-  typedef Core::Cloud::Annotation Annotation;
-  typedef Core::Cloud::AnnotationList AnnotationList;
+  typedef AnnotCloud::Token Token;
+  typedef AnnotCloud::TokenList TokenList;
+  typedef AnnotCloud::Alias Alias;
+  typedef AnnotCloud::AliasList AliasList;
+  typedef AnnotCloud::Annotation Annotation;
+  typedef AnnotCloud::AnnotationList AnnotationList;
 
 public:
   DataServer(ServerAgent *server, Database *cache, Database *queue, QObject *parent = 0)
@@ -46,6 +46,8 @@ public:
   // - Update -
 public slots:
   bool updateAnnotationTextWithId(const QString &text, qint64 id);
+
+  void updateAnnotations(const AnnotationList &l);
 
   // - Deletion -
 public slots:

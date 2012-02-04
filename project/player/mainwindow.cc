@@ -52,8 +52,12 @@
   #include "messagehandler.h"
 #endif // USE_MODE_SIGNAL
 #include "module/player/player.h"
+#include "module/annotcodec/annotationcodecmanager.h"
 #include "module/mrlresolver/mrlresolvermanager.h"
 #include "module/translator/translator.h"
+#include "module/qtext/actionwithid.h"
+#include "module/qtext/datetime.h"
+#include "module/qtext/htmltag.h"
 #ifdef USE_MODULE_SERVERAGENT
   #include "module/serveragent/serveragent.h"
 #endif // USE_MODULE_SERVERAGENT
@@ -92,12 +96,8 @@
 #ifdef Q_OS_UNIX
   #include "unix/qtunix/qtunix.h"
 #endif // Q_OS_UNIX
-//#include "core/os.h"
-#include "core/cmd.h"
-#include "core/annotationparser.h"
-#include "core/util/datetime.h"
-#include "core/htmltag.h"
-#include "core/gui/actionwithid.h"
+#include "module/annotcloud/cmd.h"
+#include "module/annotcloud/annotationparser.h"
 #include <QtGui>
 #include <boost/foreach.hpp>
 #include <boost/tuple/tuple.hpp>
@@ -108,7 +108,7 @@
   #error "Module server agent is indispensible."
 #endif // USE_MODULE_SERVERAGENT
 
-using namespace Core::Cloud;
+using namespace AnnotCloud;
 using namespace Logger;
 
 #define DEBUG "mainwindow"
@@ -186,20 +186,23 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags f)
     tray_(0),
     annotationEditor_(0), blacklistView_(0), cloudView_(0), commentView_(0), backlogView_(0),
     aboutDialog_(0), deviceDialog_(0), helpDialog_(0), loginDialog_(0),
-    processPickDialog_(0), seekDialog_(0), syncDialog_(0), windowPickDialog_(0), urlDialog_(0), userView_(0),
+    processPickDialog_(0), seekDialog_(0), syncDialog_(0), windowPickDialog_(0),
+    mediaUrlDialog_(0), annotationUrlDialog_(0), userView_(0),
     dragPos_(BAD_POS), tokenType_(0), recentSourceLocked_(false),
     themeMenu_(0),
     setThemeToDefaultAct_(0), setThemeToRandomAct_(0),
-    setThemeToBlack1Act_(0), setThemeToBlack2Act_(0)  ,
-    setThemeToBlue1Act_(0), setThemeToBlue2Act_(0),
-    setThemeToBrown1Act_(0), setThemeToBrown2Act_(0),
-    setThemeToGreen1Act_(0), setThemeToGreen2Act_(0),
-    setThemeToLightBlue1Act_(0), setThemeToLightBlue2Act_(0),
-    setThemeToOrange1Act_(0), setThemeToOrange2Act_(0),
-    setThemeToPink1Act_(0), setThemeToPink2Act_(0),
-    setThemeToPurple1Act_(0), setThemeToPurple2Act_(0),
-    setThemeToRed1Act_(0), setThemeToRed2Act_(0),
-    setThemeToYellow1Act_(0), setThemeToYellow2Act_(0)
+    setThemeToDarkAct_(0),
+    setThemeToBlackAct_(0),
+    setThemeToBlueAct_(0),
+    setThemeToBrownAct_(0),
+    setThemeToCyanAct_(0),
+    setThemeToGrayAct_(0),
+    setThemeToGreenAct_(0),
+    setThemeToPinkAct_(0),
+    setThemeToPurpleAct_(0),
+    setThemeToRedAct_(0),
+    setThemeToWhiteAct_(0),
+    setThemeToYellowAct_(0)
 {
 //#ifdef USE_WIN_PICKER
 //  setWindowFlags(windowFlags() | Qt::WindowStaysOnTopHint);
@@ -506,6 +509,9 @@ MainWindow::createConnections()
   connect(this, SIGNAL(logged(QString)), SLOT(log(QString)), Qt::QueuedConnection);
 
   // Annotation graphics view
+  connect(this, SIGNAL(addAnnotationsRequested(AnnotationList)),
+          annotationView_, SLOT(addAnnotations(AnnotationList)),
+          Qt::QueuedConnection);
   connect(this, SIGNAL(addAndShowAnnotationRequested(Annotation)),
           annotationView_, SLOT(addAndShowAnnotation(Annotation)),
           Qt::QueuedConnection);
@@ -555,6 +561,7 @@ MainWindow::createConnections()
   // Data manager
   connect(dataManager_, SIGNAL(tokenChanged(Token)), tokenView_, SLOT(setToken(Token)));
   connect(dataManager_, SIGNAL(aliasesChanged(AliasList)), tokenView_, SLOT(setAliases(AliasList)));
+  connect(dataManager_, SIGNAL(aliasesChanged(AliasList)), SLOT(openAnnotationUrlFromAliases(AliasList)));
   connect(tokenView_, SIGNAL(aliasSubmitted(Alias)), dataManager_, SLOT(addAlias(Alias)));
 
   connect(dataManager_, SIGNAL(aliasRemovedWithId(qint64)), dataServer_, SLOT(deleteAliasWithId(qint64)));
@@ -563,6 +570,8 @@ MainWindow::createConnections()
 
   connect(annotationView_, SIGNAL(annotationAdded(Annotation)), dataManager_, SLOT(addAnnotation(Annotation)));
   connect(annotationView_, SIGNAL(annotationsRemoved()), dataManager_, SLOT(removeAnnotations()));
+
+  connect(annotationView_, SIGNAL(annotationsRemoved()), SLOT(clearAnnotationUrls()));
 
   connect(dataManager_, SIGNAL(annotationsChanged(AnnotationList)), annotationBrowser_, SLOT(setAnnotations(AnnotationList)));
   connect(dataManager_, SIGNAL(annotationAdded(Annotation)), annotationBrowser_, SLOT(addAnnotation(Annotation)));
@@ -714,12 +723,18 @@ MainWindow::createConnections()
 #endif // USE_MODE_SIGNAL
   //connect(player_, SIGNAL(opening()), SLOT(backlogView()));
 
-
   // MRL resolver
   MrlResolverManager *rm = MrlResolverManager::globalInstance();
-  connect(rm, SIGNAL(resolved(QStringList,QString,QString)), SLOT(openRemoteUrls(QStringList,QString,QString)));
+  connect(rm, SIGNAL(mediaResolved(MediaInfo)), SLOT(openRemoteMedia(MediaInfo)));
+  connect(rm, SIGNAL(annotResolved(QString)), SLOT(importAnnotationsFromUrl(QString)));
   connect(rm, SIGNAL(messageReceived(QString)), SLOT(log(QString)));
   connect(rm, SIGNAL(errorReceived(QString)), SLOT(warn(QString)));
+
+  // MRL resolver
+  AnnotationCodecManager *acm = AnnotationCodecManager::globalInstance();
+  connect(acm, SIGNAL(messageReceived(QString)), SLOT(log(QString)));
+  connect(acm, SIGNAL(errorReceived(QString)), SLOT(warn(QString)));
+  connect(acm, SIGNAL(fetched(AnnotationList,QString)), SLOT(addRemoteAnnotations(AnnotationList,QString)));
 
   // - Close
   //connect(this, SIGNAL(closing()), db_, SLOT(dispose));
@@ -755,6 +770,7 @@ MainWindow::createActions()
   MAKE_ACTION(openAct_,         OPEN,           hub_,           SLOT(open()))
   MAKE_ACTION(openFileAct_,     OPENFILE,       this,           SLOT(openFile()))
   MAKE_ACTION(openUrlAct_,      OPENURL,        this,           SLOT(openUrl()))
+  MAKE_ACTION(openAnnotationUrlAct_, OPENANNOTATIONURL, this,   SLOT(openAnnotationUrl()))
   MAKE_ACTION(openDeviceAct_,   OPENDEVICE,     this,           SLOT(openDevice()))
   MAKE_ACTION(openInWebBrowserAct_,OPENINWEBBROWSER, this,      SLOT(openInWebBrowser()))
   MAKE_ACTION(openVideoDeviceAct_, OPENVIDEODEVICE,  this,      SLOT(openVideoDevice()))
@@ -879,30 +895,23 @@ MainWindow::createActions()
   {
     MAKE_TOGGLE(setThemeToDefaultAct_,    DEFAULTTHEME,   this,   SLOT(setThemeToDefault()))
     MAKE_TOGGLE(setThemeToRandomAct_,     RANDOMTHEME,    this,   SLOT(setThemeToRandom()))
-    MAKE_TOGGLE(setThemeToBlack1Act_,     BLACKTHEME1,    this,   SLOT(setThemeToBlack1()))
-    MAKE_TOGGLE(setThemeToBlack2Act_,     BLACKTHEME2,    this,   SLOT(setThemeToBlack2()))
-    MAKE_TOGGLE(setThemeToBlue1Act_,      BLUETHEME1,     this,   SLOT(setThemeToBlue1()))
-    MAKE_TOGGLE(setThemeToBlue2Act_,      BLUETHEME2,     this,   SLOT(setThemeToBlue2()))
-    MAKE_TOGGLE(setThemeToBrown1Act_,     BROWNTHEME1,    this,   SLOT(setThemeToBrown1()))
-    MAKE_TOGGLE(setThemeToBrown2Act_,     BROWNTHEME2,    this,   SLOT(setThemeToBrown2()))
-    MAKE_TOGGLE(setThemeToGreen1Act_,     GREENTHEME1,    this,   SLOT(setThemeToGreen1()))
-    MAKE_TOGGLE(setThemeToGreen2Act_,     GREENTHEME2,    this,   SLOT(setThemeToGreen2()))
-    MAKE_TOGGLE(setThemeToLightBlue1Act_, LIGHTBLUETHEME1,this,   SLOT(setThemeToLightBlue1()))
-    MAKE_TOGGLE(setThemeToLightBlue2Act_, LIGHTBLUETHEME2,this,   SLOT(setThemeToLightBlue2()))
-    MAKE_TOGGLE(setThemeToOrange1Act_,    ORANGETHEME1,   this,   SLOT(setThemeToOrange1()))
-    MAKE_TOGGLE(setThemeToOrange2Act_,    ORANGETHEME2,   this,   SLOT(setThemeToOrange2()))
-    MAKE_TOGGLE(setThemeToPink1Act_,      PINKTHEME1,     this,   SLOT(setThemeToPink1()))
-    MAKE_TOGGLE(setThemeToPink2Act_,      PINKTHEME2,     this,   SLOT(setThemeToPink2()))
-    MAKE_TOGGLE(setThemeToPurple1Act_,    PURPLETHEME1,   this,   SLOT(setThemeToPurple1()))
-    MAKE_TOGGLE(setThemeToPurple2Act_,    PURPLETHEME2,   this,   SLOT(setThemeToPurple2()))
-    MAKE_TOGGLE(setThemeToRed1Act_,       REDTHEME1,      this,   SLOT(setThemeToRed1()))
-    MAKE_TOGGLE(setThemeToRed2Act_,       REDTHEME2,      this,   SLOT(setThemeToRed2()))
-    MAKE_TOGGLE(setThemeToYellow1Act_,    YELLOWTHEME1,   this,   SLOT(setThemeToYellow1()))
-    MAKE_TOGGLE(setThemeToYellow2Act_,    YELLOWTHEME2,   this,   SLOT(setThemeToYellow2()))
+    MAKE_TOGGLE(setThemeToDarkAct_,       DARKTHEME,      this,   SLOT(setThemeToDark()))
+    MAKE_TOGGLE(setThemeToBlackAct_,      BLACKTHEME,     this,   SLOT(setThemeToBlack()))
+    MAKE_TOGGLE(setThemeToBlueAct_,       BLUETHEME,      this,   SLOT(setThemeToBlue()))
+    MAKE_TOGGLE(setThemeToBrownAct_,      BROWNTHEME,     this,   SLOT(setThemeToBrown()))
+    MAKE_TOGGLE(setThemeToCyanAct_,       CYANTHEME,      this,   SLOT(setThemeToCyan()))
+    MAKE_TOGGLE(setThemeToGrayAct_,       GRAYTHEME,      this,   SLOT(setThemeToGray()))
+    MAKE_TOGGLE(setThemeToGreenAct_,      GREENTHEME,     this,   SLOT(setThemeToGreen()))
+    MAKE_TOGGLE(setThemeToPinkAct_,       PINKTHEME,      this,   SLOT(setThemeToPink()))
+    MAKE_TOGGLE(setThemeToPurpleAct_,     PURPLETHEME,    this,   SLOT(setThemeToPurple()))
+    MAKE_TOGGLE(setThemeToRedAct_,        REDTHEME,       this,   SLOT(setThemeToRed()))
+    MAKE_TOGGLE(setThemeToWhiteAct_,      WHITETHEME,     this,   SLOT(setThemeToWhite()))
+    MAKE_TOGGLE(setThemeToYellowAct_,     YELLOWTHEME,    this,   SLOT(setThemeToYellow()))
   }
 
   MAKE_ACTION(aboutAct_,        ABOUT,  this,   SLOT(about()))
   MAKE_ACTION(helpAct_,         HELP,   this,   SLOT(help()))
+  MAKE_ACTION(updateAct_,       UPDATE, this,   SLOT(update()))
   MAKE_ACTION(quitAct_,         QUIT,   this,   SLOT(close()))
 
   openAct_->setShortcuts(QKeySequence::Open);
@@ -951,6 +960,7 @@ MainWindow::createMenus()
 
     helpContextMenu_->addAction(openHomePageAct_);
     helpContextMenu_->addAction(helpAct_);
+    helpContextMenu_->addAction(updateAct_);
     helpContextMenu_->addAction(aboutAct_);
   }
 
@@ -1007,26 +1017,18 @@ MainWindow::createMenus()
     themeMenu_->addAction(setThemeToDefaultAct_);
     themeMenu_->addAction(setThemeToRandomAct_);
     themeMenu_->addSeparator();
-    themeMenu_->addAction(setThemeToBlack1Act_);
-    themeMenu_->addAction(setThemeToBlack2Act_);
-    themeMenu_->addAction(setThemeToBlue1Act_);
-    themeMenu_->addAction(setThemeToBlue2Act_);
-    themeMenu_->addAction(setThemeToBrown1Act_);
-    themeMenu_->addAction(setThemeToBrown2Act_);
-    themeMenu_->addAction(setThemeToGreen1Act_);
-    themeMenu_->addAction(setThemeToGreen2Act_);
-    themeMenu_->addAction(setThemeToLightBlue1Act_);
-    themeMenu_->addAction(setThemeToLightBlue2Act_);
-    themeMenu_->addAction(setThemeToOrange1Act_);
-    themeMenu_->addAction(setThemeToOrange2Act_);
-    themeMenu_->addAction(setThemeToPink1Act_);
-    themeMenu_->addAction(setThemeToPink2Act_);
-    themeMenu_->addAction(setThemeToPurple1Act_);
-    themeMenu_->addAction(setThemeToPurple2Act_);
-    themeMenu_->addAction(setThemeToRed1Act_);
-    themeMenu_->addAction(setThemeToRed2Act_);
-    themeMenu_->addAction(setThemeToYellow1Act_);
-    themeMenu_->addAction(setThemeToYellow2Act_);
+    themeMenu_->addAction(setThemeToDarkAct_);
+    themeMenu_->addAction(setThemeToBlackAct_);
+    themeMenu_->addAction(setThemeToBlueAct_);
+    themeMenu_->addAction(setThemeToBrownAct_);
+    themeMenu_->addAction(setThemeToCyanAct_);
+    themeMenu_->addAction(setThemeToGrayAct_);
+    themeMenu_->addAction(setThemeToGreenAct_);
+    themeMenu_->addAction(setThemeToPinkAct_);
+    themeMenu_->addAction(setThemeToPurpleAct_);
+    themeMenu_->addAction(setThemeToRedAct_);
+    themeMenu_->addAction(setThemeToWhiteAct_);
+    themeMenu_->addAction(setThemeToYellowAct_);
   }
 
   subtitleStyleMenu_ = new QMenu(this); {
@@ -1407,17 +1409,54 @@ MainWindow::open()
 void
 MainWindow::openUrl()
 {
-  if (!urlDialog_) {
-    urlDialog_ = new UrlDialog(this);
-    connect(urlDialog_, SIGNAL(urlEntered(QString)), SLOT(openUrl(QString)));
+  if (!mediaUrlDialog_) {
+    mediaUrlDialog_ = new UrlDialog(this);
+    mediaUrlDialog_->setWindowTitle(tr("Open media from URL"));
+    mediaUrlDialog_->setExampleUrl(tr("http://www.youtube.com/watch?v=-DJqnomZoLk"));
+    connect(mediaUrlDialog_, SIGNAL(urlEntered(QString)), SLOT(openUrl(QString)));
   }
-  urlDialog_->show();
+  mediaUrlDialog_->show();
+}
+
+void
+MainWindow::openAnnotationUrl()
+{
+  if (!annotationUrlDialog_) {
+    annotationUrlDialog_ = new UrlDialog(this);
+    annotationUrlDialog_->setWindowTitle(tr("Import annotations from URL"));
+    annotationUrlDialog_->setExampleUrl(tr("http://www.bilibili.tv/video/av55775/"));
+    connect(annotationUrlDialog_, SIGNAL(urlEntered(QString)), SLOT(openAnnotationUrl(QString)));
+  }
+  annotationUrlDialog_->show();
+}
+
+void
+MainWindow::openAnnotationUrlFromAliases(const AliasList &l)
+{
+  if (!l.isEmpty())
+    foreach (Alias a, l)
+      if (a.type() == Alias::AT_Url)
+        openAnnotationUrl(a.text());
+}
+
+void
+MainWindow::openAnnotationUrl(const QString &url)
+{
+  log(tr("analyzing URL ...") + " " + url);
+  if (registerAnnotationUrl(url)) {
+    bool ok = MrlResolverManager::globalInstance()->resolveAnnot(url);
+    if (!ok)
+      warn(tr("failed to resolve URL") + ": " + url);
+  }
 }
 
 void
 MainWindow::openUrl(const QString &url)
 {
-  if (!MrlResolverManager::globalInstance()->resolve(url)) {
+  if (MrlResolverManager::globalInstance()->resolveMedia(url))
+    log(tr("analyzing URL ...") + " " + url);
+  else {
+      qDebug()<<33333;
     if (isRemoteMrl(url))
       openMrl(url, false); // checkPath = false
     else
@@ -1631,29 +1670,33 @@ MainWindow::setRecentOpenedFile(const QString &path)
 }
 
 void
-MainWindow::openRemoteUrls(const QStringList &urls, const QString &href, const QString &title)
+MainWindow::openRemoteMedia(const MediaInfo &mi)
 {
   recentSourceLocked_ = false;
   playlist_.clear();
-  if (urls.isEmpty())
+  if (mi.mrls.isEmpty())
     return;
-  if (urls.size() > 1)
-    playlist_ = urls;
-  openMrl(urls.front(), false); // checkPath = false
-  if (!title.isEmpty() && !isRemoteMrl(title)) {
+  if (mi.mrls.size() > 1)
+    playlist_ = mi.mrls;
+  else if (!playlist_.isEmpty())
+    playlist_.clear();
+
+  openMrl(mi.mrls.front(), false); // checkPath = false
+  if (!mi.title.isEmpty() && !isRemoteMrl(mi.title)) {
     if (!player_->isValid())
       resetPlayer();
-    player_->setMediaTitle(title);
+    player_->setMediaTitle(mi.title);
   }
 
   recentDigest_.clear();
   recentSource_.clear();
-  if (!href.isEmpty()) {
-    addRecent(href);
-    recentSource_ = href;
+  if (!mi.refurl.isEmpty()) {
+    addRecent(mi.refurl);
+    recentSource_ = mi.refurl;
     recentSourceLocked_ = true;
     setToken();
   }
+  importAnnotationsFromUrl(mi.suburl);
 }
 
 void
@@ -1792,7 +1835,7 @@ MainWindow::invalidateMediaAndPlay(bool async)
 
   if (player_->hasMedia()) {
     if (async) {
-      log(tr("analyzing media ..."));
+      log(tr("analyzing media ...")); // might cause parallel contension
       QThreadPool::globalInstance()->start(new task_::invalidateMediaAndPlay(this));
       DOUT("exit: returned from async branch");
       return;
@@ -1992,7 +2035,7 @@ MainWindow::snapshot()
     if (player_->hasMedia() && !player_->isStopped()) {
 
       QString mediaName = QFileInfo(player_->mediaPath()).fileName();
-      QTime time = Core::msecs2time(player_->time());
+      QTime time = QtExt::msecs2time(player_->time());
 
       QString saveName = mediaName + "__" + time.toString("hh_mm_ss_zzz") + ".png";
       QString savePath = grabber_->savePath() + "/" + saveName;
@@ -2212,13 +2255,19 @@ MainWindow::about()
 }
 
 
-// TODO
 void
 MainWindow::help()
 {
   if (!helpDialog_)
     helpDialog_ = new HelpDialog(this);
   helpDialog_->show();
+}
+
+void
+MainWindow::update()
+{
+  log(tr("openning update URL ...") + " " G_UPDATEPAGE_URL);
+  QDesktopServices::openUrl(QUrl(G_UPDATEPAGE_URL));
 }
 
 // - Update -
@@ -2501,6 +2550,13 @@ MainWindow::submitAlias(const Alias &input, bool async)
     DOUT("exit: returned from disposed branch");
     return;
   }
+  if (input.type() == Alias::AT_Url) {
+    if (!isRemoteMrl(input.text())) {
+      warn(tr("source alias is not a valid URL") + ": " + input.text());
+      return;
+    }
+    openAnnotationUrl(input.text());
+  }
   if (async) {
     log(tr("connecting server to submit alias ..."));
     QThreadPool::globalInstance()->start(new task_::submitAlias(input, this));
@@ -2706,7 +2762,7 @@ MainWindow::setToken(const QString &input, bool async)
   if (tid) {
     Token t = dataServer_->selectTokenWithId(tid);
     if (t.isValid()) {
-      aliases = dataServer_->selectAliasesWithTokenId(tid);
+      //aliases = dataServer_->selectAliasesWithTokenId(tid);
       token = t;
     } //else
       //warn(TR(T_ERROR_SUBMIT_TOKEN) + ": " + input);
@@ -2735,24 +2791,22 @@ MainWindow::setToken(const QString &input, bool async)
   //annotationView_->setAnnotations(annots);
   emit setAnnotationsRequested(annots);
 
-  /*
-  if (tokens.size() == 1) {
-    Token token = tokens.front();
-    if (!tokenView_->hasToken()) {
-      tokenView_->setToken(token);
-      server_->queryClusteredTokensyTokenId(token.id());
-      return;
-    }
-  }
-
-  tokenView_->setClusteredTokens(tokens);
-  foreach (const Token &t, tokens)
-    server_->queryAnnotationsByTokenId(t.id());
-  */
+  //if (tokens.size() == 1) {
+  //  Token token = tokens.front();
+  //  if (!tokenView_->hasToken()) {
+  //    tokenView_->setToken(token);
+  //    server_->queryClusteredTokensyTokenId(token.id());
+  //    return;
+  //  }
+  //}
+  //tokenView_->setClusteredTokens(tokens);
+  //foreach (const Token &t, tokens)
+  //  server_->queryAnnotationsByTokenId(t.id());
 
   DOUT("inetMutex unlocking");
   inetMutex_.unlock();
   DOUT("inetMutex unlocked");
+
   DOUT("exit");
 }
 
@@ -2970,12 +3024,12 @@ MainWindow::eval(const QString &input)
 
   foreach (const QString &tag, tags)
     switch (qHash(tag)) {
-    case Core::H_Chat: chat(text); return;
-    case Core::H_Play: play(); return;
+    case AnnotCloud::H_Chat: chat(text); return;
+    case AnnotCloud::H_Play: play(); return;
 
-    case Core::H_Quit:
-    case Core::H_Exit:
-    case Core::H_Close:
+    case AnnotCloud::H_Quit:
+    case AnnotCloud::H_Exit:
+    case AnnotCloud::H_Close:
       close();
       return;
     }
@@ -3052,7 +3106,7 @@ MainWindow::say(const QString &text, const QString &color)
   if (color.isEmpty())
     log(text);
   else
-    log(core_html_style(text, "color:" + color) + core_html_br());
+    log(html_style(text, "color:" + color) + html_br());
   DOUT("exit");
 }
 
@@ -3395,7 +3449,7 @@ MainWindow::invalidateContextMenu()
 
       for (int tid = 0; tid < player_->titleCount(); tid++) {
         QString text = TR(T_SECTION) + " " + QString::number(tid);
-        BOOST_AUTO(a, new Core::Gui::ActionWithId(tid, text, sectionMenu_));
+        BOOST_AUTO(a, new QtExt::ActionWithId(tid, text, sectionMenu_));
         contextMenuActions_.append(a);
         if (tid == player_->titleId()) {
 #ifdef Q_WS_WIN
@@ -3433,6 +3487,8 @@ MainWindow::invalidateContextMenu()
     if (hub_->isMediaTokenMode() && player_->hasMedia()) {
       contextMenu_->addSeparator();
 
+      contextMenu_->addAction(openAnnotationUrlAct_);
+
       // Subtitle menu
 
       subtitleMenu_->clear();
@@ -3455,7 +3511,7 @@ MainWindow::invalidateContextMenu()
             subtitle = TR(T_SUBTITLE) + " " + QString::number(id);
           else
             subtitle = QString::number(id) + ". " + subtitle;
-          BOOST_AUTO(a, new Core::Gui::ActionWithId(id, subtitle, subtitleMenu_));
+          BOOST_AUTO(a, new QtExt::ActionWithId(id, subtitle, subtitleMenu_));
           contextMenuActions_.append(a);
           if (id == player_->subtitleId()) {
 #ifdef Q_WS_WIN
@@ -3486,7 +3542,7 @@ MainWindow::invalidateContextMenu()
             name = TR(T_AUDIOTRACK) + " " + QString::number(id);
           else
             name = QString::number(id) + ". " + name;
-          BOOST_AUTO(a, new Core::Gui::ActionWithId(id, name, audioTrackMenu_));
+          BOOST_AUTO(a, new QtExt::ActionWithId(id, name, audioTrackMenu_));
           contextMenuActions_.append(a);
           if (id == player_->audioTrackId()) {
 #ifdef Q_WS_WIN
@@ -3642,26 +3698,18 @@ MainWindow::invalidateContextMenu()
       UiStyle::Theme t = UiStyle::globalInstance()->theme();
       setThemeToDefaultAct_->setChecked(t == UiStyle::DefaultTheme);
       setThemeToRandomAct_->setChecked(t == UiStyle::RandomTheme);
-      setThemeToBlack1Act_->setChecked(t == UiStyle::Black1Theme);
-      setThemeToBlack2Act_->setChecked(t == UiStyle::Black2Theme);
-      setThemeToBlue1Act_->setChecked(t == UiStyle::Blue1Theme);
-      setThemeToBlue2Act_->setChecked(t == UiStyle::Blue2Theme);
-      setThemeToBrown1Act_->setChecked(t == UiStyle::Brown1Theme);
-      setThemeToBrown2Act_->setChecked(t == UiStyle::Brown2Theme);
-      setThemeToGreen1Act_->setChecked(t == UiStyle::Green1Theme);
-      setThemeToGreen2Act_->setChecked(t == UiStyle::Green2Theme);
-      setThemeToLightBlue1Act_->setChecked(t == UiStyle::LightBlue1Theme);
-      setThemeToLightBlue2Act_->setChecked(t == UiStyle::LightBlue2Theme);
-      setThemeToOrange1Act_->setChecked(t == UiStyle::Orange1Theme);
-      setThemeToOrange2Act_->setChecked(t == UiStyle::Orange2Theme);
-      setThemeToPink1Act_->setChecked(t == UiStyle::Pink1Theme);
-      setThemeToPink2Act_->setChecked(t == UiStyle::Pink2Theme);
-      setThemeToPurple1Act_->setChecked(t == UiStyle::Purple1Theme);
-      setThemeToPurple2Act_->setChecked(t == UiStyle::Purple2Theme);
-      setThemeToRed1Act_->setChecked(t == UiStyle::Red1Theme);
-      setThemeToRed2Act_->setChecked(t == UiStyle::Red2Theme);
-      setThemeToYellow1Act_->setChecked(t == UiStyle::Yellow1Theme);
-      setThemeToYellow2Act_->setChecked(t == UiStyle::Yellow2Theme);
+      setThemeToDarkAct_->setChecked(t == UiStyle::DarkTheme);
+      setThemeToBlackAct_->setChecked(t == UiStyle::BlackTheme);
+      setThemeToBlueAct_->setChecked(t == UiStyle::BlueTheme);
+      setThemeToBrownAct_->setChecked(t == UiStyle::BrownTheme);
+      setThemeToCyanAct_->setChecked(t == UiStyle::CyanTheme);
+      setThemeToGrayAct_->setChecked(t == UiStyle::GrayTheme);
+      setThemeToGreenAct_->setChecked(t == UiStyle::GreenTheme);
+      setThemeToPinkAct_->setChecked(t == UiStyle::PinkTheme);
+      setThemeToPurpleAct_->setChecked(t == UiStyle::PurpleTheme);
+      setThemeToRedAct_->setChecked(t == UiStyle::RedTheme);
+      setThemeToWhiteAct_->setChecked(t == UiStyle::WhiteTheme);
+      setThemeToYellowAct_->setChecked(t == UiStyle::YellowTheme);
     }
 
     // Language
@@ -3759,7 +3807,7 @@ MainWindow::invalidateTrackMenu()
 
   foreach (Player::MediaInfo mi, player_->playlist()) {
     QString text = QString("%1. %2").arg(QString::number(mi.track + 1)).arg(mi.title);
-    BOOST_AUTO(a, new Core::Gui::ActionWithId(mi.track, text, trackMenu_));
+    BOOST_AUTO(a, new QtExt::ActionWithId(mi.track, text, trackMenu_));
     a->setToolTip(mi.path);
     if (mi.track == player_->trackNumber()) {
 #ifdef Q_WS_X11
@@ -4538,7 +4586,7 @@ MainWindow::login(const QString &userName, const QString &encryptedPassword, boo
     if (Settings::globalInstance()->updateDate() != today) {
       bool updated = server_->isSoftwareUpdated();
       if (!updated)
-        warn(tr("new version released, check here: ") + CORE_HTML_BR() ": " + G_UPDATEPAGE_URL);
+        warn(tr("new version released, check here: ") + HTML_BR() ": " + G_UPDATEPAGE_URL);
 
       Settings::globalInstance()->setUpdateDate(today);
     }
@@ -5032,7 +5080,7 @@ MainWindow::invalidatePlaylistMenu()
           text = f;
       }
       text = QString::number(index++) + ". " + shortenText(text);
-      BOOST_AUTO(a, new Core::Gui::ActionWithId(i++, text, playlistMenu_));
+      BOOST_AUTO(a, new QtExt::ActionWithId(i++, text, playlistMenu_));
       if (f == recentOpenedFile_) {
 #ifdef Q_WS_X11
         a->setCheckable(true);
@@ -5059,8 +5107,8 @@ MainWindow::invalidateRecent()
 
   BOOST_AUTO(p, recentFiles_.begin());
   while (p != recentFiles_.end()) {
-    if (isRemoteMrl(*p)
-        || QFileInfo(removeUrlPrefix(*p)).exists())
+    if (isRemoteMrl(*p) ||
+        QFileInfo(removeUrlPrefix(*p)).exists())
       ++p;
     else {
       p = recentFiles_.erase(p);
@@ -5110,7 +5158,7 @@ MainWindow::invalidateRecentMenu()
       }
       Q_ASSERT(!text.isEmpty());
       text = QString::number(i) + ". " + shortenText(text);
-      BOOST_AUTO(a, new Core::Gui::ActionWithId(i++, text, recentMenu_));
+      BOOST_AUTO(a, new QtExt::ActionWithId(i++, text, recentMenu_));
       connect(a, SIGNAL(triggeredWithId(int)), SLOT(openRecent(int)));
 
       recentMenu_->addAction(a);
@@ -5324,17 +5372,20 @@ MainWindow::subtitleColor() const
       UiStyle::globalInstance()->setBlackBackground(this); \
   }
 
-  SET_THEME_TO(Default) SET_THEME_TO(Random)
-  SET_THEME_TO(Black1)  SET_THEME_TO(Black2)
-  SET_THEME_TO(Blue1)   SET_THEME_TO(Blue2)
-  SET_THEME_TO(Brown1)  SET_THEME_TO(Brown2)
-  SET_THEME_TO(Green1)  SET_THEME_TO(Green2)
-  SET_THEME_TO(LightBlue1) SET_THEME_TO(LightBlue2)
-  SET_THEME_TO(Orange1) SET_THEME_TO(Orange2)
-  SET_THEME_TO(Pink1)   SET_THEME_TO(Pink2)
-  SET_THEME_TO(Purple1) SET_THEME_TO(Purple2)
-  SET_THEME_TO(Red1)    SET_THEME_TO(Red2)
-  SET_THEME_TO(Yellow1) SET_THEME_TO(Yellow2)
+  SET_THEME_TO(Default)
+  SET_THEME_TO(Random)
+  SET_THEME_TO(Dark)
+  SET_THEME_TO(Black)
+  SET_THEME_TO(Blue)
+  SET_THEME_TO(Brown)
+  SET_THEME_TO(Cyan)
+  SET_THEME_TO(Gray)
+  SET_THEME_TO(Green)
+  SET_THEME_TO(Pink)
+  SET_THEME_TO(Purple)
+  SET_THEME_TO(Red)
+  SET_THEME_TO(White)
+  SET_THEME_TO(Yellow)
 #undef SET_THEME_TO
 
 void
@@ -5381,7 +5432,7 @@ MainWindow::setBrowsedFile(const QString &filePath)
 
   int id = 0;
   foreach (QFileInfo f, browsedFiles_) {
-    BOOST_AUTO(a, new Core::Gui::ActionWithId(id++, f.fileName(), browseMenu_));
+    BOOST_AUTO(a, new QtExt::ActionWithId(id++, f.fileName(), browseMenu_));
     if (f.fileName() == fi.fileName()) {
 #ifdef Q_WS_X11
       a->setCheckable(true);
@@ -5556,6 +5607,54 @@ MainWindow::updateLiveAnnotations(bool async)
 
   //DOUT("exit");
 }
+
+// - Remote annotation -
+
+void
+MainWindow::addRemoteAnnotations(const AnnotationList &l, const QString &url)
+{
+  AnnotationList annots;
+  const Token &t = dataManager_->token();
+  foreach (Annotation a, l) {
+    a.setTokenId(t.id());
+    a.setTokenPart(t.part());
+    a.setTokenDigest(t.digest());
+    annots.append(a);
+  }
+  if (!annots.isEmpty()) {
+    emit logged(QString("%1 (+%2, %3)")
+                .arg(tr("annotations found"))
+                .arg(QString::number(annots.size()))
+                .arg(url));
+    emit addAnnotationsRequested(annots);
+    if (t.hasId())
+      dataServer_->updateAnnotations(annots);
+  }
+}
+
+void
+MainWindow::importAnnotationsFromUrl(const QString &suburl)
+{
+  if (!suburl.isEmpty()) {
+    log(tr("analyzing annotation URL ...") + ": " + suburl);
+    if (registerAnnotationUrl(suburl))
+      AnnotationCodecManager::globalInstance()->fetch(suburl);
+  }
+}
+
+bool
+MainWindow::registerAnnotationUrl(const QString &suburl)
+{
+  if (suburl.isEmpty() ||
+      annotationUrls_.contains(suburl, Qt::CaseInsensitive))
+    return false;
+  annotationUrls_.append(suburl);
+  return true;
+}
+
+void
+MainWindow::clearAnnotationUrls()
+{ annotationUrls_.clear(); }
 
 // - Source -
 

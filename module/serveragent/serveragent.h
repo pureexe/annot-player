@@ -11,10 +11,10 @@
 
 #include <QObject>
 #include <QMutex>
-#include "core/cloud/user.h"
-#include "core/cloud/token.h"
-#include "core/cloud/alias.h"
-#include "core/cloud/annotation.h"
+#include "module/annotcloud/user.h"
+#include "module/annotcloud/token.h"
+#include "module/annotcloud/alias.h"
+#include "module/annotcloud/annotation.h"
 
 class ServerProxy;
 class ClientAgent;
@@ -26,13 +26,13 @@ class ServerAgent: public QObject
   typedef ServerAgent Self;
   typedef QObject Base;
 
-  typedef Core::Cloud::User User;
-  typedef Core::Cloud::Token Token;
-  typedef Core::Cloud::TokenList TokenList;
-  typedef Core::Cloud::Alias Alias;
-  typedef Core::Cloud::AliasList AliasList;
-  typedef Core::Cloud::Annotation Annotation;
-  typedef Core::Cloud::AnnotationList AnnotationList;
+  typedef AnnotCloud::User User;
+  typedef AnnotCloud::Token Token;
+  typedef AnnotCloud::TokenList TokenList;
+  typedef AnnotCloud::Alias Alias;
+  typedef AnnotCloud::AliasList AliasList;
+  typedef AnnotCloud::Annotation Annotation;
+  typedef AnnotCloud::AnnotationList AnnotationList;
 
 public:
   explicit ServerAgent(QObject *parent = 0);
@@ -107,6 +107,7 @@ public:
 
   // - Queries -
 public:
+  qint64 selectTokenId(const Token &token);
   Token selectTokenWithId(qint64 id);
   Token selectTokenWithDigest(const QString &digest, qint32 part);
 

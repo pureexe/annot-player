@@ -8,8 +8,8 @@
 #include "signalhub.h"
 #include "module/player/player.h"
 #include "module/serveragent/serveragent.h"
-#include "core/util/datetime.h"
-#include "core/cloud/annotation.h"
+#include "module/qtext/datetime.h"
+#include "module/annotcloud/annotation.h"
 #ifdef Q_WS_WIN
   #include "win/qtwin/qtwin.h"
 #endif // Q_WS_WIN
@@ -17,7 +17,7 @@
 #include <map>
 #include <QtGui>
 
-using namespace Core::Cloud;
+using namespace AnnotCloud;
 
 /* jichi 7/25/2011: using boost is so bloated while less efficient than directly expanding the code.
 #include <boost/typeof/typeof.hpp>
@@ -145,7 +145,6 @@ PlayerUi::createConnections()
   void \
   PlayerUi::_connect##Player() \
   { \
-    _connect(player_, SIGNAL(encodingChanged()), this, SLOT(invalidateTitle())); \
     _connect(player_, SIGNAL(mediaTitleChanged(QString)), this, SLOT(invalidateTitle())); \
 \
     _connect(player_, SIGNAL(mediaChanged()), this, SLOT(invalidateTitle())); \
@@ -398,8 +397,8 @@ PlayerUi::invalidatePositionSlider()
            total_msecs = player_->mediaLength();
     qint64 left_msecs = total_msecs - current_msecs;
 
-    QTime current = Core::msecs2time(current_msecs),
-          left = Core::msecs2time(left_msecs);
+    QTime current = QtExt::msecs2time(current_msecs),
+          left = QtExt::msecs2time(left_msecs);
 
     slider->setToolTip(current.toString() + " / -" + left.toString());
 
@@ -444,10 +443,10 @@ PlayerUi::invalidatePositionButton()
     qint64 current_msecs = player_->time(),
            total_msecs = player_->mediaLength();
     //qint64 left_msecs = total_msecs - current_msecs;
-    //QTime left = Core::msecs2time(left_msecs),
+    //QTime left = QtExt::msecs2time(left_msecs),
 
-    QTime current = Core::msecs2time(current_msecs),
-          total = Core::msecs2time(total_msecs);
+    QTime current = QtExt::msecs2time(current_msecs),
+          total = QtExt::msecs2time(total_msecs);
 
     button->setText(
       QString("%1 / %2")

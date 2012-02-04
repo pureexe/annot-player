@@ -7,11 +7,11 @@
 #include "stylesheet.h"
 #include "lineedit.h"
 #include "logger.h"
-#include "core/cloud/user.h"
-#include "core/gui/toolbutton.h"
+#include "module/annotcloud/user.h"
+#include "module/qtext/toolbutton.h"
 #include <QtGui>
 
-using namespace Core::Cloud;
+using namespace AnnotCloud;
 using namespace Logger;
 
 // - Constructions -
@@ -39,14 +39,14 @@ LoginDialog::LoginDialog(QWidget *parent)
     passwordEdit_->setText(TR(T_DEFAULT_PASSWORD));
   }
 
-  QToolButton *loginButton = new Core::Gui::ToolButton; {
+  QToolButton *loginButton = new QtExt::ToolButton; {
     loginButton->setStyleSheet(SS_TOOLBUTTON_TEXT);
     loginButton->setToolButtonStyle(Qt::ToolButtonTextOnly);
     loginButton->setText(QString("[ %1 ]").arg(TR(T_LOGIN)));
     loginButton->setToolTip(TR(T_LOGIN) + " [ENTER]");
   }
 
-  QToolButton *cancelButton = new Core::Gui::ToolButton; {
+  QToolButton *cancelButton = new QtExt::ToolButton; {
     cancelButton->setStyleSheet(SS_TOOLBUTTON_TEXT);
     cancelButton->setToolButtonStyle(Qt::ToolButtonTextOnly);
     cancelButton->setText(QString("[ %1 ]").arg(TR(T_CANCEL)));

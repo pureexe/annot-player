@@ -2,7 +2,7 @@
 // 7/12/2011
 
 #include "osdwindow.h"
-#include "core/eventlistener.h"
+#include "module/qtext/eventlistener.h"
 #ifdef Q_WS_X11
   #include "unix/qtx/qtx.h"
 #endif // Q_WS_X11
@@ -42,12 +42,12 @@ OsdWindow::OsdWindow(QWidget *parent)
   //connect(poller_, SIGNAL(timeout()), SLOT(repaint()));
 }
 
-Core::EventListener*
+QtExt::EventListener*
 OsdWindow::eventListener() const
 { return listener_; }
 
 void
-OsdWindow::setEventListener(Core::EventListener *listener)
+OsdWindow::setEventListener(QtExt::EventListener *listener)
 { listener_ = listener; }
 
 // - Events -

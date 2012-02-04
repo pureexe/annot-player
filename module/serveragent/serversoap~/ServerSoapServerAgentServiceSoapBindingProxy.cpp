@@ -1185,6 +1185,114 @@ int ServerAgentServiceSoapBindingProxy::selectMediaAnnotationsWithTokenId(const 
 	return soap_closesock(soap);
 }
 
+int ServerAgentServiceSoapBindingProxy::selectMediaTokenIdWithDigest(const char *endpoint, const char *soap_action, tns__selectMediaTokenIdWithDigest *tns__selectMediaTokenIdWithDigest_, tns__selectMediaTokenIdWithDigestResponse *tns__selectMediaTokenIdWithDigestResponse_)
+{	struct soap *soap = this;
+	struct __tns__selectMediaTokenIdWithDigest soap_tmp___tns__selectMediaTokenIdWithDigest;
+	if (endpoint)
+		soap_endpoint = endpoint;
+	if (!soap_endpoint)
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
+	if (!soap_action)
+		soap_action = "";
+	soap->encodingStyle = NULL;
+	soap_tmp___tns__selectMediaTokenIdWithDigest.tns__selectMediaTokenIdWithDigest_ = tns__selectMediaTokenIdWithDigest_;
+	soap_begin(soap);
+	soap_serializeheader(soap);
+	soap_serialize___tns__selectMediaTokenIdWithDigest(soap, &soap_tmp___tns__selectMediaTokenIdWithDigest);
+	if (soap_begin_count(soap))
+		return soap->error;
+	if (soap->mode & SOAP_IO_LENGTH)
+	{	if (soap_envelope_begin_out(soap)
+		 || soap_putheader(soap)
+		 || soap_body_begin_out(soap)
+		 || soap_put___tns__selectMediaTokenIdWithDigest(soap, &soap_tmp___tns__selectMediaTokenIdWithDigest, "-tns:selectMediaTokenIdWithDigest", NULL)
+		 || soap_body_end_out(soap)
+		 || soap_envelope_end_out(soap))
+			 return soap->error;
+	}
+	if (soap_end_count(soap))
+		return soap->error;
+	if (soap_connect(soap, soap_endpoint, soap_action)
+	 || soap_envelope_begin_out(soap)
+	 || soap_putheader(soap)
+	 || soap_body_begin_out(soap)
+	 || soap_put___tns__selectMediaTokenIdWithDigest(soap, &soap_tmp___tns__selectMediaTokenIdWithDigest, "-tns:selectMediaTokenIdWithDigest", NULL)
+	 || soap_body_end_out(soap)
+	 || soap_envelope_end_out(soap)
+	 || soap_end_send(soap))
+		return soap_closesock(soap);
+	if (!tns__selectMediaTokenIdWithDigestResponse_)
+		return soap_closesock(soap);
+	tns__selectMediaTokenIdWithDigestResponse_->soap_default(soap);
+	if (soap_begin_recv(soap)
+	 || soap_envelope_begin_in(soap)
+	 || soap_recv_header(soap)
+	 || soap_body_begin_in(soap))
+		return soap_closesock(soap);
+	tns__selectMediaTokenIdWithDigestResponse_->soap_get(soap, "tns:selectMediaTokenIdWithDigestResponse", "tns:selectMediaTokenIdWithDigestResponse");
+	if (soap->error)
+		return soap_recv_fault(soap, 0);
+	if (soap_body_end_in(soap)
+	 || soap_envelope_end_in(soap)
+	 || soap_end_recv(soap))
+		return soap_closesock(soap);
+	return soap_closesock(soap);
+}
+
+int ServerAgentServiceSoapBindingProxy::selectMediaTokenIdWithSource(const char *endpoint, const char *soap_action, tns__selectMediaTokenIdWithSource *tns__selectMediaTokenIdWithSource_, tns__selectMediaTokenIdWithSourceResponse *tns__selectMediaTokenIdWithSourceResponse_)
+{	struct soap *soap = this;
+	struct __tns__selectMediaTokenIdWithSource soap_tmp___tns__selectMediaTokenIdWithSource;
+	if (endpoint)
+		soap_endpoint = endpoint;
+	if (!soap_endpoint)
+		soap_endpoint = "http://localhost/services/ServerAgentPort";
+	if (!soap_action)
+		soap_action = "";
+	soap->encodingStyle = NULL;
+	soap_tmp___tns__selectMediaTokenIdWithSource.tns__selectMediaTokenIdWithSource_ = tns__selectMediaTokenIdWithSource_;
+	soap_begin(soap);
+	soap_serializeheader(soap);
+	soap_serialize___tns__selectMediaTokenIdWithSource(soap, &soap_tmp___tns__selectMediaTokenIdWithSource);
+	if (soap_begin_count(soap))
+		return soap->error;
+	if (soap->mode & SOAP_IO_LENGTH)
+	{	if (soap_envelope_begin_out(soap)
+		 || soap_putheader(soap)
+		 || soap_body_begin_out(soap)
+		 || soap_put___tns__selectMediaTokenIdWithSource(soap, &soap_tmp___tns__selectMediaTokenIdWithSource, "-tns:selectMediaTokenIdWithSource", NULL)
+		 || soap_body_end_out(soap)
+		 || soap_envelope_end_out(soap))
+			 return soap->error;
+	}
+	if (soap_end_count(soap))
+		return soap->error;
+	if (soap_connect(soap, soap_endpoint, soap_action)
+	 || soap_envelope_begin_out(soap)
+	 || soap_putheader(soap)
+	 || soap_body_begin_out(soap)
+	 || soap_put___tns__selectMediaTokenIdWithSource(soap, &soap_tmp___tns__selectMediaTokenIdWithSource, "-tns:selectMediaTokenIdWithSource", NULL)
+	 || soap_body_end_out(soap)
+	 || soap_envelope_end_out(soap)
+	 || soap_end_send(soap))
+		return soap_closesock(soap);
+	if (!tns__selectMediaTokenIdWithSourceResponse_)
+		return soap_closesock(soap);
+	tns__selectMediaTokenIdWithSourceResponse_->soap_default(soap);
+	if (soap_begin_recv(soap)
+	 || soap_envelope_begin_in(soap)
+	 || soap_recv_header(soap)
+	 || soap_body_begin_in(soap))
+		return soap_closesock(soap);
+	tns__selectMediaTokenIdWithSourceResponse_->soap_get(soap, "tns:selectMediaTokenIdWithSourceResponse", "tns:selectMediaTokenIdWithSourceResponse");
+	if (soap->error)
+		return soap_recv_fault(soap, 0);
+	if (soap_body_end_in(soap)
+	 || soap_envelope_end_in(soap)
+	 || soap_end_recv(soap))
+		return soap_closesock(soap);
+	return soap_closesock(soap);
+}
+
 int ServerAgentServiceSoapBindingProxy::selectMediaTokenWithDigest(const char *endpoint, const char *soap_action, tns__selectMediaTokenWithDigest *tns__selectMediaTokenWithDigest_, tns__selectMediaTokenWithDigestResponse *tns__selectMediaTokenWithDigestResponse_)
 {	struct soap *soap = this;
 	struct __tns__selectMediaTokenWithDigest soap_tmp___tns__selectMediaTokenWithDigest;

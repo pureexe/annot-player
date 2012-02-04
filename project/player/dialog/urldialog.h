@@ -4,12 +4,12 @@
 // urldialog.h
 // 1/24/2012
 
-#include "core/gui/dialog.h"
+#include "module/qtext/dialog.h"
 
 QT_FORWARD_DECLARE_CLASS(QLineEdit)
-QT_FORWARD_DECLARE_CLASS(QLabel)
+QT_FORWARD_DECLARE_CLASS(QToolButton)
 
-typedef Core::Gui::Dialog UrlDialogBase;
+typedef QtExt::Dialog UrlDialogBase;
 
 class UrlDialog : public UrlDialogBase
 {
@@ -18,6 +18,7 @@ class UrlDialog : public UrlDialogBase
   typedef UrlDialogBase Base;
 
   QLineEdit *edit_;
+  QToolButton *urlButton_;
 
 public:
   explicit UrlDialog(QWidget *parent = 0);
@@ -28,11 +29,11 @@ signals:
 public slots:
   void open();
   void paste();
+  void setExampleUrl(const QString &text);
 
 protected:
   static QString autoCompleteUrl(const QString &url);
 
-  QString exampleUrl() const;
 protected slots:
   void showExampleUrl();
 

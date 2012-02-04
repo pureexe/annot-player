@@ -42,6 +42,7 @@
                         <array>
                                 <string>f4v</string>
                                 <string>flv</string>
+                                <string>hlv</string>
                         </array>
                         <key>CFBundleTypeIconFile</key>
                         <string>flv.icns</string>

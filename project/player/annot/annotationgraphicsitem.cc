@@ -11,9 +11,9 @@
 #include "defines.h"
 #include "logger.h"
 #include "signalhub.h"
-#include "core/cmd.h"
-#include "core/htmltag.h"
-#include "core/annotationparser.h"
+#include "module/annotcloud/cmd.h"
+#include "module/annotcloud/annotationparser.h"
+#include "module/qtext/htmltag.h"
 #include <boost/tuple/tuple.hpp>
 #include <QtGui>
 #include <ctime>
@@ -22,7 +22,7 @@
 //#define DEBUG "annotationgraphicsitem"
 #include "module/debug/debug.h"
 
-using namespace Core::Cloud;
+using namespace AnnotCloud;
 using namespace Logger;
 
 // - Helpers -
@@ -259,14 +259,14 @@ AnnotationGraphicsItem::setTags(const QStringList &tags)
   if (!tags.empty())
     foreach (const QString &tag, tags) {
       switch (qHash(tag)) {
-      case Core::H_Verbatim: continue;
-      case Core::H_Fly:
-      case Core::H_Float: setStyle(FloatStyle); break;
-      case Core::H_Top: setStyle(TopStyle); break;
-      case Core::H_Bottom: setStyle(BottomStyle); break;
+      case AnnotCloud::H_Verbatim: continue;
+      case AnnotCloud::H_Fly:
+      case AnnotCloud::H_Float: setStyle(FloatStyle); break;
+      case AnnotCloud::H_Top: setStyle(TopStyle); break;
+      case AnnotCloud::H_Bottom: setStyle(BottomStyle); break;
 
-      case Core::H_Sub:
-      case Core::H_Subtitle: setStyle(SubtitleStyle); break;
+      case AnnotCloud::H_Sub:
+      case AnnotCloud::H_Subtitle: setStyle(SubtitleStyle); break;
       default:
         // Warn if the annot is submitted by current user
         if (!annot_.hasUserId() && !annot_.hasUserAlias() ||
@@ -327,49 +327,49 @@ AnnotationGraphicsItem::parse(const QString &input)
   boost::tie(tag, left) = Core::parseLeadingTag(text);
   uint hash = qHash(tag);
 
-  if (hash == Core::H_Verbatim)
+  if (hash == AnnotCloud::H_Verbatim)
     return text;
 
-  else if (hash == Core::H_Float) {
+  else if (hash == AnnotCloud::H_Float) {
     setStyle(Float);
     return SELF(left);
-  } else if (hash == Core::H_Top) {
+  } else if (hash == AnnotCloud::H_Top) {
     setStyle(Top);
     return SELF(left);
-  } else if (hash == Core::H_Bottom) {
+  } else if (hash == AnnotCloud::H_Bottom) {
     setStyle(Bottom);
     return SELF(left);
   }
 
-  else if (hash == Core::H_Em || hash == Core::H_Emph || hash == Core::H_TextIt)
-    return CORE_HTML_EM(SELF(left));
-  else if (hash == Core::H_Bf || hash == Core::H_Strong || hash == Core::H_TextBf)
-    return CORE_HTML_STRONG(SELF(left));
+  else if (hash == AnnotCloud::H_Em || hash == AnnotCloud::H_Emph || hash == AnnotCloud::H_TextIt)
+    return HTML_EM(SELF(left));
+  else if (hash == AnnotCloud::H_Bf || hash == AnnotCloud::H_Strong || hash == AnnotCloud::H_TextBf)
+    return HTML_STRONG(SELF(left));
 
-  else if (hash == Core::H_LineThrough
-           || hash == Core::H_Strike
-           || hash == Core::H_StrikeOut
-           || hash == Core::H_Sout)
-    return CORE_HTML_STYLE(SELF(left), text-decoration:line-through);
-  else if (hash == Core::H_Underline
-           || hash == Core::H_Uline)
-    return CORE_HTML_STYLE(SELF(left), text-decoration:underline);
-  else if (hash == Core::H_Overline)
-    return CORE_HTML_STYLE(SELF(left), text-decoration:overline);
-  else if (hash == Core::H_Blink)
-    return CORE_HTML_STYLE(SELF(left), text-decoration:blink);
+  else if (hash == AnnotCloud::H_LineThrough
+           || hash == AnnotCloud::H_Strike
+           || hash == AnnotCloud::H_StrikeOut
+           || hash == AnnotCloud::H_Sout)
+    return HTML_STYLE(SELF(left), text-decoration:line-through);
+  else if (hash == AnnotCloud::H_Underline
+           || hash == AnnotCloud::H_Uline)
+    return HTML_STYLE(SELF(left), text-decoration:underline);
+  else if (hash == AnnotCloud::H_Overline)
+    return HTML_STYLE(SELF(left), text-decoration:overline);
+  else if (hash == AnnotCloud::H_Blink)
+    return HTML_STYLE(SELF(left), text-decoration:blink);
 
 #define ELIF_TRANSFORM(_trans) \
-  else if (hash == Core::H_##_trans) \
-    return CORE_HTML_STYLE(SELF(left), text-transform:_trans); \
+  else if (hash == AnnotCloud::H_##_trans) \
+    return HTML_STYLE(SELF(left), text-transform:_trans); \
 
   ELIF_TRANSFORM(Uppercase)
   ELIF_TRANSFORM(Lowercase)
 #undef ELIF_TRANSFORM
 
 #define ELIF_COLOR(_color) \
-  else if (hash == (Core::H_##_color)) \
-    return CORE_HTML_STYLE(SELF(left), color:_color);
+  else if (hash == (AnnotCloud::H_##_color)) \
+    return HTML_STYLE(SELF(left), color:_color);
 
   ELIF_COLOR(Black)
   ELIF_COLOR(Blue)
@@ -388,8 +388,8 @@ AnnotationGraphicsItem::parse(const QString &input)
 #undef ELIF_COLOR
 
 #define ELIF_SIZE(_id, _size) \
-  else if (hash == (Core::H_##_id)) \
-    return CORE_HTML_STYLE(SELF(left), font-size:_size);
+  else if (hash == (AnnotCloud::H_##_id)) \
+    return HTML_STYLE(SELF(left), font-size:_size);
 
   ELIF_SIZE(Tiny,       ANNOTATION_SIZE_TINY)
   ELIF_SIZE(Small,      ANNOTATION_SIZE_SMALL)
@@ -656,7 +656,7 @@ AnnotationGraphicsItem::contextMenuEvent(QContextMenuEvent *event)
 
     } else {
       QString text = abstract();
-      if (annot_.hasId() && !hub_->isLiveTokenMode()) {
+      if (annot_.id() > 0 && !hub_->isLiveTokenMode()) {
         menu.addAction(TR(T_BLESS) + ": " + text, this, SLOT(blessMe()));
         menu.addAction(TR(T_CURSE) + ": " + text, this, SLOT(curseMe()));
       }
@@ -770,18 +770,18 @@ AnnotationGraphicsItem::edit()
 void
 AnnotationGraphicsItem::blessMe()
 {
-  if (annot_.hasId() && !hub_->isLiveTokenMode())
+  if (annot_.id() > 0 && !hub_->isLiveTokenMode())
     view_->blessAnnotationWithId(annot_.id());
-  if (annot_.hasUserId())
+  if (annot_.userId() > 0)
     view_->blessUserWithId(annot_.userId());
 }
 
 void
 AnnotationGraphicsItem::curseMe()
 {
-  if (annot_.hasId() && !hub_->isLiveTokenMode())
+  if (annot_.id() > 0 && !hub_->isLiveTokenMode())
     view_->curseAnnotationWithId(annot_.id());
-  if (annot_.hasUserId())
+  if (annot_.userId() > 0)
     view_->curseUserWithId(annot_.userId());
 }
 
@@ -791,7 +791,7 @@ AnnotationGraphicsItem::blockMe()
   hide();
   if (annot_.hasText())
     view_->blockAnnotationWithText(annot_.text());
-  if (annot_.hasId() && !hub_->isLiveTokenMode())
+  if (annot_.id() > 0 && !hub_->isLiveTokenMode())
     view_->blockAnnotationWithId(annot_.id());
 }
 

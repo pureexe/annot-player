@@ -4,8 +4,8 @@
 // annotationview.h
 // 7/14/2011
 
-#include "core/eventlistener.h"
-#include "core/cloud/annotation.h"
+#include "module/annotcloud/annotation.h"
+#include "module/qtext/eventlistener.h"
 #include <QGraphicsView>
 #include <QHash>
 #include <QList>
@@ -20,14 +20,14 @@ class AnnotationEditor;
 class AnnotationFilter;
 
 ///  An interactive shadow view.
-class AnnotationGraphicsView : public QGraphicsView, public Core::EventListener
+class AnnotationGraphicsView : public QGraphicsView, public QtExt::EventListener
 {
   Q_OBJECT
   typedef AnnotationGraphicsView Self;
   typedef QGraphicsView Base;
 
-  typedef Core::Cloud::Annotation Annotation;
-  typedef Core::Cloud::AnnotationList AnnotationList;
+  typedef AnnotCloud::Annotation Annotation;
+  typedef AnnotCloud::AnnotationList AnnotationList;
 
   // - Types -
 public:

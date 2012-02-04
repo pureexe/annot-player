@@ -102,6 +102,7 @@ TranslatorManager::translate(int tid) const
   switch (tid) {
   case T_NULL:          return QString();
 
+  case T_UPDATE:        return tr("Update");
   case T_WINDOWS:       return tr("Windows");
   case T_SOURCE:        return tr("Source");
   case T_OPEN:          return tr("Open");
@@ -150,6 +151,7 @@ TranslatorManager::translate(int tid) const
   case T_ITALIC:        return tr("Italic");
   case T_UNDERLINE:     return tr("Underline");
 
+  case T_DARK:          return tr("Dark");
   case T_BLACK:         return tr("Black");
   case T_BLUE:          return tr("Blue");
   case T_BROWN:         return tr("Brown");
@@ -263,6 +265,9 @@ TranslatorManager::translate(int tid) const
 
   case T_MENUTEXT_OPENURL:     return tr("Open media URL");
   case T_TIP_OPENURL:          return tr("Open media from Internet or local URL");
+
+  case T_MENUTEXT_OPENANNOTATIONURL:     return tr("Import annots from URL");
+  case T_TIP_OPENANNOTATIONURL:          return tr("Add annotations from URL");
 
   case T_MENUTEXT_OPENDEVICE:   return tr("Open DVD/VCD/CD device");
   case T_TIP_OPENDEVICE:        return tr("Open media device");
@@ -540,9 +545,9 @@ TranslatorManager::translate(int tid) const
   case T_MENUTEXT_THEME:  return tr("Theme");
   case T_TIP_THEME:       return tr("Select GUI theme");
 
-  case T_LABEL_CREATEDATE:      return tr("Create");
+  case T_LABEL_CREATEDATE:      return tr("Create date");
   case T_TIP_CREATEDATE:        return tr("Create date");
-  case T_LABEL_UPDATEDATE:      return tr("Update");
+  case T_LABEL_UPDATEDATE:      return tr("Update date");
   case T_TIP_UPDATEDATE:        return tr("Update date");
   case T_LABEL_BLESSEDCOUNT:    return tr("Blessed");
   case T_TIP_BLESSEDCOUNT:      return tr("Blessed count");
@@ -599,29 +604,6 @@ TranslatorManager::translate(int tid) const
 
   case T_MENUTEXT_DELETECACHE:  return tr("Remove caches");
   case T_TIP_DELETECACHE:       return tr("Remove offline caches");
-
-  case T_MENUTEXT_BLACKTHEME1:  return SELF(T_BLACK) + "1";
-  case T_MENUTEXT_BLACKTHEME2:  return SELF(T_BLACK) + "2";
-  case T_MENUTEXT_BLUETHEME1:  return SELF(T_BLUE) + "1";
-  case T_MENUTEXT_BLUETHEME2:  return SELF(T_BLUE) + "2";
-  case T_MENUTEXT_BROWNTHEME1:  return SELF(T_BROWN) + "1";
-  case T_MENUTEXT_BROWNTHEME2:  return SELF(T_BROWN) + "2";
-  case T_MENUTEXT_GREENTHEME1:  return SELF(T_GREEN) + "1";
-  case T_MENUTEXT_GREENTHEME2:  return SELF(T_GREEN) + "2";
-  case T_MENUTEXT_LIGHTBLUETHEME1:  return SELF(T_LIGHTBLUE) + "1";
-  case T_MENUTEXT_LIGHTBLUETHEME2:  return SELF(T_LIGHTBLUE) + "2";
-  case T_MENUTEXT_ORANGETHEME1:  return SELF(T_ORANGE) + "1";
-  case T_MENUTEXT_ORANGETHEME2:  return SELF(T_ORANGE) + "2";
-  case T_MENUTEXT_PINKTHEME1:  return SELF(T_PINK) + "1";
-  case T_MENUTEXT_PINKTHEME2:  return SELF(T_PINK) + "2";
-  case T_MENUTEXT_PURPLETHEME1:  return SELF(T_PURPLE) + "1";
-  case T_MENUTEXT_PURPLETHEME2:  return SELF(T_PURPLE) + "2";
-  case T_MENUTEXT_REDTHEME1:  return SELF(T_RED) + "1";
-  case T_MENUTEXT_REDTHEME2:  return SELF(T_RED) + "2";
-  case T_MENUTEXT_YELLOWTHEME1:  return SELF(T_YELLOW) + "1";
-  case T_MENUTEXT_YELLOWTHEME2:  return SELF(T_YELLOW) + "2";
-  case T_MENUTEXT_WINDOWSTHEME1:  return SELF(T_WINDOWS) + "1";
-  case T_MENUTEXT_WINDOWSTHEME2:  return SELF(T_WINDOWS) + "2";
 
   case T_FILTER_PATTERN:        return tr("Filter pattern");
   case T_FILTER_SYNTAX:         return tr("Filter syntax");

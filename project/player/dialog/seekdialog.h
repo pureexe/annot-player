@@ -4,12 +4,12 @@
 // seekdialog.h
 // 8/16/2011
 
-#include "core/gui/dialog.h"
+#include "module/qtext/dialog.h"
 
 // jichi TODO 8/16/2011: Use a number picker rather than line edit?!
 QT_FORWARD_DECLARE_CLASS(QLineEdit)
 
-typedef Core::Gui::Dialog SeekDialogBase;
+typedef QtExt::Dialog SeekDialogBase;
 class SeekDialog : public SeekDialogBase
 {
   Q_OBJECT

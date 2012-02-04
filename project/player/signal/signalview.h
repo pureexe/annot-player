@@ -5,13 +5,13 @@
 // 8/13/2011
 
 #include "processinfo.h"
-#include "core/gui/dialog.h"
+#include "module/qtext/dialog.h"
 
 class ProcessView;
 class MessageView;
 //class TokenView;
 
-typedef Core::Gui::Dialog SignalViewBase;
+typedef QtExt::Dialog SignalViewBase;
 
 class SignalView : public SignalViewBase
 {

@@ -7,7 +7,7 @@
 #include "uistyle.h"
 #include <QtGui>
 
-using namespace Core::Cloud;
+using namespace AnnotCloud;
 
 // - Constructions -
 

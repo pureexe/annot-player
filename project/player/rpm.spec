@@ -3,7 +3,7 @@
 # See: http://fedoraproject.org/wiki/How_to_create_an_RPM_package
 # See: http://dl.atrpms.net/all/vlc.spec
 Name:	annot-player
-Version:	0.1.2.4
+Version:	0.1.2.5
 Release:	1%{?dist}
 Summary:	Media and annotation player.
 
@@ -19,7 +19,7 @@ BuildRequires: qt-devel, qtwebkit-devel
 BuildRequires: vlc-devel
 BuildRequires: zlib-devel
 
-Requires:	qt, qt-x11, qtwebkit, vlc, zlib
+Requires:	lua, qt, qt-x11, qtwebkit, vlc, zlib
 
 %description
 Annot Player is a software for sharing annotations while playing movies, music, pictures, and games (esp. Japanese AVG).

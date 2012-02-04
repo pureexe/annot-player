@@ -2,9 +2,9 @@
 // 8/22/2011
 
 #include "annotationgraphicsstyle.h"
-#include "core/annotationparser.h"
+#include "module/annotcloud/annotationparser.h"
 
-#define PARSER  Core::AnnotationParser::globalInstance()
+#define PARSER  AnnotCloud::AnnotationParser::globalInstance()
 
 namespace { // anonymous, static initializers
 

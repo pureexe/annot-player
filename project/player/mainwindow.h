@@ -5,8 +5,9 @@
 // 6/30/2011
 
 #include "config.h"
-#include "core/cloud/alias.h"
-#include "core/cloud/annotation.h"
+#include "module/annotcloud/alias.h"
+#include "module/annotcloud/annotation.h"
+#include "module/mrlresolver/mediainfo.h"
 #ifdef USE_MODE_SIGNAL
   #include "processinfo.h"
 #endif // USE_MODE_SIGNAL
@@ -75,10 +76,10 @@ class MainWindow : public QMainWindow
   typedef MainWindow Self;
   typedef QMainWindow Base;
 
-  typedef Core::Cloud::Alias Alias;
-  typedef Core::Cloud::AliasList AliasList;
-  typedef Core::Cloud::Annotation Annotation;
-  typedef Core::Cloud::AnnotationList AnnotationList;
+  typedef AnnotCloud::Alias Alias;
+  typedef AnnotCloud::AliasList AliasList;
+  typedef AnnotCloud::Annotation Annotation;
+  typedef AnnotCloud::AnnotationList AnnotationList;
 
   // - Types -
 public:
@@ -103,6 +104,7 @@ signals:
 
   void seeked();
   void addAndShowAnnotationRequested(const Annotation &a);
+  void addAnnotationsRequested(const AnnotationList &l);
   void showAnnotationRequested(const Annotation &a);
   void showAnnotationOnceRequested(const Annotation &a);
   void setAnnotationsRequested(const AnnotationList &l);
@@ -156,6 +158,7 @@ public slots:
 
   void about();
   void help();
+  void update();
 
   void login(const QString &userName, const QString &encryptedPassword, bool async = true);
   void logout(bool async = true);
@@ -167,6 +170,9 @@ public slots:
   void open();  ///< By default the same as openFile()
   void openFile();
   void openUrl();
+  void openAnnotationUrl();
+  void openAnnotationUrlFromAliases(const AliasList &l);
+  void openAnnotationUrl(const QString &url);
   void openUrl(const QString &url);
   void openProcess();
   void openWindow();
@@ -177,7 +183,7 @@ public slots:
   void openSubtitle();
   void openDirectory();
   void openMrl(const QString &path, bool checkPath = true);
-  void openRemoteUrls(const QStringList &urls, const QString &href = QString(), const QString &title = QString());
+  void openRemoteMedia(const MediaInfo &mi);
   void openLocalUrl(const QUrl &url);
   void openLocalUrls(const QList<QUrl> &urls);
   void openMimeData(const QMimeData *urls);
@@ -341,6 +347,13 @@ public slots:
   void curseAnnotationWithId(qint64 tid, bool async = true);
   void blockAnnotationWithId(qint64 tid, bool async = true);
 
+  // - Remote annotations -
+protected slots:
+  void addRemoteAnnotations(const AnnotationList &l, const QString &url);
+  void importAnnotationsFromUrl(const QString &suburl);
+  bool registerAnnotationUrl(const QString &suburl);
+  void clearAnnotationUrls();
+
   // - Recent -
 protected slots:
   void addRecent(const QString &path);
@@ -407,17 +420,20 @@ public slots:
 
   // - Themes -
 public slots:
-  void setThemeToDefault(); void setThemeToRandom();
-  void setThemeToBlack1(); void setThemeToBlack2();
-  void setThemeToBlue1(); void setThemeToBlue2();
-  void setThemeToBrown1(); void setThemeToBrown2();
-  void setThemeToGreen1(); void setThemeToGreen2();
-  void setThemeToLightBlue1(); void setThemeToLightBlue2();
-  void setThemeToOrange1(); void setThemeToOrange2();
-  void setThemeToPink1(); void setThemeToPink2();
-  void setThemeToPurple1(); void setThemeToPurple2();
-  void setThemeToRed1(); void setThemeToRed2();
-  void setThemeToYellow1(); void setThemeToYellow2();
+  void setThemeToDefault();
+  void setThemeToRandom();
+  void setThemeToDark();
+  void setThemeToBlack();
+  void setThemeToBlue();
+  void setThemeToBrown();
+  void setThemeToCyan();
+  void setThemeToGray();
+  void setThemeToGreen();
+  void setThemeToPink();
+  void setThemeToPurple();
+  void setThemeToRed();
+  void setThemeToWhite();
+  void setThemeToYellow();
 
   // - Browse -
 public slots:
@@ -501,6 +517,7 @@ private:
 
   QTimer *liveTimer_;
   QTimer *windowStaysOnTopTimer_;
+  QStringList annotationUrls_;
 
   //QTimer *windowStaysOnTopTimer_;
 
@@ -554,7 +571,8 @@ private:
   SeekDialog *seekDialog_;
   SyncDialog *syncDialog_;
   PickDialog *windowPickDialog_;
-  UrlDialog *urlDialog_;
+  UrlDialog *mediaUrlDialog_;
+  UrlDialog *annotationUrlDialog_;
   UserView *userView_;
 
   QPoint dragPos_;
@@ -624,6 +642,7 @@ private:
   QAction *openAct_,
           *openFileAct_,
           *openUrlAct_,
+          *openAnnotationUrlAct_,
           *openDeviceAct_,
           *openVideoDeviceAct_,
           *openAudioDeviceAct_,
@@ -718,23 +737,27 @@ private:
           *toggleAnnotationLanguageToUnknownAct_,
           *toggleAnnotationLanguageToAnyAct_;
 
-  QAction *setThemeToDefaultAct_, *setThemeToRandomAct_,
-          *setThemeToBlack1Act_, *setThemeToBlack2Act_,
-          *setThemeToBlue1Act_, *setThemeToBlue2Act_,
-          *setThemeToBrown1Act_, *setThemeToBrown2Act_,
-          *setThemeToGreen1Act_, *setThemeToGreen2Act_,
-          *setThemeToLightBlue1Act_, *setThemeToLightBlue2Act_,
-          *setThemeToOrange1Act_, *setThemeToOrange2Act_,
-          *setThemeToPink1Act_, *setThemeToPink2Act_,
-          *setThemeToPurple1Act_, *setThemeToPurple2Act_,
-          *setThemeToRed1Act_, *setThemeToRed2Act_,
-          *setThemeToYellow1Act_, *setThemeToYellow2Act_;
+  QAction *setThemeToDefaultAct_,
+          *setThemeToRandomAct_,
+          *setThemeToDarkAct_,
+          *setThemeToBlackAct_,
+          *setThemeToBlueAct_,
+          *setThemeToBrownAct_,
+          *setThemeToCyanAct_,
+          *setThemeToGrayAct_,
+          *setThemeToGreenAct_,
+          *setThemeToPinkAct_,
+          *setThemeToPurpleAct_,
+          *setThemeToRedAct_,
+          *setThemeToWhiteAct_,
+          *setThemeToYellowAct_;
 
 
   QAction *showMaximizedAct_,
           *showMinimizedAct_,
           *showNormalAct_,
           *helpAct_,
+          *updateAct_,
           *aboutAct_,
           *quitAct_;
 };

@@ -29,7 +29,7 @@ YoukuMrlResolver::YoukuMrlResolver(QObject *parent)
   : Base(parent)
 {
   qnam_ = new QNetworkAccessManager(this);
-  connect(qnam_, SIGNAL(finished(QNetworkReply*)), SLOT(resolve(QNetworkReply*)));
+  connect(qnam_, SIGNAL(finished(QNetworkReply*)), SLOT(resolveMedia(QNetworkReply*)));
 }
 
 // - Analysis -
@@ -38,11 +38,11 @@ bool
 YoukuMrlResolver::match(const QString &href) const
 {
   QString pattern("http://v.youku.com/v_show/id_");
-  return href.contains(pattern, Qt::CaseInsensitive);
+  return href.startsWith(pattern, Qt::CaseInsensitive);
 }
 
 void
-YoukuMrlResolver::resolve(const QString &href)
+YoukuMrlResolver::resolveMedia(const QString &href)
 {
   static const QString errorMessage = tr("failed to resolve URL");
 
@@ -62,7 +62,7 @@ YoukuMrlResolver::resolve(const QString &href)
 }
 
 void
-YoukuMrlResolver::resolve(QNetworkReply *reply)
+YoukuMrlResolver::resolveMedia(QNetworkReply *reply)
 {
   DOUT("enter");
   static const QString resolveErrorMessage = tr("failed to resolve URL");
@@ -71,7 +71,7 @@ YoukuMrlResolver::resolve(QNetworkReply *reply)
   reply->deleteLater();
   if (!reply->isFinished() || reply->error() != QNetworkReply::NoError) {
     //emit errorReceived(reply->errorString());
-    emit errorReceived(tr("network error, failed to resolve media URL"));
+    emit errorReceived(tr("network error, failed to resolve media URL") + ": " + reply->url().toString());
     DOUT("exit: error =" << reply->error());
     return;
   }
@@ -154,7 +154,7 @@ YoukuMrlResolver::resolve(QNetworkReply *reply)
 
         QString sid = newSid();
 
-        QStringList mrls;
+        MediaInfo mi;
 
         Q_ASSERT(seq.isArray());
         quint32 len = seq.property("length").toUInt32();
@@ -175,19 +175,21 @@ YoukuMrlResolver::resolve(QNetworkReply *reply)
             "/st/" + st + "/fileid/" + fid +
             "?K=" + k + "&hd=" + hd + "&myp=0&ts=" + ts ;
 
-          mrls.append(url);
+          mi.mrls.append(url);
         }
 
-        if (mrls.isEmpty()) {
+        if (mi.mrls.isEmpty()) {
           emit errorReceived(resolveErrorMessage + ": " + reply->url().toString());
           continue;
         }
 
-        DOUT("mrls =" << mrls);
+        DOUT("mrls =" << mi.mrls);
 
         QString href = "http://v.youku.com/v_show/id_" + vid + ".html";
         DOUT("href =" << href);
-        emit resolved(mrls, href, title);
+        mi.refurl = href;
+        mi.title = title;
+        emit mediaResolved(mi);
         break;
       }
 

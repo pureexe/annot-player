@@ -7,14 +7,12 @@
 #include "defines.h"
 #include "stylesheet.h"
 #include "lineedit.h"
-#include "core/htmltag.h"
-#include "core/util/datetime.h"
-#include "core/gui/toolbutton.h"
-#include "core/cloud/traits.h"
-#include "core/cloud/alias.h"
+#include "module/qtext/toolbutton.h"
+#include "module/annotcloud/traits.h"
+#include "module/annotcloud/alias.h"
 #include <QtGui>
 
-using namespace Core::Cloud;
+using namespace AnnotCloud;
 
 // - Panel -
 AddAliasDialog::AddAliasDialog(QWidget *parent)
@@ -45,7 +43,7 @@ AddAliasDialog::AddAliasDialog(QWidget *parent)
 #undef MAKE_LABEL
 
 #define MAKE_TAG(_id) \
-  QToolButton *tag##_id##Button = new Core::Gui::ToolButton; { \
+  QToolButton *tag##_id##Button = new QtExt::ToolButton; { \
     tag##_id##Button->setStyleSheet(SS_TOOLBUTTON_TEXT); \
     tag##_id##Button->setToolButtonStyle(Qt::ToolButtonTextOnly); \
     tag##_id##Button->setText(#_id); \
@@ -63,7 +61,7 @@ AddAliasDialog::AddAliasDialog(QWidget *parent)
 #undef MAKE_TAG
 
 #define MAKE_LANGUAGE(_id, _styleid) \
-  is##_id##Button_ = new Core::Gui::ToolButton; { \
+  is##_id##Button_ = new QtExt::ToolButton; { \
     is##_id##Button_->setStyleSheet(SS_TOOLBUTTON_TEXT); \
     is##_id##Button_->setToolButtonStyle(Qt::ToolButtonTextOnly); \
     is##_id##Button_->setText(TR(T_##_styleid)); \
@@ -82,7 +80,7 @@ AddAliasDialog::AddAliasDialog(QWidget *parent)
 #undef MAKE_LANGUAGE
 
 #define MAKE_TYPE(_id, _text, _tip) \
-  is##_id##Button_ = new Core::Gui::ToolButton; { \
+  is##_id##Button_ = new QtExt::ToolButton; { \
     is##_id##Button_->setStyleSheet(SS_TOOLBUTTON_TEXT); \
     is##_id##Button_->setToolButtonStyle(Qt::ToolButtonTextOnly); \
     is##_id##Button_->setText(_text); \
@@ -96,11 +94,12 @@ AddAliasDialog::AddAliasDialog(QWidget *parent)
 
   MAKE_TYPE(Name, tr("name"), tr("Add a name to the token"))
   MAKE_TYPE(Tag, tr("tag"), tr("Add a tag to the token"))
+  MAKE_TYPE(Url, tr("URL"), tr("Add source URL to the token"))
 #undef MAKE_TYPE
   isNameButton_->setChecked(true);
 
 #define MAKE_BUTTON(_button, _styleid, _slot) \
-  _button = new Core::Gui::ToolButton; { \
+  _button = new QtExt::ToolButton; { \
     _button->setStyleSheet(SS_TOOLBUTTON_TEXT); \
     _button->setToolButtonStyle(Qt::ToolButtonTextOnly); \
     _button->setText(QString("[ %1 ]").arg(TR(T_##_styleid))); \
@@ -129,6 +128,7 @@ AddAliasDialog::AddAliasDialog(QWidget *parent)
     row1->addStretch();
     row1->addWidget(isNameButton_);
     row1->addWidget(isTagButton_);
+    row1->addWidget(isUrlButton_);
 
     row2->addWidget(languageLabel);
     row2->addStretch();
@@ -196,6 +196,7 @@ AddAliasDialog::setTypeToName(bool t)
 {
   isNameButton_->setChecked(t);
   isTagButton_->setChecked(!t);
+  isUrlButton_->setChecked(!t);
 }
 
 void
@@ -203,6 +204,15 @@ AddAliasDialog::setTypeToTag(bool t)
 {
   isNameButton_->setChecked(!t);
   isTagButton_->setChecked(t);
+  isUrlButton_->setChecked(!t);
+}
+
+void
+AddAliasDialog::setTypeToUrl(bool t)
+{
+  isNameButton_->setChecked(!t);
+  isTagButton_->setChecked(!t);
+  isUrlButton_->setChecked(t);
 }
 
 void
@@ -229,7 +239,9 @@ AddAliasDialog::ok()
   if (!l)
     return;
 
-  int type = isNameButton_->isChecked() ? Alias::AT_Name : Alias::AT_Tag;
+  int type = isNameButton_->isChecked() ? Alias::AT_Name :
+             isUrlButton_->isChecked() ? Alias::AT_Url :
+                                            Alias::AT_Tag;
   emit aliasAdded(alias, type, l);
 }
 

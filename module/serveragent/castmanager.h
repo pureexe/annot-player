@@ -4,7 +4,7 @@
 // castmanager.h
 // 11/15/2011
 
-#include "core/cloud/traits.h"
+#include "module/annotcloud/traits.h"
 #include <QObject>
 #include <QMutex>
 #include <QList>
@@ -13,7 +13,7 @@ struct CastEvent
 {
   typedef CastEvent Self;
   enum Type { NullEvent = 0, BlessEvent, CurseEvent, BlockEvent };
-  typedef Core::Cloud::Traits::Entity Entity;
+  typedef AnnotCloud::Traits::Entity Entity;
 
   Type type;
   qint64 targetId;

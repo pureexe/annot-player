@@ -4,7 +4,7 @@
 // devicedialog.h
 // 12/2/2011
 
-#include "core/gui/dialog.h"
+#include "module/qtext/dialog.h"
 #include <QStringList>
 
 QT_BEGIN_NAMESPACE
@@ -13,7 +13,7 @@ class QComboBox;
 class QRadioButton;
 QT_END_NAMESPACE
 
-typedef Core::Gui::Dialog DeviceDialogBase;
+typedef QtExt::Dialog DeviceDialogBase;
 class DeviceDialog : public DeviceDialogBase
 {
   Q_OBJECT

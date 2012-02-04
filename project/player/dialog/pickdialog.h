@@ -4,11 +4,11 @@
 // pickdialog.h
 // 10/30/2011
 
-#include "core/gui/dialog.h"
+#include "module/qtext/dialog.h"
 
 QT_FORWARD_DECLARE_CLASS(QLabel)
 
-typedef Core::Gui::Dialog PickDialogBase;
+typedef QtExt::Dialog PickDialogBase;
 class PickDialog : public PickDialogBase
 {
   Q_OBJECT

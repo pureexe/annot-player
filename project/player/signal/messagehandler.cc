@@ -8,14 +8,14 @@
 #else
   #error "QTH module is indispensible"
 #endif // USE_WIN_QTH
-#include "core/cloud/annotation.h"
-#include "core/cmd.h"
+#include "module/annotcloud/annotation.h"
+#include "module/annotcloud/cmd.h"
 #include <QtCore>
 
 //#define DEBUG "messagehandler"
 #include "module/debug/debug.h"
 
-using namespace Core::Cloud;
+using namespace AnnotCloud;
 
 //
 // Message hashing rule:

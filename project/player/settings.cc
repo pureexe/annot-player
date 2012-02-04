@@ -4,7 +4,7 @@
 #include "settings.h"
 #include "defines.h"
 #include "mainwindow.h"
-#include "core/cloud/traits.h"
+#include "module/annotcloud/traits.h"
 #include <QtCore>
 
 // - Settings keys -
@@ -163,7 +163,7 @@ Settings::setSubtitleColor(int colorId)
 qint64
 Settings::annotationLanguages() const
 {
-  enum { defval = Core::Cloud::Traits::AnyLanguageBit };
+  enum { defval = AnnotCloud::Traits::AnyLanguageBit };
   bool ok;
   qint64 ret = value(SK_ANNOTLANGUAGES, defval).toLongLong(&ok);
   if (!ok)

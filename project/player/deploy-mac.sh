@@ -8,8 +8,8 @@ cd "$PREFIX"  || exit 1
 ## environment
 
 COLOR=orange
-VERSION=0.1.2.4
-DMG_SIZE=120m
+VERSION=0.1.2.5
+DMG_SIZE=140m
 
 TARGET="Annot Player"
 TARGET_DMG=$TARGET.dmg
@@ -161,6 +161,13 @@ cp -Rv "$VLC_BUILD"/share/locale "$APP_MACOS"/share/ || exit 1
 for i in "$APP_MACOS"/plugins/*.dylib; do
   change_vlc_lib "$i"
 done
+
+## copy luascript
+
+cp "$APP_SRC"/module/mrlresolver/lua/luascript.lua "$APP_MACOS"/ || exit 1
+cp -R "$APP_SRC"/module/mrlresolver/lua/luascript "$APP_MACOS"/  || exit 1
+rm -f "$APP_MACOS"/luascript/*~
+rm -f "$APP_MACOS"/luascript/*/*~
 
 ## deploy macports libs
 

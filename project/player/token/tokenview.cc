@@ -10,10 +10,10 @@
 #include "logger.h"
 #include "filteredtableview.h"
 #include "module/serveragent/serveragent.h"
-#include "core/gui/toolbutton.h"
+#include "module/qtext/toolbutton.h"
 #include <QtGui>
 
-using namespace Core::Cloud;
+using namespace AnnotCloud;
 using namespace Logger;
 
 // - Constructions -
@@ -73,7 +73,7 @@ TokenView::TokenView(ServerAgent *server, QWidget *parent)
 #undef MAKE_TOKEN_LABEL
 
 #define MAKE_BUTTON(_button, _text, _tip, _slot) \
-  _button = new Core::Gui::ToolButton; { \
+  _button = new QtExt::ToolButton; { \
     _button->setText(QString("[ %1 ]").arg(_text)); \
     _button->setToolTip(_tip); \
     _button->setStyleSheet(SS_TOOLBUTTON_TEXT); \
@@ -98,7 +98,7 @@ TokenView::TokenView(ServerAgent *server, QWidget *parent)
     aliasBuddy->setText(TR(T_LABEL_ALIAS));
     aliasBuddy->setToolTip(TR(T_TOOLTIP_ALIAS));
   }
-  sourceButton_ = new Core::Gui::ToolButton; {
+  sourceButton_ = new QtExt::ToolButton; {
     sourceButton_->setToolTip(TR(T_SOURCE));
     sourceButton_->setStyleSheet(SS_TOOLBUTTON_TEXT);
     sourceButton_->setToolButtonStyle(Qt::ToolButtonTextOnly);
@@ -469,7 +469,7 @@ TokenView::aliasTypeToString(int type)
   case Alias::AT_Name:  return tr("name");
   case Alias::AT_Source:return tr("source");
   case Alias::AT_Tag:   return tr("tag");
-  case Alias::AT_Title: return tr("title");
+  case Alias::AT_Url: return tr("URL");
   default: return TR(T_NA);
   }
 }

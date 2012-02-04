@@ -1,7 +1,7 @@
 #ifndef YOUTUBEMRLRESOLVER_H
 #define YOUTUBEMRLRESOLVER_H
 
-// Youtubemrlresolver.h
+// youtubemrlresolver.h
 // 1/24/2011
 
 #include "mrlresolver.h"
@@ -20,7 +20,7 @@ public:
   bool match(const QString &href) const; ///< \override
 
 public slots:
-  void resolve(const QString &href); ///< \override
+  void resolveMedia(const QString &href); ///< \override
 };
 
 #endif // YOUTUBEMRLRESOLVER_H

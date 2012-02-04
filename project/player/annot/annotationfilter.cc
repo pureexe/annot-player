@@ -1,12 +1,12 @@
 // annotationfilter.cc
 // 11/15/2011
 #include "annotationfilter.h"
-#include "core/cloud/annotation.h"
-#include "core/cloud/traits.h"
+#include "module/annotcloud/annotation.h"
+#include "module/annotcloud/traits.h"
 #include <boost/typeof/typeof.hpp>
 #include <QtCore>
 
-using namespace Core::Cloud;
+using namespace AnnotCloud;
 
 // - Constructions -
 

@@ -6,7 +6,7 @@
 #include "uistyle.h"
 #include "tr.h"
 #include "lineedit.h"
-#include "core/gui/toolbutton.h"
+#include "module/qtext/toolbutton.h"
 #include <QtGui>
 
 // - Constructions -
@@ -37,13 +37,13 @@ UrlDialog::createLayout()
   }
   connect(edit_, SIGNAL(returnPressed()), SLOT(open()));
 
-  QToolButton *urlButton = new Core::Gui::ToolButton; {
-    urlButton->setText(exampleUrl());
-    urlButton->setStyleSheet(SS_TOOLBUTTON_TEXT);
-    urlButton->setToolTip(tr("Click to paste the URL example"));
-    urlButton->setCheckable(true);
-    urlButton->setChecked(true);
-  } connect(urlButton, SIGNAL(clicked(bool)), SLOT(showExampleUrl()));
+  urlButton_ = new QtExt::ToolButton; {
+    //urlButton_->setText(exampleUrl());
+    urlButton_->setStyleSheet(SS_TOOLBUTTON_TEXT);
+    urlButton_->setToolTip(tr("Click to paste the URL example"));
+    urlButton_->setCheckable(true);
+    urlButton_->setChecked(true);
+  } connect(urlButton_, SIGNAL(clicked(bool)), SLOT(showExampleUrl()));
 
   QLabel *urlLabel = new QLabel; {
     urlLabel->setStyleSheet(SS_LABEL);
@@ -52,21 +52,21 @@ UrlDialog::createLayout()
     urlLabel->setBuddy(urlLabel);
   }
 
-  QToolButton *openButton = new Core::Gui::ToolButton; {
+  QToolButton *openButton = new QtExt::ToolButton; {
     openButton->setStyleSheet(SS_TOOLBUTTON_TEXT);
     openButton->setToolButtonStyle(Qt::ToolButtonTextOnly);
     openButton->setText(QString("[ %1 ]").arg(TR(T_OPEN)));
     openButton->setToolTip(TR(T_OPEN));
   } connect(openButton, SIGNAL(clicked()), SLOT(open()));
 
-  QToolButton *pasteButton = new Core::Gui::ToolButton; {
+  QToolButton *pasteButton = new QtExt::ToolButton; {
     pasteButton->setStyleSheet(SS_TOOLBUTTON_TEXT);
     pasteButton->setToolButtonStyle(Qt::ToolButtonTextOnly);
     pasteButton->setText(QString("[ %1 ]").arg(TR(T_PASTE)));
     pasteButton->setToolTip(TR(T_PASTE));
   } connect(pasteButton, SIGNAL(clicked()), SLOT(paste()));
 
-  QToolButton *clearButton = new Core::Gui::ToolButton; {
+  QToolButton *clearButton = new QtExt::ToolButton; {
     clearButton->setStyleSheet(SS_TOOLBUTTON_TEXT);
     clearButton->setToolButtonStyle(Qt::ToolButtonTextOnly);
     clearButton->setText(QString("[ %1 ]").arg(TR(T_CLEAR)));
@@ -82,7 +82,7 @@ UrlDialog::createLayout()
     rows->addLayout(footer);
 
     header->addWidget(urlLabel);
-    header->addWidget(urlButton);
+    header->addWidget(urlButton_);
 
     footer->addWidget(openButton);
     footer->addWidget(pasteButton);
@@ -121,21 +121,24 @@ UrlDialog::paste()
 QString
 UrlDialog::autoCompleteUrl(const QString &url)
 {
+  QString ret = url.trimmed();
   if (!url.contains("://"))
-    return "http://" + url;
-  if (url.startsWith("ttp://"))
-    return "h" + url;
+    ret = "http://" + ret;
+  else if (url.startsWith("ttp://"))
+    ret = "h" + ret;
 
-  return url;
+  ret.replace(QRegExp("/index.html$", Qt::CaseInsensitive), "/");
+
+  return ret;
 }
-
-QString
-UrlDialog::exampleUrl() const
-{ return tr("http://www.youtube.com/watch?v=-DJqnomZoLk"); }
 
 void
 UrlDialog::showExampleUrl()
-{ edit_->setText(exampleUrl()); }
+{ edit_->setText(urlButton_->text()); }
+
+void
+UrlDialog::setExampleUrl(const QString &text)
+{ urlButton_->setText(text); }
 
 // EOF
 

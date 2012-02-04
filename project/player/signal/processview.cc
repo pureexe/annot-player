@@ -14,7 +14,7 @@
 #else
   #error "QTH is indispensible"
 #endif // USE_WIN_QTH
-#include "core/gui/toolbutton.h"
+#include "module/qtext/toolbutton.h"
 #include <QtGui>
 
 using namespace Logger;
@@ -99,7 +99,7 @@ void
 ProcessView::createLayout()
 {
 #define MAKE_BUTTON(_button, _text, _tip, _slot) \
-  _button = new Core::Gui::ToolButton; { \
+  _button = new QtExt::ToolButton; { \
     _button->setText(QString("[ %1 ]").arg(_text)); \
     _button->setToolTip(_tip); \
     _button->setStyleSheet(SS_TOOLBUTTON_TEXT); \

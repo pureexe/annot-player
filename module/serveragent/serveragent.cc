@@ -13,7 +13,7 @@
 //#define DEBUG "serveragent"
 #include "module/debug/debug.h"
 
-using namespace Core::Cloud;
+using namespace AnnotCloud;
 
 #define CALLBACK_RETRY_TIME     5000 // in msec
 
@@ -212,6 +212,20 @@ ServerAgent::chat(const QString &message)
 // - Queries -
 
 qint64
+ServerAgent::selectTokenId(const Token &token)
+{
+  DOUT("enter: tt =" << token.type());
+
+  qint64 ret = 0;
+  if (token.hasDigest())
+    ret = proxy_->selectTokenIdWithDigest(token.digest(), token.part());
+  else if (token.hasSource())
+    ret = proxy_->selectTokenIdWithSource(token.source(), token.part());
+  DOUT("exit: ret =" << ret);
+  return ret;
+}
+
+qint64
 ServerAgent::submitToken(const Token &token)
 {
   DOUT("enter: tt =" << token.type());
@@ -293,7 +307,7 @@ ServerAgent::submitAnnotation(const Annotation &annot)
     DOUT("exit: missing text");
     return 0;
   }
-  if (!annot.hasUserId() || user_.id() != annot.userId()) {
+  if (annot.userId() <= 0 || user_.id() != annot.userId()) {
     DOUT("exit: mismatched userId");
     return 0;
   }

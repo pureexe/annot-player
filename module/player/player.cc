@@ -56,8 +56,8 @@ namespace { // anonymous
 class PlayerImpl
   : public mp_handle_,
     public mp_states_,
-    public mp_trackers_,
-    public mp_intl_
+    public mp_trackers_
+    //public mp_intl_
 { };
 
 // - Event handlers -
@@ -397,8 +397,8 @@ void
 Player::destroy()
 {
   if (impl_) {
-    if (impl_->codec())
-      delete impl_->codec();
+    //if (impl_->codec())
+    //  delete impl_->codec();
     delete impl_;
   }
 }
@@ -497,38 +497,38 @@ Player::isEmbedded() const
 }
 
 // - Encoding -
-QString
-Player::encoding() const
-{
-  Q_ASSERT(isValid());
-  return impl_->codec()->encoding();
-}
-
-void
-Player::setEncoding(const QString &encoding)
-{
-  Q_ASSERT(isValid());
-
-  if (impl_->codec())
-    delete impl_->codec();
-  impl_->setCodec(new Core::TextCodec(encoding));
-  emit encodingChanged();
-}
+//QString
+//Player::encoding() const
+//{
+//  Q_ASSERT(isValid());
+//  return impl_->codec()->encoding();
+//}
+//
+//void
+//Player::setEncoding(const QString &encoding)
+//{
+//  Q_ASSERT(isValid());
+//
+//  if (impl_->codec())
+//    delete impl_->codec();
+//  impl_->setCodec(new Core::TextCodec(encoding));
+//  emit encodingChanged();
+//}
 
 QByteArray
 Player::decode(const QString &input) const
 {
-  return impl_ && impl_->codec() ?
-    impl_->codec()->encode(input) :
-    input.toAscii();
+  //return impl_ && impl_->codec() ?
+  //  impl_->codec()->encode(input) :
+  return input.toAscii();
 }
 
 QString
 Player::encode(const char *input) const
 {
-  return impl_ && impl_->codec() ?
-    impl_->codec()->decode(input) :
-    QString(input);
+  //return impl_ && impl_->codec() ?
+  //  impl_->codec()->decode(input) :
+  return QString(input);
 }
 
 // - Playing states -
@@ -628,8 +628,16 @@ Player::openMedia(const QString &path)
 
   impl_->setMedia(
     //::libvlc_media_new_path(impl_->instance(), decode(path))   // local file only
-    ::libvlc_media_new_location(impl_->instance(), decode(path)) // URL
+    ::libvlc_media_new_location(impl_->instance(), decode(path)) // MRL
   );
+
+  //libvlc_media_list_player_t *mlp = libvlc_media_list_player_new(impl_->instance());
+  //libvlc_media_list_player_set_media_player(mlp, impl_->player());
+  //libvlc_media_list_t *ml = ::libvlc_media_list_new(impl_->instance());
+  //libvlc_media_list_add_media(ml, impl_->media());
+  //libvlc_media_list_add_file_content(ml, "d:/devel/mp4.mp4");
+  //libvlc_media_list_add_file_content(ml, "d:/devel/mp4.mp4");
+  //libvlc_media_list_player_set_media_list(mlp, ml);
 
   if (!impl_->media()) {
     impl_->setMediaPath();
@@ -684,8 +692,8 @@ Player::closeMedia()
 bool
 Player::hasMedia() const
 {
-  return isValid() && impl_->media() &&
-         ::libvlc_media_player_get_media(impl_->player());
+  return isValid() && impl_->media();
+         //::libvlc_media_player_get_media(impl_->player()); // avoid parallel contention
 }
 
 // - Full screen -
@@ -930,6 +938,7 @@ Player::position() const
 { return hasMedia()? ::libvlc_media_player_get_position(impl_->player()) : 0; }
 
 // - Play time -
+
 qint64
 Player::mediaLength() const
 {
@@ -1296,10 +1305,10 @@ void
 Player::startVoutTimer()
 {
 #ifdef WITH_VLCCORE
-  Core::CountdownTimer *timer = impl_->voutCountdown();
+  QtExt::CountdownTimer *timer = impl_->voutCountdown();
   if (!timer) {
     impl_->setVoutCountdown(
-      timer = new Core::CountdownTimer(this)
+      timer = new QtExt::CountdownTimer(this)
     );
     timer->setInterval(VOUT_TIMEOUT);
     connect(timer, SIGNAL(timeout()), SLOT(invalidateVout()));

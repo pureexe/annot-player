@@ -10,8 +10,8 @@
 // 11/26/2011
 
 #include "player.h"
-#include "core/util/textcodec.h"
-#include "core/util/countdowntimer.h"
+//#include "qtext/textcodec.h"
+#include "qtext/countdowntimer.h"
 #include <QObject>
 #include <QList>
 #include <memory>
@@ -271,15 +271,16 @@ namespace { // anonymous: player states
 
   class mp_trackers_
   {
-    Core::CountdownTimer *voutCountdown_;
+    QtExt::CountdownTimer *voutCountdown_;
   public:
     mp_trackers_() : voutCountdown_(0) { }
 
   public:
-    Core::CountdownTimer *voutCountdown() const { return voutCountdown_; }
-    void setVoutCountdown(Core::CountdownTimer *timer) { voutCountdown_ = timer; }
+    QtExt::CountdownTimer *voutCountdown() const { return voutCountdown_; }
+    void setVoutCountdown(QtExt::CountdownTimer *timer) { voutCountdown_ = timer; }
   };
 
+  /*
   class mp_intl_
   {
     Core::TextCodec *codec_;
@@ -291,6 +292,7 @@ namespace { // anonymous: player states
     Core::TextCodec *codec() const { return codec_; }
     void setCodec(Core::TextCodec *codec) { codec_ = codec; }
   };
+  */
 
 } // anonymous namespace
 

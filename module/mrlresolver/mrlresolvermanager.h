@@ -4,8 +4,8 @@
 // mrlresolvermanager.h
 // 1/25/2011
 
+#include "mediainfo.h"
 #include <QObject>
-#include <QStringList>
 #include <QList>
 
 class MrlResolver;
@@ -19,7 +19,7 @@ class MrlResolverManager : public QObject
   QList<MrlResolver*> resolvers_;
 
 public:
-  enum Resolver { Youtube = 0, Youku, ResolverCount };
+  enum Resolver { Youtube = 0, GoogleVideo, Youku, Lua, ResolverCount };
 
   static Self *globalInstance() { static Self g; return &g; }
 
@@ -30,19 +30,30 @@ signals:
   void errorReceived(QString message);
   void messageReceived(QString message);
 
-  void resolved(QStringList mrls, QString href, QString title);
+  void mediaResolved(MediaInfo mi);
+  void annotResolved(QString suburl);
 
 public:
   int match(const QString &href) const;
 
-  void resolve(int id, const QString &href);
+  void resolveMedia(int id, const QString &href);
 
-  bool resolve(const QString &href)
+  bool resolveMedia(const QString &href)
   {
     int r = match(href);
     if (r < 0)
       return false;
-    resolve(r, href);
+    resolveMedia(r, href);
+    return true;
+  }
+
+  void resolveAnnot(int id, const QString &href);
+  bool resolveAnnot(const QString &href)
+  {
+    int r = match(href);
+    if (r != Lua)
+      return false;
+    resolveAnnot(r, href);
     return true;
   }
 };

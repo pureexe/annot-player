@@ -4,9 +4,9 @@
 // commentview.h
 // 10/9/2011
 
-#include "core/gui/webdialog.h"
+#include "module/qtext/webdialog.h"
 
-typedef Core::Gui::WebDialog CommentViewBase;
+typedef QtExt::WebDialog CommentViewBase;
 
 class CommentView: public CommentViewBase
 {

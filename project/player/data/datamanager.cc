@@ -5,7 +5,7 @@
 #include <QtGui>
 #include <boost/typeof/typeof.hpp>
 
-using namespace Core::Cloud;
+using namespace AnnotCloud;
 
 // - User -
 

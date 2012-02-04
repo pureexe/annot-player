@@ -1,14 +1,15 @@
 # player.pro
 # 6/30/2011
 
-VERSION = 0.1.2.4
+VERSION = 0.1.2.5
 
 include(../../config.pri)
 include(tr/tr.pri)
 
 ## Libraries
 
-include($$ROOTDIR/core/core.pri)
+include($$ROOTDIR/module/annotcloud/annotcloud.pri)
+include($$ROOTDIR/module/annotcodec/annotcodec.pri)
 include($$ROOTDIR/module/player/player.pri)
 #include($$ROOTDIR/module/doll/doll.pri)
 include($$ROOTDIR/module/serveragent/serveragent.pri)
@@ -17,6 +18,7 @@ include($$ROOTDIR/module/gsoap/gsoap.pri)       # would static linking cause lic
 include($$ROOTDIR/module/translator/translator.pri)
 include($$ROOTDIR/module/mrlresolver/mrlresolver.pri)
 include($$ROOTDIR/module/ioutil/ioutil.pri)
+include($$ROOTDIR/module/qtext/qtext.pri)
 
 # shared link gave me so many trouble on mac and linux
 unix:       include($$ROOTDIR/module/webbrowser/webbrowser_static.pri)
@@ -234,6 +236,7 @@ win32 {
   SOURCES += \
     signal/messagehandler.cc \
     signal/messageview.cc \
+    signal/processinfo.cc \
     signal/processview.cc \
     signal/signalview.cc
 }

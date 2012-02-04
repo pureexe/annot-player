@@ -6,7 +6,7 @@
 #include "tr.h"
 #include "uistyle.h"
 #include "stylesheet.h"
-#include "core/gui/toolbutton.h"
+#include "module/qtext/toolbutton.h"
 #include <QtGui>
 
 // - Constructions -
@@ -34,7 +34,7 @@ void
 BacklogView::createLayout()
 {
 #define MAKE_TAB_BUTTON(_button, _text, _slot) \
-  _button = new Core::Gui::ToolButton; { \
+  _button = new QtExt::ToolButton; { \
     _button->setStyleSheet(SS_TOOLBUTTON_TEXT); \
     _button->setToolButtonStyle(Qt::ToolButtonTextOnly); \
     _button->setText(QString("- %1 -").arg(_text)); \
@@ -44,7 +44,7 @@ BacklogView::createLayout()
   }
 
 #define MAKE_UNCHECKABLE_BUTTON(_button, _text, _slot) \
-  _button = new Core::Gui::ToolButton; { \
+  _button = new QtExt::ToolButton; { \
     _button->setStyleSheet(SS_TOOLBUTTON_TEXT); \
     _button->setToolButtonStyle(Qt::ToolButtonTextOnly); \
     _button->setText(QString("[ %1 ]").arg(_text)); \
@@ -53,7 +53,7 @@ BacklogView::createLayout()
   }
 
 #define MAKE_CHECKABLE_BUTTON(_button, _text, _slot) \
-  _button = new Core::Gui::ToolButton; { \
+  _button = new QtExt::ToolButton; { \
     _button->setStyleSheet(SS_TOOLBUTTON_TEXT); \
     _button->setToolButtonStyle(Qt::ToolButtonTextOnly); \
     _button->setText(QString("[ %1 ]").arg(_text)); \

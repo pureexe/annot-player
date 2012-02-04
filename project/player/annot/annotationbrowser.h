@@ -4,8 +4,8 @@
 // annotationbrowser.h
 // 10/23/2011
 
-#include "core/gui/dialog.h"
-#include "core/cloud/annotation.h"
+#include "module/qtext/dialog.h"
+#include "module/annotcloud/annotation.h"
 #include <QModelIndex>
 
 QT_BEGIN_NAMESPACE
@@ -20,15 +20,15 @@ class AnnotationEditor;
 class FilteredTableView;
 class SignalHub;
 
-typedef Core::Gui::Dialog AnnotationBrowserBase;
+typedef QtExt::Dialog AnnotationBrowserBase;
 class AnnotationBrowser : public AnnotationBrowserBase
 {
   Q_OBJECT
   typedef AnnotationBrowser Self;
   typedef AnnotationBrowserBase Base;
 
-  typedef Core::Cloud::Annotation Annotation;
-  typedef Core::Cloud::AnnotationList AnnotationList;
+  typedef AnnotCloud::Annotation Annotation;
+  typedef AnnotCloud::AnnotationList AnnotationList;
 
 protected:
   enum HeaderCloud {

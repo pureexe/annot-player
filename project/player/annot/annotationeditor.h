@@ -4,7 +4,7 @@
 // annotationeditor.h
 // 10/4/2011
 
-#include "core/gui/dialog.h"
+#include "module/qtext/dialog.h"
 #include <QTextCharFormat>
 #include <QColor>
 
@@ -21,7 +21,7 @@ QT_END_NAMESPACE
 
 // TODO: attach image!!!!!!!!!! or URL link as well!!!!
 
-typedef Core::Gui::Dialog AnnotationEditorBase;
+typedef QtExt::Dialog AnnotationEditorBase;
 class AnnotationEditor : public AnnotationEditorBase
 {
   Q_OBJECT

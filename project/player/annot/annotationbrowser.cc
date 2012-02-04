@@ -9,13 +9,13 @@
 #include "tr.h"
 #include "filteredtableview.h"
 #include "signalhub.h"
-#include "core/gui/toolbutton.h"
-#include "core/util/datetime.h"
-#include "core/cloud/traits.h"
-#include "core/cmd.h"
+#include "module/qtext/toolbutton.h"
+#include "module/qtext/datetime.h"
+#include "module/annotcloud/traits.h"
+#include "annotcloud/cmd.h"
 #include <QtGui>
 
-using namespace Core::Cloud;
+using namespace AnnotCloud;
 using namespace Logger;
 
 // - Constructions -
@@ -85,7 +85,7 @@ AnnotationBrowser::createLayout()
   // Set layout
 
 #define MAKE_TOGGLE(_button, _text, _tip, _slot) \
-  _button = new Core::Gui::ToolButton; { \
+  _button = new QtExt::ToolButton; { \
     _button->setStyleSheet(SS_TOOLBUTTON_TEXT); \
     _button->setToolButtonStyle(Qt::ToolButtonTextOnly); \
     _button->setText(QString("| %1 |").arg(_text)); \
@@ -264,7 +264,7 @@ void
 AnnotationBrowser::addAnnotation(const Annotation &a)
 {
 #define FORMAT_TIME(_secs)        QDateTime::fromMSecsSinceEpoch(_secs * 1000)
-#define FORMAT_POS(_msecs)        Core::msecs2time(_msecs)
+#define FORMAT_POS(_msecs)        QtExt::msecs2time(_msecs)
 #define FORMAT_LANGUAGE(_lang)    languageToString(_lang)
 #define FORMAT_FLAGS(_flags)      annotationFlagsToStringList(_flags)
 #define FORMAT_STATUS(_status)    annotationStatusToString(_status)
@@ -545,14 +545,17 @@ AnnotationBrowser::contextMenuEvent(QContextMenuEvent *event)
       contextMenu_->addAction(copyAnnotAct_);
 
     // Cast: TODO
-    if (currentId()) {
+    qint64 id = currentId();
+    if (id) {
       if (userId_ == cuid) {
         contextMenu_->addSeparator();
         contextMenu_->addAction(deleteAnnotAct_);
       } else {
         contextMenu_->addSeparator();
-        contextMenu_->addAction(blessAnnotAct_);
-        contextMenu_->addAction(curseAnnotAct_);
+        if (id > 0) {
+          contextMenu_->addAction(blessAnnotAct_);
+          contextMenu_->addAction(curseAnnotAct_);
+        }
         contextMenu_->addAction(blockAnnotAct_);
       }
     }
@@ -591,7 +594,7 @@ AnnotationBrowser::setNow(bool t)
   QString s;
   if (t)
     s = hub_->isMediaTokenMode() ?
-      Core::msecs2time(annotationPos_).toString() :
+      QtExt::msecs2time(annotationPos_).toString() :
       QString::number(annotationPos_);
 
   filterNowModel_->setFilterFixedString(s);

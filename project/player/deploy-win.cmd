@@ -3,7 +3,7 @@
 setlocal
 cd /d d:/devel/releases/player || exit /b 1
 
-set VERSION=0.1.2.4
+set VERSION=0.1.2.5
 set APP=annot-player
 set ZIPFILE=%APP%-%VERSION%-win.zip
 
@@ -25,6 +25,12 @@ set VLC_PLUGINS=plugins,lua,locale
 
 set BUILD=/Volumes/local/devel/annot-build-desktop/build.win
 set SOURCE=/Volumes/local/devel/annot
+
+set CURL_HOME=/Volumes/win/dev/curl
+set CURL_BIN=curl.exe
+
+set GZIP_HOME=/Volumes/win/dev/gzip
+set GZIP_BIN=gzip.exe
 
 :: deploy into app dir
 
@@ -61,16 +67,34 @@ cp -v "%MSVC_HOME%"/{%MSVC_DLLS%} . || exit /b 1
 cp -v "%ITH_HOME%"/bin/{%ITH_DLLS%} . || exit /b 1
 cp -v "%ZLIB_HOME%"/bin/%ZLIB_DLL% . || exit /b 1
 
+::cp -v "%CURL_HOME%"/bin/%CURL_BIN% . || exit /b 1
+::cp -v "%GZIP_HOME%"/bin/%GZIP_BIN% . || exit /b 1
+
 cp -Rv "%VLC_HOME%"/{%VLC_PLUGINS%} . || exit /b 1
 rm -fv plugins/*.dat*
 
 ::cp -v "%BUILD%"/*.{exe,dll} . || exit /b 1
 cp -v "%BUILD%"/*.{exe,dll} .
 
-rm -f "Annot Player.exe"
+rm -fv "Annot Player.exe"
 rm -fv hook.dll
+rm -fv luascript.lua
 
-cd ..
+:: compile lua
+
+::luac -s -o luascript.luac "%SOURCE%"/module/mrlresolver/lua/luascript.lua  || exit 1
+::cp -R "%SOURCE%"/module/mrlresolver/lua/luascript .  || exit 1
+::pushd luascript || exit 1
+::for %%d in (lib sitelist .) do (
+::  pushd %%d || exit 1
+::  for %%i in (*.lua) do luac -s -o %%ic %%i && rm -f %%i
+::  popd
+::)
+::popd
+cp "%SOURCE%"/module/mrlresolver/lua/luascript.lua . || exit 1
+cp -R "%SOURCE%"/module/mrlresolver/lua/luascript .  || exit 1
+rm -f luascript/*~
+rm -f luascript/*/*~
 
 :: repair permissions
 

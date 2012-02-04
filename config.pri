@@ -74,6 +74,7 @@ win32 {
     POPPLER_HOME        = c:/dev/poppler
     BOOST_HOME          = c:/dev/boost
     GSOAP_HOME          = c:/dev/gsoap
+    LUA_HOME            = c:/dev/lua
     ZLIB_HOME           = c:/dev/zlib
 
     ITH_HOME            = c:/dev/ith
@@ -98,6 +99,7 @@ unix {
     POPPLER_HOME        = ${HOME}/opt/poppler
     BOOST_HOME          = /usr
     GSOAP_HOME          = /usr
+    LUA_HOME            = /usr
     ZLIB_HOME           = /usr
 }
 
@@ -109,6 +111,7 @@ mac {
     POPPLER_HOME        = ${HOME}/opt/poppler
     BOOST_HOME          = ${HOME}/opt/local
     GSOAP_HOME          = ${HOME}/opt/local
+    LUA_HOME            = /usr
     ZLIB_HOME           = /usr
 }
 
@@ -124,10 +127,12 @@ INCLUDEPATH     += $$POPPLER_HOME/include/poppler/qt4
 LIBS            += -L$$POPPLER_HOME/lib
 INCLUDEPATH     += $$BOOST_HOME/include
 LIBS            += -L$$BOOST_HOME/lib
-INCLUDEPATH     += $$ZLIB_HOME/include
-LIBS            += -L$$ZLIB_HOME/lib
 INCLUDEPATH     += $$GSOAP_HOME/include
 LIBS            += -L$$GSOAP_HOME/lib
+INCLUDEPATH     += $$LUA_HOME/include
+LIBS            += -L$$LUA_HOME/lib
+INCLUDEPATH     += $$ZLIB_HOME/include
+LIBS            += -L$$ZLIB_HOME/lib
 
 CONFIG(release) {
   #DEFINES += QT_NO_DEBUG_OUTPUT QT_NO_WARNING_OUTPUT

@@ -7,8 +7,8 @@
 #include "stylesheet.h"
 #include "defines.h"
 #include "logger.h"
-#include "core/gui/toolbutton.h"
-#include "core/gui/combobox.h"
+#include "module/qtext/toolbutton.h"
+#include "module/qtext/combobox.h"
 #ifdef Q_WS_WIN
   #include "win/qtwin/qtwin.h"
 #endif // Q_WS_WIN
@@ -62,7 +62,7 @@ DeviceDialog::DeviceDialog(QWidget *parent)
   //  messageLabel_->setAlignment(Qt::AlignCenter);
   //}
 
-  pathComboBox_ = new Core::Gui::ComboBox; {
+  pathComboBox_ = new QtExt::ComboBox; {
     UiStyle::globalInstance()->setComboBoxStyle(pathComboBox_);
     pathComboBox_->setEditable(true);
     pathComboBox_->setMinimumWidth(COMBOBOX_MINWIDTH);
@@ -83,7 +83,7 @@ DeviceDialog::DeviceDialog(QWidget *parent)
 #undef MAKE_RADIOBUTTON
 
 #define MAKE_TOOLBUTTON(_button, _text, _tip, _slot) \
-   _button = new Core::Gui::ToolButton; { \
+   _button = new QtExt::ToolButton; { \
     _button->setStyleSheet(SS_TOOLBUTTON_TEXT); \
     _button->setToolButtonStyle(Qt::ToolButtonTextOnly); \
     _button->setText(QString("[ %1 ]").arg(_text)); \

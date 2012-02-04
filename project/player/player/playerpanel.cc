@@ -9,8 +9,8 @@
 #include "stylesheet.h"
 #include "uistyle.h"
 #include "tr.h"
-#include "core/gui/slider.h"
-#include "core/gui/toolbutton.h"
+#include "module/qtext/slider.h"
+#include "module/qtext/toolbutton.h"
 #include <QtGui>
 
 #define SS_TOOLBUTTON \
@@ -38,7 +38,7 @@ QSlider*
 PlayerPanel::positionSlider()
 {
   if (!positionSlider_) {
-    positionSlider_ = new Core::Gui::Slider(Qt::Horizontal, this);
+    positionSlider_ = new QtExt::Slider(Qt::Horizontal, this);
     positionSlider_->setStyleSheet(SS_SLIDER_POSITION);
     positionSlider_->setEnabled(false);
     positionSlider_->setMaximum(G_POSITION_MAX);
@@ -52,7 +52,7 @@ QSlider*
 PlayerPanel::volumeSlider()
 {
   if (!volumeSlider_) {
-    volumeSlider_ = new Core::Gui::Slider(Qt::Horizontal, this);
+    volumeSlider_ = new QtExt::Slider(Qt::Horizontal, this);
     volumeSlider_->setStyleSheet(SS_SLIDER_VOLUME);
     volumeSlider_->setMaximum(G_VOLUME_MAX);
     volumeSlider_->setToolTip(TR(T_VOLUME));
@@ -66,7 +66,7 @@ PlayerPanel::volumeSlider()
   PlayerPanel::_button() \
   { \
     if (!_button##_) { \
-      _button##_ = new Core::Gui::ToolButton(this); \
+      _button##_ = new QtExt::ToolButton(this); \
       _button##_->setStyleSheet(SS_TOOLBUTTON_##_styleid); \
       _button##_->setToolTip(TR(T_TOOLTIP_##_styleid)); \
       UiStyle::globalInstance()->setToolButtonStyle(_button##_); \

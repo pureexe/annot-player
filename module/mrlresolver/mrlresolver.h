@@ -4,8 +4,8 @@
 // mrlresolver.h
 // 1/24/2011
 
+#include "mediainfo.h"
 #include <QObject>
-#include <QStringList>
 
 class MrlResolver : public QObject
 {
@@ -21,12 +21,15 @@ signals:
   void errorReceived(QString message);
   void messageReceived(QString message);
 
-  void resolved(QStringList mrls, QString href, QString title);
+  void mediaResolved(MediaInfo mi);
+  void annotResolved(QString suburl);
 
 public:
   virtual bool match(const QString &href) const = 0;
 public slots:
-  virtual void resolve(const QString &href) = 0;
+  virtual void resolveMedia(const QString &href) = 0;
+
+  virtual void resolveAnnot(const QString &href) { (void)href; }
 };
 
 #endif // MRLRESOLVER_H

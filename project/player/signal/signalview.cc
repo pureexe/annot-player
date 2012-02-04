@@ -7,7 +7,7 @@
 #include "processview.h"
 #include "uistyle.h"
 #include "stylesheet.h"
-#include "core/gui/toolbutton.h"
+#include "module/qtext/toolbutton.h"
 #include "tr.h"
 #include <QtGui>
 
@@ -44,7 +44,7 @@ SignalView::SignalView(QWidget *parent)
   // Buttons
 
 #define MAKE_BUTTON(_id, _text) \
-  QToolButton *_id##Button = new Core::Gui::ToolButton; { \
+  QToolButton *_id##Button = new QtExt::ToolButton; { \
     _id##Button->setStyleSheet(SS_TOOLBUTTON_TEXT); \
     _id##Button->setToolButtonStyle(Qt::ToolButtonTextOnly); \
     _id##Button->setCheckable(true); \

@@ -34,10 +34,12 @@
 namespace { // anonymous
 
   // Meta types
+  /*
   inline void registerMetaTypes()
   {
     qRegisterMetaType<ProcessInfo>("ProcessInfo");
   }
+  */
 
   // i18n
   /*
@@ -117,7 +119,7 @@ main(int argc, char *argv[])
   ::qsrand((uint)QDateTime::currentMSecsSinceEpoch());
 
   // Register meta types.
-  ::registerMetaTypes();
+  //::registerMetaTypes();
 
   // Warm up startup caches
   ::warmUp();
@@ -232,24 +234,22 @@ main(int argc, char *argv[])
   //w.openPath("cdda://X:", false);
   //w.openPath("/dev/rdisk1", false);
 
-  /*
-  Display *dpy = QX11Info::display();
-  XEvent xev;
-  Atom wm_state = XInternAtom(dpy, "_NET_WM_STATE", False);
-  Atom fullscreen = XInternAtom(dpy, "_NET_WM_STATE_FULLSCREEN", False);
-
-  memset(&xev, 0, sizeof(xev));
-  xev.type = ClientMessage;
-  xev.xclient.window = w.winId();
-  xev.xclient.message_type = wm_state;
-  xev.xclient.format = 32;
-  xev.xclient.data.l[0] = 1;
-  xev.xclient.data.l[1] = fullscreen;
-  xev.xclient.data.l[2] = 0;
-
-  XSendEvent(dpy, DefaultRootWindow(dpy), False,
-  SubstructureNotifyMask, &xev);
-  */
+  //Display *dpy = QX11Info::display();
+  //XEvent xev;
+  //Atom wm_state = XInternAtom(dpy, "_NET_WM_STATE", False);
+  //Atom fullscreen = XInternAtom(dpy, "_NET_WM_STATE_FULLSCREEN", False);
+//
+  //memset(&xev, 0, sizeof(xev));
+  //xev.type = ClientMessage;
+  //xev.xclient.window = w.winId();
+  //xev.xclient.message_type = wm_state;
+  //xev.xclient.format = 32;
+  //xev.xclient.data.l[0] = 1;
+  //xev.xclient.data.l[1] = fullscreen;
+  //xev.xclient.data.l[2] = 0;
+//
+  //XSendEvent(dpy, DefaultRootWindow(dpy), False,
+  //SubstructureNotifyMask, &xev);
 
 #if defined(USE_MODE_SIGNAL) && defined(Q_OS_WIN)
   // jichi 11/29/2011: Use as a PERSISTENT hidden top level window.
@@ -266,6 +266,11 @@ main(int argc, char *argv[])
   //QTimer::singleShot(0, &dummy, SLOT(show()));
 
 #endif // USE_MODE_SIGNAL && Q_OS_WIN
+
+  //QWidget bk;
+  //bk.setWindowFlags(Qt::CustomizeWindowHint);
+  //DWM_ENABLE_AERO_WIDGET(&bk);
+  //bk.showMaximized();
 
   return a.exec();
 }

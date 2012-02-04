@@ -5,7 +5,7 @@
 // 10/16/2011
 
 #include "processinfo.h"
-#include "core/gui/dialog.h"
+#include "module/qtext/dialog.h"
 #include <QModelIndex>
 #include <QHash>
 
@@ -20,7 +20,7 @@ QT_END_NAMESPACE
 
 class FilteredTableView;
 
-typedef Core::Gui::Dialog ProcessViewBase;
+typedef QtExt::Dialog ProcessViewBase;
 class ProcessView : public ProcessViewBase
 {
   Q_OBJECT

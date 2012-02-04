@@ -4,14 +4,14 @@
 // backlogview.h
 // 1/1/2012
 
-#include "core/gui/dialog.h"
+#include "module/qtext/dialog.h"
 
 QT_FORWARD_DECLARE_CLASS(QToolButton)
 QT_FORWARD_DECLARE_CLASS(QStackedLayout)
 
 class TextView;
 
-typedef Core::Gui::Dialog BacklogViewBase;
+typedef QtExt::Dialog BacklogViewBase;
 class BacklogView : public BacklogViewBase
 {
   Q_OBJECT

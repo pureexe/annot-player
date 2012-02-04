@@ -12,7 +12,7 @@
 #endif // USE_MODULE_SERVERAGENT
 #include <QtCore>
 
-using namespace Core::Cloud;
+using namespace AnnotCloud;
 using namespace Logger;
 
 //#define DEBUG "dataserver"
@@ -34,9 +34,13 @@ DataServer::submitToken(const Token &token)
 {
   DOUT("enter");
   qint64 id = 0;
-  if (server_->isConnected() && server_->isAuthorized())
-    id = server_->submitToken(token);
-  else if (cache_->isValid() && token.hasDigest())
+  if (server_->isConnected()) {
+    if (server_->isAuthorized())
+      id = server_->submitToken(token);
+    else
+      id = server_->selectTokenId(token);
+  }
+  if (!id && cache_->isValid() && token.hasDigest())
     id = cache_->selectTokenWithDigest(token.digest(), token.part()).id();
   DOUT("exit: ret =" << id);
   return id;
@@ -292,10 +296,7 @@ DataServer::selectAnnotationsWithTokenId(qint64 tid)
   AnnotationList ret;
   if (server_->isConnected()) {
     ret = server_->selectAnnotationsWithTokenId(tid);
-    if (!ret.isEmpty() && cache_->isValid()) {
-      cache_->deleteAnnotationsWithTokenId(tid);
-      cache_->insertAnnotations(ret);
-    }
+    updateAnnotations(ret);
   } else if (cache_->isValid())
     ret = cache_->selectAnnotationsWithTokenId(tid);;
   DOUT("exit: count =" << ret.size());
@@ -326,16 +327,22 @@ DataServer::selectRelatedAnnotationsWithTokenId(qint64 tid)
   AnnotationList ret;
   if (server_->isConnected()) {
     ret = server_->selectRelatedAnnotationsWithTokenId(tid);
-    if (!ret.isEmpty() && cache_->isValid()) {
-      if (ret.size() > 20) // async for large amount of annots
-        cache_->updateAnnotations(ret, true); // async = true
-      else
-        cache_->updateAnnotations(ret, false); // async =false
-    }
+    updateAnnotations(ret);
   } else if (cache_->isValid())
     ret = cache_->selectAnnotationsWithTokenId(tid);
   DOUT("exit: count =" << ret.size());
   return ret;
+}
+
+void
+DataServer::updateAnnotations(const AnnotationList &l)
+{
+  if (!l.isEmpty() && cache_->isValid()) {
+    if (l.size() > 20) // async for large amount of annots
+      cache_->updateAnnotations(l, true); // async = true
+    else
+      cache_->updateAnnotations(l, false); // async =false
+  }
 }
 
 AliasList

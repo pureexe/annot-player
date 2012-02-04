@@ -17,7 +17,7 @@
 //#define DEBUG "database"
 #include "module/debug/debug.h"
 
-using namespace Core::Cloud;
+using namespace AnnotCloud;
 
 namespace { // anonymous, helper
 

@@ -4,12 +4,12 @@
 // addaliasdialog.h
 // 10/13/2011
 
-#include "core/gui/dialog.h"
+#include "module/qtext/dialog.h"
 
 QT_FORWARD_DECLARE_CLASS(QLineEdit)
 QT_FORWARD_DECLARE_CLASS(QToolButton)
 
-typedef Core::Gui::Dialog AddAliasDialogBase;
+typedef QtExt::Dialog AddAliasDialogBase;
 class AddAliasDialog : public AddAliasDialogBase
 {
   Q_OBJECT
@@ -40,6 +40,7 @@ protected slots:
 
   void setTypeToName(bool t);
   void setTypeToTag(bool t);
+  void setTypeToUrl(bool t);
 
 protected:
   void tag(const QString &tag);
@@ -51,7 +52,7 @@ private:
   QLineEdit *aliasEdit_;
   QToolButton *okButton_, *cancelButton_;
 
-  QToolButton *isNameButton_, *isTagButton_;
+  QToolButton *isNameButton_, *isTagButton_, *isUrlButton_;
 
   QToolButton *isEnglishButton_,
               *isJapaneseButton_,

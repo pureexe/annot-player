@@ -132,8 +132,8 @@ enum { ALPHA = 0 };
 #define BAD_POS     QPoint(-1, -1)
 
 // - Annotations -
-#define ANNOT_PARSE_CODE(_code)  Core::AnnotationParser::globalInstance()->renderToHtml(_code)
-#define ANNOT_REDUCE_HTML(_html) Core::AnnotationParser::globalInstance()->reduceHtml(_html)
+#define ANNOT_PARSE_CODE(_code)  AnnotCloud::AnnotationParser::globalInstance()->renderToHtml(_code)
+#define ANNOT_REDUCE_HTML(_html) AnnotCloud::AnnotationParser::globalInstance()->reduceHtml(_html)
 
 // - Hook -
 #ifdef USE_WIN_HOOK
@@ -166,8 +166,8 @@ enum { ALPHA = 0 };
     if (Dwm::isCompositionEnabled()) { \
       Dwm::enableBlurBehindWindow((_w)); \
       Dwm::extendFrameIntoClientArea((_w)); \
-      _w->setAttribute(Qt::WA_TranslucentBackground); \
-      _w->setAttribute(Qt::WA_NoSystemBackground); \
+      (_w)->setAttribute(Qt::WA_TranslucentBackground); \
+      (_w)->setAttribute(Qt::WA_NoSystemBackground); \
     } \
   }
 
@@ -177,8 +177,8 @@ enum { ALPHA = 0 };
     if (Dwm::isCompositionEnabled()) { \
       Dwm::enableBlurBehindWindow((_w), false); \
       Dwm::extendFrameIntoClientArea((_w), 0, 0, 0, 0); \
-      _w->setAttribute(Qt::WA_TranslucentBackground, false); \
-      _w->setAttribute(Qt::WA_NoSystemBackground, false); \
+      (_w)->setAttribute(Qt::WA_TranslucentBackground, false); \
+      (_w)->setAttribute(Qt::WA_NoSystemBackground, false); \
     } \
   }
 
@@ -188,8 +188,8 @@ enum { ALPHA = 0 };
     if (Dwm::isCompositionEnabled()) { \
       Dwm::enableBlurBehindWindow((_w)->winId()); \
       Dwm::extendFrameIntoClientArea((_w)->winId()); \
-      _w->setAttribute(Qt::WA_TranslucentBackground); \
-      _w->setAttribute(Qt::WA_NoSystemBackground); \
+      (_w)->setAttribute(Qt::WA_TranslucentBackground); \
+      (_w)->setAttribute(Qt::WA_NoSystemBackground); \
     } \
   }
 

@@ -4,11 +4,11 @@
 // logindialog.h
 // 8/14/2011
 
-#include "core/gui/dialog.h"
+#include "module/qtext/dialog.h"
 
 QT_FORWARD_DECLARE_CLASS(QLineEdit)
 
-typedef Core::Gui::Dialog LoginDialogBase;
+typedef QtExt::Dialog LoginDialogBase;
 class LoginDialog : public LoginDialogBase
 {
   Q_OBJECT

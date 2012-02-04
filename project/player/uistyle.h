@@ -25,17 +25,18 @@ class UiStyle : public QObject
 public:
   enum Theme {
     DefaultTheme = 0, RandomTheme,
-    Black1Theme, Black2Theme,
-    Blue1Theme, Blue2Theme,
-    Brown1Theme, Brown2Theme,
-    Green1Theme, Green2Theme,
-    LightBlue1Theme, LightBlue2Theme,
-    Orange1Theme, Orange2Theme,
-    Pink1Theme, Pink2Theme,
-    Purple1Theme, Purple2Theme,
-    Red1Theme, Red2Theme,
-    Yellow1Theme, Yellow2Theme,
-    Windows1Theme, Windows2Theme,
+    DarkTheme,
+    BlackTheme,
+    BlueTheme,
+    BrownTheme,
+    CyanTheme,
+    GrayTheme,
+    GreenTheme,
+    PinkTheme,
+    PurpleTheme,
+    RedTheme,
+    WhiteTheme,
+    YellowTheme,
     ThemeCount
   };
 

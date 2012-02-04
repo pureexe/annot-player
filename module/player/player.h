@@ -75,7 +75,7 @@ public:
 
   bool isValid() const;
 
-  QString encoding() const;
+  //QString encoding() const;
 
   // - Queries -
 public:
@@ -189,12 +189,12 @@ public slots:
    *  - [cdda://][device]              Audio CD device
    *  - udp:[[<source address>]@[<bind address>][:<bind port>]]
    */
-  bool openMedia(const QString &url);
+  bool openMedia(const QString &mrl);
   bool openMediaAsCD(const QString &url);
   void closeMedia();
 
 
-  void setEncoding(const QString &encoding); ///< See \c Encoding for details.
+  //void setEncoding(const QString &encoding); ///< See \c Encoding for details.
 
   bool openSubtitle(const QString &fileName); ///< Same as \c setSubtitleFromFile
 
@@ -270,7 +270,7 @@ signals:
   void lengthChanged(); // Due to deficency of VLC, the length is changed after mediaChangd.
   void positionChanged();
   void volumeChanged();
-  void encodingChanged();
+  //void encodingChanged();
   void errorEncountered();
   void subtitleChanged();
   void audioTrackChanged();
@@ -294,7 +294,7 @@ public:
     ADD_SIGNAL(lengthChanged())
     ADD_SIGNAL(positionChanged())
     ADD_SIGNAL(volumeChanged())
-    ADD_SIGNAL(encodingChanged())
+    //ADD_SIGNAL(encodingChanged())
     ADD_SIGNAL(endReached())
     //ADD_SIGNAL(errorEncountered())
 #undef ADD_SIGNAL

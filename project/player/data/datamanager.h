@@ -3,10 +3,10 @@
 // datamanager.h
 // 12/5/2011
 
-#include "core/cloud/alias.h"
-#include "core/cloud/annotation.h"
-#include "core/cloud/token.h"
-#include "core/cloud/user.h"
+#include "module/annotcloud/alias.h"
+#include "module/annotcloud/annotation.h"
+#include "module/annotcloud/token.h"
+#include "module/annotcloud/user.h"
 #include <QObject>
 
 class DataManager : public QObject
@@ -15,12 +15,12 @@ class DataManager : public QObject
   typedef DataManager Self;
   typedef QObject Base;
 
-  typedef Core::Cloud::User User;
-  typedef Core::Cloud::Token Token;
-  typedef Core::Cloud::Alias Alias;
-  typedef Core::Cloud::AliasList AliasList;
-  typedef Core::Cloud::Annotation Annotation;
-  typedef Core::Cloud::AnnotationList AnnotationList;
+  typedef AnnotCloud::User User;
+  typedef AnnotCloud::Token Token;
+  typedef AnnotCloud::Alias Alias;
+  typedef AnnotCloud::AliasList AliasList;
+  typedef AnnotCloud::Annotation Annotation;
+  typedef AnnotCloud::AnnotationList AnnotationList;
 
   User user_;
   Token token_;

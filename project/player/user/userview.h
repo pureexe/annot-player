@@ -4,12 +4,12 @@
 // userview.h
 // 8/3/2011
 
-#include "core/gui/dialog.h"
-#include "core/cloud/user.h"
+#include "module/qtext/dialog.h"
+#include "module/annotcloud/user.h"
 
 QT_FORWARD_DECLARE_CLASS(QLabel)
 
-typedef Core::Gui::Dialog UserViewBase;
+typedef QtExt::Dialog UserViewBase;
 
 class UserView : public UserViewBase
 {
@@ -17,7 +17,7 @@ class UserView : public UserViewBase
   typedef UserView Self;
   typedef UserViewBase Base;
 
-  typedef Core::Cloud::User User;
+  typedef AnnotCloud::User User;
 
 public:
   explicit UserView(QWidget *parent = 0);

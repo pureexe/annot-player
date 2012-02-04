@@ -4,8 +4,8 @@
 // comboboxedit.h
 // 7/16/2011
 
-#include "core/gui/combobox.h"
-#include "core/gui/withsizehint.h"
+#include "module/qtext/combobox.h"
+#include "module/qtext/withsizehint.h"
 #include <QStringList>
 
 QT_FORWARD_DECLARE_CLASS(QAction)
@@ -13,8 +13,8 @@ QT_FORWARD_DECLARE_CLASS(QMenu)
 
 class AnnotationEditor;
 
-typedef Core::Gui::ComboBox ComboBoxEditBase;
-class ComboBoxEdit : public ComboBoxEditBase, public Core::Gui::WithSizeHint
+typedef QtExt::ComboBox ComboBoxEditBase;
+class ComboBoxEdit : public ComboBoxEditBase, public QtExt::WithSizeHint
 {
   Q_OBJECT
   typedef ComboBoxEdit Self;
@@ -29,7 +29,7 @@ public slots:
   void setDefaultItems(const QStringList &l) { defaultItems_ = l; }
 
   virtual QSize sizeHint() const ///< \override QWidget
-  { return Core::Gui::WithSizeHint::sizeHint(); }
+  { return QtExt::WithSizeHint::sizeHint(); }
 
 public:
   const QStringList &defaultItems() const { return defaultItems_; }

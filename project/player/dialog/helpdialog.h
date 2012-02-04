@@ -4,10 +4,10 @@
 // helpdialog.h
 // 11/16/2011
 
-#include "core/gui/webdialog.h"
+#include "module/qtext/webdialog.h"
 #include <QLocale>
 
-typedef Core::Gui::WebDialog HelpDialogBase;
+typedef QtExt::WebDialog HelpDialogBase;
 
 class HelpDialog: public HelpDialogBase
 {

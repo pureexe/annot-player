@@ -4,9 +4,9 @@
 // tokenview.h
 // 8/13/2011
 
-#include "core/gui/dialog.h"
-#include "core/cloud/token.h"
-#include "core/cloud/alias.h"
+#include "module/qtext/dialog.h"
+#include "module/annotcloud/token.h"
+#include "module/annotcloud/alias.h"
 #include <QModelIndex>
 
 QT_BEGIN_NAMESPACE
@@ -23,7 +23,7 @@ class AddAliasDialog;
 class ServerAgent;
 class FilteredTableView;
 
-typedef Core::Gui::Dialog TokenViewBase;
+typedef QtExt::Dialog TokenViewBase;
 
 class TokenView : public TokenViewBase
 {
@@ -31,10 +31,10 @@ class TokenView : public TokenViewBase
   typedef TokenView Self;
   typedef TokenViewBase Base;
 
-  typedef Core::Cloud::Token Token;
-  typedef Core::Cloud::TokenList TokenList;
-  typedef Core::Cloud::Alias Alias;
-  typedef Core::Cloud::AliasList AliasList;
+  typedef AnnotCloud::Token Token;
+  typedef AnnotCloud::TokenList TokenList;
+  typedef AnnotCloud::Alias Alias;
+  typedef AnnotCloud::AliasList AliasList;
 
   Token token_;
   AliasList aliases_;

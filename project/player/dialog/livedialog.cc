@@ -5,9 +5,8 @@
 #include "uistyle.h"
 #include "tr.h"
 #include "stylesheet.h"
-#include "core/htmltag.h"
-#include "core/gui/toolbutton.h"
-#include "core/gui/combobox.h"
+#include "module/qtext/toolbutton.h"
+#include "module/qtext/combobox.h"
 #include <QtGui>
 
 #define SLOTLINE_MAXWIDTH 150
@@ -23,19 +22,19 @@ LiveDialog::LiveDialog(QWidget *parent)
 
   // Widgets
 
-  comboBox_ = new Core::Gui::ComboBox; {
+  comboBox_ = new QtExt::ComboBox; {
     UiStyle::globalInstance()->setComboBoxStyle(comboBox_);
     comboBox_->setMaximumWidth(SLOTLINE_MAXWIDTH);
   }
 
-  QToolButton *okButton = new Core::Gui::ToolButton; {
+  QToolButton *okButton = new QtExt::ToolButton; {
     okButton->setStyleSheet(SS_TOOLBUTTON_TEXT);
     okButton->setToolButtonStyle(Qt::ToolButtonTextOnly);
     okButton->setText(QString("[ %1 ]").arg(TR(T_OK)));
     okButton->setToolTip(TR(T_OK));
   }
 
-  QToolButton *cancelButton = new Core::Gui::ToolButton; {
+  QToolButton *cancelButton = new QtExt::ToolButton; {
     cancelButton->setStyleSheet(SS_TOOLBUTTON_TEXT);
     cancelButton->setToolButtonStyle(Qt::ToolButtonTextOnly);
     cancelButton->setText(QString("[ %1 ]").arg(TR(T_CANCEL)));

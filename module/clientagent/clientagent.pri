@@ -2,9 +2,6 @@
 # 10/6/2011
 
 include(../../config.pri)
-#include($$ROOTDIR/module/gsoap/gsoap.pri)
-#include($$ROOTDIR/core/core.pri)
-#include($$PWD/clientsoap.pri)
 
 INCLUDEPATH += $$PWD
 INCLUDEPATH += $$PWD/clientsoap

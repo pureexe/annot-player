@@ -22,6 +22,7 @@
     __VA_ARGS__ "f4v" \
     __VA_ARGS__ "flv" \
     __VA_ARGS__ "gxf" \
+    __VA_ARGS__ "hlv" \
     __VA_ARGS__ "m1v" \
     __VA_ARGS__ "m2p" \
     __VA_ARGS__ "m2ts" \

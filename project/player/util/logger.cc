@@ -2,16 +2,16 @@
 // 10/16/2011
 #include "logger.h"
 #include "osdconsole.h"
-#include "core/htmltag.h"
+#include "module/qtext/htmltag.h"
 #include <QtCore>
 
 void
 Logger::log(const QString &message)
 {
   gConsole().append(
-    CORE_HTML_STYLE_OPEN(color:blue)
+    HTML_STYLE_OPEN(color:blue)
     ": " + message +
-    CORE_HTML_STYLE_CLOSE() CORE_HTML_BR()
+    HTML_STYLE_CLOSE() HTML_BR()
   );
 }
 
@@ -19,9 +19,9 @@ void
 Logger::notify(const QString &message)
 {
   gConsole().append(
-    CORE_HTML_STYLE_OPEN(color:purple)
+    HTML_STYLE_OPEN(color:purple)
     ": " + message +
-    CORE_HTML_STYLE_CLOSE() CORE_HTML_BR()
+    HTML_STYLE_CLOSE() HTML_BR()
   );
 }
 
@@ -29,9 +29,9 @@ void
 Logger::warn(const QString &message)
 {
   gConsole().append(
-    CORE_HTML_STYLE_OPEN(color:orange)
+    HTML_STYLE_OPEN(color:orange)
     ": " + message +
-    CORE_HTML_STYLE_CLOSE() CORE_HTML_BR()
+    HTML_STYLE_CLOSE() HTML_BR()
   );
 }
 
@@ -39,9 +39,9 @@ void
 Logger::error(const QString &message)
 {
   gConsole().append(
-    CORE_HTML_STYLE_OPEN(color:red)
+    HTML_STYLE_OPEN(color:red)
     ": " + message +
-    CORE_HTML_STYLE_CLOSE() CORE_HTML_BR()
+    HTML_STYLE_CLOSE() HTML_BR()
   );
 }
 

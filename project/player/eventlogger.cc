@@ -5,8 +5,7 @@
 #include "osdconsole.h"
 #include "defines.h"
 #include "logger.h"
-#include "core/htmltag.h"
-#include "core/util/datetime.h"
+#include "module/qtext/datetime.h"
 #include "module/player/player.h"
 #include "module/serveragent/serveragent.h"
 #include <QtCore>
@@ -95,7 +94,7 @@ EventLogger::logUntilPlaying()
     log(tr("caching fonts on first launch ... this could take up to 10min, don't panic!"));
   else {
     int msecs = logCount_ * G_LOGGER_PLAYING_WAITER_TIMEOUT;
-    QTime t = Core::msecs2time(msecs);
+    QTime t = QtExt::msecs2time(msecs);
     QString s = QString("%1 / %2").arg(t.toString("m:ss"));
     if (logCount_ < 100) // 5sec * 100 < 10:0min = 60sec * 10
         s = s.arg("10:00");
@@ -193,7 +192,7 @@ EventLogger::logLogoutFinished()
 
 void
 EventLogger::logSeeked(qint64 msecs)
-{ log(tr("seek") + ": " + Core::msecs2time(msecs).toString()); }
+{ log(tr("seek") + ": " + QtExt::msecs2time(msecs).toString()); }
 
 void
 EventLogger::logCacheCleared()

@@ -10,7 +10,7 @@
 #include "stylesheet.h"
 #include "lineedit.h"
 #include "logger.h"
-#include "core/gui/toolbutton.h"
+#include "module/qtext/toolbutton.h"
 #include <QtGui>
 
 // - Constructions -
@@ -80,7 +80,7 @@ BlacklistView::createTabs()
 {
   // Widgets
 #define MAKE_TAB_BUTTON(_button, _tr, _slot) \
-  _button = new Core::Gui::ToolButton; { \
+  _button = new QtExt::ToolButton; { \
     _button->setStyleSheet(SS_TOOLBUTTON_TEXT); \
     _button->setToolButtonStyle(Qt::ToolButtonTextOnly); \
     _button->setText(QString("- %1 -").arg(_tr)); \
@@ -89,7 +89,7 @@ BlacklistView::createTabs()
   }
 
 #define MAKE_UNCHECKABLE_BUTTON(_button, _title, _tip, _slot) \
-    _button = new Core::Gui::ToolButton; { \
+    _button = new QtExt::ToolButton; { \
       _button->setStyleSheet(SS_TOOLBUTTON_TEXT); \
       _button->setToolButtonStyle(Qt::ToolButtonTextOnly); \
       _button->setText(_title); \
@@ -97,7 +97,7 @@ BlacklistView::createTabs()
       connect(_button, SIGNAL(clicked()), _slot); \
     }
 #define MAKE_CHECKABLE_BUTTON(_button, _title, _tip, _slot) \
-    _button = new Core::Gui::ToolButton; { \
+    _button = new QtExt::ToolButton; { \
       _button->setStyleSheet(SS_TOOLBUTTON_TEXT); \
       _button->setToolButtonStyle(Qt::ToolButtonTextOnly); \
       _button->setText(_title); \
@@ -116,7 +116,7 @@ BlacklistView::createTabs()
   MAKE_UNCHECKABLE_BUTTON(subtitleButton_, tr("subtitle"), TR(T_SUBTITLE), SLOT(setSubtitle()))
 
   // - moveStyleComboBox_
-  moveStyleComboBox_ = new Core::Gui::ComboBox; {
+  moveStyleComboBox_ = new QtExt::ComboBox; {
     UiStyle::globalInstance()->setComboBoxStyle(moveStyleComboBox_);
     moveStyleComboBox_->setEditable(true);
     moveStyleComboBox_->setMaximumWidth(MOVESTYLECOMBOBOX_MAXWIDTH);

@@ -21,7 +21,7 @@
 //#define DEBUG "annotationgraphicsview"
 #include "module/debug/debug.h"
 
-using namespace Core::Cloud;
+using namespace AnnotCloud;
 using namespace Logger;
 
 #define MAX_SUBTITLE_HISTORY    30

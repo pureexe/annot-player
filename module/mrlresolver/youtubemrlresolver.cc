@@ -18,19 +18,20 @@
 bool
 YoutubeMrlResolver::match(const QString &href) const
 {
-  QRegExp rx("http://(|www\\.)youtube\\.com/watch?", Qt::CaseInsensitive);
+  QRegExp rx("^http://(|www\\.)youtube\\.com/watch?", Qt::CaseInsensitive);
   return href.contains(rx);
 }
 
 // Example: http://www.youtube.com/watch?v=-DJqnomZoLk&list=FLc18abM35KhjkqsLzTmOEjA&feature=plcp
 void
-YoutubeMrlResolver::resolve(const QString &href)
+YoutubeMrlResolver::resolveMedia(const QString &href)
 {
   static const QString errorMessage = tr("failed to resolve URL");
   QUrl url(href);
-  if (!url.host().contains("youtube.com", Qt::CaseInsensitive) && url.path() == "/watch") {
+  if (!url.host().endsWith("youtube.com", Qt::CaseInsensitive) ||
+      url.path().compare("/watch", Qt::CaseInsensitive)) {
     emit errorReceived(errorMessage + ": " + href);
-    return;
+    //return;
   }
 
   QString v = url.queryItemValue("v");
@@ -41,8 +42,10 @@ YoutubeMrlResolver::resolve(const QString &href)
 
   QString mrl = "http://youtube.com/watch?v=" + v;
   emit messageReceived(tr("resolving media URL ...") + ": " + mrl);
-  QString title;
-  emit resolved(QStringList(mrl), mrl, title);
+  MediaInfo mi;
+  mi.mrls.append(mrl);
+  mi.refurl = mrl;
+  emit mediaResolved(mi);
 }
 
 // EOF

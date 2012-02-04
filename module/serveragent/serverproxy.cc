@@ -4,13 +4,13 @@
 
 #include "serverproxy.h"
 #include "serverproxy_config.h"
-#include "core/cloud/traits.h"
+#include "module/annotcloud/traits.h"
 #include <QtCore>
 
 //#define DEBUG "serverproxy"
 #include "module/debug/debug.h"
 
-using namespace Core::Cloud;
+using namespace AnnotCloud;
 using namespace ServerSoap;
 
 // - Construction -
@@ -344,6 +344,66 @@ ServerProxy::submitToken(const Token &token, const QString &userName, const QStr
   tns__submitMediaTokenResponse response;
   mutex_.lock();
   int err = proxy_->submitMediaToken(&request, &response);
+  mutex_.unlock();
+  if (err) {
+    DOUT("soap error, err =" << err);
+    emit soapError(err);
+    DOUT("exit");
+    return 0;
+  }
+
+  qint64 ret = response.return_;
+  DOUT("exit: tid =" << ret);
+  return ret;
+}
+
+qint64
+ServerProxy::selectTokenIdWithDigest(const QString &digest, qint32 part)
+{
+  DOUT("enter: part =" << part);
+  if (digest.size() != Traits::TOKEN_DIGEST_LENGTH) {
+    DOUT("exit: error: invalid digest =" << digest);
+    return 0;
+  }
+
+  tns__selectMediaTokenIdWithDigest request;
+  std::string arg0 = digest.toStdString();
+  request.arg0 = &arg0;
+  request.arg1 = part;
+
+  tns__selectMediaTokenIdWithDigestResponse response;
+  mutex_.lock();
+  int err = proxy_->selectMediaTokenIdWithDigest(&request, &response);
+  mutex_.unlock();
+  if (err) {
+    DOUT("soap error, err =" << err);
+    emit soapError(err);
+    DOUT("exit");
+    return 0;
+  }
+
+  qint64 ret = response.return_;
+  DOUT("exit: tid =" << ret);
+  return ret;
+}
+
+qint64
+ServerProxy::selectTokenIdWithSource(const QString &source, qint32 part)
+{
+  DOUT("enter: part =" << part);
+  if (source.isEmpty() || source.size() > Traits::MAX_SOURCE_LENGTH) {
+    DOUT("exit: error: invalid source =" << source);
+    return 0;
+  }
+
+  tns__selectMediaTokenIdWithSource request;
+  std::string arg0 = source.toStdString();
+  request.arg0 = &arg0;
+  request.arg1 = part;
+
+  tns__selectMediaTokenIdWithSourceResponse response;
+  mutex_.lock();
+  int err = proxy_->selectMediaTokenIdWithSource(&request, &response);
   mutex_.unlock();
   if (err) {
     DOUT("soap error, err =" << err);

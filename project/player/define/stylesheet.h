@@ -7,7 +7,7 @@
 // See: http://doc.qt.nokia.com/4.7/stylesheet-reference.html
 
 #include "rc.h"
-#include "core/ss.h"
+#include "module/qtext/ss.h"
 #include <QtGlobal>
 
 // - Sliders -

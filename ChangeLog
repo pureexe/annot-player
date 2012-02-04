@@ -2,12 +2,19 @@ ChangeLog
 Annot Project
 6/18/2011
 
+2/4/2012	annot.player	0.1.2.5
+        * Now support playing GoogleVideo/AcFun/BiliBili/Sina/Tudou,QQ video online, with annotation support.
+          Example URLs follow:
+          http://www.youtube.com/watch?v=-DJqnomZoLk
+          http://video.google.com/videoplay?docid=-8070240344560020977
+          http://v.youku.com/v_show/id_XOTg1NzAwMzI=.html
+        * Support importing annotations from AcFun and Bilibli.
+
 1/27/2012	annot.player	0.1.2.4
         * Now support playing Youtube/Youku video online, with annotation support.
           Example URLs follow:
           http://www.youtube.com/watch?v=-DJqnomZoLk
-          http://v.youku.com/v_show/id_XMzQzNTkzNDY0.html
-
+          http://v.youku.com/v_show/id_XOTg1NzAwMzI=.html
 
 1/20/2012	annot.player	0.1.2.3
         * Adjusted for Akatsuki no Goei 2

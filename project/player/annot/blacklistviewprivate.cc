@@ -10,11 +10,11 @@
 #include "stylesheet.h"
 #include "lineedit.h"
 #include "annotationbrowser.h" // TO BE REMOVED
-#include "core/util/datetime.h"
-#include "core/gui/toolbutton.h"
+#include "module/qtext/datetime.h"
+#include "module/qtext/toolbutton.h"
 #include <QtGui>
 
-using namespace Core::Cloud;
+using namespace AnnotCloud;
 
 // + TextFilterView +
 
@@ -226,7 +226,7 @@ void
 AnnotationFilterView::addRow(const Annotation &a)
 {
 #define FORMAT_TIME(_secs)        QDateTime::fromMSecsSinceEpoch(_secs * 1000)
-#define FORMAT_POS(_msecs)        Core::msecs2time(_msecs)
+#define FORMAT_POS(_msecs)        QtExt::msecs2time(_msecs)
 #define FORMAT_LANGUAGE(_lang)    AnnotationBrowser::languageToString(_lang)
 #define FORMAT_FLAGS(_flags)      AnnotationBrowser::annotationFlagsToStringList(_flags)
 #define FORMAT_STATUS(_status)    AnnotationBrowser::annotationStatusToString(_status)

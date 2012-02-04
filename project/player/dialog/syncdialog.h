@@ -4,12 +4,12 @@
 // syncdialog.h
 // 10/7/2011
 
-#include "core/gui/dialog.h"
+#include "module/qtext/dialog.h"
 #include <QList>
 
 QT_FORWARD_DECLARE_CLASS(QComboBox)
 
-typedef Core::Gui::Dialog SyncDialogBase;
+typedef QtExt::Dialog SyncDialogBase;
 class SyncDialog : public SyncDialogBase
 {
   Q_OBJECT

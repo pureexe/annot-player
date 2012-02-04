@@ -5,10 +5,10 @@
 // 9/10/2011
 
 #include "serversoap.h"
-#include "core/cloud/user.h"
-#include "core/cloud/token.h"
-#include "core/cloud/alias.h"
-#include "core/cloud/annotation.h"
+#include "module/annotcloud/user.h"
+#include "module/annotcloud/token.h"
+#include "module/annotcloud/alias.h"
+#include "module/annotcloud/annotation.h"
 #include <boost/scoped_ptr.hpp>
 #include <QObject>
 #include <QMutex>
@@ -19,13 +19,13 @@ class ServerProxy: public QObject
   typedef ServerProxy Self;
   typedef QObject Base;
 
-  typedef Core::Cloud::User User;
-  typedef Core::Cloud::Token Token;
-  typedef Core::Cloud::TokenList TokenList;
-  typedef Core::Cloud::Alias Alias;
-  typedef Core::Cloud::AliasList AliasList;
-  typedef Core::Cloud::Annotation Annotation;
-  typedef Core::Cloud::AnnotationList AnnotationList;
+  typedef AnnotCloud::User User;
+  typedef AnnotCloud::Token Token;
+  typedef AnnotCloud::TokenList TokenList;
+  typedef AnnotCloud::Alias Alias;
+  typedef AnnotCloud::AliasList AliasList;
+  typedef AnnotCloud::Annotation Annotation;
+  typedef AnnotCloud::AnnotationList AnnotationList;
 
   QMutex mutex_;
   boost::scoped_ptr<ServerSoap::ServerSoapProxy> proxy_;
@@ -75,6 +75,9 @@ public:
 
   // - Queries -
 public:
+  qint64 selectTokenIdWithDigest(const QString &digest, qint32 part);
+  qint64 selectTokenIdWithSource(const QString &source, qint32 part);
+
   Token selectTokenWithId(qint64 id);
   Token selectTokenWithDigest(const QString &digest, qint32 part);
 

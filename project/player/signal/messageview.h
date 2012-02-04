@@ -5,7 +5,7 @@
 // 10/16/2011
 
 #include "processinfo.h"
-#include "core/gui/dialog.h"
+#include "module/qtext/dialog.h"
 #include <QTextCharFormat>
 #include <QColor>
 #include <QStringList>
@@ -17,7 +17,7 @@ class QTextEdit;
 class QToolButton;
 QT_END_NAMESPACE
 
-typedef Core::Gui::Dialog MessageViewBase;
+typedef QtExt::Dialog MessageViewBase;
 class MessageView : public MessageViewBase
 {
   Q_OBJECT

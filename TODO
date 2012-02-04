@@ -1,17 +1,39 @@
 # TODO
 # 6/18/2011
 
-# 0.1.2.5
-- FIXME: minimize restore aero bug in game mode
-- split CORE module into independent seperate modules
-- pop up agreement dialog on first launch for youtube/youku
-- add Download video context menu
-- QDesktopServices to openUrl instead of link
+# 0.1.2.6
+- able to block specific source/alias
+- gapless playback using lua playlist
+  see: cue.lua
+  also need time for each part
+  see parse function in cue.lua, use start-time, stop-time to set ts
+- FIXME: diff part error in bilibili!
+- fixme: youtube/googlvideo crash when openning in recent menu
 - change qDebug()<< to qDebug(....)
-- FIXME: live channel echo bug
 
-- Achieve download through http proxy server at localhost
-- ability to play bilibili's xml annots offline
+- finish postdlFile and support for nicovideo
+
+- DOWNLOAD and TRANSCODE
+  - use jdownloader to directly download in c++
+    http://www.codeproject.com/Articles/22881/How-to-Call-Java-Functions-from-C-Using-JNI
+  - use libvlc to merge to single file:
+    http://wiki.videolan.org/How_to_Merge_and_Transcode_Multiple_Videos
+    transcode
+    http://wiki.videolan.org/LibVLC_Visual_C
+- add Download video context menu
+
+- rewrite openMrl logic
+
+- FIXME: live channel echo bug for non-guest user
+- FIXME: minimize restore aero bug in game mode
+- pop up agreement dialog on first launch for youtube/youku/sina...
+- QDesktopServices to openUrl instead of link
+
+- decode nicovideo video
+  - See: NicoVideoJp.java
+    http://flapi.nicovideo.jp/api/getflv/sm16690269
+    http://smile-cln41.nicovideo.jp/smile?m=16690269.29722
+- decode/import nico's annotation -- require authenticated browser with cookies
 
 ## 0.1.3
 
@@ -24,27 +46,6 @@
 
 - SNS
 - Comment
-
-## annot.player
-- monitor clipboard for youtube and youku
-- decode nicovideo
-- decode sina, tudou -- extend http_access, through lua or imem module
-  - See: TdCom.java
-- decode bilibili/acfun video
-
-- cache movie to local disk
-  - save movies from adobe flash
-    using qnetwork cookies jar
-  - manage all saved video
-    into caches
-
-- decode nicovideo video
-  - See: NicoVideoJp.java
-    http://flapi.nicovideo.jp/api/getflv/sm16690269
-    http://smile-cln41.nicovideo.jp/smile?m=16690269.29722
-
-- decode/import nico's annotation -- require authenticated browser with cookies
-- decode/import bilibili/acfun's annotation
 
 ## pass data in mem to vlc
 libvlc imem
@@ -181,9 +182,6 @@ sprintf(sinput, "fake://");
 - ubuntu
   - submit to ubuntu app market
 
-## NextStep:
-
-(0.1.2.?)
 LIVE MODE (annot not saved)
 - try ppstream on windows with my player
   make sure todou work

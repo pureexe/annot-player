@@ -7,8 +7,8 @@
 #include "tr.h"
 #include "stylesheet.h"
 #include "util/textedit.h"
-#include "core/htmltag.h"
-#include "core/gui/toolbutton.h"
+#include "module/qtext/htmltag.h"
+#include "module/qtext/toolbutton.h"
 #include <QtGui>
 
 // - Constructions -
@@ -23,30 +23,30 @@ QString
 AboutDialog::text()
 {
   static const char *ret =
-    CORE_HTML_CENTER_OPEN()
-      CORE_HTML_STYLE_OPEN(color:purple)
-        CORE_HTML_BR()
+    HTML_CENTER_OPEN()
+      HTML_STYLE_OPEN(color:purple)
+        HTML_BR()
 
         G_ORGANIZATION " "
         G_APPLICATION " "
         G_VERSION
-        CORE_HTML_BR()
+        HTML_BR()
 
-        CORE_HTML_EM_OPEN()
+        HTML_EM_OPEN()
           G_LICENSE
-        CORE_HTML_EM_CLOSE()
-        CORE_HTML_BR()
+        HTML_EM_CLOSE()
+        HTML_BR()
 
-        CORE_HTML_BR()
+        HTML_BR()
 
-        CORE_HTML_A_OPEN("dummy")
-          G_HOMEPAGE      CORE_HTML_BR()
-          G_UPDATEPAGE    CORE_HTML_BR()
-          G_EMAIL         CORE_HTML_BR()
-        CORE_HTML_A_CLOSE()
+        HTML_A_OPEN("dummy")
+          G_HOMEPAGE      HTML_BR()
+          G_UPDATEPAGE    HTML_BR()
+          G_EMAIL         HTML_BR()
+        HTML_A_CLOSE()
 
-      CORE_HTML_STYLE_CLOSE()
-    CORE_HTML_CENTER_CLOSE()
+      HTML_STYLE_CLOSE()
+    HTML_CENTER_CLOSE()
   ;
   return ret;
 }
@@ -62,7 +62,7 @@ AboutDialog::AboutDialog(QWidget *parent)
 
   // Components
 
-  QToolButton *okButton = new Core::Gui::ToolButton; {
+  QToolButton *okButton = new QtExt::ToolButton; {
     okButton->setStyleSheet(SS_TOOLBUTTON_TEXT);
     okButton->setToolButtonStyle(Qt::ToolButtonTextOnly);
     okButton->setText(QString("[ %1 ]").arg(TR(T_OK)));

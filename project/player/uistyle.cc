@@ -39,28 +39,18 @@ UiStyle::backgroundImagePath() const
 
   const char *rc = 0;
   switch (t) {
-  case Black1Theme:     rc = RC_IMAGE_AERO_BLACK1; break;
-  case Black2Theme:     rc = RC_IMAGE_AERO_BLACK2; break;
-  case Blue1Theme:      rc = RC_IMAGE_AERO_BLUE1; break;
-  case Blue2Theme:      rc = RC_IMAGE_AERO_BLUE2; break;
-  case Brown1Theme:     rc = RC_IMAGE_AERO_BROWN1; break;
-  case Brown2Theme:     rc = RC_IMAGE_AERO_BROWN2; break;
-  case Green1Theme:     rc = RC_IMAGE_AERO_GREEN1; break;
-  case Green2Theme:     rc = RC_IMAGE_AERO_GREEN2; break;
-  case LightBlue1Theme: rc = RC_IMAGE_AERO_LIGHTBLUE1; break;
-  case LightBlue2Theme: rc = RC_IMAGE_AERO_LIGHTBLUE2; break;
-  case Orange1Theme:    rc = RC_IMAGE_AERO_ORANGE1; break;
-  case Orange2Theme:    rc = RC_IMAGE_AERO_ORANGE2; break;
-  case Pink1Theme:      rc = RC_IMAGE_AERO_PINK1; break;
-  case Pink2Theme:      rc = RC_IMAGE_AERO_PINK2; break;
-  case Purple1Theme:    rc = RC_IMAGE_AERO_PURPLE1; break;
-  case Purple2Theme:    rc = RC_IMAGE_AERO_PURPLE2; break;
-  case Red1Theme:       rc = RC_IMAGE_AERO_RED1; break;
-  case Red2Theme:       rc = RC_IMAGE_AERO_RED2; break;
-  case Yellow1Theme:    rc = RC_IMAGE_AERO_YELLOW1; break;
-  case Yellow2Theme:    rc = RC_IMAGE_AERO_YELLOW2; break;
-  case Windows1Theme:   rc = RC_IMAGE_AERO_WIN1; break;
-  case Windows2Theme:   rc = RC_IMAGE_AERO_WIN2; break;
+  case DarkTheme:       rc = RC_IMAGE_AERO_DARK; break;
+  case BlackTheme:      rc = RC_IMAGE_AERO_BLACK; break;
+  case BlueTheme:       rc = RC_IMAGE_AERO_BLUE; break;
+  case BrownTheme:      rc = RC_IMAGE_AERO_BROWN; break;
+  case CyanTheme:       rc = RC_IMAGE_AERO_CYAN; break;
+  case GrayTheme:       rc = RC_IMAGE_AERO_GRAY; break;
+  case GreenTheme:      rc = RC_IMAGE_AERO_GREEN; break;
+  case PinkTheme:       rc = RC_IMAGE_AERO_PINK; break;
+  case PurpleTheme:     rc = RC_IMAGE_AERO_PURPLE; break;
+  case RedTheme:        rc = RC_IMAGE_AERO_RED; break;
+  case WhiteTheme:      rc = RC_IMAGE_AERO_WHITE; break;
+  case YellowTheme:     rc = RC_IMAGE_AERO_YELLOW; break;
 
   case DefaultTheme:
   case RandomTheme:
