@@ -3,8 +3,6 @@
 
 include(../../config.pri)
 
-INCLUDEPATH += $$PWD/..
-
 HEADERS += \
     $$PWD/alias.h\
     $$PWD/annotationparser.h \

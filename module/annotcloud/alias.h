@@ -4,7 +4,7 @@
 // annotcloud/tokenalias.h
 // 10/5/2011
 
-#include "annotcloud/traits.h"
+#include "module/annotcloud/traits.h"
 #include <QString>
 #include <QList>
 #include <QMetaType>

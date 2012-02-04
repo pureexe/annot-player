@@ -1,7 +1,7 @@
 // annotcloud/user.cc
 // 8/14/2011
 
-#include "annotcloud/user.h"
+#include "module/annotcloud/user.h"
 #include "module/qtext/crypt.h"
 #include <QtCore>
 

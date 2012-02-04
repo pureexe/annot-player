@@ -1,7 +1,7 @@
 // qtext/slider.cc
 // 8/6/2011
 
-#include "qtext/slider.h"
+#include "module/qtext/slider.h"
 #include <QtGui>
 
 // - Constructions -

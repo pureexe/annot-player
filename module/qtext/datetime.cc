@@ -1,7 +1,7 @@
 // qtext/datetime.cc
 // 7/24/2011
 
-#include "qtext/datetime.h"
+#include "module/qtext/datetime.h"
 #include <QtCore>
 
 QTime

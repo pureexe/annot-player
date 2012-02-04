@@ -3,8 +3,6 @@
 
 include(../../config.pri)
 
-INCLUDEPATH += $$PWD/..
-
 HEADERS += \
     $$PWD/actionwithid.h \
     $$PWD/combobox.h \

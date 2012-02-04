@@ -1,7 +1,7 @@
 // qtext/fontcombobox.cc
 // 10/11/2011
 
-#include "qtext/fontcombobox.h"
+#include "module/qtext/fontcombobox.h"
 #include <QtGui>
 
 // - Constructions -

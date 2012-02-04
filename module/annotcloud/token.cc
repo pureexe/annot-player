@@ -1,7 +1,7 @@
 // annotcloud/token.cc
 // 8/7/2011
 
-#include "annotcloud/token.h"
+#include "module/annotcloud/token.h"
 #include "module/qtext/crypt.h"
 #ifdef USE_MODULE_IOUTIL
   #include "module/ioutil/ioutil.h"
@@ -9,7 +9,7 @@
 #include <QtCore>
 #include <memory>
 
-#define DEBUG "annotcloud::token"
+#define DEBUG "module/annotcloud::token"
 #include "module/debug/debug.h"
 
 #define DIGEST(_bytes)  QtExt::Crypt::md5(_bytes)

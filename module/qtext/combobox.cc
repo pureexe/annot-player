@@ -1,7 +1,7 @@
 // qtext/combobox.cc
 // 10/7/2011
 
-#include "qtext/combobox.h"
+#include "module/qtext/combobox.h"
 #include <QtGui>
 
 // - Constructions -

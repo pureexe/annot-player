@@ -4069,6 +4069,9 @@ MainWindow::closeEvent(QCloseEvent *event)
   //if (parentWidget())
   //  QTimer::singleShot(0, parentWidget(), SLOT(close()));
 
+  //MrlResolverManager::globalInstance()->deleteLater();
+  //AnnotationCodecManager::globalInstance()->deleteLater();
+
   QTimer::singleShot(0, qApp, SLOT(quit())); // ensure quit app and clean up zombie threads
   Base::closeEvent(event);
 

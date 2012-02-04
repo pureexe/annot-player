@@ -4,9 +4,9 @@
 // annotcloud/annotation.h
 // 7/24/2011
 
-#include "annotcloud/cmd.h"
-#include "annotcloud/traits.h"
-#include "annotcloud/user.h"
+#include "module/annotcloud/cmd.h"
+#include "module/annotcloud/traits.h"
+#include "module/annotcloud/user.h"
 #include <QString>
 #include <QMetaType>
 #include <QList>

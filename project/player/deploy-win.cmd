@@ -96,6 +96,8 @@ cp -R "%SOURCE%"/module/mrlresolver/lua/luascript .  || exit 1
 rm -f luascript/*~
 rm -f luascript/*/*~
 
+cd ..
+
 :: repair permissions
 
 chown -R jichi .

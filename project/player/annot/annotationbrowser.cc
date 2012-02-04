@@ -12,7 +12,7 @@
 #include "module/qtext/toolbutton.h"
 #include "module/qtext/datetime.h"
 #include "module/annotcloud/traits.h"
-#include "annotcloud/cmd.h"
+#include "module/annotcloud/cmd.h"
 #include <QtGui>
 
 using namespace AnnotCloud;

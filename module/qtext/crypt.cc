@@ -1,7 +1,7 @@
 // qtext/crypt.cc
 // 9/4/2011
 
-#include "qtext/crypt.h"
+#include "module/qtext/crypt.h"
 #include <QtCore>
 
 QByteArray

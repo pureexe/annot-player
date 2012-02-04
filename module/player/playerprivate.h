@@ -10,8 +10,8 @@
 // 11/26/2011
 
 #include "player.h"
-//#include "qtext/textcodec.h"
-#include "qtext/countdowntimer.h"
+//#include "module/qtext/textcodec.h"
+#include "module/qtext/countdowntimer.h"
 #include <QObject>
 #include <QList>
 #include <memory>

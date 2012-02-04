@@ -1,7 +1,7 @@
 // annotcloud/alias.cc
 // 10/29/2011
 
-#include "annotcloud/alias.h"
+#include "module/annotcloud/alias.h"
 #include <QtCore>
 
 using namespace AnnotCloud;

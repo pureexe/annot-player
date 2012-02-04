@@ -1,7 +1,7 @@
 // qtext/dialog.cc
 // 9/3/2011
 
-#include "qtext/dialog.h"
+#include "module/qtext/dialog.h"
 #include <QtGui>
 
 #define BAD_POS     QPoint(-1, -1)

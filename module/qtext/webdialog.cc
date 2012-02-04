@@ -1,7 +1,7 @@
 // qtext/webdialog.cc
 // 10/9/2011
 
-#include "qtext/webdialog.h"
+#include "module/qtext/webdialog.h"
 #include <QtGui>
 #include <QtWebKit>
 

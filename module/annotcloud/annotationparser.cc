@@ -1,8 +1,8 @@
-// annotationparser.cc
+// annotcloud/annotationparser.cc
 // 8/19/2011
 
-#include "annotcloud/annotationparser.h"
-#include "annotcloud/cmd.h"
+#include "module/annotcloud/annotationparser.h"
+#include "module/annotcloud/cmd.h"
 #include "module/qtext/htmltag.h"
 #include <QtCore>
 #include <QtWebKit>
@@ -432,7 +432,6 @@ AnnotationParser::translate(const QString &tag,
         else {
           QString ret;
           int i = 0;
-          QString;
           foreach (QString param, params) {
             if (param.isEmpty())
               continue;

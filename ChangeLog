@@ -7,8 +7,9 @@ Annot Project
           Example URLs follow:
           http://www.youtube.com/watch?v=-DJqnomZoLk
           http://video.google.com/videoplay?docid=-8070240344560020977
-          http://v.youku.com/v_show/id_XOTg1NzAwMzI=.html
-        * Support importing annotations from AcFun and Bilibli.
+          http://www.bilibili.tv/video/av55775/
+          http://www.acfun.tv/v/ac245437/
+        * Support importing online annotations from AcFun and Bilibli.
 
 1/27/2012	annot.player	0.1.2.4
         * Now support playing Youtube/Youku video online, with annotation support.

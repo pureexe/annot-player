@@ -1,7 +1,7 @@
 // qtext/actionwithid.cc
 // 9/2/2011
 
-#include "actionwithid.h"
+#include "module/qtext/actionwithid.h"
 #include <QtGui>
 
 // - Constructions -

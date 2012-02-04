@@ -23,7 +23,7 @@ namespace { namespace task_ {
     virtual void run() { r_->resolveMedia(ref_, false); } // \override, async = false
   public:
     ResolveMedia(const QString &ref, LuaMrlResolver *r)
-      : ref_(ref), r_(r) { Q_ASSERT(r_); }
+      : r_(r), ref_(ref) { Q_ASSERT(r_); }
   };
 
   class ResolveAnnot : public QRunnable
@@ -33,7 +33,7 @@ namespace { namespace task_ {
     virtual void run() { r_->resolveAnnot(ref_, false); } // \override, async = false
   public:
     ResolveAnnot(const QString &ref, LuaMrlResolver *r)
-      : ref_(ref), r_(r) { Q_ASSERT(r_); }
+      : r_(r), ref_(ref) { Q_ASSERT(r_); }
   };
 
 } } // anonymous namespace task_

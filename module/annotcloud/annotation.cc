@@ -1,7 +1,7 @@
 // annotcloud/annotation.cc
 // 7/24/2011
 
-#include "annotcloud/annotation.h"
+#include "module/annotcloud/annotation.h"
 #include "module/qtext/hash.h"
 #include "module/qtext/crypt.h"
 #include <QtCore>

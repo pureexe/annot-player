@@ -4,7 +4,7 @@
 // annotcloud/user.h
 // 8/14/2011
 
-#include "annotcloud/traits.h"
+#include "module/annotcloud/traits.h"
 #include <QByteArray>
 #include <QMetaType>
 #include <QString>

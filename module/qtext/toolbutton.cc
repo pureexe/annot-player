@@ -1,7 +1,7 @@
 // qtext/toolbutton.cc
 // 8/6/2011
 
-#include "qtext/toolbutton.h"
+#include "module/qtext/toolbutton.h"
 #include <QtGui>
 
 // - Constructions -

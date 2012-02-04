@@ -171,7 +171,10 @@ BilibiliCodec::parseAttribute(const QString &attr)
     t += CORE_CMD_SUB;
 
   // 6
-  ret.setUserId(-userId);
+  qint64 uid = userId;
+  if (uid <= 0)
+    uid = rowId;
+  ret.setUserId(-uid);
 
   // 7
   ret.setId(-rowId);
