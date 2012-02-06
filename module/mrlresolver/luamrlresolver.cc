@@ -2,7 +2,7 @@
 // 2/2/2012
 
 #include "luamrlresolver.h"
-#include "luascript.h"
+#include "module/luaresolver/luaresolver.h"
 #include <boost/foreach.hpp>
 #include <QtCore>
 #include <QtScript>
@@ -12,7 +12,19 @@
 //#define DEBUG "luaemrlresolver"
 #include "module/debug/debug.h"
 
-// - Helper -
+// TODO: move to project source code
+#ifdef Q_OS_LINUX
+  #define LUAPACKAGE_PATH "/usr/share/annot/player/lua"
+#else
+  #define LUAPACKAGE_PATH ""
+#endif // Q_OS_
+#ifdef Q_OS_MAC
+  #define LUASCRIPT_PATH  QCoreApplication::applicationDirPath().toStdString() + "/" "luascript.lua"
+#else
+  #define LUASCRIPT_PATH  "lua" "/" "luascript.lua"
+#endif // Q_OS_MAC
+
+// - Tasks -
 
 namespace { namespace task_ {
 
@@ -38,12 +50,22 @@ namespace { namespace task_ {
 
 } } // anonymous namespace task_
 
+// - Construction -
+
+LuaMrlResolver::LuaMrlResolver(QObject *parent)
+  : Base(parent)
+{ lua_ = new luaresolver(LUASCRIPT_PATH, LUAPACKAGE_PATH); }
+
+LuaMrlResolver::~LuaMrlResolver()
+{ delete lua_; }
+
 // - Analysis -
 
 bool
 LuaMrlResolver::match(const QString &href) const
 {
-  return href.startsWith("http://", Qt::CaseInsensitive) &&
+  DOUT("enter");
+  bool ret = href.startsWith("http://", Qt::CaseInsensitive) &&
   (
     href.contains("bilibili.tv/", Qt::CaseInsensitive) ||
     href.contains("acfun.tv/", Qt::CaseInsensitive) ||
@@ -53,6 +75,8 @@ LuaMrlResolver::match(const QString &href) const
     href.contains("mikufans.cn/", Qt::CaseInsensitive)
     //href.contains("nicovideo.jp/") ||
   );
+  DOUT("exit: ret =" << ret);
+  return ret;
 }
 
 void
@@ -62,10 +86,12 @@ LuaMrlResolver::resolveMedia(const QString &href, bool async)
     QThreadPool::globalInstance()->start(new task_::ResolveMedia(href, this));
     return;
   }
-  luascript::media_description md;
-  bool ok = luascript::resolve_media(href.toStdString(), md);
+  DOUT("enter: href =" << href);
+  luaresolver::media_description md;
+  bool ok = lua_->resolve_media(href.toStdString(), md);
   if (!ok) {
     emit errorReceived(tr("failed to resolve URL") + ": " + href);
+    DOUT("exit: luaresolver returned empty url");
     return;
   }
 
@@ -85,6 +111,7 @@ LuaMrlResolver::resolveMedia(const QString &href, bool async)
       mi.mrls.append(formatUrl(mrl));
   }
   emit mediaResolved(mi);
+  DOUT("exit: title =" << mi.title);
 }
 
 void
@@ -94,16 +121,19 @@ LuaMrlResolver::resolveAnnot(const QString &href, bool async)
     QThreadPool::globalInstance()->start(new task_::ResolveAnnot(href, this));
     return;
   }
+  DOUT("enter: href =" << href);
   std::string suburl;
-  bool ok = luascript::resolve_annot(href.toStdString(), suburl);
+  bool ok = lua_->resolve_annot(href.toStdString(), suburl);
   if (!ok || suburl.empty()) {
     emit errorReceived(tr("failed to resolve URL") + ": " + href);
+    DOUT("exit: luaresolver returned empty url");
     return;
   }
 
   QString url = formatUrl(suburl);
   if (!url.isEmpty())
     emit annotResolved(url);
+  DOUT("exit: suburl =" << url);
 }
 
 // - Helper -

@@ -3,6 +3,7 @@
 
 // rc.h
 // 7/15/2011
+#include <QtGlobal>
 
 #define RC_PREFIX_IMAGE ":/images/"
 #define RC_IMAGE_NULL   ""
@@ -23,8 +24,13 @@
 
 // - Backgrounds -
 
-#define RC_IMAGE_AERO           RC_PREFIX_IMAGE "aero.png"
-#define RC_IMAGE_AERO_PREVIEW   RC_PREFIX_IMAGE "aero_thumbnail.png"
+#ifdef Q_OS_MAC
+  #define RC_IMAGE_AERO           RC_PREFIX_IMAGE "aero_mac.png"
+  #define RC_IMAGE_AERO_PREVIEW   RC_PREFIX_IMAGE "aero_mac_thumbnail.png"
+#else
+  #define RC_IMAGE_AERO           RC_PREFIX_IMAGE "aero.png"
+  #define RC_IMAGE_AERO_PREVIEW   RC_PREFIX_IMAGE "aero_thumbnail.png"
+#endif // Q_OS_MAC
 
 #define RC_IMAGE_LINEEDIT       RC_PREFIX_IMAGE "lineedit.png"
 #define RC_IMAGE_TEXTEDIT       RC_PREFIX_IMAGE "textedit.png"

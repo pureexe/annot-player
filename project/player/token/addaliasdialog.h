@@ -29,6 +29,7 @@ public:
   // - Slots -
 protected slots:
   void ok();
+  void paste();
   void cancel();
 
   void tagBD()          { tag("BD"); }

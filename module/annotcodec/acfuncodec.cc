@@ -182,7 +182,7 @@ AcFunCodec::parseAttribute(const QString &attr)
   bool ok;
   double pos = l[AttrPos].toDouble();
   int fontSize = l[AttrFontSize].toInt();
-  qint64 fontColor = l[AttrFontColor].toLongLong();
+  int fontColor = l[AttrFontColor].toInt();
   int floatStyle = l[AttrFloatStyle].toInt();
   qint64 userId = l[AttrUserId].toLongLong(&ok, 16);
   qint64 createTime = l[AttrCreateTime].toLongLong();
@@ -200,7 +200,7 @@ AcFunCodec::parseAttribute(const QString &attr)
   // 3
   //fontColor
   if (fontColor > 0)
-    t += CORE_CMD_COLOR "[" "#" + QString::number(fontColor, 16) + "]";
+    t += CORE_CMD_COLOR "[" "#" + QString().sprintf("%06X", fontColor) + "]";
 
   // 4
   switch (floatStyle) {

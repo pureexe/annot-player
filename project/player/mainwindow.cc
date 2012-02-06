@@ -191,22 +191,12 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags f)
     dragPos_(BAD_POS), tokenType_(0), recentSourceLocked_(false),
     themeMenu_(0),
     setThemeToDefaultAct_(0), setThemeToRandomAct_(0),
-    setThemeToDarkAct_(0),
-    setThemeToBlackAct_(0),
-    setThemeToBlueAct_(0),
-    setThemeToBrownAct_(0),
-    setThemeToCyanAct_(0),
-    setThemeToGrayAct_(0),
-    setThemeToGreenAct_(0),
-    setThemeToPinkAct_(0),
-    setThemeToPurpleAct_(0),
-    setThemeToRedAct_(0),
-    setThemeToWhiteAct_(0),
-    setThemeToYellowAct_(0)
+    setThemeToDarkAct_(0), setThemeToBlackAct_(0), setThemeToBlueAct_(0),
+    setThemeToBrownAct_(0), setThemeToCyanAct_(0), setThemeToGrayAct_(0),
+    setThemeToGreenAct_(0), setThemeToPinkAct_(0), setThemeToPurpleAct_(0),
+    setThemeToRedAct_(0), setThemeToWhiteAct_(0), setThemeToYellowAct_(0)
 {
-//#ifdef USE_WIN_PICKER
-//  setWindowFlags(windowFlags() | Qt::WindowStaysOnTopHint);
-//#endif // USE_WIN_PICKER
+  //setWindowFlags(windowFlags() | Qt::WindowStaysOnTopHint);
 
   setWindowIcon(QIcon(RC_IMAGE_APP)); // X11 require setting icon at runtime
   setWindowTitle(TR(T_TITLE_PROGRAM));
@@ -955,11 +945,11 @@ MainWindow::createMenus()
 
   helpContextMenu_ = new QMenu(this); {
     UiStyle::globalInstance()->setContextMenuStyle(helpContextMenu_, true); // persistent = true
-    helpContextMenu_->setTitle(TR(T_MENUTEXT_HELP));
+    helpContextMenu_->setTitle(TR(T_MENUTEXT_HELP) + " ...");
     helpContextMenu_->setToolTip(TR(T_TOOLTIP_HELP));
 
-    helpContextMenu_->addAction(openHomePageAct_);
     helpContextMenu_->addAction(helpAct_);
+    helpContextMenu_->addAction(openHomePageAct_);
     helpContextMenu_->addAction(updateAct_);
     helpContextMenu_->addAction(aboutAct_);
   }
@@ -967,7 +957,7 @@ MainWindow::createMenus()
   appLanguageMenu_ = new QMenu(this); {
     UiStyle::globalInstance()->setContextMenuStyle(appLanguageMenu_, true); // persistent = true
 
-    appLanguageMenu_->setTitle("Language"); // no tr wrapping "language"
+    appLanguageMenu_->setTitle("Language ..."); // no tr wrapping "language"
     appLanguageMenu_->setToolTip(TR(T_TOOLTIP_APPLANGUAGE));
 
     appLanguageMenu_->addAction(setAppLanguageToEnglishAct_);
@@ -979,7 +969,7 @@ MainWindow::createMenus()
   userLanguageMenu_ = new QMenu(this); {
     UiStyle::globalInstance()->setContextMenuStyle(userLanguageMenu_, true); // persistent = true
 
-    userLanguageMenu_->setTitle(TR(T_MENUTEXT_USERLANGUAGE));
+    userLanguageMenu_->setTitle(TR(T_MENUTEXT_USERLANGUAGE) + " ...");
     userLanguageMenu_->setToolTip(TR(T_TOOLTIP_USERLANGUAGE));
 
     userLanguageMenu_->addAction(setUserLanguageToEnglishAct_);
@@ -992,7 +982,7 @@ MainWindow::createMenus()
   annotationLanguageMenu_ = new QMenu(this); {
     UiStyle::globalInstance()->setContextMenuStyle(annotationLanguageMenu_, true); // persistent = true
 
-    annotationLanguageMenu_->setTitle(TR(T_MENUTEXT_ANNOTATIONLANGUAGE));
+    annotationLanguageMenu_->setTitle(TR(T_MENUTEXT_ANNOTATIONLANGUAGE) + " ...");
     annotationLanguageMenu_->setToolTip(TR(T_TOOLTIP_ANNOTATIONLANGUAGE));
 
     annotationLanguageMenu_->addAction(toggleAnnotationLanguageToAnyAct_);
@@ -1011,7 +1001,7 @@ MainWindow::createMenus()
     themeMenu_ = new QMenu(this);
 
     UiStyle::globalInstance()->setContextMenuStyle(themeMenu_, true); // persistent = true
-    themeMenu_->setTitle(TR(T_MENUTEXT_THEME));
+    themeMenu_->setTitle(TR(T_MENUTEXT_THEME) + " ...");
     themeMenu_->setToolTip(TR(T_TOOLTIP_THEME));
 
     themeMenu_->addAction(setThemeToDefaultAct_);
@@ -1034,7 +1024,7 @@ MainWindow::createMenus()
   subtitleStyleMenu_ = new QMenu(this); {
     UiStyle::globalInstance()->setContextMenuStyle(subtitleStyleMenu_, true); // persistent = true
 
-    subtitleStyleMenu_->setTitle(TR(T_MENUTEXT_SUBTITLESTYLE));
+    subtitleStyleMenu_->setTitle(TR(T_MENUTEXT_SUBTITLESTYLE) + " ...");
     subtitleStyleMenu_->setToolTip(TR(T_TOOLTIP_SUBTITLESTYLE));
 
     subtitleStyleMenu_->addAction(setSubtitleColorToDefaultAct_);
@@ -1051,32 +1041,32 @@ MainWindow::createMenus()
   browseMenu_ = new QMenu(this); {
     UiStyle::globalInstance()->setContextMenuStyle(browseMenu_, true); // persistent = true
 
-    browseMenu_->setTitle(TR(T_MENUTEXT_BROWSE));
+    browseMenu_->setTitle(TR(T_MENUTEXT_BROWSE) + " ...");
     browseMenu_->setToolTip(TR(T_TOOLTIP_BROWSE));
   }
 
   trackMenu_ = new QMenu(this); {
     UiStyle::globalInstance()->setContextMenuStyle(trackMenu_, true); // persistent = true
 
-    trackMenu_->setTitle(TR(T_MENUTEXT_TRACK));
+    trackMenu_->setTitle(TR(T_MENUTEXT_TRACK) + " ...");
     trackMenu_->setToolTip(TR(T_TOOLTIP_TRACK));
   }
 
   recentMenu_ = new QMenu(this); {
     UiStyle::globalInstance()->setContextMenuStyle(recentMenu_, true); // persistent = true
-    recentMenu_->setTitle(TR(T_MENUTEXT_RECENT));
+    recentMenu_->setTitle(TR(T_MENUTEXT_RECENT) + " ...");
     recentMenu_->setToolTip(TR(T_TOOLTIP_RECENT));
   }
 
   playlistMenu_ = new QMenu(this); {
     UiStyle::globalInstance()->setContextMenuStyle(playlistMenu_, true); // persistent = true
-    playlistMenu_->setTitle(TR(T_MENUTEXT_PLAYLIST));
+    playlistMenu_->setTitle(TR(T_MENUTEXT_PLAYLIST) + " ...");
     playlistMenu_->setToolTip(TR(T_TOOLTIP_PLAYLIST));
   }
 
   backwardMenu_ = new QMenu(this); {
     backwardMenu_->setIcon(QIcon(RC_IMAGE_BACKWARD));
-    backwardMenu_->setTitle(TR(T_MENUTEXT_BACKWARD));
+    backwardMenu_->setTitle(TR(T_MENUTEXT_BACKWARD) + " ...");
     backwardMenu_->setToolTip(TR(T_TOOLTIP_BACKWARD));
     UiStyle::globalInstance()->setContextMenuStyle(backwardMenu_, true); // persistent = true
 
@@ -1089,7 +1079,7 @@ MainWindow::createMenus()
 
   forwardMenu_ = new QMenu(this); {
     forwardMenu_->setIcon(QIcon(RC_IMAGE_FORWARD));
-    forwardMenu_->setTitle(TR(T_MENUTEXT_FORWARD));
+    forwardMenu_->setTitle(TR(T_MENUTEXT_FORWARD) + " ...");
     forwardMenu_->setToolTip(TR(T_TOOLTIP_FORWARD));
     UiStyle::globalInstance()->setContextMenuStyle(forwardMenu_, true); // persistent = true
 
@@ -1101,7 +1091,7 @@ MainWindow::createMenus()
   }
 
   openMenu_ = new QMenu(this); {
-    openMenu_->setTitle(TR(T_MENUTEXT_OPENCONTEXTMENU));
+    openMenu_->setTitle(TR(T_MENUTEXT_OPENCONTEXTMENU) + " ...");
     openMenu_->setToolTip(TR(T_TOOLTIP_OPENCONTEXTMENU));
     openMenu_->setIcon(QIcon(RC_IMAGE_OPENCONTEXTMENU));
     UiStyle::globalInstance()->setContextMenuStyle(openMenu_, true); // persistent = true
@@ -1109,27 +1099,27 @@ MainWindow::createMenus()
 
   subtitleMenu_ = new QMenu(this); {
     subtitleMenu_->setIcon(QIcon(RC_IMAGE_SUBTITLE));
-    subtitleMenu_->setTitle(TR(T_MENUTEXT_SUBTITLE));
+    subtitleMenu_->setTitle(TR(T_MENUTEXT_SUBTITLE) + " ...");
     subtitleMenu_->setToolTip(TR(T_TOOLTIP_SUBTITLE));
     UiStyle::globalInstance()->setContextMenuStyle(subtitleMenu_, true); // persistent = true
   }
 
   playMenu_ = new QMenu(this); {
-    playMenu_->setTitle(tr("Play"));
+    playMenu_->setTitle(tr("Play") + " ...");
     playMenu_->setToolTip(tr("Play menu"));
     UiStyle::globalInstance()->setContextMenuStyle(playMenu_, true); // persistent = true
   }
 
   audioTrackMenu_ = new QMenu(this); {
     audioTrackMenu_->setIcon(QIcon(RC_IMAGE_AUDIOTRACK));
-    audioTrackMenu_->setTitle(TR(T_MENUTEXT_AUDIOTRACK));
+    audioTrackMenu_->setTitle(TR(T_MENUTEXT_AUDIOTRACK) + " ...");
     audioTrackMenu_->setToolTip(TR(T_TOOLTIP_AUDIOTRACK));
     UiStyle::globalInstance()->setContextMenuStyle(audioTrackMenu_, true); // persistent = true
   }
 
   annotationSubtitleMenu_ = new QMenu(this); {
     annotationSubtitleMenu_->setIcon(QIcon(RC_IMAGE_ANNOTSUBTITLE));
-    annotationSubtitleMenu_->setTitle(TR(T_MENUTEXT_ANNOTSUBTITLE));
+    annotationSubtitleMenu_->setTitle(TR(T_MENUTEXT_ANNOTSUBTITLE) + " ...");
     annotationSubtitleMenu_->setToolTip(TR(T_TOOLTIP_ANNOTSUBTITLE));
     UiStyle::globalInstance()->setContextMenuStyle(annotationSubtitleMenu_, true); // persistent = true
 
@@ -1142,7 +1132,7 @@ MainWindow::createMenus()
 
   sectionMenu_ = new QMenu(this); {
     sectionMenu_->setIcon(QIcon(RC_IMAGE_SECTION));
-    sectionMenu_->setTitle(TR(T_MENUTEXT_SECTION));
+    sectionMenu_->setTitle(TR(T_MENUTEXT_SECTION) + " ...");
     sectionMenu_->setToolTip(TR(T_TOOLTIP_SECTION));
     UiStyle::globalInstance()->setContextMenuStyle(sectionMenu_, true); // persistent = true
   }
@@ -1696,7 +1686,13 @@ MainWindow::openRemoteMedia(const MediaInfo &mi)
     recentSourceLocked_ = true;
     setToken();
   }
-  importAnnotationsFromUrl(mi.suburl);
+
+  //importAnnotationsFromUrl(mi.suburl);
+  if (!mi.suburl.isEmpty())
+    QTimer::singleShot(5000, // TODO: use event loop in aother thread rather than 5 sec
+      new MainWindow_slot_::ImportAnnotationsFromUrl(mi.suburl, this),
+      SLOT(importAnnotationsFromUrl())
+    );
 }
 
 void
@@ -2413,10 +2409,14 @@ MainWindow::setAnnotationEditorVisible(bool visible)
 void
 MainWindow::openInCloudView(const QString &url)
 {
+#ifdef USE_MODULE_WEBBROWSER
   if (!cloudView_)
     cloudView_ = new CloudView(this);
   cloudView_->openUrl(url);
   cloudView_->show();
+#else
+  QDesktopServices::openUrl(url);
+#endif // USE_MODULE_WEBBROWSER
 }
 
 void
@@ -4031,32 +4031,34 @@ MainWindow::closeEvent(QCloseEvent *event)
   settings->setLive(hub_->isLiveTokenMode());
 
   // Wait for thread pool
-  if (QThreadPool::globalInstance()->activeThreadCount()) {
 #ifdef USE_WIN_PICKER
-    if (PICKER->isActive())
-      PICKER->stop();
+  if (PICKER->isActive())
+    PICKER->stop();
 #endif // USE_WIN_PICKER
 #ifdef USE_WIN_HOOK
-    if (HOOK->isActive())
-      HOOK->stop();
+  if (HOOK->isActive())
+    HOOK->stop();
 #endif // USE_WIN_HOOK
-    if (!player_->isStopped()) {
-      player_->setVolume(0);
-      player_->stop();
-    }
-    if (player_->hasMedia())
-      player_->closeMedia();
-    if (!hub_->isStopped())
-      hub_->stop();
-    hide();
-    osdWindow_->hide();
-    //osdDock_->hide();
-    annotationView_->hide();
-    globalOsdConsole_->hide();
-    //if (parentWidget())
-    //  parentWidget()->hide();
+  if (!player_->isStopped()) {
+    player_->setVolume(0);
+    player_->stop();
+    //QEventLoop loop;
+    //connect(player_, SIGNAL(stopped()), &loop, SLOT(quit()));
+    //loop.exec();
+  }
+  if (player_->hasMedia())
+    player_->closeMedia();
+  if (!hub_->isStopped())
+    hub_->stop();
+  hide();
+  osdWindow_->hide();
+  //osdDock_->hide();
+  annotationView_->hide();
+  globalOsdConsole_->hide();
+  //if (parentWidget())
+  //  parentWidget()->hide();
 
-    // FIXME: use waitForDone with timeout in Qt 4.8
+  if (QThreadPool::globalInstance()->activeThreadCount()) {
 #if QT_VERSION >= 0x040800
     // wait for at most 5 seconds ant kill all threads
     QThreadPool::globalInstance()->waitForDone(5000);
@@ -4071,6 +4073,11 @@ MainWindow::closeEvent(QCloseEvent *event)
 
   //MrlResolverManager::globalInstance()->deleteLater();
   //AnnotationCodecManager::globalInstance()->deleteLater();
+
+//#ifdef Q_OS_MAC
+//  MrlResolverManager::globalInstance()->setParent(this);
+//  AnnotationCodecManager::globalInstance()->setParent(this);
+//#endif // Q_OS_MAC
 
   QTimer::singleShot(0, qApp, SLOT(quit())); // ensure quit app and clean up zombie threads
   Base::closeEvent(event);
@@ -5625,10 +5632,11 @@ MainWindow::addRemoteAnnotations(const AnnotationList &l, const QString &url)
     annots.append(a);
   }
   if (!annots.isEmpty()) {
-    emit logged(QString("%1 (+%2, %3)")
-                .arg(tr("annotations found"))
-                .arg(QString::number(annots.size()))
-                .arg(url));
+    QString msg = QString("%1 (" HTML_STYLE_OPEN(color:red) "+%2" HTML_STYLE_CLOSE() ", %3)")
+      .arg(tr("annotations found"))
+      .arg(QString::number(annots.size()))
+      .arg(url);
+    emit logged(msg);
     emit addAnnotationsRequested(annots);
     if (t.hasId())
       dataServer_->updateAnnotations(annots);

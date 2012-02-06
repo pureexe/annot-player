@@ -34,6 +34,26 @@ namespace MainWindow_slot_ { // anonymous slot_
     }
   };
 
+  class ImportAnnotationsFromUrl : public QObject {
+    Q_OBJECT
+    typedef QObject Base;
+
+    MainWindow *w_;
+    QString url_;
+
+  public:
+    ImportAnnotationsFromUrl(const QString &url, MainWindow *w)
+      : Base(w), w_(w), url_(url)
+    { Q_ASSERT(w_); }
+
+  public slots:
+    void importAnnotationsFromUrl()
+    {
+      w_->importAnnotationsFromUrl(url_);
+      QTimer::singleShot(0, this, SLOT(deleteLater()));
+    }
+  };
+
   /*
   class SetWindowDwmEnabled : public QObject {
     Q_OBJECT

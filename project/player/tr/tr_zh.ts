@@ -73,7 +73,7 @@
         <translation>URL</translation>
     </message>
     <message>
-        <location filename="../token/addaliasdialog.cc" line="226"/>
+        <location filename="../token/addaliasdialog.cc" line="228"/>
         <source>Please select alias language</source>
         <translation>请选择语言</translation>
     </message>
@@ -657,8 +657,8 @@
 <context>
     <name>LuaMrlResolver</name>
     <message>
-        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="68"/>
-        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="100"/>
+        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="86"/>
+        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="118"/>
         <source>failed to resolve URL</source>
         <translation>网络使魔：解析链接失败</translation>
     </message>
@@ -676,7 +676,7 @@
         <translation>侦听使魔：选择需要监听的进程窗口</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1159"/>
+        <location filename="../mainwindow.cc" line="1149"/>
         <source>&amp;File</source>
         <translation></translation>
     </message>
@@ -685,33 +685,33 @@
         <translation type="obsolete">视图</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1169"/>
+        <location filename="../mainwindow.cc" line="1159"/>
         <source>&amp;Quit</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1183"/>
-        <location filename="../mainwindow.cc" line="1184"/>
+        <location filename="../mainwindow.cc" line="1173"/>
+        <location filename="../mainwindow.cc" line="1174"/>
         <source>&amp;Help</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1185"/>
+        <location filename="../mainwindow.cc" line="1175"/>
         <source>&amp;About</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1838"/>
+        <location filename="../mainwindow.cc" line="1834"/>
         <source>analyzing media ...</source>
         <translation>播放使魔：媒体分析中...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1950"/>
+        <location filename="../mainwindow.cc" line="1946"/>
         <source>detaching all processes ...</source>
         <translation>侦听使魔：进程同步断开...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2057"/>
+        <location filename="../mainwindow.cc" line="2053"/>
         <source>snapshot saved on the destop</source>
         <translation>播放使魔：截图保存到了桌面上</translation>
     </message>
@@ -754,60 +754,60 @@
         <translation>通信使魔：提交弹幕中...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4113"/>
+        <location filename="../mainwindow.cc" line="4121"/>
         <source>always on top enabled</source>
         <translation>播放使魔：总在前面有效</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4115"/>
+        <location filename="../mainwindow.cc" line="4123"/>
         <source>always on top disabled</source>
         <translation>播放使魔：总在前面无效</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4143"/>
-        <location filename="../mainwindow.cc" line="4186"/>
-        <location filename="../mainwindow.cc" line="4233"/>
-        <location filename="../mainwindow.cc" line="4278"/>
-        <location filename="../mainwindow.cc" line="4323"/>
+        <location filename="../mainwindow.cc" line="4151"/>
+        <location filename="../mainwindow.cc" line="4194"/>
+        <location filename="../mainwindow.cc" line="4241"/>
+        <location filename="../mainwindow.cc" line="4286"/>
+        <location filename="../mainwindow.cc" line="4331"/>
         <source>invalid cast id</source>
         <translation>通信使魔：无效的施法对象</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4149"/>
-        <location filename="../mainwindow.cc" line="4192"/>
-        <location filename="../mainwindow.cc" line="4239"/>
-        <location filename="../mainwindow.cc" line="4284"/>
-        <location filename="../mainwindow.cc" line="4329"/>
+        <location filename="../mainwindow.cc" line="4157"/>
+        <location filename="../mainwindow.cc" line="4200"/>
+        <location filename="../mainwindow.cc" line="4247"/>
+        <location filename="../mainwindow.cc" line="4292"/>
+        <location filename="../mainwindow.cc" line="4337"/>
         <source>cannot perform cast when offline</source>
         <translation>通信使魔：离线中魔法无效</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4155"/>
+        <location filename="../mainwindow.cc" line="4163"/>
         <source>submit bless cast to token ...</source>
         <translation>通信使魔：施展祝福魔法中...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4167"/>
+        <location filename="../mainwindow.cc" line="4175"/>
         <source>token blessed</source>
         <translation>通信使魔：祝福标记成功</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4173"/>
+        <location filename="../mainwindow.cc" line="4181"/>
         <source>failed to bless token</source>
         <translation>通信使魔：祝福标记失败</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4198"/>
+        <location filename="../mainwindow.cc" line="4206"/>
         <source>submit curse cast to token ...</source>
         <translation>通信使魔：施展诅咒魔法中...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4210"/>
+        <location filename="../mainwindow.cc" line="4218"/>
         <source>token cursed</source>
         <translation>通信使魔：诅咒标记成功</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4216"/>
+        <location filename="../mainwindow.cc" line="4224"/>
         <source>failed to curse token</source>
         <translation>通信使魔：诅咒标记失败</translation>
     </message>
@@ -816,48 +816,48 @@
         <translation type="obsolete">通信使魔：退出登录中...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1118"/>
+        <location filename="../mainwindow.cc" line="1108"/>
         <source>Play</source>
         <translation>播放</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1119"/>
+        <location filename="../mainwindow.cc" line="1109"/>
         <source>Play menu</source>
         <translation>播放菜单</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1414"/>
+        <location filename="../mainwindow.cc" line="1404"/>
         <source>Open media from URL</source>
         <translation>打开在线媒体链接</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1415"/>
+        <location filename="../mainwindow.cc" line="1405"/>
         <source>http://www.youtube.com/watch?v=-DJqnomZoLk</source>
-        <translation>http://v.youku.com/v_show/id_XOTg1NzAwMzI=.html</translation>
+        <translation>http://www.bilibili.tv/video/av207531/</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1426"/>
+        <location filename="../mainwindow.cc" line="1416"/>
         <source>Import annotations from URL</source>
         <translation>导入在线弹幕链接</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1427"/>
+        <location filename="../mainwindow.cc" line="1417"/>
         <source>http://www.bilibili.tv/video/av55775/</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1445"/>
-        <location filename="../mainwindow.cc" line="1457"/>
+        <location filename="../mainwindow.cc" line="1435"/>
+        <location filename="../mainwindow.cc" line="1447"/>
         <source>analyzing URL ...</source>
         <translation>播放使魔：媒体链接分析中...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1449"/>
+        <location filename="../mainwindow.cc" line="1439"/>
         <source>failed to resolve URL</source>
         <translation>网络使魔：解析链接失败</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2269"/>
+        <location filename="../mainwindow.cc" line="2265"/>
         <source>openning update URL ...</source>
         <translation>通信使魔：正在打开升级的URL...</translation>
     </message>
@@ -872,174 +872,174 @@
         <translation>播放使魔：程序退出中...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4244"/>
-        <location filename="../mainwindow.cc" line="4289"/>
-        <location filename="../mainwindow.cc" line="4334"/>
+        <location filename="../mainwindow.cc" line="4252"/>
+        <location filename="../mainwindow.cc" line="4297"/>
+        <location filename="../mainwindow.cc" line="4342"/>
         <source>cannot perform cast to yourself</source>
         <translation>通信使魔：不能对自己施法</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4250"/>
+        <location filename="../mainwindow.cc" line="4258"/>
         <source>blessing user ...</source>
         <translation>通信使魔：正在祝福魔法师...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4261"/>
+        <location filename="../mainwindow.cc" line="4269"/>
         <source>user blessed</source>
         <translation>通信使魔：魔法师被祝福</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4295"/>
+        <location filename="../mainwindow.cc" line="4303"/>
         <source>cursing user ...</source>
         <translation>通信使魔：正在诅咒魔法师...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4306"/>
+        <location filename="../mainwindow.cc" line="4314"/>
         <source>user cursed</source>
         <translation>通信使魔：魔法师被诅咒</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4340"/>
+        <location filename="../mainwindow.cc" line="4348"/>
         <source>blocking user ...</source>
         <translation>通信使魔：正在屏蔽魔法师...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4351"/>
+        <location filename="../mainwindow.cc" line="4359"/>
         <source>user blocked</source>
         <translation>通信使魔：魔法师被屏蔽</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4452"/>
+        <location filename="../mainwindow.cc" line="4460"/>
         <source>connecting to server ...</source>
         <translation>通信使魔：正在连接服务器...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4469"/>
+        <location filename="../mainwindow.cc" line="4477"/>
         <source>server connected</source>
         <translation>通信使魔：服务器已连接</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4471"/>
+        <location filename="../mainwindow.cc" line="4479"/>
         <source>server disconnected</source>
         <translation>通信使魔：服务器断开</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4589"/>
+        <location filename="../mainwindow.cc" line="4597"/>
         <source>new version released, check here: </source>
         <translation>通信使魔：新版魔导书发现，下载地址：</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4668"/>
+        <location filename="../mainwindow.cc" line="4676"/>
         <source>found process id for window</source>
         <translation>侦听使魔：发现窗口的进程</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4671"/>
+        <location filename="../mainwindow.cc" line="4679"/>
         <source>process id for window was not found</source>
         <translation>侦听使魔：窗口的进程没有找到</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4682"/>
+        <location filename="../mainwindow.cc" line="4690"/>
         <source>process was attached</source>
         <translation>侦听使魔：进程已同步</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4686"/>
+        <location filename="../mainwindow.cc" line="4694"/>
         <source>process attached</source>
         <translation>侦听使魔：同步进程成功</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4692"/>
+        <location filename="../mainwindow.cc" line="4700"/>
         <source>failed to attach process </source>
         <translation>侦听使魔：同步进程失败</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4694"/>
+        <location filename="../mainwindow.cc" line="4702"/>
         <source>Is the process running now?</source>
         <translation>侦听使魔：程序真的开了吗？</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4696"/>
+        <location filename="../mainwindow.cc" line="4704"/>
         <source>Run me as administrator and try again (o^^o)</source>
         <translation>侦听使魔：换成管理员的身份试试吧</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4698"/>
+        <location filename="../mainwindow.cc" line="4706"/>
         <source>Restart the target process might help -_-</source>
         <translation>侦听使魔：可能需要重启一下程序</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4709"/>
+        <location filename="../mainwindow.cc" line="4717"/>
         <source>process was started</source>
         <translation>侦听使魔：程序已经启动</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4712"/>
+        <location filename="../mainwindow.cc" line="4720"/>
         <source>told process to start</source>
         <translation>侦听使魔：刚刚让程序启动</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4720"/>
+        <location filename="../mainwindow.cc" line="4728"/>
         <source>failed to start process</source>
         <translation>侦听使魔：开始程序失败</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4724"/>
+        <location filename="../mainwindow.cc" line="4732"/>
         <source>wait %1 seconds for process to start ...</source>
         <translation>侦听使魔：等待%1秒程序启动...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4737"/>
+        <location filename="../mainwindow.cc" line="4745"/>
         <source>openning process</source>
         <translation>播放使魔：正在打开程序</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4835"/>
+        <location filename="../mainwindow.cc" line="4843"/>
         <source>connecting server to change anonymous status ...</source>
         <translation>通信使魔：远程魔法修改匿名属性中...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4847"/>
+        <location filename="../mainwindow.cc" line="4855"/>
         <source>failed to change user anonymous state</source>
         <translation>通信使魔：远程魔法修改匿名属性失败</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4857"/>
+        <location filename="../mainwindow.cc" line="4865"/>
         <source>you are anonymous now</source>
         <translation>通信使魔：主人已经匿名了</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4859"/>
+        <location filename="../mainwindow.cc" line="4867"/>
         <source>you are not anonymous now</source>
         <translation>通信使魔：主人不再匿名了</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4876"/>
+        <location filename="../mainwindow.cc" line="4884"/>
         <source>connecting server to change language ...</source>
         <translation>通信使魔：远程魔法修改语言属性中...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4888"/>
+        <location filename="../mainwindow.cc" line="4896"/>
         <source>failed to change user language</source>
         <translation>通信使魔：远程魔法修改语言属性失败</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4897"/>
+        <location filename="../mainwindow.cc" line="4905"/>
         <source>your language is </source>
         <translation>通信属性：主人的语言属性是</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4966"/>
+        <location filename="../mainwindow.cc" line="4974"/>
         <source>restart the app to use the new language</source>
         <translation>播放使魔：使用新的语言需要重启播放器</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5626"/>
+        <location filename="../mainwindow.cc" line="5634"/>
         <source>annotations found</source>
         <translation>播放使魔：发现新弹幕</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5639"/>
+        <location filename="../mainwindow.cc" line="5648"/>
         <source>analyzing annotation URL ...</source>
         <translation>网络使魔：解析弹幕链接中...</translation>
     </message>
@@ -1072,7 +1072,7 @@
         <translation type="obsolete">播放使魔：文件不存在</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5210"/>
+        <location filename="../mainwindow.cc" line="5218"/>
         <source>invalid lnk</source>
         <translation>播放使魔：快捷方式好像无效</translation>
     </message>
@@ -2144,6 +2144,8 @@
     <message>
         <location filename="translatormanager.cc" line="108"/>
         <location filename="translatormanager.cc" line="260"/>
+        <location filename="translatormanager.cc" line="284"/>
+        <location filename="translatormanager.cc" line="285"/>
         <source>Open</source>
         <translation>打开</translation>
     </message>
@@ -2197,12 +2199,6 @@
         <location filename="translatormanager.cc" line="282"/>
         <source>Load subtitle from file</source>
         <translation>从文件加载字幕</translation>
-    </message>
-    <message>
-        <location filename="translatormanager.cc" line="284"/>
-        <location filename="translatormanager.cc" line="285"/>
-        <source>Open ...</source>
-        <translation>打开...</translation>
     </message>
     <message>
         <location filename="translatormanager.cc" line="287"/>
@@ -3460,42 +3456,31 @@
 <context>
     <name>WebBrowser</name>
     <message>
-        <location filename="../../../module/webbrowser/webbrowser.cc" line="240"/>
         <source>New tab</source>
-        <translation>空白页</translation>
+        <translation type="obsolete">空白页</translation>
     </message>
 </context>
 <context>
     <name>WebBrowserUi</name>
     <message>
-        <location filename="../../../module/webbrowser/webbrowser.ui" line="126"/>
-        <location filename="../../../module/webbrowser/webbrowser.ui" line="147"/>
         <source>Back</source>
-        <translation>后退</translation>
+        <translation type="obsolete">后退</translation>
     </message>
     <message>
         <source>http://qt.nokia.com</source>
         <translation type="obsolete">``</translation>
     </message>
     <message>
-        <location filename="../../../module/webbrowser/webbrowser.ui" line="166"/>
-        <source>http://annot.me</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../../module/webbrowser/webbrowser.ui" line="176"/>
         <source>Search</source>
-        <translation>搜索</translation>
+        <translation type="obsolete">搜索</translation>
     </message>
     <message>
-        <location filename="../../../module/webbrowser/webbrowser.ui" line="210"/>
         <source>Tab 1</source>
-        <translation>标签1</translation>
+        <translation type="obsolete">标签1</translation>
     </message>
     <message>
-        <location filename="../../../module/webbrowser/webbrowser.ui" line="227"/>
         <source>Function</source>
-        <translation>函数</translation>
+        <translation type="obsolete">函数</translation>
     </message>
 </context>
 <context>

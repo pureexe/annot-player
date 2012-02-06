@@ -3,7 +3,7 @@
 setlocal
 cd /d d:/devel/releases/player || exit /b 1
 
-set VERSION=0.1.2.5
+set VERSION=0.1.2.7
 set APP=annot-player
 set ZIPFILE=%APP%-%VERSION%-win.zip
 
@@ -78,7 +78,7 @@ cp -v "%BUILD%"/*.{exe,dll} .
 
 rm -fv "Annot Player.exe"
 rm -fv hook.dll
-rm -fv luascript.lua
+rm -fv webbrowser.dll
 
 :: compile lua
 
@@ -91,10 +91,10 @@ rm -fv luascript.lua
 ::  popd
 ::)
 ::popd
-cp "%SOURCE%"/module/mrlresolver/lua/luascript.lua . || exit 1
-cp -R "%SOURCE%"/module/mrlresolver/lua/luascript .  || exit 1
-rm -f luascript/*~
-rm -f luascript/*/*~
+cp "%SOURCE%"/module/luaresolver/lua/luascript.lua lua/ || exit 1
+cp -R "%SOURCE%"/module/luaresolver/lua/luascript lua/  || exit 1
+rm -f lua/luascript/*~
+rm -f lua/luascript/*/*~
 
 cd ..
 

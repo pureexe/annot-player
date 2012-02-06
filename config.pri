@@ -109,8 +109,8 @@ mac {
     #WSF_HOME            = ${HOME}/opt/wso2/wsf
     #CDIO_HOME          = ${HOME}/opt/libcdio
     POPPLER_HOME        = ${HOME}/opt/poppler
-    BOOST_HOME          = ${HOME}/opt/local
-    GSOAP_HOME          = ${HOME}/opt/local
+    BOOST_HOME          = /opt/local
+    GSOAP_HOME          = /opt/local
     LUA_HOME            = /usr
     ZLIB_HOME           = /usr
 }
@@ -123,8 +123,8 @@ LIBS            += -L$$VLC_HOME/lib
 #LIBS            += -L$$WSF_HOME/lib
 #INCLUDEPATH     += $$CDIO_HOME/include
 #LIBS            += -L$$CDIO_HOME/lib
-INCLUDEPATH     += $$POPPLER_HOME/include/poppler/qt4
-LIBS            += -L$$POPPLER_HOME/lib
+#INCLUDEPATH     += $$POPPLER_HOME/include/poppler/qt4
+#LIBS            += -L$$POPPLER_HOME/lib
 INCLUDEPATH     += $$BOOST_HOME/include
 LIBS            += -L$$BOOST_HOME/lib
 INCLUDEPATH     += $$GSOAP_HOME/include

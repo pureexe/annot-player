@@ -348,9 +348,10 @@ public slots:
   void blockAnnotationWithId(qint64 tid, bool async = true);
 
   // - Remote annotations -
+public slots:
+  void importAnnotationsFromUrl(const QString &suburl);
 protected slots:
   void addRemoteAnnotations(const AnnotationList &l, const QString &url);
-  void importAnnotationsFromUrl(const QString &suburl);
   bool registerAnnotationUrl(const QString &suburl);
   void clearAnnotationUrls();
 

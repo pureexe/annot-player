@@ -1,7 +1,7 @@
-// luascript.cc
+// luaresolver.cc
 // 2/1/2012
 // See: http://csl.sublevel3.org/lua/
-#include "luascript.h"
+#include "luaresolver.h"
 #include "module/luacpp/luacpp.h"
 #include "module/download/download.h"
 #include <boost/function.hpp>
@@ -15,18 +15,13 @@
 
 #define UNUSED(_var)    (void)(_var)
 
-//#define DEBUG "luascript"
+//#include <QtCore>
+//#define DEBUG "luaresolver"
 #include <module/debug/debug.h>
 
-#define LUASCRIPT       "luascript.lua"
+// - Helpers -
 
 namespace  { // anonymous
-  inline void perror_(lua_State *L)
-  {
-    std::cerr << "lua error: " << lua_tostring(L, -1) << std::endl;
-    lua_pop(L, 1); // remove error message
-  }
-
   // See: http://gamedevgeek.com/tutorials/calling-c-functions-from-lua/
   // int curl(string url, string path)
   int
@@ -47,7 +42,7 @@ namespace  { // anonymous
 } // anonymous namespace
 
 std::string
-luascript::mktemp()
+luaresolver::mktemp()
 {
 #ifdef _MSC_VER
   std::string tmp = ::getenv("tmp");
@@ -59,19 +54,49 @@ luascript::mktemp()
 #endif //_MSC_VER
 }
 
+// See: http://stackoverflow.com/questions/4125971/setting-the-global-lua-path-variable-from-c-c
+// Append to package.path.
+
+void
+luaresolver::print_last_error(lua_State *L)
+{
+  std::cerr << "lua error: " << lua_tostring(L, -1) << std::endl;
+  lua_pop(L, 1); // remove error message
+}
+
+void
+luaresolver::append_lua_path(lua_State *L, const char *path)
+{
+  DOUT("enter: path =" << QString::fromStdString(path));
+  lua_getglobal(L, "package");
+  lua_getfield(L, -1, "path"); // get field "path" from table at top of stack (-1)
+  std::string cur_path = lua_tostring(L, -1); // grab path string from top of stack
+  cur_path.append(";"); // do your path magic here
+  cur_path.append(path);
+  lua_pop(L, 1); // get rid of the string on the stack we just pushed on line 5
+  lua_pushstring(L, cur_path.c_str()); // push the new one
+  lua_setfield(L, -2, "path"); // set the field "path" in table at -2 with value at top of stack
+  lua_pop(L, 1); // get rid of package table from top of stack
+  DOUT("exit");
+}
+
+// - Resolvers -
+
 bool
-luascript::resolve_annot(const std::string &href, std::string &suburl)
+luaresolver::resolve_annot(const std::string &href, std::string &suburl) const
 {
   // TODO: not well-implemented
+  DOUT("enter: href =" << QString::fromStdString(href));
   media_description md;
   bool ret = resolve_media(href, md);
   if (ret)
     suburl = md.suburl;
+  DOUT("exit: ret =" << ret << ", suburl =" << QString::fromStdString(md.suburl));
   return ret;
 }
 
 bool
-luascript::resolve_media(const std::string &href, media_description &md)
+luaresolver::resolve_media(const std::string &href, media_description &md) const
 {
   if (href.empty())
     return false;
@@ -82,6 +107,7 @@ luascript::resolve_media(const std::string &href, media_description &md)
     L = lua_open();
     if (!L)
       return false;
+
     luaL_openlibs(L);
 
     // See: http://stackoverflow.com/questions/2710194/register-c-function-in-lua-table
@@ -91,31 +117,35 @@ luascript::resolve_media(const std::string &href, media_description &md)
     };
     luaL_register(L, "cc", ft);
 
-    int err = luaL_loadfile(L, LUASCRIPT);
+    DOUT("script_path =" << QString::fromStdString(script_path_));
+
+    int err = luaL_loadfile(L, script_path_.c_str());
     if (err) {
 #ifdef DEBUG
-      perror_(L);
+      print_last_error(L);
 #endif // DEBUG
       lua_close(L);
       return false;
     }
+
+    append_lua_path(L);
 
     err = lua_pcall(L, 0, LUA_MULTRET, 0);
     if (err) {
 #ifdef DEBUG
-      perror_(L);
+      print_last_error(L);
 #endif // DEBUG
       lua_close(L);
       return false;
     }
 
-    // Must be consistent with resolve function in luascript
+    // Must be consistent with resolve function in luaresolver
     boost::function<int (std::string, std::string)>
         resolve = lua_function<int>(L, "resolve_media");
     err = resolve(href, mktemp());
     if (err) {
 #ifdef DEBUG
-      perror_(L);
+      print_last_error(L);
 #endif // DEBUG
       lua_close(L);
       return false;
@@ -176,7 +206,7 @@ luascript::resolve_media(const std::string &href, media_description &md)
 #ifdef DEBUG
     std::cerr << DEBUG ":exception: " << e.what() << std::endl;
     if (L)
-      perror_(L);
+      print_last_error(L);
 #else
     UNUSED(e);
 #endif // DEBUG

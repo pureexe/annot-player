@@ -108,6 +108,7 @@ AddAliasDialog::AddAliasDialog(QWidget *parent)
   connect(_button, SIGNAL(clicked()), _slot);
 
   MAKE_BUTTON(okButton_, ADD, SLOT(ok()))
+  QToolButton *MAKE_BUTTON(pasteButton, PASTE, SLOT(paste()))
   MAKE_BUTTON(cancelButton_, CANCEL, SLOT(cancel()))
 #undef MAKE_BUTTON
 
@@ -148,6 +149,7 @@ AddAliasDialog::AddAliasDialog(QWidget *parent)
     row4->addWidget(aliasEdit_);
 
     row5->addWidget(okButton_);
+    row5->addWidget(pasteButton);
     row5->addWidget(cancelButton_);
   } setLayout(rows);
 
@@ -225,6 +227,14 @@ AddAliasDialog::invalidateOKButton()
     okButton_->setEnabled(false);
     okButton_->setToolTip(tr("Please select alias language"));
   }
+}
+
+void
+AddAliasDialog::paste()
+{
+  QClipboard *clipboard = QApplication::clipboard();
+  if (clipboard)
+    aliasEdit_->setText(clipboard->text());
 }
 
 void

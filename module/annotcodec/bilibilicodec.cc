@@ -132,7 +132,7 @@ BilibiliCodec::parseAttribute(const QString &attr)
   double pos = l[AttrPos].toDouble();
   int floatStyle = l[AttrFloatStyle].toInt();
   int fontSize = l[AttrFontSize].toInt();
-  qint64 fontColor = l[AttrFontColor].toLongLong();
+  int fontColor = l[AttrFontColor].toInt();
   qint64 createTime = l[AttrCreateTime].toLongLong();
   int subType = l[AttrSubType].toInt();
   qint64 userId = l[AttrUserId].toLongLong(&ok, 16);
@@ -161,7 +161,7 @@ BilibiliCodec::parseAttribute(const QString &attr)
   // 3
   //fontColor
   if (fontColor > 0)
-    t += CORE_CMD_COLOR "[" "#" + QString::number(fontColor, 16) + "]";
+    t += CORE_CMD_COLOR "[" "#" + QString().sprintf("%06X", fontColor) + "]";
 
   // 4
   ret.setCreateTime(createTime);

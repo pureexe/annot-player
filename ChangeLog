@@ -2,6 +2,9 @@ ChangeLog
 Annot Project
 6/18/2011
 
+2/4/2012	annot.player	0.1.2.6
+        * Fixed a severe bug while openning remote media.
+
 2/4/2012	annot.player	0.1.2.5
         * Now support playing GoogleVideo/AcFun/BiliBili/Sina/Tudou,QQ video online, with annotation support.
           Example URLs follow:

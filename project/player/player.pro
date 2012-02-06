@@ -1,7 +1,7 @@
 # player.pro
 # 6/30/2011
 
-VERSION = 0.1.2.5
+VERSION = 0.1.2.6
 
 include(../../config.pri)
 include(tr/tr.pri)
@@ -21,8 +21,9 @@ include($$ROOTDIR/module/ioutil/ioutil.pri)
 include($$ROOTDIR/module/qtext/qtext.pri)
 
 # shared link gave me so many trouble on mac and linux
-unix:       include($$ROOTDIR/module/webbrowser/webbrowser_static.pri)
-win32:      include($$ROOTDIR/module/webbrowser/webbrowser.pri)
+#unix:       include($$ROOTDIR/module/webbrowser/webbrowser_static.pri)
+#win32:      include($$ROOTDIR/module/webbrowser/webbrowser.pri)
+#DEFINES += USE_MODULE_WEBBROWSER
 
 DEFINES += USE_MODULE_IOUTIL
 DEFINES += USE_MODE_DEBUG

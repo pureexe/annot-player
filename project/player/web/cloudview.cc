@@ -1,3 +1,4 @@
+#ifdef USE_MODULE_WEBBROWSER
 // cloudview.cc
 // 7/15/2011
 
@@ -38,6 +39,7 @@ CloudView::CloudView(QWidget *parent)
   setWindowOpacity(1.0); // window is opaque
 }
 
+#endif // USE_MODULE_WEBBROWSER
 // EOF
 
 /*

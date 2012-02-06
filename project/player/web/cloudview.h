@@ -1,5 +1,7 @@
+#ifdef USE_MODULE_WEBBROWSER
 #ifndef CLOUDVIEW_H
 #define CLOUDVIEW_H
+
 
 // cloudview.h
 // 7/15/2011
@@ -20,3 +22,4 @@ public:
 };
 
 #endif // CLOUDVIEW_H
+#endif // USE_MODULE_WEBBROWSER

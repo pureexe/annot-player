@@ -114,6 +114,8 @@
         <file>images/app.png</file>
         <file>images/aero.png</file>
         <file>images/aero_thumbnail.png</file>
+        <file>images/aero_mac.png</file>
+        <file>images/aero_mac_thumbnail.png</file>
         <file>images/aero_dark.jpg</file>
         <file>images/aero_dark_thumbnail.png</file>
         <file>images/aero_black.jpg</file>

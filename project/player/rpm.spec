@@ -3,7 +3,7 @@
 # See: http://fedoraproject.org/wiki/How_to_create_an_RPM_package
 # See: http://dl.atrpms.net/all/vlc.spec
 Name:	annot-player
-Version:	0.1.2.5
+Version:	0.1.2.7
 Release:	1%{?dist}
 Summary:	Media and annotation player.
 

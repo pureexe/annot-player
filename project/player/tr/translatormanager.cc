@@ -281,8 +281,8 @@ TranslatorManager::translate(int tid) const
   case T_MENUTEXT_OPENSUBTITLE: return tr("Open subtitle");
   case T_TIP_OPENSUBTITLE:      return tr("Load subtitle from file");
 
-  case T_MENUTEXT_OPENCONTEXTMENU: return tr("Open ...");
-  case T_TIP_OPENCONTEXTMENU:      return tr("Open ...");
+  case T_MENUTEXT_OPENCONTEXTMENU: return tr("Open");
+  case T_TIP_OPENCONTEXTMENU:      return tr("Open");
 
   case T_OPENINWEBBROWSER:      return tr("Open in web browser");
 

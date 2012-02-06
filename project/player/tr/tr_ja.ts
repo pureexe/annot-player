@@ -73,7 +73,7 @@
         <translation>URL</translation>
     </message>
     <message>
-        <location filename="../token/addaliasdialog.cc" line="226"/>
+        <location filename="../token/addaliasdialog.cc" line="228"/>
         <source>Please select alias language</source>
         <translation>言語を選択してください</translation>
     </message>
@@ -633,8 +633,8 @@
 <context>
     <name>LuaMrlResolver</name>
     <message>
-        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="68"/>
-        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="100"/>
+        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="86"/>
+        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="118"/>
         <source>failed to resolve URL</source>
         <translation>ネット使い：URLの解析に失敗した</translation>
     </message>
@@ -668,38 +668,38 @@
         <translation type="obsolete">ソフトについて</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1159"/>
+        <location filename="../mainwindow.cc" line="1149"/>
         <source>&amp;File</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1169"/>
+        <location filename="../mainwindow.cc" line="1159"/>
         <source>&amp;Quit</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1183"/>
-        <location filename="../mainwindow.cc" line="1184"/>
+        <location filename="../mainwindow.cc" line="1173"/>
+        <location filename="../mainwindow.cc" line="1174"/>
         <source>&amp;Help</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1185"/>
+        <location filename="../mainwindow.cc" line="1175"/>
         <source>&amp;About</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1838"/>
+        <location filename="../mainwindow.cc" line="1834"/>
         <source>analyzing media ...</source>
         <translation>魔法使い：メデアを分析中…</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1950"/>
+        <location filename="../mainwindow.cc" line="1946"/>
         <source>detaching all processes ...</source>
         <translation>呪術使い：プロセスの同期を切断中…</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2057"/>
+        <location filename="../mainwindow.cc" line="2053"/>
         <source>snapshot saved on the destop</source>
         <translation>魔法使い：スナップショットが保存された</translation>
     </message>
@@ -742,60 +742,60 @@
         <translation>通信使い：コメントを保存中…</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4113"/>
+        <location filename="../mainwindow.cc" line="4121"/>
         <source>always on top enabled</source>
         <translation>魔法使い：常に手前に表示</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4115"/>
+        <location filename="../mainwindow.cc" line="4123"/>
         <source>always on top disabled</source>
         <translation>魔法使い：手前に表示しない</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4143"/>
-        <location filename="../mainwindow.cc" line="4186"/>
-        <location filename="../mainwindow.cc" line="4233"/>
-        <location filename="../mainwindow.cc" line="4278"/>
-        <location filename="../mainwindow.cc" line="4323"/>
+        <location filename="../mainwindow.cc" line="4151"/>
+        <location filename="../mainwindow.cc" line="4194"/>
+        <location filename="../mainwindow.cc" line="4241"/>
+        <location filename="../mainwindow.cc" line="4286"/>
+        <location filename="../mainwindow.cc" line="4331"/>
         <source>invalid cast id</source>
         <translation>通信使い：無効な魔法対象</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4149"/>
-        <location filename="../mainwindow.cc" line="4192"/>
-        <location filename="../mainwindow.cc" line="4239"/>
-        <location filename="../mainwindow.cc" line="4284"/>
-        <location filename="../mainwindow.cc" line="4329"/>
+        <location filename="../mainwindow.cc" line="4157"/>
+        <location filename="../mainwindow.cc" line="4200"/>
+        <location filename="../mainwindow.cc" line="4247"/>
+        <location filename="../mainwindow.cc" line="4292"/>
+        <location filename="../mainwindow.cc" line="4337"/>
         <source>cannot perform cast when offline</source>
         <translation>通信使い：オフラインで魔法きない</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4155"/>
+        <location filename="../mainwindow.cc" line="4163"/>
         <source>submit bless cast to token ...</source>
         <translation>通信使い：トーケンに祝福をかける…</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4167"/>
+        <location filename="../mainwindow.cc" line="4175"/>
         <source>token blessed</source>
         <translation>通信使い：トーケンを祝福された</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4173"/>
+        <location filename="../mainwindow.cc" line="4181"/>
         <source>failed to bless token</source>
         <translation>通信使い：トーケンの祝福に失敗した</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4198"/>
+        <location filename="../mainwindow.cc" line="4206"/>
         <source>submit curse cast to token ...</source>
         <translation>通信使い：トーケンに呪いをかける…</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4210"/>
+        <location filename="../mainwindow.cc" line="4218"/>
         <source>token cursed</source>
         <translation>通信使い：トーケンを呪われた</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4216"/>
+        <location filename="../mainwindow.cc" line="4224"/>
         <source>failed to curse token</source>
         <translation>通信使い：トーケンの呪いに失敗した</translation>
     </message>
@@ -804,48 +804,48 @@
         <translation type="obsolete">通信使い：ログアウト中…</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1118"/>
+        <location filename="../mainwindow.cc" line="1108"/>
         <source>Play</source>
         <translation>再生</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1119"/>
+        <location filename="../mainwindow.cc" line="1109"/>
         <source>Play menu</source>
         <translation>再生メニュー</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1414"/>
+        <location filename="../mainwindow.cc" line="1404"/>
         <source>Open media from URL</source>
         <translation>魔法使い：メデアURLを開く</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1415"/>
+        <location filename="../mainwindow.cc" line="1405"/>
         <source>http://www.youtube.com/watch?v=-DJqnomZoLk</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1426"/>
+        <location filename="../mainwindow.cc" line="1416"/>
         <source>Import annotations from URL</source>
         <translation>魔法使い：URLから弾幕を導入</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1427"/>
+        <location filename="../mainwindow.cc" line="1417"/>
         <source>http://www.bilibili.tv/video/av55775/</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1445"/>
-        <location filename="../mainwindow.cc" line="1457"/>
+        <location filename="../mainwindow.cc" line="1435"/>
+        <location filename="../mainwindow.cc" line="1447"/>
         <source>analyzing URL ...</source>
         <translation>魔法使い：URLを分析中…</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1449"/>
+        <location filename="../mainwindow.cc" line="1439"/>
         <source>failed to resolve URL</source>
         <translation>ネット使い：URLの解析に失敗した</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2269"/>
+        <location filename="../mainwindow.cc" line="2265"/>
         <source>openning update URL ...</source>
         <translation>魔法使い：アップデートURLを開く…</translation>
     </message>
@@ -860,174 +860,174 @@
         <translation>魔法使い：終了…</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4244"/>
-        <location filename="../mainwindow.cc" line="4289"/>
-        <location filename="../mainwindow.cc" line="4334"/>
+        <location filename="../mainwindow.cc" line="4252"/>
+        <location filename="../mainwindow.cc" line="4297"/>
+        <location filename="../mainwindow.cc" line="4342"/>
         <source>cannot perform cast to yourself</source>
         <translation>通信使い：スペルに失敗した</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4250"/>
+        <location filename="../mainwindow.cc" line="4258"/>
         <source>blessing user ...</source>
         <translation>通信使い：ﾕｰｻﾞｰを祝福する…</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4261"/>
+        <location filename="../mainwindow.cc" line="4269"/>
         <source>user blessed</source>
         <translation>通信使い：ﾕｰｻﾞｰを祝福された</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4295"/>
+        <location filename="../mainwindow.cc" line="4303"/>
         <source>cursing user ...</source>
         <translation>通信使い：ﾕｰｻﾞｰを呪う…</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4306"/>
+        <location filename="../mainwindow.cc" line="4314"/>
         <source>user cursed</source>
         <translation>通信使い：ﾕｰｻﾞｰを呪われた</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4340"/>
+        <location filename="../mainwindow.cc" line="4348"/>
         <source>blocking user ...</source>
         <translation>通信使い：ﾕｰｻﾞｰをブロックする…</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4351"/>
+        <location filename="../mainwindow.cc" line="4359"/>
         <source>user blocked</source>
         <translation>通信使い：ﾕｰｻﾞｰをブロックされた</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4452"/>
+        <location filename="../mainwindow.cc" line="4460"/>
         <source>connecting to server ...</source>
         <translation>通信使い：サーバーと接続中…</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4469"/>
+        <location filename="../mainwindow.cc" line="4477"/>
         <source>server connected</source>
         <translation>通信使い：サーバーと接続しました</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4471"/>
+        <location filename="../mainwindow.cc" line="4479"/>
         <source>server disconnected</source>
         <translation>通信使い：サーバーと接続できません</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4589"/>
+        <location filename="../mainwindow.cc" line="4597"/>
         <source>new version released, check here: </source>
         <translation>通信使い：新しいバージョンの魔道書を見つかりました：</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4668"/>
+        <location filename="../mainwindow.cc" line="4676"/>
         <source>found process id for window</source>
         <translation>呪術使い：プロセスが発見されまいた</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4671"/>
+        <location filename="../mainwindow.cc" line="4679"/>
         <source>process id for window was not found</source>
         <translation>呪術使い：プロセスが見つかりません</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4682"/>
+        <location filename="../mainwindow.cc" line="4690"/>
         <source>process was attached</source>
         <translation>呪術使い：プロセスがアタッチしました</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4686"/>
+        <location filename="../mainwindow.cc" line="4694"/>
         <source>process attached</source>
         <translation>呪術使い：プロセスがアタッチしました</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4692"/>
+        <location filename="../mainwindow.cc" line="4700"/>
         <source>failed to attach process </source>
         <translation>呪術使い：プロセスの同期に失敗した</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4694"/>
+        <location filename="../mainwindow.cc" line="4702"/>
         <source>Is the process running now?</source>
         <translation>呪術使い：プログラムが有効なの？</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4696"/>
+        <location filename="../mainwindow.cc" line="4704"/>
         <source>Run me as administrator and try again (o^^o)</source>
         <translation>呪術使い：管理者としても一度実行してください</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4698"/>
+        <location filename="../mainwindow.cc" line="4706"/>
         <source>Restart the target process might help -_-</source>
         <translation>呪術使い：プロセスを再起動してください</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4709"/>
+        <location filename="../mainwindow.cc" line="4717"/>
         <source>process was started</source>
         <translation>呪術使い：プロセスがすでに起動しました</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4712"/>
+        <location filename="../mainwindow.cc" line="4720"/>
         <source>told process to start</source>
         <translation>呪術使い：プロセスを起動しました</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4720"/>
+        <location filename="../mainwindow.cc" line="4728"/>
         <source>failed to start process</source>
         <translation>呪術使い：プロセスの起動に失敗した</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4724"/>
+        <location filename="../mainwindow.cc" line="4732"/>
         <source>wait %1 seconds for process to start ...</source>
         <translation>呪術使い：%1秒待つ…</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4737"/>
+        <location filename="../mainwindow.cc" line="4745"/>
         <source>openning process</source>
         <translation>魔法使い：プロセスを起動中</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4835"/>
+        <location filename="../mainwindow.cc" line="4843"/>
         <source>connecting server to change anonymous status ...</source>
         <translation>通信使い：匿名の設定を変更中…</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4847"/>
+        <location filename="../mainwindow.cc" line="4855"/>
         <source>failed to change user anonymous state</source>
         <translation>通信使い：匿名の変更に失敗した</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4857"/>
+        <location filename="../mainwindow.cc" line="4865"/>
         <source>you are anonymous now</source>
         <translation>通信使い：匿名状態になった</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4859"/>
+        <location filename="../mainwindow.cc" line="4867"/>
         <source>you are not anonymous now</source>
         <translation>通信使い：公開状態になった</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4876"/>
+        <location filename="../mainwindow.cc" line="4884"/>
         <source>connecting server to change language ...</source>
         <translation>通信使い：言語設定を変更中…</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4888"/>
+        <location filename="../mainwindow.cc" line="4896"/>
         <source>failed to change user language</source>
         <translation>通信使い：言語の変更に失敗した</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4897"/>
+        <location filename="../mainwindow.cc" line="4905"/>
         <source>your language is </source>
         <translation>通信使い：今の言語は</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4966"/>
+        <location filename="../mainwindow.cc" line="4974"/>
         <source>restart the app to use the new language</source>
         <translation>魔法使い：プログラムを再起動してください</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5626"/>
+        <location filename="../mainwindow.cc" line="5634"/>
         <source>annotations found</source>
         <translation>魔法使い：弾幕を発見しました</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5639"/>
+        <location filename="../mainwindow.cc" line="5648"/>
         <source>analyzing annotation URL ...</source>
         <translation>ネット使い：弾幕URLを分析中…</translation>
     </message>
@@ -1060,7 +1060,7 @@
         <translation type="obsolete">魔法使い：ファイルが見つかりません</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5210"/>
+        <location filename="../mainwindow.cc" line="5218"/>
         <source>invalid lnk</source>
         <translation>魔法使い：lnkのターゲットファイルが見つかりません</translation>
     </message>
@@ -2052,6 +2052,8 @@
     <message>
         <location filename="translatormanager.cc" line="108"/>
         <location filename="translatormanager.cc" line="260"/>
+        <location filename="translatormanager.cc" line="284"/>
+        <location filename="translatormanager.cc" line="285"/>
         <source>Open</source>
         <translation>開く</translation>
     </message>
@@ -2103,12 +2105,6 @@
         <location filename="translatormanager.cc" line="282"/>
         <source>Load subtitle from file</source>
         <translation>字幕ファイルを開く</translation>
-    </message>
-    <message>
-        <location filename="translatormanager.cc" line="284"/>
-        <location filename="translatormanager.cc" line="285"/>
-        <source>Open ...</source>
-        <translation>開く…</translation>
     </message>
     <message>
         <location filename="translatormanager.cc" line="287"/>
@@ -3313,38 +3309,27 @@
 <context>
     <name>WebBrowser</name>
     <message>
-        <location filename="../../../module/webbrowser/webbrowser.cc" line="240"/>
         <source>New tab</source>
-        <translation>新しいタブ</translation>
+        <translation type="obsolete">新しいタブ</translation>
     </message>
 </context>
 <context>
     <name>WebBrowserUi</name>
     <message>
-        <location filename="../../../module/webbrowser/webbrowser.ui" line="126"/>
-        <location filename="../../../module/webbrowser/webbrowser.ui" line="147"/>
         <source>Back</source>
-        <translation>バック</translation>
+        <translation type="obsolete">バック</translation>
     </message>
     <message>
-        <location filename="../../../module/webbrowser/webbrowser.ui" line="166"/>
-        <source>http://annot.me</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../../module/webbrowser/webbrowser.ui" line="176"/>
         <source>Search</source>
-        <translation>検索</translation>
+        <translation type="obsolete">検索</translation>
     </message>
     <message>
-        <location filename="../../../module/webbrowser/webbrowser.ui" line="210"/>
         <source>Tab 1</source>
-        <translation>タブ1</translation>
+        <translation type="obsolete">タブ1</translation>
     </message>
     <message>
-        <location filename="../../../module/webbrowser/webbrowser.ui" line="227"/>
         <source>Function</source>
-        <translation>関数</translation>
+        <translation type="obsolete">関数</translation>
     </message>
 </context>
 <context>

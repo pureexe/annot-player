@@ -2,12 +2,9 @@
 # 1/24/2012
 
 include(../../config.pri)
-include ($$ROOTDIR/module/luacpp/luacpp.pri)
-include ($$ROOTDIR/module/download/download.pri)
+include ($$ROOTDIR/module/luaresolver/luaresolver.pri)
 
 INCLUDEPATH += $$PWD
-INCLUDEPATH += $$PWD/lua
-DEPENDPATH += $$PWD/lua
 
 HEADERS += \
     $$PWD/luamrlresolver.h \
@@ -16,8 +13,7 @@ HEADERS += \
     $$PWD/mrlresolver.h \
     $$PWD/mrlresolvermanager.h \
     $$PWD/youkumrlresolver.h \
-    $$PWD/youtubemrlresolver.h \
-    $$PWD/lua/luascript.h
+    $$PWD/youtubemrlresolver.h
 
 SOURCES += \
     $$PWD/luamrlresolver.cc \
@@ -25,10 +21,7 @@ SOURCES += \
     $$PWD/mediainfo.cc \
     $$PWD/mrlresolvermanager.cc \
     $$PWD/youkumrlresolver.cc \
-    $$PWD/youtubemrlresolver.cc \
-    $$PWD/lua/luascript.cc
-
-OTHER_FILES += $$PWD/lua/luascript.lua
+    $$PWD/youtubemrlresolver.cc
 
 QT      += core network script
 

@@ -7,15 +7,19 @@
 #include "mrlresolver.h"
 #include <string>
 
+class luaresolver;
+
 class LuaMrlResolver : public MrlResolver
 {
   Q_OBJECT
   typedef LuaMrlResolver Self;
   typedef MrlResolver Base;
 
+  luaresolver *lua_;
+
 public:
-  explicit LuaMrlResolver(QObject *parent = 0)
-    : Base(parent) { }
+  explicit LuaMrlResolver(QObject *parent = 0);
+  ~LuaMrlResolver();
 
 public:
   bool match(const QString &href) const; ///< \override

@@ -58,6 +58,7 @@ Tray::createActions()
   QMenu *menu = new QMenu(w_); {
     menu->addAction(openFileAct);
 #ifdef USE_MODE_SIGNAL
+    menu->addAction(openUrlAct);
     menu->addAction(openWindowAct);
 #endif // USE_MODE_SIGNAL
 #ifdef Q_WS_WIN
