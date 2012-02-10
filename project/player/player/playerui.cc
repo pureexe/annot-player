@@ -82,7 +82,7 @@ PlayerUi::PlayerUi(SignalHub *hub, Player *player, ServerAgent *server, QWidget 
   toggleFullScreenModeButton()->setCheckable(true);
 
   setTabOrder(inputComboBox(), prefixComboBox());
-  setTabOrder(prefixComboBox(), inputComboBox());
+  //setTabOrder(prefixComboBox(), inputComboBox());
 
   createConnections();
 
@@ -112,11 +112,11 @@ PlayerUi::createConnections()
   //  connect(lineEdit(), SIGNAL(returnPressed()), p, SLOT(addCurrentTextToHistory()));
 }
 
+//_connect(openButton(), SIGNAL(clicked()), hub_, SLOT(open()));
 #define CREATE_HUB_CONNECTIONS(_connect) \
   void \
   PlayerUi::_connect##Hub() \
   { \
-    _connect(openButton(), SIGNAL(clicked()), hub_, SLOT(open())); \
     _connect(toggleFullScreenModeButton(), SIGNAL(clicked(bool)), hub_, SLOT(setFullScreenWindowMode(bool))); \
     _connect(toggleMiniModeButton(), SIGNAL(clicked(bool)), hub_, SLOT(setMiniPlayerMode(bool))); \
     _connect(toggleEmbedModeButton(), SIGNAL(clicked(bool)), hub_, SLOT(setEmbeddedPlayerMode(bool))); \
@@ -318,13 +318,13 @@ PlayerUi::server() const
 
 void
 PlayerUi::setVolume(int vol)
-{ hub_->setVolume(vol / G_VOLUME_MAX); }
+{ hub_->setVolume((qreal)vol / G_VOLUME_MAX); }
 
 void
 PlayerUi::setPosition(int pos)
 {
   if (player_->hasMedia())
-    player_->setPosition(pos / G_POSITION_MAX);
+    player_->setPosition((qreal)pos / G_POSITION_MAX);
 }
 
 void

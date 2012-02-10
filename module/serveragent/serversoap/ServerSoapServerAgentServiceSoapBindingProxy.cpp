@@ -1401,6 +1401,60 @@ int ServerAgentServiceSoapBindingProxy::selectMediaTokenWithId(const char *endpo
 	return soap_closesock(soap);
 }
 
+int ServerAgentServiceSoapBindingProxy::selectRelatedMediaAliasesWithTokenId(const char *endpoint, const char *soap_action, tns__selectRelatedMediaAliasesWithTokenId *tns__selectRelatedMediaAliasesWithTokenId_, tns__selectRelatedMediaAliasesWithTokenIdResponse *tns__selectRelatedMediaAliasesWithTokenIdResponse_)
+{	struct soap *soap = this;
+	struct __tns__selectRelatedMediaAliasesWithTokenId soap_tmp___tns__selectRelatedMediaAliasesWithTokenId;
+	if (endpoint)
+		soap_endpoint = endpoint;
+	if (!soap_endpoint)
+		soap_endpoint = "http://annotcloud.com/services/ServerAgentPort";
+	if (!soap_action)
+		soap_action = "";
+	soap->encodingStyle = NULL;
+	soap_tmp___tns__selectRelatedMediaAliasesWithTokenId.tns__selectRelatedMediaAliasesWithTokenId_ = tns__selectRelatedMediaAliasesWithTokenId_;
+	soap_begin(soap);
+	soap_serializeheader(soap);
+	soap_serialize___tns__selectRelatedMediaAliasesWithTokenId(soap, &soap_tmp___tns__selectRelatedMediaAliasesWithTokenId);
+	if (soap_begin_count(soap))
+		return soap->error;
+	if (soap->mode & SOAP_IO_LENGTH)
+	{	if (soap_envelope_begin_out(soap)
+		 || soap_putheader(soap)
+		 || soap_body_begin_out(soap)
+		 || soap_put___tns__selectRelatedMediaAliasesWithTokenId(soap, &soap_tmp___tns__selectRelatedMediaAliasesWithTokenId, "-tns:selectRelatedMediaAliasesWithTokenId", NULL)
+		 || soap_body_end_out(soap)
+		 || soap_envelope_end_out(soap))
+			 return soap->error;
+	}
+	if (soap_end_count(soap))
+		return soap->error;
+	if (soap_connect(soap, soap_endpoint, soap_action)
+	 || soap_envelope_begin_out(soap)
+	 || soap_putheader(soap)
+	 || soap_body_begin_out(soap)
+	 || soap_put___tns__selectRelatedMediaAliasesWithTokenId(soap, &soap_tmp___tns__selectRelatedMediaAliasesWithTokenId, "-tns:selectRelatedMediaAliasesWithTokenId", NULL)
+	 || soap_body_end_out(soap)
+	 || soap_envelope_end_out(soap)
+	 || soap_end_send(soap))
+		return soap_closesock(soap);
+	if (!tns__selectRelatedMediaAliasesWithTokenIdResponse_)
+		return soap_closesock(soap);
+	tns__selectRelatedMediaAliasesWithTokenIdResponse_->soap_default(soap);
+	if (soap_begin_recv(soap)
+	 || soap_envelope_begin_in(soap)
+	 || soap_recv_header(soap)
+	 || soap_body_begin_in(soap))
+		return soap_closesock(soap);
+	tns__selectRelatedMediaAliasesWithTokenIdResponse_->soap_get(soap, "tns:selectRelatedMediaAliasesWithTokenIdResponse", "tns:selectRelatedMediaAliasesWithTokenIdResponse");
+	if (soap->error)
+		return soap_recv_fault(soap, 0);
+	if (soap_body_end_in(soap)
+	 || soap_envelope_end_in(soap)
+	 || soap_end_recv(soap))
+		return soap_closesock(soap);
+	return soap_closesock(soap);
+}
+
 int ServerAgentServiceSoapBindingProxy::selectRelatedMediaAnnotationsWithTokenId(const char *endpoint, const char *soap_action, tns__selectRelatedMediaAnnotationsWithTokenId *tns__selectRelatedMediaAnnotationsWithTokenId_, tns__selectRelatedMediaAnnotationsWithTokenIdResponse *tns__selectRelatedMediaAnnotationsWithTokenIdResponse_)
 {	struct soap *soap = this;
 	struct __tns__selectRelatedMediaAnnotationsWithTokenId soap_tmp___tns__selectRelatedMediaAnnotationsWithTokenId;

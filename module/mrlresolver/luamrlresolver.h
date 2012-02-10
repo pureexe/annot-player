@@ -5,9 +5,10 @@
 // 1/24/2011
 
 #include "mrlresolver.h"
+#include <QString>
 #include <string>
 
-class luaresolver;
+//QT_FORWARD_DECLARE_CLASS(QTextDecoder)
 
 class LuaMrlResolver : public MrlResolver
 {
@@ -15,14 +16,16 @@ class LuaMrlResolver : public MrlResolver
   typedef LuaMrlResolver Self;
   typedef MrlResolver Base;
 
-  luaresolver *lua_;
+  QString nicovideoUsername_, nicovideoPassword_;
+  QString bilibiliUsername_, bilibiliPassword_;
 
 public:
-  explicit LuaMrlResolver(QObject *parent = 0);
-  ~LuaMrlResolver();
+  explicit LuaMrlResolver(QObject *parent = 0)
+    : Base(parent) { }
 
 public:
-  bool match(const QString &href) const; ///< \override
+  bool matchMedia(const QString &href) const; ///< \override
+  bool matchSubtitle(const QString &href) const; ///< \override
 
 public slots:
   void resolveMedia(const QString &href) ///< \override
@@ -30,15 +33,48 @@ public slots:
 
   void resolveMedia(const QString &href, bool async);
 
-  void resolveAnnot(const QString &href) ///< \override
-  { resolveAnnot(href, true); }
+  void resolveSubtitle(const QString &href) ///< \override
+  { resolveSubtitle(href, true); }
 
-  void resolveAnnot(const QString &href, bool async);
+  void resolveSubtitle(const QString &href, bool async);
+
+public:
+  const QString &nicovideoUsername() const { return nicovideoUsername_; }
+  const QString &nicovideoPassword() const { return nicovideoPassword_; }
+  const QString &bilibiliUsername() const { return bilibiliUsername_; }
+  const QString &bilibiliPassword() const { return bilibiliPassword_; }
+
+  bool hasNicovideoAccount() const
+  { return !nicovideoUsername_.isEmpty() && !nicovideoPassword_.isEmpty(); }
+
+  bool hasBilibiliAccount() const
+  { return !bilibiliUsername_.isEmpty() && !bilibiliPassword_.isEmpty(); }
+
+public slots:
+  void setNicovideoAccount(const QString &username, const QString &password)
+  { nicovideoUsername_ = username; nicovideoPassword_ = password; }
+
+  void clearNicovideoAccount()
+  { nicovideoUsername_.clear(); nicovideoPassword_.clear(); }
+
+  void setBilibiliAccount(const QString &username, const QString &password)
+  { bilibiliUsername_ = username; bilibiliPassword_ = password; }
+
+  void clearBilibiliAccount()
+  { bilibiliUsername_.clear(); bilibiliPassword_.clear(); }
 
 protected:
-  static QString decodeText(const std::string &text, const char *encoding = 0);
-  static QString formatTitle(const std::string &title, const char *encoding = 0);
-  static QString formatUrl(const std::string &url);
+  //LuaResolver *makeResolver(QObject *parent = 0);
+
+  ///  Return true if succeed.
+  bool checkSiteAccount(const QString &href);
+
+  // It's important to keep these methods stateless.
+  static QString decodeText(const QString &text, const char *encoding = 0);
+  static QString formatTitle(const QString &title, const char *encoding = 0);
+  static QString formatUrl(const QString &url);
+
+  static QString cleanUrl(const QString &url);
 };
 
 #endif // LUAMRLRESOLVER_H

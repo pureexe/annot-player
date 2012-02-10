@@ -698,10 +698,9 @@ AnnotationGraphicsView::annotationWithId(qint64 id) const
 bool
 AnnotationGraphicsView::isAnnotationBlocked(const Annotation &a) const
 {
-  return
-      a.isHidden() ||
+  return a.isHidden() ||
       a.hasId() && filteredAnnotationIds_.contains(a.id()) ||
-      filter_ && filter_->filter(a);
+      filter_ && filter_->filter(a) ;
 }
 
 bool

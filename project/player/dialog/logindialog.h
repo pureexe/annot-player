@@ -7,6 +7,7 @@
 #include "module/qtext/dialog.h"
 
 QT_FORWARD_DECLARE_CLASS(QLineEdit)
+QT_FORWARD_DECLARE_CLASS(QComboBox)
 
 typedef QtExt::Dialog LoginDialogBase;
 class LoginDialog : public LoginDialogBase
@@ -15,9 +16,8 @@ class LoginDialog : public LoginDialogBase
   typedef LoginDialog Self;
   typedef LoginDialogBase Base;
 
-  // Temporarily just for registration.
-  // TODO: Move to Core/Dialog/LoginDialog
-  QLineEdit *userNameEdit_, *passwordEdit_;
+  QComboBox *userNameEdit_;
+  QLineEdit *passwordEdit_;
 
 public:
   explicit LoginDialog(QWidget *parent = 0);
@@ -36,6 +36,7 @@ protected slots:
   void login();
 
 protected:
+  bool containsUserName(const QString &name) const;
   //virtual void mouseDoubleClickEvent(QMouseEvent *event);
   //virtual void contextMenuEvent(QContextMenuEvent *event);
 };

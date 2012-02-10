@@ -93,6 +93,8 @@ public slots:
   void curse();
 
   // - Events -
+public:
+  virtual void setVisible(bool visible); ///< \override
 protected slots:
   void invalidateTokenLabels();
 

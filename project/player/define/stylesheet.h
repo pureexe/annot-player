@@ -157,16 +157,19 @@
 #define SS_TOOLBUTTON_SEEK      SS_TOOLBUTTON_TEXT
 
 // - Labels -
-#define SS_LABEL \
+#define SS_LABEL_(_normal, _hover, _disabled) \
   SS_BEGIN(QLabel) \
-    SS_COLOR(blue) \
+    SS_COLOR(_normal) \
   SS_END \
   SS_BEGIN(QLabel:hover) \
-    SS_COLOR(red) \
+    SS_COLOR(_hover) \
   SS_END \
   SS_BEGIN(QLabel:disabled) \
-    SS_COLOR(gray) \
+    SS_COLOR(_disabled) \
   SS_END
+
+#define SS_LABEL           SS_LABEL_(blue, red, gray)
+#define SS_LABEL_HIGHLIGHT SS_LABEL_(orange, blue, gray)
 
 // - Lines -
 

@@ -13,7 +13,7 @@
 ---[[edit 20111102 for acfun new flashvar embed id]]
 ---[[edit 20111106 for new acfun sub]]
 
-require "luascript/lib/lalib"
+require "lalib"
 
 acfun_xml_servername = '124.228.254.234';--'www.sjfan.com.cn';
 

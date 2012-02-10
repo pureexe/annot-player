@@ -24,7 +24,8 @@ using namespace Logger;
   Qt::WindowTitleHint | \
   Qt::WindowSystemMenuHint | \
   Qt::WindowMinMaxButtonsHint | \
-  Qt::WindowCloseButtonHint )
+  Qt::WindowCloseButtonHint | \
+  Qt::WindowStaysOnTopHint)
 
 TokenView::TokenView(ServerAgent *server, QWidget *parent)
   : Base(parent, WINDOW_FLAGS), server_(server)
@@ -53,7 +54,7 @@ TokenView::TokenView(ServerAgent *server, QWidget *parent)
 
 #define MAKE_TOKEN_LABEL(_id, _styleid) \
   _id##Label_ = new QLabel; { \
-    _id##Label_->setStyleSheet(SS_LABEL); \
+    _id##Label_->setStyleSheet(SS_LABEL_HIGHLIGHT); \
     _id##Label_->setText(TR(T_UNKNOWN)); \
     _id##Label_->setToolTip(TR(T_TOOLTIP_##_styleid)); \
   } \
@@ -301,6 +302,9 @@ TokenView::addAlias(const Alias &a)
 #undef FORMAT_LANGUAGE
 #undef FORMAT_FLAGS
 #undef FORMAT_STATUS
+
+  if (isVisible())
+    tableView_->invalidateCount();
 }
 
 void
@@ -536,6 +540,14 @@ TokenView::openSource()
     log(TR(T_MENUTEXT_OPENURL) + ": " + url);
     QDesktopServices::openUrl(url);
   }
+}
+
+void
+TokenView::setVisible(bool visible)
+{
+  if (visible)
+    tableView_->invalidateCount();
+  Base::setVisible(visible);
 }
 
 // EOF

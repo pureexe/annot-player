@@ -1,7 +1,7 @@
-#ifndef COMBOBOXEDITPRIVATE_H
-#define COMBOBOXEDITPRIVATE_H
+#ifndef COMBOEDITPRIVATE_H
+#define COMBOEDITPRIVATE_H
 
-// comboboxeditprivate.h
+// comboeditprivate.h
 // 12/15/2011
 
 #include <QLineEdit>
@@ -45,4 +45,4 @@ protected:
   }
 };
 
-#endif // COMBOBOXEDITPRIVATE_H
+#endif // COMBOEDITPRIVATE_H

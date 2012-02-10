@@ -85,6 +85,7 @@ public:
   AnnotationList selectRelatedAnnotationsWithTokenId(qint64 tid);
 
   AliasList selectAliasesWithTokenId(qint64 tid);
+  AliasList selectRelatedAliasesWithTokenId(qint64 tid);
 
   // - Live -
 public:

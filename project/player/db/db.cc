@@ -29,6 +29,15 @@ namespace { // anonymous, helper
 
 namespace { namespace task_ { // anonymous
 
+  class updateAliases : public QRunnable
+  {
+    Database *db_;
+    AliasList l_;
+    virtual void run() { db_->updateAliases(l_, false); } // \override, async = false
+  public:
+    updateAliases(const AliasList &l, Database *db) : db_(db), l_(l) { Q_ASSERT(db_); }
+  };
+
   class updateAnnotations : public QRunnable
   {
     Database *db_;
@@ -821,6 +830,45 @@ Database::selectAnnotations() const
 }
 
 qint64
+Database::selectAliasUpdateTimeWithId(qint64 id) const
+{
+  DOUT("enter: id =" << id);
+  //Q_ASSERT(id)
+
+  Q_ASSERT(isValid());
+  qint64 ret = -1;
+
+  QSqlQuery query(db_);
+  query.prepare(
+    "SELECT "
+      DB_UNIX_TIMESTAMP("alias_update_time") " "
+    "FROM alias "
+    "WHERE alias_id = ?"
+  );
+  query.addBindValue(id);
+
+  DOUT("locking"); mutex_.lock(); DOUT("locked");
+  bool ok = query.exec();
+  DOUT("unlocking"); mutex_.unlock(); DOUT("unlocked");
+  if (!ok) {
+    DOUT("exit: error:" << query.lastError());
+    return ret;
+  }
+
+  if (!query.next()) {
+    DOUT("exit: query returns empty");
+    return ret;
+  }
+
+  ret = query.value(0).toLongLong(&ok);
+  if (!ok)
+    ret = -1;
+
+  DOUT("exit: text =" << ret);
+  return ret;
+}
+
+qint64
 Database::selectAnnotationUpdateTimeWithId(qint64 id) const
 {
   DOUT("enter: id =" << id);
@@ -1093,4 +1141,50 @@ Database::updateAnnotations(const AnnotationList &l, bool async)
   return;
 }
 
+void
+Database::updateAlias(const Alias &alias)
+{
+  DOUT("enter: aid =" << alias.id());
+  if (!alias.hasId()) {
+    DOUT("exit: ERROR: missing alias ID");
+    return;
+  }
+
+  qint64 ts = selectAliasUpdateTimeWithId(alias.id());
+  if (ts < 0)
+    insertAlias(alias);
+  else if (ts != alias.updateTime()) {
+    deleteAliasWithId(alias.id());
+    insertAlias(alias);
+  }
+
+  DOUT("exit");
+  return;
+}
+
+void
+Database::updateAliases(const AliasList &l, bool async)
+{
+  DOUT("enter: count =" << l.size() << ", async =" << async);
+  Q_ASSERT(isValid());
+  if (l.isEmpty() || disposed_) {
+    DOUT("exit: empty list or disposed");
+    return;
+  }
+  if (async) {
+    QThreadPool::globalInstance()->start(new task_::updateAliases(l, this));
+    DOUT("exit: returned from async branch");
+    return;
+  }
+
+  foreach (Alias a, l) {
+    if (disposed_) {
+      DOUT("exit: disposed");
+      return;
+    }
+    updateAlias(a);
+  }
+  DOUT("exit");
+  return;
+}
 // EOF

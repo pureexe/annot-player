@@ -366,6 +366,14 @@ ServerAgent::selectRelatedAnnotationsWithTokenId(qint64 tid)
   return ret;
 }
 
+AliasList
+ServerAgent::selectRelatedAliasesWithTokenId(qint64 tid)
+{
+  AliasList ret;
+  if (tid)
+    ret = proxy_->selectRelatedAliasesWithTokenId(tid);
+  return ret;
+}
 
 AliasList
 ServerAgent::selectAliasesWithTokenId(qint64 tid)

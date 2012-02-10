@@ -65,14 +65,20 @@ namespace { // anonymous, annotation display
                   last_time_bottom_[lane_count];
 
     Q_ASSERT(visible_time > 0);
-    //int wait_time = style == AnnotationGraphicsItem::FloatStyle ? (visible_time / 4 + 1) : visible_time;
-    int wait_time = (style == AnnotationGraphicsItem::FloatStyle ? visible_time/2 : visible_time) + 500;
+    int wait_time = 500;
+    switch (style) {
+    case AnnotationGraphicsItem::FloatStyle:
+    case AnnotationGraphicsItem::FlyStyle: wait_time += visible_time / 2; break;
+    default: wait_time += visible_time;
+    }
 
     time_t *last_time_;
     switch (style) {
-    case AnnotationGraphicsItem::FloatStyle:    last_time_ = last_time_fly_; break;
+    case AnnotationGraphicsItem::FloatStyle:
+    case AnnotationGraphicsItem::FlyStyle:      last_time_ = last_time_fly_; break;
     case AnnotationGraphicsItem::TopStyle:      last_time_ = last_time_top_; break;
-    case AnnotationGraphicsItem::BottomStyle:   last_time_ = last_time_bottom_; break;
+    case AnnotationGraphicsItem::BottomStyle:
+    case AnnotationGraphicsItem::SubtitleStyle: last_time_ = last_time_bottom_; break;
     default : Q_ASSERT(0);      last_time_ = last_time_fly_;
     }
 
@@ -103,6 +109,7 @@ namespace { // anonymous, annotation display
 
     switch (style) {
     case AnnotationGraphicsItem::BottomStyle:
+    case AnnotationGraphicsItem::SubtitleStyle:
       {
         int window_footer = !hub_->isNormalPlayerMode() ? (lane_height+lane_height/2)   : 0;
         return window_height - (best_lane + 2) * lane_height - window_footer;
@@ -260,8 +267,8 @@ AnnotationGraphicsItem::setTags(const QStringList &tags)
     foreach (const QString &tag, tags) {
       switch (qHash(tag)) {
       case AnnotCloud::H_Verbatim: continue;
-      case AnnotCloud::H_Fly:
       case AnnotCloud::H_Float: setStyle(FloatStyle); break;
+      case AnnotCloud::H_Fly: setStyle(FlyStyle); break;
       case AnnotCloud::H_Top: setStyle(TopStyle); break;
       case AnnotCloud::H_Bottom: setStyle(BottomStyle); break;
 
@@ -453,6 +460,7 @@ AnnotationGraphicsItem::showMe()
 {
   switch (style_) {
   case FloatStyle:
+  case FlyStyle:
     fly(); break;
 
   case TopStyle:
@@ -483,6 +491,7 @@ AnnotationGraphicsItem::isPaused() const
   Q_ASSERT(autoRemoveTimer_);
   switch (style_) {
   case FloatStyle:
+  case FlyStyle:
     return ani_->state() == QAbstractAnimation::Paused;
 
   case TopStyle:
@@ -505,6 +514,7 @@ AnnotationGraphicsItem::pause()
   Q_ASSERT(autoRemoveTimer_);
   switch (style_) {
   case FloatStyle:
+  case FlyStyle:
     if (ani_->state() == QAbstractAnimation::Running)
       ani_->pause();
     break;
@@ -530,6 +540,7 @@ AnnotationGraphicsItem::resume()
   Q_ASSERT(autoRemoveTimer_);
   switch (style_) {
   case FloatStyle:
+  case FlyStyle:
     if (ani_->state() == QAbstractAnimation::Paused)
       ani_->resume();
     break;
@@ -565,7 +576,10 @@ AnnotationGraphicsItem::flyTime() const
       w = qMax((int)boundingRect().width(), 50);
   float f = (float)(w0 + 200) / (w + 200);
   int ret = ANNOTATION_FLY_TIME * ::pow(f, 0.2f) + ANNOTATION_FLY_TIME_MIN;
-  return qMin(ret, ANNOTATION_FLY_TIME_MAX);
+  ret = qMin(ret, ANNOTATION_FLY_TIME_MAX);
+  if (style_ == FlyStyle)
+    ret /= 5;
+  return qMax(ret, ANNOTATION_FLY_TIME_MIN);
 }
 
 void
@@ -605,7 +619,7 @@ AnnotationGraphicsItem::fly()
 {
   Q_ASSERT(view_);
   int msecs = flyTime();
-  int y = nextY(msecs, FloatStyle);
+  int y = nextY(msecs, style_);
 
   QPoint from(view_->width(), y);
   QPoint to(- boundingRect().width(), y);

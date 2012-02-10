@@ -3,45 +3,82 @@
 
 // luaresolver.h
 // 2/2/2012
-#include <string>
-#include <list>
+#include <QObject>
+#include <QString>
+#include <QStringList>
+
+QT_FORWARD_DECLARE_CLASS(QNetworkAccessManager)
 
 struct lua_State;
 
-class luaresolver
+class LuaResolver : public QObject
 {
-  std::string script_path_;
-  std::string package_path_;
+  Q_OBJECT
+  typedef LuaResolver Self;
+  typedef QObject Base;
+
+  QNetworkAccessManager *qnam_;
+
+  QString scriptPath_;
+  QString packagePath_;
+
+  QString nicovideoUsername_, nicovideoPassword_;
+
+  QString bilibiliUsername_, bilibiliPassword_;
 
 public:
-  struct media_description
-  {
-    std::string title;
-    std::string refurl;
-    std::string suburl;
-    std::list<std::string> mrls;
-  };
+  //struct media_description
+  //{
+  //  std::string title;
+  //  std::string refurl;
+  //  std::string suburl;
+  //  std::list<std::string> mrls;
+  //};
 
-  explicit luaresolver(const std::string &script_path, const std::string &package_path = std::string())
-    : script_path_(script_path), package_path_(package_path) { }
+  explicit LuaResolver(const QString &scriptPath,
+                       const QString &packagePath = QString(),
+                       QNetworkAccessManager *qnam = 0,
+                       QObject *parent = 0);
 
 public:
-  const std::string &script_path() const { return script_path_; }
-  const std::string &package_path() const { return package_path_; }
+  bool resolve(const QString &href,
+               QString *refurl = 0,
+               QString *title = 0,
+               QString *suburl = 0,
+               QStringList *mrls = 0);
 
-  bool resolve_media(const std::string &href, media_description &md) const;
-  bool resolve_annot(const std::string &href, std::string &suburl) const;
+  bool hasNicovideoAccount() const
+  { return !nicovideoUsername_.isEmpty() && !nicovideoPassword_.isEmpty(); }
+
+  bool hasBilibiliAccount() const
+  { return !bilibiliUsername_.isEmpty() && !bilibiliPassword_.isEmpty(); }
+
+public slots:
+  void setNicovideoAccount(const QString &username, const QString &password)
+  { nicovideoUsername_ = username; nicovideoPassword_ = password; }
+
+  void clearNicovideoAccount()
+  { nicovideoUsername_.clear(); nicovideoPassword_.clear(); }
+
+  void setBilibiliAccount(const QString &username, const QString &password)
+  { bilibiliUsername_ = username; bilibiliPassword_ = password; }
+
+  void clearBilibiliAccount()
+  { bilibiliUsername_.clear(); bilibiliPassword_.clear(); }
+
+  // - Implementation -
+public:
+  static QString mktemp();
+
+  static void setObject(lua_State *L, Self *obj);
+  static Self *getObject(lua_State *L);
+
+  int dlget(lua_State *L);
+  int dlpost(lua_State *L);
 
 protected:
-  static std::string mktemp();
-  static void print_last_error(lua_State *L);
-  static void append_lua_path(lua_State *L, const char *path);
-
-  void append_lua_path(lua_State *L) const
-  {
-    if (!package_path_.empty())
-      append_lua_path(L, package_path_.c_str());
-  }
+  static void printLastError(lua_State *L);
+  static void appendLuaPath(lua_State *L, const QString &path);
 };
 
 #endif // LUARESOLVER_H

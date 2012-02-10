@@ -6,7 +6,7 @@
 
 #include "module/qtext/dialog.h"
 
-QT_FORWARD_DECLARE_CLASS(QLineEdit)
+QT_FORWARD_DECLARE_CLASS(QComboBox)
 QT_FORWARD_DECLARE_CLASS(QToolButton)
 
 typedef QtExt::Dialog AddAliasDialogBase;
@@ -32,10 +32,18 @@ protected slots:
   void paste();
   void cancel();
 
-  void tagBD()          { tag("BD"); }
-  void tagDVD()         { tag("DVD"); }
-  void tagTV()          { tag("TV"); }
-  void tagWeb()         { tag("Web"); }
+  void tag01()          { tag("01"); }
+  void tag02()          { tag("02"); }
+  void tag03()          { tag("03"); }
+  void tag04()          { tag("04"); }
+  void tag05()          { tag("05"); }
+  void tagOVA()         { tag("OVA"); }
+  void tagOAD()         { tag("OAD"); }
+
+  //void tagBD()          { tag("BD"); }
+  //void tagDVD()         { tag("DVD"); }
+  //void tagTV()          { tag("TV"); }
+  //void tagWeb()         { tag("Web"); }
 
   void invalidateOKButton();
 
@@ -45,12 +53,13 @@ protected slots:
 
 protected:
   void tag(const QString &tag);
+  //void postfix(const QString &tag);
 
   //virtual void mouseDoubleClickEvent(QMouseEvent *event);
   //virtual void contextMenuEvent(QContextMenuEvent *event);
 
 private:
-  QLineEdit *aliasEdit_;
+  QComboBox *aliasEdit_;
   QToolButton *okButton_, *cancelButton_;
 
   QToolButton *isNameButton_, *isTagButton_, *isUrlButton_;

@@ -116,6 +116,7 @@ public:
 
  ///  Clustered at server based on token's aliases
   AnnotationList selectRelatedAnnotationsWithTokenId(qint64 tid);
+  AliasList selectRelatedAliasesWithTokenId(qint64 tid);
 
   // - Deletion -
 public:

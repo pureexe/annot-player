@@ -16,7 +16,7 @@
 // - Analysis -
 
 bool
-YoutubeMrlResolver::match(const QString &href) const
+YoutubeMrlResolver::matchMedia(const QString &href) const
 {
   QRegExp rx("^http://(|www\\.)youtube\\.com/watch?", Qt::CaseInsensitive);
   return href.contains(rx);

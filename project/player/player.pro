@@ -1,7 +1,7 @@
 # player.pro
 # 6/30/2011
 
-VERSION = 0.1.2.6
+VERSION = 0.1.2.7
 
 include(../../config.pri)
 include(tr/tr.pri)
@@ -19,6 +19,7 @@ include($$ROOTDIR/module/translator/translator.pri)
 include($$ROOTDIR/module/mrlresolver/mrlresolver.pri)
 include($$ROOTDIR/module/ioutil/ioutil.pri)
 include($$ROOTDIR/module/qtext/qtext.pri)
+include($$ROOTDIR/module/crypt/crypt.pri)
 
 # shared link gave me so many trouble on mac and linux
 #unix:       include($$ROOTDIR/module/webbrowser/webbrowser_static.pri)
@@ -122,8 +123,7 @@ HEADERS += \
     annot/blacklistview.h \
     annot/blacklistviewprivate.h \
     annot/textformathandler.h \
-    command/comboboxedit.h \
-    command/comboboxeditprivate.h \
+    command/annotationcomboedit.h \
     command/inputcombobox.h \
     command/prefixcombobox.h \
     data/datamanager.h \
@@ -135,13 +135,18 @@ HEADERS += \
     define/rc.h \
     define/stylesheet.h \
     dialog/aboutdialog.h \
+    dialog/annotationcountdialog.h \
     dialog/backlogview.h \
     dialog/devicedialog.h \
     dialog/helpdialog.h \
+    dialog/inputdialog.h \
     dialog/livedialog.h \
     dialog/logindialog.h \
+    dialog/mediaurldialog.h \
     dialog/pickdialog.h \
     dialog/seekdialog.h \
+    dialog/siteaccountview.h \
+    dialog/suburldialog.h \
     dialog/syncdialog.h \
     dialog/textview.h \
     dialog/urldialog.h \
@@ -159,6 +164,8 @@ HEADERS += \
     token/tokenview.h \
     user/userview.h \
     util/closewidgetthread.h \
+    util/comboedit.h \
+    util/comboeditprivate.h \
     util/filteredlistview.h \
     util/filteredtableview.h \
     util/grabber.h \
@@ -185,20 +192,25 @@ SOURCES += \
     annot/blacklistview.cc \
     annot/blacklistviewprivate.cc \
     annot/textformathandler.cc \
-    command/comboboxedit.cc \
+    command/annotationcomboedit.cc \
     command/inputcombobox.cc \
     command/prefixcombobox.cc \
     data/datamanager.cc \
     data/dataserver.cc \
     db/db.cc \
     dialog/aboutdialog.cc \
+    dialog/annotationcountdialog.cc \
     dialog/backlogview.cc \
     dialog/devicedialog.cc \
     dialog/helpdialog.cc \
+    dialog/inputdialog.cc \
     dialog/livedialog.cc \
     dialog/logindialog.cc \
+    dialog/mediaurldialog.cc \
     dialog/pickdialog.cc \
     dialog/seekdialog.cc \
+    dialog/siteaccountview.cc \
+    dialog/suburldialog.cc \
     dialog/syncdialog.cc \
     dialog/textview.cc \
     dialog/urldialog.cc \
@@ -215,6 +227,7 @@ SOURCES += \
     token/addaliasdialog.cc \
     token/tokenview.cc \
     user/userview.cc \
+    util/comboedit.cc \
     util/filteredtableview.cc \
     util/filteredlistview.cc \
     util/grabber.cc \

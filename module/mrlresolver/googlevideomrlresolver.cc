@@ -15,7 +15,7 @@
 // - Analysis -
 
 bool
-GoogleVideoMrlResolver::match(const QString &href) const
+GoogleVideoMrlResolver::matchMedia(const QString &href) const
 {
   QString pattern("http://video.google.com/videoplay?docid=");
   return href.startsWith(pattern, Qt::CaseInsensitive);

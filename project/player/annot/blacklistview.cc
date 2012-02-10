@@ -8,7 +8,6 @@
 #include "tr.h"
 #include "defines.h"
 #include "stylesheet.h"
-#include "lineedit.h"
 #include "logger.h"
 #include "module/qtext/toolbutton.h"
 #include <QtGui>

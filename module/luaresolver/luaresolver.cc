@@ -3,11 +3,15 @@
 // See: http://csl.sublevel3.org/lua/
 #include "luaresolver.h"
 #include "module/luacpp/luacpp.h"
-#include "module/download/download.h"
+#include "module/download/downloader.h"
+#include "module/qtext/filedeleter.h"
+#include <QtCore>
+#include <QtNetwork>
 #include <boost/function.hpp>
 #include <exception>
-#include <iostream>
 #include <cstdio>
+
+#define _qs(_cstr)      QString::fromLocal8Bit(_cstr)
 
 #ifdef _MSC_VER
   #pragma warning (disable:4996)     // C4996: This function or variable may be unsafe. (tmpnam, getenv)
@@ -15,66 +19,150 @@
 
 #define UNUSED(_var)    (void)(_var)
 
-//#include <QtCore>
-//#define DEBUG "luaresolver"
-#include <module/debug/debug.h>
+//#define DEBUG "LuaResolver"
+#include "module/debug/debug.h"
+
+// - Construction -
+
+LuaResolver::LuaResolver(const QString &scriptPath, const QString &packagePath,
+                         QNetworkAccessManager *qnam, QObject *parent)
+  : Base(parent), qnam_(qnam), scriptPath_(scriptPath), packagePath_(packagePath){
+  if (!qnam_)
+    qnam_ = new QNetworkAccessManager(this);
+}
 
 // - Helpers -
 
-namespace  { // anonymous
-  // See: http://gamedevgeek.com/tutorials/calling-c-functions-from-lua/
-  // int curl(string url, string path)
-  int
-  cc_curl_(lua_State *L)
+namespace { // anonymous
+
+  int clib_dlget_(lua_State *L)
   {
-    Q_ASSERT(L);
-    int param_count = lua_gettop(L);
-    Q_ASSERT(param_count == 2);
-    if (param_count != 2)
+    LuaResolver *obj = LuaResolver::getObject(L);
+    if (!obj)
       return 1;
-    QString url = QString::fromLocal8Bit(lua_tostring(L, 1));
-    QString path = QString::fromLocal8Bit(lua_tostring(L, 2));
-    bool zipped = url.contains("bilibili.tv/", Qt::CaseInsensitive);
-    const bool async = false;
-    bool ok = ::download(url, path, zipped, async);
-    return ok ? 0 : 1;
+    return obj->dlget(L);
   }
+
+  int clib_dlpost_(lua_State *L)
+  {
+    LuaResolver *obj = LuaResolver::getObject(L);
+    if (!obj)
+      return 1;
+    return obj->dlpost(L);
+  }
+
 } // anonymous namespace
 
-std::string
-luaresolver::mktemp()
+void
+LuaResolver::setObject(lua_State *L, Self *obj)
 {
-#ifdef _MSC_VER
-  std::string tmp = ::getenv("tmp");
-  if (tmp.empty())
-    tmp = ::getenv("temp");
-  return tmp + ::tmpnam(0);
+  DOUT("enter: obj =" << obj);
+  lua_pushlightuserdata(L, 0);
+  lua_pushlightuserdata(L, obj);
+  lua_settable(L, LUA_REGISTRYINDEX);
+  DOUT("exit");
+}
+
+LuaResolver*
+LuaResolver::getObject(lua_State *L)
+{
+  DOUT("enter");
+  lua_pushlightuserdata(L, 0);
+  lua_gettable(L, LUA_REGISTRYINDEX);
+  void *p = lua_isnil(L, -1) ? 0 : lua_touserdata(L, -1);
+  lua_pop(L, 1);
+  DOUT("exit: ret =" << p);
+  return reinterpret_cast<Self*>(p);
+}
+
+// See: http://gamedevgeek.com/tutorials/calling-c-functions-from-lua/
+// int dlget(string url, string path)
+int
+LuaResolver::dlget(lua_State *L)
+{
+  DOUT("enter");
+  enum { PARAM_PATH = 1, PARAM_URL };
+  Q_ASSERT(L);
+  int param_count = lua_gettop(L);
+  Q_ASSERT(param_count == 2);
+  if (param_count != 2) {
+    DOUT("exit: mismatched param_count =" << param_count);
+    return 1;
+  }
+  QString path = _qs(lua_tostring(L, PARAM_PATH));
+  QString url = _qs(lua_tostring(L, PARAM_URL));
+  bool zipped = url.contains("bilibili.tv/", Qt::CaseInsensitive);
+
+  const bool async = false;
+  const QString noheader;
+  Downloader dl(path, zipped, 0, qnam_);
+  dl.get(QUrl(url), noheader, async);
+  bool ok = dl.state() == Downloader::OK;
+  DOUT("exit: ok =" << ok);
+  return ok ? 0 : 1;
+}
+
+int
+LuaResolver::dlpost(lua_State *L)
+{
+  DOUT("enter");
+  enum { PARAM_PATH = 1, PARAM_URL, PARAM_PARAM, PARAM_HEADER };
+  Q_ASSERT(L);
+  int param_count = lua_gettop(L);
+  Q_ASSERT(param_count == 4);
+  if (param_count != 4) {
+    DOUT("exit: mismatched param_count =" << param_count);
+    return 1;
+  }
+  QString path = _qs(lua_tostring(L, PARAM_PATH));
+  QString url = _qs(lua_tostring(L, PARAM_URL));
+  QString param = _qs(lua_tostring(L, PARAM_PARAM));
+
+  QString header = _qs(lua_tostring(L, PARAM_HEADER));
+  bool zipped = url.contains("bilibili.tv/", Qt::CaseInsensitive);
+  const bool async = false;
+  Downloader dl(path, zipped, 0, qnam_);
+  //QByteArray data = Downloader::encodeUrlParameters(param);
+  QByteArray data = param.toLocal8Bit();
+  dl.post(QUrl(url), data, header, async);
+  bool ok = dl.state() == Downloader::OK;
+  DOUT("exit: ok =" << ok);
+  return ok ? 0 : 1;
+}
+
+QString
+LuaResolver::mktemp()
+{
+#ifdef Q_OS_WIN
+  QString ret = _qs(::getenv("tmp"));
+  if (ret.isEmpty())
+    ret = _qs(::getenv("temp"));
+  return ret + _qs(::tmpnam(0));
 #else
-  return ::tmpnam(0);
-#endif //_MSC_VER
+  return _qs(::tmpnam(0));
+#endif // Q_OS_WIN
 }
 
 // See: http://stackoverflow.com/questions/4125971/setting-the-global-lua-path-variable-from-c-c
 // Append to package.path.
 
 void
-luaresolver::print_last_error(lua_State *L)
+LuaResolver::printLastError(lua_State *L)
 {
-  std::cerr << "lua error: " << lua_tostring(L, -1) << std::endl;
+  DOUT("lua error:" << lua_tostring(L, -1));
   lua_pop(L, 1); // remove error message
 }
 
 void
-luaresolver::append_lua_path(lua_State *L, const char *path)
+LuaResolver::appendLuaPath(lua_State *L, const QString &path)
 {
-  DOUT("enter: path =" << QString::fromStdString(path));
+  DOUT("enter: path =" << path);
   lua_getglobal(L, "package");
   lua_getfield(L, -1, "path"); // get field "path" from table at top of stack (-1)
-  std::string cur_path = lua_tostring(L, -1); // grab path string from top of stack
-  cur_path.append(";"); // do your path magic here
-  cur_path.append(path);
+  QString cur_path = _qs(lua_tostring(L, -1)); // grab path string from top of stack
+  cur_path.append(";").append(path);
   lua_pop(L, 1); // get rid of the string on the stack we just pushed on line 5
-  lua_pushstring(L, cur_path.c_str()); // push the new one
+  lua_pushstring(L, cur_path.toLocal8Bit()); // push the new one
   lua_setfield(L, -2, "path"); // set the field "path" in table at -2 with value at top of stack
   lua_pop(L, 1); // get rid of package table from top of stack
   DOUT("exit");
@@ -83,23 +171,12 @@ luaresolver::append_lua_path(lua_State *L, const char *path)
 // - Resolvers -
 
 bool
-luaresolver::resolve_annot(const std::string &href, std::string &suburl) const
+LuaResolver::resolve(const QString &href, QString *refurl, QString *title,
+                     QString *suburl, QStringList *mrls)
 {
-  // TODO: not well-implemented
-  DOUT("enter: href =" << QString::fromStdString(href));
-  media_description md;
-  bool ret = resolve_media(href, md);
-  if (ret)
-    suburl = md.suburl;
-  DOUT("exit: ret =" << ret << ", suburl =" << QString::fromStdString(md.suburl));
-  return ret;
-}
-
-bool
-luaresolver::resolve_media(const std::string &href, media_description &md) const
-{
-  if (href.empty())
+  if (href.isEmpty())
     return false;
+  DOUT("href =" << href);
 
   lua_State *L = 0;
 
@@ -112,93 +189,134 @@ luaresolver::resolve_media(const std::string &href, media_description &md) const
 
     // See: http://stackoverflow.com/questions/2710194/register-c-function-in-lua-table
     static const luaL_Reg ft[] = {
-      { "curl", cc_curl_ },
+      { "dlget", clib_dlget_ },
+      { "dlpost", clib_dlpost_ },
       { 0, 0 }
     };
-    luaL_register(L, "cc", ft);
+    luaL_register(L, "clib", ft);
 
-    DOUT("script_path =" << QString::fromStdString(script_path_));
+    DOUT("scriptPath =" << scriptPath_);
 
-    int err = luaL_loadfile(L, script_path_.c_str());
+    setObject(L, this);
+
+    int err = luaL_loadfile(L, scriptPath_.toLocal8Bit());
     if (err) {
 #ifdef DEBUG
-      print_last_error(L);
+      printLastError(L);
 #endif // DEBUG
       lua_close(L);
       return false;
     }
 
-    append_lua_path(L);
+    if (!packagePath_.isEmpty())
+      appendLuaPath(L, packagePath_);
 
     err = lua_pcall(L, 0, LUA_MULTRET, 0);
     if (err) {
 #ifdef DEBUG
-      print_last_error(L);
+      printLastError(L);
 #endif // DEBUG
       lua_close(L);
       return false;
     }
 
-    // Must be consistent with resolve function in luaresolver
-    boost::function<int (std::string, std::string)>
-        resolve = lua_function<int>(L, "resolve_media");
-    err = resolve(href, mktemp());
-    if (err) {
+    // Set account
+    if (hasNicovideoAccount() &&
+        href.contains("nicovideo.jp", Qt::CaseInsensitive)) {
+      DOUT("nicovideo username =" << nicovideoUsername_);
+      boost::function<int (std::string, std::string)>
+          call = lua_function<int>(L, "set_nicovideo_account");
+      err = call(nicovideoUsername_.toStdString(), nicovideoPassword_.toStdString());
+      if (err) {
 #ifdef DEBUG
-      print_last_error(L);
+        printLastError(L);
 #endif // DEBUG
-      lua_close(L);
-      return false;
-    }
-
-    lua_getglobal(L, "g_mrls_size");
-    int g_mrls_size = lua_tointeger(L, -1);
-    if (g_mrls_size <= 0) {
-      lua_close(L);
-      return false;
-    }
-
-    lua_getglobal(L, "g_title");
-    if (!lua_isnil(L, -1))
-       md.title = lua_tostring(L, -1);
-    else if (!md.title.empty())
-      md.title.clear();
-
-    lua_getglobal(L, "g_refurl");
-    if (!lua_isnil(L, -1))
-      md.refurl = lua_tostring(L, -1);
-    else if (!md.refurl.empty())
-      md.refurl.clear();
-
-    lua_getglobal(L, "g_suburl");
-    if (!lua_isnil(L, -1))
-      md.suburl = lua_tostring(L, -1);
-    else if (!md.suburl.empty())
-      md.suburl.clear();
-
-    if (!md.mrls.empty())
-      md.mrls.clear();
-    lua_getglobal(L, "g_mrls");
-    if (!lua_isnil(L, -1)) {
-      lua_pushnil(L);
-      while (lua_next(L, -2)) {
-        if (lua_isstring(L, -1))
-          md.mrls.push_back(lua_tostring(L, -1));
-        lua_pop(L, 1);
+        lua_close(L);
+        return false;
       }
-      lua_pop(L, 1);
+    }
+
+    if (hasBilibiliAccount() &&
+        href.contains("bilibili.tv", Qt::CaseInsensitive)) {
+      DOUT("bilibili username =" << bilibiliUsername_);
+      boost::function<int (std::string, std::string)>
+          call = lua_function<int>(L, "set_bilibili_account");
+      err = call(bilibiliUsername_.toStdString(), bilibiliPassword_.toStdString());
+      if (err) {
+#ifdef DEBUG
+        printLastError(L);
+#endif // DEBUG
+        lua_close(L);
+        return false;
+      }
+    }
+
+    // Invoke MRL resolver
+    {
+      const char *callee = mrls ? "resolve_media" : "resolve_subtitle";
+      // Must be consistent with resolve function in LuaResolver
+      boost::function<int (std::string, std::string)>
+          call = lua_function<int>(L, callee);
+      QString dlfile = mktemp();
+      FileDeleter::globalInstance()->deleteFileLater(dlfile);
+      err = call(href.toStdString(), dlfile.toStdString());
+      if (err) {
+  #ifdef DEBUG
+        printLastError(L);
+  #endif // DEBUG
+        lua_close(L);
+        return false;
+      }
+    }
+
+    if (title) {
+      lua_getglobal(L, "g_title");
+      if (!lua_isnil(L, -1))
+         *title = _qs(lua_tostring(L, -1));
+    }
+
+    if (refurl) {
+      lua_getglobal(L, "g_refurl");
+      if (!lua_isnil(L, -1))
+        *refurl = _qs(lua_tostring(L, -1));
+    }
+
+    if (suburl) {
+      lua_getglobal(L, "g_suburl");
+      if (!lua_isnil(L, -1))
+        *suburl = _qs(lua_tostring(L, -1));
+    }
+
+    if (mrls) {
+      int mrls_size = 0;
+      lua_getglobal(L, "g_mrls_size");
+      if (!lua_isnil(L, -1))
+        mrls_size = lua_tointeger(L, -1);
+      if (mrls_size > 0) {
+        lua_getglobal(L, "g_mrls");
+        if (!lua_isnil(L, -1)) {
+          lua_pushnil(L);
+          while (lua_next(L, -2)) {
+            if (lua_isstring(L, -1))
+              mrls->append(_qs(lua_tostring(L, -1)));
+            lua_pop(L, 1);
+          }
+          lua_pop(L, 1);
+        }
+      }
     }
 
     lua_close(L);
 
 #ifdef DEBUG
-    std::cout << DEBUG ":title:" << md.title << "\n"
-              << DEBUG ":refurl:" << md.refurl << "\n"
-              << DEBUG ":suburl:" << md.suburl << "\n"
-              << DEBUG ":mrls:" << std::endl;
-    for (std::list<std::string>::const_iterator p = md.mrls.begin();
-         p != md.mrls.end(); ++p)
-       std::cout << *p << std::endl;
+    if (title)
+      DOUT("title =" << *title);
+    if (refurl)
+      DOUT("refurl =" << *refurl);
+    if (suburl)
+      DOUT("suburl =" << *suburl);
+    if (mrls)
+      DOUT("mrls =" << *mrls);
 #endif // DEBUG
     return true;
 
@@ -206,7 +324,7 @@ luaresolver::resolve_media(const std::string &href, media_description &md) const
 #ifdef DEBUG
     std::cerr << DEBUG ":exception: " << e.what() << std::endl;
     if (L)
-      print_last_error(L);
+      printLastError(L);
 #else
     UNUSED(e);
 #endif // DEBUG

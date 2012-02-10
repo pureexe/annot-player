@@ -2,7 +2,7 @@
 // 11/17/2011
 
 #include "filteredlistview.h"
-#include "lineedit.h"
+#include "comboedit.h"
 #include "tr.h"
 #include "stylesheet.h"
 #include "uistyle.h"
@@ -31,7 +31,7 @@ FilteredListView::FilteredListView(QStandardItemModel *sourceModel, QSortFilterP
   //filterColumnComboBox_->setCurrentIndex(HD_Name);
   proxyView_->sortByColumn(0);
   //filterColumnComboBox_->setCurrentIndex(0);
-  filterPatternLineEdit_->setFocus();
+  filterPatternEdit_->setFocus();
 }
 
 void
@@ -57,14 +57,14 @@ FilteredListView::createLayout()
     //proxyView_->setToolTip(tr("Running processes"));
   }
 
-  filterPatternLineEdit_ = new LineEdit; {
-    filterPatternLineEdit_->setToolTip(TR(T_FILTER_PATTERN));
+  filterPatternEdit_ = new ComboEdit; {
+    filterPatternEdit_->setToolTip(TR(T_FILTER_PATTERN));
   }
   //QLabel *filterPatternLabel = new QLabel; {
   //  filterPatternLabel->setStyleSheet(SS_LABEL);
-  //  filterPatternLabel->setBuddy(filterPatternLineEdit_);
+  //  filterPatternLabel->setBuddy(filterPatternEdit_);
   //  filterPatternLabel->setText(TR(T_FILTER_PATTERN) + ":");
-  //  filterPatternLabel->setToolTip(filterPatternLineEdit_->toolTip());
+  //  filterPatternLabel->setToolTip(filterPatternEdit_->toolTip());
   //}
 
   //filterSyntaxComboBox_ = new QtExt::ComboBox; {
@@ -94,20 +94,42 @@ FilteredListView::createLayout()
   //  filterColumnLabel->setToolTip(filterColumnComboBox_->toolTip());
   //}
 
+  countButton_ = new QtExt::ToolButton; {
+    countButton_->setStyleSheet(SS_TOOLBUTTON_TEXT);
+    countButton_->setToolButtonStyle(Qt::ToolButtonTextOnly);
+    countButton_->setText("0/0");
+    countButton_->setToolTip(tr("Count"));
+  } connect(countButton_, SIGNAL(clicked()), SLOT(popup()));
+
   // Set layout
 
-  QLayout *layout = new QVBoxLayout; {
-    layout->addWidget(proxyView_);
-    layout->addWidget(filterPatternLineEdit_);
+  //QLayout *layout = new QVBoxLayout; {
+  //  layout->addWidget(proxyView_);
+  //  layout->addWidget(filterPatternEdit_);
+//
+  //  layout->setContentsMargins(0, 0, 0, 0);
+  //  setContentsMargins(0, 0, 0, 0);
+  //}
+  //setLayout(layout);
+
+  QGridLayout *layout = new QGridLayout; {
+    // (row, col, rowspan, colspan, alignment)
+    int r, c;
+
+    layout->addWidget(proxyView_, r=0, c=0, 1, 3);
+
+    layout->addWidget(filterPatternEdit_, ++r, c=0, 1, 3);
+    layout->addWidget(countButton_, r, c+=2, 1, 1, Qt::AlignRight);
 
     layout->setContentsMargins(0, 0, 0, 0);
     setContentsMargins(0, 0, 0, 0);
-  }
-  setLayout(layout);
+  } setLayout(layout);
 
   // Set up connections
-  connect(filterPatternLineEdit_, SIGNAL(textChanged(QString)),
+  connect(filterPatternEdit_, SIGNAL(editTextChanged(QString)),
           SLOT(invalidateFilterRegExp()));
+  connect(filterPatternEdit_, SIGNAL(editTextChanged(QString)),
+          SLOT(invalidateCount()));
   //connect(filterSyntaxComboBox_, SIGNAL(currentIndexChanged(int)),
   //        SLOT(invalidateFilterRegExp()));
   //connect(filterColumnComboBox_, SIGNAL(currentIndexChanged(int)),
@@ -119,6 +141,10 @@ FilteredListView::createLayout()
 
 // - Properties -
 
+QLineEdit*
+FilteredListView::lineEdit() const
+{ return filterPatternEdit_->lineEdit(); }
+
 QModelIndex
 FilteredListView::currentIndex() const
 { return proxyView_->currentIndex(); }
@@ -129,15 +155,21 @@ FilteredListView::removeCurrentRow()
   QModelIndex mi = currentIndex();
   if (mi.isValid())
     proxyModel_->removeRow(mi.row());
+  invalidateCount();
 }
 
-// - Slots -
+// - Actions -
+
+void
+FilteredListView::popup()
+{ filterPatternEdit_->showPopup(); }
 
 void
 FilteredListView::clear()
 {
   while (sourceModel_->rowCount())
     sourceModel_->removeRow(0);
+  invalidateCount();
 }
 
 void
@@ -148,12 +180,25 @@ FilteredListView::invalidateFilterRegExp()
   //      filterSyntaxComboBox_->itemData(
   //        filterSyntaxComboBox_->currentIndex()).toInt());
 
-  QRegExp regExp(filterPatternLineEdit_->text(), Qt::CaseInsensitive, QRegExp::FixedString);
+  QRegExp regExp(filterPatternEdit_->currentText(), Qt::CaseInsensitive, QRegExp::FixedString);
   proxyModel_->setFilterRegExp(regExp);
+  invalidateCount();
 }
 
 //void
 //FilteredListView::invalidateFilterColumn()
 //{ proxyModel_->setFilterKeyColumn(filterColumnComboBox_->currentIndex()); }
+
+void
+FilteredListView::invalidateCount()
+{
+  int total = sourceModel_->rowCount();
+  int count = proxyModel_->rowCount();
+  countButton_->setText(
+    QString("%1/%2")
+      .arg(QString::number(count))
+      .arg(QString::number(total))
+  );
+}
 
 // EOF

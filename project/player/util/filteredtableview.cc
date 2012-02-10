@@ -2,7 +2,7 @@
 // 11/17/2011
 
 #include "filteredtableview.h"
-#include "lineedit.h"
+#include "comboedit.h"
 #include "tr.h"
 #include "stylesheet.h"
 #include "uistyle.h"
@@ -32,7 +32,7 @@ FilteredTableView::FilteredTableView(QStandardItemModel *sourceModel, QSortFilte
   //filterColumnComboBox_->setCurrentIndex(HD_Name);
   proxyView_->sortByColumn(0);
   filterColumnComboBox_->setCurrentIndex(0);
-  filterPatternLineEdit_->setFocus();
+  filterPatternEdit_->setFocus();
 }
 
 void
@@ -58,14 +58,14 @@ FilteredTableView::createLayout()
     //proxyView_->setToolTip(tr("Running processes"));
   }
 
-  filterPatternLineEdit_ = new LineEdit; {
-    filterPatternLineEdit_->setToolTip(TR(T_FILTER_PATTERN));
+  filterPatternEdit_ = new ComboEdit; {
+    filterPatternEdit_->setToolTip(TR(T_FILTER_PATTERN));
   }
   QLabel *filterPatternLabel = new QLabel; {
     filterPatternLabel->setStyleSheet(SS_LABEL);
-    filterPatternLabel->setBuddy(filterPatternLineEdit_);
+    filterPatternLabel->setBuddy(filterPatternEdit_);
     filterPatternLabel->setText(TR(T_FILTER_PATTERN) + ":");
-    filterPatternLabel->setToolTip(filterPatternLineEdit_->toolTip());
+    filterPatternLabel->setToolTip(filterPatternEdit_->toolTip());
   }
 
   filterSyntaxComboBox_ = new QtExt::ComboBox; {
@@ -95,6 +95,13 @@ FilteredTableView::createLayout()
     filterColumnLabel->setToolTip(filterColumnComboBox_->toolTip());
   }
 
+  countButton_ = new QtExt::ToolButton; {
+    countButton_->setStyleSheet(SS_TOOLBUTTON_TEXT);
+    countButton_->setToolButtonStyle(Qt::ToolButtonTextOnly);
+    countButton_->setText("0/0");
+    countButton_->setToolTip(tr("Count"));
+  } connect(countButton_, SIGNAL(clicked()), SLOT(popup()));
+
   // Set layout
 
   QGridLayout *layout = new QGridLayout; {
@@ -104,7 +111,8 @@ FilteredTableView::createLayout()
     layout->addWidget(proxyView_, r=0, c=0, 1, 3);
 
     layout->addWidget(filterPatternLabel, ++r, c=0);
-    layout->addWidget(filterPatternLineEdit_, r, ++c, 1, 2);
+    layout->addWidget(filterPatternEdit_, r, ++c, 1, 2);
+    layout->addWidget(countButton_, r, ++c, 1, 1, Qt::AlignRight);
 
     layout->addWidget(filterSyntaxLabel, ++r, c=0);
     layout->addWidget(filterSyntaxComboBox_, r, ++c, 1, 2);
@@ -118,8 +126,10 @@ FilteredTableView::createLayout()
   setLayout(layout);
 
   // Set up connections
-  connect(filterPatternLineEdit_, SIGNAL(textChanged(QString)),
+  connect(filterPatternEdit_, SIGNAL(editTextChanged(QString)),
           SLOT(invalidateFilterRegExp()));
+  connect(filterPatternEdit_, SIGNAL(editTextChanged(QString)),
+          SLOT(invalidateCount()));
   connect(filterSyntaxComboBox_, SIGNAL(currentIndexChanged(int)),
           SLOT(invalidateFilterRegExp()));
   connect(filterColumnComboBox_, SIGNAL(currentIndexChanged(int)),
@@ -141,6 +151,7 @@ FilteredTableView::removeCurrentRow()
   QModelIndex mi = currentIndex();
   if (mi.isValid())
     proxyModel_->removeRow(mi.row());
+  invalidateCount();
 }
 
 void
@@ -151,13 +162,18 @@ void
 FilteredTableView::sortByColumn(int col, Qt::SortOrder order)
 { proxyView_->sortByColumn(col, order); }
 
-// - Slots -
+// - Actions -
+
+void
+FilteredTableView::popup()
+{ filterPatternEdit_->showPopup(); }
 
 void
 FilteredTableView::clear()
 {
   while (sourceModel_->rowCount())
     sourceModel_->removeRow(0);
+  invalidateCount();
 }
 
 void
@@ -168,12 +184,28 @@ FilteredTableView::invalidateFilterRegExp()
         filterSyntaxComboBox_->itemData(
           filterSyntaxComboBox_->currentIndex()).toInt());
 
-  QRegExp regExp(filterPatternLineEdit_->text(), Qt::CaseInsensitive, syntax);
+  QRegExp regExp(filterPatternEdit_->currentText(), Qt::CaseInsensitive, syntax);
   proxyModel_->setFilterRegExp(regExp);
+  invalidateCount();
 }
 
 void
 FilteredTableView::invalidateFilterColumn()
-{ proxyModel_->setFilterKeyColumn(filterColumnComboBox_->currentIndex()); }
+{
+  proxyModel_->setFilterKeyColumn(filterColumnComboBox_->currentIndex());
+  invalidateCount();
+}
+
+void
+FilteredTableView::invalidateCount()
+{
+  int total = sourceModel_->rowCount();
+  int count = proxyModel_->rowCount();
+  countButton_->setText(
+    QString("%1/%2")
+      .arg(QString::number(count))
+      .arg(QString::number(total))
+  );
+}
 
 // EOF

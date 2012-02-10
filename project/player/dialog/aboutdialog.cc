@@ -19,6 +19,13 @@
   #define WINDOW_SIZE   QSize(270, 160)
 #endif // Q_WS_MAC
 
+#define WINDOW_FLAGS ( \
+  Qt::Dialog | \
+  Qt::CustomizeWindowHint | \
+  Qt::WindowTitleHint | \
+  Qt::WindowCloseButtonHint | \
+  Qt::WindowStaysOnTopHint )
+
 QString
 AboutDialog::text()
 {
@@ -52,11 +59,11 @@ AboutDialog::text()
 }
 
 AboutDialog::AboutDialog(QWidget *parent)
-  : Base(parent)
+  : Base(parent, WINDOW_FLAGS)
 {
-#ifdef Q_WS_MAC
-  setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
-#endif // Q_WS_MAC
+//#ifdef Q_WS_MAC
+//  setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
+//#endif // Q_WS_MAC
   UiStyle::globalInstance()->setWindowStyle(this);
   setWindowTitle(TR(T_TITLE_ABOUT));
 

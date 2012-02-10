@@ -26,7 +26,8 @@ using namespace Logger;
   Qt::WindowTitleHint | \
   Qt::WindowSystemMenuHint | \
   Qt::WindowMinMaxButtonsHint | \
-  Qt::WindowCloseButtonHint )
+  Qt::WindowCloseButtonHint | \
+  Qt::WindowStaysOnTopHint)
 
 AnnotationBrowser::AnnotationBrowser(SignalHub *hub, QWidget *parent)
   : Base(parent, WINDOW_FLAGS), hub_(hub), userId_(0), annotationPos_(0), editor_(0)
@@ -304,6 +305,9 @@ AnnotationBrowser::addAnnotation(const Annotation &a)
 #undef FORMAT_LANGUAGE
 #undef FORMAT_FLAGS
 #undef FORMAT_STATUS
+
+  if (isVisible())
+    tableView_->invalidateCount();
 }
 
 void
@@ -326,8 +330,11 @@ void
 AnnotationBrowser::removeAnnotationWithId(qint64 id)
 {
   int row = rowWithId(id);
-  if (row>= 0)
+  if (row >= 0) {
     sourceModel_->removeRow(row);
+    if (isVisible())
+      tableView_->invalidateCount();
+  }
 }
 
 int
@@ -521,8 +528,10 @@ AnnotationBrowser::blockUser()
 void
 AnnotationBrowser::setVisible(bool visible)
 {
-  if (visible)
+  if (visible) {
     invalidateFilters();
+    tableView_->invalidateCount();
+  }
   Base::setVisible(visible);
 }
 
@@ -598,6 +607,7 @@ AnnotationBrowser::setNow(bool t)
       QString::number(annotationPos_);
 
   filterNowModel_->setFilterFixedString(s);
+  tableView_->invalidateCount();
 }
 
 void
@@ -607,6 +617,7 @@ AnnotationBrowser::setMe(bool t)
   if (t)
     s = QString::number(userId_);
   filterMeModel_->setFilterFixedString(s);
+  tableView_->invalidateCount();
 }
 
 void
@@ -616,6 +627,7 @@ AnnotationBrowser::setSubtitle(bool t)
   if (t)
     s = CORE_CMD_SUB;
   filterSubtitleModel_->setFilterFixedString(s);
+  tableView_->invalidateCount();
 }
 
 void

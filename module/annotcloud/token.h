@@ -8,6 +8,7 @@
 #include <QString>
 #include <QMetaType>
 #include <QList>
+#include <QHash>
 
 namespace AnnotCloud {
 
@@ -150,6 +151,18 @@ namespace AnnotCloud {
     bool isRemote() const { return hasSource(); }
 
     void clear() { (*this) = Self(); }
+
+    qint64 hashId() const
+    {
+      if (hasId())
+        return id();
+      else if (hasDigest())
+        return - ((qint64)qHash(digest()) + part());
+      else if (hasSource())
+        return - ((qint64)qHash(source()) + part());
+      else
+        return 0;
+    }
 
     // - Operators -
 

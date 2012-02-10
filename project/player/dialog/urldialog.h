@@ -1,23 +1,22 @@
-#ifndef USERDIALOG_H
-#define USERDIALOG_H
+#ifndef URLDIALOG_H
+#define URLDIALOG_H
 
 // urldialog.h
 // 1/24/2012
 
 #include "module/qtext/dialog.h"
 
-QT_FORWARD_DECLARE_CLASS(QLineEdit)
 QT_FORWARD_DECLARE_CLASS(QToolButton)
+QT_FORWARD_DECLARE_CLASS(QComboBox)
 
 typedef QtExt::Dialog UrlDialogBase;
-
 class UrlDialog : public UrlDialogBase
 {
   Q_OBJECT
   typedef UrlDialog Self;
   typedef UrlDialogBase Base;
 
-  QLineEdit *edit_;
+  QComboBox *edit_;
   QToolButton *urlButton_;
 
 public:
@@ -41,4 +40,4 @@ private:
   void createLayout();
 };
 
-#endif // URLRDIALOG_H
+#endif // URLDIALOG_H

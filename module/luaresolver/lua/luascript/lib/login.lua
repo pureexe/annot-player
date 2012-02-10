@@ -3,8 +3,8 @@
 --[[edit 20110625 for bilibili.tv]]
 --[[edit 20111206 for bilibili.tv]]
 
-require "luascript/lib/lalib"
-require "luascript/loginconfig"
+require "lalib"
+require "loginconfig"
 
 function Login_Bilibili( str_tmp_file )
 	--local str_login_url = "https://secure.bilibili.us/member/index_do.php";
@@ -60,7 +60,8 @@ function Login_Nico( str_tmp_file )
 	local str_login_url = "https://secure.nicovideo.jp/secure/login?site=niconico";
 	local post_str = string.format(
 		"next_url=&mail=%s&password=%s"
-		,encodeUrl(username["nico"]),decrypt(password["nico"]));
+		--,encodeUrl(username["nico"]),decrypt(password["nico"]));
+		,username["nico"],decrypt(password["nico"]));
 	--dbgMessage(post_str);
 	re = postdlFile(str_tmp_file, str_login_url, post_str,
 		"Content-type: application/x-www-form-urlencoded\r\nReferer: https://secure.nicovideo.jp/secure/login_form");

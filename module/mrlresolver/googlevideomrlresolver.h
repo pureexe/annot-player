@@ -17,7 +17,7 @@ public:
     : Base(parent) { }
 
 public:
-  bool match(const QString &href) const; ///< \override
+  bool matchMedia(const QString &href) const; ///< \override
 
 public slots:
   void resolveMedia(const QString &href); ///< \override

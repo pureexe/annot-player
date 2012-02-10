@@ -2,6 +2,19 @@ ChangeLog
 Annot Project
 6/18/2011
 
+2/9/2012	annot.player	0.1.2.7
+        * Support importing annotations from nicovideo.jp.
+          Example URLs:
+            http://www.nicovideo.jp/watch/1310115872
+            http://www.nicovideo.jp/watch/sm16712476
+        * Support bilibili/nicovideo login.
+        * Online video and annotations decoding improved.
+        * User interface improved.
+        * Added history to all input line edits.
+        * Web browser module removed.
+        * Remember last played position, subtitle, and audio track for each movie.
+        * Added option to limit annotation count.
+
 2/4/2012	annot.player	0.1.2.6
         * Fixed a severe bug while openning remote media.
 

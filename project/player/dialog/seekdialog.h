@@ -6,8 +6,7 @@
 
 #include "module/qtext/dialog.h"
 
-// jichi TODO 8/16/2011: Use a number picker rather than line edit?!
-QT_FORWARD_DECLARE_CLASS(QLineEdit)
+QT_FORWARD_DECLARE_CLASS(QComboBox)
 
 typedef QtExt::Dialog SeekDialogBase;
 class SeekDialog : public SeekDialogBase
@@ -16,7 +15,7 @@ class SeekDialog : public SeekDialogBase
   typedef SeekDialog Self;
   typedef SeekDialogBase Base;
 
-  QLineEdit *ssEdit_, *mmEdit_, *hhEdit_;
+  QComboBox *ssEdit_, *mmEdit_, *hhEdit_;
 
 public:
   explicit SeekDialog(QWidget *parent = 0);
@@ -31,7 +30,6 @@ public slots:
 
 protected slots:
   void ok();
-  void cancel();
 
 protected:
   //virtual void mouseDoubleClickEvent(QMouseEvent *event);

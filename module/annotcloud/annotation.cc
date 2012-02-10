@@ -3,7 +3,7 @@
 
 #include "module/annotcloud/annotation.h"
 #include "module/qtext/hash.h"
-#include "module/qtext/crypt.h"
+#include "module/crypt/crypt.h"
 #include <QtCore>
 
 using namespace AnnotCloud;

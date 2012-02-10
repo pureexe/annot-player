@@ -27,6 +27,13 @@
 
 using namespace Logger;
 
+#define WINDOW_FLAGS ( \
+  Qt::Dialog | \
+  Qt::CustomizeWindowHint | \
+  Qt::WindowTitleHint | \
+  Qt::WindowCloseButtonHint | \
+  Qt::WindowStaysOnTopHint )
+
 // - Helpers -
 
 QStringList
@@ -45,11 +52,11 @@ DeviceDialog::devices()
 // - Constructions -
 
 DeviceDialog::DeviceDialog(QWidget *parent)
-  : Base(parent)
+  : Base(parent, WINDOW_FLAGS)
 {
-#ifdef Q_WS_MAC
-  setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
-#endif // Q_WS_MAC
+//#ifdef Q_WS_MAC
+//  setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
+//#endif // Q_WS_MAC
   setWindowTitle(TR(T_TITLE_OPENDEVICE));
   UiStyle::globalInstance()->setWindowStyle(this);
   setContentsMargins(0, 0, 0, 0);

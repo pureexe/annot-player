@@ -7,6 +7,8 @@
 #include <QSettings>
 #include <QStringList>
 #include <QDate>
+#include <QHash>
+#include <utility>
 
 class Settings : protected QSettings
 {
@@ -16,7 +18,9 @@ class Settings : protected QSettings
 
   // - Constructions -
 public:
-  static Self *globalInstance();
+  static Self *globalInstance() { static Self g; return &g; }
+protected:
+  explicit Settings(QObject *parent = 0);
 
   // - Properties -
 public:
@@ -71,7 +75,7 @@ public:
 
   QStringList recentFiles() const;
   void setRecentFiles(const QStringList &files);
-  void clearRecentFiles();
+  //void clearRecentFiles();
 
   QString recentPath() const;
   void setRecentPath(const QString &path);
@@ -85,9 +89,27 @@ public:
   QStringList blockedUserNames() const;
   void setBlockedUserNames(const QStringList &l);
 
-  // - Constructions -
-protected:
-  explicit Settings(QObject *parent = 0);
+  int annotationCountHint() const;
+  void setAnnotationCountHint(int count);
+
+  // - Accounts -
+
+  std::pair<QString, QString> nicovideoAccount();
+  void setNicovideoAccount(const QString &username, const QString &password);
+
+  std::pair<QString, QString> bilibiliAccount();
+  void setBilibiliAccount(const QString &username, const QString &password);
+
+  // - History per token -
+
+  QHash<qint64, qint64> playPosHistory() const;
+  void setPlayPosHistory(const QHash<qint64, qint64> &h);
+
+  QHash<qint64, int> subtitleHistory() const;
+  void setSubtitleHistory(const QHash<qint64, int> &h);
+
+  QHash<qint64, int> audioTrackHistory() const;
+  void setAudioTrackHistory(const QHash<qint64, int> &h);
 };
 
 #endif // SETTINGS_H

@@ -135,4 +135,17 @@ DataManager::updateAnnotationTextWithId(const QString &text, qint64 id)
   }
 }
 
+bool
+DataManager::aliasConflicts(const Alias &input) const
+{
+  if (aliases_.isEmpty() || !input.hasText())
+    return false;
+
+  foreach (const Alias &a, aliases_)
+    if (a.type() == input.type() &&
+        !a.text().compare(input.text(), Qt::CaseInsensitive))
+      return true;
+  return false;
+}
+
 // EOF

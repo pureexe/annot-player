@@ -5,9 +5,9 @@ include(../../config.pri)
 
 HEADERS += \
     $$PWD/actionwithid.h \
+    $$PWD/filedeleter.h \
     $$PWD/combobox.h \
     $$PWD/countdowntimer.h \
-    $$PWD/crypt.h \
     $$PWD/datetime.h \
     $$PWD/dialog.h \
     $$PWD/eventlistener.h \
@@ -23,9 +23,9 @@ HEADERS += \
 
 SOURCES += \
     $$PWD/actionwithid.cc \
+    $$PWD/filedeleter.cc \
     $$PWD/combobox.cc \
     $$PWD/countdowntimer.cc \
-    $$PWD/crypt.cc \
     $$PWD/datetime.cc \
     $$PWD/dialog.cc \
     $$PWD/fontcombobox.cc \

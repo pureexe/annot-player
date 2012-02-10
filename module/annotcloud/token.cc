@@ -2,7 +2,7 @@
 // 8/7/2011
 
 #include "module/annotcloud/token.h"
-#include "module/qtext/crypt.h"
+#include "module/crypt/crypt.h"
 #ifdef USE_MODULE_IOUTIL
   #include "module/ioutil/ioutil.h"
 #endif // USE_MODULE_IOUTIL
@@ -12,7 +12,7 @@
 #define DEBUG "module/annotcloud::token"
 #include "module/debug/debug.h"
 
-#define DIGEST(_bytes)  QtExt::Crypt::md5(_bytes)
+#define DIGEST(_bytes)  Crypt::md5(_bytes)
 enum { DIGEST_SIZE = 10 * 1024 * 1024 }; // 10 MB
 
 using namespace AnnotCloud;

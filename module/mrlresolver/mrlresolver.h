@@ -22,14 +22,15 @@ signals:
   void messageReceived(QString message);
 
   void mediaResolved(MediaInfo mi);
-  void annotResolved(QString suburl);
+  void subtitleResolved(QString suburl);
 
 public:
-  virtual bool match(const QString &href) const = 0;
+  virtual bool matchMedia(const QString &href) const { (void)href; return false; }
+  virtual bool matchSubtitle(const QString &href) const { (void)href; return false; }
 public slots:
-  virtual void resolveMedia(const QString &href) = 0;
+  virtual void resolveMedia(const QString &href)  { (void)href; }
 
-  virtual void resolveAnnot(const QString &href) { (void)href; }
+  virtual void resolveSubtitle(const QString &href) { (void)href; }
 };
 
 #endif // MRLRESOLVER_H

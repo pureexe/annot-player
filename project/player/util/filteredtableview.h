@@ -11,7 +11,6 @@
 
 QT_BEGIN_NAMESPACE
 class QComboBox;
-class QLineEdit;
 class QMenu;
 class QStandardItemModel;
 class QSortFilterProxyModel;
@@ -37,13 +36,15 @@ public:
   QModelIndex currentIndex() const;
   void removeCurrentRow();
 
-  // - Slots -
+  // - Actions -
 public slots:
   void clear();
   void setCurrentColumn(int col);
   void sortByColumn(int col, Qt::SortOrder order);
+  void invalidateCount();
 
-private slots:
+protected slots:
+  void popup();
   void invalidateFilterRegExp();
   void invalidateFilterColumn();
 
@@ -56,9 +57,11 @@ private:
   QSortFilterProxyModel *proxyModel_;
   QTreeView *proxyView_;
 
-  QLineEdit *filterPatternLineEdit_;
+  QComboBox *filterPatternEdit_;
   QComboBox *filterSyntaxComboBox_;
   QComboBox *filterColumnComboBox_;
+
+  QToolButton *countButton_;
 };
 
 #endif // FILTEREDTABLEVIEW_H

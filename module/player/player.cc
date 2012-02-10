@@ -664,6 +664,8 @@ Player::closeMedia()
   Q_ASSERT(isValid());
   if (isMouseEventEnabled())
     stopVoutTimer();
+  if (!isStopped())
+    stop();
 
   impl_->setPaused(false);
   impl_->setSubtitleId();
@@ -808,6 +810,7 @@ void
 Player::stop()
 {
   DOUT("enter");
+  emit stopping();
   if (hasMedia()) {
     impl_->setPaused(false);
     ::libvlc_media_player_stop(impl_->player());

@@ -24,7 +24,7 @@
 PlayerPanel::PlayerPanel(QWidget *parent)
   : Base(parent),
     positionSlider_(0), volumeSlider_(0),
-    playButton_(0), stopButton_(0), openButton_(0), nextFrameButton_(0),
+    playButton_(0), stopButton_(0), nextFrameButton_(0),
     toggleFullScreenModeButton_(0), toggleMiniModeButton_(0), toggleEmbedModeButton_(0), toggleAnnotationButton_(0),
     userButton_(0), positionButton_(0), previousButton_(0), nextButton_(0),
     inputComboBox_(0), prefixComboBox_(0)
@@ -73,7 +73,7 @@ PlayerPanel::volumeSlider()
     } return _button##_; \
   }
 
-  MAKE_BUTTON(openButton, OPEN)
+  //MAKE_BUTTON(openButton, OPEN)
   MAKE_BUTTON(playButton, PLAY)
   MAKE_BUTTON(stopButton, STOP)
   MAKE_BUTTON(nextFrameButton, NEXTFRAME)
@@ -94,7 +94,6 @@ PlayerPanel::inputComboBox()
 {
   if (!inputComboBox_) {
     inputComboBox_ = new InputComboBox(this);
-    inputComboBox_->setStyleSheet(SS_COMBOBOX);
     inputComboBox_->setToolTip(TR(T_TOOLTIP_INPUTLINE));
   } return inputComboBox_;
 }
@@ -104,7 +103,6 @@ PlayerPanel::prefixComboBox()
 {
   if (!prefixComboBox_) {
     prefixComboBox_ = new PrefixComboBox(this);
-    prefixComboBox_->setStyleSheet(SS_COMBOBOX);
     prefixComboBox_->setToolTip(TR(T_TOOLTIP_PREFIXLINE));
     prefixComboBox_->setMaximumWidth(G_PREFIXLINE_MAXWIDTH);
   } return prefixComboBox_;

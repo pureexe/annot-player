@@ -10,13 +10,24 @@
 #include "module/debug/debug.h"
 
 bool
-download(const QString &url, const QString &path, bool zipped, bool async)
+dlget(const QString &path, const QUrl &url, const QString &header, bool zipped, bool async)
 {
-  DOUT("enter: url =" << url << ", path =" << path << ", zipped =" << zipped << ", async =" << async);
-  Downloader d(path, zipped);
-  d.start(QUrl(url), async);
-  bool ret = d.state() != Downloader::Error;
-  DOUT("exit: ret =" << ret << ", state =" << d.state());
+  DOUT("enter: path =" << path << ", url =" << url << ", zipped =" << zipped << ", async =" << async);
+  Downloader dl(path, zipped);
+  dl.get(url, header, async);
+  bool ret = dl.state() != Downloader::Error;
+  DOUT("exit: ret =" << ret << ", state =" << dl.state());
+  return ret;
+}
+
+bool
+dlpost(const QString &path, const QUrl &url, const QByteArray &data, const QString &header, bool zipped, bool async)
+{
+  DOUT("enter: path =" << path << ", url =" << url << ", header =" << header << ", zipped =" << zipped << ", async =" << async);
+  Downloader dl(path, zipped);
+  dl.post(url, data, header, async);
+  bool ret = dl.state() != Downloader::Error;
+  DOUT("exit: ret =" << ret << ", state =" << dl.state());
   return ret;
 }
 

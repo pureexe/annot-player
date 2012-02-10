@@ -5,7 +5,7 @@
 #include "stylesheet.h"
 #include "uistyle.h"
 #include "tr.h"
-#include "lineedit.h"
+#include "comboedit.h"
 #include "module/qtext/toolbutton.h"
 #include <QtGui>
 
@@ -22,7 +22,7 @@ UrlDialog::UrlDialog(QWidget *parent)
   : Base(parent, WINDOW_FLAGS)
 {
   Q_ASSERT(server_);
-  setWindowTitle(tr("Open Media URL"));
+  setWindowTitle(tr("Open URL"));
   UiStyle::globalInstance()->setWindowStyle(this);
 
   createLayout();
@@ -31,11 +31,10 @@ UrlDialog::UrlDialog(QWidget *parent)
 void
 UrlDialog::createLayout()
 {
-  edit_ = new LineEdit; {
-    //edit_->setText("http://");
+  edit_ = new ComboEdit; {
+    edit_->setEditText("http://");
     edit_->setToolTip(tr("Enter local or Internet media URL"));
-  }
-  connect(edit_, SIGNAL(returnPressed()), SLOT(open()));
+  } connect(edit_->lineEdit(), SIGNAL(returnPressed()), SLOT(open()));
 
   urlButton_ = new QtExt::ToolButton; {
     //urlButton_->setText(exampleUrl());
@@ -88,7 +87,7 @@ UrlDialog::createLayout()
     footer->addWidget(pasteButton);
     footer->addWidget(clearButton);
 
-    rows->setContentsMargins(5, 6, 6, 6);
+    rows->setContentsMargins(9, 9, 9, 9);
     //setContentsMargins(0, 0, 0, 0);
   } setLayout(rows);
 
@@ -104,7 +103,7 @@ void
 UrlDialog::open()
 {
   hide();
-  QString url = edit_->text().trimmed();
+  QString url = edit_->currentText().trimmed();
 
   url = autoCompleteUrl(url);
   emit urlEntered(url);
@@ -115,7 +114,7 @@ UrlDialog::paste()
 {
   QClipboard *clipboard = QApplication::clipboard();
   if (clipboard)
-    edit_->setText(clipboard->text());
+    edit_->setEditText(clipboard->text());
 }
 
 QString
@@ -134,11 +133,10 @@ UrlDialog::autoCompleteUrl(const QString &url)
 
 void
 UrlDialog::showExampleUrl()
-{ edit_->setText(urlButton_->text()); }
+{ edit_->setEditText(urlButton_->text()); }
 
 void
 UrlDialog::setExampleUrl(const QString &text)
 { urlButton_->setText(text); }
 
 // EOF
-

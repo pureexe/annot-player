@@ -42,6 +42,10 @@ OsdWindow::OsdWindow(QWidget *parent)
   //connect(poller_, SIGNAL(timeout()), SLOT(repaint()));
 }
 
+void
+OsdWindow::ensureStaysOnTop()
+{ setWindowFlags(windowFlags() | Qt::WindowStaysOnTopHint); }
+
 QtExt::EventListener*
 OsdWindow::eventListener() const
 { return listener_; }

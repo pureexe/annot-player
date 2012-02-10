@@ -111,8 +111,7 @@ main(int argc, char *argv[])
   a.startLoggingDebugMessage();
 #endif // USE_MODE_DEBUG
 
-  Settings *settings = Settings::globalInstance(); // Global settings
-  Q_ASSERT(settings);
+  Settings *settings = Settings::globalInstance();
 
   // Seed global random generator.
   ::srand((uint)::time(0));
@@ -145,12 +144,15 @@ main(int argc, char *argv[])
       QFile::remove(cachedb.filePath());
     if (queuedb.exists())
       QFile::remove(queuedb.filePath());
+
     settings->setVersion(G_VERSION);
   }
 
   // Hashes
   //qDebug() << qHash(QString("\\bookmark"));
   //qDebug() << qHash(QString("\\b"));
+  //qDebug() << qHash(QString("docomo"));
+  //qDebug() << qHash(QString("ue"));
 
   // Load persistant settings
 

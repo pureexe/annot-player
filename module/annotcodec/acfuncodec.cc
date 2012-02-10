@@ -1,4 +1,4 @@
-// acfuncodec.cc
+﻿// acfuncodec.cc
 // 2/4/2012
 
 #include "acfuncodec.h"
@@ -161,8 +161,12 @@ AcFunCodec::parseText(const QString &text)
   DOUT("text =" << text);
   if (text.isEmpty())
     return QString();
-  QString ret = text;
-  //ret.replace("/n", "\n ");
+  QString ret = text.trimmed();
+  if (ret == "/fly")
+    return "\\fly " + QString::fromLocal8Bit("飞");
+  ret.replace("/fly ", "\\fly ", Qt::CaseInsensitive);
+  if (ret.startsWith(QString::fromLocal8Bit("飞")))
+    ret.prepend("\\fly ");
   return ret.trimmed();
 }
 
@@ -219,8 +223,8 @@ AcFunCodec::parseAttribute(const QString &attr)
   ret.setCreateTime(createTime);
 
   // Others
-  if (t.isEmpty())
-    t = CORE_CMD_VERBATIM;
+  //if (t.isEmpty())
+  //  t = CORE_CMD_VERBATIM;
   ret.setText(t);
 
   ret.setLanguage(Traits::Chinese);

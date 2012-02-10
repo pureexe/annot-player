@@ -5,11 +5,19 @@
 #include "defines.h"
 #include "mainwindow.h"
 #include "module/annotcloud/traits.h"
+#include "module/crypt/crypt.h"
+#include "module/crypt/simplecrypt.h"
 #include <QtCore>
 
 // - Settings keys -
 
-#define SK_ORGANIZATION   G_ORGANIZATION
+// See platform specific issue in QSettings manual.
+#ifdef Q_OS_MAC
+  #define SK_ORGANIZATION   G_DOMAIN
+#else
+  #define SK_ORGANIZATION   G_ORGANIZATION
+#endif // Q_OS_MAC
+
 #define SK_APPLICATION    G_APPLICATION
 #define SK_VERSION        "Version"
 
@@ -29,14 +37,20 @@
 #define SK_UPDATEDATE   "UpdateDate"
 #define SK_RECENTPATH   "RecentPath"
 #define SK_AUTOPLAYNEXT "AutoPlayNext"
-#define SK_ANNOTFILTER  "AnnotFilter"
+#define SK_ANNOTFILTER  "AnnotationFilter"
+#define SK_ANNOTCOUNT   "AnnotationCount"
 #define SK_BLOCKEDUSERS "BlockedUsers"
 #define SK_BLOCKEDKEYS  "BlockedKeywords"
+#define SK_NICOACCOUNT  "NicovideoAccount"
+#define SK_BILIACCOUNT  "BilibiliAccount"
+#define SK_PLAYPOSHIST  "PlayPosHistory"
+#define SK_SUBTITLEHIST "SubtitleHistory"
+#define SK_TRACKHIST    "TrackHistory"
 
 #define SK_QUEUEEMPTY   "QueueEmpty"
 
-#define SK_RECENT(_i)   "Recent" #_i
-namespace { enum { RECENT_COUNT = 10 }; }
+//#define SK_RECENT(_i)   "Recent" #_i
+#define SK_RECENT       "Recent"
 
 // - Helpers -
 
@@ -57,16 +71,12 @@ namespace { // anonymous
 
 // - Constructions -
 
-Settings*
-Settings::globalInstance()
-{ static Self global; return &global; }
-
 Settings::Settings(QObject *parent)
   : Base(
       QSettings::NativeFormat, QSettings::UserScope,
       SK_ORGANIZATION, SK_APPLICATION,
       parent)
-{  }
+{ }
 
 // - Properties -
 
@@ -109,19 +119,41 @@ Settings::setUserId(qint64 uid)
 
 QString
 Settings::userName() const
-{ return value(SK_USERNAME).toString(); }
+{
+  QString ret = value(SK_USERNAME).toString();
+  if (ret.isEmpty())
+    return ret;
+  else
+    return Crypt::decrypt(ret);
+}
 
 void
 Settings::setUserName(const QString &userName)
-{ setValue(SK_USERNAME, userName); }
+{
+  if (userName.isEmpty())
+    remove(SK_USERNAME);
+  else
+    setValue(SK_USERNAME, Crypt::encrypt(userName));
+}
 
 QString
 Settings::password() const
-{ return value(SK_PASSWORD).toString(); }
+{
+  QString ret = value(SK_PASSWORD).toString();
+  if (ret.isEmpty())
+    return ret;
+  else
+    return Crypt::decrypt(ret);
+}
 
 void
 Settings::setPassword(const QString &password)
-{ setValue(SK_PASSWORD, password); }
+{
+  if (password.isEmpty())
+    remove(SK_PASSWORD);
+  else
+    setValue(SK_PASSWORD, Crypt::encrypt(password));
+}
 
 QDate
 Settings::updateDate() const
@@ -250,71 +282,78 @@ Settings::setRecentPath(const QString &path)
 QStringList
 Settings::recentFiles() const
 {
-  Q_ASSERT(RECENT_COUNT == G_RECENT_COUNT);
+  QStringList ret = value(SK_RECENT).toStringList();
 
-  QStringList ret;
-  QString
-  r = value(SK_RECENT(0)).toString(); if (!r.isEmpty()) ret.append(r);
-  r = value(SK_RECENT(1)).toString(); if (!r.isEmpty()) ret.append(r);
-  r = value(SK_RECENT(2)).toString(); if (!r.isEmpty()) ret.append(r);
-  r = value(SK_RECENT(3)).toString(); if (!r.isEmpty()) ret.append(r);
-  r = value(SK_RECENT(4)).toString(); if (!r.isEmpty()) ret.append(r);
-  r = value(SK_RECENT(5)).toString(); if (!r.isEmpty()) ret.append(r);
-  r = value(SK_RECENT(6)).toString(); if (!r.isEmpty()) ret.append(r);
-  r = value(SK_RECENT(7)).toString(); if (!r.isEmpty()) ret.append(r);
-  r = value(SK_RECENT(8)).toString(); if (!r.isEmpty()) ret.append(r);
-  r = value(SK_RECENT(9)).toString(); if (!r.isEmpty()) ret.append(r);
+  //QString
+  //r = value(SK_RECENT(0)).toString(); if (!r.isEmpty()) ret.append(r);
+  //r = value(SK_RECENT(1)).toString(); if (!r.isEmpty()) ret.append(r);
+  //r = value(SK_RECENT(2)).toString(); if (!r.isEmpty()) ret.append(r);
+  //r = value(SK_RECENT(3)).toString(); if (!r.isEmpty()) ret.append(r);
+  //r = value(SK_RECENT(4)).toString(); if (!r.isEmpty()) ret.append(r);
+  //r = value(SK_RECENT(5)).toString(); if (!r.isEmpty()) ret.append(r);
+  //r = value(SK_RECENT(6)).toString(); if (!r.isEmpty()) ret.append(r);
+  //r = value(SK_RECENT(7)).toString(); if (!r.isEmpty()) ret.append(r);
+  //r = value(SK_RECENT(8)).toString(); if (!r.isEmpty()) ret.append(r);
+  //r = value(SK_RECENT(9)).toString(); if (!r.isEmpty()) ret.append(r);
 
   if (!ret.isEmpty())
     ret = ::uniqueList(ret);
-
   return ret;
 }
 
-
-void
-Settings::clearRecentFiles()
-{
-  Q_ASSERT(RECENT_COUNT == G_RECENT_COUNT);
-
-  setValue(SK_RECENT(0), QString());
-  setValue(SK_RECENT(1), QString());
-  setValue(SK_RECENT(2), QString());
-  setValue(SK_RECENT(3), QString());
-  setValue(SK_RECENT(4), QString());
-  setValue(SK_RECENT(5), QString());
-  setValue(SK_RECENT(6), QString());
-  setValue(SK_RECENT(7), QString());
-  setValue(SK_RECENT(8), QString());
-  setValue(SK_RECENT(9), QString());
-}
+//void
+//Settings::clearRecentFiles()
+//{
+//  Q_ASSERT(RECENT_COUNT == G_RECENT_COUNT);
+//  remove(SK_RECENT(0));
+//  remove(SK_RECENT(1));
+//  remove(SK_RECENT(2));
+//  remove(SK_RECENT(3));
+//  remove(SK_RECENT(4));
+//  remove(SK_RECENT(5));
+//  remove(SK_RECENT(6));
+//  remove(SK_RECENT(7));
+//  remove(SK_RECENT(8));
+//  remove(SK_RECENT(9));
+//}
 
 void
 Settings::setRecentFiles(const QStringList &l)
 {
-  Q_ASSERT(RECENT_COUNT == G_RECENT_COUNT);
+  if (l.isEmpty())
+    remove(SK_RECENT);
+  else
+    setValue(SK_RECENT, l);
 
-  if (l.isEmpty()) {
-    clearRecentFiles();
-    return;
-  }
-
-  QString
-  r = l.size() <= 0 ? QString() : l[0]; setValue(SK_RECENT(0), r);
-  r = l.size() <= 1 ? QString() : l[1]; setValue(SK_RECENT(1), r);
-  r = l.size() <= 2 ? QString() : l[2]; setValue(SK_RECENT(2), r);
-  r = l.size() <= 3 ? QString() : l[3]; setValue(SK_RECENT(3), r);
-  r = l.size() <= 4 ? QString() : l[4]; setValue(SK_RECENT(4), r);
-  r = l.size() <= 5 ? QString() : l[5]; setValue(SK_RECENT(5), r);
-  r = l.size() <= 6 ? QString() : l[6]; setValue(SK_RECENT(6), r);
-  r = l.size() <= 7 ? QString() : l[7]; setValue(SK_RECENT(7), r);
-  r = l.size() <= 8 ? QString() : l[8]; setValue(SK_RECENT(8), r);
-  r = l.size() <= 9 ? QString() : l[9]; setValue(SK_RECENT(9), r);
+  //QString
+  //r = l.size() <= 0 ? QString() : l[0]; setValue(SK_RECENT(0), r);
+  //r = l.size() <= 1 ? QString() : l[1]; setValue(SK_RECENT(1), r);
+  //r = l.size() <= 2 ? QString() : l[2]; setValue(SK_RECENT(2), r);
+  //r = l.size() <= 3 ? QString() : l[3]; setValue(SK_RECENT(3), r);
+  //r = l.size() <= 4 ? QString() : l[4]; setValue(SK_RECENT(4), r);
+  //r = l.size() <= 5 ? QString() : l[5]; setValue(SK_RECENT(5), r);
+  //r = l.size() <= 6 ? QString() : l[6]; setValue(SK_RECENT(6), r);
+  //r = l.size() <= 7 ? QString() : l[7]; setValue(SK_RECENT(7), r);
+  //r = l.size() <= 8 ? QString() : l[8]; setValue(SK_RECENT(8), r);
+  //r = l.size() <= 9 ? QString() : l[9]; setValue(SK_RECENT(9), r);
 }
 
 void
+Settings::setAnnotationCountHint(int v)
+{ setValue(SK_ANNOTCOUNT, v); }
+
+int
+Settings::annotationCountHint() const
+{ return value(SK_ANNOTCOUNT).toInt(); }
+
+void
 Settings::setBlockedKeywords(const QStringList &l)
-{ setValue(SK_BLOCKEDKEYS, l); }
+{
+  if (l.isEmpty())
+    remove(SK_BLOCKEDKEYS);
+  else
+    setValue(SK_BLOCKEDKEYS, l);
+}
 
 QStringList
 Settings::blockedKeywords() const
@@ -322,10 +361,147 @@ Settings::blockedKeywords() const
 
 void
 Settings::setBlockedUserNames(const QStringList &l)
-{ setValue(SK_BLOCKEDUSERS, l); }
+{
+  if (l.isEmpty())
+    remove(SK_BLOCKEDUSERS);
+  else
+    setValue(SK_BLOCKEDUSERS, l);
+}
 
 QStringList
 Settings::blockedUserNames() const
 { return value(SK_BLOCKEDUSERS).toStringList(); }
+
+// - Accounts -
+
+std::pair<QString, QString>
+Settings::nicovideoAccount()
+{
+  QStringList v = value(SK_NICOACCOUNT).toStringList();
+  if (v.size() != 2)
+    return std::pair<QString, QString>();
+  else {
+    SimpleCrypt c(0);
+    QString username = c.decryptToString(v.first());
+    QString password = c.decryptToString(v.last());
+    return std::make_pair(username, password);
+  }
+}
+
+void
+Settings::setNicovideoAccount(const QString &username, const QString &password)
+{
+  if (username.isEmpty() || password.isEmpty())
+    remove(SK_NICOACCOUNT);
+  else {
+    SimpleCrypt c(0);
+    QStringList v;
+    v.append(c.encryptToString(username));
+    v.append(c.encryptToString(password));
+    setValue(SK_NICOACCOUNT, v);
+  }
+}
+
+std::pair<QString, QString>
+Settings::bilibiliAccount()
+{
+  QStringList v = value(SK_BILIACCOUNT).toStringList();
+  if (v.size() != 2)
+    return std::pair<QString, QString>();
+  else {
+    SimpleCrypt c(0);
+    QString username = c.decryptToString(v.first());
+    QString password = c.decryptToString(v.last());
+    return std::make_pair(username, password);
+  }
+}
+
+void
+Settings::setBilibiliAccount(const QString &username, const QString &password)
+{
+  if (username.isEmpty() || password.isEmpty()) {
+    remove(SK_BILIACCOUNT);
+  } else {
+    SimpleCrypt c(0);
+    QStringList v;
+    v.append(c.encryptToString(username));
+    v.append(c.encryptToString(password));
+    setValue(SK_BILIACCOUNT, v);
+  }
+}
+
+// - Resume -
+
+QHash<qint64, qint64>
+Settings::playPosHistory() const
+{
+  QHash<qint64, qint64> ret;
+  QHash<QString, QVariant> h = value(SK_PLAYPOSHIST).toHash();
+  if (!h.isEmpty())
+    foreach (QString k, h.keys())
+      ret[k.toLongLong()] = h[k].toLongLong();
+  return ret;
+}
+
+void
+Settings::setPlayPosHistory(const QHash<qint64, qint64> &input)
+{
+  if (input.isEmpty())
+    remove(SK_PLAYPOSHIST);
+  else {
+    QHash<QString, QVariant> h;
+    foreach (qint64 k, input.keys())
+      h[QString::number(k)] = QString::number(input[k]);
+    setValue(SK_PLAYPOSHIST, h);
+  }
+}
+
+QHash<qint64, int>
+Settings::subtitleHistory() const
+{
+  QHash<qint64, int> ret;
+  QHash<QString, QVariant> h = value(SK_SUBTITLEHIST).toHash();
+  if (!h.isEmpty())
+    foreach (QString k, h.keys())
+      ret[k.toLongLong()] = h[k].toInt();
+  return ret;
+}
+
+void
+Settings::setSubtitleHistory(const QHash<qint64, int> &input)
+{
+  if (input.isEmpty())
+    remove(SK_SUBTITLEHIST);
+  else {
+    QHash<QString, QVariant> h;
+    foreach (qint64 k, input.keys())
+      h[QString::number(k)] = QString::number(input[k]);
+    setValue(SK_SUBTITLEHIST, h);
+  }
+}
+
+QHash<qint64, int>
+Settings::audioTrackHistory() const
+{
+  QHash<qint64, int> ret;
+  QHash<QString, QVariant> h = value(SK_TRACKHIST).toHash();
+  if (!h.isEmpty())
+    foreach (QString k, h.keys())
+      ret[k.toLongLong()] = h[k].toInt();
+  return ret;
+}
+
+void
+Settings::setAudioTrackHistory(const QHash<qint64, int> &input)
+{
+  if (input.isEmpty())
+    remove(SK_TRACKHIST);
+  else {
+    QHash<QString, QVariant> h;
+    foreach (qint64 k, input.keys())
+      h[QString::number(k)] = QString::number(input[k]);
+    setValue(SK_TRACKHIST, h);
+  }
+}
 
 // EOF

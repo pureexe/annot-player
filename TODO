@@ -1,38 +1,35 @@
 # TODO
 # 6/18/2011
-- only decode suburl not mrls
-  - make whether decode mrl as an option, decode suburl only in luascript
-- display count ot annot in annotbrowser
-- remember last play time for specific token
-- FIXME: stop context menu not working
+CHECKPOINT
 
-- Import nicovideo's comment
-  - finish postdlFile and support for nicovideo
-  - try import nico comments from current video
-
-- An option to download current video
-  - popup agreement
-- FIXME: a wait-signal-notify strategy rather than 5 seconds
-- FIXME: Lua threads crash on exit in Mac
-- able to block specific source/alias
-
-- How to aggregate media?
-  - need a wiki like unique media content descriptor
-    use community power!
-    use wiki-like
-
-# 0.1.2.7
+# 0.1.2.8
+- utilize token_source while select related_aliaes | related_annot
+- able to block specific alias
+- figure out how to set VLC http request header, and http cache
+  so that nicovideo could be played online out of banning
 - gapless playback using lua playlist
   see: cue.lua
   also need time for each part
   see parse function in cue.lua, use start-time, stop-time to set ts
   - FIXME: diff part error in bilibili!
+- add command
+  - screenshots with descriptions to share
+  - make it as diary
+\t annot
+\twitter
+\facebook
+\mixi
+\weibo
+- FIXME: install luascript on Linux
+- FIXME: remove 5 seconds wait time
+  wait until danmaku is solved before start playing
+  and then prevent it is invalidated
+- FIXME: stop context menu not working
 - fixme: youtube/googlvideo crash when openning in recent menu
 
-- change qDebug()<< to qDebug(....)
-
 - DOWNLOAD and TRANSCODE
-  - use jdownloader to directly download in c++
+  - popup agreement
+  - reuse jdownloader to directly download in c++
     http://www.codeproject.com/Articles/22881/How-to-Call-Java-Functions-from-C-Using-JNI
   - use libvlc to merge to single file:
     http://wiki.videolan.org/How_to_Merge_and_Transcode_Multiple_Videos
@@ -42,23 +39,16 @@
 
 - rewrite openMrl logic
 
-- FIXME: live channel echo bug for non-guest user
 - FIXME: minimize restore aero bug in game mode
 - pop up agreement dialog on first launch for youtube/youku/sina...
-- QDesktopServices to openUrl instead of link
 
-- decode nicovideo video
-  - See: NicoVideoJp.java
-    http://flapi.nicovideo.jp/api/getflv/sm16690269
-    http://smile-cln41.nicovideo.jp/smile?m=16690269.29722
-- decode/import nico's annotation -- require authenticated browser with cookies
+- FIXME: live channel echo bug for non-guest user
 
 ## 0.1.3
-
 - How to aggregate media?
-  - create a webbrowser for it?
-  - add search engine?
-  - through sns?
+  - need a wiki like unique media content descriptor
+    use community power!
+    use wiki-like
 
 - UI extended
 

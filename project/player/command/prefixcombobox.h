@@ -4,14 +4,14 @@
 // prefixcombobox.h
 // 9/26/2011
 
-#include "comboboxedit.h"
+#include "annotationcomboedit.h"
 #include <QVector>
 
-class PrefixComboBox : public ComboBoxEdit
+class PrefixComboBox : public AnnotationComboEdit
 {
   Q_OBJECT
   typedef PrefixComboBox Self;
-  typedef ComboBoxEdit Base;
+  typedef AnnotationComboEdit Base;
 
 public:
   explicit PrefixComboBox(QWidget *parent = 0);

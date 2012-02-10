@@ -5,16 +5,25 @@
 // For instance, add "\chat" into popup context menu.
 
 #include "inputcombobox.h"
+#include "module/annotcloud/cmd.h"
 #include <QtGui>
 
 InputComboBox::InputComboBox(QWidget *parent)
   : Base(parent)
 {
-  QStringList l; {
-    l.append(tr("Konichiwa!"));
-    l.append("ノシ");
-  }
-  setDefaultItems(l);
+#define ADD(_cmd)       defaultItems.append(_cmd)
+  ADD("ノシ");
+  ADD("\\em 朝\\red{ミルキ}");
+  ADD("\\cyan だが{\\big\\red 男}だ");
+  ADD(CORE_CMD_COLOR_BACKGROUND "[yellow]" "{背景色}");
+  ADD(CORE_CMD_HTML_FONT "[face:gothic;color:red;size:20]" "{HTMLフォント}");
+  ADD(CORE_CMD_STYLE "[font-family:gothic;text-decoration:underline]" " HTML CSS3");
+  ADD("\\fly 飛~~~~~~~~~~~~~~~~");
+  ADD("\\repeat[5] クンカ\\cyan{クンカ}");
+  ADD("line1\\n\\orange{line2}\\n\\pink{line3}");
+  ADD("\\verbatim \\(>_<)/");
+#undef ADD
+  setMaxVisibleItems(15);
   reset();
 }
 

@@ -47,6 +47,7 @@ public:
 public slots:
   bool updateAnnotationTextWithId(const QString &text, qint64 id);
 
+  void updateAliases(const AliasList &l);
   void updateAnnotations(const AnnotationList &l);
 
   // - Deletion -
@@ -64,6 +65,7 @@ public:
   AnnotationList selectAnnotationsWithTokenId(qint64 tid);
   AliasList selectAliasesWithTokenId(qint64 tid);
   AnnotationList selectRelatedAnnotationsWithTokenId(qint64 tid);
+  AliasList selectRelatedAliasesWithTokenId(qint64 tid);
 
   AliasList selectAliasesWithToken(const Token &token);
   AnnotationList selectAnnotationsWithToken(const Token &token);

@@ -46,6 +46,8 @@ public:
   const AnnotationList &annotations() const { return annots_; }
   bool hasAnnotations() const { return !annots_.isEmpty(); }
 
+  bool aliasConflicts(const Alias &a) const;
+
 public slots:
   void setUser(const User &user);
   void setToken(const Token &token);

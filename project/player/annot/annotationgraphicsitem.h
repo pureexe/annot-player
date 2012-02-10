@@ -38,7 +38,7 @@ class AnnotationGraphicsItem : public QGraphicsTextItem
 
 public:
   enum { AnnotationGraphicsItemType = UserType + 1 };
-  enum Style { FloatStyle = 0, SubtitleStyle, TopStyle, BottomStyle };  // Appear style
+  enum Style { FloatStyle = 0, FlyStyle, SubtitleStyle, TopStyle, BottomStyle };  // Appear style
 
   static void warmUp(); ///< optional, caching fonts on first load
 

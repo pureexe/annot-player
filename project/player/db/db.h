@@ -87,6 +87,7 @@ public:
   AnnotationList selectAnnotations() const;
 
   ///  Return -1 if not annotation id not exist
+  qint64 selectAliasUpdateTimeWithId(qint64 id) const;
   qint64 selectAnnotationUpdateTimeWithId(qint64 id) const;
 
   // - Update -
@@ -111,12 +112,13 @@ public:
   qint64 updateToken(const Token &t)
   { deleteTokenWithId(t.id()); return insertToken(t); }
 
-  qint64 updateAlias(const Alias &a)
-  { deleteAliasWithId(a.id()); return insertAlias(a); }
-
   ///  Insert annotation if not exist, or replace the old one. Return updated aid.
   void updateAnnotation(const Annotation &annot);
   void updateAnnotations(const AnnotationList &l, bool async = false);
+
+  ///  Insert alias if not exist, or replace the old one. Return updated aid.
+  void updateAlias(const Alias &alias);
+  void updateAliases(const AliasList &l, bool async = false);
 };
 
 #endif // DB_H

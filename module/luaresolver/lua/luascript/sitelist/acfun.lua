@@ -13,14 +13,14 @@
 ---[[edit 20111102 for acfun new flashvar embed id]]
 ---[[edit 20111106 for new acfun sub]]
 
-require "luascript/lib/lalib"
+require "lalib"
 
 -- jichi 2/4/2011: replace with permanent name
 --acfun_xml_servername = '124.228.254.234';--'www.sjfan.com.cn';
 acfun_xml_servername = "www.sjfan.com.cn";
 
 --[[parse single acfun url]]
-function getTaskAttribute_acfun ( str_url, str_tmpfile ,str_servername, pDlg)
+function getTaskAttribute_acfun ( str_url, str_tmpfile ,str_servername, pDlg, bSubOnly)
 	if pDlg~=nil then
 		sShowMessage(pDlg, '开始解析..');
 	end
@@ -190,22 +190,25 @@ function getTaskAttribute_acfun ( str_url, str_tmpfile ,str_servername, pDlg)
 	--realurls
 	local int_realurlnum = 0;
 	local tbl_realurls = {};
-	--if str_notsinaurl=="" -- is sina flv
-	if int_foreignlinksite == fls["sina"]
-	then
-		--fetch dynamic url
-		int_realurlnum, tbl_readurls = getRealUrls(str_id, str_tmpfile, pDlg);
-	elseif int_foreignlinksite == fls["qq"]
-	then
-		int_realurlnum, tbl_readurls = getRealUrls_QQ(str_id, str_tmpfile, pDlg);
-	elseif int_foreignlinksite == fls["youku"]
-	then
-		int_realurlnum, tbl_readurls = getRealUrls_youku(str_id, str_tmpfile, pDlg);
-	else
-		int_realurlnum = 1;
-		tbl_readurls = {};
-		tbl_readurls[string.format("%d",0)] = str_notsinaurl;
-	end
+
+    if not bSubOnly then
+	  --if str_notsinaurl=="" -- is sina flv
+	  if int_foreignlinksite == fls["sina"]
+	  then
+	  	--fetch dynamic url
+	  	int_realurlnum, tbl_readurls = getRealUrls(str_id, str_tmpfile, pDlg);
+	  elseif int_foreignlinksite == fls["qq"]
+	  then
+	  	int_realurlnum, tbl_readurls = getRealUrls_QQ(str_id, str_tmpfile, pDlg);
+	  elseif int_foreignlinksite == fls["youku"]
+	  then
+	  	int_realurlnum, tbl_readurls = getRealUrls_youku(str_id, str_tmpfile, pDlg);
+	  else
+	  	int_realurlnum = 1;
+	  	tbl_readurls = {};
+	  	tbl_readurls[string.format("%d",0)] = str_notsinaurl;
+	  end
+    end
 
 	if pDlg~=nil then
 		sShowMessage(pDlg, '完成解析..');

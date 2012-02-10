@@ -18,6 +18,17 @@ class MrlResolverManager : public QObject
 
   QList<MrlResolver*> resolvers_;
 
+  // - Types -
+public:
+  struct Account {
+    QString username, password;
+
+    Account(const QString &name, const QString &pass)
+      : username(name), password(pass) { }
+    void clear() { username.clear(); password.clear(); }
+  };
+
+  // - Construction -
 public:
   enum Resolver { Youtube = 0, GoogleVideo, Youku, Lua, ResolverCount };
 
@@ -26,36 +37,48 @@ public:
 protected:
   explicit MrlResolverManager(QObject *parent = 0);
 
+  // - Signals -
 signals:
   void errorReceived(QString message);
   void messageReceived(QString message);
 
   void mediaResolved(MediaInfo mi);
-  void annotResolved(QString suburl);
+  void subtitleResolved(QString suburl);
 
+  // - Analysis -
 public:
-  int match(const QString &href) const;
+  int matchMedia(const QString &href) const;
+  int matchSubtitle(const QString &href) const;
 
   void resolveMedia(int id, const QString &href);
 
   bool resolveMedia(const QString &href)
   {
-    int r = match(href);
+    int r = matchMedia(href);
     if (r < 0)
       return false;
     resolveMedia(r, href);
     return true;
   }
 
-  void resolveAnnot(int id, const QString &href);
-  bool resolveAnnot(const QString &href)
+  void resolveSubtitle(int id, const QString &href);
+  bool resolveSubtitle(const QString &href)
   {
-    int r = match(href);
+    int r = matchSubtitle(href);
     if (r != Lua)
       return false;
-    resolveAnnot(r, href);
+    resolveSubtitle(r, href);
     return true;
   }
+
+public slots:
+  void setNicovideoAccount(const QString &username = QString(),
+                           const QString &password = QString());
+  void setBilibiliAccount(const QString &username = QString(),
+                          const QString &password = QString());
+public:
+  Account nicovideoAccount() const;
+  Account bilibiliAccount() const;
 };
 
 #endif // MRLRESOLVERMANAGER_H

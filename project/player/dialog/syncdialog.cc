@@ -11,14 +11,21 @@
 
 #define SLOTLINE_MAXWIDTH 150
 
+#define WINDOW_FLAGS ( \
+  Qt::Dialog | \
+  Qt::CustomizeWindowHint | \
+  Qt::WindowTitleHint | \
+  Qt::WindowCloseButtonHint | \
+  Qt::WindowStaysOnTopHint )
+
 // - Constructions -
 
 SyncDialog::SyncDialog(QWidget *parent)
-  : Base(parent), timeSlotIndex_(0)
+  : Base(parent, WINDOW_FLAGS), timeSlotIndex_(0)
 {
-#ifdef Q_WS_MAC
-  setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
-#endif // Q_WS_MAC
+//#ifdef Q_WS_MAC
+//  setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
+//#endif // Q_WS_MAC
   setWindowTitle(TR(T_TITLE_SYNC));
   setContentsMargins(0, 0, 0, 0);
   UiStyle::globalInstance()->setWindowStyle(this);

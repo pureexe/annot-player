@@ -2,7 +2,7 @@
 ---[[by lostangel 20110402]]
 --[[edit lostangel 20110405 add batch code]]
 
-require "luascript/lib/lalib"
+require "lalib"
 
 --[[parse single youku url]]
 function getTaskAttribute_youku ( str_url, str_tmpfile ,str_servername, pDlg)

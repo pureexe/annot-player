@@ -107,7 +107,7 @@ EmbeddedPlayerUi::createLayout()
     row->addWidget(toggleAnnotationButton());
     row->addWidget(nextFrameButton());
     row->addWidget(stopButton());
-    row->addWidget(openButton());
+    //row->addWidget(openButton());
     row->addWidget(previousButton());
     row->addWidget(nextButton());
     row->addWidget(toggleEmbedModeButton());

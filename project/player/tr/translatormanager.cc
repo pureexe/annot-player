@@ -587,6 +587,9 @@ TranslatorManager::translate(int tid) const
   case T_MENUTEXT_CLEARRECENT:  return tr("Clear");
   case T_TIP_CLEARRECENT:       return tr("Clear recent files");
 
+  case T_MENUTEXT_ANNOTATIONLIMIT: return tr("Annot count");
+  case T_TIP_ANNOTATIONLIMIT:      return tr("Hint maximum annotation count");
+
   case T_MENUTEXT_BROWSE:       return tr("Browse");
   case T_TIP_BROWSE:            return tr("Files in the same folder");
 
@@ -604,6 +607,12 @@ TranslatorManager::translate(int tid) const
 
   case T_MENUTEXT_DELETECACHE:  return tr("Remove caches");
   case T_TIP_DELETECACHE:       return tr("Remove offline caches");
+
+  case T_MENUTEXT_SITEACCOUNT:  return tr("Link accounts");
+  case T_TIP_SITEACCOUNT:       return tr("Set accounts for websites");
+
+  case T_MENUTEXT_ENABLEBLACKLIST:  return tr("Enable blacklist");
+  case T_TIP_ENABLEBLACKLIST:       return tr("Enable blacklist");
 
   case T_FILTER_PATTERN:        return tr("Filter pattern");
   case T_FILTER_SYNTAX:         return tr("Filter syntax");
@@ -650,6 +659,12 @@ TranslatorManager::translate(int tid) const
   case T_MAXIMIZE:      return tr("Maximize");
   case T_MINIMIZE:      return tr("Minimize");
   case T_RESTORE:       return tr("Restore");
+
+  case T_HISTORY:       return tr("History");
+  case T_WEBSITE:       return tr("Website");
+
+  case T_URL_NICOVIDEO: return tr("http://nicovideo.jp");
+  case T_URL_BILIBILI:  return tr("http://bilibili.tv");
 
   default:
     qWarning() << "TranslatorManager:translate: Unknown tid =" << tid;

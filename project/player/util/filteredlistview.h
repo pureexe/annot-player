@@ -11,6 +11,7 @@
 
 QT_BEGIN_NAMESPACE
 //class QComboBox;
+class QComboBox;
 class QLineEdit;
 class QMenu;
 class QStandardItemModel;
@@ -34,7 +35,7 @@ signals:
 
   // - Properties -
 public:
-  QLineEdit *lineEdit() const                     { return filterPatternLineEdit_; }
+  QLineEdit *lineEdit() const;
 
   QModelIndex currentIndex() const;
   void removeCurrentRow();
@@ -42,8 +43,10 @@ public:
   // - Slots -
 public slots:
   void clear();
-private slots:
+  void invalidateCount();
+protected slots:
   void invalidateFilterRegExp();
+  void popup();
   //void invalidateFilterColumn();
 
   // - Implementaions
@@ -55,9 +58,11 @@ private:
   QSortFilterProxyModel *proxyModel_;
   QTreeView *proxyView_;
 
-  QLineEdit *filterPatternLineEdit_;
+  QComboBox *filterPatternEdit_;
   //QComboBox *filterSyntaxComboBox_;
   //QComboBox *filterColumnComboBox_;
+
+  QToolButton *countButton_;
 };
 
 #endif // FILTEREDLISTVIEW_H

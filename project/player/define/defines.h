@@ -19,7 +19,7 @@ enum { ALPHA = 0 };
 #define G_PREFIXLINE_MAXWIDTH       100     // TODO: Make this auto-resize instead
 
 // - About -
-#define G_DOMAIN        "me.annot.player"
+#define G_DOMAIN        "annot.me"
 #define G_ORGANIZATION  "Annot"
 #define G_APPLICATION   "Player"
 #define G_VERSION       VERSION
@@ -51,7 +51,7 @@ enum { ALPHA = 0 };
 
 #define G_VOLUME_DELTA      0.05   // 5 %
 
-#define G_RECENT_COUNT      10
+#define G_RECENT_COUNT      20
 
 #define G_ANNOTATION_MAXSIZE 255
 

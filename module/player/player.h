@@ -193,7 +193,6 @@ public slots:
   bool openMediaAsCD(const QString &url);
   void closeMedia();
 
-
   //void setEncoding(const QString &encoding); ///< See \c Encoding for details.
 
   bool openSubtitle(const QString &fileName); ///< Same as \c setSubtitleFromFile
@@ -263,6 +262,7 @@ signals:
   void playing();
   void paused();
   void stopped();
+  void stopping();
   void mediaChanged();  // Actually mediaAdded
   void mediaTitleChanged(const QString &title);
   void mediaClosed();

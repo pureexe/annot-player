@@ -83,7 +83,7 @@ rm -fv webbrowser.dll
 :: compile lua
 
 ::luac -s -o luascript.luac "%SOURCE%"/module/mrlresolver/lua/luascript.lua  || exit 1
-::cp -R "%SOURCE%"/module/mrlresolver/lua/luascript .  || exit 1
+::cp -Rv "%SOURCE%"/module/mrlresolver/lua/luascript .  || exit 1
 ::pushd luascript || exit 1
 ::for %%d in (lib sitelist .) do (
 ::  pushd %%d || exit 1
@@ -91,10 +91,11 @@ rm -fv webbrowser.dll
 ::  popd
 ::)
 ::popd
-cp "%SOURCE%"/module/luaresolver/lua/luascript.lua lua/ || exit 1
-cp -R "%SOURCE%"/module/luaresolver/lua/luascript lua/  || exit 1
-rm -f lua/luascript/*~
-rm -f lua/luascript/*/*~
+set LUA_PATH=lua/luascript
+mkdir -p "%LUA_PATH%" || exit 1
+cp "%SOURCE%"/module/luaresolver/lua/luascript.lua "%LUA_PATH%"/ || exit 1
+cp -v "%SOURCE%"/module/luaresolver/lua/luascript/*.lua "%LUA_PATH%"/  || exit 1
+cp -v "%SOURCE%"/module/luaresolver/lua/luascript/*/*.lua "%LUA_PATH%"/  || exit 1
 
 cd ..
 

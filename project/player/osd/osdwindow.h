@@ -25,6 +25,7 @@ public:
 
 public slots:
   void showInOsdMode();
+  void ensureStaysOnTop();
 
 protected:
   void forward(QEvent *event);

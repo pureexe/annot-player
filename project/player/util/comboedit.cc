@@ -1,90 +1,89 @@
-// comboboxedit.cc
+// comboedit.cc
 // 7/16/2011
 
-#include "comboboxedit.h"
-#include "comboboxeditprivate.h"
-#include "annotationeditor.h"
+#include "comboedit.h"
+#include "comboeditprivate.h"
 #include "uistyle.h"
+#include "stylesheet.h"
 #include "rc.h"
 #include "tr.h"
-#include "annotationeditor.h"
 #include <QtGui>
 
-#define DEBUG "comboboxedit"
+#define DEBUG "comboedit"
 #include "module/debug/debug.h"
 
 // - Constructions -
 
-ComboBoxEdit::ComboBoxEdit(QWidget *parent)
-  : Base(parent), editor_(0)
+ComboEdit::ComboEdit(QWidget *parent)
+  : Base(parent)
+{ init(); }
+
+ComboEdit::ComboEdit(const QStringList &items, QWidget *parent)
+  : Base(parent), defaultItems(items)
+{ init(); }
+
+void
+ComboEdit::init()
 {
   setLineEdit(new ComboBoxLineEdit_);
 
   createActions();
 
+  setStyleSheet(SS_COMBOBOX);
+
+  if (!defaultItems.isEmpty())
+    reset();
+
   setEditable(true);
 }
 
 void
-ComboBoxEdit::createActions()
+ComboEdit::createActions()
 {
 #define MAKE_ACTION(_action, _styleid, _slot) \
   _action = new QAction(QIcon(RC_IMAGE_##_styleid), TR(T_MENUTEXT_##_styleid), this); \
   _action->setToolTip(TR(T_TOOLTIP_##_styleid)); \
   connect(_action, SIGNAL(triggered()), _slot);
 
-  MAKE_ACTION(editAct_, EDIT, SLOT(edit()))
-  MAKE_ACTION(clearAct_, CLEAR, SLOT(reset()))
+  MAKE_ACTION(popupAct, HISTORY, SLOT(popup()))
+  MAKE_ACTION(clearAct, CLEAR, SLOT(reset()))
 
 #undef MAKE_ACTION
 
   // Create menus
-  contextMenu_ = new QMenu(TR(T_TITLE_ANNOTATIONBROWSER), this);
-  UiStyle::globalInstance()->setContextMenuStyle(contextMenu_, true); // persistent = true
-}
-
-
-// - Properties -
-
-void
-ComboBoxEdit::edit()
-{
-  if (!editor_) {
-    editor_ = new AnnotationEditor(this);
-    connect(editor_, SIGNAL(textSaved(QString)), SLOT(setEditText(QString)));
-  }
-  editor_->setText(currentText());
-  editor_->show();
+  contextMenu = new QMenu(TR(T_TITLE_ANNOTATIONBROWSER), this);
+  UiStyle::globalInstance()->setContextMenuStyle(contextMenu, true); // persistent = true
 }
 
 // - Actions -
 
 void
-ComboBoxEdit::reset()
+ComboEdit::reset()
 {
   clear();
-  addItems(defaultItems_);
+  addItems(defaultItems);
   clearEditText();
 }
 
 // - Events -
 
 void
-ComboBoxEdit::contextMenuEvent(QContextMenuEvent *event)
+ComboEdit::contextMenuEvent(QContextMenuEvent *event)
 {
   if (!event)
     return;
 
-  contextMenu_->clear();
+  contextMenu->clear();
 
-  contextMenu_->addAction(editAct_);
-  contextMenu_->addAction(clearAct_);
-  contextMenu_->addSeparator();
+  if (count())
+    contextMenu->addAction(popupAct);
+  contextMenu->addAction(clearAct);
+  contextMenu->addSeparator();
 
   QMenu *scm = lineEdit()->createStandardContextMenu();
-  contextMenu_->addActions(scm->actions());
+  contextMenu->addActions(scm->actions());
 
-  contextMenu_->exec(event->globalPos());
+  contextMenu->exec(event->globalPos());
   delete scm;
   event->accept();
 }
@@ -93,7 +92,7 @@ ComboBoxEdit::contextMenuEvent(QContextMenuEvent *event)
 
 /*
 void
-ComboBoxEdit::keyPressEvent(QKeyEvent *event)
+ComboEdit::keyPressEvent(QKeyEvent *event)
 {
   Q_ASSERT(event);
   // Do not pass escape key to parent.

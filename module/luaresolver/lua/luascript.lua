@@ -19,11 +19,16 @@ end
 function dprint() end;
 function dump() end;
 
--- Modules --
+-- Global variables required by ImageCreator --
+
+username = {};
+password = {};
+
+-- Functions --
 
 printf = print;
 function print() end;
-require "luascript/add";
+require "add";
 
 function sShowMessage() end;
 
@@ -32,12 +37,15 @@ function utf8_to_lua(utf8string)
   return utf8string
 end
 
--- curl(url, path)
+function encrypt(s) return s end
+function decrypt(s) return s end
+
+-- require clib.dlget(url, path)
 function dlFile(filesavepath, fileurl)
-  --return cc.curl(fileurl, filesavepath);
+  --return clib.dlget(fileurl, filesavepath);
   -- FIXME: return value not worked
   os.remove(filesavepath);
-  cc.curl(fileurl, filesavepath);
+  clib.dlget(filesavepath, fileurl);
 --[[
   if not string.match(fileurl, "tp://") then
     return -1;
@@ -54,6 +62,15 @@ function dlFile(filesavepath, fileurl)
   return 0;
 end
 
+-- require clib.dlpost(url, path)
+function postdlFile(filesavepath, posturl, postdata, postheader)
+  --return clib.dlget(fileurl, filesavepath);
+  -- FIXME: return value not worked
+  os.remove(filesavepath);
+  clib.dlpost(filesavepath, posturl, postdata, postheader);
+  return 0;
+end
+
 -- Entry --
 --g_acfpv = nil;
 g_title = nil;
@@ -61,10 +78,9 @@ g_refurl = nil;
 g_mrls = nil;
 g_mrls_size = nil;
 g_suburl = nil;
-function resolve_media(url, tmpnam)
-  --local t = getTaskAttribute("http://www.bilibili.tv/video/av205838/", tmpnam, "acfun.tv");
-  local t = getTaskAttribute(url, tmpnam, "acfun.tv");
-  os.remove(tmpnam);
+function resolve(url, tmpnam, bSubOnly)
+  --local t = getTaskAttribute("http://www.bilibili.tv/video/av205838/", tmpnam, "acfun.tv", bSubOnly);
+  local t = getTaskAttribute(url, tmpnam, "acfun.tv", bSubOnly);
   if t == nil then
     return 1;
   end
@@ -74,14 +90,44 @@ function resolve_media(url, tmpnam)
   --g_acfpv = t["acfpv"];
   g_title = t[p]["descriptor"];
   g_refurl = t[p]["oriurl"];
-  g_mrls = t[p]["realurls"];
-  g_mrls_size = t[p]["realurlnum"];
+  if not bSubOnly then
+    g_mrls = t[p]["realurls"];
+    g_mrls_size = t[p]["realurlnum"];
+  end
   if t[p]["subxmlurl"] ~= nil then
     g_suburl = t[p]["subxmlurl"]["0"];
   end
+  --if not (g_suburl and string.match(g_suburl, "file://")) then
+  --  os.remove(tmpnam);
+  --end
   return 0;
 end
 
+function resolve_media(url, tmpnam)
+  return resolve(url, tmpnam, false);
+end
+
+function resolve_subtitle(url, tmpnam)
+  return resolve(url, tmpnam, true);
+end
+
+function set_account(entry, name, passwd)
+  username[entry] = name;
+  password[entry] = passwd;
+end
+
+g_nicovideo_login = false;
+function set_nicovideo_account(name, passwd)
+  set_account("nico", name, passwd);
+  g_nicovideo_login = true;
+end
+
+g_bilibili_login = false;
+function set_bilibili_account(name, passwd)
+  set_account("bilibili", name, passwd);
+  g_bilibili_login = true;
+end
+  
 --[[
 -- Test --
 function test()
@@ -89,7 +135,7 @@ function test()
   local tbl_re = getTaskAttribute("http://www.bilibili.tv/video/av205838/", tmpnam, "acfun.tv");
   --local tbl_re = getTaskAttributeBatch("http://www.bilibili.tv/video/av55775/", tmpnam, "acfun.tv");
   --local tbl_re = getTaskAttribute("http://v.youku.com/v_show/id_XMzQ3OTc4MTg4.html", tmpnam, "acfun.tv");
-  os.remove(tmpnam);
+  --os.remove(tmpnam);
 
   if tbl_re ~= nil then
     dump(tbl_re);

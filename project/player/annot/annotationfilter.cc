@@ -1,18 +1,15 @@
 // annotationfilter.cc
 // 11/15/2011
 #include "annotationfilter.h"
+#include "datamanager.h"
 #include "module/annotcloud/annotation.h"
 #include "module/annotcloud/traits.h"
 #include <boost/typeof/typeof.hpp>
 #include <QtCore>
+#include <ctime>
+#include <cmath>
 
 using namespace AnnotCloud;
-
-// - Constructions -
-
-AnnotationFilter::AnnotationFilter(QObject *parent)
-  : Base(parent), enabled_(false), languages_(0)
-{ }
 
 // - Properties -
 
@@ -137,6 +134,8 @@ AnnotationFilter::filter(const Annotation &input) const
 {
   if (!enabled_)
     return false;
+  if (dm_->user().id() == input.userId())
+    return false;
 
   // Language filter
   if (!(languages_ & Traits::AnyLanguageBit)) {
@@ -169,7 +168,42 @@ AnnotationFilter::filter(const Annotation &input) const
       if (input.text().contains(k, Qt::CaseInsensitive))
         return true;
 
+  if (annotationCountHint_)
+    return !maybeSignificant(input);
+
   return false;
+}
+
+bool
+AnnotationFilter::maybeSignificant(const Annotation &a) const
+{
+  int total = dm_->annotations().count();
+  if (total < annotationCountHint_)
+    return true;
+  if (a.isBlocked())
+    return false;
+  if (a.isBlessed() || a.isCursed())
+    return true;
+  if (annotationCountHint_ <= 0)
+    return true;
+
+  int r = qrand();
+  // TODO: make time to increase probability here.
+  //qint64 t = a.createTime() / 1000; // seconds
+  //if (t > 0) {
+  //  qint64 current = ::time(0);
+  //  if (t >= current)
+  //    return true;
+  //
+  //  enum { week = 86400 * 7 };
+  //  double p = (double)t/current;
+  //  int delta = total - annotationCountHint_;
+  //  total -=
+  //}
+  if (r % total < annotationCountHint_)
+    return false;
+
+  return true;
 }
 
 // EOF

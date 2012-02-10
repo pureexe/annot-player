@@ -8,16 +8,16 @@
 ---[[note: this version must run with acfunlocalizer 2.600+]]
 
 
-require "luascript/sitelist/acfun"
-require "luascript/sitelist/bilibili"
-require "luascript/sitelist/mikufans"
-require "luascript/sitelist/youku"
-require "luascript/sitelist/qqvideo"
-require "luascript/sitelist/nicovideo"
-require "luascript/sitelist/tudou"
-require "luascript/sitelist/sina"
-require "luascript/customadd"
---require "your site parse script"
+require "customadd"
+-- sitelist
+require "acfun"
+require "bilibili"
+require "mikufans"
+require "youku"
+require "qqvideo"
+require "nicovideo"
+require "tudou"
+require "sina"
 
 --[[
 tbl_re is a table indexed by string from "0" ,"1",...to "n"(tbl_re has n+1 elements).
@@ -45,7 +45,7 @@ there are also 2 funtions for retreive files from internet:
 dlFile(filesavepath, fileurl); //example can be found in every sitelist script
 postdlFile(filesavepath, posturl, postdata, postheader); // example can be found in nicovideo.lua.
 ]]
-function getTaskAttribute ( str_url, str_tmpfile ,str_servername, pDlg)
+function getTaskAttribute ( str_url, str_tmpfile ,str_servername, pDlg, bSubOnly)
 	local tbl_re = {};
 
 	--local tmpstr = encrypt("abcdefgh");
@@ -55,12 +55,12 @@ function getTaskAttribute ( str_url, str_tmpfile ,str_servername, pDlg)
 
 	if string.find(str_url, "acfun.tv", 1, true)~=nil or string.find(str_url, "acfun.cn", 1, true)~=nil or string.find(str_url, --[["220.170.79.109"]]"124.228.254.229", 1, true)~=nil or string.find(str_url, str_servername, 1, true)~=nil
 	then
-		return getTaskAttribute_acfun(str_url, str_tmpfile, str_servername, pDlg);
+		return getTaskAttribute_acfun(str_url, str_tmpfile, str_servername, pDlg, bSubOnly);
 	end
 
 	if string.find(str_url, "bilibili.tv", 1, true)~=nil or string.find(str_url, "bilibili.us", 1, true)~=nil
 	then
-		return getTaskAttribute_bilibili(str_url, str_tmpfile, pDlg);
+		return getTaskAttribute_bilibili(str_url, str_tmpfile, pDlg, true, bSubOnly);
 	end
 
 	if string.find(str_url, "dm.mikufans.cn", 1, true)~=nil or string.find(str_url, "danmaku.us", 1, true)~=nil

@@ -35,7 +35,7 @@ YoukuMrlResolver::YoukuMrlResolver(QObject *parent)
 // - Analysis -
 
 bool
-YoukuMrlResolver::match(const QString &href) const
+YoukuMrlResolver::matchMedia(const QString &href) const
 {
   QString pattern("http://v.youku.com/v_show/id_");
   return href.startsWith(pattern, Qt::CaseInsensitive);

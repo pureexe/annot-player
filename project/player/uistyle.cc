@@ -12,6 +12,8 @@
 #endif // Q_WS_WIN
 #include <QtGui>
 
+//#define USE_THEME_MENU
+
 // - Constructions -
 
 namespace { UiStyle default_; }
@@ -130,6 +132,7 @@ UiStyle::setWindowBackground(QWidget *w, bool persistent)
 void
 UiStyle::setMenuBackground(QMenu *m, bool persistent)
 {
+#ifdef USE_THEME_MENU
   Q_ASSERT(m);
   if (!m)
     return;
@@ -155,6 +158,10 @@ UiStyle::setMenuBackground(QMenu *m, bool persistent)
     if (!menus_.contains(m))
       menus_.append(m);
   }
+#else
+  Q_UNUSED(m);
+  Q_UNUSED(persistent);
+#endif // USE_THEME_MENU
 }
 
 void
@@ -164,9 +171,11 @@ UiStyle::invalidateBackground()
     foreach (QWidget *w, windows_)
       setWindowBackground(w, false); // persistent = false
 
+#ifdef USE_THEME_MENU
   if (!menus_.isEmpty())
     foreach (QMenu *m, menus_)
       setMenuBackground(m, false); // persistent = false
+#endif // USE_THEME_MENU
 }
 
 #ifdef USE_WIN_DWM

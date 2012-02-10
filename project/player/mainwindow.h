@@ -15,11 +15,14 @@
 #include <QUrl>
 #include <QMutex>
 #include <QStringList>
+#include <QHash>
 #include <QFileInfoList>
 
 QT_FORWARD_DECLARE_CLASS(QTimer)
 QT_FORWARD_DECLARE_CLASS(QUrl)
 QT_FORWARD_DECLARE_CLASS(QMimeData)
+
+namespace QtExt { class CountdownTimer; }
 
 // Objects
 class AnnotationFilter;
@@ -58,15 +61,18 @@ class VideoView;
 
 // Dialogs
 class AboutDialog;
+class AnnotationCountDialog;
 class BlacklistView;
 class DeviceDialog;
 class HelpDialog;
 class LiveDialog;
 class LoginDialog;
+class MediaUrlDialog;
 class PickDialog;
 class SeekDialog;
+class SiteAccountView;
+class SubUrlDialog;
 class SyncDialog;
-class UrlDialog;
 class UserView;
 
 // MainWindow
@@ -172,7 +178,7 @@ public slots:
   void openUrl();
   void openAnnotationUrl();
   void openAnnotationUrlFromAliases(const AliasList &l);
-  void openAnnotationUrl(const QString &url);
+  void openAnnotationUrl(const QString &url, bool save = false);
   void openUrl(const QString &url);
   void openProcess();
   void openWindow();
@@ -257,7 +263,9 @@ public slots:
   void setUserViewVisible(bool visible);
 
   void setAnnotationEditorVisible(bool visible);
+
   void setBlacklistViewVisible(bool visible);
+  void showBlacklistView() { setBlacklistViewVisible(true); }
 
   void openInCloudView(const QString &url);
   void openHomePage();
@@ -265,6 +273,8 @@ public slots:
   void showSeekDialog();
   void hideSeekDialog();
   void setSeekDialogVisible(bool visible);
+
+  void setAnnotationCountDialogVisible(bool visible);
 
   void showLiveDialog();
   void hideLiveDialog();
@@ -284,7 +294,10 @@ public slots:
   void setProcessPickDialogVisible(bool visible);
 
   void setBacklogViewVisible(bool visible);
+
+  void setSiteAccountViewVisible(bool visible);
 protected slots:
+  void invalidateSiteAccounts();
   BacklogView *backlogView();
 
   // - User -
@@ -331,6 +344,7 @@ public slots:
   void setToken(const QString &filePath = QString(), bool async = true);
   void invalidateToken(const QString &mrl = QString());
   void submitAlias(const Alias &alias, bool async = true);
+  void submitAliasText(const QString &text, qint32 type = 0, bool async = true);
 
   void blessTokenWithId(qint64 tid, bool async = true);
   void curseTokenWithId(qint64 tid, bool async = true);
@@ -351,7 +365,7 @@ public slots:
 public slots:
   void importAnnotationsFromUrl(const QString &suburl);
 protected slots:
-  void addRemoteAnnotations(const AnnotationList &l, const QString &url);
+  void addRemoteAnnotations(const AnnotationList &l, const QString &url = QString());
   bool registerAnnotationUrl(const QString &suburl);
   void clearAnnotationUrls();
 
@@ -407,6 +421,17 @@ protected slots:
   void invalidateAnnotationSubtitleMenu();
   void invalidateUserMenu();
   void invalidateTrackMenu();
+
+  void rememberPlayPos();
+  void resumePlayPos();
+
+  void rememberSubtitle();
+  void resumeSubtitle();
+
+  void rememberAudioTrack();
+  void resumeAudioTrack();
+
+  void resumeAll();
 
 protected:
   bool isGlobalPosNearEmbeddedPlayer(const QPoint &pos) const;
@@ -516,6 +541,10 @@ private:
   Tray *tray_;
   SignalHub *hub_;
 
+  QtExt::CountdownTimer *resumePlayTimer_,
+                        *resumeSubtitleTimer_,
+                        *resumeAudioTrackTimer_;
+
   QTimer *liveTimer_;
   QTimer *windowStaysOnTopTimer_;
   QStringList annotationUrls_;
@@ -564,6 +593,7 @@ private:
   BacklogView *backlogView_;
 
   AboutDialog *aboutDialog_;
+  AnnotationCountDialog *annotationCountDialog_;
   DeviceDialog *deviceDialog_;
   HelpDialog *helpDialog_;
   LoginDialog *loginDialog_;
@@ -572,8 +602,9 @@ private:
   SeekDialog *seekDialog_;
   SyncDialog *syncDialog_;
   PickDialog *windowPickDialog_;
-  UrlDialog *mediaUrlDialog_;
-  UrlDialog *annotationUrlDialog_;
+  MediaUrlDialog *mediaUrlDialog_;
+  SubUrlDialog *annotationUrlDialog_;
+  SiteAccountView *siteAccountView_;
   UserView *userView_;
 
   QPoint dragPos_;
@@ -590,6 +621,10 @@ private:
   bool recentSourceLocked_;
 
   QStringList playlist_;
+
+  QHash<qint64, qint64> playPosHistory_;
+  QHash<qint64, int> subtitleHistory_;
+  QHash<qint64, int> audioTrackHistory_;
 
   // - Menus and actions -
 
@@ -657,7 +692,9 @@ private:
           *nextAct_,
           *snapshotAct_,
           *toggleAnnotationVisibleAct_,
+          *toggleAnnotationCountDialogVisibleAct_,
           *toggleMenuBarVisibleAct_,
+          *toggleSiteAccountViewVisibleAct_,
           *toggleFullScreenModeAct_,
           *toggleEmbeddedModeAct_,
           *toggleMiniModeAct_,
@@ -694,7 +731,8 @@ private:
           *toggleSyncDialogVisibleAct_,
           *toggleUserViewVisibleAct_,
           *toggleBlacklistViewVisibleAct_,
-          *toggleBacklogViewVisibleAct_;
+          *toggleBacklogViewVisibleAct_,
+          *toggleAnnotationFilterEnabledAct_;
 
   QAction *toggleUserAnonymousAct_;
 

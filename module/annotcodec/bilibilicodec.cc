@@ -180,8 +180,8 @@ BilibiliCodec::parseAttribute(const QString &attr)
   ret.setId(-rowId);
 
   // Others
-  if (t.isEmpty())
-    t = CORE_CMD_VERBATIM;
+  //if (t.isEmpty())
+  //  t = CORE_CMD_VERBATIM;
   ret.setText(t);
 
   ret.setLanguage(Traits::Chinese);

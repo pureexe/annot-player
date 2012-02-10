@@ -6,6 +6,7 @@
 #include "tr.h"
 #include "stylesheet.h"
 #include "lineedit.h"
+#include "comboedit.h"
 #include "logger.h"
 #include "module/annotcloud/user.h"
 #include "module/qtext/toolbutton.h"
@@ -14,23 +15,31 @@
 using namespace AnnotCloud;
 using namespace Logger;
 
+#define WINDOW_FLAGS ( \
+  Qt::Dialog | \
+  Qt::CustomizeWindowHint | \
+  Qt::WindowTitleHint | \
+  Qt::WindowCloseButtonHint | \
+  Qt::WindowStaysOnTopHint )
+
 // - Constructions -
 
 LoginDialog::LoginDialog(QWidget *parent)
-  : Base(parent)
+  : Base(parent, WINDOW_FLAGS)
 {
-#ifdef Q_WS_MAC
-  setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
-#endif // Q_WS_MAC
+//#ifdef Q_WS_MAC
+//  setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
+//#endif // Q_WS_MAC
   setWindowTitle(TR(T_TITLE_LOGIN));
   UiStyle::globalInstance()->setWindowStyle(this);
   setContentsMargins(0, 0, 0, 0);
 
   // Widgets
 
-  userNameEdit_ = new LineEdit; {
+  QStringList defaultUsers(User::guest().name());
+  userNameEdit_ = new ComboEdit(defaultUsers); {
     userNameEdit_->setToolTip(TR(T_TOOLTIP_USERNAME));
-    userNameEdit_->setText(TR(T_DEFAULT_USERNAME));
+    userNameEdit_->setEditText(TR(T_DEFAULT_USERNAME));
   }
 
   passwordEdit_ = new LineEdit; {
@@ -77,9 +86,10 @@ LoginDialog::LoginDialog(QWidget *parent)
     grid->addWidget(passwordLabel, ++r, c=0);
     grid->addWidget(passwordEdit_, r, ++c);
 
-    grid->addWidget(loginButton, ++r, c=0);
-    grid->addWidget(cancelButton, r, ++c);
+    grid->addWidget(loginButton, ++r, c=0, Qt::AlignHCenter);
+    grid->addWidget(cancelButton, r, ++c, Qt::AlignHCenter);
 
+    //grid->setContentsMargins(6, 6, 6, 6);
   } setLayout(grid);
 
   setTabOrder(userNameEdit_, passwordEdit_);
@@ -99,7 +109,7 @@ LoginDialog::LoginDialog(QWidget *parent)
   // Connections
   connect(cancelButton, SIGNAL(clicked()), SLOT(hide()));
   connect(loginButton, SIGNAL(clicked()), SLOT(login()));
-  connect(userNameEdit_, SIGNAL(returnPressed()), SLOT(login()));
+  connect(userNameEdit_->lineEdit(), SIGNAL(returnPressed()), SLOT(login()));
   connect(passwordEdit_, SIGNAL(returnPressed()), SLOT(login()));
 
   // Shortcuts
@@ -114,7 +124,7 @@ LoginDialog::LoginDialog(QWidget *parent)
 
 QString
 LoginDialog::userName() const
-{ return userNameEdit_->text(); }
+{ return userNameEdit_->currentText(); }
 
 QString
 LoginDialog::password() const
@@ -122,19 +132,22 @@ LoginDialog::password() const
 
 void
 LoginDialog::setUserName(const QString &userName)
-{ userNameEdit_->setText(userName); }
+{ userNameEdit_->setEditText(userName); }
 
 void
 LoginDialog::setPassword(const QString &password)
 { passwordEdit_->setText(password); }
 
-// - Slots -
+// - Actions -
 
 void
 LoginDialog::login()
 {
   QString name = userName();
   QString pass = password();
+
+  if (!name.trimmed().isEmpty() && !containsUserName(name))
+    userNameEdit_->addItem(name);
 
   if (!User::isValidName(name)) {
     warn(TR(T_ERROR_BAD_USERNAME));
@@ -150,6 +163,15 @@ LoginDialog::login()
 
   hide();
   emit loginRequested(name, pass);
+}
+
+bool
+LoginDialog::containsUserName(const QString &name) const
+{
+  for (int i = 0; i < userNameEdit_->count(); i++)
+    if (userNameEdit_->itemText(i) == name)
+      return true;
+  return false;
 }
 
 // EOF

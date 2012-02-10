@@ -32,7 +32,9 @@
 #include "tr.h"
 #include "translatormanager.h"
 #include "settings.h"
+#include "siteaccountview.h"
 #include "aboutdialog.h"
+#include "annotationcountdialog.h"
 #include "blacklistview.h"
 #include "backlogview.h"
 #include "devicedialog.h"
@@ -42,7 +44,8 @@
 #include "seekdialog.h"
 #include "livedialog.h"
 #include "syncdialog.h"
-#include "urldialog.h"
+#include "mediaurldialog.h"
+#include "suburldialog.h"
 #include "userview.h"
 #include "defines.h"
 #ifdef USE_MODE_SIGNAL
@@ -56,6 +59,7 @@
 #include "module/mrlresolver/mrlresolvermanager.h"
 #include "module/translator/translator.h"
 #include "module/qtext/actionwithid.h"
+#include "module/qtext/countdowntimer.h"
 #include "module/qtext/datetime.h"
 #include "module/qtext/htmltag.h"
 #ifdef USE_MODULE_SERVERAGENT
@@ -103,6 +107,7 @@
 #include <boost/tuple/tuple.hpp>
 #include <boost/typeof/typeof.hpp>
 #include <cstring>
+#include <ctime>
 
 #ifndef USE_MODULE_SERVERAGENT
   #error "Module server agent is indispensible."
@@ -185,9 +190,9 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags f)
     liveInterval_(DEFAULT_LIVE_INTERVAL),
     tray_(0),
     annotationEditor_(0), blacklistView_(0), cloudView_(0), commentView_(0), backlogView_(0),
-    aboutDialog_(0), deviceDialog_(0), helpDialog_(0), loginDialog_(0),
+    aboutDialog_(0), annotationCountDialog_(0), deviceDialog_(0), helpDialog_(0), loginDialog_(0),
     processPickDialog_(0), seekDialog_(0), syncDialog_(0), windowPickDialog_(0),
-    mediaUrlDialog_(0), annotationUrlDialog_(0), userView_(0),
+    mediaUrlDialog_(0), annotationUrlDialog_(0), siteAccountView_(0), userView_(0),
     dragPos_(BAD_POS), tokenType_(0), recentSourceLocked_(false),
     themeMenu_(0),
     setThemeToDefaultAct_(0), setThemeToRandomAct_(0),
@@ -260,6 +265,10 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags f)
 
   recentPath_ = settings->recentPath();
 
+  playPosHistory_ = settings->playPosHistory();
+  subtitleHistory_ = settings->subtitleHistory();
+  audioTrackHistory_= settings->audioTrackHistory();
+
   setTranslateEnabled(settings->isTranslateEnabled());
   setSubtitleOnTop(settings->isSubtitleOnTop());
 
@@ -268,8 +277,31 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags f)
   annotationFilter_->setEnabled(settings->isAnnotationFilterEnabled());
   annotationFilter_->setBlockedTexts(settings->blockedKeywords());
   annotationFilter_->setBlockedUserAliases(settings->blockedUserNames());
+  //annotationFilter_->setAnnotationCountHint(settings->annotationCountHint());
+  {
+    qint64 l = settings->annotationLanguages();
+    annotationFilter_->setLanguages(l);
 
-  invalidateAnnotationLanguages();
+    toggleAnnotationLanguageToAnyAct_->setChecked(l & Traits::AnyLanguageBit);
+    toggleAnnotationLanguageToUnknownAct_->setChecked(l & Traits::UnknownLanguageBit);
+    toggleAnnotationLanguageToEnglishAct_->setChecked(l & Traits::EnglishBit);
+    toggleAnnotationLanguageToJapaneseAct_->setChecked(l & Traits::JapaneseBit);
+    toggleAnnotationLanguageToChineseAct_->setChecked(l & Traits::ChineseBit);
+    toggleAnnotationLanguageToKoreanAct_->setChecked(l & Traits::KoreanBit);
+    invalidateAnnotationLanguages();
+  }
+
+  {
+    MrlResolverManager *rm = MrlResolverManager::globalInstance();
+    std::pair<QString, QString>
+    a = settings->nicovideoAccount();
+    if (!a.first.isEmpty() && !a.second.isEmpty())
+      rm->setNicovideoAccount(a.first, a.second);
+
+    a = settings->bilibiliAccount();
+    if (!a.first.isEmpty() && !a.second.isEmpty())
+      rm->setBilibiliAccount(a.first, a.second);
+  }
 
 #ifdef Q_WS_WIN
   //connect(annotationView_, SIGNAL(posChanged()), SLOT(ensureWindowOnTop()));
@@ -368,7 +400,7 @@ MainWindow::createComponents()
 //    SS_END
 //  );
 //#endif // Q_WS_MAC
-  annotationFilter_ = new AnnotationFilter(this);
+  annotationFilter_ = new AnnotationFilter(dataManager_, this);
   annotationView_->setFilter(annotationFilter_);
 
   //QLayout *layout = new QStackedLayout(osdWindow_);
@@ -444,6 +476,15 @@ MainWindow::createComponents()
 
   liveTimer_ = new QTimer(this);
   connect(liveTimer_, SIGNAL(timeout()), SLOT(updateLiveAnnotations()));
+
+  resumePlayTimer_ = new QtExt::CountdownTimer;
+  resumePlayTimer_->setInterval(3000); // 3 seconds
+
+  resumeSubtitleTimer_ = new QtExt::CountdownTimer;
+  resumeSubtitleTimer_->setInterval(3000); // 3 seconds
+
+  resumeAudioTrackTimer_ = new QtExt::CountdownTimer;
+  resumeAudioTrackTimer_->setInterval(3000); // 3 seconds
 }
 
 void
@@ -460,6 +501,15 @@ MainWindow::createConnections()
   connect(player_, SIGNAL(trackNumberChanged(int)), SLOT(invalidateMediaAndPlay()));
   connect(player_, SIGNAL(endReached()), SLOT(autoPlayNext()));
   connect(player_, SIGNAL(mediaTitleChanged(QString)), SLOT(setWindowTitle(QString)));
+
+  // Resume
+  connect(player_, SIGNAL(stopping()), SLOT(rememberPlayPos()));
+  connect(player_, SIGNAL(stopping()), SLOT(rememberSubtitle()));
+  connect(player_, SIGNAL(stopping()), SLOT(rememberAudioTrack()));
+
+  connect(resumePlayTimer_, SIGNAL(timeout()), SLOT(resumePlayPos()));
+  connect(resumeSubtitleTimer_, SIGNAL(timeout()), SLOT(resumeSubtitle()));
+  connect(resumeAudioTrackTimer_, SIGNAL(timeout()), SLOT(resumeAudioTrack()));
 
   // Hub
   connect(hub_, SIGNAL(playModeChanged(SignalHub::PlayMode)), SLOT(updatePlayMode()));
@@ -552,7 +602,7 @@ MainWindow::createConnections()
   connect(dataManager_, SIGNAL(tokenChanged(Token)), tokenView_, SLOT(setToken(Token)));
   connect(dataManager_, SIGNAL(aliasesChanged(AliasList)), tokenView_, SLOT(setAliases(AliasList)));
   connect(dataManager_, SIGNAL(aliasesChanged(AliasList)), SLOT(openAnnotationUrlFromAliases(AliasList)));
-  connect(tokenView_, SIGNAL(aliasSubmitted(Alias)), dataManager_, SLOT(addAlias(Alias)));
+  //connect(tokenView_, SIGNAL(aliasSubmitted(Alias)), dataManager_, SLOT(addAlias(Alias)));
 
   connect(dataManager_, SIGNAL(aliasRemovedWithId(qint64)), dataServer_, SLOT(deleteAliasWithId(qint64)));
   connect(dataManager_, SIGNAL(annotationRemovedWithId(qint64)), dataServer_, SLOT(deleteAnnotationWithId(qint64)));
@@ -716,7 +766,7 @@ MainWindow::createConnections()
   // MRL resolver
   MrlResolverManager *rm = MrlResolverManager::globalInstance();
   connect(rm, SIGNAL(mediaResolved(MediaInfo)), SLOT(openRemoteMedia(MediaInfo)));
-  connect(rm, SIGNAL(annotResolved(QString)), SLOT(importAnnotationsFromUrl(QString)));
+  connect(rm, SIGNAL(subtitleResolved(QString)), SLOT(importAnnotationsFromUrl(QString)));
   connect(rm, SIGNAL(messageReceived(QString)), SLOT(log(QString)));
   connect(rm, SIGNAL(errorReceived(QString)), SLOT(warn(QString)));
 
@@ -778,6 +828,7 @@ MainWindow::createActions()
   MAKE_ACTION(deleteCachesAct_, DELETECACHE,   this, SLOT(deleteCaches()))
   MAKE_TOGGLE(toggleFullScreenModeAct_, FULLSCREEN, hub_,       SLOT(setFullScreenWindowMode(bool)))
   MAKE_TOGGLE(toggleMenuBarVisibleAct_, SHOWMENUBAR, menuBar(), SLOT(setVisible(bool)))
+  MAKE_TOGGLE(toggleAnnotationCountDialogVisibleAct_, ANNOTATIONLIMIT, this, SLOT(setAnnotationCountDialogVisible(bool)))
   MAKE_TOGGLE(toggleEmbeddedModeAct_, EMBED,    hub_,           SLOT(setEmbeddedPlayerMode(bool)))
   MAKE_TOGGLE(toggleMiniModeAct_, MINI,         hub_,           SLOT(setMiniPlayerMode(bool)))
   MAKE_TOGGLE(toggleLiveModeAct_, LIVE,         hub_,           SLOT(setLiveTokenMode(bool)))
@@ -790,6 +841,7 @@ MainWindow::createActions()
   MAKE_TOGGLE(toggleUserAnonymousAct_,  ANONYMOUS,       this,         SLOT(setUserAnonymous(bool)))
   MAKE_TOGGLE(toggleUserViewVisibleAct_, USER,          this,         SLOT(setUserViewVisible(bool)))
   MAKE_TOGGLE(toggleBlacklistViewVisibleAct_, BLACKLIST,   this,    SLOT(setBlacklistViewVisible(bool)))
+  MAKE_TOGGLE(toggleAnnotationFilterEnabledAct_, ENABLEBLACKLIST,   annotationFilter_,    SLOT(setEnabled(bool)))
   MAKE_TOGGLE(toggleBacklogViewVisibleAct_, BACKLOG,   this,    SLOT(setBacklogViewVisible(bool)))
   MAKE_TOGGLE(toggleLoginDialogVisibleAct_, LOGINDIALOG, this,         SLOT(setLoginDialogVisible(bool)))
   MAKE_TOGGLE(toggleWindowPickDialogVisibleAct_,  WINDOWPICKDIALOG,  this,         SLOT(setWindowPickDialogVisible(bool)))
@@ -797,6 +849,7 @@ MainWindow::createActions()
   MAKE_TOGGLE(toggleSeekDialogVisibleAct_,  SEEKDIALOG,  this,         SLOT(setSeekDialogVisible(bool)))
   MAKE_TOGGLE(toggleLiveDialogVisibleAct_,  LIVEDIALOG,  this,         SLOT(setLiveDialogVisible(bool)))
   MAKE_TOGGLE(toggleSyncDialogVisibleAct_,  SYNCDIALOG,  this,         SLOT(setSyncDialogVisible(bool)))
+  MAKE_TOGGLE(toggleSiteAccountViewVisibleAct_, SITEACCOUNT, this, SLOT(setSiteAccountViewVisible(bool)))
   MAKE_TOGGLE(toggleAnnotationBrowserVisibleAct_, ANNOTATIONBROWSER, annotationBrowser_, SLOT(setVisible(bool)))
   MAKE_TOGGLE(toggleAnnotationEditorVisibleAct_, ANNOTATIONEDITOR, this, SLOT(setAnnotationEditorVisible(bool)))
   MAKE_TOGGLE(toggleTokenViewVisibleAct_, TOKENVIEW, tokenView_, SLOT(setVisible(bool)))
@@ -866,7 +919,7 @@ MainWindow::createActions()
   MAKE_TOGGLE(toggleAnnotationLanguageToJapaneseAct_, JAPANESE,this, SLOT(invalidateAnnotationLanguages()))
   MAKE_TOGGLE(toggleAnnotationLanguageToChineseAct_, CHINESE, this, SLOT(invalidateAnnotationLanguages()))
   MAKE_TOGGLE(toggleAnnotationLanguageToKoreanAct_, KOREAN, this, SLOT(invalidateAnnotationLanguages()))
-  MAKE_TOGGLE(toggleAnnotationLanguageToUnknownAct_, UNKNOWNLANGUAGE, this,SLOT(invalidateAnnotationLanguages()))
+  MAKE_TOGGLE(toggleAnnotationLanguageToUnknownAct_, UNKNOWNLANGUAGE, this, SLOT(invalidateAnnotationLanguages()))
   MAKE_TOGGLE(toggleAnnotationLanguageToAnyAct_, ANYLANGUAGE, this,SLOT(invalidateAnnotationLanguages()))
 
   MAKE_ACTION(showMaximizedAct_,        MAXIMIZE,       this,    SLOT(showMaximized()))
@@ -1400,9 +1453,7 @@ void
 MainWindow::openUrl()
 {
   if (!mediaUrlDialog_) {
-    mediaUrlDialog_ = new UrlDialog(this);
-    mediaUrlDialog_->setWindowTitle(tr("Open media from URL"));
-    mediaUrlDialog_->setExampleUrl(tr("http://www.youtube.com/watch?v=-DJqnomZoLk"));
+    mediaUrlDialog_ = new MediaUrlDialog(this);
     connect(mediaUrlDialog_, SIGNAL(urlEntered(QString)), SLOT(openUrl(QString)));
   }
   mediaUrlDialog_->show();
@@ -1412,10 +1463,8 @@ void
 MainWindow::openAnnotationUrl()
 {
   if (!annotationUrlDialog_) {
-    annotationUrlDialog_ = new UrlDialog(this);
-    annotationUrlDialog_->setWindowTitle(tr("Import annotations from URL"));
-    annotationUrlDialog_->setExampleUrl(tr("http://www.bilibili.tv/video/av55775/"));
-    connect(annotationUrlDialog_, SIGNAL(urlEntered(QString)), SLOT(openAnnotationUrl(QString)));
+    annotationUrlDialog_ = new SubUrlDialog(this);
+    connect(annotationUrlDialog_, SIGNAL(urlEntered(QString,bool)), SLOT(openAnnotationUrl(QString,bool)));
   }
   annotationUrlDialog_->show();
 }
@@ -1430,13 +1479,15 @@ MainWindow::openAnnotationUrlFromAliases(const AliasList &l)
 }
 
 void
-MainWindow::openAnnotationUrl(const QString &url)
+MainWindow::openAnnotationUrl(const QString &url, bool save)
 {
   log(tr("analyzing URL ...") + " " + url);
   if (registerAnnotationUrl(url)) {
-    bool ok = MrlResolverManager::globalInstance()->resolveAnnot(url);
+    bool ok = MrlResolverManager::globalInstance()->resolveSubtitle(url);
     if (!ok)
       warn(tr("failed to resolve URL") + ": " + url);
+    else if (save)
+      submitAliasText(url, Alias::AT_Url);
   }
 }
 
@@ -1446,7 +1497,6 @@ MainWindow::openUrl(const QString &url)
   if (MrlResolverManager::globalInstance()->resolveMedia(url))
     log(tr("analyzing URL ...") + " " + url);
   else {
-      qDebug()<<33333;
     if (isRemoteMrl(url))
       openMrl(url, false); // checkPath = false
     else
@@ -2333,6 +2383,17 @@ MainWindow::hideLoginDialog()
 { setLoginDialogVisible(false); }
 
 void
+MainWindow::setAnnotationCountDialogVisible(bool visible)
+{
+  if (!annotationCountDialog_) {
+    annotationCountDialog_ = new AnnotationCountDialog(dataManager_, this);
+    connect(annotationCountDialog_, SIGNAL(countChanged(int)), annotationFilter_, SLOT(setAnnotationCountHint(int)));
+    annotationCountDialog_->setCount(annotationFilter_->annotationCountHint());
+  }
+  annotationCountDialog_->setVisible(visible);
+}
+
+void
 MainWindow::setLoginDialogVisible(bool visible)
 {
   if (!loginDialog_) {
@@ -2404,6 +2465,38 @@ MainWindow::setAnnotationEditorVisible(bool visible)
     connect(annotationEditor_, SIGNAL(textSaved(QString)), SLOT(eval(QString)));
   }
   annotationEditor_->setVisible(visible);
+}
+
+void
+MainWindow::invalidateSiteAccounts()
+{
+  if (!siteAccountView_)
+    return;
+  log(tr("site accounts updated"));
+  MrlResolverManager *rm = MrlResolverManager::globalInstance();
+  rm->setNicovideoAccount(siteAccountView_->nicovideoAccount().username,
+                          siteAccountView_->nicovideoAccount().password);
+  rm->setBilibiliAccount(siteAccountView_->bilibiliAccount().username,
+                         siteAccountView_->bilibiliAccount().password);
+}
+
+void
+MainWindow::setSiteAccountViewVisible(bool visible)
+{
+  if (!siteAccountView_) {
+    siteAccountView_ = new SiteAccountView(this);
+    connect(siteAccountView_, SIGNAL(accountChanged()), SLOT(invalidateSiteAccounts()));
+
+    std::pair<QString, QString>
+    a = Settings::globalInstance()->nicovideoAccount();
+    if (!a.first.isEmpty() && !a.second.isEmpty())
+      siteAccountView_->setNicovideoAccount(a.first, a.second);
+
+    a = Settings::globalInstance()->bilibiliAccount();
+    if (!a.first.isEmpty() && !a.second.isEmpty())
+      siteAccountView_->setBilibiliAccount(a.first, a.second);
+  }
+  siteAccountView_->setVisible(visible);
 }
 
 void
@@ -2543,11 +2636,43 @@ MainWindow::setProcessPickDialogVisible(bool visible)
 // - Annotations -
 
 void
+MainWindow::submitAliasText(const QString &text, qint32 type, bool async)
+{
+  if (!server_->isConnected() && server_->isAuthorized()) {
+    warn(tr("please log in to save alias online") + ": " + text);
+    return;
+  }
+  const Token &t = dataManager_->token();
+  if (!t.hasId() && !t.hasDigest()) {
+    warn(tr("alias not saved for unknown media token") + ": " + text);
+    return;
+  }
+  log(tr("saving alias ...") + ": " + text);
+  Alias a;
+  a.setTokenId(t.id());
+  a.setTokenDigest(t.digest());
+  a.setTokenPart(t.part());
+
+  a.setText(text);
+  a.setType(type);
+  a.setUserId(server_->user().id());
+  a.setLanguage(server_->user().language());
+  a.setUpdateTime(::time(0));
+  tokenView_->addAlias(a);
+  submitAlias(a, async);
+}
+
+void
 MainWindow::submitAlias(const Alias &input, bool async)
 {
   DOUT("enter: async =" << async << ", text =" << input.text());
   if (disposed_) {
     DOUT("exit: returned from disposed branch");
+    return;
+  }
+  if (dataManager_->aliasConflicts(input)) {
+    warn(tr("similar alias already exists") + ": " + input.text());
+    DOUT("exit: alias conflics");
     return;
   }
   if (input.type() == Alias::AT_Url) {
@@ -2564,15 +2689,17 @@ MainWindow::submitAlias(const Alias &input, bool async)
     return;
   }
 
+  dataManager_->addAlias(input);
+
   DOUT("inetMutex locking");
   inetMutex_.lock();
   DOUT("inetMutex locked");
 
-  Alias a = input;
-  //bool id = server_->submitAlias(a);
-  dataServer_->submitAlias(a);
+  qint64 id = dataServer_->submitAlias(input);
+  Q_UNUSED(id);
+  DOUT("alias id =" << id);
   //if (id)
-    log(tr("alias saved") + ": " + a.text());
+    log(tr("alias saved") + ": " + input.text());
   //else
   //  warn(tr("failed to update alias text") + ": " + a.text());
 
@@ -2651,6 +2778,16 @@ MainWindow::invalidateToken(const QString &mrl)
     dataManager_->removeAliases();
     annotationView_->invalidateAnnotations();
   }
+
+  QTimer::singleShot(0, this, SLOT(resumeAll()));
+}
+
+void
+MainWindow::resumeAll()
+{
+  resumeAudioTrackTimer_->start(3); // 3 times
+  resumePlayTimer_->start(3); // 3 times
+  resumeSubtitleTimer_->start(3); // 3 times
 }
 
 void
@@ -3484,9 +3621,18 @@ MainWindow::invalidateContextMenu()
      }
 #endif // USE_MODE_SIGNAL
 
-    if (hub_->isMediaTokenMode() && player_->hasMedia()) {
+    {
       contextMenu_->addSeparator();
+      toggleSiteAccountViewVisibleAct_->setChecked(siteAccountView_ && siteAccountView_->isVisible());
+      int count = annotationFilter_->annotationCountHint();
+      QString text = count <= 0 ? TR(T_MENUTEXT_SITEACCOUNT) :
+        QString("%1 (%2)").arg(TR(T_MENUTEXT_SITEACCOUNT))
+                          .arg(QString::number(count));
+      toggleSiteAccountViewVisibleAct_->setText(text);
+      contextMenu_->addAction(toggleSiteAccountViewVisibleAct_);
+    }
 
+    if (hub_->isMediaTokenMode() && player_->hasMedia()) {
       contextMenu_->addAction(openAnnotationUrlAct_);
 
       // Subtitle menu
@@ -3565,12 +3711,9 @@ MainWindow::invalidateContextMenu()
   // Basic control
   contextMenu_->addSeparator();
   if (!hub_->isMediaTokenMode() || player_->hasMedia()) {
-    playMenu_->clear();
+    contextMenu_->addAction(isPlaying() ? pauseAct_ : playAct_);
 
-    if (!isPlaying())
-      playMenu_->addAction(playAct_);
-    else
-      playMenu_->addAction(pauseAct_);
+    playMenu_->clear();
 
     // jichi 11/18/2011: Removed from play menu only in order to save space ....
     //if (hub_->isMediaTokenMode())
@@ -3617,26 +3760,37 @@ MainWindow::invalidateContextMenu()
     }
   }
 
+  // Annotation filter
+  {
+    contextMenu_->addSeparator();
+
+    toggleAnnotationFilterEnabledAct_->setChecked(annotationFilter_->isEnabled());
+    contextMenu_->addAction(toggleAnnotationFilterEnabledAct_);
+    if (annotationFilter_->isEnabled()) {
+      toggleBlacklistViewVisibleAct_->setChecked(toggleAnnotationFilterEnabledAct_ && toggleAnnotationFilterEnabledAct_->isVisible());
+      contextMenu_->addAction(toggleBlacklistViewVisibleAct_);
+
+      toggleAnnotationCountDialogVisibleAct_->setChecked(annotationCountDialog_ && annotationCountDialog_->isVisible());
+      contextMenu_->addAction(toggleAnnotationCountDialogVisibleAct_ );
+
+      contextMenu_->addMenu(annotationLanguageMenu_);
+    }
+  }
+
   // Annotations
   {
     contextMenu_->addSeparator();
 
-    toggleBacklogViewVisibleAct_->setChecked(backlogView_ && backlogView_->isVisible());
-    contextMenu_->addAction(toggleBacklogViewVisibleAct_);
-
     toggleAnnotationVisibleAct_->setChecked(annotationView_ && annotationView_->isVisible());
     contextMenu_->addAction(toggleAnnotationVisibleAct_ );
+
+    toggleBacklogViewVisibleAct_->setChecked(backlogView_ && backlogView_->isVisible());
+    contextMenu_->addAction(toggleBacklogViewVisibleAct_);
 
     bool t = toggleAnnotationVisibleAct_->isChecked();
 
     toggleBlacklistViewVisibleAct_->setEnabled(t);
     toggleBlacklistViewVisibleAct_->setChecked(blacklistView_ && blacklistView_->isVisible());
-    contextMenu_->addAction(toggleBlacklistViewVisibleAct_);
-
-    if (annotationFilter_->isEnabled()) {
-      annotationLanguageMenu_->setEnabled(t);
-      contextMenu_->addMenu(annotationLanguageMenu_);
-    }
 
     if (t)
       invalidateAnnotationSubtitleMenu();
@@ -4015,6 +4169,8 @@ MainWindow::closeEvent(QCloseEvent *event)
   settings->setAnnotationFilterEnabled(annotationFilter_->isEnabled());
   settings->setBlockedKeywords(annotationFilter_->blockedTexts());
   settings->setBlockedUserNames(annotationFilter_->blockedUserAliases());
+  settings->setAnnotationLanguages(annotationFilter_->languages());
+  //settings->setAnnotationCountHint(annotationFilter_->annotationCountHint());
 
   settings->setSubtitleColor(subtitleColor());
 
@@ -4029,6 +4185,13 @@ MainWindow::closeEvent(QCloseEvent *event)
   settings->setAutoPlayNext(isAutoPlayNext());
 
   settings->setLive(hub_->isLiveTokenMode());
+
+  if (siteAccountView_) {
+    settings->setNicovideoAccount(siteAccountView_->nicovideoAccount().username,
+                                  siteAccountView_->nicovideoAccount().password);
+    settings->setBilibiliAccount(siteAccountView_->bilibiliAccount().username,
+                                 siteAccountView_->bilibiliAccount().password);
+  }
 
   // Wait for thread pool
 #ifdef USE_WIN_PICKER
@@ -4058,6 +4221,10 @@ MainWindow::closeEvent(QCloseEvent *event)
   //if (parentWidget())
   //  parentWidget()->hide();
 
+  settings->setPlayPosHistory(playPosHistory_);
+  settings->setSubtitleHistory(subtitleHistory_);
+  settings->setAudioTrackHistory(audioTrackHistory_);
+
   if (QThreadPool::globalInstance()->activeThreadCount()) {
 #if QT_VERSION >= 0x040800
     // wait for at most 5 seconds ant kill all threads
@@ -4079,7 +4246,9 @@ MainWindow::closeEvent(QCloseEvent *event)
 //  AnnotationCodecManager::globalInstance()->setParent(this);
 //#endif // Q_OS_MAC
 
+#ifdef Q_OS_WIN
   QTimer::singleShot(0, qApp, SLOT(quit())); // ensure quit app and clean up zombie threads
+#endif // Q_OS_WIN
   Base::closeEvent(event);
 
   emit windowClosed();
@@ -4118,6 +4287,9 @@ MainWindow::setWindowOnTop(bool t)
       else
         show();
     }
+
+    // FIXME: make it work in Windows
+    //osdWindow_->ensureStaysOnTop();
 
     if (t)
       log(tr("always on top enabled"));
@@ -4571,26 +4743,25 @@ MainWindow::login(const QString &userName, const QString &encryptedPassword, boo
       cache_->updateUser(server_->user());
 
     // Languages
-    switch (server_->user().language()) {
-    case Traits::Japanese:
-      toggleAnnotationLanguageToJapaneseAct_->setChecked(true);
-      break;
-    case Traits::Chinese:
-      toggleAnnotationLanguageToChineseAct_->setChecked(true);
-      break;
-    case Traits::Korean:
-      toggleAnnotationLanguageToKoreanAct_->setChecked(true);
-      break;
-    case Traits::UnknownLanguage:
-      toggleAnnotationLanguageToUnknownAct_->setChecked(true);
-      break;
-    case Traits::English:
-    case Traits::AnyLanguage:
-    default:
-      toggleAnnotationLanguageToEnglishAct_->setChecked(true);
-    }
-    invalidateAnnotationLanguages();
-
+    //switch (server_->user().language()) {
+    //case Traits::Japanese:
+    //  toggleAnnotationLanguageToJapaneseAct_->setChecked(true);
+    //  break;
+    //case Traits::Chinese:
+    //  toggleAnnotationLanguageToChineseAct_->setChecked(true);
+    //  break;
+    //case Traits::Korean:
+    //  toggleAnnotationLanguageToKoreanAct_->setChecked(true);
+    //  break;
+    //case Traits::UnknownLanguage:
+    //  toggleAnnotationLanguageToUnknownAct_->setChecked(true);
+    //  break;
+    //case Traits::English:
+    //case Traits::AnyLanguage:
+    //default:
+    //  toggleAnnotationLanguageToEnglishAct_->setChecked(true);
+    //}
+    //invalidateAnnotationLanguages();
 
     QDate today = QDate::currentDate();
     if (Settings::globalInstance()->updateDate() != today) {
@@ -4949,7 +5120,6 @@ MainWindow::invalidateAnnotationLanguages()
   }
 
   annotationFilter_->setLanguages(languages);
-  Settings::globalInstance()->setAnnotationLanguages(languages);
 }
 
 // - Language -
@@ -5442,7 +5612,8 @@ MainWindow::setBrowsedFile(const QString &filePath)
 
   int id = 0;
   foreach (QFileInfo f, browsedFiles_) {
-    BOOST_AUTO(a, new QtExt::ActionWithId(id++, f.fileName(), browseMenu_));
+    QString text = QString::number(id) + ". " + f.fileName();
+    BOOST_AUTO(a, new QtExt::ActionWithId(id++, text, browseMenu_));
     if (f.fileName() == fi.fileName()) {
 #ifdef Q_WS_X11
       a->setCheckable(true);
@@ -5632,7 +5803,7 @@ MainWindow::addRemoteAnnotations(const AnnotationList &l, const QString &url)
     annots.append(a);
   }
   if (!annots.isEmpty()) {
-    QString msg = QString("%1 (" HTML_STYLE_OPEN(color:red) "+%2" HTML_STYLE_CLOSE() ", %3)")
+    QString msg = QString("%1 :" HTML_STYLE_OPEN(color:red) "+%2" HTML_STYLE_CLOSE() ", %3")
       .arg(tr("annotations found"))
       .arg(QString::number(annots.size()))
       .arg(url);
@@ -5697,6 +5868,197 @@ MainWindow::shortenText(const QString &text)
 bool
 MainWindow::isRemoteMrl(const QString& mrl)
 { return mrl.contains("tp://", Qt::CaseInsensitive); }
+
+// - Resume -
+
+void
+MainWindow::rememberPlayPos()
+{
+  DOUT("enter");
+  enum { margin = 90 * 1000 }; // 1.5min
+  if (player_->hasMedia()) {
+    DOUT("hasMedia = true");
+    qint64 pos = player_->time();
+    DOUT("pos =" << pos);
+    if (pos <= margin) { // 1.5min
+      DOUT("exit: pos too small");
+      return;
+    }
+    qint64 len = player_->mediaLength();
+    DOUT("length =" << len);
+    if (pos >= len - margin) {
+      DOUT("exit: pos too large");
+      return;
+    }
+
+    qint64 hash = dataManager_->token().hashId();
+    DOUT("hash =" << hash);
+    if (!hash) {
+      DOUT("exit: no hash");
+      return;
+    }
+
+    if (playPosHistory_.size() > 100) {
+      // maximum play pos count to remember
+      int i = qrand() % playPosHistory_.size();
+      qint64 k = playPosHistory_.keys()[i];
+      playPosHistory_.remove(k);
+    }
+    playPosHistory_[hash] = pos;
+  }
+  DOUT("exit");
+}
+
+void
+MainWindow::resumePlayPos()
+{
+  DOUT("enter");
+  if (player_->hasMedia() && !player_->isStopped()) {
+    DOUT("hasMedia = true");
+    resumePlayTimer_->stop();
+    if (player_->time() > 20 * 1000) { // 20 seconds, user manually seeked
+      DOUT("exit: user manually seeked");
+      return;
+    }
+    qint64 hash = dataManager_->token().hashId();
+    DOUT("hash =" << hash);
+    if (!hash) {
+      DOUT("exit: no hash");
+      return;
+    }
+
+    qint64 pos = 0;
+    if (playPosHistory_.contains(hash))
+      pos = playPosHistory_[hash];
+    DOUT("pos =" << pos);
+    if (pos > 0 && pos < player_->mediaLength()) {
+      log(tr("resuming last play") + ": " + QtExt::msecs2time(pos).toString("hh:mm:ss"));
+      pos -= 5000; // seek back 5 seconds
+      seek(pos);
+    }
+  }
+  DOUT("exit");
+}
+
+void
+MainWindow::rememberSubtitle()
+{
+  DOUT("enter");
+  if (player_->hasMedia() && player_->subtitleCount() > 1) {
+    DOUT("hasMedia = true");
+    int id = player_->subtitleId();
+    DOUT("id =" << id);
+    if (id < 0) {
+      DOUT("exit: invalid id");
+      return;
+    }
+
+    qint64 hash = dataManager_->token().hashId();
+    DOUT("hash =" << hash);
+    if (!hash) {
+      DOUT("exit: no hash");
+      return;
+    }
+
+    if (subtitleHistory_.size() > 100) {
+      // maximum play pos count to remember
+      int i = qrand() % subtitleHistory_.size();
+      qint64 k = subtitleHistory_.keys()[i];
+      subtitleHistory_.remove(k);
+    }
+    subtitleHistory_[hash] = id;
+  }
+  DOUT("exit");
+}
+
+void
+MainWindow::resumeSubtitle()
+{
+  DOUT("enter");
+  if (player_->hasMedia() && player_->subtitleCount() > 1) {
+    DOUT("hasMedia = true");
+    resumeSubtitleTimer_->stop();
+    qint64 hash = dataManager_->token().hashId();
+    DOUT("hash =" << hash);
+    if (!hash) {
+      DOUT("exit: no hash");
+      return;
+    }
+
+    int id = 0;
+    if (playPosHistory_.contains(hash))
+      id = playPosHistory_[hash];
+    DOUT("id =" << id);
+    if (id >= 0 && id < player_->subtitleCount() &&
+        id != player_->subtitleId()) {
+      if (id > 0)
+        log(tr("loading last subtitle") + ": " +
+            player_->subtitleDescriptions()[id]);
+      player_->setSubtitleId(id);
+    }
+  }
+  DOUT("exit");
+}
+
+void
+MainWindow::rememberAudioTrack()
+{
+  DOUT("enter");
+  if (player_->hasMedia() && player_->audioTrackCount() > 1) {
+    DOUT("hasMedia = true");
+    int id = player_->audioTrackId();
+    DOUT("id =" << id);
+    if (id < 0) {
+      DOUT("exit: invalid id");
+      return;
+    }
+
+    qint64 hash = dataManager_->token().hashId();
+    DOUT("hash =" << hash);
+    if (!hash) {
+      DOUT("exit: no hash");
+      return;
+    }
+
+    if (audioTrackHistory_.size() > 100) {
+      // maximum play pos count to remember
+      int i = qrand() % audioTrackHistory_.size();
+      qint64 k = audioTrackHistory_.keys()[i];
+      audioTrackHistory_.remove(k);
+    }
+    audioTrackHistory_[hash] = id;
+  }
+  DOUT("exit");
+}
+
+void
+MainWindow::resumeAudioTrack()
+{
+  DOUT("enter");
+  if (player_->hasMedia() && player_->audioTrackCount() > 1) {
+    DOUT("hasMedia = true");
+    resumeSubtitleTimer_->stop();
+    qint64 hash = dataManager_->token().hashId();
+    DOUT("hash =" << hash);
+    if (!hash) {
+      DOUT("exit: no hash");
+      return;
+    }
+
+    int id = 0;
+    if (playPosHistory_.contains(hash))
+      id = playPosHistory_[hash];
+    DOUT("id =" << id);
+    if (id >= 0 && id < player_->audioTrackCount()
+        && id != player_->audioTrackId()) {
+      if (id > 0)
+        log(tr("loading last audio track") + ": " +
+            player_->audioTrackDescriptions()[id]);
+      player_->setAudioTrackId(id);
+    }
+  }
+  DOUT("exit");
+}
 
 // EOF
 

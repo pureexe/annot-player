@@ -15,6 +15,6 @@ SOURCES += \
 
 OTHER_FILES += $$PWD/lua/luascript.lua
 
-#QT      += core
+QT      += core network
 
 # EOF

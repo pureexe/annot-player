@@ -914,6 +914,51 @@ ServerProxy::selectAliasesWithTokenId(qint64 tid)
   return ret;
 }
 
+AliasList
+ServerProxy::selectRelatedAliasesWithTokenId(qint64 tid)
+{
+  DOUT("enter: tid =" << tid);
+  AliasList ret;
+
+  tns__selectRelatedMediaAliasesWithTokenId request;
+  request.arg0 = tid;
+
+  tns__selectRelatedMediaAliasesWithTokenIdResponse response;
+  mutex_.lock();
+  int err = proxy_->selectRelatedMediaAliasesWithTokenId(&request, &response);
+  mutex_.unlock();
+  if (err) {
+    DOUT("soap error, err =" << err);
+    emit soapError(err);
+    DOUT("exit");
+    return ret;
+  }
+
+  if (!response.return_.empty())
+    foreach (tns__mediaAlias *p, response.return_)
+      if (p) {
+        Alias a;
+        a.setStatus(p->status);
+        a.setFlags(p->flags);
+        a.setId(p->id);
+        a.setTokenId(p->tokenId);
+        a.setUserId(p->userId);
+        a.setType(p->type);
+        a.setLanguage(p->language);
+        if (p->text)
+          a.setText(QString::fromStdString(*p->text));
+        a.setUpdateTime(p->updateTime);
+        a.setBlessedCount(p->blessedCount);
+        a.setCursedCount(p->cursedCount);
+        a.setBlockedCount(p->blockedCount);
+
+        ret.append(a);
+      }
+
+  DOUT("exit: count =" << ret.size());
+  return ret;
+}
+
 AnnotationList
 ServerProxy::selectAnnotationsWithTokenId(qint64 tid)
 {

@@ -2,6 +2,7 @@
 // 1/25/2012
 
 #include "mrlresolvermanager.h"
+#include "mrlresolver.h"
 #include "youtubemrlresolver.h"
 #include "googlevideomrlresolver.h"
 #include "youkumrlresolver.h"
@@ -22,7 +23,7 @@ MrlResolverManager::MrlResolverManager(QObject *parent)
     connect(r, SIGNAL(errorReceived(QString)), SIGNAL(errorReceived(QString))); \
     connect(r, SIGNAL(messageReceived(QString)), SIGNAL(messageReceived(QString))); \
     connect(r, SIGNAL(mediaResolved(MediaInfo)), SIGNAL(mediaResolved(MediaInfo))); \
-    connect(r, SIGNAL(annotResolved(QString)), SIGNAL(annotResolved(QString))); \
+    connect(r, SIGNAL(subtitleResolved(QString)), SIGNAL(subtitleResolved(QString))); \
   } resolvers_.append(r);
 
   ADD(YoutubeMrlResolver)
@@ -35,10 +36,19 @@ MrlResolverManager::MrlResolverManager(QObject *parent)
 // - Analysis -
 
 int
-MrlResolverManager::match(const QString &href) const
+MrlResolverManager::matchMedia(const QString &href) const
 {
   for (int i = 0; i < resolvers_.size(); i++)
-    if (resolvers_[i]->match(href))
+    if (resolvers_[i]->matchMedia(href))
+      return i;
+  return -1;
+}
+
+int
+MrlResolverManager::matchSubtitle(const QString &href) const
+{
+  for (int i = 0; i < resolvers_.size(); i++)
+    if (resolvers_[i]->matchSubtitle(href))
       return i;
   return -1;
 }
@@ -55,14 +65,54 @@ MrlResolverManager::resolveMedia(int id, const QString &href)
 }
 
 void
-MrlResolverManager::resolveAnnot(int id, const QString &href)
+MrlResolverManager::resolveSubtitle(int id, const QString &href)
 {
   if (id < 0 || id > resolvers_.size()) {
     Q_ASSERT(0);
     DOUT("illegal state: resolver id out of bounds");
     return;
   }
-  resolvers_[id]->resolveAnnot(href);
+  resolvers_[id]->resolveSubtitle(href);
+}
+
+// - Account -
+
+void
+MrlResolverManager::setNicovideoAccount(const QString &userName, const QString &password)
+{
+  LuaMrlResolver *r = dynamic_cast<LuaMrlResolver*>(resolvers_[Lua]);
+  Q_ASSERT(r);
+  if (userName.isEmpty() || password.isEmpty())
+    r->clearNicovideoAccount();
+  else
+    r->setNicovideoAccount(userName, password);
+}
+
+void
+MrlResolverManager::setBilibiliAccount(const QString &userName, const QString &password)
+{
+  LuaMrlResolver *r = dynamic_cast<LuaMrlResolver*>(resolvers_[Lua]);
+  Q_ASSERT(r);
+  if (userName.isEmpty() || password.isEmpty())
+    r->clearBilibiliAccount();
+  else
+    r->setBilibiliAccount(userName, password);
+}
+
+MrlResolverManager::Account
+MrlResolverManager::nicovideoAccount() const
+{
+  LuaMrlResolver *r = dynamic_cast<LuaMrlResolver*>(resolvers_[Lua]);
+  Q_ASSERT(r);
+  return Account(r->nicovideoUsername(), r->nicovideoPassword());
+}
+
+MrlResolverManager::Account
+MrlResolverManager::bilibiliAccount() const
+{
+  LuaMrlResolver *r = dynamic_cast<LuaMrlResolver*>(resolvers_[Lua]);
+  Q_ASSERT(r);
+  return Account(r->bilibiliUsername(), r->bilibiliPassword());
 }
 
 // EOF

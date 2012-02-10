@@ -3,8 +3,6 @@
 
 // rc.h
 // 7/15/2011
-#include <QtGlobal>
-
 #define RC_PREFIX_IMAGE ":/images/"
 #define RC_IMAGE_NULL   ""
 
@@ -24,13 +22,8 @@
 
 // - Backgrounds -
 
-#ifdef Q_OS_MAC
-  #define RC_IMAGE_AERO           RC_PREFIX_IMAGE "aero_mac.png"
-  #define RC_IMAGE_AERO_PREVIEW   RC_PREFIX_IMAGE "aero_mac_thumbnail.png"
-#else
-  #define RC_IMAGE_AERO           RC_PREFIX_IMAGE "aero.png"
-  #define RC_IMAGE_AERO_PREVIEW   RC_PREFIX_IMAGE "aero_thumbnail.png"
-#endif // Q_OS_MAC
+#define RC_IMAGE_AERO           RC_PREFIX_IMAGE "aero_mac.png"
+#define RC_IMAGE_AERO_PREVIEW   RC_PREFIX_IMAGE "aero_mac_thumbnail.png"
 
 #define RC_IMAGE_LINEEDIT       RC_PREFIX_IMAGE "lineedit.png"
 #define RC_IMAGE_TEXTEDIT       RC_PREFIX_IMAGE "textedit.png"
@@ -217,6 +210,7 @@
 #define RC_IMAGE_PREVIOUSSECTION RC_IMAGE_PREVIOUS
 #define RC_IMAGE_NEXTSECTION     RC_IMAGE_NEXT
 
+#define RC_IMAGE_ENABLEBLACKLIST      RC_IMAGE_NULL
 #define RC_IMAGE_BLACKLIST      RC_IMAGE_NULL
 #define RC_IMAGE_BACKLOG        RC_IMAGE_NULL
 #define RC_IMAGE_SECTION        RC_IMAGE_NULL
@@ -300,6 +294,7 @@
 #define RC_IMAGE_COMMENTVIEW    RC_IMAGE_NULL
 #define RC_IMAGE_CLOUDVIEW      RC_IMAGE_NULL
 #define RC_IMAGE_SIGNALVIEW     RC_IMAGE_NULL
+#define RC_IMAGE_SITEACCOUNT    RC_IMAGE_NULL
 
 #define RC_IMAGE_EDIT           RC_IMAGE_NULL
 #define RC_IMAGE_HIDE           RC_IMAGE_NULL
@@ -332,9 +327,12 @@
 
 #define RC_IMAGE_TRANSLATE      RC_IMAGE_NULL
 
+#define RC_IMAGE_ANNOTATIONLIMIT RC_IMAGE_NULL
+
 #define RC_IMAGE_OPENINWEBBROWSER RC_IMAGE_NULL
 
 #define RC_IMAGE_CLEAR          RC_IMAGE_NULL
+#define RC_IMAGE_HISTORY        RC_IMAGE_NULL
 
 #define RC_IMAGE_RECENT         RC_IMAGE_NULL
 #define RC_IMAGE_RECENTFILE     RC_IMAGE_NULL

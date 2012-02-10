@@ -3,7 +3,6 @@
 
 // acfuncodec.h
 // 2/4/2012
-// TODO: split this file into bilibili/acfun two versions
 
 #include "annotationcodec.h"
 #include <QByteArray>
@@ -28,8 +27,8 @@ public:
   explicit AcFunCodec(QObject *parent = 0);
 
 public:
-  bool match(const QString &url) const; ///< \virtual
-  void fetch(const QString &url); ///< \virtual
+  virtual bool match(const QString &url) const; ///< \override
+  virtual void fetch(const QString &url); ///< \override
 
   static AnnotationList parseDocument(const QByteArray &data, Format f = (Format)0)
   {

@@ -8,7 +8,7 @@ cd "$PREFIX"  || exit 1
 ## environment
 
 COLOR=orange
-VERSION=0.1.2.6
+VERSION=0.1.2.7
 DMG_SIZE=140m
 
 TARGET="Annot Player"
@@ -164,13 +164,11 @@ done
 
 ## copy luascript
 
-#LUAPATH="$APP_MACOS/lua"
-LUAPATH=$APP_MACOS
-mkdir "$LUAPATH"|| exit 1
+LUAPATH="$APP_MACOS/lua"
+test -e "$LUAPATH" || mkdir "$LUAPATH"|| exit 1
 cp "$APP_SRC"/module/luaresolver/lua/luascript.lua "$LUAPATH"/ || exit 1
-cp -R "$APP_SRC"/module/luaresolver/lua/luascript "$LUAPATH"/  || exit 1
-rm -f "$LUAPATH"/luascript/*~
-rm -f "$LUAPATH"/luascript/*/*~
+cp -R "$APP_SRC"/module/luaresolver/lua/luascript/*.lua "$LUAPATH"/  || exit 1
+cp -R "$APP_SRC"/module/luaresolver/lua/luascript/*/*.lua "$LUAPATH"/  || exit 1
 
 ## deploy macports libs
 

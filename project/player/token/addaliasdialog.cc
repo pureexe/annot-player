@@ -6,7 +6,7 @@
 #include "tr.h"
 #include "defines.h"
 #include "stylesheet.h"
-#include "lineedit.h"
+#include "comboedit.h"
 #include "module/qtext/toolbutton.h"
 #include "module/annotcloud/traits.h"
 #include "module/annotcloud/alias.h"
@@ -14,9 +14,16 @@
 
 using namespace AnnotCloud;
 
+#define WINDOW_FLAGS ( \
+  Qt::Dialog | \
+  Qt::CustomizeWindowHint | \
+  Qt::WindowTitleHint | \
+  Qt::WindowCloseButtonHint | \
+  Qt::WindowStaysOnTopHint )
+
 // - Panel -
 AddAliasDialog::AddAliasDialog(QWidget *parent)
-  : Base(parent)
+  : Base(parent, WINDOW_FLAGS)
 {
   setWindowTitle(tr("Add Alias"));
   UiStyle::globalInstance()->setWindowStyle(this);
@@ -24,10 +31,16 @@ AddAliasDialog::AddAliasDialog(QWidget *parent)
 
   // Widgets
 
-  aliasEdit_ = new LineEdit; {
+  QStringList defvals = QStringList()
+      << "DEATHNOTE 01"
+      << "デスノート 01"
+      << "死亡笔记 01"
+      << "集英社"
+      << "http://www.youtube.com/watch?v=koeaZ_z1WbI";
+
+  aliasEdit_ = new ComboEdit(defvals); {
     aliasEdit_->setToolTip(TR(T_TOOLTIP_ADDALIAS));
-  }
-  connect(aliasEdit_, SIGNAL(returnPressed()), SLOT(ok()));
+  } connect(aliasEdit_->lineEdit(), SIGNAL(returnPressed()), SLOT(ok()));
 
 #define MAKE_LABEL(_label, _tr) \
   QLabel *_label = new QLabel; { \
@@ -54,10 +67,9 @@ AddAliasDialog::AddAliasDialog(QWidget *parent)
   } \
   connect(tag##_id##Button, SIGNAL(clicked()), SLOT(tag##_id()));
 
-  MAKE_TAG(BD)
-  MAKE_TAG(DVD)
-  MAKE_TAG(TV)
-  MAKE_TAG(Web)
+  MAKE_TAG(01) MAKE_TAG(02) MAKE_TAG(03) MAKE_TAG(04) MAKE_TAG(05)
+  MAKE_TAG(OVA)
+  MAKE_TAG(OAD)
 #undef MAKE_TAG
 
 #define MAKE_LANGUAGE(_id, _styleid) \
@@ -140,10 +152,13 @@ AddAliasDialog::AddAliasDialog(QWidget *parent)
 
     row3->addWidget(tagLabel);
     row3->addStretch();
-    row3->addWidget(tagBDButton);
-    row3->addWidget(tagDVDButton);
-    row3->addWidget(tagTVButton);
-    row3->addWidget(tagWebButton);
+    row3->addWidget(tag01Button);
+    row3->addWidget(tag02Button);
+    row3->addWidget(tag03Button);
+    row3->addWidget(tag04Button);
+    row3->addWidget(tag05Button);
+    row3->addWidget(tagOVAButton);
+    row3->addWidget(tagOADButton);
 
     row4->addWidget(aliasLabel);
     row4->addWidget(aliasEdit_);
@@ -173,12 +188,33 @@ AddAliasDialog::languageFlags() const
 
 // - Slots -
 
+//void
+//AddAliasDialog::postfix(const QString &tag)
+//{
+//  QString text = aliasEdit_->currentText().trimmed();
+//  if (text.isEmpty())
+//    text = tag;
+//  else {
+//    text.remove(QRegExp(" \\d*$"));
+//    text.remove(QRegExp(" " + tag + "$"));
+//    text = text.trimmed();
+//    if (text.isEmpty())
+//      text = tag;
+//    else
+//      text += " " + tag;
+//  }
+//  aliasEdit_->setEditText(text);
+//}
+
 void
 AddAliasDialog::tag(const QString &key)
 {
-  QString alias = aliasEdit_->text().trimmed();
+  QString alias = aliasEdit_->currentText().trimmed();
   QString t = QString("[%1]").arg(key);
-  alias.remove(t, Qt::CaseInsensitive);
+  if (!alias.isEmpty()) {
+    alias.remove(QRegExp("\\[\\d+\\]$"));
+    alias.remove(t, Qt::CaseInsensitive);
+  }
   alias = alias.trimmed();
 
   if (alias.isEmpty())
@@ -188,7 +224,7 @@ AddAliasDialog::tag(const QString &key)
   else
     alias = QString("%1 %2").arg(alias).arg(t);
 
-  aliasEdit_->setText(alias);
+  aliasEdit_->setEditText(alias);
 }
 
 // - Events -
@@ -234,7 +270,7 @@ AddAliasDialog::paste()
 {
   QClipboard *clipboard = QApplication::clipboard();
   if (clipboard)
-    aliasEdit_->setText(clipboard->text());
+    aliasEdit_->setEditText(clipboard->text());
 }
 
 void
@@ -242,7 +278,7 @@ AddAliasDialog::ok()
 {
   hide();
 
-  QString alias = aliasEdit_->text().trimmed();
+  QString alias = aliasEdit_->currentText().trimmed();
   if (alias.isEmpty())
     return;
   quint32 l = languageFlags();

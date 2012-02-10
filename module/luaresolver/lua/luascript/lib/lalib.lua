@@ -8,7 +8,7 @@
 --[[edit 20110704 for bili.tv,acfun.tv]]
 --[[edit 20110729 for automate download tudou highest quality video]]
 --[[edit 20110819 for youku new parse key]]
-require "luascript/lib/bit"
+require "bit"
 
 function getACFPV ( str_url, str_servername)
 	if str_servername == nil then

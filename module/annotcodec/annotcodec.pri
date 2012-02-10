@@ -10,12 +10,14 @@ HEADERS += \
     $$PWD/acfuncodec.h \
     $$PWD/annotationcodec.h \
     $$PWD/annotationcodecmanager.h \
-    $$PWD/bilibilicodec.h
+    $$PWD/bilibilicodec.h \
+    $$PWD/nicovideocodec.h
 
 SOURCES += \
     $$PWD/acfuncodec.cc \
     $$PWD/annotationcodecmanager.cc \
-    $$PWD/bilibilicodec.cc
+    $$PWD/bilibilicodec.cc \
+    $$PWD/nicovideocodec.cc
 
 QT      += core network xml script
 

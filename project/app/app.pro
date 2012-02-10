@@ -1,7 +1,7 @@
 # app.pro
 # 9/3/2011
 
-VERSION = 0.1.2.6
+VERSION = 0.1.2.7
 
 CONFIG += noqt nocrt
 include(../../config.pri)

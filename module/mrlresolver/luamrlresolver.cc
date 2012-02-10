@@ -3,26 +3,28 @@
 
 #include "luamrlresolver.h"
 #include "module/luaresolver/luaresolver.h"
-#include <boost/foreach.hpp>
 #include <QtCore>
-#include <QtScript>
 #include <QtNetwork>
-#include <string>
 
 //#define DEBUG "luaemrlresolver"
 #include "module/debug/debug.h"
 
-// TODO: move to project source code
-#ifdef Q_OS_LINUX
-  #define LUAPACKAGE_PATH "/usr/share/annot/player/lua"
+// TODO: move to project source project instead of hard code here
+#ifdef Q_OS_WIN
+  #define LUA_PATH QCoreApplication::applicationDirPath() + "/lua/luascript"
+#elif defined Q_OS_MAC
+  #define LUA_PATH QCoreApplication::applicationDirPath() + "/lua"
+#elif defined Q_OS_LINUX
+  #define LUA_PATH "/usr/share/annot/player/lua"
+#endif // Q_OS_
+
+#ifdef LUA_PATH
+  #define LUAPACKAGE_PATH LUA_PATH "/?.lua"
+  #define LUASCRIPT_PATH  LUA_PATH "/luascript.lua"
 #else
   #define LUAPACKAGE_PATH ""
-#endif // Q_OS_
-#ifdef Q_OS_MAC
-  #define LUASCRIPT_PATH  QCoreApplication::applicationDirPath().toStdString() + "/" "luascript.lua"
-#else
-  #define LUASCRIPT_PATH  "lua" "/" "luascript.lua"
-#endif // Q_OS_MAC
+  #define LUASCRIPT_PATH  "luascript.lua"
+#endif // LUA_PATH
 
 // - Tasks -
 
@@ -38,42 +40,48 @@ namespace { namespace task_ {
       : r_(r), ref_(ref) { Q_ASSERT(r_); }
   };
 
-  class ResolveAnnot : public QRunnable
+  class ResolveSubtitle : public QRunnable
   {
     LuaMrlResolver *r_;
     QString ref_;
-    virtual void run() { r_->resolveAnnot(ref_, false); } // \override, async = false
+    virtual void run() { r_->resolveSubtitle(ref_, false); } // \override, async = false
   public:
-    ResolveAnnot(const QString &ref, LuaMrlResolver *r)
+    ResolveSubtitle(const QString &ref, LuaMrlResolver *r)
       : r_(r), ref_(ref) { Q_ASSERT(r_); }
   };
 
 } } // anonymous namespace task_
 
-// - Construction -
-
-LuaMrlResolver::LuaMrlResolver(QObject *parent)
-  : Base(parent)
-{ lua_ = new luaresolver(LUASCRIPT_PATH, LUAPACKAGE_PATH); }
-
-LuaMrlResolver::~LuaMrlResolver()
-{ delete lua_; }
-
 // - Analysis -
 
 bool
-LuaMrlResolver::match(const QString &href) const
+LuaMrlResolver::matchMedia(const QString &href) const
 {
   DOUT("enter");
   bool ret = href.startsWith("http://", Qt::CaseInsensitive) &&
   (
     href.contains("bilibili.tv/", Qt::CaseInsensitive) ||
     href.contains("acfun.tv/", Qt::CaseInsensitive) ||
+    href.contains("nicovideo.jp/") ||
     href.contains("youku.com/", Qt::CaseInsensitive) ||
     href.contains("video.sina.com.cn/", Qt::CaseInsensitive) ||
     href.contains("tudou.com/", Qt::CaseInsensitive) ||
+    href.contains("6.cn/", Qt::CaseInsensitive) ||
     href.contains("mikufans.cn/", Qt::CaseInsensitive)
-    //href.contains("nicovideo.jp/") ||
+  );
+  DOUT("exit: ret =" << ret);
+  return ret;
+}
+
+bool
+LuaMrlResolver::matchSubtitle(const QString &href) const
+{
+  DOUT("enter");
+  bool ret = href.startsWith("http://", Qt::CaseInsensitive) &&
+  (
+    href.contains("bilibili.tv/", Qt::CaseInsensitive) ||
+    href.contains("acfun.tv/", Qt::CaseInsensitive) ||
+    href.contains("nicovideo.jp/")
   );
   DOUT("exit: ret =" << ret);
   return ret;
@@ -83,31 +91,57 @@ void
 LuaMrlResolver::resolveMedia(const QString &href, bool async)
 {
   if (async) {
+    if (!checkSiteAccount(href))
+      return;
     QThreadPool::globalInstance()->start(new task_::ResolveMedia(href, this));
     return;
   }
+  if (!checkSiteAccount(href))
+    return;
   DOUT("enter: href =" << href);
-  luaresolver::media_description md;
-  bool ok = lua_->resolve_media(href.toStdString(), md);
+  QString url = cleanUrl(href);
+  DOUT("url =" << url);
+
+  //LuaResolver *lua = makeResolver();
+  LuaResolver lua(LUASCRIPT_PATH, LUAPACKAGE_PATH);
+  if (hasNicovideoAccount())
+    lua.setNicovideoAccount(nicovideoUsername_, nicovideoPassword_);
+  if (hasBilibiliAccount())
+    lua.setBilibiliAccount(bilibiliUsername_, bilibiliPassword_);
+
+  QString refurl, title, suburl;
+  QStringList mrls;
+  bool ok = lua.resolve(url, &refurl, &title, &suburl, &mrls);
   if (!ok) {
-    emit errorReceived(tr("failed to resolve URL") + ": " + href);
-    DOUT("exit: luaresolver returned empty url");
+    emit errorReceived(tr("failed to resolve URL") + ": " + url);
+    DOUT("exit: LuaResolver returned false");
+    return;
+  }
+
+  if (mrls.isEmpty()) {
+    if (href.contains("nicovideo.jp", Qt::CaseInsensitive))
+      emit errorReceived(tr("failed to resolve URL using nicovideo account") + ": " + url);
+    else if (href.contains("bilibili.tv", Qt::CaseInsensitive))
+      emit errorReceived(tr("failed to resolve URL using bilibili account") + ": " + url);
+    else
+      emit errorReceived(tr("failed to resolve URL") + ": " + url);
+    DOUT("exit: mrls is empty");
     return;
   }
 
   MediaInfo mi;
   const char *encoding = 0;
-  mi.suburl = formatUrl(md.suburl);
-  mi.refurl = formatUrl(md.refurl);
+  mi.suburl = formatUrl(suburl);
+  mi.refurl = formatUrl(refurl);
   if (mi.refurl.contains("acfun.tv", Qt::CaseInsensitive))
     encoding = "GBK";
-  mi.title = formatTitle(md.title, encoding);
+  mi.title = formatTitle(title, encoding);
 
-  switch (md.mrls.size()) { // Specialization for better performance
+  switch (mrls.size()) { // Specialization for better performance
   case 0: break;
-  case 1: mi.mrls.append(formatUrl(md.mrls.front())); break;
+  case 1: mi.mrls.append(formatUrl(mrls.front())); break;
   default:
-    BOOST_FOREACH(std::string mrl, md.mrls)
+    foreach (QString mrl, mrls)
       mi.mrls.append(formatUrl(mrl));
   }
   emit mediaResolved(mi);
@@ -115,67 +149,128 @@ LuaMrlResolver::resolveMedia(const QString &href, bool async)
 }
 
 void
-LuaMrlResolver::resolveAnnot(const QString &href, bool async)
+LuaMrlResolver::resolveSubtitle(const QString &href, bool async)
 {
   if (async) {
-    QThreadPool::globalInstance()->start(new task_::ResolveAnnot(href, this));
+    if (!checkSiteAccount(href))
+      return;
+    QThreadPool::globalInstance()->start(new task_::ResolveSubtitle(href, this));
     return;
   }
+  if (!checkSiteAccount(href))
+    return;
   DOUT("enter: href =" << href);
-  std::string suburl;
-  bool ok = lua_->resolve_annot(href.toStdString(), suburl);
-  if (!ok || suburl.empty()) {
-    emit errorReceived(tr("failed to resolve URL") + ": " + href);
-    DOUT("exit: luaresolver returned empty url");
+  QString url = cleanUrl(href);
+  DOUT("url =" << url);
+
+  //LuaResolver *lua = makeResolver();
+  LuaResolver lua(LUASCRIPT_PATH, LUAPACKAGE_PATH);
+  if (hasNicovideoAccount())
+    lua.setNicovideoAccount(nicovideoUsername_, nicovideoPassword_);
+  if (hasBilibiliAccount())
+    lua.setBilibiliAccount(bilibiliUsername_, bilibiliPassword_);
+
+  // LuaResolver::resolve(const QString &href, QString *refurl, QString *title, QString *suburl, QStringList *mrls) const
+  QString suburl;
+  bool ok = lua.resolve(url, 0, 0, &suburl);
+  if (!ok) {
+    emit errorReceived(tr("failed to resolve URL") + ": " + url);
+    DOUT("exit: LuaResolver returned false");
     return;
   }
 
-  QString url = formatUrl(suburl);
-  if (!url.isEmpty())
-    emit annotResolved(url);
-  DOUT("exit: suburl =" << url);
+  if (suburl.isEmpty()) {
+    if (href.contains("nicovideo.jp", Qt::CaseInsensitive))
+      emit errorReceived(tr("failed to resolve URL using nicovideo account") + ": " + url);
+    else if (href.contains("bilibili.tv", Qt::CaseInsensitive))
+      emit errorReceived(tr("failed to resolve URL using bilibili account") + ": " + url);
+    else
+      emit errorReceived(tr("failed to resolve URL") + ": " + url);
+    DOUT("exit: suburl is empty");
+    return;
+  }
+
+  suburl = formatUrl(suburl);
+  if (!suburl.isEmpty())
+    emit subtitleResolved(suburl);
+  DOUT("exit: suburl =" << suburl);
 }
 
 // - Helper -
 
+//LuaResolver*
+//LuaMrlResolver::makeResolver(QObject *parent)
+//{
+//  LuaResolver *ret = new LuaResolver(LUASCRIPT_PATH, LUAPACKAGE_PATH, 0, parent);
+//  if (hasNicovideoAccount())
+//    ret->setNicovideoAccount(nicovideoUsername_, nicovideoPassword_);
+//  if (hasBilibiliAccount())
+//    ret->setBilibiliAccount(bilibiliUsername_, bilibiliPassword_);
+//  return ret;
+//}
+
 QString
-LuaMrlResolver::decodeText(const std::string &text, const char *encoding)
+LuaMrlResolver::decodeText(const QString &text, const char *encoding)
 {
-  if (text.empty())
+  if (text.isEmpty())
     return QString();
   if (encoding) {
     QTextCodec *tc = QTextCodec::codecForName(encoding);
     if (tc) {
       QTextDecoder *dc = tc->makeDecoder();
       if (dc)
-        return dc->toUnicode(text.c_str());
+        return dc->toUnicode(text.toLocal8Bit());
     }
   }
-  return QString::fromStdString(text);
+  return text;
 }
 
 QString
-LuaMrlResolver::formatTitle(const std::string &title, const char *encoding)
+LuaMrlResolver::formatTitle(const QString &title, const char *encoding)
 {
-  QString ret = decodeText(title, encoding).trimmed();
+  QString ret = encoding ? decodeText(title, encoding) : title;
   if (ret.isEmpty())
     return ret;
 
   ret = ret.remove(QRegExp(" - 嗶哩嗶哩 - .*"));
   ret = ret.remove(QRegExp(" - AcFun.tv$"));
+  ret = ret.trimmed();
   return ret;
 }
 
 QString
-LuaMrlResolver::formatUrl(const std::string &href)
+LuaMrlResolver::formatUrl(const QString &href)
 {
-  QString ret = QString::fromStdString(href).trimmed();
+  QString ret = href.trimmed();
   if (ret.isEmpty())
     return ret;
 
   //ret = ret.replace("http://www.", "http://", Qt::CaseInsensitive);
   //ret = ret.remove(QRegExp("/$"));
   return ret;
+}
+
+QString
+LuaMrlResolver::cleanUrl(const QString &url)
+{
+  QString ret = url;
+  if (ret.contains("nicovideo.jp/watch/"))
+    ret.remove(QRegExp("\\?.*"));
+  return ret;
+}
+
+bool
+LuaMrlResolver::checkSiteAccount(const QString &href)
+{
+  DOUT("enter");
+  if (href.contains("nicovideo.jp", Qt::CaseInsensitive) &&
+      !hasNicovideoAccount()) {
+    emit errorReceived(tr("nicovideo.jp account is required to resolve URL") + ": " + href);
+    DOUT("exit: ret = false, nico account required");
+    return false;
+  }
+  DOUT("exit: ret = true");
+  return true;
 }
 
 // EOF

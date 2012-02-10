@@ -6,7 +6,7 @@
 #include "tr.h"
 #include "defines.h"
 #include "stylesheet.h"
-#include "lineedit.h"
+#include "comboedit.h"
 #include "logger.h"
 #include "module/qtext/datetime.h"
 #include "module/qtext/toolbutton.h"
@@ -21,17 +21,23 @@ using namespace Logger;
 
 #define BAD_TIME    -1
 
+#define WINDOW_FLAGS ( \
+  Qt::Dialog | \
+  Qt::CustomizeWindowHint | \
+  Qt::WindowTitleHint | \
+  Qt::WindowCloseButtonHint | \
+  Qt::WindowStaysOnTopHint )
+
 // - Constructions -
 
 SeekDialog::SeekDialog(QWidget *parent)
-  : Base(parent)
+  : Base(parent, WINDOW_FLAGS)
 {
-#ifdef Q_WS_MAC
-  setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
-#endif // Q_WS_MAC
+//#ifdef Q_WS_MAC
+//  setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
+//#endif // Q_WS_MAC
   setWindowTitle(TR(T_TITLE_SEEK));
   UiStyle::globalInstance()->setWindowStyle(this);
-  setContentsMargins(0, 0, 0, 0);
 
   // Widgets
 
@@ -40,12 +46,16 @@ SeekDialog::SeekDialog(QWidget *parent)
   //timeLabel->setText(TR(T_LABEL_SEEK));
   //timeLabel->setToolTip(TR(T_TOOLTIP_SEEK));
 
+  QStringList defvals = QStringList()
+    << "0" << "1" << "2" << "3" << "5"
+    << "10" << "20" << "30" << "40" << "50";
+
 #define MAKE_EDIT(_edit) \
-  _edit = new LineEdit; { \
-    _edit->setAlignment(Qt::AlignRight); \
+  _edit = new ComboEdit(defvals); { \
     _edit->setToolTip(TR(T_TOOLTIP_SEEK)); \
-    _edit->setText("0"); \
+    _edit->setEditText("0"); \
     _edit->setMaximumWidth(SEEKLINEEDIT_MAXWIDTH); \
+    _edit->lineEdit()->setAlignment(Qt::AlignRight); \
   }
 
   MAKE_EDIT(ssEdit_)
@@ -66,16 +76,17 @@ SeekDialog::SeekDialog(QWidget *parent)
   MAKE_LABEL(hhLabel, hhEdit_, tr("hh"), tr("hours"))
 #undef MAKE_LABEL
 
-#define MAKE_BUTTON(_button, _text, _tip) \
+#define MAKE_BUTTON(_button, _text, _tip, _slot) \
   QToolButton *_button = new QtExt::ToolButton; { \
     _button->setStyleSheet(SS_TOOLBUTTON_TEXT); \
     _button->setToolButtonStyle(Qt::ToolButtonTextOnly); \
     _button->setText(_text); \
     _button->setToolTip(_tip); \
-  }
+  } \
+  connect(_button, SIGNAL(clicked()), _slot);
 
-  MAKE_BUTTON(okButton, QString("[ %1 ]").arg(TR(T_OK)), TR(T_OK))
-  MAKE_BUTTON(cancelButton, QString("[ %1 ]").arg(TR(T_CANCEL)), TR(T_CANCEL))
+  MAKE_BUTTON(okButton, QString("[ %1 ]").arg(TR(T_OK)), TR(T_OK), SLOT(ok()))
+  MAKE_BUTTON(cancelButton, QString("[ %1 ]").arg(TR(T_CANCEL)), TR(T_CANCEL), SLOT(hide()))
 #undef MAKE_BUTTON
 
   // Layouts
@@ -95,6 +106,7 @@ SeekDialog::SeekDialog(QWidget *parent)
 
     row2->addWidget(okButton);
     row2->addWidget(cancelButton);
+    //rows->setContentsMargins(6, 6, 6, 6);
   } setLayout(rows);
 
   setTabOrder(ssEdit_, mmEdit_);
@@ -102,11 +114,9 @@ SeekDialog::SeekDialog(QWidget *parent)
   setTabOrder(hhEdit_, ssEdit_);
 
   // Connections
-  connect(cancelButton, SIGNAL(clicked()), SLOT(cancel()));
-  connect(okButton, SIGNAL(clicked()), SLOT(ok()));
-  connect(ssEdit_, SIGNAL(returnPressed()), SLOT(ok()));
-  connect(mmEdit_, SIGNAL(returnPressed()), SLOT(ok()));
-  connect(hhEdit_, SIGNAL(returnPressed()), SLOT(ok()));
+  connect(ssEdit_->lineEdit(), SIGNAL(returnPressed()), SLOT(ok()));
+  connect(mmEdit_->lineEdit(), SIGNAL(returnPressed()), SLOT(ok()));
+  connect(hhEdit_->lineEdit(), SIGNAL(returnPressed()), SLOT(ok()));
 
   // Focus
   ssEdit_->setFocus();
@@ -118,13 +128,13 @@ qint64
 SeekDialog::time() const
 {
   bool ok;
-  ulong ss = ssEdit_->text().toULong(&ok);
+  ulong ss = ssEdit_->currentText().toULong(&ok);
   if (!ok) return BAD_TIME;
 
-  ulong mm = mmEdit_->text().toULong(&ok);
+  ulong mm = mmEdit_->currentText().toULong(&ok);
   if (!ok) return BAD_TIME;
 
-  ulong hh = hhEdit_->text().toULong(&ok);
+  ulong hh = hhEdit_->currentText().toULong(&ok);
   if (!ok) return BAD_TIME;
 
   DOUT("time: hh =" << hh << ", mm =" << mm << ", ss =" << ss);
@@ -142,9 +152,9 @@ SeekDialog::setTime(qint64 msecs)
       mm = t.minute(),
       ss = t.second();
 
-  ssEdit_->setText(QString::number(ss));
-  mmEdit_->setText(QString::number(mm));
-  hhEdit_->setText(QString::number(hh));
+  ssEdit_->setEditText(QString::number(ss));
+  mmEdit_->setEditText(QString::number(mm));
+  hhEdit_->setEditText(QString::number(hh));
 }
 
 // - Slots -
@@ -160,9 +170,5 @@ SeekDialog::ok()
   hide();
   emit seekRequested(msecs);
 }
-
-void
-SeekDialog::cancel()
-{ hide(); }
 
 // EOF

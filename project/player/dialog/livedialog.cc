@@ -11,10 +11,17 @@
 
 #define SLOTLINE_MAXWIDTH 150
 
+#define WINDOW_FLAGS ( \
+  Qt::Dialog | \
+  Qt::CustomizeWindowHint | \
+  Qt::WindowTitleHint | \
+  Qt::WindowCloseButtonHint | \
+  Qt::WindowStaysOnTopHint )
+
 // - Constructions -
 
 LiveDialog::LiveDialog(QWidget *parent)
-  : Base(parent), timeSlotIndex_(0)
+  : Base(parent, WINDOW_FLAGS), timeSlotIndex_(0)
 {
   setWindowTitle(TR(T_TITLE_LIVE));
   UiStyle::globalInstance()->setWindowStyle(this);

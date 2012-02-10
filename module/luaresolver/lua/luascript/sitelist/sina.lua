@@ -4,7 +4,7 @@
 --[[edit 20110314 for video tag]]
 --[[edit lostangel 20110402 for subxml return struct]]
 
-require "luascript/lib/lalib"
+require "lalib"
 
 --[[parse single sina url]]
 function getTaskAttribute_sina ( str_url, str_tmpfile , pDlg)

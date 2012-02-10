@@ -73,6 +73,7 @@ TextFilterView::addRow(const QString &text)
 {
   sourceModel_->insertRow(0);
   sourceModel_->setData(sourceModel_->index(0, HD_Text), text);
+  tableView_->invalidateCount();
 }
 
 QString
@@ -146,6 +147,7 @@ UserFilterView::addRow(const QString &text)
 {
   sourceModel_->insertRow(0);
   sourceModel_->setData(sourceModel_->index(0, HD_UserAlias), text);
+  tableView_->invalidateCount();
 }
 
 QString
@@ -263,6 +265,8 @@ AnnotationFilterView::addRow(const Annotation &a)
 #undef FORMAT_LANGUAGE
 #undef FORMAT_FLAGS
 #undef FORMAT_STATUS
+
+  tableView_->invalidateCount();
 }
 
 qint64

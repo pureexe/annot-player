@@ -7,6 +7,8 @@
 #include <QObject>
 #include <QStringList>
 
+class DataManager;
+
 class AnnotationFilter : public QObject
 {
   Q_OBJECT
@@ -18,10 +20,14 @@ class AnnotationFilter : public QObject
 
   // - Constructions -
 public:
-  explicit AnnotationFilter(QObject *parent = 0);
+  explicit AnnotationFilter(DataManager *dm, QObject *parent = 0)
+    : Base(parent), dm_(dm), enabled_(false), languages_(0), annotationCountHint_(0)
+  { Q_ASSERT(dm_); }
 
   ///  Return true if the annotation is supposed to be blocked.
   bool filter(const Annotation &a) const;
+
+  bool maybeSignificant(const Annotation &a) const;
 
   // - Properties -
 
@@ -40,9 +46,14 @@ public:
   const QStringList &blockedUserAliases() const { return blockedUserAliases_; }
   const QStringList &blockedTexts() const { return blockedTexts_; }
 
+  int annotationCountHint() const { return annotationCountHint_; }
+
 public slots:
   void setEnabled(bool enabled);
   void setLanguages(qint64 bits) { languages_ = bits; }
+
+  void setAnnotationCountHint(int count = 0)
+  { annotationCountHint_ = count > 0 ? count : 0; }
 
   void clearBlockedAnnotations();
   void clearBlockedUserAliases();
@@ -61,8 +72,11 @@ public slots:
   void setBlockedTexts(const QStringList &l);
 
 private:
+  DataManager *dm_;
   bool enabled_;
   qint64 languages_;
+
+  int annotationCountHint_;
 
   // Blacklists
   QList<Annotation> blockedAnnotations_; // NG annots

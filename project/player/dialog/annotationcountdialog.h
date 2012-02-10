@@ -1,0 +1,41 @@
+#ifndef ANNOTATIONCOUNTDIALOG_H
+#define ANNOTATIONCOUNTDIALOG_H
+
+// annotationcountdialog.h
+// 2/8/2012
+
+#include "module/qtext/dialog.h"
+#include <QStringList>
+
+QT_FORWARD_DECLARE_CLASS(QComboBox)
+QT_FORWARD_DECLARE_CLASS(QLabel)
+
+class ComboEdit;
+class DataManager;
+
+typedef QtExt::Dialog AnnotationCountDialogBase;
+class AnnotationCountDialog : public AnnotationCountDialogBase
+{
+  Q_OBJECT
+  typedef AnnotationCountDialog Self;
+  typedef AnnotationCountDialogBase Base;
+
+  DataManager *dm_;
+  ComboEdit *edit_;
+  QLabel *totalCountLabel_;
+
+public:
+  explicit AnnotationCountDialog(DataManager *dm, QWidget *parent = 0);
+
+signals:
+  void countChanged(int count);
+
+public slots:
+  virtual void setVisible(bool visible); ///< \override
+  void setCount(int count);
+protected slots:
+  void ok();
+  void invalidateTotalCount();
+};
+
+#endif // ANNOTATIONCOUNTDIALOG_H

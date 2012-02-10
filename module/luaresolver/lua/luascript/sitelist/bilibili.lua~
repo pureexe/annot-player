@@ -19,8 +19,8 @@
 ---[[edit 20111206 for bilibili batch ]]
 ---[[edit 20111206 for bilibili no src html when batch ]]
 
-require "luascript/lib/lalib"
-require "luascript/lib/login"
+require "lalib"
+require "login"
 
 --[[parse single bilibili url]]
 function getTaskAttribute_bilibili ( str_url, str_tmpfile, pDlg, isNeedLogin)

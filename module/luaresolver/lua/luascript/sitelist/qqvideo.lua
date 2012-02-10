@@ -1,7 +1,7 @@
 
 ---[[by lostangel 20110402]]
 
-require "luascript/lib/lalib"
+require "lalib"
 
 --[[parse single acfun url]]
 function getTaskAttribute_qq ( str_url, str_tmpfile ,str_servername, pDlg)

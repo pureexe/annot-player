@@ -36,6 +36,8 @@ namespace AnnotCloud {
       UI_Guest = 4L
     };
 
+    static const Self &guest();
+
     // - Properties -
 
     // id > 0: made by human; id < 0: made by doll

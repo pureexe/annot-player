@@ -4,14 +4,14 @@
 // inputcombobox.h
 // 9/26/2011
 
-#include "comboboxedit.h"
+#include "annotationcomboedit.h"
 #include <QVector>
 
-class InputComboBox : public ComboBoxEdit
+class InputComboBox : public AnnotationComboEdit
 {
   Q_OBJECT
   typedef InputComboBox Self;
-  typedef ComboBoxEdit Base;
+  typedef AnnotationComboEdit Base;
 
 public:
   explicit InputComboBox(QWidget *parent = 0);

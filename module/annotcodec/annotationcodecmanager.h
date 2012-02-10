@@ -20,7 +20,7 @@ class AnnotationCodecManager : public QObject
   QList<AnnotationCodec*> codecs_;
 
 public:
-  enum Site { Bilibli = 0, AcFun, SiteCount };
+  enum Site { Bilibli = 0, AcFun, Nicovideo, SiteCount };
 
   static Self *globalInstance() { static Self g; return &g; }
 

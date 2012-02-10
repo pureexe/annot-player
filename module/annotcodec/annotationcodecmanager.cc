@@ -3,6 +3,7 @@
 #include "annotationcodecmanager.h"
 #include "bilibilicodec.h"
 #include "acfuncodec.h"
+#include "nicovideocodec.h"
 #include <QtCore>
 
 //#define DEBUG "annotationcodecmanager"
@@ -25,6 +26,7 @@ AnnotationCodecManager::AnnotationCodecManager(QObject *parent)
 
   ADD(BilibiliCodec)
   ADD(AcFunCodec)
+  ADD(NicovideoCodec)
 #undef ADD
 }
 

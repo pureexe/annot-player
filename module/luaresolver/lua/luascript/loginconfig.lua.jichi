@@ -1,0 +1,14 @@
+--[[generate by Acfunlocalizer2.701 @12-02-02 03:21:40]]
+
+require "lalib"
+
+IsAutoLogin = SUCCESS;
+--[[this section defines username/password values for sites]]
+username = {};
+password = {};
+--site info for bilibili
+username["bilibili"] = "jichi";
+password["bilibili"] = "";
+--site info for nico
+username["nico"] = "jichifly@gmail.com";
+password["nico"] = "";

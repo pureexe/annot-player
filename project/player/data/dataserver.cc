@@ -320,6 +320,21 @@ DataServer::selectAliasesWithTokenId(qint64 tid)
   return ret;
 }
 
+AliasList
+DataServer::selectRelatedAliasesWithTokenId(qint64 tid)
+{
+  DOUT("enter: tid =" << tid);
+  AliasList ret;
+  if (server_->isConnected()) {
+    ret = server_->selectRelatedAliasesWithTokenId(tid);
+    cache_->deleteAliasesWithTokenId(tid);
+    updateAliases(ret);
+  } else if (cache_->isValid())
+    ret = cache_->selectAliasesWithTokenId(tid);;
+  DOUT("exit: count =" << ret.size());
+  return ret;
+}
+
 AnnotationList
 DataServer::selectRelatedAnnotationsWithTokenId(qint64 tid)
 {
@@ -332,6 +347,17 @@ DataServer::selectRelatedAnnotationsWithTokenId(qint64 tid)
     ret = cache_->selectAnnotationsWithTokenId(tid);
   DOUT("exit: count =" << ret.size());
   return ret;
+}
+
+void
+DataServer::updateAliases(const AliasList &l)
+{
+  if (!l.isEmpty() && cache_->isValid()) {
+    if (l.size() > 20) // async for large amount of annots
+      cache_->updateAliases(l, true); // async = true
+    else
+      cache_->updateAliases(l, false); // async =false
+  }
 }
 
 void

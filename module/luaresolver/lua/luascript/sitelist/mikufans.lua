@@ -2,7 +2,7 @@
 ---[[by lostangel 20100529]]
 ---[[edit 20101212]]
 ---[[edit 20110402]]
-require "luascript/lib/lalib"
+require "lalib"
 
 --[[parse single acfun url]]
 function getTaskAttribute_mikufans ( str_url, str_tmpfile , pDlg)
