@@ -12,6 +12,14 @@
 #include <QtCore>
 #include <QtNetwork>
 
+//#define DEBUG "mediastreamtask"
+#include "module/debug/debug.h"
+
+#ifdef DEBUG
+  #include "module/datastream/fileinputstream.h"
+  #include "module/mediacodec/flvcodec.h"
+#endif // DEBUG
+
 void
 MediaStreamTask::stop()
 {
@@ -20,8 +28,13 @@ MediaStreamTask::stop()
 }
 
 void
-MediaStreamTask::run() ///< \override
+MediaStreamTask::run()
 {
+#ifdef DEBUG
+  debug();
+  return;
+#endif // DEBUG
+
   if (msi_.urls.isEmpty())
     return;
 
@@ -29,7 +42,6 @@ MediaStreamTask::run() ///< \override
     nam_ = new QNetworkAccessManager;
 
   // http://www.bilibili.tv/video/av214176/
-  // http://www.bilibili.tv/video/av214156/
   ins_ = new InputStreamList;
 
   qint64 totalDuration = 0;
@@ -59,6 +71,7 @@ MediaStreamTask::run() ///< \override
   if (!first)
     return;
   {
+    first->run();
     QEventLoop loop;
     connect(first, SIGNAL(readyRead()), &loop, SLOT(quit()));
     connect(first, SIGNAL(finished()), &loop, SLOT(quit()));
@@ -84,6 +97,45 @@ MediaStreamTask::run() ///< \override
   ss->setDuration(totalDuration);
 
   ss->start();
+}
+
+void
+MediaStreamTask::debug()
+{
+#ifdef DEBUG
+  if (msi_.urls.isEmpty())
+    return;
+
+  if (!nam_)
+    nam_ = new QNetworkAccessManager;
+
+  // http://www.bilibili.tv/video/av214176/
+  // http://www.bilibili.tv/video/av214156/
+  ins_ = new InputStreamList;
+
+  InputStream *in = new FileInputStream("/Users/jichi/tmp/bilibili.flv");
+
+  FifoStream *vout = new BufferedFifoStream;
+  FifoStream *aout = new BufferedFifoStream;
+  MediaToc *vtoc = new MediaToc;
+  MediaToc *atoc = new MediaToc;
+
+  vout->setSize(in->size()); // estimated max siz
+  aout->setSize(in->size()); // estimated max size
+
+  qint64 duration = FLVCodec::getFLVStreamDuration(in);
+  FLVCodec::globalInstance()->demuxStream(in, vout, aout, vtoc, atoc);
+
+  StreamService *ss = StreamService::globalInstance();
+  if (ss->isActive())
+    ss->stop();
+  ss->clear();
+  ss->addStream(MT_H264, vout, vtoc);
+  ss->addStream(MT_AAC, aout, atoc);
+  ss->setDuration(duration);
+
+  ss->start();
+#endif // DEBUG
 }
 
 // EOF

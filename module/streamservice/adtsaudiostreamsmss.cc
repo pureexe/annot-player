@@ -3,7 +3,6 @@
 
 #include "adtsaudiostreamsmss.h"
 #include "adtsaudiostreamsource.h"
-#include "live555_config.h"
 #include <liveMedia.hh>
 #include <GroupsockHelper.hh>
 

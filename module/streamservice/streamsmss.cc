@@ -3,7 +3,6 @@
 
 #include "streamsmss.h"
 #include "framedstreamsource.h"
-#include "live555_config.h"
 #include <liveMedia.hh>
 
 #define UNUSED(_var)    (void)(_var)

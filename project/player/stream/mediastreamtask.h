@@ -31,6 +31,9 @@ public:
 public slots:
   void stop();
   virtual void run(); ///< \override
+
+private:
+  void debug();
 };
 
 #endif // MEDIASTREAMTASK_H

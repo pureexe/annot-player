@@ -5,7 +5,6 @@
 #include "adtsaudiostreamsource.h"
 #include "module/datastream/inputstream.h"
 #include "module/mediacodec/mediatoc.h"
-#include "live555_config.h"
 #include <GroupsockHelper.hh>
 #include <QtCore>
 

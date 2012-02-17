@@ -5,6 +5,7 @@
 // 2/12/2012
 // See: liveMedia/ByteStreamFileSource.hh
 
+#include "live555_config.h"
 #include <FramedSource.hh>
 
 class InputStream;

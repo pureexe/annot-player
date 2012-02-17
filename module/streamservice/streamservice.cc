@@ -3,7 +3,6 @@
 
 #include "streamservice.h"
 #include "streamthread.h"
-#include "live555_config.h"
 #include "module/datastream/inputstream.h"
 #include <QtCore>
 

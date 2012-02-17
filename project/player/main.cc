@@ -108,7 +108,7 @@ main(int argc, char *argv[])
     return 0;
 
 #ifdef USE_MODE_DEBUG
-  //a.startLoggingDebugMessage();
+  a.startLoggingDebugMessage();
 #endif // USE_MODE_DEBUG
 
   Settings *settings = Settings::globalInstance();

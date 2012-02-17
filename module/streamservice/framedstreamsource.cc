@@ -5,14 +5,8 @@
 #include "framedstreamsource.h"
 #include "module/datastream/inputstream.h"
 #include "module/mediacodec/mediatoc.h"
-#include "live555_config.h"
 #include <liveMedia.hh>
 #include <ctime>
-
-#ifdef Q_WS_WIN
-  #include "module/qtwin/qtwin.h"
-  using QtWin::gettimeofday;
-#endif // Q_WS_WIN
 
 // - Do -
 
@@ -33,7 +27,9 @@ FramedStreamSource::doGetNextFrame()
     return;
   }
 
+#ifndef Q_OS_WIN
   gettimeofday(&fPresentationTime, 0);
+#endif // Q_OS_WIN
 
   // Inform the reader that he has data:
   // To avoid possible infinite recursion, we need to return to the event loop to do this:

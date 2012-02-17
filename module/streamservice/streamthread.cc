@@ -6,7 +6,6 @@
 #include "streamthread.h"
 #include "adtsaudiostreamsmss.h"
 #include "h264videostreamsmss.h"
-#include "live555_config.h"
 #include <liveMedia.hh>
 #include <BasicUsageEnvironment.hh>
 #include <QtCore>

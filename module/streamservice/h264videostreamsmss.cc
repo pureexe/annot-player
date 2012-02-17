@@ -3,7 +3,6 @@
 
 #include "h264videostreamsmss.h"
 #include "framedstreamsource.h"
-#include "live555_config.h"
 #include <liveMedia.hh>
 #include <GroupsockHelper.hh>
 

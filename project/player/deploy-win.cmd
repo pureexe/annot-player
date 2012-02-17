@@ -68,8 +68,8 @@ cp -v "%QT_HOME%"/bin/{%QT_DLLS%} . || exit /b 1
 
 cp -v "%MSVC_HOME%"/{%MSVC_DLLS%} . || exit /b 1
 cp -v "%ITH_HOME%"/bin/{%ITH_DLLS%} . || exit /b 1
+cp -v "%GPAC_HOME%"/bin/{%GPAC_DLLS%} . || exit /b 1
 cp -v "%ZLIB_HOME%"/bin/%ZLIB_DLL% . || exit /b 1
-cp -v "%GPAC_HOME%"/bin/%GPAC_DLLS% . || exit /b 1
 
 ::cp -v "%CURL_HOME%"/bin/%CURL_BIN% . || exit /b 1
 ::cp -v "%GZIP_HOME%"/bin/%GZIP_BIN% . || exit /b 1

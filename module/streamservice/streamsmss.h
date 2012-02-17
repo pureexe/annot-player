@@ -4,6 +4,7 @@
 // streamsmss.h
 // 2/11/2012
 
+#include "live555_config.h"
 #include <OnDemandServerMediaSubsession.hh>
 
 class InputStream;
