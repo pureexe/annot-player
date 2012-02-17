@@ -12,11 +12,13 @@
 //#define DEBUG "annotationparser"
 #include "module/debug/debug.h"
 
-#define DEFAULT_TINY_SIZE        "10px"
-#define DEFAULT_SMALL_SIZE       "15px"
-#define DEFAULT_NORMAL_SIZE      "20px"
-#define DEFAULT_LARGE_SIZE       "40px"
-#define DEFAULT_HUGE_SIZE        "80px"
+#define DEFAULT_TINY_SIZE       "10px"
+#define DEFAULT_SMALL_SIZE      "18px"
+#define DEFAULT_NORMAL_SIZE     "25px"
+#define DEFAULT_LARGE_SIZE      "36px"
+#define DEFAULT_HUGE_SIZE       "50px"
+
+#define MAX_REPEAT_COUNT        10
 
 // - Constructions -
 
@@ -485,7 +487,11 @@ AnnotationParser::translate(const QString &tag,
                 return "";
               break;
             case 1:
-              ret = param.repeated(count);
+              if (count > 0) {
+                if (count > MAX_REPEAT_COUNT)
+                  count = MAX_REPEAT_COUNT;
+                ret = param.repeated(count);
+              }
             default:
               ret += param;
             }
@@ -495,21 +501,20 @@ AnnotationParser::translate(const QString &tag,
         }
 
       } else {
-        QString s_count = attrs.front();
-        bool ok;
-        int count = s_count.toInt(&ok);
-        if (!ok) {
-          qDebug() << "Invalid count format";
-          return "";
-        }
         QString ret;
-        int i = 0;
-        foreach (const QString &param, params) {
-          if (i == 0)
-            ret = param.repeated(count);
-          else
-            ret += param;
-          i++;
+        QString s_count = attrs.front();
+        int count = s_count.toInt();
+        if (count > 0) {
+          if (count > MAX_REPEAT_COUNT)
+            count = MAX_REPEAT_COUNT;
+          int i = 0;
+          foreach (const QString &param, params) {
+            if (i == 0)
+              ret = param.repeated(count);
+            else
+              ret += param;
+            i++;
+          }
         }
         return ret;
       }

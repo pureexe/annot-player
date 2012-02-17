@@ -39,6 +39,7 @@
 #define SK_AUTOPLAYNEXT "AutoPlayNext"
 #define SK_ANNOTFILTER  "AnnotationFilter"
 #define SK_ANNOTCOUNT   "AnnotationCount"
+#define SK_ANNOTEFFECT  "AnnotationEffect"
 #define SK_BLOCKEDUSERS "BlockedUsers"
 #define SK_BLOCKEDKEYS  "BlockedKeywords"
 #define SK_NICOACCOUNT  "NicovideoAccount"
@@ -112,6 +113,19 @@ Settings::themeId() const
   return ret;
 }
 
+void
+Settings::setAnnotationEffect(int id)
+{ setValue(SK_ANNOTEFFECT, id); }
+
+int
+Settings::annotationEffect() const
+{
+  bool ok;
+  int ret = value(SK_ANNOTEFFECT).toInt(&ok);
+  if (!ok)
+    return 0;
+  return ret;
+}
 
 void
 Settings::setUserId(qint64 uid)

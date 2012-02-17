@@ -4,8 +4,10 @@
 // mrlresolver.h
 // 1/24/2011
 
-#include "mediainfo.h"
+#include "mrlinfo.h"
 #include <QObject>
+
+QT_FORWARD_DECLARE_CLASS(QNetworkAccessManager)
 
 class MrlResolver : public QObject
 {
@@ -21,7 +23,7 @@ signals:
   void errorReceived(QString message);
   void messageReceived(QString message);
 
-  void mediaResolved(MediaInfo mi);
+  void mediaResolved(MediaInfo mi, QNetworkAccessManager *nam);
   void subtitleResolved(QString suburl);
 
 public:

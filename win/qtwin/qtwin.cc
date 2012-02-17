@@ -22,6 +22,12 @@
   #pragma warning (disable: 4996)     // C4996: 'getenv': This function or variable may be unsafe. Consider using _dupenv_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
 #endif // _MSC_VER
 
+#if defined(_MSC_VER) || defined(_MSC_EXTENSIONS)
+  #define DELTA_EPOCH_IN_MICROSECS  11644473600000000Ui64
+#else
+  #define DELTA_EPOCH_IN_MICROSECS  11644473600000000ULL
+#endif // _MSC_VER
+
 // - Helpers -
 
 #define MAKEDWORD(_a, _b)       ((DWORD)(((WORD)(((DWORD_PTR)(_a)) & 0xffff)) | ((DWORD)((WORD)(((DWORD_PTR)(_b)) & 0xffff))) << 16))
@@ -71,7 +77,6 @@ QtWin::warmUp()
   isWindowsXpOrLater();
   isWindowsVistaOrLater();
 }
-
 
 // - Threads and processes -
 
@@ -775,6 +780,43 @@ QtWin::getWaveVolume()
 // EOF
 
 /*
+
+// See: http://social.msdn.microsoft.com/Forums/en-US/vcgeneral/thread/430449b3-f6dd-4e18-84de-eebd26a8d668/
+int
+QtWin::gettimeofday(struct timeval *tv, struct timezone *tz)
+{
+  FILETIME ft;
+  unsigned __int64 tmpres = 0;
+  static int tzflag;
+
+  if (NULL != tv)
+  {
+    GetSystemTimeAsFileTime(&ft);
+
+    tmpres |= ft.dwHighDateTime;
+    tmpres <<= 32;
+    tmpres |= ft.dwLowDateTime;
+
+    // converting file time to unix epoch
+    tmpres -= DELTA_EPOCH_IN_MICROSECS;
+    tmpres /= 10;  // convert into microseconds
+    tv->tv_sec = (long)(tmpres / 1000000UL);
+    tv->tv_usec = (long)(tmpres % 1000000UL);
+  }
+
+  if (NULL != tz)
+  {
+    if (!tzflag)
+    {
+      _tzset();
+      tzflag++;
+    }
+    tz->tz_minuteswest = _timezone / 60;
+    tz->tz_dsttime = _daylight;
+  }
+
+  return 0;
+}
 
 // See: http://msdn.microsoft.com/en-us/library/bb776891(VS.85).aspx
 //

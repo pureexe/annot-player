@@ -7,6 +7,7 @@ SUBDIRS = \
     #reader
 
 win32:  SUBDIRS += app
+mac:    SUBDIRS += live
 #unix:   SUBDIRS += x
 
 # EOF

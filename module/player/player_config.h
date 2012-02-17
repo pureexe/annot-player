@@ -13,6 +13,7 @@
     __VA_ARGS__ "mdf"
 
 #define PLAYER_FORMAT_VIDEO(...) \
+    __VA_ARGS__ "264" \
     __VA_ARGS__ "3gp" \
     __VA_ARGS__ "asf" \
     __VA_ARGS__ "avi" \
@@ -27,6 +28,7 @@
     __VA_ARGS__ "m2p" \
     __VA_ARGS__ "m2ts" \
     __VA_ARGS__ "m2v" \
+    __VA_ARGS__ "m4e" \
     __VA_ARGS__ "m4v" \
     __VA_ARGS__ "mks" \
     __VA_ARGS__ "mkv" \

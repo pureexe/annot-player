@@ -60,9 +60,6 @@ function getTaskAttribute_youku ( str_url, str_tmpfile ,str_servername, pDlg)
 
 	local int_realurlnum, tbl_realurls = getRealUrls_youku(str_id, str_tmpfile, pDlg);
 
-
-
-
 	if pDlg~=nil then
 		sShowMessage(pDlg, 'Íê³É½âÎö..');
 	end
@@ -71,7 +68,8 @@ function getTaskAttribute_youku ( str_url, str_tmpfile ,str_servername, pDlg)
 
 	local tbl_ta = {};
 	tbl_ta["acfpv"] = int_acfpv;
-	tbl_ta["descriptor"] = "youku"..str_id.." - "..str_descriptor;
+	--tbl_ta["descriptor"] = "youku"..str_id.." - "..str_descriptor;
+	tbl_ta["descriptor"] = str_descriptor;
 	tbl_ta["subxmlurl"] = tbl_subxmlurls;--str_subxmlurl;
 	tbl_ta["realurlnum"] = int_realurlnum;
 	tbl_ta["realurls"] = tbl_realurls;

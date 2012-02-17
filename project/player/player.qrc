@@ -135,7 +135,7 @@
         <file>images/aero_red.jpg</file>
         <file>images/aero_red_thumbnail.png</file>
         <file>images/aero_white.jpg</file>
-        <file>images/aero_white.png</file>
+        <file>images/aero_white_thumbnail.png</file>
         <file>images/aero_yellow.jpg</file>
         <file>images/aero_yellow_thumbnail.png</file>
     </qresource>

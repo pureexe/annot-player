@@ -35,9 +35,10 @@ Tray::createActions()
   _action->setCheckable(true); \
   connect(_action, SIGNAL(triggered(bool)), _receiver, _slot);
 
-  QAction *MAKE_ACTION(openAct,         OPENFILE,       w_,     SLOT(open()))
+  //QAction *MAKE_ACTION(openAct,         OPENFILE,       w_,     SLOT(open()))
   QAction *MAKE_ACTION(openFileAct,     OPENFILE,       w_,     SLOT(openFile()))
   QAction *MAKE_ACTION(openUrlAct,      OPENURL,        w_,     SLOT(openUrl()))
+  QAction *MAKE_ACTION(openAnnotationUrlAct,   OPENANNOTATIONURL, w_,  SLOT(openAnnotationUrl()))
   QAction *MAKE_ACTION(openWindowAct,   PROCESSPICKDIALOG,w_,   SLOT(openWindow()))
   QAction *MAKE_ACTION(pickWindowAct,   WINDOWPICKDIALOG, w_,   SLOT(showWindowPickDialog()))
   QAction *MAKE_ACTION(aboutAct,        ABOUT,          w_,     SLOT(about()))
@@ -48,7 +49,8 @@ Tray::createActions()
 
   MAKE_TOGGLE(toggleWindowOnTopAct_, WINDOWSTAYSONTOP, w_, SLOT(setWindowOnTop(bool)))
 
-  openAct->setShortcuts(QKeySequence::Open);
+  openFileAct->setShortcuts(QKeySequence::Open);
+  openUrlAct->setShortcuts(QKeySequence::New);
   helpAct->setShortcuts(QKeySequence::HelpContents);
   quitAct->setShortcuts(QKeySequence::Quit);
 #undef MAKE_ACTION
@@ -57,8 +59,9 @@ Tray::createActions()
   // Menu
   QMenu *menu = new QMenu(w_); {
     menu->addAction(openFileAct);
-#ifdef USE_MODE_SIGNAL
     menu->addAction(openUrlAct);
+    menu->addAction(openAnnotationUrlAct);
+#ifdef USE_MODE_SIGNAL
     menu->addAction(openWindowAct);
 #endif // USE_MODE_SIGNAL
 #ifdef Q_WS_WIN

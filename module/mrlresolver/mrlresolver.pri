@@ -9,7 +9,7 @@ INCLUDEPATH += $$PWD
 HEADERS += \
     $$PWD/luamrlresolver.h \
     $$PWD/googlevideomrlresolver.h \
-    $$PWD/mediainfo.h \
+    $$PWD/mrlinfo.h \
     $$PWD/mrlresolver.h \
     $$PWD/mrlresolvermanager.h \
     $$PWD/youkumrlresolver.h \
@@ -18,7 +18,7 @@ HEADERS += \
 SOURCES += \
     $$PWD/luamrlresolver.cc \
     $$PWD/googlevideomrlresolver.cc \
-    $$PWD/mediainfo.cc \
+    $$PWD/mrlinfo.cc \
     $$PWD/mrlresolvermanager.cc \
     $$PWD/youkumrlresolver.cc \
     $$PWD/youtubemrlresolver.cc

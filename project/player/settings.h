@@ -63,6 +63,9 @@ public:
   int subtitleColor() const;
   void setSubtitleColor(int colorId);
 
+  int annotationEffect() const;
+  void setAnnotationEffect(int effect);
+
   int language() const; ///< Application language
   void setLanguage(int lang);
 

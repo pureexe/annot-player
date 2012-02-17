@@ -26,7 +26,14 @@
 #define CORE_CMD_ESCAPE_N                       CORE_CMDSTR "n"
 #define CORE_CMD_NEWLINE                        CORE_CMD_ESCAPE_N
 
-// - Special -        -
+// - Effects -
+
+#define CORE_CMD_EFFECT_TRANSP          CORE_CMDSTR "transp"
+#define CORE_CMD_EFFECT_TRANSPARENT     CORE_CMDSTR "transparent"
+#define CORE_CMD_EFFECT_SHADOW          CORE_CMDSTR "shadow"
+#define CORE_CMD_EFFECT_BLUR            CORE_CMDSTR "blur"
+
+// - Special -
 
 #define CORE_CMD_EVAL                   CORE_CMDSTR "eval"      // TODO
 #define CORE_CMD_REPEAT                 CORE_CMDSTR "repeat"    // \repeat[10]{anything}
@@ -148,6 +155,11 @@ namespace AnnotCloud {
     H_Sub =             408242,         // CORE_CMD_ANNOT_SUB
     H_Subtitle =        194759781,      // CORE_CMD_ANNOT_SUBTITLE
 
+    // - Effect -
+    H_Transp =          62424416,
+    H_Transparent =     102735092,
+    H_Shadow =          60717991,
+    H_Blur =            6460354,
 
     // - HTML style -
 

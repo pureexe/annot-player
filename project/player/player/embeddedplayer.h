@@ -7,7 +7,6 @@
 #include "playerui.h"
 
 QT_FORWARD_DECLARE_CLASS(QTimer)
-QT_FORWARD_DECLARE_CLASS(QMenu)
 QT_FORWARD_DECLARE_CLASS(QToolButton)
 
 class EmbeddedPlayerUi : public PlayerUi
@@ -20,7 +19,6 @@ public:
   explicit EmbeddedPlayerUi(SignalHub *hub, Player *player, ServerAgent *server, QWidget *parent = 0);
 
 signals:
-  void invalidateMenuRequested();
   void fullScreenModeChanged(bool t);
 public:
   bool autoHideEnabled() const;
@@ -28,17 +26,13 @@ public:
   WId containerWindow() const;
   QWidget *containerWidget() const;
 
-  void setMenu(QMenu *menu);
   bool isFullScreenMode() const;
 
   bool isOnTop() const;
 public slots:
   void setOnTop(bool t);
 
-protected:
-  QToolButton *menuButton();
 protected slots:
-  void popupMenu();
   void showWhenEmbedded();
 
 public slots:

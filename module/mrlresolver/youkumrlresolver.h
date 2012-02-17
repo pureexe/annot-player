@@ -5,6 +5,7 @@
 // 1/24/2011
 
 #include "mrlresolver.h"
+#include <QString>
 
 QT_FORWARD_DECLARE_CLASS(QNetworkReply)
 QT_FORWARD_DECLARE_CLASS(QNetworkAccessManager)
@@ -16,6 +17,7 @@ class YoukuMrlResolver : public MrlResolver
   typedef MrlResolver Base;
 
   QNetworkAccessManager *qnam_;
+  QString preferredType_; // should be one of "mp4", "flv", or "flvhd"
 
 public:
   explicit YoukuMrlResolver(QObject *parent = 0);
@@ -25,6 +27,8 @@ public:
 
 public slots:
   void resolveMedia(const QString &href); ///< \override
+
+  void setPreferredType(const QString &type) { preferredType_ = type; }
 
 protected slots:
   void resolveMedia(QNetworkReply *reply);

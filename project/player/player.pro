@@ -1,7 +1,7 @@
 # player.pro
 # 6/30/2011
 
-VERSION = 0.1.2.7
+VERSION = 0.1.2.8
 
 include(../../config.pri)
 include(tr/tr.pri)
@@ -10,13 +10,16 @@ include(tr/tr.pri)
 
 include($$ROOTDIR/module/annotcloud/annotcloud.pri)
 include($$ROOTDIR/module/annotcodec/annotcodec.pri)
+include($$ROOTDIR/module/datastream/datastream.pri)
 include($$ROOTDIR/module/player/player.pri)
 #include($$ROOTDIR/module/doll/doll.pri)
 include($$ROOTDIR/module/serveragent/serveragent.pri)
 #include($$ROOTDIR/module/clientagent/clientagent.pri)
 include($$ROOTDIR/module/gsoap/gsoap.pri)       # would static linking cause license conflicts?
+include($$ROOTDIR/module/streamservice/streamservice.pri)
 include($$ROOTDIR/module/translator/translator.pri)
 include($$ROOTDIR/module/mrlresolver/mrlresolver.pri)
+include($$ROOTDIR/module/mp4box/mp4box.pri)
 include($$ROOTDIR/module/ioutil/ioutil.pri)
 include($$ROOTDIR/module/qtext/qtext.pri)
 include($$ROOTDIR/module/crypt/crypt.pri)
@@ -96,6 +99,7 @@ SUBPATH = \
     $$PWD/dialog \
     $$PWD/osd \
     $$PWD/player \
+    $$PWD/stream \
     $$PWD/signal \
     $$PWD/token \
     $$PWD/tr \
@@ -160,6 +164,8 @@ HEADERS += \
     player/playerui.h \
     player/userlabel.h \
     signal/signalhub.h \
+    stream/mediastreamer.h \
+    stream/mediastreamtask.h \
     token/addaliasdialog.h \
     token/tokenview.h \
     user/userview.h \
@@ -172,7 +178,6 @@ HEADERS += \
     util/lineedit.h \
     util/logger.h \
     util/textedit.h \
-    web/cloudview.h \
     web/commentview.h
 
 SOURCES += \
@@ -224,6 +229,8 @@ SOURCES += \
     player/playerpanel.cc \
     player/userlabel.cc \
     signal/signalhub.cc \
+    stream/mediastreamer.cc \
+    stream/mediastreamtask.cc \
     token/addaliasdialog.cc \
     token/tokenview.cc \
     user/userview.cc \
@@ -234,7 +241,6 @@ SOURCES += \
     util/lineedit.cc \
     util/logger.cc \
     util/textedit.cc \
-    web/cloudview.cc \
     web/commentview.cc
 
 win32 {
@@ -287,6 +293,8 @@ unix:!mac {
     INSTALLS += target desktop desktop-kde icon
 
     target.path = $$BINDIR
+
+    LUA_SCRIPTS.path = $$DATADIR/annot/player/lua
 
     desktop.path = $$DATADIR/applications
     desktop.files += $${TARGET}.desktop

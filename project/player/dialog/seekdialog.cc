@@ -109,9 +109,9 @@ SeekDialog::SeekDialog(QWidget *parent)
     //rows->setContentsMargins(6, 6, 6, 6);
   } setLayout(rows);
 
-  setTabOrder(ssEdit_, mmEdit_);
-  setTabOrder(mmEdit_, hhEdit_);
-  setTabOrder(hhEdit_, ssEdit_);
+  setTabOrder(hhEdit_, mmEdit_);
+  setTabOrder(mmEdit_, ssEdit_);
+  setTabOrder(ssEdit_, hhEdit_);
 
   // Connections
   connect(ssEdit_->lineEdit(), SIGNAL(returnPressed()), SLOT(ok()));

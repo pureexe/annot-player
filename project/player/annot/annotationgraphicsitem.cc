@@ -57,7 +57,7 @@ namespace { // anonymous, annotation display
   next_y_(int window_height, int visible_time, AnnotationGraphicsItem::Style style, const SignalHub *hub_)
   {
     Q_ASSERT(hub_);
-    enum { lane_height = ANNOTATION_SIZE_DEFAULT + ANNOTATION_SIZE_MARGIN * 2 + 5 }; // height of a piece of danmu
+    enum { lane_height = ANNOTATION_SIZE_DEFAULT + ANNOTATION_SIZE_MARGIN * 2 + 6 }; // height of a piece of danmu
     enum { lane_count = 100 };                      // number of vertical lanes, large enough
 
     static time_t last_time_fly_[lane_count],
@@ -205,9 +205,11 @@ void
 AnnotationGraphicsItem::invalidateAnnotation()
 {
   setDefaultStyle();
+  invalidateEffect();
 
-  bool isOwner = annot_.userId() == view_->userId() &&
-                 annot_.userId() != User::UI_Guest;
+  bool isOwner = view_->userId() &&
+                 view_->userId() != User::UI_Guest &&
+                 annot_.userId() == view_->userId();
 
   QFont font = ::default_annot_font_(annot_.language());
   if (isOwner)
@@ -229,8 +231,6 @@ AnnotationGraphicsItem::invalidateAnnotation()
     if (isOwner)
       richText_ = CORE_CMD_LATEX_ULINE " " + richText_;
   }
-
-  invalidateGraphicsEffect();
 }
 
 // TODO: How to use QTextCharFormat to set advanced format:
@@ -266,14 +266,21 @@ AnnotationGraphicsItem::setTags(const QStringList &tags)
   if (!tags.empty())
     foreach (const QString &tag, tags) {
       switch (qHash(tag)) {
+      // Style:
       case AnnotCloud::H_Verbatim: continue;
       case AnnotCloud::H_Float: setStyle(FloatStyle); break;
       case AnnotCloud::H_Fly: setStyle(FlyStyle); break;
       case AnnotCloud::H_Top: setStyle(TopStyle); break;
       case AnnotCloud::H_Bottom: setStyle(BottomStyle); break;
-
       case AnnotCloud::H_Sub:
       case AnnotCloud::H_Subtitle: setStyle(SubtitleStyle); break;
+
+      // Effect:
+      case AnnotCloud::H_Transp:
+      case AnnotCloud::H_Transparent: setEffect(TransparentEffect); break;
+      case AnnotCloud::H_Shadow: setEffect(ShadowEffect); break;
+      case AnnotCloud::H_Blur: setEffect(BlurEffect); break;
+
       default:
         // Warn if the annot is submitted by current user
         if (!annot_.hasUserId() && !annot_.hasUserAlias() ||
@@ -295,27 +302,53 @@ AnnotationGraphicsItem::setDefaultStyle()
 }
 
 void
-AnnotationGraphicsItem::invalidateGraphicsEffect()
+AnnotationGraphicsItem::invalidateEffect()
 {
-  // Add outline to fonts
-  if (isSubtitle() || hub_->isSignalTokenMode()) {
-    QGraphicsDropShadowEffect *shadow = new QGraphicsDropShadowEffect(this);
-    //shadow->setBlurRadius(2); // in pixels
-    //shadow->setOffset(1); // in pixels
-    shadow->setBlurRadius(10); // in pixels
-    shadow->setOffset(1); // in pixels
-    shadow->setColor(QColor("black"));
-    setGraphicsEffect(shadow);
-  } else {
-    QGraphicsOpacityEffect *transp = new QGraphicsOpacityEffect(this);
-    transp->setOpacity(ANNOTATION_OPACITY);
-    setGraphicsEffect(transp);
+  Effect e;
+  switch (view_->renderHint()) {
+  case AnnotationGraphicsView::TransparentHint: e = TransparentEffect; break;
+  case AnnotationGraphicsView::ShadowHint: e = ShadowEffect; break;
+  case AnnotationGraphicsView::BlurHint: e = BlurEffect; break;
+  case AnnotationGraphicsView::DefaultRenderHint:
+  default:
+    //if (isSubtitle() || hub_->isSignalTokenMode())
+    //  e = ShadowEffect;
+    //else
+    //  e = TransparentEffect;
+    e = ShadowEffect;
   }
+  setEffect(e);
+}
 
-  //QGraphicsBlurEffect *blur = new QGraphicsBlurEffect(this);
-  //blur->setBlurHints(QGraphicsBlurEffect::PerformanceHint);
-  //blur->setBlurRadius(1.2);
-  //setGraphicsEffect(blur);
+void
+AnnotationGraphicsItem::setEffect(Effect e)
+{
+  switch (e) {
+  case ShadowEffect:
+    {
+      QGraphicsDropShadowEffect *shadow = new QGraphicsDropShadowEffect(this);
+      shadow->setBlurRadius(10); // in pixels
+      shadow->setOffset(1); // in pixels
+      shadow->setColor(QColor("black"));
+      setGraphicsEffect(shadow);
+    } break;
+  case TransparentEffect:
+    {
+      QGraphicsOpacityEffect *transp = new QGraphicsOpacityEffect(this);
+      transp->setOpacity(ANNOTATION_OPACITY);
+      setGraphicsEffect(transp);
+    } break;
+  case BlurEffect:
+    {
+      QGraphicsBlurEffect *blur = new QGraphicsBlurEffect(this);
+      blur->setBlurHints(QGraphicsBlurEffect::PerformanceHint);
+      blur->setBlurRadius(2.5);
+      setGraphicsEffect(blur);
+    } break;
+  case DefaultEffect:
+  default:
+    invalidateEffect();
+  }
 }
 
 /*
@@ -563,7 +596,7 @@ AnnotationGraphicsItem::stayTime(Style style) const
       w = qMax((int)boundingRect().width(), 50),
       h = qMax((int)boundingRect().height(), 20);
   float f = (float)(w0 + 200)/ (w + 200),
-        g = (float)(h + 20) / (ANNOTATION_SIZE_DEFAULT + 20);
+        g = (float)(h + 20) / (ANNOTATION_SIZE_DEFAULT + 15);
   float q = hub_->isSignalTokenMode() ? 1.0f : 0.8f;
   int ret = t * ::pow(f, 0.3f)* g * q + ANNOTATION_STAY_TIME_MIN;
   return qMin(ret, ANNOTATION_STAY_TIME_MAX);

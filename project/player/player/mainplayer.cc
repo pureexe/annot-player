@@ -2,6 +2,7 @@
 // 6/30/2011
 
 #include "mainplayer.h"
+#include <QtCore>
 #include <QtGui>
 
 // + MainPlayerDock +
@@ -47,6 +48,7 @@ MainPlayerUi::createLayout()
     rows->addLayout(row1);
     rows->addLayout(row2);
 
+    row1->addWidget(menuButton());
     row1->addWidget(playButton());
     row1->addWidget(toggleAnnotationButton());
     row1->addWidget(nextFrameButton());
@@ -71,6 +73,10 @@ MainPlayerUi::createLayout()
     row2->setContentsMargins(0, 0, 0, 9);
   }
   setLayout(rows);
+//#ifndef Q_OS_MAC
+//  menuButton()->hide();
+//  menuBButton()->resize(0, 0);
+//#endif // Q_OS_MAC
   setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
 }
 

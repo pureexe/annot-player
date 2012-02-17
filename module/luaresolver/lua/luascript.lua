@@ -72,11 +72,14 @@ function postdlFile(filesavepath, posturl, postdata, postheader)
 end
 
 -- Entry --
---g_acfpv = nil;
+g_debug = {};
+g_siteid = nil;
 g_title = nil;
 g_refurl = nil;
 g_mrls = nil;
 g_mrls_size = nil;
+g_sizes = nil;
+g_durations = nil;
 g_suburl = nil;
 function resolve(url, tmpnam, bSubOnly)
   --local t = getTaskAttribute("http://www.bilibili.tv/video/av205838/", tmpnam, "acfun.tv", bSubOnly);
@@ -87,12 +90,14 @@ function resolve(url, tmpnam, bSubOnly)
 
   dump(t);
   local p = "0";
-  --g_acfpv = t["acfpv"];
+  g_siteid = t[p]["acfpv"];
   g_title = t[p]["descriptor"];
   g_refurl = t[p]["oriurl"];
   if not bSubOnly then
     g_mrls = t[p]["realurls"];
     g_mrls_size = t[p]["realurlnum"];
+    g_sizes = t[p]["sizes"];
+    g_durations = t[p]["durations"];
   end
   if t[p]["subxmlurl"] ~= nil then
     g_suburl = t[p]["subxmlurl"]["0"];

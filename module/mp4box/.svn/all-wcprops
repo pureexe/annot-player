@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svnroot/gpac/!svn/ver/3905/trunk/gpac/applications/mp4box
+END
+live.c
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svnroot/gpac/!svn/ver/3802/trunk/gpac/applications/mp4box/live.c
+END
+wrapper.c
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svnroot/gpac/!svn/ver/3371/trunk/gpac/applications/mp4box/wrapper.c
+END
+main.c
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svnroot/gpac/!svn/ver/3888/trunk/gpac/applications/mp4box/main.c
+END
+filedump.c
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svnroot/gpac/!svn/ver/3905/trunk/gpac/applications/mp4box/filedump.c
+END
+fileimport.c
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svnroot/gpac/!svn/ver/3871/trunk/gpac/applications/mp4box/fileimport.c
+END
+Makefile
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svnroot/gpac/!svn/ver/2992/trunk/gpac/applications/mp4box/Makefile
+END

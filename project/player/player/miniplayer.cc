@@ -5,13 +5,13 @@
 #include "defines.h"
 #include "signalhub.h"
 #include "uistyle.h"
-#include "module/player/player.h"    // TO BE REMOVED; added due to bad design of playerui.
+#include "module/player/player.h"
+#include <QtCore>
 #include <QtGui>
 
 #define WINDOW_FLAGS_BASE \
   Qt::Dialog | \
   Qt::CustomizeWindowHint | \
-  Qt::WindowTitleHint | \
   Qt::WindowStaysOnTopHint
 
 #ifdef Q_WS_MAC
@@ -19,8 +19,12 @@
     Qt::FramelessWindowHint | \
     WINDOW_FLAGS_BASE )
 #else
-  #define WINDOW_FLAGS ( WINDOW_FLAGS_BASE )
+  #define WINDOW_FLAGS ( \
+    Qt::WindowTitleHint | \
+    WINDOW_FLAGS_BASE )
 #endif // Q_WS_MAC
+
+#define INPUTLINE_MAXIMUM_WIDTH   200
 
 // - Constructions -
 
@@ -34,17 +38,19 @@ MiniPlayerUi::MiniPlayerUi(SignalHub *hub, Player *player, ServerAgent *server, 
 
   createLayout();
 
-  QShortcut *e = new QShortcut(QKeySequence("F2"), this);
+  QShortcut *e = new QShortcut(QKeySequence("CTRL+1"), this);
   connect(e, SIGNAL(activated()), hub, SLOT(toggleEmbeddedPlayerMode()));
-  QShortcut *m = new QShortcut(QKeySequence("F3"), this);
+  QShortcut *m = new QShortcut(QKeySequence("CTRL+2"), this);
   connect(m, SIGNAL(activated()), hub, SLOT(toggleMiniPlayerMode()));
-  QShortcut *f = new QShortcut(QKeySequence("F11"), this);
+  QShortcut *f = new QShortcut(QKeySequence("CTRL+3"), this);
   connect(f, SIGNAL(activated()), hub, SLOT(toggleFullScreenWindowMode()));
 }
 
 void
 MiniPlayerUi::createLayout()
 {
+  inputComboBox()->setMaximumWidth(INPUTLINE_MAXIMUM_WIDTH);
+
   // Set layout
   QVBoxLayout *rows = new QVBoxLayout; {
     QHBoxLayout *row0 = new QHBoxLayout,
@@ -57,6 +63,7 @@ MiniPlayerUi::createLayout()
     row0->addWidget(positionButton());
     row0->addWidget(positionSlider());
 
+    row1->addWidget(menuButton());
     row1->addWidget(playButton());
     row1->addWidget(toggleAnnotationButton());
     row1->addWidget(nextFrameButton());
@@ -80,12 +87,17 @@ MiniPlayerUi::createLayout()
     row2->setContentsMargins(0, 0, 0, 9);
   }
   setLayout(rows);
-  setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+  //setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+  setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
   // TOD jichi 7/26/2011: This is really a bad hotfix. Need a better design for PlayerUI class do to this in an efficient way.
   // Note: there is no textChanged event in QLabel.
   positionButton()->hide(); // always hide - it is better to disable this label rather than hide it.
   positionButton()->resize(0, 0);
+//#ifndef Q_OS_MAC
+//  menuButton()->hide();
+//  menuBButton()->resize(0, 0);
+//#endif // Q_OS_MAC
 }
 
 void

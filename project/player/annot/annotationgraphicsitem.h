@@ -4,7 +4,6 @@
 // annotationgraphicsitem.h
 // 7/16/2011
 
-#include "config.h"
 #include "module/annotcloud/annotation.h"
 #include <QGraphicsTextItem>
 #include <QEasingCurve>
@@ -42,6 +41,8 @@ public:
 
   static void warmUp(); ///< optional, caching fonts on first load
 
+  enum Effect { DefaultEffect = 0, TransparentEffect, ShadowEffect, BlurEffect, EffectCount };
+
 public:
   AnnotationGraphicsItem(const Annotation &annot, SignalHub *hub, AnnotationGraphicsView *viewWithScene);
   //explicit AnnotationGraphicsItem(AnnotationGraphicsView *viewWithScene);
@@ -78,7 +79,8 @@ public slots:
   void removeMe(); // Remove me from graphics scene
   void deleteMe(); // Delete corresponding annotation
   void showMe();   // Add me to graphics scene, and autmatic remove me.
-  void invalidateGraphicsEffect();
+  void invalidateEffect();
+  void setEffect(Effect e);
 
 protected slots:
   void pause();

@@ -22,13 +22,13 @@ MrlResolverManager::MrlResolverManager(QObject *parent)
   r = new _resolver(this); { \
     connect(r, SIGNAL(errorReceived(QString)), SIGNAL(errorReceived(QString))); \
     connect(r, SIGNAL(messageReceived(QString)), SIGNAL(messageReceived(QString))); \
-    connect(r, SIGNAL(mediaResolved(MediaInfo)), SIGNAL(mediaResolved(MediaInfo))); \
+    connect(r, SIGNAL(mediaResolved(MediaInfo,QNetworkAccessManager*)), SIGNAL(mediaResolved(MediaInfo,QNetworkAccessManager*))); \
     connect(r, SIGNAL(subtitleResolved(QString)), SIGNAL(subtitleResolved(QString))); \
   } resolvers_.append(r);
 
   ADD(YoutubeMrlResolver)
   ADD(GoogleVideoMrlResolver)
-  ADD(YoukuMrlResolver)
+  //ADD(YoukuMrlResolver)
   ADD(LuaMrlResolver)
 #undef ADD
 }

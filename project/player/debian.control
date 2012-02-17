@@ -1,7 +1,7 @@
 # debian/control
 # 11/26/2011
 Source: annot-player
-Standards-Version: 0.1.2.7
+Standards-Version: 0.1.3.0
 Section: video
 Maintainer: Annot Cloud <annotcloud@gmail.com>
 Priority: optional

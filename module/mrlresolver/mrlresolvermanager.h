@@ -4,9 +4,11 @@
 // mrlresolvermanager.h
 // 1/25/2011
 
-#include "mediainfo.h"
+#include "mrlinfo.h"
 #include <QObject>
 #include <QList>
+
+QT_FORWARD_DECLARE_CLASS(QNetworkAccessManager)
 
 class MrlResolver;
 
@@ -30,7 +32,7 @@ public:
 
   // - Construction -
 public:
-  enum Resolver { Youtube = 0, GoogleVideo, Youku, Lua, ResolverCount };
+  enum Resolver { Youtube = 0, GoogleVideo, Lua, ResolverCount };
 
   static Self *globalInstance() { static Self g; return &g; }
 
@@ -42,7 +44,7 @@ signals:
   void errorReceived(QString message);
   void messageReceived(QString message);
 
-  void mediaResolved(MediaInfo mi);
+  void mediaResolved(MediaInfo mi, QNetworkAccessManager *nam);
   void subtitleResolved(QString suburl);
 
   // - Analysis -

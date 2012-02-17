@@ -6,6 +6,20 @@
 #include "rc.h" // This breaks the modularity of this pri
 #include <QtCore>
 
+#ifdef Q_OS_MAC
+  #define K_CTRL "cmd"
+#else
+  #define K_CTRL "ctrl"
+#endif // Q_OS_MAC
+
+#ifdef Q_OS_MAC
+  #define K_ALT "opt"
+#else
+  #define K_ALT "alt"
+#endif // Q_OS_MAC
+
+#define K_SHIFT "shift"
+
 // - Constructions -
 
 // Use C as an invalid entry
@@ -286,17 +300,17 @@ TranslatorManager::translate(int tid) const
 
   case T_OPENINWEBBROWSER:      return tr("Open in web browser");
 
-  case T_MENUTEXT_PLAY:         return tr("Play") + " [SPACE]";
-  case T_TIP_PLAY:              return tr("Play media") + " [SPACE]";
+  case T_MENUTEXT_PLAY:         return tr("Play") + " [space]";
+  case T_TIP_PLAY:              return tr("Play media") + " [space]";
 
   case T_MENUTEXT_MENU:         return tr("Menu");
   case T_TIP_MENU:              return tr("Show menu");
 
-  case T_MENUTEXT_PAUSE:        return tr("Pause") + " [SPACE]";
-  case T_TIP_PAUSE:             return tr("Pause playing") + " [SPACE]";
+  case T_MENUTEXT_PAUSE:        return tr("Pause") + " [space]";
+  case T_TIP_PAUSE:             return tr("Pause playing") + " [space]";
 
-  case T_MENUTEXT_STOP:         return tr("Stop");
-  case T_TIP_STOP:              return tr("Stop playing");
+  case T_MENUTEXT_STOP:         return tr("Stop") + " [backspace]";
+  case T_TIP_STOP:              return tr("Stop playing") + " [backspace]";
 
   case T_MENUTEXT_NEXTFRAME:    return tr("Next frame");
   case T_TIP_NEXTFRAME:         return tr("Next frame");
@@ -304,11 +318,11 @@ TranslatorManager::translate(int tid) const
   case T_MENUTEXT_REPLAY:       return tr("Replay");
   case T_TIP_REPLAY:            return tr("Restart playing");
 
-  case T_MENUTEXT_MINI:         return tr("Mini player") + " [F3/ESC]";
-  case T_TIP_MINI:              return tr("Show mini player") + " [F3/ESC]";
+  case T_MENUTEXT_MINI:         return tr("Mini player") + " [" K_CTRL "+2]";
+  case T_TIP_MINI:              return tr("Show mini player") + " [" K_CTRL "+2]";
 
-  case T_MENUTEXT_EMBED:        return tr("Embed player") + " [F2]";
-  case T_TIP_EMBED:             return tr("Embed player window") + " [F2]";
+  case T_MENUTEXT_EMBED:        return tr("Embed player") + " [" K_CTRL "+1]";
+  case T_TIP_EMBED:             return tr("Embed player window") + " [" K_CTRL "+1]";
 
   case T_MENUTEXT_EMBEDONTOP:   return tr("Embed on top");
   case T_TIP_EMBEDONTOP:        return tr("Embed player window on the top");
@@ -319,8 +333,8 @@ TranslatorManager::translate(int tid) const
   case T_MENUTEXT_SYNC:         return tr("Sync mode");
   case T_TIP_SYNC:              return tr("Toggle Sync mode");
 
-  case T_MENUTEXT_FULLSCREEN:   return tr("Fullscreen") + " [F11/ENTER]";
-  case T_TIP_FULLSCREEN:        return tr("Show fullscreen") + " [F11/ENTER]";
+  case T_MENUTEXT_FULLSCREEN:   return tr("Fullscreen") + " [" K_CTRL "+3]";
+  case T_TIP_FULLSCREEN:        return tr("Show fullscreen") + " [" K_CTRL "+3]";
 
   case T_MENUTEXT_SNAPSHOT:     return tr("Snapshot");
   case T_TIP_SNAPSHOT:          return tr("Taks a snapshot of current frame");
@@ -358,6 +372,14 @@ TranslatorManager::translate(int tid) const
 
   case T_MENUTEXT_SEEKDIALOG:   return tr("Seek");
   case T_TIP_SEEKDIALOG:        return tr("Show seek dialog");
+
+  case T_MENUTEXT_PREVIOUS:     return tr("Previous") + " [" K_CTRL "+" K_SHIFT "+←]";
+  case T_TIP_PREVIOUS:          return tr("Previous") + " [" K_CTRL "+" K_SHIFT "+←]";
+  case T_MENUTEXT_NEXT:         return tr("Next") + " [" K_CTRL "+" K_SHIFT "+→]";
+  case T_TIP_NEXT:              return tr("Next") + " [" K_CTRL "+" K_SHIFT "+→]";
+
+  case T_MENUTEXT_BLACKLIST:    return tr("Blacklist") + " [" K_CTRL + "+F4]";
+  case T_TIP_BLACKLIST:         return tr("Blacklist") + " [" K_CTRL + "+F4]";
 
   case T_MENUTEXT_PICKDIALOG:   return tr("Pick window");
   case T_TIP_PICKDIALOG:        return tr("Show pick dialog");
@@ -474,13 +496,13 @@ TranslatorManager::translate(int tid) const
   case T_MENUTEXT_DISCONNECT:   return tr("Disconnect from server");
   case T_TIP_DISCONNECT:        return tr("Disconnect from server and use local cache only");
 
-  case T_MENUTEXT_ANNOTATIONBROWSER: return tr("Annots");
-  case T_TIP_ANNOTATIONBROWSER: return tr("Show annotation browser");
-
-  case T_MENUTEXT_ANNOTATIONEDITOR: return tr("Annot editor");
+  case T_MENUTEXT_ANNOTATIONEDITOR: return tr("Annot editor") + " [" K_CTRL "+F1]";
   case T_TIP_ANNOTATIONEDITOR: return tr("Show annotation editor");
 
-  case T_MENUTEXT_TOKENVIEW:    return tr("Token");
+  case T_MENUTEXT_ANNOTATIONBROWSER: return tr("Annots") + " [" K_CTRL "+F2]";
+  case T_TIP_ANNOTATIONBROWSER: return tr("Show annotation browser");
+
+  case T_MENUTEXT_TOKENVIEW:    return tr("Token") + " [" K_CTRL "+F3]";
   case T_TIP_TOKENVIEW:         return tr("Show token view");
 
   case T_MENUTEXT_COMMENTVIEW:  return tr("Comments");
@@ -569,12 +591,12 @@ TranslatorManager::translate(int tid) const
   case T_MENUTEXT_BACKWARD5S:   return tr("Backward 5 sec");
   case T_MENUTEXT_FORWARD10S:   return tr("Forward 10 sec");
   case T_MENUTEXT_BACKWARD10S:  return tr("Backward 10 sec");
-  case T_MENUTEXT_FORWARD30S:   return tr("Forward 30 sec");
-  case T_MENUTEXT_BACKWARD30S:  return tr("Backward 30 sec");
+  case T_MENUTEXT_FORWARD30S:   return tr("Forward 30 sec") + " [→]";
+  case T_MENUTEXT_BACKWARD30S:  return tr("Backward 30 sec") + " [←]";
   case T_MENUTEXT_FORWARD60S:   return tr("Forward 60 sec");
   case T_MENUTEXT_BACKWARD60S:  return tr("Backward 60 sec");
-  case T_MENUTEXT_FORWARD90S:   return tr("Forward 90 sec");
-  case T_MENUTEXT_BACKWARD90S:  return tr("Backward 90 sec");
+  case T_MENUTEXT_FORWARD90S:   return tr("Forward 90 sec") + " [" K_CTRL "+→]";
+  case T_MENUTEXT_BACKWARD90S:  return tr("Backward 90 sec") + " [" K_CTRL "+←]";
   case T_MENUTEXT_FORWARD1M:    return tr("Forward 1 min");
   case T_MENUTEXT_BACKWARD1M:   return tr("Backward 1 min");
   case T_MENUTEXT_FORWARD5M:    return tr("Forward 5 min");
@@ -662,6 +684,11 @@ TranslatorManager::translate(int tid) const
 
   case T_HISTORY:       return tr("History");
   case T_WEBSITE:       return tr("Website");
+
+  case T_ANNOTATIONEFFECT: return tr("Annotation effect");
+  case T_TRANSPARENT:      return tr("Transparent");
+  case T_SHADOW:           return tr("Shadow");
+  case T_BLUR:             return tr("Blur");
 
   case T_URL_NICOVIDEO: return tr("http://nicovideo.jp");
   case T_URL_BILIBILI:  return tr("http://bilibili.tv");

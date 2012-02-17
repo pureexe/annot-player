@@ -7,7 +7,7 @@
 #include "config.h"
 #include "module/annotcloud/alias.h"
 #include "module/annotcloud/annotation.h"
-#include "module/mrlresolver/mediainfo.h"
+#include "module/mrlresolver/mrlinfo.h"
 #ifdef USE_MODE_SIGNAL
   #include "processinfo.h"
 #endif // USE_MODE_SIGNAL
@@ -19,7 +19,7 @@
 #include <QFileInfoList>
 
 QT_FORWARD_DECLARE_CLASS(QTimer)
-QT_FORWARD_DECLARE_CLASS(QUrl)
+QT_FORWARD_DECLARE_CLASS(QNetworkAccessManager)
 QT_FORWARD_DECLARE_CLASS(QMimeData)
 
 namespace QtExt { class CountdownTimer; }
@@ -141,6 +141,9 @@ public slots:
   void translate(const QString &text);
 
   void setWindowOnTop(bool t = true);
+  void toggleWindowOnTop()
+  { setWindowOnTop(!isWindowOnTop()); }
+
   //void ensureWindowOnTop();
 
   void setSubtitleOnTop(bool t);
@@ -189,7 +192,8 @@ public slots:
   void openSubtitle();
   void openDirectory();
   void openMrl(const QString &path, bool checkPath = true);
-  void openRemoteMedia(const MediaInfo &mi);
+  void openStreamUrl(const QString &rtsp);
+  void openRemoteMedia(const MediaInfo &mi, QNetworkAccessManager *nam = 0);
   void openLocalUrl(const QUrl &url);
   void openLocalUrls(const QList<QUrl> &urls);
   void openMimeData(const QMimeData *urls);
@@ -263,9 +267,13 @@ public slots:
   void setUserViewVisible(bool visible);
 
   void setAnnotationEditorVisible(bool visible);
+  void toggleAnnotationEditorVisible();
 
   void setBlacklistViewVisible(bool visible);
   void showBlacklistView() { setBlacklistViewVisible(true); }
+
+  void toggleTokenViewVisible();
+  void toggleAnnotationBrowserVisible();
 
   void openInCloudView(const QString &url);
   void openHomePage();
@@ -461,6 +469,14 @@ public slots:
   void setThemeToWhite();
   void setThemeToYellow();
 
+  // - Annotation effect -
+protected slots:
+  void invalidateAnnotationEffectMenu();
+  void setAnnotationEffectToDefault();
+  void setAnnotationEffectToTransparent();
+  void setAnnotationEffectToShadow();
+  void setAnnotationEffectToBlur();
+
   // - Browse -
 public slots:
   void setBrowsedFile(const QString &filePath);
@@ -650,6 +666,7 @@ private:
         *backwardMenu_,
         *forwardMenu_,
         *appLanguageMenu_,
+        *annotationEffectMenu_,
         *userLanguageMenu_,
         *annotationLanguageMenu_,
         *themeMenu_,
@@ -674,6 +691,11 @@ private:
           *setSubtitleColorToPurpleAct_,
           *setSubtitleColorToOrangeAct_,
           *setSubtitleColorToBlackAct_;
+
+  QAction *setAnnotationEffectToDefaultAct_,
+          *setAnnotationEffectToTransparentAct_,
+          *setAnnotationEffectToShadowAct_,
+          *setAnnotationEffectToBlurAct_;
 
   QAction *openAct_,
           *openFileAct_,

@@ -63,7 +63,8 @@ function getTaskAttribute_tudou ( str_url, str_tmpfile ,str_servername, pDlg)
 
 	local tbl_ta = {};
 	tbl_ta["acfpv"] = int_acfpv;
-	tbl_ta["descriptor"] = "tudou"..str_id.." - "..str_descriptor;
+	--tbl_ta["descriptor"] = "tudou"..str_id.." - "..str_descriptor;
+	tbl_ta["descriptor"] = str_descriptor;
 	tbl_ta["subxmlurl"] = tbl_subxmlurls;--str_subxmlurl;
 	tbl_ta["realurlnum"] = int_realurlnum;
 	tbl_ta["realurls"] = tbl_realurls;

@@ -103,15 +103,19 @@ LuaMrlResolver::resolveMedia(const QString &href, bool async)
   DOUT("url =" << url);
 
   //LuaResolver *lua = makeResolver();
-  LuaResolver lua(LUASCRIPT_PATH, LUAPACKAGE_PATH);
+  //QNetworkAccessManager *nam = new QNetworkAccessManager(this);
+  QNetworkAccessManager *nam = new QNetworkAccessManager;
+  LuaResolver lua(LUASCRIPT_PATH, LUAPACKAGE_PATH, nam);
   if (hasNicovideoAccount())
     lua.setNicovideoAccount(nicovideoUsername_, nicovideoPassword_);
   if (hasBilibiliAccount())
     lua.setBilibiliAccount(bilibiliUsername_, bilibiliPassword_);
 
+  int siteid;
   QString refurl, title, suburl;
   QStringList mrls;
-  bool ok = lua.resolve(url, &refurl, &title, &suburl, &mrls);
+  QList<qint64> durations, sizes;
+  bool ok = lua.resolve(url, &siteid, &refurl, &title, &suburl, &mrls, &durations, &sizes);
   if (!ok) {
     emit errorReceived(tr("failed to resolve URL") + ": " + url);
     DOUT("exit: LuaResolver returned false");
@@ -135,16 +139,33 @@ LuaMrlResolver::resolveMedia(const QString &href, bool async)
   mi.refurl = formatUrl(refurl);
   if (mi.refurl.contains("acfun.tv", Qt::CaseInsensitive))
     encoding = "GBK";
+  else if (mi.refurl.contains("nicovideo.jp", Qt::CaseInsensitive))
+    encoding = "SHIFT-JIS";
   mi.title = formatTitle(title, encoding);
 
   switch (mrls.size()) { // Specialization for better performance
   case 0: break;
-  case 1: mi.mrls.append(formatUrl(mrls.front())); break;
+  case 1:
+    {
+      MrlInfo m(formatUrl(mrls.first()));
+      if (!durations.isEmpty())
+        m.duration = durations.front();
+      if (!sizes.isEmpty())
+        m.size = sizes.first();
+      mi.mrls.append(m);
+    } break;
+
   default:
-    foreach (QString mrl, mrls)
-      mi.mrls.append(formatUrl(mrl));
+    for (int i = 0; i < mrls.size(); i++) {
+      MrlInfo m(formatUrl(mrls[i]));
+      if (durations.size() > i)
+        m.duration = durations[i];
+      if (sizes.size() > i)
+        m.size = sizes[i];
+      mi.mrls.append(m);
+    }
   }
-  emit mediaResolved(mi);
+  emit mediaResolved(mi, nam);
   DOUT("exit: title =" << mi.title);
 }
 
@@ -171,8 +192,9 @@ LuaMrlResolver::resolveSubtitle(const QString &href, bool async)
     lua.setBilibiliAccount(bilibiliUsername_, bilibiliPassword_);
 
   // LuaResolver::resolve(const QString &href, QString *refurl, QString *title, QString *suburl, QStringList *mrls) const
+  int siteid;
   QString suburl;
-  bool ok = lua.resolve(url, 0, 0, &suburl);
+  bool ok = lua.resolve(url, &siteid, 0, 0, &suburl);
   if (!ok) {
     emit errorReceived(tr("failed to resolve URL") + ": " + url);
     DOUT("exit: LuaResolver returned false");
@@ -232,7 +254,9 @@ LuaMrlResolver::formatTitle(const QString &title, const char *encoding)
   if (ret.isEmpty())
     return ret;
 
+  ret = ret.remove(QRegExp(" ‐ ニコニコ動画(原宿)$"));
   ret = ret.remove(QRegExp(" - 嗶哩嗶哩 - .*"));
+  ret = ret.remove(QRegExp(" - 优酷视频 - .*"));
   ret = ret.remove(QRegExp(" - AcFun.tv$"));
   ret = ret.trimmed();
   return ret;

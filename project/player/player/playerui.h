@@ -6,6 +6,8 @@
 
 #include "playerpanel.h"
 
+QT_FORWARD_DECLARE_CLASS(QMenu)
+
 class SignalHub;
 class Player;
 class ServerAgent;
@@ -44,7 +46,10 @@ public:
   virtual void setVisible(bool visible); ///< \override
   bool isActive() const { return active_; }
 
+  void setMenu(QMenu *menu);
+
 signals:
+  void invalidateMenuRequested();
   void textEntered(const QString &text);
   void loginRequested();
   void showPositionPanelRequested();
@@ -84,6 +89,9 @@ public slots:
 
   // - Comments -
   void postAnnotation(); ///< Post annotation in lineEdit()
+
+protected slots:
+  void popupMenu();
 
 private:
   void createConnections();

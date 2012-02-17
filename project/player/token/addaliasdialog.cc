@@ -168,6 +168,10 @@ AddAliasDialog::AddAliasDialog(QWidget *parent)
     row5->addWidget(cancelButton_);
   } setLayout(rows);
 
+  // Shotcuts
+  QShortcut *cancelShortcut = new QShortcut(QKeySequence("Esc"), this);
+  connect(cancelShortcut, SIGNAL(activated()), SLOT(hide()));
+
   // Initial status
   invalidateOKButton();
   aliasEdit_->setFocus();

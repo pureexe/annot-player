@@ -1,0 +1,26 @@
+#ifndef REMOTEINPUTSTREAM_H
+#define REMOTEINPUTSTREAM_H
+
+// remoteinputstream.h
+// 2/9/2012
+
+#include "inputstream.h"
+#include <QObject>
+
+class RemoteInputStream : public QObject, public InputStream
+{
+  Q_OBJECT
+  typedef RemoteInputStream Self;
+  typedef QObject Base;
+
+public:
+  explicit RemoteInputStream(QObject *parent = 0);
+
+  virtual void setBufferSize(qint64 size) { Q_UNUSED(size); }
+
+  virtual qint64 size() const { return 0; }
+  virtual qint64 read(char *data, qint64 maxSize) { return 0; }
+  virtual qint64 skip(qint64 count) { return 0; }
+};
+
+#endif // INPUTSTREAM_H

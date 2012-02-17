@@ -12,13 +12,14 @@
 #endif // Q_WS_WIN
 #include "module/qtext/toolbutton.h"
 #include "module/qtext/withsizehint.h"
+#include <QtCore>
 #include <QtGui>
 
 #define DEBUG "embeddedplayerui"
 #include "module/debug/debug.h"
 
-#define G_INPUTLINE_MINWIDTH    400
-#define G_INPUTLINE_MINHEIGHT   25
+#define INPUTLINE_MINWIDTH    400
+#define INPUTLINE_MINHEIGHT   25
 
 #define SS_COMBOBOX_OSD \
   SS_BEGIN(QComboBox) \
@@ -45,7 +46,7 @@
 // - Constructions -
 EmbeddedPlayerUi::EmbeddedPlayerUi(SignalHub *hub, Player *player, ServerAgent *server, QWidget *parent)
   : Base(hub, player, server, parent),
-    menuButton_(0), containerWindow_(0), containerWidget_(0),
+    containerWindow_(0), containerWidget_(0),
     fullScreen_(false), top_(false)
 {
   setWindowFlags(Qt::FramelessWindowHint);
@@ -91,10 +92,10 @@ EmbeddedPlayerUi::createLayout()
   QtExt::WithSizeHint*
   w = dynamic_cast<QtExt::WithSizeHint*>(inputComboBox());
   if (w)
-    w->setSizeHint(QSize(G_INPUTLINE_MINWIDTH, G_INPUTLINE_MINHEIGHT));
+    w->setSizeHint(QSize(INPUTLINE_MINWIDTH, INPUTLINE_MINHEIGHT));
   w = dynamic_cast<QtExt::WithSizeHint*>(prefixComboBox());
   if (w)
-    w->setSizeHint(QSize(G_PREFIXLINE_MAXWIDTH, G_INPUTLINE_MINHEIGHT));
+    w->setSizeHint(QSize(G_PREFIXLINE_MAXWIDTH, INPUTLINE_MINHEIGHT));
 
   // Set layout
   QVBoxLayout *rows = new QVBoxLayout; {
@@ -349,33 +350,6 @@ EmbeddedPlayerUi::showWhenEmbedded()
 {
   if (!isVisible() && hub()->isEmbeddedPlayerMode())
     show();
-}
-
-// - Menu button -
-
-void
-EmbeddedPlayerUi::setMenu(QMenu *menu)
-{ menuButton()->setMenu(menu); }
-
-QToolButton*
-EmbeddedPlayerUi::menuButton()
-{
-  if (!menuButton_) {
-    menuButton_ = new QtExt::ToolButton(this);
-    menuButton_->setStyleSheet(SS_TOOLBUTTON_MENU);
-    menuButton_->setToolTip(TR(T_TOOLTIP_MENU));
-    UiStyle::globalInstance()->setToolButtonStyle(menuButton_);
-
-    connect(menuButton_, SIGNAL(clicked()), SLOT(popupMenu()));
-  }
-  return menuButton_;
-}
-
-void
-EmbeddedPlayerUi::popupMenu()
-{
-  emit invalidateMenuRequested();
-  menuButton()->showMenu();
 }
 
 // EOF

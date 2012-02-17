@@ -5,6 +5,9 @@
 #include "osdconsole.h"
 #include "defines.h"
 #include "logger.h"
+#include "tr.h"
+#include "defines.h"
+#include "module/qtext/htmltag.h"
 #include "module/qtext/datetime.h"
 #include "module/player/player.h"
 #include "module/serveragent/serveragent.h"
@@ -29,7 +32,7 @@ EventLogger::createConnections()
   //connect(player_, SIGNAL(titleIdChanged(int)), SLOT(logTitleChanged()));
   connect(player_, SIGNAL(mediaChanged()), SLOT(logMediaChanged()));
   connect(player_, SIGNAL(mediaClosed()), SLOT(logMediaClosed()));
-  //connect(player_, SIGNAL(volumeChanged()), SLOT(logVolumeChanged()));
+  connect(player_, SIGNAL(volumeChanged()), SLOT(logVolumeChanged()));
   connect(player_, SIGNAL(subtitleChanged()), SLOT(logSubtitleChanged()));
   connect(player_, SIGNAL(audioTrackChanged()), SLOT(logAudioTrackChanged()));
   connect(player_, SIGNAL(opening()), SLOT(logOpening()));
@@ -119,7 +122,22 @@ EventLogger::logMediaClosed()
 
 void
 EventLogger::logVolumeChanged()
-{ log(tr("volume changed")); }
+{
+  //static bool first = true;
+  //if (first) {
+  //  first = false;
+  //  return;
+  //}
+
+  if (player_->isValid()) {
+    int v = player_->volume() * 100;
+    if (v == 50)
+      return;
+    QString msg = QString("%1: " HTML_STYLE_OPEN(color:orange) "%2%" HTML_STYLE_CLOSE())
+        .arg(TR(T_VOLUME)).arg(QString::number(v));
+    log(msg);
+  }
+}
 
 void
 EventLogger::logSubtitleChanged()
@@ -192,7 +210,18 @@ EventLogger::logLogoutFinished()
 
 void
 EventLogger::logSeeked(qint64 msecs)
-{ log(tr("seek") + ": " + QtExt::msecs2time(msecs).toString()); }
+{
+  if (player_->isValid()) {
+
+    QTime t = QtExt::msecs2time(msecs);
+    QTime l = QtExt::msecs2time(player_->mediaLength());
+    QString msg = QString("%1: " HTML_STYLE_OPEN(color:orange) "%2 / %3" HTML_STYLE_CLOSE())
+        .arg(tr("seek"))
+        .arg(t.toString())
+        .arg(l.toString());
+    log(msg);
+  }
+}
 
 void
 EventLogger::logCacheCleared()

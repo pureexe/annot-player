@@ -19,16 +19,16 @@
 
 #define UNUSED(_var)    (void)(_var)
 
-//#define DEBUG "LuaResolver"
+//#define DEBUG "luaresolver"
 #include "module/debug/debug.h"
 
 // - Construction -
 
 LuaResolver::LuaResolver(const QString &scriptPath, const QString &packagePath,
-                         QNetworkAccessManager *qnam, QObject *parent)
-  : Base(parent), qnam_(qnam), scriptPath_(scriptPath), packagePath_(packagePath){
-  if (!qnam_)
-    qnam_ = new QNetworkAccessManager(this);
+                         QNetworkAccessManager *nam, QObject *parent)
+  : Base(parent), nam_(nam), scriptPath_(scriptPath), packagePath_(packagePath){
+  if (!nam_)
+    nam_ = new QNetworkAccessManager(this);
 }
 
 // - Helpers -
@@ -95,7 +95,7 @@ LuaResolver::dlget(lua_State *L)
 
   const bool async = false;
   const QString noheader;
-  Downloader dl(path, zipped, 0, qnam_);
+  Downloader dl(path, zipped, 0, nam_);
   dl.get(QUrl(url), noheader, async);
   bool ok = dl.state() == Downloader::OK;
   DOUT("exit: ok =" << ok);
@@ -121,7 +121,7 @@ LuaResolver::dlpost(lua_State *L)
   QString header = _qs(lua_tostring(L, PARAM_HEADER));
   bool zipped = url.contains("bilibili.tv/", Qt::CaseInsensitive);
   const bool async = false;
-  Downloader dl(path, zipped, 0, qnam_);
+  Downloader dl(path, zipped, 0, nam_);
   //QByteArray data = Downloader::encodeUrlParameters(param);
   QByteArray data = param.toLocal8Bit();
   dl.post(QUrl(url), data, header, async);
@@ -171,8 +171,8 @@ LuaResolver::appendLuaPath(lua_State *L, const QString &path)
 // - Resolvers -
 
 bool
-LuaResolver::resolve(const QString &href, QString *refurl, QString *title,
-                     QString *suburl, QStringList *mrls)
+LuaResolver::resolve(const QString &href, int *siteid, QString *refurl, QString *title, QString *suburl,
+                     QStringList *mrls, QList<qint64> *durations, QList<qint64> *sizes)
 {
   if (href.isEmpty())
     return false;
@@ -269,6 +269,12 @@ LuaResolver::resolve(const QString &href, QString *refurl, QString *title,
       }
     }
 
+    if (siteid) {
+      lua_getglobal(L, "g_siteid");
+      if (!lua_isnil(L, -1))
+         *siteid = lua_tointeger(L, -1);
+    }
+
     if (title) {
       lua_getglobal(L, "g_title");
       if (!lua_isnil(L, -1))
@@ -287,28 +293,98 @@ LuaResolver::resolve(const QString &href, QString *refurl, QString *title,
         *suburl = _qs(lua_tostring(L, -1));
     }
 
-    if (mrls) {
+    if (mrls || durations || sizes) {
       int mrls_size = 0;
       lua_getglobal(L, "g_mrls_size");
       if (!lua_isnil(L, -1))
         mrls_size = lua_tointeger(L, -1);
       if (mrls_size > 0) {
-        lua_getglobal(L, "g_mrls");
-        if (!lua_isnil(L, -1)) {
-          lua_pushnil(L);
-          while (lua_next(L, -2)) {
-            if (lua_isstring(L, -1))
-              mrls->append(_qs(lua_tostring(L, -1)));
+        // MRLs
+        if (mrls) {
+          lua_getglobal(L, "g_mrls");
+          if (!lua_isnil(L, -1)) {
+            int count = 0;
+            lua_pushnil(L);
+            while (lua_next(L, -2)) {
+              if (lua_isstring(L, -1)) {
+                if (count++ % 2)
+                  mrls->insert(mrls->size() - 1,
+                               _qs(lua_tostring(L, -1)));
+                else
+                  mrls->append(_qs(lua_tostring(L, -1)));
+              }
+              lua_pop(L, 1);
+            }
             lua_pop(L, 1);
           }
-          lua_pop(L, 1);
+        }
+        // Durations
+        if (durations) {
+          lua_getglobal(L, "g_durations");
+          if (!lua_isnil(L, -1)) {
+            int count = 0;
+            lua_pushnil(L);
+            while (lua_next(L, -2)) {
+              if (lua_isnumber(L, -1)) {
+                if (count++ % 2)
+                  durations->insert(durations->size() - 1,
+                                    lua_tointeger(L, -1));
+                else
+                  durations->append(lua_tointeger(L, -1));
+              }
+              lua_pop(L, 1);
+            }
+            lua_pop(L, 1);
+          }
+        }
+        // Sizes
+        if (sizes) {
+          lua_getglobal(L, "g_sizes");
+          if (!lua_isnil(L, -1)) {
+            int count = 0;
+            lua_pushnil(L);
+            while (lua_next(L, -2)) {
+              if (lua_isnumber(L, -1)) {
+                if (count++ % 2)
+                  sizes->insert(sizes->size() - 1,
+                                lua_tointeger(L, -1));
+                else
+                  sizes->append(lua_tointeger(L, -1));
+              }
+              lua_pop(L, 1);
+            }
+            lua_pop(L, 1);
+          }
         }
       }
     }
 
+#ifdef DEBUG
+    // Debug
+    {
+      // 1 0 3 2 5 4 7 6
+      int count = 0;
+      lua_getglobal(L, "g_debug");
+      if (!lua_isnil(L, -1)) {
+        lua_pushnil(L);
+        while (lua_next(L, -2)) {
+          if (lua_isstring(L, -1)) {
+            int index = count % 2 ? count + 1 : count - 1;
+            DOUT("debug[" << index << "] =" << _qs(lua_tostring(L, -1)));
+            count++;
+          }
+          lua_pop(L, 1);
+        }
+        lua_pop(L, 1);
+      }
+    }
+#endif // DEBUG
+
     lua_close(L);
 
 #ifdef DEBUG
+    if (siteid)
+      DOUT("siteid =" << *siteid);
     if (title)
       DOUT("title =" << *title);
     if (refurl)
@@ -317,6 +393,10 @@ LuaResolver::resolve(const QString &href, QString *refurl, QString *title,
       DOUT("suburl =" << *suburl);
     if (mrls)
       DOUT("mrls =" << *mrls);
+    if (sizes)
+      DOUT("sizes =" << *sizes);
+    if (durations)
+      DOUT("durations =" << *durations);
 #endif // DEBUG
     return true;
 

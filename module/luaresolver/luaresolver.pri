@@ -13,7 +13,24 @@ HEADERS += \
 SOURCES += \
     $$PWD/luaresolver.cc
 
-OTHER_FILES += $$PWD/lua/luascript.lua
+LUA_SCRIPTS += \
+    $$PWD/lua/luascript/add.lua \
+    $$PWD/lua/luascript/customadd.lua \
+    $$PWD/lua/luascript/lib/bit.lua \
+    $$PWD/lua/luascript/lib/lalib.lua \
+    $$PWD/lua/luascript/lib/login.lua \
+    $$PWD/lua/luascript/loginconfig.lua \
+    $$PWD/lua/luascript/sitelist/acfun.lua \
+    $$PWD/lua/luascript/sitelist/bilibili.lua \
+    $$PWD/lua/luascript/sitelist/mikufans.lua \
+    $$PWD/lua/luascript/sitelist/nicovideo.lua \
+    $$PWD/lua/luascript/sitelist/qqvideo.lua \
+    $$PWD/lua/luascript/sitelist/sina.lua \
+    $$PWD/lua/luascript/sitelist/tudou.lua \
+    $$PWD/lua/luascript/sitelist/youku.lua \
+    $$PWD/lua/luascript.lua
+
+OTHER_FILES += $$LUA_SCRIPTS
 
 QT      += core network
 

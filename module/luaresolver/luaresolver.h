@@ -17,7 +17,7 @@ class LuaResolver : public QObject
   typedef LuaResolver Self;
   typedef QObject Base;
 
-  QNetworkAccessManager *qnam_;
+  QNetworkAccessManager *nam_;
 
   QString scriptPath_;
   QString packagePath_;
@@ -37,15 +37,22 @@ public:
 
   explicit LuaResolver(const QString &scriptPath,
                        const QString &packagePath = QString(),
-                       QNetworkAccessManager *qnam = 0,
+                       QNetworkAccessManager *nam = 0,
                        QObject *parent = 0);
 
+  QNetworkAccessManager *networkAccessManager() const
+  { Q_ASSERT(nam_); return nam_; }
+
+  // CHECKPOINT: siteid with nam
 public:
   bool resolve(const QString &href,
+               int *siteid = 0,
                QString *refurl = 0,
                QString *title = 0,
                QString *suburl = 0,
-               QStringList *mrls = 0);
+               QStringList *mrls = 0,
+               QList<qint64> *durations = 0,
+               QList<qint64> *sizes = 0);
 
   bool hasNicovideoAccount() const
   { return !nicovideoUsername_.isEmpty() && !nicovideoPassword_.isEmpty(); }

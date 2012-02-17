@@ -15,9 +15,16 @@
 #endif // Q_WS_WIN
 #include "boost/foreach.hpp"
 #include <map>
+#include <QtCore>
 #include <QtGui>
 
 using namespace AnnotCloud;
+
+#ifdef Q_OS_MAC
+  #define K_CTRL "cmd"
+#else
+  #define K_CTRL "ctrl"
+#endif // Q_OS_MAC
 
 /* jichi 7/25/2011: using boost is so bloated while less efficient than directly expanding the code.
 #include <boost/typeof/typeof.hpp>
@@ -77,6 +84,9 @@ PlayerUi::PlayerUi(SignalHub *hub, Player *player, ServerAgent *server, QWidget 
   // Post fix: remove blurred graphics effects for text buttons
   userButton()->setGraphicsEffect(0);
 
+  positionButton()->setToolTip(positionButton()->toolTip()  + " [" K_CTRL "+F]");
+  positionSlider()->setToolTip(positionSlider()->toolTip()  + " [" K_CTRL "+F]");
+
   toggleEmbedModeButton()->setCheckable(true);
   toggleMiniModeButton()->setCheckable(true);
   toggleFullScreenModeButton()->setCheckable(true);
@@ -92,6 +102,7 @@ PlayerUi::PlayerUi(SignalHub *hub, Player *player, ServerAgent *server, QWidget 
 void
 PlayerUi::createConnections()
 {
+  connect(menuButton(), SIGNAL(clicked()), SLOT(popupMenu()));
   connect(playButton(), SIGNAL(clicked()), SLOT(play()));
   connect(stopButton(), SIGNAL(clicked()), SLOT(stop()));
   connect(nextFrameButton(), SIGNAL(clicked()), SLOT(nextFrame()));
@@ -353,7 +364,7 @@ PlayerUi::invalidateVolumeSlider()
   // Update tool tip.
   int percentage = qRound(vol * 100);
   slider->setToolTip(
-    QString("%1 %2%")
+    QString("%1 %2%" " [" K_CTRL "+shift+↑/↓]")
       .arg(TR(T_VOLUME))
       .arg(QString::number(percentage))
   );
@@ -643,5 +654,19 @@ PlayerUi::invalidateVisibleWidgets()
   nextButton()->setVisible(v);
   nextFrameButton()->setVisible(v);
 }
+
+// - Menu button -
+
+void
+PlayerUi::setMenu(QMenu *menu)
+{ menuButton()->setMenu(menu); }
+
+void
+PlayerUi::popupMenu()
+{
+  emit invalidateMenuRequested();
+  menuButton()->showMenu();
+}
+
 
 // EOF

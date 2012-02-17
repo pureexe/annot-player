@@ -17,21 +17,27 @@ using namespace Logger;
 
 #define EDIT_MIN_WIDTH  150
 
-#define WINDOW_FLAGS ( \
+#define WINDOW_FLAGS_BASE \
   Qt::Dialog | \
   Qt::CustomizeWindowHint | \
+  Qt::WindowStaysOnTopHint | \
   Qt::WindowTitleHint | \
-  Qt::WindowCloseButtonHint | \
-  Qt::WindowStaysOnTopHint )
+  Qt::WindowCloseButtonHint
+
+#ifdef Q_WS_MAC
+  #define WINDOW_FLAGS ( \
+    Qt::FramelessWindowHint | \
+    WINDOW_FLAGS_BASE )
+#else
+  #define WINDOW_FLAGS ( \
+    WINDOW_FLAGS_BASE )
+#endif // Q_WS_MAC
 
 // - Constructions -
 
 SiteAccountView::SiteAccountView(QWidget *parent)
   : Base(parent, WINDOW_FLAGS)
 {
-//#ifdef Q_WS_MAC
-//  setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
-//#endif // Q_WS_MAC
   setWindowTitle(tr("Link online accounts"));
   UiStyle::globalInstance()->setWindowStyle(this);
 

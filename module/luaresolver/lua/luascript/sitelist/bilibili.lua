@@ -48,7 +48,6 @@ function getTaskAttribute_bilibili ( str_url, str_tmpfile, pDlg, isNeedLogin, bS
     end
   end
   -------[[read flv id start]]
-
   local re = dlFile(str_tmpfile, str_url);
   if re~=0
   then
@@ -252,29 +251,30 @@ function getTaskAttribute_bilibili ( str_url, str_tmpfile, pDlg, isNeedLogin, bS
   --realurls
   local int_realurlnum = 0;
   local tbl_realurls = {};
+  local tbl_durations = {};
 
     if not bSubOnly then
     if int_foreignlinksite == fls["sina"] -- is sina flv
     then
       --fetch dynamic url
-      int_realurlnum, tbl_readurls = getRealUrls(str_id, str_tmpfile, pDlg);
+      int_realurlnum, tbl_realurls, tbl_durations = getRealUrls(str_id, str_tmpfile, pDlg);
     elseif int_foreignlinksite == fls["youku"]
     then
-      int_realurlnum, tbl_readurls = getRealUrls_youku(str_id, str_tmpfile, pDlg);
+      int_realurlnum, tbl_realurls = getRealUrls_youku(str_id, str_tmpfile, pDlg);
     elseif int_foreignlinksite == fls["qq"]
     then
-      int_realurlnum, tbl_readurls = getRealUrls_QQ(str_id, str_tmpfile, pDlg);
+      int_realurlnum, tbl_realurls = getRealUrls_QQ(str_id, str_tmpfile, pDlg);
     elseif int_foreignlinksite == fls["tudou"]
     then
-      int_realurlnum, tbl_readurls = getRealUrls_tudou(str_id, str_tmpfile, pDlg);
+      int_realurlnum, tbl_realurls = getRealUrls_tudou(str_id, str_tmpfile, pDlg);
     elseif int_foreignlinksite == fls["6cn"]
     then
       str_id_tmp = string.gsub(str_id, "=","/");
-      int_realurlnum, tbl_readurls = getRealUrls_6cn(str_id_tmp, str_tmpfile, pDlg);
+      int_realurlnum, tbl_realurls = getRealUrls_6cn(str_id_tmp, str_tmpfile, pDlg);
     else
       int_realurlnum = 1;
-      tbl_readurls = {};
-      tbl_readurls[string.format("%d",0)] = str_notsinaurl;
+      tbl_realurls = {};
+      tbl_realurls[string.format("%d",0)] = str_notsinaurl;
     end
     end
 
@@ -298,7 +298,9 @@ function getTaskAttribute_bilibili ( str_url, str_tmpfile, pDlg, isNeedLogin, bS
   tbl_ta["descriptor"] = str_descriptor;
   tbl_ta["subxmlurl"] = tbl_subxmlurls;
   tbl_ta["realurlnum"] = int_realurlnum;
-  tbl_ta["realurls"] = tbl_readurls;
+  tbl_ta["realurls"] = tbl_realurls;
+  tbl_ta["durations"] = tbl_durations;
+  tbl_ta["sizes"] = {};
   tbl_ta["oriurl"] = str_url;
 
   local tbl_resig = {};

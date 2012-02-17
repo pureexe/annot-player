@@ -15,9 +15,7 @@
 
 AnnotationComboEdit::AnnotationComboEdit(QWidget *parent)
   : Base(parent), editor_(0)
-{
-  createActions();
-}
+{ createActions(); }
 
 void
 AnnotationComboEdit::createActions()

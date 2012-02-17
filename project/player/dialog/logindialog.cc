@@ -15,24 +15,29 @@
 using namespace AnnotCloud;
 using namespace Logger;
 
-#define WINDOW_FLAGS ( \
+#define WINDOW_FLAGS_BASE \
   Qt::Dialog | \
   Qt::CustomizeWindowHint | \
+  Qt::WindowStaysOnTopHint | \
   Qt::WindowTitleHint | \
-  Qt::WindowCloseButtonHint | \
-  Qt::WindowStaysOnTopHint )
+  Qt::WindowCloseButtonHint
+
+#ifdef Q_WS_MAC
+  #define WINDOW_FLAGS ( \
+    Qt::FramelessWindowHint | \
+    WINDOW_FLAGS_BASE )
+#else
+  #define WINDOW_FLAGS ( \
+    WINDOW_FLAGS_BASE )
+#endif // Q_WS_MAC
 
 // - Constructions -
 
 LoginDialog::LoginDialog(QWidget *parent)
   : Base(parent, WINDOW_FLAGS)
 {
-//#ifdef Q_WS_MAC
-//  setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
-//#endif // Q_WS_MAC
   setWindowTitle(TR(T_TITLE_LOGIN));
   UiStyle::globalInstance()->setWindowStyle(this);
-  setContentsMargins(0, 0, 0, 0);
 
   // Widgets
 
@@ -89,7 +94,8 @@ LoginDialog::LoginDialog(QWidget *parent)
     grid->addWidget(loginButton, ++r, c=0, Qt::AlignHCenter);
     grid->addWidget(cancelButton, r, ++c, Qt::AlignHCenter);
 
-    //grid->setContentsMargins(6, 6, 6, 6);
+    grid->setContentsMargins(9, 9, 9, 9);
+    setContentsMargins(0, 0, 0, 0);
   } setLayout(grid);
 
   setTabOrder(userNameEdit_, passwordEdit_);

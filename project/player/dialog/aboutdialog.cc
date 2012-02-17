@@ -11,6 +11,21 @@
 #include "module/qtext/toolbutton.h"
 #include <QtGui>
 
+#define WINDOW_FLAGS_BASE \
+  Qt::Dialog | \
+  Qt::CustomizeWindowHint | \
+  Qt::WindowStaysOnTopHint
+
+#ifdef Q_WS_MAC
+  #define WINDOW_FLAGS ( \
+    Qt::FramelessWindowHint | \
+    WINDOW_FLAGS_BASE )
+#else
+  #define WINDOW_FLAGS ( \
+    Qt::WindowTitleHint | \
+    WINDOW_FLAGS_BASE )
+#endif // Q_WS_MAC
+
 // - Constructions -
 
 #ifdef Q_WS_MAC
@@ -18,13 +33,6 @@
 #else
   #define WINDOW_SIZE   QSize(270, 160)
 #endif // Q_WS_MAC
-
-#define WINDOW_FLAGS ( \
-  Qt::Dialog | \
-  Qt::CustomizeWindowHint | \
-  Qt::WindowTitleHint | \
-  Qt::WindowCloseButtonHint | \
-  Qt::WindowStaysOnTopHint )
 
 QString
 AboutDialog::text()
@@ -61,9 +69,6 @@ AboutDialog::text()
 AboutDialog::AboutDialog(QWidget *parent)
   : Base(parent, WINDOW_FLAGS)
 {
-//#ifdef Q_WS_MAC
-//  setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
-//#endif // Q_WS_MAC
   UiStyle::globalInstance()->setWindowStyle(this);
   setWindowTitle(TR(T_TITLE_ABOUT));
 

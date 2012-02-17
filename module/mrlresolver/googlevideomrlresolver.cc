@@ -42,9 +42,9 @@ GoogleVideoMrlResolver::resolveMedia(const QString &href)
   QString mrl = "http://video.google.com/videoplay?docid=" + docid;
   emit messageReceived(tr("resolving media URL ...") + ": " + mrl);
   MediaInfo mi;
-  mi.mrls.append(mrl);
+  mi.mrls.append(MrlInfo(mrl));
   mi.refurl = mrl;
-  emit mediaResolved(mi);
+  emit mediaResolved(mi, 0);
 }
 
 // EOF

@@ -22,7 +22,6 @@
 // http://f.youku.com/player/getFlvPath/sid/132747676347914796333_06/st/flv/fileid/03000108064F1F454D939903BAF2B1D3A1A504-3603-2115-A3B8-8D7F07A4D1FE?K=11e3f58a96d7bd932410e136&hd=2&myp=0&ts=219
 // http://f.youku.com/player/getFlvPath/sid/132747732759415941579_07/st/mp4/fileid/03000808074F1F160B939903BAF2B1D3A1A504-3603-2115-A3B8-8D7F07A4D1FE?K=fb81be0040730165261c2206&hd=1&myp=0&ts=253
 
-
 // - Construction -
 
 YoukuMrlResolver::YoukuMrlResolver(QObject *parent)
@@ -114,16 +113,21 @@ YoukuMrlResolver::resolveMedia(QNetworkReply *reply)
       QString vid = dataValue.property("vidEncoded").toString();
 
       foreach (QString type, types) {
-        if (types.size() == 1 && type == "flvhd")
+        //if (types.size() == 1 && type == "flvhd")
+        //  type = "flv";
+        if (type == "flvhd" && !types.contains("flv"))
           type = "flv";
+
+        if (!preferredType_.isEmpty() &&
+            type != preferredType_)
+          continue;
 
         QString hd = "0", st = "flv";
         if (type == ("mp4")) {
           hd = "1";
           st = "mp4";
-        } else if (type == "hd2") {
+        } else if (type == "hd2")
           hd = "2";
-        }
 
         QScriptValue segs = dataValue.property("segs");
         QScriptValue seq = segs.property(type);
@@ -167,6 +171,7 @@ YoukuMrlResolver::resolveMedia(QNetworkReply *reply)
           QString k = item.property("k").toString();
 
           QString ts = item.property("seconds").toString();
+          QString sz = item.property("size").toString();
 
           QString fid = fileId.left(8) + part.toUpper() + fileId.mid(10);
 
@@ -175,7 +180,9 @@ YoukuMrlResolver::resolveMedia(QNetworkReply *reply)
             "/st/" + st + "/fileid/" + fid +
             "?K=" + k + "&hd=" + hd + "&myp=0&ts=" + ts ;
 
-          mi.mrls.append(url);
+          qint64 duration = ts.toLongLong() * 1000;
+          qint64 size = sz.toLongLong();
+          mi.mrls.append(MrlInfo(url, duration, size));
         }
 
         if (mi.mrls.isEmpty()) {
@@ -189,7 +196,8 @@ YoukuMrlResolver::resolveMedia(QNetworkReply *reply)
         DOUT("href =" << href);
         mi.refurl = href;
         mi.title = title;
-        emit mediaResolved(mi);
+        // FIXME: for debugging only!
+        emit mediaResolved(mi, 0);
         break;
       }
 

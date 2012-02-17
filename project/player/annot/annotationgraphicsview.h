@@ -35,6 +35,14 @@ public:
     AP_Top = 0, AP_Bottom
   };
 
+  enum RenderHint {
+    DefaultRenderHint = 0,
+    TransparentHint,    // implies QGraphicsOpacityEffect
+    ShadowHint,         // implies QGraphicsShadowEffect
+    BlurHint,           // implies QGraphicsBlurEffect
+    RenderHintCount
+  };
+
   // - Constructions -
 public:
   AnnotationGraphicsView(SignalHub *hub, Player *player, VideoView *videoView, QWidget *parent = 0);
@@ -167,6 +175,8 @@ signals:
 public:
   AnnotationEditor *editor() const;
 
+  RenderHint renderHint() const { return renderHint_; } ///< Default render hint
+
   void setFilter(AnnotationFilter *filter);
 
   int itemsCount() const;
@@ -188,6 +198,7 @@ public slots:
   void togglePlaybackEnabled() { setPlaybackEnabled(!playbackEnabled_); }
   void toggleVisible() { setVisible(!isVisible()); }
 
+  void setRenderHint(int hint);
 
   // Video view tracker
   void invalidateGeometry();
@@ -246,6 +257,7 @@ private:
   SignalHub *hub_;
   Player *player_;
   AnnotationFilter *filter_;
+  RenderHint renderHint_;
   bool active_;
   bool paused_;
   bool fullScreen_;

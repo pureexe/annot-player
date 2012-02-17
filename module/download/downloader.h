@@ -18,7 +18,7 @@ class Downloader : public QObject
   typedef Downloader Self;
   typedef QObject Base;
 
-  QNetworkAccessManager *qnam_;
+  QNetworkAccessManager *nam_;
   int state_;
   QString path_;
   bool zipped_;
@@ -28,18 +28,21 @@ public:
 
 public:
   explicit Downloader(const QString &path, bool zipped = false, QObject *parent = 0,
-                      QNetworkAccessManager *qnam = 0);
+                      QNetworkAccessManager *nam = 0);
 
   int state() const { return state_; }
 
 public slots:
-  void get(const QUrl &url, const QString &header = QString(), bool async = true);
-  void post(const QUrl &url, const QByteArray &data = QByteArray(), const QString &header = QString(), bool async = true);
+  void get(const QUrl &url,
+           const QString &header = QString(), bool async = true, int retries = 3);
+  void post(const QUrl &url, const QByteArray &data = QByteArray(),
+            const QString &header = QString(), bool async = true, int retries = 3);
 
   static QByteArray encodeUrlParameters(const QString &params);
 
 protected slots:
   void save(QNetworkReply *reply);
+  void redirect(QNetworkReply *reply);
   static bool save(const QByteArray &data, const QString &path);
 
   static QHash<QString, QString> parseHttpHeader(const QString &header);

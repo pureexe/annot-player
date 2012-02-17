@@ -30,6 +30,7 @@
 #define FONTSIZECOMBOBOX_MAXWIDTH       40
 #define ALIGNCOMBOBOX_MAXWIDTH          60
 #define MOVESTYLECOMBOBOX_MAXWIDTH      60
+#define RENDEREFFECTCOMBOBOX_MAXWIDTH   80
 
 #ifdef Q_OS_MAC
   #define SAVE_SHORTCUT "CMD+S"
@@ -114,11 +115,24 @@ AnnotationEditor::createRibons()
     moveStyleComboBox_->setToolTip(tr("Style tag"));
 
     // Must be consistent with MoveStyleIndex
-    moveStyleComboBox_->addItem(tr("float"));
+    moveStyleComboBox_->addItem(tr("fly"));
     moveStyleComboBox_->addItem(tr("top"));
     moveStyleComboBox_->addItem(tr("bottom"));
   }
   connect(moveStyleComboBox_, SIGNAL(activated(int)), SLOT(setMoveStyle(int)));
+
+  renderEffectComboBox_ = new QtExt::ComboBox; {
+    UiStyle::globalInstance()->setComboBoxStyle(renderEffectComboBox_);
+    renderEffectComboBox_->setEditable(true);
+    renderEffectComboBox_->setMaximumWidth(RENDEREFFECTCOMBOBOX_MAXWIDTH);
+    renderEffectComboBox_->setToolTip(TR(T_ANNOTATIONEFFECT));
+
+    // Must be consistent with RenderEffectIndex
+    renderEffectComboBox_->addItem(tr("transp"));
+    renderEffectComboBox_->addItem(tr("shadow"));
+    renderEffectComboBox_->addItem(tr("blur"));
+  }
+  connect(renderEffectComboBox_, SIGNAL(activated(int)), SLOT(setRenderEffect(int)));
 
   // - Code ribon
   QGroupBox *codeRibon = new QGroupBox; {
@@ -134,6 +148,7 @@ AnnotationEditor::createRibons()
     row0->addStretch();
 
     row1->addWidget(moveStyleComboBox_);
+    row1->addWidget(renderEffectComboBox_);
     row1->addStretch();
 
     int patch = 0;
@@ -580,7 +595,6 @@ void
 AnnotationEditor::setSubtitle()
 { tag(CORE_CMD_SUB); }
 
-// TODO: use moveStyleComboBox as Tag combo box?
 void
 AnnotationEditor::setMoveStyle(int index)
 {
@@ -599,6 +613,28 @@ AnnotationEditor::setMoveStyle(int index)
   case MoveStyleFlyIndex:    addTag(CORE_CMD_VIEW_FLY); break;
   case MoveStyleTopIndex:    addTag(CORE_CMD_VIEW_TOP); break;
   case MoveStyleBottomIndex: addTag(CORE_CMD_VIEW_BOTTOM); break;
+  }
+}
+
+void
+AnnotationEditor::setRenderEffect(int index)
+{
+  if (index < 0 || index >= RenderEffectCount) {
+    QString newTag = renderEffectComboBox_->currentText().trimmed();
+    if (!newTag.isEmpty())
+      tag(CORE_CMDSTR + newTag);
+    return;
+  }
+
+  removeTag(CORE_CMD_EFFECT_TRANSP);
+  removeTag(CORE_CMD_EFFECT_TRANSPARENT);
+  removeTag(CORE_CMD_EFFECT_SHADOW);
+  removeTag(CORE_CMD_EFFECT_BLUR);
+
+  switch (index) {
+  case TransparentEffectIndex:  addTag(CORE_CMD_EFFECT_TRANSP); break;
+  case ShadowEffectIndex:       addTag(CORE_CMD_EFFECT_SHADOW); break;
+  case BlurEffectIndex:         addTag(CORE_CMD_EFFECT_BLUR); break;
   }
 }
 

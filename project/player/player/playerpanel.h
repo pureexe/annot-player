@@ -40,6 +40,7 @@ public:
   ADD_WIDGET(QToolButton, positionButton)
   ADD_WIDGET(QToolButton, previousButton)
   ADD_WIDGET(QToolButton, nextButton)
+  ADD_WIDGET(QToolButton, menuButton)
   //ADD_WIDGET(QLineEdit, lineEdit)
   //ADD_WIDGET(QLineEdit, prefixLineEdit)
   ADD_WIDGET(QComboBox, inputComboBox)

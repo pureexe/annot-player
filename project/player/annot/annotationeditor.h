@@ -50,6 +50,13 @@ protected:
     MoveStyleCount
   };
 
+  enum RenderEffectIndex {
+    TransparentEffectIndex = 0,
+    ShadowEffectIndex,
+    BlurEffectIndex,
+    RenderEffectCount
+  };
+
 public:
   enum Mode {
     CodeMode = 0,
@@ -129,6 +136,7 @@ protected slots:
 
   void setVerbatim();
   void setMoveStyle(int moveStyleIndex);
+  void setRenderEffect(int effectIndex);
 
   void addTag(const QString &tag);
   void removeTag(const QString &tag);
@@ -171,7 +179,8 @@ private:
 
   // Code ribon
   QToolButton *codeRibonButton_;
-  QComboBox *moveStyleComboBox_;
+  QComboBox *moveStyleComboBox_,
+            *renderEffectComboBox_;
   QToolButton *verbatimButton_,
               *subtitleButton_;
 

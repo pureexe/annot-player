@@ -27,7 +27,7 @@ using namespace Logger;
 #define MAX_SUBTITLE_HISTORY    30
 #define TIMER_INTERVAL        1000 // 1 second
 
-// - Constructions -
+// - Construction -
 
 AnnotationGraphicsView::AnnotationGraphicsView(
   SignalHub *hub,
@@ -35,7 +35,7 @@ AnnotationGraphicsView::AnnotationGraphicsView(
   VideoView *view,
   QWidget *parent)
   : Base(parent), videoView_(view), fullScreenView_(0), trackedWindow_(0), editor_(0),
-    hub_(hub), player_(player), filter_(0), active_(false), paused_(false), fullScreen_(false),
+    hub_(hub), player_(player), filter_(0), renderHint_(DefaultRenderHint), active_(false), paused_(false), fullScreen_(false),
     subtitleVisible_(true), nonSubtitleVisible_(true),
     currentTime_(-1), interval_(TIMER_INTERVAL), userId_(0), playbackEnabled_(true), subtitlePosition_(AP_Bottom)
 {
@@ -66,6 +66,21 @@ AnnotationGraphicsView::AnnotationGraphicsView(
   connect(trackingTimer_, SIGNAL(timeout()), SLOT(invalidateGeometry()));
 
   //centerOn(0, 0);
+}
+
+// - Properties -
+
+void
+AnnotationGraphicsView::setRenderHint(int hint)
+{
+  switch (hint) {
+  case TransparentHint: renderHint_ = TransparentHint; break;
+  case ShadowHint: renderHint_ = ShadowHint; break;
+  case BlurHint: renderHint_ = BlurHint; break;
+  case DefaultRenderHint:
+  default:
+    renderHint_ = DefaultRenderHint;
+  }
 }
 
 //AnnotationGraphicsView::~AnnotationGraphicsView()
@@ -826,6 +841,5 @@ AnnotationGraphicsView::appendAnnotations(const AnnotationList &annots)
   foreach (Annotation a, annots)
     emit annotationAdded(a);
 }
-
 
 // EOF

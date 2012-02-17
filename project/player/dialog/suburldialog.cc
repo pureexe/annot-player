@@ -28,6 +28,7 @@ SubUrlDialog::SubUrlDialog(QWidget *parent)
   createLayout();
 
   setExampleUrl(tr("http://www.bilibili.tv/video/av55775/"));
+  edit_->setFocus();
 }
 
 void

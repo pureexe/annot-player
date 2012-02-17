@@ -2,6 +2,12 @@ ChangeLog
 Annot Project
 6/18/2011
 
+2/17/2012	annot.player	0.1.2.8
+        * Added annotation rendering effects.
+          Annotations rendered with shadow by default.
+        * Added support to open RTSP stream.
+        * GUI improved.
+
 2/9/2012	annot.player	0.1.2.7
         * Support importing annotations from nicovideo.jp.
           Example URLs:

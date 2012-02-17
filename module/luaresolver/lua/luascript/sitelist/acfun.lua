@@ -190,23 +190,24 @@ function getTaskAttribute_acfun ( str_url, str_tmpfile ,str_servername, pDlg, bS
 	--realurls
 	local int_realurlnum = 0;
 	local tbl_realurls = {};
+    local tbl_durations = {};
 
     if not bSubOnly then
 	  --if str_notsinaurl=="" -- is sina flv
 	  if int_foreignlinksite == fls["sina"]
 	  then
 	  	--fetch dynamic url
-	  	int_realurlnum, tbl_readurls = getRealUrls(str_id, str_tmpfile, pDlg);
+	  	int_realurlnum, tbl_realurls, tbl_durations = getRealUrls(str_id, str_tmpfile, pDlg);
 	  elseif int_foreignlinksite == fls["qq"]
 	  then
-	  	int_realurlnum, tbl_readurls = getRealUrls_QQ(str_id, str_tmpfile, pDlg);
+	  	int_realurlnum, tbl_realurls = getRealUrls_QQ(str_id, str_tmpfile, pDlg);
 	  elseif int_foreignlinksite == fls["youku"]
 	  then
-	  	int_realurlnum, tbl_readurls = getRealUrls_youku(str_id, str_tmpfile, pDlg);
+	  	int_realurlnum, tbl_realurls = getRealUrls_youku(str_id, str_tmpfile, pDlg);
 	  else
 	  	int_realurlnum = 1;
-	  	tbl_readurls = {};
-	  	tbl_readurls[string.format("%d",0)] = str_notsinaurl;
+	  	tbl_realurls = {};
+	  	tbl_realurls[string.format("%d",0)] = str_notsinaurl;
 	  end
     end
 
@@ -251,7 +252,9 @@ function getTaskAttribute_acfun ( str_url, str_tmpfile ,str_servername, pDlg, bS
 	--tbl_ta["subxmlurl"] = str_subxmlurl;
 	tbl_ta["subxmlurl"] = tbl_subxmlurls;
 	tbl_ta["realurlnum"] = int_realurlnum;
-	tbl_ta["realurls"] = tbl_readurls;
+	tbl_ta["realurls"] = tbl_realurls;
+	tbl_ta["durations"] = tbl_durations;
+	tbl_ta["sizes"] = {};
 	tbl_ta["oriurl"] = str_url;
 
 	local tbl_resig = {};

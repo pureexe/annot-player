@@ -309,8 +309,13 @@ FAILURE = 0;
 
 
 --[[read real urls from sina through vid]]
+-- See: http://agonix.5d6d.com/archiver/tid-47.html
+-- Example: http://v.iask.com/v_play.php?vid=15830701
+--          http://video.sina.com.cn/v/b/15830701-1264371947.html
+--          http://p.you.video.sina.com.cn/player/outer_player.swf?auto=1&vid=15830701&uid=1264371947
 function getRealUrls (str_id, str_tmpfile, pDlg)
 	local tbl_urls = {};
+	local tbl_durations = {};
 	local index = 0;
 
 	local str_dynurl = "http://v.iask.com/v_play.php?vid="..str_id;
@@ -327,7 +332,7 @@ function getRealUrls (str_id, str_tmpfile, pDlg)
 		if pDlg~=nil then
 			sShowMessage(pDlg, '转接页面读取错误。');
 		end
-		return index, tbl_urls;
+		return index, tbl_urls, tbl_durations;
 	else
 		if pDlg~=nil then
 			sShowMessage(pDlg, '读取转接页面成功，正在分析..');
@@ -346,6 +351,15 @@ function getRealUrls (str_id, str_tmpfile, pDlg)
 	local str_line = "";
 	while str_line~=nil
 	do
+		str_line = readUntil(file, "<length>");
+		str_line = readIntoUntil(file, str_line, "</length>");
+		if str_line~=nil and string.find(str_line, "<length>")~=nil
+		then
+			local str_index = string.format("%d",index);
+			tbl_durations[str_index] = getMedText(str_line, "<length>", "</length>");
+			print(tbl_durations[str_index]);
+			--index = index+1;
+		end
 		str_line = readUntil(file, "<url>");
 		str_line = readIntoUntil(file, str_line, "</url>");
 		if str_line~=nil and string.find(str_line, "<url>")~=nil
@@ -357,7 +371,7 @@ function getRealUrls (str_id, str_tmpfile, pDlg)
 		end
 	end
 	io.close(file);
-	return index, tbl_urls;
+	return index, tbl_urls, tbl_durations;
 end
 
 

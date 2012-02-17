@@ -3,7 +3,7 @@
 setlocal
 cd /d d:/devel/releases/player || exit /b 1
 
-set VERSION=0.1.2.7
+set VERSION=0.1.2.8
 set APP=annot-player
 set ZIPFILE=%APP%-%VERSION%-win.zip
 
@@ -15,6 +15,9 @@ set QT_DLLS=QtCore4.dll,QtGui4.dll,QtNetwork4.dll,QtScript4.dll,QtSql4.dll,QtWeb
 
 set ITH_HOME=/Volumes/win/dev/ith
 set ITH_DLLS=ITH.dll,ITH_engine.dll
+
+set GPAC_HOME=/Volumes/win/dev/gpac
+set GPAC_DLLS=js32.dll,libgpac.dll,libeay32.dll,ssleay32.dll
 
 set ZLIB_HOME=/Volumes/win/dev/zlib
 set ZLIB_DLL=zlib1.dll
@@ -66,6 +69,7 @@ cp -v "%QT_HOME%"/bin/{%QT_DLLS%} . || exit /b 1
 cp -v "%MSVC_HOME%"/{%MSVC_DLLS%} . || exit /b 1
 cp -v "%ITH_HOME%"/bin/{%ITH_DLLS%} . || exit /b 1
 cp -v "%ZLIB_HOME%"/bin/%ZLIB_DLL% . || exit /b 1
+cp -v "%GPAC_HOME%"/bin/%GPAC_DLLS% . || exit /b 1
 
 ::cp -v "%CURL_HOME%"/bin/%CURL_BIN% . || exit /b 1
 ::cp -v "%GZIP_HOME%"/bin/%GZIP_BIN% . || exit /b 1
@@ -77,6 +81,7 @@ rm -fv plugins/*.dat*
 cp -v "%BUILD%"/*.{exe,dll} .
 
 rm -fv "Annot Player.exe"
+rm -fv live.exe
 rm -fv hook.dll
 rm -fv webbrowser.dll
 
@@ -92,7 +97,7 @@ rm -fv webbrowser.dll
 ::)
 ::popd
 set LUA_PATH=lua/luascript
-mkdir -p "%LUA_PATH%" || exit 1
+mkdir "%LUA_PATH%" || exit 1
 cp "%SOURCE%"/module/luaresolver/lua/luascript.lua "%LUA_PATH%"/ || exit 1
 cp -v "%SOURCE%"/module/luaresolver/lua/luascript/*.lua "%LUA_PATH%"/  || exit 1
 cp -v "%SOURCE%"/module/luaresolver/lua/luascript/*/*.lua "%LUA_PATH%"/  || exit 1

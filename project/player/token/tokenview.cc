@@ -146,6 +146,10 @@ TokenView::TokenView(ServerAgent *server, QWidget *parent)
   // Create context menu
   createActions();
 
+  // Shotcuts
+  QShortcut *cancelShortcut = new QShortcut(QKeySequence("Esc"), this);
+  connect(cancelShortcut, SIGNAL(activated()), SLOT(hide()));
+
   // Set initial states
 
   tableView_->sortByColumn(HD_Type, Qt::AscendingOrder);

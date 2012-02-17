@@ -183,12 +183,11 @@ AcFunCodec::parseAttribute(const QString &attr)
   if (l.size() != AttrCount)
     return Annotation();
 
-  bool ok;
   double pos = l[AttrPos].toDouble();
   int fontSize = l[AttrFontSize].toInt();
   int fontColor = l[AttrFontColor].toInt();
   int floatStyle = l[AttrFloatStyle].toInt();
-  qint64 userId = l[AttrUserId].toLongLong(&ok, 16);
+  QString userAlias = l[AttrUserId];
   qint64 createTime = l[AttrCreateTime].toLongLong();
 
   Annotation ret;
@@ -217,7 +216,9 @@ AcFunCodec::parseAttribute(const QString &attr)
   }
 
   // 5
-  ret.setUserId(-userId);
+  ret.setUserAlias(userAlias);
+  qint64 uid = qHash(userAlias);
+  ret.setUserId(uid + LLONG_MIN);
 
   // 6
   ret.setCreateTime(createTime);

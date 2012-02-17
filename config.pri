@@ -71,6 +71,10 @@ win32 {
     VLC_SRC             = $$VLC_HOME/src
     #WSF_HOME            = c:/dev/wso2
     #CDIO_HOME          = c:/dev/cdio
+    #FFMPEG_HOME         = c:/dev/ffmpeg
+    GPAC_HOME           = c:/dev/gpac
+    MP4V2_HOME          = c:/dev/mp4v2
+    LIVE_HOME           = c:/dev/live
     POPPLER_HOME        = c:/dev/poppler
     BOOST_HOME          = c:/dev/boost
     GSOAP_HOME          = c:/dev/gsoap
@@ -96,6 +100,10 @@ unix {
     VLC_SRC             = ${HOME}/opt/src
     #WSF_HOME            = ${HOME}/opt/wso2/wsf
     #CDIO_HOME          = /usr
+    #FFMPEG_HOME         = /usr
+    GPAC_HOME           = /usr
+    MP4V2_HOME          = /usr
+    LIVE_HOME           = /usr
     POPPLER_HOME        = ${HOME}/opt/poppler
     BOOST_HOME          = /usr
     GSOAP_HOME          = /usr
@@ -106,8 +114,12 @@ unix {
 mac {
     VLC_HOME            = ${HOME}/opt/vlc
     VLC_SRC             = ${HOME}/opt/src
-    #WSF_HOME            = ${HOME}/opt/wso2/wsf
+    #WSF_HOME           = ${HOME}/opt/wso2/wsf
     #CDIO_HOME          = ${HOME}/opt/libcdio
+    #FFMPEG_HOME         = /opt/local
+    GPAC_HOME           = ${HOME}/opt/gpac
+    MP4V2_HOME          = /opt/local
+    LIVE_HOME           = ${HOME}/opt/live
     POPPLER_HOME        = ${HOME}/opt/poppler
     BOOST_HOME          = /opt/local
     GSOAP_HOME          = /opt/local
@@ -133,6 +145,33 @@ INCLUDEPATH     += $$LUA_HOME/include
 LIBS            += -L$$LUA_HOME/lib
 INCLUDEPATH     += $$ZLIB_HOME/include
 LIBS            += -L$$ZLIB_HOME/lib
+#INCLUDEPATH     += $$FFMPEG_HOME/include
+#LIBS            += -L$$FFMPEG_HOME/lib
+INCLUDEPATH     += $$GPAC_HOME/include
+LIBS            += -L$$GPAC_HOME/lib
+INCLUDEPATH     += $$MP4V2_HOME/include
+LIBS            += -L$$MP4V2_HOME/lib
+INCLUDEPATH     += \
+    $$LIVE_HOME/BasicUsageEnvironment/include \
+    $$LIVE_HOME/UsageEnvironment/include \
+    $$LIVE_HOME/groupsock/include \
+    $$LIVE_HOME/liveMedia/include
+    #$$LIVE_HOME/BasicUsageEnvironment $$LIVE_HOME/BasicUsageEnvironment/include \
+    #$$LIVE_HOME/UsageEnvironment $$LIVE_HOME/UsageEnvironment/include \
+    #$$LIVE_HOME/groupsock $$LIVE_HOME/groupsock/include \
+    #$$LIVE_HOME/liveMedia $$LIVE_HOME/liveMedia/include
+LIBS            += \
+    -L$$LIVE_HOME/BasicUsageEnvironment \
+    -L$$LIVE_HOME/UsageEnvironment \
+    -L$$LIVE_HOME/groupsock \
+    -L$$LIVE_HOME/liveMedia
+
+# Otherwise, qtcreator grammar checking not work
+mac: INCLUDEPATH += \
+    /Users/jichi/opt/live/BasicUsageEnvironment/include \
+    /Users/jichi/opt/live/UsageEnvironment/include \
+    /Users/jichi/opt/live/groupsock/include \
+    /Users/jichi/opt/live/liveMedia/include
 
 CONFIG(release) {
   #DEFINES += QT_NO_DEBUG_OUTPUT QT_NO_WARNING_OUTPUT

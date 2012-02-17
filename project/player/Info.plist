@@ -772,6 +772,7 @@
                 <dict>
                         <key>CFBundleTypeExtensions</key>
                         <array>
+                                <string>264</string>
                                 <string>mpg</string>
                                 <string>mpeg</string>
                                 <string>mpeg1</string>
@@ -904,6 +905,7 @@
                 <dict>
                         <key>CFBundleTypeExtensions</key>
                         <array>
+                                <string>m4e</string>
                                 <string>mp4</string>
                                 <string>mpeg4</string>
                                 <string>m4v</string>

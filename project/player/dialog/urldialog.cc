@@ -26,6 +26,7 @@ UrlDialog::UrlDialog(QWidget *parent)
   UiStyle::globalInstance()->setWindowStyle(this);
 
   createLayout();
+  edit_->setFocus();
 }
 
 void

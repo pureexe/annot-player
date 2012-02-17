@@ -3,6 +3,8 @@
 --[[edit lostangel 20110216 add autologin]]
 --[[edit lostangel 20110402 for subxml return struct]]
 
+-- See: http://d.hatena.ne.jp/MineAP/20100819/1282201560
+
 require "lalib"
 
 local nico_sublice_num = 2000; -- change this to set how many comments you will download for one video.
@@ -145,8 +147,10 @@ function getTaskAttribute_nico ( str_url, str_tmpfile , pDlg)
     end
     return;
   end
+  -- See: http://d.hatena.ne.jp/MineAP/20100819/1282201560
   str_line = file:read("*l");
   local str_threadid = getMedText(str_line, "thread_id=", "&");
+  local str_length = getMedText(str_line, "l=", "&");
   local str_real_url = decodeUrl(getMedText(str_line, "url=", "&"));
   local str_sub_url = decodeUrl(getMedText(str_line, "ms=", "&"));
   local str_userid = getMedText(str_line, "user_id=", "&");
@@ -240,11 +244,11 @@ function getTaskAttribute_nico ( str_url, str_tmpfile , pDlg)
   tbl_realurls["0"] = str_real_url;
   local int_realurlnum = 1;
 
+  local tbl_durations = {};
+  tbl_durations["0"] = str_length * 1000;
 
 
   --local int_realurlnum, tbl_realurls = getRealUrls_QQ(str_id, str_tmpfile, pDlg);
-
-
 
 
   if pDlg~=nil then
@@ -257,10 +261,13 @@ function getTaskAttribute_nico ( str_url, str_tmpfile , pDlg)
 
   local tbl_ta = {};
   tbl_ta["acfpv"] = int_acfpv;
-  tbl_ta["descriptor"] = str_id.." - "..str_descriptor;
+  --tbl_ta["descriptor"] = str_id.." - "..str_descriptor;
+  tbl_ta["descriptor"] = str_descriptor;
   tbl_ta["subxmlurl"] = tbl_subxmlurls;--str_subxmlurl;
   tbl_ta["realurlnum"] = int_realurlnum;
   tbl_ta["realurls"] = tbl_realurls;
+  tbl_ta["sizes"] = {};
+  tbl_ta["durations"] = tbl_durations;
   tbl_ta["oriurl"] = str_url;
   --dbgMessage(tbl_realurls["0"]);
   --dbgMessage(tbl_ta["realurls"]["0"]);

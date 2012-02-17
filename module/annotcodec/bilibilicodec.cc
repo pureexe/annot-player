@@ -128,14 +128,13 @@ BilibiliCodec::parseAttribute(const QString &attr)
   if (l.size() != AttrCount)
     return Annotation();
 
-  bool ok;
   double pos = l[AttrPos].toDouble();
   int floatStyle = l[AttrFloatStyle].toInt();
   int fontSize = l[AttrFontSize].toInt();
   int fontColor = l[AttrFontColor].toInt();
   qint64 createTime = l[AttrCreateTime].toLongLong();
   int subType = l[AttrSubType].toInt();
-  qint64 userId = l[AttrUserId].toLongLong(&ok, 16);
+  QString userAlias = l[AttrUserId];
   qint64 rowId = l[AttrRowId].toLongLong();
 
   Annotation ret;
@@ -171,7 +170,9 @@ BilibiliCodec::parseAttribute(const QString &attr)
     t += CORE_CMD_SUB;
 
   // 6
-  qint64 uid = userId;
+  bool ok;
+  ret.setUserAlias(userAlias);
+  qint64 uid = userAlias.toLongLong(&ok, 16);
   if (uid <= 0)
     uid = rowId;
   ret.setUserId(-uid);

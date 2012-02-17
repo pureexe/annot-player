@@ -18,13 +18,14 @@
 #include "signalhub.h"
 #include "mainplayer.h"
 #include "miniplayer.h"
+#include "mediastreamer.h"
 #include "annotationgraphicsview.h"
 #include "annotationeditor.h"
 #include "annotationfilter.h"
 #include "tokenview.h"
 #include "commentview.h"
 #include "tray.h"
-#include "cloudview.h"
+//#include "cloudview.h"
 #include "annotationbrowser.h"
 #include "stylesheet.h"
 #include "uistyle.h"
@@ -62,6 +63,8 @@
 #include "module/qtext/countdowntimer.h"
 #include "module/qtext/datetime.h"
 #include "module/qtext/htmltag.h"
+#include "module/streamservice/streamservice.h"
+#include "module/mediacodec/flvcodec.h"
 #ifdef USE_MODULE_SERVERAGENT
   #include "module/serveragent/serveragent.h"
 #endif // USE_MODULE_SERVERAGENT
@@ -202,6 +205,9 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags f)
     setThemeToRedAct_(0), setThemeToWhiteAct_(0), setThemeToYellowAct_(0)
 {
   //setWindowFlags(windowFlags() | Qt::WindowStaysOnTopHint);
+//#ifdef Q_WS_MAC
+//  setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
+//#endif // Q_WS_MAC
 
   setWindowIcon(QIcon(RC_IMAGE_APP)); // X11 require setting icon at runtime
   setWindowTitle(TR(T_TITLE_PROGRAM));
@@ -273,6 +279,8 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags f)
   setSubtitleOnTop(settings->isSubtitleOnTop());
 
   embeddedPlayer_->setOnTop(settings->isEmbeddedPlayerOnTop());
+
+  annotationView_->setRenderHint(settings->annotationEffect());
 
   annotationFilter_->setEnabled(settings->isAnnotationFilterEnabled());
   annotationFilter_->setBlockedTexts(settings->blockedKeywords());
@@ -532,6 +540,7 @@ MainWindow::createConnections()
     connect(_playerui->toggleAnnotationButton(), SIGNAL(clicked()), annotationView_, SLOT(toggleVisible())); \
     connect(_playerui->previousButton(), SIGNAL(clicked()), SLOT(previous())); \
     connect(_playerui->nextButton(), SIGNAL(clicked()), SLOT(next())); \
+    connect(_playerui, SIGNAL(invalidateMenuRequested()), SLOT(invalidateContextMenu())); \
     connect(annotationView_, SIGNAL(visibleChanged(bool)), _playerui, SLOT(setAnnotationEnabled(bool)));
 
     CONNECT(mainPlayer_)
@@ -764,17 +773,29 @@ MainWindow::createConnections()
   //connect(player_, SIGNAL(opening()), SLOT(backlogView()));
 
   // MRL resolver
-  MrlResolverManager *rm = MrlResolverManager::globalInstance();
-  connect(rm, SIGNAL(mediaResolved(MediaInfo)), SLOT(openRemoteMedia(MediaInfo)));
-  connect(rm, SIGNAL(subtitleResolved(QString)), SLOT(importAnnotationsFromUrl(QString)));
-  connect(rm, SIGNAL(messageReceived(QString)), SLOT(log(QString)));
-  connect(rm, SIGNAL(errorReceived(QString)), SLOT(warn(QString)));
+  {
+    MrlResolverManager *rm = MrlResolverManager::globalInstance();
+    connect(rm, SIGNAL(mediaResolved(MediaInfo,QNetworkAccessManager*)), SLOT(openRemoteMedia(MediaInfo,QNetworkAccessManager*)));
+    connect(rm, SIGNAL(subtitleResolved(QString)), SLOT(importAnnotationsFromUrl(QString)));
+    connect(rm, SIGNAL(messageReceived(QString)), SLOT(log(QString)));
+    connect(rm, SIGNAL(errorReceived(QString)), SLOT(warn(QString)));
+  }
 
   // MRL resolver
-  AnnotationCodecManager *acm = AnnotationCodecManager::globalInstance();
-  connect(acm, SIGNAL(messageReceived(QString)), SLOT(log(QString)));
-  connect(acm, SIGNAL(errorReceived(QString)), SLOT(warn(QString)));
-  connect(acm, SIGNAL(fetched(AnnotationList,QString)), SLOT(addRemoteAnnotations(AnnotationList,QString)));
+  {
+    AnnotationCodecManager *acm = AnnotationCodecManager::globalInstance();
+    connect(acm, SIGNAL(messageReceived(QString)), SLOT(log(QString)));
+    connect(acm, SIGNAL(errorReceived(QString)), SLOT(warn(QString)));
+    connect(acm, SIGNAL(fetched(AnnotationList,QString)), SLOT(addRemoteAnnotations(AnnotationList,QString)));
+  }
+
+  // Streaming service
+  {
+    StreamService *ss = StreamService::globalInstance();
+    connect(ss, SIGNAL(messageReceived(QString)), SLOT(log(QString)));
+    connect(ss, SIGNAL(errorReceived(QString)), SLOT(warn(QString)));
+    connect(ss, SIGNAL(streamReady(QString)), SLOT(openStreamUrl(QString)));
+  }
 
   // - Close
   //connect(this, SIGNAL(closing()), db_, SLOT(dispose));
@@ -871,6 +892,10 @@ MainWindow::createActions()
   MAKE_TOGGLE(setSubtitleColorToPurpleAct_, PURPLECOLOR, this, SLOT(setSubtitleColorToPurple()))
   MAKE_TOGGLE(setSubtitleColorToBlackAct_, BLACKCOLOR, this, SLOT(setSubtitleColorToBlack()))
   MAKE_TOGGLE(setSubtitleColorToRedAct_, REDCOLOR, this, SLOT(setSubtitleColorToRed()))
+  MAKE_TOGGLE(setAnnotationEffectToDefaultAct_, AUTO, this, SLOT(setAnnotationEffectToDefault()))
+  MAKE_TOGGLE(setAnnotationEffectToTransparentAct_, TRANSPARENT, this, SLOT(setAnnotationEffectToTransparent()))
+  MAKE_TOGGLE(setAnnotationEffectToShadowAct_, SHADOW, this, SLOT(setAnnotationEffectToShadow()))
+  MAKE_TOGGLE(setAnnotationEffectToBlurAct_, BLUR, this, SLOT(setAnnotationEffectToBlur()))
 #ifdef USE_MODE_SIGNAL
   MAKE_TOGGLE(toggleSignalViewVisibleAct_, SIGNALVIEW, this, SLOT(setSignalViewVisible(bool)))
   MAKE_TOGGLE(toggleRecentMessageViewVisibleAct_, RECENTMESSAGES, this, SLOT(setRecentMessageViewVisible(bool)))
@@ -957,25 +982,88 @@ MainWindow::createActions()
   MAKE_ACTION(updateAct_,       UPDATE, this,   SLOT(update()))
   MAKE_ACTION(quitAct_,         QUIT,   this,   SLOT(close()))
 
-  openAct_->setShortcuts(QKeySequence::Open);
-  helpAct_->setShortcuts(QKeySequence::HelpContents);
-  quitAct_->setShortcuts(QKeySequence::Quit);
-
 #undef MAKE_ACTION
 
   // Shortcuts
-  QShortcut *openShortcut = new QShortcut(QKeySequence::Open, this);
-  connect(openShortcut, SIGNAL(activated()), SLOT(open()));
+  {
+    toggleSeekDialogVisibleAct_->setShortcuts(QKeySequence::Find);
+    QShortcut *f = new QShortcut(QKeySequence::Find, this);
+    connect(f, SIGNAL(activated()), SLOT(showSeekDialog()));
 
-  QShortcut *helpShortcut = new QShortcut(QKeySequence::HelpContents, this);
-  connect(helpShortcut, SIGNAL(activated()), SLOT(help()));
+    nextFrameAct_->setShortcuts(QKeySequence::FindNext);
+    QShortcut *g = new QShortcut(QKeySequence::FindNext, this);
+    connect(g, SIGNAL(activated()), SLOT(nextFrame()));
 
-  QShortcut *e = new QShortcut(QKeySequence("F2"), this);
-  connect(e, SIGNAL(activated()), hub_, SLOT(toggleEmbeddedPlayerMode()));
-  QShortcut *m = new QShortcut(QKeySequence("F3"), this);
-  connect(m, SIGNAL(activated()), hub_, SLOT(toggleMiniPlayerMode()));
-  QShortcut *f = new QShortcut(QKeySequence("F11"), this);
-  connect(f, SIGNAL(activated()), hub_, SLOT(toggleFullScreenWindowMode()));
+    openAct_->setShortcuts(QKeySequence::Open);
+    openFileAct_->setShortcuts(QKeySequence::Open);
+    QShortcut *o = new QShortcut(QKeySequence::Open, this);
+    connect(o, SIGNAL(activated()), SLOT(open()));
+
+    openUrlAct_->setShortcuts(QKeySequence::New);
+    QShortcut *n = new QShortcut(QKeySequence::New, this);
+    connect(n, SIGNAL(activated()), SLOT(openUrl()));
+
+    openAnnotationUrlAct_->setShortcuts(QKeySequence::Italic);
+    QShortcut *i = new QShortcut(QKeySequence::Italic, this);
+    connect(i, SIGNAL(activated()), SLOT(openUrl()));
+
+    snapshotAct_->setShortcut(QKeySequence::Save);
+    QShortcut *s = new QShortcut(QKeySequence::Save, this);
+    connect(s, SIGNAL(activated()), SLOT(snapshot()));
+
+    toggleWindowOnTopAct_->setShortcuts(QKeySequence::AddTab);
+    QShortcut *t = new QShortcut(QKeySequence::AddTab, this);
+    connect(t, SIGNAL(activated()), SLOT(toggleWindowOnTop()));
+
+    helpAct_->setShortcuts(QKeySequence::HelpContents);
+    QShortcut *help = new QShortcut(QKeySequence::HelpContents, this);
+    connect(help, SIGNAL(activated()), SLOT(help()));
+
+    playAct_->setShortcuts(QKeySequence::Print);
+    pauseAct_->setShortcuts(QKeySequence::Print);
+    QShortcut *p = new QShortcut(QKeySequence::Print, this);
+    connect(p, SIGNAL(activated()), SLOT(playPause()));
+
+    quitAct_->setShortcuts(QKeySequence::Quit);
+
+    QShortcut *c1 = new QShortcut(QKeySequence("CTRL+1"), this);
+    connect(c1, SIGNAL(activated()), hub_, SLOT(toggleEmbeddedPlayerMode()));
+    QShortcut *c2 = new QShortcut(QKeySequence("CTRL+2"), this);
+    connect(c2, SIGNAL(activated()), hub_, SLOT(toggleMiniPlayerMode()));
+    QShortcut *c3 = new QShortcut(QKeySequence("CTRL+3"), this);
+    connect(c3, SIGNAL(activated()), hub_, SLOT(toggleFullScreenWindowMode()));
+
+    QShortcut *f11 = new QShortcut(QKeySequence("F11"), this);
+    connect(f11, SIGNAL(activated()), hub_, SLOT(toggleFullScreenWindowMode()));
+
+    QShortcut *cf1 = new QShortcut(QKeySequence("CTRL+F1"), this);
+    connect(cf1, SIGNAL(activated()), SLOT(toggleAnnotationEditorVisible()));
+    QShortcut *cf2 = new QShortcut(QKeySequence("CTRL+F2"), this);
+    connect(cf2, SIGNAL(activated()), SLOT(toggleAnnotationBrowserVisible()));
+    QShortcut *cf3 = new QShortcut(QKeySequence("CTRL+F3"), this);
+    connect(cf3, SIGNAL(activated()), SLOT(toggleTokenViewVisible()));
+    QShortcut *cf4 = new QShortcut(QKeySequence("CTRL+F4"), this);
+    connect(cf4, SIGNAL(activated()), SLOT(showBlacklistView()));
+
+    QShortcut *pp = new QShortcut(QKeySequence("CTRL+SHIFT+LEFT"), this);
+    connect(pp, SIGNAL(activated()), SLOT(previous()));
+    QShortcut *nn = new QShortcut(QKeySequence("CTRL+SHIFT+RIGHT"), this);
+    connect(nn, SIGNAL(activated()), SLOT(next()));
+
+    QShortcut *backward = new QShortcut(QKeySequence("CTRL+LEFT"), this);
+    connect(backward, SIGNAL(activated()), SLOT(backward90s()));
+    QShortcut *forward = new QShortcut(QKeySequence("CTRL+RIGHT"), this);
+    connect(forward, SIGNAL(activated()), SLOT(forward90s()));
+
+    QShortcut *up = new QShortcut(QKeySequence("CTRL+UP"), this);
+    connect(up, SIGNAL(activated()), SLOT(volumeUp()));
+    QShortcut *down = new QShortcut(QKeySequence("CTRL+DOWN"), this);
+    connect(down, SIGNAL(activated()), SLOT(volumeDown()));
+    QShortcut *csup = new QShortcut(QKeySequence("CTRL+SHIFTUP"), this);
+    connect(csup, SIGNAL(activated()), SLOT(volumeUp()));
+    QShortcut *csdown = new QShortcut(QKeySequence("CTRL+SHIFT+DOWN"), this);
+    connect(csdown, SIGNAL(activated()), SLOT(volumeDown()));
+  }
 }
 
 void
@@ -985,6 +1073,8 @@ MainWindow::createMenus()
   contextMenu_ = new QMenu(TR(T_TITLE_PROGRAM), this); {
     UiStyle::globalInstance()->setContextMenuStyle(contextMenu_, true); // persistent = true
     embeddedPlayer_->setMenu(contextMenu_);
+    mainPlayer_->setMenu(contextMenu_);
+    miniPlayer_->setMenu(contextMenu_);
   }
 
   userMenu_ = new QMenu(TR(T_TITLE_PROGRAM), this); {
@@ -1005,6 +1095,19 @@ MainWindow::createMenus()
     helpContextMenu_->addAction(openHomePageAct_);
     helpContextMenu_->addAction(updateAct_);
     helpContextMenu_->addAction(aboutAct_);
+  }
+
+  annotationEffectMenu_ = new QMenu(this); {
+    UiStyle::globalInstance()->setContextMenuStyle(annotationEffectMenu_, true); // persistent = true
+
+    annotationEffectMenu_->setTitle(TR(T_ANNOTATIONEFFECT) + " ...");
+    annotationEffectMenu_->setToolTip(TR(T_ANNOTATIONEFFECT));
+
+    annotationEffectMenu_->addAction(setAnnotationEffectToDefaultAct_);
+    annotationEffectMenu_->addSeparator();
+    annotationEffectMenu_->addAction(setAnnotationEffectToTransparentAct_);
+    annotationEffectMenu_->addAction(setAnnotationEffectToShadowAct_);
+    annotationEffectMenu_->addAction(setAnnotationEffectToBlurAct_);
   }
 
   appLanguageMenu_ = new QMenu(this); {
@@ -1201,10 +1304,12 @@ MainWindow::createMenus()
   //menuBar_ = new QMenuBar;
   fileMenu_ = menuBar()->addMenu(tr("&File")); {
     fileMenu_->addAction(openAct_);
+    fileMenu_->addAction(openUrlAct_);
     fileMenu_->addSeparator();
-    fileMenu_->addAction(openSubtitleAct_);
     fileMenu_->addAction(openDeviceAct_);
     fileMenu_->addAction(openVideoDeviceAct_);
+    fileMenu_->addAction(openSubtitleAct_);
+    fileMenu_->addAction(openAnnotationUrlAct_);
 #ifdef Q_WS_WIN // TODO add support for Mac/Linux
     fileMenu_->addAction(openAudioDeviceAct_);
 #endif // Q_WS_WIN
@@ -1710,23 +1815,42 @@ MainWindow::setRecentOpenedFile(const QString &path)
 }
 
 void
-MainWindow::openRemoteMedia(const MediaInfo &mi)
+MainWindow::openRemoteMedia(const MediaInfo &mi, QNetworkAccessManager *nam)
 {
+  DOUT("refurl =" << mi.refurl << ", mrls.size =" << mi.mrls.size());
   recentSourceLocked_ = false;
   playlist_.clear();
   if (mi.mrls.isEmpty())
     return;
-  if (mi.mrls.size() > 1)
-    playlist_ = mi.mrls;
-  else if (!playlist_.isEmpty())
-    playlist_.clear();
-
-  openMrl(mi.mrls.front(), false); // checkPath = false
-  if (!mi.title.isEmpty() && !isRemoteMrl(mi.title)) {
-    if (!player_->isValid())
-      resetPlayer();
-    player_->setMediaTitle(mi.title);
+  if (mi.mrls.size() > 1 && !nam) {
+    foreach (const MrlInfo &mrl, mi.mrls)
+      playlist_.append(mrl.url);
   }
+
+  if (nam && mi.mrls.size() > 1) {
+    if (!mi.title.isEmpty() && !isRemoteMrl(mi.title))
+      player_->setMediaTitle(mi.title);
+    recentDigest_.clear();
+    recentSource_.clear();
+
+    MrlInfo mrl = mi.mrls.front();
+    DOUT("mrl =" << mrl.url);
+
+    MediaStreamInfo msi;
+    foreach (const MrlInfo &mrl, mi.mrls) {
+      if (mrl.url.isEmpty())
+        continue;
+      msi.urls.append(mrl.url);
+      msi.durations.append(mrl.duration);
+      msi.sizes.append(mrl.size);
+    }
+    MediaStreamer::globalInstance()->stream(msi, nam);
+    return;
+  }
+
+  openMrl(mi.mrls.front().url, false); // checkPath = false
+  if (!mi.title.isEmpty() && !isRemoteMrl(mi.title))
+    player_->setMediaTitle(mi.title);
 
   recentDigest_.clear();
   recentSource_.clear();
@@ -1755,6 +1879,10 @@ MainWindow::closeMedia()
   dataManager_->removeAliases();
   annotationView_->invalidateAnnotations();
 }
+
+void
+MainWindow::openStreamUrl(const QString &rtsp)
+{ openMrl(rtsp, false); }
 
 void
 MainWindow::openMrl(const QString &path, bool checkPath)
@@ -1861,6 +1989,8 @@ MainWindow::isAliasReady(const QString &path) const
 QString
 MainWindow::digestFromFile(const QString &path)
 {
+  if (isRemoteMrl(path))
+    return QString();
   QString digest = Token::digestFromFile(path);
   if (digest.isEmpty()) {
     QString localPath = QUrl(path).toLocalFile();
@@ -1947,19 +2077,12 @@ MainWindow::openSubtitlePath(const QString &path)
     warn(TR(T_ERROR_BAD_SUBTITLE) + ": " + path);
 }
 
-#define MAINWINDOW_ACTION_TRIGGER(_action) \
-  void \
-  MainWindow::_action() \
-  { \
-    Q_ASSERT(_action##Act_); \
-    _action##Act_->trigger(); \
-  }
-
-  //MAINWINDOW_ACTION_TRIGGER(pause);
-  //MAINWINDOW_ACTION_TRIGGER(stop);
-  MAINWINDOW_ACTION_TRIGGER(nextFrame);
-
-#undef MAINWINDOW_ACTION_TRIGGER
+void
+MainWindow::nextFrame()
+{
+  if (hub_->isMediaTokenMode() && player_->hasMedia())
+    player_->nextFrame();
+}
 
 void
 MainWindow::pause()
@@ -1999,7 +2122,6 @@ MainWindow::stop()
     hub_->setNormalPlayerMode();
     break;
   }
-
 }
 
 bool
@@ -2429,6 +2551,14 @@ MainWindow::setUserViewVisible(bool visible)
 }
 
 void
+MainWindow::toggleTokenViewVisible()
+{ tokenView_->setVisible(!tokenView_->isVisible()); }
+
+void
+MainWindow::toggleAnnotationBrowserVisible()
+{ annotationBrowser_->setVisible(!annotationBrowser_->isVisible()); }
+
+void
 MainWindow::setBlacklistViewVisible(bool visible)
 {
   if (!blacklistView_)
@@ -2465,6 +2595,13 @@ MainWindow::setAnnotationEditorVisible(bool visible)
     connect(annotationEditor_, SIGNAL(textSaved(QString)), SLOT(eval(QString)));
   }
   annotationEditor_->setVisible(visible);
+}
+
+void
+MainWindow::toggleAnnotationEditorVisible()
+{
+  bool v = annotationEditor_ && annotationEditor_->isVisible();
+  setAnnotationEditorVisible(!v);
 }
 
 void
@@ -2926,7 +3063,6 @@ MainWindow::setToken(const QString &input, bool async)
   AnnotationList annots = dataServer_->selectAnnotationsWithToken(token);
   //annotationBrowser_->setAnnotations(annots);
   //annotationView_->setAnnotations(annots);
-  emit setAnnotationsRequested(annots);
 
   //if (tokens.size() == 1) {
   //  Token token = tokens.front();
@@ -2943,6 +3079,15 @@ MainWindow::setToken(const QString &input, bool async)
   DOUT("inetMutex unlocking");
   inetMutex_.unlock();
   DOUT("inetMutex unlocked");
+
+  if (!annots.isEmpty()) {
+    QString msg = QString("%1 :" HTML_STYLE_OPEN(color:red) "+%2" HTML_STYLE_CLOSE() ", %3")
+      .arg(tr("annotations found"))
+      .arg(QString::number(annots.size()))
+      .arg("http://annot.me");
+    emit logged(msg);
+    emit setAnnotationsRequested(annots);
+  }
 
   DOUT("exit");
 }
@@ -3793,6 +3938,11 @@ MainWindow::invalidateContextMenu()
     toggleBlacklistViewVisibleAct_->setChecked(blacklistView_ && blacklistView_->isVisible());
 
     if (t)
+      invalidateAnnotationEffectMenu();
+    annotationEffectMenu_->setEnabled(t);
+    contextMenu_->addMenu(annotationEffectMenu_);
+
+    if (t)
       invalidateAnnotationSubtitleMenu();
     annotationSubtitleMenu_->setEnabled(t);
     contextMenu_->addMenu(annotationSubtitleMenu_);
@@ -4043,6 +4193,8 @@ MainWindow::keyPressEvent(QKeyEvent *event)
     //if (!hasVisiblePlayer() || !visiblePlayer()->lineEdit()->hasFocus())
   case Qt::Key_Escape: hub_->toggleMiniPlayerMode(); break;
   case Qt::Key_Return: hub_->toggleFullScreenWindowMode(); break;
+  case Qt::Key_Backspace: stop(); break;
+  case Qt::Key_Space: playPause(); break;
 
   case Qt::Key_Up:      volumeUp(); break;
   case Qt::Key_Down:    volumeDown(); break;
@@ -4056,8 +4208,6 @@ MainWindow::keyPressEvent(QKeyEvent *event)
     if (event->modifiers() == Qt::NoModifier) forward();
     else forward(G_FORWARD_INTERVAL * 3);
     break;
-
-  case Qt::Key_Space: playPause(); break;
 
   default:
     if (hub_->isFullScreenWindowMode()) { // Osd mode
@@ -4174,6 +4324,8 @@ MainWindow::closeEvent(QCloseEvent *event)
 
   settings->setSubtitleColor(subtitleColor());
 
+  settings->setAnnotationEffect(annotationView_->renderHint());
+
   // Disabled for saving closing time orz
   //if (server_->isConnected() && server_->isAuthorized())
   //  server_->logout();
@@ -4202,15 +4354,16 @@ MainWindow::closeEvent(QCloseEvent *event)
   if (HOOK->isActive())
     HOOK->stop();
 #endif // USE_WIN_HOOK
-  if (!player_->isStopped()) {
-    player_->setVolume(0);
-    player_->stop();
-    //QEventLoop loop;
-    //connect(player_, SIGNAL(stopped()), &loop, SLOT(quit()));
-    //loop.exec();
-  }
-  if (player_->hasMedia())
+  if (player_->hasMedia()) {
+    if (!player_->isStopped()) {
+      player_->setVolume(0);
+      player_->stop();
+      //QEventLoop loop;
+      //connect(player_, SIGNAL(stopped()), &loop, SLOT(quit()));
+      //loop.exec();
+    }
     player_->closeMedia();
+  }
   if (!hub_->isStopped())
     hub_->stop();
   hide();
@@ -4224,6 +4377,17 @@ MainWindow::closeEvent(QCloseEvent *event)
   settings->setPlayPosHistory(playPosHistory_);
   settings->setSubtitleHistory(subtitleHistory_);
   settings->setAudioTrackHistory(audioTrackHistory_);
+
+  MediaStreamer::globalInstance()->stop();
+
+  {
+    StreamService *ss = StreamService::globalInstance();
+    ss->stop(10 * 1000); // 10 seconds
+    if (ss->isActive())
+      ss->terminateService();
+  }
+
+  FLVCodec::globalInstance()->stop();
 
   if (QThreadPool::globalInstance()->activeThreadCount()) {
 #if QT_VERSION >= 0x040800
@@ -5867,7 +6031,7 @@ MainWindow::shortenText(const QString &text)
 
 bool
 MainWindow::isRemoteMrl(const QString& mrl)
-{ return mrl.contains("tp://", Qt::CaseInsensitive); }
+{ return mrl.contains(QRegExp("[ts]p://", Qt::CaseInsensitive)); }
 
 // - Resume -
 
@@ -5878,23 +6042,28 @@ MainWindow::rememberPlayPos()
   enum { margin = 90 * 1000 }; // 1.5min
   if (player_->hasMedia()) {
     DOUT("hasMedia = true");
+
+    qint64 hash = dataManager_->token().hashId();
+    DOUT("hash =" << hash);
+    if (!hash) {
+      DOUT("exit: no hash");
+      return;
+    }
+
     qint64 pos = player_->time();
     DOUT("pos =" << pos);
     if (pos <= margin) { // 1.5min
+      if (playPosHistory_.contains(hash))
+        playPosHistory_.remove(hash);
       DOUT("exit: pos too small");
       return;
     }
     qint64 len = player_->mediaLength();
     DOUT("length =" << len);
     if (pos >= len - margin) {
+      if (playPosHistory_.contains(hash))
+        playPosHistory_.remove(hash);
       DOUT("exit: pos too large");
-      return;
-    }
-
-    qint64 hash = dataManager_->token().hashId();
-    DOUT("hash =" << hash);
-    if (!hash) {
-      DOUT("exit: no hash");
       return;
     }
 
@@ -5960,13 +6129,17 @@ MainWindow::rememberSubtitle()
       return;
     }
 
+    if (id)
+      subtitleHistory_[hash] = id;
+    else
+      subtitleHistory_.remove(hash);
+
     if (subtitleHistory_.size() > 100) {
       // maximum play pos count to remember
       int i = qrand() % subtitleHistory_.size();
       qint64 k = subtitleHistory_.keys()[i];
       subtitleHistory_.remove(k);
     }
-    subtitleHistory_[hash] = id;
   }
   DOUT("exit");
 }
@@ -5986,8 +6159,8 @@ MainWindow::resumeSubtitle()
     }
 
     int id = 0;
-    if (playPosHistory_.contains(hash))
-      id = playPosHistory_[hash];
+    if (subtitleHistory_.contains(hash))
+      id = subtitleHistory_[hash];
     DOUT("id =" << id);
     if (id >= 0 && id < player_->subtitleCount() &&
         id != player_->subtitleId()) {
@@ -6020,13 +6193,17 @@ MainWindow::rememberAudioTrack()
       return;
     }
 
+    if (id)
+      audioTrackHistory_[hash] = id;
+    else
+      audioTrackHistory_.remove(hash);
+
     if (audioTrackHistory_.size() > 100) {
       // maximum play pos count to remember
       int i = qrand() % audioTrackHistory_.size();
       qint64 k = audioTrackHistory_.keys()[i];
       audioTrackHistory_.remove(k);
     }
-    audioTrackHistory_[hash] = id;
   }
   DOUT("exit");
 }
@@ -6046,8 +6223,8 @@ MainWindow::resumeAudioTrack()
     }
 
     int id = 0;
-    if (playPosHistory_.contains(hash))
-      id = playPosHistory_[hash];
+    if (audioTrackHistory_.contains(hash))
+      id = audioTrackHistory_[hash];
     DOUT("id =" << id);
     if (id >= 0 && id < player_->audioTrackCount()
         && id != player_->audioTrackId()) {
@@ -6059,6 +6236,31 @@ MainWindow::resumeAudioTrack()
   }
   DOUT("exit");
 }
+
+// - Effect -
+
+void
+MainWindow::invalidateAnnotationEffectMenu()
+{
+  AnnotationGraphicsView::RenderHint hint = annotationView_->renderHint();
+  setAnnotationEffectToDefaultAct_->setChecked(hint == AnnotationGraphicsView::DefaultRenderHint);
+  setAnnotationEffectToTransparentAct_->setChecked(hint == AnnotationGraphicsView::TransparentHint);
+  setAnnotationEffectToShadowAct_->setChecked(hint == AnnotationGraphicsView::ShadowHint);
+  setAnnotationEffectToBlurAct_->setChecked(hint == AnnotationGraphicsView::BlurHint);
+}
+
+void
+MainWindow::setAnnotationEffectToDefault()
+{ annotationView_->setRenderHint(AnnotationGraphicsView::DefaultRenderHint); }
+void
+MainWindow::setAnnotationEffectToTransparent()
+{ annotationView_->setRenderHint(AnnotationGraphicsView::TransparentHint); }
+void
+MainWindow::setAnnotationEffectToShadow()
+{ annotationView_->setRenderHint(AnnotationGraphicsView::ShadowHint); }
+void
+MainWindow::setAnnotationEffectToBlur()
+{ annotationView_->setRenderHint(AnnotationGraphicsView::BlurHint); }
 
 // EOF
 

@@ -42,6 +42,11 @@ AnnotationBrowser::AnnotationBrowser(SignalHub *hub, QWidget *parent)
   createLayout();
   createActions();
 
+  // Shotcuts
+  QShortcut *cancelShortcut = new QShortcut(QKeySequence("Esc"), this);
+  connect(cancelShortcut, SIGNAL(activated()), SLOT(hide()));
+
+  // Initial states
   tableView_->sortByColumn(HD_CreateTime, Qt::DescendingOrder);
   tableView_->setCurrentColumn(HD_Text);
 }
