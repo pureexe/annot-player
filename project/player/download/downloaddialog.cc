@@ -342,8 +342,10 @@ DownloadDialog::addTask(DownloadTask *t)
 void
 DownloadDialog::refresh()
 {
-  if (downloadManager_->isEmpty())
+  if (downloadManager_->isEmpty()) {
+    setWindowTitle(TR(T_DOWNLOAD));
     return;
+  }
 
 #define FORMAT_TIME(_msecs)       downloadTimeToString(_msecs)
 #define FORMAT_STATE(_state)      downloadStateToString(_state)
@@ -366,7 +368,10 @@ DownloadDialog::refresh()
     if (!t)
       continue;
 
-    sourceModel_->setData(sourceModel_->index(row, HD_Name), t->title(), Qt::DisplayRole);
+    QString title = t->title();
+    if (title.isEmpty())
+      title = t->url();
+    sourceModel_->setData(sourceModel_->index(row, HD_Name), title, Qt::DisplayRole);
     sourceModel_->setData(sourceModel_->index(row, HD_State), FORMAT_STATE(t->state()), Qt::DisplayRole);
     sourceModel_->setData(sourceModel_->index(row, HD_Size), FORMAT_SIZE(t->size()), Qt::DisplayRole);
     sourceModel_->setData(sourceModel_->index(row, HD_Speed), t->isFinished() ? QString("-") : FORMAT_SPEED(t->speed()), Qt::DisplayRole);
@@ -404,8 +409,12 @@ DownloadDialog::finish(DownloadTask *task)
   Q_ASSERT(task);
   if (!task->isFinished())
     return;
-  log(tr("download finished") + ": " + task->path());
-  emit downloadFinished(task->path(), task->url());
+  QString path = task->path();
+  if (QFile::exists(path)) {
+    log(tr("download finished") + ": " + path);
+    emit downloadFinished(path, task->url());
+  } else
+    warn(tr("download failed") + ": " + path);
   QApplication::beep();
 }
 

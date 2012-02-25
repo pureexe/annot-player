@@ -6,13 +6,13 @@
 
 #include <QtGlobal>
 
-#ifdef WEBBROWSER_LIB
+#ifdef WEBBROWSER_SHARED
   #define WEBBROWSER_API Q_DECL_EXPORT
-#elif defined(WEBBROWSER_STATICLIB)
+#elif defined(WEBBROWSER_STATIC)
   #define WEBBROWSER_API
 #else
   #define WEBBROWSER_API Q_DECL_IMPORT
-#endif // WEBBROWSER_LIB
+#endif // WEBBROWSER_
 
 #define WEBBROWSER_HOMEPAGE     "http://www.google.com"
 #define WEBBROWSER_SEARCHENGINE "www.google.com/search?q="

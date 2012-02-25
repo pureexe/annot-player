@@ -128,25 +128,29 @@ LuaMrlResolver::resolveMedia(const QString &href, bool async)
   }
 
   if (mrls.isEmpty()) {
-    if (href.contains("nicovideo.jp", Qt::CaseInsensitive))
+    switch (siteid) {
+    case LuaResolver::Nicovideo:
       emit errorReceived(tr("failed to resolve URL using nicovideo account") + ": " + url);
-    else if (href.contains("bilibili.tv", Qt::CaseInsensitive))
+      break;
+    case LuaResolver::Bilibili:
       emit errorReceived(tr("failed to resolve URL using bilibili account") + ": " + url);
-    else
+      break;
+    default:
       emit errorReceived(tr("failed to resolve URL") + ": " + url);
+    }
     DOUT("exit: mrls is empty");
     return false;
   }
 
   MediaInfo mi;
-  const char *encoding = 0;
   mi.suburl = formatUrl(suburl);
   mi.refurl = formatUrl(refurl);
-  if (mi.refurl.contains("acfun.tv", Qt::CaseInsensitive))
-    encoding = "GBK";
-  //else if (mi.refurl.contains("nicovideo.jp", Qt::CaseInsensitive))
-  //  encoding = "SHIFT-JIS";
-  mi.title = formatTitle(title, encoding);
+  mi.title = formatTitle(title);
+  //switch (siteid) {
+  //case LuaResolver::AcFun: encoding = "GBK"; break;
+  ////case LuaResolver::Bilibili: encoding = "UTF-8"; break;
+  //default: encoding = 0;
+  //}
 
   switch (mrls.size()) { // Specialization for better performance
   case 0: break;
@@ -215,12 +219,16 @@ LuaMrlResolver::resolveSubtitle(const QString &href, bool async)
   }
 
   if (suburl.isEmpty()) {
-    if (href.contains("nicovideo.jp", Qt::CaseInsensitive))
+    switch (siteid) {
+    case LuaResolver::Nicovideo:
       emit errorReceived(tr("failed to resolve URL using nicovideo account") + ": " + url);
-    else if (href.contains("bilibili.tv", Qt::CaseInsensitive))
+      break;
+    case LuaResolver::Bilibili:
       emit errorReceived(tr("failed to resolve URL using bilibili account") + ": " + url);
-    else
+      break;
+    default:
       emit errorReceived(tr("failed to resolve URL") + ": " + url);
+    }
     DOUT("exit: suburl is empty");
     return false;
   }
@@ -262,21 +270,20 @@ LuaMrlResolver::decodeText(const QString &text, const char *encoding)
 }
 
 QString
-LuaMrlResolver::formatTitle(const QString &title, const char *encoding)
+LuaMrlResolver::formatTitle(const QString &title)
 {
-  QString ret = encoding ? decodeText(title, encoding) : title;
+  QString ret = title;
   if (ret.isEmpty())
     return ret;
 
-  ret.remove(QRegExp(" ‐ ニコニコ動画\\(原宿\\)$"));
+  ret.remove(QRegExp("..ニコニコ動画\\(原宿\\)$"));
   ret.remove(QRegExp(" - 嗶哩嗶哩 - .*"));
   ret.remove(QRegExp(" - 优酷视频 - .*"));
   ret.remove(QRegExp(" - AcFun.tv$"));
   ret.replace("&lt;", "<");
   ret.replace("&gt;", ">");
   ret.replace("&quot;", "'");
-  ret = ret.trimmed();
-  return ret;
+  return ret.trimmed();
 }
 
 QString

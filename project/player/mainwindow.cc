@@ -4433,9 +4433,11 @@ MainWindow::closeEvent(QCloseEvent *event)
 {
   DOUT("enter");
   closeEventEnter();
+
   QTimer::singleShot(0,
-                     new MainWindow_slot_::CloseEventLeave(event, this),
-                     SLOT(closeEventLeave()));
+    new MainWindow_slot_::CloseEventLeave(event, this),
+    SLOT(closeEventLeave())
+  );
   DOUT("exit");
 }
 

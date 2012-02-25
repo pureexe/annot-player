@@ -15,8 +15,8 @@ include(doll/doll.pri)
 include(gsoap/gsoap.pri)
 include(luacpp/luacpp.pri)
 include(luaresolver/luaresolver.pri)
-include(mp4box/mp4box.pri)
 include(mrlresolver/mrlresolver.pri)
+include(mp4box/mp4box.pri)
 include(player/player.pri)
 include(qtext/qtext.pri)
 include(serveragent/serveragent.pri)
@@ -26,6 +26,7 @@ include(vlccore/vlccore.pri)
 
 TEMPLATE = subdirs
 
-SUBDIRS = webbrowser
+SUBDIRS = \
+    webbrowser
 
 # EOF

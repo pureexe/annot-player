@@ -1,5 +1,5 @@
 /*
- * webbrowser.rc 10/9/2011
+ * mp4box.rc 2/25/2012
  */
 #if defined(UNDER_CE)
 # include <winbase.h>
@@ -25,10 +25,10 @@ VS_VERSION_INFO VERSIONINFO
                         BLOCK "040904B0"
                         BEGIN
                                 VALUE "CompanyName", "Annot Cloud\0"
-                                VALUE "FileDescription", "Annot Browser\0"
+                                VALUE "FileDescription", "MP4Box\0"
                                 VALUE "FileVersion", VERSION
                                 VALUE "LegalCopyright", "Copyright\0"
-                                VALUE "OriginalFilename", "webbrowser.dll\0"
+                                VALUE "OriginalFilename", "mp4box.dll\0"
                                 VALUE "ProductName", VERSION
                         END
                 END

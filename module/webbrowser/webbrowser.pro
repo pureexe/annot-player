@@ -19,7 +19,7 @@ CONFIG  += shared
 mac:    CONFIG += dylib lib_bundle
 win32:  CONFIG += dll embed_manifest_dll
 
-DEFINES += WEBBROWSER_LIB
+DEFINES += WEBBROWSER_SHARED
 
 DEPENDPATH += $$PWD
 INCLUDEPATH += $$PWD

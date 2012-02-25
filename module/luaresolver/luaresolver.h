@@ -43,7 +43,7 @@ public:
 
   // CHECKPOINT: siteid with nam
 public:
-  enum Site { AcFun = 1, Nicovideo = 2, Bilibili = 3 };
+  enum Site { UnknownSite = 0, AcFun = 1, Nicovideo = 2, Bilibili = 3 };
 
   bool resolve(const QString &href,
                int *siteid = 0,
@@ -88,6 +88,8 @@ public:
 protected:
   static void printLastError(lua_State *L);
   static void appendLuaPath(lua_State *L, const QString &path);
+  static QString decodeText(const char *text, const char *encoding);
+  static QString decodeTitle(const char *text, int siteId);
 };
 
 #endif // LUARESOLVER_H

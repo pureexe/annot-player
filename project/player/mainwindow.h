@@ -316,7 +316,6 @@ public slots:
   void setSiteAccountViewVisible(bool visible);
 protected slots:
   void invalidateSiteAccounts();
-protected:
   DownloadDialog *downloadDialog();
   BacklogDialog *backlogDialog();
   ConsoleDialog *consoleDialog();

@@ -4,21 +4,27 @@
 include(../../config.pri)
 
 INCLUDEPATH += $$PWD
-DEPENDPATH += $$PWD/gpac
 
-HEADERS += \
-    $$PWD/gpac/mp4box_config.h \
-    $$PWD/gpac.h \
-    $$PWD/mp4box.h
+#DEFINES += MP4BOX_STATIC
 
-SOURCES += \
+HEADERS += $$PWD/mp4box.h
+SOURCES += $$PWD/mp4box.cc
+QT      += core
+
+!win32 {
+  DEFINES += WITH_GPAC
+  LIBS    += -lgpac
+
+  DEPENDPATH += $$PWD/gpac
+  HEADERS += \
+    $$PWD/gpac/gpac.h \
+    $$PWD/gpac/mp4box_config.h
+
+  SOURCES += \
     $$PWD/gpac/mp4box_filedump.c \
     $$PWD/gpac/mp4box_fileimport.c \
     $$PWD/gpac/mp4box_live.c \
-    $$PWD/gpac/mp4box_main.c \
-    $$PWD/mp4box.cc
-
-QT      += core
-LIBS    += -lgpac
+    $$PWD/gpac/mp4box_main.c
+}
 
 # EOF

@@ -9,7 +9,14 @@
 
 namespace Mp4Box {
 
-  bool muxMp4File(const QString &mp4, const QStringList &tracks);
+  struct Mp4Info
+  {
+    int width,  height;
+    Mp4Info() : width(0), height(0) { }
+  };
+
+  bool muxMp4File(const QString &mp4, const QStringList &tracks,
+                  Mp4Info *info = 0);
 
 } // namepsace MP4Box
 

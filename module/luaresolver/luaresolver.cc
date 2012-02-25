@@ -44,6 +44,35 @@ namespace { // anonymous
 
 } // anonymous namespace
 
+QString
+LuaResolver::decodeText(const char *text, const char *encoding)
+{
+  if (text && encoding) {
+    QTextCodec *tc = QTextCodec::codecForName(encoding);
+    if (tc) {
+      QTextDecoder *dc = tc->makeDecoder();
+      if (dc)
+        return dc->toUnicode(text);
+    }
+  }
+  return QString::fromLocal8Bit(text);
+}
+
+QString
+LuaResolver::decodeTitle(const char *text, int siteId)
+{
+  switch (siteId) {
+  case Nicovideo:
+  case Bilibili:
+    return QString::fromUtf8(text);
+  case AcFun:
+    return decodeText(text, "GBK");
+  case UnknownSite:
+  default:
+    return QString::fromLocal8Bit(text);
+  }
+}
+
 void
 LuaResolver::setObject(lua_State *L, Self *obj)
 {
@@ -260,18 +289,17 @@ LuaResolver::resolve(const QString &href, int *siteid, QString *refurl, QString 
       }
     }
 
-    if (siteid) {
-      lua_getglobal(L, "g_siteid");
-      if (!lua_isnil(L, -1))
-         *siteid = lua_tointeger(L, -1);
-      else
-        *siteid = 0;
-    }
+    int sid = 0;
+    lua_getglobal(L, "g_siteid");
+    if (!lua_isnil(L, -1))
+      sid = lua_tointeger(L, -1);
+    if (siteid)
+      *siteid = sid;
 
     if (title) {
       lua_getglobal(L, "g_title");
       if (!lua_isnil(L, -1))
-         *title = _qs(lua_tostring(L, -1));
+        *title = decodeTitle(lua_tostring(L, -1), sid);
     }
 
     if (refurl) {
@@ -376,8 +404,7 @@ LuaResolver::resolve(const QString &href, int *siteid, QString *refurl, QString 
     lua_close(L);
 
 #ifdef DEBUG
-    if (siteid)
-      DOUT("siteid =" << *siteid);
+    DOUT("siteid =" << sid);
     if (title)
       DOUT("title =" << *title);
     if (refurl)

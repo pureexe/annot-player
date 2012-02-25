@@ -3,7 +3,7 @@
 include(../../config.pri)
 INCLUDEPATH += $$PWD
 
-DEFINES +=  WEBBROWSER_STATICLIB
+DEFINES +=  WEBBROWSER_STATIC
 
 FORMS   += \
     $$PWD/webbrowser.ui

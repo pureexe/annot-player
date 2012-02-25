@@ -11,7 +11,7 @@
 
 #include "module/vlccore/types/module.h"
 
-#define DEBUG "vlccore::http"
+//#define DEBUG "vlccore::http"
 #include "module/debug/debug.h"
 
 // - Modules -
@@ -477,7 +477,7 @@ VlcHttpPlugin::control(access_t *p_access, int i_query, va_list args)
     DOUT("query = ACCESS_CAN_SEEK");
     pb_bool = (bool*)va_arg( args, bool* );
     //*pb_bool = p_sys->b_seekable;
-    *pb_bool = false; // FIXME: not seekable
+    *pb_bool = true; // FIXME: not seekable
     break;
   case ACCESS_CAN_FASTSEEK:
     DOUT("query = ACCESS_CAN_FASTSEEK");

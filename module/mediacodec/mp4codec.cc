@@ -13,6 +13,20 @@
 
 // - Helper -
 
+namespace { // anonymous
+
+  QString fixFileName_(const QString &path)
+  {
+#ifdef Q_OS_WIN
+    QString ret = path;
+    ret.replace("/", "\\");
+    return ret;
+#else
+    return path;
+#endif // Q_OS_WIN
+  }
+} // anonymous namespace
+
 // See: http://www.jqueryphp.com/how-to-get-flv-file-duration/2009/08/
 bool
 Mp4Codec::isMp4Stream(InputStream *input)

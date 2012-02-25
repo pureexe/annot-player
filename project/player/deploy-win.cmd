@@ -21,6 +21,8 @@ set ITH_DLLS=ITH.dll,ITH_engine.dll
 
 set GPAC_HOME=/Volumes/win/dev/gpac
 set GPAC_DLLS=js32.dll,libgpac.dll,libeay32.dll,ssleay32.dll
+set MP4BOX_HOME=%GPAC_HOME%
+set MP4BOX_EXE=MP4Box.exe
 
 set MP4V2_HOME=/Volumes/win/dev/mp4v2
 set MP4V2_DLL=libmp4v2.dll
@@ -76,6 +78,7 @@ cp -v "%MSVC_HOME%"/{%MSVC_DLLS%} . || exit /b 1
 cp -Rv "%MSVC90_REDIST%" . || exit /b 1
 cp -v "%ITH_HOME%"/bin/{%ITH_DLLS%} . || exit /b 1
 cp -v "%GPAC_HOME%"/bin/{%GPAC_DLLS%} . || exit /b 1
+cp -v "%MP4BOX_HOME%"/bin/%MP4BOX_EXE% . || exit /b 1
 cp -v "%MP4V2_HOME%"/bin/%MP4V2_DLL% . || exit /b 1
 cp -v "%ZLIB_HOME%"/bin/%ZLIB_DLL% . || exit /b 1
 

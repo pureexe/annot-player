@@ -4,6 +4,8 @@ Annot Project
 
 2/25/2012	annot.player	0.1.2.9
         * Annotation rendering improved.
+        * Online streaming improved.
+          Added support to play nicovideo.jp online (Windows only).
         * Added dialog to download online videos, and remux parted videos to mp4.
           Downloaded videos will be associated with online annotations automatically.
           Supported websites: nicovideo.jp,acfun.tv,bilibili.tv,....

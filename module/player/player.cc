@@ -13,7 +13,6 @@
 #include "player.h"
 #include "playerprivate.h"
 #include "vlcext.h"
-// Enable core hacks by default.
 #ifdef Q_WS_MAC
   #include <QMacCocoaViewContainer>
 #endif // Q_WS_MAC

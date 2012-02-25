@@ -43,7 +43,7 @@ protected:
 
   // It's important to keep these methods stateless.
   static QString decodeText(const QString &text, const char *encoding = 0);
-  static QString formatTitle(const QString &title, const char *encoding = 0);
+  static QString formatTitle(const QString &title);
   static QString formatUrl(const QString &url);
 
   static QString cleanUrl(const QString &url);

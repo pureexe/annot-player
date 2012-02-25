@@ -1196,7 +1196,8 @@ enum
 /*for dash*/
 #define MAX_DASH_REP	30
 
-int mp4boxMain(int argc, char **argv)
+int
+mp4boxMain(int argc, char **argv)
 {
     char outfile[5000];
     GF_Err e;
