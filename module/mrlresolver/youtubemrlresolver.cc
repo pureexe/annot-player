@@ -23,7 +23,7 @@ YoutubeMrlResolver::matchMedia(const QString &href) const
 }
 
 // Example: http://www.youtube.com/watch?v=-DJqnomZoLk&list=FLc18abM35KhjkqsLzTmOEjA&feature=plcp
-void
+bool
 YoutubeMrlResolver::resolveMedia(const QString &href)
 {
   static const QString errorMessage = tr("failed to resolve URL");
@@ -37,7 +37,7 @@ YoutubeMrlResolver::resolveMedia(const QString &href)
   QString v = url.queryItemValue("v");
   if (v.isEmpty()) {
     emit errorReceived(errorMessage + ": " + href);
-    return;
+    return false;
   }
 
   QString mrl = "http://youtube.com/watch?v=" + v;
@@ -46,6 +46,7 @@ YoutubeMrlResolver::resolveMedia(const QString &href)
   mi.mrls.append(MrlInfo(mrl));
   mi.refurl = mrl;
   emit mediaResolved(mi, 0);
+  return true;
 }
 
 // EOF

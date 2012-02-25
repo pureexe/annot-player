@@ -30,9 +30,11 @@
 //  #define ANNOTATION_SIZE_HUGE          "80px"
 //#endif // Q_WS_MAC
 
-#define ANNOTATION_FONT_ENGLISH         "Arial"
-#define ANNOTATION_FONT_CHINESE         "SimSun"
-#define ANNOTATION_FONT_JAPANESE        "MS Gothic"
+#define ANNOTATION_FONT_ENGLISH         "Geneva"
+//#define ANNOTATION_FONT_CHINESE         "SimSun"
+#define ANNOTATION_FONT_CHINESE         "Geneva"        // Helvetica on Mac
+//#define ANNOTATION_FONT_JAPANESE        "MS Gothic"
+#define ANNOTATION_FONT_JAPANESE        "Geneva"        // Helvetica on Mac
 #define ANNOTATION_FONT_DEFAULT         ANNOTATION_FONT_JAPANESE
 
 #define ANNOTATION_STAY_TIME            2000

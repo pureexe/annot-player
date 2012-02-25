@@ -13,7 +13,7 @@
 #include <QtXml>
 #include <climits>
 
-#define DEBUG "NicovideoCodec"
+//#define DEBUG "nicovideocodec"
 #include "module/debug/debug.h"
 
 using namespace AnnotCloud;

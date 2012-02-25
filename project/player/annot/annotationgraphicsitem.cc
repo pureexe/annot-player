@@ -140,11 +140,15 @@ AnnotationGraphicsItem::nextY(int msecs, Style style) const
 void
 AnnotationGraphicsItem::warmUp()
 {
+  //qDebug() << ::default_annot_font_(Traits::Japanese).rawName();
+  //qDebug() << ::default_annot_font_(Traits::Japanese).family();
+
 #ifdef Q_WS_MAC
   QGraphicsTextItem dummy;
 
   QFont j = ::default_annot_font_(Traits::Japanese),
         c = ::default_annot_font_(Traits::Chinese);
+
 
   j.setWeight(QFont::Light); dummy.setFont(j);
   c.setWeight(QFont::Light); dummy.setFont(c);
@@ -327,7 +331,7 @@ AnnotationGraphicsItem::setEffect(Effect e)
   case ShadowEffect:
     {
       QGraphicsDropShadowEffect *shadow = new QGraphicsDropShadowEffect(this);
-      shadow->setBlurRadius(10); // in pixels
+      shadow->setBlurRadius(12); // in pixels
       shadow->setOffset(1); // in pixels
       shadow->setColor(QColor("black"));
       setGraphicsEffect(shadow);

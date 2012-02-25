@@ -48,7 +48,7 @@ namespace Bitwise { using namespace BigEndian; }
 
 
 // Manually delete owned objects to avoid creating children in another thread.
-FLVDemux::~FLVDemux()
+FlvDemux::~FlvDemux()
 {
   if (audioWriter_) delete audioWriter_;
   if (videoWriter_) delete videoWriter_;
@@ -57,9 +57,10 @@ FLVDemux::~FLVDemux()
 // - Demux -
 
 bool
-FLVDemux::demux()
+FlvDemux::demux()
 {
   DOUT("enter");
+  state_ = Running;
 
   bool ok;
   if (readUInt32(&ok) != 0x464C5601 || !ok) {
@@ -83,7 +84,7 @@ FLVDemux::demux()
   seek(dataOffset);
 
   quint32 prevTagSize = readUInt32(&ok);
-  while (ok) {
+  while (ok && isRunning()) {
     if (!readTag()) break;
     prevTagSize = readUInt32(&ok);
   }
@@ -94,12 +95,15 @@ FLVDemux::demux()
   //  averageFrameRate = FractionUInt32(25, 1);
   //trueFrameRate = calculateTrueFrameRate();
 
-  return true;
-  DOUT("exit");
+  if (isRunning())
+    state_ = Finished;
+
+  DOUT("exit: ret =" << isFinished());
+  return isFinished();
 }
 
 void
-FLVDemux::leadOut()
+FlvDemux::leadOut()
 {
   DOUT("enter: videoWriter =" << videoWriter_ << ", audioWriter =" << audioWriter_);
   if (videoWriter_)
@@ -110,7 +114,7 @@ FLVDemux::leadOut()
 }
 
 bool
-FLVDemux::readTag()
+FlvDemux::readTag()
 {
   //if ((inputSize_ - inputOffset_) < 11)
   //  return false;
@@ -160,7 +164,7 @@ FLVDemux::readTag()
 }
 
 MediaWriter*
-FLVDemux::makeAudioWriter(quint32 mediaInfo)
+FlvDemux::makeAudioWriter(quint32 mediaInfo)
 {
   DOUT("enter: mediaInfo =" << mediaInfo);
   if (!audioOutputStream_) {
@@ -174,8 +178,8 @@ FLVDemux::makeAudioWriter(quint32 mediaInfo)
 
   if ((format == 2) || (format == 14)) { // MP3
     DOUT("MP3");
-    //return new MP3Writer(path, _warnings);
-    return new MP3Writer;
+    //return new Mp3Writer(path, _warnings);
+    return new Mp3Writer;
   } else if ((format == 0) || (format == 3)) { // PCM
     DOUT("PCM");
     int sampleRate = 0;
@@ -187,14 +191,15 @@ FLVDemux::makeAudioWriter(quint32 mediaInfo)
     }
     if (format == 0)
       DOUT("PCM byte order unspecified, assuming little endian.");
+    DOUT("exit: WAV");
     //return new WAVWriter(path, (bits == 1) ? 16 : 8, (chans == 1) ? 2 : 1, sampleRate);
-    return new WAVWriter;
+    return new WavWriter;
   } else if (format == 10) { // AAC
-    DOUT("AAC");
-    //return new AACWriter(path);
-    return new AACWriter(audioOutputStream_, audioToc_);
+    DOUT("exit: AAC");
+    //return new AacWriter(path);
+    return new AacWriter(audioOutputStream_, audioToc_);
   } else if (format == 11) { // Speex
-    DOUT("SPX");
+    DOUT("exit: SPX");
     //return new SpeexWriter(path, (int)(inputSize_ & 0xFFFFFFFF));
     return new SpeexWriter;
   } else {
@@ -208,14 +213,14 @@ FLVDemux::makeAudioWriter(quint32 mediaInfo)
       typeStr = "format=" + QString::number(format);
     DOUT(typeStr);
 
-    DOUT("Unable to extract audio (" + typeStr + " is unsupported).");
+    DOUT("exit: nable to extract audio (" + typeStr + " is unsupported).");
 
     return new DummyMediaWriter;
   }
 }
 
 MediaWriter*
-FLVDemux::makeVideoWriter(quint32 mediaInfo)
+FlvDemux::makeVideoWriter(quint32 mediaInfo)
 {
   DOUT("enter: mediaInfo =" << mediaInfo);
   if (!videoOutputStream_) {
@@ -225,11 +230,11 @@ FLVDemux::makeVideoWriter(quint32 mediaInfo)
   quint32 codecID = mediaInfo & 0x0F;
 
   if ((codecID == 2) || (codecID == 4) || (codecID == 5)) {
-    //return new AVIWriter(path, (int)codecID, _warnings);
-    DOUT("AVI");
-    return new AVIWriter;
+    //return new AviWriter(path, (int)codecID, _warnings);
+    DOUT("exit: AVI");
+    return new AviWriter;
   } else if (codecID == 7) {
-    DOUT("H.264");
+    DOUT("exit: H.264");
     return new RawH264Writer(videoOutputStream_, videoToc_);
   } else {
     QString typeStr;
@@ -242,29 +247,39 @@ FLVDemux::makeVideoWriter(quint32 mediaInfo)
       typeStr = "codecID=" + QString::number(codecID);
     DOUT(typeStr);
 
-    DOUT("Unable to extract video (" + typeStr + " is unsupported).");
+    DOUT("exit: unable to extract video (" + typeStr + " is unsupported).");
 
     return new DummyMediaWriter;
   }
 }
 
 bool
-FLVListDemux::demux()
+FlvListDemux::demux()
 {
+  DOUT("enter");
   Q_ASSERT(ins_);
-  if (ins_->isEmpty())
+  state_ = Running;
+
+  if (ins_->isEmpty()) {
+    DOUT("exit: empty input streams");
     return true;
+  }
   duration_ = 0;
   for (streamIndex_ = 0; streamIndex_ < ins_->size(); streamIndex_++) {
+    if (!isRunning())
+      break;
     demux_->setInput((*ins_)[streamIndex_]);
     if (demux_->videoToc())
       demux_->videoToc()->setBaseTimestamp(duration_);
     if (demux_->audioToc())
       demux_->audioToc()->setBaseTimestamp(duration_);
-    if (!demux_->demux())
+    if (!demux_->demux()) {
+      DOUT("exit: ret = false");
       return false;
+    }
     demux_->setWriteHeader(false);
-    duration_ += durations_[streamIndex_];
+    if (!durations_.isEmpty())
+      duration_ += durations_[streamIndex_];
   }
 
   if (demux_->videoToc())
@@ -272,7 +287,11 @@ FLVListDemux::demux()
   if (demux_->audioToc())
     demux_->audioToc()->setBaseTimestamp(0);
 
-  return true;
+  if (isRunning())
+    state_ = Finished;
+
+  DOUT("exit: ret =" << isFinished());
+  return isFinished();
 }
 
 // EOF

@@ -42,7 +42,7 @@ public:
 
   // - Properties -
 protected:
-  bool active() const;
+  bool active() const { return active_; }
 protected slots:
   void setActive(bool t);
   void connectFilter();

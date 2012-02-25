@@ -7,18 +7,20 @@
 #include <QtCore>
 
 #ifdef Q_OS_MAC
-  #define K_CTRL "cmd"
+  #define K_CTRL        "cmd"
+  #define K_ALT         "opt"
+  #define K_SHIFT       "shift"
+  #define K_SPACE       "space"
+  #define K_BACKSPACE   "backspace"
+  #define K_ESC         "esc"
 #else
-  #define K_CTRL "ctrl"
+  #define K_CTRL        "Ctrl"
+  #define K_ALT         "Alt"
+  #define K_SHIFT       "Shift"
+  #define K_SPACE       "Space"
+  #define K_BACKSPACE   "Backspace"
+  #define K_ESC         "Esc"
 #endif // Q_OS_MAC
-
-#ifdef Q_OS_MAC
-  #define K_ALT "opt"
-#else
-  #define K_ALT "alt"
-#endif // Q_OS_MAC
-
-#define K_SHIFT "shift"
 
 // - Constructions -
 
@@ -117,16 +119,24 @@ TranslatorManager::translate(int tid) const
   case T_NULL:          return QString();
 
   case T_UPDATE:        return tr("Update");
+  case T_DOWNLOAD:      return tr("Download");
   case T_WINDOWS:       return tr("Windows");
   case T_SOURCE:        return tr("Source");
   case T_OPEN:          return tr("Open");
+  case T_PLAY:          return tr("Play");
+  case T_START:         return tr("Start");
+  case T_SIZE:          return tr("Size");
   case T_BLACKLIST:     return tr("Blacklist");
   case T_DEFAULT:       return tr("Default");
   case T_RANDOM:        return tr("Random");
   case T_POSITION:      return tr("Progress");
+  case T_URL:           return tr("URL");
+  case T_STATE:         return tr("State");
   case T_VOLUME:        return tr("Volume");
   case T_USER:          return tr("User");
   case T_NICKNAME:      return tr("Nickname");
+  case T_PERCENTAGE:    return tr("Percentage");
+  case T_SPEED:         return tr("Speed");
   case T_EMAIL:         return tr("Email");
   case T_LOGIN:         return tr("Login");
   case T_OK:            return tr("OK");
@@ -135,6 +145,7 @@ TranslatorManager::translate(int tid) const
   case T_ADD:           return tr("Add");
   case T_DELETE:        return tr("Delete");
   case T_BACKLOG:       return tr("Backlog");
+  case T_CONSOLE:       return tr("Console");
   case T_REMOVE:        return tr("Remove");
   case T_AUTO:          return tr("Auto");
   case T_ENABLE:        return tr("Enable");
@@ -299,18 +310,19 @@ TranslatorManager::translate(int tid) const
   case T_TIP_OPENCONTEXTMENU:      return tr("Open");
 
   case T_OPENINWEBBROWSER:      return tr("Open in web browser");
+  case T_DOWNLOADCURRENT:       return tr("Download current media");
 
-  case T_MENUTEXT_PLAY:         return tr("Play") + " [space]";
-  case T_TIP_PLAY:              return tr("Play media") + " [space]";
+  case T_MENUTEXT_PLAY:         return tr("Play") + " [" K_SPACE "]";
+  case T_TIP_PLAY:              return tr("Play media") + " [" K_SPACE "]";
 
   case T_MENUTEXT_MENU:         return tr("Menu");
   case T_TIP_MENU:              return tr("Show menu");
 
-  case T_MENUTEXT_PAUSE:        return tr("Pause") + " [space]";
-  case T_TIP_PAUSE:             return tr("Pause playing") + " [space]";
+  case T_MENUTEXT_PAUSE:        return tr("Pause") + " [" K_SPACE "]";
+  case T_TIP_PAUSE:             return tr("Pause playing") + " [" K_SPACE "]";
 
-  case T_MENUTEXT_STOP:         return tr("Stop") + " [backspace]";
-  case T_TIP_STOP:              return tr("Stop playing") + " [backspace]";
+  case T_MENUTEXT_STOP:         return tr("Stop");
+  case T_TIP_STOP:              return tr("Stop playing");
 
   case T_MENUTEXT_NEXTFRAME:    return tr("Next frame");
   case T_TIP_NEXTFRAME:         return tr("Next frame");
@@ -609,6 +621,9 @@ TranslatorManager::translate(int tid) const
   case T_MENUTEXT_CLEARRECENT:  return tr("Clear");
   case T_TIP_CLEARRECENT:       return tr("Clear recent files");
 
+  case T_MENUTEXT_MINIMIZE:     return tr("Minimize and pause") + " [" K_ESC "]";
+  case T_TIP_MINIMIZE:          return tr("Minimize and pause") + " [" K_ESC "]";
+
   case T_MENUTEXT_ANNOTATIONLIMIT: return tr("Annot count");
   case T_TIP_ANNOTATIONLIMIT:      return tr("Hint maximum annotation count");
 
@@ -635,6 +650,9 @@ TranslatorManager::translate(int tid) const
 
   case T_MENUTEXT_ENABLEBLACKLIST:  return tr("Enable blacklist");
   case T_TIP_ENABLEBLACKLIST:       return tr("Enable blacklist");
+
+  case T_MENUTEXT_DOWNLOAD:  return tr("Download") + " [" K_CTRL "+F5]";
+  case T_TIP_DOWNLOAD:       return tr("Download") + " [" K_CTRL "+F5]";
 
   case T_FILTER_PATTERN:        return tr("Filter pattern");
   case T_FILTER_SYNTAX:         return tr("Filter syntax");

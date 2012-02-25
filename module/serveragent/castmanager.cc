@@ -12,23 +12,21 @@ CastManager::CastManager(QObject *parent)
 bool
 CastManager::containsEvent(const CastEvent &e) const
 {
-  mutex_.lock();
+  QMutexLocker lock(&mutex_);
   bool ret = events_.contains(e);
-  mutex_.unlock();
   return ret;
 }
 
 bool
 CastManager::registerEvent(const CastEvent &e)
 {
+  QMutexLocker lock(&mutex_);
   bool ret = false;
 
-  mutex_.lock();
   if (!events_.contains(e)) {
     events_.append(e);
     ret = true;
   }
-  mutex_.unlock();
 
   return ret;
 }

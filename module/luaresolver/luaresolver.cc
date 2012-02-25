@@ -22,15 +22,6 @@
 //#define DEBUG "luaresolver"
 #include "module/debug/debug.h"
 
-// - Construction -
-
-LuaResolver::LuaResolver(const QString &scriptPath, const QString &packagePath,
-                         QNetworkAccessManager *nam, QObject *parent)
-  : Base(parent), nam_(nam), scriptPath_(scriptPath), packagePath_(packagePath){
-  if (!nam_)
-    nam_ = new QNetworkAccessManager(this);
-}
-
 // - Helpers -
 
 namespace { // anonymous
@@ -91,13 +82,13 @@ LuaResolver::dlget(lua_State *L)
   }
   QString path = _qs(lua_tostring(L, PARAM_PATH));
   QString url = _qs(lua_tostring(L, PARAM_URL));
-  bool zipped = url.contains("bilibili.tv/", Qt::CaseInsensitive);
 
-  const bool async = false;
+  Downloader *dl = new Downloader(path, this);
+  if (cookieJar_)
+    dl->networkAccessManager()->setCookieJar(cookieJar_);
   const QString noheader;
-  Downloader dl(path, zipped, 0, nam_);
-  dl.get(QUrl(url), noheader, async);
-  bool ok = dl.state() == Downloader::OK;
+  dl->get(QUrl(url), noheader, false); // async = false
+  bool ok = dl->state() == Downloader::OK;
   DOUT("exit: ok =" << ok);
   return ok ? 0 : 1;
 }
@@ -119,13 +110,13 @@ LuaResolver::dlpost(lua_State *L)
   QString param = _qs(lua_tostring(L, PARAM_PARAM));
 
   QString header = _qs(lua_tostring(L, PARAM_HEADER));
-  bool zipped = url.contains("bilibili.tv/", Qt::CaseInsensitive);
-  const bool async = false;
-  Downloader dl(path, zipped, 0, nam_);
+  Downloader *dl = new Downloader(path, this);
+  if (cookieJar_)
+    dl->networkAccessManager()->setCookieJar(cookieJar_);
   //QByteArray data = Downloader::encodeUrlParameters(param);
   QByteArray data = param.toLocal8Bit();
-  dl.post(QUrl(url), data, header, async);
-  bool ok = dl.state() == Downloader::OK;
+  dl->post(QUrl(url), data, header, false); // async = false
+  bool ok = dl->state() == Downloader::OK;
   DOUT("exit: ok =" << ok);
   return ok ? 0 : 1;
 }
@@ -222,7 +213,7 @@ LuaResolver::resolve(const QString &href, int *siteid, QString *refurl, QString 
 
     // Set account
     if (hasNicovideoAccount() &&
-        href.contains("nicovideo.jp", Qt::CaseInsensitive)) {
+        href.contains("nicovideo.jp/", Qt::CaseInsensitive)) {
       DOUT("nicovideo username =" << nicovideoUsername_);
       boost::function<int (std::string, std::string)>
           call = lua_function<int>(L, "set_nicovideo_account");
@@ -237,7 +228,7 @@ LuaResolver::resolve(const QString &href, int *siteid, QString *refurl, QString 
     }
 
     if (hasBilibiliAccount() &&
-        href.contains("bilibili.tv", Qt::CaseInsensitive)) {
+        href.contains("bilibili.tv/", Qt::CaseInsensitive)) {
       DOUT("bilibili username =" << bilibiliUsername_);
       boost::function<int (std::string, std::string)>
           call = lua_function<int>(L, "set_bilibili_account");
@@ -273,6 +264,8 @@ LuaResolver::resolve(const QString &href, int *siteid, QString *refurl, QString 
       lua_getglobal(L, "g_siteid");
       if (!lua_isnil(L, -1))
          *siteid = lua_tointeger(L, -1);
+      else
+        *siteid = 0;
     }
 
     if (title) {

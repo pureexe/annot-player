@@ -3,12 +3,15 @@
 setlocal
 cd /d d:/devel/releases/player || exit /b 1
 
-set VERSION=0.1.2.8
+set VERSION=0.1.2.9
 set APP=annot-player
 set ZIPFILE=%APP%-%VERSION%-win.zip
 
 set MSVC_HOME=/Volumes/win/Windows/System32
 set MSVC_DLLS=msvcp100.dll,msvcr100.dll
+
+set MSVC90_HOME=/Volumes/win/Program Files/Microsoft Visual Studio 9.0
+set MSVC90_REDIST=%MSVC90_HOME%/VC/redist/x86/Microsoft.VC90.CRT
 
 set QT_HOME=/Volumes/win/qt/current
 set QT_DLLS=QtCore4.dll,QtGui4.dll,QtNetwork4.dll,QtScript4.dll,QtSql4.dll,QtWebkit4.dll,QtXml4.dll,phonon4.dll
@@ -18,6 +21,9 @@ set ITH_DLLS=ITH.dll,ITH_engine.dll
 
 set GPAC_HOME=/Volumes/win/dev/gpac
 set GPAC_DLLS=js32.dll,libgpac.dll,libeay32.dll,ssleay32.dll
+
+set MP4V2_HOME=/Volumes/win/dev/mp4v2
+set MP4V2_DLL=libmp4v2.dll
 
 set ZLIB_HOME=/Volumes/win/dev/zlib
 set ZLIB_DLL=zlib1.dll
@@ -67,8 +73,10 @@ cp -v "%QT_HOME%"/plugins/sqldrivers/qsqlite4.dll sqldrivers/ || exit /b 1
 cp -v "%QT_HOME%"/bin/{%QT_DLLS%} . || exit /b 1
 
 cp -v "%MSVC_HOME%"/{%MSVC_DLLS%} . || exit /b 1
+cp -Rv "%MSVC90_REDIST%" . || exit /b 1
 cp -v "%ITH_HOME%"/bin/{%ITH_DLLS%} . || exit /b 1
 cp -v "%GPAC_HOME%"/bin/{%GPAC_DLLS%} . || exit /b 1
+cp -v "%MP4V2_HOME%"/bin/%MP4V2_DLL% . || exit /b 1
 cp -v "%ZLIB_HOME%"/bin/%ZLIB_DLL% . || exit /b 1
 
 ::cp -v "%CURL_HOME%"/bin/%CURL_BIN% . || exit /b 1

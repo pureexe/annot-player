@@ -21,33 +21,6 @@ extern "C" {
 #define DEBUG "application"
 #include "module/debug/debug.h"
 
-// - Debug -
-
-namespace { // anonymous, debug
-
-  // See: http://www.cppblog.com/lauer3912/archive/2011/04/10/143870.html
-  void
-  debugMessageHandler(QtMsgType type, const char *msg)
-  {
-#define TIMESTAMP QDateTime::currentDateTime().toString("MM:dd: hh:mm:ss")
-    QString output;
-    switch (type) {
-    case QtDebugMsg:    output = QString("%1: %2\n").arg(TIMESTAMP).arg(msg); break;
-    case QtWarningMsg:  output = QString("%1: warning: %2\n").arg(TIMESTAMP).arg(msg); break;
-    case QtCriticalMsg: output = QString("%1: critical: %2\n").arg(TIMESTAMP).arg(msg); break;
-    case QtFatalMsg:    output = QString("%1: fatal: %2\n").arg(TIMESTAMP).arg(msg); break;
-    default: return;
-    }
-
-    QFile file(G_PATH_DEBUG);
-    if (file.open(QIODevice::WriteOnly | QIODevice::Append))
-      QTextStream(&file) << output;
-#undef TIMESTAMP
-  }
-
-} // anonymous namespace
-
-
 // - Constructions -
 
 Application::Application(int &argc, char **argv)
@@ -133,10 +106,37 @@ Application::event(QEvent *e)
   return accept;
 }
 
-// - Logging -
+// - Debug -
 
 void
-Application::startLoggingDebugMessage()
+Application::messageHandler(QtMsgType type, const char *msg)
+{
+  foreach (QtMsgHandler callback, globalInstance()->messageHandlers_)
+    callback(type, msg);
+}
+
+// See: http://www.cppblog.com/lauer3912/archive/2011/04/10/143870.html
+void
+Application::loggedMessageHandler(QtMsgType type, const char *msg)
+{
+#define TIMESTAMP QDateTime::currentDateTime().toString("MM:dd: hh:mm:ss")
+  QString output;
+  switch (type) {
+  case QtDebugMsg:    output = QString("%1: %2\n").arg(TIMESTAMP).arg(msg); break;
+  case QtWarningMsg:  output = QString("%1: warning: %2\n").arg(TIMESTAMP).arg(msg); break;
+  case QtCriticalMsg: output = QString("%1: critical: %2\n").arg(TIMESTAMP).arg(msg); break;
+  case QtFatalMsg:    output = QString("%1: fatal: %2\n").arg(TIMESTAMP).arg(msg); break;
+  default: return;
+  }
+
+  QFile file(G_PATH_DEBUG);
+  if (file.open(QIODevice::WriteOnly | QIODevice::Append))
+    QTextStream(&file) << output;
+#undef TIMESTAMP
+}
+
+void
+Application::installMessageHandlers()
 {
   QFile debug(G_PATH_DEBUG);
   if (debug.open(QIODevice::WriteOnly | QIODevice::Append)) {
@@ -144,7 +144,8 @@ Application::startLoggingDebugMessage()
       << "\n################################################################################\n\n";
     debug.close();
 
-    qInstallMsgHandler(::debugMessageHandler);
+    qInstallMsgHandler(messageHandler);
+    addMessageHandler(loggedMessageHandler);
     DOUT("debug message handler installed");
   }
 }

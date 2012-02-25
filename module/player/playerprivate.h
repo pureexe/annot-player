@@ -12,6 +12,7 @@
 #include "player.h"
 //#include "module/qtext/textcodec.h"
 #include "module/qtext/countdowntimer.h"
+#include "module/vlccore/http.h"
 #include <QObject>
 #include <QList>
 #include <memory>
@@ -150,42 +151,59 @@ namespace { // anonymous: vlc handle
     void reset();
   };
 
+  inline
   mp_handle_::mp_handle_()
     : instance_(0), player_(0), media_(0)
   {
     //reset();
   }
 
+  inline
   mp_handle_::~mp_handle_()
   {
     if (!media_list_.isEmpty())
       foreach (libvlc_media_t *m, media_list_)
         if (m  && m != media_)
           ::libvlc_media_release(m);
-
     if (media_)
       ::libvlc_media_release(media_);
-    if (player_)
+    if (player_) {
+      ::libvlc_media_player_set_media(player_, 0);
       ::libvlc_media_player_release(player_);
-    if (instance_)
+    } if (instance_)
       ::libvlc_release(instance_);
   }
 
-  void
+  inline void
   mp_handle_::reset()
   {
+    if (!media_list_.isEmpty()) {
+      foreach (libvlc_media_t *m, media_list_)
+        if (m  && m != media_)
+          ::libvlc_media_release(m);
+      media_list_.clear();
+    }
+    if (media_) {
+      ::libvlc_media_release(media_);
+      media_ = 0;
+    }
+
+    if (player_) {
+      ::libvlc_media_player_set_media(player_, 0);
+      ::libvlc_media_player_release(player_);
+    }
     if (instance_)
       ::libvlc_release(instance_);
 
     const char *vlc_argv[] = { VLC_ARGS };
-    int vlc_argc = sizeof(vlc_argv)/sizeof(*vlc_argv);
+    enum { vlc_argc = sizeof(vlc_argv)/sizeof(*vlc_argv) };
     instance_ = ::libvlc_new(vlc_argc, vlc_argv);
     Q_ASSERT(instance_);
 
+    VlcHttpPlugin::load();
+
     player_ = ::libvlc_media_player_new(instance_);
     Q_ASSERT(player_);
-
-    media_ = 0;
 
     //list_player_ = ::libvlc_media_list_player_new(instance_);
     //Q_ASSERT(list_player_);

@@ -1,6 +1,5 @@
 // main.cc
 // 6/30/2011
-
 #include "application.h"
 #include "mainwindow.h"
 #include "settings.h"
@@ -22,7 +21,7 @@
   #include "mac/qtmac/qtmac.h"
 #endif // Q_OS_MAC
 #include <QtGui>
-#include <QtWebKit>
+//#include <QtWebKit>
 #include <ctime>
 #include <cstdlib>
 
@@ -108,7 +107,7 @@ main(int argc, char *argv[])
     return 0;
 
 #ifdef USE_MODE_DEBUG
-  a.startLoggingDebugMessage();
+  //a.installMessageHandlers();
 #endif // USE_MODE_DEBUG
 
   Settings *settings = Settings::globalInstance();
@@ -138,13 +137,9 @@ main(int argc, char *argv[])
   // Rebuild caches on update.
   if (settings->version() != G_VERSION) {
     DOUT("update from old version");
-    QFileInfo cachedb(G_PATH_CACHEDB),
-              queuedb(G_PATH_QUEUEDB);
-    if (cachedb.exists())
-      QFile::remove(cachedb.filePath());
-    if (queuedb.exists())
-      QFile::remove(queuedb.filePath());
-
+    QFile::remove(G_PATH_CACHEDB);
+    QFile::remove(G_PATH_QUEUEDB);
+    QFile::remove(G_PATH_DEBUG);
     settings->setVersion(G_VERSION);
   }
 
@@ -164,15 +159,15 @@ main(int argc, char *argv[])
   //  a.installTranslator(&t);
 
   // Set webkit settings
-  {
-    QWebSettings *ws = QWebSettings::globalSettings();
-
-    ws->setAttribute(QWebSettings::PluginsEnabled, true);
-    ws->setAttribute(QWebSettings::AutoLoadImages, true);
-    ws->setAttribute(QWebSettings::JavascriptEnabled, true);
-
-    //g->setMaximumPagesInCache(10);
-  }
+  //{
+  //  QWebSettings *ws = QWebSettings::globalSettings();
+  //
+  //  ws->setAttribute(QWebSettings::PluginsEnabled, true);
+  //  ws->setAttribute(QWebSettings::AutoLoadImages, true);
+  //  ws->setAttribute(QWebSettings::JavascriptEnabled, true);
+  //
+  //  //g->setMaximumPagesInCache(10);
+  //}
 
   // Set theme.
   {

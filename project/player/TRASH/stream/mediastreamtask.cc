@@ -86,7 +86,7 @@ MediaStreamTask::run()
   vout->setSize(totalSize); // estimated max siz
   aout->setSize(totalSize); // estimated max size
 
-  FLVCodec::globalInstance()->demuxStreamList(ins_, msi_.durations, vout, aout, vtoc, atoc);
+  FlvCodec::globalInstance()->demuxStreamList(ins_, msi_.durations, vout, aout, vtoc, atoc);
 
   StreamService *ss = StreamService::globalInstance();
   if (ss->isActive())
@@ -123,8 +123,8 @@ MediaStreamTask::debug()
   vout->setSize(in->size()); // estimated max siz
   aout->setSize(in->size()); // estimated max size
 
-  qint64 duration = FLVCodec::getFLVStreamDuration(in);
-  FLVCodec::globalInstance()->demuxStream(in, vout, aout, vtoc, atoc);
+  qint64 duration = FlvCodec::getFlvStreamDuration(in);
+  FlvCodec::globalInstance()->demuxStream(in, vout, aout, vtoc, atoc);
 
   StreamService *ss = StreamService::globalInstance();
   if (ss->isActive())

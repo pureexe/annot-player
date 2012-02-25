@@ -78,13 +78,12 @@ Database::Database(const QString &fileName, QObject *parent)
 
 Database::~Database()
 {
-  DOUT("locking"); mutex_.lock(); DOUT("locked");
+  DOUT("enter");
+  QMutexLocker lock(&mutex_);
 
   if (db_.isOpen())
     db_.close();
-
-  DOUT("unlocking"); mutex_.unlock(); DOUT("unlocked");
-  //db_.removeDatabase(db_.connectionName());
+  DOUT("exit");
 }
 
 bool
@@ -93,14 +92,13 @@ Database::open(const QString &fileName)
   DOUT("fileName =" << fileName);
 
   // Locking is not needed currently
-  //DOUT("locking"); mutex_.lock(); DOUT("locked");
+  //QMutexLocker lock(&mutex_);
 
   Q_ASSERT(!db_.isOpen());
   if (db_.isOpen())
     db_.close();
   db_.setDatabaseName(fileName);
 
-  //DOUT("unlocking"); mutex_.unlock(); DOUT("unlocked");
   return db_.open();
 }
 
@@ -112,8 +110,7 @@ void
 Database::clear()
 {
   DOUT("enter");
-
-  DOUT("locking"); mutex_.lock(); DOUT("locked");
+  QMutexLocker lock(&mutex_);
 
   if (db_.isOpen())
     db_.close();
@@ -138,8 +135,6 @@ Database::clear()
     }
   } else
     DOUT("failed to reset database");
-
-  DOUT("unlocking"); mutex_.unlock(); DOUT("unlocked");
 
   emit cleared();
   DOUT("exit");

@@ -8,6 +8,7 @@
 #include <QWidget> // where WId is declared
 #include <QStringList>
 
+QT_FORWARD_DECLARE_CLASS(QNetworkCookieJar)
 #ifdef Q_WS_MAC
 QT_FORWARD_DECLARE_CLASS(QMacCocoaViewContainer)
 #endif // Q_WS_MAC
@@ -121,6 +122,8 @@ public:
   WindowHandle embeddedWindow() const;
 
 public slots:
+  void dispose();
+
   // Do not use WindowHandle to bypass qMetatype registration.
 #ifdef Q_WS_MAC
   void setEmbeddedWindow(void *cocoaView);
@@ -136,6 +139,9 @@ public slots:
 #endif // Q_WS_MAC
 
   void setUserAgent(const QString &agent = QString());
+
+  void setCookieJar(QNetworkCookieJar *jar);
+  void clearCookieJar() { setCookieJar(0); }
 
 public:
   ///  Save the current frame as picture. Return if succeed.
@@ -217,6 +223,7 @@ public slots:
   qreal volume() const;       ///< [0,1]
   qreal position() const;     ///< [0,1]
   void setVolume(qreal vol);
+  void mute();
   void setPosition(qreal pos);
 
   void setTime(qint64 msecs); ///< same effect as setPosition
@@ -261,8 +268,8 @@ signals:
   void buffering();
   void playing();
   void paused();
-  void stopped();
   void stopping();
+  void stopped();
   void mediaChanged();  // Actually mediaAdded
   void mediaTitleChanged(const QString &title);
   void mediaClosed();
@@ -283,7 +290,7 @@ signals:
   //@{
   // \internal
 public:
-#define ADD_SIGNAL(_signal)    void emit_##_signal { emit _signal; }
+#define ADD_SIGNAL(_signal)    void emit_##_signal { emit _signal; } ///< \internal
     ADD_SIGNAL(opening())
     ADD_SIGNAL(buffering())
     ADD_SIGNAL(playing())
@@ -311,6 +318,10 @@ public:
 protected:
   QByteArray decode(const QString &utf) const;
   QString encode(const char *ascii) const;
+
+  void attachEvents();
+  void detachEvents();
+
 private:
   QList<libvlc_media_t*> parsePlaylist(const QString &fileName) const;
   QList<libvlc_media_t*> parsePlaylist(libvlc_media_t *md) const;

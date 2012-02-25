@@ -23,6 +23,11 @@ Logger::log(const QString &message)
       HTML_STYLE_OPEN(color:orange) " ..." HTML_STYLE_CLOSE()
       HTML_STYLE_CLOSE() HTML_BR()
     );
+  LoggerSignals::globalInstance()->emit_logged(
+    HTML_STYLE_OPEN(color:blue) ": "
+    + message +
+    HTML_STYLE_CLOSE()
+  );
 }
 
 void
@@ -41,6 +46,11 @@ Logger::notify(const QString &message)
       HTML_STYLE_OPEN(color:orange) " ..." HTML_STYLE_CLOSE()
       HTML_STYLE_CLOSE() HTML_BR()
     );
+  LoggerSignals::globalInstance()->emit_notified(
+    HTML_STYLE_OPEN(color:purple) ": "
+    + message +
+    HTML_STYLE_CLOSE()
+  );
 }
 
 void
@@ -59,6 +69,11 @@ Logger::warn(const QString &message)
       HTML_STYLE_OPEN(color:orange) " ..." HTML_STYLE_CLOSE()
       HTML_STYLE_CLOSE() HTML_BR()
     );
+  LoggerSignals::globalInstance()->emit_warned(
+    HTML_STYLE_OPEN(color:orange) ": "
+    + message +
+    HTML_STYLE_CLOSE()
+  );
 }
 
 void
@@ -77,6 +92,11 @@ Logger::error(const QString &message)
       HTML_STYLE_OPEN(color:orange) " ..." HTML_STYLE_CLOSE()
       HTML_STYLE_CLOSE() HTML_BR()
     );
+  LoggerSignals::globalInstance()->emit_errored(
+    HTML_STYLE_OPEN(color:red) ": "
+    + message +
+    HTML_STYLE_CLOSE()
+  );
 }
 
 // EOF

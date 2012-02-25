@@ -1,7 +1,7 @@
 # player.pro
 # 6/30/2011
 
-VERSION = 0.1.2.8
+VERSION = 0.1.2.9
 
 include(../../config.pri)
 include(tr/tr.pri)
@@ -16,7 +16,8 @@ include($$ROOTDIR/module/player/player.pri)
 include($$ROOTDIR/module/serveragent/serveragent.pri)
 #include($$ROOTDIR/module/clientagent/clientagent.pri)
 include($$ROOTDIR/module/gsoap/gsoap.pri)       # would static linking cause license conflicts?
-include($$ROOTDIR/module/streamservice/streamservice.pri)
+#include($$ROOTDIR/module/streamservice/streamservice.pri)
+include($$ROOTDIR/module/mediacodec/mediacodec.pri)
 include($$ROOTDIR/module/translator/translator.pri)
 include($$ROOTDIR/module/mrlresolver/mrlresolver.pri)
 include($$ROOTDIR/module/mp4box/mp4box.pri)
@@ -72,7 +73,8 @@ mac {
     include($$ROOTDIR/mac/qtvlc/qtvlc.pri)
 }
 
-QT      += core gui sql webkit
+QT      += core gui sql network #webkit
+#CONFIG(static): QTPLUGIN += qsqlite
 
 # Increase heap space
 #win32 {
@@ -97,9 +99,9 @@ SUBPATH = \
     $$PWD/db \
     $$PWD/define \
     $$PWD/dialog \
+    $$PWD/download \
     $$PWD/osd \
     $$PWD/player \
-    $$PWD/stream \
     $$PWD/signal \
     $$PWD/token \
     $$PWD/tr \
@@ -140,7 +142,8 @@ HEADERS += \
     define/stylesheet.h \
     dialog/aboutdialog.h \
     dialog/annotationcountdialog.h \
-    dialog/backlogview.h \
+    dialog/backlogdialog.h \
+    dialog/consoledialog.h \
     dialog/devicedialog.h \
     dialog/helpdialog.h \
     dialog/inputdialog.h \
@@ -152,8 +155,9 @@ HEADERS += \
     dialog/siteaccountview.h \
     dialog/suburldialog.h \
     dialog/syncdialog.h \
-    dialog/textview.h \
     dialog/urldialog.h \
+    download/downloaddialog.h \
+    download/downloadtaskdialog.h \
     osd/osdconsole.h \
     osd/osdwindow.h \
     osd/videoview.h \
@@ -164,8 +168,6 @@ HEADERS += \
     player/playerui.h \
     player/userlabel.h \
     signal/signalhub.h \
-    stream/mediastreamer.h \
-    stream/mediastreamtask.h \
     token/addaliasdialog.h \
     token/tokenview.h \
     user/userview.h \
@@ -178,7 +180,9 @@ HEADERS += \
     util/lineedit.h \
     util/logger.h \
     util/textedit.h \
-    web/commentview.h
+    util/textedittabview.h \
+    util/textview.h
+    #web/commentview.h
 
 SOURCES += \
     application.cc \
@@ -205,7 +209,8 @@ SOURCES += \
     db/db.cc \
     dialog/aboutdialog.cc \
     dialog/annotationcountdialog.cc \
-    dialog/backlogview.cc \
+    dialog/backlogdialog.cc \
+    dialog/consoledialog.cc \
     dialog/devicedialog.cc \
     dialog/helpdialog.cc \
     dialog/inputdialog.cc \
@@ -217,8 +222,9 @@ SOURCES += \
     dialog/siteaccountview.cc \
     dialog/suburldialog.cc \
     dialog/syncdialog.cc \
-    dialog/textview.cc \
     dialog/urldialog.cc \
+    download/downloaddialog.cc \
+    download/downloadtaskdialog.cc \
     osd/osdconsole.cc \
     osd/osdwindow.cc \
     osd/videoview.cc \
@@ -229,8 +235,6 @@ SOURCES += \
     player/playerpanel.cc \
     player/userlabel.cc \
     signal/signalhub.cc \
-    stream/mediastreamer.cc \
-    stream/mediastreamtask.cc \
     token/addaliasdialog.cc \
     token/tokenview.cc \
     user/userview.cc \
@@ -241,7 +245,9 @@ SOURCES += \
     util/lineedit.cc \
     util/logger.cc \
     util/textedit.cc \
-    web/commentview.cc
+    util/textedittabview.cc \
+    util/textview.cc
+    #web/commentview.cc
 
 win32 {
   DEFINES += USE_MODE_SIGNAL

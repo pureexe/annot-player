@@ -23,8 +23,9 @@ OBJECTIVE_SOURCES += \
 QT      += core
 LIBS    += -framework Foundation
 
-DEFINES     += WITH_VLCCORE
 LIBS        += -lvlccore
-INCLUDEPATH += $$VLC_SRC/vlc/modules/gui/minimal_macosx
+INCLUDEPATH += \
+    $$VLC_SRC \
+    $$VLC_SRC/vlc/modules/gui/minimal_macosx
 
 # EOF

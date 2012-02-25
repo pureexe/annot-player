@@ -227,8 +227,8 @@ AnnotationFilterView::setRows(const AnnotationList &l)
 void
 AnnotationFilterView::addRow(const Annotation &a)
 {
-#define FORMAT_TIME(_secs)        QDateTime::fromMSecsSinceEpoch(_secs * 1000)
-#define FORMAT_POS(_msecs)        QtExt::msecs2time(_msecs)
+#define FORMAT_TIME(_secs)        QDateTime::fromMSecsSinceEpoch(_secs * 1000).toString(Qt::ISODate)
+#define FORMAT_POS(_msecs)        QtExt::msecs2time(_msecs).toString()
 #define FORMAT_LANGUAGE(_lang)    AnnotationBrowser::languageToString(_lang)
 #define FORMAT_FLAGS(_flags)      AnnotationBrowser::annotationFlagsToStringList(_flags)
 #define FORMAT_STATUS(_status)    AnnotationBrowser::annotationStatusToString(_status)

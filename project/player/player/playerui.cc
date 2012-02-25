@@ -21,9 +21,11 @@
 using namespace AnnotCloud;
 
 #ifdef Q_OS_MAC
-  #define K_CTRL "cmd"
+  #define K_CTRL        "cmd"
+  #define K_SHIFT       "shift"
 #else
-  #define K_CTRL "ctrl"
+  #define K_CTRL        "Ctrl"
+  #define K_SHIFT       "Shift"
 #endif // Q_OS_MAC
 
 /* jichi 7/25/2011: using boost is so bloated while less efficient than directly expanding the code.
@@ -364,7 +366,7 @@ PlayerUi::invalidateVolumeSlider()
   // Update tool tip.
   int percentage = qRound(vol * 100);
   slider->setToolTip(
-    QString("%1 %2%" " [" K_CTRL "+shift+↑/↓]")
+    QString("%1 %2%" " [" K_CTRL "+" K_SHIFT "+↑/↓]")
       .arg(TR(T_VOLUME))
       .arg(QString::number(percentage))
   );

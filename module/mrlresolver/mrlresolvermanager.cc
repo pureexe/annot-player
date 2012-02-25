@@ -22,7 +22,7 @@ MrlResolverManager::MrlResolverManager(QObject *parent)
   r = new _resolver(this); { \
     connect(r, SIGNAL(errorReceived(QString)), SIGNAL(errorReceived(QString))); \
     connect(r, SIGNAL(messageReceived(QString)), SIGNAL(messageReceived(QString))); \
-    connect(r, SIGNAL(mediaResolved(MediaInfo,QNetworkAccessManager*)), SIGNAL(mediaResolved(MediaInfo,QNetworkAccessManager*))); \
+    connect(r, SIGNAL(mediaResolved(MediaInfo,QNetworkCookieJar*)), SIGNAL(mediaResolved(MediaInfo,QNetworkCookieJar*))); \
     connect(r, SIGNAL(subtitleResolved(QString)), SIGNAL(subtitleResolved(QString))); \
   } resolvers_.append(r);
 
@@ -36,7 +36,7 @@ MrlResolverManager::MrlResolverManager(QObject *parent)
 // - Analysis -
 
 int
-MrlResolverManager::matchMedia(const QString &href) const
+MrlResolverManager::resolverForMedia(const QString &href) const
 {
   for (int i = 0; i < resolvers_.size(); i++)
     if (resolvers_[i]->matchMedia(href))
@@ -45,7 +45,7 @@ MrlResolverManager::matchMedia(const QString &href) const
 }
 
 int
-MrlResolverManager::matchSubtitle(const QString &href) const
+MrlResolverManager::resolverForSubtitle(const QString &href) const
 {
   for (int i = 0; i < resolvers_.size(); i++)
     if (resolvers_[i]->matchSubtitle(href))
@@ -53,66 +53,26 @@ MrlResolverManager::matchSubtitle(const QString &href) const
   return -1;
 }
 
-void
+bool
 MrlResolverManager::resolveMedia(int id, const QString &href)
 {
   if (id < 0 || id > resolvers_.size()) {
     Q_ASSERT(0);
     DOUT("illegal state: resolver id out of bounds");
-    return;
+    return false;
   }
-  resolvers_[id]->resolveMedia(href);
+  return resolvers_[id]->resolveMedia(href);
 }
 
-void
+bool
 MrlResolverManager::resolveSubtitle(int id, const QString &href)
 {
   if (id < 0 || id > resolvers_.size()) {
     Q_ASSERT(0);
     DOUT("illegal state: resolver id out of bounds");
-    return;
+    return false;
   }
-  resolvers_[id]->resolveSubtitle(href);
-}
-
-// - Account -
-
-void
-MrlResolverManager::setNicovideoAccount(const QString &userName, const QString &password)
-{
-  LuaMrlResolver *r = dynamic_cast<LuaMrlResolver*>(resolvers_[Lua]);
-  Q_ASSERT(r);
-  if (userName.isEmpty() || password.isEmpty())
-    r->clearNicovideoAccount();
-  else
-    r->setNicovideoAccount(userName, password);
-}
-
-void
-MrlResolverManager::setBilibiliAccount(const QString &userName, const QString &password)
-{
-  LuaMrlResolver *r = dynamic_cast<LuaMrlResolver*>(resolvers_[Lua]);
-  Q_ASSERT(r);
-  if (userName.isEmpty() || password.isEmpty())
-    r->clearBilibiliAccount();
-  else
-    r->setBilibiliAccount(userName, password);
-}
-
-MrlResolverManager::Account
-MrlResolverManager::nicovideoAccount() const
-{
-  LuaMrlResolver *r = dynamic_cast<LuaMrlResolver*>(resolvers_[Lua]);
-  Q_ASSERT(r);
-  return Account(r->nicovideoUsername(), r->nicovideoPassword());
-}
-
-MrlResolverManager::Account
-MrlResolverManager::bilibiliAccount() const
-{
-  LuaMrlResolver *r = dynamic_cast<LuaMrlResolver*>(resolvers_[Lua]);
-  Q_ASSERT(r);
-  return Account(r->bilibiliUsername(), r->bilibiliPassword());
+  return resolvers_[id]->resolveSubtitle(href);
 }
 
 // EOF

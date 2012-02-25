@@ -20,6 +20,7 @@ RESOURCES += \
     $$PWD/webbrowser.qrc
 
 QT += core gui network webkit
+#CONFIG(static): QTPLUGIN += qgif qico qjpeg gsvg qtiff
 
 #mac:  LIBS  += -framework WebBrowser
 

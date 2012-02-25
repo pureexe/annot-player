@@ -10,7 +10,7 @@
 #include <QtNetwork>
 #include <QtXml>
 
-//#define DEBUG "BilibiliCodec"
+//#define DEBUG "bilibilicodec"
 #include "module/debug/debug.h"
 
 using namespace AnnotCloud;
@@ -94,7 +94,6 @@ BilibiliCodec::parseDocument(const QByteArray &data)
   AnnotationList ret;
   QDomElement e = root.firstChildElement("d");
   while (!e.isNull()) {
-    e = e.nextSiblingElement("d");
     QString attr = e.attribute("p");
     QString text = e.text();
     Annotation a = parseComment(attr, text);
@@ -104,7 +103,7 @@ BilibiliCodec::parseDocument(const QByteArray &data)
   }
   DOUT("exit: size =" << ret.size());
   return ret;
-}
+ }
 
 QString
 BilibiliCodec::parseText(const QString &text)
@@ -154,6 +153,9 @@ BilibiliCodec::parseAttribute(const QString &attr)
 
   // 2
   //fontSize
+#ifdef Q_WS_WIN
+  fontSize *= 0.9;
+#endif // Q_WS_WIN
   if (fontSize > 0)
     t += CORE_CMD_SIZE  "[" + QString::number(fontSize) + "]";
 

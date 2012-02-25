@@ -86,8 +86,8 @@ AnnotationCountDialog::AnnotationCountDialog(DataManager *dm, QWidget *parent)
     header->addWidget(totalCountBuddy);
     header->addWidget(totalCountLabel_);
 
-    footer->addWidget(okButton);
     footer->addWidget(cancelButton);
+    footer->addWidget(okButton);
     //rows->setContentsMargins(6, 6, 6, 6);
   } setLayout(rows);
 

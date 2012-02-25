@@ -96,7 +96,7 @@ UserView::createLayout()
 void
 UserView::invalidateUser()
 {
-#define FORMAT_TIME(_secs)        QDateTime::fromMSecsSinceEpoch(_secs * 1000).toString()
+#define FORMAT_TIME(_secs)        QDateTime::fromMSecsSinceEpoch(_secs * 1000).toString(Qt::ISODate)
 #define FORMAT_COUNT(_count)      QString::number(_count)
   nameLabel_->setText(user_.name());
   nicknameLabel_->setText(user_.nickname());

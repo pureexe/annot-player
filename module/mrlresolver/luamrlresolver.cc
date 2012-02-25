@@ -2,6 +2,7 @@
 // 2/2/2012
 
 #include "luamrlresolver.h"
+#include "mrlresolversettings.h"
 #include "module/luaresolver/luaresolver.h"
 #include <QtCore>
 #include <QtNetwork>
@@ -87,29 +88,33 @@ LuaMrlResolver::matchSubtitle(const QString &href) const
   return ret;
 }
 
-void
+bool
 LuaMrlResolver::resolveMedia(const QString &href, bool async)
 {
   if (async) {
     if (!checkSiteAccount(href))
-      return;
+      return false;
     QThreadPool::globalInstance()->start(new task_::ResolveMedia(href, this));
-    return;
+    return true;
   }
   if (!checkSiteAccount(href))
-    return;
+    return false;
   DOUT("enter: href =" << href);
   QString url = cleanUrl(href);
   DOUT("url =" << url);
 
+  MrlResolverSettings *settings = MrlResolverSettings::globalInstance();
+
   //LuaResolver *lua = makeResolver();
-  //QNetworkAccessManager *nam = new QNetworkAccessManager(this);
-  QNetworkAccessManager *nam = new QNetworkAccessManager;
-  LuaResolver lua(LUASCRIPT_PATH, LUAPACKAGE_PATH, nam);
-  if (hasNicovideoAccount())
-    lua.setNicovideoAccount(nicovideoUsername_, nicovideoPassword_);
-  if (hasBilibiliAccount())
-    lua.setBilibiliAccount(bilibiliUsername_, bilibiliPassword_);
+  QNetworkCookieJar *jar = new QNetworkCookieJar;
+  LuaResolver lua(LUASCRIPT_PATH, LUAPACKAGE_PATH);
+  lua.setCookieJar(jar);
+  if (settings->hasNicovideoAccount())
+    lua.setNicovideoAccount(settings->nicovideoAccount().username,
+                            settings->nicovideoAccount().password);
+  if (settings->hasBilibiliAccount())
+    lua.setBilibiliAccount(settings->bilibiliAccount().username,
+                           settings->bilibiliAccount().password);
 
   int siteid;
   QString refurl, title, suburl;
@@ -119,7 +124,7 @@ LuaMrlResolver::resolveMedia(const QString &href, bool async)
   if (!ok) {
     emit errorReceived(tr("failed to resolve URL") + ": " + url);
     DOUT("exit: LuaResolver returned false");
-    return;
+    return false;
   }
 
   if (mrls.isEmpty()) {
@@ -130,7 +135,7 @@ LuaMrlResolver::resolveMedia(const QString &href, bool async)
     else
       emit errorReceived(tr("failed to resolve URL") + ": " + url);
     DOUT("exit: mrls is empty");
-    return;
+    return false;
   }
 
   MediaInfo mi;
@@ -139,8 +144,8 @@ LuaMrlResolver::resolveMedia(const QString &href, bool async)
   mi.refurl = formatUrl(refurl);
   if (mi.refurl.contains("acfun.tv", Qt::CaseInsensitive))
     encoding = "GBK";
-  else if (mi.refurl.contains("nicovideo.jp", Qt::CaseInsensitive))
-    encoding = "SHIFT-JIS";
+  //else if (mi.refurl.contains("nicovideo.jp", Qt::CaseInsensitive))
+  //  encoding = "SHIFT-JIS";
   mi.title = formatTitle(title, encoding);
 
   switch (mrls.size()) { // Specialization for better performance
@@ -165,40 +170,48 @@ LuaMrlResolver::resolveMedia(const QString &href, bool async)
       mi.mrls.append(m);
     }
   }
-  emit mediaResolved(mi, nam);
+  jar->setParent(0);
+  emit mediaResolved(mi, jar);
   DOUT("exit: title =" << mi.title);
+  return true;
 }
 
-void
+bool
 LuaMrlResolver::resolveSubtitle(const QString &href, bool async)
 {
   if (async) {
     if (!checkSiteAccount(href))
-      return;
+      return false;
     QThreadPool::globalInstance()->start(new task_::ResolveSubtitle(href, this));
-    return;
+    return true;
   }
   if (!checkSiteAccount(href))
-    return;
+    return false;
   DOUT("enter: href =" << href);
   QString url = cleanUrl(href);
   DOUT("url =" << url);
 
+  MrlResolverSettings *settings = MrlResolverSettings::globalInstance();
+
   //LuaResolver *lua = makeResolver();
   LuaResolver lua(LUASCRIPT_PATH, LUAPACKAGE_PATH);
-  if (hasNicovideoAccount())
-    lua.setNicovideoAccount(nicovideoUsername_, nicovideoPassword_);
-  if (hasBilibiliAccount())
-    lua.setBilibiliAccount(bilibiliUsername_, bilibiliPassword_);
+  lua.setCookieJar(new QNetworkCookieJar); // potential memory leak on error
+  if (settings->hasNicovideoAccount())
+    lua.setNicovideoAccount(settings->nicovideoAccount().username,
+                            settings->nicovideoAccount().password);
+  if (settings->hasBilibiliAccount())
+    lua.setBilibiliAccount(settings->bilibiliAccount().username,
+                           settings->bilibiliAccount().password);
 
   // LuaResolver::resolve(const QString &href, QString *refurl, QString *title, QString *suburl, QStringList *mrls) const
   int siteid;
   QString suburl;
   bool ok = lua.resolve(url, &siteid, 0, 0, &suburl);
+
   if (!ok) {
     emit errorReceived(tr("failed to resolve URL") + ": " + url);
     DOUT("exit: LuaResolver returned false");
-    return;
+    return false;
   }
 
   if (suburl.isEmpty()) {
@@ -209,13 +222,14 @@ LuaMrlResolver::resolveSubtitle(const QString &href, bool async)
     else
       emit errorReceived(tr("failed to resolve URL") + ": " + url);
     DOUT("exit: suburl is empty");
-    return;
+    return false;
   }
 
   suburl = formatUrl(suburl);
   if (!suburl.isEmpty())
     emit subtitleResolved(suburl);
   DOUT("exit: suburl =" << suburl);
+  return true;
 }
 
 // - Helper -
@@ -254,10 +268,13 @@ LuaMrlResolver::formatTitle(const QString &title, const char *encoding)
   if (ret.isEmpty())
     return ret;
 
-  ret = ret.remove(QRegExp(" ‐ ニコニコ動画(原宿)$"));
-  ret = ret.remove(QRegExp(" - 嗶哩嗶哩 - .*"));
-  ret = ret.remove(QRegExp(" - 优酷视频 - .*"));
-  ret = ret.remove(QRegExp(" - AcFun.tv$"));
+  ret.remove(QRegExp(" ‐ ニコニコ動画\\(原宿\\)$"));
+  ret.remove(QRegExp(" - 嗶哩嗶哩 - .*"));
+  ret.remove(QRegExp(" - 优酷视频 - .*"));
+  ret.remove(QRegExp(" - AcFun.tv$"));
+  ret.replace("&lt;", "<");
+  ret.replace("&gt;", ">");
+  ret.replace("&quot;", "'");
   ret = ret.trimmed();
   return ret;
 }
@@ -288,7 +305,7 @@ LuaMrlResolver::checkSiteAccount(const QString &href)
 {
   DOUT("enter");
   if (href.contains("nicovideo.jp", Qt::CaseInsensitive) &&
-      !hasNicovideoAccount()) {
+      !MrlResolverSettings::globalInstance()->hasNicovideoAccount()) {
     emit errorReceived(tr("nicovideo.jp account is required to resolve URL") + ": " + href);
     DOUT("exit: ret = false, nico account required");
     return false;

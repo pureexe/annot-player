@@ -9,6 +9,8 @@
 #include <QtCore>
 #include <QtGui>
 
+#define WINDOW_OPACITY  0.8
+
 #define WINDOW_FLAGS_BASE \
   Qt::Dialog | \
   Qt::CustomizeWindowHint | \
@@ -33,8 +35,11 @@ MiniPlayerUi::MiniPlayerUi(SignalHub *hub, Player *player, ServerAgent *server, 
 {
   setWindowFlags(WINDOW_FLAGS);
   setContentsMargins(0, 0, 0, 0);
-  UiStyle::globalInstance()->setWindowStyle(this);
   setAcceptDrops(true);
+  UiStyle::globalInstance()->setWindowStyle(this);
+#ifdef Q_WS_MAC
+  setWindowOpacity(WINDOW_OPACITY);
+#endif // Q_WS_MAC
 
   createLayout();
 
@@ -60,7 +65,6 @@ MiniPlayerUi::createLayout()
     rows->addLayout(row1);
     rows->addLayout(row2);
 
-    row0->addWidget(positionButton());
     row0->addWidget(positionSlider());
 
     row1->addWidget(menuButton());
@@ -74,6 +78,7 @@ MiniPlayerUi::createLayout()
     row1->addWidget(toggleEmbedModeButton());
     row1->addWidget(toggleMiniModeButton());
     row1->addWidget(toggleFullScreenModeButton());
+    row1->addWidget(positionButton());
     row1->addWidget(volumeSlider());
 
     row2->addWidget(userButton());
@@ -92,12 +97,13 @@ MiniPlayerUi::createLayout()
 
   // TOD jichi 7/26/2011: This is really a bad hotfix. Need a better design for PlayerUI class do to this in an efficient way.
   // Note: there is no textChanged event in QLabel.
-  positionButton()->hide(); // always hide - it is better to disable this label rather than hide it.
+#ifdef Q_WS_MAC
+  volumeSlider()->hide();
+  volumeSlider()->resize(0, 0);
+#else
+  positionButton()->hide();
   positionButton()->resize(0, 0);
-//#ifndef Q_OS_MAC
-//  menuButton()->hide();
-//  menuBButton()->resize(0, 0);
-//#endif // Q_OS_MAC
+#endif // Q_WS_MAC
 }
 
 void

@@ -19,7 +19,7 @@
 #include <QFileInfoList>
 
 QT_FORWARD_DECLARE_CLASS(QTimer)
-QT_FORWARD_DECLARE_CLASS(QNetworkAccessManager)
+QT_FORWARD_DECLARE_CLASS(QNetworkCookieJar)
 QT_FORWARD_DECLARE_CLASS(QMimeData)
 
 namespace QtExt { class CountdownTimer; }
@@ -32,6 +32,7 @@ class DataManager;
 class DataServer;
 class EventLogger;
 class Grabber;
+class MrlResolver;
 class Player;
 class ServerAgent;
 class SignalHub;
@@ -43,7 +44,7 @@ class AnnotationGraphicsView;
 class AnnotationBrowser;
 class AnnotationEditor;
 class CloudView;
-class CommentView;
+//class CommentView;
 class MainPlayerUi;
 class MessageHandler;
 class MiniPlayerUi;
@@ -55,7 +56,9 @@ class EmbeddedPlayerUi;
 class PlayerUi;
 class MessageView;
 class SignalView;
-class BacklogView;
+class BacklogDialog;
+class DownloadDialog;
+class ConsoleDialog;
 class TokenView;
 class VideoView;
 
@@ -105,6 +108,7 @@ signals:
   void responded(const QString &text);
   void said(const QString &text, const QString &color);
   void logged(const QString &text);
+  void warned(const QString &text);
   void showTextRequested(const QString &text);
   void windowClosed();
 
@@ -193,7 +197,7 @@ public slots:
   void openDirectory();
   void openMrl(const QString &path, bool checkPath = true);
   void openStreamUrl(const QString &rtsp);
-  void openRemoteMedia(const MediaInfo &mi, QNetworkAccessManager *nam = 0);
+  void openRemoteMedia(const MediaInfo &mi, QNetworkCookieJar *jar = 0); ///< jar will be deleted6+
   void openLocalUrl(const QUrl &url);
   void openLocalUrls(const QList<QUrl> &urls);
   void openMimeData(const QMimeData *urls);
@@ -248,7 +252,9 @@ public slots:
   void showVideoViewIfAvailable();
 
   void openInWebBrowser();
-
+  void downloadCurrentUrl();
+protected:
+  QString currentUrl() const;
 public slots:
   void invalidateMediaAndPlay(bool async = true);
 
@@ -292,21 +298,28 @@ public slots:
   void hideSyncDialog();
   void setSyncDialogVisible(bool visible);
 
-  void showCommentView();
-  void hideCommentView();
-  void setCommentViewVisible(bool visible);
+  //void showCommentView();
+  //void hideCommentView();
+  //void setCommentViewVisible(bool visible);
 
   void showWindowPickDialog();
   void setWindowPickDialogVisible(bool visible);
 
   void setProcessPickDialogVisible(bool visible);
 
-  void setBacklogViewVisible(bool visible);
+  void setBacklogDialogVisible(bool visible);
+  void setConsoleDialogVisible(bool visible);
+
+  void setDownloadDialogVisible(bool visible);
+  void showDownloadDialog() { setDownloadDialogVisible(true); }
 
   void setSiteAccountViewVisible(bool visible);
 protected slots:
   void invalidateSiteAccounts();
-  BacklogView *backlogView();
+protected:
+  DownloadDialog *downloadDialog();
+  BacklogDialog *backlogDialog();
+  ConsoleDialog *consoleDialog();
 
   // - User -
 public slots:
@@ -353,6 +366,8 @@ public slots:
   void invalidateToken(const QString &mrl = QString());
   void submitAlias(const Alias &alias, bool async = true);
   void submitAliasText(const QString &text, qint32 type = 0, bool async = true);
+
+  void signFileWithUrl(const QString &path, const QString &url, bool async = true);
 
   void blessTokenWithId(qint64 tid, bool async = true);
   void curseTokenWithId(qint64 tid, bool async = true);
@@ -418,6 +433,9 @@ protected:
   virtual void contextMenuEvent(QContextMenuEvent *event); ///< \override
 
   virtual void closeEvent(QCloseEvent *event); ///< \override
+  void closeEventEnter();
+public:
+  void closeEventLeave(QCloseEvent *event); ///< \internal
 
 protected slots:
   virtual void dragEnterEvent(QDragEnterEvent *event); ///< \override
@@ -483,6 +501,8 @@ public slots:
   void openBrowsedFile(int id);
   void openPreviousFile();
   void openNextFile();
+
+  void showMinimizedAndPause();
 
 protected:
   int currentBrowsedFileId() const;
@@ -586,6 +606,8 @@ private:
   DataManager *dataManager_;
   DataServer *dataServer_;
 
+  MrlResolver *mrlResolver_;
+
   EventLogger *logger_;
   OsdConsole *globalOsdConsole_;
 
@@ -605,8 +627,10 @@ private:
 
   BlacklistView *blacklistView_;
   CloudView *cloudView_;
-  CommentView *commentView_;
-  BacklogView *backlogView_;
+  //CommentView *commentView_;
+  BacklogDialog *backlogDialog_;
+  ConsoleDialog *consoleDialog_;
+  DownloadDialog *downloadDialog_;
 
   AboutDialog *aboutDialog_;
   AnnotationCountDialog *annotationCountDialog_;
@@ -731,7 +755,8 @@ private:
           *toggleAutoPlayNextAct_;
 
   QAction *toggleWindowOnTopAct_;
-  QAction *openInWebBrowserAct_,
+  QAction *downloadCurrentUrlAct_,
+          *openInWebBrowserAct_,
           *openHomePageAct_;
 
   QAction *loginAct_,
@@ -743,7 +768,6 @@ private:
 
   QAction *toggleAnnotationBrowserVisibleAct_,
           *toggleAnnotationEditorVisibleAct_,
-          *toggleCommentViewVisibleAct_,
           *toggleTokenViewVisibleAct_,
           *toggleLiveDialogVisibleAct_,
           *toggleLoginDialogVisibleAct_,
@@ -753,8 +777,11 @@ private:
           *toggleSyncDialogVisibleAct_,
           *toggleUserViewVisibleAct_,
           *toggleBlacklistViewVisibleAct_,
-          *toggleBacklogViewVisibleAct_,
+          *toggleBacklogDialogVisibleAct_,
+          *toggleDownloadDialogVisibleAct_,
+          *toggleConsoleDialogVisibleAct_,
           *toggleAnnotationFilterEnabledAct_;
+          //*toggleCommentViewVisibleAct_,
 
   QAction *toggleUserAnonymousAct_;
 

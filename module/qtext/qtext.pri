@@ -15,10 +15,12 @@ HEADERS += \
     $$PWD/fontcombobox.h \
     $$PWD/hash.h \
     $$PWD/htmltag.h \
+    $$PWD/network.h \
     $$PWD/ss.h \
     $$PWD/slider.h \
     $$PWD/stoppable.h \
     $$PWD/toolbutton.h \
+    $$PWD/toolbuttonwithid.h \
     $$PWD/webdialog.h \
     $$PWD/withsizehint.h
 
@@ -32,6 +34,7 @@ SOURCES += \
     $$PWD/fontcombobox.cc \
     $$PWD/slider.cc \
     $$PWD/toolbutton.cc \
+    $$PWD/toolbuttonwithid.cc \
     $$PWD/webdialog.cc
 
 QT +=   core gui

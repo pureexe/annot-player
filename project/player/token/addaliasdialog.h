@@ -20,7 +20,7 @@ public:
   explicit AddAliasDialog(QWidget *parent = 0);
 
 signals:
-  void aliasAdded(const QString &alias, int type, quint32 language);
+  void aliasAdded(const QString &alias, int type, qint32 language);
 
   // - Properties -
 public:
@@ -30,7 +30,6 @@ public:
 protected slots:
   void ok();
   void paste();
-  void cancel();
 
   void tag01()          { tag("01"); }
   void tag02()          { tag("02"); }

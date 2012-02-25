@@ -18,17 +18,14 @@
   #include <QMacCocoaViewContainer>
 #endif // Q_WS_MAC
 #include <QtGui>
-#ifdef WITH_VLCCORE
-  #include "vlccore.h"
-  extern "C" {
-    #ifndef MODULE_STRING
-      #define MODULE_STRING "main"  // needed by VLC
-    #endif
-    #include <inttypes.h>
-    #include <vlc/plugins/vlc_vout.h>
-  } // extern "C"
-#endif // WITH_VLCCORE
+#include "module/vlccore/http.h"
+#include "module/vlccore/video.h"
 extern "C" {
+  #ifndef MODULE_STRING
+    #define MODULE_STRING "main"  // needed by VLC
+  #endif
+  #include <inttypes.h>
+  #include <vlc/plugins/vlc_vout.h>
   #include <vlc/vlc.h>
 } // extern "C"
 #include <boost/typeof/typeof.hpp>
@@ -169,8 +166,6 @@ namespace { // anonymous, vlc event callbacks
   }
 } // anonymous namespace
 
-
-#ifdef WITH_VLCCORE
 
 namespace { // anonymous, callbacks
 
@@ -319,8 +314,6 @@ namespace { // anonymous, callbacks
 
 } // anonymous namespace
 
-#endif // WITH_VLCCORE
-
 // - Static properties -
 
 #define SUPPORTED_SUFFICES_(_Type, _TYPE) \
@@ -416,21 +409,7 @@ Player::reset()
 
   setUserAgent();
 
-  // Set event handlers.
-  libvlc_event_manager_t *event_manager = ::libvlc_media_player_event_manager(impl_->player());
-  Q_ASSERT(event_manager);
-  ::libvlc_event_attach(event_manager, libvlc_MediaPlayerOpening, vlc_event_handler_::opening, this);
-  ::libvlc_event_attach(event_manager, libvlc_MediaPlayerOpening, vlc_event_handler_::buffering, this);
-  ::libvlc_event_attach(event_manager, libvlc_MediaPlayerPlaying, vlc_event_handler_::playing, this);
-  ::libvlc_event_attach(event_manager, libvlc_MediaPlayerPaused, vlc_event_handler_::paused, this);
-  ::libvlc_event_attach(event_manager, libvlc_MediaPlayerStopped, vlc_event_handler_::stopped, this);
-  ::libvlc_event_attach(event_manager, libvlc_MediaPlayerTimeChanged, vlc_event_handler_::timeChanged, this);
-  //::libvlc_event_attach(event_manager, libvlc_MediaPlayerTitleChanged, vlc_event_handler_::titleChanged, this);
-  ::libvlc_event_attach(event_manager, libvlc_MediaPlayerLengthChanged, vlc_event_handler_::lengthChanged, this);
-  ::libvlc_event_attach(event_manager, libvlc_MediaPlayerPositionChanged, vlc_event_handler_::positionChanged, this);
-  ::libvlc_event_attach(event_manager, libvlc_MediaPlayerMediaChanged, vlc_event_handler_::mediaChanged, this);
-  ::libvlc_event_attach(event_manager, libvlc_MediaPlayerEncounteredError, vlc_event_handler_::errorEncountered, this);
-  ::libvlc_event_attach(event_manager, libvlc_MediaPlayerEndReached, vlc_event_handler_::endReached, this);
+  attachEvents();
 
   // Set timer.
   //impl_->setUpdateTimer(new QTimer(this));
@@ -439,6 +418,29 @@ Player::reset()
 
   DOUT("exit");
 }
+
+#define REGISTER_EVENTS(_attach) \
+  void \
+  Player::_attach##Events() \
+  { \
+    libvlc_event_manager_t *event_manager = ::libvlc_media_player_event_manager(impl_->player()); \
+    Q_ASSERT(event_manager); \
+    ::libvlc_event_##_attach(event_manager, libvlc_MediaPlayerOpening, vlc_event_handler_::opening, this); \
+    ::libvlc_event_##_attach(event_manager, libvlc_MediaPlayerBuffering, vlc_event_handler_::buffering, this); \
+    ::libvlc_event_##_attach(event_manager, libvlc_MediaPlayerPlaying, vlc_event_handler_::playing, this); \
+    ::libvlc_event_##_attach(event_manager, libvlc_MediaPlayerPaused, vlc_event_handler_::paused, this); \
+    ::libvlc_event_##_attach(event_manager, libvlc_MediaPlayerStopped, vlc_event_handler_::stopped, this); \
+    ::libvlc_event_##_attach(event_manager, libvlc_MediaPlayerTimeChanged, vlc_event_handler_::timeChanged, this); \
+    ::libvlc_event_##_attach(event_manager, libvlc_MediaPlayerLengthChanged, vlc_event_handler_::lengthChanged, this); \
+    ::libvlc_event_##_attach(event_manager, libvlc_MediaPlayerPositionChanged, vlc_event_handler_::positionChanged, this); \
+    ::libvlc_event_##_attach(event_manager, libvlc_MediaPlayerMediaChanged, vlc_event_handler_::mediaChanged, this); \
+    ::libvlc_event_##_attach(event_manager, libvlc_MediaPlayerEncounteredError, vlc_event_handler_::errorEncountered, this); \
+    ::libvlc_event_##_attach(event_manager, libvlc_MediaPlayerEndReached, vlc_event_handler_::endReached, this); \
+  }
+
+  REGISTER_EVENTS(attach)
+  REGISTER_EVENTS(detach)
+#undef REGISTER_EVENTS
 
 // - Embedding -
 
@@ -648,6 +650,7 @@ Player::openMedia(const QString &path)
 
   impl_->setMediaPath(path);
 
+
   ::libvlc_media_player_set_media(impl_->player(), impl_->media());
 
   if (isMouseEventEnabled())
@@ -675,17 +678,18 @@ Player::closeMedia()
   impl_->setTrackNumber();
   impl_->setExternalSubtitles();
 
-  if (!impl_->mediaList().isEmpty())
+  if (!impl_->mediaList().isEmpty()) {
     foreach (libvlc_media_t *m, impl_->mediaList())
-      if (m  && m != impl_->media())
+      if (m && m != impl_->media())
         ::libvlc_media_release(m);
-  impl_->setMediaList();
+    impl_->setMediaList();
+  }
 
-  if (impl_->media())
+  if (impl_->media()) {
     ::libvlc_media_release(impl_->media());
-
-  impl_->setMedia();
-  ::libvlc_media_player_set_media(impl_->player(), 0);
+    impl_->setMedia();
+  }
+  ::libvlc_media_player_set_media(impl_->player(), 0); // If any, previous md will be released.
 
   emit mediaClosed();
   DOUT("exit");
@@ -810,8 +814,8 @@ void
 Player::stop()
 {
   DOUT("enter");
-  emit stopping();
   if (hasMedia()) {
+    emit stopping();
     impl_->setPaused(false);
     ::libvlc_media_player_stop(impl_->player());
   }
@@ -910,13 +914,23 @@ Player::isKeyboardEnabled() const
 }
 
 void
+Player::mute()
+{ setVolume(0); }
+
+void
 Player::setVolume(qreal vol)
 {
   DOUT("enter");
   Q_ASSERT(isValid());
-  ::libvlc_audio_set_volume(impl_->player(),
-                            static_cast<int>(vol * VLC_MAX_VOLUME));
-  emit volumeChanged();
+  if (impl_) {
+    int newv = vol * VLC_MAX_VOLUME;
+    int oldv = ::libvlc_audio_get_volume(impl_->player());
+    if (oldv != newv) {
+      ::libvlc_audio_set_volume(impl_->player(), newv);
+      emit volumeChanged();
+    } else if (newv == 0 || newv == VLC_MAX_VOLUME)
+      emit volumeChanged();
+  }
   DOUT("exit");
 }
 
@@ -933,7 +947,7 @@ qreal
 Player::volume() const
 {
   Q_ASSERT(isValid());
-  return ::libvlc_audio_get_volume(impl_->player()) / VLC_MAX_VOLUME;
+  return ::libvlc_audio_get_volume(impl_->player()) / (qreal)VLC_MAX_VOLUME;
 }
 
 qreal
@@ -1284,7 +1298,6 @@ Player::setNextChapter()
 
 // - VLCCORE -
 
-
 bool
 Player::isMouseEventEnabled() const
 { return impl_->isMouseEventEnabled(); }
@@ -1292,22 +1305,16 @@ Player::isMouseEventEnabled() const
 void
 Player::setMouseEventEnabled(bool enabled)
 {
-#ifndef WITH_VLCCORE
-  Q_UNUSED(enabled);
-  return;
-#else
   impl_->setMouseEventEnabled(enabled);
   //if (enabled)
   //  startVoutTimer();
   //else
   //  stopVoutTimer();
-#endif // WITH_VLCCORE
 }
 
 void
 Player::startVoutTimer()
 {
-#ifdef WITH_VLCCORE
   QtExt::CountdownTimer *timer = impl_->voutCountdown();
   if (!timer) {
     impl_->setVoutCountdown(
@@ -1321,29 +1328,23 @@ Player::startVoutTimer()
     timer->start(VOUT_COUNTDOWN);
   else
     timer->setCount(VOUT_COUNTDOWN);
-
-#endif // WITH_VLCCORE
 }
 
 void
 Player::stopVoutTimer()
 {
-#ifdef WITH_VLCCORE
   if (impl_->voutCountdown())
     impl_->voutCountdown()->stop();
-#endif // WITH_VLCCORE
 }
 
 void
 Player::invalidateVout()
 {
-#ifdef WITH_VLCCORE
   if (hasMedia()) {
     bool ok = ::register_vout_callbacks_(impl_->player(), this);
     if (ok) // new vout found
       stopVoutTimer();
   }
-#endif // WITH_VLCCORE
 }
 
 // - Error handling -
@@ -1554,6 +1555,10 @@ Player::setUserAgent(const QString &agent)
   }
 }
 
+void
+Player::setCookieJar(QNetworkCookieJar *jar)
+{ VlcHttpPlugin::setCookieJar(jar); }
+
 // - Title -
 
 void
@@ -1563,6 +1568,23 @@ Player::setMediaTitle(const QString &t)
   if (t != impl_->mediaTitle()) {
     impl_->setMediaTitle(t);
     emit mediaTitleChanged(t);
+  }
+}
+
+// - Dispose
+
+void
+Player::dispose()
+{
+  //if (impl_)
+  //  detachEvents();
+
+  if (hasMedia()) {
+    if (!isStopped()) {
+      mute();
+      stop();
+    }
+    closeMedia();
   }
 }
 

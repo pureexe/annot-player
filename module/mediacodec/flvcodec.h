@@ -14,10 +14,10 @@ class OutputStream;
 class Stoppable;
 class MediaToc;
 
-class FLVCodec : public QObject
+class FlvCodec : public QObject
 {
   Q_OBJECT
-  typedef FLVCodec Self;
+  typedef FlvCodec Self;
   typedef QObject Base;
 
   QList<Stoppable*> tasks_;
@@ -27,8 +27,8 @@ public:
   static Self *globalInstance() { static Self g; return &g; }
 
 protected:
-  explicit FLVCodec(QObject *parent = 0) : Base(parent) { }
-  ~FLVCodec() { stop(); }
+  explicit FlvCodec(QObject *parent = 0) : Base(parent) { }
+  ~FlvCodec() { stop(); }
 
 public:
   void demuxStream(InputStream *flv, OutputStream *vout, OutputStream *aout,
@@ -36,10 +36,12 @@ public:
   void demuxStreamList(InputStreamList *flvs, const QList<qint64> &durations,
                        OutputStream *vout, OutputStream *aout,
                        MediaToc *vtoc, MediaToc *atoc, bool async = true);
+  void demuxStreamList(InputStreamList *flvs,
+                       OutputStream *vout, OutputStream *aout, bool async = true);
   void stop(); ///< Stop all background tasks.
 
-  static bool isFLVStream(InputStream *flv);
-  static int getFLVStreamDuration(InputStream *flv);
+  static bool isFlvStream(InputStream *flv);
+  static int getFlvStreamDuration(InputStream *flv);
 };
 
 #endif // FLVCODEC_H

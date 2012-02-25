@@ -7,7 +7,7 @@
 #include "mrlinfo.h"
 #include <QObject>
 
-QT_FORWARD_DECLARE_CLASS(QNetworkAccessManager)
+QT_FORWARD_DECLARE_CLASS(QNetworkCookieJar)
 
 class MrlResolver : public QObject
 {
@@ -23,16 +23,16 @@ signals:
   void errorReceived(QString message);
   void messageReceived(QString message);
 
-  void mediaResolved(MediaInfo mi, QNetworkAccessManager *nam);
+  void mediaResolved(MediaInfo mi, QNetworkCookieJar *cookieJar);
   void subtitleResolved(QString suburl);
 
 public:
   virtual bool matchMedia(const QString &href) const { (void)href; return false; }
   virtual bool matchSubtitle(const QString &href) const { (void)href; return false; }
 public slots:
-  virtual void resolveMedia(const QString &href)  { (void)href; }
+  virtual bool resolveMedia(const QString &href)  { (void)href; return false; }
 
-  virtual void resolveSubtitle(const QString &href) { (void)href; }
+  virtual bool resolveSubtitle(const QString &href) { (void)href; return false; }
 };
 
 #endif // MRLRESOLVER_H

@@ -12,6 +12,7 @@ HEADERS += \
     $$PWD/mrlinfo.h \
     $$PWD/mrlresolver.h \
     $$PWD/mrlresolvermanager.h \
+    $$PWD/mrlresolversettings.h \
     $$PWD/youkumrlresolver.h \
     $$PWD/youtubemrlresolver.h
 

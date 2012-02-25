@@ -2,6 +2,13 @@ ChangeLog
 Annot Project
 6/18/2011
 
+2/25/2012	annot.player	0.1.2.9
+        * Annotation rendering improved.
+        * Added dialog to download online videos, and remux parted videos to mp4.
+          Downloaded videos will be associated with online annotations automatically.
+          Supported websites: nicovideo.jp,acfun.tv,bilibili.tv,....
+        * Added debug console.
+
 2/17/2012	annot.player	0.1.2.8
         * Added annotation rendering effects.
           Annotations rendered with shadow by default.

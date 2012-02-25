@@ -51,38 +51,4 @@ ActionWithId::createConnections()
   connect(this, SIGNAL(triggered(bool)), SLOT(emit_triggeredWithId(bool)));
 }
 
-// - Properties -
-
-int
-QtExt::
-ActionWithId::id() const
-{ return id_; }
-
-void
-QtExt::
-ActionWithId::setId(int id)
-{ id_ = id; }
-
-// - Emits -
-
-void
-QtExt::
-ActionWithId::emit_changedWithId()
-{ emit changedWithId(id_); }
-
-void
-QtExt::
-ActionWithId::emit_hoveredWithId()
-{ emit hoveredWithId(id_); }
-
-void
-QtExt::
-ActionWithId::emit_toggledWithId(bool checked)
-{ emit toggledWithId(id_, checked); }
-
-void
-QtExt::
-ActionWithId::emit_triggeredWithId(bool checked)
-{ emit triggeredWithId(id_, checked); }
-
 // EOF

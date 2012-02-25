@@ -73,12 +73,12 @@ BufferedRemoteStream::read(char *data, qint64 maxSize)
 
   qint64 count;
   while ((count = reply_->bytesAvailable()) < maxSize - leftSize &&
-         reply_->isRunning()) {
+         reply_->isRunning() && ! stopped_) {
     waitForReadyRead();
     if (isRedirected()) {
       redirect();
       DOUT("exit: redirect");
-      return read(data, maxSize);
+      return read(data, qMin(maxSize, count + leftSize));
     }
     DOUT("received size =" << count);
   }
@@ -97,9 +97,23 @@ BufferedRemoteStream::read(char *data, qint64 maxSize)
 }
 
 void
+BufferedRemoteStream::stop()
+{
+  stopped_ = true;
+  if (reply_)
+    reply_->abort();
+  emit stopped();
+}
+
+void
 BufferedRemoteStream::run()
 {
   DOUT("enter");
+  if (!data_.isEmpty()) {
+    m_.lock();
+    data_.clear();
+    m_.unlock();
+  }
   if (!redirectUrl_.isEmpty()) {
     if (reply_)
       reply_->deleteLater();
@@ -108,9 +122,9 @@ BufferedRemoteStream::run()
     reply_ = networkAccessManager()->get(QNetworkRequest(url));
     if (bufferSize_ > 0)
       reply_->setReadBufferSize(bufferSize_);
-  } else if (reply_) {
-    DOUT("exit; reply already created");
-    return;
+  //} else if (reply_) {
+  //  DOUT("exit; reply already created");
+  //  return;
   } else {
     DOUT("url =" << request().url());
     reply_ = networkAccessManager()->get(request());
@@ -122,7 +136,7 @@ BufferedRemoteStream::run()
   connect(reply_, SIGNAL(finished()), SIGNAL(finished()));
   connect(reply_, SIGNAL(readyRead()), SIGNAL(readyRead()));
   connect(reply_, SIGNAL(downloadProgress(qint64,qint64)), SIGNAL(progress(qint64,qint64)));
-  connect(reply_, SIGNAL(error(QNetworkReply::NetworkError)), SIGNAL(errorReceived()));
+  connect(reply_, SIGNAL(error(QNetworkReply::NetworkError)), SLOT(networkError()));
   DOUT("exit");
 }
 
@@ -151,6 +165,7 @@ BufferedRemoteStream::waitForFinished()
 
   QEventLoop loop;
   connect(reply_, SIGNAL(finished()), &loop, SLOT(quit()));
+  connect(this, SIGNAL(stopped()), &loop, SLOT(quit()));
   loop.exec();
   DOUT("exit");
 }
@@ -171,6 +186,7 @@ BufferedRemoteStream::waitForReadyRead()
   QEventLoop loop;
   connect(reply_, SIGNAL(readyRead()), &loop, SLOT(quit()));
   connect(reply_, SIGNAL(finished()), &loop, SLOT(quit()));
+  connect(this, SIGNAL(stopped()), &loop, SLOT(quit()));
   loop.exec();
   DOUT("exit");
 }
@@ -222,6 +238,7 @@ BufferedRemoteStream::redirect()
 void
 BufferedRemoteStream::invalidateSize()
 {
+  DOUT("enter");
   if (reply_ && !Base::size()) {
     qint64 contentLength = reply_->header(QNetworkRequest::ContentLengthHeader).toLongLong();
     if (contentLength > 0) {
@@ -229,6 +246,11 @@ BufferedRemoteStream::invalidateSize()
       setSize(contentLength);
     }
   }
+  DOUT("exit");
 }
+
+void
+BufferedRemoteStream::networkError()
+{ emit error(tr("network error, failed to download remote resource")); }
 
 // EOF

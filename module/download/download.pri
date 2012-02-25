@@ -8,11 +8,20 @@ INCLUDEPATH += $$PWD
 
 HEADERS += \
     $$PWD/download.h \
-    $$PWD/downloader.h
+    $$PWD/downloader.h \
+    $$PWD/downloadmanager.h \
+    $$PWD/downloadtask.h \
+    $$PWD/mrldownloadtask.h \
+    $$PWD/mrlmuxdownloadtask.h \
+    $$PWD/mrlmuxdownloadtaskprivate.h
 
 SOURCES += \
     $$PWD/download.cc \
-    $$PWD/downloader.cc
+    $$PWD/downloader.cc \
+    $$PWD/downloadmanager.cc \
+    $$PWD/downloadtask.cc \
+    $$PWD/mrldownloadtask.cc \
+    $$PWD/mrlmuxdownloadtask.cc
 
 QT      += core network
 

@@ -1,6 +1,7 @@
 // dwm.cc
 // 7/10/2011
 //
+// See: http://labs.qt.nokia.com/2009/09/15/using-blur-behind-on-windows/
 // Source:
 // http://sic.no-ammo.org/git/index.cgi/Client.git/blob_plain/HEAD:/modules/qtwin/qtwin.h
 // http://sic.no-ammo.org/git/index.cgi/Client.git/blob_plain/HEAD:/modules/qtwin/qtwin.cpp

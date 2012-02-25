@@ -17,13 +17,13 @@
 // - Task -
 
 void
-FLVCodec::demuxStream(InputStream *flv, OutputStream *vout, OutputStream *aout,
+FlvCodec::demuxStream(InputStream *flv, OutputStream *vout, OutputStream *aout,
                       MediaToc *vtoc, MediaToc *atoc, bool async)
 {
   DOUT("enter: async =" << async);
   Q_ASSERT(flv);
   flv->reset();
-  FLVDemux *t = new FLVDemux(flv, this);
+  FlvDemux *t = new FlvDemux(flv, this);
   t->setAutoDelete(false);
   t->setVideoOut(vout);
   t->setAudioOut(aout);
@@ -37,14 +37,14 @@ FLVCodec::demuxStream(InputStream *flv, OutputStream *vout, OutputStream *aout,
 }
 
 void
-FLVCodec::demuxStreamList(InputStreamList *flvs, const QList<qint64> &durations,
+FlvCodec::demuxStreamList(InputStreamList *flvs, const QList<qint64> &durations,
                           OutputStream *vout, OutputStream *aout,
                           MediaToc *vtoc, MediaToc *atoc, bool async)
 {
   DOUT("enter: async =" << async);
   Q_ASSERT(flvs);
   flvs->reset();
-  FLVListDemux *t = new FLVListDemux(flvs, durations, this);
+  FlvListDemux *t = new FlvListDemux(flvs, durations, this);
   t->setAutoDelete(false);
   t->setVideoOut(vout);
   t->setAudioOut(aout);
@@ -58,7 +58,26 @@ FLVCodec::demuxStreamList(InputStreamList *flvs, const QList<qint64> &durations,
 }
 
 void
-FLVCodec::stop()
+FlvCodec::demuxStreamList(InputStreamList *flvs,
+                          OutputStream *vout, OutputStream *aout, bool async)
+{
+  DOUT("enter: async =" << async);
+  Q_ASSERT(flvs);
+  flvs->reset();
+  FlvListDemux *t = new FlvListDemux(this);
+  t->setAutoDelete(false);
+  t->setInputStreams(flvs);
+  t->setVideoOut(vout);
+  t->setAudioOut(aout);
+  if (async)
+    QThreadPool::globalInstance()->start(t);
+  else
+    t->run();
+  DOUT("exit");
+}
+
+void
+FlvCodec::stop()
 {
   if (!tasks_.isEmpty())
     foreach (Stoppable *t, tasks_)
@@ -69,12 +88,12 @@ FLVCodec::stop()
 
 // See: http://www.jqueryphp.com/how-to-get-flv-file-duration/2009/08/
 bool
-FLVCodec::isFLVStream(InputStream *input)
+FlvCodec::isFlvStream(InputStream *input)
 {
   Q_ASSERT(input);
   input->reset();
-  if (input->size() < 3)
-    return false;
+  //if (input->size() < 3)
+  //  return false;
   input->reset();
   char data[3];
   int count = input->read(data, sizeof(data));
@@ -86,7 +105,7 @@ FLVCodec::isFLVStream(InputStream *input)
 
 // See: http://www.jqueryphp.com/how-to-get-flv-file-duration/2009/08/
 int
-FLVCodec::getFLVStreamDuration(InputStream *input)
+FlvCodec::getFlvStreamDuration(InputStream *input)
 {
   Q_ASSERT(input);
   qint64 size = input->size();

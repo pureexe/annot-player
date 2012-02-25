@@ -1,63 +1,39 @@
 # TODO
 # 6/18/2011
-
 CHECKPOINT
 
-compare framedstreamsource with bytestreamfilesource
-look into how MKV is implemented
-instead of two simutanius stream
-
-- async nam download for youku and sina
-- synced only for nico, tudou, and qq
-
-look into mkvtoolnix
-
-- update homepage
-  - add webm to homepage
-  - add softpedia link for mac/win
-
--  sure bilibili/acfun streaming work
-  - fixme: shutter h.264 bilibili.flv
-    - seek problem?
-  - fixme: shutter on slow speed internet
-
-
-- cache to local disk
-- mux to mp4 in local disk
-
-- add batch video downloader
-
-- extract size/duragion in luascript
-  - qq
-  - tudou
-  - youku
-  eventloop instead of wait for 5 seconds
-
-- add a progress slider
-- use non-blocking read in live555? -- async access orz
-
-- use annot wiki URL to identify unique source
-
-# 0.1.2.9
-        * Seamless stream parted media from bilibili.tv and acfun.tv.
-          Parted media will be demuxed and merged on the fly.
-        * Online media will be cached and automatically muxed to MP4.
-        * Added online media downloader.
-- replace buffered stream with cached stream
-- mux caches to mp4
-
-- add save && automatic save option
-- add download dialog
-
+# 0.1.3.0
+- upgrade to vlc 2.0
+  - FIXME: event loop not working in vlc http access plugin
+  - add site browser similar to VLC 2.0
+  - index videos in the server side
+- add batch download for acfun/bilibili
+- mux parted flvs in network access manager
+- cached remote stream, seekable remote stream
 - bypass niconico banning
   See: http://9ch.co/t9651,1-1.html
        http://nico.galstars.net/?t=www&u=/
-  use qnetworkproxy?
+  use qnetworkproxy
+  use booxt_asio or popilo: http://code.google.com/p/solidground/source/browse/trunk/example/extern/boost/asio/proxyserver.cpp?r=597
 - add an http viewer for nico
   - use cloudview to achieve this?
-- add support to decode nicovideo's AVI && MP3
 - bypass youtube banning
   enable youtube to china
+- demux mp3/avi for nicovideo
+- replace buffered stream with disk-cached stream
+  - enable local disk cache
+  - mux caches to mp4 automatically
+- add a download speed/progress slider
+- batch download for acfun and bilibili
+- linux support
+- use eventloop instead of wait for 5 seconds
+- replace lua module with pure c++
+  See: downloader from AcDown source code (Apache License)
+  http://acdown.codeplex.com/SourceControl/list/changesets
+- add save && automatic save option
+- add download dialog
+
+- fixme: Tudou media resolver broken
 
 - serveragent/serverproxy: retries 3 times on network/soap error rather than give up
 - remote stream: retry 3 times on network error rather than give up
@@ -65,9 +41,9 @@ look into mkvtoolnix
 
 - FIXME: stop context menu not working
 - fixme: youtube/googlvideo crash when openning in recent menu
-- FIXME: install luascript on Linux
 
 ## TODO
+- use annot wiki URL to identify unique source
 - need to hack ith_engine commit database for identifying goei2?
 - integrate with QML
 Livecoding video effects with Qt5

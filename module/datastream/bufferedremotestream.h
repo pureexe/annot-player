@@ -21,16 +21,16 @@ class BufferedRemoteStream :  public RemoteStream
   QUrl redirectUrl_;
   qint64 bufferSize_;
 
+  bool stopped_;
+
 public:
-  explicit BufferedRemoteStream(QNetworkAccessManager *nam, QObject *parent = 0)
-    : Base(nam, parent), pos_(0), reply_(0), bufferSize_(0) { }
   explicit BufferedRemoteStream(QObject *parent = 0)
-    : Base(parent), pos_(0), reply_(0), bufferSize_(0) { }
+    : Base(parent), pos_(0), reply_(0), bufferSize_(0), stopped_(false) { }
 
   ~BufferedRemoteStream();
 
 signals:
-  void errorReceived();
+  void stopped();
 
 public:
   virtual qint64 size() const { return Base::size() ? Base::size() : data_.size(); } ///< \override
@@ -64,14 +64,21 @@ public:
     return ret;
   }
 
+  virtual QString contentType() const ///< \override
+  {
+    return reply_ ? reply_->header(QNetworkRequest::ContentTypeHeader).toString() :
+                    QString();
+  }
+
   bool isRunning() const { return reply_ && reply_->isRunning(); }
   bool isFinished() const { return reply_ && reply_->isFinished(); }
-
-  virtual void run(); ///< \override
 
 public slots:
   void waitForFinished();
   void waitForReadyRead();
+
+  virtual void run(); ///< \override
+  virtual void stop(); ///< \override
 
   virtual void setBufferSize(qint64 size) { bufferSize_ = size; } ///< \override
 
@@ -82,6 +89,7 @@ protected slots:
   void leadOut();
   void redirect();
   void invalidateSize();
+  void networkError();
 };
 
 #endif // BUFFEREDREMOTESTREAM_H

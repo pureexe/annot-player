@@ -155,6 +155,10 @@ namespace AnnotCloud {
     // - Operators -
     bool operator==(const Self &that) { return !operator!=(that); }
     bool operator!=(const Self &that) { return ::memcmp(this, &that, sizeof(Self)); }
+
+    // - Helpers -
+
+    static qint32 guessUrlLanguage(const QString &url, qint32 defval = 0);
   };
 
   typedef QList<Alias> AliasList;

@@ -8,23 +8,23 @@
 
 class InputStream;
 
-struct AACInfo
+struct AacInfo
 {
   uint frequency; ///< such as 41000
   uint channels; ///< such as 0 or 2
   uint profile;
   quint8 config[2]; ///< config
 
-  AACInfo() : frequency(0), channels(0), profile(0) { }
+  AacInfo() : frequency(0), channels(0), profile(0) { }
   bool isBad() const { return !frequency; }
 };
 
-class AACCodec
+class AacCodec
 {
-  AACCodec() { }
+  AacCodec() { }
 
 public:
-  static AACInfo parseAACInfo(InputStream *in);
+  static AacInfo parseAacInfo(InputStream *in);
 };
 
 #endif // AACCODEC_H

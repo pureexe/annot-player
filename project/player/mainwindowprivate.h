@@ -54,6 +54,26 @@ namespace MainWindow_slot_ { // anonymous slot_
     }
   };
 
+  class CloseEventLeave : public QObject {
+    Q_OBJECT
+    typedef QObject Base;
+
+    MainWindow *w_;
+    QCloseEvent *e_;
+
+  public:
+    CloseEventLeave(QCloseEvent *e, MainWindow *w)
+      : Base(0), w_(w), e_(e) // no parent
+    { Q_ASSERT(w_); Q_ASSERT(e_); }
+
+  public slots:
+    void closeEventLeave()
+    {
+      w_->closeEventLeave(e_);
+      QTimer::singleShot(0, this, SLOT(deleteLater()));
+    }
+  };
+
   /*
   class SetWindowDwmEnabled : public QObject {
     Q_OBJECT
@@ -211,6 +231,18 @@ namespace { namespace task_ { // anonymous
   public:
     setToken(const QString &t, MainWindow *w) : w_(w), t_(t) { Q_ASSERT(w_); }
   };
+
+  class signFileWithUrl : public QRunnable
+  {
+    MainWindow *w_;
+    QString path_;
+    QString url_;
+    virtual void run() { w_->signFileWithUrl(path_, url_, false); } // \override, async = false
+  public:
+    signFileWithUrl(const QString &path, const QString &url, MainWindow *w)
+      : w_(w), path_(path), url_(url) { Q_ASSERT(w_); }
+  };
+
 
 #define CAST(_cast, _entity) \
   class _cast##_entity##WithId : public QRunnable \

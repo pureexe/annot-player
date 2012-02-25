@@ -25,11 +25,8 @@ FileDeleter::deleteFileLater(const QString &path, bool async)
 void
 FileDeleter::deleteAll()
 {
-  foreach (QString path, files_) {
-    QFile f(path);
-    if (f.exists())
-      f.remove();
-  }
+  foreach (QString path, files_)
+    QFile::remove(path);
 }
 
 // EOF

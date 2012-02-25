@@ -7,7 +7,7 @@
 #include <QString>
 #include <QStringList>
 
-QT_FORWARD_DECLARE_CLASS(QNetworkAccessManager)
+QT_FORWARD_DECLARE_CLASS(QNetworkCookieJar)
 
 struct lua_State;
 
@@ -17,14 +17,14 @@ class LuaResolver : public QObject
   typedef LuaResolver Self;
   typedef QObject Base;
 
-  QNetworkAccessManager *nam_;
-
   QString scriptPath_;
   QString packagePath_;
 
   QString nicovideoUsername_, nicovideoPassword_;
 
   QString bilibiliUsername_, bilibiliPassword_;
+
+  QNetworkCookieJar *cookieJar_;
 
 public:
   //struct media_description
@@ -37,14 +37,14 @@ public:
 
   explicit LuaResolver(const QString &scriptPath,
                        const QString &packagePath = QString(),
-                       QNetworkAccessManager *nam = 0,
-                       QObject *parent = 0);
-
-  QNetworkAccessManager *networkAccessManager() const
-  { Q_ASSERT(nam_); return nam_; }
+                       QObject *parent = 0)
+    : Base(parent), scriptPath_(scriptPath), packagePath_(packagePath), cookieJar_(0)
+  { }
 
   // CHECKPOINT: siteid with nam
 public:
+  enum Site { AcFun = 1, Nicovideo = 2, Bilibili = 3 };
+
   bool resolve(const QString &href,
                int *siteid = 0,
                QString *refurl = 0,
@@ -53,6 +53,8 @@ public:
                QStringList *mrls = 0,
                QList<qint64> *durations = 0,
                QList<qint64> *sizes = 0);
+
+  void setCookieJar(QNetworkCookieJar *cookieJar) { cookieJar_ = cookieJar; }
 
   bool hasNicovideoAccount() const
   { return !nicovideoUsername_.isEmpty() && !nicovideoPassword_.isEmpty(); }

@@ -27,8 +27,8 @@
 YoukuMrlResolver::YoukuMrlResolver(QObject *parent)
   : Base(parent)
 {
-  qnam_ = new QNetworkAccessManager(this);
-  connect(qnam_, SIGNAL(finished(QNetworkReply*)), SLOT(resolveMedia(QNetworkReply*)));
+  nam_ = new QNetworkAccessManager(this);
+  connect(nam_, SIGNAL(finished(QNetworkReply*)), SLOT(resolveMedia(QNetworkReply*)));
 }
 
 // - Analysis -
@@ -40,7 +40,7 @@ YoukuMrlResolver::matchMedia(const QString &href) const
   return href.startsWith(pattern, Qt::CaseInsensitive);
 }
 
-void
+bool
 YoukuMrlResolver::resolveMedia(const QString &href)
 {
   static const QString errorMessage = tr("failed to resolve URL");
@@ -48,7 +48,7 @@ YoukuMrlResolver::resolveMedia(const QString &href)
   QRegExp rx("v.youku.com/v_show/id_([a-z0-9]+)", Qt::CaseInsensitive);
   if (rx.indexIn(href) < 0) {
     emit errorReceived(errorMessage + ": " + href);
-    return;
+    return false;
   }
   QString id = rx.cap(1);
 
@@ -57,7 +57,8 @@ YoukuMrlResolver::resolveMedia(const QString &href)
 
   DOUT("url =" << url);
   QNetworkRequest request(url);
-  qnam_->get(request);
+  nam_->get(request);
+  return true;
 }
 
 void

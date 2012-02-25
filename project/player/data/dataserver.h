@@ -39,6 +39,7 @@ public:
   qint64 submitAlias(const Alias &alias);
   bool submitAliases(const AliasList &aliases);
   qint64 submitTokenAndAlias(const Token &token, const Alias &alias); ///< return token id only
+  qint64 submitTokenAndAliases(const Token &token, const AliasList &l); ///< return token id only
 
   qint64 submitAnnotation(const Annotation &annot);
   bool submitAnnotations(const AnnotationList &annots);

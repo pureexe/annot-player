@@ -121,8 +121,8 @@ SiteAccountView::createLayout()
     grid->addWidget(bilibiliPasswordEdit_, r, ++c);
     grid->addWidget(bilibiliClearButton, r, ++c);
 
-    grid->addWidget(saveButton, ++r, c=1, Qt::AlignHCenter);
-    grid->addWidget(cancelButton, r, c=2, Qt::AlignHCenter);
+    grid->addWidget(cancelButton, ++r, c=1, Qt::AlignHCenter);
+    grid->addWidget(saveButton, r, c=2, Qt::AlignHCenter);
 
     grid->setContentsMargins(6, 6, 6, 6);
     setContentsMargins(0, 0, 0, 0);

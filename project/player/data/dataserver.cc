@@ -113,6 +113,23 @@ DataServer::submitTokenAndAlias(const Token &token, const Alias &alias)
 }
 
 qint64
+DataServer::submitTokenAndAliases(const Token &token, const AliasList &aliases)
+{
+  DOUT("enter");
+  qint64 tid = submitToken(token);
+  if (tid) {
+    foreach (Alias a, aliases) {
+      if (!a.hasText())
+        continue;
+      a.setTokenId(tid);;
+      submitAlias(a);
+    }
+  }
+  DOUT("exit: ret =" << tid);
+  return tid;
+}
+
+qint64
 DataServer::submitAnnotation(const Annotation &annot)
 {
   DOUT("enter");

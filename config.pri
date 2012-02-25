@@ -129,7 +129,7 @@ mac {
 
 INCLUDEPATH     += $$VLC_HOME/include
 INCLUDEPATH     += $$VLC_HOME/include/vlc/plugins
-INCLUDEPATH     += $$VLC_SRC
+#INCLUDEPATH     += $$VLC_SRC/include
 LIBS            += -L$$VLC_HOME/lib
 #INCLUDEPATH     += $$WSF_HOME/include
 #LIBS            += -L$$WSF_HOME/lib
@@ -165,13 +165,6 @@ LIBS            += \
     -L$$LIVE_HOME/UsageEnvironment \
     -L$$LIVE_HOME/groupsock \
     -L$$LIVE_HOME/liveMedia
-
-# Otherwise, qtcreator grammar checking not work
-mac: INCLUDEPATH += \
-    /Users/jichi/opt/live/BasicUsageEnvironment/include \
-    /Users/jichi/opt/live/UsageEnvironment/include \
-    /Users/jichi/opt/live/groupsock/include \
-    /Users/jichi/opt/live/liveMedia/include
 
 CONFIG(release) {
   #DEFINES += QT_NO_DEBUG_OUTPUT QT_NO_WARNING_OUTPUT

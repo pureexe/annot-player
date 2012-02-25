@@ -18,6 +18,12 @@
 using namespace AnnotCloud;
 using namespace Logger;
 
+#ifdef Q_OS_MAC
+  #define K_CTRL        "cmd"
+#else
+  #define K_CTRL        "Ctrl"
+#endif // Q_OS_MAC
+
 // - Constructions -
 
 #define WINDOW_FLAGS ( \
@@ -41,10 +47,6 @@ AnnotationBrowser::AnnotationBrowser(SignalHub *hub, QWidget *parent)
   createModel();
   createLayout();
   createActions();
-
-  // Shotcuts
-  QShortcut *cancelShortcut = new QShortcut(QKeySequence("Esc"), this);
-  connect(cancelShortcut, SIGNAL(activated()), SLOT(hide()));
 
   // Initial states
   tableView_->sortByColumn(HD_CreateTime, Qt::DescendingOrder);
@@ -100,9 +102,9 @@ AnnotationBrowser::createLayout()
     connect(_button, SIGNAL(clicked(bool)), _slot); \
   }
 
-  MAKE_TOGGLE(meButton_, tr("Mine"), tr("Display my annotations only"), SLOT(setMe(bool)))
-  MAKE_TOGGLE(nowButton_, tr("Now"), tr("Display annotations at the time only"), SLOT(setNow(bool)))
-  MAKE_TOGGLE(subtitleButton_, TR(T_SUBTITLE), tr("Display subtitles only"), SLOT(setSubtitle(bool)))
+  MAKE_TOGGLE(meButton_, tr("Mine"), tr("Display my annotations only") + " [" K_CTRL "+1]", SLOT(setMe(bool)))
+  MAKE_TOGGLE(nowButton_, tr("Now"), tr("Display annotations at the time only") + " [" K_CTRL "+2]", SLOT(setNow(bool)))
+  MAKE_TOGGLE(subtitleButton_, TR(T_SUBTITLE), tr("Display subtitles only") + " [" K_CTRL "+3]", SLOT(setSubtitle(bool)))
 
   QVBoxLayout *rows = new QVBoxLayout; {
     QLayout *header = new QHBoxLayout;
@@ -149,6 +151,17 @@ AnnotationBrowser::createActions()
   // Create menus
   contextMenu_ = new QMenu(TR(T_TITLE_ANNOTATIONBROWSER), this);
   UiStyle::globalInstance()->setContextMenuStyle(contextMenu_, true); // persistent = true
+
+  // Shortcuts
+  QShortcut *cancelShortcut = new QShortcut(QKeySequence("Esc"), this);
+  connect(cancelShortcut, SIGNAL(activated()), SLOT(hide()));
+
+  QShortcut *c1 = new QShortcut(QKeySequence("CTRL+1"), this);
+  connect(c1, SIGNAL(activated()), meButton_, SLOT(click()));
+  QShortcut *c2 = new QShortcut(QKeySequence("CTRL+2"), this);
+  connect(c2, SIGNAL(activated()), nowButton_, SLOT(click()));
+  QShortcut *c3 = new QShortcut(QKeySequence("CTRL+3"), this);
+  connect(c3, SIGNAL(activated()), subtitleButton_, SLOT(click()));
 }
 
 void
@@ -269,8 +282,8 @@ AnnotationBrowser::isEmpty() const
 void
 AnnotationBrowser::addAnnotation(const Annotation &a)
 {
-#define FORMAT_TIME(_secs)        QDateTime::fromMSecsSinceEpoch(_secs * 1000)
-#define FORMAT_POS(_msecs)        QtExt::msecs2time(_msecs)
+#define FORMAT_TIME(_secs)        QDateTime::fromMSecsSinceEpoch(_secs * 1000).toString(Qt::ISODate)
+#define FORMAT_POS(_msecs)        QtExt::msecs2time(_msecs).toString()
 #define FORMAT_LANGUAGE(_lang)    languageToString(_lang)
 #define FORMAT_FLAGS(_flags)      annotationFlagsToStringList(_flags)
 #define FORMAT_STATUS(_status)    annotationStatusToString(_status)

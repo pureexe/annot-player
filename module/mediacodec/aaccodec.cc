@@ -18,8 +18,8 @@ namespace { // anonymous
   };
 } // anonymous namespace
 
-AACInfo
-AACCodec::parseAACInfo(InputStream *in)
+AacInfo
+AacCodec::parseAacInfo(InputStream *in)
 {
   Q_ASSERT(in);
   DOUT("enter");
@@ -31,27 +31,27 @@ AACCodec::parseAACInfo(InputStream *in)
   if (in->read((char*)fixedHeader, sizeof(fixedHeader))
       != sizeof(fixedHeader)) {
     DOUT("exit: insufficient input size");
-    return AACInfo();
+    return AacInfo();
   }
 
   // Check the 'syncword':
   if (!(fixedHeader[0] == 0xFF && (fixedHeader[1]&0xF0) == 0xF0)) {
     DOUT("exit: bad 'syncword' at start of ADTS file");
-    return AACInfo();
+    return AacInfo();
   }
 
   // Get and check the 'profile':
   quint8 profile = (fixedHeader[2]&0xC0)>>6; // 2 bits
   if (profile == 3) {
     DOUT("exit: bad (reserved) 'profile': 3 in first frame of ADTS file");
-    return AACInfo();
+    return AacInfo();
   }
 
   // Get and check the 'sampling_frequency_index':
   quint8 samplingFrequencyIndex = (fixedHeader[2]&0x3C)>>2; // 4 bits
   if (samplingFrequencyTable[samplingFrequencyIndex] == 0) {
     DOUT("exit: bad 'sampling_frequency_index' in first frame of ADTS file");
-    return AACInfo();
+    return AacInfo();
   }
 
   // Get and check the 'channel_configuration':
@@ -67,7 +67,7 @@ AACCodec::parseAACInfo(InputStream *in)
   //uint fuSecsPerFrame
   //  = (1024/*samples-per-frame*/*1000000) / fSamplingFrequency/*samples-per-second*/;
 
-  AACInfo ret;
+  AacInfo ret;
 
   // Construct the 'AudioSpecificConfig', and from it, the corresponding ASCII string:
   //unsigned char audioSpecificConfig[2];

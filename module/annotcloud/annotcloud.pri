@@ -19,7 +19,7 @@ SOURCES += \
     $$PWD/token.cc \
     $$PWD/user.cc
 
-QT +=   core xml network webkit
+QT +=   core xml webkit
 
 # EOF
 

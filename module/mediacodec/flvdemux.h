@@ -20,11 +20,14 @@
 class MediaToc;
 class MediaWriter;
 
-class FLVDemux : public QObject, public QRunnable, public Stoppable
+class FlvDemux : public QObject, public QRunnable, public Stoppable
 {
   Q_OBJECT
-  typedef FLVDemux Self;
+  typedef FlvDemux Self;
   typedef QObject Base;
+
+  enum State { Error = -1, Stopped = 0, Running, Finished };
+  State state_;
 
   InputStream *inputStream_;
   OutputStream *videoOutputStream_,
@@ -41,19 +44,24 @@ class FLVDemux : public QObject, public QRunnable, public Stoppable
   //QList<quint32> _videoTimeStamps;
 
 public:
-  explicit FLVDemux(InputStream *in, QObject *parent = 0)
-    : Base(parent),
+  explicit FlvDemux(InputStream *in, QObject *parent = 0)
+    : Base(parent), state_(Stopped),
       inputStream_(in), videoOutputStream_(0), audioOutputStream_(0),
-      videoWriter_(0), audioWriter_(0), writeHeader_(true)
-  { Q_ASSERT(inputStream_); }
+      videoToc_(0), audioToc_(0),
+      videoWriter_(0), audioWriter_(0), writeHeader_(true) { }
 
-  explicit FLVDemux(QObject *parent = 0)
-    : Base(parent),
+  explicit FlvDemux(QObject *parent = 0)
+    : Base(parent), state_(Stopped),
       inputStream_(0), videoOutputStream_(0), audioOutputStream_(0),
-      videoWriter_(0), audioWriter_(0), writeHeader_(true)
-  {  }
+      videoToc_(0), audioToc_(0),
+      videoWriter_(0), audioWriter_(0), writeHeader_(true) {  }
 
-  ~FLVDemux();
+  ~FlvDemux();
+
+public:
+  bool isStopped() const { return state_ == Stopped; }
+  bool isRunning() const { return state_ == Running; }
+  bool isFinished() const { return state_ == Finished; }
 
   void setInput(InputStream *in) { inputStream_ = in; }
   void setVideoOut(OutputStream *out) { videoOutputStream_ = out; }
@@ -69,7 +77,9 @@ public:
   MediaToc *audioToc() const { return audioToc_; }
 
 signals:
+  void stopped();
   void timestampChanged(qint64);
+  void error(QString message);
 
 public slots:
   virtual void run() ///< \override
@@ -78,10 +88,10 @@ public slots:
       leadOut();
   }
 
-    // TODO
   virtual void stop() ///< \override
   {
-    // Use a signal to prevent blocking from datastream
+    state_ = Stopped;
+    emit stopped();
   }
 
   void leadOut();
@@ -119,11 +129,14 @@ protected:
   { quint8 x[4]; *ok = read(x, 0, 4); return Bitwise::BigEndian::toUInt32(x, 0); }
 };
 
-class FLVListDemux : public QObject, public QRunnable, public Stoppable
+class FlvListDemux : public QObject, public QRunnable, public Stoppable
 {
   Q_OBJECT
-  typedef FLVListDemux Self;
+  typedef FlvListDemux Self;
   typedef QObject Base;
+
+  enum State { Error = -1, Stopped = 0, Running, Finished };
+  State state_;
 
   InputStreamList *ins_;
   QList<qint64> durations_;
@@ -131,21 +144,29 @@ class FLVListDemux : public QObject, public QRunnable, public Stoppable
   int streamIndex_; // current stream index
   qint64 duration_; // current duration
 
-  FLVDemux *demux_;
+  FlvDemux *demux_;
 
   //FractionUInt32 _averageFrameRate,
   //               _trueFrameRate;
   //QList<quint32> _videoTimeStamps;
 
 public:
-  FLVListDemux(InputStreamList *ins, const QList<qint64> &durations, QObject *parent = 0)
-    : Base(parent), ins_(ins), durations_(durations)
-  {
-    Q_ASSERT(ins_);
-    Q_ASSERT(ins_->size() == durations.size());
-    demux_ = new FLVDemux(this);
-    connect(demux_, SIGNAL(timestampChanged(qint64)), SLOT(updateTimestamp(qint64)));
-  }
+  FlvListDemux(InputStreamList *ins, const QList<qint64> &durations, QObject *parent = 0)
+    : Base(parent), state_(Stopped), ins_(ins), durations_(durations) { init(); }
+
+  explicit FlvListDemux(InputStreamList *ins, QObject *parent = 0)
+    : Base(parent), state_(Stopped), ins_(ins) { init(); }
+
+  explicit FlvListDemux(QObject *parent = 0)
+    : Base(parent), state_(Stopped), ins_(0) { init(); }
+
+public:
+  bool isStopped() const { return state_ == Stopped; }
+  bool isRunning() const { return state_ == Running; }
+  bool isFinished() const { return state_ == Finished; }
+
+  void setInputStreams(InputStreamList *ins) { ins_ = ins; }
+  void setDurations(const QList<qint64> &durations) { durations_ = durations; }
 
   void setVideoOut(OutputStream *out) { demux_->setVideoOut(out); }
   void setAudioOut(OutputStream *out) { demux_->setAudioOut(out); }
@@ -153,8 +174,17 @@ public:
   void setVideoToc(MediaToc *toc) { demux_->setVideoToc(toc); }
   void setAudioToc(MediaToc *toc) { demux_->setAudioToc(toc); }
 
+private:
+  void init()
+  {
+    demux_ = new FlvDemux(this);
+    connect(demux_, SIGNAL(timestampChanged(qint64)), SLOT(updateTimestamp(qint64)));
+  }
+
 signals:
+  void stopped();
   void timestampChanged(qint64);
+  void error(QString message);
 
 public slots:
   virtual void run() ///< \override
@@ -163,7 +193,12 @@ public slots:
       demux_->leadOut();
   }
 
-  virtual void stop() { demux_->stop(); } ///< \override
+  virtual void stop() ///< \override
+  {
+    state_ = Stopped;
+    demux_->stop();
+    emit stopped();
+  }
 
 protected:
   bool demux();

@@ -1,8 +1,6 @@
-#ifdef WITH_VLCCORE
-
-#ifndef VLCCORE_H
-#define VLCCORE_H
-// vlccore.h
+#ifndef _VLCCORE_VIDEO_H
+#define _VLCCORE_VIDEO_H
+// vlccore/video.h
 // 11/26/2011
 
 #include <cstdlib>
@@ -23,6 +21,4 @@ namespace vlccore {
 
 } // namespace vlccore
 
-#endif // VLCCORE_H
-
-#endif // WITH_VLCCORE
+#endif // _VLCCORE_VIDEO_H

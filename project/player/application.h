@@ -4,6 +4,7 @@
 // 11/18/2011
 
 #include <QApplication>
+#include <QList>
 
 QT_FORWARD_DECLARE_CLASS(QWidget)
 
@@ -14,18 +15,26 @@ class Application : public QApplication
   typedef QApplication Base;
 
   QWidget *w_;
+  QList<QtMsgHandler> messageHandlers_;
 
   // - Constructions -
 public:
+  static Self *globalInstance() { return dynamic_cast<Self*>(qApp); }
+
   Application(int &argc, char **argv );
 
-  void startLoggingDebugMessage(); // invoke only once
-
   // - Properties -
+public:
   QWidget *mainWindow() const { return w_; }
   void setMainWindow(QWidget *w) { w_ = w; }
 
   bool isSingleInstance() const;
+
+public:
+  void installMessageHandlers(); // invoke only once
+
+  void addMessageHandler(QtMsgHandler callback)
+  { messageHandlers_.append(callback); }
 
   // - Events -
 protected:
@@ -33,6 +42,8 @@ protected:
 
   // - Implementation -
 private:
+  static void messageHandler(QtMsgType type, const char *msg);
+  static void loggedMessageHandler(QtMsgType type, const char *msg);
   void createDirectories();
 };
 

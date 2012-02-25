@@ -82,9 +82,7 @@ bool
 ServerAgent::login(const QString &userName, const QString &passwordDigest)
 {
   DOUT("enter");
-  DOUT("mutex locking");
-  mutex_.lock();
-  DOUT("mutex locked");
+  QMutexLocker lock(&mutex_);
   emit loginRequested(userName);
 
   bool updated = isSoftwareUpdated();
@@ -119,9 +117,6 @@ ServerAgent::login(const QString &userName, const QString &passwordDigest)
     emit loginFailed(userName);
   DOUT("exit: ret =" << authorized_);
   emit userChanged();
-  DOUT("mutex unlocking");
-  mutex_.unlock();
-  DOUT("mutex unlocked");
   return authorized_;
 }
 

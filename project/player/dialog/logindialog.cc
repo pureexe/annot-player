@@ -91,8 +91,8 @@ LoginDialog::LoginDialog(QWidget *parent)
     grid->addWidget(passwordLabel, ++r, c=0);
     grid->addWidget(passwordEdit_, r, ++c);
 
-    grid->addWidget(loginButton, ++r, c=0, Qt::AlignHCenter);
-    grid->addWidget(cancelButton, r, ++c, Qt::AlignHCenter);
+    grid->addWidget(cancelButton, ++r, c=0, Qt::AlignHCenter);
+    grid->addWidget(loginButton, r, ++c, Qt::AlignHCenter);
 
     grid->setContentsMargins(9, 9, 9, 9);
     setContentsMargins(0, 0, 0, 0);

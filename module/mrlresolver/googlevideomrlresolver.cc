@@ -22,7 +22,7 @@ GoogleVideoMrlResolver::matchMedia(const QString &href) const
 }
 
 // Example: http://video.google.com/videoplay?docid=-8070240344560020977
-void
+bool
 GoogleVideoMrlResolver::resolveMedia(const QString &href)
 {
   static const QString errorMessage = tr("failed to resolve URL");
@@ -36,7 +36,7 @@ GoogleVideoMrlResolver::resolveMedia(const QString &href)
   QString docid = url.queryItemValue("docid");
   if (docid.isEmpty()) {
     emit errorReceived(errorMessage + ": " + href);
-    return;
+    return false;
   }
 
   QString mrl = "http://video.google.com/videoplay?docid=" + docid;
@@ -45,6 +45,7 @@ GoogleVideoMrlResolver::resolveMedia(const QString &href)
   mi.mrls.append(MrlInfo(mrl));
   mi.refurl = mrl;
   emit mediaResolved(mi, 0);
+  return true;
 }
 
 // EOF

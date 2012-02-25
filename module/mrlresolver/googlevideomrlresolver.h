@@ -20,7 +20,7 @@ public:
   bool matchMedia(const QString &href) const; ///< \override
 
 public slots:
-  void resolveMedia(const QString &href); ///< \override
+  bool resolveMedia(const QString &href); ///< \override
 };
 
 #endif // GOOGLEVIDEOMRLRESOLVER_H

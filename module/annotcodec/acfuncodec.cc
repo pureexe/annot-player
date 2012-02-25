@@ -10,7 +10,7 @@
 #include <QtScript>
 #include <climits>
 
-//#define DEBUG "AcFunCodec"
+//#define DEBUG "acfuncodec"
 #include "module/debug/debug.h"
 
 using namespace AnnotCloud;
@@ -91,7 +91,6 @@ AcFunCodec::parseXmlDocument(const QByteArray &data)
   AnnotationList ret;
   QDomElement e = root.firstChildElement("l");
   while (!e.isNull()) {
-    e = e.nextSiblingElement("l");
     QString attr = e.attribute("i");
     QString text = e.text();
     Annotation a = parseComment(attr, text);
@@ -127,11 +126,6 @@ AcFunCodec::parseJsonDocument(const QByteArray &data)
 
   QScriptValueIterator it(root);
   it.next();
-  if (!it.hasNext()) {
-    DOUT("exit: empty JSON list");
-    return AnnotationList();
-  }
-
   AnnotationList ret;
   while (it.hasNext()) {
     QScriptValue v = it.value();
@@ -197,6 +191,9 @@ AcFunCodec::parseAttribute(const QString &attr)
 
   // 2
   //fontSize
+#ifdef Q_WS_WIN
+  fontSize *= 0.9;
+#endif // Q_WS_WIN
   if (fontSize > 0)
     t += CORE_CMD_SIZE  "[" + QString::number(fontSize) + "]";
 

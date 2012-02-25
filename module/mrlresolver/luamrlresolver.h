@@ -16,9 +16,6 @@ class LuaMrlResolver : public MrlResolver
   typedef LuaMrlResolver Self;
   typedef MrlResolver Base;
 
-  QString nicovideoUsername_, nicovideoPassword_;
-  QString bilibiliUsername_, bilibiliPassword_;
-
 public:
   explicit LuaMrlResolver(QObject *parent = 0)
     : Base(parent) { }
@@ -28,40 +25,15 @@ public:
   bool matchSubtitle(const QString &href) const; ///< \override
 
 public slots:
-  void resolveMedia(const QString &href) ///< \override
-  { resolveMedia(href, true); }
+  bool resolveMedia(const QString &href) ///< \override
+  { return resolveMedia(href, true); }
 
-  void resolveMedia(const QString &href, bool async);
+  bool resolveMedia(const QString &href, bool async);
 
-  void resolveSubtitle(const QString &href) ///< \override
-  { resolveSubtitle(href, true); }
+  bool resolveSubtitle(const QString &href) ///< \override
+  { return resolveSubtitle(href, true); }
 
-  void resolveSubtitle(const QString &href, bool async);
-
-public:
-  const QString &nicovideoUsername() const { return nicovideoUsername_; }
-  const QString &nicovideoPassword() const { return nicovideoPassword_; }
-  const QString &bilibiliUsername() const { return bilibiliUsername_; }
-  const QString &bilibiliPassword() const { return bilibiliPassword_; }
-
-  bool hasNicovideoAccount() const
-  { return !nicovideoUsername_.isEmpty() && !nicovideoPassword_.isEmpty(); }
-
-  bool hasBilibiliAccount() const
-  { return !bilibiliUsername_.isEmpty() && !bilibiliPassword_.isEmpty(); }
-
-public slots:
-  void setNicovideoAccount(const QString &username, const QString &password)
-  { nicovideoUsername_ = username; nicovideoPassword_ = password; }
-
-  void clearNicovideoAccount()
-  { nicovideoUsername_.clear(); nicovideoPassword_.clear(); }
-
-  void setBilibiliAccount(const QString &username, const QString &password)
-  { bilibiliUsername_ = username; bilibiliPassword_ = password; }
-
-  void clearBilibiliAccount()
-  { bilibiliUsername_.clear(); bilibiliPassword_.clear(); }
+  bool resolveSubtitle(const QString &href, bool async);
 
 protected:
   //LuaResolver *makeResolver(QObject *parent = 0);

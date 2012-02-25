@@ -7,9 +7,9 @@
 #include <QString>
 #include <QStringList>
 
-namespace MP4Box {
+namespace Mp4Box {
 
-  bool muxFile(const QString &mp4, const QStringList &tracks);
+  bool muxMp4File(const QString &mp4, const QStringList &tracks);
 
 } // namepsace MP4Box
 

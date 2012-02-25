@@ -22,8 +22,8 @@ namespace { // anonymous
     char **p = argv;
     foreach (QString s, args) {
       QByteArray c = s.toLocal8Bit();
-      *p = new char[c.size()];
-      strncpy(*p, c.data(), c.size());
+      *p = new char[c.size() + 1];
+      strncpy(*p, c.data(), c.size() + 1);
       p++;
     }
     p[0] = 0;
@@ -41,7 +41,7 @@ namespace { // anonymous
 } // anonymous namespace
 
 bool
-MP4Box::muxFile(const QString &mp4, const QStringList &tracks)
+Mp4Box::muxMp4File(const QString &mp4, const QStringList &tracks)
 {
   DOUT("enter: mp4 =" << mp4 << ", tracks =" << tracks);
 

@@ -12,6 +12,12 @@
 #include "module/qtext/toolbutton.h"
 #include <QtGui>
 
+#ifdef Q_OS_MAC
+  #define K_CTRL        "cmd"
+#else
+  #define K_CTRL        "Ctrl"
+#endif // Q_OS_MAC
+
 // - Constructions -
 
 #define WINDOW_FLAGS ( \
@@ -31,9 +37,9 @@ BlacklistView::BlacklistView(AnnotationFilter *filter, QWidget *parent)
   UiStyle::globalInstance()->setWindowStyle(this);
   setContentsMargins(0, 0, 0, 0);
 
-  createActions();
   createTabs();
   createLayout();
+  createActions();
 
   invalidateTab();
 
@@ -41,10 +47,6 @@ BlacklistView::BlacklistView(AnnotationFilter *filter, QWidget *parent)
   if (edit)
     edit->setFocus();
 }
-
-bool
-BlacklistView::active() const
-{ return active_; }
 
 void
 BlacklistView::setActive(bool active)
@@ -78,11 +80,12 @@ void
 BlacklistView::createTabs()
 {
   // Widgets
-#define MAKE_TAB_BUTTON(_button, _tr, _slot) \
+#define MAKE_TAB_BUTTON(_button, _text, _key, _slot) \
   _button = new QtExt::ToolButton; { \
     _button->setStyleSheet(SS_TOOLBUTTON_TEXT); \
     _button->setToolButtonStyle(Qt::ToolButtonTextOnly); \
-    _button->setText(QString("- %1 -").arg(_tr)); \
+    _button->setText(QString("- %1 -").arg(_text)); \
+    _button->setToolTip(_text + " [" _key "]"); \
     _button->setCheckable(true); \
     connect(_button, SIGNAL(clicked()), _slot); \
   }
@@ -171,18 +174,18 @@ BlacklistView::createTabs()
 
   // Tabs
 
-  MAKE_TAB_BUTTON(textTabButton_, TR(T_TEXT), SLOT(setTabToText()))
-  MAKE_TAB_BUTTON(userTabButton_, TR(T_USER), SLOT(setTabToUser()))
-  MAKE_TAB_BUTTON(annotationTabButton_, TR(T_ANNOTATION), SLOT(setTabToAnnotation()))
+  MAKE_TAB_BUTTON(textTabButton_, TR(T_TEXT), K_CTRL "+1", SLOT(setTabToText()))
+  MAKE_TAB_BUTTON(userTabButton_, TR(T_USER), K_CTRL "+2", SLOT(setTabToUser()))
+  MAKE_TAB_BUTTON(annotationTabButton_, TR(T_ANNOTATION), K_CTRL "+3", SLOT(setTabToAnnotation()))
 
   // Footer
 
-  MAKE_UNCHECKABLE_BUTTON(clearButton_, TR(T_CLEAR), TR(T_CLEAR), SLOT(clearCurrentText()));
+  MAKE_UNCHECKABLE_BUTTON(clearButton_, QString("[ %1 ]").arg(TR(T_CLEAR)), TR(T_CLEAR), SLOT(clearCurrentText()));
 
   MAKE_UNCHECKABLE_BUTTON(addButton_, QString("[ %1 ]").arg(TR(T_ADD)), TR(T_ADD), SLOT(add()));
   MAKE_UNCHECKABLE_BUTTON(removeButton_, QString("[ %1 ]").arg(TR(T_REMOVE)), TR(T_REMOVE), SLOT(remove()));
 
-  MAKE_CHECKABLE_BUTTON(enableButton_, TR(T_ENABLE), tr("Enable blacklist"), SLOT(setFilterEnabled(bool))) {
+  MAKE_CHECKABLE_BUTTON(enableButton_, QString("| %1 |").arg(TR(T_ENABLE)), tr("Enable blacklist"), SLOT(setFilterEnabled(bool))) {
     enableButton_->setEnabled(true);
   }
 
@@ -234,7 +237,13 @@ BlacklistView::createLayout()
 void
 BlacklistView::createActions()
 {
-  // TODO - context menu
+  QShortcut *c1 = new QShortcut(QKeySequence("CTRL+1"), this);
+  connect(c1, SIGNAL(activated()), textTabButton_, SLOT(click()));
+  QShortcut *c2 = new QShortcut(QKeySequence("CTRL+2"), this);
+  connect(c2, SIGNAL(activated()), userTabButton_, SLOT(click()));
+
+  QShortcut *cancelShortcut = new QShortcut(QKeySequence("Esc"), this);
+  connect(cancelShortcut, SIGNAL(activated()), SLOT(hide()));
 }
 
 // - Slots -

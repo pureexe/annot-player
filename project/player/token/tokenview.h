@@ -98,7 +98,7 @@ public:
 protected slots:
   void invalidateTokenLabels();
 
-  void submitAlias(const QString &alias, int type, quint32 language);
+  void submitAlias(const QString &alias, int type, qint32 language);
 
 protected slots:
   virtual void dragEnterEvent(QDragEnterEvent *event); ///< \override

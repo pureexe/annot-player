@@ -12,7 +12,7 @@ DEPENDPATH  += $$PWD
 #DEPENDPATH  += $$PWD/Config
 
 #LIBS += -framework VLCKit
-LIBS += -l vlckit
+LIBS += -lvlckit
 
 HEADERS += \
     $$PWD/VLCAudio.h \

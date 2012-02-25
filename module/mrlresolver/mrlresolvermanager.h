@@ -4,83 +4,48 @@
 // mrlresolvermanager.h
 // 1/25/2011
 
-#include "mrlinfo.h"
+#include "mrlresolver.h"
 #include <QObject>
 #include <QList>
 
-QT_FORWARD_DECLARE_CLASS(QNetworkAccessManager)
-
-class MrlResolver;
-
-class MrlResolverManager : public QObject
+class MrlResolverManager : public MrlResolver
 {
   Q_OBJECT
   typedef MrlResolverManager Self;
-  typedef QObject Base;
+  typedef MrlResolver Base;
 
   QList<MrlResolver*> resolvers_;
-
-  // - Types -
-public:
-  struct Account {
-    QString username, password;
-
-    Account(const QString &name, const QString &pass)
-      : username(name), password(pass) { }
-    void clear() { username.clear(); password.clear(); }
-  };
 
   // - Construction -
 public:
   enum Resolver { Youtube = 0, GoogleVideo, Lua, ResolverCount };
 
-  static Self *globalInstance() { static Self g; return &g; }
-
-protected:
   explicit MrlResolverManager(QObject *parent = 0);
-
-  // - Signals -
-signals:
-  void errorReceived(QString message);
-  void messageReceived(QString message);
-
-  void mediaResolved(MediaInfo mi, QNetworkAccessManager *nam);
-  void subtitleResolved(QString suburl);
 
   // - Analysis -
 public:
-  int matchMedia(const QString &href) const;
-  int matchSubtitle(const QString &href) const;
+  int resolverForMedia(const QString &href) const;
+  int resolverForSubtitle(const QString &href) const;
 
-  void resolveMedia(int id, const QString &href);
+  virtual bool matchMedia(const QString &href) const ///< \override
+  { return resolverForMedia(href) >= 0; }
+  virtual bool matchSubtitle(const QString &href) const ///< \override
+  { return resolverForSubtitle(href) >= 0; }
 
-  bool resolveMedia(const QString &href)
+  bool resolveMedia(int id, const QString &href);
+
+  virtual bool resolveMedia(const QString &href) ///< \override
   {
-    int r = matchMedia(href);
-    if (r < 0)
-      return false;
-    resolveMedia(r, href);
-    return true;
+    int r = resolverForMedia(href);
+    return r >= 0 && resolveMedia(r, href);
   }
 
-  void resolveSubtitle(int id, const QString &href);
-  bool resolveSubtitle(const QString &href)
+  bool resolveSubtitle(int id, const QString &href);
+  virtual bool resolveSubtitle(const QString &href) ///< \override
   {
-    int r = matchSubtitle(href);
-    if (r != Lua)
-      return false;
-    resolveSubtitle(r, href);
-    return true;
+    int r = resolverForSubtitle(href);
+    return r == Lua && resolveSubtitle(r, href);
   }
-
-public slots:
-  void setNicovideoAccount(const QString &username = QString(),
-                           const QString &password = QString());
-  void setBilibiliAccount(const QString &username = QString(),
-                          const QString &password = QString());
-public:
-  Account nicovideoAccount() const;
-  Account bilibiliAccount() const;
 };
 
 #endif // MRLRESOLVERMANAGER_H

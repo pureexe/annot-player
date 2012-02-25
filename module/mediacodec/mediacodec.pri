@@ -23,7 +23,7 @@ SOURCES += \
     $$PWD/mp4codec.cc
 
 QT      += core
-#LIBS   += -lmp4v2
+LIBS   += -lmp4v2
 #LIBS   += -lavcodec -lavformat -lavutil
 #LIBS   += -lfaac
 

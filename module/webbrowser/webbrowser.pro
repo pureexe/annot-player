@@ -6,6 +6,7 @@
 include(../../config.pri)
 
 QT += core gui network webkit
+#CONFIG(static): QTPLUGIN += qgif qico qjpeg gsvg qtiff
 
 TEMPLATE = lib
 

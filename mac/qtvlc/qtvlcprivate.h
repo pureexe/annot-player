@@ -1,8 +1,6 @@
 // qtvlcprivate.h
 // Objective C header.
 
-#ifdef WITH_VLCCORE
-
 #ifndef MODULE_STRING
   #define MODULE_STRING "main" // VLC module string, defined in VLC's Makefile
 #endif // MODULE_STRING
@@ -25,7 +23,5 @@
 
 @implementation VLCOpenGLVoutView_public
 @end
-
-#endif // WITH_VLCCORE
 
 // EOF

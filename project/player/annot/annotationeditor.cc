@@ -15,6 +15,12 @@
 #include <boost/tuple/tuple.hpp>
 #include <QtGui>
 
+#ifdef Q_OS_MAC
+  #define K_CTRL        "cmd"
+#else
+  #define K_CTRL        "Ctrl"
+#endif // Q_OS_MAC
+
 //#define DEBUG "annotationeditor"
 #include "module/debug/debug.h"
 
@@ -26,11 +32,11 @@
   Qt::WindowMinMaxButtonsHint | \
   Qt::WindowCloseButtonHint )
 
-#define FONTCOMBOBOX_MAXWIDTH           100
-#define FONTSIZECOMBOBOX_MAXWIDTH       40
-#define ALIGNCOMBOBOX_MAXWIDTH          60
-#define MOVESTYLECOMBOBOX_MAXWIDTH      60
-#define RENDEREFFECTCOMBOBOX_MAXWIDTH   80
+#define FONTCOMBOBOX_WIDTH           100
+#define FONTSIZECOMBOBOX_WIDTH       60
+#define ALIGNCOMBOBOX_WIDTH          80
+#define MOVESTYLECOMBOBOX_WIDTH      60
+#define RENDEREFFECTCOMBOBOX_WIDTH   60
 
 #ifdef Q_OS_MAC
   #define SAVE_SHORTCUT "CMD+S"
@@ -65,18 +71,19 @@ AnnotationEditor::AnnotationEditor(QWidget *parent)
   setCodeMode();
   invalidateCount();
 
+  fontSizeComboBox_->setEditText("22");
   textEdit_->setFocus();
 }
 
 void
 AnnotationEditor::createRibons()
 {
-#define MAKE_RIBON_BUTTON(_button, _text, _slot) \
+#define MAKE_RIBON_BUTTON(_button, _text, _key, _slot) \
   _button = new QtExt::ToolButton; { \
     _button->setStyleSheet(SS_TOOLBUTTON_TEXT); \
     _button->setToolButtonStyle(Qt::ToolButtonTextOnly); \
     _button->setText(QString("- %1 -").arg(_text)); \
-    _button->setToolTip(_text); \
+    _button->setToolTip(_text + " [" _key "]"); \
     _button->setCheckable(true); \
     connect(_button, SIGNAL(clicked()), _slot); \
   }
@@ -111,7 +118,8 @@ AnnotationEditor::createRibons()
   moveStyleComboBox_ = new QtExt::ComboBox; {
     UiStyle::globalInstance()->setComboBoxStyle(moveStyleComboBox_);
     moveStyleComboBox_->setEditable(true);
-    moveStyleComboBox_->setMaximumWidth(MOVESTYLECOMBOBOX_MAXWIDTH);
+    moveStyleComboBox_->setMaximumWidth(MOVESTYLECOMBOBOX_WIDTH);
+    moveStyleComboBox_->setMinimumWidth(MOVESTYLECOMBOBOX_WIDTH);
     moveStyleComboBox_->setToolTip(tr("Style tag"));
 
     // Must be consistent with MoveStyleIndex
@@ -124,7 +132,8 @@ AnnotationEditor::createRibons()
   renderEffectComboBox_ = new QtExt::ComboBox; {
     UiStyle::globalInstance()->setComboBoxStyle(renderEffectComboBox_);
     renderEffectComboBox_->setEditable(true);
-    renderEffectComboBox_->setMaximumWidth(RENDEREFFECTCOMBOBOX_MAXWIDTH);
+    renderEffectComboBox_->setMaximumWidth(RENDEREFFECTCOMBOBOX_WIDTH);
+    renderEffectComboBox_->setMinimumWidth(RENDEREFFECTCOMBOBOX_WIDTH);
     renderEffectComboBox_->setToolTip(TR(T_ANNOTATIONEFFECT));
 
     // Must be consistent with RenderEffectIndex
@@ -210,7 +219,8 @@ AnnotationEditor::createRibons()
   alignComboBox_ = new QtExt::ComboBox; {
     UiStyle::globalInstance()->setComboBoxStyle(alignComboBox_);
     alignComboBox_->setEditable(false);
-    alignComboBox_->setMaximumWidth(ALIGNCOMBOBOX_MAXWIDTH);
+    alignComboBox_->setMaximumWidth(ALIGNCOMBOBOX_WIDTH);
+    alignComboBox_->setMinimumWidth(ALIGNCOMBOBOX_WIDTH);
     alignComboBox_->setToolTip(tr("Alignment"));
 
     // Must be consisitent with AlignIndex
@@ -225,7 +235,8 @@ AnnotationEditor::createRibons()
   fontComboBox_ = new QtExt::FontComboBox; {
     UiStyle::globalInstance()->setComboBoxStyle(fontComboBox_);
     fontComboBox_->setEditable(true);
-    fontComboBox_->setMaximumWidth(FONTCOMBOBOX_MAXWIDTH);
+    fontComboBox_->setMaximumWidth(FONTCOMBOBOX_WIDTH);
+    fontComboBox_->setMinimumWidth(FONTCOMBOBOX_WIDTH);
     fontComboBox_->setToolTip(tr("Font family"));
   }
   connect(fontComboBox_, SIGNAL(activated(QString)), SLOT(setFontFamily(QString)));
@@ -234,7 +245,8 @@ AnnotationEditor::createRibons()
   fontSizeComboBox_ = new QtExt::ComboBox; {
     UiStyle::globalInstance()->setComboBoxStyle(fontSizeComboBox_);
     fontSizeComboBox_->setEditable(true);
-    fontSizeComboBox_->setMaximumWidth(FONTSIZECOMBOBOX_MAXWIDTH);
+    fontSizeComboBox_->setMaximumWidth(FONTSIZECOMBOBOX_WIDTH);
+    fontSizeComboBox_->setMinimumWidth(FONTSIZECOMBOBOX_WIDTH);
     fontSizeComboBox_->setToolTip(tr("Font size"));
 
     QFontDatabase db;
@@ -286,8 +298,8 @@ AnnotationEditor::createRibons()
 
   // Header
 
-  MAKE_RIBON_BUTTON(codeRibonButton_, tr("tex"), SLOT(setCodeMode()))
-  MAKE_RIBON_BUTTON(htmlRibonButton_, tr("html"), SLOT(setHtmlMode()))
+  MAKE_RIBON_BUTTON(codeRibonButton_, tr("tex"), K_CTRL "+1", SLOT(setCodeMode()))
+  MAKE_RIBON_BUTTON(htmlRibonButton_, tr("html"), K_CTRL "+2", SLOT(setHtmlMode()))
 
   formatButton_ = new QtExt::ToolButton; {
     formatButton_->setStyleSheet(SS_TOOLBUTTON_TEXT);
@@ -405,6 +417,11 @@ AnnotationEditor::createActions()
 
   QShortcut *cancelShortcut = new QShortcut(QKeySequence("Esc"), this);
   connect(cancelShortcut, SIGNAL(activated()), SLOT(cancel()));
+
+  QShortcut *c1 = new QShortcut(QKeySequence("CTRL+1"), this);
+  connect(c1, SIGNAL(activated()), codeRibonButton_, SLOT(click()));
+  QShortcut *c2 = new QShortcut(QKeySequence("CTRL+2"), this);
+  connect(c2, SIGNAL(activated()), htmlRibonButton_, SLOT(click()));
 }
 
 void
@@ -427,8 +444,8 @@ AnnotationEditor::createLayout()
     footer->addWidget(countLabel_);
     footer->addWidget(tidyButton_);
     footer->addStretch();
-    footer->addWidget(saveButton_);
     footer->addWidget(cancelButton_);
+    footer->addWidget(saveButton_);
 
     // left, top, right, bottom
     int patch = 0;

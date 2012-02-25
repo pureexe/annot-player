@@ -42,12 +42,12 @@ public:
   virtual void writeFrame(const QByteArray &, quint32, bool) { } ///< \override
 };
 
-class MP3Writer : public DummyMediaWriter
+class Mp3Writer : public DummyMediaWriter
 {
   Q_OBJECT
   typedef DummyMediaWriter Base;
 public:
-  explicit MP3Writer(QObject *parent = 0) : Base(parent) { }
+  explicit Mp3Writer(QObject *parent = 0) : Base(parent) { }
   virtual QString codecName() const { return "MP3"; } ///< \override
 };
 class SpeexWriter : public DummyMediaWriter
@@ -58,26 +58,26 @@ public:
   explicit SpeexWriter(QObject *parent = 0) : Base(parent) { }
   virtual QString codecName() const { return "Speex"; } ///< \override
 };
-class WAVWriter : public DummyMediaWriter
+class WavWriter : public DummyMediaWriter
 {
   Q_OBJECT
   typedef DummyMediaWriter Base;
 public:
-  explicit WAVWriter(QObject *parent = 0) : Base(parent) { }
+  explicit WavWriter(QObject *parent = 0) : Base(parent) { }
   virtual QString codecName() const { return "WAV"; } ///< \override
 };
-class AVIWriter : public DummyMediaWriter
+class AviWriter : public DummyMediaWriter
 {
   Q_OBJECT
   typedef DummyMediaWriter Base;
 public:
-  explicit AVIWriter(QObject *parent = 0) : Base(parent) { }
+  explicit AviWriter(QObject *parent = 0) : Base(parent) { }
   virtual QString codecName() const { return "AVI"; } ///< \override
 };
 
-class AACWriter : public MediaWriter {
+class AacWriter : public MediaWriter {
   Q_OBJECT
-  typedef AACWriter Self;
+  typedef AacWriter Self;
   typedef MediaWriter Base;
 
   OutputStream *out_;
@@ -87,7 +87,7 @@ class AACWriter : public MediaWriter {
   int _channelConfig;
 
 public:
-  AACWriter(OutputStream *out, MediaToc *toc, QObject *parent = 0)
+  explicit AacWriter(OutputStream *out, MediaToc *toc = 0, QObject *parent = 0)
     : Base(parent), out_(out), toc_(toc) { Q_ASSERT(out_); }
 
   virtual QString codecName() const { return "AAC"; } ///< \override
@@ -115,7 +115,7 @@ class RawH264Writer : public MediaWriter
   int _nalLengthSize;
 
 public:
-  RawH264Writer(OutputStream *out, MediaToc *toc, QObject *parent = 0)
+  explicit RawH264Writer(OutputStream *out, MediaToc *toc = 0, QObject *parent = 0)
     : Base(parent), out_(out), toc_(toc) { Q_ASSERT(out_); }
 
   virtual QString codecName() const { return "H264"; } ///< \override

@@ -11,10 +11,10 @@ unix:   SUBDIRS += unix
 mac:    SUBDIRS += mac
 
 OTHER_FILES = \
-  ChangeLog \
-  COPYING \
-  README \
-  TODO \
-  licenses/annot-player.txt
+    licenses/annot-player.txt \
+    ChangeLog \
+    COPYING \
+    README \
+    TODO
 
 # EOF

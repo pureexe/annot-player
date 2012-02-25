@@ -88,9 +88,6 @@ vlcvout_map_from_global(vlcvout_t *vout, const QPoint &globalPos, const QRect &v
 void
 vlcvout_mouse_down(vlcvout_t *vout, const QPoint &pos, vlcbutton button)
 {
-#ifndef WITH_VLCCORE
-  Q_UNUSED(vout);
-#else
   DOUT("vlcvout_mouse_down:enter");
 
   //if (!pos.isNull())
@@ -102,15 +99,11 @@ vlcvout_mouse_down(vlcvout_t *vout, const QPoint &pos, vlcbutton button)
   ::var_Set(vout, "mouse-button-down", val);
 
   DOUT("vlcvout_mouse_down:exit");
-#endif // WITH_VLCCORE
 }
 
 void
 vlcvout_mouse_up(vlcvout_t *vout, const QPoint &pos, vlcbutton button)
 {
-#ifndef WITH_VLCCORE
-  Q_UNUSED(vout);
-#else
   DOUT("vlcvout_mouse_up:enter");
 
   //if (!pos.isNull())
@@ -126,22 +119,16 @@ vlcvout_mouse_up(vlcvout_t *vout, const QPoint &pos, vlcbutton button)
   ::var_Set(vout, "mouse-button-down", val);
 
   DOUT("vlcvout_mouse_up:exit");
-#endif // WITH_VLCCORE
 }
 
 void
 vlcvout_mouse_moved(vlcvout_t *vout, const QPoint &pos)
 {
-#ifndef WITH_VLCCORE
-  Q_UNUSED(vout);
-  Q_UNUSED(pos);
-#else
   DOUT("vlcvout_mouse_moved:enter: pos =" << pos);
   if (vout)
     ::var_SetCoords(vout, "mouse-moved", pos.x(), pos.y());
 
   DOUT("vlcvout_mouse_moved:exit");
-#endif // WITH_VLCCORE
 }
 
 // EOF

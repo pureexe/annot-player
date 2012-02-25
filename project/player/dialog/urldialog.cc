@@ -71,11 +71,11 @@ UrlDialog::createLayout()
     clearButton->setToolButtonStyle(Qt::ToolButtonTextOnly);
     clearButton->setText(QString("[ %1 ]").arg(TR(T_CLEAR)));
     clearButton->setToolTip(TR(T_CLEAR));
-  } connect(clearButton, SIGNAL(clicked()), edit_, SLOT(clear()));
+  } connect(clearButton, SIGNAL(clicked()), edit_->lineEdit(), SLOT(clear()));
 
   QVBoxLayout *rows = new QVBoxLayout; {
     QLayout *header = new QHBoxLayout;
-    QLayout *footer = new QHBoxLayout;
+    QHBoxLayout *footer = new QHBoxLayout;
 
     rows->addLayout(header);
     rows->addWidget(edit_);
@@ -84,9 +84,10 @@ UrlDialog::createLayout()
     header->addWidget(urlLabel);
     header->addWidget(urlButton_);
 
-    footer->addWidget(openButton);
-    footer->addWidget(pasteButton);
     footer->addWidget(clearButton);
+    footer->addWidget(pasteButton);
+    footer->addStretch();
+    footer->addWidget(openButton);
 
     rows->setContentsMargins(9, 9, 9, 9);
     //setContentsMargins(0, 0, 0, 0);
@@ -114,8 +115,10 @@ void
 UrlDialog::paste()
 {
   QClipboard *clipboard = QApplication::clipboard();
-  if (clipboard)
-    edit_->setEditText(clipboard->text());
+  if (clipboard) {
+    QString t = clipboard->text().trimmed();
+    edit_->setEditText(t);
+  }
 }
 
 QString

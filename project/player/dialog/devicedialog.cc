@@ -118,9 +118,10 @@ DeviceDialog::DeviceDialog(QWidget *parent)
     path->addWidget(dvdRadioButton_);
     path->addWidget(cdRadioButton_);
 
-    buttons->addWidget(okButton_);
-    buttons->addWidget(refreshButton);
     buttons->addWidget(cancelButton);
+    buttons->addWidget(refreshButton);
+    buttons->addStretch();
+    buttons->addWidget(okButton_);
   } setLayout(rows);
 
   // Connections
@@ -158,7 +159,7 @@ DeviceDialog::ok()
   hide();
 
   QString path = currentPath();
-  if (!QFileInfo(path).exists()) {
+  if (!QFile::exists(path)) {
     warn(TR(T_ERROR_BAD_FILEPATH) + ": " + path);
     return;
   }
@@ -207,7 +208,7 @@ void
 DeviceDialog::invalidateButtons()
 {
   QString path = currentPath();
-  bool t = QFileInfo(path).exists();
+  bool t = QFile::exists(path);
   okButton_->setEnabled(t);
 }
 

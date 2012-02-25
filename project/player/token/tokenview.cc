@@ -50,7 +50,7 @@ TokenView::TokenView(ServerAgent *server, QWidget *parent)
 
   // Create widgets
   aliasDialog_ = new AddAliasDialog(this);
-  connect(aliasDialog_, SIGNAL(aliasAdded(QString,int,quint32)), SLOT(submitAlias(QString,int,quint32)));
+  connect(aliasDialog_, SIGNAL(aliasAdded(QString,int,qint32)), SLOT(submitAlias(QString,int,qint32)));
 
 #define MAKE_TOKEN_LABEL(_id, _styleid) \
   _id##Label_ = new QLabel; { \
@@ -139,7 +139,7 @@ TokenView::TokenView(ServerAgent *server, QWidget *parent)
 
     grid->addWidget(tableView_, ++r, c=0, 1, 3);
 
-    //grid->setContentsMargins(0, 0, 0, 0);
+    grid->setContentsMargins(6, 6, 6, 6);
     //setContentsMargins(0, 0, 0, 0);
   } setLayout(grid);
 
@@ -301,7 +301,6 @@ TokenView::addAlias(const Alias &a)
     sourceModel_->setData(sourceModel_->index(0, i), sourceModel_->headerData(i, Qt::Horizontal), Qt::ToolTipRole);
 
 #undef FORMAT_TIME
-#undef FORMAT_POS
 #undef FORMAT_TYPE
 #undef FORMAT_LANGUAGE
 #undef FORMAT_FLAGS
@@ -312,7 +311,7 @@ TokenView::addAlias(const Alias &a)
 }
 
 void
-TokenView::submitAlias(const QString &alias, int type, quint32 language)
+TokenView::submitAlias(const QString &alias, int type, qint32 language)
 {
   Alias a;
   a.setTokenId(token_.id());

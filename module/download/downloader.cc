@@ -10,11 +10,10 @@
 
 // - Construction -
 
-Downloader::Downloader(const QString &path, bool zipped, QObject *parent, QNetworkAccessManager *nam)
-  : Base(parent), nam_(nam), state_(OK), path_(path), zipped_(zipped)
+void
+Downloader::init()
 {
-  if (!nam_)
-    nam_ = new QNetworkAccessManager(this);
+  nam_ = new QNetworkAccessManager(this);
   connect(nam_, SIGNAL(finished(QNetworkReply*)), SLOT(save(QNetworkReply*)));
 }
 
@@ -34,12 +33,7 @@ Downloader::get(const QUrl &url, const QString &header, bool async, int retries)
   }
 
   QNetworkReply *reply = nam_->get(request);
-  Q_ASSERT(reply);
-  if (!reply) {
-    state_ = Error;
-    DOUT("exit: ERROR: invalid reply");
-    return;
-  }
+  connect(reply, SIGNAL(downloadProgress(qint64,qint64)), SIGNAL(progress(qint64,qint64)));
 
   // See: http://www.developer.nokia.com/Community/Wiki/CS001432_-_Handling_an_HTTP_redirect_with_QNetworkAccessManager
   if (!async) {
@@ -121,7 +115,7 @@ Downloader::save(QNetworkReply *reply)
     return;
   }
 
-  if (zipped_) {
+  if (reply->rawHeader("Content-Encoding") == "gzip") {
     QByteArray unzipped = ::gHttpUncompress(data);
     if (!unzipped.isEmpty())
       data = unzipped;
@@ -129,6 +123,10 @@ Downloader::save(QNetworkReply *reply)
   DOUT("data.size =" << data.size() << ", data =" << QString(data));
   bool ok = save(data, path_);
   state_ = ok ? OK : Error;
+  if (ok)
+    emit finished();
+  else
+    emit error(tr("failed to save file") + ": " + path_);
   DOUT("exit: state =" << state_);
 }
 

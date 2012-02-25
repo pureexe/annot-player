@@ -27,7 +27,6 @@ AddAliasDialog::AddAliasDialog(QWidget *parent)
 {
   setWindowTitle(tr("Add Alias"));
   UiStyle::globalInstance()->setWindowStyle(this);
-  setContentsMargins(0, 0, 0, 0);
 
   // Widgets
 
@@ -121,7 +120,7 @@ AddAliasDialog::AddAliasDialog(QWidget *parent)
 
   MAKE_BUTTON(okButton_, ADD, SLOT(ok()))
   QToolButton *MAKE_BUTTON(pasteButton, PASTE, SLOT(paste()))
-  MAKE_BUTTON(cancelButton_, CANCEL, SLOT(cancel()))
+  MAKE_BUTTON(cancelButton_, CANCEL, SLOT(hide()))
 #undef MAKE_BUTTON
 
   // Layouts
@@ -163,9 +162,18 @@ AddAliasDialog::AddAliasDialog(QWidget *parent)
     row4->addWidget(aliasLabel);
     row4->addWidget(aliasEdit_);
 
-    row5->addWidget(okButton_);
-    row5->addWidget(pasteButton);
     row5->addWidget(cancelButton_);
+    row5->addWidget(pasteButton);
+    row5->addStretch();
+    row5->addWidget(okButton_);
+
+    row1->setContentsMargins(0, 0, 0, 0);
+    row2->setContentsMargins(0, 0, 0, 0);
+    row3->setContentsMargins(0, 0, 0, 0);
+    row4->setContentsMargins(0, 0, 0, 0);
+    row5->setContentsMargins(0, 0, 0, 0);
+    rows->setContentsMargins(6, 6, 6, 6);
+    setContentsMargins(0, 0, 0, 0);
   } setLayout(rows);
 
   // Shotcuts
@@ -182,12 +190,11 @@ AddAliasDialog::AddAliasDialog(QWidget *parent)
 quint32
 AddAliasDialog::languageFlags() const
 {
-  int ret = 0;
-  if (isEnglishButton_->isChecked()) ret |= Traits::English;
-  if (isJapaneseButton_->isChecked()) ret |= Traits::Japanese;
-  if (isChineseButton_->isChecked()) ret |= Traits::Chinese;
-  if (isAlienButton_->isChecked()) ret |= Traits::UnknownLanguage;
-  return ret;
+  if (isAlienButton_->isChecked()) return Traits::UnknownLanguage;
+  else if (isChineseButton_->isChecked()) return Traits::Chinese;
+  else if (isEnglishButton_->isChecked()) return Traits::English;
+  else if (isJapaneseButton_->isChecked()) return Traits::Japanese;
+  else return Traits::UnknownLanguage;
 }
 
 // - Slots -
@@ -285,18 +292,17 @@ AddAliasDialog::ok()
   QString alias = aliasEdit_->currentText().trimmed();
   if (alias.isEmpty())
     return;
-  quint32 l = languageFlags();
-  if (!l)
+  qint32 lang = languageFlags();
+  if (!lang)
     return;
 
   int type = isNameButton_->isChecked() ? Alias::AT_Name :
              isUrlButton_->isChecked() ? Alias::AT_Url :
-                                            Alias::AT_Tag;
-  emit aliasAdded(alias, type, l);
-}
+                                         Alias::AT_Tag;
+  if (type == Alias::AT_Url)
+    lang = Alias::guessUrlLanguage(alias, lang);
 
-void
-AddAliasDialog::cancel()
-{ hide(); }
+  emit aliasAdded(alias, type, lang);
+}
 
 // EOF

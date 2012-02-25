@@ -2,12 +2,11 @@
 // 2/14/2012
 
 #include "mp4codec.h"
-#include "aaccodec.h"
 #include "module/datastream/inputstream.h"
-#include "module/qtext/bitwise.h"
-#include "module/mp4box/mp4box.h"
-//#include <mp4v2/mp4v2.h>
+#include <mp4v2/mp4v2.h>
 #include <QtCore>
+#include <cstdlib>
+#include <cstring>
 
 #define DEBUG "mp4codec"
 #include "module/debug/debug.h"
@@ -16,7 +15,7 @@
 
 // See: http://www.jqueryphp.com/how-to-get-flv-file-duration/2009/08/
 bool
-MP4Codec::isMP4Stream(InputStream *input)
+Mp4Codec::isMp4Stream(InputStream *input)
 {
   Q_ASSERT(input);
   input->reset();
@@ -31,21 +30,48 @@ MP4Codec::isMP4Stream(InputStream *input)
       data[2] == '4';
 }
 
+std::pair<int, int>
+Mp4Codec::fileDimension(const QString &path)
+{
+  std::pair<int, int> ret;
+  MP4FileHandle mp4 = ::MP4Read(path.toLocal8Bit());
+  if (mp4 == MP4_INVALID_FILE_HANDLE)
+    return ret;
+  int trackNum = ::MP4GetNumberOfTracks(mp4);
+  for (int index = 0; index < trackNum; index++) {
+    MP4TrackId trackId = ::MP4FindTrackId(mp4, index);
+    if (trackId == MP4_INVALID_TRACK_ID)
+      continue;
+    if (!::strcmp(::MP4GetTrackType(mp4, trackId), MP4_VIDEO_TRACK_TYPE)) {
+      ret.first = ::MP4GetTrackVideoWidth(mp4, trackId);
+      ret.second = ::MP4GetTrackVideoWidth(mp4, trackId);
+      break;
+    }
+  }
+  ::MP4Close(mp4);
+  return ret;
+}
+
+QString
+Mp4Codec::fileInfo(const QString &path)
+{
+  QString ret;
+  char *info = ::MP4FileInfo(path.toLocal8Bit());
+  if (info) {
+    ret = QString::fromLocal8Bit(info);
+    ::free(info);
+  }
+  return ret;
+}
+
+// EOF
+
 // - Mux -
 
+/*
 bool
-MP4Codec::muxStream(const QString &path, qint64 duration, InputStream *vin, InputStream *ain)
+Mp4Codec::muxStream(const QString &path, qint64 duration, InputStream *vin, InputStream *ain)
 {
-  // TODO: CHECKPOINT
-  // Interleave H.264 with AAC
-  Q_UNUSED(path);
-  Q_UNUSED(duration);
-  Q_UNUSED(vin);
-  Q_UNUSED(ain);
-  Q_ASSERT(0);
-  return false;
-
-  /*
   DOUT("enter: duration =" << duration << ", path =" << path);
 
   MP4FileHandle mp4 = ::MP4Create(path.toLocal8Bit());
@@ -118,7 +144,5 @@ MP4Codec::muxStream(const QString &path, qint64 duration, InputStream *vin, Inpu
   ::MP4Close(mp4);
   DOUT("exit: ret =" << ret);
   return ret;
-  */
 }
-
-// EOF
+*/

@@ -7,8 +7,8 @@
 #include "mrlresolver.h"
 #include <QString>
 
-QT_FORWARD_DECLARE_CLASS(QNetworkReply)
 QT_FORWARD_DECLARE_CLASS(QNetworkAccessManager)
+QT_FORWARD_DECLARE_CLASS(QNetworkReply)
 
 class YoukuMrlResolver : public MrlResolver
 {
@@ -16,7 +16,7 @@ class YoukuMrlResolver : public MrlResolver
   typedef YoukuMrlResolver Self;
   typedef MrlResolver Base;
 
-  QNetworkAccessManager *qnam_;
+  QNetworkAccessManager *nam_;
   QString preferredType_; // should be one of "mp4", "flv", or "flvhd"
 
 public:
@@ -26,7 +26,7 @@ public:
   bool matchMedia(const QString &href) const; ///< \override
 
 public slots:
-  void resolveMedia(const QString &href); ///< \override
+  bool resolveMedia(const QString &href); ///< \override
 
   void setPreferredType(const QString &type) { preferredType_ = type; }
 

@@ -106,7 +106,7 @@ class AnnotationFilterView : public QWidget
   // - Constructions -
   // TODO: code reuse!!!!!! these codes are duplicated with annotationbrowser.
 protected:
-  enum HeaderCloud {
+  enum HeaderData {
     HD_Text = 0,
     HD_Pos,
     HD_UserAlias,

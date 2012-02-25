@@ -22,10 +22,10 @@ include(qtext/qtext.pri)
 include(serveragent/serveragent.pri)
 include(streamservice/streamservice.pri)
 include(translator/translator.pri)
+include(vlccore/vlccore.pri)
 
 TEMPLATE = subdirs
 
-!unix: SUBDIRS = webbrowser
-unix:include(webbrowser/webbrowser_static.pri)
+SUBDIRS = webbrowser
 
 # EOF

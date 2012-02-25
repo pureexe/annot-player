@@ -17,7 +17,7 @@
 
 using namespace Logger;
 
-#define SEEKLINEEDIT_MAXWIDTH         40
+#define SEEKLINEEDIT_MAXWIDTH         50
 
 #define BAD_TIME    -1
 
@@ -104,9 +104,9 @@ SeekDialog::SeekDialog(QWidget *parent)
     row1->addWidget(ssEdit_);
     row1->addWidget(ssLabel);
 
-    row2->addWidget(okButton);
     row2->addWidget(cancelButton);
-    //rows->setContentsMargins(6, 6, 6, 6);
+    row2->addWidget(okButton);
+    rows->setContentsMargins(6, 6, 6, 6);
   } setLayout(rows);
 
   setTabOrder(hhEdit_, mmEdit_);

@@ -10,11 +10,10 @@
 #include "module/debug/debug.h"
 
 bool
-dlget(const QString &path, const QUrl &url, const QString &header,
-      bool zipped, bool async, int retries)
+dlget(const QString &path, const QUrl &url, const QString &header, bool async, int retries)
 {
-  DOUT("enter: path =" << path << ", url =" << url << ", zipped =" << zipped << ", async =" << async << ", retries =" << retries);
-  Downloader dl(path, zipped);
+  DOUT("enter: path =" << path << ", url =" << url << ", async =" << async << ", retries =" << retries);
+  Downloader dl(path);
   dl.get(url, header, async, retries);
   bool ret = dl.state() != Downloader::Error;
   DOUT("exit: ret =" << ret << ", state =" << dl.state());
@@ -24,11 +23,10 @@ dlget(const QString &path, const QUrl &url, const QString &header,
 bool
 dlpost(const QString &path, const QUrl &url,
        const QByteArray &data, const QString &header,
-       bool zipped, bool async,
-       int retries)
+       bool async, int retries)
 {
-  DOUT("enter: path =" << path << ", url =" << url << ", header =" << header << ", zipped =" << zipped << ", async =" << async << ", retries =" << retries);
-  Downloader dl(path, zipped);
+  DOUT("enter: path =" << path << ", url =" << url << ", header =" << header << ", async =" << async << ", retries =" << retries);
+  Downloader dl(path);
   dl.post(url, data, header, async, retries);
   bool ret = dl.state() != Downloader::Error;
   DOUT("exit: ret =" << ret << ", state =" << dl.state());

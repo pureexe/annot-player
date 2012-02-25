@@ -25,9 +25,9 @@ public:
   ActionWithId(int id, const QString &text, QObject *parent);
   ActionWithId(int id, const QIcon &icon, const QString &text, QObject *parent);
 
-  int id() const;
+  int id() const { return id_; }
 public slots:
-  void setId(int id);
+  void setId(int id) { id_ = id; }
 
 signals:
   void changedWithId(int id);
@@ -36,11 +36,11 @@ signals:
   void triggeredWithId(int id, bool checked = false);
 
 // - Implementations -
-public slots:
-  void emit_changedWithId(); ///< \internal
-  void emit_hoveredWithId(); ///< \internal
-  void emit_toggledWithId(bool checked); ///< \internal
-  void emit_triggeredWithId(bool checked = false); ///< \internal
+private slots:
+  void emit_changedWithId() { emit changedWithId(id_); }
+  void emit_hoveredWithId() { emit hoveredWithId(id_); }
+  void emit_toggledWithId(bool checked) { emit toggledWithId(id_, checked); }
+  void emit_triggeredWithId(bool checked = false) { emit triggeredWithId(id_, checked); }
 
 private:
   void createConnections();

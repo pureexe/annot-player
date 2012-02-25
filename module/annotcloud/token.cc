@@ -41,9 +41,9 @@ Token::digestFromFile(const QString &input)
   if (fi.isDir()) {
     QString dir = fi.filePath();
     filePath = dir + "/VIDEO_TS/VIDEO_TS.IFO";
-    if (!QFileInfo(filePath).exists())
+    if (!QFile::exists(filePath))
       filePath = dir + "/VIDEO_TS/VIDEO_TS.BUP";
-    if (!QFileInfo(filePath).exists())
+    if (!QFile::exists(filePath))
       filePath = input;
   }
 
