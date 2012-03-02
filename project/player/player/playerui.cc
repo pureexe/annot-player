@@ -1,4 +1,4 @@
-// playerui.cc
+﻿// playerui.cc
 // 7/17/2011
 
 #include "playerui.h"
@@ -10,9 +10,9 @@
 #include "module/serveragent/serveragent.h"
 #include "module/qtext/datetime.h"
 #include "module/annotcloud/annotation.h"
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
   #include "win/qtwin/qtwin.h"
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
 #include "boost/foreach.hpp"
 #include <map>
 #include <QtCore>
@@ -349,9 +349,9 @@ PlayerUi::invalidateVolumeSlider()
     slider->setSliderPosition(0);
     if (slider->isEnabled())
       slider->setEnabled(false);
-//#ifdef Q_WS_WIN
+//#ifdef Q_OS_WIN
 //    QtWin::repaintWindow(slider->winId());
-//#endif // Q_WS_WIN
+//#endif // Q_OS_WIN
     return;
   }
 
@@ -371,9 +371,9 @@ PlayerUi::invalidateVolumeSlider()
       .arg(QString::number(percentage))
   );
 
-//#ifdef Q_WS_WIN
+//#ifdef Q_OS_WIN
 //  QtWin::repaintWindow(slider->winId());
-//#endif // Q_WS_WIN
+//#endif // Q_OS_WIN
 }
 
 void
@@ -386,9 +386,9 @@ PlayerUi::invalidatePositionSlider()
     slider->setSliderPosition(0);
     if (slider->isEnabled())
       slider->setEnabled(false);
-//#ifdef Q_WS_WIN
+//#ifdef Q_OS_WIN
 //    QtWin::repaintWindow(slider->winId());
-//#endif // Q_WS_WIN
+//#endif // Q_OS_WIN
     return;
   }
 
@@ -413,7 +413,10 @@ PlayerUi::invalidatePositionSlider()
     QTime current = QtExt::msecs2time(current_msecs),
           left = QtExt::msecs2time(left_msecs);
 
-    slider->setToolTip(current.toString() + " / -" + left.toString());
+    QString tip = current.toString() + " / -" + left.toString();
+    if (total_msecs)
+      tip += QString().sprintf(" (%.1f%%)", current_msecs * 100.0 / total_msecs);
+    slider->setToolTip(tip);
 
   } else {
     if (slider->isEnabled())
@@ -422,9 +425,9 @@ PlayerUi::invalidatePositionSlider()
     QString zero = QTime(0, 0, 0).toString();
     slider->setToolTip(zero + " / -" + zero);
   }
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
   //QtWin::repaintWindow(slider->winId());
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
 }
 
 void
@@ -438,9 +441,9 @@ PlayerUi::invalidateUserButton()
     button->setStyleSheet(SS_TOOLBUTTON_TEXT_HIGHLIGHT);
     button->setText(TR(T_LOGIN));
   }
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
   QtWin::repaintWindow(button->winId());
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
 }
 
 void
@@ -474,9 +477,9 @@ PlayerUi::invalidatePositionButton()
     QString zero = QTime(0, 0, 0).toString();
     button->setText(zero + " / " + zero);
   }
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
   QtWin::repaintWindow(button->winId());
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
 }
 
 void
@@ -530,9 +533,9 @@ PlayerUi::invalidatePlayButton()
     break;
   }
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
   QtWin::repaintWindow(button->winId());
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
 }
 
 void
@@ -549,9 +552,9 @@ PlayerUi::invalidateStopButton()
     button->setEnabled(!player_->isStopped());
     break;
   }
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
   QtWin::repaintWindow(button->winId());
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
 }
 
 void
@@ -575,9 +578,9 @@ PlayerUi::invalidateNextFrameButton()
     button->setEnabled(false);
     break;
   }
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
   QtWin::repaintWindow(button->winId());
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
 }
 
 // - Annotations -
@@ -628,9 +631,9 @@ PlayerUi::setAnnotationEnabled(bool enabled)
     button->setStyleSheet(SS_TOOLBUTTON_SHOWANNOT);
     button->setToolTip(TR(T_TOOLTIP_SHOWANNOT));
   }
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
   QtWin::repaintWindow(button->winId());
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
 }
 
 void

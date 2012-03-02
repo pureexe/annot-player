@@ -35,13 +35,13 @@ void
 SubUrlDialog::createLayout()
 {
   edit_ = new ComboEdit; {
-    edit_->setEditText("http://");
+    //edit_->setEditText("http://");
     edit_->setToolTip(tr("Enter online subtitle URL"));
   } connect(edit_->lineEdit(), SIGNAL(returnPressed()), SLOT(open()));
 
   saveButton_ = new QtExt::ToolButton; {
     saveButton_->setText(QString("| %1 |").arg(TR(T_SAVE)));
-    saveButton_->setStyleSheet(SS_TOOLBUTTON_TEXT);
+    saveButton_->setStyleSheet(SS_TOOLBUTTON_TEXT_CHECKABLE);
     saveButton_->setToolTip(tr("Associate the URL with this media"));
     saveButton_->setCheckable(true);
     saveButton_->setChecked(true);
@@ -49,7 +49,7 @@ SubUrlDialog::createLayout()
 
   urlButton_ = new QtExt::ToolButton; {
     //urlButton_->setText(exampleUrl());
-    urlButton_->setStyleSheet(SS_TOOLBUTTON_TEXT);
+    urlButton_->setStyleSheet(SS_TOOLBUTTON_TEXT_URL);
     urlButton_->setToolTip(tr("Click to paste the URL example"));
     urlButton_->setCheckable(true);
     urlButton_->setChecked(true);
@@ -59,11 +59,11 @@ SubUrlDialog::createLayout()
     urlLabel->setStyleSheet(SS_LABEL);
     urlLabel->setText(TR(T_EXAMPLE) + ":");
     urlLabel->setToolTip(TR(T_EXAMPLE));
-    urlLabel->setBuddy(urlLabel);
+    urlLabel->setBuddy(urlButton_);
   }
 
   QToolButton *openButton = new QtExt::ToolButton; {
-    openButton->setStyleSheet(SS_TOOLBUTTON_TEXT);
+    openButton->setStyleSheet(SS_TOOLBUTTON_TEXT_HIGHLIGHT);
     openButton->setToolButtonStyle(Qt::ToolButtonTextOnly);
     openButton->setText(QString("[ %1 ]").arg(TR(T_OPEN)));
     openButton->setToolTip(TR(T_OPEN));
@@ -97,8 +97,8 @@ SubUrlDialog::createLayout()
     footer->addWidget(clearButton);
     footer->addWidget(pasteButton);
     footer->addStretch();
-    footer->addWidget(openButton);
     footer->addWidget(saveButton_);
+    footer->addWidget(openButton);
 
     rows->setContentsMargins(9, 9, 9, 9);
     //setContentsMargins(0, 0, 0, 0);
@@ -117,6 +117,8 @@ SubUrlDialog::open()
 {
   hide();
   QString url = edit_->currentText().trimmed();
+  if (url.isEmpty() || url == "http://")
+    return;
 
   url = autoCompleteUrl(url);
   emit urlEntered(url, saveButton_->isChecked());
@@ -139,7 +141,7 @@ SubUrlDialog::autoCompleteUrl(const QString &url)
   if (!url.contains("://"))
     ret = "http://" + ret;
   else if (url.startsWith("ttp://"))
-    ret = "h" + ret;
+    ret.prepend('h');
 
   ret.replace(QRegExp("/index.html$", Qt::CaseInsensitive), "/");
 

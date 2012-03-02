@@ -54,7 +54,7 @@ private:
 protected:
   bool mux();
   static QString escapeFileName(const QString &name);
-  static QString suffixForUrl(const QString &url);
+  static QString suffixForUrl(const QString &url, const QString &codecs = QString());
 };
 
 #endif // MRLMUXDOWNLOADTASK_H

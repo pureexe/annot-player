@@ -100,7 +100,7 @@ void
 BufferedRemoteStream::stop()
 {
   stopped_ = true;
-  if (reply_)
+  if (reply_ && reply_->isRunning())
     reply_->abort();
   emit stopped();
 }

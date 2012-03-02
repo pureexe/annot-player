@@ -5,7 +5,7 @@ mac {
 TEMPLATE = subdirs
 include(qtmac/qtmac.pri)
 include(qtstep/qtstep.pri)
-include(qtvlc/qtvlc.pri)
+include(vlcstep/vlcstep.pri)
 #include(VLCKit/VLCKit.pri)
 #SUBDIRS += macdeploy
 #SUBDIRS += macdeployqt

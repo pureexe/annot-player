@@ -51,6 +51,7 @@ private:
 #ifdef Q_WS_MAC
 private:
   vlcvideoview_t *view_; // cocoa view
+  qint64 pressTime_, releaseTime_;
 public:
   vlcvideoview_t *view() const { return view_; }
   bool isViewVisible() const;

@@ -94,7 +94,7 @@ AnnotationBrowser::createLayout()
 
 #define MAKE_TOGGLE(_button, _text, _tip, _slot) \
   _button = new QtExt::ToolButton; { \
-    _button->setStyleSheet(SS_TOOLBUTTON_TEXT); \
+    _button->setStyleSheet(SS_TOOLBUTTON_TEXT_CHECKABLE); \
     _button->setToolButtonStyle(Qt::ToolButtonTextOnly); \
     _button->setText(QString("| %1 |").arg(_text)); \
     _button->setToolTip(_tip); \
@@ -619,12 +619,14 @@ void
 AnnotationBrowser::setNow(bool t)
 {
   QString s;
-  if (t)
+  if (t) {
     s = hub_->isMediaTokenMode() ?
       QtExt::msecs2time(annotationPos_).toString() :
       QString::number(annotationPos_);
+    s = '^' + s + '$';
+  }
 
-  filterNowModel_->setFilterFixedString(s);
+  filterNowModel_->setFilterRegExp(s);
   tableView_->invalidateCount();
 }
 
@@ -632,9 +634,11 @@ void
 AnnotationBrowser::setMe(bool t)
 {
   QString s;
-  if (t)
+  if (t) {
     s = QString::number(userId_);
-  filterMeModel_->setFilterFixedString(s);
+    s = '^' + s + '$';
+  }
+  filterMeModel_->setFilterRegExp(s);
   tableView_->invalidateCount();
 }
 

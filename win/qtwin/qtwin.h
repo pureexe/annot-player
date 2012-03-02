@@ -111,7 +111,10 @@ namespace QtWin {
   bool isWindowBelowWindow(WId parent, WId above);
 
   // - Mouse and keyboard -
-  void sendMouseClick(const QPoint& globalPos, Qt::MouseButton button);
+  void sendMouseMove(const QPoint& globalPos, bool relative = false);
+  void sendMouseClick(const QPoint& globalPos, Qt::MouseButton button, bool relative = false);
+
+  int getDoubleClickInterval(); // in msec
 
   // - Environments -
   QString getWinDirPath();

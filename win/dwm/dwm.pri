@@ -4,7 +4,6 @@
 INCLUDEPATH += $$PWD
 
 HEADERS += \
-    $$PWD/dwm_config.h \
     $$PWD/dwm.h
 SOURCES += \
     $$PWD/dwm.cc

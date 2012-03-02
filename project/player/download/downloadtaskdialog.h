@@ -7,6 +7,8 @@
 #include "module/qtext/dialog.h"
 #include <QStringList>
 
+QT_FORWARD_DECLARE_CLASS(QToolButton)
+
 class TextView;
 typedef QtExt::Dialog DownloadTaskDialogBase;
 class DownloadTaskDialog : public DownloadTaskDialogBase
@@ -16,6 +18,7 @@ class DownloadTaskDialog : public DownloadTaskDialogBase
   typedef DownloadTaskDialogBase Base;
 
   TextView *textView_;
+  QToolButton *urlButton_;
 
 signals:
   void urlsAdded(const QStringList &urls, bool batch);
@@ -29,6 +32,7 @@ public slots:
 protected slots:
   void add();
   void paste();
+  void showExampleUrl();
   void clear();
 private:
   void createLayout();

@@ -17,7 +17,8 @@ namespace Mp4Codec
   std::pair<int, int> fileDimension(const QString &path);
   QString fileInfo(const QString &path);
 
-  bool isMp4Stream(InputStream *in);
-};
+  bool isMp4Stream(InputStream *in); // Only for verification, not fully implemented.
+  bool isMp4File(const QString &fileName);
+}
 
 #endif // MP4CODEC_H

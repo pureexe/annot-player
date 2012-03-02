@@ -1,25 +1,35 @@
 # TODO
 # 6/18/2011
 CHECKPOINT
+- ja translate: download mikansei
+  http.c encoding
 
-# 0.1.3.0
-- upgrade to vlc 2.0
-  - FIXME: event loop not working in vlc http access plugin
-  - add site browser similar to VLC 2.0
-  - index videos in the server side
-- add batch download for acfun/bilibili
-- mux parted flvs in network access manager
-- cached remote stream, seekable remote stream
-- bypass niconico banning
-  See: http://9ch.co/t9651,1-1.html
-       http://nico.galstars.net/?t=www&u=/
-  use qnetworkproxy
-  use booxt_asio or popilo: http://code.google.com/p/solidground/source/browse/trunk/example/extern/boost/asio/proxyserver.cpp?r=597
+# 0.1.3.1
+- customize positionslider, indicate hotspot and download progress
+- flvjoin: join parted flvs in network access manager by skipping header
+  without seekable support
+- bypass niconico banning on anime
+- bypass youtube banning
+- design filetype icon
+  - filetype rendered as floating annotation
+- FIXME: event loop not working in vlc http access plugin on mac
+- demux to MP3 as well
+  - do not delete demuxed mp3 file
+- register file handlers on windows
+- continue aiml project
+- FIXME: cue add-content support broken on Mac OS X
+- jump list
+  http://msdn.microsoft.com/en-us/library/dd378460%28VS.85%29.aspx
+  task bar extension, jump list
+  - recent list
+  - progress same as playtime
+  http://stackoverflow.com/questions/2515185/shaddtorecentdocs-without-a-file
 - add an http viewer for nico
   - use cloudview to achieve this?
-- bypass youtube banning
-  enable youtube to china
-- demux mp3/avi for nicovideo
+- add site browser similar to VLC 2.0
+  - index videos in the server side
+- add batch download for acfun/bilibili
+- cached remote stream, seekable remote stream
 - replace buffered stream with disk-cached stream
   - enable local disk cache
   - mux caches to mp4 automatically

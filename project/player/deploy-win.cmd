@@ -3,7 +3,7 @@
 setlocal
 cd /d d:/devel/releases/player || exit /b 1
 
-set VERSION=0.1.2.9
+set VERSION=0.1.3.0
 set APP=annot-player
 set ZIPFILE=%APP%-%VERSION%-win.zip
 
@@ -32,7 +32,7 @@ set ZLIB_DLL=zlib1.dll
 
 set VLC_HOME=/Volumes/win/Program Files/VideoLAN/VLC
 set VLC_DLLS=libvlc.dll,libvlccore.dll
-set VLC_PLUGINS=plugins,lua,locale
+set VLC_DATA=plugins,lua,locale
 
 set BUILD=/Volumes/local/devel/annot-build-desktop/build.win
 set SOURCE=/Volumes/local/devel/annot
@@ -58,12 +58,12 @@ cp -v "%SOURCE%/ChangeLog" ChangeLog.txt || exit /b 1
 unix2dos ChangeLog.txt
 
 rm -Rf licenses
-cp -R "%SOURCE%/licenses" .
-cp "%SOURCE%/COPYING" licenses/COPYING.txt || exit /b 1
+cp -R "%SOURCE%/licenses" Licenses
+cp "%SOURCE%/COPYING" Licenses/COPYING.txt || exit /b 1
 
 :: deploy modules
-mkdir modules
-cd modules || exit /b 1
+mkdir Data
+cd Data || exit /b 1
 
 mkdir imageformats
 cp -v "%QT_HOME%"/plugins/imageformats/*4.dll imageformats/ || exit /b 1
@@ -85,7 +85,12 @@ cp -v "%ZLIB_HOME%"/bin/%ZLIB_DLL% . || exit /b 1
 ::cp -v "%CURL_HOME%"/bin/%CURL_BIN% . || exit /b 1
 ::cp -v "%GZIP_HOME%"/bin/%GZIP_BIN% . || exit /b 1
 
-cp -Rv "%VLC_HOME%"/{%VLC_PLUGINS%} . || exit /b 1
+cp -Rv "%VLC_HOME%"/{%VLC_DATA%} . || exit /b 1
+
+::rm -Rfv plugins || exit /b 1
+::mkdir plugins || exit /b 1
+::cp -Rv "%VLC_HOME%"/plugins/*/*.dll plugins/
+
 rm -fv plugins/*.dat*
 
 ::cp -v "%BUILD%"/*.{exe,dll} . || exit /b 1

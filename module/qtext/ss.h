@@ -48,6 +48,17 @@
 #define SS_BORDER_IMAGE_URL(_url) "border-image: url(" _url ");"
 #define SS_SELECTION_COLOR(_color)"selection-color:" #_color ";"
 
+#define SS_FONT_WEIGHT(_weight) "font-weight:" #_weight ";"
+#define SS_FONT_STYLE(_style)   "font-style:" #_style ";"
+#define SS_FONT_SIZE(_size)     "font-size:" #_size ";"
+#define SS_TEXT_DECORATION(_d)  "text-decoration:" #_d ";"
+#define SS_BOLD                 SS_FONT_WEIGHT(bold)
+#define SS_ITALIC               SS_FONT_STYLE(italic)
+#define SS_UNDERLINE            SS_FONT_DECORATION(underline)
+#define SS_OVERLINE             SS_TEXT_DECORATION(overline)
+#define SS_BLINK                SS_TEXT_DECORATION(blink)
+#define SS_STRIKE               SS_TEXT_DECORATION(line-through)
+
 #define SS_BACKGROUND_IMAGE_URL(_url) "background-image: url(" _url ");"
 #define SS_BACKGROUND_IMAGE_URL_BEGIN "background-image: url("
 #define SS_BACKGROUND_IMAGE_URL_END   ");"

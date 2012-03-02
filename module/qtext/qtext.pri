@@ -32,6 +32,7 @@ SOURCES += \
     $$PWD/dialog.cc \
     $$PWD/filedeleter.cc \
     $$PWD/fontcombobox.cc \
+    $$PWD/network.cc \
     $$PWD/slider.cc \
     $$PWD/toolbutton.cc \
     $$PWD/toolbuttonwithid.cc \

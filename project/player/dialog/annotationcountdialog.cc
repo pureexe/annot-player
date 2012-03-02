@@ -74,6 +74,7 @@ AnnotationCountDialog::AnnotationCountDialog(DataManager *dm, QWidget *parent)
   MAKE_BUTTON(okButton, QString("[ %1 ]").arg(TR(T_OK)), TR(T_OK), SLOT(ok()))
   MAKE_BUTTON(cancelButton, QString("[ %1 ]").arg(TR(T_CANCEL)), TR(T_CANCEL), SLOT(hide()))
 #undef MAKE_BUTTON
+  okButton->setStyleSheet(SS_TOOLBUTTON_TEXT_HIGHLIGHT);
 
   // Layouts
   QVBoxLayout *rows = new QVBoxLayout; {

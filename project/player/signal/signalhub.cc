@@ -39,21 +39,21 @@ SignalHub::volume() const
   default: Q_ASSERT(0); break;
   }
 
-#ifdef Q_WS_X11
+#ifdef Q_OS_LINUX
   // de-expand percentage
   if (ret > 0)
     ret = ::sqrt(ret);
-#endif // Q_WS_X11
+#endif // Q_OS_LINUX
   return ret;
 }
 
 void
 SignalHub::setVolume(qreal percentage)
 {
-#ifdef Q_WS_X11
+#ifdef Q_OS_LINUX
   // expand percentage
   percentage = percentage * percentage;
-#endif // Q_WS_X11
+#endif // Q_OS_LINUX
 
   if (percentage < 0)
     percentage = 0;
@@ -69,10 +69,10 @@ SignalHub::setVolume(qreal percentage)
 
   case LiveTokenMode:
   case SignalTokenMode:
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     //QtWin::setWaveVolume(percentage);
     emit volumeChanged(percentage);
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
     break;
   }
 }

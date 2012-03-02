@@ -66,7 +66,7 @@ MessageView::MessageView(QWidget *parent)
   connect(hookComboBox_, SIGNAL(currentIndexChanged(int)), SLOT(invalidateSelectButton()));
 
   autoButton_  = new QtExt::ToolButton; {
-    autoButton_->setStyleSheet(SS_TOOLBUTTON_TEXT);
+    autoButton_->setStyleSheet(SS_TOOLBUTTON_TEXT_CHECKABLE);
     autoButton_->setToolButtonStyle(Qt::ToolButtonTextOnly);
     autoButton_->setText(QString("| %1 |").arg(TR(T_AUTO)));
     autoButton_->setToolTip(tr("Auto-detect signal"));
@@ -84,7 +84,7 @@ MessageView::MessageView(QWidget *parent)
   connect(resetButton, SIGNAL(clicked()), SLOT(clear()));
 
   selectButton_ = new QtExt::ToolButton; {
-    selectButton_->setStyleSheet(SS_TOOLBUTTON_TEXT);
+    selectButton_->setStyleSheet(SS_TOOLBUTTON_TEXT_HIGHLIGHT);
     selectButton_->setToolButtonStyle(Qt::ToolButtonTextOnly);
     selectButton_->setText(QString("[ %1 ]").arg(TR(T_OK)));
     selectButton_->setToolTip(tr("Use selected signal"));

@@ -43,9 +43,9 @@ SignalView::SignalView(QWidget *parent)
 
   // Buttons
 
-#define MAKE_BUTTON(_id, _text) \
+#define MAKE_TAB_BUTTON(_id, _text) \
   QToolButton *_id##Button = new QtExt::ToolButton; { \
-    _id##Button->setStyleSheet(SS_TOOLBUTTON_TEXT); \
+    _id##Button->setStyleSheet(SS_TOOLBUTTON_TEXT_TAB); \
     _id##Button->setToolButtonStyle(Qt::ToolButtonTextOnly); \
     _id##Button->setCheckable(true); \
     _id##Button->setChecked(true); \
@@ -54,10 +54,10 @@ SignalView::SignalView(QWidget *parent)
   } \
   connect(_id##Button, SIGNAL(clicked(bool)), _id##View_, SLOT(setVisible(bool)));
 
-  //MAKE_BUTTON(token, tr("info"))
-  MAKE_BUTTON(process, tr("process"))
-  MAKE_BUTTON(message, tr("message"))
-#undef MAKE_BUTTON
+  //MAKE_TAB_BUTTON(token, tr("info"))
+  MAKE_TAB_BUTTON(process, tr("process"))
+  MAKE_TAB_BUTTON(message, tr("message"))
+#undef MAKE_TAB_BUTTON
 
   // Layout
   QVBoxLayout *rows = new QVBoxLayout; {

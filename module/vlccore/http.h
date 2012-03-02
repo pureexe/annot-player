@@ -1,7 +1,5 @@
 #ifndef _VLCCORE_HTTP_H
 #define _VLCCORE_HTTP_H
-#include <QMutex>
-#include <QWaitCondition>
 
 // vlccore/http.h
 // 2/21/2012
@@ -11,9 +9,12 @@
   #pragma warning (disable:4996)       // C4996: MS' deprecated std functions orz.
 #endif // _MSC_VER
 
-#include <QObject>
+#include <QThread>
+#include <QWaitCondition>
+#include <QMutex>
+#include <QMutexLocker>
 #include <QString>
-#include <QRunnable>
+#include <QUrl>
 #include "module/qtext/stoppable.h"
 #include <cstdarg>
 
@@ -22,67 +23,113 @@
 #endif // _MSC_VER
 
 QT_FORWARD_DECLARE_CLASS(QNetworkCookieJar)
+QT_FORWARD_DECLARE_CLASS(QNetworkReply)
+QT_FORWARD_DECLARE_CLASS(QNetworkAccessManager)
 
 struct vlc_object_t;
 struct access_t;
-class RemoteStream;
 
-class VlcHttpSession : public QObject, public QRunnable, public Stoppable
+class VlcHttpSession : public QThread, public Stoppable
 {
   Q_OBJECT
   typedef VlcHttpSession Self;
-  typedef QObject Base;
+  typedef QThread Base;
 
   enum State { Error = -1, Stopped = 0, Running, Finished };
   State state_;
 
-  QString url_;
-  RemoteStream *in_;
+  QUrl url_;
+  QNetworkAccessManager *nam_;
+  QNetworkCookieJar *cookieJar_;
+  QNetworkReply *reply_;
+
+  QByteArray buffer_;
+  qint64 pos_, size_;
+  QString contentType_;
+
+  QMutex m_;
+  QWaitCondition readyCond_, readyReadCond_, stoppedCond_;
+  bool ready_;
+
+  QString mediaTitle_, fileName_;
 
 public:
   explicit VlcHttpSession(QObject *parent = 0);
   ~VlcHttpSession();
-bool debug();
+
 signals:
   void error(QString msg);
-  void readyRead();
-  void finished();
-  void stopped();
+  void message(QString msg);
+  void fileSaved(QString msg);
+  void progress(qint64 receivedBytes, qint64 totalBytes);
 
   // - Properties -
 public:
-  QString contentType() const;
-  const QString &url() const { return url_; }
+  QString contentType() const { return contentType_; }
+  const QUrl &url() const { return url_; }
   qint64 read(char *data, qint64 maxSize);
   bool seek(qint64 pos);
-  qint64 size() const;
-  qint64 pos() const;
+  qint64 size() const { return size_; }
+  qint64 pos() const { return pos_; }
+  qint64 availableSize() const { return buffer_.size(); }
 
   bool isRunning() const { return state_ == Running; }
   bool isStopped() const { return state_ == Stopped; }
   bool isFinished() const { return state_ == Finished; }
 
+  void setCookieJar(QNetworkCookieJar *jar) { cookieJar_ = jar; }
+  void setMediaTitle(const QString &title) { mediaTitle_ = title; }
+
 public slots:
-  void setUrl(const QString &url) { url_ = url; }
+  void setUrl(const QUrl &url) { url_ = url; }
   virtual void run(); ///< \override
   virtual void stop(); ///< \override
 
+  void waitForReady();
+  void waitForStopped();
+
 protected slots:
+  void invalidateSize();
+  void invalidateContentType();
+  void invalidateFileName();
   void finish();
-  void abort();
+  void save();
+  void waitForReplyReady();
+  void setState(State state) { state_ = state; }
+protected:
+  bool tryRedirect();
+  static QString escapeFileName(const QString &name);
+  static bool isMultiMediaMimeType(const QString &contentType);
 };
 
-class VlcHttpPlugin
+class VlcHttpPlugin : public QObject
 {
+  Q_OBJECT
+  typedef VlcHttpPlugin Self;
+  typedef QObject Base;
+
   static QNetworkCookieJar *cookieJar_;
+  static QString mediaTitle_;
+public:
+  static Self *globalInstance() { static Self g; return &g; }
+protected:
+  explicit VlcHttpPlugin(QObject *parent = 0) : Base(parent) { }
+
+signals:
+  void error(const QString &msg);
+  void message(const QString &msg);
+  void fileSaved(const QString &fileName);
+  void progress(qint64 receivedBytes, qint64 totalBytes);
+
 public:
   static void load();
   static void unload();
 
   static void setCookieJar(QNetworkCookieJar *jar) { cookieJar_ = jar; }
-  static QNetworkCookieJar *cookieJar() { return cookieJar_; }
+  static void setMediaTitle(const QString &title) { mediaTitle_ = title; }
 
 protected:
+
   // - Plugin APIs -
   static int open(vlc_object_t *);
   static void close(vlc_object_t *);

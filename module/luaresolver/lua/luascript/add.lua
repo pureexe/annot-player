@@ -82,6 +82,10 @@ function getTaskAttribute ( str_url, str_tmpfile ,str_servername, pDlg, bSubOnly
 	then
 		return getTaskAttribute_nico(str_url, str_tmpfile, pDlg);
 	end
+	if string.find(str_url, "nico.galstars.net", 1, true)~=nil
+	then
+		return getTaskAttribute_nico(str_url, str_tmpfile, pDlg);
+	end
 
 	if string.find(str_url, "tudou.com", 1, true)~=nil
 	then

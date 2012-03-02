@@ -82,7 +82,7 @@ BlacklistView::createTabs()
   // Widgets
 #define MAKE_TAB_BUTTON(_button, _text, _key, _slot) \
   _button = new QtExt::ToolButton; { \
-    _button->setStyleSheet(SS_TOOLBUTTON_TEXT); \
+    _button->setStyleSheet(SS_TOOLBUTTON_TEXT_TAB); \
     _button->setToolButtonStyle(Qt::ToolButtonTextOnly); \
     _button->setText(QString("- %1 -").arg(_text)); \
     _button->setToolTip(_text + " [" _key "]"); \
@@ -192,6 +192,8 @@ BlacklistView::createTabs()
 #undef MAKE_TAB_BUTTON
 #undef MAKE_UNCHECKABLE_BUTTON
 #undef MAKE_CHECKABLE_BUTTON
+
+  addButton_->setStyleSheet(SS_TOOLBUTTON_TEXT_HIGHLIGHT);
 }
 
 void

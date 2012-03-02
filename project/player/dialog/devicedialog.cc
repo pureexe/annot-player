@@ -9,9 +9,9 @@
 #include "logger.h"
 #include "module/qtext/toolbutton.h"
 #include "module/qtext/combobox.h"
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
   #include "win/qtwin/qtwin.h"
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
 #ifdef Q_OS_UNIX
   #include "unix/qtunix/qtunix.h"
 #endif // Q_OS_UNIX
@@ -39,14 +39,14 @@ using namespace Logger;
 QStringList
 DeviceDialog::devices()
 {
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
   return QtWin::getLogicalDrivesWithType(QtWin::CdRomDrive);
 #elif defined (Q_OS_UNIX)
   return QtUnix::getDevicesWithType(QtUnix::CdRom);
 #else
   Q_ASSERT(0); // unimplemented
   return QStringList();
-#endif // Q_WS_WIN | Q_OS_UNIX
+#endif // Q_OS_WIN | Q_OS_UNIX
 }
 
 // - Constructions -
@@ -54,9 +54,9 @@ DeviceDialog::devices()
 DeviceDialog::DeviceDialog(QWidget *parent)
   : Base(parent, WINDOW_FLAGS)
 {
-//#ifdef Q_WS_MAC
+//#ifdef Q_OS_MAC
 //  setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
-//#endif // Q_WS_MAC
+//#endif // Q_OS_MAC
   setWindowTitle(TR(T_TITLE_OPENDEVICE));
   UiStyle::globalInstance()->setWindowStyle(this);
   setContentsMargins(0, 0, 0, 0);
@@ -102,6 +102,7 @@ DeviceDialog::DeviceDialog(QWidget *parent)
   QToolButton *MAKE_TOOLBUTTON(cancelButton, TR(T_CANCEL), TR(T_CANCEL), SLOT(cancel()))
   QToolButton *MAKE_TOOLBUTTON(refreshButton, TR(T_REFRESH), TR(T_REFRESH), SLOT(refresh()))
 #undef MAKE_TOOLBUTTON
+  okButton_->setStyleSheet(SS_TOOLBUTTON_TEXT_HIGHLIGHT);
 
   // Layouts
   QVBoxLayout *rows = new QVBoxLayout; {

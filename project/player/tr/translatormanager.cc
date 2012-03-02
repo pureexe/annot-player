@@ -445,7 +445,7 @@ TranslatorManager::translate(int tid) const
   case T_MENUTEXT_DISABLEAUTOCLEARCONSOLE: return tr("Stick console");
   case T_TIP_DISABLEAUTOCLEARCONSOLE:      return tr("Disable auto clear console");
 
-  case T_MENUTEXT_WINDOWSTAYSONTOP:   return tr("Always on top");
+  case T_MENUTEXT_WINDOWSTAYSONTOP:   return tr("Always on top") + " [" K_CTRL "+T]";
   case T_TIP_WINDOWSTAYSONTOP:        return tr("Show window on top");
 
   case T_MENUTEXT_ADVANCED:     return tr("Advanced");
@@ -621,8 +621,8 @@ TranslatorManager::translate(int tid) const
   case T_MENUTEXT_CLEARRECENT:  return tr("Clear");
   case T_TIP_CLEARRECENT:       return tr("Clear recent files");
 
-  case T_MENUTEXT_MINIMIZE:     return tr("Minimize and pause") + " [" K_ESC "]";
-  case T_TIP_MINIMIZE:          return tr("Minimize and pause") + " [" K_ESC "]";
+  case T_MENUTEXT_MINIMIZE:     return tr("Minimize and pause") + " [" K_CTRL "+" K_ESC "]";
+  case T_TIP_MINIMIZE:          return tr("Minimize and pause") + " [" K_CTRL "+" K_ESC "]";
 
   case T_MENUTEXT_ANNOTATIONLIMIT: return tr("Annot count");
   case T_TIP_ANNOTATIONLIMIT:      return tr("Hint maximum annotation count");
@@ -651,8 +651,8 @@ TranslatorManager::translate(int tid) const
   case T_MENUTEXT_ENABLEBLACKLIST:  return tr("Enable blacklist");
   case T_TIP_ENABLEBLACKLIST:       return tr("Enable blacklist");
 
-  case T_MENUTEXT_DOWNLOAD:  return tr("Download") + " [" K_CTRL "+F5]";
-  case T_TIP_DOWNLOAD:       return tr("Download") + " [" K_CTRL "+F5]";
+  case T_MENUTEXT_DOWNLOAD:  return tr("Download") + " [" K_CTRL "+S]";
+  case T_TIP_DOWNLOAD:       return tr("Download") + " [" K_CTRL "+S]";
 
   case T_FILTER_PATTERN:        return tr("Filter pattern");
   case T_FILTER_SYNTAX:         return tr("Filter syntax");

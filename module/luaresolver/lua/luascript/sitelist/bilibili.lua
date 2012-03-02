@@ -253,7 +253,7 @@ function getTaskAttribute_bilibili ( str_url, str_tmpfile, pDlg, isNeedLogin, bS
   local tbl_realurls = {};
   local tbl_durations = {};
 
-    if not bSubOnly then
+  if not bSubOnly then
     if int_foreignlinksite == fls["sina"] -- is sina flv
     then
       --fetch dynamic url
@@ -276,7 +276,7 @@ function getTaskAttribute_bilibili ( str_url, str_tmpfile, pDlg, isNeedLogin, bS
       tbl_realurls = {};
       tbl_realurls[string.format("%d",0)] = str_notsinaurl;
     end
-    end
+  end
 
   if pDlg~=nil then
     sShowMessage(pDlg, 'Íê³É½âÎö..');

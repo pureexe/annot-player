@@ -11,6 +11,7 @@
 
 class Database;
 class ServerAgent;
+class SignalHub;
 
 class DataServer : public QObject
 {
@@ -26,8 +27,8 @@ class DataServer : public QObject
   typedef AnnotCloud::AnnotationList AnnotationList;
 
 public:
-  DataServer(ServerAgent *server, Database *cache, Database *queue, QObject *parent = 0)
-    : Base(parent), server_(server), cache_(cache), queue_(queue) { }
+  DataServer(SignalHub *hub, ServerAgent *server, Database *cache, Database *queue, QObject *parent = 0)
+    : Base(parent), hub_(hub), server_(server), cache_(cache), queue_(queue) { }
 
 public slots:
   void dispose();
@@ -77,9 +78,10 @@ public:
 
   // - Implementations -
 private:
+  SignalHub *hub_;
   ServerAgent *server_;
-  Database *cache_;
-  Database *queue_;
+  Database *cache_,
+           *queue_;
 };
 
 #endif // DATASERVER_H

@@ -46,6 +46,12 @@ namespace { // anonymous, hook callbacks
     if (nCode < 0 || !HOOKMAN->isActive())
       return NEXT;
 
+    QEvent::Type type;
+    switch (wparam) {
+    case WM_MOUSEMOVE: type = QEvent::MouseMove; break;
+    default: return NEXT;
+    }
+
     LPMOUSEHOOKSTRUCT lpMouseEvent = (LPMOUSEHOOKSTRUCT)lparam;
     Q_ASSERT(lpMouseEvent);
     QPoint globalPos = ::POINT2QPoint(lpMouseEvent->pt);
@@ -62,7 +68,7 @@ namespace { // anonymous, hook callbacks
 
     QObject *listener = HOOKMAN->eventListener();
     if (listener) {
-      QMouseEvent e(QEvent::MouseMove, pos, globalPos, Qt::NoButton, Qt::NoButton, Qt::NoModifier);
+      QMouseEvent e(type, pos, globalPos, Qt::NoButton, Qt::NoButton, Qt::NoModifier);
       QCoreApplication::sendEvent(listener, &e);
 
       // Always return next.

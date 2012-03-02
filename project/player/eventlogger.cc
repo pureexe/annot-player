@@ -53,8 +53,7 @@ EventLogger::createConnections()
 void
 EventLogger::startLogUntilPlaying()
 {
-  DOUT("enter");
-
+  //DOUT("enter");
   if (player_->hasMedia()) {
     logCount_ = 0;
     if (!logUntilPlayingTimer_) {
@@ -65,8 +64,7 @@ EventLogger::startLogUntilPlaying()
     if (!logUntilPlayingTimer_->isActive())
       logUntilPlayingTimer_->start();
   }
-
-  DOUT("exit");
+  //DOUT("exit");
 }
 
 void
@@ -153,7 +151,17 @@ EventLogger::logOpening()
 
 void
 EventLogger::logBuffering()
-{ log(tr("buffering ...")); }
+{
+  enum { interval = 2000 }; // 1 second
+  static qint64 time = 0;
+  qint64 now = QDateTime::currentMSecsSinceEpoch();
+  if (now <= time + interval) {
+    time = now;
+    return;
+  }
+  time = now;
+  log(tr("buffering ..."));
+}
 
 void
 EventLogger::logPlaying()
@@ -215,7 +223,7 @@ EventLogger::logSeeked(qint64 msecs)
 
     QTime t = QtExt::msecs2time(msecs);
     QTime l = QtExt::msecs2time(player_->mediaLength());
-    QString msg = QString("%1: " HTML_STYLE_OPEN(color:orange) "%2 / %3" HTML_STYLE_CLOSE())
+    QString msg = QString("%1: " HTML_STYLE_OPEN(color:orange) "%2" HTML_STYLE_CLOSE() " / %3")
         .arg(tr("seek"))
         .arg(t.toString())
         .arg(l.toString());

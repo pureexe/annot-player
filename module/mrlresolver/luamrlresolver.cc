@@ -64,6 +64,7 @@ LuaMrlResolver::matchMedia(const QString &href) const
     href.contains("bilibili.tv/", Qt::CaseInsensitive) ||
     href.contains("acfun.tv/", Qt::CaseInsensitive) ||
     href.contains("nicovideo.jp/") ||
+    href.contains("nico.galstars.net/") ||
     href.contains("youku.com/", Qt::CaseInsensitive) ||
     href.contains("video.sina.com.cn/", Qt::CaseInsensitive) ||
     href.contains("tudou.com/", Qt::CaseInsensitive) ||
@@ -80,9 +81,10 @@ LuaMrlResolver::matchSubtitle(const QString &href) const
   DOUT("enter");
   bool ret = href.startsWith("http://", Qt::CaseInsensitive) &&
   (
+    href.contains("nicovideo.jp/", Qt::CaseInsensitive) ||
+    href.contains("nico.galstars.net/", Qt::CaseInsensitive) ||
     href.contains("bilibili.tv/", Qt::CaseInsensitive) ||
-    href.contains("acfun.tv/", Qt::CaseInsensitive) ||
-    href.contains("nicovideo.jp/")
+    href.contains("acfun.tv/", Qt::CaseInsensitive)
   );
   DOUT("exit: ret =" << ret);
   return ret;
@@ -106,9 +108,9 @@ LuaMrlResolver::resolveMedia(const QString &href, bool async)
   MrlResolverSettings *settings = MrlResolverSettings::globalInstance();
 
   //LuaResolver *lua = makeResolver();
-  QNetworkCookieJar *jar = new QNetworkCookieJar;
   LuaResolver lua(LUASCRIPT_PATH, LUAPACKAGE_PATH);
-  lua.setCookieJar(jar);
+  if (!lua.cookieJar())
+    lua.setCookieJar(new QNetworkCookieJar);
   if (settings->hasNicovideoAccount())
     lua.setNicovideoAccount(settings->nicovideoAccount().username,
                             settings->nicovideoAccount().password);
@@ -174,7 +176,12 @@ LuaMrlResolver::resolveMedia(const QString &href, bool async)
       mi.mrls.append(m);
     }
   }
-  jar->setParent(0);
+
+  QNetworkCookieJar *jar = lua.cookieJar();
+  Q_ASSERT(jar);
+  if (jar)
+    jar->setParent(0);
+
   emit mediaResolved(mi, jar);
   DOUT("exit: title =" << mi.title);
   return true;
@@ -311,8 +318,9 @@ bool
 LuaMrlResolver::checkSiteAccount(const QString &href)
 {
   DOUT("enter");
-  if (href.contains("nicovideo.jp", Qt::CaseInsensitive) &&
-      !MrlResolverSettings::globalInstance()->hasNicovideoAccount()) {
+  if ((href.contains("nicovideo.jp/", Qt::CaseInsensitive) ||
+       href.contains("nico.galstars.jp/", Qt::CaseInsensitive))
+      && !MrlResolverSettings::globalInstance()->hasNicovideoAccount()) {
     emit errorReceived(tr("nicovideo.jp account is required to resolve URL") + ": " + href);
     DOUT("exit: ret = false, nico account required");
     return false;

@@ -34,6 +34,7 @@
 #define SK_SUBTITLECOLOR "SubtitleColor"
 #define SK_SUBTITLEONTOP "SubtitleOnTop"
 #define SK_EMBEDONTOP   "EmbedOnTop"
+#define SK_WINDOWONTOP  "WindowOnTop"
 #define SK_UPDATEDATE   "UpdateDate"
 #define SK_RECENTPATH   "RecentPath"
 #define SK_AUTOPLAYNEXT "AutoPlayNext"
@@ -246,6 +247,14 @@ Settings::setSubtitleOnTop(bool t)
 { setValue(SK_SUBTITLEONTOP, t); }
 
 bool
+Settings::isWindowOnTop() const
+{ return value(SK_WINDOWONTOP, true).toBool(); }
+
+void
+Settings::setWindowOnTop(bool t)
+{ setValue(SK_WINDOWONTOP, t); }
+
+bool
 Settings::isEmbeddedPlayerOnTop() const
 { return value(SK_EMBEDONTOP).toBool(); }
 
@@ -263,7 +272,7 @@ Settings::setAnnotationFilterEnabled(bool t)
 
 bool
 Settings::isAutoPlayNext() const
-{ return value(SK_AUTOPLAYNEXT).toBool(); }
+{ return value(SK_AUTOPLAYNEXT, true).toBool(); }
 
 void
 Settings::setAutoPlayNext(bool t)

@@ -122,6 +122,7 @@ AddAliasDialog::AddAliasDialog(QWidget *parent)
   QToolButton *MAKE_BUTTON(pasteButton, PASTE, SLOT(paste()))
   MAKE_BUTTON(cancelButton_, CANCEL, SLOT(hide()))
 #undef MAKE_BUTTON
+  okButton_->setStyleSheet(SS_TOOLBUTTON_TEXT_HIGHLIGHT);
 
   // Layouts
   QVBoxLayout *rows = new QVBoxLayout; {

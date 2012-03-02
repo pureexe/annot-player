@@ -5,11 +5,14 @@
 #include "module/luacpp/luacpp.h"
 #include "module/download/downloader.h"
 #include "module/qtext/filedeleter.h"
+#include "module/qtext/network.h"
 #include <QtCore>
 #include <QtNetwork>
 #include <boost/function.hpp>
 #include <exception>
 #include <cstdio>
+
+#define NICO_PROXY_DOMAIN ".galstars.net"
 
 #define _qs(_cstr)      QString::fromLocal8Bit(_cstr)
 
@@ -21,6 +24,16 @@
 
 //#define DEBUG "luaresolver"
 #include "module/debug/debug.h"
+
+// - Construction -
+
+LuaResolver::LuaResolver(const QString &scriptPath, const QString &packagePath, QObject *parent)
+  : Base(parent), scriptPath_(scriptPath), packagePath_(packagePath), cookieJar_(0)
+{
+#ifdef NICO_PROXY_DOMAIN
+  cookieJar_ = new QtExt::NetworkCookieJarWithDomainAlias(".nicovideo.jp", NICO_PROXY_DOMAIN, this);
+#endif // NICO_PROXY_DOMAIN
+}
 
 // - Helpers -
 
@@ -62,14 +75,13 @@ QString
 LuaResolver::decodeTitle(const char *text, int siteId)
 {
   switch (siteId) {
-  case Nicovideo:
-  case Bilibili:
-    return QString::fromUtf8(text);
   case AcFun:
     return decodeText(text, "GBK");
+  case Nicovideo:
+  case Bilibili:
   case UnknownSite:
   default:
-    return QString::fromLocal8Bit(text);
+    return QString::fromUtf8(text);
   }
 }
 
@@ -112,12 +124,15 @@ LuaResolver::dlget(lua_State *L)
   QString path = _qs(lua_tostring(L, PARAM_PATH));
   QString url = _qs(lua_tostring(L, PARAM_URL));
 
+  DOUT("url =" << url);
   Downloader *dl = new Downloader(path, this);
   if (cookieJar_)
     dl->networkAccessManager()->setCookieJar(cookieJar_);
   const QString noheader;
   dl->get(QUrl(url), noheader, false); // async = false
   bool ok = dl->state() == Downloader::OK;
+  //if (ok && cookieJar_)
+  //  hackCookieJar(cookieJar_);
   DOUT("exit: ok =" << ok);
   return ok ? 0 : 1;
 }
@@ -137,8 +152,9 @@ LuaResolver::dlpost(lua_State *L)
   QString path = _qs(lua_tostring(L, PARAM_PATH));
   QString url = _qs(lua_tostring(L, PARAM_URL));
   QString param = _qs(lua_tostring(L, PARAM_PARAM));
-
   QString header = _qs(lua_tostring(L, PARAM_HEADER));
+
+  DOUT("url =" << url);
   Downloader *dl = new Downloader(path, this);
   if (cookieJar_)
     dl->networkAccessManager()->setCookieJar(cookieJar_);
@@ -146,6 +162,8 @@ LuaResolver::dlpost(lua_State *L)
   QByteArray data = param.toLocal8Bit();
   dl->post(QUrl(url), data, header, false); // async = false
   bool ok = dl->state() == Downloader::OK;
+  //if (ok && cookieJar_)
+  //  hackCookieJar(cookieJar_);
   DOUT("exit: ok =" << ok);
   return ok ? 0 : 1;
 }
@@ -242,7 +260,8 @@ LuaResolver::resolve(const QString &href, int *siteid, QString *refurl, QString 
 
     // Set account
     if (hasNicovideoAccount() &&
-        href.contains("nicovideo.jp/", Qt::CaseInsensitive)) {
+        (href.contains("nicovideo.jp/", Qt::CaseInsensitive) ||
+         href.contains("nico.galstars.net/", Qt::CaseInsensitive))) {
       DOUT("nicovideo username =" << nicovideoUsername_);
       boost::function<int (std::string, std::string)>
           call = lua_function<int>(L, "set_nicovideo_account");
@@ -329,8 +348,7 @@ LuaResolver::resolve(const QString &href, int *siteid, QString *refurl, QString 
             while (lua_next(L, -2)) {
               if (lua_isstring(L, -1)) {
                 if (count++ % 2)
-                  mrls->insert(mrls->size() - 1,
-                               _qs(lua_tostring(L, -1)));
+                  mrls->insert(mrls->size() - 1, _qs(lua_tostring(L, -1)));
                 else
                   mrls->append(_qs(lua_tostring(L, -1)));
               }
@@ -435,3 +453,30 @@ LuaResolver::resolve(const QString &href, int *siteid, QString *refurl, QString 
 }
 
 // EOF
+
+/*
+QString
+LuaResolver::decodeUrl(const QString &url, const QString &href)
+{
+#ifndef USE_NICO_PROXY
+  Q_UNUSED(href);
+  return url;
+#else
+  if (url.isEmpty() ||
+      !href.contains("nico.galstars.net/", Qt::CaseInsensitive))
+    return url;
+
+  // Example: http://smile-com00.nicovideo.jp/smile?m=17054368.25318low
+  QRegExp rx("http://([\\w\\d\\-]+)\\.nicovideo\\.jp/smile\\?m=([\\w\\d\\.]+)", Qt::CaseInsensitive);
+  if (!rx.exactMatch(url))
+    return url;
+  Q_ASSERT(rx.captureCount() == 2);
+  QString t = rx.cap(1),
+          m = rx.cap(2);
+  // /: %2F, ?: %3F, see: http://www.blooberry.com/indexdot/html/topics/urlencoding.htm
+  QString u = "%2Fsmile%3Fm=" + m;
+  QString fmt = "http://nico.galstars.net/?t=%1&u=%2";
+  return fmt.arg(t).arg(u);
+#endif // USE_NICO_PROXY
+}
+*/

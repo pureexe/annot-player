@@ -86,6 +86,7 @@ TokenView::TokenView(ServerAgent *server, QWidget *parent)
   QToolButton *MAKE_BUTTON(curseButton, TR(T_CURSE), TR(T_TOOLTIP_CURSETHISTOKEN), SLOT(curse()))
   QToolButton *MAKE_BUTTON(addAliasButton, TR(T_ADD), TR(T_TOOLTIP_CURSETHISTOKEN), SLOT(addAlias()))
 #undef MAKE_BUTTON
+  addAliasButton->setStyleSheet(SS_TOOLBUTTON_TEXT_HIGHLIGHT);
 
   QLabel *sourceBuddy = new QLabel; {
     sourceBuddy->setStyleSheet(SS_LABEL);
@@ -101,7 +102,7 @@ TokenView::TokenView(ServerAgent *server, QWidget *parent)
   }
   sourceButton_ = new QtExt::ToolButton; {
     sourceButton_->setToolTip(TR(T_SOURCE));
-    sourceButton_->setStyleSheet(SS_TOOLBUTTON_TEXT);
+    sourceButton_->setStyleSheet(SS_TOOLBUTTON_TEXT_URL);
     sourceButton_->setToolButtonStyle(Qt::ToolButtonTextOnly);
     sourceButton_->setCheckable(true);
     sourceButton_->setChecked(true);

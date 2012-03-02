@@ -54,6 +54,7 @@ namespace MainWindow_slot_ { // anonymous slot_
     }
   };
 
+  /*
   class CloseEventLeave : public QObject {
     Q_OBJECT
     typedef QObject Base;
@@ -74,7 +75,6 @@ namespace MainWindow_slot_ { // anonymous slot_
     }
   };
 
-  /*
   class SetWindowDwmEnabled : public QObject {
     Q_OBJECT
     typedef QObject Base;

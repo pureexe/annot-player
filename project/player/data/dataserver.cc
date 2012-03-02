@@ -5,6 +5,7 @@
 #include "db.h"
 #include "settings.h"
 #include "logger.h"
+#include "signalhub.h"
 #ifdef USE_MODULE_SERVERAGENT
   #include "module/serveragent/serveragent.h"
 #else
@@ -383,8 +384,14 @@ DataServer::updateAnnotations(const AnnotationList &l)
   if (!l.isEmpty() && cache_->isValid()) {
     if (l.size() > 20) // async for large amount of annots
       cache_->updateAnnotations(l, true); // async = true
-    else
-      cache_->updateAnnotations(l, false); // async =false
+    else {
+      int limit = 0;
+#ifdef Q_OS_WIN
+      if (hub_->isSignalTokenMode())
+        limit = 500; // media annotations max count to save harddisk
+#endif // Q_OS_WIN
+      cache_->updateAnnotations(l, false, limit); // async =false
+    }
   }
 }
 

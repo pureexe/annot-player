@@ -88,6 +88,7 @@ SeekDialog::SeekDialog(QWidget *parent)
   MAKE_BUTTON(okButton, QString("[ %1 ]").arg(TR(T_OK)), TR(T_OK), SLOT(ok()))
   MAKE_BUTTON(cancelButton, QString("[ %1 ]").arg(TR(T_CANCEL)), TR(T_CANCEL), SLOT(hide()))
 #undef MAKE_BUTTON
+  okButton->setStyleSheet(SS_TOOLBUTTON_TEXT_HIGHLIGHT);
 
   // Layouts
   QVBoxLayout *rows = new QVBoxLayout; {
@@ -117,6 +118,10 @@ SeekDialog::SeekDialog(QWidget *parent)
   connect(ssEdit_->lineEdit(), SIGNAL(returnPressed()), SLOT(ok()));
   connect(mmEdit_->lineEdit(), SIGNAL(returnPressed()), SLOT(ok()));
   connect(hhEdit_->lineEdit(), SIGNAL(returnPressed()), SLOT(ok()));
+
+  // Shortcuts
+  QShortcut *cancelShortcut = new QShortcut(QKeySequence("Esc"), this);
+  connect(cancelShortcut, SIGNAL(activated()), SLOT(hide()));
 
   // Focus
   ssEdit_->setFocus();

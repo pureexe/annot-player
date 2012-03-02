@@ -16,10 +16,11 @@ HEADERS += \
 
 SOURCES += \
     $$PWD/aaccodec.cc \
+    $$PWD/aacwriter.cc \
     $$PWD/flvcodec.cc \
     $$PWD/flvdemux.cc \
+    $$PWD/h264writer.cc \
     $$PWD/mediatoc.cc \
-    $$PWD/mediawriter.cc \
     $$PWD/mp4codec.cc
 
 QT      += core

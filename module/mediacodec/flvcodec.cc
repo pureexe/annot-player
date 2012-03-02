@@ -7,6 +7,7 @@
 #include "flvdemux.h"
 #include "module/datastream/inputstream.h"
 #include "module/datastream/outputstream.h"
+#include "module/datastream/fileinputstream.h"
 #include "module/qtext/bitwise.h"
 #include "module/qtext/stoppable.h"
 #include <QtCore>
@@ -101,6 +102,13 @@ FlvCodec::isFlvStream(InputStream *input)
       data[0] == 'F' &&
       data[1] == 'L' &&
       data[2] == 'V';
+}
+
+bool
+FlvCodec::isFlvFile(const QString &fileName)
+{
+  FileInputStream fin(fileName);
+  return isFlvStream(&fin);
 }
 
 // See: http://www.jqueryphp.com/how-to-get-flv-file-duration/2009/08/

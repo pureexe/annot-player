@@ -70,8 +70,8 @@ namespace { // anonymous
     QString mangle(const QString &path)
     {
       QFileInfo fi(path);
-      //QString ret = fi.absolutePath() + "/" + ::tmpnam(0) + "." + fi.suffix();
-      QString ret = ::tmpnam(0) + ("." + fi.suffix());
+      QString ret = fi.absolutePath() + "/" + ::tmpnam(0) + "." + fi.suffix();
+      //QString ret = ::tmpnam(0) + ("." + fi.suffix());
       if (!QFile::rename(path, ret))
         return QString();
       store_.append(Pair(path, ret));
@@ -81,8 +81,8 @@ namespace { // anonymous
     QString mangleLater(const QString &path)
     {
       QFileInfo fi(path);
-      //QString ret = fi.absolutePath() + "/" + ::tmpnam(0) + "." + fi.suffix();
-      QString ret = ::tmpnam(0) + ("." + fi.suffix());
+      QString ret = fi.absolutePath() + "/" + ::tmpnam(0) + "." + fi.suffix();
+      //QString ret = ::tmpnam(0) + ("." + fi.suffix());
       store_.append(Pair(path, ret));
       return ret;
     }
@@ -157,7 +157,7 @@ Mp4Box::muxMp4File(const QString &mp4, const QStringList &tracks,
     proc.start(program, args, QIODevice::ReadOnly | QIODevice::Text);
     proc.waitForFinished(-1);
     err = proc.exitCode();
-    if (!err)
+    if (err)
       DOUT(proc.readAll());
   }
 #endif // WITH_GPAC

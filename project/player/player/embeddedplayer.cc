@@ -7,9 +7,9 @@
 #include "stylesheet.h"
 #include "uistyle.h"
 #include "signalhub.h"
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
   #include "win/qtwin/qtwin.h"
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
 #include "module/qtext/toolbutton.h"
 #include "module/qtext/withsizehint.h"
 #include <QtCore>
@@ -163,11 +163,11 @@ EmbeddedPlayerUi::autoHide()
 {
   if (underMouse() ||
       inputComboBox()->hasFocus() || prefixComboBox()->hasFocus()
-#ifndef Q_WS_WIN
+#ifndef Q_OS_WIN
       // Always keep embedded player visible in live mode
       // Because mouse hook is missing in non-windows platform.
       || (hub()->isLiveTokenMode() && hub()->isEmbeddedPlayerMode())
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
       )
     resetAutoHideTimeout();
   else if (isVisible())
@@ -226,7 +226,7 @@ EmbeddedPlayerUi::invalidateGeometry()
     moveToGlobalPos(QPoint(x_left, y));
 
   } else if (containerWindow_) {
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     QRect r = QtWin::getWindowRect(containerWindow_);
     if (r.isNull()) {
       if (!QtWin::isValidWindow(containerWindow_))
@@ -248,7 +248,7 @@ EmbeddedPlayerUi::invalidateGeometry()
 
       moveToGlobalPos(QPoint(x_left, y));
     }
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
   } else {
     QWidget *w = containerWidget_ ? containerWidget_ : parentWidget();
     if(w) {

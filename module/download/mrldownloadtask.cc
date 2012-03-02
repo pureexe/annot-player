@@ -1,12 +1,14 @@
-// mrldownloadtask.cc
+Ôªø// mrldownloadtask.cc
 // 2/20/2012
 #include "mrldownloadtask.h"
 #include "module/datastream/bufferedremotestream.h"
 #include "module/datastream/fileoutputstream.h"
 #include "module/datastream/bufferedstreampipe.h"
 #include "module/mrlresolver/mrlresolvermanager.h"
+#include "module/mediacodec/flvcodec.h"
+#include "module/mediacodec/mp4codec.h"
+#include <QDesktopServices>
 #include <QtNetwork>
-#include <QtGui>
 
 #define DEBUG "mrldownloadtask"
 #include "module/debug/debug.h"
@@ -58,8 +60,9 @@ MrlDownloadTask::escapeFileName(const QString &name)
 {
   QString ret = name;
   ret.remove('"');
-  ret.replace('/', "Å^");
-  ret.replace('?', "ÅH");
+  ret.replace('/', "Ôºè");
+  ret.replace(':', "-");
+  ret.replace('?', "Ôºü");
   return ret.trimmed();
 }
 
@@ -76,7 +79,7 @@ MrlDownloadTask::downloadMedia(const MediaInfo &mi, QNetworkCookieJar *jar)
   QString desktopPath = QDesktopServices::storageLocation(QDesktopServices::DesktopLocation);
 
   if (mi.mrls.isEmpty()) {
-    setPath(desktopPath);
+    setFileName(QString());
     setState(Error);
     DOUT("exit: empty mrl");
     return;
@@ -89,16 +92,16 @@ MrlDownloadTask::downloadMedia(const MediaInfo &mi, QNetworkCookieJar *jar)
   QString suf = realUrl.contains(QRegExp("[/\\.]mp4")) ? ".mp4" : ".flv";
 
   title = escapeFileName(title);
-  QString tmpPath = desktopPath + "/_" + title + suf;
-  setPath(tmpPath);
+  QString tmpFile = desktopPath + "/_" + title + suf;
+  setFileName(tmpFile);
 
   DOUT("realUrl =" << realUrl);
-  DOUT("path =" << tmpPath);
+  DOUT("fileName =" << tmpFile);
 
-  out_->setFileName(tmpPath);
+  out_->setFileName(tmpFile);
   if (!out_->open()) {
     setState(Error);
-    emit error(tr("failed to open file to write") + ": " + tmpPath);
+    emit error(tr("failed to open file to write") + ": " + tmpFile);
     DOUT("exit: cannot write to file");
     return;
   }
@@ -118,19 +121,22 @@ MrlDownloadTask::downloadMedia(const MediaInfo &mi, QNetworkCookieJar *jar)
   if (!isStopped())
     pipe_->run();
   out_->close();
-  if (pipe_->isFinished()) {
-    QString path = desktopPath + "/" + title + suf;
-    QFile::remove(path);
-    if (QFile::rename(tmpPath, path))
-      setPath(path);
+  bool flv;
+  if (pipe_->isFinished() &&
+      ((flv = FlvCodec::isFlvFile(tmpFile)) || Mp4Codec::isMp4File(tmpFile))) {
+    suf = flv ? "flv" : ".mp4";
+    QString file = desktopPath + "/" + title + suf;
+    QFile::remove(file);
+    if (QFile::rename(tmpFile, file))
+      setFileName(file);
     else
-      emit error(tr("failed to rename downloaded file") + ": " + path);
+      emit error(tr("failed to rename downloaded file") + ": " + file);
     finish();
   } else {
-    QFile::remove(tmpPath);
+    QFile::remove(tmpFile);
     if (!isStopped())
       setState(Error);;
-    emit error(tr("download incomplete") + ": " + tmpPath);
+    emit error(tr("download incomplete") + ": " + tmpFile);
   }
   DOUT("exit");
 }

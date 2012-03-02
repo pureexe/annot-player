@@ -44,6 +44,12 @@
   #define SAVE_SHORTCUT "CTRL+S"
 #endif // Q_OS_MAC
 
+#define SS_TOOLBUTTON_TAG       SS_TOOLBUTTON_TEXT_(bold, italic, none, blue, red, purple, purple, red, gray)
+#define SS_TOOLBUTTON_BOLD      SS_TOOLBUTTON_TEXT_(bold, italic, none, blue, red, purple, purple, red, gray)
+#define SS_TOOLBUTTON_ITALIC    SS_TOOLBUTTON_TEXT_(bold, italic, none, blue, red, purple, purple, red, gray)
+#define SS_TOOLBUTTON_UNDERLINE SS_TOOLBUTTON_TEXT_(bold, italic, underline, blue, red, purple, purple, red, gray)
+#define SS_TOOLBUTTON_STRIKE    SS_TOOLBUTTON_TEXT_(bold, italic, line-through, blue, red, purple, purple, red, gray)
+
 // - Constructions -
 
 AnnotationEditor::AnnotationEditor(QWidget *parent)
@@ -63,6 +69,18 @@ AnnotationEditor::AnnotationEditor(QWidget *parent)
   connect(textEdit_, SIGNAL(currentCharFormatChanged(QTextCharFormat)), SLOT(invalidateCount()));
   connect(textEdit_, SIGNAL(textChanged()), SLOT(invalidateCount()));
 
+  // Shortcuts
+  saveShortcut_ = new QShortcut(QKeySequence::Save, this);
+  connect(saveShortcut_, SIGNAL(activated()), SLOT(save()));
+
+  QShortcut *cancelShortcut = new QShortcut(QKeySequence("Esc"), this);
+  connect(cancelShortcut, SIGNAL(activated()), SLOT(cancel()));
+
+  QShortcut *c1 = new QShortcut(QKeySequence("CTRL+1"), this);
+  connect(c1, SIGNAL(activated()), codeRibonButton_, SLOT(click()));
+  QShortcut *c2 = new QShortcut(QKeySequence("CTRL+2"), this);
+  connect(c2, SIGNAL(activated()), htmlRibonButton_, SLOT(click()));
+
   // Start up states
   setFontType(QApplication::font());
   setColorIconColor(QColor("black"));
@@ -78,9 +96,9 @@ AnnotationEditor::AnnotationEditor(QWidget *parent)
 void
 AnnotationEditor::createRibons()
 {
-#define MAKE_RIBON_BUTTON(_button, _text, _key, _slot) \
+#define MAKE_TAB_BUTTON(_button, _text, _key, _slot) \
   _button = new QtExt::ToolButton; { \
-    _button->setStyleSheet(SS_TOOLBUTTON_TEXT); \
+    _button->setStyleSheet(SS_TOOLBUTTON_TEXT_TAB); \
     _button->setToolButtonStyle(Qt::ToolButtonTextOnly); \
     _button->setText(QString("- %1 -").arg(_text)); \
     _button->setToolTip(_text + " [" _key "]"); \
@@ -90,15 +108,15 @@ AnnotationEditor::createRibons()
 
 #define MAKE_UNCHECKABLE_BUTTON(_button, _title, _tip, _slot) \
   _button = new QtExt::ToolButton; { \
-    _button->setStyleSheet(SS_TOOLBUTTON_TEXT); \
+    _button->setStyleSheet(SS_TOOLBUTTON_TAG); \
     _button->setToolButtonStyle(Qt::ToolButtonTextOnly); \
     _button->setText(_title); \
     _button->setToolTip(_tip); \
     connect(_button, SIGNAL(clicked()), _slot); \
   }
-#define MAKE_CHECKABLE_BUTTON(_button, _title, _tip, _slot) \
+#define MAKE_CHECKABLE_BUTTON(_button, _ss, _title, _tip, _slot) \
   _button = new QtExt::ToolButton; { \
-    _button->setStyleSheet(SS_TOOLBUTTON_TEXT); \
+    _button->setStyleSheet(_ss); \
     _button->setToolButtonStyle(Qt::ToolButtonTextOnly); \
     _button->setText(_title); \
     _button->setToolTip(_tip); \
@@ -174,28 +192,28 @@ AnnotationEditor::createRibons()
   // Html ribon
 
   // - boldButton_
-  MAKE_CHECKABLE_BUTTON(boldButton_, tr("B"), TR(T_BOLD), SLOT(setBold(bool))) {
+  MAKE_CHECKABLE_BUTTON(boldButton_, SS_TOOLBUTTON_BOLD, tr("B"), TR(T_BOLD), SLOT(setBold(bool))) {
     QFont font = boldButton_->font();
     font.setBold(true);
     boldButton_->setFont(font);
   }
 
   // - italicButton_
-  MAKE_CHECKABLE_BUTTON(italicButton_, tr("I"), TR(T_ITALIC), SLOT(setItalic(bool))) {
+  MAKE_CHECKABLE_BUTTON(italicButton_, SS_TOOLBUTTON_ITALIC, tr("I"), TR(T_ITALIC), SLOT(setItalic(bool))) {
     QFont font = italicButton_->font();
     font.setItalic(true);
     italicButton_->setFont(font);
   }
 
   // - underlineButton_
-  MAKE_CHECKABLE_BUTTON(underlineButton_, tr("U"), TR(T_UNDERLINE), SLOT(setUnderline(bool))) {
+  MAKE_CHECKABLE_BUTTON(underlineButton_, SS_TOOLBUTTON_UNDERLINE, tr("U"), TR(T_UNDERLINE), SLOT(setUnderline(bool))) {
     QFont font = underlineButton_->font();
     font.setUnderline(true);
     underlineButton_->setFont(font);
   }
 
   // - strikeOutButton_
-  MAKE_CHECKABLE_BUTTON(strikeOutButton_, tr("S"), TR(T_STRIKEOUT), SLOT(setStrikeOut(bool))) {
+  MAKE_CHECKABLE_BUTTON(strikeOutButton_, SS_TOOLBUTTON_STRIKE, tr("S"), TR(T_STRIKEOUT), SLOT(setStrikeOut(bool))) {
     QFont font = strikeOutButton_->font();
     font.setStrikeOut(true);
     strikeOutButton_->setFont(font);
@@ -298,8 +316,8 @@ AnnotationEditor::createRibons()
 
   // Header
 
-  MAKE_RIBON_BUTTON(codeRibonButton_, tr("tex"), K_CTRL "+1", SLOT(setCodeMode()))
-  MAKE_RIBON_BUTTON(htmlRibonButton_, tr("html"), K_CTRL "+2", SLOT(setHtmlMode()))
+  MAKE_TAB_BUTTON(codeRibonButton_, tr("tex"), K_CTRL "+1", SLOT(setCodeMode()))
+  MAKE_TAB_BUTTON(htmlRibonButton_, tr("html"), K_CTRL "+2", SLOT(setHtmlMode()))
 
   formatButton_ = new QtExt::ToolButton; {
     formatButton_->setStyleSheet(SS_TOOLBUTTON_TEXT);
@@ -354,7 +372,7 @@ AnnotationEditor::createRibons()
   }
 
   tidyButton_ = new QtExt::ToolButton; {
-    tidyButton_->setStyleSheet(SS_TOOLBUTTON_TEXT);
+    tidyButton_->setStyleSheet(SS_TOOLBUTTON_TEXT_CHECKABLE);
     tidyButton_->setToolButtonStyle(Qt::ToolButtonTextOnly);
     tidyButton_->setText(QString("| %1 |").arg(tr("tidy")));
     tidyButton_->setToolTip(tr("Tidy HTML"));
@@ -364,7 +382,7 @@ AnnotationEditor::createRibons()
   connect(tidyButton_, SIGNAL(clicked(bool)),SLOT(setTidyEnabled(bool)));
 
   saveButton_ = new QtExt::ToolButton; {
-    saveButton_->setStyleSheet(SS_TOOLBUTTON_TEXT);
+    saveButton_->setStyleSheet(SS_TOOLBUTTON_TEXT_HIGHLIGHT);
     saveButton_->setToolButtonStyle(Qt::ToolButtonTextOnly);
     saveButton_->setText(QString("[ %1 ]").arg(TR(T_SAVE)));
     saveButton_->setToolTip(TR(T_SAVE) + " [" SAVE_SHORTCUT "]");
@@ -379,7 +397,7 @@ AnnotationEditor::createRibons()
   }
   connect(cancelButton_, SIGNAL(clicked()), SLOT(cancel()));
 
-#undef MAKE_RIBON_BUTTON
+#undef MAKE_TAB_BUTTON
 #undef MAKE_UNCHECKABLE_BUTTON
 #undef MAKE_CHECKABLE_BUTTON
 }
@@ -410,18 +428,6 @@ AnnotationEditor::createActions()
 
 #undef MAKE_ACTION
 #undef MAKE_TOGGLE
-
-  // Shortcuts
-  saveShortcut_ = new QShortcut(QKeySequence::Save, this);
-  connect(saveShortcut_, SIGNAL(activated()), SLOT(save()));
-
-  QShortcut *cancelShortcut = new QShortcut(QKeySequence("Esc"), this);
-  connect(cancelShortcut, SIGNAL(activated()), SLOT(cancel()));
-
-  QShortcut *c1 = new QShortcut(QKeySequence("CTRL+1"), this);
-  connect(c1, SIGNAL(activated()), codeRibonButton_, SLOT(click()));
-  QShortcut *c2 = new QShortcut(QKeySequence("CTRL+2"), this);
-  connect(c2, SIGNAL(activated()), htmlRibonButton_, SLOT(click()));
 }
 
 void

@@ -4,7 +4,7 @@
 // config.h
 // 9/3/2011
 
-#define APP_PREFIX      L"modules\\"
+#define APP_PREFIX      L"Data\\"
 #define APP_EXE         L"player.exe"
 
 #endif // CONFIG_H

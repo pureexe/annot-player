@@ -16,7 +16,7 @@
   Qt::CustomizeWindowHint | \
   Qt::WindowStaysOnTopHint
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
   #define WINDOW_FLAGS ( \
     Qt::FramelessWindowHint | \
     WINDOW_FLAGS_BASE )
@@ -24,7 +24,7 @@
   #define WINDOW_FLAGS ( \
     Qt::WindowTitleHint | \
     WINDOW_FLAGS_BASE )
-#endif // Q_WS_MAC
+#endif // Q_OS_MAC
 
 #define INPUTLINE_MAXIMUM_WIDTH   200
 
@@ -37,9 +37,9 @@ MiniPlayerUi::MiniPlayerUi(SignalHub *hub, Player *player, ServerAgent *server, 
   setContentsMargins(0, 0, 0, 0);
   setAcceptDrops(true);
   UiStyle::globalInstance()->setWindowStyle(this);
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
   setWindowOpacity(WINDOW_OPACITY);
-#endif // Q_WS_MAC
+#endif // Q_OS_MAC
 
   createLayout();
 
@@ -97,13 +97,13 @@ MiniPlayerUi::createLayout()
 
   // TOD jichi 7/26/2011: This is really a bad hotfix. Need a better design for PlayerUI class do to this in an efficient way.
   // Note: there is no textChanged event in QLabel.
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
   volumeSlider()->hide();
   volumeSlider()->resize(0, 0);
 #else
   positionButton()->hide();
   positionButton()->resize(0, 0);
-#endif // Q_WS_MAC
+#endif // Q_OS_MAC
 }
 
 void

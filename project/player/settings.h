@@ -22,6 +22,9 @@ public:
 protected:
   explicit Settings(QObject *parent = 0);
 
+public slots:
+  void flush() { sync(); }
+
   // - Properties -
 public:
   QString version() const;
@@ -44,6 +47,9 @@ public:
 
   bool isSubtitleOnTop() const;
   void setSubtitleOnTop(bool t);
+
+  bool isWindowOnTop() const;
+  void setWindowOnTop(bool t);
 
   bool isEmbeddedPlayerOnTop() const;
   void setEmbeddedPlayerOnTop(bool t);

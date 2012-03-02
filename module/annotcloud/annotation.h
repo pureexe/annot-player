@@ -194,7 +194,7 @@ namespace AnnotCloud {
     static bool isValidText(const QString &text);
 
     static QString encryptUserName(const QString &name)
-    { return digest(name.toAscii()); }
+    { return digest(name.toLocal8Bit()); }
 
     static QString userAliasFromUserName(const QString &name)
     { return encryptUserName(name); }

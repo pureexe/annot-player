@@ -73,7 +73,7 @@
         <translation>URL</translation>
     </message>
     <message>
-        <location filename="../token/addaliasdialog.cc" line="275"/>
+        <location filename="../token/addaliasdialog.cc" line="276"/>
         <source>Please select alias language</source>
         <translation>请选择语言</translation>
     </message>
@@ -227,12 +227,12 @@
         <translation>当前弹幕数</translation>
     </message>
     <message>
-        <location filename="../dialog/annotationcountdialog.cc" line="115"/>
+        <location filename="../dialog/annotationcountdialog.cc" line="116"/>
         <source>annotation max count</source>
         <translation>播放使魔：弹幕数上限</translation>
     </message>
     <message>
-        <location filename="../dialog/annotationcountdialog.cc" line="118"/>
+        <location filename="../dialog/annotationcountdialog.cc" line="119"/>
         <source>annotation maximum count disabled</source>
         <translation>播放使魔：取消弹幕数上限</translation>
     </message>
@@ -240,22 +240,22 @@
 <context>
     <name>AnnotationEditor</name>
     <message>
-        <location filename="../annot/annotationeditor.cc" line="112"/>
+        <location filename="../annot/annotationeditor.cc" line="130"/>
         <source>verbatim</source>
         <translation>转义</translation>
     </message>
     <message>
-        <location filename="../annot/annotationeditor.cc" line="115"/>
+        <location filename="../annot/annotationeditor.cc" line="133"/>
         <source>subtitle</source>
         <translation>字幕</translation>
     </message>
     <message>
-        <location filename="../annot/annotationeditor.cc" line="123"/>
+        <location filename="../annot/annotationeditor.cc" line="141"/>
         <source>Style tag</source>
         <translation>风格标签</translation>
     </message>
     <message>
-        <location filename="../annot/annotationeditor.cc" line="126"/>
+        <location filename="../annot/annotationeditor.cc" line="144"/>
         <source>fly</source>
         <translation>飞行</translation>
     </message>
@@ -264,117 +264,117 @@
         <translation type="obsolete">漂流</translation>
     </message>
     <message>
-        <location filename="../annot/annotationeditor.cc" line="127"/>
+        <location filename="../annot/annotationeditor.cc" line="145"/>
         <source>top</source>
         <translation>顶部</translation>
     </message>
     <message>
-        <location filename="../annot/annotationeditor.cc" line="128"/>
+        <location filename="../annot/annotationeditor.cc" line="146"/>
         <source>bottom</source>
         <translation>底部</translation>
     </message>
     <message>
-        <location filename="../annot/annotationeditor.cc" line="140"/>
+        <location filename="../annot/annotationeditor.cc" line="158"/>
         <source>transp</source>
         <translation>透明</translation>
     </message>
     <message>
-        <location filename="../annot/annotationeditor.cc" line="141"/>
+        <location filename="../annot/annotationeditor.cc" line="159"/>
         <source>shadow</source>
         <translation>阴影</translation>
     </message>
     <message>
-        <location filename="../annot/annotationeditor.cc" line="142"/>
+        <location filename="../annot/annotationeditor.cc" line="160"/>
         <source>blur</source>
         <translation>模糊</translation>
     </message>
     <message>
-        <location filename="../annot/annotationeditor.cc" line="177"/>
+        <location filename="../annot/annotationeditor.cc" line="195"/>
         <source>B</source>
         <translation>B</translation>
     </message>
     <message>
-        <location filename="../annot/annotationeditor.cc" line="184"/>
+        <location filename="../annot/annotationeditor.cc" line="202"/>
         <source>I</source>
         <translation>I</translation>
     </message>
     <message>
-        <location filename="../annot/annotationeditor.cc" line="191"/>
+        <location filename="../annot/annotationeditor.cc" line="209"/>
         <source>U</source>
         <translation>U</translation>
     </message>
     <message>
-        <location filename="../annot/annotationeditor.cc" line="198"/>
+        <location filename="../annot/annotationeditor.cc" line="216"/>
         <source>S</source>
         <translation>S</translation>
     </message>
     <message>
-        <location filename="../annot/annotationeditor.cc" line="224"/>
+        <location filename="../annot/annotationeditor.cc" line="242"/>
         <source>Alignment</source>
         <translation>对齐</translation>
     </message>
     <message>
-        <location filename="../annot/annotationeditor.cc" line="227"/>
+        <location filename="../annot/annotationeditor.cc" line="245"/>
         <source>Left</source>
         <translation>左对齐</translation>
     </message>
     <message>
-        <location filename="../annot/annotationeditor.cc" line="228"/>
+        <location filename="../annot/annotationeditor.cc" line="246"/>
         <source>Right</source>
         <translation>右对齐</translation>
     </message>
     <message>
-        <location filename="../annot/annotationeditor.cc" line="229"/>
+        <location filename="../annot/annotationeditor.cc" line="247"/>
         <source>Center</source>
         <translation>中央对齐</translation>
     </message>
     <message>
-        <location filename="../annot/annotationeditor.cc" line="230"/>
+        <location filename="../annot/annotationeditor.cc" line="248"/>
         <source>Justify</source>
         <translation>自动对齐</translation>
     </message>
     <message>
-        <location filename="../annot/annotationeditor.cc" line="240"/>
+        <location filename="../annot/annotationeditor.cc" line="258"/>
         <source>Font family</source>
         <translation>字体</translation>
     </message>
     <message>
-        <location filename="../annot/annotationeditor.cc" line="250"/>
+        <location filename="../annot/annotationeditor.cc" line="268"/>
         <source>Font size</source>
         <translation>字号</translation>
     </message>
     <message>
-        <location filename="../annot/annotationeditor.cc" line="301"/>
+        <location filename="../annot/annotationeditor.cc" line="319"/>
         <source>tex</source>
         <translation>tex</translation>
     </message>
     <message>
-        <location filename="../annot/annotationeditor.cc" line="302"/>
+        <location filename="../annot/annotationeditor.cc" line="320"/>
         <source>html</source>
         <translation>html</translation>
     </message>
     <message>
-        <location filename="../annot/annotationeditor.cc" line="307"/>
+        <location filename="../annot/annotationeditor.cc" line="325"/>
         <source>format</source>
         <translation>格式</translation>
     </message>
     <message>
-        <location filename="../annot/annotationeditor.cc" line="308"/>
+        <location filename="../annot/annotationeditor.cc" line="326"/>
         <source>Format</source>
         <translation>格式</translation>
     </message>
     <message>
-        <location filename="../annot/annotationeditor.cc" line="359"/>
+        <location filename="../annot/annotationeditor.cc" line="377"/>
         <source>tidy</source>
         <translation>整理</translation>
     </message>
     <message>
-        <location filename="../annot/annotationeditor.cc" line="360"/>
+        <location filename="../annot/annotationeditor.cc" line="378"/>
         <source>Tidy HTML</source>
         <translation>自动整理HTML</translation>
     </message>
     <message>
-        <location filename="../annot/annotationeditor.cc" line="900"/>
+        <location filename="../annot/annotationeditor.cc" line="906"/>
         <source>Text is too long &gt;_&lt;</source>
         <translation>通信使魔：内容太长了</translation>
     </message>
@@ -382,7 +382,7 @@
 <context>
     <name>AnnotationGraphicsItem</name>
     <message>
-        <location filename="../annot/annotationgraphicsitem.cc" line="812"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="811"/>
         <source>cannot edit other&apos;s annotation text</source>
         <translation>通信使魔：无法编辑别人的弹幕</translation>
     </message>
@@ -492,42 +492,42 @@
 <context>
     <name>DataServer</name>
     <message>
-        <location filename="../data/dataserver.cc" line="177"/>
+        <location filename="../data/dataserver.cc" line="178"/>
         <source>annotation saved</source>
         <translation>通信使魔：弹幕已保存</translation>
     </message>
     <message>
-        <location filename="../data/dataserver.cc" line="179"/>
+        <location filename="../data/dataserver.cc" line="180"/>
         <source>failed to update annotation text</source>
         <translation>通信使魔：远程魔法修改弹幕失败</translation>
     </message>
     <message>
-        <location filename="../data/dataserver.cc" line="222"/>
+        <location filename="../data/dataserver.cc" line="223"/>
         <source>annotation deleted</source>
         <translation>通信使魔：弹幕已删除</translation>
     </message>
     <message>
-        <location filename="../data/dataserver.cc" line="224"/>
+        <location filename="../data/dataserver.cc" line="225"/>
         <source>failed to delete annotation</source>
         <translation>通信使魔：弹幕删除失败</translation>
     </message>
     <message>
-        <location filename="../data/dataserver.cc" line="266"/>
+        <location filename="../data/dataserver.cc" line="267"/>
         <source>alias deleted</source>
         <translation>通信使魔：别名已删除</translation>
     </message>
     <message>
-        <location filename="../data/dataserver.cc" line="268"/>
+        <location filename="../data/dataserver.cc" line="269"/>
         <source>failed to delete alias</source>
         <translation>通信使魔：别名删除失败</translation>
     </message>
     <message>
-        <location filename="../data/dataserver.cc" line="441"/>
+        <location filename="../data/dataserver.cc" line="448"/>
         <source>failed to commit offline annotations</source>
         <translation>通信使魔：远程魔法提交离线保存的弹幕失败</translation>
     </message>
     <message>
-        <location filename="../data/dataserver.cc" line="452"/>
+        <location filename="../data/dataserver.cc" line="459"/>
         <source>failed to commit offline aliases</source>
         <translation>通信使魔：远程魔法提交离线保存的别名失败</translation>
     </message>
@@ -583,48 +583,48 @@
         <translation>打开文件所在目录</translation>
     </message>
     <message>
-        <location filename="../download/downloaddialog.cc" line="159"/>
+        <location filename="../download/downloaddialog.cc" line="161"/>
         <source>Remaining time</source>
         <translation>剩余时间</translation>
     </message>
     <message>
-        <location filename="../download/downloaddialog.cc" line="285"/>
+        <location filename="../download/downloaddialog.cc" line="294"/>
         <source>analyzing URL</source>
         <translation>再生使魔：分析下载链接</translation>
     </message>
     <message>
-        <location filename="../download/downloaddialog.cc" line="409"/>
+        <location filename="../download/downloaddialog.cc" line="423"/>
         <source>download finished</source>
         <translation>再生使魔：下载完毕</translation>
     </message>
     <message>
-        <location filename="../download/downloaddialog.cc" line="412"/>
+        <location filename="../download/downloaddialog.cc" line="426"/>
         <source>download failed</source>
         <translation>再生使魔：下载失败</translation>
     </message>
     <message>
-        <location filename="../download/downloaddialog.cc" line="452"/>
+        <location filename="../download/downloaddialog.cc" line="466"/>
         <source>Stopped</source>
         <translation>停止</translation>
     </message>
     <message>
-        <location filename="../download/downloaddialog.cc" line="453"/>
+        <location filename="../download/downloaddialog.cc" line="467"/>
         <source>Downloading</source>
         <translation>下载</translation>
     </message>
     <message>
-        <location filename="../download/downloaddialog.cc" line="454"/>
+        <location filename="../download/downloaddialog.cc" line="468"/>
         <source>Pending</source>
         <translation>等待</translation>
     </message>
     <message>
-        <location filename="../download/downloaddialog.cc" line="455"/>
+        <location filename="../download/downloaddialog.cc" line="469"/>
         <source>Finished</source>
         <translation>完成</translation>
     </message>
     <message>
-        <location filename="../download/downloaddialog.cc" line="456"/>
-        <location filename="../download/downloaddialog.cc" line="457"/>
+        <location filename="../download/downloaddialog.cc" line="470"/>
+        <location filename="../download/downloaddialog.cc" line="471"/>
         <source>Error</source>
         <translation>错误</translation>
     </message>
@@ -637,7 +637,17 @@
         <translation>添加下载链接</translation>
     </message>
     <message>
-        <location filename="../download/downloadtaskdialog.cc" line="126"/>
+        <location filename="../download/downloadtaskdialog.cc" line="65"/>
+        <source>http://www.nicovideo.jp/watch/sm12159572</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../download/downloadtaskdialog.cc" line="67"/>
+        <source>Click to paste the URL example</source>
+        <translation>单击打开这个链接</translation>
+    </message>
+    <message>
+        <location filename="../download/downloadtaskdialog.cc" line="149"/>
         <source>invalid URLs</source>
         <translation>再生使魔：下载链接无效</translation>
     </message>
@@ -653,27 +663,27 @@
 <context>
     <name>EventLogger</name>
     <message>
-        <location filename="../eventlogger.cc" line="97"/>
+        <location filename="../eventlogger.cc" line="95"/>
         <source>caching fonts on first launch ... this could take up to 10min, don&apos;t panic!</source>
         <translation>播放使魔：正在缓冲媒体，可能会花费10分钟以上...主人坐下喝杯茶吧！</translation>
     </message>
     <message>
-        <location filename="../eventlogger.cc" line="106"/>
+        <location filename="../eventlogger.cc" line="104"/>
         <source>patient ... </source>
         <translation>播放使魔：请主人耐心等待...</translation>
     </message>
     <message>
-        <location filename="../eventlogger.cc" line="113"/>
+        <location filename="../eventlogger.cc" line="111"/>
         <source>media changed</source>
         <translation>播放使魔：播放文件改变</translation>
     </message>
     <message>
-        <location filename="../eventlogger.cc" line="117"/>
+        <location filename="../eventlogger.cc" line="115"/>
         <source>title changed</source>
         <translation>播放使魔：播放内容变更</translation>
     </message>
     <message>
-        <location filename="../eventlogger.cc" line="121"/>
+        <location filename="../eventlogger.cc" line="119"/>
         <source>media closed</source>
         <translation>播放使魔：播放文件关闭</translation>
     </message>
@@ -682,127 +692,127 @@
         <translation type="obsolete">播放使魔：音量改变</translation>
     </message>
     <message>
-        <location filename="../eventlogger.cc" line="144"/>
+        <location filename="../eventlogger.cc" line="142"/>
         <source>subtitle changed</source>
         <translation>播放使魔：字幕改变</translation>
     </message>
     <message>
-        <location filename="../eventlogger.cc" line="148"/>
+        <location filename="../eventlogger.cc" line="146"/>
         <source>audio track changed</source>
         <translation>播放使魔：播放音轨变更</translation>
     </message>
     <message>
-        <location filename="../eventlogger.cc" line="152"/>
+        <location filename="../eventlogger.cc" line="150"/>
         <source>opening ...</source>
         <translation>播放使魔：正在打开...</translation>
     </message>
     <message>
-        <location filename="../eventlogger.cc" line="156"/>
+        <location filename="../eventlogger.cc" line="163"/>
         <source>buffering ...</source>
         <translation>播放使魔：正在缓冲...</translation>
     </message>
     <message>
-        <location filename="../eventlogger.cc" line="170"/>
+        <location filename="../eventlogger.cc" line="178"/>
         <source>playing: </source>
         <translation>播放使魔：正在播放：</translation>
     </message>
     <message>
-        <location filename="../eventlogger.cc" line="175"/>
+        <location filename="../eventlogger.cc" line="183"/>
         <source>stopped</source>
         <translation>播放使魔：播放停止</translation>
     </message>
     <message>
-        <location filename="../eventlogger.cc" line="179"/>
+        <location filename="../eventlogger.cc" line="187"/>
         <source>paused</source>
         <translation>播放使魔：播放暂停</translation>
     </message>
     <message>
-        <location filename="../eventlogger.cc" line="183"/>
+        <location filename="../eventlogger.cc" line="191"/>
         <source>player error</source>
         <translation>播放使魔：播放器错误</translation>
     </message>
     <message>
-        <location filename="../eventlogger.cc" line="187"/>
+        <location filename="../eventlogger.cc" line="195"/>
         <source>openning track %1</source>
         <translation>播放使魔：播放音轨%1</translation>
     </message>
     <message>
-        <location filename="../eventlogger.cc" line="193"/>
+        <location filename="../eventlogger.cc" line="201"/>
         <source>logging in ... using: </source>
         <translation>通信使魔：正在登陆...ID：</translation>
     </message>
     <message>
-        <location filename="../eventlogger.cc" line="197"/>
+        <location filename="../eventlogger.cc" line="205"/>
         <source>login succeeded as: </source>
         <translation>通信使魔：成功登录：</translation>
     </message>
     <message>
-        <location filename="../eventlogger.cc" line="201"/>
+        <location filename="../eventlogger.cc" line="209"/>
         <source>failed to login as: </source>
         <translation>通信使魔：登录失败：</translation>
     </message>
     <message>
-        <location filename="../eventlogger.cc" line="205"/>
+        <location filename="../eventlogger.cc" line="213"/>
         <source>logging out ...</source>
         <translation>通信使魔：退出登录中...</translation>
     </message>
     <message>
-        <location filename="../eventlogger.cc" line="209"/>
+        <location filename="../eventlogger.cc" line="217"/>
         <source>user logged out</source>
         <translation>通信使魔：成功退出登录</translation>
     </message>
     <message>
-        <location filename="../eventlogger.cc" line="219"/>
+        <location filename="../eventlogger.cc" line="227"/>
         <source>seek</source>
         <translation>播放使魔：快进</translation>
     </message>
     <message>
-        <location filename="../eventlogger.cc" line="228"/>
+        <location filename="../eventlogger.cc" line="236"/>
         <source>offline cache removed</source>
         <translation>播放使魔：离线缓冲已删除</translation>
     </message>
     <message>
-        <location filename="../eventlogger.cc" line="232"/>
+        <location filename="../eventlogger.cc" line="240"/>
         <source>tracked window closed</source>
         <translation>侦听使魔：监听的窗口关闭</translation>
     </message>
     <message>
-        <location filename="../eventlogger.cc" line="236"/>
+        <location filename="../eventlogger.cc" line="244"/>
         <source>serveragent: failed to connect to server</source>
         <translation>通信使魔：无法连接远程服务器</translation>
     </message>
     <message>
-        <location filename="../eventlogger.cc" line="240"/>
+        <location filename="../eventlogger.cc" line="248"/>
         <source>serveragent: got error 404 from server</source>
         <translation>通信使魔：通信魔法失败（错误404）</translation>
     </message>
     <message>
-        <location filename="../eventlogger.cc" line="244"/>
+        <location filename="../eventlogger.cc" line="252"/>
         <source>serveragent: got error reply from server</source>
         <translation>通信使魔：远程服务器表示请求无效</translation>
     </message>
     <message>
-        <location filename="../eventlogger.cc" line="248"/>
+        <location filename="../eventlogger.cc" line="256"/>
         <source>serveragent: unknown SOAP error</source>
         <translation>通信使魔：通信魔法失败（SOAP错误）</translation>
     </message>
     <message>
-        <location filename="../eventlogger.cc" line="252"/>
+        <location filename="../eventlogger.cc" line="260"/>
         <source>clientagent: server authorization succeeded</source>
         <translation>通信使魔：服务器授权成功</translation>
     </message>
     <message>
-        <location filename="../eventlogger.cc" line="256"/>
+        <location filename="../eventlogger.cc" line="264"/>
         <source>clientagent: server deauthorized</source>
         <translation>通信使魔：服务器连接断开</translation>
     </message>
     <message>
-        <location filename="../eventlogger.cc" line="260"/>
+        <location filename="../eventlogger.cc" line="268"/>
         <source>clientagent: failed to authorize server, mismatched public key</source>
         <translation>通信使魔：服务器授权失败</translation>
     </message>
     <message>
-        <location filename="../eventlogger.cc" line="264"/>
+        <location filename="../eventlogger.cc" line="272"/>
         <source>translator: got network error: </source>
         <translation>翻译使魔：网络魔法无效：</translation>
     </message>
@@ -862,27 +872,27 @@
 <context>
     <name>LuaMrlResolver</name>
     <message>
-        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="125"/>
-        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="139"/>
-        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="216"/>
-        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="230"/>
+        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="127"/>
+        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="141"/>
+        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="223"/>
+        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="237"/>
         <source>failed to resolve URL</source>
         <translation>网络使魔：解析链接失败</translation>
     </message>
     <message>
-        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="133"/>
-        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="224"/>
+        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="135"/>
+        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="231"/>
         <source>failed to resolve URL using nicovideo account</source>
         <translation>解析使魔：无效的链接或nicovideo账户</translation>
     </message>
     <message>
-        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="136"/>
-        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="227"/>
+        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="138"/>
+        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="234"/>
         <source>failed to resolve URL using bilibili account</source>
         <translation>解析使魔：无效的链接或bilibili账户</translation>
     </message>
     <message>
-        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="316"/>
+        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="324"/>
         <source>nicovideo.jp account is required to resolve URL</source>
         <translation>分析使魔：无法解析nico链接，请设置nico账户</translation>
     </message>
@@ -890,17 +900,17 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../mainwindow.cc" line="2812"/>
+        <location filename="../mainwindow.cc" line="2907"/>
         <source>Select annots window</source>
         <translation>侦听使魔：选择再生窗口</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2826"/>
+        <location filename="../mainwindow.cc" line="2921"/>
         <source>Select process window to open</source>
         <translation>侦听使魔：选择需要监听的进程窗口</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1322"/>
+        <location filename="../mainwindow.cc" line="1344"/>
         <source>&amp;File</source>
         <translation></translation>
     </message>
@@ -909,43 +919,43 @@
         <translation type="obsolete">视图</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1334"/>
+        <location filename="../mainwindow.cc" line="1356"/>
         <source>&amp;Quit</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1348"/>
-        <location filename="../mainwindow.cc" line="1349"/>
+        <location filename="../mainwindow.cc" line="1370"/>
+        <location filename="../mainwindow.cc" line="1371"/>
         <source>&amp;Help</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1350"/>
+        <location filename="../mainwindow.cc" line="1372"/>
         <source>&amp;About</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2034"/>
+        <location filename="../mainwindow.cc" line="2073"/>
         <source>analyzing media ...</source>
         <translation>播放使魔：媒体分析中...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2146"/>
+        <location filename="../mainwindow.cc" line="2185"/>
         <source>detaching all processes ...</source>
         <translation>侦听使魔：进程同步断开...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2252"/>
+        <location filename="../mainwindow.cc" line="2291"/>
         <source>snapshot saved on the destop</source>
         <translation>播放使魔：截图保存到了桌面上</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2889"/>
+        <location filename="../mainwindow.cc" line="2984"/>
         <source>connecting server to submit alias ...</source>
         <translation>通信使魔：正在连接服务器提交别名...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2905"/>
+        <location filename="../mainwindow.cc" line="3000"/>
         <source>alias saved</source>
         <translation>通信使魔：别名已保存</translation>
     </message>
@@ -962,76 +972,76 @@
         <translation type="obsolete">通信使魔：远程魔法修改弹幕失败</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3095"/>
+        <location filename="../mainwindow.cc" line="3201"/>
         <source>connecting server to query media/game token ...</source>
         <translation>通信使魔：搜索弹幕中...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3193"/>
+        <location filename="../mainwindow.cc" line="3299"/>
         <source>searching for token in cache ...</source>
         <translation>通信使魔：正在本地缓冲中搜索弹幕信息...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3308"/>
-        <location filename="../mainwindow.cc" line="3380"/>
+        <location filename="../mainwindow.cc" line="3414"/>
+        <location filename="../mainwindow.cc" line="3486"/>
         <source>connecting server to submit annot ...</source>
         <translation>通信使魔：提交弹幕中...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4610"/>
+        <location filename="../mainwindow.cc" line="4718"/>
         <source>always on top enabled</source>
         <translation>播放使魔：总在前面有效</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4612"/>
+        <location filename="../mainwindow.cc" line="4720"/>
         <source>always on top disabled</source>
         <translation>播放使魔：总在前面无效</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4640"/>
-        <location filename="../mainwindow.cc" line="4683"/>
-        <location filename="../mainwindow.cc" line="4730"/>
-        <location filename="../mainwindow.cc" line="4775"/>
-        <location filename="../mainwindow.cc" line="4820"/>
+        <location filename="../mainwindow.cc" line="4748"/>
+        <location filename="../mainwindow.cc" line="4791"/>
+        <location filename="../mainwindow.cc" line="4838"/>
+        <location filename="../mainwindow.cc" line="4883"/>
+        <location filename="../mainwindow.cc" line="4928"/>
         <source>invalid cast id</source>
         <translation>通信使魔：无效的施法对象</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4646"/>
-        <location filename="../mainwindow.cc" line="4689"/>
-        <location filename="../mainwindow.cc" line="4736"/>
-        <location filename="../mainwindow.cc" line="4781"/>
-        <location filename="../mainwindow.cc" line="4826"/>
+        <location filename="../mainwindow.cc" line="4754"/>
+        <location filename="../mainwindow.cc" line="4797"/>
+        <location filename="../mainwindow.cc" line="4844"/>
+        <location filename="../mainwindow.cc" line="4889"/>
+        <location filename="../mainwindow.cc" line="4934"/>
         <source>cannot perform cast when offline</source>
         <translation>通信使魔：离线中魔法无效</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4652"/>
+        <location filename="../mainwindow.cc" line="4760"/>
         <source>submit bless cast to token ...</source>
         <translation>通信使魔：施展祝福魔法中...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4664"/>
+        <location filename="../mainwindow.cc" line="4772"/>
         <source>token blessed</source>
         <translation>通信使魔：祝福标记成功</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4670"/>
+        <location filename="../mainwindow.cc" line="4778"/>
         <source>failed to bless token</source>
         <translation>通信使魔：祝福标记失败</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4695"/>
+        <location filename="../mainwindow.cc" line="4803"/>
         <source>submit curse cast to token ...</source>
         <translation>通信使魔：施展诅咒魔法中...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4707"/>
+        <location filename="../mainwindow.cc" line="4815"/>
         <source>token cursed</source>
         <translation>通信使魔：诅咒标记成功</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4713"/>
+        <location filename="../mainwindow.cc" line="4821"/>
         <source>failed to curse token</source>
         <translation>通信使魔：诅咒标记失败</translation>
     </message>
@@ -1040,12 +1050,12 @@
         <translation type="obsolete">通信使魔：退出登录中...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1281"/>
+        <location filename="../mainwindow.cc" line="1303"/>
         <source>Play</source>
         <translation>播放</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1282"/>
+        <location filename="../mainwindow.cc" line="1304"/>
         <source>Play menu</source>
         <translation>播放菜单</translation>
     </message>
@@ -1062,13 +1072,13 @@
         <translation type="obsolete">导入在线弹幕链接</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1606"/>
-        <location filename="../mainwindow.cc" line="1620"/>
+        <location filename="../mainwindow.cc" line="1632"/>
+        <location filename="../mainwindow.cc" line="1646"/>
         <source>analyzing URL ...</source>
         <translation>播放使魔：媒体链接分析中...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1610"/>
+        <location filename="../mainwindow.cc" line="1636"/>
         <source>failed to resolve URL</source>
         <translation>网络使魔：解析链接失败</translation>
     </message>
@@ -1077,37 +1087,37 @@
         <translation type="obsolete">播放使魔：解析视频链接失败</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2464"/>
+        <location filename="../mainwindow.cc" line="2503"/>
         <source>openning update URL ...</source>
         <translation>通信使魔：正在打开升级的URL...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2676"/>
+        <location filename="../mainwindow.cc" line="2771"/>
         <source>site accounts updated</source>
         <translation>解析使魔：账户信息已保存</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2845"/>
+        <location filename="../mainwindow.cc" line="2940"/>
         <source>please log in to save alias online</source>
         <translation>解析使魔：标记媒体失败，请登录</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2850"/>
+        <location filename="../mainwindow.cc" line="2945"/>
         <source>alias not saved for unknown media token</source>
         <translation>解析使魔：标记媒体失败</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2853"/>
+        <location filename="../mainwindow.cc" line="2948"/>
         <source>saving alias ...</source>
         <translation>解析使魔：标记媒体中...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2877"/>
+        <location filename="../mainwindow.cc" line="2972"/>
         <source>similar alias already exists</source>
         <translation>解析使魔：相似的标记已存在</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2883"/>
+        <location filename="../mainwindow.cc" line="2978"/>
         <source>source alias is not a valid URL</source>
         <translation>通信使魔：别名不是有效的URL</translation>
     </message>
@@ -1116,54 +1126,54 @@
         <translation type="obsolete">播放使魔：程序退出中...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4741"/>
-        <location filename="../mainwindow.cc" line="4786"/>
-        <location filename="../mainwindow.cc" line="4831"/>
+        <location filename="../mainwindow.cc" line="4849"/>
+        <location filename="../mainwindow.cc" line="4894"/>
+        <location filename="../mainwindow.cc" line="4939"/>
         <source>cannot perform cast to yourself</source>
         <translation>通信使魔：不能对自己施法</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4747"/>
+        <location filename="../mainwindow.cc" line="4855"/>
         <source>blessing user ...</source>
         <translation>通信使魔：正在祝福魔法师...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4758"/>
+        <location filename="../mainwindow.cc" line="4866"/>
         <source>user blessed</source>
         <translation>通信使魔：魔法师被祝福</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4792"/>
+        <location filename="../mainwindow.cc" line="4900"/>
         <source>cursing user ...</source>
         <translation>通信使魔：正在诅咒魔法师...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4803"/>
+        <location filename="../mainwindow.cc" line="4911"/>
         <source>user cursed</source>
         <translation>通信使魔：魔法师被诅咒</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4837"/>
+        <location filename="../mainwindow.cc" line="4945"/>
         <source>blocking user ...</source>
         <translation>通信使魔：正在屏蔽魔法师...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4848"/>
+        <location filename="../mainwindow.cc" line="4956"/>
         <source>user blocked</source>
         <translation>通信使魔：魔法师被屏蔽</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4949"/>
+        <location filename="../mainwindow.cc" line="5057"/>
         <source>connecting to server ...</source>
         <translation>通信使魔：正在连接服务器...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4966"/>
+        <location filename="../mainwindow.cc" line="5074"/>
         <source>server connected</source>
         <translation>通信使魔：服务器已连接</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4968"/>
+        <location filename="../mainwindow.cc" line="5076"/>
         <source>server disconnected</source>
         <translation>通信使魔：服务器断开</translation>
     </message>
@@ -1172,168 +1182,183 @@
         <translation type="obsolete">通信使魔：新版魔导书发现，下载地址：</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5164"/>
+        <location filename="../mainwindow.cc" line="5272"/>
         <source>found process id for window</source>
         <translation>侦听使魔：发现窗口的进程</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5167"/>
+        <location filename="../mainwindow.cc" line="5275"/>
         <source>process id for window was not found</source>
         <translation>侦听使魔：窗口的进程没有找到</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5178"/>
+        <location filename="../mainwindow.cc" line="5286"/>
         <source>process was attached</source>
         <translation>侦听使魔：进程已同步</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5182"/>
+        <location filename="../mainwindow.cc" line="5290"/>
         <source>process attached</source>
         <translation>侦听使魔：同步进程成功</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5188"/>
+        <location filename="../mainwindow.cc" line="5296"/>
         <source>failed to attach process </source>
         <translation>侦听使魔：同步进程失败</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5190"/>
+        <location filename="../mainwindow.cc" line="5298"/>
         <source>Is the process running now?</source>
         <translation>侦听使魔：程序真的开了吗？</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5192"/>
+        <location filename="../mainwindow.cc" line="5300"/>
         <source>Run me as administrator and try again (o^^o)</source>
         <translation>侦听使魔：换成管理员的身份试试吧</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5194"/>
+        <location filename="../mainwindow.cc" line="5302"/>
         <source>Restart the target process might help -_-</source>
         <translation>侦听使魔：可能需要重启一下程序</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5205"/>
+        <location filename="../mainwindow.cc" line="5313"/>
         <source>process was started</source>
         <translation>侦听使魔：程序已经启动</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5208"/>
+        <location filename="../mainwindow.cc" line="5316"/>
         <source>told process to start</source>
         <translation>侦听使魔：刚刚让程序启动</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5216"/>
+        <location filename="../mainwindow.cc" line="5324"/>
         <source>failed to start process</source>
         <translation>侦听使魔：开始程序失败</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5220"/>
+        <location filename="../mainwindow.cc" line="5328"/>
         <source>wait %1 seconds for process to start ...</source>
         <translation>侦听使魔：等待%1秒程序启动...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5233"/>
+        <location filename="../mainwindow.cc" line="5341"/>
         <source>openning process</source>
         <translation>播放使魔：正在打开程序</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5331"/>
+        <location filename="../mainwindow.cc" line="5439"/>
         <source>connecting server to change anonymous status ...</source>
         <translation>通信使魔：远程魔法修改匿名属性中...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5343"/>
+        <location filename="../mainwindow.cc" line="5451"/>
         <source>failed to change user anonymous state</source>
         <translation>通信使魔：远程魔法修改匿名属性失败</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5353"/>
+        <location filename="../mainwindow.cc" line="5461"/>
         <source>you are anonymous now</source>
         <translation>通信使魔：主人已经匿名了</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5355"/>
+        <location filename="../mainwindow.cc" line="5463"/>
         <source>you are not anonymous now</source>
         <translation>通信使魔：主人不再匿名了</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5372"/>
+        <location filename="../mainwindow.cc" line="5480"/>
         <source>connecting server to change language ...</source>
         <translation>通信使魔：远程魔法修改语言属性中...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5384"/>
+        <location filename="../mainwindow.cc" line="5492"/>
         <source>failed to change user language</source>
         <translation>通信使魔：远程魔法修改语言属性失败</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5393"/>
+        <location filename="../mainwindow.cc" line="5501"/>
         <source>your language is </source>
         <translation>通信属性：主人的语言属性是</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5461"/>
+        <location filename="../mainwindow.cc" line="5569"/>
         <source>restart the app to use the new language</source>
         <translation>播放使魔：使用新的语言需要重启播放器</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3232"/>
-        <location filename="../mainwindow.cc" line="6121"/>
+        <location filename="../mainwindow.cc" line="3338"/>
+        <location filename="../mainwindow.cc" line="6230"/>
         <source>annotations found</source>
         <translation>播放使魔：发现新弹幕</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3014"/>
+        <location filename="../mainwindow.cc" line="1979"/>
+        <source>failed to open media</source>
+        <translation>播放使魔：媒体再生失败</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cc" line="2547"/>
+        <source>Complete</source>
+        <translation>完成</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cc" line="3108"/>
+        <source>login is requied to to submit annotation URL</source>
+        <translation>通信使魔：请登录以提交弹幕链接</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cc" line="3120"/>
         <source>URL is too long</source>
         <translation>通信使魔：链接过长</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3018"/>
+        <location filename="../mainwindow.cc" line="3124"/>
         <source>signing media ...</source>
         <translation>再生使魔：正在为文件签名...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3026"/>
+        <location filename="../mainwindow.cc" line="3132"/>
         <source>failed to analyze media</source>
         <translation>再生使魔：分析文件标记失败</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3079"/>
+        <location filename="../mainwindow.cc" line="3185"/>
         <source>media signed</source>
         <translation>通信使魔：文件签名成功</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3081"/>
+        <location filename="../mainwindow.cc" line="3187"/>
         <source>failed to sign media</source>
         <translation>再生使魔：文件签名失败</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5085"/>
+        <location filename="../mainwindow.cc" line="5193"/>
         <source>new version released, please check Help/Update menu</source>
         <translation>通信使魔：在Google Code发现新版魔法书</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="6135"/>
+        <location filename="../mainwindow.cc" line="6245"/>
         <source>analyzing annotation URL ...</source>
         <translation>网络使魔：解析弹幕链接中...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="6282"/>
+        <location filename="../mainwindow.cc" line="6398"/>
         <source>resuming last play</source>
         <translation>播放使魔：恢复上一次播放位置</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="6342"/>
+        <location filename="../mainwindow.cc" line="6463"/>
         <source>loading last subtitle</source>
         <translation>播放使魔：加载上一次播放的字幕</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="6348"/>
+        <location filename="../mainwindow.cc" line="6469"/>
         <source>hide last subtitle</source>
         <translation>播放使魔：隐藏上次的字幕</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="6411"/>
+        <location filename="../mainwindow.cc" line="6537"/>
         <source>loading last audio track</source>
         <translation>播放使魔：切换到上一次播放的音轨</translation>
     </message>
@@ -1366,7 +1391,7 @@
         <translation type="obsolete">播放使魔：文件不存在</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5704"/>
+        <location filename="../mainwindow.cc" line="5812"/>
         <source>invalid lnk</source>
         <translation>播放使魔：快捷方式好像无效</translation>
     </message>
@@ -1435,64 +1460,64 @@
 <context>
     <name>MrlDownloadTask</name>
     <message>
-        <location filename="../../../module/download/mrldownloadtask.cc" line="49"/>
+        <location filename="../../../module/download/mrldownloadtask.cc" line="51"/>
         <source>failed to download from URL</source>
         <translation>离线使魔：下载失败</translation>
     </message>
     <message>
-        <location filename="../../../module/download/mrldownloadtask.cc" line="73"/>
+        <location filename="../../../module/download/mrldownloadtask.cc" line="76"/>
         <source>unknown</source>
         <translation>未知</translation>
     </message>
     <message>
-        <location filename="../../../module/download/mrldownloadtask.cc" line="101"/>
+        <location filename="../../../module/download/mrldownloadtask.cc" line="104"/>
         <source>failed to open file to write</source>
         <translation>再生使魔：保存文件失败</translation>
     </message>
     <message>
-        <location filename="../../../module/download/mrldownloadtask.cc" line="127"/>
+        <location filename="../../../module/download/mrldownloadtask.cc" line="133"/>
         <source>failed to rename downloaded file</source>
         <translation>再生使魔：重命名下载文件失败</translation>
     </message>
     <message>
-        <location filename="../../../module/download/mrldownloadtask.cc" line="133"/>
+        <location filename="../../../module/download/mrldownloadtask.cc" line="139"/>
         <source>download incomplete</source>
-        <translation>再生使魔：下载完成</translation>
+        <translation>再生使魔：下载失败</translation>
     </message>
 </context>
 <context>
     <name>MrlMuxDownloadTask</name>
     <message>
-        <location filename="../../../module/download/mrlmuxdownloadtask.cc" line="48"/>
+        <location filename="../../../module/download/mrlmuxdownloadtask.cc" line="49"/>
         <source>failed to download from URL</source>
         <translation>再生使魔：下载失败</translation>
     </message>
     <message>
-        <location filename="../../../module/download/mrlmuxdownloadtask.cc" line="93"/>
+        <location filename="../../../module/download/mrlmuxdownloadtask.cc" line="100"/>
         <source>unknown</source>
         <translation>未知</translation>
     </message>
     <message>
-        <location filename="../../../module/download/mrlmuxdownloadtask.cc" line="171"/>
-        <location filename="../../../module/download/mrlmuxdownloadtask.cc" line="180"/>
-        <location filename="../../../module/download/mrlmuxdownloadtask.cc" line="295"/>
+        <location filename="../../../module/download/mrlmuxdownloadtask.cc" line="178"/>
+        <location filename="../../../module/download/mrlmuxdownloadtask.cc" line="187"/>
+        <location filename="../../../module/download/mrlmuxdownloadtask.cc" line="310"/>
         <source>failed to open file to write</source>
         <translation>再生使魔：保存文件失败</translation>
     </message>
     <message>
-        <location filename="../../../module/download/mrlmuxdownloadtask.cc" line="199"/>
-        <location filename="../../../module/download/mrlmuxdownloadtask.cc" line="336"/>
+        <location filename="../../../module/download/mrlmuxdownloadtask.cc" line="206"/>
+        <location filename="../../../module/download/mrlmuxdownloadtask.cc" line="352"/>
         <source>download incomplete</source>
         <translation>再生使魔：放弃下载</translation>
     </message>
     <message>
-        <location filename="../../../module/download/mrlmuxdownloadtask.cc" line="227"/>
+        <location filename="../../../module/download/mrlmuxdownloadtask.cc" line="237"/>
         <source>failed to mux media</source>
         <translation>再生使魔：合成视频失败</translation>
     </message>
     <message>
-        <location filename="../../../module/download/mrlmuxdownloadtask.cc" line="249"/>
-        <location filename="../../../module/download/mrlmuxdownloadtask.cc" line="330"/>
+        <location filename="../../../module/download/mrlmuxdownloadtask.cc" line="263"/>
+        <location filename="../../../module/download/mrlmuxdownloadtask.cc" line="345"/>
         <source>failed to rename downloaded file</source>
         <translation>再生使魔：重命名下载文件失败</translation>
     </message>
@@ -1899,38 +1924,38 @@
         <translation type="obsolete">火星文</translation>
     </message>
     <message>
-        <location filename="../token/tokenview.cc" line="388"/>
-        <location filename="../token/tokenview.cc" line="414"/>
+        <location filename="../token/tokenview.cc" line="389"/>
+        <location filename="../token/tokenview.cc" line="415"/>
         <source>cannot perform cast when offline</source>
         <translation>通信使魔：离线中魔法无效</translation>
     </message>
     <message>
-        <location filename="../token/tokenview.cc" line="394"/>
+        <location filename="../token/tokenview.cc" line="395"/>
         <source>token is already blessed</source>
         <translation>通信使魔：标记已被祝福</translation>
     </message>
     <message>
-        <location filename="../token/tokenview.cc" line="420"/>
+        <location filename="../token/tokenview.cc" line="421"/>
         <source>token is already cursed</source>
         <translation>通信使魔：标记已被诅咒</translation>
     </message>
     <message>
-        <location filename="../token/tokenview.cc" line="476"/>
+        <location filename="../token/tokenview.cc" line="477"/>
         <source>name</source>
         <translation>name</translation>
     </message>
     <message>
-        <location filename="../token/tokenview.cc" line="477"/>
+        <location filename="../token/tokenview.cc" line="478"/>
         <source>source</source>
         <translation>source</translation>
     </message>
     <message>
-        <location filename="../token/tokenview.cc" line="478"/>
+        <location filename="../token/tokenview.cc" line="479"/>
         <source>tag</source>
         <translation>tag</translation>
     </message>
     <message>
-        <location filename="../token/tokenview.cc" line="479"/>
+        <location filename="../token/tokenview.cc" line="480"/>
         <source>URL</source>
         <translation>URL</translation>
     </message>
@@ -1939,7 +1964,7 @@
         <translation type="obsolete">标题</translation>
     </message>
     <message>
-        <location filename="../token/tokenview.cc" line="493"/>
+        <location filename="../token/tokenview.cc" line="494"/>
         <source>cannot delete other&apos;s alias</source>
         <translation>通信使魔：无法删除别人的别名</translation>
     </message>
@@ -4023,6 +4048,34 @@
         <location filename="../dialog/urldialog.cc" line="37"/>
         <source>Enter local or Internet media URL</source>
         <translation>输入在线或本地媒体链接</translation>
+    </message>
+</context>
+<context>
+    <name>VlcHttpSession</name>
+    <message>
+        <location filename="../../../module/vlccore/http.cc" line="82"/>
+        <source>cannot save to file</source>
+        <translation>再生使魔：文件保存失败</translation>
+    </message>
+    <message>
+        <location filename="../../../module/vlccore/http.cc" line="93"/>
+        <source>download failed</source>
+        <translation>再生使魔：下载失败</translation>
+    </message>
+    <message>
+        <location filename="../../../module/vlccore/http.cc" line="97"/>
+        <source>file saved</source>
+        <translation>再生使魔：文件保存</translation>
+    </message>
+    <message>
+        <location filename="../../../module/vlccore/http.cc" line="211"/>
+        <source>network error to access URL</source>
+        <translation>再生使魔：网络错误，无法访问链接</translation>
+    </message>
+    <message>
+        <location filename="../../../module/vlccore/http.cc" line="227"/>
+        <source>access forbidden</source>
+        <translation>再生使魔：无法访问</translation>
     </message>
 </context>
 <context>

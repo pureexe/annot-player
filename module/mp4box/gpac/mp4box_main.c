@@ -1942,7 +1942,7 @@ mp4boxMain(int argc, char **argv)
         else if (!stricmp(arg, "-split-size") || !stricmp(arg, "-splits")) {
             CHECK_NEXT_ARG
             split_size = atoi(argv[i+1]);
-            if (split_size<0) split_size = 0;
+            //if (split_size<0) split_size = 0;
             i++;
             split_duration = 0;
         }

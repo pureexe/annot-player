@@ -112,7 +112,8 @@ unix {
 }
 
 mac {
-    VLC_HOME            = ${HOME}/opt/vlc
+    #VLC_HOME            = ${HOME}/opt/vlc
+    VLC_HOME            = /Applications/VLC.app/Contents/MacOS
     VLC_SRC             = ${HOME}/opt/src
     #WSF_HOME           = ${HOME}/opt/wso2/wsf
     #CDIO_HOME          = ${HOME}/opt/libcdio
@@ -151,20 +152,20 @@ INCLUDEPATH     += $$GPAC_HOME/include
 LIBS            += -L$$GPAC_HOME/lib
 INCLUDEPATH     += $$MP4V2_HOME/include
 LIBS            += -L$$MP4V2_HOME/lib
-INCLUDEPATH     += \
-    $$LIVE_HOME/BasicUsageEnvironment/include \
-    $$LIVE_HOME/UsageEnvironment/include \
-    $$LIVE_HOME/groupsock/include \
-    $$LIVE_HOME/liveMedia/include
+#INCLUDEPATH     += \
+#    $$LIVE_HOME/BasicUsageEnvironment/include \
+#    $$LIVE_HOME/UsageEnvironment/include \
+#    $$LIVE_HOME/groupsock/include \
+#    $$LIVE_HOME/liveMedia/include
     #$$LIVE_HOME/BasicUsageEnvironment $$LIVE_HOME/BasicUsageEnvironment/include \
     #$$LIVE_HOME/UsageEnvironment $$LIVE_HOME/UsageEnvironment/include \
     #$$LIVE_HOME/groupsock $$LIVE_HOME/groupsock/include \
     #$$LIVE_HOME/liveMedia $$LIVE_HOME/liveMedia/include
-LIBS            += \
-    -L$$LIVE_HOME/BasicUsageEnvironment \
-    -L$$LIVE_HOME/UsageEnvironment \
-    -L$$LIVE_HOME/groupsock \
-    -L$$LIVE_HOME/liveMedia
+#LIBS            += \
+#    -L$$LIVE_HOME/BasicUsageEnvironment \
+#    -L$$LIVE_HOME/UsageEnvironment \
+#    -L$$LIVE_HOME/groupsock \
+#    -L$$LIVE_HOME/liveMedia
 
 CONFIG(release) {
   #DEFINES += QT_NO_DEBUG_OUTPUT QT_NO_WARNING_OUTPUT

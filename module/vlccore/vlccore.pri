@@ -3,12 +3,9 @@
 
 include(../../config.pri)
 
-DEPENDPATH += $$PWD/types
-
 HEADERS += \
-    $$PWD/types/media_player.h \
-    $$PWD/types/module.h \
     $$PWD/http.h \
+    $$PWD/sound.h \
     $$PWD/video.h
 
 SOURCES += \
@@ -19,10 +16,11 @@ DEFINES += \
     HAVE_ZLIB_H \
     HAVE_STRUCT_ADDRINFO
 
-QT      += core network
+QT      += core gui network
 LIBS    += -lvlc -lvlccore -lz
 
-INCLUDEPATH     += $$VLC_SRC/vlc/include
-!mac: DEFINES   += USE_MODULE_VLCCORE_HTTP
+INCLUDEPATH += \
+    $$VLC_SRC \
+    $$VLC_SRC/vlc/include
 
 # EOF

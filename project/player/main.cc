@@ -21,11 +21,13 @@
   #include "mac/qtmac/qtmac.h"
 #endif // Q_OS_MAC
 #include <QtGui>
-//#include <QtWebKit>
+#ifdef USE_MODULE_WEBBROWSER
+#  include <QtWebKit>
+#endif // USE_MODULE_WEBBROWSER
 #include <ctime>
 #include <cstdlib>
 
-#define DEBUG "main"
+//#define DEBUG "main"
 #include "module/debug/debug.h"
 
 // - Startup stages -
@@ -107,7 +109,7 @@ main(int argc, char *argv[])
     return 0;
 
 #ifdef USE_MODE_DEBUG
-  a.installMessageHandlers();
+  //a.installMessageHandlers();
 #endif // USE_MODE_DEBUG
 
   Settings *settings = Settings::globalInstance();
@@ -158,16 +160,18 @@ main(int argc, char *argv[])
   //if (ok && !t.isEmpty())
   //  a.installTranslator(&t);
 
+#ifdef USE_MODULE_WEBBROWSER
   // Set webkit settings
-  //{
-  //  QWebSettings *ws = QWebSettings::globalSettings();
-  //
-  //  ws->setAttribute(QWebSettings::PluginsEnabled, true);
-  //  ws->setAttribute(QWebSettings::AutoLoadImages, true);
-  //  ws->setAttribute(QWebSettings::JavascriptEnabled, true);
-  //
-  //  //g->setMaximumPagesInCache(10);
-  //}
+  {
+    QWebSettings *ws = QWebSettings::globalSettings();
+
+    ws->setAttribute(QWebSettings::PluginsEnabled, true);
+    ws->setAttribute(QWebSettings::AutoLoadImages, true);
+    ws->setAttribute(QWebSettings::JavascriptEnabled, true);
+
+    //g->setMaximumPagesInCache(10);
+  }
+#endif // USE_MODULE_WEBBROWSER
 
   // Set theme.
   {
@@ -267,7 +271,16 @@ main(int argc, char *argv[])
   //QWidget bk;
   //bk.setWindowFlags(Qt::CustomizeWindowHint);
   //DWM_ENABLE_AERO_WIDGET(&bk);
+
   //bk.showMaximized();
+
+  //QString url = "http://smile-com00.nicovideo.jp/smile?m=17054368.25318";
+  //QRegExp rx("http://([\\w\\d\\-]+)\\.nicovideo\\.jp/smile\\?m=([\\w\\d\\.]+)", Qt::CaseInsensitive);
+  //if (rx.exactMatch(url)) {
+  //  qDebug()<<rx.captureCount();
+  //  qDebug()<<rx.cap(1);
+  //  qDebug()<<rx.cap(2);
+  //}
 
   return a.exec();
 }

@@ -12,21 +12,28 @@
 
 #include "player.h"
 #include "playerprivate.h"
-#include "vlcext.h"
+#include "module/vlccore/video.h"
+#include "module/vlccore/sound.h"
+#ifdef Q_WS_WIN
+  #include "win/qtwin/qtwin.h"
+#endif // Q_WS_WIN
 #ifdef Q_WS_MAC
   #include <QMacCocoaViewContainer>
 #endif // Q_WS_MAC
 #include <QtGui>
-#include "module/vlccore/http.h"
-#include "module/vlccore/video.h"
-extern "C" {
-  #ifndef MODULE_STRING
-    #define MODULE_STRING "main"  // needed by VLC
-  #endif
-  #include <inttypes.h>
-  #include <vlc/plugins/vlc_vout.h>
-  #include <vlc/vlc.h>
-} // extern "C"
+
+#ifndef MODULE_STRING
+  #define MODULE_STRING "main"  // needed by VLC
+#endif
+#include <inttypes.h>
+#include <vlc/plugins/vlc_vout.h>
+#include <vlc/plugins/vlc_input_item.h>
+#include <vlc/lib/libvlc_internal.h>
+#include <vlc/lib/media_internal.h>
+#include <vlc/lib/media_list_internal.h>
+#include <vlc/vlc.h>
+//#include <vlc/lib/media_list.c>
+#include <boost/tuple/tuple.hpp>
 #include <boost/typeof/typeof.hpp>
 #include <cstring>
 #include <memory>
@@ -42,7 +49,7 @@ extern "C" {
 
 namespace { // anonymous
 
-  enum { VOUT_COUNTDOWN = 20 }; // vout countdown timer
+  enum { VOUT_COUNTDOWN = 30 }; // vout countdown timer
   enum { VOUT_TIMEOUT = 500 };  // 0.5 secs
 
 } // anonymous namespace
@@ -170,9 +177,17 @@ namespace { // anonymous, callbacks
 
   namespace vout_callback_ { // Consisent with vlc_callback_t
 
-    enum { DOUBLE_CLICK_TIMEOUT = 1500 }; // time between D and DUD, in msecs
+
+    int doubleClickTimeout_ = // time between D and DUD, in msecs
+#ifdef Q_OS_WIN
+     QtWin::getDoubleClickInterval() * 1.5
+#else
+     600
+#endif // Q_OS_WIN
+    ;
 
     qint64 recentClickTime_ = 0; // in msecs
+    bool ignoreNextMove_ = false;
 
     // Not used
     //int
@@ -191,6 +206,10 @@ namespace { // anonymous, callbacks
       Q_UNUSED(psz_var); // Q_ASSERT(psz_var == "mouse-moved");
       Q_UNUSED(oldval);
 
+      if (ignoreNextMove_) {
+        ignoreNextMove_ = false;
+        return VLC_SUCCESS;
+      }
       recentClickTime_ = 0;
 
       Player *player = reinterpret_cast<Player*>(p_data);
@@ -199,29 +218,36 @@ namespace { // anonymous, callbacks
         return 0;
       vout_thread_t *vout = reinterpret_cast<vout_thread_t*>(p_this);
       Q_ASSERT(vout);
-      if (!vout ||
-          !vout->render.i_width || !vout->render.i_height)
+      //if (!vout ||
+      //    !vout->render.i_width || !vout->render.i_height)
+      //  return 0;
+      if (!vout)
         return 0;
       QWidget *w = player->impl()->voutWindow();
       if (!w)
         return 0;
 
-      vlc_value_t btval = { };
-      ::var_Get(vout, "mouse-button-down", &btval);
+      vlccore::vlcbuttons bt = vlccore::vout_mouse_buttons(vout);
 
-      int x = (newval.coords.x * w->width()) / vout->render.i_width,
-          y = (newval.coords.y * w->height()) / vout->render.i_height;
-
-      QPoint pos(x, y);
+      QPoint coords(newval.coords.x, newval.coords.y);
+      QPoint pos = vlccore::vout_map_to_widget(vout, coords, w->size());
       QPoint globalPos = pos + w->mapToGlobal(QPoint());
 
       Qt::MouseButton button;
       Qt::MouseButtons buttons;
-      boost::tie(button, buttons) = ::qt_buttons_from_vlc_buttons(btval.i_int);
+      boost::tie(button, buttons) = vlccore::vlcbuttons_to_qt(bt);
 
-      // Use sendEvent to reduce heap overheads
-      QMouseEvent e(QEvent::MouseMove, pos, globalPos, button, buttons, Qt::NoModifier);
-      QCoreApplication::sendEvent(w, &e);
+#ifdef Q_OS_WIN
+      // Mouse-move without buttons is already provided by mousehook on Windows
+      // Skip to reduce overheads.
+      if (!buttons)
+        return VLC_SUCCESS;
+#endif // Q_OS_WIN
+
+      // Post event across diff threads.
+      QCoreApplication::postEvent(w,
+        new QMouseEvent(QEvent::MouseMove, pos, globalPos, button, buttons, Qt::NoModifier)
+      );
 
       return VLC_SUCCESS;
     }
@@ -232,7 +258,6 @@ namespace { // anonymous, callbacks
     {
       //qDebug() << "mouse-button-down" << newval.i_int;
       Q_UNUSED(psz_var); // Q_ASSERT(psz_var == "mouse-button-down");
-      //Q_UNUSED(oldval);
 
       qint64 currentTime = QDateTime::currentMSecsSinceEpoch();
 
@@ -242,41 +267,48 @@ namespace { // anonymous, callbacks
         return 0;
       vout_thread_t *vout = reinterpret_cast<vout_thread_t*>(p_this);
       Q_ASSERT(vout);
-      if (!vout ||
-          !vout->render.i_width || !vout->render.i_height)
+      if (!vout)
         return 0;
       QWidget *w = player->impl()->voutWindow();
       if (!w)
         return 0;
 
-      int32_t coords_x = 0, coords_y = 0;
-      ::var_GetCoords(vout, "mouse-moved", &coords_x, &coords_y);
-      int x = (coords_x * w->width()) / vout->render.i_width,
-          y = (coords_y * w->height()) / vout->render.i_height;
-
-      QPoint pos(x, y);
+      QPoint coords = vlccore::vout_mouse_pos(vout);
+      QPoint pos = vlccore::vout_map_to_widget(vout, coords, w->size());
       QPoint globalPos = pos + w->mapToGlobal(QPoint());
 
       Qt::MouseButton button;
       Qt::MouseButtons buttons;
-      boost::tie(button, buttons) = ::qt_buttons_from_vlc_buttons(newval.i_int);
+      boost::tie(button, buttons) = vlccore::vlcbuttons_to_qt(newval.i_int);
 
       QEvent::Type type = button ? QEvent::MouseButtonPress : QEvent::MouseButtonRelease;
       if (!button)
-        boost::tie(button, buttons) = ::qt_buttons_from_vlc_buttons(oldval.i_int);
+        boost::tie(button, buttons) = vlccore::vlcbuttons_to_qt(oldval.i_int);
 
       if (button != Qt::LeftButton)
         recentClickTime_ = 0;
       else if (type == QEvent::MouseButtonPress) {
         if (recentClickTime_) {
-          if (currentTime - recentClickTime_ < DOUBLE_CLICK_TIMEOUT)
+          if (currentTime - recentClickTime_ < doubleClickTimeout_)
             type = QMouseEvent::MouseButtonDblClick;
           recentClickTime_ = 0;
         } else
           recentClickTime_ = currentTime;
       }
 
-      // Use postEvent to send event across thread
+#ifdef Q_OS_WIN
+      if (type != QMouseEvent::MouseButtonRelease && button == Qt::LeftButton) {
+        // Disable VLC built-in double-click timer.
+        ignoreNextMove_ = true;
+
+        static bool rand_;
+        rand_ = !rand_;
+        int offset = rand_ ? 2 : -2;
+        QtWin::sendMouseMove(QPoint(offset, 0), true); // relative == true
+      }
+#endif // Q_OS_WIN
+
+      // Post event across diff threads.
       QCoreApplication::postEvent(w,
         new QMouseEvent(type, pos, globalPos, button, buttons, Qt::NoModifier)
       );
@@ -304,8 +336,8 @@ namespace { // anonymous, callbacks
         if (vout && !vouts_.contains(vout)) {
           vouts_.append(vout);
           ::var_AddCallback(vout, "mouse-moved", vout_callback_::mouse_moved, player);
-          //::var_AddCallback(vout, "mouse-clicked", vout_callback_::mouse_clicked, player);
           ::var_AddCallback(vout, "mouse-button-down", vout_callback_::mouse_button_down, player);
+          //::var_AddCallback(vout, "mouse-clicked", vout_callback_::mouse_clicked, player);
         }
       }
     return vouts_count;
@@ -370,7 +402,10 @@ Player::Player(QObject *parent)
   : Base(parent), impl_(0)
 {
   DOUT("enter");
-  //reset();
+  connect(VlcHttpPlugin::globalInstance(), SIGNAL(error(QString)), SIGNAL(error(QString)));
+  connect(VlcHttpPlugin::globalInstance(), SIGNAL(message(QString)), SIGNAL(message(QString)));
+  connect(VlcHttpPlugin::globalInstance(), SIGNAL(fileSaved(QString)), SIGNAL(fileSaved(QString)));
+  connect(VlcHttpPlugin::globalInstance(), SIGNAL(progress(qint64,qint64)), SIGNAL(downloadProgress(qint64,qint64)));
   DOUT("exit");
 }
 
@@ -405,6 +440,9 @@ Player::reset()
   impl_ = new Impl;
   impl_->reset();
   Q_ASSERT(isValid());
+
+  enum { initial_volume = int(0.5 * VLC_MAX_VOLUME) };
+  ::libvlc_audio_set_volume(impl_->player(), initial_volume);
 
   setUserAgent();
 
@@ -516,21 +554,21 @@ Player::isEmbedded() const
 //  emit encodingChanged();
 //}
 
-QByteArray
-Player::decode(const QString &input) const
-{
-  //return impl_ && impl_->codec() ?
-  //  impl_->codec()->encode(input) :
-  return input.toAscii();
-}
+//QByteArray
+//Player::decode(const QString &input) const
+//{
+//  //return impl_ && impl_->codec() ?
+//  //  impl_->codec()->encode(input) :
+//  return input.toAscii();
+//}
 
-QString
-Player::encode(const char *input) const
-{
-  //return impl_ && impl_->codec() ?
-  //  impl_->codec()->decode(input) :
-  return QString(input);
-}
+//QString
+//Player::encode(const char *input) const
+//{
+//  //return impl_ && impl_->codec() ?
+//  //  impl_->codec()->decode(input) :
+//  return QString(input);
+//}
 
 // - Playing states -
 bool
@@ -593,17 +631,16 @@ Player::openMedia(const QString &path)
   if (hasMedia())
     closeMedia();
 
-  DOUT("open:" << decode(path));
+  DOUT("open:" << path);
 
   // Handle CDA
   if (path.endsWith(".cda", Qt::CaseInsensitive)) {
     QFileInfo fi(path);
-    QRegExp re("^Track(\\d+)\\.cda$", Qt::CaseInsensitive);
-    if (re.indexIn(fi.fileName()) >= 0) {
+    QRegExp rx("^Track(\\d+)\\.cda$", Qt::CaseInsensitive);
+    if (rx.indexIn(fi.fileName()) >= 0) {
       bool ok;
-      int track1 = re.cap(1).toInt(&ok);
+      int track1 = rx.cap(1).toInt(&ok);
       if (ok && track1 >= 1) {
-        qDebug()<<fi.absolutePath();
         impl_->setTrackNumber(track1 - 1);
         bool ret = openMediaAsCD(fi.absolutePath());
         DOUT("exit from cda code path: ret =" << ret);
@@ -613,6 +650,7 @@ Player::openMedia(const QString &path)
   }
 
   if (isSupportedPlaylist(path)) {
+#ifdef USE_PLAYER_PLAYLIST
     QList<libvlc_media_t*> l = parsePlaylist(path);
     if (l.isEmpty()) {
       DOUT("empty play list");
@@ -625,12 +663,16 @@ Player::openMedia(const QString &path)
     setTrackNumber(impl_->trackNumber());
     DOUT("exit: ret = true");
     return true;
+#else
+    DOUT("exit: playlist support is not enabled");
+    return false;
+#endif // USE_PLAYER_PLAYLIST
   }
 
-  impl_->setMedia(
-    //::libvlc_media_new_path(impl_->instance(), decode(path))   // local file only
-    ::libvlc_media_new_location(impl_->instance(), decode(path)) // MRL
-  );
+  libvlc_media_t *md = path.contains("://") ?
+    ::libvlc_media_new_location(impl_->instance(), _cs(path)) :   // MRL
+    ::libvlc_media_new_path(impl_->instance(), vlcpath(path)); // local file
+  impl_->setMedia(md);
 
   //libvlc_media_list_player_t *mlp = libvlc_media_list_player_new(impl_->instance());
   //libvlc_media_list_player_set_media_player(mlp, impl_->player());
@@ -676,6 +718,8 @@ Player::closeMedia()
   impl_->setMediaTitle();
   impl_->setTrackNumber();
   impl_->setExternalSubtitles();
+
+  VlcHttpPlugin::setMediaTitle(QString());
 
   if (!impl_->mediaList().isEmpty()) {
     foreach (libvlc_media_t *m, impl_->mediaList())
@@ -740,7 +784,7 @@ Player::mediaTitle() const
   if (!title || ::strstr(title, "??"))
     return QString();
 
-  return encode(title);
+  return _qs(title);
 }
 
 QString
@@ -785,11 +829,11 @@ Player::playlist() const
 
     const char *mrl = ::libvlc_media_get_mrl(md);
     if (mrl)
-      mi.path = encode(mrl);
+      mi.path = mrl;
 
     const char *title = ::libvlc_media_get_meta(md, libvlc_meta_Title);
     if (title && !::strstr(title, "??"))
-      mi.title = encode(title);
+      mi.title = title;
 
     ret.append(mi);
   }
@@ -874,9 +918,9 @@ Player::snapshot(const QString &path)
     return false;
   }
 
-  QByteArray path_cstr = decode(path);
-  DOUT("exit");
-  return !::libvlc_video_take_snapshot(impl_->player(), 0, path_cstr, 0, 0);
+  int err = ::libvlc_video_take_snapshot(impl_->player(), 0, vlcpath(path), 0, 0);
+  DOUT("exit: ret =" << !err);
+  return !err;
 }
 
 
@@ -1010,7 +1054,7 @@ Player::subtitleDescriptions() const
 
   while (first) {
     if (first->psz_name)
-      ret.append(encode(first->psz_name));
+      ret.append(first->psz_name);
     else
       ret.append(QString());
     first = first->p_next;
@@ -1086,14 +1130,14 @@ Player::setSubtitleFromFile(const QString &fileName)
   path.replace('/', '\\');
 #endif // Q_WS_WIN
 
-  DOUT("opening subtitle:" << decode(path));
+  DOUT("opening subtitle:" << path);
   if (impl_->externalSubtitles().indexOf(path) >= 0) {
     DOUT("subtitle already loaded");
     DOUT("exit");
     return true;
   }
 
-  bool ok = ::libvlc_video_set_subtitle_file(impl_->player(), decode(path));
+  bool ok = ::libvlc_video_set_subtitle_file(impl_->player(), vlcpath(path));
   if (ok) {
     DOUT("succeeded, number of subtitles (0 for the first time):" << ::libvlc_video_get_spu_count(impl_->player()));
     impl_->externalSubtitles() << path;
@@ -1113,7 +1157,7 @@ Player::addSubtitleFromFile(const QString &fileName)
   int bak = ::libvlc_video_get_spu(impl_->player());
   if (bak > 0)
     impl_->setSubtitleId(bak);
-  ::libvlc_video_set_subtitle_file(impl_->player(), decode(fileName));
+  ::libvlc_video_set_subtitle_file(impl_->player(), vlcpath(fileName));
   ::libvlc_video_set_spu(impl_->player(), impl_->subtitleId());
 }
 
@@ -1372,13 +1416,13 @@ Player::handleError()
   emit errorEncountered();
 }
 
-
 // - Playlist -
 
 QList<libvlc_media_t*>
 Player::parsePlaylist(const QString &fileName) const
 {
   QList<libvlc_media_t*> ret;
+#ifdef USE_PLAYER_PLAYLIST
   QFileInfo fi(fileName);
   if (!fi.exists())
     return ret;
@@ -1387,7 +1431,7 @@ Player::parsePlaylist(const QString &fileName) const
   libvlc_instance_t *parent = const_cast<libvlc_instance_t*>(impl_->instance());
   libvlc_media_list_t *ml = ::libvlc_media_list_new(parent);
 
-  ::libvlc_media_list_add_file_content(ml, decode(fileName)); // FIXME: deprecated in VLC 1.1.11
+  ::libvlc_media_list_add_file_content(ml, vlcpath(fileName)); // FIXME: deprecated in VLC 1.1.11
   int count = ::libvlc_media_list_count(ml);
   for (int i = 0; i < count; i++) { // count should always be 1 if succeed
     libvlc_media_t *md = ::libvlc_media_list_item_at_index(ml, i);
@@ -1397,6 +1441,9 @@ Player::parsePlaylist(const QString &fileName) const
 
   ::libvlc_media_list_release(ml);
 
+#else
+  Q_UNUSED(fileName);
+#endif // USE_PLAYER_PLAYLIST
   return ret;
 }
 
@@ -1437,7 +1484,7 @@ Player::setTrackNumber(int track)
   impl_->setTrackNumber(track);
   impl_->setMedia(impl_->mediaList().at(track));
   const char *mrl = ::libvlc_media_get_mrl(impl_->media());
-  impl_->setMediaPath(mrl ? encode(mrl) : QString());
+  impl_->setMediaPath(_qs(mrl));
 
   ::libvlc_media_player_set_media(impl_->player(), impl_->media());
 
@@ -1498,10 +1545,7 @@ Player::audioTrackDescriptions() const
     first = first->p_next;
 
   while (first) {
-    if (first->psz_name)
-      ret.append(encode(first->psz_name));
-    else
-      ret.append(QString());
+    ret.append(_qs(first->psz_name));
     first = first->p_next;
   }
 
@@ -1550,7 +1594,7 @@ Player::setUserAgent(const QString &agent)
     ::libvlc_set_user_agent(impl_->instance(), PLAYER_USER_AGENT, PLAYER_USER_AGENT);
   } else {
     impl_->setUserAgent(agent);
-    ::libvlc_set_user_agent(impl_->instance(), PLAYER_USER_AGENT, impl_->userAgent().toAscii());
+    ::libvlc_set_user_agent(impl_->instance(), PLAYER_USER_AGENT, _cs(impl_->userAgent()));
   }
 }
 
@@ -1566,6 +1610,7 @@ Player::setMediaTitle(const QString &t)
   Q_ASSERT(isValid());
   if (t != impl_->mediaTitle()) {
     impl_->setMediaTitle(t);
+    VlcHttpPlugin::setMediaTitle(t);
     emit mediaTitleChanged(t);
   }
 }
@@ -1588,7 +1633,6 @@ Player::dispose()
 }
 
 // EOF
-
 // - PlayerListener -
 
 /*

@@ -2,18 +2,13 @@
 // 7/21/2011
 
 #include "qtwin.h"
-#include <QtCore>
-
-#ifndef Q_WS_WIN
-  #error "This file is for windows only."
-#endif // Q_WS_WIN
-
 #include <qt_windows.h>
 #include <TlHelp32.h>
 #include <Psapi.h>
 #include <ShObjIdl.h>
 #include <ShlGuid.h>
 //#include <strsafe.h>
+#include <QtCore>
 #include <memory>
 #include <string>
 #include <cstdlib>
@@ -428,27 +423,39 @@ QtWin::getWindowProcessId(HWND hwnd)
 
 // - Mouse and keyboard -
 
+int
+QtWin::getDoubleClickInterval()
+{ return ::GetDoubleClickTime(); }
+
+void
+QtWin::sendMouseMove(const QPoint &globalPos, bool relative)
+{
+  DWORD f = relative ? 0 : MOUSEEVENTF_ABSOLUTE;
+  ::mouse_event(f | MOUSEEVENTF_MOVE, globalPos.x(), globalPos.y(), 0, 0);
+}
+
 // See mouse_event: http://msdn.microsoft.com/en-us/library/ms646260(v=vs.85).aspx
 void
-QtWin::sendMouseClick(const QPoint& globalPos, Qt::MouseButton button)
+QtWin::sendMouseClick(const QPoint& globalPos, Qt::MouseButton button, bool relative)
 {
+  DWORD f = relative ? 0 : MOUSEEVENTF_ABSOLUTE;
   switch (button) {
   case Qt::LeftButton:
-    ::mouse_event(MOUSEEVENTF_LEFTDOWN,       globalPos.x(), globalPos.y(), 0, 0);
-    ::mouse_event(MOUSEEVENTF_LEFTUP,         globalPos.x(), globalPos.y(), 0, 0);
+    ::mouse_event(f | MOUSEEVENTF_LEFTDOWN,     globalPos.x(), globalPos.y(), 0, 0);
+    ::mouse_event(f | MOUSEEVENTF_LEFTUP,       globalPos.x(), globalPos.y(), 0, 0);
     break;
   case Qt::RightButton:
-    ::mouse_event(MOUSEEVENTF_RIGHTDOWN,      globalPos.x(), globalPos.y(), 0, 0);
-    ::mouse_event(MOUSEEVENTF_RIGHTUP,        globalPos.x(), globalPos.y(), 0, 0);
+    ::mouse_event(f | MOUSEEVENTF_RIGHTDOWN,    globalPos.x(), globalPos.y(), 0, 0);
+    ::mouse_event(f | MOUSEEVENTF_RIGHTUP,      globalPos.x(), globalPos.y(), 0, 0);
     break;
   case Qt::MiddleButton:
-    ::mouse_event(MOUSEEVENTF_MIDDLEDOWN,     globalPos.x(), globalPos.y(), 0, 0);
-    ::mouse_event(MOUSEEVENTF_MIDDLEUP,       globalPos.x(), globalPos.y(), 0, 0);
+    ::mouse_event(f | MOUSEEVENTF_MIDDLEDOWN,   globalPos.x(), globalPos.y(), 0, 0);
+    ::mouse_event(f | MOUSEEVENTF_MIDDLEUP,     globalPos.x(), globalPos.y(), 0, 0);
     break;
   case Qt::XButton1:
   case Qt::XButton2:
-    ::mouse_event(MOUSEEVENTF_XDOWN,          globalPos.x(), globalPos.y(), 0, 0);
-    ::mouse_event(MOUSEEVENTF_XUP,            globalPos.x(), globalPos.y(), 0, 0);
+    ::mouse_event(f | MOUSEEVENTF_XDOWN,        globalPos.x(), globalPos.y(), 0, 0);
+    ::mouse_event(f | MOUSEEVENTF_XUP,          globalPos.x(), globalPos.y(), 0, 0);
     break;
   }
 }

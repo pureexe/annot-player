@@ -108,9 +108,13 @@
     SS_BORDER_IMAGE_URL(RC_IMAGE_##_id##_DISABLED) \
   SS_END
 
-#define SS_TOOLBUTTON_TEXT_(_normal, _hover, _pressed, _checked, _checked_hover, _disabled) \
+#define SS_TOOLBUTTON_TEXT_(_weight, _style, _dec, \
+                            _normal, _hover, _pressed, _checked, _checked_hover, _disabled) \
   SS_BEGIN(QToolButton) \
     SS_TRANSPARENT \
+    SS_FONT_WEIGHT(_weight) \
+    SS_FONT_STYLE(_style) \
+    SS_TEXT_DECORATION(_dec) \
     SS_COLOR(_normal) \
   SS_END \
   SS_BEGIN(QToolButton:hover) \
@@ -129,9 +133,21 @@
     SS_COLOR(_disabled) \
   SS_END
 
-#define SS_TOOLBUTTON_TEXT_NORMAL       SS_TOOLBUTTON_TEXT_(blue, red, red, orange, red, gray)
-#define SS_TOOLBUTTON_TEXT_HIGHLIGHT    SS_TOOLBUTTON_TEXT_(red, blue, red, orange, red, gray)
-#define SS_TOOLBUTTON_TEXT              SS_TOOLBUTTON_TEXT_NORMAL
+#ifdef Q_OS_MAC
+  #define SS_TOOLBUTTON_TEXT_NORMAL       SS_TOOLBUTTON_TEXT_(normal, normal, none, blue, red, purple, purple, red, gray)
+  #define SS_TOOLBUTTON_TEXT_HIGHLIGHT    SS_TOOLBUTTON_TEXT_(bold, normal, none, blue, red, purple, purple, red, gray)
+  #define SS_TOOLBUTTON_TEXT_CHECKABLE    SS_TOOLBUTTON_TEXT_(bold, italic, none, blue, red, purple, purple, red, gray)
+  #define SS_TOOLBUTTON_TEXT_TAB          SS_TOOLBUTTON_TEXT_(bold, normal, none, blue, red, purple, purple, red, gray)
+  #define SS_TOOLBUTTON_TEXT_URL          SS_TOOLBUTTON_TEXT_(normal, italic, underline, blue, red, purple, purple, red, gray)
+  #define SS_TOOLBUTTON_TEXT              SS_TOOLBUTTON_TEXT_NORMAL
+#else
+  #define SS_TOOLBUTTON_TEXT_NORMAL       SS_TOOLBUTTON_TEXT_(normal, normal, none, blue, red, orange, orange, red, gray)
+  #define SS_TOOLBUTTON_TEXT_HIGHLIGHT    SS_TOOLBUTTON_TEXT_(bold, normal, none, blue, red, orange, orange, red, gray)
+  #define SS_TOOLBUTTON_TEXT_CHECKABLE    SS_TOOLBUTTON_TEXT_(normal, italic, none, blue, red, orange, orange, red, gray)
+  #define SS_TOOLBUTTON_TEXT_TAB          SS_TOOLBUTTON_TEXT_(bold, normal, none, blue, red, orange, orange, red, gray)
+  #define SS_TOOLBUTTON_TEXT_URL          SS_TOOLBUTTON_TEXT_(normal, italic, underline, blue, red, orange, orange, red, gray)
+  #define SS_TOOLBUTTON_TEXT              SS_TOOLBUTTON_TEXT_NORMAL
+#endif // Q_OS_MAC
 
 #define SS_TOOLBUTTON_PLAY      SS_TOOLBUTTON_(PLAY)
 #define SS_TOOLBUTTON_PAUSE     SS_TOOLBUTTON_(PAUSE)
@@ -157,8 +173,12 @@
 #define SS_TOOLBUTTON_SEEK      SS_TOOLBUTTON_TEXT
 
 // - Labels -
-#define SS_LABEL_(_normal, _hover, _disabled) \
+#define SS_LABEL_(_weight, _style, _dec, \
+                  _normal, _hover, _disabled) \
   SS_BEGIN(QLabel) \
+    SS_FONT_WEIGHT(_weight) \
+    SS_FONT_STYLE(_style) \
+    SS_TEXT_DECORATION(_dec) \
     SS_COLOR(_normal) \
   SS_END \
   SS_BEGIN(QLabel:hover) \
@@ -168,8 +188,15 @@
     SS_COLOR(_disabled) \
   SS_END
 
-#define SS_LABEL           SS_LABEL_(blue, red, gray)
-#define SS_LABEL_HIGHLIGHT SS_LABEL_(orange, blue, gray)
+#ifdef Q_OS_MAC
+  #define SS_LABEL           SS_LABEL_(normal, normal, none, blue, red, gray)
+  #define SS_LABEL_HIGHLIGHT SS_LABEL_(normal, italic, none, purple, red, gray)
+  #define SS_LABEL_URL       SS_LABEL_(normal, italic, underline, purple, red, gray)
+#else
+  #define SS_LABEL           SS_LABEL_(normal, normal, none, blue, red, gray)
+  #define SS_LABEL_HIGHLIGHT SS_LABEL_(normal, italic, none, orange, red, gray)
+  #define SS_LABEL_URL       SS_LABEL_(normal, italic, underline, orange, red, gray)
+#endif // Q_OS_MAC
 
 // - Lines -
 

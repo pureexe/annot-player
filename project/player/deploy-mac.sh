@@ -7,8 +7,8 @@ cd "$PREFIX"  || exit 1
 
 ## environment
 
-COLOR=orange
-VERSION=0.1.2.9
+COLOR=purple
+VERSION=0.1.3.0
 DMG_SIZE=200m
 
 TARGET="Annot Player"
@@ -18,8 +18,9 @@ TARGET_ZIP=annot-player-$VERSION-mac.zip
 APP_SRC=$HOME/Developer/Annot/Player/annot-player
 APP_BUILD=$HOME/Developer/Annot/Player/annot-build-desktop/build.mac
 QT_BUILD=/opt/local/share/qt4
-VLC_BUILD=$HOME/opt/vlc
-VLC_FRAMEWORKS=$VLC_BUILD/Frameworks
+VLC_APP=/Applications/VLC.app
+VLC_HOME=$VLC_APP/Contents/MacOS
+VLC_FRAMEWORKS=$VLC_APP/Contents/Frameworks
 
 APP_NAME="Annot Player"
 APP=$APP_NAME.app
@@ -67,6 +68,7 @@ otool_libs()
   otool -L "$target" | sed '1d' | awk '{ print $1 }' | \
     grep -v "^@" | \
     grep -v "^/usr/lib/" | \
+    grep -v "^/usr/X11/lib/" | \
     grep -v "^/System/Library/Frameworks/" | \
     sort | uniq
 }
@@ -134,7 +136,8 @@ change_macports_lib libsqlite3.0.dylib  "$APP_PLUGINS/$dylib"
 
 ## deploy vlc frameworks
 
-cp -R "$VLC_FRAMEWORKS"/* "$APP_FRAMEWORKS"/
+#test -e "$APP_FRAMEWORKS" || mkdir "$APP_FRAMEWORKS" || exit 1
+cp -Rv "$VLC_FRAMEWORKS"/* "$APP_FRAMEWORKS"/ || exit 1
 
 ## deploy vlc plugins
 
@@ -142,7 +145,7 @@ change_vlc_lib()
 {
   local target=$1
   for i in $(otool_libs "$target"); do
-    cp -v "$i" "$APP_FRAMEWORKS"/
+    cp -v "$i" "$APP_FRAMEWORKS"/ || exit 1
     install_name_tool -change "$i" \
       "@executable_path/../Frameworks/$(basename "$i")" \
       "$target"
@@ -150,17 +153,16 @@ change_vlc_lib()
 }
 
 #rm -Rfv "$APP_MACOS"/{lua,plugins}
-cp -Rv "$VLC_BUILD"/plugins "$APP_MACOS"/ || exit 1
-rm -f "$VLC_BUILD"/plugins/*.dat
 
-cp -Rv "$VLC_BUILD"/share/vlc/lua "$APP_MACOS"/share || exit 1
-cp -Rv "$VLC_BUILD"/share/locale "$APP_MACOS"/share/ || exit 1
+cp -Rv "$VLC_HOME"/{lib,plugins,share} "$APP_MACOS"/ || exit 1
+rm -f "$APP_MACOS"/plugins/*.dat
+rm -f "$APP_MACOS"/share/*.png
 
 #luac -s -o "$APP_MACOS"/lua/playlist/youtube.luac "$APP_SRC"/module/player/lua/playlist/youtube.lua  || exit 1
 
-for i in "$APP_MACOS"/plugins/*.dylib; do
-  change_vlc_lib "$i"
-done
+#for i in "$APP_MACOS"/plugins/*.dylib; do
+#  change_vlc_lib "$i"
+#done
 
 ## copy luascript
 
@@ -179,6 +181,7 @@ update_all_libs()
     otool -L "$APP_FRAMEWORKS"/*.dylib | sed '1d' | awk '{ print $1 }' | \
     grep -v "^@" | \
     grep -v "^/usr/lib/" | \
+    grep -v "^/usr/X11/lib/" | \
     grep -v "^/System/Library/Frameworks/" | \
     sort | uniq \
     `; do
@@ -210,6 +213,11 @@ change_all_libs()
   done
 }
 
+update_all_libs
+update_all_libs
+update_all_libs
+update_all_libs
+update_all_libs
 update_all_libs
 update_all_libs
 update_all_libs

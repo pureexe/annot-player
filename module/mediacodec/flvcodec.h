@@ -40,6 +40,7 @@ public:
                        OutputStream *vout, OutputStream *aout, bool async = true);
   void stop(); ///< Stop all background tasks.
 
+  static bool isFlvFile(const QString &fileName);
   static bool isFlvStream(InputStream *flv);
   static int getFlvStreamDuration(InputStream *flv);
 };

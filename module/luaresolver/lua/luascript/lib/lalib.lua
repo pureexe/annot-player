@@ -23,7 +23,7 @@ function getACFPV ( str_url, str_servername)
 		return 3;--BIRIBIRIPAD
 	elseif string.find(str_url, "mikufans.cn",1,true)~=nil  or string.find(str_url, "danmaku.us", 1, true)~=nil
 	then
-		if string.find(str_url, "Bilibili", 1,true)~=nil
+		if string.find(str_url, "bilibili", 1,true)~=nil
 		then
 			return 3;--BIRI
 		else
@@ -32,6 +32,9 @@ function getACFPV ( str_url, str_servername)
 	elseif string.find(str_url, "nicovideo.jp", 1, true)~=nil
 	then
 		return 2;--NICOP_2009
+	elseif string.find(str_url, "nico.galstars.net", 1, true)~=nil
+	then
+		return 2;
 	end
 	--2:NICOP_2009
 	--0:ACFPV_ORI

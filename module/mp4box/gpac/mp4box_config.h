@@ -12,7 +12,8 @@
 #endif // _MSC_VER
 
 #ifdef __GNUC__
-  #pragma GCC diagnostic ignored "-Wunused-parameter"   // unused parameter
+  #pragma GCC diagnostic ignored "-Wunused-parameter" // unused parameter
+  #pragma GCC diagnostic ignored "-Wpointer-sign"     // pointer with diff signess
 #endif // __GNUC__
 
 //#ifdef MP4BOX_SHARED

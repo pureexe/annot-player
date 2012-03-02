@@ -35,19 +35,19 @@ Logger::notify(const QString &message)
 {
   if (message.size() < MAX_LENGTH)
     gConsole().append(
-      HTML_STYLE_OPEN(color:purple) ": "
+      HTML_STYLE_OPEN(color:green) ": "
       + message +
       HTML_STYLE_CLOSE() HTML_BR()
     );
   else
     gConsole().append(
-      HTML_STYLE_OPEN(color:purple) ": "
+      HTML_STYLE_OPEN(color:green) ": "
       + message.left(MAX_LENGTH) +
       HTML_STYLE_OPEN(color:orange) " ..." HTML_STYLE_CLOSE()
       HTML_STYLE_CLOSE() HTML_BR()
     );
   LoggerSignals::globalInstance()->emit_notified(
-    HTML_STYLE_OPEN(color:purple) ": "
+    HTML_STYLE_OPEN(color:green) ": "
     + message +
     HTML_STYLE_CLOSE()
   );

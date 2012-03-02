@@ -35,7 +35,7 @@ LiveDialog::LiveDialog(QWidget *parent)
   }
 
   QToolButton *okButton = new QtExt::ToolButton; {
-    okButton->setStyleSheet(SS_TOOLBUTTON_TEXT);
+    okButton->setStyleSheet(SS_TOOLBUTTON_TEXT_HIGHLIGHT);
     okButton->setToolButtonStyle(Qt::ToolButtonTextOnly);
     okButton->setText(QString("[ %1 ]").arg(TR(T_OK)));
     okButton->setToolTip(TR(T_OK));

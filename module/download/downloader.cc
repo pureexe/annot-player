@@ -29,7 +29,7 @@ Downloader::get(const QUrl &url, const QString &header, bool async, int retries)
   if (!header.isEmpty()) {
     QHash<QString, QString> h = parseHttpHeader(header);
     foreach (QString k, h.keys())
-      request.setRawHeader(k.toAscii(), h[k].toAscii());
+      request.setRawHeader(k.toLocal8Bit(), h[k].toLocal8Bit());
   }
 
   QNetworkReply *reply = nam_->get(request);
@@ -120,7 +120,7 @@ Downloader::save(QNetworkReply *reply)
     if (!unzipped.isEmpty())
       data = unzipped;
   }
-  DOUT("data.size =" << data.size() << ", data =" << QString(data));
+  DOUT("data.size =" << data.size() << ", data =" << QString(data.left(50)) << "...");
   bool ok = save(data, path_);
   state_ = ok ? OK : Error;
   if (ok)

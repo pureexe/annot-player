@@ -8,8 +8,10 @@
   #include "win/qtwin/qtwin.h"
 #endif // USE_WIN_HOOK
 #ifdef Q_WS_MAC
-  #include "mac/qtvlc/qtvlc.h"
-  #include "mac/qtstep/qtstep.h"
+  #include "module/vlccore/video.h"
+  #include "mac/vlcstep/vlcstep.h"
+
+  #define DOUBLE_CLICK_TIMEOUT  1000 // 1 second
 #endif // Q_WS_MAC
 #include <QtGui>
 #ifdef Q_WS_X11
@@ -33,6 +35,8 @@ VideoView::VideoView(QWidget *parent)
   //setMouseTracking(true);
 
 #ifdef Q_WS_MAC
+  pressTime_ = releaseTime_ = 0;
+
   //setMouseTracking(true); // No effect since this is not a top-level window
   view_ = ::vlcvideoview_new();
   //setCocoaView(view_);
@@ -105,13 +109,20 @@ VideoView::viewMapFromGlobal(const QPoint &globalPos)
   if (isViewVisible())
     voutPos.ry() -= height(); // video view and cocoaView doesn't overlap
   QRect voutRect(voutPos, size());
-  ret = ::vlcvout_map_from_global(vout, globalPos, voutRect);
+  ret = vlccore::vout_map_from_global(vout, globalPos, voutRect);
   return ret;
 }
 
 void
 VideoView::setViewMousePressPos(const QPoint &globalPos)
 {
+  qint64 now = QDateTime::currentMSecsSinceEpoch();
+  if (now < pressTime_ + DOUBLE_CLICK_TIMEOUT) {
+    pressTime_ = now;
+    return;
+  }
+  pressTime_ = now;
+
   if (!view_)
     return;
   vlcglview_t *glview = ::vlcvideoview_glview(view_);
@@ -122,12 +133,19 @@ VideoView::setViewMousePressPos(const QPoint &globalPos)
     return;
 
   QPoint pos = viewMapFromGlobal(globalPos);
-  ::vlcvout_mouse_down(vout, pos);
+  vlccore::vout_mouse_down(vout, pos);
 }
 
 void
 VideoView::setViewMouseReleasePos(const QPoint &globalPos)
 {
+  qint64 now = QDateTime::currentMSecsSinceEpoch();
+  if (now < releaseTime_ + DOUBLE_CLICK_TIMEOUT) {
+    releaseTime_ = now;
+    return;
+  }
+  releaseTime_ = now;
+
   if (!view_)
     return;
   vlcglview_t *glview = ::vlcvideoview_glview(view_);
@@ -138,7 +156,7 @@ VideoView::setViewMouseReleasePos(const QPoint &globalPos)
     return;
 
   QPoint pos = viewMapFromGlobal(globalPos);
-  ::vlcvout_mouse_up(vout, pos);
+  vlccore::vout_mouse_up(vout, pos);
 }
 
 void
@@ -154,7 +172,7 @@ VideoView::setViewMouseMovePos(const QPoint &globalPos)
     return;
 
   QPoint pos = viewMapFromGlobal(globalPos);
-  ::vlcvout_mouse_moved(vout, pos);
+  vlccore::vout_mouse_moved(vout, pos);
 }
 
 #endif // Q_WS_MAC

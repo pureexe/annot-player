@@ -92,7 +92,7 @@ enum { ALPHA = 0 };
 #endif // Q_OS_WIN
 
 #ifdef Q_OS_WIN
-  #define G_PATH_LOGS   "../logs"
+  #define G_PATH_LOGS   "./logs"
 #elif defined (Q_OS_MAC)
   #define G_PATH_LOGS   QtMac::homeLogsPath() + "/" G_ORGANIZATION "/" G_APPLICATION
 #else

@@ -1,4 +1,4 @@
-// mrlmuxdownloadtask.cc
+ï»¿// mrlmuxdownloadtask.cc
 // 2/22/2012
 #include "mrlmuxdownloadtask.h"
 #include "mrlmuxdownloadtaskprivate.h"
@@ -11,8 +11,8 @@
 #include "module/mp4box/mp4box.h"
 #include "module/mrlresolver/mrlresolvermanager.h"
 #include <boost/tuple/tuple.hpp>
+#include <QDesktopServices>
 #include <QtNetwork>
-#include <QtGui>
 
 #define DEBUG "mrlmuxdownloadtask"
 #include "module/debug/debug.h"
@@ -54,24 +54,29 @@ MrlMuxDownloadTask::run()
 // - Download -
 
 QString
-MrlMuxDownloadTask::suffixForUrl(const QString &url)
+MrlMuxDownloadTask::suffixForUrl(const QString &url, const QString &codecs)
 {
+  QString pad;
+  if (!pad.isEmpty())
+    pad.prepend(" ");
   if (url.contains(".nicovideo.jp/", Qt::CaseInsensitive))
-    return " (nico H264 AAC).mp4";
+    return " (nico" + pad + ").mp4";
   else if (url.contains(".bilibili.tv/", Qt::CaseInsensitive))
-    return " (bili H264 AAC).mp4";
+    return " (bili" + pad + ").mp4";
   else if (url.contains(".acfun.tv/", Qt::CaseInsensitive))
-    return " (acfun H264 AAC).mp4";
+    return " (acfun" + pad + ").mp4";
   else if (url.contains(".youku.com/", Qt::CaseInsensitive))
-    return " (youku H264 AAC).mp4";
+    return " (youku" + pad + ").mp4";
   else if (url.contains(".sina.com.cn/", Qt::CaseInsensitive))
-    return " (sina H264 AAC).mp4";
+    return " (sina" + pad + ").mp4";
   else if (url.contains(".qq.com/", Qt::CaseInsensitive))
-    return " (qq H264 AAC).mp4";
+    return " (qq" + pad + ").mp4";
   else if (url.contains(".tudou.com/", Qt::CaseInsensitive))
     return " (tudou H264 AAC).mp4";
+  else if (!codecs.isEmpty())
+    return " (" + codecs + ").mp4";
   else
-    return " (H264 AAC).mp4";
+    return ".mp4";
 }
 
 QString
@@ -79,8 +84,9 @@ MrlMuxDownloadTask::escapeFileName(const QString &name)
 {
   QString ret = name;
   ret.remove('"');
-  ret.replace('/', "^");
-  ret.replace('?', "H");
+  ret.replace('/', "ï¼");
+  ret.replace(':', "-");
+  ret.replace('?', "ï¼Ÿ");
   return ret.trimmed();
 }
 
@@ -97,7 +103,7 @@ MrlMuxDownloadTask::downloadAndMuxMedia(const MediaInfo &mi, QNetworkCookieJar *
   QString desktopPath = QDesktopServices::storageLocation(QDesktopServices::DesktopLocation);
 
   if (mi.mrls.isEmpty()) {
-    setPath(desktopPath);
+    setFileName(QString());
     setState(Error);
     DOUT("exit: empty mrl");
     return;
@@ -107,7 +113,7 @@ MrlMuxDownloadTask::downloadAndMuxMedia(const MediaInfo &mi, QNetworkCookieJar *
 
   title = escapeFileName(title);
   QString baseName = desktopPath + "/_" + title;
-  QString path = baseName + suffixForUrl(mi.mrls.first().url);
+  QString file = baseName + suffixForUrl(mi.mrls.first().url, "H264 AAC");
 
   InputStreamList ins;
   RemoteStream *first = 0;
@@ -147,38 +153,38 @@ MrlMuxDownloadTask::downloadAndMuxMedia(const MediaInfo &mi, QNetworkCookieJar *
       DOUT("not a flv stream, download as it is");
       //emit error(tr("failed to demux flv stream") + ": " + mi.mrls.first().url);
 
-      path = baseName + ".mp4";
-      downloadMedia(path);
+      file = baseName + ".mp4";
+      downloadMedia(file);
       DOUT("exit");
       return;
     }
     first->reset();
     DOUT("download and remux to mp4");
 
-    setPath(path);
+    setFileName(file);
 
     if (ins_.size() > 1)
       foreach (RemoteStream *in, ins_)
         if (in != first)
           in->run();
 
-    QString videoPath = baseName + ".264";
-    QString audioPath = baseName + ".aac";
+    QString videoFile = baseName + ".264";
+    QString audioFile = baseName + ".aac";
 
-    videoOut_->setFileName(videoPath);
+    videoOut_->setFileName(videoFile);
     if (!videoOut_->open()) {
       stop();
       setState(Error);
-      emit error(tr("failed to open file to write") + ": " + videoPath);
+      emit error(tr("failed to open file to write") + ": " + videoFile);
       return;
     }
-    audioOut_->setFileName(audioPath);
+    audioOut_->setFileName(audioFile);
     if (!audioOut_->open()) {
       stop();
       setState(Error);
       videoOut_->close();
-      QFile::remove(videoPath);
-      emit error(tr("failed to open file to write") + ": " + audioPath);
+      QFile::remove(videoFile);
+      emit error(tr("failed to open file to write") + ": " + audioFile);
       return;
     }
 
@@ -194,13 +200,13 @@ MrlMuxDownloadTask::downloadAndMuxMedia(const MediaInfo &mi, QNetworkCookieJar *
     if (demux_->isFinished() && mux())
       finish();
     else {
-      QFile::remove(path);
+      QFile::remove(file);
       if (!isStopped())
         setState(Error);;
-      emit error(tr("download incomplete") + ": " + path);
+      emit error(tr("download incomplete") + ": " + file);
     }
-    QFile::remove(audioPath);
-    QFile::remove(videoPath);
+    QFile::remove(audioFile);
+    QFile::remove(videoFile);
   }
   DOUT("exit");
 }
@@ -222,40 +228,42 @@ MrlMuxDownloadTask::mux()
   QStringList tracks;
   tracks.append(videoOut_->fileName());
   tracks.append(audioOut_->fileName());
-  QString fileName = path();
+  QString file = fileName();
   Mp4Box::Mp4Info info;
-  bool ret = Mp4Box::muxMp4File(fileName, tracks, &info);
+  bool ret = Mp4Box::muxMp4File(file, tracks, &info);
+  if (ret)
+    ret = Mp4Codec::isMp4File(file);
   if (!ret) {
-    emit error(tr("failed to mux media") + ": " + fileName);
+    emit error(tr("failed to mux media") + ": " + file);
     DOUT("exit: failed to mux mp4");
     return false;
   }
   int width = info.width,
       height = info.height;
   if (!width || !height)
-    boost::tie(width, height) = Mp4Codec::fileDimension(fileName);
-  QString oldName = fileName;
+    boost::tie(width, height) = Mp4Codec::fileDimension(file);
+  QString oldFile = file;
 #ifdef Q_OS_WIN
-  fileName.replace("\\", "/");
+  file.replace("\\", "/");
 #endif // Q_OS_WIN
-  int i = fileName.lastIndexOf("/_");
+  int i = file.lastIndexOf("/_");
   if (i >= 0)
-    fileName.remove(i + 1, 1);
+    file.remove(i + 1, 1);
   if (width && height) {
-    fileName.replace(QRegExp("H264 AAC\\)\\.mp4$"), QString("%1x%2 H264 AAC).mp4")
+    file.replace(QRegExp("H264 AAC\\)\\.mp4$"), QString("%1x%2 H264 AAC).mp4")
       .arg(QString::number(width)).arg(QString::number(height))
     );
   }
-  if (fileName != oldName) {
-    QFile::remove(fileName);
-    ret = QFile::rename(oldName, fileName);
+  if (file != oldFile) {
+    QFile::remove(file);
+    ret = QFile::rename(oldFile, file);
     if (ret)
-      setPath(fileName);
+      setFileName(file);
     else
-      emit error(tr("failed to rename downloaded file") + ": " + fileName);
+      emit error(tr("failed to rename downloaded file") + ": " + file);
   }
   DOUT("exit: ret =" << ret);
-  return true; // always return true, even if renaming failed
+  return ret; // always return true, even if renaming failed
 }
 
 void
@@ -292,21 +300,21 @@ MrlMuxDownloadTask::updateProgressWithId(qint64 receivedBytes, qint64 totalBytes
 }
 
 void
-MrlMuxDownloadTask::downloadMedia(const QString &path)
+MrlMuxDownloadTask::downloadMedia(const QString &file)
 {
-  DOUT("enter: path =" << path);
+  DOUT("enter: file =" << file);
   Q_ASSERT(ins_.size() > 1);
-  setPath(path);
-  FileOutputStream *out = new FileOutputStream(path, this);
+  setFileName(file);
+  FileOutputStream *out = new FileOutputStream(file, this);
   if (!out->open()) {
-    emit error(tr("failed to open file to write") + ": " + path);
+    emit error(tr("failed to open file to write") + ": " + file);
     stop();
     setState(Error);
     DOUT("exit: cannot write to file");
     return;
   }
 
-  RemoteStream *in = ins_.front();
+  RemoteStream *in = ins_.first();
   BufferedStreamPipe *pipe = new BufferedStreamPipe(in, out, this);
   //connect(pipe_, SIGNAL(finished()), SLOT(finish()));
   connect(pipe, SIGNAL(error(QString)), SIGNAL(error(QString)));
@@ -314,37 +322,34 @@ MrlMuxDownloadTask::downloadMedia(const QString &path)
 
   pipe->run();
   out->close();
-  if (pipe->isFinished()) {
+  bool mp4;
+  if (pipe->isFinished() &&
+     ((mp4 = Mp4Codec::isMp4File(file)) || FlvCodec::isFlvFile(file))
+     ) {
     // Rename file
-    QString fileName = path;
-    int width, height;
-    boost::tie(width, height) = Mp4Codec::fileDimension(path);
+    QString newFile = file;
 #ifdef Q_OS_WIN
-    fileName.replace("\\", "/");
+    newFile.replace("\\", "/");
 #endif // Q_OS_WIN
-    int i = fileName.lastIndexOf("/_");
+    int i = newFile.lastIndexOf("/_");
     if (i >= 0)
-      fileName.remove(i + 1, 1);
-    fileName.replace(QRegExp("\\.mp4$"), suffixForUrl(ins_.first()->url().toString()));
-    if (width && height) {
-      fileName.replace(QRegExp("H264 AAC\\)\\.mp4$"), QString("%1x%2 H264 AAC).mp4")
-        .arg(QString::number(width)).arg(QString::number(height))
-      );
-    }
-    if (fileName != path) {
-      QFile::remove(fileName);
-      bool ok = QFile::rename(path, fileName);
+      newFile.remove(i + 1, 1);
+    if (!mp4)
+      newFile.replace(QRegExp("\\.mp4$"), ".flv");
+    if (newFile != file) {
+      QFile::remove(newFile);
+      bool ok = QFile::rename(file, newFile);
       if (ok)
-        setPath(fileName);
+        setFileName(newFile);
       else
-        emit error(tr("failed to rename downloaded file") + ": " + fileName);
+        emit error(tr("failed to rename downloaded file") + ": " + newFile);
     }
     finish();
   } else {
-    QFile::remove(path);
+    QFile::remove(fileName());
     if (!isStopped())
       setState(Error);;
-    emit error(tr("download incomplete") + ": " + path);
+    emit error(tr("download incomplete") + ": " + fileName());
   }
   DOUT("exit");
 }

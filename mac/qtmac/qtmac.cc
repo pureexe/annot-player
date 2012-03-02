@@ -1,20 +1,15 @@
 // qtmac.cc
 // 11/11/2011
 
-#include <QtGlobal>
-#ifndef Q_WS_MAC
-  #error "This file is for mac only."
-#endif // Q_WS_MAC
-
 #include "qtmac.h"
 #include <QtCore>
 #ifdef WITH_IOKIT
-  #include <IOKit/IOKitLib.h>
-  #include <IOKit/IOBSD.h>
-  #include <IOKit/storage/IOMedia.h>
-  #include <IOKit/storage/IOCDMedia.h>
-  #include <IOKit/storage/IOCDTypes.h>
-  #include <CoreFoundation/CoreFoundation.h>
+#  include <IOKit/IOKitLib.h>
+#  include <IOKit/IOBSD.h>
+#  include <IOKit/storage/IOMedia.h>
+#  include <IOKit/storage/IOCDMedia.h>
+#  include <IOKit/storage/IOCDTypes.h>
+#  include <CoreFoundation/CoreFoundation.h>
 #endif // WITH_IOKIT
 #include <sys/param.h>
 #include <paths.h>

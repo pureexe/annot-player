@@ -61,6 +61,21 @@ DownloadTaskDialog::createLayout()
 {
   textView_ = new TextView;
 
+  urlButton_ = new QtExt::ToolButton; {
+    urlButton_->setText(tr("http://www.nicovideo.jp/watch/sm12159572"));
+    urlButton_->setStyleSheet(SS_TOOLBUTTON_TEXT_URL);
+    urlButton_->setToolTip(tr("Click to paste the URL example"));
+    urlButton_->setCheckable(true);
+    urlButton_->setChecked(true);
+  } connect(urlButton_, SIGNAL(clicked(bool)), SLOT(showExampleUrl()));
+
+  QLabel *urlLabel = new QLabel; {
+    urlLabel->setStyleSheet(SS_LABEL);
+    urlLabel->setText(TR(T_EXAMPLE) + ":");
+    urlLabel->setToolTip(TR(T_EXAMPLE));
+    urlLabel->setBuddy(urlButton_);
+  }
+
 #define MAKE_BUTTON(_button, _title, _tip, _slot) \
     QToolButton *_button = new QtExt::ToolButton; { \
       _button->setStyleSheet(SS_TOOLBUTTON_TEXT); \
@@ -73,11 +88,18 @@ DownloadTaskDialog::createLayout()
   MAKE_BUTTON(pasteButton, TR(T_PASTE), TR(T_PASTE), SLOT(paste()))
   MAKE_BUTTON(clearButton, TR(T_CLEAR), TR(T_CLEAR), SLOT(clear()))
 
+  addButton->setStyleSheet(SS_TOOLBUTTON_TEXT_HIGHLIGHT);
+
   // Layout
   QVBoxLayout *rows = new QVBoxLayout; {
-    QHBoxLayout *footer = new QHBoxLayout;
+    QHBoxLayout *header = new QHBoxLayout,
+                *footer = new QHBoxLayout;
+    rows->addLayout(header);
     rows->addWidget(textView_);
     rows->addLayout(footer);
+
+    header->addWidget(urlLabel);
+    header->addWidget(urlButton_);
 
     footer->addWidget(clearButton);
     footer->addWidget(pasteButton);
@@ -88,6 +110,7 @@ DownloadTaskDialog::createLayout()
     int patch = 0;
     if (!UiStyle::isAeroAvailable())
       patch = 9;
+    header->setContentsMargins(0, 0, 0, 0);
     footer->setContentsMargins(0, 0, 0, 0);
     rows->setContentsMargins(0, 0, 0, 0);
     setContentsMargins(9, patch, 9, patch);
@@ -135,6 +158,10 @@ DownloadTaskDialog::paste()
     textView_->append(t);
   }
 }
+
+void
+DownloadTaskDialog::showExampleUrl()
+{ setText(urlButton_->text()); }
 
 void
 DownloadTaskDialog::clear()

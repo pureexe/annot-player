@@ -1,7 +1,7 @@
 # player.pro
 # 6/30/2011
 
-VERSION = 0.1.2.9
+VERSION = 0.1.3.0
 
 include(../../config.pri)
 include(tr/tr.pri)
@@ -70,7 +70,7 @@ unix:!mac {
 }
 mac {
     include($$ROOTDIR/mac/qtmac/qtmac.pri)
-    include($$ROOTDIR/mac/qtvlc/qtvlc.pri)
+    include($$ROOTDIR/mac/vlcstep/vlcstep.pri)
 }
 
 QT      += core gui sql network #webkit

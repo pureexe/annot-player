@@ -44,7 +44,18 @@ function getTaskAttribute_nico ( str_url, str_tmpfile , pDlg)
   end
 
   --get descriptor
-  local re = dlFile(str_tmpfile, str_url);
+
+  -- jichi 3/2/2012: cookies from original URL is essential, get twice
+  -- tw.nicovideo. will be broken here. fuck taiwan!
+  local nico_url = "http://www.nicovideo.jp/watch/"..str_id;
+  local re;
+  --re = dlFile(str_tmpfile, nico_url);
+  --dlFile(str_tmpfile, "http://nico.galstars.net/?t=www&u=%2Fimg%2Fremocon%2Fremocon_off.gif"); -- bypass banning
+  --dlFile(str_tmpfile, "http://nico.galstars.net/?t=www&u=%2Fswf%2Fplayer%2Fjsconnector.swf%3Fv%3D201111141207"); -- bypass banning
+
+  --local nico_proxy_url = "http://nico.galstars.net/?t=www&u=%2Fwatch%2F"..str_id;
+  local nico_proxy_url = "http://nico.galstars.net/?t=www&u=/watch/"..str_id;
+  re = dlFile(str_tmpfile, nico_proxy_url); -- bypass banning
   local forbidden = false;
   if re~=0
   then
@@ -122,6 +133,7 @@ function getTaskAttribute_nico ( str_url, str_tmpfile , pDlg)
     re = dlFile(str_tmpfile, str_getflv_url);
   else
     local str_getflv_url = "http://flapi.nicovideo.jp/api/getflv";
+    --local str_getflv_url = "http://nico.galstars.net/?t=&u=/api/getflv";
     --local str_post_data = string.format("v=%s&ts=%s&as=1", str_id, tostring(os.time()));
     local str_post_data = string.format("v=%s&as=1", str_id);
     re = postdlFile(str_tmpfile, str_getflv_url, str_post_data, "Referer: http\r\nContent-type: application/x-www-form-urlencoded");
@@ -171,7 +183,6 @@ function getTaskAttribute_nico ( str_url, str_tmpfile , pDlg)
 
   -- parse ok close file
   io.close(file);
-
 
   local str_threadkey = nil;
   local str_force_184 = nil;
@@ -268,7 +279,7 @@ function getTaskAttribute_nico ( str_url, str_tmpfile , pDlg)
   tbl_ta["realurls"] = tbl_realurls;
   tbl_ta["sizes"] = {};
   tbl_ta["durations"] = tbl_durations;
-  tbl_ta["oriurl"] = str_url;
+  tbl_ta["oriurl"] = nico_url;
   --dbgMessage(tbl_realurls["0"]);
   --dbgMessage(tbl_ta["realurls"]["0"]);
   --dbgMessage(string.format("%d videos.", int_realurlnum));

@@ -47,9 +47,9 @@ signals:
 public slots:
   void setPath(const QString &path) { path_ = path; }
   void get(const QUrl &url,
-           const QString &header = QString(), bool async = true, int retries = 3);
+           const QString &header = QString(), bool async = true, int retries = 5);
   void post(const QUrl &url, const QByteArray &data = QByteArray(),
-            const QString &header = QString(), bool async = true, int retries = 3);
+            const QString &header = QString(), bool async = true, int retries = 5);
 
   QNetworkAccessManager *networkAccessManager() const { return nam_; }
 

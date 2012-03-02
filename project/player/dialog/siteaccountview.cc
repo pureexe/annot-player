@@ -79,7 +79,7 @@ SiteAccountView::createLayout()
 #undef ADDSITE
 
   QToolButton *saveButton = new QtExt::ToolButton; {
-    saveButton->setStyleSheet(SS_TOOLBUTTON_TEXT);
+    saveButton->setStyleSheet(SS_TOOLBUTTON_TEXT_HIGHLIGHT);
     saveButton->setToolButtonStyle(Qt::ToolButtonTextOnly);
     saveButton->setText(QString("[ %1 ]").arg(TR(T_SAVE)));
     saveButton->setToolTip(TR(T_SAVE));

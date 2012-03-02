@@ -80,6 +80,8 @@ DownloadDialog::createLayout()
   MAKE_BUTTON(openDirectoryButton_, tr("Dir"), tr("Open directory"), SLOT(openDirectory()));
   MAKE_BUTTON(addButton_, TR(T_ADD), TR(T_ADD), SLOT(add()));
 
+  addButton_->setStyleSheet(SS_TOOLBUTTON_TEXT_HIGHLIGHT);
+
   startButton_->setEnabled(false);
   stopButton_->setEnabled(false);
   removeButton_->setEnabled(false);
@@ -257,15 +259,22 @@ void
 DownloadDialog::open()
 {
   DownloadTask *t = currentTask();
-  if (t && !t->path().isEmpty())
-    emit openFileRequested(t->path());
+  if (t && !t->fileName().isEmpty())
+    emit openFileRequested(t->fileName());
 }
 
 void
 DownloadDialog::openDirectory()
 {
   QString desktopPath = QDesktopServices::storageLocation(QDesktopServices::DesktopLocation);
-  QDesktopServices::openUrl("file://" + desktopPath);
+  QString url =
+#ifdef Q_OS_WIN
+    "file:///" + desktopPath
+#else
+    "file://" + desktopPath
+#endif // Q_OS_WIN
+  ;
+  QDesktopServices::openUrl(url);
 }
 
 // - Download -
@@ -299,7 +308,7 @@ DownloadDialog::addUrl(const QString &url)
   //QEventLoop loop;
   //connect(t, SIGNAL(error(QString)), &loop, SLOT(quit()));
   //connect(t, SIGNAL(finished()), &loop, SLOT(quit()));
-  //connect(t, SIGNAL(pathChanged(QString)), &loop, SLOT(quit()));
+  //connect(t, SIGNAL(fileNameChanged(QString)), &loop, SLOT(quit()));
   //loop.exec();
   //DOUT("eventloop leave");
 
@@ -315,7 +324,7 @@ DownloadDialog::addTask(DownloadTask *t)
 
 #define FORMAT_TIME(_msecs)       downloadTimeToString(_msecs)
 #define FORMAT_STATE(_state)      downloadStateToString(_state)
-#define FORMAT_PERCENTAGE(_real)  QString().sprintf("%.1f%%", (_real)*100)
+#define FORMAT_PERCENTAGE(_real)  QString().sprintf("%.2f%%", (_real)*100)
 #define FORMAT_SIZE(_size)        downloadSizeToString(_size)
 #define FORMAT_SPEED(_speed)      downloadSpeedToString(_speed)
 
@@ -349,7 +358,7 @@ DownloadDialog::refresh()
 
 #define FORMAT_TIME(_msecs)       downloadTimeToString(_msecs)
 #define FORMAT_STATE(_state)      downloadStateToString(_state)
-#define FORMAT_PERCENTAGE(_real)  QString().sprintf("%.1f%%", (_real)*100)
+#define FORMAT_PERCENTAGE(_real)  QString().sprintf("%.2f%%", (_real)*100)
 #define FORMAT_SIZE(_size)        downloadSizeToString(_size)
 #define FORMAT_SPEED(_speed)      downloadSpeedToString(_speed)
 
@@ -377,7 +386,7 @@ DownloadDialog::refresh()
     sourceModel_->setData(sourceModel_->index(row, HD_Speed), t->isFinished() ? QString("-") : FORMAT_SPEED(t->speed()), Qt::DisplayRole);
     sourceModel_->setData(sourceModel_->index(row, HD_Percentage), FORMAT_PERCENTAGE(t->percentage()), Qt::DisplayRole);
     sourceModel_->setData(sourceModel_->index(row, HD_RemainingTime), t->isFinished() ? QString("-") : FORMAT_TIME(t->remainingTime()), Qt::DisplayRole);
-    sourceModel_->setData(sourceModel_->index(row, HD_Path), t->path(), Qt::DisplayRole);
+    sourceModel_->setData(sourceModel_->index(row, HD_Path), t->fileName(), Qt::DisplayRole);
     sourceModel_->setData(sourceModel_->index(row, HD_Url), t->url(), Qt::DisplayRole);
     //sourceModel_->setData(sourceModel_->index(row, HD_Id), t->id(), Qt::DisplayRole);
 
@@ -409,12 +418,12 @@ DownloadDialog::finish(DownloadTask *task)
   Q_ASSERT(task);
   if (!task->isFinished())
     return;
-  QString path = task->path();
-  if (QFile::exists(path)) {
-    log(tr("download finished") + ": " + path);
-    emit downloadFinished(path, task->url());
+  QString file = task->fileName();
+  if (QFile::exists(file)) {
+    log(tr("download finished") + ": " + file);
+    emit downloadFinished(file, task->url());
   } else
-    warn(tr("download failed") + ": " + path);
+    warn(tr("download failed") + ": " + file);
   QApplication::beep();
 }
 
@@ -428,7 +437,7 @@ DownloadDialog::invalidateButtons()
     removeButton_->setEnabled(false);
     openButton_->setEnabled(false);
   } else {
-    bool e = QFile::exists(t->path());
+    bool e = QFile::exists(t->fileName());
     startButton_->setEnabled(!t->isRunning() && !e);
     stopButton_->setEnabled(t->isRunning());
     removeButton_->setEnabled(true);

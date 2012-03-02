@@ -52,6 +52,7 @@ BacklogDialog::createLayout()
 
   MAKE_BUTTON(okButton, TR(T_OK), SLOT(hide()))
   MAKE_BUTTON(clearButton, TR(T_CLEAR), SLOT(clear()))
+  okButton->setStyleSheet(SS_TOOLBUTTON_TEXT_HIGHLIGHT);
 
   // Layout
   QVBoxLayout *rows = new QVBoxLayout; {

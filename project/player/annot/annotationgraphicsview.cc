@@ -507,7 +507,7 @@ AnnotationGraphicsView::addAnnotation(const Annotation &annot, qint64 delaysecs)
 
   qint64 pos = annot.pos();
   if (!hub_->isSignalTokenMode())
-    pos = pos / 1000; // msecs => secs, cluster media annotation by seconds
+    pos = qRound64(pos / 1000.0); // msecs => secs, cluster media annotation by seconds
 
   //QList<AnnotationGraphicsItem*> *l = annots_[pos];
   //if (!l)
@@ -522,7 +522,7 @@ AnnotationGraphicsView::addAnnotation(const Annotation &annot, qint64 delaysecs)
   if (delaysecs == LLONG_MAX)
     show = true;
   else if (hub_->isMediaTokenMode() && player_->hasMedia()) {
-    qint64 secsdiff =  player_->time() / 1000 - annot.pos() / 1000;
+    qint64 secsdiff =  player_->time() / 1000 - pos;
     if (secsdiff >= 0 && secsdiff <= delaysecs)
       show = true;
   }
@@ -631,7 +631,7 @@ AnnotationGraphicsView::showAnnotationsAtPos(qint64 pos)
   emit annotationPosChanged(pos);
 
   if (!hub_->isSignalTokenMode())
-    pos = pos / 1000; // msecs => secs
+    pos = qRound64(pos / 1000.0); // msecs => secs
 
   //if (annots_.contains(pos)) {
   //  DOUT("found annotations at pos =" << pos);

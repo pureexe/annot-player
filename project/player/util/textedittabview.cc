@@ -64,7 +64,7 @@ void
 TextEditTabView::addTab(const QString &tabName)
 {
   QtExt::ToolButtonWithId *tabButton = new QtExt::ToolButtonWithId(tabCount_); {
-    tabButton->setStyleSheet(SS_TOOLBUTTON_TEXT);
+    tabButton->setStyleSheet(SS_TOOLBUTTON_TEXT_TAB);
     tabButton->setToolButtonStyle(Qt::ToolButtonTextOnly);
     tabButton->setText(QString("- %1 -").arg(tabName));
     tabButton->setToolTip(

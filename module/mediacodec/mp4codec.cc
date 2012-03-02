@@ -3,6 +3,7 @@
 
 #include "mp4codec.h"
 #include "module/datastream/inputstream.h"
+#include "module/datastream/fileinputstream.h"
 #include <mp4v2/mp4v2.h>
 #include <QtCore>
 #include <cstdlib>
@@ -33,15 +34,25 @@ Mp4Codec::isMp4Stream(InputStream *input)
 {
   Q_ASSERT(input);
   input->reset();
-  if (input->size() < 3)
+  if (input->size() < 8)
     return false;
   input->reset();
-  char data[3];
+  char data[8];
+  enum { size = sizeof(data)/sizeof(*data) };
   int count = input->read(data, sizeof(data));
-  return count == 3 &&
-      data[0] == 'M' &&
-      data[1] == 'P' &&
-      data[2] == '4';
+  // xxxx xxxx
+  // 6674 7970 6973 6f6d: ftypisom
+  // 0000 0200
+  // ...................: isomiso2avc1mp41
+  return count == size &&
+      data[4] == 'f' && data[5] == 't' && data[6] == 'y' && data[7] == 'p';
+}
+
+bool
+Mp4Codec::isMp4File(const QString &fileName)
+{
+  FileInputStream fin(fileName);
+  return isMp4Stream(&fin);
 }
 
 std::pair<int, int>

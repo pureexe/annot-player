@@ -3,7 +3,7 @@
 # See: http://fedoraproject.org/wiki/How_to_create_an_RPM_package
 
 ## environment
-VERSION=0.1.2.9
+VERSION=0.1.3.0
 
 PACKAGE_NAME=annot-player
 PACKAGE_VERSION=$VERSION

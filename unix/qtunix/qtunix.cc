@@ -20,7 +20,7 @@ QtUnix::getDevicesWithType(DeviceType type)
   QStringList ret;
   switch (type) {
   case HardDisk:
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     ret = getDevicesWithNameFilter("rdisk*");
 #else // UNIX
     {
@@ -28,10 +28,10 @@ QtUnix::getDevicesWithType(DeviceType type)
       filters.append("sd*");
       ret = getDevicesWithNameFilters(filters);
     }
-#endif // Q_WS_MAC
+#endif // Q_OS_MAC
     break;
   case CdRom:
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     {
       QStringList disks = getDevicesWithNameFilter("rdisk*");
       if (!disks.isEmpty())
@@ -41,7 +41,7 @@ QtUnix::getDevicesWithType(DeviceType type)
     }
 #else
     ret = getDevicesWithNameFilter("cdrom*");
-#endif // Q_WS_MAC
+#endif // Q_OS_MAC
     break;
   default: break;
   }

@@ -264,6 +264,10 @@ public:
 
   // - Signals -
 signals:
+  void error(const QString &msg);
+  void message(const QString &msg);
+  void fileSaved(const QString &fileName);
+  void downloadProgress(qint64 receivedBytes, qint64 totalBytes);
   void opening();
   void buffering();
   void playing();
@@ -316,8 +320,8 @@ public:
   Impl *impl() const { return impl_; } ///< \internal
 
 protected:
-  QByteArray decode(const QString &utf) const;
-  QString encode(const char *ascii) const;
+  //QByteArray decode(const QString &utf) const;
+  //QString encode(const char *ascii) const;
 
   void attachEvents();
   void detachEvents();

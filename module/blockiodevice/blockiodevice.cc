@@ -156,7 +156,7 @@ BlockIODevice::open(OpenMode mode)
   Q_ASSERT(!fileName_.isEmpty());
 #ifdef Q_OS_WIN
   fd_ = ::CreateFileA(
-    fileName_.toAscii(), // device file name
+    fileName_.toLocal8Bit(), // device file name
     GENERIC_READ, // Read-only
     FILE_SHARE_READ, // Read-only
     nullptr, // Default security attributes
@@ -165,7 +165,7 @@ BlockIODevice::open(OpenMode mode)
     nullptr // Template file
   );
 #else
-  fd_ = ::open(fileName_.toAscii(), O_RDONLY | O_NONBLOCK);
+  fd_ = ::open(fileName_.toLocal8Bit(), O_RDONLY | O_NONBLOCK);
 #endif // Q_OS_WIN
   if (::isValidFd_(fd_)) { // succeedded
     setOpenMode(mode);

@@ -111,6 +111,7 @@ signals:
   void warned(const QString &text);
   void showTextRequested(const QString &text);
   void windowClosed();
+  void windowTitleToChange(QString title);
 
   void seeked();
   void addAndShowAnnotationRequested(const Annotation &a);
@@ -243,6 +244,7 @@ public slots:
   //void help(); // TODO
 
   void invalidateWindowTitle();
+  void updateDownloadProgress(qint64 receivedBytes, qint64 totalBytes);
   void syncInputLineText(const QString &text);
   void syncPrefixLineText(const QString &text);
 
@@ -254,7 +256,9 @@ public slots:
   void openInWebBrowser();
   void downloadCurrentUrl();
 protected:
+  QString newWindowTitle() const;
   QString currentUrl() const;
+  static QString downloadSpeedToString(int speed);
 public slots:
   void invalidateMediaAndPlay(bool async = true);
 
@@ -366,6 +370,7 @@ public slots:
   void submitAlias(const Alias &alias, bool async = true);
   void submitAliasText(const QString &text, qint32 type = 0, bool async = true);
 
+  void signFile(const QString &path, bool async = true);
   void signFileWithUrl(const QString &path, const QString &url, bool async = true);
 
   void blessTokenWithId(qint64 tid, bool async = true);
@@ -414,6 +419,7 @@ protected slots:
   // - Events -
 public slots:
   virtual void setVisible(bool visible); ///< \override
+  void dispose();
 protected:
   virtual bool event(QEvent *event); ///< \override
   virtual void mousePressEvent(QMouseEvent *event); ///< \override
@@ -432,9 +438,6 @@ protected:
   virtual void contextMenuEvent(QContextMenuEvent *event); ///< \override
 
   virtual void closeEvent(QCloseEvent *event); ///< \override
-  void closeEventEnter();
-public:
-  void closeEventLeave(QCloseEvent *event); ///< \internal
 
 protected slots:
   virtual void dragEnterEvent(QDragEnterEvent *event); ///< \override
@@ -493,6 +496,12 @@ protected slots:
   void setAnnotationEffectToTransparent();
   void setAnnotationEffectToShadow();
   void setAnnotationEffectToBlur();
+
+  // - Navigation -
+protected slots:
+  void setNavigationEnabled(bool t);
+  void enableNavigation() { setNavigationEnabled(true); }
+  void disableNavigation() { setNavigationEnabled(false); }
 
   // - Browse -
 public slots:
@@ -573,6 +582,7 @@ private:
   int liveInterval_; // TO BE REMOVED
   QMutex inetMutex_;    // mutext for remote communication
   QMutex playerMutex_;  // mutex for local player
+  QMutex annotMutex_;
   Tray *tray_;
   SignalHub *hub_;
 
@@ -582,6 +592,7 @@ private:
 
   QTimer *liveTimer_;
   QTimer *windowStaysOnTopTimer_;
+  QTimer *navigationTimer_;
   QStringList annotationUrls_;
 
   //QTimer *windowStaysOnTopTimer_;
@@ -647,6 +658,7 @@ private:
   UserView *userView_;
 
   QPoint dragPos_;
+  qint64 windowModeUpdateTime_;
 
   qint32 tokenType_; // current token type tt
 
@@ -667,12 +679,12 @@ private:
 
   // - Menus and actions -
 
-//#ifndef Q_WS_WIN
+//#ifndef Q_OS_WIN
   //QMenuBar *menuBar_;
   QMenu *fileMenu_,
         //*viewMenu_,
         *helpMenu_;
-//#endif // !Q_WS_WIN
+//#endif // !Q_OS_WIN
 
   QMenu *contextMenu_,
         *advancedMenu_,

@@ -9,8 +9,7 @@ INCLUDEPATH += $$PWD
 HEADERS += \
     $$PWD/player_config.h \
     $$PWD/playerprivate.h \
-    $$PWD/player.h \
-    $$PWD/vlcext.h
+    $$PWD/player.h
 
 SOURCES += \
     $$PWD/player.cc
@@ -20,5 +19,7 @@ OTHER_FILES += \
 
 QT      += core gui network
 LIBS    += -lvlc -lvlccore
+
+!mac: DEFINES += USE_PLAYER_PLAYLIST
 
 # EOF

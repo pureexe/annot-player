@@ -143,12 +143,11 @@ AnnotationGraphicsItem::warmUp()
   //qDebug() << ::default_annot_font_(Traits::Japanese).rawName();
   //qDebug() << ::default_annot_font_(Traits::Japanese).family();
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
   QGraphicsTextItem dummy;
 
   QFont j = ::default_annot_font_(Traits::Japanese),
         c = ::default_annot_font_(Traits::Chinese);
-
 
   j.setWeight(QFont::Light); dummy.setFont(j);
   c.setWeight(QFont::Light); dummy.setFont(c);
@@ -164,7 +163,7 @@ AnnotationGraphicsItem::warmUp()
 
   j.setWeight(QFont::Black); dummy.setFont(j);
   c.setWeight(QFont::Black); dummy.setFont(c);
-#endif // Q_WS_MAC
+#endif // Q_OS_MAC
 }
 
 AnnotationGraphicsItem::AnnotationGraphicsItem(

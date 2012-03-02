@@ -24,9 +24,9 @@ public:
 
 signals:
   void titleChanged(QString title);
-  void pathChanged(QString path);
+  void fileNameChanged(QString fileName);
   void stateChanged(int state);
-  void progress(qint64 bytesReceived, qint64 bytesTotal);
+  void progress(qint64 receivedBytes, qint64 totalBytes);
   void finished(DownloadTask *self);
   void error(QString message);
 
@@ -35,7 +35,7 @@ public:
   int id() const { return id_; }
   State state() const { return state_; }
   const QString &title() const { return title_; }
-  const QString &path() const { return path_; }
+  const QString &fileName() const { return fileName_; }
   const QString &url() const { return url_; }
 
   bool isStopped() const { return state_ == Stopped; }
@@ -58,10 +58,10 @@ public slots:
 
 protected slots:
   void setState(State state);
-  void setTitle(const QString &title);
-  void setPath(const QString &path);
+  void setTitle(const QString &title) { title_ = title; emit titleChanged(title_); }
+  void setFileName(const QString &fileName) { fileName_ = fileName; emit fileNameChanged(fileName_); }
 
-  void updateProgress(qint64 bytesReceived, qint64 bytesTotal);
+  void updateProgress(qint64 receivedBytes, qint64 totalBytes);
 
   // - Implementation -
 private:
@@ -71,7 +71,7 @@ private:
   State state_;
   QString url_;
   QString title_;
-  QString path_;
+  QString fileName_;
 
   qint64 receivedSize_, totalSize_;
   qint64 progressUpdateTime_; // in msec

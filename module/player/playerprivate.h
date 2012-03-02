@@ -29,42 +29,60 @@ extern "C" {
 // - VLC arguments -
 // http://wiki.videolan.org/VLC_command-line_help
 
+#define APP_PLUGIN_PATH QCoreApplication::applicationDirPath() + "/plugins"
+#define APP_DATA_PATH QCoreApplication::applicationDirPath() + "/share"
+
+#define _qs(cs) QString::fromAscii((cs))
+#define _cs(qs) (qs).toAscii()    // toLocal8Bit is not recognized by VLC
+
 namespace { // anonymous
 
-  // Persistent storage, for Windows & Mac OS X
-  const char *vlc_plugin_path()
+  inline
+  QByteArray vlcpath(const QString &path)
+  {
+#ifdef Q_OS_WIN
+    return _cs(QString(path).replace("/", "\\"));
+#else
+    return _cs(path);
+#endif // Q_OS_WIN
+  }
+
+
+  inline void vlc_reset_env()
+  {
+    static std::auto_ptr<char> auto_release_pool;
+    QString qs = "VLC_PLUGIN_PATH=" + APP_PLUGIN_PATH;
+    int n = qs.size() + 1;
+    char *env = new char[n];
+    ::strncpy(env, _cs(qs), n);
+    ::putenv(env);
+    auto_release_pool.reset(env);
+  }
+
+  inline const char *vlc_plugin_path()
   {
     static std::auto_ptr<char> auto_release_pool;
     char *ret = auto_release_pool.get();
     if (!ret) {
-      QString path = QCoreApplication::applicationDirPath() + "/plugins";
-      const char *src = path.toAscii();
-      int n = ::strlen(src);
-      Q_ASSERT(n);
-      if (n) {
-        ret = new char[n + 1];
-        ::strncpy(ret, src, n + 1); // use strncpy instead of strcpy in case sth goes wrong
-        auto_release_pool.reset(ret);
-      }
+      QString path = APP_PLUGIN_PATH;
+      int n = path.size() + 1;
+      ret = new char[n];
+      ::strncpy(ret, _cs(path), n); // use strncpy instead of strcpy in case sth goes wrong
+      auto_release_pool.reset(ret);
     }
     return ret;
   }
 
-  // Persistent storage, for Mac OS X
-  const char *vlc_data_path()
+  inline const char *vlc_data_path()
   {
     static std::auto_ptr<char> auto_release_pool;
     char *ret = auto_release_pool.get();
     if (!ret) {
-      QString path = QCoreApplication::applicationDirPath() + "/share";
-      const char *src = path.toAscii();
-      int n = ::strlen(src);
-      Q_ASSERT(n);
-      if (n) {
-        ret = new char[n + 1];
-        ::strncpy(ret, src, n + 1); // use strncpy instead of strcpy in case sth goes wrong
-        auto_release_pool.reset(ret);
-      }
+      QString path = APP_DATA_PATH;
+      int n = path.size() + 1;
+      ret = new char[n];
+      ::strncpy(ret, _cs(path), n); // use strncpy instead of strcpy in case sth goes wrong
+      auto_release_pool.reset(ret);
     }
     return ret;
   }
@@ -86,19 +104,15 @@ namespace { // anonymous
 
 // http://forums.techarena.in/windows-software/1403280.htm
 //#define VLC_ARGS_MAC            "--vout=minimal_macosx", "--opengl-provider=minimal_macosx"
-#define VLC_ARGS_MAC            "--opengl-provider=minimal_macosx"
-//#define VLC_ARGS_MAC            VLC_ARGS_NULL // use default macosx filter
-#ifdef Q_WS_MAC
+//#define VLC_ARGS_MAC            "--opengl-provider=minimal_macosx"
+#define VLC_ARGS_MAC            VLC_ARGS_NULL // use default macosx filter
+#ifdef Q_OS_MAC
   #define VLC_ARGS_OS \
-    VLC_ARGS_PLUGIN_PATH, \
     VLC_ARGS_DATA_PATH, \
     VLC_ARGS_MAC
-#elif defined(Q_WS_WIN)
-  #define VLC_ARGS_OS \
-    VLC_ARGS_PLUGIN_PATH
 #else
   #define VLC_ARGS_OS           VLC_ARGS_NULL
-#endif // Q_WS_MAC
+#endif // Q_OS
 
 #define VLC_ARGS_RELEASE \
   VLC_ARGS_CONFIG, \
@@ -177,6 +191,10 @@ namespace { // anonymous: vlc handle
   inline void
   mp_handle_::reset()
   {
+#ifdef Q_OS_MAC
+    ::vlc_reset_env();
+#endif // Q_OS_MAC
+
     if (!media_list_.isEmpty()) {
       foreach (libvlc_media_t *m, media_list_)
         if (m  && m != media_)

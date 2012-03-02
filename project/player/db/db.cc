@@ -33,18 +33,22 @@ namespace { namespace task_ { // anonymous
   {
     Database *db_;
     AliasList l_;
-    virtual void run() { db_->updateAliases(l_, false); } // \override, async = false
+    int limit_;
+    virtual void run() { db_->updateAliases(l_, false, limit_); } // \override, async = false
   public:
-    updateAliases(const AliasList &l, Database *db) : db_(db), l_(l) { Q_ASSERT(db_); }
+    updateAliases(const AliasList &l, int limit, Database *db)
+      : db_(db), l_(l), limit_(limit) { Q_ASSERT(db_); }
   };
 
   class updateAnnotations : public QRunnable
   {
     Database *db_;
     AnnotationList l_;
-    virtual void run() { db_->updateAnnotations(l_, false); } // \override, async = false
+    int limit_;
+    virtual void run() { db_->updateAnnotations(l_, false, limit_); } // \override, async = false
   public:
-    updateAnnotations(const AnnotationList &l, Database *db) : db_(db), l_(l) { Q_ASSERT(db_); }
+    updateAnnotations(const AnnotationList &l, int limit, Database *db)
+      : db_(db), l_(l), limit_(limit) { Q_ASSERT(db_); }
   };
 
 } } // anonymous namespace task_
@@ -1111,23 +1115,25 @@ Database::updateAnnotation(const Annotation &annot)
 }
 
 void
-Database::updateAnnotations(const AnnotationList &l, bool async)
+Database::updateAnnotations(const AnnotationList &l, bool async, int limit)
 {
-  DOUT("enter: count =" << l.size() << ", async =" << async);
+  DOUT("enter: count =" << l.size() << ", limit =" << limit << ", async =" << async);
   Q_ASSERT(isValid());
   if (l.isEmpty() || disposed_) {
     DOUT("exit: empty list or disposed");
     return;
   }
   if (async) {
-    QThreadPool::globalInstance()->start(new task_::updateAnnotations(l, this));
+    QThreadPool::globalInstance()->start(new task_::updateAnnotations(l, limit, this));
     DOUT("exit: returned from async branch");
     return;
   }
 
+  int count = 0;
   foreach (Annotation a, l) {
-    if (disposed_) {
-      DOUT("exit: disposed");
+    if (disposed_ ||
+        limit && count++ >= limit) {
+      DOUT("exit: disposed or limit reached");
       return;
     }
     updateAnnotation(a);
@@ -1158,23 +1164,25 @@ Database::updateAlias(const Alias &alias)
 }
 
 void
-Database::updateAliases(const AliasList &l, bool async)
+Database::updateAliases(const AliasList &l, bool async, int limit)
 {
-  DOUT("enter: count =" << l.size() << ", async =" << async);
+  DOUT("enter: count =" << l.size() << ", limit =" << limit << ", async =" << async);
   Q_ASSERT(isValid());
   if (l.isEmpty() || disposed_) {
     DOUT("exit: empty list or disposed");
     return;
   }
   if (async) {
-    QThreadPool::globalInstance()->start(new task_::updateAliases(l, this));
+    QThreadPool::globalInstance()->start(new task_::updateAliases(l, limit, this));
     DOUT("exit: returned from async branch");
     return;
   }
 
+  int count = 0;
   foreach (Alias a, l) {
-    if (disposed_) {
-      DOUT("exit: disposed");
+    if (disposed_ ||
+        limit && count++ >= limit) {
+      DOUT("exit: disposed or limit reached");
       return;
     }
     updateAlias(a);

@@ -114,11 +114,11 @@ public:
 
   ///  Insert annotation if not exist, or replace the old one. Return updated aid.
   void updateAnnotation(const Annotation &annot);
-  void updateAnnotations(const AnnotationList &l, bool async = false);
+  void updateAnnotations(const AnnotationList &l, bool async = false, int limit = 0);
 
   ///  Insert alias if not exist, or replace the old one. Return updated aid.
   void updateAlias(const Alias &alias);
-  void updateAliases(const AliasList &l, bool async = false);
+  void updateAliases(const AliasList &l, bool async = false, int limit = 0);
 };
 
 #endif // DB_H

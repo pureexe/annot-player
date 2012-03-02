@@ -54,7 +54,7 @@ LoginDialog::LoginDialog(QWidget *parent)
   }
 
   QToolButton *loginButton = new QtExt::ToolButton; {
-    loginButton->setStyleSheet(SS_TOOLBUTTON_TEXT);
+    loginButton->setStyleSheet(SS_TOOLBUTTON_TEXT_HIGHLIGHT);
     loginButton->setToolButtonStyle(Qt::ToolButtonTextOnly);
     loginButton->setText(QString("[ %1 ]").arg(TR(T_LOGIN)));
     loginButton->setToolTip(TR(T_LOGIN) + " [ENTER]");

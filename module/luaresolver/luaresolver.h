@@ -27,21 +27,10 @@ class LuaResolver : public QObject
   QNetworkCookieJar *cookieJar_;
 
 public:
-  //struct media_description
-  //{
-  //  std::string title;
-  //  std::string refurl;
-  //  std::string suburl;
-  //  std::list<std::string> mrls;
-  //};
-
   explicit LuaResolver(const QString &scriptPath,
                        const QString &packagePath = QString(),
-                       QObject *parent = 0)
-    : Base(parent), scriptPath_(scriptPath), packagePath_(packagePath), cookieJar_(0)
-  { }
+                       QObject *parent = 0);
 
-  // CHECKPOINT: siteid with nam
 public:
   enum Site { UnknownSite = 0, AcFun = 1, Nicovideo = 2, Bilibili = 3 };
 
@@ -54,6 +43,7 @@ public:
                QList<qint64> *durations = 0,
                QList<qint64> *sizes = 0);
 
+  QNetworkCookieJar *cookieJar() const { return cookieJar_; }
   void setCookieJar(QNetworkCookieJar *cookieJar) { cookieJar_ = cookieJar; }
 
   bool hasNicovideoAccount() const
@@ -90,6 +80,8 @@ protected:
   static void appendLuaPath(lua_State *L, const QString &path);
   static QString decodeText(const char *text, const char *encoding);
   static QString decodeTitle(const char *text, int siteId);
+  //static QString decodeUrl(const QString &url, const QString &href);
+  //static void hackCookieJar(QNetworkCookieJar *jar);
 };
 
 #endif // LUARESOLVER_H

@@ -174,10 +174,10 @@ namespace AnnotCloud {
     static bool isLatin1String(const QString &latin1);
 
     static QString encryptUserName(const QString password)
-    { return digest(password.toAscii()); }
+    { return digest(password.toLocal8Bit()); }
 
     static QString encryptPassword(const QString password)
-    { return digest(password.toLatin1()); }
+    { return digest(password.toLocal8Bit()); }
 
   protected:
     static QByteArray digest(const QByteArray &input);

@@ -95,11 +95,11 @@
 #ifdef USE_WIN_PICKER
   #include "win/picker/picker.h"
 #endif // USE_WIN_PICKER
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
   #include "mac/qtmac/qtmac.h"
   //#include "mac/qtstep/qtstep.h"
   //#include "mac/qtvlc/qtvlc.h"
-#endif // Q_WS_MAC
+#endif // Q_OS_MAC
 #ifdef Q_WS_X11
   #include "unix/qtx/qtx.h"
 #endif // Q_WS_X11
@@ -133,14 +133,16 @@ using namespace Logger;
 void
 MainWindow::onFocusedWidgetChanged(QWidget *w_old, QWidget *w_new)
 {
-#ifdef Q_WS_WIN
-  // When EmbeddedPlayer's lineEdit cleared its focus.
-  if (!w_new && w_old == embeddedPlayer_->inputComboBox())
-    QtWin::sendMouseClick(QPoint(0, 0), Qt::LeftButton);
-#else
   Q_UNUSED(w_old);
   Q_UNUSED(w_new);
-#endif // Q_WS_WIN
+//#ifdef Q_WS_WIN
+//  // When EmbeddedPlayer's lineEdit cleared its focus.
+//  if (!w_new && w_old == embeddedPlayer_->inputComboBox())
+//    QtWin::sendMouseClick(QPoint(0, 0), Qt::LeftButton);
+//#else
+//  Q_UNUSED(w_old);
+//  Q_UNUSED(w_new);
+//#endif // Q_WS_WIN
 }
 
 bool
@@ -181,14 +183,14 @@ MainWindow::resetPlayer()
   //player_->setMouseEnabled(true);     // default true
   //player_->setEncoding("UTF-8");      // default do nothing
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
   videoView_->showView();
   player_->setEmbeddedWindow(videoView_->view());
   QTimer::singleShot(0, videoView_, SLOT(hideView()));
   //videoView_->hideView();
 #else
   player_->embed(videoView_);
-#endif // Q_WS_MAC
+#endif // Q_OS_MAC
   player_->setFullScreen(false);
 }
 
@@ -200,7 +202,8 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags f)
     aboutDialog_(0), annotationCountDialog_(0), deviceDialog_(0), helpDialog_(0), loginDialog_(0),
     processPickDialog_(0), seekDialog_(0), syncDialog_(0), windowPickDialog_(0),
     mediaUrlDialog_(0), annotationUrlDialog_(0), siteAccountView_(0), userView_(0),
-    dragPos_(BAD_POS), tokenType_(0), recentSourceLocked_(false),
+    dragPos_(BAD_POS), windowModeUpdateTime_(0),
+    tokenType_(0), recentSourceLocked_(false),
     themeMenu_(0),
     setThemeToDefaultAct_(0), setThemeToRandomAct_(0),
     setThemeToDarkAct_(0), setThemeToBlackAct_(0), setThemeToBlueAct_(0),
@@ -208,10 +211,14 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags f)
     setThemeToGreenAct_(0), setThemeToPinkAct_(0), setThemeToPurpleAct_(0),
     setThemeToRedAct_(0), setThemeToWhiteAct_(0), setThemeToYellowAct_(0)
 {
-  //setWindowFlags(windowFlags() | Qt::WindowStaysOnTopHint);
-//#ifdef Q_WS_MAC
+#ifndef Q_OS_MAC
+  if (Settings::globalInstance()->isWindowOnTop())
+    setWindowFlags(windowFlags() | Qt::WindowStaysOnTopHint);
+#endif // Q_OS_MAC
+
+//#ifdef Q_OS_MAC
 //  setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
-//#endif // Q_WS_MAC
+//#endif // Q_OS_MAC
 
   setWindowIcon(QIcon(RC_IMAGE_APP)); // X11 require setting icon at runtime
   setWindowTitle(TR(T_TITLE_PROGRAM));
@@ -319,11 +326,11 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags f)
   //connect(annotationView_, SIGNAL(posChanged()), SLOT(ensureWindowOnTop()));
 #endif // Q_WS_WIN
 
-#ifdef Q_WS_MAC
-  // Forward reset player on Mac OS X
+#ifdef Q_OS_MAC
+  // Forward reseting player on Mac OS X
   if (!player_->isValid())
     resetPlayer();
-#endif // Q_WS_MAC
+#endif // Q_OS_MAC
 
   // Initial focus
   mainPlayer_->inputComboBox()->setFocus();
@@ -352,14 +359,6 @@ MainWindow::createComponents()
       grabber_->setSavePath(desktopPath);
   }
 
-  // Caches
-  cache_ = new Database(G_PATH_CACHEDB, this);
-  if (!cache_->isValid())
-    cache_->clear();
-  queue_ = new Database(G_PATH_QUEUEDB, this);
-  if (!queue_->isValid())
-    queue_->clear();
-
   // Server agents
   server_ = new ServerAgent(this);
 #ifdef USE_MODULE_CLIENTAGENT
@@ -368,15 +367,6 @@ MainWindow::createComponents()
   server_->setClientAgent(client_);
   client_->setServerAgent(server_);
 #endif // USE_MODULE_CLIENTAGENT
-
-  // Data server
-  dataServer_ = new DataServer(server_, cache_, queue_, this);
-
-  // Data manager
-  dataManager_ = new DataManager(this);
-
-  // Mrl resolver
-  mrlResolver_ = new MrlResolverManager(this);
 
   // Qth
 #ifdef USE_WIN_QTH
@@ -394,6 +384,24 @@ MainWindow::createComponents()
   // Logger
   logger_ = new EventLogger(player_, this);
 
+  // Caches
+  cache_ = new Database(G_PATH_CACHEDB, this);
+  if (!cache_->isValid())
+    cache_->clear();
+  queue_ = new Database(G_PATH_QUEUEDB, this);
+  if (!queue_->isValid())
+    queue_->clear();
+
+  // Data server
+  dataServer_ = new DataServer(hub_, server_, cache_, queue_, this);
+
+  // Data manager
+  dataManager_ = new DataManager(this);
+
+  // Mrl resolver
+  mrlResolver_ = new MrlResolverManager(this);
+
+
   // Players and graphic views
   videoView_ = new VideoView(this);
   osdWindow_ = new OsdWindow(this);
@@ -408,13 +416,13 @@ MainWindow::createComponents()
 //    UiStyle::globalInstance()->setWindowDwmEnabled(w->winId(), true);
 //  }
 //#endif // USE_WIN_DWM
-//#ifdef Q_WS_MAC // remove background in annotation view
+//#ifdef Q_OS_MAC // remove background in annotation view
 //  annotationView_->setStyleSheet(
 //    SS_BEGIN(QWidget)
 //      SS_TRANSPARENT
 //    SS_END
 //  );
-//#endif // Q_WS_MAC
+//#endif // Q_OS_MAC
   annotationFilter_ = new AnnotationFilter(dataManager_, this);
   annotationView_->setFilter(annotationFilter_);
 
@@ -425,13 +433,13 @@ MainWindow::createComponents()
 
   //embeddedPlayer_ = new EmbeddedPlayerUi(hub_, player_, server_, osdWindow_);
   embeddedPlayer_ = new EmbeddedPlayerUi(hub_, player_, server_);
-//#ifdef Q_WS_MAC // remove background in Osd player
+//#ifdef Q_OS_MAC // remove background in Osd player
 //  embeddedPlayer_->setStyleSheet(
 //    SS_BEGIN(QWidget)
 //      SS_TRANSPARENT
 //    SS_END
 //  );
-//#endif // Q_WS_MAC
+//#endif // Q_OS_MAC
 
   globalOsdConsole_ = new OsdConsole(annotationView_);
   globalOsdConsole_->setAutoClearInterval(G_CONSOLE_AUTOClEAR_TIMEOUT);
@@ -448,13 +456,13 @@ MainWindow::createComponents()
   mainPlayer_ = new MainPlayerUi(hub_, player_, server_, this);
   miniPlayer_ = new MiniPlayerUi(hub_, player_, server_, this);
 
-//#ifdef Q_WS_MAC
+//#ifdef Q_OS_MAC
 //  videoView_->showView();
 //  player_->setEmbeddedWindow(videoView_->view());
 //  QTimer::singleShot(0, videoView_, SLOT(hideView()));
 //#else
 //  player_->embed(videoView_);
-//#endif // Q_WS_MAC
+//#endif // Q_OS_MAC
 //  player_->setFullScreen(false);
 
   // Translator
@@ -500,6 +508,11 @@ MainWindow::createComponents()
 
   resumeAudioTrackTimer_ = new QtExt::CountdownTimer;
   resumeAudioTrackTimer_->setInterval(3000); // 3 seconds
+
+  navigationTimer_ = new QTimer(this);
+  navigationTimer_->setInterval(5000); // 5 seconds
+  navigationTimer_->setSingleShot(true);
+  connect(navigationTimer_, SIGNAL(timeout()), SLOT(enableNavigation()));
 }
 
 void
@@ -516,6 +529,10 @@ MainWindow::createConnections()
   connect(player_, SIGNAL(trackNumberChanged(int)), SLOT(invalidateMediaAndPlay()));
   connect(player_, SIGNAL(endReached()), SLOT(autoPlayNext()));
   connect(player_, SIGNAL(mediaTitleChanged(QString)), SLOT(setWindowTitle(QString)));
+  connect(player_, SIGNAL(error(QString)), SIGNAL(warned(QString)));
+  connect(player_, SIGNAL(message(QString)), SIGNAL(logged(QString)));
+  connect(player_, SIGNAL(fileSaved(QString)), SLOT(signFile(QString)), Qt::QueuedConnection);
+  connect(player_, SIGNAL(downloadProgress(qint64,qint64)), SLOT(updateDownloadProgress(qint64,qint64)));
 
   // Resume
   connect(player_, SIGNAL(stopping()), SLOT(rememberPlayPos()));
@@ -561,6 +578,7 @@ MainWindow::createConnections()
   connect(this, SIGNAL(responded(QString)), SLOT(respond(QString)), Qt::QueuedConnection);
   connect(this, SIGNAL(said(QString,QString)), SLOT(say(QString,QString)), Qt::QueuedConnection);
   connect(this, SIGNAL(showTextRequested(QString)), SLOT(showText(QString)), Qt::QueuedConnection);
+  connect(this, SIGNAL(windowTitleToChange(QString)), SLOT(setWindowTitle(QString)), Qt::QueuedConnection);
 
   connect(this, SIGNAL(logged(QString)), SLOT(log(QString)), Qt::QueuedConnection);
   connect(this, SIGNAL(warned(QString)), SLOT(warn(QString)), Qt::QueuedConnection);
@@ -716,10 +734,10 @@ MainWindow::createConnections()
   //connect(server_, SIGNAL(tokensReceived(TokenList)),
   //        this, SLOT(processTokens(TokenList)));
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
   connect(player_, SIGNAL(playing()), SLOT(showVideoViewIfAvailable()));
   connect(player_, SIGNAL(stopped()), videoView_, SLOT(hideView()));
-#endif // Q_WS_MAC
+#endif // Q_OS_MAC
 
 #ifdef Q_WS_WIN
   if (!QtWin::isWindowsVistaOrLater())
@@ -995,42 +1013,46 @@ MainWindow::createActions()
   // Shortcuts
   {
     toggleSeekDialogVisibleAct_->setShortcuts(QKeySequence::Find);
-    QShortcut *f = new QShortcut(QKeySequence::Find, this);
-    connect(f, SIGNAL(activated()), SLOT(showSeekDialog()));
+    //QShortcut *f = new QShortcut(QKeySequence::Find, this);
+    //connect(f, SIGNAL(activated()), SLOT(showSeekDialog()));
 
     nextFrameAct_->setShortcuts(QKeySequence::FindNext);
-    QShortcut *g = new QShortcut(QKeySequence::FindNext, this);
-    connect(g, SIGNAL(activated()), SLOT(nextFrame()));
+    //QShortcut *g = new QShortcut(QKeySequence::FindNext, this);
+    //connect(g, SIGNAL(activated()), SLOT(nextFrame()));
 
-    openAct_->setShortcuts(QKeySequence::Open);
     openFileAct_->setShortcuts(QKeySequence::Open);
-    QShortcut *o = new QShortcut(QKeySequence::Open, this);
-    connect(o, SIGNAL(activated()), SLOT(open()));
+    //QShortcut *o = new QShortcut(QKeySequence::Open, this);
+    //connect(o, SIGNAL(activated()), SLOT(open()));
 
     openUrlAct_->setShortcuts(QKeySequence::New);
-    QShortcut *n = new QShortcut(QKeySequence::New, this);
-    connect(n, SIGNAL(activated()), SLOT(openUrl()));
+    //QShortcut *n = new QShortcut(QKeySequence::New, this);
+    //connect(n, SIGNAL(activated()), SLOT(openUrl()));
 
     openAnnotationUrlAct_->setShortcuts(QKeySequence::Italic);
-    QShortcut *i = new QShortcut(QKeySequence::Italic, this);
-    connect(i, SIGNAL(activated()), SLOT(openUrl()));
+    //QShortcut *i = new QShortcut(QKeySequence::Italic, this);
+    //connect(i, SIGNAL(activated()), SLOT(openUrl()));
 
-    snapshotAct_->setShortcut(QKeySequence::Save);
+    snapshotAct_->setShortcut(QKeySequence::Print);
+    QShortcut *p = new QShortcut(QKeySequence::Print, this);
+    connect(p, SIGNAL(activated()), SLOT(snapshot()));
+
+    //downloadCurrentUrlAct_->setShortcut(QKeySequence::Save);
+    //toggleDownloadDialogVisibleAct_->setShortcut(QKeySequence::Save);
     QShortcut *s = new QShortcut(QKeySequence::Save, this);
-    connect(s, SIGNAL(activated()), SLOT(snapshot()));
+    connect(s, SIGNAL(activated()), SLOT(downloadCurrentUrl()));
 
-    toggleWindowOnTopAct_->setShortcuts(QKeySequence::AddTab);
+    //toggleWindowOnTopAct_->setShortcuts(QKeySequence::AddTab);
     QShortcut *t = new QShortcut(QKeySequence::AddTab, this);
     connect(t, SIGNAL(activated()), SLOT(toggleWindowOnTop()));
 
     helpAct_->setShortcuts(QKeySequence::HelpContents);
-    QShortcut *help = new QShortcut(QKeySequence::HelpContents, this);
-    connect(help, SIGNAL(activated()), SLOT(help()));
+    //QShortcut *help = new QShortcut(QKeySequence::HelpContents, this);
+    //connect(help, SIGNAL(activated()), SLOT(help()));
 
-    playAct_->setShortcuts(QKeySequence::Print);
-    pauseAct_->setShortcuts(QKeySequence::Print);
-    QShortcut *p = new QShortcut(QKeySequence::Print, this);
-    connect(p, SIGNAL(activated()), SLOT(playPause()));
+    //playAct_->setShortcuts(QKeySequence::Print);
+    //pauseAct_->setShortcuts(QKeySequence::Print);
+    //QShortcut *p = new QShortcut(QKeySequence::Print, this);
+    //connect(p, SIGNAL(activated()), SLOT(playPause()));
 
     quitAct_->setShortcuts(QKeySequence::Quit);
 
@@ -1065,7 +1087,7 @@ MainWindow::createActions()
     QShortcut *forward = new QShortcut(QKeySequence("CTRL+RIGHT"), this);
     connect(forward, SIGNAL(activated()), SLOT(forward90s()));
 
-    QShortcut *esc = new QShortcut(QKeySequence("Esc"), this);
+    QShortcut *esc = new QShortcut(QKeySequence("CTRL+ESC"), this);
     connect(esc, SIGNAL(activated()), SLOT(showMinimizedAndPause()));
 
     QShortcut *up = new QShortcut(QKeySequence("CTRL+UP"), this);
@@ -1494,6 +1516,8 @@ MainWindow::updatePlayerMode()
 void
 MainWindow::updateWindowMode()
 {
+  windowModeUpdateTime_ = QDateTime::currentMSecsSinceEpoch();
+
   switch (hub_->windowMode()) {
   case SignalHub::FullScreenWindowMode:
 #ifdef USE_WIN_DWM
@@ -1537,6 +1561,8 @@ MainWindow::updateWindowMode()
     }
     break;
   }
+
+  dragPos_ = BAD_POS;
 }
 
 /*
@@ -1677,7 +1703,7 @@ MainWindow::isDevicePath(const QString &path)
   if (path.contains(QRegExp("^[a-zA-Z]:$")) ||
       path.contains(QRegExp("^[a-zA-Z]:\\\\$")))
     return true;
-#endif // Q_WS_MAC
+#endif // Q_OS_MAC
 #ifdef Q_OS_UNIX
   if (QtUnix::isDeviceFile(path))
     return true;
@@ -1865,10 +1891,14 @@ MainWindow::openRemoteMedia(const MediaInfo &mi, QNetworkCookieJar *cookieJar)
   //  return;
   //}
 
+  if (!player_->isValid())
+    resetPlayer();
+
+  if (player_->hasMedia())
+    closeMedia();
+
   if (cookieJar)
     player_->setCookieJar(cookieJar);
-
-  openMrl(mi.mrls.front().url, false); // checkPath = false
   if (!mi.title.isEmpty() && !isRemoteMrl(mi.title))
     player_->setMediaTitle(mi.title);
 
@@ -1878,8 +1908,10 @@ MainWindow::openRemoteMedia(const MediaInfo &mi, QNetworkCookieJar *cookieJar)
     addRecent(mi.refurl);
     recentSource_ = mi.refurl;
     recentSourceLocked_ = true;
-    setToken();
+    //setToken();
   }
+
+  openMrl(mi.mrls.front().url, false); // checkPath = false
 
   //importAnnotationsFromUrl(mi.suburl);
   if (!mi.suburl.isEmpty())
@@ -1908,6 +1940,8 @@ void
 MainWindow::openMrl(const QString &path, bool checkPath)
 {
   DOUT("enter: path =" << path);
+  disableNavigation();
+
   bool fullScreen = hub_->isLiveTokenMode() && hub_->isEmbeddedPlayerMode();
   hub_->setMediaTokenMode();
   if (fullScreen) {
@@ -1940,7 +1974,12 @@ MainWindow::openMrl(const QString &path, bool checkPath)
   DOUT("invoke openMedia");
   if (player_->hasMedia())
     closeMedia();
-  player_->openMedia(path);
+  bool ok = player_->openMedia(path);
+  if (!ok) {
+    warn(tr("failed to open media") + ": " + path);
+    DOUT("exit: openMedia failed");
+    return;
+  }
 
   if (!isRemoteMrl(path))
     addRecent(path);
@@ -2055,14 +2094,14 @@ MainWindow::invalidateMediaAndPlay(bool async)
 
     invalidateWindowTitle();
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     // ensure videoView_ stretch in full screen mode
     if (hub_->isEmbeddedPlayerMode() && !videoView_->isViewVisible()) {
       videoView_->showView();
       hub_->setEmbeddedPlayerMode(false);
       hub_->setEmbeddedPlayerMode(true);
     }
-#endif // Q_WS_MAC
+#endif // Q_OS_MAC
 
 #ifdef Q_WS_X11
     if (hub_->isFullScreenWindowMode())
@@ -2467,37 +2506,98 @@ MainWindow::update()
 
 // - Update -
 
-void
-MainWindow::invalidateWindowTitle()
+QString
+MainWindow::downloadSpeedToString(int speed)
 {
+  if (speed < 1024)
+    return QString::number(speed) + " B/s";
+  else if (speed < 1024 * 1024)
+    return QString::number(speed / 1024) + " KB/s";
+  else
+    return QString().sprintf("%.2f MB/s", speed / (1024.0 * 1024));
+}
+
+void
+MainWindow::updateDownloadProgress(qint64 receivedBytes, qint64 totalBytes)
+{
+#define FORMAT_PERCENTAGE(_real)  QString().sprintf("%.2f%%", (_real)*100)
+  enum { update_interval = 2500 }; // 2.5 seconds
+  static qint64 updateTime, receivedSize;
+
+  qint64 currentTime  = QDateTime::currentMSecsSinceEpoch();
+  if (currentTime - updateTime < update_interval &&
+      receivedBytes != totalBytes)
+    return;
+
+  int speed = 0;
+  qreal percentage = 0;
+  qint64 remainingTime = 0;
+  if (totalBytes > 0 && receivedBytes > receivedSize) {
+    speed = (receivedBytes - receivedSize) * 1000 / (currentTime - updateTime);
+    percentage = (qreal)receivedBytes / totalBytes;
+    if (speed > 0)
+      remainingTime = (totalBytes - receivedBytes) * 1000 / speed; // in msecs
+  }
+
+  receivedSize = receivedBytes;
+  updateTime = currentTime;
+
+  QString title = newWindowTitle();
+  bool stopped = receivedBytes == totalBytes;
+  title += " (";
+  if (stopped)
+    title += tr("Complete");
+  else {
+    title += FORMAT_PERCENTAGE(percentage);
+    if (speed)
+      title += ", " + downloadSpeedToString(speed);
+    if (remainingTime) {
+      QString ts = QtExt::msecs2time(remainingTime).toString();
+      if (!ts.isEmpty())
+        title += ", " + ts;
+    }
+  }
+  title += ")";
+
+  emit windowTitleToChange(title);
+#undef FORMAT_PERCENTAGE
+}
+
+QString
+MainWindow::newWindowTitle() const
+{
+  QString ret;
   switch (hub_->tokenMode()) {
   case SignalHub::SignalTokenMode:
 #ifdef USE_MODE_SIGNAL
-    setWindowTitle(messageHandler_->processInfo().processName);
+    ret = messageHandler_->processInfo().processName;
 #endif // USE_MODE_SIGNAL
     break;
 
   case SignalHub::LiveTokenMode:
-    setWindowTitle(TR(T_TITLE_LIVE));
+    ret = TR(T_TITLE_LIVE);
     break;
 
   case SignalHub::MediaTokenMode:
     if (player_->hasMedia()) {
-      QString title = player_->mediaTitle();
-      if (title.isEmpty()) {
-        title = player_->mediaPath();
-        if (!title.isEmpty())
-          title = QFileInfo(title).fileName();
+      ret = player_->mediaTitle();
+      if (ret.isEmpty()) {
+        ret = player_->mediaPath();
+        if (!ret.isEmpty())
+          ret = QFileInfo(ret).fileName();
       }
-      if (title.isEmpty())
-        title = TR(T_TITLE_PROGRAM);
-
-      setWindowTitle(title);
-    } else
-      setWindowTitle(TR(T_TITLE_PROGRAM));
+    }
     break;
   }
+
+  if (ret.isEmpty())
+    ret = TR(T_TITLE_PROGRAM);
+  return ret;
 }
+
+void
+MainWindow::invalidateWindowTitle()
+{ setWindowTitle(newWindowTitle()); }
 
 void
 MainWindow::syncInputLineText(const QString &text)
@@ -2996,10 +3096,21 @@ MainWindow::resumeAll()
 void
 MainWindow::showVideoViewIfAvailable()
 {
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
   if (tokenType_ != Token::TT_Audio)
     videoView_->showView();
-#endif // Q_WS_MAC
+#endif // Q_OS_MAC
+}
+
+void
+MainWindow::signFile(const QString &path, bool async)
+{
+  QString url = dataManager_->token().source();
+  DOUT("url =" << url);
+  if (!url.isEmpty())
+    signFileWithUrl(path, url, async);
+  else
+    warn(tr("login is requied to to submit annotation URL"));
 }
 
 void
@@ -3569,14 +3680,6 @@ MainWindow::event(QEvent *e)
   return accept;
 }
 
-/*
-void
-MainWindow::setWindowDwmEnabled(bool t)
-{
-  if (UiStyle::isAeroAvailable())
-    UiStyle::globalInstance()->setWindowDwmEnabled(this, t);
-}
-*/
 
 void
 MainWindow::setVisible(bool visible)
@@ -3604,7 +3707,7 @@ MainWindow::mousePressEvent(QMouseEvent *event)
   //DOUT("enter");
   //if (contextMenu_->isVisible())
   //  contextMenu_->hide();
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
   if (hub_->isEmbeddedPlayerMode()) {
     // Prevent auto hide osd player.
     // Since NSView::mouseMoved is not avaible, use mouseDown to prevent hiding instead.
@@ -3621,15 +3724,15 @@ MainWindow::mousePressEvent(QMouseEvent *event)
     //if (isPlaying())
     //  pause();
   }
-#endif // Q_WS_MAC
+#endif // Q_OS_MAC
 
   if (event)
     switch (event->button()) {
     case Qt::LeftButton:
-#ifdef Q_WS_MAC
-      if (videoView_->isViewVisible())
+#ifdef Q_OS_MAC
+      if (videoView_->isViewVisible() && player_->titleCount() > 1)
         videoView_->setViewMousePressPos(event->globalPos());
-#endif // Q_WS_MAC
+#endif // Q_OS_MAC
       if (!isFullScreen() && dragPos_ == BAD_POS) {
         dragPos_ = event->globalPos() - frameGeometry().topLeft();
         event->accept();
@@ -3641,13 +3744,13 @@ MainWindow::mousePressEvent(QMouseEvent *event)
       break;
 
     case Qt::RightButton:
-#ifndef Q_WS_MAC
+#ifndef Q_OS_MAC
       if (!contextMenu_->isVisible()) {
         QContextMenuEvent cm(QContextMenuEvent::Mouse, event->pos(), event->globalPos(), event->modifiers());
         QCoreApplication::sendEvent(this, &cm);
         event->accept();
       }
-#endif // !Q_WS_MAC
+#endif // !Q_OS_MAC
       break;
 
     default: break;
@@ -3663,11 +3766,11 @@ MainWindow::mouseReleaseEvent(QMouseEvent *event)
   //DOUT("enter");
   dragPos_ = BAD_POS;
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
   if (event && event->button() == Qt::LeftButton && // event->buttons() is always zero, qt4 bug?
-      videoView_->isViewVisible())
+      videoView_->isViewVisible() && player_->titleCount() > 1)
     videoView_->setViewMouseReleasePos(event->globalPos());
-#endif // Q_WS_MAC
+#endif // Q_OS_MAC
 
   if (event)
     event->accept();
@@ -3695,7 +3798,6 @@ void
 MainWindow::mouseMoveEvent(QMouseEvent *event)
 {
   //DOUT("enter");
-
   // Prevent auto hide osd player.
   if (hub_->isEmbeddedPlayerMode())
     if (!event || isGlobalPosNearEmbeddedPlayer(event->globalPos())) {
@@ -3706,14 +3808,21 @@ MainWindow::mouseMoveEvent(QMouseEvent *event)
         //QTimer::singleShot(0, embeddedPlayer_, SLOT(resetAutoHideTimeout()));
     }
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
    if (event && videoView_->isViewVisible())
      videoView_->setViewMouseMovePos(event->globalPos());
-#endif // Q_WS_MAC
+#endif // Q_OS_MAC
 
   // Move the main window
   if (event && event->buttons() & Qt::LeftButton &&
-      dragPos_ != BAD_POS && !isFullScreen()) {
+      dragPos_ != BAD_POS && !isFullScreen()
+#ifdef Q_WS_WIN
+      && (
+        player_->isStopped() ||
+        QDateTime::currentMSecsSinceEpoch() - windowModeUpdateTime_ > QtWin::getDoubleClickInterval()
+        )
+#endif // Q_WS_WIN
+      ) {
     QPoint globalPos = event->globalPos();
     // FIXME: not working
     //QRect globalRect(globalPos, size());
@@ -3721,9 +3830,9 @@ MainWindow::mouseMoveEvent(QMouseEvent *event)
       move(globalPos - dragPos_);
 
     annotationView_->invalidatePos();
-//#ifdef Q_WS_MAC // FIXME: solve the postion tracking problem....
+//#ifdef Q_OS_MAC // FIXME: solve the postion tracking problem....
 //  QTimer::singleShot(200, annotationView_, SLOT(invalidatePos()));
-//#endif // Q_WS_MAC
+//#endif // Q_OS_MAC
 
     event->accept();
   }
@@ -3815,7 +3924,8 @@ MainWindow::invalidateContextMenu()
 
   if (!currentUrl().isEmpty()) {
     contextMenu_->addAction(openInWebBrowserAct_);
-    contextMenu_->addAction(downloadCurrentUrlAct_);
+    if (!dataManager_->token().hasSource())
+      contextMenu_->addAction(downloadCurrentUrlAct_);
     contextMenu_->addSeparator();
   }
 
@@ -3824,25 +3934,20 @@ MainWindow::invalidateContextMenu()
     //contextMenu_->addSeparator();
 
     //contextMenu_->addAction(openAct_);
-    contextMenu_->addAction(openFileAct_);
-    contextMenu_->addAction(openUrlAct_);
-    contextMenu_->addAction(openDeviceAct_);
-
-#ifdef USE_WIN_PICKER
-    toggleWindowPickDialogVisibleAct_->setChecked(windowPickDialog_ && windowPickDialog_->isVisible());
-    contextMenu_->addAction(toggleWindowPickDialogVisibleAct_);
-#endif // USE_WIN_PICKER
 
     openMenu_->clear(); {
-      if (hub_->isMediaTokenMode() && player_->hasMedia()) {
-        openMenu_->addAction(openSubtitleAct_);
-        openMenu_->addSeparator();
-      }
+      openMenu_->addAction(openFileAct_);
+      openMenu_->addAction(openUrlAct_);
+      openMenu_->addAction(openDeviceAct_);
       openMenu_->addAction(openVideoDeviceAct_);
 #ifdef Q_WS_WIN // TODO add support for Mac/Linux
       openMenu_->addAction(openAudioDeviceAct_);
 #endif // Q_WS_WIN
-      //openMenu_->addAction(openFileAct_);
+
+      if (hub_->isMediaTokenMode() && player_->hasMedia()) {
+        openMenu_->addSeparator();
+        openMenu_->addAction(openSubtitleAct_);
+      }
     }
     contextMenu_->addMenu(openMenu_);
 
@@ -3850,7 +3955,7 @@ MainWindow::invalidateContextMenu()
       contextMenu_->addMenu(browseMenu_);
 
     // Recent
-    invalidateRecent();
+    //invalidateRecent();
     if (!recentFiles_.isEmpty())
       contextMenu_->addMenu(recentMenu_);
 
@@ -3896,22 +4001,27 @@ MainWindow::invalidateContextMenu()
       contextMenu_->addMenu(sectionMenu_);
     }
 
+#ifdef USE_WIN_PICKER
+    contextMenu_->addSeparator();
+    toggleWindowPickDialogVisibleAct_->setChecked(windowPickDialog_ && windowPickDialog_->isVisible());
+    contextMenu_->addAction(toggleWindowPickDialogVisibleAct_);
+#endif // USE_WIN_PICKER
+
 #ifdef USE_MODE_SIGNAL
     if (!player_->hasMedia() || player_->isStopped()) {
-      contextMenu_->addSeparator();
 #ifdef USE_WIN_PICKER
       toggleProcessPickDialogVisibleAct_->setChecked(processPickDialog_ && processPickDialog_->isVisible());
       contextMenu_->addAction(toggleProcessPickDialogVisibleAct_);
 #endif // USE_WIN_PICKER
 
-       toggleSignalViewVisibleAct_->setChecked(signalView_->isVisible());
-       contextMenu_->addAction(toggleSignalViewVisibleAct_ );
+      toggleSignalViewVisibleAct_->setChecked(signalView_->isVisible());
+      contextMenu_->addAction(toggleSignalViewVisibleAct_ );
 
-       if (hub_->isSignalTokenMode()) {
-         toggleRecentMessageViewVisibleAct_->setChecked(recentMessageView_->isVisible());
-         contextMenu_->addAction(toggleRecentMessageViewVisibleAct_ );
-       }
-     }
+      if (hub_->isSignalTokenMode()) {
+        toggleRecentMessageViewVisibleAct_->setChecked(recentMessageView_->isVisible());
+        contextMenu_->addAction(toggleRecentMessageViewVisibleAct_ );
+      }
+    }
 #endif // USE_MODE_SIGNAL
 
     {
@@ -4285,9 +4395,9 @@ MainWindow::moveEvent(QMoveEvent *event)
   Q_UNUSED(event);
   if (annotationView_->isVisible()) {
     annotationView_->invalidatePos();
-//#ifdef Q_WS_MAC // FIXME: solve the postion tracking problem....
+//#ifdef Q_OS_MAC // FIXME: solve the postion tracking problem....
 //    QTimer::singleShot(200, annotationView_, SLOT(invalidatePos()));
-//#endif // Q_WS_MAC
+//#endif // Q_OS_MAC
   }
 
   Base::moveEvent(event);
@@ -4428,25 +4538,11 @@ MainWindow::dragLeaveEvent(QDragLeaveEvent *event)
 }
 
 // - Close -
-void
-MainWindow::closeEvent(QCloseEvent *event)
-{
-  DOUT("enter");
-  closeEventEnter();
-
-  QTimer::singleShot(0,
-    new MainWindow_slot_::CloseEventLeave(event, this),
-    SLOT(closeEventLeave())
-  );
-  DOUT("exit");
-}
 
 void
-MainWindow::closeEventEnter()
+MainWindow::dispose()
 {
   DOUT("enter");
-  //respond(tr("yin: ...")); // crash on mac
-  //log(tr("closing application ..."));
 
   if (player_->hasMedia()) {
     rememberPlayPos();
@@ -4458,7 +4554,6 @@ MainWindow::closeEventEnter()
   hide();
 
   osdWindow_->hide();
-  annotationView_->hide();
   globalOsdConsole_->hide();
 
   if (tray_)
@@ -4489,9 +4584,24 @@ MainWindow::closeEventEnter()
 }
 
 void
-MainWindow::closeEventLeave(QCloseEvent *event)
+MainWindow::closeEvent(QCloseEvent *event)
 {
   DOUT("enter");
+
+  if (!disposed_) {
+    disposed_ = true;
+    if (event)
+      event->ignore();
+
+    enum { wait_player_stop_timeout = 2000 }; // 2 seconds
+    int timeout = player_->isStopped() ? 0 : wait_player_stop_timeout;
+
+    dispose();
+    QTimer::singleShot(timeout, this, SLOT(close()));
+    DOUT("exit: close later");
+    return;
+  }
+
   // Save settings
   Settings *settings = Settings::globalInstance();
 
@@ -4528,6 +4638,8 @@ MainWindow::closeEventLeave(QCloseEvent *event)
 
   settings->setLive(hub_->isLiveTokenMode());
 
+  settings->setWindowOnTop(isWindowOnTop());
+
   if (siteAccountView_) { // Update account settings iff it is modified
     settings->setNicovideoAccount(siteAccountView_->nicovideoAccount().username,
                                   siteAccountView_->nicovideoAccount().password);
@@ -4538,6 +4650,8 @@ MainWindow::closeEventLeave(QCloseEvent *event)
   settings->setPlayPosHistory(playPosHistory_);
   settings->setSubtitleHistory(subtitleHistory_);
   settings->setAudioTrackHistory(audioTrackHistory_);
+
+  settings->flush();
 
   //MediaStreamer::globalInstance()->stop();
 
@@ -4561,9 +4675,9 @@ MainWindow::closeEventLeave(QCloseEvent *event)
   //if (parentWidget())
   //  QTimer::singleShot(0, parentWidget(), SLOT(close()));
 
-#ifdef Q_OS_WIN
+#ifdef Q_WS_WIN
   QTimer::singleShot(0, qApp, SLOT(quit())); // ensure quit app and clean up zombie threads
-#endif // Q_OS_WIN
+#endif // Q_WS_WIN
 
   Base::closeEvent(event);
   emit windowClosed();
@@ -4584,11 +4698,8 @@ MainWindow::setWindowOnTop(bool t)
 //    UiStyle::globalInstance()->setDwmEnabled(false);
 //#endif // USE_WIN_DWM
     bool visible = isVisible();
-    if (t)
-      setWindowFlags(windowFlags() | Qt::WindowStaysOnTopHint);
-    else
-      setWindowFlags(windowFlags() & ~Qt::WindowStaysOnTopHint);
-
+    setWindowFlags( t ? windowFlags() | Qt::WindowStaysOnTopHint :
+                        windowFlags() & ~Qt::WindowStaysOnTopHint);
 //#ifdef USE_WIN_QTH
 //    QTH->setParentWinId(winId());
 //#endif // USE_WIN_QTH
@@ -4603,8 +4714,10 @@ MainWindow::setWindowOnTop(bool t)
         show();
     }
 
-    // FIXME: make it work in Windows
-    //osdWindow_->ensureStaysOnTop();
+//#ifdef Q_OS_MAC
+//    if (t)
+//      osdWindow_->ensureStaysOnTop();
+//#endif // Q_OS_MAC
 
     if (t)
       log(tr("always on top enabled"));
@@ -5082,7 +5195,7 @@ MainWindow::login(const QString &userName, const QString &encryptedPassword, boo
     if (Settings::globalInstance()->updateDate() != today) {
       bool updated = server_->isSoftwareUpdated();
       if (!updated)
-        warn(tr("new version released, please check Help/Update menu"));
+        notify(tr("new version released, please check Help/Update menu"));
 
       Settings::globalInstance()->setUpdateDate(today);
     }
@@ -6040,10 +6153,10 @@ MainWindow::setEmbeddedWindow(WId winId)
   if (!winId)
     player_->embed(videoView_);
   else {
-#ifndef Q_WS_MAC
+#ifndef Q_OS_MAC
     player_->embed(0);
     player_->setEmbeddedWindow(winId);
-#endif // !Q_WS_MAC
+#endif // !Q_OS_MAC
   }
 }
 
@@ -6117,10 +6230,11 @@ MainWindow::addRemoteAnnotations(const AnnotationList &l, const QString &url)
     annots.append(a);
   }
   if (!annots.isEmpty()) {
+    QString src = isRemoteMrl(url) ? url : "http://nicovideo.jp";
     QString msg = QString("%1 :" HTML_STYLE_OPEN(color:red) "+%2" HTML_STYLE_CLOSE() ", %3")
       .arg(tr("annotations found"))
       .arg(QString::number(annots.size()))
-      .arg(url);
+      .arg(src);
     emit logged(msg);
     emit addAnnotationsRequested(annots);
     if (t.hasId())
@@ -6132,7 +6246,8 @@ void
 MainWindow::importAnnotationsFromUrl(const QString &suburl)
 {
   if (!suburl.isEmpty()) {
-    log(tr("analyzing annotation URL ...") + ": " + suburl);
+    QString url = isRemoteMrl(suburl) ? suburl : "http://nicovideo.jp";
+    log(tr("analyzing annotation URL ...") + ": " + url);
     if (registerAnnotationUrl(suburl))
       AnnotationCodecManager::globalInstance()->fetch(suburl);
   }
@@ -6141,6 +6256,7 @@ MainWindow::importAnnotationsFromUrl(const QString &suburl)
 bool
 MainWindow::registerAnnotationUrl(const QString &suburl)
 {
+  QMutexLocker lock(&annotMutex_);
   if (suburl.isEmpty() ||
       annotationUrls_.contains(suburl, Qt::CaseInsensitive))
     return false;
@@ -6218,7 +6334,8 @@ MainWindow::rememberPlayPos()
 {
   DOUT("enter");
   enum { margin = 90 * 1000 }; // 1.5min
-  if (player_->hasMedia()) {
+  if (player_->hasMedia() &&
+      !isRemoteMrl(player_->mediaPath())) {
     DOUT("hasMedia = true");
 
     qint64 hash = dataManager_->token().hashId();
@@ -6263,6 +6380,10 @@ MainWindow::resumePlayPos()
   if (player_->hasMedia() && !player_->isStopped()) {
     DOUT("hasMedia = true");
     resumePlayTimer_->stop();
+    if (isRemoteMrl(player_->mediaPath())) {
+      DOUT("exit: remote media is not resumed (since seek not implemented)");
+      return;
+    }
     if (player_->time() > 20 * 1000) { // 20 seconds, user manually seeked
       DOUT("exit: user manually seeked");
       return;
@@ -6291,7 +6412,8 @@ void
 MainWindow::rememberSubtitle()
 {
   DOUT("enter");
-  if (player_->hasMedia() && player_->hasSubtitles()) {
+  if (player_->hasMedia() && player_->subtitleCount() > 1 &&
+      !isRemoteMrl(player_->mediaPath())) {
     DOUT("hasMedia = true");
     int id = player_->isSubtitleVisible() ? player_->subtitleId() : -1;
     DOUT("id =" << id);
@@ -6322,9 +6444,13 @@ void
 MainWindow::resumeSubtitle()
 {
   DOUT("enter");
-  if (player_->hasMedia() && player_->hasSubtitles()) {
+  if (player_->hasMedia() && player_->subtitleCount() > 1) {
     DOUT("hasMedia = true");
     resumeSubtitleTimer_->stop();
+    if (isRemoteMrl(player_->mediaPath())) {
+      DOUT("exit: remote media is not resumed");
+      return;
+    }
     qint64 hash = dataManager_->token().hashId();
     DOUT("hash =" << hash);
     if (!hash) {
@@ -6356,7 +6482,8 @@ void
 MainWindow::rememberAudioTrack()
 {
   DOUT("enter");
-  if (player_->hasMedia() && player_->audioTrackCount() > 1) {
+  if (player_->hasMedia() && player_->audioTrackCount() > 1 &&
+      !isRemoteMrl(player_->mediaPath())) {
     DOUT("hasMedia = true");
     int id = player_->audioTrackId();
     DOUT("id =" << id);
@@ -6394,6 +6521,10 @@ MainWindow::resumeAudioTrack()
   if (player_->hasMedia() && player_->audioTrackCount() > 1) {
     DOUT("hasMedia = true");
     resumeAudioTrackTimer_->stop();
+    if (isRemoteMrl(player_->mediaPath())) {
+      DOUT("exit: remote media is not resumed");
+      return;
+    }
     qint64 hash = dataManager_->token().hashId();
     DOUT("hash =" << hash);
     if (!hash) {
@@ -6440,6 +6571,34 @@ MainWindow::setAnnotationEffectToShadow()
 void
 MainWindow::setAnnotationEffectToBlur()
 { annotationView_->setRenderHint(AnnotationGraphicsView::BlurHint); }
+
+// - Navigation -
+
+void
+MainWindow::setNavigationEnabled(bool t)
+{
+  mainPlayer_->previousButton()->setEnabled(t);
+  mainPlayer_->nextButton()->setEnabled(t);
+  miniPlayer_->previousButton()->setEnabled(t);
+  miniPlayer_->nextButton()->setEnabled(t);
+  embeddedPlayer_->previousButton()->setEnabled(t);
+  embeddedPlayer_->nextButton()->setEnabled(t);
+
+  previousAct_->setEnabled(t);
+  nextAct_->setEnabled(t);
+
+#ifdef Q_OS_WIN
+  QtWin::repaintWindow(mainPlayer_->previousButton()->winId());
+  QtWin::repaintWindow(mainPlayer_->nextButton()->winId());
+  QtWin::repaintWindow(miniPlayer_->previousButton()->winId());
+  QtWin::repaintWindow(miniPlayer_->nextButton()->winId());
+  QtWin::repaintWindow(embeddedPlayer_->previousButton()->winId());
+  QtWin::repaintWindow(embeddedPlayer_->nextButton()->winId());
+#endif // Q_OS_WIN
+
+  if (!t)
+    navigationTimer_->start();
+}
 
 // EOF
 

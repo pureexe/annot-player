@@ -1,2 +1,0 @@
-http://forum.videolan.org/viewtopic.php?f=14&t=97355&p=324013&hilit=youtube#p323917
-http://git.videolan.org/?p=vlc.git;a=blob_plain;f=share/lua/playlist/youtube.lua;h=20cb3a127117c8d8a97a13c1e97e463e8d8fb3d9;hb=0137d3be215be27d29224bd04f921e41e9cac145

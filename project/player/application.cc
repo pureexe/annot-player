@@ -72,7 +72,7 @@ Application::isSingleInstance() const
   // See: http://www.linuxquestions.org/questions/programming-9/restricting-multiple-instance-of-a-program-242069/
   static int fd_lock = -1;
   if (fd_lock < 0) {
-    fd_lock = ::open((G_PATH_LOCK_RUNNING).toAscii(), O_WRONLY|O_CREAT, 0666);
+    fd_lock = ::open((G_PATH_LOCK_RUNNING).toLocal8Bit(), O_WRONLY|O_CREAT, 0666);
     if (fd_lock >= 0) {
       flock fl; {
         fl.l_type = F_WRLCK;

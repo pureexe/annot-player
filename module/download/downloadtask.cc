@@ -27,32 +27,24 @@ DownloadTask::setState(State s)
 }
 
 void
-DownloadTask::setTitle(const QString &title)
-{ title_ = title; emit titleChanged(title_); }
-
-void
-DownloadTask::setPath(const QString &path)
-{ path_ = path; emit pathChanged(path_); }
-
-void
-DownloadTask::updateProgress(qint64 bytesReceived, qint64 bytesTotal)
+DownloadTask::updateProgress(qint64 receivedBytes, qint64 totalBytes)
 {
   enum { update_interval = 2500 }; // 2.5 seconds
 
   qint64 currentTime  = QDateTime::currentMSecsSinceEpoch();
 
   if (currentTime - progressUpdateTime_ < update_interval
-      && !isFinished())
+      && !isFinished() && receivedBytes != totalBytes)
     return;
 
-  totalSize_ = bytesTotal;
+  totalSize_ = totalBytes;
 
-  if (totalSize_ > 0 && bytesReceived > receivedSize_)
-    speed_ = (bytesReceived - receivedSize_) * 1000.0 / (currentTime - progressUpdateTime_);
+  if (totalSize_ > 0 && receivedBytes > receivedSize_)
+    speed_ = (receivedBytes - receivedSize_) * 1000.0 / (currentTime - progressUpdateTime_);
   else
     speed_ = 0;
 
-  receivedSize_ = bytesReceived;
+  receivedSize_ = receivedBytes;
   progressUpdateTime_ = currentTime;
 }
 

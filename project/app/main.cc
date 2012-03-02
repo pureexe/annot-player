@@ -1,6 +1,5 @@
 // main.cc
 // 9/3/2011
-
 #include "config.h"
 #include "mscex.h"
 #include <string>
