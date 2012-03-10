@@ -1,4 +1,4 @@
-﻿// playerui.cc
+// playerui.cc
 // 7/17/2011
 
 #include "playerui.h"
@@ -108,6 +108,12 @@ PlayerUi::createConnections()
   connect(playButton(), SIGNAL(clicked()), SLOT(play()));
   connect(stopButton(), SIGNAL(clicked()), SLOT(stop()));
   connect(nextFrameButton(), SIGNAL(clicked()), SLOT(nextFrame()));
+  connect(fastForwardButton(), SIGNAL(pressed()), SLOT(fastForward()));
+  connect(fastFastForwardButton(), SIGNAL(pressed()), SLOT(fastFastForward()));
+  //connect(rewindButton(), SIGNAL(pressed()), SLOT(rewind()));
+  connect(fastForwardButton(), SIGNAL(released()), player_, SLOT(resetRate()));
+  connect(fastFastForwardButton(), SIGNAL(released()), player_, SLOT(resetRate()));
+  //connect(rewindButton(), SIGNAL(released()), player_, SLOT(resetRate()));
 
   connect(userButton(), SIGNAL(clicked()), SLOT(clickUserButton()));
   connect(positionButton(), SIGNAL(clicked()), SIGNAL(showPositionPanelRequested()));
@@ -179,7 +185,9 @@ PlayerUi::createConnections()
     static const char *invalidate_slots[] = { \
       SLOT(invalidatePlayButton()), \
       SLOT(invalidateStopButton()), \
-      SLOT(invalidateNextFrameButton()) \
+      SLOT(invalidateNextFrameButton()), \
+      SLOT(invalidateFastForwardButton()), \
+      SLOT(invalidateFastFastForwardButton()), \
     }; \
     BOOST_FOREACH (const char *signal, status_signals) \
       BOOST_FOREACH (const char *slot, invalidate_slots) \
@@ -227,6 +235,10 @@ PlayerUi::setActive(bool active)
     invalidatePlayButton();
     invalidateStopButton();
     invalidateNextFrameButton();
+    invalidateFastForwardButton();
+    invalidateFastFastForwardButton();
+    invalidateNextButton();
+    invalidatePreviousButton();
     invalidatePlayerModeToggler();
     invalidateWindowModeToggler();
 
@@ -313,6 +325,26 @@ PlayerUi::nextFrame()
   if (hub_->isMediaTokenMode() &&
       player_->hasMedia())
     player_->nextFrame();
+}
+
+void
+PlayerUi::fastForward(qreal rate)
+{
+  if (!player_->isStopped())
+    player_->setRate(rate);
+}
+
+void
+PlayerUi::fastForward()
+{ fastForward(4.0); }
+void
+PlayerUi::fastFastForward()
+{ fastForward(16.0); }
+
+void
+PlayerUi::rewind()
+{
+  fastForward(-1.0); // not supported by most codecs
 }
 
 // - Set/get properties -
@@ -433,27 +465,27 @@ PlayerUi::invalidatePositionSlider()
 void
 PlayerUi::invalidateUserButton()
 {
-  QToolButton *button = userButton();
+  QToolButton *b = userButton();
   if (server_->isAuthorized()) {
-    button->setStyleSheet(SS_TOOLBUTTON_TEXT_NORMAL);
-    button->setText(server_->user().name());
+    b->setStyleSheet(SS_TOOLBUTTON_TEXT_NORMAL);
+    b->setText(server_->user().name());
   } else {
-    button->setStyleSheet(SS_TOOLBUTTON_TEXT_HIGHLIGHT);
-    button->setText(TR(T_LOGIN));
+    b->setStyleSheet(SS_TOOLBUTTON_TEXT_HIGHLIGHT);
+    b->setText(TR(T_LOGIN));
   }
 #ifdef Q_OS_WIN
-  QtWin::repaintWindow(button->winId());
+  QtWin::repaintWindow(b->winId());
 #endif // Q_OS_WIN
 }
 
 void
 PlayerUi::invalidatePositionButton()
 {
-  QToolButton *button = positionButton();
+  QToolButton *b = positionButton();
 
   if (player_->hasMedia()) {
-    if (!button->isEnabled())
-      button->setEnabled(true);
+    if (!b->isEnabled())
+      b->setEnabled(true);
 
     // Update slider's tool tip and button's text.
     qint64 current_msecs = player_->time(),
@@ -464,21 +496,21 @@ PlayerUi::invalidatePositionButton()
     QTime current = QtExt::msecs2time(current_msecs),
           total = QtExt::msecs2time(total_msecs);
 
-    button->setText(
+    b->setText(
       QString("%1 / %2")
         .arg(current.toString())
         .arg(total.toString())
     );
 
   } else {
-    if (button->isEnabled())
-      button->setEnabled(false);
+    if (b->isEnabled())
+      b->setEnabled(false);
 
     QString zero = QTime(0, 0, 0).toString();
-    button->setText(zero + " / " + zero);
+    b->setText(zero + " / " + zero);
   }
 #ifdef Q_OS_WIN
-  QtWin::repaintWindow(button->winId());
+  QtWin::repaintWindow(b->winId());
 #endif // Q_OS_WIN
 }
 
@@ -505,81 +537,166 @@ PlayerUi::invalidateTitle()
 void
 PlayerUi::invalidatePlayButton()
 {
-  QToolButton *button = playButton();
+  QToolButton *b= playButton();
   switch (hub_->tokenMode()) {
   case SignalHub::LiveTokenMode:
   case SignalHub::SignalTokenMode:
     if (hub_->isPlaying()) {
-      button->setStyleSheet(SS_TOOLBUTTON_PAUSE);
-      button->setToolTip(TR(T_TOOLTIP_PAUSE));
+      b->setStyleSheet(SS_TOOLBUTTON_PAUSE);
+      b->setToolTip(TR(T_TOOLTIP_PAUSE));
     } else {
-      button->setStyleSheet(SS_TOOLBUTTON_PLAY);
-      button->setToolTip(TR(T_TOOLTIP_PLAY));
+      b->setStyleSheet(SS_TOOLBUTTON_PLAY);
+      b->setToolTip(TR(T_TOOLTIP_PLAY));
     }
     break;
 
   case SignalHub::MediaTokenMode:
     switch (player_->status()) {
     case Player::Playing:
-      button->setStyleSheet(SS_TOOLBUTTON_PAUSE);
-      button->setToolTip(TR(T_TOOLTIP_PAUSE));
+      b->setStyleSheet(SS_TOOLBUTTON_PAUSE);
+      b->setToolTip(TR(T_TOOLTIP_PAUSE));
       break;
     case Player::Stopped:
     case Player::Paused:
-      button->setStyleSheet(SS_TOOLBUTTON_PLAY);
-      button->setToolTip(TR(T_TOOLTIP_PLAY));
+      b->setStyleSheet(SS_TOOLBUTTON_PLAY);
+      b->setToolTip(TR(T_TOOLTIP_PLAY));
       break;
     }
     break;
   }
 
 #ifdef Q_OS_WIN
-  QtWin::repaintWindow(button->winId());
+  QtWin::repaintWindow(b->winId());
 #endif // Q_OS_WIN
 }
 
 void
 PlayerUi::invalidateStopButton()
 {
-  QToolButton *button = stopButton();
+  QToolButton *b = stopButton();
   switch (hub_->tokenMode()) {
   case SignalHub::LiveTokenMode:
   case SignalHub::SignalTokenMode:
-    button->setEnabled(!hub_->isStopped());
+    b->setEnabled(!hub_->isStopped());
     break;
 
   case SignalHub::MediaTokenMode:
-    button->setEnabled(!player_->isStopped());
+    b->setEnabled(!player_->isStopped());
     break;
   }
 #ifdef Q_OS_WIN
-  QtWin::repaintWindow(button->winId());
+  QtWin::repaintWindow(b->winId());
 #endif // Q_OS_WIN
 }
 
 void
 PlayerUi::invalidateNextFrameButton()
 {
-  QToolButton *button = nextFrameButton();
+  QToolButton *b = nextFrameButton();
   if (!hub_->isMediaTokenMode()) {
-    button->hide();
-    button->setEnabled(false);
+    b->hide();
+    b->setEnabled(false);
     return;
   }
-
-  button->show();
 
   switch (player_->status()) {
   case Player::Playing:
   case Player::Paused:
-    button->setEnabled(true);
+    b->setEnabled(true);
     break;
   case Player::Stopped:
-    button->setEnabled(false);
+    b->setEnabled(false);
     break;
   }
+
+  b->show();
 #ifdef Q_OS_WIN
-  QtWin::repaintWindow(button->winId());
+  QtWin::repaintWindow(b->winId());
+#endif // Q_OS_WIN
+}
+
+void
+PlayerUi::invalidateFastForwardButton()
+{
+  QToolButton *b = fastForwardButton();
+  if (!hub_->isMediaTokenMode()) {
+    b->hide();
+    b->setEnabled(false);
+    return;
+  }
+
+  switch (player_->status()) {
+  case Player::Playing:
+  case Player::Paused:
+    b->setEnabled(true);
+    break;
+  case Player::Stopped:
+    b->setEnabled(false);
+    break;
+  }
+
+  b->show();
+#ifdef Q_OS_WIN
+  QtWin::repaintWindow(b->winId());
+#endif // Q_OS_WIN
+}
+void
+PlayerUi::invalidateFastFastForwardButton()
+{
+  QToolButton *b = fastFastForwardButton();
+  if (!hub_->isMediaTokenMode()) {
+    b->hide();
+    b->setEnabled(false);
+    return;
+  }
+
+  switch (player_->status()) {
+  case Player::Playing:
+  case Player::Paused:
+    b->setEnabled(true);
+    break;
+  case Player::Stopped:
+    b->setEnabled(false);
+    break;
+  }
+
+  b->show();
+#ifdef Q_OS_WIN
+  QtWin::repaintWindow(b->winId());
+#endif // Q_OS_WIN
+}
+
+void
+PlayerUi::invalidateNextButton()
+{
+  QToolButton *b = nextButton();
+  if (!hub_->isMediaTokenMode()) {
+    b->hide();
+    b->setEnabled(false);
+    return;
+  }
+
+  b->setEnabled(player_->hasMedia());
+  b->show();
+#ifdef Q_OS_WIN
+  QtWin::repaintWindow(b->winId());
+#endif // Q_OS_WIN
+}
+
+void
+PlayerUi::invalidatePreviousButton()
+{
+  QToolButton *b = previousButton();
+  if (!hub_->isMediaTokenMode()) {
+    b->hide();
+    b->setEnabled(false);
+    return;
+  }
+
+  b->setEnabled(player_->hasMedia());
+  b->show();
+#ifdef Q_OS_WIN
+  QtWin::repaintWindow(b->winId());
 #endif // Q_OS_WIN
 }
 
@@ -623,16 +740,16 @@ PlayerUi::clickUserButton()
 void
 PlayerUi::setAnnotationEnabled(bool enabled)
 {
-  QToolButton *button = toggleAnnotationButton();
+  QToolButton *b = toggleAnnotationButton();
   if (enabled) {
-    button->setStyleSheet(SS_TOOLBUTTON_HIDEANNOT);
-    button->setToolTip(TR(T_TOOLTIP_HIDEANNOT));
+    b->setStyleSheet(SS_TOOLBUTTON_HIDEANNOT);
+    b->setToolTip(TR(T_TOOLTIP_HIDEANNOT));
   } else {
-    button->setStyleSheet(SS_TOOLBUTTON_SHOWANNOT);
-    button->setToolTip(TR(T_TOOLTIP_SHOWANNOT));
+    b->setStyleSheet(SS_TOOLBUTTON_SHOWANNOT);
+    b->setToolTip(TR(T_TOOLTIP_SHOWANNOT));
   }
 #ifdef Q_OS_WIN
-  QtWin::repaintWindow(button->winId());
+  QtWin::repaintWindow(b->winId());
 #endif // Q_OS_WIN
 }
 

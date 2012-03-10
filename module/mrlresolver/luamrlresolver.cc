@@ -311,6 +311,7 @@ LuaMrlResolver::cleanUrl(const QString &url)
   QString ret = url;
   if (ret.contains("nicovideo.jp/watch/"))
     ret.remove(QRegExp("\\?.*"));
+  ret.replace(QRegExp("/#.*"), "/");
   return ret;
 }
 

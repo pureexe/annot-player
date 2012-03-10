@@ -1,7 +1,7 @@
 # player.pro
 # 6/30/2011
 
-VERSION = 0.1.3.0
+VERSION = 0.1.3.1
 
 include(../../config.pri)
 include(tr/tr.pri)
@@ -31,7 +31,7 @@ include($$ROOTDIR/module/crypt/crypt.pri)
 #DEFINES += USE_MODULE_WEBBROWSER
 
 DEFINES += USE_MODULE_IOUTIL
-DEFINES += USE_MODE_DEBUG
+#DEFINES += USE_MODE_DEBUG
 
 #DEFINES += USE_MODULE_DOLL
 DEFINES += USE_MODULE_SERVERAGENT

@@ -22,5 +22,7 @@ SOURCES += \
     $$PWD/serversoap.cc
 
 QT      += core
+OTHER_FILES += \
+    $$PWD/serversoap.update.cmd
 
 # EOF

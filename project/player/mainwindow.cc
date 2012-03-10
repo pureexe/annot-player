@@ -120,6 +120,12 @@
   #error "Module server agent is indispensible."
 #endif // USE_MODULE_SERVERAGENT
 
+#ifdef Q_OS_MAC
+  #define K_CMD         "CTRL"
+#else
+  #define K_CMD         "ALT"
+#endif // Q_OS_MAC
+
 using namespace AnnotCloud;
 using namespace Logger;
 
@@ -204,12 +210,7 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags f)
     mediaUrlDialog_(0), annotationUrlDialog_(0), siteAccountView_(0), userView_(0),
     dragPos_(BAD_POS), windowModeUpdateTime_(0),
     tokenType_(0), recentSourceLocked_(false),
-    themeMenu_(0),
-    setThemeToDefaultAct_(0), setThemeToRandomAct_(0),
-    setThemeToDarkAct_(0), setThemeToBlackAct_(0), setThemeToBlueAct_(0),
-    setThemeToBrownAct_(0), setThemeToCyanAct_(0), setThemeToGrayAct_(0),
-    setThemeToGreenAct_(0), setThemeToPinkAct_(0), setThemeToPurpleAct_(0),
-    setThemeToRedAct_(0), setThemeToWhiteAct_(0), setThemeToYellowAct_(0)
+    preferredSubtitleTrack_(0), preferredAudioTrack_(0)
 {
 #ifndef Q_OS_MAC
   if (Settings::globalInstance()->isWindowOnTop())
@@ -223,6 +224,10 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags f)
   setWindowIcon(QIcon(RC_IMAGE_APP)); // X11 require setting icon at runtime
   setWindowTitle(TR(T_TITLE_PROGRAM));
   setContentsMargins(0, 0, 0, 0);
+
+#ifdef Q_WS_WIN
+  UiStyle::globalInstance()->setAeroEnabled(Settings::globalInstance()->isAeroEnabled());
+#endif // Q_WS_WIN
   UiStyle::globalInstance()->setMainWindowStyle(this);
 
   menuBar()->setVisible(Settings::globalInstance()->isMenuBarVisible());
@@ -500,6 +505,9 @@ MainWindow::createComponents()
   liveTimer_ = new QTimer(this);
   connect(liveTimer_, SIGNAL(timeout()), SLOT(updateLiveAnnotations()));
 
+  loadSubtitlesTimer_ = new QtExt::CountdownTimer;
+  loadSubtitlesTimer_->setInterval(3000); // 3 seconds
+
   resumePlayTimer_ = new QtExt::CountdownTimer;
   resumePlayTimer_->setInterval(3000); // 3 seconds
 
@@ -539,6 +547,7 @@ MainWindow::createConnections()
   connect(player_, SIGNAL(stopping()), SLOT(rememberSubtitle()));
   connect(player_, SIGNAL(stopping()), SLOT(rememberAudioTrack()));
 
+  connect(loadSubtitlesTimer_, SIGNAL(timeout()), SLOT(loadSubtitles()));
   connect(resumePlayTimer_, SIGNAL(timeout()), SLOT(resumePlayPos()));
   connect(resumeSubtitleTimer_, SIGNAL(timeout()), SLOT(resumeSubtitle()));
   connect(resumeAudioTrackTimer_, SIGNAL(timeout()), SLOT(resumeAudioTrack()));
@@ -573,6 +582,11 @@ MainWindow::createConnections()
   #undef CONNECT
 
   connect(embeddedPlayer_, SIGNAL(invalidateMenuRequested()), SLOT(invalidateContextMenu()));
+
+  // invalidateMediaAndPlay
+  connect(this, SIGNAL(mediaInvalidated()), SLOT(loadSubtitlesLater()), Qt::QueuedConnection);
+  connect(this, SIGNAL(mediaInvalidated()), SLOT(invalidateWindowTitle()), Qt::QueuedConnection);
+  connect(this, SIGNAL(mediaInvalidated()), SLOT(invalidateTrackMenu()), Qt::QueuedConnection);
 
   // Queued connections
   connect(this, SIGNAL(responded(QString)), SLOT(respond(QString)), Qt::QueuedConnection);
@@ -740,7 +754,7 @@ MainWindow::createConnections()
 #endif // Q_OS_MAC
 
 #ifdef Q_WS_WIN
-  if (!QtWin::isWindowsVistaOrLater())
+  //if (!QtWin::isWindowsVistaOrLater())
 #endif // Q_WS_WIN
   {
     connect(player_, SIGNAL(playing()), SLOT(disableWindowTransparency()));
@@ -871,6 +885,7 @@ MainWindow::createActions()
   MAKE_ACTION(snapshotAct_,     SNAPSHOT,       this,           SLOT(snapshot()))
   MAKE_ACTION(checkInternetConnectionAct_,     CHECKINTERNET,   this, SLOT(checkInternetConnection()))
   MAKE_ACTION(deleteCachesAct_, DELETECACHE,   this, SLOT(deleteCaches()))
+  MAKE_TOGGLE(toggleAeroEnabledAct_, ENABLEAERO, UiStyle::globalInstance(), SLOT(setAeroEnabled(bool)))
   MAKE_TOGGLE(toggleFullScreenModeAct_, FULLSCREEN, hub_,       SLOT(setFullScreenWindowMode(bool)))
   MAKE_TOGGLE(toggleMenuBarVisibleAct_, SHOWMENUBAR, menuBar(), SLOT(setVisible(bool)))
   MAKE_TOGGLE(toggleAnnotationCountDialogVisibleAct_, ANNOTATIONLIMIT, this, SLOT(setAnnotationCountDialogVisible(bool)))
@@ -984,7 +999,7 @@ MainWindow::createActions()
   }
 
 #ifdef Q_WS_WIN
-  if (!QtWin::isWindowsVistaOrLater())
+  //if (!QtWin::isWindowsVistaOrLater())
 #endif // Q_WS_WIN
   {
     MAKE_TOGGLE(setThemeToDefaultAct_,    DEFAULTTHEME,   this,   SLOT(setThemeToDefault()))
@@ -1056,11 +1071,11 @@ MainWindow::createActions()
 
     quitAct_->setShortcuts(QKeySequence::Quit);
 
-    QShortcut *c1 = new QShortcut(QKeySequence("CTRL+1"), this);
+    QShortcut *c1 = new QShortcut(QKeySequence(K_CMD "+1"), this);
     connect(c1, SIGNAL(activated()), hub_, SLOT(toggleEmbeddedPlayerMode()));
-    QShortcut *c2 = new QShortcut(QKeySequence("CTRL+2"), this);
+    QShortcut *c2 = new QShortcut(QKeySequence(K_CMD "+2"), this);
     connect(c2, SIGNAL(activated()), hub_, SLOT(toggleMiniPlayerMode()));
-    QShortcut *c3 = new QShortcut(QKeySequence("CTRL+3"), this);
+    QShortcut *c3 = new QShortcut(QKeySequence(K_CMD "+3"), this);
     connect(c3, SIGNAL(activated()), hub_, SLOT(toggleFullScreenWindowMode()));
 
     QShortcut *f11 = new QShortcut(QKeySequence("F11"), this);
@@ -1126,6 +1141,7 @@ MainWindow::createMenus()
     helpContextMenu_->setTitle(TR(T_MENUTEXT_HELP) + " ...");
     helpContextMenu_->setToolTip(TR(T_TOOLTIP_HELP));
 
+    helpContextMenu_->addAction(checkInternetConnectionAct_);
     helpContextMenu_->addAction(helpAct_);
     helpContextMenu_->addAction(openHomePageAct_);
     helpContextMenu_->addAction(updateAct_);
@@ -1189,9 +1205,9 @@ MainWindow::createMenus()
     annotationLanguageMenu_->addAction(toggleAnnotationLanguageToKoreanAct_);
   }
 
-#ifdef Q_WS_WIN
-  if (!QtWin::isWindowsVistaOrLater())
-#endif // Q_WS_WIN
+//#ifdef Q_WS_WIN
+//  if (!QtWin::isWindowsVistaOrLater())
+//#endif // Q_WS_WIN
   {
     themeMenu_ = new QMenu(this);
 
@@ -1342,7 +1358,7 @@ MainWindow::createMenus()
 
   //menuBar_ = new QMenuBar;
   fileMenu_ = menuBar()->addMenu(tr("&File")); {
-    fileMenu_->addAction(openAct_);
+    fileMenu_->addAction(openFileAct_);
     fileMenu_->addAction(openUrlAct_);
     fileMenu_->addSeparator();
     fileMenu_->addAction(openDeviceAct_);
@@ -1807,7 +1823,7 @@ MainWindow::openSubtitle()
   if (!l.isEmpty()) {
     recentPath_ = QFileInfo(l.front()).absolutePath();
     foreach (QString fileName, l)
-      openSubtitlePath(fileName);
+      openSubtitleFile(fileName);
   }
 }
 
@@ -1830,13 +1846,24 @@ MainWindow::openLocalUrls(const QList<QUrl> &urls)
 {
   // FIXME: add to playlist rather then this approach!!!!!
   if (!urls.empty()) {
-    playlist_.clear();
+    QStringList subs;
+    QStringList playlist;
     foreach (const QUrl &url, urls) {
-      QString path = url.toLocalFile();
-      if (!path.isEmpty())
-        playlist_.append(path);
+      QString fileName = url.toLocalFile();
+      if (!fileName.isEmpty()) {
+        if (Player::isSupportedSubtitle(fileName))
+          subs.append(fileName);
+        else
+          playlist.append(fileName);
+      }
     }
-    openLocalUrl(urls.front());
+    if (!urls.isEmpty()) {
+      playlist_ = playlist;
+      openLocalUrl(urls.front());
+    }
+    if (player_->hasMedia() && !subs.isEmpty())
+      foreach (QString f, ::revertList(subs))
+        openSubtitleFile(f);
   }
 }
 
@@ -2089,10 +2116,13 @@ MainWindow::invalidateMediaAndPlay(bool async)
     //  videoView_->resize(INIT_WINDOW_SIZE);
 
     player_->play();
-    if (!isRemoteMrl(path))
-      QTimer::singleShot(0, player_, SLOT(loadExternalSubtitles())); // load external subtitles later
 
-    invalidateWindowTitle();
+//#ifdef Q_OS_WIN
+//    if (!isRemoteMrl(path))
+//      QTimer::singleShot(0, player_, SLOT(loadExternalSubtitles())); // load external subtitles later
+//#endif // Q_OS_WIN
+    //loadSubtitlesTimer_->start(3); // 3 times
+    //invalidateWindowTitle();
 
 #ifdef Q_OS_MAC
     // ensure videoView_ stretch in full screen mode
@@ -2108,8 +2138,10 @@ MainWindow::invalidateMediaAndPlay(bool async)
       UiStyle::globalInstance()->setBlackBackground(this);
 #endif // Q_WS_X11
 
+    emit mediaInvalidated();
+
     // SingleShot only because of multi-threading problem.
-    QTimer::singleShot(0, this, SLOT(invalidateTrackMenu()));
+    //QTimer::singleShot(0, this, SLOT(invalidateTrackMenu()));
 
     DOUT("playerMutex unlocking");
     playerMutex_.unlock();
@@ -2119,7 +2151,7 @@ MainWindow::invalidateMediaAndPlay(bool async)
 }
 
 void
-MainWindow::openSubtitlePath(const QString &path)
+MainWindow::openSubtitleFile(const QString &path)
 {
   if (!player_->hasMedia()) {
     log(TR(T_ERROR_NO_MEDIA))   ;
@@ -2732,6 +2764,7 @@ ConsoleDialog*
 MainWindow::consoleDialog()
 {
   if (!consoleDialog_) {
+    reinterpret_cast<Application *>(qApp)->installMessageHandlers();
     consoleDialog_ = new ConsoleDialog(this);
     connect(LoggerSignals::globalInstance(), SIGNAL(logged(QString)),
             consoleDialog_, SLOT(appendLogText(QString)), Qt::QueuedConnection);
@@ -4251,27 +4284,6 @@ MainWindow::invalidateContextMenu()
   {
     contextMenu_->addSeparator();
 
-    // Theme
-    if (themeMenu_) {
-      contextMenu_->addMenu(themeMenu_);
-
-      UiStyle::Theme t = UiStyle::globalInstance()->theme();
-      setThemeToDefaultAct_->setChecked(t == UiStyle::DefaultTheme);
-      setThemeToRandomAct_->setChecked(t == UiStyle::RandomTheme);
-      setThemeToDarkAct_->setChecked(t == UiStyle::DarkTheme);
-      setThemeToBlackAct_->setChecked(t == UiStyle::BlackTheme);
-      setThemeToBlueAct_->setChecked(t == UiStyle::BlueTheme);
-      setThemeToBrownAct_->setChecked(t == UiStyle::BrownTheme);
-      setThemeToCyanAct_->setChecked(t == UiStyle::CyanTheme);
-      setThemeToGrayAct_->setChecked(t == UiStyle::GrayTheme);
-      setThemeToGreenAct_->setChecked(t == UiStyle::GreenTheme);
-      setThemeToPinkAct_->setChecked(t == UiStyle::PinkTheme);
-      setThemeToPurpleAct_->setChecked(t == UiStyle::PurpleTheme);
-      setThemeToRedAct_->setChecked(t == UiStyle::RedTheme);
-      setThemeToWhiteAct_->setChecked(t == UiStyle::WhiteTheme);
-      setThemeToYellowAct_->setChecked(t == UiStyle::YellowTheme);
-    }
-
     // Language
     if (player_->isStopped() && hub_->isStopped() ||
         hub_->isLiveTokenMode()) {
@@ -4294,18 +4306,51 @@ MainWindow::invalidateContextMenu()
 
   }
 
-  // Help
+  // GUI
   {
     contextMenu_->addSeparator();
 
+    // Theme
+    bool aero = UiStyle::globalInstance()->isAeroEnabled();
+#ifdef Q_WS_WIN
+    if (QtWin::isWindowsVistaOrLater()) {
+      toggleAeroEnabledAct_->setChecked(aero);
+      contextMenu_->addAction(toggleAeroEnabledAct_);
+    }
+#endif // Q_WS_WIN
+    if (!aero) {
+      contextMenu_->addMenu(themeMenu_);
+
+      UiStyle::Theme t = UiStyle::globalInstance()->theme();
+      setThemeToDefaultAct_->setChecked(t == UiStyle::DefaultTheme);
+      setThemeToRandomAct_->setChecked(t == UiStyle::RandomTheme);
+      setThemeToDarkAct_->setChecked(t == UiStyle::DarkTheme);
+      setThemeToBlackAct_->setChecked(t == UiStyle::BlackTheme);
+      setThemeToBlueAct_->setChecked(t == UiStyle::BlueTheme);
+      setThemeToBrownAct_->setChecked(t == UiStyle::BrownTheme);
+      setThemeToCyanAct_->setChecked(t == UiStyle::CyanTheme);
+      setThemeToGrayAct_->setChecked(t == UiStyle::GrayTheme);
+      setThemeToGreenAct_->setChecked(t == UiStyle::GreenTheme);
+      setThemeToPinkAct_->setChecked(t == UiStyle::PinkTheme);
+      setThemeToPurpleAct_->setChecked(t == UiStyle::PurpleTheme);
+      setThemeToRedAct_->setChecked(t == UiStyle::RedTheme);
+      setThemeToWhiteAct_->setChecked(t == UiStyle::WhiteTheme);
+      setThemeToYellowAct_->setChecked(t == UiStyle::YellowTheme);
+    }
+
     //contextMenu_->addAction(showMinimizedAct_);
-    contextMenu_->addAction(checkInternetConnectionAct_);
     //if (hub_->isStopped() && player_->isStopped())
     //  contextMenu_->addAction(deleteCachesAct_);
 
     toggleWindowOnTopAct_->setChecked(isWindowOnTop());
     contextMenu_->addAction(toggleWindowOnTopAct_);
+  }
 
+  // Help
+  {
+    contextMenu_->addSeparator();
+
+    //contextMenu_->addAction(checkInternetConnectionAct_);
 #ifdef Q_OS_LINUX
     toggleMenuBarVisibleAct_->setChecked(menuBar()->isVisible());
     contextMenu_->addAction(toggleMenuBarVisibleAct_);
@@ -4606,6 +4651,10 @@ MainWindow::closeEvent(QCloseEvent *event)
   Settings *settings = Settings::globalInstance();
 
   //invalidateRecent();
+#ifdef Q_WS_WIN
+  settings->setAeroEnabled(UiStyle::globalInstance()->isAeroEnabled());
+#endif // Q_WS_WIN
+
   settings->setRecentFiles(recentFiles_);
 
   settings->setRecentPath(recentPath_);
@@ -5975,7 +6024,7 @@ MainWindow::subtitleColor() const
 \
     if (hub_->isMediaTokenMode() && hub_->isEmbeddedPlayerMode() && \
         player_->hasMedia() && \
-        !UiStyle::isAeroAvailable()) \
+        !UiStyle::globalInstance()->isAeroEnabled()) \
       UiStyle::globalInstance()->setBlackBackground(this); \
   }
 
@@ -5997,11 +6046,17 @@ MainWindow::subtitleColor() const
 
 void
 MainWindow::enableWindowTransparency()
-{ setWindowOpacity(G_WINDOW_OPACITY); }
+{
+  if (!UiStyle::globalInstance()->isAeroEnabled())
+    setWindowOpacity(G_WINDOW_OPACITY);
+}
 
 void
 MainWindow::disableWindowTransparency()
-{ setWindowOpacity(1.0); }
+{
+  if (!UiStyle::globalInstance()->isAeroEnabled())
+    setWindowOpacity(1.0);
+}
 
 // - Browse -
 
@@ -6104,7 +6159,8 @@ MainWindow::openNextFile()
 void
 MainWindow::previous()
 {
-  if (hub_->isMediaTokenMode() && player_->hasMedia()) {
+  if (hub_->isMediaTokenMode() && player_->hasMedia() &&
+      !isRemoteMrl(player_->mediaPath())) {
     if (player_->hasPlaylist())
       player_->previousTrack();
     //else if (player_->hasChapters())
@@ -6121,7 +6177,8 @@ MainWindow::previous()
 void
 MainWindow::next()
 {
-  if (hub_->isMediaTokenMode() && player_->hasMedia()) {
+  if (hub_->isMediaTokenMode() && player_->hasMedia() &&
+      !isRemoteMrl(player_->mediaPath())) {
     if (player_->hasPlaylist())
       player_->nextTrack();
     //else if (player_->hasChapters())
@@ -6317,10 +6374,10 @@ MainWindow::handlePlayerError()
 QString
 MainWindow::shortenText(const QString &text)
 {
-  if (text.size() <= 30)
+  if (text.size() <= 40)
     return text;
   else
-    return text.left(17) + "..." + text.right(10);
+    return text.left(25) + "..." + text.right(15);
 }
 
 bool
@@ -6330,13 +6387,28 @@ MainWindow::isRemoteMrl(const QString& mrl)
 // - Resume -
 
 void
+MainWindow::loadSubtitlesLater()
+{ loadSubtitlesTimer_->start(3); }
+
+void
+MainWindow::loadSubtitles()
+{
+  //DOUT("enter");
+  if (player_->hasMedia() && !player_->isStopped()) {
+    loadSubtitlesTimer_->stop();
+    if (!player_->hasSubtitles())
+      player_->loadExternalSubtitles();
+  }
+  //DOUT("exit");
+}
+
+void
 MainWindow::rememberPlayPos()
 {
-  DOUT("enter");
+  //DOUT("enter");
   enum { margin = 90 * 1000 }; // 1.5min
   if (player_->hasMedia() &&
       !isRemoteMrl(player_->mediaPath())) {
-    DOUT("hasMedia = true");
 
     qint64 hash = dataManager_->token().hashId();
     DOUT("hash =" << hash);
@@ -6370,15 +6442,14 @@ MainWindow::rememberPlayPos()
     }
     playPosHistory_[hash] = pos;
   }
-  DOUT("exit");
+  //DOUT("exit");
 }
 
 void
 MainWindow::resumePlayPos()
 {
-  DOUT("enter");
+  //DOUT("enter");
   if (player_->hasMedia() && !player_->isStopped()) {
-    DOUT("hasMedia = true");
     resumePlayTimer_->stop();
     if (isRemoteMrl(player_->mediaPath())) {
       DOUT("exit: remote media is not resumed (since seek not implemented)");
@@ -6405,18 +6476,17 @@ MainWindow::resumePlayPos()
       seek(pos);
     }
   }
-  DOUT("exit");
+  //DOUT("exit");
 }
 
 void
 MainWindow::rememberSubtitle()
 {
-  DOUT("enter");
-  if (player_->hasMedia() && player_->subtitleCount() > 1 &&
-      !isRemoteMrl(player_->mediaPath())) {
-    DOUT("hasMedia = true");
-    int id = player_->isSubtitleVisible() ? player_->subtitleId() : -1;
-    DOUT("id =" << id);
+  //DOUT("enter");
+  if (player_->hasMedia() && player_->subtitleCount() > 1) {
+    int track = preferredSubtitleTrack_ =
+        player_->isSubtitleVisible() ? player_->subtitleId() : -1;
+    DOUT("track =" << track);
 
     qint64 hash = dataManager_->token().hashId();
     DOUT("hash =" << hash);
@@ -6425,8 +6495,8 @@ MainWindow::rememberSubtitle()
       return;
     }
 
-    if (id)
-      subtitleHistory_[hash] = id;
+    if (track)
+      subtitleHistory_[hash] = track;
     else
       subtitleHistory_.remove(hash);
 
@@ -6437,58 +6507,47 @@ MainWindow::rememberSubtitle()
       subtitleHistory_.remove(k);
     }
   }
-  DOUT("exit");
+  //DOUT("exit");
 }
 
 void
 MainWindow::resumeSubtitle()
 {
-  DOUT("enter");
+  //DOUT("enter");
   if (player_->hasMedia() && player_->subtitleCount() > 1) {
-    DOUT("hasMedia = true");
     resumeSubtitleTimer_->stop();
-    if (isRemoteMrl(player_->mediaPath())) {
-      DOUT("exit: remote media is not resumed");
-      return;
-    }
     qint64 hash = dataManager_->token().hashId();
     DOUT("hash =" << hash);
-    if (!hash) {
-      DOUT("exit: no hash");
-      return;
-    }
 
-    int id = 0;
-    if (subtitleHistory_.contains(hash))
-      id = subtitleHistory_[hash];
-    DOUT("id =" << id);
-    if (id >= 0 && id < player_->subtitleCount() &&
-        id != player_->subtitleId()) {
-      if (id > 0) {
+    int track = hash && subtitleHistory_.contains(hash) ? subtitleHistory_[hash] :
+                                                          preferredSubtitleTrack_;
+    DOUT("track =" << track);
+    if (track >= 0 && track < player_->subtitleCount() &&
+        track != player_->subtitleId()) {
+      if (track > 0) {
         log(tr("loading last subtitle") + ": " +
-          player_->subtitleDescriptions()[id]);
-        player_->setSubtitleId(id);
+          player_->subtitleDescriptions()[track]);
+        player_->setSubtitleId(track);
       }
       player_->setSubtitleVisible(true);
-    } else if (id == -1) {
+    } else if (track == -1) {
       log(tr("hide last subtitle"));
       player_->setSubtitleVisible(false);
     }
   }
-  DOUT("exit");
+  //DOUT("exit");
 }
 
 void
 MainWindow::rememberAudioTrack()
 {
-  DOUT("enter");
-  if (player_->hasMedia() && player_->audioTrackCount() > 1 &&
-      !isRemoteMrl(player_->mediaPath())) {
-    DOUT("hasMedia = true");
-    int id = player_->audioTrackId();
-    DOUT("id =" << id);
-    if (id < 0) {
-      DOUT("exit: invalid id");
+  //DOUT("enter");
+  if (player_->hasMedia() && player_->audioTrackCount() > 1) {
+    int track = preferredAudioTrack_ = player_->audioTrackId();
+
+    DOUT("track =" << track);
+    if (track < 0) {
+      DOUT("exit: invalid track");
       return;
     }
 
@@ -6499,8 +6558,8 @@ MainWindow::rememberAudioTrack()
       return;
     }
 
-    if (id)
-      audioTrackHistory_[hash] = id;
+    if (track)
+      audioTrackHistory_[hash] = track;
     else
       audioTrackHistory_.remove(hash);
 
@@ -6511,40 +6570,30 @@ MainWindow::rememberAudioTrack()
       audioTrackHistory_.remove(k);
     }
   }
-  DOUT("exit");
+  //DOUT("exit");
 }
 
 void
 MainWindow::resumeAudioTrack()
 {
-  DOUT("enter");
+  //DOUT("enter");
   if (player_->hasMedia() && player_->audioTrackCount() > 1) {
-    DOUT("hasMedia = true");
     resumeAudioTrackTimer_->stop();
-    if (isRemoteMrl(player_->mediaPath())) {
-      DOUT("exit: remote media is not resumed");
-      return;
-    }
     qint64 hash = dataManager_->token().hashId();
     DOUT("hash =" << hash);
-    if (!hash) {
-      DOUT("exit: no hash");
-      return;
-    }
 
-    int id = 0;
-    if (audioTrackHistory_.contains(hash))
-      id = audioTrackHistory_[hash];
-    DOUT("id =" << id);
-    if (id >= 0 && id < player_->audioTrackCount()
-        && id != player_->audioTrackId()) {
-      if (id > 0)
+    int track =  hash && audioTrackHistory_.contains(hash) ? audioTrackHistory_[hash] :
+                                                             preferredAudioTrack_;
+    DOUT("track =" << track);
+    if (track >= 0 && track < player_->audioTrackCount()
+        && track != player_->audioTrackId()) {
+      if (track > 0)
         log(tr("loading last audio track") + ": " +
-            player_->audioTrackDescriptions()[id]);
-      player_->setAudioTrackId(id);
+            player_->audioTrackDescriptions()[track]);
+      player_->setAudioTrackId(track);
     }
   }
-  DOUT("exit");
+  //DOUT("exit");
 }
 
 // - Effect -
@@ -6577,6 +6626,11 @@ MainWindow::setAnnotationEffectToBlur()
 void
 MainWindow::setNavigationEnabled(bool t)
 {
+  if (t) {
+    if (!hub_->isMediaTokenMode() ||
+        player_->hasMedia() && isRemoteMrl(player_->mediaPath()))
+      return;
+  }
   mainPlayer_->previousButton()->setEnabled(t);
   mainPlayer_->nextButton()->setEnabled(t);
   miniPlayer_->previousButton()->setEnabled(t);

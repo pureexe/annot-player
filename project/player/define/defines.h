@@ -23,7 +23,6 @@ enum { ALPHA = 0 };
 #define G_ORGANIZATION  "Annot"
 #define G_APPLICATION   "Player"
 #define G_VERSION       VERSION
-//#define G_HOMEPAGE      "http://annot.me"
 #define G_HOMEPAGE      "http://annotcloud.com"
 #define G_WIKIPAGE      G_HOMEPAGE "/w"
 #define G_WIKIPAGE_FAQ  G_WIKIPAGE "/index.php?title=Manual:FAQ"

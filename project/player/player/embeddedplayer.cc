@@ -107,6 +107,8 @@ EmbeddedPlayerUi::createLayout()
     row->addWidget(playButton());
     row->addWidget(toggleAnnotationButton());
     row->addWidget(nextFrameButton());
+    row->addWidget(fastForwardButton());
+    row->addWidget(fastFastForwardButton());
     row->addWidget(stopButton());
     //row->addWidget(openButton());
     row->addWidget(previousButton());

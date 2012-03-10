@@ -16,6 +16,16 @@
         <file>images/downarrow_disabled.png</file>
         <file>images/downarrow_hover.png</file>
         <file>images/downarrow_pressed.png</file>
+        <file>images/fastforward.png</file>
+        <file>images/fastforward_checked.png</file>
+        <file>images/fastforward_disabled.png</file>
+        <file>images/fastforward_hover.png</file>
+        <file>images/fastforward_pressed.png</file>
+        <file>images/fastfastforward.png</file>
+        <file>images/fastfastforward_checked.png</file>
+        <file>images/fastfastforward_disabled.png</file>
+        <file>images/fastfastforward_hover.png</file>
+        <file>images/fastfastforward_pressed.png</file>
         <file>images/fullscreen.png</file>
         <file>images/fullscreen_checked.png</file>
         <file>images/fullscreen_disabled.png</file>
@@ -81,6 +91,11 @@
         <file>images/restore_disabled.png</file>
         <file>images/restore_hover.png</file>
         <file>images/restore_pressed.png</file>
+        <file>images/rewind.png</file>
+        <file>images/rewind_checked.png</file>
+        <file>images/rewind_disabled.png</file>
+        <file>images/rewind_hover.png</file>
+        <file>images/rewind_pressed.png</file>
         <file>images/stop.png</file>
         <file>images/stop_checked.png</file>
         <file>images/stop_disabled.png</file>

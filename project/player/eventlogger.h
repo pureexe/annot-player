@@ -37,6 +37,7 @@ public slots:
   void logStopped();
   void logPlayerError();
   void logTrackNumberChanged(int track);
+  void logPlayRateChanged(qreal rate);
 
   void logTranslatorNetworkError(const QString &message);
 

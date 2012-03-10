@@ -127,7 +127,6 @@ namespace { // anonymous, annotation display
 int
 AnnotationGraphicsItem::nextY(int msecs, Style style) const
 {
-
   int ret = ::next_y_(view_->height(), msecs, style, hub_);
   int max = view_->height() - boundingRect().height() ;
   if (ret > max - 5)

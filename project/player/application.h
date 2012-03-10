@@ -31,7 +31,7 @@ public:
   bool isSingleInstance() const;
 
 public:
-  void installMessageHandlers(); // invoke only once
+  void installMessageHandlers(); ///< invoked only once
 
   void addMessageHandler(QtMsgHandler callback)
   { messageHandlers_.append(callback); }

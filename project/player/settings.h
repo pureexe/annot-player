@@ -60,6 +60,9 @@ public:
   bool isAutoPlayNext() const;
   void setAutoPlayNext(bool t);
 
+  bool isAeroEnabled() const;
+  void setAeroEnabled(bool t);
+
   bool isLive() const;
   void setLive(bool t);
 

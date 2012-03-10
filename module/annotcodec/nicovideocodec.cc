@@ -90,8 +90,6 @@ NicovideoCodec::parseDocument(const QByteArray &data)
   AnnotationList ret;
   QDomElement e = root.firstChildElement("chat");
   while (!e.isNull()) {
-    e = e.nextSiblingElement("chat");
-
     Annotation a;
     QString text = e.text();
     if (text.isEmpty())

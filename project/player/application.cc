@@ -49,11 +49,9 @@ Application::createDirectories()
   if (!caches.exists())
     caches.mkpath(caches.absolutePath());
 
-#ifdef USE_MODE_DEBUG
   QDir logs(G_PATH_LOGS);
   if (!logs.exists())
     logs.mkpath(logs.absolutePath());
-#endif // USE_MODE_DEBUG
 }
 
 // - Properties -
@@ -138,6 +136,7 @@ Application::loggedMessageHandler(QtMsgType type, const char *msg)
 void
 Application::installMessageHandlers()
 {
+  qDebug() << "application::installMessageHandlers";
   QFile debug(G_PATH_DEBUG);
   if (debug.open(QIODevice::WriteOnly | QIODevice::Append)) {
     QTextStream(&debug)

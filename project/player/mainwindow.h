@@ -105,6 +105,7 @@ public:
 
   // - Signals -
 signals:
+  void mediaInvalidated();
   void responded(const QString &text);
   void said(const QString &text, const QString &color);
   void logged(const QString &text);
@@ -202,7 +203,7 @@ public slots:
   void openLocalUrl(const QUrl &url);
   void openLocalUrls(const QList<QUrl> &urls);
   void openMimeData(const QMimeData *urls);
-  void openSubtitlePath(const QString &path);
+  void openSubtitleFile(const QString &path);
   void closeMedia();
   void play();
   void playPause();
@@ -461,6 +462,9 @@ protected slots:
 
   void resumeAll();
 
+  void loadSubtitles();
+  void loadSubtitlesLater();
+
 protected:
   bool isGlobalPosNearEmbeddedPlayer(const QPoint &pos) const;
 
@@ -586,6 +590,7 @@ private:
   Tray *tray_;
   SignalHub *hub_;
 
+  QtExt::CountdownTimer *loadSubtitlesTimer_;
   QtExt::CountdownTimer *resumePlayTimer_,
                         *resumeSubtitleTimer_,
                         *resumeAudioTrackTimer_;
@@ -676,6 +681,9 @@ private:
   QHash<qint64, qint64> playPosHistory_;
   QHash<qint64, int> subtitleHistory_;
   QHash<qint64, int> audioTrackHistory_;
+
+  int preferredSubtitleTrack_,
+      preferredAudioTrack_;
 
   // - Menus and actions -
 
@@ -835,6 +843,8 @@ private:
           *toggleAnnotationLanguageToKoreanAct_,
           *toggleAnnotationLanguageToUnknownAct_,
           *toggleAnnotationLanguageToAnyAct_;
+
+  QAction *toggleAeroEnabledAct_;
 
   QAction *setThemeToDefaultAct_,
           *setThemeToRandomAct_,

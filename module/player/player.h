@@ -220,9 +220,12 @@ public slots:
   void playPause(); ///< Toggle play/pause.
   void nextFrame(); ///< Pause and jump to the next frame.
 
+  qreal rate() const;
   qreal volume() const;       ///< [0,1]
   qreal position() const;     ///< [0,1]
   void setVolume(qreal vol);
+  void setRate(qreal rate);
+  void resetRate() { setRate(1.0); }
   void mute();
   void setPosition(qreal pos);
 
@@ -312,6 +315,7 @@ public:
   //@}
 
 signals:
+  void rateChanged(qreal rate);
   void titleIdChanged(int tid);
   void trackNumberChanged(int track);
 

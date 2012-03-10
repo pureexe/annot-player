@@ -7,7 +7,7 @@
 //#define DEBUG "debug"
 //#define USE_MODE_DEBUG
 
-#if defined(DEBUG) && defined(USE_MODE_DEBUG)
+#ifdef DEBUG
   #include <QDebug>
   #define DPRINT(...)   qDebug(QString("%1:%2:").arg(DEBUG).arg(__FUNCTION__), \
                                  __VA_ARGS__)

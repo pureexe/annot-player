@@ -40,7 +40,7 @@ YoutubeMrlResolver::resolveMedia(const QString &href)
     return false;
   }
 
-  QString mrl = "http://youtube.com/watch?v=" + v;
+  QString mrl = "http://www.youtube.com/watch?v=" + v;
   emit messageReceived(tr("resolving media URL ...") + ": " + mrl);
   MediaInfo mi;
   mi.mrls.append(MrlInfo(mrl));

@@ -108,10 +108,6 @@ main(int argc, char *argv[])
   if (!a.isSingleInstance())
     return 0;
 
-#ifdef USE_MODE_DEBUG
-  //a.installMessageHandlers();
-#endif // USE_MODE_DEBUG
-
   Settings *settings = Settings::globalInstance();
 
   // Seed global random generator.

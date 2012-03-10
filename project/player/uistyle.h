@@ -44,6 +44,11 @@ public:
   static Self *globalInstance()               { Q_ASSERT(global_); return global_; }
   static void setGlobalInstance(Self *global) { global_ = global; }
   static bool isAeroAvailable();
+public slots:
+  void setAeroEnabled(bool t);
+public:
+  bool isAeroEnabled() const { return aero_ && isAeroAvailable(); }
+
 public:
   explicit UiStyle(QObject *parent = 0);
 
@@ -84,6 +89,7 @@ protected:
 
 private:
   static Self *global_;
+  bool aero_;
   Theme theme_;
   QWidgetList windows_; // windows with customized background
   QList<QMenu*> menus_; // menus with customized background

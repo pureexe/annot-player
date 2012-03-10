@@ -71,6 +71,8 @@ MiniPlayerUi::createLayout()
     row1->addWidget(playButton());
     row1->addWidget(toggleAnnotationButton());
     row1->addWidget(nextFrameButton());
+    row1->addWidget(fastForwardButton());
+    row1->addWidget(fastFastForwardButton());
     row1->addWidget(stopButton());
     //row1->addWidget(openButton());
     row1->addWidget(previousButton());

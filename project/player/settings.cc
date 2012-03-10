@@ -37,10 +37,11 @@
 #define SK_WINDOWONTOP  "WindowOnTop"
 #define SK_UPDATEDATE   "UpdateDate"
 #define SK_RECENTPATH   "RecentPath"
-#define SK_AUTOPLAYNEXT "AutoPlayNext"
+#define SK_AERO         "Aero"
 #define SK_ANNOTFILTER  "AnnotationFilter"
 #define SK_ANNOTCOUNT   "AnnotationCount"
 #define SK_ANNOTEFFECT  "AnnotationEffect"
+#define SK_AUTOPLAYNEXT "AutoPlayNext"
 #define SK_BLOCKEDUSERS "BlockedUsers"
 #define SK_BLOCKEDKEYS  "BlockedKeywords"
 #define SK_NICOACCOUNT  "NicovideoAccount"
@@ -277,6 +278,14 @@ Settings::isAutoPlayNext() const
 void
 Settings::setAutoPlayNext(bool t)
 { setValue(SK_AUTOPLAYNEXT, t); }
+
+bool
+Settings::isAeroEnabled() const
+{ return value(SK_AERO, true).toBool(); }
+
+void
+Settings::setAeroEnabled(bool t)
+{ setValue(SK_AERO, t); }
 
 bool
 Settings::isMenuBarVisible() const

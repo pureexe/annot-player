@@ -60,6 +60,10 @@ public slots:
   void play();
   void stop();
   void nextFrame();
+  void fastForward(qreal reate);
+  void fastForward();
+  void fastFastForward();
+  void rewind();
 
   void setAnnotationEnabled(bool enabled); // invalidateToggleAnnotationButton
 
@@ -79,6 +83,11 @@ public slots:
   void invalidatePlayButton();
   void invalidateStopButton();
   void invalidateNextFrameButton();
+  void invalidateFastForwardButton();
+  void invalidateFastFastForwardButton();
+  //void invalidateRewindButton();
+  void invalidateNextButton();
+  void invalidatePreviousButton();
 
   void invalidatePlayerModeToggler();
   void invalidateWindowModeToggler();

@@ -8,6 +8,7 @@
 
 #ifdef Q_OS_MAC
   #define K_CTRL        "cmd"
+  #define K_CMD         "cmd"
   #define K_ALT         "opt"
   #define K_SHIFT       "shift"
   #define K_SPACE       "space"
@@ -15,6 +16,7 @@
   #define K_ESC         "esc"
 #else
   #define K_CTRL        "Ctrl"
+  #define K_CMD         "Alt"
   #define K_ALT         "Alt"
   #define K_SHIFT       "Shift"
   #define K_SPACE       "Space"
@@ -157,6 +159,8 @@ TranslatorManager::translate(int tid) const
   case T_TIMESLOT:      return tr("Slot");
   case T_PREVIOUS:      return tr("Previous");
   case T_NEXT:          return tr("Next");
+  case T_FASTFORWARD:   return tr("Fast forward");
+  case T_REWIND:        return tr("Rewind");
   case T_VERBATIM:      return tr("Verbatim");
   case T_SUBTITLE:      return tr("Subtitle");
   case T_AUDIOTRACK:    return tr("Audio track");
@@ -315,6 +319,9 @@ TranslatorManager::translate(int tid) const
   case T_MENUTEXT_PLAY:         return tr("Play") + " [" K_SPACE "]";
   case T_TIP_PLAY:              return tr("Play media") + " [" K_SPACE "]";
 
+  case T_MENUTEXT_FASTFORWARD:  return tr("Fast forward") + " " "x4";
+  case T_MENUTEXT_FASTFASTFORWARD: return tr("Fast forward") + " " "x16";
+
   case T_MENUTEXT_MENU:         return tr("Menu");
   case T_TIP_MENU:              return tr("Show menu");
 
@@ -330,11 +337,11 @@ TranslatorManager::translate(int tid) const
   case T_MENUTEXT_REPLAY:       return tr("Replay");
   case T_TIP_REPLAY:            return tr("Restart playing");
 
-  case T_MENUTEXT_MINI:         return tr("Mini player") + " [" K_CTRL "+2]";
-  case T_TIP_MINI:              return tr("Show mini player") + " [" K_CTRL "+2]";
+  case T_MENUTEXT_MINI:         return tr("Mini player") + " [" K_CMD "+2]";
+  case T_TIP_MINI:              return tr("Show mini player") + " [" K_CMD "+2]";
 
-  case T_MENUTEXT_EMBED:        return tr("Embed player") + " [" K_CTRL "+1]";
-  case T_TIP_EMBED:             return tr("Embed player window") + " [" K_CTRL "+1]";
+  case T_MENUTEXT_EMBED:        return tr("Embed player") + " [" K_CMD "+1]";
+  case T_TIP_EMBED:             return tr("Embed player window") + " [" K_CMD "+1]";
 
   case T_MENUTEXT_EMBEDONTOP:   return tr("Embed on top");
   case T_TIP_EMBEDONTOP:        return tr("Embed player window on the top");
@@ -345,8 +352,8 @@ TranslatorManager::translate(int tid) const
   case T_MENUTEXT_SYNC:         return tr("Sync mode");
   case T_TIP_SYNC:              return tr("Toggle Sync mode");
 
-  case T_MENUTEXT_FULLSCREEN:   return tr("Fullscreen") + " [" K_CTRL "+3]";
-  case T_TIP_FULLSCREEN:        return tr("Show fullscreen") + " [" K_CTRL "+3]";
+  case T_MENUTEXT_FULLSCREEN:   return tr("Fullscreen") + " [" K_CMD "+3]";
+  case T_TIP_FULLSCREEN:        return tr("Show fullscreen") + " [" K_CMD "+3]";
 
   case T_MENUTEXT_SNAPSHOT:     return tr("Snapshot");
   case T_TIP_SNAPSHOT:          return tr("Taks a snapshot of current frame");
@@ -638,6 +645,8 @@ TranslatorManager::translate(int tid) const
 
   case T_MENUTEXT_SHOWMENUBAR:  return tr("Show menubar");
   case T_TIP_SHOWMENUBAR:       return tr("Show menubar");
+
+  case T_MENUTEXT_ENABLEAERO:   return tr("Enable Aero");
 
   case T_MENUTEXT_CHECKINTERNET:return tr("Check Internet");
   case T_TIP_CHECKINTERNET:     return tr("Check Internet connection");

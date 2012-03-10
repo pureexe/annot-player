@@ -2,6 +2,12 @@ ChangeLog
 Annot Project
 6/18/2011
 
+3/10/2012	annot.player	0.1.3.1
+        * Added fast forward buttons.
+        * Able to disable Aero effect in Windows Vista/7.
+        * Automatically detect last language preference for subtitle/audio track.
+        * Several bug fixes.
+
 3/2/2012	annot.player	0.1.3.0
         * Now support streaming from nicovideo.jp in Mac OS X as well.
           Online video will be automatically downloaded and associated with annotations.

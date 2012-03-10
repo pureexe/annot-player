@@ -986,6 +986,21 @@ Player::setPosition(qreal pos)
   DOUT("exit");
 }
 
+void
+Player::setRate(qreal rate)
+{
+  Q_ASSERT(isValid());
+  ::libvlc_media_player_set_rate(impl_->player(), rate);
+  emit rateChanged(rate);
+}
+
+qreal
+Player::rate() const
+{
+  Q_ASSERT(isValid());
+  return ::libvlc_media_player_get_rate(impl_->player());
+}
+
 qreal
 Player::volume() const
 {
@@ -1037,7 +1052,7 @@ bool
 Player::hasSubtitles() const
 {
   Q_ASSERT(isValid());
-  return ::libvlc_video_get_spu_description(impl_->player());
+  return subtitleCount() > 0;
 }
 
 QStringList
@@ -1181,18 +1196,17 @@ Player::searchExternalSubtitles() const
   QStringList ret;
   if (hasMedia()) {
     QString fileName = mediaPath();
-    QString baseName =QFileInfo(fileName).baseName() ;
     QDir dir = QFileInfo(fileName).absolutePath();
     DOUT("search in directory:" << dir.path());
     if (dir.exists()) {
+      QString baseName = QFileInfo(fileName).baseName() ;
       QStringList filters = supportedSubtitleFilters();
-      foreach (const QString fileName, dir.entryList(filters, QDir::Files))
-        if (fileName.startsWith(baseName + "."))
-          ret << dir.path() + "/" + fileName;
+      foreach (QString f, dir.entryList(filters, QDir::Files))
+        if (f.startsWith(baseName + "."))
+          ret << dir.path() + "/" + f;
     } else
       DOUT("directory to search not existed");
   }
-
   DOUT("found subtitles count:" << ret.size());
   DOUT("exit");
   return ret;

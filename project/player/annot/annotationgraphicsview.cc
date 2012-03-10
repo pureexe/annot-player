@@ -466,7 +466,7 @@ AnnotationGraphicsView::invalidateCurrentTime()
   qint64 secs = msecs / 1000;
   if (secs != currentTime_) { // currentTime_ is used to prevent the same seconds being double displayed
     currentTime_ = secs;
-    showAnnotationsAtPos(msecs);
+    showAnnotationsAtPos(currentTime_ * 1000);
   }
 }
 
@@ -631,7 +631,8 @@ AnnotationGraphicsView::showAnnotationsAtPos(qint64 pos)
   emit annotationPosChanged(pos);
 
   if (!hub_->isSignalTokenMode())
-    pos = qRound64(pos / 1000.0); // msecs => secs
+    //pos = qRound64(pos / 1000.0); // msecs => secs
+    pos /= 1000;
 
   //if (annots_.contains(pos)) {
   //  DOUT("found annotations at pos =" << pos);

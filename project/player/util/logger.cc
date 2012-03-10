@@ -10,6 +10,8 @@ enum { MAX_LENGTH = 75 };
 void
 Logger::log(const QString &message)
 {
+  if (!OsdConsole::globalInstance())
+    return;
   if (message.size() < MAX_LENGTH)
     gConsole().append(
       HTML_STYLE_OPEN(color:blue) ": "
@@ -33,6 +35,8 @@ Logger::log(const QString &message)
 void
 Logger::notify(const QString &message)
 {
+  if (!OsdConsole::globalInstance())
+    return;
   if (message.size() < MAX_LENGTH)
     gConsole().append(
       HTML_STYLE_OPEN(color:green) ": "
@@ -56,6 +60,8 @@ Logger::notify(const QString &message)
 void
 Logger::warn(const QString &message)
 {
+  if (!OsdConsole::globalInstance())
+    return;
   if (message.size() < MAX_LENGTH)
     gConsole().append(
       HTML_STYLE_OPEN(color:orange)
@@ -79,6 +85,8 @@ Logger::warn(const QString &message)
 void
 Logger::error(const QString &message)
 {
+  if (!OsdConsole::globalInstance())
+    return;
   if (message.size() < MAX_LENGTH)
     gConsole().append(
       HTML_STYLE_OPEN(color:red) ": "

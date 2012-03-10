@@ -43,6 +43,7 @@ EventLogger::createConnections()
   connect(player_, SIGNAL(errorEncountered()), SLOT(logPlayerError()));
   connect(player_, SIGNAL(errorEncountered()), SLOT(stopLogUntilPlaying()));
   connect(player_, SIGNAL(trackNumberChanged(int)), SLOT(logTrackNumberChanged(int)));
+  connect(player_, SIGNAL(rateChanged(qreal)), SLOT(logPlayRateChanged(qreal)));
 
   connect(player_, SIGNAL(buffering()), SLOT(startLogUntilPlaying()));
   connect(player_, SIGNAL(stopped()), SLOT(stopLogUntilPlaying()));
@@ -194,6 +195,19 @@ void
 EventLogger::logTrackNumberChanged(int track)
 { log(tr("openning track %1").arg(QString::number(track))); }
 
+void
+EventLogger::logPlayRateChanged(qreal rate)
+{
+  int r = qRound(rate);
+  if (r == 1)
+    log(tr("resume playing"));
+  else
+    log(tr("fast forward") +
+        QString(": " HTML_STYLE_OPEN(color:orange) "x%1" HTML_STYLE_CLOSE())
+        .arg(QString::number(r))
+    );
+}
+
 // - Server -
 
 void
@@ -220,13 +234,15 @@ void
 EventLogger::logSeeked(qint64 msecs)
 {
   if (player_->isValid()) {
-
+    qint64 len = player_->mediaLength();
     QTime t = QtExt::msecs2time(msecs);
-    QTime l = QtExt::msecs2time(player_->mediaLength());
+    QTime l = QtExt::msecs2time(len);
     QString msg = QString("%1: " HTML_STYLE_OPEN(color:orange) "%2" HTML_STYLE_CLOSE() " / %3")
         .arg(tr("seek"))
         .arg(t.toString())
         .arg(l.toString());
+    if (len)
+      msg += QString().sprintf(" (%.1f%%)", msecs * 100.0 / len);
     log(msg);
   }
 }

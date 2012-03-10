@@ -206,9 +206,11 @@ VlcHttpSession::run()
 
   if (reply_->error() != QNetworkReply::NoError) {
     setState(Error);
+    ready_ = true;
     readyCond_.wakeAll();
     stoppedCond_.wakeAll();
     emit error(tr("network error to access URL") + ": " + url_.toString());
+    DOUT("exit: network error");
     return;
   }
 
@@ -372,9 +374,9 @@ extern "C" {
   //#include <vlc_http.h>
   //#include <vlc_configuration.h>
 
-#ifdef HAVE_ZLIB_H
-  #include <zlib.h>
-#endif
+//#ifdef HAVE_ZLIB_H
+//  #include <zlib.h>
+//#endif
 //#ifdef HAVE_LIBPROXY
 //  #include <proxy.h>
 //#endif
@@ -406,6 +408,16 @@ VlcHttpPlugin::open(vlc_object_t *p_this)
   DOUT("enter");
   access_t *p_access = (access_t *)p_this;
 
+  QString path = QString::fromLocal8Bit(p_access->psz_location).trimmed();
+  QString protocal = QString::fromLocal8Bit(p_access->psz_access);
+  QString url = protocal + "://" + path;
+
+  if (url.contains(".youtube.com/")) {
+    // FIXME: youtube video not saved
+    DOUT("exit: youtube URL:" << url);
+    return VLC_EGENERIC;
+  }
+
   //STANDARD_READ_ACCESS_INIT;
   ::access_InitFields(p_access);
   ACCESS_SET_CALLBACKS(read, NULL, control, seek); // read, block, control, seek
@@ -418,10 +430,6 @@ VlcHttpPlugin::open(vlc_object_t *p_this)
   connect(&session, SIGNAL(progress(qint64,qint64)), globalInstance(), SIGNAL(progress(qint64,qint64)));
   session.setCookieJar(cookieJar_);
   session.setMediaTitle(mediaTitle_);
-
-  QString path = QString::fromLocal8Bit(p_access->psz_location).trimmed();
-  QString protocal = QString::fromLocal8Bit(p_access->psz_access);
-  QString url = protocal + "://" + path;
   session.setUrl(url);
   DOUT("url =" << url);
 
@@ -435,6 +443,10 @@ VlcHttpPlugin::open(vlc_object_t *p_this)
   p_access->info.i_size = session.size();
 
   bool ok = session.isRunning();
+  if (!ok) {
+    delete p_sys;
+    p_access->p_sys = 0;
+  }
   DOUT("exit: ret =" << ok);
   return ok ? VLC_SUCCESS : VLC_EGENERIC;
 }
@@ -489,10 +501,18 @@ VlcHttpPlugin::seek(access_t *p_access, uint64_t i_pos)
     return true;
   }
   DOUT("size =" << p_access->info.i_size);
+  //if (i_pos >= p_access->info.i_size) {
+  //  DOUT("exit: ret = egeneric, out of size");
+  //  return VLC_EGENERIC;
+  //}
+
+  DOUT("availableSize =" << session.availableSize());
   if (i_pos >= (quint64)session.availableSize()) {
     qint64 pos = qMin(session.pos(), session.availableSize() - 1024 * 1024);
     i_pos = pos > 0 ? (quint64)pos : 0;
     DOUT("new pos =" << i_pos);
+    //DOUT("exit: ret = egeneric, out of available size");
+    //return VLC_EGENERIC;
   }
 
   bool ok = session.seek(i_pos);

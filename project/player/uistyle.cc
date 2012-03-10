@@ -4,6 +4,7 @@
 #include "uistyle.h"
 #include "defines.h"
 #include "stylesheet.h"
+#include "logger.h"
 #ifdef USE_WIN_DWM
   #include "win/dwm/dwm.h"
 #endif // USE_WIN_DWM
@@ -12,6 +13,8 @@
 #endif // Q_WS_WIN
 #include <QtGui>
 
+using namespace Logger;
+
 //#define USE_THEME_MENU
 
 // - Constructions -
@@ -19,7 +22,15 @@
 namespace { UiStyle default_; }
 UiStyle *UiStyle::global_ = &default_;
 
-UiStyle::UiStyle(QObject *parent) : Base(parent), theme_(DefaultTheme) { }
+UiStyle::UiStyle(QObject *parent)
+  : Base(parent), theme_(DefaultTheme)
+{
+#ifdef Q_WS_WIN
+  aero_ = true;
+#else
+  aero_ = false;
+#endif // Q_WS_WIN
+}
 
 UiStyle::Theme
 UiStyle::theme() const
@@ -62,6 +73,20 @@ UiStyle::backgroundImagePath() const
   return rc;
 }
 
+void
+UiStyle::setAeroEnabled(bool t)
+{
+  if (aero_ != t) {
+    aero_ = t;
+    if (isAeroEnabled())
+      warn(tr("Aero is enabled, please restart the program"));
+    else if (t)
+      warn(tr("failed to enable Aero"));
+    else
+      warn(tr("Aero is disabled, please restart the program"));
+  }
+}
+
 bool
 UiStyle::isAeroAvailable()
 {
@@ -84,7 +109,7 @@ UiStyle::setMainWindowStyle(QWidget *w)
 {
   Q_ASSERT(w);
 #ifdef USE_WIN_DWM
-  if(isAeroAvailable()) {
+  if(isAeroEnabled()) {
     w->setAttribute(Qt::WA_TranslucentBackground);
     w->setAttribute(Qt::WA_NoSystemBackground);
 
@@ -224,7 +249,7 @@ UiStyle::setWindowStyle(QWidget *w, bool persistent)
   //w->setGraphicsEffect(new QGraphicsBlurEffect(w));
 
 #ifdef USE_WIN_DWM
-  if (isAeroAvailable()) {
+  if (isAeroEnabled()) {
     if (persistent) {
       DWM_ENABLE_AERO_WIDGET(w)
       dwmEnabledWindows_.append(w);
@@ -276,7 +301,7 @@ UiStyle::setMenuStyle(QMenu *menu)
     return;
 
 #ifdef USE_WIN_DWM
-  if (isAeroAvailable()) {
+  if (isAeroEnabled()) {
     DWM_ENABLE_AERO_WIDGET(menu);
     return;
   }
@@ -294,7 +319,7 @@ UiStyle::setContextMenuStyle(QMenu *w, bool persistent)
     return;
 
 #ifdef USE_WIN_DWM
-  if (isAeroAvailable()) {
+  if (isAeroEnabled()) {
     if (persistent)
       DWM_ENABLE_AERO_WIDGET(w)
     else
