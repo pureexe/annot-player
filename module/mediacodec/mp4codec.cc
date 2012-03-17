@@ -2,31 +2,17 @@
 // 2/14/2012
 
 #include "mp4codec.h"
-#include "module/datastream/inputstream.h"
-#include "module/datastream/fileinputstream.h"
-#include <mp4v2/mp4v2.h>
+#include "module/stream/inputstream.h"
+#include "module/stream/fileinputstream.h"
+#ifdef WITH_MP4V2
+#  include <mp4v2/mp4v2.h>
+#endif // WITH_MP4V2
 #include <QtCore>
 #include <cstdlib>
 #include <cstring>
 
 #define DEBUG "mp4codec"
 #include "module/debug/debug.h"
-
-// - Helper -
-
-namespace { // anonymous
-
-  QString fixFileName_(const QString &path)
-  {
-#ifdef Q_OS_WIN
-    QString ret = path;
-    ret.replace("/", "\\");
-    return ret;
-#else
-    return path;
-#endif // Q_OS_WIN
-  }
-} // anonymous namespace
 
 // See: http://www.jqueryphp.com/how-to-get-flv-file-duration/2009/08/
 bool
@@ -55,6 +41,7 @@ Mp4Codec::isMp4File(const QString &fileName)
   return isMp4Stream(&fin);
 }
 
+#ifdef WITH_MP4V2
 std::pair<int, int>
 Mp4Codec::fileDimension(const QString &path)
 {
@@ -88,6 +75,8 @@ Mp4Codec::fileInfo(const QString &path)
   }
   return ret;
 }
+
+#endif // WITH_MP4V2
 
 // EOF
 

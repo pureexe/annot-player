@@ -21,6 +21,7 @@ class UrlDialog : public UrlDialogBase
 
 public:
   explicit UrlDialog(QWidget *parent = 0);
+  QString text() const;
 
 signals:
   void urlEntered(const QString &url);
@@ -29,6 +30,9 @@ public slots:
   void open();
   void paste();
   void setExampleUrl(const QString &text);
+  void setText(const QString &url);
+  void increase();
+  void decrease();
 
 protected:
   static QString autoCompleteUrl(const QString &url);

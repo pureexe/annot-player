@@ -5,14 +5,14 @@
 #include "module/qtext/htmltag.h"
 #include <QtCore>
 
-enum { MAX_LENGTH = 75 };
+enum { LEFT_LENGTH = 75, RIGHT_LENGTH = 0 };
 
 void
 Logger::log(const QString &message)
 {
   if (!OsdConsole::globalInstance())
     return;
-  if (message.size() < MAX_LENGTH)
+  if (message.size() < LEFT_LENGTH + RIGHT_LENGTH)
     gConsole().append(
       HTML_STYLE_OPEN(color:blue) ": "
       + message +
@@ -21,8 +21,9 @@ Logger::log(const QString &message)
   else
     gConsole().append(
       HTML_STYLE_OPEN(color:blue) ": "
-      + message.left(MAX_LENGTH) +
+      + message.left(LEFT_LENGTH) +
       HTML_STYLE_OPEN(color:orange) " ..." HTML_STYLE_CLOSE()
+      //+ message.right(RIGHT_LENGTH) +
       HTML_STYLE_CLOSE() HTML_BR()
     );
   LoggerSignals::globalInstance()->emit_logged(
@@ -37,7 +38,7 @@ Logger::notify(const QString &message)
 {
   if (!OsdConsole::globalInstance())
     return;
-  if (message.size() < MAX_LENGTH)
+  if (message.size() < LEFT_LENGTH + RIGHT_LENGTH)
     gConsole().append(
       HTML_STYLE_OPEN(color:green) ": "
       + message +
@@ -46,8 +47,9 @@ Logger::notify(const QString &message)
   else
     gConsole().append(
       HTML_STYLE_OPEN(color:green) ": "
-      + message.left(MAX_LENGTH) +
+      + message.left(LEFT_LENGTH) +
       HTML_STYLE_OPEN(color:orange) " ..." HTML_STYLE_CLOSE()
+      //+ message.right(RIGHT_LENGTH) +
       HTML_STYLE_CLOSE() HTML_BR()
     );
   LoggerSignals::globalInstance()->emit_notified(
@@ -62,7 +64,7 @@ Logger::warn(const QString &message)
 {
   if (!OsdConsole::globalInstance())
     return;
-  if (message.size() < MAX_LENGTH)
+  if (message.size() < LEFT_LENGTH + RIGHT_LENGTH)
     gConsole().append(
       HTML_STYLE_OPEN(color:orange)
       ": " + message +
@@ -71,8 +73,9 @@ Logger::warn(const QString &message)
   else
     gConsole().append(
       HTML_STYLE_OPEN(color:orange) ": "
-      + message.left(MAX_LENGTH) +
+      + message.left(LEFT_LENGTH) +
       HTML_STYLE_OPEN(color:orange) " ..." HTML_STYLE_CLOSE()
+      //+ message.right(RIGHT_LENGTH) +
       HTML_STYLE_CLOSE() HTML_BR()
     );
   LoggerSignals::globalInstance()->emit_warned(
@@ -87,7 +90,7 @@ Logger::error(const QString &message)
 {
   if (!OsdConsole::globalInstance())
     return;
-  if (message.size() < MAX_LENGTH)
+  if (message.size() < LEFT_LENGTH + RIGHT_LENGTH)
     gConsole().append(
       HTML_STYLE_OPEN(color:red) ": "
       + message +
@@ -96,8 +99,9 @@ Logger::error(const QString &message)
   else
     gConsole().append(
       HTML_STYLE_OPEN(color:red) ": "
-      + message.left(MAX_LENGTH) +
+      + message.left(LEFT_LENGTH) +
       HTML_STYLE_OPEN(color:orange) " ..." HTML_STYLE_CLOSE()
+      //+ message.right(RIGHT_LENGTH) +
       HTML_STYLE_CLOSE() HTML_BR()
     );
   LoggerSignals::globalInstance()->emit_errored(

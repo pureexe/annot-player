@@ -67,4 +67,14 @@ QtUnix::isDeviceFile(const QString &path)
          path.startsWith("/dev/");
 }
 
+// - Shutdown -
+
+void
+QtUnix::halt()
+{ QProcess::startDetached("shutdown -h now"); }
+
+void
+QtUnix::reboot()
+{ QProcess::startDetached("shutdown -r now"); }
+
 // EOF

@@ -124,7 +124,7 @@ LuaMrlResolver::resolveMedia(const QString &href, bool async)
   QList<qint64> durations, sizes;
   bool ok = lua.resolve(url, &siteid, &refurl, &title, &suburl, &mrls, &durations, &sizes);
   if (!ok) {
-    emit errorReceived(tr("failed to resolve URL") + ": " + url);
+    emit error(tr("failed to resolve URL") + ": " + url);
     DOUT("exit: LuaResolver returned false");
     return false;
   }
@@ -132,13 +132,13 @@ LuaMrlResolver::resolveMedia(const QString &href, bool async)
   if (mrls.isEmpty()) {
     switch (siteid) {
     case LuaResolver::Nicovideo:
-      emit errorReceived(tr("failed to resolve URL using nicovideo account") + ": " + url);
+      emit error(tr("failed to resolve URL using nicovideo account") + ": " + url);
       break;
     case LuaResolver::Bilibili:
-      emit errorReceived(tr("failed to resolve URL using bilibili account") + ": " + url);
+      emit error(tr("failed to resolve URL using bilibili account") + ": " + url);
       break;
     default:
-      emit errorReceived(tr("failed to resolve URL") + ": " + url);
+      emit error(tr("failed to resolve URL") + ": " + url);
     }
     DOUT("exit: mrls is empty");
     return false;
@@ -220,7 +220,7 @@ LuaMrlResolver::resolveSubtitle(const QString &href, bool async)
   bool ok = lua.resolve(url, &siteid, 0, 0, &suburl);
 
   if (!ok) {
-    emit errorReceived(tr("failed to resolve URL") + ": " + url);
+    emit error(tr("failed to resolve URL") + ": " + url);
     DOUT("exit: LuaResolver returned false");
     return false;
   }
@@ -228,13 +228,13 @@ LuaMrlResolver::resolveSubtitle(const QString &href, bool async)
   if (suburl.isEmpty()) {
     switch (siteid) {
     case LuaResolver::Nicovideo:
-      emit errorReceived(tr("failed to resolve URL using nicovideo account") + ": " + url);
+      emit error(tr("failed to resolve URL using nicovideo account") + ": " + url);
       break;
     case LuaResolver::Bilibili:
-      emit errorReceived(tr("failed to resolve URL using bilibili account") + ": " + url);
+      emit error(tr("failed to resolve URL using bilibili account") + ": " + url);
       break;
     default:
-      emit errorReceived(tr("failed to resolve URL") + ": " + url);
+      emit error(tr("failed to resolve URL") + ": " + url);
     }
     DOUT("exit: suburl is empty");
     return false;
@@ -300,6 +300,8 @@ LuaMrlResolver::formatUrl(const QString &href)
   if (ret.isEmpty())
     return ret;
 
+  ret.replace(QRegExp("/index.html$", Qt::CaseInsensitive), "/");
+  ret.replace(QRegExp("/default.html$", Qt::CaseInsensitive), "/");
   //ret = ret.replace("http://www.", "http://", Qt::CaseInsensitive);
   //ret = ret.remove(QRegExp("/$"));
   return ret;
@@ -322,7 +324,7 @@ LuaMrlResolver::checkSiteAccount(const QString &href)
   if ((href.contains("nicovideo.jp/", Qt::CaseInsensitive) ||
        href.contains("nico.galstars.jp/", Qt::CaseInsensitive))
       && !MrlResolverSettings::globalInstance()->hasNicovideoAccount()) {
-    emit errorReceived(tr("nicovideo.jp account is required to resolve URL") + ": " + href);
+    emit error(tr("nicovideo.jp account is required to resolve URL") + ": " + href);
     DOUT("exit: ret = false, nico account required");
     return false;
   }

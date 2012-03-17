@@ -53,6 +53,12 @@ PickDialog::PickDialog(QWidget *parent)
   // Connections
   connect(cancelButton, SIGNAL(clicked()), SLOT(cancel()));
 
+  // Shortcuts
+  QShortcut *cancelShortcut = new QShortcut(QKeySequence("Esc"), this);
+  connect(cancelShortcut, SIGNAL(activated()), SLOT(cancel()));
+  QShortcut *closeShortcut = new QShortcut(QKeySequence::Close, this);
+  connect(closeShortcut, SIGNAL(activated()), SLOT(cancel()));
+
   // Focus
   cancelButton->setFocus();
 }

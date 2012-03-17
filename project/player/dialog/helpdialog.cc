@@ -18,6 +18,12 @@ HelpDialog::HelpDialog(QWidget *parent)
   setWindowTitle(TR(T_TITLE_HELP));
   setTextSizeMultiplier(TEXT_SIZE_SCALE);
   resize(INIT_WINDOW_SIZE);
+
+  // Shortcuts
+  QShortcut *cancelShortcut = new QShortcut(QKeySequence("Esc"), this);
+  connect(cancelShortcut, SIGNAL(activated()), SLOT(hide()));
+  QShortcut *closeShortcut = new QShortcut(QKeySequence::Close, this);
+  connect(closeShortcut, SIGNAL(activated()), SLOT(hide()));
 }
 
 // - Properties -

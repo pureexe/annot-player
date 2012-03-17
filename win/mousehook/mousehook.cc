@@ -104,8 +104,7 @@ MouseHook::MouseHook()
 
 MouseHook::~MouseHook()
 {
-  if (isActive())
-    stop();
+  stop();
 
   Q_ASSERT(impl_);
   delete impl_;

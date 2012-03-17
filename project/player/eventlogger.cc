@@ -22,7 +22,6 @@ EventLogger::EventLogger(Player *player, QObject *parent)
   : Base(parent), player_(player), logUntilPlayingTimer_(0), logCount_(0)
 {
   Q_ASSERT(player_);
-
   createConnections();
 }
 
@@ -242,7 +241,10 @@ EventLogger::logSeeked(qint64 msecs)
         .arg(t.toString())
         .arg(l.toString());
     if (len)
-      msg += QString().sprintf(" (%.1f%%)", msecs * 100.0 / len);
+      msg += QString().sprintf(
+        " (" HTML_STYLE_OPEN(color:orange) "%.1f%%" HTML_STYLE_CLOSE() ")",
+        msecs * 100.0 / len
+      );
     log(msg);
   }
 }

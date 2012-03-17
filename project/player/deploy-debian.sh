@@ -4,7 +4,7 @@
 # See: https://wiki.kubuntu.org/PackagingGuide/QtApplication
 
 ## environment
-VERSION=0.1.3.1
+VERSION=0.1.3.2
 
 PACKAGE_AUTHOR="Annot Cloud"
 PACKAGE_EMAIL=annotcloud@gmail.com

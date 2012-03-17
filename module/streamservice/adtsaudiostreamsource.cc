@@ -3,7 +3,7 @@
 // See: liveMedia/ADTSAudioStreamSource.cc
 
 #include "adtsaudiostreamsource.h"
-#include "module/datastream/inputstream.h"
+#include "module/stream/inputstream.h"
 #include "module/mediacodec/mediatoc.h"
 #include <GroupsockHelper.hh>
 #include <QtCore>

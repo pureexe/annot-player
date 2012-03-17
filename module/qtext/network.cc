@@ -14,7 +14,8 @@
 bool
 QtExt::
 NetworkCookieJarWithDomainAlias::isParentDomain(const QString &domain, const QUrl &url)
-{ return url.toString().contains(domain, Qt::CaseInsensitive); }
+{ return url.host().contains(domain, Qt::CaseInsensitive); }
+//{ return url.toString().contains(domain, Qt::CaseInsensitive); }
 
 // Used in QNetworkAccessManagerPrivate::createRequest
 // See: qnetworkaccessmanager.cpp, http://qt.gitorious.org/qt/qt/blobs/67376be28ca51930ff0f4fad2dd58f53968655a9/src/network/access/qnetworkaccessmanager.cpp

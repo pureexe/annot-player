@@ -34,8 +34,15 @@ namespace { // anonymous, annotation display
   inline QFont
   default_annot_font_(int language)
   {
+    enum { FontSize =
+#ifdef Q_WS_WIN
+     int(ANNOTATION_SIZE_DEFAULT * 0.9)
+#else
+     ANNOTATION_SIZE_DEFAULT
+#endif // Q_WS_WIN
+    };
     if (language == Traits::Chinese) {
-      QFont font(ANNOTATION_FONT_CHINESE, ANNOTATION_SIZE_DEFAULT);
+      QFont font(ANNOTATION_FONT_CHINESE, FontSize);
       font.setWeight(QFont::DemiBold);
       font.setStyleStrategy((QFont::StyleStrategy)(
         QFont::ForceOutline | QFont::PreferQuality
@@ -43,7 +50,7 @@ namespace { // anonymous, annotation display
       return font;
 
     } else {
-      QFont font(ANNOTATION_FONT_JAPANESE, ANNOTATION_SIZE_DEFAULT);
+      QFont font(ANNOTATION_FONT_JAPANESE, FontSize);
       font.setWeight(QFont::DemiBold);
       font.setStyleStrategy((QFont::StyleStrategy)(
         QFont::ForceOutline | QFont::PreferQuality

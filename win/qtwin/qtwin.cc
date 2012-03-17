@@ -784,6 +784,32 @@ QtWin::getWaveVolume()
 
 #endif // 0
 
+// - Shutdown -
+
+void
+QtWin::halt()
+{ QProcess::startDetached("shutdown -s"); }
+
+void
+QtWin::reboot()
+{ QProcess::startDetached("shutdown -t"); }
+
+void
+QtWin::logoff()
+{ QProcess::startDetached("shutdown -l"); }
+
+// Standby %windir%\System32\rundll32.exe powrprof.dll,SetSuspendState Standby
+// Hibernate %windir%\System32\rundll32.exe powrprof.dll,SetSuspendState Hibernate
+void
+QtWin::hibernate()
+{ QProcess::startDetached("shutdown -h"); }
+
+// - POSIX -
+
+void
+QtWin::sleep(long msecs)
+{ ::Sleep(msecs); }
+
 // EOF
 
 /*

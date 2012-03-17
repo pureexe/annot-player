@@ -48,7 +48,7 @@ AacWriter::writeFrame(const QByteArray &chunk, quint32 timestamp, bool writeHead
     // Reference: WriteADTSHeader from FAAC's bitstream.c
 
     if (toc_)
-      toc_->append(out_->realSize(), timestamp);
+      toc_->append(out_->availableSize(), timestamp);
 
     Bitwise::write(bits, 12, 0xFFF);
     Bitwise::write(bits,  1, 0);

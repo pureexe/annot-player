@@ -19,9 +19,6 @@ using namespace Logger;
 
 // - Constructions -
 
-namespace { UiStyle default_; }
-UiStyle *UiStyle::global_ = &default_;
-
 UiStyle::UiStyle(QObject *parent)
   : Base(parent), theme_(DefaultTheme)
 {

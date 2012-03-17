@@ -8,7 +8,7 @@ cd "$PREFIX"  || exit 1
 ## environment
 
 COLOR=purple
-VERSION=0.1.3.1
+VERSION=0.1.3.2
 DMG_SIZE=200m
 
 TARGET="Annot Player"
@@ -17,7 +17,8 @@ TARGET_ZIP=annot-player-$VERSION-mac.zip
 
 APP_SRC=$HOME/Developer/Annot/Player/annot-player
 APP_BUILD=$HOME/Developer/Annot/Player/annot-build-desktop/build.mac
-QT_BUILD=/opt/local/share/qt4
+QT_HOME=/opt/local/share/qt4
+#QT_HOME=/Developer/QtSDK/Desktop/Qt/default/gcc
 VLC_APP=/Applications/VLC.app
 VLC_HOME=$VLC_APP/Contents/MacOS
 VLC_FRAMEWORKS=$VLC_APP/Contents/Frameworks
@@ -93,42 +94,42 @@ change_macports_lib()
 mkdir -p "$APP_PLUGINS"/{imageformats,sqldrivers} | exit 1
 
 dylib=imageformats/libqjpeg.dylib
-cp "$QT_BUILD"/plugins/$dylib "$APP_PLUGINS/$dylib"
+cp "$QT_HOME"/plugins/$dylib "$APP_PLUGINS/$dylib"
 #install_name_tool -id @executable_path/../PlugIns/$dylib "$APP_PLUGINS/$dylib"
 change_macports_qt QtCore "$APP_PLUGINS/$dylib"
 change_macports_qt QtGui "$APP_PLUGINS/$dylib"
 change_macports_lib libjpeg.8.dylib  "$APP_PLUGINS/$dylib"
 
 dylib=imageformats/libqgif.dylib
-cp "$QT_BUILD"/plugins/$dylib "$APP_PLUGINS/$dylib"
+cp "$QT_HOME"/plugins/$dylib "$APP_PLUGINS/$dylib"
 #install_name_tool -id @executable_path/../PlugIns/$dylib "$APP_PLUGINS/$dylib"
 change_macports_qt QtCore "$APP_PLUGINS/$dylib"
 change_macports_qt QtGui "$APP_PLUGINS/$dylib"
 change_macports_lib libgif.4.1.6.dylib  "$APP_PLUGINS/$dylib"
 
 dylib=imageformats/libqmng.dylib
-cp "$QT_BUILD"/plugins/$dylib "$APP_PLUGINS/$dylib"
+cp "$QT_HOME"/plugins/$dylib "$APP_PLUGINS/$dylib"
 #install_name_tool -id @executable_path/../PlugIns/$dylib "$APP_PLUGINS/$dylib"
 change_macports_qt QtCore "$APP_PLUGINS/$dylib"
 change_macports_qt QtGui "$APP_PLUGINS/$dylib"
 change_macports_lib libmng.1.dylib  "$APP_PLUGINS/$dylib"
 
 dylib=imageformats/libqsvg.dylib
-cp "$QT_BUILD"/plugins/$dylib "$APP_PLUGINS/$dylib"
+cp "$QT_HOME"/plugins/$dylib "$APP_PLUGINS/$dylib"
 #install_name_tool -id @executable_path/../PlugIns/$dylib "$APP_PLUGINS/$dylib"
 change_macports_qt QtCore "$APP_PLUGINS/$dylib"
 change_macports_qt QtGui "$APP_PLUGINS/$dylib"
 change_macports_lib libsvg.2.2.dylib  "$APP_PLUGINS/$dylib"
 
 dylib=imageformats/libqtiff.dylib
-cp "$QT_BUILD"/plugins/$dylib "$APP_PLUGINS/$dylib"
+cp "$QT_HOME"/plugins/$dylib "$APP_PLUGINS/$dylib"
 #install_name_tool -id @executable_path/../PlugIns/$dylib "$APP_PLUGINS/$dylib"
 change_macports_qt QtCore "$APP_PLUGINS/$dylib"
 change_macports_qt QtGui "$APP_PLUGINS/$dylib"
 change_macports_lib libtiff.3.dylib  "$APP_PLUGINS/$dylib"
 
 dylib=sqldrivers/libqsqlite.dylib
-cp "$QT_BUILD"/plugins/$dylib "$APP_PLUGINS/$dylib"
+cp "$QT_HOME"/plugins/$dylib "$APP_PLUGINS/$dylib"
 #install_name_tool -id @executable_path/../PlugIns/$dylib "$APP_PLUGINS/$dylib"
 change_macports_qt QtCore "$APP_PLUGINS/$dylib"
 change_macports_qt QtSql "$APP_PLUGINS/$dylib"

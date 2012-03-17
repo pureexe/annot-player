@@ -65,7 +65,7 @@ StreamThread::run()
   }
   if (!rtspServer) {
     url_.clear();
-    emit errorReceived(tr("failed to create RTSP service") + ": " + env->getResultMsg());
+    emit error(tr("failed to create RTSP service") + ": " + env->getResultMsg());
     DOUT("exit: failed to create RTSP server: errno =" << env->getErrno() << "," << env->getResultMsg());
     return;
   }

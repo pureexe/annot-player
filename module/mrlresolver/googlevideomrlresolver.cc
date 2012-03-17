@@ -29,18 +29,18 @@ GoogleVideoMrlResolver::resolveMedia(const QString &href)
   QUrl url(href);
   if (url.host().compare("video.google.com", Qt::CaseInsensitive) ||
       url.path().compare("/videoplay", Qt::CaseInsensitive)) {
-    emit errorReceived(errorMessage + ": " + href);
+    emit error(errorMessage + ": " + href);
     //return;
   }
 
   QString docid = url.queryItemValue("docid");
   if (docid.isEmpty()) {
-    emit errorReceived(errorMessage + ": " + href);
+    emit error(errorMessage + ": " + href);
     return false;
   }
 
   QString mrl = "http://video.google.com/videoplay?docid=" + docid;
-  emit messageReceived(tr("resolving media URL ...") + ": " + mrl);
+  emit message(tr("resolving media URL ...") + ": " + mrl);
   MediaInfo mi;
   mi.mrls.append(MrlInfo(mrl));
   mi.refurl = mrl;

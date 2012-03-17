@@ -4,6 +4,7 @@
 # Original since: 27. jul 14:00:10 2009, by qmake (2.01a) ma
 
 include(../../config.pri)
+include($$ROOTDIR/module/qtext/qtext.pri)
 
 QT += core gui network webkit
 #CONFIG(static): QTPLUGIN += qgif qico qjpeg gsvg qtiff
@@ -34,6 +35,7 @@ HEADERS += \
     webbrowser_config.h
 
 SOURCES += \
+    webbrowserprivate.cc \
     webbrowser.cc
 
 OTHER_FILES += \

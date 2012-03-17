@@ -74,6 +74,12 @@ InputDialog::InputDialog(QWidget *parent)
     //rows->setContentsMargins(6, 6, 6, 6);
   } setLayout(rows);
 
+  // Shortcuts
+  QShortcut *cancelShortcut = new QShortcut(QKeySequence("Esc"), this);
+  connect(cancelShortcut, SIGNAL(activated()), SLOT(hide()));
+  QShortcut *closeShortcut = new QShortcut(QKeySequence::Close, this);
+  connect(closeShortcut, SIGNAL(activated()), SLOT(hide()));
+
   // Focus
   edit_->setFocus();
 }

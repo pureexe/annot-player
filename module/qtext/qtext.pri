@@ -12,13 +12,15 @@ HEADERS += \
     $$PWD/dialog.h \
     $$PWD/eventlistener.h \
     $$PWD/filedeleter.h \
+    $$PWD/filesystem.h \
     $$PWD/fontcombobox.h \
     $$PWD/hash.h \
     $$PWD/htmltag.h \
     $$PWD/network.h \
-    $$PWD/ss.h \
     $$PWD/slider.h \
     $$PWD/stoppable.h \
+    $$PWD/string.h \
+    $$PWD/ss.h \
     $$PWD/toolbutton.h \
     $$PWD/toolbuttonwithid.h \
     $$PWD/webdialog.h \
@@ -34,6 +36,7 @@ SOURCES += \
     $$PWD/fontcombobox.cc \
     $$PWD/network.cc \
     $$PWD/slider.cc \
+    $$PWD/string.cc \
     $$PWD/toolbutton.cc \
     $$PWD/toolbuttonwithid.cc \
     $$PWD/webdialog.cc

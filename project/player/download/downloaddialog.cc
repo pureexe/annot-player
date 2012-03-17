@@ -13,7 +13,6 @@
 #include "module/qtext/datetime.h"
 #include "module/download/downloadmanager.h"
 #include "module/download/mrldownloadtask.h"
-#include "module/download/mrlmuxdownloadtask.h"
 #include <QtGui>
 #include <climits>
 
@@ -61,6 +60,10 @@ DownloadDialog::DownloadDialog(QWidget *parent)
   tableView_->setFocus();
 }
 
+bool
+DownloadDialog::isAddingUrls() const
+{ return downloadTaskDialog_ && downloadTaskDialog_->isVisible(); }
+
 void
 DownloadDialog::createLayout()
 {
@@ -78,7 +81,7 @@ DownloadDialog::createLayout()
   MAKE_BUTTON(removeButton_, tr("Remove"), tr("Remove"), SLOT(remove()));
   MAKE_BUTTON(openButton_, TR(T_PLAY), TR(T_PLAY), SLOT(open()));
   MAKE_BUTTON(openDirectoryButton_, tr("Dir"), tr("Open directory"), SLOT(openDirectory()));
-  MAKE_BUTTON(addButton_, TR(T_ADD), TR(T_ADD), SLOT(add()));
+  MAKE_BUTTON(addButton_, TR(T_ADD), TR(T_ADD) + " [" K_CTRL "+N]", SLOT(add()));
 
   addButton_->setStyleSheet(SS_TOOLBUTTON_TEXT_HIGHLIGHT);
 
@@ -145,6 +148,12 @@ DownloadDialog::createActions()
 
   QShortcut *cancelShortcut = new QShortcut(QKeySequence("Esc"), this);
   connect(cancelShortcut, SIGNAL(activated()), SLOT(hide()));
+
+  QShortcut *closeShortcut = new QShortcut(QKeySequence::Close, this);
+  connect(closeShortcut, SIGNAL(activated()), SLOT(hide()));
+
+  QShortcut *newShortcut = new QShortcut(QKeySequence::New, this);
+  connect(newShortcut, SIGNAL(activated()), SLOT(add()));
 }
 
 // - Table -
@@ -213,13 +222,20 @@ DownloadDialog::downloadTaskDialog()
 }
 
 void
-DownloadDialog::promptDownloads(const QString urls)
+DownloadDialog::promptUrls(const QStringList &urls)
+{
+  foreach (QString text, urls)
+    promptUrl(text);
+}
+
+void
+DownloadDialog::promptUrl(const QString &text)
 {
   DownloadTaskDialog *dlg = downloadTaskDialog();
   if (dlg->isVisible())
-    dlg->addText(urls);
+    dlg->addText(text);
   else {
-    dlg->setText(urls);
+    dlg->setText(text);
     dlg->show();
   }
 }
@@ -294,9 +310,7 @@ DownloadDialog::addUrl(const QString &url)
   log(tr("analyzing URL") + ": " + url);
 
   // TODO: add support to demux AVI/MP3 for nico flv
-  DownloadTask *t = url.contains(".nicovideo.jp/", Qt::CaseInsensitive) ?
-        (DownloadTask *)new MrlDownloadTask(url, downloadManager_) :
-        (DownloadTask *)new MrlMuxDownloadTask(url, downloadManager_);
+  DownloadTask *t = new MrlDownloadTask(url, downloadManager_);
 
   t->setAutoDelete(false);
   connect(t, SIGNAL(error(QString)),
@@ -363,6 +377,7 @@ DownloadDialog::refresh()
 #define FORMAT_SPEED(_speed)      downloadSpeedToString(_speed)
 
   qreal totalSpeed = 0;
+  qreal leastPercentage = 0;
   qint64 leastRemainingTime = LLONG_MAX;
 
   for (int row = 0; row < sourceModel_->rowCount(); row++) {
@@ -390,18 +405,32 @@ DownloadDialog::refresh()
     sourceModel_->setData(sourceModel_->index(row, HD_Url), t->url(), Qt::DisplayRole);
     //sourceModel_->setData(sourceModel_->index(row, HD_Id), t->id(), Qt::DisplayRole);
 
-    if (!t->isFinished())
+    if (t->isRunning()) {
       leastRemainingTime = qMin(leastRemainingTime, t->remainingTime());
+      leastPercentage = qMin(leastPercentage, t->percentage());
+    }
 
-    totalSpeed += t->speed();
+    if (t->isRunning())
+      totalSpeed += t->speed();
   }
 
   tableView_->invalidateCount();
   invalidateButtons();
 
-  QString title = totalSpeed <= 0 ? TR(T_DOWNLOAD) : leastRemainingTime == LLONG_MAX ?
-    QString("%1 (%2)").arg(TR(T_DOWNLOAD)).arg(FORMAT_SPEED(totalSpeed)) :
-    QString("%1 (%2, %3)").arg(TR(T_DOWNLOAD)).arg(FORMAT_SPEED(totalSpeed)).arg(FORMAT_TIME(leastRemainingTime)) ;
+  QString title = TR(T_DOWNLOAD);
+  if (totalSpeed > 0) {
+    title += " (";
+    title += FORMAT_SPEED(totalSpeed);
+    if (leastPercentage)
+      title += ", " + FORMAT_PERCENTAGE(leastPercentage);
+    if (leastRemainingTime) {
+      QString ts = FORMAT_TIME(leastRemainingTime);
+      if (!ts.isEmpty())
+        title += ", " + ts;
+    }
+    title += ")";
+  }
+
   setWindowTitle(title);
 #undef FORMAT_TIME
 #undef FORMAT_STATE

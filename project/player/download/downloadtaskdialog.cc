@@ -16,6 +16,12 @@
 
 using namespace Logger;
 
+#ifdef Q_OS_MAC
+  #define K_CTRL        "cmd"
+#else
+  #define K_CTRL        "Ctrl"
+#endif // Q_OS_MAC
+
 // - Helper -
 
 namespace { // anonymous
@@ -49,10 +55,16 @@ DownloadTaskDialog::DownloadTaskDialog(QWidget *parent)
   setWindowTitle(tr("Add download URLs"));
   createLayout();
 
+  // Shortcuts
   QShortcut *cancelShortcut = new QShortcut(QKeySequence("Esc"), this);
   connect(cancelShortcut, SIGNAL(activated()), SLOT(hide()));
+  QShortcut *closeShortcut = new QShortcut(QKeySequence::Close, this);
+  connect(closeShortcut, SIGNAL(activated()), SLOT(hide()));
 
-  //textView_->setText("http://www.bilibili.tv/video/av216157/");
+  QShortcut *saveShortcut = new QShortcut(QKeySequence::Save, this);
+  connect(saveShortcut, SIGNAL(activated()), SLOT(add()));
+
+  // Focus
   textView_->setFocus();
 }
 
@@ -84,7 +96,7 @@ DownloadTaskDialog::createLayout()
       _button->setToolTip(_tip); \
     } connect(_button, SIGNAL(clicked()), _slot);
 
-  MAKE_BUTTON(addButton, TR(T_ADD), TR(T_ADD), SLOT(add()))
+  MAKE_BUTTON(addButton, TR(T_ADD), TR(T_ADD) + " [" K_CTRL "+S]", SLOT(add()))
   MAKE_BUTTON(pasteButton, TR(T_PASTE), TR(T_PASTE), SLOT(paste()))
   MAKE_BUTTON(clearButton, TR(T_CLEAR), TR(T_CLEAR), SLOT(clear()))
 

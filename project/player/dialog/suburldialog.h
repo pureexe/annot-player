@@ -22,6 +22,8 @@ class SubUrlDialog : public SubUrlDialogBase
 public:
   explicit SubUrlDialog(QWidget *parent = 0);
 
+  QString text() const;
+
 signals:
   void urlEntered(const QString &url, bool save);
 
@@ -29,6 +31,9 @@ public slots:
   void open();
   void paste();
   void setExampleUrl(const QString &text);
+  void setText(const QString &url);
+  void increase();
+  void decrease();
 
 protected:
   static QString autoCompleteUrl(const QString &url);

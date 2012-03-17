@@ -75,6 +75,8 @@ AnnotationEditor::AnnotationEditor(QWidget *parent)
 
   QShortcut *cancelShortcut = new QShortcut(QKeySequence("Esc"), this);
   connect(cancelShortcut, SIGNAL(activated()), SLOT(cancel()));
+  QShortcut *closeShortcut = new QShortcut(QKeySequence::Close, this);
+  connect(closeShortcut, SIGNAL(activated()), SLOT(hide()));
 
   QShortcut *c1 = new QShortcut(QKeySequence("CTRL+1"), this);
   connect(c1, SIGNAL(activated()), codeRibonButton_, SLOT(click()));

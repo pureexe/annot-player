@@ -19,8 +19,8 @@ AnnotationCodecManager::AnnotationCodecManager(QObject *parent)
   AnnotationCodec *c;
 #define ADD(_codec) \
   c = new _codec(this); { \
-    connect(c, SIGNAL(errorReceived(QString)), SIGNAL(errorReceived(QString))); \
-    connect(c, SIGNAL(messageReceived(QString)), SIGNAL(messageReceived(QString))); \
+    connect(c, SIGNAL(error(QString)), SIGNAL(error(QString))); \
+    connect(c, SIGNAL(message(QString)), SIGNAL(message(QString))); \
     connect(c, SIGNAL(fetched(AnnotationList,QString)), SIGNAL(fetched(AnnotationList,QString))); \
   } codecs_.append(c);
 

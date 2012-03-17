@@ -154,6 +154,7 @@ TranslatorManager::translate(int tid) const
   case T_CLEAR:         return tr("Clear");
   case T_MENU:          return tr("Menu");
   case T_HTML:          return tr("HTML");
+  case T_HOMEPAGE:      return tr("Homepage");
   case T_RICH:          return tr("Rich");
   case T_CODE:          return tr("Code");
   case T_TIMESLOT:      return tr("Slot");
@@ -231,7 +232,7 @@ TranslatorManager::translate(int tid) const
   case T_TITLE_ANNOTATIONEDITOR:        return tr("Annot Editor");
   case T_TITLE_TOKENVIEW:       return tr("Token");
   case T_TITLE_COMMENTVIEW:     return tr("Comments");
-  case T_TITLE_CLOUDVIEW:       return tr("Annot Cloud");
+  //case T_TITLE_CLOUDVIEW:       return tr("Annot Cloud");
   case T_TITLE_SIGNALVIEW:      return tr("Select process signal");
   case T_TITLE_LIVE:            return tr("Live Channel");
   case T_TITLE_SYNC:            return tr("Sync Mode");
@@ -527,9 +528,8 @@ TranslatorManager::translate(int tid) const
   case T_MENUTEXT_COMMENTVIEW:  return tr("Comments");
   case T_TIP_COMMENTVIEW:       return tr("Show comment browser");
 
-  // case T_MENUTEXT_CLOUDVIEW:    return tr("Cloud");
-  case T_MENUTEXT_CLOUDVIEW:    return tr("Homepage");
-  case T_TIP_CLOUDVIEW:         return tr("Show cloud browser");
+  case T_MENUTEXT_PROXYVIEW:    return tr("Proxy browser");
+  case T_TIP_PROXYVIEW:         return tr("Proxy web browser");
 
   case T_MENUTEXT_EDIT:         return tr("Edit");
   case T_TIP_EDIT:              return tr("Edit");
@@ -647,6 +647,7 @@ TranslatorManager::translate(int tid) const
   case T_TIP_SHOWMENUBAR:       return tr("Show menubar");
 
   case T_MENUTEXT_ENABLEAERO:   return tr("Enable Aero");
+  case T_MENUTEXT_DISABLEAERO:  return tr("Disable Aero");
 
   case T_MENUTEXT_CHECKINTERNET:return tr("Check Internet");
   case T_TIP_CHECKINTERNET:     return tr("Check Internet connection");
@@ -662,6 +663,12 @@ TranslatorManager::translate(int tid) const
 
   case T_MENUTEXT_DOWNLOAD:  return tr("Download") + " [" K_CTRL "+S]";
   case T_TIP_DOWNLOAD:       return tr("Download") + " [" K_CTRL "+S]";
+
+  case T_MENUTEXT_MONITORCLIPBOARD:  return tr("Monitor clipboard");
+
+  case T_MENUTEXT_NOTHINGAFTERFINISHED: return tr("Nothing");
+  case T_MENUTEXT_SHUTDOWNAFTERFINISHED: return tr("Shutdown");
+  case T_MENUTEXT_SLEEPAFTERFINISHED: return tr("Sleep");
 
   case T_FILTER_PATTERN:        return tr("Filter pattern");
   case T_FILTER_SYNTAX:         return tr("Filter syntax");
@@ -716,6 +723,11 @@ TranslatorManager::translate(int tid) const
   case T_TRANSPARENT:      return tr("Transparent");
   case T_SHADOW:           return tr("Shadow");
   case T_BLUR:             return tr("Blur");
+
+  case T_INCREASE:      return tr("Increase");
+  case T_DECREASE:      return tr("Decrease");
+
+  case T_NETWORKPROXY:  return tr("Network proxy");
 
   case T_URL_NICOVIDEO: return tr("http://nicovideo.jp");
   case T_URL_BILIBILI:  return tr("http://bilibili.tv");

@@ -29,8 +29,8 @@ protected:
 
 signals:
   void streamReady(QString url);
-  void errorReceived(QString msg);
-  void messageReceived(QString msg);
+  void error(QString msg);
+  void message(QString msg);
 
   // - Service -
 public:

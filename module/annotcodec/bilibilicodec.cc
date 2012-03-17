@@ -48,8 +48,8 @@ BilibiliCodec::parseReply(QNetworkReply *reply)
   Q_ASSERT(reply);
   reply->deleteLater();
   if (!reply->isFinished() || reply->error() != QNetworkReply::NoError) {
-    //emit errorReceived(reply->errorString());
-    emit errorReceived(tr("network error, failed to resolve media URL") + ": " + reply->url().toString());
+    //emit error(reply->errorString());
+    emit error(tr("network error, failed to resolve media URL") + ": " + reply->url().toString());
     DOUT("exit: network error");
     return;
   }
@@ -63,7 +63,7 @@ BilibiliCodec::parseReply(QNetworkReply *reply)
       l = parseDocument(data);
   }
   if (l.isEmpty())
-    emit errorReceived(tr("failed to resolve annotations from URL") + ": " + reply->url().toString());
+    emit error(tr("failed to resolve annotations from URL") + ": " + reply->url().toString());
   else
     emit fetched(l, reply->url().toString());
   DOUT("exit: annots.size =" << l.size());
@@ -94,11 +94,13 @@ BilibiliCodec::parseDocument(const QByteArray &data)
   AnnotationList ret;
   QDomElement e = root.firstChildElement("d");
   while (!e.isNull()) {
+    QString text = e.text().trimmed();
     QString attr = e.attribute("p");
-    QString text = e.text();
-    Annotation a = parseComment(attr, text);
-    if (a.hasText())
-      ret.append(a);
+    if (!text.isEmpty() && !attr.isEmpty()) {
+      Annotation a = parseComment(attr, text);
+      if (a.hasText())
+        ret.append(a);
+    }
     e = e.nextSiblingElement("d");
   }
   DOUT("exit: size =" << ret.size());

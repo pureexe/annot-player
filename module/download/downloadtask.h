@@ -4,14 +4,12 @@
 // downloadtask.h
 // 2/20/2012
 
+#include "module/qtext/stoppable.h"
 #include <QObject>
-#include <QRunnable>
 #include <QString>
 #include <QList>
 
-#include "module/qtext/stoppable.h"
-
-class DownloadTask : public QObject, public QRunnable, public Stoppable
+class DownloadTask : public QObject, public StoppableTask
 {
   Q_OBJECT
   typedef DownloadTask Self;
@@ -53,8 +51,8 @@ public slots:
   virtual void run() = 0; ///< \override
   virtual void stop() = 0; ///< \override
 
-  virtual void finish()
-  { emit progress(totalSize_, totalSize_); emit finished(this); }
+  //virtual void finish()
+  //{ emit progress(totalSize_, totalSize_); emit finished(this); }
 
 protected slots:
   void setState(State state);

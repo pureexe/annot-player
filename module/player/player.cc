@@ -303,7 +303,7 @@ namespace { // anonymous, callbacks
 
         static bool rand_;
         rand_ = !rand_;
-        int offset = rand_ ? 2 : -2;
+        int offset = rand_ ? 4 : -4;
         QtWin::sendMouseMove(QPoint(offset, 0), true); // relative == true
       }
 #endif // Q_OS_WIN
@@ -623,6 +623,24 @@ Player::openMediaAsCD(const QString &path)
   return openMedia(mrl);
 }
 
+void
+Player::setStream(const QStringList &mrls, qint64 duration)
+{
+  VlcHttpPlugin:: setUrls(mrls);
+  VlcHttpPlugin:: setDuration(duration);
+}
+
+bool
+Player::openStream(const QStringList &mrls)
+{
+  if (hasMedia())
+    closeMedia();
+  if (mrls.isEmpty())
+    return false;
+  setStream(mrls);
+  return openMedia(mrls.first());
+}
+
 bool
 Player::openMedia(const QString &path)
 {
@@ -720,6 +738,8 @@ Player::closeMedia()
   impl_->setExternalSubtitles();
 
   VlcHttpPlugin::setMediaTitle(QString());
+  VlcHttpPlugin::setUrls(QStringList());
+  VlcHttpPlugin::setDuration(0);
 
   if (!impl_->mediaList().isEmpty()) {
     foreach (libvlc_media_t *m, impl_->mediaList())

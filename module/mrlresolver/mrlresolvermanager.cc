@@ -20,8 +20,8 @@ MrlResolverManager::MrlResolverManager(QObject *parent)
   MrlResolver *r;
 #define ADD(_resolver) \
   r = new _resolver(this); { \
-    connect(r, SIGNAL(errorReceived(QString)), SIGNAL(errorReceived(QString))); \
-    connect(r, SIGNAL(messageReceived(QString)), SIGNAL(messageReceived(QString))); \
+    connect(r, SIGNAL(error(QString)), SIGNAL(error(QString))); \
+    connect(r, SIGNAL(message(QString)), SIGNAL(message(QString))); \
     connect(r, SIGNAL(mediaResolved(MediaInfo,QNetworkCookieJar*)), SIGNAL(mediaResolved(MediaInfo,QNetworkCookieJar*))); \
     connect(r, SIGNAL(subtitleResolved(QString)), SIGNAL(subtitleResolved(QString))); \
   } resolvers_.append(r);

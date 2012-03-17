@@ -1,8 +1,8 @@
 ﻿== ENGLISH ==
 
 Product:	Annot Player
-Version:	0.1.3.1
-Release:	2012/3/10
+Version:	0.1.3.2
+Release:	2012/3/17
 Homepage:	http://annot.me
 Help (Wiki):	http://annot.me/wiki/FAQ
 Download:	http://code.google.com/p/annot-player/downloads
@@ -32,3 +32,6 @@ FAQ：	http://annot.me/wiki/Manual:FAQ/zh
 Galgame即时翻译：	http://youtu.be/-Eo9Mo9F-Us
 
 有各种bug或者希望和建议欢迎联系AnnotCloud@gmail.com。
+
+CONTRIBUTIONS
+- 0.1.3版：感谢VAN兄和郁闷中大哥提出的各种建议。

@@ -47,6 +47,7 @@ protected:
   // - Construction -
 public:
   explicit DownloadDialog(QWidget *parent = 0);
+  bool isAddingUrls() const;
 
 signals:
   void downloadFinished(const QString &path, const QString &url);
@@ -61,7 +62,8 @@ public slots:
   void addUrl(const QString &url);
   void addTask(DownloadTask *t);
 
-  void promptDownloads(const QString urls);
+  void promptUrl(const QString &text);
+  void promptUrls(const QStringList &urls);
 
   virtual void setVisible(bool visible); ///< \override
 

@@ -5,12 +5,15 @@
 
 #include "flvcodec.h"
 #include "flvdemux.h"
-#include "module/datastream/inputstream.h"
-#include "module/datastream/outputstream.h"
-#include "module/datastream/fileinputstream.h"
+#include "flvmerge.h"
+#include "flvparser.h"
+#include "module/stream/inputstream.h"
+#include "module/stream/outputstream.h"
+#include "module/stream/fileinputstream.h"
 #include "module/qtext/bitwise.h"
 #include "module/qtext/stoppable.h"
 #include <QtCore>
+#include <cstring>
 
 #define DEBUG "flvcodec"
 #include "module/debug/debug.h"
@@ -18,18 +21,19 @@
 // - Task -
 
 void
-FlvCodec::demuxStream(InputStream *flv, OutputStream *vout, OutputStream *aout,
-                      MediaToc *vtoc, MediaToc *atoc, bool async)
+FlvCodec::demuxStream(InputStream *flv, OutputStream *aout, OutputStream *vout,
+                      MediaToc *atoc, MediaToc *vtoc, bool async)
 {
   DOUT("enter: async =" << async);
   Q_ASSERT(flv);
   flv->reset();
   FlvDemux *t = new FlvDemux(flv, this);
   t->setAutoDelete(false);
-  t->setVideoOut(vout);
   t->setAudioOut(aout);
-  t->setVideoToc(vtoc);
+  t->setVideoOut(vout);
   t->setAudioToc(atoc);
+  t->setVideoToc(vtoc);
+  tasks_.append(t);
   if (async)
     QThreadPool::globalInstance()->start(t);
   else
@@ -38,19 +42,20 @@ FlvCodec::demuxStream(InputStream *flv, OutputStream *vout, OutputStream *aout,
 }
 
 void
-FlvCodec::demuxStreamList(InputStreamList *flvs, const QList<qint64> &durations,
-                          OutputStream *vout, OutputStream *aout,
-                          MediaToc *vtoc, MediaToc *atoc, bool async)
+FlvCodec::demuxStreams(const InputStreamList &flvs, const QList<qint64> &durations,
+                       OutputStream *aout, OutputStream *vout,
+                       MediaToc *atoc, MediaToc *vtoc, bool async)
 {
   DOUT("enter: async =" << async);
-  Q_ASSERT(flvs);
-  flvs->reset();
+  Q_ASSERT(!flvs.isEmpty());
+  flvs.reset();
   FlvListDemux *t = new FlvListDemux(flvs, durations, this);
   t->setAutoDelete(false);
-  t->setVideoOut(vout);
   t->setAudioOut(aout);
-  t->setVideoToc(vtoc);
+  t->setVideoOut(vout);
   t->setAudioToc(atoc);
+  t->setVideoToc(vtoc);
+  tasks_.append(t);
   if (async)
     QThreadPool::globalInstance()->start(t);
   else
@@ -59,17 +64,18 @@ FlvCodec::demuxStreamList(InputStreamList *flvs, const QList<qint64> &durations,
 }
 
 void
-FlvCodec::demuxStreamList(InputStreamList *flvs,
-                          OutputStream *vout, OutputStream *aout, bool async)
+FlvCodec::demuxStreams(const InputStreamList &flvs,
+                       OutputStream *aout, OutputStream *vout, bool async)
 {
   DOUT("enter: async =" << async);
-  Q_ASSERT(flvs);
-  flvs->reset();
+  Q_ASSERT(!flvs.isEmpty());
+  flvs.reset();
   FlvListDemux *t = new FlvListDemux(this);
   t->setAutoDelete(false);
   t->setInputStreams(flvs);
-  t->setVideoOut(vout);
   t->setAudioOut(aout);
+  t->setVideoOut(vout);
+  tasks_.append(t);
   if (async)
     QThreadPool::globalInstance()->start(t);
   else
@@ -112,8 +118,8 @@ FlvCodec::isFlvFile(const QString &fileName)
 }
 
 // See: http://www.jqueryphp.com/how-to-get-flv-file-duration/2009/08/
-int
-FlvCodec::getFlvStreamDuration(InputStream *input)
+qint64
+FlvCodec::getLastTimestamp(InputStream *input)
 {
   Q_ASSERT(input);
   qint64 size = input->size();
@@ -132,11 +138,74 @@ FlvCodec::getFlvStreamDuration(InputStream *input)
     return 0;
   if (!input->seek(pos))
     return 0;
-  data[0] = 0;
   count = input->read(data + 1, 3);
   if (count != 3)
     return 0;
   return Bitwise::BigEndian::toUInt32((quint8*)data);
+}
+
+qint64
+FlvCodec::getLastTimestamp(const QByteArray &input)
+{
+  qint64 size = input.size();
+  qint64 pos = size - 3;
+  if (pos < 0)
+    return 0;
+  char data[4];
+  data[0] = 0;
+  ::memcpy(data + 1, input.data() + pos, 3);
+  pos = size - (qint64)Bitwise::BigEndian::toUInt32((quint8*)data);
+  if (pos < 0 || pos >= size)
+    return 0;
+  ::memcpy(data + 1, input.data() + pos, 3);
+  return Bitwise::BigEndian::toUInt32((quint8*)data);
+}
+
+void
+FlvCodec::mergeStream(const InputStreamList &ins, OutputStream *out, bool async)
+{
+  DOUT("enter: async =" << async);
+  Q_ASSERT(!ins.isEmpty());
+  Q_ASSERT(out);
+  ins.reset();
+  FlvMerge *t = new FlvMerge(ins, out, this);
+  t->setAutoDelete(false);
+  tasks_.append(t);
+  if (async)
+    QThreadPool::globalInstance()->start(t);
+  else
+    t->run();
+  DOUT("exit");
+}
+
+
+FlvInfo
+FlvCodec::analyzeStream(InputStream *in)
+{
+  DOUT("enter");
+  Q_ASSERT(in);
+  FlvParser t;
+  t.setAutoDelete(false);
+  //tasks_.append(&t);
+
+  t.parseStream(in);
+  //tasks_.removeAll(&t);
+  DOUT("exit");
+  return t.meta();
+}
+
+FlvInfo
+FlvCodec::analyzeStreams(const InputStreamList &ins)
+{
+  DOUT("enter: stream.count =" << ins.size());
+  FlvParser t;
+  t.setAutoDelete(false);
+  //tasks_.append(&t);
+
+  t.parseStreams(ins);
+  //tasks_.removeAll(&t);
+  DOUT("exit");
+  return t.meta();
 }
 
 // EOF

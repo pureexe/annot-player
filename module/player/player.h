@@ -199,6 +199,9 @@ public slots:
   bool openMediaAsCD(const QString &url);
   void closeMedia();
 
+  bool openStream(const QStringList &mrls);
+  void setStream(const QStringList &mrls, qint64 duration = 0);
+
   //void setEncoding(const QString &encoding); ///< See \c Encoding for details.
 
   bool openSubtitle(const QString &fileName); ///< Same as \c setSubtitleFromFile

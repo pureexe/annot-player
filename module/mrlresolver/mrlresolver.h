@@ -20,8 +20,8 @@ public:
     : Base(parent) { }
 
 signals:
-  void errorReceived(QString message);
-  void messageReceived(QString message);
+  void error(QString msg);
+  void message(QString msg);
 
   void mediaResolved(MediaInfo mi, QNetworkCookieJar *cookieJar);
   void subtitleResolved(QString suburl);

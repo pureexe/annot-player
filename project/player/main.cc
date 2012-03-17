@@ -9,21 +9,20 @@
 #include "translatormanager.h"
 #include "annotationgraphicsitem.h"
 #ifdef USE_WIN_QTH
-  #include "win/qth/qth.h"
+#  include "win/qth/qth.h"
 #endif // USE_WIN_QTH
 #ifdef USE_WIN_DWM
-  #include "win/dwm/dwm.h"
+#  include "win/dwm/dwm.h"
 #endif // USE_WIN_DWM
 #ifdef Q_OS_WIN
-  #include "win/qtwin/qtwin.h"
+#  include "win/qtwin/qtwin.h"
 #endif // Q_OS_WIN
 #ifdef Q_OS_MAC
-  #include "mac/qtmac/qtmac.h"
+#  include "mac/qtmac/qtmac.h"
 #endif // Q_OS_MAC
 #include <QtGui>
-#ifdef USE_MODULE_WEBBROWSER
-#  include <QtWebKit>
-#endif // USE_MODULE_WEBBROWSER
+#include <QtNetwork>
+#include <QtWebKit>
 #include <ctime>
 #include <cstdlib>
 
@@ -35,12 +34,11 @@
 namespace { // anonymous
 
   // Meta types
-  /*
   inline void registerMetaTypes()
   {
-    qRegisterMetaType<ProcessInfo>("ProcessInfo");
+    // Not registered in Qt 4.8
+    qRegisterMetaType<QNetworkReply::NetworkError>("QNetworkReply::NetworkError");
   }
-  */
 
   // i18n
   /*
@@ -111,11 +109,12 @@ main(int argc, char *argv[])
   Settings *settings = Settings::globalInstance();
 
   // Seed global random generator.
-  ::srand((uint)::time(0));
-  ::qsrand((uint)QDateTime::currentMSecsSinceEpoch());
+  time_t now = ::time(0);
+  ::srand(now);
+  ::qsrand(now);
 
   // Register meta types.
-  //::registerMetaTypes();
+  ::registerMetaTypes();
 
   // Warm up startup caches
   ::warmUp();
@@ -156,23 +155,35 @@ main(int argc, char *argv[])
   //if (ok && !t.isEmpty())
   //  a.installTranslator(&t);
 
-#ifdef USE_MODULE_WEBBROWSER
+//#ifdef USE_MODULE_WEBBROWSER
   // Set webkit settings
   {
     QWebSettings *ws = QWebSettings::globalSettings();
-
     ws->setAttribute(QWebSettings::PluginsEnabled, true);
     ws->setAttribute(QWebSettings::AutoLoadImages, true);
     ws->setAttribute(QWebSettings::JavascriptEnabled, true);
-
-    //g->setMaximumPagesInCache(10);
+    //ws->setMaximumPagesInCache(10);
   }
-#endif // USE_MODULE_WEBBROWSER
+//#endif // USE_MODULE_WEBBROWSER
 
   // Set theme.
   {
     int tid = settings->themeId();
     UiStyle::globalInstance()->setTheme(tid);
+  }
+
+  // Set network proxy
+  if (settings->isProxyEnabled()) {
+    QNetworkProxy::ProxyType type;
+    switch (settings->proxyType()) {
+    case QNetworkProxy::Socks5Proxy: type = QNetworkProxy::Socks5Proxy; break;
+    case QNetworkProxy::HttpProxy: type = QNetworkProxy::HttpProxy; break;
+    default: type = QNetworkProxy::Socks5Proxy;
+    }
+    quint16 port = settings->proxyPort();
+    QNetworkProxy proxy(type, settings->proxyHostName(), port,
+                        settings->proxyUser(), settings->proxyPassword());
+    QNetworkProxy::setApplicationProxy(proxy);
   }
 
 //#ifdef USE_MODE_SIGNAL
@@ -267,16 +278,7 @@ main(int argc, char *argv[])
   //QWidget bk;
   //bk.setWindowFlags(Qt::CustomizeWindowHint);
   //DWM_ENABLE_AERO_WIDGET(&bk);
-
   //bk.showMaximized();
-
-  //QString url = "http://smile-com00.nicovideo.jp/smile?m=17054368.25318";
-  //QRegExp rx("http://([\\w\\d\\-]+)\\.nicovideo\\.jp/smile\\?m=([\\w\\d\\.]+)", Qt::CaseInsensitive);
-  //if (rx.exactMatch(url)) {
-  //  qDebug()<<rx.captureCount();
-  //  qDebug()<<rx.cap(1);
-  //  qDebug()<<rx.cap(2);
-  //}
 
   return a.exec();
 }

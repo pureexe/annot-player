@@ -3,7 +3,7 @@
 // See: liveMedia/ADTSAudioStreamSource.cc
 
 #include "aaccodec.h"
-#include "module/datastream/inputstream.h"
+#include "module/stream/inputstream.h"
 #include <QtCore>
 
 #define DEBUG "aaccodec"

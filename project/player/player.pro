@@ -1,7 +1,7 @@
 # player.pro
 # 6/30/2011
 
-VERSION = 0.1.3.1
+VERSION = 0.1.3.2
 
 include(../../config.pri)
 include(tr/tr.pri)
@@ -10,7 +10,7 @@ include(tr/tr.pri)
 
 include($$ROOTDIR/module/annotcloud/annotcloud.pri)
 include($$ROOTDIR/module/annotcodec/annotcodec.pri)
-include($$ROOTDIR/module/datastream/datastream.pri)
+include($$ROOTDIR/module/stream/stream.pri)
 include($$ROOTDIR/module/player/player.pri)
 #include($$ROOTDIR/module/doll/doll.pri)
 include($$ROOTDIR/module/serveragent/serveragent.pri)
@@ -20,15 +20,15 @@ include($$ROOTDIR/module/gsoap/gsoap.pri)       # would static linking cause lic
 include($$ROOTDIR/module/mediacodec/mediacodec.pri)
 include($$ROOTDIR/module/translator/translator.pri)
 include($$ROOTDIR/module/mrlresolver/mrlresolver.pri)
-include($$ROOTDIR/module/mp4box/mp4box.pri)
+#include($$ROOTDIR/module/mp4box/mp4box.pri)
 include($$ROOTDIR/module/ioutil/ioutil.pri)
+include($$ROOTDIR/module/nicoutil/nicoutil.pri)
 include($$ROOTDIR/module/qtext/qtext.pri)
 include($$ROOTDIR/module/crypt/crypt.pri)
 
 # shared link gave me so many trouble on mac and linux
-#unix:       include($$ROOTDIR/module/webbrowser/webbrowser_static.pri)
-#win32:      include($$ROOTDIR/module/webbrowser/webbrowser.pri)
-#DEFINES += USE_MODULE_WEBBROWSER
+unix:       include($$ROOTDIR/module/webbrowser/webbrowser_static.pri)
+win32:      include($$ROOTDIR/module/webbrowser/webbrowser.pri)
 
 DEFINES += USE_MODULE_IOUTIL
 #DEFINES += USE_MODE_DEBUG
@@ -113,6 +113,7 @@ DEPENDPATH      += $$SUBPATH
 
 HEADERS += \
     application.h \
+    clipboardmonitor.h \
     config.h \
     eventlogger.h \
     mainwindow.h \
@@ -144,14 +145,18 @@ HEADERS += \
     dialog/annotationcountdialog.h \
     dialog/backlogdialog.h \
     dialog/consoledialog.h \
+    dialog/countdowndialog.h \
     dialog/devicedialog.h \
     dialog/helpdialog.h \
     dialog/inputdialog.h \
     dialog/livedialog.h \
     dialog/logindialog.h \
     dialog/mediaurldialog.h \
+    dialog/networkproxydialog.h \
     dialog/pickdialog.h \
     dialog/seekdialog.h \
+    dialog/shutdowndialog.h \
+    dialog/sleepdialog.h \
     dialog/siteaccountview.h \
     dialog/suburldialog.h \
     dialog/syncdialog.h \
@@ -181,11 +186,12 @@ HEADERS += \
     util/logger.h \
     util/textedit.h \
     util/textedittabview.h \
-    util/textview.h
-    #web/commentview.h
+    util/textview.h \
+    web/proxybrowser.h
 
 SOURCES += \
     application.cc \
+    clipboardmonitor.cc \
     eventlogger.cc \
     main.cc \
     mainwindow.cc \
@@ -211,14 +217,18 @@ SOURCES += \
     dialog/annotationcountdialog.cc \
     dialog/backlogdialog.cc \
     dialog/consoledialog.cc \
+    dialog/countdowndialog.cc \
     dialog/devicedialog.cc \
     dialog/helpdialog.cc \
     dialog/inputdialog.cc \
     dialog/livedialog.cc \
     dialog/logindialog.cc \
     dialog/mediaurldialog.cc \
+    dialog/networkproxydialog.cc \
     dialog/pickdialog.cc \
     dialog/seekdialog.cc \
+    dialog/shutdowndialog.cc \
+    dialog/sleepdialog.cc \
     dialog/siteaccountview.cc \
     dialog/suburldialog.cc \
     dialog/syncdialog.cc \
@@ -246,8 +256,8 @@ SOURCES += \
     util/logger.cc \
     util/textedit.cc \
     util/textedittabview.cc \
-    util/textview.cc
-    #web/commentview.cc
+    util/textview.cc \
+    web/proxybrowser.cc
 
 win32 {
   DEFINES += USE_MODE_SIGNAL

@@ -1,6 +1,7 @@
 # webbrowser_static.pri
 # 10/9/2011
 include(../../config.pri)
+
 INCLUDEPATH += $$PWD
 
 DEFINES +=  WEBBROWSER_STATIC
@@ -14,6 +15,7 @@ HEADERS += \
     $$PWD/webbrowserprivate.h
 
 SOURCES += \
+    $$PWD/webbrowserprivate.cc \
     $$PWD/webbrowser.cc
 
 RESOURCES += \

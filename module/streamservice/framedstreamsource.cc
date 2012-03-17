@@ -3,7 +3,7 @@
 // See: ByteStreamFileSource.cpp
 
 #include "framedstreamsource.h"
-#include "module/datastream/inputstream.h"
+#include "module/stream/inputstream.h"
 #include "module/mediacodec/mediatoc.h"
 #include <liveMedia.hh>
 #include <ctime>

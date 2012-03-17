@@ -30,18 +30,18 @@ YoutubeMrlResolver::resolveMedia(const QString &href)
   QUrl url(href);
   if (!url.host().endsWith("youtube.com", Qt::CaseInsensitive) ||
       url.path().compare("/watch", Qt::CaseInsensitive)) {
-    emit errorReceived(errorMessage + ": " + href);
+    emit error(errorMessage + ": " + href);
     //return;
   }
 
   QString v = url.queryItemValue("v");
   if (v.isEmpty()) {
-    emit errorReceived(errorMessage + ": " + href);
+    emit error(errorMessage + ": " + href);
     return false;
   }
 
   QString mrl = "http://www.youtube.com/watch?v=" + v;
-  emit messageReceived(tr("resolving media URL ...") + ": " + mrl);
+  emit message(tr("resolving media URL ...") + ": " + mrl);
   MediaInfo mi;
   mi.mrls.append(MrlInfo(mrl));
   mi.refurl = mrl;

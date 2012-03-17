@@ -90,4 +90,33 @@ QtMac::getCDMediaPaths()
 
 #endif // WITH_IOKIT
 
+// - Shutdown -
+
+void
+QtMac::halt()
+{
+  //QProcess::startDetached("shutdown -s now");
+  QProcess::startDetached("osascript -e '"
+    "tell app \"Finder\" to shut down"
+  "'");
+}
+
+void
+QtMac::reboot()
+{
+  //QProcess::startDetached("shutdown -r now");
+  QProcess::startDetached("osascript", QStringList() << "-e" <<
+    "tell app \"Finder\" to shut down"
+  );
+}
+
+void
+QtMac::sleep()
+{
+  //QProcess::startDetached("pmset sleepnow");
+  QProcess::startDetached("osascript", QStringList() << "-e" <<
+    "tell app \"Finder\" to sleep"
+  );
+}
+
 // EOF

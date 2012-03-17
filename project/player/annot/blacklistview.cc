@@ -94,15 +94,15 @@ BlacklistView::createTabs()
     _button = new QtExt::ToolButton; { \
       _button->setStyleSheet(SS_TOOLBUTTON_TEXT); \
       _button->setToolButtonStyle(Qt::ToolButtonTextOnly); \
-      _button->setText(_title); \
+      _button->setText(QString("[ %1 ]").arg(_title)); \
       _button->setToolTip(_tip); \
       connect(_button, SIGNAL(clicked()), _slot); \
     }
 #define MAKE_CHECKABLE_BUTTON(_button, _title, _tip, _slot) \
     _button = new QtExt::ToolButton; { \
-      _button->setStyleSheet(SS_TOOLBUTTON_TEXT); \
+      _button->setStyleSheet(SS_TOOLBUTTON_TEXT_CHECKABLE); \
       _button->setToolButtonStyle(Qt::ToolButtonTextOnly); \
-      _button->setText(_title); \
+      _button->setText(QString("| %1 |").arg(_title)); \
       _button->setToolTip(_tip); \
       _button->setCheckable(true); \
       connect(_button, SIGNAL(clicked(bool)), _slot); \
@@ -180,12 +180,12 @@ BlacklistView::createTabs()
 
   // Footer
 
-  MAKE_UNCHECKABLE_BUTTON(clearButton_, QString("[ %1 ]").arg(TR(T_CLEAR)), TR(T_CLEAR), SLOT(clearCurrentText()));
+  MAKE_UNCHECKABLE_BUTTON(clearButton_, TR(T_CLEAR), TR(T_CLEAR), SLOT(clearCurrentText()));
 
-  MAKE_UNCHECKABLE_BUTTON(addButton_, QString("[ %1 ]").arg(TR(T_ADD)), TR(T_ADD), SLOT(add()));
-  MAKE_UNCHECKABLE_BUTTON(removeButton_, QString("[ %1 ]").arg(TR(T_REMOVE)), TR(T_REMOVE), SLOT(remove()));
+  MAKE_UNCHECKABLE_BUTTON(addButton_, TR(T_ADD), TR(T_ADD), SLOT(add()));
+  MAKE_UNCHECKABLE_BUTTON(removeButton_, TR(T_REMOVE), TR(T_REMOVE), SLOT(remove()));
 
-  MAKE_CHECKABLE_BUTTON(enableButton_, QString("| %1 |").arg(TR(T_ENABLE)), tr("Enable blacklist"), SLOT(setFilterEnabled(bool))) {
+  MAKE_CHECKABLE_BUTTON(enableButton_, TR(T_ENABLE), tr("Enable blacklist"), SLOT(setFilterEnabled(bool))) {
     enableButton_->setEnabled(true);
   }
 
@@ -246,6 +246,8 @@ BlacklistView::createActions()
 
   QShortcut *cancelShortcut = new QShortcut(QKeySequence("Esc"), this);
   connect(cancelShortcut, SIGNAL(activated()), SLOT(hide()));
+  QShortcut *closeShortcut = new QShortcut(QKeySequence::Close, this);
+  connect(closeShortcut, SIGNAL(activated()), SLOT(hide()));
 }
 
 // - Slots -

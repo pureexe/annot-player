@@ -330,8 +330,11 @@ PlayerUi::nextFrame()
 void
 PlayerUi::fastForward(qreal rate)
 {
-  if (!player_->isStopped())
+  if (!player_->isStopped()) {
     player_->setRate(rate);
+    if (player_->isPaused())
+      player_->play();
+  }
 }
 
 void

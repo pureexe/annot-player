@@ -3,7 +3,7 @@
 setlocal
 cd /d d:/devel/releases/player || exit /b 1
 
-set VERSION=0.1.3.1
+set VERSION=0.1.3.2
 set APP=annot-player
 set ZIPFILE=%APP%-%VERSION%-win.zip
 
@@ -77,9 +77,9 @@ cp -v "%QT_HOME%"/bin/{%QT_DLLS%} . || exit /b 1
 cp -v "%MSVC_HOME%"/{%MSVC_DLLS%} . || exit /b 1
 cp -Rv "%MSVC90_REDIST%" . || exit /b 1
 cp -v "%ITH_HOME%"/bin/{%ITH_DLLS%} . || exit /b 1
-cp -v "%GPAC_HOME%"/bin/{%GPAC_DLLS%} . || exit /b 1
-cp -v "%MP4BOX_HOME%"/bin/%MP4BOX_EXE% . || exit /b 1
-cp -v "%MP4V2_HOME%"/bin/%MP4V2_DLL% . || exit /b 1
+::cp -v "%GPAC_HOME%"/bin/{%GPAC_DLLS%} . || exit /b 1
+::cp -v "%MP4BOX_HOME%"/bin/%MP4BOX_EXE% . || exit /b 1
+::cp -v "%MP4V2_HOME%"/bin/%MP4V2_DLL% . || exit /b 1
 cp -v "%ZLIB_HOME%"/bin/%ZLIB_DLL% . || exit /b 1
 
 ::cp -v "%CURL_HOME%"/bin/%CURL_BIN% . || exit /b 1
@@ -99,7 +99,7 @@ cp -v "%BUILD%"/*.{exe,dll} .
 rm -fv "Annot Player.exe"
 rm -fv live.exe
 rm -fv hook.dll
-rm -fv webbrowser.dll
+::rm -fv webbrowser.dll
 
 :: compile lua
 

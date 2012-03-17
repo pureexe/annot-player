@@ -46,8 +46,8 @@ private:
 
 signals:
   void streamReady(QString url);
-  void errorReceived(QString msg);
-  void messageReceived(QString msg);
+  void error(QString msg);
+  void message(QString msg);
 
 public:
   int port() const { return port_; }

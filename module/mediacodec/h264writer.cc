@@ -14,21 +14,23 @@ namespace Bitwise { using namespace BigEndian; }
 void
 RawH264Writer::writeFrame(const QByteArray &chunk, quint32 timestamp, bool writeHeader)
 {
-  static const quint8 _startCode[4] = { 0, 0, 0, 1 };
-  enum { _startCodeSize = sizeof(_startCode)/sizeof(*_startCode) };
+  static const quint8 StartCode[] = { 0, 0, 0, 1 };
+  enum { StartCodeSize = sizeof(StartCode)/sizeof(*StartCode) };
   if (chunk.size() < 4)
     return;
 
-  // Reference: decode_frame from libavcodec's h264.c
+  // See: decode_frame in ffmpeg/libavcodec/h264.c
 
   if (chunk[0] == 0) { // Headers
-    if (chunk.size() < 10 || !writeHeader)
+    if (chunk.size() < 10)
       return;
 
-    if (toc_)
-      toc_->append(out_->realSize(), timestamp);
     int offset = 8;
-    _nalLengthSize = (chunk[offset++] & 0x03) + 1;
+    nalLengthSize_ = (chunk[offset++] & 0x03) + 1;
+    if (!writeHeader)
+      return;
+    if (toc_)
+      toc_->append(out_->availableSize(), timestamp);
     int spsCount = chunk[offset++] & 0x1F;
     int ppsCount = -1;
 
@@ -43,30 +45,30 @@ RawH264Writer::writeFrame(const QByteArray &chunk, quint32 timestamp, bool write
       else break;
 
       const quint8 *p = (const quint8 *)chunk.data();
-      int len = (int)Bitwise::toUInt16(p, offset);
+      int len = Bitwise::toUInt16(p, offset);
         offset += 2;
       if (offset + len > chunk.size()) break;
-      write(_startCode, 0, _startCodeSize);
+      write(StartCode, 0, StartCodeSize);
       write(chunk, offset, len);
       offset += len;
     }
   } else { // Video data
     if (toc_)
-      toc_->append(out_->realSize(), timestamp);
+      toc_->append(out_->availableSize(), timestamp);
 
     int offset = 4;
 
-    if (_nalLengthSize != 2)
-      _nalLengthSize = 4;
+    if (nalLengthSize_ != 2)
+      nalLengthSize_ = 4;
 
-    const quint8 *p = (const quint8 *)chunk.data();
-    while (offset <= chunk.size() - _nalLengthSize) {
-      int len = (_nalLengthSize == 2) ?
+    const quint8 *p = (const quint8 *)chunk.constData();
+    while (offset <= chunk.size() - nalLengthSize_) {
+      int len = nalLengthSize_ == 2 ?
         (int)Bitwise::toUInt16(p, offset) :
         (int)Bitwise::toUInt32(p, offset);
-      offset += _nalLengthSize;
+      offset += nalLengthSize_;
       if (offset + len > chunk.size()) break;
-      write(_startCode, 0, _startCodeSize);
+      write(StartCode, 0, StartCodeSize);
       write(chunk, offset, len);
       offset += len;
     }

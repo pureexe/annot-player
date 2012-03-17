@@ -21,6 +21,12 @@ namespace QtMac {
   QStringList getCDMediaPaths();
 #endif // WITH_IOKIT
 
+  // - Shutdown -
+
+  void halt();
+  void reboot();
+  void sleep();
+
 } // namespace QtMac
 
 #endif // QTMAC_H

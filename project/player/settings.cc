@@ -4,10 +4,12 @@
 #include "settings.h"
 #include "defines.h"
 #include "mainwindow.h"
+#include "uistyle.h"
 #include "module/annotcloud/traits.h"
 #include "module/crypt/crypt.h"
 #include "module/crypt/simplecrypt.h"
 #include <QtCore>
+#include <QNetworkProxy>
 
 // - Settings keys -
 
@@ -55,6 +57,13 @@
 //#define SK_RECENT(_i)   "Recent" #_i
 #define SK_RECENT       "Recent"
 
+#define SK_PROXY_ENABLED "ProxyEnabled"
+#define SK_PROXY_HOST   "ProxyHost"
+#define SK_PROXY_PORT   "ProxyPort"
+#define SK_PROXY_TYPE   "ProxyType"
+#define SK_PROXY_USER   "ProxyUser"
+#define SK_PROXY_PASS   "ProxyPassword"
+
 // - Helpers -
 
 namespace { // anonymous
@@ -93,13 +102,7 @@ Settings::setVersion(const QString &version)
 
 qint64
 Settings::userId() const
-{
-  bool ok;
-  qint64 ret = value(SK_USERID).toLongLong(&ok);
-  if (!ok)
-    return 0;
-  return ret;
-}
+{ return value(SK_USERID).toLongLong(); }
 
 void
 Settings::setThemeId(int tid)
@@ -108,11 +111,8 @@ Settings::setThemeId(int tid)
 int
 Settings::themeId() const
 {
-  bool ok;
-  int ret = value(SK_THEME).toInt(&ok);
-  if (!ok)
-    return 0;
-  return ret;
+  enum { defval = UiStyle::RandomTheme };
+  return value(SK_THEME, defval).toInt();
 }
 
 void
@@ -121,13 +121,7 @@ Settings::setAnnotationEffect(int id)
 
 int
 Settings::annotationEffect() const
-{
-  bool ok;
-  int ret = value(SK_ANNOTEFFECT).toInt(&ok);
-  if (!ok)
-    return 0;
-  return ret;
-}
+{ return value(SK_ANNOTEFFECT).toInt(); }
 
 void
 Settings::setUserId(qint64 uid)
@@ -137,10 +131,7 @@ QString
 Settings::userName() const
 {
   QString ret = value(SK_USERNAME).toString();
-  if (ret.isEmpty())
-    return ret;
-  else
-    return Crypt::decrypt(ret);
+  return ret.isEmpty() ? ret : Crypt::decrypt(ret);
 }
 
 void
@@ -156,10 +147,7 @@ QString
 Settings::password() const
 {
   QString ret = value(SK_PASSWORD).toString();
-  if (ret.isEmpty())
-    return ret;
-  else
-    return Crypt::decrypt(ret);
+  return ret.isEmpty() ? ret : Crypt::decrypt(ret);
 }
 
 void
@@ -181,13 +169,7 @@ Settings::setUpdateDate(const QDate &date)
 
 int
 Settings::language() const
-{
-  bool ok;
-  int ret = value(SK_LANGUAGE).toInt(&ok);
-  if (!ok)
-    return 0;
-  return ret;
-}
+{ return value(SK_LANGUAGE).toInt(); }
 
 void
 Settings::setLanguage(int language)
@@ -197,11 +179,7 @@ int
 Settings::subtitleColor() const
 {
   enum { defval = MainWindow::Cyan };
-  bool ok;
-  int ret = value(SK_SUBTITLECOLOR, defval).toInt(&ok);
-  if (!ok)
-    ret = defval;
-  return ret;
+  return value(SK_SUBTITLECOLOR, defval).toInt();
 }
 
 void
@@ -212,11 +190,7 @@ qint64
 Settings::annotationLanguages() const
 {
   enum { defval = AnnotCloud::Traits::AnyLanguageBit };
-  bool ok;
-  qint64 ret = value(SK_ANNOTLANGUAGES, defval).toLongLong(&ok);
-  if (!ok)
-    ret = defval;
-  return ret;
+  return value(SK_ANNOTLANGUAGES, defval).toLongLong();
 }
 
 void
@@ -534,6 +508,75 @@ Settings::setAudioTrackHistory(const QHash<qint64, int> &input)
       h[QString::number(k)] = QString::number(input[k]);
     setValue(SK_TRACKHIST, h);
   }
+}
+
+// - Network proxy -
+
+void
+Settings::setProxyEnabled(bool t)
+{ setValue(SK_PROXY_ENABLED, t); }
+
+bool
+Settings::isProxyEnabled() const
+{ return value(SK_PROXY_ENABLED).toBool(); }
+
+void
+Settings::setProxyHostName(const QString &host)
+{ setValue(SK_PROXY_HOST, host); }
+
+QString
+Settings::proxyHostName() const
+{ return value(SK_PROXY_HOST).toString(); }
+
+void
+Settings::setProxyPort(int port)
+{ setValue(SK_PROXY_PORT, port); }
+
+int
+Settings::proxyPort() const
+{ return value(SK_PROXY_PORT).toInt(); }
+
+void
+Settings::setProxyType(int type)
+{ setValue(SK_PROXY_TYPE, type); }
+
+int
+Settings::proxyType() const
+{
+  enum { defval = QNetworkProxy::Socks5Proxy };
+  return value(SK_PROXY_TYPE, defval).toInt();
+}
+
+QString
+Settings::proxyUser() const
+{
+  QString ret = value(SK_PROXY_USER).toString();
+  return ret.isEmpty() ? ret : Crypt::decrypt(ret);
+}
+
+void
+Settings::setProxyUser(const QString &userName)
+{
+  if (userName.isEmpty())
+    remove(SK_PROXY_USER);
+  else
+    setValue(SK_PROXY_USER, Crypt::encrypt(userName));
+}
+
+QString
+Settings::proxyPassword() const
+{
+  QString ret = value(SK_PROXY_PASS).toString();
+  return ret.isEmpty() ? ret : Crypt::decrypt(ret);
+}
+
+void
+Settings::setProxyPassword(const QString &password)
+{
+  if (password.isEmpty())
+    remove(SK_PROXY_PASS);
+  else
+    setValue(SK_PROXY_PASS, Crypt::encrypt(password));
 }
 
 // EOF

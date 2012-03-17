@@ -41,11 +41,11 @@ public:
   };
 
 public:
-  static Self *globalInstance()               { Q_ASSERT(global_); return global_; }
-  static void setGlobalInstance(Self *global) { global_ = global; }
+  static Self *globalInstance() { static Self g; return &g; }
   static bool isAeroAvailable();
 public slots:
   void setAeroEnabled(bool t);
+  void setAeroDisabled(bool t) { setAeroEnabled(!t); }
 public:
   bool isAeroEnabled() const { return aero_ && isAeroAvailable(); }
 
@@ -88,7 +88,6 @@ protected:
   const char *backgroundImagePath() const; // rc for current theme
 
 private:
-  static Self *global_;
   bool aero_;
   Theme theme_;
   QWidgetList windows_; // windows with customized background

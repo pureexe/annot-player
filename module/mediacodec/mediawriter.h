@@ -7,7 +7,7 @@
 // See: FLVExtractCl/Library/FLVFile.cs
 // http://moitah.net/
 
-#include "module/datastream/outputstream.h"
+#include "module/stream/outputstream.h"
 #include <QObject>
 #include <QByteArray>
 
@@ -103,7 +103,6 @@ protected:
   { write((const char *)data, offset, count); }
 };
 
-
 class RawH264Writer : public MediaWriter
 {
   Q_OBJECT
@@ -112,11 +111,11 @@ class RawH264Writer : public MediaWriter
 
   OutputStream *out_;
   MediaToc *toc_;
-  int _nalLengthSize;
+  int nalLengthSize_; // 2 for 16bit or 4 for 32bit
 
 public:
   explicit RawH264Writer(OutputStream *out, MediaToc *toc = 0, QObject *parent = 0)
-    : Base(parent), out_(out), toc_(toc) { Q_ASSERT(out_); }
+    : Base(parent), out_(out), toc_(toc), nalLengthSize_(0) { Q_ASSERT(out_); }
 
   virtual QString codecName() const { return "H264"; } ///< \override
 

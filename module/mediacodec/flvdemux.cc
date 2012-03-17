@@ -56,6 +56,24 @@ FlvDemux::~FlvDemux()
 
 // - Demux -
 
+void
+FlvListDemux::run()
+{
+  if (demux())
+    demux_->leadOut();
+  else
+    emit error(tr("failed to demux FLV stream list"));
+}
+
+void
+FlvDemux::run()
+{
+  if (demux())
+    leadOut();
+  else
+    emit error(tr("failed to demux FLV stream"));
+}
+
 bool
 FlvDemux::demux()
 {
@@ -74,18 +92,25 @@ FlvDemux::demux()
 
   quint32 flags = readUInt8(&ok);
   Q_UNUSED(flags);
-  if (!ok)
+  if (!ok) {
+    DOUT("exit: read error");
     return false;
+  }
 
   quint32 dataOffset = readUInt32(&ok);
-  if (!ok)
+  if (!ok || !dataOffset) {
+    DOUT("exit: read error");
     return false;
+  }
 
-  seek(dataOffset);
+  Q_ASSERT(out_->pos() == 0x9);
+  if (dataOffset != 0x9)
+    seek(dataOffset);
 
   quint32 prevTagSize = readUInt32(&ok);
   while (ok && isRunning()) {
-    if (!readTag()) break;
+    if (!readTag())
+      break;
     prevTagSize = readUInt32(&ok);
   }
 
@@ -116,31 +141,34 @@ FlvDemux::leadOut()
 bool
 FlvDemux::readTag()
 {
+#define CHECK_OK        if (!ok) return false
   //if ((inputSize_ - inputOffset_) < 11)
   //  return false;
 
   // Read tag header
   bool ok;
-  quint32 tagType = readUInt8(&ok); if (!ok) return false;
-  quint32 dataSize = readUInt24(&ok); if (!ok) return false;
-  quint32 timestamp = readUInt24(&ok); if (!ok) return false;
-  timestamp |= readUInt8(&ok) << 24; if (!ok) return false;
-  quint32 streamID = readUInt24(&ok); if (!ok) return false;
-  Q_UNUSED(streamID);
+  quint32 tagType = readUInt8(&ok); CHECK_OK;
+  quint32 dataSize = readUInt24(&ok); CHECK_OK;
+  quint32 timestamp = readUInt24(&ok); CHECK_OK;
+  timestamp |= readUInt8(&ok) << 24; CHECK_OK;
+  quint32 streamId = readUInt24(&ok); CHECK_OK;
+
+  Q_UNUSED(streamId);
+  Q_ASSERT(!streamId); // always 0 for healthy FLV
+
+  // Read tag body
+  quint32 mediaInfo = readUInt8(&ok); CHECK_OK;
 
   // Read tag data
   if (dataSize == 0)
     return true;
-  dataSize--;
+  dataSize--; // skip leading tag
 
   //if ((inputSize_ - inputOffset_) < dataSize)
   //  return false;
-  quint32 mediaInfo = readUInt8(&ok);
-  if (!ok)
-    return false;
 
   //QByteArray data = readBytes((int)dataSize);
-  QByteArray data((int)dataSize, '0');
+  QByteArray data(dataSize, '0');
   if (!read(data.data(), 0, dataSize))
     return false;
 
@@ -159,8 +187,9 @@ FlvDemux::readTag()
       //_videoTimeStamps.append(timestamp);
     }
   }
-  emit timestampChanged(timestamp);
+  //emit timestampChanged(timestamp);
   return true;
+#undef CHECK_OK
 }
 
 MediaWriter*
@@ -257,18 +286,18 @@ bool
 FlvListDemux::demux()
 {
   DOUT("enter");
-  Q_ASSERT(ins_);
-  state_ = Running;
-
-  if (ins_->isEmpty()) {
+  Q_ASSERT(!ins_.isEmpty());
+  if (ins_.isEmpty()) {
     DOUT("exit: empty input streams");
     return true;
   }
+  state_ = Running;
+
   duration_ = 0;
-  for (streamIndex_ = 0; streamIndex_ < ins_->size(); streamIndex_++) {
+  for (streamIndex_ = 0; streamIndex_ < ins_.size(); streamIndex_++) {
     if (!isRunning())
       break;
-    demux_->setInput((*ins_)[streamIndex_]);
+    demux_->setInput(ins_[streamIndex_]);
     if (demux_->videoToc())
       demux_->videoToc()->setBaseTimestamp(duration_);
     if (demux_->audioToc())
@@ -459,7 +488,7 @@ namespace JDP {
         }
 
         private bool ReadTag() {
-            uint tagType, dataSize, timestamp, streamID, mediaInfo;
+            uint tagType, dataSize, timestamp, streamId, mediaInfo;
             byte[] data;
 
             if ((inputSize_ - inputOffset_) < 11) {
@@ -471,7 +500,7 @@ namespace JDP {
             dataSize = ReadUInt24();
             timestamp = ReadUInt24();
             timestamp |= ReadUInt8() << 24;
-            streamID = ReadUInt24();
+            streamId = ReadUInt24();
 
             // Read tag data
             if (dataSize == 0) {

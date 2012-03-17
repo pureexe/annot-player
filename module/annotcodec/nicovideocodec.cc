@@ -49,14 +49,14 @@ NicovideoCodec::fetchLocalFile(const QString &path)
   DOUT("enter: path =" << path);
   QFile file(path);
   if (!file.exists() || !file.open(QIODevice::ReadOnly)) {
-    emit errorReceived(tr("network error, failed to resolve nicovideo comments"));
+    emit error(tr("network error, failed to resolve nicovideo comments"));
     return;
   }
   QByteArray data = file.readAll();
   //DOUT("data =" << QString(data));
   AnnotationList l = parseDocument(data);
   if (l.isEmpty())
-    emit errorReceived(tr("failed to resolve nicovideo comments"));
+    emit error(tr("failed to resolve nicovideo comments"));
   else
     emit fetched(l, path);
   DOUT("exit: annots.size =" << l.size());
@@ -90,38 +90,38 @@ NicovideoCodec::parseDocument(const QByteArray &data)
   AnnotationList ret;
   QDomElement e = root.firstChildElement("chat");
   while (!e.isNull()) {
-    Annotation a;
-    QString text = e.text();
-    if (text.isEmpty())
-      continue;
+    QString text = e.text().trimmed();
+    if (!text.isEmpty()) {
+      Annotation a;
 
-    qint64 id = e.attribute("no").toLongLong();
-    long vpos = e.attribute("vpos").toLong();
-    qint64 date = e.attribute("date").toLongLong();
-    QString mail = e.attribute("mail");
-    QString userAlias = e.attribute("user_id");
-    QString anonymity = e.attribute("anonymity");
+      qint64 id = e.attribute("no").toLongLong();
+      long vpos = e.attribute("vpos").toLong();
+      qint64 date = e.attribute("date").toLongLong();
+      QString mail = e.attribute("mail");
+      QString userAlias = e.attribute("user_id");
+      QString anonymity = e.attribute("anonymity");
 
-    a.setId(-id);
-    a.setCreateTime(date);
+      a.setId(-id);
+      a.setCreateTime(date);
 
-    if (anonymity == "1")
-      a.setUserAnonymous(true);
-    a.setUserAlias(userAlias);
-    qint64 uid = qHash(userAlias);
-    a.setUserId(uid + LLONG_MIN);
+      if (anonymity == "1")
+        a.setUserAnonymous(true);
+      a.setUserAlias(userAlias);
+      qint64 uid = qHash(userAlias);
+      a.setUserId(uid + LLONG_MIN);
 
-    qint64 pos = vpos * 10; // 1/100 second
-    a.setPos(pos);
+      qint64 pos = vpos * 10; // 1/100 second
+      a.setPos(pos);
 
-    QString prefix = parsePrefix(mail);
-    if (!prefix.isEmpty())
-      text = prefix + " " + text;
-    a.setText(text);
+      QString prefix = parsePrefix(mail);
+      if (!prefix.isEmpty())
+        text = prefix + " " + text;
+      a.setText(text);
 
-    a.setLanguage(Traits::Japanese);
+      a.setLanguage(Traits::Japanese);
 
-    ret.append(a);
+      ret.append(a);
+    }
     e = e.nextSiblingElement("chat");
   }
   DOUT("exit: size =" << ret.size());

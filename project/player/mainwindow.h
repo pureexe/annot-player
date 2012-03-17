@@ -27,6 +27,7 @@ namespace QtExt { class CountdownTimer; }
 // Objects
 class AnnotationFilter;
 class ClientAgent;
+class ClipboardMonitor;
 class Database;
 class DataManager;
 class DataServer;
@@ -43,7 +44,6 @@ class Translator;
 class AnnotationGraphicsView;
 class AnnotationBrowser;
 class AnnotationEditor;
-class CloudView;
 //class CommentView;
 class MainPlayerUi;
 class MessageHandler;
@@ -71,6 +71,7 @@ class HelpDialog;
 class LiveDialog;
 class LoginDialog;
 class MediaUrlDialog;
+class NetworkProxyDialog;
 class PickDialog;
 class SeekDialog;
 class SiteAccountView;
@@ -105,6 +106,7 @@ public:
 
   // - Signals -
 signals:
+  void playingFinished();
   void mediaInvalidated();
   void responded(const QString &text);
   void said(const QString &text, const QString &color);
@@ -257,6 +259,7 @@ public slots:
   void openInWebBrowser();
   void downloadCurrentUrl();
 protected:
+  bool hasNext() const;
   QString newWindowTitle() const;
   QString currentUrl() const;
   static QString downloadSpeedToString(int speed);
@@ -270,10 +273,16 @@ public slots:
   void updateLiveAnnotations(bool async = true);
 
   // - Dialogs -
+protected:
+  SubUrlDialog *annotationUrlDialog();
+  MediaUrlDialog *mediaUrlDialog();
+
 public slots:
   void showLoginDialog();
   void hideLoginDialog();
   void setLoginDialogVisible(bool visible);
+
+  void setNetworkProxyDialogVisible(bool visible);
 
   void setUserViewVisible(bool visible);
 
@@ -286,7 +295,6 @@ public slots:
   void toggleTokenViewVisible();
   void toggleAnnotationBrowserVisible();
 
-  void openInCloudView(const QString &url);
   void openHomePage();
 
   void showSeekDialog();
@@ -392,9 +400,10 @@ public slots:
   // - Remote annotations -
 public slots:
   void importAnnotationsFromUrl(const QString &suburl);
+  bool isAnnotationUrlRegistered(const QString &suburl) const;
 protected slots:
-  void addRemoteAnnotations(const AnnotationList &l, const QString &url = QString());
   bool registerAnnotationUrl(const QString &suburl);
+  void addRemoteAnnotations(const AnnotationList &l, const QString &url = QString());
   void clearAnnotationUrls();
 
   // - Recent -
@@ -519,6 +528,24 @@ public slots:
 protected:
   int currentBrowsedFileId() const;
 
+  // - Proxy browser -
+protected slots:
+  void openProxyBrowser();
+
+  // - Clipboard -
+protected slots:
+  void enterAnnotationUrl(const QString &url);
+  void enterMediaUrl(const QString &url);
+  void enterDownloadUrls(const QStringList &urls);
+
+  // - Close menu -
+protected slots:
+  void nothingAfterFinished();
+  void sleepAfterFinished();
+  void shutdownAfterFinished();
+  void promptSleep();
+  void promptShutdown();
+
   // - Signal mode -
 #ifdef USE_WIN_QTH
 signals:
@@ -584,9 +611,9 @@ private:
 private:
   bool disposed_;
   int liveInterval_; // TO BE REMOVED
-  QMutex inetMutex_;    // mutext for remote communication
-  QMutex playerMutex_;  // mutex for local player
-  QMutex annotMutex_;
+  mutable QMutex inetMutex_;    // mutext for remote communication
+  mutable QMutex playerMutex_;  // mutex for local player
+  mutable QMutex annotMutex_;
   Tray *tray_;
   SignalHub *hub_;
 
@@ -621,6 +648,7 @@ private:
   DataManager *dataManager_;
   DataServer *dataServer_;
 
+  ClipboardMonitor *clipboardMonitor_;
   MrlResolver *mrlResolver_;
 
   EventLogger *logger_;
@@ -641,7 +669,6 @@ private:
   AnnotationFilter *annotationFilter_;
 
   BlacklistView *blacklistView_;
-  CloudView *cloudView_;
   //CommentView *commentView_;
   BacklogDialog *backlogDialog_;
   ConsoleDialog *consoleDialog_;
@@ -653,6 +680,7 @@ private:
   HelpDialog *helpDialog_;
   LoginDialog *loginDialog_;
   LiveDialog *liveDialog_;
+  NetworkProxyDialog *networkProxyDialog_;
   PickDialog *processPickDialog_;
   SeekDialog *seekDialog_;
   SyncDialog *syncDialog_;
@@ -711,6 +739,9 @@ private:
         *appLanguageMenu_,
         *annotationEffectMenu_,
         *userLanguageMenu_,
+        *settingsMenu_,
+        *utilityMenu_,
+        *closeMenu_,
         *annotationLanguageMenu_,
         *themeMenu_,
         *playlistMenu_,
@@ -759,6 +790,7 @@ private:
           *toggleAnnotationVisibleAct_,
           *toggleAnnotationCountDialogVisibleAct_,
           *toggleMenuBarVisibleAct_,
+          *toggleClipboardMonitorEnabledAct_,
           *toggleSiteAccountViewVisibleAct_,
           *toggleFullScreenModeAct_,
           *toggleEmbeddedModeAct_,
@@ -772,6 +804,10 @@ private:
           *toggleSubtitleOnTopAct_,
           *toggleEmbeddedPlayerOnTopAct_,
           *toggleAutoPlayNextAct_;
+
+  QAction *nothingAfterFinishedAct_,
+          *sleepAfterFinishedAct_,
+          *shutdownAfterFinishedAct_;
 
   QAction *toggleWindowOnTopAct_;
   QAction *downloadCurrentUrlAct_,
@@ -790,6 +826,7 @@ private:
           *toggleTokenViewVisibleAct_,
           *toggleLiveDialogVisibleAct_,
           *toggleLoginDialogVisibleAct_,
+          *toggleNetworkProxyDialogVisibleAct_,
           *toggleWindowPickDialogVisibleAct_,
           *toggleProcessPickDialogVisibleAct_,
           *toggleSeekDialogVisibleAct_,
@@ -803,6 +840,7 @@ private:
           //*toggleCommentViewVisibleAct_,
 
   QAction *toggleUserAnonymousAct_;
+  QAction *openProxyBrowserAct_;
 
   QAction *forward5sAct_,
           *backward5sAct_,
@@ -844,7 +882,7 @@ private:
           *toggleAnnotationLanguageToUnknownAct_,
           *toggleAnnotationLanguageToAnyAct_;
 
-  QAction *toggleAeroEnabledAct_;
+  QAction *toggleAeroDisabledAct_;
 
   QAction *setThemeToDefaultAct_,
           *setThemeToRandomAct_,

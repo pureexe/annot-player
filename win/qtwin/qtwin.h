@@ -17,7 +17,7 @@ namespace QtWin {
   // Direct access windows DLL api
   namespace Api { }
 
-  // - UNIX -
+  // - POSIX -
 
   struct timezone
   {
@@ -26,6 +26,8 @@ namespace QtWin {
   };
 
   //int gettimeofday(struct timeval *tv, struct timezone *tz);
+
+  void sleep(long msecs);
 
   // - Maintence -
 
@@ -163,6 +165,13 @@ namespace QtWin {
 
   QString guessDeviceFileName(const QString &hint);
   bool isValidDeviceFileName(const QString &fileName);
+
+  // - Shutdown -
+
+  void halt();
+  void reboot();
+  void hibernate();
+  void logoff();
 
 } // namespace QtWin
 

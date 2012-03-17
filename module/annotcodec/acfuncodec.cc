@@ -53,14 +53,14 @@ AcFunCodec::parseReply(QNetworkReply *reply)
   Q_ASSERT(reply);
   reply->deleteLater();
   if (!reply->isFinished() || reply->error() != QNetworkReply::NoError) {
-    //emit errorReceived(reply->errorString());
-    emit errorReceived(tr("network error, failed to resolve media URL") + " <br/> " + reply->url().toString());
+    //emit error(reply->errorString());
+    emit error(tr("network error, failed to resolve media URL") + " <br/> " + reply->url().toString());
     DOUT("exit: network error");
     return;
   }
   AnnotationList l = parseDocument(reply->readAll());
   if (l.isEmpty())
-    emit errorReceived(tr("failed to resolve annotations from URL") + ": " + reply->url().toString());
+    emit error(tr("failed to resolve annotations from URL") + ": " + reply->url().toString());
   else
     emit fetched(l, reply->url().toString());
   DOUT("exit: annots.size =" << l.size());
@@ -91,13 +91,15 @@ AcFunCodec::parseXmlDocument(const QByteArray &data)
   AnnotationList ret;
   QDomElement e = root.firstChildElement("l");
   while (!e.isNull()) {
+    QString text = e.text().trimmed();
     QString attr = e.attribute("i");
-    QString text = e.text();
-    Annotation a = parseComment(attr, text);
-    if (a.hasText()) {
-      qint64 id = ret.size() + (qint64)INT_MAX;
-      a.setId(-id);
-      ret.append(a);
+    if (!text.isEmpty() && !attr.isEmpty()) {
+      Annotation a = parseComment(attr, text);
+      if (a.hasText()) {
+        qint64 id = ret.size() + (qint64)INT_MAX;
+        a.setId(-id);
+        ret.append(a);
+      }
     }
     e = e.nextSiblingElement("l");
   }
@@ -133,15 +135,15 @@ AcFunCodec::parseJsonDocument(const QByteArray &data)
     QScriptValue c = v.property("c");
     QScriptValue m = v.property("m");
 
+    QString text = m.toString().trimmed();
     QString attr = c.toString();
-    QString text = m.toString();
-    if (attr.isEmpty() || text.isEmpty())
-      continue;
-    Annotation a = parseComment(attr, text);
-    if (a.hasText()) {
-      qint64 id = ret.size() + (qint64)INT_MAX;
-      a.setId(-id);
-      ret.append(a);
+    if (!text.isEmpty() && !attr.isEmpty()) {
+      Annotation a = parseComment(attr, text);
+      if (a.hasText()) {
+        qint64 id = ret.size() + (qint64)INT_MAX;
+        a.setId(-id);
+        ret.append(a);
+      }
     }
     it.next();
   }

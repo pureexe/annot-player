@@ -36,6 +36,8 @@ ConsoleDialog::ConsoleDialog(QWidget *parent)
   // Shortcuts
   QShortcut *cancelShortcut = new QShortcut(QKeySequence("Esc"), this);
   connect(cancelShortcut, SIGNAL(activated()), SLOT(hide()));
+  QShortcut *closeShortcut = new QShortcut(QKeySequence::Close, this);
+  connect(closeShortcut, SIGNAL(activated()), SLOT(hide()));
 
   instances_.append(this);
 }
@@ -69,8 +71,8 @@ ConsoleDialog::createLayout()
     rows->addWidget(tabView_);
     rows->addLayout(footer);
 
-    footer->addWidget(okButton);
     footer->addWidget(clearButton);
+    footer->addWidget(okButton);
 
     // left, top, right, bottom
     int patch = 0;
@@ -123,6 +125,5 @@ ConsoleDialog::messageHandler(QtMsgType type, const char *msg)
   }
 #undef TIMESTAMP
 }
-
 
 // EOF

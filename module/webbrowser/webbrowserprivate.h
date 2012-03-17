@@ -1,11 +1,12 @@
 #ifndef WEBBROWSERPRIVATE_H
 #define WEBBROWSERPRIVATE_H
 
-// WEBBROWSERPRIVATE.h
+// webbrowserprivate.h
 // 1/27/2012
 
-#include <QtCore>
+#include "module/qtext/network.h"
 #include <QtGui>
+#include <QtNetwork>
 
 // - Slots -
 
@@ -33,5 +34,38 @@ namespace slot_ {
   };
 
 } // namespace slot_
+
+typedef QtExt::NetworkCookieJarWithDomainAlias WBNetworkCookieJarBase;
+class WBNetworkCookieJar : public WBNetworkCookieJarBase
+{
+  Q_OBJECT
+  typedef WBNetworkCookieJar Self;
+  typedef WBNetworkCookieJarBase Base;
+
+public:
+  explicit WBNetworkCookieJar(QObject *parent = 0)
+    : Base(".nicovideo.jp", ".galstars.net", parent)
+  { }
+};
+
+class WBNetworkAccessManager : public QNetworkAccessManager
+{
+  Q_OBJECT
+  typedef WBNetworkAccessManager Self;
+  typedef QNetworkAccessManager Base;
+
+public:
+  explicit WBNetworkAccessManager(QObject *parent = 0)
+    : Base(parent) { }
+
+protected:
+  ///  \override
+  virtual QNetworkReply *createRequest(Operation op, const QNetworkRequest &req,
+                                       QIODevice *outgoingData = 0);
+
+  static QUrl transformNicoUrl(const QUrl &url);
+  static QUrl transformNicoHostUrl(const QUrl &url);
+  //static QNetworkReply *transformRedirectedReply(QNetworkReply *reply);
+};
 
 #endif // WEBBROWSERPRIVATE_H

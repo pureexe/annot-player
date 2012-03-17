@@ -62,6 +62,7 @@ public:
 
 private:
   QList<ulong> pids_;
+  //static bool ithActive_;
 };
 
 // EOF

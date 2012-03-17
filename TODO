@@ -1,20 +1,43 @@
 # TODO
 # 6/18/2011
 
+CHECKPOINT
+- clean up make_button/toggle, etc
+- move bitwise utilityes out of flv
+- FIXME: flash not enabled in qwebkit in mac
+- continue goei2
+- FIXME: download from youtube is broken
+
+# demo video for new features
+- double click to pause annotations
+- nicovideo banning for china/japan
+
 # server side
 - mysql script to cleanup token with less then 1 annot
 - share sourced token with alias as well
 - fake aiml reply at server side, utilize user_id
   enforce japanese support
 - tokenview/annotationthreadview
-- annotation search engine, similar to lyricts search
+- annotation thread view
+  like this: http://www.douban.com/group/topic/17281190/
 
-FIXME: server banned in prc
-
-# 0.1.3.2
+# client side
+- indicate merged timestamp in progress bar
+- randomized seeking
+- FIXME: window disapeared while dragging in Windows
+- show online user simutaneously, enable chat for the same video
 - use get session id to get client id
   chat with session id
-- FIXME: download from youtube is broken
+- improve proxy browser
+  - nico hover event: popup button
+  - delegate contextmenu
+
+# 0.1.3.3
+- fix flvscripttag after download finished
+- FIXME: drag video windows: wait for closing first
+- display subtitle track name: big5/gb/jp
+- move httpsessions out of vlccore
+- start Ith on demand
 - fix green screen issue
 - contextmenu to save downloaded annotations as xml (*.annot)
   import annotations from file
@@ -103,85 +126,16 @@ https://gitorious.org/quint
 - SNS, friends in annots
 - Comment
 
-## EOF
-
-
-libvlc imem
-http://forum.videolan.org/viewtopic.php?f=32&t=81529
-libvlc_exception_t ex;
-libvlc_instance_t* inst;
-static const char* args[] = {
-                                   "--codec", "invmem",
-                                   "-vvvvv",
-                                   "-I", "dummy",
-                                   "--no-ipv6",
-                                   "--ipv4",
-                                   "--file-logging",
-                                   "--drop-late-frames",
-                                   "--skip-frames",
-                                   "--no-sout-transcode-hurry-up",
-                                   "--logfile", "/var/log/mylogfile"
-                                   };
-
-libvlc_exception_init(&ex);
-inst = libvlc_new(argv, args, &ex);
-if(inst == NULL || libvlc_exception_raised(&ex)) {
-  //your error handler
-}
-
-char swidth[50], sheight[50], slock[50], sunlock[50], sdata[50];
-char sinput[10];
-
-sprintf(swidth, ":invmem-width=%d", 800);
-sprintf(sheight, ":invmem-height=%d", 600);
-sprintf(slock, ":invmem-lock=%lld", your_lock_function_ptr);
-sprintf(sunlock, ":invmem-unlock=%lld", your_unlock_function_ptr);
-sprintf(sdata, ":invmem-data=%lld", your_lock_unlock_functions_param_ptr);
-
-const char* argvideo[] = {
-                                    swidth,
-                                    sheight,
-                                    slock,
-                                    sunlock,
-                                    sdata
-                                };
-
-sprintf(sinput, "fake://");
-
-
-- win
-  - FIXME: double click event ignored when too fast
-    in vlccore, figure out where I could find double click
-  - FIXME: The app would close when there is no visible window after injecting another process.
-    such as, select process window, and press cancel
-  - associate with filetype
-    QSettings("HKEY_CURRENT_USER\Software\Classes\blergcorp.blergapp.v1\shell\open\command", null, @"c:\path\to\app.exe \"%1\"");
-    QSettings("HKEY_CURRENT_USER\Software\Classes\.blerg", null, "blergcorp.blergapp.v1");
-
-- FIXME: m3u/m3u8 which doesn't get media path correctly
-
-
-LIVE MODE (annot not saved)
-- try ppstream on windows with my player
-  make sure todou work
-- make default UI as open channel, and as FIRST live channel
-  every chat is received
-- PPStream support for chjunjiewanhui!
-- chunjiewanhui channel
-- support for user to create open channel
-  for example: synchronzing games while playing multi-player game
-
-- set up repository for deb and fedora
-
-- self-update framework
-  http://sourceforge.net/projects/qup/
-  http://stackoverflow.com/questions/2077550/how-can-i-enable-auto-updates-in-a-qt-cross-platform-app
-
-add \eval{} for instance: \eval{1+2}
-add \tr{} using google translation
 
 important message / message from friends pass to console
 - allow pause console message
 - make console be able to parse message color, etc
 - beable to move/ highlight console
 - add username to console message
+
+## Misc
+
+- add \tr{} using google translation
+
+
+## EOF

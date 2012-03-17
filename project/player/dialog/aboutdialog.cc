@@ -103,6 +103,12 @@ AboutDialog::AboutDialog(QWidget *parent)
 
   resize(WINDOW_SIZE);
 
+  // Shortcuts
+  QShortcut *cancelShortcut = new QShortcut(QKeySequence("Esc"), this);
+  connect(cancelShortcut, SIGNAL(activated()), SLOT(hide()));
+  QShortcut *closeShortcut = new QShortcut(QKeySequence::Close, this);
+  connect(closeShortcut, SIGNAL(activated()), SLOT(hide()));
+
   // Focus
   okButton->setFocus();
 }

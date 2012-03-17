@@ -10,7 +10,9 @@
 
 // - Constructions -
 
-Qth *Qth::globalInstance() { static Self global; return &global; }
+//bool Qth::ithActive_= false;
+
+Qth *Qth::globalInstance() { static Self g; return &g; }
 
 //void
 //Qth::startService()
@@ -28,7 +30,6 @@ Qth::~Qth()
 {
   DOUT("enter");
   clear();
-  // FIXME: need wait for detaching processes before destroying ITH
   Ith::destroy();
   DOUT("exit");
 }
@@ -71,6 +72,10 @@ Qth::attachProcess(ulong pid, bool checkActive)
 {
   DOUT("enter: pid =" << pid);
   DOUT("isAttached =" << isProcessAttached(pid));
+  //if (!ithActive_) {
+  //  ithActive_ = true;
+  //  Ith::init();
+  //}
 
   if (checkActive && !QtWin::isProcessActiveWithId(pid)) {
     DOUT("exit: ret = false, isActive = false");

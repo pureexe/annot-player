@@ -122,6 +122,26 @@ public:
 
   QHash<qint64, int> audioTrackHistory() const;
   void setAudioTrackHistory(const QHash<qint64, int> &h);
+
+  // - Network proxy -
+
+  void setProxyEnabled(bool t);
+  bool isProxyEnabled() const;
+
+  void setProxyHostName(const QString &host);
+  QString proxyHostName() const;
+
+  void setProxyPort(int port);
+  int proxyPort() const;
+
+  void setProxyType(int type);
+  int proxyType() const;
+
+  void setProxyUser(const QString &name);
+  QString proxyUser() const;
+
+  void setProxyPassword(const QString &password);
+  QString proxyPassword() const;
 };
 
 #endif // SETTINGS_H

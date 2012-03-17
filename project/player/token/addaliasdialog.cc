@@ -177,9 +177,11 @@ AddAliasDialog::AddAliasDialog(QWidget *parent)
     setContentsMargins(0, 0, 0, 0);
   } setLayout(rows);
 
-  // Shotcuts
+  // Shortcuts
   QShortcut *cancelShortcut = new QShortcut(QKeySequence("Esc"), this);
   connect(cancelShortcut, SIGNAL(activated()), SLOT(hide()));
+  QShortcut *closeShortcut = new QShortcut(QKeySequence::Close, this);
+  connect(closeShortcut, SIGNAL(activated()), SLOT(hide()));
 
   // Initial status
   invalidateOKButton();
