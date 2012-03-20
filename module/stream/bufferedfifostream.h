@@ -52,6 +52,11 @@ public:
   virtual QByteArray readAll() ///< \override
   { if (!isFinished()) waitForFinished(); return data_; }
 
+  QByteArray &data() { return data_; }
+  const QByteArray &data() const { return data_; }
+
+  virtual bool writeToFile(const QString &path); ///< \override
+
   // - Output -
 
   virtual qint64 write(const char *data, qint64 maxSize); ///< \override

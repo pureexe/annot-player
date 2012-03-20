@@ -7,8 +7,8 @@
 #include "tr.h"
 #include "comboedit.h"
 #include "module/qtext/ss.h"
-#include "module/qtext/toolbutton.h"
 #include "module/qtext/string.h"
+#include "module/qtext/overlaylayout.h"
 #include <QtGui>
 
 #ifdef Q_OS_MAC
@@ -48,69 +48,32 @@ SubUrlDialog::createLayout()
     edit_->setToolTip(tr("Enter online subtitle URL"));
   } connect(edit_->lineEdit(), SIGNAL(returnPressed()), SLOT(open()));
 
-  saveButton_ = new QtExt::ToolButton; {
-    saveButton_->setText(QString("| %1 |").arg(TR(T_SAVE)));
-    saveButton_->setStyleSheet(SS_TOOLBUTTON_TEXT_CHECKABLE);
-    saveButton_->setToolTip(tr("Associate the URL with this media"));
-    saveButton_->setCheckable(true);
-    saveButton_->setChecked(true);
-  }
+  UiStyle *ui = UiStyle::globalInstance();
+  saveButton_ = ui->makeToolButton(
+        UiStyle::CheckHint, TR(T_SAVE), tr("Associate the URL with this media"));
+  saveButton_->setChecked(true);
 
-  urlButton_ = new QtExt::ToolButton; {
-    //urlButton_->setText(exampleUrl());
-    urlButton_->setStyleSheet(SS_TOOLBUTTON_TEXT_URL);
-    urlButton_->setToolTip(tr("Click to paste the URL example"));
-    urlButton_->setCheckable(true);
-    urlButton_->setChecked(true);
-  } connect(urlButton_, SIGNAL(clicked(bool)), SLOT(showExampleUrl()));
+  urlButton_ = ui->makeToolButton(
+        UiStyle::UrlHint, "", tr("Click to paste the URL example"), this, SLOT(showExampleUrl()));
+  QLabel *urlLabel = ui->makeLabel(UiStyle::BuddyHint, TR(T_EXAMPLE), urlButton_);
 
-  QLabel *urlLabel = new QLabel; {
-    urlLabel->setStyleSheet(SS_LABEL);
-    urlLabel->setText(TR(T_EXAMPLE) + ":");
-    urlLabel->setToolTip(TR(T_EXAMPLE));
-    urlLabel->setBuddy(urlButton_);
-  }
+  QToolButton *openButton = ui->makeToolButton(
+        UiStyle::PushHint | UiStyle::HighlightHint, TR(T_OPEN), this, SLOT(open()));
+  QToolButton *pasteButton = ui->makeToolButton(
+        UiStyle::PushHint, TR(T_PASTE), this, SLOT(paste()));
+  QToolButton *clearButton = ui->makeToolButton(
+        UiStyle::PushHint, TR(T_CLEAR), edit_->lineEdit(), SLOT(clear()));
 
-  QToolButton *openButton = new QtExt::ToolButton; {
-    openButton->setStyleSheet(SS_TOOLBUTTON_TEXT_HIGHLIGHT);
-    openButton->setToolButtonStyle(Qt::ToolButtonTextOnly);
-    openButton->setText(QString("[ %1 ]").arg(TR(T_OPEN)));
-    openButton->setToolTip(TR(T_OPEN));
-  } connect(openButton, SIGNAL(clicked()), SLOT(open()));
-
-  QToolButton *pasteButton = new QtExt::ToolButton; {
-    pasteButton->setStyleSheet(SS_TOOLBUTTON_TEXT);
-    pasteButton->setToolButtonStyle(Qt::ToolButtonTextOnly);
-    pasteButton->setText(QString("[ %1 ]").arg(TR(T_PASTE)));
-    pasteButton->setToolTip(TR(T_PASTE));
-  } connect(pasteButton, SIGNAL(clicked()), SLOT(paste()));
-
-  QToolButton *clearButton = new QtExt::ToolButton; {
-    clearButton->setStyleSheet(SS_TOOLBUTTON_TEXT);
-    clearButton->setToolButtonStyle(Qt::ToolButtonTextOnly);
-    clearButton->setText(QString("[ %1 ]").arg(TR(T_CLEAR)));
-    clearButton->setToolTip(TR(T_CLEAR));
-  } connect(clearButton, SIGNAL(clicked()), edit_->lineEdit(), SLOT(clear()));
-
-  QToolButton *increaseButton = new QtExt::ToolButton; {
-    increaseButton->setStyleSheet(SS_TOOLBUTTON_TEXT);
-    increaseButton->setToolButtonStyle(Qt::ToolButtonTextOnly);
-    increaseButton->setText("+");
-    increaseButton->setToolTip(TR(T_INCREASE) + " [" K_CTRL "+=]");
-  } connect(increaseButton, SIGNAL(clicked()), SLOT(increase()));
-
-  QToolButton *decreaseButton = new QtExt::ToolButton; {
-    decreaseButton->setStyleSheet(SS_TOOLBUTTON_TEXT);
-    decreaseButton->setToolButtonStyle(Qt::ToolButtonTextOnly);
-    decreaseButton->setText("-");
-    decreaseButton->setToolTip(TR(T_DECREASE) + " [" K_CTRL "+-]");
-  } connect(decreaseButton, SIGNAL(clicked()), SLOT(decrease()));
+  QToolButton *increaseButton = ui->makeToolButton(
+        UiStyle::NoHint, "+", TR(T_INCREASE), K_CTRL "+=", this, SLOT(increase()));
+  QToolButton *decreaseButton = ui->makeToolButton(
+        UiStyle::NoHint, "+", TR(T_INCREASE), K_CTRL "+-", this, SLOT(decrease()));
 
   QVBoxLayout *rows = new QVBoxLayout; {
     QHBoxLayout *header = new QHBoxLayout,
                 *footer = new QHBoxLayout;
     QLayout *inc = new QVBoxLayout;
-    QGridLayout *body = new QGridLayout;
+    OverlayLayout *body = new OverlayLayout;
 
     rows->addLayout(header);
     rows->addLayout(body);
@@ -119,8 +82,8 @@ SubUrlDialog::createLayout()
     header->addWidget(urlLabel);
     header->addWidget(urlButton_);
 
-    body->addWidget(edit_, 0, 0, 1, 2);
-    body->addLayout(inc, 0, 1, 1, 1, Qt::AlignRight);
+    body->addWidget(edit_);
+    body->addLayout(inc, Qt::AlignRight);
     inc->addWidget(increaseButton);
     inc->addWidget(decreaseButton);
 

@@ -19,6 +19,9 @@ class AddAliasDialog : public AddAliasDialogBase
 public:
   explicit AddAliasDialog(QWidget *parent = 0);
 
+private:
+  void createLayout();
+
 signals:
   void aliasAdded(const QString &alias, int type, qint32 language);
 

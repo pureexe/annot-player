@@ -4,28 +4,42 @@
 #include "inputstream.h"
 #include <QtCore>
 
+#define DEBUG "inputstream"
+#include "module/debug/debug.h"
+
 QByteArray
 InputStream::readAll()
 {
-  int count = (int)size();
-  if (count <= 0)
+  DOUT("enter");
+  qint64 count = size() - pos();
+  if (count <= 0) {
+    DOUT("exit: no left data");
     return QByteArray();
+  }
   QByteArray ret(count, 0);
-  int n = (int)read(ret.data(), count);
-  if (n <= 0)
+  qint64 n = read(ret);
+  if (n <= 0) {
+    DOUT("exit: read nothing");
     return QByteArray();
-  if (n < count)
+  }
+  if (n < count) {
+    DOUT("warning: read less then real size");
     ret.resize(n);
+  }
+  DOUT("exit: ret.size =" << ret.size());
   return ret;
 }
 
 bool
 InputStream::writeToFile(const QString &path)
 {
+  DOUT("enter: fileName =" << path);
   enum { BufferSize = 10240 };
   QFile file(path);
-  if (!file.open(QIODevice::WriteOnly))
+  if (!file.open(QIODevice::WriteOnly)) {
+    DOUT("exit: failed to write to file:" << path);
     return false;
+  }
   //if (isEmpty())
   //  return true;
 
@@ -39,6 +53,7 @@ InputStream::writeToFile(const QString &path)
     file.write(buf, count);
 
   delete[] buf;
+  DOUT("exit: true");
   return true;
 }
 

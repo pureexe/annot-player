@@ -62,6 +62,8 @@ public slots:
   void logClientAgentDeauthorized();
   void logClientAgentAuthorizationError();
 
+  void logAspectRatioChanged(const QString &ratio);
+
 protected slots:
   void logUntilPlaying();
   void startLogUntilPlaying();

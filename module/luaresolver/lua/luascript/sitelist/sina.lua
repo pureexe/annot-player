@@ -94,7 +94,7 @@ function getTaskAttribute_sina ( str_url, str_tmpfile , pDlg)
 	local tbl_realurls = {};
 	local tbl_durations = {};
 	--fetch dynamic url
-	int_realurlnum, tbl_readurls, tbl_durations = getRealUrls(str_id, str_tmpfile, pDlg);
+	int_realurlnum, tbl_realurls, tbl_durations = getRealUrls(str_id, str_tmpfile, pDlg);
 
 
 	if pDlg~=nil then
@@ -109,7 +109,7 @@ function getTaskAttribute_sina ( str_url, str_tmpfile , pDlg)
 	tbl_ta["descriptor"] = str_title;
 	tbl_ta["subxmlurl"] = tbl_subxmlurls;
 	tbl_ta["realurlnum"] = int_realurlnum;
-	tbl_ta["realurls"] = tbl_readurls;
+	tbl_ta["realurls"] = tbl_realurls;
 	tbl_ta["durations"] = tbl_durations;
 	tbl_ta["sizes"] = {};
 	tbl_ta["oriurl"] = str_url;

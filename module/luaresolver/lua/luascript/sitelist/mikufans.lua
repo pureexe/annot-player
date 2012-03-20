@@ -158,11 +158,11 @@ function getTaskAttribute_mikufans ( str_url, str_tmpfile , pDlg)
 	if str_notsinaurl=="" -- is sina flv
 	then
 		--fetch dynamic url
-		int_realurlnum, tbl_readurls = getRealUrls(str_id, str_tmpfile, pDlg);
+		int_realurlnum, tbl_realurls = getRealUrls(str_id, str_tmpfile, pDlg);
 	else
 		int_realurlnum = 1;
-		tbl_readurls = {};
-		tbl_readurls[string.format("%d",0)] = str_notsinaurl;
+		tbl_realurls = {};
+		tbl_realurls[string.format("%d",0)] = str_notsinaurl;
 	end
 
 	if pDlg~=nil then
@@ -177,7 +177,7 @@ function getTaskAttribute_mikufans ( str_url, str_tmpfile , pDlg)
 	tbl_ta["descriptor"] = str_descriptor;
 	tbl_ta["subxmlurl"] = tbl_subxmlurls;
 	tbl_ta["realurlnum"] = int_realurlnum;
-	tbl_ta["realurls"] = tbl_readurls;
+	tbl_ta["realurls"] = tbl_realurls;
 	tbl_ta["oriurl"] = str_url;
 
 	local tbl_resig = {};

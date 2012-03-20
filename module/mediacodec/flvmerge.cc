@@ -4,16 +4,14 @@
 // Adobe Flash 9 File Format Specification.pdf (2007), The FLV Header (page 268)
 
 #include "flvmerge.h"
-#include "flvparser.h"
+#include "flvmeta.h"
 #include "module/stream/datainputstream.h"
 #include <QtCore>
 
 //#define DEBUG "flvmerge"
 #include "module/debug/debug.h"
 
-namespace Bitwise { using namespace BigEndian; }
-
-// - Demux -
+// - Merge -
 
 void
 FlvMerge::run()
@@ -28,7 +26,7 @@ FlvMerge::run()
     emit error(tr("failed to merge FLV streams"));
     return;
   }
-  leadOut();
+  finish();
 }
 
 bool
@@ -39,12 +37,12 @@ FlvMerge::parse()
   if (ins_.isEmpty())
     return false;
 
-  FlvParser parser;
+  FlvMetaReader parser;
   //connect(&parser, SIGNAL(error(QString)), SIGNAL(error(QString)));
   //connect(this, SIGNAL(stopped()), &parser, SLOT(parse()));
 
   if (parser.parseStreams(ins_)) {
-    FlvInfo meta = parser.meta();
+    FlvMeta meta = parser.meta();
     if (meta.duration)
       duration_ = meta.duration;
     DOUT("duration =" << duration_);
@@ -130,23 +128,21 @@ FlvMerge::append(InputStream *in, bool writeHeader)
     + 4 // data offset
   };
   QByteArray header(HeaderSize, 0);
-  if (in->read(header.data(), HeaderSize) != HeaderSize)
+  if (in->read(header) != HeaderSize)
     return false;
   DataInputStream headerIn(header);
 
   bool ok;
-  if (readUInt32(&headerIn, &ok) != 0x464C5601 || !ok) {
+  if (headerIn.readUInt32() != 0x464C5601) {
     DOUT("exit: ERROR: this isn't a FLV file.");
     return false;
   }
 
-  quint32 flags = readUInt8(&headerIn, &ok);
-  Q_ASSERT(ok);
+  quint32 flags = headerIn.readUInt8();
   Q_UNUSED(flags); // supposed to be 0x5 for FLV with both a/v tracks
   DOUT("FLV flags =" << flags);
 
-  qint64 dataOffset = readUInt32(&headerIn, &ok);
-  Q_ASSERT(ok);
+  qint64 dataOffset = headerIn.readUInt32();
   if (!dataOffset) {
     DOUT("exit: malformed FLV with zero dataOffset");
     return false;
@@ -158,19 +154,21 @@ FlvMerge::append(InputStream *in, bool writeHeader)
   qint64 paddingSize = dataOffset - HeaderSize; // Often 0
   if (paddingSize > 0) {
     QByteArray padding(paddingSize, 0);
-    if (in->read(padding.data(), paddingSize) != paddingSize)
+    if (in->read(padding) != paddingSize)
       return false;
 
     if (writeHeader)
       out_->write(padding);
   }
 
-  quint32 prevTagSize = readUInt32(in, &ok);
+  quint32 prevTagSize = in->readUInt32(&ok);
   if (!ok)
     return false;
+  if (prevTagSize)
+    DOUT("warning: invalid FLV with non-zero first tag size:" << prevTagSize);
 
   if (writeHeader)
-    writeUInt32(out_, prevTagSize); // first prevTagSize is always 0
+    out_->writeUInt32(prevTagSize); // first prevTagSize is always 0
 
   lastAudioTimestamp_ += lastAudioTimestep_;
   lastVideoTimestamp_ += lastAudioTimestep_;
@@ -183,18 +181,16 @@ FlvMerge::append(InputStream *in, bool writeHeader)
   lastAudioTimestamp_ = audioTimestamp_;
   lastVideoTimestamp_ = videoTimestamp_;
 
-  Q_ASSERT(in->atEnd());
-
   DOUT("exit: ret =" << isRunning());
   return isRunning();
 }
 
 void
-FlvMerge::leadOut()
+FlvMerge::finish()
 {
   DOUT("enter");
   Q_ASSERT(out_);
-  out_->flush();
+  out_->finish();
   DOUT("exit");
 }
 
@@ -212,17 +208,17 @@ FlvMerge::readTag(InputStream *in, bool writeHeader)
   enum { TimestampOffset = 1 + 3 };
 
   QByteArray tagData(TagSize, 0); // header
-  if (in->read(tagData.data(), TagSize) != TagSize)
+  if (in->read(tagData) != TagSize)
     return false;
   DataInputStream tagIn(tagData);
 
   // Read tag header
   bool ok;
-  quint32 tagType = readUInt8(&tagIn, &ok); Q_ASSERT(ok);
-  quint32 dataSize = readUInt24(&tagIn, &ok); Q_ASSERT(ok);
-  quint32 timestamp = readUInt24(&tagIn, &ok); Q_ASSERT(ok);
-  timestamp |= readUInt8(&tagIn, &ok) << 24; Q_ASSERT(ok);
-  //quint32 streamId = readUInt24(&tagIn, &ok); Q_ASSERT(ok);
+  quint32 tagType = tagIn.readUInt8();
+  quint32 dataSize = tagIn.readUInt24();
+  quint32 timestamp = tagIn.readUInt24();
+  timestamp |= tagIn.readUInt8() << 24;
+  //quint32 streamId = tagIn.readUInt24();
 
   quint32 newTimestamp = timestamp;
   switch (tagType) {
@@ -252,11 +248,11 @@ FlvMerge::readTag(InputStream *in, bool writeHeader)
   //dataSize--;
 
   //QByteArray data = readBytes((int)dataSize);
-  QByteArray data(dataSize, '0'); // tag body
-  if (in->read(data.data(), dataSize) != dataSize)
+  QByteArray data(dataSize, 0); // tag body
+  if (in->read(data) != dataSize)
     return false;
 
-  quint32 tagSize = readUInt32(in, &ok);
+  quint32 tagSize = in->readUInt32(&ok);
   if (!ok)
     return false;
 
@@ -281,7 +277,7 @@ FlvMerge::readTag(InputStream *in, bool writeHeader)
 
   out_->write(tagData);
   out_->write(data);
-  writeUInt32(out_, tagSize);
+  out_->writeUInt32(tagSize);
 
   return ok;
 }
@@ -340,22 +336,23 @@ FlvMerge::updateScriptTag(QByteArray &data, int pos) const
   if (pos < 0)
     return pos;
   bool ok;
-  DataInputStream in(data);
+  DataInputStream dataIn(data);
+  InputStream &in = dataIn;
   ok = in.seek(pos);
   CHECK_OK;
 
   // - ScriptDataString
   // - ScriptDataValue
-  quint16 stringLength = readUInt16(&in, &ok); CHECK_OK;
+  quint16 stringLength = in.readUInt16(&ok); CHECK_OK;
   QByteArray stringData(stringLength, 0);
-  ok = in.read(stringData.data(), stringLength) == stringLength; CHECK_OK;
+  ok = in.read(stringData) == stringLength; CHECK_OK;
   QString var(stringData);
 
-  quint8 valueType = readUInt8(&in, &ok); CHECK_OK;
+  quint8 valueType = in.readUInt8(&ok); CHECK_OK;
   switch (valueType) {
   case DoubleType:
     {
-      double value = readDouble(&in, &ok); CHECK_OK;
+      double value = in.readDouble(&ok); CHECK_OK;
       Q_UNUSED(value);
       DOUT("meta:" << var << "double" << value);
       int offset = in.pos() - sizeof(double);
@@ -363,7 +360,7 @@ FlvMerge::updateScriptTag(QByteArray &data, int pos) const
     } break;
   case UInt8Type:
     {
-      quint8 value = readUInt8(&in, &ok); CHECK_OK;
+      quint8 value = in.readUInt8(&ok); CHECK_OK;
       Q_UNUSED(value);
       DOUT("meta:" << var << "byte" << value);
       int offset = in.pos() - sizeof(quint8);
@@ -371,38 +368,38 @@ FlvMerge::updateScriptTag(QByteArray &data, int pos) const
     } break;
   case UInt16Type:
     {
-      quint16 value = readUInt16(&in, &ok); CHECK_OK;
+      quint16 value = in.readUInt16(&ok); CHECK_OK;
       Q_UNUSED(value);
       DOUT("meta:" << var << "short" << value);
     } break;
   case DateType:
     {
-      readUInt64(&in, &ok); CHECK_OK;
-      readUInt16(&in, &ok); CHECK_OK;
+      in.readUInt64(&ok); CHECK_OK;
+      in.readUInt16(&ok); CHECK_OK;
       DOUT("meta:" << var << "date");
     } break;
   case StringType:
   case StringType_Path:
     {
-      quint16 valueLength = readUInt16(&in, &ok); CHECK_OK;
+      quint16 valueLength = in.readUInt16(&ok); CHECK_OK;
       QByteArray valueData(valueLength, 0);
-      ok = in.read(valueData.data(), valueLength) == valueLength; CHECK_OK;
+      ok = in.read(valueData) == valueLength; CHECK_OK;
       QString value(valueData);
       Q_UNUSED(value);
       DOUT("meta:" << var << "string" << value);
     } break;
   case LongStringType:
     {
-      quint32 valueLength = readUInt32(&in, &ok); CHECK_OK;
+      quint32 valueLength = in.readUInt32(&ok); CHECK_OK;
       QByteArray valueData(valueLength, 0);
-      ok = in.read(valueData.data(), valueLength) == valueLength; CHECK_OK;
+      ok = in.read(valueData) == valueLength; CHECK_OK;
       QString value(valueData);
       Q_UNUSED(value);
       DOUT("meta:" << var << "lstring" << value);
     } break;
   case ECMAArrayType:
     {
-      quint32 valueCount = readUInt32(&in, &ok); CHECK_OK;
+      quint32 valueCount = in.readUInt32(&ok); CHECK_OK;
       DOUT("meta:" << var << "array" << valueCount);
       int offset = in.pos();
       for (quint32 i = 0; i < valueCount; i++) {
@@ -423,6 +420,7 @@ FlvMerge::updateScriptTagDoubleValue(quint8 *data, const QString &var) const
   enum { size = sizeof(double) };
   bool update = false;
   double value;
+  bool zero = false;
   // TODO: use qHash to improve performance
   if (var == "duration") {
     update = true;
@@ -435,13 +433,14 @@ FlvMerge::updateScriptTagDoubleValue(quint8 *data, const QString &var) const
       var == "lastkeyframetimestamp" ||
       var == "lastkeyframelocation") {
     update = true;
-    value = 0;
+    zero = true;
   }
 
   if (update) {
     DOUT(var << "=" << value);
-    quint8 bytes[size];
-    Bitwise::BigEndian::getBytes(bytes, value);
+    quint8 bytes[size] = { };
+    if (!zero)
+      Bitwise::BigEndian::getBytes(bytes, value);
     ::memcpy(data, bytes, size);
   }
   return update;

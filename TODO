@@ -2,15 +2,42 @@
 # 6/18/2011
 
 CHECKPOINT
-- clean up make_button/toggle, etc
-- move bitwise utilityes out of flv
+- try disable blur effect in toolbutton in Windows?
+- FIXME on mac: crash on exit while playing remote media
+  cause by seeking over eof?
+
+- show merged timestamp in progress bar
+  implement progressbar myself, with blue/orange to indicate progress && hot spot
+  use styleSheet to acheive this: add a blue background color for download progress
+- FIXME: might crash on exit and atEnd
+
+- improve proxy browser
+  - delegate contextmenu, open in new Tab
+  - enable local storage cache
 - FIXME: flash not enabled in qwebkit in mac
+  /Library/Internet Plug-Ins/QuickTime Plugin.plugin/Contents/MacOS/QuickTime Plugin: mach-o, but wrong architecture
+
+- annotationthreadview
+
+- use get session id to get client id
+  chat with session id
+  - online status
+  - sending log out session instruction on exit
+- show online user simutaneously, enable chat for the same video
+
+- cleanup TR.h, rc.h
+- rewrite makeaction in mainwindow
+
+- redesign website using PHP?
+
+- try use mechanism to annotate deathnote
+- advertisement  in bilibili
 - continue goei2
-- FIXME: download from youtube is broken
 
 # demo video for new features
 - double click to pause annotations
 - nicovideo banning for china/japan
+- use SAKI as example
 
 # server side
 - mysql script to cleanup token with less then 1 annot
@@ -22,18 +49,15 @@ CHECKPOINT
   like this: http://www.douban.com/group/topic/17281190/
 
 # client side
-- indicate merged timestamp in progress bar
-- randomized seeking
-- FIXME: window disapeared while dragging in Windows
-- show online user simutaneously, enable chat for the same video
-- use get session id to get client id
-  chat with session id
+able to open multiple window raher than multiple applications
+wrap up uistyle and widgets into my own guitk
+
+# 0.1.3.4
+- cleanup flv modules, reduce code redundency
+- FIXME: download from youtube is broken
 - improve proxy browser
   - nico hover event: popup button
-  - delegate contextmenu
-
-# 0.1.3.3
-- fix flvscripttag after download finished
+- randomized seeking
 - FIXME: drag video windows: wait for closing first
 - display subtitle track name: big5/gb/jp
 - move httpsessions out of vlccore

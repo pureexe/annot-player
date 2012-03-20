@@ -51,6 +51,8 @@ signals:
 
 private slots:
   void selectHookAndHide(ulong hookId);
+private:
+  void createLayout();
 };
 
 #endif // SIGNALVIEW_H

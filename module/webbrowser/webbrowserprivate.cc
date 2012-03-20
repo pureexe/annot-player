@@ -16,7 +16,7 @@ WBNetworkAccessManager::createRequest(Operation op, const QNetworkRequest &req, 
         !host.startsWith("flapi.") && // use original nico fl api, or flash won't work properly
         !host.startsWith("msg.") && // use original nico annot URL
         !host.startsWith("smile-")) { // skip "smile-" video host
-      DOUT("nico request =" << url.toString());
+      //DOUT("nico request =" << url.toString());
       QNetworkRequest r = req;
       //DOUT("nico delegate =" << transformNicoUrl(url));
       r.setUrl(transformNicoUrl(url));

@@ -670,6 +670,11 @@ TranslatorManager::translate(int tid) const
   case T_MENUTEXT_SHUTDOWNAFTERFINISHED: return tr("Shutdown");
   case T_MENUTEXT_SLEEPAFTERFINISHED: return tr("Sleep");
 
+  case T_MENUTEXT_ASPECTRATIOSTANDARD: return tr("Standard") + " (4:3)";
+  case T_MENUTEXT_ASPECTRATIOWIDESCREEN: return tr("Wide screen") + " (16:9)";
+
+  case T_MENUTEXT_MULTIWINDOW: return tr("Allow multiple windows");
+
   case T_FILTER_PATTERN:        return tr("Filter pattern");
   case T_FILTER_SYNTAX:         return tr("Filter syntax");
   case T_FILTER_COLUMN:         return tr("Filter column");
@@ -727,10 +732,17 @@ TranslatorManager::translate(int tid) const
   case T_INCREASE:      return tr("Increase");
   case T_DECREASE:      return tr("Decrease");
 
+  case T_SECOND:        return tr("Second");
+  case T_MINUTE:        return tr("Minute");
+  case T_HOUR:          return tr("Hour");
+
   case T_NETWORKPROXY:  return tr("Network proxy");
+  case T_MENUTHEME:     return tr("Render context menu");
 
   case T_URL_NICOVIDEO: return tr("http://nicovideo.jp");
   case T_URL_BILIBILI:  return tr("http://bilibili.tv");
+
+  case T_ASPECTRATIO:  return tr("Aspect ratio");
 
   default:
     qWarning() << "TranslatorManager:translate: Unknown tid =" << tid;

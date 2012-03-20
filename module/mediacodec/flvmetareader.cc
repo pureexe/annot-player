@@ -1,21 +1,21 @@
-// flvparser.cc
+// flvmetareader.cc
 // 3/16/2012
 // See: http://hackipedia.org/File%20formats/SWF,%20Macromedia-Adobe%20Flash/Adobe%20Flash%209%20File%20Format%20Specification.pdf
 // Adobe Flash 9 File Format Specification.pdf (2007), The FLV Header (page 268)
 
-#include "flvparser.h"
+#include "flvmeta.h"
 #include "module/stream/datainputstream.h"
 #include <QtCore>
 
-//#define DEBUG "flvparser"
+//#define DEBUG "flvmetareader"
 #include "module/debug/debug.h"
 
-namespace Bitwise { using namespace BigEndian; }
+#define CHECK_OK        if (!ok) return false
 
-// - Demux -
+// - Reader -
 
 void
-FlvParser::run()
+FlvMetaReader::run()
 {
   DOUT("enter");
   if (!parse())
@@ -24,7 +24,7 @@ FlvParser::run()
 }
 
 bool
-FlvParser::parse()
+FlvMetaReader::parse()
 {
   DOUT("enter");
   meta_.clear();
@@ -37,7 +37,7 @@ FlvParser::parse()
 
   foreach (InputStream *in, ins_) {
     Q_ASSERT(in);
-    bool ok = append(in);
+    bool ok = readStream(in);
     if (!ok) {
       state_ = Error;
       break;
@@ -83,7 +83,7 @@ FlvParser::parse()
 // ...
 //
 bool
-FlvParser::append(InputStream *in)
+FlvMetaReader::readStream(InputStream *in)
 {
   DOUT("enter");
   Q_ASSERT(in);
@@ -93,53 +93,45 @@ FlvParser::append(InputStream *in)
     + 1 // flags
     + 4 // data offset
   };
-  QByteArray header(HeaderSize, 0);
-  if (in->read(header.data(), HeaderSize) != HeaderSize)
-    return false;
-  DataInputStream headerIn(header);
+  //QByteArray header(HeaderSize, 0);
+  //if (in->read(header) != HeaderSize)
+  //  return false;
 
   bool ok;
-  if (readUInt32(&headerIn, &ok) != 0x464C5601 || !ok) {
+  if (in->readUInt32(&ok) != 0x464C5601 || !ok) {
     DOUT("exit: ERROR: this isn't a FLV file.");
     return false;
   }
 
-  quint32 flags = readUInt8(&headerIn, &ok);
-  Q_ASSERT(ok);
+  quint32 flags = in->readUInt8(&ok); CHECK_OK;
   Q_UNUSED(flags); // supposed to be 0x5 for FLV with both a/v tracks
   DOUT("FLV flags =" << flags);
 
-  qint64 dataOffset = readUInt32(&headerIn, &ok);
-  Q_ASSERT(ok);
+  qint64 dataOffset = in->readUInt32(&ok); CHECK_OK;
   if (!dataOffset) {
     DOUT("exit: malformed FLV with zero dataOffset");
     return false;
   }
 
   qint64 paddingSize = dataOffset - HeaderSize; // Often 0
-  if (paddingSize > 0) {
-    QByteArray padding(paddingSize, 0);
-    if (in->read(padding.data(), paddingSize) != paddingSize)
-      return false;
-  }
-
-  quint32 firstTagSize = readUInt32(in, &ok);
-  Q_UNUSED(firstTagSize);
-  if (!ok)
+  if (paddingSize > 0 &&
+      in->skip(paddingSize) != paddingSize)
     return false;
 
-  ok = readTag(in);
+  quint32 firstTagSize = in->readUInt32(&ok); CHECK_OK;
+  if (firstTagSize)
+    DOUT("warning: invalid FLV with non-zero first tag size:" << firstTagSize);
+
+  ok = seekToScriptTag(in) && readScriptTag(in);
   if (!ok)
     state_ = Error;
-
-  Q_ASSERT(in->atEnd());
 
   DOUT("exit: ret =" << isRunning());
   return isRunning();
 }
 
 bool
-FlvParser::readTag(InputStream *in)
+FlvMetaReader::seekToScriptTag(InputStream *in)
 {
   enum TagType { AudioTag = 8, VideoTag = 9, ScriptTag = 18 };
 
@@ -149,44 +141,43 @@ FlvParser::readTag(InputStream *in)
     + 4 // timestamp
     + 3 // streamId
   };
-  enum { TimestampOffset = 1 + 3 };
 
   QByteArray tagData(TagSize, 0); // header
-  if (in->read(tagData.data(), TagSize) != TagSize)
+  if (in->read(tagData) != TagSize)
     return false;
   DataInputStream tagIn(tagData);
 
   // Read tag header
-  bool ok;
-  quint32 tagType = readUInt8(&tagIn, &ok); Q_ASSERT(ok);
-  quint32 dataSize = readUInt24(&tagIn, &ok); Q_ASSERT(ok);
-  quint32 timestamp = readUInt24(&tagIn, &ok); Q_ASSERT(ok);
-  timestamp |= readUInt8(&tagIn, &ok) << 24; Q_ASSERT(ok);
-  //quint32 streamId = readUInt24(&tagIn, &ok); Q_ASSERT(ok);
+  quint32 tagType = tagIn.readUInt8();
+  quint32 dataSize = tagIn.readUInt24();
+  //quint32 timestamp = tagIn.readUInt24();
+  //timestamp |= tagIn.readUInt8() << 24;
+  //quint32 streamId = tagIn.readUInt24();
 
   // Read tag data
   if (dataSize == 0) // no data
     return false;
 
-  //quint32 mediaInfo = readUInt8(&tagIn, &ok); if (!ok) return false;
+  //quint32 mediaInfo = tagIn.readUInt8();
   //dataSize--;
 
   if (tagType != ScriptTag) // not script tag
     return true;
 
-  //QByteArray data = readBytes((int)dataSize);
-  QByteArray data(dataSize, '0'); // tag body
-  if (in->read(data.data(), dataSize) != dataSize)
+  if (in->skip(1) != 1) // skip first byte
     return false;
+
+  //QByteArray data = readBytes((int)dataSize);
+  //if (in->skip(dataSize) != dataSize)
+  //  return false;
 
   //quint32 tagSize = readUInt32(in, &ok);
   //Q_UNUSED(tagSize);
   //if (!ok)
   //  return false;
+  //parseScriptTag(data, 1); // skip the first byte
 
-  scanScriptTag(data, 1); // skip the first byte
-
-  return ok;
+  return true;
 }
 
 // onMetaData
@@ -226,10 +217,9 @@ FlvParser::readTag(InputStream *in)
 // stereo: a BOOL indicating whether the data is stereo
 // audiocodecid: a DOUBLE indicating the audio codec ID used in the file (see “Audio tags” on page 6 for available SoundFormat values)
 // filesize: a DOUBLE indicating the total size of the file in bytes
-int
-FlvParser::scanScriptTag(QByteArray &data, int pos)
+bool
+FlvMetaReader::readScriptTag(InputStream *in)
 {
-#define CHECK_OK        if (!ok) return -1
   enum ScriptDataType {
     DoubleType = 0,
     UInt8Type = 1,
@@ -240,113 +230,123 @@ FlvParser::scanScriptTag(QByteArray &data, int pos)
     DateType = 11,
     LongStringType = 12
   };
-  if (pos < 0)
-    return pos;
-  bool ok;
-  DataInputStream in(data);
-  ok = in.seek(pos);
-  CHECK_OK;
+  bool ok = true;
 
   // - ScriptDataString
   // - ScriptDataValue
-  quint16 stringLength = readUInt16(&in, &ok); CHECK_OK;
+  quint16 stringLength = in->readUInt16(&ok); CHECK_OK;
   QByteArray stringData(stringLength, 0);
-  ok = in.read(stringData.data(), stringLength) == stringLength; CHECK_OK;
+  ok = in->read(stringData) == stringLength; CHECK_OK;
   QString var(stringData);
 
-  quint8 valueType = readUInt8(&in, &ok); CHECK_OK;
+  quint8 valueType = in->readUInt8(&ok); CHECK_OK;
   switch (valueType) {
   case DoubleType:
     {
-      double value = readDouble(&in, &ok); CHECK_OK;
+      double value = in->readDouble(&ok); CHECK_OK;
       setMetaDouble(var, value);
     } break;
   case UInt8Type:
     {
-      quint8 value = readUInt8(&in, &ok); CHECK_OK;
+      quint8 value = in->readUInt8(&ok); CHECK_OK;
       setMetaUInt8(var, value);
     } break;
   case UInt16Type:
     {
-      quint16 value = readUInt16(&in, &ok); CHECK_OK;
+      quint16 value = in->readUInt16(&ok); CHECK_OK;
       Q_UNUSED(value);
       DOUT("meta:" << var << "short" << value);
     } break;
   case DateType:
     {
-      readUInt64(&in, &ok); CHECK_OK;
-      readUInt16(&in, &ok); CHECK_OK;
+      in->readUInt64(&ok); CHECK_OK;
+      in->readUInt16(&ok); CHECK_OK;
       DOUT("meta:" << var << "date");
     } break;
   case StringType:
   case StringType_Path:
     {
-      quint16 valueLength = readUInt16(&in, &ok); CHECK_OK;
+      quint16 valueLength = in->readUInt16(&ok); CHECK_OK;
       QByteArray valueData(valueLength, 0);
-      ok = in.read(valueData.data(), valueLength) == valueLength; CHECK_OK;
+      ok = in->read(valueData) == valueLength; CHECK_OK;
       QString value(valueData);
       setMetaString(var, value);
     } break;
   case LongStringType:
     {
-      quint32 valueLength = readUInt32(&in, &ok); CHECK_OK;
+      quint32 valueLength = in->readUInt32(&ok); CHECK_OK;
       QByteArray valueData(valueLength, 0);
-      ok = in.read(valueData.data(), valueLength) == valueLength; CHECK_OK;
+      ok = in->read(valueData) == valueLength; CHECK_OK;
       QString value(valueData);
       Q_UNUSED(value);
       DOUT("meta:" << var << "lstring" << value);
     } break;
   case ECMAArrayType:
     {
-      quint32 valueCount = readUInt32(&in, &ok); CHECK_OK;
+      quint32 valueCount = in->readUInt32(&ok); CHECK_OK;
       DOUT("meta:" << var << "array" << valueCount);
-      int offset = in.pos();
       for (quint32 i = 0; i < valueCount; i++) {
-        offset = scanScriptTag(data, offset);
-        if (pos < 0)
-          return pos;
+        ok = readScriptTag(in);
+        CHECK_OK;
       }
-      ok = in.seek(pos); CHECK_OK;
     }
   }
-  return in.pos();
-#undef CHECK_OK
+  return ok;
 }
 
 void
-FlvParser::setMetaDouble(const QString &var, double value)
+FlvMetaReader::setMetaDouble(const QString &var, double value)
 {
   DOUT("var =" << var << ", value =" << value);
+#define ELIF_VAR(_var, _meta) \
+  else if (var == _var) { \
+    if (!meta_._meta) \
+      meta_._meta = value; \
+  }
+
   if (var == "duration") {
     qint64 duration = value * 1000;
     meta_.duration += duration;
-  } else if (var == "width") {
-    if (!meta_.width)
-      meta_.width = value;
-  } else if (var == "height") {
-    if (!meta_.height)
-      meta_.height = value;
-  } else if (var == "audiocodecid") {
-    if (!meta_.audioCodecId)
-      meta_.audioCodecId = value;
-  } else if (var == "videocodecid") {
-    if (!meta_.videoCodecId)
-      meta_.videoCodecId = value;
-  }
+  } else if (var == "lasttimestamp") {
+    if (!meta_.lastTimestamp)
+      meta_.lastTimestamp = value * 1000;
+  } else if (var == "lastkeyframetimestamp") {
+    if (!meta_.lastKeyFrameTimestamp)
+      meta_.lastKeyFrameTimestamp = value * 1000;
+  } else if (var == "audiodatarate")
+    meta_.audioDataRate = value;
+  else if (var == "videodatarate")
+    meta_.videoDataRate = value;
+  else if (var == "framerate")
+    meta_.frameRate = value;
+  ELIF_VAR("width", width)
+  ELIF_VAR("height", height)
+  ELIF_VAR("audiocodecid", audioCodecId)
+  ELIF_VAR("videocodecid", videoCodecId)
+  ELIF_VAR("filesize", fileSize)
+  ELIF_VAR("audiosize", audioSize)
+  ELIF_VAR("videosize", videoSize)
+  ELIF_VAR("datasize", dataSize)
+  ELIF_VAR("lastkeyframelocation", lastKeyFrameLocation)
+
+#undef ELIF_VAR
 }
 
 void
-FlvParser::setMetaString(const QString &var, const QString &value)
+FlvMetaReader::setMetaString(const QString &var, const QString &value)
 {
   DOUT("var =" << var << ", value =" << value);
   if (var == "creator") {
     if (meta_.creator.isEmpty())
       meta_.creator = value;
+  } else if (var == "metadatacreator") {
+    if (meta_.metaDataCreator.isEmpty())
+      meta_.metaDataCreator = value;
   }
 }
 
 void
-FlvParser::setMetaUInt8(const QString &var, quint8 value)
+FlvMetaReader::setMetaUInt8(const QString &var, quint8 value)
 {
   Q_UNUSED(var);
   Q_UNUSED(value);
@@ -357,7 +357,7 @@ FlvParser::setMetaUInt8(const QString &var, quint8 value)
 
 /*
 bool
-FlvParser::updateScriptTagDoubleValue(quint8 *data, const QString &var) const
+FlvMetaReader::updateScriptTagDoubleValue(quint8 *data, const QString &var) const
 {
   enum { size = sizeof(double) };
   bool update = false;
@@ -387,7 +387,7 @@ FlvParser::updateScriptTagDoubleValue(quint8 *data, const QString &var) const
 }
 
 bool
-FlvParser::updateScriptTagUInt8Value(quint8 *data, const QString &var) const
+FlvMetaReader::updateScriptTagUInt8Value(quint8 *data, const QString &var) const
 {
   bool update = false;
   quint8 value;

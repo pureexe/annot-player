@@ -44,8 +44,6 @@ class HttpStreamSession : public VlcHttpSession
 
   QString fileName_;
 
-  QList<QObject*> deleteLater_;
-
   StoppableTask *progressTask_;
 
   //struct Progress

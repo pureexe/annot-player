@@ -8,10 +8,8 @@
 #include "tr.h"
 #include "defines.h"
 #include "stylesheet.h"
-#include "lineedit.h"
 #include "annotationbrowser.h" // TO BE REMOVED
 #include "module/qtext/datetime.h"
-#include "module/qtext/toolbutton.h"
 #include <QtGui>
 
 using namespace AnnotCloud;

@@ -6,11 +6,11 @@
 #include "flvcodec.h"
 #include "flvdemux.h"
 #include "flvmerge.h"
-#include "flvparser.h"
+#include "flvmeta.h"
 #include "module/stream/inputstream.h"
 #include "module/stream/outputstream.h"
 #include "module/stream/fileinputstream.h"
-#include "module/qtext/bitwise.h"
+#include "module/stream/filestream.h"
 #include "module/qtext/stoppable.h"
 #include <QtCore>
 #include <cstring>
@@ -179,12 +179,12 @@ FlvCodec::mergeStream(const InputStreamList &ins, OutputStream *out, bool async)
 }
 
 
-FlvInfo
+FlvMeta
 FlvCodec::analyzeStream(InputStream *in)
 {
   DOUT("enter");
   Q_ASSERT(in);
-  FlvParser t;
+  FlvMetaReader t;
   t.setAutoDelete(false);
   //tasks_.append(&t);
 
@@ -194,11 +194,11 @@ FlvCodec::analyzeStream(InputStream *in)
   return t.meta();
 }
 
-FlvInfo
+FlvMeta
 FlvCodec::analyzeStreams(const InputStreamList &ins)
 {
   DOUT("enter: stream.count =" << ins.size());
-  FlvParser t;
+  FlvMetaReader t;
   t.setAutoDelete(false);
   //tasks_.append(&t);
 
@@ -206,6 +206,46 @@ FlvCodec::analyzeStreams(const InputStreamList &ins)
   //tasks_.removeAll(&t);
   DOUT("exit");
   return t.meta();
+}
+
+bool
+FlvCodec::updateFlvFileMeta(const QString &fileName)
+{
+  DOUT("enter: fileName =" << fileName);
+  FileStream fs(fileName);
+  if (!fs.isOpen()) {
+    DOUT("exit: failed to open file");
+    return false;
+  }
+  bool ok = updateFlvStreamMeta(&fs);
+  DOUT("exit: ret =" << ok);
+  return ok;
+}
+
+bool
+FlvCodec::updateFlvStreamMeta(InputOutputStream *ios)
+{
+  DOUT("enter");
+  Q_ASSERT(ios);
+  FlvMetaCreator creator;
+  ios->reset();
+  bool ok = creator.parseStream(ios);
+  if (!ok) {
+    DOUT("exit: failed to parse meta from FLV file");
+    return false;
+  }
+
+  FlvMeta meta = creator.meta();
+  FlvMetaWriter writer(meta);
+  ios->reset();
+  ok = writer.updateStream(ios);
+  if (!ok) {
+    DOUT("exit: failed to update meta in FLV file");
+    return false;
+  }
+
+  DOUT("exit: ret =" << ok);
+  return ok;
 }
 
 // EOF

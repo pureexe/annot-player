@@ -34,12 +34,13 @@ public slots:
 
 protected slots:
   void showWhenEmbedded();
+  virtual void invalidateInputCountButton(); ///< \override
 
 public slots:
   void setAutoHideEnabled(bool enabled = true);
   void autoHide();
 
-  void invalidateGeometry();    ///< Automatically adjust from its parent.
+  void invalidateGeometry();    ///< Automatically adjust from its parent
   void resetAutoHideTimeout();  ///< Reset timeout for autohide EmbeddedPlayer
 
   void setContainerWindow(WId winId);

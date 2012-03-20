@@ -2,6 +2,8 @@
 // 6/30/2011
 
 #include "mainplayer.h"
+#include "module/qtext/ss.h"
+#include "module/qtext/overlaylayout.h"
 #include <QtCore>
 #include <QtGui>
 
@@ -49,13 +51,13 @@ MainPlayerUi::createLayout()
     rows->addLayout(row2);
 
     row1->addWidget(menuButton());
+    row1->addWidget(openButton());
     row1->addWidget(playButton());
-    row1->addWidget(toggleAnnotationButton());
+    //row1->addWidget(toggleAnnotationButton());
     row1->addWidget(nextFrameButton());
     row1->addWidget(fastForwardButton());
     row1->addWidget(fastFastForwardButton());
     row1->addWidget(stopButton());
-    //row1->addWidget(openButton());
     row1->addWidget(previousButton());
     row1->addWidget(nextButton());
     row1->addWidget(toggleEmbedModeButton());
@@ -67,7 +69,11 @@ MainPlayerUi::createLayout()
 
     row2->addWidget(userButton());
     row2->addWidget(prefixComboBox());
-    row2->addWidget(inputComboBox());
+
+    OverlayLayout *input = new OverlayLayout;
+    input->addWidget(inputComboBox());
+    input->addWidget(inputCountButton(), Qt::AlignRight);
+    row2->addLayout(input);
 
     // margins (px): left, top, right, down
     rows->setContentsMargins(9, 0, 9, 0);
@@ -80,6 +86,12 @@ MainPlayerUi::createLayout()
 //  menuBButton()->resize(0, 0);
 //#endif // Q_OS_MAC
   setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+
+  setStyleSheet(styleSheet() +
+    SS_BEGIN(QToolButton)
+      SS_NO_BORDER
+    SS_END
+  );
 }
 
 // EOF

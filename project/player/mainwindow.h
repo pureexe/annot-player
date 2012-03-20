@@ -183,6 +183,8 @@ public slots:
   void checkInternetConnection(bool async = true);
   void deleteCaches();
 
+  void checkClipboard();
+
   void openSource(const QString &source);
   void open();  ///< By default the same as openFile()
   void openFile();
@@ -255,6 +257,8 @@ public slots:
   void disableWindowTransparency();
 
   void showVideoViewIfAvailable();
+
+  void setMultipleWindowsEnabled(bool t);
 
   void openInWebBrowser();
   void downloadCurrentUrl();
@@ -456,6 +460,9 @@ protected slots:
   virtual void dropEvent(QDropEvent *event); ///< \override
 
   void invalidateContextMenu();
+  void invalidateAspectRatioMenu();
+  void invalidateSettingsMenu();
+  void invalidateMenuTheme();
   void invalidateAnnotationSubtitleMenu();
   void invalidateUserMenu();
   void invalidateTrackMenu();
@@ -468,6 +475,9 @@ protected slots:
 
   void rememberAudioTrack();
   void resumeAudioTrack();
+
+  void rememberAspectRatio();
+  void resumeAspectRatio();
 
   void resumeAll();
 
@@ -598,6 +608,11 @@ protected:
   bool isDigestReady(const QString &path) const;
   bool isAliasReady(const QString &path) const;
 
+protected slots:
+  void setDefaultAspectRatio();
+  void setWideScreenAspectRatio(); // 16:9
+  void setStandardAspectRatio(); // 4:3
+
   // - Members for initialization. -
 private:
   void resetPlayer();
@@ -620,7 +635,8 @@ private:
   QtExt::CountdownTimer *loadSubtitlesTimer_;
   QtExt::CountdownTimer *resumePlayTimer_,
                         *resumeSubtitleTimer_,
-                        *resumeAudioTrackTimer_;
+                        *resumeAudioTrackTimer_,
+                        *resumeAspectRatioTimer_;
 
   QTimer *liveTimer_;
   QTimer *windowStaysOnTopTimer_;
@@ -709,6 +725,7 @@ private:
   QHash<qint64, qint64> playPosHistory_;
   QHash<qint64, int> subtitleHistory_;
   QHash<qint64, int> audioTrackHistory_;
+  QHash<qint64, QString> aspectRatioHistory_;
 
   int preferredSubtitleTrack_,
       preferredAudioTrack_;
@@ -728,6 +745,7 @@ private:
         *recentMenu_,
         *userMenu_,
         *openMenu_,
+        *openButtonMenu_,
         *playMenu_,
         *subtitleMenu_,
         *audioTrackMenu_,
@@ -765,6 +783,11 @@ private:
           *setSubtitleColorToPurpleAct_,
           *setSubtitleColorToOrangeAct_,
           *setSubtitleColorToBlackAct_;
+
+  QMenu *aspectRatioMenu_;
+  QAction *setDefaultAspectRatioAct_,
+          *setStandardAspectRatioAct_,
+          *setWideScreenAspectRatioAct_;
 
   QAction *setAnnotationEffectToDefaultAct_,
           *setAnnotationEffectToTransparentAct_,
@@ -882,7 +905,10 @@ private:
           *toggleAnnotationLanguageToUnknownAct_,
           *toggleAnnotationLanguageToAnyAct_;
 
-  QAction *toggleAeroDisabledAct_;
+  QAction *toggleAeroEnabledAct_,
+          *toggleMenuThemeEnabledAct_;
+
+  QAction *toggleMultipleWindowsEnabledAct_;
 
   QAction *setThemeToDefaultAct_,
           *setThemeToRandomAct_,

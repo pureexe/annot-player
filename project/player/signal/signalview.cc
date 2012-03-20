@@ -6,8 +6,6 @@
 #include "messageview.h"
 #include "processview.h"
 #include "uistyle.h"
-#include "stylesheet.h"
-#include "module/qtext/toolbutton.h"
 #include "tr.h"
 #include <QtGui>
 
@@ -29,6 +27,12 @@ SignalView::SignalView(QWidget *parent)
   setContentsMargins(0, 0, 0, 0);
   setAcceptDrops(true);
 
+  createLayout();
+}
+
+void
+SignalView::createLayout()
+{
   // Views
   processView_ = new ProcessView;
   messageView_ = new MessageView;
@@ -43,21 +47,12 @@ SignalView::SignalView(QWidget *parent)
 
   // Buttons
 
-#define MAKE_TAB_BUTTON(_id, _text) \
-  QToolButton *_id##Button = new QtExt::ToolButton; { \
-    _id##Button->setStyleSheet(SS_TOOLBUTTON_TEXT_TAB); \
-    _id##Button->setToolButtonStyle(Qt::ToolButtonTextOnly); \
-    _id##Button->setCheckable(true); \
-    _id##Button->setChecked(true); \
-    _id##Button->setText(QString("- %1 -").arg(_text)); \
-    _id##Button->setToolTip(_id##View_->windowTitle()); \
-  } \
-  connect(_id##Button, SIGNAL(clicked(bool)), _id##View_, SLOT(setVisible(bool)));
-
-  //MAKE_TAB_BUTTON(token, tr("info"))
-  MAKE_TAB_BUTTON(process, tr("process"))
-  MAKE_TAB_BUTTON(message, tr("message"))
-#undef MAKE_TAB_BUTTON
+  QToolButton *processButton = UiStyle::globalInstance()->makeToolButton(
+      UiStyle::TabHint, tr("process"), processView_->windowTitle(), processView_, SLOT(setVisible(bool)));
+  QToolButton *messageButton = UiStyle::globalInstance()->makeToolButton(
+      UiStyle::TabHint, tr("message"), messageView_->windowTitle(), messageView_, SLOT(setVisible(bool)));
+  processButton->setChecked(true);
+  messageButton->setChecked(true);
 
   // Layout
   QVBoxLayout *rows = new QVBoxLayout; {

@@ -12,6 +12,7 @@
 #endif // Q_OS_WIN
 #include "module/qtext/toolbutton.h"
 #include "module/qtext/withsizehint.h"
+#include "module/qtext/overlaylayout.h"
 #include <QtCore>
 #include <QtGui>
 
@@ -21,16 +22,6 @@
 #define INPUTLINE_MINWIDTH    400
 #define INPUTLINE_MINHEIGHT   25
 
-#define SS_COMBOBOX_OSD \
-  SS_BEGIN(QComboBox) \
-    SS_TRANSPARENT \
-    SS_COLOR(blue) \
-  SS_END \
-  SS_BEGIN(QComboBox::drop-down) \
-  SS_END \
-  SS_BEGIN(QComboBox QAbstractItemView) \
-    SS_BORDER_IMAGE_URL(RC_IMAGE_BACKGROUND) \
-  SS_END
 #define SS_LINEEDIT_OSD \
   SS_BEGIN(QLineEdit) \
     SS_TRANSPARENT \
@@ -41,6 +32,33 @@
     SS_BORDER_IMAGE_URL(RC_IMAGE_LINEEDIT) \
     SS_BORDER(1px groove black) \
     SS_COLOR(black) \
+  SS_END
+
+#define SS_COMBOBOX_OSD \
+  SS_BEGIN(QComboBox) \
+    SS_TRANSPARENT \
+    SS_COLOR(blue) \
+  SS_END \
+  SS_BEGIN(QComboBox QAbstractItemView) \
+    SS_BORDER_IMAGE_URL(RC_IMAGE_BACKGROUND) \
+  SS_END
+
+#define SS_COMBOBOX_OSD_NODROPDOWN \
+  SS_BEGIN(QComboBox) \
+    SS_TRANSPARENT \
+    SS_COLOR(blue) \
+  SS_END \
+  SS_BEGIN(QComboBox QAbstractItemView) \
+    SS_BORDER_IMAGE_URL(RC_IMAGE_BACKGROUND) \
+  SS_END \
+  SS_BEGIN(QComboBox::drop-down) \
+    SS_TRANSPARENT \
+  SS_END \
+  SS_BEGIN(QComboBox::down-arrow) \
+    SS_TRANSPARENT \
+  SS_END \
+  SS_BEGIN(QComboBox::down-arrow:pressed) \
+    SS_TRANSPARENT \
   SS_END
 
 // - Constructions -
@@ -84,7 +102,7 @@ void
 EmbeddedPlayerUi::createLayout()
 {
   // Reset Ui style
-  inputComboBox()->setStyleSheet(SS_COMBOBOX_OSD);
+  inputComboBox()->setStyleSheet(SS_COMBOBOX_OSD_NODROPDOWN);
   inputComboBox()->lineEdit()->setStyleSheet(SS_LINEEDIT_OSD);
   prefixComboBox()->setStyleSheet(SS_COMBOBOX_OSD);
   prefixComboBox()->lineEdit()->setStyleSheet(SS_LINEEDIT_OSD);
@@ -104,13 +122,13 @@ EmbeddedPlayerUi::createLayout()
     rows->addLayout(row);
 
     row->addWidget(menuButton());
+    row->addWidget(openButton());
     row->addWidget(playButton());
-    row->addWidget(toggleAnnotationButton());
+    //row->addWidget(toggleAnnotationButton());
     row->addWidget(nextFrameButton());
     row->addWidget(fastForwardButton());
     row->addWidget(fastFastForwardButton());
     row->addWidget(stopButton());
-    //row->addWidget(openButton());
     row->addWidget(previousButton());
     row->addWidget(nextButton());
     row->addWidget(toggleEmbedModeButton());
@@ -119,13 +137,24 @@ EmbeddedPlayerUi::createLayout()
     row->addStretch();
     row->addWidget(userButton());
     row->addWidget(prefixComboBox());
-    row->addWidget(inputComboBox());
+
+    OverlayLayout *input = new OverlayLayout;
+    input->addWidget(inputComboBox());
+    input->addWidget(inputCountButton(), Qt::AlignRight);
+    row->addLayout(input);
+
     //row->addStretch();
     row->addWidget(volumeSlider());
     row->addWidget(positionButton());
   }
   setLayout(rows);
   setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+
+  setStyleSheet(styleSheet() +
+    SS_BEGIN(QToolButton)
+      SS_NO_BORDER
+    SS_END
+  );
 }
 
 // - Properties -
@@ -352,6 +381,14 @@ EmbeddedPlayerUi::showWhenEmbedded()
 {
   if (!isVisible() && hub()->isEmbeddedPlayerMode())
     show();
+}
+
+void
+EmbeddedPlayerUi::invalidateInputCountButton()
+{
+  Base::invalidateInputCountButton();
+  QToolButton *b = inputCountButton();
+  b->setText(b->text() + "    "); // padding
 }
 
 // EOF

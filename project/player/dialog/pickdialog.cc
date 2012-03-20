@@ -4,13 +4,11 @@
 #include "pickdialog.h"
 #include "uistyle.h"
 #include "tr.h"
-#include "stylesheet.h"
 #include "logger.h"
 #include "defines.h"
 #ifdef USE_WIN_PICKER
-  #include "win/picker/picker.h"
+#  include "win/picker/picker.h"
 #endif // USE_WIN_PICKER
-#include "module/qtext/toolbutton.h"
 #include <QtGui>
 
 #define DEBUG "pickdialog"
@@ -28,26 +26,23 @@ PickDialog::PickDialog(QWidget *parent)
 #endif // Q_WS_MAC
   setWindowTitle(tr("Select window"));
   UiStyle::globalInstance()->setWindowStyle(this);
-  setContentsMargins(0, 0, 0, 0);
 
-  // Widgets
+  createLayout();
+}
 
-  messageLabel_ = new QLabel; {
-    messageLabel_->setStyleSheet(SS_LABEL);
-    messageLabel_->setToolTip(TR(T_MESSAGE));
-  }
+void
+PickDialog::createLayout()
+{
+  messageLabel_ = UiStyle::globalInstance()->makeLabel(0, "", TR(T_MESSAGE));
 
-  QToolButton *cancelButton = new QtExt::ToolButton; {
-    cancelButton->setStyleSheet(SS_TOOLBUTTON_TEXT);
-    cancelButton->setToolButtonStyle(Qt::ToolButtonTextOnly);
-    cancelButton->setText(QString("[ %1 ]").arg(TR(T_CANCEL)));
-    cancelButton->setToolTip(TR(T_CANCEL));
-  }
+  QToolButton *cancelButton = UiStyle::globalInstance()->makeToolButton(
+        UiStyle::PushHint, TR(T_CANCEL), this, SLOT(cancel()));
 
   // Layouts
   QVBoxLayout *rows = new QVBoxLayout; {
     rows->addWidget(messageLabel_, 0, Qt::AlignCenter);
     rows->addWidget(cancelButton, 0, Qt::AlignCenter);
+    setContentsMargins(0, 0, 0, 0);
   } setLayout(rows);
 
   // Connections

@@ -41,6 +41,7 @@ public:
   QString mediaTitle() const { return mediaTitle_; }
   virtual qint64 read(char *data, qint64 maxSize) = 0;
   virtual bool seek(qint64 pos) = 0;
+  bool reset() { return seek(0); }
   virtual qint64 size() const = 0;
   virtual qint64 pos() const = 0;
   virtual qint64 availableSize() const = 0;

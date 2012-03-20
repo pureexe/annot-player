@@ -3,12 +3,10 @@
 
 #include "downloadtaskdialog.h"
 #include "uistyle.h"
-#include "defines.h"
 #include "logger.h"
 #include "tr.h"
-#include "stylesheet.h"
 #include "util/textview.h"
-#include "module/qtext/toolbutton.h"
+#include "module/qtext/algorithm.h"
 #include <QtGui>
 
 #define DEBUG "downloaddialog"
@@ -21,21 +19,6 @@ using namespace Logger;
 #else
   #define K_CTRL        "Ctrl"
 #endif // Q_OS_MAC
-
-// - Helper -
-
-namespace { // anonymous
-  template <typename T>
-  inline QList<T>
-  uniqueList(const QList<T> &l)
-  {
-    QList<T> ret;
-    foreach (T t, l)
-      if (!ret.contains(t))
-        ret.append(t);
-    return ret;
-  }
-} // namespace anonymous
 
 // - Construciton -
 
@@ -71,36 +54,25 @@ DownloadTaskDialog::DownloadTaskDialog(QWidget *parent)
 void
 DownloadTaskDialog::createLayout()
 {
+  UiStyle *ui = UiStyle::globalInstance();
+
   textView_ = new TextView;
 
-  urlButton_ = new QtExt::ToolButton; {
-    urlButton_->setText(tr("http://www.nicovideo.jp/watch/sm12159572"));
-    urlButton_->setStyleSheet(SS_TOOLBUTTON_TEXT_URL);
-    urlButton_->setToolTip(tr("Click to paste the URL example"));
-    urlButton_->setCheckable(true);
-    urlButton_->setChecked(true);
-  } connect(urlButton_, SIGNAL(clicked(bool)), SLOT(showExampleUrl()));
+  urlButton_ = ui->makeToolButton(
+        UiStyle::UrlHint,
+        tr("http://www.nicovideo.jp/watch/sm12159572"),
+        tr("Click to paste the URL example"),
+        this, SLOT(showExampleUrl()));
 
-  QLabel *urlLabel = new QLabel; {
-    urlLabel->setStyleSheet(SS_LABEL);
-    urlLabel->setText(TR(T_EXAMPLE) + ":");
-    urlLabel->setToolTip(TR(T_EXAMPLE));
-    urlLabel->setBuddy(urlButton_);
-  }
+  QLabel *urlLabel = ui->makeLabel(UiStyle::BuddyHint, TR(T_EXAMPLE), urlButton_);
 
-#define MAKE_BUTTON(_button, _title, _tip, _slot) \
-    QToolButton *_button = new QtExt::ToolButton; { \
-      _button->setStyleSheet(SS_TOOLBUTTON_TEXT); \
-      _button->setToolButtonStyle(Qt::ToolButtonTextOnly); \
-      _button->setText(QString("[ %1 ]").arg(_title)); \
-      _button->setToolTip(_tip); \
-    } connect(_button, SIGNAL(clicked()), _slot);
-
-  MAKE_BUTTON(addButton, TR(T_ADD), TR(T_ADD) + " [" K_CTRL "+S]", SLOT(add()))
-  MAKE_BUTTON(pasteButton, TR(T_PASTE), TR(T_PASTE), SLOT(paste()))
-  MAKE_BUTTON(clearButton, TR(T_CLEAR), TR(T_CLEAR), SLOT(clear()))
-
-  addButton->setStyleSheet(SS_TOOLBUTTON_TEXT_HIGHLIGHT);
+  QToolButton *addButton = ui->makeToolButton(
+        UiStyle::PushHint | UiStyle::HighlightHint, TR(T_ADD), "", K_CTRL "+S",
+        this, SLOT(add()));
+  QToolButton *pasteButton = ui->makeToolButton(
+        UiStyle::PushHint, TR(T_PASTE), this, SLOT(paste()));
+  QToolButton *clearButton = ui->makeToolButton(
+        UiStyle::PushHint, TR(T_CLEAR), this, SLOT(clear()));
 
   // Layout
   QVBoxLayout *rows = new QVBoxLayout; {
@@ -127,8 +99,6 @@ DownloadTaskDialog::createLayout()
     rows->setContentsMargins(0, 0, 0, 0);
     setContentsMargins(9, patch, 9, patch);
   } setLayout(rows);
-
-#undef MAKE_BUTTON
 }
 
 void
@@ -154,7 +124,7 @@ DownloadTaskDialog::add()
   }
   bool batch = false;
   if (!urls.isEmpty()) {
-    urls =::uniqueList(urls);
+    urls = QtExt::uniqueList(urls);
     DOUT("urls =" << urls);
     emit urlsAdded(urls, batch);
   } else if (!text.isEmpty())

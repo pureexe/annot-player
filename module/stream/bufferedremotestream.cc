@@ -132,16 +132,17 @@ BufferedRemoteStream::run()
       reply_->setReadBufferSize(bufferSize_);
   }
   connect(reply_, SIGNAL(readyRead()), SLOT(invalidateSize()));
-  connect(reply_, SIGNAL(finished()), SLOT(leadOut()));
+  connect(reply_, SIGNAL(finished()), SLOT(finish()));
   connect(reply_, SIGNAL(finished()), SIGNAL(finished()));
   connect(reply_, SIGNAL(readyRead()), SIGNAL(readyRead()));
   connect(reply_, SIGNAL(downloadProgress(qint64,qint64)), SIGNAL(progress(qint64,qint64)));
   connect(reply_, SIGNAL(error(QNetworkReply::NetworkError)), SLOT(networkError()));
+
   DOUT("exit");
 }
 
 void
-BufferedRemoteStream::leadOut()
+BufferedRemoteStream::finish()
 {
   DOUT("enter");
   if (reply_ && !isRedirected()) {
@@ -153,6 +154,17 @@ BufferedRemoteStream::leadOut()
     DOUT("reply is null or redirected");
   DOUT("exit");
 }
+
+// - Properties -
+
+qint64
+BufferedRemoteStream::availableSize() const
+{
+  return reply_ ? data_.size() + reply_->bytesAvailable()
+                : data_.size();
+}
+
+// - Wait -
 
 void
 BufferedRemoteStream::waitForFinished()
@@ -187,6 +199,8 @@ BufferedRemoteStream::waitForReadyRead()
   DOUT("exit");
 }
 
+// - I/O -
+
 QByteArray
 BufferedRemoteStream::readAll()
 {
@@ -212,23 +226,25 @@ BufferedRemoteStream::isRedirected() const
   return !url.isEmpty() && url != reply_->url();
 }
 
-void
+bool
 BufferedRemoteStream::redirect()
 {
   DOUT("enter");
   if (!reply_) {
     DOUT("exit: reply is null");
+    return false;
   }
 
   QUrl url = reply_->attribute(QNetworkRequest::RedirectionTargetAttribute).toUrl();
-  if (url.isEmpty()) {
+  if (url.isEmpty() || url == reply_->url()) {
     DOUT("exit: redirection attribute doesn't exist");
-    return;
+    return false;
   }
   redirectUrl_ = url;
   DOUT("redirectUrl =" << redirectUrl_);
   run();
-  DOUT("exit");
+  return true;
+  DOUT("exit: ret = true");
 }
 
 void
@@ -248,5 +264,21 @@ BufferedRemoteStream::invalidateSize()
 void
 BufferedRemoteStream::networkError()
 { emit error(tr("network error, failed to download remote resource")); }
+
+bool
+BufferedRemoteStream::writeToFile(const QString &path)
+{
+  DOUT("enter: fileName =" << path);
+  QFile file(path);
+  if (!file.open(QIODevice::WriteOnly)) {
+    DOUT("exit: failed to write to file:" << path);
+    return false;
+  }
+
+  bool ok = file.write(data_) == data_.size();
+
+  DOUT("exit: ret =" << ok);
+  return ok;
+}
 
 // EOF

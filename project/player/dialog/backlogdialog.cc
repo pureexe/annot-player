@@ -5,8 +5,6 @@
 #include "textedittabview.h"
 #include "tr.h"
 #include "uistyle.h"
-#include "stylesheet.h"
-#include "module/qtext/toolbutton.h"
 #include <QtGui>
 
 // - Constructions -
@@ -43,18 +41,10 @@ BacklogDialog::createLayout()
   tabView_->addTab(tr("Text"));
   tabView_->finalizeLayout();
 
-#define MAKE_BUTTON(_button, _text, _slot) \
-  QToolButton *_button = new QtExt::ToolButton; { \
-    _button->setStyleSheet(SS_TOOLBUTTON_TEXT); \
-    _button->setToolButtonStyle(Qt::ToolButtonTextOnly); \
-    _button->setText(QString("[ %1 ]").arg(_text)); \
-    _button->setToolTip(_text); \
-    connect(_button, SIGNAL(clicked()), _slot); \
-  }
-
-  MAKE_BUTTON(okButton, TR(T_OK), SLOT(hide()))
-  MAKE_BUTTON(clearButton, TR(T_CLEAR), SLOT(clear()))
-  okButton->setStyleSheet(SS_TOOLBUTTON_TEXT_HIGHLIGHT);
+  QToolButton *okButton = UiStyle::globalInstance()->makeToolButton(
+        UiStyle::PushHint | UiStyle::HighlightHint, TR(T_OK), this, SLOT(hide()));
+  QToolButton *clearButton = UiStyle::globalInstance()->makeToolButton(
+        UiStyle::PushHint, TR(T_CLEAR), this, SLOT(clear()));
 
   // Layout
   QVBoxLayout *rows = new QVBoxLayout; {
@@ -73,8 +63,6 @@ BacklogDialog::createLayout()
     rows->setContentsMargins(9, patch, 9, 9);
     setContentsMargins(0, 0, 0, 0);
   } setLayout(rows);
-
-#undef MAKE_BUTTON
 }
 
 // - Properties -

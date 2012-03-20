@@ -28,9 +28,9 @@ public:
 
   ADD_WIDGET(QSlider, positionSlider)
   ADD_WIDGET(QSlider, volumeSlider)
+  ADD_WIDGET(QToolButton, openButton)
   ADD_WIDGET(QToolButton, playButton)
   ADD_WIDGET(QToolButton, stopButton)
-  //ADD_WIDGET(QToolButton, openButton)
   ADD_WIDGET(QToolButton, nextFrameButton)
   ADD_WIDGET(QToolButton, fastForwardButton)
   ADD_WIDGET(QToolButton, fastFastForwardButton)
@@ -38,7 +38,7 @@ public:
   ADD_WIDGET(QToolButton, toggleFullScreenModeButton)
   ADD_WIDGET(QToolButton, toggleMiniModeButton)
   ADD_WIDGET(QToolButton, toggleEmbedModeButton)
-  ADD_WIDGET(QToolButton, toggleAnnotationButton)
+  //ADD_WIDGET(QToolButton, toggleAnnotationButton)
   ADD_WIDGET(QToolButton, userButton)
   ADD_WIDGET(QToolButton, positionButton)
   ADD_WIDGET(QToolButton, previousButton)
@@ -46,6 +46,7 @@ public:
   ADD_WIDGET(QToolButton, menuButton)
   //ADD_WIDGET(QLineEdit, lineEdit)
   //ADD_WIDGET(QLineEdit, prefixLineEdit)
+  ADD_WIDGET(QToolButton, inputCountButton)
   ADD_WIDGET(QComboBox, inputComboBox)
   ADD_WIDGET(QComboBox, prefixComboBox)
 #undef ADD_WIDGET

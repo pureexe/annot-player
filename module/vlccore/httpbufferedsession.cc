@@ -109,6 +109,7 @@ HttpBufferedSession::stop()
 {
   DOUT("enter");
   setState(Stopped);
+  quit();
   DOUT("exit");
 }
 
@@ -132,7 +133,7 @@ HttpBufferedSession::tryRedirect()
   if (!reply_)
     return false;
   QUrl url = reply_->attribute(QNetworkRequest::RedirectionTargetAttribute).toUrl();
-  if (url.isEmpty() || url != reply_->url())
+  if (url.isEmpty() || url == reply_->url())
     return false;
   url_ = url;
   run();
@@ -180,6 +181,7 @@ HttpBufferedSession::run()
   if (cookieJar()) {
     DOUT("use cookie jar");
     nam_->setCookieJar(cookieJar());
+    cookieJar()->setParent(0);
   }
   reply_ = nam_->get(QNetworkRequest(url_));
   Q_ASSERT(reply_);
@@ -276,7 +278,7 @@ HttpBufferedSession::seek(qint64 pos)
 {
   if (pos < 0)
     return false;
-  if (pos == 0)
+  if (pos == pos_)
     return true;
   if (size_ > 0 && (pos >= size_ && pos > buffer_.size()))
     return false;

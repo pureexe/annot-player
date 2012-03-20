@@ -10,7 +10,6 @@
 QT_FORWARD_DECLARE_CLASS(QComboBox)
 QT_FORWARD_DECLARE_CLASS(QLabel)
 
-class ComboEdit;
 class DataManager;
 
 typedef QtExt::Dialog AnnotationCountDialogBase;
@@ -21,7 +20,7 @@ class AnnotationCountDialog : public AnnotationCountDialogBase
   typedef AnnotationCountDialogBase Base;
 
   DataManager *dm_;
-  ComboEdit *edit_;
+  QComboBox *edit_;
   QLabel *totalCountLabel_;
 
 public:
@@ -36,6 +35,9 @@ public slots:
 protected slots:
   void ok();
   void invalidateTotalCount();
+
+private:
+  void createLayout();
 };
 
 #endif // ANNOTATIONCOUNTDIALOG_H

@@ -17,7 +17,6 @@
 #endif // _MSC_VER
 
 QT_FORWARD_DECLARE_CLASS(QNetworkCookieJar)
-QT_FORWARD_DECLARE_CLASS(QTimer)
 
 struct vlc_object_t;
 struct access_t;
@@ -31,32 +30,23 @@ class VlcHttpPlugin : public QObject
   typedef QObject Base;
 
   static VlcHttpSession *session_;
-  static bool sessionRetained_;
   static QNetworkCookieJar *cookieJar_;
   static QString url_;
   static QStringList urls_;
   static qint64 duration_;
   static QString mediaTitle_;
 
-  QTimer *closeSessionTimer_;
 public:
   static Self *globalInstance() { static Self g; return &g; }
 protected:
-  explicit VlcHttpPlugin(QObject *parent = 0);
-  ~VlcHttpPlugin();
+  explicit VlcHttpPlugin(QObject *parent = 0)
+    : Base(parent) { }
 
 signals:
   void error(const QString &msg);
   void message(const QString &msg);
   void fileSaved(const QString &fileName);
   void progress(qint64 receivedBytes, qint64 totalBytes);
-
-  void closeSessionRequested();
-
-protected slots:
-  void emit_closeSessionRequested() { emit closeSessionRequested(); }
-  void closeSessionNow() { closeSession(); }
-  void startCloseSessionTimer();
 
 public:
   static void load();
@@ -66,6 +56,8 @@ public:
   static void setUrls(const QStringList &urls) { urls_ = urls; }
   static void setDuration(qint64 msec) { duration_ = msec; }
   static void setMediaTitle(const QString &title) { mediaTitle_ = title; }
+
+  static void closeSession();
 
 protected:
   // - Plugin APIs -
@@ -77,8 +69,6 @@ protected:
   static int control(access_t *, int, va_list);
 
   static void openSession();
-  static void closeSession();
-  static void closeSessionLater() { globalInstance()->emit_closeSessionRequested(); }
 };
 
 #endif // _VLCCORE_HTTP_H

@@ -114,7 +114,7 @@ MrlDownloadTask::downloadSingleMedia(const MediaInfo &mi, QNetworkCookieJar *jar
 
   in.setUrl(realUrl);
   in.run();
-  in.waitForReadyRead();
+  in.waitForReady();
 
   QString contentType = in.contentType();
   if (!isMultiMediaMimeType(contentType)) {
@@ -229,7 +229,7 @@ MrlDownloadTask::downloadMultipleMedia(const MediaInfo &mi, QNetworkCookieJar *j
     if (jar)
       in->networkAccessManager()->setCookieJar(jar);
     in->run();
-    in->waitForReadyRead();
+    in->waitForReady();
     ins.append(in);
   }
   //if (jar)
@@ -293,15 +293,16 @@ MrlDownloadTask::downloadMultipleMedia(const MediaInfo &mi, QNetworkCookieJar *j
   ins.reset();
   ok = merger.merge();
   if (ok)
-    merger.leadOut();
+    merger.finish();
 
   out.close();
 
-  bool flv;
-  if (ok && isRunning() &&
-      (flv = FlvCodec::isFlvFile(tmpFile)) || Mp4Codec::isMp4File(tmpFile)) {
+  if (ok && isRunning() && FlvCodec::isFlvFile(tmpFile)) {
+    ok = FlvCodec::updateFlvFileMeta(tmpFile);
+    if (!ok)
+      DOUT("warning: failed to update FLV meta:" << tmpFile);
+
     qint64 size = QFile(tmpFile).size();
-    suf = flv ? ".flv" : ".mp4";
 
     QString fileName = desktopPath + "/" + name + suf;
     QFile::remove(fileName);

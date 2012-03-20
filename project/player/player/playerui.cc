@@ -105,15 +105,16 @@ void
 PlayerUi::createConnections()
 {
   connect(menuButton(), SIGNAL(clicked()), SLOT(popupMenu()));
+  connect(openButton(), SIGNAL(clicked()), openButton(), SLOT(showMenu()));
   connect(playButton(), SIGNAL(clicked()), SLOT(play()));
   connect(stopButton(), SIGNAL(clicked()), SLOT(stop()));
   connect(nextFrameButton(), SIGNAL(clicked()), SLOT(nextFrame()));
   connect(fastForwardButton(), SIGNAL(pressed()), SLOT(fastForward()));
   connect(fastFastForwardButton(), SIGNAL(pressed()), SLOT(fastFastForward()));
   //connect(rewindButton(), SIGNAL(pressed()), SLOT(rewind()));
-  connect(fastForwardButton(), SIGNAL(released()), player_, SLOT(resetRate()));
-  connect(fastFastForwardButton(), SIGNAL(released()), player_, SLOT(resetRate()));
-  //connect(rewindButton(), SIGNAL(released()), player_, SLOT(resetRate()));
+  connect(fastForwardButton(), SIGNAL(released()), player_, SLOT(clearRate()));
+  connect(fastFastForwardButton(), SIGNAL(released()), player_, SLOT(clearRate()));
+  //connect(rewindButton(), SIGNAL(released()), player_, SLOT(clearRate()));
 
   connect(userButton(), SIGNAL(clicked()), SLOT(clickUserButton()));
   connect(positionButton(), SIGNAL(clicked()), SIGNAL(showPositionPanelRequested()));
@@ -122,6 +123,11 @@ PlayerUi::createConnections()
   connect(volumeSlider(), SIGNAL(valueChanged(int)), SLOT(setVolume(int)));
 
   connect(inputComboBox()->lineEdit(), SIGNAL(returnPressed()), SLOT(postAnnotation()));
+
+  connect(inputComboBox(), SIGNAL(editTextChanged(QString)), SLOT(invalidateInputCountButton()));
+  connect(prefixComboBox(), SIGNAL(editTextChanged(QString)), SLOT(invalidateInputCountButton()));
+
+  connect(inputCountButton(), SIGNAL(clicked()), SLOT(popupInputItems()));
 
   // Always connected
   connect(hub_, SIGNAL(tokenModeChanged(SignalHub::TokenMode)), SLOT(invalidateVisibleWidgets())); \
@@ -241,6 +247,7 @@ PlayerUi::setActive(bool active)
     invalidatePreviousButton();
     invalidatePlayerModeToggler();
     invalidateWindowModeToggler();
+    invalidateInputCountButton();
 
     invalidateUserButton();
 
@@ -473,7 +480,7 @@ PlayerUi::invalidateUserButton()
     b->setStyleSheet(SS_TOOLBUTTON_TEXT_NORMAL);
     b->setText(server_->user().name());
   } else {
-    b->setStyleSheet(SS_TOOLBUTTON_TEXT_HIGHLIGHT);
+    b->setStyleSheet(SS_TOOLBUTTON_TEXT_INVERT);
     b->setText(TR(T_LOGIN));
   }
 #ifdef Q_OS_WIN
@@ -741,22 +748,6 @@ PlayerUi::clickUserButton()
 }
 
 void
-PlayerUi::setAnnotationEnabled(bool enabled)
-{
-  QToolButton *b = toggleAnnotationButton();
-  if (enabled) {
-    b->setStyleSheet(SS_TOOLBUTTON_HIDEANNOT);
-    b->setToolTip(TR(T_TOOLTIP_HIDEANNOT));
-  } else {
-    b->setStyleSheet(SS_TOOLBUTTON_SHOWANNOT);
-    b->setToolTip(TR(T_TOOLTIP_SHOWANNOT));
-  }
-#ifdef Q_OS_WIN
-  QtWin::repaintWindow(b->winId());
-#endif // Q_OS_WIN
-}
-
-void
 PlayerUi::invalidatePlayerModeToggler()
 {
   toggleMiniModeButton()->setChecked(hub_->isMiniPlayerMode());
@@ -780,11 +771,22 @@ PlayerUi::invalidateVisibleWidgets()
   nextFrameButton()->setVisible(v);
 }
 
-// - Menu button -
-
 void
-PlayerUi::setMenu(QMenu *menu)
-{ menuButton()->setMenu(menu); }
+PlayerUi::invalidateInputCountButton()
+{
+  QToolButton *b = inputCountButton();
+  enum { total = 255 };
+  int count = currentText().size();
+  QString text = QString("%1/%2").arg(count).arg(total);
+  b->setText(text);
+
+  if (count < total)
+    b->setStyleSheet(SS_TOOLBUTTON_TEXT);
+  else
+    b->setStyleSheet(SS_TOOLBUTTON_TEXT_INVERT);
+}
+
+// - Menu button -
 
 void
 PlayerUi::popupMenu()
@@ -793,5 +795,38 @@ PlayerUi::popupMenu()
   menuButton()->showMenu();
 }
 
+void
+PlayerUi::popupInputItems()
+{ inputComboBox()->showPopup(); }
+
+QString
+PlayerUi::currentText() const
+{
+  Self *self = const_cast<Self *>(this);
+  QString x = self->prefixComboBox()->currentText().trimmed(),
+          y = self->inputComboBox()->currentText().trimmed();
+  if (x.isEmpty())
+    return y;
+  else
+    return x + " " + y;
+}
 
 // EOF
+
+/*
+void
+PlayerUi::setAnnotationEnabled(bool enabled)
+{
+  QToolButton *b = toggleAnnotationButton();
+  if (enabled) {
+    b->setStyleSheet(SS_TOOLBUTTON_HIDEANNOT);
+    b->setToolTip(TR(T_TOOLTIP_HIDEANNOT));
+  } else {
+    b->setStyleSheet(SS_TOOLBUTTON_SHOWANNOT);
+    b->setToolTip(TR(T_TOOLTIP_SHOWANNOT));
+  }
+#ifdef Q_OS_WIN
+  QtWin::repaintWindow(b->winId());
+#endif // Q_OS_WIN
+}
+*/

@@ -6,6 +6,7 @@
 #include "signalhub.h"
 #include "uistyle.h"
 #include "module/player/player.h"
+#include "module/qtext/overlaylayout.h"
 #include <QtCore>
 #include <QtGui>
 
@@ -68,13 +69,13 @@ MiniPlayerUi::createLayout()
     row0->addWidget(positionSlider());
 
     row1->addWidget(menuButton());
+    row1->addWidget(openButton());
     row1->addWidget(playButton());
-    row1->addWidget(toggleAnnotationButton());
+    //row1->addWidget(toggleAnnotationButton());
     row1->addWidget(nextFrameButton());
     row1->addWidget(fastForwardButton());
     row1->addWidget(fastFastForwardButton());
     row1->addWidget(stopButton());
-    //row1->addWidget(openButton());
     row1->addWidget(previousButton());
     row1->addWidget(nextButton());
     row1->addWidget(toggleEmbedModeButton());
@@ -85,7 +86,11 @@ MiniPlayerUi::createLayout()
 
     row2->addWidget(userButton());
     row2->addWidget(prefixComboBox());
-    row2->addWidget(inputComboBox());
+
+    OverlayLayout *input = new OverlayLayout;
+    input->addWidget(inputComboBox());
+    input->addWidget(inputCountButton(), Qt::AlignRight);
+    row2->addLayout(input);
 
     // void setContentsMargins(int left, int top, int right, int bottom);
     rows->setContentsMargins(9, 9, 9, 0);
@@ -106,6 +111,12 @@ MiniPlayerUi::createLayout()
   positionButton()->hide();
   positionButton()->resize(0, 0);
 #endif // Q_OS_MAC
+
+  //setStyleSheet(styleSheet() +
+  //  SS_BEGIN(QToolButton)
+  //    SS_NO_BORDER
+  //  SS_END
+  //);
 }
 
 void

@@ -43,6 +43,14 @@ public:
 
   virtual QString contentType() const { return QString(); }
 
+  void waitForReady()
+  {
+    enum { max_redirect = 5 };
+    int retries = max_redirect;
+    do waitForReadyRead();
+    while (tryRedirect() && retries--);
+  }
+
 public slots:
   virtual void run() = 0; ///< \override as slot
   virtual void stop() = 0; ///< \override as slot
@@ -51,6 +59,7 @@ public slots:
   void setUrl(const QUrl &url) { request_.setUrl(url); }
   void setSize(const qint64 &size) { size_ = size; }
 
+protected:
   virtual void waitForReadyRead()
   {
     QEventLoop loop;
@@ -60,6 +69,10 @@ public slots:
     connect(this, SIGNAL(stopped()), &loop, SLOT(quit()));
     loop.exec();
   }
+
+  virtual bool isRedirected() const { return false; }
+  virtual bool redirect() { return false; }
+  bool tryRedirect() { return isRedirected() && redirect(); }
 };
 
 #endif // IREMOTESTREAM_H

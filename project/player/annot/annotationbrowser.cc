@@ -4,12 +4,11 @@
 #include "annotationbrowser.h"
 #include "annotationeditor.h"
 #include "uistyle.h"
-#include "stylesheet.h"
+#include "rc.h"
 #include "logger.h"
 #include "tr.h"
 #include "filteredtableview.h"
 #include "signalhub.h"
-#include "module/qtext/toolbutton.h"
 #include "module/qtext/datetime.h"
 #include "module/annotcloud/traits.h"
 #include "module/annotcloud/cmd.h"
@@ -90,21 +89,14 @@ AnnotationBrowser::createModel()
 void
 AnnotationBrowser::createLayout()
 {
-  // Set layout
+  UiStyle *ui = UiStyle::globalInstance();
 
-#define MAKE_TOGGLE(_button, _text, _tip, _slot) \
-  _button = new QtExt::ToolButton; { \
-    _button->setStyleSheet(SS_TOOLBUTTON_TEXT_CHECKABLE); \
-    _button->setToolButtonStyle(Qt::ToolButtonTextOnly); \
-    _button->setText(QString("| %1 |").arg(_text)); \
-    _button->setToolTip(_tip); \
-    _button->setCheckable(true); \
-    connect(_button, SIGNAL(clicked(bool)), _slot); \
-  }
-
-  MAKE_TOGGLE(meButton_, tr("Mine"), tr("Display my annotations only") + " [" K_CTRL "+1]", SLOT(setMe(bool)))
-  MAKE_TOGGLE(nowButton_, tr("Now"), tr("Display annotations at the time only") + " [" K_CTRL "+2]", SLOT(setNow(bool)))
-  MAKE_TOGGLE(subtitleButton_, TR(T_SUBTITLE), tr("Display subtitles only") + " [" K_CTRL "+3]", SLOT(setSubtitle(bool)))
+  meButton_ = ui->makeToolButton(
+        UiStyle::CheckHint, tr("Mine"), tr("Display my annotations only"), K_CTRL "+1", this, SLOT(setMe(bool)));
+  nowButton_ = ui->makeToolButton(
+        UiStyle::CheckHint, tr("Now"), tr("Display annotations at the time only"), K_CTRL "+2", this, SLOT(setNow(bool)));
+  subtitleButton_ = ui->makeToolButton(
+        UiStyle::CheckHint, TR(T_SUBTITLE), tr("Display subtitles only"), K_CTRL "+3", this, SLOT(setSubtitle(bool)));
 
   QVBoxLayout *rows = new QVBoxLayout; {
     QLayout *header = new QHBoxLayout;
@@ -115,8 +107,8 @@ AnnotationBrowser::createLayout()
     header->addWidget(nowButton_);
     header->addWidget(subtitleButton_);
 
-    rows->setContentsMargins(0, 0, 0, 0);
-    setContentsMargins(9, 9, 9, 9);
+    rows->setContentsMargins(9, 9, 9, 9);
+    setContentsMargins(0, 0, 0, 0);
 
   } setLayout(rows);
 
@@ -125,7 +117,6 @@ AnnotationBrowser::createLayout()
   tableView_->sortByColumn(HD_CreateTime, Qt::DescendingOrder);
   tableView_->setCurrentColumn(HD_Text);
 
-#undef MAKE_TOGGLE
 }
 
 void
@@ -369,7 +360,6 @@ AnnotationBrowser::rowWithId(qint64 id) const
   }
   return -1;
 }
-
 
 // - Formatter -
 

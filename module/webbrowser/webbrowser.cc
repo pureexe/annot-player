@@ -187,6 +187,47 @@ int
 WebBrowser::tabCount() const
 { return ui_->tabWidget->count(); }
 
+QUrl
+WebBrowser::tabUrl(int index) const
+{
+  QWidget *w = ui_->tabWidget->widget(index);
+  if (w) {
+    QWebView *view = qobject_cast<QWebView*>(w);
+    if (w)
+      return view->url();
+  }
+  return QUrl();
+}
+
+QList<QUrl>
+WebBrowser::tabUrls() const
+{
+  QList<QUrl> ret;
+  for (int i = 0; i < tabCount(); i++)
+    ret.append(tabUrl(i));
+  return ret;
+}
+
+
+QString
+WebBrowser::tabAddress(int index) const
+{
+  QUrl url = tabUrl(index);
+  if (url.isEmpty())
+    return QString();
+  else
+    return tidyUrl(decodeUrl(url));
+}
+
+QStringList
+WebBrowser::tabAddresses() const
+{
+  QStringList ret;
+  for (int i = 0; i < tabCount(); i++)
+    ret.append(tabAddress(i));
+  return ret;
+}
+
 // - Actions -
 
 void
@@ -248,6 +289,10 @@ WebBrowser::openSearch()
 void
 WebBrowser::closeTab(int tab)
 {
+  switch (tabCount()) {
+  case 0: return;
+  case 1: hide(); break;
+  }
   QWidget *widget = ui_->tabWidget->widget(tab);
   if (widget) {
     ui_->tabWidget->removeTab(tab);
@@ -260,6 +305,10 @@ WebBrowser::closeTab(int tab)
 void
 WebBrowser::closeTab()
 {
+  switch (tabCount()) {
+  case 0: return;
+  case 1: hide(); break;
+  }
   QWidget *widget = ui_->tabWidget->currentWidget();
   if (widget) {
     ui_->tabWidget->removeTab(ui_->tabWidget->currentIndex());

@@ -9,12 +9,14 @@ HEADERS += \
     $$PWD/bufferedfifostream.h \
     $$PWD/bufferedremotestream.h \
     $$PWD/bufferedstreampipe.h \
+    $$PWD/datainputstream.h \
+    $$PWD/dataoutputstream.h \
     $$PWD/fifostream.h \
     $$PWD/fileinputstream.h \
     $$PWD/fileoutputstream.h \
+    $$PWD/filestream.h \
+    $$PWD/inputoutputstream.h \
     $$PWD/inputstream.h \
-    $$PWD/datainputstream.h \
-    $$PWD/dataoutputstream.h \
     $$PWD/nulloutputstream.h \
     $$PWD/remotestream.h \
     $$PWD/securebufferedfifostream.h \
@@ -25,6 +27,7 @@ SOURCES += \
     $$PWD/bufferedfifostream.cc \
     $$PWD/bufferedremotestream.cc \
     $$PWD/bufferedstreampipe.cc \
+    $$PWD/datainputstream.cc \
     $$PWD/securebufferedfifostream.cc \
     $$PWD/inputstream.cc
 

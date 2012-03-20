@@ -177,7 +177,6 @@ namespace { // anonymous, callbacks
 
   namespace vout_callback_ { // Consisent with vlc_callback_t
 
-
     int doubleClickTimeout_ = // time between D and DUD, in msecs
 #ifdef Q_OS_WIN
      QtWin::getDoubleClickInterval() * 1.5
@@ -737,6 +736,7 @@ Player::closeMedia()
   impl_->setTrackNumber();
   impl_->setExternalSubtitles();
 
+  VlcHttpPlugin::closeSession();
   VlcHttpPlugin::setMediaTitle(QString());
   VlcHttpPlugin::setUrls(QStringList());
   VlcHttpPlugin::setDuration(0);
@@ -1004,6 +1004,55 @@ Player::setPosition(qreal pos)
   if (hasMedia())
     ::libvlc_media_player_set_position(impl_->player(), pos);
   DOUT("exit");
+}
+
+QString
+Player::aspectRatio() const
+{
+  Q_ASSERT(isValid());
+  char *p = ::libvlc_video_get_aspect_ratio(impl_->player());
+  QString ret;
+  if (p) {
+    ret = _qs(p);
+    ::libvlc_free(p);
+  }
+  return ret;
+}
+
+void
+Player::setAspectRatio(const char *ratio)
+{
+  Q_ASSERT(isValid());
+  ::libvlc_video_set_aspect_ratio(impl_->player(), ratio);
+  emit aspectRatioChanged(_qs(ratio));
+}
+void
+Player::setAspectRatio(const QString &ratio)
+{
+  Q_ASSERT(isValid());
+  if (ratio.isEmpty())
+    ::libvlc_video_set_aspect_ratio(impl_->player(), 0);
+  else
+    ::libvlc_video_set_aspect_ratio(impl_->player(), _cs(ratio));
+  emit aspectRatioChanged(ratio);
+}
+
+void
+Player::clearAspectRatio()
+{
+  Q_ASSERT(isValid());
+  ::libvlc_video_set_aspect_ratio(impl_->player(), 0);
+  emit aspectRatioChanged(QString());
+}
+
+void
+Player::setAspectRatio(int width, int height)
+{
+  if (width > 0 && height > 0)
+    setAspectRatio(QString("%1:%2").arg(QString::number(width)).arg(QString::number(height)));
+  else
+    clearAspectRatio();
+
 }
 
 void

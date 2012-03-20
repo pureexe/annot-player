@@ -4,12 +4,10 @@
 #include "blacklistview.h"
 #include "blacklistviewprivate.h"
 #include "annotationfilter.h"
+#include "defines.h"
 #include "uistyle.h"
 #include "tr.h"
-#include "defines.h"
-#include "stylesheet.h"
 #include "logger.h"
-#include "module/qtext/toolbutton.h"
 #include <QtGui>
 
 #ifdef Q_OS_MAC
@@ -79,85 +77,7 @@ BlacklistView::setActive(bool active)
 void
 BlacklistView::createTabs()
 {
-  // Widgets
-#define MAKE_TAB_BUTTON(_button, _text, _key, _slot) \
-  _button = new QtExt::ToolButton; { \
-    _button->setStyleSheet(SS_TOOLBUTTON_TEXT_TAB); \
-    _button->setToolButtonStyle(Qt::ToolButtonTextOnly); \
-    _button->setText(QString("- %1 -").arg(_text)); \
-    _button->setToolTip(_text + " [" _key "]"); \
-    _button->setCheckable(true); \
-    connect(_button, SIGNAL(clicked()), _slot); \
-  }
-
-#define MAKE_UNCHECKABLE_BUTTON(_button, _title, _tip, _slot) \
-    _button = new QtExt::ToolButton; { \
-      _button->setStyleSheet(SS_TOOLBUTTON_TEXT); \
-      _button->setToolButtonStyle(Qt::ToolButtonTextOnly); \
-      _button->setText(QString("[ %1 ]").arg(_title)); \
-      _button->setToolTip(_tip); \
-      connect(_button, SIGNAL(clicked()), _slot); \
-    }
-#define MAKE_CHECKABLE_BUTTON(_button, _title, _tip, _slot) \
-    _button = new QtExt::ToolButton; { \
-      _button->setStyleSheet(SS_TOOLBUTTON_TEXT_CHECKABLE); \
-      _button->setToolButtonStyle(Qt::ToolButtonTextOnly); \
-      _button->setText(QString("| %1 |").arg(_title)); \
-      _button->setToolTip(_tip); \
-      _button->setCheckable(true); \
-      connect(_button, SIGNAL(clicked(bool)), _slot); \
-    }
-
-  // User tab
-
-  /*
-  // - verbatimButton_
-  MAKE_UNCHECKABLE_BUTTON(verbatimButton_, tr("verbatim"), TR(T_VERBATIM), SLOT(setVerbatim()))
-
-  // - subtitleButton_
-  MAKE_UNCHECKABLE_BUTTON(subtitleButton_, tr("subtitle"), TR(T_SUBTITLE), SLOT(setSubtitle()))
-
-  // - moveStyleComboBox_
-  moveStyleComboBox_ = new QtExt::ComboBox; {
-    UiStyle::globalInstance()->setComboBoxStyle(moveStyleComboBox_);
-    moveStyleComboBox_->setEditable(true);
-    moveStyleComboBox_->setMaximumWidth(MOVESTYLECOMBOBOX_MAXWIDTH);
-    moveStyleComboBox_->setToolTip(tr("Style tag"));
-
-    // Must be consistent with MoveStyleIndex
-    moveStyleComboBox_->addItem(tr("fly"));
-    moveStyleComboBox_->addItem(tr("top"));
-    moveStyleComboBox_->addItem(tr("bottom"));
-  }
-  connect(moveStyleComboBox_, SIGNAL(activated(int)), SLOT(setMoveStyle(int)));
-
-  // - Code tab
-  QGroupBox *codeTab = new QGroupBox; {
-    QVBoxLayout *rows = new QVBoxLayout;
-    QHBoxLayout *row0 = new QHBoxLayout,
-                *row1 = new QHBoxLayout;
-    rows->addLayout(row0);
-    rows->addLayout(row1);
-    codeTab->setLayout(rows);
-
-    row0->addWidget(verbatimButton_);
-    row0->addWidget(subtitleButton_);
-    row0->addStretch();
-
-    row1->addWidget(moveStyleComboBox_);
-    row1->addStretch();
-
-    int patch = 0;
-    if (!UiStyle::isAeroAvailable())
-      patch = 4;
-
-    // void setContentsMargins(int left, int top, int right, int bottom);
-    rows->setContentsMargins(patch, patch, patch, patch);
-    row0->setContentsMargins(0, 0, 0, 0);
-    row1->setContentsMargins(0, 0, 0, 0);
-    codeTab->setContentsMargins(0, 0, 0, 0);
-  }
-  */
+  UiStyle *ui = UiStyle::globalInstance();
 
   // Tab layout
 
@@ -174,26 +94,18 @@ BlacklistView::createTabs()
 
   // Tabs
 
-  MAKE_TAB_BUTTON(textTabButton_, TR(T_TEXT), K_CTRL "+1", SLOT(setTabToText()))
-  MAKE_TAB_BUTTON(userTabButton_, TR(T_USER), K_CTRL "+2", SLOT(setTabToUser()))
-  MAKE_TAB_BUTTON(annotationTabButton_, TR(T_ANNOTATION), K_CTRL "+3", SLOT(setTabToAnnotation()))
+  textTabButton_ = ui->makeToolButton(UiStyle::TabHint, TR(T_TEXT), "", K_CTRL "+1", this, SLOT(setTabToText()));
+  userTabButton_ = ui->makeToolButton(UiStyle::TabHint, TR(T_USER), "", K_CTRL "+2", this, SLOT(setTabToUser()));
+  annotationTabButton_ = ui->makeToolButton(UiStyle::TabHint, TR(T_ANNOTATION), "", K_CTRL "+3", this, SLOT(setTabToAnnotation()));
 
   // Footer
 
-  MAKE_UNCHECKABLE_BUTTON(clearButton_, TR(T_CLEAR), TR(T_CLEAR), SLOT(clearCurrentText()));
+  addButton_ = ui->makeToolButton(UiStyle::PushHint | UiStyle::HighlightHint, TR(T_ADD), this, SLOT(add()));
+  clearButton_ = ui->makeToolButton(UiStyle::PushHint, TR(T_CLEAR), this, SLOT(clearCurrentText()));
+  removeButton_ = ui->makeToolButton(UiStyle::PushHint, TR(T_REMOVE), this, SLOT(remove()));
 
-  MAKE_UNCHECKABLE_BUTTON(addButton_, TR(T_ADD), TR(T_ADD), SLOT(add()));
-  MAKE_UNCHECKABLE_BUTTON(removeButton_, TR(T_REMOVE), TR(T_REMOVE), SLOT(remove()));
-
-  MAKE_CHECKABLE_BUTTON(enableButton_, TR(T_ENABLE), tr("Enable blacklist"), SLOT(setFilterEnabled(bool))) {
-    enableButton_->setEnabled(true);
-  }
-
-#undef MAKE_TAB_BUTTON
-#undef MAKE_UNCHECKABLE_BUTTON
-#undef MAKE_CHECKABLE_BUTTON
-
-  addButton_->setStyleSheet(SS_TOOLBUTTON_TEXT_HIGHLIGHT);
+  enableButton_ = ui->makeToolButton(
+        UiStyle::CheckHint, TR(T_ENABLE), tr("Enable blacklist"), this, SLOT(setFilterEnabled(bool)));
 }
 
 void

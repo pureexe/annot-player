@@ -48,10 +48,17 @@ ProxyBrowser::ProxyBrowser(QWidget *parent)
   setWindowOpacity(1.0); // window is opaque
 
   login();
+}
 
-  openUrls(QStringList()
-    << "http://ch.nicovideo.jp/menu/anime/"
-  );
+QStringList
+ProxyBrowser::startupUrls()
+{
+  QStringList ret = Settings::globalInstance()->browserUrls();
+  if (ret.isEmpty()) {
+    ret.append("http://ch.nicovideo.jp/menu/anime/");
+    ret.append("http://live.nicovideo.jp/");
+  }
+  return ret;
 }
 
 void
@@ -63,6 +70,33 @@ ProxyBrowser::login()
   if (!userName.isEmpty() && !password.isEmpty()) {
     log(tr("logging in nicovideo.jp as %1 ...").arg(userName));
     nico::login(userName, password, cookieJar());
+  }
+}
+
+// - Events -
+
+void
+ProxyBrowser::closeEvent(QCloseEvent *event)
+{
+  if (tabCount() > 1) {
+    QStringList urls;
+    foreach (QString url, tabAddresses())
+      if (!url.isEmpty())
+        urls.append(url);
+    Settings::globalInstance()->setBrowserUrls(urls);
+  } else
+    Settings::globalInstance()->clearBrowserUrls();
+  Base::closeEvent(event);
+}
+
+void
+ProxyBrowser::setVisible(bool visible)
+{
+  Base::setVisible(visible);
+
+  if (visible && tabCount() <= 0) {
+    openUrls(startupUrls());
+    Settings::globalInstance()->clearBrowserUrls();
   }
 }
 

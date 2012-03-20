@@ -4,9 +4,7 @@
 #include "countdowndialog.h"
 #include "uistyle.h"
 #include "tr.h"
-#include "stylesheet.h"
 #include "logger.h"
-#include "module/qtext/toolbutton.h"
 #include <QtGui>
 
 using namespace Logger;
@@ -40,27 +38,25 @@ CountdownDialog::CountdownDialog(QWidget *parent)
   connect(timer_, SIGNAL(timeout()), SLOT(tick()));
 
   createLayout();
+
+  // Shortcuts
+  QShortcut *cancelShortcut = new QShortcut(QKeySequence("Esc"), this);
+  connect(cancelShortcut, SIGNAL(activated()), SLOT(cancel()));
+  QShortcut *closeShortcut = new QShortcut(QKeySequence::Close, this);
+  connect(closeShortcut, SIGNAL(activated()), SLOT(cancel()));
 }
 
 void
 CountdownDialog::createLayout()
 {
-#define MAKE_BUTTON(_button, _title, _tip, _slot) \
-  QToolButton *_button = new QtExt::ToolButton; { \
-    _button->setStyleSheet(SS_TOOLBUTTON_TEXT); \
-    _button->setToolButtonStyle(Qt::ToolButtonTextOnly); \
-    _button->setText(QString("[ %1 ]").arg(_title)); \
-    _button->setToolTip(_tip); \
-  } connect(_button, SIGNAL(clicked()), _slot);
+  UiStyle *ui = UiStyle::globalInstance();
 
-  MAKE_BUTTON(okButton, TR(T_OK), TR(T_OK), SLOT(run()))
-  MAKE_BUTTON(cancelButton, TR(T_CANCEL), TR(T_CANCEL), SLOT(cancel()))
-  okButton->setStyleSheet(SS_TOOLBUTTON_TEXT_HIGHLIGHT);
+  QToolButton *okButton = ui->makeToolButton(
+        UiStyle::PushHint | UiStyle::HighlightHint, TR(T_OK), this, SLOT(run()));
+  QToolButton *cancelButton = ui->makeToolButton(
+        UiStyle::PushHint, TR(T_CANCEL), this, SLOT(cancel()));
 
-  messageLabel_ = new QLabel; {
-    messageLabel_->setStyleSheet(SS_LABEL);
-    messageLabel_->setToolTip(TR(T_MESSAGE));
-  }
+  messageLabel_ = ui->makeLabel(0, "", TR(T_MESSAGE));
 
   QVBoxLayout *rows = new QVBoxLayout; {
     QLayout *buttons = new QHBoxLayout;
@@ -75,14 +71,7 @@ CountdownDialog::createLayout()
     setContentsMargins(0, 0, 0, 0);
   } setLayout(rows);
 
-#undef MAKE_BUTTON
-
-  // Shortcuts
-  QShortcut *cancelShortcut = new QShortcut(QKeySequence("Esc"), this);
-  connect(cancelShortcut, SIGNAL(activated()), SLOT(cancel()));
-  QShortcut *closeShortcut = new QShortcut(QKeySequence::Close, this);
-  connect(closeShortcut, SIGNAL(activated()), SLOT(cancel()));
-
+  // Focus
   cancelButton->setFocus();
 }
 

@@ -4,7 +4,12 @@
 #include "uistyle.h"
 #include "defines.h"
 #include "stylesheet.h"
+#include "textedit.h"
+#include "comboedit.h"
+#include "lineedit.h"
 #include "logger.h"
+#include "module/qtext/toolbutton.h"
+#include "module/qtext/combobox.h"
 #ifdef USE_WIN_DWM
   #include "win/dwm/dwm.h"
 #endif // USE_WIN_DWM
@@ -15,12 +20,10 @@
 
 using namespace Logger;
 
-//#define USE_THEME_MENU
-
 // - Constructions -
 
 UiStyle::UiStyle(QObject *parent)
-  : Base(parent), theme_(DefaultTheme)
+  : Base(parent), menu_(false), theme_(DefaultTheme)
 {
 #ifdef Q_WS_WIN
   aero_ = true;
@@ -76,11 +79,23 @@ UiStyle::setAeroEnabled(bool t)
   if (aero_ != t) {
     aero_ = t;
     if (isAeroEnabled())
-      warn(tr("Aero is enabled, please restart the program"));
+      notify(tr("Aero is enabled, please restart the program"));
     else if (t)
       warn(tr("failed to enable Aero"));
     else
-      warn(tr("Aero is disabled, please restart the program"));
+      notify(tr("Aero is disabled, please restart the program"));
+  }
+}
+
+void
+UiStyle::setMenuEnabled(bool t)
+{
+  if (menu_ != t) {
+    menu_ = t;
+    if (t)
+      notify(tr("Menu theme is enabled, please restart the program"));
+    else
+      notify(tr("Menu theme is disabled, please restart the program"));
   }
 }
 
@@ -154,9 +169,8 @@ UiStyle::setWindowBackground(QWidget *w, bool persistent)
 void
 UiStyle::setMenuBackground(QMenu *m, bool persistent)
 {
-#ifdef USE_THEME_MENU
   Q_ASSERT(m);
-  if (!m)
+  if (!m || !menu_)
     return;
 
 //#ifdef Q_WS_MAC
@@ -180,10 +194,6 @@ UiStyle::setMenuBackground(QMenu *m, bool persistent)
     if (!menus_.contains(m))
       menus_.append(m);
   }
-#else
-  Q_UNUSED(m);
-  Q_UNUSED(persistent);
-#endif // USE_THEME_MENU
 }
 
 void
@@ -193,11 +203,9 @@ UiStyle::invalidateBackground()
     foreach (QWidget *w, windows_)
       setWindowBackground(w, false); // persistent = false
 
-#ifdef USE_THEME_MENU
-  if (!menus_.isEmpty())
+  if (menu_ && !menus_.isEmpty())
     foreach (QMenu *m, menus_)
       setMenuBackground(m, false); // persistent = false
-#endif // USE_THEME_MENU
 }
 
 #ifdef USE_WIN_DWM
@@ -312,7 +320,7 @@ void
 UiStyle::setContextMenuStyle(QMenu *w, bool persistent)
 {
   Q_ASSERT(w);
-  if (!w)
+  if (!w || !menu_)
     return;
 
 #ifdef USE_WIN_DWM
@@ -350,41 +358,134 @@ UiStyle::setToolButtonStyle(QToolButton *button)
   if (!button)
     return;
 
-//#ifdef Q_WS_WIN
+#ifdef Q_WS_WIN
   QGraphicsBlurEffect *blur = new QGraphicsBlurEffect(this);
   blur->setBlurHints(QGraphicsBlurEffect::PerformanceHint);
   blur->setBlurRadius(G_TOOLBUTTON_BLUR_RADIUS);
   button->setGraphicsEffect(blur);
-//#endif // Q_WS_WIN
+#endif // Q_WS_WIN
 }
 
-void
-UiStyle::setComboBoxStyle(QComboBox *w)
+// - Maker
+
+QToolButton*
+UiStyle::makeToolButton(ulong hints, const QString &title, const QString &tip, const QString &key,
+                        QObject *receiver, const char *slot, Qt::ConnectionType type)
 {
-  Q_ASSERT(w);
-  if (!w)
-    return;
+  QToolButton *ret = new QtExt::ToolButton;
+  ret->setToolButtonStyle(Qt::ToolButtonTextOnly);
 
-  /*
-#ifdef USE_WIN_DWM
-  DWM_ENABLE_ONETIME_AERO_WIDGET(w);
-  if (w->view())
-    DWM_ENABLE_ONETIME_AERO_WIDGET(w->view());
-#endif
-  */
+  ret->setStyleSheet(
+        hints & InvertHint ? SS_TOOLBUTTON_TEXT_INVERT :
+        hints & HighlightHint ? SS_TOOLBUTTON_TEXT_HIGHLIGHT :
+        hints & PushHint ? SS_TOOLBUTTON_TEXT_NORMAL :
+        hints & CheckHint ? SS_TOOLBUTTON_TEXT_CHECKABLE :
+        hints & TabHint ? SS_TOOLBUTTON_TEXT_TAB :
+        hints & UrlHint ? SS_TOOLBUTTON_TEXT_URL :
+        SS_TOOLBUTTON_TEXT
+  );
 
-  w->setStyleSheet(SS_COMBOBOX);
+  if (!title.isEmpty())
+    ret->setText(
+        hints & PushHint ? QString("[ %1 ]").arg(title) :
+        hints & CheckHint ? QString("| %1 |").arg(title) :
+        hints & TabHint ? QString("- %1 -").arg(title) :
+        hints & BuddyHint ? title + ":" :
+        hints & MenuHint ? title + " " :
+        title
+    );
 
-  /*
-#ifdef Q_WS_WIN
-  if (w->view()) {
-    QGraphicsColorizeEffect *effect = new QGraphicsColorizeEffect(w);
-    effect->setColor(G_CONTEXTMENU_COLOR);
-    effect->setStrength(G_CONTEXTMENU_COLOR_STRENGTH);
-    w->view()->setGraphicsEffect(effect);
+  QString t = tip.isEmpty() ? title : tip;
+  if (!key.isEmpty())
+    t += " [" + key + "]";
+  ret->setToolTip(t);
+
+  if (hints & (CheckHint | TabHint | UrlHint))
+    ret->setCheckable(true);
+  if (hints & UrlHint)
+    ret->setChecked(true);
+
+  if (receiver && slot) {
+    if (hints & (CheckHint | TabHint | UrlHint))
+      connect(ret, SIGNAL(clicked(bool)), receiver, slot, type);
+    else
+      connect(ret, SIGNAL(clicked()), receiver, slot, type);
+  } else if (hints & MenuHint)
+    connect(ret, SIGNAL(clicked()), ret, SLOT(showMenu()));
+
+  return ret;
+}
+
+QLabel*
+UiStyle::makeLabel(ulong hints, const QString &title, const QString &tip, QWidget *buddy)
+{
+  QLabel *ret = new QLabel;
+
+  ret->setStyleSheet(hints & HighlightHint ? SS_LABEL_HIGHLIGHT :
+                     hints & UrlHint ? SS_LABEL_URL :
+                     SS_LABEL);
+  ret->setText(hints & BuddyHint ? title + ":" : title);
+  ret->setToolTip(tip.isEmpty() ? title : tip);
+
+  if (buddy)
+    ret->setBuddy(buddy);
+
+  return ret;
+}
+
+QRadioButton*
+UiStyle::makeRadioButton(ulong hints, const QString &title, const QString &tip)
+{
+  Q_UNUSED(hints);
+  QRadioButton *ret = new QRadioButton;
+
+  ret->setStyleSheet(SS_RADIOBUTTON_TEXT);
+  ret->setText(title);
+  ret->setToolTip(tip.isEmpty() ? title : tip);
+
+  return ret;
+}
+
+QTextEdit*
+UiStyle::makeTextEdit(ulong hints, const QString &tip)
+{
+  QTextEdit *ret = new TextEdit;
+  ret->setToolTip(tip);
+  ret->setReadOnly(hints & ReadOnlyHint);
+
+  return ret;
+}
+
+QComboBox*
+UiStyle::makeComboBox(ulong hints, const QString &text, const QString &tip, const QStringList &items)
+{
+  QComboBox *ret;
+  if (hints | EditHint)
+    ret = new ComboEdit(items);
+  else {
+    ret = new QtExt::ComboBox;
+    ret->setStyleSheet(SS_COMBOBOX);
+    ret->addItems(items);
   }
-#endif // Q_WS_WIN
-  */
+
+  if (!text.isEmpty())
+    ret->setEditText(text);
+  ret->setToolTip(tip);
+  ret->setEditable(!(hints & ReadOnlyHint));
+
+  return ret;
+}
+
+QLineEdit*
+UiStyle::makeLineEdit(ulong hints, const QString &text, const QString &tip)
+{
+  QLineEdit *ret = new LineEdit;
+  ret->setText(text);
+  ret->setToolTip(tip);
+  ret->setReadOnly(hints & ReadOnlyHint);
+  if (hints & PasswordHint)
+    ret->setEchoMode(QLineEdit::Password);
+  return ret;
 }
 
 // EOF

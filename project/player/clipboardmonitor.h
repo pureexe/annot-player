@@ -26,6 +26,7 @@ signals:
 
 public slots:
   void setEnabled(bool t) { enabled_ = t; }
+  void checkClipboard() { invalidateClipboard(); }
 
 protected slots:
   void invalidateClipboard();

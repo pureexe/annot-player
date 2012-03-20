@@ -2,12 +2,19 @@ ChangeLog
 Annot Project
 6/18/2011
 
+3/20/2012	annot.player	0.1.3.3
+        * Fixed a severe bug which could crash the app while downloading.
+        * Option to disable context menu rendering.
+        * Option to open multiple player windows on Windows in context menu.
+        * Able to change video aspect ratio in context menu.
+          Specified aspect ratio will be saved for the movie.
+
 3/17/2012	annot.player	0.1.3.2
         * When playing online video from AcFun/Bilibili,
           parted videos are now merged on the fly.
           Knowing issues with current implementation:
           * Seeking over downloaded frames is not allowed.
-          * High CPU consumption in Macbook Air.
+          * High CPU usage on Macbook Air.
         * Added network proxy.
         * Added proxy browser for nicovideo.
           Able to play nico video from outside of Japan.

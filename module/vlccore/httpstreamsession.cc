@@ -7,6 +7,7 @@
 #include "module/mediacodec/flvmerge.h"
 #include "module/mediacodec/flvcodec.h"
 #include "module/qtext/filesystem.h"
+#include "module/qtext/algorithm.h"
 #include <QDesktopServices>
 #include <QApplication>
 #include <QtCore>
@@ -70,8 +71,8 @@ HttpStreamSession::~HttpStreamSession()
   if (merger_)
     delete merger_;
 
-  foreach (QObject *obj, deleteLater_)
-    delete obj;
+  //foreach (QObject *obj, deleteLater_)
+  //  delete obj;
 }
 
 // - Properties -
@@ -135,8 +136,11 @@ HttpStreamSession::invalidateFileName()
 void
 HttpStreamSession::save()
 {
-  if (fileName_.isEmpty() || !fifo_ || !fifo_->availableSize())
+  DOUT("enter");
+  if (fileName_.isEmpty() || !fifo_ || !fifo_->availableSize()) {
+    DOUT("exit: empty fileName or fifo");
     return;
+  }
 
   QFile::remove(fileName_);
   QDir().mkpath(QFileInfo(fileName_).absolutePath());
@@ -145,12 +149,18 @@ HttpStreamSession::save()
   if (!ok || !FlvCodec::isFlvFile(fileName_)) {
     QFile::remove(fileName_);
     emit error(tr("download failed") + ": " + fileName_);
+    DOUT("exit: fifo failed to write to file");
     return;
   }
+
+  ok = FlvCodec::updateFlvFileMeta(fileName_);
+  if (!ok)
+    DOUT("warning: failed to update FLV meta:" << fileName_);
 
   emit message(tr("file saved") + ": " + fileName_);
   QApplication::beep();
   emit fileSaved(fileName_);
+  DOUT("exit");
 }
 
 void
@@ -159,8 +169,8 @@ HttpStreamSession::finish()
   DOUT("enter");
   qint64 size = 0;
   if (fifo_) {
-    size = fifo_->availableSize();
-    fifo_->setSize(size);
+    fifo_->finish();
+    size = fifo_->size();
   }
 
   if (isRunning()) {
@@ -191,8 +201,7 @@ HttpStreamSession::stop()
     if (r)
       r->stop();
   }
-
-  stoppedCond_.wakeAll();
+  quit();
   DOUT("exit");
 }
 
@@ -247,7 +256,9 @@ HttpStreamSession::run()
   if (mediaTitle().isEmpty())
     setMediaTitle(QDateTime::currentDateTime().toString(Qt::ISODate));
 
-  foreach (const QUrl &url, urls_) {
+  bool ok = true;
+
+  foreach (const QUrl &url, QtExt::revertList(urls_)) {
     RemoteStream *in = new BufferedRemoteStream;
     //QtExt::ProgressWithId p((long)in);
     //connect(in, SIGNAL(progress(qint64,qint64)), &p, SLOT(emit_progress(qint64,qint64)));
@@ -257,13 +268,18 @@ HttpStreamSession::run()
     if (cookieJar())
       in->networkAccessManager()->setCookieJar(cookieJar());
     in->run();
-    ins_.append(in);
-    in->waitForReadyRead();
+    ins_.prepend(in);
+    in->waitForReady();
+
+    QString type = in->contentType();
+    ok = isMultiMediaMimeType(type);
+    if (!ok) {
+      DOUT("WARNING: invalid contentType =" << in->contentType() << ", url =" << url.toString());
+      ins_.removeFirst();
+    }
   }
-  if (cookieJar()) {
+  if (cookieJar())
     cookieJar()->setParent(0);
-    deleteLater_.append(cookieJar());
-  }
 
   //if (reply_->error() != QNetworkReply::NoError) {
   //  setState(Error);
@@ -275,14 +291,15 @@ HttpStreamSession::run()
   //  return;
   //}
 
-  bool ok = isMultiMediaMimeType(contentType());
-  if (!ok) {
+  if (ins_.isEmpty()) {
+    DOUT("access forbidden");
     setState(Error);
     emit error(tr("access forbidden") + ": " + urls_.first().toString());
 
     ready_ = true;
     readyCond_.wakeAll();
     stoppedCond_.wakeAll();
+    DOUT("exit: error caused by invalid content type");
     return;
   }
 
@@ -332,7 +349,7 @@ HttpStreamSession::run()
     ins_.reset();
     ok = merger->merge();
     if (ok)
-      merger->leadOut();
+      merger->finish();
     else {
       setState(Error);
       emit error(tr("failed to merge FLV streams"));
@@ -342,11 +359,12 @@ HttpStreamSession::run()
   if (progressTask_)
     progressTask_->stop();
 
-  if (isRunning())
+  if (isRunning()) {
     finish();
-  else
-    emit tr("failed to process remote media");
 
+    DOUT("exec after finished");
+  } else
+    emit tr("failed to process remote media");
 
   DOUT("exit");
 }

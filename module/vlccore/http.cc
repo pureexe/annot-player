@@ -23,37 +23,11 @@ extern "C" {
 // - Construction -
 
 VlcHttpSession *VlcHttpPlugin::session_ = 0;
-bool VlcHttpPlugin::sessionRetained_ = false;
 QString VlcHttpPlugin::url_;
 QStringList VlcHttpPlugin::urls_;
 qint64 VlcHttpPlugin::duration_ = 0;
 QNetworkCookieJar *VlcHttpPlugin::cookieJar_ = 0;
 QString VlcHttpPlugin::mediaTitle_;
-
-VlcHttpPlugin::VlcHttpPlugin(QObject *parent)
-  : Base(parent)
-{
-  closeSessionTimer_ = new QTimer(this);
-  closeSessionTimer_->setSingleShot(true);
-  closeSessionTimer_->setInterval(1000); // less than 1 second
-  connect(closeSessionTimer_, SIGNAL(timeout()), SLOT(closeSessionNow()));
-
-  // FIXME: This timer is not working since VlcHttpPlugin is not started within QThread
-  connect(this, SIGNAL(closeSessionRequested()), SLOT(startCloseSessionTimer()), Qt::QueuedConnection);
-}
-
-VlcHttpPlugin::~VlcHttpPlugin()
-{
-  if (session_) {
-    closeSessionTimer_->stop();
-    sessionRetained_ = false;
-    closeSession();
-  }
-}
-
-void
-VlcHttpPlugin::startCloseSessionTimer()
-{ closeSessionTimer_->start(); }
 
 // - Static -
 
@@ -155,6 +129,7 @@ VlcHttpPlugin::open(vlc_object_t *p_this)
   DOUT("url =" << url);
   if (url.contains(".youtube.com/")) {
     // FIXME: youtube video not saved
+    closeSession();
     DOUT("exit: youtube URL:" << url);
     return VLC_EGENERIC;
   }
@@ -163,33 +138,25 @@ VlcHttpPlugin::open(vlc_object_t *p_this)
   ::access_InitFields(p_access);
   ACCESS_SET_CALLBACKS(read, NULL, control, seek); // read, block, control, seek
 
-  if (session_) {
-    if (url_ == url) {
-      DOUT("retain previous session");
-      sessionRetained_ = true;
-      session_->seek(0);
-    } else {
-      DOUT("close previous session");
-      sessionRetained_ = false;
-      closeSession();
-    }
-  }
-
-  if (!session_) {
+  bool reuseLastSession = session_ && url_ == url;
+  DOUT("reuseLastSession =" << reuseLastSession);
+  if (reuseLastSession)
+    session_->reset();
+  else {
+    closeSession();
     url_ = url;
     openSession();
   }
+
   Q_ASSERT(session_);
 
-  p_access->info.i_size = session_->size();
-  p_access->info.i_pos = 0;
-  p_access->info.b_eof = false;
-
-  bool ok = session_->isRunning();
-  if (!ok) {
-    sessionRetained_ = false;
+  bool ok = reuseLastSession || session_->isRunning();
+  if (ok) {
+    p_access->info.i_size = session_->size();
+    p_access->info.i_pos = 0;
+    p_access->info.b_eof = false;
+  } else
     closeSession();
-  }
   DOUT("exit: ret =" << ok);
   return ok ? VLC_SUCCESS : VLC_EGENERIC;
 }
@@ -200,11 +167,6 @@ VlcHttpPlugin::close(vlc_object_t *p_this)
   DOUT("enter");
   Q_UNUSED(p_this);
   //closeSession();
-  if (session_) {
-    DOUT("release session, close later");
-    sessionRetained_ = false;
-    closeSessionLater();
-  }
   DOUT("exit");
 }
 
@@ -215,7 +177,7 @@ VlcHttpPlugin::openSession()
 {
   DOUT("enter: session_ =" << session_);
   Q_ASSERT(!session_);
-  sessionRetained_ = true;
+
   if (!urls_.isEmpty()) {
     QList<QUrl> urls;
     foreach (QString u, urls_)
@@ -236,29 +198,24 @@ VlcHttpPlugin::openSession()
 
   session_->start();
   session_->waitForReady();
+
   DOUT("exit");
 }
 
 void
 VlcHttpPlugin::closeSession()
 {
-  if (sessionRetained_)
+  if (!session_)
     return;
-  static bool closing = false;
-  if (closing)
-    return;
+
   DOUT("enter");
-  closing = true;
-  if (session_) {
-    if (session_->isRunning()) {
-      session_->stop();
-      session_->waitForStopped();
-      session_->wait(5000); // wait at most 5 seconds
-    }
-    delete session_;
-    session_ = 0;
+  if (session_->isRunning()) {
+    session_->stop();
+    session_->waitForStopped();
+    session_->wait(5000); // wait at most 5 seconds
   }
-  closing = false;
+  session_->deleteLater();
+  session_ = 0;
   DOUT("exit");
 }
 
@@ -272,15 +229,18 @@ VlcHttpPlugin::read(access_t *p_access, uint8_t *p_buffer, size_t i_len)
   //DOUT("enter: i_len =" << i_len);
   //Q_ASSERT(p_access && p_access->p_sys);
   //VlcHttpSession *session = (VlcHttpSession *)p_access->p_sys;
-
+  Q_ASSERT(p_access);
   Q_ASSERT(session_);
+
   qint64 count = session_->read((char *)p_buffer, i_len);
 
   p_access->info.i_pos = session_->pos();
   p_access->info.b_eof = count != (qint64)i_len;
 
-  if (p_access->info.b_eof)
-    DOUT("read eof");
+  if (p_access->info.b_eof) {
+    DOUT("read eof, sesion size =" << session_->size() << ", prevous size =" << p_access->info.i_size);
+    p_access->info.i_size = session_->size();
+  }
 
   //DOUT("exit: ret =" << count);
   return count;
@@ -305,11 +265,8 @@ VlcHttpPlugin::seek(access_t *p_access, uint64_t i_pos)
   //}
 
   if (i_pos >= (quint64)session_->availableSize()) {
-    DOUT("i_pos =" << i_pos << ", availableSize =" << session_->availableSize());
-    //qint64 pos = qMin(session_->pos(), session_->availableSize() - 1024 * 1024);
-    //i_pos = pos > 0 ? (quint64)pos : 0;
-    //DOUT("new pos =" << i_pos);
-    DOUT("exit: ret = egeneric, seek out of available size");
+    //DOUT("i_pos =" << i_pos << ", availableSize =" << session_->availableSize());
+    //DOUT("exit: ret = egeneric, seek out of available size");
     return VLC_EGENERIC;
   }
 

@@ -24,6 +24,8 @@ public:
   explicit FileOutputStream(const QString &fileName, QObject *parent = 0)
     : Base(parent) { file_ = new QFile(fileName, this); }
 
+  bool isOpen() const { return file_ && file_->isOpen(); }
+
 public:
   virtual qint64 availableSize() const { return file_->size(); } ///< \override
 

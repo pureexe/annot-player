@@ -4,13 +4,12 @@
 #include "tokenview.h"
 #include "addaliasdialog.h"
 #include "tr.h"
-#include "stylesheet.h"
+#include "rc.h"
 #include "uistyle.h"
 #include "defines.h"
 #include "logger.h"
 #include "filteredtableview.h"
 #include "module/serveragent/serveragent.h"
-#include "module/qtext/toolbutton.h"
 #include <QtGui>
 
 using namespace AnnotCloud;
@@ -52,18 +51,30 @@ TokenView::TokenView(ServerAgent *server, QWidget *parent)
   aliasDialog_ = new AddAliasDialog(this);
   connect(aliasDialog_, SIGNAL(aliasAdded(QString,int,qint32)), SLOT(submitAlias(QString,int,qint32)));
 
+  createLayout();
+
+  // Create context menu
+  createActions();
+
+  // Shortcuts
+  QShortcut *cancelShortcut = new QShortcut(QKeySequence("Esc"), this);
+  connect(cancelShortcut, SIGNAL(activated()), SLOT(hide()));
+  QShortcut *closeShortcut = new QShortcut(QKeySequence::Close, this);
+  connect(closeShortcut, SIGNAL(activated()), SLOT(hide()));
+
+  // Set initial states
+
+  tableView_->sortByColumn(HD_Type, Qt::AscendingOrder);
+  tableView_->setCurrentColumn(HD_Text);
+}
+
+void
+TokenView::createLayout()
+{
+  UiStyle *ui = UiStyle::globalInstance();
 #define MAKE_TOKEN_LABEL(_id, _styleid) \
-  _id##Label_ = new QLabel; { \
-    _id##Label_->setStyleSheet(SS_LABEL_HIGHLIGHT); \
-    _id##Label_->setText(TR(T_UNKNOWN)); \
-    _id##Label_->setToolTip(TR(T_TOOLTIP_##_styleid)); \
-  } \
-  QLabel *_id##Buddy = new QLabel; { \
-    _id##Buddy->setStyleSheet(SS_LABEL); \
-    _id##Buddy->setBuddy(_id##Label_); \
-    _id##Buddy->setText(TR(T_LABEL_##_styleid)); \
-    _id##Buddy->setToolTip(TR(T_TOOLTIP_##_styleid)); \
-  }
+  _id##Label_ = ui->makeLabel(UiStyle::HighlightHint, TR(T_UNKNOWN), TR(T_TOOLTIP_##_styleid)); \
+  QLabel *_id##Buddy = ui->makeLabel(UiStyle::BuddyHint, TR(T_LABEL_##_styleid), TR(T_TOOLTIP_##_styleid), _id##Label_);
 
   //MAKE_TOKEN_LABEL(source, SOURCE)
   MAKE_TOKEN_LABEL(createDate, CREATEDATE)
@@ -73,41 +84,17 @@ TokenView::TokenView(ServerAgent *server, QWidget *parent)
   MAKE_TOKEN_LABEL(annotCount, ANNOTCOUNT)
 #undef MAKE_TOKEN_LABEL
 
-#define MAKE_BUTTON(_button, _text, _tip, _slot) \
-  _button = new QtExt::ToolButton; { \
-    _button->setText(QString("[ %1 ]").arg(_text)); \
-    _button->setToolTip(_tip); \
-    _button->setStyleSheet(SS_TOOLBUTTON_TEXT); \
-    _button->setToolButtonStyle(Qt::ToolButtonTextOnly); \
-  } \
-  connect(_button, SIGNAL(clicked()), _slot);
+  QToolButton *blessButton = ui->makeToolButton(
+        UiStyle::PushHint, TR(T_BLESS), TR(T_TOOLTIP_BLESSTHISTOKEN), this, SLOT(bless()));
+  QToolButton *curseButton = ui->makeToolButton(
+        UiStyle::PushHint, TR(T_CURSE), TR(T_TOOLTIP_CURSETHISTOKEN), this, SLOT(curse()));
+  QToolButton *addAliasButton = ui->makeToolButton(
+        UiStyle::PushHint | UiStyle::HighlightHint, TR(T_ADD), TR(T_TOOLTIP_ADDALIAS), this, SLOT(addAlias()));
 
-  QToolButton *MAKE_BUTTON(blessButton, TR(T_BLESS), TR(T_TOOLTIP_BLESSTHISTOKEN), SLOT(bless()))
-  QToolButton *MAKE_BUTTON(curseButton, TR(T_CURSE), TR(T_TOOLTIP_CURSETHISTOKEN), SLOT(curse()))
-  QToolButton *MAKE_BUTTON(addAliasButton, TR(T_ADD), TR(T_TOOLTIP_CURSETHISTOKEN), SLOT(addAlias()))
-#undef MAKE_BUTTON
-  addAliasButton->setStyleSheet(SS_TOOLBUTTON_TEXT_HIGHLIGHT);
+  sourceButton_ = ui->makeToolButton(UiStyle::UrlHint, "", TR(T_SOURCE), this, SLOT(openSource()));
 
-  QLabel *sourceBuddy = new QLabel; {
-    sourceBuddy->setStyleSheet(SS_LABEL);
-    sourceBuddy->setBuddy(addAliasButton);
-    sourceBuddy->setText(TR(T_LABEL_SOURCE));
-    sourceBuddy->setToolTip(TR(T_TOOLTIP_SOURCE));
-  }
-  QLabel *aliasBuddy = new QLabel; {
-    aliasBuddy->setStyleSheet(SS_LABEL);
-    aliasBuddy->setBuddy(addAliasButton);
-    aliasBuddy->setText(TR(T_LABEL_ALIAS));
-    aliasBuddy->setToolTip(TR(T_TOOLTIP_ALIAS));
-  }
-  sourceButton_ = new QtExt::ToolButton; {
-    sourceButton_->setToolTip(TR(T_SOURCE));
-    sourceButton_->setStyleSheet(SS_TOOLBUTTON_TEXT_URL);
-    sourceButton_->setToolButtonStyle(Qt::ToolButtonTextOnly);
-    sourceButton_->setCheckable(true);
-    sourceButton_->setChecked(true);
-  }
-  connect(sourceButton_, SIGNAL(clicked(bool)), SLOT(openSource()));
+  QLabel *sourceBuddy = ui->makeLabel(UiStyle::BuddyHint, TR(T_LABEL_SOURCE), TR(T_TOOLTIP_SOURCE), sourceButton_),
+         *aliasBuddy = ui->makeLabel(UiStyle::BuddyHint, TR(T_LABEL_ALIAS), TR(T_TOOLTIP_ALIAS), addAliasButton);
 
   // Set layout
 
@@ -143,20 +130,6 @@ TokenView::TokenView(ServerAgent *server, QWidget *parent)
     grid->setContentsMargins(6, 6, 6, 6);
     //setContentsMargins(0, 0, 0, 0);
   } setLayout(grid);
-
-  // Create context menu
-  createActions();
-
-  // Shortcuts
-  QShortcut *cancelShortcut = new QShortcut(QKeySequence("Esc"), this);
-  connect(cancelShortcut, SIGNAL(activated()), SLOT(hide()));
-  QShortcut *closeShortcut = new QShortcut(QKeySequence::Close, this);
-  connect(closeShortcut, SIGNAL(activated()), SLOT(hide()));
-
-  // Set initial states
-
-  tableView_->sortByColumn(HD_Type, Qt::AscendingOrder);
-  tableView_->setCurrentColumn(HD_Text);
 }
 
 void

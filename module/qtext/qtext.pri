@@ -5,6 +5,7 @@ include(../../config.pri)
 
 HEADERS += \
     $$PWD/actionwithid.h \
+    $$PWD/algorithm.h \
     $$PWD/bitwise.h \
     $$PWD/combobox.h \
     $$PWD/countdowntimer.h \
@@ -17,6 +18,7 @@ HEADERS += \
     $$PWD/hash.h \
     $$PWD/htmltag.h \
     $$PWD/network.h \
+    $$PWD/overlaylayout.h \
     $$PWD/slider.h \
     $$PWD/stoppable.h \
     $$PWD/string.h \

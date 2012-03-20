@@ -5,10 +5,7 @@
 #include "uistyle.h"
 #include "defines.h"
 #include "tr.h"
-#include "stylesheet.h"
-#include "util/textedit.h"
 #include "module/qtext/htmltag.h"
-#include "module/qtext/toolbutton.h"
 #include <QtGui>
 
 #define WINDOW_FLAGS_BASE \
@@ -74,18 +71,12 @@ AboutDialog::AboutDialog(QWidget *parent)
 
   // Components
 
-  QToolButton *okButton = new QtExt::ToolButton; {
-    okButton->setStyleSheet(SS_TOOLBUTTON_TEXT);
-    okButton->setToolButtonStyle(Qt::ToolButtonTextOnly);
-    okButton->setText(QString("[ %1 ]").arg(TR(T_OK)));
-    okButton->setToolTip(TR(T_OK));
-  }
-  connect(okButton, SIGNAL(clicked()), SLOT(ok()));
+  QToolButton *okButton = UiStyle::globalInstance()->makeToolButton(
+       UiStyle::PushHint, TR(T_OK), this, SLOT(ok()));
 
-  textEdit_ = new TextEdit; {
-    textEdit_->setReadOnly(true);
-    textEdit_->setHtml(text());
-  }
+  textEdit_ = UiStyle::globalInstance()->makeTextEdit(
+      UiStyle::ReadOnlyHint, TR(T_TITLE_ABOUT));
+  textEdit_->setHtml(text());
 
   // Layout
 

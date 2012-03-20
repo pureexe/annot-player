@@ -326,31 +326,5 @@ protected:
 };
 #endif // USE_WIN_HOOK
 
-// - Helpers -
-
-namespace { // anonymous
-
-  template <typename L>
-  inline L
-  revertList(const L &l)
-  {
-    L ret;
-    if (!l.isEmpty())
-      foreach (typename L::value_type v, l)
-        ret.push_front(v);
-    return ret;
-  }
-
-  template <typename T>
-  inline QList<T>
-  uniqueList(const QList<T> &l)
-  {
-    QList<T> ret;
-    foreach (T t, l)
-      if (!ret.contains(t))
-        ret.append(t);
-    return ret;
-  }
-} // anonymous namespace
 
 #endif // MAINWINDOWPRIVATE_H

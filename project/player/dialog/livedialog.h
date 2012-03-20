@@ -43,12 +43,14 @@ public slots:
 
 protected slots:
   void ok();
-  void cancel();
   void updateComboBox();
 
 protected:
   //virtual void mouseDoubleClickEvent(QMouseEvent *event);
   //virtual void contextMenuEvent(QContextMenuEvent *event);
+
+private:
+  void createLayout();
 };
 
 #endif // LIVEDIALOG_H

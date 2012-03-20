@@ -25,7 +25,7 @@ public:
 
   virtual QString codecName() const = 0;
 
-  virtual void leadOut() { }
+  virtual void finish() { }
   virtual void writeFrame(const QByteArray &chunk, quint32 timestamp, bool writeHeader) = 0;
 };
 
@@ -93,14 +93,7 @@ public:
   virtual QString codecName() const { return "AAC"; } ///< \override
 
   virtual void writeFrame(const QByteArray &chunk, quint32 timestamp, bool writeHeader); ///< \override
-  virtual void leadOut() { out_->finish(); } ///< \override
-
-protected:
-  void write(const char *data, int offset, int count)
-  { out_->write(data + offset, count); }
-
-  void write(const quint8 *data, int offset, int count)
-  { write((const char *)data, offset, count); }
+  virtual void finish() { out_->finish(); } ///< \override
 };
 
 class RawH264Writer : public MediaWriter
@@ -120,14 +113,7 @@ public:
   virtual QString codecName() const { return "H264"; } ///< \override
 
   virtual void writeFrame(const QByteArray &chunk, quint32 timestamp, bool writeHeader); ///< \override
-  virtual void leadOut() { out_->finish(); } ///< \override
-
-protected:
-  void write(const char *data, int offset, int count)
-  { out_->write(data + offset, count); }
-
-  void write(const quint8 *data, int offset, int count)
-  { write((const char *)data, offset, count); }
+  virtual void finish() { out_->finish(); } ///< \override
 };
 
 #endif // MEDIAWRITER_H

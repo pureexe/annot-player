@@ -2,15 +2,10 @@
 // 3/12/2012
 
 #include "networkproxydialog.h"
-#include "uistyle.h"
 #include "tr.h"
-#include "stylesheet.h"
-#include "lineedit.h"
-#include "comboedit.h"
+#include "uistyle.h"
 #include "logger.h"
 #include "settings.h"
-#include "module/qtext/combobox.h"
-#include "module/qtext/toolbutton.h"
 #include <QtGui>
 #include <QNetworkProxy>
 
@@ -48,70 +43,34 @@ NetworkProxyDialog::NetworkProxyDialog(QWidget *parent)
 void
 NetworkProxyDialog::createLayout()
 {
-#define MAKE_BUTTON(_button, _title, _tip, _slot) \
-    _button = new QtExt::ToolButton; { \
-      _button->setStyleSheet(SS_TOOLBUTTON_TEXT); \
-      _button->setToolButtonStyle(Qt::ToolButtonTextOnly); \
-      _button->setText(QString("[ %1 ]").arg(_title)); \
-      _button->setToolTip(_tip); \
-    } connect(_button, SIGNAL(clicked()), _slot);
-#define MAKE_TOGGLER(_button, _title, _tip, _slot) \
-    _button = new QtExt::ToolButton; { \
-      _button->setStyleSheet(SS_TOOLBUTTON_TEXT_CHECKABLE); \
-      _button->setToolButtonStyle(Qt::ToolButtonTextOnly); \
-      _button->setText(QString("| %1 |").arg(_title)); \
-      _button->setToolTip(_tip); \
-      _button->setCheckable(true); \
-    } connect(_button, SIGNAL(clicked(bool)), _slot);
+  UiStyle *ui = UiStyle::globalInstance();
 
-#define MAKE_BUDDY(_label, _title, _tip, _buddy) \
-  _label = new QLabel; { \
-    _label->setStyleSheet(SS_LABEL); \
-    _label->setText(_title + ":"); \
-    _label->setToolTip(_tip); \
-    _label->setBuddy(_buddy); \
-  }
-
-  // typeCombo_
-  typeCombo_ = new QtExt::ComboBox; {
-    UiStyle::globalInstance()->setComboBoxStyle(typeCombo_);
-    typeCombo_->setEditable(false);
-    //typeCombo_->setMaximumWidth(MOVESTYLECOMBOBOX_WIDTH);
-    //typeCombo_->setMinimumWidth(MOVESTYLECOMBOBOX_WIDTH);
-    typeCombo_->setToolTip(tr("Proxy type"));
-
-    // Must be consistent with ProxyType
-    typeCombo_->addItem("Socks5");
-    typeCombo_->addItem("HTTP");
-  } //connect(typeCombo_, SIGNAL(activated(int)), SLOT(setProxyType(int)));
+  QStringList types("Socks5");
+  types.append("HTTP");
+  typeCombo_ = ui->makeComboBox(UiStyle::ReadOnlyHint, "", tr("Proxy type"), types);
 
   QStringList hosts("localhost");
-  hostEdit_ = new ComboEdit(hosts); {
-    hostEdit_->setToolTip(tr("Host"));
-  }
+  hostEdit_ = ui->makeComboBox(UiStyle::EditHint, "", tr("Host"), hosts);
 
-  QStringList ports("8080");
-  portEdit_ = new ComboEdit(ports); {
-    portEdit_->setToolTip(tr("Port"));
-  }
-  userNameEdit_ = new ComboEdit; {
-    userNameEdit_->setToolTip(tr("Username"));
-  }
-  passwordEdit_ = new LineEdit; {
-    passwordEdit_->setToolTip(tr("Password"));
-    passwordEdit_->setEchoMode(QLineEdit::Password);
-  }
+  QStringList ports("9050");
+  ports.append("8080");
+  portEdit_ = ui->makeComboBox(UiStyle::EditHint, "", tr("Port"), ports);
 
-  QToolButton *MAKE_BUTTON(cancelButton, TR(T_CANCEL), TR(T_CANCEL), SLOT(hide()))
-  QToolButton *MAKE_BUTTON(saveButton, TR(T_SAVE), TR(T_SAVE), SLOT(save()))
-  saveButton->setStyleSheet(SS_TOOLBUTTON_TEXT_HIGHLIGHT);
+  userNameEdit_ = ui->makeComboBox(UiStyle::EditHint, "", tr("Username"));
+  passwordEdit_ = ui->makeLineEdit(UiStyle::PasswordHint, "", tr("Password"));
 
-  MAKE_TOGGLER(enableButton_, TR(T_ENABLE), TR(T_ENABLE), SLOT(invalidateButtons()));
+  QToolButton *saveButton = ui->makeToolButton(
+        UiStyle::PushHint | UiStyle::HighlightHint, TR(T_SAVE), this, SLOT(save()));
+  QToolButton *cancelButton = ui->makeToolButton(
+        UiStyle::PushHint, TR(T_CANCEL), this, SLOT(hide()));
 
-  MAKE_BUDDY(typeLabel_, tr("Type"), tr("Type"), typeCombo_)
-  MAKE_BUDDY(hostLabel_, tr("Host"), tr("Host"), hostEdit_)
-  MAKE_BUDDY(userNameLabel_, tr("Username"), tr("Username"), userNameEdit_)
-  MAKE_BUDDY(passwordLabel_, tr("Password"), tr("Password"), passwordEdit_)
+  enableButton_ = ui->makeToolButton(
+        UiStyle::CheckHint, TR(T_ENABLE), this, SLOT(invalidateButtons()));
+
+  typeLabel_ = ui->makeLabel(UiStyle::BuddyHint, tr("Type"), typeCombo_);
+  hostLabel_ = ui->makeLabel(UiStyle::BuddyHint, tr("Host"), hostEdit_);
+  userNameLabel_ = ui->makeLabel(UiStyle::BuddyHint, tr("Username"), userNameEdit_);
+  passwordLabel_ = ui->makeLabel(UiStyle::BuddyHint, tr("Password"), passwordEdit_);
 
   // Layouts
   QGridLayout *grid = new QGridLayout; {
@@ -141,10 +100,6 @@ NetworkProxyDialog::createLayout()
   setTabOrder(hostEdit_, portEdit_);
   setTabOrder(portEdit_, userNameEdit_);
   setTabOrder(userNameEdit_, passwordEdit_);
-
-#undef MAKE_BUTTON
-#undef MAKE_TOGGLER
-#undef MAKE_BUDDY
 
   // Shortcuts
   QShortcut *cancelShortcut = new QShortcut(QKeySequence("Esc"), this);
@@ -199,7 +154,7 @@ NetworkProxyDialog::refresh()
 
   int port = s->proxyPort();
   if (port <= 0)
-    port = 8080;
+    port = 9050;
   portEdit_->setEditText(QString::number(port));
 
   userNameEdit_->setEditText(s->proxyUser());

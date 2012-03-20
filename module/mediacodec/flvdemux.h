@@ -7,7 +7,6 @@
 // See: FLVExtractCl/Library/FLVFile.cs
 // http://moitah.net/
 
-#include "module/qtext/bitwise.h"
 #include "module/qtext/stoppable.h"
 #include "module/stream/inputstream.h"
 #include "module/stream/outputstream.h"
@@ -27,9 +26,9 @@ class FlvDemux : public QObject, public StoppableTask
   enum State { Error = -1, Stopped = 0, Running, Finished };
   State state_;
 
-  InputStream *inputStream_;
-  OutputStream *audioOutputStream_,
-               *videoOutputStream_;
+  InputStream *in_;
+  OutputStream *audioOut_,
+               *videoOut_;
   MediaToc *audioToc_,
            *videoToc_;
 
@@ -44,13 +43,13 @@ class FlvDemux : public QObject, public StoppableTask
 public:
   explicit FlvDemux(InputStream *in, QObject *parent = 0)
     : Base(parent), state_(Stopped),
-      inputStream_(in), audioOutputStream_(0), videoOutputStream_(0),
+      in_(in), audioOut_(0), videoOut_(0),
       audioToc_(0), videoToc_(0),
       audioWriter_(0), videoWriter_(0), writeHeader_(true) { }
 
   explicit FlvDemux(QObject *parent = 0)
     : Base(parent), state_(Stopped),
-      inputStream_(0), audioOutputStream_(0), videoOutputStream_(0),
+      in_(0), audioOut_(0), videoOut_(0),
       audioToc_(0), videoToc_(0),
       audioWriter_(0), videoWriter_(0), writeHeader_(true) {  }
 
@@ -61,15 +60,15 @@ public:
   bool isRunning() const { return state_ == Running; }
   bool isFinished() const { return state_ == Finished; }
 
-  void setInput(InputStream *in) { inputStream_ = in; }
-  void setAudioOut(OutputStream *out) { audioOutputStream_ = out; }
-  void setVideoOut(OutputStream *out) { videoOutputStream_ = out; }
+  void setInput(InputStream *in) { in_ = in; }
+  void setAudioOut(OutputStream *out) { audioOut_ = out; }
+  void setVideoOut(OutputStream *out) { videoOut_ = out; }
 
   void setAudioToc(MediaToc *toc) { audioToc_ = toc; }
   void setVideoToc(MediaToc *toc) { videoToc_ = toc; }
 
-  OutputStream *audioOut() const { return audioOutputStream_; }
-  OutputStream *videoOut() const { return videoOutputStream_; }
+  OutputStream *audioOut() const { return audioOut_; }
+  OutputStream *videoOut() const { return videoOut_; }
 
   MediaToc *audioToc() const { return audioToc_; }
   MediaToc *videoToc() const { return videoToc_; }
@@ -88,7 +87,7 @@ public slots:
     emit stopped();
   }
 
-  void leadOut();
+  void finish();
 
   void setWriteHeader(bool t) { writeHeader_ = t; }
 public:
@@ -102,28 +101,6 @@ protected:
   bool readTag();
   //FractionUInt32 calculateAverageFrameRate() const;
   //FractionUInt32 calculateTrueFrameRate() const;
-
-protected:
-  void seek(qint64 offset) { inputStream_->seek(offset); }
-  qint64 pos() const { return inputStream_->pos(); }
-
-  bool read(char *data, int offset, int count)
-  { return count == inputStream_->read(data + offset, count); }
-
-  bool read(quint8 *data, int offset, int count)
-  { return read((char *)data, offset, count); }
-
-  quint8 readUInt8(bool *ok)
-  { quint8 byte; *ok = read(&byte, 0, 1); return byte; }
-
-  quint16 readUInt16(bool *ok)
-  { quint8 x[2]; *ok = read(x, 0, 2); return Bitwise::BigEndian::toUInt16(x); }
-
-  quint32 readUInt24(bool *ok)
-  { quint8 x[4]; x[0] = 0; *ok = read(x, 1, 3); return Bitwise::BigEndian::toUInt32(x); }
-
-  quint32 readUInt32(bool *ok)
-  { quint8 x[4]; *ok = read(x, 0, 4); return Bitwise::BigEndian::toUInt32(x); }
 };
 
 class FlvListDemux : public QObject, public StoppableTask

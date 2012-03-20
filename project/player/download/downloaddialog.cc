@@ -6,10 +6,7 @@
 #include "filteredlistview.h"
 #include "uistyle.h"
 #include "tr.h"
-#include "defines.h"
-#include "stylesheet.h"
 #include "logger.h"
-#include "module/qtext/toolbutton.h"
 #include "module/qtext/datetime.h"
 #include "module/download/downloadmanager.h"
 #include "module/download/mrldownloadtask.h"
@@ -67,23 +64,16 @@ DownloadDialog::isAddingUrls() const
 void
 DownloadDialog::createLayout()
 {
-#define MAKE_BUTTON(_button, _title, _tip, _slot) \
-    _button = new QtExt::ToolButton; { \
-      _button->setStyleSheet(SS_TOOLBUTTON_TEXT); \
-      _button->setToolButtonStyle(Qt::ToolButtonTextOnly); \
-      _button->setText(QString("[ %1 ]").arg(_title)); \
-      _button->setToolTip(_tip); \
-      connect(_button, SIGNAL(clicked()), _slot); \
-    }
+  UiStyle *ui = UiStyle::globalInstance();
 
-  MAKE_BUTTON(startButton_, TR(T_START), TR(T_START), SLOT(start()));
-  MAKE_BUTTON(stopButton_, tr("Stop"), tr("Stop"), SLOT(stop()));
-  MAKE_BUTTON(removeButton_, tr("Remove"), tr("Remove"), SLOT(remove()));
-  MAKE_BUTTON(openButton_, TR(T_PLAY), TR(T_PLAY), SLOT(open()));
-  MAKE_BUTTON(openDirectoryButton_, tr("Dir"), tr("Open directory"), SLOT(openDirectory()));
-  MAKE_BUTTON(addButton_, TR(T_ADD), TR(T_ADD) + " [" K_CTRL "+N]", SLOT(add()));
-
-  addButton_->setStyleSheet(SS_TOOLBUTTON_TEXT_HIGHLIGHT);
+  startButton_ = ui->makeToolButton(UiStyle::PushHint, TR(T_START), this, SLOT(start()));
+  stopButton_ = ui->makeToolButton(UiStyle::PushHint, tr("Stop"), this, SLOT(stop()));
+  removeButton_ = ui->makeToolButton(UiStyle::PushHint, tr("Remove"), this, SLOT(remove()));
+  openButton_ = ui->makeToolButton(UiStyle::PushHint, TR(T_PLAY), this, SLOT(open()));
+  openDirectoryButton_ = ui->makeToolButton(
+        UiStyle::PushHint, tr("Dir"), tr("Open directory"), this, SLOT(openDirectory()));
+  addButton_ = ui->makeToolButton(
+        UiStyle::PushHint | UiStyle::HighlightHint, TR(T_ADD), "", K_CTRL "+N", this, SLOT(add()));
 
   startButton_->setEnabled(false);
   stopButton_->setEnabled(false);

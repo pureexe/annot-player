@@ -42,6 +42,9 @@ protected slots:
   void stopPicking();
 
 private:
+  void createLayout();
+
+private:
   bool active_;
   QLabel *messageLabel_;
 };

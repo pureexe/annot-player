@@ -11,7 +11,7 @@ HEADERS += \
     $$PWD/flvcodec.h \
     $$PWD/flvdemux.h \
     $$PWD/flvmerge.h \
-    $$PWD/flvparser.h \
+    $$PWD/flvmeta.h \
     $$PWD/mediatoc.h \
     $$PWD/mediawriter.h \
     $$PWD/mp4codec.h
@@ -22,7 +22,9 @@ SOURCES += \
     $$PWD/flvcodec.cc \
     $$PWD/flvdemux.cc \
     $$PWD/flvmerge.cc \
-    $$PWD/flvparser.cc \
+    $$PWD/flvmetacreator.cc \
+    $$PWD/flvmetareader.cc \
+    $$PWD/flvmetawriter.cc \
     $$PWD/h264writer.cc \
     $$PWD/mediatoc.cc \
     $$PWD/mp4codec.cc

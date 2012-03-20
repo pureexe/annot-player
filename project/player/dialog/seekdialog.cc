@@ -5,11 +5,8 @@
 #include "uistyle.h"
 #include "tr.h"
 #include "defines.h"
-#include "stylesheet.h"
-#include "comboedit.h"
 #include "logger.h"
 #include "module/qtext/datetime.h"
-#include "module/qtext/toolbutton.h"
 #include <QtGui>
 
 #define DEBUG "seekdialog"
@@ -39,56 +36,41 @@ SeekDialog::SeekDialog(QWidget *parent)
   setWindowTitle(TR(T_TITLE_SEEK));
   UiStyle::globalInstance()->setWindowStyle(this);
 
-  // Widgets
+  createLayout();
 
-  //QLabel *timeLabel = new QLabel;
-  //timeLabel->setStyleSheet(SS_LABEL);
-  //timeLabel->setText(TR(T_LABEL_SEEK));
-  //timeLabel->setToolTip(TR(T_TOOLTIP_SEEK));
+  // Focus
+  ssEdit_->setFocus();
+}
+
+void
+SeekDialog::createLayout()
+{
+  UiStyle *ui = UiStyle::globalInstance();
 
   QStringList defvals = QStringList()
     << "0" << "1" << "2" << "3" << "5"
     << "10" << "20" << "30" << "40" << "50";
 
-#define MAKE_EDIT(_edit) \
-  _edit = new ComboEdit(defvals); { \
-    _edit->setToolTip(TR(T_TOOLTIP_SEEK)); \
-    _edit->setEditText("0"); \
-    _edit->setMaximumWidth(SEEKLINEEDIT_MAXWIDTH); \
-    _edit->lineEdit()->setAlignment(Qt::AlignRight); \
-  }
+  ssEdit_ = ui->makeComboBox(UiStyle::EditHint, "", TR(T_SECOND), defvals);
+  ssEdit_->lineEdit()->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+  ssEdit_->setMaximumWidth(SEEKLINEEDIT_MAXWIDTH);
 
-  MAKE_EDIT(ssEdit_)
-  MAKE_EDIT(mmEdit_)
-  MAKE_EDIT(hhEdit_)
-#undef MAKE_EDIT
+  mmEdit_ = ui->makeComboBox(UiStyle::EditHint, "", TR(T_MINUTE), defvals);
+  mmEdit_->lineEdit()->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+  mmEdit_->setMaximumWidth(SEEKLINEEDIT_MAXWIDTH);
 
-#define MAKE_LABEL(_label, _buddy, _text, _tip) \
-  QLabel *_label = new QLabel; { \
-    _label->setBuddy(_buddy); \
-    _label->setStyleSheet(SS_LABEL); \
-    _label->setText(_text); \
-    _label->setToolTip(_tip); \
-  }
+  hhEdit_ = ui->makeComboBox(UiStyle::EditHint, "", TR(T_HOUR), defvals);
+  hhEdit_->lineEdit()->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+  hhEdit_->setMaximumWidth(SEEKLINEEDIT_MAXWIDTH);
 
-  MAKE_LABEL(ssLabel, ssEdit_, tr("ss"), tr("seconds"))
-  MAKE_LABEL(mmLabel, mmEdit_, tr("mm"), tr("minutes"))
-  MAKE_LABEL(hhLabel, hhEdit_, tr("hh"), tr("hours"))
-#undef MAKE_LABEL
+  QLabel *ssLabel = ui->makeLabel(UiStyle::BuddyHint, tr("ss"), tr("seconds"), ssEdit_),
+         *mmLabel = ui->makeLabel(UiStyle::BuddyHint, tr("mm"), tr("minutes"), mmEdit_),
+         *hhLabel = ui->makeLabel(UiStyle::BuddyHint, tr("hh"), tr("hours"), hhEdit_);
 
-#define MAKE_BUTTON(_button, _text, _tip, _slot) \
-  QToolButton *_button = new QtExt::ToolButton; { \
-    _button->setStyleSheet(SS_TOOLBUTTON_TEXT); \
-    _button->setToolButtonStyle(Qt::ToolButtonTextOnly); \
-    _button->setText(_text); \
-    _button->setToolTip(_tip); \
-  } \
-  connect(_button, SIGNAL(clicked()), _slot);
-
-  MAKE_BUTTON(okButton, QString("[ %1 ]").arg(TR(T_OK)), TR(T_OK), SLOT(ok()))
-  MAKE_BUTTON(cancelButton, QString("[ %1 ]").arg(TR(T_CANCEL)), TR(T_CANCEL), SLOT(hide()))
-#undef MAKE_BUTTON
-  okButton->setStyleSheet(SS_TOOLBUTTON_TEXT_HIGHLIGHT);
+  QToolButton *okButton = ui->makeToolButton(
+        UiStyle::PushHint | UiStyle::HighlightHint, TR(T_OK), this, SLOT(ok()));
+  QToolButton *cancelButton = ui->makeToolButton(
+        UiStyle::PushHint, TR(T_CANCEL), this, SLOT(hide()));
 
   // Layouts
   QVBoxLayout *rows = new QVBoxLayout; {
@@ -124,9 +106,6 @@ SeekDialog::SeekDialog(QWidget *parent)
   connect(cancelShortcut, SIGNAL(activated()), SLOT(hide()));
   QShortcut *closeShortcut = new QShortcut(QKeySequence::Close, this);
   connect(closeShortcut, SIGNAL(activated()), SLOT(hide()));
-
-  // Focus
-  ssEdit_->setFocus();
 }
 
 // - Properties -
@@ -135,17 +114,17 @@ qint64
 SeekDialog::time() const
 {
   bool ok;
-  ulong ss = ssEdit_->currentText().toULong(&ok);
+  qint64 ss = ssEdit_->currentText().toULong(&ok);
   if (!ok) return BAD_TIME;
 
-  ulong mm = mmEdit_->currentText().toULong(&ok);
+  qint64 mm = mmEdit_->currentText().toULong(&ok);
   if (!ok) return BAD_TIME;
 
-  ulong hh = hhEdit_->currentText().toULong(&ok);
+  qint64 hh = hhEdit_->currentText().toULong(&ok);
   if (!ok) return BAD_TIME;
 
   DOUT("time: hh =" << hh << ", mm =" << mm << ", ss =" << ss);
-  return static_cast<qint64>(ss * 1000 + mm * 1000 * 60 + hh * 1000 * 60 * 60);
+  return ss * 1000 + mm * 1000 * 60 + hh * 1000 * 60 * 60;
 }
 
 void

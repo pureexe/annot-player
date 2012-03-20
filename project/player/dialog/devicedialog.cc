@@ -4,19 +4,15 @@
 #include "devicedialog.h"
 #include "uistyle.h"
 #include "tr.h"
-#include "stylesheet.h"
-#include "defines.h"
 #include "logger.h"
-#include "module/qtext/toolbutton.h"
-#include "module/qtext/combobox.h"
 #ifdef Q_OS_WIN
-  #include "win/qtwin/qtwin.h"
+#  include "win/qtwin/qtwin.h"
 #endif // Q_OS_WIN
 #ifdef Q_OS_UNIX
-  #include "unix/qtunix/qtunix.h"
+#  include "unix/qtunix/qtunix.h"
 #endif // Q_OS_UNIX
 #ifdef USE_MODULE_IOUTIL
-  #include "module/ioutil/ioutil.h"
+#  include "module/ioutil/ioutil.h"
 #endif // USE_MODULE_IOUTIL
 #include <QtGui>
 
@@ -40,12 +36,18 @@ QStringList
 DeviceDialog::devices()
 {
 #ifdef Q_OS_WIN
-  return QtWin::getLogicalDrivesWithType(QtWin::CdRomDrive);
+  QStringList ret = QtWin::getLogicalDrivesWithType(QtWin::CdRomDrive);
+  if (ret.isEmpty())
+    ret.append("X:\\");
+  return ret;
 #elif defined (Q_OS_UNIX)
-  return QtUnix::getDevicesWithType(QtUnix::CdRom);
+  QStringList ret = QtUnix::getDevicesWithType(QtUnix::CdRom);
+  if (ret.isEmpty())
+    ret.append("/dev/cdrom");
+  return ret;
 #else
   Q_ASSERT(0); // unimplemented
-  return QStringList();
+  return "/dev/cdrom";
 #endif // Q_OS_WIN | Q_OS_UNIX
 }
 
@@ -59,50 +61,39 @@ DeviceDialog::DeviceDialog(QWidget *parent)
 //#endif // Q_OS_MAC
   setWindowTitle(TR(T_TITLE_OPENDEVICE));
   UiStyle::globalInstance()->setWindowStyle(this);
-  setContentsMargins(0, 0, 0, 0);
 
-  // Widgets
+  createLayout();
 
-  //messageLabel_ = new QLabel; {
-  //  messageLabel_->setStyleSheet(SS_LABEL);
-  //  messageLabel_->setToolTip(TR(T_MESSAGE));
-  //  messageLabel_->setAlignment(Qt::AlignCenter);
-  //}
+  // Shortcuts
+  QShortcut *cancelShortcut = new QShortcut(QKeySequence("Esc"), this);
+  connect(cancelShortcut, SIGNAL(activated()), SLOT(hide()));
+  QShortcut *closeShortcut = new QShortcut(QKeySequence::Close, this);
+  connect(closeShortcut, SIGNAL(activated()), SLOT(hide()));
 
-  pathComboBox_ = new QtExt::ComboBox; {
-    UiStyle::globalInstance()->setComboBoxStyle(pathComboBox_);
-    pathComboBox_->setEditable(true);
-    pathComboBox_->setMinimumWidth(COMBOBOX_MINWIDTH);
-    pathComboBox_->setToolTip(TR(T_PATH));
-  }
+  // Post behaviors
+  autoRadioButton_->setChecked(true);
+  okButton_->setFocus();
+}
+
+void
+DeviceDialog::createLayout()
+{
+  UiStyle *ui = UiStyle::globalInstance();
+
+  pathComboBox_ = ui->makeComboBox(0, TR(T_PATH));
+  pathComboBox_->setMinimumWidth(COMBOBOX_MINWIDTH);
   //connect(pathComboBox_, SIGNAL(activated(int)), SLOT(setMoveStyle(int)));
 
-#define MAKE_RADIOBUTTON(_button, _text) \
-  _button = new QRadioButton; { \
-    _button->setStyleSheet(SS_RADIOBUTTON_TEXT); \
-    _button->setText(_text); \
-    _button->setToolTip(_text); \
-  }
+  autoRadioButton_ = ui->makeRadioButton(0, tr("auto"));
+  dvdRadioButton_ = ui->makeRadioButton(0, tr("DVD"));
+  cdRadioButton_ = ui->makeRadioButton(0, tr("CD"));
 
-  MAKE_RADIOBUTTON(autoRadioButton_, tr("auto"))
-  MAKE_RADIOBUTTON(dvdRadioButton_, "DVD")
-  MAKE_RADIOBUTTON(cdRadioButton_, "CD")
-#undef MAKE_RADIOBUTTON
-
-#define MAKE_TOOLBUTTON(_button, _text, _tip, _slot) \
-   _button = new QtExt::ToolButton; { \
-    _button->setStyleSheet(SS_TOOLBUTTON_TEXT); \
-    _button->setToolButtonStyle(Qt::ToolButtonTextOnly); \
-    _button->setText(QString("[ %1 ]").arg(_text)); \
-    _button->setToolTip(_tip); \
-    connect(_button, SIGNAL(clicked()), _slot); \
-  }
-
-  MAKE_TOOLBUTTON(okButton_, TR(T_OPEN), TR(T_TOOLTIP_OPENDEVICE), SLOT(ok()))
-  QToolButton *MAKE_TOOLBUTTON(cancelButton, TR(T_CANCEL), TR(T_CANCEL), SLOT(cancel()))
-  QToolButton *MAKE_TOOLBUTTON(refreshButton, TR(T_REFRESH), TR(T_REFRESH), SLOT(refresh()))
-#undef MAKE_TOOLBUTTON
-  okButton_->setStyleSheet(SS_TOOLBUTTON_TEXT_HIGHLIGHT);
+  okButton_ = ui->makeToolButton(
+        UiStyle::PushHint | UiStyle::HighlightHint, TR(T_OPEN), TR(T_TIP_OPENDEVICE), this, SLOT(ok()));
+  QToolButton *cancelButton = ui->makeToolButton(
+        UiStyle::PushHint, TR(T_CANCEL), this, SLOT(hide()));
+  QToolButton *refreshButton = ui->makeToolButton(
+        UiStyle::PushHint, TR(T_REFRESH), this, SLOT(refresh()));
 
   // Layouts
   QVBoxLayout *rows = new QVBoxLayout; {
@@ -119,26 +110,19 @@ DeviceDialog::DeviceDialog(QWidget *parent)
     path->addWidget(dvdRadioButton_);
     path->addWidget(cdRadioButton_);
 
-    buttons->addWidget(cancelButton);
     buttons->addWidget(refreshButton);
     buttons->addStretch();
+    buttons->addWidget(cancelButton);
     buttons->addWidget(okButton_);
+
+    rows->setContentsMargins(9, 9, 9, 9);
+    setContentsMargins(0, 0, 0, 0);
   } setLayout(rows);
 
   // Connections
   connect(pathComboBox_, SIGNAL(currentIndexChanged(int)), SLOT(invalidateButtons()));
   connect(pathComboBox_, SIGNAL(editTextChanged(QString)), SLOT(invalidateButtons()));
   connect(pathComboBox_->lineEdit(), SIGNAL(returnPressed()), SLOT(ok()));
-
-  // Shortcuts
-  QShortcut *cancelShortcut = new QShortcut(QKeySequence("Esc"), this);
-  connect(cancelShortcut, SIGNAL(activated()), SLOT(hide()));
-  QShortcut *closeShortcut = new QShortcut(QKeySequence::Close, this);
-  connect(closeShortcut, SIGNAL(activated()), SLOT(hide()));
-
-  // Post behaviors
-  autoRadioButton_->setChecked(true);
-  okButton_->setFocus();
 }
 
 // - Properties -
@@ -150,11 +134,8 @@ DeviceDialog::DeviceDialog(QWidget *parent)
 QString
 DeviceDialog::currentPath() const
 { return pathComboBox_->currentText(); }
-// - Slots -
 
-void
-DeviceDialog::cancel()
-{ hide(); }
+// - Actions -
 
 void
 DeviceDialog::ok()

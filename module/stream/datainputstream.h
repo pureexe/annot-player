@@ -48,6 +48,8 @@ public:
 
   virtual QByteArray readAll()  ///< \override
   { return pos_ ? data_.mid(pos_) : data_; }
+
+  virtual bool writeToFile(const QString &path); ///< \override
 };
 
 #endif // DATAINPUTSTREAM_H

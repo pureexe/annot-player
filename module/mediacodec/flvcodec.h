@@ -4,37 +4,17 @@
 // flvcodec.h
 // 2/12/2012
 
+#include "flvmeta.h"
+#include "module/stream/inputstream.h"
 #include <QObject>
 #include <QList>
-#include "module/stream/inputstream.h"
 
 class InputStream;
 class OutputStream;
+class InputOutputStream;
 
 class Stoppable;
 class MediaToc;
-
-struct FlvInfo
-{
-  qint64 duration; ///< in msec
-
-  int height, width;
-
-  int audioCodecId, videoCodecId;
-
-  QString creator;
-
-  FlvInfo()
-    : duration(0), height(0), width(0), audioCodecId(0), videoCodecId(0) { }
-
-  void clear()
-  {
-    duration = 0;
-    width = height = 0;
-    audioCodecId = videoCodecId = 0;
-    creator.clear();
-  }
-};
 
 class FlvCodec : public QObject
 {
@@ -69,14 +49,17 @@ public:
 
   void mergeStream(const InputStreamList &ins,  OutputStream *out, bool async = true);
 
-  FlvInfo analyzeStream(InputStream *in);
-  FlvInfo analyzeStreams(const InputStreamList &ins);
+  FlvMeta analyzeStream(InputStream *in);
+  FlvMeta analyzeStreams(const InputStreamList &ins);
 
 public:
   static bool isFlvFile(const QString &fileName);
   static bool isFlvStream(InputStream *flv);
   static qint64 getLastTimestamp(InputStream *flv);
   static qint64 getLastTimestamp(const QByteArray &flv);
+
+  static bool updateFlvFileMeta(const QString &fileName);
+  static bool updateFlvStreamMeta(InputOutputStream *ios);
 
 };
 

@@ -39,6 +39,9 @@ protected:
   bool containsUserName(const QString &name) const;
   //virtual void mouseDoubleClickEvent(QMouseEvent *event);
   //virtual void contextMenuEvent(QContextMenuEvent *event);
+
+private:
+  void createLayout();
 };
 
 #endif // LOGINDIALOG_H

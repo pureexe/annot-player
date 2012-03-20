@@ -2,19 +2,16 @@
 // 10/16/2011
 
 #include "messageview.h"
-#include "textedit.h"
-#include "uistyle.h"
 #include "tr.h"
 #include "defines.h"
 #include "stylesheet.h"
 #include "logger.h"
+#include "uistyle.h"
 #ifdef USE_WIN_QTH
-  #include "win/qth/qth.h"
+#  include "win/qth/qth.h"
 #endif // USE_WIN_QTH
 #include "module/annotcloud/cmd.h"
 #include "module/qtext/htmltag.h"
-#include "module/qtext/toolbutton.h"
-#include "module/qtext/combobox.h"
 #include <QtGui>
 
 //#define DEBUG "messageview"
@@ -41,10 +38,14 @@ MessageView::MessageView(QWidget *parent)
   setWindowTitle(tr("Message view"));
   UiStyle::globalInstance()->setWindowStyle(this);
 
-  textEdit_ = new TextEdit; {
-    textEdit_->setStyleSheet(SS_TEXTEDIT);
-    textEdit_->setToolTip(tr("Process messages"));
+  createLayout();
+}
 
+void
+MessageView::createLayout()
+{
+  UiStyle *ui = UiStyle::globalInstance();
+  textEdit_ = ui->makeTextEdit(0, tr("Process message")); {
     //QTextCharFormat fmt;
     //fmt.setBackground(QColor("red"));
     //QTextCursor tc = textEdit_->textCursor();
@@ -53,49 +54,26 @@ MessageView::MessageView(QWidget *parent)
   }
   connect(textEdit_, SIGNAL(cursorPositionChanged()), SLOT(invalidateCurrentCharFormat()));
 
-  hookComboBox_ = new QtExt::ComboBox; {
-    UiStyle::globalInstance()->setComboBoxStyle(hookComboBox_);
-    hookComboBox_->setEditable(false);
+  hookComboBox_ = ui->makeComboBox(UiStyle::ReadOnlyHint, "", tr("Signal channel")); {
     hookComboBox_->setMinimumWidth(HOOKCOMBOBOX_MINWIDTH);
     hookComboBox_->setMaximumWidth(HOOKCOMBOBOX_MAXWIDTH);
-    hookComboBox_->setToolTip(tr("Signal channel"));
     //if (hookComboBox_->isEditable())
     //  hookComboBox_->lineEdit()->setAlignment(Qt::AlignRight);
   }
   connect(hookComboBox_, SIGNAL(activated(int)), SLOT(selectHookIndex(int)));
   connect(hookComboBox_, SIGNAL(currentIndexChanged(int)), SLOT(invalidateSelectButton()));
 
-  autoButton_  = new QtExt::ToolButton; {
-    autoButton_->setStyleSheet(SS_TOOLBUTTON_TEXT_CHECKABLE);
-    autoButton_->setToolButtonStyle(Qt::ToolButtonTextOnly);
-    autoButton_->setText(QString("| %1 |").arg(TR(T_AUTO)));
-    autoButton_->setToolTip(tr("Auto-detect signal"));
-    autoButton_->setCheckable(true);
-    autoButton_->setChecked(true);
-  }
-  connect(autoButton_, SIGNAL(clicked(bool)), SLOT(invalidateCurrentHook()));
+  autoButton_ = ui->makeToolButton(
+        UiStyle::CheckHint, TR(T_AUTO), tr("Auto-detect signal"), this, SLOT(invalidateCurrentHook()));
+  autoButton_->setChecked(true);
 
-  QToolButton *resetButton  = new QtExt::ToolButton; {
-    resetButton->setStyleSheet(SS_TOOLBUTTON_TEXT);
-    resetButton->setToolButtonStyle(Qt::ToolButtonTextOnly);
-    resetButton->setText(QString("[ %1 ]").arg(TR(T_RESET)));
-    resetButton->setToolTip(tr("Reset changes and texts"));
-  }
-  connect(resetButton, SIGNAL(clicked()), SLOT(clear()));
+  selectButton_ = ui->makeToolButton(
+        UiStyle::PushHint | UiStyle::HighlightHint, TR(T_OK), tr("Use selected signal"), this, SLOT(selectCurrentHook()));
 
-  selectButton_ = new QtExt::ToolButton; {
-    selectButton_->setStyleSheet(SS_TOOLBUTTON_TEXT_HIGHLIGHT);
-    selectButton_->setToolButtonStyle(Qt::ToolButtonTextOnly);
-    selectButton_->setText(QString("[ %1 ]").arg(TR(T_OK)));
-    selectButton_->setToolTip(tr("Use selected signal"));
-  }
-  connect(selectButton_, SIGNAL(clicked()), SLOT(selectCurrentHook()));
+  QToolButton *resetButton = ui->makeToolButton(
+        UiStyle::PushHint, TR(T_RESET), tr("Reset changes and texts"), this, SLOT(clear()));
 
-  hookCountLabel_ = new QLabel; {
-    hookCountLabel_->setStyleSheet(SS_LABEL);
-    hookCountLabel_->setBuddy(hookComboBox_);
-    hookCountLabel_->setToolTip(tr("Current signal"));
-  }
+  hookCountLabel_ = ui->makeLabel(0, "0", tr("Current signal"), hookComboBox_);
 
   // Set layout
 

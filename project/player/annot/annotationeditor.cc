@@ -98,24 +98,8 @@ AnnotationEditor::AnnotationEditor(QWidget *parent)
 void
 AnnotationEditor::createRibons()
 {
-#define MAKE_TAB_BUTTON(_button, _text, _key, _slot) \
-  _button = new QtExt::ToolButton; { \
-    _button->setStyleSheet(SS_TOOLBUTTON_TEXT_TAB); \
-    _button->setToolButtonStyle(Qt::ToolButtonTextOnly); \
-    _button->setText(QString("- %1 -").arg(_text)); \
-    _button->setToolTip(_text + " [" _key "]"); \
-    _button->setCheckable(true); \
-    connect(_button, SIGNAL(clicked()), _slot); \
-  }
+  UiStyle *ui = UiStyle::globalInstance();
 
-#define MAKE_UNCHECKABLE_BUTTON(_button, _title, _tip, _slot) \
-  _button = new QtExt::ToolButton; { \
-    _button->setStyleSheet(SS_TOOLBUTTON_TAG); \
-    _button->setToolButtonStyle(Qt::ToolButtonTextOnly); \
-    _button->setText(_title); \
-    _button->setToolTip(_tip); \
-    connect(_button, SIGNAL(clicked()), _slot); \
-  }
 #define MAKE_CHECKABLE_BUTTON(_button, _ss, _title, _tip, _slot) \
   _button = new QtExt::ToolButton; { \
     _button->setStyleSheet(_ss); \
@@ -129,39 +113,31 @@ AnnotationEditor::createRibons()
   // Code ribon
 
   // - verbatimButton_
-  MAKE_UNCHECKABLE_BUTTON(verbatimButton_, tr("verbatim"), TR(T_VERBATIM), SLOT(setVerbatim()))
+  verbatimButton_ = ui->makeToolButton(0, tr("verbatim"), TR(T_VERBATIM), this, SLOT(setVerbatim()));
 
   // - subtitleButton_
-  MAKE_UNCHECKABLE_BUTTON(subtitleButton_, tr("subtitle"), TR(T_SUBTITLE), SLOT(setSubtitle()))
+  subtitleButton_ = ui->makeToolButton(0, tr("subtitle"), TR(T_SUBTITLE), this, SLOT(setSubtitle()));
 
   // - moveStyleComboBox_
-  moveStyleComboBox_ = new QtExt::ComboBox; {
-    UiStyle::globalInstance()->setComboBoxStyle(moveStyleComboBox_);
-    moveStyleComboBox_->setEditable(true);
+  moveStyleComboBox_ = ui->makeComboBox(0, "", tr("Style tag")); {
     moveStyleComboBox_->setMaximumWidth(MOVESTYLECOMBOBOX_WIDTH);
     moveStyleComboBox_->setMinimumWidth(MOVESTYLECOMBOBOX_WIDTH);
-    moveStyleComboBox_->setToolTip(tr("Style tag"));
 
     // Must be consistent with MoveStyleIndex
     moveStyleComboBox_->addItem(tr("fly"));
     moveStyleComboBox_->addItem(tr("top"));
     moveStyleComboBox_->addItem(tr("bottom"));
-  }
-  connect(moveStyleComboBox_, SIGNAL(activated(int)), SLOT(setMoveStyle(int)));
+  } connect(moveStyleComboBox_, SIGNAL(activated(int)), SLOT(setMoveStyle(int)));
 
-  renderEffectComboBox_ = new QtExt::ComboBox; {
-    UiStyle::globalInstance()->setComboBoxStyle(renderEffectComboBox_);
-    renderEffectComboBox_->setEditable(true);
+  renderEffectComboBox_ = ui->makeComboBox(0, "", TR(T_ANNOTATIONEFFECT)); {
     renderEffectComboBox_->setMaximumWidth(RENDEREFFECTCOMBOBOX_WIDTH);
     renderEffectComboBox_->setMinimumWidth(RENDEREFFECTCOMBOBOX_WIDTH);
-    renderEffectComboBox_->setToolTip(TR(T_ANNOTATIONEFFECT));
 
     // Must be consistent with RenderEffectIndex
     renderEffectComboBox_->addItem(tr("transp"));
     renderEffectComboBox_->addItem(tr("shadow"));
     renderEffectComboBox_->addItem(tr("blur"));
-  }
-  connect(renderEffectComboBox_, SIGNAL(activated(int)), SLOT(setRenderEffect(int)));
+  } connect(renderEffectComboBox_, SIGNAL(activated(int)), SLOT(setRenderEffect(int)));
 
   // - Code ribon
   QGroupBox *codeRibon = new QGroupBox; {
@@ -236,24 +212,20 @@ AnnotationEditor::createRibons()
   connect(backgroundColorButton_, SIGNAL(clicked()), SLOT(showBackgroundColorDialog()));
 
   // - alignComboBox_
-  alignComboBox_ = new QtExt::ComboBox; {
-    UiStyle::globalInstance()->setComboBoxStyle(alignComboBox_);
-    alignComboBox_->setEditable(false);
+  alignComboBox_ = ui->makeComboBox(UiStyle::ReadOnlyHint, "", tr("Alignment")); {
     alignComboBox_->setMaximumWidth(ALIGNCOMBOBOX_WIDTH);
     alignComboBox_->setMinimumWidth(ALIGNCOMBOBOX_WIDTH);
-    alignComboBox_->setToolTip(tr("Alignment"));
 
     // Must be consisitent with AlignIndex
     alignComboBox_->addItem(tr("Left"));
     alignComboBox_->addItem(tr("Right"));
     alignComboBox_->addItem(tr("Center"));
     alignComboBox_->addItem(tr("Justify"));
-  }
-  connect(alignComboBox_, SIGNAL(activated(int)), SLOT(setAlignment(int)));
+  } connect(alignComboBox_, SIGNAL(activated(int)), SLOT(setAlignment(int)));
 
   // - fontComboBox_
   fontComboBox_ = new QtExt::FontComboBox; {
-    UiStyle::globalInstance()->setComboBoxStyle(fontComboBox_);
+    fontComboBox_->setStyleSheet(SS_COMBOBOX);
     fontComboBox_->setEditable(true);
     fontComboBox_->setMaximumWidth(FONTCOMBOBOX_WIDTH);
     fontComboBox_->setMinimumWidth(FONTCOMBOBOX_WIDTH);
@@ -262,18 +234,14 @@ AnnotationEditor::createRibons()
   connect(fontComboBox_, SIGNAL(activated(QString)), SLOT(setFontFamily(QString)));
 
   // - sizeComboBox_
-  fontSizeComboBox_ = new QtExt::ComboBox; {
-    UiStyle::globalInstance()->setComboBoxStyle(fontSizeComboBox_);
-    fontSizeComboBox_->setEditable(true);
+  fontSizeComboBox_ = ui->makeComboBox(0, "", tr("Font size")); {
     fontSizeComboBox_->setMaximumWidth(FONTSIZECOMBOBOX_WIDTH);
     fontSizeComboBox_->setMinimumWidth(FONTSIZECOMBOBOX_WIDTH);
-    fontSizeComboBox_->setToolTip(tr("Font size"));
 
     QFontDatabase db;
     foreach(int size, db.standardSizes())
       fontSizeComboBox_->addItem(QString::number(size));
-  }
-  connect(fontSizeComboBox_, SIGNAL(activated(QString)), SLOT(setFontSize(QString)));
+  } connect(fontSizeComboBox_, SIGNAL(activated(QString)), SLOT(setFontSize(QString)));
 
   // - Html ribon
   QGroupBox *htmlRibon = new QGroupBox; {
@@ -318,15 +286,12 @@ AnnotationEditor::createRibons()
 
   // Header
 
-  MAKE_TAB_BUTTON(codeRibonButton_, tr("tex"), K_CTRL "+1", SLOT(setCodeMode()))
-  MAKE_TAB_BUTTON(htmlRibonButton_, tr("html"), K_CTRL "+2", SLOT(setHtmlMode()))
+  codeRibonButton_ = ui->makeToolButton(
+        UiStyle::TabHint, tr("tex"), "", K_CTRL "+1", this, SLOT(setCodeMode()));
+  htmlRibonButton_ = ui->makeToolButton(
+        UiStyle::TabHint, tr("html"), "", K_CTRL "+2", this, SLOT(setHtmlMode()));
 
-  formatButton_ = new QtExt::ToolButton; {
-    formatButton_->setStyleSheet(SS_TOOLBUTTON_TEXT);
-    formatButton_->setToolButtonStyle(Qt::ToolButtonTextOnly);
-    formatButton_->setText(QString("%1 ").arg(tr("format")));
-    formatButton_->setToolTip(tr("Format"));
-
+  formatButton_ = ui->makeToolButton(UiStyle::MenuHint, tr("format"), tr("Format")); {
     QMenu *menu = new QMenu; {
       UiStyle::globalInstance()->setContextMenuStyle(menu, false); // persistent = false
 
@@ -363,7 +328,6 @@ AnnotationEditor::createRibons()
     }
 
     formatButton_->setMenu(menu);
-    connect(formatButton_, SIGNAL(clicked()), formatButton_, SLOT(showMenu()));
   }
 
   // Footer
@@ -399,8 +363,6 @@ AnnotationEditor::createRibons()
   }
   connect(cancelButton_, SIGNAL(clicked()), SLOT(cancel()));
 
-#undef MAKE_TAB_BUTTON
-#undef MAKE_UNCHECKABLE_BUTTON
 #undef MAKE_CHECKABLE_BUTTON
 }
 

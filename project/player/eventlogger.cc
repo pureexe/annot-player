@@ -43,6 +43,7 @@ EventLogger::createConnections()
   connect(player_, SIGNAL(errorEncountered()), SLOT(stopLogUntilPlaying()));
   connect(player_, SIGNAL(trackNumberChanged(int)), SLOT(logTrackNumberChanged(int)));
   connect(player_, SIGNAL(rateChanged(qreal)), SLOT(logPlayRateChanged(qreal)));
+  connect(player_, SIGNAL(aspectRatioChanged(QString)), SLOT(logAspectRatioChanged(QString)));
 
   connect(player_, SIGNAL(buffering()), SLOT(startLogUntilPlaying()));
   connect(player_, SIGNAL(stopped()), SLOT(stopLogUntilPlaying()));
@@ -288,5 +289,15 @@ EventLogger::logClientAgentAuthorizationError()
 void
 EventLogger::logTranslatorNetworkError(const QString &message)
 { warn(tr("translator: got network error: ") + message); }
+
+void
+EventLogger::logAspectRatioChanged(const QString &ratio)
+{
+  if (ratio.isEmpty())
+    log(tr("video aspect ratio set to default"));
+  else
+    log(tr("video aspect ratio") + ": "
+        HTML_STYLE_OPEN(color:orange) + ratio + HTML_STYLE_CLOSE());
+}
 
 // EOF

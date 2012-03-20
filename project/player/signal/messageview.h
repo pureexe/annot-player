@@ -97,6 +97,9 @@ protected:
   static bool isBetterHook(ulong goodHookId, ulong badHookId);
 
 private:
+  void createLayout();
+
+private:
   bool active_;
   QString processName_;
   QComboBox *hookComboBox_;

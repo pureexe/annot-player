@@ -66,6 +66,7 @@
 #include "module/mrlresolver/mrlresolvermanager.h"
 #include "module/mrlresolver/mrlresolversettings.h"
 #include "module/translator/translator.h"
+#include "module/qtext/algorithm.h"
 #include "module/qtext/actionwithid.h"
 #include "module/qtext/countdowntimer.h"
 #include "module/qtext/datetime.h"
@@ -136,7 +137,8 @@ using namespace Logger;
 #define DEBUG "mainwindow"
 #include "module/debug/debug.h"
 
-#define DEFAULT_LIVE_INTERVAL   3000    // 3 seconds
+enum { DEFAULT_LIVE_INTERVAL = 3000 }; // 3 seconds
+enum { HISTORY_SIZE = 100 };    // Size of playPos/Sub/AudioTrack history
 
 // - Focus -
 
@@ -229,9 +231,6 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags f)
   setWindowTitle(TR(T_TITLE_PROGRAM));
   setContentsMargins(0, 0, 0, 0);
 
-#ifdef Q_WS_WIN
-  UiStyle::globalInstance()->setAeroEnabled(Settings::globalInstance()->isAeroEnabled());
-#endif // Q_WS_WIN
   UiStyle::globalInstance()->setMainWindowStyle(this);
 
   menuBar()->setVisible(Settings::globalInstance()->isMenuBarVisible());
@@ -294,6 +293,7 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags f)
   playPosHistory_ = settings->playPosHistory();
   subtitleHistory_ = settings->subtitleHistory();
   audioTrackHistory_= settings->audioTrackHistory();
+  aspectRatioHistory_= settings->aspectRatioHistory();
 
   setTranslateEnabled(settings->isTranslateEnabled());
   setSubtitleOnTop(settings->isSubtitleOnTop());
@@ -533,6 +533,9 @@ MainWindow::createComponents()
   resumeAudioTrackTimer_ = new QtExt::CountdownTimer;
   resumeAudioTrackTimer_->setInterval(3000); // 3 seconds
 
+  resumeAspectRatioTimer_ = new QtExt::CountdownTimer;
+  resumeAspectRatioTimer_->setInterval(3000); // 3 seconds
+
   navigationTimer_ = new QTimer(this);
   navigationTimer_->setInterval(5000); // 5 seconds
   navigationTimer_->setSingleShot(true);
@@ -559,6 +562,7 @@ MainWindow::createConnections()
   connect(player_, SIGNAL(downloadProgress(qint64,qint64)), SLOT(updateDownloadProgress(qint64,qint64)));
 
   // Resume
+  connect(player_, SIGNAL(stopping()), SLOT(rememberAspectRatio()));
   connect(player_, SIGNAL(stopping()), SLOT(rememberPlayPos()));
   connect(player_, SIGNAL(stopping()), SLOT(rememberSubtitle()));
   connect(player_, SIGNAL(stopping()), SLOT(rememberAudioTrack()));
@@ -567,6 +571,7 @@ MainWindow::createConnections()
   connect(resumePlayTimer_, SIGNAL(timeout()), SLOT(resumePlayPos()));
   connect(resumeSubtitleTimer_, SIGNAL(timeout()), SLOT(resumeSubtitle()));
   connect(resumeAudioTrackTimer_, SIGNAL(timeout()), SLOT(resumeAudioTrack()));
+  connect(resumeAspectRatioTimer_, SIGNAL(timeout()), SLOT(resumeAspectRatio()));
 
   // Hub
   connect(hub_, SIGNAL(playModeChanged(SignalHub::PlayMode)), SLOT(updatePlayMode()));
@@ -586,11 +591,11 @@ MainWindow::createConnections()
     connect(_playerui, SIGNAL(showPositionPanelRequested()), SLOT(showSeekDialog())); \
     connect(_playerui->inputComboBox()->lineEdit(), SIGNAL(textChanged(QString)), SLOT(syncInputLineText(QString))); \
     connect(_playerui->prefixComboBox()->lineEdit(), SIGNAL(textChanged(QString)), SLOT(syncPrefixLineText(QString))); \
-    connect(_playerui->toggleAnnotationButton(), SIGNAL(clicked()), annotationView_, SLOT(toggleVisible())); \
     connect(_playerui->previousButton(), SIGNAL(clicked()), SLOT(previous())); \
     connect(_playerui->nextButton(), SIGNAL(clicked()), SLOT(next())); \
-    connect(_playerui, SIGNAL(invalidateMenuRequested()), SLOT(invalidateContextMenu())); \
-    connect(annotationView_, SIGNAL(visibleChanged(bool)), _playerui, SLOT(setAnnotationEnabled(bool)));
+    connect(_playerui, SIGNAL(invalidateMenuRequested()), SLOT(invalidateContextMenu()));
+    //connect(_playerui->toggleAnnotationButton(), SIGNAL(clicked()), annotationView_, SLOT(toggleVisible()));
+    //connect(annotationView_, SIGNAL(visibleChanged(bool)), _playerui, SLOT(setAnnotationEnabled(bool)));
 
     CONNECT(mainPlayer_)
     CONNECT(miniPlayer_)
@@ -912,9 +917,11 @@ MainWindow::createActions()
   MAKE_TOGGLE(nothingAfterFinishedAct_, NOTHINGAFTERFINISHED, this, SLOT(nothingAfterFinished()))
   MAKE_TOGGLE(sleepAfterFinishedAct_, SLEEPAFTERFINISHED, this, SLOT(sleepAfterFinished()))
   MAKE_TOGGLE(shutdownAfterFinishedAct_, SHUTDOWNAFTERFINISHED, this, SLOT(shutdownAfterFinished()))
+  MAKE_TOGGLE(toggleMultipleWindowsEnabledAct_, MULTIWINDOW, this, SLOT(setMultipleWindowsEnabled(bool)))
   MAKE_TOGGLE(toggleClipboardMonitorEnabledAct_, MONITORCLIPBOARD, clipboardMonitor_, SLOT(setEnabled(bool)))
   MAKE_TOGGLE(toggleNetworkProxyDialogVisibleAct_, NETWORKPROXY, this, SLOT(setNetworkProxyDialogVisible(bool)))
-  MAKE_TOGGLE(toggleAeroDisabledAct_, DISABLEAERO, UiStyle::globalInstance(), SLOT(setAeroDisabled(bool)))
+  MAKE_TOGGLE(toggleAeroEnabledAct_, ENABLEAERO, UiStyle::globalInstance(), SLOT(setAeroEnabled(bool)))
+  MAKE_TOGGLE(toggleMenuThemeEnabledAct_, MENUTHEME, UiStyle::globalInstance(), SLOT(setMenuEnabled(bool)))
   MAKE_TOGGLE(toggleFullScreenModeAct_, FULLSCREEN, hub_,       SLOT(setFullScreenWindowMode(bool)))
   MAKE_TOGGLE(toggleMenuBarVisibleAct_, SHOWMENUBAR, menuBar(), SLOT(setVisible(bool)))
   MAKE_TOGGLE(toggleAnnotationCountDialogVisibleAct_, ANNOTATIONLIMIT, this, SLOT(setAnnotationCountDialogVisible(bool)))
@@ -966,6 +973,9 @@ MainWindow::createActions()
   MAKE_TOGGLE(setAnnotationEffectToTransparentAct_, TRANSPARENT, this, SLOT(setAnnotationEffectToTransparent()))
   MAKE_TOGGLE(setAnnotationEffectToShadowAct_, SHADOW, this, SLOT(setAnnotationEffectToShadow()))
   MAKE_TOGGLE(setAnnotationEffectToBlurAct_, BLUR, this, SLOT(setAnnotationEffectToBlur()))
+  MAKE_TOGGLE(setDefaultAspectRatioAct_, DEFAULT, this, SLOT(setDefaultAspectRatio()))
+  MAKE_TOGGLE(setStandardAspectRatioAct_, ASPECTRATIOSTANDARD, this, SLOT(setStandardAspectRatio()))
+  MAKE_TOGGLE(setWideScreenAspectRatioAct_, ASPECTRATIOWIDESCREEN, this, SLOT(setWideScreenAspectRatio()))
 #ifdef USE_MODE_SIGNAL
   MAKE_TOGGLE(toggleSignalViewVisibleAct_, SIGNALVIEW, this, SLOT(setSignalViewVisible(bool)))
   MAKE_TOGGLE(toggleRecentMessageViewVisibleAct_, RECENTMESSAGES, this, SLOT(setRecentMessageViewVisible(bool)))
@@ -1166,9 +1176,6 @@ MainWindow::createMenus()
   // Context menu
   contextMenu_ = new QMenu(TR(T_TITLE_PROGRAM), this); {
     UiStyle::globalInstance()->setContextMenuStyle(contextMenu_, true); // persistent = true
-    embeddedPlayer_->setMenu(contextMenu_);
-    mainPlayer_->setMenu(contextMenu_);
-    miniPlayer_->setMenu(contextMenu_);
   }
 
   userMenu_ = new QMenu(TR(T_TITLE_PROGRAM), this); {
@@ -1356,6 +1363,17 @@ MainWindow::createMenus()
     UiStyle::globalInstance()->setContextMenuStyle(subtitleMenu_, true); // persistent = true
   }
 
+  aspectRatioMenu_ = new QMenu(this); {
+    aspectRatioMenu_->setTitle(TR(T_ASPECTRATIO) + " ...");
+    aspectRatioMenu_->setToolTip(TR(T_ASPECTRATIO));
+    UiStyle::globalInstance()->setContextMenuStyle(aspectRatioMenu_, true); // persistent = true
+
+    aspectRatioMenu_->addAction(setDefaultAspectRatioAct_);
+    aspectRatioMenu_->addSeparator();
+    aspectRatioMenu_->addAction(setStandardAspectRatioAct_);
+    aspectRatioMenu_->addAction(setWideScreenAspectRatioAct_);
+  }
+
   playMenu_ = new QMenu(this); {
     playMenu_->setTitle(tr("Play") + " ...");
     playMenu_->setToolTip(tr("Play menu"));
@@ -1419,6 +1437,23 @@ MainWindow::createMenus()
 
     settingsMenu_->addAction(toggleSiteAccountViewVisibleAct_);
     settingsMenu_->addAction(toggleNetworkProxyDialogVisibleAct_);
+
+    settingsMenu_->addSeparator();
+#ifndef Q_WS_MAC
+    settingsMenu_->addAction(toggleMultipleWindowsEnabledAct_);
+#endif // Q_WS_MAC
+
+    settingsMenu_->addAction(toggleWindowOnTopAct_);
+
+#ifdef Q_OS_LINUX
+    settingsMenu_->addAction(toggleMenuBarVisibleAct_);
+#endif // Q_OS_LINUX
+    settingsMenu_->addAction(toggleMenuThemeEnabledAct_);
+#ifdef Q_WS_WIN
+    if (QtWin::isWindowsVistaOrLater())
+      settingsMenu_->addAction(toggleAeroEnabledAct_);
+#endif Q_WS_WIN
+    settingsMenu_->addMenu(themeMenu_);
   }
 
 //#ifndef Q_WS_WIN
@@ -1460,6 +1495,33 @@ MainWindow::createMenus()
   helpMenu_->addAction(tr("&Help"), this, SLOT(help())); // DO NOT TRANSLATE ME
   helpMenu_->addAction(tr("&About"), this, SLOT(about())); // DO NOT TRANSLATE ME
 //#endif // !Q_WS_WIN
+
+  openButtonMenu_ = new QMenu(this); {
+    UiStyle::globalInstance()->setContextMenuStyle(openButtonMenu_, true); // persistent = true
+    openButtonMenu_->setTitle(TR(T_OPEN));
+    openButtonMenu_->setToolTip(TR(T_OPEN));
+    openButtonMenu_->setIcon(QIcon(RC_IMAGE_OPEN));
+
+    openButtonMenu_->addAction(openFileAct_);
+    openButtonMenu_->addAction(openUrlAct_);
+    openButtonMenu_->addSeparator();
+    openButtonMenu_->addAction(openDeviceAct_);
+    openButtonMenu_->addAction(openVideoDeviceAct_);
+    openButtonMenu_->addSeparator();
+    openButtonMenu_->addAction(openSubtitleAct_);
+    openButtonMenu_->addAction(openAnnotationUrlAct_);
+#ifdef Q_WS_WIN // TODO add support for Mac/Linux
+    openButtonMenu_->addAction(openAudioDeviceAct_);
+#endif // Q_WS_WIN
+  }
+
+  // PlayerUI
+  embeddedPlayer_->menuButton()->setMenu(contextMenu_);
+  mainPlayer_->menuButton()->setMenu(contextMenu_);
+  miniPlayer_->menuButton()->setMenu(contextMenu_);
+  embeddedPlayer_->openButton()->setMenu(openButtonMenu_);
+  mainPlayer_->openButton()->setMenu(openButtonMenu_);
+  miniPlayer_->openButton()->setMenu(openButtonMenu_);
 }
 
 // jichi:10/17/2011: TODO: Totally remove dock widgets; use layout instead
@@ -1751,6 +1813,10 @@ MainWindow::openUrl(const QString &url)
 }
 
 void
+MainWindow::checkClipboard()
+{ clipboardMonitor_->checkClipboard(); }
+
+void
 MainWindow::openFile()
 {
   if (!QDir(recentPath_).exists())
@@ -1944,7 +2010,7 @@ MainWindow::openLocalUrls(const QList<QUrl> &urls)
       openLocalUrl(urls.front());
     }
     if (player_->hasMedia() && !subs.isEmpty())
-      foreach (QString f, ::revertList(subs))
+      foreach (QString f, QtExt::revertList(subs))
         openSubtitleFile(f);
   }
 }
@@ -2673,7 +2739,10 @@ MainWindow::updateDownloadProgress(qint64 receivedBytes, qint64 totalBytes)
     if (stopped)
       title += tr("Complete");
     else {
-      title += FORMAT_PERCENTAGE(percentage);
+      if (percentage < 0.01 / 100)
+        title += tr("Buffering");
+      else
+        title += FORMAT_PERCENTAGE(percentage);
       if (speed)
         title += ", " + downloadSpeedToString(speed);
       if (remainingTime) {
@@ -3213,6 +3282,7 @@ MainWindow::invalidateToken(const QString &mrl)
 void
 MainWindow::resumeAll()
 {
+  resumeAspectRatioTimer_->start(3); // 3 times
   resumeAudioTrackTimer_->start(3); // 3 times
   resumePlayTimer_->start(3); // 3 times
   resumeSubtitleTimer_->start(3); // 3 times
@@ -4221,6 +4291,9 @@ MainWindow::invalidateContextMenu()
 
         contextMenu_->addMenu(audioTrackMenu_);
       }
+
+      invalidateAspectRatioMenu();
+      contextMenu_->addMenu(aspectRatioMenu_);
     }
   }
 
@@ -4395,56 +4468,11 @@ MainWindow::invalidateContextMenu()
 
   }
 
-  // GUI
-  {
-    contextMenu_->addSeparator();
-
-    //contextMenu_->addAction(showMinimizedAct_);
-    //if (hub_->isStopped() && player_->isStopped())
-    //  contextMenu_->addAction(deleteCachesAct_);
-
-    toggleWindowOnTopAct_->setChecked(isWindowOnTop());
-    contextMenu_->addAction(toggleWindowOnTopAct_);
-
-    // Theme
-    bool aero = UiStyle::globalInstance()->isAeroEnabled();
-#ifdef Q_WS_WIN
-    if (QtWin::isWindowsVistaOrLater()) {
-      toggleAeroDisabledAct_->setChecked(!aero);
-      contextMenu_->addAction(toggleAeroDisabledAct_);
-    }
-#endif // Q_WS_WIN
-    if (!aero) {
-      contextMenu_->addMenu(themeMenu_);
-
-      UiStyle::Theme t = UiStyle::globalInstance()->theme();
-      setThemeToDefaultAct_->setChecked(t == UiStyle::DefaultTheme);
-      setThemeToRandomAct_->setChecked(t == UiStyle::RandomTheme);
-      setThemeToDarkAct_->setChecked(t == UiStyle::DarkTheme);
-      setThemeToBlackAct_->setChecked(t == UiStyle::BlackTheme);
-      setThemeToBlueAct_->setChecked(t == UiStyle::BlueTheme);
-      setThemeToBrownAct_->setChecked(t == UiStyle::BrownTheme);
-      setThemeToCyanAct_->setChecked(t == UiStyle::CyanTheme);
-      setThemeToGrayAct_->setChecked(t == UiStyle::GrayTheme);
-      setThemeToGreenAct_->setChecked(t == UiStyle::GreenTheme);
-      setThemeToPinkAct_->setChecked(t == UiStyle::PinkTheme);
-      setThemeToPurpleAct_->setChecked(t == UiStyle::PurpleTheme);
-      setThemeToRedAct_->setChecked(t == UiStyle::RedTheme);
-      setThemeToWhiteAct_->setChecked(t == UiStyle::WhiteTheme);
-      setThemeToYellowAct_->setChecked(t == UiStyle::YellowTheme);
-    }
-#ifdef Q_OS_LINUX
-    toggleMenuBarVisibleAct_->setChecked(menuBar()->isVisible());
-    contextMenu_->addAction(toggleMenuBarVisibleAct_);
-#endif // Q_OS_LINUX
-  }
-
   // Help
   {
     contextMenu_->addSeparator();
 
-    toggleSiteAccountViewVisibleAct_->setChecked(siteAccountView_ && siteAccountView_->isVisible());
-    toggleNetworkProxyDialogVisibleAct_->setChecked(networkProxyDialog_ && networkProxyDialog_->isVisible());
+    invalidateSettingsMenu();
     contextMenu_->addMenu(settingsMenu_);
 
     //contextMenu_->addAction(checkInternetConnectionAct_);
@@ -4456,6 +4484,69 @@ MainWindow::invalidateContextMenu()
     contextMenu_->addAction(quitAct_);
   }
   //DOUT("exit");
+}
+
+void
+MainWindow::invalidateAspectRatioMenu()
+{
+  QString ratio;
+  if (player_ && player_->hasMedia())
+    ratio = player_->aspectRatio();
+
+  setDefaultAspectRatioAct_->setChecked(ratio.isEmpty());
+  setStandardAspectRatioAct_->setChecked(ratio == "4:3");
+  setWideScreenAspectRatioAct_->setChecked(ratio == "16:9");
+}
+
+void
+MainWindow::invalidateSettingsMenu()
+{
+  toggleSiteAccountViewVisibleAct_->setChecked(siteAccountView_ && siteAccountView_->isVisible());
+  toggleNetworkProxyDialogVisibleAct_->setChecked(networkProxyDialog_ && networkProxyDialog_->isVisible());
+  toggleWindowOnTopAct_->setChecked(isWindowOnTop());
+
+#ifdef Q_OS_LINUX
+  toggleMenuBarVisibleAct_->setChecked(menuBar()->isVisible());
+#endif // Q_OS_LINUX
+
+  toggleMenuThemeEnabledAct_->setChecked(UiStyle::globalInstance()->isMenuEnabled());
+
+  toggleMultipleWindowsEnabledAct_->setChecked(Settings::globalInstance()->isMultipleWindowsEnabled());
+
+  bool themeEnabled = true;
+#ifdef Q_WS_WIN
+  if (QtWin::isWindowsVistaOrLater()) {
+    bool aero = UiStyle::globalInstance()->isAeroEnabled();
+    toggleAeroEnabledAct_->setChecked(aero);
+    themeEnabled = !aero;
+    if (themeEnabled != themeMenu_->isEnabled()) {
+      themeMenu_->setEnabled(themeEnabled);
+      themeMenu_->setVisible(themeEnabled);
+     }
+  }
+#endif // Q_WS_WIN
+  if (themeEnabled)
+    invalidateMenuTheme();
+}
+
+void
+MainWindow::invalidateMenuTheme()
+{
+  UiStyle::Theme t = UiStyle::globalInstance()->theme();
+  setThemeToDefaultAct_->setChecked(t == UiStyle::DefaultTheme);
+  setThemeToRandomAct_->setChecked(t == UiStyle::RandomTheme);
+  setThemeToDarkAct_->setChecked(t == UiStyle::DarkTheme);
+  setThemeToBlackAct_->setChecked(t == UiStyle::BlackTheme);
+  setThemeToBlueAct_->setChecked(t == UiStyle::BlueTheme);
+  setThemeToBrownAct_->setChecked(t == UiStyle::BrownTheme);
+  setThemeToCyanAct_->setChecked(t == UiStyle::CyanTheme);
+  setThemeToGrayAct_->setChecked(t == UiStyle::GrayTheme);
+  setThemeToGreenAct_->setChecked(t == UiStyle::GreenTheme);
+  setThemeToPinkAct_->setChecked(t == UiStyle::PinkTheme);
+  setThemeToPurpleAct_->setChecked(t == UiStyle::PurpleTheme);
+  setThemeToRedAct_->setChecked(t == UiStyle::RedTheme);
+  setThemeToWhiteAct_->setChecked(t == UiStyle::WhiteTheme);
+  setThemeToYellowAct_->setChecked(t == UiStyle::YellowTheme);
 }
 
 void
@@ -4685,6 +4776,7 @@ MainWindow::dispose()
   DOUT("enter");
 
   if (player_->hasMedia()) {
+    //rememberAspectRatio();
     rememberPlayPos();
     rememberSubtitle();
     rememberAudioTrack();
@@ -4744,19 +4836,20 @@ MainWindow::closeEvent(QCloseEvent *event)
 
   // Save settings
   Settings *settings = Settings::globalInstance();
+  UiStyle *ui = UiStyle::globalInstance();
 
   //invalidateRecent();
 #ifdef Q_WS_WIN
-  settings->setAeroEnabled(UiStyle::globalInstance()->isAeroEnabled());
+  settings->setAeroEnabled(ui->isAeroEnabled());
 #endif // Q_WS_WIN
+
+  settings->setMenuThemeEnabled(ui->isMenuEnabled());
 
   settings->setRecentFiles(recentFiles_);
 
   settings->setRecentPath(recentPath_);
 
-  settings->setThemeId(UiStyle::globalInstance()->theme());
-
-  settings->setThemeId(UiStyle::globalInstance()->theme());
+  settings->setThemeId(ui->theme());
 
   settings->setMenuBarVisible(menuBar()->isVisible());
 
@@ -4794,6 +4887,7 @@ MainWindow::closeEvent(QCloseEvent *event)
   settings->setPlayPosHistory(playPosHistory_);
   settings->setSubtitleHistory(subtitleHistory_);
   settings->setAudioTrackHistory(audioTrackHistory_);
+  settings->setAspectRatioHistory(aspectRatioHistory_);
 
   settings->flush();
 
@@ -5561,7 +5655,7 @@ MainWindow::setRecentMessageViewVisible(bool visible)
 {
   if (visible) {
     recentMessageView_->clear();
-    recentMessageView_->addMessages(::revertList(messageHandler_->recentMessages()), messageHandler_->hookId());
+    recentMessageView_->addMessages(QtExt::revertList(messageHandler_->recentMessages()), messageHandler_->hookId());
     recentMessageView_->setCurrentIndex(1);
   }
   recentMessageView_->setVisible(visible);
@@ -5715,7 +5809,7 @@ MainWindow::setAppLanguageToSimplifiedChinese()
 
 void
 MainWindow::invalidateAppLanguage()
-{ warn(tr("restart the app to use the new language")); }
+{ notify(tr("restart the app to use the new language")); }
 
 // - Helpers -
 
@@ -5869,7 +5963,7 @@ MainWindow::invalidateRecent()
   }
 
   if (!recentFiles_.isEmpty()) {
-     QStringList unique = ::uniqueList(recentFiles_);
+     QStringList unique = QtExt::uniqueList(recentFiles_);
      if (unique.size() != recentFiles_.size()) {
        recentFiles_ = unique;
        update = true;
@@ -6558,7 +6652,7 @@ MainWindow::rememberPlayPos()
       return;
     }
 
-    if (playPosHistory_.size() > 100) {
+    if (playPosHistory_.size() > HISTORY_SIZE) {
       // maximum play pos count to remember
       int i = qrand() % playPosHistory_.size();
       qint64 k = playPosHistory_.keys()[i];
@@ -6624,7 +6718,7 @@ MainWindow::rememberSubtitle()
     else
       subtitleHistory_.remove(hash);
 
-    if (subtitleHistory_.size() > 100) {
+    if (subtitleHistory_.size() > HISTORY_SIZE) {
       // maximum play pos count to remember
       int i = qrand() % subtitleHistory_.size();
       qint64 k = subtitleHistory_.keys()[i];
@@ -6687,7 +6781,7 @@ MainWindow::rememberAudioTrack()
     else
       audioTrackHistory_.remove(hash);
 
-    if (audioTrackHistory_.size() > 100) {
+    if (audioTrackHistory_.size() > HISTORY_SIZE) {
       // maximum play pos count to remember
       int i = qrand() % audioTrackHistory_.size();
       qint64 k = audioTrackHistory_.keys()[i];
@@ -6715,6 +6809,60 @@ MainWindow::resumeAudioTrack()
         log(tr("loading last audio track") + ": " +
             player_->audioTrackDescriptions()[track]);
       player_->setAudioTrackId(track);
+    }
+  }
+  //DOUT("exit");
+}
+
+void
+MainWindow::rememberAspectRatio()
+{
+  //DOUT("enter");
+  if (player_->hasMedia()) {
+    QString ratio = player_->aspectRatio();
+
+    DOUT("ratio =" << ratio);
+
+    qint64 hash = dataManager_->token().hashId();
+    DOUT("hash =" << hash);
+    if (!hash) {
+      DOUT("exit: no hash");
+      return;
+    }
+
+    if (ratio.isEmpty())
+      aspectRatioHistory_.remove(hash);
+    else
+      aspectRatioHistory_[hash] = ratio;
+
+    if (aspectRatioHistory_.size() > HISTORY_SIZE) {
+      // maximum count to remember
+      int i = qrand() % aspectRatioHistory_.size();
+      qint64 k = aspectRatioHistory_.keys()[i];
+      aspectRatioHistory_.remove(k);
+    }
+  }
+  //DOUT("exit");
+}
+
+void
+MainWindow::resumeAspectRatio()
+{
+  //DOUT("enter");
+  //if (player_->hasMedia()) {
+  if (player_->isValid()) {
+    resumeAspectRatioTimer_->stop();
+    qint64 hash = dataManager_->token().hashId();
+    DOUT("hash =" << hash);
+
+    QString ratio;
+    if (hash && aspectRatioHistory_.contains(hash))
+      ratio = aspectRatioHistory_[hash];
+
+    DOUT("ratio =" << ratio);
+    if (!ratio.isEmpty()) {
+      log(tr("using last aspect ratio") + ": " + ratio);
+      player_->setAspectRatio(ratio);
     }
   }
   //DOUT("exit");
@@ -6750,29 +6898,29 @@ MainWindow::setAnnotationEffectToBlur()
 void
 MainWindow::setNavigationEnabled(bool t)
 {
+  PlayerPanel *players[] = { mainPlayer_, miniPlayer_, embeddedPlayer_ };
+  BOOST_FOREACH(PlayerPanel *p, players) {
+    p->openButton()->setEnabled(t);
+#ifdef Q_WS_WIN
+    QtWin::repaintWindow(mainPlayer_->openButton()->winId());
+#endif // Q_WS_WIN
+  }
   if (t) {
     if (!hub_->isMediaTokenMode() ||
         player_->hasMedia() && isRemoteMrl(player_->mediaPath()))
       return;
   }
-  mainPlayer_->previousButton()->setEnabled(t);
-  mainPlayer_->nextButton()->setEnabled(t);
-  miniPlayer_->previousButton()->setEnabled(t);
-  miniPlayer_->nextButton()->setEnabled(t);
-  embeddedPlayer_->previousButton()->setEnabled(t);
-  embeddedPlayer_->nextButton()->setEnabled(t);
+  BOOST_FOREACH(PlayerPanel *p, players) {
+    p->previousButton()->setEnabled(t);
+    p->nextButton()->setEnabled(t);
+#ifdef Q_WS_WIN
+    QtWin::repaintWindow(mainPlayer_->previousButton()->winId());
+    QtWin::repaintWindow(mainPlayer_->nextButton()->winId());
+#endif // Q_WS_WIN
+  }
 
   previousAct_->setEnabled(t);
   nextAct_->setEnabled(t);
-
-#ifdef Q_OS_WIN
-  QtWin::repaintWindow(mainPlayer_->previousButton()->winId());
-  QtWin::repaintWindow(mainPlayer_->nextButton()->winId());
-  QtWin::repaintWindow(miniPlayer_->previousButton()->winId());
-  QtWin::repaintWindow(miniPlayer_->nextButton()->winId());
-  QtWin::repaintWindow(embeddedPlayer_->previousButton()->winId());
-  QtWin::repaintWindow(embeddedPlayer_->nextButton()->winId());
-#endif // Q_OS_WIN
 
   if (!t)
     navigationTimer_->start();
@@ -6902,6 +7050,42 @@ MainWindow::openProxyBrowser()
 #endif // !Q_WS_MAC
   QWidget *w = new ProxyBrowser(parent);
   w->show();
+}
+
+// - Single window -
+
+void
+MainWindow::setMultipleWindowsEnabled(bool t)
+{
+  Settings::globalInstance()->setMultipleWindowsEnabled(t);
+  Settings::globalInstance()->flush();
+  if (t)
+    log(tr("allow multiple player windows"));
+  else
+    log(tr("allow single player window"));
+}
+
+// - Aspect ratio -
+
+void
+MainWindow::setDefaultAspectRatio()
+{
+  if (player_->hasMedia())
+    player_->clearAspectRatio();
+}
+
+void
+MainWindow::setStandardAspectRatio()
+{
+  if (player_->hasMedia())
+    player_->setAspectRatio("4:3");
+}
+
+void
+MainWindow::setWideScreenAspectRatio()
+{
+  if (player_->hasMedia())
+    player_->setAspectRatio("16:9");
 }
 
 // EOF

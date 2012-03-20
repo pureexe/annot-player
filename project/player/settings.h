@@ -63,6 +63,9 @@ public:
   bool isAeroEnabled() const;
   void setAeroEnabled(bool t);
 
+  bool isMenuThemeEnabled() const;
+  void setMenuThemeEnabled(bool t);
+
   bool isLive() const;
   void setLive(bool t);
 
@@ -84,6 +87,13 @@ public:
 
   qint64 annotationLanguages() const; ///< Annotation language
   void setAnnotationLanguages(qint64 lang);
+
+  void setMultipleWindowsEnabled(bool t);
+  bool isMultipleWindowsEnabled() const;
+
+  QStringList browserUrls() const;
+  void setBrowserUrls(const QStringList &urls);
+  void clearBrowserUrls();
 
   QStringList recentFiles() const;
   void setRecentFiles(const QStringList &files);
@@ -122,6 +132,9 @@ public:
 
   QHash<qint64, int> audioTrackHistory() const;
   void setAudioTrackHistory(const QHash<qint64, int> &h);
+
+  QHash<qint64, QString> aspectRatioHistory() const;
+  void setAspectRatioHistory(const QHash<qint64, QString> &h);
 
   // - Network proxy -
 

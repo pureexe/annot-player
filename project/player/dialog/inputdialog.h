@@ -37,6 +37,9 @@ protected slots:
 protected:
   //virtual void mouseDoubleClickEvent(QMouseEvent *event);
   //virtual void contextMenuEvent(QContextMenuEvent *event);
+
+private:
+  void createLayout();
 };
 
 #endif // INPUTDIALOG_H

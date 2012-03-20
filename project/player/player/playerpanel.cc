@@ -11,27 +11,22 @@
 #include "tr.h"
 #include "module/qtext/slider.h"
 #include "module/qtext/toolbutton.h"
-#include <QtCore>
 #include <QtGui>
-
-#define SS_TOOLBUTTON \
-  SS_BEGIN(QToolButton) \
-    SS_BORDERLESS \
-  SS_END
-
-#define SS_ALL \
-  SS_TOOLBUTTON
 
 PlayerPanel::PlayerPanel(QWidget *parent)
   : Base(parent),
     positionSlider_(0), volumeSlider_(0),
-    playButton_(0), stopButton_(0), nextFrameButton_(0), fastForwardButton_(0), fastFastForwardButton_(0),
-    toggleFullScreenModeButton_(0), toggleMiniModeButton_(0), toggleEmbedModeButton_(0), toggleAnnotationButton_(0),
+    openButton_(0), playButton_(0), stopButton_(0), nextFrameButton_(0), fastForwardButton_(0), fastFastForwardButton_(0),
+    toggleFullScreenModeButton_(0), toggleMiniModeButton_(0), toggleEmbedModeButton_(0),
     userButton_(0), positionButton_(0), previousButton_(0), nextButton_(0), menuButton_(0),
-    inputComboBox_(0), prefixComboBox_(0)
+    inputCountButton_(0), inputComboBox_(0), prefixComboBox_(0)
 {
   setContentsMargins(0, 0, 0, 0);
-  setStyleSheet(SS_ALL);
+  setStyleSheet(
+    SS_BEGIN(QToolButton) \
+      SS_BORDERLESS \
+    SS_END
+  );
 }
 
 // - Sliders -
@@ -74,7 +69,7 @@ PlayerPanel::volumeSlider()
     } return _button##_; \
   }
 
-  //MAKE_BUTTON(openButton, OPEN)
+  MAKE_BUTTON(openButton, OPEN)
   MAKE_BUTTON(playButton, PLAY)
   MAKE_BUTTON(stopButton, STOP)
   MAKE_BUTTON(nextFrameButton, NEXTFRAME)
@@ -84,13 +79,22 @@ PlayerPanel::volumeSlider()
   MAKE_BUTTON(toggleMiniModeButton, MINI)
   MAKE_BUTTON(toggleEmbedModeButton, EMBED)
   MAKE_BUTTON(toggleFullScreenModeButton, FULLSCREEN)
-  MAKE_BUTTON(toggleAnnotationButton, ANNOT)
+  //MAKE_BUTTON(toggleAnnotationButton, ANNOT)
   MAKE_BUTTON(previousButton, PREVIOUS)
   MAKE_BUTTON(nextButton, NEXT)
   MAKE_BUTTON(userButton, USER)
   MAKE_BUTTON(positionButton, SEEK)
   MAKE_BUTTON(menuButton, MENU)
 #undef MAKE_BUTTON
+
+QToolButton*
+PlayerPanel::inputCountButton()
+{
+  if (!inputCountButton_)
+    inputCountButton_ = UiStyle::globalInstance()->makeToolButton(
+          0, "-", tr("Character count"));
+  return inputCountButton_;
+}
 
 // - Line edits -
 

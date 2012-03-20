@@ -26,7 +26,7 @@
 #include <ctime>
 #include <cstdlib>
 
-//#define DEBUG "main"
+#define DEBUG "main"
 #include "module/debug/debug.h"
 
 // - Startup stages -
@@ -96,6 +96,7 @@ namespace { // anonymous
 int
 main(int argc, char *argv[])
 {
+  DOUT("enter");
   // Set OS encoding to UTF-8 before application starts.
   QTextCodec *codec = QTextCodec::codecForName("UTF-8");
   QTextCodec::setCodecForCStrings(codec);
@@ -103,10 +104,11 @@ main(int argc, char *argv[])
 
   // Applications
   Application a(argc, argv);
-  if (!a.isSingleInstance())
-    return 0;
-
   Settings *settings = Settings::globalInstance();
+
+  if (!settings->isMultipleWindowsEnabled() &&
+      !a.isSingleInstance())
+    return 0;
 
   // Seed global random generator.
   time_t now = ::time(0);
@@ -160,16 +162,33 @@ main(int argc, char *argv[])
   {
     QWebSettings *ws = QWebSettings::globalSettings();
     ws->setAttribute(QWebSettings::PluginsEnabled, true);
-    ws->setAttribute(QWebSettings::AutoLoadImages, true);
-    ws->setAttribute(QWebSettings::JavascriptEnabled, true);
+    ws->setAttribute(QWebSettings::JavaEnabled, true);
+    ws->setAttribute(QWebSettings::DnsPrefetchEnabled, true); // better performance
+
+    ws->setAttribute(QWebSettings::JavascriptCanOpenWindows, true);
+    ws->setAttribute(QWebSettings::JavascriptCanAccessClipboard, true);
+    ws->setAttribute(QWebSettings::DeveloperExtrasEnabled, true);
+
+    ws->setAttribute(QWebSettings::OfflineStorageDatabaseEnabled, true);
+    ws->setAttribute(QWebSettings::OfflineWebApplicationCacheEnabled, true);
+
+    ws->setAttribute(QWebSettings::LocalStorageEnabled, true);
+    ws->setAttribute(QWebSettings::LocalContentCanAccessRemoteUrls, true);
+
     //ws->setMaximumPagesInCache(10);
+    //web->setLocalStoragePath(...);
   }
 //#endif // USE_MODULE_WEBBROWSER
 
   // Set theme.
   {
+    UiStyle *ui = UiStyle::globalInstance();
     int tid = settings->themeId();
-    UiStyle::globalInstance()->setTheme(tid);
+    ui->setTheme(tid);
+    ui->setMenuEnabled(settings->isMenuThemeEnabled());
+#ifdef Q_WS_WIN
+    ui->setAeroEnabled(settings->isAeroEnabled());
+#endif // Q_WS_WIN
   }
 
   // Set network proxy
@@ -199,6 +218,7 @@ main(int argc, char *argv[])
 //  MainWindow w;
 //
 //#endif // USE_MODE_SIGNAL
+  DOUT("make mainwindow");
   MainWindow w; {
     Q_ASSERT(w.isValid());
     //if (!w.isValid()) {
@@ -213,11 +233,13 @@ main(int argc, char *argv[])
     a.setMainWindow(&w);
 
     // Show main window
+    DOUT("show mainwindow");
     w.resize(INIT_WINDOW_SIZE);
     w.show();
     //QTimer::singleShot(0, &w, SLOT(show()));
 
     // Automatic login
+    DOUT("automatic login");
     QString userName = settings->userName(),
             password = settings->password();
     if (!userName.isEmpty() && !password.isEmpty())
@@ -280,6 +302,9 @@ main(int argc, char *argv[])
   //DWM_ENABLE_AERO_WIDGET(&bk);
   //bk.showMaximized();
 
+  QTimer::singleShot(0, &w, SLOT(checkClipboard()));
+
+  DOUT("exit: exec");
   return a.exec();
 }
 

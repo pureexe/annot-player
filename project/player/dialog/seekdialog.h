@@ -31,9 +31,8 @@ public slots:
 protected slots:
   void ok();
 
-protected:
-  //virtual void mouseDoubleClickEvent(QMouseEvent *event);
-  //virtual void contextMenuEvent(QContextMenuEvent *event);
+private:
+  void createLayout();
 };
 
 #endif // SEEKDIALOG_H

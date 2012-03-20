@@ -3,7 +3,7 @@
 
 #include "processview.h"
 #include "tr.h"
-#include "stylesheet.h"
+#include "rc.h"
 #include "uistyle.h"
 #include "defines.h"
 #include "logger.h"
@@ -14,7 +14,6 @@
 #else
   #error "QTH is indispensible"
 #endif // USE_WIN_QTH
-#include "module/qtext/toolbutton.h"
 #include <QtGui>
 
 using namespace Logger;
@@ -98,20 +97,14 @@ ProcessView::createModel()
 void
 ProcessView::createLayout()
 {
-#define MAKE_BUTTON(_button, _text, _tip, _slot) \
-  _button = new QtExt::ToolButton; { \
-    _button->setText(QString("[ %1 ]").arg(_text)); \
-    _button->setToolTip(_tip); \
-    _button->setStyleSheet(SS_TOOLBUTTON_TEXT); \
-    _button->setToolButtonStyle(Qt::ToolButtonTextOnly); \
-  } \
-  connect(_button, SIGNAL(clicked()), _slot);
+  UiStyle *ui = UiStyle::globalInstance();
 
-  MAKE_BUTTON(attachButton_, TR(T_ATTACH), TR(T_TOOLTIP_ATTACHPROCESS), SLOT(attachProcess()))
-  MAKE_BUTTON(detachButton_, TR(T_DETACH), TR(T_TOOLTIP_DETACHPROCESS), SLOT(detachProcess()))
-
-  QToolButton *MAKE_BUTTON(refreshButton, TR(T_REFRESH), TR(T_TOOLTIP_REFRESHPROCESS), SLOT(refresh()))
-#undef MAKE_BUTTON
+  attachButton_ = ui->makeToolButton(
+        UiStyle::PushHint, TR(T_ATTACH), TR(T_TOOLTIP_ATTACHPROCESS), this, SLOT(attachProcess()));
+  detachButton_ = ui->makeToolButton(
+        UiStyle::PushHint, TR(T_DETACH), TR(T_TOOLTIP_DETACHPROCESS), this, SLOT(detachProcess()));
+  QToolButton *refreshButton = ui->makeToolButton(
+        UiStyle::PushHint, TR(T_REFRESH), TR(T_TOOLTIP_REFRESHPROCESS), this, SLOT(refresh()));
 
   // Set layout
 

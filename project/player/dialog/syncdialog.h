@@ -46,9 +46,8 @@ protected slots:
   void cancel();
   void updateComboBox();
 
-protected:
-  //virtual void mouseDoubleClickEvent(QMouseEvent *event);
-  //virtual void contextMenuEvent(QContextMenuEvent *event);
+private:
+  void createLayout();
 };
 
 #endif // SYNCDIALOG_H

@@ -31,7 +31,7 @@ public:
 
 public:
   virtual qint64 size() const { return Base::size() ? Base::size() : data_.size(); } ///< \override
-  qint64 availableSize() const { return data_.size(); }
+  qint64 availableSize() const;
 
   virtual qint64 pos() const { return pos_; } ///< \override
 
@@ -68,26 +68,32 @@ public:
                     QString();
   }
 
+  QByteArray &data() { return data_; }
+  const QByteArray &data() const { return data_; }
+
+  virtual bool writeToFile(const QString &path); ///< \override
+
   bool isRunning() const { return reply_ && reply_->isRunning(); }
   bool isFinished() const { return reply_ && reply_->isFinished(); }
 
-public slots:
   void waitForFinished();
   virtual void waitForReadyRead(); ///< \override
+
+public slots:
 
   virtual void run(); ///< \override
   virtual void stop(); ///< \override
 
   virtual void setBufferSize(qint64 size) { bufferSize_ = size; } ///< \override
 
-protected:
-  bool isRedirected() const;
-
 protected slots:
-  void leadOut();
-  void redirect();
+  void finish();
   void invalidateSize();
   void networkError();
+
+protected:
+  bool isRedirected() const; ///< override
+  bool redirect(); ///< \override
 };
 
 #endif // BUFFEREDREMOTESTREAM_H

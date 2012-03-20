@@ -17,6 +17,12 @@ public:
 
 public slots:
   void login();
+
+  virtual void setVisible(bool visible); ///< \override
+protected:
+  virtual void closeEvent(QCloseEvent *event); ///< \override
+
+  static QStringList startupUrls();
 };
 
 #endif // PROXYBROWSER_H

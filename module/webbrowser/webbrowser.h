@@ -62,10 +62,16 @@ protected slots:
   WEBBROWSER_API void focusSearchBar();
 
 protected:
-  int tabCount() const;
+  WEBBROWSER_API int tabCount() const;
+  WEBBROWSER_API QUrl tabUrl(int index) const;
+  WEBBROWSER_API QList<QUrl> tabUrls() const;
+  WEBBROWSER_API QString tabAddress(int index) const;
+  WEBBROWSER_API QStringList tabAddresses() const;
+
   QNetworkAccessManager *makeNetworkAccessManager();
   void setupWebPage(QWebPage *page);
 
+protected:
   WEBBROWSER_API virtual void closeEvent(QCloseEvent *event); ///< \override
 
 protected:

@@ -244,24 +244,24 @@ function getTaskAttribute_bilibili ( str_url, str_tmpfile, pDlg, isNeedLogin)
 	if int_foreignlinksite == fls["sina"] -- is sina flv
 	then
 		--fetch dynamic url
-		int_realurlnum, tbl_readurls = getRealUrls(str_id, str_tmpfile, pDlg);
+		int_realurlnum, tbl_realurls = getRealUrls(str_id, str_tmpfile, pDlg);
 	elseif int_foreignlinksite == fls["youku"]
 	then
-		int_realurlnum, tbl_readurls = getRealUrls_youku(str_id, str_tmpfile, pDlg);
+		int_realurlnum, tbl_realurls = getRealUrls_youku(str_id, str_tmpfile, pDlg);
 	elseif int_foreignlinksite == fls["qq"]
 	then
-		int_realurlnum, tbl_readurls = getRealUrls_QQ(str_id, str_tmpfile, pDlg);
+		int_realurlnum, tbl_realurls = getRealUrls_QQ(str_id, str_tmpfile, pDlg);
 	elseif int_foreignlinksite == fls["tudou"]
 	then
-		int_realurlnum, tbl_readurls = getRealUrls_tudou(str_id, str_tmpfile, pDlg);
+		int_realurlnum, tbl_realurls = getRealUrls_tudou(str_id, str_tmpfile, pDlg);
 	elseif int_foreignlinksite == fls["6cn"]
 	then
 		str_id_tmp = string.gsub(str_id, "=","/");
-		int_realurlnum, tbl_readurls = getRealUrls_6cn(str_id_tmp, str_tmpfile, pDlg);
+		int_realurlnum, tbl_realurls = getRealUrls_6cn(str_id_tmp, str_tmpfile, pDlg);
 	else
 		int_realurlnum = 1;
-		tbl_readurls = {};
-		tbl_readurls[string.format("%d",0)] = str_notsinaurl;
+		tbl_realurls = {};
+		tbl_realurls[string.format("%d",0)] = str_notsinaurl;
 	end
 
 	if pDlg~=nil then
@@ -282,7 +282,7 @@ function getTaskAttribute_bilibili ( str_url, str_tmpfile, pDlg, isNeedLogin)
 	tbl_ta["descriptor"] = "bili"..str_biliid.." - "..str_descriptor;
 	tbl_ta["subxmlurl"] = tbl_subxmlurls;
 	tbl_ta["realurlnum"] = int_realurlnum;
-	tbl_ta["realurls"] = tbl_readurls;
+	tbl_ta["realurls"] = tbl_realurls;
 	tbl_ta["oriurl"] = str_url;
 
 	local tbl_resig = {};

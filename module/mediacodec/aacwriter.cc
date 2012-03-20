@@ -68,8 +68,8 @@ AacWriter::writeFrame(const QByteArray &chunk, quint32 timestamp, bool writeHead
 
     quint8 bytes[8];
     Bitwise::getBytes(bytes, bits);
-    write(bytes, 1, 7);
-    write(chunk, 1, dataSize);
+    out_->write(bytes + 1, 7);
+    out_->write(chunk.data() + 1, dataSize);
   }
 }
 

@@ -8,6 +8,7 @@
 #include "module/annotcloud/traits.h"
 #include "module/crypt/crypt.h"
 #include "module/crypt/simplecrypt.h"
+#include "module/qtext/algorithm.h"
 #include <QtCore>
 #include <QNetworkProxy>
 
@@ -40,6 +41,7 @@
 #define SK_UPDATEDATE   "UpdateDate"
 #define SK_RECENTPATH   "RecentPath"
 #define SK_AERO         "Aero"
+#define SK_MENUTHEME    "MenuTheme"
 #define SK_ANNOTFILTER  "AnnotationFilter"
 #define SK_ANNOTCOUNT   "AnnotationCount"
 #define SK_ANNOTEFFECT  "AnnotationEffect"
@@ -51,6 +53,9 @@
 #define SK_PLAYPOSHIST  "PlayPosHistory"
 #define SK_SUBTITLEHIST "SubtitleHistory"
 #define SK_TRACKHIST    "TrackHistory"
+#define SK_ASPECTHIST   "AspectHistory"
+#define SK_BROWSERURLS  "BrowserUrls"
+#define SK_MULTIWINDOW  "MultipleWindows"
 
 #define SK_QUEUEEMPTY   "QueueEmpty"
 
@@ -63,23 +68,6 @@
 #define SK_PROXY_TYPE   "ProxyType"
 #define SK_PROXY_USER   "ProxyUser"
 #define SK_PROXY_PASS   "ProxyPassword"
-
-// - Helpers -
-
-namespace { // anonymous
-
-  template <typename T>
-  inline QList<T>
-  uniqueList(const QList<T> &l)
-  {
-    QList<T> ret;
-    foreach (T t, l)
-      if (!ret.contains(t))
-        ret.append(t);
-    return ret;
-  }
-
-} // anonymous namespace
 
 // - Constructions -
 
@@ -198,6 +186,14 @@ Settings::setAnnotationLanguages(qint64 bits)
 { setValue(SK_ANNOTLANGUAGES, bits); }
 
 bool
+Settings::isMultipleWindowsEnabled() const
+{ return value(SK_MULTIWINDOW).toBool(); }
+
+void
+Settings::setMultipleWindowsEnabled(bool t)
+{ setValue(SK_MULTIWINDOW, t); }
+
+bool
 Settings::isQueueEmpty() const
 { return value(SK_QUEUEEMPTY).toBool(); }
 
@@ -262,6 +258,14 @@ Settings::setAeroEnabled(bool t)
 { setValue(SK_AERO, t); }
 
 bool
+Settings::isMenuThemeEnabled() const
+{ return value(SK_MENUTHEME).toBool(); }
+
+void
+Settings::setMenuThemeEnabled(bool t)
+{ setValue(SK_MENUTHEME, t); }
+
+bool
 Settings::isMenuBarVisible() const
 { return value(SK_MENUBAR).toBool(); }
 
@@ -286,6 +290,23 @@ Settings::setRecentPath(const QString &path)
 { setValue(SK_RECENTPATH, path); }
 
 QStringList
+Settings::browserUrls() const
+{ return value(SK_BROWSERURLS).toStringList(); }
+
+void
+Settings::setBrowserUrls(const QStringList &urls)
+{
+  if (urls.isEmpty())
+    remove(SK_BROWSERURLS);
+  else
+    setValue(SK_BROWSERURLS, urls);
+}
+
+void
+Settings::clearBrowserUrls()
+{ remove(SK_BROWSERURLS); }
+
+QStringList
 Settings::recentFiles() const
 {
   QStringList ret = value(SK_RECENT).toStringList();
@@ -303,7 +324,7 @@ Settings::recentFiles() const
   //r = value(SK_RECENT(9)).toString(); if (!r.isEmpty()) ret.append(r);
 
   if (!ret.isEmpty())
-    ret = ::uniqueList(ret);
+    ret = QtExt::uniqueList(ret);
   return ret;
 }
 
@@ -507,6 +528,30 @@ Settings::setAudioTrackHistory(const QHash<qint64, int> &input)
     foreach (qint64 k, input.keys())
       h[QString::number(k)] = QString::number(input[k]);
     setValue(SK_TRACKHIST, h);
+  }
+}
+
+QHash<qint64, QString>
+Settings::aspectRatioHistory() const
+{
+  QHash<qint64, QString> ret;
+  QHash<QString, QVariant> h = value(SK_ASPECTHIST).toHash();
+  if (!h.isEmpty())
+    foreach (QString k, h.keys())
+      ret[k.toLongLong()] = h[k].toString();
+  return ret;
+}
+
+void
+Settings::setAspectRatioHistory(const QHash<qint64, QString> &input)
+{
+  if (input.isEmpty())
+    remove(SK_PLAYPOSHIST);
+  else {
+    QHash<QString, QVariant> h;
+    foreach (qint64 k, input.keys())
+      h[QString::number(k)] = input[k];
+    setValue(SK_ASPECTHIST, h);
   }
 }
 

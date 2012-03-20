@@ -98,4 +98,19 @@ BufferedFifoStream::waitForFinished()
   DOUT("exit");
 }
 
+bool
+BufferedFifoStream::writeToFile(const QString &path)
+{
+  DOUT("enter: fileName =" << path);
+  QFile file(path);
+  if (!file.open(QIODevice::WriteOnly)) {
+    DOUT("exit: failed to write to file:" << path);
+    return false;
+  }
+
+  bool ok = file.write(data_) == data_.size();
+
+  DOUT("exit: ret =" << ok);
+  return ok;
+}
 // EOF

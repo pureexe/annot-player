@@ -4,9 +4,6 @@
 #include "syncdialog.h"
 #include "uistyle.h"
 #include "tr.h"
-#include "stylesheet.h"
-#include "module/qtext/toolbutton.h"
-#include "module/qtext/combobox.h"
 #include <QtGui>
 
 #define SLOTLINE_MAXWIDTH 150
@@ -27,36 +24,31 @@ SyncDialog::SyncDialog(QWidget *parent)
 //  setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
 //#endif // Q_WS_MAC
   setWindowTitle(TR(T_TITLE_SYNC));
-  setContentsMargins(0, 0, 0, 0);
   UiStyle::globalInstance()->setWindowStyle(this);
 
+  createLayout();
+
+  // Focus
+  comboBox_->setFocus();
+}
+
+void
+SyncDialog::createLayout()
+{
+  UiStyle *ui = UiStyle::globalInstance();
+
   // Widgets
+  comboBox_ = ui->makeComboBox();
+  comboBox_->setMaximumWidth(SLOTLINE_MAXWIDTH);
+  connect(comboBox_, SIGNAL(currentIndexChanged(int)), SLOT(setTimeSlotIndex(int)));
 
-  comboBox_ = new QtExt::ComboBox; {
-    UiStyle::globalInstance()->setComboBoxStyle(comboBox_);
-    comboBox_->setMaximumWidth(SLOTLINE_MAXWIDTH);
-  }
+  QToolButton *okButton = ui->makeToolButton(
+        UiStyle::PushHint | UiStyle::HighlightHint, TR(T_OK), this, SLOT(ok()));
+  QToolButton *cancelButton = ui->makeToolButton(
+        UiStyle::PushHint, TR(T_CANCEL), this, SLOT(hide()));
 
-  QToolButton *okButton = new QtExt::ToolButton; {
-    okButton->setStyleSheet(SS_TOOLBUTTON_TEXT_HIGHLIGHT);
-    okButton->setToolButtonStyle(Qt::ToolButtonTextOnly);
-    okButton->setText(QString("[ %1 ]").arg(TR(T_OK)));
-    okButton->setToolTip(TR(T_OK));
-  }
-
-  QToolButton *cancelButton = new QtExt::ToolButton; {
-    cancelButton->setStyleSheet(SS_TOOLBUTTON_TEXT);
-    cancelButton->setToolButtonStyle(Qt::ToolButtonTextOnly);
-    cancelButton->setText(QString("[ %1 ]").arg(TR(T_CANCEL)));
-    cancelButton->setToolTip(TR(T_CANCEL));
-  }
-
-  QLabel *comboBoxLabel = new QLabel; {
-    comboBoxLabel->setBuddy(comboBox_);
-    comboBoxLabel->setStyleSheet(SS_LABEL);
-    comboBoxLabel->setText(TR(T_LABEL_TIMESLOT));
-    comboBoxLabel->setToolTip(TR(T_TOOLTIP_TIMESLOT));
-  }
+  QLabel *comboBoxLabel = ui->makeLabel(
+        UiStyle::BuddyHint, TR(T_LABEL_TIMESLOT), TR(T_TOOLTIP_TIMESLOT), comboBox_);
 
   // Layouts
   QVBoxLayout *rows = new QVBoxLayout; {
@@ -69,34 +61,15 @@ SyncDialog::SyncDialog(QWidget *parent)
     row1->addWidget(comboBox_);
     row2->addWidget(okButton);
     row2->addWidget(cancelButton);
+
+    setContentsMargins(0, 0, 0, 0);
   } setLayout(rows);
-
-  /*
-  QGridLayout *layout = new QGridLayout; {
-    layout->addWidget(userNameLabel, 0, 0);
-    layout->addWidget(userNameEdit_, 0, 1);
-    layout->addWidget(passwordLabel, 1, 0);
-    layout->addWidget(passwordEdit_, 1, 1);
-    layout->addWidget(okButton, 2, 0);
-    layout->addWidget(cancelButton, 2, 1);
-  }
-  setLayout(layout);
-  */
-
-  // Connections
-  connect(cancelButton, SIGNAL(clicked()), SLOT(cancel()));
-  connect(okButton, SIGNAL(clicked()), SLOT(ok()));
-
-  connect(comboBox_, SIGNAL(currentIndexChanged(int)), SLOT(setTimeSlotIndex(int)));
 
   // Shortcuts
   QShortcut *cancelShortcut = new QShortcut(QKeySequence("Esc"), this);
   connect(cancelShortcut, SIGNAL(activated()), SLOT(hide()));
   QShortcut *closeShortcut = new QShortcut(QKeySequence::Close, this);
   connect(closeShortcut, SIGNAL(activated()), SLOT(hide()));
-
-  // Focus
-  comboBox_->setFocus();
 }
 
 void

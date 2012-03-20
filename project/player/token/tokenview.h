@@ -136,6 +136,7 @@ protected:
   static void setAliasHeaderData(QAbstractItemModel *model);
 
 private:
+  void createLayout();
   void createActions();
 
 private:

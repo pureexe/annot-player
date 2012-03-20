@@ -48,8 +48,8 @@ RawH264Writer::writeFrame(const QByteArray &chunk, quint32 timestamp, bool write
       int len = Bitwise::toUInt16(p, offset);
         offset += 2;
       if (offset + len > chunk.size()) break;
-      write(StartCode, 0, StartCodeSize);
-      write(chunk, offset, len);
+      out_->write(StartCode, StartCodeSize);
+      out_->write(chunk.data() + offset, len);
       offset += len;
     }
   } else { // Video data
@@ -68,8 +68,8 @@ RawH264Writer::writeFrame(const QByteArray &chunk, quint32 timestamp, bool write
         (int)Bitwise::toUInt32(p, offset);
       offset += nalLengthSize_;
       if (offset + len > chunk.size()) break;
-      write(StartCode, 0, StartCodeSize);
-      write(chunk, offset, len);
+      out_->write(StartCode, StartCodeSize);
+      out_->write(chunk.data() + offset, len);
       offset += len;
     }
   }

@@ -342,58 +342,39 @@ LuaResolver::resolve(const QString &href, int *siteid, QString *refurl, QString 
         // MRLs
         if (mrls) {
           lua_getglobal(L, "g_mrls");
-          if (!lua_isnil(L, -1)) {
-            int count = 0;
-            lua_pushnil(L);
-            while (lua_next(L, -2)) {
-              if (lua_isstring(L, -1)) {
-                if (count++ % 2)
-                  mrls->insert(mrls->size() - 1, _qs(lua_tostring(L, -1)));
-                else
-                  mrls->append(_qs(lua_tostring(L, -1)));
-              }
-              lua_pop(L, 1);
+          if (!lua_isnil(L, -1))
+            // See: http://www.wellho.net/mouth/1845_Passing-a-table-from-Lua-into-C.html
+            for (int i = 0; i < mrls_size; i++) {
+              QString k = QString::number(i);
+              lua_pushstring(L, k.toAscii());
+              lua_gettable(L, -2);
+              mrls->append(_qs(lua_tostring(L,-1)));
+              lua_pop(L,1);
             }
-            lua_pop(L, 1);
-          }
         }
         // Durations
         if (durations) {
           lua_getglobal(L, "g_durations");
-          if (!lua_isnil(L, -1)) {
-            int count = 0;
-            lua_pushnil(L);
-            while (lua_next(L, -2)) {
-              if (lua_isnumber(L, -1)) {
-                if (count++ % 2)
-                  durations->insert(durations->size() - 1,
-                                    lua_tointeger(L, -1));
-                else
-                  durations->append(lua_tointeger(L, -1));
-              }
-              lua_pop(L, 1);
+          if (!lua_isnil(L, -1))
+            for (int i = 0; i < mrls_size; i++) {
+              QString k = QString::number(i);
+              lua_pushstring(L, k.toAscii());
+              lua_gettable(L, -2);
+              durations->append(lua_tointeger(L,-1));
+              lua_pop(L,1);
             }
-            lua_pop(L, 1);
-          }
         }
         // Sizes
         if (sizes) {
           lua_getglobal(L, "g_sizes");
-          if (!lua_isnil(L, -1)) {
-            int count = 0;
-            lua_pushnil(L);
-            while (lua_next(L, -2)) {
-              if (lua_isnumber(L, -1)) {
-                if (count++ % 2)
-                  sizes->insert(sizes->size() - 1,
-                                lua_tointeger(L, -1));
-                else
-                  sizes->append(lua_tointeger(L, -1));
-              }
-              lua_pop(L, 1);
+          if (!lua_isnil(L, -1))
+            for (int i = 0; i < mrls_size; i++) {
+              QString k = QString::number(i);
+              lua_pushstring(L, k.toAscii());
+              lua_gettable(L, -2);
+              sizes->append(lua_tointeger(L,-1));
+              lua_pop(L,1);
             }
-            lua_pop(L, 1);
-          }
         }
       }
     }

@@ -43,11 +43,13 @@ public:
 public slots:
   void refresh();
 protected slots:
-  void cancel();
   void ok();
 
   void invalidateButtons();
   void invalidateComboBox();
+
+private:
+  void createLayout();
 
 private:
   QToolButton *okButton_;

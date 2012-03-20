@@ -4,10 +4,6 @@
 #include "addaliasdialog.h"
 #include "uistyle.h"
 #include "tr.h"
-#include "defines.h"
-#include "stylesheet.h"
-#include "comboedit.h"
-#include "module/qtext/toolbutton.h"
 #include "module/annotcloud/traits.h"
 #include "module/annotcloud/alias.h"
 #include <QtGui>
@@ -28,7 +24,23 @@ AddAliasDialog::AddAliasDialog(QWidget *parent)
   setWindowTitle(tr("Add Alias"));
   UiStyle::globalInstance()->setWindowStyle(this);
 
-  // Widgets
+  createLayout();
+
+  // Shortcuts
+  QShortcut *cancelShortcut = new QShortcut(QKeySequence("Esc"), this);
+  connect(cancelShortcut, SIGNAL(activated()), SLOT(hide()));
+  QShortcut *closeShortcut = new QShortcut(QKeySequence::Close, this);
+  connect(closeShortcut, SIGNAL(activated()), SLOT(hide()));
+
+  // Initial status
+  invalidateOKButton();
+  aliasEdit_->setFocus();
+}
+
+void
+AddAliasDialog::createLayout()
+{
+  UiStyle *ui = UiStyle::globalInstance();
 
   QStringList defvals = QStringList()
       << "DEATHNOTE 01"
@@ -37,34 +49,20 @@ AddAliasDialog::AddAliasDialog(QWidget *parent)
       << "集英社"
       << "http://www.youtube.com/watch?v=koeaZ_z1WbI";
 
-  aliasEdit_ = new ComboEdit(defvals); {
-    aliasEdit_->setToolTip(TR(T_TOOLTIP_ADDALIAS));
-  } connect(aliasEdit_->lineEdit(), SIGNAL(returnPressed()), SLOT(ok()));
+  aliasEdit_ = ui->makeComboBox(UiStyle::EditHint, "", TR(T_TOOLTIP_ADDALIAS), defvals);
+  connect(aliasEdit_->lineEdit(), SIGNAL(returnPressed()), SLOT(ok()));
 
-#define MAKE_LABEL(_label, _tr) \
-  QLabel *_label = new QLabel; { \
-    _label->setStyleSheet(SS_LABEL); \
-    _label->setText(QString("%1:").arg(_tr)); \
-    _label->setToolTip(_tr); \
-  }
-
-  MAKE_LABEL(tagLabel, TR(T_TAG))
-  MAKE_LABEL(typeLabel, TR(T_TYPE))
-  MAKE_LABEL(languageLabel, TR(T_LANGUAGE))
-  MAKE_LABEL(aliasLabel, TR(T_ALIAS))
-#undef MAKE_LABEL
+  QLabel *tagLabel = ui->makeLabel(UiStyle::BuddyHint, TR(T_TAG)),
+         *typeLabel = ui->makeLabel(UiStyle::BuddyHint, TR(T_TYPE)),
+         *languageLabel = ui->makeLabel(UiStyle::BuddyHint, TR(T_LANGUAGE)),
+         *aliasLabel = ui->makeLabel(UiStyle::BuddyHint, TR(T_ALIAS));
 
 #define MAKE_TAG(_id) \
-  QToolButton *tag##_id##Button = new QtExt::ToolButton; { \
-    tag##_id##Button->setStyleSheet(SS_TOOLBUTTON_TEXT); \
-    tag##_id##Button->setToolButtonStyle(Qt::ToolButtonTextOnly); \
-    tag##_id##Button->setText(#_id); \
-    tag##_id##Button->setToolTip(#_id); \
+  QToolButton *tag##_id##Button = ui->makeToolButton(0, #_id, this, SLOT(tag##_id())); { \
     QFont font = tag##_id##Button->font(); \
     font.setItalic(true); \
     tag##_id##Button->setFont(font); \
-  } \
-  connect(tag##_id##Button, SIGNAL(clicked()), SLOT(tag##_id()));
+  }
 
   MAKE_TAG(01) MAKE_TAG(02) MAKE_TAG(03) MAKE_TAG(04) MAKE_TAG(05)
   MAKE_TAG(OVA)
@@ -72,17 +70,12 @@ AddAliasDialog::AddAliasDialog(QWidget *parent)
 #undef MAKE_TAG
 
 #define MAKE_LANGUAGE(_id, _styleid) \
-  is##_id##Button_ = new QtExt::ToolButton; { \
-    is##_id##Button_->setStyleSheet(SS_TOOLBUTTON_TEXT); \
-    is##_id##Button_->setToolButtonStyle(Qt::ToolButtonTextOnly); \
-    is##_id##Button_->setText(TR(T_##_styleid)); \
+  is##_id##Button_ = ui->makeToolButton(0, TR(T_##_styleid), this, SLOT(invalidateOKButton())); { \
     is##_id##Button_->setCheckable(true); \
-    is##_id##Button_->setToolTip(TR(T_##_styleid)); \
     QFont font = is##_id##Button_->font(); \
     font.setUnderline(true); \
     is##_id##Button_->setFont(font); \
-  } \
-  connect(is##_id##Button_, SIGNAL(clicked(bool)), SLOT(invalidateOKButton()));
+  }
 
   MAKE_LANGUAGE(English, ENGLISH)
   MAKE_LANGUAGE(Japanese, JAPANESE)
@@ -91,12 +84,8 @@ AddAliasDialog::AddAliasDialog(QWidget *parent)
 #undef MAKE_LANGUAGE
 
 #define MAKE_TYPE(_id, _text, _tip) \
-  is##_id##Button_ = new QtExt::ToolButton; { \
-    is##_id##Button_->setStyleSheet(SS_TOOLBUTTON_TEXT); \
-    is##_id##Button_->setToolButtonStyle(Qt::ToolButtonTextOnly); \
-    is##_id##Button_->setText(_text); \
+  is##_id##Button_ = ui->makeToolButton(0, _text, _tip); { \
     is##_id##Button_->setCheckable(true); \
-    is##_id##Button_->setToolTip(_tip); \
     QFont font = is##_id##Button_->font(); \
     font.setBold(true); \
     is##_id##Button_->setFont(font); \
@@ -109,20 +98,12 @@ AddAliasDialog::AddAliasDialog(QWidget *parent)
 #undef MAKE_TYPE
   isNameButton_->setChecked(true);
 
-#define MAKE_BUTTON(_button, _styleid, _slot) \
-  _button = new QtExt::ToolButton; { \
-    _button->setStyleSheet(SS_TOOLBUTTON_TEXT); \
-    _button->setToolButtonStyle(Qt::ToolButtonTextOnly); \
-    _button->setText(QString("[ %1 ]").arg(TR(T_##_styleid))); \
-    _button->setToolTip(TR(T_##_styleid)); \
-  } \
-  connect(_button, SIGNAL(clicked()), _slot);
-
-  MAKE_BUTTON(okButton_, ADD, SLOT(ok()))
-  QToolButton *MAKE_BUTTON(pasteButton, PASTE, SLOT(paste()))
-  MAKE_BUTTON(cancelButton_, CANCEL, SLOT(hide()))
-#undef MAKE_BUTTON
-  okButton_->setStyleSheet(SS_TOOLBUTTON_TEXT_HIGHLIGHT);
+  okButton_ = ui->makeToolButton(
+        UiStyle::PushHint | UiStyle::HighlightHint , TR(T_ADD), this, SLOT(ok()));
+  cancelButton_ = ui->makeToolButton(
+        UiStyle::PushHint, TR(T_CANCEL), this, SLOT(hide()));
+  QToolButton *pasteButton = ui->makeToolButton(
+        UiStyle::PushHint, TR(T_PASTE), this, SLOT(paste()));
 
   // Layouts
   QVBoxLayout *rows = new QVBoxLayout; {
@@ -176,16 +157,6 @@ AddAliasDialog::AddAliasDialog(QWidget *parent)
     rows->setContentsMargins(6, 6, 6, 6);
     setContentsMargins(0, 0, 0, 0);
   } setLayout(rows);
-
-  // Shortcuts
-  QShortcut *cancelShortcut = new QShortcut(QKeySequence("Esc"), this);
-  connect(cancelShortcut, SIGNAL(activated()), SLOT(hide()));
-  QShortcut *closeShortcut = new QShortcut(QKeySequence::Close, this);
-  connect(closeShortcut, SIGNAL(activated()), SLOT(hide()));
-
-  // Initial status
-  invalidateOKButton();
-  aliasEdit_->setFocus();
 }
 
 // - Properties -

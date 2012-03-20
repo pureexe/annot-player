@@ -24,6 +24,9 @@ mac:    INCLUDEPATH     += $$ROOTDIR/mac
 
 DEFINES += UNICODE
 
+#CONFIG += x86 x86_64 ppc64
+CONFIG -= ppc ppc64
+
 # C++0x
 win32:  QMAKE_CXXFLAGS  += -Zc:auto
 unix:   QMAKE_CXXFLAGS  += -std=c++0x

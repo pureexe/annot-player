@@ -223,14 +223,21 @@ public slots:
   void playPause(); ///< Toggle play/pause.
   void nextFrame(); ///< Pause and jump to the next frame.
 
+public:
   qreal rate() const;
   qreal volume() const;       ///< [0,1]
   qreal position() const;     ///< [0,1]
+  QString aspectRatio() const;
+public slots:
   void setVolume(qreal vol);
   void setRate(qreal rate);
-  void resetRate() { setRate(1.0); }
+  void clearRate() { setRate(1.0); }
   void mute();
   void setPosition(qreal pos);
+  void setAspectRatio(const char *ratio); ///< ratio = width:height
+  void setAspectRatio(const QString &ratio); ///< ratio = width:height
+  void setAspectRatio(int width, int height);
+  void clearAspectRatio();
 
   void setTime(qint64 msecs); ///< same effect as setPosition
 
@@ -273,6 +280,7 @@ signals:
   void error(const QString &msg);
   void message(const QString &msg);
   void fileSaved(const QString &fileName);
+  void aspectRatioChanged(const QString &ratio);
   void downloadProgress(qint64 receivedBytes, qint64 totalBytes);
   void opening();
   void buffering();

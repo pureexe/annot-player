@@ -1,7 +1,7 @@
 #ifndef FIFOSTREAM_H
 #define FIFOSTREAM_H
 
-// remoteinputstream.h
+// fifostream.h
 // 2/9/2012
 
 #include "inputstream.h"

@@ -4,12 +4,8 @@
 #include "siteaccountview.h"
 #include "uistyle.h"
 #include "tr.h"
-#include "stylesheet.h"
-#include "lineedit.h"
-#include "comboedit.h"
 #include "logger.h"
 #include "module/annotcloud/user.h"
-#include "module/qtext/toolbutton.h"
 #include <QtGui>
 
 using namespace AnnotCloud;
@@ -47,28 +43,16 @@ SiteAccountView::SiteAccountView(QWidget *parent)
 void
 SiteAccountView::createLayout()
 {
+  UiStyle *ui = UiStyle::globalInstance();
+
 #define ADDSITE(_pref, _Pref, _name, _tip) \
-  QToolButton *_pref##SiteButton = new QtExt::ToolButton; { \
-    _pref##SiteButton->setStyleSheet(SS_TOOLBUTTON_TEXT); \
-    _pref##SiteButton->setToolButtonStyle(Qt::ToolButtonTextOnly); \
-    _pref##SiteButton->setText(_name + ":"); \
-    _pref##SiteButton->setToolTip(_tip); \
-  } connect(_pref##SiteButton, SIGNAL(clicked()), SLOT(visit##_Pref())); \
-  _pref##UsernameEdit_ = new ComboEdit; { \
-    _pref##UsernameEdit_->setToolTip(TR(T_TOOLTIP_USERNAME)); \
+  QToolButton *_pref##SiteButton = ui->makeToolButton( \
+    UiStyle::UrlHint | UiStyle::BuddyHint, _name, _tip, this, SLOT(visit##_Pref())); \
+  _pref##UsernameEdit_ = ui->makeComboBox(UiStyle::EditHint, "", TR(T_USERNAME)); \
     _pref##UsernameEdit_->setMinimumWidth(EDIT_MIN_WIDTH); \
-  } \
-  _pref##PasswordEdit_ = new LineEdit; { \
-    _pref##PasswordEdit_->setToolTip(TR(T_TOOLTIP_PASSWORD)); \
-    _pref##PasswordEdit_->setEchoMode(QLineEdit::Password); \
+  _pref##PasswordEdit_ = ui->makeLineEdit(UiStyle::PasswordHint, "", TR(T_PASSWORD)); \
     _pref##PasswordEdit_->setMinimumWidth(EDIT_MIN_WIDTH); \
-  } \
-  QToolButton *_pref##ClearButton = new QtExt::ToolButton; { \
-    _pref##ClearButton->setStyleSheet(SS_TOOLBUTTON_TEXT); \
-    _pref##ClearButton->setToolButtonStyle(Qt::ToolButtonTextOnly); \
-    _pref##ClearButton->setText(TR(T_CLEAR)); \
-    _pref##ClearButton->setToolTip(TR(T_CLEAR)); \
-  } \
+  QToolButton *_pref##ClearButton = ui->makeToolButton(UiStyle::PushHint, TR(T_CLEAR)); \
   connect(_pref##ClearButton, SIGNAL(clicked()), _pref##UsernameEdit_, SLOT(clearEditText())); \
   connect(_pref##ClearButton, SIGNAL(clicked()), _pref##PasswordEdit_, SLOT(clear())); \
   connect(_pref##UsernameEdit_->lineEdit(), SIGNAL(returnPressed()), SLOT(save())); \
@@ -78,34 +62,10 @@ SiteAccountView::createLayout()
   ADDSITE(bilibili, Bilibili, tr("Bilibili.tv"), "bilibili.tv")
 #undef ADDSITE
 
-  QToolButton *saveButton = new QtExt::ToolButton; {
-    saveButton->setStyleSheet(SS_TOOLBUTTON_TEXT_HIGHLIGHT);
-    saveButton->setToolButtonStyle(Qt::ToolButtonTextOnly);
-    saveButton->setText(QString("[ %1 ]").arg(TR(T_SAVE)));
-    saveButton->setToolTip(TR(T_SAVE));
-  } connect(saveButton, SIGNAL(clicked()), SLOT(save()));
-  QToolButton *cancelButton = new QtExt::ToolButton; {
-    cancelButton->setStyleSheet(SS_TOOLBUTTON_TEXT);
-    cancelButton->setToolButtonStyle(Qt::ToolButtonTextOnly);
-    cancelButton->setText(QString("[ %1 ]").arg(TR(T_CANCEL)));
-    cancelButton->setToolTip(TR(T_CANCEL));
-  } connect(cancelButton, SIGNAL(clicked()), SLOT(hide()));
-
-  //QLabel *websiteLabel = new QLabel; {
-  //  websiteLabel->setStyleSheet(SS_LABEL);
-  //  websiteLabel->setText(TR(T_WEBSITE));
-  //  websiteLabel->setToolTip(TR(T_WEBSITE));
-  //}
-  //QLabel *usernameLabel = new QLabel; {
-  //  usernameLabel->setStyleSheet(SS_LABEL);
-  //  usernameLabel->setText(TR(T_LABEL_USERNAME));
-  //  usernameLabel->setToolTip(TR(T_TOOLTIP_USERNAME));
-  //}
-  //QLabel *passwordLabel = new QLabel; {
-  //  passwordLabel->setStyleSheet(SS_LABEL);
-  //  passwordLabel->setText(TR(T_LABEL_PASSWORD));
-  //  passwordLabel->setToolTip(TR(T_TOOLTIP_PASSWORD));
-  //}
+  QToolButton *saveButton = ui->makeToolButton(
+        UiStyle::PushHint | UiStyle::HighlightHint, TR(T_SAVE), this, SLOT(save()));
+  QToolButton *cancelButton = ui->makeToolButton(
+        UiStyle::PushHint, TR(T_CANCEL), this, SLOT(hide()));
 
   // Layouts
   QGridLayout *grid = new QGridLayout; {

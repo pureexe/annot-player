@@ -57,9 +57,9 @@ private:
   QSortFilterProxyModel *proxyModel_;
   QTreeView *proxyView_;
 
-  QComboBox *filterPatternEdit_;
-  QComboBox *filterSyntaxComboBox_;
-  QComboBox *filterColumnComboBox_;
+  QComboBox *filterPatternEdit_,
+            *filterSyntaxComboBox_,
+            *filterColumnComboBox_;
 
   QToolButton *countButton_;
 };

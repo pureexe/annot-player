@@ -18,42 +18,42 @@
 <context>
     <name>AddAliasDialog</name>
     <message>
-        <location filename="../token/addaliasdialog.cc" line="28"/>
+        <location filename="../token/addaliasdialog.cc" line="24"/>
         <source>Add Alias</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../token/addaliasdialog.cc" line="106"/>
+        <location filename="../token/addaliasdialog.cc" line="95"/>
         <source>name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../token/addaliasdialog.cc" line="106"/>
+        <location filename="../token/addaliasdialog.cc" line="95"/>
         <source>Add a name to the token</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../token/addaliasdialog.cc" line="107"/>
+        <location filename="../token/addaliasdialog.cc" line="96"/>
         <source>tag</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../token/addaliasdialog.cc" line="107"/>
+        <location filename="../token/addaliasdialog.cc" line="96"/>
         <source>Add a tag to the token</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../token/addaliasdialog.cc" line="108"/>
+        <location filename="../token/addaliasdialog.cc" line="97"/>
         <source>Add source URL to the token</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../token/addaliasdialog.cc" line="108"/>
+        <location filename="../token/addaliasdialog.cc" line="97"/>
         <source>URL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../token/addaliasdialog.cc" line="278"/>
+        <location filename="../token/addaliasdialog.cc" line="249"/>
         <source>Please select alias language</source>
         <translation type="unfinished"></translation>
     </message>
@@ -61,37 +61,37 @@
 <context>
     <name>AnnotationBrowser</name>
     <message>
-        <location filename="../annot/annotationbrowser.cc" line="106"/>
+        <location filename="../annot/annotationbrowser.cc" line="97"/>
         <source>Now</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../annot/annotationbrowser.cc" line="106"/>
+        <location filename="../annot/annotationbrowser.cc" line="97"/>
         <source>Display annotations at the time only</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../annot/annotationbrowser.cc" line="105"/>
+        <location filename="../annot/annotationbrowser.cc" line="95"/>
         <source>Mine</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../annot/annotationbrowser.cc" line="105"/>
+        <location filename="../annot/annotationbrowser.cc" line="95"/>
         <source>Display my annotations only</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../annot/annotationbrowser.cc" line="107"/>
+        <location filename="../annot/annotationbrowser.cc" line="99"/>
         <source>Display subtitles only</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../annot/annotationbrowser.cc" line="423"/>
+        <location filename="../annot/annotationbrowser.cc" line="413"/>
         <source>cannot edit other&apos;s annotation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../annot/annotationbrowser.cc" line="485"/>
+        <location filename="../annot/annotationbrowser.cc" line="475"/>
         <source>cannot delete other&apos;s annotation</source>
         <translation type="unfinished"></translation>
     </message>
@@ -99,29 +99,28 @@
 <context>
     <name>AnnotationCountDialog</name>
     <message>
-        <location filename="../dialog/annotationcountdialog.cc" line="40"/>
+        <location filename="../dialog/annotationcountdialog.cc" line="36"/>
         <source>Annot Max Count Hint</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialog/annotationcountdialog.cc" line="41"/>
+        <location filename="../dialog/annotationcountdialog.cc" line="37"/>
         <source>Maximum numbers of annotations to display</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialog/annotationcountdialog.cc" line="48"/>
-        <location filename="../dialog/annotationcountdialog.cc" line="53"/>
-        <location filename="../dialog/annotationcountdialog.cc" line="54"/>
+        <location filename="../dialog/annotationcountdialog.cc" line="57"/>
+        <location filename="../dialog/annotationcountdialog.cc" line="59"/>
         <source>Number of annotations</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialog/annotationcountdialog.cc" line="118"/>
+        <location filename="../dialog/annotationcountdialog.cc" line="102"/>
         <source>annotation max count</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialog/annotationcountdialog.cc" line="121"/>
+        <location filename="../dialog/annotationcountdialog.cc" line="105"/>
         <source>annotation maximum count disabled</source>
         <translation type="unfinished"></translation>
     </message>
@@ -129,137 +128,137 @@
 <context>
     <name>AnnotationEditor</name>
     <message>
-        <location filename="../annot/annotationeditor.cc" line="132"/>
+        <location filename="../annot/annotationeditor.cc" line="116"/>
         <source>verbatim</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../annot/annotationeditor.cc" line="135"/>
+        <location filename="../annot/annotationeditor.cc" line="119"/>
         <source>subtitle</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../annot/annotationeditor.cc" line="143"/>
+        <location filename="../annot/annotationeditor.cc" line="122"/>
         <source>Style tag</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../annot/annotationeditor.cc" line="146"/>
+        <location filename="../annot/annotationeditor.cc" line="127"/>
         <source>fly</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../annot/annotationeditor.cc" line="147"/>
+        <location filename="../annot/annotationeditor.cc" line="128"/>
         <source>top</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../annot/annotationeditor.cc" line="148"/>
+        <location filename="../annot/annotationeditor.cc" line="129"/>
         <source>bottom</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../annot/annotationeditor.cc" line="160"/>
+        <location filename="../annot/annotationeditor.cc" line="137"/>
         <source>transp</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../annot/annotationeditor.cc" line="161"/>
+        <location filename="../annot/annotationeditor.cc" line="138"/>
         <source>shadow</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../annot/annotationeditor.cc" line="162"/>
+        <location filename="../annot/annotationeditor.cc" line="139"/>
         <source>blur</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../annot/annotationeditor.cc" line="197"/>
+        <location filename="../annot/annotationeditor.cc" line="173"/>
         <source>B</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../annot/annotationeditor.cc" line="204"/>
+        <location filename="../annot/annotationeditor.cc" line="180"/>
         <source>I</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../annot/annotationeditor.cc" line="211"/>
+        <location filename="../annot/annotationeditor.cc" line="187"/>
         <source>U</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../annot/annotationeditor.cc" line="218"/>
+        <location filename="../annot/annotationeditor.cc" line="194"/>
         <source>S</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../annot/annotationeditor.cc" line="244"/>
+        <location filename="../annot/annotationeditor.cc" line="215"/>
         <source>Alignment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../annot/annotationeditor.cc" line="247"/>
+        <location filename="../annot/annotationeditor.cc" line="220"/>
         <source>Left</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../annot/annotationeditor.cc" line="248"/>
+        <location filename="../annot/annotationeditor.cc" line="221"/>
         <source>Right</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../annot/annotationeditor.cc" line="249"/>
+        <location filename="../annot/annotationeditor.cc" line="222"/>
         <source>Center</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../annot/annotationeditor.cc" line="250"/>
+        <location filename="../annot/annotationeditor.cc" line="223"/>
         <source>Justify</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../annot/annotationeditor.cc" line="260"/>
+        <location filename="../annot/annotationeditor.cc" line="232"/>
         <source>Font family</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../annot/annotationeditor.cc" line="270"/>
+        <location filename="../annot/annotationeditor.cc" line="237"/>
         <source>Font size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../annot/annotationeditor.cc" line="321"/>
+        <location filename="../annot/annotationeditor.cc" line="290"/>
         <source>tex</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../annot/annotationeditor.cc" line="322"/>
+        <location filename="../annot/annotationeditor.cc" line="292"/>
         <source>html</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../annot/annotationeditor.cc" line="327"/>
+        <location filename="../annot/annotationeditor.cc" line="294"/>
         <source>format</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../annot/annotationeditor.cc" line="328"/>
+        <location filename="../annot/annotationeditor.cc" line="294"/>
         <source>Format</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../annot/annotationeditor.cc" line="379"/>
+        <location filename="../annot/annotationeditor.cc" line="343"/>
         <source>tidy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../annot/annotationeditor.cc" line="380"/>
+        <location filename="../annot/annotationeditor.cc" line="344"/>
         <source>Tidy HTML</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../annot/annotationeditor.cc" line="908"/>
+        <location filename="../annot/annotationeditor.cc" line="870"/>
         <source>Text is too long &gt;_&lt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -275,17 +274,17 @@
 <context>
     <name>BacklogDialog</name>
     <message>
-        <location filename="../dialog/backlogdialog.cc" line="41"/>
+        <location filename="../dialog/backlogdialog.cc" line="39"/>
         <source>Annot</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialog/backlogdialog.cc" line="42"/>
+        <location filename="../dialog/backlogdialog.cc" line="40"/>
         <source>Subtitle</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialog/backlogdialog.cc" line="43"/>
+        <location filename="../dialog/backlogdialog.cc" line="41"/>
         <source>Text</source>
         <translation type="unfinished"></translation>
     </message>
@@ -306,7 +305,7 @@
 <context>
     <name>BlacklistView</name>
     <message>
-        <location filename="../annot/blacklistview.cc" line="188"/>
+        <location filename="../annot/blacklistview.cc" line="108"/>
         <source>Enable blacklist</source>
         <translation type="unfinished"></translation>
     </message>
@@ -314,7 +313,7 @@
 <context>
     <name>BufferedRemoteStream</name>
     <message>
-        <location filename="../../../module/stream/bufferedremotestream.cc" line="250"/>
+        <location filename="../../../module/stream/bufferedremotestream.cc" line="266"/>
         <source>network error, failed to download remote resource</source>
         <translation type="unfinished"></translation>
     </message>
@@ -344,12 +343,12 @@
 <context>
     <name>ConsoleDialog</name>
     <message>
-        <location filename="../dialog/consoledialog.cc" line="52"/>
+        <location filename="../dialog/consoledialog.cc" line="50"/>
         <source>Log</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialog/consoledialog.cc" line="53"/>
+        <location filename="../dialog/consoledialog.cc" line="51"/>
         <source>Debug</source>
         <translation type="unfinished"></translation>
     </message>
@@ -357,12 +356,12 @@
 <context>
     <name>CountdownDialog</name>
     <message>
-        <location filename="../dialog/countdowndialog.cc" line="35"/>
+        <location filename="../dialog/countdowndialog.cc" line="33"/>
         <source>Countdown</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialog/countdowndialog.cc" line="102"/>
+        <location filename="../dialog/countdowndialog.cc" line="91"/>
         <source>countdown stopped</source>
         <translation type="unfinished"></translation>
     </message>
@@ -417,72 +416,82 @@
         <source>auto</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../dialog/devicedialog.cc" line="88"/>
+        <source>DVD</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialog/devicedialog.cc" line="89"/>
+        <source>CD</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>DownloadDialog</name>
     <message>
-        <location filename="../download/downloaddialog.cc" line="80"/>
+        <location filename="../download/downloaddialog.cc" line="70"/>
         <source>Stop</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../download/downloaddialog.cc" line="81"/>
+        <location filename="../download/downloaddialog.cc" line="71"/>
         <source>Remove</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../download/downloaddialog.cc" line="83"/>
+        <location filename="../download/downloaddialog.cc" line="74"/>
         <source>Dir</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../download/downloaddialog.cc" line="83"/>
+        <location filename="../download/downloaddialog.cc" line="74"/>
         <source>Open directory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../download/downloaddialog.cc" line="170"/>
+        <location filename="../download/downloaddialog.cc" line="160"/>
         <source>Remaining time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../download/downloaddialog.cc" line="310"/>
+        <location filename="../download/downloaddialog.cc" line="300"/>
         <source>analyzing URL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../download/downloaddialog.cc" line="452"/>
+        <location filename="../download/downloaddialog.cc" line="442"/>
         <source>download finished</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../download/downloaddialog.cc" line="455"/>
+        <location filename="../download/downloaddialog.cc" line="445"/>
         <source>download failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../download/downloaddialog.cc" line="495"/>
+        <location filename="../download/downloaddialog.cc" line="485"/>
         <source>Stopped</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../download/downloaddialog.cc" line="496"/>
+        <location filename="../download/downloaddialog.cc" line="486"/>
         <source>Downloading</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../download/downloaddialog.cc" line="497"/>
+        <location filename="../download/downloaddialog.cc" line="487"/>
         <source>Pending</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../download/downloaddialog.cc" line="498"/>
+        <location filename="../download/downloaddialog.cc" line="488"/>
         <source>Finished</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../download/downloaddialog.cc" line="499"/>
-        <location filename="../download/downloaddialog.cc" line="500"/>
+        <location filename="../download/downloaddialog.cc" line="489"/>
+        <location filename="../download/downloaddialog.cc" line="490"/>
         <source>Error</source>
         <translation type="unfinished"></translation>
     </message>
@@ -490,22 +499,22 @@
 <context>
     <name>DownloadTaskDialog</name>
     <message>
-        <location filename="../download/downloadtaskdialog.cc" line="55"/>
+        <location filename="../download/downloadtaskdialog.cc" line="38"/>
         <source>Add download URLs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../download/downloadtaskdialog.cc" line="77"/>
+        <location filename="../download/downloadtaskdialog.cc" line="63"/>
         <source>http://www.nicovideo.jp/watch/sm12159572</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../download/downloadtaskdialog.cc" line="79"/>
+        <location filename="../download/downloadtaskdialog.cc" line="64"/>
         <source>Click to paste the URL example</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../download/downloadtaskdialog.cc" line="161"/>
+        <location filename="../download/downloadtaskdialog.cc" line="131"/>
         <source>invalid URLs</source>
         <translation type="unfinished"></translation>
     </message>
@@ -521,170 +530,185 @@
 <context>
     <name>EventLogger</name>
     <message>
-        <location filename="../eventlogger.cc" line="95"/>
+        <location filename="../eventlogger.cc" line="96"/>
         <source>caching fonts on first launch ... this could take up to 10min, don&apos;t panic!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventlogger.cc" line="104"/>
+        <location filename="../eventlogger.cc" line="105"/>
         <source>patient ... </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventlogger.cc" line="111"/>
+        <location filename="../eventlogger.cc" line="112"/>
         <source>media changed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventlogger.cc" line="115"/>
+        <location filename="../eventlogger.cc" line="116"/>
         <source>title changed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventlogger.cc" line="119"/>
+        <location filename="../eventlogger.cc" line="120"/>
         <source>media closed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventlogger.cc" line="142"/>
+        <location filename="../eventlogger.cc" line="143"/>
         <source>subtitle changed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventlogger.cc" line="146"/>
+        <location filename="../eventlogger.cc" line="147"/>
         <source>audio track changed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventlogger.cc" line="150"/>
+        <location filename="../eventlogger.cc" line="151"/>
         <source>opening ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventlogger.cc" line="163"/>
+        <location filename="../eventlogger.cc" line="164"/>
         <source>buffering ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventlogger.cc" line="178"/>
+        <location filename="../eventlogger.cc" line="179"/>
         <source>playing: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventlogger.cc" line="183"/>
+        <location filename="../eventlogger.cc" line="184"/>
         <source>stopped</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventlogger.cc" line="187"/>
+        <location filename="../eventlogger.cc" line="188"/>
         <source>paused</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventlogger.cc" line="191"/>
+        <location filename="../eventlogger.cc" line="192"/>
         <source>player error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventlogger.cc" line="195"/>
+        <location filename="../eventlogger.cc" line="196"/>
         <source>openning track %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventlogger.cc" line="202"/>
+        <location filename="../eventlogger.cc" line="203"/>
         <source>resume playing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventlogger.cc" line="204"/>
+        <location filename="../eventlogger.cc" line="205"/>
         <source>fast forward</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventlogger.cc" line="214"/>
+        <location filename="../eventlogger.cc" line="215"/>
         <source>logging in ... using: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventlogger.cc" line="218"/>
+        <location filename="../eventlogger.cc" line="219"/>
         <source>login succeeded as: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventlogger.cc" line="222"/>
+        <location filename="../eventlogger.cc" line="223"/>
         <source>failed to login as: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventlogger.cc" line="226"/>
+        <location filename="../eventlogger.cc" line="227"/>
         <source>logging out ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventlogger.cc" line="230"/>
+        <location filename="../eventlogger.cc" line="231"/>
         <source>user logged out</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventlogger.cc" line="240"/>
+        <location filename="../eventlogger.cc" line="241"/>
         <source>seek</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventlogger.cc" line="254"/>
+        <location filename="../eventlogger.cc" line="255"/>
         <source>offline cache removed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventlogger.cc" line="258"/>
+        <location filename="../eventlogger.cc" line="259"/>
         <source>tracked window closed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventlogger.cc" line="262"/>
+        <location filename="../eventlogger.cc" line="263"/>
         <source>serveragent: failed to connect to server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventlogger.cc" line="266"/>
+        <location filename="../eventlogger.cc" line="267"/>
         <source>serveragent: got error 404 from server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventlogger.cc" line="270"/>
+        <location filename="../eventlogger.cc" line="271"/>
         <source>serveragent: got error reply from server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventlogger.cc" line="274"/>
+        <location filename="../eventlogger.cc" line="275"/>
         <source>serveragent: unknown SOAP error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventlogger.cc" line="278"/>
+        <location filename="../eventlogger.cc" line="279"/>
         <source>clientagent: server authorization succeeded</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventlogger.cc" line="282"/>
+        <location filename="../eventlogger.cc" line="283"/>
         <source>clientagent: server deauthorized</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventlogger.cc" line="286"/>
+        <location filename="../eventlogger.cc" line="287"/>
         <source>clientagent: failed to authorize server, mismatched public key</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../eventlogger.cc" line="290"/>
+        <location filename="../eventlogger.cc" line="291"/>
         <source>translator: got network error: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../eventlogger.cc" line="297"/>
+        <source>video aspect ratio set to default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../eventlogger.cc" line="299"/>
+        <source>video aspect ratio</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>FilteredListView</name>
     <message>
-        <location filename="../util/filteredlistview.cc" line="101"/>
+        <location filename="../util/filteredlistview.cc" line="54"/>
+        <source>View</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../util/filteredlistview.cc" line="58"/>
         <source>Count</source>
         <translation type="unfinished"></translation>
     </message>
@@ -692,7 +716,7 @@
 <context>
     <name>FilteredTableView</name>
     <message>
-        <location filename="../util/filteredtableview.cc" line="102"/>
+        <location filename="../util/filteredtableview.cc" line="78"/>
         <source>Count</source>
         <translation type="unfinished"></translation>
     </message>
@@ -700,7 +724,7 @@
 <context>
     <name>FlvDemux</name>
     <message>
-        <location filename="../../../module/mediacodec/flvdemux.cc" line="74"/>
+        <location filename="../../../module/mediacodec/flvdemux.cc" line="72"/>
         <source>failed to demux FLV stream</source>
         <translation type="unfinished"></translation>
     </message>
@@ -708,7 +732,7 @@
 <context>
     <name>FlvListDemux</name>
     <message>
-        <location filename="../../../module/mediacodec/flvdemux.cc" line="65"/>
+        <location filename="../../../module/mediacodec/flvdemux.cc" line="63"/>
         <source>failed to demux FLV stream list</source>
         <translation type="unfinished"></translation>
     </message>
@@ -716,21 +740,37 @@
 <context>
     <name>FlvMerge</name>
     <message>
-        <location filename="../../../module/mediacodec/flvmerge.cc" line="23"/>
+        <location filename="../../../module/mediacodec/flvmerge.cc" line="21"/>
         <source>failed to parse FLV streams</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../module/mediacodec/flvmerge.cc" line="28"/>
+        <location filename="../../../module/mediacodec/flvmerge.cc" line="26"/>
         <source>failed to merge FLV streams</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
-    <name>FlvParser</name>
+    <name>FlvMetaCreator</name>
     <message>
-        <location filename="../../../module/mediacodec/flvparser.cc" line="22"/>
+        <location filename="../../../module/mediacodec/flvmetacreator.cc" line="20"/>
+        <source>failed to parse FLV streams</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>FlvMetaReader</name>
+    <message>
+        <location filename="../../../module/mediacodec/flvmetareader.cc" line="22"/>
         <source>failed to parse FLV</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>FlvMetaWriter</name>
+    <message>
+        <location filename="../../../module/mediacodec/flvmetawriter.cc" line="17"/>
+        <source>failed to merge FLV streams</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -773,12 +813,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../module/vlccore/httpbufferedsession.cc" line="198"/>
+        <location filename="../../../module/vlccore/httpbufferedsession.cc" line="200"/>
         <source>network error to access URL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../module/vlccore/httpbufferedsession.cc" line="215"/>
+        <location filename="../../../module/vlccore/httpbufferedsession.cc" line="217"/>
         <source>access forbidden</source>
         <translation type="unfinished"></translation>
     </message>
@@ -786,32 +826,32 @@
 <context>
     <name>HttpStreamSession</name>
     <message>
-        <location filename="../../../module/vlccore/httpstreamsession.cc" line="147"/>
+        <location filename="../../../module/vlccore/httpstreamsession.cc" line="151"/>
         <source>download failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../module/vlccore/httpstreamsession.cc" line="151"/>
+        <location filename="../../../module/vlccore/httpstreamsession.cc" line="160"/>
         <source>file saved</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../module/vlccore/httpstreamsession.cc" line="281"/>
+        <location filename="../../../module/vlccore/httpstreamsession.cc" line="297"/>
         <source>access forbidden</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../module/vlccore/httpstreamsession.cc" line="320"/>
+        <location filename="../../../module/vlccore/httpstreamsession.cc" line="337"/>
         <source>failed to parse FLV streams</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../module/vlccore/httpstreamsession.cc" line="338"/>
+        <location filename="../../../module/vlccore/httpstreamsession.cc" line="355"/>
         <source>failed to merge FLV streams</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../module/vlccore/httpstreamsession.cc" line="348"/>
+        <location filename="../../../module/vlccore/httpstreamsession.cc" line="367"/>
         <source>failed to process remote media</source>
         <translation type="unfinished"></translation>
     </message>
@@ -819,7 +859,7 @@
 <context>
     <name>InputDialog</name>
     <message>
-        <location filename="../dialog/inputdialog.cc" line="37"/>
+        <location filename="../dialog/inputdialog.cc" line="34"/>
         <source>Input Dialog</source>
         <translation type="unfinished"></translation>
     </message>
@@ -855,474 +895,494 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../mainwindow.cc" line="3037"/>
+        <location filename="../mainwindow.cc" line="3106"/>
         <source>Select annots window</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3051"/>
+        <location filename="../mainwindow.cc" line="3120"/>
         <source>Select process window to open</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1433"/>
+        <location filename="../mainwindow.cc" line="1468"/>
         <source>&amp;File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1360"/>
+        <location filename="../mainwindow.cc" line="1378"/>
         <source>Play</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1361"/>
+        <location filename="../mainwindow.cc" line="1379"/>
         <source>Play menu</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1393"/>
+        <location filename="../mainwindow.cc" line="1411"/>
         <source>After finished</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1394"/>
+        <location filename="../mainwindow.cc" line="1412"/>
         <source>After finished playing all files in the same folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1404"/>
-        <location filename="../mainwindow.cc" line="1405"/>
+        <location filename="../mainwindow.cc" line="1422"/>
+        <location filename="../mainwindow.cc" line="1423"/>
         <source>Utilities</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1416"/>
-        <location filename="../mainwindow.cc" line="1417"/>
+        <location filename="../mainwindow.cc" line="1434"/>
+        <location filename="../mainwindow.cc" line="1435"/>
         <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1445"/>
+        <location filename="../mainwindow.cc" line="1480"/>
         <source>&amp;Quit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1459"/>
-        <location filename="../mainwindow.cc" line="1460"/>
+        <location filename="../mainwindow.cc" line="1494"/>
+        <location filename="../mainwindow.cc" line="1495"/>
         <source>&amp;Help</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1461"/>
+        <location filename="../mainwindow.cc" line="1496"/>
         <source>&amp;About</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1730"/>
-        <location filename="../mainwindow.cc" line="1744"/>
+        <location filename="../mainwindow.cc" line="1792"/>
+        <location filename="../mainwindow.cc" line="1806"/>
         <source>analyzing URL ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1734"/>
+        <location filename="../mainwindow.cc" line="1796"/>
         <source>failed to resolve URL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2097"/>
+        <location filename="../mainwindow.cc" line="2163"/>
         <source>failed to open media</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2191"/>
+        <location filename="../mainwindow.cc" line="2257"/>
         <source>analyzing media ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2308"/>
+        <location filename="../mainwindow.cc" line="2374"/>
         <source>detaching all processes ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2414"/>
+        <location filename="../mainwindow.cc" line="2480"/>
         <source>snapshot saved on the destop</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2626"/>
+        <location filename="../mainwindow.cc" line="2692"/>
         <source>openning update URL ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2674"/>
+        <location filename="../mainwindow.cc" line="2740"/>
         <source>Complete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2914"/>
+        <location filename="../mainwindow.cc" line="2743"/>
+        <source>Buffering</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cc" line="2983"/>
         <source>site accounts updated</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3070"/>
+        <location filename="../mainwindow.cc" line="3139"/>
         <source>please log in to save alias online</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3075"/>
+        <location filename="../mainwindow.cc" line="3144"/>
         <source>alias not saved for unknown media token</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3078"/>
+        <location filename="../mainwindow.cc" line="3147"/>
         <source>saving alias ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3102"/>
+        <location filename="../mainwindow.cc" line="3171"/>
         <source>similar alias already exists</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3108"/>
+        <location filename="../mainwindow.cc" line="3177"/>
         <source>source alias is not a valid URL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3114"/>
+        <location filename="../mainwindow.cc" line="3183"/>
         <source>connecting server to submit alias ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3130"/>
+        <location filename="../mainwindow.cc" line="3199"/>
         <source>alias saved</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3238"/>
+        <location filename="../mainwindow.cc" line="3308"/>
         <source>login is requied to to submit annotation URL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3250"/>
+        <location filename="../mainwindow.cc" line="3320"/>
         <source>URL is too long</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3254"/>
+        <location filename="../mainwindow.cc" line="3324"/>
         <source>signing media ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3262"/>
+        <location filename="../mainwindow.cc" line="3332"/>
         <source>failed to analyze media</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3315"/>
+        <location filename="../mainwindow.cc" line="3385"/>
         <source>media signed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3317"/>
+        <location filename="../mainwindow.cc" line="3387"/>
         <source>failed to sign media</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3331"/>
+        <location filename="../mainwindow.cc" line="3401"/>
         <source>connecting server to query media/game token ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3429"/>
+        <location filename="../mainwindow.cc" line="3499"/>
         <source>searching for token in cache ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3544"/>
-        <location filename="../mainwindow.cc" line="3616"/>
+        <location filename="../mainwindow.cc" line="3614"/>
+        <location filename="../mainwindow.cc" line="3686"/>
         <source>connecting server to submit annot ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4867"/>
+        <location filename="../mainwindow.cc" line="4958"/>
         <source>always on top enabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4869"/>
+        <location filename="../mainwindow.cc" line="4960"/>
         <source>always on top disabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4897"/>
-        <location filename="../mainwindow.cc" line="4940"/>
-        <location filename="../mainwindow.cc" line="4987"/>
-        <location filename="../mainwindow.cc" line="5032"/>
-        <location filename="../mainwindow.cc" line="5077"/>
+        <location filename="../mainwindow.cc" line="4988"/>
+        <location filename="../mainwindow.cc" line="5031"/>
+        <location filename="../mainwindow.cc" line="5078"/>
+        <location filename="../mainwindow.cc" line="5123"/>
+        <location filename="../mainwindow.cc" line="5168"/>
         <source>invalid cast id</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4903"/>
-        <location filename="../mainwindow.cc" line="4946"/>
-        <location filename="../mainwindow.cc" line="4993"/>
-        <location filename="../mainwindow.cc" line="5038"/>
-        <location filename="../mainwindow.cc" line="5083"/>
+        <location filename="../mainwindow.cc" line="4994"/>
+        <location filename="../mainwindow.cc" line="5037"/>
+        <location filename="../mainwindow.cc" line="5084"/>
+        <location filename="../mainwindow.cc" line="5129"/>
+        <location filename="../mainwindow.cc" line="5174"/>
         <source>cannot perform cast when offline</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4909"/>
+        <location filename="../mainwindow.cc" line="5000"/>
         <source>submit bless cast to token ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4921"/>
+        <location filename="../mainwindow.cc" line="5012"/>
         <source>token blessed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4927"/>
+        <location filename="../mainwindow.cc" line="5018"/>
         <source>failed to bless token</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4952"/>
+        <location filename="../mainwindow.cc" line="5043"/>
         <source>submit curse cast to token ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4964"/>
+        <location filename="../mainwindow.cc" line="5055"/>
         <source>token cursed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4970"/>
+        <location filename="../mainwindow.cc" line="5061"/>
         <source>failed to curse token</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4998"/>
-        <location filename="../mainwindow.cc" line="5043"/>
-        <location filename="../mainwindow.cc" line="5088"/>
+        <location filename="../mainwindow.cc" line="5089"/>
+        <location filename="../mainwindow.cc" line="5134"/>
+        <location filename="../mainwindow.cc" line="5179"/>
         <source>cannot perform cast to yourself</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5004"/>
+        <location filename="../mainwindow.cc" line="5095"/>
         <source>blessing user ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5015"/>
+        <location filename="../mainwindow.cc" line="5106"/>
         <source>user blessed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5049"/>
+        <location filename="../mainwindow.cc" line="5140"/>
         <source>cursing user ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5060"/>
+        <location filename="../mainwindow.cc" line="5151"/>
         <source>user cursed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5094"/>
+        <location filename="../mainwindow.cc" line="5185"/>
         <source>blocking user ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5105"/>
+        <location filename="../mainwindow.cc" line="5196"/>
         <source>user blocked</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5206"/>
+        <location filename="../mainwindow.cc" line="5297"/>
         <source>connecting to server ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5223"/>
+        <location filename="../mainwindow.cc" line="5314"/>
         <source>server connected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5225"/>
+        <location filename="../mainwindow.cc" line="5316"/>
         <source>server disconnected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5421"/>
+        <location filename="../mainwindow.cc" line="5512"/>
         <source>found process id for window</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5424"/>
+        <location filename="../mainwindow.cc" line="5515"/>
         <source>process id for window was not found</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5435"/>
+        <location filename="../mainwindow.cc" line="5526"/>
         <source>process was attached</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5439"/>
+        <location filename="../mainwindow.cc" line="5530"/>
         <source>process attached</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5445"/>
+        <location filename="../mainwindow.cc" line="5536"/>
         <source>failed to attach process </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5447"/>
+        <location filename="../mainwindow.cc" line="5538"/>
         <source>Is the process running now?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5449"/>
+        <location filename="../mainwindow.cc" line="5540"/>
         <source>Run me as administrator and try again (o^^o)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5451"/>
+        <location filename="../mainwindow.cc" line="5542"/>
         <source>Restart the target process might help -_-</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5462"/>
+        <location filename="../mainwindow.cc" line="5553"/>
         <source>process was started</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5465"/>
+        <location filename="../mainwindow.cc" line="5556"/>
         <source>told process to start</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5473"/>
+        <location filename="../mainwindow.cc" line="5564"/>
         <source>failed to start process</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5477"/>
+        <location filename="../mainwindow.cc" line="5568"/>
         <source>wait %1 seconds for process to start ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5490"/>
+        <location filename="../mainwindow.cc" line="5581"/>
         <source>openning process</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5588"/>
+        <location filename="../mainwindow.cc" line="5679"/>
         <source>connecting server to change anonymous status ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5600"/>
+        <location filename="../mainwindow.cc" line="5691"/>
         <source>failed to change user anonymous state</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5610"/>
+        <location filename="../mainwindow.cc" line="5701"/>
         <source>you are anonymous now</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5612"/>
+        <location filename="../mainwindow.cc" line="5703"/>
         <source>you are not anonymous now</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5629"/>
+        <location filename="../mainwindow.cc" line="5720"/>
         <source>connecting server to change language ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5641"/>
+        <location filename="../mainwindow.cc" line="5732"/>
         <source>failed to change user language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5650"/>
+        <location filename="../mainwindow.cc" line="5741"/>
         <source>your language is </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5718"/>
+        <location filename="../mainwindow.cc" line="5809"/>
         <source>restart the app to use the new language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5961"/>
+        <location filename="../mainwindow.cc" line="6052"/>
         <source>invalid lnk</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="6793"/>
+        <location filename="../mainwindow.cc" line="6861"/>
+        <source>using last aspect ratio</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cc" line="6938"/>
         <source>annot URL is already used</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="6799"/>
-        <location filename="../mainwindow.cc" line="6823"/>
+        <location filename="../mainwindow.cc" line="6944"/>
+        <location filename="../mainwindow.cc" line="6968"/>
         <source>media URL is being played </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="6849"/>
+        <location filename="../mainwindow.cc" line="6994"/>
         <source>do nothings after finished playing all files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="6858"/>
+        <location filename="../mainwindow.cc" line="7003"/>
         <source>put the computer to sleep after finished playing all files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="6867"/>
+        <location filename="../mainwindow.cc" line="7012"/>
         <source>shutdown the computer after finished playing all files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3468"/>
-        <location filename="../mainwindow.cc" line="6403"/>
+        <location filename="../mainwindow.cc" line="7060"/>
+        <source>allow multiple player windows</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cc" line="7062"/>
+        <source>allow single player window</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cc" line="3538"/>
+        <location filename="../mainwindow.cc" line="6494"/>
         <source>annotations found</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5342"/>
+        <location filename="../mainwindow.cc" line="5433"/>
         <source>new version released, please check Help/Update menu</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="6420"/>
+        <location filename="../mainwindow.cc" line="6511"/>
         <source>analyzing annotation URL ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="6598"/>
+        <location filename="../mainwindow.cc" line="6689"/>
         <source>resuming last play</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="6652"/>
+        <location filename="../mainwindow.cc" line="6743"/>
         <source>loading last subtitle</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="6658"/>
+        <location filename="../mainwindow.cc" line="6749"/>
         <source>hide last subtitle</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="6715"/>
+        <location filename="../mainwindow.cc" line="6806"/>
         <source>loading last audio track</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1343,47 +1403,47 @@
 <context>
     <name>MessageView</name>
     <message>
-        <location filename="../signal/messageview.cc" line="41"/>
+        <location filename="../signal/messageview.cc" line="38"/>
         <source>Message view</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../signal/messageview.cc" line="46"/>
-        <source>Process messages</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../signal/messageview.cc" line="61"/>
+        <location filename="../signal/messageview.cc" line="57"/>
         <source>Signal channel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../signal/messageview.cc" line="72"/>
+        <location filename="../signal/messageview.cc" line="67"/>
         <source>Auto-detect signal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../signal/messageview.cc" line="82"/>
+        <location filename="../signal/messageview.cc" line="74"/>
         <source>Reset changes and texts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../signal/messageview.cc" line="90"/>
+        <location filename="../signal/messageview.cc" line="71"/>
         <source>Use selected signal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../signal/messageview.cc" line="97"/>
+        <location filename="../signal/messageview.cc" line="48"/>
+        <source>Process message</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../signal/messageview.cc" line="76"/>
         <source>Current signal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../signal/messageview.cc" line="186"/>
+        <location filename="../signal/messageview.cc" line="164"/>
         <source>process signal selected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../signal/messageview.cc" line="260"/>
+        <location filename="../signal/messageview.cc" line="238"/>
         <source>new signal discovered</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1421,13 +1481,13 @@
     </message>
     <message>
         <location filename="../../../module/download/mrldownloadtask.cc" line="168"/>
-        <location filename="../../../module/download/mrldownloadtask.cc" line="312"/>
+        <location filename="../../../module/download/mrldownloadtask.cc" line="313"/>
         <source>failed to rename downloaded file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../module/download/mrldownloadtask.cc" line="178"/>
-        <location filename="../../../module/download/mrldownloadtask.cc" line="321"/>
+        <location filename="../../../module/download/mrldownloadtask.cc" line="322"/>
         <source>download incomplete</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1440,45 +1500,45 @@
 <context>
     <name>NetworkProxyDialog</name>
     <message>
-        <location filename="../dialog/networkproxydialog.cc" line="81"/>
+        <location filename="../dialog/networkproxydialog.cc" line="50"/>
         <source>Proxy type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialog/networkproxydialog.cc" line="90"/>
-        <location filename="../dialog/networkproxydialog.cc" line="112"/>
+        <location filename="../dialog/networkproxydialog.cc" line="53"/>
+        <location filename="../dialog/networkproxydialog.cc" line="71"/>
         <source>Host</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialog/networkproxydialog.cc" line="95"/>
+        <location filename="../dialog/networkproxydialog.cc" line="57"/>
         <source>Port</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialog/networkproxydialog.cc" line="98"/>
-        <location filename="../dialog/networkproxydialog.cc" line="113"/>
+        <location filename="../dialog/networkproxydialog.cc" line="59"/>
+        <location filename="../dialog/networkproxydialog.cc" line="72"/>
         <source>Username</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialog/networkproxydialog.cc" line="101"/>
-        <location filename="../dialog/networkproxydialog.cc" line="114"/>
+        <location filename="../dialog/networkproxydialog.cc" line="60"/>
+        <location filename="../dialog/networkproxydialog.cc" line="73"/>
         <source>Password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialog/networkproxydialog.cc" line="111"/>
+        <location filename="../dialog/networkproxydialog.cc" line="70"/>
         <source>Type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialog/networkproxydialog.cc" line="233"/>
+        <location filename="../dialog/networkproxydialog.cc" line="188"/>
         <source>network proxy disabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialog/networkproxydialog.cc" line="256"/>
+        <location filename="../dialog/networkproxydialog.cc" line="211"/>
         <source>network proxy enabled</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1499,65 +1559,73 @@
 <context>
     <name>PickDialog</name>
     <message>
-        <location filename="../dialog/pickdialog.cc" line="29"/>
+        <location filename="../dialog/pickdialog.cc" line="27"/>
         <source>Select window</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialog/pickdialog.cc" line="98"/>
+        <location filename="../dialog/pickdialog.cc" line="93"/>
         <source>window picking canceled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialog/pickdialog.cc" line="112"/>
+        <location filename="../dialog/pickdialog.cc" line="107"/>
         <source>window picked</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>PlayerPanel</name>
+    <message>
+        <location filename="../player/playerpanel.cc" line="95"/>
+        <source>Character count</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>ProcessView</name>
     <message>
-        <location filename="../signal/processview.cc" line="70"/>
+        <location filename="../signal/processview.cc" line="69"/>
         <source>Process view</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../signal/processview.cc" line="215"/>
+        <location filename="../signal/processview.cc" line="208"/>
         <source>refreshing process list ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../signal/processview.cc" line="316"/>
+        <location filename="../signal/processview.cc" line="309"/>
         <source>process attached</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../signal/processview.cc" line="319"/>
+        <location filename="../signal/processview.cc" line="312"/>
         <source>failed to attach process </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../signal/processview.cc" line="321"/>
+        <location filename="../signal/processview.cc" line="314"/>
         <source>Is the process running now?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../signal/processview.cc" line="323"/>
+        <location filename="../signal/processview.cc" line="316"/>
         <source>Run me as administrator and try again &amp;gt;_&amp;lt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../signal/processview.cc" line="325"/>
+        <location filename="../signal/processview.cc" line="318"/>
         <source>Restart the target process might help -_-</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../signal/processview.cc" line="340"/>
+        <location filename="../signal/processview.cc" line="333"/>
         <source>process detached</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../signal/processview.cc" line="342"/>
+        <location filename="../signal/processview.cc" line="335"/>
         <source>failed to detach process</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1570,7 +1638,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../web/proxybrowser.cc" line="64"/>
+        <location filename="../web/proxybrowser.cc" line="71"/>
         <source>logging in nicovideo.jp as %1 ...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1578,32 +1646,32 @@
 <context>
     <name>SeekDialog</name>
     <message>
-        <location filename="../dialog/seekdialog.cc" line="74"/>
+        <location filename="../dialog/seekdialog.cc" line="66"/>
         <source>ss</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialog/seekdialog.cc" line="74"/>
+        <location filename="../dialog/seekdialog.cc" line="66"/>
         <source>seconds</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialog/seekdialog.cc" line="75"/>
+        <location filename="../dialog/seekdialog.cc" line="67"/>
         <source>mm</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialog/seekdialog.cc" line="75"/>
+        <location filename="../dialog/seekdialog.cc" line="67"/>
         <source>minutes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialog/seekdialog.cc" line="76"/>
+        <location filename="../dialog/seekdialog.cc" line="68"/>
         <source>hh</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialog/seekdialog.cc" line="76"/>
+        <location filename="../dialog/seekdialog.cc" line="68"/>
         <source>hours</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1687,12 +1755,12 @@
 <context>
     <name>SignalView</name>
     <message>
-        <location filename="../signal/signalview.cc" line="58"/>
+        <location filename="../signal/signalview.cc" line="51"/>
         <source>process</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../signal/signalview.cc" line="59"/>
+        <location filename="../signal/signalview.cc" line="53"/>
         <source>message</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1700,17 +1768,17 @@
 <context>
     <name>SiteAccountView</name>
     <message>
-        <location filename="../dialog/siteaccountview.cc" line="41"/>
+        <location filename="../dialog/siteaccountview.cc" line="37"/>
         <source>Link online accounts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialog/siteaccountview.cc" line="77"/>
+        <location filename="../dialog/siteaccountview.cc" line="61"/>
         <source>Nicovideo.jp</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialog/siteaccountview.cc" line="78"/>
+        <location filename="../dialog/siteaccountview.cc" line="62"/>
         <source>Bilibili.tv</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1751,12 +1819,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialog/suburldialog.cc" line="54"/>
+        <location filename="../dialog/suburldialog.cc" line="53"/>
         <source>Associate the URL with this media</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialog/suburldialog.cc" line="62"/>
+        <location filename="../dialog/suburldialog.cc" line="57"/>
         <source>Click to paste the URL example</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1764,43 +1832,43 @@
 <context>
     <name>TokenView</name>
     <message>
-        <location filename="../token/tokenview.cc" line="391"/>
-        <location filename="../token/tokenview.cc" line="417"/>
+        <location filename="../token/tokenview.cc" line="364"/>
+        <location filename="../token/tokenview.cc" line="390"/>
         <source>cannot perform cast when offline</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../token/tokenview.cc" line="397"/>
+        <location filename="../token/tokenview.cc" line="370"/>
         <source>token is already blessed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../token/tokenview.cc" line="423"/>
+        <location filename="../token/tokenview.cc" line="396"/>
         <source>token is already cursed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../token/tokenview.cc" line="479"/>
+        <location filename="../token/tokenview.cc" line="452"/>
         <source>name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../token/tokenview.cc" line="480"/>
+        <location filename="../token/tokenview.cc" line="453"/>
         <source>source</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../token/tokenview.cc" line="481"/>
+        <location filename="../token/tokenview.cc" line="454"/>
         <source>tag</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../token/tokenview.cc" line="482"/>
+        <location filename="../token/tokenview.cc" line="455"/>
         <source>URL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../token/tokenview.cc" line="496"/>
+        <location filename="../token/tokenview.cc" line="469"/>
         <source>cannot delete other&apos;s alias</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3101,58 +3169,98 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="719"/>
-        <source>History</source>
+        <location filename="translatormanager.cc" line="673"/>
+        <source>Standard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="720"/>
-        <source>Website</source>
+        <location filename="translatormanager.cc" line="674"/>
+        <source>Wide screen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="722"/>
-        <source>Annotation effect</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="translatormanager.cc" line="723"/>
-        <source>Transparent</source>
+        <location filename="translatormanager.cc" line="676"/>
+        <source>Allow multiple windows</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="translatormanager.cc" line="724"/>
-        <source>Shadow</source>
+        <source>History</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="translatormanager.cc" line="725"/>
-        <source>Blur</source>
+        <source>Website</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="translatormanager.cc" line="727"/>
-        <source>Increase</source>
+        <source>Annotation effect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="translatormanager.cc" line="728"/>
-        <source>Decrease</source>
+        <source>Transparent</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="translatormanager.cc" line="729"/>
+        <source>Shadow</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="translatormanager.cc" line="730"/>
-        <source>Network proxy</source>
+        <source>Blur</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="translatormanager.cc" line="732"/>
-        <source>http://nicovideo.jp</source>
+        <source>Increase</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="translatormanager.cc" line="733"/>
+        <source>Decrease</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="translatormanager.cc" line="735"/>
+        <source>Second</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="translatormanager.cc" line="736"/>
+        <source>Minute</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="translatormanager.cc" line="737"/>
+        <source>Hour</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="translatormanager.cc" line="739"/>
+        <source>Network proxy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="translatormanager.cc" line="740"/>
+        <source>Render context menu</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="translatormanager.cc" line="742"/>
+        <source>http://nicovideo.jp</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="translatormanager.cc" line="743"/>
         <source>http://bilibili.tv</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="translatormanager.cc" line="745"/>
+        <source>Aspect ratio</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3319,7 +3427,7 @@
     </message>
     <message>
         <location filename="translatormanager.cc" line="574"/>
-        <location filename="translatormanager.cc" line="713"/>
+        <location filename="translatormanager.cc" line="718"/>
         <source>Anonymous</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3408,7 +3516,7 @@
     </message>
     <message>
         <location filename="translatormanager.cc" line="597"/>
-        <location filename="translatormanager.cc" line="710"/>
+        <location filename="translatormanager.cc" line="715"/>
         <source>Blocked</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3429,7 +3537,7 @@
     </message>
     <message>
         <location filename="translatormanager.cc" line="601"/>
-        <location filename="translatormanager.cc" line="711"/>
+        <location filename="translatormanager.cc" line="716"/>
         <source>Annot</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3441,7 +3549,7 @@
     <message>
         <location filename="translatormanager.cc" line="604"/>
         <location filename="translatormanager.cc" line="605"/>
-        <location filename="translatormanager.cc" line="685"/>
+        <location filename="translatormanager.cc" line="690"/>
         <source>Alias</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3618,22 +3726,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="693"/>
+        <location filename="translatormanager.cc" line="698"/>
         <source>LoginTime</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="715"/>
+        <location filename="translatormanager.cc" line="720"/>
         <source>Maximize</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="716"/>
+        <location filename="translatormanager.cc" line="721"/>
         <source>Minimize</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="717"/>
+        <location filename="translatormanager.cc" line="722"/>
         <source>Restore</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3666,58 +3774,58 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="673"/>
+        <location filename="translatormanager.cc" line="678"/>
         <source>Filter pattern</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="674"/>
+        <location filename="translatormanager.cc" line="679"/>
         <source>Filter syntax</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="675"/>
+        <location filename="translatormanager.cc" line="680"/>
         <source>Filter column</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="676"/>
+        <location filename="translatormanager.cc" line="681"/>
         <source>Regular expression</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="677"/>
+        <location filename="translatormanager.cc" line="682"/>
         <source>Wildcard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="678"/>
+        <location filename="translatormanager.cc" line="683"/>
         <source>Fixed string</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="680"/>
+        <location filename="translatormanager.cc" line="685"/>
         <source>ID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="681"/>
+        <location filename="translatormanager.cc" line="686"/>
         <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="682"/>
+        <location filename="translatormanager.cc" line="687"/>
         <source>Type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="683"/>
+        <location filename="translatormanager.cc" line="688"/>
         <source>Tag</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="translatormanager.cc" line="274"/>
-        <location filename="translatormanager.cc" line="684"/>
+        <location filename="translatormanager.cc" line="689"/>
         <source>Annotation</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3727,113 +3835,113 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="686"/>
+        <location filename="translatormanager.cc" line="691"/>
         <source>UserID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="687"/>
+        <location filename="translatormanager.cc" line="692"/>
         <source>UserAlias</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="688"/>
+        <location filename="translatormanager.cc" line="693"/>
         <source>TokenId</source>
         <oldsource>TokeId</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="689"/>
+        <location filename="translatormanager.cc" line="694"/>
         <source>Hash</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="690"/>
+        <location filename="translatormanager.cc" line="695"/>
         <source>Text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="691"/>
+        <location filename="translatormanager.cc" line="696"/>
         <source>Pos</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="692"/>
+        <location filename="translatormanager.cc" line="697"/>
         <source>CreateTime</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="694"/>
+        <location filename="translatormanager.cc" line="699"/>
         <source>UpdateTime</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="695"/>
+        <location filename="translatormanager.cc" line="700"/>
         <source>Language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="696"/>
+        <location filename="translatormanager.cc" line="701"/>
         <source>Status</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="697"/>
+        <location filename="translatormanager.cc" line="702"/>
         <source>Flags</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="698"/>
+        <location filename="translatormanager.cc" line="703"/>
         <source>BlessedCount</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="699"/>
+        <location filename="translatormanager.cc" line="704"/>
         <source>CursedCount</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="700"/>
+        <location filename="translatormanager.cc" line="705"/>
         <source>BlockedCount</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="701"/>
+        <location filename="translatormanager.cc" line="706"/>
         <source>AnnotCount</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="702"/>
+        <location filename="translatormanager.cc" line="707"/>
         <source>VisitedCount</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="704"/>
+        <location filename="translatormanager.cc" line="709"/>
         <source>PID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="705"/>
+        <location filename="translatormanager.cc" line="710"/>
         <source>Folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="706"/>
+        <location filename="translatormanager.cc" line="711"/>
         <source>Path</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="708"/>
+        <location filename="translatormanager.cc" line="713"/>
         <source>Active</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="709"/>
+        <location filename="translatormanager.cc" line="714"/>
         <source>Deleted</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="translatormanager.cc" line="712"/>
+        <location filename="translatormanager.cc" line="717"/>
         <source>n/a</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3841,18 +3949,28 @@
 <context>
     <name>UiStyle</name>
     <message>
-        <location filename="../uistyle.cc" line="79"/>
+        <location filename="../uistyle.cc" line="82"/>
         <source>Aero is enabled, please restart the program</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../uistyle.cc" line="81"/>
+        <location filename="../uistyle.cc" line="84"/>
         <source>failed to enable Aero</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../uistyle.cc" line="83"/>
+        <location filename="../uistyle.cc" line="86"/>
         <source>Aero is disabled, please restart the program</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../uistyle.cc" line="96"/>
+        <source>Menu theme is enabled, please restart the program</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../uistyle.cc" line="98"/>
+        <source>Menu theme is disabled, please restart the program</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3881,7 +3999,7 @@
 <context>
     <name>WebBrowser</name>
     <message>
-        <location filename="../../../module/webbrowser/webbrowser.cc" line="310"/>
+        <location filename="../../../module/webbrowser/webbrowser.cc" line="359"/>
         <source>New tab</source>
         <translation type="unfinished"></translation>
     </message>

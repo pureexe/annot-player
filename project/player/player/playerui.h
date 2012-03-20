@@ -46,7 +46,7 @@ public:
   virtual void setVisible(bool visible); ///< \override
   bool isActive() const { return active_; }
 
-  void setMenu(QMenu *menu);
+  QString currentText() const;
 
 signals:
   void invalidateMenuRequested();
@@ -65,7 +65,7 @@ public slots:
   void fastFastForward();
   void rewind();
 
-  void setAnnotationEnabled(bool enabled); // invalidateToggleAnnotationButton
+  //void setAnnotationEnabled(bool enabled); // invalidateToggleAnnotationButton
 
   void setVolume(int vol);
   void setPosition(int pos);
@@ -88,6 +88,7 @@ public slots:
   //void invalidateRewindButton();
   void invalidateNextButton();
   void invalidatePreviousButton();
+  virtual void invalidateInputCountButton();
 
   void invalidatePlayerModeToggler();
   void invalidateWindowModeToggler();
@@ -101,6 +102,7 @@ public slots:
 
 protected slots:
   void popupMenu();
+  void popupInputItems();
 
 private:
   void createConnections();

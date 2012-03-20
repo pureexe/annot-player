@@ -4,13 +4,17 @@
 #include "logindialog.h"
 #include "uistyle.h"
 #include "tr.h"
-#include "stylesheet.h"
-#include "lineedit.h"
-#include "comboedit.h"
 #include "logger.h"
 #include "module/annotcloud/user.h"
-#include "module/qtext/toolbutton.h"
 #include <QtGui>
+
+#ifdef Q_OS_MAC
+  #define K_ENTER       "enter"
+  #define K_ESC         "esc"
+#else
+  #define K_ENTER       "Enter"
+  #define K_ESC         "Esc"
+#endif // Q_OS_MAC
 
 using namespace AnnotCloud;
 using namespace Logger;
@@ -39,47 +43,41 @@ LoginDialog::LoginDialog(QWidget *parent)
   setWindowTitle(TR(T_TITLE_LOGIN));
   UiStyle::globalInstance()->setWindowStyle(this);
 
-  // Widgets
+  createLayout();
+
+  // Shortcuts
+  QShortcut *cancelShortcut = new QShortcut(QKeySequence("Esc"), this);
+  connect(cancelShortcut, SIGNAL(activated()), SLOT(hide()));
+  QShortcut *closeShortcut = new QShortcut(QKeySequence::Close, this);
+  connect(closeShortcut, SIGNAL(activated()), SLOT(hide()));
+
+  // Focus
+  userNameEdit_->setFocus();
+}
+
+void
+LoginDialog::createLayout()
+{
+  UiStyle *ui = UiStyle::globalInstance();
 
   QStringList defaultUsers(User::guest().name());
-  userNameEdit_ = new ComboEdit(defaultUsers); {
-    userNameEdit_->setToolTip(TR(T_TOOLTIP_USERNAME));
-    userNameEdit_->setEditText(TR(T_DEFAULT_USERNAME));
-  }
+  userNameEdit_ = ui->makeComboBox(
+        UiStyle::EditHint, TR(T_DEFAULT_USERNAME), TR(T_TOOLTIP_USERNAME), defaultUsers);
+  passwordEdit_ = ui->makeLineEdit(
+        UiStyle::EditHint | UiStyle::PasswordHint, TR(T_DEFAULT_PASSWORD), TR(T_TOOLTIP_PASSWORD));
 
-  passwordEdit_ = new LineEdit; {
-    passwordEdit_->setToolTip(TR(T_TOOLTIP_PASSWORD));
-    passwordEdit_->setEchoMode(QLineEdit::Password);
-    passwordEdit_->setText(TR(T_DEFAULT_PASSWORD));
-  }
+  setTabOrder(userNameEdit_, passwordEdit_);
 
-  QToolButton *loginButton = new QtExt::ToolButton; {
-    loginButton->setStyleSheet(SS_TOOLBUTTON_TEXT_HIGHLIGHT);
-    loginButton->setToolButtonStyle(Qt::ToolButtonTextOnly);
-    loginButton->setText(QString("[ %1 ]").arg(TR(T_LOGIN)));
-    loginButton->setToolTip(TR(T_LOGIN) + " [ENTER]");
-  }
+  QToolButton *loginButton = ui->makeToolButton(
+        UiStyle::PushHint | UiStyle::HighlightHint, TR(T_LOGIN), TR(T_LOGIN), K_ENTER,
+        this, SLOT(login()));
+  QToolButton *cancelButton = ui->makeToolButton(
+        UiStyle::PushHint, TR(T_CANCEL), TR(T_CANCEL), K_ESC,
+        this, SLOT(hide()));
 
-  QToolButton *cancelButton = new QtExt::ToolButton; {
-    cancelButton->setStyleSheet(SS_TOOLBUTTON_TEXT);
-    cancelButton->setToolButtonStyle(Qt::ToolButtonTextOnly);
-    cancelButton->setText(QString("[ %1 ]").arg(TR(T_CANCEL)));
-    cancelButton->setToolTip(TR(T_CANCEL));
-  }
 
-  QLabel *userNameLabel = new QLabel; {
-    userNameLabel->setBuddy(userNameEdit_);
-    userNameLabel->setStyleSheet(SS_LABEL);
-    userNameLabel->setText(TR(T_LABEL_USERNAME) + ":");
-    userNameLabel->setToolTip(TR(T_TOOLTIP_USERNAME));
-  }
-
-  QLabel *passwordLabel = new QLabel; {
-    passwordLabel->setBuddy(passwordEdit_);
-    passwordLabel->setStyleSheet(SS_LABEL);
-    passwordLabel->setText(TR(T_LABEL_PASSWORD) + ":");
-    passwordLabel->setToolTip(TR(T_TOOLTIP_PASSWORD));
-  }
+  QLabel *userNameLabel = ui->makeLabel(UiStyle::BuddyHint, TR(T_USERNAME), userNameEdit_),
+         *passwordLabel = ui->makeLabel(UiStyle::BuddyHint, TR(T_PASSWORD), passwordEdit_);
 
   // Layouts
   QGridLayout *grid = new QGridLayout; {
@@ -98,34 +96,9 @@ LoginDialog::LoginDialog(QWidget *parent)
     setContentsMargins(0, 0, 0, 0);
   } setLayout(grid);
 
-  setTabOrder(userNameEdit_, passwordEdit_);
-
-  /*
-  QGridLayout *layout = new QGridLayout; {
-    layout->addWidget(userNameLabel, 0, 0);
-    layout->addWidget(userNameEdit_, 0, 1);
-    layout->addWidget(passwordLabel, 1, 0);
-    layout->addWidget(passwordEdit_, 1, 1);
-    layout->addWidget(loginButton, 2, 0);
-    layout->addWidget(cancelButton, 2, 1);
-  }
-  setLayout(layout);
-  */
-
   // Connections
-  connect(cancelButton, SIGNAL(clicked()), SLOT(hide()));
-  connect(loginButton, SIGNAL(clicked()), SLOT(login()));
   connect(userNameEdit_->lineEdit(), SIGNAL(returnPressed()), SLOT(login()));
   connect(passwordEdit_, SIGNAL(returnPressed()), SLOT(login()));
-
-  // Shortcuts
-  QShortcut *cancelShortcut = new QShortcut(QKeySequence("Esc"), this);
-  connect(cancelShortcut, SIGNAL(activated()), SLOT(hide()));
-  QShortcut *closeShortcut = new QShortcut(QKeySequence::Close, this);
-  connect(closeShortcut, SIGNAL(activated()), SLOT(hide()));
-
-  // Focus
-  userNameEdit_->setFocus();
 }
 
 // - Properties -
