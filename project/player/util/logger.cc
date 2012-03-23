@@ -66,20 +66,20 @@ Logger::warn(const QString &message)
     return;
   if (message.size() < LEFT_LENGTH + RIGHT_LENGTH)
     gConsole().append(
-      HTML_STYLE_OPEN(color:purple)
+      HTML_STYLE_OPEN(color:cyan)
       ": " + message +
       HTML_STYLE_CLOSE() HTML_BR()
     );
   else
     gConsole().append(
-      HTML_STYLE_OPEN(color:purple) ": "
+      HTML_STYLE_OPEN(color:cyan) ": "
       + message.left(LEFT_LENGTH) +
       HTML_STYLE_OPEN(color:orange) " ..." HTML_STYLE_CLOSE()
       //+ message.right(RIGHT_LENGTH) +
       HTML_STYLE_CLOSE() HTML_BR()
     );
   LoggerSignals::globalInstance()->emit_warned(
-    HTML_STYLE_OPEN(color:purple) ": "
+    HTML_STYLE_OPEN(color:cyan) ": "
     + message +
     HTML_STYLE_CLOSE()
   );

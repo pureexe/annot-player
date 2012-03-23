@@ -59,6 +59,12 @@ public:
 
   static void closeSession();
 
+  static qint64 duration();
+  static qint64 availableDuration();
+
+  static qint64 size();
+  static qint64 availableSize();
+
 protected:
   // - Plugin APIs -
   static int open(vlc_object_t *);

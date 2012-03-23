@@ -810,6 +810,17 @@ void
 QtWin::sleep(long msecs)
 { ::Sleep(msecs); }
 
+// - Encoding -
+
+// See
+const char *
+QtWin::toUtf8(const wchar_t *pStr)
+{
+  static char szBuf[1024]; // not threadsafe!
+  WideCharToMultiByte(CP_UTF8, 0, pStr, -1, szBuf, sizeof(szBuf), NULL, NULL);
+  return szBuf;
+}
+
 // EOF
 
 /*

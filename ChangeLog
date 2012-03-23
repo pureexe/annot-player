@@ -2,6 +2,12 @@ ChangeLog
 Annot Project
 6/18/2011
 
+3/23/2012	annot.player	0.1.3.4
+        * Show download progress in position slider.
+        * Added annotation thread view.
+        * Allow openning multiple windows from context menu.
+        * Bug fix in streaming module.
+
 3/20/2012	annot.player	0.1.3.3
         * Fixed a severe bug which could crash the app while downloading.
         * Option to disable context menu rendering.

@@ -17,6 +17,9 @@ class TextEdit : public QTextEdit
 public:
   explicit TextEdit(QWidget *parent = 0);
 
+  bool containsPlainText(const QString &text) const;
+  bool containsHtml(const QString &text) const;
+
   // - Events -
 protected:
   virtual void contextMenuEvent(QContextMenuEvent *event); ///< \override

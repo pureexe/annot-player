@@ -5,6 +5,7 @@
 #include "defines.h"
 #include "signalhub.h"
 #include "uistyle.h"
+#include "positionslider.h"
 #include "module/player/player.h"
 #include "module/qtext/overlaylayout.h"
 #include <QtCore>

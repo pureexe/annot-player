@@ -40,6 +40,26 @@ end
 function encrypt(s) return s end
 function decrypt(s) return s end
 
+-- See: http://stackoverflow.com/questions/4990990/lua-check-if-a-file-exists
+function file_readable(name)
+  local file = io.open(name,"r");
+   if file~=nil then
+     io.close(file);
+     return true;
+   else 
+     return false;
+   end
+end
+function file_size(name)
+  local file = io.open(name,"r");
+  local size = -1;
+  if file~=nil then
+    size = file:seek("end");
+    io.close(file);
+  end
+  return size;
+end
+
 -- require clib.dlget(url, path)
 function dlFile(filesavepath, fileurl)
   --return clib.dlget(fileurl, filesavepath);
@@ -68,12 +88,13 @@ function postdlFile(filesavepath, posturl, postdata, postheader)
   -- FIXME: return value not worked
   os.remove(filesavepath);
   clib.dlpost(filesavepath, posturl, postdata, postheader);
+
   return 0;
 end
 
 -- Entry --
 g_debug = {};
-g_siteid = nil;
+g_siteid = 0;
 g_title = nil;
 g_refurl = nil;
 g_mrls = nil;

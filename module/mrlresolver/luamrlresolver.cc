@@ -286,6 +286,7 @@ LuaMrlResolver::formatTitle(const QString &title)
   ret.remove(QRegExp("..ニコニコ動画\\(原宿\\)$"));
   ret.remove(QRegExp(" - 嗶哩嗶哩 - .*"));
   ret.remove(QRegExp(" - 优酷视频 - .*"));
+  ret.remove(QRegExp(" - 视频$"));
   ret.remove(QRegExp(" - AcFun.tv$"));
   ret.replace("&lt;", "<");
   ret.replace("&gt;", ">");

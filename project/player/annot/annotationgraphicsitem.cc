@@ -11,8 +11,8 @@
 #include "defines.h"
 #include "logger.h"
 #include "signalhub.h"
-#include "module/annotcloud/cmd.h"
-#include "module/annotcloud/annotationparser.h"
+#include "module/annotcloud/annottag.h"
+#include "module/annotcloud/annothtml.h"
 #include "module/qtext/htmltag.h"
 #include <boost/tuple/tuple.hpp>
 #include <QtGui>

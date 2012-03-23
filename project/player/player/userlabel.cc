@@ -4,9 +4,6 @@
 #include "userlabel.h"
 #include <QtGui>
 
-UserLabel::UserLabel(QWidget *parent)
-  : Base(parent) { }
-
 void
 UserLabel::mouseDoubleClickEvent(QMouseEvent *event)
 {

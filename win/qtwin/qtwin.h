@@ -173,6 +173,10 @@ namespace QtWin {
   void hibernate();
   void logoff();
 
+  // - String -
+
+  const char *toUtf8(const wchar_t *str);
+
 } // namespace QtWin
 
 // EOF

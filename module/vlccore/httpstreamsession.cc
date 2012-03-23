@@ -78,6 +78,10 @@ HttpStreamSession::~HttpStreamSession()
 // - Properties -
 
 qint64
+HttpStreamSession::availableDuration() const
+{ return merger_ ? merger_->timestamp() : 0; }
+
+qint64
 HttpStreamSession::receivedSize() const
 {
   if (ins_.isEmpty())
@@ -145,7 +149,7 @@ HttpStreamSession::save()
   QFile::remove(fileName_);
   QDir().mkpath(QFileInfo(fileName_).absolutePath());
 
-  bool ok = fifo_->writeToFile(fileName_);
+  bool ok = fifo_->writeFile(fileName_);
   if (!ok || !FlvCodec::isFlvFile(fileName_)) {
     QFile::remove(fileName_);
     emit error(tr("download failed") + ": " + fileName_);
@@ -274,7 +278,7 @@ HttpStreamSession::run()
     QString type = in->contentType();
     ok = isMultiMediaMimeType(type);
     if (!ok) {
-      DOUT("WARNING: invalid contentType =" << in->contentType() << ", url =" << url.toString());
+      DOUT("WARNING: invalid contentType =" << type << ", url =" << url.toString());
       ins_.removeFirst();
     }
   }
@@ -308,15 +312,14 @@ HttpStreamSession::run()
 
   updateProgress();
 
-  FlvMerge *merger = new FlvMerge; {
-    merger->setInputStreams(ins_);
-    merger->setOutputStream(fifo_);
-    merger->setDuration(duration_);
+  merger_ = new FlvMerge; {
+    merger_->setInputStreams(ins_);
+    merger_->setOutputStream(fifo_);
+    merger_->setDuration(duration_);
 
-    connect(merger, SIGNAL(error(QString)), SIGNAL(error(QString)));
-    connect(merger, SIGNAL(error(QString)), SLOT(stop()));
-    //connect(merger, SIGNAL(timestampChanged(qint64)), SLOT(updateProgress()));
-    merger_ = merger;
+    connect(merger_, SIGNAL(error(QString)), SIGNAL(error(QString)));
+    connect(merger_, SIGNAL(error(QString)), SLOT(stop()));
+    //connect(merger_, SIGNAL(timestampChanged(qint64)), SLOT(updateProgress()));
   }
 
   //QTimer progressTimer;
@@ -328,9 +331,9 @@ HttpStreamSession::run()
   //progressTimer.stop();
 
   //ins_.reset();
-  ok = merger->parse();
+  ok = merger_->parse();
   if (ok) {
-    duration_ = merger->duration();
+    duration_ = merger_->duration();
     DOUT("duration =" << duration_);
   } else {
     setState(Error);
@@ -347,9 +350,9 @@ HttpStreamSession::run()
 
   if (ok) {
     ins_.reset();
-    ok = merger->merge();
+    ok = merger_->merge();
     if (ok)
-      merger->finish();
+      merger_->finish();
     else {
       setState(Error);
       emit error(tr("failed to merge FLV streams"));

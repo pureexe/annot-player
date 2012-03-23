@@ -3,7 +3,7 @@
 setlocal
 cd /d d:/devel/releases/player || exit /b 1
 
-set VERSION=0.1.3.3
+set VERSION=0.1.3.4
 set APP=annot-player
 set ZIPFILE=%APP%-%VERSION%-win.zip
 
@@ -117,6 +117,9 @@ mkdir "%LUA_PATH%" || exit 1
 cp "%SOURCE%"/module/luaresolver/lua/luascript.lua "%LUA_PATH%"/ || exit 1
 cp -v "%SOURCE%"/module/luaresolver/lua/luascript/*.lua "%LUA_PATH%"/  || exit 1
 cp -v "%SOURCE%"/module/luaresolver/lua/luascript/*/*.lua "%LUA_PATH%"/  || exit 1
+
+:: jsf
+cp -Rv "%SOURCE%"/module/annotcloud/jsf . || exit 1
 
 cd ..
 

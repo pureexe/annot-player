@@ -219,6 +219,22 @@ VlcHttpPlugin::closeSession()
   DOUT("exit");
 }
 
+qint64
+VlcHttpPlugin::duration()
+{ return session_ ? session_->duration() : duration_; }
+
+qint64
+VlcHttpPlugin::availableDuration()
+{ return session_ ? session_->availableDuration() : 0; }
+
+qint64
+VlcHttpPlugin::size()
+{ return session_ ? session_->size() : 0; }
+
+qint64
+VlcHttpPlugin::availableSize()
+{ return session_ ? session_->availableSize() : 0; }
+
 // - I/O -
 
 // Read: Read up to i_len bytes from the http connection and place in
@@ -265,7 +281,7 @@ VlcHttpPlugin::seek(access_t *p_access, uint64_t i_pos)
   //}
 
   if (i_pos >= (quint64)session_->availableSize()) {
-    //DOUT("i_pos =" << i_pos << ", availableSize =" << session_->availableSize());
+    DOUT("egeneric, seek over availableSize: i_pos =" << i_pos << ", availableSize =" << session_->availableSize());
     //DOUT("exit: ret = egeneric, seek out of available size");
     return VLC_EGENERIC;
   }
@@ -314,7 +330,7 @@ VlcHttpPlugin::control(access_t *p_access, int i_query, va_list args)
     //DOUT("query = ACCESS_GET_PTS_DELAY");
     pi_64 = (int64_t*)va_arg( args, int64_t * );
     //*pi_64 = (int64_t)var_GetInteger( p_access, "http-caching" ) * 1000;
-    *pi_64 = 1000;
+    *pi_64 = 1000 * 1000; // in msecs, large enough to prevent jitter from youku video
     break;
 
   case ACCESS_SET_PAUSE_STATE:
@@ -334,11 +350,11 @@ VlcHttpPlugin::control(access_t *p_access, int i_query, va_list args)
         *va_arg(args, char **) = ::strdup(t.toLocal8Bit());
     } break;
 
-  case ACCESS_GET_TITLE_INFO:
+  case ACCESS_GET_TITLE_INFO:   // 0x102 = 258
   case ACCESS_SET_TITLE:
   case ACCESS_SET_SEEKPOINT:
   case ACCESS_SET_PRIVATE_ID_STATE:
-    //DOUT("exit: ignored");
+    DOUT("exit: ignored: i_query =" << i_query);
     return VLC_EGENERIC;
 
   case ACCESS_GET_META:

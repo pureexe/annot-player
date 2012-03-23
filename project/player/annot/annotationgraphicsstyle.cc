@@ -2,28 +2,23 @@
 // 8/22/2011
 
 #include "annotationgraphicsstyle.h"
-#include "module/annotcloud/annotationparser.h"
+#include "module/annotcloud/annothtml.h"
+#include <boost/typeof/typeof.hpp>
 
-#define PARSER  AnnotCloud::AnnotationParser::globalInstance()
-
-namespace { // anonymous, static initializers
-
-  struct parser_config {
+namespace { struct parser_config_ {
 
     // Potential run time error if this class is linked before PARSER get initialized.
-    parser_config()
-    {
-      Q_ASSERT(PARSER);
+  parser_config_()
+  {
+    BOOST_AUTO(p, AnnotCloud::AnnotationHtmlParser::globalInstance());
 
-      PARSER->setTinySize(ANNOTATION_SIZE_TINY);
-      PARSER->setSmallSize(ANNOTATION_SIZE_SMALL);
-      PARSER->setNormalSize(ANNOTATION_SIZE_NORMAL);
-      PARSER->setLargeSize(ANNOTATION_SIZE_LARGE);
-      PARSER->setHugeSize(ANNOTATION_SIZE_HUGE);
-    }
+    p->setTinySize(ANNOTATION_SIZE_TINY);
+    p->setSmallSize(ANNOTATION_SIZE_SMALL);
+    p->setNormalSize(ANNOTATION_SIZE_NORMAL);
+    p->setLargeSize(ANNOTATION_SIZE_LARGE);
+    p->setHugeSize(ANNOTATION_SIZE_HUGE);
+  }
 
-  } parser_config;
-
-} // anonymous namespace
+} parser_config_; }
 
 // EOF

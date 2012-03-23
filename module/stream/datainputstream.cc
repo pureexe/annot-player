@@ -8,7 +8,7 @@
 #include "module/debug/debug.h"
 
 bool
-DataInputStream::writeToFile(const QString &path)
+DataInputStream::writeFile(const QString &path)
 {
   DOUT("enter: fileName =" << path);
   QFile file(path);

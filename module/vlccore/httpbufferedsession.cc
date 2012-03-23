@@ -135,6 +135,7 @@ HttpBufferedSession::tryRedirect()
   QUrl url = reply_->attribute(QNetworkRequest::RedirectionTargetAttribute).toUrl();
   if (url.isEmpty() || url == reply_->url())
     return false;
+  DOUT("redirected");
   url_ = url;
   run();
   return true;
@@ -198,7 +199,7 @@ HttpBufferedSession::run()
     readyCond_.wakeAll();
     stoppedCond_.wakeAll();
     emit error(tr("network error to access URL") + ": " + url_.toString());
-    DOUT("exit: network error");
+    DOUT("exit: network error:" << reply_->errorString());
     return;
   }
 

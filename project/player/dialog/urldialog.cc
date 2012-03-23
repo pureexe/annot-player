@@ -61,7 +61,7 @@ UrlDialog::createLayout()
   QToolButton *increaseButton = ui->makeToolButton(
         UiStyle::NoHint, "+", TR(T_INCREASE), K_CTRL "+=", this, SLOT(increase()));
   QToolButton *decreaseButton = ui->makeToolButton(
-        UiStyle::NoHint, "+", TR(T_INCREASE), K_CTRL "+-", this, SLOT(decrease()));
+        UiStyle::NoHint, "-", TR(T_INCREASE), K_CTRL "+-", this, SLOT(decrease()));
 
   QVBoxLayout *rows = new QVBoxLayout; {
     QHBoxLayout *header = new QHBoxLayout,

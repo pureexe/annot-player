@@ -324,28 +324,28 @@ FlvMetaWriter::updateScriptTagDoubleValue(OutputStream *out, const QString &var)
 bool
 FlvMetaWriter::updateScriptTagUInt8Value(OutputStream *out, const QString &var) const
 {
-#define ELIF_VAR(_var, _meta) \
-  else if (var == _var) { \
-    update = true; \
-    value = meta_._meta ? 1 : 0; \
-  }
-
-  bool update = false;
-  quint8 value;
-
-  if (var == "hasKeyframes") {
-    update = true;
-    value = meta_.hasKeyFrames() ? 1 : 0;
-  }
-  ELIF_VAR("hasMetadata", hasMetaData)
-  ELIF_VAR("canSeekToEnd", canSeekToEnd)
-
-  if (update) {
-    out->writeUInt8(value);
-    DOUT("update" << var << "=" << value);
-  }
-  return update;
-#undef ELIF_VAR
+  Q_UNUSED(out);
+  Q_UNUSED(var);
+  return false;
+//#define IF_VAR(_var, _meta) \
+//  if (var == _var) { \
+//    update = true; \
+//    value = meta_._meta ? 1 : 0; \
+//  }
+//
+//  bool update = false;
+//  quint8 value;
+//
+//  IF_VAR("hasKeyframes", hasKeyFrames)
+//  else IF_VAR("hasMetadata", hasMetaData)
+//  else IF_VAR("canSeekToEnd", canSeekToEnd)
+//
+//  if (update) {
+//    out->writeUInt8(value);
+//    DOUT("update" << var << "=" << value);
+//  }
+//  return update;
+//#undef ELIF_VAR
 }
 
 // EOF

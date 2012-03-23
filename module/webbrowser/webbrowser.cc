@@ -256,10 +256,7 @@ WebBrowser::openUrl(const QString &url)
   if (view) {
     ui_->addressLine->setText(tidyUrl(url));
     ui_->tabWidget->setTabText(ui_->tabWidget->currentIndex(), url);
-
-    QWebPage *page = view->page();
-    setupWebPage(page);
-    view->setUrl(encodeUrl(url));
+    view->setUrl(encodeUrl(completeUrl(url)));
   }
 }
 
@@ -347,10 +344,12 @@ WebBrowser::forward()
 void
 WebBrowser::newTab()
 {
-  QWebView *view = new QWebView(this); {
-    if (textSizeMultiplier_)
-      view->setTextSizeMultiplier(textSizeMultiplier_);
-  }
+  QWebView *view = new QWebView(this);
+  QWebPage *page = view->page();
+  setupWebPage(page);
+
+  if (textSizeMultiplier_ > 0)
+    view->setTextSizeMultiplier(textSizeMultiplier_);
 
   connect(view, SIGNAL(urlChanged(QUrl)), SLOT(updateAddressbar()));
   connect(view, SIGNAL(loadStarted()), SLOT(handleLoadStarted()));

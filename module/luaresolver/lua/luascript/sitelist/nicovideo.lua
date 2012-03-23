@@ -56,6 +56,9 @@ function getTaskAttribute_nico ( str_url, str_tmpfile , pDlg)
   --local nico_proxy_url = "http://nico.galstars.net/?t=www&u=%2Fwatch%2F"..str_id;
   local nico_proxy_url = "http://nico.galstars.net/?t=www&u=/watch/"..str_id;
   re = dlFile(str_tmpfile, nico_proxy_url); -- bypass banning
+  --if re ~= 0 then
+  --  re = dlFile(str_tmpfile, nico_url); -- redundant, in case galstars.net is down
+  --end
   local forbidden = false;
   if re~=0
   then
@@ -110,6 +113,30 @@ function getTaskAttribute_nico ( str_url, str_tmpfile , pDlg)
     io.close(file);
   end
 
+
+
+  if str_title == nil then
+    re = dlFile(str_tmpfile, nico_url); -- bypass banning
+
+
+    forbidden = false;
+    file = io.open(str_tmpfile, "r");
+    if file==nil
+    then
+      forbidden = true;
+      --return;
+    end
+
+    if file ~= nil then
+      str_line = readUntilFromUTF8(file, "<title>");
+      str_title_line = readIntoUntilFromUTF8(file, str_line, "</title>");
+      str_title = getMedText(str_title_line, "<title>", "</title>");
+
+      str_descriptor = str_title;
+
+      io.close(file);
+    end
+  end
 
   --parse url
   if istwnico==1 then

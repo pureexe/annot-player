@@ -21,9 +21,9 @@ typedef QList<MrlInfo> MrlInfoList;
 
 struct MediaInfo
 {
-  QString title;
-  QString refurl;
-  QString suburl;
+  QString title,
+          refurl,
+          suburl;
   MrlInfoList mrls;
 };
 

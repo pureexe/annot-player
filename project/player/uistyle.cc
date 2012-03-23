@@ -183,9 +183,7 @@ UiStyle::setMenuBackground(QMenu *m, bool persistent)
     m->setStyleSheet(
       SS_CONTEXTMENU
       SS_BEGIN(QMenu)
-        SS_BACKGROUND_IMAGE_URL_BEGIN
-          + rc +
-        SS_BACKGROUND_IMAGE_URL_END
+        SS_BACKGROUND_IMAGE_URL(+rc+)
       SS_END
     );
   }

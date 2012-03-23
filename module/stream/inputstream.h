@@ -36,7 +36,7 @@ public:
   virtual QByteArray readAll();
 
   ///  Warning: default implementation will change the pos().
-  virtual bool writeToFile(const QString &path);
+  virtual bool writeFile(const QString &path);
 
   // - Bitwise -
 public:

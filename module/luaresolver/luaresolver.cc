@@ -22,7 +22,7 @@
 
 #define UNUSED(_var)    (void)(_var)
 
-//#define DEBUG "luaresolver"
+#define DEBUG "luaresolver"
 #include "module/debug/debug.h"
 
 // - Construction -
@@ -77,8 +77,8 @@ LuaResolver::decodeTitle(const char *text, int siteId)
   switch (siteId) {
   case AcFun:
     return decodeText(text, "GBK");
-  case Nicovideo:
   case Bilibili:
+  case Nicovideo:
   case UnknownSite:
   default:
     return QString::fromUtf8(text);

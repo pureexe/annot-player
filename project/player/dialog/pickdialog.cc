@@ -5,7 +5,6 @@
 #include "uistyle.h"
 #include "tr.h"
 #include "logger.h"
-#include "defines.h"
 #ifdef USE_WIN_PICKER
 #  include "win/picker/picker.h"
 #endif // USE_WIN_PICKER
@@ -15,6 +14,8 @@
 #include "module/debug/debug.h"
 
 using namespace Logger;
+
+#define PICKER  WindowPicker::globalInstance()
 
 // - Constructions -
 

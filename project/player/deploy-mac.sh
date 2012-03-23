@@ -8,7 +8,7 @@ cd "$PREFIX"  || exit 1
 ## environment
 
 COLOR=purple
-VERSION=0.1.3.3
+VERSION=0.1.3.4
 DMG_SIZE=200m
 
 TARGET="Annot Player"
@@ -172,6 +172,9 @@ test -e "$LUAPATH" || mkdir "$LUAPATH"|| exit 1
 cp "$APP_SRC"/module/luaresolver/lua/luascript.lua "$LUAPATH"/ || exit 1
 cp -R "$APP_SRC"/module/luaresolver/lua/luascript/*.lua "$LUAPATH"/  || exit 1
 cp -R "$APP_SRC"/module/luaresolver/lua/luascript/*/*.lua "$LUAPATH"/  || exit 1
+
+## copy jsf
+cp -R "$APP_SRC"/module/annotcloud/jsf "$APP_MACOS"/ || exit 1
 
 ## deploy macports libs
 

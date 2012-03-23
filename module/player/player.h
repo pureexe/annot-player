@@ -83,6 +83,7 @@ public:
   bool isEmbedded() const;
   bool isFullScreen() const;
   bool hasMedia() const;
+  bool hasRemoteMedia() const;
   bool isMouseEnabled() const;
   bool isKeyboardEnabled() const;
 
@@ -227,13 +228,15 @@ public:
   qreal rate() const;
   qreal volume() const;       ///< [0,1]
   qreal position() const;     ///< [0,1]
+  qreal availablePosition() const; ///< [0,1]
   QString aspectRatio() const;
+
 public slots:
   void setVolume(qreal vol);
   void setRate(qreal rate);
   void clearRate() { setRate(1.0); }
   void mute();
-  void setPosition(qreal pos);
+  void setPosition(qreal pos, bool checkPos = true);
   void setAspectRatio(const char *ratio); ///< ratio = width:height
   void setAspectRatio(const QString &ratio); ///< ratio = width:height
   void setAspectRatio(int width, int height);

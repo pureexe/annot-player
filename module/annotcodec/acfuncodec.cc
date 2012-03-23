@@ -2,7 +2,7 @@
 // 2/4/2012
 
 #include "acfuncodec.h"
-#include "module/annotcloud/cmd.h"
+#include "module/annotcloud/annottag.h"
 #include "module/annotcloud/traits.h"
 #include <QtCore>
 #include <QtNetwork>

@@ -12,9 +12,7 @@
 QtExt::
 Slider::Slider(QWidget *parent)
   : Base(parent), SLIDER_INIT
-{
-  setGraphicsEffect(new QGraphicsBlurEffect(this));
-}
+{ }
 
 QtExt::
 Slider::Slider(Qt::Orientation orientation, QWidget *parent)

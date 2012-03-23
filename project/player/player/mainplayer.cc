@@ -2,6 +2,7 @@
 // 6/30/2011
 
 #include "mainplayer.h"
+#include "positionslider.h"
 #include "module/qtext/ss.h"
 #include "module/qtext/overlaylayout.h"
 #include <QtCore>

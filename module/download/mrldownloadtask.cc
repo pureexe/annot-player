@@ -229,16 +229,22 @@ MrlDownloadTask::downloadMultipleMedia(const MediaInfo &mi, QNetworkCookieJar *j
     if (jar)
       in->networkAccessManager()->setCookieJar(jar);
     in->run();
-    in->waitForReady();
+
     ins.append(in);
+    in->waitForReady();
+
+    QString contentType = first->contentType();
+    if (!isMultiMediaMimeType(contentType)) {
+      DOUT("WARNING: invalid contentType =" << contentType << ", url =" << url.toString());
+      ins.removeLast();
+    }
   }
   //if (jar)
   //  jar->setParent(this);
 
   Q_ASSERT(first);
 
-  QString contentType = first->contentType();
-  if (!isMultiMediaMimeType(contentType)) {
+  if (ins.isEmpty()) {
     setState(Error);
     emit error(tr("access denied to download URL") + ": " + first->url().toString());
     emit stopped();
@@ -250,7 +256,7 @@ MrlDownloadTask::downloadMultipleMedia(const MediaInfo &mi, QNetworkCookieJar *j
   //    size += in->size();
 
   // Output
-  QString suf = contentType.contains("mp4", Qt::CaseInsensitive) ? ".mp4" : ".flv";
+  QString suf = ".flv";
 
   FileOutputStream out;
   QString desktopPath = QDesktopServices::storageLocation(QDesktopServices::DesktopLocation);

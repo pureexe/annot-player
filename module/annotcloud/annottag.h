@@ -1,7 +1,7 @@
-#ifndef _ANNOTCLOUD_CMD_H
-#define _ANNOTCLOUD_CMD_H
+#ifndef _ANNOTCLOUD_ANNOTTAG_H
+#define _ANNOTCLOUD_ANNOTTAG_H
 
-// annotcloud/cmd.h
+// annotcloud/annottag.h
 // 8/9/2011
 //
 // See: http://en.wikibooks.org/wiki/LaTeX/Command_Glossary
@@ -336,4 +336,4 @@ namespace AnnotCloud {
 
 } // namespace AnnotCloud
 
-#endif // _ANNOTCLOUD_CMD_H
+#endif // _ANNOTCLOUD_ANNOTTAG_H

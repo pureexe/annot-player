@@ -1,7 +1,7 @@
 # player.pro
 # 6/30/2011
 
-VERSION = 0.1.3.3
+VERSION = 0.1.3.4
 
 include(../../config.pri)
 include(tr/tr.pri)
@@ -127,6 +127,7 @@ HEADERS += \
     annot/annotationgraphicsitem.h \
     annot/annotationgraphicsview.h \
     annot/annotationgraphicsstyle.h \
+    annot/annotationthreadview.h \
     annot/blacklistview.h \
     annot/blacklistviewprivate.h \
     annot/textformathandler.h \
@@ -171,6 +172,7 @@ HEADERS += \
     player/embeddedplayer.h \
     player/playerpanel.h \
     player/playerui.h \
+    player/positionslider.h \
     player/userlabel.h \
     signal/signalhub.h \
     token/addaliasdialog.h \
@@ -204,6 +206,7 @@ SOURCES += \
     annot/annotationgraphicsitem.cc \
     annot/annotationgraphicsview.cc \
     annot/annotationgraphicsstyle.cc \
+    annot/annotationthreadview.cc \
     annot/blacklistview.cc \
     annot/blacklistviewprivate.cc \
     annot/textformathandler.cc \
@@ -243,6 +246,7 @@ SOURCES += \
     player/embeddedplayer.cc \
     player/playerui.cc \
     player/playerpanel.cc \
+    player/positionslider.cc \
     player/userlabel.cc \
     signal/signalhub.cc \
     token/addaliasdialog.cc \

@@ -289,7 +289,7 @@ main(int argc, char *argv[])
 
 #ifdef USE_WIN_QTH
   QTH->setParentWinId(dummy.winId());
-  QTH->setInterval(QTH_INTERVAL);
+  QTH->setInterval(200); // Esential!
 #endif // USE_WIN_QTH
 
   dummy.show();

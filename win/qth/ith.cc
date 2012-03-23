@@ -104,6 +104,8 @@ namespace { // anonymous, handlers
     //QMessageBox::warning(0, "Exception", msg);
     //NtTerminateProcess(NtCurrentProcess(),0);
     DOUT(msg);
+    DOUT("WARNING: abort current process");
+    exit(-1);
     DOUT("exit");
     return 0;
   }

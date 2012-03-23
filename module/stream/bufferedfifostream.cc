@@ -99,7 +99,7 @@ BufferedFifoStream::waitForFinished()
 }
 
 bool
-BufferedFifoStream::writeToFile(const QString &path)
+BufferedFifoStream::writeFile(const QString &path)
 {
   DOUT("enter: fileName =" << path);
   QFile file(path);

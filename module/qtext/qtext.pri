@@ -35,6 +35,7 @@ SOURCES += \
     $$PWD/datetime.cc \
     $$PWD/dialog.cc \
     $$PWD/filedeleter.cc \
+    $$PWD/filesystem.cc \
     $$PWD/fontcombobox.cc \
     $$PWD/network.cc \
     $$PWD/slider.cc \

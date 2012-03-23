@@ -10,7 +10,6 @@
 #ifdef USE_WIN_QTH
 #  include "win/qth/qth.h"
 #endif // USE_WIN_QTH
-#include "module/annotcloud/cmd.h"
 #include "module/qtext/htmltag.h"
 #include <QtGui>
 

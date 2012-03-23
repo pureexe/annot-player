@@ -71,8 +71,9 @@
     SS_BORDER(1px solid #aaa) \
   SS_END
 
-#define SS_SLIDER_POSITION      SS_SLIDER_
-#define SS_SLIDER_VOLUME        SS_SLIDER_
+#define SS_SLIDER_NORMAL        SS_SLIDER_
+
+#define SS_SLIDER_VOLUME        SS_SLIDER_NORMAL
 
 // - Buttons -
 

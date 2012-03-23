@@ -4,6 +4,7 @@
 #include "playerpanel.h"
 #include "inputcombobox.h"
 #include "prefixcombobox.h"
+#include "positionslider.h"
 #include "userlabel.h"
 #include "defines.h"
 #include "stylesheet.h"
@@ -30,12 +31,12 @@ PlayerPanel::PlayerPanel(QWidget *parent)
 }
 
 // - Sliders -
-QSlider*
+PositionSlider*
 PlayerPanel::positionSlider()
 {
   if (!positionSlider_) {
-    positionSlider_ = new QtExt::Slider(Qt::Horizontal, this);
-    positionSlider_->setStyleSheet(SS_SLIDER_POSITION);
+    positionSlider_ = new PositionSlider(this);
+    //positionSlider_->setStyleSheet(SS_SLIDER_POSITION);
     positionSlider_->setEnabled(false);
     positionSlider_->setMaximum(G_POSITION_MAX);
     positionSlider_->setToolTip(TR(T_POSITION));

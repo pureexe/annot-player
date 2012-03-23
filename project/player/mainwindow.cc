@@ -21,6 +21,7 @@
 #include "miniplayer.h"
 #include "clipboardmonitor.h"
 #include "annotationgraphicsview.h"
+#include "annotationthreadview.h"
 #include "annotationeditor.h"
 #include "annotationfilter.h"
 #include "tokenview.h"
@@ -111,8 +112,8 @@
 #ifdef Q_OS_UNIX
   #include "unix/qtunix/qtunix.h"
 #endif // Q_OS_UNIX
-#include "module/annotcloud/cmd.h"
-#include "module/annotcloud/annotationparser.h"
+#include "module/annotcloud/annottag.h"
+#include "module/annotcloud/annothtml.h"
 #include <QtGui>
 //#include <QtNetwork>
 #include <boost/foreach.hpp>
@@ -210,7 +211,7 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags f)
   : Base(parent, f), disposed_(false),
     liveInterval_(DEFAULT_LIVE_INTERVAL),
     tray_(0),//commentView_(0),
-    annotationEditor_(0), blacklistView_(0), backlogDialog_(0), consoleDialog_(0), downloadDialog_(0),
+    annotationThreadView_(0), annotationEditor_(0), blacklistView_(0), backlogDialog_(0), consoleDialog_(0), downloadDialog_(0),
     aboutDialog_(0), annotationCountDialog_(0), deviceDialog_(0), helpDialog_(0), loginDialog_(0), liveDialog_(0),
     networkProxyDialog_(0), processPickDialog_(0), seekDialog_(0), syncDialog_(0), windowPickDialog_(0),
     mediaUrlDialog_(0), annotationUrlDialog_(0), siteAccountView_(0), userView_(0),
@@ -593,9 +594,9 @@ MainWindow::createConnections()
     connect(_playerui->prefixComboBox()->lineEdit(), SIGNAL(textChanged(QString)), SLOT(syncPrefixLineText(QString))); \
     connect(_playerui->previousButton(), SIGNAL(clicked()), SLOT(previous())); \
     connect(_playerui->nextButton(), SIGNAL(clicked()), SLOT(next())); \
-    connect(_playerui, SIGNAL(invalidateMenuRequested()), SLOT(invalidateContextMenu()));
-    //connect(_playerui->toggleAnnotationButton(), SIGNAL(clicked()), annotationView_, SLOT(toggleVisible()));
-    //connect(annotationView_, SIGNAL(visibleChanged(bool)), _playerui, SLOT(setAnnotationEnabled(bool)));
+    connect(_playerui, SIGNAL(invalidateMenuRequested()), SLOT(invalidateContextMenu())); \
+    connect(this, SIGNAL(downloadProgressUpdated()), \
+            _playerui, SLOT(invalidatePositionSlider()), Qt::QueuedConnection);
 
     CONNECT(mainPlayer_)
     CONNECT(miniPlayer_)
@@ -912,8 +913,10 @@ MainWindow::createActions()
   MAKE_ACTION(stopAct_,         STOP,           hub_,           SLOT(stop()))
   MAKE_ACTION(replayAct_,       REPLAY,         this,           SLOT(replay()))
   MAKE_ACTION(snapshotAct_,     SNAPSHOT,       this,           SLOT(snapshot()))
-  MAKE_ACTION(checkInternetConnectionAct_,     CHECKINTERNET,   this, SLOT(checkInternetConnection()))
-  MAKE_ACTION(deleteCachesAct_, DELETECACHE,   this, SLOT(deleteCaches()))
+  MAKE_ACTION(checkInternetConnectionAct_,      CHECKINTERNET,   this, SLOT(checkInternetConnection()))
+  MAKE_ACTION(deleteCachesAct_, DELETECACHE,    this,           SLOT(deleteCaches()))
+  MAKE_ACTION(newWindowAct_,    NEWWINDOW,      this,           SLOT(newWindow()))
+  MAKE_ACTION(showAnnotationsAsThreadAct_,    ANNOTTHREAD,      this,  SLOT(showAnnotationsAsThread()))
   MAKE_TOGGLE(nothingAfterFinishedAct_, NOTHINGAFTERFINISHED, this, SLOT(nothingAfterFinished()))
   MAKE_TOGGLE(sleepAfterFinishedAct_, SLEEPAFTERFINISHED, this, SLOT(sleepAfterFinished()))
   MAKE_TOGGLE(shutdownAfterFinishedAct_, SHUTDOWNAFTERFINISHED, this, SLOT(shutdownAfterFinished()))
@@ -1142,14 +1145,15 @@ MainWindow::createActions()
     QShortcut *cf4 = new QShortcut(QKeySequence("CTRL+F4"), this);
     connect(cf4, SIGNAL(activated()), SLOT(showBlacklistView()));
     QShortcut *cf5 = new QShortcut(QKeySequence("CTRL+F5"), this);
-    connect(cf5, SIGNAL(activated()), SLOT(showDownloadDialog()));
-    QShortcut *cf6 = new QShortcut(QKeySequence("CTRL+F6"), this);
-    connect(cf6, SIGNAL(activated()), SLOT(openProxyBrowser()));
+    connect(cf5, SIGNAL(activated()), SLOT(showAnnotationsAsThread()));
 
     QShortcut *pp = new QShortcut(QKeySequence("CTRL+SHIFT+LEFT"), this);
     connect(pp, SIGNAL(activated()), SLOT(previous()));
     QShortcut *nn = new QShortcut(QKeySequence("CTRL+SHIFT+RIGHT"), this);
     connect(nn, SIGNAL(activated()), SLOT(next()));
+
+    QShortcut *csn = new QShortcut(QKeySequence("CTRL+SHIFT+N"), this);
+    connect(csn, SIGNAL(activated()), SLOT(newWindow()));
 
     QShortcut *backward = new QShortcut(QKeySequence("CTRL+LEFT"), this);
     connect(backward, SIGNAL(activated()), SLOT(backward90s()));
@@ -2740,9 +2744,18 @@ MainWindow::updateDownloadProgress(qint64 receivedBytes, qint64 totalBytes)
       title += tr("Complete");
     else {
       if (percentage < 0.01 / 100)
-        title += tr("Buffering");
-      else
-        title += FORMAT_PERCENTAGE(percentage);
+        title += tr("Buffering ...");
+      else {
+        double progress = player_->availablePosition();
+        if (progress > percentage ||
+            qFuzzyCompare(1 + progress, 1 + percentage))
+          title += FORMAT_PERCENTAGE(percentage);
+        else {
+          title += QString("%1 / %2")
+            .arg(FORMAT_PERCENTAGE(progress))
+            .arg(FORMAT_PERCENTAGE(percentage));
+        }
+      }
       if (speed)
         title += ", " + downloadSpeedToString(speed);
       if (remainingTime) {
@@ -2754,6 +2767,7 @@ MainWindow::updateDownloadProgress(qint64 receivedBytes, qint64 totalBytes)
     title += ")";
   }
   emit windowTitleToChange(title);
+  emit downloadProgressUpdated();
 #undef FORMAT_PERCENTAGE
 }
 
@@ -4105,22 +4119,24 @@ MainWindow::invalidateContextMenu()
 
   bool online = server_->isConnected() && server_->isAuthorized();
 
-  // Live mode
-  if (online &&
-      (hub_->isLiveTokenMode() || hub_->isStopped() && player_->isStopped())) {
-    toggleLiveModeAct_->setChecked(hub_->isLiveTokenMode());
-    contextMenu_->addAction(toggleLiveModeAct_);
+  {
+    // Live mode
+    if (online &&
+        (hub_->isLiveTokenMode() || hub_->isStopped() && player_->isStopped())) {
+      toggleLiveModeAct_->setChecked(hub_->isLiveTokenMode());
+      contextMenu_->addAction(toggleLiveModeAct_);
 
-    //toggleLiveDialogVisibleAct_->setChecked(liveDialog_->isVisible());
-    //contextMenu_->addAction(toggleLiveDialogVisibleAct_);
-
-    contextMenu_->addSeparator();
-  }
-
-  if (!currentUrl().isEmpty()) {
-    contextMenu_->addAction(openInWebBrowserAct_);
-    if (!dataManager_->token().hasSource())
-      contextMenu_->addAction(downloadCurrentUrlAct_);
+      //toggleLiveDialogVisibleAct_->setChecked(liveDialog_->isVisible());
+      //contextMenu_->addAction(toggleLiveDialogVisibleAct_);
+    }
+#ifndef Q_WS_MAC
+    contextMenu_->addAction(newWindowAct_);
+#endif // !Q_WS_MAC
+    if (!currentUrl().isEmpty()) {
+      contextMenu_->addAction(openInWebBrowserAct_);
+      if (!dataManager_->token().hasSource())
+        contextMenu_->addAction(downloadCurrentUrlAct_);
+    }
     contextMenu_->addSeparator();
   }
 
@@ -4406,6 +4422,8 @@ MainWindow::invalidateContextMenu()
     contextMenu_->addAction(toggleAnnotationEditorVisibleAct_ );
 
     if (!hub_->isMediaTokenMode() || player_->hasMedia()) {
+      contextMenu_->addAction(showAnnotationsAsThreadAct_);
+
       toggleAnnotationBrowserVisibleAct_->setChecked(annotationBrowser_->isVisible());
       contextMenu_->addAction(toggleAnnotationBrowserVisibleAct_ );
 
@@ -4803,8 +4821,7 @@ MainWindow::dispose()
     downloadDialog_->stopAll();
 
 #ifdef USE_WIN_PICKER
-  if (PICKER->isActive())
-    PICKER->stop();
+  WindowPicker::globalInstance()->stop();
 #endif // USE_WIN_PICKER
 #ifdef USE_WIN_HOOK
   if (HOOK->isActive())
@@ -6031,6 +6048,7 @@ MainWindow::openRecent(int i)
 void
 MainWindow::openSource(const QString &path)
 {
+  DOUT("path =" << path);
   if (path.isEmpty())
     return;
 
@@ -7065,6 +7083,27 @@ MainWindow::setMultipleWindowsEnabled(bool t)
     log(tr("allow single player window"));
 }
 
+void
+MainWindow::newWindow()
+{
+  Settings *s = Settings::globalInstance();
+  bool t = s->isMultipleWindowsEnabled();
+  if (!t) {
+    s->setMultipleWindowsEnabled(true);
+    s->flush();
+  }
+
+  QString exe = QCoreApplication::applicationFilePath();
+  QProcess::startDetached(exe);
+
+  log(tr("new window launched"));
+
+  if (!t) {
+    s->setMultipleWindowsEnabled(false);
+    QTimer::singleShot(5000, s, SLOT(flush()));
+  }
+}
+
 // - Aspect ratio -
 
 void
@@ -7087,6 +7126,22 @@ MainWindow::setWideScreenAspectRatio()
   if (player_->hasMedia())
     player_->setAspectRatio("16:9");
 }
+
+// - Annotation thread view -
+
+void
+MainWindow::showAnnotationsAsThread()
+{
+  if (!annotationThreadView_) {
+    annotationThreadView_ = new AnnotationThreadView(this);
+    connect(annotationThreadView_, SIGNAL(annotationsRequested()), SLOT(invalidateAnnotationThreadView()));
+  }
+  annotationThreadView_->show();
+}
+
+void
+MainWindow::invalidateAnnotationThreadView()
+{ annotationThreadView_->setAnnotations(dataManager_->annotations()); }
 
 // EOF
 

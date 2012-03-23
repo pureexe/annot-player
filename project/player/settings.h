@@ -10,7 +10,7 @@
 #include <QHash>
 #include <utility>
 
-class Settings : protected QSettings
+class Settings : public QSettings
 {
   Q_OBJECT
   typedef Settings Self;

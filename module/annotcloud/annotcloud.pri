@@ -5,17 +5,22 @@ include(../../config.pri)
 
 HEADERS += \
     $$PWD/alias.h\
-    $$PWD/annotationparser.h \
     $$PWD/annotation.h \
-    $$PWD/cmd.h \
+    $$PWD/annothtml.h \
+    $$PWD/annottag.h \
+    $$PWD/annotxml.h \
     $$PWD/traits.h \
     $$PWD/token.h \
     $$PWD/user.h
 
 SOURCES += \
     $$PWD/alias.cc \
-    $$PWD/annotationparser.cc \
     $$PWD/annotation.cc \
+    $$PWD/annothtml.cc \
+    $$PWD/annothtmlparse.cc \
+    $$PWD/annothtmlthread.cc \
+    $$PWD/annothtmlunparse.cc \
+    $$PWD/annotxml.cc \
     $$PWD/token.cc \
     $$PWD/user.cc
 

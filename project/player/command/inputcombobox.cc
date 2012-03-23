@@ -5,7 +5,7 @@
 // For instance, add "\chat" into popup context menu.
 
 #include "inputcombobox.h"
-#include "module/annotcloud/cmd.h"
+#include "module/annotcloud/annottag.h"
 #include <QtGui>
 
 InputComboBox::InputComboBox(QWidget *parent)

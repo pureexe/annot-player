@@ -11,7 +11,7 @@
 #include "signalhub.h"
 #include "module/qtext/datetime.h"
 #include "module/annotcloud/traits.h"
-#include "module/annotcloud/cmd.h"
+#include "module/annotcloud/annottag.h"
 #include <QtGui>
 
 using namespace AnnotCloud;

@@ -40,7 +40,7 @@ public:
   virtual qint64 read(char *data, qint64 maxSize) { return file_->read(data, maxSize); } ///< \override
   virtual QByteArray readAll() { return file_->readAll(); } ///< \override
 
-  virtual bool writeToFile(const QString &fileName) ///< \override
+  virtual bool writeFile(const QString &fileName) ///< \override
   { return QFile::copy(file_->fileName(), fileName); }
 };
 

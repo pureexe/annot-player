@@ -266,7 +266,7 @@ BufferedRemoteStream::networkError()
 { emit error(tr("network error, failed to download remote resource")); }
 
 bool
-BufferedRemoteStream::writeToFile(const QString &path)
+BufferedRemoteStream::writeFile(const QString &path)
 {
   DOUT("enter: fileName =" << path);
   QFile file(path);

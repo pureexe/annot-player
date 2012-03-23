@@ -14,7 +14,8 @@ class UserLabel : public QLabel
   typedef QLabel Base;
 
 public:
-  explicit UserLabel(QWidget *parent = 0);
+  explicit UserLabel(QWidget *parent = 0)
+    : Base(parent) { }
 
 signals:
   void showUserPanelRequested();

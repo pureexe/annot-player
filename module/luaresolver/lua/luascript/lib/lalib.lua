@@ -40,7 +40,7 @@ function getACFPV ( str_url, str_servername)
 	--0:ACFPV_ORI
 	--65535:NOTFLV
 	--other:reserved
-	return 1;
+	return 0;
 
 end
 

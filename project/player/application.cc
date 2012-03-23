@@ -26,12 +26,47 @@ extern "C" {
 Application::Application(int &argc, char **argv)
   : Base(argc, argv), w_(0)
 {
+  DOUT("enter");
   setOrganizationDomain(G_DOMAIN);
   setOrganizationName(G_ORGANIZATION);
   setApplicationName(G_APPLICATION);
   setApplicationVersion(G_VERSION);
 
   createDirectories();
+  DOUT("exit");
+}
+
+Application::~Application()
+{
+  DOUT("enter: abort in 3 seconds");
+  QTimer::singleShot(3000, this, SLOT(abort()));
+  DOUT("exit");
+}
+
+void
+Application::abort()
+{
+  DOUT("enter");
+#ifdef Q_WS_WIN
+  exit(0);
+#else
+  QProcess::startDetached("kill -9 " + QString::number(applicationPid()));
+#endif Q_WS_
+  DOUT("exit");
+}
+
+void
+Application::abortAll()
+{
+  DOUT("enter");
+#ifdef Q_WS_WIN
+  QProcess::startDetached("tskill player");
+#elif define Q_WS_MAC
+  QProcess::startDetached("killall", QStringList("Annot Player"));
+#else
+  QProcess::startDetached("killall annot-player");
+#endif Q_WS_
+  DOUT("exit");
 }
 
 void

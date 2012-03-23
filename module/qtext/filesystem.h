@@ -1,4 +1,4 @@
-﻿#ifndef _QTEXT_FILESYSTEM_H
+#ifndef _QTEXT_FILESYSTEM_H
 #define _QTEXT_FILESYSTEM_H
 
 // qtext/filesystem.h
@@ -8,18 +8,7 @@
 
 namespace QtExt {
 
-  inline QString escapeFileName(const QString &name)
-  {
-    QString ret = name;
-    ret.remove('"');
-    ret.remove('\'');
-    ret.replace('/', "／");
-    ret.replace('\\', "-");
-    ret.replace('|', "-");
-    ret.replace(':', "-");
-    ret.replace('?', "？");
-    return ret.trimmed();
-  }
+  QString escapeFileName(const QString &name);
 
 } // namespace QtExt
 

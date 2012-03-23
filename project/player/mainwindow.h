@@ -42,6 +42,7 @@ class Translator;
 
 // Views
 class AnnotationGraphicsView;
+class AnnotationThreadView;
 class AnnotationBrowser;
 class AnnotationEditor;
 //class CommentView;
@@ -115,6 +116,7 @@ signals:
   void showTextRequested(const QString &text);
   void windowClosed();
   void windowTitleToChange(QString title);
+  void downloadProgressUpdated();
 
   void seeked();
   void addAndShowAnnotationRequested(const Annotation &a);
@@ -184,6 +186,8 @@ public slots:
   void deleteCaches();
 
   void checkClipboard();
+
+  void newWindow();
 
   void openSource(const QString &source);
   void open();  ///< By default the same as openFile()
@@ -613,6 +617,9 @@ protected slots:
   void setWideScreenAspectRatio(); // 16:9
   void setStandardAspectRatio(); // 4:3
 
+  void showAnnotationsAsThread();
+  void invalidateAnnotationThreadView();
+
   // - Members for initialization. -
 private:
   void resetPlayer();
@@ -680,6 +687,7 @@ private:
   EmbeddedPlayerUi *embeddedPlayer_;
 
   AnnotationGraphicsView *annotationView_;
+  AnnotationThreadView *annotationThreadView_;
   AnnotationBrowser *annotationBrowser_;
   AnnotationEditor *annotationEditor_;
   AnnotationFilter *annotationFilter_;
@@ -794,6 +802,8 @@ private:
           *setAnnotationEffectToShadowAct_,
           *setAnnotationEffectToBlurAct_;
 
+  QAction *newWindowAct_;
+
   QAction *openAct_,
           *openFileAct_,
           *openUrlAct_,
@@ -810,6 +820,7 @@ private:
           *previousAct_,
           *nextAct_,
           *snapshotAct_,
+          *showAnnotationsAsThreadAct_,
           *toggleAnnotationVisibleAct_,
           *toggleAnnotationCountDialogVisibleAct_,
           *toggleMenuBarVisibleAct_,

@@ -18,6 +18,9 @@ WebDialog::WebDialog(QWidget *parent, Qt::WindowFlags f)
   : Base(parent)
 {
   setWindowFlags(f ? f : WINDOW_FLAGS);
+
+  QShortcut *refreshShortcut = new QShortcut(QKeySequence::Refresh, this);
+  connect(refreshShortcut, SIGNAL(activated()), SLOT(reload()));
 }
 
 // EOF

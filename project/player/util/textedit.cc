@@ -32,4 +32,12 @@ TextEdit::contextMenuEvent(QContextMenuEvent *event)
   }
 }
 
+bool
+TextEdit::containsPlainText(const QString &text) const
+{ return toPlainText().contains(text); }
+
+bool
+TextEdit::containsHtml(const QString &text) const
+{ return toHtml().contains(text); }
+
 // EOF

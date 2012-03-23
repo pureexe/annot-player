@@ -6,6 +6,7 @@
 #include "stylesheet.h"
 #include "tr.h"
 #include "signalhub.h"
+#include "positionslider.h"
 #include "module/player/player.h"
 #include "module/serveragent/serveragent.h"
 #include "module/qtext/datetime.h"
@@ -401,9 +402,7 @@ PlayerUi::invalidateVolumeSlider()
     slider->setEnabled(true);
 
   qreal vol = hub_->volume();
-  slider->setSliderPosition(
-    static_cast<int>(vol * G_VOLUME_MAX)
-  );
+  slider->setSliderPosition(vol * G_VOLUME_MAX);
 
   // Update tool tip.
   int percentage = qRound(vol * 100);
@@ -421,11 +420,14 @@ PlayerUi::invalidateVolumeSlider()
 void
 PlayerUi::invalidatePositionSlider()
 {
-  QSlider *slider = positionSlider();
+  if (!active_)
+    return;
+  PositionSlider *slider = positionSlider();
 
   if (!hub_->isMediaTokenMode() || !player_->isValid()) {
     //slider->hide();
     slider->setSliderPosition(0);
+    slider->clearAvailablePosition();
     if (slider->isEnabled())
       slider->setEnabled(false);
 //#ifdef Q_OS_WIN
@@ -442,10 +444,11 @@ PlayerUi::invalidatePositionSlider()
 
     if (!slider->isSliderDown()) {
       qreal pos = player_->position();
-      slider->setSliderPosition(
-        static_cast<int>(pos * G_POSITION_MAX)
-      );
+      slider->setSliderPosition(pos * G_POSITION_MAX);
     }
+
+    qreal progress = player_->availablePosition();
+    slider->setAvailablePosition(progress * G_POSITION_MAX);
 
     // Update slider's tool tip and label's text.
     qint64 current_msecs = player_->time(),
@@ -456,8 +459,12 @@ PlayerUi::invalidatePositionSlider()
           left = QtExt::msecs2time(left_msecs);
 
     QString tip = current.toString() + " / -" + left.toString();
-    if (total_msecs)
-      tip += QString().sprintf(" (%.1f%%)", current_msecs * 100.0 / total_msecs);
+    if (total_msecs) {
+      tip += QString().sprintf(" (%.1f%%", current_msecs * 100.0 / total_msecs);
+      if (progress)
+        tip += QString().sprintf(" / %.1f%%", progress * 100);
+      tip += ")";
+    }
     slider->setToolTip(tip);
 
   } else {

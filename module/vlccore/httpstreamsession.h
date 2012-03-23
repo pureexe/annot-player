@@ -9,7 +9,6 @@
 #endif // _MSC_VER
 
 #include "module/vlccore/httpsession.h"
-#include "module/qtext/stoppable.h"
 #include "module/stream/inputstream.h"
 #include "module/stream/fifostream.h"
 #include <QWaitCondition>
@@ -25,6 +24,7 @@ QT_FORWARD_DECLARE_CLASS(QNetworkReply)
 QT_FORWARD_DECLARE_CLASS(QNetworkAccessManager)
 
 class RemoteStream;
+class FlvMerge;
 
 class HttpStreamSession : public VlcHttpSession
 {
@@ -36,7 +36,7 @@ class HttpStreamSession : public VlcHttpSession
   qint64 duration_;
   InputStreamList ins_;
   FifoStream *fifo_;
-  StoppableTask *merger_;
+  FlvMerge *merger_;
 
   QMutex m_;
   QWaitCondition readyCond_, readyReadCond_, stoppedCond_;
@@ -85,11 +85,16 @@ public:
   virtual qint64 pos() const { return fifo_ ? fifo_->pos() : 0; } ///< \override
   virtual qint64 availableSize() const { return fifo_ ? fifo_->availableSize() : 0; } ///< \override
 
+
+  virtual qint64 duration() const { return duration_; } ///< \override
+  virtual qint64 availableDuration() const; ///< \override
+
   qint64 receivedSize() const;
 
 public slots:
   void setUrls(const QList<QUrl> &urls) { urls_ = urls; }
   void setDuration(qint64 duration) { duration_ = duration; }
+
   virtual void run(); ///< \override
   virtual void stop(); ///< \override
 

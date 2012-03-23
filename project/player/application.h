@@ -22,6 +22,11 @@ public:
   static Self *globalInstance() { return dynamic_cast<Self*>(qApp); }
 
   Application(int &argc, char **argv );
+  ~Application();
+
+public slots:
+  void abortAll(); // kill all instances
+  void abort();    // kill this instance
 
   // - Properties -
 public:

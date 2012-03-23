@@ -765,6 +765,10 @@ Player::hasMedia() const
          //::libvlc_media_player_get_media(impl_->player()); // avoid parallel contention
 }
 
+bool
+Player::hasRemoteMedia() const
+{ return hasMedia() && mediaPath().contains("p://"); }
+
 // - Full screen -
 void
 Player::setFullScreen(bool t)
@@ -998,11 +1002,19 @@ Player::setVolume(qreal vol)
 }
 
 void
-Player::setPosition(qreal pos)
+Player::setPosition(qreal pos, bool checkPos)
 {
   DOUT("enter");
-  if (hasMedia())
+  if (hasMedia()) {
+    if (checkPos) {
+      double max = availablePosition();
+      if (!qFuzzyCompare(1 + max, 1) && pos > max) {
+        emit error(tr("seek too much"));
+        return;
+      }
+    }
     ::libvlc_media_player_set_position(impl_->player(), pos);
+  }
   DOUT("exit");
 }
 
@@ -1079,7 +1091,26 @@ Player::volume() const
 
 qreal
 Player::position() const
-{ return hasMedia()? ::libvlc_media_player_get_position(impl_->player()) : 0; }
+{ return hasMedia() ? ::libvlc_media_player_get_position(impl_->player()) : 0; }
+
+qreal
+Player::availablePosition() const
+{
+  if (!hasMedia())
+    return 0;
+  //if (!hasRemoteMedia())
+  //  return 0;
+
+  qint64 duration, size;
+  if ((duration = VlcHttpPlugin::duration()) > 0) {
+    qint64 ts = VlcHttpPlugin::availableDuration();
+    return ts / (double)duration;
+  } else if ((size = VlcHttpPlugin::size()) > 0) {
+    qint64 sz = VlcHttpPlugin::availableSize();
+    return sz / (double)size;
+  } else
+    return 0;
+}
 
 // - Play time -
 

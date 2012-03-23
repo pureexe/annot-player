@@ -38,12 +38,13 @@ Downloader::get(const QUrl &url, const QString &header, bool async, int retries)
   // See: http://www.developer.nokia.com/Community/Wiki/CS001432_-_Handling_an_HTTP_redirect_with_QNetworkAccessManager
   if (!async) {
     QEventLoop loop;
-    connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
+    connect(reply, SIGNAL(finished()), &loop, SLOT(quit()), Qt::QueuedConnection);
+    connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), &loop, SLOT(quit()), Qt::QueuedConnection);
     DOUT("eventloop enter");
     loop.exec();
     DOUT("eventloop leave");
 
-    while (state_ != OK && retries-- > 0)
+    while (retries-- > 0 && state_ != OK)
       get(url, header, false, retries); // async = false
   }
 
@@ -71,12 +72,13 @@ Downloader::post(const QUrl &url, const QByteArray &data, const QString &header,
   }
   if (!async) {
     QEventLoop loop;
-    connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
+    connect(reply, SIGNAL(finished()), &loop, SLOT(quit()), Qt::QueuedConnection);
+    connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), &loop, SLOT(quit()), Qt::QueuedConnection);
     DOUT("eventloop enter");
     loop.exec();
     DOUT("eventloop leave");
 
-    while (state_ != OK && retries-- > 0)
+    while (retries-- > 0 && state_ != OK)
       post(url, data, header, false, retries); // async = false
   }
   DOUT("exit: state =" << state_);

@@ -48,7 +48,7 @@ public:
     enum { max_redirect = 5 };
     int retries = max_redirect;
     do waitForReadyRead();
-    while (tryRedirect() && retries--);
+    while (retries--  && tryRedirect());
   }
 
 public slots:

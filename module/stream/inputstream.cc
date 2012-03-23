@@ -31,7 +31,7 @@ InputStream::readAll()
 }
 
 bool
-InputStream::writeToFile(const QString &path)
+InputStream::writeFile(const QString &path)
 {
   DOUT("enter: fileName =" << path);
   enum { BufferSize = 10240 };

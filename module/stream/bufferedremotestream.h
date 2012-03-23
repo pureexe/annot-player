@@ -71,7 +71,7 @@ public:
   QByteArray &data() { return data_; }
   const QByteArray &data() const { return data_; }
 
-  virtual bool writeToFile(const QString &path); ///< \override
+  virtual bool writeFile(const QString &path); ///< \override
 
   bool isRunning() const { return reply_ && reply_->isRunning(); }
   bool isFinished() const { return reply_ && reply_->isFinished(); }

@@ -46,6 +46,9 @@ public:
   virtual qint64 pos() const = 0;
   virtual qint64 availableSize() const = 0;
 
+  virtual qint64 duration() const { return 0; }
+  virtual qint64 availableDuration() const { return 0; }
+
   bool isRunning() const { return state_ == Running; }
   bool isStopped() const { return state_ == Stopped; }
   bool isFinished() const { return state_ == Finished; }

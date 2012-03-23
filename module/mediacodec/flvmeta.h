@@ -26,7 +26,7 @@ struct FlvMeta
 
   double audioDataRate, videoDataRate, frameRate;
 
-  bool hasMetaData, canSeekToEnd;
+  //bool hasKeyFrames, hasMetaData, canSeekToEnd;
 
   QString creator, metaDataCreator;
 
@@ -34,8 +34,8 @@ struct FlvMeta
     : duration(0), lastTimestamp(0), lastKeyFrameTimestamp(0), lastKeyFrameLocation(0),
       fileSize(0), audioSize(0), videoSize(0), dataSize(0),
       height(0), width(0), audioCodecId(0), videoCodecId(0),
-      audioDataRate(0), videoDataRate(0), frameRate(0),
-      hasMetaData(true), canSeekToEnd(true) { }
+      audioDataRate(0), videoDataRate(0), frameRate(0) { }
+      //hasKeyFrames(true), hasMetaData(true), canSeekToEnd(true) { }
 
   void clear()
   {
@@ -43,12 +43,10 @@ struct FlvMeta
     fileSize = audioSize = videoSize = dataSize = 0;
     height = width = audioCodecId = videoCodecId = 0;
     audioDataRate = videoDataRate = frameRate = 0;
-    hasMetaData = canSeekToEnd = true;
+    //hasKeyFrames = hasMetaData = canSeekToEnd = true;
     creator.clear();
     metaDataCreator.clear();
   }
-
-  bool hasKeyFrames() const { return lastKeyFrameTimestamp && lastKeyFrameLocation; }
 };
 
 

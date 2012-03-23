@@ -55,7 +55,7 @@ public:
   QByteArray &data() { return data_; }
   const QByteArray &data() const { return data_; }
 
-  virtual bool writeToFile(const QString &path); ///< \override
+  virtual bool writeFile(const QString &path); ///< \override
 
   // - Output -
 

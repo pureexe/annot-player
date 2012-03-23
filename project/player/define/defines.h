@@ -131,8 +131,8 @@ enum { ALPHA = 0 };
 #define BAD_POS     QPoint(-1, -1)
 
 // - Annotations -
-#define ANNOT_PARSE_CODE(_code)  AnnotCloud::AnnotationParser::globalInstance()->renderToHtml(_code)
-#define ANNOT_REDUCE_HTML(_html) AnnotCloud::AnnotationParser::globalInstance()->reduceHtml(_html)
+#define ANNOT_PARSE_CODE(_code)  AnnotCloud::AnnotationHtmlParser::globalInstance()->toHtml(_code)
+#define ANNOT_REDUCE_HTML(_html) AnnotCloud::AnnotationHtmlParser::globalInstance()->reduceHtml(_html)
 
 // - Hook -
 #ifdef USE_WIN_HOOK
@@ -141,21 +141,12 @@ enum { ALPHA = 0 };
   #define HOOK          #error "Hook is not used"
 #endif // USE_WIN_HOOK
 
-// - Picker -
-#ifdef USE_WIN_PICKER
-  #define PICKER        WindowPicker::globalInstance()
-#else
-  #define PICKER        #error "Picker is not used"
-#endif // USE_WIN_PICKER
-
 // - QTH -
 #ifdef USE_WIN_QTH
   #define QTH           Qth::globalInstance()
 #else
   #define QTH           #error "Hook is not used"
-#endif // USE_WIN_HOOK
-//#define QTH_INTERVAL    1000    // 1 second
-#define QTH_INTERVAL    200     // 0.2 second
+#endif // USE_WIN_QTH
 
 // - DWM -
 #ifdef USE_WIN_DWM

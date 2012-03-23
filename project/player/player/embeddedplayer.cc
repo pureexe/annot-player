@@ -2,6 +2,7 @@
 // 7/16/2011
 
 #include "embeddedplayer.h"
+#include "positionslider.h"
 #include "defines.h"
 #include "tr.h"
 #include "stylesheet.h"
@@ -388,7 +389,7 @@ EmbeddedPlayerUi::invalidateInputCountButton()
 {
   Base::invalidateInputCountButton();
   QToolButton *b = inputCountButton();
-  b->setText(b->text() + "    "); // padding
+  b->setText(b->text() + "   "); // padding
 }
 
 // EOF

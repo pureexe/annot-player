@@ -13,6 +13,8 @@ class QLabel;
 class QComboBox;
 QT_END_NAMESPACE
 
+class PositionSlider;
+
 class PlayerPanel: public QWidget
 {
   Q_OBJECT
@@ -26,7 +28,7 @@ public:
   public: _type *_name(); \
   private: _type *_name##_;
 
-  ADD_WIDGET(QSlider, positionSlider)
+  ADD_WIDGET(PositionSlider, positionSlider)
   ADD_WIDGET(QSlider, volumeSlider)
   ADD_WIDGET(QToolButton, openButton)
   ADD_WIDGET(QToolButton, playButton)

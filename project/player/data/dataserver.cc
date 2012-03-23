@@ -388,7 +388,7 @@ DataServer::updateAnnotations(const AnnotationList &l)
       int limit = 0;
 #ifdef Q_OS_WIN
       if (hub_->isSignalTokenMode())
-        limit = 300; // media annotations max count to save harddisk
+        limit = 100; // media annotations max count to save harddisk
 #endif // Q_OS_WIN
       cache_->updateAnnotations(l, false, limit); // async =false
     }

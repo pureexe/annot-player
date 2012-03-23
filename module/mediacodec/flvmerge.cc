@@ -449,6 +449,10 @@ FlvMerge::updateScriptTagDoubleValue(quint8 *data, const QString &var) const
 bool
 FlvMerge::updateScriptTagUInt8Value(quint8 *data, const QString &var) const
 {
+  Q_UNUSED(data);
+  Q_UNUSED(var);
+  return false;
+/*
   bool update = false;
   quint8 value;
   if ((var == "hasKeyframes" ||
@@ -464,6 +468,7 @@ FlvMerge::updateScriptTagUInt8Value(quint8 *data, const QString &var) const
     *data = value;
   }
   return update;
+*/
 }
 
 // EOF

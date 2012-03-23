@@ -106,8 +106,11 @@ DownloadTaskDialog::setText(const QString &urls)
 { textView_->setText(urls); }
 
 void
-DownloadTaskDialog::addText(const QString &urls)
-{ textView_->append(urls); }
+DownloadTaskDialog::addText(const QString &text)
+{
+  if (!textView_->containsPlainText(text))
+    textView_->append(text);
+}
 
 // - Actions -
 
@@ -137,7 +140,7 @@ DownloadTaskDialog::paste()
   QClipboard *clipboard = QApplication::clipboard();
   if (clipboard) {
     QString t = clipboard->text().trimmed();
-    textView_->append(t);
+    addText(t);
   }
 }
 

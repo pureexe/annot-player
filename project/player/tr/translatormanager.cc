@@ -232,7 +232,7 @@ TranslatorManager::translate(int tid) const
   case T_TITLE_ANNOTATIONEDITOR:        return tr("Annot Editor");
   case T_TITLE_TOKENVIEW:       return tr("Token");
   case T_TITLE_COMMENTVIEW:     return tr("Comments");
-  //case T_TITLE_CLOUDVIEW:       return tr("Annot Cloud");
+  case T_TITLE_ANNOTTHREAD:     return tr("Annotations Thread");
   case T_TITLE_SIGNALVIEW:      return tr("Select process signal");
   case T_TITLE_LIVE:            return tr("Live Channel");
   case T_TITLE_SYNC:            return tr("Sync Mode");
@@ -664,6 +664,9 @@ TranslatorManager::translate(int tid) const
   case T_MENUTEXT_DOWNLOAD:  return tr("Download") + " [" K_CTRL "+S]";
   case T_TIP_DOWNLOAD:       return tr("Download") + " [" K_CTRL "+S]";
 
+  case T_MENUTEXT_ANNOTTHREAD:  return tr("Annots thread") + " [" K_CTRL "+F5]";
+  case T_TIP_ANNOTTHREAD:       return tr("Show annotations as thread") + " [" K_CTRL "+F5]";
+
   case T_MENUTEXT_MONITORCLIPBOARD:  return tr("Monitor clipboard");
 
   case T_MENUTEXT_NOTHINGAFTERFINISHED: return tr("Nothing");
@@ -742,7 +745,8 @@ TranslatorManager::translate(int tid) const
   case T_URL_NICOVIDEO: return tr("http://nicovideo.jp");
   case T_URL_BILIBILI:  return tr("http://bilibili.tv");
 
-  case T_ASPECTRATIO:  return tr("Aspect ratio");
+  case T_ASPECTRATIO:   return tr("Aspect ratio");
+  case T_NEWWINDOW:     return tr("New window") + " [" K_CTRL "+" K_SHIFT "+" "N]";
 
   default:
     qWarning() << "TranslatorManager:translate: Unknown tid =" << tid;
