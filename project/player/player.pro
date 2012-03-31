@@ -1,10 +1,11 @@
 # player.pro
 # 6/30/2011
 
-VERSION = 0.1.3.4
+VERSION = 0.1.4.0
 
 include(../../config.pri)
 include(tr/tr.pri)
+include($$ROOTDIR/project/common/common.pri)
 
 ## Libraries
 
@@ -17,6 +18,8 @@ include($$ROOTDIR/module/serveragent/serveragent.pri)
 #include($$ROOTDIR/module/clientagent/clientagent.pri)
 include($$ROOTDIR/module/gsoap/gsoap.pri)       # would static linking cause license conflicts?
 #include($$ROOTDIR/module/streamservice/streamservice.pri)
+include($$ROOTDIR/module/download/download.pri)
+include($$ROOTDIR/module/download/mrldownload.pri)
 include($$ROOTDIR/module/mediacodec/mediacodec.pri)
 include($$ROOTDIR/module/translator/translator.pri)
 include($$ROOTDIR/module/mrlresolver/mrlresolver.pri)
@@ -31,17 +34,9 @@ unix:       include($$ROOTDIR/module/webbrowser/webbrowser_static.pri)
 win32:      include($$ROOTDIR/module/webbrowser/webbrowser.pri)
 
 DEFINES += USE_MODULE_IOUTIL
-#DEFINES += USE_MODE_DEBUG
-
 #DEFINES += USE_MODULE_DOLL
 DEFINES += USE_MODULE_SERVERAGENT
 #DEFINES += USE_MODULE_CLIENTAGENT
-
-win32 {
-     DEPENDPATH += $$ROOTDIR/core
-     DEPENDPATH += $$ROOTDIR/module/mediaplayer
-     #DEPENDPATH += $$ROOTDIR/module/doll
-}
 
 win32 {
     include($$ROOTDIR/win/dwm/dwm.pri)
@@ -73,7 +68,7 @@ mac {
     include($$ROOTDIR/mac/vlcstep/vlcstep.pri)
 }
 
-QT      += core gui sql network #webkit
+QT      += core gui sql xml network webkit
 #CONFIG(static): QTPLUGIN += qsqlite
 
 # Increase heap space
@@ -85,7 +80,7 @@ QT      += core gui sql network #webkit
 ## Sources
 
 TEMPLATE      = app
-win32:  TARGET = player
+win32:  TARGET = annot-player
 unix:   TARGET = annot-player
 mac:   TARGET = "Annot Player"
 
@@ -114,13 +109,11 @@ DEPENDPATH      += $$SUBPATH
 HEADERS += \
     application.h \
     clipboardmonitor.h \
-    config.h \
     eventlogger.h \
     mainwindow.h \
     mainwindowprivate.h \
     settings.h \
     tray.h \
-    uistyle.h \
     annot/annotationbrowser.h \
     annot/annotationeditor.h \
     annot/annotationfilter.h \
@@ -138,8 +131,7 @@ HEADERS += \
     data/dataserver.h \
     db/db_config.h \
     db/db.h \
-    define/config.h \
-    define/defines.h \
+    define/global.h \
     define/rc.h \
     define/stylesheet.h \
     dialog/aboutdialog.h \
@@ -179,16 +171,9 @@ HEADERS += \
     token/tokenview.h \
     user/userview.h \
     util/closewidgetthread.h \
-    util/comboedit.h \
-    util/comboeditprivate.h \
-    util/filteredlistview.h \
-    util/filteredtableview.h \
     util/grabber.h \
-    util/lineedit.h \
     util/logger.h \
-    util/textedit.h \
     util/textedittabview.h \
-    util/textview.h \
     web/proxybrowser.h
 
 SOURCES += \
@@ -199,7 +184,6 @@ SOURCES += \
     mainwindow.cc \
     settings.cc \
     tray.cc \
-    uistyle.cc \
     annot/annotationbrowser.cc \
     annot/annotationeditor.cc \
     annot/annotationfilter.cc \
@@ -252,15 +236,9 @@ SOURCES += \
     token/addaliasdialog.cc \
     token/tokenview.cc \
     user/userview.cc \
-    util/comboedit.cc \
-    util/filteredtableview.cc \
-    util/filteredlistview.cc \
     util/grabber.cc \
-    util/lineedit.cc \
     util/logger.cc \
-    util/textedit.cc \
     util/textedittabview.cc \
-    util/textview.cc \
     web/proxybrowser.cc
 
 win32 {
@@ -289,8 +267,6 @@ OTHER_FILES += \
     debian.control \
     deploy-debian.sh \
     deploy-fedora.sh \
-    deploy-mac.sh \
-    deploy-win.cmd \
     Info.plist \
     player.rc \
     player.ico \

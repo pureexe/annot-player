@@ -5,7 +5,7 @@
 #include "module/qtext/htmltag.h"
 #include <QtCore>
 
-enum { LEFT_LENGTH = 75, RIGHT_LENGTH = 0 };
+enum { LEFT_LENGTH = 100, RIGHT_LENGTH = 0 };
 
 void
 Logger::log(const QString &message)

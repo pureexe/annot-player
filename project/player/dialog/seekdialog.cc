@@ -2,10 +2,10 @@
 // 8/16/2011
 
 #include "seekdialog.h"
-#include "uistyle.h"
 #include "tr.h"
-#include "defines.h"
+#include "global.h"
 #include "logger.h"
+#include "ac/acui.h"
 #include "module/qtext/datetime.h"
 #include <QtGui>
 
@@ -34,7 +34,6 @@ SeekDialog::SeekDialog(QWidget *parent)
 //  setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
 //#endif // Q_WS_MAC
   setWindowTitle(TR(T_TITLE_SEEK));
-  UiStyle::globalInstance()->setWindowStyle(this);
 
   createLayout();
 
@@ -45,32 +44,33 @@ SeekDialog::SeekDialog(QWidget *parent)
 void
 SeekDialog::createLayout()
 {
-  UiStyle *ui = UiStyle::globalInstance();
+  AcUi *ui = AcUi::globalInstance();
+  ui->setWindowStyle(this);
 
   QStringList defvals = QStringList()
     << "0" << "1" << "2" << "3" << "5"
     << "10" << "20" << "30" << "40" << "50";
 
-  ssEdit_ = ui->makeComboBox(UiStyle::EditHint, "", TR(T_SECOND), defvals);
+  ssEdit_ = ui->makeComboBox(AcUi::EditHint, "", TR(T_SECOND), defvals);
   ssEdit_->lineEdit()->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
   ssEdit_->setMaximumWidth(SEEKLINEEDIT_MAXWIDTH);
 
-  mmEdit_ = ui->makeComboBox(UiStyle::EditHint, "", TR(T_MINUTE), defvals);
+  mmEdit_ = ui->makeComboBox(AcUi::EditHint, "", TR(T_MINUTE), defvals);
   mmEdit_->lineEdit()->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
   mmEdit_->setMaximumWidth(SEEKLINEEDIT_MAXWIDTH);
 
-  hhEdit_ = ui->makeComboBox(UiStyle::EditHint, "", TR(T_HOUR), defvals);
+  hhEdit_ = ui->makeComboBox(AcUi::EditHint, "", TR(T_HOUR), defvals);
   hhEdit_->lineEdit()->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
   hhEdit_->setMaximumWidth(SEEKLINEEDIT_MAXWIDTH);
 
-  QLabel *ssLabel = ui->makeLabel(UiStyle::BuddyHint, tr("ss"), tr("seconds"), ssEdit_),
-         *mmLabel = ui->makeLabel(UiStyle::BuddyHint, tr("mm"), tr("minutes"), mmEdit_),
-         *hhLabel = ui->makeLabel(UiStyle::BuddyHint, tr("hh"), tr("hours"), hhEdit_);
+  QLabel *ssLabel = ui->makeLabel(AcUi::BuddyHint, tr("ss"), tr("seconds"), ssEdit_),
+         *mmLabel = ui->makeLabel(AcUi::BuddyHint, tr("mm"), tr("minutes"), mmEdit_),
+         *hhLabel = ui->makeLabel(AcUi::BuddyHint, tr("hh"), tr("hours"), hhEdit_);
 
   QToolButton *okButton = ui->makeToolButton(
-        UiStyle::PushHint | UiStyle::HighlightHint, TR(T_OK), this, SLOT(ok()));
+        AcUi::PushHint | AcUi::HighlightHint, TR(T_OK), this, SLOT(ok()));
   QToolButton *cancelButton = ui->makeToolButton(
-        UiStyle::PushHint, TR(T_CANCEL), this, SLOT(hide()));
+        AcUi::PushHint, TR(T_CANCEL), this, SLOT(hide()));
 
   // Layouts
   QVBoxLayout *rows = new QVBoxLayout; {

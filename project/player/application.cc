@@ -1,12 +1,12 @@
 // application.cc
 // 11/18/2011
 #include "application.h"
-#include "defines.h"
+#include "global.h"
 #ifdef Q_OS_WIN
-  #include "win/qtwin/qtwin.h"
+#  include "win/qtwin/qtwin.h"
 #endif // Q_OS_WIN
 #ifdef Q_OS_MAC
-  #include "mac/qtmac/qtmac.h"
+#  include "mac/qtmac/qtmac.h"
 #endif // Q_OS_MAC
 #include <QtGui>
 #ifdef Q_OS_UNIX
@@ -47,11 +47,14 @@ void
 Application::abort()
 {
   DOUT("enter");
-#ifdef Q_WS_WIN
-  exit(0);
+  qint64 pid = applicationPid();
+#ifdef Q_OS_WIN
+  QtWin::killCurrentProcess();
+  // If failed
+  QProcess::startDetached(QString("tskill %1").arg(QString::number(pid)));
 #else
-  QProcess::startDetached("kill -9 " + QString::number(applicationPid()));
-#endif Q_WS_
+  QProcess::startDetached(QString("kill -9 %1").arg(QString::number(pid)));
+#endif Q_OS_WIN
   DOUT("exit");
 }
 
@@ -59,13 +62,12 @@ void
 Application::abortAll()
 {
   DOUT("enter");
-#ifdef Q_WS_WIN
-  QProcess::startDetached("tskill player");
-#elif define Q_WS_MAC
-  QProcess::startDetached("killall", QStringList("Annot Player"));
+  QString app = QFileInfo(applicationFilePath()).fileName();
+#ifdef Q_OS_WIN
+  QProcess::startDetached("tskill", QStringList(app));
 #else
-  QProcess::startDetached("killall annot-player");
-#endif Q_WS_
+  QProcess::startDetached("killall", QStringList(app));
+#endif Q_OS_WIN
   DOUT("exit");
 }
 

@@ -2,9 +2,9 @@
 // 2/13/2012
 
 #include "countdowndialog.h"
-#include "uistyle.h"
 #include "tr.h"
 #include "logger.h"
+#include "ac/acui.h"
 #include <QtGui>
 
 using namespace Logger;
@@ -31,7 +31,6 @@ CountdownDialog::CountdownDialog(QWidget *parent)
   : Base(parent, WINDOW_FLAGS), count_(DefaultCount), currentCount_(0)
 {
   setWindowTitle(tr("Countdown"));
-  UiStyle::globalInstance()->setWindowStyle(this);
 
   timer_ = new QTimer(this);
   timer_->setInterval(1000); // 1 second
@@ -49,12 +48,13 @@ CountdownDialog::CountdownDialog(QWidget *parent)
 void
 CountdownDialog::createLayout()
 {
-  UiStyle *ui = UiStyle::globalInstance();
+  AcUi *ui = AcUi::globalInstance();
+  ui->setWindowStyle(this);
 
   QToolButton *okButton = ui->makeToolButton(
-        UiStyle::PushHint | UiStyle::HighlightHint, TR(T_OK), this, SLOT(run()));
+        AcUi::PushHint | AcUi::HighlightHint, TR(T_OK), this, SLOT(run()));
   QToolButton *cancelButton = ui->makeToolButton(
-        UiStyle::PushHint, TR(T_CANCEL), this, SLOT(cancel()));
+        AcUi::PushHint, TR(T_CANCEL), this, SLOT(cancel()));
 
   messageLabel_ = ui->makeLabel(0, "", TR(T_MESSAGE));
 

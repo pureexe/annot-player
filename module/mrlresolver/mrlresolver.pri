@@ -2,7 +2,7 @@
 # 1/24/2012
 
 include(../../config.pri)
-include ($$ROOTDIR/module/luaresolver/luaresolver.pri)
+include($$ROOTDIR/module/luaresolver/luaresolver.pri)
 
 INCLUDEPATH += $$PWD
 

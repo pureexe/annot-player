@@ -134,6 +134,8 @@ public:
 public:
   QRect globalRect() const;
 
+  QPoint fromGlobal(const QPoint &globalPos) const;
+
   // Implement event listener.
   virtual void sendContextMenuEvent(QContextMenuEvent *event); ///< \override
   virtual void sendMouseMoveEvent(QMouseEvent *event); ///< \override
@@ -211,6 +213,12 @@ public slots:
 
   void pause();
   void resume();
+
+  void pauseItemAt(const QPoint &pos);
+  void resumeItemAt(const QPoint &pos);
+
+  void pauseItems(const QRect &rect, Qt::ItemSelectionMode mode = Qt::IntersectsItemShape);
+  void resumeItems(const QRect &rect, Qt::ItemSelectionMode mode = Qt::IntersectsItemShape);
 
   // Annotations
 

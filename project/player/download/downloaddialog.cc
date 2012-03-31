@@ -3,10 +3,11 @@
 
 #include "downloaddialog.h"
 #include "downloadtaskdialog.h"
-#include "filteredlistview.h"
-#include "uistyle.h"
 #include "tr.h"
 #include "logger.h"
+#include "rc.h"
+#include "ac/acui.h"
+#include "ac/acfilteredlistview.h"
 #include "module/qtext/datetime.h"
 #include "module/download/downloadmanager.h"
 #include "module/download/mrldownloadtask.h"
@@ -24,7 +25,7 @@ using namespace Logger;
   #define K_CTRL        "Ctrl"
 #endif // Q_OS_MAC
 
-#define REFRESH_INTERVAL        3000 // 3 second
+enum { RefreshInterval = 3000 }; // 3 second
 
 // - Constructions -
 
@@ -40,7 +41,7 @@ DownloadDialog::DownloadDialog(QWidget *parent)
   : Base(parent, WINDOW_FLAGS), downloadTaskDialog_(0)
 {
   setWindowTitle(TR(T_TITLE_DOWNLOAD));
-  UiStyle::globalInstance()->setWindowStyle(this);
+  setWindowIcon(QIcon(RC_IMAGE_DOWNLOADER));
 
   downloadManager_ = new DownloadManager(this);
 
@@ -49,7 +50,7 @@ DownloadDialog::DownloadDialog(QWidget *parent)
   createActions();
 
   refreshTimer_ = new QTimer(this);
-  refreshTimer_->setInterval(REFRESH_INTERVAL);
+  refreshTimer_->setInterval(RefreshInterval);
   connect(refreshTimer_, SIGNAL(timeout()), SLOT(refresh()));
 
   connect(tableView_, SIGNAL(currentIndexChanged(QModelIndex)), SLOT(invalidateButtons()));
@@ -64,16 +65,17 @@ DownloadDialog::isAddingUrls() const
 void
 DownloadDialog::createLayout()
 {
-  UiStyle *ui = UiStyle::globalInstance();
+  AcUi *ui = AcUi::globalInstance();
+  ui->setWindowStyle(this);
 
-  startButton_ = ui->makeToolButton(UiStyle::PushHint, TR(T_START), this, SLOT(start()));
-  stopButton_ = ui->makeToolButton(UiStyle::PushHint, tr("Stop"), this, SLOT(stop()));
-  removeButton_ = ui->makeToolButton(UiStyle::PushHint, tr("Remove"), this, SLOT(remove()));
-  openButton_ = ui->makeToolButton(UiStyle::PushHint, TR(T_PLAY), this, SLOT(open()));
+  startButton_ = ui->makeToolButton(AcUi::PushHint, TR(T_START), this, SLOT(start()));
+  stopButton_ = ui->makeToolButton(AcUi::PushHint, tr("Stop"), this, SLOT(stop()));
+  removeButton_ = ui->makeToolButton(AcUi::PushHint, tr("Remove"), this, SLOT(remove()));
+  openButton_ = ui->makeToolButton(AcUi::PushHint, TR(T_PLAY), this, SLOT(open()));
   openDirectoryButton_ = ui->makeToolButton(
-        UiStyle::PushHint, tr("Dir"), tr("Open directory"), this, SLOT(openDirectory()));
+        AcUi::PushHint, tr("Dir"), tr("Open directory"), this, SLOT(openDirectory()));
   addButton_ = ui->makeToolButton(
-        UiStyle::PushHint | UiStyle::HighlightHint, TR(T_ADD), "", K_CTRL "+N", this, SLOT(add()));
+        AcUi::PushHint | AcUi::HighlightHint, TR(T_ADD), "", K_CTRL "+N", this, SLOT(add()));
 
   startButton_->setEnabled(false);
   stopButton_->setEnabled(false);
@@ -99,7 +101,7 @@ DownloadDialog::createLayout()
     footer->addWidget(addButton_);
 
     int patch = 0;
-    if (!UiStyle::isAeroAvailable())
+    if (!AcUi::isAeroAvailable())
       patch = 9;
 
     // left, top, right, bottom
@@ -125,7 +127,7 @@ DownloadDialog::createModels()
     proxyModel_->setSortCaseSensitivity(Qt::CaseInsensitive);
   }
 
-  tableView_ = new FilteredListView(sourceModel_, proxyModel_, this);
+  tableView_ = new AcFilteredListView(sourceModel_, proxyModel_, this);
 }
 
 void

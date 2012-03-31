@@ -120,6 +120,8 @@ TranslatorManager::translate(int tid) const
   switch (tid) {
   case T_NULL:          return QString();
 
+  case T_MORE:          return tr("More");
+  case T_LESS:          return tr("Less");
   case T_UPDATE:        return tr("Update");
   case T_DOWNLOAD:      return tr("Download");
   case T_WINDOWS:       return tr("Windows");
@@ -606,22 +608,22 @@ TranslatorManager::translate(int tid) const
 
   case T_MENUTEXT_BACKWARD:     return tr("Backward");
   case T_MENUTEXT_FORWARD:      return tr("Forward");
-  case T_MENUTEXT_FORWARD5S:    return tr("Forward 5 sec");
-  case T_MENUTEXT_BACKWARD5S:   return tr("Backward 5 sec");
-  case T_MENUTEXT_FORWARD10S:   return tr("Forward 10 sec");
-  case T_MENUTEXT_BACKWARD10S:  return tr("Backward 10 sec");
-  case T_MENUTEXT_FORWARD30S:   return tr("Forward 30 sec") + " [→]";
-  case T_MENUTEXT_BACKWARD30S:  return tr("Backward 30 sec") + " [←]";
-  case T_MENUTEXT_FORWARD60S:   return tr("Forward 60 sec");
-  case T_MENUTEXT_BACKWARD60S:  return tr("Backward 60 sec");
-  case T_MENUTEXT_FORWARD90S:   return tr("Forward 90 sec") + " [" K_CTRL "+→]";
-  case T_MENUTEXT_BACKWARD90S:  return tr("Backward 90 sec") + " [" K_CTRL "+←]";
-  case T_MENUTEXT_FORWARD1M:    return tr("Forward 1 min");
-  case T_MENUTEXT_BACKWARD1M:   return tr("Backward 1 min");
-  case T_MENUTEXT_FORWARD5M:    return tr("Forward 5 min");
-  case T_MENUTEXT_BACKWARD5M:   return tr("Backward 5 min");
-  case T_MENUTEXT_FORWARD10M:   return tr("Forward 10 min");
-  case T_MENUTEXT_BACKWARD10M:  return tr("Backward 10 min");
+  case T_MENUTEXT_FORWARD5S:    return tr("Forward %1 sec").arg("5");
+  case T_MENUTEXT_BACKWARD5S:   return tr("Backward %1 sec").arg("5");
+  case T_MENUTEXT_FORWARD10S:   return tr("Forward %1 sec").arg("10");
+  case T_MENUTEXT_BACKWARD10S:  return tr("Backward %1 sec").arg("10");
+  case T_MENUTEXT_FORWARD25S:   return tr("Forward %1 sec").arg("25") + " [→]";
+  case T_MENUTEXT_BACKWARD30S:  return tr("Backward %1 sec").arg("30") + " [←]";
+  case T_MENUTEXT_FORWARD60S:   return tr("Forward %1 sec").arg("60");
+  case T_MENUTEXT_BACKWARD60S:  return tr("Backward %1 sec").arg("60");
+  case T_MENUTEXT_FORWARD85S:   return tr("Forward %1 sec").arg("85") + " [" K_SHIFT "+→]";
+  case T_MENUTEXT_BACKWARD90S:  return tr("Backward %1 sec").arg("90") + " [" K_SHIFT "+←]";
+  case T_MENUTEXT_FORWARD1M:    return tr("Forward %1 min").arg("1");
+  case T_MENUTEXT_BACKWARD1M:   return tr("Backward %1 min").arg("1");
+  case T_MENUTEXT_FORWARD5M:    return tr("Forward %1 min").arg("5");
+  case T_MENUTEXT_BACKWARD5M:   return tr("Backward %1 min").arg("5");
+  case T_MENUTEXT_FORWARD10M:   return tr("Forward %1 min").arg("10");
+  case T_MENUTEXT_BACKWARD10M:  return tr("Backward %1 min").arg("10");
 
   case T_MENUTEXT_RECENT:       return tr("Recent");
   case T_TIP_RECENT:            return tr("Recent file");
@@ -661,11 +663,17 @@ TranslatorManager::translate(int tid) const
   case T_MENUTEXT_ENABLEBLACKLIST:  return tr("Enable blacklist");
   case T_TIP_ENABLEBLACKLIST:       return tr("Enable blacklist");
 
-  case T_MENUTEXT_DOWNLOAD:  return tr("Download") + " [" K_CTRL "+S]";
-  case T_TIP_DOWNLOAD:       return tr("Download") + " [" K_CTRL "+S]";
+  case T_MENUTEXT_DOWNLOAD:  return tr("Download") + " [" K_CTRL "+D]";
+  case T_TIP_DOWNLOAD:       return tr("Download") + " [" K_CTRL "+D]";
 
   case T_MENUTEXT_ANNOTTHREAD:  return tr("Annots thread") + " [" K_CTRL "+F5]";
   case T_TIP_ANNOTTHREAD:       return tr("Show annotations as thread") + " [" K_CTRL "+F5]";
+
+  case T_MENUTEXT_SAVEMEDIA:    return tr("Save buffered video");
+  case T_TIP_SAVEMEDIA:         return tr("Save buffered video on desktop");
+
+  case T_MENUTEXT_AUTOSAVEMEDIA:  return tr("Save buffered video");
+  case T_TIP_AUTOSAVEMEDIA:       return tr("Save buffered video on desktop");
 
   case T_MENUTEXT_MONITORCLIPBOARD:  return tr("Monitor clipboard");
 
@@ -747,6 +755,8 @@ TranslatorManager::translate(int tid) const
 
   case T_ASPECTRATIO:   return tr("Aspect ratio");
   case T_NEWWINDOW:     return tr("New window") + " [" K_CTRL "+" K_SHIFT "+" "N]";
+
+  case T_MENUTEXT_AUTOSUBMIT:  return tr("Save annots associations");
 
   default:
     qWarning() << "TranslatorManager:translate: Unknown tid =" << tid;

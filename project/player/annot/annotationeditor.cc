@@ -2,11 +2,10 @@
 // 10/4/2011
 
 #include "annotationeditor.h"
-#include "textedit.h"
-#include "uistyle.h"
 #include "tr.h"
-#include "defines.h"
+#include "global.h"
 #include "stylesheet.h"
+#include "ac/acui.h"
 #include "module/annotcloud/annottag.h"
 #include "module/annotcloud/annothtml.h"
 #include "module/qtext/toolbutton.h"
@@ -56,9 +55,9 @@ AnnotationEditor::AnnotationEditor(QWidget *parent)
   : Base(parent, WINDOW_FLAGS), id_(0)
 {
   setWindowTitle(TR(T_TITLE_ANNOTATIONEDITOR));
-  UiStyle::globalInstance()->setWindowStyle(this);
+  AcUi::globalInstance()->setWindowStyle(this);
 
-  textEdit_ = new TextEdit;
+  textEdit_ = AcUi::globalInstance()->makeTextEdit(0, TR(T_ANNOT));
 
   createActions();
   createRibons();
@@ -98,7 +97,7 @@ AnnotationEditor::AnnotationEditor(QWidget *parent)
 void
 AnnotationEditor::createRibons()
 {
-  UiStyle *ui = UiStyle::globalInstance();
+  AcUi *ui = AcUi::globalInstance();
 
 #define MAKE_CHECKABLE_BUTTON(_button, _ss, _title, _tip, _slot) \
   _button = new QtExt::ToolButton; { \
@@ -157,7 +156,7 @@ AnnotationEditor::createRibons()
     row1->addStretch();
 
     int patch = 0;
-    if (!UiStyle::isAeroAvailable())
+    if (!AcUi::isAeroAvailable())
       patch = 4;
 
     // void setContentsMargins(int left, int top, int right, int bottom);
@@ -212,7 +211,7 @@ AnnotationEditor::createRibons()
   connect(backgroundColorButton_, SIGNAL(clicked()), SLOT(showBackgroundColorDialog()));
 
   // - alignComboBox_
-  alignComboBox_ = ui->makeComboBox(UiStyle::ReadOnlyHint, "", tr("Alignment")); {
+  alignComboBox_ = ui->makeComboBox(AcUi::ReadOnlyHint, "", tr("Alignment")); {
     alignComboBox_->setMaximumWidth(ALIGNCOMBOBOX_WIDTH);
     alignComboBox_->setMinimumWidth(ALIGNCOMBOBOX_WIDTH);
 
@@ -266,7 +265,7 @@ AnnotationEditor::createRibons()
     row1->addStretch();
 
     int patch = 0;
-    if (!UiStyle::isAeroAvailable())
+    if (!AcUi::isAeroAvailable())
       patch = 4;
 
     rows->setContentsMargins(patch, patch, patch, patch);
@@ -287,13 +286,13 @@ AnnotationEditor::createRibons()
   // Header
 
   codeRibonButton_ = ui->makeToolButton(
-        UiStyle::TabHint, tr("tex"), "", K_CTRL "+1", this, SLOT(setCodeMode()));
+        AcUi::TabHint, tr("tex"), "", K_CTRL "+1", this, SLOT(setCodeMode()));
   htmlRibonButton_ = ui->makeToolButton(
-        UiStyle::TabHint, tr("html"), "", K_CTRL "+2", this, SLOT(setHtmlMode()));
+        AcUi::TabHint, tr("html"), "", K_CTRL "+2", this, SLOT(setHtmlMode()));
 
-  formatButton_ = ui->makeToolButton(UiStyle::MenuHint, tr("format"), tr("Format")); {
+  formatButton_ = ui->makeToolButton(AcUi::MenuHint, tr("format"), tr("Format")); {
     QMenu *menu = new QMenu; {
-      UiStyle::globalInstance()->setContextMenuStyle(menu, false); // persistent = false
+      AcUi::globalInstance()->setContextMenuStyle(menu, false); // persistent = false
 
       // - Styles
       menu->addAction(boldAct_);
@@ -419,7 +418,7 @@ AnnotationEditor::createLayout()
 
     // left, top, right, bottom
     int patch = 0;
-    if (!UiStyle::isAeroAvailable())
+    if (!AcUi::isAeroAvailable())
       patch = 9;
     header->setContentsMargins(0, 0, 0, 0);
     footer->setContentsMargins(0, 0, 0, 0);

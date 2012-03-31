@@ -2,10 +2,10 @@
 // 2/18/2012
 
 #include "downloadtaskdialog.h"
-#include "uistyle.h"
 #include "logger.h"
 #include "tr.h"
-#include "util/textview.h"
+#include "ac/acui.h"
+#include "ac/actextview.h"
 #include "module/qtext/algorithm.h"
 #include <QtGui>
 
@@ -34,7 +34,6 @@ using namespace Logger;
 DownloadTaskDialog::DownloadTaskDialog(QWidget *parent)
   : Base(parent, WINDOW_FLAGS)
 {
-  UiStyle::globalInstance()->setWindowStyle(this);
   setWindowTitle(tr("Add download URLs"));
   createLayout();
 
@@ -54,25 +53,26 @@ DownloadTaskDialog::DownloadTaskDialog(QWidget *parent)
 void
 DownloadTaskDialog::createLayout()
 {
-  UiStyle *ui = UiStyle::globalInstance();
+  AcUi *ui = AcUi::globalInstance();
+  ui->setWindowStyle(this);
 
-  textView_ = new TextView;
+  textView_ = new AcTextView;
 
   urlButton_ = ui->makeToolButton(
-        UiStyle::UrlHint,
+        AcUi::UrlHint,
         tr("http://www.nicovideo.jp/watch/sm12159572"),
         tr("Click to paste the URL example"),
         this, SLOT(showExampleUrl()));
 
-  QLabel *urlLabel = ui->makeLabel(UiStyle::BuddyHint, TR(T_EXAMPLE), urlButton_);
+  QLabel *urlLabel = ui->makeLabel(AcUi::BuddyHint, TR(T_EXAMPLE), urlButton_);
 
   QToolButton *addButton = ui->makeToolButton(
-        UiStyle::PushHint | UiStyle::HighlightHint, TR(T_ADD), "", K_CTRL "+S",
+        AcUi::PushHint | AcUi::HighlightHint, TR(T_ADD), "", K_CTRL "+S",
         this, SLOT(add()));
   QToolButton *pasteButton = ui->makeToolButton(
-        UiStyle::PushHint, TR(T_PASTE), this, SLOT(paste()));
+        AcUi::PushHint, TR(T_PASTE), this, SLOT(paste()));
   QToolButton *clearButton = ui->makeToolButton(
-        UiStyle::PushHint, TR(T_CLEAR), this, SLOT(clear()));
+        AcUi::PushHint, TR(T_CLEAR), this, SLOT(clear()));
 
   // Layout
   QVBoxLayout *rows = new QVBoxLayout; {
@@ -92,7 +92,7 @@ DownloadTaskDialog::createLayout()
 
     // l, t, r, b
     int patch = 0;
-    if (!UiStyle::isAeroAvailable())
+    if (!AcUi::isAeroAvailable())
       patch = 9;
     header->setContentsMargins(0, 0, 0, 0);
     footer->setContentsMargins(0, 0, 0, 0);

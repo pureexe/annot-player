@@ -7,10 +7,15 @@
 #include "webbrowser_config.h"
 #include <QMainWindow>
 #include <QUrl>
+#include <QNetworkRequest>
 
-QT_FORWARD_DECLARE_CLASS(QNetworkCookieJar)
-QT_FORWARD_DECLARE_CLASS(QNetworkAccessManager)
-QT_FORWARD_DECLARE_CLASS(QWebPage)
+QT_BEGIN_NAMESPACE
+class QTimer;
+class QNetworkCookieJar;
+class QNetworkAccessManager;
+class QWebPage;
+class QWebView;
+QT_END_NAMESPACE
 
 namespace Ui { class WebBrowserUi; }
 
@@ -40,13 +45,23 @@ public slots:
 
   // - Actions -
 public slots:
+  WEBBROWSER_API void showMessage(const QString &text);
+  WEBBROWSER_API void error(const QString &text);
+  WEBBROWSER_API void warn(const QString &text);
+
   WEBBROWSER_API void openUrl(const QString &url);
   WEBBROWSER_API void openUrls(const QStringList &urls);
+
+  WEBBROWSER_API void addHistory(const QString &url);
+  WEBBROWSER_API void addHistory(const QStringList &urls);
+
+  WEBBROWSER_API void download(const QNetworkRequest &req);
 
 protected slots:
   WEBBROWSER_API void closeTab(int index);
   WEBBROWSER_API void closeTab();
-  WEBBROWSER_API void newTab();
+  WEBBROWSER_API void newTab(QWebView *w = 0);
+  WEBBROWSER_API void newTabWithDefaultPage();
   WEBBROWSER_API void openUrl();
   WEBBROWSER_API void openSearch();
   WEBBROWSER_API void reload();
@@ -89,6 +104,7 @@ private:
 private:
   Form *ui_;
   QNetworkCookieJar *cookieJar_;
+  QTimer *hideStatusBarTimer_;
 
   QString homePage_;
   QString searchEngine_;

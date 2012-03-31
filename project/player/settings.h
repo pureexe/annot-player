@@ -18,29 +18,26 @@ class Settings : public QSettings
 
   // - Constructions -
 public:
-  static Self *globalInstance() { static Self g; return &g; }
+  static Self *globalSettings() { static Self g; return &g; }
 protected:
   explicit Settings(QObject *parent = 0);
 
 public slots:
-  void flush() { sync(); }
+  void sync() { Base::sync(); }
 
   // - Properties -
 public:
   QString version() const;
   void setVersion(const QString &version);
 
-  qint64 userId() const;
-  void setUserId(qint64 uid);
-
-  QString userName() const;
-  void setUserName(const QString &userName);
-
-  QString password() const; ///< Encrypted
-  void setPassword(const QString &password);
-
   bool isQueueEmpty() const; ///< If database queue is empty
   void setQueueEmpty(bool empty);
+
+  bool isBufferedMediaSaved() const;
+  void setBufferedMediaSaved(bool t);
+
+  bool isAutoSubmit() const;
+  void setAutoSubmit(bool t);
 
   bool isTranslateEnabled() const; ///< If use translation in game mode
   void setTranslateEnabled(bool enabled);
@@ -60,12 +57,6 @@ public:
   bool isAutoPlayNext() const;
   void setAutoPlayNext(bool t);
 
-  bool isAeroEnabled() const;
-  void setAeroEnabled(bool t);
-
-  bool isMenuThemeEnabled() const;
-  void setMenuThemeEnabled(bool t);
-
   bool isLive() const;
   void setLive(bool t);
 
@@ -78,13 +69,7 @@ public:
   int annotationEffect() const;
   void setAnnotationEffect(int effect);
 
-  int language() const; ///< Application language
-  void setLanguage(int lang);
-
   ///  Theme in UiStyle
-  int themeId() const;
-  void setThemeId(int tid);
-
   qint64 annotationLanguages() const; ///< Annotation language
   void setAnnotationLanguages(qint64 lang);
 
@@ -114,14 +99,6 @@ public:
   int annotationCountHint() const;
   void setAnnotationCountHint(int count);
 
-  // - Accounts -
-
-  std::pair<QString, QString> nicovideoAccount();
-  void setNicovideoAccount(const QString &username, const QString &password);
-
-  std::pair<QString, QString> bilibiliAccount();
-  void setBilibiliAccount(const QString &username, const QString &password);
-
   // - History per token -
 
   QHash<qint64, qint64> playPosHistory() const;
@@ -135,26 +112,6 @@ public:
 
   QHash<qint64, QString> aspectRatioHistory() const;
   void setAspectRatioHistory(const QHash<qint64, QString> &h);
-
-  // - Network proxy -
-
-  void setProxyEnabled(bool t);
-  bool isProxyEnabled() const;
-
-  void setProxyHostName(const QString &host);
-  QString proxyHostName() const;
-
-  void setProxyPort(int port);
-  int proxyPort() const;
-
-  void setProxyType(int type);
-  int proxyType() const;
-
-  void setProxyUser(const QString &name);
-  QString proxyUser() const;
-
-  void setProxyPassword(const QString &password);
-  QString proxyPassword() const;
 };
 
 #endif // SETTINGS_H

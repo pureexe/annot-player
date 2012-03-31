@@ -2,9 +2,9 @@
 // 8/14/2011
 
 #include "logindialog.h"
-#include "uistyle.h"
 #include "tr.h"
 #include "logger.h"
+#include "ac/acui.h"
 #include "module/annotcloud/user.h"
 #include <QtGui>
 
@@ -41,7 +41,6 @@ LoginDialog::LoginDialog(QWidget *parent)
   : Base(parent, WINDOW_FLAGS)
 {
   setWindowTitle(TR(T_TITLE_LOGIN));
-  UiStyle::globalInstance()->setWindowStyle(this);
 
   createLayout();
 
@@ -58,26 +57,26 @@ LoginDialog::LoginDialog(QWidget *parent)
 void
 LoginDialog::createLayout()
 {
-  UiStyle *ui = UiStyle::globalInstance();
+  AcUi *ui = AcUi::globalInstance();
+  ui->setWindowStyle(this);
 
   QStringList defaultUsers(User::guest().name());
   userNameEdit_ = ui->makeComboBox(
-        UiStyle::EditHint, TR(T_DEFAULT_USERNAME), TR(T_TOOLTIP_USERNAME), defaultUsers);
+        AcUi::EditHint, TR(T_DEFAULT_USERNAME), TR(T_TOOLTIP_USERNAME), defaultUsers);
   passwordEdit_ = ui->makeLineEdit(
-        UiStyle::EditHint | UiStyle::PasswordHint, TR(T_DEFAULT_PASSWORD), TR(T_TOOLTIP_PASSWORD));
+        AcUi::EditHint | AcUi::PasswordHint, TR(T_DEFAULT_PASSWORD), TR(T_TOOLTIP_PASSWORD));
 
   setTabOrder(userNameEdit_, passwordEdit_);
 
   QToolButton *loginButton = ui->makeToolButton(
-        UiStyle::PushHint | UiStyle::HighlightHint, TR(T_LOGIN), TR(T_LOGIN), K_ENTER,
+        AcUi::PushHint | AcUi::HighlightHint, TR(T_LOGIN), TR(T_LOGIN), K_ENTER,
         this, SLOT(login()));
   QToolButton *cancelButton = ui->makeToolButton(
-        UiStyle::PushHint, TR(T_CANCEL), TR(T_CANCEL), K_ESC,
+        AcUi::PushHint, TR(T_CANCEL), TR(T_CANCEL), K_ESC,
         this, SLOT(hide()));
 
-
-  QLabel *userNameLabel = ui->makeLabel(UiStyle::BuddyHint, TR(T_USERNAME), userNameEdit_),
-         *passwordLabel = ui->makeLabel(UiStyle::BuddyHint, TR(T_PASSWORD), passwordEdit_);
+  QLabel *userNameLabel = ui->makeLabel(AcUi::BuddyHint, TR(T_USERNAME), userNameEdit_),
+         *passwordLabel = ui->makeLabel(AcUi::BuddyHint, TR(T_PASSWORD), passwordEdit_);
 
   // Layouts
   QGridLayout *grid = new QGridLayout; {

@@ -1,11 +1,9 @@
 // urldialog.cc
-// 1/24/2012
+// 2/8/2012
 
 #include "urldialog.h"
-#include "stylesheet.h"
-#include "uistyle.h"
 #include "tr.h"
-#include "comboedit.h"
+#include "ac/acui.h"
 #include "module/qtext/ss.h"
 #include "module/qtext/string.h"
 #include "module/qtext/overlaylayout.h"
@@ -30,38 +28,40 @@ UrlDialog::UrlDialog(QWidget *parent)
   : Base(parent, WINDOW_FLAGS)
 {
   Q_ASSERT(server_);
-  setWindowTitle(tr("Open URL"));
-  UiStyle::globalInstance()->setWindowStyle(this);
 
   createLayout();
+
   edit_->setFocus();
 }
 
 void
 UrlDialog::createLayout()
 {
-  edit_ = new ComboEdit; {
-    //edit_->setEditText("http://");
-    edit_->setToolTip(tr("Enter local or Internet media URL"));
-  } connect(edit_->lineEdit(), SIGNAL(returnPressed()), SLOT(open()));
+  AcUi *ui = AcUi::globalInstance();
+  ui->setWindowStyle(this);
 
-  UiStyle *ui = UiStyle::globalInstance();
+  edit_ = ui->makeComboBox(AcUi::EditHint);
+  connect(edit_->lineEdit(), SIGNAL(returnPressed()), SLOT(open()));
+
+  saveButton_ = ui->makeToolButton(
+        AcUi::CheckHint, TR(T_SAVE), tr("Save the association online"));
+  saveButton_->setChecked(true);
 
   urlButton_ = ui->makeToolButton(
-        UiStyle::UrlHint, "", tr("Click to paste the URL example"), this, SLOT(showExampleUrl()));
-  QLabel *urlLabel = ui->makeLabel(UiStyle::BuddyHint, TR(T_EXAMPLE), urlButton_);
+        AcUi::UrlHint, "", tr("Click to paste the URL example"), this, SLOT(showExampleUrl()));
+  QLabel *urlLabel = ui->makeLabel(AcUi::BuddyHint, TR(T_EXAMPLE), urlButton_);
 
   QToolButton *openButton = ui->makeToolButton(
-        UiStyle::PushHint | UiStyle::HighlightHint, TR(T_OPEN), this, SLOT(open()));
+        AcUi::PushHint | AcUi::HighlightHint, TR(T_OPEN), this, SLOT(open()));
   QToolButton *pasteButton = ui->makeToolButton(
-        UiStyle::PushHint, TR(T_PASTE), this, SLOT(paste()));
+        AcUi::PushHint, TR(T_PASTE), this, SLOT(paste()));
   QToolButton *clearButton = ui->makeToolButton(
-        UiStyle::PushHint, TR(T_CLEAR), edit_->lineEdit(), SLOT(clear()));
+        AcUi::PushHint, TR(T_CLEAR), edit_->lineEdit(), SLOT(clear()));
 
   QToolButton *increaseButton = ui->makeToolButton(
-        UiStyle::NoHint, "+", TR(T_INCREASE), K_CTRL "+=", this, SLOT(increase()));
+        AcUi::NoHint, "+", TR(T_INCREASE), K_CTRL "+=", this, SLOT(increase()));
   QToolButton *decreaseButton = ui->makeToolButton(
-        UiStyle::NoHint, "-", TR(T_INCREASE), K_CTRL "+-", this, SLOT(decrease()));
+        AcUi::NoHint, "-", TR(T_INCREASE), K_CTRL "+-", this, SLOT(decrease()));
 
   QVBoxLayout *rows = new QVBoxLayout; {
     QHBoxLayout *header = new QHBoxLayout,
@@ -84,6 +84,7 @@ UrlDialog::createLayout()
     footer->addWidget(clearButton);
     footer->addWidget(pasteButton);
     footer->addStretch();
+    footer->addWidget(saveButton_);
     footer->addWidget(openButton);
 
     rows->setContentsMargins(9, 9, 9, 9);
@@ -120,13 +121,30 @@ UrlDialog::open()
   if (url.isEmpty() || url == "http://")
     return;
 
+  edit_->addItem(url);
+
   url = autoCompleteUrl(url);
-  emit urlEntered(url);
+  emit urlEntered(url, saveButton_->isChecked());
+}
+
+void
+UrlDialog::paste()
+{
+  QClipboard *c = QApplication::clipboard();
+  if (c){
+    QString t = c->text().trimmed();
+    if (!t.isEmpty())
+      setText(t);
+  }
 }
 
 QString
 UrlDialog::text() const
 { return edit_->currentText(); }
+
+bool
+UrlDialog::isEmpty() const
+{ return text().trimmed().isEmpty(); }
 
 void
 UrlDialog::setText(const QString &text)
@@ -152,17 +170,6 @@ UrlDialog::decrease()
   setText(t);
 }
 
-void
-UrlDialog::paste()
-{
-  QClipboard *c = QApplication::clipboard();
-  if (c) {
-    QString t = c->text().trimmed();
-    if (!t.isEmpty())
-      setText(t);
-  }
-}
-
 QString
 UrlDialog::autoCompleteUrl(const QString &url)
 {
@@ -173,16 +180,21 @@ UrlDialog::autoCompleteUrl(const QString &url)
     ret.prepend('h');
 
   ret.replace(QRegExp("/index.html$", Qt::CaseInsensitive), "/");
+  ret.replace(QRegExp("/#$"), "/");
 
   return ret;
 }
 
 void
 UrlDialog::showExampleUrl()
-{ edit_->setEditText(urlButton_->text()); }
+{ setText(urlButton_->text()); }
 
 void
 UrlDialog::setExampleUrl(const QString &text)
 { urlButton_->setText(text); }
+
+void
+UrlDialog::setSave(bool t)
+{ saveButton_->setChecked(t); }
 
 // EOF

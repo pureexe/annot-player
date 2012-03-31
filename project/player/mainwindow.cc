@@ -29,7 +29,6 @@
 #include "tray.h"
 #include "annotationbrowser.h"
 #include "stylesheet.h"
-#include "uistyle.h"
 #include "rc.h"
 #include "tr.h"
 #include "translatormanager.h"
@@ -55,12 +54,12 @@
 #include "shutdowndialog.h"
 #include "sleepdialog.h"
 #include "userview.h"
-#include "defines.h"
+#include "global.h"
 #ifdef USE_MODE_SIGNAL
-  #include "signalview.h"
-  #include "messageview.h"
-  #include "processview.h"
-  #include "messagehandler.h"
+#  include "signalview.h"
+#  include "messageview.h"
+#  include "processview.h"
+#  include "messagehandler.h"
 #endif // USE_MODE_SIGNAL
 #include "module/player/player.h"
 #include "module/annotcodec/annotationcodecmanager.h"
@@ -68,50 +67,54 @@
 #include "module/mrlresolver/mrlresolversettings.h"
 #include "module/translator/translator.h"
 #include "module/qtext/algorithm.h"
+#include "module/qtext/string.h"
 #include "module/qtext/actionwithid.h"
 #include "module/qtext/countdowntimer.h"
 #include "module/qtext/datetime.h"
 #include "module/qtext/htmltag.h"
+#include "module/qtext/rubberband.h"
 //#include "module/qtext/network.h"
 #include "module/mediacodec/flvcodec.h"
 #ifdef USE_MODULE_SERVERAGENT
-  #include "module/serveragent/serveragent.h"
+#  include "module/serveragent/serveragent.h"
 #endif // USE_MODULE_SERVERAGENT
 #ifdef USE_MODULE_CLIENTAGENT
-  #include "module/clientagent/clientagent.h"
+#  include "module/clientagent/clientagent.h"
 #endif // USE_MODULE_CLIENTAGENT
 #ifdef USE_MODULE_DOLL
-  #include "module/doll/doll.h"
+#  include "module/doll/doll.h"
 #endif // USE_MODULE_DOLL
 #ifdef USE_WIN_HOOK
-  #include "win/hook/hook.h"
+#  include "win/hook/hook.h"
 #endif // USE_WIN_HOOK
 #ifdef USE_WIN_MOUSEHOOK
-  #include "win/mousehook/mousehook.h"
+#  include "win/mousehook/mousehook.h"
 #endif // USE_WIN_MOUSEHOOK
 //#ifdef USE_WIN_DWM
-//  #include "win/dwm/dwm.h"
+//#  include "win/dwm/dwm.h"
 //#endif // USE_WIN_DWM
 #ifdef USE_WIN_QTH
-  #include "win/qth/qth.h"
+#  include "win/qth/qth.h"
 #endif // USE_WIN_QTH
 #ifdef Q_WS_WIN
-  #include "win/qtwin/qtwin.h"
+#  include "win/qtwin/qtwin.h"
 #endif // Q_WS_WIN
 #ifdef USE_WIN_PICKER
-  #include "win/picker/picker.h"
+#  include "win/picker/picker.h"
 #endif // USE_WIN_PICKER
 #ifdef Q_OS_MAC
-  #include "mac/qtmac/qtmac.h"
-  //#include "mac/qtstep/qtstep.h"
-  //#include "mac/qtvlc/qtvlc.h"
+#  include "mac/qtmac/qtmac.h"
+//#  include "mac/qtstep/qtstep.h"
+//#  include "mac/qtvlc/qtvlc.h"
 #endif // Q_OS_MAC
 #ifdef Q_WS_X11
-  #include "unix/qtx/qtx.h"
+#  include "unix/qtx/qtx.h"
 #endif // Q_WS_X11
 #ifdef Q_OS_UNIX
-  #include "unix/qtunix/qtunix.h"
+#  include "unix/qtunix/qtunix.h"
 #endif // Q_OS_UNIX
+#include "ac/acui.h"
+#include "ac/acsettings.h"
 #include "module/annotcloud/annottag.h"
 #include "module/annotcloud/annothtml.h"
 #include <QtGui>
@@ -139,7 +142,13 @@ using namespace Logger;
 #include "module/debug/debug.h"
 
 enum { DEFAULT_LIVE_INTERVAL = 3000 }; // 3 seconds
-enum { HISTORY_SIZE = 100 };    // Size of playPos/Sub/AudioTrack history
+enum { HISTORY_SIZE =    // Size of playPos/Sub/AudioTrack history
+  #ifdef Q_OS_WIN
+       20
+  #else
+       100
+  #endif // Q_OS_WIN
+};
 
 // - Focus -
 
@@ -207,8 +216,26 @@ MainWindow::resetPlayer()
   player_->setFullScreen(false);
 }
 
+void
+MainWindow::setupWindowStyle()
+{
+#ifdef USE_WIN_DWM
+  if(AcUi::globalInstance()->isAeroEnabled()) {
+    setAttribute(Qt::WA_TranslucentBackground);
+    setAttribute(Qt::WA_NoSystemBackground);
+
+    AcUi::globalInstance()->setWindowDwmEnabled(this, true);
+    return;
+  }
+#endif // USE_WIN_DWM
+  //if (qss)
+  //  w->setStyleSheet(SS_BACKGROUND_CLASS(MainWindow));
+  AcUi::globalInstance()->setWindowBackground(this, true); // persistent = true
+  setWindowOpacity(AC_WINDOW_OPACITY);
+}
+
 MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags f)
-  : Base(parent, f), disposed_(false),
+  : Base(parent, f), disposed_(false), submit_(true),
     liveInterval_(DEFAULT_LIVE_INTERVAL),
     tray_(0),//commentView_(0),
     annotationThreadView_(0), annotationEditor_(0), blacklistView_(0), backlogDialog_(0), consoleDialog_(0), downloadDialog_(0),
@@ -220,7 +247,7 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags f)
     preferredSubtitleTrack_(0), preferredAudioTrack_(0)
 {
 #ifndef Q_OS_MAC
-  if (Settings::globalInstance()->isWindowOnTop())
+  if (Settings::globalSettings()->isWindowOnTop())
     setWindowFlags(windowFlags() | Qt::WindowStaysOnTopHint);
 #endif // Q_OS_MAC
 
@@ -232,9 +259,9 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags f)
   setWindowTitle(TR(T_TITLE_PROGRAM));
   setContentsMargins(0, 0, 0, 0);
 
-  UiStyle::globalInstance()->setMainWindowStyle(this);
+  setupWindowStyle();
 
-  menuBar()->setVisible(Settings::globalInstance()->isMenuBarVisible());
+  menuBar()->setVisible(Settings::globalSettings()->isMenuBarVisible());
 
   createComponents();
 
@@ -282,7 +309,10 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags f)
 #endif // USE_WIN_MOUSEHOOK
 
   // Load settings
-  Settings *settings = Settings::globalInstance();
+  Settings *settings = Settings::globalSettings();
+  AcSettings *ac = AcSettings::globalSettings();
+
+  submit_ = settings->isAutoSubmit();
 
   setSubtitleColor(settings->subtitleColor());
 
@@ -320,14 +350,16 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags f)
     invalidateAnnotationLanguages();
   }
 
+  player_->setBufferSaved(settings->isBufferedMediaSaved());
+
   {
-    MrlResolverSettings *mrs= MrlResolverSettings::globalInstance();
+    MrlResolverSettings *mrs = MrlResolverSettings::globalSettings();
     std::pair<QString, QString>
-    a = settings->nicovideoAccount();
+    a = ac->nicovideoAccount();
     if (!a.first.isEmpty() && !a.second.isEmpty())
       mrs->setNicovideoAccount(a.first, a.second);
 
-    a = settings->bilibiliAccount();
+    a = ac->bilibiliAccount();
     if (!a.first.isEmpty() && !a.second.isEmpty())
       mrs->setBilibiliAccount(a.first, a.second);
   }
@@ -430,12 +462,18 @@ MainWindow::createComponents()
 
   annotationView_ = new AnnotationGraphicsView(hub_,  player_, videoView_, osdWindow_);
   annotationView_->setFullScreenView(osdWindow_);
+
+  // Rubber band
+  pauseRubberBand_ = new QtExt::MouseRubberBand(QRubberBand::Rectangle, annotationView_);
+  resumeRubberBand_ = new QtExt::MouseRubberBand(QRubberBand::Rectangle, annotationView_);
+  resumeRubberBand_->setColor("red");
+
 //#ifdef USE_WIN_DWM
 //  {
 //    QWidget *w = annotationView_->editor();
 //    w->setParent(this, w->windowFlags()); // hot fix for dwm displaying issue
-//    UiStyle::globalInstance()->setWindowDwmEnabled(w->winId(), false);
-//    UiStyle::globalInstance()->setWindowDwmEnabled(w->winId(), true);
+//    AcUi::globalInstance()->setWindowDwmEnabled(w->winId(), false);
+//    AcUi::globalInstance()->setWindowDwmEnabled(w->winId(), true);
 //  }
 //#endif // USE_WIN_DWM
 //#ifdef Q_OS_MAC // remove background in annotation view
@@ -557,8 +595,8 @@ MainWindow::createConnections()
   connect(player_, SIGNAL(trackNumberChanged(int)), SLOT(invalidateMediaAndPlay()));
   connect(player_, SIGNAL(endReached()), SLOT(autoPlayNext()));
   connect(player_, SIGNAL(mediaTitleChanged(QString)), SLOT(setWindowTitle(QString)));
-  connect(player_, SIGNAL(error(QString)), SIGNAL(warned(QString)));
-  connect(player_, SIGNAL(message(QString)), SIGNAL(logged(QString)));
+  connect(player_, SIGNAL(error(QString)), SLOT(warn(QString)), Qt::QueuedConnection);
+  connect(player_, SIGNAL(message(QString)), SLOT(log(QString)), Qt::QueuedConnection);
   connect(player_, SIGNAL(fileSaved(QString)), SLOT(signFile(QString)), Qt::QueuedConnection);
   connect(player_, SIGNAL(downloadProgress(qint64,qint64)), SLOT(updateDownloadProgress(qint64,qint64)));
 
@@ -638,6 +676,10 @@ MainWindow::createConnections()
   connect(this, SIGNAL(showAnnotationOnceRequested(Annotation)),
           annotationView_, SLOT(showAnnotationOnce(Annotation)),
           Qt::QueuedConnection);
+
+  // - Rubber band -
+  connect(pauseRubberBand_, SIGNAL(selected(QRect)), SLOT(pauseAnnotationsAt(QRect)));
+  connect(resumeRubberBand_, SIGNAL(selected(QRect)), SLOT(resumeAnnotationsAt(QRect)));
 
   // Tokens
   connect(tokenView_, SIGNAL(aliasSubmitted(Alias)), SLOT(submitAlias(Alias)));
@@ -844,14 +886,14 @@ MainWindow::createConnections()
   // MRL resolver
   connect(mrlResolver_, SIGNAL(mediaResolved(MediaInfo,QNetworkCookieJar*)), SLOT(openRemoteMedia(MediaInfo,QNetworkCookieJar*)));
   connect(mrlResolver_, SIGNAL(subtitleResolved(QString)), SLOT(importAnnotationsFromUrl(QString)));
-  connect(mrlResolver_, SIGNAL(message(QString)), SLOT(log(QString)));
-  connect(mrlResolver_, SIGNAL(error(QString)), SLOT(warn(QString)));
+  connect(mrlResolver_, SIGNAL(message(QString)), SLOT(log(QString)), Qt::QueuedConnection);
+  connect(mrlResolver_, SIGNAL(error(QString)), SLOT(warn(QString)), Qt::QueuedConnection);
 
   // Annotation codec
   {
     AnnotationCodecManager *acm = AnnotationCodecManager::globalInstance();
-    connect(acm, SIGNAL(message(QString)), SLOT(log(QString)));
-    connect(acm, SIGNAL(error(QString)), SLOT(warn(QString)));
+    connect(acm, SIGNAL(message(QString)), SLOT(log(QString)), Qt::QueuedConnection);
+    connect(acm, SIGNAL(error(QString)), SLOT(warn(QString)), Qt::QueuedConnection);
     connect(acm, SIGNAL(fetched(AnnotationList,QString)), SLOT(addRemoteAnnotations(AnnotationList,QString)));
   }
 
@@ -874,7 +916,8 @@ MainWindow::parseArguments(const QStringList &args)
     return;
 
   playlist_ = args;
-  openMrl(args.back());
+  playlist_.removeFirst();
+  openMrl(playlist_.first());
 }
 
 bool
@@ -917,14 +960,17 @@ MainWindow::createActions()
   MAKE_ACTION(deleteCachesAct_, DELETECACHE,    this,           SLOT(deleteCaches()))
   MAKE_ACTION(newWindowAct_,    NEWWINDOW,      this,           SLOT(newWindow()))
   MAKE_ACTION(showAnnotationsAsThreadAct_,    ANNOTTHREAD,      this,  SLOT(showAnnotationsAsThread()))
+  MAKE_ACTION(saveMediaAct_, SAVEMEDIA, this, SLOT(saveMedia()))
+  MAKE_TOGGLE(toggleSaveMediaAct_, AUTOSAVEMEDIA, this, SLOT(setSaveMedia(bool)))
+  MAKE_TOGGLE(toggleSubmitAct_, AUTOSUBMIT, this, SLOT(setSubmit(bool)))
   MAKE_TOGGLE(nothingAfterFinishedAct_, NOTHINGAFTERFINISHED, this, SLOT(nothingAfterFinished()))
   MAKE_TOGGLE(sleepAfterFinishedAct_, SLEEPAFTERFINISHED, this, SLOT(sleepAfterFinished()))
   MAKE_TOGGLE(shutdownAfterFinishedAct_, SHUTDOWNAFTERFINISHED, this, SLOT(shutdownAfterFinished()))
   MAKE_TOGGLE(toggleMultipleWindowsEnabledAct_, MULTIWINDOW, this, SLOT(setMultipleWindowsEnabled(bool)))
   MAKE_TOGGLE(toggleClipboardMonitorEnabledAct_, MONITORCLIPBOARD, clipboardMonitor_, SLOT(setEnabled(bool)))
   MAKE_TOGGLE(toggleNetworkProxyDialogVisibleAct_, NETWORKPROXY, this, SLOT(setNetworkProxyDialogVisible(bool)))
-  MAKE_TOGGLE(toggleAeroEnabledAct_, ENABLEAERO, UiStyle::globalInstance(), SLOT(setAeroEnabled(bool)))
-  MAKE_TOGGLE(toggleMenuThemeEnabledAct_, MENUTHEME, UiStyle::globalInstance(), SLOT(setMenuEnabled(bool)))
+  MAKE_TOGGLE(toggleAeroEnabledAct_, ENABLEAERO, AcUi::globalInstance(), SLOT(setAeroEnabled(bool)))
+  MAKE_TOGGLE(toggleMenuThemeEnabledAct_, MENUTHEME, AcUi::globalInstance(), SLOT(setMenuEnabled(bool)))
   MAKE_TOGGLE(toggleFullScreenModeAct_, FULLSCREEN, hub_,       SLOT(setFullScreenWindowMode(bool)))
   MAKE_TOGGLE(toggleMenuBarVisibleAct_, SHOWMENUBAR, menuBar(), SLOT(setVisible(bool)))
   MAKE_TOGGLE(toggleAnnotationCountDialogVisibleAct_, ANNOTATIONLIMIT, this, SLOT(setAnnotationCountDialogVisible(bool)))
@@ -988,11 +1034,11 @@ MainWindow::createActions()
   MAKE_ACTION(backward5sAct_,   BACKWARD5S,     this,   SLOT(backward5s()))
   MAKE_ACTION(forward10sAct_,   FORWARD10S,     this,   SLOT(forward10s()))
   MAKE_ACTION(backward10sAct_,  BACKWARD10S,    this,   SLOT(backward10s()))
-  MAKE_ACTION(forward30sAct_,   FORWARD30S,     this,   SLOT(forward30s()))
+  MAKE_ACTION(forward25sAct_,   FORWARD25S,     this,   SLOT(forward25s()))
   MAKE_ACTION(backward30sAct_,  BACKWARD30S,    this,   SLOT(backward30s()))
-  MAKE_ACTION(forward90sAct_,   FORWARD60S,     this,   SLOT(forward60s()))
-  MAKE_ACTION(backward90sAct_,  BACKWARD60S,    this,   SLOT(backward60s()))
-  MAKE_ACTION(forward90sAct_,   FORWARD90S,     this,   SLOT(forward90s()))
+  MAKE_ACTION(forward60sAct_,   FORWARD60S,     this,   SLOT(forward60s()))
+  MAKE_ACTION(backward60sAct_,  BACKWARD60S,    this,   SLOT(backward60s()))
+  MAKE_ACTION(forward85sAct_,   FORWARD85S,     this,   SLOT(forward85s()))
   MAKE_ACTION(backward90sAct_,  BACKWARD90S,    this,   SLOT(backward90s()))
   MAKE_ACTION(forward1mAct_,    FORWARD1M,      this,   SLOT(forward1m()))
   MAKE_ACTION(backward1mAct_,   BACKWARD1M,     this,   SLOT(backward1m()))
@@ -1011,6 +1057,8 @@ MainWindow::createActions()
 
   MAKE_ACTION(previousFileAct_, PREVIOUS, this,  SLOT(openPreviousFile()))
   MAKE_ACTION(nextFileAct_,     NEXT,     this,  SLOT(openNextFile()))
+  MAKE_ACTION(moreFilesAct_,    MORE,     this,  SLOT(moreBrowsedFiles()))
+  MAKE_ACTION(lessFilesAct_,    LESS,     this,  SLOT(lessBrowsedFiles()))
 
   MAKE_TOGGLE(setAppLanguageToEnglishAct_,  ENGLISH, this, SLOT(setAppLanguageToEnglish()))
   MAKE_TOGGLE(setAppLanguageToJapaneseAct_, JAPANESE,this, SLOT(setAppLanguageToJapanese()))
@@ -1037,7 +1085,7 @@ MainWindow::createActions()
   toggleAutoPlayNextAct_ = new QAction(TR(T_MENUTEXT_AUTOPLAYNEXT), this); {
     toggleAutoPlayNextAct_->setToolTip(TR(T_TOOLTIP_AUTOPLAYNEXT));
     toggleAutoPlayNextAct_->setCheckable(true);
-    //toggleAutoPlayNextAct_->setChecked(Settings::globalInstance()->isAutoPlayNext());
+    //toggleAutoPlayNextAct_->setChecked(Settings::globalSettings()->isAutoPlayNext());
     toggleAutoPlayNextAct_->setChecked(true);
   }
 
@@ -1091,13 +1139,15 @@ MainWindow::createActions()
     //connect(i, SIGNAL(activated()), SLOT(openUrl()));
 
     snapshotAct_->setShortcut(QKeySequence::Print);
-    QShortcut *p = new QShortcut(QKeySequence::Print, this);
-    connect(p, SIGNAL(activated()), SLOT(snapshot()));
+    //QShortcut *p = new QShortcut(QKeySequence::Print, this);
+    //connect(p, SIGNAL(activated()), SLOT(snapshot()));
 
-    //downloadCurrentUrlAct_->setShortcut(QKeySequence::Save);
-    //toggleDownloadDialogVisibleAct_->setShortcut(QKeySequence::Save);
-    QShortcut *s = new QShortcut(QKeySequence::Save, this);
-    connect(s, SIGNAL(activated()), SLOT(downloadCurrentUrl()));
+    saveMediaAct_->setShortcut(QKeySequence::Save);
+    //QShortcut *s = new QShortcut(QKeySequence::Save, this);
+    //connect(s, SIGNAL(activated()), SLOT(saveMedia()));
+
+    QShortcut *d = new QShortcut(QKeySequence("CTRL+D"), this);
+    connect(d, SIGNAL(activated()), SLOT(downloadCurrentUrl()));
 
     openProxyBrowserAct_->setShortcut(QKeySequence::Bold);
     //QShortcut *b = new QShortcut(QKeySequence::Bold, this);
@@ -1158,7 +1208,7 @@ MainWindow::createActions()
     QShortcut *backward = new QShortcut(QKeySequence("CTRL+LEFT"), this);
     connect(backward, SIGNAL(activated()), SLOT(backward90s()));
     QShortcut *forward = new QShortcut(QKeySequence("CTRL+RIGHT"), this);
-    connect(forward, SIGNAL(activated()), SLOT(forward90s()));
+    connect(forward, SIGNAL(activated()), SLOT(forward85s()));
 
     QShortcut *esc = new QShortcut(QKeySequence("CTRL+ESC"), this);
     connect(esc, SIGNAL(activated()), SLOT(showMinimizedAndPause()));
@@ -1177,13 +1227,15 @@ MainWindow::createActions()
 void
 MainWindow::createMenus()
 {
+  AcUi *ui = AcUi::globalInstance();
+
   // Context menu
   contextMenu_ = new QMenu(TR(T_TITLE_PROGRAM), this); {
-    UiStyle::globalInstance()->setContextMenuStyle(contextMenu_, true); // persistent = true
+    ui->setContextMenuStyle(contextMenu_, true); // persistent = true
   }
 
   userMenu_ = new QMenu(TR(T_TITLE_PROGRAM), this); {
-    UiStyle::globalInstance()->setContextMenuStyle(userMenu_, true); // persistent = true
+    ui->setContextMenuStyle(userMenu_, true); // persistent = true
     PlayerUi *players[] = { mainPlayer_, miniPlayer_, embeddedPlayer_ };
     BOOST_FOREACH (PlayerUi *p, players) {
       p->userButton()->setMenu(userMenu_);
@@ -1192,7 +1244,7 @@ MainWindow::createMenus()
   }
 
   helpContextMenu_ = new QMenu(this); {
-    UiStyle::globalInstance()->setContextMenuStyle(helpContextMenu_, true); // persistent = true
+    ui->setContextMenuStyle(helpContextMenu_, true); // persistent = true
     helpContextMenu_->setTitle(TR(T_MENUTEXT_HELP) + " ...");
     helpContextMenu_->setToolTip(TR(T_TOOLTIP_HELP));
 
@@ -1205,7 +1257,7 @@ MainWindow::createMenus()
   }
 
   annotationEffectMenu_ = new QMenu(this); {
-    UiStyle::globalInstance()->setContextMenuStyle(annotationEffectMenu_, true); // persistent = true
+    ui->setContextMenuStyle(annotationEffectMenu_, true); // persistent = true
 
     annotationEffectMenu_->setTitle(TR(T_ANNOTATIONEFFECT) + " ...");
     annotationEffectMenu_->setToolTip(TR(T_ANNOTATIONEFFECT));
@@ -1218,7 +1270,7 @@ MainWindow::createMenus()
   }
 
   appLanguageMenu_ = new QMenu(this); {
-    UiStyle::globalInstance()->setContextMenuStyle(appLanguageMenu_, true); // persistent = true
+    ui->setContextMenuStyle(appLanguageMenu_, true); // persistent = true
 
     appLanguageMenu_->setTitle("Language ..."); // no tr wrapping "language"
     appLanguageMenu_->setToolTip(TR(T_TOOLTIP_APPLANGUAGE));
@@ -1230,7 +1282,7 @@ MainWindow::createMenus()
   }
 
   userLanguageMenu_ = new QMenu(this); {
-    UiStyle::globalInstance()->setContextMenuStyle(userLanguageMenu_, true); // persistent = true
+    ui->setContextMenuStyle(userLanguageMenu_, true); // persistent = true
 
     userLanguageMenu_->setTitle(TR(T_MENUTEXT_USERLANGUAGE) + " ...");
     userLanguageMenu_->setToolTip(TR(T_TOOLTIP_USERLANGUAGE));
@@ -1243,7 +1295,7 @@ MainWindow::createMenus()
   }
 
   annotationLanguageMenu_ = new QMenu(this); {
-    UiStyle::globalInstance()->setContextMenuStyle(annotationLanguageMenu_, true); // persistent = true
+    ui->setContextMenuStyle(annotationLanguageMenu_, true); // persistent = true
 
     annotationLanguageMenu_->setTitle(TR(T_MENUTEXT_ANNOTATIONLANGUAGE) + " ...");
     annotationLanguageMenu_->setToolTip(TR(T_TOOLTIP_ANNOTATIONLANGUAGE));
@@ -1263,7 +1315,7 @@ MainWindow::createMenus()
   {
     themeMenu_ = new QMenu(this);
 
-    UiStyle::globalInstance()->setContextMenuStyle(themeMenu_, true); // persistent = true
+    ui->setContextMenuStyle(themeMenu_, true); // persistent = true
     themeMenu_->setTitle(TR(T_MENUTEXT_THEME) + " ...");
     themeMenu_->setToolTip(TR(T_TOOLTIP_THEME));
 
@@ -1285,7 +1337,7 @@ MainWindow::createMenus()
   }
 
   subtitleStyleMenu_ = new QMenu(this); {
-    UiStyle::globalInstance()->setContextMenuStyle(subtitleStyleMenu_, true); // persistent = true
+    ui->setContextMenuStyle(subtitleStyleMenu_, true); // persistent = true
 
     subtitleStyleMenu_->setTitle(TR(T_MENUTEXT_SUBTITLESTYLE) + " ...");
     subtitleStyleMenu_->setToolTip(TR(T_TOOLTIP_SUBTITLESTYLE));
@@ -1302,27 +1354,27 @@ MainWindow::createMenus()
   }
 
   browseMenu_ = new QMenu(this); {
-    UiStyle::globalInstance()->setContextMenuStyle(browseMenu_, true); // persistent = true
+    ui->setContextMenuStyle(browseMenu_, true); // persistent = true
 
     browseMenu_->setTitle(TR(T_MENUTEXT_BROWSE) + " ...");
     browseMenu_->setToolTip(TR(T_TOOLTIP_BROWSE));
   }
 
   trackMenu_ = new QMenu(this); {
-    UiStyle::globalInstance()->setContextMenuStyle(trackMenu_, true); // persistent = true
+    ui->setContextMenuStyle(trackMenu_, true); // persistent = true
 
     trackMenu_->setTitle(TR(T_MENUTEXT_TRACK) + " ...");
     trackMenu_->setToolTip(TR(T_TOOLTIP_TRACK));
   }
 
   recentMenu_ = new QMenu(this); {
-    UiStyle::globalInstance()->setContextMenuStyle(recentMenu_, true); // persistent = true
+    ui->setContextMenuStyle(recentMenu_, true); // persistent = true
     recentMenu_->setTitle(TR(T_MENUTEXT_RECENT) + " ...");
     recentMenu_->setToolTip(TR(T_TOOLTIP_RECENT));
   }
 
   playlistMenu_ = new QMenu(this); {
-    UiStyle::globalInstance()->setContextMenuStyle(playlistMenu_, true); // persistent = true
+    ui->setContextMenuStyle(playlistMenu_, true); // persistent = true
     playlistMenu_->setTitle(TR(T_MENUTEXT_PLAYLIST) + " ...");
     playlistMenu_->setToolTip(TR(T_TOOLTIP_PLAYLIST));
   }
@@ -1331,7 +1383,7 @@ MainWindow::createMenus()
     backwardMenu_->setIcon(QIcon(RC_IMAGE_BACKWARD));
     backwardMenu_->setTitle(TR(T_MENUTEXT_BACKWARD) + " ...");
     backwardMenu_->setToolTip(TR(T_TOOLTIP_BACKWARD));
-    UiStyle::globalInstance()->setContextMenuStyle(backwardMenu_, true); // persistent = true
+    ui->setContextMenuStyle(backwardMenu_, true); // persistent = true
 
     backwardMenu_->addAction(backward5sAct_);
     backwardMenu_->addAction(backward30sAct_);
@@ -1344,11 +1396,11 @@ MainWindow::createMenus()
     forwardMenu_->setIcon(QIcon(RC_IMAGE_FORWARD));
     forwardMenu_->setTitle(TR(T_MENUTEXT_FORWARD) + " ...");
     forwardMenu_->setToolTip(TR(T_TOOLTIP_FORWARD));
-    UiStyle::globalInstance()->setContextMenuStyle(forwardMenu_, true); // persistent = true
+    ui->setContextMenuStyle(forwardMenu_, true); // persistent = true
 
     forwardMenu_->addAction(forward5sAct_);
-    forwardMenu_->addAction(forward30sAct_);
-    forwardMenu_->addAction(forward90sAct_);
+    forwardMenu_->addAction(forward25sAct_);
+    forwardMenu_->addAction(forward85sAct_);
     forwardMenu_->addAction(forward5mAct_);
     forwardMenu_->addAction(forward10mAct_);
   }
@@ -1357,20 +1409,20 @@ MainWindow::createMenus()
     openMenu_->setTitle(TR(T_MENUTEXT_OPENCONTEXTMENU) + " ...");
     openMenu_->setToolTip(TR(T_TOOLTIP_OPENCONTEXTMENU));
     openMenu_->setIcon(QIcon(RC_IMAGE_OPENCONTEXTMENU));
-    UiStyle::globalInstance()->setContextMenuStyle(openMenu_, true); // persistent = true
+    ui->setContextMenuStyle(openMenu_, true); // persistent = true
   }
 
   subtitleMenu_ = new QMenu(this); {
     subtitleMenu_->setIcon(QIcon(RC_IMAGE_SUBTITLE));
     subtitleMenu_->setTitle(TR(T_MENUTEXT_SUBTITLE) + " ...");
     subtitleMenu_->setToolTip(TR(T_TOOLTIP_SUBTITLE));
-    UiStyle::globalInstance()->setContextMenuStyle(subtitleMenu_, true); // persistent = true
+    ui->setContextMenuStyle(subtitleMenu_, true); // persistent = true
   }
 
   aspectRatioMenu_ = new QMenu(this); {
     aspectRatioMenu_->setTitle(TR(T_ASPECTRATIO) + " ...");
     aspectRatioMenu_->setToolTip(TR(T_ASPECTRATIO));
-    UiStyle::globalInstance()->setContextMenuStyle(aspectRatioMenu_, true); // persistent = true
+    ui->setContextMenuStyle(aspectRatioMenu_, true); // persistent = true
 
     aspectRatioMenu_->addAction(setDefaultAspectRatioAct_);
     aspectRatioMenu_->addSeparator();
@@ -1381,21 +1433,21 @@ MainWindow::createMenus()
   playMenu_ = new QMenu(this); {
     playMenu_->setTitle(tr("Play") + " ...");
     playMenu_->setToolTip(tr("Play menu"));
-    UiStyle::globalInstance()->setContextMenuStyle(playMenu_, true); // persistent = true
+    ui->setContextMenuStyle(playMenu_, true); // persistent = true
   }
 
   audioTrackMenu_ = new QMenu(this); {
     audioTrackMenu_->setIcon(QIcon(RC_IMAGE_AUDIOTRACK));
     audioTrackMenu_->setTitle(TR(T_MENUTEXT_AUDIOTRACK) + " ...");
     audioTrackMenu_->setToolTip(TR(T_TOOLTIP_AUDIOTRACK));
-    UiStyle::globalInstance()->setContextMenuStyle(audioTrackMenu_, true); // persistent = true
+    ui->setContextMenuStyle(audioTrackMenu_, true); // persistent = true
   }
 
   annotationSubtitleMenu_ = new QMenu(this); {
     annotationSubtitleMenu_->setIcon(QIcon(RC_IMAGE_ANNOTSUBTITLE));
     annotationSubtitleMenu_->setTitle(TR(T_MENUTEXT_ANNOTSUBTITLE) + " ...");
     annotationSubtitleMenu_->setToolTip(TR(T_TOOLTIP_ANNOTSUBTITLE));
-    UiStyle::globalInstance()->setContextMenuStyle(annotationSubtitleMenu_, true); // persistent = true
+    ui->setContextMenuStyle(annotationSubtitleMenu_, true); // persistent = true
 
     annotationSubtitleMenu_->addAction(toggleSubtitleAnnotationVisibleAct_);
     annotationSubtitleMenu_->addSeparator();
@@ -1408,13 +1460,13 @@ MainWindow::createMenus()
     sectionMenu_->setIcon(QIcon(RC_IMAGE_SECTION));
     sectionMenu_->setTitle(TR(T_MENUTEXT_SECTION) + " ...");
     sectionMenu_->setToolTip(TR(T_TOOLTIP_SECTION));
-    UiStyle::globalInstance()->setContextMenuStyle(sectionMenu_, true); // persistent = true
+    ui->setContextMenuStyle(sectionMenu_, true); // persistent = true
   }
 
   closeMenu_ = new QMenu(this); {
     closeMenu_->setTitle(tr("After finished") + " ...");
     closeMenu_->setToolTip(tr("After finished playing all files in the same folder"));
-    UiStyle::globalInstance()->setContextMenuStyle(closeMenu_, true); // persistent = true
+    ui->setContextMenuStyle(closeMenu_, true); // persistent = true
 
     closeMenu_->addAction(nothingAfterFinishedAct_);
     closeMenu_->addSeparator();
@@ -1425,7 +1477,7 @@ MainWindow::createMenus()
   utilityMenu_ = new QMenu(this); {
     utilityMenu_->setTitle(tr("Utilities") + " ...");
     utilityMenu_->setToolTip(tr("Utilities"));
-    UiStyle::globalInstance()->setContextMenuStyle(utilityMenu_, true); // persistent = true
+    ui->setContextMenuStyle(utilityMenu_, true); // persistent = true
 
     utilityMenu_->addMenu(closeMenu_);
     utilityMenu_->addSeparator();
@@ -1437,10 +1489,15 @@ MainWindow::createMenus()
   settingsMenu_ = new QMenu(this); {
     settingsMenu_->setTitle(tr("Settings") + " ...");
     settingsMenu_->setToolTip(tr("Settings"));
-    UiStyle::globalInstance()->setContextMenuStyle(settingsMenu_, true); // persistent = true
+    ui->setContextMenuStyle(settingsMenu_, true); // persistent = true
 
     settingsMenu_->addAction(toggleSiteAccountViewVisibleAct_);
     settingsMenu_->addAction(toggleNetworkProxyDialogVisibleAct_);
+
+    settingsMenu_->addSeparator();
+    settingsMenu_->addAction(toggleClipboardMonitorEnabledAct_);
+    settingsMenu_->addAction(toggleSaveMediaAct_);
+    settingsMenu_->addAction(toggleSubmitAct_);
 
     settingsMenu_->addSeparator();
 #ifndef Q_WS_MAC
@@ -1501,7 +1558,7 @@ MainWindow::createMenus()
 //#endif // !Q_WS_WIN
 
   openButtonMenu_ = new QMenu(this); {
-    UiStyle::globalInstance()->setContextMenuStyle(openButtonMenu_, true); // persistent = true
+    ui->setContextMenuStyle(openButtonMenu_, true); // persistent = true
     openButtonMenu_->setTitle(TR(T_OPEN));
     openButtonMenu_->setToolTip(TR(T_OPEN));
     openButtonMenu_->setIcon(QIcon(RC_IMAGE_OPEN));
@@ -1676,12 +1733,12 @@ MainWindow::updateWindowMode()
   switch (hub_->windowMode()) {
   case SignalHub::FullScreenWindowMode:
 #ifdef USE_WIN_DWM
-    if (UiStyle::isAeroAvailable())
-      UiStyle::globalInstance()->setWindowDwmEnabled(this, false);
+    if (AcUi::isAeroAvailable())
+      AcUi::globalInstance()->setWindowDwmEnabled(this, false);
 #endif // USE_WIN_DWM
 #ifdef Q_WS_X11
     if (hub_->isMediaTokenMode() && player_->hasMedia())
-      UiStyle::globalInstance()->setBlackBackground(this);
+      AcUi::globalInstance()->setBlackBackground(this);
 #endif // Q_WS_X11
 
     if (mainPlayer_->isVisible())
@@ -1731,11 +1788,11 @@ MainWindow::setVisible(bool visible)
 
   if (!hub_->isFullScreenWindowMode()) {
 #ifdef USE_WIN_DWM
-    if (UiStyle::isAeroAvailable())
-      UiStyle::globalInstance()->setWindowDwmEnabled(this, true);
+    if (AcUi::isAeroAvailable())
+      AcUi::globalInstance()->setWindowDwmEnabled(this, true);
     else
 #endif // USE_WIN_DWM
-      UiStyle::globalInstance()->setWindowBackground(this, false); // persistent is false
+      AcUi::globalInstance()->setWindowBackground(this, false); // persistent is false
   }
 }
 */
@@ -1752,28 +1809,38 @@ MainWindow::open()
   }
 }
 
-MediaUrlDialog*
+UrlDialog*
 MainWindow::mediaUrlDialog()
 {
   if (!mediaUrlDialog_) {
     mediaUrlDialog_ = new MediaUrlDialog(this);
-    connect(mediaUrlDialog_, SIGNAL(urlEntered(QString)), SLOT(openUrl(QString)));
+    connect(mediaUrlDialog_, SIGNAL(urlEntered(QString,bool)), SLOT(openUrl(QString,bool)));
   }
+  mediaUrlDialog_->setSave(player_->isBufferSaved());
   return mediaUrlDialog_;
 }
 
 void
 MainWindow::openUrl()
-{ mediaUrlDialog()->show(); }
+{
+  UrlDialog *d = mediaUrlDialog();
+  if (d->isEmpty()) {
+    QString url = dataManager_->token().source();
+    if (!url.isEmpty())
+      d->setText(url);
+  }
+  d->show();
+}
 
 
-SubUrlDialog*
+UrlDialog*
 MainWindow::annotationUrlDialog()
 {
   if (!annotationUrlDialog_) {
     annotationUrlDialog_ = new SubUrlDialog(this);
     connect(annotationUrlDialog_, SIGNAL(urlEntered(QString,bool)), SLOT(openAnnotationUrl(QString,bool)));
   }
+  annotationUrlDialog_->setSave(submit_);
   return annotationUrlDialog_;
 }
 
@@ -1801,6 +1868,13 @@ MainWindow::openAnnotationUrl(const QString &url, bool save)
     else if (save)
       submitAliasText(url, Alias::AT_Url);
   }
+}
+
+void
+MainWindow::openUrl(const QString &url, bool save)
+{
+  player_->setBufferSaved(save);
+  openUrl(url);
 }
 
 void
@@ -2143,7 +2217,10 @@ MainWindow::openMrl(const QString &path, bool checkPath)
 
   setRecentOpenedFile(path);
 
-  setBrowsedFile(path);
+  if (!recentSource_.isEmpty())
+    setBrowsedUrl(recentSource_);
+  else
+    setBrowsedFile(path);
 
   if (checkPath && !isRemoteMrl(path)) {
     QFileInfo fi(removeUrlPrefix(path));
@@ -2296,7 +2373,7 @@ MainWindow::invalidateMediaAndPlay(bool async)
 
 #ifdef Q_WS_X11
     if (hub_->isFullScreenWindowMode())
-      UiStyle::globalInstance()->setBlackBackground(this);
+      AcUi::globalInstance()->setBlackBackground(this);
 #endif // Q_WS_X11
 
     emit mediaInvalidated();
@@ -2995,7 +3072,7 @@ MainWindow::invalidateSiteAccounts()
   if (!siteAccountView_)
     return;
   log(tr("site accounts updated"));
-  MrlResolverSettings *settings = MrlResolverSettings::globalInstance();
+  MrlResolverSettings *settings = MrlResolverSettings::globalSettings();
   settings->setNicovideoAccount(
     siteAccountView_->nicovideoAccount().username,
     siteAccountView_->nicovideoAccount().password);
@@ -3012,11 +3089,11 @@ MainWindow::setSiteAccountViewVisible(bool visible)
     connect(siteAccountView_, SIGNAL(accountChanged()), SLOT(invalidateSiteAccounts()));
 
     std::pair<QString, QString>
-    a = Settings::globalInstance()->nicovideoAccount();
+    a = AcSettings::globalSettings()->nicovideoAccount();
     if (!a.first.isEmpty() && !a.second.isEmpty())
       siteAccountView_->setNicovideoAccount(a.first, a.second);
 
-    a = Settings::globalInstance()->bilibiliAccount();
+    a = AcSettings::globalSettings()->bilibiliAccount();
     if (!a.first.isEmpty() && !a.second.isEmpty())
       siteAccountView_->setBilibiliAccount(a.first, a.second);
   }
@@ -3498,7 +3575,9 @@ MainWindow::setToken(const QString &input, bool async)
 
   AliasList aliases;
 
-  qint64 tid = dataServer_->submitTokenAndAlias(token, alias);
+  qint64 tid = 0;
+  if (submit_)
+    tid = dataServer_->submitTokenAndAlias(token, alias);
   //alias.setTokenId(tid)
   if (tid) {
     Token t = dataServer_->selectTokenWithId(tid);
@@ -3874,21 +3953,19 @@ MainWindow::event(QEvent *e)
 {
   bool accept = true;
   switch (e->type()) {
-  case QEvent::FileOpen: { // See: http://www.qtcentre.org/wiki/index.php?title=Opening_documents_in_the_Mac_OS_X_Finder
-      QFileOpenEvent *fe = dynamic_cast<QFileOpenEvent*>(e);
+  case QEvent::FileOpen: // See: http://www.qtcentre.org/wiki/index.php?title=Opening_documents_in_the_Mac_OS_X_Finder
+    {
+      QFileOpenEvent *fe = dynamic_cast<QFileOpenEvent *>(e);
       Q_ASSERT(fe);
       if (fe) {
         QString url = fe->file();
         QTimer::singleShot(0, new MainWindow_slot_::OpenSource(url, this), SLOT(openSource()));
       }
     } break;
-
   default: accept = Base::event(e);
   }
-
   return accept;
 }
-
 
 void
 MainWindow::setVisible(bool visible)
@@ -3897,14 +3974,14 @@ MainWindow::setVisible(bool visible)
   //  return;
   if (!isMinimized() && !isFullScreen()) { // invoked by showNormal or showMaximized
 #ifdef USE_WIN_DWM
-    if (UiStyle::isAeroAvailable())
-      UiStyle::globalInstance()->setWindowDwmEnabled(this, true);
+    if (AcUi::isAeroAvailable())
+      AcUi::globalInstance()->setWindowDwmEnabled(this, true);
       //QTimer::singleShot(0,
       //  new MainWindow_slot_::SetWindowDwmEnabled(true, this), SLOT(setWindowDwmEnabled())
       //);
     else
 #endif // USE_WIN_DWM
-    UiStyle::globalInstance()->setWindowBackground(this, false); // persistent is false
+    AcUi::globalInstance()->setWindowBackground(this, false); // persistent is false
   }
 
   Base::setVisible(visible);
@@ -3938,13 +4015,31 @@ MainWindow::mousePressEvent(QMouseEvent *event)
   if (event)
     switch (event->button()) {
     case Qt::LeftButton:
+      if (event->modifiers() & Qt::ControlModifier
+#ifdef Q_OS_WIN
+          || QtWin::isKeyControlPressed()
+#endif // Q_OS_WIN
+      ) {
+        log(tr("capture annotations"));
+        QPoint pos = mapFromGlobal(event->globalPos());
+        pauseRubberBand_->press(pos);
+      } else if (event->modifiers() & Qt::ShiftModifier
+#ifdef Q_OS_WIN
+          || QtWin::isKeyShiftPressed()
+#endif // Q_OS_WIN
+      ) {
+        log(tr("release annotations"));
+        QPoint pos = mapFromGlobal(event->globalPos());
+        resumeRubberBand_->press(pos);
+      } else {
 #ifdef Q_OS_MAC
-      if (videoView_->isViewVisible() && player_->titleCount() > 1)
-        videoView_->setViewMousePressPos(event->globalPos());
+        if (videoView_->isViewVisible() && player_->titleCount() > 1)
+          videoView_->setViewMousePressPos(event->globalPos());
 #endif // Q_OS_MAC
-      if (!isFullScreen() && dragPos_ == BAD_POS) {
-        dragPos_ = event->globalPos() - frameGeometry().topLeft();
-        event->accept();
+        if (!isFullScreen() && dragPos_ == BAD_POS) {
+          dragPos_ = event->globalPos() - frameGeometry().topLeft();
+          event->accept();
+        }
       } break;
 
     case Qt::MiddleButton:
@@ -3973,7 +4068,13 @@ void
 MainWindow::mouseReleaseEvent(QMouseEvent *event)
 {
   //DOUT("enter");
+
   dragPos_ = BAD_POS;
+
+  if (pauseRubberBand_->isPressed())
+    pauseRubberBand_->release();
+  if (resumeRubberBand_->isPressed())
+    resumeRubberBand_->release();
 
 #ifdef Q_OS_MAC
   if (event && event->button() == Qt::LeftButton && // event->buttons() is always zero, qt4 bug?
@@ -4023,27 +4124,34 @@ MainWindow::mouseMoveEvent(QMouseEvent *event)
 #endif // Q_OS_MAC
 
   // Move the main window
-  if (event && event->buttons() & Qt::LeftButton &&
-      dragPos_ != BAD_POS && !isFullScreen()
+  if (event && event->buttons() & Qt::LeftButton) {
+    if (pauseRubberBand_->isPressed()) {
+      QPoint pos = mapFromGlobal(event->globalPos());
+      pauseRubberBand_->drag(pos);
+    } else if (resumeRubberBand_->isPressed()) {
+      QPoint pos = mapFromGlobal(event->globalPos());
+      resumeRubberBand_->drag(pos);
+    } else if (dragPos_ != BAD_POS && !isFullScreen()
 #ifdef Q_WS_WIN
-      && (
-        player_->isStopped() ||
-        QDateTime::currentMSecsSinceEpoch() - windowModeUpdateTime_ > QtWin::getDoubleClickInterval()
+        &&
+        (
+          player_->isStopped() ||
+          QDateTime::currentMSecsSinceEpoch() - windowModeUpdateTime_ > QtWin::getDoubleClickInterval()
         )
 #endif // Q_WS_WIN
-      ) {
-    QPoint globalPos = event->globalPos();
-    // FIXME: not working
-    //QRect globalRect(globalPos, size());
-    //if (!isRectOutOfScreen(globalRect))
-      move(globalPos - dragPos_);
+      )
+    {
 
-    annotationView_->invalidatePos();
-//#ifdef Q_OS_MAC // FIXME: solve the postion tracking problem....
-//  QTimer::singleShot(200, annotationView_, SLOT(invalidatePos()));
-//#endif // Q_OS_MAC
+      QPoint globalPos = event->globalPos();
+      // FIXME: out-of-screen check not working
+      //QRect globalRect(globalPos, size());
+      //if (!isRectOutOfScreen(globalRect))
+        move(globalPos - dragPos_);
 
-    event->accept();
+      annotationView_->invalidatePos();
+
+      event->accept();
+    }
   }
 
   Base::mouseMoveEvent(event);
@@ -4054,6 +4162,12 @@ void
 MainWindow::mouseDoubleClickEvent(QMouseEvent *event)
 {
   //DOUT("enter");
+
+  if (pauseRubberBand_->isPressed())
+    pauseRubberBand_->release();
+  if (resumeRubberBand_->isPressed())
+    resumeRubberBand_->release();
+
   if (event)
     switch (event->button()) {
     case Qt::LeftButton: hub_->toggleFullScreenWindowMode(); event->accept(); break;
@@ -4134,9 +4248,11 @@ MainWindow::invalidateContextMenu()
 #endif // !Q_WS_MAC
     if (!currentUrl().isEmpty()) {
       contextMenu_->addAction(openInWebBrowserAct_);
-      if (!dataManager_->token().hasSource())
+      contextMenu_->addAction(saveMediaAct_);
+      if (!player_->isDownloadFinished())
         contextMenu_->addAction(downloadCurrentUrlAct_);
     }
+
     contextMenu_->addSeparator();
   }
 
@@ -4239,9 +4355,6 @@ MainWindow::invalidateContextMenu()
     if (hub_->isMediaTokenMode() && player_->hasMedia()) {
       contextMenu_->addAction(openAnnotationUrlAct_);
 
-      toggleClipboardMonitorEnabledAct_->setChecked(clipboardMonitor_->isEnabled());
-      contextMenu_->addAction(toggleClipboardMonitorEnabledAct_);
-
       // Subtitle menu
 
       subtitleMenu_->clear();
@@ -4324,12 +4437,14 @@ MainWindow::invalidateContextMenu()
     //if (hub_->isMediaTokenMode())
     //  playMenu_->addAction(nextFrameAct_);
 
+    if (hub_->isMediaTokenMode())
+      playMenu_->addAction(replayAct_);
+
     if (!hub_->isMediaTokenMode() && !hub_->isStopped() ||
         hub_->isMediaTokenMode() && !player_->isStopped())
-    playMenu_->addAction(stopAct_);
+      playMenu_->addAction(stopAct_);
 
     if (hub_->isMediaTokenMode()) {
-      playMenu_->addAction(replayAct_);
       playMenu_->addAction(previousAct_);
       playMenu_->addAction(nextAct_);
       playMenu_->addSeparator();
@@ -4422,13 +4537,13 @@ MainWindow::invalidateContextMenu()
     contextMenu_->addAction(toggleAnnotationEditorVisibleAct_ );
 
     if (!hub_->isMediaTokenMode() || player_->hasMedia()) {
-      contextMenu_->addAction(showAnnotationsAsThreadAct_);
-
       toggleAnnotationBrowserVisibleAct_->setChecked(annotationBrowser_->isVisible());
       contextMenu_->addAction(toggleAnnotationBrowserVisibleAct_ );
 
       toggleTokenViewVisibleAct_->setChecked(tokenView_->isVisible());
       contextMenu_->addAction(toggleTokenViewVisibleAct_ );
+
+      contextMenu_->addAction(showAnnotationsAsThreadAct_);
     }
 
     //if (ALPHA) if (commentView_ && commentView_->tokenId()) {
@@ -4470,7 +4585,7 @@ MainWindow::invalidateContextMenu()
       contextMenu_->addMenu(appLanguageMenu_);
 
       //int l = TranslatorManager::globalInstance()->language();
-      int l = Settings::globalInstance()->language();
+      int l = AcSettings::globalSettings()->language();
       setAppLanguageToJapaneseAct_->setChecked(l == QLocale::Japanese);
       //setAppLanguageToTraditionalChineseAct_->setChecked(l == TranslatorManager::TraditionalChinese);
       setAppLanguageToSimplifiedChineseAct_->setChecked(l == QLocale::Chinese);
@@ -4522,19 +4637,23 @@ MainWindow::invalidateSettingsMenu()
   toggleSiteAccountViewVisibleAct_->setChecked(siteAccountView_ && siteAccountView_->isVisible());
   toggleNetworkProxyDialogVisibleAct_->setChecked(networkProxyDialog_ && networkProxyDialog_->isVisible());
   toggleWindowOnTopAct_->setChecked(isWindowOnTop());
+  toggleClipboardMonitorEnabledAct_->setChecked(clipboardMonitor_->isEnabled());
 
 #ifdef Q_OS_LINUX
   toggleMenuBarVisibleAct_->setChecked(menuBar()->isVisible());
 #endif // Q_OS_LINUX
 
-  toggleMenuThemeEnabledAct_->setChecked(UiStyle::globalInstance()->isMenuEnabled());
+  toggleSaveMediaAct_->setChecked(player_->isBufferSaved());
+  toggleSubmitAct_->setChecked(submit_);
 
-  toggleMultipleWindowsEnabledAct_->setChecked(Settings::globalInstance()->isMultipleWindowsEnabled());
+  toggleMenuThemeEnabledAct_->setChecked(AcUi::globalInstance()->isMenuEnabled());
+
+  toggleMultipleWindowsEnabledAct_->setChecked(Settings::globalSettings()->isMultipleWindowsEnabled());
 
   bool themeEnabled = true;
 #ifdef Q_WS_WIN
   if (QtWin::isWindowsVistaOrLater()) {
-    bool aero = UiStyle::globalInstance()->isAeroEnabled();
+    bool aero = AcUi::globalInstance()->isAeroEnabled();
     toggleAeroEnabledAct_->setChecked(aero);
     themeEnabled = !aero;
     if (themeEnabled != themeMenu_->isEnabled()) {
@@ -4550,21 +4669,21 @@ MainWindow::invalidateSettingsMenu()
 void
 MainWindow::invalidateMenuTheme()
 {
-  UiStyle::Theme t = UiStyle::globalInstance()->theme();
-  setThemeToDefaultAct_->setChecked(t == UiStyle::DefaultTheme);
-  setThemeToRandomAct_->setChecked(t == UiStyle::RandomTheme);
-  setThemeToDarkAct_->setChecked(t == UiStyle::DarkTheme);
-  setThemeToBlackAct_->setChecked(t == UiStyle::BlackTheme);
-  setThemeToBlueAct_->setChecked(t == UiStyle::BlueTheme);
-  setThemeToBrownAct_->setChecked(t == UiStyle::BrownTheme);
-  setThemeToCyanAct_->setChecked(t == UiStyle::CyanTheme);
-  setThemeToGrayAct_->setChecked(t == UiStyle::GrayTheme);
-  setThemeToGreenAct_->setChecked(t == UiStyle::GreenTheme);
-  setThemeToPinkAct_->setChecked(t == UiStyle::PinkTheme);
-  setThemeToPurpleAct_->setChecked(t == UiStyle::PurpleTheme);
-  setThemeToRedAct_->setChecked(t == UiStyle::RedTheme);
-  setThemeToWhiteAct_->setChecked(t == UiStyle::WhiteTheme);
-  setThemeToYellowAct_->setChecked(t == UiStyle::YellowTheme);
+  AcUi::Theme t = AcUi::globalInstance()->theme();
+  setThemeToDefaultAct_->setChecked(t == AcUi::DefaultTheme);
+  setThemeToRandomAct_->setChecked(t == AcUi::RandomTheme);
+  setThemeToDarkAct_->setChecked(t == AcUi::DarkTheme);
+  setThemeToBlackAct_->setChecked(t == AcUi::BlackTheme);
+  setThemeToBlueAct_->setChecked(t == AcUi::BlueTheme);
+  setThemeToBrownAct_->setChecked(t == AcUi::BrownTheme);
+  setThemeToCyanAct_->setChecked(t == AcUi::CyanTheme);
+  setThemeToGrayAct_->setChecked(t == AcUi::GrayTheme);
+  setThemeToGreenAct_->setChecked(t == AcUi::GreenTheme);
+  setThemeToPinkAct_->setChecked(t == AcUi::PinkTheme);
+  setThemeToPurpleAct_->setChecked(t == AcUi::PurpleTheme);
+  setThemeToRedAct_->setChecked(t == AcUi::RedTheme);
+  setThemeToWhiteAct_->setChecked(t == AcUi::WhiteTheme);
+  setThemeToYellowAct_->setChecked(t == AcUi::YellowTheme);
 }
 
 void
@@ -4648,7 +4767,6 @@ MainWindow::moveEvent(QMoveEvent *event)
 //    QTimer::singleShot(200, annotationView_, SLOT(invalidatePos()));
 //#endif // Q_OS_MAC
   }
-
   Base::moveEvent(event);
 }
 
@@ -4706,12 +4824,18 @@ MainWindow::keyPressEvent(QKeyEvent *event)
 
   case Qt::Key_Left:
     if (event->modifiers() == Qt::NoModifier) backward();
-    else backward(G_BACKWARD_INTERVAL * 3);
+    else backward30s();
     break;
 
   case Qt::Key_Right:
     if (event->modifiers() == Qt::NoModifier) forward();
-    else forward(G_FORWARD_INTERVAL * 3);
+    else forward25s();
+    break;
+
+    // Modifiers
+  case Qt::Key_Control:
+  case Qt::Key_Shift:
+  case Qt::Key_Alt:
     break;
 
   default:
@@ -4852,21 +4976,22 @@ MainWindow::closeEvent(QCloseEvent *event)
   }
 
   // Save settings
-  Settings *settings = Settings::globalInstance();
-  UiStyle *ui = UiStyle::globalInstance();
+  Settings *settings = Settings::globalSettings();
+  AcSettings *ac = AcSettings::globalSettings();
+  AcUi *ui = AcUi::globalInstance();
 
   //invalidateRecent();
 #ifdef Q_WS_WIN
-  settings->setAeroEnabled(ui->isAeroEnabled());
+  ac->setAeroEnabled(ui->isAeroEnabled());
 #endif // Q_WS_WIN
 
-  settings->setMenuThemeEnabled(ui->isMenuEnabled());
+  ac->setMenuThemeEnabled(ui->isMenuEnabled());
 
   settings->setRecentFiles(recentFiles_);
 
   settings->setRecentPath(recentPath_);
 
-  settings->setThemeId(ui->theme());
+  ac->setThemeId(ui->theme());
 
   settings->setMenuBarVisible(menuBar()->isVisible());
 
@@ -4884,6 +5009,8 @@ MainWindow::closeEvent(QCloseEvent *event)
   //if (server_->isConnected() && server_->isAuthorized())
   //  server_->logout();
 
+  settings->setBufferedMediaSaved(player_->isBufferSaved());
+
   settings->setTranslateEnabled(isTranslateEnabled());
 
   settings->setEmbeddedPlayerOnTop(embeddedPlayer_->isOnTop());
@@ -4892,13 +5019,15 @@ MainWindow::closeEvent(QCloseEvent *event)
 
   settings->setLive(hub_->isLiveTokenMode());
 
+  settings->setAutoSubmit(submit_);
+
   settings->setWindowOnTop(isWindowOnTop());
 
   if (siteAccountView_) { // Update account settings iff it is modified
-    settings->setNicovideoAccount(siteAccountView_->nicovideoAccount().username,
-                                  siteAccountView_->nicovideoAccount().password);
-    settings->setBilibiliAccount(siteAccountView_->bilibiliAccount().username,
-                                 siteAccountView_->bilibiliAccount().password);
+    ac->setNicovideoAccount(siteAccountView_->nicovideoAccount().username,
+                            siteAccountView_->nicovideoAccount().password);
+    ac->setBilibiliAccount(siteAccountView_->bilibiliAccount().username,
+                           siteAccountView_->bilibiliAccount().password);
   }
 
   settings->setPlayPosHistory(playPosHistory_);
@@ -4906,7 +5035,8 @@ MainWindow::closeEvent(QCloseEvent *event)
   settings->setAudioTrackHistory(audioTrackHistory_);
   settings->setAspectRatioHistory(aspectRatioHistory_);
 
-  settings->flush();
+  ac->sync();
+  settings->sync();
 
   //MediaStreamer::globalInstance()->stop();
 
@@ -4920,7 +5050,8 @@ MainWindow::closeEvent(QCloseEvent *event)
   if (QThreadPool::globalInstance()->activeThreadCount()) {
 #if QT_VERSION >= 0x040800
     // wait for at most 5 seconds ant kill all threads
-    QThreadPool::globalInstance()->waitForDone(5000);
+    enum { CloseTimeout = 5000 };
+    QThreadPool::globalInstance()->waitForDone(CloseTimeout);
 #else
     //DOUT("WARNING: killing active threads; will be fixed in Qt 4.8");
     QThreadPool::globalInstance()->waitForDone();
@@ -4950,7 +5081,7 @@ MainWindow::setWindowOnTop(bool t)
 {
   if (t != isWindowOnTop()) {
 //#ifdef USE_WIN_DWM
-//    UiStyle::globalInstance()->setDwmEnabled(false);
+//    AcUi::globalInstance()->setDwmEnabled(false);
 //#endif // USE_WIN_DWM
     bool visible = isVisible();
     setWindowFlags( t ? windowFlags() | Qt::WindowStaysOnTopHint :
@@ -4960,7 +5091,7 @@ MainWindow::setWindowOnTop(bool t)
 //#endif // USE_WIN_QTH
 
 #ifdef USE_WIN_DWM
-    UiStyle::globalInstance()->setDwmEnabled(true);
+    AcUi::globalInstance()->setDwmEnabled(true);
 #endif // USE_WIN_DWM
     if (visible) {
       if (hub_->isFullScreenWindowMode())
@@ -5298,9 +5429,8 @@ MainWindow::logout(bool async)
 
   emit userChanged(User());
 
-  Settings *s = Settings::globalInstance();
   //s->setUserName(QString());
-  s->setPassword(QString());
+  AcSettings::globalSettings()->setPassword(QString());
 
   DOUT("exit: async =" << async);
 }
@@ -5362,7 +5492,7 @@ MainWindow::login(const QString &userName, const QString &encryptedPassword, boo
   inetMutex_.lock();
   DOUT("inetMutex locked");
 
-  Settings *settings = Settings::globalInstance();
+  AcSettings *settings = AcSettings::globalSettings();
 
   server_->updateConnected();
   if (disposed_) {
@@ -5447,12 +5577,12 @@ MainWindow::login(const QString &userName, const QString &encryptedPassword, boo
     //invalidateAnnotationLanguages();
 
     QDate today = QDate::currentDate();
-    if (Settings::globalInstance()->updateDate() != today) {
+    if (Settings::globalSettings()->updateDate() != today) {
       bool updated = server_->isSoftwareUpdated();
       if (!updated)
         notify(tr("new version released, please check Help/Update menu"));
 
-      Settings::globalInstance()->setUpdateDate(today);
+      Settings::globalSettings()->setUpdateDate(today);
     }
 
     if (disposed_) {
@@ -5470,7 +5600,7 @@ MainWindow::login(const QString &userName, const QString &encryptedPassword, boo
   emit userChanged(server_->user());
 
   if (!disposed_ && online &&
-      settings->isLive() && !hub_->isSignalTokenMode() && !player_->hasMedia())
+      Settings::globalSettings()->isLive() && !hub_->isSignalTokenMode() && !player_->hasMedia())
     QTimer::singleShot(0, hub_, SLOT(setLiveTokenMode()));
 
   DOUT("exit");
@@ -5809,20 +5939,20 @@ MainWindow::invalidateAnnotationLanguages()
 
 void
 MainWindow::setAppLanguageToEnglish()
-{ Settings::globalInstance()->setLanguage(QLocale::English); invalidateAppLanguage(); }
+{ AcSettings::globalSettings()->setLanguage(QLocale::English); invalidateAppLanguage(); }
 
 void
 MainWindow::setAppLanguageToJapanese()
-{ Settings::globalInstance()->setLanguage(QLocale::Japanese); invalidateAppLanguage(); }
+{ AcSettings::globalSettings()->setLanguage(QLocale::Japanese); invalidateAppLanguage(); }
 
 // TODO: Simplified Chinese and Traditional Chinese are not differed until qt 4.8
 void
 MainWindow::setAppLanguageToTraditionalChinese()
-{ Settings::globalInstance()->setLanguage(TranslatorManager::TraditionalChinese); invalidateAppLanguage(); }
+{ AcSettings::globalSettings()->setLanguage(TranslatorManager::TraditionalChinese); invalidateAppLanguage(); }
 
 void
 MainWindow::setAppLanguageToSimplifiedChinese()
-{ Settings::globalInstance()->setLanguage(QLocale::Chinese); invalidateAppLanguage(); }
+{ AcSettings::globalSettings()->setLanguage(QLocale::Chinese); invalidateAppLanguage(); }
 
 void
 MainWindow::invalidateAppLanguage()
@@ -6134,7 +6264,7 @@ MainWindow::setSubtitleOnTop(bool t)
         t ? AnnotationGraphicsView::AP_Top
           : AnnotationGraphicsView::AP_Bottom);
 
-  Settings::globalInstance()->setSubtitleOnTop(t);
+  Settings::globalSettings()->setSubtitleOnTop(t);
 }
 
 bool
@@ -6227,12 +6357,12 @@ MainWindow::subtitleColor() const
   void \
   MainWindow::setThemeTo##_theme() \
   { \
-    UiStyle::globalInstance()->setTheme(UiStyle::_theme##Theme); \
+    AcUi::globalInstance()->setTheme(AcUi::_theme##Theme); \
 \
     if (hub_->isMediaTokenMode() && hub_->isEmbeddedPlayerMode() && \
         player_->hasMedia() && \
-        !UiStyle::globalInstance()->isAeroEnabled()) \
-      UiStyle::globalInstance()->setBlackBackground(this); \
+        !AcUi::globalInstance()->isAeroEnabled()) \
+      AcUi::globalInstance()->setBlackBackground(this); \
   }
 
   SET_THEME_TO(Default)
@@ -6254,50 +6384,111 @@ MainWindow::subtitleColor() const
 void
 MainWindow::enableWindowTransparency()
 {
-  if (!UiStyle::globalInstance()->isAeroEnabled())
-    setWindowOpacity(G_WINDOW_OPACITY);
+  if (!AcUi::globalInstance()->isAeroEnabled())
+    setWindowOpacity(AC_WINDOW_OPACITY);
 }
 
 void
 MainWindow::disableWindowTransparency()
 {
-  if (!UiStyle::globalInstance()->isAeroEnabled())
+  if (!AcUi::globalInstance()->isAeroEnabled())
     setWindowOpacity(1.0);
 }
 
 // - Browse -
 
 void
-MainWindow::setBrowsedFile(const QString &filePath)
+MainWindow::setBrowsedUrl(const QString &url)
 {
-  browsedFiles_.clear();
-  browseMenu_->clear();
+  DOUT("url =" << url);
+  enum { increment = 5 };
 
-  QFileInfo fi(filePath);
+  browsedFiles_.clear();
+  int id = 0;
+  QString prefix, suffix;
+
+  QRegExp rx("(http://.*/index_)(\\d+)(.html)", Qt::CaseInsensitive);
+  if (rx.exactMatch(url)) {
+    Q_ASSERT(rx.captureCount() == 3);
+    prefix = rx.cap(1);
+    QString n = rx.cap(2);
+    suffix = rx.cap(3);
+    id = n.toUInt();
+  }
+
+  if (id)
+    for (int i = 1; i <= id + increment; i++) {
+      QString f = prefix + QString::number(i) + suffix;
+      browsedFiles_.append(f);
+    }
+
+  invalidateBrowseMenu(url);
+}
+
+void
+MainWindow::setBrowsedFile(const QString &fileName)
+{
+  DOUT("url =" << fileName);
+  browsedFiles_.clear();
+
+  QFileInfo fi(fileName);
   QDir dir = fi.dir();
 
-  if (!dir.exists())
-    return;
-
-  int tt = fileType(filePath);
-  QStringList nf;
-  switch (tt) {
-  case Token::TT_Video:         nf = Player::supportedVideoFilters(); break;
-  case Token::TT_Audio:         nf = Player::supportedAudioFilters(); break;
-  case Token::TT_Picture:       nf = Player::supportedPictureFilters(); break;
+  if (dir.exists()) {
+    int tt = fileType(fileName);
+    QStringList nf;
+    switch (tt) {
+    case Token::TT_Video:         nf = Player::supportedVideoFilters(); break;
+    case Token::TT_Audio:         nf = Player::supportedAudioFilters(); break;
+    case Token::TT_Picture:       nf = Player::supportedPictureFilters(); break;
+    }
+    if (!nf.isEmpty())
+      browsedFiles_ = dir.entryInfoList(nf, QDir::Files);
   }
-  if (nf.isEmpty())
-    return;
 
-  browsedFiles_ = dir.entryInfoList(nf, QDir::Files);
-  if (browsedFiles_.size() <= 1)
+  invalidateBrowseMenu(fileName);
+}
+
+void
+MainWindow::invalidateBrowseMenu()
+{
+  if (player_->hasMedia()) {
+    QString fileName = recentSource_.isEmpty() ? player_->mediaPath()
+                                               : recentSource_;
+    invalidateBrowseMenu(fileName);
+  }
+}
+
+void
+MainWindow::invalidateBrowseMenu(const QString &fileName)
+{
+  if (!browseMenu_->isEmpty()) {
+    foreach (QAction *a, browseMenu_->actions())
+      if (a != previousFileAct_ && a != nextFileAct_ &&
+          a !=  moreFilesAct_ && a != lessFilesAct_)
+        a->deleteLater();
+    browseMenu_->clear();
+  }
+  bool remote = isRemoteMrl(fileName);
+  if (remote && browsedFiles_.isEmpty() ||
+      browsedFiles_.size() <= 1)
     return;
 
   if (browsedFiles_.size() > 10) {
     browseMenu_->addAction(previousFileAct_);
     browseMenu_->addAction(nextFileAct_);
-    browseMenu_->addSeparator();
   }
+
+  if (remote)
+    browseMenu_->addAction(moreFilesAct_);
+
+  if (browsedFiles_.size() > 10)
+    browseMenu_->addAction(lessFilesAct_);
+
+  if (!browseMenu_->isEmpty())
+    browseMenu_->addSeparator();
+
+  QFileInfo fi(fileName);
 
   int id = 0;
   foreach (QFileInfo f, browsedFiles_) {
@@ -6313,6 +6504,51 @@ MainWindow::setBrowsedFile(const QString &filePath)
     }
     connect(a, SIGNAL(triggeredWithId(int)), SLOT(openBrowsedFile(int)));
     browseMenu_->addAction(a);
+  }
+}
+
+void
+MainWindow::lessBrowsedFiles()
+{
+  int decrement = 5;
+  if (browsedFiles_.size() <= decrement)
+    return;
+
+  log(tr("less files to browse"));
+  while (decrement--)
+    browsedFiles_.pop_back();
+  invalidateBrowseMenu();
+}
+
+
+void
+MainWindow::moreBrowsedFiles()
+{
+  enum { increment = 5 };
+  if (browsedFiles_.isEmpty())
+    return;
+
+  QString url = browsedFiles_.last().filePath();
+
+  int id = 0;
+  QString prefix, suffix;
+
+  QRegExp rx("(http://.*/index_)(\\d+)(.html)", Qt::CaseInsensitive);
+  if (rx.exactMatch(url)) {
+    Q_ASSERT(rx.captureCount() == 3);
+    prefix = rx.cap(1);
+    QString n = rx.cap(2);
+    suffix = rx.cap(3);
+    id = n.toUInt();
+  }
+
+  if (id) {
+    log(tr("more files added"));
+    for (int i = id + 1; i <= id + increment; i++) {
+      QString f = prefix + QString::number(i) + suffix;
+      browsedFiles_.append(f);
+    }
+    invalidateBrowseMenu();
   }
 }
 
@@ -6364,10 +6600,32 @@ MainWindow::openNextFile()
 // - Previous / Next -
 
 void
+MainWindow::openPreviousMrl()
+{
+  QString mrl = dataManager_->token().source();
+  if (!mrl.isEmpty()) {
+    QString n = QtExt::decreaseString(mrl);
+    if (n != mrl)
+      openSource(n);
+  }
+}
+
+void
+MainWindow::openNextMrl()
+{
+  QString mrl = dataManager_->token().source();
+  if (!mrl.isEmpty()) {
+    QString n = QtExt::increaseString(mrl);
+    if (n != mrl)
+      openSource(n);
+  }
+}
+
+void
 MainWindow::previous()
 {
-  if (hub_->isMediaTokenMode() && player_->hasMedia() &&
-      !isRemoteMrl(player_->mediaPath())) {
+  if (hub_->isMediaTokenMode() && player_->hasMedia()) {
+    setPreviousEnabled(false);
     if (player_->hasPlaylist())
       player_->previousTrack();
     //else if (player_->hasChapters())
@@ -6378,27 +6636,28 @@ MainWindow::previous()
       openPreviousPlaylistItem();
     else if (browsedFiles_.size() > 1)
       openPreviousFile();
+    else if (isNavigable())
+      openPreviousMrl();
   }
 }
 
 bool
 MainWindow::hasNext() const
 {
-  return player_->hasMedia() &&
-      !isRemoteMrl(player_->mediaPath()) && (
-
+  return player_->hasMedia() && (
     player_->trackNumber() < player_->trackCount() - 1 ||
     player_->titleId() < player_->titleCount() - 1 ||
     playlist_.size() > 1 && playlist_.indexOf(recentOpenedFile_) < playlist_.size() - 1 ||
-    browsedFiles_.size() > 1 && currentBrowsedFileId() < browsedFiles_.size() - 1
+    browsedFiles_.size() > 1 && currentBrowsedFileId() < browsedFiles_.size() - 1 ||
+    isNavigable()
   );
 }
 
 void
 MainWindow::next()
 {
-  if (hub_->isMediaTokenMode() && player_->hasMedia() &&
-      !isRemoteMrl(player_->mediaPath())) {
+  if (hub_->isMediaTokenMode() && player_->hasMedia()) {
+    setNextEnabled(false);
     if (player_->hasPlaylist())
       player_->nextTrack();
     //else if (player_->hasChapters())
@@ -6409,6 +6668,8 @@ MainWindow::next()
       openNextPlaylistItem();
     else if (browsedFiles_.size() > 1)
       openNextFile();
+    else if (isNavigable())
+      openNextMrl();
   }
 }
 
@@ -6686,12 +6947,13 @@ MainWindow::resumePlayPos()
 {
   //DOUT("enter");
   if (player_->hasMedia() && !player_->isStopped()) {
-    resumePlayTimer_->stop();
     if (isRemoteMrl(player_->mediaPath())) {
+      resumePlayTimer_->stop();
       DOUT("exit: remote media is not resumed (since seek not implemented)");
       return;
     }
     if (player_->time() > 20 * 1000) { // 20 seconds, user manually seeked
+      resumePlayTimer_->stop();
       DOUT("exit: user manually seeked");
       return;
     }
@@ -6701,6 +6963,8 @@ MainWindow::resumePlayPos()
       DOUT("exit: no hash");
       return;
     }
+
+    resumePlayTimer_->stop();
 
     qint64 pos = 0;
     if (playPosHistory_.contains(hash))
@@ -6869,12 +7133,17 @@ MainWindow::resumeAspectRatio()
   //DOUT("enter");
   //if (player_->hasMedia()) {
   if (player_->isValid()) {
-    resumeAspectRatioTimer_->stop();
     qint64 hash = dataManager_->token().hashId();
     DOUT("hash =" << hash);
+    if (!hash) {
+      DOUT("exit: empty hash");
+      return;
+    }
+
+    resumeAspectRatioTimer_->stop();
 
     QString ratio;
-    if (hash && aspectRatioHistory_.contains(hash))
+    if (aspectRatioHistory_.contains(hash))
       ratio = aspectRatioHistory_[hash];
 
     DOUT("ratio =" << ratio);
@@ -6913,6 +7182,46 @@ MainWindow::setAnnotationEffectToBlur()
 
 // - Navigation -
 
+bool
+MainWindow::isNavigable() const
+{
+  if (!hub_->isMediaTokenMode() ||
+      !player_->hasMedia())
+    return false;
+  if (!isRemoteMrl(player_->mediaPath()))
+    return true;
+
+  QString mrl = dataManager_->token().source();
+  return mrl.contains(QRegExp("index_\\d+.html$", Qt::CaseInsensitive));
+}
+
+void
+MainWindow::setPreviousEnabled(bool t)
+{
+  PlayerPanel *players[] = { mainPlayer_, miniPlayer_, embeddedPlayer_ };
+  BOOST_FOREACH(PlayerPanel *p, players) {
+    p->previousButton()->setEnabled(t);
+#ifdef Q_WS_WIN
+    QtWin::repaintWindow(mainPlayer_->previousButton()->winId());
+#endif // Q_WS_WIN
+  }
+
+  previousAct_->setEnabled(t);
+}
+
+void
+MainWindow::setNextEnabled(bool t)
+{
+  PlayerPanel *players[] = { mainPlayer_, miniPlayer_, embeddedPlayer_ };
+  BOOST_FOREACH(PlayerPanel *p, players) {
+    p->nextButton()->setEnabled(t);
+#ifdef Q_WS_WIN
+    QtWin::repaintWindow(mainPlayer_->nextButton()->winId());
+#endif // Q_WS_WIN
+  }
+
+  nextAct_->setEnabled(t);
+}
 void
 MainWindow::setNavigationEnabled(bool t)
 {
@@ -6923,22 +7232,11 @@ MainWindow::setNavigationEnabled(bool t)
     QtWin::repaintWindow(mainPlayer_->openButton()->winId());
 #endif // Q_WS_WIN
   }
-  if (t) {
-    if (!hub_->isMediaTokenMode() ||
-        player_->hasMedia() && isRemoteMrl(player_->mediaPath()))
-      return;
-  }
-  BOOST_FOREACH(PlayerPanel *p, players) {
-    p->previousButton()->setEnabled(t);
-    p->nextButton()->setEnabled(t);
-#ifdef Q_WS_WIN
-    QtWin::repaintWindow(mainPlayer_->previousButton()->winId());
-    QtWin::repaintWindow(mainPlayer_->nextButton()->winId());
-#endif // Q_WS_WIN
-  }
+  if (t && !isNavigable())
+    return;
 
-  previousAct_->setEnabled(t);
-  nextAct_->setEnabled(t);
+  setPreviousEnabled(t);
+  setNextEnabled(t);
 
   if (!t)
     navigationTimer_->start();
@@ -6971,7 +7269,7 @@ MainWindow::enterAnnotationUrl(const QString &url)
     enterMediaUrl(url);
     return;
   }
-  SubUrlDialog *d = annotationUrlDialog();
+  UrlDialog *d = annotationUrlDialog();
   d->setText(url);
   d->show();
 }
@@ -6991,7 +7289,7 @@ MainWindow::enterMediaUrl(const QString &url)
     );
     return;
   }
-  MediaUrlDialog *d = mediaUrlDialog();
+  UrlDialog *d = mediaUrlDialog();
   d->setText(url);
   d->show();
 }
@@ -7075,8 +7373,8 @@ MainWindow::openProxyBrowser()
 void
 MainWindow::setMultipleWindowsEnabled(bool t)
 {
-  Settings::globalInstance()->setMultipleWindowsEnabled(t);
-  Settings::globalInstance()->flush();
+  Settings::globalSettings()->setMultipleWindowsEnabled(t);
+  Settings::globalSettings()->sync();
   if (t)
     log(tr("allow multiple player windows"));
   else
@@ -7086,11 +7384,11 @@ MainWindow::setMultipleWindowsEnabled(bool t)
 void
 MainWindow::newWindow()
 {
-  Settings *s = Settings::globalInstance();
+  Settings *s = Settings::globalSettings();
   bool t = s->isMultipleWindowsEnabled();
   if (!t) {
     s->setMultipleWindowsEnabled(true);
-    s->flush();
+    s->sync();
   }
 
   QString exe = QCoreApplication::applicationFilePath();
@@ -7100,7 +7398,7 @@ MainWindow::newWindow()
 
   if (!t) {
     s->setMultipleWindowsEnabled(false);
-    QTimer::singleShot(5000, s, SLOT(flush()));
+    QTimer::singleShot(5000, s, SLOT(sync()));
   }
 }
 
@@ -7141,7 +7439,50 @@ MainWindow::showAnnotationsAsThread()
 
 void
 MainWindow::invalidateAnnotationThreadView()
-{ annotationThreadView_->setAnnotations(dataManager_->annotations()); }
+{
+  annotationThreadView_->setAnnotations(dataManager_->annotations());
+  annotationThreadView_->setMode(hub_->tokenMode());
+}
+
+// - Save media -
+
+void
+MainWindow::setSaveMedia(bool t)
+{
+  player_->setBufferSaved(t);
+  if (t)
+    log(tr("buffered video will be saved on Desktop"));
+  else
+    log(tr("buffered video will not be saved"));
+}
+
+void
+MainWindow::saveMedia()
+{
+  setSaveMedia(true);
+  if (player_->hasMedia())
+    player_->saveBuffer();
+}
+
+// - Rubber band -
+
+void
+MainWindow::pauseAnnotationsAt(const QRect &rect)
+{
+  QPoint globalPos = mapToGlobal(rect.topLeft());
+  QPoint pos = annotationView_->mapFromGlobal(globalPos);
+  QRect map(pos, rect.size());
+  annotationView_->pauseItems(map);
+}
+
+void
+MainWindow::resumeAnnotationsAt(const QRect &rect)
+{
+  QPoint globalPos = mapToGlobal(rect.topLeft());
+  QPoint pos = annotationView_->mapFromGlobal(globalPos);
+  QRect map(pos, rect.size());
+  annotationView_->resumeItems(map);
+}
 
 // EOF
 

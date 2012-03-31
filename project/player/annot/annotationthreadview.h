@@ -9,15 +9,15 @@
 #include <QLocale>
 
 typedef QtExt::WebDialog AnnotationThreadViewBase;
-
 class AnnotationThreadView: public AnnotationThreadViewBase
 {
   Q_OBJECT
   typedef AnnotationThreadView Self;
-  typedef WebDialog Base;
+  typedef AnnotationThreadViewBase Base;
 
   typedef AnnotCloud::AnnotationList AnnotationList;
 
+  int mode_;
   AnnotationList annots_;
 
   // - Constructions -
@@ -29,6 +29,7 @@ signals:
 
 public slots:
   void setAnnotations(const AnnotationList &l) { annots_ = l; }
+  void setMode(int tokenMode) { mode_ = tokenMode; }
   void refresh();
 
   // - Events -

@@ -4,7 +4,7 @@
 // annotationcomboedit.h
 // 7/16/2011
 
-#include "comboedit.h"
+#include "ac/accomboedit.h"
 #include "module/qtext/withsizehint.h"
 #include <QStringList>
 
@@ -13,11 +13,11 @@ QT_FORWARD_DECLARE_CLASS(QMenu)
 
 class AnnotationEditor;
 
-class AnnotationComboEdit : public ComboEdit, public QtExt::WithSizeHint
+class AnnotationComboEdit : public AcComboEdit, public QtExt::WithSizeHint
 {
   Q_OBJECT
   typedef AnnotationComboEdit Self;
-  typedef ComboEdit Base;
+  typedef AcComboEdit Base;
 
 public:
   explicit AnnotationComboEdit(QWidget *parent = 0);

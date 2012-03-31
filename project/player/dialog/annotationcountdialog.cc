@@ -3,9 +3,9 @@
 
 #include "annotationcountdialog.h"
 #include "datamanager.h"
-#include "uistyle.h"
 #include "tr.h"
 #include "logger.h"
+#include "ac/acui.h"
 #include "module/qtext/htmltag.h"
 #include "module/qtext/datetime.h"
 #include <QtGui>
@@ -35,7 +35,6 @@ AnnotationCountDialog::AnnotationCountDialog(DataManager *dm, QWidget *parent)
 //#endif // Q_WS_MAC
   setWindowTitle(tr("Annot Max Count Hint"));
   setToolTip(tr("Maximum numbers of annotations to display"));
-  UiStyle::globalInstance()->setWindowStyle(this);
 
   createLayout();
 
@@ -52,22 +51,24 @@ AnnotationCountDialog::AnnotationCountDialog(DataManager *dm, QWidget *parent)
 void
 AnnotationCountDialog::createLayout()
 {
-  UiStyle *ui = UiStyle::globalInstance();
+  AcUi *ui = AcUi::globalInstance();
+  ui->setWindowStyle(this);
+
   totalCountLabel_ = ui->makeLabel(
-        UiStyle::UrlHint, "", tr("Number of annotations"));
+        AcUi::UrlHint, "", tr("Number of annotations"));
   QLabel *totalCountBuddy = ui->makeLabel(
-        UiStyle::BuddyHint, tr("Number of annotations"), totalCountLabel_);
+        AcUi::BuddyHint, tr("Number of annotations"), totalCountLabel_);
 
   QStringList defvals = QStringList("0")
     << "100" << "500" << "1000" << "1500" << "3000" << "5000" << "8000" << "10000";
-  edit_ = ui->makeComboBox(UiStyle::EditHint, "", TR(T_TOOLTIP_INPUTLINE),  defvals);
+  edit_ = ui->makeComboBox(AcUi::EditHint, "", TR(T_TOOLTIP_INPUTLINE),  defvals);
   edit_->lineEdit()->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
   connect(edit_->lineEdit(), SIGNAL(returnPressed()), SLOT(ok()));
 
   QToolButton *okButton = ui->makeToolButton(
-        UiStyle::PushHint | UiStyle::HighlightHint, TR(T_OK), this, SLOT(ok()));
+        AcUi::PushHint | AcUi::HighlightHint, TR(T_OK), this, SLOT(ok()));
   QToolButton *cancelButton = ui->makeToolButton(
-        UiStyle::PushHint, TR(T_CANCEL), this, SLOT(hide()));
+        AcUi::PushHint, TR(T_CANCEL), this, SLOT(hide()));
 
   // Layouts
   QVBoxLayout *rows = new QVBoxLayout; {

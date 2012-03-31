@@ -2,8 +2,8 @@
 // 10/13/2011
 
 #include "addaliasdialog.h"
-#include "uistyle.h"
 #include "tr.h"
+#include "ac/AcUi.h"
 #include "module/annotcloud/traits.h"
 #include "module/annotcloud/alias.h"
 #include <QtGui>
@@ -22,7 +22,6 @@ AddAliasDialog::AddAliasDialog(QWidget *parent)
   : Base(parent, WINDOW_FLAGS)
 {
   setWindowTitle(tr("Add Alias"));
-  UiStyle::globalInstance()->setWindowStyle(this);
 
   createLayout();
 
@@ -40,7 +39,8 @@ AddAliasDialog::AddAliasDialog(QWidget *parent)
 void
 AddAliasDialog::createLayout()
 {
-  UiStyle *ui = UiStyle::globalInstance();
+  AcUi *ui = AcUi::globalInstance();
+  ui->setWindowStyle(this);
 
   QStringList defvals = QStringList()
       << "DEATHNOTE 01"
@@ -49,13 +49,13 @@ AddAliasDialog::createLayout()
       << "集英社"
       << "http://www.youtube.com/watch?v=koeaZ_z1WbI";
 
-  aliasEdit_ = ui->makeComboBox(UiStyle::EditHint, "", TR(T_TOOLTIP_ADDALIAS), defvals);
+  aliasEdit_ = ui->makeComboBox(AcUi::EditHint, "", TR(T_TOOLTIP_ADDALIAS), defvals);
   connect(aliasEdit_->lineEdit(), SIGNAL(returnPressed()), SLOT(ok()));
 
-  QLabel *tagLabel = ui->makeLabel(UiStyle::BuddyHint, TR(T_TAG)),
-         *typeLabel = ui->makeLabel(UiStyle::BuddyHint, TR(T_TYPE)),
-         *languageLabel = ui->makeLabel(UiStyle::BuddyHint, TR(T_LANGUAGE)),
-         *aliasLabel = ui->makeLabel(UiStyle::BuddyHint, TR(T_ALIAS));
+  QLabel *tagLabel = ui->makeLabel(AcUi::BuddyHint, TR(T_TAG)),
+         *typeLabel = ui->makeLabel(AcUi::BuddyHint, TR(T_TYPE)),
+         *languageLabel = ui->makeLabel(AcUi::BuddyHint, TR(T_LANGUAGE)),
+         *aliasLabel = ui->makeLabel(AcUi::BuddyHint, TR(T_ALIAS));
 
 #define MAKE_TAG(_id) \
   QToolButton *tag##_id##Button = ui->makeToolButton(0, #_id, this, SLOT(tag##_id())); { \
@@ -99,11 +99,11 @@ AddAliasDialog::createLayout()
   isNameButton_->setChecked(true);
 
   okButton_ = ui->makeToolButton(
-        UiStyle::PushHint | UiStyle::HighlightHint , TR(T_ADD), this, SLOT(ok()));
+        AcUi::PushHint | AcUi::HighlightHint , TR(T_ADD), this, SLOT(ok()));
   cancelButton_ = ui->makeToolButton(
-        UiStyle::PushHint, TR(T_CANCEL), this, SLOT(hide()));
+        AcUi::PushHint, TR(T_CANCEL), this, SLOT(hide()));
   QToolButton *pasteButton = ui->makeToolButton(
-        UiStyle::PushHint, TR(T_PASTE), this, SLOT(paste()));
+        AcUi::PushHint, TR(T_PASTE), this, SLOT(paste()));
 
   // Layouts
   QVBoxLayout *rows = new QVBoxLayout; {

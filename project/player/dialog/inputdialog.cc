@@ -2,10 +2,10 @@
 // 2/8/2012
 
 #include "inputdialog.h"
-#include "uistyle.h"
 #include "tr.h"
 #include "logger.h"
-#include "comboedit.h"
+#include "ac/acui.h"
+#include "ac/accomboedit.h"
 #include "module/qtext/datetime.h"
 #include <QtGui>
 
@@ -32,7 +32,6 @@ InputDialog::InputDialog(QWidget *parent)
 //  setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
 //#endif // Q_WS_MAC
   setWindowTitle(tr("Input Dialog"));
-  UiStyle::globalInstance()->setWindowStyle(this);
 
   createLayout();
 
@@ -49,21 +48,22 @@ InputDialog::InputDialog(QWidget *parent)
 void
 InputDialog::createLayout()
 {
-  UiStyle *ui = UiStyle::globalInstance();
+  AcUi *ui = AcUi::globalInstance();
+  ui->setWindowStyle(this);
 
   //QLabel *timeLabel = new QLabel;
   //timeLabel->setStyleSheet(SS_LABEL);
   //timeLabel->setText(TR(T_LABEL_SEEK));
   //timeLabel->setToolTip(TR(T_TOOLTIP_SEEK));
 
-  edit_ = new ComboEdit; {
+  edit_ = new AcComboEdit; {
     edit_->setToolTip(TR(T_TOOLTIP_INPUTLINE));
     edit_->setMaximumWidth(INPUTLINEEDIT_MAXWIDTH);
     edit_->lineEdit()->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
   } connect(edit_->lineEdit(), SIGNAL(returnPressed()), SLOT(ok()));
 
   QToolButton *okButton =
-      ui->makeToolButton(UiStyle::PushHint, TR(T_OK), this, SLOT(ok()));
+      ui->makeToolButton(AcUi::PushHint, TR(T_OK), this, SLOT(ok()));
 
   // Layouts
   QVBoxLayout *rows = new QVBoxLayout; {

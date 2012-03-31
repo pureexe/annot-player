@@ -64,7 +64,6 @@ LuaMrlResolver::matchMedia(const QString &href) const
     href.contains("bilibili.tv/", Qt::CaseInsensitive) ||
     href.contains("acfun.tv/", Qt::CaseInsensitive) ||
     href.contains("nicovideo.jp/") ||
-    href.contains("nico.galstars.net/") ||
     href.contains("youku.com/", Qt::CaseInsensitive) ||
     href.contains("video.sina.com.cn/", Qt::CaseInsensitive) ||
     href.contains("tudou.com/", Qt::CaseInsensitive) ||
@@ -82,7 +81,6 @@ LuaMrlResolver::matchSubtitle(const QString &href) const
   bool ret = href.startsWith("http://", Qt::CaseInsensitive) &&
   (
     href.contains("nicovideo.jp/", Qt::CaseInsensitive) ||
-    href.contains("nico.galstars.net/", Qt::CaseInsensitive) ||
     href.contains("bilibili.tv/", Qt::CaseInsensitive) ||
     href.contains("acfun.tv/", Qt::CaseInsensitive)
   );
@@ -105,7 +103,7 @@ LuaMrlResolver::resolveMedia(const QString &href, bool async)
   QString url = cleanUrl(href);
   DOUT("url =" << url);
 
-  MrlResolverSettings *settings = MrlResolverSettings::globalInstance();
+  MrlResolverSettings *settings = MrlResolverSettings::globalSettings();
 
   //LuaResolver *lua = makeResolver();
   LuaResolver lua(LUASCRIPT_PATH, LUAPACKAGE_PATH);
@@ -202,7 +200,7 @@ LuaMrlResolver::resolveSubtitle(const QString &href, bool async)
   QString url = cleanUrl(href);
   DOUT("url =" << url);
 
-  MrlResolverSettings *settings = MrlResolverSettings::globalInstance();
+  MrlResolverSettings *settings = MrlResolverSettings::globalSettings();
 
   //LuaResolver *lua = makeResolver();
   LuaResolver lua(LUASCRIPT_PATH, LUAPACKAGE_PATH);
@@ -285,8 +283,13 @@ LuaMrlResolver::formatTitle(const QString &title)
 
   ret.remove(QRegExp("..ニコニコ動画\\(原宿\\)$"));
   ret.remove(QRegExp(" - 嗶哩嗶哩 - .*"));
-  ret.remove(QRegExp(" - 优酷视频 - .*"));
-  ret.remove(QRegExp(" - 视频$"));
+#ifdef _MSC_VER
+  ret.remove(QRegExp(" - ..\xe8\xa7\x86\xe9\xa2\x91 - .*")); // Youku
+  ret.remove(QRegExp(" - \xe8\xa7\x86\xe9\xa2\x91 - .*")); // Youku
+#else
+  ret.remove(QRegExp(" - 优酷视频 - .*")); // Youku
+  ret.remove(QRegExp(" - 视频 - .*")); // Youku
+#endif // _MSC_VER
   ret.remove(QRegExp(" - AcFun.tv$"));
   ret.replace("&lt;", "<");
   ret.replace("&gt;", ">");
@@ -302,6 +305,8 @@ LuaMrlResolver::formatUrl(const QString &href)
     return ret;
 
   ret.replace(QRegExp("/index.html$", Qt::CaseInsensitive), "/");
+  ret.replace(QRegExp("/#$", Qt::CaseInsensitive), "/");
+  ret.replace(QRegExp("/index_1.html$", Qt::CaseInsensitive), "/");
   ret.replace(QRegExp("/default.html$", Qt::CaseInsensitive), "/");
   //ret = ret.replace("http://www.", "http://", Qt::CaseInsensitive);
   //ret = ret.remove(QRegExp("/$"));
@@ -314,7 +319,6 @@ LuaMrlResolver::cleanUrl(const QString &url)
   QString ret = url;
   if (ret.contains("nicovideo.jp/watch/"))
     ret.remove(QRegExp("\\?.*"));
-  ret.replace(QRegExp("/#.*"), "/");
   return ret;
 }
 
@@ -322,9 +326,8 @@ bool
 LuaMrlResolver::checkSiteAccount(const QString &href)
 {
   DOUT("enter");
-  if ((href.contains("nicovideo.jp/", Qt::CaseInsensitive) ||
-       href.contains("nico.galstars.jp/", Qt::CaseInsensitive))
-      && !MrlResolverSettings::globalInstance()->hasNicovideoAccount()) {
+  if (href.contains("nicovideo.jp/", Qt::CaseInsensitive)
+      && !MrlResolverSettings::globalSettings()->hasNicovideoAccount()) {
     emit error(tr("nicovideo.jp account is required to resolve URL") + ": " + href);
     DOUT("exit: ret = false, nico account required");
     return false;

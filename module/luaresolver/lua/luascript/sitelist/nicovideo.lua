@@ -50,11 +50,10 @@ function getTaskAttribute_nico ( str_url, str_tmpfile , pDlg)
   local nico_url = "http://www.nicovideo.jp/watch/"..str_id;
   local re;
   --re = dlFile(str_tmpfile, nico_url);
-  --dlFile(str_tmpfile, "http://nico.galstars.net/?t=www&u=%2Fimg%2Fremocon%2Fremocon_off.gif"); -- bypass banning
-  --dlFile(str_tmpfile, "http://nico.galstars.net/?t=www&u=%2Fswf%2Fplayer%2Fjsconnector.swf%3Fv%3D201111141207"); -- bypass banning
 
   --local nico_proxy_url = "http://nico.galstars.net/?t=www&u=%2Fwatch%2F"..str_id;
-  local nico_proxy_url = "http://nico.galstars.net/?t=www&u=/watch/"..str_id;
+  --local nico_proxy_url = "http://nico.galstars.net/?t=www&u=/watch/"..str_id;
+  local nico_proxy_url = "http://sakuradite.com/nico/www/watch/"..str_id;
   re = dlFile(str_tmpfile, nico_proxy_url); -- bypass banning
   --if re ~= 0 then
   --  re = dlFile(str_tmpfile, nico_url); -- redundant, in case galstars.net is down

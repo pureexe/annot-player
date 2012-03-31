@@ -65,6 +65,10 @@ public slots:
   void logAspectRatioChanged(const QString &ratio);
 
 protected slots:
+  void logAeroEnabledChanged(bool t);
+  void logMenuEnabledChanged(bool t);
+
+protected slots:
   void logUntilPlaying();
   void startLogUntilPlaying();
   void stopLogUntilPlaying();

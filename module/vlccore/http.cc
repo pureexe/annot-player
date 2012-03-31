@@ -28,6 +28,24 @@ QStringList VlcHttpPlugin::urls_;
 qint64 VlcHttpPlugin::duration_ = 0;
 QNetworkCookieJar *VlcHttpPlugin::cookieJar_ = 0;
 QString VlcHttpPlugin::mediaTitle_;
+bool VlcHttpPlugin::bufferSaved_ = true;
+
+void
+VlcHttpPlugin::setBufferSaved(bool t)
+{
+  bufferSaved_ = t;
+  if (session_)
+    session_->setBufferSaved(t);
+}
+
+bool
+VlcHttpPlugin::isFinished()
+{ return session_ && session_->isFinished(); }
+
+
+void
+VlcHttpPlugin::save()
+{ if (session_) session_->save(); }
 
 // - Static -
 
@@ -185,6 +203,8 @@ VlcHttpPlugin::openSession()
     session_ = new HttpStreamSession(urls, duration_);
   } else
     session_ = new HttpBufferedSession(url_);
+
+  session_->setBufferSaved(bufferSaved_);
 
   connect(session_, SIGNAL(error(QString)), globalInstance(), SIGNAL(error(QString)));
   connect(session_, SIGNAL(message(QString)), globalInstance(), SIGNAL(message(QString)));

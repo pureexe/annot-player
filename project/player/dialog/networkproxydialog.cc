@@ -3,9 +3,9 @@
 
 #include "networkproxydialog.h"
 #include "tr.h"
-#include "uistyle.h"
 #include "logger.h"
-#include "settings.h"
+#include "ac/acsettings.h"
+#include "ac/acui.h"
 #include <QtGui>
 #include <QNetworkProxy>
 
@@ -33,7 +33,6 @@ NetworkProxyDialog::NetworkProxyDialog(QWidget *parent)
   : Base(parent, WINDOW_FLAGS)
 {
   setWindowTitle(TR(T_NETWORKPROXY));
-  UiStyle::globalInstance()->setWindowStyle(this);
 
   createLayout();
 
@@ -43,34 +42,35 @@ NetworkProxyDialog::NetworkProxyDialog(QWidget *parent)
 void
 NetworkProxyDialog::createLayout()
 {
-  UiStyle *ui = UiStyle::globalInstance();
+  AcUi *ui = AcUi::globalInstance();
+  ui->setWindowStyle(this);
 
   QStringList types("Socks5");
   types.append("HTTP");
-  typeCombo_ = ui->makeComboBox(UiStyle::ReadOnlyHint, "", tr("Proxy type"), types);
+  typeCombo_ = ui->makeComboBox(AcUi::ReadOnlyHint, "", tr("Proxy type"), types);
 
   QStringList hosts("localhost");
-  hostEdit_ = ui->makeComboBox(UiStyle::EditHint, "", tr("Host"), hosts);
+  hostEdit_ = ui->makeComboBox(AcUi::EditHint, "", tr("Host"), hosts);
 
   QStringList ports("9050");
   ports.append("8080");
-  portEdit_ = ui->makeComboBox(UiStyle::EditHint, "", tr("Port"), ports);
+  portEdit_ = ui->makeComboBox(AcUi::EditHint, "", tr("Port"), ports);
 
-  userNameEdit_ = ui->makeComboBox(UiStyle::EditHint, "", tr("Username"));
-  passwordEdit_ = ui->makeLineEdit(UiStyle::PasswordHint, "", tr("Password"));
+  userNameEdit_ = ui->makeComboBox(AcUi::EditHint, "", tr("Username"));
+  passwordEdit_ = ui->makeLineEdit(AcUi::PasswordHint, "", tr("Password"));
 
   QToolButton *saveButton = ui->makeToolButton(
-        UiStyle::PushHint | UiStyle::HighlightHint, TR(T_SAVE), this, SLOT(save()));
+        AcUi::PushHint | AcUi::HighlightHint, TR(T_SAVE), this, SLOT(save()));
   QToolButton *cancelButton = ui->makeToolButton(
-        UiStyle::PushHint, TR(T_CANCEL), this, SLOT(hide()));
+        AcUi::PushHint, TR(T_CANCEL), this, SLOT(hide()));
 
   enableButton_ = ui->makeToolButton(
-        UiStyle::CheckHint, TR(T_ENABLE), this, SLOT(invalidateButtons()));
+        AcUi::CheckHint, TR(T_ENABLE), this, SLOT(invalidateButtons()));
 
-  typeLabel_ = ui->makeLabel(UiStyle::BuddyHint, tr("Type"), typeCombo_);
-  hostLabel_ = ui->makeLabel(UiStyle::BuddyHint, tr("Host"), hostEdit_);
-  userNameLabel_ = ui->makeLabel(UiStyle::BuddyHint, tr("Username"), userNameEdit_);
-  passwordLabel_ = ui->makeLabel(UiStyle::BuddyHint, tr("Password"), passwordEdit_);
+  typeLabel_ = ui->makeLabel(AcUi::BuddyHint, tr("Type"), typeCombo_);
+  hostLabel_ = ui->makeLabel(AcUi::BuddyHint, tr("Host"), hostEdit_);
+  userNameLabel_ = ui->makeLabel(AcUi::BuddyHint, tr("Username"), userNameEdit_);
+  passwordLabel_ = ui->makeLabel(AcUi::BuddyHint, tr("Password"), passwordEdit_);
 
   // Layouts
   QGridLayout *grid = new QGridLayout; {
@@ -135,7 +135,7 @@ NetworkProxyDialog::setPassword(const QString &password)
 void
 NetworkProxyDialog::refresh()
 {
-  Settings *s = Settings::globalInstance();
+  AcSettings *s = AcSettings::globalSettings();
 
   enableButton_->setChecked(s->isProxyEnabled());
 

@@ -11,8 +11,26 @@
    </rect>
   </property>
   <property name="styleSheet">
-   <string notr="true">QLineEdit {
-	border-image: url(&quot;:/images/lineedit.png&quot;) ;
+   <string notr="true">QComboBox {
+	border-image:url(&quot;:/images/comboedit.png&quot;);
+    border-width:4px;
+    border-radius:3px;
+}
+ 
+QComboBox::drop-down {
+	background:transparent;
+}
+
+QComboBox::down-arrow {
+	background:transparent;
+}
+
+QComboBox::down-arrow:pressed {
+	background:transparent;
+}
+
+QLineEdit {
+	border-image:url(&quot;:/images/lineedit.png&quot;);
 	border-width:4;
 	color:black;
 }
@@ -21,38 +39,45 @@ QTabWidget::tab-bar {
      top: 4px;
 }
 
- QTabBar::tab { 
-	border-image: url(&quot;:/images/tab.png&quot;) ;
+QTabBar::tab { 
+	border-image:url(&quot;:/images/tab.png&quot;);
 	border-width:4px;
 	padding-left:3px;
 	min-width:54ex;
 	color: black;
 }
 
-QTabBar::tab:!selected{
-     margin-top: 3px;
-     margin-bottom: 5px;
-  }
-
-QTabBar::tab:selected {
-	border-image: url(&quot;:/images/tab-selected.png&quot;) ;
-    margin-bottom: 3px;
+QTabBar::tab:!selected {
+	margin-top:3px;
+	margin-bottom:5px;
 }
 
-QTabBar::tab:last {  border-image: url(&quot;:/images/tab-last.png&quot;) ;}
+QTabBar::tab:selected {
+	border-image:url(&quot;:/images/tab-selected.png&quot;);
+	margin-bottom:3px;
+}
+
+QTabBar::tab:last {
+	border-image:url(&quot;:/images/tab-last.png&quot;);
+}
 
 QTabBar::tab:selected:only-one {
-	border-image: url(&quot;:/images/tab-last-selected.png&quot;) ;
-    margin-bottom: 3px;
+	border-image:url(&quot;:/images/tab-last-selected.png&quot;);
+    margin-bottom:3px;
 }
 
 QTabBar::tab:selected:last {
-	border-image: url(&quot;:/images/tab-last-selected.png&quot;) ;
-    margin-bottom: 3px;
+	border-image:url(&quot;:/images/tab-last-selected.png&quot;);
+    margin-bottom:3px;
 }
 
-QTabBar::tab:!selected:last:hover { border-image: url(&quot;:/images/tab-last-hover.png&quot;) ; }
-QTabBar::tab:hover:!selected { border-image: url(&quot;:/images/tab-hover.png&quot;) ; }
+QTabBar::tab:!selected:last:hover {
+	border-image:url(&quot;:/images/tab-last-hover.png&quot;);
+}
+QTabBar::tab:hover:!selected {
+	border-image:url(&quot;:/images/tab-hover.png&quot;);
+}
+
 /*
 QTabBar::close-button { image: url(&quot;:/images/closebutton.png&quot;) ; }
 QTabBar::close-button:hover:!pressed { image: url(&quot;:/images/closebutton_hover.png&quot;) ;}
@@ -114,11 +139,11 @@ QToolButton::pressed {
        <widget class="QToolButton" name="backButton">
         <property name="styleSheet">
          <string notr="true">QToolButton {
-	border-image: url(&quot;:/images/button-left.png&quot;) ;
+	border-image:url(&quot;:/images/button-left.png&quot;);
 }
 
 QToolButton:hover {
-	border-image: url(&quot;:/images/button-left-hover.png&quot;) ;
+	border-image:url(&quot;:/images/button-left-hover.png&quot;);
 }
 </string>
         </property>
@@ -126,7 +151,7 @@ QToolButton:hover {
          <string>Back</string>
         </property>
         <property name="icon">
-         <iconset resource="webbrowser.qrc">
+         <iconset>
           <normaloff>:/images/arrow-back.png</normaloff>:/images/arrow-back.png</iconset>
         </property>
        </widget>
@@ -135,11 +160,11 @@ QToolButton:hover {
        <widget class="QToolButton" name="forwardButton">
         <property name="styleSheet">
          <string notr="true">QToolButton {
-	border-image: url(&quot;:/images/button-right.png&quot;) ;
+	border-image:url(&quot;:/images/button-right.png&quot;);
 }
 
 QToolButton:hover {
-	border-image: url(&quot;:/images/button-right-hover.png&quot;) ;
+	border-image:url(&quot;:/images/button-right-hover.png&quot;);
 }
 </string>
         </property>
@@ -147,7 +172,7 @@ QToolButton:hover {
          <string>Back</string>
         </property>
         <property name="icon">
-         <iconset resource="webbrowser.qrc">
+         <iconset>
           <normaloff>:/images/arrow-forward.png</normaloff>:/images/arrow-forward.png</iconset>
         </property>
        </widget>
@@ -155,25 +180,28 @@ QToolButton:hover {
      </layout>
     </item>
     <item row="0" column="2">
-     <widget class="QLineEdit" name="addressLine">
+     <widget class="QComboBox" name="addressEdit">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
         <horstretch>1</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
-      <property name="text">
-       <string>http://annot.me</string>
+      <property name="editable">
+       <bool>true</bool>
       </property>
      </widget>
     </item>
     <item row="0" column="3">
-     <widget class="QLineEdit" name="searchEdit">
+     <widget class="QComboBox" name="searchEdit">
+      <property name="toolTip">
+       <string/>
+      </property>
       <property name="styleSheet">
        <string notr="true">color:gray;</string>
       </property>
-      <property name="text">
-       <string>Search</string>
+      <property name="editable">
+       <bool>true</bool>
       </property>
      </widget>
     </item>
@@ -183,7 +211,7 @@ QToolButton:hover {
        <string/>
       </property>
       <property name="icon">
-       <iconset resource="webbrowser.qrc">
+       <iconset>
         <normaloff>:/images/reload.png</normaloff>:/images/reload.png</iconset>
       </property>
      </widget>
@@ -224,13 +252,11 @@ QToolButton:hover {
   </widget>
   <action name="actionFunction">
    <property name="text">
-    <string>Function</string>
+    <string/>
    </property>
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources>
-  <include location="webbrowser.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

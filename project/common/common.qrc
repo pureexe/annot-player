@@ -1,0 +1,33 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/background.png</file>
+        <file>images/lineedit.png</file>
+        <file>images/textedit.png</file>
+        <file>images/aero_mac.png</file>
+        <file>images/aero_mac_thumbnail.png</file>
+        <file>images/aero_dark.jpg</file>
+        <file>images/aero_dark_thumbnail.png</file>
+        <file>images/aero_black.jpg</file>
+        <file>images/aero_black_thumbnail.png</file>
+        <file>images/aero_blue.jpg</file>
+        <file>images/aero_blue_thumbnail.png</file>
+        <file>images/aero_brown.jpg</file>
+        <file>images/aero_brown_thumbnail.png</file>
+        <file>images/aero_cyan.jpg</file>
+        <file>images/aero_cyan_thumbnail.png</file>
+        <file>images/aero_gray.jpg</file>
+        <file>images/aero_gray_thumbnail.png</file>
+        <file>images/aero_green.jpg</file>
+        <file>images/aero_green_thumbnail.png</file>
+        <file>images/aero_pink.jpg</file>
+        <file>images/aero_pink_thumbnail.png</file>
+        <file>images/aero_purple.jpg</file>
+        <file>images/aero_purple_thumbnail.png</file>
+        <file>images/aero_red.jpg</file>
+        <file>images/aero_red_thumbnail.png</file>
+        <file>images/aero_white.jpg</file>
+        <file>images/aero_white_thumbnail.png</file>
+        <file>images/aero_yellow.jpg</file>
+        <file>images/aero_yellow_thumbnail.png</file>
+    </qresource>
+</RCC>

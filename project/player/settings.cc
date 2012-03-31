@@ -2,15 +2,11 @@
 // 7/30/2011
 
 #include "settings.h"
-#include "defines.h"
+#include "global.h"
 #include "mainwindow.h"
-#include "uistyle.h"
 #include "module/annotcloud/traits.h"
-#include "module/crypt/crypt.h"
-#include "module/crypt/simplecrypt.h"
 #include "module/qtext/algorithm.h"
 #include <QtCore>
-#include <QNetworkProxy>
 
 // - Settings keys -
 
@@ -24,24 +20,18 @@
 #define SK_APPLICATION    G_APPLICATION
 #define SK_VERSION        "Version"
 
-#define SK_USERID       "UserId"
-#define SK_USERNAME     "UserName"
-#define SK_PASSWORD     "Password"
-
 #define SK_ANNOTLANGUAGES "AnnotLanguages"
-#define SK_LANGUAGE     "Language"
 #define SK_LIVE         "Live"
 #define SK_MENUBAR      "MenuBar"
-#define SK_THEME        "Theme"
 #define SK_TRANSLATE    "Translate"
 #define SK_SUBTITLECOLOR "SubtitleColor"
 #define SK_SUBTITLEONTOP "SubtitleOnTop"
 #define SK_EMBEDONTOP   "EmbedOnTop"
+#define SK_SAVEBUFFER   "SaveBuffer"
 #define SK_WINDOWONTOP  "WindowOnTop"
 #define SK_UPDATEDATE   "UpdateDate"
 #define SK_RECENTPATH   "RecentPath"
-#define SK_AERO         "Aero"
-#define SK_MENUTHEME    "MenuTheme"
+#define SK_AUTOSUBMIT   "Submit"
 #define SK_ANNOTFILTER  "AnnotationFilter"
 #define SK_ANNOTCOUNT   "AnnotationCount"
 #define SK_ANNOTEFFECT  "AnnotationEffect"
@@ -56,24 +46,14 @@
 #define SK_ASPECTHIST   "AspectHistory"
 #define SK_BROWSERURLS  "BrowserUrls"
 #define SK_MULTIWINDOW  "MultipleWindows"
-
 #define SK_QUEUEEMPTY   "QueueEmpty"
-
-//#define SK_RECENT(_i)   "Recent" #_i
 #define SK_RECENT       "Recent"
-
-#define SK_PROXY_ENABLED "ProxyEnabled"
-#define SK_PROXY_HOST   "ProxyHost"
-#define SK_PROXY_PORT   "ProxyPort"
-#define SK_PROXY_TYPE   "ProxyType"
-#define SK_PROXY_USER   "ProxyUser"
-#define SK_PROXY_PASS   "ProxyPassword"
 
 // - Constructions -
 
 Settings::Settings(QObject *parent)
   : Base(
-      QSettings::NativeFormat, QSettings::UserScope,
+      Base::NativeFormat, Base::UserScope,
       SK_ORGANIZATION, SK_APPLICATION,
       parent)
 { }
@@ -88,21 +68,6 @@ void
 Settings::setVersion(const QString &version)
 { setValue(SK_VERSION, version); }
 
-qint64
-Settings::userId() const
-{ return value(SK_USERID).toLongLong(); }
-
-void
-Settings::setThemeId(int tid)
-{ setValue(SK_THEME, tid); }
-
-int
-Settings::themeId() const
-{
-  enum { defval = UiStyle::RandomTheme };
-  return value(SK_THEME, defval).toInt();
-}
-
 void
 Settings::setAnnotationEffect(int id)
 { setValue(SK_ANNOTEFFECT, id); }
@@ -111,42 +76,6 @@ int
 Settings::annotationEffect() const
 { return value(SK_ANNOTEFFECT).toInt(); }
 
-void
-Settings::setUserId(qint64 uid)
-{ setValue(SK_USERID, uid); }
-
-QString
-Settings::userName() const
-{
-  QString ret = value(SK_USERNAME).toString();
-  return ret.isEmpty() ? ret : Crypt::decrypt(ret);
-}
-
-void
-Settings::setUserName(const QString &userName)
-{
-  if (userName.isEmpty())
-    remove(SK_USERNAME);
-  else
-    setValue(SK_USERNAME, Crypt::encrypt(userName));
-}
-
-QString
-Settings::password() const
-{
-  QString ret = value(SK_PASSWORD).toString();
-  return ret.isEmpty() ? ret : Crypt::decrypt(ret);
-}
-
-void
-Settings::setPassword(const QString &password)
-{
-  if (password.isEmpty())
-    remove(SK_PASSWORD);
-  else
-    setValue(SK_PASSWORD, Crypt::encrypt(password));
-}
-
 QDate
 Settings::updateDate() const
 { return value(SK_UPDATEDATE).toDate(); }
@@ -154,14 +83,6 @@ Settings::updateDate() const
 void
 Settings::setUpdateDate(const QDate &date)
 { setValue(SK_UPDATEDATE, date); }
-
-int
-Settings::language() const
-{ return value(SK_LANGUAGE).toInt(); }
-
-void
-Settings::setLanguage(int language)
-{ setValue(SK_LANGUAGE, language); }
 
 int
 Settings::subtitleColor() const
@@ -200,6 +121,22 @@ Settings::isQueueEmpty() const
 void
 Settings::setQueueEmpty(bool empty)
 { setValue(SK_QUEUEEMPTY, empty); }
+
+bool
+Settings::isBufferedMediaSaved() const
+{ return value(SK_SAVEBUFFER, true).toBool(); }
+
+void
+Settings::setBufferedMediaSaved(bool t)
+{ setValue(SK_SAVEBUFFER, t); }
+
+bool
+Settings::isAutoSubmit() const
+{ return value(SK_AUTOSUBMIT, true).toBool(); }
+
+void
+Settings::setAutoSubmit(bool t)
+{ setValue(SK_AUTOSUBMIT, t); }
 
 bool
 Settings::isTranslateEnabled() const
@@ -248,22 +185,6 @@ Settings::isAutoPlayNext() const
 void
 Settings::setAutoPlayNext(bool t)
 { setValue(SK_AUTOPLAYNEXT, t); }
-
-bool
-Settings::isAeroEnabled() const
-{ return value(SK_AERO, true).toBool(); }
-
-void
-Settings::setAeroEnabled(bool t)
-{ setValue(SK_AERO, t); }
-
-bool
-Settings::isMenuThemeEnabled() const
-{ return value(SK_MENUTHEME).toBool(); }
-
-void
-Settings::setMenuThemeEnabled(bool t)
-{ setValue(SK_MENUTHEME, t); }
 
 bool
 Settings::isMenuBarVisible() const
@@ -399,64 +320,6 @@ QStringList
 Settings::blockedUserNames() const
 { return value(SK_BLOCKEDUSERS).toStringList(); }
 
-// - Accounts -
-
-std::pair<QString, QString>
-Settings::nicovideoAccount()
-{
-  QStringList v = value(SK_NICOACCOUNT).toStringList();
-  if (v.size() != 2)
-    return std::pair<QString, QString>();
-  else {
-    SimpleCrypt c(0);
-    QString username = c.decryptToString(v.first());
-    QString password = c.decryptToString(v.last());
-    return std::make_pair(username, password);
-  }
-}
-
-void
-Settings::setNicovideoAccount(const QString &username, const QString &password)
-{
-  if (username.isEmpty() || password.isEmpty())
-    remove(SK_NICOACCOUNT);
-  else {
-    SimpleCrypt c(0);
-    QStringList v;
-    v.append(c.encryptToString(username));
-    v.append(c.encryptToString(password));
-    setValue(SK_NICOACCOUNT, v);
-  }
-}
-
-std::pair<QString, QString>
-Settings::bilibiliAccount()
-{
-  QStringList v = value(SK_BILIACCOUNT).toStringList();
-  if (v.size() != 2)
-    return std::pair<QString, QString>();
-  else {
-    SimpleCrypt c(0);
-    QString username = c.decryptToString(v.first());
-    QString password = c.decryptToString(v.last());
-    return std::make_pair(username, password);
-  }
-}
-
-void
-Settings::setBilibiliAccount(const QString &username, const QString &password)
-{
-  if (username.isEmpty() || password.isEmpty()) {
-    remove(SK_BILIACCOUNT);
-  } else {
-    SimpleCrypt c(0);
-    QStringList v;
-    v.append(c.encryptToString(username));
-    v.append(c.encryptToString(password));
-    setValue(SK_BILIACCOUNT, v);
-  }
-}
-
 // - Resume -
 
 QHash<qint64, qint64>
@@ -553,75 +416,6 @@ Settings::setAspectRatioHistory(const QHash<qint64, QString> &input)
       h[QString::number(k)] = input[k];
     setValue(SK_ASPECTHIST, h);
   }
-}
-
-// - Network proxy -
-
-void
-Settings::setProxyEnabled(bool t)
-{ setValue(SK_PROXY_ENABLED, t); }
-
-bool
-Settings::isProxyEnabled() const
-{ return value(SK_PROXY_ENABLED).toBool(); }
-
-void
-Settings::setProxyHostName(const QString &host)
-{ setValue(SK_PROXY_HOST, host); }
-
-QString
-Settings::proxyHostName() const
-{ return value(SK_PROXY_HOST).toString(); }
-
-void
-Settings::setProxyPort(int port)
-{ setValue(SK_PROXY_PORT, port); }
-
-int
-Settings::proxyPort() const
-{ return value(SK_PROXY_PORT).toInt(); }
-
-void
-Settings::setProxyType(int type)
-{ setValue(SK_PROXY_TYPE, type); }
-
-int
-Settings::proxyType() const
-{
-  enum { defval = QNetworkProxy::Socks5Proxy };
-  return value(SK_PROXY_TYPE, defval).toInt();
-}
-
-QString
-Settings::proxyUser() const
-{
-  QString ret = value(SK_PROXY_USER).toString();
-  return ret.isEmpty() ? ret : Crypt::decrypt(ret);
-}
-
-void
-Settings::setProxyUser(const QString &userName)
-{
-  if (userName.isEmpty())
-    remove(SK_PROXY_USER);
-  else
-    setValue(SK_PROXY_USER, Crypt::encrypt(userName));
-}
-
-QString
-Settings::proxyPassword() const
-{
-  QString ret = value(SK_PROXY_PASS).toString();
-  return ret.isEmpty() ? ret : Crypt::decrypt(ret);
-}
-
-void
-Settings::setProxyPassword(const QString &password)
-{
-  if (password.isEmpty())
-    remove(SK_PROXY_PASS);
-  else
-    setValue(SK_PROXY_PASS, Crypt::encrypt(password));
 }
 
 // EOF

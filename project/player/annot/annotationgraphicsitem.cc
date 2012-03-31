@@ -6,11 +6,11 @@
 #include "annotationgraphicsstyle.h"
 #include "annotationeditor.h"
 //#include "textformathandler.h"
-#include "uistyle.h"
 #include "tr.h"
-#include "defines.h"
+#include "global.h"
 #include "logger.h"
 #include "signalhub.h"
+#include "ac/acui.h"
 #include "module/annotcloud/annottag.h"
 #include "module/annotcloud/annothtml.h"
 #include "module/qtext/htmltag.h"
@@ -698,7 +698,7 @@ AnnotationGraphicsItem::contextMenuEvent(QContextMenuEvent *event)
       pause();
 
     QMenu menu;
-    UiStyle::globalInstance()->setContextMenuStyle(&menu, false); // persistent = false
+    AcUi::globalInstance()->setContextMenuStyle(&menu, false); // persistent = false
 
     if (!hub_->isLiveTokenMode())
       menu.addAction(TR(T_MENUTEXT_EDIT), this, SLOT(edit()));

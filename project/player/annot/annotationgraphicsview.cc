@@ -9,7 +9,7 @@
 #include "signalhub.h"
 #include "videoview.h"
 #include "logger.h"
-#include "defines.h"
+#include "global.h"
 #include "module/player/player.h"
 #ifdef Q_WS_WIN
   #include "win/qtwin/qtwin.h"
@@ -327,10 +327,10 @@ AnnotationGraphicsView::invalidatePos()
   }
 }
 
-void
-AnnotationGraphicsView::moveToGlobalPos(const QPoint &globalPos)
+QPoint
+AnnotationGraphicsView::fromGlobal(const QPoint &globalPos) const
 {
-  QPoint newPos =
+  return
 #ifdef Q_WS_MAC
       mapFromGlobal(globalPos) - mapFromGlobal(QPoint())
 #else
@@ -339,6 +339,12 @@ AnnotationGraphicsView::moveToGlobalPos(const QPoint &globalPos)
       globalPos - mapToGlobal(pos()) // absolute distance
 #endif // Q_WS_MAC
   ;
+}
+
+void
+AnnotationGraphicsView::moveToGlobalPos(const QPoint &globalPos)
+{
+  QPoint newPos = fromGlobal(globalPos);
   if (newPos != pos()) {
     move(newPos);
     emit posChanged();
@@ -438,6 +444,44 @@ AnnotationGraphicsView::resume()
   if (paused_) {
     paused_ = false;
     emit resumed();
+  }
+}
+
+void
+AnnotationGraphicsView::pauseItemAt(const QPoint &pos)
+{
+  QGraphicsItem *item = itemAt(pos);
+  AnnotationGraphicsItem *a = dynamic_cast<AnnotationGraphicsItem *>(item);
+  if (a)
+    a->pause();
+}
+
+void
+AnnotationGraphicsView::resumeItemAt(const QPoint &pos)
+{
+  QGraphicsItem *item = itemAt(pos);
+  AnnotationGraphicsItem *a = dynamic_cast<AnnotationGraphicsItem *>(item);
+  if (a)
+    a->pause();
+}
+
+void
+AnnotationGraphicsView::pauseItems(const QRect &rect, Qt::ItemSelectionMode mode)
+{
+  foreach (QGraphicsItem *item, items(rect, mode)) {
+    AnnotationGraphicsItem *a = dynamic_cast<AnnotationGraphicsItem *>(item);
+    if (a)
+      a->pause();
+  }
+}
+
+void
+AnnotationGraphicsView::resumeItems(const QRect &rect, Qt::ItemSelectionMode mode)
+{
+  foreach (QGraphicsItem *item, items(rect, mode)) {
+    AnnotationGraphicsItem *a = dynamic_cast<AnnotationGraphicsItem *>(item);
+    if (a)
+      a->resume();
   }
 }
 

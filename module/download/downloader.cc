@@ -19,6 +19,31 @@ Downloader::init()
 
 // - Download -
 
+void
+Downloader::get(const QNetworkRequest &req, bool async, int retries)
+{
+  DOUT("enter: async =" << async << ", url =" << req.url().toString() << ", retries =" << retries);
+  state_ = Downloading;
+
+  QNetworkReply *reply = nam_->get(req);
+  connect(reply, SIGNAL(downloadProgress(qint64,qint64)), SIGNAL(progress(qint64,qint64)));
+
+  // See: http://www.developer.nokia.com/Community/Wiki/CS001432_-_Handling_an_HTTP_redirect_with_QNetworkAccessManager
+  if (!async) {
+    QEventLoop loop;
+    connect(reply, SIGNAL(finished()), &loop, SLOT(quit()), Qt::QueuedConnection);
+    connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), &loop, SLOT(quit()), Qt::QueuedConnection);
+    DOUT("eventloop enter");
+    loop.exec();
+    DOUT("eventloop leave");
+
+    while (retries-- > 0 && state_ != OK)
+      get(req, false, retries); // async = false
+  }
+
+  DOUT("exit: state =" << state_);
+}
+
 // See: http://stackoverflow.com/questions/5486090/qnetworkreply-wait-for-finished
 void
 Downloader::get(const QUrl &url, const QString &header, bool async, int retries)

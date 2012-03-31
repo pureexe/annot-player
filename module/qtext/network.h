@@ -116,7 +116,6 @@ namespace QtExt {
   };
 
 
-
   class ProgressWithId : public QObject
   {
     Q_OBJECT

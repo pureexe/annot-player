@@ -49,12 +49,18 @@ public:
   virtual qint64 duration() const { return 0; }
   virtual qint64 availableDuration() const { return 0; }
 
+  bool isBufferSaved() const { return saveBuffer_; }
+
   bool isRunning() const { return state_ == Running; }
   bool isStopped() const { return state_ == Stopped; }
   bool isFinished() const { return state_ == Finished; }
 
+  virtual void save() { }
+
   void setCookieJar(QNetworkCookieJar *jar) { cookieJar_ = jar; }
 public slots:
+  void setBufferSaved(bool t) { saveBuffer_ = t; }
+
   void setMediaTitle(const QString &title) { mediaTitle_ = title; }
 
   virtual void waitForReady() = 0;
@@ -67,6 +73,7 @@ protected slots:
 
 private:
   State state_;
+  bool saveBuffer_;
 
   QNetworkCookieJar *cookieJar_;
   QString mediaTitle_;

@@ -2,6 +2,13 @@ ChangeLog
 Annot Project
 6/18/2011
 
+3/30/2012	annot.player	0.1.4.0
+        * Web browser and downloader utilities are made into different apps.
+        * Added mouse rubber band to select annotations with CTRL/SHIFT modifiers.
+        * Nico browser fixed. Able to visit nico anime channel from outside of Japan.
+        * Added previous/next/browse actions for online video.
+        * Upgraded to Qt 4.8.1 and VLC 2.0.1.
+
 3/23/2012	annot.player	0.1.3.4
         * Show download progress in position slider.
         * Added annotation thread view.

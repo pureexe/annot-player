@@ -23,9 +23,9 @@ public:
 
   // - Properties -
 public:
-  bool draggable() const;
+  bool isDraggable() const { return draggable_; }
 public slots:
-  void setDraggable(bool draggable);
+  void setDraggable(bool t) { draggable_ = t; }
 
   // - Events -
 protected:

@@ -5,8 +5,9 @@
 #include <QtCore>
 #include <boost/tuple/tuple.hpp>
 
-#define FORMAT_TIME(_secs)        QDateTime::fromMSecsSinceEpoch(_secs * 1000).toString(Qt::ISODate)
-#define FORMAT_POS(_msecs)        QtExt::msecs2time(_msecs).toString()
+#define FORMAT_TIME(_secs)        QDateTime::fromMSecsSinceEpoch(_secs * 1000).toString(Qt::ISODate) \
+                                  .replace('T', ' ')
+#define FORMAT_POS(_msecs)        ((_msecs) <= 0 ? QString() : QtExt::msecs2time(_msecs).toString())
 
 // - Resources -
 

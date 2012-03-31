@@ -12,7 +12,8 @@
 #include <exception>
 #include <cstdio>
 
-#define NICO_PROXY_DOMAIN ".galstars.net"
+//#define NICO_PROXY_DOMAIN     ".galstars.net"
+#define NICO_PROXY_DOMAIN       "sakuradite.com"
 
 #define _qs(_cstr)      QString::fromLocal8Bit(_cstr)
 
@@ -22,7 +23,7 @@
 
 #define UNUSED(_var)    (void)(_var)
 
-#define DEBUG "luaresolver"
+//#define DEBUG "luaresolver"
 #include "module/debug/debug.h"
 
 // - Construction -
@@ -260,8 +261,7 @@ LuaResolver::resolve(const QString &href, int *siteid, QString *refurl, QString 
 
     // Set account
     if (hasNicovideoAccount() &&
-        (href.contains("nicovideo.jp/", Qt::CaseInsensitive) ||
-         href.contains("nico.galstars.net/", Qt::CaseInsensitive))) {
+        href.contains("nicovideo.jp/", Qt::CaseInsensitive)) {
       DOUT("nicovideo username =" << nicovideoUsername_);
       boost::function<int (std::string, std::string)>
           call = lua_function<int>(L, "set_nicovideo_account");

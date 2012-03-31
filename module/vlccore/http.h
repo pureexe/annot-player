@@ -35,6 +35,7 @@ class VlcHttpPlugin : public QObject
   static QStringList urls_;
   static qint64 duration_;
   static QString mediaTitle_;
+  static bool bufferSaved_;
 
 public:
   static Self *globalInstance() { static Self g; return &g; }
@@ -52,12 +53,18 @@ public:
   static void load();
   static void unload();
 
+  static bool isBufferSaved() { return bufferSaved_; }
+
   static void setCookieJar(QNetworkCookieJar *jar) { cookieJar_ = jar; }
+  static void setBufferSaved(bool t);
   static void setUrls(const QStringList &urls) { urls_ = urls; }
   static void setDuration(qint64 msec) { duration_ = msec; }
   static void setMediaTitle(const QString &title) { mediaTitle_ = title; }
 
   static void closeSession();
+
+  static void save();
+  static bool isFinished();
 
   static qint64 duration();
   static qint64 availableDuration();

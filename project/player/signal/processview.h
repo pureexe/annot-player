@@ -18,7 +18,7 @@ class QSortFilterProxyModel;
 class QToolButton;
 QT_END_NAMESPACE
 
-class FilteredTableView;
+class AcFilteredTableView;
 
 typedef QtExt::Dialog ProcessViewBase;
 class ProcessView : public ProcessViewBase
@@ -107,7 +107,7 @@ private:
   void createActions();
 
 private:
-  FilteredTableView *tableView_; // process table
+  AcFilteredTableView *tableView_; // process table
 
   QHash<ulong, ProcessInfo> pis_;
 

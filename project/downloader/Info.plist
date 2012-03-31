@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+        <key>CFBundleIconFile</key>
+        <string>@icon@</string>
+        <key>CFBundlePackageType</key>
+        <string>APPL</string>
+        <key>CFBundleGetInfoString</key>
+        <string>Copyright @ 2012</string>
+        <key>CFBundleSignature</key>
+        <string>????</string>
+        <key>CFBundleVersion</key>
+        <string>@VERSION@</string>
+        <key>CFBundleIdentifier</key>
+        <string>me.annot.Downloader</string>
+        <key>CFBundleExecutable</key>
+        <string>@executable@</string>
+        <key>LSArchitecturePriority</key>
+        <array>
+                <string>x86_64</string>
+        </array>
+        <key>LSMinimumSystemVersionByArchitecture</key>
+        <dict>
+                <key>x86_64</key>
+                <string>10.7.3</string>
+        </dict>
+        <key>CFBundleURLTypes</key>
+        <array>
+                <dict>
+                        <key>CFBundleURLIconFile</key>
+                        <string>downloader</string>
+                        <key>CFBundleURLName</key>
+                        <string>http url</string>
+                        <key>CFBundleURLSchemes</key>
+                        <array>
+                                <string>http</string>
+                        </array>
+                </dict>
+                <dict>
+                        <key>CFBundleURLIconFile</key>
+                        <string>downloader</string>
+                        <key>CFBundleURLName</key>
+                        <string>ftp url</string>
+                        <key>CFBundleURLSchemes</key>
+                        <array>
+                                <string>ftp</string>
+                        </array>
+                </dict>
+                <dict>
+                        <key>CFBundleURLIconFile</key>
+                        <string>downloader</string>
+                        <key>CFBundleURLName</key>
+                        <string>Multimedia Stream URL</string>
+                        <key>CFBundleURLSchemes</key>
+                        <array>
+                                <string>mms</string>
+                        </array>
+                </dict>
+                <dict>
+                        <key>CFBundleURLIconFile</key>
+                        <string>downloader</string>
+                        <key>CFBundleURLName</key>
+                        <string>RTSP</string>
+                        <key>CFBundleURLSchemes</key>
+                        <array>
+                                <string>rtsp</string>
+                        </array>
+                </dict>
+                <dict>
+                        <key>CFBundleURLIconFile</key>
+                        <string>downloader</string>
+                        <key>CFBundleURLName</key>
+                        <string>udp url</string>
+                        <key>CFBundleURLSchemes</key>
+                        <array>
+                                <string>udp</string>
+                        </array>
+                </dict>
+        </array>
+</dict>
+</plist>

@@ -2,8 +2,8 @@
 // 10/7/2011
 
 #include "livedialog.h"
-#include "uistyle.h"
 #include "tr.h"
+#include "ac/acui.h"
 #include <QtGui>
 
 #define SLOTLINE_MAXWIDTH 150
@@ -21,7 +21,6 @@ LiveDialog::LiveDialog(QWidget *parent)
   : Base(parent, WINDOW_FLAGS), timeSlotIndex_(0)
 {
   setWindowTitle(TR(T_TITLE_LIVE));
-  UiStyle::globalInstance()->setWindowStyle(this);
 
   createLayout();
 
@@ -38,18 +37,19 @@ LiveDialog::LiveDialog(QWidget *parent)
 void
 LiveDialog::createLayout()
 {
-  UiStyle *ui = UiStyle::globalInstance();
+  AcUi *ui = AcUi::globalInstance();
+  ui->setWindowStyle(this);
 
   comboBox_ = ui->makeComboBox();
   comboBox_->setMaximumWidth(SLOTLINE_MAXWIDTH);
 
   QToolButton *okButton = ui->makeToolButton(
-        UiStyle::PushHint | UiStyle::HighlightHint, TR(T_OK), this, SLOT(ok()));
+        AcUi::PushHint | AcUi::HighlightHint, TR(T_OK), this, SLOT(ok()));
   QToolButton *cancelButton = ui->makeToolButton(
-        UiStyle::PushHint, TR(T_CANCEL), this, SLOT(hide()));
+        AcUi::PushHint, TR(T_CANCEL), this, SLOT(hide()));
 
   QLabel *comboBoxLabel = ui->makeLabel(
-        UiStyle::BuddyHint, TR(T_LABEL_TIMESLOT), TR(T_TOOLTIP_TIMESLOT), comboBox_);
+        AcUi::BuddyHint, TR(T_LABEL_TIMESLOT), TR(T_TOOLTIP_TIMESLOT), comboBox_);
 
   // Layouts
   QVBoxLayout *rows = new QVBoxLayout; {

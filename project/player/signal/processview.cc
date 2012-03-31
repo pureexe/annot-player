@@ -4,16 +4,16 @@
 #include "processview.h"
 #include "tr.h"
 #include "rc.h"
-#include "uistyle.h"
-#include "defines.h"
+#include "global.h"
 #include "logger.h"
-#include "filteredtableview.h"
 #include "win/qtwin/qtwin.h"
 #ifdef USE_WIN_QTH
-  #include "win/qth/qth.h"
+#  include "win/qth/qth.h"
 #else
-  #error "QTH is indispensible"
+#  error "QTH is indispensible"
 #endif // USE_WIN_QTH
+#include "ac/acfilteredtableview.h"
+#include "ac/acui.h"
 #include <QtGui>
 
 using namespace Logger;
@@ -67,7 +67,6 @@ ProcessView::ProcessView(QWidget *parent)
   : Base(parent, WINDOW_FLAGS)
 {
   setWindowTitle(tr("Process view"));
-  UiStyle::globalInstance()->setWindowStyle(this);
 
   createModel();
   createLayout();
@@ -90,21 +89,22 @@ ProcessView::createModel()
     proxyModel_->setSortCaseSensitivity(Qt::CaseInsensitive);
   }
 
-  tableView_ = new FilteredTableView(sourceModel_, proxyModel_, this);
+  tableView_ = new AcFilteredTableView(sourceModel_, proxyModel_, this);
   connect(tableView_, SIGNAL(currentIndexChanged(QModelIndex)), SLOT(invalidateButtons()));
 }
 
 void
 ProcessView::createLayout()
 {
-  UiStyle *ui = UiStyle::globalInstance();
+  AcUi *ui = AcUi::globalInstance();
+  ui->setWindowStyle(this);
 
   attachButton_ = ui->makeToolButton(
-        UiStyle::PushHint, TR(T_ATTACH), TR(T_TOOLTIP_ATTACHPROCESS), this, SLOT(attachProcess()));
+        AcUi::PushHint, TR(T_ATTACH), TR(T_TOOLTIP_ATTACHPROCESS), this, SLOT(attachProcess()));
   detachButton_ = ui->makeToolButton(
-        UiStyle::PushHint, TR(T_DETACH), TR(T_TOOLTIP_DETACHPROCESS), this, SLOT(detachProcess()));
+        AcUi::PushHint, TR(T_DETACH), TR(T_TOOLTIP_DETACHPROCESS), this, SLOT(detachProcess()));
   QToolButton *refreshButton = ui->makeToolButton(
-        UiStyle::PushHint, TR(T_REFRESH), TR(T_TOOLTIP_REFRESHPROCESS), this, SLOT(refresh()));
+        AcUi::PushHint, TR(T_REFRESH), TR(T_TOOLTIP_REFRESHPROCESS), this, SLOT(refresh()));
 
   // Set layout
 
@@ -151,7 +151,7 @@ ProcessView::createActions()
 
   // Create menus
   contextMenu_ = new QMenu(windowTitle(), this);
-  UiStyle::globalInstance()->setContextMenuStyle(contextMenu_, true); // persistent = true
+  AcUi::globalInstance()->setContextMenuStyle(contextMenu_, true); // persistent = true
 }
 
 

@@ -2,19 +2,24 @@
 // 3/14/2012
 
 #include "proxybrowser.h"
-#include "defines.h"
-#include "uistyle.h"
+#include "global.h"
 #include "tr.h"
-#include "settings.h"
 #include "logger.h"
+#include "settings.h"
+#include "rc.h"
+#include "ac/acui.h"
+#include "ac/acsettings.h"
 #include "module/nicoutil/nicoutil.h"
+#include "module/qtext/algorithm.h"
 #include <boost/tuple/tuple.hpp>
 #include <QtGui>
 #include <QtWebKit>
 
 using namespace Logger;
 
-// - Constructions -
+#define HOMEPAGE_URL    "http://ch.nicovideo.jp/menu/anime/"
+
+// - Construction -
 
 #define WINDOW_FLAGS ( \
   Qt::Dialog | \
@@ -33,8 +38,9 @@ using namespace Logger;
 ProxyBrowser::ProxyBrowser(QWidget *parent)
   : Base(parent)
 {
-  setWindowTitle(tr("Web browser"));
   setWindowFlags(WINDOW_FLAGS);
+  setWindowTitle(tr("Annot Browser"));
+  setWindowIcon(QIcon(RC_IMAGE_BROWSER));
   setTextSizeMultiplier(TEXT_SIZE_SCALE);
 
 #ifdef Q_WS_MAC
@@ -42,9 +48,11 @@ ProxyBrowser::ProxyBrowser(QWidget *parent)
   setContentsMargins(4, 2, 4, 2);
 #endif // Q_WS_MAC
 
-  setHomePage("http://www.google.com");
+  setHomePage(HOMEPAGE_URL);
 
-  UiStyle::globalInstance()->setWindowStyle(this);
+  AcUi::globalInstance()->setWindowStyle(this);
+  AcUi::globalInstance()->setStatusBarStyle(statusBar());
+
   setWindowOpacity(1.0); // window is opaque
 
   login();
@@ -53,22 +61,23 @@ ProxyBrowser::ProxyBrowser(QWidget *parent)
 QStringList
 ProxyBrowser::startupUrls()
 {
-  QStringList ret = Settings::globalInstance()->browserUrls();
-  if (ret.isEmpty()) {
-    ret.append("http://ch.nicovideo.jp/menu/anime/");
-    ret.append("http://live.nicovideo.jp/");
-  }
+  QStringList ret = Settings::globalSettings()->browserUrls();
+  if (ret.isEmpty())
+    ret.append(homePage());
+  else
+    showMessage(tr("restoring last sessions ..."));
   return ret;
 }
 
 void
 ProxyBrowser::login()
 {
-  Settings *s = Settings::globalInstance();
+  AcSettings *s = AcSettings::globalSettings();
   QString userName, password;
   boost::tie(userName, password) = s->nicovideoAccount();
   if (!userName.isEmpty() && !password.isEmpty()) {
     log(tr("logging in nicovideo.jp as %1 ...").arg(userName));
+    showMessage(tr("logging in nicovideo.jp as %1 ...").arg(userName));
     nico::login(userName, password, cookieJar());
   }
 }
@@ -81,11 +90,12 @@ ProxyBrowser::closeEvent(QCloseEvent *event)
   if (tabCount() > 1) {
     QStringList urls;
     foreach (QString url, tabAddresses())
-      if (!url.isEmpty())
+      if (!url.trimmed().isEmpty())
         urls.append(url);
-    Settings::globalInstance()->setBrowserUrls(urls);
+    urls = QtExt::uniqueList(urls);
+    Settings::globalSettings()->setBrowserUrls(urls);
   } else
-    Settings::globalInstance()->clearBrowserUrls();
+    Settings::globalSettings()->clearBrowserUrls();
   Base::closeEvent(event);
 }
 
@@ -96,7 +106,7 @@ ProxyBrowser::setVisible(bool visible)
 
   if (visible && tabCount() <= 0) {
     openUrls(startupUrls());
-    Settings::globalInstance()->clearBrowserUrls();
+    Settings::globalSettings()->clearBrowserUrls();
   }
 }
 

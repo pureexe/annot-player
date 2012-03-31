@@ -12,6 +12,7 @@
 
 //#define DEBUG "vlccore::video"
 #include "module/debug/debug.h"
+#include <QDebug>
 
 #ifdef _MSC_VER
 #  pragma warning (disable:4819)       // C4819: The file contains a character that cannot be represented in the current code page.
@@ -113,7 +114,7 @@ QPoint
 vlccore::vout_map_to_widget(vout_thread_t *vout, const QPoint &voutPos, const QSize &widgetSize)
 {
   QSize voutSize = vout_dimension(vout);
-  if (voutSize.isEmpty())
+  if (voutSize.isEmpty() || voutSize == widgetSize)
     return voutPos;
 
  int x = (voutPos.x() * widgetSize.width()) / voutSize.width(),

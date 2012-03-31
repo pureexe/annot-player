@@ -11,6 +11,8 @@ HEADERS += \
     $$PWD/countdowntimer.h \
     $$PWD/datetime.h \
     $$PWD/dialog.h \
+    $$PWD/draggablemainwindow.h \
+    $$PWD/draggablewidget.h \
     $$PWD/eventlistener.h \
     $$PWD/filedeleter.h \
     $$PWD/filesystem.h \
@@ -19,6 +21,7 @@ HEADERS += \
     $$PWD/htmltag.h \
     $$PWD/network.h \
     $$PWD/overlaylayout.h \
+    $$PWD/rubberband.h \
     $$PWD/slider.h \
     $$PWD/stoppable.h \
     $$PWD/string.h \
@@ -34,17 +37,20 @@ SOURCES += \
     $$PWD/countdowntimer.cc \
     $$PWD/datetime.cc \
     $$PWD/dialog.cc \
+    $$PWD/draggablemainwindow.cc \
+    $$PWD/draggablewidget.cc \
     $$PWD/filedeleter.cc \
     $$PWD/filesystem.cc \
     $$PWD/fontcombobox.cc \
     $$PWD/network.cc \
+    $$PWD/rubberband.cc \
     $$PWD/slider.cc \
     $$PWD/string.cc \
     $$PWD/toolbutton.cc \
     $$PWD/toolbuttonwithid.cc \
     $$PWD/webdialog.cc
 
-QT +=   core gui
+QT +=   core gui network webkit
 
 # EOF
 

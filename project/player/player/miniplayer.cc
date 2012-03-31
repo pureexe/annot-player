@@ -2,10 +2,10 @@
 // 7/11/2011
 
 #include "miniplayer.h"
-#include "defines.h"
+#include "global.h"
 #include "signalhub.h"
-#include "uistyle.h"
 #include "positionslider.h"
+#include "ac/acui.h"
 #include "module/player/player.h"
 #include "module/qtext/overlaylayout.h"
 #include <QtCore>
@@ -28,7 +28,7 @@
     WINDOW_FLAGS_BASE )
 #endif // Q_OS_MAC
 
-#define INPUTLINE_MAXIMUM_WIDTH   200
+#define INPUTLINE_MAXIMUM_WIDTH   300
 
 // - Constructions -
 
@@ -38,7 +38,7 @@ MiniPlayerUi::MiniPlayerUi(SignalHub *hub, Player *player, ServerAgent *server, 
   setWindowFlags(WINDOW_FLAGS);
   setContentsMargins(0, 0, 0, 0);
   setAcceptDrops(true);
-  UiStyle::globalInstance()->setWindowStyle(this);
+  AcUi::globalInstance()->setWindowStyle(this);
 #ifdef Q_OS_MAC
   setWindowOpacity(WINDOW_OPACITY);
 #endif // Q_OS_MAC

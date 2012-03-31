@@ -310,6 +310,13 @@ QtWin::createProcessWithExecutablePath(const QString &filePath)
   return bResult;
 }
 
+void
+QtWin::killCurrentProcess()
+{
+  enum { ExitCode = 0 };
+  ::TerminateProcess(::GetCurrentProcess(), ExitCode);
+}
+
 // - Windows -
 
 bool
@@ -423,6 +430,30 @@ QtWin::getWindowProcessId(HWND hwnd)
 
 // - Mouse and keyboard -
 
+bool
+QtWin::isKeyPressed(int vk)
+{ return ::GetKeyState(vk) & 0xF0; }
+
+bool
+QtWin::isKeyToggled(int vk)
+{ return ::GetKeyState(vk) & 0x0F; }
+
+bool
+QtWin::isKeyCapslockToggled()
+{ return isKeyToggled(VK_CAPITAL); }
+
+bool
+QtWin::isKeyShiftPressed()
+{ return isKeyPressed(VK_LSHIFT) || isKeyPressed(VK_RSHIFT); }
+
+bool
+QtWin::isKeyControlPressed()
+{ return isKeyPressed(VK_LCONTROL) || isKeyPressed(VK_RCONTROL); }
+
+bool
+QtWin::isKeyWinPressed()
+{ return isKeyPressed(VK_LWIN) || isKeyPressed(VK_RWIN); }
+
 int
 QtWin::getDoubleClickInterval()
 { return ::GetDoubleClickTime(); }
@@ -458,6 +489,16 @@ QtWin::sendMouseClick(const QPoint& globalPos, Qt::MouseButton button, bool rela
     ::mouse_event(f | MOUSEEVENTF_XUP,          globalPos.x(), globalPos.y(), 0, 0);
     break;
   }
+}
+
+QPoint
+QtWin::getMousePos()
+{
+  POINT pt;
+  if (::GetCursorPos(&pt))
+    return POINT2QPoint(pt);
+  else
+    return QPoint();
 }
 
 // - Environments -

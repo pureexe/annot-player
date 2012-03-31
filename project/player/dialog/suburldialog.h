@@ -4,45 +4,16 @@
 // suburldialog.h
 // 2/7/2012
 
-#include "module/qtext/dialog.h"
+#include "urldialog.h"
 
-QT_FORWARD_DECLARE_CLASS(QToolButton)
-QT_FORWARD_DECLARE_CLASS(QComboBox)
-
-typedef QtExt::Dialog SubUrlDialogBase;
-class SubUrlDialog : public SubUrlDialogBase
+class SubUrlDialog : public UrlDialog
 {
   Q_OBJECT
   typedef SubUrlDialog Self;
-  typedef SubUrlDialogBase Base;
-
-  QComboBox *edit_;
-  QToolButton *urlButton_, *saveButton_;
+  typedef UrlDialog Base;
 
 public:
   explicit SubUrlDialog(QWidget *parent = 0);
-
-  QString text() const;
-
-signals:
-  void urlEntered(const QString &url, bool save);
-
-public slots:
-  void open();
-  void paste();
-  void setExampleUrl(const QString &text);
-  void setText(const QString &url);
-  void increase();
-  void decrease();
-
-protected:
-  static QString autoCompleteUrl(const QString &url);
-
-protected slots:
-  void showExampleUrl();
-
-private:
-  void createLayout();
 };
 
 #endif // SUBURLDIALOG_H

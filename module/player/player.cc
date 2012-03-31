@@ -178,11 +178,11 @@ namespace { // anonymous, callbacks
   namespace vout_callback_ { // Consisent with vlc_callback_t
 
     int doubleClickTimeout_ = // time between D and DUD, in msecs
-#ifdef Q_OS_WIN
+#ifdef Q_WS_WIN
      QtWin::getDoubleClickInterval() * 1.5
 #else
      600
-#endif // Q_OS_WIN
+#endif // Q_WS_WIN
     ;
 
     qint64 recentClickTime_ = 0; // in msecs
@@ -228,20 +228,26 @@ namespace { // anonymous, callbacks
 
       vlccore::vlcbuttons bt = vlccore::vout_mouse_buttons(vout);
 
-      QPoint coords(newval.coords.x, newval.coords.y);
-      QPoint pos = vlccore::vout_map_to_widget(vout, coords, w->size());
-      QPoint globalPos = pos + w->mapToGlobal(QPoint());
+      QPoint pos(newval.coords.x, newval.coords.y); // same as libvlc_video_get_cursor
+      //QPoint pos = vlccore::vout_map_to_widget(vout, coords, w->size());
+      QPoint globalPos =
+#ifdef Q_WS_WIN
+          QtWin::getMousePos()
+#else
+          pos + w->mapToGlobal(QPoint())
+#endif // Q_WS_WIN
+      ;
 
       Qt::MouseButton button;
       Qt::MouseButtons buttons;
       boost::tie(button, buttons) = vlccore::vlcbuttons_to_qt(bt);
 
-#ifdef Q_OS_WIN
+#ifdef Q_WS_WIN
       // Mouse-move without buttons is already provided by mousehook on Windows
       // Skip to reduce overheads.
       if (!buttons)
         return VLC_SUCCESS;
-#endif // Q_OS_WIN
+#endif // Q_WS_WIN
 
       // Post event across diff threads.
       QCoreApplication::postEvent(w,
@@ -272,9 +278,15 @@ namespace { // anonymous, callbacks
       if (!w)
         return 0;
 
-      QPoint coords = vlccore::vout_mouse_pos(vout);
-      QPoint pos = vlccore::vout_map_to_widget(vout, coords, w->size());
-      QPoint globalPos = pos + w->mapToGlobal(QPoint());
+      QPoint pos = vlccore::vout_mouse_pos(vout); // same as libvlc_video_get_cursor
+      //QPoint pos = vlccore::vout_map_to_widget(vout, coords, w->size());
+      QPoint globalPos =
+#ifdef Q_WS_WIN
+          QtWin::getMousePos()
+#else
+          pos + w->mapToGlobal(QPoint())
+#endif // Q_WS_WIN
+      ;
 
       Qt::MouseButton button;
       Qt::MouseButtons buttons;
@@ -295,7 +307,7 @@ namespace { // anonymous, callbacks
           recentClickTime_ = currentTime;
       }
 
-#ifdef Q_OS_WIN
+#ifdef Q_WS_WIN
       if (type != QMouseEvent::MouseButtonRelease && button == Qt::LeftButton) {
         // Disable VLC built-in double-click timer.
         ignoreNextMove_ = true;
@@ -305,7 +317,7 @@ namespace { // anonymous, callbacks
         int offset = rand_ ? 4 : -4;
         QtWin::sendMouseMove(QPoint(offset, 0), true); // relative == true
       }
-#endif // Q_OS_WIN
+#endif // Q_WS_WIN
 
       // Post event across diff threads.
       QCoreApplication::postEvent(w,
@@ -1715,6 +1727,22 @@ Player::setUserAgent(const QString &agent)
 void
 Player::setCookieJar(QNetworkCookieJar *jar)
 { VlcHttpPlugin::setCookieJar(jar); }
+
+bool
+Player::isBufferSaved() const
+{ return VlcHttpPlugin::isBufferSaved(); }
+
+bool
+Player::isDownloadFinished() const
+{ return VlcHttpPlugin::isFinished(); }
+
+void
+Player::setBufferSaved(bool t)
+{ VlcHttpPlugin::setBufferSaved(t); }
+
+void
+Player::saveBuffer()
+{ VlcHttpPlugin::save(); }
 
 // - Title -
 

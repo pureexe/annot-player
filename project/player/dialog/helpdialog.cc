@@ -2,10 +2,9 @@
 // 11/16/2011
 
 #include "helpdialog.h"
-#include "defines.h"
+#include "global.h"
 #include "tr.h"
-#include "settings.h"
-
+#include "ac/acsettings.h"
 #include <QtGui>
 #include <QtWebKit>
 
@@ -46,7 +45,7 @@ HelpDialog::setVisible(bool visible)
 {
   if (visible) {
     QUrl url = urlForLanguage(
-      (QLocale::Language)Settings::globalInstance()->language()
+      (QLocale::Language)AcSettings::globalSettings()->language()
     );
     load(url);
   }

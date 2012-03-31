@@ -2,8 +2,7 @@
 # 1/24/2012
 
 include(../../config.pri)
-include ($$ROOTDIR/module/luacpp/luacpp.pri)
-include ($$ROOTDIR/module/download/download.pri)
+include($$ROOTDIR/module/luacpp/luacpp.pri)
 
 INCLUDEPATH += $$PWD
 

@@ -6,10 +6,10 @@
 #include "prefixcombobox.h"
 #include "positionslider.h"
 #include "userlabel.h"
-#include "defines.h"
+#include "global.h"
 #include "stylesheet.h"
-#include "uistyle.h"
 #include "tr.h"
+#include "ac/acui.h"
 #include "module/qtext/slider.h"
 #include "module/qtext/toolbutton.h"
 #include <QtGui>
@@ -50,7 +50,7 @@ PlayerPanel::volumeSlider()
 {
   if (!volumeSlider_) {
     volumeSlider_ = new QtExt::Slider(Qt::Horizontal, this);
-    volumeSlider_->setStyleSheet(SS_SLIDER_VOLUME);
+    volumeSlider_->setStyleSheet(SS_SLIDER);
     volumeSlider_->setMaximum(G_VOLUME_MAX);
     volumeSlider_->setToolTip(TR(T_VOLUME));
   } return volumeSlider_;
@@ -66,7 +66,7 @@ PlayerPanel::volumeSlider()
       _button##_ = new QtExt::ToolButton(this); \
       _button##_->setStyleSheet(SS_TOOLBUTTON_##_styleid); \
       _button##_->setToolTip(TR(T_TOOLTIP_##_styleid)); \
-      UiStyle::globalInstance()->setToolButtonStyle(_button##_); \
+      AcUi::globalInstance()->setToolButtonStyle(_button##_); \
     } return _button##_; \
   }
 
@@ -92,7 +92,7 @@ QToolButton*
 PlayerPanel::inputCountButton()
 {
   if (!inputCountButton_)
-    inputCountButton_ = UiStyle::globalInstance()->makeToolButton(
+    inputCountButton_ = AcUi::globalInstance()->makeToolButton(
           0, "-", tr("Character count"));
   return inputCountButton_;
 }

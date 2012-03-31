@@ -85,7 +85,6 @@ public:
   virtual qint64 pos() const { return fifo_ ? fifo_->pos() : 0; } ///< \override
   virtual qint64 availableSize() const { return fifo_ ? fifo_->availableSize() : 0; } ///< \override
 
-
   virtual qint64 duration() const { return duration_; } ///< \override
   virtual qint64 availableDuration() const; ///< \override
 
@@ -104,10 +103,11 @@ public slots:
   void updateProgress() { emit progress(receivedSize(), size()); }
 
 protected slots:
+  virtual void save(); ///< \override
+
   void invalidateSize();
   void invalidateFileName();
   void finish();
-  void save();
 
   void wakeAllStopped() { stoppedCond_.wakeAll(); }
   void wakeAllReady() { readyCond_.wakeAll(); }

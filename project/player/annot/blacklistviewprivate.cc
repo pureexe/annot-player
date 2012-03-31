@@ -2,13 +2,11 @@
 // 11/17/2011
 
 #include "blacklistviewprivate.h"
-#include "filteredtableview.h"
-#include "filteredlistview.h"
-#include "uistyle.h"
 #include "tr.h"
-#include "defines.h"
-#include "stylesheet.h"
+#include "global.h"
 #include "annotationbrowser.h" // TO BE REMOVED
+#include "ac/acfilteredtableview.h"
+#include "ac/acfilteredlistview.h"
 #include "module/qtext/datetime.h"
 #include <QtGui>
 
@@ -29,7 +27,7 @@ TextFilterView::TextFilterView(QWidget *parent)
     proxyModel_->setSortCaseSensitivity(Qt::CaseInsensitive);
   }
 
-  tableView_ = new FilteredListView(sourceModel_, proxyModel_, this);
+  tableView_ = new AcFilteredListView(sourceModel_, proxyModel_, this);
 
   // Layout
   QLayout *layout = new QHBoxLayout; {
@@ -103,7 +101,7 @@ UserFilterView::UserFilterView(QWidget *parent)
     proxyModel_->setSortCaseSensitivity(Qt::CaseInsensitive);
   }
 
-  tableView_ = new FilteredListView(sourceModel_, proxyModel_, this);
+  tableView_ = new AcFilteredListView(sourceModel_, proxyModel_, this);
 
   // Layout
   QLayout *layout = new QHBoxLayout; {
@@ -177,7 +175,7 @@ AnnotationFilterView::AnnotationFilterView(QWidget *parent)
     proxyModel_->setSortCaseSensitivity(Qt::CaseInsensitive);
   }
 
-  tableView_ = new FilteredTableView(sourceModel_, proxyModel_, this);
+  tableView_ = new AcFilteredTableView(sourceModel_, proxyModel_, this);
 
   // Layout
   QLayout *layout = new QHBoxLayout; {

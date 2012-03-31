@@ -23,7 +23,7 @@ public:
     void clear() { username.clear(); password.clear(); }
   };
 
-  static Self *globalInstance() { static Self g; return &g; }
+  static Self *globalSettings() { static Self g; return &g; }
 
 protected:
   explicit MrlResolverSettings(QObject *parent = 0) : Base(parent) { }

@@ -70,6 +70,7 @@ mac {
 ## External libraries
 
 win32 {
+    #VLC_HOME            = "c:/Program Files/VideoLAN/VLC/sdk"
     VLC_HOME            = c:/dev/vlc
     VLC_SRC             = $$VLC_HOME/src
     #WSF_HOME            = c:/dev/wso2

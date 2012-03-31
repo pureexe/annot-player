@@ -2,8 +2,8 @@
 // 10/7/2011
 
 #include "syncdialog.h"
-#include "uistyle.h"
 #include "tr.h"
+#include "ac/acui.h"
 #include <QtGui>
 
 #define SLOTLINE_MAXWIDTH 150
@@ -24,7 +24,6 @@ SyncDialog::SyncDialog(QWidget *parent)
 //  setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
 //#endif // Q_WS_MAC
   setWindowTitle(TR(T_TITLE_SYNC));
-  UiStyle::globalInstance()->setWindowStyle(this);
 
   createLayout();
 
@@ -35,7 +34,8 @@ SyncDialog::SyncDialog(QWidget *parent)
 void
 SyncDialog::createLayout()
 {
-  UiStyle *ui = UiStyle::globalInstance();
+  AcUi *ui = AcUi::globalInstance();
+  ui->setWindowStyle(this);
 
   // Widgets
   comboBox_ = ui->makeComboBox();
@@ -43,12 +43,12 @@ SyncDialog::createLayout()
   connect(comboBox_, SIGNAL(currentIndexChanged(int)), SLOT(setTimeSlotIndex(int)));
 
   QToolButton *okButton = ui->makeToolButton(
-        UiStyle::PushHint | UiStyle::HighlightHint, TR(T_OK), this, SLOT(ok()));
+        AcUi::PushHint | AcUi::HighlightHint, TR(T_OK), this, SLOT(ok()));
   QToolButton *cancelButton = ui->makeToolButton(
-        UiStyle::PushHint, TR(T_CANCEL), this, SLOT(hide()));
+        AcUi::PushHint, TR(T_CANCEL), this, SLOT(hide()));
 
   QLabel *comboBoxLabel = ui->makeLabel(
-        UiStyle::BuddyHint, TR(T_LABEL_TIMESLOT), TR(T_TOOLTIP_TIMESLOT), comboBox_);
+        AcUi::BuddyHint, TR(T_LABEL_TIMESLOT), TR(T_TOOLTIP_TIMESLOT), comboBox_);
 
   // Layouts
   QVBoxLayout *rows = new QVBoxLayout; {

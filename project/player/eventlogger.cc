@@ -3,10 +3,10 @@
 
 #include "eventlogger.h"
 #include "osdconsole.h"
-#include "defines.h"
+#include "global.h"
 #include "logger.h"
 #include "tr.h"
-#include "defines.h"
+#include "ac/acui.h"
 #include "module/qtext/htmltag.h"
 #include "module/qtext/datetime.h"
 #include "module/player/player.h"
@@ -47,6 +47,9 @@ EventLogger::createConnections()
 
   connect(player_, SIGNAL(buffering()), SLOT(startLogUntilPlaying()));
   connect(player_, SIGNAL(stopped()), SLOT(stopLogUntilPlaying()));
+
+  connect(AcUi::globalInstance(), SIGNAL(aeroEnabledChanged(bool)), SLOT(logAeroEnabledChanged(bool)));
+  connect(AcUi::globalInstance(), SIGNAL(menuEnabledChanged(bool)), SLOT(logMenuEnabledChanged(bool)));
 }
 
 // - Logging -
@@ -176,7 +179,7 @@ EventLogger::logPlaying()
         title = QFileInfo(title).fileName();
     }
   }
-  log(tr("playing: ") + title);
+  log(tr("playing") + ": " + title);
 }
 
 void
@@ -212,15 +215,15 @@ EventLogger::logPlayRateChanged(qreal rate)
 
 void
 EventLogger::logLoginRequested(const QString &userName)
-{ log(tr("logging in ... using: ") + userName); }
+{ log(tr("logging in as %1 ...").arg(userName)); }
 
 void
 EventLogger::logLoginSucceeded(const QString &userName)
-{ log(tr("login succeeded as: ") + userName); }
+{ log(tr("login succeeded as %1").arg(userName)); }
 
 void
 EventLogger::logLoginFailed(const QString &userName)
-{ warn(tr("failed to login as: ") + userName); }
+{ warn(tr("failed to login as %1").arg(userName)); }
 
 void
 EventLogger::logLogoutRequested()
@@ -288,7 +291,7 @@ EventLogger::logClientAgentAuthorizationError()
 
 void
 EventLogger::logTranslatorNetworkError(const QString &message)
-{ warn(tr("translator: got network error: ") + message); }
+{ warn(tr("translator got network error") + ": " + message); }
 
 void
 EventLogger::logAspectRatioChanged(const QString &ratio)
@@ -298,6 +301,26 @@ EventLogger::logAspectRatioChanged(const QString &ratio)
   else
     log(tr("video aspect ratio") + ": "
         HTML_STYLE_OPEN(color:orange) + ratio + HTML_STYLE_CLOSE());
+}
+
+void
+EventLogger::logAeroEnabledChanged(bool t)
+{
+  if (AcUi::globalInstance()->isAeroEnabled())
+    notify(tr("Aero is enabled, please restart the program"));
+  else if (t)
+    warn(tr("failed to enable Aero"));
+  else
+    notify(tr("Aero is disabled, please restart the program"));
+}
+
+void
+EventLogger::logMenuEnabledChanged(bool t)
+{
+  if (t)
+    notify(tr("Menu theme is enabled, please restart the program"));
+  else
+    notify(tr("Menu theme is disabled, please restart the program"));
 }
 
 // EOF

@@ -2,27 +2,26 @@
 // 7/10/2011
 
 #include "videoview.h"
-#include "defines.h"
+#include "global.h"
 #ifdef USE_WIN_HOOK
-  #include "win/hook/hook.h"
-  #include "win/qtwin/qtwin.h"
+#  include "win/hook/hook.h"
+#  include "win/qtwin/qtwin.h"
 #endif // USE_WIN_HOOK
 #ifdef Q_WS_MAC
-  #include "module/vlccore/video.h"
-  #include "mac/vlcstep/vlcstep.h"
-
-  #define DOUBLE_CLICK_TIMEOUT  1000 // 1 second
+#  include "module/vlccore/video.h"
+#  include "mac/vlcstep/vlcstep.h"
+#  define DOUBLE_CLICK_TIMEOUT  1000 // 1 second
 #endif // Q_WS_MAC
 #include <QtGui>
 #ifdef Q_WS_X11
-  //#include <QX11Info>
-  #include <X11/Xlib.h>
+//#  include <QX11Info>
+#  include <X11/Xlib.h>
 #endif // Q_WS_X11
 
 #ifdef Q_WS_MAC
-  #define BASE(_parent)   Base(0, _parent)
+#  define BASE(_parent)   Base(0, _parent)
 #else
-  #define BASE(_parent)   Base(_parent)
+#  define BASE(_parent)   Base(_parent)
 #endif // Q_WS_MAC
 
 // - Constructions -

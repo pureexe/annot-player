@@ -82,6 +82,8 @@ namespace QtWin {
   };
   QList<ModuleInfo> getModulesInfo();
 
+  void killCurrentProcess();
+
   // - Windows -
 
   ///  Set focus using a native way. If failed, return false but still do it in Qt way.
@@ -116,14 +118,23 @@ namespace QtWin {
   void sendMouseMove(const QPoint& globalPos, bool relative = false);
   void sendMouseClick(const QPoint& globalPos, Qt::MouseButton button, bool relative = false);
 
+  QPoint getMousePos(); ///< global pos
+
   int getDoubleClickInterval(); // in msec
+
+  bool isKeyToggled(int vk);
+  bool isKeyPressed(int vk);
+
+  bool isKeyCapslockToggled();
+  bool isKeyShiftPressed();
+  bool isKeyControlPressed();
+  bool isKeyWinPressed();
 
   // - Environments -
   QString getWinDirPath();
   QString getAppDataPath();
 
   QString getDesktopPath();
-
 
   bool isWindowsVistaOrLater();
   bool isWindowsXpOrLater();

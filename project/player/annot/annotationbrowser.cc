@@ -3,12 +3,12 @@
 
 #include "annotationbrowser.h"
 #include "annotationeditor.h"
-#include "uistyle.h"
 #include "rc.h"
 #include "logger.h"
 #include "tr.h"
-#include "filteredtableview.h"
+#include "ac/acfilteredtableview.h"
 #include "signalhub.h"
+#include "ac/acui.h"
 #include "module/qtext/datetime.h"
 #include "module/annotcloud/traits.h"
 #include "module/annotcloud/annottag.h"
@@ -40,7 +40,6 @@ AnnotationBrowser::AnnotationBrowser(SignalHub *hub, QWidget *parent)
   Q_ASSERT(hub_);
 
   setWindowTitle(TR(T_TITLE_ANNOTATIONBROWSER));
-  UiStyle::globalInstance()->setWindowStyle(this);
   setAcceptDrops(true);
 
   createModel();
@@ -83,20 +82,21 @@ AnnotationBrowser::createModel()
     proxyModel_->setSortCaseSensitivity(Qt::CaseInsensitive);
   }
 
-  tableView_ = new FilteredTableView(sourceModel_, proxyModel_, this);
+  tableView_ = new AcFilteredTableView(sourceModel_, proxyModel_, this);
 }
 
 void
 AnnotationBrowser::createLayout()
 {
-  UiStyle *ui = UiStyle::globalInstance();
+  AcUi *ui = AcUi::globalInstance();
+  ui->setWindowStyle(this);
 
   meButton_ = ui->makeToolButton(
-        UiStyle::CheckHint, tr("Mine"), tr("Display my annotations only"), K_CTRL "+1", this, SLOT(setMe(bool)));
+        AcUi::CheckHint, tr("Mine"), tr("Display my annotations only"), K_CTRL "+1", this, SLOT(setMe(bool)));
   nowButton_ = ui->makeToolButton(
-        UiStyle::CheckHint, tr("Now"), tr("Display annotations at the time only"), K_CTRL "+2", this, SLOT(setNow(bool)));
+        AcUi::CheckHint, tr("Now"), tr("Display annotations at the time only"), K_CTRL "+2", this, SLOT(setNow(bool)));
   subtitleButton_ = ui->makeToolButton(
-        UiStyle::CheckHint, TR(T_SUBTITLE), tr("Display subtitles only"), K_CTRL "+3", this, SLOT(setSubtitle(bool)));
+        AcUi::CheckHint, TR(T_SUBTITLE), tr("Display subtitles only"), K_CTRL "+3", this, SLOT(setSubtitle(bool)));
 
   QVBoxLayout *rows = new QVBoxLayout; {
     QLayout *header = new QHBoxLayout;
@@ -141,7 +141,7 @@ AnnotationBrowser::createActions()
 
   // Create menus
   contextMenu_ = new QMenu(TR(T_TITLE_ANNOTATIONBROWSER), this);
-  UiStyle::globalInstance()->setContextMenuStyle(contextMenu_, true); // persistent = true
+  AcUi::globalInstance()->setContextMenuStyle(contextMenu_, true); // persistent = true
 
   // Shortcuts
   QShortcut *cancelShortcut = new QShortcut(QKeySequence("Esc"), this);

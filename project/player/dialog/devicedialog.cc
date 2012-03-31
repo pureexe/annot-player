@@ -2,9 +2,9 @@
 // 12/2/2011
 
 #include "devicedialog.h"
-#include "uistyle.h"
 #include "tr.h"
 #include "logger.h"
+#include "ac/acui.h"
 #ifdef Q_OS_WIN
 #  include "win/qtwin/qtwin.h"
 #endif // Q_OS_WIN
@@ -60,7 +60,6 @@ DeviceDialog::DeviceDialog(QWidget *parent)
 //  setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
 //#endif // Q_OS_MAC
   setWindowTitle(TR(T_TITLE_OPENDEVICE));
-  UiStyle::globalInstance()->setWindowStyle(this);
 
   createLayout();
 
@@ -78,7 +77,8 @@ DeviceDialog::DeviceDialog(QWidget *parent)
 void
 DeviceDialog::createLayout()
 {
-  UiStyle *ui = UiStyle::globalInstance();
+  AcUi *ui = AcUi::globalInstance();
+  ui->setWindowStyle(this);
 
   pathComboBox_ = ui->makeComboBox(0, TR(T_PATH));
   pathComboBox_->setMinimumWidth(COMBOBOX_MINWIDTH);
@@ -89,11 +89,11 @@ DeviceDialog::createLayout()
   cdRadioButton_ = ui->makeRadioButton(0, tr("CD"));
 
   okButton_ = ui->makeToolButton(
-        UiStyle::PushHint | UiStyle::HighlightHint, TR(T_OPEN), TR(T_TIP_OPENDEVICE), this, SLOT(ok()));
+        AcUi::PushHint | AcUi::HighlightHint, TR(T_OPEN), TR(T_TIP_OPENDEVICE), this, SLOT(ok()));
   QToolButton *cancelButton = ui->makeToolButton(
-        UiStyle::PushHint, TR(T_CANCEL), this, SLOT(hide()));
+        AcUi::PushHint, TR(T_CANCEL), this, SLOT(hide()));
   QToolButton *refreshButton = ui->makeToolButton(
-        UiStyle::PushHint, TR(T_REFRESH), this, SLOT(refresh()));
+        AcUi::PushHint, TR(T_REFRESH), this, SLOT(refresh()));
 
   // Layouts
   QVBoxLayout *rows = new QVBoxLayout; {

@@ -2,7 +2,7 @@
 #define URLDIALOG_H
 
 // urldialog.h
-// 1/24/2012
+// 2/7/2012
 
 #include "module/qtext/dialog.h"
 
@@ -17,20 +17,23 @@ class UrlDialog : public UrlDialogBase
   typedef UrlDialogBase Base;
 
   QComboBox *edit_;
-  QToolButton *urlButton_;
+  QToolButton *urlButton_, *saveButton_;
 
 public:
   explicit UrlDialog(QWidget *parent = 0);
+
   QString text() const;
+  bool isEmpty() const;
 
 signals:
-  void urlEntered(const QString &url);
+  void urlEntered(const QString &url, bool save);
 
 public slots:
   void open();
   void paste();
   void setExampleUrl(const QString &text);
   void setText(const QString &url);
+  void setSave(bool t);
   void increase();
   void decrease();
 

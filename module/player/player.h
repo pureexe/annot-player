@@ -86,6 +86,8 @@ public:
   bool hasRemoteMedia() const;
   bool isMouseEnabled() const;
   bool isKeyboardEnabled() const;
+  bool isBufferSaved() const;
+  bool isDownloadFinished() const;
 
   Status status() const;
   bool isPlaying() const;
@@ -138,6 +140,9 @@ public slots:
 #else
   void embed(QWidget *w);
 #endif // Q_WS_MAC
+
+  void setBufferSaved(bool t);
+  void saveBuffer();
 
   void setUserAgent(const QString &agent = QString());
 

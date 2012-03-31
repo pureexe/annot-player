@@ -19,9 +19,10 @@ class QToolButton;
 class QMenu;
 QT_END_NAMESPACE
 
+class AcFilteredTableView;
+
 class AddAliasDialog;
 class ServerAgent;
-class FilteredTableView;
 
 typedef QtExt::Dialog TokenViewBase;
 
@@ -144,7 +145,7 @@ private:
   //qint64 userId_;
   QStandardItemModel *sourceModel_; // for alias
   QSortFilterProxyModel *proxyModel_;
-  FilteredTableView *tableView_; // for alias
+  AcFilteredTableView *tableView_; // for alias
 
   QLabel *createDateLabel_,
          *annotCountLabel_,

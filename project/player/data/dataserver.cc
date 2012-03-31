@@ -72,7 +72,7 @@ DataServer::submitAlias(const Alias &alias)
     id = server_->submitAlias(alias);
   } else if (queue_->isValid() && !queue_->isAliasExists(alias)) {
     queue_->insertAlias(alias);
-    Settings::globalInstance()->setQueueEmpty(false);
+    Settings::globalSettings()->setQueueEmpty(false);
   }
 
   if (cache_->isValid() && !cache_->isAliasExists(alias)) {
@@ -139,7 +139,7 @@ DataServer::submitAnnotation(const Annotation &annot)
     id = server_->submitAnnotation(annot);
   } else if (queue_->isValid()) {
     queue_->insertAnnotation(annot);
-    Settings::globalInstance()->setQueueEmpty(false);
+    Settings::globalSettings()->setQueueEmpty(false);
   }
   if (cache_->isValid()) {
     if (id) {
@@ -427,7 +427,7 @@ bool
 DataServer::commitQueue()
 {
   DOUT("enter");
-  if (Settings::globalInstance()->isQueueEmpty()) {
+  if (Settings::globalSettings()->isQueueEmpty()) {
     DOUT("exit: no changes, ret =" << true);
     return true;
   }
@@ -462,7 +462,7 @@ DataServer::commitQueue()
   }
 
   if (empty)
-    Settings::globalInstance()->setQueueEmpty(true);
+    Settings::globalSettings()->setQueueEmpty(true);
 
   DOUT("exit: ret =" << empty);
   return empty;

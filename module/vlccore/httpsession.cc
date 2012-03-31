@@ -8,8 +8,6 @@
 //#define DEBUG "httpsession"
 #include "module/debug/debug.h"
 
-// - Session -
-
 bool
 VlcHttpSession::isMultiMediaMimeType(const QString &contentType)
 { return !contentType.isEmpty() && !contentType.startsWith("text/", Qt::CaseInsensitive); }

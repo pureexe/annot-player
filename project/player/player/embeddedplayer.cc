@@ -3,14 +3,13 @@
 
 #include "embeddedplayer.h"
 #include "positionslider.h"
-#include "defines.h"
+#include "global.h"
 #include "tr.h"
-#include "stylesheet.h"
-#include "uistyle.h"
 #include "signalhub.h"
 #ifdef Q_OS_WIN
-  #include "win/qtwin/qtwin.h"
+#  include "win/qtwin/qtwin.h"
 #endif // Q_OS_WIN
+#include "ac/acss.h"
 #include "module/qtext/toolbutton.h"
 #include "module/qtext/withsizehint.h"
 #include "module/qtext/overlaylayout.h"
@@ -30,7 +29,7 @@
     SS_COLOR(blue) \
   SS_END \
   SS_BEGIN(QLineEdit::hover) \
-    SS_BORDER_IMAGE_URL(RC_IMAGE_LINEEDIT) \
+    SS_BORDER_IMAGE_URL(ACR_IMAGE_LINEEDIT) \
     SS_BORDER(1px groove black) \
     SS_COLOR(black) \
   SS_END
@@ -41,7 +40,7 @@
     SS_COLOR(blue) \
   SS_END \
   SS_BEGIN(QComboBox QAbstractItemView) \
-    SS_BORDER_IMAGE_URL(RC_IMAGE_BACKGROUND) \
+    SS_BORDER_IMAGE_URL(ACR_IMAGE_BACKGROUND) \
   SS_END
 
 #define SS_COMBOBOX_OSD_NODROPDOWN \
@@ -50,7 +49,7 @@
     SS_COLOR(blue) \
   SS_END \
   SS_BEGIN(QComboBox QAbstractItemView) \
-    SS_BORDER_IMAGE_URL(RC_IMAGE_BACKGROUND) \
+    SS_BORDER_IMAGE_URL(ACR_IMAGE_BACKGROUND) \
   SS_END \
   SS_BEGIN(QComboBox::drop-down) \
     SS_TRANSPARENT \
@@ -387,9 +386,15 @@ EmbeddedPlayerUi::showWhenEmbedded()
 void
 EmbeddedPlayerUi::invalidateInputCountButton()
 {
+#ifdef Q_WS_MAC
+#  define PADDING "    "
+#else
+#  define PADDING "   "
+#endif // Q_WS_MAC
   Base::invalidateInputCountButton();
   QToolButton *b = inputCountButton();
-  b->setText(b->text() + "   "); // padding
+  b->setText(b->text() + PADDING); // padding
+#undef PADDING
 }
 
 // EOF

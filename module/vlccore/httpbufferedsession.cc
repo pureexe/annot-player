@@ -57,6 +57,10 @@ HttpBufferedSession::invalidateFileName()
 void
 HttpBufferedSession::save()
 {
+  if (!isFinished()) {
+    emit error(tr("downloading"));
+    return;
+  }
   if (fileName_.isEmpty() || buffer_.isEmpty())
     return;
   QFile::remove(fileName_);
@@ -91,8 +95,9 @@ HttpBufferedSession::finish()
   size_ = buffer_.size();
 
   if (isRunning()) {
-    save();
     setState(Finished);
+    if (isBufferSaved())
+      save();
   }
 
   if (reply_ && reply_->isRunning())

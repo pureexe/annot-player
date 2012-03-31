@@ -141,6 +141,11 @@ void
 HttpStreamSession::save()
 {
   DOUT("enter");
+  if (!isFinished()) {
+    emit error(tr("downloading"));
+    DOUT("exit: not finished");
+    return;
+  }
   if (fileName_.isEmpty() || !fifo_ || !fifo_->availableSize()) {
     DOUT("exit: empty fileName or fifo");
     return;
@@ -178,8 +183,9 @@ HttpStreamSession::finish()
   }
 
   if (isRunning()) {
-    save();
     setState(Finished);
+    if (isBufferSaved())
+      save();
   }
 
   //if (reply_ && reply_->isRunning())

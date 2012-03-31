@@ -3,8 +3,8 @@
 
 #include "userview.h"
 #include "tr.h"
-#include "stylesheet.h"
-#include "uistyle.h"
+#include "ac/acss.h"
+#include "ac/acui.h"
 #include <QtGui>
 
 using namespace AnnotCloud;
@@ -24,7 +24,7 @@ UserView::UserView(QWidget *parent)
 {
   Q_ASSERT(server_);
   setWindowTitle(TR(T_TITLE_USERVIEW));
-  UiStyle::globalInstance()->setWindowStyle(this);
+  AcUi::globalInstance()->setWindowStyle(this);
 
   createLayout();
 }

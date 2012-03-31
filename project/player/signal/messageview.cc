@@ -3,13 +3,12 @@
 
 #include "messageview.h"
 #include "tr.h"
-#include "defines.h"
-#include "stylesheet.h"
+#include "global.h"
 #include "logger.h"
-#include "uistyle.h"
 #ifdef USE_WIN_QTH
 #  include "win/qth/qth.h"
 #endif // USE_WIN_QTH
+#include "ac/acui.h"
 #include "module/qtext/htmltag.h"
 #include <QtGui>
 
@@ -35,7 +34,6 @@ MessageView::MessageView(QWidget *parent)
   : Base(parent, WINDOW_FLAGS), active_(false)
 {
   setWindowTitle(tr("Message view"));
-  UiStyle::globalInstance()->setWindowStyle(this);
 
   createLayout();
 }
@@ -43,7 +41,9 @@ MessageView::MessageView(QWidget *parent)
 void
 MessageView::createLayout()
 {
-  UiStyle *ui = UiStyle::globalInstance();
+  AcUi *ui = AcUi::globalInstance();
+  ui->setWindowStyle(this);
+
   textEdit_ = ui->makeTextEdit(0, tr("Process message")); {
     //QTextCharFormat fmt;
     //fmt.setBackground(QColor("red"));
@@ -53,7 +53,7 @@ MessageView::createLayout()
   }
   connect(textEdit_, SIGNAL(cursorPositionChanged()), SLOT(invalidateCurrentCharFormat()));
 
-  hookComboBox_ = ui->makeComboBox(UiStyle::ReadOnlyHint, "", tr("Signal channel")); {
+  hookComboBox_ = ui->makeComboBox(AcUi::ReadOnlyHint, "", tr("Signal channel")); {
     hookComboBox_->setMinimumWidth(HOOKCOMBOBOX_MINWIDTH);
     hookComboBox_->setMaximumWidth(HOOKCOMBOBOX_MAXWIDTH);
     //if (hookComboBox_->isEditable())
@@ -63,14 +63,14 @@ MessageView::createLayout()
   connect(hookComboBox_, SIGNAL(currentIndexChanged(int)), SLOT(invalidateSelectButton()));
 
   autoButton_ = ui->makeToolButton(
-        UiStyle::CheckHint, TR(T_AUTO), tr("Auto-detect signal"), this, SLOT(invalidateCurrentHook()));
+        AcUi::CheckHint, TR(T_AUTO), tr("Auto-detect signal"), this, SLOT(invalidateCurrentHook()));
   autoButton_->setChecked(true);
 
   selectButton_ = ui->makeToolButton(
-        UiStyle::PushHint | UiStyle::HighlightHint, TR(T_OK), tr("Use selected signal"), this, SLOT(selectCurrentHook()));
+        AcUi::PushHint | AcUi::HighlightHint, TR(T_OK), tr("Use selected signal"), this, SLOT(selectCurrentHook()));
 
   QToolButton *resetButton = ui->makeToolButton(
-        UiStyle::PushHint, TR(T_RESET), tr("Reset changes and texts"), this, SLOT(clear()));
+        AcUi::PushHint, TR(T_RESET), tr("Reset changes and texts"), this, SLOT(clear()));
 
   hookCountLabel_ = ui->makeLabel(0, "0", tr("Current signal"), hookComboBox_);
 

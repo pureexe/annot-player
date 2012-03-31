@@ -16,8 +16,8 @@ class QAction;
 class QToolButton;
 QT_END_NAMESPACE
 
+class AcFilteredTableView;
 class AnnotationEditor;
-class FilteredTableView;
 class SignalHub;
 
 typedef QtExt::Dialog AnnotationBrowserBase;
@@ -158,7 +158,7 @@ private:
   QStandardItemModel *sourceModel_;
   QSortFilterProxyModel *proxyModel_;
   QSortFilterProxyModel *filterMeModel_, *filterNowModel_, *filterSubtitleModel_;
-  FilteredTableView *tableView_;
+  AcFilteredTableView *tableView_;
 
   // - Menus and actions -
   QMenu *contextMenu_;

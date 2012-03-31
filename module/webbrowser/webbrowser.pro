@@ -5,6 +5,7 @@
 
 include(../../config.pri)
 include($$ROOTDIR/module/qtext/qtext.pri)
+include($$ROOTDIR/module/download/download.pri)
 
 QT += core gui network webkit
 #CONFIG(static): QTPLUGIN += qgif qico qjpeg gsvg qtiff

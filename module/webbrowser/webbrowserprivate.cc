@@ -7,7 +7,97 @@
 #include "module/debug/debug.h"
 
 QNetworkReply*
-WBNetworkAccessManager::createRequest(Operation op, const QNetworkRequest &req, QIODevice *outgoingData)
+WbNetworkAccessManager::createRequest(Operation op, const QNetworkRequest &req, QIODevice *outgoingData)
+{
+  QUrl url = req.url();
+  if (url.scheme() == "http") {
+    QString host = url.host();
+    if (host.contains("nicovideo.jp", Qt::CaseInsensitive) &&
+        host.startsWith("www.") && url.path().startsWith("/watch")) {
+      //DOUT("nico request =" << url.toString());
+      QNetworkRequest r = req;
+      //DOUT("nico delegate =" << transformNicoUrl(url));
+      r.setUrl(transformNicoUrl(url));
+      return Base::createRequest(op, r, outgoingData);
+    } else if (host.contains("akabeesoft2.com", Qt::CaseInsensitive)) {
+      QNetworkRequest r = req;
+      r.setUrl(transformAb2Url(url));
+      return Base::createRequest(op, r, outgoingData);
+    } else if (host == "erogamescape.dyndns.org") {
+      QNetworkRequest r = req;
+      r.setUrl(transformEroUrl(url));
+      return Base::createRequest(op, r, outgoingData);
+    }
+  }
+  return Base::createRequest(op, req, outgoingData);
+}
+
+QUrl
+WbNetworkAccessManager::transformNicoUrl(const QUrl &url)
+{
+  QString host = url.toString();
+  if (!host.compare("nicovideo.jp", Qt::CaseInsensitive)) {
+    QUrl ret = url;
+    ret.setHost("sakuradite.com");
+    ret.setPath("/nicovideo" + ret.path());
+    return ret;
+  }
+
+  QRegExp rx("http://([\\w\\.\\-]+)\\.nicovideo\\.jp(.*)", Qt::CaseInsensitive);
+  if (!rx.exactMatch(url.toString()))
+    return url;
+  Q_ASSERT(rx.captureCount() == 2);
+  QString t = rx.cap(1),
+          u = rx.cap(2);
+  if (!u.isEmpty() && u[0] != '/')
+    u.prepend('/');
+  return QString("http://sakuradite.com/nico/%1%2").arg(t).arg(u);
+}
+
+QUrl
+WbNetworkAccessManager::transformAb2Url(const QUrl &url)
+{
+  QUrl ret = url;
+  ret.setHost("sakuradite.com");
+  ret.setPath("/akabeesoft2" + ret.path());
+  return ret;
+}
+
+QUrl
+WbNetworkAccessManager::transformSyangrilaUrl(const QUrl &url)
+{
+  QUrl ret = url;
+  ret.setHost("sakuradite.com");
+  ret.setPath("/syangrila" + ret.path());
+  return ret;
+}
+
+QUrl
+WbNetworkAccessManager::transformEroUrl(const QUrl &url)
+{
+  QUrl ret = url;
+  ret.setHost("sakuradite.com");
+  QString path = ret.path();
+  path.remove(QRegExp("^/~ap2/ero/toukei_kaiseki", Qt::CaseInsensitive));
+  ret.setPath("/erogamescape" + path);
+  return ret;
+}
+
+// EOF
+
+/*
+QNetworkReply*
+WbNetworkAccessManager::transformRedirectedReply(QNetworkReply *reply)
+{
+  if (!reply)
+    return 0;
+  QUrl url = reply->attribute(QNetworkRequest::RedirectionTargetAttribute).toUrl();
+  if (url.host().contains("nico"))
+  return reply;
+}
+
+QNetworkReply*
+WbNetworkAccessManager::createRequest(Operation op, const QNetworkRequest &req, QIODevice *outgoingData)
 {
   QUrl url = req.url();
   if (url.scheme() == "http") {
@@ -33,7 +123,7 @@ WBNetworkAccessManager::createRequest(Operation op, const QNetworkRequest &req, 
 }
 
 QUrl
-WBNetworkAccessManager::transformNicoUrl(const QUrl &url)
+WbNetworkAccessManager::transformNicoUrl(const QUrl &url)
 {
   QString host = url.host();
   if (!host.compare("nicovideo.jp", Qt::CaseInsensitive)) {
@@ -55,7 +145,7 @@ WBNetworkAccessManager::transformNicoUrl(const QUrl &url)
 }
 
 QUrl
-WBNetworkAccessManager::transformNicoHostUrl(const QUrl &url)
+WbNetworkAccessManager::transformNicoHostUrl(const QUrl &url)
 {
   QString host = url.host();
   if (host == "niconicohost") {
@@ -77,16 +167,4 @@ WBNetworkAccessManager::transformNicoHostUrl(const QUrl &url)
   //return QString("http://%1.nicovideo.jp%2").arg(t).arg(u);
 }
 
-// EOF
-
-/*
-QNetworkReply*
-WBNetworkAccessManager::transformRedirectedReply(QNetworkReply *reply)
-{
-  if (!reply)
-    return 0;
-  QUrl url = reply->attribute(QNetworkRequest::RedirectionTargetAttribute).toUrl();
-  if (url.host().contains("nico"))
-  return reply;
-}
 */

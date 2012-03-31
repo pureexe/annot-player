@@ -7,6 +7,7 @@
 #include <QObject>
 #include <QString>
 #include <QUrl>
+#include <QNetworkRequest>
 #include <QHash>
 
 QT_FORWARD_DECLARE_CLASS(QNetworkAccessManager)
@@ -46,6 +47,7 @@ signals:
 
 public slots:
   void setPath(const QString &path) { path_ = path; }
+  void get(const QNetworkRequest &req, bool async = true, int retries = 5);
   void get(const QUrl &url,
            const QString &header = QString(), bool async = true, int retries = 5);
   void post(const QUrl &url, const QByteArray &data = QByteArray(),

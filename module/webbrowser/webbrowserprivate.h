@@ -7,6 +7,10 @@
 #include "module/qtext/network.h"
 #include <QtGui>
 #include <QtNetwork>
+#include <QtWebKit>
+
+//#define NICO_PROXY_DOMAIN       ".galstars.net"
+#define NICO_PROXY_DOMAIN       "sakuradite.com"
 
 // - Slots -
 
@@ -20,42 +24,41 @@ namespace slot_ {
     int index_;
 
   public:
-    SetTabText(QTabWidget *w, int index)
-      : Base(w), w_(w), index_(index)
+    SetTabText(QTabWidget *w, int index, QWidget *parent = 0)
+      : Base(parent), w_(w), index_(index)
     {  Q_ASSERT(w_); Q_ASSERT(index >= 0); }
 
   public slots:
     void setTabText(const QString &text)
     {
-      if (w_->count() > index_)
+      if (index_ < w_->count())
         w_->setTabText(index_, text);
-      QTimer::singleShot(0, this, SLOT(deleteLater()));
     }
   };
 
 } // namespace slot_
 
-typedef QtExt::NetworkCookieJarWithDomainAlias WBNetworkCookieJarBase;
-class WBNetworkCookieJar : public WBNetworkCookieJarBase
+typedef QtExt::NetworkCookieJarWithDomainAlias WbNetworkCookieJarBase;
+class WbNetworkCookieJar : public WbNetworkCookieJarBase
 {
   Q_OBJECT
-  typedef WBNetworkCookieJar Self;
-  typedef WBNetworkCookieJarBase Base;
+  typedef WbNetworkCookieJar Self;
+  typedef WbNetworkCookieJarBase Base;
 
 public:
-  explicit WBNetworkCookieJar(QObject *parent = 0)
-    : Base(".nicovideo.jp", ".galstars.net", parent)
+  explicit WbNetworkCookieJar(QObject *parent = 0)
+    : Base(".nicovideo.jp", NICO_PROXY_DOMAIN, parent)
   { }
 };
 
-class WBNetworkAccessManager : public QNetworkAccessManager
+class WbNetworkAccessManager : public QNetworkAccessManager
 {
   Q_OBJECT
-  typedef WBNetworkAccessManager Self;
+  typedef WbNetworkAccessManager Self;
   typedef QNetworkAccessManager Base;
 
 public:
-  explicit WBNetworkAccessManager(QObject *parent = 0)
+  explicit WbNetworkAccessManager(QObject *parent = 0)
     : Base(parent) { }
 
 protected:
@@ -64,8 +67,31 @@ protected:
                                        QIODevice *outgoingData = 0);
 
   static QUrl transformNicoUrl(const QUrl &url);
-  static QUrl transformNicoHostUrl(const QUrl &url);
-  //static QNetworkReply *transformRedirectedReply(QNetworkReply *reply);
+  static QUrl transformAb2Url(const QUrl &url);
+  static QUrl transformSyangrilaUrl(const QUrl &url);
+  static QUrl transformEroUrl(const QUrl &url);
+};
+
+class WbWebView : public QWebView
+{
+  Q_OBJECT
+  typedef WbWebView Self;
+  typedef QWebView Base;
+public:
+  explicit WbWebView(QWidget *parent = 0) : Base(parent) { }
+
+signals:
+  void windowCreated(QWebView *w);
+
+protected:
+  virtual Base *createWindow(QWebPage::WebWindowType type) ///< \override
+  {
+    if (type != QWebPage::WebBrowserWindow)
+      return Base::createWindow(type);
+    Self *ret = new Self(parentWidget());
+    emit windowCreated(ret);
+    return ret;
+  }
 };
 
 #endif // WEBBROWSERPRIVATE_H

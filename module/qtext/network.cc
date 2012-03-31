@@ -24,6 +24,8 @@ QtExt::
 NetworkCookieJarWithDomainAlias::cookiesForUrl(const QUrl &url) const
 {
   DOUT("enter: url =" << url);
+  //DOUT("all cookies =" << allCookies());
+
   if (domain_.isEmpty() || alias_.isEmpty() ||
       !(isParentDomain(domain_, url) ^ isParentDomain(alias_, url))) {
     DOUT("exit: url is not aliased");

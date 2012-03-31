@@ -4,9 +4,9 @@
 #include "blacklistview.h"
 #include "blacklistviewprivate.h"
 #include "annotationfilter.h"
-#include "defines.h"
-#include "uistyle.h"
+#include "global.h"
 #include "tr.h"
+#include "ac/acui.h"
 #include "logger.h"
 #include <QtGui>
 
@@ -32,8 +32,6 @@ BlacklistView::BlacklistView(AnnotationFilter *filter, QWidget *parent)
   Q_ASSERT(filter_);
 
   setWindowTitle(TR(T_TITLE_BLACKLIST));
-  UiStyle::globalInstance()->setWindowStyle(this);
-  setContentsMargins(0, 0, 0, 0);
 
   createTabs();
   createLayout();
@@ -77,7 +75,8 @@ BlacklistView::setActive(bool active)
 void
 BlacklistView::createTabs()
 {
-  UiStyle *ui = UiStyle::globalInstance();
+  AcUi *ui = AcUi::globalInstance();
+  ui->setWindowStyle(this);
 
   // Tab layout
 
@@ -94,18 +93,18 @@ BlacklistView::createTabs()
 
   // Tabs
 
-  textTabButton_ = ui->makeToolButton(UiStyle::TabHint, TR(T_TEXT), "", K_CTRL "+1", this, SLOT(setTabToText()));
-  userTabButton_ = ui->makeToolButton(UiStyle::TabHint, TR(T_USER), "", K_CTRL "+2", this, SLOT(setTabToUser()));
-  annotationTabButton_ = ui->makeToolButton(UiStyle::TabHint, TR(T_ANNOTATION), "", K_CTRL "+3", this, SLOT(setTabToAnnotation()));
+  textTabButton_ = ui->makeToolButton(AcUi::TabHint, TR(T_TEXT), "", K_CTRL "+1", this, SLOT(setTabToText()));
+  userTabButton_ = ui->makeToolButton(AcUi::TabHint, TR(T_USER), "", K_CTRL "+2", this, SLOT(setTabToUser()));
+  annotationTabButton_ = ui->makeToolButton(AcUi::TabHint, TR(T_ANNOTATION), "", K_CTRL "+3", this, SLOT(setTabToAnnotation()));
 
   // Footer
 
-  addButton_ = ui->makeToolButton(UiStyle::PushHint | UiStyle::HighlightHint, TR(T_ADD), this, SLOT(add()));
-  clearButton_ = ui->makeToolButton(UiStyle::PushHint, TR(T_CLEAR), this, SLOT(clearCurrentText()));
-  removeButton_ = ui->makeToolButton(UiStyle::PushHint, TR(T_REMOVE), this, SLOT(remove()));
+  addButton_ = ui->makeToolButton(AcUi::PushHint | AcUi::HighlightHint, TR(T_ADD), this, SLOT(add()));
+  clearButton_ = ui->makeToolButton(AcUi::PushHint, TR(T_CLEAR), this, SLOT(clearCurrentText()));
+  removeButton_ = ui->makeToolButton(AcUi::PushHint, TR(T_REMOVE), this, SLOT(remove()));
 
   enableButton_ = ui->makeToolButton(
-        UiStyle::CheckHint, TR(T_ENABLE), tr("Enable blacklist"), this, SLOT(setFilterEnabled(bool)));
+        AcUi::CheckHint, TR(T_ENABLE), tr("Enable blacklist"), this, SLOT(setFilterEnabled(bool)));
 }
 
 void
@@ -136,7 +135,7 @@ BlacklistView::createLayout()
     footer->addWidget(removeButton_);
 
     int patch = 0;
-    if (!UiStyle::isAeroAvailable())
+    if (!AcUi::isAeroAvailable())
       patch = 9;
 
     // left, top, right, bottom

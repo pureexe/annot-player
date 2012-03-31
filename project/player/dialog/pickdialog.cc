@@ -2,12 +2,12 @@
 // 10/30/2011
 
 #include "pickdialog.h"
-#include "uistyle.h"
 #include "tr.h"
 #include "logger.h"
 #ifdef USE_WIN_PICKER
 #  include "win/picker/picker.h"
 #endif // USE_WIN_PICKER
+#include "ac/acui.h"
 #include <QtGui>
 
 #define DEBUG "pickdialog"
@@ -26,7 +26,6 @@ PickDialog::PickDialog(QWidget *parent)
   setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
 #endif // Q_WS_MAC
   setWindowTitle(tr("Select window"));
-  UiStyle::globalInstance()->setWindowStyle(this);
 
   createLayout();
 }
@@ -34,10 +33,12 @@ PickDialog::PickDialog(QWidget *parent)
 void
 PickDialog::createLayout()
 {
-  messageLabel_ = UiStyle::globalInstance()->makeLabel(0, "", TR(T_MESSAGE));
+  AcUi::globalInstance()->setWindowStyle(this);
 
-  QToolButton *cancelButton = UiStyle::globalInstance()->makeToolButton(
-        UiStyle::PushHint, TR(T_CANCEL), this, SLOT(cancel()));
+  messageLabel_ = AcUi::globalInstance()->makeLabel(0, "", TR(T_MESSAGE));
+
+  QToolButton *cancelButton = AcUi::globalInstance()->makeToolButton(
+        AcUi::PushHint, TR(T_CANCEL), this, SLOT(cancel()));
 
   // Layouts
   QVBoxLayout *rows = new QVBoxLayout; {

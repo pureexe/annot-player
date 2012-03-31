@@ -16,8 +16,8 @@ class QAction;
 class QLineEdit;
 QT_END_NAMESPACE
 
-class FilteredListView;
-class FilteredTableView;
+class AcFilteredListView;
+class AcFilteredTableView;
 
 // Text filter table
 class TextFilterView : public QWidget
@@ -51,7 +51,7 @@ public slots:
 protected:
   static void setHeaderData(QAbstractItemModel *model);
 private:
-  FilteredListView *tableView_;
+  AcFilteredListView *tableView_;
   QStandardItemModel *sourceModel_;
   QSortFilterProxyModel *proxyModel_;
 };
@@ -88,7 +88,7 @@ public slots:
 protected:
   static void setHeaderData(QAbstractItemModel *model);
 private:
-  FilteredListView *tableView_;
+  AcFilteredListView *tableView_;
   QStandardItemModel *sourceModel_;
   QSortFilterProxyModel *proxyModel_;
 };
@@ -137,7 +137,7 @@ public slots:
 protected:
   static void setHeaderData(QAbstractItemModel *model);
 private:
-  FilteredTableView *tableView_;
+  AcFilteredTableView *tableView_;
   QStandardItemModel *sourceModel_;
   QSortFilterProxyModel *proxyModel_;
 };

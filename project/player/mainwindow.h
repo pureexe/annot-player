@@ -4,7 +4,6 @@
 // mainwindow.h
 // 6/30/2011
 
-#include "config.h"
 #include "module/annotcloud/alias.h"
 #include "module/annotcloud/annotation.h"
 #include "module/mrlresolver/mrlinfo.h"
@@ -22,7 +21,10 @@ QT_FORWARD_DECLARE_CLASS(QTimer)
 QT_FORWARD_DECLARE_CLASS(QNetworkCookieJar)
 QT_FORWARD_DECLARE_CLASS(QMimeData)
 
-namespace QtExt { class CountdownTimer; }
+namespace QtExt {
+  class CountdownTimer;
+  class MouseRubberBand;
+} // namespace QtExt
 
 // Objects
 class AnnotationFilter;
@@ -71,14 +73,13 @@ class DeviceDialog;
 class HelpDialog;
 class LiveDialog;
 class LoginDialog;
-class MediaUrlDialog;
 class NetworkProxyDialog;
 class PickDialog;
 class SeekDialog;
 class SiteAccountView;
-class SubUrlDialog;
 class SyncDialog;
 class UserView;
+class UrlDialog;
 
 // MainWindow
 class MainWindow : public QMainWindow
@@ -197,6 +198,7 @@ public slots:
   void openAnnotationUrlFromAliases(const AliasList &l);
   void openAnnotationUrl(const QString &url, bool save = false);
   void openUrl(const QString &url);
+  void openUrl(const QString &url, bool save);
   void openProcess();
   void openWindow();
   void openDevice();
@@ -233,10 +235,12 @@ public slots:
   void backward5s()     { backward(5 * 1000); }
   void forward10s()     { forward(10 * 1000); }
   void backward10s()    { backward(10 * 1000); }
+  void forward25s()     { forward(25 * 1000); }
   void forward30s()     { forward(30 * 1000); }
   void backward30s()    { backward(30 * 1000); }
   void forward60s()     { forward(60 * 1000); }
   void backward60s()    { backward(60 * 1000); }
+  void forward85s()     { forward(85 * 1000); }
   void forward90s()     { forward(90 * 1000); }
   void backward90s()    { backward(90 * 1000); }
   void forward1m()      { forward(1 * 60000); }
@@ -282,8 +286,8 @@ public slots:
 
   // - Dialogs -
 protected:
-  SubUrlDialog *annotationUrlDialog();
-  MediaUrlDialog *mediaUrlDialog();
+  UrlDialog *annotationUrlDialog();
+  UrlDialog *mediaUrlDialog();
 
 public slots:
   void showLoginDialog();
@@ -525,21 +529,32 @@ protected slots:
   void setAnnotationEffectToBlur();
 
   // - Navigation -
+protected:
+  bool isNavigable() const;
 protected slots:
+  void setPreviousEnabled(bool t);
+  void setNextEnabled(bool t);
   void setNavigationEnabled(bool t);
   void enableNavigation() { setNavigationEnabled(true); }
   void disableNavigation() { setNavigationEnabled(false); }
 
+  void openPreviousMrl();
+  void openNextMrl();
+
   // - Browse -
 public slots:
-  void setBrowsedFile(const QString &filePath);
+  void setBrowsedFile(const QString &fileName);
+  void setBrowsedUrl(const QString &mrl);
   void openBrowsedFile(int id);
+  void moreBrowsedFiles();
+  void lessBrowsedFiles();
   void openPreviousFile();
   void openNextFile();
 
   void showMinimizedAndPause();
-
 protected:
+  void invalidateBrowseMenu(const QString &fileName);
+  void invalidateBrowseMenu();
   int currentBrowsedFileId() const;
 
   // - Proxy browser -
@@ -612,6 +627,11 @@ protected:
   bool isDigestReady(const QString &path) const;
   bool isAliasReady(const QString &path) const;
 
+  // - Rubber band -
+protected slots:
+  void pauseAnnotationsAt(const QRect &rect);
+  void resumeAnnotationsAt(const QRect &rect);
+
 protected slots:
   void setDefaultAspectRatio();
   void setWideScreenAspectRatio(); // 16:9
@@ -620,8 +640,14 @@ protected slots:
   void showAnnotationsAsThread();
   void invalidateAnnotationThreadView();
 
+protected slots:
+  void setSubmit(bool t) { submit_ = t; }
+  void setSaveMedia(bool t);
+  void saveMedia();
+
   // - Members for initialization. -
 private:
+  void setupWindowStyle();
   void resetPlayer();
   void createComponents();
   void createActions();
@@ -632,6 +658,7 @@ private:
   // - Attributes -
 private:
   bool disposed_;
+  bool submit_;
   int liveInterval_; // TO BE REMOVED
   mutable QMutex inetMutex_;    // mutext for remote communication
   mutable QMutex playerMutex_;  // mutex for local player
@@ -692,6 +719,9 @@ private:
   AnnotationEditor *annotationEditor_;
   AnnotationFilter *annotationFilter_;
 
+  QtExt::MouseRubberBand *pauseRubberBand_,
+                         *resumeRubberBand_;
+
   BlacklistView *blacklistView_;
   //CommentView *commentView_;
   BacklogDialog *backlogDialog_;
@@ -709,8 +739,8 @@ private:
   SeekDialog *seekDialog_;
   SyncDialog *syncDialog_;
   PickDialog *windowPickDialog_;
-  MediaUrlDialog *mediaUrlDialog_;
-  SubUrlDialog *annotationUrlDialog_;
+  UrlDialog *mediaUrlDialog_;
+  UrlDialog *annotationUrlDialog_;
   SiteAccountView *siteAccountView_;
   UserView *userView_;
 
@@ -776,9 +806,11 @@ private:
   QList<QAction*> contextMenuActions_;
 
   QAction *previousSectionAct_,
-          *nextSectionAct_,
-          *previousFileAct_,
-          *nextFileAct_;
+          *nextSectionAct_;
+  QAction *previousFileAct_,
+          *nextFileAct_,
+          *moreFilesAct_,
+          *lessFilesAct_;
 
   QAction *checkInternetConnectionAct_;
   QAction *deleteCachesAct_;
@@ -880,11 +912,11 @@ private:
           *backward5sAct_,
           *forward10sAct_,
           *backward10sAct_,
-          *forward30sAct_,
+          *forward25sAct_,
           *backward30sAct_,
           *forward60sAct_,
           *backward60sAct_,
-          *forward90sAct_,
+          *forward85sAct_,
           *backward90sAct_,
           *forward1mAct_,
           *backward1mAct_,
@@ -920,6 +952,9 @@ private:
           *toggleMenuThemeEnabledAct_;
 
   QAction *toggleMultipleWindowsEnabledAct_;
+  QAction *toggleSubmitAct_;
+  QAction *toggleSaveMediaAct_,
+          *saveMediaAct_;
 
   QAction *setThemeToDefaultAct_,
           *setThemeToRandomAct_,

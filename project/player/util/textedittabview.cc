@@ -2,9 +2,9 @@
 // 1/1/2012
 
 #include "textedittabview.h"
-#include "textview.h"
 #include "tr.h"
-#include "stylesheet.h"
+#include "ac/acss.h"
+#include "ac/actextview.h"
 #include "module/qtext/toolbutton.h"
 #include "module/qtext/toolbuttonwithid.h"
 #include <QtGui>
@@ -75,7 +75,7 @@ TextEditTabView::addTab(const QString &tabName)
   }
   tabButtons_.append(tabButton);
 
-  TextView *tabView = new TextView;
+  AcTextView *tabView = new AcTextView;
   tabViews_.append(tabView);
 
   stackLayout_->addWidget(tabView);

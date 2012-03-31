@@ -3,7 +3,6 @@
 
 #include "annotationcomboedit.h"
 #include "annotationeditor.h"
-#include "stylesheet.h"
 #include "rc.h"
 #include "tr.h"
 #include <QtGui>
@@ -20,16 +19,12 @@ AnnotationComboEdit::AnnotationComboEdit(QWidget *parent)
 void
 AnnotationComboEdit::createActions()
 {
-#define MAKE_ACTION(_action, _styleid, _slot) \
-  _action = new QAction(QIcon(RC_IMAGE_##_styleid), TR(T_MENUTEXT_##_styleid), this); \
-  _action->setToolTip(TR(T_TOOLTIP_##_styleid)); \
-  connect(_action, SIGNAL(triggered()), _slot);
-
-  MAKE_ACTION(editAct, EDIT, SLOT(edit()))
-
-#undef MAKE_ACTION
+  editAct = new QAction(this); {
+    editAct->setText(TR(T_MENUTEXT_EDIT));
+    editAct->setToolTip(TR(T_TOOLTIP_EDIT));
+    connect(editAct, SIGNAL(triggered()), SLOT(edit()));
+  }
 }
-
 
 // - Properties -
 

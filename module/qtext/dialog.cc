@@ -17,16 +17,6 @@ Dialog::Dialog(QWidget *parent, Qt::WindowFlags f)
     draggable_(true), dragPos_(BAD_POS)
 { }
 
-bool
-QtExt::
-Dialog::draggable() const
-{ return draggable_; }
-
-void
-QtExt::
-Dialog::setDraggable(bool draggable)
-{ draggable_ = draggable; }
-
 // - Events -
 
 void

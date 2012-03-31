@@ -2,8 +2,9 @@
 // 11/16/2011
 
 #include "annotationthreadview.h"
-#include "defines.h"
+#include "global.h"
 #include "tr.h"
+#include "signalhub.h"
 #include "module/annotcloud/annothtml.h"
 #include <QtGui>
 #include <QtWebKit>
@@ -21,7 +22,7 @@ using namespace AnnotCloud;
 
 // - Constructions -
 AnnotationThreadView::AnnotationThreadView(QWidget *parent)
-  : Base(parent)
+  : Base(parent), mode_(0)
 {
   setWindowTitle(TR(T_TITLE_ANNOTTHREAD));
   setTextSizeMultiplier(TEXT_SIZE_SCALE);

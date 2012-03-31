@@ -16,7 +16,7 @@ class QTimer;
 class QToolButton;
 QT_END_NAMESPACE
 
-class FilteredListView;
+class AcFilteredListView;
 class DownloadTaskDialog;
 
 class MrlResolver;
@@ -102,7 +102,7 @@ private:
   DownloadManager *downloadManager_;
 
   DownloadTaskDialog *downloadTaskDialog_;
-  FilteredListView *tableView_;
+  AcFilteredListView *tableView_;
   QStandardItemModel *sourceModel_;
   QSortFilterProxyModel *proxyModel_;
 

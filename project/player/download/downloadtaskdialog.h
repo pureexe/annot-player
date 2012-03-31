@@ -9,7 +9,7 @@
 
 QT_FORWARD_DECLARE_CLASS(QToolButton)
 
-class TextView;
+class AcTextView;
 typedef QtExt::Dialog DownloadTaskDialogBase;
 class DownloadTaskDialog : public DownloadTaskDialogBase
 {
@@ -17,7 +17,7 @@ class DownloadTaskDialog : public DownloadTaskDialogBase
   typedef DownloadTaskDialog Self;
   typedef DownloadTaskDialogBase Base;
 
-  TextView *textView_;
+  AcTextView *textView_;
   QToolButton *urlButton_;
 
 signals:

@@ -4,7 +4,7 @@
 #include "backlogdialog.h"
 #include "textedittabview.h"
 #include "tr.h"
-#include "uistyle.h"
+#include "ac/acui.h"
 #include <QtGui>
 
 // - Constructions -
@@ -21,7 +21,6 @@ BacklogDialog::BacklogDialog(QWidget *parent)
   : Base(parent, WINDOW_FLAGS)
 {
   setWindowTitle(TR(T_TITLE_BACKLOG));
-  UiStyle::globalInstance()->setWindowStyle(this);
 
   createLayout();
 
@@ -35,16 +34,19 @@ BacklogDialog::BacklogDialog(QWidget *parent)
 void
 BacklogDialog::createLayout()
 {
+  AcUi *ui = AcUi::globalInstance();
+  ui->setWindowStyle(this);
+
   tabView_ = new TextEditTabView;
   tabView_->addTab(tr("Annot"));
   tabView_->addTab(tr("Subtitle"));
   tabView_->addTab(tr("Text"));
   tabView_->finalizeLayout();
 
-  QToolButton *okButton = UiStyle::globalInstance()->makeToolButton(
-        UiStyle::PushHint | UiStyle::HighlightHint, TR(T_OK), this, SLOT(hide()));
-  QToolButton *clearButton = UiStyle::globalInstance()->makeToolButton(
-        UiStyle::PushHint, TR(T_CLEAR), this, SLOT(clear()));
+  QToolButton *okButton = ui->makeToolButton(
+        AcUi::PushHint | AcUi::HighlightHint, TR(T_OK), this, SLOT(hide()));
+  QToolButton *clearButton = ui->makeToolButton(
+        AcUi::PushHint, TR(T_CLEAR), this, SLOT(clear()));
 
   // Layout
   QVBoxLayout *rows = new QVBoxLayout; {
@@ -57,7 +59,7 @@ BacklogDialog::createLayout()
 
     // left, top, right, bottom
     int patch = 0;
-    if (!UiStyle::isAeroAvailable())
+    if (!AcUi::isAeroAvailable())
       patch = 9;
     footer->setContentsMargins(0, 0, 0, 0);
     rows->setContentsMargins(9, patch, 9, 9);

@@ -1,13 +1,22 @@
 # project.pro
 # 7/31/2011
 
+INCLUDEPATH += $$PWD
+
 TEMPLATE = subdirs
 SUBDIRS = \
+    browser \
+    downloader \
     player
-    #reader
 
-win32:  SUBDIRS += app
+win32:  SUBDIRS += apps
 #mac:    SUBDIRS += live
 #unix:   SUBDIRS += x
+
+include(common/common.pri)
+
+OTHER_FILES += \
+    deploy-mac.sh \
+    deploy-win.cmd
 
 # EOF

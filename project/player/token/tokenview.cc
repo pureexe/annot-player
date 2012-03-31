@@ -5,10 +5,10 @@
 #include "addaliasdialog.h"
 #include "tr.h"
 #include "rc.h"
-#include "uistyle.h"
-#include "defines.h"
+#include "global.h"
 #include "logger.h"
-#include "filteredtableview.h"
+#include "ac/acui.h"
+#include "ac/acfilteredtableview.h"
 #include "module/serveragent/serveragent.h"
 #include <QtGui>
 
@@ -31,7 +31,6 @@ TokenView::TokenView(ServerAgent *server, QWidget *parent)
 {
   Q_ASSERT(server_);
   setWindowTitle(TR(T_TITLE_TOKENVIEW));
-  UiStyle::globalInstance()->setWindowStyle(this);
   setAcceptDrops(true);
 
   // Create models
@@ -45,7 +44,7 @@ TokenView::TokenView(ServerAgent *server, QWidget *parent)
     proxyModel_->setSortCaseSensitivity(Qt::CaseInsensitive);
   }
 
-  tableView_ = new FilteredTableView(sourceModel_, proxyModel_, this);
+  tableView_ = new AcFilteredTableView(sourceModel_, proxyModel_, this);
 
   // Create widgets
   aliasDialog_ = new AddAliasDialog(this);
@@ -71,10 +70,12 @@ TokenView::TokenView(ServerAgent *server, QWidget *parent)
 void
 TokenView::createLayout()
 {
-  UiStyle *ui = UiStyle::globalInstance();
+  AcUi *ui = AcUi::globalInstance();
+  ui->setWindowStyle(this);
+
 #define MAKE_TOKEN_LABEL(_id, _styleid) \
-  _id##Label_ = ui->makeLabel(UiStyle::HighlightHint, TR(T_UNKNOWN), TR(T_TOOLTIP_##_styleid)); \
-  QLabel *_id##Buddy = ui->makeLabel(UiStyle::BuddyHint, TR(T_LABEL_##_styleid), TR(T_TOOLTIP_##_styleid), _id##Label_);
+  _id##Label_ = ui->makeLabel(AcUi::HighlightHint, TR(T_UNKNOWN), TR(T_TOOLTIP_##_styleid)); \
+  QLabel *_id##Buddy = ui->makeLabel(AcUi::BuddyHint, TR(T_LABEL_##_styleid), TR(T_TOOLTIP_##_styleid), _id##Label_);
 
   //MAKE_TOKEN_LABEL(source, SOURCE)
   MAKE_TOKEN_LABEL(createDate, CREATEDATE)
@@ -85,16 +86,16 @@ TokenView::createLayout()
 #undef MAKE_TOKEN_LABEL
 
   QToolButton *blessButton = ui->makeToolButton(
-        UiStyle::PushHint, TR(T_BLESS), TR(T_TOOLTIP_BLESSTHISTOKEN), this, SLOT(bless()));
+        AcUi::PushHint, TR(T_BLESS), TR(T_TOOLTIP_BLESSTHISTOKEN), this, SLOT(bless()));
   QToolButton *curseButton = ui->makeToolButton(
-        UiStyle::PushHint, TR(T_CURSE), TR(T_TOOLTIP_CURSETHISTOKEN), this, SLOT(curse()));
+        AcUi::PushHint, TR(T_CURSE), TR(T_TOOLTIP_CURSETHISTOKEN), this, SLOT(curse()));
   QToolButton *addAliasButton = ui->makeToolButton(
-        UiStyle::PushHint | UiStyle::HighlightHint, TR(T_ADD), TR(T_TOOLTIP_ADDALIAS), this, SLOT(addAlias()));
+        AcUi::PushHint | AcUi::HighlightHint, TR(T_ADD), TR(T_TOOLTIP_ADDALIAS), this, SLOT(addAlias()));
 
-  sourceButton_ = ui->makeToolButton(UiStyle::UrlHint, "", TR(T_SOURCE), this, SLOT(openSource()));
+  sourceButton_ = ui->makeToolButton(AcUi::UrlHint, "", TR(T_SOURCE), this, SLOT(openSource()));
 
-  QLabel *sourceBuddy = ui->makeLabel(UiStyle::BuddyHint, TR(T_LABEL_SOURCE), TR(T_TOOLTIP_SOURCE), sourceButton_),
-         *aliasBuddy = ui->makeLabel(UiStyle::BuddyHint, TR(T_LABEL_ALIAS), TR(T_TOOLTIP_ALIAS), addAliasButton);
+  QLabel *sourceBuddy = ui->makeLabel(AcUi::BuddyHint, TR(T_LABEL_SOURCE), TR(T_TOOLTIP_SOURCE), sourceButton_),
+         *aliasBuddy = ui->makeLabel(AcUi::BuddyHint, TR(T_LABEL_ALIAS), TR(T_TOOLTIP_ALIAS), addAliasButton);
 
   // Set layout
 
@@ -164,7 +165,7 @@ TokenView::createActions()
 
   // Create menus
   contextMenu_ = new QMenu(TR(T_TITLE_TOKENVIEW), this);
-  UiStyle::globalInstance()->setContextMenuStyle(contextMenu_, true); // persistent = true
+  AcUi::globalInstance()->setContextMenuStyle(contextMenu_, true); // persistent = true
 }
 
 // - Properties -

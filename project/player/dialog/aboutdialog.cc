@@ -2,9 +2,9 @@
 // 11/13/2011
 
 #include "aboutdialog.h"
-#include "uistyle.h"
-#include "defines.h"
+#include "global.h"
 #include "tr.h"
+#include "ac/acui.h"
 #include "module/qtext/htmltag.h"
 #include <QtGui>
 
@@ -66,16 +66,17 @@ AboutDialog::text()
 AboutDialog::AboutDialog(QWidget *parent)
   : Base(parent, WINDOW_FLAGS)
 {
-  UiStyle::globalInstance()->setWindowStyle(this);
   setWindowTitle(TR(T_TITLE_ABOUT));
+
+  AcUi::globalInstance()->setWindowStyle(this);
 
   // Components
 
-  QToolButton *okButton = UiStyle::globalInstance()->makeToolButton(
-       UiStyle::PushHint, TR(T_OK), this, SLOT(ok()));
+  QToolButton *okButton = AcUi::globalInstance()->makeToolButton(
+       AcUi::PushHint, TR(T_OK), this, SLOT(ok()));
 
-  textEdit_ = UiStyle::globalInstance()->makeTextEdit(
-      UiStyle::ReadOnlyHint, TR(T_TITLE_ABOUT));
+  textEdit_ = AcUi::globalInstance()->makeTextEdit(
+      AcUi::ReadOnlyHint, TR(T_TITLE_ABOUT));
   textEdit_->setHtml(text());
 
   // Layout
@@ -87,7 +88,7 @@ AboutDialog::AboutDialog(QWidget *parent)
 
   // l, t, r, b
   int patch = 0;
-  if (!UiStyle::isAeroAvailable())
+  if (!AcUi::isAeroAvailable())
     patch = 4;
   col->setContentsMargins(patch, patch, patch, 0);
   setContentsMargins(4, 4, 4, patch);

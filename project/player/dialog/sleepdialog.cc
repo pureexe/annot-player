@@ -6,11 +6,11 @@
 #include "logger.h"
 #include "module/qtext/htmltag.h"
 #ifdef Q_OS_WIN
-  #include "win/qtwin/qtwin.h"
+#  include "win/qtwin/qtwin.h"
 #elif defined Q_OS_MAC
-  #include "mac/qtmac/qtmac.h"
+#  include "mac/qtmac/qtmac.h"
 #else
-  #include "unix/qtunix/qtunix.h"
+#  include "unix/qtunix/qtunix.h"
 #endif // Q_OS_
 #include <QtGui>
 

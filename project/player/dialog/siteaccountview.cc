@@ -2,9 +2,9 @@
 // 2/8/2012
 
 #include "siteaccountview.h"
-#include "uistyle.h"
 #include "tr.h"
 #include "logger.h"
+#include "ac/acui.h"
 #include "module/annotcloud/user.h"
 #include <QtGui>
 
@@ -35,7 +35,6 @@ SiteAccountView::SiteAccountView(QWidget *parent)
   : Base(parent, WINDOW_FLAGS)
 {
   setWindowTitle(tr("Link online accounts"));
-  UiStyle::globalInstance()->setWindowStyle(this);
 
   createLayout();
 }
@@ -43,16 +42,17 @@ SiteAccountView::SiteAccountView(QWidget *parent)
 void
 SiteAccountView::createLayout()
 {
-  UiStyle *ui = UiStyle::globalInstance();
+  AcUi *ui = AcUi::globalInstance();
+  ui->setWindowStyle(this);
 
 #define ADDSITE(_pref, _Pref, _name, _tip) \
   QToolButton *_pref##SiteButton = ui->makeToolButton( \
-    UiStyle::UrlHint | UiStyle::BuddyHint, _name, _tip, this, SLOT(visit##_Pref())); \
-  _pref##UsernameEdit_ = ui->makeComboBox(UiStyle::EditHint, "", TR(T_USERNAME)); \
+    AcUi::UrlHint | AcUi::BuddyHint, _name, _tip, this, SLOT(visit##_Pref())); \
+  _pref##UsernameEdit_ = ui->makeComboBox(AcUi::EditHint, "", TR(T_USERNAME)); \
     _pref##UsernameEdit_->setMinimumWidth(EDIT_MIN_WIDTH); \
-  _pref##PasswordEdit_ = ui->makeLineEdit(UiStyle::PasswordHint, "", TR(T_PASSWORD)); \
+  _pref##PasswordEdit_ = ui->makeLineEdit(AcUi::PasswordHint, "", TR(T_PASSWORD)); \
     _pref##PasswordEdit_->setMinimumWidth(EDIT_MIN_WIDTH); \
-  QToolButton *_pref##ClearButton = ui->makeToolButton(UiStyle::PushHint, TR(T_CLEAR)); \
+  QToolButton *_pref##ClearButton = ui->makeToolButton(AcUi::PushHint, TR(T_CLEAR)); \
   connect(_pref##ClearButton, SIGNAL(clicked()), _pref##UsernameEdit_, SLOT(clearEditText())); \
   connect(_pref##ClearButton, SIGNAL(clicked()), _pref##PasswordEdit_, SLOT(clear())); \
   connect(_pref##UsernameEdit_->lineEdit(), SIGNAL(returnPressed()), SLOT(save())); \
@@ -63,9 +63,9 @@ SiteAccountView::createLayout()
 #undef ADDSITE
 
   QToolButton *saveButton = ui->makeToolButton(
-        UiStyle::PushHint | UiStyle::HighlightHint, TR(T_SAVE), this, SLOT(save()));
+        AcUi::PushHint | AcUi::HighlightHint, TR(T_SAVE), this, SLOT(save()));
   QToolButton *cancelButton = ui->makeToolButton(
-        UiStyle::PushHint, TR(T_CANCEL), this, SLOT(hide()));
+        AcUi::PushHint, TR(T_CANCEL), this, SLOT(hide()));
 
   // Layouts
   QGridLayout *grid = new QGridLayout; {

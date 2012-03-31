@@ -2,11 +2,11 @@
 // 10/19/2011
 
 #include "messagehandler.h"
-#include "defines.h"
+#include "global.h"
 #ifdef USE_WIN_QTH
-  #include "win/qth/qth.h"
+#  include "win/qth/qth.h"
 #else
-  #error "QTH module is indispensible"
+#  error "QTH module is indispensible"
 #endif // USE_WIN_QTH
 #include "module/annotcloud/annotation.h"
 #include "module/annotcloud/annottag.h"

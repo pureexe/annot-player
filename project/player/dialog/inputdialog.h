@@ -9,7 +9,7 @@
 
 QT_FORWARD_DECLARE_CLASS(QComboBox)
 
-class ComboEdit;
+class AcComboEdit;
 
 typedef QtExt::Dialog InputDialogBase;
 class InputDialog : public InputDialogBase
@@ -18,7 +18,7 @@ class InputDialog : public InputDialogBase
   typedef InputDialog Self;
   typedef InputDialogBase Base;
 
-  ComboEdit *edit_;
+  AcComboEdit *edit_;
 
 public:
   explicit InputDialog(QWidget *parent = 0);

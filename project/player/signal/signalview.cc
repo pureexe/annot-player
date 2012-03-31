@@ -5,8 +5,8 @@
 //#include "tokenview.h"
 #include "messageview.h"
 #include "processview.h"
-#include "uistyle.h"
 #include "tr.h"
+#include "ac/acui.h"
 #include <QtGui>
 
 // - Constructions -
@@ -23,7 +23,6 @@ SignalView::SignalView(QWidget *parent)
   : Base(parent, WINDOW_FLAGS)
 {
   setWindowTitle(TR(T_TITLE_SIGNALVIEW));
-  UiStyle::globalInstance()->setWindowStyle(this);
   setContentsMargins(0, 0, 0, 0);
   setAcceptDrops(true);
 
@@ -33,6 +32,9 @@ SignalView::SignalView(QWidget *parent)
 void
 SignalView::createLayout()
 {
+  AcUi *ui = AcUi::globalInstance();
+  ui->setWindowStyle(this);
+
   // Views
   processView_ = new ProcessView;
   messageView_ = new MessageView;
@@ -47,10 +49,10 @@ SignalView::createLayout()
 
   // Buttons
 
-  QToolButton *processButton = UiStyle::globalInstance()->makeToolButton(
-      UiStyle::TabHint, tr("process"), processView_->windowTitle(), processView_, SLOT(setVisible(bool)));
-  QToolButton *messageButton = UiStyle::globalInstance()->makeToolButton(
-      UiStyle::TabHint, tr("message"), messageView_->windowTitle(), messageView_, SLOT(setVisible(bool)));
+  QToolButton *processButton = ui->makeToolButton(
+      AcUi::TabHint, tr("process"), processView_->windowTitle(), processView_, SLOT(setVisible(bool)));
+  QToolButton *messageButton = ui->makeToolButton(
+      AcUi::TabHint, tr("message"), messageView_->windowTitle(), messageView_, SLOT(setVisible(bool)));
   processButton->setChecked(true);
   messageButton->setChecked(true);
 

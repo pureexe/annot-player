@@ -10,7 +10,7 @@
 QT_FORWARD_DECLARE_CLASS(QToolButton)
 QT_FORWARD_DECLARE_CLASS(QStackedLayout)
 
-class TextView;
+class AcTextView;
 
 class TextEditTabView : public QWidget
 {
@@ -45,7 +45,7 @@ private:
   int tabCount_;
   int tabIndex_;
   QList<QToolButton *> tabButtons_;
-  QList<TextView *> tabViews_;
+  QList<AcTextView *> tabViews_;
 };
 
 #endif // TEXTEDITTABVIEW_H

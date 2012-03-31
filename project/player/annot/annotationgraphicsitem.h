@@ -82,10 +82,10 @@ public slots:
   void invalidateEffect();
   void setEffect(Effect e);
 
-protected slots:
   void pause();
   void resume();
 
+protected slots:
   void fly();
   void stay(Style location = TopStyle);
 

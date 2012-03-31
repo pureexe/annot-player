@@ -13,9 +13,13 @@ QtExt::escapeFileName(const QString &name)
 #else
   ret.replace('/', "／");
 #endif // _MSC_VER
-  ret.replace('\\', "-");
-  ret.replace('|', "-");
-  ret.replace(':', "-");
+  ret.replace('\\', '-');
+  ret.replace('|', '-');
+#ifdef _MSC_VER
+  ret.replace(':', "\xef\xbc\x9a");
+#else
+  ret.replace(':', "：");
+#endif // _MSC_VER
 #ifdef _MSC_VER
   ret.replace('?', "\xef\xbc\x9f");
 #else

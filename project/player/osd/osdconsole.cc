@@ -4,8 +4,8 @@
 #include "osdconsole.h"
 #include "tr.h"
 #include "rc.h"
-#include "defines.h"
-#include "uistyle.h"
+#include "global.h"
+#include "ac/acui.h"
 #include <QtGui>
 
 #define DEBUG "osdconsole"
@@ -57,7 +57,7 @@ void
 OsdConsole::createMenus()
 {
   contextMenu_ = new QMenu(this);
-  UiStyle::globalInstance()->setContextMenuStyle(contextMenu_, true); // persistent = true
+  AcUi::globalInstance()->setContextMenuStyle(contextMenu_, true); // persistent = true
 }
 
 void

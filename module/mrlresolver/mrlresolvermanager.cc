@@ -13,7 +13,6 @@
 #include "module/debug/debug.h"
 
 // - Construction -
-
 MrlResolverManager::MrlResolverManager(QObject *parent)
   : Base(parent)
 {

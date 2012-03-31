@@ -3,9 +3,7 @@
 #include "application.h"
 #include "mainwindow.h"
 #include "settings.h"
-#include "defines.h"
-#include "uistyle.h"
-#include "processinfo.h"
+#include "global.h"
 #include "translatormanager.h"
 #include "annotationgraphicsitem.h"
 #ifdef USE_WIN_QTH
@@ -20,6 +18,9 @@
 #ifdef Q_OS_MAC
 #  include "mac/qtmac/qtmac.h"
 #endif // Q_OS_MAC
+#include "ac/acui.h"
+#include "ac/acglobal.h"
+#include "ac/acsettings.h"
 #include <QtGui>
 #include <QtNetwork>
 #include <QtWebKit>
@@ -39,32 +40,6 @@ namespace { // anonymous
     // Not registered in Qt 4.8
     qRegisterMetaType<QNetworkReply::NetworkError>("QNetworkReply::NetworkError");
   }
-
-  // i18n
-  /*
-  inline bool setTranslator(QTranslator &t)
-  {
-    QString qm;
-    switch (QLocale::system().language()) {
-    case QLocale::English:
-      qm = RC_TR_EN;
-      break;
-    case QLocale::Japanese:
-      qm = RC_TR_JA;
-      break;
-    case QLocale::Chinese:
-      qm = RC_TR_ZH;
-      break;
-    case QLocale::Taiwan:
-      qm = RC_TR_TW;
-      break;
-    default:
-      qm = RC_TR_EN;
-    }
-
-    return t.load(qm);
-  }
-  */
 
   // Warm up
   inline void warmUp()
@@ -104,7 +79,8 @@ main(int argc, char *argv[])
 
   // Applications
   Application a(argc, argv);
-  Settings *settings = Settings::globalInstance();
+  Settings *settings = Settings::globalSettings();
+  AcSettings *ac = AcSettings::globalSettings();
 
   if (!settings->isMultipleWindowsEnabled() &&
       !a.isSingleInstance())
@@ -123,10 +99,10 @@ main(int argc, char *argv[])
 
   // Initialize translator
   {
-    int lang = settings->language();
+    int lang = ac->language();
     if (!lang) {
       lang =  QLocale::system().language();
-      settings->setLanguage(lang);
+      ac->setLanguage(lang);
     }
     TranslatorManager::globalInstance()->setLanguage(lang, false); // auto-update translator = false
     TranslatorManager::globalInstance()->installCurrentTranslator(&a);
@@ -140,6 +116,11 @@ main(int argc, char *argv[])
     QFile::remove(G_PATH_QUEUEDB);
     QFile::remove(G_PATH_DEBUG);
     settings->setVersion(G_VERSION);
+  }
+
+  if (ac->version() != AC_VERSION) {
+    DOUT("update from old ac version");
+    ac->setVersion(AC_VERSION);
   }
 
   // Hashes
@@ -175,6 +156,9 @@ main(int argc, char *argv[])
     ws->setAttribute(QWebSettings::LocalStorageEnabled, true);
     ws->setAttribute(QWebSettings::LocalContentCanAccessRemoteUrls, true);
 
+    ws->setDefaultTextEncoding("SHIFT-JIS");
+    //ws->setDefaultTextEncoding("EUC-JP");
+
     //ws->setMaximumPagesInCache(10);
     //web->setLocalStoragePath(...);
   }
@@ -182,26 +166,25 @@ main(int argc, char *argv[])
 
   // Set theme.
   {
-    UiStyle *ui = UiStyle::globalInstance();
-    int tid = settings->themeId();
+    AcUi *ui = AcUi::globalInstance();
+    int tid = ac->themeId();
     ui->setTheme(tid);
-    ui->setMenuEnabled(settings->isMenuThemeEnabled());
+    ui->setMenuEnabled(ac->isMenuThemeEnabled());
 #ifdef Q_WS_WIN
-    ui->setAeroEnabled(settings->isAeroEnabled());
+    ui->setAeroEnabled(ac->isAeroEnabled());
 #endif // Q_WS_WIN
   }
 
   // Set network proxy
-  if (settings->isProxyEnabled()) {
+  if (ac->isProxyEnabled()) {
     QNetworkProxy::ProxyType type;
-    switch (settings->proxyType()) {
+    switch (ac->proxyType()) {
     case QNetworkProxy::Socks5Proxy: type = QNetworkProxy::Socks5Proxy; break;
     case QNetworkProxy::HttpProxy: type = QNetworkProxy::HttpProxy; break;
     default: type = QNetworkProxy::Socks5Proxy;
     }
-    quint16 port = settings->proxyPort();
-    QNetworkProxy proxy(type, settings->proxyHostName(), port,
-                        settings->proxyUser(), settings->proxyPassword());
+    QNetworkProxy proxy(type, ac->proxyHostName(), ac->proxyPort(),
+                        ac->proxyUser(), ac->proxyPassword());
     QNetworkProxy::setApplicationProxy(proxy);
   }
 
@@ -240,14 +223,16 @@ main(int argc, char *argv[])
 
     // Automatic login
     DOUT("automatic login");
-    QString userName = settings->userName(),
-            password = settings->password();
+    QString userName = ac->userName(),
+            password = ac->password();
     if (!userName.isEmpty() && !password.isEmpty())
       w.login(userName, password);
     else
       w.checkInternetConnection();
 
-    w.parseArguments(a.arguments());
+    QStringList args = a.arguments();
+    if (args.size() > 1)
+      w.parseArguments(a.arguments());
   }
 
   //QWidget t;

@@ -76,11 +76,12 @@ public slots:
   virtual void waitForStopped(); ///< \override
 
 protected slots:
+  virtual void save(); ///< \override
+
   void invalidateSize();
   void invalidateContentType();
   void invalidateFileName();
   void finish();
-  void save();
   void waitForReplyReady();
 protected:
   bool tryRedirect();

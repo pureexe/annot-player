@@ -12,6 +12,8 @@ namespace QtExt {
   inline L
   revertList(const L &l)
   {
+    if (l.size() <= 1)
+      return l;
     L ret;
     foreach (typename L::value_type v, l)
       ret.push_front(v);
@@ -22,6 +24,8 @@ namespace QtExt {
   inline L
   uniqueList(const L &l)
   {
+    if (l.size() <= 1)
+      return l;
     L ret;
     foreach (typename L::value_type v, l)
       if (!ret.contains(v))
