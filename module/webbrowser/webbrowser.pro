@@ -6,6 +6,7 @@
 include(../../config.pri)
 include($$ROOTDIR/module/qtext/qtext.pri)
 include($$ROOTDIR/module/download/download.pri)
+include($$ROOTDIR/module/compress/compress.pri)
 
 QT += core gui network webkit
 #CONFIG(static): QTPLUGIN += qgif qico qjpeg gsvg qtiff
@@ -23,20 +24,40 @@ win32:  CONFIG += dll embed_manifest_dll
 
 DEFINES += WEBBROWSER_SHARED
 
-DEPENDPATH += $$PWD
-INCLUDEPATH += $$PWD
+DEPENDPATH += \
+    $$PWD \
+    $$PWD/gui \
+    $$PWD/network \
+    $$PWD/webkit
+
+INCLUDEPATH += \
+    $$PWD \
+    $$PWD/gui \
+    $$PWD/network \
+    $$PWD/webkit
 
 ## Sources
 
 FORMS += webbrowser.ui
 
 HEADERS += \
+    gui/wbaddresscomboedit.h \
+    gui/wbcomboedit.h \
+    gui/wblineedit.h \
+    network/wbnetworkaccessmanager.h \
+    network/wbnetworkcookiejar.h \
+    webkit/wbwebview.h \
+    wbrc.h \
+    wbss.h \
     webbrowser.h \
     webbrowserprivate.h \
     webbrowser_config.h
 
 SOURCES += \
-    webbrowserprivate.cc \
+    gui/wbaddresscomboedit.cc \
+    gui/wbcomboedit.cc \
+    gui/wblineedit.cc \
+    network/wbnetworkaccessmanager.cc \
     webbrowser.cc
 
 OTHER_FILES += \

@@ -2,7 +2,18 @@
 # 10/9/2011
 include(../../config.pri)
 
-INCLUDEPATH += $$PWD
+DEFINES += WITH_MODULE_WEBBROWSER
+
+INCLUDEPATH += \
+    $$PWD \
+    $$PWD/gui \
+    $$PWD/network \
+    $$PWD/webkit
+DEPENDPATH += \
+    $$PWD \
+    $$PWD/gui \
+    $$PWD/network \
+    $$PWD/webkit
 
 DEFINES +=  WEBBROWSER_STATIC
 
@@ -10,12 +21,23 @@ FORMS   += \
     $$PWD/webbrowser.ui
 
 HEADERS += \
-    $$PWD/webbrowser_config.h \
+    $$PWD/gui/wbaddresscomboedit.h \
+    $$PWD/gui/wbcomboedit.h \
+    $$PWD/gui/wblineedit.h \
+    $$PWD/network/wbnetworkaccessmanager.h \
+    $$PWD/network/wbnetworkcookiejar.h \
+    $$PWD/webkit/wbwebview.h \
+    $$PWD/wbrc.h \
+    $$PWD/wbss.h \
     $$PWD/webbrowser.h \
-    $$PWD/webbrowserprivate.h
+    $$PWD/webbrowserprivate.h \
+    $$PWD/webbrowser_config.h
 
 SOURCES += \
-    $$PWD/webbrowserprivate.cc \
+    $$PWD/gui/wbaddresscomboedit.cc \
+    $$PWD/gui/wbcomboedit.cc \
+    $$PWD/gui/wblineedit.cc \
+    $$PWD/network/wbnetworkaccessmanager.cc \
     $$PWD/webbrowser.cc
 
 RESOURCES += \

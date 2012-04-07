@@ -23,6 +23,14 @@ ClipboardMonitor::ClipboardMonitor(QObject *parent)
 // - Slots -
 
 void
+ClipboardMonitor::setEnabled(bool t)
+{
+  enabled_ = t;
+  if (enabled_)
+    QTimer::singleShot(0, this, SLOT(invalidateClipboard()));
+}
+
+void
 ClipboardMonitor::invalidateClipboard()
 {
   if (!isEnabled())

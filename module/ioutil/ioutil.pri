@@ -3,10 +3,10 @@
 
 include(../../config.pri)
 
+DEFINES += WITH_MODULE_IOUTIL
+
 #win32:  include($$ROOTDIR/win/qtwin/qtwin.pri)
 #unix:   include($$ROOTDIR/unix/qtunix/qtunix.pri)
-include($$ROOTDIR/module/blockiodevice/blockiodevice.pri)
-DEFINES += USE_MODULE_BLOCKIODEVICE
 
 INCLUDEPATH += $$PWD
 HEADERS += $$PWD/ioutil.h

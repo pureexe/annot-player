@@ -4,16 +4,15 @@
 // helpdialog.h
 // 11/16/2011
 
-#include "module/qtext/webdialog.h"
+#include "ac/acwebwindow.h"
 #include <QLocale>
+#include <QUrl>
 
-typedef QtExt::WebDialog HelpDialogBase;
-
-class HelpDialog: public HelpDialogBase
+class HelpDialog: public AcWebWindow
 {
   Q_OBJECT
   typedef HelpDialog Self;
-  typedef WebDialog Base;
+  typedef AcWebWindow Base;
 
   // - Constructions -
 public:

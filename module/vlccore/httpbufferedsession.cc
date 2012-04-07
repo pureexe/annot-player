@@ -2,8 +2,12 @@
 // 2/21/2012
 
 #include "module/vlccore/httpbufferedsession.h"
-#include "module/mediacodec/flvcodec.h"
-#include "module/mediacodec/mp4codec.h"
+#ifdef WITH_MODULE_MEDIACODEC
+#  include "module/mediacodec/flvcodec.h"
+#  include "module/mediacodec/mp4codec.h"
+#else
+#  error "mediacodec module is required"
+#endif // WITH_MODULE_MEDIACODEC
 #include "module/qtext/filesystem.h"
 #include <QDesktopServices>
 #include <QApplication>

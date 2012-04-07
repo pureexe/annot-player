@@ -121,7 +121,8 @@ UrlDialog::open()
   if (url.isEmpty() || url == "http://")
     return;
 
-  edit_->addItem(url);
+  if (edit_->itemText(edit_->count() - 1) != url)
+    edit_->addItem(url);
 
   url = autoCompleteUrl(url);
   emit urlEntered(url, saveButton_->isChecked());
@@ -156,7 +157,10 @@ UrlDialog::increase()
   QString t = text().trimmed();
   if (t.isEmpty())
     return;
-  t = QtExt::increaseString(t);
+  if (t.endsWith("/"))
+    t.append("index_2.html");
+  else
+    t = QtExt::increaseString(t);
   setText(t);
 }
 
@@ -167,6 +171,8 @@ UrlDialog::decrease()
   if (t.isEmpty())
     return;
   t = QtExt::decreaseString(t);
+  t.replace("/index_1.html", "/");
+  t.replace("/index_0.html", "/");
   setText(t);
 }
 
@@ -179,6 +185,7 @@ UrlDialog::autoCompleteUrl(const QString &url)
   else if (url.startsWith("ttp://"))
     ret.prepend('h');
 
+  ret.remove(QRegExp("#$"));
   ret.replace(QRegExp("/index.html$", Qt::CaseInsensitive), "/");
   ret.replace(QRegExp("/#$"), "/");
 

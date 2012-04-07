@@ -3,6 +3,8 @@
 
 include(../../config.pri)
 
+DEFINES += WITH_MODULE_MEDIACODEC
+
 INCLUDEPATH += $$PWD
 
 HEADERS += \
@@ -12,6 +14,7 @@ HEADERS += \
     $$PWD/flvdemux.h \
     $$PWD/flvmerge.h \
     $$PWD/flvmeta.h \
+    $$PWD/mediacodec_config.h \
     $$PWD/mediatoc.h \
     $$PWD/mediawriter.h \
     $$PWD/mp4codec.h

@@ -3,6 +3,8 @@
 
 include(../../config.pri)
 
+DEFINES += WITH_MODULE_QTEXT
+
 HEADERS += \
     $$PWD/actionwithid.h \
     $$PWD/algorithm.h \
@@ -20,6 +22,7 @@ HEADERS += \
     $$PWD/hash.h \
     $$PWD/htmltag.h \
     $$PWD/network.h \
+    $$PWD/os.h \
     $$PWD/overlaylayout.h \
     $$PWD/rubberband.h \
     $$PWD/slider.h \
@@ -43,6 +46,7 @@ SOURCES += \
     $$PWD/filesystem.cc \
     $$PWD/fontcombobox.cc \
     $$PWD/network.cc \
+    $$PWD/os.cc \
     $$PWD/rubberband.cc \
     $$PWD/slider.cc \
     $$PWD/string.cc \

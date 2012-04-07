@@ -17,7 +17,7 @@ builddir:
 
 builddir/Makefile: builddir
 	cd builddir && \
-	  qmake-qt4 -config release PREFIX=/usr ../annot.pro
+		qmake-qt4 -config release PREFIX=/usr ../project/player/player.pro
 
 build: build-stamp
 

@@ -20,7 +20,7 @@ class QTextEdit;
 QT_END_NAMESPACE
 
 // - DWM -
-#ifdef USE_WIN_DWM
+#ifdef WITH_WIN_DWM
   #define DWM_ENABLE_AERO_WIDGET(_w) \
   { \
     Q_ASSERT(_w); \
@@ -58,8 +58,7 @@ QT_END_NAMESPACE
   #define DWM_ENABLE_AERO_WIDGET(_w)            ({ })
   #define DWM_DISABLE_AERO_WIDGET(_w)           ({ })
   #define DWM_ENABLE_ONETIME_AERO_WIDGET(_w) ({ })
-#endif // USE_WIN_DWM
-
+#endif // WITH_WIN_DWM
 
 #define AC_CONTEXTMENU_OPACITY           0.8
 #define AC_CONTEXTMENU_COLOR             "orange"
@@ -181,7 +180,7 @@ public:
 public slots:
   void invalidateBackground();
 
-#ifdef USE_WIN_DWM
+#ifdef WITH_WIN_DWM
 public slots:
   void setWindowDwmEnabled(QWidget *w, bool t = true);
   void setWindowDwmEnabled(WId wid, bool t = true);
@@ -189,7 +188,7 @@ public slots:
   void setDwmEnabled(bool t); ///< global
 private:
   QWidgetList dwmEnabledWindows_;
-#endif // USE_WIN_DWM
+#endif // WITH_WIN_DWM
 
   // - Implementations -
 

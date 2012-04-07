@@ -2,7 +2,8 @@
 # 2/3/2012
 
 include(../../config.pri)
-#include($$ROOTDIR/module/compress/compress.pri)
+
+DEFINES += WITH_MODULE_ANNOTCODEC
 
 INCLUDEPATH += $$PWD
 

@@ -179,4 +179,41 @@ QtStep::mouseClickEvent(nsview_t *handle, const QPoint &pos)
   [view mouseUp:mouseUpEvent];
 }
 
+
+// - Event -
+
+// See: NSEvent
+// See: http://stackoverflow.com/questions/5993633/how-to-get-keyboard-state-in-objective-c-without-referring-to-nsevent
+bool
+QtStep::isModifierKeyPressed(uint mask)
+{ return mask & [NSEvent modifierFlags]; }
+
+bool
+QtStep::isCommandKeyPressed()
+{ return isModifierKeyPressed(NSCommandKeyMask); }
+
+bool
+QtStep::isControlKeyPressed()
+{ return isModifierKeyPressed(NSControlKeyMask); }
+
+bool
+QtStep::isAlternateKeyPressed()
+{ return isModifierKeyPressed(NSAlternateKeyMask); }
+
+bool
+QtStep::isShiftKeyPressed()
+{ return isModifierKeyPressed(NSShiftKeyMask); }
+
+bool
+QtStep::isHelpKeyPressed()
+{ return isModifierKeyPressed(NSHelpKeyMask); }
+
+bool
+QtStep::isFunctionKeyPressed()
+{ return isModifierKeyPressed(NSFunctionKeyMask); }
+
+bool
+QtStep::isCapsLockKeyPressed()
+{ return isModifierKeyPressed(NSAlphaShiftKeyMask); }
+
 // EOF

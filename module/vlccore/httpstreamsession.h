@@ -17,7 +17,6 @@
 #include <QString>
 #include <QUrl>
 #include <QList>
-#include <QHash>
 
 QT_FORWARD_DECLARE_CLASS(QNetworkCookieJar)
 QT_FORWARD_DECLARE_CLASS(QNetworkReply)

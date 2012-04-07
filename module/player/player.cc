@@ -2,28 +2,39 @@
 // 6/30/2011
 
 #ifdef _MSC_VER
-  #pragma warning (disable:4819)       // C4819: The file contains a character that cannot be represented in the current code page.
-  #pragma warning (disable:4996)       // C4996: MS' deprecated std functions orz.
+#  pragma warning (disable:4819)       // C4819: The file contains a character that cannot be represented in the current code page.
+#  pragma warning (disable:4996)       // C4996: MS' deprecated std functions orz.
 #endif // _MSC_VER
 
 #ifndef __LIBVLC__
-  #define __LIBVLC__ // disable unnecessary warnings
+#  define __LIBVLC__ // disable unnecessary warnings
 #endif // __LIBVLC__
 
 #include "player.h"
 #include "playerprivate.h"
-#include "module/vlccore/video.h"
-#include "module/vlccore/sound.h"
-#ifdef Q_WS_WIN
-  #include "win/qtwin/qtwin.h"
-#endif // Q_WS_WIN
+//#include "module/qtext/os.h"
+#ifdef WITH_MODULE_VLCCORE
+#  include "module/vlccore/video.h"
+#  include "module/vlccore/sound.h"
+#  ifdef Q_WS_WIN
+#    ifdef WITH_WIN_QTWIN
+#      include "win/qtwin/qtwin.h"
+#    else
+#      warning "qtwin is not used"
+#    endif // WITH_WIN_QTWIN
+#  endif // Q_WS_WIN
+#endif // WITH_MODULE_VLCCORE
 #ifdef Q_WS_MAC
-  #include <QMacCocoaViewContainer>
+#  include <QMacCocoaViewContainer>
 #endif // Q_WS_MAC
 #include <QtGui>
+#include <boost/tuple/tuple.hpp>
+#include <boost/typeof/typeof.hpp>
+#include <cstring>
+#include <memory>
 
 #ifndef MODULE_STRING
-  #define MODULE_STRING "main"  // needed by VLC
+#  define MODULE_STRING "main"  // needed by VLC
 #endif
 #include <inttypes.h>
 #include <vlc/plugins/vlc_vout.h>
@@ -33,14 +44,6 @@
 #include <vlc/lib/media_list_internal.h>
 #include <vlc/vlc.h>
 //#include <vlc/lib/media_list.c>
-#include <boost/tuple/tuple.hpp>
-#include <boost/typeof/typeof.hpp>
-#include <cstring>
-#include <memory>
-#ifdef Q_WS_MAC
-//#include <Carbon/Carbon.h>
-//#include <HIToolbox/HIToolbox.h>
-#endif // Q_WS_MAC
 
 //#define DEBUG "player"
 #include "module/debug/debug.h"
@@ -173,12 +176,13 @@ namespace { // anonymous, vlc event callbacks
 } // anonymous namespace
 
 
-namespace { // anonymous, callbacks
+#ifdef WITH_MODULE_VLCCORE
+namespace { // anonymous, vlccore callbacks
 
   namespace vout_callback_ { // Consisent with vlc_callback_t
 
     int doubleClickTimeout_ = // time between D and DUD, in msecs
-#ifdef Q_WS_WIN
+#ifdef WITH_WIN_QTWIN
      QtWin::getDoubleClickInterval() * 1.5
 #else
      600
@@ -231,7 +235,7 @@ namespace { // anonymous, callbacks
       QPoint pos(newval.coords.x, newval.coords.y); // same as libvlc_video_get_cursor
       //QPoint pos = vlccore::vout_map_to_widget(vout, coords, w->size());
       QPoint globalPos =
-#ifdef Q_WS_WIN
+#ifdef WITH_WIN_QTWIN
           QtWin::getMousePos()
 #else
           pos + w->mapToGlobal(QPoint())
@@ -281,7 +285,7 @@ namespace { // anonymous, callbacks
       QPoint pos = vlccore::vout_mouse_pos(vout); // same as libvlc_video_get_cursor
       //QPoint pos = vlccore::vout_map_to_widget(vout, coords, w->size());
       QPoint globalPos =
-#ifdef Q_WS_WIN
+#ifdef WITH_WIN_QTWIN
           QtWin::getMousePos()
 #else
           pos + w->mapToGlobal(QPoint())
@@ -307,7 +311,7 @@ namespace { // anonymous, callbacks
           recentClickTime_ = currentTime;
       }
 
-#ifdef Q_WS_WIN
+#ifdef WITH_WIN_QTWIN
       if (type != QMouseEvent::MouseButtonRelease && button == Qt::LeftButton) {
         // Disable VLC built-in double-click timer.
         ignoreNextMove_ = true;
@@ -355,6 +359,7 @@ namespace { // anonymous, callbacks
   }
 
 } // anonymous namespace
+#endif // WITH_MODULE_VLCCORE
 
 // - Static properties -
 
@@ -413,10 +418,12 @@ Player::Player(QObject *parent)
   : Base(parent), impl_(0)
 {
   DOUT("enter");
+#ifdef WITH_MODULE_VLCCORE
   connect(VlcHttpPlugin::globalInstance(), SIGNAL(error(QString)), SIGNAL(error(QString)));
   connect(VlcHttpPlugin::globalInstance(), SIGNAL(message(QString)), SIGNAL(message(QString)));
   connect(VlcHttpPlugin::globalInstance(), SIGNAL(fileSaved(QString)), SIGNAL(fileSaved(QString)));
   connect(VlcHttpPlugin::globalInstance(), SIGNAL(progress(qint64,qint64)), SIGNAL(downloadProgress(qint64,qint64)));
+#endif // WITH_MODULE_VLCCORE
   DOUT("exit");
 }
 
@@ -637,8 +644,13 @@ Player::openMediaAsCD(const QString &path)
 void
 Player::setStream(const QStringList &mrls, qint64 duration)
 {
+#ifdef WITH_MODULE_VLCCORE
   VlcHttpPlugin:: setUrls(mrls);
   VlcHttpPlugin:: setDuration(duration);
+#else
+  Q_UNUSED(mrls)
+  Q_UNUSED(duration)
+#endif // WITH_MODULE_VLCCORE
 }
 
 bool
@@ -737,8 +749,17 @@ Player::closeMedia()
   Q_ASSERT(isValid());
   if (isMouseEventEnabled())
     stopVoutTimer();
-  if (!isStopped())
+  if (!isStopped()) {
     stop();
+    //enum { timeout = 1000 };
+    //qDebug() << "Player::closeMedia: enter sleep: timeout =" << timeout;
+    //QtExt::sleep(timeout);
+    //qDebug() << "Player::closeMedia: leave sleep";
+    //DOUT("processEvent: enter");
+    //enum { timeout = 1000 };
+    //qApp->processEvents(QEventLoop::AllEvents, timeout);
+    //DOUT("processEvent: exit");
+  }
 
   impl_->setPaused(false);
   impl_->setSubtitleId();
@@ -748,10 +769,12 @@ Player::closeMedia()
   impl_->setTrackNumber();
   impl_->setExternalSubtitles();
 
+#ifdef WITH_MODULE_VLCCORE
   VlcHttpPlugin::closeSession();
   VlcHttpPlugin::setMediaTitle(QString());
   VlcHttpPlugin::setUrls(QStringList());
   VlcHttpPlugin::setDuration(0);
+#endif // WITH_MODULE_VLCCORE
 
   if (!impl_->mediaList().isEmpty()) {
     foreach (libvlc_media_t *m, impl_->mediaList())
@@ -1113,6 +1136,7 @@ Player::availablePosition() const
   //if (!hasRemoteMedia())
   //  return 0;
 
+#ifdef WITH_MODULE_VLCCORE
   qint64 duration, size;
   if ((duration = VlcHttpPlugin::duration()) > 0) {
     qint64 ts = VlcHttpPlugin::availableDuration();
@@ -1121,6 +1145,7 @@ Player::availablePosition() const
     qint64 sz = VlcHttpPlugin::availableSize();
     return sz / (double)size;
   } else
+#endif // WITH_MODULE_VLCCORE
     return 0;
 }
 
@@ -1465,7 +1490,7 @@ Player::setNextChapter()
   DOUT("exit");
 }
 
-// - VLCCORE -
+// - vlccore -
 
 bool
 Player::isMouseEventEnabled() const
@@ -1510,8 +1535,10 @@ void
 Player::invalidateVout()
 {
   if (hasMedia()) {
+#ifdef WITH_MODULE_VLCCORE
     bool ok = ::register_vout_callbacks_(impl_->player(), this);
     if (ok) // new vout found
+#endif // WITH_MODULE_VLCCORE
       stopVoutTimer();
   }
 }
@@ -1726,23 +1753,43 @@ Player::setUserAgent(const QString &agent)
 
 void
 Player::setCookieJar(QNetworkCookieJar *jar)
-{ VlcHttpPlugin::setCookieJar(jar); }
+{
+#ifdef WITH_MODULE_VLCCORE
+  VlcHttpPlugin::setCookieJar(jar);
+#endif // WITH_MODULE_VLCCORE
+}
 
 bool
 Player::isBufferSaved() const
-{ return VlcHttpPlugin::isBufferSaved(); }
+{
+#ifdef WITH_MODULE_VLCCORE
+  return VlcHttpPlugin::isBufferSaved();
+#endif // WITH_MODULE_VLCCORE
+}
 
 bool
 Player::isDownloadFinished() const
-{ return VlcHttpPlugin::isFinished(); }
+{
+#ifdef WITH_MODULE_VLCCORE
+  return VlcHttpPlugin::isFinished();
+#endif // WITH_MODULE_VLCCORE
+}
 
 void
 Player::setBufferSaved(bool t)
-{ VlcHttpPlugin::setBufferSaved(t); }
+{
+#ifdef WITH_MODULE_VLCCORE
+  VlcHttpPlugin::setBufferSaved(t);
+#endif // WITH_MODULE_VLCCORE
+}
 
 void
 Player::saveBuffer()
-{ VlcHttpPlugin::save(); }
+{
+#ifdef WITH_MODULE_VLCCORE
+  VlcHttpPlugin::save();
+#endif // WITH_MODULE_VLCCORE
+}
 
 // - Title -
 
@@ -1752,7 +1799,9 @@ Player::setMediaTitle(const QString &t)
   Q_ASSERT(isValid());
   if (t != impl_->mediaTitle()) {
     impl_->setMediaTitle(t);
+#ifdef WITH_MODULE_VLCCORE
     VlcHttpPlugin::setMediaTitle(t);
+#endif // WITH_MODULE_VLCCORE
     emit mediaTitleChanged(t);
   }
 }
@@ -1773,6 +1822,48 @@ Player::dispose()
     closeMedia();
   }
 }
+
+// - Adjustment -
+
+//bool
+//Player::isAdjustEnabled() const
+//{
+//  Q_ASSERT(isValid());
+//  return ::libvlc_video_get_adjust_int(impl_->player(), libvlc_adjust_Enable);
+//}
+//
+//void
+//Player::setAdjustEnabled(bool t)
+//{
+//  Q_ASSERT(isValid());
+//  int value = t ? 1 : 0;
+//  ::libvlc_video_set_adjust_int(impl_->player(), libvlc_adjust_Enable, value);
+//  emit adjustEnabledChanged(t);
+//}
+
+#define MAKE_ADJUST(_adjust, _Adjust, _type, _suffix) \
+  _type \
+  Player::_adjust() const \
+  { \
+    Q_ASSERT(isValid()); \
+    return ::libvlc_video_get_adjust_##_suffix(impl_->player(), libvlc_adjust_##_Adjust); \
+  } \
+  void \
+  Player::set##_Adjust(_type value) \
+  { \
+    Q_ASSERT(isValid()); \
+    ::libvlc_video_set_adjust_int(impl_->player(), libvlc_adjust_Enable, 1); \
+    ::libvlc_video_set_adjust_##_suffix(impl_->player(), libvlc_adjust_##_Adjust, value); \
+    emit _adjust##Changed(_adjust()); \
+  }
+
+  MAKE_ADJUST(contrast, Contrast, qreal, float)
+  MAKE_ADJUST(brightness, Brightness, qreal, float)
+  MAKE_ADJUST(hue, Hue, int, int)
+  MAKE_ADJUST(saturation, Saturation, qreal, float)
+  MAKE_ADJUST(gamma, Gamma, qreal, float)
+
+#undef MAKE_ADJUST
 
 // EOF
 // - PlayerListener -

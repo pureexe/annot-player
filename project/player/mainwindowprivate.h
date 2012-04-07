@@ -5,9 +5,9 @@
 // 11/8/2011
 
 #include "mainwindow.h"
-#ifdef USE_WIN_HOOK
+#ifdef WITH_WIN_HOOK
   #include "win/hook/hook.h"
-#endif // USE_WIN_HOOK
+#endif // WITH_WIN_HOOK
 #include <QtGui>
 
 // - Slots -
@@ -263,7 +263,7 @@ namespace { namespace task_ { // anonymous
 } } // anonymous namespace task_
 
 // - Hook -
-#ifdef USE_WIN_HOOK
+#ifdef WITH_WIN_HOOK
 
 class HookEventForwarder : public QObject
 {
@@ -324,7 +324,7 @@ protected:
     return Base::eventFilter(hook, event);
   }
 };
-#endif // USE_WIN_HOOK
+#endif // WITH_WIN_HOOK
 
 
 #endif // MAINWINDOWPRIVATE_H

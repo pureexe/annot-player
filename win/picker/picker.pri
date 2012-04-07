@@ -3,6 +3,8 @@
 
 INCLUDEPATH += $$PWD
 
+DEFINES += WITH_WIN_PICKER
+
 HEADERS += \
     $$PWD/picker_config.h \
     $$PWD/picker.h

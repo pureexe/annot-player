@@ -3,6 +3,8 @@
 
 include(../../config.pri)
 
+DEFINES += WITH_MODULE_VLCCORE
+
 HEADERS += \
     $$PWD/http.h \
     $$PWD/httpbufferedsession.h \

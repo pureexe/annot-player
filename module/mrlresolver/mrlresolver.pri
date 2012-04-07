@@ -4,6 +4,8 @@
 include(../../config.pri)
 include($$ROOTDIR/module/luaresolver/luaresolver.pri)
 
+DEFINES += WITH_MODULE_MRLRESOLVER
+
 INCLUDEPATH += $$PWD
 
 HEADERS += \

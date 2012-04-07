@@ -8,10 +8,15 @@
 
 namespace QtX {
 
-  // - X Windows -
+  // - Windows -
 
   void zeroWindowInputShape(WId window);
   void setWindowInputShape(WId window, const QPoint &pos, const QRegion &region);
+
+  // - Keybaord -
+
+  bool isKeyPressed(uint mask);
+  bool isKeyCapsLockPressed();
 
 } // namespace QtX
 

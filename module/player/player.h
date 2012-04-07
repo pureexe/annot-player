@@ -15,12 +15,8 @@ QT_FORWARD_DECLARE_CLASS(QMacCocoaViewContainer)
 
 class PlayerImpl; ///< \internal
 struct libvlc_media_t;
-// Player
-/**
- *  \brief  Media player controller
- *
- *  Currently, multiple documents is not allowed.
- */
+
+
 class Player : public QObject
 {
   Q_OBJECT
@@ -115,6 +111,35 @@ public:
 
   ///  Current played time in msecs, always in [0, mediaLength()].
   qint64 time() const;
+
+  // - Adjustment -
+public:
+  //bool isAdjustEnabled() const;
+  qreal contrast() const;
+  qreal brightness() const;
+  int hue() const; // [0, 360]
+  qreal saturation() const;
+  qreal gamma() const;
+public slots:
+  //void setAdjustEnabled(bool t);
+  void setContrast(qreal value);
+  void resetContrast() { setContrast(1); }
+  void setBrightness(qreal value);
+  void resetBrightness() { setBrightness(1); }
+  void setHue(int value);
+  void resetHue() { setHue(0); }
+  void setSaturation(qreal value);
+  void resetSaturation() { setSaturation(1); }
+  void setGamma(qreal value);
+  void resetGamma() { setGamma(1); }
+
+signals:
+  //void adjustEnabledChanged(bool value);
+  void contrastChanged(qreal value);
+  void brightnessChanged(qreal value);
+  void hueChanged(int value);
+  void saturationChanged(qreal value);
+  void gammaChanged(qreal value);
 
 public:
 #ifdef Q_WS_MAC

@@ -3,6 +3,8 @@
 
 include(../../config.pri)
 
+DEFINES += WITH_MODULE_CRYPT
+
 HEADERS += \
     $$PWD/crypt.h \
     $$PWD/simplecrypt.h

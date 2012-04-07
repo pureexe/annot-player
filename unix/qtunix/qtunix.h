@@ -27,8 +27,8 @@ namespace QtUnix {
   bool isDeviceFile(const QString &path);
 
   // - Shutdown -
-  void halt();
-  void reboot();
+  bool halt();
+  bool reboot();
 
 } // namespace QtUnix
 

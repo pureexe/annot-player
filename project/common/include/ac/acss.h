@@ -6,7 +6,7 @@
 // See: http://doc.qt.nokia.com/stable/stylesheet-examples.html
 // See: http://doc.qt.nokia.com/4.7/stylesheet-reference.html
 
-#include "ac/acr.h"
+#include "ac/acrc.h"
 #include "module/qtext/ss.h"
 #include <QtGlobal>
 
@@ -158,7 +158,7 @@
 
 #define SS_LINEEDIT \
   SS_BEGIN(QLineEdit) \
-    SS_BORDER_IMAGE_URL(ACR_IMAGE_LINEEDIT) \
+    SS_BORDER_IMAGE_URL(ACRC_IMAGE_LINEEDIT) \
     SS_BORDER(1px groove gray) \
     SS_BORDER_WIDTH(4px) \
     SS_BORDER_RADIUS(3px) \
@@ -172,7 +172,7 @@
 //    SS_COLOR(blue)
 //  SS_END
 //  SS_BEGIN(QLineEdit::hover)
-//    SS_BORDER_IMAGE_URL(ACR_IMAGE_LINEEDIT)
+//    SS_BORDER_IMAGE_URL(ACRC_IMAGE_LINEEDIT)
 //    SS_BORDER(1px groove)
 //    SS_BORDER_WIDTH(4px)
 //    SS_COLOR(black)
@@ -184,7 +184,7 @@
 // TODO: Change QAbstractItemView style as well!
 #define SS_COMBOBOX \
   SS_BEGIN(QComboBox) \
-    SS_BORDER_IMAGE_URL(ACR_IMAGE_BACKGROUND) \
+    SS_BORDER_IMAGE_URL(ACRC_IMAGE_BACKGROUND) \
     SS_BORDER_WIDTH(4px) \
     SS_BORDER_RADIUS(3px) \
   SS_END \
@@ -214,14 +214,14 @@
 //    SS_TRANSPARENT
 //  SS_END
 //  SS_BEGIN(QComboBox QAbstractItemView)
-//    SS_BORDER_IMAGE_URL(ACR_IMAGE_BACKGROUND)
+//    SS_BORDER_IMAGE_URL(ACRC_IMAGE_BACKGROUND)
 //  SS_END
 
 // - Item views -
 
 #define SS_TREEVIEW \
   SS_BEGIN(QTreeView) \
-    SS_BACKGROUND_IMAGE_URL(ACR_IMAGE_BACKGROUND) \
+    SS_BACKGROUND_IMAGE_URL(ACRC_IMAGE_BACKGROUND) \
     SS_BORDER_WIDTH(4px) \
     SS_BORDER_RADIUS(3px) \
   SS_END
@@ -253,21 +253,21 @@
         stop:1    rgba(255, 204, 153, 16))) \
   SS_END
 //SS_BEGIN(QMenu)
-//SS_BACKGROUND_IMAGE_URL(ACR_IMAGE_CONTEXTMENU)
+//SS_BACKGROUND_IMAGE_URL(ACRC_IMAGE_CONTEXTMENU)
 //SS_EN
 
 // - Text edits -
 
 #define SS_TEXTEDIT \
   SS_BEGIN(QTextEdit) \
-    SS_BORDER_IMAGE_URL(ACR_IMAGE_TEXTEDIT) \
+    SS_BORDER_IMAGE_URL(ACRC_IMAGE_TEXTEDIT) \
   SS_END
 
 // - Windows -
 
 //#define SS_WINDOW
 //  SS_BEGIN(QWidget)
-//    SS_BACKGROUND_IMAGE_URL(ACR_IMAGE_AERO)
+//    SS_BACKGROUND_IMAGE_URL(ACRC_IMAGE_AERO)
 //  SS_END
 #define SS_WINDOW     SS_NULL
 
@@ -292,7 +292,7 @@
 
 #define SS_BACKGROUND_CLASS(_class) \
   SS_BEGIN(_class) \
-    SS_BACKGROUND_IMAGE_URL(ACR_IMAGE_AERO) \
+    SS_BACKGROUND_IMAGE_URL(ACRC_IMAGE_AERO) \
   SS_END
 
 #endif // _AC_ACSS_H

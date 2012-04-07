@@ -102,7 +102,7 @@ FlvDemux::demux()
     return false;
   }
 
-  Q_ASSERT(out_->pos() == 0x9);
+  Q_ASSERT(in_->pos() == 0x9);
   if (dataOffset != 0x9)
     in_->seek(dataOffset);
 
@@ -207,19 +207,21 @@ FlvDemux::makeAudioWriter(quint32 mediaInfo)
   quint32 bits = (mediaInfo >> 1) & 0x1; Q_UNUSED(bits);
   quint32 chans = mediaInfo & 0x1; Q_UNUSED(chans);
 
+  Q_UNUSED(rate);
+
   if ((format == 2) || (format == 14)) { // MP3
     DOUT("MP3");
     //return new Mp3Writer(path, _warnings);
     return new Mp3Writer;
   } else if ((format == 0) || (format == 3)) { // PCM
     DOUT("PCM");
-    int sampleRate = 0;
-    switch (rate) {
-    case 0: sampleRate =  5512; break;
-    case 1: sampleRate = 11025; break;
-    case 2: sampleRate = 22050; break;
-    case 3: sampleRate = 44100; break;
-    }
+    //int sampleRate = 0;
+    //switch (rate) {
+    //case 0: sampleRate =  5512; break;
+    //case 1: sampleRate = 11025; break;
+    //case 2: sampleRate = 22050; break;
+    //case 3: sampleRate = 44100; break;
+    //}
     if (format == 0)
       DOUT("PCM byte order unspecified, assuming little endian.");
     DOUT("exit: WAV");

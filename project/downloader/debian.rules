@@ -1,0 +1,76 @@
+#!/usr/bin/make -f
+# File: debian/rules
+# Since: 11/25/2011
+# See: https://wiki.kubuntu.org/PackagingGuide/QtApplication
+# Sample debian/rules that uses debhelper.
+# This file is public domain software, originally written by Joey Hess. 
+#
+# This version is for packages that are architecture dependent.
+
+# Uncomment this to turn on verbose mode.
+export DH_VERBOSE=1
+
+package_name = annot-down
+
+builddir:
+	mkdir -p builddir
+
+builddir/Makefile: builddir
+	cd builddir && \
+		qmake-qt4 -config release PREFIX=/usr ../project/downloader/downloader.pro
+
+build: build-stamp
+
+build-stamp: builddir/Makefile
+	dh_testdir
+	cd builddir && $(MAKE)
+	#qmake-qt4 -config release PREFIX=/usr annot.pro
+	#(MAKE)
+	touch $@
+
+clean:
+	dh_testdir
+	dh_testroot
+	rm -f build-stamp
+	rm -Rf builddir
+	#$(MAKE) clean
+	#$(MAKE) distclean
+	dh_clean
+
+install: build
+	dh_testdir
+	dh_testroot
+	dh_prep
+	#dh_clean -k
+	dh_installdirs
+	cd builddir && \
+	  $(MAKE) install INSTALL_ROOT=$(CURDIR)/debian/$(package_name)
+
+# Build architecture-independent files here.
+binary-indep: build install
+# We have nothing to do by default.
+
+# Build architecture-dependent files here.
+binary-arch: build install
+	dh_testdir
+	dh_testroot
+	#dh_auto_install
+	#dh_install
+	#dh_installchangelogs
+	dh_installdocs
+	#dh_installexamples
+	#dh_installman
+	dh_link
+	dh_strip
+	dh_compress
+	dh_fixperms
+	dh_installdeb
+	dh_shlibdeps
+	dh_gencontrol
+	dh_md5sums
+	dh_builddeb
+
+binary: binary-indep binary-arch
+.PHONY: build clean binary-indep binary-arch binary install configure
+
+# EOF

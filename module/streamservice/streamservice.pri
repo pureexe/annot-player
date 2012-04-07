@@ -4,6 +4,8 @@
 include(../../config.pri)
 include($$ROOTDIR/module/mediacodec/mediacodec.pri)
 
+DEFINES += WITH_MODULE_STREAMSERVICE
+
 INCLUDEPATH += $$PWD
 
 HEADERS += \

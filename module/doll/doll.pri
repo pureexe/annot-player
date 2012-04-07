@@ -4,6 +4,8 @@
 include(../../config.pri)
 include($$ROOTDIR/module/aiml/aiml.pri)
 
+DEFINES += WITH_MODULE_DOLL
+
 INCLUDEPATH     += $$PWD
 QT              += core
 

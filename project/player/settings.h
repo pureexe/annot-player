@@ -76,10 +76,6 @@ public:
   void setMultipleWindowsEnabled(bool t);
   bool isMultipleWindowsEnabled() const;
 
-  QStringList browserUrls() const;
-  void setBrowserUrls(const QStringList &urls);
-  void clearBrowserUrls();
-
   QStringList recentFiles() const;
   void setRecentFiles(const QStringList &files);
   //void clearRecentFiles();
@@ -112,6 +108,17 @@ public:
 
   QHash<qint64, QString> aspectRatioHistory() const;
   void setAspectRatioHistory(const QHash<qint64, QString> &h);
+
+  // - Video control -
+  int hue() const; void setHue(int value);
+  qreal contrast() const; void setContrast(qreal value);
+  qreal gamma() const; void setGamma(qreal value);
+  qreal saturation() const; void setSaturation(qreal value);
+  qreal brightness() const; void setBrightness(qreal value);
+
+  // - Annotation transforms -
+  qreal annotationScale() const; void setAnnotationScale(qreal value);
+  //qreal annotationRotation() const; void setAnnotationRotation(qreal value);
 };
 
 #endif // SETTINGS_H

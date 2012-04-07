@@ -3,10 +3,12 @@
 
 #include "module/annotcloud/token.h"
 #include "module/crypt/crypt.h"
-#ifdef USE_MODULE_IOUTIL
-  #include "module/ioutil/ioutil.h"
-#endif // USE_MODULE_IOUTIL
-#include <QtCore>
+#ifdef WITH_MODULE_IOUTIL
+#  include "module/ioutil/ioutil.h"
+#endif // WITH_MODULE_IOUTIL
+#include <QMetaType>
+#include <QFile>
+#include <QFileInfo>
 #include <memory>
 
 #define DEBUG "module/annotcloud::token"
@@ -48,7 +50,7 @@ Token::digestFromFile(const QString &input)
   }
 
   if (!filePath.isEmpty()) {
-#ifdef USE_MODULE_BLOCKIODEVICE
+#ifdef WITH_MODULE_IOUTIL
     data = IOUtil::readBytes(filePath, DIGEST_SIZE);
 #else
     QFile file(filePath);
@@ -60,7 +62,7 @@ Token::digestFromFile(const QString &input)
 
     data = file.read(DIGEST_SIZE);
     file.close();
-#endif // USE_MODULE_BLOCKIODEVICE
+#endif // WITH_MODULE_IOUTIL
   }
 
   if (data.isEmpty()) {

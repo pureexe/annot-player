@@ -36,13 +36,16 @@ ShutdownDialog::run()
   QApplication::beep();
   hide();
   warn(tr("shutting down the computer ..."));
+  bool ok = false;
 #ifdef Q_OS_WIN
-  QtWin::halt();
+  ok = QtWin::halt();
 #elif defined Q_OS_MAC
-  QtMac::halt();
+  ok = QtMac::halt();
 #else
-  QtUnix::halt();
+  ok = QtUnix::halt();
 #endif // Q_OS_
+  if (!ok)
+    warn(tr("failed to shut down the computer"));
   DOUT("exit");
 }
 

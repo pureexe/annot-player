@@ -7,6 +7,7 @@
 // See: FLVExtractCl/Library/FLVFile.cs
 // http://moitah.net/
 
+#include "mediacodec_config.h"
 #include "module/stream/outputstream.h"
 #include <QObject>
 #include <QByteArray>

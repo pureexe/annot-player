@@ -64,9 +64,9 @@ Tray::createActions()
 #ifdef USE_MODE_SIGNAL
     menu->addAction(openWindowAct);
 #endif // USE_MODE_SIGNAL
-#ifdef USE_WIN_PICKER
+#ifdef WITH_WIN_PICKER
     menu->addAction(pickWindowAct);
-#endif // USE_WIN_PICKER
+#endif // WITH_WIN_PICKER
     menu->addSeparator();
     menu->addAction(aboutAct);
     menu->addAction(helpAct);

@@ -63,6 +63,8 @@ public:
   bool isNonSubtitleVisible() const { return nonSubtitleVisible_; }
 
 signals:
+  void scaleChanged(qreal value);
+  void rotationChanged(qreal value);
   void fullScreenModeChanged(bool);
 public:
   /**
@@ -176,6 +178,7 @@ signals:
   // - Properties -
 public:
   AnnotationEditor *editor() const;
+  bool hasPausedItems() const;
 
   RenderHint renderHint() const { return renderHint_; } ///< Default render hint
 
@@ -188,8 +191,17 @@ public:
   bool isActive() const { return active_; }
   bool isPlaybackEnabled() const {  return playbackEnabled_; }
 
+  qreal scale() const { return scale_; }
+  qreal rotation() const { return rotation_; }
+
   bool isStarted() const;
 public slots:
+  void setScale(qreal value);
+  void resetScale() { setScale(1.0); }
+
+  void setRotation(qreal value);
+  void resetRotation() { setRotation(0); }
+
   void setInterval(int msecs);
   void start();
   void stop();
@@ -219,6 +231,9 @@ public slots:
 
   void pauseItems(const QRect &rect, Qt::ItemSelectionMode mode = Qt::IntersectsItemShape);
   void resumeItems(const QRect &rect, Qt::ItemSelectionMode mode = Qt::IntersectsItemShape);
+
+  void scalePausedItems(qreal scale);
+  void rotatePausedItems(qreal angle);
 
   // Annotations
 
@@ -289,6 +304,8 @@ private:
   AnnotationPosition subtitlePosition_;
 
   QList<qint64> filteredAnnotationIds_;
+
+  qreal scale_, rotation_;
 };
 
 #endif // ANNOTATIONGRAPHICSVIEW_H

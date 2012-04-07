@@ -3,6 +3,8 @@
 
 INCLUDEPATH += $$PWD
 
+DEFINES += WITH_WIN_QTWIN
+
 HEADERS += \
     $$PWD/ntdll.h \
     $$PWD/qtwin.h \

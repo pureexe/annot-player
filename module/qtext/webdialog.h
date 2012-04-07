@@ -5,6 +5,9 @@
 // 10/9/2011
 
 #include <QWebView>
+#include <QNetworkRequest>
+
+QT_FORWARD_DECLARE_CLASS(QAction)
 
 namespace QtExt {
 
@@ -16,6 +19,29 @@ class WebDialog: public QWebView
 
 public:
   explicit WebDialog(QWidget *parent = 0, Qt::WindowFlags f = 0);
+private:
+  void createActions();
+
+  //-  Log -
+signals:
+  void message(const QString &text);
+  void errorMessage(const QString &text);
+  void warning(const QString &text);
+  void notification(const QString &text);
+
+protected slots:
+  void download(const QNetworkRequest &req);
+  void zoomIn();
+  void zoomOut();
+  void zoomReset();
+
+protected:
+  virtual void contextMenuEvent(QContextMenuEvent *e); ///< \override
+  virtual void wheelEvent(QWheelEvent *e); ///< \override
+protected:
+  QAction *zoomInAct,
+          *zoomOutAct,
+          *zoomResetAct;
 };
 
 } // namespace QtExt

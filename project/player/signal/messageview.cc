@@ -5,9 +5,9 @@
 #include "tr.h"
 #include "global.h"
 #include "logger.h"
-#ifdef USE_WIN_QTH
+#ifdef WITH_WIN_QTH
 #  include "win/qth/qth.h"
-#endif // USE_WIN_QTH
+#endif // WITH_WIN_QTH
 #include "ac/acui.h"
 #include "module/qtext/htmltag.h"
 #include <QtGui>
@@ -46,7 +46,7 @@ MessageView::createLayout()
 
   textEdit_ = ui->makeTextEdit(0, tr("Process message")); {
     //QTextCharFormat fmt;
-    //fmt.setBackground(QColor("red"));
+    //fmt.setBackground(Qt::red);
     //QTextCursor tc = textEdit_->textCursor();
     //tc.mergeCharFormat(fmt);
     //textEdit_->setTextCursor(tc);
@@ -108,7 +108,7 @@ void
 MessageView::setActive(bool active)
 {
   active_ = active;
-#ifdef USE_WIN_QTH
+#ifdef WITH_WIN_QTH
   Q_ASSERT(QTH);
   if (active_)
     connect(QTH, SIGNAL(textReceived(QString,ulong,ulong,QString)),
@@ -116,7 +116,7 @@ MessageView::setActive(bool active)
   else
     disconnect(QTH, SIGNAL(textReceived(QString,ulong,ulong,QString)),
                this, SLOT(processHookedText(QString,ulong)));
-#endif USE_WIN_QTH
+#endif WITH_WIN_QTH
 }
 
 void
@@ -293,7 +293,7 @@ void
 MessageView::invalidateCurrentCharFormat()
 {
   QTextCharFormat fmt;
-  fmt.setForeground(QColor("red"));
+  fmt.setForeground(Qt::red);
   textEdit_->mergeCurrentCharFormat(fmt);
 }
 

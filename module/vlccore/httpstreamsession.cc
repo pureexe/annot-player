@@ -2,21 +2,25 @@
 // 3/14/2012
 
 #include "module/vlccore/httpstreamsession.h"
-#include "module/stream/securebufferedfifostream.h"
-#include "module/stream/bufferedremotestream.h"
-#include "module/mediacodec/flvmerge.h"
-#include "module/mediacodec/flvcodec.h"
+#ifdef WITH_MODULE_STREAM
+#  include "module/stream/securebufferedfifostream.h"
+#  include "module/stream/bufferedremotestream.h"
+#else
+#  error "stream module is required"
+#endif // WITH_MODULE_STREAM
+#ifdef WITH_MODULE_MEDIACODEC
+#  include "module/mediacodec/flvmerge.h"
+#  include "module/mediacodec/flvcodec.h"
+#else
+#  error "mediacodec module is required"
+#endif // WITH_MODULE_MEDIACODEC
 #include "module/qtext/filesystem.h"
 #include "module/qtext/algorithm.h"
+#include "module/qtext/os.h"
 #include <QDesktopServices>
 #include <QApplication>
 #include <QtCore>
 #include <QtNetwork>
-#ifdef Q_OS_WIN
-#  include "win/qtwin/qtwin.h"
-#else
-#  include <unistd.h>
-#endif // Q_OS_WIN
 
 #define DEBUG "httpstreamsession"
 #include "module/debug/debug.h"
@@ -24,15 +28,6 @@
 // - Progress -
 
 namespace { // anonymous
-
-  void sleep_(uint msecs_)
-  {
-#ifdef Q_OS_WIN
-    QtWin::sleep(msecs_);
-#else
-    ::sleep(msecs_ / 1000);
-#endif // Q_OS_WIN
-  }
 
   class ProgressTask_ : public StoppableTask
   {
@@ -51,7 +46,7 @@ namespace { // anonymous
     {
       while (!stop_ && session_->isRunning()) {
         session_->updateProgress();
-        sleep_(SleepInterval);
+        QtExt::sleep(SleepInterval);
       }
     }
   };

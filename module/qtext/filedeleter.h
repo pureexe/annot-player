@@ -27,7 +27,7 @@ protected:
   explicit FileDeleter(QObject *parent = 0)
     : Base(parent) { }
 
-  ~FileDeleter();
+  ~FileDeleter() { deleteAll(); }
 
 public:
   bool isEmpty() const { return files_.isEmpty(); }

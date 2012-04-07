@@ -14,13 +14,13 @@
 #include <cstdlib>
 
 #ifdef _MSC_VER
-  #pragma warning (disable: 4996)     // C4996: 'getenv': This function or variable may be unsafe. Consider using _dupenv_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+#  pragma warning (disable: 4996)     // C4996: 'getenv': This function or variable may be unsafe. Consider using _dupenv_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
 #endif // _MSC_VER
 
-#if defined(_MSC_VER) || defined(_MSC_EXTENSIONS)
-  #define DELTA_EPOCH_IN_MICROSECS  11644473600000000Ui64
+#if defined _MSC_VER || defined _MSC_EXTENSIONS
+#  define DELTA_EPOCH_IN_MICROSECS  11644473600000000Ui64
 #else
-  #define DELTA_EPOCH_IN_MICROSECS  11644473600000000ULL
+#  define DELTA_EPOCH_IN_MICROSECS  11644473600000000ULL
 #endif // _MSC_VER
 
 // - Helpers -
@@ -430,6 +430,7 @@ QtWin::getWindowProcessId(HWND hwnd)
 
 // - Mouse and keyboard -
 
+// Note: GetAsyncKeyState does not work
 bool
 QtWin::isKeyPressed(int vk)
 { return ::GetKeyState(vk) & 0xF0; }
@@ -827,23 +828,23 @@ QtWin::getWaveVolume()
 
 // - Shutdown -
 
-void
+bool
 QtWin::halt()
-{ QProcess::startDetached("shutdown -s"); }
+{ return QProcess::startDetached("shutdown -s"); }
 
-void
+bool
 QtWin::reboot()
-{ QProcess::startDetached("shutdown -t"); }
+{ return QProcess::startDetached("shutdown -t"); }
 
-void
+bool
 QtWin::logoff()
-{ QProcess::startDetached("shutdown -l"); }
+{ return QProcess::startDetached("shutdown -l"); }
 
 // Standby %windir%\System32\rundll32.exe powrprof.dll,SetSuspendState Standby
 // Hibernate %windir%\System32\rundll32.exe powrprof.dll,SetSuspendState Hibernate
-void
+bool
 QtWin::hibernate()
-{ QProcess::startDetached("shutdown -h"); }
+{ return QProcess::startDetached("shutdown -h"); }
 
 // - POSIX -
 

@@ -16,7 +16,7 @@
 #include <QtGui>
 #include <climits>
 
-#define DEBUG "downloaddialog"
+#define DEBUG "mainwindow"
 #include "module/debug/debug.h"
 
 #ifdef Q_OS_MAC
@@ -25,25 +25,15 @@
   #define K_CTRL        "Ctrl"
 #endif // Q_OS_MAC
 
-#define SS_STATUSBAR_(_color) \
-  SS_BEGIN(QStatusBar) \
-    SS_COLOR(_color) \
-  SS_END
-#define SS_STATUSBAR_MESSAGE    SS_STATUSBAR_(cyan)
-#define SS_STATUSBAR_WARNING    SS_STATUSBAR_(orange)
-#define SS_STATUSBAR_ERROR      SS_STATUSBAR_(red)
-
-
 enum { RefreshInterval = 3000 };
-enum { StatusMessageTimeout = 5000 };
 
 // - Constructions -
 
-//#define WINDOW_FLAGS ( \
-//  Qt::CustomizeWindowHint | \
-//  Qt::WindowTitleHint | \
-//  Qt::WindowSystemMenuHint | \
-//  Qt::WindowMinMaxButtonsHint | \
+//#define WINDOW_FLAGS (
+//  Qt::CustomizeWindowHint |
+//  Qt::WindowTitleHint |
+//  Qt::WindowSystemMenuHint |
+//  Qt::WindowMinMaxButtonsHint |
 //  Qt::WindowCloseButtonHint )
 
 MainWindow::MainWindow(QWidget *parent)
@@ -61,12 +51,6 @@ MainWindow::MainWindow(QWidget *parent)
   refreshTimer_ = new QTimer(this);
   refreshTimer_->setInterval(RefreshInterval);
   connect(refreshTimer_, SIGNAL(timeout()), SLOT(refresh()));
-
-  hideStatusBarTimer_ = new QTimer(this);
-  hideStatusBarTimer_->setInterval(StatusMessageTimeout);
-  hideStatusBarTimer_->setSingleShot(true);
-  connect(hideStatusBarTimer_, SIGNAL(timeout()), statusBar(), SLOT(hide()));
-  statusBar()->hide();
 
   connect(tableView_, SIGNAL(currentIndexChanged(QModelIndex)), SLOT(invalidateButtons()));
 
@@ -233,7 +217,7 @@ MainWindow::currentTask() const
 
 void
 MainWindow::checkClipboard()
-{ clipboardMonitor_->checkClipboard(); }
+{ clipboardMonitor_->invalidateClipboard(); }
 
 void
 MainWindow::stopAll()
@@ -564,35 +548,6 @@ MainWindow::downloadTimeToString(qint64 msecs) const
   if (ret.isEmpty())
     ret = "-";
   return ret;
-}
-
-// - Log -
-
-void
-MainWindow::showMessage(const QString &text)
-{
-  statusBar()->setStyleSheet(SS_STATUSBAR_MESSAGE);
-  statusBar()->showMessage(text);
-  statusBar()->show();
-  hideStatusBarTimer_->start();
-}
-
-void
-MainWindow::error(const QString &text)
-{
-  statusBar()->setStyleSheet(SS_STATUSBAR_ERROR);
-  statusBar()->showMessage(text);
-  statusBar()->show();
-  hideStatusBarTimer_->start();
-}
-
-void
-MainWindow::warn(const QString &text)
-{
-  statusBar()->setStyleSheet(SS_STATUSBAR_WARNING);
-  statusBar()->showMessage(text);
-  statusBar()->show();
-  hideStatusBarTimer_->start();
 }
 
 // - Events -

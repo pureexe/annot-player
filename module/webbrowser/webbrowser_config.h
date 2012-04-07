@@ -7,14 +7,14 @@
 #include <QtGlobal>
 
 #ifdef WEBBROWSER_SHARED
-  #define WEBBROWSER_API Q_DECL_EXPORT
+#  define WB_API Q_DECL_EXPORT
 #elif defined(WEBBROWSER_STATIC)
-  #define WEBBROWSER_API
+#  define WB_API
 #else
-  #define WEBBROWSER_API Q_DECL_IMPORT
+#  define WB_API Q_DECL_IMPORT
 #endif // WEBBROWSER_
 
 #define WEBBROWSER_HOMEPAGE     "http://www.google.com"
-#define WEBBROWSER_SEARCHENGINE "www.google.com/search?q="
+#define WEBBROWSER_SEARCHENGINE "https://www.google.com/search?hl=ja&ie=UTF-8&q=%1"
 
 #endif // WEBBROWSER_CONFIG_H

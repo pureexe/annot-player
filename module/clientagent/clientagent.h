@@ -12,9 +12,9 @@
 
 #include <QObject>
 #include "clientdelegate.h"
-#include "core/universe/user.h"
-#include "core/universe/token.h"
-#include "core/universe/annotation.h"
+#include "module/annotcloud/user.h"
+#include "module/annotcloud/token.h"
+#include "module/annotcloud/annotation.h"
 
 class ClientService;
 class ServerAgent;
@@ -37,16 +37,16 @@ class ClientAgent: public QObject, public ClientDelegate
 
   long key_;
 
-#ifdef USE_MODULE_SERVERAGENT
+#ifdef WITH_MODULE_SERVERAGENT
   ServerAgent *server_;
-#endif // USE_MODULE_SERVERAGENT
+#endif // WITH_MODULE_SERVERAGENT
 
 public:
   explicit ClientAgent(QObject *parent = 0);
 
-#ifdef USE_MODULE_SERVERAGENT
+#ifdef WITH_MODULE_SERVERAGENT
   void setServerAgent(ServerAgent *server);
-#endif // USE_MODULE_SERVERAGENT
+#endif // WITH_MODULE_SERVERAGENT
 
   // - Properties -
 public:

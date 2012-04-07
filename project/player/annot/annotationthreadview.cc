@@ -18,14 +18,12 @@
 
 using namespace AnnotCloud;
 
-#define TEXT_SIZE_SCALE 0.85
 
 // - Constructions -
 AnnotationThreadView::AnnotationThreadView(QWidget *parent)
   : Base(parent), mode_(0)
 {
   setWindowTitle(TR(T_TITLE_ANNOTTHREAD));
-  setTextSizeMultiplier(TEXT_SIZE_SCALE);
   resize(WINDOW_SIZE);
 
   setupActions();
@@ -40,11 +38,11 @@ AnnotationThreadView::AnnotationThreadView(QWidget *parent)
 void
 AnnotationThreadView::setupActions()
 {
-  QAction *a = pageAction(QWebPage::Reload);
+  QAction *a = webView()->pageAction(QWebPage::Reload);
   if (a)
     connect(a, SIGNAL(triggered()), SLOT(refresh()));
 
-  a = pageAction(QWebPage::ReloadAndBypassCache);
+  a = webView()->pageAction(QWebPage::ReloadAndBypassCache);
   if (a)
     connect(a, SIGNAL(triggered()), SLOT(refresh()));
 }
@@ -57,7 +55,7 @@ AnnotationThreadView::refresh()
   DOUT("enter");
   emit annotationsRequested();
   if (annots_.isEmpty())
-    load(QUrl(EMPTY_URL));
+    webView()->load(QUrl(EMPTY_URL));
   else {
     QString title = TR(T_TITLE_ANNOTTHREAD) +
         QString(" (%1)").arg(QString::number(annots_.size()));
@@ -66,7 +64,7 @@ AnnotationThreadView::refresh()
     QString html = AnnotationHtmlParser::globalInstance()->toHtml(annots_);
     QString mimeType;
     QString baseUrl = BASE_URL;
-    setContent(html.toUtf8(), mimeType, baseUrl);
+    webView()->setContent(html.toUtf8(), mimeType, baseUrl);
   }
   DOUT("exit");
 }

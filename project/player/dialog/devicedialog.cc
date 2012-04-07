@@ -11,9 +11,9 @@
 #ifdef Q_OS_UNIX
 #  include "unix/qtunix/qtunix.h"
 #endif // Q_OS_UNIX
-#ifdef USE_MODULE_IOUTIL
+#ifdef WITH_MODULE_IOUTIL
 #  include "module/ioutil/ioutil.h"
-#endif // USE_MODULE_IOUTIL
+#endif // WITH_MODULE_IOUTIL
 #include <QtGui>
 
 #define DEBUG "devicedialog"
@@ -149,11 +149,11 @@ DeviceDialog::ok()
   }
 
   bool isAudioCD;
-#if USE_MODULE_IOUTIL
+#if WITH_MODULE_IOUTIL
   if (autoRadioButton_->isChecked())
     isAudioCD = IOUtil::isAudioCD(path);
   else
-#endif // USE_MODULE_IOUTIL
+#endif // WITH_MODULE_IOUTIL
   isAudioCD = cdRadioButton_->isChecked();
   emit deviceSelected(path, isAudioCD);
 }

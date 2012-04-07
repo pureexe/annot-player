@@ -25,11 +25,10 @@ signals:
   void annotationUrlEntered(const QString &url);
 
 public slots:
-  void setEnabled(bool t) { enabled_ = t; }
-  void checkClipboard() { invalidateClipboard(); }
+  void setEnabled(bool t);
+  void invalidateClipboard();
 
 protected slots:
-  void invalidateClipboard();
   void parseUrl(const QString &text);
 
 protected:

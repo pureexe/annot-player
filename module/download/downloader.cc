@@ -1,7 +1,9 @@
 // downloader.cc
 // 2/4/2011
 #include "downloader.h"
-#include "module/compress/qgzip.h"
+#ifdef WITH_MODULE_COMPRESS
+#  include "module/compress/qgzip.h"
+#endif // WITH_MODULE_COMPRESS
 #include <QtCore>
 #include <QtNetwork>
 
@@ -53,8 +55,9 @@ Downloader::get(const QUrl &url, const QString &header, bool async, int retries)
   QNetworkRequest request(url);
   if (!header.isEmpty()) {
     QHash<QString, QString> h = parseHttpHeader(header);
-    foreach (QString k, h.keys())
-      request.setRawHeader(k.toLocal8Bit(), h[k].toLocal8Bit());
+    for (QHash<QString, QString>::ConstIterator
+         p = h.begin(); p != h.end(); ++p)
+      request.setRawHeader(p.key().toAscii(), p.value().toAscii());
   }
 
   QNetworkReply *reply = nam_->get(request);
@@ -85,8 +88,9 @@ Downloader::post(const QUrl &url, const QByteArray &data, const QString &header,
   QNetworkRequest request(url);
   if (!header.isEmpty()) {
     QHash<QString, QString> h = parseHttpHeader(header);
-    foreach (QString k, h.keys())
-      request.setRawHeader(k.toAscii(), h[k].toAscii());
+    for (QHash<QString, QString>::ConstIterator
+         p = h.begin(); p != h.end(); ++p)
+      request.setRawHeader(p.key().toAscii(), p.value().toAscii());
   }
   QNetworkReply *reply = nam_->post(request, data);
   Q_ASSERT(reply);
@@ -143,9 +147,13 @@ Downloader::save(QNetworkReply *reply)
   }
 
   if (reply->rawHeader("Content-Encoding") == "gzip") {
+#ifdef WITH_MODULE_COMPRESS
     QByteArray unzipped = ::gHttpUncompress(data);
     if (!unzipped.isEmpty())
       data = unzipped;
+#else
+    DOUT("warning: replied with gzip encoding");
+#endif // WITH_MODULE_COMPRESS
   }
   DOUT("data.size =" << data.size() << ", data =" << QString(data.left(50)) << "...");
   bool ok = save(data, path_);

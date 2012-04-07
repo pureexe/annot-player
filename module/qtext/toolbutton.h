@@ -15,21 +15,23 @@ class ToolButton : public QToolButton
   typedef ToolButton Self;
   typedef QToolButton Base;
 
-  bool hover_;
-  QCursor lastCursor_;
-  QCursor hoverCursor_;
+  bool hovered_;
+  QCursor hoverCursor_,
+          lastCursor_;
 
 public:
-  explicit ToolButton(QWidget *parent = 0);
+  explicit ToolButton(QWidget *parent = 0)
+    : Base(parent), hovered_(false), hoverCursor_(Qt::PointingHandCursor) { }
 
-  bool isHovered() const;
+  bool isHovered() const { return hovered_; }
 
-  QCursor hoverCursor() const;
-  void setHoverCursor(const QCursor &cursor);
+  QCursor hoverCursor() const { return hoverCursor_; }
+public slots:
+  void setHoverCursor(const QCursor &cursor) { hoverCursor_ = cursor; }
 
 signals:
-  //void hovered();
-  //void leaved();
+  void hovered();
+  void leaved();
 
   // - Events -
 protected:

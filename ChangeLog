@@ -2,7 +2,18 @@ ChangeLog
 Annot Project
 6/18/2011
 
-3/30/2012	annot.player	0.1.4.0
+4/??/2012	annot.player, down, browser	0.1.4.1, 0.1.0.1, 0.1.0.1
+        * Added keyboard shortcuts to adjust contrast, brightness, hue, saturation and gamma.
+        * Added mouse wheel shortcuts to rotate/scale annotations.
+          * Ctrl + Wheel: scale all/paused annotations
+          * Shift + Wheel: rotate all/paused annotations
+        * Added basic analytics for annotations.
+        * Hardcode anonymous accounts for annot.me and nicovideo.jp.
+        * Alpha-release for linux.
+        * Service host moved to Japan.
+        * Bug fix and improvement on usability and stability.
+
+3/30/2012	annot.player, down, browser	0.1.4.0, 0.1.0.0, 0.1.0.0
         * Web browser and downloader utilities are made into different apps.
         * Added mouse rubber band to select annotations with CTRL/SHIFT modifiers.
         * Nico browser fixed. Able to visit nico anime channel from outside of Japan.

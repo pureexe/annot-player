@@ -1,6 +1,8 @@
 # tr.pri
 # 9/16/2011
 
+include(../../../config.pri)
+
 HEADERS += \
     tr.h \
     translatormanager.h
@@ -12,8 +14,6 @@ TRANSLATIONS += \
     $$PWD/tr_en.ts \
     $$PWD/tr_ja.ts \
     $$PWD/tr_zh.ts
-
-CODECFORTR = UTF-8
 
 OTHER_FILES += $$TRANSLATIONS \
     $$PWD/lrelease_tr.cmd \

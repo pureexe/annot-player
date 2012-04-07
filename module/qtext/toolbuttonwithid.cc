@@ -2,7 +2,6 @@
 // 8/6/2011
 
 #include "module/qtext/toolbuttonwithid.h"
-#include <QtGui>
 
 // - Construction -
 

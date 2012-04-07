@@ -3,7 +3,11 @@
 
 #include "luamrlresolver.h"
 #include "mrlresolversettings.h"
-#include "module/luaresolver/luaresolver.h"
+#ifdef WITH_MODULE_LUARESOLVER
+#  include "module/luaresolver/luaresolver.h"
+#else
+#  error "luaresolver is required"
+#endif // WITH_MODULE_LUARESOLVER
 #include <QtCore>
 #include <QtNetwork>
 
@@ -12,19 +16,19 @@
 
 // TODO: move to project source project instead of hard code here
 #ifdef Q_OS_WIN
-  #define LUA_PATH QCoreApplication::applicationDirPath() + "/lua/luascript"
+#  define LUA_PATH QCoreApplication::applicationDirPath() + "/lua/luascript"
 #elif defined Q_OS_MAC
-  #define LUA_PATH QCoreApplication::applicationDirPath() + "/lua"
+#  define LUA_PATH QCoreApplication::applicationDirPath() + "/lua"
 #elif defined Q_OS_LINUX
-  #define LUA_PATH "/usr/share/annot/player/lua"
+#  define LUA_PATH LUADIR
 #endif // Q_OS_
 
 #ifdef LUA_PATH
-  #define LUAPACKAGE_PATH LUA_PATH "/?.lua"
-  #define LUASCRIPT_PATH  LUA_PATH "/luascript.lua"
+#  define LUAPACKAGE_PATH LUA_PATH "/?.lua"
+#  define LUASCRIPT_PATH  LUA_PATH "/luascript.lua"
 #else
-  #define LUAPACKAGE_PATH ""
-  #define LUASCRIPT_PATH  "luascript.lua"
+#  define LUAPACKAGE_PATH ""
+#  define LUASCRIPT_PATH  "luascript.lua"
 #endif // LUA_PATH
 
 // - Tasks -
@@ -283,17 +287,25 @@ LuaMrlResolver::formatTitle(const QString &title)
 
   ret.remove(QRegExp("..ニコニコ動画\\(原宿\\)$"));
   ret.remove(QRegExp(" - 嗶哩嗶哩 - .*"));
-#ifdef _MSC_VER
-  ret.remove(QRegExp(" - ..\xe8\xa7\x86\xe9\xa2\x91 - .*")); // Youku
-  ret.remove(QRegExp(" - \xe8\xa7\x86\xe9\xa2\x91 - .*")); // Youku
-#else
-  ret.remove(QRegExp(" - 优酷视频 - .*")); // Youku
-  ret.remove(QRegExp(" - 视频 - .*")); // Youku
-#endif // _MSC_VER
   ret.remove(QRegExp(" - AcFun.tv$"));
+
+   // Youku
+#ifdef _MSC_VER
+  ret.remove(QRegExp(" - \xe7\x94\xb5\xe8\xa7\x86\xe5\x89\xa7 - .*"));
+  ret.remove(QRegExp(" - \xe8\xa7\x86\xe9\xa2\x91 - .*"));
+  ret.remove(QRegExp(" - ..\xe8\xa7\x86\xe9\xa2\x91 - .*"));
+#else
+  ret.remove(QRegExp(" - 电视剧 - .*"));
+  ret.remove(QRegExp(" - 视频 - .*"));
+  ret.remove(QRegExp(" - 优酷视频 - .*"));
+#endif // _MSC_VER
+
+  // See: http://htmlhelp.com/reference/html40/entities/special.html
+  ret.replace("&quot;", "'");
+  ret.replace("&amp;", "&");
   ret.replace("&lt;", "<");
   ret.replace("&gt;", ">");
-  ret.replace("&quot;", "'");
+
   return ret.trimmed();
 }
 
@@ -304,6 +316,7 @@ LuaMrlResolver::formatUrl(const QString &href)
   if (ret.isEmpty())
     return ret;
 
+  ret.remove(QRegExp("#$"));
   ret.replace(QRegExp("/index.html$", Qt::CaseInsensitive), "/");
   ret.replace(QRegExp("/#$", Qt::CaseInsensitive), "/");
   ret.replace(QRegExp("/index_1.html$", Qt::CaseInsensitive), "/");

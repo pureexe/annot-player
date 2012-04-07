@@ -3,6 +3,8 @@
 
 INCLUDEPATH += $$PWD
 
+DEFINES += WITH_MODULE_WEBBROWSER
+
 HEADERS += \
     $$PWD/webbrowser_config.h \
     $$PWD/webbrowser.h

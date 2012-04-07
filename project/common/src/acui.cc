@@ -2,16 +2,16 @@
 // 7/30/2011
 
 #include "ac/acui.h"
-#include "ac/acr.h"
+#include "ac/acrc.h"
 #include "ac/acss.h"
 #include "ac/actextedit.h"
 #include "ac/accomboedit.h"
 #include "ac/aclineedit.h"
 #include "module/qtext/toolbutton.h"
 #include "module/qtext/combobox.h"
-#ifdef USE_WIN_DWM
+#ifdef WITH_WIN_DWM
 #  include "win/dwm/dwm.h"
-#endif // USE_WIN_DWM
+#endif // WITH_WIN_DWM
 #ifdef Q_WS_WIN
 #  include "win/qtwin/qtwin.h"
 #endif // Q_WS_WIN
@@ -45,22 +45,22 @@ AcUi::backgroundImagePath() const
 
   const char *rc = 0;
   switch (t) {
-  case DarkTheme:       rc = ACR_IMAGE_AERO_DARK; break;
-  case BlackTheme:      rc = ACR_IMAGE_AERO_BLACK; break;
-  case BlueTheme:       rc = ACR_IMAGE_AERO_BLUE; break;
-  case BrownTheme:      rc = ACR_IMAGE_AERO_BROWN; break;
-  case CyanTheme:       rc = ACR_IMAGE_AERO_CYAN; break;
-  case GrayTheme:       rc = ACR_IMAGE_AERO_GRAY; break;
-  case GreenTheme:      rc = ACR_IMAGE_AERO_GREEN; break;
-  case PinkTheme:       rc = ACR_IMAGE_AERO_PINK; break;
-  case PurpleTheme:     rc = ACR_IMAGE_AERO_PURPLE; break;
-  case RedTheme:        rc = ACR_IMAGE_AERO_RED; break;
-  case WhiteTheme:      rc = ACR_IMAGE_AERO_WHITE; break;
-  case YellowTheme:     rc = ACR_IMAGE_AERO_YELLOW; break;
+  case DarkTheme:       rc = ACRC_IMAGE_AERO_DARK; break;
+  case BlackTheme:      rc = ACRC_IMAGE_AERO_BLACK; break;
+  case BlueTheme:       rc = ACRC_IMAGE_AERO_BLUE; break;
+  case BrownTheme:      rc = ACRC_IMAGE_AERO_BROWN; break;
+  case CyanTheme:       rc = ACRC_IMAGE_AERO_CYAN; break;
+  case GrayTheme:       rc = ACRC_IMAGE_AERO_GRAY; break;
+  case GreenTheme:      rc = ACRC_IMAGE_AERO_GREEN; break;
+  case PinkTheme:       rc = ACRC_IMAGE_AERO_PINK; break;
+  case PurpleTheme:     rc = ACRC_IMAGE_AERO_PURPLE; break;
+  case RedTheme:        rc = ACRC_IMAGE_AERO_RED; break;
+  case WhiteTheme:      rc = ACRC_IMAGE_AERO_WHITE; break;
+  case YellowTheme:     rc = ACRC_IMAGE_AERO_YELLOW; break;
 
   case DefaultTheme:
   case RandomTheme:
-  default: rc = ACR_IMAGE_AERO;
+  default: rc = ACRC_IMAGE_AERO;
   }
 
   return rc;
@@ -72,9 +72,9 @@ AcUi::isAeroAvailable()
   return
 #ifdef Q_WS_WIN
   QtWin::isWindowsVistaOrLater()
-#if USE_WIN_DWM
+#if WITH_WIN_DWM
   && Dwm::isCompositionEnabled()
-#endif // USE_WIN_DWM
+#endif // WITH_WIN_DWM
 #else
   false
 #endif // Q_WS_WIN;
@@ -87,7 +87,7 @@ void
 AcUi::setMainWindowStyle(QWidget *w)
 {
   Q_ASSERT(w);
-#ifdef USE_WIN_DWM
+#ifdef WITH_WIN_DWM
   if(isAeroEnabled()) {
     w->setAttribute(Qt::WA_TranslucentBackground);
     w->setAttribute(Qt::WA_NoSystemBackground);
@@ -95,7 +95,7 @@ AcUi::setMainWindowStyle(QWidget *w)
     setWindowDwmEnabled(w, true);
     return;
   }
-#endif // USE_WIN_DWM
+#endif // WITH_WIN_DWM
   //if (qss)
   //  w->setStyleSheet(SS_BACKGROUND_CLASS(MainWindow));
   setWindowBackground(w, true); // persistent = true
@@ -108,7 +108,7 @@ AcUi::setBlackBackground(QWidget *w)
   Q_ASSERT(w);
   if (w) {
     w->ensurePolished();
-    w->setPalette(QColor("black"));
+    w->setPalette(Qt::black);
   }
 }
 
@@ -173,7 +173,7 @@ AcUi::invalidateBackground()
       setMenuBackground(m, false); // persistent = false
 }
 
-#ifdef USE_WIN_DWM
+#ifdef WITH_WIN_DWM
 void
 AcUi::setWindowDwmEnabled(QWidget *w, bool t)
 {
@@ -207,7 +207,7 @@ AcUi::setDwmEnabled(bool t)
     else
       DWM_DISABLE_AERO_WIDGET(w)
 }
-#endif // USE_WIN_DWM
+#endif // WITH_WIN_DWM
 
 void
 AcUi::setWindowStyle(QWidget *w, bool persistent)
@@ -218,7 +218,7 @@ AcUi::setWindowStyle(QWidget *w, bool persistent)
 
   //w->setGraphicsEffect(new QGraphicsBlurEffect(w));
 
-#ifdef USE_WIN_DWM
+#ifdef WITH_WIN_DWM
   if (isAeroEnabled()) {
     if (persistent) {
       DWM_ENABLE_AERO_WIDGET(w)
@@ -234,7 +234,7 @@ AcUi::setWindowStyle(QWidget *w, bool persistent)
     //    w->setStyleSheet(SS_WINDOW);
     //}
   }
-#endif // USE_WIN_DWM
+#endif // WITH_WIN_DWM
 
   //w->setAttribute(Qt::WA_TranslucentBackground);
   //w->setAttribute(Qt::WA_NoSystemBackground, false);
@@ -270,12 +270,12 @@ AcUi::setMenuStyle(QMenu *menu)
   if (!menu)
     return;
 
-#ifdef USE_WIN_DWM
+#ifdef WITH_WIN_DWM
   if (isAeroEnabled()) {
     DWM_ENABLE_AERO_WIDGET(menu);
     return;
   }
-#endif // USE_WIN_DWM
+#endif // WITH_WIN_DWM
 
   menu->setStyleSheet(SS_MENU);
 }
@@ -288,7 +288,7 @@ AcUi::setContextMenuStyle(QMenu *w, bool persistent)
   if (!w || !menu_)
     return;
 
-#ifdef USE_WIN_DWM
+#ifdef WITH_WIN_DWM
   if (isAeroEnabled()) {
     if (persistent)
       DWM_ENABLE_AERO_WIDGET(w)
@@ -304,7 +304,7 @@ AcUi::setContextMenuStyle(QMenu *w, bool persistent)
 
     return;
   }
-#endif // USE_WIN_DWM
+#endif // WITH_WIN_DWM
 
   setMenuBackground(w, persistent);
   w->setWindowOpacity(AC_CONTEXTMENU_OPACITY);
@@ -337,10 +337,10 @@ AcUi::setStatusBarStyle(QStatusBar *w)
   Q_ASSERT(w);
   if (!w)
     return;
-#ifdef USE_WIN_DWM
+#ifdef WITH_WIN_DWM
   if (isAeroEnabled())
     w->setStyleSheet(SS_STATUSBAR_DWM);
-#endif // USE_WIN_DWM
+#endif // WITH_WIN_DWM
 }
 
 // - Maker

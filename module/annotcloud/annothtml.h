@@ -9,13 +9,16 @@
 #include <QStringList>
 #include <QWebElement>
 #include <QColor>
+#include <QObject>
 #include <utility>
 
 namespace AnnotCloud {
 
-class AnnotationHtmlParser
+class AnnotationHtmlParser : public QObject
 {
+  Q_OBJECT
   typedef AnnotationHtmlParser Self;
+  typedef QObject Base;
 
   QString tinySize_, smallSize_, normalSize_, largeSize_, hugeSize_;
 
@@ -23,7 +26,7 @@ class AnnotationHtmlParser
 public:
   static Self *globalInstance() { static Self g; return &g; }
 
-  AnnotationHtmlParser();
+  explicit AnnotationHtmlParser(QObject *parent = 0);
 
   // - Properties -
 public:

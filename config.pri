@@ -50,26 +50,33 @@ win32 {
 # See: http://www.developer.nokia.com/Community/Wiki/Creating_Debian_packages_for_Maemo_5_Qt_applications_and_showing_in_the_application_menu
 # See: https://wiki.kubuntu.org/PackagingGuide/QtApplication
 
+LUADIR=$$DESTDIR/lua
+JSFDIR=$$DESTDIR/jsf
+
 unix:!mac {
     isEmpty(PREFIX): PREFIX = /usr
     BINDIR = $$PREFIX/bin
     DATADIR = $$PREFIX/share
-    DEFINES += \
-        BINDIR=\\\"$$BINDIR\\\" \
-        DATADIR=\\\"$$DATADIR\\\"
 }
 mac {
     isEmpty(PREFIX): PREFIX = /opt/annot
     BINDIR = $$PREFIX/bin
     DATADIR = $$PREFIX/share
-    DEFINES += \
-        BINDIR=\\\"$$BINDIR\\\" \
-        DATADIR=\\\"$$DATADIR\\\"
 }
+
+!win32 {
+  DEFINES += \
+    BINDIR=\\\"$$BINDIR\\\" \
+    DATADIR=\\\"$$DATADIR\\\"
+}
+DEFINES += \
+    LUADIR=\\\"$$LUADIR\\\" \
+    JSFDIR=\\\"$$JSFDIR\\\"
 
 ## External libraries
 
 win32 {
+    QT_HOME             = c:/qt/current
     #VLC_HOME            = "c:/Program Files/VideoLAN/VLC/sdk"
     VLC_HOME            = c:/dev/vlc
     VLC_SRC             = $$VLC_HOME/src
@@ -82,8 +89,9 @@ win32 {
     POPPLER_HOME        = c:/dev/poppler
     BOOST_HOME          = c:/dev/boost
     GSOAP_HOME          = c:/dev/gsoap
-    LUA_HOME            = c:/dev/lua
     ZLIB_HOME           = c:/dev/zlib
+    LUA_HOME            = c:/dev/lua
+    LUA_VERSION =
 
     ITH_HOME            = c:/dev/ith
     WDK_HOME            = c:/winddk
@@ -100,6 +108,7 @@ win32 {
 }
 
 unix {
+    QT_HOME             = /usr/share/qt4
     VLC_HOME            = /usr
     VLC_SRC             = ${HOME}/opt/src
     #WSF_HOME            = ${HOME}/opt/wso2/wsf
@@ -113,9 +122,11 @@ unix {
     GSOAP_HOME          = /usr
     LUA_HOME            = /usr
     ZLIB_HOME           = /usr
+    LUA_VERSION = 5.1
 }
 
 mac {
+    QT_HOME             = /opt/local/share/qt4
     #VLC_HOME            = ${HOME}/opt/vlc
     VLC_HOME            = /Applications/VLC.app/Contents/MacOS
     VLC_SRC             = ${HOME}/opt/src
@@ -128,8 +139,9 @@ mac {
     POPPLER_HOME        = ${HOME}/opt/poppler
     BOOST_HOME          = /opt/local
     GSOAP_HOME          = /opt/local
-    LUA_HOME            = /usr
     ZLIB_HOME           = /usr
+    LUA_HOME            = /usr
+    LUA_VERSION =
 }
 
 INCLUDEPATH     += $$VLC_HOME/include
@@ -146,7 +158,8 @@ INCLUDEPATH     += $$BOOST_HOME/include
 LIBS            += -L$$BOOST_HOME/lib
 INCLUDEPATH     += $$GSOAP_HOME/include
 LIBS            += -L$$GSOAP_HOME/lib
-INCLUDEPATH     += $$LUA_HOME/include
+INCLUDEPATH     += $$LUA_HOME/include \
+                   $$LUA_HOME/include/lua$$LUA_VERSION
 LIBS            += -L$$LUA_HOME/lib
 INCLUDEPATH     += $$ZLIB_HOME/include
 LIBS            += -L$$ZLIB_HOME/lib
@@ -194,6 +207,10 @@ CONFIG(nocrt) {
   }
 }
 
+## Translation
+
+CODECFORTR = UTF-8
+
 ## Debug
 
 include($$ROOTDIR/module/debug/debug.pri)
@@ -201,6 +218,13 @@ include($$ROOTDIR/module/debug/debug.pri)
 ## Deploy
 
 DEFINES += VERSION=\\\"$$VERSION\\\"
+
+## Domains and accounts
+
+DEFINES += NICO_PROXY_DOMAIN=\\\"sakuradite.com\\\"
+
+DEFINES += NICOVIDEO_USERNAME=\\\"oedivocin@gmail.com\\\" \
+           NICOVIDEO_PASSWORD=\\\"nicovideo.jp\\\"
 
 # EOF
 

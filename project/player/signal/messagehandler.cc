@@ -3,11 +3,11 @@
 
 #include "messagehandler.h"
 #include "global.h"
-#ifdef USE_WIN_QTH
+#ifdef WITH_WIN_QTH
 #  include "win/qth/qth.h"
 #else
 #  error "QTH module is indispensible"
-#endif // USE_WIN_QTH
+#endif // WITH_WIN_QTH
 #include "module/annotcloud/annotation.h"
 #include "module/annotcloud/annottag.h"
 #include <QtCore>

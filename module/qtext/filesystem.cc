@@ -17,12 +17,12 @@ QtExt::escapeFileName(const QString &name)
   ret.replace('|', '-');
 #ifdef _MSC_VER
   ret.replace(':', "\xef\xbc\x9a");
-#else
+#elif !defined Q_OS_MAC
   ret.replace(':', "：");
 #endif // _MSC_VER
 #ifdef _MSC_VER
   ret.replace('?', "\xef\xbc\x9f");
-#else
+#elif !defined Q_OS_MAC
   ret.replace('?', "？");
 #endif // _MSC_VER
   return ret.trimmed();

@@ -9,7 +9,7 @@ include(vlcstep/vlcstep.pri)
 #include(VLCKit/VLCKit.pri)
 #SUBDIRS += macdeploy
 #SUBDIRS += macdeployqt
-SUBDIRS = VLCKit
+#SUBDIRS = VLCKit
 
 }
 # EOF

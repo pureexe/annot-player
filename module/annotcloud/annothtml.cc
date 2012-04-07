@@ -12,8 +12,9 @@
 // - Construction -
 
 AnnotCloud::
-AnnotationHtmlParser::AnnotationHtmlParser()
-  : tinySize_(DEFAULT_TINY_SIZE),
+AnnotationHtmlParser::AnnotationHtmlParser(QObject *parent)
+  : Base(parent),
+    tinySize_(DEFAULT_TINY_SIZE),
     smallSize_(DEFAULT_SMALL_SIZE),
     normalSize_(DEFAULT_NORMAL_SIZE),
     largeSize_(DEFAULT_LARGE_SIZE),

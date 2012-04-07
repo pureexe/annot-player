@@ -3,7 +3,7 @@
 
 #include "addaliasdialog.h"
 #include "tr.h"
-#include "ac/AcUi.h"
+#include "ac/acui.h"
 #include "module/annotcloud/traits.h"
 #include "module/annotcloud/alias.h"
 #include <QtGui>

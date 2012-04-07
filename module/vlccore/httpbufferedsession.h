@@ -5,8 +5,8 @@
 // 2/21/2012
 
 #ifdef _MSC_VER
-  #pragma warning (disable:4819)       // C4819: The file contains a character that cannot be represented in the current code page.
-  #pragma warning (disable:4996)       // C4996: MS' deprecated std functions orz.
+#  pragma warning (disable:4819)       // C4819: The file contains a character that cannot be represented in the current code page.
+#  pragma warning (disable:4996)       // C4996: MS' deprecated std functions orz.
 #endif // _MSC_VER
 
 #include "module/vlccore/httpsession.h"

@@ -7,14 +7,18 @@
 #include "module/annotcloud/traits.h"
 #include "module/qtext/algorithm.h"
 #include <QtCore>
+#include <boost/typeof/typeof.hpp>
+
+#define DEBUG "settings"
+#include "module/debug/debug.h"
 
 // - Settings keys -
 
 // See platform specific issue in QSettings manual.
 #ifdef Q_OS_MAC
-  #define SK_ORGANIZATION   G_DOMAIN
+#  define SK_ORGANIZATION   G_DOMAIN
 #else
-  #define SK_ORGANIZATION   G_ORGANIZATION
+#  define SK_ORGANIZATION   G_ORGANIZATION
 #endif // Q_OS_MAC
 
 #define SK_APPLICATION    G_APPLICATION
@@ -32,22 +36,26 @@
 #define SK_UPDATEDATE   "UpdateDate"
 #define SK_RECENTPATH   "RecentPath"
 #define SK_AUTOSUBMIT   "Submit"
+#define SK_ANNOTSCALE   "AnnotationScale"
+//#define SK_ANNOTROTATE  "AnnotationRotation"
 #define SK_ANNOTFILTER  "AnnotationFilter"
 #define SK_ANNOTCOUNT   "AnnotationCount"
 #define SK_ANNOTEFFECT  "AnnotationEffect"
 #define SK_AUTOPLAYNEXT "AutoPlayNext"
 #define SK_BLOCKEDUSERS "BlockedUsers"
 #define SK_BLOCKEDKEYS  "BlockedKeywords"
-#define SK_NICOACCOUNT  "NicovideoAccount"
-#define SK_BILIACCOUNT  "BilibiliAccount"
 #define SK_PLAYPOSHIST  "PlayPosHistory"
 #define SK_SUBTITLEHIST "SubtitleHistory"
 #define SK_TRACKHIST    "TrackHistory"
 #define SK_ASPECTHIST   "AspectHistory"
-#define SK_BROWSERURLS  "BrowserUrls"
 #define SK_MULTIWINDOW  "MultipleWindows"
 #define SK_QUEUEEMPTY   "QueueEmpty"
 #define SK_RECENT       "Recent"
+#define SK_HUE          "Hue"
+#define SK_SATURATION   "Saturation"
+#define SK_BRIGHTNESS   "Brightness"
+#define SK_CONTRAST     "Contrast"
+#define SK_GAMMA        "Gamma"
 
 // - Constructions -
 
@@ -211,23 +219,6 @@ Settings::setRecentPath(const QString &path)
 { setValue(SK_RECENTPATH, path); }
 
 QStringList
-Settings::browserUrls() const
-{ return value(SK_BROWSERURLS).toStringList(); }
-
-void
-Settings::setBrowserUrls(const QStringList &urls)
-{
-  if (urls.isEmpty())
-    remove(SK_BROWSERURLS);
-  else
-    setValue(SK_BROWSERURLS, urls);
-}
-
-void
-Settings::clearBrowserUrls()
-{ remove(SK_BROWSERURLS); }
-
-QStringList
 Settings::recentFiles() const
 {
   QStringList ret = value(SK_RECENT).toStringList();
@@ -328,8 +319,8 @@ Settings::playPosHistory() const
   QHash<qint64, qint64> ret;
   QHash<QString, QVariant> h = value(SK_PLAYPOSHIST).toHash();
   if (!h.isEmpty())
-    foreach (QString k, h.keys())
-      ret[k.toLongLong()] = h[k].toLongLong();
+    for (BOOST_AUTO(p, h.begin()); p != h.end(); ++p)
+      ret[p.key().toLongLong()] = p.value().toLongLong();
   return ret;
 }
 
@@ -340,8 +331,8 @@ Settings::setPlayPosHistory(const QHash<qint64, qint64> &input)
     remove(SK_PLAYPOSHIST);
   else {
     QHash<QString, QVariant> h;
-    foreach (qint64 k, input.keys())
-      h[QString::number(k)] = QString::number(input[k]);
+    for (BOOST_AUTO(p, input.begin()); p != input.end(); ++p)
+      h[QString::number(p.key())] = p.value();
     setValue(SK_PLAYPOSHIST, h);
   }
 }
@@ -352,8 +343,8 @@ Settings::subtitleHistory() const
   QHash<qint64, int> ret;
   QHash<QString, QVariant> h = value(SK_SUBTITLEHIST).toHash();
   if (!h.isEmpty())
-    foreach (QString k, h.keys())
-      ret[k.toLongLong()] = h[k].toInt();
+    for (BOOST_AUTO(p, h.begin()); p != h.end(); ++p)
+      ret[p.key().toLongLong()] = p.value().toInt();
   return ret;
 }
 
@@ -364,8 +355,8 @@ Settings::setSubtitleHistory(const QHash<qint64, int> &input)
     remove(SK_SUBTITLEHIST);
   else {
     QHash<QString, QVariant> h;
-    foreach (qint64 k, input.keys())
-      h[QString::number(k)] = QString::number(input[k]);
+    for (BOOST_AUTO(p, input.begin()); p != input.end(); ++p)
+      h[QString::number(p.key())] = p.value();
     setValue(SK_SUBTITLEHIST, h);
   }
 }
@@ -376,8 +367,8 @@ Settings::audioTrackHistory() const
   QHash<qint64, int> ret;
   QHash<QString, QVariant> h = value(SK_TRACKHIST).toHash();
   if (!h.isEmpty())
-    foreach (QString k, h.keys())
-      ret[k.toLongLong()] = h[k].toInt();
+    for (BOOST_AUTO(p, h.begin()); p != h.end(); ++p)
+      ret[p.key().toLongLong()] = p.value().toInt();
   return ret;
 }
 
@@ -388,8 +379,8 @@ Settings::setAudioTrackHistory(const QHash<qint64, int> &input)
     remove(SK_TRACKHIST);
   else {
     QHash<QString, QVariant> h;
-    foreach (qint64 k, input.keys())
-      h[QString::number(k)] = QString::number(input[k]);
+    for (BOOST_AUTO(p, input.begin()); p != input.end(); ++p)
+      h[QString::number(p.key())] = p.value();
     setValue(SK_TRACKHIST, h);
   }
 }
@@ -400,8 +391,8 @@ Settings::aspectRatioHistory() const
   QHash<qint64, QString> ret;
   QHash<QString, QVariant> h = value(SK_ASPECTHIST).toHash();
   if (!h.isEmpty())
-    foreach (QString k, h.keys())
-      ret[k.toLongLong()] = h[k].toString();
+    for (BOOST_AUTO(p, h.begin()); p != h.end(); ++p)
+      ret[p.key().toLongLong()] = p.value().toString();
   return ret;
 }
 
@@ -412,10 +403,72 @@ Settings::setAspectRatioHistory(const QHash<qint64, QString> &input)
     remove(SK_PLAYPOSHIST);
   else {
     QHash<QString, QVariant> h;
-    foreach (qint64 k, input.keys())
-      h[QString::number(k)] = input[k];
+    for (BOOST_AUTO(p, input.begin()); p != input.end(); ++p)
+      h[QString::number(p.key())] = p.value();
     setValue(SK_ASPECTHIST, h);
   }
 }
 
+// - Video control -
+
+void
+Settings::setHue(int v)
+{ setValue(SK_HUE, v); }
+
+int
+Settings::hue() const
+{ return value(SK_HUE).toInt(); }
+
+void
+Settings::setGamma(qreal v)
+{ setValue(SK_GAMMA, v); }
+
+qreal
+Settings::gamma() const
+{ return value(SK_GAMMA, 1.0).toReal(); }
+
+void
+Settings::setContrast(qreal v)
+{ setValue(SK_CONTRAST, v); }
+
+qreal
+Settings::contrast() const
+{ return value(SK_CONTRAST, 1.0).toReal(); }
+
+void
+Settings::setSaturation(qreal v)
+{ setValue(SK_SATURATION, v); }
+
+qreal
+Settings::saturation() const
+{ return value(SK_SATURATION, 1.0).toReal(); }
+
+void
+Settings::setBrightness(qreal v)
+{ setValue(SK_BRIGHTNESS, v); }
+
+qreal
+Settings::brightness() const
+{ return value(SK_BRIGHTNESS, 1.0).toReal(); }
+
+// - Transform -
+
+void
+Settings::setAnnotationScale(qreal v)
+{ setValue(SK_ANNOTSCALE, v); }
+
+qreal
+Settings::annotationScale() const
+{ return value(SK_ANNOTSCALE, 1.0).toReal(); }
+
 // EOF
+
+/*
+void
+Settings::setAnnotationRotation(qreal v)
+{ setValue(SK_ANNOTROTATE, v); }
+
+qreal
+Settings::annotationRotation() const
+{ return value(SK_ANNOTROTATE).toReal(); }
+*/

@@ -11,6 +11,8 @@ unix:   SUBDIRS += unix
 mac:    SUBDIRS += mac
 
 OTHER_FILES = \
+    licenses/annot-browser.txt \
+    licenses/annot-down.txt \
     licenses/annot-player.txt \
     ChangeLog \
     COPYING \

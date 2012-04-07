@@ -48,7 +48,6 @@
 #include "seekdialog.h"
 #include "livedialog.h"
 #include "syncdialog.h"
-#include "proxybrowser.h"
 #include "mediaurldialog.h"
 #include "suburldialog.h"
 #include "shutdowndialog.h"
@@ -75,33 +74,33 @@
 #include "module/qtext/rubberband.h"
 //#include "module/qtext/network.h"
 #include "module/mediacodec/flvcodec.h"
-#ifdef USE_MODULE_SERVERAGENT
+#ifdef WITH_MODULE_SERVERAGENT
 #  include "module/serveragent/serveragent.h"
-#endif // USE_MODULE_SERVERAGENT
-#ifdef USE_MODULE_CLIENTAGENT
+#endif // WITH_MODULE_SERVERAGENT
+#ifdef WITH_MODULE_CLIENTAGENT
 #  include "module/clientagent/clientagent.h"
-#endif // USE_MODULE_CLIENTAGENT
-#ifdef USE_MODULE_DOLL
+#endif // WITH_MODULE_CLIENTAGENT
+#ifdef WITH_MODULE_DOLL
 #  include "module/doll/doll.h"
-#endif // USE_MODULE_DOLL
-#ifdef USE_WIN_HOOK
+#endif // WITH_MODULE_DOLL
+#ifdef WITH_WIN_HOOK
 #  include "win/hook/hook.h"
-#endif // USE_WIN_HOOK
-#ifdef USE_WIN_MOUSEHOOK
+#endif // WITH_WIN_HOOK
+#ifdef WITH_WIN_MOUSEHOOK
 #  include "win/mousehook/mousehook.h"
-#endif // USE_WIN_MOUSEHOOK
-//#ifdef USE_WIN_DWM
+#endif // WITH_WIN_MOUSEHOOK
+//#ifdef WITH_WIN_DWM
 //#  include "win/dwm/dwm.h"
-//#endif // USE_WIN_DWM
-#ifdef USE_WIN_QTH
+//#endif // WITH_WIN_DWM
+#ifdef WITH_WIN_QTH
 #  include "win/qth/qth.h"
-#endif // USE_WIN_QTH
+#endif // WITH_WIN_QTH
 #ifdef Q_WS_WIN
 #  include "win/qtwin/qtwin.h"
 #endif // Q_WS_WIN
-#ifdef USE_WIN_PICKER
+#ifdef WITH_WIN_PICKER
 #  include "win/picker/picker.h"
-#endif // USE_WIN_PICKER
+#endif // WITH_WIN_PICKER
 #ifdef Q_OS_MAC
 #  include "mac/qtmac/qtmac.h"
 //#  include "mac/qtstep/qtstep.h"
@@ -125,14 +124,20 @@
 #include <cstring>
 #include <ctime>
 
-#ifndef USE_MODULE_SERVERAGENT
-  #error "Module server agent is indispensible."
-#endif // USE_MODULE_SERVERAGENT
+#ifdef __GNUC__
+#  pragma GCC diagnostic ignored "-Wparentheses" // suggest parentheses around && within ||
+#endif // __GNUC__
 
 #ifdef Q_OS_MAC
-  #define K_CMD         "CTRL"
+#  define K_CMD         "CTRL"
+#  define K_ALT         "CTRL+ALT"
+#  define K_CTRL        "cmd"
+#  define K_SHIFT       "shift"
 #else
-  #define K_CMD         "ALT"
+#  define K_CMD         "ALT"
+#  define K_ALT         "ALT"
+#  define K_CTRL        "Ctrl"
+#  define K_SHIFT       "Shift"
 #endif // Q_OS_MAC
 
 using namespace AnnotCloud;
@@ -142,13 +147,7 @@ using namespace Logger;
 #include "module/debug/debug.h"
 
 enum { DEFAULT_LIVE_INTERVAL = 3000 }; // 3 seconds
-enum { HISTORY_SIZE =    // Size of playPos/Sub/AudioTrack history
-  #ifdef Q_OS_WIN
-       20
-  #else
-       100
-  #endif // Q_OS_WIN
-};
+enum { HISTORY_SIZE = 100 };   // Size of playPos/Sub/AudioTrack history
 
 // - Focus -
 
@@ -214,12 +213,20 @@ MainWindow::resetPlayer()
   player_->embed(videoView_);
 #endif // Q_OS_MAC
   player_->setFullScreen(false);
+
+
+  Settings *settings = Settings::globalSettings();
+  player_->setHue(settings->hue());
+  player_->setContrast(settings->contrast());
+  player_->setSaturation(settings->saturation());
+  player_->setBrightness(settings->brightness());
+  player_->setGamma(settings->gamma());
 }
 
 void
 MainWindow::setupWindowStyle()
 {
-#ifdef USE_WIN_DWM
+#ifdef WITH_WIN_DWM
   if(AcUi::globalInstance()->isAeroEnabled()) {
     setAttribute(Qt::WA_TranslucentBackground);
     setAttribute(Qt::WA_NoSystemBackground);
@@ -227,7 +234,7 @@ MainWindow::setupWindowStyle()
     AcUi::globalInstance()->setWindowDwmEnabled(this, true);
     return;
   }
-#endif // USE_WIN_DWM
+#endif // WITH_WIN_DWM
   //if (qss)
   //  w->setStyleSheet(SS_BACKGROUND_CLASS(MainWindow));
   AcUi::globalInstance()->setWindowBackground(this, true); // persistent = true
@@ -286,7 +293,7 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags f)
   embeddedPlayer_->invalidateGeometry();
 
   // Global hooks
-#ifdef USE_WIN_HOOK
+#ifdef WITH_WIN_HOOK
   HOOK->setMouseHookEnabled(true);
   //HOOK->setKeyboardHookEnabled(false);
   HOOK->setThreadsFilterEnabled(false);         // Use global hook.
@@ -301,12 +308,12 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags f)
   connect(player_, SIGNAL(mediaClosed()), videoView_, SLOT(removeFromWindowsHook()));
 
   HOOK->start();
-#endif // USE_WIN_HOOK
+#endif // WITH_WIN_HOOK
 
-#ifdef USE_WIN_MOUSEHOOK
+#ifdef WITH_WIN_MOUSEHOOK
   MouseHook::globalInstance()->setEventListener(this);
   MouseHook::globalInstance()->start();
-#endif // USE_WIN_MOUSEHOOK
+#endif // WITH_WIN_MOUSEHOOK
 
   // Load settings
   Settings *settings = Settings::globalSettings();
@@ -332,6 +339,7 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags f)
   embeddedPlayer_->setOnTop(settings->isEmbeddedPlayerOnTop());
 
   annotationView_->setRenderHint(settings->annotationEffect());
+  annotationView_->setScale(settings->annotationScale());
 
   annotationFilter_->setEnabled(settings->isAnnotationFilterEnabled());
   annotationFilter_->setBlockedTexts(settings->blockedKeywords());
@@ -411,19 +419,19 @@ MainWindow::createComponents()
 
   // Server agents
   server_ = new ServerAgent(this);
-#ifdef USE_MODULE_CLIENTAGENT
+#ifdef WITH_MODULE_CLIENTAGENT
   client_ = new ClientAgent(this);
 
   server_->setClientAgent(client_);
   client_->setServerAgent(server_);
-#endif // USE_MODULE_CLIENTAGENT
+#endif // WITH_MODULE_CLIENTAGENT
 
   // Qth
-#ifdef USE_WIN_QTH
+#ifdef WITH_WIN_QTH
   //Qth *qth = new Qth(winId(), this);
   //Qth::setGlobalInstance(qth);
   //QTH->setParentWinId(winId());
-#endif // USE_WIN_QTH
+#endif // WITH_WIN_QTH
 
   // Player
   player_ = new Player(this);
@@ -466,16 +474,16 @@ MainWindow::createComponents()
   // Rubber band
   pauseRubberBand_ = new QtExt::MouseRubberBand(QRubberBand::Rectangle, annotationView_);
   resumeRubberBand_ = new QtExt::MouseRubberBand(QRubberBand::Rectangle, annotationView_);
-  resumeRubberBand_->setColor("red");
+  resumeRubberBand_->setColor(Qt::red);
 
-//#ifdef USE_WIN_DWM
+//#ifdef WITH_WIN_DWM
 //  {
 //    QWidget *w = annotationView_->editor();
 //    w->setParent(this, w->windowFlags()); // hot fix for dwm displaying issue
 //    AcUi::globalInstance()->setWindowDwmEnabled(w->winId(), false);
 //    AcUi::globalInstance()->setWindowDwmEnabled(w->winId(), true);
 //  }
-//#endif // USE_WIN_DWM
+//#endif // WITH_WIN_DWM
 //#ifdef Q_OS_MAC // remove background in annotation view
 //  annotationView_->setStyleSheet(
 //    SS_BEGIN(QWidget)
@@ -548,10 +556,10 @@ MainWindow::createComponents()
   connect(signalView_->processView(), SIGNAL(detached(ProcessInfo)), recentMessageView_, SLOT(clearProcessName()));
 #endif // USE_MODE_SIGNAL
 
-#ifdef USE_MODULE_DOLL
+#ifdef WITH_MODULE_DOLL
   doll_ = new Doll(this);
   connect(doll_, SIGNAL(said(QString)), SLOT(respond(QString)));
-#endif // USE_MODULE_DOLL
+#endif // WITH_MODULE_DOLL
 
   windowStaysOnTopTimer_ = new QTimer(this);
   windowStaysOnTopTimer_->setInterval(G_WINDOWONTOP_TIMEOUT);
@@ -829,9 +837,9 @@ MainWindow::createConnections()
   }
 
   // Agents:
-#ifdef USE_MODULE_CLIENTAGENT
+#ifdef WITH_MODULE_CLIENTAGENT
   connect(client_, SIGNAL(chatReceived(QString)), SLOT(respond(QString)));
-#endif // USE_MODULE_CLIENTAGENT
+#endif // WITH_MODULE_CLIENTAGENT
 
   // Clipboard
   connect(clipboardMonitor_, SIGNAL(annotationUrlEntered(QString)), SLOT(enterAnnotationUrl(QString)));
@@ -860,12 +868,14 @@ MainWindow::createConnections()
   connect(translator_, SIGNAL(networkError(QString)), logger_, SLOT(logTranslatorNetworkError(QString)));
 
   connect(annotationView_, SIGNAL(trackedWindowDestroyed()), logger_, SLOT(logTrackedWindowDestroyed()));
+  connect(annotationView_, SIGNAL(scaleChanged(qreal)), logger_, SLOT(logAnnotationScaleChanged(qreal)));
+  connect(annotationView_, SIGNAL(rotationChanged(qreal)), logger_, SLOT(logAnnotationRotationChanged(qreal)));
 
-#ifdef USE_MODULE_CLIENTAGENT
+#ifdef WITH_MODULE_CLIENTAGENT
   connect(client_, SIGNAL(authorized()), logger_, SLOT(logClientAgentAuthorized()));
   connect(client_, SIGNAL(deauthorized()), logger_, SLOT(logClientAgentDeauthorized()));
   connect(client_, SIGNAL(authorizationError()), logger_, SLOT(logClientAgentAuthorizationError()));
-#endif // USE_MODULE_CLIENTAGENT
+#endif // WITH_MODULE_CLIENTAGENT
 
   connect(annotationView_, SIGNAL(annotationPosChanged(qint64)), annotationBrowser_, SLOT(setAnnotationPos(qint64)));
 
@@ -959,8 +969,30 @@ MainWindow::createActions()
   MAKE_ACTION(checkInternetConnectionAct_,      CHECKINTERNET,   this, SLOT(checkInternetConnection()))
   MAKE_ACTION(deleteCachesAct_, DELETECACHE,    this,           SLOT(deleteCaches()))
   MAKE_ACTION(newWindowAct_,    NEWWINDOW,      this,           SLOT(newWindow()))
+  MAKE_ACTION(resumeAnnotationAct_, RESUMEANNOT,this,           SLOT(resumeAnnotations()))
+  MAKE_ACTION(resetAnnotationScaleAct_, RESETANNOTSCALE, annotationView_,  SLOT(resetScale()))
+  MAKE_ACTION(increaseAnnotationScaleAct_, INCREASEANNOTSCALE, this,  SLOT(annotationScaleUp()))
+  MAKE_ACTION(decreaseAnnotationScaleAct_, DECREASEANNOTSCALE, this,  SLOT(annotationScaleDown()))
+  MAKE_ACTION(resetAnnotationRotationAct_, RESETANNOTROTATION, annotationView_,  SLOT(resetRotation()))
+  MAKE_ACTION(increaseAnnotationRotationAct_, INCREASEANNOTROTATION, this,  SLOT(annotationRotateUp()))
+  MAKE_ACTION(decreaseAnnotationRotationAct_, DECREASEANNOTROTATION, this,  SLOT(annotationRotateDown()))
   MAKE_ACTION(showAnnotationsAsThreadAct_,    ANNOTTHREAD,      this,  SLOT(showAnnotationsAsThread()))
   MAKE_ACTION(saveMediaAct_, SAVEMEDIA, this, SLOT(saveMedia()))
+  MAKE_ACTION(hueUpAct_, HUEUP, this, SLOT(hueUp()))
+  MAKE_ACTION(hueDownAct_, HUEDOWN, this, SLOT(hueDown()))
+  MAKE_ACTION(hueResetAct_, RESET, this, SLOT(hueReset()))
+  MAKE_ACTION(contrastUpAct_, CONTRASTUP, this, SLOT(contrastUp()))
+  MAKE_ACTION(contrastDownAct_, CONTRASTDOWN, this, SLOT(contrastDown()))
+  MAKE_ACTION(contrastResetAct_, RESET, this, SLOT(contrastReset()))
+  MAKE_ACTION(brightnessUpAct_, BRIGHTNESSUP, this, SLOT(brightnessUp()))
+  MAKE_ACTION(brightnessDownAct_, BRIGHTNESSDOWN, this, SLOT(brightnessDown()))
+  MAKE_ACTION(brightnessResetAct_, RESET, this, SLOT(brightnessReset()))
+  MAKE_ACTION(gammaUpAct_, GAMMAUP, this, SLOT(gammaUp()))
+  MAKE_ACTION(gammaDownAct_, GAMMADOWN, this, SLOT(gammaDown()))
+  MAKE_ACTION(gammaResetAct_, RESET, this, SLOT(gammaReset()))
+  MAKE_ACTION(saturationUpAct_, SATURATIONUP, this, SLOT(saturationUp()))
+  MAKE_ACTION(saturationDownAct_, SATURATIONDOWN, this, SLOT(saturationDown()))
+  MAKE_ACTION(saturationResetAct_, RESET, this, SLOT(saturationReset()))
   MAKE_TOGGLE(toggleSaveMediaAct_, AUTOSAVEMEDIA, this, SLOT(setSaveMedia(bool)))
   MAKE_TOGGLE(toggleSubmitAct_, AUTOSUBMIT, this, SLOT(setSubmit(bool)))
   MAKE_TOGGLE(nothingAfterFinishedAct_, NOTHINGAFTERFINISHED, this, SLOT(nothingAfterFinished()))
@@ -1153,11 +1185,18 @@ MainWindow::createActions()
     //QShortcut *b = new QShortcut(QKeySequence::Bold, this);
     //connect(b, SIGNAL(activated()), SLOT(openProxyBrowser()));
 
-    //toggleWindowOnTopAct_->setShortcuts(QKeySequence::AddTab);
-    QShortcut *t = new QShortcut(QKeySequence::AddTab, this);
-    connect(t, SIGNAL(activated()), SLOT(toggleWindowOnTop()));
+    //resumeAnnotationAct_->setShortcut(QKeySequence::Refresh);
+    resumeAnnotationAct_->setShortcut(QKeySequence("CTRL+R"));
 
+    toggleWindowOnTopAct_->setShortcuts(QKeySequence::AddTab);
+    //QShortcut *t = new QShortcut(QKeySequence::AddTab, this);
+    //connect(t, SIGNAL(activated()), SLOT(toggleWindowOnTop()));
+
+#ifdef Q_WS_MAC
+    helpAct_->setShortcut(QKeySequence("F1"));
+#else
     helpAct_->setShortcuts(QKeySequence::HelpContents);
+#endif // Q_WS_MAC
     //QShortcut *help = new QShortcut(QKeySequence::HelpContents, this);
     //connect(help, SIGNAL(activated()), SLOT(help()));
 
@@ -1168,20 +1207,15 @@ MainWindow::createActions()
 
     quitAct_->setShortcuts(QKeySequence::Quit);
 
+    //toggleEmbeddedModeAct_->setShortcut(QKeySequence(K_CMD "+1"));
     QShortcut *c1 = new QShortcut(QKeySequence(K_CMD "+1"), this);
     connect(c1, SIGNAL(activated()), hub_, SLOT(toggleEmbeddedPlayerMode()));
+    //toggleMiniModeAct_->setShortcut(QKeySequence(K_CMD "+2"));
     QShortcut *c2 = new QShortcut(QKeySequence(K_CMD "+2"), this);
     connect(c2, SIGNAL(activated()), hub_, SLOT(toggleMiniPlayerMode()));
+    //toggleFullScreenModeAct_->setShortcut(QKeySequence(K_CMD "+3"));
     QShortcut *c3 = new QShortcut(QKeySequence(K_CMD "+3"), this);
     connect(c3, SIGNAL(activated()), hub_, SLOT(toggleFullScreenWindowMode()));
-#ifndef Q_OS_MAC
-    QShortcut *cc1 = new QShortcut(QKeySequence("CTRL+1"), this);
-    connect(cc1, SIGNAL(activated()), hub_, SLOT(toggleEmbeddedPlayerMode()));
-    QShortcut *cc2 = new QShortcut(QKeySequence("CTRL+2"), this);
-    connect(cc2, SIGNAL(activated()), hub_, SLOT(toggleMiniPlayerMode()));
-    QShortcut *cc3 = new QShortcut(QKeySequence("CTRL+3"), this);
-    connect(cc3, SIGNAL(activated()), hub_, SLOT(toggleFullScreenWindowMode()));
-#endif // Q_OS_MAC
 
     QShortcut *f11 = new QShortcut(QKeySequence("F11"), this);
     connect(f11, SIGNAL(activated()), hub_, SLOT(toggleFullScreenWindowMode()));
@@ -1196,14 +1230,19 @@ MainWindow::createActions()
     connect(cf4, SIGNAL(activated()), SLOT(showBlacklistView()));
     QShortcut *cf5 = new QShortcut(QKeySequence("CTRL+F5"), this);
     connect(cf5, SIGNAL(activated()), SLOT(showAnnotationsAsThread()));
+    QShortcut *cf6 = new QShortcut(QKeySequence("CTRL+F6"), this);
+    connect(cf6, SIGNAL(activated()), SLOT(showBacklogDialog()));
 
     QShortcut *pp = new QShortcut(QKeySequence("CTRL+SHIFT+LEFT"), this);
     connect(pp, SIGNAL(activated()), SLOT(previous()));
     QShortcut *nn = new QShortcut(QKeySequence("CTRL+SHIFT+RIGHT"), this);
     connect(nn, SIGNAL(activated()), SLOT(next()));
 
-    QShortcut *csn = new QShortcut(QKeySequence("CTRL+SHIFT+N"), this);
-    connect(csn, SIGNAL(activated()), SLOT(newWindow()));
+#ifndef Q_WS_MAC
+    newWindowAct_->setShortcut(QKeySequence("CTRL+SHIFT+N"));
+    //QShortcut *csn = new QShortcut(QKeySequence("CTRL+SHIFT+N"), this);
+    //connect(csn, SIGNAL(activated()), SLOT(newWindow()));
+#endif // Q_WS_MAC
 
     QShortcut *backward = new QShortcut(QKeySequence("CTRL+LEFT"), this);
     connect(backward, SIGNAL(activated()), SLOT(backward90s()));
@@ -1221,6 +1260,81 @@ MainWindow::createActions()
     connect(csup, SIGNAL(activated()), SLOT(volumeUp()));
     QShortcut *csdown = new QShortcut(QKeySequence("CTRL+SHIFT+DOWN"), this);
     connect(csdown, SIGNAL(activated()), SLOT(volumeDown()));
+
+    // - Video adjustment -
+    saturationUpAct_->setShortcut(QKeySequence(K_ALT "+Q"));
+    saturationDownAct_->setShortcut(QKeySequence(K_ALT "+A"));
+    saturationResetAct_->setShortcut(QKeySequence(K_ALT "+Z"));
+
+    gammaUpAct_->setShortcut(QKeySequence(K_ALT "+W"));
+    gammaDownAct_->setShortcut(QKeySequence(K_ALT "+S"));
+    gammaResetAct_->setShortcut(QKeySequence(K_ALT "+X"));
+
+    hueUpAct_->setShortcut(QKeySequence(K_ALT "+E"));
+#ifdef Q_OS_MAC
+    hueDownAct_->setShortcut(QKeySequence(K_ALT "+3"));
+#else
+    hueDownAct_->setShortcut(QKeySequence(K_ALT "+D"));
+#endif // Q_OS_MAC
+    hueResetAct_->setShortcut(QKeySequence(K_ALT "+C"));
+
+    contrastUpAct_->setShortcut(QKeySequence(K_ALT "+R"));
+    contrastDownAct_->setShortcut(QKeySequence(K_ALT "+F"));
+    contrastResetAct_->setShortcut(QKeySequence(K_ALT "+V"));
+
+    brightnessUpAct_->setShortcut(QKeySequence(K_ALT "+T"));
+    brightnessDownAct_->setShortcut(QKeySequence(K_ALT "+G"));
+    brightnessResetAct_->setShortcut(QKeySequence(K_ALT "+B"));
+
+    increaseAnnotationScaleAct_->setShortcut(QKeySequence("CTRL+="));
+    decreaseAnnotationScaleAct_->setShortcut(QKeySequence("CTRL+-"));
+    resetAnnotationScaleAct_->setShortcut(QKeySequence("CTRL+0"));
+
+    increaseAnnotationRotationAct_->setShortcut(QKeySequence("CTRL+SHIFT+="));
+    decreaseAnnotationRotationAct_->setShortcut(QKeySequence("CTRL+SHIFT+-"));
+    resetAnnotationRotationAct_->setShortcut(QKeySequence("CTRL+SHIFT+0"));
+
+/*
+    QShortcut *aq = new QShortcut(QKeySequence(K_ALT "+Q"), this);
+    connect(aq, SIGNAL(activated()), SLOT(saturationUp()));
+    QShortcut *aa = new QShortcut(QKeySequence(K_ALT "+A"), this);
+    connect(aa, SIGNAL(activated()), SLOT(saturationDown()));
+    QShortcut *az = new QShortcut(QKeySequence(K_ALT "+Z"), this);
+    connect(az, SIGNAL(activated()), SLOT(saturationReset()));
+
+    QShortcut *aw = new QShortcut(QKeySequence(K_ALT "+W"), this);
+    connect(aw, SIGNAL(activated()), SLOT(gammaUp()));
+    QShortcut *as = new QShortcut(QKeySequence(K_ALT "+S"), this);
+    connect(as, SIGNAL(activated()), SLOT(gammaDown()));
+    QShortcut *ax = new QShortcut(QKeySequence(K_ALT "+X"), this);
+    connect(ax, SIGNAL(activated()), SLOT(gammaReset()));
+
+    QShortcut *ae = new QShortcut(QKeySequence(K_ALT "+E"), this);
+    connect(ae, SIGNAL(activated()), SLOT(hueUp()));
+#ifdef Q_WS_MAC
+    QShortcut *a3 = new QShortcut(QKeySequence(K_ALT "+3"), this);
+    connect(a3, SIGNAL(activated()), SLOT(hueDown()));
+#else
+    QShortcut *ad = new QShortcut(QKeySequence(K_ALT "+D"), this);
+    connect(ad, SIGNAL(activated()), SLOT(hueDown()));
+#endif // Q_WS_MAC
+    QShortcut *ac = new QShortcut(QKeySequence(K_ALT "+C"), this);
+    connect(ac, SIGNAL(activated()), SLOT(hueReset()));
+
+    QShortcut *ar = new QShortcut(QKeySequence(K_ALT "+R"), this);
+    connect(ar, SIGNAL(activated()), SLOT(contrastUp()));
+    QShortcut *af = new QShortcut(QKeySequence(K_ALT "+F"), this);
+    connect(af, SIGNAL(activated()), SLOT(contrastDown()));
+    QShortcut *av = new QShortcut(QKeySequence(K_ALT "+V"), this);
+    connect(av, SIGNAL(activated()), SLOT(contrastReset()));
+
+    QShortcut *at = new QShortcut(QKeySequence(K_ALT "+T"), this);
+    connect(at, SIGNAL(activated()), SLOT(brightnessUp()));
+    QShortcut *ag = new QShortcut(QKeySequence(K_ALT "+G"), this);
+    connect(ag, SIGNAL(activated()), SLOT(brightnessDown()));
+    QShortcut *ab = new QShortcut(QKeySequence(K_ALT "+B"), this);
+    connect(ab, SIGNAL(activated()), SLOT(brightnessReset()));
+*/
   }
 }
 
@@ -1379,6 +1493,32 @@ MainWindow::createMenus()
     playlistMenu_->setToolTip(TR(T_TOOLTIP_PLAYLIST));
   }
 
+  adjustMenu_ = new QMenu(this); {
+    adjustMenu_->setTitle(tr("Adjust video") + " ...");
+    adjustMenu_->setToolTip(tr("Adjust video"));
+    ui->setContextMenuStyle(adjustMenu_, true); // persistent = true
+
+    adjustMenu_->addAction(saturationUpAct_);
+    adjustMenu_->addAction(saturationDownAct_);
+    adjustMenu_->addAction(saturationResetAct_);
+    adjustMenu_->addSeparator();
+    adjustMenu_->addAction(gammaUpAct_);
+    adjustMenu_->addAction(gammaDownAct_);
+    adjustMenu_->addAction(gammaResetAct_);
+    adjustMenu_->addSeparator();
+    adjustMenu_->addAction(hueUpAct_);
+    adjustMenu_->addAction(hueDownAct_);
+    adjustMenu_->addAction(hueResetAct_);
+    adjustMenu_->addSeparator();
+    adjustMenu_->addAction(contrastUpAct_);
+    adjustMenu_->addAction(contrastDownAct_);
+    adjustMenu_->addAction(contrastResetAct_);
+    adjustMenu_->addSeparator();
+    adjustMenu_->addAction(brightnessUpAct_);
+    adjustMenu_->addAction(brightnessDownAct_);
+    adjustMenu_->addAction(brightnessResetAct_);
+  }
+
   backwardMenu_ = new QMenu(this); {
     backwardMenu_->setIcon(QIcon(RC_IMAGE_BACKWARD));
     backwardMenu_->setTitle(TR(T_MENUTEXT_BACKWARD) + " ...");
@@ -1453,7 +1593,6 @@ MainWindow::createMenus()
     annotationSubtitleMenu_->addSeparator();
     annotationSubtitleMenu_->addAction(toggleNonSubtitleAnnotationVisibleAct_);
     annotationSubtitleMenu_->addAction(toggleSubtitleOnTopAct_);
-    annotationSubtitleMenu_->addMenu(subtitleStyleMenu_);
   }
 
   sectionMenu_ = new QMenu(this); {
@@ -1513,9 +1652,31 @@ MainWindow::createMenus()
 #ifdef Q_WS_WIN
     if (QtWin::isWindowsVistaOrLater())
       settingsMenu_->addAction(toggleAeroEnabledAct_);
-#endif Q_WS_WIN
+#endif // Q_WS_WIN
     settingsMenu_->addMenu(themeMenu_);
   }
+
+  annotationMenu_ = new QMenu(this); {
+    ui->setContextMenuStyle(annotationMenu_, true); // persistent = true
+
+    annotationMenu_->setTitle(tr("Annotation settings") + " ...");
+    annotationMenu_->setToolTip(tr("Annotation settings"));
+
+    annotationMenu_->addAction(resumeAnnotationAct_);
+    annotationMenu_->addSeparator();
+    annotationMenu_->addMenu(annotationEffectMenu_);
+    annotationMenu_->addMenu(annotationSubtitleMenu_);
+    annotationMenu_->addMenu(subtitleStyleMenu_);
+    annotationMenu_->addSeparator();
+    annotationMenu_->addAction(increaseAnnotationScaleAct_);
+    annotationMenu_->addAction(decreaseAnnotationScaleAct_);
+    annotationMenu_->addAction(resetAnnotationScaleAct_);
+    annotationMenu_->addSeparator();
+    annotationMenu_->addAction(increaseAnnotationRotationAct_);
+    annotationMenu_->addAction(decreaseAnnotationRotationAct_);
+    annotationMenu_->addAction(resetAnnotationRotationAct_);
+  }
+
 
 //#ifndef Q_WS_WIN
   // Use menuBar_ instead MainWindow::menuBar() to enable customization.
@@ -1627,10 +1788,10 @@ MainWindow::updateTokenMode()
   if (hub_->isMediaTokenMode() && !player_->isStopped())
     player_->stop();
 
-#ifdef USE_WIN_QTH
+#ifdef WITH_WIN_QTH
   if (!hub_->isSignalTokenMode())
     messageHandler_->setActive(false);
-#endif // USE_WIN_QTH
+#endif // WITH_WIN_QTH
 
   if (!hub_->isLiveTokenMode())
     closeChannel();
@@ -1732,10 +1893,10 @@ MainWindow::updateWindowMode()
 
   switch (hub_->windowMode()) {
   case SignalHub::FullScreenWindowMode:
-#ifdef USE_WIN_DWM
+#ifdef WITH_WIN_DWM
     if (AcUi::isAeroAvailable())
       AcUi::globalInstance()->setWindowDwmEnabled(this, false);
-#endif // USE_WIN_DWM
+#endif // WITH_WIN_DWM
 #ifdef Q_WS_X11
     if (hub_->isMediaTokenMode() && player_->hasMedia())
       AcUi::globalInstance()->setBlackBackground(this);
@@ -1787,11 +1948,11 @@ MainWindow::setVisible(bool visible)
   Base::setVisible(visible);
 
   if (!hub_->isFullScreenWindowMode()) {
-#ifdef USE_WIN_DWM
+#ifdef WITH_WIN_DWM
     if (AcUi::isAeroAvailable())
       AcUi::globalInstance()->setWindowDwmEnabled(this, true);
     else
-#endif // USE_WIN_DWM
+#endif // WITH_WIN_DWM
       AcUi::globalInstance()->setWindowBackground(this, false); // persistent is false
   }
 }
@@ -1889,10 +2050,6 @@ MainWindow::openUrl(const QString &url)
       openLocalUrl(url);
   }
 }
-
-void
-MainWindow::checkClipboard()
-{ clipboardMonitor_->checkClipboard(); }
 
 void
 MainWindow::openFile()
@@ -2181,17 +2338,30 @@ MainWindow::openRemoteMedia(const MediaInfo &mi, QNetworkCookieJar *cookieJar)
       new MainWindow_slot_::ImportAnnotationsFromUrl(mi.suburl, this),
       SLOT(importAnnotationsFromUrl())
     );
+
+  static bool once = true;
+  if (once) {
+    once = false;
+    QTimer::singleShot(0, this, SLOT(invalidateContextMenu()));
+  }
 }
 
 void
 MainWindow::closeMedia()
 {
-  if (player_->hasMedia())
+  if (player_->hasMedia()) {
     player_->closeMedia();
+
+    //DOUT("processEvent: enter");
+    //enum { timeout = 1000 };
+    //qApp->processEvents(QEventLoop::AllEvents, timeout);
+    //DOUT("processEvent: exit");
+  }
 
   dataManager_->token().setId(0);
   dataManager_->removeAliases();
   annotationView_->invalidateAnnotations();
+
 }
 
 void
@@ -2683,9 +2853,9 @@ MainWindow::setPlayMode(PlayMode mode)
 
   switch (mode_) {
   case FullScreenPlayMode:
-#ifdef USE_WIN_DWM
+#ifdef WITH_WIN_DWM
     setAeroStyleEnabled(false);
-#endif // USE_WIN_DWM
+#endif // WITH_WIN_DWM
     mainPlayer_->hide();
     showFullScreen();
     embeddedPlayer_->setVisible(!miniPlayer_->isVisible());
@@ -2696,9 +2866,9 @@ MainWindow::setPlayMode(PlayMode mode)
     showNormal();
     mainPlayer_->setVisible(!miniPlayer_->isVisible());
     annotationView_->invalidateSize(); // Otherwise the height doesn't look right
-#ifdef USE_WIN_DWM
+#ifdef WITH_WIN_DWM
     setAeroStyleEnabled(true);
-#endif // USE_WIN_DWM
+#endif // WITH_WIN_DWM
     break;
   }
 }
@@ -3015,6 +3185,7 @@ MainWindow::downloadDialog()
     parent = this;
 #endif // !Q_WS_MAC
     downloadDialog_ = new DownloadDialog(parent);
+    downloadDialog_->resize(400, 300);
     connect(downloadDialog_, SIGNAL(downloadFinished(QString,QString)), SLOT(signFileWithUrl(QString,QString)));
     connect(downloadDialog_, SIGNAL(openFileRequested(QString)), SLOT(openMrl(QString)));
   }
@@ -3899,13 +4070,13 @@ MainWindow::chat(const QString &input, bool async)
   emit showTextRequested(CORE_CMD_COLOR_BLUE " " + text);
   emit said(text, "blue");
 
-#ifdef USE_MODULE_DOLL
+#ifdef WITH_MODULE_DOLL
   Q_ASSERT(doll_);
   doll_->chat(text);
 #else
   if (server_->isConnected())
     emit responded(server_->chat(text));
-#endif // USE_MODULE_DOLL
+#endif // WITH_MODULE_DOLL
 
   DOUT("inetMutex unlocking");
   inetMutex_.unlock();
@@ -3951,6 +4122,7 @@ MainWindow::warn(const QString &text)
 bool
 MainWindow::event(QEvent *e)
 {
+  Q_ASSERT(e);
   bool accept = true;
   switch (e->type()) {
   case QEvent::FileOpen: // See: http://www.qtcentre.org/wiki/index.php?title=Opening_documents_in_the_Mac_OS_X_Finder
@@ -3973,14 +4145,14 @@ MainWindow::setVisible(bool visible)
   //if (visible == isVisible())
   //  return;
   if (!isMinimized() && !isFullScreen()) { // invoked by showNormal or showMaximized
-#ifdef USE_WIN_DWM
+#ifdef WITH_WIN_DWM
     if (AcUi::isAeroAvailable())
       AcUi::globalInstance()->setWindowDwmEnabled(this, true);
       //QTimer::singleShot(0,
       //  new MainWindow_slot_::SetWindowDwmEnabled(true, this), SLOT(setWindowDwmEnabled())
       //);
     else
-#endif // USE_WIN_DWM
+#endif // WITH_WIN_DWM
     AcUi::globalInstance()->setWindowBackground(this, false); // persistent is false
   }
 
@@ -3990,6 +4162,7 @@ MainWindow::setVisible(bool visible)
 void
 MainWindow::mousePressEvent(QMouseEvent *event)
 {
+  Q_ASSERT(event);
   //DOUT("enter");
   //if (contextMenu_->isVisible())
   //  contextMenu_->hide();
@@ -4012,53 +4185,61 @@ MainWindow::mousePressEvent(QMouseEvent *event)
   }
 #endif // Q_OS_MAC
 
-  if (event)
-    switch (event->button()) {
-    case Qt::LeftButton:
-      if (event->modifiers() & Qt::ControlModifier
+  switch (event->button()) {
+  case Qt::LeftButton:
+    if (event->modifiers() & Qt::ControlModifier
 #ifdef Q_OS_WIN
-          || QtWin::isKeyControlPressed()
+        || QtWin::isKeyControlPressed()
 #endif // Q_OS_WIN
-      ) {
-        log(tr("capture annotations"));
-        QPoint pos = mapFromGlobal(event->globalPos());
-        pauseRubberBand_->press(pos);
-      } else if (event->modifiers() & Qt::ShiftModifier
+    ) {
+      log(tr("capture annotations"));
+      pauseRubberBand_->press(mapFromGlobal(event->globalPos()));
+    } else if (event->modifiers() & Qt::ShiftModifier
 #ifdef Q_OS_WIN
-          || QtWin::isKeyShiftPressed()
+        || QtWin::isKeyShiftPressed()
 #endif // Q_OS_WIN
-      ) {
-        log(tr("release annotations"));
-        QPoint pos = mapFromGlobal(event->globalPos());
-        resumeRubberBand_->press(pos);
-      } else {
+    ) {
+      log(tr("release annotations"));
+      resumeRubberBand_->press(mapFromGlobal(event->globalPos()));
+    } else if (hub_->isMediaTokenMode() && hub_->isFullScreenWindowMode()) {
+      pauseRubberBand_->press(mapFromGlobal(event->globalPos()));
+    } else {
 #ifdef Q_OS_MAC
-        if (videoView_->isViewVisible() && player_->titleCount() > 1)
-          videoView_->setViewMousePressPos(event->globalPos());
+      if (videoView_->isViewVisible() && player_->titleCount() > 1)
+        videoView_->setViewMousePressPos(event->globalPos());
 #endif // Q_OS_MAC
-        if (!isFullScreen() && dragPos_ == BAD_POS) {
-          dragPos_ = event->globalPos() - frameGeometry().topLeft();
-          event->accept();
-        }
-      } break;
-
-    case Qt::MiddleButton:
-      hub_->toggleMiniPlayerMode();
-      event->accept();
-      break;
-
-    case Qt::RightButton:
-#ifndef Q_OS_MAC
-      if (!contextMenu_->isVisible()) {
-        QContextMenuEvent cm(QContextMenuEvent::Mouse, event->pos(), event->globalPos(), event->modifiers());
-        QCoreApplication::sendEvent(this, &cm);
+      if (!isFullScreen() && dragPos_ == BAD_POS) {
+        dragPos_ = event->globalPos() - frameGeometry().topLeft();
         event->accept();
       }
-#endif // !Q_OS_MAC
-      break;
+    } break;
 
-    default: break;
-    }
+  case Qt::MiddleButton:
+    if (event->modifiers() & Qt::ControlModifier
+#ifdef Q_OS_WIN
+        || QtWin::isKeyControlPressed()
+#endif // Q_OS_WIN
+    )
+      annotationView_->resetScale();
+    else if (event->modifiers() & Qt::ShiftModifier
+#ifdef Q_OS_WIN
+        || QtWin::isKeyShiftPressed()
+#endif // Q_OS_WIN
+    )
+      annotationView_->resetRotation();
+    else
+      hub_->toggleMiniPlayerMode();
+    event->accept();
+    break;
+
+  case Qt::RightButton:
+#ifndef Q_WS_MAC
+    resumeRubberBand_->press(mapFromGlobal(event->globalPos()));
+#endif // !Q_WS_MAC
+    break;
+
+  default: break;
+  }
 
   Base::mousePressEvent(event);
   //DOUT("exit");
@@ -4068,22 +4249,32 @@ void
 MainWindow::mouseReleaseEvent(QMouseEvent *event)
 {
   //DOUT("enter");
+  Q_ASSERT(event);
 
   dragPos_ = BAD_POS;
 
   if (pauseRubberBand_->isPressed())
     pauseRubberBand_->release();
+
+#ifndef Q_WS_MAC
+  if (event->buttons() == Qt::RightButton &&
+      (!resumeRubberBand_->isPressed() || resumeRubberBand_->isEmpty()) &&
+      !contextMenu_->isVisible()) {
+    QContextMenuEvent cm(QContextMenuEvent::Mouse, event->pos(), event->globalPos(), event->modifiers());
+    QCoreApplication::sendEvent(this, &cm);
+  }
+#endif // !Q_WS_MAC
+
   if (resumeRubberBand_->isPressed())
     resumeRubberBand_->release();
 
-#ifdef Q_OS_MAC
-  if (event && event->button() == Qt::LeftButton && // event->buttons() is always zero, qt4 bug?
+#ifdef Q_WS_MAC
+  if (event->button() == Qt::LeftButton && // event->buttons() is always zero, qt4 bug?
       videoView_->isViewVisible() && player_->titleCount() > 1)
     videoView_->setViewMouseReleasePos(event->globalPos());
-#endif // Q_OS_MAC
+#endif // Q_WS_MAC
 
-  if (event)
-    event->accept();
+  event->accept();
 
   Base::mouseReleaseEvent(event);
   //DOUT("exit");
@@ -4107,6 +4298,7 @@ MainWindow::isGlobalPosNearEmbeddedPlayer(const QPoint &pos) const
 void
 MainWindow::mouseMoveEvent(QMouseEvent *event)
 {
+  Q_ASSERT(event);
   //DOUT("enter");
   // Prevent auto hide osd player.
   if (hub_->isEmbeddedPlayerMode())
@@ -4123,14 +4315,18 @@ MainWindow::mouseMoveEvent(QMouseEvent *event)
      videoView_->setViewMouseMovePos(event->globalPos());
 #endif // Q_OS_MAC
 
-  // Move the main window
-  if (event && event->buttons() & Qt::LeftButton) {
+  switch (event->buttons()) {
+  case Qt::LeftButton:
     if (pauseRubberBand_->isPressed()) {
-      QPoint pos = mapFromGlobal(event->globalPos());
-      pauseRubberBand_->drag(pos);
+      static bool once = true;
+      if (once) {
+        once = false;
+        notify(tr("use %1/%2 with mouse or wheel to capture annotations")
+               .arg(K_CTRL).arg(K_SHIFT));
+      }
+      pauseRubberBand_->drag(mapFromGlobal(event->globalPos()));
     } else if (resumeRubberBand_->isPressed()) {
-      QPoint pos = mapFromGlobal(event->globalPos());
-      resumeRubberBand_->drag(pos);
+      resumeRubberBand_->drag(mapFromGlobal(event->globalPos()));
     } else if (dragPos_ != BAD_POS && !isFullScreen()
 #ifdef Q_WS_WIN
         &&
@@ -4139,8 +4335,7 @@ MainWindow::mouseMoveEvent(QMouseEvent *event)
           QDateTime::currentMSecsSinceEpoch() - windowModeUpdateTime_ > QtWin::getDoubleClickInterval()
         )
 #endif // Q_WS_WIN
-      )
-    {
+      ) {
 
       QPoint globalPos = event->globalPos();
       // FIXME: out-of-screen check not working
@@ -4150,11 +4345,22 @@ MainWindow::mouseMoveEvent(QMouseEvent *event)
 
       annotationView_->invalidatePos();
 
-      event->accept();
-    }
+    } break;
+  case Qt::RightButton:
+    if (resumeRubberBand_->isPressed()) {
+      static bool once = true;
+      if (once) {
+        once = false;
+        notify(tr("use %1/%2 with mouse or wheel to capture annotations")
+               .arg(K_CTRL).arg(K_SHIFT));
+      }
+      resumeRubberBand_->drag(mapFromGlobal(event->globalPos()));
+    } break;
   }
 
+  event->accept();
   Base::mouseMoveEvent(event);
+
   //DOUT("exit");
 }
 
@@ -4162,17 +4368,17 @@ void
 MainWindow::mouseDoubleClickEvent(QMouseEvent *event)
 {
   //DOUT("enter");
+  Q_ASSERT(event);
 
   if (pauseRubberBand_->isPressed())
     pauseRubberBand_->release();
   if (resumeRubberBand_->isPressed())
     resumeRubberBand_->release();
 
-  if (event)
-    switch (event->button()) {
-    case Qt::LeftButton: hub_->toggleFullScreenWindowMode(); event->accept(); break;
-    default: break;
-    }
+  switch (event->button()) {
+  case Qt::LeftButton: hub_->toggleFullScreenWindowMode(); event->accept(); break;
+  default: break;
+  }
 
   Base::mouseDoubleClickEvent(event);
   //DOUT("exit");
@@ -4182,29 +4388,76 @@ void
 MainWindow::wheelEvent(QWheelEvent *event)
 {
   //DOUT("enter");
-  if (event && event->orientation() == Qt::Vertical) {
-    qreal vol = hub_->volume();
-    vol += event->delta() / (8 * 360.0);
-    vol = (vol > 1)? 1 : (vol < 0)? 0 : vol;
-    hub_->setVolume(vol);
-    event->accept();
+  Q_ASSERT(event);
+  switch (event->modifiers()) {
+  case Qt::ControlModifier:
+    if (annotationView_->hasPausedItems()) {
+      if (event->delta() > 0)
+        annotationView_->scalePausedItems(1.1);
+      else if (event->delta() < 0)
+        annotationView_->scalePausedItems(1 / 1.1);
+    } else {
+      if (event->delta() > 0)
+        annotationScaleUp();
+      else if (event->delta() < 0)
+        annotationScaleDown();
+    } break;
+  case Qt::ShiftModifier:
+    {
+      enum { zoom = -3 };
+      qreal angle = event->delta() / (8.0 * zoom);
+      if (annotationView_->hasPausedItems())
+        annotationView_->rotatePausedItems(angle);
+      else
+        annotationView_->setRotation(annotationView_->rotation() + angle);
+    } break;
+  default:
+    {
+      qreal vol = hub_->volume();
+      vol += event->delta() / (8 * 360.0);
+      vol =  vol > 1.0 ? 1.0 :vol < 0.0 ? 0.0 : vol;
+      hub_->setVolume(vol);
+    }
   }
-
-  Base::wheelEvent(event);
+  event->accept();
+  //Base::wheelEvent(event);
   //DOUT("exit");
 }
 
 void
 MainWindow::contextMenuEvent(QContextMenuEvent *event)
 {
-  //DOUT("enter");
-  if (event) {
+  Q_ASSERT(event);
+  if (pauseRubberBand_->isPressed())
+    pauseRubberBand_->cancel();
+#ifdef Q_WS_MAC
+  if (resumeRubberBand_->isPressed())
+    resumeRubberBand_->cancel();
+#endif // Q_WS_MAC
+
+#ifndef Q_WS_MAC
+  if (!resumeRubberBand_->isPressed() || resumeRubberBand_->isEmpty())
+#endif // !Q_WS_MAC
+  {
     invalidateContextMenu();
     contextMenu_->popup(event->globalPos());
-    event->accept(); }
+  }
+#ifndef Q_WS_MAC
+  else
+    resumeRubberBand_->release();
+  resumeRubberBand_->cancel();
+#endif // !Q_WS_MAC
+
+  event->accept();
 
   //Base::contextMenuEvent(event);
-  //DOUT("exit");
+}
+
+void
+MainWindow::invalidateAnnotationMenu()
+{
+  invalidateAnnotationSubtitleMenu();
+  invalidateAnnotationEffectMenu();
 }
 
 void
@@ -4216,7 +4469,6 @@ MainWindow::invalidateAnnotationSubtitleMenu()
 
   bool t = toggleSubtitleAnnotationVisibleAct_->isChecked();
   toggleSubtitleOnTopAct_->setEnabled(t);
-  subtitleStyleMenu_->setEnabled(t);
 }
 
 void
@@ -4328,18 +4580,18 @@ MainWindow::invalidateContextMenu()
       contextMenu_->addMenu(sectionMenu_);
     }
 
-#ifdef USE_WIN_PICKER
+#ifdef WITH_WIN_PICKER
     contextMenu_->addSeparator();
     toggleWindowPickDialogVisibleAct_->setChecked(windowPickDialog_ && windowPickDialog_->isVisible());
     contextMenu_->addAction(toggleWindowPickDialogVisibleAct_);
-#endif // USE_WIN_PICKER
+#endif // WITH_WIN_PICKER
 
 #ifdef USE_MODE_SIGNAL
     if (!player_->hasMedia() || player_->isStopped()) {
-#ifdef USE_WIN_PICKER
+#ifdef WITH_WIN_PICKER
       toggleProcessPickDialogVisibleAct_->setChecked(processPickDialog_ && processPickDialog_->isVisible());
       contextMenu_->addAction(toggleProcessPickDialogVisibleAct_);
-#endif // USE_WIN_PICKER
+#endif // WITH_WIN_PICKER
 
       toggleSignalViewVisibleAct_->setChecked(signalView_->isVisible());
       contextMenu_->addAction(toggleSignalViewVisibleAct_ );
@@ -4423,6 +4675,8 @@ MainWindow::invalidateContextMenu()
 
       invalidateAspectRatioMenu();
       contextMenu_->addMenu(aspectRatioMenu_);
+
+      contextMenu_->addMenu(adjustMenu_);
     }
   }
 
@@ -4510,28 +4764,12 @@ MainWindow::invalidateContextMenu()
     toggleAnnotationVisibleAct_->setChecked(annotationView_ && annotationView_->isVisible());
     contextMenu_->addAction(toggleAnnotationVisibleAct_ );
 
-    toggleBacklogDialogVisibleAct_->setChecked(backlogDialog_ && backlogDialog_->isVisible());
-    contextMenu_->addAction(toggleBacklogDialogVisibleAct_);
-
     bool t = toggleAnnotationVisibleAct_->isChecked();
 
-    toggleBlacklistViewVisibleAct_->setEnabled(t);
-    toggleBlacklistViewVisibleAct_->setChecked(blacklistView_ && blacklistView_->isVisible());
-
+    annotationMenu_->setEnabled(t);
     if (t)
-      invalidateAnnotationEffectMenu();
-    annotationEffectMenu_->setEnabled(t);
-    contextMenu_->addMenu(annotationEffectMenu_);
-
-    if (t)
-      invalidateAnnotationSubtitleMenu();
-    annotationSubtitleMenu_->setEnabled(t);
-    contextMenu_->addMenu(annotationSubtitleMenu_);
-
-    if (hub_->isSignalTokenMode()) {
-      toggleTranslateAct_->setEnabled(t && online);
-      contextMenu_->addAction(toggleTranslateAct_);
-    }
+      invalidateAnnotationMenu();
+    contextMenu_->addMenu(annotationMenu_);
 
     toggleAnnotationEditorVisibleAct_->setChecked(annotationEditor_ && annotationEditor_->isVisible());
     contextMenu_->addAction(toggleAnnotationEditorVisibleAct_ );
@@ -4544,6 +4782,17 @@ MainWindow::invalidateContextMenu()
       contextMenu_->addAction(toggleTokenViewVisibleAct_ );
 
       contextMenu_->addAction(showAnnotationsAsThreadAct_);
+    }
+
+    toggleBacklogDialogVisibleAct_->setChecked(backlogDialog_ && backlogDialog_->isVisible());
+    contextMenu_->addAction(toggleBacklogDialogVisibleAct_);
+
+    toggleBlacklistViewVisibleAct_->setEnabled(t);
+    toggleBlacklistViewVisibleAct_->setChecked(blacklistView_ && blacklistView_->isVisible());
+
+    if (hub_->isSignalTokenMode()) {
+      toggleTranslateAct_->setEnabled(t && online);
+      contextMenu_->addAction(toggleTranslateAct_);
     }
 
     //if (ALPHA) if (commentView_ && commentView_->tokenId()) {
@@ -4811,6 +5060,7 @@ MainWindow::changeEvent(QEvent *event)
 void
 MainWindow::keyPressEvent(QKeyEvent *event)
 {
+  Q_ASSERT(event);
   switch (event->key()) {
 
     //if (!hasVisiblePlayer() || !visiblePlayer()->lineEdit()->hasFocus())
@@ -4836,6 +5086,13 @@ MainWindow::keyPressEvent(QKeyEvent *event)
   case Qt::Key_Control:
   case Qt::Key_Shift:
   case Qt::Key_Alt:
+    {
+      PlayerUi *ui = visiblePlayer();
+      if (ui)
+        ui->clearFocus();
+      setFocus();
+    }
+    Base::keyPressEvent(event);
     break;
 
   default:
@@ -4944,13 +5201,13 @@ MainWindow::dispose()
   if (downloadDialog_)
     downloadDialog_->stopAll();
 
-#ifdef USE_WIN_PICKER
+#ifdef WITH_WIN_PICKER
   WindowPicker::globalInstance()->stop();
-#endif // USE_WIN_PICKER
-#ifdef USE_WIN_HOOK
+#endif // WITH_WIN_PICKER
+#ifdef WITH_WIN_HOOK
   if (HOOK->isActive())
     HOOK->stop();
-#endif // USE_WIN_HOOK
+#endif // WITH_WIN_HOOK
 
   FlvCodec::globalInstance()->stop();
   DOUT("exit");
@@ -5004,6 +5261,7 @@ MainWindow::closeEvent(QCloseEvent *event)
   settings->setSubtitleColor(subtitleColor());
 
   settings->setAnnotationEffect(annotationView_->renderHint());
+  settings->setAnnotationScale(annotationView_->scale());
 
   // Disabled for saving closing time orz
   //if (server_->isConnected() && server_->isAuthorized())
@@ -5030,13 +5288,22 @@ MainWindow::closeEvent(QCloseEvent *event)
                            siteAccountView_->bilibiliAccount().password);
   }
 
-  settings->setPlayPosHistory(playPosHistory_);
+  if (player_->isValid()) {
+    settings->setHue(player_->hue());
+    settings->setContrast(player_->contrast());
+    settings->setSaturation(player_->saturation());
+    settings->setBrightness(player_->brightness());
+    settings->setGamma(player_->gamma());
+  }
+
+  settings->setAspectRatioHistory(aspectRatioHistory_);
   settings->setSubtitleHistory(subtitleHistory_);
   settings->setAudioTrackHistory(audioTrackHistory_);
-  settings->setAspectRatioHistory(aspectRatioHistory_);
+  settings->setPlayPosHistory(playPosHistory_);
+
+  settings->sync();
 
   ac->sync();
-  settings->sync();
 
   //MediaStreamer::globalInstance()->stop();
 
@@ -5080,19 +5347,19 @@ void
 MainWindow::setWindowOnTop(bool t)
 {
   if (t != isWindowOnTop()) {
-//#ifdef USE_WIN_DWM
+//#ifdef WITH_WIN_DWM
 //    AcUi::globalInstance()->setDwmEnabled(false);
-//#endif // USE_WIN_DWM
+//#endif // WITH_WIN_DWM
     bool visible = isVisible();
     setWindowFlags( t ? windowFlags() | Qt::WindowStaysOnTopHint :
                         windowFlags() & ~Qt::WindowStaysOnTopHint);
-//#ifdef USE_WIN_QTH
+//#ifdef WITH_WIN_QTH
 //    QTH->setParentWinId(winId());
-//#endif // USE_WIN_QTH
+//#endif // WITH_WIN_QTH
 
-#ifdef USE_WIN_DWM
+#ifdef WITH_WIN_DWM
     AcUi::globalInstance()->setDwmEnabled(true);
-#endif // USE_WIN_DWM
+#endif // WITH_WIN_DWM
     if (visible) {
       if (hub_->isFullScreenWindowMode())
         showFullScreen();
@@ -5593,6 +5860,8 @@ MainWindow::login(const QString &userName, const QString &encryptedPassword, boo
     dataServer_->commitQueue();
   }
 
+  settings->sync();
+
   DOUT("inetMutex unlocking");
   inetMutex_.unlock();
   DOUT("inetMutex unlocked");
@@ -5650,7 +5919,7 @@ MainWindow::setLiveMode(bool t)
 }
 */
 
-#ifdef USE_WIN_QTH
+#ifdef WITH_WIN_QTH
 
 // - Signal mode -
 
@@ -5758,7 +6027,7 @@ MainWindow::openProcessHook(ulong hookId, const ProcessInfo &pi)
   hub_->play();
 }
 
-#endif // USE_WIN_QTH
+#endif // WITH_WIN_QTH
 
 #ifdef USE_MODE_SIGNAL
 
@@ -6605,8 +6874,11 @@ MainWindow::openPreviousMrl()
   QString mrl = dataManager_->token().source();
   if (!mrl.isEmpty()) {
     QString n = QtExt::decreaseString(mrl);
-    if (n != mrl)
+    if (n != mrl) {
+      n.replace("/index_0.html", "/");
+      n.replace("/index_1.html", "/");
       openSource(n);
+    }
   }
 }
 
@@ -6615,9 +6887,14 @@ MainWindow::openNextMrl()
 {
   QString mrl = dataManager_->token().source();
   if (!mrl.isEmpty()) {
-    QString n = QtExt::increaseString(mrl);
-    if (n != mrl)
-      openSource(n);
+    if (mrl.endsWith("/")) {
+      mrl.append("index_2.html");
+      openSource(mrl);
+    } else {
+      QString n = QtExt::increaseString(mrl);
+      if (n != mrl)
+        openSource(n);
+    }
   }
 }
 
@@ -7025,8 +7302,11 @@ MainWindow::resumeSubtitle()
     if (track >= 0 && track < player_->subtitleCount() &&
         track != player_->subtitleId()) {
       if (track > 0) {
-        log(tr("loading last subtitle") + ": " +
-          player_->subtitleDescriptions()[track]);
+        QStringList desc = player_->subtitleDescriptions();
+        if (track < desc.size())
+          log(tr("loading last subtitle") + ": " + desc[track]);
+        else
+          log(tr("loading last subtitle"));
         player_->setSubtitleId(track);
       }
       player_->setSubtitleVisible(true);
@@ -7087,9 +7367,13 @@ MainWindow::resumeAudioTrack()
     DOUT("track =" << track);
     if (track >= 0 && track < player_->audioTrackCount()
         && track != player_->audioTrackId()) {
-      if (track > 0)
-        log(tr("loading last audio track") + ": " +
-            player_->audioTrackDescriptions()[track]);
+      if (track > 0) {
+        QStringList desc =  player_->audioTrackDescriptions();
+        if (track < desc.size())
+          log(tr("loading last audio track") + ": " + desc[track]);
+        else
+          log(tr("loading last audio track"));
+      }
       player_->setAudioTrackId(track);
     }
   }
@@ -7360,12 +7644,21 @@ MainWindow::promptShutdown()
 void
 MainWindow::openProxyBrowser()
 {
-  QWidget *parent = 0; // orphan window
-#ifndef Q_WS_MAC
-  parent = this;
-#endif // !Q_WS_MAC
-  QWidget *w = new ProxyBrowser(parent);
-  w->show();
+  Settings::globalSettings()->sync();
+  AcSettings::globalSettings()->sync();
+  bool ok = false;
+#ifdef Q_WS_MAC
+  ok = QtMac::open("Annot Browser");
+#elif defined Q_WS_WIN
+  QString exe = QCoreApplication::applicationDirPath() + "/" + "annot-browser";
+  ok = QProcess::startDetached('"' + exe + '"');
+#else
+  ok = QProcess::startDetached("annot-browser");
+#endif // Q_WS_
+  if (!ok) {
+    warn(tr("failed to launch external browser"));
+    QDesktopServices::openUrl(QUrl("http://google.com"));
+  }
 }
 
 // - Single window -
@@ -7375,6 +7668,7 @@ MainWindow::setMultipleWindowsEnabled(bool t)
 {
   Settings::globalSettings()->setMultipleWindowsEnabled(t);
   Settings::globalSettings()->sync();
+  AcSettings::globalSettings()->sync();
   if (t)
     log(tr("allow multiple player windows"));
   else
@@ -7386,10 +7680,11 @@ MainWindow::newWindow()
 {
   Settings *s = Settings::globalSettings();
   bool t = s->isMultipleWindowsEnabled();
-  if (!t) {
+  if (!t)
     s->setMultipleWindowsEnabled(true);
-    s->sync();
-  }
+
+  s->sync();
+  AcSettings::globalSettings()->sync();
 
   QString exe = QCoreApplication::applicationFilePath();
   QProcess::startDetached(exe);
@@ -7482,6 +7777,184 @@ MainWindow::resumeAnnotationsAt(const QRect &rect)
   QPoint pos = annotationView_->mapFromGlobal(globalPos);
   QRect map(pos, rect.size());
   annotationView_->resumeItems(map);
+}
+
+void
+MainWindow::resumeAnnotations()
+{
+  log(tr("resume annotations"));
+  annotationView_->resume();
+}
+
+// - Adjustment -
+
+void
+MainWindow::contrastUp()
+{
+  if (player_->isValid()) {
+    qreal value = player_->contrast();
+    value *= 1.1;
+    player_->setContrast(value);
+  }
+}
+
+void
+MainWindow::contrastDown()
+{
+  if (player_->isValid()) {
+    qreal value = player_->contrast();
+    value /= 1.1;
+    player_->setContrast(value);
+  }
+}
+
+void
+MainWindow::contrastReset()
+{
+  if (player_->isValid())
+    player_->resetContrast();
+}
+
+void
+MainWindow::brightnessUp()
+{
+  if (player_->isValid()) {
+    qreal value = player_->brightness();
+    value *= 1.02;
+    player_->setBrightness(value);
+  }
+}
+
+void
+MainWindow::brightnessDown()
+{
+  if (player_->isValid()) {
+    qreal value = player_->brightness();
+    value /= 1.02;
+    player_->setBrightness(value);
+  }
+}
+
+void
+MainWindow::brightnessReset()
+{
+  if (player_->isValid())
+    player_->resetBrightness();
+}
+
+void
+MainWindow::hueUp()
+{
+  if (player_->isValid()) {
+    int value = player_->hue();
+    value += 2;
+    player_->setHue(value);
+  }
+}
+
+void
+MainWindow::hueDown()
+{
+  if (player_->isValid()) {
+    int value = player_->hue();
+    value -= 2;
+    player_->setHue(value);
+  }
+}
+
+void
+MainWindow::hueReset()
+{
+  if (player_->isValid())
+    player_->resetHue();
+}
+
+void
+MainWindow::saturationUp()
+{
+  if (player_->isValid()) {
+    qreal value = player_->saturation();
+    value *= 1.1;
+    player_->setSaturation(value);
+  }
+}
+
+void
+MainWindow::saturationDown()
+{
+  if (player_->isValid()) {
+    qreal value = player_->saturation();
+    value /= 1.1;
+    player_->setSaturation(value);
+  }
+}
+
+void
+MainWindow::saturationReset()
+{
+  if (player_->isValid())
+    player_->resetSaturation();
+}
+
+void
+MainWindow::gammaUp()
+{
+  if (player_->isValid()) {
+    qreal value = player_->gamma();
+    value *= 1.1;
+    player_->setGamma(value);
+  }
+}
+
+void
+MainWindow::gammaDown()
+{
+  if (player_->isValid()) {
+    qreal value = player_->gamma();
+    value /= 1.1;
+    player_->setGamma(value);
+  }
+}
+
+void
+MainWindow::gammaReset()
+{
+  if (player_->isValid())
+    player_->resetGamma();
+}
+
+// - Annotation transforms -
+
+void
+MainWindow::annotationScaleUp()
+{
+  qreal value = annotationView_->scale();
+  value *= 1.1;
+  if (value < 5)
+    annotationView_->setScale(value);
+}
+
+void
+MainWindow::annotationScaleDown()
+{
+  qreal value = annotationView_->scale();
+  value /= 1.1;
+  if (value > 0.2)
+    annotationView_->setScale(value);
+}
+
+void
+MainWindow::annotationRotateUp()
+{
+  enum { delta = 15 };
+  annotationView_->setRotation(annotationView_->rotation() + delta);
+}
+
+void
+MainWindow::annotationRotateDown()
+{
+  enum { delta = 15 };
+  annotationView_->setRotation(annotationView_->rotation() - delta);
 }
 
 // EOF

@@ -67,8 +67,6 @@ public slots:
 
   // - Implementation -
 public:
-  static QString mktemp();
-
   static void setObject(lua_State *L, Self *obj);
   static Self *getObject(lua_State *L);
 

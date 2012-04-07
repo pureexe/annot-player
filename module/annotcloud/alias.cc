@@ -2,7 +2,7 @@
 // 10/29/2011
 
 #include "module/annotcloud/alias.h"
-#include <QtCore>
+#include <QMetaType>
 
 using namespace AnnotCloud;
 

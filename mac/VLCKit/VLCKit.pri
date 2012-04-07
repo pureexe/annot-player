@@ -2,6 +2,8 @@
 # 7/30/2011
 # TODO: Make this into a framework!
 
+DEFINES += WITH_MAC_VLCKIT
+
 INCLUDEPATH += $$PWD/..
 
 INCLUDEPATH += $$PWD

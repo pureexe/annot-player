@@ -19,6 +19,10 @@
 #include <ctime>
 #include <cmath>
 
+#ifdef __GNUC__
+#  pragma GCC diagnostic ignored "-Wparentheses" // suggest parentheses around && within ||
+#endif // __GNUC__
+
 //#define DEBUG "annotationgraphicsitem"
 #include "module/debug/debug.h"
 
@@ -61,15 +65,17 @@ namespace { // anonymous, annotation display
 
   // Use std time() rather than QTime::currentTime() to improve performance.
   inline int
-  next_y_(int window_height, int visible_time, AnnotationGraphicsItem::Style style, const SignalHub *hub_)
+  next_y_(int window_height, int visible_time, qreal scale, AnnotationGraphicsItem::Style style, const SignalHub *hub_)
   {
     Q_ASSERT(hub_);
-    enum { lane_height = ANNOTATION_SIZE_DEFAULT + ANNOTATION_SIZE_MARGIN * 2 + 6 }; // height of a piece of danmu
-    enum { lane_count = 100 };                      // number of vertical lanes, large enough
+    enum { LaneHeight = ANNOTATION_SIZE_DEFAULT + ANNOTATION_SIZE_MARGIN * 2 + 6 }; // height of a piece of danmu
+    enum { LaneCount = 100 };                      // number of vertical lanes, large enough
 
-    static time_t last_time_fly_[lane_count],
-                  last_time_top_[lane_count],
-                  last_time_bottom_[lane_count];
+    int laneHeight = LaneHeight * scale;
+
+    static time_t last_time_fly_[LaneCount],
+                  last_time_top_[LaneCount],
+                  last_time_bottom_[LaneCount];
 
     Q_ASSERT(visible_time > 0);
     int wait_time = 500;
@@ -89,13 +95,13 @@ namespace { // anonymous, annotation display
     default : Q_ASSERT(0);      last_time_ = last_time_fly_;
     }
 
-    if (window_height <= lane_height * 2) // Do not schedule when window size is so small
+    if (window_height <= laneHeight * 2) // Do not schedule when window size is so small
       return 0;
 
     time_t current_time = ::time(0);
-    int count = window_height / lane_height;
-    if (count > lane_count)
-      count = lane_count;
+    int count = window_height / laneHeight;
+    if (count > LaneCount)
+      count = LaneCount;
 
     int best_lane = 0;
     time_t max_time = current_time;
@@ -118,13 +124,13 @@ namespace { // anonymous, annotation display
     case AnnotationGraphicsItem::BottomStyle:
     case AnnotationGraphicsItem::SubtitleStyle:
       {
-        int window_footer = !hub_->isNormalPlayerMode() ? (lane_height+lane_height/2)   : 0;
-        return window_height - (best_lane + 2) * lane_height - window_footer;
+        int window_footer = !hub_->isNormalPlayerMode() ? int(laneHeight * 1.5)   : 0;
+        return window_height - (best_lane + 2) * laneHeight - window_footer;
       }
     default:
       {
         int window_header = !hub_->isNormalPlayerMode() && !hub_->isMediaTokenMode() ? 50 : 0;
-        return best_lane * lane_height + window_header;
+        return best_lane * laneHeight + window_header;
       }
     }
   }
@@ -134,7 +140,7 @@ namespace { // anonymous, annotation display
 int
 AnnotationGraphicsItem::nextY(int msecs, Style style) const
 {
-  int ret = ::next_y_(view_->height(), msecs, style, hub_);
+  int ret = ::next_y_(view_->height(), msecs, view_->scale(), style, hub_);
   int max = view_->height() - boundingRect().height() ;
   if (ret > max - 5)
     ret = max;
@@ -183,6 +189,8 @@ AnnotationGraphicsItem::AnnotationGraphicsItem(
   Q_ASSERT(view_);
   scene_ = view_->scene();
   Q_ASSERT(scene_);
+
+  setScale(view_->scale());
 
   autoRemoveTimer_ = new QTimer(this);
   autoRemoveTimer_->setSingleShot(true);
@@ -335,10 +343,11 @@ AnnotationGraphicsItem::setEffect(Effect e)
   switch (e) {
   case ShadowEffect:
     {
+      enum { offset = 1, radius = 12 };
       QGraphicsDropShadowEffect *shadow = new QGraphicsDropShadowEffect(this);
-      shadow->setBlurRadius(12); // in pixels
-      shadow->setOffset(1); // in pixels
-      shadow->setColor(QColor("black"));
+      shadow->setBlurRadius(radius); // in pixels
+      shadow->setOffset(offset); // in pixels
+      shadow->setColor(Qt::black);
       setGraphicsEffect(shadow);
     } break;
   case TransparentEffect:
@@ -463,6 +472,7 @@ AnnotationGraphicsItem::addMe()
 {
   connect(view_, SIGNAL(paused()), SLOT(pause()));
   connect(view_, SIGNAL(resumed()), SLOT(resume()));
+  connect(view_, SIGNAL(scaleChanged(qreal)), SLOT(setScale(qreal)));
 
   if (style_ == SubtitleStyle &&
       hub_->isSignalTokenMode() &&

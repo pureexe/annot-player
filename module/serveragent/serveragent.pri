@@ -3,10 +3,10 @@
 
 include(../../config.pri)
 
+DEFINES += WITH_MODULE_SERVERAGENT
+
 INCLUDEPATH += $$PWD
 INCLUDEPATH += $$PWD/serversoap
-
-#DEFINES += USE_MODULE_CLIENTAGENT
 
 HEADERS += \
     $$PWD/castmanager.h \

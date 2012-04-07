@@ -12,7 +12,9 @@
 #include "player.h"
 //#include "module/qtext/textcodec.h"
 #include "module/qtext/countdowntimer.h"
-#include "module/vlccore/http.h"
+#ifdef WITH_MODULE_VLCCORE
+#  include "module/vlccore/http.h"
+#endif // WITH_MODULE_VLCCORE
 #include <QObject>
 #include <QList>
 #include <memory>
@@ -218,7 +220,9 @@ namespace { // anonymous: vlc handle
     instance_ = ::libvlc_new(vlc_argc, vlc_argv);
     Q_ASSERT(instance_);
 
+#ifdef WITH_MODULE_VLCCORE
     VlcHttpPlugin::load();
+#endif // WITH_MODULE_VLCCORE
 
     player_ = ::libvlc_media_player_new(instance_);
     Q_ASSERT(player_);

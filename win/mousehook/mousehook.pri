@@ -3,6 +3,8 @@
 
 INCLUDEPATH += $$PWD
 
+DEFINES += WITH_WIN_MOUSEHOOK
+
 HEADERS += \
     $$PWD/mousehook_config.h \
     $$PWD/mousehook.h

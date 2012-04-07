@@ -18,8 +18,6 @@ namespace AnnotCloud {
 
     // - Types -
   public:
-    typedef Traits::Language Language;
-
     enum UserStatus {
       US_Invisible = 2,
       US_Online = 1,

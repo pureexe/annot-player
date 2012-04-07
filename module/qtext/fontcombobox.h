@@ -15,21 +15,23 @@ class FontComboBox : public QFontComboBox
   typedef FontComboBox Self;
   typedef QFontComboBox Base;
 
-  bool hover_;
-  QCursor lastCursor_;
-  QCursor hoverCursor_;
+  bool hovered_;
+  QCursor hoverCursor_,
+          lastCursor_;
 
 public:
-  explicit FontComboBox(QWidget *parent = 0);
-
-  bool isHovered() const;
-
-  QCursor hoverCursor() const;
-  void setHoverCursor(const QCursor &cursor);
+  explicit FontComboBox(QWidget *parent = 0)
+    : Base(parent), hovered_(false), hoverCursor_(Qt::PointingHandCursor) { }
 
 signals:
-  //void hovered();
-  //void leaved();
+  void hovered();
+  void leaved();
+
+public:
+  bool isHovered() const { return hovered_; }
+  QCursor hoverCursor() const { return hoverCursor_; }
+public slots:
+  void setHoverCursor(const QCursor &cursor) { hoverCursor_ = cursor; }
 
   // - Events -
 protected:

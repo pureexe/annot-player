@@ -3,6 +3,8 @@
 
 INCLUDEPATH += $$PWD
 
+DEFINES += WITH_WIN_HOOK
+
 HEADERS += \
     $$PWD/hook_config.h \
     $$PWD/hook.h

@@ -12,11 +12,11 @@ namespace { struct parser_config_ {
   {
     BOOST_AUTO(p, AnnotCloud::AnnotationHtmlParser::globalInstance());
 
-    p->setTinySize(ANNOTATION_SIZE_TINY);
-    p->setSmallSize(ANNOTATION_SIZE_SMALL);
-    p->setNormalSize(ANNOTATION_SIZE_NORMAL);
-    p->setLargeSize(ANNOTATION_SIZE_LARGE);
-    p->setHugeSize(ANNOTATION_SIZE_HUGE);
+    p->setTinySize(ANNOTATION_SIZE_TINY "px");
+    p->setSmallSize(ANNOTATION_SIZE_SMALL "px");
+    p->setNormalSize(ANNOTATION_SIZE_NORMAL "px");
+    p->setLargeSize(ANNOTATION_SIZE_LARGE "px");
+    p->setHugeSize(ANNOTATION_SIZE_HUGE "px");
   }
 
 } parser_config_; }

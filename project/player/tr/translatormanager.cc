@@ -4,6 +4,9 @@
 #include "translatormanager.h"
 #include "tr.h"
 #include "rc.h" // This breaks the modularity of this pri
+#ifdef WITH_MODULE_QT
+#  include "module/qt/qtrc.h"
+#endif // WITH_MODULE_QT
 #include <QtCore>
 
 #ifdef Q_OS_MAC
@@ -26,26 +29,6 @@
 
 // - Constructions -
 
-// Use C as an invalid entry
-namespace { enum { INVALID_LANGUAGE = 0 }; }
-
-int TranslatorManager::language_ = INVALID_LANGUAGE;
-
-TranslatorManager*
-TranslatorManager::globalInstance()
-{ static Self global; return &global; }
-
-TranslatorManager::TranslatorManager(QObject *parent)
-  : Base(parent),
-    tr_en_(0), tr_ja_(0), tr_tw_(0), tr_zh_(0)
-{
-  //setLanguage(QLocale::system().language());
-}
-
-int
-TranslatorManager::language() const
-{ return language_; }
-
 void
 TranslatorManager::setLanguage(int language, bool updateTranslator)
 {
@@ -60,29 +43,48 @@ TranslatorManager::setLanguage(int language, bool updateTranslator)
   }
 }
 
-#define MAKE_TRANSLATOR(_tr, _TR) \
-  QTranslator* \
+#ifdef WITH_MODULE_QT
+  #define MAKE_TR(_tr, _TR) \
+  const TranslatorManager::QTranslatorList& \
   TranslatorManager::tr_##_tr() const \
   { \
-    if (!tr_##_tr##_) { \
-      tr_##_tr##_ = new QTranslator(const_cast<Self*>(this)); \
-      tr_##_tr##_->load(RC_TR_##_TR); \
+    if (tr_##_tr##_.isEmpty()) { \
+      QTranslator *t = new QTranslator(const_cast<Self*>(this)); \
+      t->load(RC_TR_##_TR); \
+      tr_##_tr##_.append(t); \
+      if (!QString(QTRC_TR_##_TR).isEmpty()) { \
+        t = new QTranslator(const_cast<Self*>(this)); \
+        t->load(QTRC_TR_##_TR); \
+        tr_##_tr##_.append(t); \
+      } \
     } \
     return tr_##_tr##_; \
   }
+#else
+  #define MAKE_TR(_tr, _TR) \
+  const TranslatorManager::QTranslatorList& \
+  TranslatorManager::tr_##_tr() const \
+  { \
+    if (tr_##_tr##_.isEmpty()) { \
+      QTranslator *t = new QTranslator(const_cast<Self*>(this)); \
+      t->load(RC_TR_##_TR); \
+      tr_##_tr##_.append(t); \
+    } \
+    return tr_##_tr##_; \
+  }
+#endif // WITH_MODULE_QT
 
-  MAKE_TRANSLATOR(en, EN)
-  MAKE_TRANSLATOR(ja, JA)
-  MAKE_TRANSLATOR(tw, TW)
-  MAKE_TRANSLATOR(zh, ZH)
+  MAKE_TR(en, EN)
+  MAKE_TR(ja, JA)
+  MAKE_TR(tw, TW)
+  MAKE_TR(zh, ZH)
+#undef MAKE_TR
 
-#undef MAKE_TRANSLATOR
-
-QTranslator*
-TranslatorManager::currentTranslatorManager() const
+TranslatorManager::QTranslatorList
+TranslatorManager::currentTranslators() const
 {
   switch (language_) {
-  case INVALID_LANGUAGE:   return 0;
+  case NoLanguage:         return QTranslatorList();
   case QLocale::English:   return tr_en();
   case QLocale::Japanese:  return tr_ja();
   case TraditionalChinese: return tr_tw();
@@ -94,21 +96,17 @@ TranslatorManager::currentTranslatorManager() const
 void
 TranslatorManager::installCurrentTranslator(QCoreApplication *a)
 {
-  if (a) {
-    QTranslator *t = currentTranslatorManager();
-    if (t)
+  if (a)
+    foreach (QTranslator *t, currentTranslators())
       a->installTranslator(t);
-  }
 }
 
 void
 TranslatorManager::removeCurrentTranslator(QCoreApplication *a)
 {
-  if (a) {
-    QTranslator *t = currentTranslatorManager();
-    if (t)
+  if (a)
+    foreach (QTranslator *t, currentTranslators())
       a->removeTranslator(t);
-  }
 }
 
 // - Translations -
@@ -234,7 +232,7 @@ TranslatorManager::translate(int tid) const
   case T_TITLE_ANNOTATIONEDITOR:        return tr("Annot Editor");
   case T_TITLE_TOKENVIEW:       return tr("Token");
   case T_TITLE_COMMENTVIEW:     return tr("Comments");
-  case T_TITLE_ANNOTTHREAD:     return tr("Annotations Thread");
+  case T_TITLE_ANNOTTHREAD:     return tr("Annotations analytics");
   case T_TITLE_SIGNALVIEW:      return tr("Select process signal");
   case T_TITLE_LIVE:            return tr("Live Channel");
   case T_TITLE_SYNC:            return tr("Sync Mode");
@@ -401,7 +399,7 @@ TranslatorManager::translate(int tid) const
   case T_TIP_NEXT:              return tr("Next") + " [" K_CTRL "+" K_SHIFT "+→]";
 
   case T_MENUTEXT_BLACKLIST:    return tr("Blacklist") + " [" K_CTRL + "+F4]";
-  case T_TIP_BLACKLIST:         return tr("Blacklist") + " [" K_CTRL + "+F4]";
+  case T_TIP_BLACKLIST:         return tr("Blacklist");
 
   case T_MENUTEXT_PICKDIALOG:   return tr("Pick window");
   case T_TIP_PICKDIALOG:        return tr("Show pick dialog");
@@ -455,7 +453,7 @@ TranslatorManager::translate(int tid) const
   case T_MENUTEXT_DISABLEAUTOCLEARCONSOLE: return tr("Stick console");
   case T_TIP_DISABLEAUTOCLEARCONSOLE:      return tr("Disable auto clear console");
 
-  case T_MENUTEXT_WINDOWSTAYSONTOP:   return tr("Always on top") + " [" K_CTRL "+T]";
+  case T_MENUTEXT_WINDOWSTAYSONTOP:   return tr("Always on top"); // + " [" K_CTRL "+T]";
   case T_TIP_WINDOWSTAYSONTOP:        return tr("Show window on top");
 
   case T_MENUTEXT_ADVANCED:     return tr("Advanced");
@@ -612,11 +610,11 @@ TranslatorManager::translate(int tid) const
   case T_MENUTEXT_BACKWARD5S:   return tr("Backward %1 sec").arg("5");
   case T_MENUTEXT_FORWARD10S:   return tr("Forward %1 sec").arg("10");
   case T_MENUTEXT_BACKWARD10S:  return tr("Backward %1 sec").arg("10");
-  case T_MENUTEXT_FORWARD25S:   return tr("Forward %1 sec").arg("25") + " [→]";
+  case T_MENUTEXT_FORWARD25S:   return tr("Forward %1 sec").arg("30") + " [→]";
   case T_MENUTEXT_BACKWARD30S:  return tr("Backward %1 sec").arg("30") + " [←]";
   case T_MENUTEXT_FORWARD60S:   return tr("Forward %1 sec").arg("60");
   case T_MENUTEXT_BACKWARD60S:  return tr("Backward %1 sec").arg("60");
-  case T_MENUTEXT_FORWARD85S:   return tr("Forward %1 sec").arg("85") + " [" K_SHIFT "+→]";
+  case T_MENUTEXT_FORWARD85S:   return tr("Forward %1 sec").arg("90") + " [" K_SHIFT "+→]";
   case T_MENUTEXT_BACKWARD90S:  return tr("Backward %1 sec").arg("90") + " [" K_SHIFT "+←]";
   case T_MENUTEXT_FORWARD1M:    return tr("Forward %1 min").arg("1");
   case T_MENUTEXT_BACKWARD1M:   return tr("Backward %1 min").arg("1");
@@ -666,8 +664,8 @@ TranslatorManager::translate(int tid) const
   case T_MENUTEXT_DOWNLOAD:  return tr("Download") + " [" K_CTRL "+D]";
   case T_TIP_DOWNLOAD:       return tr("Download") + " [" K_CTRL "+D]";
 
-  case T_MENUTEXT_ANNOTTHREAD:  return tr("Annots thread") + " [" K_CTRL "+F5]";
-  case T_TIP_ANNOTTHREAD:       return tr("Show annotations as thread") + " [" K_CTRL "+F5]";
+  case T_MENUTEXT_ANNOTTHREAD:  return tr("Annotation analytics") + " [" K_CTRL "+F5]";
+  case T_TIP_ANNOTTHREAD:       return tr("Show annotations as thread");
 
   case T_MENUTEXT_SAVEMEDIA:    return tr("Save buffered video");
   case T_TIP_SAVEMEDIA:         return tr("Save buffered video on desktop");
@@ -685,6 +683,8 @@ TranslatorManager::translate(int tid) const
   case T_MENUTEXT_ASPECTRATIOWIDESCREEN: return tr("Wide screen") + " (16:9)";
 
   case T_MENUTEXT_MULTIWINDOW: return tr("Allow multiple windows");
+
+  case T_MENUTEXT_RESUMEANNOT:  return tr("Release annotations");
 
   case T_FILTER_PATTERN:        return tr("Filter pattern");
   case T_FILTER_SYNTAX:         return tr("Filter syntax");
@@ -754,9 +754,39 @@ TranslatorManager::translate(int tid) const
   case T_URL_BILIBILI:  return tr("http://bilibili.tv");
 
   case T_ASPECTRATIO:   return tr("Aspect ratio");
-  case T_NEWWINDOW:     return tr("New window") + " [" K_CTRL "+" K_SHIFT "+" "N]";
+  case T_NEWWINDOW:     return tr("New window"); // + " [" K_CTRL "+" K_SHIFT "+" "N]";
 
   case T_MENUTEXT_AUTOSUBMIT:  return tr("Save annots associations");
+  case T_MENUTEXT_BACKLOG:     return tr("Backlog") + " [" K_CTRL "+F6]";
+
+  case T_MENUTEXT_RESETANNOTSCALE:  return tr("Reset scale") + " [" K_CTRL "+" + tr("Mid") + "]";
+  case T_TIP_RESETANNOTSCALE:       return tr("Reset annotation scale");
+
+  case T_MENUTEXT_INCREASEANNOTSCALE:  return tr("Scale up") + " [" K_CTRL "+" + tr("Wheel") + "↑]";
+  case T_TIP_INCREASEANNOTSCALE:       return tr("Scale up");
+
+  case T_MENUTEXT_DECREASEANNOTSCALE:  return tr("Scale down") + " [" K_CTRL "+" + tr("Wheel") + "↓]";
+  case T_TIP_DECREASEANNOTSCALE:       return tr("Scale down");
+
+  case T_MENUTEXT_RESETANNOTROTATION:  return tr("Reset rotation") + " [" K_SHIFT "+" + tr("Mid") + "]";
+  case T_TIP_RESETANNOTROTATION:       return tr("Reset annotation rotation");
+
+  case T_MENUTEXT_INCREASEANNOTROTATION:  return tr("Rotate up") + " [" K_SHIFT "+" + tr("Wheel") + "↑]";
+  case T_TIP_INCREASEANNOTROTATION:       return tr("Rotate up");
+
+  case T_MENUTEXT_DECREASEANNOTROTATION:  return tr("Rotate down") + " [" K_SHIFT "+" + tr("Wheel") + "↓]";
+  case T_TIP_DECREASEANNOTROTATION:       return tr("Rotate down");
+
+  case T_HUEUP: return tr("Hue up");
+  case T_HUEDOWN: return tr("Hue down");
+  case T_CONTRASTUP: return tr("Contrast up");
+  case T_CONTRASTDOWN: return tr("Contrast down");
+  case T_GAMMAUP: return tr("Gamma up");
+  case T_GAMMADOWN: return tr("Gamma down");
+  case T_BRIGHTNESSUP: return tr("Brightness up");
+  case T_BRIGHTNESSDOWN: return tr("Brightness down");
+  case T_SATURATIONUP: return tr("Saturation up");
+  case T_SATURATIONDOWN: return tr("Saturation down");
 
   default:
     qWarning() << "TranslatorManager:translate: Unknown tid =" << tid;

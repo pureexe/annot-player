@@ -5,7 +5,6 @@
 // See:  http://blog.smartnetwork.co.jp/staff/node/22
 
 #include "nicovideocodec.h"
-#include "module/compress/qgzip.h"
 #include "module/annotcloud/annottag.h"
 #include "module/annotcloud/traits.h"
 #include <QtCore>

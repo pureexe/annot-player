@@ -44,6 +44,11 @@ EventLogger::createConnections()
   connect(player_, SIGNAL(trackNumberChanged(int)), SLOT(logTrackNumberChanged(int)));
   connect(player_, SIGNAL(rateChanged(qreal)), SLOT(logPlayRateChanged(qreal)));
   connect(player_, SIGNAL(aspectRatioChanged(QString)), SLOT(logAspectRatioChanged(QString)));
+  connect(player_, SIGNAL(contrastChanged(qreal)), SLOT(logContrastChanged(qreal)));
+  connect(player_, SIGNAL(brightnessChanged(qreal)), SLOT(logBrightnessChanged(qreal)));
+  connect(player_, SIGNAL(hueChanged(int)), SLOT(logHueChanged(int)));
+  connect(player_, SIGNAL(saturationChanged(qreal)), SLOT(logSaturationChanged(qreal)));
+  connect(player_, SIGNAL(gammaChanged(qreal)), SLOT(logGammaChanged(qreal)));
 
   connect(player_, SIGNAL(buffering()), SLOT(startLogUntilPlaying()));
   connect(player_, SIGNAL(stopped()), SLOT(stopLogUntilPlaying()));
@@ -321,6 +326,118 @@ EventLogger::logMenuEnabledChanged(bool t)
     notify(tr("Menu theme is enabled, please restart the program"));
   else
     notify(tr("Menu theme is disabled, please restart the program"));
+}
+
+void
+EventLogger::logContrastChanged(qreal value)
+{
+  static bool once = true;
+  if (once) {
+    once = false;
+    return;
+  }
+
+  if (qFuzzyCompare(value, 1.0))
+    log(tr("contrast reset"));
+  else
+    log(tr("contrast") + ": "
+        HTML_STYLE_OPEN(color:orange) + QString::number(value) + HTML_STYLE_CLOSE());
+}
+
+void
+EventLogger::logBrightnessChanged(qreal value)
+{
+  static bool once = true;
+  if (once) {
+    once = false;
+    return;
+  }
+
+  if (qFuzzyCompare(value, 1.0))
+    log(tr("brightness reset"));
+  else
+    log(tr("brightness") + ": "
+        HTML_STYLE_OPEN(color:orange) + QString::number(value) + HTML_STYLE_CLOSE());
+}
+
+void
+EventLogger::logHueChanged(int value)
+{
+  static bool once = true;
+  if (once) {
+    once = false;
+    return;
+  }
+
+  if (value)
+    log(tr("hue") + ": "
+        HTML_STYLE_OPEN(color:orange) + QString::number(value) + HTML_STYLE_CLOSE());
+  else
+    log(tr("hue reset"));
+}
+
+void
+EventLogger::logSaturationChanged(qreal value)
+{
+  static bool once = true;
+  if (once) {
+    once = false;
+    return;
+  }
+
+  if (qFuzzyCompare(value, 1.0))
+    log(tr("saturation reset"));
+  else
+    log(tr("saturation") + ": "
+        HTML_STYLE_OPEN(color:orange) + QString::number(value) + HTML_STYLE_CLOSE());
+}
+
+void
+EventLogger::logGammaChanged(qreal value)
+{
+  static bool once = true;
+  if (once) {
+    once = false;
+    return;
+  }
+
+  if (qFuzzyCompare(value, 1.0))
+    log(tr("gamma reset"));
+  else
+    log(tr("gamma") + ": "
+        HTML_STYLE_OPEN(color:orange) + QString::number(value) + HTML_STYLE_CLOSE());
+}
+
+void
+EventLogger::logAnnotationScaleChanged(qreal value)
+{
+  static bool once = true;
+  if (once) {
+    once = false;
+    return;
+  }
+
+  if (qFuzzyCompare(value, 1.0))
+    log(tr("scale reset"));
+  else
+    log(tr("scale") + ": "
+        HTML_STYLE_OPEN(color:orange) + QString::number(value) + HTML_STYLE_CLOSE());
+}
+
+void
+EventLogger::logAnnotationRotationChanged(qreal value)
+{
+  static bool once = true;
+  if (once) {
+    once = false;
+    return;
+  }
+
+  if (qFuzzyCompare(value + 1, 1.0))
+    log(tr("rotation reset"));
+  else
+    log(tr("rotate") + ": "
+        HTML_STYLE_OPEN(color:orange) + QString::number(value) + HTML_STYLE_CLOSE());
 }
 
 // EOF

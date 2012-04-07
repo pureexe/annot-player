@@ -2,8 +2,7 @@
 // 3/21/2012
 
 #include "module/annotcloud/annotxml.h"
-#include <QtCore>
-#include <QtXml>
+#include <QFile>
 
 QDomDocument
 AnnotCloud::

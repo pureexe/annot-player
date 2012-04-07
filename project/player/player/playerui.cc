@@ -447,8 +447,13 @@ PlayerUi::invalidatePositionSlider()
       slider->setSliderPosition(pos * G_POSITION_MAX);
     }
 
-    qreal progress = player_->availablePosition();
-    slider->setAvailablePosition(progress * G_POSITION_MAX);
+    qreal progress = 0;
+    if (player_->isDownloadFinished())
+      slider->clearAvailablePosition();
+    else {
+      progress = player_->availablePosition();
+      slider->setAvailablePosition(progress * G_POSITION_MAX);
+    }
 
     // Update slider's tool tip and label's text.
     qint64 current_msecs = player_->time(),
@@ -461,7 +466,7 @@ PlayerUi::invalidatePositionSlider()
     QString tip = current.toString() + " / -" + left.toString();
     if (total_msecs) {
       tip += QString().sprintf(" (%.1f%%", current_msecs * 100.0 / total_msecs);
-      if (progress)
+      if (!qFuzzyCompare(progress + 1, 1))
         tip += QString().sprintf(" / %.1f%%", progress * 100);
       tip += ")";
     }

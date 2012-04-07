@@ -6,6 +6,7 @@
 
 #include <QObject>
 #include <QLocale>
+#include <QList>
 
 QT_FORWARD_DECLARE_CLASS(QTranslator)
 QT_FORWARD_DECLARE_CLASS(QCoreApplication)
@@ -16,12 +17,18 @@ class TranslatorManager : public QObject
   typedef TranslatorManager Self;
   typedef QObject Base;
 
-  static int language_;
+  enum { NoLanguage = 0 };
+  int language_;
 
+protected:
+  typedef QList<QTranslator *> QTranslatorList;
+
+  explicit TranslatorManager(QObject *parent = 0)
+    : Base(parent), language_(NoLanguage) { }
 public:
-  static Self *globalInstance();
+  static Self *globalInstance() { static Self g; return &g; }
 public:
-  int language() const;
+  int language() const { return language_; }
   void setLanguage(int language, bool updateTranslator = true); ///< if true, app translator is updated automatically
 
   enum { TraditionalChinese = -1 }; // TO BE REMOVED AFTER Qt 4.8
@@ -36,18 +43,18 @@ public:
   void removeCurrentTranslator(QCoreApplication *a);
 
 protected:
-  explicit TranslatorManager(QObject *parent = 0);
+  const QTranslatorList &tr_en() const;
+  const QTranslatorList &tr_ja() const;
+  const QTranslatorList &tr_tw() const;
+  const QTranslatorList &tr_zh() const;
 
-protected:
-  QTranslator *tr_en() const;
-  QTranslator *tr_ja() const;
-  QTranslator *tr_tw() const;
-  QTranslator *tr_zh() const;
-
-  QTranslator *currentTranslatorManager() const;
+  QTranslatorList currentTranslators() const;
 
 private:
-  mutable QTranslator *tr_en_, *tr_ja_, *tr_tw_, *tr_zh_;
+  mutable QTranslatorList tr_en_,
+                          tr_ja_,
+                          tr_zh_,
+                          tr_tw_;
 };
 
 #endif // TRANSLATORMANAGER_H

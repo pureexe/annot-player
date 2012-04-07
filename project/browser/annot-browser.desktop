@@ -1,0 +1,21 @@
+# annot-browser.desktop
+# 4/1/2012
+[Desktop Entry]
+X-AppInstall-Package=annot-browser
+#X-AppInstall-Popcon=63720
+X-AppInstall-Section=universe
+
+Version=0.1.0.1
+Name=Annot Browser
+Comment=Proxy Internet Browser
+Exec=annot-browser %U
+Icon=annot-browser
+Terminal=false
+Type=Application
+Categories=Network;WebBrowser;
+MimeType=text/html;text/xml;application/xhtml_xml;x-scheme-handler/http;x-scheme-handler/https;x-scheme-handler/ftp;
+X-KDE-Protocols=ftp,http,https,sftp
+
+#X-Ubuntu-Gettext-Domain=app-install-data
+
+# EOF

@@ -4,6 +4,8 @@
 DEPENDPATH  += $$PWD
 INCLUDEPATH += $$PWD
 
+DEFINES += WITH_WIN_QTH
+
 QT      += core
 
 LIBS    += -lqth

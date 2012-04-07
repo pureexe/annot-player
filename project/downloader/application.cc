@@ -7,16 +7,15 @@
 #endif // Q_OS_WIN
 #ifdef Q_OS_MAC
 #  include "mac/qtmac/qtmac.h"
-#endif // Q_OS_MAC
-#include <QtGui>
-#ifdef Q_OS_UNIX
+#elif defined Q_OS_UNIX
 extern "C" {
   #include <sys/types.h>
   #include <sys/stat.h>
   #include <unistd.h>
   #include <fcntl.h>
 } // extern "C"
-#endif // Q_OS_UNIX
+#endif // Q_OS_
+#include <QtGui>
 
 #define DEBUG "application"
 #include "module/debug/debug.h"
@@ -31,6 +30,8 @@ Application::Application(int &argc, char **argv, bool gui)
   setOrganizationName(G_ORGANIZATION);
   setApplicationName(G_APPLICATION);
   setApplicationVersion(G_VERSION);
+
+  createDirectories();
   DOUT("exit");
 }
 
@@ -39,6 +40,14 @@ Application::~Application()
   DOUT("enter: abort in 3 seconds");
   QTimer::singleShot(3000, this, SLOT(abort()));
   DOUT("exit");
+}
+
+void
+Application::createDirectories()
+{
+  QDir profile(G_PATH_PROFILE);
+  if (!profile.exists())
+    profile.mkpath(profile.absolutePath());
 }
 
 void
@@ -52,7 +61,7 @@ Application::abort()
   QProcess::startDetached(QString("tskill %1").arg(QString::number(pid)));
 #else
   QProcess::startDetached(QString("kill -9 %1").arg(QString::number(pid)));
-#endif Q_OS_WIN
+#endif // Q_OS_WIN
   DOUT("exit");
 }
 
@@ -65,7 +74,7 @@ Application::abortAll()
   QProcess::startDetached("tskill", QStringList(app));
 #else
   QProcess::startDetached("killall", QStringList(app));
-#endif Q_OS_WIN
+#endif // Q_OS_WIN
   DOUT("exit");
 }
 

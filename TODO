@@ -1,28 +1,62 @@
 # TODO
 # 6/18/2011
 
-- continue goei2
-- back to appcloud
+http://db.tt/SrtkzxI
 
-# 0.1.4.1
+# server
+- remove php support, move wiki to sakuradite
+- design jsp front end, remove icefaces && jsf
+- reduce mem usage for java
+
+# 0.1.4.2
+- use qshared memory to implement "open" with diff apps in windows
+  enable open from command line
+- generate screenshots according to time/pos of annots
+- mechanism to annotate deathnote
+
+# download shared module
+- make download dialogs into module module/downloadui
+- increase decrease button
+- increase button for downloading
+- debug add 12 download task
+- add context menu for remove from downloader, launch from downloader
+
+# player
+- indicate hot according to annot using colorred posisition slider
+  - directly paint red points on qslider
+- fixme: crash on next?
+  trigger processEvents after closemedia
+- fixme: rotate crash the app
+
+# webbrowser
+- FIXME: images are not zoomed
+- CTRL+N to open a new browser window rathan then a new app
+- todo: webbrowser check loadFinished error
+
+# cleanup
+- fix resize problem for acwebwindow
+- replace player's logger with error|message|warning |notification signals
+
+- fixme: browser: google search for chinese/japanese
+- fixme: crash when open next/previous video
+  wait for 1 seconds
+
+- create thumbnails and save as png on desktop
+
+- add alpha release for linux
+
+# client side
+- split video/game annot into diff apps
+- directly download from bt source
+- change annotdown, annotbrowser license, put them on appstore
 - show online user simutaneously, enable chat for the same video
-- try inventing mechanism to annotate deathnote
-  use wiki link?
-- redesign website using PHP?
+- SNS at server side
+- file icons, communicate with ap in windows with fileopen event
 
-# demo video for new features
-ads on bilibili
-ads for nicovideo & galgame on youtube for hongfire & 4chan
-- double click to pause annotations
-- nicovideo banning for japan
-- use SAKI as example
+- browser launcher example
+  http://labs.qt.nokia.com/2008/11/03/thumbnail-preview-of-web-page/
 
 # server side
-- mac os x DVD navigation broken
-
-- fixme: crash on exit, for south park 2 on mac
-- fixme: mac annot thread often not displayed
-
 - mysql script to cleanup token with less then 1 annot
 - share sourced token with alias as well
 - fake aiml reply at server side, utilize user_id
@@ -32,24 +66,24 @@ ads for nicovideo & galgame on youtube for hongfire & 4chan
   - online status
   - sending log out session instruction on exit
 
-# client side
+# FIXME
+- mac os x DVD navigation broken
 
-wrap up uistyle and widgets into my own guitk
+- fixme: crash on exit, for south park 2 on mac
+- fixme: mac annot thread often not displayed
 
-- improve proxy browser
-  - delegate contextmenu, open in new Tab
 - FIXME: flash not enabled in qwebkit in mac
   /Library/Internet Plug-Ins/QuickTime Plugin.plugin/Contents/MacOS/QuickTime Plugin: mach-o, but wrong architecture
+
 - cleanup TR.h, rc.h
 - rewrite makeaction in mainwindow
 
-# 0.1.3.4
-able to open multiple window raher than multiple applications
+# TODO
+- improve proxy browser
+  - nico hover event: popup button
 - add icons for diff file types
 - cleanup flv modules, reduce code redundency
 - FIXME: download from youtube is broken
-- improve proxy browser
-  - nico hover event: popup button
 - randomized seeking
 - FIXME: drag video windows: wait for closing first
 - display subtitle track name: big5/gb/jp

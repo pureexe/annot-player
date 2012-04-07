@@ -3,7 +3,7 @@
 setlocal
 cd /d d:/devel/build || exit /b 1
 
-set VERSION=0.1.4.0
+set VERSION=0.1.4.1
 set APP=annot-player
 set FOLDER=Annot Player
 set ZIPFILE=%APP%-%VERSION%-win.zip
@@ -15,7 +15,8 @@ set MSVC90_HOME=/Volumes/win/Program Files/Microsoft Visual Studio 9.0
 set MSVC90_REDIST=%MSVC90_HOME%/VC/redist/x86/Microsoft.VC90.CRT
 
 set QT_HOME=/Volumes/win/qt/current
-set QT_DLLS=QtCore4.dll,QtGui4.dll,QtNetwork4.dll,QtScript4.dll,QtSql4.dll,QtWebkit4.dll,QtXml4.dll,phonon4.dll
+set QT_DLLS=QtCore4.dll,QtGui4.dll,QtNetwork4.dll,QtScript4.dll,QtSql4.dll,QtSvg4.dll,QtWebkit4.dll,QtXml4.dll,phonon4.dll
+set QT_TRANSLATIONS=qt_ja.qm,qt_zh_CN.qm,qt_zh_TW.qm
 
 set ITH_HOME=/Volumes/win/dev/ith
 set ITH_DLLS=ITH.dll,ITH_engine.dll
@@ -50,9 +51,9 @@ rm -Rf "%FOLDER%"
 mkdir "%FOLDER%"
 cd "%FOLDER%" || exit /b 1
 
-cp -v "%BUILD%/Player.exe" . || exit /b 1
-cp -v "%BUILD%/Browser.exe" . || exit /b 1
-cp -v "%BUILD%/Downloader.exe" . || exit /b 1
+cp -v "%BUILD%/Annot Browser.exe" . || exit /b 1
+cp -v "%BUILD%/Annot Downloader.exe" . || exit /b 1
+cp -v "%BUILD%/Annot Player.exe" . || exit /b 1
 
 cp -v "%SOURCE%/README" "Read Me.txt" || exit /b 1
 unix2dos "Read Me.txt"
@@ -67,6 +68,9 @@ cp "%SOURCE%/COPYING" Licenses/COPYING.txt || exit /b 1
 :: deploy modules
 mkdir Data
 cd Data || exit /b 1
+
+mkdir translations
+cp -v "%QT_HOME%"/translations/{%QT_TRANSLATIONS%} translations/ || exit /b 1
 
 mkdir imageformats
 cp -v "%QT_HOME%"/plugins/imageformats/*4.dll imageformats/ || exit /b 1
@@ -103,9 +107,9 @@ rm -fv plugins/*.dat*
 ::cp -v "%BUILD%"/*.{exe,dll} . || exit /b 1
 cp -v "%BUILD%"/*.{exe,dll} .
 
-rm -fv "Player.exe" "Browser.exe" "Downloader.exe"
+rm -fv "Annot Player.exe" "Annot Browser.exe" "Annot Downloader.exe"
 rm -fv hook.dll
-::rm -fv webbrowser.dll
+rm -fv webbrowser.dll
 
 :: compile lua
 
@@ -130,7 +134,7 @@ cp -Rv "%SOURCE%"/module/annotcloud/jsf . || exit 1
 cd ..
 
 :: desktop.ini
-cp -v "%SOURCE%"/project/apps/share/apps.ico Data/ || exit 1
+cp -v "%SOURCE%"/project/apps/share/apps.ico icon.ico || exit 1
 cp -v "%SOURCE%"/project/apps/share/desktop.ini.txt desktop.ini || exit 1
 
 :: repair permissions
@@ -140,7 +144,11 @@ chmod -R 755 .
 
 attrib +h Data
 attrib +h Licenses
+
+:: See: http://msdn.microsoft.com/en-us/library/windows/desktop/cc144102(v=vs.85).aspx
+attrib +h icon.ico
 attrib +h +s desktop.ini
+attrib +r .
 
 :: archive
 ::call "Delete Caches.cmd"

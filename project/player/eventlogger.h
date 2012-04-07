@@ -63,6 +63,14 @@ public slots:
   void logClientAgentAuthorizationError();
 
   void logAspectRatioChanged(const QString &ratio);
+  void logContrastChanged(qreal value);
+  void logBrightnessChanged(qreal value);
+  void logHueChanged(int value);
+  void logSaturationChanged(qreal value);
+  void logGammaChanged(qreal value);
+
+  void logAnnotationScaleChanged(qreal value);
+  void logAnnotationRotationChanged(qreal value);
 
 protected slots:
   void logAeroEnabledChanged(bool t);

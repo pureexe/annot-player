@@ -4,10 +4,7 @@
 // module/debug/debug.h
 // 10/16/2011
 
-//#define DEBUG "debug"
-//#define USE_MODE_DEBUG
-
-#ifdef DEBUG
+#if defined DEBUG && WITH_MODULE_DEBUG
   #include <QDebug>
   #define DPRINT(...)   qDebug(QString("%1:%2:").arg(DEBUG).arg(__FUNCTION__), \
                                  __VA_ARGS__)

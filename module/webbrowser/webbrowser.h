@@ -27,74 +27,76 @@ class WebBrowser : public QMainWindow
   typedef Ui::WebBrowserUi Form;
 
 public:
-  WEBBROWSER_API explicit WebBrowser(QWidget *parent = 0);
-  WEBBROWSER_API ~WebBrowser();
+  WB_API explicit WebBrowser(QWidget *parent = 0);
+  WB_API ~WebBrowser();
 
   // - Properties -
 public:
-  WEBBROWSER_API QString homePage() const { return homePage_; }
-  WEBBROWSER_API QString searchEngine() const { return searchEngine_; }
-  WEBBROWSER_API qreal textSizeMultiplier() const { return textSizeMultiplier_; }
-  WEBBROWSER_API QNetworkCookieJar *cookieJar() { return cookieJar_; }
+  WB_API QString homePage() const { return homePage_; }
+  WB_API QStringList homePages() const { return homePages_; }
+  WB_API QString searchEngine() const { return searchEngine_; }
+  WB_API qreal textSizeMultiplier() const { return textSizeMultiplier_; }
+  WB_API QNetworkCookieJar *cookieJar() { return cookieJar_; }
 
 public slots:
-  WEBBROWSER_API void setHomePage(const QString &url) { homePage_ = url; }
-  WEBBROWSER_API void setSearchEngine(const QString &url) { searchEngine_ = url; }
-  WEBBROWSER_API void setTextSizeMultiplier(qreal factor) { textSizeMultiplier_ = factor; }
-  WEBBROWSER_API void setCookieJar(QNetworkCookieJar *cookieJar) { cookieJar_ = cookieJar; }
+  WB_API void setHomePage(const QString &url) { homePage_ = url; }
+  WB_API void setHomePages(const QStringList &urls);
+  WB_API void setSearchEngine(const QString &url) { searchEngine_ = url; }
+  WB_API void setTextSizeMultiplier(qreal factor) { textSizeMultiplier_ = factor; }
+  WB_API void setCookieJar(QNetworkCookieJar *cookieJar) { cookieJar_ = cookieJar; }
 
   // - Actions -
 public slots:
-  WEBBROWSER_API void showMessage(const QString &text);
-  WEBBROWSER_API void error(const QString &text);
-  WEBBROWSER_API void warn(const QString &text);
+  WB_API void showMessage(const QString &text);
+  WB_API void error(const QString &text);
+  WB_API void warn(const QString &text);
+  WB_API void notify(const QString &text);
 
-  WEBBROWSER_API void openUrl(const QString &url);
-  WEBBROWSER_API void openUrls(const QStringList &urls);
+  WB_API void openUrl(const QString &url);
+  WB_API void openUrls(const QStringList &urls);
 
-  WEBBROWSER_API void addHistory(const QString &url);
-  WEBBROWSER_API void addHistory(const QStringList &urls);
-
-  WEBBROWSER_API void download(const QNetworkRequest &req);
+  WB_API void addHistory(const QString &url);
+  WB_API void addHistory(const QStringList &urls);
 
 protected slots:
-  WEBBROWSER_API void closeTab(int index);
-  WEBBROWSER_API void closeTab();
-  WEBBROWSER_API void newTab(QWebView *w = 0);
-  WEBBROWSER_API void newTabWithDefaultPage();
-  WEBBROWSER_API void openUrl();
-  WEBBROWSER_API void openSearch();
-  WEBBROWSER_API void reload();
-  WEBBROWSER_API void updateAddressbar();
-  WEBBROWSER_API void back();
-  WEBBROWSER_API void forward();
-  WEBBROWSER_API void updateButtons();
-  WEBBROWSER_API void handleLoadStarted();
-  WEBBROWSER_API void handleLoadFinished();
-  WEBBROWSER_API void toggleFullScreen();
+  WB_API void closeTab(int index);
+  WB_API void closeTab();
+  WB_API void newTab(QWebView *w = 0);
+  WB_API void newTabWithDefaultPage();
+  WB_API void openUrl();
+  WB_API void search();
+  WB_API void reload();
+  WB_API void updateAddressbar();
+  WB_API void back();
+  WB_API void forward();
+  WB_API void updateButtons();
+  WB_API void handleLoadStarted();
+  WB_API void handleLoadFinished();
+  WB_API void toggleFullScreen();
 
-  WEBBROWSER_API void focusLocationBar();
-  WEBBROWSER_API void focusSearchBar();
+  WB_API void focusLocationBar();
+  WB_API void focusSearchBar();
 
 protected:
-  WEBBROWSER_API int tabCount() const;
-  WEBBROWSER_API QUrl tabUrl(int index) const;
-  WEBBROWSER_API QList<QUrl> tabUrls() const;
-  WEBBROWSER_API QString tabAddress(int index) const;
-  WEBBROWSER_API QStringList tabAddresses() const;
+  WB_API int tabCount() const;
+  WB_API QUrl tabUrl(int index) const;
+  WB_API QList<QUrl> tabUrls() const;
+  WB_API QString tabAddress(int index) const;
+  WB_API QStringList tabAddresses() const;
+  WB_API QString searchAddress(const QString &text) const;
 
   QNetworkAccessManager *makeNetworkAccessManager();
   void setupWebPage(QWebPage *page);
 
 protected:
-  WEBBROWSER_API virtual void closeEvent(QCloseEvent *event); ///< \override
+  WB_API virtual void closeEvent(QCloseEvent *event); ///< \override
 
 protected:
+  WB_API QString completeUrl(const QString &address) const;
+  static QString tidyUrl(const QString &address);
+
   static QString decodeUrl(const QUrl &url); ///< real url to visible address
   static QUrl encodeUrl(const QString &url); ///< visible address to real url
-
-  static QString tidyUrl(const QString &address);
-  static QString completeUrl(const QString &address);
 
   // - Implementations -
 private:
@@ -107,6 +109,7 @@ private:
   QTimer *hideStatusBarTimer_;
 
   QString homePage_;
+  QStringList homePages_;
   QString searchEngine_;
   qreal textSizeMultiplier_;
 };

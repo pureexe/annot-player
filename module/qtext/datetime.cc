@@ -2,7 +2,6 @@
 // 7/24/2011
 
 #include "module/qtext/datetime.h"
-#include <QtCore>
 
 QTime
 QtExt::

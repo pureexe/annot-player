@@ -30,10 +30,9 @@ signals:
 
 public slots:
   void setEnabled(bool t) { enabled_ = t; }
-  void checkClipboard() { invalidateClipboard(); }
+  void invalidateClipboard();
 
 protected slots:
-  void invalidateClipboard();
   void parseUrl(const QString &text);
 
 protected:

@@ -14,6 +14,10 @@
 #include <QtCore>
 #include <QtSql>
 
+#ifdef __GNUC__
+#  pragma GCC diagnostic ignored "-Wparentheses" // suggest parentheses around && within ||
+#endif // __GNUC__
+
 //#define DEBUG "database"
 #include "module/debug/debug.h"
 

@@ -4,7 +4,6 @@
 #include "module/annotcloud/annothtml.h"
 #include "module/annotcloud/annottag.h"
 #include "module/qtext/htmltag.h"
-#include <QtCore>
 #include <boost/tuple/tuple.hpp>
 #include <boost/typeof/typeof.hpp>
 
@@ -169,7 +168,7 @@ AnnotationHtmlParser::toHtml(const QString &text) const
 
         case '{':
         case '[':
-          qWarning() << "AnnotationHtmlParser:parse: Unparsed parentheses on the stack";
+          DOUT("warning: unparsed parentheses on the stack");
         case '\0':
           // Allow post-fixed attributes
           //if (!attrs.empty())

@@ -8,13 +8,13 @@
 #include "module/annotcloud/annotation.h"
 #include "module/mrlresolver/mrlinfo.h"
 #ifdef USE_MODE_SIGNAL
-  #include "processinfo.h"
+#  include "processinfo.h"
 #endif // USE_MODE_SIGNAL
 #include <QMainWindow>
 #include <QUrl>
 #include <QMutex>
-#include <QStringList>
 #include <QHash>
+#include <QStringList>
 #include <QFileInfoList>
 
 QT_FORWARD_DECLARE_CLASS(QTimer)
@@ -186,8 +186,6 @@ public slots:
   void checkInternetConnection(bool async = true);
   void deleteCaches();
 
-  void checkClipboard();
-
   void newWindow();
 
   void openSource(const QString &source);
@@ -284,6 +282,21 @@ public slots:
   void closeChannel();
   void updateLiveAnnotations(bool async = true);
 
+  // - Video adjustment -
+protected slots:
+  void contrastUp(); void contrastDown(); void contrastReset();
+  void brightnessUp(); void brightnessDown(); void brightnessReset();
+  void hueUp(); void hueDown(); void hueReset();
+  void saturationUp(); void saturationDown(); void saturationReset();
+  void gammaUp(); void gammaDown(); void gammaReset();
+
+  // - Annotation transformations -
+protected slots:
+  void annotationScaleUp();
+  void annotationScaleDown();
+  void annotationRotateUp();
+  void annotationRotateDown();
+
   // - Dialogs -
 protected:
   UrlDialog *annotationUrlDialog();
@@ -333,6 +346,8 @@ public slots:
   void setProcessPickDialogVisible(bool visible);
 
   void setBacklogDialogVisible(bool visible);
+  void showBacklogDialog() { setBacklogDialogVisible(true); }
+
   void setConsoleDialogVisible(bool visible);
 
   void setDownloadDialogVisible(bool visible);
@@ -471,6 +486,7 @@ protected slots:
   void invalidateAspectRatioMenu();
   void invalidateSettingsMenu();
   void invalidateMenuTheme();
+  void invalidateAnnotationMenu();
   void invalidateAnnotationSubtitleMenu();
   void invalidateUserMenu();
   void invalidateTrackMenu();
@@ -502,6 +518,8 @@ public slots:
   void updateWindowMode();
 
   void invalidatePlayerMode();
+
+  void resumeAnnotations();
 
   // - Themes -
 public slots:
@@ -576,7 +594,7 @@ protected slots:
   void promptShutdown();
 
   // - Signal mode -
-#ifdef USE_WIN_QTH
+#ifdef WITH_WIN_QTH
 signals:
   void attached(ProcessInfo pi);
   void detached(ProcessInfo pi);
@@ -585,7 +603,7 @@ public slots:
   void openProcessHook(ulong hHook, const ProcessInfo &pi = ProcessInfo());
   void openProcessWindow(WId hwnd);
   void openProcessId(ulong pid);
-#endif // USE_WIN_QTH
+#endif // WITH_WIN_QTH
 
 #ifdef USE_MODE_SIGNAL
 public slots:
@@ -684,12 +702,12 @@ private:
 
   Translator *translator_;
 
-#ifdef USE_MODULE_SERVERAGENT
+#ifdef WITH_MODULE_SERVERAGENT
   ServerAgent *server_;
-#endif // USE_MODULE_SERVERAGENT
-#ifdef USE_MODULE_CLIENTAGENT
+#endif // WITH_MODULE_SERVERAGENT
+#ifdef WITH_MODULE_CLIENTAGENT
   ClientAgent *client_;
-#endif // USE_MODULE_CLIENTAGENT
+#endif // WITH_MODULE_CLIENTAGENT
 
   Player *player_;
 
@@ -792,6 +810,7 @@ private:
         *sectionMenu_,
         *backwardMenu_,
         *forwardMenu_,
+        *adjustMenu_,
         *appLanguageMenu_,
         *annotationEffectMenu_,
         *userLanguageMenu_,
@@ -804,6 +823,21 @@ private:
         *subtitleStyleMenu_,
         *annotationSubtitleMenu_;
   QList<QAction*> contextMenuActions_;
+
+  QMenu *annotationMenu_;
+  QAction *resumeAnnotationAct_,
+          *increaseAnnotationScaleAct_,
+          *decreaseAnnotationScaleAct_,
+          *resetAnnotationScaleAct_,
+          *increaseAnnotationRotationAct_,
+          *decreaseAnnotationRotationAct_,
+          *resetAnnotationRotationAct_;
+
+  QAction *contrastUpAct_, *contrastDownAct_, *contrastResetAct_,
+          *hueUpAct_, *hueDownAct_, *hueResetAct_,
+          *gammaUpAct_, *gammaDownAct_, *gammaResetAct_,
+          *saturationUpAct_, *saturationDownAct_, *saturationResetAct_,
+          *brightnessUpAct_, *brightnessDownAct_, *brightnessResetAct_;
 
   QAction *previousSectionAct_,
           *nextSectionAct_;

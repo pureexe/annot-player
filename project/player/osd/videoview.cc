@@ -3,10 +3,10 @@
 
 #include "videoview.h"
 #include "global.h"
-#ifdef USE_WIN_HOOK
+#ifdef WITH_WIN_HOOK
 #  include "win/hook/hook.h"
 #  include "win/qtwin/qtwin.h"
-#endif // USE_WIN_HOOK
+#endif // WITH_WIN_HOOK
 #ifdef Q_WS_MAC
 #  include "module/vlccore/video.h"
 #  include "mac/vlcstep/vlcstep.h"
@@ -178,7 +178,7 @@ VideoView::setViewMouseMovePos(const QPoint &globalPos)
 
 // - Windows Hook -
 
-#ifdef USE_WIN_HOOK
+#ifdef WITH_WIN_HOOK
 
 //#define DEBUG "videoview"
 #include "module/debug/debug.h"
@@ -243,7 +243,7 @@ bool
 VideoView::containsWindow(WId hwnd) const
 { return children_.contains(hwnd); }
 
-#endif // USE_WIN_HOOK
+#endif // WITH_WIN_HOOK
 
 // - X11 Events -
 

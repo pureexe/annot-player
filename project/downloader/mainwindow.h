@@ -1,10 +1,10 @@
-#ifndef DOWNLOADDIALOG_H
-#define DOWNLOADDIALOG_H
+#ifndef MAINWINDOW_H
+#define MAINWINDOW_H
 
-// dialogdialog.h
+// mainwindow.h
 // 2/17/2012
 
-#include "module/qtext/draggablemainwindow.h"
+#include "ac/acmainwindow.h"
 
 QT_BEGIN_NAMESPACE
 class QAbstractItemModel;
@@ -25,12 +25,11 @@ class DownloadTask;
 class ClipboardMonitor;
 class Signer;
 
-typedef QtExt::DraggableMainWindow MainWindowBase;
-class MainWindow : public MainWindowBase
+class MainWindow : public AcMainWindow
 {
   Q_OBJECT
   typedef MainWindow Self;
-  typedef MainWindowBase Base;
+  typedef AcMainWindow Base;
 
 protected:
   enum HeaderData {
@@ -56,8 +55,6 @@ signals:
   void openFileRequested(const QString &path);
 
 public slots:
-  void showMessage(const QString &text);
-
   void stopAll();
   void clear();
   //void removeCurrent();
@@ -92,9 +89,6 @@ protected slots:
 
   void finish(DownloadTask *task);
 
-  void error(const QString &text);
-  void warn(const QString &text);
-
 protected:
   QString downloadStateToString(int state) const;
   QString downloadSizeToString(qint64 size) const;
@@ -127,8 +121,7 @@ private:
               *addButton_,
               *openDirectoryButton_;
 
-  QTimer *refreshTimer_,
-         *hideStatusBarTimer_;
+  QTimer *refreshTimer_;
 };
 
-#endif // DOWNLOADDIALOG_H
+#endif // MAINWINDOW_H

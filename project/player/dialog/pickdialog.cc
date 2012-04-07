@@ -4,9 +4,9 @@
 #include "pickdialog.h"
 #include "tr.h"
 #include "logger.h"
-#ifdef USE_WIN_PICKER
+#ifdef WITH_WIN_PICKER
 #  include "win/picker/picker.h"
-#endif // USE_WIN_PICKER
+#endif // WITH_WIN_PICKER
 #include "ac/acui.h"
 #include <QtGui>
 
@@ -69,12 +69,12 @@ void
 PickDialog::setActive(bool t)
 {
   if (active_ != t) {
-#ifdef USE_WIN_PICKER
+#ifdef WITH_WIN_PICKER
     if (t)
       connect(PICKER, SIGNAL(windowPicked(WId)), SLOT(pickWindow(WId)));
     else
       disconnect(PICKER, SIGNAL(windowPicked(WId)), this, SLOT(pickWindow(WId)));
-#endif // USE_WIN_PICKER
+#endif // WITH_WIN_PICKER
     active_ = t;
   }
 }
@@ -117,9 +117,9 @@ void
 PickDialog::startPicking()
 {
   DOUT("enter");
-#ifdef USE_WIN_PICKER
+#ifdef WITH_WIN_PICKER
   PICKER->singleShot();
-#endif // USE_WIN_PICKER
+#endif // WITH_WIN_PICKER
   DOUT("exit");
 }
 
@@ -127,9 +127,9 @@ void
 PickDialog::stopPicking()
 {
   DOUT("enter");
-#ifdef USE_WIN_PICKER
+#ifdef WITH_WIN_PICKER
   PICKER->stop();
-#endif // USE_WIN_PICKER
+#endif // WITH_WIN_PICKER
   DOUT("exit");
 }
 

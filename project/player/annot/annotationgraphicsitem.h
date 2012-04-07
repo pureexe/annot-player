@@ -75,6 +75,7 @@ protected:
   static bool isSubtitle(const QString &text);
 
 public slots:
+  void setScale(qreal value) { Base::setScale(value); }
   void addMe();
   void removeMe(); // Remove me from graphics scene
   void deleteMe(); // Delete corresponding annotation

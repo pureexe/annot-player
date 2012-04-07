@@ -1,0 +1,21 @@
+# annot-down.desktop
+# 4/1/2012
+[Desktop Entry]
+X-AppInstall-Package=annot-down
+#X-AppInstall-Popcon=63720
+X-AppInstall-Section=universe
+
+Version=0.1.0.1
+Name=Annot Downloader
+Comment=Media and annotation downloader
+Exec=annot-down %U
+Icon=annot-down
+Terminal=false
+Type=Application
+Categories=Network;Downloader;
+MimeType=text/html;text/xml;application/xhtml_xml;x-scheme-handler/http;x-scheme-handler/https;x-scheme-handler/ftp;
+X-KDE-Protocols=ftp,http,https,sftp
+
+#X-Ubuntu-Gettext-Domain=app-install-data
+
+# EOF

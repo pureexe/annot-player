@@ -6,12 +6,12 @@
 #include "global.h"
 #include "translatormanager.h"
 #include "annotationgraphicsitem.h"
-#ifdef USE_WIN_QTH
+#ifdef WITH_WIN_QTH
 #  include "win/qth/qth.h"
-#endif // USE_WIN_QTH
-#ifdef USE_WIN_DWM
+#endif // WITH_WIN_QTH
+#ifdef WITH_WIN_DWM
 #  include "win/dwm/dwm.h"
-#endif // USE_WIN_DWM
+#endif // WITH_WIN_DWM
 #ifdef Q_OS_WIN
 #  include "win/qtwin/qtwin.h"
 #endif // Q_OS_WIN
@@ -21,6 +21,7 @@
 #include "ac/acui.h"
 #include "ac/acglobal.h"
 #include "ac/acsettings.h"
+#include "module/annotcloud/user.h"
 #include <QtGui>
 #include <QtNetwork>
 #include <QtWebKit>
@@ -48,9 +49,9 @@ namespace { // anonymous
     QtWin::warmUp();
 #endif // Q_OS_WIN
 
-#ifdef USE_WIN_DWM
+#ifdef WITH_WIN_DWM
     Dwm::warmUp();
-#endif // USE_WIN_DWM
+#endif // WITH_WIN_DWM
 
     // Cache fonts needed to render annotations
     AnnotationGraphicsItem::warmUp();
@@ -138,7 +139,7 @@ main(int argc, char *argv[])
   //if (ok && !t.isEmpty())
   //  a.installTranslator(&t);
 
-//#ifdef USE_MODULE_WEBBROWSER
+//#ifdef WITH_MODULE_WEBBROWSER
   // Set webkit settings
   {
     QWebSettings *ws = QWebSettings::globalSettings();
@@ -156,13 +157,15 @@ main(int argc, char *argv[])
     ws->setAttribute(QWebSettings::LocalStorageEnabled, true);
     ws->setAttribute(QWebSettings::LocalContentCanAccessRemoteUrls, true);
 
+    ws->setAttribute(QWebSettings::ZoomTextOnly, false);
+
     ws->setDefaultTextEncoding("SHIFT-JIS");
     //ws->setDefaultTextEncoding("EUC-JP");
 
     //ws->setMaximumPagesInCache(10);
     //web->setLocalStoragePath(...);
   }
-//#endif // USE_MODULE_WEBBROWSER
+//#endif // WITH_MODULE_WEBBROWSER
 
   // Set theme.
   {
@@ -209,9 +212,9 @@ main(int argc, char *argv[])
     //  return -1;
     //}
 
-//#ifdef USE_WIN_QTH
+//#ifdef WITH_WIN_QTH
 //    QTH->setParentWinId(w.winId());
-//#endif // USE_WIN_QTH
+//#endif // WITH_WIN_QTH
 
     a.setMainWindow(&w);
 
@@ -225,10 +228,13 @@ main(int argc, char *argv[])
     DOUT("automatic login");
     QString userName = ac->userName(),
             password = ac->password();
-    if (!userName.isEmpty() && !password.isEmpty())
-      w.login(userName, password);
-    else
-      w.checkInternetConnection();
+    if (userName.isEmpty() || password.isEmpty()) {
+      userName = AnnotCloud::User::guest().name();
+      password = AnnotCloud::User::guest().password();
+    }
+    //else
+    //  w.checkInternetConnection();
+    w.login(userName, password);
 
     QStringList args = a.arguments();
     if (args.size() > 1)
@@ -272,10 +278,10 @@ main(int argc, char *argv[])
   dummy.resize(QSize()); // zero-sized to be hidden
   QObject::connect(&w, SIGNAL(windowClosed()), &dummy, SLOT(close()));
 
-#ifdef USE_WIN_QTH
+#ifdef WITH_WIN_QTH
   QTH->setParentWinId(dummy.winId());
   QTH->setInterval(200); // Esential!
-#endif // USE_WIN_QTH
+#endif // WITH_WIN_QTH
 
   dummy.show();
   //QTimer::singleShot(0, &dummy, SLOT(show()));
@@ -287,7 +293,7 @@ main(int argc, char *argv[])
   //DWM_ENABLE_AERO_WIDGET(&bk);
   //bk.showMaximized();
 
-  QTimer::singleShot(0, &w, SLOT(checkClipboard()));
+  //QTimer::singleShot(0, &w, SLOT(checkClipboard()));
 
   DOUT("exit: exec");
   return a.exec();

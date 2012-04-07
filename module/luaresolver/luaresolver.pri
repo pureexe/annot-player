@@ -4,6 +4,8 @@
 include(../../config.pri)
 include($$ROOTDIR/module/luacpp/luacpp.pri)
 
+DEFINES += WITH_MODULE_LUARESOLVER
+
 INCLUDEPATH += $$PWD
 
 HEADERS += \
@@ -12,7 +14,7 @@ HEADERS += \
 SOURCES += \
     $$PWD/luaresolver.cc
 
-LUA_SCRIPTS += \
+LUA_FILES += \
     $$PWD/lua/luascript/add.lua \
     $$PWD/lua/luascript/customadd.lua \
     $$PWD/lua/luascript/lib/bit.lua \
@@ -29,8 +31,10 @@ LUA_SCRIPTS += \
     $$PWD/lua/luascript/sitelist/youku.lua \
     $$PWD/lua/luascript.lua
 
-OTHER_FILES += $$LUA_SCRIPTS
+OTHER_FILES += $$LUA_FILES
 
 QT      += core network
+
+LIBS    += -llua$$LUA_VERSION
 
 # EOF

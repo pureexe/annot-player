@@ -2,12 +2,7 @@
 // 2/6/2012
 
 #include "module/qtext/filedeleter.h"
-#include <QtCore>
-
-// - Constructions -
-
-FileDeleter::~FileDeleter()
-{ deleteAll(); }
+#include <QFile>
 
 // - Deletion -
 

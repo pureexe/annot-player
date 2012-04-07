@@ -2,7 +2,7 @@
 // 9/3/2011
 
 #include "module/qtext/draggablemainwindow.h"
-#include <QtGui>
+#include <QMouseEvent>
 
 #define BAD_POS     QPoint(-1, -1)
 

@@ -12,11 +12,15 @@
 #include "global.h"
 #include "module/player/player.h"
 #ifdef Q_WS_WIN
-  #include "win/qtwin/qtwin.h"
+#  include "win/qtwin/qtwin.h"
 #endif // Q_WS_WIN
 #include <QtGui>
 #include <boost/typeof/typeof.hpp>
 #include <climits>
+
+#ifdef __GNUC__
+#  pragma GCC diagnostic ignored "-Wparentheses" // suggest parentheses around && within ||
+#endif // __GNUC__
 
 //#define DEBUG "annotationgraphicsview"
 #include "module/debug/debug.h"
@@ -37,7 +41,8 @@ AnnotationGraphicsView::AnnotationGraphicsView(
   : Base(parent), videoView_(view), fullScreenView_(0), trackedWindow_(0), editor_(0),
     hub_(hub), player_(player), filter_(0), renderHint_(DefaultRenderHint), active_(false), paused_(false), fullScreen_(false),
     subtitleVisible_(true), nonSubtitleVisible_(true),
-    currentTime_(-1), interval_(TIMER_INTERVAL), userId_(0), playbackEnabled_(true), subtitlePosition_(AP_Bottom)
+    currentTime_(-1), interval_(TIMER_INTERVAL), userId_(0), playbackEnabled_(true), subtitlePosition_(AP_Bottom),
+    scale_(1.0), rotation_(0)
 {
   Q_ASSERT(hub_);
   Q_ASSERT(player_);
@@ -432,19 +437,17 @@ AnnotationGraphicsView::isPaused() const
 void
 AnnotationGraphicsView::pause()
 {
-  if (!paused_) {
+  if (!paused_)
     paused_ = true;
-    emit paused();
-  }
+  emit paused();
 }
 
 void
 AnnotationGraphicsView::resume()
 {
-  if (paused_) {
+  if (paused_)
     paused_ = false;
-    emit resumed();
-  }
+  emit resumed();
 }
 
 void
@@ -482,6 +485,37 @@ AnnotationGraphicsView::resumeItems(const QRect &rect, Qt::ItemSelectionMode mod
     AnnotationGraphicsItem *a = dynamic_cast<AnnotationGraphicsItem *>(item);
     if (a)
       a->resume();
+  }
+}
+
+bool
+AnnotationGraphicsView::hasPausedItems() const
+{
+  foreach (QGraphicsItem *item, items()) {
+    AnnotationGraphicsItem *a = dynamic_cast<AnnotationGraphicsItem *>(item);
+    if (a && a->isPaused())
+      return true;
+  }
+  return false;
+}
+
+void
+AnnotationGraphicsView::scalePausedItems(qreal scale)
+{
+  foreach (QGraphicsItem *item, items()) {
+    AnnotationGraphicsItem *a = dynamic_cast<AnnotationGraphicsItem *>(item);
+    if (a && a->isPaused())
+      a->setScale(a->scale() * scale);
+  }
+}
+
+void
+AnnotationGraphicsView::rotatePausedItems(qreal angle)
+{
+  foreach (QGraphicsItem *item, items()) {
+    AnnotationGraphicsItem *a = dynamic_cast<AnnotationGraphicsItem *>(item);
+    if (a && a->isPaused())
+      a->setRotation(a->rotation() + angle);
   }
 }
 
@@ -745,12 +779,11 @@ AnnotationGraphicsView::itemWithId(qint64 id) const
 Annotation*
 AnnotationGraphicsView::annotationWithId(qint64 id) const
 {
-  Self *self = const_cast<Self*>(this);
-  for (AnnotationHash::Iterator h = self->hash_.begin(); h != self->hash_.end(); ++h) {
-    AnnotationList &l = h.value();
-    for (AnnotationList::Iterator p = l.begin(); p != l.end(); ++p)
+  for (AnnotationHash::ConstIterator h = hash_.begin(); h != hash_.end(); ++h) {
+    const AnnotationList &l = h.value();
+    for (AnnotationList::ConstIterator p = l.begin(); p != l.end(); ++p)
       if (p->id() == id)
-        return &*p;
+        return const_cast<Annotation *>(&*p);
   }
   return 0;
 }
@@ -781,9 +814,9 @@ void
 AnnotationGraphicsView::setTrackedWindow(WId hwnd)
 {
   if (hwnd == videoView_->winId()
-#ifdef USE_WIN_HOOK
+#ifdef WITH_WIN_HOOK
       ||  videoView_->containsWindow(hwnd)
-#endif // USE_WIN_HOOK
+#endif // WITH_WIN_HOOK
 #ifdef Q_WS_WIN
       || QtWin::getChildWindows(videoView_->winId()).contains(hwnd)
 #endif // Q_WS_WIN
@@ -885,6 +918,26 @@ AnnotationGraphicsView::appendAnnotations(const AnnotationList &annots)
 
   foreach (Annotation a, annots)
     emit annotationAdded(a);
+}
+
+void
+AnnotationGraphicsView::setScale(qreal value)
+{
+ // qreal r = value / scale_;
+  //Base::scale(r, r);
+
+  scale_ = value;
+  emit scaleChanged(scale_);
+}
+
+void
+AnnotationGraphicsView::setRotation(qreal value)
+{
+  qreal delta = value - rotation_;
+  Base::rotate(delta);
+
+  rotation_ = value;
+  emit rotationChanged(rotation_);
 }
 
 // EOF

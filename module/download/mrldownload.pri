@@ -3,6 +3,8 @@
 
 include(../../config.pri)
 
+DEFINES += WITH_MODULE_MRLDOWNLOAD
+
 INCLUDEPATH += $$PWD
 
 HEADERS += \

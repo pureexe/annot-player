@@ -3,6 +3,8 @@
 
 include(../../config.pri)
 
+DEFINES += WITH_MODULE_BLOCKIODEVICE
+
 win32: INCLUDEPATH += $$WDK_HOME/include/api
 
 INCLUDEPATH += $$PWD

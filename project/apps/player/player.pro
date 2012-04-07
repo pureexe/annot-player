@@ -1,7 +1,7 @@
 # player.pro
 # 9/3/2011
 
-VERSION = 0.1.4.0
+VERSION = 0.1.4.1
 
 CONFIG += noqt nocrt
 include(../../../config.pri)
@@ -17,7 +17,7 @@ DEPENDPATH  += ../include
 
 TEMPLATE    = app
 win32: CONFIG += windows
-TARGET      = "Player"
+TARGET      = "Annot Player"
 
 HEADERS += config.h
 SOURCES += main.cc

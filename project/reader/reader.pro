@@ -2,6 +2,7 @@
 # 2011-06-18T21:54:19
 
 include (../../config.pri)
+include($$ROOTDIR/module/debug/debug.pri)
 
 ## Libraries
 include($$ROOTDIR/core/core.pri)
@@ -9,7 +10,6 @@ include(core/core.pri)
 
 win32 {
     include($$ROOTDIR/win/dwm/dwm.pri)
-    DEFINES += USE_DWM
 }
 
 QT      += core gui webkit network

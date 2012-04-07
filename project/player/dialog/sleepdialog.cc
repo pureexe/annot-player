@@ -36,13 +36,16 @@ SleepDialog::run()
   QApplication::beep();
   hide();
   warn(tr("putting the computer to sleep ..."));
+  bool ok = false;
 #ifdef Q_OS_WIN
-  QtWin::hibernate();
+  ok = QtWin::hibernate();
 #elif defined Q_OS_MAC
-  QtMac::sleep();
+  ok = QtMac::sleep();
 #else
   //QtUnix::hibernate(); // FIXME
 #endif // Q_OS_
+  if (!ok)
+    warn(tr("failed to put the computer to sleep"));
   DOUT("exit");
 }
 

@@ -1,6 +1,8 @@
 # qtstep.pri
 # 6/30/2011
 
+DEFINES += WITH_MAC_QTSTEP
+
 INCLUDEPATH += $$PWD
 
 HEADERS += \

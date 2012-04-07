@@ -3,6 +3,8 @@
 
 INCLUDEPATH += $$PWD
 
+DEFINES += WITH_WIN_DWM
+
 HEADERS += \
     $$PWD/dwm.h
 SOURCES += \

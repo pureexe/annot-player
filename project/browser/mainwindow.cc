@@ -13,7 +13,7 @@
 #include <QtGui>
 #include <QtWebKit>
 
-#define HOMEPAGE_URL    "http://ch.nicovideo.jp/menu/anime/"
+#define HOMEPAGE_URL    "http://ch.nicovideo.jp/menu/anime"
 
 #define DEBUG "mainwindow"
 #include "module/debug/debug.h"
@@ -48,12 +48,24 @@ MainWindow::MainWindow(QWidget *parent)
 #endif // Q_WS_MAC
 
   setHomePage(HOMEPAGE_URL);
+  setHomePages(QStringList()
+    << "google.com"
+    << "nicovideo.jp"
+    << "akabeesoft2.com"
+    << "syangrila.com"
+    << "www.light.gr.jp"
+    << "erogamescape.dyndns.org/~ap2/ero/toukei_kaiseki"
+    << "erogamescape.dyndns.org/~ap2/ero/toukei_kaiseki/index_toukei.php"
+  );
 
   AcUi::globalInstance()->setWindowStyle(this);
   AcUi::globalInstance()->setStatusBarStyle(statusBar());
   setWindowOpacity(1.0); // window is opaque
 
-  login();
+#ifndef Q_WS_MAC
+  QShortcut *n = new QShortcut(QKeySequence::New, this);
+  connect(n, SIGNAL(activated()), SLOT(newWindow()));
+#endif // Q_WS_MAC
 }
 
 QStringList
@@ -70,13 +82,14 @@ MainWindow::startupUrls()
 void
 MainWindow::login()
 {
-  AcSettings *s = AcSettings::globalSettings();
+  DOUT("enter");
   QString userName, password;
-  boost::tie(userName, password) = s->nicovideoAccount();
+  boost::tie(userName, password) = AcSettings::globalSettings()->nicovideoAccount();
   if (!userName.isEmpty() && !password.isEmpty()) {
     showMessage(tr("logging in nicovideo.jp as %1 ...").arg(userName));
     nico::login(userName, password, cookieJar());
   }
+  DOUT("exit");
 }
 
 // - Events -
@@ -139,6 +152,25 @@ MainWindow::setVisible(bool visible)
   }
 }
 
+// - New window -
+
+void
+MainWindow::newWindow()
+{
+  bool ok = false;
+#ifdef Q_WS_MAC
+  ok = QtMac::open("Annot Browser");
+#elif defined Q_WS_WIN
+  QString exe = QCoreApplication::applicationDirPath() + "/" + "annot-browser";
+  ok = QProcess::startDetached('"' + exe + '"');
+#else
+  ok = QProcess::startDetached("annot-browser");
+#endif // Q_WS_
+  if (ok)
+    showMessage(tr("openning new window") + " ...");
+  else
+    warn(tr("failed open new window"));
+}
 // EOF
 
 /*

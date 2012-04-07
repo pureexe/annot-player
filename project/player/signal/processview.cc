@@ -7,11 +7,11 @@
 #include "global.h"
 #include "logger.h"
 #include "win/qtwin/qtwin.h"
-#ifdef USE_WIN_QTH
+#ifdef WITH_WIN_QTH
 #  include "win/qth/qth.h"
 #else
 #  error "QTH is indispensible"
-#endif // USE_WIN_QTH
+#endif // WITH_WIN_QTH
 #include "ac/acfilteredtableview.h"
 #include "ac/acui.h"
 #include <QtGui>

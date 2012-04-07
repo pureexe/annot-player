@@ -4,6 +4,10 @@
 // module/serveragent/serverproxy_config.h
 // 10/8/2011
 
+#ifndef WITH_MODULE_GSOAP
+#  error "gsoap is required"
+#endif // WITH_MODULE_GSOAP
+
 #include <QtGlobal>
 
 // SOAP imode and omode, enforcing UTF-8, and gzip compression

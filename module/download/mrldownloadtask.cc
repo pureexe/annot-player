@@ -1,6 +1,9 @@
 ﻿// mrldownloadtask.cc
 // 2/20/2012
 #include "mrldownloadtask.h"
+#if !defined WITH_MODULE_MRLRESOLVER || !defined WITH_MODULE_STREAM || !defined WITH_MODULE_MEDIACODEC
+#  error "required modules missing"
+#endif // !WITH_MODULE_
 #include "module/mrlresolver/mrlresolvermanager.h"
 #include "module/stream/bufferedremotestream.h"
 #include "module/stream/bufferedstreampipe.h"
@@ -155,7 +158,7 @@ MrlDownloadTask::downloadSingleMedia(const MediaInfo &mi, QNetworkCookieJar *jar
 
   bool flv;
   bool ok = pipe.isFinished() &&
-      (flv = FlvCodec::isFlvFile(tmpFile)) || Mp4Codec::isMp4File(tmpFile);
+      ((flv = FlvCodec::isFlvFile(tmpFile)) || Mp4Codec::isMp4File(tmpFile));
   if (ok) {
     suf = flv ? ".flv" : ".mp4";
 

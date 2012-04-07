@@ -44,8 +44,13 @@ public slots:
   }
 
 public:
-  const Account &nicovideoAccount() const { return nicovideoAccount_; }
-  const Account &bilibiliAccount() const { return bilibiliAccount_; }
+  Account nicovideoAccount() const
+  {
+    return nicovideoAccount_.isBad() ? Account(NICOVIDEO_USERNAME, NICOVIDEO_PASSWORD)
+                                     : nicovideoAccount_;
+  }
+
+  Account bilibiliAccount() const { return bilibiliAccount_; }
 
   bool hasNicovideoAccount() const { return !nicovideoAccount_.isBad(); }
   bool hasBilibiliAccount() const { return !bilibiliAccount_.isBad(); }

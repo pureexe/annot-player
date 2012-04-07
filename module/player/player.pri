@@ -4,6 +4,8 @@
 include(../../config.pri)
 include($$ROOTDIR/module/vlccore/vlccore.pri)
 
+DEFINES += WITH_MODULE_PLAYER
+
 INCLUDEPATH += $$PWD
 
 HEADERS += \
@@ -20,6 +22,6 @@ OTHER_FILES += \
 QT      += core gui network
 LIBS    += -lvlc -lvlccore
 
-!mac: DEFINES += USE_PLAYER_PLAYLIST
+win32: DEFINES += USE_PLAYER_PLAYLIST
 
 # EOF

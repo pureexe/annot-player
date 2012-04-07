@@ -179,10 +179,10 @@ namespace QtWin {
 
   // - Shutdown -
 
-  void halt();
-  void reboot();
-  void hibernate();
-  void logoff();
+  bool halt();
+  bool reboot();
+  bool hibernate();
+  bool logoff();
 
   // - String -
 

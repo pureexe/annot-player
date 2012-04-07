@@ -3,13 +3,14 @@
 
 include(../../config.pri)
 
+DEFINES += WITH_MODULE_LUACPP
+
 INCLUDEPATH += $$PWD
 
-HEADERS += \
-    $$PWD/luacpp.h
+HEADERS += $$PWD/luacpp.h
 
-SOURCES +=
+#SOURCES +=
 
-LIBS    += -llua
+#LIBS    += -llua
 
 # EOF

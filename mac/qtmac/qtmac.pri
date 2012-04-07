@@ -1,6 +1,8 @@
 # qtmac.pri
 # 11/11/2011
 
+DEFINES += WITH_MAC_QTMAC
+
 INCLUDEPATH += $$PWD
 
 HEADERS += \

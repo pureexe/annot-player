@@ -4,16 +4,15 @@
 // annotationthreadview.h
 // 11/16/2011
 
-#include "module/qtext/webdialog.h"
+#include "ac/acwebwindow.h"
 #include "module/annotcloud/annotation.h"
 #include <QLocale>
 
-typedef QtExt::WebDialog AnnotationThreadViewBase;
-class AnnotationThreadView: public AnnotationThreadViewBase
+class AnnotationThreadView: public AcWebWindow
 {
   Q_OBJECT
   typedef AnnotationThreadView Self;
-  typedef AnnotationThreadViewBase Base;
+  typedef AcWebWindow Base;
 
   typedef AnnotCloud::AnnotationList AnnotationList;
 

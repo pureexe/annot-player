@@ -159,10 +159,16 @@ AcFunCodec::parseText(const QString &text)
     return QString();
   QString ret = text.trimmed();
   if (ret == "/fly")
-    return "\\fly " + QString::fromLocal8Bit("飞");
-  ret.replace("/fly ", "\\fly ", Qt::CaseInsensitive);
-  if (ret.startsWith(QString::fromLocal8Bit("飞")))
-    ret.prepend("\\fly ");
+    return CORE_CMD_VIEW_FLY " " + QString::fromLocal8Bit("飞");
+  ret.replace("/fly ", CORE_CMD_VIEW_FLY " ", Qt::CaseInsensitive);
+  if (ret.startsWith("飛") ||
+#ifdef _MSC_VER
+      ret.startsWith("\xe9\xa3\x9e")
+#else
+      ret.startsWith("飞")
+#endif // _MSC_VER
+      )
+    ret.prepend(CORE_CMD_VIEW_FLY " ");
   return ret.trimmed();
 }
 

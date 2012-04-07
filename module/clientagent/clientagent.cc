@@ -4,9 +4,9 @@
 #include "clientagent.h"
 #include "clientservice.h"
 #include "clientservice_config.h"
-#ifdef USE_MODULE_SERVERAGENT
-  #include "module/serveragent/serveragent.h"
-#endif // USE_MODULE_SERVERAGENT
+#ifdef WITH_MODULE_SERVERAGENT
+#  include "module/serveragent/serveragent.h"
+#endif // WITH_MODULE_SERVERAGENT
 #include <QtCore>
 
 #define DEBUG "clientagent"
@@ -18,9 +18,9 @@ using namespace Core::Universe;
 
 ClientAgent::ClientAgent(QObject *parent)
   : Base(parent), authorized_(false), connected_(false)
-#ifdef USE_MODULE_SERVERAGENT
+#ifdef WITH_MODULE_SERVERAGENT
   , server_(0)
-#endif // USE_MODULE_SERVERAGENT
+#endif // WITH_MODULE_SERVERAGENT
 {
   DOUT("enter");
   qsrand(QDateTime::currentMSecsSinceEpoch());
@@ -36,11 +36,11 @@ ClientAgent::ClientAgent(QObject *parent)
   service_->start();
 }
 
-#ifdef USE_MODULE_SERVERAGENT
+#ifdef WITH_MODULE_SERVERAGENT
 void
 ClientAgent::setServerAgent(ServerAgent *server)
 { server_ = server; }
-#endif // USE_MODULE_SERVERAGENT
+#endif // WITH_MODULE_SERVERAGENT
 
 long
 ClientAgent::privateKey() const

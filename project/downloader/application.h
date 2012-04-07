@@ -23,6 +23,9 @@ public:
   Application(int &argc, char **argv, bool gui = true);
   ~Application();
 
+protected:
+  void createDirectories();
+
 public slots:
   void abortAll(); // kill all instances
   void abort();    // kill this instance

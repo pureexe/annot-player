@@ -151,7 +151,7 @@ QToolButton:hover {
          <string>Back</string>
         </property>
         <property name="icon">
-         <iconset>
+         <iconset resource="webbrowser.qrc">
           <normaloff>:/images/arrow-back.png</normaloff>:/images/arrow-back.png</iconset>
         </property>
        </widget>
@@ -172,7 +172,7 @@ QToolButton:hover {
          <string>Back</string>
         </property>
         <property name="icon">
-         <iconset>
+         <iconset resource="webbrowser.qrc">
           <normaloff>:/images/arrow-forward.png</normaloff>:/images/arrow-forward.png</iconset>
         </property>
        </widget>
@@ -180,7 +180,7 @@ QToolButton:hover {
      </layout>
     </item>
     <item row="0" column="2">
-     <widget class="QComboBox" name="addressEdit">
+     <widget class="WbAddressComboEdit" name="addressEdit">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
         <horstretch>1</horstretch>
@@ -193,7 +193,7 @@ QToolButton:hover {
      </widget>
     </item>
     <item row="0" column="3">
-     <widget class="QComboBox" name="searchEdit">
+     <widget class="WbComboEdit" name="searchEdit">
       <property name="toolTip">
        <string/>
       </property>
@@ -211,7 +211,7 @@ QToolButton:hover {
        <string/>
       </property>
       <property name="icon">
-       <iconset>
+       <iconset resource="webbrowser.qrc">
         <normaloff>:/images/reload.png</normaloff>:/images/reload.png</iconset>
       </property>
      </widget>
@@ -257,6 +257,10 @@ QToolButton:hover {
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources/>
+ <resources>
+  <include location="webbrowser.qrc"/>
+  <include location="webbrowser.qrc"/>
+  <include location="webbrowser.qrc"/>
+ </resources>
  <connections/>
 </ui>

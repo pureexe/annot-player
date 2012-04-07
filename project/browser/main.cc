@@ -5,6 +5,9 @@
 #include "rc.h"
 #include "ac/acsettings.h"
 #include "ac/acui.h"
+#ifdef WITH_MODULE_QT
+#  include "module/qt/qtrc.h"
+#endif // WITH_MODULE_QT
 #include <QtGui>
 #include <QtWebKit>
 #include <ctime>
@@ -27,7 +30,6 @@ namespace { // anonymous
 
   inline QTranslator *translatorForLanguage(int lang)
   {
-    DOUT("langugage =" << lang);
     QString qm;
     switch (lang) {
     case QLocale::English: qm = RC_TR_EN; break;
@@ -37,11 +39,32 @@ namespace { // anonymous
     default: qm = RC_TR_EN;
     }
 
-    QTranslator *t = new QTranslator;
+    QTranslator *t = new QTranslator(qApp);
     if (t->load(qm)) return t;
     else { Q_ASSERT(0); delete t; return 0; }
   }
 
+#ifdef WITH_MODULE_QT
+  inline QTranslator *qtTranslatorForLanguage(int lang)
+  {
+    QString qm;
+    switch (lang) {
+    case QLocale::English: break;
+    case QLocale::Japanese: qm = "qt_ja"; break;
+    case QLocale::Chinese: qm = "qt_zh_CN"; break;
+    case QLocale::Taiwan: qm = "qt_zh_TW"; break;
+    }
+
+    if (!qm.isEmpty()) {
+      QTranslator *t = new QTranslator(qApp);
+      if (t->load(qm, QTRC_PREFIX_TR))
+        return t;
+      else
+        delete t;
+    }
+    return 0;
+  }
+#endif // WITH_MODULE_QT
 
 } // namespace anonymous
 
@@ -77,6 +100,11 @@ main(int argc, char *argv[])
     Q_ASSERT(t);
     if (t)
       a.installTranslator(t);
+#ifdef WITH_MODULE_QT
+    t = qtTranslatorForLanguage(lang);
+    if (t)
+      a.installTranslator(t);
+#endif // WITH_MODULE_QT
   }
 
   // Set theme.
@@ -107,6 +135,8 @@ main(int argc, char *argv[])
     ws->setAttribute(QWebSettings::LocalStorageEnabled, true);
     ws->setAttribute(QWebSettings::LocalContentCanAccessRemoteUrls, true);
 
+    ws->setAttribute(QWebSettings::ZoomTextOnly, false);
+
     ws->setDefaultTextEncoding("SHIFT-JIS");
     //ws->setDefaultTextEncoding("EUC-JP");
 
@@ -134,6 +164,8 @@ main(int argc, char *argv[])
 
   w.resize(800, 600);
   w.show();
+
+  QTimer::singleShot(0, &w, SLOT(login()));
 
   QStringList args = a.arguments();
   if (args.size() > 1) {

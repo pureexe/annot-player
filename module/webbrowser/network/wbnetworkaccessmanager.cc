@@ -1,9 +1,10 @@
-// webbrowserprivate.cc
+// wbnetworkaccessmanager.cc
 // 1/27/2012
 
-#include "webbrowserprivate.h"
+#include "wbnetworkaccessmanager.h"
+#include <QtCore>
 
-#define DEBUG "webbrowserprivate"
+//#define DEBUG "wbnetworkaccessmanager"
 #include "module/debug/debug.h"
 
 QNetworkReply*
@@ -14,9 +15,9 @@ WbNetworkAccessManager::createRequest(Operation op, const QNetworkRequest &req, 
     QString host = url.host();
     if (host.contains("nicovideo.jp", Qt::CaseInsensitive) &&
         host.startsWith("www.") && url.path().startsWith("/watch")) {
-      //DOUT("nico request =" << url.toString());
+      DOUT("nico request =" << url.toString());
       QNetworkRequest r = req;
-      //DOUT("nico delegate =" << transformNicoUrl(url));
+      DOUT("nico delegate =" << transformNicoUrl(url));
       r.setUrl(transformNicoUrl(url));
       return Base::createRequest(op, r, outgoingData);
     } else if (host.contains("akabeesoft2.com", Qt::CaseInsensitive)) {

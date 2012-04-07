@@ -37,9 +37,9 @@ class ServerAgent: public QObject
 public:
   explicit ServerAgent(QObject *parent = 0);
 
-#ifdef USE_MODULE_CLIENTAGENT
+#ifdef WITH_MODULE_CLIENTAGENT
   void setClientAgent(ClientAgent *client);
-#endif // USE_MODULE_CLIENTAGENT
+#endif // WITH_MODULE_CLIENTAGENT
 
   // - Login -
 public:
@@ -173,9 +173,9 @@ private:
   bool authorized_;
   bool connected_;
 
-#ifdef USE_MODULE_CLIENTAGENT
+#ifdef WITH_MODULE_CLIENTAGENT
   ClientAgent *client_;
-#endif // USE_MODULE_CLIENTAGENT
+#endif // WITH_MODULE_CLIENTAGENT
 
 };
 

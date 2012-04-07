@@ -287,7 +287,7 @@ FlvMetaWriter::updateScriptTagDoubleValue(OutputStream *out, const QString &var)
 
   enum { size = sizeof(double) };
   bool update = false;
-  double value;
+  double value = 0;
   if (var == "duration") {
     if (meta_.duration) {
       update = true;
@@ -327,10 +327,10 @@ FlvMetaWriter::updateScriptTagUInt8Value(OutputStream *out, const QString &var) 
   Q_UNUSED(out);
   Q_UNUSED(var);
   return false;
-//#define IF_VAR(_var, _meta) \
-//  if (var == _var) { \
-//    update = true; \
-//    value = meta_._meta ? 1 : 0; \
+//#define IF_VAR(_var, _meta)
+//  if (var == _var) {
+//    update = true;
+//    value = meta_._meta ? 1 : 0;
 //  }
 //
 //  bool update = false;

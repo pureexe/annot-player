@@ -1,30 +1,37 @@
 # browser.pro
 # 3/29/2012
 
-VERSION = 0.1.0.0
+VERSION = 0.1.0.1
 
 include(../../config.pri)
 include($$ROOTDIR/project/common/common.pri)
+include($$ROOTDIR/module/debug/debug.pri)
 
 ## Libraries
 
 include($$ROOTDIR/module/nicoutil/nicoutil.pri)
+include($$ROOTDIR/module/qt/qt.pri)
 include($$ROOTDIR/module/qtext/qtext.pri)
 include($$ROOTDIR/module/crypt/crypt.pri)
 include($$ROOTDIR/module/download/download.pri)
-
-# shared link gave me so many trouble on mac and linux
-unix:       include($$ROOTDIR/module/webbrowser/webbrowser_static.pri)
-win32:      include($$ROOTDIR/module/webbrowser/webbrowser.pri)
+include($$ROOTDIR/module/compress/compress.pri)
+include($$ROOTDIR/module/webbrowser/webbrowser_static.pri)
 
 win32 {
-    DEFINES += USE_WIN_DWM
     include($$ROOTDIR/win/dwm/dwm.pri)
     include($$ROOTDIR/win/qtwin/qtwin.pri)
+}
+mac {
+    include($$ROOTDIR/mac/qtmac/qtmac.pri)
 }
 
 QT      += core gui network webkit
 #CONFIG(static): QTPLUGIN += qsqlite
+
+DEFINES += WITH_QT_CORE \
+           WITH_QT_GUI \
+           WITH_QT_NETWORK \
+           WITH_QT_WEBKIT
 
 ## Sources
 
@@ -56,10 +63,17 @@ SOURCES += \
 RESOURCES += browser.qrc
 
 OTHER_FILES += \
+    annot-browser.desktop \
+    annot-browser.png \
     Info.plist \
     browser.rc \
     browser.ico \
-    browser.icns
+    browser.icns \
+    debian.control \
+    debian.rules \
+    deploy-debian.sh \
+    deploy-fedora.sh \
+    rpm.spec
 
 win32 {
     !wince*: LIBS += -lshell32
@@ -86,26 +100,24 @@ OTHER_FILES += $$TRANSLATIONS \
     $$PWD/tr/lupdate_tr.cmd \
     $$PWD/tr/lupdate_tr.sh
 
-# EOF
-
 # Deployment
-#unix:!mac {
-#    INSTALLS += target desktop desktop-kde icon
-#
-#    target.path = $$BINDIR
-#
-#    LUA_SCRIPTS.path = $$DATADIR/annot/player/lua
-#
-#    desktop.path = $$DATADIR/applications
-#    desktop.files += $${TARGET}.desktop
-#
-#    desktop-kde.path = $$DATADIR/kde4/apps/solid/actions
-#    desktop-kde.files += $${TARGET}.desktop
-#
-#    #service.path = $$DATADIR/dbus-1/services
-#    #service.files += $${TARGET}.service
-#
-#    icon.path = $$DATADIR/icons/hicolor/256x256/apps
-#    icon.files += $${TARGET}.png
-#}
-#
+
+unix:!mac {
+    INSTALLS += target desktop desktop-kde icon #lua
+
+    target.path = $$BINDIR
+
+    desktop.path = $$DATADIR/applications
+    desktop.files += $${TARGET}.desktop
+
+    desktop-kde.path = $$DATADIR/kde4/apps/solid/actions
+    desktop-kde.files += $${TARGET}.desktop
+
+    #service.path = $$DATADIR/dbus-1/services
+    #service.files += $${TARGET}.service
+
+    icon.path = $$DATADIR/icons/hicolor/256x256/apps
+    icon.files += $${TARGET}.png
+}
+
+# EOF

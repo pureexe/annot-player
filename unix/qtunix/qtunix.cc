@@ -69,12 +69,12 @@ QtUnix::isDeviceFile(const QString &path)
 
 // - Shutdown -
 
-void
+bool
 QtUnix::halt()
-{ QProcess::startDetached("shutdown -h now"); }
+{ return QProcess::startDetached("shutdown -h now"); }
 
-void
+bool
 QtUnix::reboot()
-{ QProcess::startDetached("shutdown -r now"); }
+{ return QProcess::startDetached("shutdown -r now"); }
 
 // EOF

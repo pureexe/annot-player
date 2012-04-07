@@ -3,8 +3,8 @@
 // 11/26/2011
 
 #ifdef _MSC_VER
-  #pragma warning (disable:4819)       // C4819: The file contains a character that cannot be represented in the current code page.
-  #pragma warning (disable:4996)       // C4996: MS' deprecated std functions orz.
+#  pragma warning (disable:4819)       // C4819: The file contains a character that cannot be represented in the current code page.
+#  pragma warning (disable:4996)       // C4996: MS' deprecated std functions orz.
 #endif // _MSC_VER
 
 #include "module/vlccore/video.h"
@@ -13,11 +13,6 @@
 //#define DEBUG "vlccore::video"
 #include "module/debug/debug.h"
 #include <QDebug>
-
-#ifdef _MSC_VER
-#  pragma warning (disable:4819)       // C4819: The file contains a character that cannot be represented in the current code page.
-#  pragma warning (disable:4996)       // C4996: MS' deprecated std functions orz.
-#endif // _MSC_VER
 
 #ifndef MODULE_STRING
 #  define MODULE_STRING "main"  // needed by VLC

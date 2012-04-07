@@ -20,8 +20,6 @@ namespace AnnotCloud {
 
     // - Types -
   public:
-    typedef Traits::Language Language;
-
     enum AnnotationStatus {
       AS_Active = 0,
       AS_Deleted = -1,
@@ -31,6 +29,19 @@ namespace AnnotCloud {
 
     enum AnnotationFlag {
       AF_Anonymous = 0x1L
+    };
+
+    enum Field {
+      None = -1,
+      Id,
+      TokenId, TokenDigest, TokenPart,
+      UserId, UserAlias,
+      Status, Flags, Language,
+      CreateTime, UpdateTime,
+      Pos, PosType,
+      Time, Text,
+      BlessedCount, CursedCount, BlockedCount,
+      FieldCount
     };
 
     // - Properties -

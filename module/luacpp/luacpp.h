@@ -6,7 +6,7 @@
 // See: http://stackoverflow.com/questions/7885299/c-call-lua-function-with-variable-parameters
 
 #ifdef _MSC_VER
-  #pragma warning (disable:4800)     // C4800: forcing value to bool 'true' or 'false' (performance warning)
+#  pragma warning (disable:4800)     // C4800: forcing value to bool 'true' or 'false' (performance warning)
 #endif // _MSC_VER
 
 extern "C" {
@@ -68,7 +68,7 @@ namespace detail
     }
   };
 
-#ifndef _MSC_VER
+#if _WIN64 || __x86_64__
   template <>
   struct value_extractor<int>
   {
@@ -79,7 +79,7 @@ namespace detail
       return val;
     }
   };
-#endif // _MSC_VER
+#endif // _64
 
   template <>
   struct value_extractor<bool>

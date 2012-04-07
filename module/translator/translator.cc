@@ -10,7 +10,7 @@
 //#define DEBUG "translator"
 #include "module/debug/debug.h"
 
-// - Constructions -
+// - Construction -
 
 // See: http://www.emreakkas.com/internationalization/microsoft-translator-api-languages-list-language-codes-and-names
 const char *Translator::English = "en";

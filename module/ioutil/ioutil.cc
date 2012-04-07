@@ -4,15 +4,23 @@
 #include "ioutil.h"
 #include <QtCore>
 
-#ifdef USE_MODULE_BLOCKIODEVICE
-  #include "module/blockiodevice/blockiodevice.h"
-  #ifdef Q_OS_WIN
-    #include "win/qtwin/qtwin.h"
-  #endif // Q_OS_WIN
-  #ifdef Q_OS_UNIX
-    #include "unix/qtunix/qtunix.h"
-  #endif // Q_OS_UNIX
-#endif // USE_MODULE_BLOCKIODEVICE
+#ifdef WITH_MODULE_BLOCKIODEVICE
+#  include "module/blockiodevice/blockiodevice.h"
+#  ifdef Q_OS_WIN
+#    ifdef WITH_WIN_QTWIN
+#      include "win/qtwin/qtwin.h"
+#    else
+#      error "qtwin is required"
+#    endif // WITH_WIN_QTWIN
+#  endif // Q_OS_WIN
+#  ifdef Q_OS_UNIX
+#    ifdef WITH_UNIX_QTUNIX
+#      include "unix/qtunix/qtunix.h"
+#    else
+#      error "qtunix is required"
+#    endif // WITH_UNIX_QTUNIX
+#  endif // Q_OS_UNIX
+#endif // WITH_MODULE_BLOCKIODEVICE
 
 #define DEBUG "ioutil"
 #include "module/debug/debug.h"
@@ -22,7 +30,7 @@ IOUtil::isAudioCD(const QString &input)
 {
   QString filePath = input;
   bool ret = false;
-#ifdef USE_MODULE_BLOCKIODEVICE
+#ifdef WITH_MODULE_BLOCKIODEVICE
   if (!filePath.isEmpty()) {
 #ifdef Q_OS_WIN
     QString deviceFileName = QtWin::guessDeviceFileName(filePath);
@@ -41,7 +49,7 @@ IOUtil::isAudioCD(const QString &input)
       }
     }
   }
-#endif // USE_MODULE_BLOCKIODEVICE
+#endif // WITH_MODULE_BLOCKIODEVICE
   return ret;
 }
 
@@ -52,7 +60,7 @@ IOUtil::readBytes(const QString &input, qint64 maxSize)
   QString filePath = input;
   QByteArray data;
   if (!filePath.isEmpty()) {
-#ifdef USE_MODULE_BLOCKIODEVICE
+#ifdef WITH_MODULE_BLOCKIODEVICE
 #ifdef Q_OS_WIN
     QString deviceFileName = QtWin::guessDeviceFileName(filePath);
     if (QtWin::isValidDeviceFileName(deviceFileName)) {
@@ -81,7 +89,7 @@ IOUtil::readBytes(const QString &input, qint64 maxSize)
       data = file.read(readSize);
       file.close();
     } else
-#endif // USE_MODULE_BLOCKIODEVICE
+#endif // WITH_MODULE_BLOCKIODEVICE
     {
       QFile file(filePath);
       bool ok = file.open(QIODevice::ReadOnly);

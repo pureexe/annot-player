@@ -5,10 +5,11 @@
 // 3/11/2012
 
 #include <QString>
+#include <QRegExp>
 
 namespace QtExt {
 
-  int matchLastString(const QString str, QRegExp &rx);
+  int matchLastString(const QString &str, QRegExp &rx);
 
   QString increaseString(const QString &s);
   QString decreaseString(const QString &s);

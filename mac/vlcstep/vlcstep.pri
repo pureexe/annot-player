@@ -1,6 +1,8 @@
 # vlcstep.pri
 # 6/30/2011
 
+DEFINES += WITH_MAC_VLCSTEP
+
 include(../../config.pri)
 include($$ROOTDIR/mac/qtstep/qtstep.pri)
 #include($$PWD/minimal_macosx/minimal_macosx.pri)

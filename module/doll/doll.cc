@@ -3,7 +3,11 @@
 
 #include "doll.h"
 #include "doll_tr.h"
-#include "module/aiml/aimlbot.h"
+#ifdef WITH_MODULE_AIML
+#  include "module/aiml/aimlbot.h"
+#else
+#  error "aiml is required"
+#endif // WITH_MODULE_AIML
 
 #include <QtCore>
 

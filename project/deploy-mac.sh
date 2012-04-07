@@ -8,7 +8,7 @@ cd "$PREFIX"  || exit 1
 ## environment
 
 COLOR=orange
-VERSION=0.1.4.0
+VERSION=0.1.4.1
 DMG_SIZE=200m
 
 TARGET="Annot Player"
@@ -36,9 +36,11 @@ APP_RESORUCES=$APP_CONTENTS/Resources
 BROWSER_NAME="Annot Browser"
 BROWSER_APP=$BROWSER_NAME.app
 BROWSER_CONTENTS=$BROWSER_APP/Contents
+BROWSER_MACOS=$BROWSER_CONTENTS/MacOS
 DOWNLOADER_NAME="Annot Downloader"
 DOWNLOADER_APP=$DOWNLOADER_NAME.app
 DOWNLOADER_CONTENTS=$DOWNLOADER_APP/Contents
+DOWNLOADER_MACOS=$DOWNLOADER_CONTENTS/MacOS
 
 ## copy package
 
@@ -69,15 +71,29 @@ macdeployqt "$DOWNLOADER_APP"
 
 cd "$BROWSER_APP"/Contents || exit 1
 finder-remove Frameworks
-ln -s ../../"$APP_FRAMEWORKS"
-ln -s ../../"$APP_PLUGINS"
+ln -s ../../"$APP_FRAMEWORKS" || exit 1
+ln -s ../../"$APP_PLUGINS" || exit 1
 cd ../..
 
 cd "$DOWNLOADER_APP"/Contents || exit 1
 finder-remove Frameworks
-ln -s ../../"$APP_FRAMEWORKS"
-ln -s ../../"$APP_PLUGINS"
+ln -s ../../"$APP_FRAMEWORKS" || exit 1
+ln -s ../../"$APP_PLUGINS" || exit 1
 cd ../..
+
+cd "$DOWNLOADER_APP"/Contents/MacOS || exit 1
+ln -s ../../../"$APP_MACOS"/lua || exit 1
+ln -s ../../../"$APP_MACOS"/translations || exit 1
+cd ../../..
+
+cd "$BROWSER_APP"/Contents/MacOS || exit 1
+ln -s ../../../"$APP_MACOS"/translations || exit 1
+cd ../../..
+
+## translations
+
+mkdir "$PLAYER_MACOS"/translations || exit 1
+cp -Rv "$QT_HOME"/translations/qt_{ja,zh_CN,zh_TW}.qm "$PLAYER_MACOS"/translations/ || exit 1
 
 ## functions
 
@@ -117,13 +133,17 @@ for codec in cn jp kr tw; do
   change_macports_qt QtCore "$APP_PLUGINS/$dylib"
 done
 
-for fmt in gif ico jpeg mng tiff; do
+for fmt in gif ico jpeg mng svg tiff; do
   dylib=imageformats/libq$fmt.dylib
   cp "$QT_HOME"/plugins/$dylib "$APP_PLUGINS/$dylib"
   #install_name_tool -id @executable_path/../PlugIns/$dylib "$APP_PLUGINS/$dylib"
   change_macports_qt QtCore "$APP_PLUGINS/$dylib"
   change_macports_qt QtGui "$APP_PLUGINS/$dylib"
 done
+
+dylib=imageformats/libqsvg.dylib
+change_macports_qt QtSvg "$APP_PLUGINS/$dylib"
+change_macports_qt QtXml "$APP_PLUGINS/$dylib"
 
 dylib=imageformats/libqjpeg.dylib
 change_macports_lib libjpeg.8.dylib  "$APP_PLUGINS/$dylib"

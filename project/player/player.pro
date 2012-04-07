@@ -1,16 +1,18 @@
 # player.pro
 # 6/30/2011
 
-VERSION = 0.1.4.0
+VERSION = 0.1.4.1
 
 include(../../config.pri)
 include(tr/tr.pri)
 include($$ROOTDIR/project/common/common.pri)
+include($$ROOTDIR/module/debug/debug.pri)
 
 ## Libraries
 
 include($$ROOTDIR/module/annotcloud/annotcloud.pri)
 include($$ROOTDIR/module/annotcodec/annotcodec.pri)
+include($$ROOTDIR/module/compress/compress.pri)
 include($$ROOTDIR/module/stream/stream.pri)
 include($$ROOTDIR/module/player/player.pri)
 #include($$ROOTDIR/module/doll/doll.pri)
@@ -25,18 +27,15 @@ include($$ROOTDIR/module/translator/translator.pri)
 include($$ROOTDIR/module/mrlresolver/mrlresolver.pri)
 #include($$ROOTDIR/module/mp4box/mp4box.pri)
 include($$ROOTDIR/module/ioutil/ioutil.pri)
+include($$ROOTDIR/module/blockiodevice/blockiodevice.pri)
 include($$ROOTDIR/module/nicoutil/nicoutil.pri)
+include($$ROOTDIR/module/qt/qt.pri)
 include($$ROOTDIR/module/qtext/qtext.pri)
 include($$ROOTDIR/module/crypt/crypt.pri)
 
 # shared link gave me so many trouble on mac and linux
-unix:       include($$ROOTDIR/module/webbrowser/webbrowser_static.pri)
-win32:      include($$ROOTDIR/module/webbrowser/webbrowser.pri)
-
-DEFINES += USE_MODULE_IOUTIL
-#DEFINES += USE_MODULE_DOLL
-DEFINES += USE_MODULE_SERVERAGENT
-#DEFINES += USE_MODULE_CLIENTAGENT
+#unix:       include($$ROOTDIR/module/webbrowser/webbrowser_static.pri)
+#win32:      include($$ROOTDIR/module/webbrowser/webbrowser.pri)
 
 win32 {
     include($$ROOTDIR/win/dwm/dwm.pri)
@@ -45,17 +44,6 @@ win32 {
     include($$ROOTDIR/win/picker/picker.pri)
     include($$ROOTDIR/win/qth/qth.pri)
     include($$ROOTDIR/win/qtwin/qtwin.pri)
-    DEFINES += USE_WIN_DWM
-    #DEFINES += USE_WIN_HOOK
-    DEFINES += USE_WIN_MOUSEHOOK
-    DEFINES += USE_WIN_PICKER
-    DEFINES += USE_WIN_QTH
-
-    DEPENDPATH += $$ROOTDIR/win/dwm
-    #DEPENDPATH += $$ROOTDIR/win/hook
-    DEPENDPATH += $$ROOTDIR/win/mousehook
-    DEPENDPATH += $$ROOTDIR/win/qtwin
-    DEPENDPATH += $$ROOTDIR/win/qth
 }
 unix: {
     include($$ROOTDIR/unix/qtunix/qtunix.pri)
@@ -68,8 +56,16 @@ mac {
     include($$ROOTDIR/mac/vlcstep/vlcstep.pri)
 }
 
-QT      += core gui sql xml network webkit
+QT      += core gui network sql svg webkit xml
 #CONFIG(static): QTPLUGIN += qsqlite
+
+DEFINES += WITH_QT_CORE \
+           WITH_QT_GUI \
+           WITH_QT_NETWORK \
+           WITH_QT_SQL \
+           WITH_QT_SVG \
+           WITH_QT_WEBKIT \
+           WITH_QT_XML
 
 # Increase heap space
 #win32 {
@@ -101,8 +97,7 @@ SUBPATH = \
     $$PWD/token \
     $$PWD/tr \
     $$PWD/user \
-    $$PWD/util \
-    $$PWD/web
+    $$PWD/util
 INCLUDEPATH     += $$SUBPATH
 DEPENDPATH      += $$SUBPATH
 
@@ -173,8 +168,7 @@ HEADERS += \
     util/closewidgetthread.h \
     util/grabber.h \
     util/logger.h \
-    util/textedittabview.h \
-    web/proxybrowser.h
+    util/textedittabview.h
 
 SOURCES += \
     application.cc \
@@ -238,8 +232,7 @@ SOURCES += \
     user/userview.cc \
     util/grabber.cc \
     util/logger.cc \
-    util/textedittabview.cc \
-    web/proxybrowser.cc
+    util/textedittabview.cc
 
 win32 {
   DEFINES += USE_MODE_SIGNAL
@@ -263,6 +256,7 @@ RESOURCES += player.qrc
 
 OTHER_FILES += \
     annot-player.desktop \
+    annot-player.png \
     debian.rules \
     debian.control \
     deploy-debian.sh \
@@ -286,11 +280,9 @@ mac {
 # Deployment
 
 unix:!mac {
-    INSTALLS += target desktop desktop-kde icon
+    INSTALLS += target desktop desktop-kde icon lua jsf
 
     target.path = $$BINDIR
-
-    LUA_SCRIPTS.path = $$DATADIR/annot/player/lua
 
     desktop.path = $$DATADIR/applications
     desktop.files += $${TARGET}.desktop
@@ -303,6 +295,14 @@ unix:!mac {
 
     icon.path = $$DATADIR/icons/hicolor/256x256/apps
     icon.files += $${TARGET}.png
+
+    LUADIR = $$DATADIR/annot/player/lua
+    lua.path = $$LUADIR
+    lua.files = $$LUA_FILES
+
+    JSFDIR = $$DATADIR/annot/player/jsf
+    jsf.path = $$JSFDIR
+    jsf.files = $$JSF_FILES
 }
 
 # EOF

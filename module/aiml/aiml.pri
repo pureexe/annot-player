@@ -1,6 +1,8 @@
 # aiml.pri
 # 6/31/2011
 
+DEFINES += WITH_MODULE_AIML
+
 INCLUDEPATH += $$PWD
 
 HEADERS += \

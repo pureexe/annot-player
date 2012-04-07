@@ -5,9 +5,9 @@
 #include "serverproxy.h"
 #include "serverproxy_config.h"
 #include "castmanager.h"
-#ifdef USE_MODULE_CLIENTAGENT
-  #include "module/clientagent/clientagent.h"
-#endif // USE_MODULE_CLIENTAGENT
+#ifdef WITH_MODULE_CLIENTAGENT
+#  include "module/clientagent/clientagent.h"
+#endif // WITH_MODULE_CLIENTAGENT
 #include <QtCore>
 
 //#define DEBUG "serveragent"
@@ -21,9 +21,9 @@ using namespace AnnotCloud;
 
 ServerAgent::ServerAgent(QObject *parent)
   : Base(parent), authorized_(false), connected_(false)
-#ifdef USE_MODULE_CLIENTAGENT
+#ifdef WITH_MODULE_CLIENTAGENT
   , client_(0)
-#endif // USE_MODULE_CLIENTAGENT
+#endif // WITH_MODULE_CLIENTAGENT
 {
   proxy_ = new ServerProxy(this);
   cast_ = new CastManager(this);
@@ -31,11 +31,11 @@ ServerAgent::ServerAgent(QObject *parent)
   connect(proxy_, SIGNAL(soapError(int)), SLOT(reportSoapError(int)));
 }
 
-#ifdef USE_MODULE_CLIENTAGENT
+#ifdef WITH_MODULE_CLIENTAGENT
 void
 ServerAgent::setClientAgent(ClientAgent *client)
 { client_ = client; }
-#endif // USE_MODULE_CLIENTAGENT
+#endif // WITH_MODULE_CLIENTAGENT
 
 void
 ServerAgent::reportSoapError(int err)
@@ -103,14 +103,14 @@ ServerAgent::login(const QString &userName, const QString &passwordDigest)
     //Q_ASSERT(user_.id());
     DOUT("new user id =" << user_.id());
 
-#ifdef USE_MODULE_CLIENTAGENT
+#ifdef WITH_MODULE_CLIENTAGENT
     if (client_ && client_->isReady()) {
       DOUT("client service is ready, try setCallback");
       proxy_->setCallback(client_->port(), client_->nextPublicKey());
       // TODO: try call back again in 5 secs
     } else
       DOUT("client service is not ready, skip setCallback TODO!!!!!");
-#endif // USE_MODULE_CLIENTAGENT
+#endif // WITH_MODULE_CLIENTAGENT
 
     emit loginSucceeded(userName);
   } else

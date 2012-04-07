@@ -8,14 +8,11 @@
 #include <QtGui>
 #include <QtWebKit>
 
-#define TEXT_SIZE_SCALE 0.85
-
 // - Constructions -
 HelpDialog::HelpDialog(QWidget *parent)
   : Base(parent)
 {
   setWindowTitle(TR(T_TITLE_HELP));
-  setTextSizeMultiplier(TEXT_SIZE_SCALE);
   resize(INIT_WINDOW_SIZE);
 
   // Shortcuts
@@ -47,7 +44,7 @@ HelpDialog::setVisible(bool visible)
     QUrl url = urlForLanguage(
       (QLocale::Language)AcSettings::globalSettings()->language()
     );
-    load(url);
+    webView()->load(url);
   }
   Base::setVisible(visible);
 }

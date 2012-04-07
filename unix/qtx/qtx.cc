@@ -12,6 +12,7 @@
 #include <X11/extensions/Xfixes.h>
 #include <X11/extensions/shape.h>
 #include <X11/Xlib.h>
+#include <X11/XKBlib.h>
 
 // - Helper -
 
@@ -76,5 +77,25 @@ QtX::setWindowInputShape(WId window, const QPoint &pos, const QRegion &region)
   ::XFixesSetWindowShapeRegion(QX11Info::display(), window, ShapeInput,
                                pos.x(), pos.y(), XserverRegionFromQRegion(region));
 }
+
+// - Keyboard -
+
+// See: http://www.qtforum.org/article/32572/how-to-determine-if-capslock-is-on-crossplatform.html
+bool
+QtX::isKeyPressed(uint mask)
+{
+  bool ret = false;
+  Display *d = ::XOpenDisplay(0);
+  if (d) {
+    uint n;
+    if (::XkbGetIndicatorState(d, XkbUseCoreKbd, &n))
+      ret = n & mask;
+   }
+   return ret;
+}
+
+bool
+QtX::isKeyCapsLockPressed()
+{ return isKeyPressed(0x01); }
 
 // EOF

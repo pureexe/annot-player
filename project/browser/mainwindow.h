@@ -17,6 +17,7 @@ public:
 
 public slots:
   void login();
+  void newWindow();
 protected:
   QStringList startupUrls();
   void saveRecentUrls();

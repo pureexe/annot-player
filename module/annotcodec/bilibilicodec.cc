@@ -3,9 +3,13 @@
 // See:  http://9ch.co/t17836,1-1.html
 
 #include "bilibilicodec.h"
-#include "module/compress/qgzip.h"
 #include "module/annotcloud/annottag.h"
 #include "module/annotcloud/traits.h"
+#ifdef WITH_MODULE_COMPRESS
+#  include "module/compress/qgzip.h"
+#else
+#  error "gzip is required to uncompress bilibili reply"
+#endif // WITH_MODULE_COMPRESS
 #include <QtCore>
 #include <QtNetwork>
 #include <QtXml>
@@ -56,10 +60,12 @@ BilibiliCodec::parseReply(QNetworkReply *reply)
   QByteArray data = reply->readAll();
   AnnotationList l;
   if (!data.isEmpty()) {
+#ifdef WITH_MODULE_COMPRESS
     QByteArray unzipped = ::gHttpUncompress(data);
     if (!unzipped.isEmpty())
       l = parseDocument(unzipped);
     else
+#endif // WITH_MODULE_COMPRESS
       l = parseDocument(data);
   }
   if (l.isEmpty())

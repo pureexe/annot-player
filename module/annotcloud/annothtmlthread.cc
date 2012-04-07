@@ -1,8 +1,11 @@
 // annothtmlthread.cc
 // 3/20/2012
 #include "module/annotcloud/annothtml.h"
+#include "module/annotcloud/annotpaint.h"
 #include "module/qtext/datetime.h"
-#include <QtCore>
+#include "module/qtext/os.h"
+#include <QFile>
+#include <QDesktopServices>
 #include <boost/tuple/tuple.hpp>
 
 #define FORMAT_TIME(_secs)        QDateTime::fromMSecsSinceEpoch(_secs * 1000).toString(Qt::ISODate) \
@@ -11,17 +14,29 @@
 
 // - Resources -
 
-#define RC_PREFIX       "jsf/"
+#ifdef Q_OS_LINUX
+#  define RC_PREFIX     JSFDIR "/"
+#else
+#  define RC_PREFIX     "jsf/"
+#endif // Q_OS_LINUX
 
 #define RC_JSF_T        RC_PREFIX "t.xhtml"
 #define RC_JSF_A        RC_PREFIX "a.xhtml"
+#define RC_JSF_I        RC_PREFIX "i.xhtml"
 
 #define EL_TITLE        "#{title}"
 #define EL_T            "#{t}"
-#define EL_A_USER       "#{user}"
-#define EL_A_POS        "#{pos}"
-#define EL_A_CREATETIME "#{ts}"
-#define EL_A_TEXT       "#{content}"
+#define EL_H            "#{h}"
+
+#define EL_A_USER       "#{a_user}"
+#define EL_A_POS        "#{a_pos}"
+#define EL_A_CREATETIME "#{a_ts}"
+#define EL_A_TEXT       "#{a_content}"
+
+#define EL_I_SRC        "#{i_src}"
+#define EL_I_TITLE      "#{i_title}"
+#define EL_I_WIDTH      "#{i_width}"
+#define EL_I_HEIGHT     "#{i_height}"
 
 namespace { // anonymous
 
@@ -47,6 +62,17 @@ namespace { // anonymous
     return ret;
   }
 
+  inline QString rc_jsf_i_()
+  {
+    static QString ret;
+    if (ret.isEmpty()) {
+      QFile f(RC_JSF_I);
+      if (f.open(QIODevice::ReadOnly))
+        ret = f.readAll();
+    }
+    return ret;
+  }
+
 } // anonymous namespace
 
 // - API -
@@ -58,6 +84,7 @@ AnnotationHtmlParser::toHtml(const AnnotationList &l, const QString &title) cons
   QString ret = rc_jsf_t_();
   ret.replace(EL_TITLE, title);
 
+  // Threads
   QString t;
   foreach (const Annotation &a, l) {
     QString c = rc_jsf_a_();
@@ -75,8 +102,52 @@ AnnotationHtmlParser::toHtml(const AnnotationList &l, const QString &title) cons
 
     t.append(c);
   }
-
   ret.replace(EL_T, t);
+
+  // Images
+
+  enum { img_width = 500, img_height = 200 };
+
+  QString h, i;
+  i = rc_jsf_i_(); {
+    QString img_title = tr("Time - Count");
+    QString img = QtExt::mktemp(".svg");
+    QString img_src;
+#ifdef Q_WS_WIN
+    img_src = "file:///" + img;
+    img_src.replace('\\', '/');
+#else
+    img_src = "file://" + img;
+#endif // Q_WS_WIN
+    i.replace(EL_I_SRC, img_src);
+    i.replace(EL_I_TITLE, img_title);
+    i.replace(EL_I_WIDTH, QString::number(img_width));
+    i.replace(EL_I_HEIGHT, QString::number(img_height));
+
+    AnnotCloud::AnnotationPainter::globalInstance()->
+        saveHistogramAsFile(img, l, Annotation::Pos, img_width, img_height, img_title);
+  } h.append(i);
+
+  i = rc_jsf_i_(); {
+    QString img_title = tr("Date - Count");
+    QString img = QtExt::mktemp(".svg");
+    QString img_src;
+#ifdef Q_WS_WIN
+    img_src = "file:///" + img;
+    img_src.replace('\\', '/');
+#else
+    img_src = "file://" + img;
+#endif // Q_WS_WIN
+    i.replace(EL_I_SRC, img_src);
+    i.replace(EL_I_TITLE, img_title);
+    i.replace(EL_I_WIDTH, QString::number(img_width));
+    i.replace(EL_I_HEIGHT, QString::number(img_height));
+
+    AnnotCloud::AnnotationPainter::globalInstance()->
+        saveHistogramAsFile(img, l, Annotation::CreateTime, img_width, img_height, img_title);
+  } h.append(i);
+
+  ret.replace(EL_H, h);
   return ret;
 }
 

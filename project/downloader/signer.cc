@@ -3,6 +3,7 @@
 
 #include "signer.h"
 #include "ac/acsettings.h"
+#include "module/annotcloud/user.h"
 #include "module/annotcloud/traits.h"
 #include "module/annotcloud/token.h"
 #include "module/annotcloud/alias.h"
@@ -70,7 +71,9 @@ Signer::signFileWithUrl(const QString &fileName, const QString &url, bool async)
     DOUT("exit: returned from async branch");
     return;
   }
-  if (!server_->isConnected() || !server_->isAuthorized()) {
+  AcSettings::globalSettings()->sync();
+  if (!server_->isConnected() || !server_->isAuthorized() ||
+      server_->user().name() != AcSettings::globalSettings()->userName()) {
     login(false); // async = false
     if (!server_->isConnected() || !server_->isAuthorized()) {
       emit warning(tr("user didn't login, skip signing file") + ": " + url);
@@ -177,8 +180,10 @@ Signer::login(bool async)
   QString userName = settings->userName(),
           password = settings->password();
   if (userName.isEmpty() || password.isEmpty()) {
-    emit warning(tr("login aborted, missing username or password"));
-    return;
+    userName = AnnotCloud::User::guest().name();
+    password = AnnotCloud::User::guest().password();
+    //emit warning(tr("login aborted, missing username or password"));
+    //return;
   }
 
   login(userName, password);

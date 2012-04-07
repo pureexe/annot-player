@@ -3,7 +3,11 @@
 #include "webbrowser.h"
 #include "ui_webbrowser.h" // generated
 #include "webbrowserprivate.h"
-#include "module/download/download.h"
+#include "wbaddresscomboedit.h"
+#include "wbnetworkaccessmanager.h"
+#include "wbnetworkcookiejar.h"
+#include "wbwebview.h"
+#include "wbss.h"
 #include "module/qtext/filesystem.h"
 #include <QtGui>
 #include <QtWebKit>
@@ -11,29 +15,17 @@
 #define DEBUG "webbrowser"
 #include "module/debug/debug.h"
 
+#define TEXT_SIZE_SCALE 0.85
+
 #ifdef Q_OS_MAC
-  #define SHORTCUT_LOCATION     "CTRL+L"
+#  define SHORTCUT_LOCATION     "CTRL+L"
 #else
-  #define SHORTCUT_LOCATION     "ALT+D"
+#  define SHORTCUT_LOCATION     "ALT+D"
 #endif // Q_WS_MAC
 
 #define SHORTCUT_SEARCH         "CTRL+E"
 
 enum { MAX_HISTORY = 30 };
-
-#ifdef Q_WS_WIN
-#  define PATH_SEP      "\\"
-#else
-#  define PATH_SEP      "/"
-#endif // Q_WS_WIN
-
-#define SS_STATUSBAR_(_color) \
-  "QStatusBar" "{" \
-    "color:" #_color ";" \
-  "}"
-#define SS_STATUSBAR_MESSAGE    SS_STATUSBAR_(cyan)
-#define SS_STATUSBAR_WARNING    SS_STATUSBAR_(orange)
-#define SS_STATUSBAR_ERROR      SS_STATUSBAR_(red)
 
 enum { StatusMessageTimeout = 10000 }; // 10 seconds
 
@@ -49,9 +41,15 @@ WebBrowser::tidyUrl(const QString &url)
 }
 
 QString
-WebBrowser::completeUrl(const QString &url)
+WebBrowser::completeUrl(const QString &url) const
 {
-  QString ret = url;
+  QString ret = url.trimmed();
+  if (ret.contains(QRegExp("[^"
+                           "a-zA-Z0-9"
+                           "\"" "\'" "\\\\" "\\." "\\^" "\\[" "\\]" "\\-"
+                           "~`!@#$%&*(){}_=+|:;<>/?"
+                           "]")))
+    ret = searchAddress(url);
   if (!ret.contains("://"))
     ret.prepend("http://");
   return ret;
@@ -62,7 +60,7 @@ WebBrowser::decodeUrl(const QUrl &url)
 {
   QUrl ret = url;
   QString host = ret.host();
-  if (!host.compare("annotcloud.com", Qt::CaseInsensitive))
+  if (host == "210.175.54.32")
     ret.setHost("annot.me");
   else if (host == "niconicohost")
     ret.setHost("nicovideo.jp");
@@ -93,7 +91,7 @@ WebBrowser::encodeUrl(const QString &url)
 WebBrowser::WebBrowser(QWidget *parent)
   : Base(parent), ui_(new Form),
     homePage_(WEBBROWSER_HOMEPAGE), searchEngine_(WEBBROWSER_SEARCHENGINE),
-    textSizeMultiplier_(0)
+    textSizeMultiplier_(TEXT_SIZE_SCALE)
 {
   cookieJar_ = new WbNetworkCookieJar(this);
   hideStatusBarTimer_ = new QTimer(this);
@@ -101,15 +99,6 @@ WebBrowser::WebBrowser(QWidget *parent)
   setupUi();
   createActions();
   updateButtons();
-
-  addHistory(QStringList()
-    << "http://google.com/"
-    << "http://nicovideo.jp/"
-    << "http://akabeesoft2.com/"
-    << "http://syangrila.com/"
-    << "http://www.light.gr.jp/"
-    << "http://erogamescape.dyndns.org/~ap2/ero/toukei_kaiseki/"
-  );
 
   hideStatusBarTimer_->setInterval(StatusMessageTimeout);
   hideStatusBarTimer_->setSingleShot(true);
@@ -140,14 +129,15 @@ WebBrowser::setupUi()
   newTabButton->setFixedSize(QSize(26, 16));
   connect(newTabButton, SIGNAL(clicked()), SLOT(newTabWithDefaultPage()));
 
-  setTabOrder(ui_->addressEdit, ui_->searchEdit);
+  ui_->addressEdit->setDefaultItems(homePages_);
+  connect(ui_->addressEdit, SIGNAL(visitAddressRequested(QString)), SLOT(openUrl(QString)));
 
   // Set up connections
   connect(ui_->tabWidget, SIGNAL(tabCloseRequested(int)), SLOT(closeTab(int)));
   connect(ui_->tabWidget, SIGNAL(currentChanged(int)), SLOT(updateAddressbar()));
   connect(ui_->addressEdit, SIGNAL(activated(int)), SLOT(openUrl()));
   connect(ui_->addressEdit->lineEdit(), SIGNAL(returnPressed()), SLOT(openUrl()));
-  connect(ui_->searchEdit->lineEdit(), SIGNAL(returnPressed()), SLOT(openSearch()));
+  connect(ui_->searchEdit->lineEdit(), SIGNAL(returnPressed()), SLOT(search()));
   connect(ui_->backButton, SIGNAL(clicked()), SLOT(back()));
   connect(ui_->forwardButton, SIGNAL(clicked()), SLOT(forward()));
   connect(ui_->reloadButton, SIGNAL(clicked()), SLOT(reload()));
@@ -159,6 +149,8 @@ WebBrowser::setupUi()
   // Remove default homepage
   ui_->tabWidget->removeTab(0);
   //newTab();
+
+  setTabOrder(ui_->addressEdit, ui_->searchEdit);
 }
 
 void
@@ -217,11 +209,19 @@ WebBrowser::setupWebPage(QWebPage *page)
   nam->setParent(page);
   page->setNetworkAccessManager(nam);
 
-  connect(page, SIGNAL(downloadRequested(QNetworkRequest)), SLOT(download(QNetworkRequest)));
+  //connect(page, SIGNAL(downloadRequested(QNetworkRequest)), SLOT(download(QNetworkRequest)));
+  //connect(page, SIGNAL(linkHovered(QString,QString,QString)), SLOT(showMessage(QString)));
   //connect(page->action(QWebPage::OpenLinkInNewWindow), SIGNAL(triggered()), SLOT(
 }
 
 // - Properties -
+
+void
+WebBrowser::setHomePages(const QStringList &urls)
+{
+  homePages_ = urls;
+  ui_->addressEdit->setDefaultItems(homePages_);
+}
 
 int
 WebBrowser::tabCount() const
@@ -292,16 +292,29 @@ WebBrowser::openUrl(const QString &url)
 {
   if (tabCount() <= 0)
     newTab();
+
   QWebView *view = qobject_cast<QWebView *>(ui_->tabWidget->currentWidget());
-  if (view) {
-    QUrl realUrl = encodeUrl(completeUrl(url));
-    if (view->url() != realUrl) {
-      addHistory(url);
-      ui_->addressEdit->setEditText(tidyUrl(url));
-      ui_->tabWidget->setTabText(ui_->tabWidget->currentIndex(), url);
-      view->setUrl(realUrl);
-    }
-  }
+  if (!view)
+    return;
+
+  QUrl viewUrl = view->url();
+  QString viewAddress = viewUrl.toString();
+
+  if (viewAddress == url)
+    return;
+
+  QString originalUrl = completeUrl(url);
+  if (viewAddress == originalUrl)
+    return;
+
+  QUrl realUrl = encodeUrl(originalUrl);
+  if (viewUrl == realUrl)
+    return;
+
+  addHistory(url);
+  ui_->addressEdit->setEditText(tidyUrl(url));
+  ui_->tabWidget->setTabText(ui_->tabWidget->currentIndex(), url);
+  view->setUrl(realUrl);
 }
 
 void
@@ -334,19 +347,21 @@ WebBrowser::openUrl()
 }
 
 void
-WebBrowser::openSearch()
+WebBrowser::search()
 {
-  if (tabCount() <= 0)
-    newTab();
+  QString text = ui_->searchEdit->currentText();
+  ui_->searchEdit->insertItem(0, text);
+  openUrl(searchAddress(text));
+}
 
-  QWebView *view = qobject_cast<QWebView*>(ui_->tabWidget->currentWidget());
-  if (view) {
-    QString text = ui_->searchEdit->currentText();
-    ui_->searchEdit->insertItem(0, text);
-    QString address = searchEngine_ + QUrl::toPercentEncoding(text);
-    ui_->tabWidget->setTabText(ui_->tabWidget->currentIndex(), address);
-    view->setUrl(completeUrl(address));
-  }
+QString
+WebBrowser::searchAddress(const QString &text) const
+{
+  QString ret = text.trimmed();
+  ret = ret.toUtf8();
+  ret = QUrl::toPercentEncoding(ret);
+  ret = searchEngine_.arg(ret);
+  return ret;
 }
 
 void
@@ -425,8 +440,13 @@ WebBrowser::newTab(QWebView *view)
     view->setTextSizeMultiplier(textSizeMultiplier_);
 
   WbWebView *wbview = qobject_cast<WbWebView *>(view);
-  if (wbview)
+  if (wbview) {
+    connect(wbview, SIGNAL(message(QString)), SLOT(showMessage(QString)));
+    connect(wbview, SIGNAL(errorMessage(QString)), SLOT(error(QString)));
+    connect(wbview, SIGNAL(warning(QString)), SLOT(warn(QString)));
+    connect(wbview, SIGNAL(notification(QString)), SLOT(notify(QString)));
     connect(wbview, SIGNAL(windowCreated(QWebView*)), SLOT(newTab(QWebView*)));
+  }
 
   connect(view, SIGNAL(urlChanged(QUrl)), SLOT(updateAddressbar()));
   connect(view, SIGNAL(loadStarted()), SLOT(handleLoadStarted()));
@@ -509,25 +529,6 @@ WebBrowser::closeEvent(QCloseEvent *event)
   Base::closeEvent(event);
 }
 
-// - Download -
-
-void
-WebBrowser::download(const QNetworkRequest &req)
-{
-  enum { retries = 3 };
-
-  QString path = QDesktopServices::storageLocation(QDesktopServices::DesktopLocation);
-  QString fileName = QFileInfo(req.url().toString()).fileName();
-  fileName = QtExt::escapeFileName(fileName);
-
-  path += PATH_SEP + fileName;
-  bool ok = ::dlget(path, req, true, retries, this); // async = true
-  if (ok)
-    showMessage(tr("saving to %1 ...").arg(path));
-  else
-    warn(tr("failed to download %1").arg(req.url().toString()));
-}
-
 // - Log -
 
 void
@@ -557,9 +558,45 @@ WebBrowser::warn(const QString &text)
   hideStatusBarTimer_->start();
 }
 
+void
+WebBrowser::notify(const QString &text)
+{
+  statusBar()->setStyleSheet(SS_STATUSBAR_NOTIFY);
+  statusBar()->showMessage(text);
+  statusBar()->show();
+  hideStatusBarTimer_->start();
+}
+
+
 // EOF
 
 /*
+
+// - Download -
+
+void
+WebBrowser::download(const QNetworkRequest &req)
+{
+#ifdef WITH_MODULE_DOWNLOAD
+  enum { retries = 3 };
+
+  QString path = QDesktopServices::storageLocation(QDesktopServices::DesktopLocation);
+  QString fileName = QFileInfo(req.url().toString()).fileName();
+  fileName = QtExt::escapeFileName(fileName);
+
+  path += FILE_PATH_SEP + fileName;
+  bool ok = ::dlget(path, req, true, retries, this); // async = true
+  if (ok)
+    showMessage(path);
+  else
+    warn(tr("failed to download %1").arg(req.url().toString()));
+  QApplication::beep();
+#else
+  Q_UNUSED(req);
+  warn(tr("download is not allowed"));
+#endif // WITH_MODULE_DOWNLOAD
+}
+
 void
 WebBrowser::openUrl()
 {

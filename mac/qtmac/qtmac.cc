@@ -92,29 +92,39 @@ QtMac::getCDMediaPaths()
 
 // - Shutdown -
 
-void
+bool
+QtMac::open(const QString &app, const QStringList &args)
+{
+  return QProcess::startDetached("open", QStringList()
+    <<"-a"
+    << app
+    << args
+  );
+}
+
+bool
 QtMac::halt()
 {
   //QProcess::startDetached("shutdown -s now");
-  QProcess::startDetached("osascript -e '"
+  return QProcess::startDetached("osascript -e '"
     "tell app \"Finder\" to shut down"
   "'");
 }
 
-void
+bool
 QtMac::reboot()
 {
   //QProcess::startDetached("shutdown -r now");
-  QProcess::startDetached("osascript", QStringList() << "-e" <<
+  return QProcess::startDetached("osascript", QStringList() << "-e" <<
     "tell app \"Finder\" to shut down"
   );
 }
 
-void
+bool
 QtMac::sleep()
 {
   //QProcess::startDetached("pmset sleepnow");
-  QProcess::startDetached("osascript", QStringList() << "-e" <<
+  return QProcess::startDetached("osascript", QStringList() << "-e" <<
     "tell app \"Finder\" to sleep"
   );
 }

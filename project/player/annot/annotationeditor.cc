@@ -84,8 +84,8 @@ AnnotationEditor::AnnotationEditor(QWidget *parent)
 
   // Start up states
   setFontType(QApplication::font());
-  setColorIconColor(QColor("black"));
-  setBackgroundColorIconColor(QColor("black"));
+  setColorIconColor(Qt::black);
+  setBackgroundColorIconColor(Qt::black);
 
   setCodeMode();
   invalidateCount();
@@ -790,7 +790,7 @@ AnnotationEditor::setColorIconColor(const QColor &input)
 {
   QColor c = input;
   if (!c.isValid())
-    c = QColor("black");
+    c = Qt::black;
   QPixmap icon(16, 16);
   icon.fill(c);
   colorButton_->setIcon(icon);
@@ -802,7 +802,7 @@ AnnotationEditor::setBackgroundColorIconColor(const QColor &input)
 {
   QColor c = input;
   if (!c.isValid())
-    c = QColor("black");
+    c = Qt::black;
   QPixmap icon(16, 16);
   icon.fill(c);
   backgroundColorButton_->setIcon(icon);

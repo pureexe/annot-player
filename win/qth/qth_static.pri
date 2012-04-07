@@ -4,6 +4,8 @@
 include(../../config.pri)
 include($$ROOTDIR/win/qtwin/qtwin.pri)
 
+DEFINES += WITH_WIN_QTH
+
 DEPENDPATH  += .
 INCLUDEPATH += .
 

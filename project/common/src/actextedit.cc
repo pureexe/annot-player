@@ -4,7 +4,8 @@
 #include "ac/actextedit.h"
 #include "ac/acui.h"
 #include "ac/acss.h"
-#include <QtGui>
+#include <QMenu>
+#include <QContextMenuEvent>
 
 // - Constructions -
 

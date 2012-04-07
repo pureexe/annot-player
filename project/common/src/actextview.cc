@@ -3,7 +3,6 @@
 
 #include "ac/actextview.h"
 #include "module/qtext/htmltag.h"
-#include <QtGui>
 
 // - Slots -
 

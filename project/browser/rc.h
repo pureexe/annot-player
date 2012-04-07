@@ -4,11 +4,13 @@
 // rc.h
 // 7/15/2011
 
+#define RC_NULL   ""
+
 #define RC_PREFIX_IMAGE ":/images/"
-#define RC_IMAGE_NULL   ""
+#define RC_IMAGE_NULL   RC_NULL
 
 #define RC_PREFIX_TR    ":/tr/"
-#define RC_TR_NULL      ""
+#define RC_TR_NULL      RC_NULL
 
 // - Translations -
 

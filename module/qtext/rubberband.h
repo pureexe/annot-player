@@ -9,11 +9,30 @@
 
 namespace QtExt {
 
-class MouseRubberBand : public QRubberBand
+class RubberBandWithColor : public QRubberBand
+{
+  Q_OBJECT
+  typedef RubberBandWithColor Self;
+  typedef QRubberBand Base;
+
+  QColor color_;
+public:
+  explicit RubberBandWithColor(Shape s, QWidget *parent = 0)
+    : Base(s, parent) { }
+
+  QColor color() const { return color_; }
+public slots:
+  void setColor(const QColor &c);
+
+protected:
+  virtual void paintEvent(QPaintEvent *e); ///< \override
+};
+
+class MouseRubberBand : public RubberBandWithColor
 {
   Q_OBJECT
   typedef MouseRubberBand Self;
-  typedef QRubberBand Base;
+  typedef RubberBandWithColor Base;
 
   QPoint pressed_;
 
@@ -24,6 +43,8 @@ public:
   bool isPressed() const
   { return !pressed_.isNull(); }
 
+  bool isEmpty() const { return size().isEmpty(); }
+
 signals:
   void selected(QRect geometry);
 
@@ -31,23 +52,12 @@ public slots:
   void press(const QPoint &pos);
   void drag(const QPoint &pos);
   void release();
+  void cancel();
 
   //void pressGlobal(const QPoint &globalPos)
   //{ press(mapFromGlobal(globalPos) - mapFromGlobal(QPoint())); }
   //void dragGlobal(const QPoint &globalPos)
   //{ drag(mapFromGlobal(globalPos) - mapFromGlobal(QPoint())); }
-
-public slots:
-  void setColor(const QColor &c, qreal strength = 1.0)
-  {
-    QGraphicsColorizeEffect *e = 0;
-    if (c.isValid()) {
-      e = new QGraphicsColorizeEffect(this);
-      e->setColor(c);
-      e->setStrength(strength);
-    }
-    setGraphicsEffect(e);
-  }
 };
 
 } // namespace QtExt

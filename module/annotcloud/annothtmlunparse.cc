@@ -3,7 +3,6 @@
 
 #include "module/annotcloud/annothtml.h"
 #include "module/annotcloud/annottag.h"
-#include <QtCore>
 #include <QtWebKit>
 
 //#define DEBUG "annothtmlunparse"

@@ -77,6 +77,14 @@ namespace QtStep {
   // Send mouse click event
   void mouseClickEvent(nsview_t *view, const QPoint &pos);
 
+  bool isModifierKeyPressed(uint mask);
+  bool isCommandKeyPressed();
+  bool isControlKeyPressed();
+  bool isAlternateKeyPressed();
+  bool isShiftKeyPressed();
+  bool isHelpKeyPressed();
+  bool isFunctionKeyPressed();
+  bool isCapsLockKeyPressed();
 } // namespace QtStep
 
 #endif // QTSTEP_H

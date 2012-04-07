@@ -2,10 +2,9 @@
 // 3/11/2012
 
 #include "module/qtext/string.h"
-#include <QtCore>
 
 int
-QtExt::matchLastString(const QString str, QRegExp &rx)
+QtExt::matchLastString(const QString &str, QRegExp &rx)
 {
   int pos = 0, ret = -1;
   while ((pos = rx.indexIn(str, pos)) >= 0) {

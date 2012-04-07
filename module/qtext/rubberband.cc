@@ -6,6 +6,54 @@
 #include <boost/tuple/tuple.hpp>
 #include <boost/algorithm/minmax.hpp>
 
+// - RubberBandWithColor -
+
+void
+QtExt::
+RubberBandWithColor::setColor(const QColor &color)
+{
+  color_ = color;
+#ifndef Q_WS_MAC
+  enum { length = 1 };
+  QGraphicsColorizeEffect *e = 0;
+  if (color_.isValid()) {
+    e = new QGraphicsColorizeEffect(this);
+    e->setColor(color_);
+    e->setStrength(1);
+  }
+  setGraphicsEffect(e);
+#endif // Q_WS_MAC
+}
+
+void
+QtExt::
+RubberBandWithColor::paintEvent(QPaintEvent *e)
+{
+#ifdef Q_WS_MAC
+  if (color_.isValid()) {
+    enum { width = 2, alpha = 32 };
+
+    QPen pen(color_, width);
+    pen.setStyle(Qt::SolidLine);
+    QPainter painter;
+    painter.begin(this);
+    painter.setPen(pen);
+    if (shape() == Rectangle) {
+      QColor c = color_;
+      c.setAlpha(alpha);
+      QBrush brush(c);
+      brush.setStyle(Qt::Dense1Pattern);
+      painter.setBrush(brush);
+    }
+    painter.drawRect(e->rect());
+    painter.end();
+  } else
+#endif // Q_WS_MAC
+  Base::paintEvent(e);
+}
+
+// - MouseRubberBound -
+
 void
 QtExt::
 MouseRubberBand::drag(const QPoint &pos)
@@ -34,11 +82,19 @@ void
 QtExt::
 MouseRubberBand::release()
 {
-  hide();
-  pressed_ = QPoint();
+  cancel();
   QRect r = geometry();
   if (!r.isEmpty())
     emit selected(r);
 }
+
+void
+QtExt::
+MouseRubberBand::cancel()
+{
+  hide();
+  pressed_ = QPoint();
+}
+
 
 // EOF

@@ -7,7 +7,6 @@
 #include "module/crypt/crypt.h"
 #include "module/crypt/simplecrypt.h"
 #include "module/qtext/algorithm.h"
-#include <QtCore>
 #include <QNetworkProxy>
 
 // - AcSettings keys -
@@ -112,15 +111,14 @@ AcSettings::setPassword(const QString &password)
 std::pair<QString, QString>
 AcSettings::nicovideoAccount()
 {
+  QString username, password;
   QStringList v = value(SK_NICOACCOUNT).toStringList();
-  if (v.size() != 2)
-    return std::pair<QString, QString>();
-  else {
+  if (v.size() == 2) {
     SimpleCrypt c(0);
-    QString username = c.decryptToString(v.first());
-    QString password = c.decryptToString(v.last());
-    return std::make_pair(username, password);
+    username = c.decryptToString(v.first());
+    password = c.decryptToString(v.last());
   }
+  return std::make_pair(username, password);
 }
 
 void
@@ -140,15 +138,14 @@ AcSettings::setNicovideoAccount(const QString &username, const QString &password
 std::pair<QString, QString>
 AcSettings::bilibiliAccount()
 {
+  QString username, password;
   QStringList v = value(SK_BILIACCOUNT).toStringList();
-  if (v.size() != 2)
-    return std::pair<QString, QString>();
-  else {
+  if (v.size() == 2) {
     SimpleCrypt c(0);
-    QString username = c.decryptToString(v.first());
-    QString password = c.decryptToString(v.last());
-    return std::make_pair(username, password);
+    username = c.decryptToString(v.first());
+    password = c.decryptToString(v.last());
   }
+  return std::make_pair(username, password);
 }
 
 void

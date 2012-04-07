@@ -4,6 +4,7 @@
 // mp4codec.h
 // 2/12/2012
 
+#include "mediacodec_config.h"
 #include <QString>
 #include <utility>
 

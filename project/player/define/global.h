@@ -24,8 +24,10 @@ enum { ALPHA = 0 };
 #define G_ORGANIZATION  AC_ORGANIZATION
 #define G_APPLICATION   "Player"
 #define G_VERSION       VERSION
-#define G_HOMEPAGE      "http://annotcloud.com"
-#define G_WIKIPAGE      G_HOMEPAGE "/w"
+//#define G_HOMEPAGE      "http://annot.me"
+//#define G_HOMEPAGE      "http://annotcloud.com"
+#define G_HOMEPAGE      "http://210.175.54.32"
+#define G_WIKIPAGE      "http://184.168.30.43" "/w"
 #define G_WIKIPAGE_FAQ  G_WIKIPAGE "/index.php?title=Manual:FAQ"
 #define G_UPDATEPAGE    "http://code.google.com/p/annot-player"
 #define G_DOWNLOADPAGE  "http://code.google.com/p/annot-player/downloads"
@@ -91,22 +93,21 @@ enum { ALPHA = 0 };
   #define G_PATH_PROFILE        QDir::homePath() + "/.annot/player"
 #endif // Q_OS_WIN
 
-#ifdef Q_OS_WIN
-  #define G_PATH_LOGS   "./logs"
-#elif defined (Q_OS_MAC)
-  #define G_PATH_LOGS   QtMac::homeLogsPath() + "/" G_ORGANIZATION "/" G_APPLICATION
+#ifdef Q_WS_WIN
+#  define G_PATH_LOGS   ".."
+#  define G_PATH_DEBUG  G_PATH_LOGS "/" "Debug.txt"
 #else
-  #define G_PATH_LOGS   G_PATH_PROFILE
-#endif // Q_OS_
-#define G_PATH_DEBUG    G_PATH_LOGS "/" "debug.txt"
+#  define G_PATH_LOGS  QDesktopServices::storageLocation(QDesktopServices::DesktopLocation)
+#  define G_PATH_DEBUG  G_PATH_LOGS + "/" "Annot-Debug.txt"
+#endif // Q_WS_WIN
 
-#ifdef Q_OS_WIN
-  #define G_PATH_CACHES  "./caches"
-#elif defined (Q_OS_MAC)
-  #define G_PATH_CACHES  QtMac::homeCachesPath() + "/" G_ORGANIZATION "/" G_APPLICATION
+#ifdef Q_WS_WIN
+#  define G_PATH_CACHES  "./caches"
+#elif defined Q_WS_MAC
+#  define G_PATH_CACHES  QtMac::homeCachesPath() + "/" G_ORGANIZATION "/" G_APPLICATION
 #else
-  #define G_PATH_CACHES  G_PATH_PROFILE
-#endif // Q_OS_
+#  define G_PATH_CACHES  G_PATH_PROFILE
+#endif // Q_WS_
 
 #define G_PATH_LOCK     G_PATH_PROFILE
 
@@ -123,17 +124,17 @@ enum { ALPHA = 0 };
 #define ANNOT_REDUCE_HTML(_html) AnnotCloud::AnnotationHtmlParser::globalInstance()->reduceHtml(_html)
 
 // - Hook -
-#ifdef USE_WIN_HOOK
+#ifdef WITH_WIN_HOOK
   #define HOOK          WindowsHookManager::globalInstance()
 #else
   #define HOOK          #error "Hook is not used"
-#endif // USE_WIN_HOOK
+#endif // WITH_WIN_HOOK
 
 // - QTH -
-#ifdef USE_WIN_QTH
+#ifdef WITH_WIN_QTH
   #define QTH           Qth::globalInstance()
 #else
   #define QTH           #error "Hook is not used"
-#endif // USE_WIN_QTH
+#endif // WITH_WIN_QTH
 
 #endif // GLOBAL_H

@@ -9,12 +9,14 @@ HEADERS += \
     $$PWD/include/ac/acfilteredtableview.h \
     $$PWD/include/ac/acglobal.h \
     $$PWD/include/ac/aclineedit.h \
-    $$PWD/include/ac/acr.h \
+    $$PWD/include/ac/acmainwindow.h \
+    $$PWD/include/ac/acrc.h \
     $$PWD/include/ac/acsettings.h \
     $$PWD/include/ac/acss.h \
     $$PWD/include/ac/actextedit.h \
     $$PWD/include/ac/actextview.h \
     $$PWD/include/ac/acui.h \
+    $$PWD/include/ac/acwebwindow.h \
     $$PWD/include/accomboeditprivate.h
 
 SOURCES += \
@@ -22,10 +24,12 @@ SOURCES += \
     $$PWD/src/acfilteredlistview.cc \
     $$PWD/src/acfilteredtableview.cc \
     $$PWD/src/aclineedit.cc \
+    $$PWD/src/acmainwindow.cc \
     $$PWD/src/acsettings.cc \
     $$PWD/src/actextedit.cc \
     $$PWD/src/actextview.cc \
-    $$PWD/src/acui.cc
+    $$PWD/src/acui.cc \
+    $$PWD/src/acwebwindow.cc
 
 RESOURCES += $$PWD/common.qrc
 

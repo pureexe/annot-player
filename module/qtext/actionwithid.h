@@ -17,13 +17,18 @@ class ActionWithId : public QAction
   int id_; // init to be zero
 
 public:
-  ActionWithId(QObject *parent);
-  ActionWithId(const QString &text, QObject *parent);
-  ActionWithId(const QIcon &icon, const QString &text, QObject *parent);
-
-  ActionWithId(int id, QObject *parent);
-  ActionWithId(int id, const QString &text, QObject *parent);
-  ActionWithId(int id, const QIcon &icon, const QString &text, QObject *parent);
+  explicit ActionWithId(QObject *parent = 0)
+    : Base(parent), id_(0) { init(); }
+  ActionWithId(const QString &text, QObject *parent = 0)
+    : Base(text, parent), id_(0) { init(); }
+  explicit ActionWithId(int id, QObject *parent = 0)
+    : Base(parent), id_(id) { init(); }
+  ActionWithId(int id, const QString &text, QObject *parent = 0)
+    : Base(text, parent), id_(id) { init(); }
+  ActionWithId(const QIcon &icon, const QString &text, QObject *parent = 0)
+    : Base(icon, text, parent), id_(0) { init(); }
+  ActionWithId(int id, const QIcon &icon, const QString &text, QObject *parent = 0)
+    : Base(icon, text, parent), id_(id) { init(); }
 
   int id() const { return id_; }
 public slots:
@@ -43,7 +48,7 @@ private slots:
   void emit_triggeredWithId(bool checked = false) { emit triggeredWithId(id_, checked); }
 
 private:
-  void createConnections();
+  void init();
 };
 
 } // namespace QtExt

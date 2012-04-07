@@ -16,6 +16,8 @@ win32:  SUBDIRS += apps
 include(common/common.pri)
 
 OTHER_FILES += \
+    deploy-debian.sh \
+    deploy-fedora.sh \
     deploy-mac.sh \
     deploy-win.cmd
 

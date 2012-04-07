@@ -1,38 +1,44 @@
 # downloader.pro
 # 3/29/2012
 
-VERSION = 0.1.0.0
+VERSION = 0.1.0.1
 
 include(../../config.pri)
 include($$ROOTDIR/project/common/common.pri)
+include($$ROOTDIR/module/debug/debug.pri)
 
 ## Libraries
 
 include($$ROOTDIR/module/annotcloud/annotcloud.pri)
 include($$ROOTDIR/module/serveragent/serveragent.pri)
 include($$ROOTDIR/module/gsoap/gsoap.pri)
-include($$ROOTDIR/module/ioutil/ioutil.pri)
-include($$ROOTDIR/module/qtext/qtext.pri)
 include($$ROOTDIR/module/crypt/crypt.pri)
 include($$ROOTDIR/module/download/download.pri)
 include($$ROOTDIR/module/download/mrldownload.pri)
-include($$ROOTDIR/module/mrlresolver/mrlresolver.pri)
-include($$ROOTDIR/module/stream/stream.pri)
+include($$ROOTDIR/module/compress/compress.pri)
 include($$ROOTDIR/module/mediacodec/mediacodec.pri)
-
-DEFINES += USE_MODULE_IOUTIL
+include($$ROOTDIR/module/mrlresolver/mrlresolver.pri)
+include($$ROOTDIR/module/qt/qt.pri)
+include($$ROOTDIR/module/qtext/qtext.pri)
+include($$ROOTDIR/module/stream/stream.pri)
 
 win32 {
-    DEFINES += USE_WIN_DWM
     include($$ROOTDIR/win/dwm/dwm.pri)
     include($$ROOTDIR/win/qtwin/qtwin.pri)
 }
 unix: {
     include($$ROOTDIR/unix/qtunix/qtunix.pri)
 }
+mac {
+    include($$ROOTDIR/mac/qtmac/qtmac.pri)
+}
 
 QT      += core gui network
 #CONFIG(static): QTPLUGIN += qsqlite
+
+DEFINES += WITH_QT_CORE \
+           WITH_QT_GUI \
+           WITH_QT_NETWORK
 
 ## Sources
 
@@ -70,10 +76,17 @@ SOURCES += \
 RESOURCES += downloader.qrc
 
 OTHER_FILES += \
+    annot-down.desktop \
+    annot-down.png \
     Info.plist \
+    debian.control \
+    debian.rules \
+    deploy-debian.sh \
+    deploy-fedora.sh \
     downloader.rc \
     downloader.ico \
-    downloader.icns
+    downloader.icns \
+    rpm.spec
 
 win32 {
     !wince*: LIBS += -lshell32
@@ -100,26 +113,29 @@ OTHER_FILES += $$TRANSLATIONS \
     $$PWD/tr/lupdate_tr.cmd \
     $$PWD/tr/lupdate_tr.sh
 
-# EOF
-
 # Deployment
-#unix:!mac {
-#    INSTALLS += target desktop desktop-kde icon
-#
-#    target.path = $$BINDIR
-#
-#    LUA_SCRIPTS.path = $$DATADIR/annot/player/lua
-#
-#    desktop.path = $$DATADIR/applications
-#    desktop.files += $${TARGET}.desktop
-#
-#    desktop-kde.path = $$DATADIR/kde4/apps/solid/actions
-#    desktop-kde.files += $${TARGET}.desktop
-#
-#    #service.path = $$DATADIR/dbus-1/services
-#    #service.files += $${TARGET}.service
-#
-#    icon.path = $$DATADIR/icons/hicolor/256x256/apps
-#    icon.files += $${TARGET}.png
-#}
-#
+
+unix:!mac {
+    INSTALLS += target desktop desktop-kde icon lua
+
+    target.path = $$BINDIR
+
+    desktop.path = $$DATADIR/applications
+    desktop.files += $${TARGET}.desktop
+
+    desktop-kde.path = $$DATADIR/kde4/apps/solid/actions
+    desktop-kde.files += $${TARGET}.desktop
+
+    #service.path = $$DATADIR/dbus-1/services
+    #service.files += $${TARGET}.service
+
+    icon.path = $$DATADIR/icons/hicolor/256x256/apps
+    icon.files += $${TARGET}.png
+
+    LUADIR = $$DATADIR/annot/down/lua
+    lua.path = $$LUADIR
+    lua.files = $$LUA_FILES
+    DEFINES += LUADIR=\\\"$$LUADIR\\\"
+}
+
+# EOF

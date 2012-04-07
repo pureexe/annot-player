@@ -2,26 +2,24 @@
 // 2/1/2012
 // See: http://csl.sublevel3.org/lua/
 #include "luaresolver.h"
-#include "module/luacpp/luacpp.h"
-#include "module/download/downloader.h"
-#include "module/qtext/filedeleter.h"
+#ifdef WITH_MODULE_LUACPP
+#  include "module/luacpp/luacpp.h"
+#else
+#  error "luacpp is required"
+#endif // WITH_MODULE_LUACPP
+#ifdef WITH_MODULE_DOWNLOAD
+#  include "module/download/downloader.h"
+#else
+#  error "download module is required"
+#endif // WITH_MODULE_DOWNLOAD
 #include "module/qtext/network.h"
+#include "module/qtext/os.h"
 #include <QtCore>
 #include <QtNetwork>
 #include <boost/function.hpp>
 #include <exception>
-#include <cstdio>
-
-//#define NICO_PROXY_DOMAIN     ".galstars.net"
-#define NICO_PROXY_DOMAIN       "sakuradite.com"
 
 #define _qs(_cstr)      QString::fromLocal8Bit(_cstr)
-
-#ifdef _MSC_VER
-  #pragma warning (disable:4996)     // C4996: This function or variable may be unsafe. (tmpnam, getenv)
-#endif // _MSC_VER
-
-#define UNUSED(_var)    (void)(_var)
 
 //#define DEBUG "luaresolver"
 #include "module/debug/debug.h"
@@ -33,6 +31,8 @@ LuaResolver::LuaResolver(const QString &scriptPath, const QString &packagePath, 
 {
 #ifdef NICO_PROXY_DOMAIN
   cookieJar_ = new QtExt::NetworkCookieJarWithDomainAlias(".nicovideo.jp", NICO_PROXY_DOMAIN, this);
+#else
+#  warning "nico proxy domain is not defined"
 #endif // NICO_PROXY_DOMAIN
 }
 
@@ -169,19 +169,6 @@ LuaResolver::dlpost(lua_State *L)
   return ok ? 0 : 1;
 }
 
-QString
-LuaResolver::mktemp()
-{
-#ifdef Q_OS_WIN
-  QString ret = _qs(::getenv("tmp"));
-  if (ret.isEmpty())
-    ret = _qs(::getenv("temp"));
-  return ret + _qs(::tmpnam(0));
-#else
-  return _qs(::tmpnam(0));
-#endif // Q_OS_WIN
-}
-
 // See: http://stackoverflow.com/questions/4125971/setting-the-global-lua-path-variable-from-c-c
 // Append to package.path.
 
@@ -296,8 +283,7 @@ LuaResolver::resolve(const QString &href, int *siteid, QString *refurl, QString 
       // Must be consistent with resolve function in LuaResolver
       boost::function<int (std::string, std::string)>
           call = lua_function<int>(L, callee);
-      QString dlfile = mktemp();
-      FileDeleter::globalInstance()->deleteFileLater(dlfile);
+      QString dlfile = QtExt::mktemp();
       err = call(href.toStdString(), dlfile.toStdString());
       if (err) {
   #ifdef DEBUG
@@ -425,7 +411,7 @@ LuaResolver::resolve(const QString &href, int *siteid, QString *refurl, QString 
     if (L)
       printLastError(L);
 #else
-    UNUSED(e);
+    Q_UNUSED(e);
 #endif // DEBUG
     if (L)
       lua_close(L);

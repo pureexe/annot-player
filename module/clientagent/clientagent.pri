@@ -3,10 +3,10 @@
 
 include(../../config.pri)
 
+DEFINES += WITH_MODULE_CLIENTAGENT
+
 INCLUDEPATH += $$PWD
 INCLUDEPATH += $$PWD/clientsoap
-
-#DEFINES += USE_MODULE_SERVERAGENT
 
 HEADERS += \
     $$PWD/clientagent.h \

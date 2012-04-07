@@ -1,9 +1,9 @@
-# annot-player.spec
+# rpmspec
 # 12/5/2011
 # See: http://fedoraproject.org/wiki/How_to_create_an_RPM_package
 # See: http://dl.atrpms.net/all/vlc.spec
 Name:	annot-player
-Version:	0.1.4.0
+Version:	0.1.4.1
 Release:	1%{?dist}
 Summary:	Media and annotation player.
 
@@ -17,6 +17,7 @@ BuildRoot:	%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 BuildRequires: qt, qt-x11, qtwebkit
 BuildRequires: qt-devel, qtwebkit-devel
 BuildRequires: vlc-devel
+BuildRequires: lua-devel
 BuildRequires: zlib-devel
 
 Requires:	lua, qt, qt-x11, qtwebkit, vlc, zlib
@@ -26,24 +27,19 @@ Annot Player is a software for sharing annotations while playing movies, music, 
 All annotations are saved onto the Cloud at http://annot.me.
 Official wiki: http://annot.me/w.
 
-
 %prep
 %setup -q
 
-
 %build
-qmake-qt4 -config release PREFIX=/usr annot.pro
+qmake-qt4 -config release PREFIX=/usr project/player/player.pro
 make %{?_smp_mflags}
-
 
 %install
 rm -Rf $RPM_BUILD_ROOT
 make install INSTALL_ROOT=$RPM_BUILD_ROOT
 
-
 %clean
-rm -rf $RPM_BUILD_ROOT
-
+rm -Rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
@@ -52,8 +48,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/kde4/apps/solid/actions/%{name}.desktop
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
-
-
 
 %changelog
 

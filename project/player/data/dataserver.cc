@@ -6,11 +6,7 @@
 #include "settings.h"
 #include "logger.h"
 #include "signalhub.h"
-#ifdef USE_MODULE_SERVERAGENT
-  #include "module/serveragent/serveragent.h"
-#else
-  #error "server agent module is indispensible"
-#endif // USE_MODULE_SERVERAGENT
+#include "module/serveragent/serveragent.h"
 #include <QtCore>
 
 using namespace AnnotCloud;

@@ -38,7 +38,7 @@ protected:
   virtual bool x11Event(XEvent *event); ///< \override
 #endif // Q_WS_X11
 
-#ifdef USE_WIN_HOOK
+#ifdef WITH_WIN_HOOK
   // Be careful to add child widget to this class!!
 public slots:
   void addToWindowsHook();
@@ -46,7 +46,7 @@ public slots:
   bool containsWindow(WId winId) const;
 private:
   QList<WId> children_;
-#endif // USE_WIN_HOOK
+#endif // WITH_WIN_HOOK
 
 #ifdef Q_WS_MAC
 private:

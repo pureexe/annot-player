@@ -2,7 +2,11 @@
 // 2/3/2012
 
 #include "qgzip.h"
-#include <zlib.h>
+#ifdef WITH_GZIP
+#  include <zlib.h>
+#else
+#  error "gzip is required"
+#endif // WITH_GZIP
 #include <QtCore>
 #include <cstring>
 

@@ -21,6 +21,9 @@ AcComboEdit::init()
   if (!defaultItems.isEmpty())
     reset();
 
+  if (completer())
+    completer()->setCompletionMode(QCompleter::PopupCompletion);
+
   setEditable(true);
 }
 

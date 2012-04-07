@@ -5,6 +5,7 @@
 // 11/11/2011
 
 #include <QString>
+#include <QStringList>
 
 namespace QtMac {
 
@@ -21,11 +22,13 @@ namespace QtMac {
   QStringList getCDMediaPaths();
 #endif // WITH_IOKIT
 
-  // - Shutdown -
+  // - Applescript -
 
-  void halt();
-  void reboot();
-  void sleep();
+  bool open(const QString &app, const QStringList &args = QStringList());
+
+  bool halt();
+  bool reboot();
+  bool sleep();
 
 } // namespace QtMac
 

@@ -29,7 +29,7 @@
     SS_COLOR(blue) \
   SS_END \
   SS_BEGIN(QLineEdit::hover) \
-    SS_BORDER_IMAGE_URL(ACR_IMAGE_LINEEDIT) \
+    SS_BORDER_IMAGE_URL(ACRC_IMAGE_LINEEDIT) \
     SS_BORDER(1px groove black) \
     SS_COLOR(black) \
   SS_END
@@ -40,7 +40,7 @@
     SS_COLOR(blue) \
   SS_END \
   SS_BEGIN(QComboBox QAbstractItemView) \
-    SS_BORDER_IMAGE_URL(ACR_IMAGE_BACKGROUND) \
+    SS_BORDER_IMAGE_URL(ACRC_IMAGE_BACKGROUND) \
   SS_END
 
 #define SS_COMBOBOX_OSD_NODROPDOWN \
@@ -49,7 +49,7 @@
     SS_COLOR(blue) \
   SS_END \
   SS_BEGIN(QComboBox QAbstractItemView) \
-    SS_BORDER_IMAGE_URL(ACR_IMAGE_BACKGROUND) \
+    SS_BORDER_IMAGE_URL(ACRC_IMAGE_BACKGROUND) \
   SS_END \
   SS_BEGIN(QComboBox::drop-down) \
     SS_TRANSPARENT \
