@@ -135,7 +135,6 @@ unix:!mac {
     LUADIR = $$DATADIR/annot/down/lua
     lua.path = $$LUADIR
     lua.files = $$LUA_FILES
-    DEFINES += LUADIR=\\\"$$LUADIR\\\"
 }
 
 # EOF

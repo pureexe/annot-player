@@ -37,10 +37,12 @@ BROWSER_NAME="Annot Browser"
 BROWSER_APP=$BROWSER_NAME.app
 BROWSER_CONTENTS=$BROWSER_APP/Contents
 BROWSER_MACOS=$BROWSER_CONTENTS/MacOS
+BROWSER_BIN=$BROWSER_MACOS/$BROWSER_NAME
 DOWNLOADER_NAME="Annot Downloader"
 DOWNLOADER_APP=$DOWNLOADER_NAME.app
 DOWNLOADER_CONTENTS=$DOWNLOADER_APP/Contents
 DOWNLOADER_MACOS=$DOWNLOADER_CONTENTS/MacOS
+DOWNLOADER_BIN=$DOWNLOADER_MACOS/$DOWNLOADER_NAME
 
 ## copy package
 
@@ -61,7 +63,12 @@ rm -Rf "$APP_MACOS"/*
 cp -v "$APP_BUILD/$APP_BIN" "$APP_BIN" || exit 1
 
 cp -Rv "$APP_BUILD/$BROWSER_APP" . || exit 1
+rm -Rf "$BROWSER_MACOS"/*
+cp -v "$APP_BUILD/$BROWSER_BIN" "$BROWSER_BIN" || exit 1
+
 cp -Rv "$APP_BUILD/$DOWNLOADER_APP" . || exit 1
+rm -Rf "$DOWNLOADER_MACOS"/*
+cp -v "$APP_BUILD/$DOWNLOADER_BIN" "$DOWNLOADER_BIN" || exit 1
 
 macdeployqt "$APP"
 macdeployqt "$BROWSER_APP"
@@ -92,8 +99,8 @@ cd ../../..
 
 ## translations
 
-mkdir "$PLAYER_MACOS"/translations || exit 1
-cp -Rv "$QT_HOME"/translations/qt_{ja,zh_CN,zh_TW}.qm "$PLAYER_MACOS"/translations/ || exit 1
+mkdir "$APP_MACOS"/translations || exit 1
+cp -Rv "$QT_HOME"/translations/qt_{ja,zh_CN,zh_TW}.qm "$APP_MACOS"/translations/ || exit 1
 
 ## functions
 

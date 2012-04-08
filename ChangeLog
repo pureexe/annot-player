@@ -2,7 +2,7 @@ ChangeLog
 Annot Project
 6/18/2011
 
-4/??/2012	annot.player, down, browser	0.1.4.1, 0.1.0.1, 0.1.0.1
+4/7/2012	annot.player, down, browser	0.1.4.1, 0.1.0.1, 0.1.0.1
         * Added keyboard shortcuts to adjust contrast, brightness, hue, saturation and gamma.
         * Added mouse wheel shortcuts to rotate/scale annotations.
           * Ctrl + Wheel: scale all/paused annotations

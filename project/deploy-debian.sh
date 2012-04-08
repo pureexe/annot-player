@@ -3,7 +3,7 @@
 
 VERSION=0.1.4.1
 APP=annot-player
-ZIPFILE=$APP-$VERSION-alpha-ubuntu.zip
+ZIPFILE=$APP-$VERSION-debian.zip
 
 SRC_PREFIX=/Volumes/local/devel/annot
 BUILD_PREFIX=$HOME/build
