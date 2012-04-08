@@ -58,23 +58,23 @@ WebBrowser::completeUrl(const QString &url) const
 QString
 WebBrowser::decodeUrl(const QUrl &url)
 {
-  QUrl ret = url;
-  QString host = ret.host();
-  if (host == "210.175.54.32")
-    ret.setHost("annot.me");
-  else if (host == "niconicohost")
-    ret.setHost("nicovideo.jp");
-  else if (host.endsWith(".niconicohost")) {
-    QRegExp rx("(.*)\\.niconicohost");
-    if (!rx.exactMatch(host)) {
-      Q_ASSERT(0);
-      return url.toString();
-    }
-    Q_ASSERT(rx.captureCount() == 1);
-    QString t = rx.cap(1);
-    ret.setHost(t + ".nicovideo.jp");
-  }
-  return ret.toString();
+  //QUrl ret = url;
+  //QString host = ret.host();
+  //if (host == ANNOT_HOST_IP)
+  //  ret.setHost("annot.me");
+  //else if (host == "niconicohost")
+  //  ret.setHost("nicovideo.jp");
+  //else if (host.endsWith(".niconicohost")) {
+  //  QRegExp rx("(.*)\\.niconicohost");
+  //  if (!rx.exactMatch(host)) {
+  //    Q_ASSERT(0);
+  //    return url.toString();
+  //  }
+  //  Q_ASSERT(rx.captureCount() == 1);
+  //  QString t = rx.cap(1);
+  //  ret.setHost(t + ".nicovideo.jp");
+  //}
+  return url.toString();
 }
 
 QUrl

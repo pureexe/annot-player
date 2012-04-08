@@ -3,10 +3,15 @@
 setlocal
 cd /d d:/devel/build || exit /b 1
 
-set VERSION=0.1.4.1
+set VERSION=0.1.4.3
 set APP=annot-player
 set FOLDER=Annot Player
 set ZIPFILE=%APP%-%VERSION%-win.zip
+
+::set BASENAME=%APP%-%VERSION%-win
+::rm -Rf "%BASENAME%" || exit 1
+::mkdir "%BASENAME%" || exit 1
+::cd "%BASENAME%" || exit 1
 
 set MSVC_HOME=/Volumes/win/Windows/System32
 set MSVC_DLLS=msvcp100.dll,msvcr100.dll

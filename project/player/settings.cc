@@ -31,6 +31,7 @@
 #define SK_SUBTITLECOLOR "SubtitleColor"
 #define SK_SUBTITLEONTOP "SubtitleOnTop"
 #define SK_EMBEDONTOP   "EmbedOnTop"
+#define SK_LABELPLAYER  "LabelPlayer"
 #define SK_SAVEBUFFER   "SaveBuffer"
 #define SK_WINDOWONTOP  "WindowOnTop"
 #define SK_UPDATEDATE   "UpdateDate"
@@ -177,6 +178,14 @@ Settings::isEmbeddedPlayerOnTop() const
 void
 Settings::setEmbeddedPlayerOnTop(bool t)
 { setValue(SK_EMBEDONTOP, t); }
+
+bool
+Settings::isPlayerLabelEnabled() const
+{ return value(SK_LABELPLAYER, true).toBool(); }
+
+void
+Settings::setPlayerLabelEnabled(bool t)
+{ setValue(SK_LABELPLAYER, t); }
 
 bool
 Settings::isAnnotationFilterEnabled() const

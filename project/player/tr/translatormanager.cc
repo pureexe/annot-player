@@ -756,6 +756,7 @@ TranslatorManager::translate(int tid) const
   case T_ASPECTRATIO:   return tr("Aspect ratio");
   case T_NEWWINDOW:     return tr("New window"); // + " [" K_CTRL "+" K_SHIFT "+" "N]";
 
+  case T_MENUTEXT_LABELPLAYER: return tr("Label player with annots");
   case T_MENUTEXT_AUTOSUBMIT:  return tr("Save annots associations");
   case T_MENUTEXT_BACKLOG:     return tr("Backlog") + " [" K_CTRL "+F6]";
 

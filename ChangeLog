@@ -2,6 +2,14 @@ ChangeLog
 Annot Project
 6/18/2011
 
+4/?/2012	annot.player, down, browser	0.1.4.3, 0.1.0.2, 0.1.0.2
+        * Bug fix.
+
+4/8/2012	annot.player, down, browser	0.1.4.2, 0.1.0.1, 0.1.0.1
+        * Annotation analytics improved.
+        * Show annotation analysis while playing.
+        * Fixed a bug in deployed package for Windows.
+
 4/7/2012	annot.player, down, browser	0.1.4.1, 0.1.0.1, 0.1.0.1
         * Added keyboard shortcuts to adjust contrast, brightness, hue, saturation and gamma.
         * Added mouse wheel shortcuts to rotate/scale annotations.

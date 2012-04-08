@@ -37,6 +37,7 @@ public:
 protected:
   void paintHistogramByPos(QPainter &painter, const AnnotationList &l, const QString &title = QString(), const QRect &canvas = QRect()) const;
   void paintHistogramByCreateTime(QPainter &painter, const AnnotationList &l, const QString &title = QString(), const QRect &canvas = QRect()) const;
+  void paintHistogramByUserId(QPainter &painter, const AnnotationList &l, const QString &title = QString(), const QRect &canvas = QRect()) const;
 };
 
 } // namespace AnnotCloud

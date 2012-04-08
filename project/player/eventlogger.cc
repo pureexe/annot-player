@@ -440,4 +440,18 @@ EventLogger::logAnnotationRotationChanged(qreal value)
         HTML_STYLE_OPEN(color:orange) + QString::number(value) + HTML_STYLE_CLOSE());
 }
 
+void
+EventLogger::logCanvasEnabled(bool t)
+{
+  static bool once = true;
+  if (once) {
+    once = false;
+    return;
+  }
+  if (t)
+    log(tr("show annotation analytics while playing"));
+  else
+    log(tr("hide annotation analytics while playing"));
+}
+
 // EOF

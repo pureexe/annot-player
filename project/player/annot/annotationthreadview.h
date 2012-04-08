@@ -6,7 +6,9 @@
 
 #include "ac/acwebwindow.h"
 #include "module/annotcloud/annotation.h"
-#include <QLocale>
+#include <QUrl>
+
+class DataManager;
 
 class AnnotationThreadView: public AcWebWindow
 {
@@ -16,27 +18,36 @@ class AnnotationThreadView: public AcWebWindow
 
   typedef AnnotCloud::AnnotationList AnnotationList;
 
-  int mode_;
-  AnnotationList annots_;
-
   // - Constructions -
 public:
-  explicit AnnotationThreadView(QWidget *parent = 0);
+  explicit AnnotationThreadView(DataManager *data, QWidget *parent = 0);
 
 signals:
-  void annotationsRequested();
+  void contentChanged(const QString &html);
+  void windowTitleChanged(const QString &title);
+  void urlChanged(const QUrl &url);
+  void visibleChanged(bool visible);
 
 public slots:
-  void setAnnotations(const AnnotationList &l) { annots_ = l; }
-  void setMode(int tokenMode) { mode_ = tokenMode; }
   void refresh();
 
   // - Events -
 public:
-  virtual void setVisible(bool visible); ///< \override
+  //virtual void setVisible(bool visible); ///< \override
 
+protected slots:
+  void setContent(const QString &html);
+  void setUrl(const QUrl &url);
+
+  // - Implementations
+public slots:
+  void invalidateAnnotations(bool async = true);
 private:
   void setupActions();
+
+private:
+  DataManager *data_;
+  bool refreshing_;
 };
 
 #endif // ANNOTATIONTHREADVIEW_H

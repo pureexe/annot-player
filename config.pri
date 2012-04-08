@@ -226,6 +226,9 @@ DEFINES += NICO_PROXY_DOMAIN=\\\"sakuradite.com\\\"
 DEFINES += NICOVIDEO_USERNAME=\\\"oedivocin@gmail.com\\\" \
            NICOVIDEO_PASSWORD=\\\"nicovideo.jp\\\"
 
+DEFINES += ANNOT_HOST_IP=\\\"210.175.54.32\\\" \
+           ANNOT_WIKI_IP=\\\"184.168.30.43\\\"
+
 # EOF
 
 #

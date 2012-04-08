@@ -11,7 +11,7 @@
 //  #include <QtCore>
 //  #define DOUT(_msg)    qDebug() << "main:" << _msg
 //#else
-  #define DOUT(_dummy)
+  #define DOUT(_dummy)  (void)0
 //#endif // DEBUG
 
 // - Launcher -
@@ -45,8 +45,12 @@ WinMain(__in HINSTANCE hInstance, __in HINSTANCE hPrevInstance, __in LPSTR lpCmd
       return -1;
   }
   std::wstring wsApp(wszBuffer);
-  std::wstring wsNextApp = dirname_(wsApp) + (L"\\" APP_PREFIX APP_EXE);
+  std::wstring wsDir = dirname_(wszBuffer);
+  std::wstring wsNextApp = wsDir + (L"\\" APP_PREFIX APP_EXE);
   std::wstring wsNextAppPath = dirname_(wsNextApp);
+
+  // See: http://msdn.microsoft.com/en-us/library/windows/desktop/cc144102(v=vs.85).aspx
+  ::SetFileAttributesW(wsDir.c_str(), FILE_ATTRIBUTE_READONLY);
 
   DOUT(QString::fromStdWString(app));
 

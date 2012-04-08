@@ -26,8 +26,8 @@ enum { ALPHA = 0 };
 #define G_VERSION       VERSION
 //#define G_HOMEPAGE      "http://annot.me"
 //#define G_HOMEPAGE      "http://annotcloud.com"
-#define G_HOMEPAGE      "http://210.175.54.32"
-#define G_WIKIPAGE      "http://184.168.30.43" "/w"
+#define G_HOMEPAGE      "http://" ANNOT_HOST_IP
+#define G_WIKIPAGE      "http://" ANNOT_WIKI_IP "/w"
 #define G_WIKIPAGE_FAQ  G_WIKIPAGE "/index.php?title=Manual:FAQ"
 #define G_UPDATEPAGE    "http://code.google.com/p/annot-player"
 #define G_DOWNLOADPAGE  "http://code.google.com/p/annot-player/downloads"

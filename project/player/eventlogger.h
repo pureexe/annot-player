@@ -39,6 +39,8 @@ public slots:
   void logTrackNumberChanged(int track);
   void logPlayRateChanged(qreal rate);
 
+  void logCanvasEnabled(bool t);
+
   void logTranslatorNetworkError(const QString &message);
 
   void logLoginRequested(const QString &userName);

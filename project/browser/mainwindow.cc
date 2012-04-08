@@ -158,13 +158,14 @@ void
 MainWindow::newWindow()
 {
   bool ok = false;
+  QString app = QCoreApplication::applicationFilePath();
 #ifdef Q_WS_MAC
-  //ok = QtMac::open("Annot Browser");
+  Q_UNUSED(app);
+  //ok = QtMac::open(app);
 #elif defined Q_WS_WIN
-  QString exe = QCoreApplication::applicationDirPath() + "/" + "annot-browser";
-  ok = QProcess::startDetached('"' + exe + '"');
+  ok = QProcess::startDetached('"' + app + '"');
 #else
-  ok = QProcess::startDetached("annot-browser");
+  ok = QProcess::startDetached(app);
 #endif // Q_WS_
   if (ok)
     showMessage(tr("openning new window") + " ...");

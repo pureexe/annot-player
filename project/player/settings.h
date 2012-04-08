@@ -51,6 +51,9 @@ public:
   bool isEmbeddedPlayerOnTop() const;
   void setEmbeddedPlayerOnTop(bool t);
 
+  bool isPlayerLabelEnabled() const;
+  void setPlayerLabelEnabled(bool t);
+
   bool isMenuBarVisible() const;
   void setMenuBarVisible(bool t);
 

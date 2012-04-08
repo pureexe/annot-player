@@ -826,25 +826,32 @@ QtWin::getWaveVolume()
 
 #endif // 0
 
-// - Shutdown -
+// - Run -
+
+bool
+QtWin::run(const QString &cmd, bool visible)
+{
+  UINT uCmdShow = visible ? SW_SHOW : SW_HIDE;
+  return ::WinExec(cmd.toLocal8Bit(), uCmdShow) > 31;
+}
 
 bool
 QtWin::halt()
-{ return QProcess::startDetached("shutdown -s"); }
+{ return run("shutdown -s", false); } // visible = false
 
 bool
 QtWin::reboot()
-{ return QProcess::startDetached("shutdown -t"); }
+{ return run("shutdown -t", false); } // visible = false
 
 bool
 QtWin::logoff()
-{ return QProcess::startDetached("shutdown -l"); }
+{ return run("shutdown -l", false); } // visible = false
 
 // Standby %windir%\System32\rundll32.exe powrprof.dll,SetSuspendState Standby
 // Hibernate %windir%\System32\rundll32.exe powrprof.dll,SetSuspendState Hibernate
 bool
 QtWin::hibernate()
-{ return QProcess::startDetached("shutdown -h"); }
+{ return run("shutdown -h", false); } // visible = false
 
 // - POSIX -
 

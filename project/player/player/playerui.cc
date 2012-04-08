@@ -12,7 +12,7 @@
 #include "module/qtext/datetime.h"
 #include "module/annotcloud/annotation.h"
 #ifdef Q_OS_WIN
-  #include "win/qtwin/qtwin.h"
+#  include "win/qtwin/qtwin.h"
 #endif // Q_OS_WIN
 #include "boost/foreach.hpp"
 #include <map>

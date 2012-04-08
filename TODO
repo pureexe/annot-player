@@ -1,18 +1,47 @@
 # TODO
 # 6/18/2011
 
-http://db.tt/SrtkzxI
+http://db.tt/SrtkzxIJ
 
 # server
-- remove php support, move wiki to sakuradite
+- move wiki to sakuradite
+  cancel godaddy vps
 - design jsp front end, remove icefaces && jsf
 - reduce mem usage for java
-
-# 0.1.4.2
-- use qshared memory to implement "open" with diff apps in windows
-  enable open from command line
-- generate screenshots according to time/pos of annots
 - mechanism to annotate deathnote
+
+# key
+- sns, show online user status
+- draw sth useful on osd
+- how to annotate/share deathnote
+
+# 0.1.4.3
+
+# CHECKPOINT
+
+# mac
+- check the size for graph
+  reduce distance between analytics and position slider
+- automatic hide analytics while hover
+- improve analytics color
+
+git://gitorious.org/inter-process-signal-propagator/inter-process-signal-propagator.git
+http://gitorious.org/inter-process-signal-propagator
+
+- back to my proposal work
+
+# windows
+
+git://gitorious.org/inter-process-signal-propagator/inter-process-signal-propagator.git
+http://gitorious.org/inter-process-signal-propagator
+interprocessssignal
+
+deal with commandline
+
+- register filetype on windows
+
+- depenends on interpro signasl
+  determine whether share or only keep downloader itself
 
 # download shared module
 - make download dialogs into module module/downloadui
@@ -22,35 +51,32 @@ http://db.tt/SrtkzxI
 - add context menu for remove from downloader, launch from downloader
 
 # player
-- indicate hot according to annot using colorred posisition slider
-  - directly paint red points on qslider
+- create thumbnails and save as png on desktop
+- popup thumbnail in positionbar
 - fixme: crash on next?
   trigger processEvents after closemedia
-- fixme: rotate crash the app
+- fixme: crash on end of movie and Next media
+  wait for 1 seconds or processevents?
 
 # webbrowser
 - FIXME: images are not zoomed
 - CTRL+N to open a new browser window rathan then a new app
-- todo: webbrowser check loadFinished error
+- todo: webbrowser check loadFinished error for empty page
 
 # cleanup
 - fix resize problem for acwebwindow
 - replace player's logger with error|message|warning |notification signals
 
 - fixme: browser: google search for chinese/japanese
-- fixme: crash when open next/previous video
-  wait for 1 seconds
-
-- create thumbnails and save as png on desktop
-
-- add alpha release for linux
 
 # client side
+- show online user simutaneously, enable chat for the same video
+  draw a user chat screen
+
+- SNS at server side
 - split video/game annot into diff apps
 - directly download from bt source
 - change annotdown, annotbrowser license, put them on appstore
-- show online user simutaneously, enable chat for the same video
-- SNS at server side
 - file icons, communicate with ap in windows with fileopen event
 
 - browser launcher example

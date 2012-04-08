@@ -1,7 +1,7 @@
 # downloader.pro
 # 3/29/2012
 
-VERSION = 0.1.0.1
+VERSION = 0.1.0.2
 
 include(../../config.pri)
 include($$ROOTDIR/project/common/common.pri)

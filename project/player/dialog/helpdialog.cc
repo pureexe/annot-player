@@ -8,9 +8,18 @@
 #include <QtGui>
 #include <QtWebKit>
 
-// - Constructions -
+// - Construction -
+
+#define WINDOW_FLAGS \
+  Qt::Dialog | \
+  Qt::CustomizeWindowHint | \
+  Qt::WindowTitleHint | \
+  Qt::WindowSystemMenuHint | \
+  Qt::WindowMinMaxButtonsHint | \
+  Qt::WindowCloseButtonHint
+
 HelpDialog::HelpDialog(QWidget *parent)
-  : Base(parent)
+  : Base(parent, WINDOW_FLAGS)
 {
   setWindowTitle(TR(T_TITLE_HELP));
   resize(INIT_WINDOW_SIZE);

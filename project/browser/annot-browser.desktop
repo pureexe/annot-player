@@ -5,7 +5,7 @@ X-AppInstall-Package=annot-browser
 #X-AppInstall-Popcon=63720
 X-AppInstall-Section=universe
 
-Version=0.1.0.1
+Version=0.1.0.2
 Name=Annot Browser
 Comment=Proxy Internet Browser
 Exec=annot-browser %U

@@ -48,9 +48,9 @@ Application::abort()
   DOUT("enter");
   qint64 pid = applicationPid();
 #ifdef Q_OS_WIN
-  QtWin::killCurrentProcess();
-  // If failed
-  QProcess::startDetached(QString("tskill %1").arg(QString::number(pid)));
+  //QtWin::killCurrentProcess();
+  QString cmd = QString("tskill %1").arg(QString::number(pid));
+  QtWin::run(cmd, false); // visible = false
 #else
   QProcess::startDetached(QString("kill -9 %1").arg(QString::number(pid)));
 #endif // Q_OS_WIN
@@ -63,7 +63,8 @@ Application::abortAll()
   DOUT("enter");
   QString app = QFileInfo(applicationFilePath()).fileName();
 #ifdef Q_OS_WIN
-  QProcess::startDetached("tskill", QStringList(app));
+  QString cmd = QString("tskill \"%1\"").arg(app);
+  QtWin::run(cmd, false); // visible = fales
 #else
   QProcess::startDetached("killall", QStringList(app));
 #endif // Q_OS_WIN

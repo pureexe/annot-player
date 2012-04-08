@@ -4,7 +4,7 @@
 // playerpanel.h
 // 7/15/2011
 
-#include <QWidget>
+#include <QMainWindow>
 
 QT_BEGIN_NAMESPACE
 class QSlider;

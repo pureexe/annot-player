@@ -21,6 +21,7 @@ HEADERS += \
     $$PWD/fontcombobox.h \
     $$PWD/hash.h \
     $$PWD/htmltag.h \
+    $$PWD/layoutwidget.h \
     $$PWD/network.h \
     $$PWD/os.h \
     $$PWD/overlaylayout.h \

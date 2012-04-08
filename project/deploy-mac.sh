@@ -8,7 +8,7 @@ cd "$PREFIX"  || exit 1
 ## environment
 
 COLOR=orange
-VERSION=0.1.4.1
+VERSION=0.1.4.3
 DMG_SIZE=200m
 
 TARGET="Annot Player"

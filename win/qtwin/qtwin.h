@@ -52,6 +52,7 @@ namespace QtWin {
   } }
 
   // - Processes and thread -
+
   QList<ulong> getThreadIdsByProcessId(ulong dwOwnerPID);
   QList<ulong> getProcessIdsByParentProcessId(ulong dwOwnerPID);
 
@@ -177,7 +178,9 @@ namespace QtWin {
   QString guessDeviceFileName(const QString &hint);
   bool isValidDeviceFileName(const QString &fileName);
 
-  // - Shutdown -
+  // - Run -
+
+  bool run(const QString &cmd, bool visible = true);
 
   bool halt();
   bool reboot();

@@ -1,7 +1,7 @@
 # player.pro
 # 6/30/2011
 
-VERSION = 0.1.4.1
+VERSION = 0.1.4.3
 
 include(../../config.pri)
 include(tr/tr.pri)
@@ -156,6 +156,7 @@ HEADERS += \
     osd/videoview.h \
     player/mainplayer.h \
     player/miniplayer.h \
+    player/embeddedcanvas.h \
     player/embeddedplayer.h \
     player/playerpanel.h \
     player/playerui.h \
@@ -221,6 +222,7 @@ SOURCES += \
     osd/videoview.cc \
     player/mainplayer.cc \
     player/miniplayer.cc \
+    player/embeddedcanvas.cc \
     player/embeddedplayer.cc \
     player/playerui.cc \
     player/playerpanel.cc \

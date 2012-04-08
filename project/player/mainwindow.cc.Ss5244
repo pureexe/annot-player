@@ -5193,17 +5193,6 @@ MainWindow::dispose()
   osdWindow_->hide();
   globalOsdConsole_->hide();
 
-  if (annotationEditor_) annotationEditor_->hide();
-  if (annotationBrowser_) annotationBrowser_->hide();
-  if (tokenView_) tokenView_->hide();
-  if (blacklistView_) blacklistView_->hide();
-  if (annotationThreadView_) annotationThreadView_->hide();
-  if (backlogDialog_) backlogDialog_->hide();
-  if (downloadDialog_) downloadDialog_->hide();
-#if USE_MODE_SIGNAL
-  if (signalView_) signalView_->hide();
-#endif // USE_MODE_SIGNAL
-
   if (tray_)
     tray_->hide();
 

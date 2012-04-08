@@ -380,7 +380,7 @@ void
 MainWindow::refresh()
 {
   if (downloadManager_->isEmpty()) {
-    setWindowTitle(tr("Download"));
+    setWindowTitle(tr("Annot Downloader"));
     return;
   }
 
@@ -447,7 +447,7 @@ MainWindow::refresh()
   if (title.isEmpty())
    title = tr("Annot Downloader");
   else
-   title.prepend(tr("Download"));
+   title.prepend(tr("Annot Downloader"));
 
   setWindowTitle(title);
 #undef FORMAT_TIME

@@ -2,6 +2,7 @@
 // 7/16/2011
 
 #include "embeddedplayer.h"
+#include "embeddedcanvas.h"
 #include "positionslider.h"
 #include "global.h"
 #include "tr.h"
@@ -62,13 +63,16 @@
   SS_END
 
 // - Constructions -
-EmbeddedPlayerUi::EmbeddedPlayerUi(SignalHub *hub, Player *player, ServerAgent *server, QWidget *parent)
+EmbeddedPlayerUi::EmbeddedPlayerUi(EmbeddedCanvas *canvas, SignalHub *hub, Player *player, ServerAgent *server, QWidget *parent)
   : Base(hub, player, server, parent),
+    canvas_(canvas),
     containerWindow_(0), containerWidget_(0),
-    fullScreen_(false), top_(false)
+    fullScreen_(false), top_(false), canvasEnabled_(true)
 {
+  Q_ASSERT(canvas_);
   setWindowFlags(Qt::FramelessWindowHint);
   setContentsMargins(0, 0, 0, 0);
+
   createLayout();
 
   // Auto hide player.
@@ -118,6 +122,7 @@ EmbeddedPlayerUi::createLayout()
   // Set layout
   QVBoxLayout *rows = new QVBoxLayout; {
     QHBoxLayout *row = new QHBoxLayout;
+    rows->addWidget(canvas_);
     rows->addWidget(positionSlider());
     rows->addLayout(row);
 
@@ -159,9 +164,15 @@ EmbeddedPlayerUi::createLayout()
 
 // - Properties -
 
-bool
-EmbeddedPlayerUi::isFullScreenMode() const
-{ return fullScreen_; }
+void
+EmbeddedPlayerUi::setCanvasEnabled(bool t)
+{
+  canvasEnabled_ = t;
+  canvas_->setVisible(canvasEnabled_);
+  if (isVisible())
+    invalidateGeometry();
+  emit canvasEnabledChanged(canvasEnabled_);
+}
 
 void
 EmbeddedPlayerUi::setFullScreenMode(bool t)
@@ -174,15 +185,12 @@ EmbeddedPlayerUi::setFullScreenMode(bool t)
   }
 }
 
-bool
-EmbeddedPlayerUi::isOnTop() const
-{ return top_; }
-
 void
 EmbeddedPlayerUi::setOnTop(bool t)
 {
   if (top_ != t) {
     top_ = t;
+    canvas_->setVisible(canvasEnabled_ && !top_);
     invalidateGeometry();
   }
 }
@@ -245,14 +253,14 @@ EmbeddedPlayerUi::invalidateGeometry()
     Q_ASSERT(!r.isNull);
 
     // Invalidate size
-    int w_max = r.width();
-    int h_hint = sizeHint().height();
+    int w_max = r.width(),
+        h_hint = sizeHint().height();
     QSize newSize(w_max, h_hint);
     if (newSize != size())
       resize(newSize);
 
-    int x_left = r.x();
-    int y = top_ ? r.y() :
+    int x_left = r.x(),
+        y = top_ ? r.y() :
                    r.y() + r.height() - height();
     moveToGlobalPos(QPoint(x_left, y));
 
@@ -264,8 +272,8 @@ EmbeddedPlayerUi::invalidateGeometry()
         setContainerWindow(0);
 
     } else {
-      int w_max = r.width();
-      int h_hint = sizeHint().height();
+      int w_max = r.width(),
+          h_hint = sizeHint().height();
       QSize newSize(w_max, h_hint);
       if (newSize != size())
         resize(newSize);
@@ -284,8 +292,8 @@ EmbeddedPlayerUi::invalidateGeometry()
     QWidget *w = containerWidget_ ? containerWidget_ : parentWidget();
     if(w) {
       // Invalidate size
-      int w_max = w->width();
-      int h_hint = sizeHint().height();
+      int w_max = w->width(),
+          h_hint = sizeHint().height();
       QSize newSize(w_max, h_hint);
       if (newSize != size())
         resize(newSize);
@@ -293,8 +301,8 @@ EmbeddedPlayerUi::invalidateGeometry()
       // Invalidate position
       //int x_center = widget->width() / 2 - 2 * width();
       QPoint g = w->mapToGlobal(QPoint());
-      int x_left = g.x();
-      int y = top_ ? g.y() :
+      int x_left = g.x(),
+          y = top_ ? g.y() :
                      g.y() + w->height() - height();
       moveToGlobalPos(QPoint(x_left, y));
     }

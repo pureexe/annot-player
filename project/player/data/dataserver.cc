@@ -377,17 +377,17 @@ DataServer::updateAliases(const AliasList &l)
 void
 DataServer::updateAnnotations(const AnnotationList &l)
 {
+  enum { AsyncLimit = 20 };
+
   if (!l.isEmpty() && cache_->isValid()) {
-    if (l.size() > 20) // async for large amount of annots
-      cache_->updateAnnotations(l, true); // async = true
-    else {
-      int limit = 0;
+    int limit = 0;
 #ifdef Q_OS_WIN
-      if (hub_->isSignalTokenMode())
-        limit = 100; // media annotations max count to save harddisk
+    if (hub_->isMediaTokenMode())
+      limit = 100; // SQLite performance on Windows is so poor....
 #endif // Q_OS_WIN
-      cache_->updateAnnotations(l, false, limit); // async =false
-    }
+
+    bool async = l.size() > AsyncLimit;
+    cache_->updateAnnotations(l, async, limit);
   }
 }
 

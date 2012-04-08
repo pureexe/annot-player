@@ -108,44 +108,30 @@ AnnotationHtmlParser::toHtml(const AnnotationList &l, const QString &title) cons
 
   enum { img_width = 500, img_height = 200 };
 
-  QString h, i;
-  i = rc_jsf_i_(); {
-    QString img_title = tr("Time - Count");
-    QString img = QtExt::mktemp(".svg");
+  QString h;
+  Annotation::Field fields[] = { Annotation::Pos, Annotation::CreateTime, Annotation::UserId };
+  QString titles[] = { tr("Time - Count"), tr("Date - Count"), tr("User - Count") };
+  enum { ImageCount = sizeof(titles) / sizeof(*titles) };
+  for (int i = 0; i < ImageCount; i++) {
+    QString img = rc_jsf_i_();
+    QString img_title = titles[i];
+    QString img_file = QtExt::mktemp(".svg");
     QString img_src;
 #ifdef Q_WS_WIN
-    img_src = "file:///" + img;
+    img_src = "file:///" + img_file;
     img_src.replace('\\', '/');
 #else
-    img_src = "file://" + img;
+    img_src = "file://" + img_file;
 #endif // Q_WS_WIN
-    i.replace(EL_I_SRC, img_src);
-    i.replace(EL_I_TITLE, img_title);
-    i.replace(EL_I_WIDTH, QString::number(img_width));
-    i.replace(EL_I_HEIGHT, QString::number(img_height));
+    img.replace(EL_I_SRC, img_src);
+    img.replace(EL_I_TITLE, img_title);
+    img.replace(EL_I_WIDTH, QString::number(img_width));
+    img.replace(EL_I_HEIGHT, QString::number(img_height));
 
     AnnotCloud::AnnotationPainter::globalInstance()->
-        saveHistogramAsFile(img, l, Annotation::Pos, img_width, img_height, img_title);
-  } h.append(i);
-
-  i = rc_jsf_i_(); {
-    QString img_title = tr("Date - Count");
-    QString img = QtExt::mktemp(".svg");
-    QString img_src;
-#ifdef Q_WS_WIN
-    img_src = "file:///" + img;
-    img_src.replace('\\', '/');
-#else
-    img_src = "file://" + img;
-#endif // Q_WS_WIN
-    i.replace(EL_I_SRC, img_src);
-    i.replace(EL_I_TITLE, img_title);
-    i.replace(EL_I_WIDTH, QString::number(img_width));
-    i.replace(EL_I_HEIGHT, QString::number(img_height));
-
-    AnnotCloud::AnnotationPainter::globalInstance()->
-        saveHistogramAsFile(img, l, Annotation::CreateTime, img_width, img_height, img_title);
-  } h.append(i);
+        saveHistogramAsFile(img_file, l, fields[i], img_width, img_height, img_title);
+    h.append(img);
+  }
 
   ret.replace(EL_H, h);
   return ret;

@@ -656,7 +656,6 @@ protected slots:
   void setStandardAspectRatio(); // 4:3
 
   void showAnnotationsAsThread();
-  void invalidateAnnotationThreadView();
 
 protected slots:
   void setSubmit(bool t) { submit_ = t; }
@@ -910,6 +909,7 @@ private:
           *shutdownAfterFinishedAct_;
 
   QAction *toggleWindowOnTopAct_;
+  QAction *togglePlayerLabelEnabled_;
   QAction *downloadCurrentUrlAct_,
           *openInWebBrowserAct_,
           *openHomePageAct_;

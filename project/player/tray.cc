@@ -7,7 +7,7 @@
 #include "mainwindow.h"
 #include <QtGui>
 
-// - Constructions -
+// - Construction -
 
 Tray::Tray(MainWindow *w, QObject *parent)
   : Base(parent), w_(w)

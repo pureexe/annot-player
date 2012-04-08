@@ -1,7 +1,7 @@
 #!/bin/bash -v
 # 4/1/2012
 
-VERSION=0.1.4.1
+VERSION=0.1.4.3
 APP=annot-player
 ZIPFILE=$APP-$VERSION-debian.zip
 
@@ -12,7 +12,7 @@ export DEBFULLNAME=$PACKAGE_AUTHOR
 
 ## copy
 
-rm -fv "$BUILD_PREFIX"/annot-*-$VERSION-*.deb
+rm -fv "$BUILD_PREFIX"/annot-*_$VERSION-*.deb
 
 cd `dirname "$0"`
 for i in browser down player; do

@@ -5,6 +5,7 @@
 #include "ith/hookman.h"
 #include "ith/pipe.h"
 #include "ith/inject.h"
+#include <qt_windows.h>
 #include <QtCore>
 #include <string>  // std::wstring
 #include <cstdlib> // ::atexit
@@ -14,7 +15,6 @@
 
 #define ITH_RUNNING_MUTEX       L"ITH_RUNNING"
 #define ITH_RUNNING_EVENT       L"ITH_PIPE_EXIST"
-
 
 // - Ith background service -
 
@@ -104,8 +104,9 @@ namespace { // anonymous, handlers
     //QMessageBox::warning(0, "Exception", msg);
     //NtTerminateProcess(NtCurrentProcess(),0);
     DOUT(msg);
-    DOUT("WARNING: abort current process");
-    exit(-1);
+    DOUT("WARNING: kill all running processes of annot-player");
+    ::WinExec("tskill annot-player", SW_HIDE);
+    //exit(-1);
     DOUT("exit");
     return 0;
   }
