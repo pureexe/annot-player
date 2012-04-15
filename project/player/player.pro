@@ -3,6 +3,8 @@
 
 VERSION = 0.1.4.3
 
+DEFINES += PROJECT_PLAYER
+
 include(../../config.pri)
 include(tr/tr.pri)
 include($$ROOTDIR/project/common/common.pri)
@@ -32,6 +34,8 @@ include($$ROOTDIR/module/nicoutil/nicoutil.pri)
 include($$ROOTDIR/module/qt/qt.pri)
 include($$ROOTDIR/module/qtext/qtext.pri)
 include($$ROOTDIR/module/crypt/crypt.pri)
+
+#!mac: include($$ROOTDIR/module/ipc/ipc.pri)
 
 # shared link gave me so many trouble on mac and linux
 #unix:       include($$ROOTDIR/module/webbrowser/webbrowser_static.pri)
@@ -90,7 +94,6 @@ SUBPATH = \
     $$PWD/db \
     $$PWD/define \
     $$PWD/dialog \
-    $$PWD/download \
     $$PWD/osd \
     $$PWD/player \
     $$PWD/signal \
@@ -106,7 +109,7 @@ HEADERS += \
     clipboardmonitor.h \
     eventlogger.h \
     mainwindow.h \
-    mainwindowprivate.h \
+    mainwindow_p.h \
     settings.h \
     tray.h \
     annot/annotationbrowser.h \
@@ -115,9 +118,9 @@ HEADERS += \
     annot/annotationgraphicsitem.h \
     annot/annotationgraphicsview.h \
     annot/annotationgraphicsstyle.h \
-    annot/annotationthreadview.h \
+    annot/annotationanalyticsview.h \
     annot/blacklistview.h \
-    annot/blacklistviewprivate.h \
+    annot/blacklistview_p.h \
     annot/textformathandler.h \
     command/annotationcomboedit.h \
     command/inputcombobox.h \
@@ -136,9 +139,11 @@ HEADERS += \
     dialog/countdowndialog.h \
     dialog/devicedialog.h \
     dialog/helpdialog.h \
+    dialog/infoview.h \
     dialog/inputdialog.h \
     dialog/livedialog.h \
     dialog/logindialog.h \
+    dialog/mediainfoview.h \
     dialog/mediaurldialog.h \
     dialog/networkproxydialog.h \
     dialog/pickdialog.h \
@@ -149,14 +154,13 @@ HEADERS += \
     dialog/suburldialog.h \
     dialog/syncdialog.h \
     dialog/urldialog.h \
-    download/downloaddialog.h \
-    download/downloadtaskdialog.h \
     osd/osdconsole.h \
     osd/osdwindow.h \
     osd/videoview.h \
     player/mainplayer.h \
     player/miniplayer.h \
     player/embeddedcanvas.h \
+    player/embeddedinfoview.h \
     player/embeddedplayer.h \
     player/playerpanel.h \
     player/playerui.h \
@@ -185,9 +189,9 @@ SOURCES += \
     annot/annotationgraphicsitem.cc \
     annot/annotationgraphicsview.cc \
     annot/annotationgraphicsstyle.cc \
-    annot/annotationthreadview.cc \
+    annot/annotationanalyticsview.cc \
     annot/blacklistview.cc \
-    annot/blacklistviewprivate.cc \
+    annot/blacklistview_p.cc \
     annot/textformathandler.cc \
     command/annotationcomboedit.cc \
     command/inputcombobox.cc \
@@ -202,9 +206,11 @@ SOURCES += \
     dialog/countdowndialog.cc \
     dialog/devicedialog.cc \
     dialog/helpdialog.cc \
+    dialog/infoview.cc \
     dialog/inputdialog.cc \
     dialog/livedialog.cc \
     dialog/logindialog.cc \
+    dialog/mediainfoview.cc \
     dialog/mediaurldialog.cc \
     dialog/networkproxydialog.cc \
     dialog/pickdialog.cc \
@@ -215,14 +221,13 @@ SOURCES += \
     dialog/suburldialog.cc \
     dialog/syncdialog.cc \
     dialog/urldialog.cc \
-    download/downloaddialog.cc \
-    download/downloadtaskdialog.cc \
     osd/osdconsole.cc \
     osd/osdwindow.cc \
     osd/videoview.cc \
     player/mainplayer.cc \
     player/miniplayer.cc \
     player/embeddedcanvas.cc \
+    player/embeddedinfoview.cc \
     player/embeddedplayer.cc \
     player/playerui.cc \
     player/playerpanel.cc \
@@ -282,7 +287,7 @@ mac {
 # Deployment
 
 unix:!mac {
-    INSTALLS += target desktop desktop-kde icon lua jsf
+    INSTALLS += target desktop desktop-kde icon lua doc jsf
 
     target.path = $$BINDIR
 
@@ -301,6 +306,10 @@ unix:!mac {
     LUADIR = $$DATADIR/annot/player/lua
     lua.path = $$LUADIR
     lua.files = $$LUA_FILES
+
+    DOCDIR = $$DATADIR/annot/player/doc
+    doc.path = $$DOCDIR
+    doc.files = $$DOC_FILES
 
     JSFDIR = $$DATADIR/annot/player/jsf
     jsf.path = $$JSFDIR

@@ -2,8 +2,16 @@ ChangeLog
 Annot Project
 6/18/2011
 
-4/?/2012	annot.player, down, browser	0.1.4.3, 0.1.0.2, 0.1.0.2
-        * Bug fix.
+4/14/2012	annot.player, down, browser	0.1.4.3, 0.1.0.2, 0.1.0.1
+        * Fixed a severe bug while streaming MP4 video from nicovideo.jp.
+        * Use CTRL+SHIFT/MiddleButton with Mouse to select and delete annotations.
+        * Annotation analytics improved.
+        * Display download progress and media information in full screen mode.
+        * Preferred playing mode changed to embedded mode.
+        * Browser improved.
+          * Automatic login nicovideo.jp and bilibili.tv.
+          * Added built-in adblock.
+          * Remember history of visited and recent closed URLs.
 
 4/8/2012	annot.player, down, browser	0.1.4.2, 0.1.0.1, 0.1.0.1
         * Annotation analytics improved.

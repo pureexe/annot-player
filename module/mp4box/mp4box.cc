@@ -73,7 +73,7 @@ namespace { // anonymous
       QString ret = fi.absolutePath() + "/" + ::tmpnam(0) + "." + fi.suffix();
       //QString ret = ::tmpnam(0) + ("." + fi.suffix());
       if (!QFile::rename(path, ret))
-        return QString();
+        return QString::null;
       store_.append(Pair(path, ret));
       return ret;
     }

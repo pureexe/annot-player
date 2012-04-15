@@ -180,7 +180,7 @@ QToolButton:hover {
      </layout>
     </item>
     <item row="0" column="2">
-     <widget class="WbAddressComboEdit" name="addressEdit">
+     <widget class="WbAddressEdit" name="addressEdit">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
         <horstretch>1</horstretch>
@@ -193,7 +193,7 @@ QToolButton:hover {
      </widget>
     </item>
     <item row="0" column="3">
-     <widget class="WbComboEdit" name="searchEdit">
+     <widget class="WbSearchEdit" name="searchEdit">
       <property name="toolTip">
        <string/>
       </property>

@@ -65,7 +65,7 @@ public:
   virtual QString contentType() const ///< \override
   {
     return reply_ ? reply_->header(QNetworkRequest::ContentTypeHeader).toString() :
-                    QString();
+                    QString::null;
   }
 
   QByteArray &data() { return data_; }

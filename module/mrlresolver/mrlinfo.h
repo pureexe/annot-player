@@ -14,7 +14,7 @@ struct MrlInfo
   qint64 duration; ///< in msec
   qint64 size;
 
-  explicit MrlInfo(const QString _url = QString(), qint64 duration = 0, qint64 size = 0)
+  explicit MrlInfo(const QString _url = QString::null, qint64 duration = 0, qint64 size = 0)
     : url(_url), duration(duration), size(size) { }
 };
 typedef QList<MrlInfo> MrlInfoList;

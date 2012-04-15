@@ -24,6 +24,8 @@ public:
   explicit WbComboEdit(const QStringList &items, QWidget *parent = 0)
     : Base(parent), defaultItems_(items) { init(); }
 
+  QStringList defaultItems() const { return defaultItems_; }
+
   // - Properties -
 public slots:
   void reset();

@@ -1,12 +1,12 @@
-#ifndef PLAYERPRIVATE_H
-#define PLAYERPRIVATE_H
+#ifndef PLAYER_P_H
+#define PLAYER_P_H
 
 #ifdef _MSC_VER
-  #pragma warning (disable:4819)       // C4819: The file contains a character that cannot be represented in the current code page.
-  #pragma warning (disable:4996)       // C4996: MS' deprecated std functions orz.
+#  pragma warning (disable:4819)       // C4819: The file contains a character that cannot be represented in the current code page.
+#  pragma warning (disable:4996)       // C4996: MS' deprecated std functions orz.
 #endif // _MSC_VER
 
-// playerprivate.h
+// player_p.h
 // 11/26/2011
 
 #include "player.h"
@@ -138,6 +138,24 @@ namespace { // anonymous
 // - PlayerImpl bases -
 
 namespace { // anonymous: vlc handle
+
+  // See: libvlc_media_track_info_t
+  struct TrackInfo
+  {
+    uint width, height; // Video
+    uint channels, rate; // Audio
+    uint videoCodecId, audioCodecId;
+
+  public:
+    TrackInfo()
+      : width(0), height(0), channels(0), rate(0), videoCodecId(0), audioCodecId(0) { }
+
+    bool isEmpty() const
+    { return !(width || height || channels || rate || videoCodecId || audioCodecId); }
+
+    void clear()
+    { width = height = channels = rate = videoCodecId = audioCodecId = 0; }
+  };
 
   class mp_handle_ {
     typedef QList<libvlc_media_t*> MediaList;
@@ -283,13 +301,13 @@ namespace { // anonymous: player states
     //void setSubtitleVisible(bool t = true) { subtitleVisible_ = t; }
 
     const QString &mediaPath() const { return mediaPath_; }
-    void setMediaPath(const QString &path = QString()) { mediaPath_ = path; }
+    void setMediaPath(const QString &path = QString::null) { mediaPath_ = path; }
 
     const QString &mediaTitle() const { return mediaTitle_; }
-    void setMediaTitle(const QString &title = QString()) { mediaTitle_ = title; }
+    void setMediaTitle(const QString &title = QString::null) { mediaTitle_ = title; }
 
     const QString &userAgent() const { return userAgent_; }
-    void setUserAgent(const QString &agent = QString()) { userAgent_ = agent; }
+    void setUserAgent(const QString &agent = QString::null) { userAgent_ = agent; }
 
     int trackNumber() const { return trackNumber_; }
     void setTrackNumber(int track = 0) { trackNumber_ = track; }
@@ -307,6 +325,14 @@ namespace { // anonymous: player states
 
     QWidget *voutWindow() const { return voutWindow_; }
     void setVoutWindow(QWidget *w = 0) { voutWindow_ = w; }
+  };
+
+  class mp_properties_
+  {
+    TrackInfo trackInfo_;
+  public:
+    TrackInfo &trackInfo() { return trackInfo_; }
+    const TrackInfo &trackInfo() const { return trackInfo_; }
   };
 
   class mp_trackers_
@@ -364,4 +390,4 @@ namespace Player_slots_ {
 } // namespace Player_slots_
 */
 
-#endif // PLAYERPRIVATE_H
+#endif // PLAYER_P_H

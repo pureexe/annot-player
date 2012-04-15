@@ -1,7 +1,7 @@
-#ifndef WBADDRESSCOMBOEDIT_H
-#define WBADDRESSCOMBOEDIT_H
+#ifndef WBSEARCHEDIT_H
+#define WBSEARCHEDIT_H
 
-// wbaddresscomboedit.h
+// wbsearchedit.h
 // 3/31/2012
 
 #include "wbcomboedit.h"
@@ -10,20 +10,20 @@
 QT_FORWARD_DECLARE_CLASS(QAction)
 QT_FORWARD_DECLARE_CLASS(QMenu)
 
-class WbAddressComboEdit : public WbComboEdit
+class WbSearchEdit : public WbComboEdit
 {
   Q_OBJECT
-  typedef WbAddressComboEdit Self;
+  typedef WbSearchEdit Self;
   typedef WbComboEdit Base;
 
 public:
-  explicit WbAddressComboEdit(QWidget *parent = 0)
+  explicit WbSearchEdit(QWidget *parent = 0)
     : Base(parent) { createActions(); }
-  explicit WbAddressComboEdit(const QStringList &items, QWidget *parent = 0)
+  explicit WbSearchEdit(const QStringList &items, QWidget *parent = 0)
     : Base(items, parent) { createActions(); }
 
 signals:
-  void visitAddressRequested(const QString &url);
+  void textEntered(const QString &url);
 
   // - Actions -
 protected slots:
@@ -43,4 +43,4 @@ protected:
   QAction *pasteAndGoAct;
 };
 
-#endif // WBADDRESSCOMBOEDIT_H
+#endif // WBSEARCHEDIT_H

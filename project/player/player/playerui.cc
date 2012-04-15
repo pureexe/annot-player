@@ -22,11 +22,11 @@
 using namespace AnnotCloud;
 
 #ifdef Q_OS_MAC
-  #define K_CTRL        "cmd"
-  #define K_SHIFT       "shift"
+#  define K_CTRL        "cmd"
+#  define K_SHIFT       "shift"
 #else
-  #define K_CTRL        "Ctrl"
-  #define K_SHIFT       "Shift"
+#  define K_CTRL        "Ctrl"
+#  define K_SHIFT       "Shift"
 #endif // Q_OS_MAC
 
 /* jichi 7/25/2011: using boost is so bloated while less efficient than directly expanding the code.
@@ -175,6 +175,7 @@ PlayerUi::createConnections()
 \
     _connect(player_, SIGNAL(mediaChanged()), this, SLOT(invalidateTitle())); \
     _connect(player_, SIGNAL(mediaClosed()), this, SLOT(invalidateTitle())); \
+    _connect(player_, SIGNAL(mediaClosed()), this, SLOT(clearProgressMessage())); \
     _connect(player_, SIGNAL(mediaChanged()), this, SLOT(invalidatePositionSlider())); \
     _connect(player_, SIGNAL(mediaClosed()), this, SLOT(invalidatePositionSlider())); \
     _connect(player_, SIGNAL(mediaChanged()), this, SLOT(invalidatePositionButton())); \
@@ -239,6 +240,7 @@ PlayerUi::setActive(bool active)
     invalidateVolumeSlider();
     invalidatePositionSlider();
     invalidatePositionButton();
+    invalidateProgressButton();
     invalidatePlayButton();
     invalidateStopButton();
     invalidateNextFrameButton();
@@ -384,6 +386,16 @@ PlayerUi::setPosition(int pos)
 }
 
 void
+PlayerUi::setProgressMessage(const QString &text)
+{
+  progressButton()->setText(text);
+  bool v = hub_->isMediaTokenMode() &&
+           hub_->isFullScreenWindowMode() &&
+           !text.isEmpty();
+  progressButton()->setVisible(v);
+}
+
+void
 PlayerUi::invalidateVolumeSlider()
 {
   QSlider *slider = volumeSlider();
@@ -420,8 +432,8 @@ PlayerUi::invalidateVolumeSlider()
 void
 PlayerUi::invalidatePositionSlider()
 {
-  if (!active_)
-    return;
+  //if (!active_)
+  //  return;
   PositionSlider *slider = positionSlider();
 
   if (!hub_->isMediaTokenMode() || !player_->isValid()) {
@@ -465,9 +477,9 @@ PlayerUi::invalidatePositionSlider()
 
     QString tip = current.toString() + " / -" + left.toString();
     if (total_msecs) {
-      tip += QString().sprintf(" (%.1f%%", current_msecs * 100.0 / total_msecs);
+      tip += QString(" (%1%").arg(QString::number(current_msecs * 100.0 / total_msecs, 'f', 1));
       if (!qFuzzyCompare(progress + 1, 1))
-        tip += QString().sprintf(" / %.1f%%", progress * 100);
+        tip += QString(" / %1%").arg(QString::number(progress * 100, 'f', 2));
       tip += ")";
     }
     slider->setToolTip(tip);
@@ -534,6 +546,15 @@ PlayerUi::invalidatePositionButton()
 #ifdef Q_OS_WIN
   QtWin::repaintWindow(b->winId());
 #endif // Q_OS_WIN
+}
+
+void
+PlayerUi::invalidateProgressButton()
+{
+  progressButton()->setVisible(
+    hub_->isMediaTokenMode() &&
+    hub_->isFullScreenWindowMode()
+  );
 }
 
 void

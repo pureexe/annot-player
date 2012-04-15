@@ -10,7 +10,7 @@ INCLUDEPATH += $$PWD
 
 HEADERS += \
     $$PWD/player_config.h \
-    $$PWD/playerprivate.h \
+    $$PWD/player_p.h \
     $$PWD/player.h
 
 SOURCES += \

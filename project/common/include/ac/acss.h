@@ -110,22 +110,21 @@
     SS_COLOR(_disabled) \
   SS_END
 
+#define SS_TOOLBUTTON_TEXT_NORMAL       SS_TOOLBUTTON_TEXT_(normal, normal, none, blue, red, purple, purple, red, gray)
 #ifdef Q_OS_MAC
-  #define SS_TOOLBUTTON_TEXT_NORMAL       SS_TOOLBUTTON_TEXT_(normal, normal, none, blue, red, purple, purple, red, gray)
-  #define SS_TOOLBUTTON_TEXT_INVERT       SS_TOOLBUTTON_TEXT_(normal, normal, none, red, blue, purple, purple, red, gray)
-  #define SS_TOOLBUTTON_TEXT_HIGHLIGHT    SS_TOOLBUTTON_TEXT_(bold, normal, none, blue, red, purple, purple, red, gray)
-  #define SS_TOOLBUTTON_TEXT_CHECKABLE    SS_TOOLBUTTON_TEXT_(bold, italic, none, blue, red, purple, purple, red, gray)
-  #define SS_TOOLBUTTON_TEXT_TAB          SS_TOOLBUTTON_TEXT_(bold, normal, none, blue, red, purple, purple, red, gray)
-  #define SS_TOOLBUTTON_TEXT_URL          SS_TOOLBUTTON_TEXT_(normal, italic, underline, blue, red, purple, purple, red, gray)
-  #define SS_TOOLBUTTON_TEXT              SS_TOOLBUTTON_TEXT_NORMAL
+#  define SS_TOOLBUTTON_TEXT_INVERT       SS_TOOLBUTTON_TEXT_(normal, normal, none, red, blue, purple, purple, red, gray)
+#  define SS_TOOLBUTTON_TEXT_HIGHLIGHT    SS_TOOLBUTTON_TEXT_(bold, normal, none, blue, red, purple, purple, red, gray)
+#  define SS_TOOLBUTTON_TEXT_CHECKABLE    SS_TOOLBUTTON_TEXT_(bold, italic, none, blue, red, purple, purple, red, gray)
+#  define SS_TOOLBUTTON_TEXT_TAB          SS_TOOLBUTTON_TEXT_(bold, normal, none, blue, red, purple, purple, red, gray)
+#  define SS_TOOLBUTTON_TEXT_URL          SS_TOOLBUTTON_TEXT_(normal, italic, underline, blue, red, purple, purple, red, gray)
+#  define SS_TOOLBUTTON_TEXT              SS_TOOLBUTTON_TEXT_NORMAL
 #else
-  #define SS_TOOLBUTTON_TEXT_NORMAL       SS_TOOLBUTTON_TEXT_(normal, normal, none, blue, red, orange, orange, red, gray)
-  #define SS_TOOLBUTTON_TEXT_INVERT       SS_TOOLBUTTON_TEXT_(normal, normal, none, red, blue, orange, orange, red, gray)
-  #define SS_TOOLBUTTON_TEXT_HIGHLIGHT    SS_TOOLBUTTON_TEXT_(bold, normal, none, blue, red, orange, orange, red, gray)
-  #define SS_TOOLBUTTON_TEXT_CHECKABLE    SS_TOOLBUTTON_TEXT_(normal, italic, none, blue, red, orange, orange, red, gray)
-  #define SS_TOOLBUTTON_TEXT_TAB          SS_TOOLBUTTON_TEXT_(bold, normal, none, blue, red, orange, orange, red, gray)
-  #define SS_TOOLBUTTON_TEXT_URL          SS_TOOLBUTTON_TEXT_(normal, italic, underline, blue, red, orange, orange, red, gray)
-  #define SS_TOOLBUTTON_TEXT              SS_TOOLBUTTON_TEXT_NORMAL
+#  define SS_TOOLBUTTON_TEXT_INVERT       SS_TOOLBUTTON_TEXT_(normal, normal, none, red, blue, orange, orange, red, gray)
+#  define SS_TOOLBUTTON_TEXT_HIGHLIGHT    SS_TOOLBUTTON_TEXT_(bold, normal, none, blue, red, orange, orange, red, gray)
+#  define SS_TOOLBUTTON_TEXT_CHECKABLE    SS_TOOLBUTTON_TEXT_(normal, italic, none, blue, red, orange, orange, red, gray)
+#  define SS_TOOLBUTTON_TEXT_TAB          SS_TOOLBUTTON_TEXT_(bold, normal, none, blue, red, orange, orange, red, gray)
+#  define SS_TOOLBUTTON_TEXT_URL          SS_TOOLBUTTON_TEXT_(normal, italic, underline, blue, red, orange, orange, red, gray)
+#  define SS_TOOLBUTTON_TEXT              SS_TOOLBUTTON_TEXT_NORMAL
 #endif // Q_OS_MAC
 
 // - Labels -

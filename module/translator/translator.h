@@ -33,10 +33,10 @@ signals:
 
 public slots:
   ///  Request translation. Autodetect source language when \param from is empty.
-  void translate(const QString &text, const QString &to, const QString &from = QString()) const;
+  void translate(const QString &text, const QString &to, const QString &from = QString::null) const;
 
 protected:
-  static QUrl translationQuery(const QString &text, const QString &to, const QString &from = QString());
+  static QUrl translationQuery(const QString &text, const QString &to, const QString &from = QString::null);
 protected slots:
   void processNetworkReply(QNetworkReply *reply);
 

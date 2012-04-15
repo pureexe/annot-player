@@ -26,18 +26,18 @@ public:
     : Base(parent) { }
 
 public:
-  void paintTitle(QPainter &painter, const QString &text,
-                  const QColor &color = QColor(), int fontSize = 0,
-                  const QRect &canvas = QRect()) const;
   void paintHistogram(QPainter &painter, const AnnotationList &l, Annotation::Field sortBy = Annotation::Pos,
-                      const QString &title = QString(), const QRect &canvas = QRect()) const;
+                      const QString &title = QString::null, const QRect &view = QRect()) const;
   bool saveHistogramAsFile(const QString &fileName, const AnnotationList &l, Annotation::Field sortBy = Annotation::Pos,
                            int width = 0, int height = 0,
-                           const QString &title = QString(), const QString &description = QString()) const;
+                           const QString &title = QString::null, const QString &description = QString::null) const;
 protected:
-  void paintHistogramByPos(QPainter &painter, const AnnotationList &l, const QString &title = QString(), const QRect &canvas = QRect()) const;
-  void paintHistogramByCreateTime(QPainter &painter, const AnnotationList &l, const QString &title = QString(), const QRect &canvas = QRect()) const;
-  void paintHistogramByUserId(QPainter &painter, const AnnotationList &l, const QString &title = QString(), const QRect &canvas = QRect()) const;
+  void paintHistogramByPos(QPainter &painter, const AnnotationList &l, const QString &title = QString::null, const QRect &view = QRect()) const;
+  void paintHistogramByCreateTime(QPainter &painter, const AnnotationList &l, const QString &title = QString::null, const QRect &view = QRect()) const;
+  void paintHistogramByUserId(QPainter &painter, const AnnotationList &l, const QString &title = QString::null, const QRect &view = QRect()) const;
+
+private:
+  void paintAxis(QPainter &painter, const QRect &view, int maxY) const;
 };
 
 } // namespace AnnotCloud

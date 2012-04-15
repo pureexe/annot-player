@@ -2,6 +2,7 @@
 // 10/9/2011
 
 #include "module/qtext/webdialog.h"
+#include "module/qtext/webpage.h"
 #ifdef WITH_MODULE_DOWNLOAD
 #  include "module/qtext/filesystem.h"
 #  include "module/download/download.h"
@@ -35,8 +36,10 @@ WebDialog::WebDialog(QWidget *parent, Qt::WindowFlags f)
 
   setTextSizeMultiplier(TEXT_SIZE_SCALE);
 
-  connect(page(), SIGNAL(linkHovered(QString,QString,QString)), SIGNAL(message(QString)));
-  connect(page(), SIGNAL(downloadRequested(QNetworkRequest)), SLOT(download(QNetworkRequest)));
+  QWebPage *page = new WebPage(this); {
+    connect(page, SIGNAL(linkHovered(QString,QString,QString)), SIGNAL(message(QString)));
+    connect(page, SIGNAL(downloadRequested(QNetworkRequest)), SLOT(download(QNetworkRequest)));
+  } setPage(page);
 
   createActions();
 }
@@ -47,25 +50,34 @@ WebDialog::createActions()
 {
   zoomInAct = new QAction(this); {
     zoomInAct->setText(tr("Zoom in"));
-    zoomInAct->setToolTip(tr("Zoom in"));
+    zoomInAct->setStatusTip(tr("Zoom in"));
     zoomInAct->setShortcut(QKeySequence::ZoomIn);
   } connect(zoomInAct, SIGNAL(triggered()), SLOT(zoomIn()));
 
   zoomOutAct = new QAction(this); {
     zoomOutAct->setText(tr("Zoom out"));
-    zoomOutAct->setToolTip(tr("Zoom out"));
+    zoomOutAct->setStatusTip(tr("Zoom out"));
     zoomOutAct->setShortcut(QKeySequence::ZoomOut);
   } connect(zoomOutAct, SIGNAL(triggered()), SLOT(zoomOut()));
 
   zoomResetAct = new QAction(this); {
     zoomResetAct->setText(tr("Reset zoom"));
-    zoomResetAct->setToolTip(tr("Reset zoom"));
+    zoomResetAct->setStatusTip(tr("Reset zoom"));
     zoomResetAct->setShortcut(QKeySequence("CTRL+0"));
   } connect(zoomOutAct, SIGNAL(triggered()), SLOT(zoomOut()));
 
   QAction *a = page()->action(QWebPage::Reload);
   if (a)
     a->setShortcut(QKeySequence("CTRL+R"));
+  a = page()->action(QWebPage::Forward);
+  if (a)
+    a->setShortcut(QKeySequence::Forward);
+  a = page()->action(QWebPage::Back);
+  if (a)
+    a->setShortcut(QKeySequence::Back);
+  a = page()->action(QWebPage::Stop);
+  if (a)
+    a->setShortcut(QKeySequence("ESC"));
 
   QShortcut *zoomInShortcut = new QShortcut(QKeySequence("CTRL+="), this);
   connect(zoomInShortcut, SIGNAL(activated()), SLOT(zoomIn()));
@@ -75,6 +87,22 @@ WebDialog::createActions()
   connect(zoomResetShortcut, SIGNAL(activated()), SLOT(zoomReset()));
   QShortcut *refreshShortcut = new QShortcut(QKeySequence("CTRL+R"), this);
   connect(refreshShortcut, SIGNAL(activated()), SLOT(reload()));
+  QShortcut *forwardShortcut = new QShortcut(QKeySequence::Forward, this);
+  connect(forwardShortcut, SIGNAL(activated()), SLOT(forward()));
+  QShortcut *backShortcut = new QShortcut(QKeySequence::Back, this);
+  connect(backShortcut, SIGNAL(activated()), SLOT(back()));
+  QShortcut *stopShortcut = new QShortcut(QKeySequence("ESC"), this);
+  connect(stopShortcut, SIGNAL(activated()), SLOT(stop()));
+}
+
+// - Properties -
+
+QString
+QtExt::
+WebDialog::hoveredLink() const
+{
+  WebPage *p = dynamic_cast<WebPage *>(page());
+  return p ? p->hoveredLink() : QString::null;
 }
 
 // - Download -
@@ -105,19 +133,25 @@ WebDialog::download(const QNetworkRequest &req)
 
 // - Events -
 
+QMenu*
+QtExt::
+WebDialog::createContextMenu()
+{
+  QMenu *m = page()->createStandardContextMenu();
+  m->addSeparator();
+  m->addAction(zoomInAct);
+  m->addAction(zoomOutAct);
+  m->addAction(zoomResetAct);
+  return m;
+}
+
 void
 QtExt::
 WebDialog::contextMenuEvent(QContextMenuEvent *event)
 {
   Q_ASSERT(event);
 
-  QMenu *m = page()->createStandardContextMenu();
-
-  m->addSeparator();
-  m->addAction(zoomInAct);
-  m->addAction(zoomOutAct);
-  m->addAction(zoomResetAct);
-
+  QMenu *m = createContextMenu();
   m->exec(event->globalPos());
   delete m;
   event->accept();

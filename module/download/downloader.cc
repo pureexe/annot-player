@@ -121,7 +121,7 @@ Downloader::redirect(QNetworkReply *reply)
   Q_ASSERT(reply);
   QUrl url = reply->attribute(QNetworkRequest::RedirectionTargetAttribute).toUrl();
   if (!url.isEmpty() && url != reply->url())
-    get(url, QString(), false); // header = QString(), async = false
+    get(url, QString::null, false); // header = null, async = false
   DOUT("exit");
 }
 

@@ -101,6 +101,17 @@ public:
   bool hasPlaylist() const;
   QList<MediaInfo> playlist() const;
 
+  QSize videoDimension() const;
+  int videoCodecId() const;
+  int audioCodecId() const;
+  int audioChannels() const;
+  int audioRate() const;
+
+  QString videoCodecName() const { return codecName(videoCodecId()); }
+  QString audioCodecName() const { return codecName(audioCodecId()); }
+
+  static QString codecName(int codecId);
+
   /**
    *  \brief  Total play time in msecs.
    *
@@ -169,7 +180,7 @@ public slots:
   void setBufferSaved(bool t);
   void saveBuffer();
 
-  void setUserAgent(const QString &agent = QString());
+  void setUserAgent(const QString &agent = QString::null);
 
   void setCookieJar(QNetworkCookieJar *jar);
   void clearCookieJar() { setCookieJar(0); }
@@ -260,6 +271,8 @@ public:
   qreal position() const;     ///< [0,1]
   qreal availablePosition() const; ///< [0,1]
   QString aspectRatio() const;
+  qreal fps() const;
+  qreal bitrate() const;
 
 public slots:
   void setVolume(qreal vol);
@@ -303,6 +316,7 @@ public slots:
   void stopVoutTimer();
 protected slots:
   void invalidateVout(); ///< only works if vlccore is used
+  void invalidateTrackInfo();
   void destroy();
 
 public:
@@ -321,6 +335,7 @@ signals:
   void paused();
   void stopping();
   void stopped();
+  void disposed();
   void mediaChanged();  // Actually mediaAdded
   void mediaTitleChanged(const QString &title);
   void mediaClosed();

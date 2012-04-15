@@ -117,6 +117,9 @@ main(int argc, char *argv[])
     QFile::remove(G_PATH_QUEUEDB);
     QFile::remove(G_PATH_DEBUG);
     settings->setVersion(G_VERSION);
+
+    settings->setWindowOnTop(false);
+    settings->sync();
   }
 
   if (ac->version() != AC_VERSION) {
@@ -195,7 +198,7 @@ main(int argc, char *argv[])
 //  // Root window
 //  QMainWindow root; // Persistant visible root widget to prevent Qt from automatic closing invisible windows
 //  root.setWindowFlags(root.windowFlags() | Qt::WindowStaysOnTopHint);
-//  root.resize(0, 0);
+//  root.resize(QSize());
 //
 //  // Main window
 //  MainWindow w(&root, WINDOW_FLAGS);
@@ -237,8 +240,10 @@ main(int argc, char *argv[])
     w.login(userName, password);
 
     QStringList args = a.arguments();
-    if (args.size() > 1)
-      w.parseArguments(a.arguments());
+    if (args.size() > 1) {
+      args.removeFirst();
+      w.openSources(args);
+    }
   }
 
   //QWidget t;
@@ -293,7 +298,7 @@ main(int argc, char *argv[])
   //DWM_ENABLE_AERO_WIDGET(&bk);
   //bk.showMaximized();
 
-  //QTimer::singleShot(0, &w, SLOT(checkClipboard()));
+  //QTimer::singleShota(0, &w, SLOT(checkClipboard()));
 
   DOUT("exit: exec");
   return a.exec();

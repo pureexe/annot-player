@@ -192,9 +192,9 @@ AnnotationGraphicsItem::AnnotationGraphicsItem(
 
   setScale(view_->scale());
 
-  autoRemoveTimer_ = new QTimer(this);
-  autoRemoveTimer_->setSingleShot(true);
-  connect(autoRemoveTimer_, SIGNAL(timeout()), SLOT(removeMe()));
+  removeLaterTimer_ = new QTimer(this);
+  removeLaterTimer_->setSingleShot(true);
+  connect(removeLaterTimer_, SIGNAL(timeout()), SLOT(removeMe()));
 
   ani_ = new QPropertyAnimation(this, "pos");
   connect(ani_, SIGNAL(finished()), SLOT(removeMe()));
@@ -343,7 +343,11 @@ AnnotationGraphicsItem::setEffect(Effect e)
   switch (e) {
   case ShadowEffect:
     {
+#ifdef Q_WS_WIN
+      enum { offset = 1, radius = 18 };
+#else
       enum { offset = 1, radius = 12 };
+#endif // Q_WS_WIN
       QGraphicsDropShadowEffect *shadow = new QGraphicsDropShadowEffect(this);
       shadow->setBlurRadius(radius); // in pixels
       shadow->setOffset(offset); // in pixels
@@ -376,7 +380,7 @@ AnnotationGraphicsItem::parse(const QString &input)
 #define SELF(_text) parse(_text)
   QString text = input.trimmed();
   if (text.isEmpty())
-    return QString();
+    return QString::null;
 
   if (text[0] != CORE_CMDCH)
     return text;
@@ -526,8 +530,8 @@ AnnotationGraphicsItem::showMe()
 }
 
 void
-AnnotationGraphicsItem::autoRemove(int msecs)
-{ autoRemoveTimer_->start(msecs); }
+AnnotationGraphicsItem::removeLater(int msecs)
+{ removeLaterTimer_->start(msecs); }
 
 // - Show up -
 
@@ -540,7 +544,7 @@ AnnotationGraphicsItem::isPaused() const
     return false;
 
   Q_ASSERT(ani_);
-  Q_ASSERT(autoRemoveTimer_);
+  Q_ASSERT(removeLaterTimer_);
   switch (style_) {
   case FloatStyle:
   case FlyStyle:
@@ -549,7 +553,7 @@ AnnotationGraphicsItem::isPaused() const
   case TopStyle:
   case BottomStyle:
   case SubtitleStyle:
-    return !autoRemoveTimer_->isActive();
+    return !removeLaterTimer_->isActive();
   }
   return false;
 }
@@ -563,7 +567,7 @@ AnnotationGraphicsItem::pause()
     return;
 
   Q_ASSERT(ani_);
-  Q_ASSERT(autoRemoveTimer_);
+  Q_ASSERT(removeLaterTimer_);
   switch (style_) {
   case FloatStyle:
   case FlyStyle:
@@ -574,8 +578,8 @@ AnnotationGraphicsItem::pause()
   case TopStyle:
   case BottomStyle:
   case SubtitleStyle:
-    if (autoRemoveTimer_->isActive())
-      autoRemoveTimer_->stop();
+    if (removeLaterTimer_->isActive())
+      removeLaterTimer_->stop();
     break;
   }
 }
@@ -589,7 +593,7 @@ AnnotationGraphicsItem::resume()
     return;
 
   Q_ASSERT(ani_);
-  Q_ASSERT(autoRemoveTimer_);
+  Q_ASSERT(removeLaterTimer_);
   switch (style_) {
   case FloatStyle:
   case FlyStyle:
@@ -600,8 +604,11 @@ AnnotationGraphicsItem::resume()
   case TopStyle:
   case BottomStyle:
   case SubtitleStyle:
-    if (!autoRemoveTimer_->isActive())
-      autoRemoveTimer_->start(stayTime(style_));
+    if (!removeLaterTimer_->isActive()) {
+      //int timeout = stayTime(style_);
+      enum { timeout = 2000 };
+      removeLater(timeout);
+    }
     break;
   }
 }
@@ -629,8 +636,11 @@ AnnotationGraphicsItem::flyTime() const
   float f = (float)(w0 + 200) / (w + 200);
   int ret = ANNOTATION_FLY_TIME * ::pow(f, 0.2f) + ANNOTATION_FLY_TIME_MIN;
   ret = qMin(ret, ANNOTATION_FLY_TIME_MAX);
-  if (style_ == FlyStyle)
+  if (style_ == FlyStyle) {
     ret /= 5;
+    if (view_->width() > 640)
+      ret = ret * view_->width() / 640;
+  }
   return qMax(ret, ANNOTATION_FLY_TIME_MIN);
 }
 
@@ -663,7 +673,7 @@ AnnotationGraphicsItem::stay(const QPointF &pos, int msecs)
   addMe();
   if (hub_->isMediaTokenMode() ||
       !hub_->isStopped() && msecs >= 0)
-    autoRemove(msecs);
+    removeLater(msecs);
 }
 
 void

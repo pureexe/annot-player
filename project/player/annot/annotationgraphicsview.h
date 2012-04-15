@@ -231,6 +231,7 @@ public slots:
 
   void pauseItems(const QRect &rect, Qt::ItemSelectionMode mode = Qt::IntersectsItemShape);
   void resumeItems(const QRect &rect, Qt::ItemSelectionMode mode = Qt::IntersectsItemShape);
+  void removeItems(const QRect &rect, Qt::ItemSelectionMode mode = Qt::IntersectsItemShape);
 
   void scalePausedItems(qreal scale);
   void rotatePausedItems(qreal angle);

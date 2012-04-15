@@ -4,16 +4,18 @@
 #include "taskdialog.h"
 #include "ac/acui.h"
 #include "ac/actextview.h"
+#include "module/mrlanalysis/mrlanalysis.h"
 #include "module/qtext/algorithm.h"
+#include "module/qtext/string.h"
 #include <QtGui>
 
 #define DEBUG "taskdialog"
 #include "module/debug/debug.h"
 
 #ifdef Q_OS_MAC
-  #define K_CTRL        "cmd"
+#  define K_CTRL        "cmd"
 #else
-  #define K_CTRL        "Ctrl"
+#  define K_CTRL        "Ctrl"
 #endif // Q_OS_MAC
 
 // - Construciton -
@@ -36,7 +38,7 @@ TaskDialog::TaskDialog(QWidget *parent)
   // Shortcuts
   QShortcut *cancelShortcut = new QShortcut(QKeySequence("Esc"), this);
   connect(cancelShortcut, SIGNAL(activated()), SLOT(hide()));
-  QShortcut *closeShortcut = new QShortcut(QKeySequence::Close, this);
+  QShortcut *closeShortcut = new QShortcut(QKeySequence("CTRL+W"), this);
   connect(closeShortcut, SIGNAL(activated()), SLOT(hide()));
 
   QShortcut *saveShortcut = new QShortcut(QKeySequence::Save, this);
@@ -65,6 +67,10 @@ TaskDialog::createLayout()
   QToolButton *addButton = ui->makeToolButton(
         AcUi::PushHint | AcUi::HighlightHint, tr("Add"), "", K_CTRL "+S",
         this, SLOT(add()));
+  QToolButton *increaseButton = ui->makeToolButton(
+        0, "+", tr("Increase"), this, SLOT(increase()));
+  QToolButton *decreaseButton = ui->makeToolButton(
+        0, "-", tr("Decrease"), this, SLOT(decrease()));
   QToolButton *pasteButton = ui->makeToolButton(
         AcUi::PushHint, tr("Paste"), this, SLOT(paste()));
   QToolButton *clearButton = ui->makeToolButton(
@@ -84,6 +90,8 @@ TaskDialog::createLayout()
     footer->addWidget(clearButton);
     footer->addWidget(pasteButton);
     footer->addStretch();
+    footer->addWidget(decreaseButton);
+    footer->addWidget(increaseButton);
     footer->addWidget(addButton);
 
     // l, t, r, b
@@ -97,6 +105,8 @@ TaskDialog::createLayout()
   } setLayout(rows);
 }
 
+// - Properties -
+
 void
 TaskDialog::setText(const QString &urls)
 { textView_->setText(urls); }
@@ -104,8 +114,22 @@ TaskDialog::setText(const QString &urls)
 void
 TaskDialog::addText(const QString &text)
 {
+  if (text.isEmpty())
+    return;
   if (!textView_->containsPlainText(text))
     textView_->append(text);
+  else
+    emit message(tr("duplicated") + ": " + text);
+}
+
+QString
+TaskDialog::lastUrl() const
+{
+  if (textView_->isEmpty())
+    return QString::null;
+  QString text = textView_->last().trimmed();
+  QStringList urls = text.split('\n', QString::SkipEmptyParts);
+  return urls.isEmpty() ? QString::null : urls.last();
 }
 
 // - Actions -
@@ -147,5 +171,53 @@ TaskDialog::showExampleUrl()
 void
 TaskDialog::clear()
 { textView_->clear(); }
+
+void
+TaskDialog::increase()
+{
+  QString prevUrl  = lastUrl();
+  if (prevUrl.isEmpty())
+    return;
+  QString url = prevUrl;
+  bool ac = url.contains(MA_EIGEN_BILIBILI, Qt::CaseInsensitive) ||
+            url.contains(MA_EIGEN_ACFUN, Qt::CaseInsensitive);
+  if (ac) {
+    if (url.endsWith('#'))
+      url.chop(1);
+    if (url.endsWith('/'))
+      url.append("index_1.html");
+  }
+  url = QtExt::increaseString(url);
+
+  if (url != prevUrl)
+    addText(url);
+}
+
+void
+TaskDialog::decrease()
+{
+  QString prevUrl  = lastUrl();
+  if (prevUrl.isEmpty())
+    return;
+  QString url = prevUrl;
+  bool ac = url.contains(MA_EIGEN_BILIBILI, Qt::CaseInsensitive) ||
+            url.contains(MA_EIGEN_ACFUN, Qt::CaseInsensitive);
+  if (ac) {
+    if (url.endsWith('#'))
+      url.chop(1);
+    if (!url.endsWith('/') ||
+        url.endsWith("/index_1.html"))
+      return;
+  }
+  url = QtExt::decreaseString(url);
+
+  if (ac) {
+    url.replace(QRegExp("/index_1.html$"), "/");
+    url.replace(QRegExp("/index_0.html$"), "/");
+  }
+
+  if (url != prevUrl)
+    addText(url);
+}
 
 // EOF

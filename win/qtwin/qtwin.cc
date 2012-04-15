@@ -522,10 +522,7 @@ QtWin::getDesktopPath()
     QSettings::NativeFormat
   );
   ret = reg.value("Desktop").toString();
-  if (QDir(ret).exists())
-    return ret;
-  else
-    return QString();
+  return QDir(ret).exists() ? ret : QString::null;
 }
 
 // See: http://msdn.microsoft.com/en-us/library/ms724451(v=VS.85).aspx
@@ -771,11 +768,11 @@ QString
 QtWin::guessDeviceFileName(const QString &hint)
 {
   if (hint.isEmpty())
-    return QString();
+    return QString::null;
 
   QString normalized = hint.trimmed().toUpper();
   if (normalized.isEmpty())
-    return QString();
+    return QString::null;
 
   else if (normalized.contains(QRegExp("^\\\\\\\\\\.\\\\[A-Z]:$")))
     return normalized;
@@ -786,7 +783,7 @@ QtWin::guessDeviceFileName(const QString &hint)
     return "\\\\.\\" + normalized;
   }
   else
-    return QString();
+    return QString::null;
 }
 
 bool

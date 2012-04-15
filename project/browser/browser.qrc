@@ -3,6 +3,5 @@
         <file>tr/tr_en.qm</file>
         <file>tr/tr_ja.qm</file>
         <file>tr/tr_zh.qm</file>
-        <file>images/app.png</file>
     </qresource>
 </RCC>

@@ -5,6 +5,7 @@
 #include "annotationeditor.h"
 #include "rc.h"
 #include "tr.h"
+#include "ac/acui.h"
 #include <QtGui>
 
 #define DEBUG "annotationcomboedit"
@@ -44,21 +45,26 @@ AnnotationComboEdit::edit()
 void
 AnnotationComboEdit::contextMenuEvent(QContextMenuEvent *event)
 {
-  if (!event)
-    return;
+  Q_ASSERT(event);
 
-  contextMenu->clear();
+  QMenu m;
+  AcUi::globalInstance()->setContextMenuStyle(&m, false); // persistent = false
 
-  if (!defaultItems.isEmpty())
-    contextMenu->addAction(popupAct);
-  contextMenu->addAction(editAct);
-  contextMenu->addAction(clearAct);
-  contextMenu->addSeparator();
+  if (contextMenuFlags() & PasteAndGoAction)
+    m.addAction(pasteAndGoAct);
+  if (count() && (contextMenuFlags() & PopupAction))
+    m.addAction(popupAct);
+  if (contextMenuFlags() & EditAction)
+    m.addAction(editAct);
+  if (contextMenuFlags() & ClearAction)
+    m.addAction(clearAct);
+
+  m.addSeparator();
 
   QMenu *scm = lineEdit()->createStandardContextMenu();
-  contextMenu->addActions(scm->actions());
+  m.addActions(scm->actions());
 
-  contextMenu->exec(event->globalPos());
+  m.exec(event->globalPos());
   delete scm;
   event->accept();
 }

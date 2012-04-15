@@ -96,11 +96,11 @@ QString
 HttpStreamSession::contentType() const
 {
   if (ins_.isEmpty())
-    return QString();
+    return QString::null;
 
   RemoteStream *in = dynamic_cast<RemoteStream *>(ins_.first());
   Q_ASSERT(in);
-  return in ? in->contentType() : QString();
+  return in ? in->contentType() : QString::null;
 }
 
 void

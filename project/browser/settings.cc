@@ -23,6 +23,8 @@
 #define SK_VERSION      "Version"
 
 #define SK_RECENT       "Recent"
+#define SK_RECENTTABS   "Tabs"
+#define SK_RECENTCLOSED "Closed"
 
 // - Constructions -
 
@@ -43,22 +45,86 @@ void
 Settings::setVersion(const QString &version)
 { setValue(SK_VERSION, version); }
 
+// - History -
+
 QStringList
 Settings::recentUrls() const
 { return value(SK_RECENT).toStringList(); }
 
 void
-Settings::setRecentUrls(const QStringList &urls)
+Settings::setRecentUrls(const QStringList &urls, int limit)
 {
   if (urls.isEmpty())
     remove(SK_RECENT);
-  else
-    setValue(SK_RECENT, urls);
+  else {
+    if (!limit || urls.size() <= limit)
+      setValue(SK_RECENT, urls);
+    else {
+      QStringList l = urls;
+      while (l.size() > limit)
+        l.removeLast();
+      setValue(SK_RECENT, l);
+    }
+  }
 }
 
 void
 Settings::clearRecentUrls()
 { remove(SK_RECENT); }
 
+QStringList
+Settings::recentTabs() const
+{ return value(SK_RECENTTABS).toStringList(); }
+
+void
+Settings::setRecentTabs(const QStringList &urls, int limit)
+{
+  if (urls.isEmpty())
+    remove(SK_RECENTTABS);
+  else {
+    if (!limit || urls.size() <= limit)
+      setValue(SK_RECENTTABS, urls);
+    else {
+      QStringList l = urls;
+      while (l.size() > limit)
+        l.removeLast();
+      setValue(SK_RECENTTABS, l);
+    }
+  }
+}
+
+void
+Settings::clearRecentTabs()
+{ remove(SK_RECENTTABS); }
+
+QList<QUrl>
+Settings::closedUrls() const
+{
+  QList<QUrl> ret;
+  foreach (QVariant v, value(SK_RECENTCLOSED).toList()) {
+    QUrl url = v.toUrl();
+    if (!url.isEmpty())
+      ret.append(url);
+  }
+  return ret;
+}
+
+void
+Settings::setClosedUrls(const QList<QUrl> &urls, int limit)
+{
+  if (urls.isEmpty())
+    remove(SK_RECENTCLOSED);
+  else {
+    QList<QVariant> value;
+    int size = qMin(limit, urls.size());
+    for (int i = 0; i < size; i++)
+      value.append(urls[i]);
+    setValue(SK_RECENTCLOSED, value);
+  }
+}
+
+void
+Settings::clearClosedUrls()
+{ remove(SK_RECENTCLOSED); }
 
 // EOF

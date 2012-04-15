@@ -1,7 +1,7 @@
-// annotationthreadview.cc
+// annotationanalyticsview.cc
 // 11/16/2011
 
-#include "annotationthreadview.h"
+#include "annotationanalyticsview.h"
 #include "global.h"
 #include "tr.h"
 #include "datamanager.h"
@@ -12,7 +12,7 @@
 
 using namespace Logger;
 
-#define DEBUG "annotationthreadview"
+#define DEBUG "annotationanalyticsview"
 #include "module/debug/debug.h"
 
 #define WINDOW_SIZE     QSize(640, 640)
@@ -27,12 +27,12 @@ namespace { namespace task_ {
 
   class InvalidateAnnotations : public QRunnable
   {
-    AnnotationThreadView *w_;
+    AnnotationAnalyticsView *w_;
     virtual void run() ///< \override
     { w_->invalidateAnnotations(false);} // async = false
 
   public:
-    explicit InvalidateAnnotations(AnnotationThreadView *w)
+    explicit InvalidateAnnotations(AnnotationAnalyticsView *w)
       : w_(w) { Q_ASSERT(w_); }
   };
 
@@ -49,11 +49,11 @@ namespace { namespace task_ {
   Qt::WindowMinMaxButtonsHint | \
   Qt::WindowCloseButtonHint
 
-AnnotationThreadView::AnnotationThreadView(DataManager *data, QWidget *parent)
+AnnotationAnalyticsView::AnnotationAnalyticsView(DataManager *data, QWidget *parent)
   : Base(parent, WINDOW_FLAGS), data_(data), refreshing_(false)
 {
   Q_ASSERT(data_);
-  setWindowTitle(TR(T_TITLE_ANNOTTHREAD));
+  setWindowTitle(TR(T_TITLE_ANNOTANALYTICS));
   resize(WINDOW_SIZE);
 
   setupActions();
@@ -66,12 +66,12 @@ AnnotationThreadView::AnnotationThreadView(DataManager *data, QWidget *parent)
   // Shortcuts
   QShortcut *cancelShortcut = new QShortcut(QKeySequence("Esc"), this);
   connect(cancelShortcut, SIGNAL(activated()), SLOT(hide()));
-  QShortcut *closeShortcut = new QShortcut(QKeySequence::Close, this);
+  QShortcut *closeShortcut = new QShortcut(QKeySequence("CTRL+W"), this);
   connect(closeShortcut, SIGNAL(activated()), SLOT(hide()));
 }
 
 void
-AnnotationThreadView::setupActions()
+AnnotationAnalyticsView::setupActions()
 {
   QAction *a = webView()->pageAction(QWebPage::Reload);
   if (a)
@@ -85,9 +85,9 @@ AnnotationThreadView::setupActions()
 // - Actions -
 
 void
-AnnotationThreadView::refresh()
+AnnotationAnalyticsView::refresh()
 {
-  enum { AsyncLimit = 1000 };
+  enum { AsyncLimit = 500 };
 
   DOUT("enter: refreshing =" << refreshing_);
   log("analyzing annotations ...");
@@ -101,11 +101,11 @@ AnnotationThreadView::refresh()
 }
 
 void
-AnnotationThreadView::setUrl(const QUrl &url)
+AnnotationAnalyticsView::setUrl(const QUrl &url)
 { webView()->load(url); }
 
 void
-AnnotationThreadView::setContent(const QString &html)
+AnnotationAnalyticsView::setContent(const QString &html)
 {
   QString mimeType,
           baseUrl = BASE_URL;
@@ -113,7 +113,7 @@ AnnotationThreadView::setContent(const QString &html)
 }
 
 void
-AnnotationThreadView::invalidateAnnotations(bool async)
+AnnotationAnalyticsView::invalidateAnnotations(bool async)
 {
   DOUT("enter: async =" << async << ", refreshing =" << refreshing_);
   refreshing_ = true;
@@ -123,7 +123,7 @@ AnnotationThreadView::invalidateAnnotations(bool async)
     return;
   }
 
-  QString title = TR(T_TITLE_ANNOTTHREAD);
+  QString title = TR(T_TITLE_ANNOTANALYTICS);
   if (data_->hasAnnotations()) {
     title.append(QString(" (%1)").arg(QString::number(data_->annotations().size())));
 
@@ -142,7 +142,7 @@ AnnotationThreadView::invalidateAnnotations(bool async)
 /*
 
 void
-AnnotationThreadView::setVisible(bool visible)
+AnnotationAnalyticsView::setVisible(bool visible)
 {
   if (visible)
     refresh();

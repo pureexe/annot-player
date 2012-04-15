@@ -1,7 +1,7 @@
-#ifndef WEBBROWSERPRIVATE_H
-#define WEBBROWSERPRIVATE_H
+#ifndef WEBBROWSER_P_H
+#define WEBBROWSER_P_H
 
-// webbrowserprivate.h
+// webbrowser_p.h
 // 1/27/2012
 
 #include <QTabWidget>
@@ -32,4 +32,4 @@ namespace slot_ {
 
 } // namespace slot_
 
-#endif // WEBBROWSERPRIVATE_H
+#endif // WEBBROWSER_P_H

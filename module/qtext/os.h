@@ -10,7 +10,7 @@ namespace QtExt {
 
   void sleep(uint msecs);
 
-  QString mktemp(const QString &suffix = QString(), bool deleteLater = true);
+  QString mktemp(const QString &suffix = QString::null, bool deleteLater = true);
 
 } // namespace QtExt
 

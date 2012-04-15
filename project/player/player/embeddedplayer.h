@@ -9,7 +9,10 @@
 QT_FORWARD_DECLARE_CLASS(QTimer)
 QT_FORWARD_DECLARE_CLASS(QToolButton)
 
+class DataManager;
+class AnnotationGraphicsView;
 class EmbeddedCanvas;
+class EmbeddedInfoView;
 
 class EmbeddedPlayerUi : public PlayerUi
 {
@@ -18,12 +21,15 @@ class EmbeddedPlayerUi : public PlayerUi
   typedef PlayerUi Base;
 
 public:
-  explicit EmbeddedPlayerUi(EmbeddedCanvas *canvas, SignalHub *hub, Player *player, ServerAgent *server, QWidget *parent = 0);
+  explicit EmbeddedPlayerUi(SignalHub *hub, Player *player, ServerAgent *server,
+                            DataManager *data, AnnotationGraphicsView *annot, QWidget *parent = 0);
 
 signals:
   void fullScreenModeChanged(bool t);
-  void canvasEnabledChanged(bool t);
 public:
+  EmbeddedCanvas *canvas() const { return canvas_; }
+  EmbeddedInfoView *infoView() const { return infoView_; }
+
   bool autoHideEnabled() const;
 
   WId containerWindow() const;
@@ -32,7 +38,6 @@ public:
   bool isFullScreenMode() const { return fullScreen_; }
 
   bool isOnTop() const { return top_; }
-  bool isCanvasEnabled() const { return canvasEnabled_; }
 public slots:
   void setOnTop(bool t);
 
@@ -41,7 +46,6 @@ protected slots:
   virtual void invalidateInputCountButton(); ///< \override
 
 public slots:
-  void setCanvasEnabled(bool enabled);
   void setAutoHideEnabled(bool enabled = true);
   void autoHide();
 
@@ -68,6 +72,7 @@ private:
 
 private:
   EmbeddedCanvas *canvas_;
+  EmbeddedInfoView *infoView_;
   QTimer *autoHideTimer_;
   QTimer *trackingTimer_;
 
@@ -77,8 +82,7 @@ private:
   QWidget *containerWidget_;
 
   bool fullScreen_,
-       top_,
-       canvasEnabled_;
+       top_;
 };
 
 #endif // EMBEDDEDPLAYER_H

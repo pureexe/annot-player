@@ -165,7 +165,7 @@ Settings::setSubtitleOnTop(bool t)
 
 bool
 Settings::isWindowOnTop() const
-{ return value(SK_WINDOWONTOP, true).toBool(); }
+{ return value(SK_WINDOWONTOP).toBool(); }
 
 void
 Settings::setWindowOnTop(bool t)
@@ -274,16 +274,16 @@ Settings::setRecentFiles(const QStringList &l)
     setValue(SK_RECENT, l);
 
   //QString
-  //r = l.size() <= 0 ? QString() : l[0]; setValue(SK_RECENT(0), r);
-  //r = l.size() <= 1 ? QString() : l[1]; setValue(SK_RECENT(1), r);
-  //r = l.size() <= 2 ? QString() : l[2]; setValue(SK_RECENT(2), r);
-  //r = l.size() <= 3 ? QString() : l[3]; setValue(SK_RECENT(3), r);
-  //r = l.size() <= 4 ? QString() : l[4]; setValue(SK_RECENT(4), r);
-  //r = l.size() <= 5 ? QString() : l[5]; setValue(SK_RECENT(5), r);
-  //r = l.size() <= 6 ? QString() : l[6]; setValue(SK_RECENT(6), r);
-  //r = l.size() <= 7 ? QString() : l[7]; setValue(SK_RECENT(7), r);
-  //r = l.size() <= 8 ? QString() : l[8]; setValue(SK_RECENT(8), r);
-  //r = l.size() <= 9 ? QString() : l[9]; setValue(SK_RECENT(9), r);
+  //r = l.size() <= 0 ? QString::null : l[0]; setValue(SK_RECENT(0), r);
+  //r = l.size() <= 1 ? QString::null : l[1]; setValue(SK_RECENT(1), r);
+  //r = l.size() <= 2 ? QString::null : l[2]; setValue(SK_RECENT(2), r);
+  //r = l.size() <= 3 ? QString::null : l[3]; setValue(SK_RECENT(3), r);
+  //r = l.size() <= 4 ? QString::null : l[4]; setValue(SK_RECENT(4), r);
+  //r = l.size() <= 5 ? QString::null : l[5]; setValue(SK_RECENT(5), r);
+  //r = l.size() <= 6 ? QString::null : l[6]; setValue(SK_RECENT(6), r);
+  //r = l.size() <= 7 ? QString::null : l[7]; setValue(SK_RECENT(7), r);
+  //r = l.size() <= 8 ? QString::null : l[8]; setValue(SK_RECENT(8), r);
+  //r = l.size() <= 9 ? QString::null : l[9]; setValue(SK_RECENT(9), r);
 }
 
 void

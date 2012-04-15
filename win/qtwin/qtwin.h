@@ -143,7 +143,7 @@ namespace QtWin {
   // - Files -
 
   ///  Create a lnk file at \param lnkPath pointed to \param targetPath.
-  bool createLink(const QString &lnkPath, const QString &targetPath, const QString &description = QString());
+  bool createLink(const QString &lnkPath, const QString &targetPath, const QString &description = QString::null);
 
   ///  Prompt using hwnd if target to return is not valid.
   QString resolveLink(const QString &lnkPath, WId winId = 0);

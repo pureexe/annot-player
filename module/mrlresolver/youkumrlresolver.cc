@@ -260,7 +260,7 @@ YoukuMrlResolver::decodeFileId(QString fileId, long seed)
     Q_ASSERT(ok);
     if (!ok) {
       DOUT("exit: ERROR: invalid id =" << id);
-      return QString();
+      return QString::null;
     }
     ret.append(alphabet[i]);
   }

@@ -56,6 +56,10 @@ AcSettings::sync()
   Base::sync();
 }
 
+bool
+AcSettings::fackCcp() const
+{ return language() == QLocale::Chinese; }
+
 // - Settings -
 
 QString

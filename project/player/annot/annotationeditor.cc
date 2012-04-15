@@ -74,7 +74,7 @@ AnnotationEditor::AnnotationEditor(QWidget *parent)
 
   QShortcut *cancelShortcut = new QShortcut(QKeySequence("Esc"), this);
   connect(cancelShortcut, SIGNAL(activated()), SLOT(cancel()));
-  QShortcut *closeShortcut = new QShortcut(QKeySequence::Close, this);
+  QShortcut *closeShortcut = new QShortcut(QKeySequence("CTRL+W"), this);
   connect(closeShortcut, SIGNAL(activated()), SLOT(hide()));
 
   QShortcut *c1 = new QShortcut(QKeySequence("CTRL+1"), this);
@@ -497,7 +497,7 @@ AnnotationEditor::text() const
 
   default:
     Q_ASSERT(0);
-    return QString();
+    return QString::null;
   }
 }
 

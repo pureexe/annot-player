@@ -28,7 +28,7 @@ class LuaResolver : public QObject
 
 public:
   explicit LuaResolver(const QString &scriptPath,
-                       const QString &packagePath = QString(),
+                       const QString &packagePath = QString::null,
                        QObject *parent = 0);
 
 public:

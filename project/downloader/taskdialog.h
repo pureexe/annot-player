@@ -34,10 +34,14 @@ public slots:
   void addText(const QString &url);
 
 protected slots:
+  void increase();
+  void decrease();
   void add();
   void paste();
   void showExampleUrl();
   void clear();
+protected:
+  QString lastUrl() const;
 private:
   void createLayout();
 };

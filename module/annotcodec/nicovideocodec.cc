@@ -131,7 +131,7 @@ QString
 NicovideoCodec::parseText(const QString &text)
 {
   if (text.isEmpty())
-    return QString();
+    return QString::null;
   QString ret = text;
   //ret.replace("/n", "\n ");
   return ret.trimmed();
@@ -142,7 +142,7 @@ QString
 NicovideoCodec::parsePrefix(const QString &text)
 {
   if (text.isEmpty() || text == "184")
-    return QString();
+    return QString::null;
 
   QString ret;
   QStringList attrs = text.split(' ');

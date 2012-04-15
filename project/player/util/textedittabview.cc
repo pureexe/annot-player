@@ -10,9 +10,9 @@
 #include <QtGui>
 
 #ifdef Q_OS_MAC
-  #define K_CTRL        "cmd"
+#  define K_CTRL        "cmd"
 #else
-  #define K_CTRL        "Ctrl"
+#  define K_CTRL        "Ctrl"
 #endif // Q_OS_MAC
 
 // - Constructions -
@@ -49,10 +49,21 @@ TextEditTabView::finalizeLayout()
     setContentsMargins(0, 0, 0, 0);
   } setLayout(rows);
 
-  for (int i = 0; i < qMin(tabCount_,10); i++) {
+  for (int i = 0; i < qMin(tabCount_,8); i++) {
     QShortcut *c = new QShortcut(QKeySequence("CTRL+" + QString::number(i+1)), this);
     connect(c, SIGNAL(activated()), tabButtons_[i], SLOT(click()));
   }
+  QShortcut *c0 = new QShortcut(QKeySequence("CTRL+0"), this);
+  connect(c0, SIGNAL(activated()), tabButtons_[tabCount_ - 1], SLOT(click()));
+
+  QShortcut *prev = new QShortcut(QKeySequence::PreviousChild, this);
+  connect(prev, SIGNAL(activated()), SLOT(previousTab()));
+  QShortcut *next = new QShortcut(QKeySequence::NextChild, this);
+  connect(next, SIGNAL(activated()), SLOT(nextTab()));
+  QShortcut *nextT = new QShortcut(QKeySequence("CTRL+SHIFT+]"), this);
+  connect(nextT , SIGNAL(activated()), SLOT(nextTab()));
+  QShortcut *prevT = new QShortcut(QKeySequence("CTRL+SHIFT+["), this);
+  connect(prevT , SIGNAL(activated()), SLOT(previousTab()));
 
   if (tabCount_ > 0)
     setTab(0);
@@ -106,6 +117,35 @@ TextEditTabView::invalidateTabIndex()
   stackLayout_->setCurrentIndex(tabIndex_);
   for (int i = 0; i < tabButtons_.size(); i++)
     tabButtons_[i]->setChecked(tabIndex_ == i);
+}
+
+void
+TextEditTabView::setTab(int index)
+{
+  if (index >= 0 && index < tabCount_) {
+    tabIndex_ = index;
+    invalidateTabIndex();
+  }
+}
+
+void
+TextEditTabView::previousTab()
+{
+  if (tabCount_) {
+    if (--tabIndex_ < 0)
+      tabIndex_ = tabCount_ - 1;
+    invalidateTabIndex();
+  }
+}
+
+void
+TextEditTabView::nextTab()
+{
+  if (tabCount_) {
+    if (++tabIndex_ >= tabCount_)
+      tabIndex_ = 0;
+    invalidateTabIndex();
+  }
 }
 
 // EOF

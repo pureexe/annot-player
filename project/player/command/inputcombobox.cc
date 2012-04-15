@@ -11,6 +11,8 @@
 InputComboBox::InputComboBox(QWidget *parent)
   : Base(parent)
 {
+  setContextMenuFlags(contextMenuFlags() | PasteAndGoAction | EditAction);
+
 #define ADD(_cmd)       defaultItems.append(_cmd)
   ADD("ノシ");
   ADD("\\em 朝\\red{ミルキ}");

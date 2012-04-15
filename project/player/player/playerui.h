@@ -73,12 +73,16 @@ public slots:
 
   void setActive(bool active); // start polling whe active
 
+  void setProgressMessage(const QString &text);
+  void clearProgressMessage() { setProgressMessage(QString::null); }
+
   void invalidateTitle();
   void invalidateVolumeSlider();
   void invalidatePositionSlider();
 
   void invalidateUserButton();
   void invalidatePositionButton();
+  void invalidateProgressButton();
 
   void invalidatePlayButton();
   void invalidateStopButton();

@@ -5,16 +5,22 @@
 <context>
     <name>AcComboEdit</name>
     <message>
-        <location filename="../../common/src/accomboedit.cc" line="34"/>
-        <location filename="../../common/src/accomboedit.cc" line="35"/>
+        <location filename="../../common/src/accomboedit.cc" line="36"/>
+        <location filename="../../common/src/accomboedit.cc" line="37"/>
         <source>History</source>
         <translation>历史</translation>
     </message>
     <message>
-        <location filename="../../common/src/accomboedit.cc" line="39"/>
-        <location filename="../../common/src/accomboedit.cc" line="40"/>
+        <location filename="../../common/src/accomboedit.cc" line="41"/>
+        <location filename="../../common/src/accomboedit.cc" line="42"/>
         <source>Clear</source>
         <translation>清除</translation>
+    </message>
+    <message>
+        <location filename="../../common/src/accomboedit.cc" line="46"/>
+        <location filename="../../common/src/accomboedit.cc" line="47"/>
+        <source>Paste and go</source>
+        <translation>粘贴并访问</translation>
     </message>
 </context>
 <context>
@@ -87,58 +93,69 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../mainwindow.cc" line="40"/>
+        <location filename="../mainwindow.cc" line="45"/>
         <source>Annot Browser</source>
         <translation>とある浏览使</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="78"/>
+        <location filename="../mainwindow.cc" line="123"/>
         <source>restoring last sessions ...</source>
         <translation>恢复上次浏览的页面...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="89"/>
-        <source>logging in nicovideo.jp as %1 ...</source>
-        <translation>以%1登录nico中...</translation>
+        <location filename="../mainwindow.cc" line="134"/>
+        <source>logging in bilibili.tv as %1 ...</source>
+        <translation>以%1登录bilibili.tv中...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="170"/>
+        <location filename="../mainwindow.cc" line="139"/>
+        <source>logging in nicovideo.jp as %1 ...</source>
+        <translation>以%1登录nicovideo.jp中...</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cc" line="230"/>
         <source>openning new window</source>
         <translation>正在打开新窗口</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="172"/>
+        <location filename="../mainwindow.cc" line="232"/>
         <source>failed open new window</source>
         <translation>无法创建新窗口</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cc" line="246"/>
+        <location filename="../mainwindow.cc" line="260"/>
+        <source>openning</source>
+        <translation>正在打开</translation>
     </message>
 </context>
 <context>
     <name>QtExt::WebDialog</name>
     <message>
-        <location filename="../../../module/qtext/webdialog.cc" line="49"/>
-        <location filename="../../../module/qtext/webdialog.cc" line="50"/>
+        <location filename="../../../module/qtext/webdialog.cc" line="52"/>
+        <location filename="../../../module/qtext/webdialog.cc" line="53"/>
         <source>Zoom in</source>
         <translation>扩大</translation>
     </message>
     <message>
-        <location filename="../../../module/qtext/webdialog.cc" line="55"/>
-        <location filename="../../../module/qtext/webdialog.cc" line="56"/>
+        <location filename="../../../module/qtext/webdialog.cc" line="58"/>
+        <location filename="../../../module/qtext/webdialog.cc" line="59"/>
         <source>Zoom out</source>
         <translation>缩小</translation>
     </message>
     <message>
-        <location filename="../../../module/qtext/webdialog.cc" line="61"/>
-        <location filename="../../../module/qtext/webdialog.cc" line="62"/>
+        <location filename="../../../module/qtext/webdialog.cc" line="64"/>
+        <location filename="../../../module/qtext/webdialog.cc" line="65"/>
         <source>Reset zoom</source>
         <translation>原始尺寸</translation>
     </message>
     <message>
-        <location filename="../../../module/qtext/webdialog.cc" line="98"/>
+        <location filename="../../../module/qtext/webdialog.cc" line="126"/>
         <source>failed to download %1</source>
         <translation>下载失败：%1</translation>
     </message>
     <message>
-        <location filename="../../../module/qtext/webdialog.cc" line="102"/>
+        <location filename="../../../module/qtext/webdialog.cc" line="130"/>
         <source>download is not allowed</source>
         <translation>无法下载</translation>
     </message>
@@ -154,10 +171,37 @@
         <translation type="obsolete">清除</translation>
     </message>
     <message>
-        <location filename="../../../module/webbrowser/gui/wbaddresscomboedit.cc" line="14"/>
-        <location filename="../../../module/webbrowser/gui/wbaddresscomboedit.cc" line="15"/>
+        <source>Paste and go</source>
+        <translation type="obsolete">粘贴并访问</translation>
+    </message>
+</context>
+<context>
+    <name>WbAddressEdit</name>
+    <message>
+        <location filename="../../../module/webbrowser/gui/wbaddressedit.cc" line="16"/>
+        <location filename="../../../module/webbrowser/gui/wbaddressedit.cc" line="17"/>
         <source>Paste and go</source>
         <translation>粘贴并访问</translation>
+    </message>
+    <message>
+        <location filename="../../../module/webbrowser/gui/wbaddressedit.cc" line="22"/>
+        <source>Play with Annot Player</source>
+        <translation>用Annot Player播放</translation>
+    </message>
+    <message>
+        <location filename="../../../module/webbrowser/gui/wbaddressedit.cc" line="23"/>
+        <source>Open with Annot Player</source>
+        <translation>用Annot Player打开</translation>
+    </message>
+    <message>
+        <location filename="../../../module/webbrowser/gui/wbaddressedit.cc" line="28"/>
+        <source>Download with Annot Downloader</source>
+        <translation>用Annot Downloader下载</translation>
+    </message>
+    <message>
+        <location filename="../../../module/webbrowser/gui/wbaddressedit.cc" line="29"/>
+        <source>Open with Annot Downloader</source>
+        <translation>用Annot Downloader打开</translation>
     </message>
 </context>
 <context>
@@ -176,9 +220,41 @@
     </message>
 </context>
 <context>
+    <name>WbSearchEdit</name>
+    <message>
+        <location filename="../../../module/webbrowser/gui/wbsearchedit.cc" line="14"/>
+        <location filename="../../../module/webbrowser/gui/wbsearchedit.cc" line="15"/>
+        <source>Paste and go</source>
+        <translation>粘贴并访问</translation>
+    </message>
+</context>
+<context>
+    <name>WbWebView</name>
+    <message>
+        <location filename="../../../module/webbrowser/webkit/wbwebview.cc" line="16"/>
+        <source>Play with Annot Player</source>
+        <translation>用Annot Player播放</translation>
+    </message>
+    <message>
+        <location filename="../../../module/webbrowser/webkit/wbwebview.cc" line="21"/>
+        <source>Download with Annot Downloader</source>
+        <translation>用Annot Downloader下载</translation>
+    </message>
+    <message>
+        <location filename="../../../module/webbrowser/webkit/wbwebview.cc" line="25"/>
+        <source>Undo closed tab</source>
+        <translation>重新打开关闭的标签</translation>
+    </message>
+</context>
+<context>
     <name>WebBrowser</name>
     <message>
-        <location filename="../../../module/webbrowser/webbrowser.cc" line="455"/>
+        <location filename="../../../module/webbrowser/webbrowser.cc" line="478"/>
+        <source>no recent closed tabs</source>
+        <translation>没有关闭的标签</translation>
+    </message>
+    <message>
+        <location filename="../../../module/webbrowser/webbrowser.cc" line="572"/>
         <source>New tab</source>
         <translation>空白页</translation>
     </message>

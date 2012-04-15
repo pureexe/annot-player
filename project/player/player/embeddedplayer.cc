@@ -3,6 +3,7 @@
 
 #include "embeddedplayer.h"
 #include "embeddedcanvas.h"
+#include "embeddedinfoview.h"
 #include "positionslider.h"
 #include "global.h"
 #include "tr.h"
@@ -63,15 +64,19 @@
   SS_END
 
 // - Constructions -
-EmbeddedPlayerUi::EmbeddedPlayerUi(EmbeddedCanvas *canvas, SignalHub *hub, Player *player, ServerAgent *server, QWidget *parent)
+EmbeddedPlayerUi::EmbeddedPlayerUi(SignalHub *hub, Player *player, ServerAgent *server, DataManager *data, AnnotationGraphicsView *annot, QWidget *parent)
   : Base(hub, player, server, parent),
-    canvas_(canvas),
     containerWindow_(0), containerWidget_(0),
-    fullScreen_(false), top_(false), canvasEnabled_(true)
+    fullScreen_(false), top_(false)
 {
-  Q_ASSERT(canvas_);
   setWindowFlags(Qt::FramelessWindowHint);
-  setContentsMargins(0, 0, 0, 0);
+
+  infoView_ = new EmbeddedInfoView(player, data, annot, hub);
+
+  canvas_ = new EmbeddedCanvas(data, hub, player);
+  canvas_->hide();
+  connect(canvas_, SIGNAL(visibleChanged(bool)), infoView_, SLOT(setInvisible(bool)));
+  connect(canvas_, SIGNAL(visibleChanged(bool)), SLOT(invalidateGeometry()), Qt::QueuedConnection);
 
   createLayout();
 
@@ -119,9 +124,13 @@ EmbeddedPlayerUi::createLayout()
   if (w)
     w->setSizeHint(QSize(G_PREFIXLINE_MAXWIDTH, INPUTLINE_MINHEIGHT));
 
+  //AcTextView *info_ = new AcTextView;
+  //info_->setText("awfwaefawfew\n22222", Qt::red);
+
   // Set layout
   QVBoxLayout *rows = new QVBoxLayout; {
     QHBoxLayout *row = new QHBoxLayout;
+    rows->addWidget(infoView_);
     rows->addWidget(canvas_);
     rows->addWidget(positionSlider());
     rows->addLayout(row);
@@ -151,6 +160,11 @@ EmbeddedPlayerUi::createLayout()
     //row->addStretch();
     row->addWidget(volumeSlider());
     row->addWidget(positionButton());
+    row->addWidget(progressButton());
+
+    //rows->setContentsMargins(0, 0, 0, 0);
+    rows->setSpacing(1);
+    setContentsMargins(0, 0, 0, 0);
   }
   setLayout(rows);
   setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
@@ -163,16 +177,6 @@ EmbeddedPlayerUi::createLayout()
 }
 
 // - Properties -
-
-void
-EmbeddedPlayerUi::setCanvasEnabled(bool t)
-{
-  canvasEnabled_ = t;
-  canvas_->setVisible(canvasEnabled_);
-  if (isVisible())
-    invalidateGeometry();
-  emit canvasEnabledChanged(canvasEnabled_);
-}
 
 void
 EmbeddedPlayerUi::setFullScreenMode(bool t)
@@ -190,7 +194,7 @@ EmbeddedPlayerUi::setOnTop(bool t)
 {
   if (top_ != t) {
     top_ = t;
-    canvas_->setVisible(canvasEnabled_ && !top_);
+    canvas_->setVisible(!top_);
     invalidateGeometry();
   }
 }
@@ -209,8 +213,11 @@ EmbeddedPlayerUi::autoHide()
 #endif // Q_OS_WIN
       )
     resetAutoHideTimeout();
-  else if (isVisible())
+  else if (isVisible()) {
     hide();
+    if (canvas_->isVisible())
+      canvas_->hide();
+  }
 }
 
 bool
@@ -376,11 +383,13 @@ EmbeddedPlayerUi::setVisible(bool visible)
   if (visible == isVisible())
     return;
 
-  if (visible)
+  if (visible) {
+    canvas_->invalidateVisible();
+    infoView_->refresh();
     invalidateGeometry();
+  }
 
   Base::setVisible(visible);
-
   invalidateTrackingTimer();
 }
 

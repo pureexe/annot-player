@@ -10,6 +10,23 @@
 #include <QNetworkRequest>
 #include <QHash>
 
+class DownloaderController : public QObject
+{
+  Q_OBJECT
+  typedef DownloaderController Self;
+  typedef QObject Base;
+public:
+  static Self *globalController() { static Self g; return &g; }
+protected:
+  explicit DownloaderController(QObject *parent = 0) : Base(parent) { }
+
+signals:
+  void aborted();
+
+public slots:
+  void abort() { emit aborted(); }
+};
+
 QT_FORWARD_DECLARE_CLASS(QNetworkAccessManager)
 QT_FORWARD_DECLARE_CLASS(QNetworkReply)
 
@@ -49,9 +66,9 @@ public slots:
   void setPath(const QString &path) { path_ = path; }
   void get(const QNetworkRequest &req, bool async = true, int retries = 5);
   void get(const QUrl &url,
-           const QString &header = QString(), bool async = true, int retries = 5);
+           const QString &header = QString::null, bool async = true, int retries = 5);
   void post(const QUrl &url, const QByteArray &data = QByteArray(),
-            const QString &header = QString(), bool async = true, int retries = 5);
+            const QString &header = QString::null, bool async = true, int retries = 5);
 
   QNetworkAccessManager *networkAccessManager() const { return nam_; }
 

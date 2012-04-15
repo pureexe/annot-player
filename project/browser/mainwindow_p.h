@@ -1,7 +1,7 @@
-#ifndef MAINWINDOWPRIVATE_H
-#define MAINWINDOWPRIVATE_H
+#ifndef MAINWINDOW_P_H
+#define MAINWINDOW_P_H
 
-// mainwindowprivate.h
+// mainwindow_p.h
 // 11/8/2011
 
 #include "mainwindow.h"
@@ -9,26 +9,26 @@
 
 namespace slot_ { // anonymous slot_
 
-  class PromptUrl : public QObject {
+  class OpenUrls : public QObject {
     Q_OBJECT
     typedef QObject Base;
 
     MainWindow *w_;
-    QString url_;
+    QStringList urls_;
 
   public:
-    PromptUrl(const QString &url, MainWindow *w)
-      : Base(w), w_(w), url_(url)
+    OpenUrls(const QStringList &urls, MainWindow *w)
+      : Base(w), w_(w), urls_(urls)
     { Q_ASSERT(w_); }
 
   public slots:
-    void promptUrl()
+    void openUrls()
     {
-      w_->promptUrl(url_);
+      w_->openUrls(urls_);
       QTimer::singleShot(0, this, SLOT(deleteLater()));
     }
   };
 
 } // namespace slot_
 
-#endif // MAINWINDOWPRIVATE_H
+#endif // MAINWINDOW_P_H

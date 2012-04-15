@@ -1,12 +1,12 @@
-#ifndef MAINWINDOWPRIVATE_H
-#define MAINWINDOWPRIVATE_H
+#ifndef MAINWINDOW_P_H
+#define MAINWINDOW_P_H
 
-// mainwindowprivate.h
+// mainwindow_p.h
 // 11/8/2011
 
 #include "mainwindow.h"
 #ifdef WITH_WIN_HOOK
-  #include "win/hook/hook.h"
+#  include "win/hook/hook.h"
 #endif // WITH_WIN_HOOK
 #include <QtGui>
 
@@ -327,4 +327,4 @@ protected:
 #endif // WITH_WIN_HOOK
 
 
-#endif // MAINWINDOWPRIVATE_H
+#endif // MAINWINDOW_P_H

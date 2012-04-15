@@ -30,7 +30,9 @@ public slots:
   void clear(int tab);
 
 protected slots:
-  void setTab(int index) { tabIndex_ = index; invalidateTabIndex(); }
+  void setTab(int index);
+  void previousTab();
+  void nextTab();
   void invalidateTabIndex();
 
 public:

@@ -229,7 +229,7 @@ ServerProxy::chat(const QString &message)
     DOUT("soap error, err =" << err);
     emit soapError(err);
     DOUT("exit");
-    return QString();
+    return QString::null;
   }
 
   QString ret;

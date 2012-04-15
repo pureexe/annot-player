@@ -95,6 +95,8 @@ namespace vlccore {
   vlcbuttons vout_mouse_buttons(vout_thread_t *vout);
   QPoint vout_mouse_pos(vout_thread_t *vout);
 
+  // - Fourcc -
+  const char *codec_name(uint i_codec);
 
 } // namespace vlccore
 

@@ -53,7 +53,7 @@ PickDialog::createLayout()
   // Shortcuts
   QShortcut *cancelShortcut = new QShortcut(QKeySequence("Esc"), this);
   connect(cancelShortcut, SIGNAL(activated()), SLOT(cancel()));
-  QShortcut *closeShortcut = new QShortcut(QKeySequence::Close, this);
+  QShortcut *closeShortcut = new QShortcut(QKeySequence("CTRL+W"), this);
   connect(closeShortcut, SIGNAL(activated()), SLOT(cancel()));
 
   // Focus

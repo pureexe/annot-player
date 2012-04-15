@@ -25,13 +25,15 @@ class OsdConsole : public QLabel
 
   static Self *global_;
 public:
-  static Self *globalInstance(); // default is 0.
-  static void setGlobalInstance(Self *global);
+  static Self *globalInstance() { return global_; } ///< default is 0.
+  static void setGlobalInstance(Self *global) { global_ = global; }
 
 public:
   explicit OsdConsole(QWidget *parent = 0);
 
   void setAutoClearInterval(int msecs);
+
+  bool isEmpty() { return text().isEmpty(); }
 
 signals:
   void asyncSetText(const QString &text); ///< \internal
@@ -50,8 +52,6 @@ public slots:
   ///  Restart timer for automatic clear the text after specified interval.
   void restartAutoClearTimer();
   void stopAutoClearTimer();
-  void copyToClipboard() const;
-  void pasteFromClipboard();
 
   // Events:
 protected:

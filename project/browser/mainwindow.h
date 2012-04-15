@@ -20,7 +20,11 @@ public slots:
   void newWindow();
 protected:
   QStringList startupUrls();
-  void saveRecentUrls();
+  void saveRecentTabs();
+
+protected slots:
+  void openUrlWithAcDownloader(const QString &url);
+  void openUrlWithAcPlayer(const QString &url);
 
   // - Events -
 public slots:

@@ -5,16 +5,22 @@
 <context>
     <name>AcComboEdit</name>
     <message>
-        <location filename="../../common/src/accomboedit.cc" line="34"/>
-        <location filename="../../common/src/accomboedit.cc" line="35"/>
+        <location filename="../../common/src/accomboedit.cc" line="36"/>
+        <location filename="../../common/src/accomboedit.cc" line="37"/>
         <source>History</source>
         <translation>历史</translation>
     </message>
     <message>
-        <location filename="../../common/src/accomboedit.cc" line="39"/>
-        <location filename="../../common/src/accomboedit.cc" line="40"/>
+        <location filename="../../common/src/accomboedit.cc" line="41"/>
+        <location filename="../../common/src/accomboedit.cc" line="42"/>
         <source>Clear</source>
         <translation>清空</translation>
+    </message>
+    <message>
+        <location filename="../../common/src/accomboedit.cc" line="46"/>
+        <location filename="../../common/src/accomboedit.cc" line="47"/>
+        <source>Paste and go</source>
+        <translation>粘贴并移动</translation>
     </message>
 </context>
 <context>
@@ -79,14 +85,19 @@
 <context>
     <name>AnnotCloud::AnnotationHtmlParser</name>
     <message>
-        <location filename="../../../module/annotcloud/annothtmlthread.cc" line="113"/>
+        <location filename="../../../module/annotcloud/annothtmlthread.cc" line="114"/>
         <source>Time - Count</source>
         <translation>再生时间 - 弹幕数</translation>
     </message>
     <message>
-        <location filename="../../../module/annotcloud/annothtmlthread.cc" line="132"/>
+        <location filename="../../../module/annotcloud/annothtmlthread.cc" line="114"/>
         <source>Date - Count</source>
         <translation>发布日期 - 弹幕数</translation>
+    </message>
+    <message>
+        <location filename="../../../module/annotcloud/annothtmlthread.cc" line="114"/>
+        <source>User - Count</source>
+        <translation>魔法师 - 弹幕数</translation>
     </message>
 </context>
 <context>
@@ -109,12 +120,12 @@
 <context>
     <name>ClipboardMonitor</name>
     <message>
-        <location filename="../clipboardmonitor.cc" line="49"/>
+        <location filename="../clipboardmonitor.cc" line="50"/>
         <source>annot URL from clipboard</source>
         <translation>在剪贴板发现弹幕链接</translation>
     </message>
     <message>
-        <location filename="../clipboardmonitor.cc" line="52"/>
+        <location filename="../clipboardmonitor.cc" line="53"/>
         <source>media URL from clipboard</source>
         <translation>在剪贴板发现动画链接</translation>
     </message>
@@ -196,27 +207,27 @@
 <context>
     <name>LuaMrlResolver</name>
     <message>
-        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="129"/>
-        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="143"/>
-        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="225"/>
-        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="239"/>
+        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="122"/>
+        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="136"/>
+        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="218"/>
+        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="232"/>
         <source>failed to resolve URL</source>
         <translation>解析链接失败</translation>
     </message>
     <message>
-        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="137"/>
-        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="233"/>
+        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="130"/>
+        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="226"/>
         <source>failed to resolve URL using nicovideo account</source>
         <translation>使用nico账户解析链接失败</translation>
     </message>
     <message>
-        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="140"/>
-        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="236"/>
+        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="133"/>
+        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="229"/>
         <source>failed to resolve URL using bilibili account</source>
         <translation>使用bilibili账户解析链接失败</translation>
     </message>
     <message>
-        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="344"/>
+        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="337"/>
         <source>nicovideo.jp account is required to resolve URL</source>
         <translation>请输入nico账户</translation>
     </message>
@@ -224,120 +235,125 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../mainwindow.cc" line="42"/>
-        <location filename="../mainwindow.cc" line="448"/>
+        <location filename="../mainwindow.cc" line="44"/>
+        <location filename="../mainwindow.cc" line="398"/>
+        <location filename="../mainwindow.cc" line="463"/>
+        <location filename="../mainwindow.cc" line="465"/>
         <source>Annot Downloader</source>
         <translation>とある下载使</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="84"/>
+        <location filename="../mainwindow.cc" line="99"/>
         <source>Start</source>
         <translation>开始</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="85"/>
+        <location filename="../mainwindow.cc" line="100"/>
         <source>Stop</source>
         <translation>停止</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="86"/>
+        <location filename="../mainwindow.cc" line="101"/>
         <source>Remove</source>
         <translation>清除</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="89"/>
+        <location filename="../mainwindow.cc" line="102"/>
+        <source>Play</source>
+        <translation>再生</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cc" line="104"/>
         <source>Dir</source>
         <translation>文件夹</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="89"/>
+        <location filename="../mainwindow.cc" line="104"/>
         <source>Open directory</source>
         <translation>打开保存文件夹</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="91"/>
+        <location filename="../mainwindow.cc" line="106"/>
         <source>Add</source>
         <translation>添加</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="173"/>
+        <location filename="../mainwindow.cc" line="188"/>
         <source>Name</source>
         <translation>名称</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="174"/>
+        <location filename="../mainwindow.cc" line="189"/>
         <source>State</source>
         <translation>状态</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="175"/>
+        <location filename="../mainwindow.cc" line="190"/>
         <source>Size</source>
         <translation>大小</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="176"/>
+        <location filename="../mainwindow.cc" line="191"/>
         <source>Speed</source>
         <translation>速度</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="178"/>
+        <location filename="../mainwindow.cc" line="193"/>
         <source>Remaining time</source>
         <translation>剩余时间</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="179"/>
+        <location filename="../mainwindow.cc" line="194"/>
         <source>Path</source>
         <translation>路径</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="180"/>
+        <location filename="../mainwindow.cc" line="195"/>
         <source>URL</source>
         <translation>链接</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="181"/>
+        <location filename="../mainwindow.cc" line="196"/>
         <source>ID</source>
         <translation>ID</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="383"/>
-        <location filename="../mainwindow.cc" line="450"/>
         <source>Download</source>
-        <translation>下载</translation>
+        <translation type="obsolete">下载</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="470"/>
+        <location filename="../mainwindow.cc" line="485"/>
         <source>download finished</source>
         <translation>下载完成</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="473"/>
+        <location filename="../mainwindow.cc" line="488"/>
         <source>download failed</source>
         <translation>下载失败</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="513"/>
+        <location filename="../mainwindow.cc" line="528"/>
         <source>Stopped</source>
         <translation>停止</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="514"/>
+        <location filename="../mainwindow.cc" line="529"/>
         <source>Downloading</source>
         <translation>下载中</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="515"/>
+        <location filename="../mainwindow.cc" line="530"/>
         <source>Pending</source>
         <translation>等待</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="516"/>
+        <location filename="../mainwindow.cc" line="531"/>
         <source>Finished</source>
         <translation>完成</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="517"/>
-        <location filename="../mainwindow.cc" line="518"/>
+        <location filename="../mainwindow.cc" line="532"/>
+        <location filename="../mainwindow.cc" line="533"/>
         <source>Error</source>
         <translation>错误</translation>
     </message>
@@ -394,30 +410,30 @@
 <context>
     <name>QtExt::WebDialog</name>
     <message>
-        <location filename="../../../module/qtext/webdialog.cc" line="49"/>
-        <location filename="../../../module/qtext/webdialog.cc" line="50"/>
+        <location filename="../../../module/qtext/webdialog.cc" line="52"/>
+        <location filename="../../../module/qtext/webdialog.cc" line="53"/>
         <source>Zoom in</source>
         <translation>扩大</translation>
     </message>
     <message>
-        <location filename="../../../module/qtext/webdialog.cc" line="55"/>
-        <location filename="../../../module/qtext/webdialog.cc" line="56"/>
+        <location filename="../../../module/qtext/webdialog.cc" line="58"/>
+        <location filename="../../../module/qtext/webdialog.cc" line="59"/>
         <source>Zoom out</source>
         <translation>缩小</translation>
     </message>
     <message>
-        <location filename="../../../module/qtext/webdialog.cc" line="61"/>
-        <location filename="../../../module/qtext/webdialog.cc" line="62"/>
+        <location filename="../../../module/qtext/webdialog.cc" line="64"/>
+        <location filename="../../../module/qtext/webdialog.cc" line="65"/>
         <source>Reset zoom</source>
         <translation>正常尺寸</translation>
     </message>
     <message>
-        <location filename="../../../module/qtext/webdialog.cc" line="98"/>
+        <location filename="../../../module/qtext/webdialog.cc" line="126"/>
         <source>failed to download %1</source>
         <translation>下载失败：%1</translation>
     </message>
     <message>
-        <location filename="../../../module/qtext/webdialog.cc" line="102"/>
+        <location filename="../../../module/qtext/webdialog.cc" line="130"/>
         <source>download is not allowed</source>
         <translation>无法下载</translation>
     </message>
@@ -492,42 +508,57 @@
 <context>
     <name>TaskDialog</name>
     <message>
-        <location filename="../taskdialog.cc" line="33"/>
+        <location filename="../taskdialog.cc" line="35"/>
         <source>Add download URLs</source>
         <translation>添加下载链接</translation>
     </message>
     <message>
-        <location filename="../taskdialog.cc" line="59"/>
+        <location filename="../taskdialog.cc" line="61"/>
         <source>http://www.nicovideo.jp/watch/sm12159572</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../taskdialog.cc" line="60"/>
+        <location filename="../taskdialog.cc" line="62"/>
         <source>Click to paste the URL example</source>
         <translation>粘贴链接</translation>
     </message>
     <message>
-        <location filename="../taskdialog.cc" line="63"/>
+        <location filename="../taskdialog.cc" line="65"/>
         <source>Example</source>
         <translation>例子</translation>
     </message>
     <message>
-        <location filename="../taskdialog.cc" line="66"/>
+        <location filename="../taskdialog.cc" line="68"/>
         <source>Add</source>
         <translation>添加</translation>
     </message>
     <message>
-        <location filename="../taskdialog.cc" line="69"/>
+        <location filename="../taskdialog.cc" line="71"/>
+        <source>Increase</source>
+        <translation>增加</translation>
+    </message>
+    <message>
+        <location filename="../taskdialog.cc" line="73"/>
+        <source>Decrease</source>
+        <translation>减少</translation>
+    </message>
+    <message>
+        <location filename="../taskdialog.cc" line="75"/>
         <source>Paste</source>
         <translation>粘贴</translation>
     </message>
     <message>
-        <location filename="../taskdialog.cc" line="71"/>
+        <location filename="../taskdialog.cc" line="77"/>
         <source>Clear</source>
         <translation>清除</translation>
     </message>
     <message>
-        <location filename="../taskdialog.cc" line="130"/>
+        <location filename="../taskdialog.cc" line="122"/>
+        <source>duplicated</source>
+        <translation>链接重复</translation>
+    </message>
+    <message>
+        <location filename="../taskdialog.cc" line="154"/>
         <source>invalid URLs</source>
         <translation>无效的链接</translation>
     </message>

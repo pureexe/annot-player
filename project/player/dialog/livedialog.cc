@@ -27,7 +27,7 @@ LiveDialog::LiveDialog(QWidget *parent)
   // Shortcuts
   QShortcut *cancelShortcut = new QShortcut(QKeySequence("Esc"), this);
   connect(cancelShortcut, SIGNAL(activated()), SLOT(hide()));
-  QShortcut *closeShortcut = new QShortcut(QKeySequence::Close, this);
+  QShortcut *closeShortcut = new QShortcut(QKeySequence("CTRL+W"), this);
   connect(closeShortcut, SIGNAL(activated()), SLOT(hide()));
 
   // Focus

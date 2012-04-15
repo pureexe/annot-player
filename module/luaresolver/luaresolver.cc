@@ -2,6 +2,7 @@
 // 2/1/2012
 // See: http://csl.sublevel3.org/lua/
 #include "luaresolver.h"
+#include "module/mrlanalysis/mrlanalysis.h"
 #ifdef WITH_MODULE_LUACPP
 #  include "module/luacpp/luacpp.h"
 #else
@@ -21,7 +22,7 @@
 
 #define _qs(_cstr)      QString::fromLocal8Bit(_cstr)
 
-//#define DEBUG "luaresolver"
+#define DEBUG "luaresolver"
 #include "module/debug/debug.h"
 
 // - Construction -
@@ -248,7 +249,7 @@ LuaResolver::resolve(const QString &href, int *siteid, QString *refurl, QString 
 
     // Set account
     if (hasNicovideoAccount() &&
-        href.contains("nicovideo.jp/", Qt::CaseInsensitive)) {
+        href.contains(MA_EIGEN_NICOVIDEO, Qt::CaseInsensitive)) {
       DOUT("nicovideo username =" << nicovideoUsername_);
       boost::function<int (std::string, std::string)>
           call = lua_function<int>(L, "set_nicovideo_account");
@@ -263,7 +264,7 @@ LuaResolver::resolve(const QString &href, int *siteid, QString *refurl, QString 
     }
 
     if (hasBilibiliAccount() &&
-        href.contains("bilibili.tv/", Qt::CaseInsensitive)) {
+        href.contains(MA_EIGEN_BILIBILI, Qt::CaseInsensitive)) {
       DOUT("bilibili username =" << bilibiliUsername_);
       boost::function<int (std::string, std::string)>
           call = lua_function<int>(L, "set_bilibili_account");
@@ -280,6 +281,7 @@ LuaResolver::resolve(const QString &href, int *siteid, QString *refurl, QString 
     // Invoke MRL resolver
     {
       const char *callee = mrls ? "resolve_media" : "resolve_subtitle";
+      DOUT("callee =" << _qs(callee));
       // Must be consistent with resolve function in LuaResolver
       boost::function<int (std::string, std::string)>
           call = lua_function<int>(L, callee);

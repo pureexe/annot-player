@@ -52,7 +52,6 @@ public:
 
 signals:
   void downloadFinished(const QString &path, const QString &url);
-  void openFileRequested(const QString &path);
 
 public slots:
   void stopAll();
@@ -119,6 +118,7 @@ private:
               *stopButton_,
               *removeButton_,
               *addButton_,
+              *openButton_,
               *openDirectoryButton_;
 
   QTimer *refreshTimer_;

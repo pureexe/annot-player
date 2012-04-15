@@ -1,75 +1,116 @@
 # TODO
 # 6/18/2011
-
 http://db.tt/SrtkzxIJ
+
+- thread#1: server
+- thread#2: goei2
+- thread#3: gamecloud
 
 # server
 - move wiki to sakuradite
   cancel godaddy vps
+
+  annot.me/w
+- automatic back database everyweek
+
 - design jsp front end, remove icefaces && jsf
-- reduce mem usage for java
+- implement twitter-like SNS using jsp
+  use \t to share feelings on annot.me, mixi, twitter, google+, facebook, and weibo
+
+  annot.me/t
+
+  combine movie with twitter
+
+- show annots as comments on the right with username similar to zombie2 of the dead
+  use embeded transparent webview
+  also, able to post new comments on it by hoverong on it
+  show only those from friends and \t in annot.me
+- p2p chat use ipc library
 - mechanism to annotate deathnote
 
 # key
-- sns, show online user status
-- draw sth useful on osd
+- implement sns, using JSP, show online user status
+- post in annot.me/weibo/twitter/facebook with screenshot
+- osd comment on it in one line similar to zombie2
+- show online user with chating and sync enabled
 - how to annotate/share deathnote
 
-# 0.1.4.3
+# client later
+- able to add annotation to a specific position
+  use mouse double click to open a editor on the screen, and add annotation to it
+  (when many people start using it)
+  - reuse the same tech for PDF as well
+- use mouse gesture to case magic to annotations
+  - annotations with life?
 
-# CHECKPOINT
-
-# mac
-- check the size for graph
-  reduce distance between analytics and position slider
-- automatic hide analytics while hover
-- improve analytics color
-
-git://gitorious.org/inter-process-signal-propagator/inter-process-signal-propagator.git
-http://gitorious.org/inter-process-signal-propagator
-
-- back to my proposal work
+CHECKPOINT
 
 # windows
+- debug playing video from bilibli.tv,  debug at the end of video
+  http://www.bilibili.tv/video/av246474/
+- debug playing video from nicovideo.jp, debug at the end of video
+- debug crash at the end of local video
+  wait for 1 seconds?
 
-git://gitorious.org/inter-process-signal-propagator/inter-process-signal-propagator.git
-http://gitorious.org/inter-process-signal-propagator
-interprocessssignal
+# mac
+- add images link
+- add screenshots in mac with osd statistics
+  upload to server
+# linux
+  compile in linux
 
-deal with commandline
+# 0.1.4.4
 
-- register filetype on windows
-
-- depenends on interpro signasl
-  determine whether share or only keep downloader itself
-
-# download shared module
-- make download dialogs into module module/downloadui
-- increase decrease button
-- increase button for downloading
-- debug add 12 download task
-- add context menu for remove from downloader, launch from downloader
-
-# player
-- create thumbnails and save as png on desktop
-- popup thumbnail in positionbar
-- fixme: crash on next?
-  trigger processEvents after closemedia
-- fixme: crash on end of movie and Next media
-  wait for 1 seconds or processevents?
-
-# webbrowser
-- FIXME: images are not zoomed
-- CTRL+N to open a new browser window rathan then a new app
-- todo: webbrowser check loadFinished error for empty page
+# mac
+- FIXME: keyboard shortcut broken
+- debug IPC module
+  - how to solve reconnect problem after connection closed
+  - deal with n-to-n casting issue
 
 # cleanup
-- fix resize problem for acwebwindow
+- connect quit signal to all downloader's qnam
+  FIXME: difficult to implement since abort is not a slot of qnetworkreply
+
+- rewrite ipc module myself
 - replace player's logger with error|message|warning |notification signals
 
 - fixme: browser: google search for chinese/japanese
+- fix resize problem for acwebwindow
+  mainwindow resize policy
+
+- FIXME: images are not zoomed
+- CTRL+N to open a new browser window rathan then a new app
+- compile fixed package as lib using *.pro rather than *.pri to save compile time
+
+- downloader: add context menu for remove from downloader, launch from downloader
+
+
+# webbrowser
+- startup page with thumbnails like safari
+- FIXME: limit maximal width of tabwidget
+  limit width for each tab, only tooltip with full title and url
+- FIXME: resize image
+
+# downloader
+- debug add 12 download task simutanously
+- limit concurrent download task to 5
+- enable streaming from youtube as well
+- add context menu
+
+- implement youtubemrlresolver from youtube video myself
+
+# player
+- use ffmpeg to provide thumbnail for image
+http://stackoverflow.com/questions/1908411/how-to-use-ffmpeg
+http://stackoverflow.com/questions/8679390/ffmpeg-extracting-20-images-from-a-video-of-variable-length
+
+##
+# implement SNS in server first
+# then implement user chat, etc later
+##
 
 # client side
+- popup thumbnail in positionbar
 - show online user simutaneously, enable chat for the same video
   draw a user chat screen
 

@@ -1,12 +1,13 @@
 #ifndef _QTEXT_WEBDIALOG_H
 #define _QTEXT_WEBDIALOG_H
 
-// qtext/commentview.h
+// qtext/webdialog.h
 // 10/9/2011
 
 #include <QWebView>
 #include <QNetworkRequest>
 
+QT_FORWARD_DECLARE_CLASS(QMenu)
 QT_FORWARD_DECLARE_CLASS(QAction)
 
 namespace QtExt {
@@ -29,6 +30,9 @@ signals:
   void warning(const QString &text);
   void notification(const QString &text);
 
+public:
+  QString hoveredLink() const;
+
 protected slots:
   void download(const QNetworkRequest &req);
   void zoomIn();
@@ -38,6 +42,8 @@ protected slots:
 protected:
   virtual void contextMenuEvent(QContextMenuEvent *e); ///< \override
   virtual void wheelEvent(QWheelEvent *e); ///< \override
+
+  QMenu *createContextMenu();
 protected:
   QAction *zoomInAct,
           *zoomOutAct,

@@ -13,7 +13,7 @@
 #include <QStringList>
 
 #ifdef _MSC_VER
-  typedef size_t ssize_t;
+typedef size_t ssize_t;
 #endif // _MSC_VER
 
 QT_FORWARD_DECLARE_CLASS(QNetworkCookieJar)

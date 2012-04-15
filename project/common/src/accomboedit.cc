@@ -4,7 +4,7 @@
 #include "ac/accomboedit.h"
 #include "ac/acui.h"
 #include "ac/acss.h"
-#include "accomboeditprivate.h"
+#include "accomboedit_p.h"
 #include <QtGui>
 
 // - Construction -
@@ -12,6 +12,8 @@
 void
 AcComboEdit::init()
 {
+  contextMenuFlags_ = PopupAction | ClearAction;
+
   setLineEdit(new AcComboBoxLineEdit);
 
   createActions();
@@ -40,13 +42,35 @@ AcComboEdit::createActions()
     clearAct->setToolTip(tr("Clear"));
     connect(clearAct, SIGNAL(triggered()), SLOT(reset()));
   }
-
-  // Create menus
-  contextMenu = new QMenu(this);
-  AcUi::globalInstance()->setContextMenuStyle(contextMenu, true); // persistent = true
+  pasteAndGoAct = new QAction(this); {
+    pasteAndGoAct->setText(tr("Paste and go"));
+    pasteAndGoAct->setToolTip(tr("Paste and go"));
+    connect(pasteAndGoAct, SIGNAL(triggered()), SLOT(pasteAndGo()));
+  }
 }
 
 // - Actions -
+
+void
+AcComboEdit::pasteAndGo()
+{
+  QClipboard *c = QApplication::clipboard();
+  if (c) {
+    QString text = c->text().trimmed();
+    if (!text.isEmpty()) {
+      insertItem(0, text);
+      dynamic_cast<AcComboBoxLineEdit *>(lineEdit())->enterText(text);
+      setEditText(text);
+    }
+  }
+}
+
+bool
+AcComboEdit::isClipboardEmpty()
+{
+  QClipboard *c = QApplication::clipboard();
+  return !c || c->text().trimmed().isEmpty();
+}
 
 void
 AcComboEdit::reset()
@@ -61,20 +85,34 @@ AcComboEdit::reset()
 void
 AcComboEdit::contextMenuEvent(QContextMenuEvent *event)
 {
-  if (!event)
+  Q_ASSERT(event);
+  if (!contextMenuFlags_) {
+    Base::contextMenuEvent(event);
     return;
+  }
 
-  contextMenu->clear();
+  // Create menus
+  QMenu m;
+  AcUi::globalInstance()->setContextMenuStyle(&m, false); // persistent = false
 
-  if (count())
-    contextMenu->addAction(popupAct);
-  contextMenu->addAction(clearAct);
-  contextMenu->addSeparator();
+  if (contextMenuFlags_ & PasteAndGoAction) {
+    pasteAndGoAct->setEnabled(!isClipboardEmpty());
+    m.addAction(pasteAndGoAct);
+  }
+
+  if ((contextMenuFlags_ & PopupAction) && count())
+    m.addAction(popupAct);
+
+  if (contextMenuFlags_ & ClearAction)
+    m.addAction(clearAct);
+
+  m.addSeparator();
+
 
   QMenu *scm = lineEdit()->createStandardContextMenu();
-  contextMenu->addActions(scm->actions());
+  m.addActions(scm->actions());
 
-  contextMenu->exec(event->globalPos());
+  m.exec(event->globalPos());
   delete scm;
   event->accept();
 }

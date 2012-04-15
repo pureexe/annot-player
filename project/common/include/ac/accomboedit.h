@@ -8,7 +8,6 @@
 #include <QStringList>
 
 QT_FORWARD_DECLARE_CLASS(QAction)
-QT_FORWARD_DECLARE_CLASS(QMenu)
 
 typedef QtExt::ComboBox ComboEditBase;
 class AcComboEdit : public ComboEditBase
@@ -18,10 +17,21 @@ class AcComboEdit : public ComboEditBase
   typedef ComboEditBase Base;
 
 public:
+  enum ContextMenuFlag {
+    NoAction = 0,
+    PopupAction = 1,            // enabled by default
+    ClearAction = 1 << 1,       // enabled by default
+    PasteAndGoAction = 1 << 2,  // disabled by default
+    CustomAction = 1 << 3
+  };
+
   explicit AcComboEdit(QWidget *parent = 0)
     : Base(parent) { init(); }
   explicit AcComboEdit(const QStringList &items, QWidget *parent = 0)
     : Base(parent), defaultItems(items) { init(); }
+
+  uint contextMenuFlags() const { return contextMenuFlags_; }
+  void setContextMenuFlags(uint flags) { contextMenuFlags_ = flags; }
 
   // - Properties -
 public slots:
@@ -31,21 +41,26 @@ public slots:
   // - Actions -
 protected slots:
   void popup() { showPopup(); }
+  void pasteAndGo();
 
   // - Events -
 protected:
   //virtual void keyPressEvent(QKeyEvent *event); ///< \override
   virtual void contextMenuEvent(QContextMenuEvent *event); ///< \override
 
+protected:
+  static bool isClipboardEmpty();
+
 private:
   void init();
   void createActions();
 
 protected:
+  uint contextMenuFlags_;
   QStringList defaultItems;
-  QMenu *contextMenu;
   QAction *popupAct,
-          *clearAct;
+          *clearAct,
+          *pasteAndGoAct;
 };
 
 #endif // _AC_ACCOMBOEDIT_H

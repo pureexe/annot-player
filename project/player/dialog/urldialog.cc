@@ -4,6 +4,7 @@
 #include "urldialog.h"
 #include "tr.h"
 #include "ac/acui.h"
+#include "ac/accomboedit.h"
 #include "module/qtext/ss.h"
 #include "module/qtext/string.h"
 #include "module/qtext/overlaylayout.h"
@@ -42,6 +43,9 @@ UrlDialog::createLayout()
 
   edit_ = ui->makeComboBox(AcUi::EditHint);
   connect(edit_->lineEdit(), SIGNAL(returnPressed()), SLOT(open()));
+  AcComboEdit *edit = dynamic_cast<AcComboEdit *>(edit_);
+  Q_ASSERT(edit);
+  edit->setContextMenuFlags(edit->contextMenuFlags() | AcComboEdit::PasteAndGoAction);
 
   saveButton_ = ui->makeToolButton(
         AcUi::CheckHint, TR(T_SAVE), tr("Save the association online"));
@@ -102,7 +106,7 @@ UrlDialog::createLayout()
   // Shortcuts
   QShortcut *cancelShortcut = new QShortcut(QKeySequence("Esc"), this);
   connect(cancelShortcut, SIGNAL(activated()), SLOT(hide()));
-  QShortcut *closeShortcut = new QShortcut(QKeySequence::Close, this);
+  QShortcut *closeShortcut = new QShortcut(QKeySequence("CTRL+W"), this);
   connect(closeShortcut, SIGNAL(activated()), SLOT(hide()));
 
   QShortcut *increaseShortcut = new QShortcut(QKeySequence("CTRL+="), this);

@@ -22,9 +22,6 @@ public:
   explicit AboutDialog(QWidget *parent = 0);
 
   static QString text();
-
-protected slots:
-  void ok();
 };
 
 #endif // ABOUTDIALOG_H

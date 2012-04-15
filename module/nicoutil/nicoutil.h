@@ -12,6 +12,12 @@ namespace nico {
 
   bool login(const QString &username, const QString &password, QNetworkCookieJar *cookieJar, int retries = 3);
 
-} // namespace IOUtil
+} // namespace nico
+
+namespace bilibili {
+
+  bool login(const QString &username, const QString &password, QNetworkCookieJar *cookieJar, int retries = 3);
+
+} // namespace bilibili
 
 #endif // NICOUTIL_H

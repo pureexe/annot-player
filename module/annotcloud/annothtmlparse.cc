@@ -20,7 +20,7 @@ AnnotCloud::
 AnnotationHtmlParser::parseLeadingTag(const QString &text)
 {
   if (text.isEmpty() || text[0] != CORE_CMDCH)
-    return std::make_pair(QString(), QString());
+    return std::make_pair(QString::null, QString::null);
 
   // TODO: use while
   //int index = 0;
@@ -33,7 +33,7 @@ AnnotationHtmlParser::parseLeadingTag(const QString &text)
 
   int index = text.indexOf(' ');
   if (index < 0)
-    return std::make_pair(text, QString());
+    return std::make_pair(text, QString::null);
   else
     return std::make_pair(text.mid(0, index), text.mid(index + 1));
 }
@@ -49,7 +49,7 @@ AnnotationHtmlParser::parseNextToken(const QString &text)
     return RETURN();
 
   if (text.size() == 1)
-    return RETURN(text, QString());
+    return RETURN(text, QString::null);
 
   char ch0 = text[0].toLatin1();
   switch (ch0) {
@@ -79,7 +79,7 @@ AnnotationHtmlParser::parseNextToken(const QString &text)
     }
   }
   if (!mid)
-    return RETURN(text, QString());
+    return RETURN(text, QString::null);
   else
     return RETURN(text.mid(0, mid), text.mid(mid).trimmed());
 #undef SELF
@@ -342,7 +342,7 @@ AnnotationHtmlParser::translate(const QString &tag,
   #endif // DEBUG
 
   if (tag.isEmpty())
-    return QString();
+    return QString::null;
 
   switch (qHash(tag)) {
   case H_Verbatim:
@@ -716,7 +716,7 @@ AnnotationHtmlParser::translate(const QString &tag,
 
     // Unknown tag
   default:
-    return QString();
+    return QString::null;
   }
 }
 

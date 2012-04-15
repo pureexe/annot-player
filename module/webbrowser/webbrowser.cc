@@ -2,8 +2,9 @@
 
 #include "webbrowser.h"
 #include "ui_webbrowser.h" // generated
-#include "webbrowserprivate.h"
-#include "wbaddresscomboedit.h"
+#include "webbrowser_p.h"
+#include "wbaddressedit.h"
+#include "wbsearchedit.h"
 #include "wbnetworkaccessmanager.h"
 #include "wbnetworkcookiejar.h"
 #include "wbwebview.h"
@@ -17,10 +18,16 @@
 
 #define TEXT_SIZE_SCALE 0.85
 
-#ifdef Q_OS_MAC
+#ifdef Q_WS_MAC
 #  define SHORTCUT_LOCATION     "CTRL+L"
 #else
 #  define SHORTCUT_LOCATION     "ALT+D"
+#endif // Q_WS_MAC
+
+#ifdef Q_WS_MAC
+#  define K_META     "META"
+#else
+#  define K_META     "CTRL"
 #endif // Q_WS_MAC
 
 #define SHORTCUT_SEARCH         "CTRL+E"
@@ -58,10 +65,10 @@ WebBrowser::completeUrl(const QString &url) const
 QString
 WebBrowser::decodeUrl(const QUrl &url)
 {
-  //QUrl ret = url;
-  //QString host = ret.host();
-  //if (host == ANNOT_HOST_IP)
-  //  ret.setHost("annot.me");
+  QUrl ret = url;
+  QString host = ret.host();
+  if (host == ANNOT_HOST_IP)
+    ret.setHost("annot.me");
   //else if (host == "niconicohost")
   //  ret.setHost("nicovideo.jp");
   //else if (host.endsWith(".niconicohost")) {
@@ -74,7 +81,7 @@ WebBrowser::decodeUrl(const QUrl &url)
   //  QString t = rx.cap(1);
   //  ret.setHost(t + ".nicovideo.jp");
   //}
-  return url.toString();
+  return ret.toString();
 }
 
 QUrl
@@ -82,7 +89,7 @@ WebBrowser::encodeUrl(const QString &url)
 {
   QUrl ret = url;
   if (!ret.host().compare("annot.me", Qt::CaseInsensitive))
-    ret.setHost("annotcloud.com");
+    ret.setHost(ANNOT_HOST_IP);
   return ret;
 }
 
@@ -130,14 +137,17 @@ WebBrowser::setupUi()
   connect(newTabButton, SIGNAL(clicked()), SLOT(newTabWithDefaultPage()));
 
   ui_->addressEdit->setDefaultItems(homePages_);
-  connect(ui_->addressEdit, SIGNAL(visitAddressRequested(QString)), SLOT(openUrl(QString)));
 
   // Set up connections
   connect(ui_->tabWidget, SIGNAL(tabCloseRequested(int)), SLOT(closeTab(int)));
   connect(ui_->tabWidget, SIGNAL(currentChanged(int)), SLOT(updateAddressbar()));
-  connect(ui_->addressEdit, SIGNAL(activated(int)), SLOT(openUrl()));
-  connect(ui_->addressEdit->lineEdit(), SIGNAL(returnPressed()), SLOT(openUrl()));
+  connect(ui_->searchEdit, SIGNAL(textEntered(QString)), SLOT(search(QString)));
   connect(ui_->searchEdit->lineEdit(), SIGNAL(returnPressed()), SLOT(search()));
+  connect(ui_->addressEdit, SIGNAL(activated(int)), SLOT(openUrl()));
+  connect(ui_->addressEdit, SIGNAL(textEntered(QString)), SLOT(openUrl(QString)));
+  connect(ui_->addressEdit->lineEdit(), SIGNAL(returnPressed()), SLOT(openUrl()));
+  connect(ui_->addressEdit, SIGNAL(openUrlWithAcPlayerRequested(QString)), SIGNAL(openUrlWithAcPlayerRequested(QString)));
+  connect(ui_->addressEdit, SIGNAL(openUrlWithAcDownloaderRequested(QString)), SIGNAL(openUrlWithAcDownloaderRequested(QString)));
   connect(ui_->backButton, SIGNAL(clicked()), SLOT(back()));
   connect(ui_->forwardButton, SIGNAL(clicked()), SLOT(forward()));
   connect(ui_->reloadButton, SIGNAL(clicked()), SLOT(reload()));
@@ -168,17 +178,52 @@ WebBrowser::createActions()
   QShortcut *t = new QShortcut(QKeySequence::AddTab, this);
   connect(t , SIGNAL(activated()), SLOT(newTab()));
 
-  QShortcut *w = new QShortcut(QKeySequence::Close, this);
+  QShortcut *w = new QShortcut(QKeySequence("CTRL+W"), this);
   connect(w , SIGNAL(activated()), SLOT(closeTab()));
 
   QShortcut *q = new QShortcut(QKeySequence::Quit, this);
   connect(q , SIGNAL(activated()), SLOT(close()));
+
+  QShortcut *next = new QShortcut(QKeySequence::NextChild, this);
+  connect(next , SIGNAL(activated()), SLOT(nextTab()));
+  QShortcut *prev = new QShortcut(QKeySequence::PreviousChild, this);
+  connect(prev , SIGNAL(activated()), SLOT(previousTab()));
+  QShortcut *nextT = new QShortcut(QKeySequence("CTRL+SHIFT+]"), this);
+  connect(nextT , SIGNAL(activated()), SLOT(nextTab()));
+  QShortcut *prevT = new QShortcut(QKeySequence("CTRL+SHIFT+["), this);
+  connect(prevT , SIGNAL(activated()), SLOT(previousTab()));
+
+  QShortcut *ut = new QShortcut(QKeySequence("CTRL+SHIFT+T"), this);
+  connect(ut , SIGNAL(activated()), SLOT(undoCloseTab()));
+
+  QShortcut *t1 = new QShortcut(QKeySequence("CTRL+1"), this);
+  connect(t1 , SIGNAL(activated()), SLOT(focusTab0()));
+  QShortcut *t2 = new QShortcut(QKeySequence("CTRL+2"), this);
+  connect(t2 , SIGNAL(activated()), SLOT(focusTab1()));
+  QShortcut *t3 = new QShortcut(QKeySequence("CTRL+3"), this);
+  connect(t3 , SIGNAL(activated()), SLOT(focusTab2()));
+  QShortcut *t4 = new QShortcut(QKeySequence("CTRL+4"), this);
+  connect(t4 , SIGNAL(activated()), SLOT(focusTab3()));
+  QShortcut *t5 = new QShortcut(QKeySequence("CTRL+5"), this);
+  connect(t5 , SIGNAL(activated()), SLOT(focusTab4()));
+  QShortcut *t6 = new QShortcut(QKeySequence("CTRL+6"), this);
+  connect(t6 , SIGNAL(activated()), SLOT(focusTab5()));
+  QShortcut *t7 = new QShortcut(QKeySequence("CTRL+7"), this);
+  connect(t7 , SIGNAL(activated()), SLOT(focusTab6()));
+  QShortcut *t8 = new QShortcut(QKeySequence("CTRL+8"), this);
+  connect(t8 , SIGNAL(activated()), SLOT(focusTab7()));
+  QShortcut *t9 = new QShortcut(QKeySequence("CTRL+9"), this);
+  connect(t9 , SIGNAL(activated()), SLOT(focusTab8()));
+  QShortcut *t0 = new QShortcut(QKeySequence("CTRL+0"), this);
+  connect(t0 , SIGNAL(activated()), SLOT(focusLastTab()));
 }
 
 QNetworkAccessManager*
 WebBrowser::makeNetworkAccessManager()
 {
-  QNetworkAccessManager *nam = new WbNetworkAccessManager(this);
+  WbNetworkAccessManager *nam = new WbNetworkAccessManager(this);
+  if (!blockedUrls_.isEmpty())
+    nam->setBlockedUrls(blockedUrls_);
   if (cookieJar_) {
     QObject *parent = cookieJar_->parent();
     nam->setCookieJar(cookieJar_);
@@ -232,7 +277,7 @@ WebBrowser::tabUrl(int index) const
 {
   QWidget *w = ui_->tabWidget->widget(index);
   if (w) {
-    QWebView *view = qobject_cast<QWebView*>(w);
+    QWebView *view = qobject_cast<QWebView *>(w);
     if (w)
       return view->url();
   }
@@ -254,7 +299,7 @@ WebBrowser::tabAddress(int index) const
 {
   QUrl url = tabUrl(index);
   if (url.isEmpty())
-    return QString();
+    return QString::null;
   else
     return tidyUrl(decodeUrl(url));
 }
@@ -283,7 +328,13 @@ WebBrowser::openUrls(const QStringList &urls)
     newTab();
     openUrl(url);
   }
-  if (index < tabCount())
+  focusTab(index);
+}
+
+void
+WebBrowser::focusTab(int index)
+{
+  if (index >= 0 && index < tabCount())
     ui_->tabWidget->setCurrentIndex(index);
 }
 
@@ -293,7 +344,7 @@ WebBrowser::openUrl(const QString &url)
   if (tabCount() <= 0)
     newTab();
 
-  QWebView *view = qobject_cast<QWebView *>(ui_->tabWidget->currentWidget());
+  QWebView *view = qobject_cast<QWebView  *>(ui_->tabWidget->currentWidget());
   if (!view)
     return;
 
@@ -311,30 +362,50 @@ WebBrowser::openUrl(const QString &url)
   if (viewUrl == realUrl)
     return;
 
-  addHistory(url);
-  ui_->addressEdit->setEditText(tidyUrl(url));
+  QString address = tidyUrl(url);
+  addRecentUrl(url);
+  ui_->addressEdit->setEditText(address);
   ui_->tabWidget->setTabText(ui_->tabWidget->currentIndex(), url);
   view->setUrl(realUrl);
 }
 
 void
-WebBrowser::addHistory(const QStringList &urls)
+WebBrowser::addRecentUrls(const QStringList &urls)
 {
   foreach (const QString &url, urls)
-    addHistory(url);
+    addRecentUrl(url);
 }
 
 void
-WebBrowser::addHistory(const QString &url)
+WebBrowser::addRecentUrl(const QString &url)
 {
+  if (url.contains(ANNOT_HOST_IP))
+    return;
   QString address = tidyUrl(url);
   QComboBox *edit = ui_->addressEdit;
   int index = edit->findText(address);
   if (index >= 0)
     edit->removeItem(index);
-  edit->insertItem(0, address);
+  edit->insertItem(0, address); // FIXME: This will change current item!
   if (edit->count() > MAX_HISTORY)
     edit->removeItem(MAX_HISTORY);
+}
+
+QStringList
+WebBrowser::recentUrls() const
+{
+  QStringList ret;
+  int count = ui_->addressEdit->count();
+  if (!count)
+    return ret;
+
+  QStringList defvals = ui_->addressEdit->defaultItems();
+  for (int i = 0; i < count; i++) {
+    QString t = ui_->addressEdit->itemText(i).trimmed();
+    if (!t.isEmpty() && !defvals.contains(t))
+      ret.append(t);
+  }
+  return ret;
 }
 
 void
@@ -347,12 +418,16 @@ WebBrowser::openUrl()
 }
 
 void
-WebBrowser::search()
+WebBrowser::search(const QString &text)
 {
-  QString text = ui_->searchEdit->currentText();
   ui_->searchEdit->insertItem(0, text);
+  //ui_->searchEdit->setEditText(text);
   openUrl(searchAddress(text));
 }
+
+void
+WebBrowser::search()
+{ search(ui_->searchEdit->currentText()); }
 
 QString
 WebBrowser::searchAddress(const QString &text) const
@@ -373,6 +448,12 @@ WebBrowser::closeTab(int tab)
   }
   QWidget *widget = ui_->tabWidget->widget(tab);
   if (widget) {
+    QWebView *w = qobject_cast<QWebView *>(widget);
+    if (w) {
+      QUrl url = w->url();
+      if (!url.isEmpty())
+        closedUrls_.append(url);
+    }
     ui_->tabWidget->removeTab(tab);
     delete widget;
   }
@@ -383,23 +464,29 @@ WebBrowser::closeTab(int tab)
 void
 WebBrowser::closeTab()
 {
-  switch (tabCount()) {
-  case 0: return;
-  case 1: hide(); break;
-  }
-  QWidget *widget = ui_->tabWidget->currentWidget();
-  if (widget) {
-    ui_->tabWidget->removeTab(ui_->tabWidget->currentIndex());
-    delete widget;
-  }
-  if (tabCount() <= 0)
+  if (tabCount())
+    closeTab(ui_->tabWidget->currentIndex());
+  else
     close();
+}
+
+void
+WebBrowser::undoCloseTab()
+{
+  DOUT("enter");
+  if (closedUrls_.isEmpty())
+    showMessage(tr("no recent closed tabs"));
+  else {
+    QUrl url = closedUrls_.takeLast();
+    openUrls(QStringList(decodeUrl(url)));
+  }
+  DOUT("exit");
 }
 
 void
 WebBrowser::updateButtons()
 {
-  QWebView *view = qobject_cast<QWebView*>(ui_->tabWidget->currentWidget());
+  QWebView *view = qobject_cast<QWebView *>(ui_->tabWidget->currentWidget());
   if (view) {
     ui_->backButton->setEnabled(view->history()->canGoBack());
     ui_->forwardButton->setEnabled(view->history()->canGoForward());
@@ -409,7 +496,7 @@ WebBrowser::updateButtons()
 void
 WebBrowser::back()
 {
-  QWebView *view = qobject_cast<QWebView*>(ui_->tabWidget->currentWidget());
+  QWebView *view = qobject_cast<QWebView *>(ui_->tabWidget->currentWidget());
   if (view)
     view->back();
 }
@@ -417,9 +504,35 @@ WebBrowser::back()
 void
 WebBrowser::forward()
 {
-  QWebView *view = qobject_cast<QWebView*>(ui_->tabWidget->currentWidget());
+  QWebView *view = qobject_cast<QWebView *>(ui_->tabWidget->currentWidget());
   if (view)
     view->forward();
+}
+
+void
+WebBrowser::previousTab()
+{
+  int n = tabCount();
+  if (n) {
+    int i = ui_->tabWidget->currentIndex();
+    if (--i < 0)
+      i = n - 1;
+    focusTab(i);
+  }
+}
+
+void
+WebBrowser::nextTab()
+{
+  DOUT("enter");
+  int n = tabCount();
+  if (n) {
+    int i = ui_->tabWidget->currentIndex();
+    if (++i >= n)
+      i = 0;
+    focusTab(i);
+  }
+  DOUT("exit");
 }
 
 void
@@ -446,6 +559,10 @@ WebBrowser::newTab(QWebView *view)
     connect(wbview, SIGNAL(warning(QString)), SLOT(warn(QString)));
     connect(wbview, SIGNAL(notification(QString)), SLOT(notify(QString)));
     connect(wbview, SIGNAL(windowCreated(QWebView*)), SLOT(newTab(QWebView*)));
+
+    connect(wbview, SIGNAL(openUrlWithAcPlayerRequested(QString)), SIGNAL(openUrlWithAcPlayerRequested(QString)));
+    connect(wbview, SIGNAL(openUrlWithAcDownloaderRequested(QString)), SIGNAL(openUrlWithAcDownloaderRequested(QString)));
+    connect(wbview, SIGNAL(undoClosedTabRequested()), SLOT(undoCloseTab()));
   }
 
   connect(view, SIGNAL(urlChanged(QUrl)), SLOT(updateAddressbar()));
@@ -456,13 +573,13 @@ WebBrowser::newTab(QWebView *view)
   connect(view, SIGNAL(titleChanged(QString)),
           new slot_::SetTabText(ui_->tabWidget, index, view), SLOT(setTabText(QString)));
 
-  ui_->tabWidget->setCurrentIndex(index);
+  focusTab(index);
 }
 
 void
 WebBrowser::reload()
 {
-  QWebView *view = qobject_cast<QWebView *>(ui_->tabWidget->currentWidget());
+  QWebView *view = qobject_cast<QWebView  *>(ui_->tabWidget->currentWidget());
   if (view)
     view->reload();
 }
@@ -470,7 +587,7 @@ WebBrowser::reload()
 void
 WebBrowser::updateAddressbar()
 {
-  QWebView *view = qobject_cast<QWebView*>(ui_->tabWidget->currentWidget());
+  QWebView *view = qobject_cast<QWebView *>(ui_->tabWidget->currentWidget());
   if (view) {
     QUrl url = view->url();
     QString address = tidyUrl(decodeUrl(url));
@@ -483,7 +600,7 @@ WebBrowser::updateAddressbar()
 void
 WebBrowser::handleLoadFinished()
 {
-  QWebView *view = qobject_cast<QWebView*>(ui_->tabWidget->currentWidget());
+  QWebView *view = qobject_cast<QWebView *>(ui_->tabWidget->currentWidget());
   if (view)
     view->setCursor(QCursor());
 }
@@ -491,7 +608,7 @@ WebBrowser::handleLoadFinished()
 void
 WebBrowser::handleLoadStarted()
 {
-  QWebView *view = qobject_cast<QWebView*>(ui_->tabWidget->currentWidget());
+  QWebView *view = qobject_cast<QWebView *>(ui_->tabWidget->currentWidget());
   if (view)
     view->setCursor(QCursor(Qt::BusyCursor));
 }
@@ -609,7 +726,7 @@ WebBrowser::openUrl()
 
   openUrl(url);
 
-  //QWebView *view = qobject_cast<QWebView*>(ui_->tabWidget->currentWidget());
+  //QWebView *view = qobject_cast<QWebView *>(ui_->tabWidget->currentWidget());
   //if (view) {
   //  QString address = ui_->addressLine->text();
   //  if (!address.startsWith("http://")) {

@@ -90,10 +90,14 @@ cd ../..
 
 cd "$DOWNLOADER_APP"/Contents/MacOS || exit 1
 ln -s ../../../"$APP_MACOS"/lua || exit 1
+ln -s ../../../"$APP_MACOS"/doc || exit 1
+ln -s ../../../"$APP_MACOS"/images || exit 1
 ln -s ../../../"$APP_MACOS"/translations || exit 1
 cd ../../..
 
 cd "$BROWSER_APP"/Contents/MacOS || exit 1
+ln -s ../../../"$APP_MACOS"/doc || exit 1
+ln -s ../../../"$APP_MACOS"/images || exit 1
 ln -s ../../../"$APP_MACOS"/translations || exit 1
 cd ../../..
 
@@ -205,6 +209,10 @@ test -e "$LUAPATH" || mkdir "$LUAPATH"|| exit 1
 cp "$APP_SRC"/module/luaresolver/lua/luascript.lua "$LUAPATH"/ || exit 1
 cp -R "$APP_SRC"/module/luaresolver/lua/luascript/*.lua "$LUAPATH"/  || exit 1
 cp -R "$APP_SRC"/module/luaresolver/lua/luascript/*/*.lua "$LUAPATH"/  || exit 1
+
+## copy doc
+cp -R "$APP_SRC"/module/qtext/doc "$APP_MACOS"/ || exit 1
+cp -R "$APP_SRC"/module/qtext/images "$APP_MACOS"/ || exit 1
 
 ## copy jsf
 cp -R "$APP_SRC"/module/annotcloud/jsf "$APP_MACOS"/ || exit 1

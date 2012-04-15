@@ -5,19 +5,20 @@
 #include "module/qtext/datetime.h"
 #include "module/qtext/os.h"
 #include <QFile>
+#include <QCoreApplication>
 #include <QDesktopServices>
 #include <boost/tuple/tuple.hpp>
 
 #define FORMAT_TIME(_secs)        QDateTime::fromMSecsSinceEpoch(_secs * 1000).toString(Qt::ISODate) \
                                   .replace('T', ' ')
-#define FORMAT_POS(_msecs)        ((_msecs) <= 0 ? QString() : QtExt::msecs2time(_msecs).toString())
+#define FORMAT_POS(_msecs)        ((_msecs) <= 0 ? QString::null : QtExt::msecs2time(_msecs).toString())
 
 // - Resources -
 
 #ifdef Q_OS_LINUX
 #  define RC_PREFIX     JSFDIR "/"
 #else
-#  define RC_PREFIX     "jsf/"
+#  define RC_PREFIX     QCoreApplication::applicationDirPath() + "/jsf/"
 #endif // Q_OS_LINUX
 
 #define RC_JSF_T        RC_PREFIX "t.xhtml"

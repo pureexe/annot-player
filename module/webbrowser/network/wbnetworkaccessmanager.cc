@@ -7,13 +7,36 @@
 //#define DEBUG "wbnetworkaccessmanager"
 #include "module/debug/debug.h"
 
+#ifdef Q_OS_LINUX
+#  define RC_IMAGE_NULL IMAGEDIR "/null.png"
+#else
+#  define RC_IMAGE_NULL "file:///" + QCoreApplication::applicationDirPath() + "/images/null.png"
+#endif Q_OS_LINUX
+
+namespace {
+  const QString &rc_image_null_()
+  {
+    static QString url;
+    if (url.isEmpty()) {
+      url = RC_IMAGE_NULL;
+#ifdef Q_WS_WIN
+      url.replace("\\", "/");
+#endif // Q_WS_WIN
+    }
+    return url;
+  }
+}
+
 QNetworkReply*
 WbNetworkAccessManager::createRequest(Operation op, const QNetworkRequest &req, QIODevice *outgoingData)
 {
   QUrl url = req.url();
   if (url.scheme() == "http") {
     QString host = url.host();
-    if (host.contains("nicovideo.jp", Qt::CaseInsensitive) &&
+    if (!blockedUrls_.isEmpty() && isBlockedUrl(url)) {
+      QNetworkRequest r(::rc_image_null_());
+      return Base::createRequest(op, r, outgoingData);
+    } else if (host.contains("nicovideo.jp", Qt::CaseInsensitive) &&
         host.startsWith("www.") && url.path().startsWith("/watch")) {
       DOUT("nico request =" << url.toString());
       QNetworkRequest r = req;
@@ -31,6 +54,16 @@ WbNetworkAccessManager::createRequest(Operation op, const QNetworkRequest &req, 
     }
   }
   return Base::createRequest(op, req, outgoingData);
+}
+
+bool
+WbNetworkAccessManager::isBlockedUrl(const QUrl &url) const
+{
+  foreach (const QUrl &u, blockedUrls_)
+    if (u.host() == url.host() &&
+        (u.path().isEmpty() || url.path().startsWith(u.path())))
+      return true;
+  return false;
 }
 
 QUrl

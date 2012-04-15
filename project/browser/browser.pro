@@ -3,6 +3,8 @@
 
 VERSION = 0.1.0.2
 
+DEFINES += PROJECT_BROWSER
+
 include(../../config.pri)
 include($$ROOTDIR/project/common/common.pri)
 include($$ROOTDIR/module/debug/debug.pri)
@@ -10,12 +12,15 @@ include($$ROOTDIR/module/debug/debug.pri)
 ## Libraries
 
 include($$ROOTDIR/module/nicoutil/nicoutil.pri)
+include($$ROOTDIR/module/mrlanalysis/mrlanalysis.pri)
 include($$ROOTDIR/module/qt/qt.pri)
 include($$ROOTDIR/module/qtext/qtext.pri)
 include($$ROOTDIR/module/crypt/crypt.pri)
 include($$ROOTDIR/module/download/download.pri)
 include($$ROOTDIR/module/compress/compress.pri)
-include($$ROOTDIR/module/webbrowser/webbrowser_static.pri)
+include($$ROOTDIR/module/webbrowser/webbrowser.pri)
+
+#!mac: include($$ROOTDIR/module/ipc/ipc.pri)
 
 win32 {
     include($$ROOTDIR/win/dwm/dwm.pri)
@@ -49,7 +54,7 @@ HEADERS += \
     application.h \
     global.h \
     mainwindow.h \
-    mainwindowprivate.h \
+    mainwindow_p.h \
     rc.h \
     settings.h
 
@@ -103,7 +108,7 @@ OTHER_FILES += $$TRANSLATIONS \
 # Deployment
 
 unix:!mac {
-    INSTALLS += target desktop desktop-kde icon #lua
+    INSTALLS += target desktop desktop-kde icon doc image
 
     target.path = $$BINDIR
 
@@ -118,6 +123,14 @@ unix:!mac {
 
     icon.path = $$DATADIR/icons/hicolor/256x256/apps
     icon.files += $${TARGET}.png
+
+    DOCDIR = $$DATADIR/annot/browser/doc
+    doc.path = $$DOCDIR
+    doc.files = $$DOC_FILES
+
+    IMAGEDIR = $$DATADIR/annot/browser/images
+    image.path = $$IMAGEDIR
+    image.files = $$IMAGE_FILES
 }
 
 # EOF

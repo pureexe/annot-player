@@ -2,7 +2,7 @@
 // 2/17/2012
 
 #include "mainwindow.h"
-#include "mainwindowprivate.h"
+#include "mainwindow_p.h"
 #include "taskdialog.h"
 #include "clipboardmonitor.h"
 #include "signer.h"
@@ -10,6 +10,8 @@
 #include "ac/acui.h"
 #include "ac/acss.h"
 #include "ac/acfilteredlistview.h"
+#include "ac/acdownloader.h"
+#include "ac/acplayer.h"
 #include "module/qtext/datetime.h"
 #include "module/download/downloadmanager.h"
 #include "module/download/mrldownloadtask.h"
@@ -20,9 +22,9 @@
 #include "module/debug/debug.h"
 
 #ifdef Q_OS_MAC
-  #define K_CTRL        "cmd"
+#  define K_CTRL        "cmd"
 #else
-  #define K_CTRL        "Ctrl"
+#  define K_CTRL        "Ctrl"
 #endif // Q_OS_MAC
 
 enum { RefreshInterval = 3000 };
@@ -67,6 +69,19 @@ MainWindow::MainWindow(QWidget *parent)
   connect(signer_, SIGNAL(error(QString)), SLOT(error(QString)), Qt::QueuedConnection);
   connect(this, SIGNAL(downloadFinished(QString,QString)), signer_, SLOT(signFileWithUrl(QString,QString)));
 
+  // - IPC -
+  connect(AcDownloaderController::globalController(), SIGNAL(message(QString)),
+          SLOT(showMessage(QString)), Qt::QueuedConnection);
+  connect(AcDownloaderController::globalController(), SIGNAL(error(QString)),
+          SLOT(error(QString)), Qt::QueuedConnection);
+  connect(AcDownloaderController::globalController(), SIGNAL(warning(QString)),
+          SLOT(warn(QString)), Qt::QueuedConnection);
+  connect(AcDownloaderController::globalController(), SIGNAL(notification(QString)),
+          SLOT(notify(QString)), Qt::QueuedConnection);
+  connect(AcDownloaderController::globalController(), SIGNAL(arguments(QStringList)),
+          SLOT(promptUrls(QStringList)), Qt::QueuedConnection);
+
+  // - Post behaviors -
   tableView_->setFocus();
 }
 
@@ -84,7 +99,7 @@ MainWindow::createLayout()
   startButton_ = ui->makeToolButton(AcUi::PushHint, tr("Start"), this, SLOT(start()));
   stopButton_ = ui->makeToolButton(AcUi::PushHint, tr("Stop"), this, SLOT(stop()));
   removeButton_ = ui->makeToolButton(AcUi::PushHint, tr("Remove"), this, SLOT(remove()));
-  //openButton_ = ui->makeToolButton(AcUi::PushHint, TR(T_PLAY), this, SLOT(open()));
+  openButton_ = ui->makeToolButton(AcUi::PushHint, tr("Play"), this, SLOT(open()));
   openDirectoryButton_ = ui->makeToolButton(
         AcUi::PushHint, tr("Dir"), tr("Open directory"), this, SLOT(openDirectory()));
   addButton_ = ui->makeToolButton(
@@ -93,7 +108,7 @@ MainWindow::createLayout()
   startButton_->setEnabled(false);
   stopButton_->setEnabled(false);
   removeButton_->setEnabled(false);
-  //openButton_->setEnabled(false);
+  openButton_->setEnabled(false);
 
   // Layout
   QVBoxLayout *rows = new QVBoxLayout; {
@@ -108,7 +123,7 @@ MainWindow::createLayout()
     header->addStretch();
     header->addWidget(removeButton_);
 
-    //footer->addWidget(openButton_);
+    footer->addWidget(openButton_);
     footer->addWidget(openDirectoryButton_);
     footer->addStretch();
     footer->addWidget(addButton_);
@@ -157,7 +172,7 @@ MainWindow::createActions()
   QShortcut *cancelShortcut = new QShortcut(QKeySequence("Esc"), this);
   connect(cancelShortcut, SIGNAL(activated()), SLOT(hide()));
 
-  QShortcut *closeShortcut = new QShortcut(QKeySequence::Close, this);
+  QShortcut *closeShortcut = new QShortcut(QKeySequence("CTRL+W"), this);
   connect(closeShortcut, SIGNAL(activated()), SLOT(hide()));
 
   QShortcut *newShortcut = new QShortcut(QKeySequence::New, this);
@@ -291,7 +306,7 @@ MainWindow::open()
 {
   DownloadTask *t = currentTask();
   if (t && !t->fileName().isEmpty())
-    emit openFileRequested(t->fileName());
+    AcPlayerController::globalController()->openUrl(t->fileName());
 }
 
 void
@@ -352,7 +367,7 @@ MainWindow::addTask(DownloadTask *t)
 
 #define FORMAT_TIME(_msecs)       downloadTimeToString(_msecs)
 #define FORMAT_STATE(_state)      downloadStateToString(_state)
-#define FORMAT_PERCENTAGE(_real)  QString().sprintf("%.2f%%", (_real)*100)
+#define FORMAT_PERCENTAGE(_real)  QString::number((_real)*100, 'f', 2) + "%"
 #define FORMAT_SIZE(_size)        downloadSizeToString(_size)
 #define FORMAT_SPEED(_speed)      downloadSpeedToString(_speed)
 
@@ -386,7 +401,7 @@ MainWindow::refresh()
 
 #define FORMAT_TIME(_msecs)       downloadTimeToString(_msecs)
 #define FORMAT_STATE(_state)      downloadStateToString(_state)
-#define FORMAT_PERCENTAGE(_real)  QString().sprintf("%.2f%%", (_real)*100)
+#define FORMAT_PERCENTAGE(_real)  QString::number((_real)*100, 'f', 2) + "%"
 #define FORMAT_SIZE(_size)        downloadSizeToString(_size)
 #define FORMAT_SPEED(_speed)      downloadSpeedToString(_speed)
 
@@ -482,13 +497,13 @@ MainWindow::invalidateButtons()
     startButton_->setEnabled(false);
     stopButton_->setEnabled(false);
     removeButton_->setEnabled(false);
-    //openButton_->setEnabled(false);
+    openButton_->setEnabled(false);
   } else {
     bool e = QFile::exists(t->fileName());
     startButton_->setEnabled(!t->isRunning() && !e);
     stopButton_->setEnabled(t->isRunning());
     removeButton_->setEnabled(true);
-    //openButton_->setEnabled(t->isFinished());
+    openButton_->setEnabled(t->isFinished());
   }
 }
 
@@ -527,7 +542,7 @@ MainWindow::downloadSizeToString(qint64 size) const
   else if (size < 1024 * 1024)
     return QString::number(size / 1014) + " KB";
   else
-    return QString().sprintf("%.1f MB", size / (1024.0 * 1024));
+    return QString::number(size / (1024.0 * 1024), 'f', 1) + " MB";
 }
 
 QString
@@ -538,7 +553,7 @@ MainWindow::downloadSpeedToString(qreal speed) const
   else if (speed < 1024 * 1024)
     return QString::number((int)speed / 1024) + " KB/s";
   else
-    return QString().sprintf("%.2f MB/s", speed / (1024.0 * 1024));
+    return QString::number(speed / (1024.0 * 1024), 'f', 2) + " MB/s";
 }
 
 QString
@@ -559,6 +574,9 @@ MainWindow::closeEvent(QCloseEvent *event)
 
   DOUT("enter");
   hide();
+
+  AcPlayerController::globalController()->stop();
+  AcDownloaderController::globalController()->stop();
 
   stopAll();
 
@@ -589,12 +607,11 @@ MainWindow::event(QEvent *e)
   switch (e->type()) {
   case QEvent::FileOpen: // See: http://www.qtcentre.org/wiki/index.php?title=Opening_documents_in_the_Mac_OS_X_Finder
     {
-      QFileOpenEvent *fe = dynamic_cast<QFileOpenEvent *>(e);
+      QFileOpenEvent *fe = static_cast<QFileOpenEvent *>(e);
       Q_ASSERT(fe);
-      if (fe) {
-        QString url = fe->file();
+      QString url = fe->url().toString();
+      if (!url.isEmpty())
         QTimer::singleShot(0, new slot_::PromptUrl(url, this), SLOT(promptUrl()));
-      }
     } break;
   default: accept = Base::event(e);
   }

@@ -165,7 +165,8 @@ main(int argc, char *argv[])
   w.resize(800, 600);
   w.show();
 
-  QTimer::singleShot(0, &w, SLOT(login()));
+  //QTimer::singleShot(0, &w, SLOT(login()));
+  //w.login();
 
   QStringList args = a.arguments();
   if (args.size() > 1) {

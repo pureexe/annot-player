@@ -19,7 +19,7 @@ PlayerPanel::PlayerPanel(QWidget *parent)
     positionSlider_(0), volumeSlider_(0),
     openButton_(0), playButton_(0), stopButton_(0), nextFrameButton_(0), fastForwardButton_(0), fastFastForwardButton_(0),
     toggleFullScreenModeButton_(0), toggleMiniModeButton_(0), toggleEmbedModeButton_(0),
-    userButton_(0), positionButton_(0), previousButton_(0), nextButton_(0), menuButton_(0),
+    userButton_(0), positionButton_(0), progressButton_(0), previousButton_(0), nextButton_(0), menuButton_(0),
     inputCountButton_(0), inputComboBox_(0), prefixComboBox_(0)
 {
   setContentsMargins(0, 0, 0, 0);
@@ -85,6 +85,7 @@ PlayerPanel::volumeSlider()
   MAKE_BUTTON(nextButton, NEXT)
   MAKE_BUTTON(userButton, USER)
   MAKE_BUTTON(positionButton, SEEK)
+  MAKE_BUTTON(progressButton, PROGRESS)
   MAKE_BUTTON(menuButton, MENU)
 #undef MAKE_BUTTON
 

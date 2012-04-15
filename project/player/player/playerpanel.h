@@ -43,6 +43,7 @@ public:
   //ADD_WIDGET(QToolButton, toggleAnnotationButton)
   ADD_WIDGET(QToolButton, userButton)
   ADD_WIDGET(QToolButton, positionButton)
+  ADD_WIDGET(QToolButton, progressButton)
   ADD_WIDGET(QToolButton, previousButton)
   ADD_WIDGET(QToolButton, nextButton)
   ADD_WIDGET(QToolButton, menuButton)

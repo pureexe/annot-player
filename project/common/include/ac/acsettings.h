@@ -27,6 +27,8 @@ public:
   QString version() const;
   void setVersion(const QString &version);
 
+  bool fackCcp() const;
+
 public slots:
   void sync(); ///< thread-safe
 

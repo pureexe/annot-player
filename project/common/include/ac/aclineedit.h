@@ -6,8 +6,6 @@
 
 #include <QLineEdit>
 
-QT_FORWARD_DECLARE_CLASS(QMenu)
-
 class AcLineEdit : public QLineEdit
 {
   Q_OBJECT
@@ -17,12 +15,12 @@ class AcLineEdit : public QLineEdit
 public:
   explicit AcLineEdit(QWidget *parent = 0);
 
+public slots:
+  void enterText(const QString &text); // setText and emit enterPressed
+
   // - Events -
 protected:
   virtual void contextMenuEvent(QContextMenuEvent *event); ///< \override
-
-private:
-  QMenu *contextMenu_;
 };
 
 #endif // _AC_ACLINEEDIT_H

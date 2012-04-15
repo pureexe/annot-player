@@ -84,8 +84,10 @@ MainPlayerUi::createLayout()
   setLayout(rows);
 //#ifndef Q_OS_MAC
 //  menuButton()->hide();
-//  menuBButton()->resize(0, 0);
+//  menuBButton()->resize(QSize());
 //#endif // Q_OS_MAC
+  progressButton()->hide();
+  progressButton()->resize(QSize());
   setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
 
   setStyleSheet(styleSheet() +

@@ -123,8 +123,5 @@
         <file>images/M_disabled.png</file>
         <file>images/M_hover.png</file>
         <file>images/M_pressed.png</file>
-        <file>images/browser.png</file>
-        <file>images/downloader.png</file>
-        <file>images/player.png</file>
     </qresource>
 </RCC>

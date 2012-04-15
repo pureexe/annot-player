@@ -146,7 +146,7 @@ AnnotationBrowser::createActions()
   // Shortcuts
   QShortcut *cancelShortcut = new QShortcut(QKeySequence("Esc"), this);
   connect(cancelShortcut, SIGNAL(activated()), SLOT(hide()));
-  QShortcut *closeShortcut = new QShortcut(QKeySequence::Close, this);
+  QShortcut *closeShortcut = new QShortcut(QKeySequence("CTRL+W"), this);
   connect(closeShortcut, SIGNAL(activated()), SLOT(hide()));
 
   QShortcut *c1 = new QShortcut(QKeySequence("CTRL+1"), this);
@@ -237,12 +237,12 @@ AnnotationBrowser::currentUserAlias() const
 {
   QModelIndex index = currentIndex();
   if (!index.isValid())
-    return QString();
+    return QString::null;
 
   int row = index.row();
   index = index.sibling(row, HD_UserAlias);
   if (!index.isValid())
-    return QString();
+    return QString::null;
   return index.data().toString();
 }
 
@@ -251,12 +251,12 @@ AnnotationBrowser::currentText() const
 {
   QModelIndex index = currentIndex();
   if (!index.isValid())
-    return QString();
+    return QString::null;
 
   int row = index.row();
   index = index.sibling(row, HD_Text);
   if (!index.isValid())
-    return QString();
+    return QString::null;
 
   return index.data().toString();
 }
@@ -792,14 +792,14 @@ void TextEdit::fileNew()
 {
   if (maybeSave()) {
     textEdit_->clear();
-    setCurrentFileName(QString());
+    setCurrentFileName(QString::null);
   }
 }
 
 void TextEdit::fileOpen()
 {
   QString fn = QFileDialog::getOpenFileName(this, tr("Open File..."),
-                        QString(), tr("HTML-Files (*.htm *.html);;All Files (*)"));
+                        QString::null, tr("HTML-Files (*.htm *.html);;All Files (*)"));
   if (!fn.isEmpty())
     load(fn);
 }
@@ -819,7 +819,7 @@ bool TextEdit::fileSave()
 bool TextEdit::fileSaveAs()
 {
   QString fn = QFileDialog::getSaveFileName(this, tr("Save as..."),
-                        QString(), tr("ODF files (*.odt);;HTML-Files (*.htm *.html);;All Files (*)"));
+                        QString::null, tr("ODF files (*.odt);;HTML-Files (*.htm *.html);;All Files (*)"));
   if (fn.isEmpty())
     return false;
   if (! (fn.endsWith(".odt", Qt::CaseInsensitive) || fn.endsWith(".htm", Qt::CaseInsensitive) || fn.endsWith(".html", Qt::CaseInsensitive)) )
@@ -867,7 +867,7 @@ void TextEdit::filePrintPdf()
 #ifndef QT_NO_PRINTER
 //! [0]
   QString fileName = QFileDialog::getSaveFileName(this, "Export PDF",
-                          QString(), "*.pdf");
+                          QString::null, "*.pdf");
   if (!fileName.isEmpty()) {
     if (QFileInfo(fileName).suffix().isEmpty())
       fileName.append(".pdf");

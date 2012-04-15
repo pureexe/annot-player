@@ -90,7 +90,7 @@ protected slots:
   void fly();
   void stay(Style location = TopStyle);
 
-  void autoRemove(int msecs = 0);
+  void removeLater(int msecs);
 
   void edit();
   void copyToClipboard() const;
@@ -135,7 +135,7 @@ private:
   QGraphicsScene *scene_;
   SignalHub *hub_;
 
-  QTimer *autoRemoveTimer_;
+  QTimer *removeLaterTimer_;
   Style style_;
   QPropertyAnimation *ani_;
 

@@ -82,6 +82,7 @@
 PositionSlider::PositionSlider(QWidget *parent)
   : Base(Qt::Horizontal, parent), availablePosition_(0)
 {
+  setContentsMargins(0, 0, 0, 0);
   connect(this, SIGNAL(sliderMoved(int)), SLOT(invalidateStyleSheet(int)));
   invalidateStyleSheet();
 }

@@ -13,4 +13,20 @@
 #define AC_EMAIL         "AnnotCloud@gmail.com"
 #define AC_LICENSE       "GNU GPL v3"
 
+// - Apps -
+
+#define AC_PLAYER_ID     1
+#define AC_DOWNLOADER_ID 2
+#define AC_BROWSER_ID    3
+
+#ifdef Q_WS_MAC
+#  define AC_BROWSER    "Annot Browser"
+#  define AC_DOWNLOADER "Annot Downloader"
+#  define AC_PLAYER     "Annot Player"
+#else
+#  define AC_BROWSER    "annot-browser"
+#  define AC_DOWNLOADER "annot-down"
+#  define AC_PLAYER     "annot-player"
+#endif // Q_WS_MAC
+
 #endif // _AC_ACGLOBAL_H

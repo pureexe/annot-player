@@ -146,7 +146,6 @@ VlcHttpPlugin::open(vlc_object_t *p_this)
 
   DOUT("url =" << url);
   if (url.contains(".youtube.com/")) {
-    // FIXME: youtube video not saved
     closeSession();
     DOUT("exit: youtube URL:" << url);
     return VLC_EGENERIC;
@@ -185,6 +184,9 @@ VlcHttpPlugin::close(vlc_object_t *p_this)
   DOUT("enter");
   Q_UNUSED(p_this);
   //closeSession();
+  enum { timeout = 2000 };
+  QEventLoop loop;
+  loop.processEvents(QEventLoop::AllEvents, timeout);
   DOUT("exit");
 }
 
@@ -234,7 +236,7 @@ VlcHttpPlugin::closeSession()
     session_->waitForStopped();
     session_->wait(5000); // wait at most 5 seconds
   }
-  session_->deleteLater();
+  QTimer::singleShot(0, session_, SLOT(deleteLater()));
   session_ = 0;
   DOUT("exit");
 }
@@ -289,7 +291,7 @@ VlcHttpPlugin::seek(access_t *p_access, uint64_t i_pos)
   //DOUT("enter: i_pos =" << i_pos);
 
   //VlcHttpSession *session = (VlcHttpSession *)p_access->p_sys;
-  Q_ASSERT(session_);
+  //Q_ASSERT(session_);
   if (i_pos == (quint64)session_->pos()) {
     DOUT("exit: already seeked");
     return true;
@@ -318,6 +320,7 @@ VlcHttpPlugin::control(access_t *p_access, int i_query, va_list args)
 {
   //DOUT("enter: i_query =" << i_query);
   Q_UNUSED(p_access);
+  Q_ASSERT(session_);
   //access_sys_t *p_sys = p_access->p_sys;
   bool     *pb_bool;
   int64_t  *pi_64;
@@ -328,12 +331,12 @@ VlcHttpPlugin::control(access_t *p_access, int i_query, va_list args)
     //DOUT("query = ACCESS_CAN_SEEK");
     pb_bool = (bool *)va_arg(args, bool *);
     //*pb_bool = p_sys->b_seekable;
-    *pb_bool = true; // FIXME: not seekable
+    *pb_bool = true;
     break;
   case ACCESS_CAN_FASTSEEK:
     //DOUT("query = ACCESS_CAN_FASTSEEK");
     pb_bool = (bool *)va_arg(args, bool *);
-    *pb_bool = true;
+    *pb_bool = false;
     break;
   case ACCESS_CAN_PAUSE:
     //DOUT("query = ACCESS_CAN_PAUSE");

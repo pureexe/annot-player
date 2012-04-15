@@ -8,6 +8,7 @@
 #include <QStringList>
 #include <QDate>
 #include <QHash>
+#include <QUrl>
 #include <utility>
 
 class Settings : public QSettings
@@ -32,8 +33,16 @@ public:
 
   // - History -
   QStringList recentUrls() const;
-  void setRecentUrls(const QStringList &urls);
+  void setRecentUrls(const QStringList &urls, int limit = 0);
   void clearRecentUrls();
+
+  QStringList recentTabs() const;
+  void setRecentTabs(const QStringList &urls, int limit = 0);
+  void clearRecentTabs();
+
+  QList<QUrl> closedUrls() const;
+  void setClosedUrls(const QList<QUrl> &urls, int limit = 0);
+  void clearClosedUrls();
 };
 
 #endif // SETTINGS_H

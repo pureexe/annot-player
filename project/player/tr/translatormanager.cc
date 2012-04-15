@@ -10,21 +10,21 @@
 #include <QtCore>
 
 #ifdef Q_OS_MAC
-  #define K_CTRL        "cmd"
-  #define K_CMD         "cmd"
-  #define K_ALT         "opt"
-  #define K_SHIFT       "shift"
-  #define K_SPACE       "space"
-  #define K_BACKSPACE   "backspace"
-  #define K_ESC         "esc"
+#  define K_CTRL        "cmd"
+#  define K_CMD         "cmd"
+#  define K_ALT         "opt"
+#  define K_SHIFT       "shift"
+#  define K_SPACE       "space"
+#  define K_BACKSPACE   "backspace"
+#  define K_ESC         "esc"
 #else
-  #define K_CTRL        "Ctrl"
-  #define K_CMD         "Alt"
-  #define K_ALT         "Alt"
-  #define K_SHIFT       "Shift"
-  #define K_SPACE       "Space"
-  #define K_BACKSPACE   "Backspace"
-  #define K_ESC         "Esc"
+#  define K_CTRL        "Ctrl"
+#  define K_CMD         "Alt"
+#  define K_ALT         "Alt"
+#  define K_SHIFT       "Shift"
+#  define K_SPACE       "Space"
+#  define K_BACKSPACE   "Backspace"
+#  define K_ESC         "Esc"
 #endif // Q_OS_MAC
 
 // - Constructions -
@@ -116,7 +116,7 @@ TranslatorManager::translate(int tid) const
 {
 #define SELF(_t)      translate(_t)
   switch (tid) {
-  case T_NULL:          return QString();
+  case T_NULL:          return QString::null;
 
   case T_MORE:          return tr("More");
   case T_LESS:          return tr("Less");
@@ -131,7 +131,10 @@ TranslatorManager::translate(int tid) const
   case T_BLACKLIST:     return tr("Blacklist");
   case T_DEFAULT:       return tr("Default");
   case T_RANDOM:        return tr("Random");
-  case T_POSITION:      return tr("Progress");
+  case T_POSITION:      return tr("Position");
+  case T_PROGRESS:      return tr("Progress");
+  case T_VIDEO:         return tr("Video");
+  case T_AUDIO:         return tr("Audio");
   case T_URL:           return tr("URL");
   case T_STATE:         return tr("State");
   case T_VOLUME:        return tr("Volume");
@@ -232,7 +235,7 @@ TranslatorManager::translate(int tid) const
   case T_TITLE_ANNOTATIONEDITOR:        return tr("Annot Editor");
   case T_TITLE_TOKENVIEW:       return tr("Token");
   case T_TITLE_COMMENTVIEW:     return tr("Comments");
-  case T_TITLE_ANNOTTHREAD:     return tr("Annotations analytics");
+  case T_TITLE_ANNOTANALYTICS:     return tr("Annotations analytics");
   case T_TITLE_SIGNALVIEW:      return tr("Select process signal");
   case T_TITLE_LIVE:            return tr("Live Channel");
   case T_TITLE_SYNC:            return tr("Sync Mode");
@@ -664,8 +667,8 @@ TranslatorManager::translate(int tid) const
   case T_MENUTEXT_DOWNLOAD:  return tr("Download") + " [" K_CTRL "+D]";
   case T_TIP_DOWNLOAD:       return tr("Download") + " [" K_CTRL "+D]";
 
-  case T_MENUTEXT_ANNOTTHREAD:  return tr("Annotation analytics") + " [" K_CTRL "+F5]";
-  case T_TIP_ANNOTTHREAD:       return tr("Show annotations as thread");
+  case T_MENUTEXT_ANNOTANALYTICS:  return tr("Annotation analytics") + " [" K_CTRL "+F5]";
+  case T_TIP_ANNOTANALYTICS:       return tr("Show annotations as thread");
 
   case T_MENUTEXT_SAVEMEDIA:    return tr("Save buffered video");
   case T_TIP_SAVEMEDIA:         return tr("Save buffered video on desktop");
@@ -789,10 +792,18 @@ TranslatorManager::translate(int tid) const
   case T_SATURATIONUP: return tr("Saturation up");
   case T_SATURATIONDOWN: return tr("Saturation down");
 
+  case T_HUE:           return tr("Hue");
+  case T_SATURATION:    return tr("Saturation");
+  case T_GAMMA:         return tr("Gamma");
+  case T_CONTRAST:      return tr("Contrast");
+  case T_BRIGHTNESS:    return tr("Brightness");
+
+  case T_MEDIAINFO:  return tr("Media information");
+
   default:
     qWarning() << "TranslatorManager:translate: Unknown tid =" << tid;
     Q_ASSERT(0);
-    return QString();
+    return QString::null;
   }
 #undef SELF
 }

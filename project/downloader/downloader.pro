@@ -3,6 +3,8 @@
 
 VERSION = 0.1.0.2
 
+DEFINES += PROJECT_DOWNLOADER
+
 include(../../config.pri)
 include($$ROOTDIR/project/common/common.pri)
 include($$ROOTDIR/module/debug/debug.pri)
@@ -21,6 +23,8 @@ include($$ROOTDIR/module/mrlresolver/mrlresolver.pri)
 include($$ROOTDIR/module/qt/qt.pri)
 include($$ROOTDIR/module/qtext/qtext.pri)
 include($$ROOTDIR/module/stream/stream.pri)
+
+#!mac: include($$ROOTDIR/module/ipc/ipc.pri)
 
 win32 {
     include($$ROOTDIR/win/dwm/dwm.pri)
@@ -57,7 +61,7 @@ HEADERS += \
     clipboardmonitor.h \
     global.h \
     mainwindow.h \
-    mainwindowprivate.h \
+    mainwindow_p.h \
     rc.h \
     settings.h \
     signer.h \
@@ -116,7 +120,7 @@ OTHER_FILES += $$TRANSLATIONS \
 # Deployment
 
 unix:!mac {
-    INSTALLS += target desktop desktop-kde icon lua
+    INSTALLS += target desktop desktop-kde icon lua doc
 
     target.path = $$BINDIR
 
@@ -135,6 +139,10 @@ unix:!mac {
     LUADIR = $$DATADIR/annot/down/lua
     lua.path = $$LUADIR
     lua.files = $$LUA_FILES
+
+    DOCDIR = $$DATADIR/annot/down/doc
+    doc.path = $$DOCDIR
+    doc.files = $$DOC_FILES
 }
 
 # EOF

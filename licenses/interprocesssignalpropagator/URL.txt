@@ -1,1 +1,0 @@
-http://gitorious.org/inter-process-signal-propagator

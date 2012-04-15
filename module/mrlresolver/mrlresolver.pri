@@ -3,6 +3,7 @@
 
 include(../../config.pri)
 include($$ROOTDIR/module/luaresolver/luaresolver.pri)
+include($$ROOTDIR/module/mrlanalysis/mrlanalysis.pri)
 
 DEFINES += WITH_MODULE_MRLRESOLVER
 

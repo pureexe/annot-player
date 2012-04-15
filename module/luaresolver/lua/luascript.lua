@@ -104,7 +104,7 @@ g_durations = nil;
 g_suburl = nil;
 function resolve(url, tmpnam, bSubOnly)
   --local t = getTaskAttribute("http://www.bilibili.tv/video/av205838/", tmpnam, "acfun.tv", bSubOnly);
-  local t = getTaskAttribute(url, tmpnam, "acfun.tv", bSubOnly);
+  local t = getTaskAttribute(url, tmpnam, "acfun.tv", nil, bSubOnly);
   if t == nil then
     return 1;
   end

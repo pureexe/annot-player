@@ -83,14 +83,14 @@ Application::abortAll()
 bool
 Application::isSingleInstance() const
 {
-#ifdef Q_OS_WIN
+#ifdef Q_WS_WIN
   QFileInfo fi(applicationFilePath());
   QString processName = fi.fileName();
   QList<ulong> pids = QtWin::getProcessIdsByName(processName);
   return pids.size() <= 1;
-#elif defined(Q_OS_MAC)
+#elif defined Q_WS_MAC
   return true;
-#elif defined(Q_OS_UNIX)
+#else
   // See: http://www.linuxquestions.org/questions/programming-9/restricting-multiple-instance-of-a-program-242069/
   static int fd_lock = -1;
   if (fd_lock < 0) {
@@ -109,8 +109,6 @@ Application::isSingleInstance() const
     }
   }
   return fd_lock >= 0;
-#else
-  return true;
 #endif // Q_OS_
 }
 

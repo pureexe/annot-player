@@ -11,7 +11,7 @@
 #endif // __LIBVLC__
 
 #include "player.h"
-#include "playerprivate.h"
+#include "player_p.h"
 //#include "module/qtext/os.h"
 #ifdef WITH_MODULE_VLCCORE
 #  include "module/vlccore/video.h"
@@ -62,6 +62,7 @@ namespace { // anonymous
 class PlayerImpl
   : public mp_handle_,
     public mp_states_,
+    public mp_properties_,
     public mp_trackers_
     //public mp_intl_
 { };
@@ -746,19 +747,30 @@ void
 Player::closeMedia()
 {
   DOUT("enter");
+  enum { ProcessEventsTimeout = 2000 }; // 2 seconds
+
   Q_ASSERT(isValid());
   if (isMouseEventEnabled())
     stopVoutTimer();
   if (!isStopped()) {
     stop();
+
     //enum { timeout = 1000 };
     //qDebug() << "Player::closeMedia: enter sleep: timeout =" << timeout;
     //QtExt::sleep(timeout);
     //qDebug() << "Player::closeMedia: leave sleep";
     //DOUT("processEvent: enter");
-    //enum { timeout = 1000 };
-    //qApp->processEvents(QEventLoop::AllEvents, timeout);
-    //DOUT("processEvent: exit");
+    //qDebug() << "player::closeEvent:eventloop:enter";
+    //QEventLoop loop;
+    //connect(this, SIGNAL(disposed()), &loop, SLOT(quit()), Qt::QueuedConnection);
+    //connect(this, SIGNAL(stopped()), &loop, SLOT(quit()), Qt::QueuedConnection);
+    //connect(this, SIGNAL(mediaChanged()), &loop, SLOT(quit()), Qt::QueuedConnection);
+    //loop.processEvents();
+    //qDebug() << "player::closeEvent:eventloop:leave";
+
+    qDebug() << "player::closeMedia:processEvents:enter: timeout =" << ProcessEventsTimeout;
+    qApp->processEvents(QEventLoop::AllEvents, ProcessEventsTimeout);
+    qDebug() << "player::closeMedia:leave";
   }
 
   impl_->setPaused(false);
@@ -769,9 +781,11 @@ Player::closeMedia()
   impl_->setTrackNumber();
   impl_->setExternalSubtitles();
 
+  impl_->trackInfo().clear();;
+
 #ifdef WITH_MODULE_VLCCORE
   VlcHttpPlugin::closeSession();
-  VlcHttpPlugin::setMediaTitle(QString());
+  VlcHttpPlugin::setMediaTitle(QString::null);
   VlcHttpPlugin::setUrls(QStringList());
   VlcHttpPlugin::setDuration(0);
 #endif // WITH_MODULE_VLCCORE
@@ -836,12 +850,12 @@ Player::mediaTitle() const
     return impl_->mediaTitle();
 
   if (!hasMedia())
-    return QString();
+    return QString::null;
 
   const char *title = ::libvlc_media_get_meta(impl_->media(), libvlc_meta_Title);
   // VLC i18n bug. It simpily cannot handle UTF-8 correctly.
   if (!title || ::strstr(title, "??"))
-    return QString();
+    return QString::null;
 
   return _qs(title);
 }
@@ -1089,7 +1103,7 @@ Player::clearAspectRatio()
 {
   Q_ASSERT(isValid());
   ::libvlc_video_set_aspect_ratio(impl_->player(), 0);
-  emit aspectRatioChanged(QString());
+  emit aspectRatioChanged(QString::null);
 }
 
 void
@@ -1115,6 +1129,13 @@ Player::rate() const
 {
   Q_ASSERT(isValid());
   return ::libvlc_media_player_get_rate(impl_->player());
+}
+
+qreal
+Player::fps() const
+{
+  Q_ASSERT(isValid());
+  return ::libvlc_media_player_get_fps(impl_->player());
 }
 
 qreal
@@ -1208,7 +1229,7 @@ Player::subtitleDescriptions() const
     if (first->psz_name)
       ret.append(first->psz_name);
     else
-      ret.append(QString());
+      ret.append(QString::null);
     first = first->p_next;
   }
 
@@ -1811,14 +1832,13 @@ Player::setMediaTitle(const QString &t)
 void
 Player::dispose()
 {
+  emit disposed();
   //if (impl_)
   //  detachEvents();
 
   if (hasMedia()) {
-    if (!isStopped()) {
+    if (!isStopped())
       mute();
-      stop();
-    }
     closeMedia();
   }
 }
@@ -1865,7 +1885,119 @@ Player::dispose()
 
 #undef MAKE_ADJUST
 
+// - Track info -
+
+QSize
+Player::videoDimension() const
+{
+  if (!hasMedia())
+    return QSize();
+
+  if (impl_->trackInfo().isEmpty())
+    const_cast<Self *>(this)->invalidateTrackInfo();
+  return QSize(impl_->trackInfo().width, impl_->trackInfo().height);
+}
+
+QString
+Player::codecName(int codecId)
+{
+#ifdef WITH_MODULE_VLCCORE
+  return _qs(vlccore::codec_name(codecId));
+#else
+  return QString::number(codecId);
+#endif // WITH_MODULE_VLCCORE
+}
+
+int
+Player::videoCodecId() const
+{
+  if (!hasMedia())
+    return 0;
+
+  if (impl_->trackInfo().isEmpty())
+    const_cast<Self *>(this)->invalidateTrackInfo();
+  return impl_->trackInfo().videoCodecId;
+}
+
+int
+Player::audioCodecId() const
+{
+  if (!hasMedia())
+    return 0;
+
+  if (impl_->trackInfo().isEmpty())
+    const_cast<Self *>(this)->invalidateTrackInfo();
+  return impl_->trackInfo().audioCodecId;
+}
+
+int
+Player::audioChannels() const
+{
+  if (!hasMedia())
+    return 0;
+
+  if (impl_->trackInfo().isEmpty())
+    const_cast<Self *>(this)->invalidateTrackInfo();
+  return impl_->trackInfo().channels;
+}
+
+int
+Player::audioRate() const
+{
+  if (!hasMedia())
+    return 0;
+
+  if (impl_->trackInfo().isEmpty())
+    const_cast<Self *>(this)->invalidateTrackInfo();
+  return impl_->trackInfo().rate;
+}
+
+void
+Player::invalidateTrackInfo()
+{
+  Q_ASSERT(isValid());
+  TrackInfo &info = impl_->trackInfo();
+  info.clear();
+  if (hasMedia()) {
+    libvlc_media_track_info_t *tracks;
+    int count = ::libvlc_media_get_tracks_info(impl_->media(), &tracks);
+    if (count > 0 && tracks) {
+      for (int i = 0; i < count; i++)
+        switch (tracks[i].i_type) {
+        case libvlc_track_video:
+          info.videoCodecId = tracks[i].i_codec;
+          info.width = tracks[i].u.video.i_width;
+          info.height = tracks[i].u.video.i_height;
+          break;
+        case libvlc_track_audio:
+          info.audioCodecId = tracks[i].i_codec;
+          info.channels = tracks[i].u.audio.i_channels;
+          info.rate = tracks[i].u.audio.i_rate;
+          break;
+        default: ;
+        }
+      ::libvlc_free(tracks);
+    }
+  }
+}
+
+// - Media stats -
+
+qreal
+Player::bitrate() const
+{
+  Q_ASSERT(isValid());
+  qreal ret = 0;
+  if (hasMedia()) {
+    libvlc_media_stats_t stats;
+    if (::libvlc_media_get_stats(impl_->media(), &stats))
+      ret = stats.f_input_bitrate * 1000;
+  }
+  return ret;
+}
+
 // EOF
+
 // - PlayerListener -
 
 /*

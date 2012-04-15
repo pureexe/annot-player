@@ -105,12 +105,14 @@ MiniPlayerUi::createLayout()
 
   // TOD jichi 7/26/2011: This is really a bad hotfix. Need a better design for PlayerUI class do to this in an efficient way.
   // Note: there is no textChanged event in QLabel.
+  progressButton()->hide();
+  progressButton()->resize(QSize());
 #ifdef Q_OS_MAC
   volumeSlider()->hide();
-  volumeSlider()->resize(0, 0);
+  volumeSlider()->resize(QSize());
 #else
   positionButton()->hide();
-  positionButton()->resize(0, 0);
+  positionButton()->resize(QSize());
 #endif // Q_OS_MAC
 
   //setStyleSheet(styleSheet() +

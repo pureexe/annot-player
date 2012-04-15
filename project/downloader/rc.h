@@ -4,7 +4,9 @@
 // rc.h
 // 7/15/2011
 
-#define RC_NULL         ""
+#include "ac/acrc.h"
+
+#define RC_NULL         ACRC_NULL
 
 #define RC_PREFIX_IMAGE ":/images/"
 #define RC_IMAGE_NULL   RC_NULL
@@ -21,6 +23,6 @@
 
 // - Apps -
 
-#define RC_IMAGE_APP    RC_PREFIX_IMAGE "app.png"
+#define RC_IMAGE_APP    ACRC_IMAGE_DOWNLOADER
 
 #endif // RC_H

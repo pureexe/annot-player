@@ -11,6 +11,11 @@
 //#define ACRC_PREFIX_TR    ":/tr/"
 //#define ACRC_TR_NULL      ""
 
+// - Apps -
+#define ACRC_IMAGE_PLAYER       ACRC_PREFIX_IMAGE "player.png"
+#define ACRC_IMAGE_DOWNLOADER   ACRC_PREFIX_IMAGE "downloader.png"
+#define ACRC_IMAGE_BROWSER      ACRC_PREFIX_IMAGE "browser.png"
+
 // - Backgrounds -
 
 #define ACRC_IMAGE_AERO         ACRC_PREFIX_IMAGE "aero_mac.png"

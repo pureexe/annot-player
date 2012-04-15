@@ -37,7 +37,7 @@ signals:
   // - Properties -
 public:
   QNetworkCookieJar *cookieJar() const { return cookieJar_; }
-  virtual QString contentType() const { return QString(); }
+  virtual QString contentType() const { return QString::null; }
   QString mediaTitle() const { return mediaTitle_; }
   virtual qint64 read(char *data, qint64 maxSize) = 0;
   virtual bool seek(qint64 pos) = 0;

@@ -22,15 +22,30 @@ class EmbeddedCanvas : public QWidget
 public:
   EmbeddedCanvas(DataManager *data, SignalHub *hub, Player *player, QWidget *parent = 0);
 
+signals:
+  void enabledChanged(bool enabled);
+  void visibleChanged(bool visible);
+
+public:
+  bool isEnabled() const { return enabled_; }
+  bool isEmpty() const;
+public slots:
+  void setEnabled(bool t);
+  void invalidateVisible();
+
   // - Events -
+public slots:
+  //virtual void mouseDoubleClickEvent(QMouseEvent *event); ///< \override
+  virtual void setVisible(bool visible); ///< \override
 protected:
   virtual void paintEvent(QPaintEvent *event); ///< \override
 
   // - Paint -
 protected:
-  void paint(QPainter &painter, const AnnotCloud::AnnotationList &l);
+  void paintHistogram(QPainter &painter, const QRect &view, const AnnotCloud::AnnotationList &l);
 
 private:
+  bool enabled_;
   DataManager *data_;
   SignalHub *hub_;
   Player *player_;

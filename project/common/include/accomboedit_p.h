@@ -1,7 +1,7 @@
-#ifndef ACCOMBOEDITPRIVATE_H
-#define ACCOMBOEDITPRIVATE_H
+#ifndef ACCOMBOEDIT_P_H
+#define ACCOMBOEDIT_P_H
 
-// comboeditprivate.h
+// accomboedit_p.h.h
 // 12/15/2011
 
 #include <QLineEdit>
@@ -17,32 +17,28 @@ public:
   explicit AcComboBoxLineEdit(QWidget *parent = 0)
     : Base(parent) { }
 
+public slots:
+  void enterText(const QString &text)
+  {
+    setText(text);
+    emit returnPressed();
+  }
+
 protected:
   virtual void keyPressEvent(QKeyEvent *event) ///< \override
   {
     switch (event->key()) {
     case Qt::Key_Escape:
-      clearFocus();    // FIXME: after clear focus, which window get new focus?
+      clearFocus();
       event->accept();
       return;
-
     case Qt::Key_Return:
       event->accept();
       emit returnPressed();
       return;
-
-    //case Qt::Key_Up:
-    //  previous();
-    //  event->accept();
-    //  return;
-    //case Qt::Key_Down:
-    //  next();
-    //  event->accept();
-    //  return;
     }
-
     Base::keyPressEvent(event);
   }
 };
 
-#endif // ACCOMBOEDITPRIVATE_H
+#endif // ACCOMBOEDIT_P_H

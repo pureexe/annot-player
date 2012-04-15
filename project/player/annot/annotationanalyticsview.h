@@ -1,7 +1,7 @@
-#ifndef ANNOTATIONTHREADVIEW_H
-#define ANNOTATIONTHREADVIEW_H
+#ifndef ANNOTATIONANALYTICSVIEW_H
+#define ANNOTATIONANALYTICSVIEW_H
 
-// annotationthreadview.h
+// annotationanalyticsview.h
 // 11/16/2011
 
 #include "ac/acwebwindow.h"
@@ -10,17 +10,17 @@
 
 class DataManager;
 
-class AnnotationThreadView: public AcWebWindow
+class AnnotationAnalyticsView: public AcWebWindow
 {
   Q_OBJECT
-  typedef AnnotationThreadView Self;
+  typedef AnnotationAnalyticsView Self;
   typedef AcWebWindow Base;
 
   typedef AnnotCloud::AnnotationList AnnotationList;
 
   // - Constructions -
 public:
-  explicit AnnotationThreadView(DataManager *data, QWidget *parent = 0);
+  explicit AnnotationAnalyticsView(DataManager *data, QWidget *parent = 0);
 
 signals:
   void contentChanged(const QString &html);
@@ -50,4 +50,4 @@ private:
   bool refreshing_;
 };
 
-#endif // ANNOTATIONTHREADVIEW_H
+#endif // ANNOTATIONANALYTICSVIEW_H

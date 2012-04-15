@@ -57,5 +57,6 @@
 
 #define SS_TOOLBUTTON_USER      SS_TOOLBUTTON_TEXT
 #define SS_TOOLBUTTON_SEEK      SS_TOOLBUTTON_TEXT
+#define SS_TOOLBUTTON_PROGRESS  SS_TOOLBUTTON_TEXT_(normal, normal, none, cyan, red, purple, purple, red, gray)
 
 #endif // STYLESHEET_H

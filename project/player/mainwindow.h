@@ -44,7 +44,7 @@ class Translator;
 
 // Views
 class AnnotationGraphicsView;
-class AnnotationThreadView;
+class AnnotationAnalyticsView;
 class AnnotationBrowser;
 class AnnotationEditor;
 //class CommentView;
@@ -56,11 +56,11 @@ class MiniPlayerUi;
 class OsdWindow;
 class OsdConsole;
 class EmbeddedPlayerUi;
+class EmbeddedCanvas;
 class PlayerUi;
 class MessageView;
 class SignalView;
 class BacklogDialog;
-class DownloadDialog;
 class ConsoleDialog;
 class TokenView;
 class VideoView;
@@ -77,6 +77,7 @@ class NetworkProxyDialog;
 class PickDialog;
 class SeekDialog;
 class SiteAccountView;
+class MediaInfoView;
 class SyncDialog;
 class UserView;
 class UrlDialog;
@@ -104,7 +105,6 @@ public:
 public:
   explicit MainWindow(QWidget *parent = 0, Qt::WindowFlags f = 0);
   bool isValid() const;
-  void parseArguments(const QStringList &args);
 
   // - Signals -
 signals:
@@ -118,6 +118,8 @@ signals:
   void windowClosed();
   void windowTitleToChange(QString title);
   void downloadProgressUpdated();
+  void downloadFinished();
+  void progressMessageChanged(const QString &text);
 
   void seeked();
   void addAndShowAnnotationRequested(const Annotation &a);
@@ -189,6 +191,7 @@ public slots:
   void newWindow();
 
   void openSource(const QString &source);
+  void openSources(const QStringList &l);
   void open();  ///< By default the same as openFile()
   void openFile();
   void openUrl();
@@ -282,6 +285,16 @@ public slots:
   void closeChannel();
   void updateLiveAnnotations(bool async = true);
 
+  // - Cursor -
+protected:
+  bool isCursorVisible() const { return cursorVisible_; }
+protected slots:
+  void setCursorVisible(bool t);
+  void showCursor() { setCursorVisible(true); }
+  void hideCursor() { setCursorVisible(false); }
+  void resetAutoHideCursor();
+  void autoHideCursor();
+
   // - Video adjustment -
 protected slots:
   void contrastUp(); void contrastDown(); void contrastReset();
@@ -301,6 +314,7 @@ protected slots:
 protected:
   UrlDialog *annotationUrlDialog();
   UrlDialog *mediaUrlDialog();
+  AnnotationAnalyticsView *annotationAnalyticsView();
 
 public slots:
   void showLoginDialog();
@@ -319,6 +333,10 @@ public slots:
 
   void toggleTokenViewVisible();
   void toggleAnnotationBrowserVisible();
+
+  void setAnnotationAnalyticsViewVisible(bool visible);
+  void toggleAnnotationAnalyticsViewVisible();
+  void showAnnotationAnalyticsView() { setAnnotationAnalyticsViewVisible(true); }
 
   void openHomePage();
 
@@ -350,13 +368,14 @@ public slots:
 
   void setConsoleDialogVisible(bool visible);
 
-  void setDownloadDialogVisible(bool visible);
-  void showDownloadDialog() { setDownloadDialogVisible(true); }
+  void showDownloader();
+
+  void setMediaInfoViewVisible(bool visible);
+  void showMediaInfoView() { setMediaInfoViewVisible(true); }
 
   void setSiteAccountViewVisible(bool visible);
 protected slots:
   void invalidateSiteAccounts();
-  DownloadDialog *downloadDialog();
   BacklogDialog *backlogDialog();
   ConsoleDialog *consoleDialog();
 
@@ -401,8 +420,8 @@ public slots:
 
   void showTextAsSubtitle(const QString &text, bool isSigned = false);
 
-  void setToken(const QString &filePath = QString(), bool async = true);
-  void invalidateToken(const QString &mrl = QString());
+  void setToken(const QString &filePath = QString::null, bool async = true);
+  void invalidateToken(const QString &mrl = QString::null);
   void submitAlias(const Alias &alias, bool async = true);
   void submitAliasText(const QString &text, qint32 type = 0, bool async = true);
 
@@ -430,7 +449,7 @@ public slots:
   bool isAnnotationUrlRegistered(const QString &suburl) const;
 protected slots:
   bool registerAnnotationUrl(const QString &suburl);
-  void addRemoteAnnotations(const AnnotationList &l, const QString &url = QString());
+  void addRemoteAnnotations(const AnnotationList &l, const QString &url = QString::null);
   void clearAnnotationUrls();
 
   // - Recent -
@@ -510,6 +529,8 @@ protected slots:
 
 protected:
   bool isGlobalPosNearEmbeddedPlayer(const QPoint &pos) const;
+  bool isGlobalPosOverEmbeddedPositionSlider(const QPoint &pos) const;
+  bool isGlobalPosOverOsdConsole(const QPoint &pos) const;
 
 public slots:
   void updatePlayMode();
@@ -649,13 +670,12 @@ protected:
 protected slots:
   void pauseAnnotationsAt(const QRect &rect);
   void resumeAnnotationsAt(const QRect &rect);
+  void removeAnnotationsAt(const QRect &rect);
 
 protected slots:
   void setDefaultAspectRatio();
   void setWideScreenAspectRatio(); // 16:9
   void setStandardAspectRatio(); // 4:3
-
-  void showAnnotationsAsThread();
 
 protected slots:
   void setSubmit(bool t) { submit_ = t; }
@@ -692,6 +712,7 @@ private:
   QTimer *liveTimer_;
   QTimer *windowStaysOnTopTimer_;
   QTimer *navigationTimer_;
+  QTimer *autoHideCursorTimer_;
   QStringList annotationUrls_;
 
   //QTimer *windowStaysOnTopTimer_;
@@ -729,21 +750,22 @@ private:
   MainPlayerUi *mainPlayer_;
   MiniPlayerUi *miniPlayer_;
   EmbeddedPlayerUi *embeddedPlayer_;
+  EmbeddedCanvas *embeddedCanvas_;
 
   AnnotationGraphicsView *annotationView_;
-  AnnotationThreadView *annotationThreadView_;
+  AnnotationAnalyticsView *annotationAnalyticsView_;
   AnnotationBrowser *annotationBrowser_;
   AnnotationEditor *annotationEditor_;
   AnnotationFilter *annotationFilter_;
 
   QtExt::MouseRubberBand *pauseRubberBand_,
-                         *resumeRubberBand_;
+                         *resumeRubberBand_,
+                         *removeRubberBand_;
 
   BlacklistView *blacklistView_;
   //CommentView *commentView_;
   BacklogDialog *backlogDialog_;
   ConsoleDialog *consoleDialog_;
-  DownloadDialog *downloadDialog_;
 
   AboutDialog *aboutDialog_;
   AnnotationCountDialog *annotationCountDialog_;
@@ -759,6 +781,7 @@ private:
   UrlDialog *mediaUrlDialog_;
   UrlDialog *annotationUrlDialog_;
   SiteAccountView *siteAccountView_;
+  MediaInfoView *mediaInfoView_;
   UserView *userView_;
 
   QPoint dragPos_;
@@ -774,6 +797,8 @@ private:
   QString recentSource_;
 
   bool recentSourceLocked_;
+
+  bool cursorVisible_;
 
   QStringList playlist_;
 
@@ -885,7 +910,7 @@ private:
           *previousAct_,
           *nextAct_,
           *snapshotAct_,
-          *showAnnotationsAsThreadAct_,
+          *toggleAnnotationAnalyticsViewVisibleAct_,
           *toggleAnnotationVisibleAct_,
           *toggleAnnotationCountDialogVisibleAct_,
           *toggleMenuBarVisibleAct_,
@@ -931,10 +956,11 @@ private:
           *toggleProcessPickDialogVisibleAct_,
           *toggleSeekDialogVisibleAct_,
           *toggleSyncDialogVisibleAct_,
+          *toggleMediaInfoViewVisibleAct_,
           *toggleUserViewVisibleAct_,
           *toggleBlacklistViewVisibleAct_,
           *toggleBacklogDialogVisibleAct_,
-          *toggleDownloadDialogVisibleAct_,
+          *toggleDownloaderVisibleAct_,
           *toggleConsoleDialogVisibleAct_,
           *toggleAnnotationFilterEnabledAct_;
           //*toggleCommentViewVisibleAct_,

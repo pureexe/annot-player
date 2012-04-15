@@ -3,6 +3,7 @@
 
 #include "clipboardmonitor.h"
 #include "logger.h"
+#include "module/mrlanalysis/mrlanalysis.h"
 #include <QtGui>
 
 using namespace Logger;
@@ -71,22 +72,17 @@ ClipboardMonitor::parseUrl(const QString &text)
 bool
 ClipboardMonitor::isSupportedAnnotationUrl(const QString &url)
 {
-  return url.startsWith("http://www.nicovideo.jp/", Qt::CaseInsensitive) ||
-         url.startsWith("http://nicovideo.jp/", Qt::CaseInsensitive) ||
-         url.startsWith("http://www.bilibili.tv/", Qt::CaseInsensitive) ||
-         url.startsWith("http://bilibili.tv/", Qt::CaseInsensitive) ||
-         url.startsWith("http://www.acfun.tv/", Qt::CaseInsensitive) ||
-         url.startsWith("http://acfun.tv/", Qt::CaseInsensitive);
+  MrlAnalysis::Site site;
+  return (site = MrlAnalysis::matchSite(url)) &&
+          site < MrlAnalysis::AnnotationSite;
 }
 
 bool
 ClipboardMonitor::isSupportedMediaUrl(const QString &url)
 {
-  return //isSupportedAnnotationUrl(url) ||
-         url.startsWith("http://www.youtube.com", Qt::CaseInsensitive) ||
-         url.startsWith("http://youtube.com", Qt::CaseInsensitive) ||
-         url.startsWith("http://v.youku.com/", Qt::CaseInsensitive) ||
-         url.startsWith("http://video.sina.com.cn", Qt::CaseInsensitive);
+  MrlAnalysis::Site site;
+  return (site = MrlAnalysis::matchSite(url)) &&
+          site < MrlAnalysis::VideoSite;
 }
 
 // EOF

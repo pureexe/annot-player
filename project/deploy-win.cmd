@@ -133,6 +133,10 @@ cp "%SOURCE%"/module/luaresolver/lua/luascript.lua "%LUA_PATH%"/ || exit 1
 cp -v "%SOURCE%"/module/luaresolver/lua/luascript/*.lua "%LUA_PATH%"/  || exit 1
 cp -v "%SOURCE%"/module/luaresolver/lua/luascript/*/*.lua "%LUA_PATH%"/  || exit 1
 
+:: doc
+cp -Rv "%SOURCE%"/module/qtext/doc . || exit 1
+cp -Rv "%SOURCE%"/module/qtext/images . || exit 1
+
 :: jsf
 cp -Rv "%SOURCE%"/module/annotcloud/jsf . || exit 1
 

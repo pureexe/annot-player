@@ -96,7 +96,7 @@ MrlDownloadTask::downloadSingleMedia(const MediaInfo &mi, QNetworkCookieJar *jar
   // - Start
   Q_ASSERT(mi.mrls.size() == 1);
   if (mi.mrls.isEmpty()) {
-    setFileName(QString());
+    setFileName(QString::null);
     setState(Error);
     DOUT("exit: empty mrl");
     return;
@@ -197,7 +197,7 @@ MrlDownloadTask::downloadMultipleMedia(const MediaInfo &mi, QNetworkCookieJar *j
 
   Q_ASSERT(mi.mrls.size() >= 1);
   if (mi.mrls.isEmpty()) {
-    setFileName(QString());
+    setFileName(QString::null);
     setState(Error);
     DOUT("exit: empty mrl");
     return;

@@ -31,12 +31,12 @@ WbComboEdit::createActions()
 {
   popupAct = new QAction(this); {
     popupAct->setText(tr("History"));
-    popupAct->setToolTip(tr("History"));
+    popupAct->setStatusTip(tr("History"));
     connect(popupAct, SIGNAL(triggered()), SLOT(popup()));
   }
   clearAct = new QAction(this); {
     clearAct->setText(tr("Clear"));
-    clearAct->setToolTip(tr("Clear"));
+    clearAct->setStatusTip(tr("Clear"));
     connect(clearAct, SIGNAL(triggered()), SLOT(reset()));
   }
 }

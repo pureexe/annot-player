@@ -4,6 +4,7 @@
 include(../../config.pri)
 
 DEFINES += WITH_MODULE_QTEXT
+DEPENDPATH += $$PWD
 
 HEADERS += \
     $$PWD/actionwithid.h \
@@ -33,6 +34,7 @@ HEADERS += \
     $$PWD/toolbutton.h \
     $$PWD/toolbuttonwithid.h \
     $$PWD/webdialog.h \
+    $$PWD/webpage.h \
     $$PWD/withsizehint.h
 
 SOURCES += \
@@ -53,9 +55,20 @@ SOURCES += \
     $$PWD/string.cc \
     $$PWD/toolbutton.cc \
     $$PWD/toolbuttonwithid.cc \
-    $$PWD/webdialog.cc
+    $$PWD/webdialog.cc \
+    $$PWD/webpage.cc
 
 QT +=   core gui network webkit
+
+DOC_FILES += \
+    $$PWD/doc/error.html
+
+IMAGE_FILES += \
+    $$PWD/images/null.png
+
+OTHER_FILES += \
+    $$DOC_FILES \
+    $$IMAGE_FILES
 
 # EOF
 

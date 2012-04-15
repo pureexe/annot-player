@@ -225,7 +225,6 @@ function getTaskAttribute_bilibili ( str_url, str_tmpfile, pDlg, isNeedLogin, bS
   end
 
 
-
   --read id ok.close file
   io.close(file);
 

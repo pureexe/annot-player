@@ -1,7 +1,7 @@
-#ifndef BLACKLISTVIEWPRIVATE_H
-#define BLACKLISTVIEWPRIVATE_H
+#ifndef BLACKLISTVIEW_P_H
+#define BLACKLISTVIEW_P_H
 
-// blacklistviewprivate.h
+// blacklistview_p.h
 // 11/16/2011
 
 #include "module/annotcloud/annotation.h"
@@ -142,4 +142,4 @@ private:
   QSortFilterProxyModel *proxyModel_;
 };
 
-#endif // BLACKLISTVIEWPRIVATE_H
+#endif // BLACKLISTVIEW_P_H

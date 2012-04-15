@@ -12,9 +12,14 @@
 AcLineEdit::AcLineEdit(QWidget *parent)
   : Base(parent)
 {
-  contextMenu_ = new QMenu(this);
-  AcUi::globalInstance()->setWindowStyle(contextMenu_);
   setStyleSheet(SS_LINEEDIT);
+}
+
+void
+AcLineEdit::enterText(const QString &text)
+{
+  setText(text);
+  emit returnPressed();
 }
 
 // - Events -
@@ -22,15 +27,16 @@ AcLineEdit::AcLineEdit(QWidget *parent)
 void
 AcLineEdit::contextMenuEvent(QContextMenuEvent *event)
 {
-  if (event) {
-    contextMenu_->clear();
+  Q_ASSERT(event);
 
-    QMenu *scm = createStandardContextMenu();
-    contextMenu_->addActions(scm->actions());
+  QMenu m;
+  AcUi::globalInstance()->setContextMenuStyle(&m, false); // persistent = false
 
-    contextMenu_->exec(event->globalPos());
-    delete scm;
-  }
+  QMenu *scm = createStandardContextMenu();
+  m.addActions(scm->actions());
+
+  m.exec(event->globalPos());
+  delete scm;
 }
 
 // EOF

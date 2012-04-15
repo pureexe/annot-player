@@ -20,6 +20,8 @@ class AnnotationComboEdit : public AcComboEdit, public QtExt::WithSizeHint
   typedef AcComboEdit Base;
 
 public:
+  enum { EditAction = CustomAction };
+
   explicit AnnotationComboEdit(QWidget *parent = 0);
 
   // - Properties -

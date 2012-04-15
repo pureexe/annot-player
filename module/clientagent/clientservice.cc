@@ -104,7 +104,7 @@ ClientServant::chat(tns__chat *request, tns__chatResponse *response)
     if (request->arg0)
       delegate_->chat(QString::fromStdString(*request->arg0));
     else
-      delegate_->chat(QString());
+      delegate_->chat(QString::null);
   }
   DOUT("exit");
   return SOAP_OK;
@@ -297,7 +297,7 @@ ClientService::chat(const QString &message)
     DOUT("soap error, err =" << err);
     emit soapError(err);
     DOUT("exit");
-    return QString();
+    return QString::null;
   }
 
   QString ret;

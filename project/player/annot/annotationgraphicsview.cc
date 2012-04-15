@@ -488,6 +488,16 @@ AnnotationGraphicsView::resumeItems(const QRect &rect, Qt::ItemSelectionMode mod
   }
 }
 
+void
+AnnotationGraphicsView::removeItems(const QRect &rect, Qt::ItemSelectionMode mode)
+{
+  foreach (QGraphicsItem *item, items(rect, mode)) {
+    AnnotationGraphicsItem *a = dynamic_cast<AnnotationGraphicsItem *>(item);
+    if (a)
+      a->removeMe();
+  }
+}
+
 bool
 AnnotationGraphicsView::hasPausedItems() const
 {

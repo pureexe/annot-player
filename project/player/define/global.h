@@ -13,7 +13,6 @@ enum { ALPHA = 0 };
 
 // - Options -
 #define INIT_WINDOW_SIZE   QSize(640, 480)
-//#define INIT_OPEN_PATH     QDir::homePath()
 
 //#define USE_MODE_DEBUG
 
@@ -72,9 +71,9 @@ enum { ALPHA = 0 };
 #define G_FORMAT_PROGRAM        G_FORMAT_PROGRAM_(" *.")
 #define G_FORMAT_MEDIA          G_FORMAT_VIDEO G_FORMAT_AUDIO G_FORMAT_PICTURE
 #ifdef USE_MODE_SIGNAL
-  #define G_FORMAT_SUPPORTED    G_FORMAT_PROGRAM G_FORMAT_MEDIA
+#  define G_FORMAT_SUPPORTED    G_FORMAT_PROGRAM G_FORMAT_MEDIA
 #else
-  #define G_FORMAT_SUPPORTED    G_FORMAT_MEDIA
+#  define G_FORMAT_SUPPORTED    G_FORMAT_MEDIA
 #endif // USE_MODE_SIGNAL
 
 #define VLC_AUTOHIDE_TIMEOUT    1500    // in msecs, same as VLC
@@ -86,20 +85,23 @@ enum { ALPHA = 0 };
 // - Path -
 
 #ifdef Q_OS_WIN
-  #define G_PATH_PROFILE        QtWin::getAppDataPath() + "/" G_ORGANIZATION "/" G_APPLICATION
+#  define G_PATH_PROFILE        QtWin::getAppDataPath() + "/" G_ORGANIZATION "/" G_APPLICATION
 #elif defined(Q_OS_MAC)
-  #define G_PATH_PROFILE        QtMac::homeApplicationSupportPath() + "/" G_ORGANIZATION "/" G_APPLICATION
+#  define G_PATH_PROFILE        QtMac::homeApplicationSupportPath() + "/" G_ORGANIZATION "/" G_APPLICATION
 #else
-  #define G_PATH_PROFILE        QDir::homePath() + "/.annot/player"
+#  define G_PATH_PROFILE        QDir::homePath() + "/.annot/player"
 #endif // Q_OS_WIN
 
 #ifdef Q_WS_WIN
 #  define G_PATH_LOGS   ".."
-#  define G_PATH_DEBUG  G_PATH_LOGS "/" "Debug.txt"
+#  define G_PATH_DEBUG    G_PATH_LOGS "/" "Debug.txt"
+#elif defined Q_WS_MAC
+#  define G_PATH_LOGS   QtMac::homeLogsPath() + "/" G_ORGANIZATION "/" G_APPLICATION
+#  define G_PATH_DEBUG    G_PATH_LOGS "/" "Debug.txt"
 #else
-#  define G_PATH_LOGS  QDesktopServices::storageLocation(QDesktopServices::DesktopLocation)
-#  define G_PATH_DEBUG  G_PATH_LOGS + "/" "Annot-Debug.txt"
-#endif // Q_WS_WIN
+#  define G_PATH_LOGS   G_PATH_PROFILE
+#  define G_PATH_DEBUG    G_PATH_LOGS "/" "debug.txt"
+#endif // Q_WS_
 
 #ifdef Q_WS_WIN
 #  define G_PATH_CACHES  "./caches"

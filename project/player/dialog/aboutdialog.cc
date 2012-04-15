@@ -73,7 +73,7 @@ AboutDialog::AboutDialog(QWidget *parent)
   // Components
 
   QToolButton *okButton = AcUi::globalInstance()->makeToolButton(
-       AcUi::PushHint, TR(T_OK), this, SLOT(ok()));
+       AcUi::PushHint, TR(T_OK), this, SLOT(hide()));
 
   textEdit_ = AcUi::globalInstance()->makeTextEdit(
       AcUi::ReadOnlyHint, TR(T_TITLE_ABOUT));
@@ -98,17 +98,11 @@ AboutDialog::AboutDialog(QWidget *parent)
   // Shortcuts
   QShortcut *cancelShortcut = new QShortcut(QKeySequence("Esc"), this);
   connect(cancelShortcut, SIGNAL(activated()), SLOT(hide()));
-  QShortcut *closeShortcut = new QShortcut(QKeySequence::Close, this);
+  QShortcut *closeShortcut = new QShortcut(QKeySequence("CTRL+W"), this);
   connect(closeShortcut, SIGNAL(activated()), SLOT(hide()));
 
   // Focus
   okButton->setFocus();
 }
-
-// - Slots -
-
-void
-AboutDialog::ok()
-{ hide(); }
 
 // EOF

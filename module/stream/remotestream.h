@@ -41,7 +41,7 @@ public:
   QUrl url() const { return request_.url(); }
   virtual qint64 size() const { return size_; } ///< \override
 
-  virtual QString contentType() const { return QString(); }
+  virtual QString contentType() const { return QString::null; }
 
   void waitForReady()
   {

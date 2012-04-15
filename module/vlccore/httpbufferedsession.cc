@@ -25,6 +25,14 @@ HttpBufferedSession::~HttpBufferedSession()
 
 // - Properties -
 
+//bool
+//HttpBufferedSession::isSeekable() const
+//{
+//  // FIXME
+//  return contentType_.contains("mp4", Qt::CaseInsensitive) &&
+//         url_.host().contains("nicovideo.jp");
+//}
+
 void
 HttpBufferedSession::invalidateSize()
 {

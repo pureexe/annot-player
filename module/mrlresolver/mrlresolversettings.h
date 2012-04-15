@@ -17,7 +17,7 @@ public:
   struct Account {
     QString username, password;
 
-    explicit Account(const QString &name = QString(), const QString &pass = QString())
+    explicit Account(const QString &name = QString::null, const QString &pass = QString::null)
       : username(name), password(pass) { }
     bool isBad() const { return username.isEmpty() || password.isEmpty(); }
     void clear() { username.clear(); password.clear(); }
@@ -30,14 +30,14 @@ protected:
 
   // - Account -
 public slots:
-  void setNicovideoAccount(const QString &username = QString(),
-                           const QString &password = QString())
+  void setNicovideoAccount(const QString &username = QString::null,
+                           const QString &password = QString::null)
   {
     nicovideoAccount_.username = username;
     nicovideoAccount_.password = password;
   }
-  void setBilibiliAccount(const QString &username = QString(),
-                          const QString &password = QString())
+  void setBilibiliAccount(const QString &username = QString::null,
+                          const QString &password = QString::null)
   {
     bilibiliAccount_.username = username;
     bilibiliAccount_.password = password;
@@ -52,7 +52,7 @@ public:
 
   Account bilibiliAccount() const { return bilibiliAccount_; }
 
-  bool hasNicovideoAccount() const { return !nicovideoAccount_.isBad(); }
+  bool hasNicovideoAccount() const { return true; }
   bool hasBilibiliAccount() const { return !bilibiliAccount_.isBad(); }
 
 private:

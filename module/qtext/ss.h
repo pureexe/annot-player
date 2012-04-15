@@ -86,6 +86,8 @@
 #define SS_FONT_SIZE(_size)     "font-size:" #_size ";"
 #define SS_TEXT_DECORATION_BEGIN "text-decoration:"
 #define SS_TEXT_DECORATION(_d)  "text-decoration:" #_d ";"
+#define SS_TEXT_ALIGN_BEGIN     "text-align:"
+#define SS_TEXT_ALIGN(_a)       "text-align:" #_a ";"
 #define SS_BOLD                 SS_FONT_WEIGHT(bold)
 #define SS_ITALIC               SS_FONT_STYLE(italic)
 #define SS_UNDERLINE            SS_FONT_DECORATION(underline)

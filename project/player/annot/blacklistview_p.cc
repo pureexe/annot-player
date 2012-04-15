@@ -1,7 +1,7 @@
-// blacklistviewprivate.cc
+// blacklistview_p.cc
 // 11/17/2011
 
-#include "blacklistviewprivate.h"
+#include "blacklistview_p.h"
 #include "tr.h"
 #include "global.h"
 #include "annotationbrowser.h" // TO BE REMOVED

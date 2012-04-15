@@ -14,12 +14,12 @@
 // Blur behind data structures, must be consistent with Windows 7 SDK
 // http://msdn.microsoft.com/en-us/library/aa969533(v=vs.85).aspx
 #ifdef USE_DWM_STATIC
-  #include <dwmapi.h>
+#  include <dwmapi.h>
 #else
-  #define DWM_BB_ENABLE                 0x00000001  // fEnable has been specified
-  #define DWM_BB_BLURREGION             0x00000002  // hRgnBlur has been specified
-  #define DWM_BB_TRANSITIONONMAXIMIZED  0x00000004  // fTransitionOnMaximized has been specified
-  #define WM_DWMCOMPOSITIONCHANGED      0x031E      // Composition changed window message
+#  define DWM_BB_ENABLE                 0x00000001  // fEnable has been specified
+#  define DWM_BB_BLURREGION             0x00000002  // hRgnBlur has been specified
+#  define DWM_BB_TRANSITIONONMAXIMIZED  0x00000004  // fTransitionOnMaximized has been specified
+#  define WM_DWMCOMPOSITIONCHANGED      0x031E      // Composition changed window message
 
   typedef struct _DWM_BLURBEHIND
   {
@@ -144,7 +144,7 @@ namespace { // anoymous, WindowsNotifier
 // - DesktopWindowManager -
 
 #ifdef USE_DWM_STATIC
-  #define DWMAPI
+#  define DWMAPI
 #else
   namespace { namespace dwmapi_ { // anonymous
     inline DwmApi *api() { static DwmApi g; return &g; }
@@ -190,7 +190,7 @@ namespace { // anoymous, WindowsNotifier
     }
 
   }} // anonymous namespace dwmapi_
-  #define DWMAPI dwmapi_
+#  define DWMAPI dwmapi_
 #endif
 
 #ifdef USE_DWM_NOTIFIER
@@ -198,7 +198,7 @@ namespace { // anoymous, WindowsNotifier
     inline WindowNotifier *windowNotifier() { static WindowNotifier g; return &g; }
   }} // anonymous namespace static_
 
-  #define DWM_NOTIFIER       static_::windowNotifier()
+#  define DWM_NOTIFIER       static_::windowNotifier()
 #endif // USE_DWM_NOTIFIER
 
 #ifdef USE_DWM_NOTIFIER

@@ -15,14 +15,6 @@
 
 OsdConsole *OsdConsole::global_ = 0;
 
-OsdConsole*
-OsdConsole::globalInstance()
-{ return global_; }
-
-void
-OsdConsole::setGlobalInstance(Self *global)
-{ global_ = global; }
-
 OsdConsole::OsdConsole(QWidget *parent)
   : Base(parent), dragPos_(BAD_POS)
 {
@@ -99,9 +91,11 @@ OsdConsole&
 OsdConsole::operator<<(const QString &text)
 { append(text); return *this; }
 
-// - Events -
+// EOF
 
 /*
+// - Events -
+
 void
 OsdConsole::mousePressEvent(QMouseEvent *event)
 {
@@ -169,7 +163,6 @@ OsdConsole::contextMenuEvent(QContextMenuEvent *event)
   //}
   DOUT("exit");
 }
-*/
 
 // - Copy && paste -
 
@@ -189,4 +182,4 @@ OsdConsole::pasteFromClipboard()
     setText(clipboard->text());
 }
 
-// EOF
+*/

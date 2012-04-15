@@ -156,7 +156,7 @@ AcFunCodec::parseText(const QString &text)
 {
   DOUT("text =" << text);
   if (text.isEmpty())
-    return QString();
+    return QString::null;
   QString ret = text.trimmed();
   if (ret == "/fly")
     return CORE_CMD_VIEW_FLY " " + QString::fromLocal8Bit("飞");

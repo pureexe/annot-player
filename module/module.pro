@@ -14,8 +14,10 @@ include(debug/debug.pri)
 include(doll/doll.pri)
 include(gsoap/gsoap.pri)
 include(ioutil/ioutil.pri)
+include(ipc/ipc.pri)
 include(luacpp/luacpp.pri)
 include(luaresolver/luaresolver.pri)
+include(mrlanalysis/mrlanalysis.pri)
 include(mrlresolver/mrlresolver.pri)
 include(mp4box/mp4box.pri)
 include(nicoutil/nicoutil.pri)
@@ -27,6 +29,7 @@ include(stream/stream.pri)
 include(streamservice/streamservice.pri)
 include(translator/translator.pri)
 include(vlccore/vlccore.pri)
+include(webbrowser/webbrowser.pri)
 
 TEMPLATE = subdirs
 

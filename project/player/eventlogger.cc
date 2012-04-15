@@ -250,10 +250,8 @@ EventLogger::logSeeked(qint64 msecs)
         .arg(t.toString())
         .arg(l.toString());
     if (len)
-      msg += QString().sprintf(
-        " (" HTML_STYLE_OPEN(color:orange) "%.1f%%" HTML_STYLE_CLOSE() ")",
-        msecs * 100.0 / len
-      );
+      msg += QString(" (" HTML_STYLE_OPEN(color:orange) "%1%" HTML_STYLE_CLOSE() ")")
+             .arg(QString::number(msecs * 100.0 / len, 'f', 1));
     log(msg);
   }
 }

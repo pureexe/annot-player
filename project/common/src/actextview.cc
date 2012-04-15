@@ -3,17 +3,29 @@
 
 #include "ac/actextview.h"
 #include "module/qtext/htmltag.h"
+#include <QtGui>
+
+namespace { // anonymous
+  inline QString colorToString(const QColor &c)
+  { return QString().sprintf("#%02x%02x%02x",c.red(), c.green(), c.blue()); }
+} // anonymous namespace
 
 // - Slots -
 
 void
-AcTextView::setText(const QString &text)
+AcTextView::setText(const QString &text, const QColor &color)
 {
   if (text.isEmpty())
     clear();
   else {
     line_++;
-    setHtml(text);
+    if (!text.trimmed().isEmpty())
+      last_ = text;
+
+    if (color.isValid())
+      setHtml(html_style(text, "color:" + colorToString(color)));
+    else
+      setHtml(text);
     moveCursorToBottom();
   }
 }
@@ -34,16 +46,19 @@ AcTextView::clear()
 }
 
 void
-AcTextView::setText(const QStringList &l)
+AcTextView::setText(const QStringList &l, const QColor &color)
 {
   if (l.isEmpty()) {
     clear();
     return;
   }
-
   QString t;
   foreach (QString s, l) {
-    if (line_++ % 2)
+    if (!s.trimmed().isEmpty())
+      last_ = s;
+    if (color.isValid())
+      t.append(html_style(s, "color:" + colorToString(color)));
+    else if (line_++ % 2)
       t.append(HTML_STYLE(s, color:purple));
     else
       t.append(HTML_STYLE(s, color:blue));
@@ -55,11 +70,15 @@ AcTextView::setText(const QStringList &l)
 }
 
 void
-AcTextView::append(const QString &text)
+AcTextView::append(const QString &text, const QColor &color)
 {
+  if (!text.trimmed().isEmpty())
+    last_ = text;
   if (!isEmpty())
-    Base::append(QString());
-  if (line_++ % 2)
+    Base::append(QString::null);
+  if (color.isValid())
+    Base::append(html_style(text, "color:" + colorToString(color)));
+  else if (line_++ % 2)
     Base::append(HTML_STYLE(text, color:purple));
   else
     Base::append(HTML_STYLE(text, color:blue));

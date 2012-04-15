@@ -51,6 +51,8 @@ win32 {
 # See: https://wiki.kubuntu.org/PackagingGuide/QtApplication
 
 LUADIR=$$DESTDIR/lua
+DOCDIR=$$DESTDIR/doc
+IMAGEDIR=$$DESTDIR/images
 JSFDIR=$$DESTDIR/jsf
 
 unix:!mac {

@@ -6,8 +6,13 @@
 #ifdef WITH_MODULE_LUARESOLVER
 #  include "module/luaresolver/luaresolver.h"
 #else
-#  error "luaresolver is required"
+#  error "luaresolver module is required"
 #endif // WITH_MODULE_LUARESOLVER
+#ifdef WITH_MODULE_MRLANALYSIS
+#  include "module/mrlanalysis/mrlanalysis.h"
+#else
+#  error "mrlanalysis module is required"
+#endif // WITH_MODULE_MRLANALYSIS
 #include <QtCore>
 #include <QtNetwork>
 
@@ -63,17 +68,9 @@ bool
 LuaMrlResolver::matchMedia(const QString &href) const
 {
   DOUT("enter");
-  bool ret = href.startsWith("http://", Qt::CaseInsensitive) &&
-  (
-    href.contains("bilibili.tv/", Qt::CaseInsensitive) ||
-    href.contains("acfun.tv/", Qt::CaseInsensitive) ||
-    href.contains("nicovideo.jp/") ||
-    href.contains("youku.com/", Qt::CaseInsensitive) ||
-    href.contains("video.sina.com.cn/", Qt::CaseInsensitive) ||
-    href.contains("tudou.com/", Qt::CaseInsensitive) ||
-    href.contains("6.cn/", Qt::CaseInsensitive) ||
-    href.contains("mikufans.cn/", Qt::CaseInsensitive)
-  );
+  MrlAnalysis::Site site;
+  bool ret = (site = MrlAnalysis::matchSite(href)) &&
+              site < MrlAnalysis::ChineseVideoSite;
   DOUT("exit: ret =" << ret);
   return ret;
 }
@@ -82,12 +79,9 @@ bool
 LuaMrlResolver::matchSubtitle(const QString &href) const
 {
   DOUT("enter");
-  bool ret = href.startsWith("http://", Qt::CaseInsensitive) &&
-  (
-    href.contains("nicovideo.jp/", Qt::CaseInsensitive) ||
-    href.contains("bilibili.tv/", Qt::CaseInsensitive) ||
-    href.contains("acfun.tv/", Qt::CaseInsensitive)
-  );
+  MrlAnalysis::Site site;
+  bool ret = (site = MrlAnalysis::matchSite(href)) &&
+              site < MrlAnalysis::AnnotationSite;
   DOUT("exit: ret =" << ret);
   return ret;
 }
@@ -119,7 +113,6 @@ LuaMrlResolver::resolveMedia(const QString &href, bool async)
   if (settings->hasBilibiliAccount())
     lua.setBilibiliAccount(settings->bilibiliAccount().username,
                            settings->bilibiliAccount().password);
-
   int siteid;
   QString refurl, title, suburl;
   QStringList mrls;
@@ -266,7 +259,7 @@ QString
 LuaMrlResolver::decodeText(const QString &text, const char *encoding)
 {
   if (text.isEmpty())
-    return QString();
+    return QString::null;
   if (encoding) {
     QTextCodec *tc = QTextCodec::codecForName(encoding);
     if (tc) {
