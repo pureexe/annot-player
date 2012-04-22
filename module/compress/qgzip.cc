@@ -7,7 +7,6 @@
 #else
 #  error "gzip is required"
 #endif // WITH_GZIP
-#include <QtCore>
 #include <cstring>
 
 //#define DEBUG "qgzip"

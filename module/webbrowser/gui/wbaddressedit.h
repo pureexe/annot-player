@@ -5,7 +5,6 @@
 // 3/31/2012
 
 #include "wbcomboedit.h"
-#include <QStringList>
 
 QT_FORWARD_DECLARE_CLASS(QAction)
 QT_FORWARD_DECLARE_CLASS(QMenu)
@@ -25,6 +24,7 @@ public:
 signals:
   void textEntered(const QString &url);
   void openUrlWithAcPlayerRequested(const QString &url);
+  void importUrlToAcPlayerRequested(const QString &url);
   void openUrlWithAcDownloaderRequested(const QString &url);
 
   // - Actions -
@@ -33,16 +33,19 @@ protected slots:
 
   // - Events -
 protected:
-  //virtual void keyPressEvent(QKeyEvent *event); ///< \override
+  virtual void wheelEvent(QWheelEvent *) { } ///< \override disabled
   virtual void contextMenuEvent(QContextMenuEvent *event); ///< \override
 
   static bool isClipboardEmpty();
 
-private slots:
-  void openAddressWithAcPlayer()
+protected slots:
+  void openWithAcPlayer()
   { emit openUrlWithAcPlayerRequested(currentText().trimmed()); }
 
-  void openAddressWithAcDownloader()
+  void importToAcPlayer()
+  { emit importUrlToAcPlayerRequested(currentText().trimmed()); }
+
+  void openWithAcDownloader()
   { emit openUrlWithAcDownloaderRequested(currentText().trimmed()); }
 
 private:
@@ -51,6 +54,7 @@ private:
 protected:
   QAction *pasteAndGoAct,
           *openAddressWithAcPlayerAct_,
+          *importAddressToAcPlayerAct_,
           *openAddressWithAcDownloaderAct_;
 };
 

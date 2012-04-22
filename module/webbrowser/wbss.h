@@ -28,17 +28,18 @@
 
 // - Status bar -
 
-#define SS_STATUSBAR_(_color) \
+#define SS_STATUSBAR_(_color, _weight) \
   SS_BEGIN(QStatusBar) \
     SS_COLOR(_color) \
+    SS_FONT_WEIGHT(_weight) \
   SS_END
-#define SS_STATUSBAR_WARNING    SS_STATUSBAR_(orange)
-#define SS_STATUSBAR_ERROR      SS_STATUSBAR_(red)
-#define SS_STATUSBAR_NOTIFY     SS_STATUSBAR_(red)
+#define SS_STATUSBAR_WARNING    SS_STATUSBAR_(orange,normal)
+#define SS_STATUSBAR_ERROR      SS_STATUSBAR_(red,bold)
+#define SS_STATUSBAR_NOTIFY     SS_STATUSBAR_(orange,bold)
 #ifdef Q_WS_X11
-#  define SS_STATUSBAR_MESSAGE  SS_STATUSBAR_(black)
+#  define SS_STATUSBAR_MESSAGE  SS_STATUSBAR_(black,normal)
 #else
-#  define SS_STATUSBAR_MESSAGE  SS_STATUSBAR_(cyan)
+#  define SS_STATUSBAR_MESSAGE  SS_STATUSBAR_(cyan,normal)
 #endif // Q_WS_X11
 
 #endif // WBSS_H

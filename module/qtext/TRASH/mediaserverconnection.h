@@ -8,8 +8,8 @@
 #include "core/universe/mediaannotation.h"
 #include "core/universe/user.h"
 
-#include <QObject>
-#include <QDomDocument>
+#include <QtXml/QDomDocument>
+#include <QtCore/QObject>
 
 QT_BEGIN_NAMESPACE
 class QNetworkAccessManager;

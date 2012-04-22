@@ -15,33 +15,37 @@
 #endif // WITH_MODULE_DOWNLOAD
 #include "module/qtext/network.h"
 #include "module/qtext/os.h"
-#include <QtCore>
-#include <QtNetwork>
 #include <boost/function.hpp>
 #include <exception>
 
 #define _qs(_cstr)      QString::fromLocal8Bit(_cstr)
 
-#define DEBUG "luaresolver"
+//#define DEBUG "luaresolver"
 #include "module/debug/debug.h"
+
+#ifdef __GNUC__
+#  define NOINLINE      __attribute__((noinline))
+#else
+#  define NOINLINE
+#endif // __GNUC__
 
 // - Construction -
 
 LuaResolver::LuaResolver(const QString &scriptPath, const QString &packagePath, QObject *parent)
   : Base(parent), scriptPath_(scriptPath), packagePath_(packagePath), cookieJar_(0)
 {
-#ifdef NICO_PROXY_DOMAIN
-  cookieJar_ = new QtExt::NetworkCookieJarWithDomainAlias(".nicovideo.jp", NICO_PROXY_DOMAIN, this);
+#ifdef ANNOT_PROXY_DOMAIN
+  cookieJar_ = new QtExt::NetworkCookieJarWithDomainAlias(".nicovideo.jp", ANNOT_PROXY_DOMAIN, this);
 #else
 #  warning "nico proxy domain is not defined"
-#endif // NICO_PROXY_DOMAIN
+#endif // ANNOT_PROXY_DOMAIN
 }
 
 // - Helpers -
 
 namespace { // anonymous
 
-  int clib_dlget_(lua_State *L)
+  int NOINLINE clib_dlget_(lua_State *L)
   {
     LuaResolver *obj = LuaResolver::getObject(L);
     if (!obj)
@@ -49,7 +53,7 @@ namespace { // anonymous
     return obj->dlget(L);
   }
 
-  int clib_dlpost_(lua_State *L)
+  int NOINLINE clib_dlpost_(lua_State *L)
   {
     LuaResolver *obj = LuaResolver::getObject(L);
     if (!obj)
@@ -59,6 +63,7 @@ namespace { // anonymous
 
 } // anonymous namespace
 
+/*
 QString
 LuaResolver::decodeText(const char *text, const char *encoding)
 {
@@ -72,13 +77,14 @@ LuaResolver::decodeText(const char *text, const char *encoding)
   }
   return QString::fromLocal8Bit(text);
 }
+*/
 
 QString
 LuaResolver::decodeTitle(const char *text, int siteId)
 {
   switch (siteId) {
   case AcFun:
-    return decodeText(text, "GBK");
+    //return decodeText(text, "GBK");
   case Bilibili:
   case Nicovideo:
   case UnknownSite:
@@ -156,7 +162,7 @@ LuaResolver::dlpost(lua_State *L)
   QString param = _qs(lua_tostring(L, PARAM_PARAM));
   QString header = _qs(lua_tostring(L, PARAM_HEADER));
 
-  DOUT("url =" << url);
+  DOUT("url =" << url << ", path =" << path);
   Downloader *dl = new Downloader(path, this);
   if (cookieJar_)
     dl->networkAccessManager()->setCookieJar(cookieJar_);
@@ -215,7 +221,7 @@ LuaResolver::resolve(const QString &href, int *siteid, QString *refurl, QString 
     luaL_openlibs(L);
 
     // See: http://stackoverflow.com/questions/2710194/register-c-function-in-lua-table
-    static const luaL_Reg ft[] = {
+    const luaL_Reg ft[] = {
       { "dlget", clib_dlget_ },
       { "dlpost", clib_dlpost_ },
       { 0, 0 }

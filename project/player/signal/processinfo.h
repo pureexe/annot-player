@@ -4,8 +4,8 @@
 // processinfo.h
 // 10/18/2011
 
-#include <QString>
-#include <QMetaType>
+#include <QtCore/QString>
+#include <QtCore/QMetaType>
 
 struct ProcessInfo
 {

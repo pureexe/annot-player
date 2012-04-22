@@ -9,9 +9,8 @@
 #include "module/annotcloud/token.h"
 #include "module/annotcloud/alias.h"
 #include "module/annotcloud/annotation.h"
+#include <QtCore/QMutex>
 #include <boost/scoped_ptr.hpp>
-#include <QObject>
-#include <QMutex>
 
 class ServerProxy: public QObject
 {
@@ -31,7 +30,8 @@ class ServerProxy: public QObject
   boost::scoped_ptr<ServerSoap::ServerSoapProxy> proxy_;
 
 public:
-  explicit ServerProxy(QObject *parent = 0);
+  explicit ServerProxy(QObject *parent = 0)
+    : Base(parent) { reset(); }
 
 signals:
   void soapError(int err);

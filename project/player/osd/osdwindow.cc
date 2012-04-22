@@ -30,7 +30,7 @@ OsdWindow::OsdWindow(QWidget *parent)
 
   //setMouseTracking(true);
 
-  // FIXME: As a trade off, dragging annot etc not working for mouse event anymore
+  // FIXME: As a trade off, dragging annot etc does not work for mouse event anymore
   // Need a machanism similar to global hook.
 #ifdef Q_WS_X11
   //setAttribute(Qt::WA_TransparentForMouseEvents);

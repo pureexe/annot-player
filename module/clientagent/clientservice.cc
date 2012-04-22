@@ -5,7 +5,7 @@
 #include "clientservice.h"
 #include "clientservice_config.h"
 
-#include "core/universe/traits.h"
+#include "module/annotcloud/traits.h"
 #include <QtCore>
 
 #define DEBUG "clientservice"
@@ -104,7 +104,7 @@ ClientServant::chat(tns__chat *request, tns__chatResponse *response)
     if (request->arg0)
       delegate_->chat(QString::fromStdString(*request->arg0));
     else
-      delegate_->chat(QString::null);
+      delegate_->chat(QString());
   }
   DOUT("exit");
   return SOAP_OK;
@@ -297,7 +297,7 @@ ClientService::chat(const QString &message)
     DOUT("soap error, err =" << err);
     emit soapError(err);
     DOUT("exit");
-    return QString::null;
+    return QString();
   }
 
   QString ret;

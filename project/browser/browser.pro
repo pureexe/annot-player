@@ -1,13 +1,17 @@
 # browser.pro
 # 3/29/2012
 
-VERSION = 0.1.0.2
+VERSION = 0.1.1.0
 
 DEFINES += PROJECT_BROWSER
 
 include(../../config.pri)
 include($$ROOTDIR/project/common/common.pri)
 include($$ROOTDIR/module/debug/debug.pri)
+
+# Enforce 32bit on Mac until apple releases 64bit version of QuickTime Plugin
+mac: CONFIG -= x86_64
+mac: CONFIG += x86
 
 ## Libraries
 
@@ -20,7 +24,7 @@ include($$ROOTDIR/module/download/download.pri)
 include($$ROOTDIR/module/compress/compress.pri)
 include($$ROOTDIR/module/webbrowser/webbrowser.pri)
 
-#!mac: include($$ROOTDIR/module/ipc/ipc.pri)
+!mac: include($$ROOTDIR/module/metacall/metacall.pri)
 
 win32 {
     include($$ROOTDIR/win/dwm/dwm.pri)

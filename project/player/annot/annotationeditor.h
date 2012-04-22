@@ -5,11 +5,11 @@
 // 10/4/2011
 
 #include "module/qtext/dialog.h"
-#include <QTextCharFormat>
-#include <QColor>
 
 QT_BEGIN_NAMESPACE
 class QAction;
+class QTextCharFormat;
+class QColor;
 class QShortcut;
 class QComboBox;
 class QFontComboBox;

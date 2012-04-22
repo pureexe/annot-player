@@ -6,7 +6,7 @@
 
 #include "module/qtext/dialog.h"
 #include "module/annotcloud/annotation.h"
-#include <QModelIndex>
+#include <QtCore/QModelIndex>
 
 QT_BEGIN_NAMESPACE
 class QStandardItemModel;

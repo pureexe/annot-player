@@ -5,7 +5,7 @@
 // 11/8/2011
 
 #include "mainwindow.h"
-#include <QTimer>
+#include <QtCore/QTimer>
 
 namespace slot_ { // anonymous slot_
 
@@ -22,12 +22,33 @@ namespace slot_ { // anonymous slot_
     { Q_ASSERT(w_); }
 
   public slots:
-    void openUrls()
+    void trigger()
     {
       w_->openUrls(urls_);
       QTimer::singleShot(0, this, SLOT(deleteLater()));
     }
   };
+
+  class NewTab : public QObject {
+    Q_OBJECT
+    typedef QObject Base;
+
+    MainWindow *w_;
+    QString url_;
+
+  public:
+    NewTab(const QString &url, MainWindow *w)
+      : Base(w), w_(w), url_(url)
+    { Q_ASSERT(w_); }
+
+  public slots:
+    void trigger()
+    {
+      w_->newTab(url_);
+      QTimer::singleShot(0, this, SLOT(deleteLater()));
+    }
+  };
+
 
 } // namespace slot_
 

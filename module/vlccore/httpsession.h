@@ -4,13 +4,8 @@
 // vlccore/httpsession.h
 // 2/21/2012
 
-#ifdef _MSC_VER
-  #pragma warning (disable:4819)       // C4819: The file contains a character that cannot be represented in the current code page.
-  #pragma warning (disable:4996)       // C4996: MS' deprecated std functions orz.
-#endif // _MSC_VER
-
 #include "module/qtext/stoppable.h"
-#include <QString>
+#include <QtCore/QString>
 
 QT_FORWARD_DECLARE_CLASS(QNetworkCookieJar)
 QT_FORWARD_DECLARE_CLASS(QNetworkReply)
@@ -31,13 +26,14 @@ public:
 signals:
   void error(QString msg);
   void message(QString msg);
+  void warning(QString msg);
   void fileSaved(QString msg);
   void progress(qint64 receivedBytes, qint64 totalBytes);
 
   // - Properties -
 public:
   QNetworkCookieJar *cookieJar() const { return cookieJar_; }
-  virtual QString contentType() const { return QString::null; }
+  virtual QString contentType() const { return QString(); }
   QString mediaTitle() const { return mediaTitle_; }
   virtual qint64 read(char *data, qint64 maxSize) = 0;
   virtual bool seek(qint64 pos) = 0;
@@ -55,6 +51,8 @@ public:
   bool isStopped() const { return state_ == Stopped; }
   bool isFinished() const { return state_ == Finished; }
 
+  QString cachePath() const { return cachePath_; }
+
   virtual void save() { }
 
   void setCookieJar(QNetworkCookieJar *jar) { cookieJar_ = jar; }
@@ -62,6 +60,7 @@ public slots:
   void setBufferSaved(bool t) { saveBuffer_ = t; }
 
   void setMediaTitle(const QString &title) { mediaTitle_ = title; }
+  void setCachePath(const QString &path) { cachePath_ = path; }
 
   virtual void waitForReady() = 0;
   virtual void waitForStopped() = 0;
@@ -75,6 +74,7 @@ private:
   State state_;
   bool saveBuffer_;
 
+  QString cachePath_;
   QNetworkCookieJar *cookieJar_;
   QString mediaTitle_;
 };

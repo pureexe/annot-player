@@ -2,8 +2,10 @@
 // 2/15/2012
 
 #include "bufferedremotestream.h"
-#include <QtCore>
-#include <QtNetwork>
+#include <QtNetwork/QNetworkReply>
+#include <QtNetwork/QNetworkRequest>
+#include <QtCore/QEventLoop>
+#include <QtCore/QFile>
 #include <cstring>
 
 //#define DEBUG "bufferedremotestream"
@@ -164,6 +166,13 @@ BufferedRemoteStream::availableSize() const
                 : data_.size();
 }
 
+QString
+BufferedRemoteStream::contentType() const
+{
+  return reply_ ? reply_->header(QNetworkRequest::ContentTypeHeader).toString() :
+                  QString();
+}
+
 // - Wait -
 
 void
@@ -191,6 +200,8 @@ BufferedRemoteStream::waitForReadyRead()
     return;
   }
 
+  Q_ASSERT(reply_);
+
   QEventLoop loop;
   connect(reply_, SIGNAL(readyRead()), &loop, SLOT(quit()));
   connect(reply_, SIGNAL(finished()), &loop, SLOT(quit()));
@@ -200,6 +211,37 @@ BufferedRemoteStream::waitForReadyRead()
 }
 
 // - I/O -
+
+bool
+BufferedRemoteStream::seek(qint64 pos)
+{
+  QMutexLocker ml(&m_);
+
+  qint64 size = Base::size();
+
+  if (size && pos >= size)
+    return false;
+  else {
+    pos_ = pos;
+    return true;
+  }
+}
+
+qint64
+BufferedRemoteStream::skip(qint64 count)
+{
+  QMutexLocker ml(&m_);
+  qint64 size = Base::size();
+  qint64 ret;
+  if (size && pos_ + count >= size) {
+     ret = size - pos_;
+     pos_ = size;
+  } else {
+    pos_ += count;
+    ret = count;
+  }
+  return ret;
+}
 
 QByteArray
 BufferedRemoteStream::readAll()
@@ -243,8 +285,8 @@ BufferedRemoteStream::redirect()
   redirectUrl_ = url;
   DOUT("redirectUrl =" << redirectUrl_);
   run();
-  return true;
   DOUT("exit: ret = true");
+  return true;
 }
 
 void

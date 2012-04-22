@@ -11,7 +11,6 @@
 #include "module/mrlresolver/mrlresolvermanager.h"
 #include "module/qtext/network.h"
 #include <boost/tuple/tuple.hpp>
-#include <QDesktopServices>
 #include <QtNetwork>
 
 #define DEBUG "mrlmuxdownloadtask"
@@ -82,12 +81,12 @@ MrlMuxDownloadTask::suffixForUrl(const QString &url, const QString &codecs)
 QString
 MrlMuxDownloadTask::escapeFileName(const QString &name)
 {
-  QString ret = name;
-  ret.remove('"');
-  ret.replace('/', "／");
-  ret.replace(':', "-");
-  ret.replace('?', "？");
-  return ret.trimmed();
+  return QString(name)
+    .remove('"')
+    .replace('/', "／")
+    .replace(':', "-")
+    .replace('?', "？")
+    .trimmed();
 }
 
 void

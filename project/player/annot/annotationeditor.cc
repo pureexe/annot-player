@@ -497,7 +497,7 @@ AnnotationEditor::text() const
 
   default:
     Q_ASSERT(0);
-    return QString::null;
+    return QString();
   }
 }
 

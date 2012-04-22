@@ -4,7 +4,7 @@
 // qtext/draggablemainwindow.h
 // 9/3/2011
 
-#include <QMainWindow>
+#include <QtGui/QMainWindow>
 
 namespace QtExt {
 

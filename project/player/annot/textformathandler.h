@@ -5,9 +5,9 @@
 // 11/8/2011
 // See: http://www.qtcentre.org/threads/26168-Contoured-text-in-editable-QGraphicsTextItem
 
-#include <QObject>
-#include <QTextObjectInterface>
-#include <QTextFormat>
+#include <QtGui/QTextObjectInterface>
+#include <QtGui/QTextFormat>
+#include <QtCore/QObject>
 
 class TextFormatHandler : public QObject, public QTextObjectInterface
 {

@@ -2,11 +2,14 @@
 // 11/18/2011
 #include "application.h"
 #include "global.h"
+#include "tr.h"
+#include "rc.h"
 #ifdef Q_OS_WIN
 #  include "win/qtwin/qtwin.h"
 #endif // Q_OS_WIN
 #ifdef Q_OS_MAC
 #  include "mac/qtmac/qtmac.h"
+#  include "unix/qtunix/qtunix.h"
 #elif defined Q_OS_UNIX
 extern "C" {
   #include <sys/types.h>
@@ -20,7 +23,7 @@ extern "C" {
 #define DEBUG "application"
 #include "module/debug/debug.h"
 
-// - Constructions -
+// - Construction -
 
 Application::Application(int &argc, char **argv)
   : Base(argc, argv), w_(0)
@@ -91,6 +94,34 @@ Application::createDirectories()
     logs.mkpath(logs.absolutePath());
 }
 
+void
+Application::infectDownloadDirectory()
+{
+  QString path = G_PATH_DOWNLOADS;
+  QDir dir(path);
+  if (!dir.exists())
+    dir.mkpath(dir.absolutePath());
+#ifdef Q_OS_MAC
+  QString targetIcon = path + "/" "Icon\r",
+          srcIcon = REZ_ICON_VIDEO;
+  bool ok = !QFile::exists(targetIcon) && QFile::exists(srcIcon) &&
+    QtUnix::cp(srcIcon, targetIcon) &&
+    QtMac::setFileAttributes(path, QtMac::FA_CustomIcon);
+  Q_UNUSED(ok);
+  DOUT("ok =" << ok);
+
+#elif defined Q_OS_WIN
+  QString targetIni = path + "/" "desktop.ini",
+          srcIni = QtWin::getVideoPath() + "/" "desktop.ini";
+  bool ok = !QFile::exists(targetIni) && QFile::exists(srcIni) &&
+    QFile::copy(srcIni, targetIni) &&
+    QtWin::setFileAttributes(targetIni, QtWin::SystemAttribute | QtWin::HiddenAttribute | QtWin::ArchiveAttribute) &&
+    QtWin::setFileAttributes(path, QtWin::ReadOnlyAttribute);
+  Q_UNUSED(ok);
+  DOUT("ok =" << ok);
+#endif Q_OS_
+}
+
 // - Properties -
 
 bool
@@ -101,9 +132,9 @@ Application::isSingleInstance() const
   QString processName = fi.fileName();
   QList<ulong> pids = QtWin::getProcessIdsByName(processName);
   return pids.size() <= 1;
-#elif defined(Q_OS_MAC)
+#elif defined Q_OS_MAC
   return true;
-#elif defined(Q_OS_UNIX)
+#elif defined Q_OS_UNIX
   // See: http://www.linuxquestions.org/questions/programming-9/restricting-multiple-instance-of-a-program-242069/
   static int fd_lock = -1;
   if (fd_lock < 0) {

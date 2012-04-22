@@ -2,7 +2,7 @@
 // 2/6/2012
 
 #include "module/qtext/filedeleter.h"
-#include <QFile>
+#include <QtCore/QFile>
 
 // - Deletion -
 

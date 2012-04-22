@@ -5,8 +5,8 @@
 // 2/9/2012
 
 #include "module/qtext/bitwise.h"
-#include <QList>
-#include <QByteArray>
+#include <QtCore/QList>
+#include <QtCore/QByteArray>
 
 class OutputStream
 {

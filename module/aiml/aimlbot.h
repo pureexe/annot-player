@@ -4,7 +4,7 @@
 // aimlbot.h
 // 7/31/2011
 
-#include <QString>
+#include <QtCore/QString>
 
 class AimlParser;
 class AimlBot

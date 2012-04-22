@@ -25,7 +25,9 @@
 #  define G_PATH_PROFILE        QDir::homePath() + "/.annot/down"
 #endif // Q_WS_
 
-#define G_PATH_LOCK     G_PATH_PROFILE
-#define G_PATH_LOCK_RUNNING  G_PATH_LOCK "/" "running.lock"
+#define G_PATH_LOCK             G_PATH_PROFILE
+#define G_PATH_LOCK_RUNNING     G_PATH_LOCK "/" "running.lock"
+
+#define G_PATH_DOWNLOADS        QDesktopServices::storageLocation(QDesktopServices::DesktopLocation)
 
 #endif // GLOBAL_H

@@ -2,7 +2,6 @@
 // 2/22/2012
 
 #include "bufferedstreampipe.h"
-#include <QtCore>
 
 //#define DEBUG "bufferedstreampipe"
 #include "module/debug/debug.h"

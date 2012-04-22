@@ -2,9 +2,15 @@
 // 1/24/2012
 
 #include "youkumrlresolver.h"
-#include <QtCore>
-#include <QtScript>
-#include <QtNetwork>
+#include <QtNetwork/QNetworkReply>
+#include <QtNetwork/QNetworkRequest>
+#include <QtNetwork/QNetworkAccessManager>
+#include <QtScript/QScriptEngine>
+#include <QtScript/QScriptValue>
+#include <QtScript/QScriptValueIterator>
+#include <QtCore/QRegExp>
+#include <QtCore/QStringList>
+#include <QtCore/QDateTime>
 #include <cstdlib>
 
 //#define DEBUG "youkumrlresolver"
@@ -56,8 +62,7 @@ YoukuMrlResolver::resolveMedia(const QString &href)
   emit message(tr("resolving media URL ...") + ": " + url);
 
   DOUT("url =" << url);
-  QNetworkRequest request(url);
-  nam_->get(request);
+  nam_->get(QNetworkRequest(url));
   return true;
 }
 
@@ -260,7 +265,7 @@ YoukuMrlResolver::decodeFileId(QString fileId, long seed)
     Q_ASSERT(ok);
     if (!ok) {
       DOUT("exit: ERROR: invalid id =" << id);
-      return QString::null;
+      return QString();
     }
     ret.append(alphabet[i]);
   }

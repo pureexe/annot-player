@@ -4,7 +4,7 @@
 // clipboardmonitor.h
 // 3/10/2012
 
-#include <QObject>
+#include <QtCore/QObject>
 
 class ClipboardMonitor : public QObject
 {
@@ -24,6 +24,7 @@ signals:
   void message(const QString &text);
   void warning(const QString &text);
   void error(const QString &text);
+  void notification(const QString &text);
 
   void mediaUrlEntered(const QString &url);
   void annotationUrlEntered(const QString &url);

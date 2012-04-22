@@ -13,7 +13,7 @@
 // - DWM API -
 // Blur behind data structures, must be consistent with Windows 7 SDK
 // http://msdn.microsoft.com/en-us/library/aa969533(v=vs.85).aspx
-#ifdef USE_DWM_STATIC
+#ifdef WITH_DWM_STATIC
 #  include <dwmapi.h>
 #else
 #  define DWM_BB_ENABLE                 0x00000001  // fEnable has been specified
@@ -21,25 +21,23 @@
 #  define DWM_BB_TRANSITIONONMAXIMIZED  0x00000004  // fTransitionOnMaximized has been specified
 #  define WM_DWMCOMPOSITIONCHANGED      0x031E      // Composition changed window message
 
-  typedef struct _DWM_BLURBEHIND
-  {
+  typedef struct _DWM_BLURBEHIND {
     DWORD dwFlags;
     BOOL fEnable;
     HRGN hRgnBlur;
     BOOL fTransitionOnMaximized;
   } DWM_BLURBEHIND, *PDWM_BLURBEHIND;
 
-  typedef struct _MARGINS
-  {
+  typedef struct _MARGINS {
     int cxLeftWidth;
     int cxRightWidth;
     int cyTopHeight;
     int cyBottomHeight;
   } MARGINS, *PMARGINS;
 
-#endif // USE_DWM_STATIC
+#endif // WITH_DWM_STATIC
 
-#ifndef USE_DWM_STATIC
+#ifndef WITH_DWM_STATIC
 namespace { // anonymous, DwmApi
   class DwmApi
   {
@@ -71,11 +69,11 @@ namespace { // anonymous, DwmApi
   };
 
 } // anonyomus
-#endif // USE_DWM_STATIC
+#endif // WITH_DWM_STATIC
 
 // - WindowNotifier -
 
-#ifdef USE_DWM_NOTIFIER
+#ifdef WITH_DWM_NOTIFIER
 namespace { // anoymous, WindowsNotifier
 
   // Invisible background window.
@@ -139,11 +137,11 @@ namespace { // anoymous, WindowsNotifier
 
 } // anonymous
 
-#endif // USE_DWM_NOTIFIER
+#endif // WITH_DWM_NOTIFIER
 
 // - DesktopWindowManager -
 
-#ifdef USE_DWM_STATIC
+#ifdef WITH_DWM_STATIC
 #  define DWMAPI
 #else
   namespace { namespace dwmapi_ { // anonymous
@@ -189,20 +187,20 @@ namespace { // anoymous, WindowsNotifier
         return api()->pDwmGetColorizationColor(pcrColorization, pfOpaqueBlend);
     }
 
-  }} // anonymous namespace dwmapi_
+  } } // anonymous namespace dwmapi_
 #  define DWMAPI dwmapi_
 #endif
 
-#ifdef USE_DWM_NOTIFIER
+#ifdef WITH_DWM_NOTIFIER
   namespace { namespace static_ { // anonymous
     inline WindowNotifier *windowNotifier() { static WindowNotifier g; return &g; }
-  }} // anonymous namespace static_
+  } } // anonymous namespace static_
 
 #  define DWM_NOTIFIER       static_::windowNotifier()
-#endif // USE_DWM_NOTIFIER
+#endif // WITH_DWM_NOTIFIER
 
-#ifdef USE_DWM_NOTIFIER
-#endif // USE_DWM_NOTIFIER
+#ifdef WITH_DWM_NOTIFIER
+#endif // WITH_DWM_NOTIFIER
 
 void
 Dwm::warmUp()
@@ -240,22 +238,22 @@ Dwm::enableBlurBehindWindow(WId hwnd, bool enable)
 }
 
 bool
-Dwm::enableBlurBehindWindow(QWidget *widget, bool enable)
+Dwm::enableBlurBehindWindow(QWidget *w, bool enable)
 {
-  Q_ASSERT(widget);
-  if (!widget)
+  Q_ASSERT(w);
+  if (!w)
     return false;
 
-  //widget->setAttribute(Qt::WA_TranslucentBackground, enable);
-  //widget->setAttribute(Qt::WA_NoSystemBackground, enable);
+  //w->setAttribute(Qt::WA_TranslucentBackground, enable);
+  //w->setAttribute(Qt::WA_NoSystemBackground, enable);
 
-  bool ok = enableBlurBehindWindow(widget->winId(), enable);
-  #ifdef USE_DWM_NOTIFIER
+  bool ok = enableBlurBehindWindow(w->winId(), enable);
+#ifdef WITH_DWM_NOTIFIER
   if (!enable)
-    DWM_NOTIFIER->removeWidget(widget);
+    DWM_NOTIFIER->removeWidget(w);
   else if (ok)
-    DWM_NOTIFIER->addWidget(widget);
-  #endif // USE_DWM_NOTIFIER
+    DWM_NOTIFIER->addWidget(w);
+#endif // WITH_DWM_NOTIFIER
   return ok;
 }
 
@@ -269,37 +267,35 @@ Dwm::extendFrameIntoClientArea(WId hwnd, int left, int top, int right, int botto
 }
 
 bool
-Dwm::extendFrameIntoClientArea(QWidget *widget, int left, int top, int right, int bottom)
+Dwm::extendFrameIntoClientArea(QWidget *w, int left, int top, int right, int bottom)
 {
-  Q_ASSERT(widget);
-  if (!widget)
+  Q_ASSERT(w);
+  if (!w)
     return false;
 
-  bool ok = extendFrameIntoClientArea(widget->winId(), left, top, right, bottom);
-  //widget->setAttribute(Qt::WA_TranslucentBackground, enable);
+  bool ok = extendFrameIntoClientArea(w->winId(), left, top, right, bottom);
+  //w->setAttribute(Qt::WA_TranslucentBackground, enable);
 
-#ifdef USE_DWM_NOTIFIER
+#ifdef WITH_DWM_NOTIFIER
   // If the margin is 0, disable the frame.
   bool enable = left || top || right || bottom;
   if (!enable)
-    DWM_NOTIFIER->removeWidget(widget);
+    DWM_NOTIFIER->removeWidget(w);
   else if (ok)
-    DWM_NOTIFIER->addWidget(widget);
-#endif // USE_DWM_NOTIFIER
+    DWM_NOTIFIER->addWidget(w);
+#endif // WITH_DWM_NOTIFIER
   return ok;
 }
 
 QColor
 Dwm::colorizationColor()
 {
-  QColor ret = QApplication::palette().window().color();
   DWORD color = 0;
-  BOOL opaque = FALSE;
+  BOOL opaque = FALSE; // unused
 
   HRESULT hr = DWMAPI::DwmGetColorizationColor(&color, &opaque);
-  if (!SUCCEEDED(hr))
-    return ret;
-  return QColor(color);
+  return SUCCEEDED(hr) ? QColor(color) :
+         QApplication::palette().window().color();
 }
 
 // EOF

@@ -4,8 +4,8 @@
 // qtext/combobox.h
 // 10/7/2011
 
-#include <QComboBox>
-#include <QCursor>
+#include <QtGui/QComboBox>
+#include <QtGui/QCursor>
 
 namespace QtExt {
 
@@ -22,6 +22,7 @@ class ComboBox : public QComboBox
 public:
   explicit ComboBox(QWidget *parent = 0)
     : Base(parent), hovered_(false), hoverCursor_(Qt::PointingHandCursor) { }
+
 signals:
   void hovered();
   void leaved();
@@ -31,6 +32,11 @@ public:
   QCursor hoverCursor() const { return hoverCursor_; }
 public slots:
   void setHoverCursor(const QCursor &cursor) { hoverCursor_ = cursor; }
+
+  void showPopup() { Base::showPopup(); }
+  void hidePopup() { Base::hidePopup(); }
+
+  void setPopupVisible(bool t) { if (t) showPopup(); else hidePopup(); }
 
   // - Events -
 protected:

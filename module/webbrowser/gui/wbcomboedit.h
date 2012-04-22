@@ -5,7 +5,7 @@
 // 3/31/2012
 
 #include "module/qtext/combobox.h"
-#include <QStringList>
+#include <QtCore/QStringList>
 
 QT_FORWARD_DECLARE_CLASS(QAction)
 QT_FORWARD_DECLARE_CLASS(QMenu)
@@ -30,10 +30,6 @@ public:
 public slots:
   void reset();
   void setDefaultItems(const QStringList &l) { defaultItems_ = l; reset(); }
-
-  // - Actions -
-protected slots:
-  void popup() { showPopup(); }
 
   // - Events -
 protected:

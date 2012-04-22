@@ -11,6 +11,7 @@
 #endif // __LIBVLC__
 
 #include "player.h"
+#include "playerdefs.h"
 #include "player_p.h"
 //#include "module/qtext/os.h"
 #ifdef WITH_MODULE_VLCCORE
@@ -25,9 +26,10 @@
 #  endif // Q_WS_WIN
 #endif // WITH_MODULE_VLCCORE
 #ifdef Q_WS_MAC
-#  include <QMacCocoaViewContainer>
+#  include <QtGui/QMacCocoaViewContainer>
 #endif // Q_WS_MAC
-#include <QtGui>
+#include <QtGui/QMouseEvent>
+#include <QtCore/QEventLoop>
 #include <boost/tuple/tuple.hpp>
 #include <boost/typeof/typeof.hpp>
 #include <cstring>
@@ -422,6 +424,7 @@ Player::Player(QObject *parent)
 #ifdef WITH_MODULE_VLCCORE
   connect(VlcHttpPlugin::globalInstance(), SIGNAL(error(QString)), SIGNAL(error(QString)));
   connect(VlcHttpPlugin::globalInstance(), SIGNAL(message(QString)), SIGNAL(message(QString)));
+  connect(VlcHttpPlugin::globalInstance(), SIGNAL(warning(QString)), SIGNAL(warning(QString)));
   connect(VlcHttpPlugin::globalInstance(), SIGNAL(fileSaved(QString)), SIGNAL(fileSaved(QString)));
   connect(VlcHttpPlugin::globalInstance(), SIGNAL(progress(qint64,qint64)), SIGNAL(downloadProgress(qint64,qint64)));
 #endif // WITH_MODULE_VLCCORE
@@ -646,8 +649,8 @@ void
 Player::setStream(const QStringList &mrls, qint64 duration)
 {
 #ifdef WITH_MODULE_VLCCORE
-  VlcHttpPlugin:: setUrls(mrls);
-  VlcHttpPlugin:: setDuration(duration);
+  VlcHttpPlugin::setUrls(mrls);
+  VlcHttpPlugin::setDuration(duration);
 #else
   Q_UNUSED(mrls)
   Q_UNUSED(duration)
@@ -725,7 +728,6 @@ Player::openMedia(const QString &path)
   //libvlc_media_list_player_set_media_list(mlp, ml);
 
   if (!impl_->media()) {
-    impl_->setMediaPath();
     DOUT("WARNING: failed");
     DOUT("exit: ret = false");
     return false;
@@ -733,6 +735,11 @@ Player::openMedia(const QString &path)
 
   impl_->setMediaPath(path);
 
+  QFileInfo fi(path);
+  if (!fi.exists())
+    fi = QFileInfo(QUrl(path).toLocalFile());
+  if (fi.exists())
+    impl_->setMediaSize(fi.size());
 
   ::libvlc_media_player_set_media(impl_->player(), impl_->media());
 
@@ -768,15 +775,14 @@ Player::closeMedia()
     //loop.processEvents();
     //qDebug() << "player::closeEvent:eventloop:leave";
 
-    qDebug() << "player::closeMedia:processEvents:enter: timeout =" << ProcessEventsTimeout;
     qApp->processEvents(QEventLoop::AllEvents, ProcessEventsTimeout);
-    qDebug() << "player::closeMedia:leave";
   }
 
   impl_->setPaused(false);
   impl_->setSubtitleId();
   impl_->setTitleId();
   impl_->setMediaPath();
+  impl_->setMediaSize();
   impl_->setMediaTitle();
   impl_->setTrackNumber();
   impl_->setExternalSubtitles();
@@ -785,7 +791,7 @@ Player::closeMedia()
 
 #ifdef WITH_MODULE_VLCCORE
   VlcHttpPlugin::closeSession();
-  VlcHttpPlugin::setMediaTitle(QString::null);
+  VlcHttpPlugin::setMediaTitle(QString());
   VlcHttpPlugin::setUrls(QStringList());
   VlcHttpPlugin::setDuration(0);
 #endif // WITH_MODULE_VLCCORE
@@ -850,12 +856,12 @@ Player::mediaTitle() const
     return impl_->mediaTitle();
 
   if (!hasMedia())
-    return QString::null;
+    return QString();
 
   const char *title = ::libvlc_media_get_meta(impl_->media(), libvlc_meta_Title);
   // VLC i18n bug. It simpily cannot handle UTF-8 correctly.
   if (!title || ::strstr(title, "??"))
-    return QString::null;
+    return QString();
 
   return _qs(title);
 }
@@ -1103,7 +1109,7 @@ Player::clearAspectRatio()
 {
   Q_ASSERT(isValid());
   ::libvlc_video_set_aspect_ratio(impl_->player(), 0);
-  emit aspectRatioChanged(QString::null);
+  emit aspectRatioChanged(QString());
 }
 
 void
@@ -1173,6 +1179,18 @@ Player::availablePosition() const
 // - Play time -
 
 qint64
+Player::mediaSize() const
+{
+  Q_ASSERT(isValid());
+  qint64 ret = impl_->mediaSize();
+#ifdef WITH_MODULE_VLCCORE
+  if (!ret && impl_->mediaPath().startsWith("http://"))
+    ret = VlcHttpPlugin::size();
+#endif // WITH_MODULE_VLCCORE
+  return ret;
+}
+
+qint64
 Player::mediaLength() const
 {
   Q_ASSERT(isValid());
@@ -1229,7 +1247,7 @@ Player::subtitleDescriptions() const
     if (first->psz_name)
       ret.append(first->psz_name);
     else
-      ret.append(QString::null);
+      ret.append(QString());
     first = first->p_next;
   }
 
@@ -1777,6 +1795,8 @@ Player::setCookieJar(QNetworkCookieJar *jar)
 {
 #ifdef WITH_MODULE_VLCCORE
   VlcHttpPlugin::setCookieJar(jar);
+#else
+  Q_UNUSED(jar);
 #endif // WITH_MODULE_VLCCORE
 }
 
@@ -1785,6 +1805,8 @@ Player::isBufferSaved() const
 {
 #ifdef WITH_MODULE_VLCCORE
   return VlcHttpPlugin::isBufferSaved();
+#else
+  return false;
 #endif // WITH_MODULE_VLCCORE
 }
 
@@ -1793,6 +1815,28 @@ Player::isDownloadFinished() const
 {
 #ifdef WITH_MODULE_VLCCORE
   return VlcHttpPlugin::isFinished();
+#else
+  return false;
+#endif // WITH_MODULE_VLCCORE
+}
+
+QString
+Player::downloadPath() const
+{
+#ifdef WITH_MODULE_VLCCORE
+  return VlcHttpPlugin::cachePath();
+#else
+  return QString();
+#endif // WITH_MODULE_VLCCORE
+}
+
+void
+Player::setDownloadPath(const QString &path)
+{
+#ifdef WITH_MODULE_VLCCORE
+  VlcHttpPlugin::setCachePath(path);
+#else
+  Q_UNUSED(path);
 #endif // WITH_MODULE_VLCCORE
 }
 
@@ -1801,6 +1845,8 @@ Player::setBufferSaved(bool t)
 {
 #ifdef WITH_MODULE_VLCCORE
   VlcHttpPlugin::setBufferSaved(t);
+#else
+  Q_UNUSED(t);
 #endif // WITH_MODULE_VLCCORE
 }
 
@@ -1991,10 +2037,37 @@ Player::bitrate() const
   if (hasMedia()) {
     libvlc_media_stats_t stats;
     if (::libvlc_media_get_stats(impl_->media(), &stats))
-      ret = stats.f_input_bitrate * 1000;
+      ret = stats.f_input_bitrate * (1000 * 1000);
   }
   return ret;
 }
+
+// - Meta data -
+
+#define META_DATA(_Field) \
+  QString \
+  Player::meta##_Field() const \
+  { return hasMedia() ? _qs(::libvlc_media_get_meta(impl_->media(), libvlc_meta_##_Field)) : QString(); }
+
+  META_DATA(Title)
+  META_DATA(Artist)
+  META_DATA(Genre)
+  META_DATA(Copyright)
+  META_DATA(Album)
+  META_DATA(TrackNumber)
+  META_DATA(Description)
+  META_DATA(Rating)
+  META_DATA(Date)
+  META_DATA(Setting)
+  META_DATA(URL)
+  META_DATA(Language)
+  META_DATA(NowPlaying)
+  META_DATA(Publisher)
+  META_DATA(EncodedBy)
+  META_DATA(ArtworkURL)
+  META_DATA(TrackID)
+#undef META_DATA
+
 
 // EOF
 

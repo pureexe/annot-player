@@ -4,7 +4,7 @@
 // streamservice.h
 // 2/11/2012
 
-#include <QObject>
+#include <QtCore/QObject>
 #include <climits>
 #include "module/mediacodec/codecinfo.h"
 

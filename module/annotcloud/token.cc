@@ -6,9 +6,8 @@
 #ifdef WITH_MODULE_IOUTIL
 #  include "module/ioutil/ioutil.h"
 #endif // WITH_MODULE_IOUTIL
-#include <QMetaType>
-#include <QFile>
-#include <QFileInfo>
+#include <QtCore/QFile>
+#include <QtCore/QFileInfo>
 #include <memory>
 
 #define DEBUG "module/annotcloud::token"

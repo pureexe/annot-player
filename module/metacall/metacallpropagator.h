@@ -4,7 +4,7 @@
 // 4/9/2012
 // metacallpropagator.h
 
-#include <QObject>
+#include <QtCore/QObject>
 
 QT_FORWARD_DECLARE_CLASS(QHostAddress)
 
@@ -29,7 +29,7 @@ protected:
   explicit MetaCallPropagator(QObject *parent = 0)
     : Base(parent), filter_(0) { }
 
-  bool isRunning() const;
+  bool isActive() const;
 
   bool startServer(const QHostAddress &address, int port);
   bool startClient(const QHostAddress &address, int port);

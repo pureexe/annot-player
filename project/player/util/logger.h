@@ -4,8 +4,8 @@
 // Logger.h
 // 10/16/2011
 
-#include <QString>
-#include <QObject>
+#include <QtCore/QString>
+#include <QtCore/QObject>
 
 namespace Logger {
   void error(const QString &message);
@@ -26,16 +26,16 @@ namespace Logger {
     explicit LoggerSignals(QObject *parent = 0) : Base(parent) { }
 
   signals:
-    void errored(QString msg);
-    void logged(QString msg);
-    void notified(QString msg);
-    void warned(QString msg);
+    void errorMessage(QString msg);
+    void message(QString msg);
+    void notification(QString msg);
+    void warning(QString msg);
 
   public:
-    void emit_errored(const QString &msg) { emit errored(msg); } ///< \internal
-    void emit_logged(const QString &msg) { emit logged(msg); } ///< \internal
-    void emit_notified(const QString &msg) { emit notified(msg); } ///< \internal
-    void emit_warned(const QString &msg) { emit warned(msg); } ///< \internal
+    void showError(const QString &msg) { emit errorMessage(msg); } ///< \internal
+    void showMessage(const QString &msg) { emit message(msg); } ///< \internal
+    void showNotification(const QString &msg) { emit notification(msg); } ///< \internal
+    void showWarning(const QString &msg) { emit warning(msg); } ///< \internal
 
   public slots:
     void error(const QString &message) { Logger::error(message); }

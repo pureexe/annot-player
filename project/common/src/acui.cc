@@ -142,7 +142,7 @@ AcUi::setMenuBackground(QMenu *m, bool persistent)
 
 //#ifdef Q_WS_MAC
   if (theme_ == DefaultTheme)
-    m->setStyleSheet(QString::null);
+    m->setStyleSheet(QString());
   else
 //#endif // Q_WS_MAC
   {

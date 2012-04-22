@@ -43,7 +43,8 @@ QTabBar::tab {
 	border-image:url(&quot;:/images/tab.png&quot;);
 	border-width:4px;
 	padding-left:3px;
-	min-width:54ex;
+    /*min-width:54ex;*/
+	min-width:45ex;
 	color: black;
 }
 

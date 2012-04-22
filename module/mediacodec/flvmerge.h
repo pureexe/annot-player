@@ -8,7 +8,7 @@
 #include "module/stream/inputstream.h"
 #include "module/stream/outputstream.h"
 #include "module/stream/streampipe.h"
-#include <QObject>
+#include <QtCore/QObject>
 
 // - Merger -
 

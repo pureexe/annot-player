@@ -20,9 +20,9 @@ SOURCES += \
     $$PWD/alias.cc \
     $$PWD/annotation.cc \
     $$PWD/annothtml.cc \
-    $$PWD/annothtmlparse.cc \
-    $$PWD/annothtmlthread.cc \
-    $$PWD/annothtmlunparse.cc \
+    $$PWD/annothtml_parse.cc \
+    $$PWD/annothtml_thread.cc \
+    $$PWD/annothtml_unparse.cc \
     $$PWD/annotpaint.cc \
     $$PWD/annotxml.cc \
     $$PWD/token.cc \

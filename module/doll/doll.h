@@ -4,7 +4,7 @@
 // doll.h
 // 8/1/2011
 
-#include <QObject>
+#include <QtCore/QObject>
 
 class AimlBot;
 class Doll : public QObject

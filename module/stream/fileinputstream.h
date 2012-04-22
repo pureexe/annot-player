@@ -5,8 +5,8 @@
 // 2/13/2012
 
 #include "inputstream.h"
-#include <QObject>
-#include <QFile>
+#include <QtCore/QObject>
+#include <QtCore/QFile>
 
 class FileInputStream : public QObject, public InputStream
 {

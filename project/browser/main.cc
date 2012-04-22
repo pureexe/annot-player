@@ -3,18 +3,24 @@
 #include "mainwindow.h"
 #include "application.h"
 #include "rc.h"
+#include "settings.h"
+#include "global.h"
 #include "ac/acsettings.h"
 #include "ac/acui.h"
 #ifdef WITH_MODULE_QT
 #  include "module/qt/qtrc.h"
 #endif // WITH_MODULE_QT
+#include <QtWebKit/QWebSettings>
+#include <QtNetwork/QNetworkProxy>
+#include <QtNetwork/QNetworkReply>
 #include <QtGui>
-#include <QtWebKit>
 #include <ctime>
 #include <cstdlib>
 
 #define DEBUG "main"
 #include "module/debug/debug.h"
+
+#define DEFAULT_SIZE    QSize(1000 + 9*2, 600); // width for nicovideo.jp + margin*2
 
 // - Startup stages -
 
@@ -24,6 +30,19 @@ namespace { // anonymous
   inline void registerMetaTypes()
   { // Not registered in Qt 4.8
     qRegisterMetaType<QNetworkReply::NetworkError>("QNetworkReply::NetworkError");
+  }
+
+  // Window size
+
+  inline bool isValidWindowSize(const QSize &size, const QWidget *w = 0)
+  {
+    enum { MinWidth = 400, MinHeight = 300 };
+    if (size.width() < MinWidth || size.height() < MinHeight)
+      return false;
+
+    QSize desktop = QApplication::desktop()->screenGeometry(w).size();
+    return desktop.isEmpty() ||
+           size.width() > desktop.width() && size.height() > desktop.height();
   }
 
   // i18n
@@ -89,12 +108,13 @@ main(int argc, char *argv[])
   // Register meta types.
   ::registerMetaTypes();
 
-  AcSettings *settings = AcSettings::globalSettings();
+  AcSettings *ac = AcSettings::globalSettings();
+  Settings *settings = Settings::globalSettings();
   {
-    int lang = settings->language();
+    int lang = ac->language();
     if (!lang) {
       lang =  QLocale::system().language();
-      settings->setLanguage(lang);
+      ac->setLanguage(lang);
     }
     QTranslator *t = translatorForLanguage(lang);
     Q_ASSERT(t);
@@ -107,14 +127,18 @@ main(int argc, char *argv[])
 #endif // WITH_MODULE_QT
   }
 
+  // Check update
+  if (settings->version() != G_VERSION)
+    settings->setVersion(G_VERSION);
+
   // Set theme.
   {
     AcUi *ui = AcUi::globalInstance();
-    int tid = settings->themeId();
+    int tid = ac->themeId();
     ui->setTheme(tid);
-    ui->setMenuEnabled(settings->isMenuThemeEnabled());
+    ui->setMenuEnabled(ac->isMenuThemeEnabled());
 #ifdef Q_WS_WIN
-    ui->setAeroEnabled(settings->isAeroEnabled());
+    ui->setAeroEnabled(ac->isAeroEnabled());
 #endif // Q_WS_WIN
   }
 
@@ -140,39 +164,57 @@ main(int argc, char *argv[])
     ws->setDefaultTextEncoding("SHIFT-JIS");
     //ws->setDefaultTextEncoding("EUC-JP");
 
-    //ws->setMaximumPagesInCache(10);
-    //web->setLocalStoragePath(...);
+    ws->setLocalStoragePath(G_PATH_CACHES);
+    ws->setIconDatabasePath(G_PATH_CACHES);
+    ws->setOfflineStoragePath(G_PATH_CACHES);
+    ws->setOfflineWebApplicationCachePath(G_PATH_CACHES);
+
+    // See: http://webkit.org/blog/427/webkit-page-cache-i-the-basics/
+    ws->setMaximumPagesInCache(30);
   }
 
+  //void *p = dlopen("/Library/Internet Plug-Ins/QuickTime Plugin.plugin/Contents/MacOS/QuickTime Plugin", 265);
+
   // Set network proxy
-  if (settings->isProxyEnabled()) {
+  if (ac->isProxyEnabled()) {
     QNetworkProxy::ProxyType type;
-    switch (settings->proxyType()) {
+    switch (ac->proxyType()) {
     case QNetworkProxy::Socks5Proxy: type = QNetworkProxy::Socks5Proxy; break;
     case QNetworkProxy::HttpProxy: type = QNetworkProxy::HttpProxy; break;
     default: type = QNetworkProxy::Socks5Proxy;
     }
-    QNetworkProxy proxy(type, settings->proxyHostName(), settings->proxyPort(),
-                        settings->proxyUser(), settings->proxyPassword());
+    QNetworkProxy proxy(type, ac->proxyHostName(), ac->proxyPort(),
+                        ac->proxyUser(), ac->proxyPassword());
     QNetworkProxy::setApplicationProxy(proxy);
   }
 
   DOUT("make mainwindow");
 
+  QStringList args = a.arguments();
+  if (args.size() > 1) {
+    args.removeFirst();
+    QStringList urls = settings->recentTabs();
+    urls.append(args);
+    settings->setRecentTabs(args);
+    settings->setRecentTabIndex(urls.size() - 1);
+  }
+
   MainWindow w;
   a.setMainWindow(&w);
 
-  w.resize(800, 600);
+  QSize size = settings->recentSize();
+  if (size.isEmpty() || !settings->hasRecentTabs() ||
+      !::isValidWindowSize(size, &w))
+    size = DEFAULT_SIZE;
+  w.resize(size);
+
+  //QTimer::singleShot(0, &w, SLOT(login()));
+  //QTimer::singleShot(0, &w, SLOT(show()));
+  w.login();
   w.show();
 
   //QTimer::singleShot(0, &w, SLOT(login()));
   //w.login();
-
-  QStringList args = a.arguments();
-  if (args.size() > 1) {
-    args.removeFirst();
-    w.openUrls(args);
-  }
 
   DOUT("exit: exec");
   return a.exec();

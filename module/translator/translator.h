@@ -4,8 +4,8 @@
 // translator.h
 // 11/2/2011
 
-#include <QObject>
-#include <QUrl>
+#include <QtCore/QObject>
+#include <QtCore/QUrl>
 
 QT_FORWARD_DECLARE_CLASS(QNetworkAccessManager)
 QT_FORWARD_DECLARE_CLASS(QNetworkReply)
@@ -33,10 +33,10 @@ signals:
 
 public slots:
   ///  Request translation. Autodetect source language when \param from is empty.
-  void translate(const QString &text, const QString &to, const QString &from = QString::null) const;
+  void translate(const QString &text, const QString &to, const QString &from = QString()) const;
 
 protected:
-  static QUrl translationQuery(const QString &text, const QString &to, const QString &from = QString::null);
+  static QUrl translationQuery(const QString &text, const QString &to, const QString &from = QString());
 protected slots:
   void processNetworkReply(QNetworkReply *reply);
 

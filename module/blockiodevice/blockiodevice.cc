@@ -12,7 +12,6 @@
 // See: http://social.msdn.microsoft.com/Forums/en-us/vssmartdevicesnative/thread/3c5daa34-afae-4a4a-a685-e282983df783
 
 #include "blockiodevice.h"
-#include <QtCore>
 extern "C" {
 #ifdef Q_OS_WIN
 #  include <qt_windows.h>

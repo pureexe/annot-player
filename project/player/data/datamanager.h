@@ -7,7 +7,8 @@
 #include "module/annotcloud/annotation.h"
 #include "module/annotcloud/token.h"
 #include "module/annotcloud/user.h"
-#include <QObject>
+#include <QtCore/QObject>
+#include <QtCore/QHash>
 
 class DataManager : public QObject
 {
@@ -27,8 +28,12 @@ class DataManager : public QObject
   AliasList aliases_;
   AnnotationList annots_;
 
+  // Statistics
+  QHash<qint64, int> userAnnotCount_;
+  qint64 minAnnotTime_, maxAnnotTime_;
+
 public:
-  explicit DataManager(QObject *parent = 0) : Base(parent) { }
+  explicit DataManager(QObject *parent = 0);
 
   // - Properties -
 public:
@@ -48,13 +53,17 @@ public:
 
   bool aliasConflicts(const Alias &a) const;
 
+  int userCount() const { return userAnnotCount_.size(); }
+  qint64 minAnnotationCreateTime() const { return minAnnotTime_; }
+  qint64 maxAnnotationCreateTime() const { return maxAnnotTime_; }
+
 public slots:
-  void setUser(const User &user);
-  void setToken(const Token &token);
-  void addAlias(const Alias &alias);
-  void setAliases(const AliasList &aliases);
+  void setUser(const User &user) { user_ = user; emit userChanged(user_); }
+  void setToken(const Token &token) { token_ = token; emit tokenChanged(token_); }
+  void addAlias(const Alias &alias) { aliases_.append(alias); emit aliasAdded(alias); }
+  void setAliases(const AliasList &aliases) { aliases_ = aliases; emit aliasesChanged(aliases_); }
   void updateAlias(const Alias &alias);
-  void setAnnotations(const AnnotationList &annots);
+  void setAnnotations(const AnnotationList &l) { annots_ = l; invalidateAnnotations(); }
   void addAnnotation(const Annotation &annot);
   void updateAnnotation(const Annotation &annot);
 
@@ -72,7 +81,7 @@ public slots:
   void invalidateUser() { emit userChanged(user_); }
   void invalidateToken() { emit tokenChanged(token_); }
   void invalidateAliases() { emit aliasesChanged(aliases_); }
-  void invalidateAnnotations() { emit annotationsChanged(annots_); }
+  void invalidateAnnotations();
 
 signals:
   void userChanged(User user);

@@ -1,7 +1,7 @@
 #ifndef _QTEXT_OVERLAYLAYOUT_H
 #define _QTEXT_OVERLAYLAYOUT_H
 
-#include <QGridLayout>
+#include <QtGui/QGridLayout>
 
 class OverlayLayout : public QGridLayout
 {

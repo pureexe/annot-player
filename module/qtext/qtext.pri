@@ -33,8 +33,9 @@ HEADERS += \
     $$PWD/ss.h \
     $$PWD/toolbutton.h \
     $$PWD/toolbuttonwithid.h \
-    $$PWD/webdialog.h \
+    $$PWD/webview.h \
     $$PWD/webpage.h \
+    $$PWD/webpluginfactory.h \
     $$PWD/withsizehint.h
 
 SOURCES += \
@@ -55,13 +56,15 @@ SOURCES += \
     $$PWD/string.cc \
     $$PWD/toolbutton.cc \
     $$PWD/toolbuttonwithid.cc \
-    $$PWD/webdialog.cc \
-    $$PWD/webpage.cc
+    $$PWD/webview.cc \
+    $$PWD/webpage.cc \
+    $$PWD/webpluginfactory.cc
 
 QT +=   core gui network webkit
 
 DOC_FILES += \
-    $$PWD/doc/error.html
+    $$PWD/doc/error.html \
+    $$PWD/doc/start.html
 
 IMAGE_FILES += \
     $$PWD/images/null.png

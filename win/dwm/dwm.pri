@@ -10,10 +10,10 @@ HEADERS += \
 SOURCES += \
     $$PWD/dwm.cc
 
-DEFINES += USE_DWM_NOTIFIER
+DEFINES += WITH_DWM_NOTIFIER
 
 CONFIG(dwmapi_static) {
-    DEFINES += USE_DWM_STATIC
+    DEFINES += WITH_DWM_STATIC
     LIBS += -Ldwmapi
 }
 

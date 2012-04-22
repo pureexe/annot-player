@@ -24,6 +24,13 @@ HelpDialog::HelpDialog(QWidget *parent)
   setWindowTitle(TR(T_TITLE_HELP));
   resize(800, 600);
 
+  webView()->setRenderHints(
+    //QPainter::Antialiasing |
+    QPainter::TextAntialiasing
+    //QPainter::HighQualityAntialiasing |
+    //QPainter::SmoothPixmapTransform
+  );
+
   // Shortcuts
   QShortcut *cancelShortcut = new QShortcut(QKeySequence("Esc"), this);
   connect(cancelShortcut, SIGNAL(activated()), SLOT(hide()));

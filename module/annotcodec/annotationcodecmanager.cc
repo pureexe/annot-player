@@ -4,7 +4,6 @@
 #include "bilibilicodec.h"
 #include "acfuncodec.h"
 #include "nicovideocodec.h"
-#include <QtCore>
 
 //#define DEBUG "annotationcodecmanager"
 #include "module/debug/debug.h"

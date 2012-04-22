@@ -5,8 +5,6 @@
 // 2/3/2012
 
 #include "annotationcodec.h"
-#include <QObject>
-#include <QList>
 
 class AnnotationCodecManager : public QObject
 {

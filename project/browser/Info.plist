@@ -18,7 +18,7 @@
 	<string>@executable@</string>
 	<key>LSArchitecturePriority</key>
 	<array>
-		<string>x86_64</string>
+		<string>x86</string>
 	</array>
 	<key>LSMinimumSystemVersionByArchitecture</key>
 	<dict>

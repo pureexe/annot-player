@@ -4,8 +4,8 @@
 // qtext/slider.h
 // 8/6/2011
 
-#include <QSlider>
-#include <QCursor>
+#include <QtGui/QSlider>
+#include <QtGui/QCursor>
 
 namespace QtExt {
 

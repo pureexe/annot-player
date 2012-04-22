@@ -1,4 +1,4 @@
-----[[version: 20111206.01]]
+----[[version: 20120416.00]]
 ---[[by lostangel 20100528]]
 ---[[edit 20101117]]
 ---[[edit 20110402 for new return struct]]
@@ -8,16 +8,16 @@
 ---[[note: this version must run with acfunlocalizer 2.600+]]
 
 
-require "customadd"
--- sitelist
-require "acfun"
-require "bilibili"
-require "mikufans"
-require "youku"
-require "qqvideo"
-require "nicovideo"
-require "tudou"
-require "sina"
+require "luascript/sitelist/acfun"
+require "luascript/sitelist/bilibili"
+require "luascript/sitelist/mikufans"
+require "luascript/sitelist/youku"
+require "luascript/sitelist/qqvideo"
+require "luascript/sitelist/nicovideo"
+require "luascript/sitelist/tudou"
+require "luascript/sitelist/sina"
+require "luascript/customadd"
+--require "your site parse script"
 
 --[[
 tbl_re is a table indexed by string from "0" ,"1",...to "n"(tbl_re has n+1 elements).

@@ -6,9 +6,7 @@
 
 #include "processinfo.h"
 #include "module/qtext/dialog.h"
-#include <QTextCharFormat>
-#include <QColor>
-#include <QStringList>
+#include <QtCore/QStringList>
 
 QT_BEGIN_NAMESPACE
 class QComboBox;

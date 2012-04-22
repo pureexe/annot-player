@@ -1,7 +1,7 @@
 #ifndef _QTEXT_LAYOUTWIDGET_H
 #define _QTEXT_LAYOUTWIDGET_H
 
-#include <QWidget>
+#include <QtGui/QWidget>
 
 class LayoutWidget : public QWidget
 {

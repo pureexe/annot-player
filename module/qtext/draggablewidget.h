@@ -4,7 +4,7 @@
 // qtext/draggablewidget.h
 // 9/3/2011
 
-#include <QWidget>
+#include <QtGui/QWidget>
 
 namespace QtExt {
 

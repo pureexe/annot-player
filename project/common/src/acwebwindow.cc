@@ -3,8 +3,8 @@
 
 #include "ac/acwebwindow.h"
 #include "ac/acui.h"
-#include "module/qtext/webdialog.h"
-#include <QWebView>
+#include "module/qtext/webview.h"
+#include <QtWebKit/QWebView>
 
 // - Construction -
 
@@ -14,8 +14,7 @@ AcWebWindow::AcWebWindow(QWidget *parent, Qt::WindowFlags f)
   AcUi::globalInstance()->setWindowStyle(this);
   setWindowOpacity(1.0);
 
-  QtExt::WebDialog *w = new QtExt::WebDialog; {
-    w->setWindowFlags(0);
+  QtExt::WebView *w = new QtExt::WebView; {
     connect(w, SIGNAL(message(QString)), SLOT(showMessage(QString)));
     connect(w, SIGNAL(errorMessage(QString)), SLOT(error(QString)));
     connect(w, SIGNAL(warning(QString)), SLOT(warn(QString)));

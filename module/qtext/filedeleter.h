@@ -4,9 +4,9 @@
 // qtext/autodeleter.h
 // 2/6/2012
 
-#include <QObject>
-#include <QMutex>
-#include <QStringList>
+#include <QtCore/QObject>
+#include <QtCore/QMutex>
+#include <QtCore/QStringList>
 
 // Note: Due to Qt4 bug, namespace would cause crash QMutex on Mac OS X.
 //namespace QtExt {

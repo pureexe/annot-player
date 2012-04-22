@@ -4,11 +4,15 @@
 // downloader.h
 // 2/3/2012
 
-#include <QObject>
-#include <QString>
-#include <QUrl>
-#include <QNetworkRequest>
-#include <QHash>
+#include <QtCore/QString>
+#include <QtCore/QHash>
+
+QT_BEGIN_NAMESPACE
+class QNetworkAccessManager;
+class QNetworkRequest;
+class QNetworkReply;
+class QUrl;
+QT_END_NAMESPACE
 
 class DownloaderController : public QObject
 {
@@ -21,14 +25,15 @@ protected:
   explicit DownloaderController(QObject *parent = 0) : Base(parent) { }
 
 signals:
+  void message(QString);
+  void error(QString);
+  void warning(QString);
+  void notification(QString);
   void aborted();
 
 public slots:
   void abort() { emit aborted(); }
 };
-
-QT_FORWARD_DECLARE_CLASS(QNetworkAccessManager)
-QT_FORWARD_DECLARE_CLASS(QNetworkReply)
 
 class Downloader : public QObject
 {
@@ -37,18 +42,19 @@ class Downloader : public QObject
   typedef QObject Base;
 
   QNetworkAccessManager *nam_;
+  QNetworkReply *reply_;
   int state_;
-  QString path_;
+  QString fileName_;
   bool stopped_;
 
 public:
   enum State { Error = -1, OK = 0, Downloading = 1 };
 
 public:
- explicit Downloader(const QString &path, QObject *parent = 0)
-    : Base(parent), state_(OK), path_(path), stopped_(false) { init(); }
+ explicit Downloader(const QString &fileName, QObject *parent = 0)
+    : Base(parent), nam_(0), reply_(0), state_(OK), fileName_(fileName), stopped_(false) { init(); }
  explicit Downloader(QObject *parent = 0)
-    : Base(parent), state_(OK), stopped_(false) { init(); }
+    : Base(parent), nam_(0), reply_(0), state_(OK), stopped_(false) { init(); }
 
   int state() const { return state_; }
 
@@ -60,15 +66,20 @@ private:
 signals:
   void progress(qint64 bytesReceived, qint64 bytesTotal);
   void finished();
-  void error(const QString &message);
+  void error(QString);
+  void message(QString);
+  void warning(QString);
+  void notification(QString);
 
 public slots:
-  void setPath(const QString &path) { path_ = path; }
+  void abort();
+
+  void setFileName(const QString &fileName) { fileName_ = fileName; }
   void get(const QNetworkRequest &req, bool async = true, int retries = 5);
   void get(const QUrl &url,
-           const QString &header = QString::null, bool async = true, int retries = 5);
+           const QString &header = QString(), bool async = true, int retries = 5);
   void post(const QUrl &url, const QByteArray &data = QByteArray(),
-            const QString &header = QString::null, bool async = true, int retries = 5);
+            const QString &header = QString(), bool async = true, int retries = 5);
 
   QNetworkAccessManager *networkAccessManager() const { return nam_; }
 
@@ -76,12 +87,12 @@ public slots:
 
 protected slots:
   void save(QNetworkReply *reply);
-  void redirect(QNetworkReply *reply);
-  static bool save(const QByteArray &data, const QString &path);
+  static bool save(const QByteArray &data, const QString &fileName);
 
   static QHash<QString, QString> parseHttpHeader(const QString &header);
 
 protected:
+  bool tryRedirect(QNetworkReply *reply);
   static QByteArray encodeUrlParameters(const QString &params);
 };
 

@@ -6,8 +6,8 @@
 
 #include "streampipe.h"
 #include "module/qtext/stoppable.h"
-#include <QObject>
-#include <QString>
+#include <QtCore/QObject>
+#include <QtCore/QString>
 
 class BufferedStreamPipe : public QObject, public StreamPipe
 {

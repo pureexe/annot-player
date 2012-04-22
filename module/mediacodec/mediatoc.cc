@@ -1,7 +1,6 @@
 // mediatoc.cc
 // 2/13/2012
 #include "mediatoc.h"
-#include <QDebug>
 namespace { // anonymous
 
   int roundIndex(qint64 pos, const QList<qint64> &l, int start, int stop)

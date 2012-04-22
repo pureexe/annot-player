@@ -5,7 +5,6 @@
 // 3/31/2012
 
 #include "wbcomboedit.h"
-#include <QStringList>
 
 QT_FORWARD_DECLARE_CLASS(QAction)
 QT_FORWARD_DECLARE_CLASS(QMenu)

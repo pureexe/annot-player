@@ -1,6 +1,6 @@
---[[generate by Acfunlocalizer2.701 @12-02-02 03:21:40]]
+--[[generate by Acfunlocalizer2.702 @12-04-18 14:45:04]]
 
-require "lalib"
+require "luascript/lib/lalib"
 
 IsAutoLogin = FAILURE;
 --[[this section defines username/password values for sites]]

@@ -7,7 +7,7 @@
 #include "module/qtext/dialog.h"
 #include "module/annotcloud/token.h"
 #include "module/annotcloud/alias.h"
-#include <QModelIndex>
+#include <QtCore/QModelIndex>
 
 QT_BEGIN_NAMESPACE
 class QAbstractItemModel;

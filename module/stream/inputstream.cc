@@ -2,7 +2,7 @@
 // 2/14/2011
 
 #include "inputstream.h"
-#include <QtCore>
+#include <QtCore/QFile>
 
 #define DEBUG "inputstream"
 #include "module/debug/debug.h"

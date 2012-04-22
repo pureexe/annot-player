@@ -4,7 +4,7 @@
 // qtext/algorithm.h
 // 3/16/2012
 
-#include <QList>
+#include <QtCore/QList>
 
 namespace QtExt {
 
@@ -32,6 +32,18 @@ namespace QtExt {
         ret.push_back(v);
     return ret;
   }
+
+  template <typename L>
+  inline L
+  skipEmpty(const L &l)
+  {
+    L ret;
+    foreach (typename L::value_type v, l)
+      if (!v.isEmpty())
+        ret.push_back(v);
+    return ret;
+  }
+
 
 } // namespace QtExt
 

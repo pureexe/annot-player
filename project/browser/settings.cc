@@ -14,16 +14,18 @@
 
 // See platform specific issue in QSettings manual.
 #ifdef Q_OS_MAC
-  #define SK_ORGANIZATION   G_DOMAIN
+#  define SK_ORGANIZATION   G_DOMAIN
 #else
-  #define SK_ORGANIZATION   G_ORGANIZATION
+#  define SK_ORGANIZATION   G_ORGANIZATION
 #endif // Q_OS_MAC
 
 #define SK_APPLICATION  G_APPLICATION
 #define SK_VERSION      "Version"
 
+#define SK_SIZE         "Size"
 #define SK_RECENT       "Recent"
 #define SK_RECENTTABS   "Tabs"
+#define SK_RECENTTABINDEX "TabIndex"
 #define SK_RECENTCLOSED "Closed"
 
 // - Constructions -
@@ -46,6 +48,14 @@ Settings::setVersion(const QString &version)
 { setValue(SK_VERSION, version); }
 
 // - History -
+
+QSize
+Settings::recentSize() const
+{ return value(SK_SIZE).toSize(); }
+
+void
+Settings::setRecentSize(const QSize &value)
+{ setValue(SK_SIZE, value); }
 
 QStringList
 Settings::recentUrls() const
@@ -75,6 +85,10 @@ Settings::clearRecentUrls()
 QStringList
 Settings::recentTabs() const
 { return value(SK_RECENTTABS).toStringList(); }
+
+bool
+Settings::hasRecentTabs() const
+{ return value(SK_RECENTTABS).isValid(); }
 
 void
 Settings::setRecentTabs(const QStringList &urls, int limit)
@@ -126,5 +140,13 @@ Settings::setClosedUrls(const QList<QUrl> &urls, int limit)
 void
 Settings::clearClosedUrls()
 { remove(SK_RECENTCLOSED); }
+
+int
+Settings::recentTabIndex() const
+{ return value(SK_RECENTTABINDEX).toInt(); }
+
+void
+Settings::setRecentTabIndex(int value)
+{ setValue(SK_RECENTTABINDEX, value); }
 
 // EOF

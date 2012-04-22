@@ -8,7 +8,7 @@
 #ifdef WITH_MODULE_CLIENTAGENT
 #  include "module/clientagent/clientagent.h"
 #endif // WITH_MODULE_CLIENTAGENT
-#include <QtCore>
+#include <QtCore/QMutexLocker>
 
 //#define DEBUG "serveragent"
 #include "module/debug/debug.h"

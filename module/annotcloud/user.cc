@@ -3,7 +3,6 @@
 
 #include "module/annotcloud/user.h"
 #include "module/crypt/crypt.h"
-#include <QMetaType>
 
 using namespace AnnotCloud;
 

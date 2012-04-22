@@ -48,6 +48,10 @@ Application::createDirectories()
   QDir profile(G_PATH_PROFILE);
   if (!profile.exists())
     profile.mkpath(profile.absolutePath());
+
+  QDir caches(G_PATH_CACHES);
+  if (!caches.exists())
+    caches.mkpath(profile.absolutePath());
 }
 
 void

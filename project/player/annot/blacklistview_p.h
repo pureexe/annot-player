@@ -5,8 +5,8 @@
 // 11/16/2011
 
 #include "module/annotcloud/annotation.h"
-#include <QWidget>
-#include <QStringList>
+#include <QtGui/QWidget>
+#include <QtCore/QStringList>
 
 QT_BEGIN_NAMESPACE
 class QAbstractItemModel;

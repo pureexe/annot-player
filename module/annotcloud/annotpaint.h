@@ -5,9 +5,9 @@
 // 4/6/2012
 
 #include "module/annotcloud/annotation.h"
-#include <QRect>
-#include <QColor>
-#include <QObject>
+#include <QtCore/QObject>
+#include <QtCore/QRect>
+
 QT_FORWARD_DECLARE_CLASS(QPainter)
 
 namespace AnnotCloud {
@@ -27,14 +27,14 @@ public:
 
 public:
   void paintHistogram(QPainter &painter, const AnnotationList &l, Annotation::Field sortBy = Annotation::Pos,
-                      const QString &title = QString::null, const QRect &view = QRect()) const;
+                      const QString &title = QString(), const QRect &view = QRect()) const;
   bool saveHistogramAsFile(const QString &fileName, const AnnotationList &l, Annotation::Field sortBy = Annotation::Pos,
                            int width = 0, int height = 0,
-                           const QString &title = QString::null, const QString &description = QString::null) const;
+                           const QString &title = QString(), const QString &description = QString()) const;
 protected:
-  void paintHistogramByPos(QPainter &painter, const AnnotationList &l, const QString &title = QString::null, const QRect &view = QRect()) const;
-  void paintHistogramByCreateTime(QPainter &painter, const AnnotationList &l, const QString &title = QString::null, const QRect &view = QRect()) const;
-  void paintHistogramByUserId(QPainter &painter, const AnnotationList &l, const QString &title = QString::null, const QRect &view = QRect()) const;
+  void paintHistogramByPos(QPainter &painter, const AnnotationList &l, const QString &title = QString(), const QRect &view = QRect()) const;
+  void paintHistogramByCreateTime(QPainter &painter, const AnnotationList &l, const QString &title = QString(), const QRect &view = QRect()) const;
+  void paintHistogramByUserId(QPainter &painter, const AnnotationList &l, const QString &title = QString(), const QRect &view = QRect()) const;
 
 private:
   void paintAxis(QPainter &painter, const QRect &view, int maxY) const;

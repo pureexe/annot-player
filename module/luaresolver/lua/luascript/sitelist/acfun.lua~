@@ -12,10 +12,14 @@
 ---[[edit 20110809 for cid= commentid equal to mid= messageid]]
 ---[[edit 20111102 for acfun new flashvar embed id]]
 ---[[edit 20111106 for new acfun sub]]
+---[[edit 20120408 for new acfun comment server]]
+---[[edit 20120413 for new acfun comment server]]
+---[[edit 20120416 for new acfun ui]]
 
-require "lalib"
+require "luascript/lib/lalib"
 
 acfun_xml_servername = '124.228.254.234';--'www.sjfan.com.cn';
+acfun_comment_servername = 'comment.acfun.tv';--'122.224.11.162';--
 
 --[[parse single acfun url]]
 function getTaskAttribute_acfun ( str_url, str_tmpfile ,str_servername, pDlg)
@@ -39,7 +43,7 @@ function getTaskAttribute_acfun ( str_url, str_tmpfile ,str_servername, pDlg)
 		end
 	end
 
-	--dbgMessage(pDlg, "dl ok");
+	--dbgMessage("dl ok");
 	local file = io.open(str_tmpfile, "r");
 	if file==nil
 	then
@@ -50,22 +54,33 @@ function getTaskAttribute_acfun ( str_url, str_tmpfile ,str_servername, pDlg)
 	end
 
 	--readin descriptor
-	local str_line = readUntil(file, "<title>");
-	local str_title_line = readIntoUntil(file, str_line, "</title>");
+	local str_line = readUntilFromUTF8(file, "<title>");
+	--dbgMessage(str_line);
+	local str_title_line = readIntoUntilFromUTF8(file, str_line, "</title>");
 	local str_title = getMedText(str_title_line, "<title>", "</title>");
 
+	--dbgMessage(str_title);
 	--readin vice descriptor
-	readUntil(file, "主页</a>");
+	--readUntil(file, "主页</a>");
+	readUntilFromUTF8(file, "</div><!--Tool -->");
 	str_line = "";
 	local str_tmp_vd = "";
-	while str_line~=nil and string.find(str_line, "</tr>")==nil
+	--while str_line~=nil and string.find(str_line, "</tr>")==nil
+	while str_line~=nil and string.find(str_line, "</div>")==nil
 	do
 		str_line = file:read("*l");
-		if str_line~=nil and string.find(str_line, "<option value='")~=nil
+		str_line = utf8_to_lua(str_line);
+		--dbgMessage(str_line);
+		--if str_line~=nil and string.find(str_line, "<option value='")~=nil
+		if str_line~=nil and string.find(str_line, "<a class=\"")~=nil
 		then
-			if str_tmp_vd=="" or string.find(str_line, "selected>")~=nil
+			--dbgMessage("pager article");
+			--if str_tmp_vd=="" or string.find(str_line, "selected>")~=nil
+			if str_tmp_vd=="" or string.find(str_line, "pager-active")~=nil
 			then
-				str_tmp_vd = getMedText(str_line, ">", "</option>");
+				--dbgMessage("pager active");
+				--str_tmp_vd = getMedText(str_line, ">", "</option>");
+				str_tmp_vd = getMedText(str_line, "\">", "</a>");
 			end
 		end
 	end
@@ -83,9 +98,10 @@ function getTaskAttribute_acfun ( str_url, str_tmpfile ,str_servername, pDlg)
 	--dbgMessage(str_descriptor);
 
 	--find embed flash
-	str_line = readUntil(file, "<embed ");
-	local str_embed = readIntoUntil(file, str_line, "</td>");--"</embed>");
+	str_line = readUntilFromUTF8(file, "<embed ");
+	local str_embed = readIntoUntilFromUTF8(file, str_line, "</div>");--"</td>");--"</embed>");
 	print(str_embed);
+	--dbgMessage(str_embed);
 	if str_embed==nil then
 		if pDlg~=nil then
 			sShowMessage(pDlg, "没有找到嵌入的flash播放器");
@@ -140,6 +156,10 @@ function getTaskAttribute_acfun ( str_url, str_tmpfile ,str_servername, pDlg)
 	elseif string.find(str_embed, "id=")~=nil
 	then
 		str_embed_tmp = getAfterText(str_embed, "flashvars=");
+		if str_embed_tmp==nil 
+		then
+			str_embed_tmp = getAfterText(str_embed, "src=");
+		end
 		str_id = getMedText2end(str_embed_tmp, "id=", "\"", "&amp;");
 	end
 
@@ -150,6 +170,8 @@ function getTaskAttribute_acfun ( str_url, str_tmpfile ,str_servername, pDlg)
 	elseif string.find(str_embed, "cid=")~= nil then
 		str_subid = getMedText2end(str_embed, "cid=", "\"", "&amp;");
 	end
+	
+	--dbgMessage(str_id);
 
 	--read id ok.close file
 	io.close(file);
@@ -175,8 +197,8 @@ function getTaskAttribute_acfun ( str_url, str_tmpfile ,str_servername, pDlg)
 		str_subxmlurl = "http://"..acfun_xml_servername.."/newflvplayer/xmldata/"..str_subid.."/comment_on.xml?r=1";
 		str_subxmlurl_lock = "http://"..acfun_xml_servername.."/newflvplayer/xmldata/"..str_subid.."/comment_lock.xml?r=1";
 		str_subxmlurl_super = "http://"..acfun_xml_servername.."/newflvplayer/xmldata/"..str_subid.."/comment_super.xml";
-		str_subxmlurl_20111106 = "http://comment.acfun.tv/".. str_subid ..".json?clientID=0.9264421034604311";
-		str_subxmlurl_lock_20111106 = "http://comment.acfun.tv/".. str_subid .."_lock.json?clientID=0.4721592585556209";
+		str_subxmlurl_20111106 = "http://"..acfun_comment_servername.."/".. str_subid ..".json?clientID=0.9264421034604311";
+		str_subxmlurl_lock_20111106 = "http://"..acfun_comment_servername.."/".. str_subid .."_lock.json?clientID=0.4721592585556209";
 	else --ACFPV_ORI
 		str_subxmlurl = "http://"..acfun_xml_servername.."/flvplayer/xmldata/"..str_subid.."/comment_on.xml?a=1";
 	end
@@ -188,17 +210,17 @@ function getTaskAttribute_acfun ( str_url, str_tmpfile ,str_servername, pDlg)
 	if int_foreignlinksite == fls["sina"]
 	then
 		--fetch dynamic url
-		int_realurlnum, tbl_realurls = getRealUrls(str_id, str_tmpfile, pDlg);
+		int_realurlnum, tbl_readurls = getRealUrls(str_id, str_tmpfile, pDlg);
 	elseif int_foreignlinksite == fls["qq"]
 	then
-		int_realurlnum, tbl_realurls = getRealUrls_QQ(str_id, str_tmpfile, pDlg);
+		int_realurlnum, tbl_readurls = getRealUrls_QQ(str_id, str_tmpfile, pDlg);
 	elseif int_foreignlinksite == fls["youku"]
 	then
-		int_realurlnum, tbl_realurls = getRealUrls_youku(str_id, str_tmpfile, pDlg);
+		int_realurlnum, tbl_readurls = getRealUrls_youku(str_id, str_tmpfile, pDlg);
 	else
 		int_realurlnum = 1;
-		tbl_realurls = {};
-		tbl_realurls[string.format("%d",0)] = str_notsinaurl;
+		tbl_readurls = {};
+		tbl_readurls[string.format("%d",0)] = str_notsinaurl;
 	end
 
 	if pDlg~=nil then
@@ -218,7 +240,7 @@ function getTaskAttribute_acfun ( str_url, str_tmpfile ,str_servername, pDlg)
 	local str_acfid_subfix = nil;
 	if str_acfid == nil
 	then
-		_,_,str_acfid = string.find(str_url, "/[a]?[c]?([%d_]+)/");
+		_,_,str_acfid = string.find(str_url, "/[a]?[c]?([%d_]+)/?");
 		_,_, str_acfid_subfix = string.find(str_url, "/index([%d_]*).html");
 		if str_acfid_subfix ~= nil then
 			str_acfid = str_acfid .. str_acfid_subfix;
@@ -240,7 +262,7 @@ function getTaskAttribute_acfun ( str_url, str_tmpfile ,str_servername, pDlg)
 	--tbl_ta["subxmlurl"] = str_subxmlurl;
 	tbl_ta["subxmlurl"] = tbl_subxmlurls;
 	tbl_ta["realurlnum"] = int_realurlnum;
-	tbl_ta["realurls"] = tbl_realurls;
+	tbl_ta["realurls"] = tbl_readurls;
 	tbl_ta["oriurl"] = str_url;
 
 	local tbl_resig = {};
@@ -277,24 +299,29 @@ function getTaskAttributeBatch_acfun ( str_url, str_tmpfile ,str_servername, pDl
 	end
 
 	--readin descriptor
-	local str_line = readUntil(file, "<title>");
-	local str_title_line = readIntoUntil(file, str_line, "</title>");
+	local str_line = readUntilFromUTF8(file, "<title>");
+	local str_title_line = readIntoUntilFromUTF8(file, str_line, "</title>");
 	local str_title = getMedText(str_title_line, "<title>", "</title>");
 
 	--readin vice descriptor
-	readUntil(file, "主页</a>");
+	--readUntil(file, "主页</a>");
+	readUntilFromUTF8(file, "</div><!--Tool -->");
 
 	str_line = "";
 	local tbl_descriptors = {};
 	local tbl_shorturls = {};
 	local index = 0;
-	while str_line~=nil and string.find(str_line, "</tr>")==nil
+	while str_line~=nil and string.find(str_line, "</div>")==nil--"</tr>")==nil
 	do
 		str_line = file:read("*l");
-		if str_line~=nil and string.find(str_line, "<option value='")~=nil
+		str_line = utf8_to_lua(str_line);
+		--dbgMessage(str_line);
+		--if str_line~=nil and string.find(str_line, "<option value='")~=nil
+		if str_line~=nil and string.find(str_line, "<a class")~=nil
 		then
-			local str_tmp_vd = getMedText(str_line, ">", "</option>");
-			local str_tmp_url = getMedText(str_line, "<option value='", "'");
+			--dbgMessage("page article");
+			local str_tmp_vd = getMedText(str_line, "\">", "</a>");
+			local str_tmp_url = getMedText(str_line, "href=\"", "\">");
 			local str_index = string.format("%d", index);
 			tbl_descriptors[str_index] = --[[str_title.."-"..]]str_tmp_vd;
 			tbl_shorturls[str_index] = str_tmp_url;
@@ -318,9 +345,10 @@ function getTaskAttributeBatch_acfun ( str_url, str_tmpfile ,str_servername, pDl
 
 	--------[[parse every url in pairs]]
 
-	local bg,ed = string.find(string.reverse(str_url),"/",1,true);
-	ed = string.len(str_url)+1-ed;
-	local urlprefix = string.sub(str_url, 1, ed);
+	--local bg,ed = string.find(string.reverse(str_url),"/",1,true);
+	--ed = string.len(str_url)+1-ed;
+	--local urlprefix = string.sub(str_url, 1, ed);
+	local urlprefix = "http://www.acfun.tv/v/"
 
 	local tbl_re = {};
 	local index2= 0;

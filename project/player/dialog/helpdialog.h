@@ -5,8 +5,8 @@
 // 11/16/2011
 
 #include "ac/acwebwindow.h"
-#include <QLocale>
-#include <QUrl>
+#include <QtCore/QLocale>
+#include <QtCore/QUrl>
 
 class HelpDialog: public AcWebWindow
 {

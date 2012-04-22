@@ -11,8 +11,8 @@
 #ifndef QTWIN_H
 #define QTWIN_H
 
-#include <QColor>
-#include <QWidget>
+#include <QtCore/QColor>
+#include <QtGui/QWidget>
 
 class WindowNotifier;
 

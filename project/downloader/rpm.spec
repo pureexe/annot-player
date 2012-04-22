@@ -3,7 +3,7 @@
 # See: http://fedoraproject.org/wiki/How_to_create_an_RPM_package
 # See: http://dl.atrpms.net/all/vlc.spec
 Name:	annot-down
-Version:	0.1.0.2
+Version:	0.1.1.0
 Release:	1%{?dist}
 Summary:	Media and annotation downloader.
 

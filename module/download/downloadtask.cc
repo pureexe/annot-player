@@ -1,7 +1,9 @@
 // downloadtask.cc
 // 2/20/2012
 #include "downloadtask.h"
-#include <QtCore>
+#include <QtCore/QTimer>
+#include <QtCore/QDir>
+#include <QtCore/QDateTime>
 
 //#define DEBUG "downloadtask"
 #include "module/debug/debug.h"
@@ -10,10 +12,39 @@
 
 int DownloadTask::count_ = 0;
 
+#define INITIALIZER \
+    id_(++count_), receivedSize_(0), totalSize_(0), progressUpdateTime_(0), speed_(0)
+
+#define STATE_FROM_INT(_v) \
+  ( \
+    (_v) == Error ? Error : \
+    (_v) == Stopped ? Stopped : \
+    (_v) == Pending ? Pending : \
+    (_v) == Downloading ? Pending : \
+    (_v) == Finished ? Finished : \
+    Stopped \
+  )
+
 DownloadTask::DownloadTask(const QString &url, QObject *parent)
-  : Base(parent), id_(++count_), state_(Stopped), url_(url),
-    receivedSize_(0), totalSize_(0), progressUpdateTime_(0), speed_(0)
-{ connect(this, SIGNAL(progress(qint64,qint64)), SLOT(updateProgress(qint64,qint64))); }
+  : Base(parent), INITIALIZER, state_(Stopped), url_(url)
+{ init(); }
+
+DownloadTask::DownloadTask(const DownloadTaskInfo &info, QObject *parent)
+  : Base(parent), INITIALIZER,
+    state_(STATE_FROM_INT(info.state)), url_(info.url), title_(info.title), fileName_(info.fileName)
+{ init(); }
+
+void
+DownloadTask::init()
+{
+  connect(this, SIGNAL(progress(qint64,qint64)), SLOT(updateProgress(qint64,qint64)));
+  if (downloadPath_.isEmpty())
+    downloadPath_ = QDir::homePath();
+}
+
+void
+DownloadTask::startLater(qint64 msecs)
+{ QTimer::singleShot(msecs, this, SLOT(start())); }
 
 // - Properties -
 

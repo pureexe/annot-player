@@ -1,8 +1,8 @@
 #ifndef _CORE_TEXTCODEC_H
 #define _CORE_TEXTCODEC_H
 
-#include <QString>
-#include <QStringList>
+#include <QtCore/QString>
+#include <QtCore/QStringList>
 
 QT_FORWARD_DECLARE_CLASS(QTextCodec)
 QT_FORWARD_DECLARE_CLASS(QTextDecoder)

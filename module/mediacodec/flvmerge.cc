@@ -6,7 +6,6 @@
 #include "flvmerge.h"
 #include "flvmeta.h"
 #include "module/stream/datainputstream.h"
-#include <QtCore>
 
 //#define DEBUG "flvmerge"
 #include "module/debug/debug.h"

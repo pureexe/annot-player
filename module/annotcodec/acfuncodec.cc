@@ -4,10 +4,15 @@
 #include "acfuncodec.h"
 #include "module/annotcloud/annottag.h"
 #include "module/annotcloud/traits.h"
-#include <QtCore>
-#include <QtNetwork>
-#include <QtXml>
-#include <QtScript>
+#include <QtNetwork/QNetworkReply>
+#include <QtNetwork/QNetworkRequest>
+#include <QtNetwork/QNetworkAccessManager>
+#include <QtXml/QDomDocument>
+#include <QtXml/QDomElement>
+#include <QtScript/QScriptEngine>
+#include <QtScript/QScriptValue>
+#include <QtScript/QScriptValueIterator>
+#include <QtCore/QStringList>
 #include <climits>
 
 //#define DEBUG "acfuncodec"
@@ -156,7 +161,7 @@ AcFunCodec::parseText(const QString &text)
 {
   DOUT("text =" << text);
   if (text.isEmpty())
-    return QString::null;
+    return QString();
   QString ret = text.trimmed();
   if (ret == "/fly")
     return CORE_CMD_VIEW_FLY " " + QString::fromLocal8Bit("飞");

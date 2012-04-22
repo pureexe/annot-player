@@ -16,6 +16,7 @@
   Qt::WindowTitleHint | \
   Qt::WindowSystemMenuHint | \
   Qt::WindowMinMaxButtonsHint | \
+  Qt::WindowStaysOnTopHint | \
   Qt::WindowCloseButtonHint )
 
 QList<ConsoleDialog*> ConsoleDialog::instances_;

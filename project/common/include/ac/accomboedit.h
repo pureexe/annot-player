@@ -40,7 +40,6 @@ public slots:
 
   // - Actions -
 protected slots:
-  void popup() { showPopup(); }
   void pasteAndGo();
 
   // - Events -

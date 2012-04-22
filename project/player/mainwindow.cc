@@ -64,11 +64,13 @@
 #  include "messagehandler.h"
 #endif // USE_MODE_SIGNAL
 #include "module/player/player.h"
+#include "module/player/playerdefs.h"
 #include "module/annotcodec/annotationcodecmanager.h"
 #include "module/mrlanalysis/mrlanalysis.h"
 #include "module/mrlresolver/mrlresolvermanager.h"
 #include "module/mrlresolver/mrlresolversettings.h"
 #include "module/translator/translator.h"
+#include "module/download/downloader.h"
 #include "module/qtext/algorithm.h"
 #include "module/qtext/string.h"
 #include "module/qtext/actionwithid.h"
@@ -156,7 +158,9 @@ using namespace Logger;
 enum { DEFAULT_LIVE_INTERVAL = 3000 }; // 3 seconds
 enum { HISTORY_SIZE = 100 };   // Size of playPos/Sub/AudioTrack history
 
-#define PREFERRED_WINDOW_SIZE   QSize(800, 480)
+#define PREFERRED_WINDOW_SIZE   QSize(840, 480)
+#define PREFERRED_MIN_WIDTH     400
+#define PREFERRED_MIN_HEIGHT    300
 
 // - Focus -
 
@@ -206,6 +210,8 @@ MainWindow::resetPlayer()
   Q_ASSERT(player_);
   player_->reset();
 
+  player_->setDownloadPath(G_PATH_DOWNLOADS);
+
 #ifdef Q_WS_WIN
   player_->setMouseEventEnabled();
 #endif // Q_WS_WIN
@@ -250,7 +256,7 @@ MainWindow::setupWindowStyle()
   setWindowOpacity(AC_WINDOW_OPACITY);
 }
 
-MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags f)
+MainWindow::MainWindow(bool unique, QWidget *parent, Qt::WindowFlags f)
   : Base(parent, f), disposed_(false), submit_(true),
     liveInterval_(DEFAULT_LIVE_INTERVAL),
     tray_(0),//commentView_(0),
@@ -279,7 +285,7 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags f)
 
   menuBar()->setVisible(Settings::globalSettings()->isMenuBarVisible());
 
-  createComponents();
+  createComponents(unique);
 
   createConnections();
 
@@ -350,6 +356,7 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags f)
 
   annotationView_->setRenderHint(settings->annotationEffect());
   annotationView_->setScale(settings->annotationScale());
+  annotationView_->setOffset(settings->annotationOffset());
 
   annotationFilter_->setEnabled(settings->isAnnotationFilterEnabled());
   annotationFilter_->setBlockedTexts(settings->blockedKeywords());
@@ -372,17 +379,40 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags f)
 
   {
     MrlResolverSettings *mrs = MrlResolverSettings::globalSettings();
-    std::pair<QString, QString>
-    a = ac->nicovideoAccount();
-    if (!a.first.isEmpty() && !a.second.isEmpty())
-      mrs->setNicovideoAccount(a.first, a.second);
+    QString username, password;
+    boost::tie(username, password) = ac->nicovideoAccount();
+    if (!username.isEmpty() && !password.isEmpty())
+      mrs->setNicovideoAccount(username, password);
 
-    a = ac->bilibiliAccount();
-    if (!a.first.isEmpty() && !a.second.isEmpty())
-      mrs->setBilibiliAccount(a.first, a.second);
+    boost::tie(username, password) = ac->bilibiliAccount();
+    if (!username.isEmpty() && !password.isEmpty())
+      mrs->setBilibiliAccount(username, password);
   }
 
   nothingAfterFinishedAct_->setChecked(true);
+
+  // Set browsed file.
+  QString browsedFile;
+  foreach (const QString &url, recentFiles_)
+    if (isRemoteMrl(url)) {
+      browsedFile = url;
+      break;
+    } else if (QFile::exists(url)) {
+      browsedFile = url;
+      break;
+    }
+  if (browsedFile.isEmpty() && QFile::exists(G_PATH_DOWNLOADS)) {
+    QDir dir(G_PATH_DOWNLOADS);
+    QStringList l = dir.entryList(Player::supportedVideoFilters(), QDir::Files, QDir::Time);
+    if (!l.isEmpty())
+      browsedFile = l.last();
+  }
+  if (!browsedFile.isEmpty()) {
+    if (isRemoteMrl(browsedFile))
+      setBrowsedUrl(browsedFile);
+    else
+      setBrowsedFile(browsedFile);
+  }
 
 #ifdef Q_WS_WIN
   //connect(annotationView_, SIGNAL(posChanged()), SLOT(ensureWindowOnTop()));
@@ -408,14 +438,19 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags f)
 
   // Enable keyboard shortcuts
   invalidateContextMenu();
+
+  if (unique)
+    appServer_->start();
 }
 
 void
-MainWindow::createComponents()
+MainWindow::createComponents(bool unique)
 {
   // Systemt tray icon
-  if (QSystemTrayIcon::isSystemTrayAvailable())
-    tray_ = new Tray(this);
+  if (unique && QSystemTrayIcon::isSystemTrayAvailable()) {
+    tray_ = new Tray(this, this);
+    connect(this, SIGNAL(setTrayToolTipRequested(QString)), tray_, SLOT(setToolTip(QString)), Qt::QueuedConnection);
+  }
 
   // Utilities
   grabber_ = new Grabber(this); {
@@ -450,11 +485,11 @@ MainWindow::createComponents()
   logger_ = new EventLogger(player_, this);
 
   // Caches
-  cache_ = new Database(G_PATH_CACHEDB, this);
-  if (!cache_->isValid())
+  cache_ = new Database(this);
+  if (unique && !cache_->open(G_PATH_CACHEDB))
     cache_->clear();
-  queue_ = new Database(G_PATH_QUEUEDB, this);
-  if (!queue_->isValid())
+  queue_ = new Database(this);
+  if (unique && !queue_->open(G_PATH_QUEUEDB))
     queue_->clear();
 
   // Data server
@@ -474,6 +509,8 @@ MainWindow::createComponents()
   // Players and graphic views
   videoView_ = new VideoView(this);
   osdWindow_ = new OsdWindow(this);
+
+  windows_.append(osdWindow_);
 
   annotationView_ = new AnnotationGraphicsView(hub_,  player_, videoView_, osdWindow_);
   annotationView_->setFullScreenView(osdWindow_);
@@ -536,6 +573,8 @@ MainWindow::createComponents()
   mainPlayer_ = new MainPlayerUi(hub_, player_, server_, this);
   miniPlayer_ = new MiniPlayerUi(hub_, player_, server_, this);
 
+  windows_.append(miniPlayer_);
+
 //#ifdef Q_OS_MAC
 //  videoView_->showView();
 //  player_->setEmbeddedWindow(videoView_->view());
@@ -553,12 +592,18 @@ MainWindow::createComponents()
   //userPanel_->hide(); // TODO!!!!!!
 
   tokenView_ = new TokenView(server_, this);
+  windows_.append(tokenView_);
+
   annotationBrowser_ = new AnnotationBrowser(hub_, this);
+  windows_.append(annotationBrowser_);
 
 #ifdef USE_MODE_SIGNAL
   messageHandler_ = new MessageHandler(this);
   signalView_ = new SignalView(this);
+  windows_.append(signalView_);
+
   recentMessageView_ = new MessageView(this);
+  windows_.append(recentMessageView_);
 
   connect(this, SIGNAL(attached(ProcessInfo)), signalView_->processView(), SIGNAL(attached(ProcessInfo)));
   connect(this, SIGNAL(detached(ProcessInfo)), signalView_->processView(), SIGNAL(detached(ProcessInfo)));
@@ -603,6 +648,10 @@ MainWindow::createComponents()
   navigationTimer_->setInterval(5000); // 5 seconds
   navigationTimer_->setSingleShot(true);
   connect(navigationTimer_, SIGNAL(timeout()), SLOT(enableNavigation()));
+
+  browserDelegate_ = new AcBrowser(this);
+  downloaderDelegate_ = new AcDownloader(this);
+  appServer_ = new AcPlayerServer(this);
 }
 
 void
@@ -620,9 +669,13 @@ MainWindow::createConnections()
   connect(player_, SIGNAL(endReached()), SLOT(autoPlayNext()));
   connect(player_, SIGNAL(mediaTitleChanged(QString)), SLOT(setWindowTitle(QString)));
   connect(player_, SIGNAL(error(QString)), SLOT(warn(QString)), Qt::QueuedConnection);
-  connect(player_, SIGNAL(message(QString)), SLOT(log(QString)), Qt::QueuedConnection);
+  connect(player_, SIGNAL(message(QString)), SLOT(showMessage(QString)), Qt::QueuedConnection);
+  connect(player_, SIGNAL(warning(QString)), SLOT(warn(QString)), Qt::QueuedConnection);
   connect(player_, SIGNAL(fileSaved(QString)), SLOT(signFile(QString)), Qt::QueuedConnection);
   connect(player_, SIGNAL(downloadProgress(qint64,qint64)), SLOT(updateDownloadProgress(qint64,qint64)));
+
+  Application *app = dynamic_cast<Application *>(qApp);
+  connect(player_, SIGNAL(fileSaved(QString)), app, SLOT(infectDownloadDirectory()), Qt::QueuedConnection);
 
   // Resume
   connect(player_, SIGNAL(stopping()), SLOT(rememberAspectRatio()));
@@ -666,22 +719,31 @@ MainWindow::createConnections()
   #undef CONNECT
 
   connect(embeddedPlayer_, SIGNAL(invalidateMenuRequested()), SLOT(invalidateContextMenu()));
-  connect(embeddedPlayer_->progressButton(), SIGNAL(clicked()), SLOT(downloadCurrentUrl()));
+  connect(embeddedPlayer_->progressButton(), SIGNAL(clicked()), SLOT(clickProgressButton()));
   connect(this, SIGNAL(progressMessageChanged(QString)), embeddedPlayer_, SLOT(setProgressMessage(QString)), Qt::QueuedConnection);
 
   // invalidateMediaAndPlay
-  connect(this, SIGNAL(mediaInvalidated()), SLOT(loadSubtitlesLater()), Qt::QueuedConnection);
-  connect(this, SIGNAL(mediaInvalidated()), SLOT(invalidateWindowTitle()), Qt::QueuedConnection);
-  connect(this, SIGNAL(mediaInvalidated()), SLOT(invalidateTrackMenu()), Qt::QueuedConnection);
+  connect(this, SIGNAL(playMediaRequested()), SLOT(playMedia()), Qt::QueuedConnection);
 
   // Queued connections
-  connect(this, SIGNAL(responded(QString)), SLOT(respond(QString)), Qt::QueuedConnection);
+  connect(this, SIGNAL(response(QString)), SLOT(respond(QString)), Qt::QueuedConnection);
   connect(this, SIGNAL(said(QString,QString)), SLOT(say(QString,QString)), Qt::QueuedConnection);
   connect(this, SIGNAL(showTextRequested(QString)), SLOT(showText(QString)), Qt::QueuedConnection);
   connect(this, SIGNAL(windowTitleToChange(QString)), SLOT(setWindowTitle(QString)), Qt::QueuedConnection);
 
-  connect(this, SIGNAL(logged(QString)), SLOT(log(QString)), Qt::QueuedConnection);
-  connect(this, SIGNAL(warned(QString)), SLOT(warn(QString)), Qt::QueuedConnection);
+  connect(this, SIGNAL(windowMaximized()), SLOT(maximizedToFullScreen()), Qt::QueuedConnection);
+
+  // - Message -
+  connect(this, SIGNAL(message(QString)), SLOT(showMessage(QString)), Qt::QueuedConnection);
+  connect(this, SIGNAL(warning(QString)), SLOT(warn(QString)), Qt::QueuedConnection);
+  connect(this, SIGNAL(errorMessage(QString)), SLOT(error(QString)), Qt::QueuedConnection);
+  connect(this, SIGNAL(notification(QString)), SLOT(notify(QString)), Qt::QueuedConnection);
+
+  DownloaderController *dc = DownloaderController::globalController();
+  connect(dc, SIGNAL(message(QString)), SLOT(showMessage(QString)), Qt::QueuedConnection);
+  connect(dc, SIGNAL(warning(QString)), SLOT(warn(QString)), Qt::QueuedConnection);
+  connect(dc, SIGNAL(error(QString)), SLOT(error(QString)), Qt::QueuedConnection);
+  connect(dc, SIGNAL(notification(QString)), SLOT(notify(QString)), Qt::QueuedConnection);
 
   // Annotation graphics view
   connect(this, SIGNAL(addAnnotationsRequested(AnnotationList)),
@@ -889,6 +951,7 @@ MainWindow::createConnections()
   connect(annotationView_, SIGNAL(trackedWindowDestroyed()), logger_, SLOT(logTrackedWindowDestroyed()));
   connect(annotationView_, SIGNAL(scaleChanged(qreal)), logger_, SLOT(logAnnotationScaleChanged(qreal)));
   connect(annotationView_, SIGNAL(rotationChanged(qreal)), logger_, SLOT(logAnnotationRotationChanged(qreal)));
+  connect(annotationView_, SIGNAL(offsetChanged(qint64)), logger_, SLOT(logAnnotationOffsetChanged(qint64)));
 
   connect(embeddedCanvas_, SIGNAL(enabledChanged(bool)), logger_, SLOT(logCanvasEnabled(bool)));
 
@@ -917,13 +980,13 @@ MainWindow::createConnections()
   // MRL resolver
   connect(mrlResolver_, SIGNAL(mediaResolved(MediaInfo,QNetworkCookieJar*)), SLOT(openRemoteMedia(MediaInfo,QNetworkCookieJar*)));
   connect(mrlResolver_, SIGNAL(subtitleResolved(QString)), SLOT(importAnnotationsFromUrl(QString)));
-  connect(mrlResolver_, SIGNAL(message(QString)), SLOT(log(QString)), Qt::QueuedConnection);
+  connect(mrlResolver_, SIGNAL(message(QString)), SLOT(showMessage(QString)), Qt::QueuedConnection);
   connect(mrlResolver_, SIGNAL(error(QString)), SLOT(warn(QString)), Qt::QueuedConnection);
 
   // Annotation codec
   {
     AnnotationCodecManager *acm = AnnotationCodecManager::globalInstance();
-    connect(acm, SIGNAL(message(QString)), SLOT(log(QString)), Qt::QueuedConnection);
+    connect(acm, SIGNAL(message(QString)), SLOT(showMessage(QString)), Qt::QueuedConnection);
     connect(acm, SIGNAL(error(QString)), SLOT(warn(QString)), Qt::QueuedConnection);
     connect(acm, SIGNAL(fetched(AnnotationList,QString)), SLOT(addRemoteAnnotations(AnnotationList,QString)));
   }
@@ -931,7 +994,7 @@ MainWindow::createConnections()
   // Streaming service
   //{
   //  StreamService *ss = StreamService::globalInstance();
-  //  connect(ss, SIGNAL(message(QString)), SLOT(log(QString)));
+  //  connect(ss, SIGNAL(message(QString)), SLOT(showMessage(QString)));
   //  connect(ss, SIGNAL(error(QString)), SLOT(warn(QString)));
   //  connect(ss, SIGNAL(streamReady(QString)), SLOT(openStreamUrl(QString)));
   //}
@@ -940,16 +1003,7 @@ MainWindow::createConnections()
   //connect(this, SIGNAL(closing()), db_, SLOT(dispose));
 
   // - IPC -
-  connect(AcPlayerController::globalController(), SIGNAL(message(QString)),
-          Logger::LoggerSignals::globalInstance(), SLOT(log(QString)), Qt::QueuedConnection);
-  connect(AcPlayerController::globalController(), SIGNAL(error(QString)),
-          Logger::LoggerSignals::globalInstance(), SLOT(error(QString)), Qt::QueuedConnection);
-  connect(AcPlayerController::globalController(), SIGNAL(warning(QString)),
-          Logger::LoggerSignals::globalInstance(), SLOT(warn(QString)), Qt::QueuedConnection);
-  connect(AcPlayerController::globalController(), SIGNAL(notification(QString)),
-          Logger::LoggerSignals::globalInstance(), SLOT(notify(QString)), Qt::QueuedConnection);
-  connect(AcPlayerController::globalController(), SIGNAL(arguments(QStringList)),
-          SLOT(openSources(QStringList)), Qt::QueuedConnection);
+  connect(appServer_, SIGNAL(arguments(QStringList)), SLOT(openSources(QStringList)), Qt::QueuedConnection);
 }
 
 void
@@ -982,7 +1036,7 @@ MainWindow::createActions()
   MAKE_ACTION(openUrlAct_,      OPENURL,        this,           SLOT(openUrl()))
   MAKE_ACTION(openAnnotationUrlAct_, OPENANNOTATIONURL, this,   SLOT(openAnnotationUrl()))
   MAKE_ACTION(openDeviceAct_,   OPENDEVICE,     this,           SLOT(openDevice()))
-  MAKE_ACTION(downloadCurrentUrlAct_,DOWNLOADCURRENT, this,      SLOT(downloadCurrentUrl()))
+  MAKE_ACTION(downloadCurrentUrlAct_,DOWNLOADCURRENT, this,    SLOT(downloadCurrentUrl()))
   MAKE_ACTION(openInWebBrowserAct_,OPENINWEBBROWSER, this,      SLOT(openInWebBrowser()))
   MAKE_ACTION(openVideoDeviceAct_, OPENVIDEODEVICE,  this,      SLOT(openVideoDevice()))
   MAKE_ACTION(openAudioDeviceAct_, OPENAUDIODEVICE,  this,      SLOT(openAudioDevice()))
@@ -1000,6 +1054,9 @@ MainWindow::createActions()
   MAKE_ACTION(deleteCachesAct_, DELETECACHE,    this,           SLOT(deleteCaches()))
   MAKE_ACTION(newWindowAct_,    NEWWINDOW,      this,           SLOT(newWindow()))
   MAKE_ACTION(resumeAnnotationAct_, RESUMEANNOT,this,           SLOT(resumeAnnotations()))
+  MAKE_ACTION(resetAnnotationOffsetAct_, RESETANNOTOFFSET, annotationView_,  SLOT(resetOffset()))
+  MAKE_ACTION(increaseAnnotationOffsetAct_, INCREASEANNOTOFFSET, this,  SLOT(increaseAnnotationOffset()))
+  MAKE_ACTION(decreaseAnnotationOffsetAct_, DECREASEANNOTOFFSET, this,  SLOT(decreaseAnnotationOffset()))
   MAKE_ACTION(resetAnnotationScaleAct_, RESETANNOTSCALE, annotationView_,  SLOT(resetScale()))
   MAKE_ACTION(increaseAnnotationScaleAct_, INCREASEANNOTSCALE, this,  SLOT(annotationScaleUp()))
   MAKE_ACTION(decreaseAnnotationScaleAct_, DECREASEANNOTSCALE, this,  SLOT(annotationScaleDown()))
@@ -1123,6 +1180,7 @@ MainWindow::createActions()
   MAKE_ACTION(nextFileAct_,     NEXT,     this,  SLOT(openNextFile()))
   MAKE_ACTION(moreFilesAct_,    MORE,     this,  SLOT(moreBrowsedFiles()))
   MAKE_ACTION(lessFilesAct_,    LESS,     this,  SLOT(lessBrowsedFiles()))
+  MAKE_ACTION(openBrowsedDirectoryAct_, OPENDIRECTORY, this,  SLOT(openBrowsedDirectory()))
 
   MAKE_TOGGLE(setAppLanguageToEnglishAct_,  ENGLISH, this, SLOT(setAppLanguageToEnglish()))
   MAKE_TOGGLE(setAppLanguageToJapaneseAct_, JAPANESE,this, SLOT(setAppLanguageToJapanese()))
@@ -1220,7 +1278,9 @@ MainWindow::createActions()
     //resumeAnnotationAct_->setShortcut(QKeySequence::Refresh);
     resumeAnnotationAct_->setShortcut(QKeySequence("CTRL+R"));
 
+#ifndef Q_WS_MAC
     toggleWindowOnTopAct_->setShortcuts(QKeySequence::AddTab);
+#endif // !Q_WS_MAC
     //QShortcut *t = new QShortcut(QKeySequence::AddTab, this);
     //connect(t, SIGNAL(activated()), SLOT(toggleWindowOnTop()));
 
@@ -1252,6 +1312,9 @@ MainWindow::createActions()
     //toggleFullScreenModeAct_->setShortcut(QKeySequence(K_CMD "+3"));
     QShortcut *c3 = new QShortcut(QKeySequence(K_CMD "+3"), this);
     connect(c3, SIGNAL(activated()), hub_, SLOT(toggleFullScreenWindowMode()));
+
+    QShortcut *fs = new QShortcut(QKeySequence(K_CMD "+ENTER"), this);
+    connect(fs, SIGNAL(activated()), hub_, SLOT(toggleFullScreenWindowMode()));
 
     QShortcut *f11 = new QShortcut(QKeySequence("F11"), this);
     connect(f11, SIGNAL(activated()), hub_, SLOT(toggleFullScreenWindowMode()));
@@ -1326,11 +1389,15 @@ MainWindow::createActions()
     decreaseAnnotationScaleAct_->setShortcut(QKeySequence("CTRL+-"));
     resetAnnotationScaleAct_->setShortcut(QKeySequence("CTRL+0"));
 
+    increaseAnnotationOffsetAct_->setShortcut(QKeySequence("CTRL+ALT+="));
+    decreaseAnnotationOffsetAct_->setShortcut(QKeySequence("CTRL+ALT+-"));
+    resetAnnotationOffsetAct_->setShortcut(QKeySequence("CTRL+ALT+0"));
+
     increaseAnnotationRotationAct_->setShortcut(QKeySequence("CTRL+SHIFT+="));
     decreaseAnnotationRotationAct_->setShortcut(QKeySequence("CTRL+SHIFT+-"));
     resetAnnotationRotationAct_->setShortcut(QKeySequence("CTRL+SHIFT+0"));
 
-/*
+#ifdef Q_WS_MAC
     QShortcut *aq = new QShortcut(QKeySequence(K_ALT "+Q"), this);
     connect(aq, SIGNAL(activated()), SLOT(saturationUp()));
     QShortcut *aa = new QShortcut(QKeySequence(K_ALT "+A"), this);
@@ -1370,7 +1437,7 @@ MainWindow::createActions()
     connect(ag, SIGNAL(activated()), SLOT(brightnessDown()));
     QShortcut *ab = new QShortcut(QKeySequence(K_ALT "+B"), this);
     connect(ab, SIGNAL(activated()), SLOT(brightnessReset()));
-*/
+#endif // Q_WS_MAC
   }
 }
 
@@ -1659,6 +1726,9 @@ MainWindow::createMenus()
     utilityMenu_->addAction(openProxyBrowserAct_);
     utilityMenu_->addAction(toggleDownloaderVisibleAct_);
     utilityMenu_->addAction(toggleConsoleDialogVisibleAct_);
+#ifndef Q_WS_MAC
+    utilityMenu_->addAction(newWindowAct_);
+#endif // !Q_WS_MAC
   }
 
   settingsMenu_ = new QMenu(this); {
@@ -1679,7 +1749,9 @@ MainWindow::createMenus()
     settingsMenu_->addAction(toggleMultipleWindowsEnabledAct_);
 #endif // Q_WS_MAC
 
+#ifndef Q_WS_MAC
     settingsMenu_->addAction(toggleWindowOnTopAct_);
+#endif // !Q_WS_MAC
     settingsMenu_->addAction(toggleEmbeddedPlayerOnTopAct_);
     //settingsMenu_->addAction(togglePlayerLabelEnabled_);
 
@@ -1713,6 +1785,10 @@ MainWindow::createMenus()
     annotationMenu_->addAction(increaseAnnotationRotationAct_);
     annotationMenu_->addAction(decreaseAnnotationRotationAct_);
     annotationMenu_->addAction(resetAnnotationRotationAct_);
+    annotationMenu_->addSeparator();
+    annotationMenu_->addAction(increaseAnnotationOffsetAct_);
+    annotationMenu_->addAction(decreaseAnnotationOffsetAct_);
+    annotationMenu_->addAction(resetAnnotationOffsetAct_);
   }
 
 
@@ -1977,7 +2053,8 @@ MainWindow::updateWindowMode()
           isPlaying() &&
           (isMaximized() || size() == INIT_WINDOW_SIZE || size() == PREFERRED_WINDOW_SIZE)) {
         QSize sz = player_->videoDimension();
-        if (sz.isEmpty())
+        if (sz.isEmpty() || sz.width() < PREFERRED_MIN_WIDTH || sz.height() < PREFERRED_MIN_HEIGHT ||
+            isMaximized())
           sz = PREFERRED_WINDOW_SIZE;
         resize(sz);
       }
@@ -2032,6 +2109,7 @@ MainWindow::mediaUrlDialog()
   if (!mediaUrlDialog_) {
     mediaUrlDialog_ = new MediaUrlDialog(this);
     connect(mediaUrlDialog_, SIGNAL(urlEntered(QString,bool)), SLOT(openUrl(QString,bool)));
+    windows_.append(mediaUrlDialog_);
   }
   mediaUrlDialog_->setSave(player_->isBufferSaved());
   return mediaUrlDialog_;
@@ -2056,6 +2134,7 @@ MainWindow::annotationUrlDialog()
   if (!annotationUrlDialog_) {
     annotationUrlDialog_ = new SubUrlDialog(this);
     connect(annotationUrlDialog_, SIGNAL(urlEntered(QString,bool)), SLOT(openAnnotationUrl(QString,bool)));
+    windows_.append(annotationUrlDialog_);
   }
   annotationUrlDialog_->setSave(submit_);
   return annotationUrlDialog_;
@@ -2069,7 +2148,7 @@ void
 MainWindow::openAnnotationUrlFromAliases(const AliasList &l)
 {
   if (!l.isEmpty())
-    foreach (Alias a, l)
+    foreach (const Alias &a, l)
       if (a.type() == Alias::AT_Url)
         openAnnotationUrl(a.text());
 }
@@ -2077,7 +2156,7 @@ MainWindow::openAnnotationUrlFromAliases(const AliasList &l)
 void
 MainWindow::openAnnotationUrl(const QString &url, bool save)
 {
-  log(tr("analyzing URL ...") + " " + url);
+  showMessage(tr("analyzing URL ...") + " " + url);
   if (registerAnnotationUrl(url)) {
     bool ok = mrlResolver_->resolveSubtitle(url);
     if (!ok)
@@ -2098,7 +2177,7 @@ void
 MainWindow::openUrl(const QString &url)
 {
   if (mrlResolver_->resolveMedia(url))
-    log(tr("analyzing URL ...") + " " + url);
+    showMessage(tr("analyzing URL ...") + " " + url);
   else {
     if (isRemoteMrl(url))
       openMrl(url, false); // checkPath = false
@@ -2172,6 +2251,7 @@ MainWindow::openDevice()
   if (!deviceDialog_) {
     deviceDialog_ = new DeviceDialog(this);
     connect(deviceDialog_, SIGNAL(deviceSelected(QString,bool)), SLOT(openDevicePath(QString,bool)));
+    windows_.append(deviceDialog_);
   }
   deviceDialog_->show();
 }
@@ -2380,7 +2460,7 @@ MainWindow::openRemoteMedia(const MediaInfo &mi, QNetworkCookieJar *cookieJar)
   if (mi.mrls.size() > 1) {
     QStringList urls;
     qint64 duration = 0;
-    foreach (MrlInfo i, mi.mrls) {
+    foreach (const MrlInfo &i, mi.mrls) {
       urls.append(i.url);
       duration += i.duration;
     }
@@ -2391,8 +2471,8 @@ MainWindow::openRemoteMedia(const MediaInfo &mi, QNetworkCookieJar *cookieJar)
   //importAnnotationsFromUrl(mi.suburl);
   if (!mi.suburl.isEmpty())
     QTimer::singleShot(5000, // TODO: use event loop in aother thread rather than 5 sec
-      new MainWindow_slot_::ImportAnnotationsFromUrl(mi.suburl, this),
-      SLOT(importAnnotationsFromUrl())
+      new slot_::ImportAnnotationsFromUrl(mi.suburl, this),
+      SLOT(trigger())
     );
 
   static bool once = true;
@@ -2428,21 +2508,6 @@ void
 MainWindow::openMrl(const QString &path, bool checkPath)
 {
   DOUT("enter: path =" << path);
-
-#ifdef Q_WS_WIN
-  static bool once = true;
-  if (once) {
-    once = false;
-    if (hub_->isNormalPlayerMode()) {
-      hub_->setEmbeddedPlayerMode();
-      if (size() == INIT_WINDOW_SIZE) {
-        move(pos().x() + (INIT_WINDOW_SIZE.width() - PREFERRED_WINDOW_SIZE.width()) / 2,
-             pos().y() + (INIT_WINDOW_SIZE.height() - PREFERRED_WINDOW_SIZE.height()) / 2);
-        resize(PREFERRED_WINDOW_SIZE);
-      }
-    }
-  }
-#endif // Q_WS_WIN
 
   disableNavigation();
 
@@ -2557,7 +2622,7 @@ QString
 MainWindow::digestFromFile(const QString &path)
 {
   if (isRemoteMrl(path))
-    return QString::null;
+    return QString();
   QString digest = Token::digestFromFile(path);
   if (digest.isEmpty()) {
     QString localPath = QUrl(path).toLocalFile();
@@ -2578,19 +2643,29 @@ MainWindow::invalidateMediaAndPlay(bool async)
 
   if (player_->hasMedia()) {
     if (async) {
-      log(tr("analyzing media ...")); // might cause parallel contension
+      showMessage(tr("analyzing media ...")); // might cause parallel contension
       QThreadPool::globalInstance()->start(new task_::invalidateMediaAndPlay(this));
       DOUT("exit: returned from async branch");
       return;
     }
 
-    DOUT("playerMutex locking");
-    playerMutex_.lock();
-    DOUT("playerMutex locked");
+    invalidateToken(player_->mediaPath());
 
+    emit playMediaRequested();
+  }
+  DOUT("exit");
+}
+
+void
+MainWindow::playMedia()
+{
+  DOUT("enter");
+  if (disposed_) {
+    DOUT("exit: returned from disposed branch");
+    return;
+  }
+  if (player_->hasMedia()) {
     QString path = player_->mediaPath();
-    invalidateToken(path);
-
     if (!isRemoteMrl(path))
       addRecent(path);
     //if (mode_ == NormalPlayMode)
@@ -2604,6 +2679,8 @@ MainWindow::invalidateMediaAndPlay(bool async)
 //#endif // Q_OS_WIN
     //loadSubtitlesTimer_->start(3); // 3 times
     //invalidateWindowTitle();
+
+    invalidateWindowSize();
 
 #ifdef Q_OS_MAC
     // ensure videoView_ stretch in full screen mode
@@ -2619,23 +2696,35 @@ MainWindow::invalidateMediaAndPlay(bool async)
       AcUi::globalInstance()->setBlackBackground(this);
 #endif // Q_WS_X11
 
-    emit mediaInvalidated();
-
-    // SingleShot only because of multi-threading problem.
-    //QTimer::singleShot(0, this, SLOT(invalidateTrackMenu()));
-
-    DOUT("playerMutex unlocking");
-    playerMutex_.unlock();
-    DOUT("playerMutex unlocked");
+    invalidateWindowTitle();
+    invalidateTrackMenu();
+    loadSubtitlesLater();
   }
   DOUT("exit");
+}
+
+void
+MainWindow::invalidateWindowSize()
+{
+  if (hub_->isNormalPlayerMode() && player_->hasMedia()) {
+    hub_->setEmbeddedPlayerMode();
+    QSize sz = player_->videoDimension();
+    if (sz.isEmpty() || sz.width() < PREFERRED_MIN_WIDTH || sz.height() < PREFERRED_MIN_HEIGHT)
+      sz = PREFERRED_WINDOW_SIZE;
+    if (sz != size()) {
+      move(pos().x() + (width() - sz.width()) / 2,
+           pos().y() + (height() - sz.height()) / 2);
+      resize(sz);
+      QTimer::singleShot(0, embeddedPlayer_, SLOT(invalidateGeometry()));
+    }
+  }
 }
 
 void
 MainWindow::openSubtitleFile(const QString &path)
 {
   if (!player_->hasMedia()) {
-    log(TR(T_ERROR_NO_MEDIA))   ;
+    showMessage(TR(T_ERROR_NO_MEDIA))   ;
     return;
   }
 
@@ -2695,7 +2784,7 @@ MainWindow::stop()
   case SignalHub::SignalTokenMode:
 #ifdef USE_MODE_SIGNAL
     messageHandler_->setActive(false);
-    log(": " + tr("detaching all processes ..."));
+    showMessage(": " + tr("detaching all processes ..."));
     QTH->detachAllProcesses();
 #endif // USE_MODE_SIGNAL
     hub_->setNormalPlayerMode();
@@ -2788,10 +2877,16 @@ MainWindow::snapshot()
       QString savePath = grabber_->savePath() + "/" + saveName;
 
       bool succeed = player_->snapshot(savePath);
-      if (succeed)
-        say(": " + TR(T_SUCCEED_SNAPSHOT_SAVED), "purple");
-      else
-        say(": " + TR(T_ERROR_SNAPSHOT_FAILED) + ": " + savePath, "red");
+      if (succeed) {
+        QClipboard *c = QApplication::clipboard();
+        if (c) {
+          QImage image(savePath);
+          if (!image.isNull())
+            c->setImage(image);
+        }
+        showMessage(tr("saved") + ": " + savePath);
+      } else
+        warn(tr("failed to save snapshot") + ": " + savePath);
     }
     break;
 
@@ -2801,7 +2896,7 @@ MainWindow::snapshot()
       grabber_->grabWindow(annotationView_->trackedWindow());
     else
       grabber_->grabDesktop();
-    log(tr("snapshot saved on the destop"));
+    showMessage(tr("snapshot saved on the destop"));
     break;
   }
 }
@@ -2996,8 +3091,10 @@ MainWindow::setMiniMode(bool visible)
 void
 MainWindow::about()
 {
-  if (!aboutDialog_)
+  if (!aboutDialog_) {
     aboutDialog_ = new AboutDialog(this);
+    windows_.append(aboutDialog_);
+  }
   aboutDialog_->show();
 }
 
@@ -3005,15 +3102,17 @@ MainWindow::about()
 void
 MainWindow::help()
 {
-  if (!helpDialog_)
+  if (!helpDialog_) {
     helpDialog_ = new HelpDialog(this);
+    windows_.append(helpDialog_);
+  }
   helpDialog_->show();
 }
 
 void
 MainWindow::update()
 {
-  log(tr("openning update URL ...") + " " G_UPDATEPAGE_URL);
+  showMessage(tr("openning update URL ...") + " " G_UPDATEPAGE_URL);
   QDesktopServices::openUrl(QUrl(G_UPDATEPAGE_URL));
 }
 
@@ -3172,6 +3271,7 @@ MainWindow::setAnnotationCountDialogVisible(bool visible)
     annotationCountDialog_ = new AnnotationCountDialog(dataManager_, this);
     connect(annotationCountDialog_, SIGNAL(countChanged(int)), annotationFilter_, SLOT(setAnnotationCountHint(int)));
     annotationCountDialog_->setCount(annotationFilter_->annotationCountHint());
+    windows_.append(annotationCountDialog_);
   }
   annotationCountDialog_->setVisible(visible);
   if (visible)
@@ -3181,8 +3281,10 @@ MainWindow::setAnnotationCountDialogVisible(bool visible)
 void
 MainWindow::setNetworkProxyDialogVisible(bool visible)
 {
-  if (!networkProxyDialog_)
+  if (!networkProxyDialog_) {
     networkProxyDialog_ = new NetworkProxyDialog(this);
+    windows_.append(networkProxyDialog_);
+  }
   networkProxyDialog_->setVisible(visible);
   if (visible)
     networkProxyDialog_->raise();
@@ -3193,6 +3295,7 @@ MainWindow::setLoginDialogVisible(bool visible)
 {
   if (!loginDialog_) {
     loginDialog_ = new LoginDialog(this);
+    windows_.append(loginDialog_);
     connect(loginDialog_, SIGNAL(loginRequested(QString, QString)), SLOT(login(QString, QString)));
   }
   if (visible) {
@@ -3200,7 +3303,7 @@ MainWindow::setLoginDialogVisible(bool visible)
     if (server_->user().name() == User::guest().name())
       loginDialog_->setPassword(User::guest().password());
     else
-      loginDialog_->setPassword(QString::null);
+      loginDialog_->setPassword(QString());
     loginDialog_->show();
     loginDialog_->raise();
   } else
@@ -3213,6 +3316,7 @@ MainWindow::setUserViewVisible(bool visible)
   if (!userView_) {
     userView_ = new UserView(this);
     userView_->setUser(server_->user());
+    windows_.append(userView_);
 
     connect(this, SIGNAL(userChanged(User)), userView_, SLOT(setUser(User)));
   }
@@ -3239,8 +3343,10 @@ MainWindow::toggleAnnotationBrowserVisible()
 void
 MainWindow::setBlacklistViewVisible(bool visible)
 {
-  if (!blacklistView_)
+  if (!blacklistView_) {
     blacklistView_ = new BlacklistView(annotationFilter_, this);
+    windows_.append(blacklistView_);
+  }
   blacklistView_->setVisible(visible);
   if (visible)
     blacklistView_->raise();
@@ -3251,6 +3357,7 @@ MainWindow::backlogDialog()
 {
   if (!backlogDialog_) {
     backlogDialog_ = new BacklogDialog(this);
+    windows_.append(backlogDialog_);
     connect(hub_, SIGNAL(tokenModeChanged(SignalHub::TokenMode)), backlogDialog_, SLOT(clear()));
     connect(player_, SIGNAL(mediaChanged()), backlogDialog_, SLOT(clear()));
     connect(annotationView_, SIGNAL(subtitleAdded(QString)), backlogDialog_, SLOT(appendSubtitle(QString)));
@@ -3290,7 +3397,7 @@ MainWindow::downloadDialog()
 
 void
 MainWindow::showDownloader()
-{ AcDownloaderController::globalController()->open(); }
+{ downloaderDelegate_->open(); }
 
 //bool
 //MainWindow::isDownloaderVisible() const
@@ -3302,13 +3409,14 @@ MainWindow::consoleDialog()
   if (!consoleDialog_) {
     reinterpret_cast<Application *>(qApp)->installMessageHandlers();
     consoleDialog_ = new ConsoleDialog(this);
-    connect(LoggerSignals::globalInstance(), SIGNAL(logged(QString)),
+    windows_.append(consoleDialog_);
+    connect(LoggerSignals::globalInstance(), SIGNAL(message(QString)),
             consoleDialog_, SLOT(appendLogText(QString)), Qt::QueuedConnection);
-    connect(LoggerSignals::globalInstance(), SIGNAL(warned(QString)),
+    connect(LoggerSignals::globalInstance(), SIGNAL(warning(QString)),
             consoleDialog_, SLOT(appendLogText(QString)), Qt::QueuedConnection);
-    connect(LoggerSignals::globalInstance(), SIGNAL(notified(QString)),
+    connect(LoggerSignals::globalInstance(), SIGNAL(notification(QString)),
             consoleDialog_, SLOT(appendLogText(QString)), Qt::QueuedConnection);
-    connect(LoggerSignals::globalInstance(), SIGNAL(errored(QString)),
+    connect(LoggerSignals::globalInstance(), SIGNAL(errorMessage(QString)),
             consoleDialog_, SLOT(appendLogText(QString)), Qt::QueuedConnection);
 
     Application::globalInstance()->addMessageHandler(ConsoleDialog::messageHandler);
@@ -3329,6 +3437,7 @@ MainWindow::setAnnotationEditorVisible(bool visible)
 {
   if (!annotationEditor_) {
     annotationEditor_ = new AnnotationEditor(this);
+    windows_.append(annotationEditor_);
     connect(annotationEditor_, SIGNAL(textSaved(QString)), SLOT(eval(QString)));
   }
   annotationEditor_->setVisible(visible);
@@ -3348,7 +3457,7 @@ MainWindow::invalidateSiteAccounts()
 {
   if (!siteAccountView_)
     return;
-  log(tr("site accounts updated"));
+  showMessage(tr("site accounts updated"));
   MrlResolverSettings *settings = MrlResolverSettings::globalSettings();
   settings->setNicovideoAccount(
     siteAccountView_->nicovideoAccount().username,
@@ -3363,16 +3472,17 @@ MainWindow::setSiteAccountViewVisible(bool visible)
 {
   if (!siteAccountView_) {
     siteAccountView_ = new SiteAccountView(this);
+    windows_.append(siteAccountView_);
     connect(siteAccountView_, SIGNAL(accountChanged()), SLOT(invalidateSiteAccounts()));
 
-    std::pair<QString, QString>
-    a = AcSettings::globalSettings()->nicovideoAccount();
-    if (!a.first.isEmpty() && !a.second.isEmpty())
-      siteAccountView_->setNicovideoAccount(a.first, a.second);
+    QString username, password;
+    boost::tie(username, password) = AcSettings::globalSettings()->nicovideoAccount();
+    if (!username.isEmpty() && !password.isEmpty())
+      siteAccountView_->setNicovideoAccount(username, password);
 
-    a = AcSettings::globalSettings()->bilibiliAccount();
-    if (!a.first.isEmpty() && !a.second.isEmpty())
-      siteAccountView_->setBilibiliAccount(a.first, a.second);
+    boost::tie(username, password) = AcSettings::globalSettings()->bilibiliAccount();
+    if (!username.isEmpty() && !password.isEmpty())
+      siteAccountView_->setBilibiliAccount(username, password);
   }
   siteAccountView_->setVisible(visible);
   if (visible)
@@ -3382,8 +3492,10 @@ MainWindow::setSiteAccountViewVisible(bool visible)
 void
 MainWindow::setMediaInfoViewVisible(bool visible)
 {
-  if (!mediaInfoView_)
+  if (!mediaInfoView_) {
     mediaInfoView_ = new MediaInfoView(player_, dataManager_, hub_, this);
+    windows_.append(mediaInfoView_);
+  }
   mediaInfoView_->setVisible(visible);
   if (visible)
     mediaInfoView_->raise();
@@ -3394,7 +3506,7 @@ MainWindow::openHomePage()
 {
   QString url = G_HOMEPAGE;
   if (AcSettings::globalSettings()->fackCcp())
-    AcBrowserController::globalController()->openUrl(url);
+    browserDelegate_->openUrl(url);
   else
     QDesktopServices::openUrl(url);
 }
@@ -3412,6 +3524,7 @@ MainWindow::setSeekDialogVisible(bool visible)
 {
   if (!seekDialog_) {
     seekDialog_ = new SeekDialog(this);
+    windows_.append(seekDialog_);
     connect(seekDialog_, SIGNAL(seekRequested(qint64)), SLOT(seek(qint64)));
   }
 
@@ -3451,8 +3564,10 @@ MainWindow::hideSyncDialog()
 void
 MainWindow::setSyncDialogVisible(bool visible)
 {
-  if (!syncDialog_)
+  if (!syncDialog_) {
     syncDialog_ = new SyncDialog(this);
+    windows_.append(syncDialog_);
+  }
 
   syncDialog_->setVisible(visible);
   if (visible)
@@ -3470,8 +3585,10 @@ MainWindow::setSyncDialogVisible(bool visible)
 //void
 //MainWindow::setCommentViewVisible(bool visible)
 //{
-//  if (!commentView_)
+//  if (!commentView_) {
 //    commentView_ = new CommentView(this);
+//    windows_.append(commentView_);
+//  }
 //
 //  if (visible && dataManager_->hasToken())
 //    commentView_->setTokenId(dataManager_->token().id());
@@ -3492,6 +3609,7 @@ MainWindow::setWindowPickDialogVisible(bool visible)
     windowPickDialog_->setMessage(tr("Select annots window"));
     connect(windowPickDialog_, SIGNAL(windowPicked(WId)), annotationView_, SLOT(setTrackedWindow(WId)));
     connect(windowPickDialog_, SIGNAL(windowPicked(WId)), SLOT(setWindowOnTop()));
+    windows_.append(windowPickDialog_);
   }
   windowPickDialog_->setVisible(visible);
   if (visible)
@@ -3503,6 +3621,7 @@ MainWindow::setProcessPickDialogVisible(bool visible)
 {
   if (!processPickDialog_) {
     processPickDialog_ = new PickDialog(this);
+    windows_.append(processPickDialog_);
     processPickDialog_->setMessage(tr("Select process window to open"));
 
     connect(processPickDialog_, SIGNAL(windowPicked(WId)), annotationView_, SLOT(setTrackedWindow(WId)));
@@ -3530,7 +3649,7 @@ MainWindow::submitAliasText(const QString &text, qint32 type, bool async)
     warn(tr("alias not saved for unknown media token") + ": " + text);
     return;
   }
-  log(tr("saving alias ...") + ": " + text);
+  showMessage(tr("saving alias ...") + ": " + text);
   Alias a;
   a.setTokenId(t.id());
   a.setTokenDigest(t.digest());
@@ -3566,7 +3685,7 @@ MainWindow::submitAlias(const Alias &input, bool async)
     openAnnotationUrl(input.text());
   }
   if (async) {
-    log(tr("connecting server to submit alias ..."));
+    showMessage(tr("connecting server to submit alias ..."));
     QThreadPool::globalInstance()->start(new task_::submitAlias(input, this));
     DOUT("exit: returned from async branch");
     return;
@@ -3582,7 +3701,7 @@ MainWindow::submitAlias(const Alias &input, bool async)
   Q_UNUSED(id);
   DOUT("alias id =" << id);
   //if (id)
-    log(tr("alias saved") + ": " + input.text());
+    showMessage(tr("alias saved") + ": " + input.text());
   //else
   //  warn(tr("failed to update alias text") + ": " + a.text());
 
@@ -3619,7 +3738,7 @@ MainWindow::fileType(const QString &fileName)
 #ifdef USE_MODE_SIGNAL
   static const QStringList supportedProgramSuffices =
       QStringList() G_FORMAT_PROGRAM_(<<);
-  foreach (QString suffix, supportedProgramSuffices)
+  foreach (const QString &suffix, supportedProgramSuffices)
     if (fileName.endsWith("." + suffix, Qt::CaseInsensitive))
       return Token::TT_Program;
 #endif // USE_MODE_SIGNAL
@@ -3688,10 +3807,11 @@ MainWindow::signFile(const QString &path, bool async)
 {
   QString url = dataManager_->token().source();
   DOUT("url =" << url);
-  if (!url.isEmpty()) {
-    signFileWithUrl(path, url, async);
-  } else
+  if (url.isEmpty())
     warn(tr("login is requied to to submit annotation URL"));
+  else
+    signFileWithUrl(path, url, async);
+  QApplication::beep();
 }
 
 void
@@ -3707,7 +3827,7 @@ MainWindow::signFileWithUrl(const QString &path, const QString &url, bool async)
     return;
   }
   if (async) {
-    log(tr("signing media ...") + " " + path);
+    showMessage(tr("signing media ...") + " " + path);
     QThreadPool::globalInstance()->start(new task_::signFileWithUrl(path, url, this));
     DOUT("exit: returned from async branch");
     return;
@@ -3768,9 +3888,9 @@ MainWindow::signFileWithUrl(const QString &path, const QString &url, bool async)
   DOUT("inetMutex unlocked");
 
   if (tid)
-    emit logged(tr("media signed") + ": " + path);
+    emit message(tr("media signed") + ": " + path);
   else
-    emit warned(tr("failed to sign media") + ": " + path);
+    emit warning(tr("failed to sign media") + ": " + path);
 
   addRecent(path);
 
@@ -3786,7 +3906,7 @@ MainWindow::setToken(const QString &input, bool async)
     return;
   }
   if (async) {
-    log(tr("connecting server to query media/game token ..."));
+    showMessage(tr("connecting server to query media/game token ..."));
     QThreadPool::globalInstance()->start(new task_::setToken(input, this));
     DOUT("exit: returned from async branch");
     return;
@@ -3886,7 +4006,7 @@ MainWindow::setToken(const QString &input, bool async)
   }
 
   if (!token.isValid() && cache_->isValid() && token.hasDigest()) {
-    log(tr("searching for token in cache ..."));
+    showMessage(tr("searching for token in cache ..."));
     Token t = cache_->selectTokenWithDigest(token.digest(), token.part());
     if (t.isValid())
       token = t;
@@ -3928,7 +4048,7 @@ MainWindow::setToken(const QString &input, bool async)
       .arg(tr("annotations found"))
       .arg(QString::number(annots.size()))
       .arg("http://annot.me");
-    emit logged(msg);
+    emit message(msg);
     emit setAnnotationsRequested(annots);
   }
 
@@ -4001,7 +4121,7 @@ void MainWindow::submitLiveText(const QString &text, bool async)
   }
 
   if (async) {
-    log(tr("connecting server to submit annot ..."));
+    showMessage(tr("connecting server to submit annot ..."));
     QThreadPool::globalInstance()->start(new task_::submitLiveText(text, this));
     DOUT("exit: returned from async branch");
     return;
@@ -4073,7 +4193,7 @@ MainWindow::submitText(const QString &text, bool async)
   Q_ASSERT(!hub_->isLiveTokenMode());
 
   if (async) {
-    log(tr("connecting server to submit annot ..."));
+    showMessage(tr("connecting server to submit annot ..."));
     QThreadPool::globalInstance()->start(new task_::submitText(text, this));
     DOUT("exit: returned from async branch");
     return;
@@ -4201,7 +4321,7 @@ MainWindow::chat(const QString &input, bool async)
   doll_->chat(text);
 #else
   if (server_->isConnected())
-    emit responded(server_->chat(text));
+    emit response(server_->chat(text));
 #endif // WITH_MODULE_DOLL
 
   DOUT("inetMutex unlocking");
@@ -4229,19 +4349,27 @@ MainWindow::say(const QString &text, const QString &color)
   }
 
   if (color.isEmpty())
-    log(text);
+    showMessage(text);
   else
-    log(html_style(text, "color:" + color));
+    showMessage(html_style(text, "color:" + color));
   DOUT("exit");
 }
 
 void
-MainWindow::log(const QString &text)
+MainWindow::warn(const QString &text)
+{ Logger::warn(text); }
+
+void
+MainWindow::notify(const QString &text)
+{ Logger::notify(text); }
+
+void
+MainWindow::showMessage(const QString &text)
 { Logger::log(text); }
 
 void
-MainWindow::warn(const QString &text)
-{ Logger::warn(text); }
+MainWindow::error(const QString &text)
+{ Logger::error(text); }
 
 // - Events -
 
@@ -4259,7 +4387,7 @@ MainWindow::event(QEvent *e)
       if (url.isEmpty())
         url = fe->url().toString();
       if (!url.isEmpty())
-        QTimer::singleShot(0, new MainWindow_slot_::OpenSource(url, this), SLOT(openSource()));
+        QTimer::singleShot(0, new slot_::OpenSource(url, this), SLOT(trigger()));
     } break;
   default: accept = Base::event(e);
   }
@@ -4276,7 +4404,7 @@ MainWindow::setVisible(bool visible)
     if (AcUi::isAeroAvailable())
       AcUi::globalInstance()->setWindowDwmEnabled(this, true);
       //QTimer::singleShot(0,
-      //  new MainWindow_slot_::SetWindowDwmEnabled(true, this), SLOT(setWindowDwmEnabled())
+      //  new slot_::SetWindowDwmEnabled(true, this), SLOT(trigger())
       //);
     else
 #endif // WITH_WIN_DWM
@@ -4331,13 +4459,13 @@ MainWindow::mousePressEvent(QMouseEvent *event)
        ;
 
       if (ctrlPressed && shiftPressed) {
-        log(tr("remove annotations"));
+        showMessage(tr("remove annotations"));
         removeRubberBand_->press(mapFromGlobal(event->globalPos()));
       } else if (ctrlPressed) {
-        log(tr("capture annotations"));
+        showMessage(tr("capture annotations"));
         pauseRubberBand_->press(mapFromGlobal(event->globalPos()));
       } else if (shiftPressed) {
-        log(tr("release annotations"));
+        showMessage(tr("release annotations"));
         resumeRubberBand_->press(mapFromGlobal(event->globalPos()));
       } else if (hub_->isMediaTokenMode() && hub_->isFullScreenWindowMode()) {
         pauseRubberBand_->press(mapFromGlobal(event->globalPos()));
@@ -4596,7 +4724,7 @@ MainWindow::wheelEvent(QWheelEvent *event)
   Q_ASSERT(event);
   switch (event->modifiers()) {
   case Qt::ControlModifier:
-    if (annotationView_->hasPausedItems()) {
+    if (!annotationView_->isPaused() && annotationView_->hasPausedItems()) {
       if (event->delta() > 0)
         annotationView_->scalePausedItems(1.1);
       else if (event->delta() < 0)
@@ -4608,13 +4736,21 @@ MainWindow::wheelEvent(QWheelEvent *event)
         annotationScaleDown();
     } break;
   case Qt::ShiftModifier:
-    {
-      enum { zoom = -3 };
-      qreal angle = event->delta() / (8.0 * zoom);
-      if (annotationView_->hasPausedItems())
+    if (event->delta()) {
+      //enum { zoom = -3 };
+      //qreal angle = event->delta() / (8.0 * zoom);
+      qreal angle = event->delta() > 0 ? -5 : 5;
+      if (!annotationView_->isPaused() && annotationView_->hasPausedItems())
         annotationView_->rotatePausedItems(angle);
       else
         annotationView_->setRotation(annotationView_->rotation() + angle);
+    } break;
+  case Qt::CTRL | Qt::ALT:
+    if (event->delta()) {
+      if (event->delta() > 0)
+        increaseAnnotationOffset();
+      else
+        decreaseAnnotationOffset();
     } break;
   default:
     {
@@ -4690,7 +4826,7 @@ MainWindow::invalidateContextMenu()
   if (!contextMenuActions_.isEmpty()) {
     foreach (QAction *a, contextMenuActions_)
       if (a)
-        a->deleteLater();
+        QTimer::singleShot(0, a, SLOT(deleteLater()));
     contextMenuActions_.clear();
   }
 
@@ -4707,15 +4843,13 @@ MainWindow::invalidateContextMenu()
       //contextMenu_->addAction(toggleLiveDialogVisibleAct_);
     }
 #ifndef Q_WS_MAC
-    contextMenu_->addAction(newWindowAct_);
+    //contextMenu_->addAction(newWindowAct_);
 #endif // !Q_WS_MAC
     if (!currentUrl().isEmpty()) {
       contextMenu_->addAction(openInWebBrowserAct_);
       contextMenu_->addAction(saveMediaAct_);
-#ifdef WITH_MODULE_IPC
       if (!player_->isDownloadFinished())
         contextMenu_->addAction(downloadCurrentUrlAct_);
-#endif // WITH_MODULE_IPC
     }
 
     contextMenu_->addSeparator();
@@ -4743,7 +4877,7 @@ MainWindow::invalidateContextMenu()
     }
     contextMenu_->addMenu(openMenu_);
 
-    if (browsedFiles_.size() > 1)
+    if (!browsedFiles_.isEmpty())
       contextMenu_->addMenu(browseMenu_);
 
     // Recent
@@ -4954,7 +5088,8 @@ MainWindow::invalidateContextMenu()
     toggleAnnotationFilterEnabledAct_->setChecked(annotationFilter_->isEnabled());
     contextMenu_->addAction(toggleAnnotationFilterEnabledAct_);
     if (annotationFilter_->isEnabled()) {
-      toggleBlacklistViewVisibleAct_->setChecked(toggleAnnotationFilterEnabledAct_ && toggleAnnotationFilterEnabledAct_->isVisible());
+
+      toggleBlacklistViewVisibleAct_->setChecked(blacklistView_ && blacklistView_->isVisible());
       contextMenu_->addAction(toggleBlacklistViewVisibleAct_);
 
       toggleAnnotationCountDialogVisibleAct_->setChecked(annotationCountDialog_ && annotationCountDialog_->isVisible());
@@ -4999,9 +5134,6 @@ MainWindow::invalidateContextMenu()
 
     toggleBacklogDialogVisibleAct_->setChecked(backlogDialog_ && backlogDialog_->isVisible());
     contextMenu_->addAction(toggleBacklogDialogVisibleAct_);
-
-    toggleBlacklistViewVisibleAct_->setEnabled(t);
-    toggleBlacklistViewVisibleAct_->setChecked(blacklistView_ && blacklistView_->isVisible());
 
     if (hub_->isSignalTokenMode()) {
       toggleTranslateAct_->setEnabled(t && online);
@@ -5254,20 +5386,18 @@ void
 MainWindow::changeEvent(QEvent *event)
 {
   Q_ASSERT(event);
+  if (event->type() == QEvent::WindowStateChange && isMaximized())
+    emit windowMaximized();
   Base::changeEvent(event);
 
-  switch (event->type()) {
-  case QEvent::WindowStateChange:
 #ifdef Q_WS_X11
+  if (event->type() == QEvent::WindowStateChange) {
     if (windowState() == Qt::WindowFullScreen)
       QtX::setWindowInputShape(osdWindow_->winId(), embeddedPlayer_->pos(), embeddedPlayer_->rect());
     else
       QtX::zeroWindowInputShape(osdWindow_->winId());
-#endif // Q_WS_X11
-    break;
-
-  default: break;
   }
+#endif // Q_WS_X11
 }
 
 // - Keyboard events -
@@ -5342,6 +5472,15 @@ MainWindow::keyPressEvent(QKeyEvent *event)
   }
 }
 
+void
+MainWindow::maximizedToFullScreen()
+{
+  if (isMaximized()) {
+    showFullScreen();
+    QTimer::singleShot(0, hub_, SLOT(setFullScreenWindowMode()));
+  }
+}
+
 // - Drag and drop events -
 
 bool
@@ -5409,22 +5548,8 @@ MainWindow::dispose()
   player_->dispose();
 
   hide();
-
-  osdWindow_->hide();
-  globalOsdConsole_->hide();
-
-  if (annotationEditor_) annotationEditor_->hide();
-  if (annotationBrowser_) annotationBrowser_->hide();
-  if (tokenView_) tokenView_->hide();
-  if (blacklistView_) blacklistView_->hide();
-  if (annotationAnalyticsView_) annotationAnalyticsView_->hide();
-  if (backlogDialog_) backlogDialog_->hide();
-  if (loginDialog_) loginDialog_->hide();
-  if (mediaUrlDialog_) mediaUrlDialog_->hide();
-  if (annotationUrlDialog_) annotationUrlDialog_->hide();
-#if USE_MODE_SIGNAL
-  if (signalView_) signalView_->hide();
-#endif // USE_MODE_SIGNAL
+  foreach (QWidget *w, windows_)
+    w->hide();
 
   if (tray_)
     tray_->hide();
@@ -5467,9 +5592,7 @@ MainWindow::closeEvent(QCloseEvent *event)
     return;
   }
 
-  AcPlayerController::globalController()->stop();
-  AcDownloaderController::globalController()->stop();
-  AcBrowserController::globalController()->stop();
+  appServer_->stop();
 
   // Save settings
   Settings *settings = Settings::globalSettings();
@@ -5501,6 +5624,7 @@ MainWindow::closeEvent(QCloseEvent *event)
 
   settings->setAnnotationEffect(annotationView_->renderHint());
   settings->setAnnotationScale(annotationView_->scale());
+  settings->setAnnotationOffset(annotationView_->offset());
 
   // Disabled for saving closing time orz
   //if (server_->isConnected() && server_->isAuthorized())
@@ -5554,10 +5678,12 @@ MainWindow::closeEvent(QCloseEvent *event)
   //    ss->terminateService();
   //}
 
-  enum { ProcessEventsTimeout = 2000 };
-  DOUT("processEvents:enter: timeout =" << ProcessEventsTimeout);
-  qApp->processEvents(QEventLoop::AllEvents, ProcessEventsTimeout);
-  DOUT("processEvents:leave");
+  DownloaderController::globalController()->abort();
+
+  //enum { ProcessEventsTimeout = 2000 };
+  //DOUT("processEvents:enter: timeout =" << ProcessEventsTimeout);
+  //qApp->processEvents(QEventLoop::AllEvents, ProcessEventsTimeout);
+  //DOUT("processEvents:leave");
 
   if (QThreadPool::globalInstance()->activeThreadCount()) {
 #if QT_VERSION >= 0x040800
@@ -5618,9 +5744,9 @@ MainWindow::setWindowOnTop(bool t)
 //#endif // Q_OS_MAC
 
     if (t)
-      log(tr("always on top enabled"));
+      showMessage(tr("always on top enabled"));
     else
-      log(tr("always on top disabled"));
+      showMessage(tr("always on top disabled"));
   }
 
 #ifdef Q_WS_WIN
@@ -5660,7 +5786,7 @@ MainWindow::blessTokenWithId(qint64 id, bool async)
   }
 
   if (async) {
-    log(tr("submit bless cast to token ..."));
+    showMessage(tr("submit bless cast to token ..."));
     QThreadPool::globalInstance()->start(new task_::blessTokenWithId(id, this));
     DOUT("exit: returned from async branch");
     return;
@@ -5672,7 +5798,7 @@ MainWindow::blessTokenWithId(qint64 id, bool async)
 
   bool ok = server_->blessTokenWithId(id);
   if (ok) {
-    log(tr("token blessed"));
+    showMessage(tr("token blessed"));
     if (dataManager_->token().id() == id) {
       dataManager_->token().blessedCount()++;
       //dataManager_->invalidateToken();
@@ -5703,7 +5829,7 @@ MainWindow::curseTokenWithId(qint64 id, bool async)
   }
 
   if (async) {
-    log(tr("submit curse cast to token ..."));
+    showMessage(tr("submit curse cast to token ..."));
     QThreadPool::globalInstance()->start(new task_::curseTokenWithId(id, this));
     DOUT("exit: returned from async branch");
     return;
@@ -5715,7 +5841,7 @@ MainWindow::curseTokenWithId(qint64 id, bool async)
 
   bool ok = server_->curseTokenWithId(id);
   if (ok) {
-    log(tr("token cursed"));
+    showMessage(tr("token cursed"));
     if (dataManager_->token().id() == id) {
       dataManager_->token().cursedCount()++;
       //dataManager_->invalidateToken();
@@ -5755,7 +5881,7 @@ MainWindow::blessUserWithId(qint64 id, bool async)
   }
 
   if (async) {
-    log(tr("blessing user ..."));
+    showMessage(tr("blessing user ..."));
     QThreadPool::globalInstance()->start(new task_::blessUserWithId(id, this));
     DOUT("exit: returned from async branch");
     return;
@@ -5766,7 +5892,7 @@ MainWindow::blessUserWithId(qint64 id, bool async)
   DOUT("inetMutex locked");
 
   server_->blessUserWithId(id);
-  log(tr("user blessed"));
+  showMessage(tr("user blessed"));
 
   DOUT("inetMutex unlocking");
   inetMutex_.unlock();
@@ -5800,7 +5926,7 @@ MainWindow::curseUserWithId(qint64 id, bool async)
   }
 
   if (async) {
-    log(tr("cursing user ..."));
+    showMessage(tr("cursing user ..."));
     QThreadPool::globalInstance()->start(new task_::curseUserWithId(id, this));
     DOUT("exit: returned from async branch");
     return;
@@ -5811,7 +5937,7 @@ MainWindow::curseUserWithId(qint64 id, bool async)
   DOUT("inetMutex locked");
 
   server_->curseUserWithId(id);
-  log(tr("user cursed"));
+  showMessage(tr("user cursed"));
 
   DOUT("inetMutex unlocking");
   inetMutex_.unlock();
@@ -5845,7 +5971,7 @@ MainWindow::blockUserWithId(qint64 id, bool async)
   }
 
   if (async) {
-    log(tr("blocking user ..."));
+    showMessage(tr("blocking user ..."));
     QThreadPool::globalInstance()->start(new task_::blockUserWithId(id, this));
     DOUT("exit: returned from async branch");
     return;
@@ -5856,7 +5982,7 @@ MainWindow::blockUserWithId(qint64 id, bool async)
   DOUT("inetMutex locked");
 
   server_->blockUserWithId(id);
-  log(tr("user blocked"));
+  showMessage(tr("user blocked"));
 
   DOUT("inetMutex unlocking");
   inetMutex_.unlock();
@@ -5886,7 +6012,7 @@ MainWindow::blockUserWithId(qint64 id, bool async)
     } \
 \
     if (async) { \
-      log(tr("casting spell to target ...")); \
+      showMessage(tr("casting spell to target ...")); \
       QThreadPool::globalInstance()->start(new task_::blockUserWithId(id, this)); \
       DOUT("exit: returned from async branch"); \
       return; \
@@ -5922,7 +6048,7 @@ MainWindow::logout(bool async)
   }
   Q_UNUSED(async);
   //if (async) {
-  //  log(tr("connecting server to logout ..."));
+  //  showMessage(tr("connecting server to logout ..."));
   //  QThreadPool::globalInstance()->start(new task_logout(this));
   //  DOUT("exit: returned from async branch");
   //  return;
@@ -5941,8 +6067,8 @@ MainWindow::logout(bool async)
 
   emit userChanged(User());
 
-  //s->setUserName(QString::null);
-  AcSettings::globalSettings()->setPassword(QString::null);
+  //s->setUserName(QString());
+  AcSettings::globalSettings()->setPassword(QString());
 
   DOUT("exit: async =" << async);
 }
@@ -5956,7 +6082,7 @@ MainWindow::checkInternetConnection(bool async)
     return;
   }
   if (async) {
-    log(tr("connecting to server ..."));
+    showMessage(tr("connecting to server ..."));
     QThreadPool::globalInstance()->start(new task_::checkInternetConnection(this));
     DOUT("exit: returned from async branch");
     return;
@@ -5973,9 +6099,9 @@ MainWindow::checkInternetConnection(bool async)
   DOUT("inetMutex unlocked");
 
   if (server_->isConnected())
-    emit logged(tr("server connected"));
+    emit message(tr("server connected"));
   else
-    emit logged(tr("server disconnected"));
+    emit message(tr("server disconnected"));
 
   DOUT("exit");
 }
@@ -6008,13 +6134,13 @@ MainWindow::login(const QString &userName, const QString &encryptedPassword, boo
 
   server_->updateConnected();
   if (disposed_) {
-    DOUT("inetMutex locking"); inetMutex_.lock(); DOUT("inetMutex locked");
+    DOUT("inetMutex unlocking"); inetMutex_.unlock(); DOUT("inetMutex unlocked");
     DOUT("exit: returned from disposed branch");
     return;
   }
   if (!server_->isConnected() && cache_->isValid()) {
     // login from cache
-    log(TR(T_MESSAGE_TRY_LOGINFROMCACHE));
+    showMessage(TR(T_MESSAGE_TRY_LOGINFROMCACHE));
     User user = cache_->selectUserWithNameAndPassword(userName, encryptedPassword);
     if (user.isValid()) {
       settings->setUserName(userName);
@@ -6023,7 +6149,7 @@ MainWindow::login(const QString &userName, const QString &encryptedPassword, boo
       server_->setAuthorized(true);
       server_->setUser(user);
       annotationBrowser_->setUserId(user.id());
-      log(TR(T_SUCCEED_LOGINFROMCACHE));
+      showMessage(TR(T_SUCCEED_LOGINFROMCACHE));
     } else
       warn(TR(T_ERROR_LOGINFROMCACHE_FAILURE));
 
@@ -6039,7 +6165,7 @@ MainWindow::login(const QString &userName, const QString &encryptedPassword, boo
 
   server_->login(userName, encryptedPassword);
   if (disposed_) {
-    DOUT("inetMutex locking"); inetMutex_.lock(); DOUT("inetMutex locked");
+    DOUT("inetMutex unlocking"); inetMutex_.unlock(); DOUT("inetMutex unlocked");
     DOUT("exit: returned from disposed branch");
     return;
   }
@@ -6048,7 +6174,7 @@ MainWindow::login(const QString &userName, const QString &encryptedPassword, boo
   if (online) {
     liveInterval_ = server_->selectLiveTokenInterval();
     if (disposed_) {
-      DOUT("inetMutex locking"); inetMutex_.lock(); DOUT("inetMutex locked");
+      DOUT("inetMutex unlocking"); inetMutex_.unlock(); DOUT("inetMutex unlocked");
       DOUT("exit: returned from disposed branch");
       return;
     }
@@ -6098,7 +6224,7 @@ MainWindow::login(const QString &userName, const QString &encryptedPassword, boo
     }
 
     if (disposed_) {
-      DOUT("inetMutex locking"); inetMutex_.lock(); DOUT("inetMutex locked");
+      DOUT("inetMutex unlocking"); inetMutex_.unlock(); DOUT("inetMutex unlocked");
       DOUT("exit: returned from disposed branch");
       return;
     }
@@ -6135,9 +6261,9 @@ MainWindow::setSyncMode(bool t)
     emit syncModeChanged(t);
 
     if (t)
-      log(tr("Sync mode started"));
+      showMessage(tr("Sync mode started"));
     else
-      log(tr("Sync mode stopped"));
+      showMessage(tr("Sync mode stopped"));
   }
 }
 */
@@ -6157,9 +6283,9 @@ MainWindow::setLiveMode(bool t)
     emit liveModeChanged(t);
 
     if (t)
-      log(tr("Live mode started"));
+      showMessage(tr("Live mode started"));
     else
-      log(tr("Live mode stopped"));
+      showMessage(tr("Live mode stopped"));
   }
 }
 */
@@ -6173,7 +6299,7 @@ MainWindow::openProcessWindow(WId hwnd)
 {
   ulong pid = QtWin::getWindowProcessId(hwnd);
   if (pid) {
-    log(tr("found process id for window") + QString(" (pid = %1)").arg(QString::number(pid)));
+    showMessage(tr("found process id for window") + QString(" (pid = %1)").arg(QString::number(pid)));
     openProcessId(pid);
   } else
     warn(tr("process id for window was not found"));
@@ -6187,11 +6313,11 @@ MainWindow::openProcessId(ulong pid)
     return;
 
   if (QTH->isProcessAttached(pid))
-    log(tr("process was attached") + QString(" (pid = %1)").arg(pid));
+    showMessage(tr("process was attached") + QString(" (pid = %1)").arg(pid));
   else {
     bool ok = QTH->attachProcess(pid);
     if (ok) {
-      log(tr("process attached") + QString(" (pid = %1)").arg(QString::number(pid)));
+      showMessage(tr("process attached") + QString(" (pid = %1)").arg(QString::number(pid)));
       signalView_->processView()->refresh();
       ProcessInfo pi = signalView_->processView()->attachedProcessInfo();
       if (pi.isValid() && pid == pi.processId)
@@ -6214,10 +6340,10 @@ MainWindow::openProcessPath(const QString &path)
   QString processName = QFileInfo(path).fileName();
   ulong pid = QTH->processIdByName(processName);
   if (pid) {
-    log(tr("process was started") + QString(" (pid = %1)").arg(pid));
+    showMessage(tr("process was started") + QString(" (pid = %1)").arg(pid));
   } else {
     QtWin::createProcessWithExecutablePath(path);
-    log(tr("told process to start") + QString(" (name = %1)").arg(processName));
+    showMessage(tr("told process to start") + QString(" (name = %1)").arg(processName));
     pid = QTH->processIdByName(processName);
   }
 
@@ -6229,9 +6355,12 @@ MainWindow::openProcessPath(const QString &path)
     openProcess();
   } else {
     enum { seconds = G_OPENPROCESS_TIMEOUT / 1000 }; // msecs / 1000
-    log(tr("wait %1 seconds for process to start ...").arg(QString::number(seconds)));
-    auto *slot = new MainWindow_slot_::OpenProcessId(pid, this);
-    QTimer::singleShot(G_OPENPROCESS_TIMEOUT, slot, SLOT(openProcessId()));
+    showMessage(tr("wait %1 seconds for process to start ...").arg(QString::number(seconds)));
+    QTimer::singleShot(
+      G_OPENPROCESS_TIMEOUT,
+      new slot_::OpenProcessId(pid, this),
+      SLOT(trigger())
+    );
   }
 }
 
@@ -6242,7 +6371,7 @@ MainWindow::openProcessHook(ulong hookId, const ProcessInfo &pi)
     stop();
 
   if (pi.isValid()) {
-    log(tr("openning process") + ": " + pi.processName);
+    showMessage(tr("openning process") + ": " + pi.processName);
 
     grabber_->setBaseName(pi.processName);
 
@@ -6340,7 +6469,7 @@ MainWindow::setUserAnonymous(bool t, bool async)
   if (server_->isConnected() && server_->isAuthorized()) {
 
     if (async) {
-      log(tr("connecting server to change anonymous status ..."));
+      showMessage(tr("connecting server to change anonymous status ..."));
       QThreadPool::globalInstance()->start(new task_::setUserAnonymous(t, this));
       DOUT("exit: returned from async branch");
       return;
@@ -6362,9 +6491,9 @@ MainWindow::setUserAnonymous(bool t, bool async)
     server_->user().setAnonymous(t);
 
   if (server_->user().isAnonymous())
-    log(tr("you are anonymous now"));
+    showMessage(tr("you are anonymous now"));
   else
-    log(tr("you are not anonymous now"));
+    showMessage(tr("you are not anonymous now"));
 
   DOUT("exit");
 }
@@ -6381,7 +6510,7 @@ MainWindow::setUserLanguage(int lang, bool async)
   if (server_->isConnected() && server_->isAuthorized()) {
 
     if (async) {
-      log(tr("connecting server to change language ..."));
+      showMessage(tr("connecting server to change language ..."));
       QThreadPool::globalInstance()->start(new task_::setUserLanguage(lang, this));
       DOUT("exit: returned from async branch");
       return;
@@ -6402,7 +6531,7 @@ MainWindow::setUserLanguage(int lang, bool async)
   } else
     server_->user().setLanguage(lang);
 
-  log(tr("your language is ") + languageToString(server_->user().language()));
+  showMessage(tr("your language is ") + languageToString(server_->user().language()));
 
   DOUT("exit");
 }
@@ -6470,7 +6599,12 @@ MainWindow::setAppLanguageToSimplifiedChinese()
 
 void
 MainWindow::invalidateAppLanguage()
-{ notify(tr("restart the app to use the new language")); }
+{
+  Settings::globalSettings()->setApplicationFilePath(QString());
+  Settings::globalSettings()->sync();
+  AcSettings::globalSettings()->sync();
+  notify(tr("restart the app to use the new language"));
+}
 
 // - Helpers -
 
@@ -6565,7 +6699,7 @@ MainWindow::invalidatePlaylistMenu()
   QList<QAction*> l = playlistMenu_->actions();
   foreach (QAction *a, l)
     if (a && a != clearPlaylistAct_ && a != previousPlaylistItemAct_ && a != nextPlaylistItemAct_)
-      a->deleteLater();
+      QTimer::singleShot(0, a, SLOT(deleteLater()));
   playlistMenu_->clear();
 
   if (!playlist_.isEmpty()) {
@@ -6641,7 +6775,7 @@ MainWindow::invalidateRecentMenu()
   QList<QAction*> l = recentMenu_->actions();
   foreach (QAction *a, l)
     if (a && a != clearRecentAct_)
-      a->deleteLater();
+      QTimer::singleShot(0, a, SLOT(deleteLater()));
   recentMenu_->clear();
 
   if (!recentFiles_.isEmpty()) {
@@ -6695,6 +6829,15 @@ MainWindow::openSource(const QString &path)
   DOUT("path =" << path);
   if (path.isEmpty())
     return;
+  if (path.startsWith("http://annot/")) {
+    QString url = path;
+    url.replace(QRegExp("^http://annot/"), "http://");
+    if (player_->hasMedia())
+      importUrl(url);
+    else
+      openSource(url);
+    return;
+  }
 
   if (isRemoteMrl(path)) {
     openUrl(path);
@@ -6802,7 +6945,7 @@ MainWindow::uncheckSubtitleColorActions()
 void
 MainWindow::setSubtitleColorToDefault()
 {
-  annotationView_->setSubtitlePrefix(QString::null);
+  annotationView_->setSubtitlePrefix(QString());
   uncheckSubtitleColorActions();
   setSubtitleColorToDefaultAct_->setChecked(true);
 }
@@ -6912,6 +7055,25 @@ MainWindow::disableWindowTransparency()
 // - Browse -
 
 void
+MainWindow::openBrowsedDirectory()
+{
+  QFileInfo fi(browsedUrl_);
+  QString path = fi.absolutePath();
+  if (!QFile::exists(path)) {
+    path = G_PATH_DOWNLOADS;
+    if (!QFile::exists(path))
+      path = QDesktopServices::storageLocation(QDesktopServices::DesktopLocation);
+  }
+#ifdef Q_WS_WIN
+  path.replace('\\', '/');
+  path.prepend("file:///");
+#else
+  path.prepend("file://");
+#endif // Q_WS_WIN
+  QDesktopServices::openUrl(path);
+}
+
+void
 MainWindow::setBrowsedUrl(const QString &url)
 {
   DOUT("url =" << url);
@@ -6976,13 +7138,18 @@ MainWindow::invalidateBrowseMenu()
 void
 MainWindow::invalidateBrowseMenu(const QString &fileName)
 {
+  browsedUrl_ = fileName;
   if (!browseMenu_->isEmpty()) {
     foreach (QAction *a, browseMenu_->actions())
       if (a != previousFileAct_ && a != nextFileAct_ &&
-          a !=  moreFilesAct_ && a != lessFilesAct_)
-        a->deleteLater();
+          a !=  moreFilesAct_ && a != lessFilesAct_ &&
+          a != openBrowsedDirectoryAct_)
+        QTimer::singleShot(0, a, SLOT(deleteLater()));
     browseMenu_->clear();
   }
+  browseMenu_->addAction(openBrowsedDirectoryAct_);
+  browseMenu_->addSeparator();
+
   bool remote = isRemoteMrl(fileName);
   if (remote && browsedFiles_.isEmpty() ||
       browsedFiles_.size() <= 1)
@@ -7028,7 +7195,7 @@ MainWindow::lessBrowsedFiles()
   if (browsedFiles_.size() <= decrement)
     return;
 
-  log(tr("less files to browse"));
+  showMessage(tr("less files to browse"));
   while (decrement--)
     browsedFiles_.pop_back();
   invalidateBrowseMenu();
@@ -7057,7 +7224,7 @@ MainWindow::moreBrowsedFiles()
   }
 
   if (id) {
-    log(tr("more files added"));
+    showMessage(tr("more files added"));
     for (int i = id + 1; i <= id + increment; i++) {
       QString f = prefix + QString::number(i) + suffix;
       browsedFiles_.append(f);
@@ -7298,12 +7465,19 @@ MainWindow::addRemoteAnnotations(const AnnotationList &l, const QString &url)
       .arg(tr("annotations found"))
       .arg(QString::number(annots.size()))
       .arg(src);
-    emit logged(msg);
+    emit message(msg);
     emit addAnnotationsRequested(annots);
-    if (t.hasId())
-      dataServer_->updateAnnotations(annots);
+    if (t.hasId() && cache_->isValid())
+      cache_->insertAnnotations(annots);
   }
   DOUT("exit");
+}
+
+void
+MainWindow::importUrl(const QString &url)
+{
+  if (!url.isEmpty())
+    openAnnotationUrl(url, submit_);
 }
 
 void
@@ -7311,8 +7485,8 @@ MainWindow::importAnnotationsFromUrl(const QString &suburl)
 {
   DOUT("enter: import annot from URL:" << suburl);
   if (!suburl.isEmpty()) {
-    QString url = isRemoteMrl(suburl) ? suburl : "http://nicovideo.jp";
-    log(tr("analyzing annotation URL ...") + ": " + url);
+    QString url = isRemoteMrl(suburl) ? suburl : "http://flapi.nicovideo.jp";
+    showMessage(tr("analyzing annotation URL ...") + ": " + url);
     if (registerAnnotationUrl(suburl))
       AnnotationCodecManager::globalInstance()->fetch(suburl);
   }
@@ -7323,7 +7497,14 @@ bool
 MainWindow::isAnnotationUrlRegistered(const QString &suburl) const
 {
   QMutexLocker lock(&annotMutex_);
-  return annotationUrls_.contains(suburl, Qt::CaseInsensitive);
+  QString k = suburl;
+  if (k.endsWith('/'))
+    k.chop(1);
+  else if (k.endsWith("/index.html", Qt::CaseInsensitive))
+    k.remove(QRegExp("/index.html$"));
+  else if (k.endsWith("index_1.html", Qt::CaseInsensitive))
+    k.remove(QRegExp("/index_1.html$"));
+  return annotationUrls_.contains(k, Qt::CaseInsensitive);
 }
 
 bool
@@ -7333,7 +7514,16 @@ MainWindow::registerAnnotationUrl(const QString &suburl)
   if (suburl.isEmpty() ||
       annotationUrls_.contains(suburl, Qt::CaseInsensitive))
     return false;
-  annotationUrls_.append(suburl);
+  QString k = suburl;
+  if (k.endsWith('/'))
+    k.chop(1);
+  else if (k.endsWith("/index.html", Qt::CaseInsensitive))
+    k.remove(QRegExp("/index.html$"));
+  else if (k.endsWith("index_1.html", Qt::CaseInsensitive))
+    k.remove(QRegExp("/index_1.html$"));
+  if (annotationUrls_.contains(k, Qt::CaseInsensitive))
+    return false;
+  annotationUrls_.append(k);
   return true;
 }
 
@@ -7358,7 +7548,7 @@ MainWindow::currentUrl() const
           break;
       }
 
-  return isRemoteMrl(ret) ? ret : QString::null;
+  return isRemoteMrl(ret) ? ret : QString();
 }
 
 void
@@ -7372,11 +7562,25 @@ MainWindow::downloadCurrentUrl()
 }
 
 void
+MainWindow::clickProgressButton()
+{
+  if (player_->isDownloadFinished()) {
+    QString url = "file:///" + player_->downloadPath();
+#ifdef Q_WS_WIN
+    url.replace('\\', '/');
+#endif // Q_WS_WIN
+    QDesktopServices::openUrl(url);
+  } else
+    downloadCurrentUrl();
+}
+
+void
 MainWindow::openInWebBrowser()
 {
   QString url = currentUrl();
   if (!url.isEmpty())
-    QDesktopServices::openUrl(url);
+    //QDesktopServices::openUrl(url);
+    browserDelegate_->openUrl(url);
 }
 
 // - Error handling -
@@ -7493,7 +7697,7 @@ MainWindow::resumePlayPos()
       pos = playPosHistory_[hash];
     DOUT("pos =" << pos);
     if (pos > 0 && pos < player_->mediaLength()) {
-      log(tr("resuming last play") + ": " + QtExt::msecs2time(pos).toString("hh:mm:ss"));
+      showMessage(tr("resuming last play") + ": " + QtExt::msecs2time(pos).toString("hh:mm:ss"));
       pos -= 5000; // seek back 5 seconds
       seek(pos);
     }
@@ -7549,14 +7753,14 @@ MainWindow::resumeSubtitle()
       if (track > 0) {
         QStringList desc = player_->subtitleDescriptions();
         if (track < desc.size())
-          log(tr("loading last subtitle") + ": " + desc[track]);
+          showMessage(tr("loading last subtitle") + ": " + desc[track]);
         else
-          log(tr("loading last subtitle"));
+          showMessage(tr("loading last subtitle"));
         player_->setSubtitleId(track);
       }
       player_->setSubtitleVisible(true);
     } else if (track == -1) {
-      log(tr("hide last subtitle"));
+      showMessage(tr("hide last subtitle"));
       player_->setSubtitleVisible(false);
     }
   }
@@ -7615,9 +7819,9 @@ MainWindow::resumeAudioTrack()
       if (track > 0) {
         QStringList desc =  player_->audioTrackDescriptions();
         if (track < desc.size())
-          log(tr("loading last audio track") + ": " + desc[track]);
+          showMessage(tr("loading last audio track") + ": " + desc[track]);
         else
-          log(tr("loading last audio track"));
+          showMessage(tr("loading last audio track"));
       }
       player_->setAudioTrackId(track);
     }
@@ -7677,7 +7881,7 @@ MainWindow::resumeAspectRatio()
 
     DOUT("ratio =" << ratio);
     if (!ratio.isEmpty()) {
-      log(tr("using last aspect ratio") + ": " + ratio);
+      showMessage(tr("using last aspect ratio") + ": " + ratio);
       player_->setAspectRatio(ratio);
     }
   }
@@ -7783,13 +7987,13 @@ MainWindow::enterAnnotationUrl(const QString &url)
   if (!hub_->isMediaTokenMode())
     return;
   if (isAnnotationUrlRegistered(url)) {
-    log(tr("annot URL is already used") + ": "
+    showMessage(tr("annot URL is already used") + ": "
         HTML_STYLE_OPEN(color:orange) + url + HTML_STYLE_CLOSE()
     );
     return;
   }
   if (url == dataManager_->token().source()) {
-    log(tr("media URL is being played ") + ": "
+    showMessage(tr("media URL is being played ") + ": "
         HTML_STYLE_OPEN(color:orange) + url + HTML_STYLE_CLOSE()
     );
     return;
@@ -7813,7 +8017,7 @@ MainWindow::enterMediaUrl(const QString &url)
   if (!hub_->isMediaTokenMode())
     return;
   if (url == dataManager_->token().source()) {
-    log(tr("media URL is being played ") + ": "
+    showMessage(tr("media URL is being played ") + ": "
         HTML_STYLE_OPEN(color:orange) + url + HTML_STYLE_CLOSE()
     );
     return;
@@ -7825,7 +8029,7 @@ MainWindow::enterMediaUrl(const QString &url)
 
 void
 MainWindow::enterDownloadUrls(const QStringList &urls)
-{ AcDownloaderController::globalController()->openUrls(urls); }
+{ downloaderDelegate_->openUrls(urls); }
 
 // - Close menu -
 
@@ -7836,7 +8040,7 @@ MainWindow::nothingAfterFinished()
   sleepAfterFinishedAct_->setChecked(false);
   shutdownAfterFinishedAct_->setChecked(false);
 
-  log(tr("do nothings after finished playing all files"));
+  showMessage(tr("do nothings after finished playing all files"));
 }
 
 void
@@ -7845,7 +8049,7 @@ MainWindow::sleepAfterFinished()
   nothingAfterFinishedAct_->setChecked(false);
   sleepAfterFinishedAct_->setChecked(true);
   shutdownAfterFinishedAct_->setChecked(false);
-  log(tr("put the computer to sleep after finished playing all files"));
+  showMessage(tr("put the computer to sleep after finished playing all files"));
 }
 
 void
@@ -7854,7 +8058,7 @@ MainWindow::shutdownAfterFinished()
   nothingAfterFinishedAct_->setChecked(false);
   sleepAfterFinishedAct_->setChecked(false);
   shutdownAfterFinishedAct_->setChecked(true);
-  log(tr("shutdown the computer after finished playing all files"));
+  showMessage(tr("shutdown the computer after finished playing all files"));
 }
 
 void
@@ -7863,8 +8067,10 @@ MainWindow::promptSleep()
   if (!sleepAfterFinishedAct_->isChecked())
     return;
   static SleepDialog *d = 0;
-  if (!d)
+  if (!d) {
     d = new SleepDialog(this);
+    windows_.append(d);
+  }
   DOUT("show sleep dialog");
   d->show();
 }
@@ -7875,8 +8081,10 @@ MainWindow::promptShutdown()
   if (!shutdownAfterFinishedAct_->isChecked())
     return;
   static ShutdownDialog *d = 0;
-  if (!d)
+  if (!d) {
     d = new ShutdownDialog(this);
+    windows_.append(d);
+  }
   DOUT("show shutdown dialog");
   d->show();
 }
@@ -7888,7 +8096,7 @@ MainWindow::openProxyBrowser()
 {
   Settings::globalSettings()->sync();
   AcSettings::globalSettings()->sync();
-  AcBrowserController::globalController()->open();
+  browserDelegate_->open();
   /*
   bool ok = false;
 #ifdef Q_WS_MAC
@@ -7915,9 +8123,9 @@ MainWindow::setMultipleWindowsEnabled(bool t)
   Settings::globalSettings()->sync();
   AcSettings::globalSettings()->sync();
   if (t)
-    log(tr("allow multiple player windows"));
+    showMessage(tr("allow multiple player windows"));
   else
-    log(tr("allow single player window"));
+    showMessage(tr("allow single player window"));
 }
 
 void
@@ -7934,7 +8142,7 @@ MainWindow::newWindow()
   QString exe = QCoreApplication::applicationFilePath();
   QProcess::startDetached(exe);
 
-  log(tr("new window launched"));
+  showMessage(tr("new window launched"));
 
   if (!t) {
     s->setMultipleWindowsEnabled(false);
@@ -7970,8 +8178,10 @@ MainWindow::setWideScreenAspectRatio()
 AnnotationAnalyticsView*
 MainWindow::annotationAnalyticsView()
 {
-  if (!annotationAnalyticsView_)
+  if (!annotationAnalyticsView_) {
     annotationAnalyticsView_ = new AnnotationAnalyticsView(dataManager_, this);
+    windows_.append(annotationAnalyticsView_);
+  }
   return annotationAnalyticsView_;
 }
 
@@ -7998,9 +8208,9 @@ MainWindow::setSaveMedia(bool t)
 {
   player_->setBufferSaved(t);
   if (t)
-    log(tr("buffered video will be saved on Desktop"));
+    showMessage(tr("buffered video will be saved on Desktop"));
   else
-    log(tr("buffered video will not be saved"));
+    showMessage(tr("buffered video will not be saved"));
 }
 
 void
@@ -8043,7 +8253,7 @@ MainWindow::removeAnnotationsAt(const QRect &rect)
 void
 MainWindow::resumeAnnotations()
 {
-  log(tr("resume annotations"));
+  showMessage(tr("resume annotations"));
   annotationView_->resume();
 }
 
@@ -8217,6 +8427,21 @@ MainWindow::annotationRotateDown()
   enum { delta = 15 };
   annotationView_->setRotation(annotationView_->rotation() - delta);
 }
+
+void
+MainWindow::increaseAnnotationOffset()
+{
+  enum { delta = 5 };
+  annotationView_->setOffset(annotationView_->offset() + delta);
+}
+
+void
+MainWindow::decreaseAnnotationOffset()
+{
+  enum { delta = 5 };
+  annotationView_->setOffset(annotationView_->offset() - delta);
+}
+
 
 // - Cursor -
 

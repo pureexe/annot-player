@@ -3,8 +3,8 @@
 --[[edit 20110625 for bilibili.tv]]
 --[[edit 20111206 for bilibili.tv]]
 
-require "lalib"
-require "loginconfig"
+require "luascript/lib/lalib"
+require "luascript/loginconfig"
 
 function Login_Bilibili( str_tmp_file )
 	--local str_login_url = "https://secure.bilibili.us/member/index_do.php";

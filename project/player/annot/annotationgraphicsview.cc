@@ -41,7 +41,7 @@ AnnotationGraphicsView::AnnotationGraphicsView(
   : Base(parent), videoView_(view), fullScreenView_(0), trackedWindow_(0), editor_(0),
     hub_(hub), player_(player), filter_(0), renderHint_(DefaultRenderHint), active_(false), paused_(false), fullScreen_(false),
     subtitleVisible_(true), nonSubtitleVisible_(true),
-    currentTime_(-1), interval_(TIMER_INTERVAL), userId_(0), playbackEnabled_(true), subtitlePosition_(AP_Bottom),
+    currentTime_(-1), offset_(0), interval_(TIMER_INTERVAL), userId_(0), playbackEnabled_(true), subtitlePosition_(AP_Bottom),
     scale_(1.0), rotation_(0)
 {
   Q_ASSERT(hub_);
@@ -69,6 +69,14 @@ AnnotationGraphicsView::AnnotationGraphicsView(
   trackingTimer_ = new QTimer(this);
   trackingTimer_->setInterval(G_TRACKING_INTERVAL);
   connect(trackingTimer_, SIGNAL(timeout()), SLOT(invalidateGeometry()));
+
+//#ifdef Q_WS_WIN
+  setRenderHints(
+    //QPainter::Antialiasing
+    QPainter::TextAntialiasing
+    //QPainter::SmoothPixmapTransform // would cost so much CPU
+  );
+//#endif // Q_WS_WIN
 
   //centerOn(0, 0);
 }
@@ -99,7 +107,7 @@ AnnotationEditor*
 AnnotationGraphicsView::editor() const
 {
   if (!editor_) {
-    Self *self = const_cast<Self*>(this);
+    BOOST_AUTO(self, const_cast<Self *>(this));
     AnnotationEditor *ret = new AnnotationEditor(self);
     connect(ret, SIGNAL(textSaved(QString)), SLOT(updateAnnotationText(QString)));
     self->editor_ = ret;
@@ -107,10 +115,6 @@ AnnotationGraphicsView::editor() const
 
   return editor_;
 }
-
-void
-AnnotationGraphicsView::setFullScreenView(QWidget *w)
-{ fullScreenView_ = w; }
 
 void
 AnnotationGraphicsView::setFullScreenMode(bool t)
@@ -123,10 +127,6 @@ AnnotationGraphicsView::setFullScreenMode(bool t)
   }
 }
 
-bool
-AnnotationGraphicsView::isFullScreenMode() const
-{ return fullScreen_; }
-
 void
 AnnotationGraphicsView::removeAnnotationWithId(qint64 id, bool deleteAnnot)
 {
@@ -136,9 +136,9 @@ AnnotationGraphicsView::removeAnnotationWithId(qint64 id, bool deleteAnnot)
       item->removeMe();
 
     bool found = false;
-    for (AnnotationHash::Iterator h = hash_.begin(); h != hash_.end() && !found; ++h) {
+    for (BOOST_AUTO(h, hash_.begin()); h != hash_.end() && !found; ++h) {
       AnnotationList &l = h.value();
-      for (AnnotationList::Iterator p = l.begin(); p != l.end() && !found; ++p)
+      for (BOOST_AUTO(p, l.begin()); p != l.end() && !found; ++p)
         if (p->id() == id) {
           l.erase(p);
           found = true;
@@ -167,7 +167,6 @@ AnnotationGraphicsView::removeAnnotationWithId(qint64 id, bool deleteAnnot)
     //}
   }
 }
-
 
 void
 AnnotationGraphicsView::removeAnnotations()
@@ -430,10 +429,6 @@ AnnotationGraphicsView::setPlaybackEnabled(bool enabled)
 
 // - Pause/resme -
 
-bool
-AnnotationGraphicsView::isPaused() const
-{ return paused_; }
-
 void
 AnnotationGraphicsView::pause()
 {
@@ -454,7 +449,7 @@ void
 AnnotationGraphicsView::pauseItemAt(const QPoint &pos)
 {
   QGraphicsItem *item = itemAt(pos);
-  AnnotationGraphicsItem *a = dynamic_cast<AnnotationGraphicsItem *>(item);
+  BOOST_AUTO(a, dynamic_cast<AnnotationGraphicsItem *>(item));
   if (a)
     a->pause();
 }
@@ -463,7 +458,7 @@ void
 AnnotationGraphicsView::resumeItemAt(const QPoint &pos)
 {
   QGraphicsItem *item = itemAt(pos);
-  AnnotationGraphicsItem *a = dynamic_cast<AnnotationGraphicsItem *>(item);
+  BOOST_AUTO(a, dynamic_cast<AnnotationGraphicsItem *>(item));
   if (a)
     a->pause();
 }
@@ -472,7 +467,7 @@ void
 AnnotationGraphicsView::pauseItems(const QRect &rect, Qt::ItemSelectionMode mode)
 {
   foreach (QGraphicsItem *item, items(rect, mode)) {
-    AnnotationGraphicsItem *a = dynamic_cast<AnnotationGraphicsItem *>(item);
+    BOOST_AUTO(a, dynamic_cast<AnnotationGraphicsItem *>(item));
     if (a)
       a->pause();
   }
@@ -482,7 +477,7 @@ void
 AnnotationGraphicsView::resumeItems(const QRect &rect, Qt::ItemSelectionMode mode)
 {
   foreach (QGraphicsItem *item, items(rect, mode)) {
-    AnnotationGraphicsItem *a = dynamic_cast<AnnotationGraphicsItem *>(item);
+    BOOST_AUTO(a, dynamic_cast<AnnotationGraphicsItem *>(item));
     if (a)
       a->resume();
   }
@@ -492,7 +487,7 @@ void
 AnnotationGraphicsView::removeItems(const QRect &rect, Qt::ItemSelectionMode mode)
 {
   foreach (QGraphicsItem *item, items(rect, mode)) {
-    AnnotationGraphicsItem *a = dynamic_cast<AnnotationGraphicsItem *>(item);
+    BOOST_AUTO(a, dynamic_cast<AnnotationGraphicsItem *>(item));
     if (a)
       a->removeMe();
   }
@@ -502,7 +497,7 @@ bool
 AnnotationGraphicsView::hasPausedItems() const
 {
   foreach (QGraphicsItem *item, items()) {
-    AnnotationGraphicsItem *a = dynamic_cast<AnnotationGraphicsItem *>(item);
+    BOOST_AUTO(a, dynamic_cast<AnnotationGraphicsItem *>(item));
     if (a && a->isPaused())
       return true;
   }
@@ -513,7 +508,7 @@ void
 AnnotationGraphicsView::scalePausedItems(qreal scale)
 {
   foreach (QGraphicsItem *item, items()) {
-    AnnotationGraphicsItem *a = dynamic_cast<AnnotationGraphicsItem *>(item);
+    BOOST_AUTO(a, dynamic_cast<AnnotationGraphicsItem *>(item));
     if (a && a->isPaused())
       a->setScale(a->scale() * scale);
   }
@@ -523,7 +518,7 @@ void
 AnnotationGraphicsView::rotatePausedItems(qreal angle)
 {
   foreach (QGraphicsItem *item, items()) {
-    AnnotationGraphicsItem *a = dynamic_cast<AnnotationGraphicsItem *>(item);
+    BOOST_AUTO(a, dynamic_cast<AnnotationGraphicsItem *>(item));
     if (a && a->isPaused())
       a->setRotation(a->rotation() + angle);
   }
@@ -553,7 +548,7 @@ AnnotationGraphicsView::invalidateCurrentTime()
   // jichi 7/27/2011: Expect this to be a problem
   qint64 secs = msecs / 1000;
   if (secs != currentTime_) { // currentTime_ is used to prevent the same seconds being double displayed
-    currentTime_ = secs;
+    currentTime_ = secs - offset_;
     showAnnotationsAtPos(currentTime_ * 1000);
   }
 }
@@ -693,7 +688,7 @@ AnnotationGraphicsView::itemsCount(int from, int to) const
     DOUT("enter"); \
     if (event) { \
       QGraphicsItem *item = itemAt(mapFromGlobal(event->globalPos())); \
-      AnnotationGraphicsItem *annot = dynamic_cast<AnnotationGraphicsItem*>(item); \
+      BOOST_AUTO(annot, dynamic_cast<AnnotationGraphicsItem *>(item)); \
       if (annot) \
         annot->_receiver(event); \
     } \
@@ -779,7 +774,7 @@ AnnotationGraphicsView::itemWithId(qint64 id) const
   //          return item;
   //return 0;
   foreach (QGraphicsItem *item, scene()->items()) {
-    BOOST_AUTO(a, dynamic_cast<AnnotationGraphicsItem*>(item));
+    BOOST_AUTO(a, dynamic_cast<AnnotationGraphicsItem *>(item));
     if (a && a->annotation().id() == id)
       return a;
   }
@@ -943,8 +938,15 @@ AnnotationGraphicsView::setScale(qreal value)
 void
 AnnotationGraphicsView::setRotation(qreal value)
 {
+  bool paused = paused_;
+  if (!paused)
+    pause(); // lock current items to prevent segmentation fault
+
   qreal delta = value - rotation_;
   Base::rotate(delta);
+
+  if (!paused)
+    QTimer::singleShot(0, this, SLOT(resume()));
 
   rotation_ = value;
   emit rotationChanged(rotation_);

@@ -1,5 +1,7 @@
 // iht/inject.cc
 // 10/14/2011
+// Derived from ith2.
+// See also: ith3/ihf/main.cpp
 #include "ith/inject.h"
 #include "ith/main.h"
 #include "ith/hookman.h"

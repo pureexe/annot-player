@@ -5,7 +5,7 @@
 // 10/7/2011
 
 #include "module/qtext/dialog.h"
-#include <QList>
+#include <QtCore/QList>
 
 QT_FORWARD_DECLARE_CLASS(QComboBox)
 

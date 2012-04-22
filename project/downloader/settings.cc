@@ -14,15 +14,16 @@
 
 // See platform specific issue in QSettings manual.
 #ifdef Q_OS_MAC
-  #define SK_ORGANIZATION   G_DOMAIN
+#  define SK_ORGANIZATION   G_DOMAIN
 #else
-  #define SK_ORGANIZATION   G_ORGANIZATION
+#  define SK_ORGANIZATION   G_ORGANIZATION
 #endif // Q_OS_MAC
 
 #define SK_APPLICATION  G_APPLICATION
 #define SK_VERSION      "Version"
 
 #define SK_RECENT       "Recent"
+#define SK_SIZE         "Size"
 
 // - Constructions -
 
@@ -42,5 +43,55 @@ Settings::version() const
 void
 Settings::setVersion(const QString &version)
 { setValue(SK_VERSION, version); }
+
+// - Recent -
+
+DownloadTaskInfoList
+Settings::recentTasks() const
+{
+  DownloadTaskInfoList ret;
+  QStringList v = value(SK_RECENT).toStringList();
+  if (v.isEmpty() || v.size() % DownloadTaskInfo::FieldCount)
+    return ret;
+
+  DownloadTaskInfo t;
+  for (int i = 0; i < v.size(); i++) {
+    switch (i % DownloadTaskInfo::FieldCount) {
+    case DownloadTaskInfo::StateField:   t.state = v[i].toInt(); break;
+    case DownloadTaskInfo::UrlField:     t.url = v[i]; break;
+    case DownloadTaskInfo::TitleField:   t.title = v[i]; break;
+    case DownloadTaskInfo::FileNameField:t.fileName = v[i];
+                                         ret.append(t); break;
+    default: Q_ASSERT(0);
+    }
+  }
+
+  return ret;
+}
+
+void
+Settings::setRecentTasks(const DownloadTaskInfoList &l)
+{
+  if (l.isEmpty())
+    remove(SK_RECENT);
+  else {
+    QStringList v;
+    foreach (const DownloadTaskInfo &t, l) {
+      v.append(QString::number(t.state));
+      v.append(t.url);
+      v.append(t.title);
+      v.append(t.fileName);
+    }
+    setValue(SK_RECENT, v);
+  }
+}
+
+QSize
+Settings::recentSize() const
+{ return value(SK_SIZE).toSize(); }
+
+void
+Settings::setRecentSize(const QSize &value)
+{ setValue(SK_SIZE, value); }
 
 // EOF

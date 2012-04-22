@@ -5,8 +5,8 @@
 // 3/16/2012
 
 #include "inputoutputstream.h"
-#include <QObject>
-#include <QFile>
+#include <QtCore/QObject>
+#include <QtCore/QFile>
 
 class FileStream : public QObject, public InputOutputStream
 {
@@ -43,10 +43,7 @@ public:
   virtual QByteArray readAll() { return file_->readAll(); } ///< \override
 
   virtual bool writeFile(const QString &fileName) ///< \override
-  {
-    flush();
-    return QFile::copy(file_->fileName(), fileName);
-  }
+  { flush(); return QFile::copy(file_->fileName(), fileName); }
 
   // - Write -
 public:

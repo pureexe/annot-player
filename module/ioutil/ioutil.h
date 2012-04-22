@@ -4,7 +4,7 @@
 // ioutil.h
 // 12/6/2011
 
-#include <QString>
+#include <QtCore/QString>
 
 namespace IOUtil {
 

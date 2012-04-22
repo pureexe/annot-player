@@ -6,10 +6,11 @@
 #ifdef WITH_GPAC
 #  include "gpac/gpac.h"
 #endif // WITH_GPAC
-#include <QtCore>
+#include <QtCore/QFile>
+#include <QtCore/QFileInfo>
+#include <QtCore/QCoreApplication>
 #include <cstring>
 #include <cstdio>
-#include <utility>
 
 #define MP4BOX_BIN      QCoreApplication::applicationDirPath() + "/" "MP4Box"
 
@@ -48,12 +49,8 @@ namespace { // anonymous
     delete[] argv;
   }
 
-  inline
-  QString fix_win_path(const QString &path)
-  {
-    QString ret = path;
-    return ret.replace("/", "\\");
-  }
+  inline QString fix_win_path(const QString &path)
+  { return QString(path).replace("/", "\\"); }
 
 #ifdef Q_OS_WIN
   class FileMangler
@@ -73,7 +70,7 @@ namespace { // anonymous
       QString ret = fi.absolutePath() + "/" + ::tmpnam(0) + "." + fi.suffix();
       //QString ret = ::tmpnam(0) + ("." + fi.suffix());
       if (!QFile::rename(path, ret))
-        return QString::null;
+        return QString();
       store_.append(Pair(path, ret));
       return ret;
     }
@@ -152,7 +149,7 @@ Mp4Box::muxMp4File(const QString &mp4, const QStringList &tracks,
 #else
   {
     QString program = args.first();
-    args.takeFirst();
+    args.removeFirst();
     QProcess proc;
     proc.start(program, args, QIODevice::ReadOnly | QIODevice::Text);
     proc.waitForFinished(-1);
@@ -165,7 +162,7 @@ Mp4Box::muxMp4File(const QString &mp4, const QStringList &tracks,
 
   bool ret = !err && QFile::exists(outputFile);
   if (ret && info) {
-    std::pair<int, int> dim = Mp4Codec::fileDimension(outputFile);
+    QPair<int, int> dim = Mp4Codec::fileDimension(outputFile);
     info->width = dim.first;
     info->height = dim.second;
   }

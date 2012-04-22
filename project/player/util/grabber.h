@@ -4,7 +4,7 @@
 // grabber.h
 // 10/20/2011
 
-#include <QWidget>
+#include <QtGui/QWidget>
 
 class Grabber : public QObject
 {

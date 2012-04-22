@@ -5,9 +5,8 @@
 // 7/16/2011
 
 #include "module/annotcloud/annotation.h"
-#include <QGraphicsTextItem>
-#include <QEasingCurve>
-#include <QStringList>
+#include <QtCore/QEasingCurve>
+#include <QtGui/QGraphicsTextItem>
 
 QT_BEGIN_NAMESPACE
 //class QGraphicsView;
@@ -16,6 +15,7 @@ class QPoint;
 class QTimer;
 class QPropertyAnimation;
 class QAction;
+class QStringList;
 class QContextMenuEvent;
 class QMouseEvent;
 QT_END_NAMESPACE

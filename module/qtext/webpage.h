@@ -4,8 +4,8 @@
 // qtext/webpage.h
 // 4/9/2012
 
-#include <QWebView>
-#include <QNetworkRequest>
+#include <QtWebKit/QWebView>
+#include <QtNetwork/QNetworkRequest>
 
 namespace QtExt {
 
@@ -23,6 +23,11 @@ public:
 
   QString hoveredLink() const { return hoveredLink_; }
 
+  virtual bool event(QEvent *e); ///< \override
+
+signals:
+  void openLinkRequested(QString url);
+
 private slots:
   void setHoveredLink(const QString &url)
   { hoveredLink_ = url; }
@@ -34,6 +39,7 @@ public:
 
 protected:
   bool errorPageExtension(const ErrorPageExtensionOption *option = 0, ErrorPageExtensionReturn *output = 0);
+  //virtual QObject *createPlugin(const QString &classid, const QUrl &url, const QStringList &paramNames, const QStringList &paramValues); ///< \override
 };
 
 } // namespace QtExt

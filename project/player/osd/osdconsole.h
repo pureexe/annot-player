@@ -4,8 +4,8 @@
 // osdconsole.h
 // 7/11/2011
 
-#include <QLabel>
-#include <QMutex>
+#include <QtGui/QLabel>
+#include <QtCore/QMutex>
 
 QT_BEGIN_NAMESPACE
 class QTimer;

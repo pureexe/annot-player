@@ -14,6 +14,7 @@ Tray::Tray(MainWindow *w, QObject *parent)
 {
   Q_ASSERT(w_);
   setIcon(QIcon(RC_IMAGE_APP));
+  setToolTip(TR(T_TITLE_PROGRAM));
 
   createActions();
 
@@ -38,6 +39,7 @@ Tray::createActions()
   //QAction *MAKE_ACTION(openAct,         OPENFILE,       w_,     SLOT(open()))
   QAction *MAKE_ACTION(openFileAct,     OPENFILE,       w_,     SLOT(openFile()))
   QAction *MAKE_ACTION(openUrlAct,      OPENURL,        w_,     SLOT(openUrl()))
+  QAction *MAKE_ACTION(openDirectoryAct,      OPENDIRECTORY,        w_,     SLOT(openBrowsedDirectory()))
   QAction *MAKE_ACTION(openAnnotationUrlAct,   OPENANNOTATIONURL, w_,  SLOT(openAnnotationUrl()))
   QAction *MAKE_ACTION(openWindowAct,   PROCESSPICKDIALOG,w_,   SLOT(openWindow()))
   QAction *MAKE_ACTION(pickWindowAct,   WINDOWPICKDIALOG, w_,   SLOT(showWindowPickDialog()))
@@ -61,6 +63,7 @@ Tray::createActions()
     menu->addAction(openFileAct);
     menu->addAction(openUrlAct);
     menu->addAction(openAnnotationUrlAct);
+    menu->addAction(openDirectoryAct);
 #ifdef USE_MODE_SIGNAL
     menu->addAction(openWindowAct);
 #endif // USE_MODE_SIGNAL
@@ -88,14 +91,15 @@ Tray::activate(ActivationReason reason)
     invalidateContextMenu();
     break;
 
-  case DoubleClick:
-  case MiddleClick:
+  case Trigger:
     restoreAct_->trigger();
     break;
 
-  case Trigger:
-  default:
+  case DoubleClick: case MiddleClick:
     break;
+    w_->openBrowsedDirectory();
+
+  default: ;
   }
 }
 

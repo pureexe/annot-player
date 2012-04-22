@@ -17,13 +17,17 @@
 #include "module/qtext/filesystem.h"
 #include "module/qtext/algorithm.h"
 #include "module/qtext/os.h"
-#include <QDesktopServices>
-#include <QApplication>
+#include "module/qtext/htmltag.h"
+#include <QtNetwork/QNetworkAccessManager>
+#include <QtNetwork/QNetworkReply>
+#include <QtNetwork/QNetworkRequest>
+#include <QtNetwork/QNetworkCookieJar>
 #include <QtCore>
-#include <QtNetwork>
 
 #define DEBUG "httpstreamsession"
 #include "module/debug/debug.h"
+
+enum { MaxDownloadRetries = 3 };
 
 // - Progress -
 
@@ -96,11 +100,11 @@ QString
 HttpStreamSession::contentType() const
 {
   if (ins_.isEmpty())
-    return QString::null;
+    return QString();
 
   RemoteStream *in = dynamic_cast<RemoteStream *>(ins_.first());
   Q_ASSERT(in);
-  return in ? in->contentType() : QString::null;
+  return in ? in->contentType() : QString();
 }
 
 void
@@ -126,8 +130,7 @@ HttpStreamSession::invalidateFileName()
 {
   //bool mp4 = contentType().contains("mp4", Qt::CaseInsensitive);
   QString suf = ".flv";
-  QString dir = QDesktopServices::storageLocation(QDesktopServices::DesktopLocation) + "/Annot";
-  fileName_ = dir + "/" + QtExt::escapeFileName(mediaTitle()) + suf;
+  fileName_ = cachePath() + "/" + QtExt::escapeFileName(mediaTitle()) + suf;
 }
 
 // - Actions -
@@ -162,7 +165,6 @@ HttpStreamSession::save()
     DOUT("warning: failed to update FLV meta:" << fileName_);
 
   emit message(tr("file saved") + ": " + fileName_);
-  QApplication::beep();
   emit fileSaved(fileName_);
   DOUT("exit");
 }
@@ -261,30 +263,49 @@ HttpStreamSession::run()
   if (mediaTitle().isEmpty())
     setMediaTitle(QDateTime::currentDateTime().toString(Qt::ISODate));
 
-  bool ok = true;
+  int count = 0;
 
   foreach (const QUrl &url, QtExt::revertList(urls_)) {
-    RemoteStream *in = new BufferedRemoteStream;
-    //QtExt::ProgressWithId p((long)in);
-    //connect(in, SIGNAL(progress(qint64,qint64)), &p, SLOT(emit_progress(qint64,qint64)));
-    //connect(&p, SIGNAL(progress(qint64,qint64,long)), SLOT(updateProgressWithId(qint64,qint64,long)), Qt::QueuedConnection);
-    in->setUrl(url);
+    emit message(
+      (tr("preparing") + HTML_STYLE_OPEN(color:orange) " %1/%2: " HTML_STYLE_CLOSE())
+        .arg(QString::number(++count))
+        .arg(QString::number(urls_.size()))
+      + url.toString()
+    );
 
-    if (cookieJar())
-      in->networkAccessManager()->setCookieJar(cookieJar());
-    in->run();
-    ins_.prepend(in);
-    in->waitForReady();
-
-    QString type = in->contentType();
-    ok = isMultiMediaMimeType(type);
-    if (!ok) {
-      DOUT("WARNING: invalid contentType =" << type << ", url =" << url.toString());
-      ins_.removeFirst();
+    bool ok = false;
+    for (int i = 0; i < MaxDownloadRetries && !ok; i++) {
+      RemoteStream *in = new BufferedRemoteStream;
+      //QtExt::ProgressWithId p((long)in);
+      //connect(in, SIGNAL(progress(qint64,qint64)), &p, SLOT(emit_progress(qint64,qint64)));
+      //connect(&p, SIGNAL(progress(qint64,qint64,long)), SLOT(updateProgressWithId(qint64,qint64,long)), Qt::QueuedConnection);
+      in->setUrl(url);
+      if (cookieJar()) {
+        in->networkAccessManager()->setCookieJar(cookieJar());
+        cookieJar()->setParent(0);
+      }
+      in->run();
+      ins_.prepend(in);
+      in->waitForReady();
+      QString type = in->contentType();
+      ok = isMultiMediaMimeType(type);
+      if (!ok) {
+        DOUT("invalid contentType =" << type << ", url =" << url.toString());
+        ins_.removeFirst();
+        in->stop();
+        QTimer::singleShot(0, in, SLOT(deleteLater()));
+        emit warning(
+          QString("%1 (%2/%3): ")
+          .arg(tr("failed to fetch HTTP header, retry"))
+          .arg(QString::number(i+1))
+          .arg(QString::number(MaxDownloadRetries))
+          + url.toString()
+        );
+      }
     }
+    if (!ok)
+      DOUT("WARNING: failed to download url:" << url.toString());
   }
-  if (cookieJar())
-    cookieJar()->setParent(0);
 
   //if (reply_->error() != QNetworkReply::NoError) {
   //  setState(Error);
@@ -296,7 +317,7 @@ HttpStreamSession::run()
   //  return;
   //}
 
-  if (ins_.isEmpty()) {
+ if (ins_.isEmpty()) {
     DOUT("access forbidden");
     setState(Error);
     emit error(tr("access forbidden") + ": " + urls_.first().toString());
@@ -332,7 +353,10 @@ HttpStreamSession::run()
   //progressTimer.stop();
 
   //ins_.reset();
-  ok = merger_->parse();
+
+  emit message(tr("buffering ..."));
+
+  bool ok = merger_->parse();
   if (ok) {
     duration_ = merger_->duration();
     DOUT("duration =" << duration_);

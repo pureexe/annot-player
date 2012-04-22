@@ -4,42 +4,17 @@
 #include "datamanager.h"
 #include <QtGui>
 #include <boost/typeof/typeof.hpp>
+#include <climits>
 
 using namespace AnnotCloud;
 
-// - User -
+// - Construction -
 
-void
-DataManager::setUser(const User &user)
-{
-  user_ = user;
-  emit userChanged(user_);
-}
-
-// - Token -
-
-void
-DataManager::setToken(const Token &token)
-{
-  token_ = token;
-  emit tokenChanged(token_);
-}
+DataManager::DataManager(QObject *parent)
+  : Base(parent), minAnnotTime_(LLONG_MAX), maxAnnotTime_(0)
+{ }
 
 // - Alias -
-
-void
-DataManager::setAliases(const AliasList &aliases)
-{
-  aliases_ = aliases;
-  emit aliasesChanged(aliases_);
-}
-
-void
-DataManager::addAlias(const Alias &alias)
-{
-  aliases_.append(alias);
-  emit aliasAdded(alias);
-}
 
 void
 DataManager::updateAlias(const Alias &alias)
@@ -70,36 +45,58 @@ DataManager::removeAliasWithId(qint64 id)
   emit aliasRemovedWithId(id);
 }
 
-
 // - Annotation -
 
 void
-DataManager::setAnnotations(const AnnotationList &annots)
+DataManager::invalidateAnnotations()
 {
-  annots_ = annots;
+  maxAnnotTime_ = 0;
+  minAnnotTime_ = LLONG_MAX;
+
+  userAnnotCount_.clear();
+  foreach (const Annotation &a, annots_) {
+    ++userAnnotCount_[a.userId()];
+    qint64 t = a.createTime();
+    if (t > Traits::MIN_TIME && t < Traits::MAX_TIME) {
+      if (t > maxAnnotTime_)
+        maxAnnotTime_ = t;
+      if (t < minAnnotTime_)
+        minAnnotTime_ = t;
+    }
+  }
+
   emit annotationsChanged(annots_);
 }
 
 void
-DataManager::addAnnotation(const Annotation &annot)
+DataManager::addAnnotation(const Annotation &a)
 {
-  annots_.append(annot);
-  emit annotationAdded(annot);
+  annots_.append(a);
+  ++userAnnotCount_[a.userId()];
+
+  qint64 t = a.createTime();
+  if (t > Traits::MIN_TIME && t < Traits::MAX_TIME) {
+    if (t > maxAnnotTime_)
+      maxAnnotTime_ = t;
+    if (t < minAnnotTime_)
+      minAnnotTime_ = t;
+  }
+  emit annotationAdded(a);
 }
 
 void
-DataManager::updateAnnotation(const Annotation &annot)
+DataManager::updateAnnotation(const Annotation &a)
 {
-  if (!annots_.isEmpty() && annot.hasId()) {
+  if (!annots_.isEmpty() && a.hasId()) {
     BOOST_AUTO(p, annots_.begin());
     while (p != annots_.end())
-      if (p->id() == annot.id())
+      if (p->id() == a.id())
         p = annots_.erase(p);
       else
         ++p;
   }
-  annots_.append(annot);
-  emit annotationUpdated(annot);
+  annots_.append(a);
+  emit annotationUpdated(a);
 }
 
 void

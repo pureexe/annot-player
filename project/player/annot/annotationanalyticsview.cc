@@ -56,6 +56,13 @@ AnnotationAnalyticsView::AnnotationAnalyticsView(DataManager *data, QWidget *par
   setWindowTitle(TR(T_TITLE_ANNOTANALYTICS));
   resize(WINDOW_SIZE);
 
+  webView()->setRenderHints(
+    QPainter::Antialiasing |
+    QPainter::TextAntialiasing |
+    //QPainter::HighQualityAntialiasing |
+    QPainter::SmoothPixmapTransform
+  );
+
   setupActions();
 
   connect(this, SIGNAL(windowTitleChanged(QString)), SLOT(setWindowTitle(QString)), Qt::QueuedConnection);
@@ -90,7 +97,7 @@ AnnotationAnalyticsView::refresh()
   enum { AsyncLimit = 500 };
 
   DOUT("enter: refreshing =" << refreshing_);
-  log("analyzing annotations ...");
+  log(tr("analyzing annotations ..."));
   if (!refreshing_) {
     refreshing_ = true;
     setWindowTitle(tr("Refreshing ..."));
@@ -138,15 +145,12 @@ AnnotationAnalyticsView::invalidateAnnotations(bool async)
   DOUT("exit");
 }
 
-// EOF
-/*
-
 void
 AnnotationAnalyticsView::setVisible(bool visible)
 {
   if (visible)
-    refresh();
+    raise();
   Base::setVisible(visible);
 }
 
-*/
+// EOF

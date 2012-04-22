@@ -6,8 +6,8 @@
 
 #include "processinfo.h"
 #include "module/qtext/dialog.h"
-#include <QModelIndex>
-#include <QHash>
+#include <QtCore/QModelIndex>
+#include <QtCore/QHash>
 
 QT_BEGIN_NAMESPACE
 class QAction;

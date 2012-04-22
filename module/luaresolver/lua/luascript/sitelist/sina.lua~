@@ -4,7 +4,7 @@
 --[[edit 20110314 for video tag]]
 --[[edit lostangel 20110402 for subxml return struct]]
 
-require "lalib"
+require "luascript/lib/lalib"
 
 --[[parse single sina url]]
 function getTaskAttribute_sina ( str_url, str_tmpfile , pDlg)
@@ -93,7 +93,7 @@ function getTaskAttribute_sina ( str_url, str_tmpfile , pDlg)
 	local int_realurlnum = 0;
 	local tbl_realurls = {};
 	--fetch dynamic url
-	int_realurlnum, tbl_realurls = getRealUrls(str_id, str_tmpfile, pDlg);
+	int_realurlnum, tbl_readurls = getRealUrls(str_id, str_tmpfile, pDlg);
 
 
 	if pDlg~=nil then
@@ -107,7 +107,7 @@ function getTaskAttribute_sina ( str_url, str_tmpfile , pDlg)
 	tbl_ta["descriptor"] = "sina" .. str_id .. " - " .. str_title;
 	tbl_ta["subxmlurl"] = tbl_subxmlurls;
 	tbl_ta["realurlnum"] = int_realurlnum;
-	tbl_ta["realurls"] = tbl_realurls;
+	tbl_ta["realurls"] = tbl_readurls;
 	tbl_ta["oriurl"] = str_url;
 
 	local tbl_resig = {};

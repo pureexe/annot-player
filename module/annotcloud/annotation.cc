@@ -4,7 +4,6 @@
 #include "module/annotcloud/annotation.h"
 #include "module/qtext/hash.h"
 #include "module/crypt/crypt.h"
-#include <QMetaType>
 
 using namespace AnnotCloud;
 using namespace QtExt;

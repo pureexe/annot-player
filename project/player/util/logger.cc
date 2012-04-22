@@ -26,7 +26,7 @@ Logger::log(const QString &message)
       //+ message.right(RIGHT_LENGTH) +
       HTML_STYLE_CLOSE() HTML_BR()
     );
-  LoggerSignals::globalInstance()->emit_logged(
+  LoggerSignals::globalInstance()->showMessage(
     HTML_STYLE_OPEN(color:blue) ": "
     + message +
     HTML_STYLE_CLOSE()
@@ -52,7 +52,7 @@ Logger::notify(const QString &message)
       //+ message.right(RIGHT_LENGTH) +
       HTML_STYLE_CLOSE() HTML_BR()
     );
-  LoggerSignals::globalInstance()->emit_notified(
+  LoggerSignals::globalInstance()->showNotification(
     HTML_STYLE_OPEN(color:cyan) ": "
     + message +
     HTML_STYLE_CLOSE()
@@ -78,7 +78,7 @@ Logger::warn(const QString &message)
       //+ message.right(RIGHT_LENGTH) +
       HTML_STYLE_CLOSE() HTML_BR()
     );
-  LoggerSignals::globalInstance()->emit_warned(
+  LoggerSignals::globalInstance()->showWarning(
     HTML_STYLE_OPEN(color:cyan) ": "
     + message +
     HTML_STYLE_CLOSE()
@@ -104,7 +104,7 @@ Logger::error(const QString &message)
       //+ message.right(RIGHT_LENGTH) +
       HTML_STYLE_CLOSE() HTML_BR()
     );
-  LoggerSignals::globalInstance()->emit_errored(
+  LoggerSignals::globalInstance()->showError(
     HTML_STYLE_OPEN(color:red) ": "
     + message +
     HTML_STYLE_CLOSE()

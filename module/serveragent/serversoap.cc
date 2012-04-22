@@ -4,10 +4,10 @@
 #include "serversoap.h"
 
 #ifdef _MSC_VER
-  #pragma warning (disable:4100)  // C4100: unreferenced formal parameter
+#  pragma warning (disable:4100)  // C4100: unreferenced formal parameter
 #endif // _MSC_VER
 #ifdef __GNUC__
-  #pragma GCC diagnostic ignored "-Wunused-parameter" // unused function parameters
+#  pragma GCC diagnostic ignored "-Wunused-parameter" // unused function parameters
 #endif // __GNUC__
 
 //#include "serversoap/ServerAgentServiceSoapBinding.nsmap"

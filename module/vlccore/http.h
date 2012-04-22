@@ -8,9 +8,9 @@
 #  pragma warning (disable:4996)       // C4996: MS' deprecated std functions orz.
 #endif // _MSC_VER
 
-#include <QObject>
-#include <QString>
-#include <QStringList>
+#include <QtCore/QObject>
+#include <QtCore/QString>
+#include <QtCore/QStringList>
 
 #ifdef _MSC_VER
 typedef size_t ssize_t;
@@ -36,6 +36,7 @@ class VlcHttpPlugin : public QObject
   static qint64 duration_;
   static QString mediaTitle_;
   static bool bufferSaved_;
+  static QString cachePath_;
 
 public:
   static Self *globalInstance() { static Self g; return &g; }
@@ -46,6 +47,7 @@ protected:
 signals:
   void error(const QString &msg);
   void message(const QString &msg);
+  void warning(const QString &msg);
   void fileSaved(const QString &fileName);
   void progress(qint64 receivedBytes, qint64 totalBytes);
 
@@ -54,7 +56,9 @@ public:
   static void unload();
 
   static bool isBufferSaved() { return bufferSaved_; }
+  static QString cachePath() { return cachePath_; }
 
+  static void setCachePath(const QString &path) { cachePath_ = path; }
   static void setCookieJar(QNetworkCookieJar *jar) { cookieJar_ = jar; }
   static void setBufferSaved(bool t);
   static void setUrls(const QStringList &urls) { urls_ = urls; }

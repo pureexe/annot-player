@@ -31,9 +31,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #ifndef SIMPLECRYPT_H
 #define SIMPLECRYPT_H
-#include <QString>
-#include <QVector>
-#include <QFlags>
+#include <QtCore/QString>
+#include <QtCore/QVector>
+#include <QtCore/QFlags>
 
 /**
   @short Simple encryption and decryption of strings and byte arrays
@@ -179,7 +179,7 @@ public:
 
       If an error occured, such as non-matching keys between encryption and decryption,
       an empty string or a string containing nonsense may be returned.
-      */   
+      */
     QString decryptToString(const QString& cyphertext) ;
     /**
       Decrypts a cyphertext string encrypted with this class with the set key back to the

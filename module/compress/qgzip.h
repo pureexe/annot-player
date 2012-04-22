@@ -4,8 +4,7 @@
 // qgzip.h
 // 2/3/2012
 
-#include <QByteArray>
-
+#include <QtCore/QByteArray>
 
 QByteArray gUncompress(const QByteArray &data, int zWindowBits = 0);
 

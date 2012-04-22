@@ -15,8 +15,8 @@
 #ifdef WITH_MODULE_VLCCORE
 #  include "module/vlccore/http.h"
 #endif // WITH_MODULE_VLCCORE
-#include <QObject>
-#include <QList>
+#include <QtCore/QObject>
+#include <QtCore/QList>
 #include <memory>
 extern "C" {
   #include <vlc/vlc.h>
@@ -25,7 +25,7 @@ extern "C" {
 
 //#define VLC_DEBUG
 #ifdef PLAYER_DEBUG
-  #define VLC_DEBUG
+#  define VLC_DEBUG
 #endif // PLAYER_DEBUG
 
 // - VLC arguments -
@@ -48,7 +48,6 @@ namespace { // anonymous
     return _cs(path);
 #endif // Q_OS_WIN
   }
-
 
   inline void vlc_reset_env()
   {
@@ -263,6 +262,7 @@ namespace { // anonymous: player states
     bool keyEnabled_;
     bool mouseEventEnabled_;
 
+    qint64 mediaSize_;
     QString mediaPath_;
     QString mediaTitle_;
     int subtitleId_;
@@ -278,6 +278,7 @@ namespace { // anonymous: player states
     mp_states_()
       : paused_(false), embedded_(false),
         mouseEnabled_(true), keyEnabled_(false), mouseEventEnabled_(false),
+        mediaSize_(0),
         subtitleId_(0), titleId_(0), trackNumber_(0),
         voutWindow_(0)
     { }
@@ -300,14 +301,17 @@ namespace { // anonymous: player states
     //bool isSubtitleVisible() const { return subtitleVisible_; }
     //void setSubtitleVisible(bool t = true) { subtitleVisible_ = t; }
 
+    const qint64 &mediaSize() const { return mediaSize_; }
+    void setMediaSize(qint64 size = 0) { mediaSize_ = size; }
+
     const QString &mediaPath() const { return mediaPath_; }
-    void setMediaPath(const QString &path = QString::null) { mediaPath_ = path; }
+    void setMediaPath(const QString &path = QString()) { mediaPath_ = path; }
 
     const QString &mediaTitle() const { return mediaTitle_; }
-    void setMediaTitle(const QString &title = QString::null) { mediaTitle_ = title; }
+    void setMediaTitle(const QString &title = QString()) { mediaTitle_ = title; }
 
     const QString &userAgent() const { return userAgent_; }
-    void setUserAgent(const QString &agent = QString::null) { userAgent_ = agent; }
+    void setUserAgent(const QString &agent = QString()) { userAgent_ = agent; }
 
     int trackNumber() const { return trackNumber_; }
     void setTrackNumber(int track = 0) { trackNumber_ = track; }
@@ -380,7 +384,7 @@ namespace Player_slots_ {
     { Q_ASSERT(p_); }
 
   public slots:
-    void setTrackNumber()
+    void trigger()
     {
       p_->setTrackNumber(track_);
       QTimer::singleShot(0, this, SLOT(deleteLater()));

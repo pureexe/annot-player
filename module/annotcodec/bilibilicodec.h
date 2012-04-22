@@ -5,7 +5,6 @@
 // 2/3/2012
 
 #include "annotationcodec.h"
-#include <QByteArray>
 
 QT_FORWARD_DECLARE_CLASS(QNetworkAccessManager)
 QT_FORWARD_DECLARE_CLASS(QNetworkReply)

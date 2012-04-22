@@ -22,15 +22,16 @@ mac:    INCLUDEPATH     += $$ROOTDIR/mac
 
 ## Compiling options
 
+mac:    CONFIG -= ppc ppc64
+
 DEFINES += UNICODE
 
 #CONFIG += x86 x86_64 ppc64
-CONFIG -= ppc ppc64
 
 # C++0x
-win32:  QMAKE_CXXFLAGS  += -Zc:auto
-unix:   QMAKE_CXXFLAGS  += -std=c++0x
-mac:    QMAKE_CXXFLAGS  -= -std=c++0x
+win32:  QMAKE_CXXFLAGS += -Zc:auto
+unix:   QMAKE_CXXFLAGS += -std=c++0x
+mac:    QMAKE_CXXFLAGS -= -std=c++0x
 
 # MSVC
 win32 {
@@ -223,13 +224,13 @@ DEFINES += VERSION=\\\"$$VERSION\\\"
 
 ## Domains and accounts
 
-DEFINES += NICO_PROXY_DOMAIN=\\\"sakuradite.com\\\"
-
 DEFINES += NICOVIDEO_USERNAME=\\\"oedivocin@gmail.com\\\" \
            NICOVIDEO_PASSWORD=\\\"nicovideo.jp\\\"
 
+#DEFINES += ANNOT_PROXY_DOMAIN=\\\"sakuradite.com\\\"
+DEFINES += ANNOT_PROXY_DOMAIN=\\\"210.175.52.140\\\"
 DEFINES += ANNOT_HOST_IP=\\\"210.175.54.32\\\" \
-           ANNOT_WIKI_IP=\\\"184.168.30.43\\\"
+           ANNOT_DOC_IP=\\\"210.175.52.140\\\"
 
 # EOF
 

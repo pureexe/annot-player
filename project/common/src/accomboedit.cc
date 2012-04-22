@@ -15,6 +15,7 @@ AcComboEdit::init()
   contextMenuFlags_ = PopupAction | ClearAction;
 
   setLineEdit(new AcComboBoxLineEdit);
+  connect(lineEdit(), SIGNAL(returnPressed()), SLOT(hidePopup()));
 
   createActions();
 
@@ -35,7 +36,7 @@ AcComboEdit::createActions()
   popupAct = new QAction(this); {
     popupAct->setText(tr("History"));
     popupAct->setToolTip(tr("History"));
-    connect(popupAct, SIGNAL(triggered()), SLOT(popup()));
+    connect(popupAct, SIGNAL(triggered()), SLOT(showPopup()));
   }
   clearAct = new QAction(this); {
     clearAct->setText(tr("Clear"));
@@ -92,28 +93,28 @@ AcComboEdit::contextMenuEvent(QContextMenuEvent *event)
   }
 
   // Create menus
-  QMenu m;
-  AcUi::globalInstance()->setContextMenuStyle(&m, false); // persistent = false
+  QMenu *m = new QMenu(this);
+  AcUi::globalInstance()->setContextMenuStyle(m, false); // persistent = false
 
   if (contextMenuFlags_ & PasteAndGoAction) {
     pasteAndGoAct->setEnabled(!isClipboardEmpty());
-    m.addAction(pasteAndGoAct);
+    m->addAction(pasteAndGoAct);
   }
 
   if ((contextMenuFlags_ & PopupAction) && count())
-    m.addAction(popupAct);
+    m->addAction(popupAct);
 
   if (contextMenuFlags_ & ClearAction)
-    m.addAction(clearAct);
+    m->addAction(clearAct);
 
-  m.addSeparator();
-
+  m->addSeparator();
 
   QMenu *scm = lineEdit()->createStandardContextMenu();
-  m.addActions(scm->actions());
+  m->addActions(scm->actions());
 
-  m.exec(event->globalPos());
+  m->exec(event->globalPos());
   delete scm;
+  QTimer::singleShot(0, m, SLOT(deleteLater()));
   event->accept();
 }
 

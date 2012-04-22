@@ -4,8 +4,8 @@
 // qtext/toolbutton.h
 // 8/6/2011
 
-#include <QToolButton>
-#include <QCursor>
+#include <QtGui/QToolButton>
+#include <QtGui/QCursor>
 
 namespace QtExt {
 

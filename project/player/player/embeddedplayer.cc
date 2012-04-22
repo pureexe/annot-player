@@ -5,6 +5,7 @@
 #include "embeddedcanvas.h"
 #include "embeddedinfoview.h"
 #include "positionslider.h"
+#include "annotationgraphicsview.h"
 #include "global.h"
 #include "tr.h"
 #include "signalhub.h"
@@ -77,6 +78,7 @@ EmbeddedPlayerUi::EmbeddedPlayerUi(SignalHub *hub, Player *player, ServerAgent *
   canvas_->hide();
   connect(canvas_, SIGNAL(visibleChanged(bool)), infoView_, SLOT(setInvisible(bool)));
   connect(canvas_, SIGNAL(visibleChanged(bool)), SLOT(invalidateGeometry()), Qt::QueuedConnection);
+  connect(annot, SIGNAL(offsetChanged(qint64)), canvas_, SLOT(setOffset(qint64)));
 
   createLayout();
 

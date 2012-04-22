@@ -2,7 +2,7 @@
 // 9/3/2011
 
 #include "module/qtext/dialog.h"
-#include <QMouseEvent>
+#include <QtGui/QMouseEvent>
 
 #define BAD_POS     QPoint(-1, -1)
 

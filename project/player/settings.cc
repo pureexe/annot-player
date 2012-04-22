@@ -12,6 +12,8 @@
 #define DEBUG "settings"
 #include "module/debug/debug.h"
 
+using namespace AnnotCloud;
+
 // - Settings keys -
 
 // See platform specific issue in QSettings manual.
@@ -23,6 +25,7 @@
 
 #define SK_APPLICATION    G_APPLICATION
 #define SK_VERSION        "Version"
+#define SK_PATH           "Path"
 
 #define SK_ANNOTLANGUAGES "AnnotLanguages"
 #define SK_LIVE         "Live"
@@ -42,6 +45,7 @@
 #define SK_ANNOTFILTER  "AnnotationFilter"
 #define SK_ANNOTCOUNT   "AnnotationCount"
 #define SK_ANNOTEFFECT  "AnnotationEffect"
+#define SK_ANNOTOFFSET  "AnnotationOffset"
 #define SK_AUTOPLAYNEXT "AutoPlayNext"
 #define SK_BLOCKEDUSERS "BlockedUsers"
 #define SK_BLOCKEDKEYS  "BlockedKeywords"
@@ -77,6 +81,14 @@ void
 Settings::setVersion(const QString &version)
 { setValue(SK_VERSION, version); }
 
+QString
+Settings::applicationFilePath() const
+{ return value(SK_PATH).toString(); }
+
+void
+Settings::setApplicationFilePath(const QString &path)
+{ setValue(SK_PATH, path); }
+
 void
 Settings::setAnnotationEffect(int id)
 { setValue(SK_ANNOTEFFECT, id); }
@@ -84,6 +96,14 @@ Settings::setAnnotationEffect(int id)
 int
 Settings::annotationEffect() const
 { return value(SK_ANNOTEFFECT).toInt(); }
+
+void
+Settings::setAnnotationOffset(qint64 offset)
+{ setValue(SK_ANNOTOFFSET, offset); }
+
+qint64
+Settings::annotationOffset() const
+{ return value(SK_ANNOTOFFSET).toLongLong(); }
 
 QDate
 Settings::updateDate() const
@@ -107,7 +127,7 @@ Settings::setSubtitleColor(int colorId)
 qint64
 Settings::annotationLanguages() const
 {
-  enum { defval = AnnotCloud::Traits::AnyLanguageBit };
+  enum { defval = Traits::AllLanguages };
   return value(SK_ANNOTLANGUAGES, defval).toLongLong();
 }
 
@@ -274,16 +294,16 @@ Settings::setRecentFiles(const QStringList &l)
     setValue(SK_RECENT, l);
 
   //QString
-  //r = l.size() <= 0 ? QString::null : l[0]; setValue(SK_RECENT(0), r);
-  //r = l.size() <= 1 ? QString::null : l[1]; setValue(SK_RECENT(1), r);
-  //r = l.size() <= 2 ? QString::null : l[2]; setValue(SK_RECENT(2), r);
-  //r = l.size() <= 3 ? QString::null : l[3]; setValue(SK_RECENT(3), r);
-  //r = l.size() <= 4 ? QString::null : l[4]; setValue(SK_RECENT(4), r);
-  //r = l.size() <= 5 ? QString::null : l[5]; setValue(SK_RECENT(5), r);
-  //r = l.size() <= 6 ? QString::null : l[6]; setValue(SK_RECENT(6), r);
-  //r = l.size() <= 7 ? QString::null : l[7]; setValue(SK_RECENT(7), r);
-  //r = l.size() <= 8 ? QString::null : l[8]; setValue(SK_RECENT(8), r);
-  //r = l.size() <= 9 ? QString::null : l[9]; setValue(SK_RECENT(9), r);
+  //r = l.size() <= 0 ? QString() : l[0]; setValue(SK_RECENT(0), r);
+  //r = l.size() <= 1 ? QString() : l[1]; setValue(SK_RECENT(1), r);
+  //r = l.size() <= 2 ? QString() : l[2]; setValue(SK_RECENT(2), r);
+  //r = l.size() <= 3 ? QString() : l[3]; setValue(SK_RECENT(3), r);
+  //r = l.size() <= 4 ? QString() : l[4]; setValue(SK_RECENT(4), r);
+  //r = l.size() <= 5 ? QString() : l[5]; setValue(SK_RECENT(5), r);
+  //r = l.size() <= 6 ? QString() : l[6]; setValue(SK_RECENT(6), r);
+  //r = l.size() <= 7 ? QString() : l[7]; setValue(SK_RECENT(7), r);
+  //r = l.size() <= 8 ? QString() : l[8]; setValue(SK_RECENT(8), r);
+  //r = l.size() <= 9 ? QString() : l[9]; setValue(SK_RECENT(9), r);
 }
 
 void
@@ -464,7 +484,12 @@ Settings::brightness() const
 
 void
 Settings::setAnnotationScale(qreal v)
-{ setValue(SK_ANNOTSCALE, v); }
+{
+  if (qFuzzyCompare(v, 1))
+    remove(SK_ANNOTSCALE);
+  else
+    setValue(SK_ANNOTSCALE, v);
+}
 
 qreal
 Settings::annotationScale() const

@@ -10,12 +10,12 @@
 #endif // _MSC_VER
 
 #include "module/qtext/stoppable.h"
-#include <QThread>
-#include <QWaitCondition>
-#include <QMutex>
-#include <QMutexLocker>
-#include <QString>
-#include <QUrl>
+#include <QtCore/QThread>
+#include <QtCore/QWaitCondition>
+#include <QtCore/QMutex>
+#include <QtCore/QMutexLocker>
+#include <QtCore/QString>
+#include <QtCore/QUrl>
 
 QT_FORWARD_DECLARE_CLASS(QNetworkCookieJar)
 QT_FORWARD_DECLARE_CLASS(QNetworkReply)

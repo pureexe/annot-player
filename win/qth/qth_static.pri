@@ -54,7 +54,6 @@ HEADERS += \
     ith/main.h \
     ith/main_template.h \
     ith/pipe.h \
-    ith/protocol.h \
     ith/query.h \
     ith/sys.h \
     ith/text.h

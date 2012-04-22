@@ -179,12 +179,12 @@ TokenView::currentAliasText() const
 {
   QModelIndex index = currentIndex();
   if (!index.isValid())
-    return QString::null;
+    return QString();
 
   int row = index.row();
   index = index.sibling(row, HD_Text);
   if (!index.isValid())
-    return QString::null;
+    return QString();
 
   return index.data().toString();
 }

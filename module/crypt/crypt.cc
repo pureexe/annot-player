@@ -3,7 +3,7 @@
 
 #include "module/crypt/crypt.h"
 #include "module/crypt/simplecrypt.h"
-#include <QtCore>
+#include <QtCore/QCryptographicHash>
 
 QByteArray
 Crypt::sha1(const QByteArray &input)

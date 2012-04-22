@@ -31,6 +31,37 @@ MediaInfoView::invalidateText()
 
   // Player
   if (hub_->isMediaTokenMode() && player_->hasMedia()) {
+    // Media
+    QSize sz = player_->videoDimension();
+    qint64 size = player_->mediaSize();
+    QString sizeField;
+    if (size < 1024)
+      sizeField = QString::number(size) + "B ";
+    else if (size < 1024 * 1024)
+      sizeField = QString::number(size / 1014) + "KB ";
+    else
+      sizeField = QString::number(size / (1024.0 * 1024), 'f', 1) + "MB ";
+    t->append(QString("- %1 -").arg(tr("Codec")), Qt::red);
+    t->append(QString("%1: %2, %3kbps")
+      .arg(TR(T_DATA))
+      .arg(sizeField)
+      .arg(QString::number(player_->bitrate() / 1000, 'f', 1))
+    );
+    t->append(QString("%1: %2, %3x%4, %5fps")
+      .arg(TR(T_VIDEO))
+      .arg(player_->videoCodecName().toUpper())
+      .arg(QString::number(sz.width()))
+      .arg(QString::number(sz.height()))
+      .arg(QString::number(player_->fps(), 'f', 1))
+    );
+    t->append(QString("%1: %2, %3%4 x %5%6")
+      .arg(TR(T_AUDIO))
+      .arg(player_->audioCodecName().toUpper())
+      .arg(QString::number(player_->audioRate())).arg(tr("Hz"))
+      .arg(QString::number(player_->audioChannels())).arg(tr("ch"))
+    );
+
+    // Render
     qreal contrast = player_->contrast();
     qreal brightness = player_->brightness();
     int hue = player_->hue();
@@ -52,24 +83,29 @@ MediaInfoView::invalidateText()
        .arg(TR(T_BRIGHTNESS)).arg(QString::number(brightness))
     );
 
-    // Media
-    QSize sz = player_->videoDimension();
-    t->append(QString("- %1 -").arg(tr("Codec")), Qt::red);
-    t->append(QString("%1: %2, %3x%4, %5fps, %6bps")
-      .arg(TR(T_VIDEO))
-      .arg(player_->videoCodecName().toUpper())
-      .arg(QString::number(sz.width()))
-      .arg(QString::number(sz.height()))
-      .arg(QString::number(player_->fps(), 'f', 1))
-      .arg(QString::number(player_->bitrate(), 'f', 1))
-    );
+    // Meta
+    t->append(QString("- %1 -").arg(tr("Meta")), Qt::red);
+#define META(_Name) \
+    t->append(#_Name ": " + player_->meta##_Name());
 
-    t->append(QString("%1: %2, %3%4 x %5%6")
-      .arg(TR(T_AUDIO))
-      .arg(player_->audioCodecName().toUpper())
-      .arg(QString::number(player_->audioRate())).arg(tr("Hz"))
-      .arg(QString::number(player_->audioChannels())).arg(tr("ch"))
-    );
+    META(Title)
+    META(Artist)
+    META(Genre)
+    META(Copyright)
+    META(Album)
+    META(TrackNumber)
+    META(Description)
+    META(Rating)
+    META(Date)
+    META(Setting)
+    META(URL)
+    META(Language)
+    META(NowPlaying)
+    META(Publisher)
+    META(EncodedBy)
+    META(ArtworkURL)
+    META(TrackID)
+#undef META
   }
 
   // Data

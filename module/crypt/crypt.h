@@ -4,8 +4,8 @@
 // crypt.h
 // 9/4/2011
 
-#include <QByteArray>
-#include <QString>
+#include <QtCore/QByteArray>
+#include <QtCore/QString>
 
 namespace Crypt {
 

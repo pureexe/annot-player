@@ -5,8 +5,8 @@
 // 2/12/2012
 
 #include "mediacodec_config.h"
-#include <QString>
-#include <utility>
+#include <QtCore/QPair>
+#include <QtCore/QString>
 
 class InputStream;
 
@@ -16,7 +16,7 @@ namespace Mp4Codec
 
 #ifdef WITH_MP4V2
   ///  Return (width, height) of the video track.
-  std::pair<int, int> fileDimension(const QString &path);
+  QPair<int, int> fileDimension(const QString &path);
   QString fileInfo(const QString &path);
 #endif // WITH_MP4V2
 

@@ -4,8 +4,8 @@
 // 11/15/2011
 
 #include "module/annotcloud/annotation.h"
-#include <QObject>
-#include <QStringList>
+#include <QtCore/QObject>
+#include <QtCore/QStringList>
 
 class DataManager;
 

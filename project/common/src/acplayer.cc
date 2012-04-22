@@ -6,43 +6,77 @@
 
 #define APP_NAME        AC_PLAYER
 #define APP_ID          AC_PLAYER_ID
-#ifdef PROJECT_PLAYER
-#  define APP_ROLE      Server
-#else
-#  define APP_ROLE      Client
-#endif // PROJECT_PLAYER
 
-// - Construction -
+#define DEBUG "acplayer"
+#include "module/debug/debug.h"
 
-AcPlayerController::AcPlayerController(QObject *parent, Role role)
-  : Base(role ? role : APP_ROLE, parent, APP_ID)
+// - Server -
+
+AcPlayerServer::AcPlayerServer(QObject *parent)
+  : Base(parent, APP_ID)
 { }
 
-// - Queries -
+void
+AcPlayerServer::start()
+{
+#ifdef WITH_MODULE_METACALL
+  Base::startServer();
+#endif // WITH_MODULE_METACALL
+}
+
+void
+AcPlayerServer::stop()
+{
+#ifdef WITH_MODULE_METACALL
+  Base::stop();
+#endif // WITH_MODULE_METACALL
+}
+
+// - Client -
+
+AcPlayer::AcPlayer(QObject *parent)
+  : Base(parent), delegate_(0)
+{
+#ifdef WITH_MODULE_METACALL
+  // It is essential that the queued signal is passed to delegate_ from another object
+  delegate_ = new Delegate(0, APP_ID);
+  connect(this, SIGNAL(arguments(QStringList)),
+          delegate_, SIGNAL(arguments(QStringList)), Qt::QueuedConnection);
+#endif // WITH_MODULE_METACALL
+}
 
 bool
-AcPlayerController::isRunning() const
-{ return isProcessRunning(APP_NAME); }
-
-// - Actions -
+AcPlayer::isRunning() const
+{ return Delegate::isProcessRunning(APP_NAME); }
 
 void
-AcPlayerController::open()
-{ Base::open(APP_NAME); }
+AcPlayer::open()
+{ Delegate::open(APP_NAME); }
 
 void
-AcPlayerController::openUrl(const QString &url)
-{ openUrls(QStringList(url)); }
-
-void
-AcPlayerController::openUrls(const QStringList &urls)
+AcPlayer::openArguments(const QStringList &args)
 {
-#ifdef WITH_MODULE_IPC
-  if (isEnabled() && isRunning())
-    emit queuedArguments(urls);
-  else
-#endif // WITH_MODULE_IPC
-  Base::open(APP_NAME, urls);
+  DOUT("enter");
+#ifdef WITH_MODULE_METACALL
+  if (isRunning()) {
+    DOUT("isRunning = true");
+    if (!delegate_->isActive())
+      delegate_->startClient();
+    emit arguments(args);
+  } else
+#endif // WITH_MODULE_METACALL
+  Delegate::open(APP_NAME, args);
+  DOUT("exit");
+}
+
+void
+AcPlayer::importUrl(const QString &url)
+{
+  if (!url.isEmpty()) {
+    QString a = url;
+    a.replace(QRegExp("^http://", Qt::CaseInsensitive), "http://annot/");
+    openUrl(a);
+  }
 }
 
 // EOF

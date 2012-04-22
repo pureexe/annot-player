@@ -3,8 +3,7 @@
 
 #include "download.h"
 #include "downloader.h"
-#include <QtCore>
-#include <QtNetwork>
+#include <QtNetwork/QNetworkRequest>
 
 #define DEBUG "download"
 #include "module/debug/debug.h"

@@ -7,13 +7,13 @@
 #include <QtGlobal>
 
 #ifdef _MSC_VER
-  #pragma warning(disable:4996) // C4996: unsafe function or variable used such as stricmp
-  #pragma warning(disable:4100) // C4100: unreferenced formal parameter
+#  pragma warning(disable:4996) // C4996: unsafe function or variable used such as stricmp
+#  pragma warning(disable:4100) // C4100: unreferenced formal parameter
 #endif // _MSC_VER
 
 #ifdef __GNUC__
-  #pragma GCC diagnostic ignored "-Wunused-parameter" // unused parameter
-  #pragma GCC diagnostic ignored "-Wpointer-sign"     // pointer with diff signess
+#  pragma GCC diagnostic ignored "-Wunused-parameter" // unused parameter
+#  pragma GCC diagnostic ignored "-Wpointer-sign"     // pointer with diff signess
 #endif // __GNUC__
 
 //#ifdef MP4BOX_SHARED

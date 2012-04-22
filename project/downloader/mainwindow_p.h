@@ -5,7 +5,7 @@
 // 11/8/2011
 
 #include "mainwindow.h"
-#include <QTimer>
+#include <QtCore/QTimer>
 
 namespace slot_ { // anonymous slot_
 
@@ -22,7 +22,7 @@ namespace slot_ { // anonymous slot_
     { Q_ASSERT(w_); }
 
   public slots:
-    void promptUrl()
+    void trigger()
     {
       w_->promptUrl(url_);
       QTimer::singleShot(0, this, SLOT(deleteLater()));

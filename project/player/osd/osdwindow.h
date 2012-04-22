@@ -4,7 +4,7 @@
 // osdwindow.h
 // 7/12/2011
 
-#include <QWidget>
+#include <QtGui/QWidget>
 
 namespace QtExt { class EventListener; }
 

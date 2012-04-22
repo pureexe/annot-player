@@ -1,17 +1,35 @@
 // youtubemrlresolver.cc
 // 1/25/2012
+//
+// JDownloader:
+// svn://svn.jdownloader.org/jdownloader/trunk/src/jd
+// svn://svn.jdownloader.org/jdownloader/browser
+//
+// See: jd/plugins/hoster/Youtube.java
+// See: jd/plugins/decrypter/TbCm.java
+// See: AcDown/Downloader/YouTube/YouTubeDownloader.cs
+// See: AcDown/Downloader/YouTube/YouTubePlugin.cs
 
 #include "youtubemrlresolver.h"
-#include <QtCore>
-#include <QtScript>
-#include <QtNetwork>
+#include <QtNetwork/QNetworkAccessManager>
+#include <QtNetwork/QNetworkReply>
+#include <QtNetwork/QNetworkRequest>
+#include <QtCore/QRegExp>
+#include <QtCore/QUrl>
+#include <QtCore/QStringList>
 #include <cstdlib>
 
-//#define DEBUG "youtubemrlresolver"
+#define DEBUG "youtubemrlresolver"
 #include "module/debug/debug.h"
 
-// See: jd/plugins/hoster/YouTubeCom.java
-// See: jd/plugins/decrypter/TbCm.java
+// - Consruction -
+
+YoutubeMrlResolver::YoutubeMrlResolver(QObject *parent)
+  : Base(parent)
+{
+  nam_ = new QNetworkAccessManager(this);
+  connect(nam_, SIGNAL(finished(QNetworkReply*)), SLOT(resolveMedia(QNetworkReply*)));
+}
 
 // - Analysis -
 
@@ -26,27 +44,132 @@ YoutubeMrlResolver::matchMedia(const QString &href) const
 bool
 YoutubeMrlResolver::resolveMedia(const QString &href)
 {
+  DOUT("enter: href =" << href);
   static const QString errorMessage = tr("failed to resolve URL");
   QUrl url(href);
-  if (!url.host().endsWith("youtube.com", Qt::CaseInsensitive) ||
-      url.path().compare("/watch", Qt::CaseInsensitive)) {
+  if (url.path().compare("/watch", Qt::CaseInsensitive) ||
+      (url.host().compare("youtube.com", Qt::CaseInsensitive) &&
+       url.host().compare("www.youtube.com"))
+      ) {
     emit error(errorMessage + ": " + href);
-    //return;
+    DOUT("exit: mimatched host or path");
+    return false;
   }
 
   QString v = url.queryItemValue("v");
   if (v.isEmpty()) {
     emit error(errorMessage + ": " + href);
+    DOUT("exit: mimatched query value");
     return false;
   }
 
-  QString mrl = "http://www.youtube.com/watch?v=" + v;
-  emit message(tr("resolving media URL ...") + ": " + mrl);
-  MediaInfo mi;
-  mi.mrls.append(MrlInfo(mrl));
-  mi.refurl = mrl;
-  emit mediaResolved(mi, 0);
+  url = "http://www.youtube.com/watch?v=" + v;
+  DOUT("url =" << url);
+  nam_->get(QNetworkRequest(url));
+  DOUT("exit: ret = true");
   return true;
 }
+
+// - Download -
+
+void
+YoutubeMrlResolver::resolveMedia(QNetworkReply *reply)
+{
+  DOUT("enter");
+  static const QString resolveErrorMessage = tr("failed to resolve URL");
+
+  Q_ASSERT(reply);
+  reply->deleteLater();
+  if (!reply->isFinished() || reply->error() != QNetworkReply::NoError) {
+    //emit error(reply->errorString());
+    emit error(tr("network error, failed to resolve media URL") + ": " + reply->url().toString());
+    DOUT("exit: error =" << reply->error());
+    return;
+  }
+
+  QString data = reply->readAll();
+  if (data.isEmpty()) {
+    emit error(resolveErrorMessage + ": " + reply->url().toString());
+    DOUT("exit: empty data");
+    return;
+  }
+
+  QString mrl = reply->url().toString();
+  QString title;
+  QUrl url;
+  QList<QUrl> urls;
+
+  // Escape percent encoding.
+  QRegExp
+  rx = QRegExp("<title>(.*)</title>");
+  qint64 offset; // use offset to improve performance by sequential search
+  if ((offset=rx.indexIn(data)) < 0)
+    offset = 0;
+  else {
+    Q_ASSERT(rx.captureCount() == 1);
+    title = formatTitle(rx.cap(1).simplified());
+  }
+
+  rx = QRegExp("url_encoded_fmt_stream_map=([^;]*);");
+  if ((offset=rx.indexIn(data, offset)) < 0)
+    offset = 0;
+  else {
+    Q_ASSERT(rx.captureCount() == 1);
+    QString map = rx.cap(1);
+    map = QUrl::fromPercentEncoding(map.toAscii());
+    foreach (QString url, map.split(",", QString::SkipEmptyParts)) {
+      Q_ASSERT(url.startsWith("url="));
+      url.remove(QRegExp("^url="));
+      url = QUrl::fromPercentEncoding(url.toAscii());
+      urls.append(url);
+    }
+  }
+
+  // URLs are in quality-desc order, such as: <quality, type>
+  // - "large" "video/webm;+codecs="vp8.0,+vorbis""
+  // - "large" "video/x-flv"
+  // - "medium" "video/webm;+codecs="vp8.0,+vorbis""
+  // - "medium" "video/x-flv"
+  // - "medium" "video/mp4;+codecs="avc1.42001E,+mp4a.40.2""
+  // - "small" "video/x-flv"
+  //
+  // Always prefer WebM (i.e. MKV) and the one with the best quality
+  if (!urls.isEmpty())
+    url = urls.first();
+
+  if (url.isEmpty())  {
+    emit error(resolveErrorMessage + ": " + reply->url().toString());
+    DOUT("exit: empty data");
+    return;
+  }
+
+  QString videoUrl = decodeYoutubeUrl(url);
+  DOUT("url =" << videoUrl);
+
+  MediaInfo mi;
+  mi.title = title;
+  mi.refurl = mrl;
+  mi.mrls.append(MrlInfo(videoUrl));
+  emit mediaResolved(mi, 0);
+  DOUT("exit");
+}
+
+// - Format -
+
+QString
+YoutubeMrlResolver::formatTitle(const QString &text)
+{
+  return text.isEmpty() ? text : QString(text)
+   .remove(QRegExp(" - YouTube$"))
+   .replace("&quot;", "'")
+   .replace("&amp;", "&")
+   .replace("&lt;", "<")
+   .replace("&gt;", ">")
+   .trimmed();
+}
+
+QString
+YoutubeMrlResolver::decodeYoutubeUrl(const QUrl &url)
+{ return url.toString().remove(QRegExp(".itag=44$")); } // chop duplicated itag in the end
 
 // EOF

@@ -99,6 +99,10 @@ AcFilteredListView::removeCurrentRow()
 // - Actions -
 
 void
+AcFilteredListView::sortByColumn(int col)
+{ proxyView_->sortByColumn(col); }
+
+void
 AcFilteredListView::popup()
 { filterPatternEdit_->showPopup(); }
 

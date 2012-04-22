@@ -3,7 +3,7 @@
 --[[edit lostangel 20110216 add autologin]]
 --[[edit lostangel 20110402 for subxml return struct]]
 
-require "lalib"
+require "luascript/lib/lalib"
 
 local nico_sublice_num = 2000; -- change this to set how many comments you will download for one video.
 

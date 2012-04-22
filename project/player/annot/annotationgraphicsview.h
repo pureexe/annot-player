@@ -6,9 +6,9 @@
 
 #include "module/annotcloud/annotation.h"
 #include "module/qtext/eventlistener.h"
-#include <QGraphicsView>
-#include <QHash>
-#include <QList>
+#include <QtGui/QGraphicsView>
+#include <QtCore/QHash>
+#include <QtCore/QList>
 
 QT_FORWARD_DECLARE_CLASS(QTimer)
 
@@ -65,14 +65,15 @@ public:
 signals:
   void scaleChanged(qreal value);
   void rotationChanged(qreal value);
+  void offsetChanged(qint64 value);
   void fullScreenModeChanged(bool);
 public:
   /**
    *  Only used to measure the current full screen geometry.
    *  \param  w  any widget which is never null and is always in full screen mode
    */
-  void setFullScreenView(QWidget *w);
-  bool isFullScreenMode() const;
+  void setFullScreenView(QWidget *w) { fullScreenView_ = w; }
+  bool isFullScreenMode() const { return fullScreen_; }
 public slots:
   void setFullScreenMode(bool t = true);
 
@@ -129,14 +130,11 @@ protected slots:
   void stopTracking();
   void invalidateTrackingTimer();
 
-public:
   // - Events -
+public slots:
   virtual void setVisible(bool visible); ///< \override stop polling when hidden
 
 public:
-  QRect globalRect() const;
-
-  QPoint fromGlobal(const QPoint &globalPos) const;
 
   // Implement event listener.
   virtual void sendContextMenuEvent(QContextMenuEvent *event); ///< \override
@@ -159,8 +157,10 @@ protected:
 public:
   ///  Generate list of annotations in the view (slow).
   AnnotationList annotations() const;
-
   const AnnotationList &annotationsAtPos(qint64 pos) const; ///< slow
+
+  QRect globalRect() const;
+  QPoint fromGlobal(const QPoint &globalPos) const;
 
 signals:
   void annotationAdded(const Annotation &annot);
@@ -168,7 +168,8 @@ signals:
   void annotationsRemoved();
 
 public:
-  bool isPaused() const;
+  bool isPaused() const { return paused_; }
+  qint64 offset() const { return offset_; } ///< in seconds
 signals:
   void paused();
   void resumed();
@@ -198,6 +199,9 @@ public:
 public slots:
   void setScale(qreal value);
   void resetScale() { setScale(1.0); }
+
+  void setOffset(qint64 secs) { offset_ = secs; emit offsetChanged(offset_); }
+  void resetOffset() { setOffset(0); }
 
   void setRotation(qreal value);
   void resetRotation() { setRotation(0); }
@@ -257,9 +261,6 @@ public slots:
   // Message mode:
   void showAnnotationsAtPos(qint64 pos);
 
-  // TODO
-  //void addAnnotations(const Core::AnnotationList &l);
-
   ///  Emit deletion signal if deleteAnnot is true
   void removeAnnotationWithId(qint64 id, bool deleteAnnot = false);
   void removeAnnotations(); // delete annotation without reading ones
@@ -296,7 +297,8 @@ private:
   //QHash<qint64, QList<AnnotationGraphicsItem*>*> annots_; // indexed by secs for MediaMode or hash for SignalMode
   typedef QHash<qint64, AnnotationList> AnnotationHash;
   AnnotationHash hash_; // indexed by secs for MediaMode or hash for SignalMode
-  qint64 currentTime_; // in secs
+  qint64 currentTime_, // in secs
+         offset_; // in secs
   int interval_; // in msecs, but will be rounded to seconds
 
   qint64 userId_;

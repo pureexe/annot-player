@@ -12,6 +12,7 @@ void
 WbComboEdit::init()
 {
   setLineEdit(new WbLineEdit);
+  connect(lineEdit(), SIGNAL(returnPressed()), SLOT(hidePopup()));
 
   createActions();
 
@@ -32,7 +33,7 @@ WbComboEdit::createActions()
   popupAct = new QAction(this); {
     popupAct->setText(tr("History"));
     popupAct->setStatusTip(tr("History"));
-    connect(popupAct, SIGNAL(triggered()), SLOT(popup()));
+    connect(popupAct, SIGNAL(triggered()), SLOT(showPopup()));
   }
   clearAct = new QAction(this); {
     clearAct->setText(tr("Clear"));
@@ -57,19 +58,20 @@ void
 WbComboEdit::contextMenuEvent(QContextMenuEvent *event)
 {
   Q_ASSERT(event);
-  QMenu m;
+  QMenu *m = new QMenu(this);
 
-  m.addAction(popupAct);
-  m.addAction(clearAct);
-  m.addSeparator();
+  m->addAction(popupAct);
+  m->addAction(clearAct);
+  m->addSeparator();
 
   popupAct->setEnabled(count());
 
   QMenu *scm = lineEdit()->createStandardContextMenu();
-  m.addActions(scm->actions());
+  m->addActions(scm->actions());
 
-  m.exec(event->globalPos());
+  m->exec(event->globalPos());
   delete scm;
+  QTimer::singleShot(0, m, SLOT(deleteLater()));
   event->accept();
 }
 

@@ -43,9 +43,9 @@ QtExt::mktemp(const QString &suffix, bool deleteLater)
 {
   QString ret;
 #ifdef Q_WS_WIN
-  ret = _qs(::getenv("tmp"));
+  ret = _qs(qgetenv("tmp"));
   if (ret.isEmpty())
-    ret = _qs(::getenv("temp"));
+    ret = _qs(qgetenv("temp"));
 #endif // Q_WS_WIN
 
   ret.append(_qs(::tmpnam(0)));

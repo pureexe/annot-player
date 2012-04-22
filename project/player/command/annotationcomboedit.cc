@@ -47,25 +47,26 @@ AnnotationComboEdit::contextMenuEvent(QContextMenuEvent *event)
 {
   Q_ASSERT(event);
 
-  QMenu m;
-  AcUi::globalInstance()->setContextMenuStyle(&m, false); // persistent = false
+  QMenu *m = new QMenu(this);
+  AcUi::globalInstance()->setContextMenuStyle(m, false); // persistent = false
 
   if (contextMenuFlags() & PasteAndGoAction)
-    m.addAction(pasteAndGoAct);
+    m->addAction(pasteAndGoAct);
   if (count() && (contextMenuFlags() & PopupAction))
-    m.addAction(popupAct);
+    m->addAction(popupAct);
   if (contextMenuFlags() & EditAction)
-    m.addAction(editAct);
+    m->addAction(editAct);
   if (contextMenuFlags() & ClearAction)
-    m.addAction(clearAct);
+    m->addAction(clearAct);
 
-  m.addSeparator();
+  m->addSeparator();
 
   QMenu *scm = lineEdit()->createStandardContextMenu();
-  m.addActions(scm->actions());
+  m->addActions(scm->actions());
 
-  m.exec(event->globalPos());
+  m->exec(event->globalPos());
   delete scm;
+  QTimer::singleShot(0, m, SLOT(deleteLater()));
   event->accept();
 }
 

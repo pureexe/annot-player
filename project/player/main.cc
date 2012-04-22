@@ -4,8 +4,14 @@
 #include "mainwindow.h"
 #include "settings.h"
 #include "global.h"
+#include "tr.h"
 #include "translatormanager.h"
 #include "annotationgraphicsitem.h"
+#ifdef Q_WS_WIN
+#  include "windowsregistry.h"
+#  include "module/player/player.h"
+#  include "win/qtwin/winreg.h"
+#endif // Q_WS_WIN
 #ifdef WITH_WIN_QTH
 #  include "win/qth/qth.h"
 #endif // WITH_WIN_QTH
@@ -21,10 +27,13 @@
 #include "ac/acui.h"
 #include "ac/acglobal.h"
 #include "ac/acsettings.h"
+#include "ac/acplayer.h"
 #include "module/annotcloud/user.h"
-#include <QtGui>
-#include <QtNetwork>
-#include <QtWebKit>
+#include <QtWebKit/QWebSettings>
+#include <QtNetwork/QNetworkProxy>
+#include <QtNetwork/QNetworkReply>
+#include <QtGui/QDesktopServices>
+#include <QtCore>
 #include <ctime>
 #include <cstdlib>
 
@@ -40,6 +49,19 @@ namespace { // anonymous
   {
     // Not registered in Qt 4.8
     qRegisterMetaType<QNetworkReply::NetworkError>("QNetworkReply::NetworkError");
+  }
+
+  // Register file types
+  inline void registerFileTypes()
+  {
+#ifdef Q_WS_WIN
+    WindowsRegistry reg;
+    reg.setClassesRoot(REG_HKCU_SOFTWARE_CLASSES);
+    reg.registerFileTypes(Player::supportedAudioSuffices());
+    reg.registerFileTypes(Player::supportedVideoSuffices());
+    reg.registerFileTypes(Player::supportedPictureSuffices());
+    reg.registerFileTypes(Player::supportedSubtitleSuffices());
+#endif // Q_WS_WIN
   }
 
   // Warm up
@@ -83,9 +105,17 @@ main(int argc, char *argv[])
   Settings *settings = Settings::globalSettings();
   AcSettings *ac = AcSettings::globalSettings();
 
-  if (!settings->isMultipleWindowsEnabled() &&
-      !a.isSingleInstance())
+  bool unique = a.isSingleInstance();
+  if (!unique && !settings->isMultipleWindowsEnabled()) {
+    QStringList args = a.arguments();
+    args.removeFirst();
+    if (!args.isEmpty()) {
+      AcPlayer delegate;
+      delegate.openArguments(args);
+      a.processEvents();
+    }
     return 0;
+  }
 
   // Seed global random generator.
   time_t now = ::time(0);
@@ -103,6 +133,13 @@ main(int argc, char *argv[])
     int lang = ac->language();
     if (!lang) {
       lang =  QLocale::system().language();
+      if (lang == QLocale::Japanese) {
+        settings->setAnnotationLanguages( // Ban Chinese language
+          Traits::JapaneseBit | Traits::UnknownLanguageBit |
+          Traits::EnglishBit | Traits::KoreanBit
+        );
+        settings->setAnnotationFilterEnabled(true);
+      }
       ac->setLanguage(lang);
     }
     TranslatorManager::globalInstance()->setLanguage(lang, false); // auto-update translator = false
@@ -110,7 +147,7 @@ main(int argc, char *argv[])
     DOUT("app language =" << lang);
   }
 
-  // Rebuild caches on update.
+  // Check update.
   if (settings->version() != G_VERSION) {
     DOUT("update from old version");
     QFile::remove(G_PATH_CACHEDB);
@@ -119,6 +156,19 @@ main(int argc, char *argv[])
     settings->setVersion(G_VERSION);
 
     settings->setWindowOnTop(false);
+    settings->setApplicationFilePath(QString());
+    //settings->setAnnotationLanguages(Traits::AllLanguages);
+    //settings->setAnnotationFilterEnabled(false);
+    settings->sync();
+
+    if (QFile::rename(QDir::homePath() + "/Annot", G_PATH_DOWNLOADS))
+      a.infectDownloadDirectory();
+  }
+
+  // Moved
+  if (settings->applicationFilePath() != QCoreApplication::applicationFilePath()) {
+    registerFileTypes();
+    settings->setApplicationFilePath(QCoreApplication::applicationFilePath());
     settings->sync();
   }
 
@@ -165,8 +215,13 @@ main(int argc, char *argv[])
     ws->setDefaultTextEncoding("SHIFT-JIS");
     //ws->setDefaultTextEncoding("EUC-JP");
 
-    //ws->setMaximumPagesInCache(10);
-    //web->setLocalStoragePath(...);
+    ws->setLocalStoragePath(G_PATH_CACHES);
+    ws->setIconDatabasePath(G_PATH_CACHES);
+    ws->setOfflineStoragePath(G_PATH_CACHES);
+    ws->setOfflineWebApplicationCachePath(G_PATH_CACHES);
+
+    // See: http://webkit.org/blog/427/webkit-page-cache-i-the-basics/
+    ws->setMaximumPagesInCache(10);
   }
 //#endif // WITH_MODULE_WEBBROWSER
 
@@ -208,7 +263,7 @@ main(int argc, char *argv[])
 //
 //#endif // USE_MODE_SIGNAL
   DOUT("make mainwindow");
-  MainWindow w; {
+  MainWindow w(unique); {
     Q_ASSERT(w.isValid());
     //if (!w.isValid()) {
     //  DOUT("FATAL ERROR: failed to initialize MainWindow, please contact " G_EMAIL);

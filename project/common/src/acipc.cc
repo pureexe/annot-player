@@ -2,18 +2,20 @@
 // 4/9/2012
 
 #include "ac/acipc.h"
+#ifdef WITH_MODULE_METACALL
+#  include "module/metacall/metacallfilter.h"
+#endif // WITH_MODULE_METACALL
 #ifdef Q_WS_WIN
 #  include "win/qtwin/qtwin.h"
 #endif // Q_WS_WIN
 #ifdef Q_WS_MAC
 #  include "mac/qtmac/qtmac.h"
 #endif // Q_WS_MAC
+#include <QtNetwork/QHostAddress>
 #include <QtCore>
-#include <QHostAddress>
 
-// - Construction -
-
-#ifdef WITH_MODULE_IPC
+#define DEBUG "acipc"
+#include "module/debug/debug.h"
 
 #define IPC_HOST        "127.0.0.1"
 
@@ -21,43 +23,18 @@
 #define IPC_PORT_STOP   6880
 #define IPC_PORT(_key)  (IPC_PORT_START + (_key) % (IPC_PORT_STOP - IPC_PORT_START))
 
-AcIpcController::AcIpcController(Role role, QObject *parent, uint id)
-  : Base(parent)
-{
-  switch (role) {
-  case Client: enabled_ = startClient(QHostAddress(IPC_HOST), IPC_PORT(id)); break;
-  case Server: enabled_ = startServer(QHostAddress(IPC_HOST), IPC_PORT(id)); break;
-  default: enabled_ = false;
-  }
-
-  connect(this, SIGNAL(queuedMessage(QString)), SIGNAL(message(QString)), Qt::QueuedConnection);
-  connect(this, SIGNAL(queuedError(QString)), SIGNAL(error(QString)), Qt::QueuedConnection);
-  connect(this, SIGNAL(queuedWarning(QString)), SIGNAL(warning(QString)), Qt::QueuedConnection);
-  connect(this, SIGNAL(queuedNotification(QString)), SIGNAL(notification(QString)), Qt::QueuedConnection);
-  connect(this, SIGNAL(queuedArguments(QStringList)), SIGNAL(arguments(QStringList)), Qt::QueuedConnection);
-}
-
-#else // WITH_MODULE_IPC
-
-AcIpcController::AcIpcController(Role role, QObject *parent, uint id)
-  : Base(parent), enabled_(true)
-{
-  Q_UNUSED(role);
-  Q_UNUSED(id);
-}
-
-#endif // WITH_MODULE_IPC
-
 // - Helpers -
 
 bool
 AcIpcController::isProcessRunning(const QString &processName)
 {
 #ifdef Q_WS_WIN
-  return QtWin::getProcessIdByName(processName);
+  QString exe = processName;
+  if (!exe.endsWith(".exe", Qt::CaseInsensitive))
+    exe.append(".exe");
+  return QtWin::getProcessIdByName(exe);
 #else
-  // TODO
-  Q_UNUSED(processName);
+  Q_UNUSED(processName); // TODO
   return false;
 #endif // Q_WS_MAC
 }
@@ -71,5 +48,53 @@ AcIpcController::open(const QString &app, const QStringList &args)
   return QProcess::startDetached(app, args);
 #endif // Q_WS_MAC
 }
+
+#ifdef WITH_MODULE_METACALL
+
+// - State -
+
+bool
+AcIpcController::isActive() const
+{ return filter_ && filter_->isActive(); }
+
+void
+AcIpcController::stop()
+{ if (filter_) filter_->stop(); }
+
+void
+AcIpcController::startServer()
+{
+  DOUT("enter");
+  if (!filter_)
+    invalidateFilter();
+  filter_->startServer(QHostAddress(IPC_HOST), IPC_PORT(id_));
+  DOUT("exit");
+}
+
+void
+AcIpcController::startClient()
+{
+  DOUT("enter");
+  if (!filter_)
+    invalidateFilter();
+  filter_->startClient(QHostAddress(IPC_HOST), IPC_PORT(id_), false); // async = false
+  DOUT("exit");
+}
+
+void
+AcIpcController::invalidateFilter()
+{
+  DOUT("enter");
+  if (filter_) {
+    filter_->stop();
+    filter_->setWatchedObject(0);
+    QTimer::singleShot(0, filter_, SLOT(deleteLater()));
+  }
+  filter_ = new MetaCallFilter(this);
+  filter_->setWatchedObject(this);
+  DOUT("exit");
+}
+
+#endif // WITH_MODULE_METACALL
 
 // EOF

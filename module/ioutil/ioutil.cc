@@ -2,7 +2,7 @@
 // 12/6/2011
 
 #include "ioutil.h"
-#include <QtCore>
+#include <QtCore/QFile>
 
 #ifdef WITH_MODULE_BLOCKIODEVICE
 #  include "module/blockiodevice/blockiodevice.h"

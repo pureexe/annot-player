@@ -4,7 +4,7 @@
 // qtstep.h
 // 7/30/2011
 
-#include <QPoint>
+#include <QtCore/QPoint>
 
 // - Type cast -
 

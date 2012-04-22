@@ -6,7 +6,7 @@
 
 #include "module/qtext/network.h"
 
-#ifdef NICO_PROXY_DOMAIN
+#ifdef ANNOT_PROXY_DOMAIN
 
 typedef QtExt::NetworkCookieJarWithDomainAlias WbNetworkCookieJarBase;
 class WbNetworkCookieJar : public WbNetworkCookieJarBase
@@ -16,7 +16,7 @@ class WbNetworkCookieJar : public WbNetworkCookieJarBase
 
 public:
   explicit WbNetworkCookieJar(QObject *parent = 0)
-    : Base(".nicovideo.jp", NICO_PROXY_DOMAIN, parent)
+    : Base(".nicovideo.jp", ANNOT_PROXY_DOMAIN, parent)
   { }
 };
 
@@ -34,6 +34,6 @@ public:
   { }
 };
 
-#endif // NICO_PROXY_DOMAIN
+#endif // ANNOT_PROXY_DOMAIN
 
 #endif // WBNETWORKCOOKIEJAR_H

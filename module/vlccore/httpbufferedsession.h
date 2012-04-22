@@ -4,18 +4,11 @@
 // vlccore/httpbufferedsession.h
 // 2/21/2012
 
-#ifdef _MSC_VER
-#  pragma warning (disable:4819)       // C4819: The file contains a character that cannot be represented in the current code page.
-#  pragma warning (disable:4996)       // C4996: MS' deprecated std functions orz.
-#endif // _MSC_VER
-
 #include "module/vlccore/httpsession.h"
 #include "module/qtext/stoppable.h"
-#include <QWaitCondition>
-#include <QMutex>
-#include <QMutexLocker>
-#include <QString>
-#include <QUrl>
+#include <QtCore/QWaitCondition>
+#include <QtCore/QMutex>
+#include <QtCore/QUrl>
 
 QT_FORWARD_DECLARE_CLASS(QNetworkCookieJar)
 QT_FORWARD_DECLARE_CLASS(QNetworkReply)
@@ -50,12 +43,6 @@ public:
       pos_(0), size_(0), ready_(false) { }
 
   ~HttpBufferedSession();
-
-signals:
-  void error(QString msg);
-  void message(QString msg);
-  void fileSaved(QString msg);
-  void progress(qint64 receivedBytes, qint64 totalBytes);
 
   // - Properties -
 public:

@@ -4,7 +4,7 @@
 // nicoutil.h
 // 3/14/2012
 
-#include <QString>
+#include <QtCore/QString>
 
 QT_FORWARD_DECLARE_CLASS(QNetworkCookieJar)
 

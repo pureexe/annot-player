@@ -5,8 +5,8 @@
 // 2/13/2012
 
 #include "outputstream.h"
-#include <QObject>
-#include <QFile>
+#include <QtCore/QObject>
+#include <QtCore/QFile>
 
 class FileOutputStream : public QObject, public OutputStream
 {

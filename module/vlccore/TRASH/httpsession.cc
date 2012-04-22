@@ -4,7 +4,6 @@
 #include "module/vlccore/httpsession.h"
 #include "module/mediacodec/flvcodec.h"
 #include "module/mediacodec/mp4codec.h"
-#include <QDesktopServices>
 #include <QApplication>
 #include <QtCore>
 #include <QtNetwork>
@@ -63,7 +62,7 @@ VlcHttpSession::invalidateFileName()
 {
   bool mp4 = contentType_.contains("mp4", Qt::CaseInsensitive);
   QString suf = mp4 ? ".mp4" : ".flv";
-  QString dir = QDesktopServices::storageLocation(QDesktopServices::DesktopLocation) + "/Annot";
+  QString dir = QDesktopServices::storageLocation(QDesktopServices::DesktopLocation);
   fileName_ = dir + "/" + escapeFileName(mediaTitle_) + suf;
 }
 

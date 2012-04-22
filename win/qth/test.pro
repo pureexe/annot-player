@@ -52,7 +52,6 @@ HEADERS += \
     $$PWD/ith/main.h \
     $$PWD/ith/main_template.h \
     $$PWD/ith/pipe.h \
-    $$PWD/ith/protocol.h \
     $$PWD/ith/query.h \
     $$PWD/ith/sys.h \
     $$PWD/ith/text.h

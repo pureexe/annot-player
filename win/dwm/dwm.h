@@ -4,7 +4,7 @@
 // 7/10/2011
 // Enable native aero support for windows.
 
-#include <QWidget>
+#include <QtGui/QWidget>
 
 ///  Access desktop window manager through dwmapi.dll. Resolve this at runtime to fit old windows XP.
 namespace Dwm {

@@ -5,7 +5,7 @@
 // 1/24/2011
 
 #include "mrlinfo.h"
-#include <QObject>
+#include <QtCore/QObject>
 
 QT_FORWARD_DECLARE_CLASS(QNetworkCookieJar)
 

@@ -3,7 +3,7 @@
 
 // signalhub.h
 // 10/16/2011
-#include <QObject>
+#include <QtCore/QObject>
 
 class Player;
 

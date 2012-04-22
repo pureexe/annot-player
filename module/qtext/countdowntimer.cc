@@ -2,7 +2,7 @@
 // 11/27/2011
 
 #include "module/qtext/countdowntimer.h"
-#include <QtCore>
+#include <QtCore/QTimer>
 
 // - Constructions -
 

@@ -4,16 +4,15 @@
 #include "ac/actextedit.h"
 #include "ac/acui.h"
 #include "ac/acss.h"
-#include <QMenu>
-#include <QContextMenuEvent>
+#include <QtGui/QMenu>
+#include <QtGui/QContextMenuEvent>
+#include <QtCore/QTimer>
 
 // - Constructions -
 
 AcTextEdit::AcTextEdit(QWidget *parent)
   : Base(parent)
 {
-  contextMenu_ = new QMenu(this);
-  AcUi::globalInstance()->setWindowStyle(contextMenu_);
   setStyleSheet(SS_TEXTEDIT);
 }
 
@@ -22,15 +21,21 @@ AcTextEdit::AcTextEdit(QWidget *parent)
 void
 AcTextEdit::contextMenuEvent(QContextMenuEvent *event)
 {
-  if (event) {
-    contextMenu_->clear();
+#ifdef WITH_WIN_DWM
+  Q_ASSERT(event);
+  QMenu *m = new QMenu(this);
+  AcUi::globalInstance()->setWindowStyle(m, false); // resistent = false
 
-    QMenu *scm = createStandardContextMenu();
-    contextMenu_->addActions(scm->actions());
+  QMenu *scm = createStandardContextMenu();
+  m->addActions(scm->actions());
 
-    contextMenu_->exec(event->globalPos());
-    delete scm;
-  }
+  m->exec(event->globalPos());
+  delete scm;
+  QTimer::singleShot(0, m, SLOT(deleteLater()));
+  event->accept();
+#else
+  Base::contextMenuEvent(event);
+#endif // WITH_WIN_DWM
 }
 
 bool

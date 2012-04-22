@@ -5,14 +5,19 @@
 // http://www.filibeto.org/unix/macos/lib/dev/documentation/DeviceDrivers/Conceptual/WorkingWStorage/WorkingWStorage.pdf
 
 #include "qtunix.h"
-#include <QtCore>
+#include <QtCore/QDir>
+#include <QtCore/QStringList>
+#include <QtCore/QProcess>
 
 #ifdef Q_OS_MAC
-  #include <paths.h>
-  #define DEVICE_PREFIX _PATH_DEV
+#  include <paths.h>
+#  define DEVICE_PREFIX _PATH_DEV
 #else
-  #define DEVICE_PREFIX "/dev/"
+#  define DEVICE_PREFIX "/dev/"
 #endif // Q_OS_MAC
+
+#define DEBUG "qtunix"
+#include "module/debug/debug.h"
 
 QStringList
 QtUnix::getDevicesWithType(DeviceType type)
@@ -67,7 +72,45 @@ QtUnix::isDeviceFile(const QString &path)
          path.startsWith("/dev/");
 }
 
-// - Shutdown -
+// - Commands -
+
+int
+QtUnix::run(const QString &bin, const QStringList &args, int timeout)
+{
+  DOUT("enter: bin =" << bin << ", args =" << args << ", timeout =" << timeout);
+  QProcess proc;
+  proc.start(bin, args, QIODevice::ReadOnly | QIODevice::Text);
+  proc.waitForFinished(timeout);
+  int err = proc.exitCode();
+  DOUT("exit: err =" << err << ", out =" << proc.readAll());
+  return err;
+}
+
+bool
+QtUnix::cp(const QStringList &from, const QString &to, const QString &opt)
+{
+  if (from.isEmpty() || to.isEmpty())
+    return false;
+  QStringList args;
+  if (!opt.isEmpty())
+    args.append(opt);
+  args.append(from);
+  args.append(to);
+  return !run("cp", args);
+}
+
+bool
+QtUnix::mv(const QStringList &from, const QString &to, const QString &opt)
+{
+  if (from.isEmpty() || to.isEmpty())
+    return false;
+  QStringList args;
+  if (!opt.isEmpty())
+    args.append(opt);
+  args.append(from);
+  args.append(to);
+  return !run("mv", args);
+}
 
 bool
 QtUnix::halt()

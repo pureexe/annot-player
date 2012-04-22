@@ -13,8 +13,11 @@
 #else
 #  error "mrlanalysis module is required"
 #endif // WITH_MODULE_MRLANALYSIS
-#include <QtCore>
-#include <QtNetwork>
+#include <QtNetwork/QNetworkCookieJar>
+#include <QtCore/QRunnable>
+#include <QtCore/QThreadPool>
+#include <QtCore/QCoreApplication>
+#include <QtCore/QTextCodec>
 
 //#define DEBUG "luaemrlresolver"
 #include "module/debug/debug.h"
@@ -259,7 +262,7 @@ QString
 LuaMrlResolver::decodeText(const QString &text, const char *encoding)
 {
   if (text.isEmpty())
-    return QString::null;
+    return QString();
   if (encoding) {
     QTextCodec *tc = QTextCodec::codecForName(encoding);
     if (tc) {
@@ -274,57 +277,54 @@ LuaMrlResolver::decodeText(const QString &text, const char *encoding)
 QString
 LuaMrlResolver::formatTitle(const QString &title)
 {
-  QString ret = title;
-  if (ret.isEmpty())
-    return ret;
-
-  ret.remove(QRegExp("..ニコニコ動画\\(原宿\\)$"));
-  ret.remove(QRegExp(" - 嗶哩嗶哩 - .*"));
-  ret.remove(QRegExp(" - AcFun.tv$"));
-
-   // Youku
+  return title.isEmpty() ? title : QString(title)
+    .remove(QRegExp("..ニコニコ動画\\(原宿\\)$"))
+    .remove(QRegExp(" - 嗶哩嗶哩 - .*"))
+    .remove(QRegExp(" - AcFun.tv$"))
+     // Youku
 #ifdef _MSC_VER
-  ret.remove(QRegExp(" - \xe7\x94\xb5\xe8\xa7\x86\xe5\x89\xa7 - .*"));
-  ret.remove(QRegExp(" - \xe8\xa7\x86\xe9\xa2\x91 - .*"));
-  ret.remove(QRegExp(" - ..\xe8\xa7\x86\xe9\xa2\x91 - .*"));
+    .remove(QRegExp(" - \xe7\x94\xb5\xe8\xa7\x86\xe5\x89\xa7 - .*"))
+    .remove(QRegExp(" - \xe8\xa7\x86\xe9\xa2\x91 - .*"))
+    .remove(QRegExp(" - ..\xe8\xa7\x86\xe9\xa2\x91 - .*"))
 #else
-  ret.remove(QRegExp(" - 电视剧 - .*"));
-  ret.remove(QRegExp(" - 视频 - .*"));
-  ret.remove(QRegExp(" - 优酷视频 - .*"));
+    .remove(QRegExp(" - 电视剧 - .*"))
+    .remove(QRegExp(" - 视频 - .*"))
+    .remove(QRegExp(" - 优酷视频 - .*"))
 #endif // _MSC_VER
-
   // See: http://htmlhelp.com/reference/html40/entities/special.html
-  ret.replace("&quot;", "'");
-  ret.replace("&amp;", "&");
-  ret.replace("&lt;", "<");
-  ret.replace("&gt;", ">");
-
-  return ret.trimmed();
+     .replace("&quot;", "'")
+     .replace("&amp;", "&")
+     .replace("&lt;", "<")
+     .replace("&gt;", ">")
+     .trimmed();
 }
 
 QString
 LuaMrlResolver::formatUrl(const QString &href)
 {
   QString ret = href.trimmed();
-  if (ret.isEmpty())
-    return ret;
-
-  ret.remove(QRegExp("#$"));
-  ret.replace(QRegExp("/index.html$", Qt::CaseInsensitive), "/");
-  ret.replace(QRegExp("/#$", Qt::CaseInsensitive), "/");
-  ret.replace(QRegExp("/index_1.html$", Qt::CaseInsensitive), "/");
-  ret.replace(QRegExp("/default.html$", Qt::CaseInsensitive), "/");
-  //ret = ret.replace("http://www.", "http://", Qt::CaseInsensitive);
-  //ret = ret.remove(QRegExp("/$"));
-  return ret;
+  return ret.isEmpty() ? ret : ret
+    .remove(QRegExp("#$"))
+    .replace(QRegExp("/index.html$", Qt::CaseInsensitive), "/")
+    .replace(QRegExp("/#$", Qt::CaseInsensitive), "/")
+    .replace(QRegExp("/index_1.html$", Qt::CaseInsensitive), "/")
+    .replace(QRegExp("/default.html$", Qt::CaseInsensitive), "/");
 }
 
 QString
 LuaMrlResolver::cleanUrl(const QString &url)
 {
-  QString ret = url;
-  if (ret.contains("nicovideo.jp/watch/"))
+  QString ret = url.trimmed();
+  ret.replace("http://acfun.tv/" , "http://www.acfun.tv", Qt::CaseInsensitive)
+     .replace("http://bilibili.tv/" , "http://www.bilibili.tv", Qt::CaseInsensitive);
+  if (ret.startsWith("http://www.nicovideo.jp/watch/", Qt::CaseInsensitive))
     ret.remove(QRegExp("\\?.*"));
+  else if (ret.startsWith("http://www.acfun.tv/v/", Qt::CaseInsensitive) ||
+           ret.startsWith("http://www.bilibili.tv/video/", Qt::CaseInsensitive)) {
+    ret.remove(QRegExp("/$"))
+       .remove(QRegExp("/index_1.html$", Qt::CaseInsensitive))
+       .remove(QRegExp("/index.html$", Qt::CaseInsensitive));
+  }
   return ret;
 }
 

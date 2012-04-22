@@ -5,8 +5,7 @@
 // 1/24/2011
 
 #include "mrlresolver.h"
-#include <QString>
-#include <string>
+#include <QtCore/QString>
 
 //QT_FORWARD_DECLARE_CLASS(QTextDecoder)
 

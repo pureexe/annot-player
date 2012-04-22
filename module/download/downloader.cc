@@ -4,20 +4,44 @@
 #ifdef WITH_MODULE_COMPRESS
 #  include "module/compress/qgzip.h"
 #endif // WITH_MODULE_COMPRESS
-#include <QtCore>
-#include <QtNetwork>
+#include <QtNetwork/QNetworkAccessManager>
+#include <QtNetwork/QNetworkReply>
+#include <QtNetwork/QNetworkRequest>
+#include <QtCore/QEventLoop>
+#include <QtCore/QFile>
+#include <QtCore/QStringList>
 
 //#define DEBUG "downloader"
 #include "module/debug/debug.h"
 
+namespace { // anonymous
+  inline QString filterHost_(const QString &host)
+  { return host == ANNOT_PROXY_DOMAIN ? QString() : host; }
+} // anonymous namespace
+
 // - Construction -
+
+//namespace { namespace shared_ { // anonymous
+//  QMutex eventLoopMutex; // very strange: QEventLoop in diff threads would crash.
+//} } // anonymous namespace
 
 void
 Downloader::init()
 {
   nam_ = new QNetworkAccessManager(this);
   connect(nam_, SIGNAL(finished(QNetworkReply*)), SLOT(save(QNetworkReply*)));
+
+  DownloaderController *c = DownloaderController::globalController();
+  connect(this, SIGNAL(message(QString)), c, SIGNAL(message(QString)));
+  connect(this, SIGNAL(error(QString)), c, SIGNAL(error(QString)));
+  connect(this, SIGNAL(warning(QString)), c, SIGNAL(warning(QString)));
+  connect(this, SIGNAL(notification(QString)), c, SIGNAL(notification(QString)));
+  connect(c, SIGNAL(aborted()), SLOT(abort()));
 }
+
+void
+Downloader::abort()
+{ if (reply_) reply_->abort(); }
 
 // - Download -
 
@@ -26,21 +50,33 @@ Downloader::get(const QNetworkRequest &req, bool async, int retries)
 {
   DOUT("enter: async =" << async << ", url =" << req.url().toString() << ", retries =" << retries);
   state_ = Downloading;
+  QUrl url = req.url();
+  emit message(tr("fetching") + ": " +
+    ::filterHost_(url.host()) + url.path()
+  );
 
-  QNetworkReply *reply = nam_->get(req);
-  connect(reply, SIGNAL(downloadProgress(qint64,qint64)), SIGNAL(progress(qint64,qint64)));
+  reply_ = nam_->get(req);
+  connect(reply_, SIGNAL(downloadProgress(qint64,qint64)), SIGNAL(progress(qint64,qint64)));
 
   // See: http://www.developer.nokia.com/Community/Wiki/CS001432_-_Handling_an_HTTP_redirect_with_QNetworkAccessManager
   if (!async) {
     QEventLoop loop;
-    connect(reply, SIGNAL(finished()), &loop, SLOT(quit()), Qt::QueuedConnection);
-    connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), &loop, SLOT(quit()), Qt::QueuedConnection);
+    connect(reply_, SIGNAL(finished()), &loop, SLOT(quit()), Qt::QueuedConnection);
+    connect(reply_, SIGNAL(error(QNetworkReply::NetworkError)), &loop, SLOT(quit()), Qt::QueuedConnection);
     DOUT("eventloop enter");
     loop.exec();
     DOUT("eventloop leave");
 
-    while (retries-- > 0 && state_ != OK)
+    reply_ = 0;
+
+    while (retries-- > 0 && state_ != OK) {
+      emit warning(QString("%1 (%2:%3--)")
+        .arg(tr("try again"))
+        .arg(tr("retries"))
+        .arg(QString::number(retries +1))
+      );
       get(req, false, retries); // async = false
+    }
   }
 
   DOUT("exit: state =" << state_);
@@ -52,6 +88,10 @@ Downloader::get(const QUrl &url, const QString &header, bool async, int retries)
 {
   DOUT("enter: async =" << async << ", url =" << url.toString() << ", retries =" << retries);
   state_ = Downloading;
+  emit message(tr("fetching") + ": " +
+    ::filterHost_(url.host()) + url.path()
+  );
+
   QNetworkRequest request(url);
   if (!header.isEmpty()) {
     QHash<QString, QString> h = parseHttpHeader(header);
@@ -60,20 +100,28 @@ Downloader::get(const QUrl &url, const QString &header, bool async, int retries)
       request.setRawHeader(p.key().toAscii(), p.value().toAscii());
   }
 
-  QNetworkReply *reply = nam_->get(request);
-  connect(reply, SIGNAL(downloadProgress(qint64,qint64)), SIGNAL(progress(qint64,qint64)));
+  reply_ = nam_->get(request);
+  connect(reply_, SIGNAL(downloadProgress(qint64,qint64)), SIGNAL(progress(qint64,qint64)));
 
   // See: http://www.developer.nokia.com/Community/Wiki/CS001432_-_Handling_an_HTTP_redirect_with_QNetworkAccessManager
   if (!async) {
     QEventLoop loop;
-    connect(reply, SIGNAL(finished()), &loop, SLOT(quit()), Qt::QueuedConnection);
-    connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), &loop, SLOT(quit()), Qt::QueuedConnection);
+    connect(reply_, SIGNAL(finished()), &loop, SLOT(quit()), Qt::QueuedConnection);
+    connect(reply_, SIGNAL(error(QNetworkReply::NetworkError)), &loop, SLOT(quit()), Qt::QueuedConnection);
     DOUT("eventloop enter");
     loop.exec();
     DOUT("eventloop leave");
 
-    while (retries-- > 0 && state_ != OK)
+    reply_ = 0;
+
+    while (retries-- > 0 && state_ != OK) {
+      emit warning(QString("%1 (%2:%3--)")
+        .arg(tr("try again"))
+        .arg(tr("retries"))
+        .arg(QString::number(retries +1))
+      );
       get(url, header, false, retries); // async = false
+    }
   }
 
   DOUT("exit: state =" << state_);
@@ -85,6 +133,11 @@ Downloader::post(const QUrl &url, const QByteArray &data, const QString &header,
 {
   DOUT("enter: async =" << async << ", url =" << url.toString() << ", retries =" << retries);
   state_ = Downloading;
+
+  emit message(tr("fetching") + ": " +
+    ::filterHost_(url.host()) + url.path()
+  );
+
   QNetworkRequest request(url);
   if (!header.isEmpty()) {
     QHash<QString, QString> h = parseHttpHeader(header);
@@ -92,37 +145,47 @@ Downloader::post(const QUrl &url, const QByteArray &data, const QString &header,
          p = h.begin(); p != h.end(); ++p)
       request.setRawHeader(p.key().toAscii(), p.value().toAscii());
   }
-  QNetworkReply *reply = nam_->post(request, data);
-  Q_ASSERT(reply);
-  if (!reply) {
-    state_ = Error;
-    DOUT("exit: ERROR: invalid reply");
-    return;
-  }
+  reply_ = nam_->post(request, data);
+  connect(reply_, SIGNAL(downloadProgress(qint64,qint64)), SIGNAL(progress(qint64,qint64)));
+
   if (!async) {
     QEventLoop loop;
-    connect(reply, SIGNAL(finished()), &loop, SLOT(quit()), Qt::QueuedConnection);
-    connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), &loop, SLOT(quit()), Qt::QueuedConnection);
+    connect(reply_, SIGNAL(finished()), &loop, SLOT(quit()), Qt::QueuedConnection);
+    connect(reply_, SIGNAL(error(QNetworkReply::NetworkError)), &loop, SLOT(quit()), Qt::QueuedConnection);
     DOUT("eventloop enter");
     loop.exec();
     DOUT("eventloop leave");
 
-    while (retries-- > 0 && state_ != OK)
+    reply_ = 0;
+
+    while (retries-- > 0 && state_ != OK) {
+      emit warning(QString("%1 (%2:%3--)")
+        .arg(tr("try again"))
+        .arg(tr("retries"))
+        .arg(QString::number(retries +1))
+      );
       post(url, data, header, false, retries); // async = false
+    }
   }
   DOUT("exit: state =" << state_);
 }
 
 // See: http://www.developer.nokia.com/Community/Wiki/CS001432_-_Handling_an_HTTP_redirect_with_QNetworkAccessManager
-void
-Downloader::redirect(QNetworkReply *reply)
+bool
+Downloader::tryRedirect(QNetworkReply *reply)
 {
-  DOUT("enter");
+  DOUT("enter: http error code =" << reply->error());
   Q_ASSERT(reply);
   QUrl url = reply->attribute(QNetworkRequest::RedirectionTargetAttribute).toUrl();
-  if (!url.isEmpty() && url != reply->url())
-    get(url, QString::null, false); // header = null, async = false
-  DOUT("exit");
+  bool ret = !url.isEmpty() && url != reply->url();
+  if (ret) {
+    if (fileName_.isEmpty())
+      state_ = OK;
+    else
+      get(url, QString(), false); // header = null, async = false
+  }
+  DOUT("exit: ret =" << ret);
+  return ret;
 }
 
 void
@@ -131,20 +194,24 @@ Downloader::save(QNetworkReply *reply)
   DOUT("enter");
   Q_ASSERT(reply);
 
+  reply_ = 0;
   reply->deleteLater();
   if (!reply->isFinished() || reply->error() != QNetworkReply::NoError) {
     state_ = Error;
     DOUT("exit: reply error: " + reply->errorString());
     return;
   }
-  QByteArray data = reply->readAll();
-  DOUT("raw data size =" << data.size());
-
-  if (data.isEmpty()) {
-    redirect(reply);
-    DOUT("exit: try redirecting URL");
+  if (tryRedirect(reply)) {
+    DOUT("exit: redirected URL");
     return;
   }
+  if (fileName_.isEmpty()) {
+    state_ = OK;
+    DOUT("exit: no fileName required");
+    return;
+  }
+  QByteArray data = reply->readAll();
+  DOUT("raw data size =" << data.size());
 
   if (reply->rawHeader("Content-Encoding") == "gzip") {
 #ifdef WITH_MODULE_COMPRESS
@@ -156,19 +223,19 @@ Downloader::save(QNetworkReply *reply)
 #endif // WITH_MODULE_COMPRESS
   }
   DOUT("data.size =" << data.size() << ", data =" << QString(data.left(50)) << "...");
-  bool ok = save(data, path_);
+  bool ok = save(data, fileName_);
   state_ = ok ? OK : Error;
   if (ok)
     emit finished();
   else
-    emit error(tr("failed to save file") + ": " + path_);
+    emit error(tr("failed to save file") + ": " + fileName_);
   DOUT("exit: state =" << state_);
 }
 
 bool
-Downloader::save(const QByteArray &data, const QString &path)
+Downloader::save(const QByteArray &data, const QString &fileName)
 {
-  QFile file(path);
+  QFile file(fileName);
   if (!file.open(QIODevice::WriteOnly))
     return false;
   file.write(data);
@@ -199,7 +266,7 @@ Downloader::parseHttpHeader(const QString &header)
   DOUT("enter: header =" << header);
 
   QStringList l = header.split('\n');
-  foreach (QString item, l) {
+  foreach (const QString &item, l) {
     int i = item.indexOf(':');
     if (i > 0) {
       QString k = item.left(i).trimmed();

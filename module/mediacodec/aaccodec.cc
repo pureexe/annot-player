@@ -4,7 +4,6 @@
 
 #include "aaccodec.h"
 #include "module/stream/inputstream.h"
-#include <QtCore>
 
 #define DEBUG "aaccodec"
 #include "module/debug/debug.h"

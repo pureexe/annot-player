@@ -3,7 +3,6 @@
 
 #include "flvmeta.h"
 #include "module/stream/datainputstream.h"
-#include <QtCore>
 
 #define DEBUG "flvmetawriter"
 #include "module/debug/debug.h"

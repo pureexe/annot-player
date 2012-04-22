@@ -5,8 +5,8 @@
 // 1/25/2011
 
 #include "mrlresolver.h"
-#include <QObject>
-#include <QList>
+#include <QtCore/QObject>
+#include <QtCore/QList>
 
 class MrlResolverManager : public MrlResolver
 {

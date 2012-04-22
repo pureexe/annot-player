@@ -5,8 +5,7 @@
 // 2/20/2012
 
 #include "downloadtask.h"
-#include <QObject>
-#include <QList>
+#include <QtCore/QObject>
 
 class DownloadManager : public QObject
 {
@@ -16,9 +15,11 @@ class DownloadManager : public QObject
 
   DownloadTaskList tasks_;
 
+  int threadCount_;
+
 public:
   explicit DownloadManager(QObject *parent = 0)
-    : Base(parent) { }
+    : Base(parent), threadCount_(0) { }
 
   // - Properties -
 public:
@@ -26,14 +27,22 @@ public:
 
   bool isEmpty() const { return tasks_.isEmpty(); }
 
-  void addTask(DownloadTask *t) ///< t will be automatically deleted
-  { Q_ASSERT(t); tasks_.append(t); }
+  void addTask(DownloadTask *t);
 
   DownloadTask *taskWithId(int tid);
-  void removeTaskWithId(int tid);
+  DownloadTask *taskWithUrl(const QString &url);
+  void removeTask(DownloadTask *t); // also delete task if owned
+
+  int maxThreadCount() const { return threadCount_; }
 
 public slots:
   void stopAll();
+  void removeAll();
+  void refreshSchedule();
+  void setMaxThreadCount(int n) { threadCount_ = n; }
+
+protected:
+  QString normalizeUrl(const QString &url);
 };
 
 #endif // DOWNLOADMANAGER_H

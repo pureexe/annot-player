@@ -7,9 +7,8 @@
 #include "ith/main.h"
 #include "ith/main_template.h"
 
-#include <QString>
-//#include <QTextDecoder>
-//QT_FORWARD_DECLARE_CLASS(QTextDecoder)
+#include <QtCore/QString>
+//#include <QtCore/QTextDecoder>
 
 class TextBuffer : public MyVector<BYTE, 0x800>
 {

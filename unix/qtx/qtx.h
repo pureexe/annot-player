@@ -4,7 +4,7 @@
 // qtx.h
 // 11/25/2011
 
-#include <QWidget>
+#include <QtGui/QWidget>
 
 namespace QtX {
 

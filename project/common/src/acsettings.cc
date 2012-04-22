@@ -7,7 +7,7 @@
 #include "module/crypt/crypt.h"
 #include "module/crypt/simplecrypt.h"
 #include "module/qtext/algorithm.h"
-#include <QNetworkProxy>
+#include <QtNetwork/QNetworkProxy>
 
 // - AcSettings keys -
 

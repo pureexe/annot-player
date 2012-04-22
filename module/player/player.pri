@@ -9,8 +9,8 @@ DEFINES += WITH_MODULE_PLAYER
 INCLUDEPATH += $$PWD
 
 HEADERS += \
-    $$PWD/player_config.h \
     $$PWD/player_p.h \
+    $$PWD/playerdefs.h \
     $$PWD/player.h
 
 SOURCES += \

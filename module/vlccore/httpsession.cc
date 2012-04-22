@@ -2,8 +2,6 @@
 // 2/21/2012
 
 #include "module/vlccore/httpsession.h"
-#include <QtCore>
-#include <QtNetwork>
 
 //#define DEBUG "httpsession"
 #include "module/debug/debug.h"

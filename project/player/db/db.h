@@ -8,9 +8,9 @@
 #include "module/annotcloud/token.h"
 #include "module/annotcloud/alias.h"
 #include "module/annotcloud/annotation.h"
-#include <QObject>
-#include <QMutex>
-#include <QSqlDatabase>
+#include <QtSql/QSqlDatabase>
+#include <QtCore/QObject>
+#include <QtCore/QMutex>
 
 /**
  *  Represents cached database.
@@ -25,7 +25,7 @@ class Database : public QObject
   typedef QObject Base;
 
   QSqlDatabase db_;
-  mutable QMutex mutex_;
+  mutable QMutex m_;
   bool disposed_;
 
   typedef AnnotCloud::User User;
@@ -39,9 +39,11 @@ class Database : public QObject
 
   // - Construction -
 public:
-  explicit Database(const QString &filePath, QObject *parent = 0);
+  explicit Database(QObject *parent = 0)
+    : Base(parent), disposed_(false) { }
   ~Database();
 
+  bool open(const QString &fileName);
   bool isValid() const { return db_.isOpen(); }
   bool isDisposed() const { return disposed_; }
 
@@ -52,11 +54,12 @@ signals:
 public slots:
   void clear();
 
-  void dispose();
+  void dispose() { disposed_ = true; }
 
 protected:
-  bool open(const QString &filePath);
   bool createTables(); ///< Format current db by creating needed tables
+  void tune();
+  static QString newId();
 
   // - Queries -
 public:
@@ -67,7 +70,7 @@ public:
   qint64 insertAlias(const Alias &alias);
   bool isAliasExists(const Alias &alias) const;
   bool insertAliases(const AliasList &l);
-  qint64 insertAnnotation(const Annotation &annot);
+  qint64 insertAnnotation(const Annotation &annot, bool lock = true);
   bool insertAnnotations(const AnnotationList &l);
 
   /// Password is encrypted. Return a user with zero id if failed.

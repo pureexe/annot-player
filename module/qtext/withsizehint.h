@@ -4,7 +4,7 @@
 // core/gui/withsizehint.h
 // 12/16/2011
 
-#include <QSize>
+#include <QtCore/QSize>
 
 namespace QtExt {
 

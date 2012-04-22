@@ -30,6 +30,7 @@ SOURCES += \
     $$PWD/bufferedremotestream.cc \
     $$PWD/bufferedstreampipe.cc \
     $$PWD/datainputstream.cc \
+    $$PWD/remotestream.cc \
     $$PWD/securebufferedfifostream.cc \
     $$PWD/inputstream.cc
 

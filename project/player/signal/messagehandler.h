@@ -5,10 +5,10 @@
 // 10/19/2011
 
 #include "processinfo.h"
-#include <QObject>
-#include <QStringList>
-#include <QList>
-#include <QVector>
+#include <QtCore/QObject>
+#include <QtCore/QStringList>
+#include <QtCore/QList>
+#include <QtCore/QVector>
 
 class MessageHandler : public QObject
 {

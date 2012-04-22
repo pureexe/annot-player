@@ -1,22 +1,28 @@
 // main.cc
 // 6/30/2011
 #include "mainwindow.h"
+#include "global.h"
 #include "application.h"
 #include "rc.h"
+#include "settings.h"
 #include "ac/acsettings.h"
 #include "ac/acui.h"
+#include "ac/acdownloader.h"
 #ifdef WITH_MODULE_QT
 #  include "module/qt/qtrc.h"
 #endif // WITH_MODULE_QT
 #include "module/mrlresolver/mrlresolversettings.h"
+#include <QtNetwork/QNetworkProxy>
+#include <QtNetwork/QNetworkReply>
 #include <QtGui>
-#include <QtNetwork>
 #include <boost/tuple/tuple.hpp>
 #include <ctime>
 #include <cstdlib>
 
 #define DEBUG "main"
 #include "module/debug/debug.h"
+
+#define DEFAULT_SIZE    QSize(400, 300)
 
 // - Startup stages -
 
@@ -27,6 +33,18 @@ namespace { // anonymous
   {
     // Not registered in Qt 4.8
     qRegisterMetaType<QNetworkReply::NetworkError>("QNetworkReply::NetworkError");
+  }
+
+  // Window size
+
+  inline bool isValidWindowSize(const QSize &size, const QWidget *w = 0)
+  {
+    if (size.width() < DEFAULT_SIZE.width() || size.height() < DEFAULT_SIZE.height())
+      return false;
+
+    QSize desktop = QApplication::desktop()->screenGeometry(w).size();
+    return desktop.isEmpty() ||
+           size.width() > desktop.width() && size.height() > desktop.height();
   }
 
   // i18n
@@ -87,6 +105,13 @@ main(int argc, char *argv[])
 
   if (!a.isSingleInstance()) {
     DOUT("exit: not single instance");
+    QStringList args = a.arguments();
+    args.removeFirst()  ;
+    if (!args.isEmpty()) {
+      AcDownloader delegate;
+      delegate.openArguments(args); // CHECKPOINT
+      a.processEvents();
+    }
     return 0;
   }
 
@@ -115,6 +140,10 @@ main(int argc, char *argv[])
       a.installTranslator(t);
 #endif // WITH_MODULE_QT
   }
+
+  // Check update
+  if (Settings::globalSettings()->version() != G_VERSION)
+    Settings::globalSettings()->setVersion(G_VERSION);
 
   // Set theme.
   {
@@ -155,7 +184,10 @@ main(int argc, char *argv[])
   MainWindow w;
   a.setMainWindow(&w);
 
-  w.resize(400, 300);
+  QSize sz = Settings::globalSettings()->recentSize();
+  if (sz.isEmpty() || !isValidWindowSize(sz))
+    sz = DEFAULT_SIZE;
+  w.resize(sz);
   w.show();
 
   QStringList args = a.arguments();

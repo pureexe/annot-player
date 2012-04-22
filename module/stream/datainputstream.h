@@ -5,9 +5,8 @@
 // 3/14/2012
 
 #include "inputstream.h"
-#include <QObject>
-#include <QByteArray>
-#include <cstring>
+#include <QtCore/QObject>
+#include <QtCore/QByteArray>
 
 class DataInputStream : public QObject, public InputStream
 {
@@ -36,15 +35,7 @@ public:
   virtual qint64 skip(qint64 count) ///< \override
   { qint64 diff = qMin(count, data_.size() - pos_); pos_ += diff; return diff; }
 
-  virtual qint64 read(char *data, qint64 maxSize)
-  {
-    qint64 count = qMin(maxSize, data_.size() - pos_);
-    if (count > 0) {
-      ::memcpy(data, data_.data() + pos_, count);
-      pos_ += count;
-    }
-    return count;
-  }
+  virtual qint64 read(char *data, qint64 maxSize); ///< \override
 
   virtual QByteArray readAll()  ///< \override
   { return pos_ ? data_.mid(pos_) : data_; }

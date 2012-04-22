@@ -9,8 +9,8 @@
 
 #include "mediacodec_config.h"
 #include "module/stream/outputstream.h"
-#include <QObject>
-#include <QByteArray>
+#include <QtCore/QObject>
+#include <QtCore/QByteArray>
 
 class MediaToc;
 

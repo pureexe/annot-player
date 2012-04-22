@@ -4,7 +4,7 @@
 // module/clientagent/clientdelegate.h
 // 10/6/2011
 
-#include <QString>
+#include <QtCore/QString>
 
 class ClientDelegate
 {

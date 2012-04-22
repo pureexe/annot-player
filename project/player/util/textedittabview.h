@@ -4,8 +4,8 @@
 // backlogview.h
 // 1/1/2012
 
-#include <QWidget>
-#include <QList>
+#include <QtGui/QWidget>
+#include <QtCore/QList>
 
 QT_FORWARD_DECLARE_CLASS(QToolButton)
 QT_FORWARD_DECLARE_CLASS(QStackedLayout)

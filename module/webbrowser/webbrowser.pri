@@ -15,7 +15,7 @@ DEPENDPATH += \
     $$PWD/network \
     $$PWD/webkit
 
-DEFINES +=  WEBBROWSER_STATIC
+#DEFINES +=  WEBBROWSER_STATIC
 
 FORMS   += \
     $$PWD/webbrowser.ui

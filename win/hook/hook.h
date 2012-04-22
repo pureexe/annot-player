@@ -14,7 +14,7 @@
 // NOTE: It is required that one dll only allow one HookProc with SetWindowsHookEx!
 
 #include "hook_config.h"
-#include <QWidget>
+#include <QtGui/QWidget>
 
 QT_FORWARD_DECLARE_CLASS(QMouseEvent)
 

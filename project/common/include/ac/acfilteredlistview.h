@@ -4,9 +4,9 @@
 // ac/acfilteredlistview.h
 // 11/17/2011
 
-#include <QWidget>
-#include <QModelIndex>
-#include <QHash>
+#include <QtGui/QWidget>
+#include <QtCore/QModelIndex>
+#include <QtCore/QHash>
 
 QT_BEGIN_NAMESPACE
 //class QComboBox;
@@ -43,6 +43,7 @@ public:
 public slots:
   void clear();
   void invalidateCount();
+  void sortByColumn(int col);
 protected slots:
   void invalidateFilterRegExp();
   void popup();

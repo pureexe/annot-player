@@ -4,8 +4,8 @@
 // core/database.h
 // 7/24/2011
 
-#include <QObject>
-#include <QSet>
+#include <QtCore/QObject>
+#include <QtCore/QSet>
 
 namespace Core {
 

@@ -4,7 +4,7 @@
 // tray.h
 // 10/27/2011
 
-#include <QSystemTrayIcon>
+#include <QtGui/QSystemTrayIcon>
 
 QT_FORWARD_DECLARE_CLASS(QAction)
 
@@ -19,6 +19,9 @@ class Tray : public QSystemTrayIcon
   // - Constructions -
 public:
   explicit Tray(MainWindow *w, QObject *parent = 0);
+
+public slots:
+  void setToolTip(const QString &text) { Base::setToolTip(text); }
 
   // - Implementations -
 protected slots:

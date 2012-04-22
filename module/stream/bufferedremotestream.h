@@ -5,8 +5,8 @@
 // 2/15/2012
 
 #include "remotestream.h"
-#include <QNetworkReply>
-#include <QMutex>
+#include <QtNetwork/QNetworkReply>
+#include <QtCore/QMutex>
 
 class BufferedRemoteStream :  public RemoteStream
 {
@@ -40,33 +40,11 @@ public:
   virtual QByteArray readAll(); ///< \override
 
   virtual bool reset() { m_.lock(); pos_ = 0; m_.unlock(); return true; } ///< \override
-  virtual bool seek(qint64 pos) ///< \override
-  {
-    if (Base::size() && pos >= Base::size()) return false;
-    m_.lock(); pos_ = pos; m_.unlock(); return true;
-  }
+  virtual bool seek(qint64 pos); ///< \override
 
-  virtual qint64 skip(qint64 count) ///< \override
-  {
-    m_.lock();
-    qint64 specifiedSize = Base::size();
-    qint64 ret;
-    if (specifiedSize && pos_ + count >= specifiedSize) {
-       ret = specifiedSize - pos_;
-       pos_ = specifiedSize;
-    } else {
-      pos_ += count;
-      ret = count;
-    }
-    m_.unlock();
-    return ret;
-  }
+  virtual qint64 skip(qint64 count); ///< \override
 
-  virtual QString contentType() const ///< \override
-  {
-    return reply_ ? reply_->header(QNetworkRequest::ContentTypeHeader).toString() :
-                    QString::null;
-  }
+  virtual QString contentType() const; ///< \override
 
   QByteArray &data() { return data_; }
   const QByteArray &data() const { return data_; }

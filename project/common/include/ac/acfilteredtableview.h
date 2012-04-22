@@ -4,9 +4,9 @@
 // ac/filteredtableview.h
 // 11/17/2011
 
-#include <QWidget>
-#include <QModelIndex>
-#include <QHash>
+#include <QtGui/QWidget>
+#include <QtCore/QModelIndex>
+#include <QtCore/QHash>
 
 QT_BEGIN_NAMESPACE
 class QComboBox;

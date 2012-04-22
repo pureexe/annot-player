@@ -1,5 +1,7 @@
 // ith/pipe.cc
 // 10/14/2011
+// Derived from ith2.
+// See also: ith3/ihf_dll/pipe.cpp
 #include "ith/pipe.h"
 #include "ith/main.h"
 #include "ith/hookman.h"

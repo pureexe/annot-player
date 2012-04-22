@@ -13,9 +13,9 @@
 #include <string>
 #include <cstdlib>
 
-#ifdef _MSC_VER
-#  pragma warning (disable: 4996)     // C4996: 'getenv': This function or variable may be unsafe. Consider using _dupenv_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-#endif // _MSC_VER
+//#ifdef _MSC_VER
+//#  pragma warning (disable: 4996)     // C4996: 'getenv': This function or variable may be unsafe. Consider using _dupenv_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+//#endif // _MSC_VER
 
 #if defined _MSC_VER || defined _MSC_EXTENSIONS
 #  define DELTA_EPOCH_IN_MICROSECS  11644473600000000Ui64
@@ -30,6 +30,13 @@
 namespace { // anonymous
 
   // Conversions between qt and win32 data structures
+
+  inline QString QPath2WinPath(const QString &fileName)
+  {
+    QString ret = fileName;
+    ret.replace('/', '\\');
+    return ret;
+  }
 
   inline QPoint POINT2QPoint(const POINT &pt)
   { return QPoint((int)pt.x, (int)pt.y); }
@@ -502,28 +509,61 @@ QtWin::getMousePos()
     return QPoint();
 }
 
-// - Environments -
+// - Paths -
+// It is suggested to use SHGetFolderPath or SHGetKnownFolderPath, which is not available to Windows XP
 
 QString
 QtWin::getWinDirPath()
-{ return ::getenv("windir"); }
+{ return qgetenv("windir"); }
 
 QString
 QtWin::getAppDataPath()
-{ return ::getenv("AppData"); }
+{ return qgetenv("AppData"); }
 
 QString
-QtWin::getDesktopPath()
+QtWin::getFontsPath()
 {
-  QString ret;
-
-  QSettings reg(
+  return QSettings(
     "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders",
     QSettings::NativeFormat
-  );
-  ret = reg.value("Desktop").toString();
-  return QDir(ret).exists() ? ret : QString::null;
+  ).value("Fonts").toString();
 }
+
+QString
+QtWin::getMusicPath()
+{
+  return QSettings(
+    "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders",
+    QSettings::NativeFormat
+  ).value("My Music").toString();
+}
+
+QString
+QtWin::getVideoPath()
+{
+  return QSettings(
+    "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders",
+    QSettings::NativeFormat
+  ).value("My Video").toString();
+}
+
+QString
+QtWin::getDocumentsPath()
+{
+  return QSettings(
+    "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders",
+    QSettings::NativeFormat
+  ).value("Personal").toString();
+}
+
+// See: http://msdn.microsoft.com/en-us/library/windows/desktop/bb762188(v=vs.85).aspx
+// See: http://msdn.microsoft.com/en-us/library/windows/desktop/dd378457(v=vs.85).aspx
+// Not implemeneted since SHGetKnownFolderPath is not available to Windows XP.
+QString
+QtWin::getDownloadsPath()
+{ return QDir::homePath() + "/" "Downloads"; }
+
+// - System information -
 
 // See: http://msdn.microsoft.com/en-us/library/ms724451(v=VS.85).aspx
 // See: http://msdn.microsoft.com/en-us/library/ms724833(VS.85).aspx
@@ -768,11 +808,11 @@ QString
 QtWin::guessDeviceFileName(const QString &hint)
 {
   if (hint.isEmpty())
-    return QString::null;
+    return QString();
 
   QString normalized = hint.trimmed().toUpper();
   if (normalized.isEmpty())
-    return QString::null;
+    return QString();
 
   else if (normalized.contains(QRegExp("^\\\\\\\\\\.\\\\[A-Z]:$")))
     return normalized;
@@ -783,7 +823,7 @@ QtWin::guessDeviceFileName(const QString &hint)
     return "\\\\.\\" + normalized;
   }
   else
-    return QString::null;
+    return QString();
 }
 
 bool
@@ -866,6 +906,12 @@ QtWin::toUtf8(const wchar_t *pStr)
   WideCharToMultiByte(CP_UTF8, 0, pStr, -1, szBuf, sizeof(szBuf), NULL, NULL);
   return szBuf;
 }
+
+// - File system -
+
+bool
+QtWin::setFileAttributes(const QString &fileName, uint flags)
+{ return ::SetFileAttributesW(::QPath2WinPath(fileName).toStdWString().c_str(), flags); }
 
 // EOF
 

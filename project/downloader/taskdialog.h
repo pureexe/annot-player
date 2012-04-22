@@ -5,7 +5,7 @@
 // 2/18/2012
 
 #include "module/qtext/dialog.h"
-#include <QStringList>
+#include <QtCore/QStringList>
 
 QT_FORWARD_DECLARE_CLASS(QToolButton)
 

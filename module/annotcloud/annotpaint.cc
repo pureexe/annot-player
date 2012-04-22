@@ -4,13 +4,13 @@
 #include "module/annotcloud/annotpaint.h"
 #include "module/qtext/datetime.h"
 #include "module/qtext/algorithm.h"
-#include <QPainter>
-#include <QHash>
-#include <QMultiMap>
-#include <QDateTime>
 #ifdef WITH_QT_SVG
-#  include <QSvgGenerator>
+#  include <QtSvg/QSvgGenerator>
 #endif // WITH_QT_SVG
+#include <QtGui/QPainter>
+#include <QtCore/QHash>
+#include <QtCore/QMultiMap>
+#include <QtCore/QDateTime>
 //#include <boost/bimap.hpp>
 #include <utility>
 #include <climits>
@@ -97,6 +97,7 @@ void
 AnnotCloud::
 AnnotationPainter::paintHistogramByPos(QPainter &p, const AnnotationList &l, const QString &title, const QRect &view) const
 {
+  DOUT("count =" << l.size());
   if (l.isEmpty())
     return;
 
@@ -116,24 +117,41 @@ AnnotationPainter::paintHistogramByPos(QPainter &p, const AnnotationList &l, con
       duration = a.pos();
 
   int metric = (duration / (1800 * 1000) +1) * unit; // unit / 30min
+  Q_ASSERT(metric);
 
   typedef QHash<int, int> Histogram;
   Histogram hist;
-  int maxY = 0;
   foreach (const Annotation &a, l) {
     int x = a.pos() / metric;
     if (x < 0)
       continue;
-    int y = ++hist[x];
-    if (maxY < y)
-      maxY = y;
+    ++hist[x];
   }
+  enum { TopCount = 3 };
+  int top[TopCount] = { };
+  foreach (int y, hist)
+    if (top[0] < y) {
+      top[2] = top[1];
+      top[1] = top[0];
+      top[0] = y;
+    } else if (top[1] < y) {
+      top[2] = top[1];
+      top[1] = y;
+    } else if (top[2] < y) {
+      top[2] = y;
+    }
+  int maxY = qMax(top[0], 1);
+  Q_ASSERT(maxY);
+
+  DOUT("hash size =" << hist.size());
+  DOUT("maxY =" << maxY);
 
   int maxX = duration / metric;
 
   if (maxX < Stride)
     maxX = Stride;
 
+  Q_ASSERT(maxX);
   Q_ASSERT(maxY);
 
   // Draw histogram
@@ -172,6 +190,7 @@ AnnotationPainter::paintHistogramByPos(QPainter &p, const AnnotationList &l, con
     f.setBold(true);
     p.setFont(f);
     int labelCount = maxX / Stride + 1;
+    Q_ASSERT(labelCount);
     int labelWidth = width / labelCount;
     for (int i = 0; i < labelCount; i++) {
       qint64 msecs = i * Stride * metric;
@@ -186,24 +205,30 @@ AnnotationPainter::paintHistogramByPos(QPainter &p, const AnnotationList &l, con
   // Calculate local peaks
   QList<QPoint> peaks;
   {
-    enum { distanceX = 5 };
-    int limitY = maxY / 2;
-    if (limitY)
-      for (Histogram::ConstIterator i = hist.begin(); i != hist.end(); ++i) {
-        int x = i.key(),
-            y = i.value();
-        if (y < limitY)
-          continue;
-        if (!peaks.isEmpty() &&
-            peaks.last().x() + distanceX > x) {
-          if (peaks.last().y() < y) {
-            peaks.removeLast();
-            peaks.append(QPoint(x, y));
-          }
-        } else
-          peaks.append(QPoint(x, y));
+    enum { distanceX = 20 }; // 5sec * 20 = 1min 40sec
+    int t = maxY;
+    for (int i = TopCount -1; i>=0; i--)
+      if (top[i]) {
+        t = top[i];
+        break;
       }
+    int limitY = t *5/8 + 1;
+    Q_ASSERT(limitY);
+    for (Histogram::ConstIterator i = hist.begin(); i != hist.end(); ++i) {
+      int x = i.key(),
+          y = i.value();
+      if (y < limitY)
+        continue;
+      if (!peaks.isEmpty() &&
+          peaks.last().x() + distanceX > x) {
+        if (peaks.last().y() < y)
+          peaks.last() = QPoint(x, y);
+      } else
+        peaks.append(QPoint(x, y));
+    }
   }
+
+  DOUT("peaks =" << peaks);
 
   // Draw peaks
   if (!peaks.isEmpty()) {
@@ -280,6 +305,7 @@ void
 AnnotCloud::
 AnnotationPainter::paintHistogramByCreateTime(QPainter &p, const AnnotationList &l, const QString &title, const QRect &view) const
 {
+  DOUT("count =" << l.size());
   if (l.isEmpty())
     return;
 
@@ -291,17 +317,24 @@ AnnotationPainter::paintHistogramByCreateTime(QPainter &p, const AnnotationList 
   // Analysis
   qint64 max = 0,
          min = LLONG_MAX;
-  enum { limit = 946706400 }; //QDateTime(QDate(2000, 1, 1)).toMSecsSinceEpoch() / 1000;
-  foreach (const Annotation &a, l)
-    if (a.createTime() > limit) {
-      if (max < a.createTime())
-        max = a.createTime();
-      else if (min > a.createTime())
-        min = a.createTime();
+  foreach (const Annotation &a, l)  {
+    qint64 t = a.createTime();
+    if (t > Traits::MIN_TIME
+#ifndef Q_WS_WIN
+        && t < Traits::MAX_TIME // FIXME sth must be broken on windows.
+#endif // Q_WS_WIN
+        ) {
+      if (max < t)
+        max = t;
+      if (min > t)
+        min = t;
     }
+  }
   qint64 range = max - min;
+  if (range < 0)
+    range = 0;
 
-  int metric = (range / (86400) + 1) * 300; // at least 5min / day
+  int metric = (range / 86400 + 1) * 300; // at least 5min / day
   Q_ASSERT(metric);
   if (metric > 86400)
     metric = 86400;
@@ -310,21 +343,30 @@ AnnotationPainter::paintHistogramByCreateTime(QPainter &p, const AnnotationList 
   Histogram hist;
   qint64 maxX = max / metric,
          minX = min / metric;
-  enum { TopCount = 3 };
-  int top[TopCount] = { };
   foreach (const Annotation &a, l) {
     qint64 x = a.createTime() / metric;
     if (x <= 0)
       continue;
-    int y = ++hist[x];
-    if (top[0] < y) {
-      for (int i = TopCount -1; i; i--)
-        top[i] = top[i-1];
-      top[0] = y;
-    }
+     ++hist[x];
   }
-  int maxY = top[0];
+  enum { TopCount = 3 };
+  int top[TopCount] = { };
+  foreach (int y, hist)
+    if (top[0] < y) {
+      top[2] = top[1];
+      top[1] = top[0];
+      top[0] = y;
+    } else if (top[1] < y) {
+      top[2] = top[1];
+      top[1] = y;
+    } else if (top[2] < y) {
+      top[2] = y;
+    }
+  int maxY = qMax(top[0], 1);
   Q_ASSERT(maxY);
+
+  DOUT("hash size =" << hist.size());
+  DOUT("maxY =" << maxY);
 
   int rangeX = maxX - minX;
 
@@ -333,6 +375,7 @@ AnnotationPainter::paintHistogramByCreateTime(QPainter &p, const AnnotationList 
     rangeX = dailyStride;
     maxX = minX + dailyStride;
   }
+  Q_ASSERT(rangeX);
 
   // Draw histogram
   int width = view.width() ? view.width() : p.device()->width(),
@@ -363,28 +406,30 @@ AnnotationPainter::paintHistogramByCreateTime(QPainter &p, const AnnotationList 
   // Calculate local peaks
   QList<QPoint> peaks;
   {
-    enum { distanceX = 8 };
-    int t = 0;
+    enum { distanceX = 30 }; // 5min * 30 = 2.5h
+    int t = maxY;
     for (int i = TopCount -1; i>=0; i--)
-      if (top[i]) t = top[i];
-      else break;
-    int limitY = t / 2;
-    if (limitY)
-      for (Histogram::ConstIterator i = hist.begin(); i != hist.end(); ++i) {
-        qint64 x = i.key();
-        int y = i.value();
-        if (y < limitY)
-          continue;
-        if (!peaks.isEmpty() &&
-            peaks.last().x() + distanceX > x) {
-          if (peaks.last().y() < y) {
-            peaks.removeLast();
-            peaks.append(QPoint(x, y));
-          }
-        } else
-          peaks.append(QPoint(x, y));
+      if (top[i]) {
+        t = top[i];
+        break;
       }
+    int limitY = t / 2 + 1;
+    Q_ASSERT(limitY);
+    for (Histogram::ConstIterator i = hist.begin(); i != hist.end(); ++i) {
+      qint64 x = i.key();
+      int y = i.value();
+      if (y < limitY)
+        continue;
+      if (!peaks.isEmpty() &&
+          peaks.last().x() + distanceX > x) {
+        if (peaks.last().y() < y)
+          peaks.last() = QPoint(x, y);
+      } else
+        peaks.append(QPoint(x, y));
+    }
   }
+
+  DOUT("peaks =" << peaks);
 
   // Draw peaks
   if (!peaks.isEmpty()) {
@@ -447,6 +492,7 @@ AnnotationPainter::paintHistogramByCreateTime(QPainter &p, const AnnotationList 
     p.setFont(f);
 
     int hourCount = range / 3600 + 1;
+    Q_ASSERT(hourCount);
     for (int i = 0; i < hourCount; i++) {
       qint64 secs = minX * metric + i * 3600;
       QDateTime ts = QDateTime::fromMSecsSinceEpoch(secs * 1000);
@@ -513,25 +559,32 @@ void
 AnnotCloud::
 AnnotationPainter::paintHistogramByUserId(QPainter &p, const AnnotationList &l, const QString &title, const QRect &view) const
 {
+  DOUT("count =" << l.size());
+
+  if (l.isEmpty())
+    return;
   enum { LabelFontSize = 10, PeakFontSize = 8 }; // 10em
   enum { LabelHeight = LabelFontSize + 2, PeakFontHeight = PeakFontSize + 2 };
   enum { MarginSize = 3 };
   enum { LabelWidth = 50 };
 
-  if (l.isEmpty())
-    return;
-
-  int maxY = 0;
+  int maxY = 1;
 
   typedef QHash<qint64, int> H;
   H h;
-  foreach (const Annotation &a, l) {
-    if (a.createTime() <= 0) // skip anonymous user, skip UI_Guest here in the future
-      continue;
-    int y = ++h[a.userId()];
-    if (y > maxY)
-      maxY = y;
-  }
+  foreach (const Annotation &a, l) // skip anonymous user, skip UI_Guest here in the future
+    if (a.createTime() > Traits::MIN_TIME
+#ifndef Q_WS_WIN
+        && t < Traits::MAX_TIME // FIXME sth must be broken on windows.
+#endif // Q_WS_WIN
+        ) {
+      int y = ++h[a.userId()];
+      if (y > maxY)
+        maxY = y;
+    }
+
+  DOUT("hash size =" << h.size());
+  DOUT("maxY =" << maxY);
 
   // Sort hash by value
   typedef QMultiMap<int, qint64> M;
@@ -554,7 +607,7 @@ AnnotationPainter::paintHistogramByUserId(QPainter &p, const AnnotationList &l, 
   labelFont.setBold(true);
 #endif // Q_WS_WIN
   p.setFont(labelFont);
-  int labelCount = width / LabelWidth;
+  int labelCount = qMax(1, width/LabelWidth);
   int stride = rangeX / labelCount;
   if (!stride)
     stride = rangeX;
@@ -626,9 +679,10 @@ AnnotationPainter::paintHistogramByUserId(QPainter &p, const AnnotationList &l, 
 
     if (height > TitleHeight + NoteHeight + NoteMargin) {
       QString peak = QString::number(maxY),
-              average = QString::number(l.size()/(qreal)rangeX, 'f', 2);
-      QString note = QString("peak = %1 / user   average = %2 / user")
-                     .arg(peak).arg(average);
+              average = QString::number(l.size()/(qreal)rangeX, 'f', 2),
+              total = QString::number(h.size());
+      QString note = QString("peak = %1 / user   average = %2 / user   total = %3 users")
+                     .arg(peak).arg(average).arg(total);
       QFont f = p.font();
       f.setBold(true);
       f.setItalic(ITALIC);
@@ -668,6 +722,11 @@ AnnotationPainter::saveHistogramAsFile(
     generator.setDescription(description);
 
   QPainter painter(&generator);
+  painter.setRenderHints(
+    //QPainter::Antialiasing |
+    QPainter::TextAntialiasing |
+    QPainter::SmoothPixmapTransform
+  );
 
   painter.fillRect(QRect(0, 0, width, height), Qt::transparent);
   paintHistogram(painter, l, sortBy, title);

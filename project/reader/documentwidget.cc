@@ -147,7 +147,7 @@ void PageWidget::selectBlocks(const QRectF &rect)
   QPainter painter;
   painter.begin(&image);
 
-  BOOST_FOREACH (Poppler::TextBox *b, std::make_pair(first, last + 1)) {
+  BOOST_FOREACH (Poppler::TextBox *b, qMakePair(first, last + 1)) {
     QRectF t_highlight = b->boundingBox();
     if (!t_highlight.isEmpty()) {
       QRectF highlight = ::zoom_from_touch_unit(t_highlight, this, zoom_);

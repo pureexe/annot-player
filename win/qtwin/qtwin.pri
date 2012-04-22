@@ -8,7 +8,8 @@ DEFINES += WITH_WIN_QTWIN
 HEADERS += \
     $$PWD/ntdll.h \
     $$PWD/qtwin.h \
-    $$PWD/qtwinapi.h
+    $$PWD/qtwinapi.h \
+    $$PWD/winreg.h
 
 SOURCES += \
     $$PWD/qtwin.cc \

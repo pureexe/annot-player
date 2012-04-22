@@ -4,7 +4,7 @@
 // qtext/hash.h
 // 8/1/2011
 
-#include <QString>
+#include <QtCore/QString>
 //#include <cstdarg>
 
 namespace QtExt {

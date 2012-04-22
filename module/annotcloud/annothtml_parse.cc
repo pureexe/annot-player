@@ -1,4 +1,4 @@
-// annotcloud/annothtmlparse.cc
+// annotcloud/annothtml_parse.cc
 // 8/19/2011
 
 #include "module/annotcloud/annothtml.h"
@@ -20,7 +20,7 @@ AnnotCloud::
 AnnotationHtmlParser::parseLeadingTag(const QString &text)
 {
   if (text.isEmpty() || text[0] != CORE_CMDCH)
-    return std::make_pair(QString::null, QString::null);
+    return std::make_pair(QString(), QString());
 
   // TODO: use while
   //int index = 0;
@@ -33,7 +33,7 @@ AnnotationHtmlParser::parseLeadingTag(const QString &text)
 
   int index = text.indexOf(' ');
   if (index < 0)
-    return std::make_pair(text, QString::null);
+    return std::make_pair(text, QString());
   else
     return std::make_pair(text.mid(0, index), text.mid(index + 1));
 }
@@ -49,7 +49,7 @@ AnnotationHtmlParser::parseNextToken(const QString &text)
     return RETURN();
 
   if (text.size() == 1)
-    return RETURN(text, QString::null);
+    return RETURN(text, QString());
 
   char ch0 = text[0].toLatin1();
   switch (ch0) {
@@ -79,7 +79,7 @@ AnnotationHtmlParser::parseNextToken(const QString &text)
     }
   }
   if (!mid)
-    return RETURN(text, QString::null);
+    return RETURN(text, QString());
   else
     return RETURN(text.mid(0, mid), text.mid(mid).trimmed());
 #undef SELF
@@ -141,15 +141,15 @@ AnnotationHtmlParser::toHtml(const QString &text) const
         switch (front.second) {
 
         case '}':
-          params.push_front(front.first);
+          params.prepend(front.first);
           break;
         case ']':
-          attrs.push_front(front.first);
+          attrs.prepend(front.first);
           break;
 
         case CORE_CMDCH: {
             if (!parsed.isEmpty())
-              params.push_back(parsed);
+              params.append(parsed);
 
             QString t = translate(front.first, params, attrs);
             if (!t.isNull()) {
@@ -212,15 +212,15 @@ AnnotationHtmlParser::toHtml(const QString &text) const
             break;
 
           case '}':
-            params.push_front(front.first);
+            params.prepend(front.first);
             break;
           case ']':
-            attrs.push_front(front.first);
+            attrs.prepend(front.first);
             break;
 
           case CORE_CMDCH: {
             if (!reduced.isEmpty())
-              params.push_back(reduced);
+              params.append(reduced);
             QString t = translate(front.first, params, attrs);
             if (!t.isNull()) {
               reduced = t;
@@ -257,7 +257,7 @@ AnnotationHtmlParser::toHtml(const QString &text) const
         if (!params.empty())
           reduced = params.join("") + reduced;
         if (!reduced.isEmpty())
-          stack.push_front(std::make_pair(reduced, '}'));
+          stack.prepend(std::make_pair(reduced, '}'));
 
         DOUT("reduced {}:" << reduced);
       } break;
@@ -286,7 +286,7 @@ AnnotationHtmlParser::toHtml(const QString &text) const
         }
 
         if (!reduced.isEmpty())
-          stack.push_front(std::make_pair(reduced, ']'));
+          stack.prepend(std::make_pair(reduced, ']'));
 
         DOUT("reduced []:" << reduced);
       } break;
@@ -294,7 +294,7 @@ AnnotationHtmlParser::toHtml(const QString &text) const
 
     case '{':
     case '[':
-      stack.push_front(std::make_pair(current, current_ch));
+      stack.prepend(std::make_pair(current, current_ch));
       break;
 
     case CORE_CMDCH:
@@ -310,11 +310,11 @@ AnnotationHtmlParser::toHtml(const QString &text) const
         }
       }
 
-      stack.push_front(std::make_pair(current, current_ch));
+      stack.prepend(std::make_pair(current, current_ch));
       break;
 
     default:
-      stack.push_front(std::make_pair(current, '\0'));
+      stack.prepend(std::make_pair(current, '\0'));
     }
 
   } while (!stack.empty());
@@ -342,7 +342,7 @@ AnnotationHtmlParser::translate(const QString &tag,
   #endif // DEBUG
 
   if (tag.isEmpty())
-    return QString::null;
+    return QString();
 
   switch (qHash(tag)) {
   case H_Verbatim:
@@ -361,7 +361,7 @@ AnnotationHtmlParser::translate(const QString &tag,
     else { \
       if (attrs.empty()) { \
         if (params.size() == 1) \
-          return params.front(); \
+          return params.first(); \
         else { \
           QString ret; \
           int i = 0; \
@@ -377,7 +377,7 @@ AnnotationHtmlParser::translate(const QString &tag,
         } \
       } else { \
         QString ret; \
-        QString color = attrs.front(); \
+        QString color = attrs.first(); \
         int i = 0; \
         foreach (const QString &param, params) { \
           if (i == 0) \
@@ -403,14 +403,14 @@ AnnotationHtmlParser::translate(const QString &tag,
     else {
       if (attrs.empty()) {
         if (params.size() == 1)
-          return params.front();
+          return params.first();
         else {
           QString ret;
           int i = 0;
           foreach (QString param, params) {
             if (param.isEmpty())
               continue;
-            if (param[param.size() - 1].isDigit())
+            if (param[param.size() -1].isDigit())
               param += "px";
             switch (i) {
             case 0: ret = html_style_open("font-size:" + param); break;
@@ -423,8 +423,8 @@ AnnotationHtmlParser::translate(const QString &tag,
         }
       } else {
         QString ret;
-        QString size = attrs.front();
-        if (!size.isEmpty() && size[size.size() - 1].isDigit())
+        QString size = attrs.first();
+        if (!size.isEmpty() && size[size.size() -1].isDigit())
           size += "px";
         int i = 0;
         foreach (const QString &param, params) {
@@ -446,7 +446,7 @@ AnnotationHtmlParser::translate(const QString &tag,
     else {
       if (attrs.empty()) {
         if (params.size() == 1)
-          return params.front();
+          return params.first();
         else {
           QString ret;
           int count = 0;
@@ -475,7 +475,7 @@ AnnotationHtmlParser::translate(const QString &tag,
 
       } else {
         QString ret;
-        QString s_count = attrs.front();
+        QString s_count = attrs.first();
         int count = s_count.toInt();
         if (count > 0) {
           if (count > MAX_REPEAT_COUNT)
@@ -501,7 +501,7 @@ AnnotationHtmlParser::translate(const QString &tag,
     else {
       if (attrs.empty()) {
         if (params.size() == 1)
-          return params.front();
+          return params.first();
         else {
           QString ret;
           int i = 0;
@@ -509,8 +509,7 @@ AnnotationHtmlParser::translate(const QString &tag,
             switch (i) {
             case 0: {
                 QString style = param;
-                style.replace("=", ":");
-                style.replace(",", ";");
+                style.replace("=", ":").replace(",", ";");
                 ret = html_style_open(style);
               } break;
             case 1:
@@ -527,8 +526,7 @@ AnnotationHtmlParser::translate(const QString &tag,
       } else {
         QString ret;
         QString style = attrs.join(";");
-        style.replace("=", ":");
-        style.replace(",", ";");
+        style.replace("=", ":").replace(",", ";");
         int i = 0;
         foreach (const QString &param, params) {
           if (i == 0)
@@ -549,7 +547,7 @@ AnnotationHtmlParser::translate(const QString &tag,
     else {
       if (attrs.empty()) {
         if (params.size() == 1)
-          return params.front();
+          return params.first();
         else {
           QString ret;
           int i = 0;
@@ -557,9 +555,7 @@ AnnotationHtmlParser::translate(const QString &tag,
             switch (i) {
             case 0: {
                 QString attr = param;
-                attr.replace(":", "=");
-                attr.replace(";", " ");
-                attr.replace(",", " ");
+                attr.replace(":", "=").replace(";", " ").replace(",", " ");
                 ret = html_font_open(attr);
               } break;
             case 1:
@@ -576,9 +572,7 @@ AnnotationHtmlParser::translate(const QString &tag,
       } else {
         QString ret;
         QString attr = attrs.join(" ");
-        attr.replace(":", "=");
-        attr.replace(";", " ");
-        attr.replace(",", " ");
+        attr.replace(":", "=").replace(";", " ").replace(",", " ");
         int i = 0;
         foreach (const QString &param, params) {
           if (i == 0)
@@ -597,7 +591,7 @@ AnnotationHtmlParser::translate(const QString &tag,
   { \
     switch (params.size()) { \
     case 0: return html_##_tag(); \
-    case 1: return html_##_tag(params.front()); \
+    case 1: return html_##_tag(params.first()); \
     default: { \
         QString ret; \
         int i = 0; \
@@ -637,7 +631,7 @@ AnnotationHtmlParser::translate(const QString &tag,
   { \
     switch (params.size()) { \
     case 0: return ""; \
-    case 1: return _html(params.front(), _style); \
+    case 1: return _html(params.first(), _style); \
     default: { \
         QString ret; \
         int i = 0; \
@@ -716,7 +710,7 @@ AnnotationHtmlParser::translate(const QString &tag,
 
     // Unknown tag
   default:
-    return QString::null;
+    return QString();
   }
 }
 

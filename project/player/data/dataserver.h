@@ -7,7 +7,7 @@
 #include "module/annotcloud/token.h"
 #include "module/annotcloud/annotation.h"
 #include "module/annotcloud/alias.h"
-#include <QObject>
+#include <QtCore/QObject>
 
 class Database;
 class ServerAgent;
@@ -49,8 +49,8 @@ public:
 public slots:
   bool updateAnnotationTextWithId(const QString &text, qint64 id);
 
-  void updateAliases(const AliasList &l);
-  void updateAnnotations(const AnnotationList &l);
+  //void updateAliases(const AliasList &l);
+  //void updateAnnotations(const AnnotationList &l);
 
   // - Deletion -
 public slots:

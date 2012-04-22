@@ -5,7 +5,7 @@
 #include "serverproxy.h"
 #include "serverproxy_config.h"
 #include "module/annotcloud/traits.h"
-#include <QtCore>
+#include <QtCore/QMutexLocker>
 
 //#define DEBUG "serverproxy"
 #include "module/debug/debug.h"
@@ -14,10 +14,6 @@ using namespace AnnotCloud;
 using namespace ServerSoap;
 
 // - Construction -
-
-ServerProxy::ServerProxy(QObject *parent)
-  : Base(parent)
-{ reset(); }
 
 void
 ServerProxy::reset()
@@ -229,7 +225,7 @@ ServerProxy::chat(const QString &message)
     DOUT("soap error, err =" << err);
     emit soapError(err);
     DOUT("exit");
-    return QString::null;
+    return QString();
   }
 
   QString ret;

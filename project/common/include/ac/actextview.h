@@ -5,8 +5,9 @@
 // 1/1/2012
 
 #include "ac/actextedit.h"
-#include <QColor>
-#include <QStringList>
+#include <QtCore/QStringList>
+
+QT_FORWARD_DECLARE_CLASS(QColor)
 
 class AcTextView : public AcTextEdit
 {

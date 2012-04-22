@@ -4,12 +4,10 @@
 // settings.h
 // 7/30/2011
 
-#include <QSettings>
-#include <QStringList>
-#include <QDate>
-#include <QHash>
-#include <QUrl>
-#include <utility>
+#include <QtCore/QSettings>
+#include <QtCore/QStringList>
+#include <QtCore/QUrl>
+#include <QtCore/QSize>
 
 class Settings : public QSettings
 {
@@ -37,12 +35,19 @@ public:
   void clearRecentUrls();
 
   QStringList recentTabs() const;
+  bool hasRecentTabs() const;
   void setRecentTabs(const QStringList &urls, int limit = 0);
   void clearRecentTabs();
 
   QList<QUrl> closedUrls() const;
   void setClosedUrls(const QList<QUrl> &urls, int limit = 0);
   void clearClosedUrls();
+
+  int recentTabIndex() const;
+  void setRecentTabIndex(int value);
+
+  QSize recentSize() const;
+  void setRecentSize(const QSize &value);
 };
 
 #endif // SETTINGS_H

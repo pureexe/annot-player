@@ -5,7 +5,6 @@
 // 2/6/2012
 
 #include "annotationcodec.h"
-#include <QByteArray>
 
 class NicovideoCodec : public AnnotationCodec
 {

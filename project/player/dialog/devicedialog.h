@@ -5,7 +5,7 @@
 // 12/2/2011
 
 #include "module/qtext/dialog.h"
-#include <QStringList>
+#include <QtCore/QStringList>
 
 QT_BEGIN_NAMESPACE
 class QToolButton;

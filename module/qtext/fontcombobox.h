@@ -4,8 +4,8 @@
 // qtext/combobox.h
 // 10/11/2011
 
-#include <QFontComboBox>
-#include <QCursor>
+#include <QtGui/QFontComboBox>
+#include <QtGui/QCursor>
 
 namespace QtExt {
 

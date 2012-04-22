@@ -439,6 +439,22 @@ EventLogger::logAnnotationRotationChanged(qreal value)
 }
 
 void
+EventLogger::logAnnotationOffsetChanged(qint64 value)
+{
+  static bool once = true;
+  if (once) {
+    once = false;
+    return;
+  }
+
+  if (value)
+    log(tr("annotation offset") + ": "
+        HTML_STYLE_OPEN(color:orange) + QString::number(value) + HTML_STYLE_CLOSE() +
+        tr(" sec"));
+  else
+    log(tr("annotation offset reset"));
+}
+void
 EventLogger::logCanvasEnabled(bool t)
 {
   static bool once = true;

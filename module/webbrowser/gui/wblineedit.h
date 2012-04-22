@@ -4,7 +4,7 @@
 // wbaddresslineedit.h
 // 3/31/2012
 
-#include <QLineEdit>
+#include <QtGui/QLineEdit>
 
 class WbLineEdit : public QLineEdit
 {

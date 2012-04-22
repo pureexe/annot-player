@@ -10,11 +10,11 @@
 // Note: since soap timeout is not slow, synchronized approach is used.
 // TODO: Deal with offline case here??
 
-#include <QObject>
 #include "clientdelegate.h"
 #include "module/annotcloud/user.h"
 #include "module/annotcloud/token.h"
 #include "module/annotcloud/annotation.h"
+#include <QtCore/QObject>
 
 class ClientService;
 class ServerAgent;

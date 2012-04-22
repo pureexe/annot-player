@@ -5,7 +5,6 @@
 // 7/16/2011
 // Global parameters.
 #include "ac/acglobal.h"
-#include "module/player/player_config.h"
 #include <QtGlobal>
 
 // - Alpha -
@@ -26,7 +25,7 @@ enum { ALPHA = 0 };
 //#define G_HOMEPAGE      "http://annot.me"
 //#define G_HOMEPAGE      "http://annotcloud.com"
 #define G_HOMEPAGE      "http://" ANNOT_HOST_IP
-#define G_WIKIPAGE      "http://" ANNOT_WIKI_IP "/w"
+#define G_WIKIPAGE      "http://" ANNOT_DOC_IP "/w"
 #define G_WIKIPAGE_FAQ  G_WIKIPAGE "/index.php?title=Manual:FAQ"
 #define G_UPDATEPAGE    "http://code.google.com/p/annot-player"
 #define G_DOWNLOADPAGE  "http://code.google.com/p/annot-player/downloads"
@@ -47,7 +46,7 @@ enum { ALPHA = 0 };
 #define G_UPDATEPAGE_URL   G_DOWNLOADPAGE
 #define G_HELPPAGE_URL     G_WIKIPAGE_FAQ
 
-#define G_FORWARD_INTERVAL  10000  // 10 sec
+#define G_FORWARD_INTERVAL  8000   // 8 sec
 #define G_BACKWARD_INTERVAL 10000  // 10 sec
 
 #define G_VOLUME_DELTA      0.05   // 5 %
@@ -115,6 +114,8 @@ enum { ALPHA = 0 };
 
 #define G_PATH_CACHEDB  G_PATH_CACHES "/" "cache.db"
 #define G_PATH_QUEUEDB  G_PATH_CACHES "/" "queue.db"
+
+#define G_PATH_DOWNLOADS QDesktopServices::storageLocation(QDesktopServices::DesktopLocation) + "/" + TR(T_VIDEO)
 
 #define G_PATH_LOCK_RUNNING  G_PATH_LOCK "/" "running.lock"
 

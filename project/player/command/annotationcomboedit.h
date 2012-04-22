@@ -6,10 +6,9 @@
 
 #include "ac/accomboedit.h"
 #include "module/qtext/withsizehint.h"
-#include <QStringList>
+#include <QtCore/QStringList>
 
 QT_FORWARD_DECLARE_CLASS(QAction)
-QT_FORWARD_DECLARE_CLASS(QMenu)
 
 class AnnotationEditor;
 

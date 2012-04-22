@@ -8,7 +8,7 @@
 #include "module/stream/inputstream.h"
 #include "module/stream/outputstream.h"
 #include "module/stream/inputoutputstream.h"
-#include <QObject>
+#include <QtCore/QObject>
 #include <cstring>
 
 // - FLV Script tag -

@@ -6,7 +6,8 @@
 
 #include "ac/acwebwindow.h"
 #include "module/annotcloud/annotation.h"
-#include <QUrl>
+
+QT_FORWARD_DECLARE_CLASS(QUrl)
 
 class DataManager;
 
@@ -33,7 +34,7 @@ public slots:
 
   // - Events -
 public:
-  //virtual void setVisible(bool visible); ///< \override
+  virtual void setVisible(bool visible); ///< \override
 
 protected slots:
   void setContent(const QString &html);

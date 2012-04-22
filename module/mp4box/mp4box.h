@@ -4,8 +4,8 @@
 // mp4box.h
 // 2/15/2012
 
-#include <QString>
-#include <QStringList>
+#include <QtCore/QString>
+#include <QtCore/QStringList>
 
 namespace Mp4Box {
 

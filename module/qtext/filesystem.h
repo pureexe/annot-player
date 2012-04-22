@@ -4,7 +4,7 @@
 // qtext/filesystem.h
 // 3/16/2012
 
-#include <QString>
+#include <QtCore/QString>
 
 #ifdef Q_WS_WIN
 #  define FILE_PATH_SEP      "\\"
@@ -15,6 +15,8 @@
 namespace QtExt {
 
   QString escapeFileName(const QString &name);
+
+  bool touchFile(const QString &fileName);
 
 } // namespace QtExt
 

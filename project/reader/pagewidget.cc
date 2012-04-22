@@ -104,7 +104,7 @@ void PagePreviewWidget::selectLines(const QRectF &rect)
   if (!painter.begin(&image))
     return;
 
-  BOOST_FOREACH (Core::TextRect *r, std::make_pair(first, last + 1)) {
+  BOOST_FOREACH (Core::TextRect *r, qMakePair(first, last + 1)) {
     QRectF t_highlight = *r;
     if (!t_highlight.isEmpty()) {
       QRectF highlight = detail::zoom_from_touch_unit(t_highlight, this, zoom_);

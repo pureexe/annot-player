@@ -20,7 +20,6 @@ LUA_FILES += \
     $$PWD/lua/luascript/lib/bit.lua \
     $$PWD/lua/luascript/lib/lalib.lua \
     $$PWD/lua/luascript/lib/login.lua \
-    $$PWD/lua/luascript/loginconfig.lua \
     $$PWD/lua/luascript/sitelist/acfun.lua \
     $$PWD/lua/luascript/sitelist/bilibili.lua \
     $$PWD/lua/luascript/sitelist/mikufans.lua \

@@ -5,7 +5,6 @@
 // 9/26/2011
 
 #include "annotationcomboedit.h"
-#include <QVector>
 
 class PrefixComboBox : public AnnotationComboEdit
 {

@@ -3,7 +3,8 @@
 // core/util/countdowntimer.h
 // 11/27/2011
 
-#include <QObject>
+#include <QtCore/QObject>
+
 QT_FORWARD_DECLARE_CLASS(QTimer)
 
 namespace QtExt {

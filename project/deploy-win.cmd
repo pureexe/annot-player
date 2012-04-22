@@ -3,7 +3,7 @@
 setlocal
 cd /d d:/devel/build || exit /b 1
 
-set VERSION=0.1.4.3
+set VERSION=0.1.4.4
 set APP=annot-player
 set FOLDER=Annot Player
 set ZIPFILE=%APP%-%VERSION%-win.zip
@@ -68,7 +68,8 @@ unix2dos ChangeLog.txt
 
 rm -Rf licenses
 cp -R "%SOURCE%/licenses" Licenses
-cp "%SOURCE%/COPYING" Licenses/COPYING.txt || exit /b 1
+cp "%SOURCE%/COPYING" COPYING.txt || exit /b 1
+unix2dos COPYING.txt
 
 :: deploy modules
 mkdir Data

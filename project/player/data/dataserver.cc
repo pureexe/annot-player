@@ -48,9 +48,8 @@ DataServer::submitTokens(const TokenList &tokens)
 {
   DOUT("exit: count =" << tokens.size());
   bool ret = true;
-  if (!tokens.isEmpty())
-    foreach (Token t, tokens)
-      ret = ret && submitToken(t);
+  foreach (const Token &t, tokens)
+    ret = ret && submitToken(t);
   DOUT("exit: ret =" << ret);
   return ret;
 }
@@ -64,9 +63,9 @@ DataServer::submitAlias(const Alias &alias)
     return 0;
   }
   qint64 id = 0;
-  if (server_->isConnected() && server_->isAuthorized()) {
+  if (server_->isConnected() && server_->isAuthorized())
     id = server_->submitAlias(alias);
-  } else if (queue_->isValid() && !queue_->isAliasExists(alias)) {
+  else if (queue_->isValid() && !queue_->isAliasExists(alias)) {
     queue_->insertAlias(alias);
     Settings::globalSettings()->setQueueEmpty(false);
   }
@@ -88,9 +87,8 @@ DataServer::submitAliases(const AliasList &aliases)
 {
   DOUT("enter: count =" << aliases.size());
   bool ret = true;
-  if (!aliases.isEmpty())
-    foreach (Alias a, aliases)
-      ret = ret && submitAlias(a);
+  foreach (const Alias &a, aliases)
+    ret = ret && submitAlias(a);
   DOUT("exit: ret =" << ret);
   return ret;
 }
@@ -115,12 +113,11 @@ DataServer::submitTokenAndAliases(const Token &token, const AliasList &aliases)
   DOUT("enter");
   qint64 tid = submitToken(token);
   if (tid) {
-    foreach (Alias a, aliases) {
-      if (!a.hasText())
-        continue;
-      a.setTokenId(tid);;
-      submitAlias(a);
-    }
+    foreach (Alias a, aliases)
+      if (a.hasText()) {
+        a.setTokenId(tid);
+        submitAlias(a);
+      }
   }
   DOUT("exit: ret =" << tid);
   return tid;
@@ -131,9 +128,9 @@ DataServer::submitAnnotation(const Annotation &annot)
 {
   DOUT("enter");
   qint64 id = 0;
-  if (server_->isConnected() && server_->isAuthorized()) {
+  if (server_->isConnected() && server_->isAuthorized())
     id = server_->submitAnnotation(annot);
-  } else if (queue_->isValid()) {
+  else if (queue_->isValid()) {
     queue_->insertAnnotation(annot);
     Settings::globalSettings()->setQueueEmpty(false);
   }
@@ -154,9 +151,8 @@ DataServer::submitAnnotations(const AnnotationList &annots)
 {
   DOUT("enter: count =" << annots.size());
   bool ret = true;
-  if (!annots.isEmpty())
-    foreach (Annotation a, annots)
-      ret = ret && submitAnnotation(a);
+  foreach (const Annotation &a, annots)
+    ret = ret && submitAnnotation(a);
   DOUT("exit: ret =" << ret);
   return ret;
 }
@@ -310,7 +306,10 @@ DataServer::selectAnnotationsWithTokenId(qint64 tid)
   AnnotationList ret;
   if (server_->isConnected()) {
     ret = server_->selectAnnotationsWithTokenId(tid);
-    updateAnnotations(ret);
+    if (cache_->isValid()) {
+      cache_->deleteAnnotationsWithTokenId(tid);
+      cache_->insertAnnotations(ret);
+    }
   } else if (cache_->isValid())
     ret = cache_->selectAnnotationsWithTokenId(tid);;
   DOUT("exit: count =" << ret.size());
@@ -324,7 +323,7 @@ DataServer::selectAliasesWithTokenId(qint64 tid)
   AliasList ret;
   if (server_->isConnected()) {
     ret = server_->selectAliasesWithTokenId(tid);
-    if (!ret.isEmpty() && cache_->isValid()) {
+    if (cache_->isValid()) {
       cache_->deleteAliasesWithTokenId(tid);
       cache_->insertAliases(ret);
     }
@@ -341,8 +340,10 @@ DataServer::selectRelatedAliasesWithTokenId(qint64 tid)
   AliasList ret;
   if (server_->isConnected()) {
     ret = server_->selectRelatedAliasesWithTokenId(tid);
-    cache_->deleteAliasesWithTokenId(tid);
-    updateAliases(ret);
+    if (cache_->isValid()) {
+      cache_->deleteAliasesWithTokenId(tid);
+      cache_->insertAliases(ret);
+    }
   } else if (cache_->isValid())
     ret = cache_->selectAliasesWithTokenId(tid);;
   DOUT("exit: count =" << ret.size());
@@ -356,21 +357,24 @@ DataServer::selectRelatedAnnotationsWithTokenId(qint64 tid)
   AnnotationList ret;
   if (server_->isConnected()) {
     ret = server_->selectRelatedAnnotationsWithTokenId(tid);
-    updateAnnotations(ret);
+    if (cache_->isValid()) {
+      cache_->deleteAnnotationsWithTokenId(tid);
+      cache_->insertAnnotations(ret);
+    }
   } else if (cache_->isValid())
     ret = cache_->selectAnnotationsWithTokenId(tid);
   DOUT("exit: count =" << ret.size());
   return ret;
 }
 
+/*
 void
 DataServer::updateAliases(const AliasList &l)
 {
+  enum { AsyncLimit = 20 };
   if (!l.isEmpty() && cache_->isValid()) {
-    if (l.size() > 20) // async for large amount of annots
-      cache_->updateAliases(l, true); // async = true
-    else
-      cache_->updateAliases(l, false); // async =false
+    bool async = l.size() > AsyncLimit;
+    cache_->updateAliases(l, async); // async = true
   }
 }
 
@@ -390,6 +394,7 @@ DataServer::updateAnnotations(const AnnotationList &l)
     cache_->updateAnnotations(l, async, limit);
   }
 }
+*/
 
 AliasList
 DataServer::selectAliasesWithToken(const Token &token)

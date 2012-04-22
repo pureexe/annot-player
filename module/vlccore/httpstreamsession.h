@@ -3,20 +3,15 @@
 
 // vlccore/httpstreamsession.h
 // 3/14/2012
-#ifdef _MSC_VER
-  #pragma warning (disable:4819)       // C4819: The file contains a character that cannot be represented in the current code page.
-  #pragma warning (disable:4996)       // C4996: MS' deprecated std functions orz.
-#endif // _MSC_VER
 
 #include "module/vlccore/httpsession.h"
 #include "module/stream/inputstream.h"
 #include "module/stream/fifostream.h"
-#include <QWaitCondition>
-#include <QMutex>
-#include <QMutexLocker>
-#include <QString>
-#include <QUrl>
-#include <QList>
+#include <QtCore/QWaitCondition>
+#include <QtCore/QMutex>
+#include <QtCore/QString>
+#include <QtCore/QUrl>
+#include <QtCore/QList>
 
 QT_FORWARD_DECLARE_CLASS(QNetworkCookieJar)
 QT_FORWARD_DECLARE_CLASS(QNetworkReply)
@@ -62,12 +57,6 @@ public:
       ready_(false), progressTask_(0) { }
 
   ~HttpStreamSession();
-
-signals:
-  void error(QString msg);
-  void message(QString msg);
-  void fileSaved(QString msg);
-  void progress(qint64 receivedBytes, qint64 totalBytes);
 
   // - Properties -
 public:

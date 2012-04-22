@@ -10,9 +10,14 @@
 class InputOutputStream : public InputStream, public OutputStream
 { };
 
-class InputOutputStreamList : public QList<InputOutputStream*>
+class InputOutputStreamList : public QList<InputOutputStream *>
 {
+  typedef InputOutputStreamList Self;
+  typedef QList<InputOutputStream *> Base;
 public:
+  InputOutputStreamList() { }
+  InputOutputStreamList(const Self &that) : Base(that) { }
+
   void reset() const
   { foreach (value_type v, *this) v->reset(); }
 };

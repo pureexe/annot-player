@@ -11,7 +11,7 @@
 #include "module/qtext/stoppable.h"
 #include "module/stream/inputstream.h"
 #include "module/stream/outputstream.h"
-#include <QObject>
+#include <QtCore/QObject>
 
 // - Demuxer -
 

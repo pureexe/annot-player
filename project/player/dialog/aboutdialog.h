@@ -5,7 +5,7 @@
 // 11/13/2011
 
 #include "module/qtext/dialog.h"
-#include <QString>
+#include <QtCore/QString>
 
 QT_FORWARD_DECLARE_CLASS(QTextEdit)
 

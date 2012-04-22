@@ -56,10 +56,10 @@ TextEditTabView::finalizeLayout()
   QShortcut *c0 = new QShortcut(QKeySequence("CTRL+0"), this);
   connect(c0, SIGNAL(activated()), tabButtons_[tabCount_ - 1], SLOT(click()));
 
-  QShortcut *prev = new QShortcut(QKeySequence::PreviousChild, this);
-  connect(prev, SIGNAL(activated()), SLOT(previousTab()));
-  QShortcut *next = new QShortcut(QKeySequence::NextChild, this);
+  QShortcut *next = new QShortcut(QKeySequence("CTRL+TAB"), this);
   connect(next, SIGNAL(activated()), SLOT(nextTab()));
+  QShortcut *prev = new QShortcut(QKeySequence("CTRL+SHIFT+TAB"), this);
+  connect(prev, SIGNAL(activated()), SLOT(previousTab()));
   QShortcut *nextT = new QShortcut(QKeySequence("CTRL+SHIFT+]"), this);
   connect(nextT , SIGNAL(activated()), SLOT(nextTab()));
   QShortcut *prevT = new QShortcut(QKeySequence("CTRL+SHIFT+["), this);

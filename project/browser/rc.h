@@ -21,8 +21,8 @@
 #define RC_TR_ZH        RC_PREFIX_TR "tr_zh"
 #define RC_TR_TW        RC_TR_ZH
 
-// - Apps -
+// - Images -
 
-#define RC_IMAGE_APP    ACRC_IMAGE_BROWSER
+#define RC_IMAGE_APP       ACRC_IMAGE_BROWSER
 
 #endif // RC_H

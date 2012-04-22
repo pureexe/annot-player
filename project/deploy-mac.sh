@@ -7,8 +7,8 @@ cd "$PREFIX"  || exit 1
 
 ## environment
 
-COLOR=orange
-VERSION=0.1.4.3
+COLOR=purple
+VERSION=0.1.4.4
 DMG_SIZE=200m
 
 TARGET="Annot Player"
@@ -31,7 +31,7 @@ APP_FRAMEWORKS=$APP_CONTENTS/Frameworks
 APP_PLUGINS=$APP_CONTENTS/PlugIns
 APP_INFO=$APP_CONTENTS/Info.plist
 APP_BIN=$APP_MACOS/$APP_NAME
-APP_RESORUCES=$APP_CONTENTS/Resources
+APP_RESOURCES=$APP_CONTENTS/Resources
 
 BROWSER_NAME="Annot Browser"
 BROWSER_APP=$BROWSER_NAME.app
@@ -52,11 +52,14 @@ mkdir -p "$TARGET"
 cd "$TARGET" || exit 1
 
 cp -Rv "$APP_SRC"/licenses Licenses || exit 1
-cp -v "$APP_SRC"/COPYING Licenses/COPYING.txt || exit 1
+cp -v "$APP_SRC"/COPYING COPYING.txt || exit 1
 cp -v "$APP_SRC"/ChangeLog ChangeLog.txt || exit 1
 cp -v "$APP_SRC"/README "Read Me.txt" || exit 1
 dos2unix "Read Me.txt"
 dos2unix ChangeLog.txt
+dos2unix COPYING.txt
+
+cp -v "$APP_SRC"/project/apps/share/apps.icns .VolumeIcon.icns || exit 1
 
 cp -Rv "$APP_BUILD/$APP" "$APP" || exit 1
 rm -Rf "$APP_MACOS"/*
@@ -276,8 +279,12 @@ change_all_libs
 repair-permissions
 remove-thumbnails
 chlabel $COLOR "$APP"
-chlabel $COLOR "$BROWSER_APP"
-chlabel $COLOR "$DOWNLOADER_APP"
+#chlabel $COLOR "$BROWSER_APP"
+#chlabel $COLOR "$DOWNLOADER_APP"
+
+## Rez
+cp "$APP_SRC"/../video.IconRez "$APP_RESOURCES"/ || exit 1
+chflags hidden "$APP_RESOURCES"/video.IconRez
 
 cd ..
 

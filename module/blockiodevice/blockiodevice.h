@@ -4,7 +4,7 @@
 // blockiodevice.h
 // 12/3/2011
 
-#include <QIODevice>
+#include <QtCore/QIODevice>
 
 ///  Read/write/seek pos must be blocked.
 class BlockIODevice : public QIODevice

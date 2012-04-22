@@ -6,7 +6,8 @@
 // Must be consistent with corelib/kernel/qobject_p.h
 // Last checked with Qt 4.7.4 and 4.8.1.
 
-#include <QEvent>
+#include <QtCore/QEvent>
+#include <QtCore/QMetaObject>
 
 QT_FORWARD_DECLARE_CLASS(QSemaphore)
 QT_FORWARD_DECLARE_CLASS(QObject)
@@ -18,7 +19,6 @@ QT_FORWARD_DECLARE_CLASS(QObject)
 QT_BEGIN_NAMESPACE
 
 #ifdef MCE_HAS_STATIC_CALL
-#include <QMetaObject>
 
 class QMetaCallEvent : public QEvent
 {
@@ -40,8 +40,6 @@ public:
   void **args() const { return args_; }
 
   int id() const { return method_offset_ + method_relative_; } // hash
-  ushort methodOffset() const { return method_offset_; } ///< hacked
-  ushort methodRelative() const { return method_relative_; } ///< hacked
 
 private:
   const QObject *sender_;

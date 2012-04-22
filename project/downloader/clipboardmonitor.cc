@@ -71,7 +71,7 @@ ClipboardMonitor::isSupportedMediaUrl(const QString &url)
 {
   MrlAnalysis::Site site;
   return (site = MrlAnalysis::matchSite(url)) &&
-          site < MrlAnalysis::ChineseVideoSite;
+          site < MrlAnalysis::ChineseVideoSite; // TODO: change to all sites after fixing youtube
 }
 
 // EOF

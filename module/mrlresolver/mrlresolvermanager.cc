@@ -7,7 +7,6 @@
 #include "googlevideomrlresolver.h"
 #include "youkumrlresolver.h"
 #include "luamrlresolver.h"
-#include <QtCore>
 
 //#define DEBUG "mrlresolvermanager"
 #include "module/debug/debug.h"

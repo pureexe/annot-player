@@ -12,7 +12,7 @@
 
 // - Slots -
 
-namespace MainWindow_slot_ { // anonymous slot_
+namespace slot_ { // anonymous slot_
 
   class OpenSource : public QObject {
     Q_OBJECT
@@ -27,7 +27,7 @@ namespace MainWindow_slot_ { // anonymous slot_
     { Q_ASSERT(w_); }
 
   public slots:
-    void openSource()
+    void trigger()
     {
       w_->openSource(url_);
       QTimer::singleShot(0, this, SLOT(deleteLater()));
@@ -47,7 +47,7 @@ namespace MainWindow_slot_ { // anonymous slot_
     { Q_ASSERT(w_); }
 
   public slots:
-    void importAnnotationsFromUrl()
+    void trigger()
     {
       w_->importAnnotationsFromUrl(url_);
       QTimer::singleShot(0, this, SLOT(deleteLater()));
@@ -68,7 +68,7 @@ namespace MainWindow_slot_ { // anonymous slot_
     { Q_ASSERT(w_); Q_ASSERT(e_); }
 
   public slots:
-    void closeEventLeave()
+    void trigger()
     {
       w_->closeEventLeave(e_);
       QTimer::singleShot(0, this, SLOT(deleteLater()));
@@ -88,7 +88,7 @@ namespace MainWindow_slot_ { // anonymous slot_
     { Q_ASSERT(w_); }
 
   public slots:
-    void setWindowDwmEnabled()
+    void trigger()
     {
       w_->setWindowDwmEnabled(t_);
       QTimer::singleShot(0, this, SLOT(deleteLater()));
@@ -111,7 +111,7 @@ namespace MainWindow_slot_ { // anonymous slot_
     { Q_ASSERT(w_); Q_ASSERT(pid_); }
 
   public slots:
-    void openProcessId()
+    void trigger()
     {
       w_->openProcessId(pid_);
       w_->openProcess();

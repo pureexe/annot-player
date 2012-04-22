@@ -116,8 +116,10 @@ TranslatorManager::translate(int tid) const
 {
 #define SELF(_t)      translate(_t)
   switch (tid) {
-  case T_NULL:          return QString::null;
+  case T_NULL:          return QString();
 
+  case T_TIME:          return tr("Time");
+  case T_DATE:          return tr("Date");
   case T_MORE:          return tr("More");
   case T_LESS:          return tr("Less");
   case T_UPDATE:        return tr("Update");
@@ -133,6 +135,8 @@ TranslatorManager::translate(int tid) const
   case T_RANDOM:        return tr("Random");
   case T_POSITION:      return tr("Position");
   case T_PROGRESS:      return tr("Progress");
+  case T_MEDIA:         return tr("Media");
+  case T_DATA:          return tr("Data");
   case T_VIDEO:         return tr("Video");
   case T_AUDIO:         return tr("Audio");
   case T_URL:           return tr("URL");
@@ -243,7 +247,6 @@ TranslatorManager::translate(int tid) const
   // Messages:
 
   case T_ERROR_UNKNOWN_COMMAND:         return tr("unrecognized command");
-  case T_ERROR_SNAPSHOT_FAILED:         return tr("failed to take snapshots");
   case T_ERROR_HASH_TOKEN:              return tr("failed to hash token");
   case T_ERROR_BAD_USERNAME:            return tr("invalid username");
   case T_ERROR_BAD_PASSWORD:            return tr("invalid password");
@@ -259,7 +262,6 @@ TranslatorManager::translate(int tid) const
   case T_ERROR_NO_MEDIA:                return tr("no media");
   case T_ERROR_NETWORK:                 return tr("network error");
 
-  case T_SUCCEED_SNAPSHOT_SAVED:        return tr("snapshot saved on desktop");
   case T_SUCCEED_COPIED:                return tr("copied to clipboard");
 
   case T_WARNING_LONG_STRING_TRUNCATED:  return tr("long string got truncated");
@@ -319,6 +321,8 @@ TranslatorManager::translate(int tid) const
 
   case T_OPENINWEBBROWSER:      return tr("Open in web browser");
   case T_DOWNLOADCURRENT:       return tr("Download current media");
+
+  case T_MENUTEXT_OPENDIRECTORY:         return tr("Open directory");
 
   case T_MENUTEXT_PLAY:         return tr("Play") + " [" K_SPACE "]";
   case T_TIP_PLAY:              return tr("Play media") + " [" K_SPACE "]";
@@ -772,6 +776,15 @@ TranslatorManager::translate(int tid) const
   case T_MENUTEXT_DECREASEANNOTSCALE:  return tr("Scale down") + " [" K_CTRL "+" + tr("Wheel") + "↓]";
   case T_TIP_DECREASEANNOTSCALE:       return tr("Scale down");
 
+  case T_MENUTEXT_RESETANNOTOFFSET:  return tr("Reset offset") + " [" K_CTRL "+" K_ALT "+" + tr("Mid") + "]";
+  case T_TIP_RESETANNOTOFFSET:       return tr("Reset annotation offset in time");
+
+  case T_MENUTEXT_INCREASEANNOTOFFSET:  return tr("Increase offset") + " [" K_CTRL "+" K_ALT "+" + tr("Wheel") + "↑]";
+  case T_TIP_INCREASEANNOTOFFSET:       return tr("Increase offset");
+
+  case T_MENUTEXT_DECREASEANNOTOFFSET:  return tr("Decrease offset") + " [" K_CTRL "+" K_ALT "+" + tr("Wheel") + "↓]";
+  case T_TIP_DECREASEANNOTOFFSET:       return tr("Decrease offset");
+
   case T_MENUTEXT_RESETANNOTROTATION:  return tr("Reset rotation") + " [" K_SHIFT "+" + tr("Mid") + "]";
   case T_TIP_RESETANNOTROTATION:       return tr("Reset annotation rotation");
 
@@ -803,7 +816,7 @@ TranslatorManager::translate(int tid) const
   default:
     qWarning() << "TranslatorManager:translate: Unknown tid =" << tid;
     Q_ASSERT(0);
-    return QString::null;
+    return QString();
   }
 #undef SELF
 }

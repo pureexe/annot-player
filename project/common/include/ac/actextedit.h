@@ -4,9 +4,7 @@
 // textedit.h
 // 10/10/2011
 
-#include <QTextEdit>
-
-QT_FORWARD_DECLARE_CLASS(QMenu)
+#include <QtGui/QTextEdit>
 
 class AcTextEdit : public QTextEdit
 {
@@ -23,9 +21,6 @@ public:
   // - Events -
 protected:
   virtual void contextMenuEvent(QContextMenuEvent *event); ///< \override
-
-private:
-  QMenu *contextMenu_;
 };
 
 #endif // _AC_ACTEXTEDIT_H

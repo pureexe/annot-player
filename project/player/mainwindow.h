@@ -10,16 +10,18 @@
 #ifdef USE_MODE_SIGNAL
 #  include "processinfo.h"
 #endif // USE_MODE_SIGNAL
-#include <QMainWindow>
-#include <QUrl>
-#include <QMutex>
-#include <QHash>
-#include <QStringList>
-#include <QFileInfoList>
+#include <QtGui/QMainWindow>
+#include <QtCore/QMutex>
+#include <QtCore/QHash>
+#include <QtCore/QStringList>
+#include <QtCore/QFileInfoList>
 
-QT_FORWARD_DECLARE_CLASS(QTimer)
-QT_FORWARD_DECLARE_CLASS(QNetworkCookieJar)
-QT_FORWARD_DECLARE_CLASS(QMimeData)
+QT_BEGIN_NAMESPACE
+class QTimer;
+class QUrl;
+class QNetworkCookieJar;
+class QMimeData;
+QT_END_NAMESPACE
 
 namespace QtExt {
   class CountdownTimer;
@@ -41,6 +43,10 @@ class ServerAgent;
 class SignalHub;
 class Tray;
 class Translator;
+
+class AcPlayerServer;
+class AcDownloader;
+class AcBrowser;
 
 // Views
 class AnnotationGraphicsView;
@@ -103,17 +109,21 @@ public:
 
   // - Constructions -
 public:
-  explicit MainWindow(QWidget *parent = 0, Qt::WindowFlags f = 0);
+  explicit MainWindow(bool unique = true, QWidget *parent = 0, Qt::WindowFlags f = 0);
   bool isValid() const;
 
   // - Signals -
 signals:
+  void windowMaximized();
   void playingFinished();
-  void mediaInvalidated();
-  void responded(const QString &text);
+  void playMediaRequested();
+  void setTrayToolTipRequested(const QString &tip);
+  void response(const QString &text);
   void said(const QString &text, const QString &color);
-  void logged(const QString &text);
-  void warned(const QString &text);
+  void message(const QString &text);
+  void errorMessage(const QString &text);
+  void warning(const QString &text);
+  void notification(const QString &text);
   void showTextRequested(const QString &text);
   void windowClosed();
   void windowTitleToChange(QString title);
@@ -150,6 +160,8 @@ public:
   bool isAutoPlayNext() const;
 
 public slots:
+  void maximizedToFullScreen();
+
   void setTranslateEnabled(bool enabled);
   void translate(const QString &text);
 
@@ -271,13 +283,18 @@ public slots:
 
   void openInWebBrowser();
   void downloadCurrentUrl();
+  void clickProgressButton();
 protected:
   bool hasNext() const;
   QString newWindowTitle() const;
   QString currentUrl() const;
   static QString downloadSpeedToString(int speed);
+
 public slots:
   void invalidateMediaAndPlay(bool async = true);
+protected slots:
+  void playMedia();
+  void invalidateWindowSize();
 
   // - Live -
 public slots:
@@ -309,6 +326,8 @@ protected slots:
   void annotationScaleDown();
   void annotationRotateUp();
   void annotationRotateDown();
+  void increaseAnnotationOffset();
+  void decreaseAnnotationOffset();
 
   // - Dialogs -
 protected:
@@ -410,8 +429,10 @@ public slots:
   void chat(const QString &text, bool async = true);
   void respond(const QString &text);
   void say(const QString &text, const QString &color = "blue");
-  void log(const QString &text);
   void warn(const QString &text);
+  void showMessage(const QString &text);
+  void notify(const QString &text);
+  void error(const QString &text);
 
   void submitText(const QString &text, bool async = true);
   void showText(const QString &text, bool isSigned = false);
@@ -420,8 +441,8 @@ public slots:
 
   void showTextAsSubtitle(const QString &text, bool isSigned = false);
 
-  void setToken(const QString &filePath = QString::null, bool async = true);
-  void invalidateToken(const QString &mrl = QString::null);
+  void setToken(const QString &filePath = QString(), bool async = true);
+  void invalidateToken(const QString &mrl = QString());
   void submitAlias(const Alias &alias, bool async = true);
   void submitAliasText(const QString &text, qint32 type = 0, bool async = true);
 
@@ -445,11 +466,12 @@ public slots:
 
   // - Remote annotations -
 public slots:
+  void importUrl(const QString &url);
   void importAnnotationsFromUrl(const QString &suburl);
   bool isAnnotationUrlRegistered(const QString &suburl) const;
 protected slots:
   bool registerAnnotationUrl(const QString &suburl);
-  void addRemoteAnnotations(const AnnotationList &l, const QString &url = QString::null);
+  void addRemoteAnnotations(const AnnotationList &l, const QString &url = QString());
   void clearAnnotationUrls();
 
   // - Recent -
@@ -584,6 +606,7 @@ protected slots:
 public slots:
   void setBrowsedFile(const QString &fileName);
   void setBrowsedUrl(const QString &mrl);
+  void openBrowsedDirectory();
   void openBrowsedFile(int id);
   void moreBrowsedFiles();
   void lessBrowsedFiles();
@@ -686,7 +709,7 @@ protected slots:
 private:
   void setupWindowStyle();
   void resetPlayer();
-  void createComponents();
+  void createComponents(bool unique);
   void createActions();
   void createMenus();
   void createDockWindows();
@@ -698,7 +721,6 @@ private:
   bool submit_;
   int liveInterval_; // TO BE REMOVED
   mutable QMutex inetMutex_;    // mutext for remote communication
-  mutable QMutex playerMutex_;  // mutex for local player
   mutable QMutex annotMutex_;
   Tray *tray_;
   SignalHub *hub_;
@@ -718,9 +740,14 @@ private:
   //QTimer *windowStaysOnTopTimer_;
 
   QStringList recentFiles_;
+  QString browsedUrl_;
   QFileInfoList browsedFiles_;
 
   Translator *translator_;
+
+  AcPlayerServer *appServer_;
+  AcBrowser *browserDelegate_;
+  AcDownloader *downloaderDelegate_;
 
 #ifdef WITH_MODULE_SERVERAGENT
   ServerAgent *server_;
@@ -731,8 +758,8 @@ private:
 
   Player *player_;
 
-  Database *cache_;
-  Database *queue_;
+  Database *cache_,
+           *queue_;
   DataManager *dataManager_;
   DataServer *dataServer_;
 
@@ -810,6 +837,8 @@ private:
   int preferredSubtitleTrack_,
       preferredAudioTrack_;
 
+  QWidgetList windows_;
+
   // - Menus and actions -
 
 //#ifndef Q_OS_WIN
@@ -853,6 +882,9 @@ private:
           *increaseAnnotationScaleAct_,
           *decreaseAnnotationScaleAct_,
           *resetAnnotationScaleAct_,
+          *increaseAnnotationOffsetAct_,
+          *decreaseAnnotationOffsetAct_,
+          *resetAnnotationOffsetAct_,
           *increaseAnnotationRotationAct_,
           *decreaseAnnotationRotationAct_,
           *resetAnnotationRotationAct_;
@@ -868,7 +900,8 @@ private:
   QAction *previousFileAct_,
           *nextFileAct_,
           *moreFilesAct_,
-          *lessFilesAct_;
+          *lessFilesAct_,
+          *openBrowsedDirectoryAct_;
 
   QAction *checkInternetConnectionAct_;
   QAction *deleteCachesAct_;

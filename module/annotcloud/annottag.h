@@ -8,8 +8,8 @@
 //
 // TODO: remove CORE_CMD prefix
 
-#include <QString>
-#include <QHash>
+#include <QtCore/QString>
+#include <QtCore/QHash>
 #include <utility>
 
 // - Excaped -

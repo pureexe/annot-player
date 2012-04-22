@@ -237,12 +237,12 @@ AnnotationBrowser::currentUserAlias() const
 {
   QModelIndex index = currentIndex();
   if (!index.isValid())
-    return QString::null;
+    return QString();
 
   int row = index.row();
   index = index.sibling(row, HD_UserAlias);
   if (!index.isValid())
-    return QString::null;
+    return QString();
   return index.data().toString();
 }
 
@@ -251,12 +251,12 @@ AnnotationBrowser::currentText() const
 {
   QModelIndex index = currentIndex();
   if (!index.isValid())
-    return QString::null;
+    return QString();
 
   int row = index.row();
   index = index.sibling(row, HD_Text);
   if (!index.isValid())
-    return QString::null;
+    return QString();
 
   return index.data().toString();
 }
@@ -792,14 +792,14 @@ void TextEdit::fileNew()
 {
   if (maybeSave()) {
     textEdit_->clear();
-    setCurrentFileName(QString::null);
+    setCurrentFileName(QString());
   }
 }
 
 void TextEdit::fileOpen()
 {
   QString fn = QFileDialog::getOpenFileName(this, tr("Open File..."),
-                        QString::null, tr("HTML-Files (*.htm *.html);;All Files (*)"));
+                        QString(), tr("HTML-Files (*.htm *.html);;All Files (*)"));
   if (!fn.isEmpty())
     load(fn);
 }
@@ -819,7 +819,7 @@ bool TextEdit::fileSave()
 bool TextEdit::fileSaveAs()
 {
   QString fn = QFileDialog::getSaveFileName(this, tr("Save as..."),
-                        QString::null, tr("ODF files (*.odt);;HTML-Files (*.htm *.html);;All Files (*)"));
+                        QString(), tr("ODF files (*.odt);;HTML-Files (*.htm *.html);;All Files (*)"));
   if (fn.isEmpty())
     return false;
   if (! (fn.endsWith(".odt", Qt::CaseInsensitive) || fn.endsWith(".htm", Qt::CaseInsensitive) || fn.endsWith(".html", Qt::CaseInsensitive)) )
@@ -867,7 +867,7 @@ void TextEdit::filePrintPdf()
 #ifndef QT_NO_PRINTER
 //! [0]
   QString fileName = QFileDialog::getSaveFileName(this, "Export PDF",
-                          QString::null, "*.pdf");
+                          QString(), "*.pdf");
   if (!fileName.isEmpty()) {
     if (QFileInfo(fileName).suffix().isEmpty())
       fileName.append(".pdf");

@@ -1,7 +1,7 @@
 # browser.pro
 # 9/3/2011
 
-VERSION = 0.1.0.2
+VERSION = 0.1.1.0
 
 CONFIG += noqt nocrt
 include(../../../config.pri)

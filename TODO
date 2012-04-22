@@ -2,14 +2,33 @@
 # 6/18/2011
 http://db.tt/SrtkzxIJ
 
-- thread#1: server
-- thread#2: goei2
-- thread#3: gamecloud
-
 # server
 - move wiki to sakuradite
-  cancel godaddy vps
 
+# client
+- mac:browser
+  - highlight occurence
+     http://doc.qt.nokia.com/4.7-snapshot/qwebview.html#findText
+    HighlightAllOccurrences
+  - use a lineedit+label (message), using qt form ui to add it
+  - also, able to highlight all downloadable video
+  - develop more ideas to make use of it together with JSP server
+- windows
+  - migrate to ith3
+    inject.cc => ihf/main.cpp
+    pipe.cc => ihf_dll/pipe.cpp
+  - achieve MDI like apple's fileopenevent
+  See: http://qt-project.org/wiki/Assigning_a_file_type_to_an_Application_on_Windows
+
+- common
+  - learn the source code of ith's updater
+  - add a prefenece panel for its settings
+- download
+  FIXME: download from youtube.com
+- browser
+  merge webrowser module with browser project
+
+# server
   annot.me/w
 - automatic back database everyweek
 
@@ -36,6 +55,9 @@ http://db.tt/SrtkzxIJ
 - how to annotate/share deathnote
 
 # client later
+- webbrowser:
+  - true fullscreen for a specific tab
+- use tcpserver to simply server/client connection
 - able to add annotation to a specific position
   use mouse double click to open a editor on the screen, and add annotation to it
   (when many people start using it)
@@ -43,36 +65,19 @@ http://db.tt/SrtkzxIJ
 - use mouse gesture to case magic to annotations
   - annotations with life?
 
-CHECKPOINT
-
-# windows
-- debug playing video from bilibli.tv,  debug at the end of video
-  http://www.bilibili.tv/video/av246474/
-- debug playing video from nicovideo.jp, debug at the end of video
-- debug crash at the end of local video
-  wait for 1 seconds?
-
-# mac
-- add images link
-- add screenshots in mac with osd statistics
-  upload to server
-# linux
-  compile in linux
-
-# 0.1.4.4
-
-# mac
-- FIXME: keyboard shortcut broken
-- debug IPC module
-  - how to solve reconnect problem after connection closed
-  - deal with n-to-n casting issue
+# TODO
+- create a shared preferences window for acsettings
+# FIXME
+- browser
+  - fixme: resize image
+- player
+  - replace player's logger with error|message|warning |notification signals
+  - fixme: alias id not saved in tokenview
+  - mac os x DVD navigation broken
+  - linux: linux: Read CD partially working before 120
 
 # cleanup
-- connect quit signal to all downloader's qnam
   FIXME: difficult to implement since abort is not a slot of qnetworkreply
-
-- rewrite ipc module myself
-- replace player's logger with error|message|warning |notification signals
 
 - fixme: browser: google search for chinese/japanese
 - fix resize problem for acwebwindow
@@ -84,20 +89,7 @@ CHECKPOINT
 
 - downloader: add context menu for remove from downloader, launch from downloader
 
-
-# webbrowser
-- startup page with thumbnails like safari
-- FIXME: limit maximal width of tabwidget
-  limit width for each tab, only tooltip with full title and url
-- FIXME: resize image
-
-# downloader
-- debug add 12 download task simutanously
-- limit concurrent download task to 5
-- enable streaming from youtube as well
-- add context menu
-
-- implement youtubemrlresolver from youtube video myself
+# EOF
 
 # player
 - use ffmpeg to provide thumbnail for image
@@ -133,127 +125,13 @@ http://stackoverflow.com/questions/8679390/ffmpeg-extracting-20-images-from-a-vi
   - online status
   - sending log out session instruction on exit
 
-# FIXME
-- mac os x DVD navigation broken
-
-- fixme: crash on exit, for south park 2 on mac
-- fixme: mac annot thread often not displayed
-
-- FIXME: flash not enabled in qwebkit in mac
-  /Library/Internet Plug-Ins/QuickTime Plugin.plugin/Contents/MacOS/QuickTime Plugin: mach-o, but wrong architecture
-
-- cleanup TR.h, rc.h
-- rewrite makeaction in mainwindow
-
-# TODO
-- improve proxy browser
-  - nico hover event: popup button
-- add icons for diff file types
-- cleanup flv modules, reduce code redundency
-- FIXME: download from youtube is broken
-- randomized seeking
-- FIXME: drag video windows: wait for closing first
-- display subtitle track name: big5/gb/jp
-- move httpsessions out of vlccore
-- start Ith on demand
-- fix green screen issue
-- contextmenu to save downloaded annotations as xml (*.annot)
-  import annotations from file
-- seekable remote stream
-  - use annot data/cache for it
-- FIXME: seek out of pos
-- remember last play pos as well
-- add automatic save video as context menu
-- flvjoin: join parted flvs in network access manager by skipping header
-  - then remove gpac dependency
-    remove mp4box
-  - remove mrlmuxdownloader
-  - cache previous parts
-- support playing bt file
-- wikipedia to add advice context menu
-- design filetype icon
-  - filetype rendered as floating annotation
-  - register file handlers on windows
-- customize positionslider, indicate hotspot and download progress
-- linux support
-
-# 0.1.3.3
-- fontcombobox to select annotation font
-- context menu to be able to set danmaku time offset
-- continue goei2
-- bypass youtube banning
-- FIXME: cue add-content support broken on Mac OS X
 - jump list -- see how jumplist is implemented in QtCreator
   http://msdn.microsoft.com/en-us/library/dd378460%28VS.85%29.aspx
   task bar extension, jump list
   - recent list
   - progress same as playtime
   http://stackoverflow.com/questions/2515185/shaddtorecentdocs-without-a-file
-- add an http viewer for nico
-  - use cloudview to achieve this?
-- add site browser similar to VLC 2.0
-  - index videos in the server side
-- add batch download for acfun/bilibili
-- add a download speed/progress slider
-- batch download for acfun and bilibili
-- linux support
-- replace lua module with pure c++
-  See: downloader from AcDown source code (Apache License)
-  http://acdown.codeplex.com/SourceControl/list/changesets
-- add download dialog
-- fixme: Tudou media resolver broken
-- FIXME: stop context menu not working
 
-## TODO
-- use annot wiki URL to identify unique source
-- need to hack ith_engine commit database for identifying goei2?
-- integrate with QML
-Livecoding video effects with Qt5
+- qunit
 http://www.youtube.com/watch?v=P4kv-AoAJ-Q
 https://gitorious.org/quint
-
-- add SNS and social commands
-  - screenshots with descriptions to share
-  - make it as diary
-\t annot
-\twitter
-\facebook
-\mixi
-\weibo
-
-## FIXME
-- fixme: alias id not saved in tokenview
-- FIXME: minimize restore aero bug in game mode
-- FIXME: live channel echo bug for non-guest user
-
-- Updated to Qt 4.8 on Mac OS X. FIXME: WebKit conflict.
-- FIXME: remove 5 seconds wait time
-  wait until danmaku is solved before start playing
-  and then prevent it is invalidated
-
-- FIXME: linux: Read CD partially working before 120
-
-## 0.1.4
-- How to aggregate media?
-  - need a wiki like unique media content descriptor
-    use community power!
-    use wiki-like
-
-- UI extended
-
-- SNS, friends in annots
-- Comment
-
-
-important message / message from friends pass to console
-- allow pause console message
-- make console be able to parse message color, etc
-- beable to move/ highlight console
-- add username to console message
-
-## Misc
-
-- add \tr{} using google translation
-
-
-## EOF

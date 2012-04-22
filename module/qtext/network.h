@@ -4,8 +4,8 @@
 // qtext/network.h
 // 2/21/2011
 
-#include <QNetworkCookieJar>
-#include <QNetworkReply>
+#include <QtNetwork/QNetworkCookieJar>
+#include <QtNetwork/QNetworkReply>
 
 namespace QtExt {
 
@@ -67,21 +67,63 @@ namespace QtExt {
 
     void setAllCookies(const QList<QNetworkCookie> &cookies)
     { return Base::setAllCookies(cookies); }
+
+    QByteArray rawCookies() const
+    { return unparseCookies(allCookies()); }
+
+    static QByteArray unparseCookies(const QList<QNetworkCookie> &cookies)
+    {
+      QByteArray ret;
+      foreach (const QNetworkCookie &c, cookies)
+        ret.append(c.toRawForm()).append('\n');
+      return ret;
+    }
   };
 
   inline QList<QNetworkCookie>
   allCookiesInNetworkCookieJar(const QNetworkCookieJar *jar)
-  {
-    Q_ASSERT(jar);
-    return NetworkCookieJarWithCookies::fromCookieJar(jar)->allCookies();
-
-  }
+  { return NetworkCookieJarWithCookies::fromCookieJar(jar)->allCookies();  }
 
   inline void
   setAllCookiesInNetworkCookieJar(QNetworkCookieJar *jar, const QList<QNetworkCookie> &cookies)
+  { NetworkCookieJarWithCookies::fromCookieJar(jar)->setAllCookies(cookies); }
+
+  inline QByteArray
+  unparseNetworkCookies(const QList<QNetworkCookie> &cookies)
+  { return NetworkCookieJarWithCookies::unparseCookies(cookies); }
+
+  inline QByteArray
+  unparseNetworkCookies(const QNetworkCookieJar *jar)
+  { return unparseNetworkCookies(allCookiesInNetworkCookieJar(jar)); }
+
+  template <typename T>
+  inline T*
+  cloneNetworkCookieJar(const T *jar)
   {
     Q_ASSERT(jar);
-    NetworkCookieJarWithCookies::fromCookieJar(jar)->setAllCookies(cookies);
+    T *ret = new T(jar->parent());
+    setAllCookiesInNetworkCookieJar(ret, allCookiesInNetworkCookieJar(jar));
+    return ret;
+  }
+
+  bool
+  writeCookiesToFile(const QList<QNetworkCookie> &cookies, const QString &fileName);
+
+  QList<QNetworkCookie>
+  readCookiesfromFile(const QString &fileName);
+
+  inline bool
+  writeCookiesToFile(const QNetworkCookieJar *jar, const QString &fileName)
+  { return writeCookiesToFile(allCookiesInNetworkCookieJar(jar), fileName); }
+
+  inline bool
+  readCookiesfromFile(QNetworkCookieJar *jar, const QString &fileName)
+  {
+    QList<QNetworkCookie> c = readCookiesfromFile(fileName);
+    if (c.isEmpty())
+      return false;
+    setAllCookiesInNetworkCookieJar(jar, c);
+    return true;
   }
 
   // - NetworkCookieJarWithDomainAlias -

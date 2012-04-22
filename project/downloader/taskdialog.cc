@@ -126,10 +126,10 @@ QString
 TaskDialog::lastUrl() const
 {
   if (textView_->isEmpty())
-    return QString::null;
+    return QString();
   QString text = textView_->last().trimmed();
   QStringList urls = text.split('\n', QString::SkipEmptyParts);
-  return urls.isEmpty() ? QString::null : urls.last();
+  return urls.isEmpty() ? QString() : urls.last();
 }
 
 // - Actions -
@@ -142,8 +142,7 @@ TaskDialog::add()
   QStringList urls;
   foreach (QString t, text.split('\n', QString::SkipEmptyParts)) {
     t = t.trimmed();
-    if (t.contains("://"))
-      urls.append(t);
+    urls.append(t);
   }
   bool batch = false;
   if (!urls.isEmpty()) {
@@ -160,6 +159,8 @@ TaskDialog::paste()
   QClipboard *clipboard = QApplication::clipboard();
   if (clipboard) {
     QString t = clipboard->text().trimmed();
+    if (!t.isEmpty())
+      t.append("\n");
     addText(t);
   }
 }
@@ -212,8 +213,8 @@ TaskDialog::decrease()
   url = QtExt::decreaseString(url);
 
   if (ac) {
-    url.replace(QRegExp("/index_1.html$"), "/");
-    url.replace(QRegExp("/index_0.html$"), "/");
+    url.replace(QRegExp("/index_1.html$"), "/")
+       .replace(QRegExp("/index_0.html$"), "/");
   }
 
   if (url != prevUrl)

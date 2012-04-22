@@ -1,35 +1,29 @@
-#ifndef ACBROWSER_H
-#define ACBROWSER_H
+#ifndef _AC_ACBROWSER_H
+#define _AC_ACBROWSER_H
 
 // acbrowser.h
 // 4/9/2012
 
-#include "ac/acipc.h"
+#include <QtCore/QString>
+#include <QtCore/QStringList>
 
-class AcBrowserController : public QObject
+class AcBrowser : public QObject
 {
   Q_OBJECT
-  typedef AcBrowserController Self;
+  typedef AcBrowser Self;
   typedef QObject Base;
-
-  // - Construction -
 public:
-  static Self *globalController() { static Self g; return &g; }
-  explicit AcBrowserController(QObject *parent = 0, AcIpcController::Role role = AcIpcController::NoRole);
+  explicit AcBrowser(QObject *parent = 0)
+    : Base(parent) { }
 
-//signals:
-//  void urlsRequested(const QString &urls);
-
-  // - Queries -
 public:
   bool isRunning() const;
 
-  // - Actions
 public slots:
-  void stop() { }
   void open();
-  void openUrl(const QString &url);
-  void openUrls(const QStringList &urls);
+  void openArguments(const QStringList &args);
+  void openUrls(const QStringList &urls) { openArguments(urls); }
+  void openUrl(const QString &url) { openUrls(QStringList(url)); }
 };
 
 #endif // ACBROWSER_H

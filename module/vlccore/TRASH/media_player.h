@@ -10,10 +10,10 @@
 #endif // _MSC_VER
 
 #ifndef MODULE_STRING
-  #define MODULE_STRING "main"  // needed by VLC
+#  define MODULE_STRING "main"  // needed by VLC
 #endif // MODULE_STRING
 #ifdef _MSC_VER
-  #include <inttypes.h>
+#  include <inttypes.h>
 #endif // _MSC_VER
 #include <vlc/plugins/vlc_input.h>
 #include <vlc/plugins/vlc_vout.h>

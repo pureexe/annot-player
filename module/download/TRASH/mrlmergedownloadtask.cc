@@ -7,7 +7,6 @@
 #include "module/mrlresolver/mrlresolvermanager.h"
 #include "module/mediacodec/flvcodec.h"
 #include "module/mediacodec/mp4codec.h"
-#include <QDesktopServices>
 #include <QtNetwork>
 
 #define DEBUG "mrlmergedownloadtask"
@@ -58,12 +57,12 @@ MrlMergeDownloadTask::run()
 QString
 MrlMergeDownloadTask::escapeFileName(const QString &name)
 {
-  QString ret = name;
-  ret.remove('"');
-  ret.replace('/', "／");
-  ret.replace(':', "-");
-  ret.replace('?', "？");
-  return ret.trimmed();
+  return QString(name)
+    .remove('"')
+    .replace('/', "／")
+    .replace(':', "-")
+    .replace('?', "？")
+    .trimmed();
 }
 
 void

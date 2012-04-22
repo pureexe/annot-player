@@ -6,6 +6,9 @@
 #include "taskdialog.h"
 #include "clipboardmonitor.h"
 #include "signer.h"
+#include "settings.h"
+#include "global.h"
+#include "systemtrayicon.h"
 #include "rc.h"
 #include "ac/acui.h"
 #include "ac/acss.h"
@@ -13,6 +16,7 @@
 #include "ac/acdownloader.h"
 #include "ac/acplayer.h"
 #include "module/qtext/datetime.h"
+#include "module/download/downloader.h"
 #include "module/download/downloadmanager.h"
 #include "module/download/mrldownloadtask.h"
 #include <QtGui>
@@ -28,6 +32,7 @@
 #endif // Q_OS_MAC
 
 enum { RefreshInterval = 3000 };
+enum { MaxDownloadThreadCount = 3 };
 
 // - Constructions -
 
@@ -39,12 +44,13 @@ enum { RefreshInterval = 3000 };
 //  Qt::WindowCloseButtonHint )
 
 MainWindow::MainWindow(QWidget *parent)
-  : Base(parent), taskDialog_(0)
+  : Base(parent), playerDelegate_(0), systemTrayIcon_(0), taskDialog_(0)
 {
   setWindowTitle(tr("Annot Downloader"));
   setWindowIcon(QIcon(RC_IMAGE_APP));
 
   downloadManager_ = new DownloadManager(this);
+  downloadManager_->setMaxThreadCount(MaxDownloadThreadCount);
 
   createModels();
   createLayout();
@@ -60,6 +66,7 @@ MainWindow::MainWindow(QWidget *parent)
   connect(clipboardMonitor_, SIGNAL(message(QString)), SLOT(showMessage(QString)));
   connect(clipboardMonitor_, SIGNAL(warning(QString)), SLOT(warn(QString)));
   connect(clipboardMonitor_, SIGNAL(error(QString)), SLOT(error(QString)));
+  connect(clipboardMonitor_, SIGNAL(notification(QString)), SLOT(notify(QString)));
   connect(clipboardMonitor_, SIGNAL(annotationUrlEntered(QString)), SLOT(promptUrl(QString)));
   connect(clipboardMonitor_, SIGNAL(mediaUrlEntered(QString)), SLOT(promptUrl(QString)));
 
@@ -67,21 +74,32 @@ MainWindow::MainWindow(QWidget *parent)
   connect(signer_, SIGNAL(message(QString)), SLOT(showMessage(QString)), Qt::QueuedConnection);
   connect(signer_, SIGNAL(warning(QString)), SLOT(warn(QString)), Qt::QueuedConnection);
   connect(signer_, SIGNAL(error(QString)), SLOT(error(QString)), Qt::QueuedConnection);
+  connect(signer_, SIGNAL(notification(QString)), SLOT(notify(QString)), Qt::QueuedConnection);
   connect(this, SIGNAL(downloadFinished(QString,QString)), signer_, SLOT(signFileWithUrl(QString,QString)));
 
+  DownloaderController *dc = DownloaderController::globalController();
+  connect(dc, SIGNAL(message(QString)), SLOT(showMessage(QString)), Qt::QueuedConnection);
+  connect(dc, SIGNAL(warning(QString)), SLOT(warn(QString)), Qt::QueuedConnection);
+  connect(dc, SIGNAL(error(QString)), SLOT(error(QString)), Qt::QueuedConnection);
+  connect(dc, SIGNAL(notification(QString)), SLOT(notify(QString)), Qt::QueuedConnection);
+
+  foreach (const DownloadTaskInfo &t, Settings::globalSettings()->recentTasks())
+    addTask(t);
+
   // - IPC -
-  connect(AcDownloaderController::globalController(), SIGNAL(message(QString)),
-          SLOT(showMessage(QString)), Qt::QueuedConnection);
-  connect(AcDownloaderController::globalController(), SIGNAL(error(QString)),
-          SLOT(error(QString)), Qt::QueuedConnection);
-  connect(AcDownloaderController::globalController(), SIGNAL(warning(QString)),
-          SLOT(warn(QString)), Qt::QueuedConnection);
-  connect(AcDownloaderController::globalController(), SIGNAL(notification(QString)),
-          SLOT(notify(QString)), Qt::QueuedConnection);
-  connect(AcDownloaderController::globalController(), SIGNAL(arguments(QStringList)),
-          SLOT(promptUrls(QStringList)), Qt::QueuedConnection);
+  playerDelegate_ = new AcPlayer(this);
+
+  appServer_ = new AcDownloaderServer(this);
+  connect(appServer_, SIGNAL(arguments(QStringList)), SLOT(promptUrls(QStringList)), Qt::QueuedConnection);
+  appServer_->start();
+
+  if (QSystemTrayIcon::isSystemTrayAvailable()) {
+    systemTrayIcon_ = new SystemTrayIcon(this, this);
+    systemTrayIcon_->show();
+  }
 
   // - Post behaviors -
+  tableView_->sortByColumn(HD_Id);
   tableView_->setFocus();
 }
 
@@ -164,16 +182,82 @@ MainWindow::createModels()
 void
 MainWindow::createActions()
 {
+  startAct_ = new QAction(this); {
+    startAct_->setText(tr("Start"));
+    startAct_->setStatusTip(tr("Start"));
+  } connect(startAct_, SIGNAL(triggered()), SLOT(start()));
+  restartAct_ = new QAction(this); {
+    restartAct_->setText(tr("Restart"));
+    restartAct_->setStatusTip(tr("Restart"));
+  } connect(restartAct_, SIGNAL(triggered()), SLOT(restart()));
+  stopAct_ = new QAction(this); {
+    stopAct_->setText(tr("Stop"));
+    stopAct_->setStatusTip(tr("Stop"));
+  } connect(stopAct_, SIGNAL(triggered()), SLOT(stop()));
+  removeAct_ = new QAction(this); {
+    removeAct_->setText(tr("Remove"));
+    removeAct_->setStatusTip(tr("Remove"));
+  } connect(removeAct_, SIGNAL(triggered()), SLOT(remove()));
+  startAllAct_ = new QAction(this); {
+    startAllAct_->setText(tr("Start all"));
+    startAllAct_->setStatusTip(tr("Start all"));
+  } connect(startAllAct_, SIGNAL(triggered()), SLOT(startAll()));
+  stopAllAct_ = new QAction(this); {
+    stopAllAct_->setText(tr("Stop all"));
+    stopAllAct_->setStatusTip(tr("Stop all"));
+  } connect(stopAllAct_, SIGNAL(triggered()), SLOT(stopAll()));
+  removeAllAct_ = new QAction(this); {
+    removeAllAct_->setText(tr("Remove all"));
+    removeAllAct_->setStatusTip(tr("Remove all"));
+  } connect(removeAllAct_, SIGNAL(triggered()), SLOT(removeAll()));
+  openAct_ = new QAction(this); {
+    openAct_->setText(tr("Play"));
+    openAct_->setStatusTip(tr("Open with Annot Player"));
+  } connect(openAct_, SIGNAL(triggered()), SLOT(open()));
+  openDirectoryAct_ = new QAction(this); {
+    openDirectoryAct_->setText(tr("Open directory"));
+    openDirectoryAct_->setStatusTip(tr("Open directory"));
+  } connect(openDirectoryAct_, SIGNAL(triggered()), SLOT(openDirectory()));
+  hideAct_ = new QAction(this); {
+    hideAct_->setText(tr("Hide"));
+    hideAct_->setStatusTip(tr("Hide"));
+  } connect(hideAct_, SIGNAL(triggered()), SLOT(hide()));
+  quitAct_ = new QAction(this); {
+    quitAct_->setText(tr("Quit"));
+    quitAct_->setStatusTip(tr("Quit"));
+  } connect(quitAct_, SIGNAL(triggered()), SLOT(close()));
+
+
+  // Create menus
+  contextMenu_ = new QMenu(this);
+  AcUi::globalInstance()->setContextMenuStyle(contextMenu_, true); // persistent = true
+  contextMenu_->addAction(startAct_);
+  contextMenu_->addAction(openAct_);
+  contextMenu_->addAction(openDirectoryAct_);
+  contextMenu_->addSeparator();
+  contextMenu_->addAction(stopAct_);
+  contextMenu_->addAction(restartAct_);
+  contextMenu_->addAction(removeAct_);
+  contextMenu_->addSeparator();
+  contextMenu_->addAction(startAllAct_);
+  contextMenu_->addAction(stopAllAct_);
+  contextMenu_->addAction(removeAllAct_);
+  contextMenu_->addSeparator();
+  contextMenu_->addAction(hideAct_);
+  contextMenu_->addAction(quitAct_);
+
   //QShortcut *c1 = new QShortcut(QKeySequence("CTRL+1"), this);
   //connect(c1, SIGNAL(activated()), textTabButton_, SLOT(click()));
   //QShortcut *c2 = new QShortcut(QKeySequence("CTRL+2"), this);
   //connect(c2, SIGNAL(activated()), userTabButton_, SLOT(click()));
 
+  hideAct_->setShortcut(QKeySequence("Esc"));
   QShortcut *cancelShortcut = new QShortcut(QKeySequence("Esc"), this);
   connect(cancelShortcut, SIGNAL(activated()), SLOT(hide()));
 
+  quitAct_->setShortcut(QKeySequence("CTRL+W"));
   QShortcut *closeShortcut = new QShortcut(QKeySequence("CTRL+W"), this);
-  connect(closeShortcut, SIGNAL(activated()), SLOT(hide()));
+  connect(closeShortcut, SIGNAL(activated()), SLOT(close()));
 
   QShortcut *newShortcut = new QShortcut(QKeySequence::New, this);
   connect(newShortcut, SIGNAL(activated()), SLOT(add()));
@@ -234,16 +318,13 @@ void
 MainWindow::checkClipboard()
 { clipboardMonitor_->invalidateClipboard(); }
 
-void
-MainWindow::stopAll()
-{ downloadManager_->stopAll(); }
-
 TaskDialog*
 MainWindow::taskDialog()
 {
   if (!taskDialog_) {
     taskDialog_ = new TaskDialog(this);
     connect(taskDialog_, SIGNAL(urlsAdded(QStringList,bool)), SLOT(addUrls(QStringList,bool)));
+    connect(taskDialog_, SIGNAL(urlsAdded(QStringList,bool)), downloadManager_, SLOT(refreshSchedule()));
     connect(taskDialog_, SIGNAL(message(QString)), SLOT(showMessage(QString)));
     connect(taskDialog_, SIGNAL(warning(QString)), SLOT(warn(QString)));
     connect(taskDialog_, SIGNAL(error(QString)), SLOT(error(QString)));
@@ -254,8 +335,10 @@ MainWindow::taskDialog()
 void
 MainWindow::promptUrls(const QStringList &urls)
 {
+  DOUT("enter: urls =" << urls);
   foreach (QString text, urls)
     promptUrl(text);
+  DOUT("exit");
 }
 
 void
@@ -278,8 +361,20 @@ void
 MainWindow::start()
 {
   DownloadTask *t = currentTask();
-  if (t && !t->isRunning())
-    t->run();
+  if (t && !t->isRunning() && !t->isFinished()) {
+    t->stop();
+    t->start();
+  }
+}
+
+void
+MainWindow::restart()
+{
+  DownloadTask *t = currentTask();
+  if (t) {
+    t->stop();
+    t->start();
+  }
 }
 
 void
@@ -291,13 +386,35 @@ MainWindow::stop()
 }
 
 void
+MainWindow::startAll()
+{
+  foreach (DownloadTask *t, downloadManager_->tasks())
+    if (t->isStopped())
+      t->setState(DownloadTask::Pending);
+  downloadManager_->refreshSchedule();
+}
+
+void
+MainWindow::stopAll()
+{
+  foreach (DownloadTask *t, downloadManager_->tasks())
+    if (!t->isFinished())
+      t->stop();
+}
+
+void
+MainWindow::removeAll()
+{
+  clear();
+  downloadManager_->removeAll();
+}
+
+void
 MainWindow::remove()
 {
   DownloadTask *t = currentTask();
-  if (t) {
-    if (t->isRunning())
-      t->stop();
-  }
+  if (t)
+    downloadManager_->removeTask(t);
   tableView_->removeCurrentRow();
 }
 
@@ -306,20 +423,18 @@ MainWindow::open()
 {
   DownloadTask *t = currentTask();
   if (t && !t->fileName().isEmpty())
-    AcPlayerController::globalController()->openUrl(t->fileName());
+    playerDelegate_->openUrl(t->fileName());
 }
 
 void
 MainWindow::openDirectory()
 {
-  QString desktopPath = QDesktopServices::storageLocation(QDesktopServices::DesktopLocation);
-  QString url =
+  QString url = G_PATH_DOWNLOADS;
 #ifdef Q_OS_WIN
-    "file:///" + desktopPath
-#else
-    "file://" + desktopPath
+  url.replace('\\', '/');
+  url.prepend('/');
 #endif // Q_OS_WIN
-  ;
+  url.prepend("file://");
   QDesktopServices::openUrl(url);
 }
 
@@ -337,32 +452,31 @@ void
 MainWindow::addUrl(const QString &url)
 {
   DOUT("enter: url =" << url);
-  //log(tr("analyzing URL") + ": " + url);
 
-  // TODO: add support to demux AVI/MP3 for nico flv
+  if (downloadManager_->taskWithUrl(url)) {
+    showMessage(tr("task exists") + ": " + url);
+    return;
+  }
+
   DownloadTask *t = new MrlDownloadTask(url, downloadManager_);
-
-  t->setAutoDelete(false);
-  connect(t, SIGNAL(error(QString)), SLOT(showMessage(QString)), Qt::QueuedConnection);
-  connect(t, SIGNAL(finished(DownloadTask*)), SLOT(finish(DownloadTask*)), Qt::QueuedConnection);
-  QThreadPool::globalInstance()->start(t);
-
-  //DOUT("eventloop enter");
-  //QEventLoop loop;
-  //connect(t, SIGNAL(error(QString)), &loop, SLOT(quit()));
-  //connect(t, SIGNAL(finished()), &loop, SLOT(quit()));
-  //connect(t, SIGNAL(fileNameChanged(QString)), &loop, SLOT(quit()));
-  //loop.exec();
-  //DOUT("eventloop leave");
-
+  t->setState(DownloadTask::Pending);
   addTask(t);
+
   DOUT("exit");
 }
+
+void
+MainWindow::addTask(const DownloadTaskInfo &info)
+{ addTask(new MrlDownloadTask(info, downloadManager_)); }
 
 void
 MainWindow::addTask(DownloadTask *t)
 {
   Q_ASSERT(t);
+  t->setAutoDelete(false);
+  t->setDownloadPath(G_PATH_DOWNLOADS);
+  connect(t, SIGNAL(error(QString)), SLOT(warn(QString)), Qt::QueuedConnection);
+  connect(t, SIGNAL(finished(DownloadTask*)), SLOT(finish(DownloadTask*)), Qt::QueuedConnection);
   downloadManager_->addTask(t);
 
 #define FORMAT_TIME(_msecs)       downloadTimeToString(_msecs)
@@ -465,6 +579,8 @@ MainWindow::refresh()
    title.prepend(tr("Annot Downloader"));
 
   setWindowTitle(title);
+  if (systemTrayIcon_)
+    systemTrayIcon_->setToolTip(title);
 #undef FORMAT_TIME
 #undef FORMAT_STATE
 #undef FORMAT_PERCENTAGE
@@ -481,12 +597,21 @@ MainWindow::finish(DownloadTask *task)
   if (!task->isFinished())
     return;
   QString file = task->fileName();
+  QString title;
+  QString msg;
   if (QFile::exists(file)) {
-    showMessage(tr("download finished") + ": " + file);
+    title = tr("download finished");
+    msg = title + ": " + file;
+    showMessage(msg);
     emit downloadFinished(file, task->url());
-  } else
-    warn(tr("download failed") + ": " + file);
+  } else {
+    title = tr("download failed");
+    msg = title + ": " + file;
+    warn(msg);
+  }
   QApplication::beep();
+  if (systemTrayIcon_)
+    systemTrayIcon_->showMessage(title, msg);
 }
 
 void
@@ -501,9 +626,29 @@ MainWindow::invalidateButtons()
   } else {
     bool e = QFile::exists(t->fileName());
     startButton_->setEnabled(!t->isRunning() && !e);
-    stopButton_->setEnabled(t->isRunning());
+    stopButton_->setEnabled(!t->isStopped());
     removeButton_->setEnabled(true);
     openButton_->setEnabled(t->isFinished());
+  }
+}
+
+void
+MainWindow::invalidateActions()
+{
+  DownloadTask *t = currentTask();
+  if (!t) {
+    startAct_->setEnabled(false);
+    restartAct_->setEnabled(false);
+    stopAct_->setEnabled(false);
+    removeAct_->setEnabled(false);
+    openAct_->setEnabled(false);
+  } else {
+    bool e = QFile::exists(t->fileName());
+    startAct_->setEnabled(!t->isRunning() && !e);
+    restartAct_->setEnabled(true);
+    stopAct_->setEnabled(!t->isStopped());
+    removeAct_->setEnabled(true);
+    openAct_->setEnabled(t->isFinished());
   }
 }
 
@@ -573,14 +718,26 @@ MainWindow::closeEvent(QCloseEvent *event)
   enum { CloseTimeout = 3000 };
 
   DOUT("enter");
+  appServer_->stop();
+
   hide();
+  if (systemTrayIcon_)
+    systemTrayIcon_->hide();
 
-  AcPlayerController::globalController()->stop();
-  AcDownloaderController::globalController()->stop();
+  if (taskDialog_)
+    taskDialog_->hide();
 
-  stopAll();
+  Settings *settings = Settings::globalSettings();
+  settings->setRecentTasks(downloadManager_->tasks().infoList());
+  settings->setRecentSize(size());
+
+  settings->sync();
+
+  downloadManager_->stopAll();
 
   signer_->dispose();
+
+  DownloaderController::globalController()->abort();
 
   if (QThreadPool::globalInstance()->activeThreadCount()) {
 #if QT_VERSION >= 0x040800
@@ -611,11 +768,20 @@ MainWindow::event(QEvent *e)
       Q_ASSERT(fe);
       QString url = fe->url().toString();
       if (!url.isEmpty())
-        QTimer::singleShot(0, new slot_::PromptUrl(url, this), SLOT(promptUrl()));
+        QTimer::singleShot(0, new slot_::PromptUrl(url, this), SLOT(trigger()));
     } break;
   default: accept = Base::event(e);
   }
   return accept;
+}
+
+void
+MainWindow::contextMenuEvent(QContextMenuEvent *event)
+{
+  Q_ASSERT(event);
+  invalidateActions();
+  contextMenu_->exec(event->globalPos());
+  event->accept();
 }
 
 // EOF

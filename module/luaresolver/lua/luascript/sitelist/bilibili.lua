@@ -31,6 +31,7 @@ function getTaskAttribute_bilibili ( str_url, str_tmpfile, pDlg, isNeedLogin, bS
     IsAutoLogin = FAILURE;
   end
 
+
   --dbgMessage("bilibili parse begin!");
   if pDlg~=nil then
     sShowMessage(pDlg, '¿ªÊ¼½âÎö..');

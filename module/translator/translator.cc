@@ -3,9 +3,11 @@
 
 #include "translator.h"
 #include "translator_config.h"
-#include <QtCore>
-#include <QtNetwork>
-#include <QtXml>
+#include <QtNetwork/QNetworkAccessManager>
+#include <QtNetwork/QNetworkReply>
+#include <QtNetwork/QNetworkRequest>
+#include <QtXml/QDomDocument>
+#include <QtXml/QDomElement>
 
 //#define DEBUG "translator"
 #include "module/debug/debug.h"

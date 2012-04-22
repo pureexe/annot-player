@@ -2,7 +2,7 @@
 // 4/9/2012
 
 #include "module/qtext/webpage.h"
-#include <QtWebkit>
+#include <QtGui>
 
 //#define HOMEPAGE_URL    "http://annot.me"
 //#define HOMEPAGE_URL    "http://" ANNOT_HOST_IP
@@ -39,6 +39,26 @@ QtExt::
 WebPage::WebPage(QWidget *parent)
   : Base(parent)
 { connect(this, SIGNAL(linkHovered(QString,QString,QString)), SLOT(setHoveredLink(QString))); }
+
+// - Events -
+
+bool
+QtExt::
+WebPage::event(QEvent *event)
+{
+  Q_ASSERT(event);
+  if (event->type() == QEvent::MouseButtonRelease) {
+    QMouseEvent *e = static_cast<QMouseEvent *>(event);
+    if (e->button() == Qt::LeftButton && e->modifiers() == Qt::ControlModifier)  {
+      if (!hoveredLink_.isEmpty())
+        emit openLinkRequested(hoveredLink_);
+      e->accept();
+      return true;
+    }
+  }
+  return Base::event(event);
+}
+
 
 // - Extensions -
 
@@ -82,3 +102,13 @@ WebPage::errorPageExtension(const ErrorPageExtensionOption *option, ErrorPageExt
 }
 
 // EOF
+
+/*
+QObject*
+QtExt::
+WebPage::createPlugin(const QString &classid, const QUrl &url, const QStringList &paramNames, const QStringList &paramValues)
+{
+  DOUT("classId =" << classid << ", url =" << url.toString() << ", paramNames =" << paramNames << ", paramValues =" << paramValues);
+  return Base::createPlugin(classid, url, paramNames, paramValues);
+}
+*/

@@ -1,34 +1,52 @@
-#ifndef ACDOWNLOADER_H
-#define ACDOWNLOADER_H
+#ifndef _AC_ACDOWNLOADER_H
+#define _AC_ACDOWNLOADER_H
 
 // acdownloader.h
 // 4/9/2012
 
 #include "ac/acipc.h"
 
-class AcDownloaderController : public AcIpcController
+class AcDownloaderServer : public AcIpcController
 {
   Q_OBJECT
-  typedef AcDownloaderController Self;
+  typedef AcDownloaderServer Self;
   typedef AcIpcController Base;
+
+  static Self *global_;
 
   // - Construction -
 public:
-  static Self *globalController() { static Self g; return &g; }
-  explicit AcDownloaderController(QObject *parent = 0, Role role = NoRole);
+  explicit AcDownloaderServer(QObject *parent = 0);
+  ~AcDownloaderServer() { stop(); }
+
+public slots:
+  void start();
+  void stop();
+};
+
+class AcDownloader : public QObject
+{
+  Q_OBJECT
+  typedef AcDownloader Self;
+  typedef QObject Base;
+  typedef AcIpcController Delegate;
+
+  Delegate *delegate_;
+
+public:
+  explicit AcDownloader(QObject *parent = 0);
 
 signals:
-  void urlsRequested(const QString &urls);
+  void arguments(const QStringList &args);
 
-  // - Queries -
 public:
   bool isRunning() const;
 
-  // - Actions
 public slots:
   void open();
-  void openUrl(const QString &url);
-  void openUrls(const QStringList &urls);
+  void openArguments(const QStringList &args);
+  void openUrls(const QStringList &urls) { openArguments(urls); }
+  void openUrl(const QString &url) { openUrls(QStringList(url)); }
 };
 
-#endif // ACDOWNLOADER_H
+#endif // _AC_ACDOWNLOADER_H

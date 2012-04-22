@@ -2,7 +2,7 @@
 // 3/14/2012
 
 #include "securebufferedfifostream.h"
-#include <QtCore>
+#include <QtCore/QMutexLocker>
 
 //#define DEBUG "securebufferedfifostream"
 #include "module/debug/debug.h"

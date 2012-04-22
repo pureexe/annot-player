@@ -380,7 +380,7 @@ AnnotationGraphicsItem::parse(const QString &input)
 #define SELF(_text) parse(_text)
   QString text = input.trimmed();
   if (text.isEmpty())
-    return QString::null;
+    return QString();
 
   if (text[0] != CORE_CMDCH)
     return text;
@@ -717,33 +717,34 @@ AnnotationGraphicsItem::contextMenuEvent(QContextMenuEvent *event)
     if (!paused)
       pause();
 
-    QMenu menu;
-    AcUi::globalInstance()->setContextMenuStyle(&menu, false); // persistent = false
+    QMenu *m = new QMenu(view_);
+    AcUi::globalInstance()->setContextMenuStyle(m, false); // persistent = false
 
     if (!hub_->isLiveTokenMode())
-      menu.addAction(TR(T_MENUTEXT_EDIT), this, SLOT(edit()));
-    menu.addAction(TR(T_MENUTEXT_COPY), this, SLOT(copyToClipboard()));
-    menu.addAction(TR(T_MENUTEXT_REMOVEANNOTATION), this, SLOT(removeMe()));
-    menu.addSeparator();
+      m->addAction(TR(T_MENUTEXT_EDIT), this, SLOT(edit()));
+    m->addAction(TR(T_MENUTEXT_COPY), this, SLOT(copyToClipboard()));
+    m->addAction(TR(T_MENUTEXT_REMOVEANNOTATION), this, SLOT(removeMe()));
+    m->addSeparator();
 
     if (annot_.userId() == view_->userId()) {
       if (annot_.hasId() && !hub_->isLiveTokenMode())
-        menu.addAction(TR(T_MENUTEXT_DELETETHISANNOT), this, SLOT(deleteMe()));
+        m->addAction(TR(T_MENUTEXT_DELETETHISANNOT), this, SLOT(deleteMe()));
 
     } else {
       QString text = abstract();
       if (annot_.id() > 0 && !hub_->isLiveTokenMode()) {
-        menu.addAction(TR(T_BLESS) + ": " + text, this, SLOT(blessMe()));
-        menu.addAction(TR(T_CURSE) + ": " + text, this, SLOT(curseMe()));
+        m->addAction(TR(T_BLESS) + ": " + text, this, SLOT(blessMe()));
+        m->addAction(TR(T_CURSE) + ": " + text, this, SLOT(curseMe()));
       }
-      menu.addAction(TR(T_BLOCK) + ": " + text, this, SLOT(blockMe()));
+      m->addAction(TR(T_BLOCK) + ": " + text, this, SLOT(blockMe()));
       if (annot_.hasUserAlias()) {
-        menu.addSeparator();
-        menu.addAction(TR(T_MENUTEXT_BLOCKUSER) + ": " + annot_.userAlias(), this, SLOT(blockUser()));
+        m->addSeparator();
+        m->addAction(TR(T_MENUTEXT_BLOCKUSER) + ": " + annot_.userAlias(), this, SLOT(blockUser()));
       }
     }
 
-    menu.exec(event->globalPos());
+    m->exec(event->globalPos());
+    QTimer::singleShot(0, m, SLOT(deleteLater()));
     event->accept();
 
     if (!paused)
@@ -881,7 +882,6 @@ AnnotationGraphicsItem::blockUser()
     view_->blockUserWithId(annot_.userId());
 }
 
-
 QString
 AnnotationGraphicsItem::abstract() const
 {
@@ -891,6 +891,5 @@ AnnotationGraphicsItem::abstract() const
     ret = ret.left(length - 6) + "..." + ret.right(3);
   return ret;
 }
-
 
 // EOF

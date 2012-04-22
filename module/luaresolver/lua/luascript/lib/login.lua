@@ -4,7 +4,7 @@
 --[[edit 20111206 for bilibili.tv]]
 
 require "lalib"
-require "loginconfig"
+--require "loginconfig"
 
 function Login_Bilibili( str_tmp_file )
 	--local str_login_url = "https://secure.bilibili.us/member/index_do.php";
@@ -14,7 +14,7 @@ function Login_Bilibili( str_tmp_file )
 		"fmdo=login&dopost=login&gourl=&keeptime=604800&userid=%s&pwd=%s&keeptime=604800"
 		,username["bilibili"],decrypt(password["bilibili"]));
 	--dbgMessage(post_str);
-	re = postdlFile(str_tmp_file, str_login_url, post_str,
+	re = postdlFile("", str_login_url, post_str,
 		"Content-type: application/x-www-form-urlencoded\r\nReferer: https://secure.bilibili.tv/login.php");
 
 	--check login state
@@ -31,29 +31,31 @@ function Login_Bilibili( str_tmp_file )
 		end
 	end
 
-	local file = io.open(str_tmp_file, "r");
-	if file==nil
-	then
-		if pDlg~=nil then
-			sShowMessage(pDlg, 'µÇÂ¼bilibiliÍøÕ¾³öÏÖ´íÎó');
-		end
-		return FAILURE;
-	end
+    return SUCCESS;
 
-	local str_line = readUntilFromUTF8(file, "³É¹¦µÇÂ¼");
+	--local file = io.open(str_tmp_file, "r");
+	--if file==nil
+	--then
+	--	if pDlg~=nil then
+	--		sShowMessage(pDlg, 'µÇÂ¼bilibiliÍøÕ¾³öÏÖ´íÎó');
+	--	end
+	--	return FAILURE;
+	--end
 
-	local login_state = FAILURE;
-	if str_line ~= 0 then
-		login_state = SUCCESS;
-		--dbgMessage("ok.");
-	else
-		login_state = FAILURE;
-	end
+	--local str_line = readUntilFromUTF8(file, "³É¹¦µÇÂ¼");
 
-	--readin  ok. close file
-	io.close(file);
+	--local login_state = FAILURE;
+	--if str_line ~= 0 then
+	--	login_state = SUCCESS;
+	--	--dbgMessage("ok.");
+	--else
+	--	login_state = FAILURE;
+	--end
 
-	return login_state;
+	----readin  ok. close file
+	--io.close(file);
+
+	--return login_state;
 end
 
 function Login_Nico( str_tmp_file )
@@ -63,7 +65,7 @@ function Login_Nico( str_tmp_file )
 		--,encodeUrl(username["nico"]),decrypt(password["nico"]));
 		,username["nico"],decrypt(password["nico"]));
 	--dbgMessage(post_str);
-	re = postdlFile(str_tmp_file, str_login_url, post_str,
+	re = postdlFile("", str_login_url, post_str,
 		"Content-type: application/x-www-form-urlencoded\r\nReferer: https://secure.nicovideo.jp/secure/login_form");
 	--dbgMessage("login ok.");
 
@@ -92,7 +94,7 @@ function Login_Nico( str_tmp_file )
 
 	local str_line = readUntilFromUTF8(file, "³É¹¦µÇÂ¼");]]
 
-	local login_state = SUCCESS;
+--	local login_state = SUCCESS;
 --[[	if str_line ~= 0 then
 		login_state = SUCCESS;
 	else
@@ -102,5 +104,5 @@ function Login_Nico( str_tmp_file )
 	--readin  ok. close file
 	io.close(file);]]
 
-	return login_state;
+	return SUCCESS;
 end

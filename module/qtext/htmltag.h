@@ -4,7 +4,7 @@
 // qtext/htmltag.h
 // 7/29/2011
 
-#include <QString>
+#include <QtCore/QString>
 
 #define HTML_NULL       ""
 

@@ -1,17 +1,16 @@
-// annothtmlthread.cc
+// annothtml_thread.cc
 // 3/20/2012
 #include "module/annotcloud/annothtml.h"
 #include "module/annotcloud/annotpaint.h"
 #include "module/qtext/datetime.h"
 #include "module/qtext/os.h"
-#include <QFile>
-#include <QCoreApplication>
-#include <QDesktopServices>
+#include <QtCore/QFile>
+#include <QtCore/QCoreApplication>
 #include <boost/tuple/tuple.hpp>
 
 #define FORMAT_TIME(_secs)        QDateTime::fromMSecsSinceEpoch(_secs * 1000).toString(Qt::ISODate) \
                                   .replace('T', ' ')
-#define FORMAT_POS(_msecs)        ((_msecs) <= 0 ? QString::null : QtExt::msecs2time(_msecs).toString())
+#define FORMAT_POS(_msecs)        ((_msecs) <= 0 ? QString() : QtExt::msecs2time(_msecs).toString())
 
 // - Resources -
 
@@ -89,9 +88,9 @@ AnnotationHtmlParser::toHtml(const AnnotationList &l, const QString &title) cons
   QString t;
   foreach (const Annotation &a, l) {
     QString c = rc_jsf_a_();
-    c.replace(EL_A_POS, FORMAT_POS(a.pos()));
-    c.replace(EL_A_CREATETIME, FORMAT_TIME(a.createTime()));
-    c.replace(EL_A_USER, a.userAlias());
+    c.replace(EL_A_POS, FORMAT_POS(a.pos()))
+     .replace(EL_A_CREATETIME, FORMAT_TIME(a.createTime()))
+     .replace(EL_A_USER, a.userAlias());
 
     QString text; {
       QStringList tags;
@@ -124,10 +123,10 @@ AnnotationHtmlParser::toHtml(const AnnotationList &l, const QString &title) cons
 #else
     img_src = "file://" + img_file;
 #endif // Q_WS_WIN
-    img.replace(EL_I_SRC, img_src);
-    img.replace(EL_I_TITLE, img_title);
-    img.replace(EL_I_WIDTH, QString::number(img_width));
-    img.replace(EL_I_HEIGHT, QString::number(img_height));
+    img.replace(EL_I_SRC, img_src)
+       .replace(EL_I_TITLE, img_title)
+       .replace(EL_I_WIDTH, QString::number(img_width))
+       .replace(EL_I_HEIGHT, QString::number(img_height));
 
     AnnotCloud::AnnotationPainter::globalInstance()->
         saveHistogramAsFile(img_file, l, fields[i], img_width, img_height, img_title);

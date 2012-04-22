@@ -5,7 +5,6 @@
 // 1/24/2011
 
 #include "mrlresolver.h"
-#include <QString>
 
 QT_FORWARD_DECLARE_CLASS(QNetworkAccessManager)
 QT_FORWARD_DECLARE_CLASS(QNetworkReply)

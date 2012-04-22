@@ -4,8 +4,8 @@
 // signer.h
 // 3/30/2012
 
-#include <QObject>
-#include <QMutex>
+#include <QtCore/QObject>
+#include <QtCore/QMutex>
 
 class ServerAgent;
 
@@ -26,6 +26,7 @@ signals:
   void message(const QString &text);
   void warning(const QString &text);
   void error(const QString &text);
+  void notification(const QString &text);
 
 public slots:
   void dispose() { disposed_ = true; }

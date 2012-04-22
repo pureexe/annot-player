@@ -2,7 +2,9 @@
 // 2012/3/28
 
 #include "module/qtext/rubberband.h"
-#include <QtGui>
+#include <QtGui/QPen>
+#include <QtGui/QPainter>
+#include <QtGui/QPaintEvent>
 #include <boost/tuple/tuple.hpp>
 #include <boost/algorithm/minmax.hpp>
 

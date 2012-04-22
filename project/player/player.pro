@@ -1,7 +1,7 @@
 # player.pro
 # 6/30/2011
 
-VERSION = 0.1.4.3
+VERSION = 0.1.5.0
 
 DEFINES += PROJECT_PLAYER
 
@@ -23,7 +23,6 @@ include($$ROOTDIR/module/serveragent/serveragent.pri)
 include($$ROOTDIR/module/gsoap/gsoap.pri)       # would static linking cause license conflicts?
 #include($$ROOTDIR/module/streamservice/streamservice.pri)
 include($$ROOTDIR/module/download/download.pri)
-include($$ROOTDIR/module/download/mrldownload.pri)
 include($$ROOTDIR/module/mediacodec/mediacodec.pri)
 include($$ROOTDIR/module/translator/translator.pri)
 include($$ROOTDIR/module/mrlresolver/mrlresolver.pri)
@@ -35,7 +34,7 @@ include($$ROOTDIR/module/qt/qt.pri)
 include($$ROOTDIR/module/qtext/qtext.pri)
 include($$ROOTDIR/module/crypt/crypt.pri)
 
-#!mac: include($$ROOTDIR/module/ipc/ipc.pri)
+!mac: include($$ROOTDIR/module/metacall/metacall.pri)
 
 # shared link gave me so many trouble on mac and linux
 #unix:       include($$ROOTDIR/module/webbrowser/webbrowser_static.pri)
@@ -242,6 +241,9 @@ SOURCES += \
     util/textedittabview.cc
 
 win32 {
+  HEADERS += windowsregistry.h
+  SOURCES += windowsregistry.cc
+
   DEFINES += USE_MODE_SIGNAL
 
   HEADERS += \

@@ -13,5 +13,6 @@
 //#define WBRC_TR_NULL      WBRC_NULL
 
 #define WBRC_IMAGE_COMBOBOX  WBRC_PREFIX_IMAGE "comboedit.png"
+#define WBRC_IMAGE_COMMENT   WBRC_PREFIX_IMAGE "comment.png"
 
 #endif // WBRC_H

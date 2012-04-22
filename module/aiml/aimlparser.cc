@@ -9,9 +9,9 @@
 #include <cstdlib>
 
 #ifdef Q_WS_WIN
-  #include <qt_windows.h>
-  #include <io.h>
-  #include <fcntl.h>
+#  include <qt_windows.h>
+#  include <io.h>
+#  include <fcntl.h>
 #endif
 
 namespace { // anonymous

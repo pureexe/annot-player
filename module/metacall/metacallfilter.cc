@@ -2,36 +2,74 @@
 // 4/9/2012
 #include "metacallfilter.h"
 #include "metacallevent.h"
-#include <QtCore>
-#include <QtNetwork>
+#include <QtNetwork/QTcpServer>
+#include <QtNetwork/QTcpSocket>
+#include <QtNetwork/QHostAddress>
+#include <QtCore/QTimer>
+#include <QtCore/QEvent>
+#include <QtCore/QEventLoop>
 #include <utility>
 
 #define DEBUG "metacallfilter"
 #include "module/debug/debug.h"
 
-// - Event -
+// - Construction -
+
+void
+MetaCallFilter::setWatchedObject(QObject *watched)
+{
+  DOUT("enter: watched_ =" << watched_);
+  if (watched_)
+    watched_->removeEventFilter(this);
+  watched_ = watched;
+  if (watched_)
+    watched_->installEventFilter(this);
+  DOUT("exit: watched_ =" << watched_);
+}
 
 bool
 MetaCallFilter::eventFilter(QObject *watched, QEvent *e)
 {
+  DOUT("enter: event type =" << e->type());
   Q_ASSERT(e);
   Q_ASSERT(socket_);
-  if (watched_ != watched || e->type() !=  QEvent::MetaCall || !running_)
+  if (watched_ != watched || e->type() !=  QEvent::MetaCall || !running_) {
+    DOUT("exit: not running");
     return QObject::eventFilter(watched, e);
+  }
 
   sendMetaEvent(static_cast<QMetaCallEvent *>(e));
+  DOUT("exit: ret = true");
   return true;
 }
 
 // - Start -
 
+bool
+MetaCallFilter::isActive() const
+{
+  return running_ && (
+    server_ && server_->isListening() ||
+    socket_ && socket_->state() == QAbstractSocket::ConnectedState
+   );
+}
+
 void
 MetaCallFilter::stop()
 {
-  if (server_)
-    server_->close();
-  if (socket_)
-    socket_->close();
+  if (socket_) {
+    if (socket_->isOpen())
+      socket_->close();
+    if (!server_)
+      QTimer::singleShot(0, socket_, SLOT(deleteLater()));
+    socket_ = 0;
+  }
+  if (server_) {
+    if (server_->isListening())
+      server_->close();
+    QTimer::singleShot(0, server_, SLOT(deleteLater()));
+    server_ = 0;
+  }
   running_ = false;
 }
 
@@ -44,6 +82,8 @@ MetaCallFilter::startServer(const QHostAddress &address, int port)
     return false;
   }
 
+  stop();
+
   server_ = new QTcpServer(this);
   running_ = server_->listen(address, port);
   if (running_) {
@@ -52,17 +92,19 @@ MetaCallFilter::startServer(const QHostAddress &address, int port)
   } else
     DOUT("error =" << server_->errorString());
   DOUT("exit: ret =" << running_);
-  return ok;
+  return running_;
 }
 
 bool
-MetaCallFilter::startClient(const QHostAddress &address, int port)
+MetaCallFilter::startClient(const QHostAddress &address, int port, bool async)
 {
   DOUT("enter: address =" << address.toString() << ", port =" << port);
-  if (running_) {
+  if (isActive()) {
     DOUT("exit: ret = false, already started");
     return false;
   }
+
+  stop();
 
   socket_ = new QTcpSocket(this);
   connect(socket_, SIGNAL(readyRead()), SLOT(readSocket()));
@@ -72,9 +114,17 @@ MetaCallFilter::startClient(const QHostAddress &address, int port)
 #endif // DEBUG
 
   socket_->connectToHost(address, port);
-  dumpSocket();
-
   running_ = true;
+  if (!async &&
+      socket_->state() != QAbstractSocket::ConnectedState &&
+      socket_->state() != QAbstractSocket::UnconnectedState) {
+    QEventLoop l;
+    connect(socket_, SIGNAL(stateChanged(QAbstractSocket::SocketState)), &l, SLOT(quit()));
+    connect(socket_, SIGNAL(error(QAbstractSocket::SocketError)), &l, SLOT(quit()));
+    do l.exec();
+    while (socket_->state() == QAbstractSocket::HostLookupState ||
+           socket_->state() == QAbstractSocket::ConnectingState);
+  }
   DOUT("exit: ret =" << running_);
   return running_;
 }
@@ -84,6 +134,7 @@ MetaCallFilter::startClient(const QHostAddress &address, int port)
 void
 MetaCallFilter::sendMetaEvent(const QMetaCallEvent *m)
 {
+  DOUT("enter");
   Q_ASSERT(m);
   Q_ASSERT(socket_);
   if (!socket_)
@@ -94,13 +145,7 @@ MetaCallFilter::sendMetaEvent(const QMetaCallEvent *m)
   QDataStream out(&message, QIODevice::WriteOnly);
 
   out << (message_size_t)0 // space holder for message size
-#ifdef MCE_HAS_STATIC_CALL
-      << m->methodOffset()
-      << m->methodRelative()
-#else
       << m->id()
-#endif // MCE_HAS_STATIC_CALL
-      << m->signalId()
       << m->nargs();
 
   bool ok = true;
@@ -123,6 +168,11 @@ void
 MetaCallFilter::acceptConnection()
 {
   DOUT("enter");
+  if (socket_) {
+    if (socket_->isOpen())
+      socket_->close();
+    QTimer::singleShot(0, socket_, SLOT(deleteLater()));
+  }
   socket_ = server_->nextPendingConnection();
   dumpSocket();
   if(socket_) {
@@ -147,69 +197,65 @@ MetaCallFilter::readSocket()
 
   QDataStream in(socket_);
   if (!messageSize_) { // Save messageSize_ since none-blocking read is used
-    if (socket_->bytesAvailable() < sizeof(message_size_t)) {
+    if (socket_->bytesAvailable() < (int)sizeof(message_size_t)) {
       DOUT("exit: insufficient messageSize");
       return;
     }
     in >> messageSize_;
   }
 
-  if (socket_->bytesAvailable() < messageSize_ - sizeof(message_size_t)) {
+  if (socket_->bytesAvailable() < int(messageSize_ - sizeof(message_size_t))) {
     DOUT("exit: insufficient messageSize");
     return;
   }
+  DOUT("messageSize =" << messageSize_);
 
   messageSize_ = 0;
 
-#ifdef MCE_HAS_STATIC_CALL
-  ushort m_methodOffset;
-  in >> m_methodOffset;
-  ushort m_methodRelative;
-  in >> m_methodRelative;
-#else
   int m_id;
   in >> m_id;
-#endif // MCE_HAS_STATIC_CALL
-  int m_signalId;
-  in >> m_signalId;
+  DOUT("m_id =" << m_id);
 
   int m_nargs;
   in >> m_nargs;
+  DOUT("m_nargs =" << m_nargs);
   Q_ASSERT(m_nargs > 0);
   if (m_nargs <= 0) {
     DOUT("exit: error, invalid m_nargs =" << m_nargs);
     return;
   }
 
-  // Use auto-release pool to prevent memory leak on exceptions
-  int *m_types = new int[m_nargs];  // FIXME: never released
+  int *m_types = new int[m_nargs];
   std::auto_ptr<int> autorelease_types(m_types);
-  Q_UNUSED(autorelease_types);
 
-  void **m_args = new void*[m_nargs]; // FIXME: never released
+  void **m_args = new void *[m_nargs];
   std::auto_ptr<void *> autorelease_args(m_args);
-  Q_UNUSED(autorelease_args);
-
   m_args[0] = 0;
-
 
   bool ok = true;
   for (int i = 1; i < m_nargs && ok; i++) {
     in >> m_types[i];
     m_args[i] = QMetaType::construct(m_types[i]);
 
-    ok = QMetaType::load(in, m_types[i], m_args[i]);
-    if (!ok)
-      DOUT("warning: unregisted metatype");
+    ok = QMetaType::load(in, m_types[i], m_args[i]) && ok;
   }
-  if (ok) {
-#ifdef MCE_HAS_STATIC_CALL
-    QMetaCallEvent m(m_methodOffset, m_methodRelative, 0, this, m_signalId, m_nargs, m_types, m_args);
-#else
-    QMetaCallEvent m(m_id, this, m_signalId, m_nargs, m_types, m_args);
-#endif // MCE_HAS_STATIC_CALL
-    DOUT("placeMetaCall");
-    m.placeMetaCall(this); // might throw exceptions
+  if (!ok)
+    DOUT("warning: unregisted metatype");
+
+  Q_ASSERT(watched_);
+  if (ok && watched_) {
+    // See: QObject::event and QQMetaCallEvent implementation in in qobject.cpp
+    // Use macros is case QT_NO_EXCEPTIONS is defined
+    QT_TRY {
+      DOUT("placeMetaCall");
+      QMetaObject::metacall(watched_, QMetaObject::InvokeMetaMethod, m_id, m_args);
+    } QT_CATCH(...) {
+      DOUT("destroy meta types");
+      for (int i = 0; i < m_nargs; ++i)
+       if (m_types[i] && m_args[i])
+         QMetaType::destroy(m_types[i], m_args[i]);
+      QT_RETHROW;
+    }
   }
   DOUT("exit: ok =" << ok);
 }

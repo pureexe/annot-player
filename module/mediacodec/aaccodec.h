@@ -4,7 +4,7 @@
 // aaccodec.h
 // 2/14/2011
 
-#include <QtGlobal>
+#include <QtCore/QtGlobal>
 
 class InputStream;
 

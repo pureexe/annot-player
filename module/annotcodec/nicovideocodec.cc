@@ -7,9 +7,13 @@
 #include "nicovideocodec.h"
 #include "module/annotcloud/annottag.h"
 #include "module/annotcloud/traits.h"
-#include <QtCore>
-#include <QtNetwork>
-#include <QtXml>
+#include <QtNetwork/QNetworkReply>
+#include <QtNetwork/QNetworkRequest>
+#include <QtNetwork/QNetworkAccessManager>
+#include <QtXml/QDomDocument>
+#include <QtXml/QDomElement>
+#include <QtCore/QStringList>
+#include <QtCore/QFile>
 #include <climits>
 
 //#define DEBUG "nicovideocodec"
@@ -131,10 +135,8 @@ QString
 NicovideoCodec::parseText(const QString &text)
 {
   if (text.isEmpty())
-    return QString::null;
-  QString ret = text;
-  //ret.replace("/n", "\n ");
-  return ret.trimmed();
+    return QString();
+  return text.trimmed();
 }
 
 // See: http://nicowiki.com/elsecom.html
@@ -142,7 +144,7 @@ QString
 NicovideoCodec::parsePrefix(const QString &text)
 {
   if (text.isEmpty() || text == "184")
-    return QString::null;
+    return QString();
 
   QString ret;
   QStringList attrs = text.split(' ');

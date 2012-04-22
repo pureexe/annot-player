@@ -4,7 +4,7 @@
 // ac/aclineedit.h
 // 10/10/2011
 
-#include <QLineEdit>
+#include <QtGui/QLineEdit>
 
 class AcLineEdit : public QLineEdit
 {

@@ -2,7 +2,6 @@
 // 10/29/2011
 
 #include "module/annotcloud/alias.h"
-#include <QMetaType>
 
 using namespace AnnotCloud;
 

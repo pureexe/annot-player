@@ -6,8 +6,8 @@
 
 #include "downloadtask.h"
 #include "module/mrlresolver/mrlinfo.h"
-#include <QHash>
-#include <QList>
+#include <QtCore/QHash>
+#include <QtCore/QList>
 
 QT_FORWARD_DECLARE_CLASS(QNetworkCookieJar)
 

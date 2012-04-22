@@ -10,9 +10,12 @@
 #else
 #  error "gzip is required to uncompress bilibili reply"
 #endif // WITH_MODULE_COMPRESS
-#include <QtCore>
-#include <QtNetwork>
-#include <QtXml>
+#include <QtNetwork/QNetworkReply>
+#include <QtNetwork/QNetworkRequest>
+#include <QtNetwork/QNetworkAccessManager>
+#include <QtXml/QDomDocument>
+#include <QtXml/QDomElement>
+#include <QtCore/QStringList>
 
 //#define DEBUG "bilibilicodec"
 #include "module/debug/debug.h"
@@ -116,11 +119,9 @@ BilibiliCodec::parseDocument(const QByteArray &data)
 QString
 BilibiliCodec::parseText(const QString &text)
 {
-  if (text.isEmpty())
-    return QString::null;
-  QString ret = text;
-  ret.replace("/n", "\n ");
-  return ret.trimmed();
+  return text.isEmpty() ? text : QString(text)
+    .replace("/n", "\n ")
+    .trimmed();
 }
 
 // Example: <d p="0,1,25,16777215,1312863760,0,eff85771,42759017">Annotation</d>

@@ -5,7 +5,7 @@
 // 4/8/2012
 
 #include "module/annotcloud/annotation.h"
-#include <QWidget>
+#include <QtGui/QWidget>
 
 QT_FORWARD_DECLARE_CLASS(QPainter)
 
@@ -31,6 +31,7 @@ public:
   bool isEmpty() const;
 public slots:
   void setEnabled(bool t);
+  void setOffset(qint64 secs);
   void invalidateVisible();
 
   // - Events -
@@ -49,6 +50,7 @@ private:
   DataManager *data_;
   SignalHub *hub_;
   Player *player_;
+  qint64 offset_;
 };
 
 #endif // EMBEDDEDCANVAS_H

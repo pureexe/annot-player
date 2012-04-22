@@ -3,8 +3,8 @@
 // application.h
 // 11/18/2011
 
-#include <QApplication>
-#include <QList>
+#include <QtGui/QApplication>
+#include <QtCore/QList>
 
 QT_FORWARD_DECLARE_CLASS(QWidget)
 
@@ -25,6 +25,7 @@ public:
   ~Application();
 
 public slots:
+  void infectDownloadDirectory();
   void abortAll(); // kill all instances
   void abort();    // kill this instance
 
@@ -34,6 +35,7 @@ public:
   void setMainWindow(QWidget *w) { w_ = w; }
 
   bool isSingleInstance() const;
+
 
 public:
   void installMessageHandlers(); ///< invoked only once

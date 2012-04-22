@@ -5,10 +5,10 @@
 // 8/14/2011
 
 #include "module/annotcloud/traits.h"
-#include <QByteArray>
-#include <QMetaType>
-#include <QString>
-#include <QList>
+#include <QtCore/QByteArray>
+#include <QtCore/QMetaType>
+#include <QtCore/QString>
+#include <QtCore/QList>
 
 namespace AnnotCloud {
 

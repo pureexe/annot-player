@@ -4,13 +4,13 @@
 // qtext/os.h
 // 4/6/2012
 
-#include <QString>
+#include <QtCore/QString>
 
 namespace QtExt {
 
   void sleep(uint msecs);
 
-  QString mktemp(const QString &suffix = QString::null, bool deleteLater = true);
+  QString mktemp(const QString &suffix = QString(), bool deleteLater = true);
 
 } // namespace QtExt
 

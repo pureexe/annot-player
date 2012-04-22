@@ -4,9 +4,9 @@
 // wbwebview.h
 // 1/27/2012
 
-#include "module/qtext/webdialog.h"
+#include "module/qtext/webview.h"
 
-typedef QtExt::WebDialog WbWebViewBase;
+typedef QtExt::WebView WbWebViewBase;
 class WbWebView : public WbWebViewBase
 {
   Q_OBJECT
@@ -14,13 +14,12 @@ class WbWebView : public WbWebViewBase
   typedef WbWebViewBase Base;
 
 public:
-  explicit WbWebView(QWidget *parent = 0)
-    : Base(parent)
-  { setWindowFlags(0); createActions(); }
+  explicit WbWebView(QWidget *parent = 0);
 
 signals:
   void windowCreated(QWebView *w);
   void openUrlWithAcPlayerRequested(const QString &url);
+  void importUrlToAcPlayerRequested(const QString &url);
   void openUrlWithAcDownloaderRequested(const QString &url);
   void undoClosedTabRequested();
 
@@ -33,6 +32,9 @@ private slots:
   void openWithAcPlayer()
   { emit openUrlWithAcPlayerRequested(currentUrl_); }
 
+  void importToAcPlayer()
+  { emit importUrlToAcPlayerRequested(currentUrl_); }
+
   void openWithAcDownloader()
   { emit openUrlWithAcDownloaderRequested(currentUrl_); }
 
@@ -40,6 +42,7 @@ private:
   void createActions();
 private:
   QAction *openWithAcPlayerAct_,
+          *importToAcPlayerAct_,
           *openWithAcDownloaderAct_,
           *undoClosedTabAct_;
   QString currentUrl_;

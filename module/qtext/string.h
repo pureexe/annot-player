@@ -4,8 +4,8 @@
 // qtext/string.h
 // 3/11/2012
 
-#include <QString>
-#include <QRegExp>
+#include <QtCore/QString>
+#include <QtCore/QRegExp>
 
 namespace QtExt {
 

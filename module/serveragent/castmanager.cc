@@ -1,13 +1,7 @@
 // castmanager.cc
 // 11/15/2011
 #include "castmanager.h"
-#include <QtCore>
-
-// - Constructions -
-
-CastManager::CastManager(QObject *parent)
-  : Base(parent)
-{ }
+#include <QtCore/QMutexLocker>
 
 bool
 CastManager::containsEvent(const CastEvent &e) const

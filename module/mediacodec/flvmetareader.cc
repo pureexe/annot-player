@@ -5,7 +5,6 @@
 
 #include "flvmeta.h"
 #include "module/stream/datainputstream.h"
-#include <QtCore>
 
 //#define DEBUG "flvmetareader"
 #include "module/debug/debug.h"

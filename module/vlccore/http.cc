@@ -7,8 +7,10 @@
 #include "module/vlccore/httpsession.h"
 #include "module/vlccore/httpbufferedsession.h"
 #include "module/vlccore/httpstreamsession.h"
-#include <QtCore>
-#include <QtNetwork>
+#include <QtNetwork/QNetworkCookieJar>
+#include <QtCore/QEventLoop>
+#include <QtCore/QDir>
+#include <QtCore/QTimer>
 #include <cstdarg>
 
 #include <vlc/plugins/vlc_common.h>
@@ -29,6 +31,7 @@ qint64 VlcHttpPlugin::duration_ = 0;
 QNetworkCookieJar *VlcHttpPlugin::cookieJar_ = 0;
 QString VlcHttpPlugin::mediaTitle_;
 bool VlcHttpPlugin::bufferSaved_ = true;
+QString VlcHttpPlugin::cachePath_;
 
 void
 VlcHttpPlugin::setBufferSaved(bool t)
@@ -147,7 +150,7 @@ VlcHttpPlugin::open(vlc_object_t *p_this)
   DOUT("url =" << url);
   if (url.contains(".youtube.com/")) {
     closeSession();
-    DOUT("exit: youtube URL:" << url);
+    DOUT("exit: youtube URL:" << url); // FIXME: cannot handle video cache server
     return VLC_EGENERIC;
   }
 
@@ -208,8 +211,14 @@ VlcHttpPlugin::openSession()
 
   session_->setBufferSaved(bufferSaved_);
 
+  QString cachePath = cachePath_;
+  if (cachePath.isEmpty())
+    cachePath = QDir::homePath();
+  session_->setCachePath(cachePath);
+
   connect(session_, SIGNAL(error(QString)), globalInstance(), SIGNAL(error(QString)));
   connect(session_, SIGNAL(message(QString)), globalInstance(), SIGNAL(message(QString)));
+  connect(session_, SIGNAL(warning(QString)), globalInstance(), SIGNAL(warning(QString)));
   connect(session_, SIGNAL(fileSaved(QString)), globalInstance(), SIGNAL(fileSaved(QString)));
   connect(session_, SIGNAL(progress(qint64,qint64)), globalInstance(), SIGNAL(progress(qint64,qint64)));
   session_->setCookieJar(cookieJar_);

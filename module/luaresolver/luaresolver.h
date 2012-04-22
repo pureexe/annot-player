@@ -3,9 +3,9 @@
 
 // luaresolver.h
 // 2/2/2012
-#include <QObject>
-#include <QString>
-#include <QStringList>
+#include <QtCore/QObject>
+#include <QtCore/QString>
+#include <QtCore/QStringList>
 
 QT_FORWARD_DECLARE_CLASS(QNetworkCookieJar)
 
@@ -28,7 +28,7 @@ class LuaResolver : public QObject
 
 public:
   explicit LuaResolver(const QString &scriptPath,
-                       const QString &packagePath = QString::null,
+                       const QString &packagePath = QString(),
                        QObject *parent = 0);
 
 public:
@@ -76,9 +76,9 @@ public:
 protected:
   static void printLastError(lua_State *L);
   static void appendLuaPath(lua_State *L, const QString &path);
-  static QString decodeText(const char *text, const char *encoding);
   static QString decodeTitle(const char *text, int siteId);
   //static QString decodeUrl(const QString &url, const QString &href);
+  //static QString decodeText(const char *text, const char *encoding);
   //static void hackCookieJar(QNetworkCookieJar *jar);
 };
 

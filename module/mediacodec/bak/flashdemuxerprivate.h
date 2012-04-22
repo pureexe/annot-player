@@ -8,12 +8,12 @@
 // See: FLVExtractCl/Library/General.cs
 // http://moitah.net/
 
-#include <QObject>
-#include <QString>
-#include <QFile>
-#include <QFileInfo>
-#include <QHash>
-#include <QDataStream>
+#include <QtCore/QObject>
+#include <QtCore/QString>
+#include <QtCore/QFile>
+#include <QtCore/QFileInfo>
+#include <QtCore/QHash>
+#include <QtCore/QDataStream>
 
 //#define DEBUG "flashdemuxerprivate"
 #include "module/debug/debug.h"

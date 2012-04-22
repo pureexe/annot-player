@@ -5,7 +5,7 @@
 // 2/18/2012
 
 #include "module/qtext/dialog.h"
-#include <QList>
+#include <QtCore/QList>
 
 class TextEditTabView;
 

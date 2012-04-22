@@ -4,9 +4,8 @@
 // player.h
 // 6/30/2011
 
-#include "player_config.h"
-#include <QWidget> // where WId is declared
-#include <QStringList>
+#include <QtGui/QWidget> // where WId is declared
+#include <QtCore/QStringList>
 
 QT_FORWARD_DECLARE_CLASS(QNetworkCookieJar)
 #ifdef Q_WS_MAC
@@ -84,6 +83,7 @@ public:
   bool isKeyboardEnabled() const;
   bool isBufferSaved() const;
   bool isDownloadFinished() const;
+  QString downloadPath() const;
 
   Status status() const;
   bool isPlaying() const;
@@ -119,6 +119,7 @@ public:
    *  Due to deficiency of VLC, there is a delay between mediaChanged and lengthChanged signals.
    */
   qint64 mediaLength() const;
+  qint64 mediaSize() const;
 
   ///  Current played time in msecs, always in [0, mediaLength()].
   qint64 time() const;
@@ -177,10 +178,12 @@ public slots:
   void embed(QWidget *w);
 #endif // Q_WS_MAC
 
+  void setDownloadPath(const QString &path);
+
   void setBufferSaved(bool t);
   void saveBuffer();
 
-  void setUserAgent(const QString &agent = QString::null);
+  void setUserAgent(const QString &agent = QString());
 
   void setCookieJar(QNetworkCookieJar *jar);
   void clearCookieJar() { setCookieJar(0); }
@@ -274,6 +277,25 @@ public:
   qreal fps() const;
   qreal bitrate() const;
 
+  // - Meta -
+  QString metaTitle() const;
+  QString metaArtist() const;
+  QString metaGenre() const;
+  QString metaCopyright() const;
+  QString metaAlbum() const;
+  QString metaTrackNumber() const;
+  QString metaDescription() const;
+  QString metaRating() const;
+  QString metaDate() const;
+  QString metaSetting() const;
+  QString metaURL() const;
+  QString metaLanguage() const;
+  QString metaNowPlaying() const;
+  QString metaPublisher() const;
+  QString metaEncodedBy() const;
+  QString metaArtworkURL() const;
+  QString metaTrackID() const;
+
 public slots:
   void setVolume(qreal vol);
   void setRate(qreal rate);
@@ -326,6 +348,7 @@ public:
 signals:
   void error(const QString &msg);
   void message(const QString &msg);
+  void warning(const QString &msg);
   void fileSaved(const QString &fileName);
   void aspectRatioChanged(const QString &ratio);
   void downloadProgress(qint64 receivedBytes, qint64 totalBytes);

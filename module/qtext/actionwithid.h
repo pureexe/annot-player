@@ -4,7 +4,7 @@
 // qtext/actionwithid.h
 // 9/2/2011
 
-#include <QAction>
+#include <QtGui/QAction>
 
 namespace QtExt {
 

@@ -4,7 +4,6 @@
 #include "flvdemux.h"
 #include "mediawriter.h"
 #include "mediatoc.h"
-#include <QtCore>
 
 #define DEBUG "flvdemux"
 #include "module/debug/debug.h"

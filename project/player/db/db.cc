@@ -8,6 +8,9 @@
 // - date and time: http://www.sqlite.org/lang_datefunc.html
 // - hex: http://www.sqlite.org/lang_corefunc.html
 //   unhex: not available
+//
+// *** Tuning performance on Windows ***
+// See: http://stackoverflow.com/questions/1711631/how-do-i-improve-the-performance-of-sqlite
 
 #include "db.h"
 #include "db_config.h"
@@ -23,11 +26,9 @@
 
 using namespace AnnotCloud;
 
-namespace { // anonymous, helper
-
-  inline QString uniqueString() { static int count = 0; return QString::number(++count); }
-
-} // anonymous namespace
+//#ifdef Q_OS_WIN
+//#  define DB_TUNE
+//#endif // Q_OS_WIN
 
 // - Threads -
 
@@ -59,18 +60,41 @@ namespace { namespace task_ { // anonymous
 
 // - Constructions -
 
-Database::Database(const QString &fileName, QObject *parent)
-  : Base(parent), disposed_(false)
+Database::~Database()
+{
+  DOUT("enter");
+  QMutexLocker lock(&m_);
+
+  if (db_.isOpen())
+    db_.close();
+  DOUT("exit");
+}
+
+QString
+Database::newId()
+{
+  static int id = 0;
+  return QString::number(++id);
+}
+
+bool
+Database::open(const QString &fileName)
 {
   DOUT("enter: fileName =" << fileName);
   QFileInfo fi(fileName);
   bool empty = !fi.exists() || fi.size() == 0;
 
-  db_ = QSqlDatabase::addDatabase("QSQLITE", uniqueString());
-  if (db_.isValid())
-    open(fileName);
-  if (isValid() && empty) {
-    bool ok = createTables();
+  db_ = QSqlDatabase::addDatabase("QSQLITE", newId());
+  bool ok = db_.isValid();
+  if (ok) {
+    Q_ASSERT(db_.driver() && db_.driver()->hasFeature(QSqlDriver::LastInsertId));
+    db_.setDatabaseName(fileName);
+    ok = db_.open();
+    if (ok)
+      tune();
+  }
+  if (ok && empty) {
+    ok = createTables();
     if (!ok) {
       DOUT("failed to create database tables");
       db_.close();
@@ -79,46 +103,16 @@ Database::Database(const QString &fileName, QObject *parent)
     }
   }
 
-  if (db_.isValid())
-    Q_ASSERT(db_.driver() && db_.driver()->hasFeature(QSqlDriver::LastInsertId));
-  DOUT("exit: valid =" << isValid());
+  ok = isValid();
+  DOUT("exit: ret =" << ok);
+  return ok;
 }
-
-Database::~Database()
-{
-  DOUT("enter");
-  QMutexLocker lock(&mutex_);
-
-  if (db_.isOpen())
-    db_.close();
-  DOUT("exit");
-}
-
-bool
-Database::open(const QString &fileName)
-{
-  DOUT("fileName =" << fileName);
-
-  // Locking is not needed currently
-  //QMutexLocker lock(&mutex_);
-
-  Q_ASSERT(!db_.isOpen());
-  if (db_.isOpen())
-    db_.close();
-  db_.setDatabaseName(fileName);
-
-  return db_.open();
-}
-
-void
-Database::dispose()
-{ disposed_ = true; }
 
 void
 Database::clear()
 {
   DOUT("enter");
-  QMutexLocker lock(&mutex_);
+  QMutexLocker lock(&m_);
 
   if (db_.isOpen())
     db_.close();
@@ -130,11 +124,17 @@ Database::clear()
     DOUT("try to remove old db file:" << fileName);
     QFile::remove(fileName);
   }
-  db_ = QSqlDatabase::addDatabase("QSQLITE", uniqueString());
-  if (db_.isValid())
-    open(fileName);
-  if (isValid()) {
-    bool ok = createTables();
+  db_ = QSqlDatabase::addDatabase("QSQLITE", newId());
+  bool ok = db_.isValid();
+  if (ok) {
+    db_.setDatabaseName(fileName);
+    ok = db_.open();
+    if (ok)
+      tune();
+  }
+
+  if (ok) {
+    ok = createTables();
     if (!ok) {
       DOUT("failed to create database tables");
       db_.close();
@@ -150,6 +150,21 @@ Database::clear()
 
 // - Create -
 
+// See: http://www.qtcentre.org/archive/index.php/t-39168.html
+void
+Database::tune()
+{
+#ifdef DB_TUNE
+  DOUT("enter");
+  Q_ASSERT(isValid());
+
+  bool ok = QSqlQuery(db_).exec("PRAGMA journal_mode = OFF");
+  Q_UNUSED(ok);
+
+  DOUT("exit: ok =" << ok);
+#endif // DB_TUNE
+}
+
 bool
 Database::createTables()
 {
@@ -157,7 +172,7 @@ Database::createTables()
   Q_ASSERT(isValid());
 
   // Currently not needed
-  //DOUT("unlocking"); mutex_.unlock(); DOUT("unlocked");
+  //DOUT("unlocking"); m_.unlock(); DOUT("unlocked");
 
   QSqlQuery query(db_);
 
@@ -207,9 +222,9 @@ Database::insertUser(const User& user)
 
   DB_INSERT_USER(user, query);
 
-  DOUT("locking"); mutex_.lock(); DOUT("locked");
+  DOUT("locking"); m_.lock(); DOUT("locked");
   bool ok = query.exec();
-  DOUT("unlocking"); mutex_.unlock(); DOUT("unlocked");
+  DOUT("unlocking"); m_.unlock(); DOUT("unlocked");
 
   qint64 ret = 0;
   if (ok)
@@ -229,14 +244,14 @@ Database::insertUsers(const UserList &l)
 {
   DOUT("enter: count =" << l.size());
   Q_ASSERT(isValid());
-  bool ret = true;
-  foreach (User u, l)
-    if (!insertUser(u)) {
+  bool ok = true;
+  foreach (const User &u, l)
+    if (disposed_ || !insertUser(u)) {
       DOUT("failed at id =" << u.id() << ", ignored");
-      ret = false;
+      ok = false;
     }
-  DOUT("exit: ret =" << ret);
-  return ret;
+  DOUT("exit: ret =" << ok);
+  return ok;
 }
 
 qint64
@@ -248,9 +263,9 @@ Database::insertToken(const Token &token)
 
   DB_INSERT_TOKEN(token, query);
 
-  DOUT("locking"); mutex_.lock(); DOUT("locked");
+  DOUT("locking"); m_.lock(); DOUT("locked");
   bool ok = query.exec();
-  DOUT("unlocking"); mutex_.unlock(); DOUT("unlocked");
+  DOUT("unlocking"); m_.unlock(); DOUT("unlocked");
   qint64 ret = 0;
   if (ok)
     ret = query.lastInsertId().toLongLong(&ok);
@@ -269,14 +284,14 @@ Database::insertTokens(const TokenList &l)
 {
   DOUT("enter: count =" << l.size());
   Q_ASSERT(isValid());
-  bool ret = true;
-  foreach (Token t, l)
-    if (!insertToken(t)) {
+  bool ok = true;
+  foreach (const Token &t, l)
+    if (disposed_ || !insertToken(t)) {
       DOUT("failed at id =" << t.id() << ", ignored");
-      ret = false;
+      ok = false;
     }
-  DOUT("exit: ret =" << ret);
-  return ret;
+  DOUT("exit: ret =" << ok);
+  return ok;
 }
 
 qint64
@@ -291,9 +306,9 @@ Database::insertAlias(const Alias &alias)
 
   DB_INSERT_ALIAS(alias, query);
 
-  DOUT("locking"); mutex_.lock(); DOUT("locked");
+  DOUT("locking"); m_.lock(); DOUT("locked");
   bool ok = query.exec();
-  DOUT("unlocking"); mutex_.unlock(); DOUT("unlocked");
+  DOUT("unlocking"); m_.unlock(); DOUT("unlocked");
   qint64 ret = 0;
   if (ok)
     ret = query.lastInsertId().toLongLong(&ok);
@@ -335,9 +350,9 @@ Database::isAliasExists(const Alias &alias) const
     query.addBindValue(alias.text());
   }
 
-  DOUT("locking"); mutex_.lock(); DOUT("locked");
+  DOUT("locking"); m_.lock(); DOUT("locked");
   bool ok = query.exec();
-  DOUT("unlocking"); mutex_.unlock(); DOUT("unlocked");
+  DOUT("unlocking"); m_.unlock(); DOUT("unlocked");
   if (!ok) {
     DOUT("error:" << query.lastError());
     return false;
@@ -353,20 +368,18 @@ Database::insertAliases(const AliasList &l)
 {
   DOUT("enter: count =" << l.size());
   Q_ASSERT(isValid());
-  bool ret = true;
-  foreach (Alias a, l)
-    if (!isAliasExists(a))
-      if (!insertAlias(a)) {
-        DOUT("failed at id =" << a.id() << ", ignored");
-        ret = false;
-      }
-  DOUT("exit: ret =" << ret);
-  return ret;
+  bool ok = true;
+  foreach (const Alias &a, l)
+    if (disposed_ || !isAliasExists(a) && !insertAlias(a)) {
+       DOUT("failed at id =" << a.id() << ", ignored");
+       ok = false;
+    }
+  DOUT("exit: ret =" << ok);
+  return ok;
 }
 
-
 qint64
-Database::insertAnnotation(const Annotation &annot)
+Database::insertAnnotation(const Annotation &annot, bool lock)
 {
   DOUT("enter: id =" << annot.id()
        << ", tid =" << annot.tokenId()
@@ -376,9 +389,9 @@ Database::insertAnnotation(const Annotation &annot)
 
   DB_INSERT_ANNOT(annot, query);
 
-  DOUT("locking"); mutex_.lock(); DOUT("locked");
+  if (lock) { DOUT("locking"); m_.lock(); DOUT("locked"); }
   bool ok = query.exec();
-  DOUT("unlocking"); mutex_.unlock(); DOUT("unlocked");
+  if (lock) { DOUT("unlocking"); m_.unlock(); DOUT("unlocked"); }
   qint64 ret = 0;
   if (ok)
     ret = query.lastInsertId().toLongLong(&ok);
@@ -397,14 +410,48 @@ Database::insertAnnotations(const AnnotationList &l)
 {
   DOUT("enter: count =" << l.size());
   Q_ASSERT(isValid());
-  bool ret = true;
-  foreach (Annotation a, l)
-    if (!insertAnnotation(a)) {
-      DOUT("failed at id =" << a.id() << ", ignored");
-      ret = false;
-    }
-  DOUT("exit: ret =" << ret);
-  return ret;
+  if (l.isEmpty())
+    return true;
+
+  qDebug() << "Database::insertAnnotations:enter: count =" << l.size();
+
+  bool ok = true;
+
+#ifdef Q_WS_WIN
+  enum { TransactionLimit = 10 };
+#else
+  enum { TransactionLimit = 100 };
+#endif // Q_WS_WIN
+
+  if (TransactionLimit && l.size() > TransactionLimit) {
+    QMutexLocker lock(&m_);
+#ifdef DB_TUNE
+    bool tuned = QSqlQuery(db_).exec("PRAGMA synchronous = OFF");
+#endif // DB_TUNE
+    bool t = db_.transaction();
+    foreach (const Annotation &a, l)
+      if (disposed_ || !insertAnnotation(a, false)) { // lock = false
+        DOUT("failed at id =" << a.id() << ", ignored");
+        ok = false;
+      }
+    if (t)
+      ok = db_.commit() && ok;
+    DOUT("transaction =" << t);
+#ifdef DB_TUNE
+    if (tuned)
+      QSqlQuery(db_).exec("PRAGMA synchronous = ON");
+    DOUT("tuned =" << tuned);
+#endif // DB_TUNE
+  } else
+    foreach (const Annotation &a, l)
+      if (disposed_ || !insertAnnotation(a)) {
+        DOUT("failed at id =" << a.id() << ", ignored");
+        ok = false;
+      }
+
+  qDebug() << "Database::insertAnnotations:exit: ret =" << ok;
+  DOUT("exit: ret =" << ok);
+  return ok;
 }
 
 // - Selection -
@@ -421,9 +468,9 @@ Database::selectUserWithNameAndPassword(const QString &name, const QString &pass
   query.addBindValue(name);     // 1:user_name
   query.addBindValue(password); // 2:user_password
 
-  DOUT("locking"); mutex_.lock(); DOUT("locked");
+  DOUT("locking"); m_.lock(); DOUT("locked");
   bool ok = query.exec();
-  DOUT("unlocking"); mutex_.unlock(); DOUT("unlocked");
+  DOUT("unlocking"); m_.unlock(); DOUT("unlocked");
   if (!ok) {
     DOUT("exit: error:" << query.lastError());
     return ret;
@@ -451,9 +498,9 @@ Database::selectUserWithId(qint64 id) const
   query.prepare(DB_SELECT_USER "WHERE user_id = ?");
   query.addBindValue(id);
 
-  DOUT("locking"); mutex_.lock(); DOUT("locked");
+  DOUT("locking"); m_.lock(); DOUT("locked");
   bool ok = query.exec();
-  DOUT("unlocking"); mutex_.unlock(); DOUT("unlocked");
+  DOUT("unlocking"); m_.unlock(); DOUT("unlocked");
   if (!ok) {
     DOUT("exit: error:" << query.lastError());
     return ret;
@@ -477,16 +524,16 @@ Database::selectUsers() const
   UserList ret;
 
   QSqlQuery query(db_);
-  DOUT("locking"); mutex_.lock(); DOUT("locked");
+  DOUT("locking"); m_.lock(); DOUT("locked");
   bool ok = query.exec(DB_SELECT_USER);
-  DOUT("unlocking"); mutex_.unlock(); DOUT("unlocked");
+  DOUT("unlocking"); m_.unlock(); DOUT("unlocked");
 
   if (!ok) {
     DOUT("exit: error:" << query.lastError());
     return ret;
   }
 
-  while (query.next()) {
+  while (!disposed_ && query.next()) {
     User user;
     DB_SET_USER(user, query);
     ret.append(user);
@@ -510,9 +557,9 @@ Database::selectTokenWithId(qint64 id) const
   query.prepare(DB_SELECT_TOKEN "WHERE token_id = ?");
   query.addBindValue(id);
 
-  DOUT("locking"); mutex_.lock(); DOUT("locked");
+  DOUT("locking"); m_.lock(); DOUT("locked");
   bool ok = query.exec();
-  DOUT("unlocking"); mutex_.unlock(); DOUT("unlocked");
+  DOUT("unlocking"); m_.unlock(); DOUT("unlocked");
   if (!ok) {
     DOUT("exit: error:" << query.lastError());
     return ret;
@@ -543,9 +590,9 @@ Database::selectTokenWithDigest(const QString &digest, qint32 part) const
   query.addBindValue(digest);
   query.addBindValue(part);
 
-  DOUT("locking"); mutex_.lock(); DOUT("locked");
+  DOUT("locking"); m_.lock(); DOUT("locked");
   bool ok = query.exec();
-  DOUT("unlocking"); mutex_.unlock(); DOUT("unlocked");
+  DOUT("unlocking"); m_.unlock(); DOUT("unlocked");
   if (!ok) {
     DOUT("exit: error:" << query.lastError());
     return ret;
@@ -569,16 +616,16 @@ Database::selectTokens() const
   TokenList ret;
 
   QSqlQuery query(db_);
-  DOUT("locking"); mutex_.lock(); DOUT("locked");
+  DOUT("locking"); m_.lock(); DOUT("locked");
   bool ok = query.exec(DB_SELECT_TOKEN);
-  DOUT("unlocking"); mutex_.unlock(); DOUT("unlocked");
+  DOUT("unlocking"); m_.unlock(); DOUT("unlocked");
 
   if (!ok) {
     DOUT("exit: error:" << query.lastError());
     return ret;
   }
 
-  while (query.next()) {
+  while (!disposed_ && query.next()) {
     Token token;
     DB_SET_TOKEN(token, query);
     ret.append(token);
@@ -601,9 +648,9 @@ Database::selectAliasWithId(qint64 id) const
   query.prepare(DB_SELECT_ALIAS "WHERE alias_id = ?");
   query.addBindValue(id);
 
-  DOUT("locking"); mutex_.lock(); DOUT("locked");
+  DOUT("locking"); m_.lock(); DOUT("locked");
   bool ok = query.exec();
-  DOUT("unlocking"); mutex_.unlock(); DOUT("unlocked");
+  DOUT("unlocking"); m_.unlock(); DOUT("unlocked");
   if (!ok) {
     DOUT("exit: error:" << query.lastError());
     return ret;
@@ -633,15 +680,15 @@ Database::selectAliasesWithTokenId(qint64 tid) const
   query.prepare(DB_SELECT_ALIAS "WHERE token_id = ?");
   query.addBindValue(tid);
 
-  DOUT("locking"); mutex_.lock(); DOUT("locked");
+  DOUT("locking"); m_.lock(); DOUT("locked");
   bool ok = query.exec();
-  DOUT("unlocking"); mutex_.unlock(); DOUT("unlocked");
+  DOUT("unlocking"); m_.unlock(); DOUT("unlocked");
   if (!ok) {
     DOUT("exit: error:" << query.lastError());
     return ret;
   }
 
-  while (query.next()) {
+  while (!disposed_ && query.next()) {
     Alias alias;
     DB_SET_ALIAS(alias, query);
     ret.append(alias);
@@ -664,15 +711,15 @@ Database::selectAliasesWithTokenDigest(const QString &digest, qint32 part)
   query.addBindValue(digest);
   query.addBindValue(part);
 
-  DOUT("locking"); mutex_.lock(); DOUT("locked");
+  DOUT("locking"); m_.lock(); DOUT("locked");
   bool ok = query.exec();
-  DOUT("unlocking"); mutex_.unlock(); DOUT("unlocked");
+  DOUT("unlocking"); m_.unlock(); DOUT("unlocked");
   if (!ok) {
     DOUT("exit: error:" << query.lastError());
     return ret;
   }
 
-  while (query.next()) {
+  while (!disposed_ && query.next()) {
     Alias alias;
     DB_SET_ALIAS(alias, query);
     ret.append(alias);
@@ -691,16 +738,16 @@ Database::selectAliases() const
   AliasList ret;
 
   QSqlQuery query(db_);
-  DOUT("locking"); mutex_.lock(); DOUT("locked");
+  DOUT("locking"); m_.lock(); DOUT("locked");
   bool ok = query.exec(DB_SELECT_ALIAS);
-  DOUT("unlocking"); mutex_.unlock(); DOUT("unlocked");
+  DOUT("unlocking"); m_.unlock(); DOUT("unlocked");
 
   if (!ok) {
     DOUT("exit: error:" << query.lastError());
     return ret;
   }
 
-  while (query.next()) {
+  while (!disposed_ && query.next()) {
     Alias alias;
     DB_SET_ALIAS(alias, query);
     ret.append(alias);
@@ -723,9 +770,9 @@ Database::selectAnnotationWithId(qint64 id) const
   query.prepare(DB_SELECT_ANNOTATION "WHERE annot_id = ?");
   query.addBindValue(id);
 
-  DOUT("locking"); mutex_.lock(); DOUT("locked");
+  DOUT("locking"); m_.lock(); DOUT("locked");
   bool ok = query.exec();
-  DOUT("unlocking"); mutex_.unlock(); DOUT("unlocked");
+  DOUT("unlocking"); m_.unlock(); DOUT("unlocked");
   if (!ok) {
     DOUT("exit: error:" << query.lastError());
     return ret;
@@ -755,16 +802,16 @@ Database::selectAnnotationsWithTokenId(qint64 tid) const
   query.prepare(DB_SELECT_ANNOTATION "WHERE token_id = ?");
   query.addBindValue(tid);
 
-  DOUT("locking"); mutex_.lock(); DOUT("locked");
+  DOUT("locking"); m_.lock(); DOUT("locked");
   bool ok = query.exec();
-  DOUT("unlocking"); mutex_.unlock(); DOUT("unlocked");
+  DOUT("unlocking"); m_.unlock(); DOUT("unlocked");
   if (!ok) {
     DOUT("exit: error:" << query.lastError());
     return ret;
   }
 
-  while (query.next()) {
-    Annotation annot;
+  Annotation annot; // move out for better performance
+  while (!disposed_ && query.next()) {
     DB_SET_ANNOTATION(annot, query);
     ret.append(annot);
   }
@@ -786,16 +833,16 @@ Database::selectAnnotationsWithTokenDigest(const QString &digest, qint32 part) c
   query.addBindValue(digest);
   query.addBindValue(part);
 
-  DOUT("locking"); mutex_.lock(); DOUT("locked");
+  DOUT("locking"); m_.lock(); DOUT("locked");
   bool ok = query.exec();
-  DOUT("unlocking"); mutex_.unlock(); DOUT("unlocked");
+  DOUT("unlocking"); m_.unlock(); DOUT("unlocked");
   if (!ok) {
     DOUT("exit: error:" << query.lastError());
     return ret;
   }
 
-  while (query.next()) {
-    Annotation annot;
+  Annotation annot; // move out for better performance
+  while (!disposed_ && query.next()) {
     DB_SET_ANNOTATION(annot, query);
     ret.append(annot);
   }
@@ -813,17 +860,17 @@ Database::selectAnnotations() const
   AnnotationList ret;
 
   QSqlQuery query(db_);
-  DOUT("locking"); mutex_.lock(); DOUT("locked");
+  DOUT("locking"); m_.lock(); DOUT("locked");
   bool ok = query.exec(DB_SELECT_ANNOTATION);
-  DOUT("unlocking"); mutex_.unlock(); DOUT("unlocked");
+  DOUT("unlocking"); m_.unlock(); DOUT("unlocked");
 
   if (!ok) {
     DOUT("exit: error:" << query.lastError());
     return ret;
   }
 
-  while (query.next()) {
-    Annotation annot;
+  Annotation annot; // move out for better performance
+  while (!disposed_ && query.next()) {
     DB_SET_ANNOTATION(annot, query);
     ret.append(annot);
   }
@@ -850,9 +897,9 @@ Database::selectAliasUpdateTimeWithId(qint64 id) const
   );
   query.addBindValue(id);
 
-  DOUT("locking"); mutex_.lock(); DOUT("locked");
+  DOUT("locking"); m_.lock(); DOUT("locked");
   bool ok = query.exec();
-  DOUT("unlocking"); mutex_.unlock(); DOUT("unlocked");
+  DOUT("unlocking"); m_.unlock(); DOUT("unlocked");
   if (!ok) {
     DOUT("exit: error:" << query.lastError());
     return ret;
@@ -889,9 +936,9 @@ Database::selectAnnotationUpdateTimeWithId(qint64 id) const
   );
   query.addBindValue(id);
 
-  DOUT("locking"); mutex_.lock(); DOUT("locked");
+  DOUT("locking"); m_.lock(); DOUT("locked");
   bool ok = query.exec();
-  DOUT("unlocking"); mutex_.unlock(); DOUT("unlocked");
+  DOUT("unlocking"); m_.unlock(); DOUT("unlocked");
   if (!ok) {
     DOUT("exit: error:" << query.lastError());
     return ret;
@@ -921,9 +968,9 @@ Database::deleteUserWithId(qint64 id)
   query.prepare("DELETE FROM user WHERE user_id = ?");
   query.addBindValue(id);
 
-  DOUT("locking"); mutex_.lock(); DOUT("locked");
+  DOUT("locking"); m_.lock(); DOUT("locked");
   query.exec();
-  DOUT("unlocking"); mutex_.unlock(); DOUT("unlocked");
+  DOUT("unlocking"); m_.unlock(); DOUT("unlocked");
 
   DOUT("exit: affected rows =" << query.numRowsAffected());
   return query.numRowsAffected();
@@ -937,9 +984,9 @@ Database::deleteTokenWithId(qint64 id)
   QSqlQuery query(db_);
   query.prepare("DELETE FROM token WHERE token_id = ?");
   query.addBindValue(id);
-  DOUT("locking"); mutex_.lock(); DOUT("locked");
+  DOUT("locking"); m_.lock(); DOUT("locked");
   query.exec();
-  DOUT("unlocking"); mutex_.unlock(); DOUT("unlocked");
+  DOUT("unlocking"); m_.unlock(); DOUT("unlocked");
   DOUT("exit: affected rows =" << query.numRowsAffected());
   return query.numRowsAffected();
 }
@@ -953,9 +1000,9 @@ Database::deleteTokenWithDigest(const QString &digest, qint32 part)
   query.prepare("DELETE FROM token WHERE token_digest = ? AND token_part = ?");
   query.addBindValue(digest);
   query.addBindValue(part);
-  DOUT("locking"); mutex_.lock(); DOUT("locked");
+  DOUT("locking"); m_.lock(); DOUT("locked");
   query.exec();
-  DOUT("unlocking"); mutex_.unlock(); DOUT("unlocked");
+  DOUT("unlocking"); m_.unlock(); DOUT("unlocked");
   DOUT("exit: affected rows =" << query.numRowsAffected());
 }
 
@@ -967,9 +1014,9 @@ Database::deleteAliasWithId(qint64 id)
   QSqlQuery query(db_);
   query.prepare("DELETE FROM alias WHERE alias_id = ?");
   query.addBindValue(id);
-  DOUT("locking"); mutex_.lock(); DOUT("locked");
+  DOUT("locking"); m_.lock(); DOUT("locked");
   query.exec();
-  DOUT("unlocking"); mutex_.unlock(); DOUT("unlocked");
+  DOUT("unlocking"); m_.unlock(); DOUT("unlocked");
   DOUT("exit: affected rows =" << query.numRowsAffected());
   return query.numRowsAffected();
 }
@@ -982,9 +1029,9 @@ Database::deleteAliasesWithTokenId(qint64 tid)
   QSqlQuery query(db_);
   query.prepare("DELETE FROM alias WHERE token_id = ?");
   query.addBindValue(tid);
-  DOUT("locking"); mutex_.lock(); DOUT("locked");
+  DOUT("locking"); m_.lock(); DOUT("locked");
   query.exec();
-  DOUT("unlocking"); mutex_.unlock(); DOUT("unlocked");
+  DOUT("unlocking"); m_.unlock(); DOUT("unlocked");
   DOUT("exit: affected rows =" << query.numRowsAffected());
 }
 
@@ -997,9 +1044,9 @@ Database::deleteAliasesWithTokenDigest(const QString &digest, qint32 part)
   query.prepare("DELETE FROM alias WHERE token_digest = ? AND token_part = ?");
   query.addBindValue(digest);
   query.addBindValue(part);
-  DOUT("locking"); mutex_.lock(); DOUT("locked");
+  DOUT("locking"); m_.lock(); DOUT("locked");
   query.exec();
-  DOUT("unlocking"); mutex_.unlock(); DOUT("unlocked");
+  DOUT("unlocking"); m_.unlock(); DOUT("unlocked");
   DOUT("exit: affected rows =" << query.numRowsAffected());
 }
 
@@ -1011,9 +1058,9 @@ Database::deleteAnnotationWithId(qint64 id)
   QSqlQuery query(db_);
   query.prepare("DELETE FROM annot WHERE annot_id = ?");
   query.addBindValue(id);
-  DOUT("locking"); mutex_.lock(); DOUT("locked");
+  DOUT("locking"); m_.lock(); DOUT("locked");
   query.exec();
-  DOUT("unlocking"); mutex_.unlock(); DOUT("unlocked");
+  DOUT("unlocking"); m_.unlock(); DOUT("unlocked");
   DOUT("exit: affected rows =" << query.numRowsAffected());
   return query.numRowsAffected();
 }
@@ -1026,9 +1073,9 @@ Database::deleteAnnotationsWithTokenId(qint64 tid)
   QSqlQuery query(db_);
   query.prepare("DELETE FROM annot WHERE token_id = ?");
   query.addBindValue(tid);
-  DOUT("locking"); mutex_.lock(); DOUT("locked");
+  DOUT("locking"); m_.lock(); DOUT("locked");
   query.exec();
-  DOUT("unlocking"); mutex_.unlock(); DOUT("unlocked");
+  DOUT("unlocking"); m_.unlock(); DOUT("unlocked");
   DOUT("exit: affected rows =" << query.numRowsAffected());
 }
 
@@ -1041,9 +1088,9 @@ Database::deleteAnnotationsWithTokenDigest(const QString &digest, qint32 part)
   query.prepare("DELETE FROM annot WHERE token_digest = ? AND token_part = ?");
   query.addBindValue(digest);
   query.addBindValue(part);
-  DOUT("locking"); mutex_.lock(); DOUT("locked");
+  DOUT("locking"); m_.lock(); DOUT("locked");
   query.exec();
-  DOUT("unlocking"); mutex_.unlock(); DOUT("unlocked");
+  DOUT("unlocking"); m_.unlock(); DOUT("unlocked");
   DOUT("exit: affected rows =" << query.numRowsAffected());
 }
 
@@ -1053,9 +1100,9 @@ Database::deleteUsers()
   DOUT("enter");
   Q_ASSERT(isValid());
   QSqlQuery query(db_);
-  DOUT("locking"); mutex_.lock(); DOUT("locked");
+  DOUT("locking"); m_.lock(); DOUT("locked");
   query.exec("DELETE FROM user");
-  DOUT("unlocking"); mutex_.unlock(); DOUT("unlocked");
+  DOUT("unlocking"); m_.unlock(); DOUT("unlocked");
   DOUT("exit: affected rows =" << query.numRowsAffected());
 }
 
@@ -1065,9 +1112,9 @@ Database::deleteTokens()
   DOUT("enter");
   Q_ASSERT(isValid());
   QSqlQuery query(db_);
-  DOUT("locking"); mutex_.lock(); DOUT("locked");
+  DOUT("locking"); m_.lock(); DOUT("locked");
   query.exec("DELETE FROM token");
-  DOUT("unlocking"); mutex_.unlock(); DOUT("unlocked");
+  DOUT("unlocking"); m_.unlock(); DOUT("unlocked");
   DOUT("exit: affected rows =" << query.numRowsAffected());
 }
 
@@ -1077,9 +1124,9 @@ Database::deleteAliases()
   DOUT("enter");
   Q_ASSERT(isValid());
   QSqlQuery query(db_);
-  DOUT("locking"); mutex_.lock(); DOUT("locked");
+  DOUT("locking"); m_.lock(); DOUT("locked");
   query.exec("DELETE FROM alias");
-  DOUT("unlocking"); mutex_.unlock(); DOUT("unlocked");
+  DOUT("unlocking"); m_.unlock(); DOUT("unlocked");
   DOUT("exit: affected rows =" << query.numRowsAffected());
 }
 
@@ -1089,9 +1136,9 @@ Database::deleteAnnotations()
   DOUT("enter");
   Q_ASSERT(isValid());
   QSqlQuery query(db_);
-  DOUT("locking"); mutex_.lock(); DOUT("locked");
+  DOUT("locking"); m_.lock(); DOUT("locked");
   query.exec("DELETE FROM annot");
-  DOUT("unlocking"); mutex_.unlock(); DOUT("unlocked");
+  DOUT("unlocking"); m_.unlock(); DOUT("unlocked");
   DOUT("exit: affected rows =" << query.numRowsAffected());
 }
 
@@ -1134,7 +1181,7 @@ Database::updateAnnotations(const AnnotationList &l, bool async, int limit)
   }
 
   int count = 0;
-  foreach (Annotation a, l) {
+  foreach (const Annotation &a, l) {
     if (disposed_ ||
         limit && count++ >= limit) {
       DOUT("exit: disposed or limit reached");
@@ -1183,7 +1230,7 @@ Database::updateAliases(const AliasList &l, bool async, int limit)
   }
 
   int count = 0;
-  foreach (Alias a, l) {
+  foreach (const Alias &a, l) {
     if (disposed_ ||
         limit && count++ >= limit) {
       DOUT("exit: disposed or limit reached");

@@ -3,7 +3,7 @@
 
 // qtext/ss.h
 // 7/15/2011
-#include <QString>
+#include <QtCore/QString>
 
 // - QSS syntax -
 

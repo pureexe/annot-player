@@ -4,7 +4,6 @@
 #include "mediawriter.h"
 #include "mediatoc.h"
 #include "module/qtext/bitwise.h"
-#include <QtCore>
 
 #define DEBUG "h264writer"
 #include "module/debug/debug.h"

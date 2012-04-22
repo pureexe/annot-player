@@ -1,7 +1,7 @@
 # downloader.pro
 # 3/29/2012
 
-VERSION = 0.1.0.2
+VERSION = 0.1.1.0
 
 DEFINES += PROJECT_DOWNLOADER
 
@@ -24,7 +24,7 @@ include($$ROOTDIR/module/qt/qt.pri)
 include($$ROOTDIR/module/qtext/qtext.pri)
 include($$ROOTDIR/module/stream/stream.pri)
 
-#!mac: include($$ROOTDIR/module/ipc/ipc.pri)
+!mac: include($$ROOTDIR/module/metacall/metacall.pri)
 
 win32 {
     include($$ROOTDIR/win/dwm/dwm.pri)
@@ -65,6 +65,7 @@ HEADERS += \
     rc.h \
     settings.h \
     signer.h \
+    systemtrayicon.h \
     taskdialog.h
 
 SOURCES += \
@@ -74,6 +75,7 @@ SOURCES += \
     mainwindow.cc \
     settings.cc \
     signer.cc \
+    systemtrayicon.cc \
     taskdialog.cc
 
 

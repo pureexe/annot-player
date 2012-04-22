@@ -4,11 +4,11 @@
 // aimlparser.h
 // 7/31/2011
 
-#include <QMap>
-#include <QStringList>
-#include <QRegExp>
-#include <QDomDocument>
-#include <QList>
+#include <QtCore/QMap>
+#include <QtCore/QStringList>
+#include <QtCore/QRegExp>
+#include <QtCore/QList>
+#include <QtXml/QDomDocument>
 
 class AimlParser
 {

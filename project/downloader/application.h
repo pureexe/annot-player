@@ -3,8 +3,8 @@
 // application.h
 // 11/18/2011
 
-#include <QApplication>
-#include <QList>
+#include <QtGui/QApplication>
+#include <QtCore/QList>
 
 QT_FORWARD_DECLARE_CLASS(QWidget)
 

@@ -5,11 +5,10 @@
 // 8/19/2011
 
 #include "module/annotcloud/annotation.h"
-#include <QString>
-#include <QStringList>
-#include <QWebElement>
-#include <QColor>
-#include <QObject>
+#include <QtWebkit/QWebElement>
+#include <QtGui/QColor>
+#include <QtCore/QString>
+#include <QtCore/QStringList>
 #include <utility>
 
 namespace AnnotCloud {
@@ -51,7 +50,7 @@ public:
   // TODO: return attributes for unparsed tags as well! i.e. return std::pair<QString, QList<std::pair<QString, QStringList> > >
   std::pair<QString, QStringList> toHtml(const QString &annot) const;
 
-  QString toHtml(const AnnotationList &l, const QString &title = QString::null) const;
+  QString toHtml(const AnnotationList &l, const QString &title = QString()) const;
 
   ///  Unparse rich text to annotation.
   QString reduceHtml(const QString &html) const;

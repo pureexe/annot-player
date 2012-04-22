@@ -4,7 +4,7 @@
 // embeddedinfoview.h
 // 4/10/2012:%s
 
-#include <QLabel>
+#include <QtGui/QLabel>
 
 class Player;
 class DataManager;
@@ -32,6 +32,9 @@ public slots:
 
 protected slots:
   void invalidateText(); ///< \override
+
+protected:
+  QString timeToString(qint64 secs) const;
 };
 
 #endif // EMBEDDEDINFOVIEW_H

@@ -4,7 +4,7 @@
 // userlabel.h
 // 8/1/2011
 
-#include <QLabel>
+#include <QtGui/QLabel>
 
 class UserLabel : public QLabel
 {

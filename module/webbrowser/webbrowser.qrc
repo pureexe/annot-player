@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/" >
+        <file>images/comment.png</file>
         <file>images/button.png</file>
         <file>images/button-hover.png</file>
         <file>images/button-left.png</file>

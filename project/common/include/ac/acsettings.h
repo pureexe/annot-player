@@ -4,11 +4,11 @@
 // ac/acsettings.h
 // 7/30/2011
 
-#include <QMutex>
-#include <QSettings>
-#include <QStringList>
-#include <QDate>
-#include <QHash>
+#include <QtCore/QMutex>
+#include <QtCore/QSettings>
+#include <QtCore/QStringList>
+#include <QtCore/QDate>
+#include <QtCore/QHash>
 #include <utility>
 
 class AcSettings : public QSettings

@@ -3,9 +3,8 @@
 // qth.h  10/14/2011
 
 #include "qth_config.h"
-#include <QObject>
-#include <QWidget> // where WId is declared
-#include <QList>
+#include <QtGui/QWidget> // where WId is declared
+#include <QtCore/QList>
 
 //class QthImpl;
 class Qth : public QObject

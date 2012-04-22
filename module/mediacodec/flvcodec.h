@@ -7,8 +7,8 @@
 #include "mediacodec_config.h"
 #include "flvmeta.h"
 #include "module/stream/inputstream.h"
-#include <QObject>
-#include <QList>
+#include <QtCore/QObject>
+#include <QtCore/QList>
 
 class InputStream;
 class OutputStream;
@@ -23,7 +23,7 @@ class FlvCodec : public QObject
   typedef FlvCodec Self;
   typedef QObject Base;
 
-  QList<Stoppable*> tasks_;
+  QList<Stoppable *> tasks_;
 
   // - Construction -
 public:

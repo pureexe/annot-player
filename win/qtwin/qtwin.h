@@ -3,11 +3,11 @@
 // qtwin.h
 // 7/21/2011
 
-#include <QWidget>
-#include <QList>
-#include <QString>
-#include <QPoint>
-#include <QRect>
+#include <QtGui/QWidget>
+#include <QtCore/QList>
+#include <QtCore/QString>
+#include <QtCore/QPoint>
+#include <QtCore/QRect>
 
 namespace QtWin {
 
@@ -85,7 +85,23 @@ namespace QtWin {
 
   void killCurrentProcess();
 
-  // - Windows -
+  // - File system -
+
+  // See: http://msdn.microsoft.com/en-us/library/windows/desktop/aa365535(v=vs.85).aspx
+  enum FileAttribute {
+    NoAttribute = 0x0,
+    ArchiveAttribute = 0x20,    // 32, A file or directory that is an archive file or directory. Applications typically use this attribute to mark files for backup or removal.
+    HiddenAttribute = 0x2,      // 2, The file or directory is hidden. It is not included in an ordinary directory listing.
+    NormalAttribute = 0x80,     // 128, A file that does not have other attributes set. This attribute is valid only when used alone.
+    OfflineAttribute = 0x1000,  // 4096, The data of a file is not available immediately. This attribute indicates that the file data is physically moved to offline storage. This attribute is used by Remote Storage, which is the hierarchical storage management software. Applications should not arbitrarily change this attribute.
+    ReadOnlyAttribute = 0x1,    // 1,  A file that is read-only. Applications can read the file, but cannot write to it or delete it. This attribute is not honored on directories. For more information, see "You cannot view or change the Read-only or the System attributes of folders in Windows Server 2003, in Windows XP, or in Windows Vista".
+    SystemAttribute = 0x4,      // 4,  A file or directory that the operating system uses a part of, or uses exclusively.
+    TemporaryAttribute = 0x100  // 256, A file that is being used for temporary storage. File systems avoid writing data back to mass storage if sufficient cache memory is available, because typically, an application deletes a temporary file after the handle is closed. In that scenario, the system can entirely avoid writing the data. Otherwise, the data is written after the handle is closed.
+  };
+
+  bool setFileAttributes(const QString &fileName, uint attributes);
+
+  // - Window -
 
   ///  Set focus using a native way. If failed, return false but still do it in Qt way.
   bool setFocus(QWidget *w);
@@ -135,7 +151,11 @@ namespace QtWin {
   QString getWinDirPath();
   QString getAppDataPath();
 
-  QString getDesktopPath();
+  QString getFontsPath();
+  QString getMusicPath();
+  QString getVideoPath();
+  QString getDocumentsPath();
+  QString getDownloadsPath();
 
   bool isWindowsVistaOrLater();
   bool isWindowsXpOrLater();
@@ -143,7 +163,7 @@ namespace QtWin {
   // - Files -
 
   ///  Create a lnk file at \param lnkPath pointed to \param targetPath.
-  bool createLink(const QString &lnkPath, const QString &targetPath, const QString &description = QString::null);
+  bool createLink(const QString &lnkPath, const QString &targetPath, const QString &description = QString());
 
   ///  Prompt using hwnd if target to return is not valid.
   QString resolveLink(const QString &lnkPath, WId winId = 0);

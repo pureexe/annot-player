@@ -4,8 +4,8 @@
 // 4/9/2012
 // metacallfilter.h
 
-#include <QObject>
-#include <QAbstractSocket>
+#include <QtNetwork/QAbstractSocket>
+#include <QtCore/QObject>
 
 QT_BEGIN_NAMESPACE
 class QMetaCallEvent;
@@ -25,22 +25,20 @@ class MetaCallFilter : public QObject
   typedef QObject Base;
 
   // - Construction -
-protected:
+public:
   explicit MetaCallFilter(QObject *parent = 0)
     : Base(parent), running_(false), watched_(0), server_(0), socket_(0), messageSize_(0)
   { }
 
-  ~MetaCallFilter()
-  { if (running_) stop(); }
-
 public:
-  bool isRunning() const { return running_; }
+  //bool isRunning() const { return running_; }
+  bool isActive() const;
 
   QObject *watchedObject() const { return watched_; }
-  void setWatchedObject(QObject *watched) { watched_ = watched; }
+  void setWatchedObject(QObject *watched);
 
   bool startServer(const QHostAddress &address, int port);
-  bool startClient(const QHostAddress &address, int port);
+  bool startClient(const QHostAddress &address, int port, bool async = true);
 
   bool isServer() const { return server_; }
   bool isClient() const { return !server_ && socket_; }

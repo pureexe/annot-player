@@ -4,9 +4,9 @@
 // streamer.h
 // 2/11/2012
 
-#include <QThread>
-#include <QString>
-#include <QList>
+#include <QtCore/QThread>
+#include <QtCore/QString>
+#include <QtCore/QList>
 #include "module/mediacodec/codecinfo.h"
 
 class InputStream;

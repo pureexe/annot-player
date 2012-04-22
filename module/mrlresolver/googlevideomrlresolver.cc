@@ -2,9 +2,7 @@
 // 2/2/2012
 
 #include "googlevideomrlresolver.h"
-#include <QtCore>
-#include <QtScript>
-#include <QtNetwork>
+#include <QtCore/QUrl>
 #include <cstdlib>
 
 //#define DEBUG "googlevideomrlresolver"

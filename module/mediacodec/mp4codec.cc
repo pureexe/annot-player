@@ -7,7 +7,6 @@
 #ifdef WITH_MP4V2
 #  include <mp4v2/mp4v2.h>
 #endif // WITH_MP4V2
-#include <QtCore>
 #include <cstdlib>
 #include <cstring>
 
@@ -42,10 +41,10 @@ Mp4Codec::isMp4File(const QString &fileName)
 }
 
 #ifdef WITH_MP4V2
-std::pair<int, int>
+QPair<int, int>
 Mp4Codec::fileDimension(const QString &path)
 {
-  std::pair<int, int> ret;
+  QPair<int, int> ret;
   MP4FileHandle mp4 = ::MP4Read(path.toLocal8Bit());
   if (mp4 == MP4_INVALID_FILE_HANDLE)
     return ret;

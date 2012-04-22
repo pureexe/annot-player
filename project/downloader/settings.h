@@ -4,11 +4,9 @@
 // settings.h
 // 7/30/2011
 
-#include <QSettings>
-#include <QStringList>
-#include <QDate>
-#include <QHash>
-#include <utility>
+#include "module/download/downloadtask.h"
+#include <QtCore/QSettings>
+#include <QtCore/QSize>
 
 class Settings : public QSettings
 {
@@ -29,6 +27,12 @@ public slots:
 public:
   QString version() const;
   void setVersion(const QString &version);
+
+  DownloadTaskInfoList recentTasks() const;
+  void setRecentTasks(const DownloadTaskInfoList &l);
+
+  QSize recentSize() const;
+  void setRecentSize(const QSize &size);
 };
 
 #endif // SETTINGS_H

@@ -12,7 +12,6 @@
 
 //#define DEBUG "vlccore::video"
 #include "module/debug/debug.h"
-#include <QDebug>
 
 #ifndef MODULE_STRING
 #  define MODULE_STRING "main"  // needed by VLC

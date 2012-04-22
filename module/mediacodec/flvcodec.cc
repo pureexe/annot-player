@@ -12,7 +12,7 @@
 #include "module/stream/fileinputstream.h"
 #include "module/stream/filestream.h"
 #include "module/qtext/stoppable.h"
-#include <QtCore>
+#include <QtCore/QThreadPool>
 #include <cstring>
 
 #define DEBUG "flvcodec"

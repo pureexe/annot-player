@@ -45,21 +45,22 @@ WbSearchEdit::contextMenuEvent(QContextMenuEvent *event)
   if (!event)
     return;
 
-  QMenu m;
+  QMenu *m = new QMenu(this);
 
-  m.addAction(pasteAndGoAct);
-  m.addAction(popupAct);
-  m.addAction(clearAct);
-  m.addSeparator();
+  m->addAction(pasteAndGoAct);
+  m->addAction(popupAct);
+  m->addAction(clearAct);
+  m->addSeparator();
 
   pasteAndGoAct->setEnabled(!isClipboardEmpty());
   popupAct->setEnabled(count());
 
   QMenu *scm = lineEdit()->createStandardContextMenu();
-  m.addActions(scm->actions());
+  m->addActions(scm->actions());
 
-  m.exec(event->globalPos());
+  m->exec(event->globalPos());
   delete scm;
+  QTimer::singleShot(0, m, SLOT(deleteLater()));
   event->accept();
 }
 

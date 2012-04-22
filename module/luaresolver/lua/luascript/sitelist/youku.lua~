@@ -2,7 +2,7 @@
 ---[[by lostangel 20110402]]
 --[[edit lostangel 20110405 add batch code]]
 
-require "lalib"
+require "luascript/lib/lalib"
 
 --[[parse single youku url]]
 function getTaskAttribute_youku ( str_url, str_tmpfile ,str_servername, pDlg)
@@ -59,6 +59,9 @@ function getTaskAttribute_youku ( str_url, str_tmpfile ,str_servername, pDlg)
 	end
 
 	local int_realurlnum, tbl_realurls = getRealUrls_youku(str_id, str_tmpfile, pDlg);
+
+
+
 
 	if pDlg~=nil then
 		sShowMessage(pDlg, 'Íê³É½âÎö..');

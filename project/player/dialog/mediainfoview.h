@@ -5,7 +5,7 @@
 // 4/10/2012:%s
 
 #include "infoview.h"
-#include <QString>
+#include <QtCore/QString>
 
 class Player;
 class DataManager;

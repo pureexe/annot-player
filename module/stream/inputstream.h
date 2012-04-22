@@ -5,8 +5,8 @@
 // 2/9/2012
 
 #include "module/qtext/bitwise.h"
-#include <QList>
-#include <QString>
+#include <QtCore/QList>
+#include <QtCore/QString>
 
 class InputStream
 {
@@ -118,9 +118,14 @@ public:
   }
 };
 
-class InputStreamList : public QList<InputStream*>
+class InputStreamList : public QList<InputStream *>
 {
+  typedef InputStreamList Self;
+  typedef QList<InputStream *> Base;
 public:
+  InputStreamList() { }
+  InputStreamList(const Self &that) : Base(that) { }
+
   void reset() const
   { foreach (value_type v, *this) v->reset(); }
 };

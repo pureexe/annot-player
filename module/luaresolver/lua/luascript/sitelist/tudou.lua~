@@ -1,7 +1,7 @@
 
 ---[[by lostangel 20110402]]
 
-require "lalib"
+require "luascript/lib/lalib"
 
 --[[parse single tudou url]]
 function getTaskAttribute_tudou ( str_url, str_tmpfile ,str_servername, pDlg)

@@ -8,13 +8,13 @@
 
 #ifdef DB_WITH_DATETIME
   // See: http://www.sqlite.org/lang_datefunc.html
-  #define DB_UNIX_TIMESTAMP(_t) "strftime('%s'," _t ")"
-  #define DB_FROM_UNIXTIME(_ts) "datetime(" _ts ",'unixepoch')"
-  #define DB_DATETIME           "DATETIME"
+#  define DB_UNIX_TIMESTAMP(_t) "strftime('%s'," _t ")"
+#  define DB_FROM_UNIXTIME(_ts) "datetime(" _ts ",'unixepoch')"
+#  define DB_DATETIME           "DATETIME"
 #else
-  #define DB_UNIX_TIMESTAMP(_t) _t
-  #define DB_FROM_UNIXTIME(_ts) _ts
-  #define DB_DATETIME           "BIGINT"
+#  define DB_UNIX_TIMESTAMP(_t) _t
+#  define DB_FROM_UNIXTIME(_ts) _ts
+#  define DB_DATETIME           "BIGINT"
 #endif // DB_WITH_DATETIME
 
 // - Creation -

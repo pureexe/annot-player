@@ -5,7 +5,6 @@
 // 2/3/2012
 
 #include "module/annotcloud/annotation.h"
-#include <QObject>
 
 class AnnotationCodec : public QObject
 {

@@ -14,16 +14,21 @@ class QStandardItemModel;
 class QSortFilterProxyModel;
 class QTimer;
 class QToolButton;
+class QMenu;
 QT_END_NAMESPACE
 
 class AcFilteredListView;
+class AcDownloaderServer;
 class TaskDialog;
 
+struct DownloadTaskInfo;
 class MrlResolver;
 class DownloadManager;
 class DownloadTask;
 class ClipboardMonitor;
 class Signer;
+class AcPlayer;
+class SystemTrayIcon;
 
 class MainWindow : public AcMainWindow
 {
@@ -54,7 +59,6 @@ signals:
   void downloadFinished(const QString &path, const QString &url);
 
 public slots:
-  void stopAll();
   void clear();
   //void removeCurrent();
 
@@ -63,11 +67,13 @@ public slots:
   void addUrls(const QStringList &urls, bool batch = false);
   void addUrl(const QString &url);
   void addTask(DownloadTask *t);
+  void addTask(const DownloadTaskInfo &t);
 
   void promptUrl(const QString &text);
   void promptUrls(const QStringList &urls);
 
   virtual void setVisible(bool visible); ///< \override
+  void openDirectory();
 
   // - Implementations -
 protected:
@@ -78,13 +84,17 @@ protected:
 protected slots:
   void add();
   void start();
+  void restart();
+  void startAll();
+  void stopAll();
+  void removeAll();
   void stop();
   void remove();
   void open();
-  void openDirectory();
 
   void refresh();
   void invalidateButtons();
+  void invalidateActions();
 
   void finish(DownloadTask *task);
 
@@ -96,8 +106,11 @@ protected:
 
   TaskDialog *taskDialog();
 
-protected:
+  // - Events -
+public:
   virtual bool event(QEvent *event); ///< \override
+protected:
+  virtual void contextMenuEvent(QContextMenuEvent *event); ///< \override
   virtual void closeEvent(QCloseEvent *event); ///< \override
 
 private:
@@ -105,6 +118,9 @@ private:
   void createLayout();
   void createActions();
 private:
+  AcDownloaderServer *appServer_;
+  AcPlayer *playerDelegate_;
+  SystemTrayIcon *systemTrayIcon_;
   DownloadManager *downloadManager_;
   ClipboardMonitor *clipboardMonitor_;
   Signer *signer_;
@@ -122,6 +138,20 @@ private:
               *openDirectoryButton_;
 
   QTimer *refreshTimer_;
+
+  QMenu *contextMenu_;
+  QAction *startAct_,
+          *stopAct_,
+          *restartAct_,
+          *startAllAct_,
+          *stopAllAct_,
+          *removeAllAct_,
+          *removeAct_,
+          *openAct_,
+          *openDirectoryAct_;
+
+  QAction *quitAct_,
+          *hideAct_;
 };
 
 #endif // MAINWINDOW_H

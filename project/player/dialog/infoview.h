@@ -5,7 +5,7 @@
 // 4/10/2012:%s
 
 #include "module/qtext/dialog.h"
-#include <QString>
+#include <QtCore/QString>
 
 class AcTextView;
 

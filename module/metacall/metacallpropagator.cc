@@ -2,7 +2,6 @@
 // 4/9/2012
 #include "metacallpropagator.h"
 #include "metacallfilter.h"
-#include <QtCore>
 
 #define DEBUG "metacallpropagator"
 #include "module/debug/debug.h"
@@ -21,9 +20,8 @@ MetaCallPropagator::installMetaCallFilter()
 // - Filter -
 
 bool
-MetaCallPropagator::isRunning() const
-{ return filter_ && filter_->isRunning(); }
-
+MetaCallPropagator::isActive() const
+{ return filter_ && filter_->isActive(); }
 
 bool
 MetaCallPropagator::startServer(const QHostAddress &address, int port)
@@ -49,6 +47,6 @@ MetaCallPropagator::isClient() const
 
 void
 MetaCallPropagator::stop()
-{ if (isRunnint()) filter_->stop(); }
+{ if (isActive()) filter_->stop(); }
 
 // EOF

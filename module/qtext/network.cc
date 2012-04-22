@@ -1,10 +1,10 @@
 // network.cc
 // 3/2/2012
 #include "module/qtext/network.h"
-#include <QtNetwork>
 
 //#define DEBUG "qtext::network"
 #include "module/debug/debug.h"
+#include <QtCore/QFile>
 
 // - NetworkCookieJarWithDomainAlias -
 // See: http://qt.gitorious.org/qt/mwenges-qt/blobs/755eceb17f6668620026cc2067ef91dd5aaf448d/src/network/access/qnetworkcookiejar.cpp
@@ -14,7 +14,7 @@
 bool
 QtExt::
 NetworkCookieJarWithDomainAlias::isParentDomain(const QString &domain, const QUrl &url)
-{ return url.host().contains(domain, Qt::CaseInsensitive); }
+{ return url.host().endsWith(domain, Qt::CaseInsensitive); }
 //{ return url.toString().contains(domain, Qt::CaseInsensitive); }
 
 // Used in QNetworkAccessManagerPrivate::createRequest
@@ -74,6 +74,30 @@ NetworkCookieJarWithDomainAlias::domainUrl(const QString &domain)
     ret.prepend("www");
   if (!ret.contains("://"))
     ret.prepend("http://");
+  return ret;
+}
+
+bool
+QtExt::
+writeCookiesToFile(const QList<QNetworkCookie> &cookies, const QString &fileName)
+{
+  QFile f(fileName);
+  bool ok = f.open(QIODevice::WriteOnly);
+  if (ok) {
+    QByteArray data = unparseNetworkCookies(cookies);
+    ok = f.write(data) == data.size();
+  }
+  return ok;
+}
+
+QList<QNetworkCookie>
+QtExt::
+readCookiesfromFile(const QString &fileName)
+{
+  QList<QNetworkCookie> ret;
+  QFile f(fileName);
+  if (f.open(QIODevice::ReadOnly))
+    ret = QNetworkCookie::parseCookies(f.readAll());
   return ret;
 }
 

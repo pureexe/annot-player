@@ -4,9 +4,9 @@
 // mrlinfo.h
 // 1/25/2011
 
-#include <QMetaType>
-#include <QString>
-#include <QList>
+#include <QtCore/QMetaType>
+#include <QtCore/QString>
+#include <QtCore/QList>
 
 struct MrlInfo
 {
@@ -14,8 +14,8 @@ struct MrlInfo
   qint64 duration; ///< in msec
   qint64 size;
 
-  explicit MrlInfo(const QString _url = QString::null, qint64 duration = 0, qint64 size = 0)
-    : url(_url), duration(duration), size(size) { }
+  explicit MrlInfo(const QString url_ = QString(), qint64 duration = 0, qint64 size = 0)
+    : url(url_), duration(duration), size(size) { }
 };
 typedef QList<MrlInfo> MrlInfoList;
 

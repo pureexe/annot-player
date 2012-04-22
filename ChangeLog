@@ -2,6 +2,30 @@ ChangeLog
 Annot Project
 6/18/2011
 
+4/22/2012	annot.player, down, browser	0.1.5.0, 0.1.1.0, 0.1.1.0
+        * Offline caching improved. Most network accesses are cached if possible.
+          Imported annotations are also cached for offline playing.
+          Offline database performance improved.
+        * Able to change annotation offset in time. Shortcuts follow.
+          * CTRL+ALT with =-0
+          * CTRL+ALT+Wheel
+        * Able to open media file from context menu on Windows.
+        * To maximize will result in full screen.
+        * Browser improved.
+          * Detect streamable video and open in Annot Player from context menu.
+          * Most webkit compatible shortcuts added.
+          * Fixed URL encoding for Asia characters.
+          * Offline cookies and caching are enabled.
+        * Downloader improved.
+          * Added concurrency control. Limit max number of downloads to 3.
+          * Added system tray.
+          * Added context menu.
+        * Stream from AcFun.tv is broken.
+          Won't fix until AcFun.tv finalize its new RESTful API.
+        * Bugfix.
+          * Fixed bugs that might crash the player while switching media.
+          * Fixed bugs preventing Adobe Flash from playing MP4 video on Mac.
+
 4/14/2012	annot.player, down, browser	0.1.4.3, 0.1.0.2, 0.1.0.1
         * Fixed a severe bug while streaming MP4 video from nicovideo.jp.
         * Use CTRL+SHIFT/MiddleButton with Mouse to select and delete annotations.

@@ -15,4 +15,5 @@ SOAP_NMAC struct Namespace namespaces[] = {
 };
 
 #endif // WITH_NONAMESPACES
+
 // EOF

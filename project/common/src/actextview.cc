@@ -53,7 +53,7 @@ AcTextView::setText(const QStringList &l, const QColor &color)
     return;
   }
   QString t;
-  foreach (QString s, l) {
+  foreach (const QString &s, l) {
     if (!s.trimmed().isEmpty())
       last_ = s;
     if (color.isValid())
@@ -63,7 +63,7 @@ AcTextView::setText(const QStringList &l, const QColor &color)
     else
       t.append(HTML_STYLE(s, color:blue));
     if (line_ != l.size())
-      t.append(HTML_BR());
+      t.append(QString());
   }
 
   setText(t);
@@ -75,7 +75,7 @@ AcTextView::append(const QString &text, const QColor &color)
   if (!text.trimmed().isEmpty())
     last_ = text;
   if (!isEmpty())
-    Base::append(QString::null);
+    Base::append(QString());
   if (color.isValid())
     Base::append(html_style(text, "color:" + colorToString(color)));
   else if (line_++ % 2)

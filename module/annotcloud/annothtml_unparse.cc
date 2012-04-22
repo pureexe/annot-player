@@ -1,9 +1,11 @@
-// annotcloud/annothtmlunparse.cc
+// annotcloud/annothtml_unparse.cc
 // 8/19/2011
 
 #include "module/annotcloud/annothtml.h"
 #include "module/annotcloud/annottag.h"
-#include <QtWebKit>
+#include <QtWebKit/QWebPage>
+#include <QtWebKit/QWebFrame>
+#include <QtWebKit/QWebElement>
 
 //#define DEBUG "annothtmlunparse"
 #include "module/debug/debug.h"
@@ -56,10 +58,10 @@ AnnotationHtmlParser::reduceHtmlElement(const QWebElement &input) const
       // if not <html> and not <head>, fix inner html
       QString innerHtml = e.toInnerXml();
       if (!innerHtml.isEmpty() && !e.firstChild().isNull()) {
-        innerHtml.replace("<", "<<");
-        innerHtml.replace(">", ">>");
-        innerHtml.replace("<<", "</span><");
-        innerHtml.replace(">>", "><span>");
+        innerHtml.replace("<", "<<")
+                 .replace(">", ">>")
+                 .replace("<<", "</span><")
+                 .replace(">>", "><span>");
         innerHtml = "<span>" + innerHtml + "</span>";
         e.setInnerXml(innerHtml);
       }

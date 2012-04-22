@@ -13,11 +13,17 @@
 #include "module/mediacodec/flvmerge.h"
 #include "module/qtext/filesystem.h"
 #include "module/qtext/network.h"
-#include <QDesktopServices>
-#include <QtNetwork>
+#include <QtNetwork/QNetworkCookieJar>
+#include <QtCore/QTimer>
 
 #define DEBUG "mrldownloadtask"
 #include "module/debug/debug.h"
+
+#ifdef Q_WS_WIN
+#  define PATH_SEP  "\\"
+#else
+#  define PATH_SEP  "/"
+#endif // Q_WS_WIN
 
 // - Helper -
 
@@ -27,8 +33,8 @@ MrlDownloadTask::isMultiMediaMimeType(const QString &contentType)
 
 // - Construction -
 
-MrlDownloadTask::MrlDownloadTask(const QString &url, QObject *parent)
-  : Base(url, parent), stopped_(false)
+void
+MrlDownloadTask::init()
 {
   resolver_ = new MrlResolverManager(this);
   connect(resolver_, SIGNAL(error(QString)), SIGNAL(error(QString)));
@@ -50,6 +56,10 @@ void
 MrlDownloadTask::run()
 {
   DOUT("enter");
+  if (stopped_) {
+    DOUT("exit: stopped");
+    return;
+  }
   setState(Downloading);
   progress_.clear();
   bool ok = resolver_->resolveMedia(url());
@@ -66,6 +76,10 @@ void
 MrlDownloadTask::downloadMedia(const MediaInfo &mi, QNetworkCookieJar *jar)
 {
   DOUT("enter");
+  if (stopped_) {
+    DOUT("exit: stopped");
+    return;
+  }
 
   QString title = mi.title;
   if (title.isEmpty())
@@ -96,13 +110,16 @@ MrlDownloadTask::downloadSingleMedia(const MediaInfo &mi, QNetworkCookieJar *jar
   // - Start
   Q_ASSERT(mi.mrls.size() == 1);
   if (mi.mrls.isEmpty()) {
-    setFileName(QString::null);
+    setFileName(QString());
     setState(Error);
     DOUT("exit: empty mrl");
     return;
   }
-  setState(Downloading);
 
+  if (stopped_) {
+    DOUT("exit: stopped");
+    return;
+  }
   // - Input
   BufferedRemoteStream in_impl;
   RemoteStream &in = in_impl;
@@ -119,6 +136,12 @@ MrlDownloadTask::downloadSingleMedia(const MediaInfo &mi, QNetworkCookieJar *jar
   in.run();
   in.waitForReady();
 
+  if (stopped_) {
+    stop();
+    DOUT("exit: stopped");
+    return;
+  }
+
   QString contentType = in.contentType();
   if (!isMultiMediaMimeType(contentType)) {
     setState(Error);
@@ -131,9 +154,10 @@ MrlDownloadTask::downloadSingleMedia(const MediaInfo &mi, QNetworkCookieJar *jar
   QString suf = contentType.contains("mp4", Qt::CaseInsensitive) ? ".mp4" : ".flv";
 
   FileOutputStream out;
-  QString desktopPath = QDesktopServices::storageLocation(QDesktopServices::DesktopLocation);
   QString name = QtExt::escapeFileName(title);
-  QString tmpFile = desktopPath + "/_" + name + suf;
+  QString tmpFile = downloadPath() + PATH_SEP "_" + name + suf;
+  for (int i = 2; QFile::exists(tmpFile); i++)
+    tmpFile = downloadPath() + PATH_SEP "_" + name + " " + QString::number(i) + suf;
 
   DOUT("fileName =" << tmpFile);
   setFileName(tmpFile);
@@ -157,13 +181,15 @@ MrlDownloadTask::downloadSingleMedia(const MediaInfo &mi, QNetworkCookieJar *jar
   out.close();
 
   bool flv;
-  bool ok = pipe.isFinished() &&
+  bool ok = isRunning() && pipe.isFinished() &&
       ((flv = FlvCodec::isFlvFile(tmpFile)) || Mp4Codec::isMp4File(tmpFile));
   if (ok) {
     suf = flv ? ".flv" : ".mp4";
 
-    QString fileName = desktopPath + "/" + name + suf;
-    QFile::remove(fileName);
+    QString fileName = downloadPath() + PATH_SEP + name + suf;
+    for (int i = 2; QFile::exists(fileName); i++)
+      fileName = downloadPath() + PATH_SEP + name + " " + QString::number(i) + suf;
+    //QFile::remove(fileName);
     ok =  QFile::rename(tmpFile, fileName);
     if (ok)
       setFileName(fileName);
@@ -197,12 +223,16 @@ MrlDownloadTask::downloadMultipleMedia(const MediaInfo &mi, QNetworkCookieJar *j
 
   Q_ASSERT(mi.mrls.size() >= 1);
   if (mi.mrls.isEmpty()) {
-    setFileName(QString::null);
+    setFileName(QString());
     setState(Error);
     DOUT("exit: empty mrl");
     return;
   }
-  setState(Downloading);
+
+  if (stopped_) {
+    DOUT("exit: stopped");
+    return;
+  }
 
   // - Input
 
@@ -223,7 +253,7 @@ MrlDownloadTask::downloadMultipleMedia(const MediaInfo &mi, QNetworkCookieJar *j
       first = in;
     connect(this, SIGNAL(stopped()), in, SLOT(stop()));
 
-    QtExt::ProgressWithId *p = new QtExt::ProgressWithId((long)in, this);
+    QtExt::ProgressWithId *p = new QtExt::ProgressWithId((long)in, in);
     connect(in, SIGNAL(progress(qint64,qint64)), p, SLOT(emit_progress(qint64,qint64)));
     connect(p, SIGNAL(progress(qint64,qint64,long)), SLOT(updateProgressWithId(qint64,qint64,long)));
 
@@ -232,8 +262,16 @@ MrlDownloadTask::downloadMultipleMedia(const MediaInfo &mi, QNetworkCookieJar *j
     if (jar)
       in->networkAccessManager()->setCookieJar(jar);
     in->run();
-
     ins.append(in);
+
+    if (stopped_) {
+      stop();
+      foreach (InputStream *s, ins)
+        QTimer::singleShot(0, dynamic_cast<RemoteStream *>(s), SLOT(deleteLater()));
+      DOUT("exit: stopped");
+      return;
+    }
+
     in->waitForReady();
 
     QString contentType = first->contentType();
@@ -262,15 +300,16 @@ MrlDownloadTask::downloadMultipleMedia(const MediaInfo &mi, QNetworkCookieJar *j
   QString suf = ".flv";
 
   FileOutputStream out;
-  QString desktopPath = QDesktopServices::storageLocation(QDesktopServices::DesktopLocation);
   QString name = QtExt::escapeFileName(title);
-  QString tmpFile = desktopPath + "/_" + name + suf;
+  QString tmpFile = downloadPath() + PATH_SEP "_" + name + suf;
+  for (int i = 2; QFile::exists(tmpFile); i++)
+    tmpFile = downloadPath() + PATH_SEP "_" + name + " " + QString::number(i) + suf;
 
   DOUT("fileName =" << tmpFile);
   setFileName(tmpFile);
 
   out.setFileName(tmpFile);
-  if (!out.open()) {
+  if (!out.open() || stopped_) {
     setState(Error);
     emit error(tr("failed to open file to write") + ": " + tmpFile);
     emit stopped();
@@ -291,10 +330,14 @@ MrlDownloadTask::downloadMultipleMedia(const MediaInfo &mi, QNetworkCookieJar *j
 
   ins.reset();
   bool ok = merger.parse();
-  if (!ok) {
+  if (!ok || stopped_) {
     setState(Error);
     emit error(tr("failed to parse FLV streams"));
     emit stopped();
+
+   foreach (InputStream *s, ins)
+      QTimer::singleShot(0, dynamic_cast<RemoteStream *>(s), SLOT(deleteLater()));
+
     QFile::remove(fileName());
     return;
   }
@@ -313,8 +356,10 @@ MrlDownloadTask::downloadMultipleMedia(const MediaInfo &mi, QNetworkCookieJar *j
 
     qint64 size = QFile(tmpFile).size();
 
-    QString fileName = desktopPath + "/" + name + suf;
-    QFile::remove(fileName);
+    QString fileName = downloadPath() + PATH_SEP + name + suf;
+    for (int i = 2; QFile::exists(fileName); i++)
+      fileName = downloadPath() + PATH_SEP + name + " " + QString::number(i) + suf;
+    //QFile::remove(fileName);
     ok =  QFile::rename(tmpFile, fileName);
     if (ok)
       setFileName(fileName);
@@ -330,6 +375,9 @@ MrlDownloadTask::downloadMultipleMedia(const MediaInfo &mi, QNetworkCookieJar *j
       setState(Error);;
     emit error(tr("download incomplete") + ": " + tmpFile);
   }
+
+  foreach (InputStream *s, ins)
+    QTimer::singleShot(0, dynamic_cast<RemoteStream *>(s), SLOT(deleteLater()));
   DOUT("exit");
 }
 

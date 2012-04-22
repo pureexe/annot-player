@@ -1,7 +1,7 @@
 #ifndef _QTEXT_DATETIME_H
 #define _QTEXT_DATETIME_H
 
-#include <QDateTime>
+#include <QtCore/QDateTime>
 
 // qtext/datetime.h
 // 7/24/2011

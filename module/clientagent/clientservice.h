@@ -6,10 +6,10 @@
 
 #include "clientsoap.h"
 #include "clientdelegate.h"
-#include "core/universe/user.h"
-#include "core/universe/token.h"
-#include "core/universe/annotation.h"
-#include <QThread>
+#include "module/annotcloud/user.h"
+#include "module/annotcloud/token.h"
+#include "module/annotcloud/annotation.h"
+#include <QtCore/QThread>
 
 /**
  *  \brief  Extend client soap service and represent service thread.

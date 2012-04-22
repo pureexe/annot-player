@@ -4,8 +4,8 @@
 // mrlresolversettings.h
 // 2/19/2011
 
-#include <QObject>
-#include <QString>
+#include <QtCore/QObject>
+#include <QtCore/QString>
 
 class MrlResolverSettings : public QObject
 {
@@ -17,7 +17,7 @@ public:
   struct Account {
     QString username, password;
 
-    explicit Account(const QString &name = QString::null, const QString &pass = QString::null)
+    explicit Account(const QString &name = QString(), const QString &pass = QString())
       : username(name), password(pass) { }
     bool isBad() const { return username.isEmpty() || password.isEmpty(); }
     void clear() { username.clear(); password.clear(); }
@@ -30,14 +30,14 @@ protected:
 
   // - Account -
 public slots:
-  void setNicovideoAccount(const QString &username = QString::null,
-                           const QString &password = QString::null)
+  void setNicovideoAccount(const QString &username = QString(),
+                           const QString &password = QString())
   {
     nicovideoAccount_.username = username;
     nicovideoAccount_.password = password;
   }
-  void setBilibiliAccount(const QString &username = QString::null,
-                          const QString &password = QString::null)
+  void setBilibiliAccount(const QString &username = QString(),
+                          const QString &password = QString())
   {
     bilibiliAccount_.username = username;
     bilibiliAccount_.password = password;

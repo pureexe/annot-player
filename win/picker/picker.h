@@ -4,7 +4,7 @@
 // 10/30/2011
 
 #include "picker_config.h"
-#include <QWidget>
+#include <QtGui/QWidget>
 
 class WindowPickerImpl; ///< \internal
 

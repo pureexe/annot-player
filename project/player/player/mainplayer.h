@@ -5,7 +5,7 @@
 // 6/30/2011
 
 #include "playerui.h"
-#include <QDockWidget>
+#include <QtGui/QDockWidget>
 
 class MainPlayerDock : public QDockWidget
 {

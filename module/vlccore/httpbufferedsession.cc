@@ -9,10 +9,11 @@
 #  error "mediacodec module is required"
 #endif // WITH_MODULE_MEDIACODEC
 #include "module/qtext/filesystem.h"
-#include <QDesktopServices>
-#include <QApplication>
+#include <QtNetwork/QNetworkAccessManager>
+#include <QtNetwork/QNetworkReply>
+#include <QtNetwork/QNetworkRequest>
+#include <QtNetwork/QNetworkCookieJar>
 #include <QtCore>
-#include <QtNetwork>
 #include <cstring>
 
 #define DEBUG "httpbufferedsession"
@@ -30,7 +31,7 @@ HttpBufferedSession::~HttpBufferedSession()
 //{
 //  // FIXME
 //  return contentType_.contains("mp4", Qt::CaseInsensitive) &&
-//         url_.host().contains("nicovideo.jp");
+//         url_.host().endsWith("nicovideo.jp");
 //}
 
 void
@@ -60,8 +61,7 @@ HttpBufferedSession::invalidateFileName()
 {
   bool mp4 = contentType_.contains("mp4", Qt::CaseInsensitive);
   QString suf = mp4 ? ".mp4" : ".flv";
-  QString dir = QDesktopServices::storageLocation(QDesktopServices::DesktopLocation) + "/Annot";
-  fileName_ = dir + "/" + QtExt::escapeFileName(mediaTitle()) + suf;
+  fileName_ = cachePath() + "/" + QtExt::escapeFileName(mediaTitle()) + suf;
 }
 
 // - Actions -
@@ -96,7 +96,6 @@ HttpBufferedSession::save()
   }
 
   emit message(tr("file saved") + ": " + fileName_);
-  QApplication::beep();
   emit fileSaved(fileName_);
 }
 
@@ -201,6 +200,7 @@ HttpBufferedSession::run()
     nam_->setCookieJar(cookieJar());
     cookieJar()->setParent(0);
   }
+  emit message(tr("buffering") + ": " + url_.toString());
   reply_ = nam_->get(QNetworkRequest(url_));
   Q_ASSERT(reply_);
   waitForReplyReady();
@@ -216,7 +216,7 @@ HttpBufferedSession::run()
     readyCond_.wakeAll();
     stoppedCond_.wakeAll();
     emit error(tr("network error to access URL") + ": " + url_.toString());
-    DOUT("exit: network error:" << reply_->errorString());
+    DOUT("exit: network error:" << reply_->error() << reply_->errorString());
     return;
   }
 

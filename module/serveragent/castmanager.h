@@ -5,9 +5,9 @@
 // 11/15/2011
 
 #include "module/annotcloud/traits.h"
-#include <QObject>
-#include <QMutex>
-#include <QList>
+#include <QtCore/QObject>
+#include <QtCore/QMutex>
+#include <QtCore/QList>
 
 struct CastEvent
 {
@@ -38,7 +38,8 @@ class CastManager : public QObject
   mutable QMutex mutex_;
 
 public:
-  explicit CastManager(QObject *parent = 0);
+  explicit CastManager(QObject *parent = 0)
+    : Base(parent) { }
 
   bool containsEvent(const CastEvent &e) const;
   bool registerEvent(const CastEvent &e);

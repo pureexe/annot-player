@@ -4,8 +4,8 @@
 // accomboedit_p.h.h
 // 12/15/2011
 
-#include <QLineEdit>
-#include <QKeyEvent>
+#include <QtGui/QLineEdit>
+#include <QtGui/QKeyEvent>
 
 class AcComboBoxLineEdit : public QLineEdit
 {

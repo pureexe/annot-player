@@ -4,7 +4,7 @@
 // clipboardmonitor.h
 // 3/10/2012
 
-#include <QObject>
+#include <QtCore/QObject>
 
 class ClipboardMonitor : public QObject
 {

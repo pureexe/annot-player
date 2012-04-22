@@ -5,7 +5,7 @@
 // 3/14/2012
 
 #include "bufferedfifostream.h"
-#include <QWaitCondition>
+#include <QtCore/QWaitCondition>
 
 class SecureBufferedFifoStream : public BufferedFifoStream
 {

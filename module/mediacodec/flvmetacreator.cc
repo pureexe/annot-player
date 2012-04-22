@@ -4,7 +4,6 @@
 // Adobe Flash 9 File Format Specification.pdf (2007), The FLV Header (page 268)
 
 #include "flvmeta.h"
-#include <QtCore>
 
 #define DEBUG "flvmetacreator"
 #include "module/debug/debug.h"

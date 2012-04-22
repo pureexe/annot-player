@@ -5,8 +5,8 @@
 // 3/14/2012
 
 #include "outputstream.h"
-#include <QObject>
-#include <QByteArray>
+#include <QtCore/QObject>
+#include <QtCore/QByteArray>
 
 class DataOutputStream : public QObject, public OutputStream
 {
@@ -27,10 +27,7 @@ public:
   virtual qint64 availableSize() const { return data_.size(); } ///< \override
 
   virtual qint64 write(const char *data, qint64 maxSize) ///< \override
-  {
-    data_.append(data, maxSize);
-    return maxSize;
-  }
+  { data_.append(data, maxSize); return maxSize; }
 };
 
 #endif // DATAOUTPUTSTREAM_H

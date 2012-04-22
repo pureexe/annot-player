@@ -6,7 +6,7 @@
 
 #include "downloadtask.h"
 #include "module/mrlresolver/mrlinfo.h"
-#include <QHash>
+#include <QtCore/QHash>
 
 QT_FORWARD_DECLARE_CLASS(QNetworkCookieJar)
 
@@ -28,8 +28,15 @@ class MrlDownloadTask : public DownloadTask
   QHash<long, Progress> progress_;
 
 public:
-  explicit MrlDownloadTask(const QString &mrl, QObject *parent = 0);
+  explicit MrlDownloadTask(const QString &url, QObject *parent = 0)
+    : Base(url, parent), stopped_(false) { init(); }
+  explicit MrlDownloadTask(const DownloadTaskInfo &info, QObject *parent = 0)
+    : Base(info, parent), stopped_(false) { init(); }
+
   ~MrlDownloadTask() { stop(); }
+
+private:
+  void init();
 
   // - Actions -
 signals:
@@ -37,6 +44,7 @@ signals:
 public slots:
   virtual void run(); ///< \override
   virtual void stop(); ///< \override
+  virtual void reset() { stopped_ = false; Base::reset(); } ///< \override
 
 protected slots:
   void downloadMedia(const MediaInfo &mi, QNetworkCookieJar *jar = 0);

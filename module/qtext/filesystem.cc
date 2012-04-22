@@ -1,31 +1,36 @@
 // qtext/filesystem.cc
 // 3/16/2012
 #include "module/qtext/filesystem.h"
+#include <QtCore/QFile>
 
 QString
 QtExt::escapeFileName(const QString &name)
 {
-  QString ret = name;
-  ret.remove('"');
-  ret.remove('\'');
+  return QString(name)
+    .remove('"')
+    .remove('\'')
 #ifdef _MSC_VER
-  ret.replace('/', "\xef\xbc\x8f");
+    .replace('/', "\xef\xbc\x8f")
 #else
-  ret.replace('/', "／");
+    .replace('/', "／")
 #endif // _MSC_VER
-  ret.replace('\\', '-');
-  ret.replace('|', '-');
+    .replace('\\', '-')
+    .replace('|', '-')
 #ifdef _MSC_VER
-  ret.replace(':', "\xef\xbc\x9a");
+    .replace(':', "\xef\xbc\x9a")
 #elif !defined Q_OS_MAC
-  ret.replace(':', "：");
+    .replace(':', "：")
 #endif // _MSC_VER
 #ifdef _MSC_VER
-  ret.replace('?', "\xef\xbc\x9f");
+    .replace('?', "\xef\xbc\x9f")
 #elif !defined Q_OS_MAC
-  ret.replace('?', "？");
+    .replace('?', "？")
 #endif // _MSC_VER
-  return ret.trimmed();
+    .trimmed();
 }
+
+bool
+QtExt::touchFile(const QString &fileName)
+{ return QFile(fileName).open(QIODevice::WriteOnly); }
 
 // EOF

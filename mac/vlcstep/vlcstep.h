@@ -5,8 +5,8 @@
 // 7/30/2011
 
 #include "qtstep/qtstep.h"
-#include <QPoint>
-#include <QRect>
+#include <QtCore/QPoint>
+#include <QtCore/QRect>
 
 // - Types -
 

@@ -6,43 +6,67 @@
 
 #define APP_NAME        AC_DOWNLOADER
 #define APP_ID          AC_DOWNLOADER_ID
-#ifdef PROJECT_DOWNLOADER
-#  define APP_ROLE      Server
-#else
-#  define APP_ROLE      Client
-#endif // PROJECT_DOWNLOADER
 
-// - Construction -
+#define DEBUG "acdownloader"
+#include "module/debug/debug.h"
 
-AcDownloaderController::AcDownloaderController(QObject *parent, Role role)
-  : Base(role ? role : APP_ROLE, parent, APP_ID)
+// - Server -
+
+AcDownloaderServer::AcDownloaderServer(QObject *parent)
+  : Base(parent, APP_ID)
 { }
 
-// - Queries -
+void
+AcDownloaderServer::start()
+{
+#ifdef WITH_MODULE_METACALL
+  Base::startServer();
+#endif // WITH_MODULE_METACALL
+}
+
+void
+AcDownloaderServer::stop()
+{
+#ifdef WITH_MODULE_METACALL
+  Base::stop();
+#endif // WITH_MODULE_METACALL
+}
+
+// - Client -
+
+AcDownloader::AcDownloader(QObject *parent)
+  : Base(parent), delegate_(0)
+{
+#ifdef WITH_MODULE_METACALL
+  // It is essential that the queued signal is passed to delegate_ from another object
+  delegate_ = new Delegate(this, APP_ID);
+  connect(this, SIGNAL(arguments(QStringList)),
+          delegate_, SIGNAL(arguments(QStringList)), Qt::QueuedConnection);
+#endif // WITH_MODULE_METACALL
+}
 
 bool
-AcDownloaderController::isRunning() const
-{ return isProcessRunning(APP_NAME); }
-
-// - Actions -
+AcDownloader::isRunning() const
+{ return Delegate::isProcessRunning(APP_NAME); }
 
 void
-AcDownloaderController::open()
-{ Base::open(APP_NAME); }
+AcDownloader::open()
+{ Delegate::open(APP_NAME); }
 
 void
-AcDownloaderController::openUrl(const QString &url)
-{ openUrls(QStringList(url)); }
-
-void
-AcDownloaderController::openUrls(const QStringList &urls)
+AcDownloader::openArguments(const QStringList &args)
 {
-#ifdef WITH_MODULE_IPC
-  if (isEnabled() && isRunning())
-    emit queuedArguments(urls);
-  else
-#endif // WITH_MODULE_IPC
-  Base::open(APP_NAME, urls);
+  DOUT("enter");
+#ifdef WITH_MODULE_METACALL
+  if (isRunning()) {
+    DOUT("isRunning = true");
+    if (!delegate_->isActive())
+      delegate_->startClient();
+    emit arguments(args);
+  } else
+#endif // WITH_MODULE_METACALL
+  Delegate::open(APP_NAME, args);
+  DOUT("exit");
 }
 
 // EOF

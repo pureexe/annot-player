@@ -4,10 +4,10 @@
 // settings.h
 // 7/30/2011
 
-#include <QSettings>
-#include <QStringList>
-#include <QDate>
-#include <QHash>
+#include <QtCore/QSettings>
+#include <QtCore/QStringList>
+#include <QtCore/QDate>
+#include <QtCore/QHash>
 #include <utility>
 
 class Settings : public QSettings
@@ -29,6 +29,9 @@ public slots:
 public:
   QString version() const;
   void setVersion(const QString &version);
+
+  QString applicationFilePath() const;
+  void setApplicationFilePath(const QString &path);
 
   bool isQueueEmpty() const; ///< If database queue is empty
   void setQueueEmpty(bool empty);
@@ -71,6 +74,9 @@ public:
 
   int annotationEffect() const;
   void setAnnotationEffect(int effect);
+
+  qint64 annotationOffset() const;
+  void setAnnotationOffset(qint64 offset);
 
   ///  Theme in UiStyle
   qint64 annotationLanguages() const; ///< Annotation language

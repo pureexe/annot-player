@@ -22,7 +22,7 @@ desktopPath()
   );
   path = reg.value("Desktop").toString();
 #else
-  path = QDir::homePath() + "/Desktop";
+  path = QDesktopServices::storageLocation(QDesktopServices::DesktopLocation);
 #endif // Q_WS_WIN
 
   if (QDir(path).exists())
