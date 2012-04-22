@@ -154,14 +154,10 @@ namespace AnnotCloud {
 
     qint64 hashId() const
     {
-      if (hasId())
-        return id();
-      else if (hasDigest())
-        return - ((qint64)qHash(digest()) + part());
-      else if (hasSource())
-        return - ((qint64)qHash(source()) + part());
-      else
-        return 0;
+      return hasId() ? id() :
+             hasDigest() ?  -qint64(qHash(digest()) + part()) :
+             hasSource() ? -qint64(qHash(source()) + part()) :
+             0LL;
     }
 
     // - Operators -

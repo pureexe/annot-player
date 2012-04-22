@@ -5,10 +5,10 @@
 #include "ith/hookman.h"
 #include "ith/pipe.h"
 #include "ith/inject.h"
-#include <qt_windows.h>
 #include <QtCore>
 #include <string>  // std::wstring
 #include <cstdlib> // ::atexit
+#include <qt_windows.h>
 
 #define DEBUG "ith"
 #include "module/debug/debug.h"

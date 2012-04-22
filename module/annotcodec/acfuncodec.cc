@@ -101,7 +101,7 @@ AcFunCodec::parseXmlDocument(const QByteArray &data)
     if (!text.isEmpty() && !attr.isEmpty()) {
       Annotation a = parseComment(attr, text);
       if (a.hasText()) {
-        qint64 id = ret.size() + (qint64)INT_MAX;
+        qint64 id = ret.size() + qint64(INT_MAX);
         a.setId(-id);
         ret.append(a);
       }
@@ -145,7 +145,7 @@ AcFunCodec::parseJsonDocument(const QByteArray &data)
     if (!text.isEmpty() && !attr.isEmpty()) {
       Annotation a = parseComment(attr, text);
       if (a.hasText()) {
-        qint64 id = ret.size() + (qint64)INT_MAX;
+        qint64 id = ret.size() + qint64(INT_MAX);
         a.setId(-id);
         ret.append(a);
       }

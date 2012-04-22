@@ -1,7 +1,7 @@
 #!/bin/bash -v
 # 4/1/2012
 
-VERSION=0.1.4.4
+VERSION=0.1.5.0
 APP=annot-player
 ZIPFILE=$APP-$VERSION-debian.zip
 
@@ -24,6 +24,6 @@ done
 
 cd "$BUILD_PREFIX" || exit 1
 rm -fv "$ZIPFILE"
-zip -9 "$ZIPFILE" annot-*_$VERSION-*.deb || exit 1
+::zip -9 "$ZIPFILE" annot-*_$VERSION-*.deb || exit 1
 
 # EOF

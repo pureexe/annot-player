@@ -2,16 +2,17 @@
 // 7/21/2011
 
 #include "qtwin.h"
+#include <QtCore>
+#include <memory>
+#include <string>
+#include <cstdlib>
+
 #include <qt_windows.h>
 #include <TlHelp32.h>
 #include <Psapi.h>
 #include <ShObjIdl.h>
 #include <ShlGuid.h>
 //#include <strsafe.h>
-#include <QtCore>
-#include <memory>
-#include <string>
-#include <cstdlib>
 
 //#ifdef _MSC_VER
 //#  pragma warning (disable: 4996)     // C4996: 'getenv': This function or variable may be unsafe. Consider using _dupenv_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
@@ -39,13 +40,13 @@ namespace { // anonymous
   }
 
   inline QPoint POINT2QPoint(const POINT &pt)
-  { return QPoint((int)pt.x, (int)pt.y); }
+  { return QPoint(pt.x, pt.y); }
 
   inline POINT QPoint2POINT(const QPoint &pos)
   { POINT ret = { pos.x(), pos.y() }; return ret; }
 
   inline QRect RECT2QRect(const RECT &rect)
-  { return QRect((int)rect.left, (int)rect.top, int(rect.right - rect.left), int(rect.bottom - rect.top)); } // QRect(x, y, w, h)
+  { return QRect(rect.left, rect.top, int(rect.right - rect.left), int(rect.bottom - rect.top)); } // QRect(x, y, w, h)
 
   inline RECT QRect2RECT(const QRect &r)
   { RECT ret = { r.x(), r.y(), r.right(), r.bottom() }; return ret; } // RECT { x1, y1, x2, y2 }

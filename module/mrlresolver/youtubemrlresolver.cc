@@ -170,6 +170,6 @@ YoutubeMrlResolver::formatTitle(const QString &text)
 
 QString
 YoutubeMrlResolver::decodeYoutubeUrl(const QUrl &url)
-{ return url.toString().remove(QRegExp(".itag=44$")); } // chop duplicated itag in the end
+{ return url.toString().remove(QRegExp(".itag=\\d+$")); } // chop duplicated itag in the end
 
 // EOF

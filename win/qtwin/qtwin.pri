@@ -12,8 +12,7 @@ HEADERS += \
     $$PWD/winreg.h
 
 SOURCES += \
-    $$PWD/qtwin.cc \
-    $$PWD/qtwinapi.cc
+    $$PWD/qtwin.cc
 
 QT      += core gui
 LIBS    += -lkernel32 -luser32 -lpsapi -lole32 #-lwinmm

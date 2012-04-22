@@ -12,6 +12,10 @@
 #define DEBUG "qtext::webpage"
 #include "module/debug/debug.h"
 
+#ifdef __GNUC__
+#  pragma GCC diagnostic ignored "-Wparentheses" // suggest parentheses around assignment
+#endif // __GNUC__
+
 // - RC -
 
 #ifdef Q_OS_LINUX

@@ -74,7 +74,7 @@ public:
   qint64 downloadSize() const { return receivedSize_; }
   qreal speed() const { return speed_; } ///< bps
   qint64 remainingTime() const { return speed_ ? (totalSize_ - receivedSize_) / speed_ * 1000 : 0.0; } ///< in msec
-  qreal percentage() const { return totalSize_ ? (qreal)receivedSize_ / totalSize_ : 0.0; }
+  qreal percentage() const { return totalSize_ ? qreal(receivedSize_)/totalSize_ : 0.0; }
 
   // - Actions -
 public slots:

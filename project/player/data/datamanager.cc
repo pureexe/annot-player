@@ -57,7 +57,11 @@ DataManager::invalidateAnnotations()
   foreach (const Annotation &a, annots_) {
     ++userAnnotCount_[a.userId()];
     qint64 t = a.createTime();
-    if (t > Traits::MIN_TIME && t < Traits::MAX_TIME) {
+    if (t > Traits::MIN_TIME
+#ifndef Q_WS_WIN
+        && t < Traits::MAX_TIME // FIXME
+#endif // !Q_WS_WIN
+        ) {
       if (t > maxAnnotTime_)
         maxAnnotTime_ = t;
       if (t < minAnnotTime_)
@@ -75,7 +79,11 @@ DataManager::addAnnotation(const Annotation &a)
   ++userAnnotCount_[a.userId()];
 
   qint64 t = a.createTime();
-  if (t > Traits::MIN_TIME && t < Traits::MAX_TIME) {
+  if (t > Traits::MIN_TIME
+#ifndef Q_WS_WIN
+      && t < Traits::MAX_TIME // FIXME
+#endif // Q_WS_WIN
+      ) {
     if (t > maxAnnotTime_)
       maxAnnotTime_ = t;
     if (t < minAnnotTime_)

@@ -162,8 +162,8 @@ AnnotationPainter::paintHistogramByPos(QPainter &p, const AnnotationList &l, con
     int x = i.key(),
         y = i.value();
 
-    qreal px = x / (qreal)maxX,
-          py = y / (qreal)maxY;
+    qreal px = x / qreal(maxX),
+          py = y / qreal(maxY);
 
     int r = r_start + (r_stop - r_start) * py,
         g = g_start + (g_stop - g_start) * py,
@@ -239,8 +239,8 @@ AnnotationPainter::paintHistogramByPos(QPainter &p, const AnnotationList &l, con
     p.setPen(Qt::green);
 
     foreach (const QPoint &peak, peaks) {
-      qreal px = peak.x() / (qreal)maxX,
-            py = peak.y() / (qreal)maxY;
+      qreal px = peak.x() / qreal(maxX),
+            py = peak.y() / qreal(maxY);
       int x = width * px,
           y = histHeight * py;
 
@@ -272,7 +272,7 @@ AnnotationPainter::paintHistogramByPos(QPainter &p, const AnnotationList &l, con
     enum { TitleFontSize = 20, NoteFontSize = 10 };
     enum { TitleHeight = TitleFontSize, NoteHeight = NoteFontSize, NoteMargin = 5 };
 
-    int titleHeight = qMin(height, (int)TitleHeight);
+    int titleHeight = qMin(height, int(TitleHeight));
     {
       QFont f = p.font();
       f.setBold(true);
@@ -385,8 +385,8 @@ AnnotationPainter::paintHistogramByCreateTime(QPainter &p, const AnnotationList 
     qint64 x = i.key();
     int y = i.value();
 
-    qreal px = (x - minX) / (qreal)rangeX,
-          py = y / (qreal)maxY;
+    qreal px = (x - minX) / qreal(rangeX),
+          py = y / qreal(maxY);
     x = width * px;
     y = histHeight * py;
 
@@ -445,8 +445,8 @@ AnnotationPainter::paintHistogramByCreateTime(QPainter &p, const AnnotationList 
     p.setPen(Qt::green);
 
     foreach (const QPoint &peak, peaks) {
-      qreal px = (peak.x() - minX) / (qreal)rangeX,
-            py = peak.y() / (qreal)maxY;
+      qreal px = (peak.x() - minX) / qreal(rangeX),
+            py = peak.y() / qreal(maxY);
       int x = width * px,
           y = histHeight * py;
 
@@ -526,7 +526,7 @@ AnnotationPainter::paintHistogramByCreateTime(QPainter &p, const AnnotationList 
     enum { TitleFontSize = 20, NoteFontSize = 10 };
     enum { TitleHeight = TitleFontSize, NoteHeight = NoteFontSize, NoteMargin = 5 };
 
-    int titleHeight = qMin(height, (int)TitleHeight);
+    int titleHeight = qMin(height, int(TitleHeight));
     {
       QFont f = p.font();
       f.setBold(true);
@@ -538,7 +538,7 @@ AnnotationPainter::paintHistogramByCreateTime(QPainter &p, const AnnotationList 
 
     if (height > TitleHeight + NoteHeight + NoteMargin) {
       QString peak = QString::number(maxY),
-              averagePerDay = QString::number(l.size()*(86400/metric)/(qreal)rangeX, 'f', 2),
+              averagePerDay = QString::number(l.size()*(86400/metric)/qreal(rangeX), 'f', 2),
               unit = metric < 3600 + 1800 ? QString("%1 min.").arg(QString::number(metric / 60)) :
                      metric < 86400 ? QString("%1 hrs.").arg(QString::number(metric/3600.0, 'f', 1)) :
                      QString("day");
@@ -575,7 +575,7 @@ AnnotationPainter::paintHistogramByUserId(QPainter &p, const AnnotationList &l, 
   foreach (const Annotation &a, l) // skip anonymous user, skip UI_Guest here in the future
     if (a.createTime() > Traits::MIN_TIME
 #ifndef Q_WS_WIN
-        && t < Traits::MAX_TIME // FIXME sth must be broken on windows.
+        && a.createTime() < Traits::MAX_TIME // FIXME sth must be broken on windows.
 #endif // Q_WS_WIN
         ) {
       int y = ++h[a.userId()];
@@ -618,8 +618,8 @@ AnnotationPainter::paintHistogramByUserId(QPainter &p, const AnnotationList &l, 
     { // Histogram
       int x = i,
           y = key;
-      qreal px = x / (qreal)rangeX,
-            py = y / (qreal)maxY;
+      qreal px = x / qreal(rangeX),
+            py = y / qreal(maxY);
       x = width * px;
       y = histHeight * py;
 
@@ -667,7 +667,7 @@ AnnotationPainter::paintHistogramByUserId(QPainter &p, const AnnotationList &l, 
     enum { TitleFontSize = 20, NoteFontSize = 10 };
     enum { TitleHeight = TitleFontSize, NoteHeight = NoteFontSize, NoteMargin = 5 };
 
-    int titleHeight = qMin(height, (int)TitleHeight);
+    int titleHeight = qMin(height, int(TitleHeight));
     {
       QFont f = p.font();
       f.setBold(true);
@@ -679,7 +679,7 @@ AnnotationPainter::paintHistogramByUserId(QPainter &p, const AnnotationList &l, 
 
     if (height > TitleHeight + NoteHeight + NoteMargin) {
       QString peak = QString::number(maxY),
-              average = QString::number(l.size()/(qreal)rangeX, 'f', 2),
+              average = QString::number(l.size()/qreal(rangeX), 'f', 2),
               total = QString::number(h.size());
       QString note = QString("peak = %1 / user   average = %2 / user   total = %3 users")
                      .arg(peak).arg(average).arg(total);

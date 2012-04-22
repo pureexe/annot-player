@@ -193,8 +193,8 @@ EmbeddedCanvas::paintHistogram(QPainter &painter, const QRect &view, const Annot
     int x = i.key(),
         y = i.value();
 
-    qreal px =  x / (qreal)rangeX,
-          py = y / (qreal)maxY;
+    qreal px =  x / qreal(rangeX),
+          py = y / qreal(maxY);
     x = width * px + x0;
     y = histHeight * py;
 
@@ -326,8 +326,8 @@ EmbeddedCanvas::paintHistogram(QPainter &painter, const QRect &view, const Annot
     painter.setFont(f);
 
     foreach (const QPoint &peak, peaks) {
-      qreal px = peak.x() / (qreal)rangeX,
-            py = peak.y() / (qreal)maxY;
+      qreal px = peak.x() / qreal(rangeX),
+            py = peak.y() / qreal(maxY);
       int x = width * px + x0,
           y = histHeight * py;
 

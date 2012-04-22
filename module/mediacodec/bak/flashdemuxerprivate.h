@@ -34,7 +34,7 @@ namespace BitHelper
     int skipBits = offset % 8;
     quint64 bits = 0;
     for (int i = 0; i <= qMin(endByte - startByte, 7); i++) {
-      bits |= (quint64)bytes[startByte + i] << (56 - (i * 8));
+      bits |= quint64(bytes[startByte + i]) << (56 - (i * 8));
     }
     if (skipBits != 0)
       read(bits, skipBits);
@@ -45,7 +45,7 @@ namespace BitHelper
   inline void write(quint64 &x, int length, int value)
   {
     quint64 mask = 0xFFFFFFFFFFFFFFFF >> (64 - length);
-    x = (x << length) | ((quint64)value & mask);
+    x = (x << length) | (quint64(value) & mask);
   }
 }
 
@@ -54,14 +54,14 @@ namespace BitConverterBE
   inline quint64 toUInt64(const quint8 *value, int startIndex = 0)
   {
     return
-      ((quint64)value[startIndex    ] << 56) |
-      ((quint64)value[startIndex + 1] << 48) |
-      ((quint64)value[startIndex + 2] << 40) |
-      ((quint64)value[startIndex + 3] << 32) |
-      ((quint64)value[startIndex + 4] << 24) |
-      ((quint64)value[startIndex + 5] << 16) |
-      ((quint64)value[startIndex + 6] <<  8) |
-      ((quint64)value[startIndex + 7]      );
+      (quint64(value[startIndex    ]) << 56) |
+      (quint64(value[startIndex + 1]) << 48) |
+      (quint64(value[startIndex + 2]) << 40) |
+      (quint64(value[startIndex + 3]) << 32) |
+      (quint64(value[startIndex + 4]) << 24) |
+      (quint64(value[startIndex + 5]) << 16) |
+      (quint64(value[startIndex + 6]) <<  8) |
+      (quint64(value[startIndex + 7])      );
   }
 
   inline quint32 toUInt32(const quint8 *value, int startIndex = 0)
@@ -144,7 +144,7 @@ public:
   FractionUInt32() : N(0), D(0) { }
   FractionUInt32(quint32 n, quint32 d) : N(n), D(d) { }
 
-  double toDouble() const { return (double)N / D; }
+  double toDouble() const { return double(N) / D; }
   bool isNull() const { return !N && !D; }
 
   void reduce()
@@ -264,7 +264,7 @@ public:
        if (chunk.size() < 3) return;
 
        const quint8 *p = (const quint8 *)chunk.data();
-       quint64 bits = (quint64)BitConverterBE::toUInt16(p, 1) << 48;
+       quint64 bits = quint64(BitConverterBE::toUInt16(p, 1)) << 48;
 
        _aacProfile = BitHelper::read(bits, 5) - 1;
        _sampleRateIndex = BitHelper::read(bits, 4);

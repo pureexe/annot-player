@@ -3,12 +3,12 @@
 
 #include <QtGlobal>
 #ifndef Q_WS_X11
-  #error "This file is for X11 only."
+#  error "This file is for X11 only."
 #endif // Q_WS_X11
 
 #include "qtx.h"
 #include <QtCore>
-#include <QX11Info>
+#include <QtGui/QX11Info>
 #include <X11/extensions/Xfixes.h>
 #include <X11/extensions/shape.h>
 #include <X11/Xlib.h>

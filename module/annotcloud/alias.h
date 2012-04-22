@@ -7,7 +7,7 @@
 #include "module/annotcloud/traits.h"
 #include <QtCore/QString>
 #include <QtCore/QList>
-#include <QtCore/QMetaType>
+#include <QtCore/QMetatype>
 
 namespace AnnotCloud {
 

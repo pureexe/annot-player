@@ -232,7 +232,7 @@ qint64
 Disk::pos() const
 {
   Q_ASSERT(isOpen());
-  if (geometry_.size() <= (qint64)4 * 1024 * 1024 * 1024) { // 4GB
+  if (geometry_.size() <= 4LL * 1024LL * 1024LL * 1024LL) { // 4GB
     // FIXME: THE ERROR IS NOT CHECKED!
     return ::SetFilePointer((HANDLE)handle_, 0, 0, FILE_CURRENT);
 
@@ -252,7 +252,7 @@ bool
 Disk::seek(qint64 pos)
 {
   Q_ASSERT(isOpen());
-  if (geometry_.size() <= (qint64)4 * 1024 * 1024 * 1024) { // 4GB
+  if (geometry_.size() <= 4LL * 1024LL * 1024LL * 1024LL) { // 4GB
     LARGE_INTEGER liPos;
     liPos.QuadPart = pos;
 
@@ -292,7 +292,7 @@ Disk::read(int maxSize)
   HANDLE hDisk = (HANDLE)handle_;
   Q_ASSERT(hDisk != INVALID_HANDLE_VALUE);
 
-  DWORD dwReturnBytes = qMin((qint64)maxSize, size());
+  DWORD dwReturnBytes = qMin(qint64(maxSize), size());
   DWORD dwBufferBytes = dwReturnBytes;
   DWORD dwBlockSize = geometry_.bytesPerSector;
   if (dwBufferBytes % dwBlockSize)

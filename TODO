@@ -6,13 +6,24 @@ http://db.tt/SrtkzxIJ
 - move wiki to sakuradite
 
 # client
+FIXME: MAX_TIME in Windows is not working
+
+- player
+  - able to login to youtube
+   example: shikabanehime @ funimation
 - mac:browser
+  - delegate ch.nicovideo.jp/menu/anime as well
   - highlight occurence
      http://doc.qt.nokia.com/4.7-snapshot/qwebview.html#findText
     HighlightAllOccurrences
   - use a lineedit+label (message), using qt form ui to add it
   - also, able to highlight all downloadable video
   - develop more ideas to make use of it together with JSP server
+
+  - avoid search history duplication
+  - save search history to settings
+- mac
+  - add menubar for browser&downloader
 - windows
   - migrate to ith3
     inject.cc => ihf/main.cpp

@@ -20,7 +20,7 @@ Annot Project
           * Added concurrency control. Limit max number of downloads to 3.
           * Added system tray.
           * Added context menu.
-        * Stream from AcFun.tv is broken.
+        * Streaming from AcFun.tv is broken.
           Won't fix until AcFun.tv finalize its new RESTful API.
         * Bugfix.
           * Fixed bugs that might crash the player while switching media.

@@ -282,7 +282,7 @@ VlcHttpPlugin::read(access_t *p_access, uint8_t *p_buffer, size_t i_len)
   qint64 count = session_->read((char *)p_buffer, i_len);
 
   p_access->info.i_pos = session_->pos();
-  p_access->info.b_eof = count != (qint64)i_len;
+  p_access->info.b_eof = count != qint64(i_len);
 
   if (p_access->info.b_eof) {
     DOUT("read eof, sesion size =" << session_->size() << ", prevous size =" << p_access->info.i_size);
@@ -301,7 +301,7 @@ VlcHttpPlugin::seek(access_t *p_access, uint64_t i_pos)
 
   //VlcHttpSession *session = (VlcHttpSession *)p_access->p_sys;
   //Q_ASSERT(session_);
-  if (i_pos == (quint64)session_->pos()) {
+  if (i_pos == quint64(session_->pos())) {
     DOUT("exit: already seeked");
     return true;
   }
@@ -311,7 +311,7 @@ VlcHttpPlugin::seek(access_t *p_access, uint64_t i_pos)
   //  return VLC_EGENERIC;
   //}
 
-  if (i_pos >= (quint64)session_->availableSize()) {
+  if (i_pos >= quint64(session_->availableSize())) {
     DOUT("egeneric, seek over availableSize: i_pos =" << i_pos << ", availableSize =" << session_->availableSize());
     //DOUT("exit: ret = egeneric, seek out of available size");
     return VLC_EGENERIC;

@@ -619,12 +619,12 @@ AnnotationGraphicsItem::stayTime(Style style) const
   int t = style == SubtitleStyle ? ANNOTATION_STAY_TIME_SUBTITLE
                                  : ANNOTATION_STAY_TIME;
   int w0 = qMax(view_->width(), 100),
-      w = qMax((int)boundingRect().width(), 50),
-      h = qMax((int)boundingRect().height(), 20);
-  float f = (float)(w0 + 200)/ (w + 200),
-        g = (float)(h + 20) / (ANNOTATION_SIZE_DEFAULT + 15);
-  float q = hub_->isSignalTokenMode() ? 1.0f : 0.8f;
-  int ret = t * ::pow(f, 0.3f)* g * q + ANNOTATION_STAY_TIME_MIN;
+      w = qMax(int(boundingRect().width()), 50),
+      h = qMax(int(boundingRect().height()), 20);
+  qreal f = qreal(w0 + 200)/ (w + 200),
+        g = qreal(h + 20) / (ANNOTATION_SIZE_DEFAULT + 15);
+  qreal q = hub_->isSignalTokenMode() ? 1.0 : 0.8;
+  int ret = t * ::pow(f, 0.3)* g * q + ANNOTATION_STAY_TIME_MIN;
   return qMin(ret, ANNOTATION_STAY_TIME_MAX);
 }
 
@@ -632,9 +632,9 @@ int
 AnnotationGraphicsItem::flyTime() const
 {
   int w0 = qMax(view_->width(), 100),
-      w = qMax((int)boundingRect().width(), 50);
-  float f = (float)(w0 + 200) / (w + 200);
-  int ret = ANNOTATION_FLY_TIME * ::pow(f, 0.2f) + ANNOTATION_FLY_TIME_MIN;
+      w = qMax(int(boundingRect().width()), 50);
+  qreal f = qreal(w0 + 200) / (w + 200);
+  int ret = ANNOTATION_FLY_TIME * ::pow(f, 0.2) + ANNOTATION_FLY_TIME_MIN;
   ret = qMin(ret, ANNOTATION_FLY_TIME_MAX);
   if (style_ == FlyStyle) {
     ret /= 5;

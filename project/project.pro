@@ -9,7 +9,7 @@ SUBDIRS = \
     downloader \
     player
 
-#win32:  SUBDIRS += apps
+win32:  SUBDIRS += apps
 #mac:    SUBDIRS += live
 #unix:   SUBDIRS += x
 

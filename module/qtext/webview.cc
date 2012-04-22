@@ -17,12 +17,16 @@
 //#define DEBUG "qtext::webview"
 #include "module/debug/debug.h"
 
-//#define WINDOW_FLAGS \
-//  Qt::Dialog | \
-//  Qt::CustomizeWindowHint | \
-//  Qt::WindowTitleHint | \
-//  Qt::WindowSystemMenuHint | \
-//  Qt::WindowMinMaxButtonsHint | \
+#ifdef __GNUC__
+#  pragma GCC diagnostic ignored "-Wparentheses" // suggest parentheses around assignment
+#endif // __GNUC__
+
+//#define WINDOW_FLAGS
+//  Qt::Dialog |
+//  Qt::CustomizeWindowHint |
+//  Qt::WindowTitleHint |
+//  Qt::WindowSystemMenuHint |
+//  Qt::WindowMinMaxButtonsHint |
 //  Qt::WindowCloseButtonHint
 
 #define TEXT_SIZE_SCALE 0.85

@@ -376,13 +376,13 @@ PlayerUi::server() const
 
 void
 PlayerUi::setVolume(int vol)
-{ hub_->setVolume((qreal)vol / G_VOLUME_MAX); }
+{ hub_->setVolume(qreal(vol) / G_VOLUME_MAX); }
 
 void
 PlayerUi::setPosition(int pos)
 {
   if (player_->hasMedia())
-    player_->setPosition((qreal)pos / G_POSITION_MAX);
+    player_->setPosition(qreal(pos) / G_POSITION_MAX);
 }
 
 void

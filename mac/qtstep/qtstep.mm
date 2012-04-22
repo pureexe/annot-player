@@ -5,7 +5,7 @@
 #include <QtGlobal>
 #import <AppKit/AppKit.h>
 #ifdef USE_MAC_CARBON
-#  import <CarbonEvents.h>
+#  import <Carbon/CarbonEvents.h>
 #endif // USE_MAC_CARBON
 //#import <objc/runtime.h>
 

@@ -1148,7 +1148,7 @@ qreal
 Player::volume() const
 {
   Q_ASSERT(isValid());
-  return ::libvlc_audio_get_volume(impl_->player()) / (qreal)VLC_MAX_VOLUME;
+  return ::libvlc_audio_get_volume(impl_->player()) / qreal(VLC_MAX_VOLUME);
 }
 
 qreal

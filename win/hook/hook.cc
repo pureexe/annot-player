@@ -3,16 +3,16 @@
 
 #include "hook.h"
 #include "qtwin/qtwin.h"
-#include <qt_windows.h>
 #include <QtGui>
 #include <tuple>
+#include <qt_windows.h>
 
 #define DEBUG "hook"
 //#define USE_MODE_DEBUG
 #include "module/debug/debug.h"
 
 #ifndef HOOK_DLL_NAME
-  #error "Please specify target DLL name."
+#  error "Please specify target DLL name."
 #endif
 #define HOOK_MODULE_NAME        HOOK_DLL_NAME
 

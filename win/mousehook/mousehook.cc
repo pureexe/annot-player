@@ -3,8 +3,8 @@
 
 #include "mousehook.h"
 #include "qtwin/qtwin.h"
-#include <qt_windows.h>
 #include <QtGui>
+#include <qt_windows.h>
 
 #define DEBUG "mousehook"
 #include "module/debug/debug.h"

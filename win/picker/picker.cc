@@ -2,13 +2,13 @@
 // 10/30/2011
 
 #ifdef _MSC_VER
-  #pragma warning (disable:4819)       // C4819: The file contains a character that cannot be represented in the current code page.
+#  pragma warning (disable:4819)       // C4819: The file contains a character that cannot be represented in the current code page.
 #endif // _MSC_VER
 
 #include "picker.h"
 #include "qtwin/qtwin.h"
-#include <qt_windows.h>
 #include <QtCore>
+#include <qt_windows.h>
 
 #define DEBUG "picker"
 #include "module/debug/debug.h"
