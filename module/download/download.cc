@@ -1,8 +1,8 @@
 // download.cc
 // 2/4/2012
 
-#include "download.h"
-#include "downloader.h"
+#include "module/download/download.h"
+#include "module/download/downloader.h"
 #include <QtNetwork/QNetworkRequest>
 
 #define DEBUG "download"

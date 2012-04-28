@@ -2,8 +2,8 @@
 // 2/18/2012
 
 #include "taskdialog.h"
-#include "ac/acui.h"
-#include "ac/actextview.h"
+#include "project/common/acui.h"
+#include "project/common/actextview.h"
 #include "module/mrlanalysis/mrlanalysis.h"
 #include "module/qtext/algorithm.h"
 #include "module/qtext/string.h"
@@ -36,13 +36,10 @@ TaskDialog::TaskDialog(QWidget *parent)
   createLayout();
 
   // Shortcuts
-  QShortcut *cancelShortcut = new QShortcut(QKeySequence("Esc"), this);
-  connect(cancelShortcut, SIGNAL(activated()), SLOT(hide()));
-  QShortcut *closeShortcut = new QShortcut(QKeySequence("CTRL+W"), this);
-  connect(closeShortcut, SIGNAL(activated()), SLOT(hide()));
+  connect(new QShortcut(QKeySequence("Esc"), this), SIGNAL(activated()), SLOT(hide()));
+  connect(new QShortcut(QKeySequence("CTRL+W"), this), SIGNAL(activated()), SLOT(hide()));
 
-  QShortcut *saveShortcut = new QShortcut(QKeySequence::Save, this);
-  connect(saveShortcut, SIGNAL(activated()), SLOT(add()));
+  connect(new QShortcut(QKeySequence::Save, this), SIGNAL(activated()), SLOT(add()));
 
   // Focus
   textView_->setFocus();

@@ -4,11 +4,11 @@
 // module/serveragent/serverproxy.h
 // 9/10/2011
 
-#include "serversoap.h"
-#include "module/annotcloud/user.h"
-#include "module/annotcloud/token.h"
+#include "module/serveragent/serversoap.h"
 #include "module/annotcloud/alias.h"
 #include "module/annotcloud/annotation.h"
+#include "module/annotcloud/token.h"
+#include "module/annotcloud/user.h"
 #include <QtCore/QMutex>
 #include <boost/scoped_ptr.hpp>
 

@@ -4,7 +4,7 @@
 #include "siteaccountview.h"
 #include "tr.h"
 #include "logger.h"
-#include "ac/acui.h"
+#include "project/common/acui.h"
 #include "module/annotcloud/user.h"
 #include <QtGui>
 
@@ -48,9 +48,9 @@ SiteAccountView::createLayout()
 #define ADDSITE(_pref, _Pref, _name, _tip) \
   QToolButton *_pref##SiteButton = ui->makeToolButton( \
     AcUi::UrlHint | AcUi::BuddyHint, _name, _tip, this, SLOT(visit##_Pref())); \
-  _pref##UsernameEdit_ = ui->makeComboBox(AcUi::EditHint, "", TR(T_USERNAME)); \
+  _pref##UsernameEdit_ = ui->makeComboBox(AcUi::EditHint, "", TR(T_USERNAME), "user@email.com"); \
     _pref##UsernameEdit_->setMinimumWidth(EDIT_MIN_WIDTH); \
-  _pref##PasswordEdit_ = ui->makeLineEdit(AcUi::PasswordHint, "", TR(T_PASSWORD)); \
+  _pref##PasswordEdit_ = ui->makeLineEdit(AcUi::PasswordHint, "", TR(T_PASSWORD), "password"); \
     _pref##PasswordEdit_->setMinimumWidth(EDIT_MIN_WIDTH); \
   QToolButton *_pref##ClearButton = ui->makeToolButton(AcUi::PushHint, TR(T_CLEAR)); \
   connect(_pref##ClearButton, SIGNAL(clicked()), _pref##UsernameEdit_, SLOT(clearEditText())); \
@@ -89,10 +89,8 @@ SiteAccountView::createLayout()
   } setLayout(grid);
 
   // Shortcuts
-  QShortcut *cancelShortcut = new QShortcut(QKeySequence("Esc"), this);
-  connect(cancelShortcut, SIGNAL(activated()), SLOT(hide()));
-  QShortcut *closeShortcut = new QShortcut(QKeySequence("CTRL+W"), this);
-  connect(closeShortcut, SIGNAL(activated()), SLOT(hide()));
+  connect(new QShortcut(QKeySequence("Esc"), this), SIGNAL(activated()), SLOT(hide()));
+  connect(new QShortcut(QKeySequence("CTRL+W"), this), SIGNAL(activated()), SLOT(hide()));
 
   // Focus
   setTabOrder(nicovideoUsernameEdit_, nicovideoPasswordEdit_);

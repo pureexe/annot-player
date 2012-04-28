@@ -4,7 +4,7 @@
 #include "logindialog.h"
 #include "tr.h"
 #include "logger.h"
-#include "ac/acui.h"
+#include "project/common/acui.h"
 #include "module/annotcloud/user.h"
 #include <QtGui>
 
@@ -45,10 +45,8 @@ LoginDialog::LoginDialog(QWidget *parent)
   createLayout();
 
   // Shortcuts
-  QShortcut *cancelShortcut = new QShortcut(QKeySequence("Esc"), this);
-  connect(cancelShortcut, SIGNAL(activated()), SLOT(hide()));
-  QShortcut *closeShortcut = new QShortcut(QKeySequence("CTRL+W"), this);
-  connect(closeShortcut, SIGNAL(activated()), SLOT(hide()));
+  connect(new QShortcut(QKeySequence("Esc"), this), SIGNAL(activated()), SLOT(hide()));
+  connect(new QShortcut(QKeySequence("CTRL+W"), this), SIGNAL(activated()), SLOT(hide()));
 
   // Focus
   userNameEdit_->setFocus();
@@ -62,9 +60,9 @@ LoginDialog::createLayout()
 
   QStringList defaultUsers(User::guest().name());
   userNameEdit_ = ui->makeComboBox(
-        AcUi::EditHint, TR(T_DEFAULT_USERNAME), TR(T_TOOLTIP_USERNAME), defaultUsers);
+        AcUi::EditHint, TR(T_DEFAULT_USERNAME), TR(T_TOOLTIP_USERNAME), "username", defaultUsers);
   passwordEdit_ = ui->makeLineEdit(
-        AcUi::EditHint | AcUi::PasswordHint, TR(T_DEFAULT_PASSWORD), TR(T_TOOLTIP_PASSWORD));
+        AcUi::EditHint | AcUi::PasswordHint, TR(T_DEFAULT_PASSWORD), "password", TR(T_TOOLTIP_PASSWORD));
 
   setTabOrder(userNameEdit_, passwordEdit_);
 

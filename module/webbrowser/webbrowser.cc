@@ -1,21 +1,30 @@
-// webbrowser.cc // 7/20/2011
+// webbrowser.cc
+// 7/20/2011
 
 #include "webbrowser.h"
-#include "ui_webbrowser.h" // generated
 #include "webbrowser_p.h"
-#include "wbaddressedit.h"
-#include "wbsearchedit.h"
-#include "wbnetworkaccessmanager.h"
-#include "wbnetworkcookiejar.h"
-#include "wbwebview.h"
-#include "wbss.h"
+#include "ui_webbrowser.h" // generated
+#include "webkit/wbwebview.h"
+#include "network/wbnetworkaccessmanager.h"
+#include "network/wbnetworkcookiejar.h"
+#include "core/wbsearchenginefactory.h"
+#include "global/wbrc.h"
+#include "global/wbss.h"
+#include "module/mousegesture/mousegesture.h"
+#include "module/mousegesture/mousegesturefilter.h"
 #include "module/qtext/filesystem.h"
+#include "module/qtext/algorithm.h"
 #include <QtWebKit/QWebHistory>
 #include <QtNetwork/QNetworkDiskCache>
 #include <QtGui>
+#include <boost/typeof/typeof.hpp>
 
 #define DEBUG "webbrowser"
 #include "module/debug/debug.h"
+
+#ifdef __GNUC__
+#  pragma GCC diagnostic ignored "-Wparentheses" // suggest parentheses
+#endif // __GNUC__
 
 #define TEXT_SIZE_SCALE 0.85
 
@@ -51,10 +60,7 @@ namespace { // anonymous
   inline QByteArray rc_html_start_()
   {
     QFile f(RC_HTML_START);
-    if (f.open(QIODevice::ReadOnly))
-      return f.readAll();
-    else
-      return QByteArray();
+    return f.open(QIODevice::ReadOnly) ? f.readAll() : QByteArray();
   }
 } // anonymous namespace
 
@@ -69,24 +75,46 @@ WebBrowser::tidyUrl(const QString &url)
   return ret;
 }
 
+int
+WebBrowser::searchEngineForAddress(const QString &address) const
+{
+  QRegExp rx("^(\\S+)\\s");
+  if (rx.indexIn(address) >= 0) {
+    Q_ASSERT(rx.captureCount() == 1);
+    QString a = rx.cap(1);
+    foreach (const WbSearchEngine *e, searchEngines_)
+      if (e->acronyms().contains(a, Qt::CaseInsensitive))
+        return e->id();
+  }
+  return -1;
+}
+
 QString
 WebBrowser::completeUrl(const QString &url) const
 {
   int i, j;
   QString ret = url.trimmed();
   if (!ret.contains(QRegExp("^\\w+://"))) {
-    if (ret.contains(QRegExp("^\\w")) &&
+    int se = searchEngineForAddress(url);
+    if (se >= 0 && se < searchEngines_.size()) {
+      ret = url;
+      ret.remove(QRegExp("^\\S*\\s"));
+      ret = ret.trimmed();
+      const_cast<Self *>(this)->addRecentSearch(ret);
+      ret = searchAddress(ret, se);
+    } else if (ret.contains(QRegExp("^\\w")) &&
         (i=ret.indexOf('/')) >= 0 &&
         ((j=ret.indexOf(' ')) < 0 || j > i))
       ret.prepend("http://");
-    else if (ret.contains(QRegExp(
+    else if (!ret.contains(".") && ret.compare("localhost", Qt::CaseInsensitive) ||
+             ret.contains(QRegExp(
       "[^"
         "a-zA-Z0-9"
         "\"" "\'" "\\\\" "\\." "\\^" "\\[" "\\]" "\\-"
         "~`!@#$%&*(){}_=+|:;<>/?"
       "]"
       )))
-      ret = searchAddress(url);
+      ret = searchAddress(url, WbSearchEngineFactory::Google);
     else
       ret.prepend("http://");
   }
@@ -132,12 +160,13 @@ WebBrowser::encodeUrl(const QString &url)
 
 WebBrowser::WebBrowser(QWidget *parent)
   : Base(parent), ui_(new Form), nam_(0),
-    homePage_(WEBBROWSER_HOMEPAGE), searchEngine_(WEBBROWSER_SEARCHENGINE),
     textSizeMultiplier_(TEXT_SIZE_SCALE)
 {
   cookieJar_ = new WbNetworkCookieJar(this);
   hideStatusBarTimer_ = new QTimer(this);
 
+  createGestures();
+  createSearchEngines();
   setupUi();
   createActions();
   updateButtons();
@@ -159,30 +188,35 @@ WebBrowser::setupUi()
 {
   ui_->setupUi(this);
 
-  ui_->tabWidget->setUsesScrollButtons(true);
+  toolBarWidgets_.append(ui_->forwardButton);
+  toolBarWidgets_.append(ui_->backButton);
+  toolBarWidgets_.append(ui_->reloadButton);
+  toolBarWidgets_.append(ui_->addressEdit);
+  toolBarWidgets_.append(ui_->searchEdit);
 
   // Add newTab corner button
   // TODO: move newTabButton into UI form
-  QToolButton *newTabButton = new QToolButton(this);
-  newTabButton->setStyleSheet(
-    "QToolButton{border-image:url(:/images/newtab.png);border:2px;}"
-    "QToolButton:hover{border-image:url(:/images/newtab_hover.png);}"
-    "QToolButton:pressed{border-image url(:/images/newtab_pressed.png);}"
-  );
-  ui_->tabWidget->setCornerWidget(newTabButton, Qt::TopRightCorner);
+  QToolButton *newTabButton = new WbToolButton(this);
+  newTabButton->setToolTip(tr("New Tab"));
+  newTabButton->setStatusTip(tr("New Tab"));
+  newTabButton->setStyleSheet(SS_TOOLBUTTON_NEWTAB);
+  ui_->tabWidget->setCornerWidget(newTabButton);
   newTabButton->setFixedSize(QSize(26, 16));
-  connect(newTabButton, SIGNAL(clicked()), SLOT(newTabWithDefaultPage()));
+  connect(newTabButton, SIGNAL(clicked()), SLOT(newTabAfterCurrentWithBlankPage()));
 
   ui_->addressEdit->setDefaultItems(homePages_);
+
+  ui_->searchEdit->setEngines(QtExt::subList(searchEngines_, WbSearchEngineFactory::VisibleEngineCount));
 
   // Set up connections
   connect(ui_->tabWidget, SIGNAL(tabCloseRequested(int)), SLOT(closeTab(int)));
   connect(ui_->tabWidget, SIGNAL(currentChanged(int)), SLOT(updateAddressbar()));
+  connect(ui_->tabWidget, SIGNAL(doubleClicked()), SLOT(newTabAtLastWithBlankPage()));
+  connect(ui_->tabWidget, SIGNAL(tabDoubleClicked(int)), SIGNAL(fullScreenRequested()));
   connect(ui_->searchEdit, SIGNAL(textEntered(QString)), SLOT(search(QString)));
-  connect(ui_->searchEdit->lineEdit(), SIGNAL(returnPressed()), SLOT(search()));
-  connect(ui_->addressEdit, SIGNAL(activated(int)), SLOT(openUrl()));
+  connect(ui_->searchEdit, SIGNAL(engineChanged(int)), SLOT(setSearchEngine(int)));
+  connect(ui_->searchEdit, SIGNAL(editTextChanged(QString)), SLOT(invalidateSearch()));
   connect(ui_->addressEdit, SIGNAL(textEntered(QString)), SLOT(openUrl(QString)));
-  connect(ui_->addressEdit->lineEdit(), SIGNAL(returnPressed()), SLOT(openUrl()));
   connect(ui_->addressEdit, SIGNAL(openUrlWithAcPlayerRequested(QString)), SIGNAL(openUrlWithAcPlayerRequested(QString)));
   connect(ui_->addressEdit, SIGNAL(importUrlToAcPlayerRequested(QString)), SIGNAL(importUrlToAcPlayerRequested(QString)));
   connect(ui_->addressEdit, SIGNAL(openUrlWithAcDownloaderRequested(QString)), SIGNAL(openUrlWithAcDownloaderRequested(QString)));
@@ -190,70 +224,70 @@ WebBrowser::setupUi()
   connect(ui_->forwardButton, SIGNAL(clicked()), SLOT(forward()));
   connect(ui_->reloadButton, SIGNAL(clicked()), SLOT(reload()));
 
-  ui_->searchEdit->setEditText("Google");
-  ui_->searchEdit->setToolTip("Google");
-  ui_->searchEdit->setMinimumWidth(150);
-
-  // Remove default homepage
-  ui_->tabWidget->removeTab(0);
-  //newTab();
-
   setTabOrder(ui_->addressEdit, ui_->searchEdit);
+}
+
+void
+WebBrowser::createSearchEngines()
+{
+  searchEngine_ = WbSearchEngineFactory::Google;
+  for (int engine = 0; engine < WbSearchEngineFactory::EngineCount; engine++)
+    searchEngines_.append(WbSearchEngineFactory::globalInstance()->create(engine));
 }
 
 void
 WebBrowser::createActions()
 {
-  QShortcut *cl = new QShortcut(QKeySequence(SHORTCUT_LOCATION), this);
-  connect(cl , SIGNAL(activated()), SLOT(focusLocationBar()));
+  connect(new QShortcut(QKeySequence(SHORTCUT_LOCATION), this), SIGNAL(activated()), SLOT(focusLocationBar()));
 
-  QShortcut *ce = new QShortcut(QKeySequence(SHORTCUT_SEARCH), this);
-  connect(ce , SIGNAL(activated()), SLOT(focusSearchBar()));
+  connect(new QShortcut(QKeySequence(QKeySequence::Find), this), SIGNAL(activated()), SLOT(focusSearchBar()));
+  connect(new QShortcut(QKeySequence(SHORTCUT_SEARCH), this), SIGNAL(activated()), SLOT(focusSearchBar()));
 
-  QShortcut *f11 = new QShortcut(QKeySequence("F11"), this);
-  connect(f11 , SIGNAL(activated()), SLOT(toggleFullScreen()));
+  connect(new QShortcut(QKeySequence("F11"), this), SIGNAL(activated()), SLOT(toggleFullScreen()));
 
-  QShortcut *t = new QShortcut(QKeySequence::AddTab, this);
-  connect(t , SIGNAL(activated()), SLOT(newTabWithDefaultPage()));
+  connect(new QShortcut(QKeySequence::AddTab, this), SIGNAL(activated()), SLOT(newTabAfterCurrentWithBlankPage()));
 
-  QShortcut *w = new QShortcut(QKeySequence("CTRL+W"), this);
-  connect(w , SIGNAL(activated()), SLOT(closeTab()));
+  connect(new QShortcut(QKeySequence("CTRL+W"), this) , SIGNAL(activated()), SLOT(closeTab()));
 
-  QShortcut *q = new QShortcut(QKeySequence::Quit, this);
-  connect(q , SIGNAL(activated()), SLOT(close()));
+  connect(new QShortcut(QKeySequence::Quit, this) , SIGNAL(activated()), SLOT(close()));
 
-  QShortcut *next = new QShortcut(QKeySequence(K_META "+TAB"), this);
-  connect(next , SIGNAL(activated()), SLOT(nextTab()));
-  QShortcut *prev = new QShortcut(QKeySequence(K_META "+SHIFT+TAB"), this);
-  connect(prev , SIGNAL(activated()), SLOT(previousTab()));
-  QShortcut *nextT = new QShortcut(QKeySequence("CTRL+}"), this);
-  connect(nextT , SIGNAL(activated()), SLOT(nextTab()));
-  QShortcut *prevT = new QShortcut(QKeySequence("CTRL+{"), this);
-  connect(prevT , SIGNAL(activated()), SLOT(previousTab()));
+  connect(new QShortcut(QKeySequence(K_META "+TAB"), this) , SIGNAL(activated()), SLOT(nextTab()));
+  connect(new QShortcut(QKeySequence(K_META "+SHIFT+TAB"), this) , SIGNAL(activated()), SLOT(previousTab()));
+  connect(new QShortcut(QKeySequence("CTRL+}"), this) , SIGNAL(activated()), SLOT(nextTab()));
+  connect(new QShortcut(QKeySequence("CTRL+{"), this) , SIGNAL(activated()), SLOT(previousTab()));
 
-  QShortcut *ut = new QShortcut(QKeySequence("CTRL+SHIFT+T"), this);
-  connect(ut , SIGNAL(activated()), SLOT(undoCloseTab()));
+  connect(new QShortcut(QKeySequence("CTRL+SHIFT+T"), this) , SIGNAL(activated()), SLOT(undoCloseTab()));
 
-  QShortcut *t1 = new QShortcut(QKeySequence("CTRL+1"), this);
-  connect(t1 , SIGNAL(activated()), SLOT(focusTab0()));
-  QShortcut *t2 = new QShortcut(QKeySequence("CTRL+2"), this);
-  connect(t2 , SIGNAL(activated()), SLOT(focusTab1()));
-  QShortcut *t3 = new QShortcut(QKeySequence("CTRL+3"), this);
-  connect(t3 , SIGNAL(activated()), SLOT(focusTab2()));
-  QShortcut *t4 = new QShortcut(QKeySequence("CTRL+4"), this);
-  connect(t4 , SIGNAL(activated()), SLOT(focusTab3()));
-  QShortcut *t5 = new QShortcut(QKeySequence("CTRL+5"), this);
-  connect(t5 , SIGNAL(activated()), SLOT(focusTab4()));
-  QShortcut *t6 = new QShortcut(QKeySequence("CTRL+6"), this);
-  connect(t6 , SIGNAL(activated()), SLOT(focusTab5()));
-  QShortcut *t7 = new QShortcut(QKeySequence("CTRL+7"), this);
-  connect(t7 , SIGNAL(activated()), SLOT(focusTab6()));
-  QShortcut *t8 = new QShortcut(QKeySequence("CTRL+8"), this);
-  connect(t8 , SIGNAL(activated()), SLOT(focusTab7()));
-  QShortcut *t9 = new QShortcut(QKeySequence("CTRL+9"), this);
-  connect(t9 , SIGNAL(activated()), SLOT(focusTab8()));
-  QShortcut *t0 = new QShortcut(QKeySequence("CTRL+0"), this);
-  connect(t0 , SIGNAL(activated()), SLOT(focusLastTab()));
+  connect(new QShortcut(QKeySequence("CTRL+1"), this) , SIGNAL(activated()), SLOT(focusTab0()));
+  connect(new QShortcut(QKeySequence("CTRL+2"), this), SIGNAL(activated()), SLOT(focusTab1()));
+  connect(new QShortcut(QKeySequence("CTRL+3"), this) , SIGNAL(activated()), SLOT(focusTab2()));
+  connect(new QShortcut(QKeySequence("CTRL+4"), this) , SIGNAL(activated()), SLOT(focusTab3()));
+  connect(new QShortcut(QKeySequence("CTRL+5"), this) , SIGNAL(activated()), SLOT(focusTab4()));
+  connect(new QShortcut(QKeySequence("CTRL+6"), this) , SIGNAL(activated()), SLOT(focusTab5()));
+  connect(new QShortcut(QKeySequence("CTRL+7"), this) , SIGNAL(activated()), SLOT(focusTab6()));
+  connect(new QShortcut(QKeySequence("CTRL+8"), this) , SIGNAL(activated()), SLOT(focusTab7()));
+  connect(new QShortcut(QKeySequence("CTRL+9"), this) , SIGNAL(activated()), SLOT(focusTab8()));
+  connect(new QShortcut(QKeySequence("CTRL+0"), this) , SIGNAL(activated()), SLOT(focusLastTab()));
+}
+
+void
+WebBrowser::createGestures()
+{
+  Qt::MouseButtons buttons = Qt::MiddleButton;
+#ifndef Q_WS_MAC
+  buttons |= Qt::RightButton;
+#endif // Q_WS_MAC
+  mouseGestureFilter_ = new MouseGestureFilter(buttons, Qt::NoModifier, this);
+}
+
+void
+WebBrowser::addMouseGesture(MouseGesture *g)
+{
+  Q_ASSERT(g);
+  if (!g->parent())
+    g->setParent(mouseGestureFilter_);
+  mouseGestureFilter_->add(g);
+  connect(g, SIGNAL(message(QString)), SLOT(showMessage(QString)));
 }
 
 QNetworkAccessManager*
@@ -295,10 +329,18 @@ int
 WebBrowser::tabIndex() const
 { return ui_->tabWidget->currentIndex(); }
 
+QWidget*
+WebBrowser::tabWidget(int i) const
+{ return i >= 0 && i < tabCount() ? ui_->tabWidget->widget(i) : 0; }
+
+QWidget*
+WebBrowser::tabWidget() const
+{ return ui_->tabWidget->currentWidget(); }
+
 QUrl
 WebBrowser::tabUrl(int index) const
 {
-  QWidget *w = ui_->tabWidget->widget(index);
+  QWidget *w = tabWidget(index);
   if (w) {
     QWebView *view = qobject_cast<QWebView *>(w);
     if (w)
@@ -365,41 +407,60 @@ WebBrowser::focusTab(int index)
 }
 
 void
-WebBrowser::openUrl(const QString &url)
+WebBrowser::openUrl(const QString &url, QWebView *view)
 {
+  DOUT("enter: url =" << url);
   if (tabCount() <= 0)
     newTab();
 
-  QWebView *view = qobject_cast<QWebView  *>(ui_->tabWidget->currentWidget());
   if (!view)
+    view = qobject_cast<QWebView  *>(tabWidget());
+  if (!view) {
+    Q_ASSERT(0);
+    DOUT("exit: failed to create new tab");
     return;
+  }
 
   QUrl viewUrl = view->url();
   QString viewAddress = viewUrl.toString();
 
-  if (viewAddress == url)
+  if (viewAddress == url) {
+    DOUT("exit: already opened");
     return;
+  }
 
   QString originalUrl = completeUrl(url);
-  if (viewAddress == originalUrl)
+  if (viewAddress == originalUrl) {
+    DOUT("exit: already opened");
     return;
+  }
 
   QUrl realUrl = encodeUrl(originalUrl);
-  if (viewUrl == realUrl)
+  if (viewUrl == realUrl) {
+    DOUT("exit: already opened");
     return;
+  }
 
-  QString address = tidyUrl(url);
   addRecentUrl(url);
-  ui_->addressEdit->setEditText(address);
-  ui_->tabWidget->setTabText(tabIndex(), url);
-  view->setUrl(realUrl);
+
+  BOOST_AUTO(iconDaemon, new daemon_::SetAddressIcon(ui_->addressEdit, url, ui_->tabWidget, view));
+  connect(view, SIGNAL(loadStarted()), iconDaemon, SLOT(trigger()));
+  connect(view, SIGNAL(loadFinished(bool)), iconDaemon, SLOT(trigger(bool)));
+  if (view == tabWidget()) {
+    QString address = tidyUrl(url);
+    ui_->addressEdit->setEditText(address);
+    ui_->tabWidget->setTabText(tabIndex(), ::shortenText(url));
+  }
+  view->load(realUrl);
+  DOUT("exit: ok");
 }
 
 void
 WebBrowser::addRecentUrls(const QStringList &urls)
 {
-  foreach (const QString &url, urls)
-    addRecentUrl(url);
+  if (!urls.isEmpty())
+    foreach (const QString &url, QtExt::revertList(urls))
+      addRecentUrl(url);
 }
 
 void
@@ -435,33 +496,49 @@ WebBrowser::recentUrls() const
   return ret;
 }
 
+QStringList
+WebBrowser::recentSearches() const
+{ return ui_->searchEdit->recent(); }
+
 void
-WebBrowser::openUrl()
+WebBrowser::addRecentSearch(const QString &text)
+{ return ui_->searchEdit->addRecent(text); }
+
+void
+WebBrowser::addRecentSearches(const QStringList &l)
 {
-  QString url = ui_->addressEdit->currentText();
-  //url = completeUrl(url);
-  openUrl(url);
+  foreach (const QString &t, QtExt::revertList(l))
+    addRecentSearch(t);
 }
 
 void
-WebBrowser::search(const QString &text)
+WebBrowser::setSearchedText(const QString &t)
+{ ui_->searchEdit->setText(t); }
+
+void
+WebBrowser::search(const QString &text, int engine)
 {
-  ui_->searchEdit->insertItem(0, text);
-  //ui_->searchEdit->setEditText(text);
-  openUrl(searchAddress(text));
+  addRecentSearch(text);
+  openUrl(searchAddress(text, engine));
 }
 
 void
-WebBrowser::search()
-{ search(ui_->searchEdit->currentText()); }
+WebBrowser::searchInNewTab(const QString &text, int engine)
+{
+  addRecentSearch(text);
+  newTabAfterCurrent();
+  openUrl(searchAddress(text, engine));
+}
 
 QString
-WebBrowser::searchAddress(const QString &text) const
+WebBrowser::searchAddress(const QString &text, int engine) const
 {
+  if (engine < 0)
+    engine = searchEngine_;
   QString ret = text.trimmed();
   ret = ret.toUtf8();
   //ret = QUrl::toPercentEncoding(ret);
-  ret = searchEngine_.arg(ret);
+  ret = searchEngines_[engine]->search(ret);
   return ret;
 }
 
@@ -472,7 +549,7 @@ WebBrowser::closeTab(int tab)
   case 0: return;
   case 1: hide(); break;
   }
-  QWidget *widget = ui_->tabWidget->widget(tab);
+  QWidget *widget = tabWidget(tab);
   if (widget) {
     QWebView *w = qobject_cast<QWebView *>(widget);
     if (w) {
@@ -485,6 +562,17 @@ WebBrowser::closeTab(int tab)
   }
   if (tabCount() <= 0)
     close();
+}
+
+void
+WebBrowser::openLinkInNewTab()
+{
+  WbWebView *v = dynamic_cast<WbWebView *>(tabWidget());
+  if (v) {
+    QString url = v->hoveredLink();
+    if (!url.isEmpty())
+      newTabInBackground(url);
+  }
 }
 
 void
@@ -512,7 +600,7 @@ WebBrowser::undoCloseTab()
 void
 WebBrowser::updateButtons()
 {
-  QWebView *view = qobject_cast<QWebView *>(ui_->tabWidget->currentWidget());
+  QWebView *view = qobject_cast<QWebView *>(tabWidget());
   if (view) {
     ui_->backButton->setEnabled(view->history()->canGoBack());
     ui_->forwardButton->setEnabled(view->history()->canGoForward());
@@ -522,7 +610,7 @@ WebBrowser::updateButtons()
 void
 WebBrowser::back()
 {
-  QWebView *view = qobject_cast<QWebView *>(ui_->tabWidget->currentWidget());
+  QWebView *view = qobject_cast<QWebView *>(tabWidget());
   if (view)
     view->back();
 }
@@ -530,7 +618,7 @@ WebBrowser::back()
 void
 WebBrowser::forward()
 {
-  QWebView *view = qobject_cast<QWebView *>(ui_->tabWidget->currentWidget());
+  QWebView *view = qobject_cast<QWebView *>(tabWidget());
   if (view)
     view->forward();
 }
@@ -562,14 +650,32 @@ WebBrowser::nextTab()
 }
 
 void
-WebBrowser::newTabWithDefaultPage()
+WebBrowser::newTabAfterCurrentWithBlankPage()
 {
-  //newTab(homePage());
   newTabAfterCurrent();
-  QWebView *v = qobject_cast<QWebView *>(ui_->tabWidget->currentWidget());
+  openBlankPage();
+}
+
+void
+WebBrowser::newTabAtLastWithBlankPage()
+{
+  newTab();
+  openBlankPage();
+}
+
+void
+WebBrowser::openBlankPage()
+{
+  if (tabCount() <= 0)
+    newTab();
+  QWebView *v = qobject_cast<QWebView *>(tabWidget());
   if (v) {
     v->setContent(::rc_html_start_(), "text/html");
-    ui_->tabWidget->setTabText(tabIndex(), tr("Bookmarks"));
+    ui_->tabWidget->setTabText(tabIndex(), tr("Start Page"));
+    int i = ui_->addressEdit->findText(WB_BLANK_PAGE);
+    if (i >= 0)
+      ui_->addressEdit->setCurrentIndex(i);
+    ui_->addressEdit->setIcon(WBRC_IMAGE_APP);
   }
 }
 
@@ -581,11 +687,18 @@ WebBrowser::newTab(const QString &url)
 }
 
 void
-WebBrowser::newTabAfterCurrent()
-{ newTab(0, tabIndex() + 1); }
+WebBrowser::newTabInBackground(const QString &url)
+{
+  newTabAfterCurrent(false); // focus = false
+  openUrl(url, qobject_cast<WbWebView *>(tabWidget(tabIndex() +1)));
+}
 
 void
-WebBrowser::newTab(QWebView *view, int index)
+WebBrowser::newTabAfterCurrent(bool focus)
+{ newTab(0, tabIndex() + 1, focus); }
+
+void
+WebBrowser::newTab(QWebView *view, int index, bool focus)
 {
   if (!view)
     view = new WbWebView(this);
@@ -596,17 +709,25 @@ WebBrowser::newTab(QWebView *view, int index)
 
   WbWebView *wbview = qobject_cast<WbWebView *>(view);
   if (wbview) {
+    wbview->setSearchEngines(QtExt::subList(searchEngines_, WbSearchEngineFactory::VisibleEngineCount));
+    wbview->setSearchEngine(searchEngine_);
+
     connect(wbview, SIGNAL(message(QString)), SLOT(showMessage(QString)));
     connect(wbview, SIGNAL(errorMessage(QString)), SLOT(error(QString)));
     connect(wbview, SIGNAL(warning(QString)), SLOT(warn(QString)));
     connect(wbview, SIGNAL(notification(QString)), SLOT(notify(QString)));
     connect(wbview, SIGNAL(windowCreated(QWebView*)), SLOT(newTab(QWebView*)));
-    connect(wbview, SIGNAL(openLinkRequested(QString)), SLOT(newTab(QString)));
+    connect(wbview, SIGNAL(openLinkRequested(QString)), SLOT(newTabInBackground(QString)));
 
     connect(wbview, SIGNAL(openUrlWithAcPlayerRequested(QString)), SIGNAL(openUrlWithAcPlayerRequested(QString)));
     connect(wbview, SIGNAL(importUrlToAcPlayerRequested(QString)), SIGNAL(importUrlToAcPlayerRequested(QString)));
     connect(wbview, SIGNAL(openUrlWithAcDownloaderRequested(QString)), SIGNAL(openUrlWithAcDownloaderRequested(QString)));
     connect(wbview, SIGNAL(undoClosedTabRequested()), SLOT(undoCloseTab()));
+    connect(wbview, SIGNAL(newWindowRequested()), SIGNAL(newWindowRequested()));
+    connect(wbview, SIGNAL(fullScreenRequested()), SIGNAL(fullScreenRequested()));
+
+    connect(wbview, SIGNAL(searchWithEngineRequested(QString,int)), SLOT(searchInNewTab(QString,int)));
+    connect(this, SIGNAL(searchEngineChanged(int)), wbview, SLOT(setSearchEngine(int)));
   }
 
   connect(view, SIGNAL(statusBarMessage(QString)), SLOT(showMessage(QString)));
@@ -614,22 +735,32 @@ WebBrowser::newTab(QWebView *view, int index)
   connect(view, SIGNAL(loadStarted()), SLOT(handleLoadStarted()));
   connect(view, SIGNAL(loadFinished(bool)), SLOT(handleLoadFinished()));
 
-  if (index < 0 || index >= tabCount())
-    index = ui_->tabWidget->addTab(view, tr("New Tab"));
-  else
-    ui_->tabWidget->insertTab(index, view, tr("New Tab"));
-  connect(view, SIGNAL(titleChanged(QString)),
-          new slot_::SetTabText(ui_->tabWidget, index, view), SLOT(trigger(QString)));
-  connect(view, SIGNAL(iconChanged()),
-          new slot_::SetTabIcon(ui_->tabWidget, index, view), SLOT(trigger()));
+  view->installEventFilter(mouseGestureFilter_);
 
-  focusTab(index);
+  QString t; //= tr("New Tab");
+  if (index < 0 || index >= tabCount())
+    index = ui_->tabWidget->addTab(view, t);
+  else
+    ui_->tabWidget->insertTab(index, view, t);
+
+  BOOST_AUTO(textDaemon, new daemon_::SetTabText(ui_->tabWidget, view));
+  connect(view, SIGNAL(titleChanged(QString)), textDaemon, SLOT(trigger(QString)));
+
+  BOOST_AUTO(iconDaemon, new daemon_::SetTabIcon(ui_->tabWidget, view));
+  connect(view, SIGNAL(loadStarted()), iconDaemon, SLOT(trigger()));
+  connect(view, SIGNAL(loadFinished(bool)), iconDaemon, SLOT(trigger(bool)));
+
+  BOOST_AUTO(searchDaemon, new daemon_::SearchTab(this, ui_->tabWidget, view));
+  connect(view, SIGNAL(loadFinished(bool)), searchDaemon, SLOT(trigger(bool)));
+
+  if (focus)
+    focusTab(index);
 }
 
 void
 WebBrowser::reload()
 {
-  QWebView *view = qobject_cast<QWebView  *>(ui_->tabWidget->currentWidget());
+  QWebView *view = qobject_cast<QWebView  *>(tabWidget());
   if (view)
     view->reload();
 }
@@ -637,12 +768,21 @@ WebBrowser::reload()
 void
 WebBrowser::updateAddressbar()
 {
-  QWebView *view = qobject_cast<QWebView *>(ui_->tabWidget->currentWidget());
+  QWebView *view = qobject_cast<QWebView *>(tabWidget());
   if (view) {
+    WbComboEdit *edit = ui_->addressEdit;
     QUrl url = view->url();
     QString address = tidyUrl(decodeUrl(url));
-    ui_->addressEdit->setEditText(address);
-    //ui_->tabWidget->setTabText(ui_->tabWidget->currentIndex(), address);
+    int i = edit->findText(address);
+    if (i >= 0) {
+      //edit->setItemIcon(i, view->icon()); // already set by daemon
+      edit->setCurrentIndex(i);
+    } else
+      edit->setEditText(address);
+    if (address == WB_BLANK_PAGE)
+      edit->setIcon(WBRC_IMAGE_APP);
+    else
+      edit->clearIcon();
     updateButtons();
   }
 }
@@ -650,7 +790,7 @@ WebBrowser::updateAddressbar()
 void
 WebBrowser::handleLoadFinished()
 {
-  QWebView *view = qobject_cast<QWebView *>(ui_->tabWidget->currentWidget());
+  QWebView *view = qobject_cast<QWebView *>(tabWidget());
   if (view)
     view->setCursor(QCursor());
 }
@@ -658,7 +798,7 @@ WebBrowser::handleLoadFinished()
 void
 WebBrowser::handleLoadStarted()
 {
-  QWebView *view = qobject_cast<QWebView *>(ui_->tabWidget->currentWidget());
+  QWebView *view = qobject_cast<QWebView *>(tabWidget());
   if (view)
     view->setCursor(QCursor(Qt::BusyCursor));
 }
@@ -691,6 +831,8 @@ WebBrowser::toggleFullScreen()
 void
 WebBrowser::closeEvent(QCloseEvent *event)
 {
+  //removeEventFilter(mouseGestureFilter_);
+
   while (tabCount())
     closeTab(0);
   Base::closeEvent(event);
@@ -703,8 +845,10 @@ WebBrowser::showMessage(const QString &text)
 {
   statusBar()->setStyleSheet(SS_STATUSBAR_MESSAGE);
   statusBar()->showMessage(text);
-  statusBar()->show();
-  hideStatusBarTimer_->start();
+  if (!text.isEmpty()) {
+    statusBar()->show();
+    hideStatusBarTimer_->start();
+  }
 }
 
 void
@@ -712,8 +856,10 @@ WebBrowser::error(const QString &text)
 {
   statusBar()->setStyleSheet(SS_STATUSBAR_ERROR);
   statusBar()->showMessage(text);
-  statusBar()->show();
-  hideStatusBarTimer_->start();
+  if (!text.isEmpty()) {
+    statusBar()->show();
+    hideStatusBarTimer_->start();
+  }
 }
 
 void
@@ -721,8 +867,10 @@ WebBrowser::warn(const QString &text)
 {
   statusBar()->setStyleSheet(SS_STATUSBAR_WARNING);
   statusBar()->showMessage(text);
-  statusBar()->show();
-  hideStatusBarTimer_->start();
+  if (!text.isEmpty()) {
+    statusBar()->show();
+    hideStatusBarTimer_->start();
+  }
 }
 
 void
@@ -730,10 +878,79 @@ WebBrowser::notify(const QString &text)
 {
   statusBar()->setStyleSheet(SS_STATUSBAR_NOTIFY);
   statusBar()->showMessage(text);
-  statusBar()->show();
-  hideStatusBarTimer_->start();
+  if (!text.isEmpty()) {
+    statusBar()->show();
+    hideStatusBarTimer_->start();
+  }
 }
 
+// - Search engine -
+
+void
+WebBrowser::setSearchEngine(int engine)
+{
+  if (searchEngine_ != engine) {
+    searchEngine_ = engine;
+    ui_->searchEdit->setEngine(searchEngine_);
+    emit searchEngineChanged(searchEngine_);
+  }
+}
+
+// - Hide toolbars -
+
+bool
+WebBrowser::isToolBarUnderMouse() const
+{
+  foreach (const QWidget *w, toolBarWidgets_)
+    if (w->underMouse())
+      return true;
+  return false;
+}
+
+bool
+WebBrowser::toolBarHasFocus() const
+{
+  foreach (const QWidget *w, toolBarWidgets_)
+    if (w->hasFocus())
+      return true;
+  return false;
+}
+
+void
+WebBrowser::setToolBarVisible(bool visible)
+{
+  foreach (QWidget *w, toolBarWidgets_)
+    w->setVisible(visible);
+}
+
+bool
+WebBrowser::isTabBarUnderMouse() const
+{ return ui_->tabWidget->tabBar()->underMouse(); }
+
+bool
+WebBrowser::tabBarHasFocus() const
+{ return ui_->tabWidget->tabBar()->hasFocus(); }
+
+
+void
+WebBrowser::setTabBarVisible(bool visible)
+{ ui_->tabWidget->tabBar()->setVisible(visible); }
+
+// - Search -
+
+void
+WebBrowser::invalidateSearch()
+{
+  enum { min = 2, max = 100 };
+  QString t = ui_->searchEdit->currentText().trimmed();
+  if (t.size() >= min && t.size() <= max) {
+    QWebView *v = qobject_cast<QWebView *>(tabWidget());
+    if (v) {
+      v->findText(QString(), QWebPage::HighlightAllOccurrences);
+      v->findText(t, QWebPage::FindWrapsAroundDocument | QWebPage::HighlightAllOccurrences);
+    }
+  }
+}
 
 // EOF
 
@@ -789,7 +1006,7 @@ WebBrowser::openUrl()
   //  QNetworkAccessManager *manager = page->networkAccessManager();
   //  connect(manager, SIGNAL(finished(QNetworkReply*)), SLOT(completeNetworkReply(QNetworkReply*)));
 //
-  //  view->setUrl(address);
+  //  view->load(address);
 //
   //  QString cacheDir = QDesktopServices::storageLocation(QDesktopServices::CacheLocation);
   //  if (!cacheDir.isEmpty()) {
@@ -801,11 +1018,11 @@ WebBrowser::openUrl()
 //
   //    //QNetworkRequest req;
   //    //req.setAttribute(QNetworkRequest::CacheLoadControlAttribute, QNetworkRequest::PreferCache);
-  //    //req.setUrl(address);
+  //    //req.load(address);
   //    //manager->get(req);
   //  }
 //
-  //  view->setUrl(address);
+  //  view->load(address);
   //}
 }
 */

@@ -9,9 +9,9 @@
 QT_BEGIN_NAMESPACE
 class QAction;
 class QComboBox;
+class QLineEdit;
 class QStackedLayout;
 class QToolButton;
-class QLineEdit;
 QT_END_NAMESPACE
 
 class AnnotationFilter;

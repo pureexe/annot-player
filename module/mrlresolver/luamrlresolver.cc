@@ -1,8 +1,8 @@
 // luamrlresolver.cc
 // 2/2/2012
 
-#include "luamrlresolver.h"
-#include "mrlresolversettings.h"
+#include "module/mrlresolver/luamrlresolver.h"
+#include "module/mrlresolver/mrlresolversettings.h"
 #ifdef WITH_MODULE_LUARESOLVER
 #  include "module/luaresolver/luaresolver.h"
 #else
@@ -14,17 +14,17 @@
 #  error "mrlanalysis module is required"
 #endif // WITH_MODULE_MRLANALYSIS
 #include <QtNetwork/QNetworkCookieJar>
-#include <QtCore/QRunnable>
-#include <QtCore/QThreadPool>
 #include <QtCore/QCoreApplication>
+#include <QtCore/QRunnable>
 #include <QtCore/QTextCodec>
+#include <QtCore/QThreadPool>
 
 //#define DEBUG "luaemrlresolver"
 #include "module/debug/debug.h"
 
 // TODO: move to project source project instead of hard code here
 #ifdef Q_OS_WIN
-#  define LUA_PATH QCoreApplication::applicationDirPath() + "/lua/luascript"
+#  define LUA_PATH "lua/luascript" // omit applicationDirPath, which might contains non-ascii chars and cannot handled by liblua
 #elif defined Q_OS_MAC
 #  define LUA_PATH QCoreApplication::applicationDirPath() + "/lua"
 #elif defined Q_OS_LINUX
@@ -319,9 +319,9 @@ LuaMrlResolver::cleanUrl(const QString &url)
      .replace("http://bilibili.tv/" , "http://www.bilibili.tv", Qt::CaseInsensitive);
   if (ret.startsWith("http://www.nicovideo.jp/watch/", Qt::CaseInsensitive))
     ret.remove(QRegExp("\\?.*"));
-  else if (ret.startsWith("http://www.acfun.tv/v/", Qt::CaseInsensitive) ||
-           ret.startsWith("http://www.bilibili.tv/video/", Qt::CaseInsensitive)) {
-    ret.remove(QRegExp("/$"))
+  else if (ret.startsWith("http://www.bilibili.tv/video/", Qt::CaseInsensitive)) {
+    ret.remove(QRegExp("/#$"))
+       .remove(QRegExp("/$"))
        .remove(QRegExp("/index_1.html$", Qt::CaseInsensitive))
        .remove(QRegExp("/index.html$", Qt::CaseInsensitive));
   }

@@ -4,9 +4,8 @@
 // 11/18/2011
 
 #include <QtGui/QApplication>
+#include <QtGui/QWidgetList>
 #include <QtCore/QList>
-
-QT_FORWARD_DECLARE_CLASS(QWidget)
 
 class Application : public QApplication
 {
@@ -14,14 +13,17 @@ class Application : public QApplication
   typedef Application Self;
   typedef QApplication Base;
 
-  QWidget *w_;
+  bool closed_;
+  QWidgetList windows_;
 
   // - Constructions -
 public:
   static Self *globalInstance() { return dynamic_cast<Self*>(qApp); }
 
   Application(int &argc, char **argv, bool gui = true);
-  ~Application();
+  ~Application() { close(); }
+
+  bool isClosed() const { return closed_; }
 
 protected:
   void createDirectories();
@@ -29,11 +31,14 @@ protected:
 public slots:
   void abortAll(); // kill all instances
   void abort();    // kill this instance
+  void close();
 
   // - Properties -
 public:
-  QWidget *mainWindow() const { return w_; }
-  void setMainWindow(QWidget *w) { w_ = w; }
+  QWidget *activeMainWindow() const;
+  void setActiveMainWindow(QWidget *w) { addWindow(w); }
+  void addWindow(QWidget *w);
+  void removeWindow(QWidget *w);
 
   bool isSingleInstance() const;
 

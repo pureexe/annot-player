@@ -1,7 +1,7 @@
 // inputstream.cc
 // 2/14/2011
 
-#include "inputstream.h"
+#include "module/stream/inputstream.h"
 #include <QtCore/QFile>
 
 #define DEBUG "inputstream"

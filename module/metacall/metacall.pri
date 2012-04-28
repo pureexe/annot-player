@@ -4,7 +4,6 @@
 DEFINES += WITH_MODULE_METACALL
 
 DEPENDPATH += $$PWD
-INCLUDEPATH += $$PWD
 
 HEADERS += \
     $$PWD/metacallevent.h \

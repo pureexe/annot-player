@@ -6,7 +6,7 @@
 #include "picker_config.h"
 #include <QtGui/QWidget>
 
-class WindowPickerImpl; ///< \internal
+class WindowPickerPrivate; ///< \internal
 
 ///  This class should be used as a singleton.
 class WindowPicker : public QObject
@@ -14,11 +14,11 @@ class WindowPicker : public QObject
   Q_OBJECT
   typedef WindowPicker Self;
   typedef QObject Base;
-  typedef WindowPickerImpl Impl;
+  typedef WindowPickerPrivate Private;
 
   // - Singleton -
 public:
-  PICKERAPI static Self *globalInstance();
+  PICKERAPI static Self *globalInstance() { static Self g; return &g; }
 
 signals:
   void windowPicked(WId hwnd);
@@ -45,7 +45,7 @@ public:
   void pickWindow(WId hwnd); ///< \internal Emit windowPicked signal
 
 private:
-  Impl *impl_;
+  Private *d_;
 };
 
 // EOF

@@ -29,6 +29,7 @@ signals:
   void urlEntered(const QString &url, bool save);
 
 public slots:
+  void addHistory(const QString &url);
   void open();
   void paste();
   void setExampleUrl(const QString &text);

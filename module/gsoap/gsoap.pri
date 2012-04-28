@@ -1,8 +1,12 @@
 # gsoap.pri
 # 9/10/2011
 
-INCLUDEPATH += $$PWD
-INCLUDEPATH += $$PWD/env
+INCLUDEPATH += \
+    $$PWD \
+    $$PWD/env
+DEPENDPATH += \
+    $$PWD \
+    $$PWD/env
 
 DEFINES += WITH_MODULE_GSOAP
 

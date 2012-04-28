@@ -5,7 +5,7 @@ include(../../config.pri)
 
 DEFINES += WITH_MODULE_ANNOTCODEC
 
-INCLUDEPATH += $$PWD
+DEPENDPATH += $$PWD
 
 HEADERS += \
     $$PWD/acfuncodec.h \

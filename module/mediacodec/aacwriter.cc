@@ -1,8 +1,8 @@
 // aacwriter.cc
 // 2/12/2012
 
-#include "mediawriter.h"
-#include "mediatoc.h"
+#include "module/mediacodec/mediawriter.h"
+#include "module/mediacodec/mediatoc.h"
 #include "module/qtext/bitwise.h"
 
 #define DEBUG "aacwriter"
@@ -22,7 +22,7 @@ AacWriter::writeFrame(const QByteArray &chunk, quint32 timestamp, bool writeHead
     if (chunk.size() < 3) return;
 
     const quint8 *p = (const quint8 *)chunk.data();
-    quint64 bits = (quint64)Bitwise::toUInt16(p, 1) << 48;
+    quint64 bits = quint64(Bitwise::toUInt16(p, 1)) << 48;
 
     _aacProfile = Bitwise::read(bits, 5) - 1;
     _sampleRateIndex = Bitwise::read(bits, 4);

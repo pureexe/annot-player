@@ -10,9 +10,9 @@
 #else
 #  error "gzip is required to uncompress bilibili reply"
 #endif // WITH_MODULE_COMPRESS
+#include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkReply>
 #include <QtNetwork/QNetworkRequest>
-#include <QtNetwork/QNetworkAccessManager>
 #include <QtXml/QDomDocument>
 #include <QtXml/QDomElement>
 #include <QtCore/QStringList>

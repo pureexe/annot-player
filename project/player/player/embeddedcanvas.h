@@ -30,9 +30,15 @@ public:
   bool isEnabled() const { return enabled_; }
   bool isEmpty() const;
 public slots:
+  void invalidatePaint() { if (isVisible()) repaint(); }
+
   void setEnabled(bool t);
+  void updateVisible();
+
   void setOffset(qint64 secs);
-  void invalidateVisible();
+
+  void setUserIds(const QList<qint64> userIds) { userIds_ = userIds; invalidatePaint(); }
+  void clearUserIds() { userIds_.clear(); invalidatePaint(); }
 
   // - Events -
 public slots:
@@ -45,12 +51,16 @@ protected:
 protected:
   void paintHistogram(QPainter &painter, const QRect &view, const AnnotCloud::AnnotationList &l);
 
+  static void drawCross(QPainter &painter, const QPoint &center, int size = 5);
+
 private:
   bool enabled_;
   DataManager *data_;
   SignalHub *hub_;
   Player *player_;
   qint64 offset_;
+
+  QList<qint64> userIds_;
 };
 
 #endif // EMBEDDEDCANVAS_H

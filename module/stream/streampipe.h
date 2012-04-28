@@ -4,8 +4,8 @@
 // streampipe.h
 // 2/22/2012
 
-#include "inputstream.h"
-#include "outputstream.h"
+#include "module/stream/inputstream.h"
+#include "module/stream/outputstream.h"
 #include "module/qtext/stoppable.h"
 
 class StreamPipe : public StoppableTask

@@ -5,7 +5,7 @@ include(../../config.pri)
 
 DEFINES += WITH_MODULE_STREAM
 
-INCLUDEPATH += $$PWD
+DEPENDPATH += $$PWD
 
 HEADERS += \
     $$PWD/bufferedfifostream.h \

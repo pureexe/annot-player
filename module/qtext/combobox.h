@@ -20,8 +20,7 @@ class ComboBox : public QComboBox
           lastCursor_;
 
 public:
-  explicit ComboBox(QWidget *parent = 0)
-    : Base(parent), hovered_(false), hoverCursor_(Qt::PointingHandCursor) { }
+  explicit ComboBox(QWidget *parent = 0);
 
 signals:
   void hovered();
@@ -33,8 +32,8 @@ public:
 public slots:
   void setHoverCursor(const QCursor &cursor) { hoverCursor_ = cursor; }
 
-  void showPopup() { Base::showPopup(); }
-  void hidePopup() { Base::hidePopup(); }
+  virtual void showPopup() { Base::showPopup(); } ///< \override
+  virtual void hidePopup() { clearFocus(); Base::hidePopup(); } ///< \override
 
   void setPopupVisible(bool t) { if (t) showPopup(); else hidePopup(); }
 

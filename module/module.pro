@@ -20,6 +20,7 @@ include(mediacodec/mediacodec.pri)
 include(metacall/metacall.pri)
 include(mrlanalysis/mrlanalysis.pri)
 include(mrlresolver/mrlresolver.pri)
+include(mousegesture/mousegesture.pri)
 include(mp4box/mp4box.pri)
 include(nicoutil/nicoutil.pri)
 include(player/player.pri)
@@ -33,8 +34,5 @@ include(vlccore/vlccore.pri)
 include(webbrowser/webbrowser.pri)
 
 TEMPLATE = subdirs
-
-#SUBDIRS = \
-#    webbrowser
 
 # EOF

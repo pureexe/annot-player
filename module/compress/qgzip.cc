@@ -1,7 +1,7 @@
 // qgzip.cc
 // 2/3/2012
 
-#include "qgzip.h"
+#include "module/compress/qgzip.h"
 #ifdef WITH_GZIP
 #  include <zlib.h>
 #else

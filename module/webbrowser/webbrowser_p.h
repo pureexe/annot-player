@@ -4,45 +4,55 @@
 // webbrowser_p.h
 // 1/27/2012
 
+#include "webbrowser.h"
+#include "gui/wbcomboedit.h"
 #include <QtWebKit/QWebView>
-#include <QtGui/QTabWidget>
-#include <QtGui/QApplication>
-#include <QtGui/QDesktopWidget>
+#include <QtGui>
 
-// - Slots -
+// - Helpers -
 
-namespace slot_ {
+namespace { // Anonyomous
+
+  inline QString shortenText(const QString &text, int len = 40)
+  {
+    Q_ASSERT(len > 3);
+    return len && text.size() < len ? text :
+           text.left(len - 3).append("...");
+  }
+
+} // Anonyomous namespace
+
+// - Daemons -
+
+namespace daemon_ {
 
   class SetTabText : public QObject {
     Q_OBJECT
     typedef QObject Base;
 
-    QTabWidget *w_;
-    int index_;
+    QWidget *w_;
+    QTabWidget *tab_;
 
   public:
-    SetTabText(QTabWidget *w, int index, QObject *parent = 0)
-      : Base(parent), w_(w), index_(index)
-    {  Q_ASSERT(w_); Q_ASSERT(index >= 0); }
+    SetTabText(QTabWidget *t, QWidget *w)
+      : Base(w), w_(w), tab_(t)
+    {  Q_ASSERT(tab_); }
 
   public slots:
     void trigger(const QString &text)
     {
-      if (index_ < w_->count()) {
-        w_->setTabText(index_, text);
-        w_->setTabToolTip(index_, text);
+      int index = tab_->indexOf(w_);
+      if (index >= 0) {
+        tab_->setTabText(index, ::shortenText(text));
+        tab_->setTabToolTip(index, text);
       }
     }
-
   protected:
-    int textMaxCount() const
+    static QString shortenText(const QString &text)
     {
-      enum { MinCount = 3 + 1 };
-      enum { FontWidth = 5 };
-      if (!w_->count())
-        return 0;
-      int ret = QApplication::desktop()->width() / (w_->count() * FontWidth);
-      return qMax((int)MinCount, ret);
+      enum { len = 40 };
+      return len && text.size() < len ? text :
+             text.left(len - 3).append("...");
     }
   };
 
@@ -50,26 +60,79 @@ namespace slot_ {
     Q_OBJECT
     typedef QObject Base;
 
-    QTabWidget *w_;
-    int index_;
+    QWebView *w_;
+    QTabWidget *tab_;
 
   public:
-    SetTabIcon(QTabWidget *w, int index, QObject *parent = 0)
-      : Base(parent), w_(w), index_(index)
-    {  Q_ASSERT(w_); Q_ASSERT(index >= 0); }
+    SetTabIcon(QTabWidget *t, QWebView *w)
+      : Base(w), w_(w), tab_(t)
+    {  Q_ASSERT(w_); Q_ASSERT(tab_); }
 
   public slots:
+    void trigger(bool ok) { if (ok) trigger(); }
     void trigger()
     {
-      if (index_ < w_->count()) {
-        QWebView *t = qobject_cast<QWebView *>(w_->widget(index_));
-        if (t)
-          w_->setTabIcon(index_, t->icon());
-      }
+      int index = tab_->indexOf(w_);
+      if (index >= 0)
+        tab_->setTabIcon(index, w_->icon());
     }
   };
 
-} // namespace slot_
+  class SetAddressIcon : public QObject {
+    Q_OBJECT
+    typedef QObject Base;
+
+    QWebView *w_;
+    QTabWidget *tab_;
+    WbComboEdit *edit_;
+    QString address_;
+
+  public:
+    SetAddressIcon(WbComboEdit *edit, const QString &address, QTabWidget *tab, QWebView *w)
+      : Base(w), w_(w), tab_(tab), edit_(edit), address_(address)
+    {  Q_ASSERT(w_); Q_ASSERT(edit_); Q_ASSERT(tab_); }
+
+  public slots:
+    void trigger(bool ok)
+    {
+      if (ok) {
+        if (w_ == tab_->currentWidget())
+          edit_->clearIcon();
+        trigger();
+        QTimer::singleShot(0, this, SLOT(deleteLater()));
+      }
+    }
+
+    void trigger()
+    {
+      int index = edit_->findText(address_);
+      if (index >= 0)
+        edit_->setItemIcon(index, w_->icon());
+    }
+  };
+
+  class SearchTab : public QObject {
+    Q_OBJECT
+    typedef QObject Base;
+
+    QWebView *w_;
+    QTabWidget *tab_;
+    WebBrowser *main_;
+
+  public:
+    SearchTab(WebBrowser *main, QTabWidget *tab, QWebView *w)
+      : Base(w), w_(w), tab_(tab), main_(main)
+    {  Q_ASSERT(w_); Q_ASSERT(tab_); Q_ASSERT(main_); }
+
+  public slots:
+    void trigger(bool ok)
+    {
+      if (ok && w_ == tab_->currentWidget())
+        main_->invalidateSearch();
+    }
+  };
+
+} // namespace daemon_
 
 #endif // WEBBROWSER_P_H
 

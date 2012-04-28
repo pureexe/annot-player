@@ -1,16 +1,19 @@
 # dwm.pri
 # 7/10/2011
 
-INCLUDEPATH += $$PWD
-
 DEFINES += WITH_WIN_DWM
+DEFINES += WITH_DWM_NOTIFIER
+
+INCLUDEPATH     += $$PWD/..
+DEPENDPATH      += $$PWD
 
 HEADERS += \
-    $$PWD/dwm.h
+    $$PWD/dwm.h \
+    $$PWD/dwmapi.h \
+    $$PWD/dwmnotifier.h
+
 SOURCES += \
     $$PWD/dwm.cc
-
-DEFINES += WITH_DWM_NOTIFIER
 
 CONFIG(dwmapi_static) {
     DEFINES += WITH_DWM_STATIC

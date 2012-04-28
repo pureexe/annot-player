@@ -11,12 +11,12 @@
 
 QT_BEGIN_NAMESPACE
 class QAbstractItemModel;
+class QAction;
 class QLabel;
+class QMenu;
 class QStandardItemModel;
 class QSortFilterProxyModel;
-class QAction;
 class QToolButton;
-class QMenu;
 QT_END_NAMESPACE
 
 class AcFilteredTableView;
@@ -97,7 +97,7 @@ public slots:
 public:
   virtual void setVisible(bool visible); ///< \override
 protected slots:
-  void invalidateTokenLabels();
+  void updateTokenLabels();
 
   void submitAlias(const QString &alias, int type, qint32 language);
 

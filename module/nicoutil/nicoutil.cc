@@ -1,11 +1,11 @@
 // nicoutil.cc
 // 3/14/2012
 
-#include "nicoutil.h"
+#include "module/nicoutil/nicoutil.h"
 #include <QtNetwork/QNetworkAccessManager>
+#include <QtNetwork/QNetworkCookieJar>
 #include <QtNetwork/QNetworkReply>
 #include <QtNetwork/QNetworkRequest>
-#include <QtNetwork/QNetworkCookieJar>
 #include <QtCore/QEventLoop>
 
 #define DEBUG "nicoutil"

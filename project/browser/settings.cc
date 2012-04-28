@@ -23,10 +23,13 @@
 #define SK_VERSION      "Version"
 
 #define SK_SIZE         "Size"
+#define SK_SEARCH       "Search"
 #define SK_RECENT       "Recent"
 #define SK_RECENTTABS   "Tabs"
 #define SK_RECENTTABINDEX "TabIndex"
 #define SK_RECENTCLOSED "Closed"
+#define SK_FULLSCREEN   "FullScreen"
+#define SK_SEARCHENGINE "SearchEngine"
 
 // - Constructions -
 
@@ -57,6 +60,10 @@ void
 Settings::setRecentSize(const QSize &value)
 { setValue(SK_SIZE, value); }
 
+void
+Settings::clearRecentSize()
+{ remove(SK_RECENT); }
+
 QStringList
 Settings::recentUrls() const
 { return value(SK_RECENT).toStringList(); }
@@ -81,6 +88,28 @@ Settings::setRecentUrls(const QStringList &urls, int limit)
 void
 Settings::clearRecentUrls()
 { remove(SK_RECENT); }
+
+
+QStringList
+Settings::recentSearches() const
+{ return value(SK_SEARCH).toStringList(); }
+
+void
+Settings::setRecentSearches(const QStringList &urls, int limit)
+{
+  if (urls.isEmpty())
+    remove(SK_SEARCH);
+  else {
+    if (!limit || urls.size() <= limit)
+      setValue(SK_SEARCH, urls);
+    else {
+      QStringList l = urls;
+      while (l.size() > limit)
+        l.removeLast();
+      setValue(SK_SEARCH, l);
+    }
+  }
+}
 
 QStringList
 Settings::recentTabs() const
@@ -148,5 +177,24 @@ Settings::recentTabIndex() const
 void
 Settings::setRecentTabIndex(int value)
 { setValue(SK_RECENTTABINDEX, value); }
+
+bool
+Settings::isFullScreen() const
+{ return value(SK_FULLSCREEN).toBool(); }
+
+void
+Settings::setFullScreen(bool value)
+{ setValue(SK_FULLSCREEN, value); }
+
+int
+Settings::searchEngine() const
+{
+  enum { badval = -1 };
+  return value(SK_SEARCHENGINE, badval).toInt();
+}
+
+void
+Settings::setSearchEngine(int value)
+{ setValue(SK_SEARCHENGINE, value); }
 
 // EOF

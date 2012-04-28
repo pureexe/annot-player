@@ -1,7 +1,7 @@
 // mrlinfo.cc
 // 2/3/2012
 
-#include "mrlinfo.h"
+#include "module/mrlresolver/mrlinfo.h"
 
 namespace { // anonymous
   struct init_ { init_() {

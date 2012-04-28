@@ -11,39 +11,38 @@
    </rect>
   </property>
   <property name="styleSheet">
-   <string notr="true">QComboBox {
+   <string notr="true">/*QComboBox {
 	border-image:url(&quot;:/images/comboedit.png&quot;);
     border-width:4px;
     border-radius:3px;
 }
- 
 QComboBox::drop-down {
-	background:transparent;
+	subcontrol-position:top left;
+	border-top-left-radius:3px;
+	border-bottom-left-radius:3px;
 }
-
 QComboBox::down-arrow {
 	background:transparent;
 }
-
 QComboBox::down-arrow:pressed {
 	background:transparent;
 }
+*/
 
 QLineEdit {
 	border-image:url(&quot;:/images/lineedit.png&quot;);
-	border-width:4;
+	border-width:4px;
 	color:black;
 }
 
 QTabWidget::tab-bar {
-     top: 4px;
+	top:4px;
 }
 
-QTabBar::tab { 
+QTabBar::tab {
 	border-image:url(&quot;:/images/tab.png&quot;);
 	border-width:4px;
 	padding-left:3px;
-    /*min-width:54ex;*/
 	min-width:45ex;
 	color: black;
 }
@@ -52,26 +51,21 @@ QTabBar::tab:!selected {
 	margin-top:3px;
 	margin-bottom:5px;
 }
-
 QTabBar::tab:selected {
 	border-image:url(&quot;:/images/tab-selected.png&quot;);
 	margin-bottom:3px;
 }
-
 QTabBar::tab:last {
 	border-image:url(&quot;:/images/tab-last.png&quot;);
 }
-
 QTabBar::tab:selected:only-one {
 	border-image:url(&quot;:/images/tab-last-selected.png&quot;);
     margin-bottom:3px;
 }
-
 QTabBar::tab:selected:last {
 	border-image:url(&quot;:/images/tab-last-selected.png&quot;);
     margin-bottom:3px;
 }
-
 QTabBar::tab:!selected:last:hover {
 	border-image:url(&quot;:/images/tab-last-hover.png&quot;);
 }
@@ -80,10 +74,17 @@ QTabBar::tab:hover:!selected {
 }
 
 /*
-QTabBar::close-button { image: url(&quot;:/images/closebutton.png&quot;) ; }
-QTabBar::close-button:hover:!pressed { image: url(&quot;:/images/closebutton_hover.png&quot;) ;}
-QTabBar::close-button:pressed { image: url(&quot;:/images/closebutton_pressed.png&quot;) ;}
-*/</string>
+QTabBar::close-button {
+	border-image:url(&quot;:/images/closebutton.png&quot;);
+}
+QTabBar::close-button:hover:!pressed {
+	border-image:url(&quot;:/images/closebutton_hover.png&quot;);
+}
+QTabBar::close-button:pressed {
+	border-image:url(&quot;:/images/closebutton_pressed.png&quot;);
+}
+*/
+</string>
   </property>
   <property name="documentMode">
    <bool>false</bool>
@@ -92,21 +93,21 @@ QTabBar::close-button:pressed { image: url(&quot;:/images/closebutton_pressed.pn
    <property name="styleSheet">
     <string notr="true">
 QToolButton {
-	border-image: url(&quot;:/images/button.png&quot;) ;
-	border-width:3;
+	border-image:url(&quot;:/images/button.png&quot;) ;
+	border-width:3px;
 	min-width:22px;
 }
 
 QToolButton::hover {
-	border-image: url(&quot;:/images/button-hover.png&quot;) ;
+	border-image:url(&quot;:/images/button-hover.png&quot;) ;
 }
 
 QToolButton::pressed {
-	border-image: url(&quot;:/images/button-pressed.png&quot;) ;
+	border-image:url(&quot;:/images/button-pressed.png&quot;) ;
 }
 
  QTabWidget::pane {
-	border-image: url(&quot;:/images/tabframe.png&quot;) ;
+	border-image:url(&quot;:/images/tabframe.png&quot;) ;
 	border-width:4;
 /*	border-top: 8px;*/
 }
@@ -137,7 +138,13 @@ QToolButton::pressed {
        <number>0</number>
       </property>
       <item>
-       <widget class="QToolButton" name="backButton">
+       <widget class="WbToolButton" name="backButton">
+        <property name="toolTip">
+         <string>Back</string>
+        </property>
+        <property name="statusTip">
+         <string>Back</string>
+        </property>
         <property name="styleSheet">
          <string notr="true">QToolButton {
 	border-image:url(&quot;:/images/button-left.png&quot;);
@@ -148,9 +155,6 @@ QToolButton:hover {
 }
 </string>
         </property>
-        <property name="text">
-         <string>Back</string>
-        </property>
         <property name="icon">
          <iconset resource="webbrowser.qrc">
           <normaloff>:/images/arrow-back.png</normaloff>:/images/arrow-back.png</iconset>
@@ -158,7 +162,13 @@ QToolButton:hover {
        </widget>
       </item>
       <item>
-       <widget class="QToolButton" name="forwardButton">
+       <widget class="WbToolButton" name="forwardButton">
+        <property name="toolTip">
+         <string>Forward</string>
+        </property>
+        <property name="statusTip">
+         <string>Forward</string>
+        </property>
         <property name="styleSheet">
          <string notr="true">QToolButton {
 	border-image:url(&quot;:/images/button-right.png&quot;);
@@ -169,9 +179,6 @@ QToolButton:hover {
 }
 </string>
         </property>
-        <property name="text">
-         <string>Back</string>
-        </property>
         <property name="icon">
          <iconset resource="webbrowser.qrc">
           <normaloff>:/images/arrow-forward.png</normaloff>:/images/arrow-forward.png</iconset>
@@ -181,35 +188,32 @@ QToolButton:hover {
      </layout>
     </item>
     <item row="0" column="2">
-     <widget class="WbAddressEdit" name="addressEdit">
+     <widget class="WbAddressEdit" name="addressEdit" native="true">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
         <horstretch>1</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
-      <property name="editable">
-       <bool>true</bool>
-      </property>
      </widget>
     </item>
     <item row="0" column="3">
-     <widget class="WbSearchEdit" name="searchEdit">
-      <property name="toolTip">
-       <string/>
+     <widget class="WbSearchEdit" name="searchEdit" native="true">
+      <property name="minimumWidth">
+       <number>250</number>
       </property>
-      <property name="styleSheet">
-       <string notr="true">color:gray;</string>
-      </property>
-      <property name="editable">
-       <bool>true</bool>
+      <property name="maxVisibleItems">
+       <number>20</number>
       </property>
      </widget>
     </item>
     <item row="0" column="1">
-     <widget class="QToolButton" name="reloadButton">
-      <property name="text">
-       <string/>
+     <widget class="WbToolButton" name="reloadButton">
+      <property name="toolTip">
+       <string>Reload</string>
+      </property>
+      <property name="statusTip">
+       <string>Reload</string>
       </property>
       <property name="icon">
        <iconset resource="webbrowser.qrc">
@@ -218,35 +222,19 @@ QToolButton:hover {
      </widget>
     </item>
     <item row="1" column="0" colspan="4">
-     <widget class="QTabWidget" name="tabWidget">
-      <property name="styleSheet">
-       <string notr="true"/>
-      </property>
-      <property name="currentIndex">
-       <number>0</number>
-      </property>
-      <property name="documentMode">
+     <widget class="WbTabWidget" name="tabWidget" native="true">
+      <property name="documentMode" stdset="0">
        <bool>false</bool>
       </property>
-      <property name="tabsClosable">
+      <property name="usesScrollButtons" stdset="0">
        <bool>true</bool>
       </property>
-      <property name="movable">
+      <property name="tabsClosable" stdset="0">
        <bool>true</bool>
       </property>
-      <widget class="QWidget" name="tab">
-       <attribute name="title">
-        <string>Tab 1</string>
-       </attribute>
-       <layout class="QGridLayout" name="gridLayout_2">
-        <property name="margin">
-         <number>0</number>
-        </property>
-        <property name="spacing">
-         <number>0</number>
-        </property>
-       </layout>
-      </widget>
+      <property name="movable" stdset="0">
+       <bool>true</bool>
+      </property>
      </widget>
     </item>
    </layout>
@@ -258,9 +246,29 @@ QToolButton:hover {
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>WbAddressEdit</class>
+   <extends>QComboBox</extends>
+   <header>gui/wbaddressedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>WbSearchEdit</class>
+   <extends>QComboBox</extends>
+   <header>gui/wbsearchedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>WbTabWidget</class>
+   <extends>QTabWidget</extends>
+   <header>gui/wbtabwidget.h</header>
+  </customwidget>
+  <customwidget>
+   <class>WbToolButton</class>
+   <extends>QToolButton</extends>
+   <header>gui/wbtoolbutton.h</header>
+  </customwidget>
+ </customwidgets>
  <resources>
-  <include location="webbrowser.qrc"/>
-  <include location="webbrowser.qrc"/>
   <include location="webbrowser.qrc"/>
  </resources>
  <connections/>

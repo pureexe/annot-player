@@ -1,7 +1,7 @@
 # browser.pro
 # 3/29/2012
 
-VERSION = 0.1.1.0
+VERSION = 0.1.2.0
 
 DEFINES += PROJECT_BROWSER
 
@@ -15,13 +15,14 @@ mac: CONFIG += x86
 
 ## Libraries
 
-include($$ROOTDIR/module/nicoutil/nicoutil.pri)
-include($$ROOTDIR/module/mrlanalysis/mrlanalysis.pri)
-include($$ROOTDIR/module/qt/qt.pri)
-include($$ROOTDIR/module/qtext/qtext.pri)
+include($$ROOTDIR/module/compress/compress.pri)
 include($$ROOTDIR/module/crypt/crypt.pri)
 include($$ROOTDIR/module/download/download.pri)
-include($$ROOTDIR/module/compress/compress.pri)
+include($$ROOTDIR/module/mousegesture/mousegesture.pri)
+include($$ROOTDIR/module/mrlanalysis/mrlanalysis.pri)
+include($$ROOTDIR/module/nicoutil/nicoutil.pri)
+include($$ROOTDIR/module/qt/qt.pri)
+include($$ROOTDIR/module/qtext/qtext.pri)
 include($$ROOTDIR/module/webbrowser/webbrowser.pri)
 
 !mac: include($$ROOTDIR/module/metacall/metacall.pri)
@@ -32,6 +33,7 @@ win32 {
 }
 mac {
     include($$ROOTDIR/mac/qtmac/qtmac.pri)
+    include($$ROOTDIR/unix/qtunix/qtunix.pri)
 }
 
 QT      += core gui network webkit

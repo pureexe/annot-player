@@ -1,23 +1,34 @@
-// wbaddressedit.cc
+// gui/wbaddressedit.cc
 // 3/31/2012
 
-#include "wbaddressedit.h"
-#include "wbss.h"
-#include "wbrc.h"
-#include "ac/acrc.h"
+#include "gui/wbaddressedit.h"
+#include "global/wbrc.h"
+#include "global/wbss.h"
+#include "project/common/acrc.h"
 #include "module/mrlanalysis/mrlanalysis.h"
 #include <QtGui>
 
 // - Construction -
 
 void
+WbAddressEdit::init()
+{
+  setIcon(WBRC_IMAGE_APP);
+
+  createActions();
+  createConnections();
+  lineEdit()->setPlaceholderText(tr("Go to this address"));
+}
+
+void
 WbAddressEdit::createActions()
 {
-  pasteAndGoAct = new QAction(this); {
-    pasteAndGoAct->setText(tr("Paste and go"));
-    pasteAndGoAct->setStatusTip(tr("Paste and go"));
-    connect(pasteAndGoAct, SIGNAL(triggered()), SLOT(pasteAndGo()));
-  }
+  submitAct->setText(tr("Go to this address"));
+  submitAct->setStatusTip(tr("Go to this address"));
+
+  pasteAndGoAct->setText(tr("Paste and go"));
+  pasteAndGoAct->setStatusTip(tr("Paste and go"));
+
   openAddressWithAcPlayerAct_ = new QAction(this); {
     openAddressWithAcPlayerAct_->setIcon(QIcon(ACRC_IMAGE_PLAYER));
     openAddressWithAcPlayerAct_->setText(tr("Play with Annot Player"));
@@ -36,27 +47,16 @@ WbAddressEdit::createActions()
     openAddressWithAcDownloaderAct_->setStatusTip(tr("Open with Annot Downloader"));
     connect(openAddressWithAcDownloaderAct_, SIGNAL(triggered()), SLOT(openWithAcDownloader()));
   }
-}
 
-// - Actions -
+  openWithOperatingSystemAct_ = new QAction(this); {
+    openWithOperatingSystemAct_->setText(tr("Open in System Default Browser"));
+    openWithOperatingSystemAct_->setStatusTip(tr("Open in System Default Browser"));
+  } connect(openWithOperatingSystemAct_, SIGNAL(triggered()), SLOT(openWithOperatingSystem()));
+}
 
 void
-WbAddressEdit::pasteAndGo()
-{
-  QClipboard *c = QApplication::clipboard();
-  if (c) {
-    QString url = c->text().trimmed();
-    if (!url.isEmpty())
-      emit textEntered(url);
-  }
-}
-
-bool
-WbAddressEdit::isClipboardEmpty()
-{
-  QClipboard *c = QApplication::clipboard();
-  return !c || c->text().trimmed().isEmpty();
-}
+WbAddressEdit::createConnections()
+{ connect(this, SIGNAL(activated(int)), SLOT(submitText())); }
 
 // - Events -
 
@@ -79,13 +79,16 @@ WbAddressEdit::contextMenuEvent(QContextMenuEvent *event)
     m->addSeparator();
   }
 
+  //m->addAction(submitAct);
   m->addAction(pasteAndGoAct);
   m->addAction(popupAct);
   m->addAction(clearAct);
+  m->addAction(openWithOperatingSystemAct_);
   m->addSeparator();
 
   pasteAndGoAct->setEnabled(!isClipboardEmpty());
   popupAct->setEnabled(count());
+  openWithOperatingSystemAct_->setEnabled(!currentText().simplified().isEmpty());
 
   QMenu *scm = lineEdit()->createStandardContextMenu();
   m->addActions(scm->actions());

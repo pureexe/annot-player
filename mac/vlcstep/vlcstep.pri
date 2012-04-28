@@ -13,19 +13,18 @@ include($$ROOTDIR/mac/qtstep/qtstep.pri)
 #include($$ROOTDIR/mac/VLCKit/VLCKit_shared.pri)
 include($$ROOTDIR/mac/VLCKit/VLCKit_static.pri)
 
-HEADERS += \
-    $$PWD/vlcstep.h
+INCLUDEPATH     += $$PWD/..
+DEPENDPATH      += $$PWD
 
-OBJECTIVE_HEADERS += \
-    $$PWD/VLCOpenGLVoutView_public.h
-
-OBJECTIVE_SOURCES += \
-   $$PWD/vlcstep.mm
+HEADERS         +=  $$PWD/vlcstep.h
+OBJECTIVE_HEADERS += $$PWD/VLCOpenGLVoutView_public.h
+OBJECTIVE_SOURCES +=  $$PWD/vlcstep.mm
 
 QT      += core
 LIBS    += -framework Foundation
 
 LIBS        += -lvlccore
+
 INCLUDEPATH += \
     $$VLC_SRC \
     $$VLC_SRC/vlc/modules/gui/minimal_macosx

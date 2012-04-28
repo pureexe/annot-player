@@ -5,7 +5,7 @@
 // 8/19/2011
 
 #include "module/annotcloud/annotation.h"
-#include <QtWebkit/QWebElement>
+#include <QtWebKit/QWebElement>
 #include <QtGui/QColor>
 #include <QtCore/QString>
 #include <QtCore/QStringList>

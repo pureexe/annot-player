@@ -766,6 +766,7 @@ TranslatorManager::translate(int tid) const
   case T_MENUTEXT_LABELPLAYER: return tr("Label player with annots");
   case T_MENUTEXT_AUTOSUBMIT:  return tr("Save annots associations");
   case T_MENUTEXT_BACKLOG:     return tr("Backlog") + " [" K_CTRL "+F6]";
+  case T_MENUTEXT_PREFERLOCALDB:     return tr("Prefer offline annotations");
 
   case T_MENUTEXT_RESETANNOTSCALE:  return tr("Reset scale") + " [" K_CTRL "+" + tr("Mid") + "]";
   case T_TIP_RESETANNOTSCALE:       return tr("Reset annotation scale");

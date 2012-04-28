@@ -2,8 +2,8 @@
 // 9/10/2011
 // See: http://blog.csdn.net/tingsking18/article/details/5456831
 
-#include "serverproxy.h"
-#include "serverproxy_config.h"
+#include "module/serveragent/serverproxy.h"
+#include "module/serveragent/serverproxy_config.h"
 #include "module/annotcloud/traits.h"
 #include <QtCore/QMutexLocker>
 

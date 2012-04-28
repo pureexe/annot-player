@@ -1,7 +1,8 @@
-// wbnetworkaccessmanager.cc
+// network/wbnetworkaccessmanager.cc
 // 1/27/2012
 
-#include "wbnetworkaccessmanager.h"
+#include "network/wbnetworkaccessmanager.h"
+#include <QtNetwork/QNetworkRequest>
 #include <QtCore>
 
 //#define DEBUG "wbnetworkaccessmanager"
@@ -11,7 +12,7 @@
 #  define RC_IMAGE_NULL IMAGEDIR "/null.png"
 #else
 #  define RC_IMAGE_NULL "file:///" + QCoreApplication::applicationDirPath() + "/images/null.png"
-#endif Q_OS_LINUX
+#endif // Q_OS_LINUX
 
 #define PROXY_HOST  ANNOT_PROXY_DOMAIN
 
@@ -56,33 +57,35 @@ WbNetworkAccessManager::createRequest(Operation op, const QNetworkRequest &req, 
     if (!blockedUrls_.isEmpty() && isBlockedUrl(url)) {
       QNetworkRequest r(::rc_image_null_());
       return Base::createRequest(op, r, outgoingData);
-    } else if (host == "www.nicovideo.jp" && url.path().startsWith("/watch")) {
+    } else if (host == "www.nicovideo.jp" && url.path().startsWith("/watch")
+               //|| host == "ext.nicovideo.jp" && url.path().startsWith("/thumb_watch") // disabled, not working at the time
+               ) {
       DOUT("nico request =" << url.toString());
       QNetworkRequest r = req;
-      DOUT("nico delegate =" << transformNicoUrl(url));
-      r.setUrl(transformNicoUrl(url));
+      DOUT("nico delegate =" << encodeNicoUrl(url).toString());
+      r.setUrl(encodeNicoUrl(url));
       return Base::createRequest(op, r, outgoingData);
     } else if (host == "erogamescape.dyndns.org") {
       QNetworkRequest r = req;
-      r.setUrl(transformEroUrl(url));
+      r.setUrl(encodeEroUrl(url));
       return Base::createRequest(op, r, outgoingData);
     }
-#define ELIF(_host, _transform) \
+#define ELIF(_host, _encode) \
     else if (host.endsWith(_host, Qt::CaseInsensitive)) { \
       QNetworkRequest r = req; \
-      r.setUrl(_transform(url)); \
+      r.setUrl(_encode(url)); \
       return Base::createRequest(op, r, outgoingData); \
     }
-    ELIF("akabeesoft2.com", transformAb2Url)
-    ELIF("syangrila.com", transformSyangrilaUrl)
-    ELIF("akatsukiworks.com", transformAkatsukiWorksUrl)
-    ELIF("wheel-soft.com", transformWheelSoftUrl)
-    ELIF("akabeesoft2-try.com", transformAb2TryUrl)
-    ELIF("collaborations2005.com", transformCo2005Url)
-    ELIF("effordomsoft.com", transformEffordomSoftUrl)
-    ELIF("applique-soft.com", transformAppliqueSoftUrl)
-    ELIF("shallotsoft.com", transformShallotSoftUrl)
-    ELIF("spermaniax.net", transformSpermaniaxUrl)
+    ELIF("akabeesoft2.com", encodeAb2Url)
+    ELIF("syangrila.com", encodeSyangrilaUrl)
+    ELIF("akatsukiworks.com", encodeAkatsukiWorksUrl)
+    ELIF("wheel-soft.com", encodeWheelSoftUrl)
+    ELIF("akabeesoft2-try.com", encodeAb2TryUrl)
+    ELIF("collaborations2005.com", encodeCo2005Url)
+    ELIF("effordomsoft.com", encodeEffordomSoftUrl)
+    ELIF("applique-soft.com", encodeAppliqueSoftUrl)
+    ELIF("shallotsoft.com", encodeShallotSoftUrl)
+    ELIF("spermaniax.net", encodeSpermaniaxUrl)
 #undef ELIF
   }
   return Base::createRequest(op, req, outgoingData);
@@ -100,7 +103,7 @@ WbNetworkAccessManager::isBlockedUrl(const QUrl &target) const
 }
 
 QUrl
-WbNetworkAccessManager::transformNicoUrl(const QUrl &url)
+WbNetworkAccessManager::encodeNicoUrl(const QUrl &url)
 {
   QString host = url.toString();
   if (!host.compare("nicovideo.jp", Qt::CaseInsensitive)) {
@@ -122,7 +125,7 @@ WbNetworkAccessManager::transformNicoUrl(const QUrl &url)
 }
 
 QUrl
-WbNetworkAccessManager::transformEroUrl(const QUrl &url)
+WbNetworkAccessManager::encodeEroUrl(const QUrl &url)
 {
   QUrl ret = url;
   ret.setHost(PROXY_HOST);
@@ -132,32 +135,32 @@ WbNetworkAccessManager::transformEroUrl(const QUrl &url)
   return ret;
 }
 
-#define TRANSFORM(_host, _transform) \
+#define TRANSFORM(_host, _encode) \
   QUrl \
-  WbNetworkAccessManager::_transform(const QUrl &url) \
+  WbNetworkAccessManager::_encode(const QUrl &url) \
   { \
     QUrl ret = url; \
     ret.setHost(PROXY_HOST); \
     ret.setPath("/" _host + ret.path()); \
     return ret; \
   }
-  TRANSFORM("akabeesoft2", transformAb2Url)
-  TRANSFORM("akabeesoft2-try", transformAb2TryUrl)
-  TRANSFORM("akatsukiworks", transformAkatsukiWorksUrl)
-  TRANSFORM("wheel-soft", transformWheelSoftUrl)
-  TRANSFORM("syangrila", transformSyangrilaUrl)
-  TRANSFORM("collaborations2005", transformCo2005Url)
-  TRANSFORM("effordomsoft", transformEffordomSoftUrl)
-  TRANSFORM("applique-soft", transformAppliqueSoftUrl)
-  TRANSFORM("shallotsoft", transformShallotSoftUrl)
-  TRANSFORM("spermaniax", transformSpermaniaxUrl)
+  TRANSFORM("akabeesoft2", encodeAb2Url)
+  TRANSFORM("akabeesoft2-try", encodeAb2TryUrl)
+  TRANSFORM("akatsukiworks", encodeAkatsukiWorksUrl)
+  TRANSFORM("wheel-soft", encodeWheelSoftUrl)
+  TRANSFORM("syangrila", encodeSyangrilaUrl)
+  TRANSFORM("collaborations2005", encodeCo2005Url)
+  TRANSFORM("effordomsoft", encodeEffordomSoftUrl)
+  TRANSFORM("applique-soft", encodeAppliqueSoftUrl)
+  TRANSFORM("shallotsoft", encodeShallotSoftUrl)
+  TRANSFORM("spermaniax", encodeSpermaniaxUrl)
 #undef TRANSFORM
 
 // EOF
 
 /*
 QNetworkReply*
-WbNetworkAccessManager::transformRedirectedReply(QNetworkReply *reply)
+WbNetworkAccessManager::encodeRedirectedReply(QNetworkReply *reply)
 {
   if (!reply)
     return 0;
@@ -178,14 +181,14 @@ WbNetworkAccessManager::createRequest(Operation op, const QNetworkRequest &req, 
         !host.startsWith("smile-")) { // skip "smile-" video host
       //DOUT("nico request =" << url.toString());
       QNetworkRequest r = req;
-      //DOUT("nico delegate =" << transformNicoUrl(url));
-      r.setUrl(transformNicoUrl(url));
+      //DOUT("nico delegate =" << encodeNicoUrl(url));
+      r.setUrl(encodeNicoUrl(url));
       return Base::createRequest(op, r, outgoingData);
     } else if (host.endsWith("niconicohost")) {
       DOUT("nicohost request =" << url.toString());
       QNetworkRequest r = req;
-      //DOUT("nicohost delegate =" << transformNicoHostUrl(url));
-      r.setUrl(transformNicoHostUrl(url));
+      //DOUT("nicohost delegate =" << encodeNicoHostUrl(url));
+      r.setUrl(encodeNicoHostUrl(url));
       return Base::createRequest(op, r, outgoingData);
     }
   }
@@ -193,7 +196,7 @@ WbNetworkAccessManager::createRequest(Operation op, const QNetworkRequest &req, 
 }
 
 QUrl
-WbNetworkAccessManager::transformNicoUrl(const QUrl &url)
+WbNetworkAccessManager::encodeNicoUrl(const QUrl &url)
 {
   QString host = url.host();
   if (!host.compare("nicovideo.jp", Qt::CaseInsensitive)) {
@@ -215,7 +218,7 @@ WbNetworkAccessManager::transformNicoUrl(const QUrl &url)
 }
 
 QUrl
-WbNetworkAccessManager::transformNicoHostUrl(const QUrl &url)
+WbNetworkAccessManager::encodeNicoHostUrl(const QUrl &url)
 {
   QString host = url.host();
   if (host == "niconicohost") {

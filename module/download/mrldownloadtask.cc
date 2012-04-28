@@ -1,6 +1,6 @@
 ﻿// mrldownloadtask.cc
 // 2/20/2012
-#include "mrldownloadtask.h"
+#include "module/download/mrldownloadtask.h"
 #if !defined WITH_MODULE_MRLRESOLVER || !defined WITH_MODULE_STREAM || !defined WITH_MODULE_MEDIACODEC
 #  error "required modules missing"
 #endif // !WITH_MODULE_
@@ -14,6 +14,7 @@
 #include "module/qtext/filesystem.h"
 #include "module/qtext/network.h"
 #include <QtNetwork/QNetworkCookieJar>
+#include <QtCore/QDir>
 #include <QtCore/QTimer>
 
 #define DEBUG "mrldownloadtask"
@@ -81,6 +82,10 @@ MrlDownloadTask::downloadMedia(const MediaInfo &mi, QNetworkCookieJar *jar)
     return;
   }
 
+  QDir dir(downloadPath());
+  if (!dir.exists())
+    dir.mkpath(dir.absolutePath());
+
   QString title = mi.title;
   if (title.isEmpty())
     title = tr("unknown");
@@ -89,7 +94,7 @@ MrlDownloadTask::downloadMedia(const MediaInfo &mi, QNetworkCookieJar *jar)
   switch (mi.mrls.size()) {
   case 0: emit error(tr("failed to resolve media URL") +": " + mi.refurl); break;
   case 1: downloadSingleMedia(mi, jar); break;
-  default: downloadMultipleMedia(mi, jar); break;
+  default: downloadMultipleMedia(mi, jar);
   }
 
   DOUT("exit");

@@ -5,7 +5,7 @@
 #include "datamanager.h"
 #include "tr.h"
 #include "logger.h"
-#include "ac/acui.h"
+#include "project/common/acui.h"
 #include "module/qtext/htmltag.h"
 #include "module/qtext/datetime.h"
 #include <QtGui>
@@ -39,10 +39,8 @@ AnnotationCountDialog::AnnotationCountDialog(DataManager *dm, QWidget *parent)
   createLayout();
 
   // Shortcuts
-  QShortcut *cancelShortcut = new QShortcut(QKeySequence("Esc"), this);
-  connect(cancelShortcut, SIGNAL(activated()), SLOT(hide()));
-  QShortcut *closeShortcut = new QShortcut(QKeySequence("CTRL+W"), this);
-  connect(closeShortcut, SIGNAL(activated()), SLOT(hide()));
+  connect(new QShortcut(QKeySequence("Esc"), this), SIGNAL(activated()), SLOT(hide()));
+  connect(new QShortcut(QKeySequence("CTRL+W"), this), SIGNAL(activated()), SLOT(hide()));
 
   // Focus
   edit_->setFocus();
@@ -61,7 +59,7 @@ AnnotationCountDialog::createLayout()
 
   QStringList defvals = QStringList("0")
     << "100" << "500" << "1000" << "1500" << "3000" << "5000" << "8000" << "10000";
-  edit_ = ui->makeComboBox(AcUi::EditHint, "", TR(T_TOOLTIP_INPUTLINE),  defvals);
+  edit_ = ui->makeComboBox(AcUi::EditHint, "", TR(T_TOOLTIP_INPUTLINE),  "", defvals);
   edit_->lineEdit()->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
   connect(edit_->lineEdit(), SIGNAL(returnPressed()), SLOT(ok()));
 
@@ -108,7 +106,7 @@ AnnotationCountDialog::ok()
 }
 
 void
-AnnotationCountDialog::invalidateTotalCount()
+AnnotationCountDialog::updateTotalCount()
 {
   totalCountLabel_->setText(
     QString::number(dm_->annotations().count())
@@ -119,7 +117,7 @@ void
 AnnotationCountDialog::setVisible(bool visible)
 {
   if (visible)
-    invalidateTotalCount();
+    updateTotalCount();
   Base::setVisible(visible);
 }
 

@@ -83,8 +83,8 @@ PositionSlider::PositionSlider(QWidget *parent)
   : Base(Qt::Horizontal, parent), availablePosition_(0)
 {
   setContentsMargins(0, 0, 0, 0);
-  connect(this, SIGNAL(sliderMoved(int)), SLOT(invalidateStyleSheet(int)));
-  invalidateStyleSheet();
+  connect(this, SIGNAL(sliderMoved(int)), SLOT(updateStyleSheet(int)));
+  updateStyleSheet();
 }
 
 void
@@ -92,14 +92,14 @@ PositionSlider::setAvailablePosition(int value)
 {
   if (availablePosition_ != value) {
     availablePosition_ = value;
-    invalidateStyleSheet();
+    updateStyleSheet();
   }
 }
 
 // - Style sheet -
 
 void
-PositionSlider::invalidateStyleSheet(int current)
+PositionSlider::updateStyleSheet(int current)
 {
   if (current <= 0)
     current = sliderPosition();

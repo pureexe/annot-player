@@ -3,7 +3,7 @@
 // See: http://hackipedia.org/File%20formats/SWF,%20Macromedia-Adobe%20Flash/Adobe%20Flash%209%20File%20Format%20Specification.pdf
 // Adobe Flash 9 File Format Specification.pdf (2007), The FLV Header (page 268)
 
-#include "flvmeta.h"
+#include "module/mediacodec/flvmeta.h"
 #include "module/stream/datainputstream.h"
 
 //#define DEBUG "flvmetareader"

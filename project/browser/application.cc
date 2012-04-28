@@ -2,6 +2,7 @@
 // 11/18/2011
 #include "application.h"
 #include "global.h"
+#include "module/download/downloader.h"
 #ifdef Q_OS_WIN
 #  include "win/qtwin/qtwin.h"
 #endif // Q_OS_WIN
@@ -9,10 +10,10 @@
 #  include "mac/qtmac/qtmac.h"
 #elif defined Q_OS_UNIX
 extern "C" {
-  #include <sys/types.h>
-  #include <sys/stat.h>
-  #include <unistd.h>
-  #include <fcntl.h>
+#  include <sys/stat.h>
+#  include <sys/types.h>
+#  include <unistd.h>
+#  include <fcntl.h>
 } // extern "C"
 #endif // Q_OS_
 #include <QtGui>
@@ -23,7 +24,7 @@ extern "C" {
 // - Constructions -
 
 Application::Application(int &argc, char **argv, bool gui)
-  : Base(argc, argv, gui), w_(0)
+  : Base(argc, argv, gui), closed_(false)
 {
   DOUT("enter");
   setOrganizationDomain(G_DOMAIN);
@@ -32,13 +33,6 @@ Application::Application(int &argc, char **argv, bool gui)
   setApplicationVersion(G_VERSION);
 
   createDirectories();
-  DOUT("exit");
-}
-
-Application::~Application()
-{
-  DOUT("enter: abort in 3 seconds");
-  QTimer::singleShot(3000, this, SLOT(abort()));
   DOUT("exit");
 }
 
@@ -52,6 +46,33 @@ Application::createDirectories()
   QDir caches(G_PATH_CACHES);
   if (!caches.exists())
     caches.mkpath(profile.absolutePath());
+}
+
+void
+Application::close()
+{
+  if (closed_)
+    return;
+  closed_ = true;
+
+  DownloaderController::globalController()->abort();
+
+  if (QThreadPool::globalInstance()->activeThreadCount()) {
+#if QT_VERSION >= 0x040800
+    // wait for at most 2 seconds ant kill all threads
+    enum { CloseTimeout = 2000 };
+    QThreadPool::globalInstance()->waitForDone(CloseTimeout);
+#else
+    //DOUT("WARNING: killing active threads; will be fixed in Qt 4.8");
+    QThreadPool::globalInstance()->waitForDone();
+#endif  // QT_VERSION
+  }
+
+  closeAllWindows();
+
+  DOUT("enter: abort in 3 seconds");
+  QTimer::singleShot(3000, this, SLOT(abort()));
+  DOUT("exit");
 }
 
 void
@@ -125,11 +146,29 @@ Application::event(QEvent *e)
 {
   bool accept = true;
   switch (e->type()) {
-  case QEvent::FileOpen: if (w_) sendEvent(w_, e); break;
+  case QEvent::FileOpen:
+    {
+      QWidget *w = activeWindow();
+      if (w) sendEvent(w, e);
+    } break;
   default: accept = Base::event(e);
   }
 
   return accept;
 }
+
+// - Windows -
+
+QWidget*
+Application::activeMainWindow() const
+{ return windows_.isEmpty() ? 0 : windows_.last(); }
+
+void
+Application::addWindow(QWidget *w)
+{ windows_.removeAll(w); windows_.append(w); }
+
+void
+Application::removeWindow(QWidget *w)
+{ windows_.removeAll(w); }
 
 // EOF

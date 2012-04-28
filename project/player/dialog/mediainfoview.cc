@@ -5,7 +5,7 @@
 #include "datamanager.h"
 #include "signalhub.h"
 #include "tr.h"
-#include "ac/actextview.h"
+#include "project/common/actextview.h"
 #include "module/player/player.h"
 #include "module/qtext/htmltag.h"
 #include <QtGui>
@@ -19,11 +19,11 @@ MediaInfoView::MediaInfoView(Player *player, DataManager *data, SignalHub *hub, 
   Q_ASSERT(player_);
   Q_ASSERT(data_);
   Q_ASSERT(hub_);
-  connect(this, SIGNAL(refreshRequested()), SLOT(invalidateText()));
+  connect(this, SIGNAL(refreshRequested()), SLOT(updateText()));
 }
 
 void
-MediaInfoView::invalidateText()
+MediaInfoView::updateText()
 {
   DOUT("enter");
   AcTextView *t = textView();

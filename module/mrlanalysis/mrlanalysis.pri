@@ -5,13 +5,10 @@ include(../../config.pri)
 
 DEFINES += WITH_MODULE_MRLANALYSIS
 
-INCLUDEPATH += $$PWD
+DEPENDPATH += $$PWD
 
-HEADERS += \
-    $$PWD/mrlanalysis.h
-
-SOURCES += \
-    $$PWD/mrlanalysis.cc
+HEADERS += $$PWD/mrlanalysis.h
+SOURCES += $$PWD/mrlanalysis.cc
 
 QT      += core
 

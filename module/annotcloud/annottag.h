@@ -5,11 +5,10 @@
 // 8/9/2011
 //
 // See: http://en.wikibooks.org/wiki/LaTeX/Command_Glossary
-//
 // TODO: remove CORE_CMD prefix
 
-#include <QtCore/QString>
 #include <QtCore/QHash>
+#include <QtCore/QString>
 #include <utility>
 
 // - Excaped -

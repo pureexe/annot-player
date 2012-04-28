@@ -4,8 +4,8 @@
 // inputoutputstream.h
 // 3/18/2012
 
-#include "inputstream.h"
-#include "outputstream.h"
+#include "module/stream/inputstream.h"
+#include "module/stream/outputstream.h"
 
 class InputOutputStream : public InputStream, public OutputStream
 { };

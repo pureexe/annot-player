@@ -3,18 +3,19 @@
 
 #include "mainwindow.h"
 #include "mainwindow_p.h"
-#include "taskdialog.h"
 #include "clipboardmonitor.h"
+#include "global.h"
+#include "rc.h"
 #include "signer.h"
 #include "settings.h"
-#include "global.h"
-#include "systemtrayicon.h"
-#include "rc.h"
-#include "ac/acui.h"
-#include "ac/acss.h"
-#include "ac/acfilteredlistview.h"
-#include "ac/acdownloader.h"
-#include "ac/acplayer.h"
+#include "taskdialog.h"
+#include "trayicon.h"
+#include "project/common/acss.h"
+#include "project/common/acui.h"
+#include "project/common/acaboutdialog.h"
+#include "project/common/acdownloader.h"
+#include "project/common/acfilteredlistview.h"
+#include "project/common/acplayer.h"
 #include "module/qtext/datetime.h"
 #include "module/download/downloader.h"
 #include "module/download/downloadmanager.h"
@@ -44,7 +45,7 @@ enum { MaxDownloadThreadCount = 3 };
 //  Qt::WindowCloseButtonHint )
 
 MainWindow::MainWindow(QWidget *parent)
-  : Base(parent), playerDelegate_(0), systemTrayIcon_(0), taskDialog_(0)
+  : Base(parent), playerDelegate_(0), trayIcon_(0), taskDialog_(0)
 {
   setWindowTitle(tr("Annot Downloader"));
   setWindowIcon(QIcon(RC_IMAGE_APP));
@@ -60,7 +61,7 @@ MainWindow::MainWindow(QWidget *parent)
   refreshTimer_->setInterval(RefreshInterval);
   connect(refreshTimer_, SIGNAL(timeout()), SLOT(refresh()));
 
-  connect(tableView_, SIGNAL(currentIndexChanged(QModelIndex)), SLOT(invalidateButtons()));
+  connect(tableView_, SIGNAL(currentIndexChanged(QModelIndex)), SLOT(updateButtons()));
 
   clipboardMonitor_ = new ClipboardMonitor(this);
   connect(clipboardMonitor_, SIGNAL(message(QString)), SLOT(showMessage(QString)));
@@ -94,8 +95,8 @@ MainWindow::MainWindow(QWidget *parent)
   appServer_->start();
 
   if (QSystemTrayIcon::isSystemTrayAvailable()) {
-    systemTrayIcon_ = new SystemTrayIcon(this, this);
-    systemTrayIcon_->show();
+    trayIcon_ = new TrayIcon(this, this);
+    trayIcon_->show();
   }
 
   // - Post behaviors -
@@ -225,8 +226,13 @@ MainWindow::createActions()
   quitAct_ = new QAction(this); {
     quitAct_->setText(tr("Quit"));
     quitAct_->setStatusTip(tr("Quit"));
+    quitAct_->setShortcut(QKeySequence::Quit);
   } connect(quitAct_, SIGNAL(triggered()), SLOT(close()));
-
+  newAct_ = new QAction(this); {
+    newAct_->setText(tr("New"));
+    newAct_->setStatusTip(tr("New"));
+    newAct_->setShortcut(QKeySequence::New);
+  } connect(newAct_, SIGNAL(triggered()), SLOT(add()));
 
   // Create menus
   contextMenu_ = new QMenu(this);
@@ -242,25 +248,46 @@ MainWindow::createActions()
   contextMenu_->addAction(startAllAct_);
   contextMenu_->addAction(stopAllAct_);
   contextMenu_->addAction(removeAllAct_);
+#ifndef Q_WS_MAC
   contextMenu_->addSeparator();
   contextMenu_->addAction(hideAct_);
   contextMenu_->addAction(quitAct_);
+#endif // Q_WS_MAC
 
-  //QShortcut *c1 = new QShortcut(QKeySequence("CTRL+1"), this);
-  //connect(c1, SIGNAL(activated()), textTabButton_, SLOT(click()));
-  //QShortcut *c2 = new QShortcut(QKeySequence("CTRL+2"), this);
-  //connect(c2, SIGNAL(activated()), userTabButton_, SLOT(click()));
 
   hideAct_->setShortcut(QKeySequence("Esc"));
-  QShortcut *cancelShortcut = new QShortcut(QKeySequence("Esc"), this);
-  connect(cancelShortcut, SIGNAL(activated()), SLOT(hide()));
+  connect(new QShortcut(QKeySequence("Esc"), this), SIGNAL(activated()), SLOT(hide()));
 
   quitAct_->setShortcut(QKeySequence("CTRL+W"));
-  QShortcut *closeShortcut = new QShortcut(QKeySequence("CTRL+W"), this);
-  connect(closeShortcut, SIGNAL(activated()), SLOT(close()));
+  connect(new QShortcut(QKeySequence("CTRL+W"), this), SIGNAL(activated()), SLOT(close()));
 
-  QShortcut *newShortcut = new QShortcut(QKeySequence::New, this);
-  connect(newShortcut, SIGNAL(activated()), SLOT(add()));
+  connect(new QShortcut(QKeySequence::New, this), SIGNAL(activated()), SLOT(add()));
+
+#ifdef Q_WS_WIN
+  menuBar()->hide();
+#endif // Q_WS_WIN
+  QMenu *
+  m = menuBar()->addMenu(tr("&File")); {
+    m->addAction(newAct_);
+    m->addSeparator();
+    m->addAction(stopAllAct_);
+    m->addAction(removeAllAct_);
+    m->addSeparator();
+    m->addAction(tr("Exit"), this, SLOT(close()), QKeySequence::Quit);
+  }
+  m = menuBar()->addMenu(tr("&Edit")); {
+    m->addAction(startAct_);
+    m->addAction(openAct_);
+    m->addAction(openDirectoryAct_);
+    m->addSeparator();
+    m->addAction(stopAct_);
+    m->addAction(restartAct_);
+    m->addAction(removeAct_);
+  }
+  m = menuBar()->addMenu(tr("&Help")); {
+    //helpMenu_->addAction(tr("&Help"), this, SLOT(help())); // DO NOT TRANSLATE ME
+    m->addAction(tr("&About"), this, SLOT(about())); // DO NOT TRANSLATE ME
+  }
 }
 
 // - Table -
@@ -497,7 +524,7 @@ MainWindow::addTask(DownloadTask *t)
   sourceModel_->setData(sourceModel_->index(0, HD_Url), t->url(), Qt::DisplayRole);
   sourceModel_->setData(sourceModel_->index(0, HD_Id), t->id(), Qt::DisplayRole);
 
-  tableView_->invalidateCount();
+  tableView_->updateCount();
 #undef FORMAT_TIME
 #undef FORMAT_STATE
 #undef FORMAT_PERCENTAGE
@@ -521,7 +548,7 @@ MainWindow::refresh()
 
   qreal totalSpeed = 0;
   qreal leastPercentage = 0;
-  qint64 leastRemainingTime = LLONG_MAX;
+  qint64 totalRemainingTime = 0;
 
   for (int row = 0; row < sourceModel_->rowCount(); row++) {
     QModelIndex index = sourceModel_->index(row, HD_Id);
@@ -549,7 +576,7 @@ MainWindow::refresh()
     //sourceModel_->setData(sourceModel_->index(row, HD_Id), t->id(), Qt::DisplayRole);
 
     if (t->isRunning()) {
-      leastRemainingTime = qMin(leastRemainingTime, t->remainingTime());
+      totalRemainingTime += t->remainingTime();
       leastPercentage = qMin(leastPercentage, t->percentage());
     }
 
@@ -557,8 +584,8 @@ MainWindow::refresh()
       totalSpeed += t->speed();
   }
 
-  tableView_->invalidateCount();
-  invalidateButtons();
+  tableView_->updateCount();
+  updateButtons();
 
   QString title;
   if (totalSpeed > 0) {
@@ -566,8 +593,8 @@ MainWindow::refresh()
     title += FORMAT_SPEED(totalSpeed);
     if (leastPercentage)
       title += ", " + FORMAT_PERCENTAGE(leastPercentage);
-    if (leastRemainingTime) {
-      QString ts = FORMAT_TIME(leastRemainingTime);
+    if (totalRemainingTime) {
+      QString ts = FORMAT_TIME(totalRemainingTime);
       if (!ts.isEmpty())
         title += ", " + ts;
     }
@@ -579,8 +606,8 @@ MainWindow::refresh()
    title.prepend(tr("Annot Downloader"));
 
   setWindowTitle(title);
-  if (systemTrayIcon_)
-    systemTrayIcon_->setToolTip(title);
+  if (trayIcon_)
+    trayIcon_->setToolTip(title);
 #undef FORMAT_TIME
 #undef FORMAT_STATE
 #undef FORMAT_PERCENTAGE
@@ -598,24 +625,24 @@ MainWindow::finish(DownloadTask *task)
     return;
   QString file = task->fileName();
   QString title;
-  QString msg;
   if (QFile::exists(file)) {
     title = tr("download finished");
-    msg = title + ": " + file;
+    QString msg = title + ": " + file;
     showMessage(msg);
     emit downloadFinished(file, task->url());
   } else {
     title = tr("download failed");
-    msg = title + ": " + file;
+    QString msg = title + ": " + file;
     warn(msg);
   }
   QApplication::beep();
-  if (systemTrayIcon_)
-    systemTrayIcon_->showMessage(title, msg);
+  if (trayIcon_)
+    trayIcon_->showMessage(title, file);
+  AcLocationManager::globalInstance()->createDownloadsLocation();
 }
 
 void
-MainWindow::invalidateButtons()
+MainWindow::updateButtons()
 {
   DownloadTask *t = currentTask();
   if (!t) {
@@ -633,7 +660,7 @@ MainWindow::invalidateButtons()
 }
 
 void
-MainWindow::invalidateActions()
+MainWindow::updateActions()
 {
   DownloadTask *t = currentTask();
   if (!t) {
@@ -721,8 +748,8 @@ MainWindow::closeEvent(QCloseEvent *event)
   appServer_->stop();
 
   hide();
-  if (systemTrayIcon_)
-    systemTrayIcon_->hide();
+  if (trayIcon_)
+    trayIcon_->hide();
 
   if (taskDialog_)
     taskDialog_->hide();
@@ -779,9 +806,19 @@ void
 MainWindow::contextMenuEvent(QContextMenuEvent *event)
 {
   Q_ASSERT(event);
-  invalidateActions();
+  updateActions();
   contextMenu_->exec(event->globalPos());
   event->accept();
 }
+
+void
+MainWindow::about()
+{
+  static AcAboutDialog *w = 0;
+  if (!w)
+    w = new AcAboutDialog(G_APPLICATION, G_VERSION, this);
+  w->show();
+}
+
 
 // EOF

@@ -1,7 +1,7 @@
 # player.pro
 # 9/3/2011
 
-VERSION = 0.1.5.0
+VERSION = 0.1.5.1
 
 CONFIG += noqt nocrt
 include(../../../config.pri)

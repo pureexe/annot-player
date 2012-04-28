@@ -4,7 +4,7 @@
 // nulloutputstream.h
 // 2/13/2012
 
-#include "outputstream.h"
+#include "module/stream/outputstream.h"
 #include <QtCore/QObject>
 
 class NullOutputStream : public QObject, public OutputStream

@@ -5,19 +5,18 @@
 // 7/16/2011
 
 #include "module/annotcloud/annotation.h"
-#include <QtCore/QEasingCurve>
 #include <QtGui/QGraphicsTextItem>
 
 QT_BEGIN_NAMESPACE
+class QAction;
+class QContextMenuEvent;
 //class QGraphicsView;
 class QGraphicsScene;
-class QPoint;
-class QTimer;
-class QPropertyAnimation;
-class QAction;
-class QStringList;
-class QContextMenuEvent;
 class QMouseEvent;
+class QPoint;
+class QPropertyAnimation;
+class QStringList;
+class QTimer;
 QT_END_NAMESPACE
 
 class SignalHub;
@@ -27,13 +26,12 @@ class AnnotationGraphicsItem : public QGraphicsTextItem
 {
   Q_OBJECT
   Q_PROPERTY(QPointF pos READ pos WRITE setPos)
+  Q_PROPERTY(QPointF relativePos READ relativePos WRITE setRelativePos)
 
   typedef AnnotationGraphicsItem Self;
   typedef QGraphicsTextItem Base;
 
   typedef AnnotCloud::Annotation Annotation;
-
-  Annotation annot_;
 
 public:
   enum { AnnotationGraphicsItemType = UserType + 1 };
@@ -70,21 +68,25 @@ public:
 
   QString abstract() const;
 
+  QPointF relativePos() const { return pos() - origin_; }
+
 protected:
   //QString parse(const QString &text);
   static bool isSubtitle(const QString &text);
 
 public slots:
+  void setRelativePos(const QPointF &offset) { setPos(origin_ + offset); }
   void setScale(qreal value) { Base::setScale(value); }
   void addMe();
   void removeMe(); // Remove me from graphics scene
   void deleteMe(); // Delete corresponding annotation
   void showMe();   // Add me to graphics scene, and autmatic remove me.
-  void invalidateEffect();
+  void updateEffect();
   void setEffect(Effect e);
 
   void pause();
   void resume();
+  void escapeFrom(const QPointF &pos);
 
 protected slots:
   void fly();
@@ -104,8 +106,8 @@ protected slots:
   void blockUser();
 
 protected:
-  void fly(const QPointF &from, const QPointF &to, int msecs,
-           QEasingCurve::Type type = QEasingCurve::Linear);
+  void fly(const QPointF &from, const QPointF &to, int msecs);
+  void escapeTo(const QPointF &pos, int msecs);
   void stay(const QPointF &pos, int msecs);
 
   int flyTime() const;  ///< in msecs
@@ -113,17 +115,21 @@ protected:
 
   // Events:
 public:
-  void contextMenuEvent(QContextMenuEvent *event);
-  void mouseDoubleClickEvent(QMouseEvent *event);
-  void mousePressEvent(QMouseEvent *event);
-  void mouseReleaseEvent(QMouseEvent *event);
-  void mouseMoveEvent(QMouseEvent *event);
+  virtual void contextMenuEvent(QContextMenuEvent *event); ///< \override
+  virtual void mouseDoubleClickEvent(QMouseEvent *event); ///< \override
+  virtual void mousePressEvent(QMouseEvent *event); ///< \override
+  virtual void mouseReleaseEvent(QMouseEvent *event); ///< \override
+  virtual void mouseMoveEvent(QMouseEvent *event); ///< \override
 protected:
-  void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
-  void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event);
-  void mousePressEvent(QGraphicsSceneMouseEvent *event);
-  void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
-  void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
+  virtual void contextMenuEvent(QGraphicsSceneContextMenuEvent *event); ///< \override
+  virtual void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event); ///< \override
+  virtual void mousePressEvent(QGraphicsSceneMouseEvent *event); ///< \override
+  virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event); ///< \override
+  virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *event); ///< \override
+
+  //virtual void hoverEnterEvent(QGraphicsSceneHoverEvent *event); ///< \override
+  //virtual void hoverMoveEvent(QGraphicsSceneHoverEvent *event); ///< \override
+  //virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent *event); ///< \override
 
 private:
   void setDefaultStyle();
@@ -131,15 +137,19 @@ private:
   int nextY(int visibleTime, Style style) const;
 
 private:
+  Annotation annot_;
+
+  QPointF origin_;
   AnnotationGraphicsView *view_;
   QGraphicsScene *scene_;
   SignalHub *hub_;
 
   QTimer *removeLaterTimer_;
   Style style_;
-  QPropertyAnimation *ani_;
+  QPropertyAnimation *flyAni_, *escapeAni_;
 
   QPoint dragPos_;
+  bool dragPaused_;
   QString richText_;
 };
 

@@ -10,9 +10,9 @@
 #endif // WITH_MODULE_MEDIACODEC
 #include "module/qtext/filesystem.h"
 #include <QtNetwork/QNetworkAccessManager>
+#include <QtNetwork/QNetworkCookieJar>
 #include <QtNetwork/QNetworkReply>
 #include <QtNetwork/QNetworkRequest>
-#include <QtNetwork/QNetworkCookieJar>
 #include <QtCore>
 #include <cstring>
 
@@ -35,7 +35,7 @@ HttpBufferedSession::~HttpBufferedSession()
 //}
 
 void
-HttpBufferedSession::invalidateSize()
+HttpBufferedSession::updateSize()
 {
   if (reply_) {
     size_ = reply_->header(QNetworkRequest::ContentLengthHeader).toLongLong();
@@ -47,7 +47,7 @@ HttpBufferedSession::invalidateSize()
 }
 
 void
-HttpBufferedSession::invalidateContentType()
+HttpBufferedSession::updateContentType()
 {
   if (reply_)
     contentType_ = reply_->header(QNetworkRequest::ContentTypeHeader).toString();
@@ -57,7 +57,7 @@ HttpBufferedSession::invalidateContentType()
 }
 
 void
-HttpBufferedSession::invalidateFileName()
+HttpBufferedSession::updateFileName()
 {
   bool mp4 = contentType_.contains("mp4", Qt::CaseInsensitive);
   QString suf = mp4 ? ".mp4" : ".flv";
@@ -76,7 +76,9 @@ HttpBufferedSession::save()
   if (fileName_.isEmpty() || buffer_.isEmpty())
     return;
   QFile::remove(fileName_);
-  QDir().mkpath(QFileInfo(fileName_).absolutePath());
+  QDir dir = QFileInfo(fileName_).absoluteDir();
+  if (!dir.exists())
+    dir.mkpath(dir.absolutePath());
 
   QFile file(fileName_);
   if (!file.open(QIODevice::WriteOnly)) {
@@ -226,9 +228,9 @@ HttpBufferedSession::run()
     m_.unlock();
   }
 
-  invalidateSize();
-  invalidateContentType();
-  invalidateFileName();
+  updateSize();
+  updateContentType();
+  updateFileName();
 
   if (!isMultiMediaMimeType(contentType_)) {
     setState(Error);

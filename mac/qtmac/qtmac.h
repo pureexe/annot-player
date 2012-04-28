@@ -4,7 +4,6 @@
 // qtmac.h
 // 11/11/2011
 
-#include <QtCore/QString>
 #include <QtCore/QStringList>
 
 #define XA_RESOURCEFORK      "com.apple.ResourceFork"

@@ -9,10 +9,10 @@
 // Note: since soap timeout is not slow, synchronized approach is used.
 // TODO: Deal with offline case here??
 
-#include "module/annotcloud/user.h"
-#include "module/annotcloud/token.h"
 #include "module/annotcloud/alias.h"
 #include "module/annotcloud/annotation.h"
+#include "module/annotcloud/token.h"
+#include "module/annotcloud/user.h"
 #include <QtCore/QMutex>
 
 class ServerProxy;

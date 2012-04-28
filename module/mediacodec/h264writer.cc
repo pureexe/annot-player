@@ -1,8 +1,8 @@
 // h264writer.cc
 // 2/12/2012
 
-#include "mediawriter.h"
-#include "mediatoc.h"
+#include "module/mediacodec/mediawriter.h"
+#include "module/mediacodec/mediatoc.h"
 #include "module/qtext/bitwise.h"
 
 #define DEBUG "h264writer"

@@ -5,6 +5,8 @@ include(../../config.pri)
 
 DEFINES += WITH_MODULE_VLCCORE
 
+DEPENDPATH += $$PWD
+
 HEADERS += \
     $$PWD/http.h \
     $$PWD/httpbufferedsession.h \

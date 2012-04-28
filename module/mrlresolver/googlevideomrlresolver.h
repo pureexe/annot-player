@@ -4,7 +4,7 @@
 // googlevideomrlresolver.h
 // 2/2/2012
 
-#include "mrlresolver.h"
+#include "module/mrlresolver/mrlresolver.h"
 
 class GoogleVideoMrlResolver : public MrlResolver
 {

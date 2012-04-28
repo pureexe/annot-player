@@ -58,10 +58,10 @@ public:
   qint64 maxAnnotationCreateTime() const { return maxAnnotTime_; }
 
 public slots:
-  void setUser(const User &user) { user_ = user; emit userChanged(user_); }
-  void setToken(const Token &token) { token_ = token; emit tokenChanged(token_); }
+  void setUser(const User &user) { user_ = user; invalidateUser(); }
+  void setToken(const Token &token) { token_ = token; invalidateToken(); }
   void addAlias(const Alias &alias) { aliases_.append(alias); emit aliasAdded(alias); }
-  void setAliases(const AliasList &aliases) { aliases_ = aliases; emit aliasesChanged(aliases_); }
+  void setAliases(const AliasList &aliases) { aliases_ = aliases; invalidateAliases(); }
   void updateAlias(const Alias &alias);
   void setAnnotations(const AnnotationList &l) { annots_ = l; invalidateAnnotations(); }
   void addAnnotation(const Annotation &annot);

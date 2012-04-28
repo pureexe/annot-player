@@ -5,7 +5,7 @@
 #include "global.h"
 #include "signalhub.h"
 #include "positionslider.h"
-#include "ac/acui.h"
+#include "project/common/acui.h"
 #include "module/player/player.h"
 #include "module/qtext/overlaylayout.h"
 #include <QtCore>
@@ -45,12 +45,9 @@ MiniPlayerUi::MiniPlayerUi(SignalHub *hub, Player *player, ServerAgent *server, 
 
   createLayout();
 
-  QShortcut *e = new QShortcut(QKeySequence("CTRL+1"), this);
-  connect(e, SIGNAL(activated()), hub, SLOT(toggleEmbeddedPlayerMode()));
-  QShortcut *m = new QShortcut(QKeySequence("CTRL+2"), this);
-  connect(m, SIGNAL(activated()), hub, SLOT(toggleMiniPlayerMode()));
-  QShortcut *f = new QShortcut(QKeySequence("CTRL+3"), this);
-  connect(f, SIGNAL(activated()), hub, SLOT(toggleFullScreenWindowMode()));
+  connect(new QShortcut(QKeySequence("CTRL+1"), this), SIGNAL(activated()), hub, SLOT(toggleEmbeddedPlayerMode()));
+  connect(new QShortcut(QKeySequence("CTRL+2"), this), SIGNAL(activated()), hub, SLOT(toggleMiniPlayerMode()));
+  connect(new QShortcut(QKeySequence("CTRL+3"), this), SIGNAL(activated()), hub, SLOT(toggleFullScreenWindowMode()));
 }
 
 void
@@ -127,13 +124,13 @@ MiniPlayerUi::setVisible(bool visible)
 {
   if (visible) {
     if (!isActive()) {
-      connect(player(), SIGNAL(lengthChanged()), SLOT(invalidateTitle()));
-      connect(player(), SIGNAL(timeChanged()), SLOT(invalidateTitle()));
+      connect(player(), SIGNAL(lengthChanged()), SLOT(updateTitle()));
+      connect(player(), SIGNAL(timeChanged()), SLOT(updateTitle()));
     }
   } else {
     if (isActive()) {
-      disconnect(player(), SIGNAL(lengthChanged()), this, SLOT(invalidateTitle()));
-      disconnect(player(), SIGNAL(timeChanged()), this, SLOT(invalidateTitle()));
+      disconnect(player(), SIGNAL(lengthChanged()), this, SLOT(updateTitle()));
+      disconnect(player(), SIGNAL(timeChanged()), this, SLOT(updateTitle()));
     }
   }
 
@@ -142,7 +139,7 @@ MiniPlayerUi::setVisible(bool visible)
 
 // BAD DESIGN! TO BE REMOVED!
 void
-MiniPlayerUi::invalidateTitle()
+MiniPlayerUi::updateTitle()
 {
   if (hub()->isMediaTokenMode())
     setWindowTitle(positionButton()->text());
@@ -189,7 +186,7 @@ MiniPlayerUi::mousePressEvent(QMouseEvent *event)
       event->accept();
       break;
 
-    default: break;
+    default: ;
     }
 }
 
@@ -273,7 +270,7 @@ MiniPlayerDock::mousePressEvent(QMouseEvent *event)
       event->accept();
       break;
 
-    default: break;
+    default: ;
     }
 }
 

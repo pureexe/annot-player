@@ -11,6 +11,8 @@
 InputComboBox::InputComboBox(QWidget *parent)
   : Base(parent)
 {
+  lineEdit()->setPlaceholderText(tr("Comment"));
+
   setContextMenuFlags(contextMenuFlags() | PasteAndGoAction | EditAction);
 
 #define ADD(_cmd)       defaultItems.append(_cmd)

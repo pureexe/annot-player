@@ -4,12 +4,12 @@
 // annotcloud/annotation.h
 // 7/24/2011
 
+#include "module/annotcloud/annottag.h"
 #include "module/annotcloud/traits.h"
 #include "module/annotcloud/user.h"
-#include "module/annotcloud/annottag.h"
-#include <QtCore/QString>
 #include <QtCore/QList>
 #include <QtCore/QMetaType>
+#include <QtCore/QString>
 #include <cstring>
 
 namespace AnnotCloud {

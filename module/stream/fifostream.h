@@ -4,8 +4,8 @@
 // fifostream.h
 // 2/9/2012
 
-#include "inputstream.h"
-#include "outputstream.h"
+#include "module/stream/inputstream.h"
+#include "module/stream/outputstream.h"
 
 class FifoStream : public InputStream, public OutputStream
 {

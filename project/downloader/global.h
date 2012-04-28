@@ -4,7 +4,8 @@
 // global.h
 // 7/16/2011
 // Global parameters.
-#include "ac/acglobal.h"
+#include "project/common/acglobal.h"
+#include "project/common/acpaths.h"
 #include <QtGlobal>
 
 // - About -
@@ -28,6 +29,6 @@
 #define G_PATH_LOCK             G_PATH_PROFILE
 #define G_PATH_LOCK_RUNNING     G_PATH_LOCK "/" "running.lock"
 
-#define G_PATH_DOWNLOADS        QDesktopServices::storageLocation(QDesktopServices::DesktopLocation)
+#define G_PATH_DOWNLOADS        AC_PATH_DOWNLOADS
 
 #endif // GLOBAL_H

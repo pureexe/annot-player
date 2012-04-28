@@ -4,8 +4,7 @@
 include(../../config.pri)
 include($$ROOTDIR/win/qtwin/qtwin.pri)
 
-DEPENDPATH  += .
-INCLUDEPATH += .
+DEPENDPATH += ith
 
 ## Libraries
 

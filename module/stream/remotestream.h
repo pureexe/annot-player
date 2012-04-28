@@ -4,7 +4,7 @@
 // remotestream.h
 // 2/15/2012
 
-#include "inputstream.h"
+#include "module/stream/inputstream.h"
 #include "module/qtext/stoppable.h"
 #include <QtNetwork/QNetworkRequest>
 #include <QtCore/QObject>

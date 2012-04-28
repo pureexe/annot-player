@@ -35,6 +35,21 @@ namespace QtExt {
 
   template <typename L>
   inline L
+  subList(const L &l, int count)
+  {
+    if (l.size() <= count)
+      return l;
+    L ret;
+    foreach (typename L::value_type v, l) {
+      ret.push_back(v);
+      if (ret.size() >= count)
+        break;
+    }
+    return ret;
+  }
+
+  template <typename L>
+  inline L
   skipEmpty(const L &l)
   {
     L ret;

@@ -3,13 +3,11 @@
 
 DEFINES += WITH_MAC_QTMAC
 
-INCLUDEPATH += $$PWD
+INCLUDEPATH     += $$PWD/..
+DEPENDPATH      += $$PWD
 
-HEADERS += \
-    $$PWD/qtmac.h
-
-SOURCES += \
-    $$PWD/qtmac.cc
+HEADERS += $$PWD/qtmac.h
+SOURCES += $$PWD/qtmac.cc
 
 QT      += core gui
 

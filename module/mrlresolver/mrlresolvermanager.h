@@ -4,9 +4,9 @@
 // mrlresolvermanager.h
 // 1/25/2011
 
-#include "mrlresolver.h"
-#include <QtCore/QObject>
+#include "module/mrlresolver/mrlresolver.h"
 #include <QtCore/QList>
+#include <QtCore/QObject>
 
 class MrlResolverManager : public MrlResolver
 {
@@ -36,16 +36,21 @@ public:
 
   virtual bool resolveMedia(const QString &href) ///< \override
   {
-    int r = resolverForMedia(href);
-    return r >= 0 && resolveMedia(r, href);
+    QString url = autoCompleteUrl(href);
+    int r = resolverForMedia(url);
+    return r >= 0 && resolveMedia(r, url);
   }
 
   bool resolveSubtitle(int id, const QString &href);
   virtual bool resolveSubtitle(const QString &href) ///< \override
   {
-    int r = resolverForSubtitle(href);
-    return r == Lua && resolveSubtitle(r, href);
+    QString url = autoCompleteUrl(href);
+    int r = resolverForSubtitle(url);
+    return r == Lua && resolveSubtitle(r, url);
   }
+
+protected:
+  static QString autoCompleteUrl(const QString &url);
 };
 
 #endif // MRLRESOLVERMANAGER_H

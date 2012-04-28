@@ -1,8 +1,7 @@
 // mp4codec.cc
 // 2/14/2012
 
-#include "mp4codec.h"
-#include "module/stream/inputstream.h"
+#include "module/mediacodec/mp4codec.h"
 #include "module/stream/fileinputstream.h"
 #ifdef WITH_MP4V2
 #  include <mp4v2/mp4v2.h>

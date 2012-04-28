@@ -24,6 +24,7 @@ HEADERS += \
     $$PWD/htmltag.h \
     $$PWD/layoutwidget.h \
     $$PWD/network.h \
+    $$PWD/networkcookie.h \
     $$PWD/os.h \
     $$PWD/overlaylayout.h \
     $$PWD/rubberband.h \
@@ -31,6 +32,7 @@ HEADERS += \
     $$PWD/stoppable.h \
     $$PWD/string.h \
     $$PWD/ss.h \
+    $$PWD/systemtrayicon.h \
     $$PWD/toolbutton.h \
     $$PWD/toolbuttonwithid.h \
     $$PWD/webview.h \
@@ -49,7 +51,7 @@ SOURCES += \
     $$PWD/filedeleter.cc \
     $$PWD/filesystem.cc \
     $$PWD/fontcombobox.cc \
-    $$PWD/network.cc \
+    $$PWD/networkcookie.cc \
     $$PWD/os.cc \
     $$PWD/rubberband.cc \
     $$PWD/slider.cc \
@@ -67,6 +69,7 @@ DOC_FILES += \
     $$PWD/doc/start.html
 
 IMAGE_FILES += \
+    $$PWD/images/favicon.ico \
     $$PWD/images/null.png
 
 OTHER_FILES += \

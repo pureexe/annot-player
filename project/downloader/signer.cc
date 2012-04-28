@@ -2,11 +2,10 @@
 // 3/30/2012
 
 #include "signer.h"
-#include "ac/acsettings.h"
-#include "module/annotcloud/user.h"
-#include "module/annotcloud/traits.h"
-#include "module/annotcloud/token.h"
+#include "project/common/acsettings.h"
 #include "module/annotcloud/alias.h"
+#include "module/annotcloud/token.h"
+#include "module/annotcloud/traits.h"
 #include "module/annotcloud/user.h"
 #include "module/serveragent/serveragent.h"
 #include <QtCore>

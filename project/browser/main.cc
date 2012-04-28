@@ -5,22 +5,20 @@
 #include "rc.h"
 #include "settings.h"
 #include "global.h"
-#include "ac/acsettings.h"
-#include "ac/acui.h"
+#include "project/common/acsettings.h"
+#include "project/common/acui.h"
 #ifdef WITH_MODULE_QT
 #  include "module/qt/qtrc.h"
 #endif // WITH_MODULE_QT
 #include <QtWebKit/QWebSettings>
 #include <QtNetwork/QNetworkProxy>
 #include <QtNetwork/QNetworkReply>
-#include <QtGui>
+#include <QtCore>
 #include <ctime>
 #include <cstdlib>
 
 #define DEBUG "main"
 #include "module/debug/debug.h"
-
-#define DEFAULT_SIZE    QSize(1000 + 9*2, 600); // width for nicovideo.jp + margin*2
 
 // - Startup stages -
 
@@ -30,19 +28,6 @@ namespace { // anonymous
   inline void registerMetaTypes()
   { // Not registered in Qt 4.8
     qRegisterMetaType<QNetworkReply::NetworkError>("QNetworkReply::NetworkError");
-  }
-
-  // Window size
-
-  inline bool isValidWindowSize(const QSize &size, const QWidget *w = 0)
-  {
-    enum { MinWidth = 400, MinHeight = 300 };
-    if (size.width() < MinWidth || size.height() < MinHeight)
-      return false;
-
-    QSize desktop = QApplication::desktop()->screenGeometry(w).size();
-    return desktop.isEmpty() ||
-           size.width() > desktop.width() && size.height() > desktop.height();
   }
 
   // i18n
@@ -128,8 +113,11 @@ main(int argc, char *argv[])
   }
 
   // Check update
-  if (settings->version() != G_VERSION)
+  if (settings->version() != G_VERSION) {
+    settings->setFullScreen(false);
     settings->setVersion(G_VERSION);
+    settings->sync();
+  }
 
   // Set theme.
   {
@@ -199,22 +187,11 @@ main(int argc, char *argv[])
     settings->setRecentTabIndex(urls.size() - 1);
   }
 
-  MainWindow w;
-  a.setMainWindow(&w);
+  MainWindow *w = new MainWindow;
 
-  QSize size = settings->recentSize();
-  if (size.isEmpty() || !settings->hasRecentTabs() ||
-      !::isValidWindowSize(size, &w))
-    size = DEFAULT_SIZE;
-  w.resize(size);
-
-  //QTimer::singleShot(0, &w, SLOT(login()));
-  //QTimer::singleShot(0, &w, SLOT(show()));
-  w.login();
-  w.show();
-
-  //QTimer::singleShot(0, &w, SLOT(login()));
-  //w.login();
+  //QTimer::singleShot(0, w, SLOT(login()));
+  w->login();
+  w->show();
 
   DOUT("exit: exec");
   return a.exec();

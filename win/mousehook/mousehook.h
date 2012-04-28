@@ -8,7 +8,7 @@
 
 QT_FORWARD_DECLARE_CLASS(QObject)
 
-class MouseHookImpl; ///< \internal
+class MouseHookPrivate; ///< \internal
 
 ///  This class should be used as a singleton.
 class MouseHook
@@ -16,11 +16,11 @@ class MouseHook
   //Q_OBJECT
   typedef MouseHook Self;
   //typedef QObject Base;
-  typedef MouseHookImpl Impl;
+  typedef MouseHookPrivate Private;
 
   // - Singleton -
 public:
-  MOUSEHOOKAPI static Self *globalInstance();
+  MOUSEHOOKAPI static Self *globalInstance() { static Self g; return &g; }
 
   // - Properties -
 public:
@@ -53,7 +53,7 @@ public:
   void *hook() const; ///< \internal Return global hook handle
 
 private:
-  Impl *impl_;
+  Private *d_;
 };
 
 // EOF

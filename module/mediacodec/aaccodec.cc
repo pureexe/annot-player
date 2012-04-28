@@ -2,7 +2,7 @@
 // 2/13/2012
 // See: liveMedia/ADTSAudioStreamSource.cc
 
-#include "aaccodec.h"
+#include "module/mediacodec/aaccodec.h"
 #include "module/stream/inputstream.h"
 
 #define DEBUG "aaccodec"

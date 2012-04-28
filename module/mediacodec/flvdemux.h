@@ -7,7 +7,6 @@
 // See: FLVExtractCl/Library/FLVFile.cs
 // http://moitah.net/
 
-#include "mediacodec_config.h"
 #include "module/qtext/stoppable.h"
 #include "module/stream/inputstream.h"
 #include "module/stream/outputstream.h"

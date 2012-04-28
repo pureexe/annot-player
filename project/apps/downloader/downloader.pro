@@ -1,7 +1,7 @@
 # downloader.pro
 # 9/3/2011
 
-VERSION = 0.1.1.0
+VERSION = 0.1.1.1
 
 CONFIG += noqt nocrt
 include(../../../config.pri)

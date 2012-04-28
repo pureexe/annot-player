@@ -1,13 +1,15 @@
 # qth.pri
 # 10/13/2011
 
-DEPENDPATH  += $$PWD
-INCLUDEPATH += $$PWD
-
 DEFINES += WITH_WIN_QTH
 
-QT      += core
+INCLUDEPATH += \
+    $$PWD
+DEPENDPATH += \
+    $$PWD \
+    $$PWD/ith
 
+QT      += core
 LIBS    += -lqth
 
 HEADERS += \

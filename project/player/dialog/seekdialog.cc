@@ -5,7 +5,7 @@
 #include "tr.h"
 #include "global.h"
 #include "logger.h"
-#include "ac/acui.h"
+#include "project/common/acui.h"
 #include "module/qtext/datetime.h"
 #include <QtGui>
 
@@ -51,15 +51,15 @@ SeekDialog::createLayout()
     << "0" << "1" << "2" << "3" << "5"
     << "10" << "20" << "30" << "40" << "50";
 
-  ssEdit_ = ui->makeComboBox(AcUi::EditHint, "", TR(T_SECOND), defvals);
+  ssEdit_ = ui->makeComboBox(AcUi::EditHint, "", TR(T_SECOND), "", defvals);
   ssEdit_->lineEdit()->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
   ssEdit_->setMaximumWidth(SEEKLINEEDIT_MAXWIDTH);
 
-  mmEdit_ = ui->makeComboBox(AcUi::EditHint, "", TR(T_MINUTE), defvals);
+  mmEdit_ = ui->makeComboBox(AcUi::EditHint, "", TR(T_MINUTE), "", defvals);
   mmEdit_->lineEdit()->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
   mmEdit_->setMaximumWidth(SEEKLINEEDIT_MAXWIDTH);
 
-  hhEdit_ = ui->makeComboBox(AcUi::EditHint, "", TR(T_HOUR), defvals);
+  hhEdit_ = ui->makeComboBox(AcUi::EditHint, "", TR(T_HOUR), "", defvals);
   hhEdit_->lineEdit()->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
   hhEdit_->setMaximumWidth(SEEKLINEEDIT_MAXWIDTH);
 
@@ -102,10 +102,8 @@ SeekDialog::createLayout()
   connect(hhEdit_->lineEdit(), SIGNAL(returnPressed()), SLOT(ok()));
 
   // Shortcuts
-  QShortcut *cancelShortcut = new QShortcut(QKeySequence("Esc"), this);
-  connect(cancelShortcut, SIGNAL(activated()), SLOT(hide()));
-  QShortcut *closeShortcut = new QShortcut(QKeySequence("CTRL+W"), this);
-  connect(closeShortcut, SIGNAL(activated()), SLOT(hide()));
+  connect(new QShortcut(QKeySequence("Esc"), this), SIGNAL(activated()), SLOT(hide()));
+  connect(new QShortcut(QKeySequence("CTRL+W"), this), SIGNAL(activated()), SLOT(hide()));
 }
 
 // - Properties -

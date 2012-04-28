@@ -1,10 +1,10 @@
 // module/serveragent/serveragent.cc
 // 9/9/2011
 
-#include "serveragent.h"
-#include "serverproxy.h"
-#include "serverproxy_config.h"
-#include "castmanager.h"
+#include "module/serveragent/serveragent.h"
+#include "module/serveragent/serverproxy.h"
+#include "module/serveragent/serverproxy_config.h"
+#include "module/serveragent/castmanager.h"
 #ifdef WITH_MODULE_CLIENTAGENT
 #  include "module/clientagent/clientagent.h"
 #endif // WITH_MODULE_CLIENTAGENT

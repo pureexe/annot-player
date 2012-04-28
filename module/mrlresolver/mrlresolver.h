@@ -4,7 +4,7 @@
 // mrlresolver.h
 // 1/24/2011
 
-#include "mrlinfo.h"
+#include "module/mrlresolver/mrlinfo.h"
 #include <QtCore/QObject>
 
 QT_FORWARD_DECLARE_CLASS(QNetworkCookieJar)

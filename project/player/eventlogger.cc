@@ -6,11 +6,12 @@
 #include "global.h"
 #include "logger.h"
 #include "tr.h"
-#include "ac/acui.h"
+#include "project/common/acui.h"
 #include "module/qtext/htmltag.h"
 #include "module/qtext/datetime.h"
 #include "module/player/player.h"
 #include "module/serveragent/serveragent.h"
+#include <QtGui/QApplication>
 #include <QtCore>
 
 #define DEBUG "eventlogger"
@@ -64,6 +65,7 @@ EventLogger::startLogUntilPlaying()
 {
   //DOUT("enter");
   if (player_->hasMedia()) {
+    QApplication::setOverrideCursor(Qt::BusyCursor);
     logCount_ = 0;
     if (!logUntilPlayingTimer_) {
       logUntilPlayingTimer_ = new QTimer(this);
@@ -81,8 +83,10 @@ EventLogger::stopLogUntilPlaying()
 {
   DOUT("enter");
   Q_ASSERT(logUntilPlayingTimer_);
-  if (logUntilPlayingTimer_ && logUntilPlayingTimer_->isActive())
+  if (logUntilPlayingTimer_ && logUntilPlayingTimer_->isActive()) {
+    QApplication::setOverrideCursor(Qt::ArrowCursor);
     logUntilPlayingTimer_->stop();
+  }
   DOUT("exit");
 }
 
@@ -454,6 +458,60 @@ EventLogger::logAnnotationOffsetChanged(qint64 value)
   else
     log(tr("annotation offset reset"));
 }
+
+void
+EventLogger::logPauseHoveredAnnotations(bool t)
+{
+  if (t)
+    log(tr("capture hovered annotations"));
+}
+
+void
+EventLogger::logResumeHoveredAnnotations(bool t)
+{
+  if (t)
+    log(tr("release hovered annotations"));
+}
+
+void
+EventLogger::logRemoveHoveredAnnotations(bool t)
+{
+  if (t)
+    log(tr("kill hovered annotations"));
+}
+
+void
+EventLogger::logExileHoveredAnnotations(bool t)
+{
+  if (t)
+    log(tr("exorcise hovered annotations"));
+}
+
+void
+EventLogger::logSelectedUserIds(const QList<qint64> &uids)
+{
+  qint64 count = uids.size();
+  if (count)
+    log(tr("found %1 users").arg(
+      HTML_STYLE_OPEN(color:orange) + QString::number(count) + HTML_STYLE_CLOSE()
+    ));
+}
+
+void
+EventLogger::logPreferLocalDatabaseChanged(bool t)
+{
+  static bool once = true;
+  if (once) {
+    once = false;
+    return;
+  }
+
+  if (t)
+    log(tr("Prefer offline annotations over online ones"));
+  else
+    log(tr("Prefer online annotations over offline ones"));
+}
+
 void
 EventLogger::logCanvasEnabled(bool t)
 {

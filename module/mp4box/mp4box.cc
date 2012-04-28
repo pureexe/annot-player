@@ -6,11 +6,11 @@
 #ifdef WITH_GPAC
 #  include "gpac/gpac.h"
 #endif // WITH_GPAC
+#include <QtCore/QCoreApplication>
 #include <QtCore/QFile>
 #include <QtCore/QFileInfo>
-#include <QtCore/QCoreApplication>
-#include <cstring>
 #include <cstdio>
+#include <cstring>
 
 #define MP4BOX_BIN      QCoreApplication::applicationDirPath() + "/" "MP4Box"
 

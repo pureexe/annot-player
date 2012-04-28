@@ -2,6 +2,7 @@
 // 4/9/2012
 
 #include "module/qtext/webpage.h"
+#include <QtWebKit/QWebFrame>
 #include <QtGui>
 
 //#define HOMEPAGE_URL    "http://annot.me"
@@ -19,6 +20,9 @@
 // - RC -
 
 #ifdef Q_OS_LINUX
+#  ifndef DOCDIR
+#    define DOCDIR      "/usr/share/annot"
+#  endif // DOCDIR
 #  define RC_PREFIX     DOCDIR "/"
 #else
 #  define RC_PREFIX     QCoreApplication::applicationDirPath() + "/doc/"
@@ -30,10 +34,7 @@ namespace { // anonymous
   inline QByteArray rc_html_error_()
   {
     QFile f(RC_HTML_ERROR);
-    if (f.open(QIODevice::ReadOnly))
-      return f.readAll();
-    else
-      return QByteArray();
+    return f.open(QIODevice::ReadOnly) ? f.readAll() : QByteArray();
   }
 } // anonymous namespace
 
@@ -104,6 +105,28 @@ WebPage::errorPageExtension(const ErrorPageExtensionOption *option, ErrorPageExt
   DOUT("exit");
   return true;
 }
+
+// - Scroll -
+
+void
+QtExt::
+WebPage::scrollTop()
+{ mainFrame()->setScrollBarValue(Qt::Vertical, 0); }
+
+void
+QtExt::
+WebPage::scrollBottom()
+{ mainFrame()->setScrollBarValue(Qt::Vertical, mainFrame()->scrollBarMaximum(Qt::Vertical)); }
+
+void
+QtExt::
+WebPage::scrollLeft()
+{ mainFrame()->setScrollBarValue(Qt::Horizontal, 0); }
+
+void
+QtExt::
+WebPage::scrollRight()
+{ mainFrame()->setScrollBarValue(Qt::Horizontal, mainFrame()->scrollBarMaximum(Qt::Horizontal)); }
 
 // EOF
 

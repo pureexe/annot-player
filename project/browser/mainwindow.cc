@@ -5,32 +5,47 @@
 #include "settings.h"
 #include "rc.h"
 #include "global.h"
-#include "ac/acsettings.h"
-#include "ac/acui.h"
-#include "ac/acbrowser.h"
-#include "ac/acplayer.h"
-#include "ac/acdownloader.h"
+#include "application.h"
+#include "project/common/acaboutdialog.h"
+#include "project/common/acsettings.h"
+#include "project/common/acui.h"
+#include "project/common/acbrowser.h"
+#include "project/common/acplayer.h"
+#include "project/common/acdownloader.h"
 #include "module/webbrowser/network/wbnetworkaccessmanager.h"
+#include "module/webbrowser/core/wbsearchenginefactory.h"
 #include "module/nicoutil/nicoutil.h"
 #include "module/download/downloader.h"
-#include "module/mrlanalysis/mrlanalysis.h"
+#include "module/mousegesture/mousegesture.h"
 #include "module/qtext/algorithm.h"
-#include "module/qtext/network.h"
+#include "module/qtext/networkcookie.h"
+#include "module/qtext/webview.h"
 #include <boost/tuple/tuple.hpp>
 #include <QtGui>
 #include <QtWebKit>
+
+#define DEBUG "mainwindow"
+#include "module/debug/debug.h"
+
+#ifdef __GNUC__
+#  pragma GCC diagnostic ignored "-Wparentheses" // suggest parentheses
+#endif // __GNUC__
 
 #define HOMEPAGE_EN    "http://www.youtube.com/FUNimation"
 #define HOMEPAGE_JP    "http://ch.nicovideo.jp/menu/anime"
 #define HOMEPAGE_ZH    "http://www.bilibili.tv/video/bangumi.html"
 
-#define DEBUG "mainwindow"
-#include "module/debug/debug.h"
+#define MIN_SIZE        QSize(400, 300)
+#ifdef Q_WS_WIN
+#  define DEFAULT_SIZE  QSize(1000 + 9*2, 600)
+#else
+#  define DEFAULT_SIZE  QSize(1000 + 9*2, 655) // width for nicovideo.jp + margin*2, height for newtab on mac
+#endif // Q_WS_WIN
 
 // - Construction -
 
 #define WINDOW_FLAGS ( \
-  Qt::Dialog | \
+  Qt::Window | \
   Qt::CustomizeWindowHint | \
   Qt::WindowTitleHint | \
   Qt::WindowSystemMenuHint | \
@@ -41,6 +56,10 @@
 #  define TEXT_SIZE_SCALE 0.9
 #else
 #  define TEXT_SIZE_SCALE 1.0
+#endif // Q_WS_MAC
+
+#ifdef Q_WS_MAC
+#  define USE_MDI
 #endif // Q_WS_MAC
 
 MainWindow::MainWindow(QWidget *parent)
@@ -56,6 +75,11 @@ MainWindow::MainWindow(QWidget *parent)
   setContentsMargins(4, 2, 4, 2);
 #endif // Q_WS_MAC
 
+  autoHideToolBarTimer_ = new QTimer(this);
+  autoHideToolBarTimer_->setSingleShot(true);
+  autoHideToolBarTimer_->setInterval(5000); // 5 seconds
+  connect(autoHideToolBarTimer_, SIGNAL(timeout()), SLOT(autoHideToolBar()));
+
   loadCookieJar();
 
   setCacheDirectory(G_PATH_CACHES);
@@ -70,7 +94,8 @@ MainWindow::MainWindow(QWidget *parent)
     << QString("http://www.bilibili.tv/html/arcgg.html")
   );
 
-  switch (AcSettings::globalSettings()->language()) {
+  int lang = AcSettings::globalSettings()->language();
+  switch (lang) {
   case QLocale::English: setHomePage(HOMEPAGE_JP); break;
   case QLocale::Chinese: setHomePage(HOMEPAGE_ZH); break;
   default:               setHomePage(HOMEPAGE_JP);
@@ -79,6 +104,7 @@ MainWindow::MainWindow(QWidget *parent)
     << "google.com"
     << "nicovideo.jp"
     << "ch.nicovideo.jp/menu/anime"
+    << "ja.wikipedia.org/wiki/"
     << "www.light.gr.jp"
     << WbNetworkAccessManager::supportedSites()
   );
@@ -93,6 +119,8 @@ MainWindow::MainWindow(QWidget *parent)
   connect(this, SIGNAL(openUrlWithAcPlayerRequested(QString)), SLOT(openUrlWithAcPlayer(QString)));
   connect(this, SIGNAL(importUrlToAcPlayerRequested(QString)), SLOT(importUrlToAcPlayer(QString)));
   connect(this, SIGNAL(openUrlWithAcDownloaderRequested(QString)), SLOT(openUrlWithAcDownloader(QString)));
+  connect(this, SIGNAL(newWindowRequested()), SLOT(newWindow()));
+  connect(this, SIGNAL(fullScreenRequested()), SLOT(toggleFullScreen()));
   /*
   connect(AcBrowserController::globalController(), SIGNAL(message(QString)),
           SLOT(showMessage(QString)), Qt::QueuedConnection);
@@ -114,24 +142,169 @@ MainWindow::MainWindow(QWidget *parent)
   connect(dc, SIGNAL(notification(QString)), SLOT(notify(QString)), Qt::QueuedConnection);
 
   // - Shortcuts -
-#ifndef Q_WS_MAC
-  QShortcut *newShortcut = new QShortcut(QKeySequence::New, this);
-  connect(newShortcut, SIGNAL(activated()), SLOT(newWindow()));
-#endif // Q_WS_MAC
+  connect(new QShortcut(QKeySequence::New, this), SIGNAL(activated()), SLOT(newWindow()));
+
+  createMenus();
+  createGestures();
 
   // - Settings -
   Settings *settings = Settings::globalSettings();
   setClosedUrls(settings->closedUrls());
-  addRecentUrls(settings->recentUrls());
+  addRecentUrls(settings->recentUrls() << WB_BLANK_PAGE);
+
+  int searchEngine = settings->searchEngine();
+  if (searchEngine < 0)
+    switch (lang) {
+    case QLocale::Japanese: searchEngine = WbSearchEngineFactory::Nicovideo; break;
+    case QLocale::Chinese:  searchEngine = WbSearchEngineFactory::Bilibili; break;
+    case QLocale::English:
+    default:                searchEngine = WbSearchEngineFactory::Google;
+    }
+  setSearchEngine(searchEngine);
+
+  QStringList searches = settings->recentSearches();
+  addRecentSearches(searches);
+  if (!searches.isEmpty())
+    setSearchedText(searches.first());
+
+  DOUT("searchEngine =" << searchEngine << Base::searchEngine());
+
+  setMinimumSize(MIN_SIZE);
+
+  if (settings->isFullScreen()) {
+    resize(DEFAULT_SIZE);
+    //setFullScreen(true);
+  } else {
+    QSize size = settings->recentSize();
+    if (size.isEmpty() || !settings->hasRecentTabs() ||
+        !isValidWindowSize(size))
+      size = DEFAULT_SIZE;
+    resize(size);
+  }
+
+  DOUT("size =" << size());
+  dynamic_cast<Application *>(qApp)->addWindow(this);
 }
 
 void
-MainWindow::showMessage(const QString &text)
+MainWindow::createGestures()
 {
-  if (MrlAnalysis::matchSite(text))
-    notify(text);
-  else
-    Base::showMessage(text);
+  MouseGesture *g;
+
+  addMouseGesture(g = new MouseGesture(MouseGesture::DirectionList()
+    << MouseGesture::NoMatch,
+    tr("Unrecognized Gesture")
+   ));
+
+  addMouseGesture(g = new MouseGesture(MouseGesture::DirectionList()
+    << MouseGesture::Down,
+    tr("Open Link in Background Tab")
+   )); connect(g, SIGNAL(triggered()), SLOT(openLinkInNewTab()), Qt::QueuedConnection);
+
+  addMouseGesture(g = new MouseGesture(MouseGesture::DirectionList()
+    << MouseGesture::Down << MouseGesture::Right,
+    tr("Close Tab")
+  )); connect(g, SIGNAL(triggered()), SLOT(closeTab()), Qt::QueuedConnection);
+
+  addMouseGesture(g = new MouseGesture(MouseGesture::DirectionList()
+    << MouseGesture::Right << MouseGesture::Left,
+    tr("New Tab")
+  )); connect(g, SIGNAL(triggered()), SLOT(newTabAfterCurrentWithBlankPage()), Qt::QueuedConnection);
+
+  addMouseGesture(g = new MouseGesture(MouseGesture::DirectionList()
+    << MouseGesture::Left << MouseGesture::Right,
+    tr("Undo Close Tab")
+  )); connect(g, SIGNAL(triggered()), SLOT(undoCloseTab()), Qt::QueuedConnection);
+
+  addMouseGesture(g = new MouseGesture(MouseGesture::DirectionList()
+    << MouseGesture::Up << MouseGesture::Down,
+    tr("Reload")
+  )); connect(g, SIGNAL(triggered()), SLOT(reload()));
+
+  addMouseGesture(g = new MouseGesture(MouseGesture::DirectionList()
+    << MouseGesture::Left,
+    tr("Forward")
+  )); connect(g, SIGNAL(triggered()), SLOT(forward()), Qt::QueuedConnection);
+
+  addMouseGesture(g = new MouseGesture(MouseGesture::DirectionList()
+    << MouseGesture::Right,
+    tr("Backward")
+  )); connect(g, SIGNAL(triggered()), SLOT(back()), Qt::QueuedConnection);
+
+  addMouseGesture(g = new MouseGesture(MouseGesture::DirectionList()
+    << MouseGesture::Up << MouseGesture::Left,
+    tr("Previous Tab")
+  )); connect(g, SIGNAL(triggered()), SLOT(previousTab()));
+
+  addMouseGesture(g = new MouseGesture(MouseGesture::DirectionList()
+    << MouseGesture::Up << MouseGesture::Right,
+    tr("Next Tab")
+  )); connect(g, SIGNAL(triggered()), SLOT(nextTab()), Qt::QueuedConnection);
+
+  addMouseGesture(g = new MouseGesture(MouseGesture::DirectionList()
+    << MouseGesture::Right << MouseGesture::Down,
+    tr("Minimize Window")
+  )); connect(g, SIGNAL(triggered()), SLOT(showMinimized()), Qt::QueuedConnection);
+
+  addMouseGesture(g = new MouseGesture(MouseGesture::DirectionList()
+    << MouseGesture::Right << MouseGesture::Up,
+    tr("Toggle Full Screen")
+  )); connect(g, SIGNAL(triggered()), SLOT(toggleFullScreen()), Qt::QueuedConnection);
+
+  addMouseGesture(g = new MouseGesture(MouseGesture::DirectionList()
+    << MouseGesture::Left << MouseGesture::Up,
+    tr("Scroll Top")
+  )); connect(g, SIGNAL(triggered()), SLOT(scrollTop()), Qt::QueuedConnection);
+
+  addMouseGesture(g = new MouseGesture(MouseGesture::DirectionList()
+    << MouseGesture::Left << MouseGesture::Down,
+    tr("Scroll Bottom")
+  )); connect(g, SIGNAL(triggered()), SLOT(scrollBottom()), Qt::QueuedConnection);
+}
+
+void
+MainWindow::createMenus()
+{
+#ifdef Q_WS_WIN
+  menuBar()->hide();
+#endif // Q_WS_WIN
+  QMenu *
+  m = menuBar()->addMenu(tr("&File")); {
+    m->addAction(tr("New Window"), this, SLOT(newWindow()), QKeySequence::New);
+    m->addAction(tr("New Tab"), this, SLOT(newTabAfterCurrentWithBlankPage()), QKeySequence::AddTab);
+    m->addSeparator();
+    m->addAction(tr("Clip"), this, SLOT(clip()), QKeySequence::Save);
+    m->addSeparator();
+    m->addAction(tr("Close Tab"), this, SLOT(closeTab()), QKeySequence("CTRL+W"));
+    m->addAction(tr("Close Window"), this, SLOT(close()));
+    m->addAction(tr("Exit"), dynamic_cast<Application *>(qApp), SLOT(close()), QKeySequence::Quit);
+  }
+
+  //editMenu = menuBar()->addMenu(tr("&Edit"));
+  //editMenu->addAction(undoAct);
+  //editMenu->addAction(insertAct);
+  //editMenu->addAction(analyzeAct);
+  //editMenu->addAction(transformAct);
+  //editMenu->addAction(applyAct);
+  //editMenu->addAction(generateAct);
+  //editMenu->addAction(clearAct);
+
+  m = menuBar()->addMenu(tr("&View")); {
+    m->addAction(tr("Reload"), this, SLOT(reload()), QKeySequence("CTRL+R"));
+    m->addAction(tr("Stop"), this, SLOT(stop()), QKeySequence("CTRL+."));
+    m->addAction(tr("Inspect"), this, SLOT(inspect()), QKeySequence("CTRL+I"));
+    m->addSeparator();
+    m->addAction(tr("Actual Size"), this, SLOT(zoomReset()), QKeySequence("CTRL+0"));
+    m->addAction(tr("Zoom In"), this, SLOT(zoomIn()), QKeySequence("CTRL+="));
+    m->addAction(tr("Zoom Out"), this, SLOT(zoomOut()), QKeySequence("CTRL+-"));
+    m->addSeparator();
+    m->addAction(tr("Toggle Full Screen"), this, SLOT(toggleFullScreen()), QKeySequence("CTRL+META+F"));
+  }
+
+  m = menuBar()->addMenu(tr("&Help")); {
+    //helpMenu_->addAction(tr("&Help"), this, SLOT(help())); // DO NOT TRANSLATE ME
+    m->addAction(tr("&About"), this, SLOT(about())); // DO NOT TRANSLATE ME
+  }
 }
 
 QStringList
@@ -178,6 +351,40 @@ MainWindow::login()
 
 // - Events -
 
+void
+MainWindow::mouseMoveEvent(QMouseEvent *event)
+{
+  if (isFullScreen() &&
+      isGlobalPosAroundToolBar(event->globalPos())) {
+    setToolBarVisible(true);
+    setTabBarVisible(true);
+    autoHideToolBarTimer_->start();
+  }
+  Base::mouseMoveEvent(event);
+}
+
+void
+MainWindow::mousePressEvent(QMouseEvent *event)
+{
+  if (isFullScreen() && event->button() == Qt::LeftButton &&
+      isGlobalPosAroundToolBar(event->globalPos())) {
+    setToolBarVisible(true);
+    setTabBarVisible(true);
+    autoHideToolBarTimer_->start();
+  }
+  Base::mousePressEvent(event);
+}
+
+void
+MainWindow::focusInEvent(QFocusEvent *e)
+{
+  Application *a = dynamic_cast<Application *>(qApp);
+  Q_ASSERT(a);
+  if (this != a->activeMainWindow())
+    a->setActiveMainWindow(this);
+  Base::focusInEvent(e);
+}
+
 bool
 MainWindow::event(QEvent *e)
 {
@@ -207,7 +414,7 @@ MainWindow::saveRecentTabs()
     QStringList urls;
     foreach (QString t, tabAddresses()) {
       t = t.trimmed();
-      if (!t.isEmpty() && t != "about:blank")
+      if (!t.isEmpty() && t != WB_BLANK_PAGE)
         urls.append(t);
     }
     urls = QtExt::uniqueList(urls);
@@ -221,16 +428,26 @@ MainWindow::closeEvent(QCloseEvent *event)
 {
   DOUT("enter");
   enum { UrlSizeLimit = 20 };
+  enum { SearchSizeLimit = 20 };
+
+  dynamic_cast<Application *>(qApp)->removeWindow(this);
 
   // Save settings
   saveRecentTabs();
   Settings *settings = Settings::globalSettings();
   settings->setClosedUrls(QtExt::skipEmpty(closedUrls()), UrlSizeLimit);
   settings->setRecentUrls(QtExt::skipEmpty(recentUrls()), UrlSizeLimit);
+  settings->setRecentSearches(recentSearches(), SearchSizeLimit);
   settings->setRecentTabIndex(tabIndex());
-  settings->setRecentSize(size());
+  if (isFullScreen())
+    settings->clearRecentSize();
+  else
+    settings->setRecentSize(size());
+  DOUT("size =" << size());
 
-  DownloaderController::globalController()->abort();
+  settings->setSearchEngine(searchEngine());
+
+  settings->setFullScreen(isFullScreen());
 
   saveCookieJar();
 
@@ -256,7 +473,7 @@ MainWindow::setVisible(bool visible)
     s->setRecentTabIndex(0);
 
     if (tabCount() <= 0)
-      newTabWithDefaultPage();
+      newTabAtLastWithBlankPage();
   }
 }
 
@@ -265,6 +482,10 @@ MainWindow::setVisible(bool visible)
 void
 MainWindow::newWindow()
 {
+#ifdef USE_MDI
+  showMessage(tr("openning new window") + " ...");
+  (new Self)->show();
+#else
   bool ok = false;
   QString app = QCoreApplication::applicationFilePath();
 #ifdef Q_WS_MAC
@@ -279,6 +500,7 @@ MainWindow::newWindow()
     showMessage(tr("openning new window") + " ...");
   else
     warn(tr("failed open new window"));
+#endif // USE_MDI
 }
 
 // - IPC -
@@ -341,6 +563,160 @@ MainWindow::saveCookieJar()
   bool ok = QtExt::writeCookiesToFile(cookieJar(), G_PATH_COOKIE);
   Q_UNUSED(ok);
   DOUT("ok =" << ok);
+}
+
+// - Window -
+
+bool
+MainWindow::isValidWindowSize(const QSize &size) const
+{
+  enum { MinWidth = 400, MinHeight = 300 };
+  if (size.width() < MinWidth || size.height() < MinHeight)
+    return false;
+
+  QSize desktop = QApplication::desktop()->screenGeometry(this).size();
+  return desktop.isEmpty() ||
+         size.width() > desktop.width() && size.height() > desktop.height();
+}
+
+// - Actions -
+
+void
+MainWindow::clip()
+{
+  QtExt::WebView *w = dynamic_cast<QtExt::WebView *>(tabWidget());
+  if (w)
+    w->clip();
+}
+
+void
+MainWindow::reload()
+{
+  QtExt::WebView *w = dynamic_cast<QtExt::WebView *>(tabWidget());
+  if (w)
+    w->reload();
+}
+
+void
+MainWindow::stop()
+{
+  QtExt::WebView *w = dynamic_cast<QtExt::WebView *>(tabWidget());
+  if (w)
+    w->stop();
+}
+
+void
+MainWindow::zoomIn()
+{
+  QtExt::WebView *w = dynamic_cast<QtExt::WebView *>(tabWidget());
+  if (w)
+    w->zoomIn();
+}
+
+void
+MainWindow::zoomOut()
+{
+  QtExt::WebView *w = dynamic_cast<QtExt::WebView *>(tabWidget());
+  if (w)
+    w->zoomOut();
+}
+
+void
+MainWindow::zoomReset()
+{
+  QtExt::WebView *w = dynamic_cast<QtExt::WebView *>(tabWidget());
+  if (w)
+    w->zoomReset();
+}
+
+void
+MainWindow::inspect()
+{
+  QWebView *w = qobject_cast<QWebView *>(tabWidget());
+  if (w) {
+    QWebPage *page = w->page();
+    if (page)
+      page->triggerAction(QWebPage::InspectElement);
+  }
+}
+
+void
+MainWindow::scrollTop()
+{
+  QtExt::WebView *w = dynamic_cast<QtExt::WebView *>(tabWidget());
+  if (w)
+    w->scrollTop();
+}
+
+void
+MainWindow::scrollBottom()
+{
+  QtExt::WebView *w = dynamic_cast<QtExt::WebView *>(tabWidget());
+  if (w)
+    w->scrollBottom();
+}
+
+void
+MainWindow::about()
+{
+  static AcAboutDialog *w = 0;
+  if (!w)
+    w = new AcAboutDialog(G_APPLICATION, G_VERSION, this);
+  w->show();
+}
+
+void
+MainWindow::setFullScreen(bool t)
+{
+#ifdef Q_WS_WIN
+  if (AcUi::globalInstance()->isAeroEnabled())
+    AcUi::globalInstance()->setWindowDwmEnabled(this, false);
+#endif // Q_WS_WIN
+
+  //setMouseTracking(t);
+  setDraggable(!t);
+  if (t) {
+    setWindowFlags(Qt::Window);
+    showFullScreen();
+    notify(tr("Double click any tab to exit full screen."));
+  } else {
+    setWindowFlags(WINDOW_FLAGS);
+    showNormal();
+  }
+
+#ifdef Q_WS_WIN
+  if (AcUi::globalInstance()->isAeroEnabled())
+    AcUi::globalInstance()->setWindowDwmEnabled(this, true);
+#endif // Q_WS_WIN
+
+  if (t)
+    autoHideToolBarTimer_->start();
+  else {
+    autoHideToolBarTimer_->stop();
+    setToolBarVisible(true);
+    setTabBarVisible(true);
+  }
+}
+
+void
+MainWindow::autoHideToolBar()
+{
+  if (isToolBarUnderMouse() || isTabBarUnderMouse() ||
+      toolBarHasFocus() || tabBarHasFocus())
+    autoHideToolBarTimer_->start();
+  else {
+    notify(tr("Click any edge of the screen to show tool bars."));
+    setToolBarVisible(false);
+    setTabBarVisible(false);
+  }
+}
+
+bool
+MainWindow::isGlobalPosAroundToolBar(const QPoint &pos) const
+{
+  enum { margin = 10, top = 10 };
+  QRect r(margin, margin + top, width() - (margin + margin), height() - (margin + margin + top));
+  return !r.contains(pos);
 }
 
 // EOF

@@ -17,10 +17,10 @@
 #include <QtCore/QFileInfoList>
 
 QT_BEGIN_NAMESPACE
+class QMimeData;
+class QNetworkCookieJar;
 class QTimer;
 class QUrl;
-class QNetworkCookieJar;
-class QMimeData;
 QT_END_NAMESPACE
 
 namespace QtExt {
@@ -114,10 +114,12 @@ public:
 
   // - Signals -
 signals:
+  void annotationUrlAdded(QString url);
   void windowMaximized();
   void playingFinished();
   void playMediaRequested();
-  void setTrayToolTipRequested(const QString &tip);
+  void trayToolTip(const QString &tip);
+  void trayMessage(const QString &title, const QString &message);
   void response(const QString &text);
   void said(const QString &text, const QString &color);
   void message(const QString &text);
@@ -269,7 +271,7 @@ public slots:
   //void about(); // TODO
   //void help(); // TODO
 
-  void invalidateWindowTitle();
+  void updateWindowTitle();
   void updateDownloadProgress(qint64 receivedBytes, qint64 totalBytes);
   void syncInputLineText(const QString &text);
   void syncPrefixLineText(const QString &text);
@@ -294,7 +296,7 @@ public slots:
   void invalidateMediaAndPlay(bool async = true);
 protected slots:
   void playMedia();
-  void invalidateWindowSize();
+  void updateWindowSize();
 
   // - Live -
 public slots:
@@ -479,8 +481,8 @@ protected slots:
   void addRecent(const QString &path);
   void openRecent(int i);
   void clearRecent();
-  void invalidateRecent();
-  void invalidateRecentMenu();
+  void updateRecent();
+  void updateRecentMenu();
 
   // - Playlist -
 protected:
@@ -491,8 +493,8 @@ protected slots:
   void openNextPlaylistItem();
   void openPreviousPlaylistItem();
   void clearPlaylist();
-  void invalidatePlaylist();
-  void invalidatePlaylistMenu();
+  void updatePlaylist();
+  void updatePlaylistMenu();
 
   // - Events -
 public slots:
@@ -523,14 +525,14 @@ protected slots:
   virtual void dragLeaveEvent(QDragLeaveEvent *event); ///< \override
   virtual void dropEvent(QDropEvent *event); ///< \override
 
-  void invalidateContextMenu();
-  void invalidateAspectRatioMenu();
-  void invalidateSettingsMenu();
-  void invalidateMenuTheme();
-  void invalidateAnnotationMenu();
-  void invalidateAnnotationSubtitleMenu();
-  void invalidateUserMenu();
-  void invalidateTrackMenu();
+  void updateContextMenu();
+  void updateAspectRatioMenu();
+  void updateSettingsMenu();
+  void updateMenuTheme();
+  void updateAnnotationMenu();
+  void updateAnnotationSubtitleMenu();
+  void updateUserMenu();
+  void updateTrackMenu();
 
   void rememberPlayPos();
   void resumePlayPos();
@@ -583,7 +585,7 @@ public slots:
 
   // - Annotation effect -
 protected slots:
-  void invalidateAnnotationEffectMenu();
+  void updateAnnotationEffectMenu();
   void setAnnotationEffectToDefault();
   void setAnnotationEffectToTransparent();
   void setAnnotationEffectToShadow();
@@ -615,8 +617,8 @@ public slots:
 
   void showMinimizedAndPause();
 protected:
-  void invalidateBrowseMenu(const QString &fileName);
-  void invalidateBrowseMenu();
+  void updateBrowseMenu(const QString &fileName);
+  void updateBrowseMenu();
   int currentBrowsedFileId() const;
 
   // - Proxy browser -
@@ -1047,7 +1049,8 @@ private:
   QAction *toggleMultipleWindowsEnabledAct_;
   QAction *toggleSubmitAct_;
   QAction *toggleSaveMediaAct_,
-          *saveMediaAct_;
+          *saveMediaAct_,
+          *togglePreferLocalDatabaseAct_;
 
   QAction *setThemeToDefaultAct_,
           *setThemeToRandomAct_,

@@ -6,9 +6,9 @@
 #include "rc.h"
 #include "logger.h"
 #include "tr.h"
-#include "ac/acfilteredtableview.h"
+#include "project/common/acfilteredtableview.h"
 #include "signalhub.h"
-#include "ac/acui.h"
+#include "project/common/acui.h"
 #include "module/qtext/datetime.h"
 #include "module/annotcloud/traits.h"
 #include "module/annotcloud/annottag.h"
@@ -144,17 +144,12 @@ AnnotationBrowser::createActions()
   AcUi::globalInstance()->setContextMenuStyle(contextMenu_, true); // persistent = true
 
   // Shortcuts
-  QShortcut *cancelShortcut = new QShortcut(QKeySequence("Esc"), this);
-  connect(cancelShortcut, SIGNAL(activated()), SLOT(hide()));
-  QShortcut *closeShortcut = new QShortcut(QKeySequence("CTRL+W"), this);
-  connect(closeShortcut, SIGNAL(activated()), SLOT(hide()));
+  connect(new QShortcut(QKeySequence("Esc"), this), SIGNAL(activated()), SLOT(hide()));
+  connect(new QShortcut(QKeySequence("CTRL+W"), this), SIGNAL(activated()), SLOT(hide()));
 
-  QShortcut *c1 = new QShortcut(QKeySequence("CTRL+1"), this);
-  connect(c1, SIGNAL(activated()), meButton_, SLOT(click()));
-  QShortcut *c2 = new QShortcut(QKeySequence("CTRL+2"), this);
-  connect(c2, SIGNAL(activated()), nowButton_, SLOT(click()));
-  QShortcut *c3 = new QShortcut(QKeySequence("CTRL+3"), this);
-  connect(c3, SIGNAL(activated()), subtitleButton_, SLOT(click()));
+  connect(new QShortcut(QKeySequence("CTRL+1"), this), SIGNAL(activated()), meButton_, SLOT(click()));
+  connect(new QShortcut(QKeySequence("CTRL+2"), this), SIGNAL(activated()), nowButton_, SLOT(click()));
+  connect(new QShortcut(QKeySequence("CTRL+3"), this), SIGNAL(activated()), subtitleButton_, SLOT(click()));
 }
 
 void
@@ -318,7 +313,7 @@ AnnotationBrowser::addAnnotation(const Annotation &a)
 #undef FORMAT_STATUS
 
   if (isVisible())
-    tableView_->invalidateCount();
+    tableView_->updateCount();
 }
 
 void
@@ -344,7 +339,7 @@ AnnotationBrowser::removeAnnotationWithId(qint64 id)
   if (row >= 0) {
     sourceModel_->removeRow(row);
     if (isVisible())
-      tableView_->invalidateCount();
+      tableView_->updateCount();
   }
 }
 
@@ -540,7 +535,7 @@ AnnotationBrowser::setVisible(bool visible)
 {
   if (visible) {
     invalidateFilters();
-    tableView_->invalidateCount();
+    tableView_->updateCount();
   }
   Base::setVisible(visible);
 }
@@ -619,7 +614,7 @@ AnnotationBrowser::setNow(bool t)
   }
 
   filterNowModel_->setFilterRegExp(s);
-  tableView_->invalidateCount();
+  tableView_->updateCount();
 }
 
 void
@@ -631,7 +626,7 @@ AnnotationBrowser::setMe(bool t)
     s = '^' + s + '$';
   }
   filterMeModel_->setFilterRegExp(s);
-  tableView_->invalidateCount();
+  tableView_->updateCount();
 }
 
 void
@@ -641,7 +636,7 @@ AnnotationBrowser::setSubtitle(bool t)
   if (t)
     s = CORE_CMD_SUB;
   filterSubtitleModel_->setFilterFixedString(s);
-  tableView_->invalidateCount();
+  tableView_->updateCount();
 }
 
 void

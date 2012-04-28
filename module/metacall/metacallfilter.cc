@@ -1,17 +1,22 @@
 // metacallfilter.cc
 // 4/9/2012
-#include "metacallfilter.h"
-#include "metacallevent.h"
+#include "module/metacall/metacallfilter.h"
+#include "module/metacall/metacallevent.h"
+#include <QtNetwork/QHostAddress>
 #include <QtNetwork/QTcpServer>
 #include <QtNetwork/QTcpSocket>
-#include <QtNetwork/QHostAddress>
-#include <QtCore/QTimer>
 #include <QtCore/QEvent>
 #include <QtCore/QEventLoop>
+#include <QtCore/QTimer>
+#include <memory>
 #include <utility>
 
 #define DEBUG "metacallfilter"
 #include "module/debug/debug.h"
+
+#ifdef __GNUC__
+#  pragma GCC diagnostic ignored "-Wparentheses" // suggest parentheses
+#endif // __GNUC__
 
 // - Construction -
 

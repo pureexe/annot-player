@@ -28,11 +28,11 @@ public:
 
   // - Slots -
 public slots:
-  void setUser(const User &user) { user_ = user; invalidateUser(); }
+  void setUser(const User &user) { user_ = user; updateUser(); }
   void clearUser() { setUser(User()); }
 
 protected slots:
-  void invalidateUser();
+  void updateUser();
 
 private:
   void createLayout();

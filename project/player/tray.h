@@ -4,29 +4,27 @@
 // tray.h
 // 10/27/2011
 
-#include <QtGui/QSystemTrayIcon>
+#include "module/qtext/systemtrayicon.h"
 
 QT_FORWARD_DECLARE_CLASS(QAction)
 
 class MainWindow;
 
-class Tray : public QSystemTrayIcon
+typedef QtExt::SystemTrayIcon TrayBase;
+class Tray : public TrayBase
 {
   Q_OBJECT
   typedef Tray Self;
-  typedef QSystemTrayIcon Base;
+  typedef TrayBase Base;
 
   // - Constructions -
 public:
   explicit Tray(MainWindow *w, QObject *parent = 0);
 
-public slots:
-  void setToolTip(const QString &text) { Base::setToolTip(text); }
-
   // - Implementations -
 protected slots:
   void activate(QSystemTrayIcon::ActivationReason reason);
-  void invalidateContextMenu();
+  void updateContextMenu();
 private:
   void createActions();
 

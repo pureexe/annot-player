@@ -1,9 +1,9 @@
 // bufferedfifostream.cc
 // 2/15/2012
 
-#include "bufferedfifostream.h"
-#include <QtCore/QFile>
+#include "module/stream/bufferedfifostream.h"
 #include <QtCore/QEventLoop>
+#include <QtCore/QFile>
 
 //#define DEBUG "bufferedfifostream"
 #include "module/debug/debug.h"

@@ -5,6 +5,8 @@ include(../../config.pri)
 
 DEFINES += WITH_MODULE_CRYPT
 
+DEPENDPATH += $$PWD
+
 HEADERS += \
     $$PWD/crypt.h \
     $$PWD/simplecrypt.h

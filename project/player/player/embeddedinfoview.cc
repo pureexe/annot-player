@@ -41,7 +41,7 @@ EmbeddedInfoView::EmbeddedInfoView(Player *player, DataManager *data, Annotation
   Q_ASSERT(player_);
   Q_ASSERT(data_);
   Q_ASSERT(hub_);
-  //connect(this, SIGNAL(refreshRequested()), SLOT(invalidateText()));
+  //connect(this, SIGNAL(refreshRequested()), SLOT(updateText()));
 
   setStyleSheet(STYLESHEET);
 
@@ -73,7 +73,7 @@ EmbeddedInfoView::setVisible(bool t)
 }
 
 void
-EmbeddedInfoView::invalidateText()
+EmbeddedInfoView::updateText()
 {
   DOUT("enter");
   QString t;

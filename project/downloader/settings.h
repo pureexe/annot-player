@@ -33,6 +33,7 @@ public:
 
   QSize recentSize() const;
   void setRecentSize(const QSize &size);
+  void clearRecentSize();
 };
 
 #endif // SETTINGS_H

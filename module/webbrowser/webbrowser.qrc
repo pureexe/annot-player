@@ -27,5 +27,15 @@
         <file>images/transp.png</file>
         <file>images/arrow-back.png</file>
         <file>images/arrow-forward.png</file>
+        <file>favicons/app.ico</file>
+        <file>favicons/cplusplus.ico</file>
+        <file>favicons/bilibili.ico</file>
+        <file>favicons/google.ico</file>
+        <file>favicons/nicovideo.ico</file>
+        <file>favicons/qt.ico</file>
+        <file>favicons/ss64.ico</file>
+        <file>favicons/wiki.ico</file>
+        <file>favicons/youku.ico</file>
+        <file>favicons/youtube.ico</file>
     </qresource>
 </RCC>

@@ -7,7 +7,7 @@
 #ifdef WITH_WIN_PICKER
 #  include "win/picker/picker.h"
 #endif // WITH_WIN_PICKER
-#include "ac/acui.h"
+#include "project/common/acui.h"
 #include <QtGui>
 
 #define DEBUG "pickdialog"
@@ -51,10 +51,8 @@ PickDialog::createLayout()
   connect(cancelButton, SIGNAL(clicked()), SLOT(cancel()));
 
   // Shortcuts
-  QShortcut *cancelShortcut = new QShortcut(QKeySequence("Esc"), this);
-  connect(cancelShortcut, SIGNAL(activated()), SLOT(cancel()));
-  QShortcut *closeShortcut = new QShortcut(QKeySequence("CTRL+W"), this);
-  connect(closeShortcut, SIGNAL(activated()), SLOT(cancel()));
+  connect(new QShortcut(QKeySequence("Esc"), this), SIGNAL(activated()), SLOT(hide()));
+  connect(new QShortcut(QKeySequence("CTRL+W"), this), SIGNAL(activated()), SLOT(hide()));
 
   // Focus
   cancelButton->setFocus();

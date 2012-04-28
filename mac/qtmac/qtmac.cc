@@ -1,20 +1,20 @@
 // qtmac.cc
 // 11/11/2011
 
-#include "qtmac.h"
+#include "qtmac/qtmac.h"
 #include <QtCore/QDir>
-#include <QtCore/QStringList>
 #include <QtCore/QProcess>
+#include <QtCore/QStringList>
 #ifdef WITH_IOKIT
-#  include <IOKit/IOKitLib.h>
 #  include <IOKit/IOBSD.h>
-#  include <IOKit/storage/IOMedia.h>
+#  include <IOKit/IOKitLib.h>
 #  include <IOKit/storage/IOCDMedia.h>
 #  include <IOKit/storage/IOCDTypes.h>
+#  include <IOKit/storage/IOMedia.h>
 #  include <CoreFoundation/CoreFoundation.h>
 #endif // WITH_IOKIT
-#include <sys/xattr.h>
 #include <sys/param.h>
+#include <sys/xattr.h>
 #include <paths.h>
 
 #define DEBUG "qtmac"

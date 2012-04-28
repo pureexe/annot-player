@@ -10,7 +10,7 @@
 #include "global.h"
 #include "logger.h"
 #include "signalhub.h"
-#include "ac/acui.h"
+#include "project/common/acui.h"
 #include "module/annotcloud/annottag.h"
 #include "module/annotcloud/annothtml.h"
 #include "module/qtext/htmltag.h"
@@ -182,7 +182,8 @@ AnnotationGraphicsItem::AnnotationGraphicsItem(
   const Annotation &annot,
   SignalHub *hub,
   AnnotationGraphicsView *view)
-  : view_(view), hub_(hub), style_(FloatStyle), dragPos_(BAD_POS)
+  : view_(view), hub_(hub), style_(FloatStyle), flyAni_(0), escapeAni_(0),
+    dragPos_(BAD_POS), dragPaused_(false)
 {
   DOUT("enter: text =" << annot.text());
   Q_ASSERT(hub_);
@@ -190,14 +191,14 @@ AnnotationGraphicsItem::AnnotationGraphicsItem(
   scene_ = view_->scene();
   Q_ASSERT(scene_);
 
+  //setAcceptHoverEvents(true); // doesn't work, as the events are filtered by the firt responder
+  //setAcceptTouchEvents(true);
+
   setScale(view_->scale());
 
   removeLaterTimer_ = new QTimer(this);
   removeLaterTimer_->setSingleShot(true);
   connect(removeLaterTimer_, SIGNAL(timeout()), SLOT(removeMe()));
-
-  ani_ = new QPropertyAnimation(this, "pos");
-  connect(ani_, SIGNAL(finished()), SLOT(removeMe()));
 
   setAnnotation(annot);
   DOUT("exit");
@@ -222,7 +223,7 @@ void
 AnnotationGraphicsItem::invalidateAnnotation()
 {
   setDefaultStyle();
-  invalidateEffect();
+  updateEffect();
 
   bool isOwner = view_->userId() &&
                  view_->userId() != User::UI_Guest &&
@@ -319,7 +320,7 @@ AnnotationGraphicsItem::setDefaultStyle()
 }
 
 void
-AnnotationGraphicsItem::invalidateEffect()
+AnnotationGraphicsItem::updateEffect()
 {
   Effect e;
   switch (view_->renderHint()) {
@@ -369,7 +370,7 @@ AnnotationGraphicsItem::setEffect(Effect e)
     } break;
   case DefaultEffect:
   default:
-    invalidateEffect();
+    updateEffect();
   }
 }
 
@@ -543,12 +544,11 @@ AnnotationGraphicsItem::isPaused() const
       !hub_->isStopped())
     return false;
 
-  Q_ASSERT(ani_);
   Q_ASSERT(removeLaterTimer_);
   switch (style_) {
   case FloatStyle:
   case FlyStyle:
-    return ani_->state() == QAbstractAnimation::Paused;
+    return flyAni_ && flyAni_->state() == QAbstractAnimation::Paused;
 
   case TopStyle:
   case BottomStyle:
@@ -566,14 +566,14 @@ AnnotationGraphicsItem::pause()
       !hub_->isStopped())
     return;
 
-  Q_ASSERT(ani_);
   Q_ASSERT(removeLaterTimer_);
   switch (style_) {
   case FloatStyle:
   case FlyStyle:
-    if (ani_->state() == QAbstractAnimation::Running)
-      ani_->pause();
-    break;
+    if (flyAni_ && flyAni_->state() == QAbstractAnimation::Running) {
+      origin_ = relativePos();
+      flyAni_->pause();
+    } break;
 
   case TopStyle:
   case BottomStyle:
@@ -592,14 +592,14 @@ AnnotationGraphicsItem::resume()
       !hub_->isStopped())
     return;
 
-  Q_ASSERT(ani_);
   Q_ASSERT(removeLaterTimer_);
   switch (style_) {
   case FloatStyle:
   case FlyStyle:
-    if (ani_->state() == QAbstractAnimation::Paused)
-      ani_->resume();
-    break;
+    if (flyAni_ && flyAni_->state() == QAbstractAnimation::Paused) {
+      origin_ = relativePos();
+      flyAni_->resume();
+    } break;
 
   case TopStyle:
   case BottomStyle:
@@ -689,21 +689,23 @@ AnnotationGraphicsItem::fly()
 }
 
 void
-AnnotationGraphicsItem::fly(const QPointF &from, const QPointF &to, int msecs, QEasingCurve::Type type)
+AnnotationGraphicsItem::fly(const QPointF &from, const QPointF &to, int msecs)
 {
   Q_ASSERT(msecs > 0);
-  Q_ASSERT(ani_);
-  if (ani_->state() != QAbstractAnimation::Stopped)
-    ani_->stop();
-  else
+  if (!flyAni_) {
+    flyAni_ = new QPropertyAnimation(this, "relativePos");
+    flyAni_->setEasingCurve(QEasingCurve::Linear);
+    connect(flyAni_, SIGNAL(finished()), SLOT(removeMe()));
     addMe();
+  } else if (flyAni_->state() != QAbstractAnimation::Stopped)
+    flyAni_->stop();
 
-  ani_->setDuration(msecs);
-  ani_->setStartValue(from);
-  ani_->setEndValue(to);
-  ani_->setEasingCurve(type);
+  origin_ = from;
+  flyAni_->setDuration(msecs);
+  flyAni_->setStartValue(QPointF());
+  flyAni_->setEndValue(to - from);
 
-  ani_->start();
+  flyAni_->start();
 }
 
 // - Events -
@@ -757,34 +759,37 @@ void
 AnnotationGraphicsItem::mouseDoubleClickEvent(QMouseEvent *event)
 {
   Q_UNUSED(event);
-  if (isPaused())
+  if (dragPaused_ && isPaused())
     resume();
-  else
-    pause();
 }
 
 void
 AnnotationGraphicsItem::mousePressEvent(QMouseEvent *event)
 {
-  if (!event|| dragPos_ != BAD_POS)
-    return;
-
-  if (event->button() == Qt::LeftButton)
+  dragPaused_ = isPaused();
+  if (!dragPaused_)
+    pause();
+  if (event && event->button() == Qt::LeftButton && dragPos_ == BAD_POS)
     dragPos_ = event->globalPos() -  QPoint(scenePos().x(), scenePos().y());
 }
 
 void
 AnnotationGraphicsItem::mouseReleaseEvent(QMouseEvent *event)
 {
-  dragPos_ = BAD_POS;
   Q_UNUSED(event);
+  dragPos_ = BAD_POS;
+  //if (dragPaused_ != isPaused()) {
+  //  if (dragPaused_)
+  //    pause();
+  //  else
+  //    resume();
+  //}
 }
 
 void
 AnnotationGraphicsItem::mouseMoveEvent(QMouseEvent *event)
 {
-  if (event && event->buttons() & Qt::LeftButton
-      && dragPos_ != BAD_POS) {
+  if (event && (event->buttons() & Qt::LeftButton) && dragPos_ != BAD_POS) {
     QPoint newPos = event->globalPos() - dragPos_;
     // use QApplication::postEvent is more elegant but less efficient
     setPos(newPos);
@@ -890,6 +895,70 @@ AnnotationGraphicsItem::abstract() const
   if (ret.size() > length)
     ret = ret.left(length - 6) + "..." + ret.right(3);
   return ret;
+}
+
+// - Escape -
+
+void
+AnnotationGraphicsItem::escapeFrom(const QPointF &from)
+{
+  enum { radius_x = 300/2, radius_y = 200/2, length = 225 }; // 225^2 = 150^2 + 100^2
+
+  qreal x1, y1, x2, y2; {
+    QRectF r = boundingRect();
+    r.moveTo(pos());
+    r.getCoords(&x1, &y1, &x2, &y2);
+  }
+  // 1 2 3
+  // 4 5 6
+  // 7 8 9
+  QPointF d =
+    from.x() < x1 && from.y() < y1 ? QPointF(x1, y1)               : // 1
+    from.x() < x2 && from.y() < y1 ? QPointF((x1+x2)/2, y1)        : // 2
+                     from.y() < y1 ? QPointF(x2, y1)               : // 3
+    from.x() < x1 && from.y() < y2 ? QPointF(x1, (y1+y2)/2)        : // 4
+    from.x() < x2 && from.y() < y2 ? QPointF((x1+x2)/2, (y1+y2)/2) : // 5
+                     from.y() < y2 ? QPointF(x2, (y1+y2)/2)        : // 6
+    from.x() < x1                  ? QPointF(x1, y2)               : // 7
+    from.x() < x2                  ? QPointF((x1+x2)/2, y2)        : // 8
+                                     QPointF(x2, y2)               ; // 9
+  d -= from;
+
+  qreal len = ::sqrt(d.x()*d.x() + d.y()*d.y());
+  if (len < 0.01) {
+    d.rx() += radius_x;
+    len = radius_x;
+  }
+  else {
+    qreal r = length/len -1;
+    if (r < 0.01)
+      return;
+    d *= r;
+    len *= r;
+  }
+  QPointF to = pos() + d;
+
+  qreal v = 1/(len/30.0 + 1) + 0.02;
+  int msecs = qMax(int(len / v), 100);
+  escapeTo(to, msecs);
+}
+
+void
+AnnotationGraphicsItem::escapeTo(const QPointF &to, int msecs)
+{
+  if (!isPaused())
+    pause();
+  if (!escapeAni_) {
+    escapeAni_ = new QPropertyAnimation(this, "pos");
+    escapeAni_->setEasingCurve(QEasingCurve::OutInQuad);
+    connect(escapeAni_, SIGNAL(finished()), SLOT(resume()));
+  } else if (escapeAni_->state() != QAbstractAnimation::Stopped)
+    escapeAni_->stop();
+
+  escapeAni_->setDuration(msecs);
+  escapeAni_->setStartValue(pos());
+  escapeAni_->setEndValue(to);
+  escapeAni_->start();
 }
 
 // EOF

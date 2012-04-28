@@ -64,7 +64,7 @@ public:
   virtual void setVisible(bool visible); ///< \override, stop polling when hidden
 
 public slots:
-  void invalidateTitle();
+  void updateTitle();
 
   // - Events -
 protected:

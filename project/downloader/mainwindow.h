@@ -4,17 +4,17 @@
 // mainwindow.h
 // 2/17/2012
 
-#include "ac/acmainwindow.h"
+#include "project/common/acmainwindow.h"
 
 QT_BEGIN_NAMESPACE
 class QAbstractItemModel;
 class QAction;
 class QComboBox;
-class QStandardItemModel;
+class QMenu;
 class QSortFilterProxyModel;
+class QStandardItemModel;
 class QTimer;
 class QToolButton;
-class QMenu;
 QT_END_NAMESPACE
 
 class AcFilteredListView;
@@ -28,7 +28,7 @@ class DownloadTask;
 class ClipboardMonitor;
 class Signer;
 class AcPlayer;
-class SystemTrayIcon;
+class TrayIcon;
 
 class MainWindow : public AcMainWindow
 {
@@ -82,6 +82,7 @@ protected:
   DownloadTask *currentTask() const;
 
 protected slots:
+  void about();
   void add();
   void start();
   void restart();
@@ -93,8 +94,8 @@ protected slots:
   void open();
 
   void refresh();
-  void invalidateButtons();
-  void invalidateActions();
+  void updateButtons();
+  void updateActions();
 
   void finish(DownloadTask *task);
 
@@ -110,8 +111,8 @@ protected:
 public:
   virtual bool event(QEvent *event); ///< \override
 protected:
-  virtual void contextMenuEvent(QContextMenuEvent *event); ///< \override
-  virtual void closeEvent(QCloseEvent *event); ///< \override
+  virtual void contextMenuEvent(QContextMenuEvent *e); ///< \override
+  virtual void closeEvent(QCloseEvent *e); ///< \override
 
 private:
   void createModels();
@@ -120,7 +121,7 @@ private:
 private:
   AcDownloaderServer *appServer_;
   AcPlayer *playerDelegate_;
-  SystemTrayIcon *systemTrayIcon_;
+  TrayIcon *trayIcon_;
   DownloadManager *downloadManager_;
   ClipboardMonitor *clipboardMonitor_;
   Signer *signer_;
@@ -140,7 +141,8 @@ private:
   QTimer *refreshTimer_;
 
   QMenu *contextMenu_;
-  QAction *startAct_,
+  QAction *newAct_,
+          *startAct_,
           *stopAct_,
           *restartAct_,
           *startAllAct_,

@@ -40,30 +40,53 @@ public:
   bool isFinished() const { return !loading_; }
   bool isLoading() const { return loading_; }
 
-protected slots:
-  void download(const QNetworkRequest &req);
+public slots:
   void clip();
   void zoomIn();
   void zoomOut();
   void zoomReset();
+  void clearHighlight();
+
+  void scrollTop();
+  void scrollBottom();
+  void scrollLeft();
+  void scrollRight();
+  void scroll(int dx, int dy, const QRect &r) { Base::scroll(dx, dy, r); }
+
+protected slots:
+  void resetStyleSheet() { setStyleSheet(QString()); }
+
+  void download(const QNetworkRequest &req);
 
   void setLoading();
   void setFinished();
+  void goToRecent(int i);
+  void invalidteSelection();
 
-  virtual void showLink(const QString &url);
+  void openWithOperatingSystem();
+
+  virtual void showLink(const QString &url, const QString &title, const QString &content);
+
+  void updateHoveredLink() { hoveredLink_ = hoveredLink(); }
 
 protected:
+  static QString shortenText(const QString &text, int len = 40);
   virtual void contextMenuEvent(QContextMenuEvent *e); ///< \override
   virtual void wheelEvent(QWheelEvent *e); ///< \override
 
   static QString fileNameFromUrl(const QUrl &url, const QString &suffix = QString());
 
   QMenu *createContextMenu();
+  QMenu *createHistoryMenu();
+
 protected:
   QAction *clipAct,
+          *clearHighlightAct,
+          *openWithOperatingSystemAct,
           *zoomInAct,
           *zoomOutAct,
           *zoomResetAct;
+  QString hoveredLink_;
 };
 
 } // namespace QtExt

@@ -10,10 +10,9 @@
 // - Construction -
 
 Tray::Tray(MainWindow *w, QObject *parent)
-  : Base(parent), w_(w)
+  : Base(QIcon(RC_IMAGE_APP), parent), w_(w)
 {
   Q_ASSERT(w_);
-  setIcon(QIcon(RC_IMAGE_APP));
   setToolTip(TR(T_TITLE_PROGRAM));
 
   createActions();
@@ -88,7 +87,7 @@ Tray::activate(ActivationReason reason)
 {
   switch (reason) {
   case Context:
-    invalidateContextMenu();
+    updateContextMenu();
     break;
 
   case Trigger:
@@ -104,7 +103,7 @@ Tray::activate(ActivationReason reason)
 }
 
 void
-Tray::invalidateContextMenu()
+Tray::updateContextMenu()
 {
   minimizeAct_->setVisible(!w_->isMinimized());
   restoreAct_->setVisible(!w_->isVisible() || w_->isMinimized());

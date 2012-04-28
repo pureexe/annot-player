@@ -10,13 +10,13 @@
 // See: AcDown/Downloader/YouTube/YouTubeDownloader.cs
 // See: AcDown/Downloader/YouTube/YouTubePlugin.cs
 
-#include "youtubemrlresolver.h"
+#include "module/mrlresolver/youtubemrlresolver.h"
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkReply>
 #include <QtNetwork/QNetworkRequest>
 #include <QtCore/QRegExp>
-#include <QtCore/QUrl>
 #include <QtCore/QStringList>
+#include <QtCore/QUrl>
 #include <cstdlib>
 
 #define DEBUG "youtubemrlresolver"

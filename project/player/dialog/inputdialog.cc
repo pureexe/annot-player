@@ -4,8 +4,8 @@
 #include "inputdialog.h"
 #include "tr.h"
 #include "logger.h"
-#include "ac/acui.h"
-#include "ac/accomboedit.h"
+#include "project/common/acui.h"
+#include "project/common/accomboedit.h"
 #include "module/qtext/datetime.h"
 #include <QtGui>
 
@@ -36,10 +36,8 @@ InputDialog::InputDialog(QWidget *parent)
   createLayout();
 
   // Shortcuts
-  QShortcut *cancelShortcut = new QShortcut(QKeySequence("Esc"), this);
-  connect(cancelShortcut, SIGNAL(activated()), SLOT(hide()));
-  QShortcut *closeShortcut = new QShortcut(QKeySequence("CTRL+W"), this);
-  connect(closeShortcut, SIGNAL(activated()), SLOT(hide()));
+  connect(new QShortcut(QKeySequence("Esc"), this), SIGNAL(activated()), SLOT(hide()));
+  connect(new QShortcut(QKeySequence("CTRL+W"), this), SIGNAL(activated()), SLOT(hide()));
 
   // Focus
   edit_->setFocus();

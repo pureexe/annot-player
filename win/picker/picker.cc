@@ -6,6 +6,7 @@
 #endif // _MSC_VER
 
 #include "picker.h"
+#include "picker_p.h"
 #include "qtwin/qtwin.h"
 #include <QtCore>
 #include <qt_windows.h>
@@ -59,46 +60,30 @@ namespace { // anonymous, hook callbacks
 
 // - Constructions -
 
-class WindowPickerImpl
-{
-public:
-  HHOOK hook;
-  bool singleShot;
-
-public:
-  WindowPickerImpl() : hook(0), singleShot(false) { }
-};
-
-WindowPicker*
-WindowPicker::globalInstance()
-{ static Self g; return &g; }
-
 WindowPicker::WindowPicker(QObject *parent)
   : Base(parent)
-{ impl_ = new Impl; }
+{ d_ = new Private; }
 
 WindowPicker::~WindowPicker()
 {
   if (isActive())
     stop();
-
-  Q_ASSERT(impl_);
-  delete impl_;
+  delete d_;
 }
 
 // - Properties -
 
 void*
 WindowPicker::hook() const
-{ return impl_->hook; }
+{ return d_->hook; }
 
 bool
 WindowPicker::isSingleShot() const
-{ return impl_->singleShot; }
+{ return d_->singleShot; }
 
 void
 WindowPicker::setSingleShot(bool t)
-{ impl_->singleShot = t; }
+{ d_->singleShot = t; }
 
 // - Slots -
 
@@ -132,7 +117,7 @@ WindowPicker::start()
 {
   static HINSTANCE hInstance = 0;
 
-  if (impl_->hook)
+  if (d_->hook)
     return;
 
   if (!hInstance) {
@@ -145,16 +130,16 @@ WindowPicker::start()
   }
 
   // Global mode
-  impl_->hook = ::SetWindowsHookEx(WH_MOUSE_LL, ::MouseProc, hInstance, 0);
+  d_->hook = ::SetWindowsHookEx(WH_MOUSE_LL, ::MouseProc, hInstance, 0);
   DOUT("start: started");
 }
 
 void
 WindowPicker::stop()
 {
-  if (impl_->hook) {
-    ::UnhookWindowsHookEx((HHOOK)impl_->hook);
-    impl_->hook = 0;
+  if (d_->hook) {
+    ::UnhookWindowsHookEx((HHOOK)d_->hook);
+    d_->hook = 0;
     DOUT("stop: stoppped");
   }
 }

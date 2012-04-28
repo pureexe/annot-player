@@ -5,8 +5,8 @@
 #include "tr.h"
 #include "global.h"
 #include "annotationbrowser.h" // TO BE REMOVED
-#include "ac/acfilteredtableview.h"
-#include "ac/acfilteredlistview.h"
+#include "project/common/acfilteredtableview.h"
+#include "project/common/acfilteredlistview.h"
 #include "module/qtext/datetime.h"
 #include <QtGui>
 
@@ -69,7 +69,7 @@ TextFilterView::addRow(const QString &text)
 {
   sourceModel_->insertRow(0);
   sourceModel_->setData(sourceModel_->index(0, HD_Text), text);
-  tableView_->invalidateCount();
+  tableView_->updateCount();
 }
 
 QString
@@ -143,7 +143,7 @@ UserFilterView::addRow(const QString &text)
 {
   sourceModel_->insertRow(0);
   sourceModel_->setData(sourceModel_->index(0, HD_UserAlias), text);
-  tableView_->invalidateCount();
+  tableView_->updateCount();
 }
 
 QString
@@ -262,7 +262,7 @@ AnnotationFilterView::addRow(const Annotation &a)
 #undef FORMAT_FLAGS
 #undef FORMAT_STATUS
 
-  tableView_->invalidateCount();
+  tableView_->updateCount();
 }
 
 qint64

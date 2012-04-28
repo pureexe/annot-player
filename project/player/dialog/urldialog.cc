@@ -3,17 +3,18 @@
 
 #include "urldialog.h"
 #include "tr.h"
-#include "ac/acui.h"
-#include "ac/accomboedit.h"
+#include "project/common/acui.h"
+#include "project/common/accomboedit.h"
+#include "project/common/acsettings.h"
 #include "module/qtext/ss.h"
 #include "module/qtext/string.h"
 #include "module/qtext/overlaylayout.h"
 #include <QtGui>
 
 #ifdef Q_OS_MAC
-  #define K_CTRL        "cmd"
+#  define K_CTRL        "cmd"
 #else
-  #define K_CTRL        "Ctrl"
+#  define K_CTRL        "Ctrl"
 #endif // Q_OS_MAC
 
 // - Constructions -
@@ -41,7 +42,8 @@ UrlDialog::createLayout()
   AcUi *ui = AcUi::globalInstance();
   ui->setWindowStyle(this);
 
-  edit_ = ui->makeComboBox(AcUi::EditHint);
+  QString holder = tr("http://www.nicovideo.jp/watch/123456");
+  edit_ = ui->makeComboBox(AcUi::EditHint, "", TR(T_URL), holder);
   connect(edit_->lineEdit(), SIGNAL(returnPressed()), SLOT(open()));
   AcComboEdit *edit = dynamic_cast<AcComboEdit *>(edit_);
   Q_ASSERT(edit);
@@ -104,15 +106,11 @@ UrlDialog::createLayout()
   );
 
   // Shortcuts
-  QShortcut *cancelShortcut = new QShortcut(QKeySequence("Esc"), this);
-  connect(cancelShortcut, SIGNAL(activated()), SLOT(hide()));
-  QShortcut *closeShortcut = new QShortcut(QKeySequence("CTRL+W"), this);
-  connect(closeShortcut, SIGNAL(activated()), SLOT(hide()));
+  connect(new QShortcut(QKeySequence("Esc"), this), SIGNAL(activated()), SLOT(hide()));
+  connect(new QShortcut(QKeySequence("CTRL+W"), this), SIGNAL(activated()), SLOT(hide()));
 
-  QShortcut *increaseShortcut = new QShortcut(QKeySequence("CTRL+="), this);
-  connect(increaseShortcut, SIGNAL(activated()), SLOT(increase()));
-  QShortcut *decreaseShortcut = new QShortcut(QKeySequence("CTRL+-"), this);
-  connect(decreaseShortcut, SIGNAL(activated()), SLOT(decrease()));
+  connect(new QShortcut(QKeySequence("CTRL+="), this), SIGNAL(activated()), SLOT(increase()));
+  connect(new QShortcut(QKeySequence("CTRL+-"), this), SIGNAL(activated()), SLOT(decrease()));
 }
 
 // - Slots -
@@ -125,7 +123,8 @@ UrlDialog::open()
   if (url.isEmpty() || url == "http://")
     return;
 
-  if (edit_->itemText(edit_->count() - 1) != url)
+  if (edit_->count() &&
+      edit_->itemText(edit_->count() - 1) != url)
     edit_->addItem(url);
 
   url = autoCompleteUrl(url);
@@ -207,5 +206,16 @@ UrlDialog::setExampleUrl(const QString &text)
 void
 UrlDialog::setSave(bool t)
 { saveButton_->setChecked(t); }
+
+void
+UrlDialog::addHistory(const QString &url)
+{
+  if (edit_->count() &&
+      edit_->itemText(edit_->count() - 1) != url)
+    edit_->addItem(url);
+
+  if (edit_->currentText().trimmed().isEmpty())
+    edit_->setEditText(url);
+}
 
 // EOF

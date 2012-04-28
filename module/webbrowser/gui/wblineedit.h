@@ -1,7 +1,7 @@
 #ifndef WBLINEEDIT_H
 #define WBLINEEDIT_H
 
-// wbaddresslineedit.h
+// gui/wbaddresslineedit.h
 // 3/31/2012
 
 #include <QtGui/QLineEdit>
@@ -14,7 +14,8 @@ class WbLineEdit : public QLineEdit
 
 public:
   explicit WbLineEdit(QWidget *parent = 0)
-    : Base(parent) { }
+    : Base(parent)
+  { setAlignment(Qt::AlignLeft | Qt::AlignVCenter); }
 
 protected:
   virtual void keyPressEvent(QKeyEvent *event);

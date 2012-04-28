@@ -1,9 +1,8 @@
 #ifndef WBCOMBOEDIT_H
 #define WBCOMBOEDIT_H
 
-// wbcomboedit.h
+// gui/wbcomboedit.h
 // 3/31/2012
-
 #include "module/qtext/combobox.h"
 #include <QtCore/QStringList>
 
@@ -26,14 +25,25 @@ public:
 
   QStringList defaultItems() const { return defaultItems_; }
 
+signals:
+  void textEntered(const QString &url);
+
   // - Properties -
 public slots:
+  void setIcon(const QString &url);
+  void clearIcon() { setIcon(QString()); }
+
   void reset();
-  void setDefaultItems(const QStringList &l) { defaultItems_ = l; reset(); }
+  virtual void submitText();
+  void pasteAndGo();
+  void setDefaultItems(const QStringList &l, const QStringList &icons = QStringList())
+  { defaultItems_ = l; defaultIcons_ = icons; reset(); }
 
   // - Events -
 protected:
   virtual void contextMenuEvent(QContextMenuEvent *event); ///< \override
+
+  static bool isClipboardEmpty();
 
 private:
   void init();
@@ -41,9 +51,12 @@ private:
 
 protected:
   QAction *popupAct,
-          *clearAct;
+          *clearAct,
+          *pasteAndGoAct,
+          *submitAct;
 private:
-  QStringList defaultItems_;
+  QStringList defaultItems_,
+               defaultIcons_;
 };
 
 #endif // WBCOMBOEDIT_H

@@ -74,12 +74,12 @@ public:
   const QString &name() const
   {
     if (name_.isEmpty())
-      const_cast<Self*>(this)->invalidateName();
+      const_cast<Self*>(this)->updateName();
     return name_;
   }
 
 protected:
-  void invalidateName();
+  void updateName();
 
   static QString decodeWText(LPCWSTR lp, int len = 0)
   { return QString::fromWCharArray(lp, len); }

@@ -2,18 +2,20 @@
 // 4/6/2012
 
 #include "module/annotcloud/annotpaint.h"
-#include "module/qtext/datetime.h"
 #include "module/qtext/algorithm.h"
+#include "module/qtext/datetime.h"
 #ifdef WITH_QT_SVG
 #  include <QtSvg/QSvgGenerator>
 #endif // WITH_QT_SVG
 #include <QtGui/QPainter>
+#include <QtCore/QDateTime>
 #include <QtCore/QHash>
 #include <QtCore/QMultiMap>
-#include <QtCore/QDateTime>
 //#include <boost/bimap.hpp>
-#include <utility>
+#include <boost/foreach.hpp>
 #include <climits>
+#include <list>
+#include <utility>
 
 #define DEBUG "annotpaint"
 #include "module/debug/debug.h"
@@ -22,7 +24,7 @@
 #  define ITALIC        false
 #else
 #  define ITALIC        true
-#endif Q_WS_WIN
+#endif // Q_WS_WIN
 
 enum LineColor
 {
@@ -89,7 +91,7 @@ AnnotationPainter::paintHistogram(QPainter &p, const AnnotationList &l, Annotati
   case Annotation::Pos: paintHistogramByPos(p, l, title, view); break;
   case Annotation::CreateTime: paintHistogramByCreateTime(p, l, title, view); break;
   case Annotation::UserId: paintHistogramByUserId(p, l, title, view); break;
-  default: Q_ASSERT(0); break;
+  default: Q_ASSERT(0);
   }
 }
 
@@ -203,7 +205,7 @@ AnnotationPainter::paintHistogramByPos(QPainter &p, const AnnotationList &l, con
   }
 
   // Calculate local peaks
-  QList<QPoint> peaks;
+  std::list<QPoint> peaks;
   {
     enum { distanceX = 20 }; // 5sec * 20 = 1min 40sec
     int t = maxY;
@@ -219,26 +221,26 @@ AnnotationPainter::paintHistogramByPos(QPainter &p, const AnnotationList &l, con
           y = i.value();
       if (y < limitY)
         continue;
-      if (!peaks.isEmpty() &&
-          peaks.last().x() + distanceX > x) {
-        if (peaks.last().y() < y)
-          peaks.last() = QPoint(x, y);
+      if (!peaks.empty() &&
+          peaks.back().x() + distanceX > x) {
+        if (peaks.back().y() < y)
+          peaks.back() = QPoint(x, y);
       } else
-        peaks.append(QPoint(x, y));
+        peaks.push_back(QPoint(x, y));
     }
   }
 
-  DOUT("peaks =" << peaks);
+  //DOUT("peaks =" << peaks);
 
   // Draw peaks
-  if (!peaks.isEmpty()) {
+  if (!peaks.empty()) {
     enum { LabelRotation = -20 };
     QFont f = p.font();
     f.setPointSize(PeakFontSize);
     p.setFont(f);
     p.setPen(Qt::green);
 
-    foreach (const QPoint &peak, peaks) {
+    BOOST_FOREACH (const QPoint &peak, peaks) {
       qreal px = peak.x() / qreal(maxX),
             py = peak.y() / qreal(maxY);
       int x = width * px,
@@ -319,11 +321,7 @@ AnnotationPainter::paintHistogramByCreateTime(QPainter &p, const AnnotationList 
          min = LLONG_MAX;
   foreach (const Annotation &a, l)  {
     qint64 t = a.createTime();
-    if (t > Traits::MIN_TIME
-#ifndef Q_WS_WIN
-        && t < Traits::MAX_TIME // FIXME sth must be broken on windows.
-#endif // Q_WS_WIN
-        ) {
+    if (t > Traits::MIN_TIME && t < Traits::MAX_TIME) {
       if (max < t)
         max = t;
       if (min > t)
@@ -404,7 +402,7 @@ AnnotationPainter::paintHistogramByCreateTime(QPainter &p, const AnnotationList 
   paintAxis(p, QRect(view.x(), view.y(), width, histHeight), maxY);
 
   // Calculate local peaks
-  QList<QPoint> peaks;
+  std::list<QPoint> peaks;
   {
     enum { distanceX = 30 }; // 5min * 30 = 2.5h
     int t = maxY;
@@ -420,19 +418,19 @@ AnnotationPainter::paintHistogramByCreateTime(QPainter &p, const AnnotationList 
       int y = i.value();
       if (y < limitY)
         continue;
-      if (!peaks.isEmpty() &&
-          peaks.last().x() + distanceX > x) {
-        if (peaks.last().y() < y)
-          peaks.last() = QPoint(x, y);
+      if (!peaks.empty() &&
+          peaks.back().x() + distanceX > x) {
+        if (peaks.back().y() < y)
+          peaks.back() = QPoint(x, y);
       } else
-        peaks.append(QPoint(x, y));
+        peaks.push_back(QPoint(x, y));
     }
   }
 
-  DOUT("peaks =" << peaks);
+  //DOUT("peaks =" << peaks);
 
   // Draw peaks
-  if (!peaks.isEmpty()) {
+  if (!peaks.empty()) {
     enum { LabelRotation = -20 };
     QFont f = p.font();
     f.setPointSize(PeakFontSize);
@@ -444,7 +442,7 @@ AnnotationPainter::paintHistogramByCreateTime(QPainter &p, const AnnotationList 
     p.setFont(f);
     p.setPen(Qt::green);
 
-    foreach (const QPoint &peak, peaks) {
+    BOOST_FOREACH (const QPoint &peak, peaks) {
       qreal px = (peak.x() - minX) / qreal(rangeX),
             py = peak.y() / qreal(maxY);
       int x = width * px,

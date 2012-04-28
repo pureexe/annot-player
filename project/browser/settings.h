@@ -6,8 +6,8 @@
 
 #include <QtCore/QSettings>
 #include <QtCore/QStringList>
-#include <QtCore/QUrl>
 #include <QtCore/QSize>
+#include <QtCore/QUrl>
 
 class Settings : public QSettings
 {
@@ -34,6 +34,9 @@ public:
   void setRecentUrls(const QStringList &urls, int limit = 0);
   void clearRecentUrls();
 
+  QStringList recentSearches() const;
+  void setRecentSearches(const QStringList &l, int limit = 0);
+
   QStringList recentTabs() const;
   bool hasRecentTabs() const;
   void setRecentTabs(const QStringList &urls, int limit = 0);
@@ -48,6 +51,13 @@ public:
 
   QSize recentSize() const;
   void setRecentSize(const QSize &value);
+  void clearRecentSize();
+
+  bool isFullScreen() const;
+  void setFullScreen(bool t);
+
+  int searchEngine() const;
+  void setSearchEngine(int engine);
 };
 
 #endif // SETTINGS_H

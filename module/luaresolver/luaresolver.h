@@ -4,7 +4,6 @@
 // luaresolver.h
 // 2/2/2012
 #include <QtCore/QObject>
-#include <QtCore/QString>
 #include <QtCore/QStringList>
 
 QT_FORWARD_DECLARE_CLASS(QNetworkCookieJar)

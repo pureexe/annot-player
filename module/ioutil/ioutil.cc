@@ -1,7 +1,7 @@
 // ioutil.cc
 // 12/6/2011
 
-#include "ioutil.h"
+#include "module/ioutil/ioutil.h"
 #include <QtCore/QFile>
 
 #ifdef WITH_MODULE_BLOCKIODEVICE

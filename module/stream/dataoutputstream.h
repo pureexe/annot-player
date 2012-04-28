@@ -4,9 +4,9 @@
 // dataoutputstream.h
 // 3/14/2012
 
-#include "outputstream.h"
-#include <QtCore/QObject>
+#include "module/stream/outputstream.h"
 #include <QtCore/QByteArray>
+#include <QtCore/QObject>
 
 class DataOutputStream : public QObject, public OutputStream
 {

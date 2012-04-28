@@ -4,16 +4,16 @@
 // See: http://hai3.net/blog/?p=122
 // See:  http://blog.smartnetwork.co.jp/staff/node/22
 
-#include "nicovideocodec.h"
+#include "module/annotcodec/nicovideocodec.h"
 #include "module/annotcloud/annottag.h"
 #include "module/annotcloud/traits.h"
 #include <QtNetwork/QNetworkReply>
-#include <QtNetwork/QNetworkRequest>
 #include <QtNetwork/QNetworkAccessManager>
+#include <QtNetwork/QNetworkRequest>
 #include <QtXml/QDomDocument>
 #include <QtXml/QDomElement>
-#include <QtCore/QStringList>
 #include <QtCore/QFile>
+#include <QtCore/QStringList>
 #include <climits>
 
 //#define DEBUG "nicovideocodec"

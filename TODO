@@ -2,42 +2,54 @@
 # 6/18/2011
 http://db.tt/SrtkzxIJ
 
+- browser
+  - FIXME: cannot play video on bilibili.tv; try fix it on windows
+
 # server
 - move wiki to sakuradite
+- add shortcuts && gestures to googlecode and herlpwiki
 
 # client
-FIXME: MAX_TIME in Windows is not working
-
-- player
+- linux
+   -auto popup menubar on hover or with ALT key
+  - FIXME: full screen issue
+  - FIXME: mouse click behavior in osd mode
+  - player
+    FIXME: crash while switching diff video filetypes
+      wait while diff filetype?
+- browser
+  - add context menu: lock hide top region
+  - update help for mouse gestures in download page
+  - add dummy help context action as place holder, helplink for mouse gestures in wiki
+    same as downloader
+    update place holder for each of them
+    Manual:Helper:AnnotPlayer
+- youtube
+  - FIXME: cannot play youtube on windows using vlc
+  - FIXME: download from youtube.com: error 202
   - able to login to youtube
-   example: shikabanehime @ funimation
-- mac:browser
-  - delegate ch.nicovideo.jp/menu/anime as well
-  - highlight occurence
-     http://doc.qt.nokia.com/4.7-snapshot/qwebview.html#findText
-    HighlightAllOccurrences
-  - use a lineedit+label (message), using qt form ui to add it
-  - also, able to highlight all downloadable video
-  - develop more ideas to make use of it together with JSP server
+     example: shikabanehime @ funimation
 
-  - avoid search history duplication
-  - save search history to settings
-- mac
-  - add menubar for browser&downloader
+- browser
+  - add tablet gesture
+    http://labs.qt.nokia.com/2009/04/02/mouse-gestures-in-qt-apps-to-be-or-not-to-be/
+  - save list of icons for recent files as well
+    qdatastream << qicon
+- player
+  add recent 20 to filemenu as well
 - windows
   - migrate to ith3
     inject.cc => ihf/main.cpp
     pipe.cc => ihf_dll/pipe.cpp
-  - achieve MDI like apple's fileopenevent
-  See: http://qt-project.org/wiki/Assigning_a_file_type_to_an_Application_on_Windows
-
+- browser
+  - FIXME: cannot play video on bilibili.tv
+  - show loading progress in addressedit using css
+  - split browser to a different app?
+  - change path of addressline to path like buttons
+  - merge webrowser module with browser project
 - common
   - learn the source code of ith's updater
   - add a prefenece panel for its settings
-- download
-  FIXME: download from youtube.com
-- browser
-  merge webrowser module with browser project
 
 # server
   annot.me/w

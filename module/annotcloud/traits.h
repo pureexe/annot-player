@@ -5,8 +5,8 @@
 // 8/17/2011
 
 #include <QtCore/QByteArray>
-#include <QtCore/QString>
 #include <QtCore/QList>
+#include <QtCore/QString>
 
 namespace AnnotCloud {
 
@@ -51,8 +51,8 @@ namespace AnnotCloud {
 
     // - Limits -
 
-    enum { MIN_TIME = 946706400 };    // QDateTime(QDate(2000, 1, 1)).toMSecsSinceEpoch() / 1000;
-    enum { MAX_TIME = 2524629600LL }; // QDateTime(QDate(2050, 1, 1)).toMSecsSinceEpoch() / 1000;
+    enum { MIN_TIME = 946706400 };  // QDateTime(QDate(2000, 1, 1)).toMSecsSinceEpoch() / 1000;
+    enum { MAX_TIME = 1893477600 }; // QDateTime(QDate(2030, 1, 1)).toMSecsSinceEpoch() / 1000;
 
     // internal:
     enum { SHA1_DIGEST_LENGTH = 20 };

@@ -5,7 +5,7 @@ include(../../config.pri)
 
 DEFINES += WITH_MODULE_DOWNLOAD
 
-INCLUDEPATH += $$PWD
+DEPENDPATH += $$PWD
 
 HEADERS += \
     $$PWD/download.h \

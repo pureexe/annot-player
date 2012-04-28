@@ -6,6 +6,7 @@
 #include "module/qtext/htmltag.h"
 #include <boost/tuple/tuple.hpp>
 #include <boost/typeof/typeof.hpp>
+#include <stack>
 
 //#define DEBUG "annothtmlparse"
 #include "module/debug/debug.h"
@@ -112,7 +113,7 @@ AnnotationHtmlParser::toHtml(const QString &text) const
     ST_LeftSquareBracket = '[',
     ST_RightSquareBracket = ']' };
 
-  QList<std::pair<QString, char> > stack; // pair<QString, StringType>
+  std::stack<std::pair<QString, char> > stack; // pair<QString, StringType>
 
   if (text.startsWith(CORE_CMD_VERBATIM)) {
     parsed = text.mid(QString(CORE_CMD_VERBATIM).size());
@@ -136,7 +137,8 @@ AnnotationHtmlParser::toHtml(const QString &text) const
 
       QStringList params, attrs;
       while (!stack.empty()) {
-        BOOST_AUTO(front, stack.takeFirst());
+        BOOST_AUTO(front, stack.top());
+        stack.pop();
 
         switch (front.second) {
 
@@ -202,7 +204,8 @@ AnnotationHtmlParser::toHtml(const QString &text) const
         if (stack.empty())
           DOUT("parse: '^]' mismatched");
         while (!stack.empty()) {
-          BOOST_AUTO(front, stack.takeFirst());
+          BOOST_AUTO(front, stack.top());
+          stack.pop();
 
           switch (front.second) {
           case '{':
@@ -257,7 +260,7 @@ AnnotationHtmlParser::toHtml(const QString &text) const
         if (!params.empty())
           reduced = params.join("") + reduced;
         if (!reduced.isEmpty())
-          stack.prepend(std::make_pair(reduced, '}'));
+          stack.push(std::make_pair(reduced, '}'));
 
         DOUT("reduced {}:" << reduced);
       } break;
@@ -272,7 +275,8 @@ AnnotationHtmlParser::toHtml(const QString &text) const
         if (stack.empty())
           DOUT("parse: '^]' mismatched");
         while (!stack.empty()) {
-          BOOST_AUTO(front, stack.takeFirst());
+          BOOST_AUTO(front, stack.top());
+          stack.pop();
 
           switch (front.second) {
           case '[':
@@ -286,7 +290,7 @@ AnnotationHtmlParser::toHtml(const QString &text) const
         }
 
         if (!reduced.isEmpty())
-          stack.prepend(std::make_pair(reduced, ']'));
+          stack.push(std::make_pair(reduced, ']'));
 
         DOUT("reduced []:" << reduced);
       } break;
@@ -294,7 +298,7 @@ AnnotationHtmlParser::toHtml(const QString &text) const
 
     case '{':
     case '[':
-      stack.prepend(std::make_pair(current, current_ch));
+      stack.push(std::make_pair(current, current_ch));
       break;
 
     case CORE_CMDCH:
@@ -310,11 +314,11 @@ AnnotationHtmlParser::toHtml(const QString &text) const
         }
       }
 
-      stack.prepend(std::make_pair(current, current_ch));
+      stack.push(std::make_pair(current, current_ch));
       break;
 
     default:
-      stack.prepend(std::make_pair(current, '\0'));
+      stack.push(std::make_pair(current, '\0'));
     }
 
   } while (!stack.empty());

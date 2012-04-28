@@ -7,6 +7,8 @@
 #include "module/player/player.h"
 #include "module/qtext/datetime.h"
 #include <QtGui>
+#include <boost/foreach.hpp>
+#include <list>
 
 //#define DEBUG "embeddedcanvas"
 #include "module/debug/debug.h"
@@ -25,6 +27,8 @@ EmbeddedCanvas::EmbeddedCanvas(DataManager *data, SignalHub *hub, Player *player
   Q_ASSERT(hub_);
   setContentsMargins(0, 0, 0, 0);
   setFixedHeight(0);
+
+  connect(player_, SIGNAL(mediaChanged()), SLOT(clearUserIds()));
 }
 
 // - Properties -
@@ -46,15 +50,14 @@ EmbeddedCanvas::setOffset(qint64 secs)
 {
   if (offset_ != secs) {
     offset_ = secs;
-    if (isVisible())
-      repaint();
+    invalidatePaint();
   }
 }
 
 // - Events -
 
 void
-EmbeddedCanvas::invalidateVisible()
+EmbeddedCanvas::updateVisible()
 {
   bool t = enabled_ && !isEmpty();
   if (t != isVisible())
@@ -283,7 +286,7 @@ EmbeddedCanvas::paintHistogram(QPainter &painter, const QRect &view, const Annot
   }
 
   // Calculate local peaks
-  QList<QPoint> peaks;
+  std::list<QPoint> peaks; // use list instead of QList to improve performance
   {
     enum { MinPeakCount = 6 };
     enum { MaxTries = 3 };
@@ -306,12 +309,12 @@ EmbeddedCanvas::paintHistogram(QPainter &painter, const QRect &view, const Annot
             y = i.value();
         if (y < limitY)
           continue;
-        if (!peaks.isEmpty() &&
-            peaks.last().x() + distanceX > x) {
-          if (peaks.last().y() < y)
-            peaks.last() = QPoint(x, y);
+        if (!peaks.empty() &&
+            peaks.back().x() + distanceX > x) {
+          if (peaks.back().y() < y)
+            peaks.back() = QPoint(x, y);
         } else
-          peaks.append(QPoint(x, y));
+          peaks.push_back(QPoint(x, y));
       }
       if (!deltaY)
         break;
@@ -320,12 +323,12 @@ EmbeddedCanvas::paintHistogram(QPainter &painter, const QRect &view, const Annot
   }
 
   // Draw peaks
-  if (!peaks.isEmpty()) {
+  if (!peaks.empty()) {
     QFont f = painter.font();
     f.setPointSize(PeakFontSize);
     painter.setFont(f);
 
-    foreach (const QPoint &peak, peaks) {
+    BOOST_FOREACH (const QPoint &peak, peaks) {
       qreal px = peak.x() / qreal(rangeX),
             py = peak.y() / qreal(maxY);
       int x = width * px + x0,
@@ -400,6 +403,31 @@ EmbeddedCanvas::paintHistogram(QPainter &painter, const QRect &view, const Annot
     }
   }
 
+  // Calculate highlighted positions.
+  std::list<qint64> highlights;
+  if (!userIds_.isEmpty())
+    foreach (const Annotation &a, data_->annotations())
+      if (userIds_.contains(a.userId()))
+        highlights.push_back(a.pos());
+  DOUT("highlights count =" << highlights.size());
+
+  // Draw highlights
+  if (!highlights.empty()) {
+    painter.setPen(Qt::cyan);
+    int y = view.y() + histHeight * 3 / 4;
+
+    BOOST_FOREACH (qint64 pos, highlights) {
+      int x = pos / metric;
+      qreal px =  x / qreal(rangeX);
+      x = width * px + x0;
+
+      if (x0 && (x < 0 || x > width))
+        continue;
+
+      drawCross(painter, QPoint(view.x() + x, y));
+    }
+  }
+
   // Draw statistics at the side
   {
     enum { MarginLeft = 10, MarginRight = 10 };
@@ -417,6 +445,12 @@ EmbeddedCanvas::paintHistogram(QPainter &painter, const QRect &view, const Annot
                    .arg(peak) // %5
                    .arg(QString::number(metricInSec)) // %6
                    .arg(averagePerSecond); // %7
+    if (!userIds_.isEmpty())
+      note.append(QString("  %1:%2%3")
+        .arg(tr("traced users"))
+        .arg(QString::number(userIds_.size()))
+        .arg(tr("u"))
+      );
 
     QFont f = painter.font();
     //f.setItalic(true);
@@ -435,6 +469,21 @@ EmbeddedCanvas::paintHistogram(QPainter &painter, const QRect &view, const Annot
     //painter.setBrush(Qt::black);
     //painter.drawPath(path);
   }
+}
+
+// - Helper -
+
+void
+EmbeddedCanvas::drawCross(QPainter &painter, const QPoint &center, int size)
+{
+  int x1, y1, x2, y2; {
+    QRect r(0, 0, size, size);
+    r.moveCenter(center);
+    r.getCoords(&x1, &y1, &x2, &y2);
+  }
+
+  painter.drawLine(x1, y1, x2, y2);
+  painter.drawLine(x1, y2, x2, y1);
 }
 
 // EOF

@@ -5,9 +5,9 @@
 // 11/15/2011
 
 #include "module/annotcloud/traits.h"
-#include <QtCore/QObject>
-#include <QtCore/QMutex>
 #include <QtCore/QList>
+#include <QtCore/QMutex>
+#include <QtCore/QObject>
 
 struct CastEvent
 {

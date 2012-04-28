@@ -4,7 +4,7 @@
 // youtubemrlresolver.h
 // 1/24/2011
 
-#include "mrlresolver.h"
+#include "module/mrlresolver/mrlresolver.h"
 
 QT_FORWARD_DECLARE_CLASS(QNetworkAccessManager)
 QT_FORWARD_DECLARE_CLASS(QNetworkReply)

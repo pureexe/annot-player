@@ -66,6 +66,9 @@ public:
   bool isLive() const;
   void setLive(bool t);
 
+  bool preferLocalDatabase() const;
+  void setPreferLocalDatabase(bool t);
+
   QDate updateDate() const;
   void setUpdateDate(const QDate &date);
 

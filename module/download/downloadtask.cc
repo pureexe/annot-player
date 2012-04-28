@@ -1,9 +1,9 @@
 // downloadtask.cc
 // 2/20/2012
-#include "downloadtask.h"
-#include <QtCore/QTimer>
-#include <QtCore/QDir>
+#include "module/download/downloadtask.h"
 #include <QtCore/QDateTime>
+#include <QtCore/QDir>
+#include <QtCore/QTimer>
 
 //#define DEBUG "downloadtask"
 #include "module/debug/debug.h"

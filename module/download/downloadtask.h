@@ -5,10 +5,10 @@
 // 2/20/2012
 
 #include "module/qtext/stoppable.h"
-#include <QtCore/QObject>
-#include <QtCore/QThreadPool>
-#include <QtCore/QString>
 #include <QtCore/QList>
+#include <QtCore/QObject>
+#include <QtCore/QString>
+#include <QtCore/QThreadPool>
 
 struct DownloadTaskInfo
 {

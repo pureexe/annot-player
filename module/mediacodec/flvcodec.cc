@@ -3,14 +3,14 @@
 // See: FLVExtractCl/Library/FLVFile.cs
 // http://moitah.net/
 
-#include "flvcodec.h"
-#include "flvdemux.h"
-#include "flvmerge.h"
-#include "flvmeta.h"
-#include "module/stream/inputstream.h"
-#include "module/stream/outputstream.h"
+#include "module/mediacodec/flvcodec.h"
+#include "module/mediacodec/flvdemux.h"
+#include "module/mediacodec/flvmerge.h"
+#include "module/mediacodec/flvmeta.h"
 #include "module/stream/fileinputstream.h"
 #include "module/stream/filestream.h"
+#include "module/stream/inputstream.h"
+#include "module/stream/outputstream.h"
 #include "module/qtext/stoppable.h"
 #include <QtCore/QThreadPool>
 #include <cstring>

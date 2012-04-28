@@ -93,8 +93,8 @@ public slots:
 protected slots:
   virtual void save(); ///< \override
 
-  void invalidateSize();
-  void invalidateFileName();
+  void updateSize();
+  void updateFileName();
   void finish();
 
   void wakeAllStopped() { stoppedCond_.wakeAll(); }

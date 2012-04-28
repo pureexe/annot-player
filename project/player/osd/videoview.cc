@@ -42,8 +42,8 @@ VideoView::VideoView(QWidget *parent)
 #endif // Q_WS_MAC
 
 #ifdef Q_WS_X11
-  //connect(this, SIGNAL(clientIsEmbedded()), SLOT(invalidateClientWindow()));
-  //connect(this, SIGNAL(clientClosed()), SLOT(invalidateClientWindow()));
+  //connect(this, SIGNAL(clientIsEmbedded()), SLOT(updatelientWindow()));
+  //connect(this, SIGNAL(clientClosed()), SLOT(updateClientWindow()));
 #endif // Q_WS_X11
 }
 #undef BASE
@@ -250,7 +250,7 @@ VideoView::containsWindow(WId hwnd) const
 /*
 // See: http://www.qtcentre.org/threads/33561-Handling-mouse-events-in-Qt-WebKit
 void
-VideoView::invalidateClientWindow()
+VideoView::updateClientWindow()
 {
   WId cid = clientWinId();
   if (!cid)
@@ -336,7 +336,7 @@ VideoView::x11Event(XEvent *event)
             recentClickTime_ = event->xbutton.time;
         }break;
 
-      default: button = Qt::NoButton; recentClickTime_ = 0; break;
+      default: button = Qt::NoButton; recentClickTime_ = 0;
       }
       Qt::MouseButtons buttons = button;
 
@@ -361,7 +361,7 @@ VideoView::x11Event(XEvent *event)
     } break;
     */
 
-  default: break;
+  default: ;
   }
   return Base::x11Event(event);
 }

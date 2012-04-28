@@ -4,9 +4,9 @@
 // datainputstream.h
 // 3/14/2012
 
-#include "inputstream.h"
-#include <QtCore/QObject>
+#include "module/stream/inputstream.h"
 #include <QtCore/QByteArray>
+#include <QtCore/QObject>
 
 class DataInputStream : public QObject, public InputStream
 {

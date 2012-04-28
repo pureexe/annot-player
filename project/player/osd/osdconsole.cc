@@ -5,7 +5,7 @@
 #include "tr.h"
 #include "rc.h"
 #include "global.h"
-#include "ac/acui.h"
+#include "project/common/acui.h"
 #include <QtGui>
 
 #define DEBUG "osdconsole"

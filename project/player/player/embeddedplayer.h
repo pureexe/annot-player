@@ -43,13 +43,13 @@ public slots:
 
 protected slots:
   void showWhenEmbedded();
-  virtual void invalidateInputCountButton(); ///< \override
+  virtual void updateInputCountButton(); ///< \override
 
 public slots:
   void setAutoHideEnabled(bool enabled = true);
   void autoHide();
 
-  void invalidateGeometry();    ///< Automatically adjust from its parent
+  void updateGeometry();    ///< Automatically adjust from its parent
   void resetAutoHideTimeout();  ///< Reset timeout for autohide EmbeddedPlayer
 
   void setContainerWindow(WId winId);
@@ -65,7 +65,7 @@ protected:
 protected slots:
   void startTracking();
   void stopTracking();
-  void invalidateTrackingTimer();
+  void updateTrackingTimer();
 
 private:
   void createLayout();

@@ -1,9 +1,9 @@
 // flvdemux.cc
 // 2/12/2012
 
-#include "flvdemux.h"
-#include "mediawriter.h"
-#include "mediatoc.h"
+#include "module/mediacodec/flvdemux.h"
+#include "module/mediacodec/mediatoc.h"
+#include "module/mediacodec/mediawriter.h"
 
 #define DEBUG "flvdemux"
 #include "module/debug/debug.h"

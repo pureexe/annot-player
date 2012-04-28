@@ -6,6 +6,8 @@ include(../../config.pri)
 DEFINES += WITH_MODULE_MP4BOX
 
 INCLUDEPATH += $$PWD
+DEPENDPATH += $$PWD
+DEPENDPATH += $$PWD/gpac
 
 #DEFINES += MP4BOX_STATIC
 

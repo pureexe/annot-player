@@ -6,8 +6,11 @@ include($$ROOTDIR/win/qtwin/qtwin.pri)
 
 DEFINES += WITH_WIN_QTH
 
-DEPENDPATH  += .
-INCLUDEPATH += .
+INCLUDEPATH += \
+    $$PWD
+DEPENDPATH += \
+    $$PWD \
+    $$PWD/ith
 
 ## Libraries
 

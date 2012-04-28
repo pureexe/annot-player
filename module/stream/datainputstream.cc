@@ -1,7 +1,7 @@
 // datainputstream.cc
 // 3/16/2012
 
-#include "datainputstream.h"
+#include "module/stream/datainputstream.h"
 #include <QtCore/QFile>
 #include <cstring>
 

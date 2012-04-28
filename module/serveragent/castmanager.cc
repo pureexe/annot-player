@@ -1,6 +1,6 @@
 // castmanager.cc
 // 11/15/2011
-#include "castmanager.h"
+#include "module/serveragent/castmanager.h"
 #include <QtCore/QMutexLocker>
 
 bool

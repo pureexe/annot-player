@@ -12,8 +12,8 @@
 #else
 #  error "QTH is indispensible"
 #endif // WITH_WIN_QTH
-#include "ac/acfilteredtableview.h"
-#include "ac/acui.h"
+#include "project/common/acfilteredtableview.h"
+#include "project/common/acui.h"
 #include <QtGui>
 
 using namespace Logger;

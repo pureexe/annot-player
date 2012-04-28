@@ -61,10 +61,10 @@
 #include "ntstatus.h"
 
 #if (_MSC_VER >= 800) || defined(_STDCALL_SUPPORTED)
-  #define NTAPI __stdcall
+#  define NTAPI __stdcall
 #else
-  #define _cdecl
-  #define NTAPI
+#  define _cdecl
+#  define NTAPI
 #endif // STDCALL
 
 #ifdef __cplusplus

@@ -3,8 +3,8 @@
 
 #include "infoview.h"
 #include "tr.h"
-#include "ac/acui.h"
-#include "ac/actextview.h"
+#include "project/common/acui.h"
+#include "project/common/actextview.h"
 #include "module/qtext/htmltag.h"
 #include <QtGui>
 
@@ -25,12 +25,10 @@ InfoView::InfoView(QWidget *parent)
   createLayout();
 
   // Shortcuts
-  QShortcut *cancelShortcut = new QShortcut(QKeySequence("Esc"), this);
-  connect(cancelShortcut, SIGNAL(activated()), SLOT(hide()));
-  QShortcut *closeShortcut = new QShortcut(QKeySequence("CTRL+W"), this);
-  connect(closeShortcut, SIGNAL(activated()), SLOT(hide()));
-  QShortcut *refreshShortcut = new QShortcut(QKeySequence("CTRL+R"), this);
-  connect(refreshShortcut, SIGNAL(activated()), SLOT(hide()));
+  connect(new QShortcut(QKeySequence("Esc"), this), SIGNAL(activated()), SLOT(hide()));
+  connect(new QShortcut(QKeySequence("CTRL+W"), this), SIGNAL(activated()), SLOT(hide()));
+
+  connect(new QShortcut(QKeySequence("CTRL+R"), this), SIGNAL(activated()), SLOT(hide()));
 }
 
 void

@@ -5,6 +5,8 @@ include(../../config.pri)
 
 DEFINES += WITH_MODULE_ANNOTCLOUD
 
+DEPENDPATH +=$$PWD
+
 HEADERS += \
     $$PWD/alias.h\
     $$PWD/annotation.h \
@@ -33,7 +35,7 @@ JSF_FILES += \
     $$PWD/jsf/i.xhtml \
     $$PWD/jsf/t.xhtml
 
-QT +=   core xml webkit
+QT      += core xml webkit
 
 OTHER_FILES += $$JSF_FILES
 

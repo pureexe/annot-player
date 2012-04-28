@@ -9,10 +9,10 @@
 #include <QtCore/QModelIndex>
 
 QT_BEGIN_NAMESPACE
+class QAction;
+class QMenu;
 class QStandardItemModel;
 class QSortFilterProxyModel;
-class QMenu;
-class QAction;
 class QToolButton;
 QT_END_NAMESPACE
 

@@ -8,7 +8,7 @@ DEFINES += WITH_MODULE_IOUTIL
 #win32:  include($$ROOTDIR/win/qtwin/qtwin.pri)
 #unix:   include($$ROOTDIR/unix/qtunix/qtunix.pri)
 
-INCLUDEPATH += $$PWD
+DEPENDPATH += $$PWD
 HEADERS += $$PWD/ioutil.h
 SOURCES += $$PWD/ioutil.cc
 

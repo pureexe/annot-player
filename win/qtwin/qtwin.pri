@@ -1,9 +1,11 @@
 # qtwin.pri
 # 7/20/2011
 
-INCLUDEPATH += $$PWD
-
 DEFINES += WITH_WIN_QTWIN
+
+INCLUDEPATH     += $$PWD/..
+INCLUDEPATH     += $$PWD
+DEPENDPATH      += $$PWD
 
 HEADERS += \
     $$PWD/ntdll.h \

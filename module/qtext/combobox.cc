@@ -4,6 +4,16 @@
 #include "module/qtext/combobox.h"
 #include <QtGui/QLineEdit>
 
+// - Construction -
+
+QtExt::
+ComboBox::ComboBox(QWidget *parent)
+  : Base(parent), hovered_(false), hoverCursor_(Qt::PointingHandCursor)
+{
+  setInsertPolicy(InsertAtTop);
+  connect(this, SIGNAL(activated(int)), SLOT(hidePopup()));
+}
+
 // - Events -
 
 void

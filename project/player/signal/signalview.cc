@@ -6,7 +6,7 @@
 #include "messageview.h"
 #include "processview.h"
 #include "tr.h"
-#include "ac/acui.h"
+#include "project/common/acui.h"
 #include <QtGui>
 
 // - Constructions -

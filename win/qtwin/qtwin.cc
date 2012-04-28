@@ -1,17 +1,17 @@
 // qtwin.cc
 // 7/21/2011
 
-#include "qtwin.h"
+#include "qtwin/qtwin.h"
 #include <QtCore>
+#include <cstdlib>
 #include <memory>
 #include <string>
-#include <cstdlib>
 
 #include <qt_windows.h>
-#include <TlHelp32.h>
 #include <Psapi.h>
 #include <ShObjIdl.h>
 #include <ShlGuid.h>
+#include <TlHelp32.h>
 //#include <strsafe.h>
 
 //#ifdef _MSC_VER
@@ -453,15 +453,31 @@ QtWin::isKeyCapslockToggled()
 
 bool
 QtWin::isKeyShiftPressed()
-{ return isKeyPressed(VK_LSHIFT) || isKeyPressed(VK_RSHIFT); }
+{ return isKeyPressed(VK_SHIFT); }
+
+bool
+QtWin::isKeyAltPressed()
+{ return isKeyPressed(VK_MENU); }
 
 bool
 QtWin::isKeyControlPressed()
-{ return isKeyPressed(VK_LCONTROL) || isKeyPressed(VK_RCONTROL); }
+{ return isKeyPressed(VK_CONTROL); }
 
 bool
 QtWin::isKeyWinPressed()
 { return isKeyPressed(VK_LWIN) || isKeyPressed(VK_RWIN); }
+
+bool
+QtWin::isMouseLeftButtonPressed()
+{ return isKeyPressed(VK_LBUTTON); }
+
+bool
+QtWin::isMouseMiddleButtonPressed()
+{ return isKeyPressed(VK_MBUTTON); }
+
+bool
+QtWin::isMouseRightButtonPressed()
+{ return isKeyPressed(VK_RBUTTON); }
 
 int
 QtWin::getDoubleClickInterval()
@@ -504,10 +520,7 @@ QPoint
 QtWin::getMousePos()
 {
   POINT pt;
-  if (::GetCursorPos(&pt))
-    return POINT2QPoint(pt);
-  else
-    return QPoint();
+  return ::GetCursorPos(&pt) ? ::POINT2QPoint(pt) : QPoint();
 }
 
 // - Paths -

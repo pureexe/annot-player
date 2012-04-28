@@ -2,17 +2,17 @@
 // 10/9/2011
 
 #include "module/qtext/webview.h"
+#include "module/qtext/actionwithid.h"
+#include "module/qtext/algorithm.h"
+#include "module/qtext/ss.h"
 #include "module/qtext/webpage.h"
 #ifdef WITH_MODULE_DOWNLOAD
 #  include "module/qtext/filesystem.h"
 #  include "module/download/download.h"
 #endif // WITH_MODULE_DOWNLOAD
+#include <QtWebKit>
 #include <QtGui>
-#include <QtWebKit/QWebFrame>
-#include <QtWebKit/QWebPage>
-#include <QtCore/QUrl>
-#include <QtCore/QFile>
-#include <QtCore/QFileInfo>
+#include <QtCore>
 
 //#define DEBUG "qtext::webview"
 #include "module/debug/debug.h"
@@ -20,6 +20,11 @@
 #ifdef __GNUC__
 #  pragma GCC diagnostic ignored "-Wparentheses" // suggest parentheses around assignment
 #endif // __GNUC__
+
+#define SS_WEBVIEW \
+  SS_BEGIN(QWebView) \
+    SS_BACKGROUND_COLOR(#ececec) \
+  SS_END
 
 //#define WINDOW_FLAGS
 //  Qt::Dialog |
@@ -41,6 +46,15 @@
 //#  define K_CTRL        "Ctrl"
 //#endif // Q_WS_MAC
 
+QString
+QtExt::
+WebView::shortenText(const QString &text, int len)
+{
+  Q_ASSERT(len > 3);
+  return len && text.size() < len ? text :
+         text.left(len - 3).append("...");
+}
+
 QtExt::
 WebView::WebView(QWidget *parent)
   : Base(parent), loading_(false)
@@ -53,18 +67,25 @@ WebView::WebView(QWidget *parent)
   setRenderHints(QPainter::TextAntialiasing);
 
   WebPage *page = new WebPage(this); {
-    connect(page, SIGNAL(linkHovered(QString,QString,QString)), SLOT(showLink(QString)));
+    connect(page, SIGNAL(linkHovered(QString,QString,QString)), SLOT(showLink(QString,QString,QString)));
     connect(page, SIGNAL(openLinkRequested(QString)), SIGNAL(openLinkRequested(QString)));
     connect(page, SIGNAL(downloadRequested(QNetworkRequest)), SLOT(download(QNetworkRequest)));
 
     connect(page, SIGNAL(loadStarted()), SLOT(setLoading()));
     connect(page, SIGNAL(loadFinished(bool)), SLOT(setFinished()));
+
+    //connect(page, SIGNAL(loadStarted()), SLOT(resetStyleSheet()), Qt::QueuedConnection);
     //connect(this, SIGNAL(loadStarted()), SLOT(setLoading()));
     //connect(this, SIGNAL(loadFinished(bool)), SLOT(setFinished()));
+    connect(page, SIGNAL(selectionChanged()), SIGNAL(selectionChanged()));
+    //connect(page, SIGNAL(scrollRequested(int,int,QRect)), SLOT(scroll(int,int,QRect)));
   } setPage(page);
 
   createActions();
 
+  connect(this, SIGNAL(selectionChanged()), SLOT(invalidteSelection()));
+
+  //setStyleSheet(SS_WEBVIEW);
 }
 
 void
@@ -72,7 +93,7 @@ QtExt::
 WebView::createActions()
 {
   clipAct = new QAction(this); {
-    clipAct->setText(tr("Clip the page"));
+    clipAct->setText(tr("Clip the Page"));
     clipAct->setStatusTip(tr("Save the web page as image to disk and clipboard"));
     clipAct->setShortcut(QKeySequence::Save);
     connect(new QShortcut(QKeySequence::Save, this), SIGNAL(activated()),
@@ -80,28 +101,38 @@ WebView::createActions()
   } connect(clipAct, SIGNAL(triggered()), SLOT(clip()));
 
   zoomInAct = new QAction(this); {
-    zoomInAct->setText(tr("Zoom in"));
-    zoomInAct->setStatusTip(tr("Zoom in"));
+    zoomInAct->setText(tr("Zoom In"));
+    zoomInAct->setStatusTip(tr("Zoom In"));
     zoomInAct->setShortcut(QKeySequence::ZoomIn);
     connect(new QShortcut(QKeySequence("CTRL+="), this), SIGNAL(activated()),
             zoomInAct, SLOT(trigger()));
   } connect(zoomInAct, SIGNAL(triggered()), SLOT(zoomIn()));
 
   zoomOutAct = new QAction(this); {
-    zoomOutAct->setText(tr("Zoom out"));
-    zoomOutAct->setStatusTip(tr("Zoom out"));
+    zoomOutAct->setText(tr("Zoom Out"));
+    zoomOutAct->setStatusTip(tr("Zoom Out"));
     zoomOutAct->setShortcut(QKeySequence::ZoomOut);
     connect(new QShortcut(QKeySequence("CTRL+-"), this), SIGNAL(activated()),
             zoomOutAct, SLOT(trigger()));
   } connect(zoomOutAct, SIGNAL(triggered()), SLOT(zoomOut()));
 
   zoomResetAct = new QAction(this); {
-    zoomResetAct->setText(tr("Reset zoom"));
-    zoomResetAct->setStatusTip(tr("Reset zoom"));
+    zoomResetAct->setText(tr("Actual Size"));
+    zoomResetAct->setStatusTip(tr("Actual Size"));
     zoomResetAct->setShortcut(QKeySequence("CTRL+0"));
     connect(new QShortcut(QKeySequence("CTRL+0"), this), SIGNAL(activated()),
             zoomResetAct, SLOT(trigger()));
   } connect(zoomOutAct, SIGNAL(triggered()), SLOT(zoomOut()));
+
+  clearHighlightAct = new QAction(this); {
+    clearHighlightAct->setText(tr("Clear Highlight"));
+    clearHighlightAct->setStatusTip(tr("Clear Highlight"));
+  } connect(clearHighlightAct, SIGNAL(triggered()), SLOT(clearHighlight()));
+
+  openWithOperatingSystemAct = new QAction(this); {
+    openWithOperatingSystemAct->setText(tr("Open in System Default Browser"));
+    openWithOperatingSystemAct->setStatusTip(tr("Open in System Default Browser"));
+  } connect(openWithOperatingSystemAct, SIGNAL(triggered()), SLOT(openWithOperatingSystem()));
 
   QAction *a;
   if (a = page()->action(QWebPage::OpenLinkInNewWindow)) {
@@ -125,8 +156,8 @@ WebView::createActions()
     connect(new QShortcut(QKeySequence::Back, this), SIGNAL(activated()), a, SLOT(trigger()));
   }
   if (a = page()->action(QWebPage::Stop)) {
-    a->setShortcut(QKeySequence("ESC"));
-    connect(new QShortcut(QKeySequence("ESC"), this), SIGNAL(activated()), a, SLOT(trigger()));
+    a->setShortcut(QKeySequence("CTRL+."));
+    connect(new QShortcut(QKeySequence("CTRL+."), this), SIGNAL(activated()), a, SLOT(trigger()));
   }
   if (a = page()->action(QWebPage::InspectElement)) {
     a->setShortcut(QKeySequence("CTRL+I"));
@@ -202,6 +233,28 @@ WebView::fileNameFromUrl(const QUrl &url, const QString &suffix)
 
 void
 QtExt::
+WebView::openWithOperatingSystem()
+{
+  QString address = hoveredLink_;
+  if (address.isEmpty()) {
+    address = selectedText().trimmed();
+    if (!address.isEmpty()) {
+      if (address.startsWith("ttp://"))
+        address.prepend('h');
+      else if (!address.startsWith("http"))
+        address.clear();
+    }
+  }
+
+  QUrl u = address.isEmpty() ? url() : QUrl(address);
+  if (!u.isEmpty()) {
+    emit message(tr("openning") + ": " + u.toString());
+    QDesktopServices::openUrl(u);
+  }
+}
+
+void
+QtExt::
 WebView::clip()
 {
   // See: http://labs.qt.nokia.com/2008/11/03/thumbnail-preview-of-web-page/
@@ -269,7 +322,42 @@ WebView::download(const QNetworkRequest &req)
 #endif // WITH_MODULE_DOWNLOAD
 }
 
-// - Events -
+// - Menu -
+
+QMenu*
+QtExt::
+WebView::createHistoryMenu()
+{
+  QWebHistory *h = history();
+  if (!h || h->count() <= 1)
+    return 0;
+
+  QList<QWebHistoryItem> items = h->items();
+
+  QMenu *m = new QMenu(tr("History"), this);
+  int i = 0;
+  QList<QAction *> actions;
+  foreach (const QWebHistoryItem &item, items) {
+    ActionWithId *a = new ActionWithId(i++, m);
+    a->setCheckable(true);
+    a->setChecked(item.url() == url());
+    QUrl u = item.originalUrl();
+    if (u.isEmpty())
+      u = item.url();
+    QString text;
+    if (!u.isEmpty())
+      text = u.toString(QUrl::RemoveAuthority | QUrl::RemoveFragment | QUrl::StripTrailingSlash);
+    else
+      text = tr("Blank");
+    text.prepend(QString::number(i) + ". ");
+    a->setText(text);
+    a->setIcon(item.icon());
+    connect(a, SIGNAL(triggeredWithId(int)), SLOT(goToRecent(int)));
+    actions.append(a);
+  }
+  m->addActions(revertList(actions));
+  return m;
+}
 
 QMenu*
 QtExt::
@@ -280,20 +368,33 @@ WebView::createContextMenu()
   //if (a = page()->action(QWebPage::ReloadAndBypassCache))
   //  m->addAction(a);
   m->addSeparator();
+  QMenu *history = createHistoryMenu();
+  if (history) {
+    m->addMenu(history);
+    m->addSeparator();
+  }
   m->addAction(clipAct);
+  m->addAction(clearHighlightAct);
   m->addSeparator();
+  m->addAction(zoomResetAct);
   m->addAction(zoomInAct);
   m->addAction(zoomOutAct);
-  m->addAction(zoomResetAct);
+  m->addSeparator();
+  m->addAction(openWithOperatingSystemAct);
+
+  if (history)
+    QTimer::singleShot(0, history, SLOT(deleteLater()));
   return m;
 }
+
+// - Events -
 
 void
 QtExt::
 WebView::contextMenuEvent(QContextMenuEvent *event)
 {
   Q_ASSERT(event);
-
+  updateHoveredLink();
   QMenu *m = createContextMenu();
   m->exec(event->globalPos());
   delete m;
@@ -317,6 +418,11 @@ WebView::wheelEvent(QWheelEvent *event)
   } else
     Base::wheelEvent(event);
 }
+
+void
+QtExt::
+WebView::clearHighlight()
+{ findText(QString(), QWebPage::HighlightAllOccurrences); }
 
 // - Zoom -
 
@@ -345,12 +451,32 @@ QtExt::
 WebView::zoomReset()
 { setZoomFactor(1.0); }
 
+void
+QtExt::
+WebView::goToRecent(int i)
+{
+  QWebHistory *h = history();
+  if (h && h->count() > i)
+    h->goToItem(h->itemAt(i));
+}
+
 // - Messages -
 
 void
 QtExt::
-WebView::showLink(const QString &url)
-{ emit message(url.isEmpty() ? url : QUrl::fromPercentEncoding(url.toLocal8Bit())); }
+WebView::showLink(const QString &url, const QString &title, const QString &content)
+{
+  if (url.isEmpty())
+    emit message(QString());
+  else {
+    QString m = QUrl::fromPercentEncoding(url.toLocal8Bit());
+    QString t = content.isEmpty() ? title : content;
+    t = t.simplified();
+    if (!t.isEmpty())
+      m.prepend(shortenText(t) + " | ");
+    emit message(m);
+  }
+}
 
 // - State -
 
@@ -373,5 +499,22 @@ WebView::setFinished()
   setCursor(Qt::ArrowCursor);
   DOUT("exit");
 }
+
+void
+QtExt::
+WebView::invalidteSelection()
+{
+  enum { min = 3, max = 100 };
+  QString s = selectedText().trimmed();
+  if (s.size() >= min && s.size() <= max) {
+    clearHighlight();
+    findText(s, QWebPage::FindWrapsAroundDocument | QWebPage::HighlightAllOccurrences);
+  }
+}
+
+void QtExt::WebView::scrollTop()    { WebPage *p = dynamic_cast<WebPage *>(page()); if (p) p->scrollTop(); }
+void QtExt::WebView::scrollBottom() { WebPage *p = dynamic_cast<WebPage *>(page()); if (p) p->scrollBottom(); }
+void QtExt::WebView::scrollLeft()   { WebPage *p = dynamic_cast<WebPage *>(page()); if (p) p->scrollLeft(); }
+void QtExt::WebView::scrollRight()  { WebPage *p = dynamic_cast<WebPage *>(page()); if (p) p->scrollRight(); }
 
 // EOF

@@ -5,9 +5,9 @@
 
 #include <QtGui/QWidget>
 #include <QtCore/QList>
-#include <QtCore/QString>
 #include <QtCore/QPoint>
 #include <QtCore/QRect>
+#include <QtCore/QString>
 
 namespace QtWin {
 
@@ -144,8 +144,13 @@ namespace QtWin {
 
   bool isKeyCapslockToggled();
   bool isKeyShiftPressed();
+  bool isKeyAltPressed();
   bool isKeyControlPressed();
   bool isKeyWinPressed();
+
+  bool isMouseLeftButtonPressed();
+  bool isMouseMiddleButtonPressed();
+  bool isMouseRightButtonPressed();
 
   // - Environments -
   QString getWinDirPath();

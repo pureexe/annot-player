@@ -1,67 +1,155 @@
-// wbsearchedit.cc
+// gui/wbsearchedit.cc
 // 3/31/2012
 
-#include "wbsearchedit.h"
-#include "wbss.h"
+#include "gui/wbsearchedit.h"
+#include "core/wbsearchengine.h"
 #include <QtGui>
+
+//#define DEBUG "wbsearchedit"
+#include "module/debug/debug.h"
+
+#define MIN_WIDTH       150
+#define MAX_RECENT      15
 
 // - Construction -
 
 void
 WbSearchEdit::createActions()
 {
-  pasteAndGoAct = new QAction(this); {
-    pasteAndGoAct->setText(tr("Paste and go"));
-    pasteAndGoAct->setStatusTip(tr("Paste and go"));
-    connect(pasteAndGoAct, SIGNAL(triggered()), SLOT(pasteAndGo()));
+  pasteAndGoAct->setText(tr("Paste and go"));
+  pasteAndGoAct->setStatusTip(tr("Paste and go"));
+
+  submitAct->setText(tr("Search"));
+  submitAct->setStatusTip(tr("Search"));
+}
+
+void
+WbSearchEdit::createConnections()
+{
+  connect(this, SIGNAL(editTextChanged(QString)), SLOT(updateText(QString)));
+  connect(this, SIGNAL(activated(int)), SLOT(setEngineByIndex(int)));
+}
+
+// - Recent -
+
+QStringList
+WbSearchEdit::recent() const
+{
+  QStringList ret;
+  for (int i = 0; i < recentCount(); i++) {
+    QString t = itemText(i).trimmed();
+    if (!t.isEmpty())
+      ret.append(t);
+  }
+  return ret;
+}
+
+void
+WbSearchEdit::addRecent(const QString &text)
+{
+  QString t = text.trimmed();
+  if (!t.isEmpty() && text != currentText()) {
+    removeRecent(text);
+    insertItem(0, t);
+    if (recentCount() > MAX_RECENT)
+      removeItem(recentCount() -1);
   }
 }
 
-// - Actions -
-
 void
-WbSearchEdit::pasteAndGo()
+WbSearchEdit::removeRecent(const QString &text)
 {
-  QClipboard *c = QApplication::clipboard();
-  if (c) {
-    QString url = c->text().trimmed();
-    if (!url.isEmpty())
-      emit textEntered(url);
+  int i = findText(text);
+  if (i >= 0 && i < recentCount()) {
+    //int engine = -1;
+    //if (i == recentCount() -1)
+    //  engine = engine_;
+    removeItem(i);
+    //if (engine >= 0)
+    //  setEngine(engine);
   }
 }
 
-bool
-WbSearchEdit::isClipboardEmpty()
+void
+WbSearchEdit::updateText(const QString &text)
 {
-  QClipboard *c = QApplication::clipboard();
-  return !c || c->text().trimmed().isEmpty();
+  lastText_ = currentText_;
+  currentText_ = text;
 }
 
-// - Events -
+// - Engines -
 
 void
-WbSearchEdit::contextMenuEvent(QContextMenuEvent *event)
+WbSearchEdit::invalidateEngines()
 {
-  if (!event)
-    return;
+  QStringList items,
+              icons;
 
-  QMenu *m = new QMenu(this);
+  items.append("アニメ"); icons.append(QString());
 
-  m->addAction(pasteAndGoAct);
-  m->addAction(popupAct);
-  m->addAction(clearAct);
-  m->addSeparator();
+  foreach (const WbSearchEngine *e, engines_) {
+    Q_ASSERT(e);
+    items.append(e->name());
+    icons.append(e->icon());
+  }
 
-  pasteAndGoAct->setEnabled(!isClipboardEmpty());
-  popupAct->setEnabled(count());
+  setDefaultItems(items, icons);
+}
 
-  QMenu *scm = lineEdit()->createStandardContextMenu();
-  m->addActions(scm->actions());
+void
+WbSearchEdit::setEngine(int engine)
+{
+  if (engine_ != engine) {
+    engine_ = engine;
+    const WbSearchEngine *e = engines_[engine_];
+    lineEdit()->setPlaceholderText(e->name());
+    lineEdit()->setToolTip(e->name());
+    lineEdit()->setStatusTip(e->queryUrl());
+    setIcon(e->icon());
+    emit engineChanged(engine_);
+  }
+}
 
-  m->exec(event->globalPos());
-  delete scm;
-  QTimer::singleShot(0, m, SLOT(deleteLater()));
-  event->accept();
+void
+WbSearchEdit::setText(const QString &text)
+{
+  if (recentCount())
+    setCurrentIndex(0);
+  setEditText(text);
+}
+
+void
+WbSearchEdit::setEngineByIndex(int index)
+{
+  DOUT("enter: index =" << index);
+  int count = recentCount();
+  int engine = index - count;
+  if (engine >= 0 && engine < engines_.size()) {
+    QString text = lastText_;
+    setEngine(engine);
+    clearText();
+    clearFocus();
+    setText(text);
+  }
+  DOUT("exit");
+}
+
+// - Submit -
+
+void
+WbSearchEdit::submitText()
+{
+  DOUT("enter: index =" << currentIndex() << ", text =" << currentText());
+  if (currentIndex() < recentCount()) {
+    QString t = currentText().trimmed();
+    if (!t.isEmpty())
+      emit textEntered(t);
+    else {
+      clearText();
+      clearFocus();
+    }
+  }
+  DOUT("exit");
 }
 
 // EOF

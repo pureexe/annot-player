@@ -47,7 +47,7 @@ protected slots:
   //void tagTV()          { tag("TV"); }
   //void tagWeb()         { tag("Web"); }
 
-  void invalidateOKButton();
+  void updateOKButton();
 
   void setTypeToName(bool t);
   void setTypeToTag(bool t);

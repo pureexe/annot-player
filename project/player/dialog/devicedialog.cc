@@ -4,7 +4,7 @@
 #include "devicedialog.h"
 #include "tr.h"
 #include "logger.h"
-#include "ac/acui.h"
+#include "project/common/acui.h"
 #ifdef Q_OS_WIN
 #  include "win/qtwin/qtwin.h"
 #endif // Q_OS_WIN
@@ -64,10 +64,8 @@ DeviceDialog::DeviceDialog(QWidget *parent)
   createLayout();
 
   // Shortcuts
-  QShortcut *cancelShortcut = new QShortcut(QKeySequence("Esc"), this);
-  connect(cancelShortcut, SIGNAL(activated()), SLOT(hide()));
-  QShortcut *closeShortcut = new QShortcut(QKeySequence("CTRL+W"), this);
-  connect(closeShortcut, SIGNAL(activated()), SLOT(hide()));
+  connect(new QShortcut(QKeySequence("Esc"), this), SIGNAL(activated()), SLOT(hide()));
+  connect(new QShortcut(QKeySequence("CTRL+W"), this), SIGNAL(activated()), SLOT(hide()));
 
   // Post behaviors
   autoRadioButton_->setChecked(true);
@@ -80,7 +78,17 @@ DeviceDialog::createLayout()
   AcUi *ui = AcUi::globalInstance();
   ui->setWindowStyle(this);
 
-  pathComboBox_ = ui->makeComboBox(0, TR(T_PATH));
+  QString holder =
+#ifdef Q_WS_WIN
+    "x:\\"
+#elif defined Q_WS_MAC
+    "/dev/cdrom"
+#else
+    "/dev/cdrom"
+#endif // Q_WS_
+  ;
+
+  pathComboBox_ = ui->makeComboBox(0, TR(T_PATH), TR(T_PATH), holder);
   pathComboBox_->setMinimumWidth(COMBOBOX_MINWIDTH);
   //connect(pathComboBox_, SIGNAL(activated(int)), SLOT(setMoveStyle(int)));
 
@@ -120,8 +128,8 @@ DeviceDialog::createLayout()
   } setLayout(rows);
 
   // Connections
-  connect(pathComboBox_, SIGNAL(currentIndexChanged(int)), SLOT(invalidateButtons()));
-  connect(pathComboBox_, SIGNAL(editTextChanged(QString)), SLOT(invalidateButtons()));
+  connect(pathComboBox_, SIGNAL(currentIndexChanged(int)), SLOT(updateButtons()));
+  connect(pathComboBox_, SIGNAL(editTextChanged(QString)), SLOT(updateButtons()));
   connect(pathComboBox_->lineEdit(), SIGNAL(returnPressed()), SLOT(ok()));
 }
 
@@ -161,13 +169,13 @@ DeviceDialog::ok()
 void
 DeviceDialog::refresh()
 {
-  //invalidateMessage();
-  invalidateComboBox();
-  invalidateButtons();
+  //updateMessage();
+  updateComboBox();
+  updateButtons();
 }
 
 void
-DeviceDialog::invalidateComboBox()
+DeviceDialog::updateComboBox()
 {
   pathComboBox_->clear();
   QStringList items = devices();
@@ -189,7 +197,7 @@ DeviceDialog::setVisible(bool visible)
 }
 
 void
-DeviceDialog::invalidateButtons()
+DeviceDialog::updateButtons()
 {
   QString path = currentPath();
   bool t = QFile::exists(path);

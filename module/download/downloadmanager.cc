@@ -1,7 +1,7 @@
 // downloadmanager.cc
 // 2/20/2012
-#include "downloadmanager.h"
-#include "downloadtask.h"
+#include "module/download/downloadmanager.h"
+#include "module/download/downloadtask.h"
 #include "module/mrlanalysis/mrlanalysis.h"
 #include <QtCore/QRegExp>
 #include <QtCore/QTimer>

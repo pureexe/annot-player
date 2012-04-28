@@ -2,11 +2,9 @@
 // 2012/3/28
 
 #include "module/qtext/rubberband.h"
-#include <QtGui/QPen>
-#include <QtGui/QPainter>
-#include <QtGui/QPaintEvent>
-#include <boost/tuple/tuple.hpp>
+#include <QtGui>
 #include <boost/algorithm/minmax.hpp>
+#include <boost/tuple/tuple.hpp>
 
 // - RubberBandWithColor -
 
@@ -77,6 +75,8 @@ MouseRubberBand::press(const QPoint &pos)
   setGeometry(pos.x(), pos.y(), 0, 0);
 
   pressed_ = pos;
+
+  QApplication::setOverrideCursor(Qt::CrossCursor);
   show();
 }
 
@@ -95,6 +95,7 @@ QtExt::
 MouseRubberBand::cancel()
 {
   hide();
+  QApplication::setOverrideCursor(Qt::ArrowCursor);
   pressed_ = QPoint();
 }
 

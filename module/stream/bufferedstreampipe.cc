@@ -1,7 +1,7 @@
 // bufferedstreampipe.cc
 // 2/22/2012
 
-#include "bufferedstreampipe.h"
+#include "module/stream/bufferedstreampipe.h"
 
 //#define DEBUG "bufferedstreampipe"
 #include "module/debug/debug.h"

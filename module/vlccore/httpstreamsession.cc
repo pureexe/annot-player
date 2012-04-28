@@ -3,31 +3,37 @@
 
 #include "module/vlccore/httpstreamsession.h"
 #ifdef WITH_MODULE_STREAM
-#  include "module/stream/securebufferedfifostream.h"
 #  include "module/stream/bufferedremotestream.h"
+#  include "module/stream/securebufferedfifostream.h"
 #else
 #  error "stream module is required"
 #endif // WITH_MODULE_STREAM
 #ifdef WITH_MODULE_MEDIACODEC
-#  include "module/mediacodec/flvmerge.h"
 #  include "module/mediacodec/flvcodec.h"
+#  include "module/mediacodec/flvmerge.h"
 #else
 #  error "mediacodec module is required"
 #endif // WITH_MODULE_MEDIACODEC
-#include "module/qtext/filesystem.h"
 #include "module/qtext/algorithm.h"
-#include "module/qtext/os.h"
 #include "module/qtext/htmltag.h"
+#include "module/qtext/filesystem.h"
+#include "module/qtext/os.h"
 #include <QtNetwork/QNetworkAccessManager>
+#include <QtNetwork/QNetworkCookieJar>
 #include <QtNetwork/QNetworkReply>
 #include <QtNetwork/QNetworkRequest>
-#include <QtNetwork/QNetworkCookieJar>
 #include <QtCore>
 
 #define DEBUG "httpstreamsession"
 #include "module/debug/debug.h"
 
 enum { MaxDownloadRetries = 3 };
+
+#ifdef Q_WS_WIN
+#  define PATH_SEP  "\\"
+#else
+#  define PATH_SEP  "/"
+#endif // Q_WS_WIN
 
 // - Progress -
 
@@ -108,7 +114,7 @@ HttpStreamSession::contentType() const
 }
 
 void
-HttpStreamSession::invalidateSize()
+HttpStreamSession::updateSize()
 {
   if (!fifo_ || ins_.isEmpty())
     return;
@@ -126,7 +132,7 @@ HttpStreamSession::invalidateSize()
 }
 
 void
-HttpStreamSession::invalidateFileName()
+HttpStreamSession::updateFileName()
 {
   //bool mp4 = contentType().contains("mp4", Qt::CaseInsensitive);
   QString suf = ".flv";
@@ -150,7 +156,9 @@ HttpStreamSession::save()
   }
 
   QFile::remove(fileName_);
-  QDir().mkpath(QFileInfo(fileName_).absolutePath());
+  QDir dir = QFileInfo(fileName_).absoluteDir();
+  if (!dir.exists())
+    dir.mkpath(dir.absolutePath());
 
   bool ok = fifo_->writeFile(fileName_);
   if (!ok || !FlvCodec::isFlvFile(fileName_)) {
@@ -244,7 +252,7 @@ HttpStreamSession::run()
   setState(Running);
   ready_ = false;
   //progress_.clear();
-  invalidateFileName();
+  updateFileName();
 
   if (merger_) {
     delete merger_;
@@ -330,7 +338,7 @@ HttpStreamSession::run()
   }
 
   fifo_ = new SecureBufferedFifoStream;
-  invalidateSize();
+  updateSize();
 
   updateProgress();
 

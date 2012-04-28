@@ -4,7 +4,7 @@
 // mrldownloadtask.h
 // 2/20/2012
 
-#include "downloadtask.h"
+#include "module/download/downloadtask.h"
 #include "module/mrlresolver/mrlinfo.h"
 #include <QtCore/QHash>
 

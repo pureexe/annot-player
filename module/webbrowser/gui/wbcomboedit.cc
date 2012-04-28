@@ -1,9 +1,9 @@
-// wbcomboedit.cc
+// gui/wbcomboedit.cc
 // 3/31/2012
 
-#include "wbcomboedit.h"
-#include "wblineedit.h"
-#include "wbss.h"
+#include "gui/wbcomboedit.h"
+#include "gui/wblineedit.h"
+#include "global/wbss.h"
 #include <QtGui>
 
 // - Construction -
@@ -13,10 +13,10 @@ WbComboEdit::init()
 {
   setLineEdit(new WbLineEdit);
   connect(lineEdit(), SIGNAL(returnPressed()), SLOT(hidePopup()));
+  connect(lineEdit(), SIGNAL(returnPressed()), SLOT(submitText()));
 
   createActions();
-
-  setStyleSheet(SS_COMBOBOX);
+  clearIcon();
 
   if (!defaultItems_.isEmpty())
     reset();
@@ -40,6 +40,25 @@ WbComboEdit::createActions()
     clearAct->setStatusTip(tr("Clear"));
     connect(clearAct, SIGNAL(triggered()), SLOT(reset()));
   }
+  pasteAndGoAct = new QAction(this); {
+    pasteAndGoAct->setText(tr("Paste and go"));
+    pasteAndGoAct->setStatusTip(tr("Paste and go"));
+    connect(pasteAndGoAct, SIGNAL(triggered()), SLOT(pasteAndGo()));
+  }
+
+  submitAct = new QAction(this); {
+    submitAct->setText(tr("Submit"));
+    submitAct->setStatusTip(tr("Submit"));
+    connect(submitAct, SIGNAL(triggered()), SLOT(submitText()));
+  }
+}
+
+void
+WbComboEdit::setIcon(const QString &url)
+{
+  QString ss = url.isEmpty() ? SS_COMBOBOX_NOICON
+                             : SS_COMBOBOX_ICON(+url+);
+  setStyleSheet(ss);
 }
 
 // - Actions -
@@ -48,7 +67,14 @@ void
 WbComboEdit::reset()
 {
   clear();
-  addItems(defaultItems_);
+  if (defaultIcons_.isEmpty())
+    addItems(defaultItems_);
+  else
+    for (int i = 0; i < defaultItems_.size(); i++)
+      if (i < defaultItems_.size())
+        addItem(QIcon(defaultIcons_[i]), defaultItems_[i]);
+      else
+        addItem(defaultItems_[i]);
   clearEditText();
 }
 
@@ -60,10 +86,14 @@ WbComboEdit::contextMenuEvent(QContextMenuEvent *event)
   Q_ASSERT(event);
   QMenu *m = new QMenu(this);
 
+  m->addAction(submitAct);
+  m->addAction(pasteAndGoAct);
   m->addAction(popupAct);
   m->addAction(clearAct);
   m->addSeparator();
 
+  submitAct->setEnabled(!currentText().trimmed().isEmpty());
+  pasteAndGoAct->setEnabled(!isClipboardEmpty());
   popupAct->setEnabled(count());
 
   QMenu *scm = lineEdit()->createStandardContextMenu();
@@ -73,6 +103,34 @@ WbComboEdit::contextMenuEvent(QContextMenuEvent *event)
   delete scm;
   QTimer::singleShot(0, m, SLOT(deleteLater()));
   event->accept();
+}
+
+bool
+WbComboEdit::isClipboardEmpty()
+{
+  QClipboard *c = QApplication::clipboard();
+  return !c || c->text().trimmed().isEmpty();
+}
+
+// - Actions -
+
+void
+WbComboEdit::pasteAndGo()
+{
+  QClipboard *c = QApplication::clipboard();
+  if (c) {
+    QString t = c->text().trimmed();
+    if (!t.isEmpty())
+      emit textEntered(t);
+  }
+}
+
+void
+WbComboEdit::submitText()
+{
+  QString t = currentText().trimmed();
+  if (!t.isEmpty())
+    emit textEntered(t);
 }
 
 // EOF

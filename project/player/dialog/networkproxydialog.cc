@@ -4,8 +4,8 @@
 #include "networkproxydialog.h"
 #include "tr.h"
 #include "logger.h"
-#include "ac/acsettings.h"
-#include "ac/acui.h"
+#include "project/common/acsettings.h"
+#include "project/common/acui.h"
 #include <QtGui>
 #include <QNetworkProxy>
 
@@ -47,17 +47,17 @@ NetworkProxyDialog::createLayout()
 
   QStringList types("Socks5");
   types.append("HTTP");
-  typeCombo_ = ui->makeComboBox(AcUi::ReadOnlyHint, "", tr("Proxy type"), types);
+  typeCombo_ = ui->makeComboBox(AcUi::ReadOnlyHint, "", tr("Proxy type"), "", types);
 
   QStringList hosts("localhost");
-  hostEdit_ = ui->makeComboBox(AcUi::EditHint, "", tr("Host"), hosts);
+  hostEdit_ = ui->makeComboBox(AcUi::EditHint, "", tr("Host"), "address", hosts);
 
   QStringList ports("9050");
   ports.append("8080");
-  portEdit_ = ui->makeComboBox(AcUi::EditHint, "", tr("Port"), ports);
+  portEdit_ = ui->makeComboBox(AcUi::EditHint, "", tr("Port"), "port", ports);
 
-  userNameEdit_ = ui->makeComboBox(AcUi::EditHint, "", tr("Username"));
-  passwordEdit_ = ui->makeLineEdit(AcUi::PasswordHint, "", tr("Password"));
+  userNameEdit_ = ui->makeComboBox(AcUi::EditHint, "", tr("Username"), "username");
+  passwordEdit_ = ui->makeLineEdit(AcUi::PasswordHint, "", tr("Password"), "password");
 
   QToolButton *saveButton = ui->makeToolButton(
         AcUi::PushHint | AcUi::HighlightHint, TR(T_SAVE), this, SLOT(save()));
@@ -65,7 +65,7 @@ NetworkProxyDialog::createLayout()
         AcUi::PushHint, TR(T_CANCEL), this, SLOT(hide()));
 
   enableButton_ = ui->makeToolButton(
-        AcUi::CheckHint, TR(T_ENABLE), this, SLOT(invalidateButtons()));
+        AcUi::CheckHint, TR(T_ENABLE), this, SLOT(updateButtons()));
 
   typeLabel_ = ui->makeLabel(AcUi::BuddyHint, tr("Type"), typeCombo_);
   hostLabel_ = ui->makeLabel(AcUi::BuddyHint, tr("Host"), hostEdit_);
@@ -102,10 +102,8 @@ NetworkProxyDialog::createLayout()
   setTabOrder(userNameEdit_, passwordEdit_);
 
   // Shortcuts
-  QShortcut *cancelShortcut = new QShortcut(QKeySequence("Esc"), this);
-  connect(cancelShortcut, SIGNAL(activated()), SLOT(hide()));
-  QShortcut *closeShortcut = new QShortcut(QKeySequence("CTRL+W"), this);
-  connect(closeShortcut, SIGNAL(activated()), SLOT(hide()));
+  connect(new QShortcut(QKeySequence("Esc"), this), SIGNAL(activated()), SLOT(hide()));
+  connect(new QShortcut(QKeySequence("CTRL+W"), this), SIGNAL(activated()), SLOT(hide()));
 }
 
 // - Properties -
@@ -143,7 +141,7 @@ NetworkProxyDialog::refresh()
   switch (s->proxyType()) {
   case QNetworkProxy::Socks5Proxy: type = SocksProxy; break;
   case QNetworkProxy::HttpProxy: type = HttpProxy; break;
-  default: type = SocksProxy; break;
+  default: type = SocksProxy;
   }
   typeCombo_->setCurrentIndex(type);
 
@@ -160,11 +158,11 @@ NetworkProxyDialog::refresh()
   userNameEdit_->setEditText(s->proxyUser());
   passwordEdit_->setText(s->proxyPassword());
 
-  invalidateButtons();
+  updateButtons();
 }
 
 void
-NetworkProxyDialog::invalidateButtons()
+NetworkProxyDialog::updateButtons()
 {
   bool t = isEnabled();
   typeCombo_->setEnabled(t);

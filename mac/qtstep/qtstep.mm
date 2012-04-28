@@ -1,7 +1,7 @@
 // qtstep.mm
 // 7/30/2011
 
-#include "qtstep.h"
+#include "qtstep/qtstep.h"
 #include <QtGlobal>
 #import <AppKit/AppKit.h>
 #ifdef USE_MAC_CARBON

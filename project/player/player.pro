@@ -1,7 +1,7 @@
 # player.pro
 # 6/30/2011
 
-VERSION = 0.1.5.0
+VERSION = 0.1.5.1
 
 DEFINES += PROJECT_PLAYER
 
@@ -14,32 +14,23 @@ include($$ROOTDIR/module/debug/debug.pri)
 
 include($$ROOTDIR/module/annotcloud/annotcloud.pri)
 include($$ROOTDIR/module/annotcodec/annotcodec.pri)
-include($$ROOTDIR/module/compress/compress.pri)
-include($$ROOTDIR/module/stream/stream.pri)
-include($$ROOTDIR/module/player/player.pri)
-#include($$ROOTDIR/module/doll/doll.pri)
-include($$ROOTDIR/module/serveragent/serveragent.pri)
-#include($$ROOTDIR/module/clientagent/clientagent.pri)
-include($$ROOTDIR/module/gsoap/gsoap.pri)       # would static linking cause license conflicts?
-#include($$ROOTDIR/module/streamservice/streamservice.pri)
-include($$ROOTDIR/module/download/download.pri)
-include($$ROOTDIR/module/mediacodec/mediacodec.pri)
-include($$ROOTDIR/module/translator/translator.pri)
-include($$ROOTDIR/module/mrlresolver/mrlresolver.pri)
-#include($$ROOTDIR/module/mp4box/mp4box.pri)
-include($$ROOTDIR/module/ioutil/ioutil.pri)
 include($$ROOTDIR/module/blockiodevice/blockiodevice.pri)
+include($$ROOTDIR/module/compress/compress.pri)
+include($$ROOTDIR/module/crypt/crypt.pri)
+include($$ROOTDIR/module/download/download.pri)
+include($$ROOTDIR/module/gsoap/gsoap.pri)       # would static linking cause license conflicts?
+include($$ROOTDIR/module/ioutil/ioutil.pri)
+include($$ROOTDIR/module/mediacodec/mediacodec.pri)
+include($$ROOTDIR/module/mrlresolver/mrlresolver.pri)
 include($$ROOTDIR/module/nicoutil/nicoutil.pri)
+include($$ROOTDIR/module/player/player.pri)
 include($$ROOTDIR/module/qt/qt.pri)
 include($$ROOTDIR/module/qtext/qtext.pri)
-include($$ROOTDIR/module/crypt/crypt.pri)
+include($$ROOTDIR/module/stream/stream.pri)
+include($$ROOTDIR/module/serveragent/serveragent.pri)
+include($$ROOTDIR/module/translator/translator.pri)
 
 !mac: include($$ROOTDIR/module/metacall/metacall.pri)
-
-# shared link gave me so many trouble on mac and linux
-#unix:       include($$ROOTDIR/module/webbrowser/webbrowser_static.pri)
-#win32:      include($$ROOTDIR/module/webbrowser/webbrowser.pri)
-
 win32 {
     include($$ROOTDIR/win/dwm/dwm.pri)
     #include($$ROOTDIR/win/hook/hook.pri)
@@ -91,8 +82,8 @@ SUBPATH = \
     $$PWD/command \
     $$PWD/data \
     $$PWD/db \
-    $$PWD/define \
     $$PWD/dialog \
+    $$PWD/global \
     $$PWD/osd \
     $$PWD/player \
     $$PWD/signal \
@@ -128,9 +119,6 @@ HEADERS += \
     data/dataserver.h \
     db/db_config.h \
     db/db.h \
-    define/global.h \
-    define/rc.h \
-    define/stylesheet.h \
     dialog/aboutdialog.h \
     dialog/annotationcountdialog.h \
     dialog/backlogdialog.h \
@@ -153,6 +141,9 @@ HEADERS += \
     dialog/suburldialog.h \
     dialog/syncdialog.h \
     dialog/urldialog.h \
+    global/global.h \
+    global/rc.h \
+    global/stylesheet.h \
     osd/osdconsole.h \
     osd/osdwindow.h \
     osd/videoview.h \

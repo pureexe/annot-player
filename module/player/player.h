@@ -12,7 +12,7 @@ QT_FORWARD_DECLARE_CLASS(QNetworkCookieJar)
 QT_FORWARD_DECLARE_CLASS(QMacCocoaViewContainer)
 #endif // Q_WS_MAC
 
-class PlayerImpl; ///< \internal
+class PlayerPrivate; ///< \internal
 struct libvlc_media_t;
 
 
@@ -21,9 +21,9 @@ class Player : public QObject
   Q_OBJECT
   typedef Player Self;
   typedef QObject Base;
-  typedef PlayerImpl Impl;
+  typedef PlayerPrivate Private;
 
-  Impl *impl_;
+  Private *d_;
 
   // - Properties -
 public:
@@ -323,7 +323,7 @@ public slots:
   void setPreviousTitle();
   void setNextTitle();
 
-  void invalidateTitleId();
+  void updateTitleId();
 
   void loadExternalSubtitles(); ///< try to automatically load external subtitles
 
@@ -337,8 +337,8 @@ public slots:
   void startVoutTimer();
   void stopVoutTimer();
 protected slots:
-  void invalidateVout(); ///< only works if vlccore is used
-  void invalidateTrackInfo();
+  void updateVout(); ///< only works if vlccore is used
+  void updateTrackInfo();
   void destroy();
 
 public:
@@ -403,7 +403,7 @@ signals:
 
   // - Implementations -
 public:
-  Impl *impl() const { return impl_; } ///< \internal
+  Private *d() const { return d_; } ///< \internal
 
 protected:
   //QByteArray decode(const QString &utf) const;

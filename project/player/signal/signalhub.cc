@@ -36,7 +36,7 @@ SignalHub::volume() const
   case SignalTokenMode:
     break;
 
-  default: Q_ASSERT(0); break;
+  default: Q_ASSERT(0);
   }
 
 #ifdef Q_OS_LINUX

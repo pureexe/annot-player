@@ -1,10 +1,10 @@
 #ifndef WBNETWORKACCESSMANAGER_H
 #define WBNETWORKACCESSMANAGER_H
 
-// wbnetwork.h
+// network/wbnetwork.h
 // 1/27/2012
 
-#include "module/qtext/network.h"
+#include <QtNetwork/QNetworkAccessManager>
 #include <QtCore/QStringList>
 #include <QtCore/QUrl>
 
@@ -30,18 +30,18 @@ protected:
   virtual QNetworkReply *createRequest(Operation op, const QNetworkRequest &req,
                                        QIODevice *outgoingData = 0);
   bool isBlockedUrl(const QUrl &url) const;
-  static QUrl transformNicoUrl(const QUrl &url);
-  static QUrl transformEroUrl(const QUrl &url);
-  static QUrl transformAb2Url(const QUrl &url);
-  static QUrl transformAb2TryUrl(const QUrl &url);
-  static QUrl transformAkatsukiWorksUrl(const QUrl &url);
-  static QUrl transformWheelSoftUrl(const QUrl &url);
-  static QUrl transformSyangrilaUrl(const QUrl &url);
-  static QUrl transformCo2005Url(const QUrl &url);
-  static QUrl transformEffordomSoftUrl(const QUrl &url);
-  static QUrl transformAppliqueSoftUrl(const QUrl &url);
-  static QUrl transformShallotSoftUrl(const QUrl &url);
-  static QUrl transformSpermaniaxUrl(const QUrl &url);
+  static QUrl encodeNicoUrl(const QUrl &url);
+  static QUrl encodeEroUrl(const QUrl &url);
+  static QUrl encodeAb2Url(const QUrl &url);
+  static QUrl encodeAb2TryUrl(const QUrl &url);
+  static QUrl encodeAkatsukiWorksUrl(const QUrl &url);
+  static QUrl encodeWheelSoftUrl(const QUrl &url);
+  static QUrl encodeSyangrilaUrl(const QUrl &url);
+  static QUrl encodeCo2005Url(const QUrl &url);
+  static QUrl encodeEffordomSoftUrl(const QUrl &url);
+  static QUrl encodeAppliqueSoftUrl(const QUrl &url);
+  static QUrl encodeShallotSoftUrl(const QUrl &url);
+  static QUrl encodeSpermaniaxUrl(const QUrl &url);
 };
 
 #endif // WBNETWORKACCESSMANAGER_H

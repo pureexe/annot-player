@@ -4,7 +4,7 @@
 // bufferedremotestream.h
 // 2/15/2012
 
-#include "remotestream.h"
+#include "module/stream/remotestream.h"
 #include <QtNetwork/QNetworkReply>
 #include <QtCore/QMutex>
 
@@ -66,7 +66,7 @@ public slots:
 
 protected slots:
   void finish();
-  void invalidateSize();
+  void updateSize();
   void networkError();
 
 protected:

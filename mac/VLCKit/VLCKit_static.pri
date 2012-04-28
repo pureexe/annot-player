@@ -4,14 +4,13 @@
 
 DEFINES += WITH_MAC_VLCKIT
 
-INCLUDEPATH += $$PWD/..
-
-INCLUDEPATH += $$PWD
-DEPENDPATH  += $$PWD
-INCLUDEPATH += $$PWD/Internal
-DEPENDPATH  += $$PWD/Internal
-INCLUDEPATH += $$PWD/Config
-DEPENDPATH  += $$PWD/Config
+INCLUDEPATH += \
+    $$PWD \
+    $$PWD/.. \
+    $$PWD/Internal \
+    $$PWD/Config
+DEPENDPATH += \
+    $$PWD
 
 OBJECTIVE_HEADERS += \
     $$PWD/VLCAudio.h \

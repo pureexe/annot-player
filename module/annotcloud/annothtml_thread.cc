@@ -4,8 +4,8 @@
 #include "module/annotcloud/annotpaint.h"
 #include "module/qtext/datetime.h"
 #include "module/qtext/os.h"
-#include <QtCore/QFile>
 #include <QtCore/QCoreApplication>
+#include <QtCore/QFile>
 #include <boost/tuple/tuple.hpp>
 
 #define FORMAT_TIME(_secs)        QDateTime::fromMSecsSinceEpoch(_secs * 1000).toString(Qt::ISODate) \
@@ -40,7 +40,7 @@
 
 namespace { // anonymous
 
-  inline QString rc_jsf_t_()
+  inline const QString &rc_jsf_t_()
   {
     static QString ret;
     if (ret.isEmpty()) {
@@ -51,7 +51,7 @@ namespace { // anonymous
     return ret;
   }
 
-  inline QString rc_jsf_a_()
+  inline const QString &rc_jsf_a_()
   {
     static QString ret;
     if (ret.isEmpty()) {
@@ -62,7 +62,7 @@ namespace { // anonymous
     return ret;
   }
 
-  inline QString rc_jsf_i_()
+  inline const QString &rc_jsf_i_()
   {
     static QString ret;
     if (ret.isEmpty()) {

@@ -1,7 +1,7 @@
 // flvmetawriter.cc
 // 3/16/2012
 
-#include "flvmeta.h"
+#include "module/mediacodec/flvmeta.h"
 #include "module/stream/datainputstream.h"
 
 #define DEBUG "flvmetawriter"

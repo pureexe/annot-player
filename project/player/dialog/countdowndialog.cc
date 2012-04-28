@@ -4,7 +4,7 @@
 #include "countdowndialog.h"
 #include "tr.h"
 #include "logger.h"
-#include "ac/acui.h"
+#include "project/common/acui.h"
 #include <QtGui>
 
 using namespace Logger;
@@ -39,10 +39,8 @@ CountdownDialog::CountdownDialog(QWidget *parent)
   createLayout();
 
   // Shortcuts
-  QShortcut *cancelShortcut = new QShortcut(QKeySequence("Esc"), this);
-  connect(cancelShortcut, SIGNAL(activated()), SLOT(cancel()));
-  QShortcut *closeShortcut = new QShortcut(QKeySequence("CTRL+W"), this);
-  connect(closeShortcut, SIGNAL(activated()), SLOT(cancel()));
+  connect(new QShortcut(QKeySequence("Esc"), this), SIGNAL(activated()), SLOT(hide()));
+  connect(new QShortcut(QKeySequence("CTRL+W"), this), SIGNAL(activated()), SLOT(hide()));
 }
 
 void

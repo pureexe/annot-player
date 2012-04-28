@@ -11,6 +11,7 @@
 #include "logger.h"
 #include "global.h"
 #include "module/player/player.h"
+#include "module/qtext/algorithm.h"
 #ifdef Q_WS_WIN
 #  include "win/qtwin/qtwin.h"
 #endif // Q_WS_WIN
@@ -42,7 +43,8 @@ AnnotationGraphicsView::AnnotationGraphicsView(
     hub_(hub), player_(player), filter_(0), renderHint_(DefaultRenderHint), active_(false), paused_(false), fullScreen_(false),
     subtitleVisible_(true), nonSubtitleVisible_(true),
     currentTime_(-1), offset_(0), interval_(TIMER_INTERVAL), userId_(0), playbackEnabled_(true), subtitlePosition_(AP_Bottom),
-    scale_(1.0), rotation_(0)
+    scale_(1.0), rotation_(0),
+    hoveredItemPaused_(false), hoveredItemResumed_(false), hoveredItemRemoved_(false), hoveredItemExiled_(false)
 {
   Q_ASSERT(hub_);
   Q_ASSERT(player_);
@@ -68,7 +70,7 @@ AnnotationGraphicsView::AnnotationGraphicsView(
 
   trackingTimer_ = new QTimer(this);
   trackingTimer_->setInterval(G_TRACKING_INTERVAL);
-  connect(trackingTimer_, SIGNAL(timeout()), SLOT(invalidateGeometry()));
+  connect(trackingTimer_, SIGNAL(timeout()), SLOT(updateGeometry()));
 
 //#ifdef Q_WS_WIN
   setRenderHints(
@@ -121,8 +123,8 @@ AnnotationGraphicsView::setFullScreenMode(bool t)
 {
   if (fullScreen_ != t) {
     fullScreen_ = t;
-    invalidateGeometry();
-    invalidateTrackingTimer();
+    updateGeometry();
+    updateTrackingTimer();
     emit fullScreenModeChanged(fullScreen_);
   }
 }
@@ -242,14 +244,14 @@ AnnotationGraphicsView::annotationsAtPos(qint64 pos) const
 // - View tracking -
 
 void
-AnnotationGraphicsView::invalidateGeometry()
+AnnotationGraphicsView::updateGeometry()
 {
-  invalidatePos();
-  invalidateSize();
+  updatePos();
+  updateSize();
 }
 
 void
-AnnotationGraphicsView::invalidateSize()
+AnnotationGraphicsView::updateSize()
 {
   bool update = false;
   if (fullScreen_ && fullScreenView_) {
@@ -290,7 +292,7 @@ AnnotationGraphicsView::invalidateSize()
 }
 
 void
-AnnotationGraphicsView::invalidatePos()
+AnnotationGraphicsView::updatePos()
 {
   if (fullScreen_ && fullScreenView_) {
     move(fullScreenView_->pos());
@@ -363,10 +365,10 @@ AnnotationGraphicsView::setVisible(bool visible)
 
   setActive(visible);
   if (visible)
-    invalidateGeometry();
+    updateGeometry();
   Base::setVisible(visible);
 
-  invalidateTrackingTimer();
+  updateTrackingTimer();
 
   emit visibleChanged(visible);
 }
@@ -378,7 +380,7 @@ AnnotationGraphicsView::setVisible(bool visible)
   AnnotationGraphicsView::_connect##Player() \
   { \
     _connect(player_, SIGNAL(mediaChanged()), this, SLOT(invalidateAnnotations())); \
-    _connect(player_, SIGNAL(timeChanged()), this, SLOT(invalidateCurrentTime())); \
+    _connect(player_, SIGNAL(timeChanged()), this, SLOT(updateCurrentTime())); \
     _connect(player_, SIGNAL(paused()), this, SLOT(pause())); \
     _connect(player_, SIGNAL(playing()), this, SLOT(resume())); \
     _connect(player_, SIGNAL(stopped()), this, SLOT(resume())); \
@@ -427,7 +429,26 @@ AnnotationGraphicsView::setPlaybackEnabled(bool enabled)
   }
 }
 
-// - Pause/resme -
+// - Control -
+
+void
+AnnotationGraphicsView::exileItems(const QPoint &center)
+{
+  enum { width = 300, height = 200 };
+  QRect r(0, 0, width, height);
+  r.moveCenter(center);
+  exileItems(center, r, Qt::IntersectsItemBoundingRect);
+}
+
+void
+AnnotationGraphicsView::exileItems(const QPoint &center, const QRect &rect, Qt::ItemSelectionMode mode)
+{
+  foreach (QGraphicsItem *item, items(rect, mode)) {
+    BOOST_AUTO(a, dynamic_cast<AnnotationGraphicsItem *>(item));
+    if (a)
+      a->escapeFrom(center);
+  }
+}
 
 void
 AnnotationGraphicsView::pause()
@@ -450,8 +471,12 @@ AnnotationGraphicsView::pauseItemAt(const QPoint &pos)
 {
   QGraphicsItem *item = itemAt(pos);
   BOOST_AUTO(a, dynamic_cast<AnnotationGraphicsItem *>(item));
-  if (a)
+  if (a) {
     a->pause();
+    qint64 uid = a->annotation().userId();
+    if (uid)
+      emit selectedUserIds(QList<qint64>() << uid);
+  }
 }
 
 void
@@ -464,13 +489,30 @@ AnnotationGraphicsView::resumeItemAt(const QPoint &pos)
 }
 
 void
+AnnotationGraphicsView::removeItemAt(const QPoint &pos)
+{
+  QGraphicsItem *item = itemAt(pos);
+  BOOST_AUTO(a, dynamic_cast<AnnotationGraphicsItem *>(item));
+  if (a)
+    a->removeMe();
+}
+
+void
 AnnotationGraphicsView::pauseItems(const QRect &rect, Qt::ItemSelectionMode mode)
 {
+  QList<qint64> uids;
   foreach (QGraphicsItem *item, items(rect, mode)) {
     BOOST_AUTO(a, dynamic_cast<AnnotationGraphicsItem *>(item));
-    if (a)
+    if (a) {
       a->pause();
+      qint64 uid = a->annotation().userId();
+      if (uid)
+        uids.append(uid);
+    }
   }
+
+  if (!uids.isEmpty())
+    emit selectedUserIds(QtExt::uniqueList(uids));
 }
 
 void
@@ -487,6 +529,43 @@ void
 AnnotationGraphicsView::removeItems(const QRect &rect, Qt::ItemSelectionMode mode)
 {
   foreach (QGraphicsItem *item, items(rect, mode)) {
+    BOOST_AUTO(a, dynamic_cast<AnnotationGraphicsItem *>(item));
+    if (a)
+      a->removeMe();
+  }
+}
+
+void
+AnnotationGraphicsView::pauseItems(const QPoint &pos)
+{
+  QList<qint64> uids;
+  foreach (QGraphicsItem *item, items(pos)) {
+    BOOST_AUTO(a, dynamic_cast<AnnotationGraphicsItem *>(item));
+    if (a) {
+      a->pause();
+      qint64 uid = a->annotation().userId();
+      if (uid)
+        uids.append(uid);
+    }
+  }
+  if (!uids.isEmpty())
+    emit selectedUserIds(QtExt::uniqueList(uids));
+}
+
+void
+AnnotationGraphicsView::resumeItems(const QPoint &pos)
+{
+  foreach (QGraphicsItem *item, items(pos)) {
+    BOOST_AUTO(a, dynamic_cast<AnnotationGraphicsItem *>(item));
+    if (a)
+      a->resume();
+  }
+}
+
+void
+AnnotationGraphicsView::removeItems(const QPoint &pos)
+{
+  foreach (QGraphicsItem *item, items(pos)) {
     BOOST_AUTO(a, dynamic_cast<AnnotationGraphicsItem *>(item));
     if (a)
       a->removeMe();
@@ -535,7 +614,7 @@ AnnotationGraphicsView::rotatePausedItems(qreal angle)
 //{ playTime_ = time; }
 
 void
-AnnotationGraphicsView::invalidateCurrentTime()
+AnnotationGraphicsView::updateCurrentTime()
 {
   if (!player_->hasMedia()
       || !playbackEnabled_)
@@ -548,7 +627,7 @@ AnnotationGraphicsView::invalidateCurrentTime()
   // jichi 7/27/2011: Expect this to be a problem
   qint64 secs = msecs / 1000;
   if (secs != currentTime_) { // currentTime_ is used to prevent the same seconds being double displayed
-    currentTime_ = secs - offset_;
+    currentTime_ = secs;
     showAnnotationsAtPos(currentTime_ * 1000);
   }
 }
@@ -713,9 +792,11 @@ AnnotationGraphicsView::showAnnotationsAtPos(qint64 pos)
 
   emit annotationPosChanged(pos);
 
-  if (!hub_->isSignalTokenMode())
+  if (!hub_->isSignalTokenMode()) {
     //pos = qRound64(pos / 1000.0); // msecs => secs
     pos /= 1000;
+    pos -= offset_;
+  }
 
   //if (annots_.contains(pos)) {
   //  DOUT("found annotations at pos =" << pos);
@@ -830,13 +911,13 @@ AnnotationGraphicsView::setTrackedWindow(WId hwnd)
 
   if (trackedWindow_ != hwnd) {
      trackedWindow_ = hwnd;
-     invalidateTrackingTimer();
+     updateTrackingTimer();
      emit trackedWindowChanged(trackedWindow_);
   }
 }
 
 void
-AnnotationGraphicsView::invalidateTrackingTimer()
+AnnotationGraphicsView::updateTrackingTimer()
 {
   if (isVisible() && !fullScreen_ && trackedWindow_)
     startTracking();

@@ -3,7 +3,7 @@
 
 #include "addaliasdialog.h"
 #include "tr.h"
-#include "ac/acui.h"
+#include "project/common/acui.h"
 #include "module/annotcloud/traits.h"
 #include "module/annotcloud/alias.h"
 #include <QtGui>
@@ -26,13 +26,11 @@ AddAliasDialog::AddAliasDialog(QWidget *parent)
   createLayout();
 
   // Shortcuts
-  QShortcut *cancelShortcut = new QShortcut(QKeySequence("Esc"), this);
-  connect(cancelShortcut, SIGNAL(activated()), SLOT(hide()));
-  QShortcut *closeShortcut = new QShortcut(QKeySequence("CTRL+W"), this);
-  connect(closeShortcut, SIGNAL(activated()), SLOT(hide()));
+  connect(new QShortcut(QKeySequence("Esc"), this), SIGNAL(activated()), SLOT(hide()));
+  connect(new QShortcut(QKeySequence("CTRL+W"), this), SIGNAL(activated()), SLOT(hide()));
 
   // Initial status
-  invalidateOKButton();
+  updateOKButton();
   aliasEdit_->setFocus();
 }
 
@@ -49,7 +47,7 @@ AddAliasDialog::createLayout()
       << "集英社"
       << "http://www.youtube.com/watch?v=koeaZ_z1WbI";
 
-  aliasEdit_ = ui->makeComboBox(AcUi::EditHint, "", TR(T_TOOLTIP_ADDALIAS), defvals);
+  aliasEdit_ = ui->makeComboBox(AcUi::EditHint, "", TR(T_TOOLTIP_ADDALIAS), TR(T_ALIAS), defvals);
   connect(aliasEdit_->lineEdit(), SIGNAL(returnPressed()), SLOT(ok()));
 
   QLabel *tagLabel = ui->makeLabel(AcUi::BuddyHint, TR(T_TAG)),
@@ -70,7 +68,7 @@ AddAliasDialog::createLayout()
 #undef MAKE_TAG
 
 #define MAKE_LANGUAGE(_id, _styleid) \
-  is##_id##Button_ = ui->makeToolButton(0, TR(T_##_styleid), this, SLOT(invalidateOKButton())); { \
+  is##_id##Button_ = ui->makeToolButton(0, TR(T_##_styleid), this, SLOT(updateOKButton())); { \
     is##_id##Button_->setCheckable(true); \
     QFont font = is##_id##Button_->font(); \
     font.setUnderline(true); \
@@ -239,7 +237,7 @@ AddAliasDialog::setTypeToUrl(bool t)
 }
 
 void
-AddAliasDialog::invalidateOKButton()
+AddAliasDialog::updateOKButton()
 {
   if (languageFlags()) {
     okButton_->setEnabled(true);

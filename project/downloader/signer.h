@@ -4,8 +4,8 @@
 // signer.h
 // 3/30/2012
 
-#include <QtCore/QObject>
 #include <QtCore/QMutex>
+#include <QtCore/QObject>
 
 class ServerAgent;
 

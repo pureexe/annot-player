@@ -5,9 +5,10 @@ include(../../config.pri)
 
 DEFINES += WITH_MODULE_BLOCKIODEVICE
 
+DEPENDPATH += $$PWD
+
 win32: INCLUDEPATH += $$WDK_HOME/include/api
 
-INCLUDEPATH += $$PWD
 HEADERS += $$PWD/blockiodevice.h
 SOURCES += $$PWD/blockiodevice.cc
 

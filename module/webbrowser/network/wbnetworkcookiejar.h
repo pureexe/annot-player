@@ -1,12 +1,11 @@
 #ifndef WBNETWORKCOOKIEJAR_H
 #define WBNETWORKCOOKIEJAR_H
 
-// wbnetworkcookiejar.h
+// network/wbnetworkcookiejar.h
 // 1/27/2012
 
-#include "module/qtext/network.h"
-
 #ifdef ANNOT_PROXY_DOMAIN
+#  include "module/qtext/networkcookie.h"
 
 typedef QtExt::NetworkCookieJarWithDomainAlias WbNetworkCookieJarBase;
 class WbNetworkCookieJar : public WbNetworkCookieJarBase
@@ -18,10 +17,15 @@ public:
   explicit WbNetworkCookieJar(QObject *parent = 0)
     : Base(".nicovideo.jp", ANNOT_PROXY_DOMAIN, parent)
   { }
+
+protected:
+  virtual QUrl toDomainUrl(const QUrl &aliasUrl) const; ///< \override
+  QUrl decodeNicoUrl(const QUrl &url) const; ///< \overrride
 };
 
 #else
-#warning "nico proxy domain is not defined"
+#  warning "nico proxy domain is not defined"
+#  include <QtNetwork/QNetworkCookieJar>
 
 class WbNetworkCookieJar : public QNetworkCookieJar
 {

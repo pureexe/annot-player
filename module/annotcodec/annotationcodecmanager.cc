@@ -1,9 +1,9 @@
 // annotationcodecmanager.cc
 // 2/4/2012
-#include "annotationcodecmanager.h"
-#include "bilibilicodec.h"
-#include "acfuncodec.h"
-#include "nicovideocodec.h"
+#include "module/annotcodec/annotationcodecmanager.h"
+#include "module/annotcodec/acfuncodec.h"
+#include "module/annotcodec/bilibilicodec.h"
+#include "module/annotcodec/nicovideocodec.h"
 
 //#define DEBUG "annotationcodecmanager"
 #include "module/debug/debug.h"

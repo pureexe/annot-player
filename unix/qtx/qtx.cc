@@ -6,13 +6,13 @@
 #  error "This file is for X11 only."
 #endif // Q_WS_X11
 
-#include "qtx.h"
-#include <QtCore>
+#include "qtx/qtx.h"
 #include <QtGui/QX11Info>
-#include <X11/extensions/Xfixes.h>
+#include <QtCore>
 #include <X11/extensions/shape.h>
-#include <X11/Xlib.h>
+#include <X11/extensions/Xfixes.h>
 #include <X11/XKBlib.h>
+#include <X11/Xlib.h>
 
 // - Helper -
 

@@ -8,15 +8,15 @@
 #include "module/vlccore/httpbufferedsession.h"
 #include "module/vlccore/httpstreamsession.h"
 #include <QtNetwork/QNetworkCookieJar>
-#include <QtCore/QEventLoop>
 #include <QtCore/QDir>
+#include <QtCore/QEventLoop>
 #include <QtCore/QTimer>
 #include <cstdarg>
 
 #include <vlc/plugins/vlc_common.h>
 extern "C" {
-  #include <vlc/src/modules/modules.h>
-  module_t *module_find(const char *name);
+#  include <vlc/src/modules/modules.h>
+module_t *module_find(const char *name);
 } // extern "C"
 
 #define DEBUG "vlccore::http"
@@ -95,26 +95,9 @@ VlcHttpPlugin::unload()
 #endif // MODULE_STRING
 
 extern "C" {
-  #include <vlc_plugin.h>
-  #include <vlc_access.h>
-
-  //#include <vlc_meta.h>
-  //#include <vlc_network.h>
-  //#include <vlc_url.h>
-  //#include <vlc_tls.h>
-  //#include <vlc_strings.h>
-  //#include <vlc_charset.h>
-  //#include <vlc_input.h>
-  //#include <vlc_md5.h>
-  //#include <vlc_http.h>
-  //#include <vlc_configuration.h>
-
-//#ifdef HAVE_ZLIB_H
-//  #include <zlib.h>
-//#endif
-//#ifdef HAVE_LIBPROXY
-//  #include <proxy.h>
-//#endif
+#  include <vlc_plugin.h>
+#  include <vlc_access.h>
+//#  include <vlc_meta.h>
 } // extern "C"
 
 //#ifdef WIN32

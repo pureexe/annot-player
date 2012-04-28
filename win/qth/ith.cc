@@ -1,13 +1,13 @@
 // ith.cc  10/15/2011
 
 #include "ith.h"
-#include "ith/main.h"
 #include "ith/hookman.h"
-#include "ith/pipe.h"
 #include "ith/inject.h"
+#include "ith/main.h"
+#include "ith/pipe.h"
 #include <QtCore>
-#include <string>  // std::wstring
 #include <cstdlib> // ::atexit
+#include <string>  // std::wstring
 #include <qt_windows.h>
 
 #define DEBUG "ith"

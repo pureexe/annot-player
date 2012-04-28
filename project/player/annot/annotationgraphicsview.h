@@ -63,6 +63,11 @@ public:
   bool isNonSubtitleVisible() const { return nonSubtitleVisible_; }
 
 signals:
+  void selectedUserIds(const QList<qint64> &ids);
+  void hoveredItemPausedChanged(bool t);
+  void hoveredItemResumedChanged(bool t);
+  void hoveredItemRemovedChanged(bool t);
+  void hoveredItemExiledChanged(bool t);
   void scaleChanged(qreal value);
   void rotationChanged(qreal value);
   void offsetChanged(qint64 value);
@@ -128,7 +133,7 @@ public slots:
 protected slots:
   void startTracking();
   void stopTracking();
-  void invalidateTrackingTimer();
+  void updateTrackingTimer();
 
   // - Events -
 public slots:
@@ -196,11 +201,16 @@ public:
   qreal rotation() const { return rotation_; }
 
   bool isStarted() const;
+
+  bool isHoveredItemPaused() const { return hoveredItemPaused_; }
+  bool isHoveredItemResumed() const { return hoveredItemResumed_; }
+  bool isHoveredItemRemoved() const { return hoveredItemRemoved_; }
+  bool isHoveredItemExiled() const { return hoveredItemExiled_; }
 public slots:
   void setScale(qreal value);
   void resetScale() { setScale(1.0); }
 
-  void setOffset(qint64 secs) { offset_ = secs; emit offsetChanged(offset_); }
+  void setOffset(qint64 secs) { emit offsetChanged(offset_ = secs); }
   void resetOffset() { setOffset(0); }
 
   void setRotation(qreal value);
@@ -216,15 +226,20 @@ public slots:
   void togglePlaybackEnabled() { setPlaybackEnabled(!playbackEnabled_); }
   void toggleVisible() { setVisible(!isVisible()); }
 
+  void setHoveredItemPaused(bool t) { emit hoveredItemPausedChanged(hoveredItemPaused_ = t);}
+  void setHoveredItemResumed(bool t) { emit hoveredItemResumedChanged(hoveredItemResumed_ = t);}
+  void setHoveredItemRemoved(bool t) { emit hoveredItemRemovedChanged(hoveredItemRemoved_ = t);}
+  void setHoveredItemExiled(bool t) { emit hoveredItemExiledChanged(hoveredItemExiled_ = t);}
+
   void setRenderHint(int hint);
 
   // Video view tracker
-  void invalidateGeometry();
-  void invalidateSize();
-  void invalidatePos();
+  void updateGeometry();
+  void updateSize();
+  void updatePos();
 
   // Stream control
-  void invalidateCurrentTime();
+  void updateCurrentTime();
   void invalidateAnnotations();       // reset annotations from database!
 
   void pause();
@@ -232,13 +247,21 @@ public slots:
 
   void pauseItemAt(const QPoint &pos);
   void resumeItemAt(const QPoint &pos);
+  void removeItemAt(const QPoint &pos);
 
   void pauseItems(const QRect &rect, Qt::ItemSelectionMode mode = Qt::IntersectsItemShape);
   void resumeItems(const QRect &rect, Qt::ItemSelectionMode mode = Qt::IntersectsItemShape);
   void removeItems(const QRect &rect, Qt::ItemSelectionMode mode = Qt::IntersectsItemShape);
 
+  void pauseItems(const QPoint &pos);
+  void resumeItems(const QPoint &pos);
+  void removeItems(const QPoint &pos);
+
   void scalePausedItems(qreal scale);
   void rotatePausedItems(qreal angle);
+
+  void exileItems(const QPoint &center);
+  void exileItems(const QPoint &center, const QRect &rect, Qt::ItemSelectionMode mode = Qt::IntersectsItemShape);
 
   // Annotations
 
@@ -309,6 +332,8 @@ private:
   QList<qint64> filteredAnnotationIds_;
 
   qreal scale_, rotation_;
+
+  bool hoveredItemPaused_, hoveredItemResumed_, hoveredItemRemoved_, hoveredItemExiled_;
 };
 
 #endif // ANNOTATIONGRAPHICSVIEW_H

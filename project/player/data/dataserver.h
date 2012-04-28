@@ -28,10 +28,16 @@ class DataServer : public QObject
 
 public:
   DataServer(SignalHub *hub, ServerAgent *server, Database *cache, Database *queue, QObject *parent = 0)
-    : Base(parent), hub_(hub), server_(server), cache_(cache), queue_(queue) { }
+    : Base(parent), preferLocal_(false), hub_(hub), server_(server), cache_(cache), queue_(queue) { }
+
+  bool preferLocal() const { return preferLocal_; }
+
+signals:
+  void preferLocalChanged(bool t);
 
 public slots:
   void dispose();
+  void setPreferLocal(bool t) { preferLocal_ = t; emit preferLocalChanged(preferLocal_); }
 
   // - Submission -
 public:
@@ -78,6 +84,7 @@ public:
 
   // - Implementations -
 private:
+  bool preferLocal_;
   SignalHub *hub_;
   ServerAgent *server_;
   Database *cache_,

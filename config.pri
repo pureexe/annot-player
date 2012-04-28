@@ -73,6 +73,8 @@ mac {
     DATADIR=\\\"$$DATADIR\\\"
 }
 DEFINES += \
+    DOCDIR=\\\"$$DOCDIR\\\" \
+    IMAGEDIR=\\\"$$IMAGDIR\\\" \
     LUADIR=\\\"$$LUADIR\\\" \
     JSFDIR=\\\"$$JSFDIR\\\"
 

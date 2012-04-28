@@ -1,15 +1,13 @@
 // downloader.cc
 // 2/4/2011
-#include "downloader.h"
+#include "module/download/downloader.h"
 #ifdef WITH_MODULE_COMPRESS
 #  include "module/compress/qgzip.h"
 #endif // WITH_MODULE_COMPRESS
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkReply>
 #include <QtNetwork/QNetworkRequest>
-#include <QtCore/QEventLoop>
-#include <QtCore/QFile>
-#include <QtCore/QStringList>
+#include <QtCore/QtCore>
 
 //#define DEBUG "downloader"
 #include "module/debug/debug.h"
@@ -235,6 +233,9 @@ Downloader::save(QNetworkReply *reply)
 bool
 Downloader::save(const QByteArray &data, const QString &fileName)
 {
+  QDir dir = QFileInfo(fileName).absoluteDir();
+  if (!dir.exists())
+    dir.mkpath(dir.absolutePath());
   QFile file(fileName);
   if (!file.open(QIODevice::WriteOnly))
     return false;

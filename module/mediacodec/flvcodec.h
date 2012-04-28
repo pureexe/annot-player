@@ -4,8 +4,7 @@
 // flvcodec.h
 // 2/12/2012
 
-#include "mediacodec_config.h"
-#include "flvmeta.h"
+#include "module/mediacodec/flvmeta.h"
 #include "module/stream/inputstream.h"
 #include <QtCore/QObject>
 #include <QtCore/QList>

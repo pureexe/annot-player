@@ -24,10 +24,10 @@
 #ifdef Q_OS_MAC
 #  include "mac/qtmac/qtmac.h"
 #endif // Q_OS_MAC
-#include "ac/acui.h"
-#include "ac/acglobal.h"
-#include "ac/acsettings.h"
-#include "ac/acplayer.h"
+#include "project/common/acui.h"
+#include "project/common/acglobal.h"
+#include "project/common/acsettings.h"
+#include "project/common/acplayer.h"
 #include "module/annotcloud/user.h"
 #include <QtWebKit/QWebSettings>
 #include <QtNetwork/QNetworkProxy>
@@ -162,7 +162,7 @@ main(int argc, char *argv[])
     settings->sync();
 
     if (QFile::rename(QDir::homePath() + "/Annot", G_PATH_DOWNLOADS))
-      a.infectDownloadDirectory();
+      AcLocationManager::globalInstance()->createDownloadsLocation();
   }
 
   // Moved

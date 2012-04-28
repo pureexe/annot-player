@@ -6,7 +6,7 @@
 #include "annotationfilter.h"
 #include "global.h"
 #include "tr.h"
-#include "ac/acui.h"
+#include "project/common/acui.h"
 #include "logger.h"
 #include <QtGui>
 
@@ -150,15 +150,11 @@ BlacklistView::createLayout()
 void
 BlacklistView::createActions()
 {
-  QShortcut *c1 = new QShortcut(QKeySequence("CTRL+1"), this);
-  connect(c1, SIGNAL(activated()), textTabButton_, SLOT(click()));
-  QShortcut *c2 = new QShortcut(QKeySequence("CTRL+2"), this);
-  connect(c2, SIGNAL(activated()), userTabButton_, SLOT(click()));
+  connect(new QShortcut(QKeySequence("Esc"), this), SIGNAL(activated()), SLOT(hide()));
+  connect(new QShortcut(QKeySequence("CTRL+W"), this), SIGNAL(activated()), SLOT(hide()));
 
-  QShortcut *cancelShortcut = new QShortcut(QKeySequence("Esc"), this);
-  connect(cancelShortcut, SIGNAL(activated()), SLOT(hide()));
-  QShortcut *closeShortcut = new QShortcut(QKeySequence("CTRL+W"), this);
-  connect(closeShortcut, SIGNAL(activated()), SLOT(hide()));
+  connect(new QShortcut(QKeySequence("CTRL+1"), this), SIGNAL(activated()), textTabButton_, SLOT(click()));
+  connect(new QShortcut(QKeySequence("CTRL+2"), this), SIGNAL(activated()), userTabButton_, SLOT(click()));
 }
 
 // - Slots -
@@ -235,7 +231,7 @@ BlacklistView::add()
   switch (tab_) {
   case TextTab: filter_->addBlockedText(text); break;
   case UserTab: filter_->addBlockedUserAlias(text); break;
-  default: break;
+  default: ;
   }
 }
 
@@ -272,7 +268,7 @@ BlacklistView::remove()
         filter_->removeBlockedAnnotationWithId(id);
       }
     } break;
-  default: Q_ASSERT(0); break;
+  default: Q_ASSERT(0);
   }
 }
 

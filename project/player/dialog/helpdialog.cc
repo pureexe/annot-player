@@ -4,7 +4,7 @@
 #include "helpdialog.h"
 #include "global.h"
 #include "tr.h"
-#include "ac/acsettings.h"
+#include "project/common/acsettings.h"
 #include <QtGui>
 #include <QtWebKit>
 
@@ -32,10 +32,8 @@ HelpDialog::HelpDialog(QWidget *parent)
   );
 
   // Shortcuts
-  QShortcut *cancelShortcut = new QShortcut(QKeySequence("Esc"), this);
-  connect(cancelShortcut, SIGNAL(activated()), SLOT(hide()));
-  QShortcut *closeShortcut = new QShortcut(QKeySequence("CTRL+W"), this);
-  connect(closeShortcut, SIGNAL(activated()), SLOT(hide()));
+  connect(new QShortcut(QKeySequence("Esc"), this), SIGNAL(activated()), SLOT(hide()));
+  connect(new QShortcut(QKeySequence("CTRL+W"), this), SIGNAL(activated()), SLOT(hide()));
 }
 
 // - Properties -

@@ -3,8 +3,8 @@
 //
 // Assume that global NSAutoreleasePool is already defined in qtstep module.
 
-#include "vlcstep.h"
-#import "VLCOpenGLVoutView_public.h"
+#include "vlcstep/vlcstep.h"
+#import "vlcstep/VLCOpenGLVoutView_public.h"
 #import "VLCKit/VLCKit.h"
 #include "module/vlccore/video.h"
 //#include <objc/runtime.h>

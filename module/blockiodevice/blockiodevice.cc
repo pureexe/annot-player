@@ -11,17 +11,17 @@
 // See: http://www.codeproject.com/KB/audio-video/SimpleAudioCD.aspx
 // See: http://social.msdn.microsoft.com/Forums/en-us/vssmartdevicesnative/thread/3c5daa34-afae-4a4a-a685-e282983df783
 
-#include "blockiodevice.h"
+#include "module/blockiodevice/blockiodevice.h"
 extern "C" {
 #ifdef Q_OS_WIN
 #  include <qt_windows.h>
-#  include <winioctl.h>
 #  include <ntddcdrm.h>
+#  include <winioctl.h>
 #endif // Q_OS_WIN
 #ifdef Q_OS_UNIX
 #  ifdef Q_OS_LINUX
-//#    include <linux/hdreg.h>
 #    include <linux/cdrom.h>
+//#    include <linux/hdreg.h>
 #  elif defined Q_OS_MAC
 #    include <sys/disk.h>
 #  endif // Q_OS_

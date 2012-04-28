@@ -4,8 +4,8 @@
 // downloader.h
 // 2/3/2012
 
-#include <QtCore/QString>
 #include <QtCore/QHash>
+#include <QtCore/QString>
 
 QT_BEGIN_NAMESPACE
 class QNetworkAccessManager;

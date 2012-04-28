@@ -5,9 +5,9 @@
 #include "application.h"
 #include "rc.h"
 #include "settings.h"
-#include "ac/acsettings.h"
-#include "ac/acui.h"
-#include "ac/acdownloader.h"
+#include "project/common/acdownloader.h"
+#include "project/common/acsettings.h"
+#include "project/common/acui.h"
 #ifdef WITH_MODULE_QT
 #  include "module/qt/qtrc.h"
 #endif // WITH_MODULE_QT
@@ -16,11 +16,15 @@
 #include <QtNetwork/QNetworkReply>
 #include <QtGui>
 #include <boost/tuple/tuple.hpp>
-#include <ctime>
 #include <cstdlib>
+#include <ctime>
 
 #define DEBUG "main"
 #include "module/debug/debug.h"
+
+#ifdef __GNUC__
+#  pragma GCC diagnostic ignored "-Wparentheses" // suggest parentheses
+#endif // __GNUC__
 
 #define DEFAULT_SIZE    QSize(400, 300)
 
@@ -185,7 +189,7 @@ main(int argc, char *argv[])
   a.setMainWindow(&w);
 
   QSize sz = Settings::globalSettings()->recentSize();
-  if (sz.isEmpty() || !isValidWindowSize(sz))
+  if (sz.isEmpty() || !isValidWindowSize(sz, &w))
     sz = DEFAULT_SIZE;
   w.resize(sz);
   w.show();

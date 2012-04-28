@@ -10,10 +10,10 @@
 
 QT_BEGIN_NAMESPACE
 class QAbstractItemModel;
-class QStandardItemModel;
-class QSortFilterProxyModel;
 class QAction;
 class QLineEdit;
+class QStandardItemModel;
+class QSortFilterProxyModel;
 QT_END_NAMESPACE
 
 class AcFilteredListView;

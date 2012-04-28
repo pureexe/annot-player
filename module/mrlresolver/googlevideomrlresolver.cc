@@ -1,7 +1,7 @@
 // googlevideomrlresolver.cc
 // 2/2/2012
 
-#include "googlevideomrlresolver.h"
+#include "module/mrlresolver/googlevideomrlresolver.h"
 #include <QtCore/QUrl>
 #include <cstdlib>
 

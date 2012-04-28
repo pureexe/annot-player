@@ -3,8 +3,8 @@
 unix {
 
 TEMPLATE = subdirs
-include(qtx/qtx.pri)
 include(qtunix/qtunix.pri)
+include(qtx/qtx.pri)
 #SUBDIRS += qtx
 
 }

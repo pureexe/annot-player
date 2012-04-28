@@ -1,7 +1,7 @@
 // luaresolver.cc
 // 2/1/2012
 // See: http://csl.sublevel3.org/lua/
-#include "luaresolver.h"
+#include "module/luaresolver/luaresolver.h"
 #include "module/mrlanalysis/mrlanalysis.h"
 #ifdef WITH_MODULE_LUACPP
 #  include "module/luacpp/luacpp.h"
@@ -13,14 +13,16 @@
 #else
 #  error "download module is required"
 #endif // WITH_MODULE_DOWNLOAD
-#include "module/qtext/network.h"
+#include "module/qtext/networkcookie.h"
 #include "module/qtext/os.h"
+#include <QtNetwork/QNetworkAccessManager>
+#include <QtCore/QFileInfo>
 #include <boost/function.hpp>
 #include <exception>
 
 #define _qs(_cstr)      QString::fromLocal8Bit(_cstr)
 
-//#define DEBUG "luaresolver"
+#define DEBUG "luaresolver"
 #include "module/debug/debug.h"
 
 #ifdef __GNUC__
@@ -292,6 +294,11 @@ LuaResolver::resolve(const QString &href, int *siteid, QString *refurl, QString 
       boost::function<int (std::string, std::string)>
           call = lua_function<int>(L, callee);
       QString dlfile = QtExt::mktemp();
+#ifdef Q_WS_WIN
+      // FIXME: Because liblua 5.1 cannot handle Chinese characters in path,
+      dlfile = QFileInfo(dlfile).fileName();
+#endif // Q_WS_WIN
+      DOUT("dlfile =" << dlfile);
       err = call(href.toStdString(), dlfile.toStdString());
       if (err) {
   #ifdef DEBUG

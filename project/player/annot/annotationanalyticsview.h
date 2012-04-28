@@ -4,7 +4,7 @@
 // annotationanalyticsview.h
 // 11/16/2011
 
-#include "ac/acwebwindow.h"
+#include "project/common/acwebwindow.h"
 #include "module/annotcloud/annotation.h"
 
 QT_FORWARD_DECLARE_CLASS(QUrl)

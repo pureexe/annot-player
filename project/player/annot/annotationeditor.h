@@ -8,13 +8,13 @@
 
 QT_BEGIN_NAMESPACE
 class QAction;
-class QTextCharFormat;
 class QColor;
-class QShortcut;
 class QComboBox;
 class QFontComboBox;
 class QLabel;
+class QShortcut;
 class QStackedLayout;
+class QTextCharFormat;
 class QTextEdit;
 class QToolButton;
 QT_END_NAMESPACE
@@ -119,8 +119,8 @@ protected slots:
   void setColorIconColor(const QColor &c);
   void setBackgroundColorIconColor(const QColor &c);
 
-  void invalidateAlignment();
-  void invalidateCount();
+  void updateAlignment();
+  void updateCount();
 
   void setBlackColor()  { setColor("Black"); }
   void setBlueColor()   { setColor("Blue"); }

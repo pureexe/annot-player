@@ -2,6 +2,38 @@ ChangeLog
 Annot Project
 6/18/2011
 
+4/28/2012	annot.player, down, browser	0.1.5.1, 0.1.2.0, 0.1.1.1
+        * Fixed a bug that prevent resolving annotations when the app or system
+          path contains Chinese characters in Windows.
+        * Option to change online/offline annotations preference.
+          Prefer cached offline annotations by default.
+        * Able to select annotation and draw all annotations from the its user.
+        * Added mouse gestures to manipulate annotations. Shortcuts follow.
+          ModifierKey | MouseButton
+          * SHIFT    | Left+Right or Left+Middle : Exile annotations by hovering
+          * CTRL     | Left  : Capture annotations using rubberband
+          * ALT      | Right : Release annotations using rubberband
+          * CTRL+ALT | Middle: Kill annotations using rubberband
+          * CTRL+SHIFT     | : Capture annotations by hovering
+          * ALT+SHIF       | : Release annotations by hovering
+          * CTRL+ALT+SHIFT | : Kill annotations by hovering
+        * Browser improved.
+          * Added multiple search engines.
+          * Always higlight selected text.
+          * Higlight hovered downloadable links.
+          * Added menus on Mac and Linux.
+          * Able to go full screen by double clicking any tab.
+          * Added mouse gestures with right or middle button, as follow.
+            * Open link in background tab: ↓
+            * Close tab: ↓ →
+            * New tab: → ←
+            * Undo close tab: ← →
+            * Refresh: ↑ ↓
+            * Full screen: → ↑
+            * Minimize: → ↓
+            * Scroll Top: ← ↑
+            * Scroll Bottom: ← ↓
+
 4/22/2012	annot.player, down, browser	0.1.5.0, 0.1.1.0, 0.1.1.0
         * Offline caching improved. Most network accesses are cached if possible.
           Imported annotations are also cached for offline playing.

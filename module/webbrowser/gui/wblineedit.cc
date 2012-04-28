@@ -1,7 +1,7 @@
-// wblineedit.cc
+// gui/wblineedit.cc
 // 3/31/2012
 
-#include "wblineedit.h"
+#include "gui/wblineedit.h"
 #include <QtGui>
 
 void

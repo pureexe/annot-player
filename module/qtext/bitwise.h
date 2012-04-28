@@ -1,8 +1,11 @@
 #ifndef _QTEXT_BITWISE_H
 #define _QTEXT_BITWISE_H
+
 // bitwise.h
 // 2/12/2012
-// See: FLVExtractCl/Library/General.cs
+//
+// TODO: use union instead of pointer magic to improve performance.
+// See: qIsNull in QtGlobal
 
 #include <QtGlobal>
 
@@ -48,30 +51,30 @@ namespace BigEndian {
   inline quint64 toUInt64(const quint8 *value, int startIndex = 0)
   {
     return
-      ((quint64)value[startIndex    ] << 56) |
-      ((quint64)value[startIndex + 1] << 48) |
-      ((quint64)value[startIndex + 2] << 40) |
-      ((quint64)value[startIndex + 3] << 32) |
-      ((quint64)value[startIndex + 4] << 24) |
-      ((quint64)value[startIndex + 5] << 16) |
-      ((quint64)value[startIndex + 6] <<  8) |
-      ((quint64)value[startIndex + 7]      );
+      quint64(value[startIndex    ]) << 56 |
+      quint64(value[startIndex + 1]) << 48 |
+      quint64(value[startIndex + 2]) << 40 |
+      quint64(value[startIndex + 3]) << 32 |
+      quint64(value[startIndex + 4]) << 24 |
+      quint64(value[startIndex + 5]) << 16 |
+      quint64(value[startIndex + 6]) <<  8 |
+      quint64(value[startIndex + 7]);
   }
 
   inline quint32 toUInt32(const quint8 *value, int startIndex = 0)
   {
     return
-      ((quint32)value[startIndex    ] << 24) |
-      ((quint32)value[startIndex + 1] << 16) |
-      ((quint32)value[startIndex + 2] <<  8) |
-      ((quint32)value[startIndex + 3]      );
+      (quint32(value[startIndex    ]) << 24) |
+      (quint32(value[startIndex + 1]) << 16) |
+      (quint32(value[startIndex + 2]) <<  8) |
+      (quint32(value[startIndex + 3])      );
   }
 
   inline quint16 toUInt16(const quint8 *value, int startIndex = 0)
   {
     return
-      ((quint16)value[startIndex    ] <<  8) |
-      ((quint16)value[startIndex + 1]      );
+      (quint16(value[startIndex    ]) <<  8) |
+      (quint16(value[startIndex + 1])      );
   }
 
   inline float toFloat(const quint8 *value, int startIndex = 0)

@@ -1,7 +1,7 @@
 // securebufferedfifostream.cc
 // 3/14/2012
 
-#include "securebufferedfifostream.h"
+#include "module/stream/securebufferedfifostream.h"
 #include <QtCore/QMutexLocker>
 
 //#define DEBUG "securebufferedfifostream"

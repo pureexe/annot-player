@@ -2,6 +2,7 @@
 // 11/26/2011
 
 #include "mousehook.h"
+#include "mousehook_p.h"
 #include "qtwin/qtwin.h"
 #include <QtGui>
 #include <qt_windows.h>
@@ -83,54 +84,37 @@ namespace { // anonymous, hook callbacks
 } // anonymouss namespace
 
 // - Constructions -
-
-class MouseHookImpl
-{
-public:
-  HHOOK hook;
-  bool windowPosEnabled;
-  QObject* listener;
-
-public:
-  MouseHookImpl() : hook(0), windowPosEnabled(false), listener(0) { }
-};
-
-MouseHook*
-MouseHook::globalInstance()
-{ static Self g; return &g; }
-
+//
 MouseHook::MouseHook()
-{ impl_ = new Impl; }
+{ d_ = new Private; }
 
 MouseHook::~MouseHook()
 {
   stop();
-
-  Q_ASSERT(impl_);
-  delete impl_;
+  delete d_;
 }
 
 // - Properties -
 
 void*
 MouseHook::hook() const
-{ return impl_->hook; }
+{ return d_->hook; }
 
 bool
 MouseHook::isWindowPosEnabled() const
-{ return impl_->windowPosEnabled; }
+{ return d_->windowPosEnabled; }
 
 void
 MouseHook::setWindowPosEnabled(bool enabled)
-{ impl_->windowPosEnabled = enabled; }
+{ d_->windowPosEnabled = enabled; }
 
 QObject*
 MouseHook::eventListener() const
-{ return impl_->listener; }
+{ return d_->listener; }
 
 void
 MouseHook::setEventListener(QObject *obj)
-{ impl_->listener = obj; }
+{ d_->listener = obj; }
 
 // - Slots -
 
@@ -143,7 +127,7 @@ MouseHook::start()
 {
   static HINSTANCE hInstance = 0;
 
-  if (impl_->hook)
+  if (d_->hook)
     return;
 
   if (!hInstance) {
@@ -156,16 +140,16 @@ MouseHook::start()
   }
 
   // Global mode
-  impl_->hook = ::SetWindowsHookEx(WH_MOUSE_LL, ::MouseProc, hInstance, 0);
+  d_->hook = ::SetWindowsHookEx(WH_MOUSE_LL, ::MouseProc, hInstance, 0);
   DOUT("start: started");
 }
 
 void
 MouseHook::stop()
 {
-  if (impl_->hook) {
-    ::UnhookWindowsHookEx((HHOOK)impl_->hook);
-    impl_->hook = 0;
+  if (d_->hook) {
+    ::UnhookWindowsHookEx((HHOOK)d_->hook);
+    d_->hook = 0;
     DOUT("stop: stoppped");
   }
 }

@@ -7,10 +7,9 @@
 // See: FLVExtractCl/Library/FLVFile.cs
 // http://moitah.net/
 
-#include "mediacodec_config.h"
 #include "module/stream/outputstream.h"
-#include <QtCore/QObject>
 #include <QtCore/QByteArray>
+#include <QtCore/QObject>
 
 class MediaToc;
 

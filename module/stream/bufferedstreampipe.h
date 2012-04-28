@@ -4,7 +4,7 @@
 // bufferedstreampipe.h
 // 2/22/2012
 
-#include "streampipe.h"
+#include "module/stream/streampipe.h"
 #include "module/qtext/stoppable.h"
 #include <QtCore/QObject>
 #include <QtCore/QString>

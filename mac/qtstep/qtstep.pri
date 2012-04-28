@@ -3,13 +3,11 @@
 
 DEFINES += WITH_MAC_QTSTEP
 
-INCLUDEPATH += $$PWD
+INCLUDEPATH     += $$PWD/..
+DEPENDPATH      += $$PWD
 
-HEADERS += \
-    $$PWD/qtstep.h
-
-OBJECTIVE_SOURCES += \
-    $$PWD/qtstep.mm
+HEADERS         += $$PWD/qtstep.h
+OBJECTIVE_SOURCES += $$PWD/qtstep.mm
 
 QT      += core gui
 LIBS    += -framework Foundation -framework AppKit

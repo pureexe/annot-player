@@ -6,13 +6,11 @@
 #include <QtGui/QWidget> // where WId is declared
 #include <QtCore/QList>
 
-//class QthImpl;
 class Qth : public QObject
 {
   Q_OBJECT
   typedef Qth Self;
   typedef QObject Base;
-  //typedef QthImpl Impl;
 
   // - Constructions -
 public:

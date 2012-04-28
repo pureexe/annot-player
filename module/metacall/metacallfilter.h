@@ -9,9 +9,9 @@
 
 QT_BEGIN_NAMESPACE
 class QMetaCallEvent;
+class QHostAddress;
 class QTcpServer;
 class QTcpSocket;
-class QHostAddress;
 QT_END_NAMESPACE
 
 /**

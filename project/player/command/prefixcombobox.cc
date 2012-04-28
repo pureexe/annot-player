@@ -11,6 +11,7 @@
 PrefixComboBox::PrefixComboBox(QWidget *parent)
   : Base(parent)
 {
+  lineEdit()->setPlaceholderText(tr("Prefix"));
 #define ADD(_cmd)       defaultItems.append(_cmd)
   ADD(CORE_CMD_VIEW_TOP); ADD(CORE_CMD_VIEW_BOTTOM); ADD(CORE_CMD_VIEW_FLY);
   ADD(CORE_CMD_LATEX_SMALL); ADD(CORE_CMD_LATEX_BIG);

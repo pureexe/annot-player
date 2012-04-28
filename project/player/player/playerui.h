@@ -49,11 +49,11 @@ public:
   QString currentText() const;
 
 signals:
-  void invalidateMenuRequested();
+  void updateMenuRequested();
   void textEntered(const QString &text);
   void loginRequested();
   void showPositionPanelRequested();
-  void invalidateUserMenuRequested();
+  void updateUserMenuRequested();
 
 public slots:
   // - Player -
@@ -65,7 +65,7 @@ public slots:
   void fastFastForward();
   void rewind();
 
-  //void setAnnotationEnabled(bool enabled); // invalidateToggleAnnotationButton
+  //void setAnnotationEnabled(bool enabled); // updateToggleAnnotationButton
 
   void setVolume(int vol);
   void setPosition(int pos);
@@ -76,30 +76,30 @@ public slots:
   void setProgressMessage(const QString &text);
   void clearProgressMessage() { setProgressMessage(QString()); }
 
-  void invalidateTitle();
-  void invalidateVolumeSlider();
-  void invalidatePositionSlider();
+  void updateTitle();
+  void updateVolumeSlider();
+  void updatePositionSlider();
 
-  void invalidateUserButton();
-  void invalidatePositionButton();
-  void invalidateProgressButton();
+  void updateUserButton();
+  void updatePositionButton();
+  void updateProgressButton();
 
-  void invalidatePlayButton();
-  void invalidateStopButton();
-  void invalidateNextFrameButton();
-  void invalidateFastForwardButton();
-  void invalidateFastFastForwardButton();
-  //void invalidateRewindButton();
-  void invalidateNextButton();
-  void invalidatePreviousButton();
-  virtual void invalidateInputCountButton();
+  void updatePlayButton();
+  void updateStopButton();
+  void updateNextFrameButton();
+  void updateFastForwardButton();
+  void updateFastFastForwardButton();
+  //void updateRewindButton();
+  void updateNextButton();
+  void updatePreviousButton();
+  virtual void updateInputCountButton();
 
-  void invalidatePlayerModeToggler();
-  void invalidateWindowModeToggler();
+  void updatePlayerModeToggler();
+  void updateWindowModeToggler();
 
   void clickUserButton();
 
-  void invalidateVisibleWidgets();
+  void updateVisibleWidgets();
 
   // - Comments -
   void postAnnotation(); ///< Post annotation in lineEdit()

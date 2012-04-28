@@ -1,7 +1,7 @@
 // bufferedremotestream.cc
 // 2/15/2012
 
-#include "bufferedremotestream.h"
+#include "module/stream/bufferedremotestream.h"
 #include <QtNetwork/QNetworkReply>
 #include <QtNetwork/QNetworkRequest>
 #include <QtCore/QEventLoop>
@@ -133,7 +133,7 @@ BufferedRemoteStream::run()
     if (bufferSize_ > 0)
       reply_->setReadBufferSize(bufferSize_);
   }
-  connect(reply_, SIGNAL(readyRead()), SLOT(invalidateSize()));
+  connect(reply_, SIGNAL(readyRead()), SLOT(updateSize()));
   connect(reply_, SIGNAL(finished()), SLOT(finish()));
   connect(reply_, SIGNAL(finished()), SIGNAL(finished()));
   connect(reply_, SIGNAL(readyRead()), SIGNAL(readyRead()));
@@ -290,7 +290,7 @@ BufferedRemoteStream::redirect()
 }
 
 void
-BufferedRemoteStream::invalidateSize()
+BufferedRemoteStream::updateSize()
 {
   //DOUT("enter");
   if (reply_ && !Base::size()) {

@@ -8,9 +8,9 @@
 #include <QtCore/QMutex>
 
 QT_BEGIN_NAMESPACE
-class QTimer;
-class QMenu;
 class QAction;
+class QMenu;
+class QTimer;
 QT_END_NAMESPACE
 
 class OsdConsole : public QLabel

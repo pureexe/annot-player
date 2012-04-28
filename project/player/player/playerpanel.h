@@ -7,10 +7,10 @@
 #include <QtGui/QWidget>
 
 QT_BEGIN_NAMESPACE
+class QComboBox;
+class QLabel;
 class QSlider;
 class QToolButton;
-class QLabel;
-class QComboBox;
 QT_END_NAMESPACE
 
 class PositionSlider;

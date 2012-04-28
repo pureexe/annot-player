@@ -1,7 +1,7 @@
 // metacallpropagator.cc
 // 4/9/2012
-#include "metacallpropagator.h"
-#include "metacallfilter.h"
+#include "module/metacall/metacallpropagator.h"
+#include "module/metacall/metacallfilter.h"
 
 #define DEBUG "metacallpropagator"
 #include "module/debug/debug.h"

@@ -8,7 +8,7 @@
 #ifdef WITH_WIN_QTH
 #  include "win/qth/qth.h"
 #endif // WITH_WIN_QTH
-#include "ac/acui.h"
+#include "project/common/acui.h"
 #include "module/qtext/htmltag.h"
 #include <QtGui>
 

@@ -5,7 +5,7 @@
 #include "tr.h"
 #include "global.h"
 #include "stylesheet.h"
-#include "ac/acui.h"
+#include "project/common/acui.h"
 #include "module/annotcloud/annottag.h"
 #include "module/annotcloud/annothtml.h"
 #include "module/qtext/toolbutton.h"
@@ -63,24 +63,20 @@ AnnotationEditor::AnnotationEditor(QWidget *parent)
   createRibons();
   createLayout();
 
-  connect(textEdit_, SIGNAL(cursorPositionChanged()), SLOT(invalidateAlignment()));
+  connect(textEdit_, SIGNAL(cursorPositionChanged()), SLOT(updateAlignment()));
   connect(textEdit_, SIGNAL(currentCharFormatChanged(QTextCharFormat)), SLOT(setFormat(QTextCharFormat)));
-  connect(textEdit_, SIGNAL(currentCharFormatChanged(QTextCharFormat)), SLOT(invalidateCount()));
-  connect(textEdit_, SIGNAL(textChanged()), SLOT(invalidateCount()));
+  connect(textEdit_, SIGNAL(currentCharFormatChanged(QTextCharFormat)), SLOT(updateCount()));
+  connect(textEdit_, SIGNAL(textChanged()), SLOT(updateCount()));
 
   // Shortcuts
   saveShortcut_ = new QShortcut(QKeySequence::Save, this);
   connect(saveShortcut_, SIGNAL(activated()), SLOT(save()));
 
-  QShortcut *cancelShortcut = new QShortcut(QKeySequence("Esc"), this);
-  connect(cancelShortcut, SIGNAL(activated()), SLOT(cancel()));
-  QShortcut *closeShortcut = new QShortcut(QKeySequence("CTRL+W"), this);
-  connect(closeShortcut, SIGNAL(activated()), SLOT(hide()));
+  connect(new QShortcut(QKeySequence("Esc"), this), SIGNAL(activated()), SLOT(hide()));
+  connect(new QShortcut(QKeySequence("CTRL+W"), this), SIGNAL(activated()), SLOT(hide()));
 
-  QShortcut *c1 = new QShortcut(QKeySequence("CTRL+1"), this);
-  connect(c1, SIGNAL(activated()), codeRibonButton_, SLOT(click()));
-  QShortcut *c2 = new QShortcut(QKeySequence("CTRL+2"), this);
-  connect(c2, SIGNAL(activated()), htmlRibonButton_, SLOT(click()));
+  connect(new QShortcut(QKeySequence("CTRL+1"), this), SIGNAL(activated()), codeRibonButton_, SLOT(click()));
+  connect(new QShortcut(QKeySequence("CTRL+2"), this), SIGNAL(activated()), htmlRibonButton_, SLOT(click()));
 
   // Start up states
   setFontType(QApplication::font());
@@ -88,7 +84,7 @@ AnnotationEditor::AnnotationEditor(QWidget *parent)
   setBackgroundColorIconColor(Qt::black);
 
   setCodeMode();
-  invalidateCount();
+  updateCount();
 
   fontSizeComboBox_->setEditText("22");
   textEdit_->setFocus();
@@ -452,7 +448,7 @@ AnnotationEditor::setTidyEnabled(bool t)
   tidyButton_->setChecked(t);
   if (t)
     textEdit_->setPlainText(ANNOT_REDUCE_HTML(textEdit_->toPlainText()));
-  invalidateCount();
+  updateCount();
 }
 
 AnnotationEditor::Mode
@@ -840,7 +836,7 @@ AnnotationEditor::setAlignment(int alignIndex)
 }
 
 void
-AnnotationEditor::invalidateAlignment()
+AnnotationEditor::updateAlignment()
 {
   Qt::Alignment a = textEdit_->alignment();
 
@@ -859,7 +855,7 @@ AnnotationEditor::invalidateAlignment()
 }
 
 void
-AnnotationEditor::invalidateCount()
+AnnotationEditor::updateCount()
 {
   int cur = text().size();
   int max = G_ANNOTATION_MAXSIZE;

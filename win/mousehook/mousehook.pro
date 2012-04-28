@@ -2,9 +2,6 @@
 # 11/26/2011
 include(../../config.pri)
 
-QT      += core gui
-LIBS    += -luser32
-
 ## Sources
 
 TEMPLATE = lib
@@ -16,6 +13,7 @@ DEFINES += MOUSEHOOK_DLL_NAME=L\\\"$$TARGET\\\"
 
 HEADERS = \
     mousehook_config.h \
+    mousehook_p.h \
     mousehook.h
 
 SOURCES = \
@@ -27,6 +25,9 @@ OTHER_FILES = \
 
 !wince*: LIBS += -lshell32
 RC_FILE += mousehook.rc
+
+QT      += core gui
+LIBS    += -luser32
 
 #include($$ROOTDIR/win/qtwin/qtwin.pri)
 

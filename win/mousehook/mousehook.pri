@@ -1,7 +1,8 @@
 # mousehook.pri
 # 11/26/2011
 
-INCLUDEPATH += $$PWD
+INCLUDEPATH     += $$PWD
+DEPENDPATH      += $$PWD
 
 DEFINES += WITH_WIN_MOUSEHOOK
 

@@ -25,7 +25,7 @@ public slots:
   void setAvailablePosition(int value);
 
 protected slots:
-  void invalidateStyleSheet(int value = 0);
+  void updateStyleSheet(int value = 0);
 };
 
 #endif // POSITIONSLIDER_H

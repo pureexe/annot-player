@@ -1,12 +1,12 @@
 ﻿// acfuncodec.cc
 // 2/4/2012
 
-#include "acfuncodec.h"
+#include "module/annotcodec/acfuncodec.h"
 #include "module/annotcloud/annottag.h"
 #include "module/annotcloud/traits.h"
+#include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkReply>
 #include <QtNetwork/QNetworkRequest>
-#include <QtNetwork/QNetworkAccessManager>
 #include <QtXml/QDomDocument>
 #include <QtXml/QDomElement>
 #include <QtScript/QScriptEngine>

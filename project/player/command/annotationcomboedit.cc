@@ -5,7 +5,7 @@
 #include "annotationeditor.h"
 #include "rc.h"
 #include "tr.h"
-#include "ac/acui.h"
+#include "project/common/acui.h"
 #include <QtGui>
 
 #define DEBUG "annotationcomboedit"

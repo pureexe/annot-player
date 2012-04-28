@@ -1,7 +1,7 @@
 // module/serveragent/serversoap.cc
 // 9/10/2011
 
-#include "serversoap.h"
+#include "module/serveragent/serversoap.h"
 
 #ifdef _MSC_VER
 #  pragma warning (disable:4100)  // C4100: unreferenced formal parameter

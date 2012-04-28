@@ -4,9 +4,9 @@
 // mediatoc.h
 // 2/13/2012
 
-#include <QtCore/QObject>
-#include <QtCore/QMutex>
 #include <QtCore/QList>
+#include <QtCore/QMutex>
+#include <QtCore/QObject>
 
 class MediaToc : public QObject
 {

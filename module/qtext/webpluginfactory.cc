@@ -15,11 +15,11 @@
 QtExt::
 WebPluginFactory::WebPluginFactory(QObject *parent)
   : Base(parent)
-{ invalidatePlugins(); }
+{ updatePlugins(); }
 
 void
 QtExt::
-WebPluginFactory::invalidatePlugins()
+WebPluginFactory::updatePlugins()
 {
 }
 

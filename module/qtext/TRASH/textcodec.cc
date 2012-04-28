@@ -92,13 +92,13 @@ TextCodec::setType(Type type)
 {
   if (type_ != type) {
     type_ = type;
-    invalidateCodec();
+    updateCodec();
   }
 }
 
 void
 Core::
-TextCodec::invalidateCodec()
+TextCodec::updateCodec()
 {
   codec_ = type_ == Default?
       QTextCodec::codecForLocale() :

@@ -6,7 +6,7 @@ include($$ROOTDIR/module/luacpp/luacpp.pri)
 
 DEFINES += WITH_MODULE_LUARESOLVER
 
-INCLUDEPATH += $$PWD
+DEPENDPATH += $$PWD
 
 HEADERS += \
     $$PWD/luaresolver.h

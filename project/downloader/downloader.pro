@@ -1,7 +1,7 @@
 # downloader.pro
 # 3/29/2012
 
-VERSION = 0.1.1.0
+VERSION = 0.1.1.1
 
 DEFINES += PROJECT_DOWNLOADER
 
@@ -12,16 +12,16 @@ include($$ROOTDIR/module/debug/debug.pri)
 ## Libraries
 
 include($$ROOTDIR/module/annotcloud/annotcloud.pri)
-include($$ROOTDIR/module/serveragent/serveragent.pri)
 include($$ROOTDIR/module/gsoap/gsoap.pri)
+include($$ROOTDIR/module/compress/compress.pri)
 include($$ROOTDIR/module/crypt/crypt.pri)
 include($$ROOTDIR/module/download/download.pri)
 include($$ROOTDIR/module/download/mrldownload.pri)
-include($$ROOTDIR/module/compress/compress.pri)
 include($$ROOTDIR/module/mediacodec/mediacodec.pri)
 include($$ROOTDIR/module/mrlresolver/mrlresolver.pri)
 include($$ROOTDIR/module/qt/qt.pri)
 include($$ROOTDIR/module/qtext/qtext.pri)
+include($$ROOTDIR/module/serveragent/serveragent.pri)
 include($$ROOTDIR/module/stream/stream.pri)
 
 !mac: include($$ROOTDIR/module/metacall/metacall.pri)
@@ -65,8 +65,8 @@ HEADERS += \
     rc.h \
     settings.h \
     signer.h \
-    systemtrayicon.h \
-    taskdialog.h
+    taskdialog.h \
+    trayicon.h
 
 SOURCES += \
     application.cc \
@@ -75,9 +75,8 @@ SOURCES += \
     mainwindow.cc \
     settings.cc \
     signer.cc \
-    systemtrayicon.cc \
-    taskdialog.cc
-
+    taskdialog.cc \
+    trayicon.cc
 
 RESOURCES += downloader.qrc
 

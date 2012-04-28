@@ -5,8 +5,12 @@ include(../../config.pri)
 
 DEFINES += WITH_MODULE_SERVERAGENT
 
-INCLUDEPATH += $$PWD
-INCLUDEPATH += $$PWD/serversoap
+INCLUDEPATH += \
+    $$PWD \
+    $$PWD/serversoap
+DEPENDPATH += \
+    $$PWD \
+    $$PWD/serversoap
 
 HEADERS += \
     $$PWD/castmanager.h \

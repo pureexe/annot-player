@@ -3,8 +3,8 @@
 
 #include "userview.h"
 #include "tr.h"
-#include "ac/acss.h"
-#include "ac/acui.h"
+#include "project/common/acss.h"
+#include "project/common/acui.h"
 #include <QtGui>
 
 using namespace AnnotCloud;
@@ -94,7 +94,7 @@ UserView::createLayout()
 }
 
 void
-UserView::invalidateUser()
+UserView::updateUser()
 {
 #define FORMAT_TIME(_secs)        QDateTime::fromMSecsSinceEpoch(_secs * 1000).toString(Qt::ISODate)
 #define FORMAT_COUNT(_count)      QString::number(_count)

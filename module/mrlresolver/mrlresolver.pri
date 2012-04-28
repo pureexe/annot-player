@@ -7,7 +7,7 @@ include($$ROOTDIR/module/mrlanalysis/mrlanalysis.pri)
 
 DEFINES += WITH_MODULE_MRLRESOLVER
 
-INCLUDEPATH += $$PWD
+DEPENDPATH += $$PWD
 
 HEADERS += \
     $$PWD/luamrlresolver.h \

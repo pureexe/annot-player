@@ -6,13 +6,10 @@ include(../../config.pri)
 DEFINES += WITH_MODULE_COMPRESS
 DEFINES += WITH_GZIP
 
-INCLUDEPATH += $$PWD
+DEPENDPATH      += $$PWD
 
-HEADERS += \
-    $$PWD/qgzip.h
-
-SOURCES += \
-    $$PWD/qgzip.cc
+HEADERS += $$PWD/qgzip.h
+SOURCES += $$PWD/qgzip.cc
 
 QT      += core
 LIBS    += -lz

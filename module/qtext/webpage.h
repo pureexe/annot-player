@@ -4,7 +4,7 @@
 // qtext/webpage.h
 // 4/9/2012
 
-#include <QtWebKit/QWebView>
+#include <QtWebKit/QWebPage>
 #include <QtNetwork/QNetworkRequest>
 
 namespace QtExt {
@@ -24,6 +24,12 @@ public:
   QString hoveredLink() const { return hoveredLink_; }
 
   virtual bool event(QEvent *e); ///< \override
+
+public slots:
+  void scrollTop();
+  void scrollBottom();
+  void scrollLeft();
+  void scrollRight();
 
 signals:
   void openLinkRequested(QString url);

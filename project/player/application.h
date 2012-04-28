@@ -25,7 +25,6 @@ public:
   ~Application();
 
 public slots:
-  void infectDownloadDirectory();
   void abortAll(); // kill all instances
   void abort();    // kill this instance
 

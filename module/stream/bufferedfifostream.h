@@ -4,10 +4,10 @@
 // bufferedfifostream.h
 // 2/9/2012
 
-#include "fifostream.h"
-#include <QtCore/QObject>
+#include "module/stream/fifostream.h"
 #include <QtCore/QByteArray>
 #include <QtCore/QMutex>
+#include <QtCore/QObject>
 
 class BufferedFifoStream : public QObject, public FifoStream
 {

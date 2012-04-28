@@ -53,7 +53,7 @@ namespace Core {
 
     // - Implementation -
   protected:
-    void invalidateCodec();
+    void updateCodec();
 
   private:
     Type type_;

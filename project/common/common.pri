@@ -1,49 +1,51 @@
 # common.pri
 # 3/29/2012
 
-INCLUDEPATH += \
-    $$PWD/include
-DEPENDPATH += \
-    $$PWD/include \
-    $$PWD/include/ac
+DEFINES     += WITH_PROJECT_COMMON
+DEPENDPATH  += $$PWD
 
 HEADERS += \
-    $$PWD/include/ac/acbrowser.h \
-    $$PWD/include/ac/accomboedit.h \
-    $$PWD/include/ac/acdownloader.h \
-    $$PWD/include/ac/acfilteredlistview.h \
-    $$PWD/include/ac/acfilteredtableview.h \
-    $$PWD/include/ac/acglobal.h \
-    $$PWD/include/ac/acipc.h \
-    $$PWD/include/ac/aclineedit.h \
-    $$PWD/include/ac/acmainwindow.h \
-    $$PWD/include/ac/acplayer.h \
-    $$PWD/include/ac/acrc.h \
-    $$PWD/include/ac/acsettings.h \
-    $$PWD/include/ac/acss.h \
-    $$PWD/include/ac/actextedit.h \
-    $$PWD/include/ac/actextview.h \
-    $$PWD/include/ac/acui.h \
-    $$PWD/include/ac/acwebwindow.h \
-    $$PWD/include/accomboedit_p.h
+    $$PWD/acaboutdialog.h \
+    $$PWD/acbrowser.h \
+    $$PWD/accomboedit.h \
+    $$PWD/accomboedit_p.h \
+    $$PWD/acdownloader.h \
+    $$PWD/acfilteredlistview.h \
+    $$PWD/acfilteredtableview.h \
+    $$PWD/acglobal.h \
+    $$PWD/acipc.h \
+    $$PWD/aclineedit.h \
+    $$PWD/acmainwindow.h \
+    $$PWD/acpaths.h \
+    $$PWD/acplayer.h \
+    $$PWD/acrc.h \
+    $$PWD/acsettings.h \
+    $$PWD/acss.h \
+    $$PWD/actextedit.h \
+    $$PWD/actextview.h \
+    $$PWD/acui.h \
+    $$PWD/acwebwindow.h
 
 SOURCES += \
-    $$PWD/src/acbrowser.cc \
-    $$PWD/src/accomboedit.cc \
-    $$PWD/src/acdownloader.cc \
-    $$PWD/src/acfilteredlistview.cc \
-    $$PWD/src/acfilteredtableview.cc \
-    $$PWD/src/acipc.cc \
-    $$PWD/src/aclineedit.cc \
-    $$PWD/src/acmainwindow.cc \
-    $$PWD/src/acplayer.cc \
-    $$PWD/src/acsettings.cc \
-    $$PWD/src/actextedit.cc \
-    $$PWD/src/actextview.cc \
-    $$PWD/src/acui.cc \
-    $$PWD/src/acwebwindow.cc
+    $$PWD/acaboutdialog.cc \
+    $$PWD/acbrowser.cc \
+    $$PWD/accomboedit.cc \
+    $$PWD/acdownloader.cc \
+    $$PWD/acfilteredlistview.cc \
+    $$PWD/acfilteredtableview.cc \
+    $$PWD/acipc.cc \
+    $$PWD/aclineedit.cc \
+    $$PWD/acmainwindow.cc \
+    $$PWD/acpaths.cc \
+    $$PWD/acplayer.cc \
+    $$PWD/acsettings.cc \
+    $$PWD/actextedit.cc \
+    $$PWD/actextview.cc \
+    $$PWD/acui.cc \
+    $$PWD/acwebwindow.cc
 
-RESOURCES += $$PWD/common.qrc
+RESOURCES += \
+    $$PWD/common.qrc
 
 QT      += core gui
 

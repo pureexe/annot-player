@@ -38,23 +38,23 @@ namespace { // anonymous
   {
     static QMap<const char*, const char*> connections
       (std::map<const char*, const char*>(boost::assign::map_list_of
-        (SIGNAL(mediaChanged()), SLOT(invalidateTitle()))
-        (SIGNAL(mediaChanged()), SLOT(invalidatePositionSlider()))
-        (SIGNAL(mediaChanged()), SLOT(invalidatePositionButton()))
-        (SIGNAL(encodingChanged()), SLOT(invalidateTitle()))
-        (SIGNAL(lengthChanged()), SLOT(invalidatePositionButton()))
-        (SIGNAL(timeChanged()), SLOT(invalidatePositionButton()))
-        (SIGNAL(positionChanged()), SLOT(invalidatePositionSlider()))
-        (SIGNAL(volumeChanged()), SLOT(invalidateVolumeSlider()))
-        (SIGNAL(playing()), SLOT(invalidatePlayButton()))
-        (SIGNAL(paused()), SLOT(invalidatePlayButton()))
-        (SIGNAL(stopped()), SLOT(invalidatePlayButton()))
-        (SIGNAL(playing()), SLOT(invalidateStopButton()))
-        (SIGNAL(paused()), SLOT(invalidateStopButton()))
-        (SIGNAL(stopped()), SLOT(invalidateStopButton()))
-        (SIGNAL(playing()), SLOT(invalidateNextFrameButton()))
-        (SIGNAL(paused()), SLOT(invalidateNextFrameButton()))
-        (SIGNAL(stopped()), SLOT(invalidateNextFrameButton()))
+        (SIGNAL(mediaChanged()), SLOT(updateTitle()))
+        (SIGNAL(mediaChanged()), SLOT(updatePositionSlider()))
+        (SIGNAL(mediaChanged()), SLOT(updatePositionButton()))
+        (SIGNAL(encodingChanged()), SLOT(updateTitle()))
+        (SIGNAL(lengthChanged()), SLOT(updatePositionButton()))
+        (SIGNAL(timeChanged()), SLOT(updatePositionButton()))
+        (SIGNAL(positionChanged()), SLOT(updatePositionSlider()))
+        (SIGNAL(volumeChanged()), SLOT(updateVolumeSlider()))
+        (SIGNAL(playing()), SLOT(updatePlayButton()))
+        (SIGNAL(paused()), SLOT(updatePlayButton()))
+        (SIGNAL(stopped()), SLOT(updatePlayButton()))
+        (SIGNAL(playing()), SLOT(updateStopButton()))
+        (SIGNAL(paused()), SLOT(updateStopButton()))
+        (SIGNAL(stopped()), SLOT(updateStopButton()))
+        (SIGNAL(playing()), SLOT(updateNextFrameButton()))
+        (SIGNAL(paused()), SLOT(updateNextFrameButton()))
+        (SIGNAL(stopped()), SLOT(updateNextFrameButton()))
       ));
 
     return connections;
@@ -125,13 +125,13 @@ PlayerUi::createConnections()
 
   connect(inputComboBox()->lineEdit(), SIGNAL(returnPressed()), SLOT(postAnnotation()));
 
-  connect(inputComboBox(), SIGNAL(editTextChanged(QString)), SLOT(invalidateInputCountButton()));
-  connect(prefixComboBox(), SIGNAL(editTextChanged(QString)), SLOT(invalidateInputCountButton()));
+  connect(inputComboBox(), SIGNAL(editTextChanged(QString)), SLOT(updateInputCountButton()));
+  connect(prefixComboBox(), SIGNAL(editTextChanged(QString)), SLOT(updateInputCountButton()));
 
   connect(inputCountButton(), SIGNAL(clicked()), SLOT(popupInputItems()));
 
   // Always connected
-  connect(hub_, SIGNAL(tokenModeChanged(SignalHub::TokenMode)), SLOT(invalidateVisibleWidgets())); \
+  connect(hub_, SIGNAL(tokenModeChanged(SignalHub::TokenMode)), SLOT(updateVisibleWidgets())); \
 
   //CommandLineEdit *p = dynamic_cast<CommandLineEdit*>(prefixLineEdit());
   //if (p)
@@ -146,20 +146,20 @@ PlayerUi::createConnections()
     _connect(toggleFullScreenModeButton(), SIGNAL(clicked(bool)), hub_, SLOT(setFullScreenWindowMode(bool))); \
     _connect(toggleMiniModeButton(), SIGNAL(clicked(bool)), hub_, SLOT(setMiniPlayerMode(bool))); \
     _connect(toggleEmbedModeButton(), SIGNAL(clicked(bool)), hub_, SLOT(setEmbeddedPlayerMode(bool))); \
-    _connect(hub_, SIGNAL(playModeChanged(SignalHub::PlayMode)), this, SLOT(invalidatePlayButton())); \
-    _connect(hub_, SIGNAL(playModeChanged(SignalHub::PlayMode)), this, SLOT(invalidateStopButton())); \
-    _connect(hub_, SIGNAL(playModeChanged(SignalHub::PlayMode)), this, SLOT(invalidatePositionSlider())); \
-    _connect(hub_, SIGNAL(volumeChanged(qreal)), this, SLOT(invalidateVolumeSlider())); \
+    _connect(hub_, SIGNAL(playModeChanged(SignalHub::PlayMode)), this, SLOT(updatePlayButton())); \
+    _connect(hub_, SIGNAL(playModeChanged(SignalHub::PlayMode)), this, SLOT(updateStopButton())); \
+    _connect(hub_, SIGNAL(playModeChanged(SignalHub::PlayMode)), this, SLOT(updatePositionSlider())); \
+    _connect(hub_, SIGNAL(volumeChanged(qreal)), this, SLOT(updateVolumeSlider())); \
 \
     static const char *status_signals[] = { \
       SIGNAL(played()), SIGNAL(paused()), SIGNAL(stopped()) \
     }; \
-    static const char *invalidate_slots[] = { \
-      SLOT(invalidatePlayButton()), \
-      SLOT(invalidateStopButton()), \
+    static const char *update_slots[] = { \
+      SLOT(updatePlayButton()), \
+      SLOT(updateStopButton()), \
     }; \
     BOOST_FOREACH (const char *signal, status_signals) \
-      BOOST_FOREACH (const char *slot, invalidate_slots) \
+      BOOST_FOREACH (const char *slot, update_slots) \
         _connect(hub_, signal, this, slot); \
   }
 
@@ -171,34 +171,34 @@ PlayerUi::createConnections()
   void \
   PlayerUi::_connect##Player() \
   { \
-    _connect(player_, SIGNAL(mediaTitleChanged(QString)), this, SLOT(invalidateTitle())); \
+    _connect(player_, SIGNAL(mediaTitleChanged(QString)), this, SLOT(updateTitle())); \
 \
-    _connect(player_, SIGNAL(mediaChanged()), this, SLOT(invalidateTitle())); \
-    _connect(player_, SIGNAL(mediaClosed()), this, SLOT(invalidateTitle())); \
+    _connect(player_, SIGNAL(mediaChanged()), this, SLOT(updateTitle())); \
+    _connect(player_, SIGNAL(mediaClosed()), this, SLOT(updateTitle())); \
     _connect(player_, SIGNAL(mediaClosed()), this, SLOT(clearProgressMessage())); \
-    _connect(player_, SIGNAL(mediaChanged()), this, SLOT(invalidatePositionSlider())); \
-    _connect(player_, SIGNAL(mediaClosed()), this, SLOT(invalidatePositionSlider())); \
-    _connect(player_, SIGNAL(mediaChanged()), this, SLOT(invalidatePositionButton())); \
-    _connect(player_, SIGNAL(mediaClosed()), this, SLOT(invalidatePositionButton())); \
+    _connect(player_, SIGNAL(mediaChanged()), this, SLOT(updatePositionSlider())); \
+    _connect(player_, SIGNAL(mediaClosed()), this, SLOT(updatePositionSlider())); \
+    _connect(player_, SIGNAL(mediaChanged()), this, SLOT(updatePositionButton())); \
+    _connect(player_, SIGNAL(mediaClosed()), this, SLOT(updatePositionButton())); \
 \
-    _connect(player_, SIGNAL(lengthChanged()), this, SLOT(invalidatePositionButton())); \
-    _connect(player_, SIGNAL(timeChanged()), this, SLOT(invalidatePositionButton())); \
-    _connect(player_, SIGNAL(positionChanged()), this, SLOT(invalidatePositionSlider())); \
+    _connect(player_, SIGNAL(lengthChanged()), this, SLOT(updatePositionButton())); \
+    _connect(player_, SIGNAL(timeChanged()), this, SLOT(updatePositionButton())); \
+    _connect(player_, SIGNAL(positionChanged()), this, SLOT(updatePositionSlider())); \
 \
-    _connect(player_, SIGNAL(playing()), this, SLOT(invalidateVolumeSlider())); \
+    _connect(player_, SIGNAL(playing()), this, SLOT(updateVolumeSlider())); \
  \
     static const char *status_signals[] = { \
       SIGNAL(playing()), SIGNAL(paused()), SIGNAL(stopped()) \
     }; \
-    static const char *invalidate_slots[] = { \
-      SLOT(invalidatePlayButton()), \
-      SLOT(invalidateStopButton()), \
-      SLOT(invalidateNextFrameButton()), \
-      SLOT(invalidateFastForwardButton()), \
-      SLOT(invalidateFastFastForwardButton()), \
+    static const char *update_slots[] = { \
+      SLOT(updatePlayButton()), \
+      SLOT(updateStopButton()), \
+      SLOT(updateNextFrameButton()), \
+      SLOT(updateFastForwardButton()), \
+      SLOT(updateFastFastForwardButton()), \
     }; \
     BOOST_FOREACH (const char *signal, status_signals) \
-      BOOST_FOREACH (const char *slot, invalidate_slots) \
+      BOOST_FOREACH (const char *slot, update_slots) \
         _connect(player_, signal, this, slot); \
   }
 
@@ -210,7 +210,7 @@ PlayerUi::createConnections()
   void \
   PlayerUi::_connect##Server() \
   { \
-    _connect(server_, SIGNAL(userChanged()), this, SLOT(invalidateUserButton())); \
+    _connect(server_, SIGNAL(userChanged()), this, SLOT(updateUserButton())); \
   }
 
   CREATE_SERVER_CONNECTIONS(connect)
@@ -236,23 +236,23 @@ void
 PlayerUi::setActive(bool active)
 {
   if (active) {
-    invalidateTitle();
-    invalidateVolumeSlider();
-    invalidatePositionSlider();
-    invalidatePositionButton();
-    invalidateProgressButton();
-    invalidatePlayButton();
-    invalidateStopButton();
-    invalidateNextFrameButton();
-    invalidateFastForwardButton();
-    invalidateFastFastForwardButton();
-    invalidateNextButton();
-    invalidatePreviousButton();
-    invalidatePlayerModeToggler();
-    invalidateWindowModeToggler();
-    invalidateInputCountButton();
+    updateTitle();
+    updateVolumeSlider();
+    updatePositionSlider();
+    updatePositionButton();
+    updateProgressButton();
+    updatePlayButton();
+    updateStopButton();
+    updateNextFrameButton();
+    updateFastForwardButton();
+    updateFastFastForwardButton();
+    updateNextButton();
+    updatePreviousButton();
+    updatePlayerModeToggler();
+    updateWindowModeToggler();
+    updateInputCountButton();
 
-    invalidateUserButton();
+    updateUserButton();
 
     if (!active_) {
       connectHub();
@@ -396,7 +396,7 @@ PlayerUi::setProgressMessage(const QString &text)
 }
 
 void
-PlayerUi::invalidateVolumeSlider()
+PlayerUi::updateVolumeSlider()
 {
   QSlider *slider = volumeSlider();
 
@@ -430,7 +430,7 @@ PlayerUi::invalidateVolumeSlider()
 }
 
 void
-PlayerUi::invalidatePositionSlider()
+PlayerUi::updatePositionSlider()
 {
   //if (!active_)
   //  return;
@@ -497,7 +497,7 @@ PlayerUi::invalidatePositionSlider()
 }
 
 void
-PlayerUi::invalidateUserButton()
+PlayerUi::updateUserButton()
 {
   QToolButton *b = userButton();
   if (server_->isAuthorized()) {
@@ -513,7 +513,7 @@ PlayerUi::invalidateUserButton()
 }
 
 void
-PlayerUi::invalidatePositionButton()
+PlayerUi::updatePositionButton()
 {
   QToolButton *b = positionButton();
 
@@ -549,7 +549,7 @@ PlayerUi::invalidatePositionButton()
 }
 
 void
-PlayerUi::invalidateProgressButton()
+PlayerUi::updateProgressButton()
 {
   progressButton()->setVisible(
     hub_->isMediaTokenMode() &&
@@ -558,7 +558,7 @@ PlayerUi::invalidateProgressButton()
 }
 
 void
-PlayerUi::invalidateTitle()
+PlayerUi::updateTitle()
 {
   if (!hub_->isMediaTokenMode())
     return;
@@ -578,7 +578,7 @@ PlayerUi::invalidateTitle()
 }
 
 void
-PlayerUi::invalidatePlayButton()
+PlayerUi::updatePlayButton()
 {
   QToolButton *b= playButton();
   switch (hub_->tokenMode()) {
@@ -614,7 +614,7 @@ PlayerUi::invalidatePlayButton()
 }
 
 void
-PlayerUi::invalidateStopButton()
+PlayerUi::updateStopButton()
 {
   QToolButton *b = stopButton();
   switch (hub_->tokenMode()) {
@@ -633,7 +633,7 @@ PlayerUi::invalidateStopButton()
 }
 
 void
-PlayerUi::invalidateNextFrameButton()
+PlayerUi::updateNextFrameButton()
 {
   QToolButton *b = nextFrameButton();
   if (!hub_->isMediaTokenMode()) {
@@ -659,7 +659,7 @@ PlayerUi::invalidateNextFrameButton()
 }
 
 void
-PlayerUi::invalidateFastForwardButton()
+PlayerUi::updateFastForwardButton()
 {
   QToolButton *b = fastForwardButton();
   if (!hub_->isMediaTokenMode()) {
@@ -684,7 +684,7 @@ PlayerUi::invalidateFastForwardButton()
 #endif // Q_OS_WIN
 }
 void
-PlayerUi::invalidateFastFastForwardButton()
+PlayerUi::updateFastFastForwardButton()
 {
   QToolButton *b = fastFastForwardButton();
   if (!hub_->isMediaTokenMode()) {
@@ -710,7 +710,7 @@ PlayerUi::invalidateFastFastForwardButton()
 }
 
 void
-PlayerUi::invalidateNextButton()
+PlayerUi::updateNextButton()
 {
   QToolButton *b = nextButton();
   if (!hub_->isMediaTokenMode()) {
@@ -727,7 +727,7 @@ PlayerUi::invalidateNextButton()
 }
 
 void
-PlayerUi::invalidatePreviousButton()
+PlayerUi::updatePreviousButton()
 {
   QToolButton *b = previousButton();
   if (!hub_->isMediaTokenMode()) {
@@ -775,24 +775,24 @@ PlayerUi::clickUserButton()
   if (!server_->isAuthorized())
     emit loginRequested();
   else {
-    emit invalidateUserMenuRequested();
+    emit updateUserMenuRequested();
     userButton()->showMenu();
   }
 }
 
 void
-PlayerUi::invalidatePlayerModeToggler()
+PlayerUi::updatePlayerModeToggler()
 {
   toggleMiniModeButton()->setChecked(hub_->isMiniPlayerMode());
   toggleEmbedModeButton()->setChecked(hub_->isEmbeddedPlayerMode());
 }
 
 void
-PlayerUi::invalidateWindowModeToggler()
+PlayerUi::updateWindowModeToggler()
 { toggleFullScreenModeButton()->setChecked(hub_->isFullScreenWindowMode()); }
 
 void
-PlayerUi::invalidateVisibleWidgets()
+PlayerUi::updateVisibleWidgets()
 {
   bool v = hub_->isMediaTokenMode();
   volumeSlider()->setVisible(v);
@@ -805,7 +805,7 @@ PlayerUi::invalidateVisibleWidgets()
 }
 
 void
-PlayerUi::invalidateInputCountButton()
+PlayerUi::updateInputCountButton()
 {
   QToolButton *b = inputCountButton();
   enum { total = 255 };
@@ -824,7 +824,7 @@ PlayerUi::invalidateInputCountButton()
 void
 PlayerUi::popupMenu()
 {
-  emit invalidateMenuRequested();
+  emit updateMenuRequested();
   menuButton()->showMenu();
 }
 

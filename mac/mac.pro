@@ -7,9 +7,6 @@ include(qtmac/qtmac.pri)
 include(qtstep/qtstep.pri)
 include(vlcstep/vlcstep.pri)
 #include(VLCKit/VLCKit.pri)
-#SUBDIRS += macdeploy
-#SUBDIRS += macdeployqt
 #SUBDIRS = VLCKit
-
 }
 # EOF

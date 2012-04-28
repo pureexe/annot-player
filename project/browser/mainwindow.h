@@ -4,7 +4,8 @@
 // mainwindow.h
 // 3/14/2012
 
-#include <module/webbrowser/webbrowser.h>
+#include "module/webbrowser/webbrowser.h"
+#include <QtCore/QTimer>
 
 class AcPlayer;
 class AcDownloader;
@@ -18,13 +19,14 @@ class MainWindow: public WebBrowser
   AcPlayer *playerDelegate_;
   AcDownloader *downloaderDelegate_;
 
+  QTimer *autoHideToolBarTimer_;
+
 public:
   explicit MainWindow(QWidget *parent = 0);
 
 public slots:
   void login();
   void newWindow();
-  virtual void showMessage(const QString &text); ///< \override
 protected:
   QStringList startupUrls();
   void saveRecentTabs();
@@ -37,12 +39,41 @@ protected slots:
   void loadCookieJar();
   void saveCookieJar();
 
+  void about();
+
+  void clip();
+  void reload();
+  void stop();
+  void zoomIn();
+  void zoomOut();
+  void zoomReset();
+  void inspect();
+  void scrollTop();
+  void scrollBottom();
+  void toggleFullScreen() { setFullScreen(!isFullScreen()); }
+  void setFullScreen(bool t);
+
   // - Events -
 public slots:
   virtual void setVisible(bool visible); ///< \override
 protected:
-  virtual bool event(QEvent *event); ///< \override
-  virtual void closeEvent(QCloseEvent *event); ///< \override
+  virtual bool event(QEvent *e); ///< \override
+  virtual void closeEvent(QCloseEvent *e); ///< \override
+  virtual void focusInEvent(QFocusEvent *e); ///< \override
+  virtual void mouseMoveEvent(QMouseEvent *event); ///< \override
+  virtual void mousePressEvent(QMouseEvent *event); ///< \override
+
+  bool isGlobalPosAroundToolBar(const QPoint &pos) const;
+
+protected slots:
+  void autoHideToolBar();
+
+  // - Helpers -
+  bool isValidWindowSize(const QSize &sz) const;
+
+private:
+  void createMenus();
+  void createGestures();
 };
 
 #endif // MAINWINDOW_H

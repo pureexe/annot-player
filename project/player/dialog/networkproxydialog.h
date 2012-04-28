@@ -8,8 +8,8 @@
 
 QT_BEGIN_NAMESPACE
 class QComboBox;
-class QLineEdit;
 class QLabel;
+class QLineEdit;
 class QToolButton;
 QT_END_NAMESPACE
 
@@ -36,7 +36,7 @@ public slots:
 protected slots:
   void save();
   void refresh();
-  void invalidateButtons();
+  void updateButtons();
 
 protected:
   //virtual void mouseDoubleClickEvent(QMouseEvent *event);

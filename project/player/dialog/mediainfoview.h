@@ -25,7 +25,7 @@ public:
   MediaInfoView(Player *player, DataManager *data, SignalHub *hub, QWidget *parent = 0);
 
 public slots:
-  void invalidateText(); ///< \override
+  void updateText(); ///< \override
 };
 
 #endif // MEDIAINFOVIEW_H

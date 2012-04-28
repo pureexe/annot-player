@@ -1,3 +1,4 @@
+#include <QDebug>
 // qtext/draggablemainwindow.cc
 // 9/3/2011
 
@@ -19,47 +20,36 @@ void
 QtExt::
 DraggableMainWindow::mousePressEvent(QMouseEvent *event)
 {
-  if (!draggable_) {
-    Base::mousePressEvent(event);
-    return;
-  }
-
-  if (event && event->button() == Qt::LeftButton
+  if (draggable_ && event->button() == Qt::LeftButton
       && dragPos_ == BAD_POS) {
     dragPos_ = event->globalPos() - frameGeometry().topLeft();
     event->accept();
   }
+  Base::mousePressEvent(event);
 }
 
 void
 QtExt::
 DraggableMainWindow::mouseMoveEvent(QMouseEvent *event)
 {
-  if (!draggable_) {
-    Base::mouseMoveEvent(event);
-    return;
-  }
-
-  if (event && event->buttons() & Qt::LeftButton
+  if (draggable_ && event->buttons() & Qt::LeftButton
       && dragPos_ != BAD_POS) {
     QPoint newPos = event->globalPos() - dragPos_;
     move(newPos);
     event->accept();
   }
+  Base::mouseMoveEvent(event);
 }
 
 void
 QtExt::
 DraggableMainWindow::mouseReleaseEvent(QMouseEvent *event)
 {
-  if (!draggable_) {
-    Base::mouseReleaseEvent(event);
-    return;
-  }
-
-  dragPos_ = BAD_POS;
-  if (event)
+  if (draggable_) {
+    dragPos_ = BAD_POS;
     event->accept();
+  }
+  Base::mouseReleaseEvent(event);
 }
 
 // EOF

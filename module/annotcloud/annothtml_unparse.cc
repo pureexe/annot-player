@@ -3,9 +3,9 @@
 
 #include "module/annotcloud/annothtml.h"
 #include "module/annotcloud/annottag.h"
-#include <QtWebKit/QWebPage>
-#include <QtWebKit/QWebFrame>
 #include <QtWebKit/QWebElement>
+#include <QtWebKit/QWebFrame>
+#include <QtWebKit/QWebPage>
 
 //#define DEBUG "annothtmlunparse"
 #include "module/debug/debug.h"

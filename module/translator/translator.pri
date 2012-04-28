@@ -5,7 +5,7 @@ include(../../config.pri)
 
 DEFINES += WITH_MODULE_TRANSLATOR
 
-INCLUDEPATH += $$PWD
+DEPENDPATH += $$PWD
 
 HEADERS += \
     $$PWD/translator_config.h \

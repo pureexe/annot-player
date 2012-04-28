@@ -9,7 +9,7 @@
 // player_p.h
 // 11/26/2011
 
-#include "player.h"
+#include "module/player/player.h"
 //#include "module/qtext/textcodec.h"
 #include "module/qtext/countdowntimer.h"
 #ifdef WITH_MODULE_VLCCORE
@@ -19,7 +19,7 @@
 #include <QtCore/QList>
 #include <memory>
 extern "C" {
-  #include <vlc/vlc.h>
+#  include <vlc/vlc.h>
 } // extern "C"
 #include <QtCore>
 
@@ -134,7 +134,7 @@ namespace { // anonymous
   #define VLC_ARGS                VLC_ARGS_RELEASE
 #endif
 
-// - PlayerImpl bases -
+// - PlayerPrivate bases -
 
 namespace { // anonymous: vlc handle
 

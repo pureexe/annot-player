@@ -4,6 +4,7 @@
 // eventlogger.h
 // 8/7/2011
 
+#include <QtCore/QList>
 #include <QtCore/QObject>
 
 QT_FORWARD_DECLARE_CLASS(QTimer)
@@ -74,6 +75,15 @@ public slots:
   void logAnnotationScaleChanged(qreal value);
   void logAnnotationRotationChanged(qreal value);
   void logAnnotationOffsetChanged(qint64 value);
+
+  void logPauseHoveredAnnotations(bool t);
+  void logResumeHoveredAnnotations(bool t);
+  void logRemoveHoveredAnnotations(bool t);
+  void logExileHoveredAnnotations(bool t);
+
+  void logPreferLocalDatabaseChanged(bool t);
+
+  void logSelectedUserIds(const QList<qint64> &uids);
 
 protected slots:
   void logAeroEnabledChanged(bool t);

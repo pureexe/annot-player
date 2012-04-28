@@ -4,6 +4,7 @@
 DEFINES += WITH_MODULE_QT
 
 #RESOURCES += $$PWD/qt.qrc
+DEPENDPATH += $$PWD
 
 HEADERS += $$PWD/qtrc.h
 

@@ -1,11 +1,8 @@
 # debug.pri
 # 10/16/2011
 
-HEADERS += \
-    $$PWD/debug.h
-
-DEFINES += WITH_MODULE_DEBUG
-
-#QT      += core
+DEFINES         += WITH_MODULE_DEBUG
+DEPENDPATH      += $$PWD
+HEADERS         += $$PWD/debug.h
 
 # EOF

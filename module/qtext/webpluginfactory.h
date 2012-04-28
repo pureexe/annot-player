@@ -33,7 +33,7 @@ public:
   virtual void refreshPlugins() { } ///< \override;
 
 protected slots:
-  void invalidatePlugins();
+  void updatePlugins();
 };
 
 } // namespace QtExt

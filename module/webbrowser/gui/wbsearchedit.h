@@ -1,13 +1,12 @@
 #ifndef WBSEARCHEDIT_H
 #define WBSEARCHEDIT_H
 
-// wbsearchedit.h
+// gui/wbsearchedit.h
 // 3/31/2012
 
 #include "wbcomboedit.h"
 
-QT_FORWARD_DECLARE_CLASS(QAction)
-QT_FORWARD_DECLARE_CLASS(QMenu)
+class WbSearchEngine;
 
 class WbSearchEdit : public WbComboEdit
 {
@@ -17,29 +16,47 @@ class WbSearchEdit : public WbComboEdit
 
 public:
   explicit WbSearchEdit(QWidget *parent = 0)
-    : Base(parent) { createActions(); }
+    : Base(parent), engine_(0) { init(); }
   explicit WbSearchEdit(const QStringList &items, QWidget *parent = 0)
-    : Base(items, parent) { createActions(); }
+    : Base(items, parent), engine_(0) { init(); }
+
+  void setEngines(const QList<WbSearchEngine *> engines)
+  { engines_ = engines; invalidateEngines(); }
+
+  QStringList recent() const;
 
 signals:
-  void textEntered(const QString &url);
+  void engineChanged(int engine);
 
   // - Actions -
+public slots:
+  void setText(const QString &text);
+  void clearText() { setText(QString()); }
+  void setEngine(int engine);
+  void addRecent(const QString &text);
+  void removeRecent(const QString &text);
+
+  int recentCount() const { return count() - engines_.size(); }
+
 protected slots:
-  void pasteAndGo();
+  void invalidateEngines();
+  void setEngineByIndex(int index);
+  virtual void submitText(); ///< \override
 
-  // - Events -
-protected:
-  //virtual void keyPressEvent(QKeyEvent *event); ///< \override
-  virtual void contextMenuEvent(QContextMenuEvent *event); ///< \override
-
-  static bool isClipboardEmpty();
+  void updateText(const QString &text);
 
 private:
-  void createActions();
+  void init()
+  { createActions(); createConnections(); }
 
+  void createActions();
+  void createConnections();
 protected:
-  QAction *pasteAndGoAct;
+  int engine_;
+
+  QList<WbSearchEngine *> engines_;
+
+  QString currentText_, lastText_;
 };
 
 #endif // WBSEARCHEDIT_H

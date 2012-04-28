@@ -12,7 +12,7 @@
 #ifdef Q_OS_WIN
 #  include "win/qtwin/qtwin.h"
 #endif // Q_OS_WIN
-#include "ac/acss.h"
+#include "project/common/acss.h"
 #include "module/qtext/toolbutton.h"
 #include "module/qtext/withsizehint.h"
 #include "module/qtext/overlaylayout.h"
@@ -77,8 +77,10 @@ EmbeddedPlayerUi::EmbeddedPlayerUi(SignalHub *hub, Player *player, ServerAgent *
   canvas_ = new EmbeddedCanvas(data, hub, player);
   canvas_->hide();
   connect(canvas_, SIGNAL(visibleChanged(bool)), infoView_, SLOT(setInvisible(bool)));
-  connect(canvas_, SIGNAL(visibleChanged(bool)), SLOT(invalidateGeometry()), Qt::QueuedConnection);
+  connect(canvas_, SIGNAL(visibleChanged(bool)), SLOT(updateGeometry()), Qt::QueuedConnection);
   connect(annot, SIGNAL(offsetChanged(qint64)), canvas_, SLOT(setOffset(qint64)));
+  connect(annot, SIGNAL(selectedUserIds(QList<qint64>)), canvas_, SLOT(setUserIds(QList<qint64>)));
+  connect(annot, SIGNAL(resumed()), canvas_, SLOT(clearUserIds()));
 
   createLayout();
 
@@ -89,7 +91,7 @@ EmbeddedPlayerUi::EmbeddedPlayerUi(SignalHub *hub, Player *player, ServerAgent *
 
   trackingTimer_ = new QTimer(this);
   trackingTimer_->setInterval(G_TRACKING_INTERVAL);
-  connect(trackingTimer_, SIGNAL(timeout()), SLOT(invalidateGeometry()));
+  connect(trackingTimer_, SIGNAL(timeout()), SLOT(updateGeometry()));
 
 #define CONNECT_TO_AUTOHIDE(_obj, _signal) \
   connect(_obj, _signal, SLOT(resetAutoHideTimeout())); \
@@ -101,12 +103,9 @@ EmbeddedPlayerUi::EmbeddedPlayerUi(SignalHub *hub, Player *player, ServerAgent *
 
   resize(QSize()); // temporarily
 
-  QShortcut *e = new QShortcut(QKeySequence("F2"), this);
-  connect(e, SIGNAL(activated()), hub, SLOT(toggleEmbeddedPlayerMode()));
-  QShortcut *m = new QShortcut(QKeySequence("F3"), this);
-  connect(m, SIGNAL(activated()), hub, SLOT(toggleMiniPlayerMode()));
-  QShortcut *f = new QShortcut(QKeySequence("F11"), this);
-  connect(f, SIGNAL(activated()), hub, SLOT(toggleFullScreenWindowMode()));
+  connect(new QShortcut(QKeySequence("F2"), this), SIGNAL(activated()), hub, SLOT(toggleEmbeddedPlayerMode()));
+  connect(new QShortcut(QKeySequence("F3"), this), SIGNAL(activated()), hub, SLOT(toggleMiniPlayerMode()));
+  connect(new QShortcut(QKeySequence("F11"), this), SIGNAL(activated()), hub, SLOT(toggleFullScreenWindowMode()));
 }
 
 void
@@ -185,8 +184,8 @@ EmbeddedPlayerUi::setFullScreenMode(bool t)
 {
   if (fullScreen_ != t) {
     fullScreen_ = t;
-    invalidateTrackingTimer();
-    invalidateGeometry();
+    updateTrackingTimer();
+    updateGeometry();
     emit fullScreenModeChanged(fullScreen_);
   }
 }
@@ -197,7 +196,7 @@ EmbeddedPlayerUi::setOnTop(bool t)
   if (top_ != t) {
     top_ = t;
     canvas_->setVisible(!top_);
-    invalidateGeometry();
+    updateGeometry();
   }
 }
 
@@ -255,13 +254,13 @@ EmbeddedPlayerUi::resetAutoHideTimeout()
 // - Geometry -
 
 void
-EmbeddedPlayerUi::invalidateGeometry()
+EmbeddedPlayerUi::updateGeometry()
 {
   if (fullScreen_ && QApplication::desktop()) {
     QRect r = QApplication::desktop()->screenGeometry(this);
     Q_ASSERT(!r.isNull);
 
-    // Invalidate size
+    // Update size
     int w_max = r.width(),
         h_hint = sizeHint().height();
     QSize newSize(w_max, h_hint);
@@ -341,7 +340,7 @@ EmbeddedPlayerUi::setContainerWindow(WId winId)
 {
   if (containerWindow_ != winId) {
     containerWindow_ = winId;
-    invalidateTrackingTimer();
+    updateTrackingTimer();
   }
 }
 
@@ -350,12 +349,12 @@ EmbeddedPlayerUi::setContainerWidget(QWidget *w)
 {
   if (containerWidget_ != w) {
     containerWidget_ = w;
-    invalidateTrackingTimer();
+    updateTrackingTimer();
   }
 }
 
 void
-EmbeddedPlayerUi::invalidateTrackingTimer()
+EmbeddedPlayerUi::updateTrackingTimer()
 {
   if (isVisible() && !fullScreen_ &&
       (containerWindow_ || containerWidget_))
@@ -386,13 +385,13 @@ EmbeddedPlayerUi::setVisible(bool visible)
     return;
 
   if (visible) {
-    canvas_->invalidateVisible();
+    canvas_->updateVisible();
     infoView_->refresh();
-    invalidateGeometry();
+    updateGeometry();
   }
 
   Base::setVisible(visible);
-  invalidateTrackingTimer();
+  updateTrackingTimer();
 }
 
 void
@@ -403,14 +402,14 @@ EmbeddedPlayerUi::showWhenEmbedded()
 }
 
 void
-EmbeddedPlayerUi::invalidateInputCountButton()
+EmbeddedPlayerUi::updateInputCountButton()
 {
 #ifdef Q_WS_MAC
 #  define PADDING "    "
 #else
 #  define PADDING "   "
 #endif // Q_WS_MAC
-  Base::invalidateInputCountButton();
+  Base::updateInputCountButton();
   QToolButton *b = inputCountButton();
   b->setText(b->text() + PADDING); // padding
 #undef PADDING

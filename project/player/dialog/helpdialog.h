@@ -4,7 +4,7 @@
 // helpdialog.h
 // 11/16/2011
 
-#include "ac/acwebwindow.h"
+#include "project/common/acwebwindow.h"
 #include <QtCore/QLocale>
 #include <QtCore/QUrl>
 

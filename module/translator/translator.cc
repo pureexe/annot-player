@@ -1,8 +1,8 @@
 // translator.cc
 // 11/2/2011
 
-#include "translator.h"
-#include "translator_config.h"
+#include "module/translator/translator.h"
+#include "module/translator/translator_config.h"
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkReply>
 #include <QtNetwork/QNetworkRequest>

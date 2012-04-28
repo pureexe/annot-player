@@ -8,9 +8,9 @@
 #include <QtCore/QStringList>
 
 QT_BEGIN_NAMESPACE
-class QToolButton;
 class QComboBox;
 class QRadioButton;
+class QToolButton;
 QT_END_NAMESPACE
 
 typedef QtExt::Dialog DeviceDialogBase;
@@ -45,8 +45,8 @@ public slots:
 protected slots:
   void ok();
 
-  void invalidateButtons();
-  void invalidateComboBox();
+  void updateButtons();
+  void updateComboBox();
 
 private:
   void createLayout();

@@ -9,7 +9,7 @@
 #include "global.h"
 #include "stylesheet.h"
 #include "tr.h"
-#include "ac/acui.h"
+#include "project/common/acui.h"
 #include "module/qtext/slider.h"
 #include "module/qtext/toolbutton.h"
 #include <QtGui>

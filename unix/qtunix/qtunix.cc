@@ -4,10 +4,10 @@
 // Mac devices:
 // http://www.filibeto.org/unix/macos/lib/dev/documentation/DeviceDrivers/Conceptual/WorkingWStorage/WorkingWStorage.pdf
 
-#include "qtunix.h"
+#include "qtunix/qtunix.h"
 #include <QtCore/QDir>
-#include <QtCore/QStringList>
 #include <QtCore/QProcess>
+#include <QtCore/QStringList>
 
 #ifdef Q_OS_MAC
 #  include <paths.h>
@@ -48,7 +48,7 @@ QtUnix::getDevicesWithType(DeviceType type)
     ret = getDevicesWithNameFilter("cdrom*");
 #endif // Q_OS_MAC
     break;
-  default: break;
+  default: ;
   }
   return ret;
 }

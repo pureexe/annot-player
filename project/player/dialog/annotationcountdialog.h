@@ -34,7 +34,7 @@ public slots:
   void setCount(int count);
 protected slots:
   void ok();
-  void invalidateTotalCount();
+  void updateTotalCount();
 
 private:
   void createLayout();

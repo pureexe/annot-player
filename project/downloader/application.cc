@@ -9,10 +9,10 @@
 #  include "mac/qtmac/qtmac.h"
 #elif defined Q_OS_UNIX
 extern "C" {
-  #include <sys/types.h>
-  #include <sys/stat.h>
-  #include <unistd.h>
-  #include <fcntl.h>
+#  include <sys/types.h>
+#  include <sys/stat.h>
+#  include <unistd.h>
+#  include <fcntl.h>
 } // extern "C"
 #endif // Q_OS_
 #include <QtGui>

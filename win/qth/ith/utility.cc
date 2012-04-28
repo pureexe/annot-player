@@ -1121,7 +1121,7 @@ TextThread::sendText()
 }
 
 void
-TextThread::invalidateName()
+TextThread::updateName()
 {
   name_.clear();
   WCHAR buf[0x200];

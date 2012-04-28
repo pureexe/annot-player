@@ -1,12 +1,12 @@
 // mrlresolvermanager.cc
 // 1/25/2012
 
-#include "mrlresolvermanager.h"
-#include "mrlresolver.h"
-#include "youtubemrlresolver.h"
-#include "googlevideomrlresolver.h"
-#include "youkumrlresolver.h"
-#include "luamrlresolver.h"
+#include "module/mrlresolver/mrlresolvermanager.h"
+#include "module/mrlresolver/mrlresolver.h"
+#include "module/mrlresolver/googlevideomrlresolver.h"
+#include "module/mrlresolver/luamrlresolver.h"
+#include "module/mrlresolver/youkumrlresolver.h"
+#include "module/mrlresolver/youtubemrlresolver.h"
 
 //#define DEBUG "mrlresolvermanager"
 #include "module/debug/debug.h"
@@ -72,5 +72,9 @@ MrlResolverManager::resolveSubtitle(int id, const QString &href)
   }
   return resolvers_[id]->resolveSubtitle(href);
 }
+
+QString
+MrlResolverManager::autoCompleteUrl(const QString &url)
+{ return url.startsWith("ttp://") ? QString(url).prepend('h') : url; }
 
 // EOF

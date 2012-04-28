@@ -27,11 +27,11 @@ public:
 
 public slots:
   virtual void setVisible(bool t); ///< \override
-  void refresh() { invalidateText(); }
+  void refresh() { updateText(); }
   void setInvisible(bool t) { setVisible(!t); }
 
 protected slots:
-  void invalidateText(); ///< \override
+  void updateText(); ///< \override
 
 protected:
   QString timeToString(qint64 secs) const;

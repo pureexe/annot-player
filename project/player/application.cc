@@ -9,13 +9,13 @@
 #endif // Q_OS_WIN
 #ifdef Q_OS_MAC
 #  include "mac/qtmac/qtmac.h"
-#  include "unix/qtunix/qtunix.h"
-#elif defined Q_OS_UNIX
+#endif // Q_OS_MAC
+#ifdef Q_OS_UNIX
 extern "C" {
-  #include <sys/types.h>
-  #include <sys/stat.h>
-  #include <unistd.h>
-  #include <fcntl.h>
+#  include <sys/types.h>
+#  include <sys/stat.h>
+#  include <unistd.h>
+#  include <fcntl.h>
 } // extern "C"
 #endif // Q_OS_
 #include <QtGui>
@@ -92,34 +92,6 @@ Application::createDirectories()
   QDir logs(G_PATH_LOGS);
   if (!logs.exists())
     logs.mkpath(logs.absolutePath());
-}
-
-void
-Application::infectDownloadDirectory()
-{
-  QString path = G_PATH_DOWNLOADS;
-  QDir dir(path);
-  if (!dir.exists())
-    dir.mkpath(dir.absolutePath());
-#ifdef Q_OS_MAC
-  QString targetIcon = path + "/" "Icon\r",
-          srcIcon = REZ_ICON_VIDEO;
-  bool ok = !QFile::exists(targetIcon) && QFile::exists(srcIcon) &&
-    QtUnix::cp(srcIcon, targetIcon) &&
-    QtMac::setFileAttributes(path, QtMac::FA_CustomIcon);
-  Q_UNUSED(ok);
-  DOUT("ok =" << ok);
-
-#elif defined Q_OS_WIN
-  QString targetIni = path + "/" "desktop.ini",
-          srcIni = QtWin::getVideoPath() + "/" "desktop.ini";
-  bool ok = !QFile::exists(targetIni) && QFile::exists(srcIni) &&
-    QFile::copy(srcIni, targetIni) &&
-    QtWin::setFileAttributes(targetIni, QtWin::SystemAttribute | QtWin::HiddenAttribute | QtWin::ArchiveAttribute) &&
-    QtWin::setFileAttributes(path, QtWin::ReadOnlyAttribute);
-  Q_UNUSED(ok);
-  DOUT("ok =" << ok);
-#endif Q_OS_
 }
 
 // - Properties -

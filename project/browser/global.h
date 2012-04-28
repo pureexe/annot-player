@@ -4,7 +4,7 @@
 // global.h
 // 7/16/2011
 // Global parameters.
-#include "ac/acglobal.h"
+#include "project/common/acglobal.h"
 #ifdef Q_WS_MAC
 #  include "mac/qtmac/qtmac.h"
 #endif // Q_WS_MAC

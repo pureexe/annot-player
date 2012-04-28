@@ -7,8 +7,8 @@
 #include "rc.h"
 #include "global.h"
 #include "logger.h"
-#include "ac/acui.h"
-#include "ac/acfilteredtableview.h"
+#include "project/common/acui.h"
+#include "project/common/acfilteredtableview.h"
 #include "module/serveragent/serveragent.h"
 #include <QtGui>
 
@@ -56,10 +56,8 @@ TokenView::TokenView(ServerAgent *server, QWidget *parent)
   createActions();
 
   // Shortcuts
-  QShortcut *cancelShortcut = new QShortcut(QKeySequence("Esc"), this);
-  connect(cancelShortcut, SIGNAL(activated()), SLOT(hide()));
-  QShortcut *closeShortcut = new QShortcut(QKeySequence("CTRL+W"), this);
-  connect(closeShortcut, SIGNAL(activated()), SLOT(hide()));
+  connect(new QShortcut(QKeySequence("Esc"), this), SIGNAL(activated()), SLOT(hide()));
+  connect(new QShortcut(QKeySequence("CTRL+W"), this), SIGNAL(activated()), SLOT(hide()));
 
   // Set initial states
 
@@ -231,14 +229,14 @@ void
 TokenView::setToken(const Token &token)
 {
   token_ = token;
-  invalidateTokenLabels();
+  updateTokenLabels();
 }
 
 void
 TokenView::clearToken()
 {
   token_.setId(0);
-  invalidateTokenLabels();
+  updateTokenLabels();
 }
 
 bool
@@ -284,7 +282,7 @@ TokenView::addAlias(const Alias &a)
 #undef FORMAT_STATUS
 
   if (isVisible())
-    tableView_->invalidateCount();
+    tableView_->updateCount();
 }
 
 void
@@ -325,7 +323,7 @@ void TokenView::dragLeaveEvent(QDragLeaveEvent *event)     { emit dragLeaveEvent
 void TokenView::dropEvent(QDropEvent *event)               { emit dropEventReceived(event); }
 
 void
-TokenView::invalidateTokenLabels()
+TokenView::updateTokenLabels()
 {
 #define FORMAT_TIME(_secs)      QDateTime::fromMSecsSinceEpoch(_secs * 1000).toString()
 #define FORMAT_COUNT(_count)    QString::number(_count)
@@ -526,7 +524,7 @@ void
 TokenView::setVisible(bool visible)
 {
   if (visible)
-    tableView_->invalidateCount();
+    tableView_->updateCount();
   Base::setVisible(visible);
 }
 

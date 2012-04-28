@@ -4,8 +4,8 @@
 // stoppable.h
 // 2/14/2011
 
-#include <QtCore/QThread>
 #include <QtCore/QRunnable>
+#include <QtCore/QThread>
 
 class Stoppable
 {

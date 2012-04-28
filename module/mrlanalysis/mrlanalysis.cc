@@ -1,7 +1,7 @@
 // mrlanalysis.cc
 // 4/11/2012
 
-#include "mrlanalysis.h"
+#include "module/mrlanalysis/mrlanalysis.h"
 
 //#define DEBUG "mrlanalysis"
 #include "module/debug/debug.h"

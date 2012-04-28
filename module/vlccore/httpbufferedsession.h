@@ -65,9 +65,9 @@ public slots:
 protected slots:
   virtual void save(); ///< \override
 
-  void invalidateSize();
-  void invalidateContentType();
-  void invalidateFileName();
+  void updateSize();
+  void updateContentType();
+  void updateFileName();
   void finish();
   void waitForReplyReady();
 protected:

@@ -2,8 +2,8 @@
 // iht/hookman.h
 // 10/14/2011
 // TODO: clean up this file
-#include "ith/text.h"
 #include "ith/AVL.h"
+#include "ith/text.h"
 #include <qt_windows.h>
 
 class BitMap

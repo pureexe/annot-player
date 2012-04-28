@@ -4,9 +4,9 @@
 // mrlinfo.h
 // 1/25/2011
 
+#include <QtCore/QList>
 #include <QtCore/QMetaType>
 #include <QtCore/QString>
-#include <QtCore/QList>
 
 struct MrlInfo
 {

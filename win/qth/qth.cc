@@ -2,7 +2,7 @@
 
 #include "qth.h"
 #include "ith.h"
-#include "win/qtwin/qtwin.h"
+#include "qtwin/qtwin.h"
 #include <QtCore>
 
 //#define DEBUG "qth"

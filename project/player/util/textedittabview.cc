@@ -3,8 +3,8 @@
 
 #include "textedittabview.h"
 #include "tr.h"
-#include "ac/acss.h"
-#include "ac/actextview.h"
+#include "project/common/acss.h"
+#include "project/common/actextview.h"
 #include "module/qtext/toolbutton.h"
 #include "module/qtext/toolbuttonwithid.h"
 #include <QtGui>
@@ -49,21 +49,16 @@ TextEditTabView::finalizeLayout()
     setContentsMargins(0, 0, 0, 0);
   } setLayout(rows);
 
-  for (int i = 0; i < qMin(tabCount_,8); i++) {
-    QShortcut *c = new QShortcut(QKeySequence("CTRL+" + QString::number(i+1)), this);
-    connect(c, SIGNAL(activated()), tabButtons_[i], SLOT(click()));
-  }
-  QShortcut *c0 = new QShortcut(QKeySequence("CTRL+0"), this);
-  connect(c0, SIGNAL(activated()), tabButtons_[tabCount_ - 1], SLOT(click()));
+  connect(new QShortcut(QKeySequence("CTRL+0"), this),
+          SIGNAL(activated()), tabButtons_[tabCount_ - 1], SLOT(click()));
+  for (int i = 0; i < qMin(tabCount_,8); i++)
+    connect(new QShortcut(QKeySequence("CTRL+" + QString::number(i+1)), this), SIGNAL(activated()),
+            tabButtons_[i], SLOT(click()));
 
-  QShortcut *next = new QShortcut(QKeySequence("CTRL+TAB"), this);
-  connect(next, SIGNAL(activated()), SLOT(nextTab()));
-  QShortcut *prev = new QShortcut(QKeySequence("CTRL+SHIFT+TAB"), this);
-  connect(prev, SIGNAL(activated()), SLOT(previousTab()));
-  QShortcut *nextT = new QShortcut(QKeySequence("CTRL+SHIFT+]"), this);
-  connect(nextT , SIGNAL(activated()), SLOT(nextTab()));
-  QShortcut *prevT = new QShortcut(QKeySequence("CTRL+SHIFT+["), this);
-  connect(prevT , SIGNAL(activated()), SLOT(previousTab()));
+  connect(new QShortcut(QKeySequence("CTRL+TAB"), this), SIGNAL(activated()), SLOT(nextTab()));
+  connect(new QShortcut(QKeySequence("CTRL+SHIFT+TAB"), this), SIGNAL(activated()), SLOT(previousTab()));
+  connect(new QShortcut(QKeySequence("CTRL+}"), this) , SIGNAL(activated()), SLOT(nextTab()));
+  connect(new QShortcut(QKeySequence("CTRL+{"), this) , SIGNAL(activated()), SLOT(previousTab()));
 
   if (tabCount_ > 0)
     setTab(0);

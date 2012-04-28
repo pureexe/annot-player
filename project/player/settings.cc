@@ -29,6 +29,7 @@ using namespace AnnotCloud;
 
 #define SK_ANNOTLANGUAGES "AnnotLanguages"
 #define SK_LIVE         "Live"
+#define SK_PREFERLOCALDB  "PreferLocalDatabase"
 #define SK_MENUBAR      "MenuBar"
 #define SK_TRANSLATE    "Translate"
 #define SK_SUBTITLECOLOR "SubtitleColor"
@@ -238,6 +239,14 @@ Settings::isLive() const
 void
 Settings::setLive(bool t)
 { setValue(SK_LIVE, t); }
+
+bool
+Settings::preferLocalDatabase() const
+{ return value(SK_PREFERLOCALDB, true).toBool(); }
+
+void
+Settings::setPreferLocalDatabase(bool t)
+{ setValue(SK_PREFERLOCALDB, t); }
 
 QString
 Settings::recentPath() const

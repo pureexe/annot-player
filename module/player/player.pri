@@ -6,7 +6,7 @@ include($$ROOTDIR/module/vlccore/vlccore.pri)
 
 DEFINES += WITH_MODULE_PLAYER
 
-INCLUDEPATH += $$PWD
+DEPENDPATH += $$PWD
 
 HEADERS += \
     $$PWD/player_p.h \

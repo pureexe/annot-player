@@ -4,7 +4,7 @@
 // securebufferedfifostream.h
 // 3/14/2012
 
-#include "bufferedfifostream.h"
+#include "module/stream/bufferedfifostream.h"
 #include <QtCore/QWaitCondition>
 
 class SecureBufferedFifoStream : public BufferedFifoStream
