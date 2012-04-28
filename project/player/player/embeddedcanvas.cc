@@ -169,6 +169,12 @@ EmbeddedCanvas::paintHistogram(QPainter &painter, const QRect &view, const Annot
     }
 
   int maxY = qMax(top[0], 1);
+  Q_ASSERT(maxY);
+
+  int relativeY = top[2] ? top[2] :
+                  top[1] ? top[1] :
+                  top[0] ? top[0] : maxY;
+  Q_ASSERT(relativeY);
 
   if (maxX < Stride)
     maxX = Stride;
@@ -181,7 +187,6 @@ EmbeddedCanvas::paintHistogram(QPainter &painter, const QRect &view, const Annot
 
   Q_ASSERT(maxX);
   Q_ASSERT(rangeX);
-  Q_ASSERT(maxY);
 
   // Draw histogram
   int width = view.width(),
@@ -246,7 +251,7 @@ EmbeddedCanvas::paintHistogram(QPainter &painter, const QRect &view, const Annot
     QColor axisColor(Qt::green);
     axisColor.setAlpha(alpha);
 
-    QColor fontColor(Qt::green);
+    QColor fontColor(Qt::cyan);
     fontColor.setAlpha(FontAlpha);
 
     // line 1/2
@@ -263,7 +268,7 @@ EmbeddedCanvas::paintHistogram(QPainter &painter, const QRect &view, const Annot
       QRect r(view.x() + FontMarginLeft, view.y() + y - FontHeight - MarginTop,
               axisLength - (FontMarginLeft + FontMarginRight), FontHeight);
       painter.drawText(r, Qt::AlignTop | Qt::AlignLeft, label);
-      label = "%50";
+      label = "%" + QString::number(50 * maxY/relativeY);
       painter.drawText(r, Qt::AlignTop | Qt::AlignRight, label);
     }
 
@@ -280,7 +285,7 @@ EmbeddedCanvas::paintHistogram(QPainter &painter, const QRect &view, const Annot
       QRect r(view.x() + FontMarginLeft, view.y() + y - FontHeight - MarginTop,
               axisLength - (FontMarginLeft + FontMarginRight), FontHeight);
       painter.drawText(r, Qt::AlignTop | Qt::AlignLeft, label);
-      label = "%25";
+      label = "%" + QString::number(25 * maxY/relativeY);
       painter.drawText(r, Qt::AlignTop | Qt::AlignRight, label);
     }
   }
@@ -291,17 +296,10 @@ EmbeddedCanvas::paintHistogram(QPainter &painter, const QRect &view, const Annot
     enum { MinPeakCount = 6 };
     enum { MaxTries = 3 };
     enum { distanceX = 30 }; // 3sec * 30 = 1.5min
-    int t = maxY;
-    for (int i = TopCount -1; i>=0; i--)
-      if (top[i]) {
-        t = top[i];
-        break;
-      }
-    Q_ASSERT(t);
-    int deltaY = qMax(t / 10, 1);
-    int minY = t / 2 + 2;
+    int deltaY = qMax(relativeY / 10, 1);
+    int minY = relativeY / 2 + 2;
     Q_ASSERT(minY >= deltaY);
-    int limitY = qMax(t * 5/8, minY);
+    int limitY = qMax(relativeY * 5/8, minY);
     while (peaks.size() < MinPeakCount && limitY && limitY >= minY) {
       peaks.clear();
       for (Histogram::ConstIterator i = hist.begin(); i != hist.end(); ++i) {
@@ -343,7 +341,7 @@ EmbeddedCanvas::paintHistogram(QPainter &painter, const QRect &view, const Annot
       QTime t = QtExt::msecs2time(msecs);
       QString pos = msecs >= 3600 * 1000 ? t.toString("h:mm:ss")
                                          : t.toString("m:ss");
-      QString value = QString("<%1%,").arg(QString::number(peak.y()*100/maxY));
+      QString value = QString("<%1%,").arg(QString::number(peak.y()*100/relativeY));
 
       if (peak.y() >= maxY * 0.9) {
         //pos += QString("(%1)").arg(tr("peak"));

@@ -82,6 +82,7 @@ WebBrowser::searchEngineForAddress(const QString &address) const
   if (rx.indexIn(address) >= 0) {
     Q_ASSERT(rx.captureCount() == 1);
     QString a = rx.cap(1);
+    DOUT("keyword =" << a);
     foreach (const WbSearchEngine *e, searchEngines_)
       if (e->acronyms().contains(a, Qt::CaseInsensitive))
         return e->id();
@@ -95,9 +96,9 @@ WebBrowser::completeUrl(const QString &url) const
   int i, j;
   QString ret = url.trimmed();
   if (!ret.contains(QRegExp("^\\w+://"))) {
-    int se = searchEngineForAddress(url);
+    int se = searchEngineForAddress(ret);
     if (se >= 0 && se < searchEngines_.size()) {
-      ret = url;
+      DOUT("searchEngine =" << se);
       ret.remove(QRegExp("^\\S*\\s"));
       ret = ret.trimmed();
       const_cast<Self *>(this)->addRecentSearch(ret);

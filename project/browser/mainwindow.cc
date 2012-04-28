@@ -85,6 +85,7 @@ MainWindow::MainWindow(QWidget *parent)
   setCacheDirectory(G_PATH_CACHES);
 
   setBlockedUrls(QList<QUrl>()
+    << QString("http://googlesyndication.com")
     << QString("http://wangmeng.baidu.com")
     << QString("http://cpro.baidu.com")
     << QString("http://static.loli.my/ad-images")

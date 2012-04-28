@@ -9,14 +9,20 @@ Annot Project
           Prefer cached offline annotations by default.
         * Able to select annotation and draw all annotations from the its user.
         * Added mouse gestures to manipulate annotations. Shortcuts follow.
-          ModifierKey | MouseButton
-          * SHIFT    | Left+Right or Left+Middle : Exile annotations by hovering
-          * CTRL     | Left  : Capture annotations using rubberband
-          * ALT      | Right : Release annotations using rubberband
-          * CTRL+ALT | Middle: Kill annotations using rubberband
-          * CTRL+SHIFT     | : Capture annotations by hovering
-          * ALT+SHIF       | : Release annotations by hovering
-          * CTRL+ALT+SHIFT | : Kill annotations by hovering
+          Modifier Keys + Mouse Buttons
+          * SHIFT          + LButton : Exile annotations by hovering
+          * CTRL           + LButton : Capture annotations using rubberband
+                             LButton(FullScreen)
+          * ALT            + LButton : Release annotations using rubberband
+                             RButton(FullScreen)
+          * CTRL+ALT       + LButton : Kill annotations using rubberband
+                             MButton(FullScreen)
+          * CTRL+SHIFT     + LButton : Capture annotations by hovering
+            CTRL           + LButton+RButton
+          * ALT+SHIFT      + Left : Release annotations by hovering
+            ALT            + LButton+RButton
+          * CTRL+ALT+SHIFT + Left : Kill annotations by hovering
+            SHIFT          + LButton+RButton
         * Browser improved.
           * Added multiple search engines.
           * Always higlight selected text.

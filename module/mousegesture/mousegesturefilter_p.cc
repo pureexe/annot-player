@@ -19,7 +19,7 @@
 bool
 MouseGestureFilterPrivate::endGesture(const QPoint &pos)
 {
-  bool triggered = true;;
+  bool triggered = false;;
   if (!positions_.empty() && pos != positions_.back())
     positions_.push_back(pos);
   DOUT("enter: positions count =" << positions_.size());

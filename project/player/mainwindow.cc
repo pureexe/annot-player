@@ -4546,12 +4546,10 @@ MainWindow::mousePressEvent(QMouseEvent *event)
         if (videoView_->isViewVisible() && player_->titleCount() > 1)
           videoView_->setViewMousePressPos(event->globalPos());
 #endif // Q_OS_MAC
-        if (!isFullScreen() && dragPos_ == BAD_POS) {
+        if (!isFullScreen() && dragPos_ == BAD_POS)
           dragPos_ = event->globalPos() - frameGeometry().topLeft();
-          event->accept();
-        }
       }
-    } break;
+    } event->accept(); break;
 
   case Qt::MiddleButton:
     if (resumeRubberBand_->isPressed())
@@ -4593,13 +4591,37 @@ MainWindow::mousePressEvent(QMouseEvent *event)
 #ifndef Q_WS_MAC
     resumeRubberBand_->press(mapFromGlobal(event->globalPos()));
 #endif // !Q_WS_MAC
+    event->accept();
     break;
 
   case Qt::LeftButton + Qt::MiddleButton:
   case Qt::LeftButton + Qt::RightButton:
   case Qt::MiddleButton + Qt::RightButton:
-    annotationView_->setHoveredItemExiled(true);
-    QApplication::setOverrideCursor(Qt::PointingHandCursor);
+    if (event->modifiers() == Qt::ShiftModifier
+#ifdef Q_OS_WIN
+        || QtWin::isKeyShiftPressed()
+#endif // Q_OS_WIN
+    ) {
+      annotationView_->setHoveredItemRemoved(true);
+      QApplication::setOverrideCursor(Qt::ForbiddenCursor);
+    } else if (event->modifiers() & Qt::ControlModifier
+#ifdef Q_OS_WIN
+        || QtWin::isKeyControlPressed()
+#endif // Q_OS_WIN
+    ) {
+      annotationView_->setHoveredItemPaused(true);
+      QApplication::setOverrideCursor(Qt::ClosedHandCursor);
+    } else if (event->modifiers() & Qt::AltModifier
+#ifdef Q_OS_WIN
+        || QtWin::isKeyAltPressed()
+#endif // Q_OS_WIN
+    ) {
+      annotationView_->setHoveredItemResumed(true);
+      QApplication::setOverrideCursor(Qt::OpenHandCursor);
+    } else {
+      annotationView_->setHoveredItemExiled(true);
+      QApplication::setOverrideCursor(Qt::PointingHandCursor);
+    } event->accept(); break;
   default: ;
   }
 

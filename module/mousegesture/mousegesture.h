@@ -40,7 +40,7 @@ public:
 
 public:
   explicit MouseGesture(const DirectionList &directions, const QString &description = QString(), QObject *parent = 0)
-    : Base(parent), description_(description), directions_(directions) { }
+    : Base(parent), directions_(directions), description_(description) { }
 
   const DirectionList &directions() const { return directions_; }
   const QString description() const { return description_; }

@@ -56,7 +56,11 @@ MouseGestureFilter::eventFilter(QObject *obj, QEvent *event)
   case QEvent::MouseButtonPress:   ret = mousePressEventFilter(static_cast<QMouseEvent *>(event)); break;
   case QEvent::MouseButtonRelease: ret = mouseReleaseEventFilter(static_cast<QMouseEvent *>(event)); break;
   case QEvent::MouseMove:          ret = mouseMoveEventFilter(static_cast<QMouseEvent *>(event)); break;
-  case QEvent::ContextMenu:        ret = (buttons_ & Qt::RightButton) && cancelContextMenu_; cancelContextMenu_ = false; break;
+  case QEvent::ContextMenu:
+    ret = (buttons_ & Qt::RightButton) && cancelContextMenu_;
+    cancelContextMenu_ = false;
+    DOUT("contextMenu: ret =" << ret);
+    break;
   default: ret = false;
   }
   return ret || Base::eventFilter(obj, event);
@@ -84,6 +88,7 @@ MouseGestureFilter::mouseReleaseEventFilter(QMouseEvent *event)
     cancelContextMenu_ = d_->endGesture(event->pos()); // cancel context menu if triggered
     active_ = false;
     ret = true;
+    DOUT("cancelContextMenu =" << cancelContextMenu_);
   }
   DOUT("exit: ret =" << ret);
   return ret;
@@ -92,10 +97,10 @@ MouseGestureFilter::mouseReleaseEventFilter(QMouseEvent *event)
 bool
 MouseGestureFilter::mouseMoveEventFilter(QMouseEvent *event)
 {
-  DOUT("enter");
+  //DOUT("enter");
   if (active_)
     d_->addPoint(event->pos());
-  DOUT("exit: ret =" << active_);
+  //DOUT("exit: ret =" << active_);
   return active_;
 }
 
