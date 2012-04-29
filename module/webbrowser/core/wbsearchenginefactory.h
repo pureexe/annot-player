@@ -40,8 +40,8 @@ protected:
   explicit WbSearchEngineFactory(QObject *parent = 0) : Base(parent) { }
 
 public:
-  enum Engine { Google = 0, GoogleImages, Youtube, Nicovideo, Bilibili, Youku, WikiJa,
-                WikiEn, WikiZh, Bing, Manpage, CPlusPlus, Qt, Osx, Msdn, Bash, Cmd,
+  enum Engine { Google = 0, GoogleImages, Bing, Youtube, Nicovideo, Bilibili, Youku, WikiJa,
+                WikiEn, WikiZh, Manpage, CPlusPlus, Qt, Osx, Msdn, Bash, Cmd,
                 EngineCount, VisibleEngineCount = WikiJa +1
   };
 

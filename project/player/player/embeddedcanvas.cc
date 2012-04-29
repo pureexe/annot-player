@@ -268,7 +268,8 @@ EmbeddedCanvas::paintHistogram(QPainter &painter, const QRect &view, const Annot
       QRect r(view.x() + FontMarginLeft, view.y() + y - FontHeight - MarginTop,
               axisLength - (FontMarginLeft + FontMarginRight), FontHeight);
       painter.drawText(r, Qt::AlignTop | Qt::AlignLeft, label);
-      label = "%" + QString::number(50 * maxY/relativeY);
+      //label = "%" + QString::number(50 * maxY/relativeY);
+      label = "%50";
       painter.drawText(r, Qt::AlignTop | Qt::AlignRight, label);
     }
 
@@ -285,7 +286,8 @@ EmbeddedCanvas::paintHistogram(QPainter &painter, const QRect &view, const Annot
       QRect r(view.x() + FontMarginLeft, view.y() + y - FontHeight - MarginTop,
               axisLength - (FontMarginLeft + FontMarginRight), FontHeight);
       painter.drawText(r, Qt::AlignTop | Qt::AlignLeft, label);
-      label = "%" + QString::number(25 * maxY/relativeY);
+      //label = "%" + QString::number(25 * maxY/relativeY);
+      label = "%25";
       painter.drawText(r, Qt::AlignTop | Qt::AlignRight, label);
     }
   }
@@ -341,7 +343,7 @@ EmbeddedCanvas::paintHistogram(QPainter &painter, const QRect &view, const Annot
       QTime t = QtExt::msecs2time(msecs);
       QString pos = msecs >= 3600 * 1000 ? t.toString("h:mm:ss")
                                          : t.toString("m:ss");
-      QString value = QString("<%1%,").arg(QString::number(peak.y()*100/relativeY));
+      QString value = QString("<%1%,").arg(QString::number(peak.y()*100/maxY));
 
       if (peak.y() >= maxY * 0.9) {
         //pos += QString("(%1)").arg(tr("peak"));

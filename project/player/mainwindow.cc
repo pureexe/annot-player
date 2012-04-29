@@ -1373,7 +1373,7 @@ MainWindow::createActions()
     connect(up, SIGNAL(activated()), SLOT(volumeUp()));
     QShortcut *down = new QShortcut(QKeySequence("CTRL+DOWN"), this);
     connect(down, SIGNAL(activated()), SLOT(volumeDown()));
-    QShortcut *csup = new QShortcut(QKeySequence("CTRL+SHIFTUP"), this);
+    QShortcut *csup = new QShortcut(QKeySequence("CTRL+SHIFT+UP"), this);
     connect(csup, SIGNAL(activated()), SLOT(volumeUp()));
     QShortcut *csdown = new QShortcut(QKeySequence("CTRL+SHIFT+DOWN"), this);
     connect(csdown, SIGNAL(activated()), SLOT(volumeDown()));

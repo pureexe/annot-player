@@ -221,6 +221,7 @@ WebBrowser::setupUi()
   connect(ui_->addressEdit, SIGNAL(openUrlWithAcPlayerRequested(QString)), SIGNAL(openUrlWithAcPlayerRequested(QString)));
   connect(ui_->addressEdit, SIGNAL(importUrlToAcPlayerRequested(QString)), SIGNAL(importUrlToAcPlayerRequested(QString)));
   connect(ui_->addressEdit, SIGNAL(openUrlWithAcDownloaderRequested(QString)), SIGNAL(openUrlWithAcDownloaderRequested(QString)));
+  connect(ui_->addressEdit, SIGNAL(openUrlWithOperatingSystemRequested(QString)), SLOT(openUrlWithOperatingSystem(QString)));
   connect(ui_->backButton, SIGNAL(clicked()), SLOT(back()));
   connect(ui_->forwardButton, SIGNAL(clicked()), SLOT(forward()));
   connect(ui_->reloadButton, SIGNAL(clicked()), SLOT(reload()));
@@ -468,9 +469,12 @@ WebBrowser::addRecentUrls(const QStringList &urls)
 void
 WebBrowser::addRecentUrl(const QString &url)
 {
+  //DOUT("enter: url =" << url);
   if (url.contains(ANNOT_HOST_IP) ||
-      url.contains(ANNOT_DOC_IP))
+      url.contains(ANNOT_DOC_IP)) {
+    //DOUT("exit: skip my hosts");
     return;
+  }
   QString address = tidyUrl(url);
   QComboBox *edit = ui_->addressEdit;
   int index = edit->findText(address);
@@ -479,6 +483,7 @@ WebBrowser::addRecentUrl(const QString &url)
   edit->insertItem(0, address); // FIXME: This will change current item!
   if (edit->count() > MAX_HISTORY)
     edit->removeItem(MAX_HISTORY);
+  //DOUT("exit");
 }
 
 QStringList
@@ -564,6 +569,18 @@ WebBrowser::closeTab(int tab)
   }
   if (tabCount() <= 0)
     close();
+}
+
+void
+WebBrowser::openUrlWithOperatingSystem(const QString &url)
+{
+  QString href = url.trimmed();
+  if (!href.isEmpty() && !href.contains("://"))
+    href.prepend("http://");
+  if (!href.isEmpty()) {
+    showMessage(tr("openning") + ": " + href);
+    QDesktopServices::openUrl(QUrl(href));
+  }
 }
 
 void

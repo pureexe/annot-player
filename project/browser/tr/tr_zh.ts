@@ -689,12 +689,17 @@
 <context>
     <name>WebBrowser</name>
     <message>
-        <location filename="../../../module/webbrowser/webbrowser.cc" line="594"/>
+        <location filename="../../../module/webbrowser/webbrowser.cc" line="577"/>
+        <source>openning</source>
+        <translation>正在打开</translation>
+    </message>
+    <message>
+        <location filename="../../../module/webbrowser/webbrowser.cc" line="607"/>
         <source>no recent closed tabs</source>
         <translation>没有关闭的标签</translation>
     </message>
     <message>
-        <location filename="../../../module/webbrowser/webbrowser.cc" line="676"/>
+        <location filename="../../../module/webbrowser/webbrowser.cc" line="689"/>
         <source>Start Page</source>
         <translation>世界の边缘</translation>
     </message>

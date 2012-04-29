@@ -55,7 +55,7 @@ Annot Player - Shortcuts -- 快捷键
   SHIFT          + LButton+RButton
 - CTRL           + Wheel     : Scale selected annotations             -- 调整弹幕大小
                    LButton+Wheel
-- SHIFT          + Wheel     : Rotate selected annotations            -- 旋转弹幕
+- ALT            + Wheel     : Rotate selected annotations            -- 旋转弹幕
                    RButton+Wheel
 
 Annot Browser - Gestures -- 鼠标手势
