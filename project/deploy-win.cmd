@@ -3,7 +3,7 @@
 setlocal
 cd /d d:/devel/build || exit /b 1
 
-set VERSION=0.1.5.1
+set VERSION=0.1.5.2
 set APP=annot-player
 set FOLDER=Annot Player
 set ZIPFILE=%APP%-%VERSION%-win.zip

@@ -16,7 +16,10 @@
 #include "module/qtext/networkcookie.h"
 #include "module/qtext/os.h"
 #include <QtNetwork/QNetworkAccessManager>
-#include <QtCore/QFileInfo>
+#ifdef Q_WS_WIN
+#  include <QtCore/QCoreApplication>
+#  include <QtCore/QFileInfo>
+#endif // Q_WS_WIN
 #include <boost/function.hpp>
 #include <exception>
 
@@ -330,8 +333,14 @@ LuaResolver::resolve(const QString &href, int *siteid, QString *refurl, QString 
 
     if (suburl) {
       lua_getglobal(L, "g_suburl");
-      if (!lua_isnil(L, -1))
+      if (!lua_isnil(L, -1)) {
         *suburl = _qs(lua_tostring(L, -1));
+#ifdef Q_WS_WIN
+        // FIXME: must be consist with QtExt::mktemp.
+        // Remove me after liblua support Asian Characters.
+        suburl->replace(QRegExp("^file://"), "file:///" + QCoreApplication::applicationDirPath());
+#endif // Q_WS_WIN
+      }
     }
 
     if (mrls || durations || sizes) {

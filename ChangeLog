@@ -2,31 +2,40 @@ ChangeLog
 Annot Project
 6/18/2011
 
+4/28/2012	annot.player, down, browser	0.1.5.2, 0.1.2.1, 0.1.1.1
+        * Fixed a severe bug that might cause duplicated imported annotations.
+
 4/28/2012	annot.player, down, browser	0.1.5.1, 0.1.2.0, 0.1.1.1
         * Fixed a bug that prevent resolving annotations when the app or system
           path contains Chinese characters in Windows.
         * Option to change online/offline annotations preference.
           Prefer cached offline annotations by default.
         * Able to select annotation and draw all annotations from the its user.
-        * Added mouse gestures to manipulate annotations. Shortcuts follow.
+        * Able to exile surrounded annotations using SHIFT+LButton or LButton+RButton.
+        * Added more mouse gestures to manipulate annotations. Shortcuts follow.
           Modifier Keys + Mouse Buttons
-          * SHIFT          + LButton : Exile annotations by hovering
-          * CTRL           + LButton : Capture annotations using rubberband
-                             LButton(FullScreen)
-          * ALT            + LButton : Release annotations using rubberband
-                             RButton(FullScreen)
-          * CTRL+ALT       + LButton : Kill annotations using rubberband
-                             MButton(FullScreen)
-          * CTRL+SHIFT     + LButton : Capture annotations by hovering
+          * SHIFT          + LButton    : Exile annotations by hovering
+          * CTRL           + LButton    : Capture annotations using rubberband
+                             LButton(FullScreen only)
+            CTRL+R
+          * ALT            + LButton    : Release annotations using rubberband
+                             RButton(FullScreen only)
+          * CTRL+ALT       + LButton    : Kill annotations using rubberband
+                             MButton(FullScreen only)
+          * CTRL+SHIFT     + LButton    : Capture annotations by hovering
             CTRL           + LButton+RButton
-          * ALT+SHIFT      + Left : Release annotations by hovering
+          * ALT+SHIFT      + LButton    : Release annotations by hovering
             ALT            + LButton+RButton
-          * CTRL+ALT+SHIFT + Left : Kill annotations by hovering
+          * CTRL+ALT+SHIFT + LButton    : Kill annotations by hovering
             SHIFT          + LButton+RButton
+          * CTRL           + Wheel      : Scale selected annotations
+                             LButton+Wheel
+          * SHIFT          + Wheel      : Rotate selected annotations
+                             RButton+Wheel
         * Browser improved.
           * Added multiple search engines.
-          * Always higlight selected text.
-          * Higlight hovered downloadable links.
+          * Always highlight selected text.
+          * Highlight hovered downloadable links.
           * Added menus on Mac and Linux.
           * Able to go full screen by double clicking any tab.
           * Added mouse gestures with right or middle button, as follow.

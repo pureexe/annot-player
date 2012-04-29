@@ -20,6 +20,10 @@
 #define DEBUG "annotpaint"
 #include "module/debug/debug.h"
 
+#ifdef __GNUC__
+#  pragma GCC diagnostic ignored "-Wparentheses" // suggest parentheses
+#endif // __GNUC__
+
 #ifdef Q_WS_WIN
 #  define ITALIC        false
 #else

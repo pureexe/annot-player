@@ -27,7 +27,7 @@
 #define DEBUG "httpstreamsession"
 #include "module/debug/debug.h"
 
-enum { MaxDownloadRetries = 3 };
+enum { MaxDownloadRetries = 5 };
 
 #ifdef Q_WS_WIN
 #  define PATH_SEP  "\\"
@@ -244,7 +244,7 @@ void
 HttpStreamSession::run()
 {
   DOUT("enter: urls.size =" << urls_.size() << ", urls =" << urls_);
-  Q_ASSERT(!url_.isEmpty());
+  Q_ASSERT(!urls_.isEmpty());
   if (urls_.isEmpty()) {
     DOUT("exit: empty urls");
     return;

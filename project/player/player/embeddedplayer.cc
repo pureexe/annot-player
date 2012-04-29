@@ -258,7 +258,7 @@ EmbeddedPlayerUi::updateGeometry()
 {
   if (fullScreen_ && QApplication::desktop()) {
     QRect r = QApplication::desktop()->screenGeometry(this);
-    Q_ASSERT(!r.isNull);
+    Q_ASSERT(!r.isEmpty());
 
     // Update size
     int w_max = r.width(),

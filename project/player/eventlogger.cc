@@ -490,11 +490,17 @@ EventLogger::logExileHoveredAnnotations(bool t)
 void
 EventLogger::logSelectedUserIds(const QList<qint64> &uids)
 {
+  enum { timeout = 500 }; // msecs
+  static qint64 ts = 0;
   qint64 count = uids.size();
-  if (count)
-    log(tr("found %1 users").arg(
-      HTML_STYLE_OPEN(color:orange) + QString::number(count) + HTML_STYLE_CLOSE()
-    ));
+  if (count) {
+    qint64 now = QDateTime::currentMSecsSinceEpoch();
+    if (now > ts + timeout)
+      log(tr("found %1 users").arg(
+        HTML_STYLE_OPEN(color:orange) + QString::number(count) + HTML_STYLE_CLOSE()
+      ));
+    ts = now;
+  }
 }
 
 void

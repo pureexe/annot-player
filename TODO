@@ -2,54 +2,61 @@
 # 6/18/2011
 http://db.tt/SrtkzxIJ
 
-- browser
-  - FIXME: cannot play flash video on bilibili.tv; try fix it on windows
-
 # server
 - move wiki to sakuradite
 - add shortcuts && gestures to googlecode and herlpwiki
 
 # client
-- linux
-   -auto popup menubar on hover or with ALT key
-  - FIXME: full screen issue
-  - FIXME: mouse click behavior in osd mode
-  - player
-    FIXME: crash while switching diff video filetypes
-      wait while diff filetype?
 - browser
-  - add context menu: lock hide top region
+  - connect link clicked signal to addrecent
+- player
+  - imaging
+    - get use of mouse/tablet gestures/shortcuts
+      property_anime function/curve
+      embedded webview/qpainter
+      make a annot game?
+  goal: make annotation more useful, only keep useful information
+        integrate SNS
+        freedom, anntotate deathnote
+  - FIXME: crash while switching diff video filetypes
+      wait while diff filetype?
+  - reduce buffering time
+
+- browser
+  - add context menu: lock hide top region in fullscreen mode
+  - add tablet gesture
   - update help for mouse gestures in download page
   - add dummy help context action as place holder, helplink for mouse gestures in wiki
     same as downloader
     update place holder for each of them
     Manual:Helper:AnnotPlayer
-- youtube
-  - FIXME: cannot play youtube on windows using vlc
-  - FIXME: download from youtube.com: error 202
-  - able to login to youtube
-     example: shikabanehime @ funimation
-
-- browser
-  - add tablet gesture
-    http://labs.qt.nokia.com/2009/04/02/mouse-gestures-in-qt-apps-to-be-or-not-to-be/
-  - save list of icons for recent files as well
-    qdatastream << qicon
-- player
-  add recent 20 to filemenu as well
-- windows
-  - migrate to ith3
-    inject.cc => ihf/main.cpp
-    pipe.cc => ihf_dll/pipe.cpp
+   -auto popup menubar on hover or with ALT key
 - browser
   - FIXME: cannot play video on bilibili.tv
   - show loading progress in addressedit using css
   - split browser to a different app?
   - change path of addressline to path like buttons
-  - merge webrowser module with browser project
+  - merge webrowser module with browser project and accommon
 - common
   - learn the source code of ith's updater
   - add a prefenece panel for its settings
+
+# client
+- windows
+  - migrate to ith3
+    inject.cc => ihf/main.cpp
+    pipe.cc => ihf_dll/pipe.cpp
+- browser
+  - save list of icons for recent files as well
+    qdatastream << qicon
+- linux
+  - FIXME: full screen issue
+  - FIXME: mouse click behavior in osd mode
+- youtube
+  - FIXME: cannot play youtube on windows using vlc
+  - FIXME: download from youtube.com: error 202
+  - able to login to youtube
+     example: shikabanehime @ funimation
 
 # server
   annot.me/w

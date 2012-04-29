@@ -514,6 +514,7 @@ protected:
   virtual void changeEvent(QEvent *event); ///< \override
 
   virtual void keyPressEvent(QKeyEvent *event); ///< \override
+  virtual void keyReleaseEvent(QKeyEvent *event); ///< \override
 
   virtual void contextMenuEvent(QContextMenuEvent *event); ///< \override
 
@@ -524,6 +525,8 @@ protected slots:
   virtual void dragMoveEvent(QDragMoveEvent *event); ///< \override
   virtual void dragLeaveEvent(QDragLeaveEvent *event); ///< \override
   virtual void dropEvent(QDropEvent *event); ///< \override
+
+  void updateAnnotationHoverGesture();
 
   void updateContextMenu();
   void updateAspectRatioMenu();
@@ -828,6 +831,8 @@ private:
   bool recentSourceLocked_;
 
   bool cursorVisible_;
+
+  bool cancelContextMenu_;
 
   QStringList playlist_;
 

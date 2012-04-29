@@ -22,7 +22,6 @@ using namespace AnnotCloud;
 UserView::UserView(QWidget *parent)
   : Base(parent, WINDOW_FLAGS)
 {
-  Q_ASSERT(server_);
   setWindowTitle(TR(T_TITLE_USERVIEW));
   AcUi::globalInstance()->setWindowStyle(this);
 

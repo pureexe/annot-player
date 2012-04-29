@@ -57,9 +57,6 @@ public:
 
   // - GUI -
 
-  bool isAeroEnabled() const;
-  void setAeroEnabled(bool t);
-
   bool isMenuThemeEnabled() const;
   void setMenuThemeEnabled(bool t);
 
@@ -85,6 +82,10 @@ public:
 
   void setProxyPassword(const QString &password);
   QString proxyPassword() const;
+
+  bool isAeroEnabled() const;
+public slots:
+  void setAeroEnabled(bool t);
 };
 
 #endif // ACSETTINGS_H

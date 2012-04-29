@@ -78,6 +78,7 @@ public slots:
   void newTabInBackground(const QString &url);
 
   void addRecentUrl(const QString &url);
+  void addRecentUrl(const QUrl &url) { addRecentUrl(url.toString()); }
   void addRecentUrls(const QStringList &urls);
 
   void addRecentSearch(const QString &text);

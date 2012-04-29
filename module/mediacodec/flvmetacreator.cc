@@ -59,7 +59,7 @@ FlvMetaCreator::parse()
   DOUT("enter");
   meta_.clear();
 
-  Q_ASSERT(is_);
+  Q_ASSERT(in_);
   if (!in_)
     return false;
 

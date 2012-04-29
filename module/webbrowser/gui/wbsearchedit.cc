@@ -116,6 +116,7 @@ WbSearchEdit::setText(const QString &text)
   if (recentCount())
     setCurrentIndex(0);
   setEditText(text);
+  lineEdit()->setCursorPosition(0);
 }
 
 void

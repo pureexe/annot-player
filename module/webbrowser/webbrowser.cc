@@ -450,6 +450,7 @@ WebBrowser::openUrl(const QString &url, QWebView *view)
   if (view == tabWidget()) {
     QString address = tidyUrl(url);
     ui_->addressEdit->setEditText(address);
+    ui_->addressEdit->lineEdit()->setCursorPosition(0);
     ui_->tabWidget->setTabText(tabIndex(), ::shortenText(url));
   }
   view->load(realUrl);
@@ -735,6 +736,7 @@ WebBrowser::newTab(QWebView *view, int index, bool focus)
   connect(view, SIGNAL(urlChanged(QUrl)), SLOT(updateAddressbar()));
   connect(view, SIGNAL(loadStarted()), SLOT(handleLoadStarted()));
   connect(view, SIGNAL(loadFinished(bool)), SLOT(handleLoadFinished()));
+  connect(view, SIGNAL(linkClicked(QUrl)), SLOT(addRecentUrl(QUrl)));
 
   view->installEventFilter(mouseGestureFilter_);
 
@@ -778,8 +780,10 @@ WebBrowser::updateAddressbar()
     if (i >= 0) {
       //edit->setItemIcon(i, view->icon()); // already set by daemon
       edit->setCurrentIndex(i);
-    } else
+    } else {
       edit->setEditText(address);
+      edit->lineEdit()->setCursorPosition(0);
+    }
     if (address == WB_BLANK_PAGE)
       edit->setIcon(WBRC_IMAGE_APP);
     else

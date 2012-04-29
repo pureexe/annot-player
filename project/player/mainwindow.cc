@@ -212,14 +212,15 @@ MainWindow::resetPlayer()
   Q_ASSERT(player_);
   player_->reset();
 
+  player_->setKeyboardEnabled(true);  // default true
+  player_->setMouseEnabled(true);     // default true
+  //player_->setEncoding("UTF-8");      // default do nothing
+
   player_->setDownloadPath(G_PATH_DOWNLOADS);
 
 #ifdef Q_WS_WIN
   player_->setMouseEventEnabled();
 #endif // Q_WS_WIN
-  //player_->setKeyboardEnabled(true);  // default true
-  //player_->setMouseEnabled(true);     // default true
-  //player_->setEncoding("UTF-8");      // default do nothing
 
 #ifdef Q_OS_MAC
   videoView_->showView();
@@ -267,7 +268,7 @@ MainWindow::MainWindow(bool unique, QWidget *parent, Qt::WindowFlags f)
     networkProxyDialog_(0), processPickDialog_(0), seekDialog_(0), syncDialog_(0), windowPickDialog_(0),
     mediaUrlDialog_(0), annotationUrlDialog_(0), siteAccountView_(0), mediaInfoView_(0), userView_(0),
     dragPos_(BAD_POS), windowModeUpdateTime_(0),
-    tokenType_(0), recentSourceLocked_(false), cursorVisible_(true),
+    tokenType_(0), recentSourceLocked_(false), cursorVisible_(true), cancelContextMenu_(false),
     preferredSubtitleTrack_(0), preferredAudioTrack_(0)
 {
 #ifndef Q_OS_MAC
@@ -399,7 +400,7 @@ MainWindow::MainWindow(bool unique, QWidget *parent, Qt::WindowFlags f)
   QString browsedFile;
   foreach (const QString &url, recentFiles_)
     if (isRemoteMrl(url)) {
-      browsedFile = url;
+      //browsedFile = url;
       break;
     } else if (QFile::exists(url)) {
       browsedFile = url;
@@ -409,8 +410,9 @@ MainWindow::MainWindow(bool unique, QWidget *parent, Qt::WindowFlags f)
     QDir dir(G_PATH_DOWNLOADS);
     QStringList l = dir.entryList(Player::supportedVideoFilters(), QDir::Files, QDir::Time);
     if (!l.isEmpty())
-      browsedFile = l.last();
+      browsedFile = dir.absolutePath() + "/" + l.last();
   }
+  DOUT("browsedFile =" << browsedFile);
   if (!browsedFile.isEmpty()) {
     if (isRemoteMrl(browsedFile))
       setBrowsedUrl(browsedFile);
@@ -993,6 +995,10 @@ MainWindow::createConnections()
   connect(mrlResolver_, SIGNAL(subtitleResolved(QString)), SLOT(importAnnotationsFromUrl(QString)));
   connect(mrlResolver_, SIGNAL(message(QString)), SLOT(showMessage(QString)), Qt::QueuedConnection);
   connect(mrlResolver_, SIGNAL(error(QString)), SLOT(warn(QString)), Qt::QueuedConnection);
+
+#ifdef Q_WS_WIN
+  connect(AcUi::globalInstance(), SIGNAL(aeroEnabledChanged(bool)), AcSettings::globalSettings(), SLOT(setAeroEnabled(bool)));
+#endif // Q_WS_WIN
 
   // Annotation codec
   {
@@ -1773,7 +1779,7 @@ MainWindow::createMenus()
 #endif // !Q_WS_MAC
 #ifndef Q_OS_LINUX
     settingsMenu_->addAction(toggleEmbeddedPlayerOnTopAct_); // FIXME: X11::zeroInput problem
-#endif Q_OS_LINUX
+#endif // Q_OS_LINUX
     //settingsMenu_->addAction(togglePlayerLabelEnabled_);
 
 #ifdef Q_OS_LINUX
@@ -4065,7 +4071,7 @@ MainWindow::setToken(const QString &input, bool async)
   //annotationBrowser_->setAnnotations(annots);
   //annotationView_->setAnnotations(annots);
 
-  if (!dataServer_->preferLocal() || annots.isEmpty())
+  if (token.hasSource() || !dataServer_->preferLocal() || annots.isEmpty())
     openAnnotationUrlFromAliases(aliases);
 
   //if (tokens.size() == 1) {
@@ -4459,16 +4465,23 @@ MainWindow::setVisible(bool visible)
 void
 MainWindow::mousePressEvent(QMouseEvent *event)
 {
+  //DOUT("enter");
   QApplication::setOverrideCursor(Qt::ArrowCursor);
   resetAutoHideCursor();
 
-  annotationView_->setHoveredItemPaused(false);
-  annotationView_->setHoveredItemResumed(false);
-  annotationView_->setHoveredItemRemoved(false);
-  annotationView_->setHoveredItemExiled(false);
+  cancelContextMenu_ = annotationView_->isHoveredItemExiled() ||
+                       annotationView_->isHoveredItemPaused() ||
+                       annotationView_->isHoveredItemRemoved() ||
+                       annotationView_->isHoveredItemResumed();
+  //DOUT("cancelContextMenu =" << cancelContextMenu_);
+  if (cancelContextMenu_) {
+    annotationView_->setHoveredItemPaused(false);
+    annotationView_->setHoveredItemResumed(false);
+    annotationView_->setHoveredItemRemoved(false);
+    annotationView_->setHoveredItemExiled(false);
+  }
 
   Q_ASSERT(event);
-  //DOUT("enter");
   //if (contextMenu_->isVisible())
   //  contextMenu_->hide();
 #ifdef Q_OS_MAC
@@ -4639,6 +4652,38 @@ MainWindow::mousePressEvent(QMouseEvent *event)
 }
 
 void
+MainWindow::updateAnnotationHoverGesture()
+{
+#ifdef Q_WS_WIN
+  bool left = QtWin::isMouseLeftButtonPressed(),
+       right = QtWin::isMouseRightButtonPressed(),
+       middle = QtWin::isMouseMiddleButtonPressed();
+  if (left && right || left && middle || right && middle) {
+    annotationView_->setHoveredItemPaused(false);
+    annotationView_->setHoveredItemResumed(false);
+    annotationView_->setHoveredItemRemoved(false);
+    annotationView_->setHoveredItemExiled(false);
+    bool shift = QtWin::isKeyShiftPressed(),
+         ctrl = QtWin::isKeyControlPressed(),
+         alt =  QtWin::isKeyAltPressed();
+    if (ctrl) {
+      annotationView_->setHoveredItemPaused(true);
+      QApplication::setOverrideCursor(Qt::ClosedHandCursor);
+    } else if (alt) {
+      annotationView_->setHoveredItemResumed(true);
+      QApplication::setOverrideCursor(Qt::OpenHandCursor);
+    } else if (shift) {
+      annotationView_->setHoveredItemRemoved(true);
+      QApplication::setOverrideCursor(Qt::ForbiddenCursor);
+    } else {
+      annotationView_->setHoveredItemExiled(true);
+      QApplication::setOverrideCursor(Qt::PointingHandCursor);
+    }
+  }
+#endif // Q_WS_WIN
+}
+
+void
 MainWindow::mouseReleaseEvent(QMouseEvent *event)
 {
   //DOUT("enter");
@@ -4648,10 +4693,17 @@ MainWindow::mouseReleaseEvent(QMouseEvent *event)
 
   dragPos_ = BAD_POS;
 
-  annotationView_->setHoveredItemPaused(false);
-  annotationView_->setHoveredItemResumed(false);
-  annotationView_->setHoveredItemRemoved(false);
-  annotationView_->setHoveredItemExiled(false);
+  //cancelContextMenu_ = annotationView_->isHoveredItemExiled() ||
+  //                     annotationView_->isHoveredItemPaused() ||
+  //                     annotationView_->isHoveredItemRemoved() ||
+  //                     annotationView_->isHoveredItemResumed();
+  //DOUT("cancelContextMenu =" << cancelContextMenu_);
+  //if (cancelContextMenu_) {
+    annotationView_->setHoveredItemPaused(false);
+    annotationView_->setHoveredItemResumed(false);
+    annotationView_->setHoveredItemRemoved(false);
+    annotationView_->setHoveredItemExiled(false);
+  //}
 
   if (event->button() == Qt::MiddleButton && event->modifiers() == Qt::NoModifier
       && removeRubberBand_->isEmpty()) {
@@ -4742,9 +4794,10 @@ MainWindow::isGlobalPosOverOsdConsole(const QPoint &pos) const
 void
 MainWindow::mouseMoveEvent(QMouseEvent *event)
 {
+  //DOUT("enter");
+  cancelContextMenu_ = false;
   Q_ASSERT(event);
   resetAutoHideCursor();
-  //DOUT("enter");
   // Prevent auto hide osd player.
   if (hub_->isEmbeddedPlayerMode()) {
     if (isGlobalPosNearEmbeddedPlayer(event->globalPos())) {
@@ -4875,43 +4928,48 @@ MainWindow::wheelEvent(QWheelEvent *event)
 {
   //DOUT("enter");
   Q_ASSERT(event);
-  switch (event->modifiers()) {
-  case Qt::ControlModifier:
+  if (!event->delta())
+    return;
+
+  if (event->modifiers() == Qt::ControlModifier + Qt::AltModifier) {
+    if (event->delta() > 0)
+      increaseAnnotationOffset();
+    else
+      decreaseAnnotationOffset();
+  } else if (event->modifiers() == Qt::ControlModifier
+#ifdef Q_WS_WIN
+    || QtWin::isMouseLeftButtonPressed()
+#endif // Q_WS_WIN
+  ) {
     if (!annotationView_->isPaused() && annotationView_->hasPausedItems()) {
       if (event->delta() > 0)
         annotationView_->scalePausedItems(1.1);
-      else if (event->delta() < 0)
+      else
         annotationView_->scalePausedItems(1 / 1.1);
     } else {
       if (event->delta() > 0)
         annotationScaleUp();
-      else if (event->delta() < 0)
+      else
         annotationScaleDown();
-    } break;
-  case Qt::ShiftModifier:
-    if (event->delta()) {
-      //enum { zoom = -3 };
-      //qreal angle = event->delta() / (8.0 * zoom);
-      qreal angle = event->delta() > 0 ? -5 : 5;
-      if (!annotationView_->isPaused() && annotationView_->hasPausedItems())
-        annotationView_->rotatePausedItems(angle);
-      else
-        annotationView_->setRotation(annotationView_->rotation() + angle);
-    } break;
-  case Qt::CTRL | Qt::ALT:
-    if (event->delta()) {
-      if (event->delta() > 0)
-        increaseAnnotationOffset();
-      else
-        decreaseAnnotationOffset();
-    } break;
-  default:
-    {
-      qreal vol = hub_->volume();
-      vol += event->delta() / (8 * 360.0);
-      vol =  vol > 1.0 ? 1.0 :vol < 0.0 ? 0.0 : vol;
-      hub_->setVolume(vol);
     }
+  } else if (event->modifiers() == Qt::AltModifier
+#ifdef Q_WS_WIN
+    || QtWin::isMouseRightButtonPressed()
+#endif // Q_WS_WIN
+  ) {
+    cancelContextMenu_ = true;
+    //enum { zoom = -3 };
+    //qreal angle = event->delta() / (8.0 * zoom);
+    qreal angle = event->delta() > 0 ? -5 : 5;
+    if (!annotationView_->isPaused() && annotationView_->hasPausedItems())
+      annotationView_->rotatePausedItems(angle);
+    else
+      annotationView_->setRotation(annotationView_->rotation() + angle);
+  } else {
+    qreal vol = hub_->volume();
+    vol += event->delta() / (8 * 360.0);
+    vol =  vol > 1.0 ? 1.0 :vol < 0.0 ? 0.0 : vol;
+    hub_->setVolume(vol);
   }
   event->accept();
   //Base::wheelEvent(event);
@@ -4921,6 +4979,7 @@ MainWindow::wheelEvent(QWheelEvent *event)
 void
 MainWindow::contextMenuEvent(QContextMenuEvent *event)
 {
+  DOUT("enter: cancelContextMenu =" << cancelContextMenu_);
   Q_ASSERT(event);
   //resetAutoHideCursor();
   QApplication::setOverrideCursor(Qt::ArrowCursor);
@@ -4941,11 +5000,13 @@ MainWindow::contextMenuEvent(QContextMenuEvent *event)
 #endif // Q_WS_MAC
 
 #ifndef Q_WS_MAC
-  if (!resumeRubberBand_->isPressed() || resumeRubberBand_->isEmpty())
+  if (!cancelContextMenu_ &&
+      (!resumeRubberBand_->isPressed() || resumeRubberBand_->isEmpty()))
 #endif // !Q_WS_MAC
   {
     updateContextMenu();
     contextMenu_->popup(event->globalPos());
+    cancelContextMenu_ = false;
   }
 #ifndef Q_WS_MAC
   else
@@ -4956,6 +5017,7 @@ MainWindow::contextMenuEvent(QContextMenuEvent *event)
   event->accept();
 
   //Base::contextMenuEvent(event);
+  DOUT("exit");
 }
 
 void
@@ -5560,6 +5622,20 @@ MainWindow::changeEvent(QEvent *event)
 // - Keyboard events -
 
 void
+MainWindow::keyReleaseEvent(QKeyEvent *event)
+{
+  //DOUT("enter");
+#ifdef Q_WS_WIN
+  switch (event->key()) {
+  case Qt::Key_Shift: case Qt::Key_Alt: case Qt::Key_Control:
+    updateAnnotationHoverGesture();
+  }
+#endif // Q_WS_WIN
+  Base::keyReleaseEvent(event);
+  //DOUT("exit");
+}
+
+void
 MainWindow::keyPressEvent(QKeyEvent *event)
 {
   Q_ASSERT(event);
@@ -5586,14 +5662,27 @@ MainWindow::keyPressEvent(QKeyEvent *event)
 
     // Modifiers
   case Qt::Key_Control:
-  case Qt::Key_Shift:
-  //case Qt::Key_Alt:
     if (!isEditing()) {
       PlayerUi *ui = visiblePlayer();
       if (ui)
         ui->clearFocus();
       setFocus();
     }
+#ifdef Q_WS_WIN
+    updateAnnotationHoverGesture();
+#endif // Q_WS_WIN
+    Base::keyPressEvent(event);
+    break;
+  case Qt::Key_Shift:
+    if (!isEditing()) {
+      PlayerUi *ui = visiblePlayer();
+      if (ui)
+        ui->clearFocus();
+      setFocus();
+    }
+#ifdef Q_WS_WIN
+    updateAnnotationHoverGesture();
+#endif // Q_WS_WIN
     Base::keyPressEvent(event);
     break;
 #ifdef Q_WS_WIN
@@ -5604,6 +5693,9 @@ MainWindow::keyPressEvent(QKeyEvent *event)
         ui->clearFocus();
       setFocus();
     }
+#ifdef Q_WS_WIN
+    updateAnnotationHoverGesture();
+#endif // Q_WS_WIN
     Base::keyPressEvent(event);
     break;
 #endif // Q_WS_WIN
@@ -5758,7 +5850,7 @@ MainWindow::closeEvent(QCloseEvent *event)
 
   //updateRecent();
 #ifdef Q_WS_WIN
-  ac->setAeroEnabled(ui->isAeroEnabled());
+  //ac->setAeroEnabled(ui->isAeroEnabled());
 #endif // Q_WS_WIN
 
   ac->setMenuThemeEnabled(ui->isMenuEnabled());
@@ -7609,9 +7701,9 @@ MainWindow::updateLiveAnnotations(bool async)
 void
 MainWindow::addRemoteAnnotations(const AnnotationList &l, const QString &url)
 {
-  DOUT("enter: annot.count =" << l.size());
-  AnnotationList annots;
+  DOUT("enter: annot.count =" << l.size() << ", url =" << url);
   const Token &t = dataManager_->token();
+  AnnotationList annots;
   foreach (Annotation a, l) {
     a.setTokenId(t.id());
     a.setTokenPart(t.part());
@@ -7626,7 +7718,9 @@ MainWindow::addRemoteAnnotations(const AnnotationList &l, const QString &url)
       .arg(src);
     emit message(msg);
     emit addAnnotationsRequested(annots);
-    if (t.hasId() && cache_->isValid())
+    DOUT("token source =" << t.source());
+    if (t.hasId() && cache_->isValid() &&
+        !t.hasSource())
       cache_->insertAnnotations(annots);
   }
   DOUT("exit");

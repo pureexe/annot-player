@@ -112,7 +112,7 @@ void
 FlvMetaWriter::finish()
 {
   DOUT("enter");
-  Q_ASSERT(out_);
+  Q_ASSERT(ios_);
   ios_->finish();
   state_ = Finished;
   DOUT("exit");
@@ -121,7 +121,6 @@ FlvMetaWriter::finish()
 bool
 FlvMetaWriter::seekToScriptTag(InputStream *in)
 {
-  Q_ASSERT(ios_);
   enum TagType { AudioTag = 8, VideoTag = 9, ScriptTag = 18 };
 
   enum { TagSize = // 11 for FLV v1

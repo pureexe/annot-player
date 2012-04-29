@@ -78,6 +78,7 @@ WebView::WebView(QWidget *parent)
     //connect(this, SIGNAL(loadStarted()), SLOT(setLoading()));
     //connect(this, SIGNAL(loadFinished(bool)), SLOT(setFinished()));
     connect(page, SIGNAL(selectionChanged()), SIGNAL(selectionChanged()));
+    connect(page, SIGNAL(linkClicked(QUrl)), SIGNAL(linkClicked(QUrl)));
     //connect(page, SIGNAL(scrollRequested(int,int,QRect)), SLOT(scroll(int,int,QRect)));
   } setPage(page);
 
@@ -469,7 +470,7 @@ WebView::showLink(const QString &url, const QString &title, const QString &conte
   if (url.isEmpty())
     emit message(QString());
   else {
-    QString m = QUrl::fromPercentEncoding(url.toLocal8Bit());
+    QString m = QUrl::fromPercentEncoding(url.toUtf8());
     QString t = content.isEmpty() ? title : content;
     t = t.simplified();
     if (!t.isEmpty())

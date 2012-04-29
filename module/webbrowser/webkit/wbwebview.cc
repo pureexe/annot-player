@@ -220,7 +220,7 @@ WbWebView::showLink(const QString &url, const QString &title, const QString &con
   if (url.isEmpty())
     emit message(QString());
   else {
-    QString m = QUrl::fromPercentEncoding(url.toLocal8Bit());
+    QString m = QUrl::fromPercentEncoding(url.toUtf8());
     QString t = content.isEmpty() ? title : content;
     t = t.simplified();
     if (!t.isEmpty())

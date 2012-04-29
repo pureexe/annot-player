@@ -29,7 +29,10 @@
 #define WBRC_IMAGE_YOUKU    WBRC_PREFIX_FAVICON "youku.ico"
 #define WBRC_IMAGE_WIKI     WBRC_PREFIX_FAVICON "wiki.ico"
 
+#define WBRC_IMAGE_MSDN     WBRC_PREFIX_FAVICON "msdn.ico"
+#define WBRC_IMAGE_APPLE    WBRC_PREFIX_FAVICON "apple.ico"
 #define WBRC_IMAGE_QT       WBRC_PREFIX_FAVICON "qt.ico"
+#define WBRC_IMAGE_BING     WBRC_PREFIX_FAVICON "bing.ico"
 #define WBRC_IMAGE_CPP      WBRC_PREFIX_FAVICON "cplusplus.ico"
 #define WBRC_IMAGE_SS64     WBRC_PREFIX_FAVICON "ss64.ico"
 

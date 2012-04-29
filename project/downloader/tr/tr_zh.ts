@@ -601,7 +601,7 @@
         <translation type="obsolete">保存页面</translation>
     </message>
     <message>
-        <location filename="../../../module/qtext/webview.cc" line="97"/>
+        <location filename="../../../module/qtext/webview.cc" line="98"/>
         <source>Save the web page as image to disk and clipboard</source>
         <translation>保存页面为图片并复制到剪贴板</translation>
     </message>
@@ -618,82 +618,82 @@
         <translation type="obsolete">正常尺寸</translation>
     </message>
     <message>
-        <location filename="../../../module/qtext/webview.cc" line="96"/>
+        <location filename="../../../module/qtext/webview.cc" line="97"/>
         <source>Clip the Page</source>
         <translation>保存页面</translation>
     </message>
     <message>
-        <location filename="../../../module/qtext/webview.cc" line="104"/>
         <location filename="../../../module/qtext/webview.cc" line="105"/>
+        <location filename="../../../module/qtext/webview.cc" line="106"/>
         <source>Zoom In</source>
         <translation>扩大</translation>
     </message>
     <message>
-        <location filename="../../../module/qtext/webview.cc" line="112"/>
         <location filename="../../../module/qtext/webview.cc" line="113"/>
+        <location filename="../../../module/qtext/webview.cc" line="114"/>
         <source>Zoom Out</source>
         <translation>缩小</translation>
     </message>
     <message>
-        <location filename="../../../module/qtext/webview.cc" line="120"/>
         <location filename="../../../module/qtext/webview.cc" line="121"/>
+        <location filename="../../../module/qtext/webview.cc" line="122"/>
         <source>Actual Size</source>
         <translation>原始尺寸</translation>
     </message>
     <message>
-        <location filename="../../../module/qtext/webview.cc" line="128"/>
         <location filename="../../../module/qtext/webview.cc" line="129"/>
+        <location filename="../../../module/qtext/webview.cc" line="130"/>
         <source>Clear Highlight</source>
         <translation>取消加亮</translation>
     </message>
     <message>
-        <location filename="../../../module/qtext/webview.cc" line="133"/>
         <location filename="../../../module/qtext/webview.cc" line="134"/>
+        <location filename="../../../module/qtext/webview.cc" line="135"/>
         <source>Open in System Default Browser</source>
         <translation>用系统默认浏览器打开</translation>
     </message>
     <message>
-        <location filename="../../../module/qtext/webview.cc" line="220"/>
+        <location filename="../../../module/qtext/webview.cc" line="221"/>
         <source>Unnamed</source>
         <translation>未命名</translation>
     </message>
     <message>
-        <location filename="../../../module/qtext/webview.cc" line="251"/>
+        <location filename="../../../module/qtext/webview.cc" line="252"/>
         <source>openning</source>
         <translation>正在打开</translation>
     </message>
     <message>
-        <location filename="../../../module/qtext/webview.cc" line="275"/>
+        <location filename="../../../module/qtext/webview.cc" line="276"/>
         <source>clipping</source>
         <translation>保存中</translation>
     </message>
     <message>
-        <location filename="../../../module/qtext/webview.cc" line="299"/>
+        <location filename="../../../module/qtext/webview.cc" line="300"/>
         <source>saved</source>
         <translation>以保存</translation>
     </message>
     <message>
-        <location filename="../../../module/qtext/webview.cc" line="301"/>
+        <location filename="../../../module/qtext/webview.cc" line="302"/>
         <source>unable to save</source>
         <translation>保存失败</translation>
     </message>
     <message>
-        <location filename="../../../module/qtext/webview.cc" line="318"/>
+        <location filename="../../../module/qtext/webview.cc" line="319"/>
         <source>failed to download %1</source>
         <translation>下载失败：%1</translation>
     </message>
     <message>
-        <location filename="../../../module/qtext/webview.cc" line="321"/>
+        <location filename="../../../module/qtext/webview.cc" line="322"/>
         <source>download is not allowed</source>
         <translation>无法下载</translation>
     </message>
     <message>
-        <location filename="../../../module/qtext/webview.cc" line="337"/>
+        <location filename="../../../module/qtext/webview.cc" line="338"/>
         <source>History</source>
         <translation>历史</translation>
     </message>
     <message>
-        <location filename="../../../module/qtext/webview.cc" line="351"/>
+        <location filename="../../../module/qtext/webview.cc" line="352"/>
         <source>Blank</source>
         <translation>空白</translation>
     </message>
