@@ -4,6 +4,7 @@
 #include "annotationgraphicsitem.h"
 #include "annotationgraphicsview.h"
 #include "annotationgraphicsstyle.h"
+#include "annotationgraphicseffect.h"
 #include "annotationeditor.h"
 //#include "textformathandler.h"
 #include "tr.h"
@@ -15,12 +16,19 @@
 #include "module/annotcloud/annothtml.h"
 #include "module/qtext/htmltag.h"
 #include <boost/tuple/tuple.hpp>
+#include <boost/typeof/typeof.hpp>
 #include <QtGui>
 #include <ctime>
 #include <cmath>
 
 #ifdef __GNUC__
 #  pragma GCC diagnostic ignored "-Wparentheses" // suggest parentheses around && within ||
+#endif // __GNUC__
+
+#ifdef __GNUC__
+#  define NOINLINE      __attribute__((noinline))
+#else
+#  define NOINLINE
 #endif // __GNUC__
 
 //#define DEBUG "annotationgraphicsitem"
@@ -31,7 +39,52 @@ using namespace Logger;
 
 // - Helpers -
 
-#define ANNOTATION_LIFE_SCHEDULE   ((ANNOTATION_LIFE_VISIBLE + 1) / 4)
+#define ANNOTATION_LIFE_SCHEDULE   ((ANNOTATION_LIFE_ViSIBLE + 1) / 4)
+
+namespace { namespace curve_ { // anonymous, curves
+
+  inline qreal linear_(qreal progress, qreal start, qreal stop)
+  {
+    return  progress < start ? progress/start :
+            progress < stop  ? 1.0 :
+                               (1.0-progress)/(1.0-stop);
+  }
+  inline qreal in2_(qreal progress, qreal start, qreal stop)
+  {
+    qreal t; // quadro
+    return  progress < start ? (t=progress/start) * t :
+            progress < stop  ? 1.0 :
+                               (t=(1.0-progress)/(1.0-stop)) * t;
+  }
+  inline qreal in3_(qreal progress, qreal start, qreal stop)
+  {
+    qreal t; // quadro
+    return  progress < start ? (t=progress/start) * t*t :
+            progress < stop  ? 1.0 :
+                               (t=(1.0-progress)/(1.0-stop)) * t*t;
+  }
+  inline qreal out2_(qreal progress, qreal start, qreal stop)
+  {
+    qreal t; // quadro
+    return  progress < start ? 1.0 - (t=(start-progress)/start) * t :
+            progress < stop  ? 1.0 :
+                               1.0 - (t=(progress-stop)/(1-stop)) * t;
+  }
+  inline qreal out3_(qreal progress, qreal start, qreal stop)
+  {
+    qreal t; // quadro
+    return  progress < start ? 1.0 - (t=(start-progress)/start) * t*t:
+            progress < stop  ? 1.0 :
+                               1.0 - (t=(progress-stop)/(1-stop)) * t*t;
+  }
+
+  qreal NOINLINE appearOpacity(qreal progress)
+  { return linear_(progress, 0.2, 0.85); }
+
+  qreal NOINLINE flyOpacity(qreal progress)
+  { return linear_(progress, 0.13, 0.85); }
+
+} } // anonymous namespace
 
 namespace { // anonymous, annotation display
 
@@ -179,13 +232,14 @@ AnnotationGraphicsItem::warmUp()
 }
 
 AnnotationGraphicsItem::AnnotationGraphicsItem(
-  const Annotation &annot,
   SignalHub *hub,
   AnnotationGraphicsView *view)
-  : view_(view), hub_(hub), style_(FloatStyle), flyAni_(0), escapeAni_(0),
-    dragPos_(BAD_POS), dragPaused_(false)
+  : autoDelete_(true), view_(view), hub_(hub), style_(FloatStyle),
+    removeLaterTimer_(0),
+    flyAni_(0), flyOpacityAni_(0), escapeAni_(0), rushAni_(0), appearOpacityAni_(0), fadeAni_(0),
+    dragPos_(BAD_POS), dragPaused_(false), opacity_(1)
 {
-  DOUT("enter: text =" << annot.text());
+  DOUT("enter");
   Q_ASSERT(hub_);
   Q_ASSERT(view_);
   scene_ = view_->scene();
@@ -196,11 +250,6 @@ AnnotationGraphicsItem::AnnotationGraphicsItem(
 
   setScale(view_->scale());
 
-  removeLaterTimer_ = new QTimer(this);
-  removeLaterTimer_->setSingleShot(true);
-  connect(removeLaterTimer_, SIGNAL(timeout()), SLOT(removeMe()));
-
-  setAnnotation(annot);
   DOUT("exit");
 }
 
@@ -220,10 +269,14 @@ AnnotationGraphicsItem::isSubtitle(const QString &text)
 }
 
 void
+AnnotationGraphicsItem::reset()
+{ setOpacity(1); }
+
+void
 AnnotationGraphicsItem::invalidateAnnotation()
 {
   setDefaultStyle();
-  updateEffect();
+  //updateEffect();
 
   bool isOwner = view_->userId() &&
                  view_->userId() != User::UI_Guest &&
@@ -320,6 +373,30 @@ AnnotationGraphicsItem::setDefaultStyle()
 }
 
 void
+AnnotationGraphicsItem::setOpacity(qreal value)
+{
+  if (!qFuzzyCompare(opacity_, value)) {
+    opacity_ = value;
+    updateOpacity();
+  }
+}
+
+void
+AnnotationGraphicsItem::updateOpacity()
+{
+  if (qFuzzyCompare(opacity_, 1))
+    updateEffect();
+  else {
+    BOOST_AUTO(e, qobject_cast<QGraphicsOpacityEffect *>(graphicsEffect()));
+    if (!e)
+      e = new QGraphicsOpacityEffect;
+    e->setOpacity(opacity_);
+    if (e != graphicsEffect())
+      setGraphicsEffect(e);
+  }
+}
+
+void
 AnnotationGraphicsItem::updateEffect()
 {
   Effect e;
@@ -328,12 +405,7 @@ AnnotationGraphicsItem::updateEffect()
   case AnnotationGraphicsView::ShadowHint: e = ShadowEffect; break;
   case AnnotationGraphicsView::BlurHint: e = BlurEffect; break;
   case AnnotationGraphicsView::DefaultRenderHint:
-  default:
-    //if (isSubtitle() || hub_->isSignalTokenMode())
-    //  e = ShadowEffect;
-    //else
-    //  e = TransparentEffect;
-    e = ShadowEffect;
+  default: e = DefaultEffect;
   }
   setEffect(e);
 }
@@ -349,28 +421,43 @@ AnnotationGraphicsItem::setEffect(Effect e)
 #else
       enum { offset = 1, radius = 12 };
 #endif // Q_WS_WIN
-      QGraphicsDropShadowEffect *shadow = new QGraphicsDropShadowEffect(this);
-      shadow->setBlurRadius(radius); // in pixels
-      shadow->setOffset(offset); // in pixels
-      shadow->setColor(Qt::black);
-      setGraphicsEffect(shadow);
+      BOOST_AUTO(e, qobject_cast<QGraphicsDropShadowEffect *>(graphicsEffect()));
+      if (!e) {
+        e = new QGraphicsDropShadowEffect;
+        e->setBlurRadius(radius); // in pixels
+        e->setOffset(offset); // in pixels
+        e->setColor(Qt::black);
+        setGraphicsEffect(e);
+      }
     } break;
   case TransparentEffect:
     {
-      QGraphicsOpacityEffect *transp = new QGraphicsOpacityEffect(this);
-      transp->setOpacity(ANNOTATION_OPACITY);
-      setGraphicsEffect(transp);
+      BOOST_AUTO(e, qobject_cast<QGraphicsOpacityEffect *>(graphicsEffect()));
+      if (!e) {
+        e = new QGraphicsOpacityEffect;
+        e->setOpacity(ANNOTATION_OPACITY);
+        setGraphicsEffect(e);
+      }
     } break;
   case BlurEffect:
     {
-      QGraphicsBlurEffect *blur = new QGraphicsBlurEffect(this);
-      blur->setBlurHints(QGraphicsBlurEffect::PerformanceHint);
-      blur->setBlurRadius(2.5);
-      setGraphicsEffect(blur);
+      BOOST_AUTO(e, qobject_cast<QGraphicsBlurEffect *>(graphicsEffect()));
+      if (!e) {
+        e = new QGraphicsBlurEffect;
+        e->setBlurHints(QGraphicsBlurEffect::PerformanceHint);
+        e->setBlurRadius(2.5);
+        setGraphicsEffect(e);
+      }
     } break;
   case DefaultEffect:
   default:
-    updateEffect();
+    {
+      BOOST_AUTO(e, dynamic_cast<AnnotationGraphicsEffect *>(graphicsEffect()));
+      if (!e) {
+        e = new AnnotationGraphicsEffect;
+        setGraphicsEffect(e);
+      }
+    }
   }
 }
 
@@ -475,6 +562,7 @@ AnnotationGraphicsItem::parse(const QString &input)
 void
 AnnotationGraphicsItem::addMe()
 {
+  connect(view_, SIGNAL(itemVisibleChanged(bool)), SLOT(setVisible(bool)));
   connect(view_, SIGNAL(paused()), SLOT(pause()));
   connect(view_, SIGNAL(resumed()), SLOT(resume()));
   connect(view_, SIGNAL(scaleChanged(qreal)), SLOT(setScale(qreal)));
@@ -484,7 +572,27 @@ AnnotationGraphicsItem::addMe()
       !hub_->isStopped())
     connect(view_, SIGNAL(removeItemRequested()), SLOT(removeMe()));
 
+  setVisible(view_->isItemVisible());
   scene_->addItem(this);
+  autoDelete_ = false;
+}
+
+void
+AnnotationGraphicsItem::disappear()
+{
+  enum { timeout = 1000 };
+
+  switch (style_) {
+  case TopStyle:
+  case BottomStyle:
+    //removeMe();
+    fadeOut(timeout);
+    removeLater(timeout);
+    break;
+  default:
+    fadeOut(timeout);
+    removeLater(timeout);
+  }
 }
 
 void
@@ -496,11 +604,15 @@ AnnotationGraphicsItem::removeMe()
   //    !hub_->isStopped())
   if (hub_->isSignalTokenMode())
     disconnect(view_, SIGNAL(removeItemRequested()), this, SLOT(removeMe()));
+  disconnect(view_, SIGNAL(itemVisibleChanged(bool)), this, SLOT(setVisible(bool)));
   disconnect(view_, SIGNAL(paused()), this, SLOT(pause()));
   disconnect(view_, SIGNAL(resumed()), this, SLOT(resume()));
-  scene_->removeItem(this);
 
-  QTimer::singleShot(0, this, SLOT(deleteLater()));
+  if (scene() == scene_)
+    scene_->removeItem(this);
+  view_->releaseItem(this);
+  autoDelete_ = true;
+  //QTimer::singleShot(0, this, SLOT(deleteLater()));
 }
 
 void
@@ -509,8 +621,12 @@ AnnotationGraphicsItem::deleteMe()
   if (annot_.hasId())
     view_->removeAnnotationWithId(annot_.id(), true); // deleteAnnot = true
   else
-    removeMe();
+    disappear();
 }
+
+void
+AnnotationGraphicsItem::selectMe()
+{ view_->selectItem(this); }
 
 void
 AnnotationGraphicsItem::showMe()
@@ -532,7 +648,14 @@ AnnotationGraphicsItem::showMe()
 
 void
 AnnotationGraphicsItem::removeLater(int msecs)
-{ removeLaterTimer_->start(msecs); }
+{
+  if (!removeLaterTimer_) {
+    removeLaterTimer_ = new QTimer(this);
+    removeLaterTimer_->setSingleShot(true);
+    connect(removeLaterTimer_, SIGNAL(timeout()), SLOT(removeMe()));
+  }
+  removeLaterTimer_->start(msecs);
+}
 
 // - Show up -
 
@@ -544,16 +667,17 @@ AnnotationGraphicsItem::isPaused() const
       !hub_->isStopped())
     return false;
 
-  Q_ASSERT(removeLaterTimer_);
   switch (style_) {
   case FloatStyle:
   case FlyStyle:
-    return flyAni_ && flyAni_->state() == QAbstractAnimation::Paused;
+    return flyOpacityAni_ && flyOpacityAni_->state() == QAbstractAnimation::Paused;
 
   case TopStyle:
   case BottomStyle:
+    return appearOpacityAni_ && appearOpacityAni_->state() == QAbstractAnimation::Paused;
+
   case SubtitleStyle:
-    return !removeLaterTimer_->isActive();
+    return removeLaterTimer_ && !removeLaterTimer_->isActive();
   }
   return false;
 }
@@ -566,10 +690,16 @@ AnnotationGraphicsItem::pause()
       !hub_->isStopped())
     return;
 
-  Q_ASSERT(removeLaterTimer_);
+  if (fadeAni_ && fadeAni_->state() == QAbstractAnimation::Running)
+    fadeAni_->pause();
+
   switch (style_) {
   case FloatStyle:
   case FlyStyle:
+    if (fadeAni_ && fadeAni_->state() == QAbstractAnimation::Running)
+      fadeAni_->pause();
+    if (flyOpacityAni_ && flyOpacityAni_->state() == QAbstractAnimation::Running)
+      flyOpacityAni_->pause();
     if (flyAni_ && flyAni_->state() == QAbstractAnimation::Running) {
       origin_ = relativePos();
       flyAni_->pause();
@@ -577,8 +707,12 @@ AnnotationGraphicsItem::pause()
 
   case TopStyle:
   case BottomStyle:
+    if (appearOpacityAni_ && appearOpacityAni_->state() == QAbstractAnimation::Running)
+      appearOpacityAni_->pause();
+    break;
+
   case SubtitleStyle:
-    if (removeLaterTimer_->isActive())
+    if (removeLaterTimer_ && removeLaterTimer_->isActive())
       removeLaterTimer_->stop();
     break;
   }
@@ -592,10 +726,14 @@ AnnotationGraphicsItem::resume()
       !hub_->isStopped())
     return;
 
-  Q_ASSERT(removeLaterTimer_);
+  if (fadeAni_ && fadeAni_->state() == QAbstractAnimation::Paused)
+    fadeAni_->resume();
+
   switch (style_) {
   case FloatStyle:
   case FlyStyle:
+    if (flyOpacityAni_ && flyOpacityAni_->state() == QAbstractAnimation::Paused)
+      flyOpacityAni_->resume();
     if (flyAni_ && flyAni_->state() == QAbstractAnimation::Paused) {
       origin_ = relativePos();
       flyAni_->resume();
@@ -603,8 +741,12 @@ AnnotationGraphicsItem::resume()
 
   case TopStyle:
   case BottomStyle:
+    if (appearOpacityAni_ && appearOpacityAni_->state() == QAbstractAnimation::Paused)
+      appearOpacityAni_->resume();
+    break;
+
   case SubtitleStyle:
-    if (!removeLaterTimer_->isActive()) {
+    if (!removeLaterTimer_ || !removeLaterTimer_->isActive()) {
       //int timeout = stayTime(style_);
       enum { timeout = 2000 };
       removeLater(timeout);
@@ -663,17 +805,69 @@ AnnotationGraphicsItem::stay(Style style)
       hub_->isSignalTokenMode() &&
       !hub_->isStopped())
     msecs = -1;
-  stay(QPointF(x, y), msecs);
+  if (style == SubtitleStyle || msecs <= 0)
+    stay(QPointF(x, y), msecs);
+  else
+    appear(QPointF(x, y), msecs);
 }
 
 void
 AnnotationGraphicsItem::stay(const QPointF &pos, int msecs)
 {
-  setPos(pos);
+  updateEffect();
   addMe();
+  setPos(pos);
   if (hub_->isMediaTokenMode() ||
       !hub_->isStopped() && msecs >= 0)
     removeLater(msecs);
+}
+
+void
+AnnotationGraphicsItem::appear(const QPointF &pos, int msecs)
+{
+  if (!appearOpacityAni_) {
+    appearOpacityAni_ = new QPropertyAnimation(this, "opacity");
+    QEasingCurve curve;
+    curve.setCustomType(curve_::appearOpacity);
+    appearOpacityAni_->setEasingCurve(curve);
+    connect(appearOpacityAni_, SIGNAL(finished()), SLOT(removeMe()));
+  } else if (appearOpacityAni_->state() != QAbstractAnimation::Stopped)
+    appearOpacityAni_->stop();
+  setOpacity(0);
+  addMe();
+  setPos(pos);
+  appearOpacityAni_->setDuration(msecs);
+  appearOpacityAni_->setStartValue(0.0);
+  appearOpacityAni_->setEndValue(1.0);
+  appearOpacityAni_->start();
+}
+
+void
+AnnotationGraphicsItem::fadeIn(int msecs)
+{
+  if (!fadeAni_) {
+    fadeAni_ = new QPropertyAnimation(this, "opacity");
+    fadeAni_->setEasingCurve(QEasingCurve::Linear);
+  } else if (fadeAni_->state() != QAbstractAnimation::Stopped)
+    fadeAni_->stop();
+  fadeAni_->setDuration(msecs);
+  fadeAni_->setStartValue(0.0);
+  fadeAni_->setEndValue(1.0);
+  fadeAni_->start();
+}
+
+void
+AnnotationGraphicsItem::fadeOut(int msecs)
+{
+  if (!fadeAni_) {
+    fadeAni_ = new QPropertyAnimation(this, "opacity");
+    fadeAni_->setEasingCurve(QEasingCurve::Linear);
+  } else if (fadeAni_->state() != QAbstractAnimation::Stopped)
+    fadeAni_->stop();
+  fadeAni_->setDuration(msecs);
+  fadeAni_->setStartValue(0.99);
+  fadeAni_->setEndValue(0.0);
+  fadeAni_->start();
 }
 
 void
@@ -695,17 +889,30 @@ AnnotationGraphicsItem::fly(const QPointF &from, const QPointF &to, int msecs)
   if (!flyAni_) {
     flyAni_ = new QPropertyAnimation(this, "relativePos");
     flyAni_->setEasingCurve(QEasingCurve::Linear);
-    connect(flyAni_, SIGNAL(finished()), SLOT(removeMe()));
-    addMe();
   } else if (flyAni_->state() != QAbstractAnimation::Stopped)
     flyAni_->stop();
+  if (!flyOpacityAni_) {
+    flyOpacityAni_ = new QPropertyAnimation(this, "opacity");
+    QEasingCurve curve;
+    curve.setCustomType(curve_::flyOpacity);
+    flyOpacityAni_->setEasingCurve(curve);
+    connect(flyOpacityAni_, SIGNAL(finished()), SLOT(removeMe()));
+  } else if (flyOpacityAni_->state() != QAbstractAnimation::Stopped)
+    flyOpacityAni_->stop();
 
+  setOpacity(0);
+  addMe();
   origin_ = from;
   flyAni_->setDuration(msecs);
   flyAni_->setStartValue(QPointF());
   flyAni_->setEndValue(to - from);
 
+  flyOpacityAni_->setDuration(msecs);
+  flyOpacityAni_->setStartValue(0.0);
+  flyOpacityAni_->setEndValue(1.0);
+
   flyAni_->start();
+  flyOpacityAni_->start();
 }
 
 // - Events -
@@ -725,7 +932,7 @@ AnnotationGraphicsItem::contextMenuEvent(QContextMenuEvent *event)
     if (!hub_->isLiveTokenMode())
       m->addAction(TR(T_MENUTEXT_EDIT), this, SLOT(edit()));
     m->addAction(TR(T_MENUTEXT_COPY), this, SLOT(copyToClipboard()));
-    m->addAction(TR(T_MENUTEXT_REMOVEANNOTATION), this, SLOT(removeMe()));
+    m->addAction(TR(T_MENUTEXT_REMOVEANNOTATION), this, SLOT(disappear()));
     m->addSeparator();
 
     if (annot_.userId() == view_->userId()) {
@@ -746,7 +953,7 @@ AnnotationGraphicsItem::contextMenuEvent(QContextMenuEvent *event)
     }
 
     m->exec(event->globalPos());
-    QTimer::singleShot(0, m, SLOT(deleteLater()));
+    delete m;
     event->accept();
 
     if (!paused)
@@ -767,8 +974,10 @@ void
 AnnotationGraphicsItem::mousePressEvent(QMouseEvent *event)
 {
   dragPaused_ = isPaused();
-  if (!dragPaused_)
+  if (!dragPaused_) {
     pause();
+    selectMe();
+  }
   if (event && event->button() == Qt::LeftButton && dragPos_ == BAD_POS)
     dragPos_ = event->globalPos() -  QPoint(scenePos().x(), scenePos().y());
 }
@@ -902,7 +1111,8 @@ AnnotationGraphicsItem::abstract() const
 void
 AnnotationGraphicsItem::escapeFrom(const QPointF &from)
 {
-  enum { radius_x = 300/2, radius_y = 200/2, length = 225 }; // 225^2 = 150^2 + 100^2
+  //enum { rmin = 300, rmax = 600 };
+  enum { rmin = 200, rmax = 400 }; // radius
 
   qreal x1, y1, x2, y2; {
     QRectF r = boundingRect();
@@ -926,15 +1136,13 @@ AnnotationGraphicsItem::escapeFrom(const QPointF &from)
 
   qreal len = ::sqrt(d.x()*d.x() + d.y()*d.y());
   if (len < 0.01) {
-    d.rx() += radius_x;
-    len = radius_x;
+    d.rx() += rmax;
+    len = rmax;
   }
   else {
-    qreal r = length/len -1;
-    if (r < 0.01)
-      return;
-    d *= r;
-    len *= r;
+    qreal l = rmin + (rmax - rmin) /(len+1);
+    d *= l/len;
+    len = l;
   }
   QPointF to = pos() + d;
 
@@ -948,9 +1156,12 @@ AnnotationGraphicsItem::escapeTo(const QPointF &to, int msecs)
 {
   if (!isPaused())
     pause();
+  if (rushAni_ && rushAni_->state() != QAbstractAnimation::Stopped)
+    rushAni_->stop();
   if (!escapeAni_) {
     escapeAni_ = new QPropertyAnimation(this, "pos");
-    escapeAni_->setEasingCurve(QEasingCurve::OutInQuad);
+    //escapeAni_->setEasingCurve(QEasingCurve::OutInCubic);
+    escapeAni_->setEasingCurve(QEasingCurve::OutQuart);
     connect(escapeAni_, SIGNAL(finished()), SLOT(resume()));
   } else if (escapeAni_->state() != QAbstractAnimation::Stopped)
     escapeAni_->stop();
@@ -959,6 +1170,40 @@ AnnotationGraphicsItem::escapeTo(const QPointF &to, int msecs)
   escapeAni_->setStartValue(pos());
   escapeAni_->setEndValue(to);
   escapeAni_->start();
+}
+
+void
+AnnotationGraphicsItem::rushTo(const QPointF &to)
+{
+
+  QPointF now = boundingRect().center();
+  QPointF d = now - to;
+  qreal len = ::sqrt(d.x()*d.x() + d.y()*d.y());
+  if (len < 0.01)
+    return;
+
+  qreal v = 1/(len/60.0 + 1) + 0.1;
+  int msecs = qMax(int(len / v), 100);
+  rushTo(to, msecs);
+}
+
+void
+AnnotationGraphicsItem::rushTo(const QPointF &to, int msecs)
+{
+  if (!isPaused())
+    pause();
+  if (escapeAni_ && escapeAni_->state() != QAbstractAnimation::Stopped)
+    escapeAni_->stop();
+  if (!rushAni_) {
+    rushAni_ = new QPropertyAnimation(this, "pos");
+    rushAni_->setEasingCurve(QEasingCurve::OutQuart);
+  } else if (rushAni_->state() != QAbstractAnimation::Stopped)
+    rushAni_->stop();
+
+  rushAni_->setDuration(msecs);
+  rushAni_->setStartValue(pos());
+  rushAni_->setEndValue(to);
+  rushAni_->start();
 }
 
 // EOF

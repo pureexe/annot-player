@@ -11,6 +11,7 @@ namespace QtExt {
 class ActionWithId : public QAction
 {
   Q_OBJECT
+  Q_DISABLE_COPY(ActionWithId)
   typedef ActionWithId Self;
   typedef QAction Base;
 

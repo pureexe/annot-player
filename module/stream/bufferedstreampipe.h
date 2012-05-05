@@ -12,6 +12,7 @@
 class BufferedStreamPipe : public QObject, public StreamPipe
 {
   Q_OBJECT
+  Q_DISABLE_COPY(BufferedStreamPipe)
   typedef BufferedStreamPipe Self;
   typedef QObject Base;
 

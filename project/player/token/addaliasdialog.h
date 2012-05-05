@@ -13,6 +13,7 @@ typedef QtExt::Dialog AddAliasDialogBase;
 class AddAliasDialog : public AddAliasDialogBase
 {
   Q_OBJECT
+  Q_DISABLE_COPY(AddAliasDialog)
   typedef AddAliasDialog Self;
   typedef AddAliasDialogBase Base;
 

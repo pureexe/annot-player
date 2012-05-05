@@ -4,18 +4,18 @@
 // taskdialog.h
 // 2/18/2012
 
-#include "module/qtext/dialog.h"
+#include "project/common/acwindow.h"
 #include <QtCore/QStringList>
 
 QT_FORWARD_DECLARE_CLASS(QToolButton)
 
 class AcTextView;
-typedef QtExt::Dialog TaskDialogBase;
-class TaskDialog : public TaskDialogBase
+class TaskDialog : public AcWindow
 {
   Q_OBJECT
+  Q_DISABLE_COPY(TaskDialog)
   typedef TaskDialog Self;
-  typedef TaskDialogBase Base;
+  typedef AcWindow Base;
 
   AcTextView *textView_;
   QToolButton *urlButton_;

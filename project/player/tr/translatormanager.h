@@ -14,6 +14,7 @@ QT_FORWARD_DECLARE_CLASS(QCoreApplication)
 class TranslatorManager : public QObject
 {
   Q_OBJECT
+  Q_DISABLE_COPY(TranslatorManager)
   typedef TranslatorManager Self;
   typedef QObject Base;
 

@@ -11,6 +11,7 @@ QT_FORWARD_DECLARE_CLASS(QSettings)
 class WindowsRegistry : public QObject
 {
   Q_OBJECT
+  Q_DISABLE_COPY(WindowsRegistry)
   typedef WindowsRegistry Self;
   typedef QObject Base;
 

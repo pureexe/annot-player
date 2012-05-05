@@ -11,6 +11,7 @@
 class MiniPlayerDock : public QDockWidget
 {
   Q_OBJECT
+  Q_DISABLE_COPY(MiniPlayerDock)
   typedef MiniPlayerDock Self;
   typedef QDockWidget Base;
 
@@ -51,6 +52,7 @@ protected:
 class MiniPlayerUi : public PlayerUi
 {
   Q_OBJECT
+  Q_DISABLE_COPY(MiniPlayerUi)
   typedef MiniPlayerUi Self;
   typedef PlayerUi Base;
 

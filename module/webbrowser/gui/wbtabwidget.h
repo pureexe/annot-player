@@ -11,6 +11,7 @@
 class WbTabWidget : public QTabWidget
 {
   Q_OBJECT
+  Q_DISABLE_COPY(WbTabWidget)
   typedef WbTabWidget Self;
   typedef QTabWidget Base;
 
@@ -27,6 +28,7 @@ public:
 
 signals:
   void doubleClicked();
+  void rightButtonClicked();
   void tabDoubleClicked(int index);
 
   // - Events -
@@ -38,6 +40,13 @@ protected:
       e->accept();
     } else
       Base::mouseDoubleClickEvent(e);
+  }
+
+  virtual void mouseReleaseEvent(QMouseEvent *e) ///< \override
+  {
+    if (e->button() == Qt::RightButton)
+      emit rightButtonClicked();
+    Base::mouseReleaseEvent(e);
   }
 };
 

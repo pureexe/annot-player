@@ -10,6 +10,9 @@
 class CloseWidgetThread : public QThread
 {
   Q_OBJECT
+  Q_DISABLE_COPY(CloseWidgetThread)
+  typedef CloseWidgetThread Self;
+  typedef QThread Base;
 
   QWidget *w_;
 
@@ -17,8 +20,7 @@ class CloseWidgetThread : public QThread
 
 public:
   explicit CloseWidgetThread(QWidget *w, QObject *parent = 0)
-    : QThread(parent), w_(w) { Q_ASSERT(w_); }
+    : Base(parent), w_(w) { Q_ASSERT(w_); }
 };
-
 
 #endif // CLOSEWIDGETTHREAD_H

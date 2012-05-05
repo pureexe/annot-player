@@ -13,13 +13,15 @@ QT_FORWARD_DECLARE_CLASS(QUrl)
 class YoutubeMrlResolver : public MrlResolver
 {
   Q_OBJECT
+  Q_DISABLE_COPY(YoutubeMrlResolver)
   typedef YoutubeMrlResolver Self;
   typedef MrlResolver Base;
 
   QNetworkAccessManager *nam_;
 
 public:
-  explicit YoutubeMrlResolver(QObject *parent = 0);
+  explicit YoutubeMrlResolver(QObject *parent = 0)
+    : Base(parent) { init(); }
 
 public:
   bool matchMedia(const QString &href) const; ///< \override
@@ -29,7 +31,8 @@ public slots:
 protected slots:
   void resolveMedia(QNetworkReply *reply);
 
-protected:
+private:
+  void init();
   static QString formatTitle(const QString &text);
   static QString decodeYoutubeUrl(const QUrl &url);
 };

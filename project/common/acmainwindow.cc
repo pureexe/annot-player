@@ -25,9 +25,8 @@ enum { StatusMessageTimeout = 5000 };
 
 // - Constructions -
 
-
 AcMainWindow::AcMainWindow(QWidget *parent, Qt::WindowFlags f)
-  : Base(parent, f)
+  : Base(parent, f), autoHideMenuBar_(true)
 {
   AcUi::globalInstance()->setWindowStyle(this);
 
@@ -52,7 +51,8 @@ AcMainWindow::showMessage(const QString &text)
   statusBar()->showMessage(text);
   if (!text.isEmpty()) {
     statusBar()->show();
-    messageTimer_->start();
+    if (autoHideMenuBar_)
+      messageTimer_->start();
   }
 }
 
@@ -63,7 +63,8 @@ AcMainWindow::error(const QString &text)
   statusBar()->showMessage(text);
   if (!text.isEmpty()) {
     statusBar()->show();
-    messageTimer_->start();
+    if (autoHideMenuBar_)
+      messageTimer_->start();
   }
 }
 
@@ -74,7 +75,8 @@ AcMainWindow::warn(const QString &text)
   statusBar()->showMessage(text);
   if (!text.isEmpty()) {
     statusBar()->show();
-    messageTimer_->start();
+    if (autoHideMenuBar_)
+      messageTimer_->start();
   }
 }
 
@@ -85,7 +87,8 @@ AcMainWindow::notify(const QString &text)
   statusBar()->showMessage(text);
   if (!text.isEmpty()) {
     statusBar()->show();
-    messageTimer_->start();
+    if (autoHideMenuBar_)
+      messageTimer_->start();
   }
 }
 

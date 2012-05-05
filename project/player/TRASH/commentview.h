@@ -11,6 +11,7 @@ typedef QtExt::WebDialog CommentViewBase;
 class CommentView: public CommentViewBase
 {
   Q_OBJECT
+  Q_DISABLE_COPY(CommentView)
   typedef CommentView Self;
   typedef WebDialog Base;
 

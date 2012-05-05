@@ -15,6 +15,7 @@
 class AnnotationWidget : public QWidget
 {
   Q_OBJECT
+  Q_DISABLE_COPY(AnnotationWidget)
   typedef AnnotationWidget Self;
   typedef QWidget Base;
 

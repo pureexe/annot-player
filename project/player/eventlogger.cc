@@ -6,6 +6,7 @@
 #include "global.h"
 #include "logger.h"
 #include "tr.h"
+#include "signalhub.h"
 #include "project/common/acui.h"
 #include "module/qtext/htmltag.h"
 #include "module/qtext/datetime.h"
@@ -19,8 +20,8 @@
 
 using namespace Logger;
 
-EventLogger::EventLogger(Player *player, QObject *parent)
-  : Base(parent), player_(player), logUntilPlayingTimer_(0), logCount_(0)
+EventLogger::EventLogger(Player *player, SignalHub *hub, QObject *parent)
+  : Base(parent), player_(player), hub_(hub), logUntilPlayingTimer_(0), logCount_(0)
 {
   Q_ASSERT(player_);
   createConnections();
@@ -476,16 +477,25 @@ EventLogger::logResumeHoveredAnnotations(bool t)
 void
 EventLogger::logRemoveHoveredAnnotations(bool t)
 {
-  if (t)
-    log(tr("kill hovered annotations"));
+  if (t && !hub_->isFullScreenWindowMode())
+    log(tr("remove hovered annotations"));
 }
 
 void
-EventLogger::logExileHoveredAnnotations(bool t)
+EventLogger::logExpelNearbyAnnotations(bool t)
 {
-  if (t)
-    log(tr("exorcise hovered annotations"));
+  Q_UNUSED(t);
+  //if (t && !hub_->isFullScreenWindowMode())
+  //  log(tr("scatter nearby annotations"));
 }
+
+void
+EventLogger::logAttractNearbyAnnotations(bool t)
+{
+  if (t && !hub_->isFullScreenWindowMode())
+    log(tr("collect nearby annotations"));
+}
+
 
 void
 EventLogger::logSelectedUserIds(const QList<qint64> &uids)

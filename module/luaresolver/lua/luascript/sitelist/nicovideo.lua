@@ -118,7 +118,6 @@ function getTaskAttribute_nico ( str_url, str_tmpfile , pDlg)
   if str_title == nil then
     re = dlFile(str_tmpfile, nico_url); -- bypass banning
 
-
     forbidden = false;
     file = io.open(str_tmpfile, "r");
     if file==nil

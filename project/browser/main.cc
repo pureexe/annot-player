@@ -7,13 +7,16 @@
 #include "global.h"
 #include "project/common/acsettings.h"
 #include "project/common/acui.h"
+//#include "module/download/downloader.h"
 #ifdef WITH_MODULE_QT
 #  include "module/qt/qtrc.h"
 #endif // WITH_MODULE_QT
 #include <QtWebKit/QWebSettings>
+//#include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkProxy>
 #include <QtNetwork/QNetworkReply>
 #include <QtCore>
+#include <QtGui>
 #include <ctime>
 #include <cstdlib>
 
@@ -176,6 +179,10 @@ main(int argc, char *argv[])
     QNetworkProxy::setApplicationProxy(proxy);
   }
 
+  //DownloaderController::globalController()->setNetworkAccessManager(
+  //  new QNetworkAccessManager(&a)
+  //);
+
   DOUT("make mainwindow");
 
   QStringList args = a.arguments();
@@ -187,11 +194,11 @@ main(int argc, char *argv[])
     settings->setRecentTabIndex(urls.size() - 1);
   }
 
-  MainWindow *w = new MainWindow;
-
-  //QTimer::singleShot(0, w, SLOT(login()));
-  w->login();
-  w->show();
+  MainWindow *w = new MainWindow; {
+    //QTimer::singleShot(0, w, SLOT(login()));
+    //w->login();
+    w->show();
+  }
 
   DOUT("exit: exec");
   return a.exec();

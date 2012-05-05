@@ -12,6 +12,7 @@
 class LuaMrlResolver : public MrlResolver
 {
   Q_OBJECT
+  Q_DISABLE_COPY(LuaMrlResolver)
   typedef LuaMrlResolver Self;
   typedef MrlResolver Base;
 
@@ -25,12 +26,12 @@ public:
 
 public slots:
   bool resolveMedia(const QString &href) ///< \override
-  { return resolveMedia(href, true); }
+  { return resolveMedia(href, !isSynchronized()); }
 
   bool resolveMedia(const QString &href, bool async);
 
   bool resolveSubtitle(const QString &href) ///< \override
-  { return resolveSubtitle(href, true); }
+  { return resolveSubtitle(href, !isSynchronized()); }
 
   bool resolveSubtitle(const QString &href, bool async);
 

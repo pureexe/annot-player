@@ -15,6 +15,7 @@ class MediaToc;
 class StreamService : public QObject
 {
   Q_OBJECT
+  Q_DISABLE_COPY(StreamService)
   typedef StreamService Self;
   typedef QObject Base;
 

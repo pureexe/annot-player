@@ -42,7 +42,7 @@ GoogleVideoMrlResolver::resolveMedia(const QString &href)
   MediaInfo mi;
   mi.mrls.append(MrlInfo(mrl));
   mi.refurl = mrl;
-  emit mediaResolved(mi, 0);
+  emit mediaResolved(mi);
   return true;
 }
 

@@ -16,6 +16,7 @@
 class MouseGesture : public QObject
 {
   Q_OBJECT
+  Q_DISABLE_COPY(MouseGesture)
   typedef MouseGesture Self;
   typedef QObject Base;
 public:

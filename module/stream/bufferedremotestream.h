@@ -11,6 +11,7 @@
 class BufferedRemoteStream :  public RemoteStream
 {
   Q_OBJECT
+  Q_DISABLE_COPY(BufferedRemoteStream)
   typedef BufferedRemoteStream Self;
   typedef RemoteStream Base;
 
@@ -24,8 +25,8 @@ class BufferedRemoteStream :  public RemoteStream
   bool stopped_;
 
 public:
-  explicit BufferedRemoteStream(QObject *parent = 0)
-    : Base(parent), pos_(0), reply_(0), bufferSize_(0), stopped_(false) { }
+  explicit BufferedRemoteStream(QNetworkAccessManager *nam, QObject *parent = 0)
+    : Base(nam, parent), pos_(0), reply_(0), bufferSize_(0), stopped_(false) { }
 
   ~BufferedRemoteStream();
 

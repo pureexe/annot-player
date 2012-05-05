@@ -13,6 +13,7 @@ typedef QtExt::Dialog LiveDialogBase;
 class LiveDialog : public LiveDialogBase
 {
   Q_OBJECT
+  Q_DISABLE_COPY(LiveDialog)
   typedef LiveDialog Self;
   typedef LiveDialogBase Base;
 

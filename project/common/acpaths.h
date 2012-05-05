@@ -16,17 +16,24 @@
 #define AC_PATH_LOGS    ""      // TODO
 #define AC_PATH_DOWNLOADS       AcLocationManager::globalInstance()->downloadsLocation()
 
-// Class to enable tr()
+class AcSettings;
 class AcLocationManager : public QObject
 {
   Q_OBJECT
+  Q_DISABLE_COPY(AcLocationManager)
   typedef AcLocationManager Self;
   typedef QObject Base;
+
+  mutable AcSettings *settings_;
 
 public:
   static Self *globalInstance() { static Self g; return &g; }
 protected:
-  explicit AcLocationManager(QObject *parent = 0) : Base(parent) { }
+  explicit AcLocationManager(QObject *parent = 0)
+    : Base(parent), settings_(0) { init(); }
+
+signals:
+  void downloadsLocationChanged(const QString &path);
 
 public:
   enum StorageLocation {
@@ -56,9 +63,15 @@ public:
   }
 
   QString downloadsLocation() const;
+  QString defaultDownloadsLocation() const;
 
 public slots:
   void createDownloadsLocation();
+  void openDownloadsLocation();
+
+private:
+  void init();
+  AcSettings *settings() const;
 };
 
 

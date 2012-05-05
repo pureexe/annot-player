@@ -10,15 +10,17 @@
 class Application : public QApplication
 {
   Q_OBJECT
+  Q_DISABLE_COPY(Application)
   typedef Application Self;
   typedef QApplication Base;
 
   bool closed_;
   QWidgetList windows_;
+  QList<QtMsgHandler> messageHandlers_;
 
   // - Constructions -
 public:
-  static Self *globalInstance() { return dynamic_cast<Self*>(qApp); }
+  static Self *globalInstance() { return dynamic_cast<Self *>(qApp); }
 
   Application(int &argc, char **argv, bool gui = true);
   ~Application() { close(); }
@@ -41,6 +43,17 @@ public:
   void removeWindow(QWidget *w);
 
   bool isSingleInstance() const;
+
+  // - Debug -
+public:
+  void installMessageHandlers(); ///< invoked only once
+
+  void addMessageHandler(QtMsgHandler callback)
+  { messageHandlers_.append(callback); }
+
+private:
+  static void messageHandler(QtMsgType type, const char *msg);
+  static void loggedMessageHandler(QtMsgType type, const char *msg);
 
   // - Events -
 protected:

@@ -2,8 +2,8 @@
 // 1/27/2012
 #include "webkit/wbwebview.h"
 #include "global/wbrc.h"
-#include "core/wbsearchenginefactory.h"
 #include "project/common/acrc.h"
+#include "module/searchengine/searchenginefactory.h"
 #include "module/mrlanalysis/mrlanalysis.h"
 #include "module/qtext/actionwithid.h"
 #include <QtGui>
@@ -19,13 +19,17 @@ WbWebView::WbWebView(QWidget *parent)
 {
   createActions();
   connect(this, SIGNAL(selectionChanged()), SLOT(invalidateSelection()));
-
   connect(page(), SIGNAL(linkHovered(QString,QString,QString)), SLOT(highlightDownloadableLink(QString,QString,QString)));
 }
 
 void
 WbWebView::createActions()
 {
+  openSelectedLinkAct_ = new QAction(this); {
+    openSelectedLinkAct_->setText(tr("Open Link in New Tab"));
+    openSelectedLinkAct_->setStatusTip(tr("Open Link in New Tab"));
+    connect(openSelectedLinkAct_, SIGNAL(triggered()), SLOT(openSelectedLink()));
+  }
   openWithAcPlayerAct_ = new QAction(this); {
     openWithAcPlayerAct_->setIcon(QIcon(ACRC_IMAGE_PLAYER));
     openWithAcPlayerAct_->setText(tr("Play with Annot Player"));
@@ -61,6 +65,12 @@ WbWebView::createActions()
     fullScreenAct_->setShortcut(QKeySequence("CTRL+META+F"));
     connect(fullScreenAct_, SIGNAL(triggered()), SIGNAL(fullScreenRequested()));
   }
+  menuBarAct_ = new QAction(this); {
+    menuBarAct_->setText(tr("Toggle Menu Bar"));
+    menuBarAct_->setStatusTip(tr("Toggle Menu Bar"));
+    menuBarAct_->setShortcut(QKeySequence("ALT"));
+    connect(menuBarAct_, SIGNAL(triggered()), SIGNAL(toggleMenuBarVisibleRequested()));
+  }
 
   undoClosedTabAct_->setShortcut(QKeySequence("CTRL+SHIFT+T"));
 }
@@ -85,8 +95,9 @@ WbWebView::contextMenuEvent(QContextMenuEvent *event)
   QMenu *m = new QMenu(this);
 
   currentUrl_ = hoveredLink();
+  QString selectedLink = selectedUrl();
   if (currentUrl_.isEmpty()) {
-    currentUrl_ = selectedUrl();
+    currentUrl_ = selectedLink;
     if (currentUrl_.isEmpty())
       currentUrl_ = url().toString();
   }
@@ -99,13 +110,16 @@ WbWebView::contextMenuEvent(QContextMenuEvent *event)
       m->addAction(openWithAcDownloaderAct_);
     m->addSeparator();
   }
+  if (!selectedLink.isEmpty()) {
+    m->addAction(openSelectedLinkAct_);
+    m->addSeparator();
+  }
 
   QString selection = selectedText().simplified();
   if (!selection.isEmpty() && hasSearchEngines()) {
-
     for (int engine = 0; engine < searchEngines_.size(); engine++) {
       QtExt::ActionWithId *a = new QtExt::ActionWithId(engine, m);
-      WbSearchEngine *e = searchEngines_[engine];
+      SearchEngine *e = searchEngines_[engine];
       a->setText(tr("Search with %1").arg(e->name()));
       a->setStatusTip(e->search("@key"));
       a->setIcon(QIcon(e->icon()));
@@ -116,12 +130,12 @@ WbWebView::contextMenuEvent(QContextMenuEvent *event)
       m->addAction(a);
     }
 
-    int engine = WbSearchEngineFactory::Qt;
+    int engine = SearchEngineFactory::Qt;
     if (engine >= searchEngines_.size() && selection.startsWith('Q') && !selection.contains(' ')) {
       QtExt::ActionWithId *a = new QtExt::ActionWithId(engine, m);
-      static WbSearchEngine *e = 0;
+      static SearchEngine *e = 0;
       if (!e)
-        e = WbSearchEngineFactory::globalInstance()->create(engine);
+        e = SearchEngineFactory::globalInstance()->create(engine);
       a->setText(tr("Search with %1").arg(e->name()));
       a->setStatusTip(e->search("@key"));
       a->setIcon(QIcon(e->icon()));
@@ -159,12 +173,15 @@ WbWebView::contextMenuEvent(QContextMenuEvent *event)
   m->addAction(openWithOperatingSystemAct);
   m->addAction(newWindowAct_);
   m->addAction(fullScreenAct_);
+#ifdef Q_WS_WIN
+  m->addAction(menuBarAct_);
+#endif // Q_WS_WIN
 
   m->exec(event->globalPos());
   delete scm;
-  QTimer::singleShot(0, m, SLOT(deleteLater()));
+  delete m;
   if (history)
-    QTimer::singleShot(0, history, SLOT(deleteLater()));
+    delete history;
   event->accept();
 }
 
@@ -183,7 +200,7 @@ WbWebView::selectedUrl() const
   if (ret.isEmpty())
     return ret;
   ret = ret.split('\n', QString::SkipEmptyParts).first();
-  if (ret.startsWith("http://")  || ret.startsWith("ttp://"))
+  if (ret.contains(QRegExp("[a-zA-Z]{3,5}://[a-zA-Z]")))
     return ret;
   else
     return QString();

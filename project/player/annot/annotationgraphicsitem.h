@@ -25,8 +25,10 @@ class AnnotationGraphicsView;
 class AnnotationGraphicsItem : public QGraphicsTextItem
 {
   Q_OBJECT
+  Q_DISABLE_COPY(AnnotationGraphicsItem)
   Q_PROPERTY(QPointF pos READ pos WRITE setPos)
   Q_PROPERTY(QPointF relativePos READ relativePos WRITE setRelativePos)
+  Q_PROPERTY(qreal opacity READ opacity WRITE setOpacity)
 
   typedef AnnotationGraphicsItem Self;
   typedef QGraphicsTextItem Base;
@@ -42,8 +44,7 @@ public:
   enum Effect { DefaultEffect = 0, TransparentEffect, ShadowEffect, BlurEffect, EffectCount };
 
 public:
-  AnnotationGraphicsItem(const Annotation &annot, SignalHub *hub, AnnotationGraphicsView *viewWithScene);
-  //explicit AnnotationGraphicsItem(AnnotationGraphicsView *viewWithScene);
+  explicit AnnotationGraphicsItem(SignalHub *hub, AnnotationGraphicsView *viewWithScene);
 
   const Annotation &annotation() const { return annot_; }
   Annotation &annotation() { return annot_; }
@@ -52,6 +53,8 @@ public:
   void invalidateAnnotation();
 
   const QString &richText() const { return richText_; } ///< tidied HTML
+
+  bool autoDelete() const { return autoDelete_; }
 
   ///  Override
   virtual int type() const { return AnnotationGraphicsItemType; }
@@ -70,28 +73,38 @@ public:
 
   QPointF relativePos() const { return pos() - origin_; }
 
+  qreal opacity() const { return opacity_; }
+
 protected:
   //QString parse(const QString &text);
   static bool isSubtitle(const QString &text);
 
 public slots:
+  void setVisible(bool t) { Base::setVisible(t); }
   void setRelativePos(const QPointF &offset) { setPos(origin_ + offset); }
   void setScale(qreal value) { Base::setScale(value); }
-  void addMe();
-  void removeMe(); // Remove me from graphics scene
-  void deleteMe(); // Delete corresponding annotation
   void showMe();   // Add me to graphics scene, and autmatic remove me.
+  void selectMe();
   void updateEffect();
   void setEffect(Effect e);
 
+  void reset();
   void pause();
   void resume();
   void escapeFrom(const QPointF &pos);
+  void rushTo(const QPointF &pos);
 
+  void setOpacity(qreal value);
+
+  void disappear();
 protected slots:
+  void addMe();
+  void removeMe(); // Remove me from graphics scene
+  void deleteMe(); // Delete corresponding annotation
+
+  void updateOpacity();
   void fly();
   void stay(Style location = TopStyle);
-
   void removeLater(int msecs);
 
   void edit();
@@ -108,10 +121,15 @@ protected slots:
 protected:
   void fly(const QPointF &from, const QPointF &to, int msecs);
   void escapeTo(const QPointF &pos, int msecs);
+  void rushTo(const QPointF &pos, int msecs);
   void stay(const QPointF &pos, int msecs);
+  void appear(const QPointF &pos, int msecs);
 
   int flyTime() const;  ///< in msecs
   int stayTime(Style style) const; ///< in msecs
+
+  void fadeIn(int msecs);
+  void fadeOut(int msecs);
 
   // Events:
 public:
@@ -137,6 +155,7 @@ private:
   int nextY(int visibleTime, Style style) const;
 
 private:
+  bool autoDelete_;
   Annotation annot_;
 
   QPointF origin_;
@@ -144,13 +163,16 @@ private:
   QGraphicsScene *scene_;
   SignalHub *hub_;
 
-  QTimer *removeLaterTimer_;
   Style style_;
-  QPropertyAnimation *flyAni_, *escapeAni_;
+  QTimer *removeLaterTimer_;
+  QPropertyAnimation *flyAni_,*flyOpacityAni_,
+                     *escapeAni_, *rushAni_,
+                     *appearOpacityAni_, *fadeAni_;
 
   QPoint dragPos_;
   bool dragPaused_;
   QString richText_;
+  qreal opacity_;
 };
 
 #endif // ANNOTATIONGRAPHICSITEM_H

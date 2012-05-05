@@ -10,6 +10,7 @@ QT_BEGIN_NAMESPACE
 class QAbstractItemModel;
 class QAction;
 class QComboBox;
+//class QGestureEvent;
 class QMenu;
 class QSortFilterProxyModel;
 class QStandardItemModel;
@@ -33,6 +34,7 @@ class TrayIcon;
 class MainWindow : public AcMainWindow
 {
   Q_OBJECT
+  Q_DISABLE_COPY(MainWindow)
   typedef MainWindow Self;
   typedef AcMainWindow Base;
 
@@ -55,8 +57,8 @@ public:
   explicit MainWindow(QWidget *parent = 0);
   bool isAddingUrls() const;
 
-signals:
-  void downloadFinished(const QString &path, const QString &url);
+//signals:
+//  void downloadFinished(const QString &path, const QString &url);
 
 public slots:
   void clear();
@@ -112,7 +114,10 @@ public:
   virtual bool event(QEvent *event); ///< \override
 protected:
   virtual void contextMenuEvent(QContextMenuEvent *e); ///< \override
+  virtual void keyReleaseEvent(QKeyEvent *e); ///< \override
   virtual void closeEvent(QCloseEvent *e); ///< \override
+
+  //void gestureEvent(QGestureEvent *e);
 
 private:
   void createModels();
@@ -142,6 +147,7 @@ private:
 
   QMenu *contextMenu_;
   QAction *newAct_,
+          *menuBarAct_,
           *startAct_,
           *stopAct_,
           *restartAct_,

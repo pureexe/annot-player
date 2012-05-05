@@ -11,6 +11,7 @@ QT_FORWARD_DECLARE_CLASS(QWidget)
 class Application : public QApplication
 {
   Q_OBJECT
+  Q_DISABLE_COPY(Application)
   typedef Application Self;
   typedef QApplication Base;
 
@@ -18,7 +19,7 @@ class Application : public QApplication
 
   // - Constructions -
 public:
-  static Self *globalInstance() { return dynamic_cast<Self*>(qApp); }
+  static Self *globalInstance() { return dynamic_cast<Self *>(qApp); }
 
   Application(int &argc, char **argv, bool gui = true);
   ~Application();

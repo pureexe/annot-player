@@ -46,6 +46,10 @@ Application::createDirectories()
   QDir caches(G_PATH_CACHES);
   if (!caches.exists())
     caches.mkpath(profile.absolutePath());
+
+  QDir logs(G_PATH_LOGS);
+  if (!logs.exists())
+    logs.mkpath(logs.absolutePath());
 }
 
 void
@@ -170,5 +174,50 @@ Application::addWindow(QWidget *w)
 void
 Application::removeWindow(QWidget *w)
 { windows_.removeAll(w); }
+
+// - Debug -
+
+void
+Application::messageHandler(QtMsgType type, const char *msg)
+{
+  foreach (QtMsgHandler callback, globalInstance()->messageHandlers_)
+    callback(type, msg);
+}
+
+// See: http://www.cppblog.com/lauer3912/archive/2011/04/10/143870.html
+void
+Application::loggedMessageHandler(QtMsgType type, const char *msg)
+{
+#define TIMESTAMP QDateTime::currentDateTime().toString("MM:dd: hh:mm:ss")
+  QString output;
+  switch (type) {
+  case QtDebugMsg:    output = QString("%1: %2\n").arg(TIMESTAMP).arg(msg); break;
+  case QtWarningMsg:  output = QString("%1: warning: %2\n").arg(TIMESTAMP).arg(msg); break;
+  case QtCriticalMsg: output = QString("%1: critical: %2\n").arg(TIMESTAMP).arg(msg); break;
+  case QtFatalMsg:    output = QString("%1: fatal: %2\n").arg(TIMESTAMP).arg(msg); break;
+  default: return;
+  }
+
+  QFile file(G_PATH_DEBUG);
+  if (file.open(QIODevice::WriteOnly | QIODevice::Append))
+    QTextStream(&file) << output;
+#undef TIMESTAMP
+}
+
+void
+Application::installMessageHandlers()
+{
+  qDebug() << "application::installMessageHandlers";
+  QFile debug(G_PATH_DEBUG);
+  if (debug.open(QIODevice::WriteOnly | QIODevice::Append)) {
+    QTextStream(&debug)
+      << "\n################################################################################\n\n";
+    debug.close();
+
+    qInstallMsgHandler(messageHandler);
+    addMessageHandler(loggedMessageHandler);
+    DOUT("debug message handler installed");
+  }
+}
 
 // EOF

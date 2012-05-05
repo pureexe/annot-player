@@ -17,6 +17,7 @@
 class ClientServant : public QThread, public ClientSoap::ClientSoapService
 {
   Q_OBJECT
+  Q_DISABLE_COPY(ClientServant)
   typedef ClientServant Self;
   typedef QThread QtBase;
   typedef ClientSoap::ClientSoapService SoapBase;

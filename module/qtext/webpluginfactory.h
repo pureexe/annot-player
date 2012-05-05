@@ -11,6 +11,7 @@ namespace QtExt {
 class WebPluginFactory: public QWebPluginFactory
 {
   Q_OBJECT
+  Q_DISABLE_COPY(WebPluginFactory)
   typedef WebPluginFactory Self;
   typedef QWebPluginFactory Base;
 

@@ -11,6 +11,7 @@
 class WbNetworkAccessManager : public QNetworkAccessManager
 {
   Q_OBJECT
+  Q_DISABLE_COPY(WbNetworkAccessManager)
   typedef WbNetworkAccessManager Self;
   typedef QNetworkAccessManager Base;
 

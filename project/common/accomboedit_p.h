@@ -10,6 +10,7 @@
 class AcComboBoxLineEdit : public QLineEdit
 {
   Q_OBJECT
+  Q_DISABLE_COPY(AcComboBoxLineEdit)
   typedef AcComboBoxLineEdit Self;
   typedef QLineEdit Base;
 

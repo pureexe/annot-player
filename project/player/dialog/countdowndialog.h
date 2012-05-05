@@ -13,6 +13,7 @@ typedef QtExt::Dialog CountdownDialogBase;
 class CountdownDialog : public CountdownDialogBase
 {
   Q_OBJECT
+  Q_DISABLE_COPY(CountdownDialog)
   typedef CountdownDialog Self;
   typedef CountdownDialogBase Base;
 

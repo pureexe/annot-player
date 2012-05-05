@@ -2,17 +2,24 @@
 # 6/18/2011
 http://db.tt/SrtkzxIJ
 
-browser address bar: open with operating system is broken
-
 # server
 - move wiki to sakuradite
 - add shortcuts && gestures to googlecode and herlpwiki
+- JSP: add a list of highligh features
+- make twitter-like system in JSP
 
-# client
-- browser
-  - connect link clicked signal to addrecent
+# ideas
+- Windows 8
+  touchpad with annotations
+- control annot in detail, point: more informable and expressable
+  - not only float, but other way
+- integrate with SNS
+
+- bridge with other asian culture like thai
+- integrate my browser with jsp server
+
 - player
-  - imaging
+  - imagine
     - get use of mouse/tablet gestures/shortcuts
       property_anime function/curve
       embedded webview/qpainter
@@ -20,30 +27,48 @@ browser address bar: open with operating system is broken
   goal: make annotation more useful, only keep useful information
         integrate SNS
         freedom, anntotate deathnote
-  - FIXME: crash while switching diff video filetypes
-      wait while diff filetype?
-  - reduce buffering time
-
-- browser
-  - add context menu: lock hide top region in fullscreen mode
-  - add tablet gesture
-  - update help for mouse gestures in download page
-  - add dummy help context action as place holder, helplink for mouse gestures in wiki
-    same as downloader
-    update place holder for each of them
-    Manual:Helper:AnnotPlayer
-   -auto popup menubar on hover or with ALT key
-- browser
-  - FIXME: cannot play video on bilibili.tv
-  - show loading progress in addressedit using css
-  - split browser to a different app?
-  - change path of addressline to path like buttons
-  - merge webrowser module with browser project and accommon
-- common
-  - learn the source code of ith's updater
-  - add a prefenece panel for its settings
 
 # client
+- player
+  able to limit annotationgraphicsview position
+  say, only a portion of the screen
+- windows
+  - improve annotation render, make it at least not worse than that on mac
+  - try graphicsrippleeffect
+- common
+  - add AcApplication, combine singleapplication, messagehandlers, etc
+  - preferences
+    - make association changable
+  - windows: change download folder icon to the one in mac
+- downloader
+  - option to copy url/open contextMenu in browser/open in player
+  - download: add filesave location option in add.*dialog
+  - change to use qtreeview to indicate connection status
+    http://qt-project.org/doc/qt-4.8/qtreeview.html
+  - color diff type of task according to its state
+  - debug download 2 files from nico bug
+- player
+  - gradually transparency startup
+  - reduce action count
+  - left+right with ripple effect
+  - wait while diff filetype?
+  - reduce buffering time
+  - FIXME: pinch gesture not received
+- browser
+  - FIXME: cannot play video on bilibili.tv
+  - auto login as settings
+  - FIXME: cannot play video on bilibili.tv
+  - debug connect link clicked signal to address
+  - show loading progress in addressedit using css
+  - change path of addressline to path like buttons
+  - merge webrowser module with browser project and accommon
+
+- common
+  - learn the source code of ith's updater
+- player
+  - finish halo effect by modifying qt_blurImage
+  - add transparency effect
+  - stream multiple video at once
 - windows
   - migrate to ith3
     inject.cc => ihf/main.cpp

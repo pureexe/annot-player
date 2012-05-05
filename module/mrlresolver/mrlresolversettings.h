@@ -10,6 +10,7 @@
 class MrlResolverSettings : public QObject
 {
   Q_OBJECT
+  Q_DISABLE_COPY(MrlResolverSettings)
   typedef MrlResolverSettings Self;
   typedef QObject Base;
 

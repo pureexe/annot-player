@@ -149,12 +149,14 @@ Signer::signFileWithUrl(const QString &fileName, const QString &url, bool async)
 QString
 Signer::digestForFile(const QString &fileName)
 {
+  DOUT("enter: fileName =" << fileName);
   QString digest = Token::digestFromFile(fileName);
   if (digest.isEmpty()) {
     QString localPath = QUrl(fileName).toLocalFile();
     QString decodedLocalPath = QUrl::fromPercentEncoding(localPath.toAscii());
     digest = Token::digestFromFile(decodedLocalPath);
   }
+  DOUT("exit: ret =" << digest);
   return digest;
 }
 
@@ -218,6 +220,7 @@ Signer::login(const QString &userName, const QString &encryptedPassword)
     emit message(tr("login succeeded as %1").arg(userName));
   else
     emit warning(tr("failed to login as %1").arg(userName));
+  DOUT("exit");
 }
 
 // EOF

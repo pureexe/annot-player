@@ -14,6 +14,7 @@
 class FileDeleter : public QObject
 {
   Q_OBJECT
+  Q_DISABLE_COPY(FileDeleter)
   typedef FileDeleter Self;
   typedef QObject Base;
 

@@ -24,6 +24,7 @@ typedef QtExt::Dialog AnnotationBrowserBase;
 class AnnotationBrowser : public AnnotationBrowserBase
 {
   Q_OBJECT
+  Q_DISABLE_COPY(AnnotationBrowser)
   typedef AnnotationBrowser Self;
   typedef AnnotationBrowserBase Base;
 

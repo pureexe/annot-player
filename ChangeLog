@@ -2,6 +2,24 @@ ChangeLog
 Annot Project
 6/18/2011
 
+5/5/2012	annot.player, down, browser	0.1.5.3, 0.1.2.2, 0.1.1.2
+        * Able to play limited Youku video from outside of China.
+        * Use annotion pool to reduce memory traffic and CPU usage significantly.
+        * Support for AcFun.tv is fixed.
+        * Fixed a bug preventing network proxy settings from being saved.
+        * Change stream strategy from mult-thread to single-thread multi-task
+          to avoid being banned by remote server when download in parallel.
+        * right button will collect nearby annotations.
+          ALT + DoubleClick will attract all annotations.
+          SHIFT + DoubleClick will expel nearby annotations.
+          Shortcuts to manipulate annotations changed.
+        * Added FadeIn / FadeOut effects to render annotations.
+        * Added touchpad gestures to player and all webview (Mac only).
+        * Added menu bar to Browser/Downloader on Windows.
+        * Added debug console to Browser.
+        * Added preferences dialog. Able to change default downloads location.
+        * Context menu to repeat current video.
+
 4/28/2012	annot.player, down, browser	0.1.5.2, 0.1.2.1, 0.1.1.1
         * Fixed a severe bug that might cause duplicated imported annotations.
 

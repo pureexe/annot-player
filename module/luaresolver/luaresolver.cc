@@ -36,14 +36,15 @@
 
 // - Construction -
 
-LuaResolver::LuaResolver(const QString &scriptPath, const QString &packagePath, QObject *parent)
-  : Base(parent), scriptPath_(scriptPath), packagePath_(packagePath), cookieJar_(0)
+void
+LuaResolver::init()
 {
 #ifdef ANNOT_PROXY_DOMAIN
   cookieJar_ = new QtExt::NetworkCookieJarWithDomainAlias(".nicovideo.jp", ANNOT_PROXY_DOMAIN, this);
 #else
-#  warning "nico proxy domain is not defined"
+#  warning "nico alias domain is not defined"
 #endif // ANNOT_PROXY_DOMAIN
+
 }
 
 // - Helpers -
@@ -126,24 +127,28 @@ int
 LuaResolver::dlget(lua_State *L)
 {
   DOUT("enter");
-  enum { PARAM_PATH = 1, PARAM_URL };
+  enum { ParamPath = 1, ParamUrl, ParamHeader,
+         ParamCount = ParamHeader};
   Q_ASSERT(L);
   int param_count = lua_gettop(L);
-  Q_ASSERT(param_count == 2);
-  if (param_count != 2) {
+  Q_ASSERT(param_count == ParamCount);
+  if (param_count != ParamCount) {
     DOUT("exit: mismatched param_count =" << param_count);
     return 1;
   }
-  QString path = _qs(lua_tostring(L, PARAM_PATH));
-  QString url = _qs(lua_tostring(L, PARAM_URL));
+  QString path = _qs(lua_tostring(L, ParamPath));
+  QString url = _qs(lua_tostring(L, ParamUrl));
+  QString header = _qs(lua_tostring(L, ParamHeader));
 
-  DOUT("url =" << url);
-  Downloader *dl = new Downloader(path, this);
-  if (cookieJar_)
-    dl->networkAccessManager()->setCookieJar(cookieJar_);
-  const QString noheader;
-  dl->get(QUrl(url), noheader, false); // async = false
-  bool ok = dl->state() == Downloader::OK;
+  DOUT("url =" << url << ", header =" << header);
+  Downloader dl(path);
+  if (cookieJar_) {
+    QObject *parent = cookieJar_->parent();
+    dl.networkAccessManager()->setCookieJar(cookieJar_);
+    cookieJar_->setParent(parent);
+  }
+  dl.get(QUrl(url), header, false); // async = false
+  bool ok = dl.state() == Downloader::OK;
   //if (ok && cookieJar_)
   //  hackCookieJar(cookieJar_);
   DOUT("exit: ok =" << ok);
@@ -154,27 +159,31 @@ int
 LuaResolver::dlpost(lua_State *L)
 {
   DOUT("enter");
-  enum { PARAM_PATH = 1, PARAM_URL, PARAM_PARAM, PARAM_HEADER };
+  enum { ParamPath = 1, ParamUrl, ParamParameter, ParamHeader,
+         ParamCount = ParamHeader };
   Q_ASSERT(L);
   int param_count = lua_gettop(L);
-  Q_ASSERT(param_count == 4);
-  if (param_count != 4) {
+  Q_ASSERT(param_count == ParamCount);
+  if (param_count != ParamCount) {
     DOUT("exit: mismatched param_count =" << param_count);
     return 1;
   }
-  QString path = _qs(lua_tostring(L, PARAM_PATH));
-  QString url = _qs(lua_tostring(L, PARAM_URL));
-  QString param = _qs(lua_tostring(L, PARAM_PARAM));
-  QString header = _qs(lua_tostring(L, PARAM_HEADER));
+  QString path = _qs(lua_tostring(L, ParamPath));
+  QString url = _qs(lua_tostring(L, ParamUrl));
+  QString param = _qs(lua_tostring(L, ParamParameter));
+  QString header = _qs(lua_tostring(L, ParamHeader));
 
   DOUT("url =" << url << ", path =" << path);
-  Downloader *dl = new Downloader(path, this);
-  if (cookieJar_)
-    dl->networkAccessManager()->setCookieJar(cookieJar_);
+  Downloader dl(path);
+  if (cookieJar_) {
+    QObject *parent = cookieJar_->parent();
+    dl.networkAccessManager()->setCookieJar(cookieJar_);
+    cookieJar_->setParent(parent);
+  }
   //QByteArray data = Downloader::encodeUrlParameters(param);
   QByteArray data = param.toLocal8Bit();
-  dl->post(QUrl(url), data, header, false); // async = false
-  bool ok = dl->state() == Downloader::OK;
+  dl.post(QUrl(url), data, header, false); // async = false
+  bool ok = dl.state() == Downloader::OK;
   //if (ok && cookieJar_)
   //  hackCookieJar(cookieJar_);
   DOUT("exit: ok =" << ok);

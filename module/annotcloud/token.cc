@@ -48,18 +48,21 @@ Token::digestFromFile(const QString &input)
       filePath = input;
   }
 
+  DOUT("path =" << filePath);
+
   if (!filePath.isEmpty()) {
 #ifdef WITH_MODULE_IOUTIL
+    DOUT("with module ioutil");
     data = IOUtil::readBytes(filePath, DIGEST_SIZE);
 #else
+    DOUT("without module ioutil");
     QFile file(filePath);
     bool ok = file.open(QIODevice::ReadOnly);
     if (!ok) {
       DOUT("exit: Failed to open file for hashing: " << filePath);
       return QByteArray();
     }
-
-    data = file.read(DIGEST_SIZE);
+    data = file.read(qMin(file.size(), qint64(DIGEST_SIZE)));
     file.close();
 #endif // WITH_MODULE_IOUTIL
   }
@@ -70,7 +73,7 @@ Token::digestFromFile(const QString &input)
   }
 
   QByteArray ret = DIGEST(data);
-  DOUT("exit");
+  DOUT("exit: ret =" << ret.toHex());
   return ret.toHex().toUpper();
 }
 

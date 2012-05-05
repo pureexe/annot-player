@@ -14,7 +14,9 @@
 #else
 #  error "mediacodec module is required"
 #endif // WITH_MODULE_MEDIACODEC
-#include "module/qtext/algorithm.h"
+#ifdef WITH_MODULE_MRLRESOLVER
+#  include "module/mrlresolver/luamrlresolver.h"
+#endif // WITH_MODULE_LUARESOLVER
 #include "module/qtext/htmltag.h"
 #include "module/qtext/filesystem.h"
 #include "module/qtext/os.h"
@@ -28,12 +30,6 @@
 #include "module/debug/debug.h"
 
 enum { MaxDownloadRetries = 5 };
-
-#ifdef Q_WS_WIN
-#  define PATH_SEP  "\\"
-#else
-#  define PATH_SEP  "/"
-#endif // Q_WS_WIN
 
 // - Progress -
 
@@ -78,6 +74,9 @@ HttpStreamSession::~HttpStreamSession()
 
   //foreach (QObject *obj, deleteLater_)
   //  delete obj;
+
+  if (nam_)
+    delete nam_;
 }
 
 // - Properties -
@@ -136,7 +135,7 @@ HttpStreamSession::updateFileName()
 {
   //bool mp4 = contentType().contains("mp4", Qt::CaseInsensitive);
   QString suf = ".flv";
-  fileName_ = cachePath() + "/" + QtExt::escapeFileName(mediaTitle()) + suf;
+  fileName_ = cachePath() + FILE_PATH_SEP + QtExt::escapeFileName(mediaTitle()) + suf;
 }
 
 // - Actions -
@@ -216,6 +215,8 @@ HttpStreamSession::stop()
     if (r)
       r->stop();
   }
+
+  emit stopped();
   quit();
   DOUT("exit");
 }
@@ -271,48 +272,108 @@ HttpStreamSession::run()
   if (mediaTitle().isEmpty())
     setMediaTitle(QDateTime::currentDateTime().toString(Qt::ISODate));
 
-  int count = 0;
+  if (nam_)
+    nam_->deleteLater();
 
-  foreach (const QUrl &url, QtExt::revertList(urls_)) {
-    emit message(
-      (tr("preparing") + HTML_STYLE_OPEN(color:orange) " %1/%2: " HTML_STYLE_CLOSE())
-        .arg(QString::number(++count))
-        .arg(QString::number(urls_.size()))
-      + url.toString()
-    );
+  nam_ = new QNetworkAccessManager;
 
-    bool ok = false;
-    for (int i = 0; i < MaxDownloadRetries && !ok; i++) {
-      RemoteStream *in = new BufferedRemoteStream;
-      //QtExt::ProgressWithId p((long)in);
-      //connect(in, SIGNAL(progress(qint64,qint64)), &p, SLOT(emit_progress(qint64,qint64)));
-      //connect(&p, SIGNAL(progress(qint64,qint64,long)), SLOT(updateProgressWithId(qint64,qint64,long)), Qt::QueuedConnection);
-      in->setUrl(url);
-      if (cookieJar()) {
-        in->networkAccessManager()->setCookieJar(cookieJar());
-        cookieJar()->setParent(0);
+  if (cookieJar()) {
+    nam_->setCookieJar(cookieJar());
+    cookieJar()->setParent(0);
+  }
+
+  bool ok = false;
+
+  for (int j = 0; j < MaxDownloadRetries && !ok; j++) {
+    DOUT("for: j =" << j);
+    int count = 0;
+    foreach (const QUrl &url, urls_) {
+      emit message(
+        (tr("preparing") + HTML_STYLE_OPEN(color:orange) " %1/%2: " HTML_STYLE_CLOSE())
+          .arg(QString::number(++count))
+          .arg(QString::number(urls_.size()))
+        + url.toString()
+      );
+      DOUT("foreach: count =" << count);
+
+      ok = false;
+      for (int i = 0; i < MaxDownloadRetries && !ok; i++) {
+        DOUT("for: i =" << i);
+        RemoteStream *in = new BufferedRemoteStream(nam_);
+        in->setUrl(url);
+        if (i == 0)
+          in->request().setPriority(QNetworkRequest::NormalPriority);
+        in->run();
+        ins_.append(in);
+        in->waitForReady();
+        QString type = in->contentType();
+        ok = isMultiMediaMimeType(type);
+        if (!ok) {
+          DOUT("invalid contentType =" << type << ", url =" << url.toString());
+          ins_.removeLast();
+          in->stop();
+          in->deleteLater();
+          emit warning(
+            QString("%1 (%2/%3): ")
+            .arg(tr("failed to fetch HTTP header, retry"))
+            .arg(QString::number(i+1))
+            .arg(QString::number(MaxDownloadRetries))
+            + url.toString()
+          );
+        }
       }
-      in->run();
-      ins_.prepend(in);
-      in->waitForReady();
-      QString type = in->contentType();
-      ok = isMultiMediaMimeType(type);
+
       if (!ok) {
-        DOUT("invalid contentType =" << type << ", url =" << url.toString());
-        ins_.removeFirst();
-        in->stop();
-        QTimer::singleShot(0, in, SLOT(deleteLater()));
-        emit warning(
-          QString("%1 (%2/%3): ")
-          .arg(tr("failed to fetch HTTP header, retry"))
-          .arg(QString::number(i+1))
-          .arg(QString::number(MaxDownloadRetries))
-          + url.toString()
-        );
+        foreach (InputStream *is, ins_) {
+          RemoteStream *rs = dynamic_cast<RemoteStream *>(is);
+          rs->stop();
+          rs->deleteLater();
+        }
+        ins_.clear();
+
+        DOUT("WARNING: failed to download url:" << url.toString());
+        break;
       }
     }
-    if (!ok)
-      DOUT("WARNING: failed to download url:" << url.toString());
+    if (!ok && !originalUrl().isEmpty() && j != MaxDownloadRetries -1) {
+#ifdef WITH_MODULE_MRLRESOLVER
+      DOUT("retry resolving mrl, orignal url =" << originalUrl());
+      emit warning(
+        QString("%1 (%2/%3): ")
+        .arg(tr("failed to fetch part %1, retry").arg(QString::number(count)))
+        .arg(QString::number(j+1))
+        .arg(QString::number(MaxDownloadRetries))
+        + originalUrl()
+      );
+
+      DOUT("with mrlresolver");
+      LuaMrlResolver resolver_impl;
+      MrlResolver &resolver = resolver_impl;
+      resolver.setSynchronized(true);
+      //connect(resolver, SIGNAL(mediaResolved(MediaInfo,QNetworkCookieJar*)), SLOT(updateUrls(MediaInfo,QNetworkCookieJar*)));
+      resolver.resolveMedia(originalUrl());
+      const MediaInfo &mi = resolver.resolvedMediaInfo();
+      QNetworkCookieJar *jar = resolver.resolvedCookieJar();
+      if (jar) {
+        setCookieJar(jar);
+        nam_->setCookieJar(jar);
+        jar->setParent(0); // memory leak
+      }
+
+      urls_.clear();
+      bool updateDuration = !duration_;
+      foreach (const MrlInfo &i, mi.mrls) {
+        urls_.append(i.url);
+        if (updateDuration)
+         duration_ += i.duration;
+      }
+      if (urls_.isEmpty())
+#endif // WITH_MODULE_MRLRESOLVER
+      {
+        DOUT("RESOLVE MEDIA FAILURE");
+        break;
+      }
+    }
   }
 
   //if (reply_->error() != QNetworkReply::NoError) {
@@ -330,6 +391,11 @@ HttpStreamSession::run()
     setState(Error);
     emit error(tr("access forbidden") + ": " + urls_.first().toString());
 
+    if (nam_) {
+      nam_->deleteLater();
+      nam_ = 0;
+    }
+
     ready_ = true;
     readyCond_.wakeAll();
     stoppedCond_.wakeAll();
@@ -337,10 +403,15 @@ HttpStreamSession::run()
     return;
   }
 
+  if (fifo_)
+    delete fifo_;
   fifo_ = new SecureBufferedFifoStream;
   updateSize();
 
   updateProgress();
+
+  if (merger_)
+    delete merger_;
 
   merger_ = new FlvMerge; {
     merger_->setInputStreams(ins_);
@@ -364,7 +435,7 @@ HttpStreamSession::run()
 
   emit message(tr("buffering ..."));
 
-  bool ok = merger_->parse();
+  ok = merger_->parse();
   if (ok) {
     duration_ = merger_->duration();
     DOUT("duration =" << duration_);

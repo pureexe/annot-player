@@ -12,6 +12,7 @@ namespace QtExt {
 class ToolButton : public QToolButton
 {
   Q_OBJECT
+  Q_DISABLE_COPY(ToolButton)
   typedef ToolButton Self;
   typedef QToolButton Base;
 

@@ -1,7 +1,7 @@
 # player.pro
 # 6/30/2011
 
-VERSION = 0.1.5.2
+VERSION = 0.1.5.3
 
 DEFINES += PROJECT_PLAYER
 
@@ -18,6 +18,7 @@ include($$ROOTDIR/module/blockiodevice/blockiodevice.pri)
 include($$ROOTDIR/module/compress/compress.pri)
 include($$ROOTDIR/module/crypt/crypt.pri)
 include($$ROOTDIR/module/download/download.pri)
+include($$ROOTDIR/module/graphicseffect/graphicseffect.pri)
 include($$ROOTDIR/module/gsoap/gsoap.pri)       # would static linking cause license conflicts?
 include($$ROOTDIR/module/ioutil/ioutil.pri)
 include($$ROOTDIR/module/mediacodec/mediacodec.pri)
@@ -26,6 +27,7 @@ include($$ROOTDIR/module/nicoutil/nicoutil.pri)
 include($$ROOTDIR/module/player/player.pri)
 include($$ROOTDIR/module/qt/qt.pri)
 include($$ROOTDIR/module/qtext/qtext.pri)
+include($$ROOTDIR/module/searchengine/searchengine.pri)
 include($$ROOTDIR/module/stream/stream.pri)
 include($$ROOTDIR/module/serveragent/serveragent.pri)
 include($$ROOTDIR/module/translator/translator.pri)
@@ -105,7 +107,9 @@ HEADERS += \
     annot/annotationbrowser.h \
     annot/annotationeditor.h \
     annot/annotationfilter.h \
+    annot/annotationgraphicseffect.h \
     annot/annotationgraphicsitem.h \
+    annot/annotationgraphicsitempool.h \
     annot/annotationgraphicsview.h \
     annot/annotationgraphicsstyle.h \
     annot/annotationanalyticsview.h \
@@ -176,7 +180,9 @@ SOURCES += \
     annot/annotationbrowser.cc \
     annot/annotationeditor.cc \
     annot/annotationfilter.cc \
+    annot/annotationgraphicseffect.cc \
     annot/annotationgraphicsitem.cc \
+    annot/annotationgraphicsitempool.cc \
     annot/annotationgraphicsview.cc \
     annot/annotationgraphicsstyle.cc \
     annot/annotationanalyticsview.cc \

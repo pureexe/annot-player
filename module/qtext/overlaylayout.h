@@ -6,6 +6,7 @@
 class OverlayLayout : public QGridLayout
 {
   Q_OBJECT
+  Q_DISABLE_COPY(OverlayLayout)
   typedef OverlayLayout Self;
   typedef QGridLayout Base;
 

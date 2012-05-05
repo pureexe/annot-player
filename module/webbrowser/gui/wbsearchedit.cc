@@ -2,7 +2,7 @@
 // 3/31/2012
 
 #include "gui/wbsearchedit.h"
-#include "core/wbsearchengine.h"
+#include "module/searchengine/searchengine.h"
 #include <QtGui>
 
 //#define DEBUG "wbsearchedit"
@@ -87,7 +87,7 @@ WbSearchEdit::invalidateEngines()
 
   items.append("アニメ"); icons.append(QString());
 
-  foreach (const WbSearchEngine *e, engines_) {
+  foreach (const SearchEngine *e, engines_) {
     Q_ASSERT(e);
     items.append(e->name());
     icons.append(e->icon());
@@ -101,9 +101,20 @@ WbSearchEdit::setEngine(int engine)
 {
   if (engine_ != engine) {
     engine_ = engine;
-    const WbSearchEngine *e = engines_[engine_];
+    const SearchEngine *e = engines_[engine_];
+    QString tip = e->name();
+    if (e->hasAcronyms()) {
+      const QStringList &a = e->acronyms();
+      tip.append(" [");
+      for (int i = 0; i < qMin(5, a.size()); i++) {
+        if (i)
+          tip.append(",");
+        tip.append(a[i]);
+      }
+      tip.append("]");
+    }
     lineEdit()->setPlaceholderText(e->name());
-    lineEdit()->setToolTip(e->name());
+    lineEdit()->setToolTip(tip);
     lineEdit()->setStatusTip(e->queryUrl());
     setIcon(e->icon());
     emit engineChanged(engine_);

@@ -17,6 +17,7 @@ namespace Logger {
   class LoggerSignals : public QObject
   {
     Q_OBJECT
+    Q_DISABLE_COPY(LoggerSignals)
     typedef LoggerSignals Self;
     typedef QObject Base;
   public:

@@ -8,38 +8,48 @@
 #include <QtNetwork/QNetworkRequest>
 #include <QtCore/QString>
 
-QT_FORWARD_DECLARE_CLASS(QMenu)
-QT_FORWARD_DECLARE_CLASS(QAction)
+QT_BEGIN_NAMESPACE
+class QAction;
+class QGestureEvent;
+class QMenu;
+class QPanGesture;
+class QPinchGesture;
+class QSwipeGesture;
+QT_END_NAMESPACE
 
 namespace QtExt {
 
 class WebView: public QWebView
 {
   Q_OBJECT
+  Q_DISABLE_COPY(WebView)
   typedef WebView Self;
   typedef QWebView Base;
 
   bool loading_;
 
+  // - Construction -
 public:
   explicit WebView(QWidget *parent = 0);
 private:
   void createActions();
 
-  //-  Log -
 signals:
+  void menuBarVisibilityChangeRequested(bool visible);
   void openLinkRequested(const QString &url);
   void message(const QString &text);
   void errorMessage(const QString &text);
   void warning(const QString &text);
   void notification(const QString &text);
 
+  //-  Properties -
 public:
   QString hoveredLink() const;
 
   bool isFinished() const { return !loading_; }
   bool isLoading() const { return loading_; }
 
+  // - Actions -
 public slots:
   void clip();
   void zoomIn();
@@ -69,15 +79,25 @@ protected slots:
 
   void updateHoveredLink() { hoveredLink_ = hoveredLink(); }
 
+  // - Events -
+public:
+  virtual bool event(QEvent *e); ///< \override
+  void gestureEvent(QGestureEvent *e);
 protected:
-  static QString shortenText(const QString &text, int len = 40);
   virtual void contextMenuEvent(QContextMenuEvent *e); ///< \override
   virtual void wheelEvent(QWheelEvent *e); ///< \override
 
-  static QString fileNameFromUrl(const QUrl &url, const QString &suffix = QString());
+  void panGesture(QPanGesture *g);
+  void pinchGesture(QPinchGesture *g);
+  void swipeGesture(QSwipeGesture *g);
 
   QMenu *createContextMenu();
   QMenu *createHistoryMenu();
+
+  // - Helpers -
+protected:
+  static QString shortenText(const QString &text, int len = 40);
+  static QString fileNameFromUrl(const QUrl &url, const QString &suffix = QString());
 
 protected:
   QAction *clipAct,

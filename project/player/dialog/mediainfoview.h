@@ -14,6 +14,7 @@ class SignalHub;
 class MediaInfoView : public InfoView
 {
   Q_OBJECT
+  Q_DISABLE_COPY(MediaInfoView)
   typedef MediaInfoView Self;
   typedef InfoView Base;
 

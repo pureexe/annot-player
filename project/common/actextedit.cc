@@ -6,15 +6,12 @@
 #include "project/common/acui.h"
 #include <QtGui/QContextMenuEvent>
 #include <QtGui/QMenu>
-#include <QtCore/QTimer>
 
 // - Constructions -
 
 AcTextEdit::AcTextEdit(QWidget *parent)
   : Base(parent)
-{
-  setStyleSheet(SS_TEXTEDIT);
-}
+{ setStyleSheet(SS_TEXTEDIT); }
 
 // - Events -
 
@@ -31,7 +28,7 @@ AcTextEdit::contextMenuEvent(QContextMenuEvent *event)
 
   m->exec(event->globalPos());
   delete scm;
-  QTimer::singleShot(0, m, SLOT(deleteLater()));
+  delete m;
   event->accept();
 #else
   Base::contextMenuEvent(event);

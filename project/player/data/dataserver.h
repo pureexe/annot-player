@@ -16,6 +16,7 @@ class SignalHub;
 class DataServer : public QObject
 {
   Q_OBJECT
+  Q_DISABLE_COPY(DataServer)
   typedef DataServer Self;
   typedef QObject Base;
 

@@ -12,6 +12,7 @@ QT_FORWARD_DECLARE_CLASS(QColor)
 class AcTextView : public AcTextEdit
 {
   Q_OBJECT
+  Q_DISABLE_COPY(AcTextView)
   typedef AcTextView Self;
   typedef AcTextEdit Base;
 

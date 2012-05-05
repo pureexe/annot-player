@@ -82,6 +82,7 @@ DEFINES += \
 
 win32 {
     QT_HOME             = c:/qt/current
+    QT_SRC              = $$QT_HOME/src
     #VLC_HOME            = "c:/Program Files/VideoLAN/VLC/sdk"
     VLC_HOME            = c:/dev/vlc
     VLC_SRC             = $$VLC_HOME/src
@@ -114,6 +115,7 @@ win32 {
 
 unix {
     QT_HOME             = /usr/share/qt4
+    QT_SRC              =
     VLC_HOME            = /usr
     VLC_SRC             = ${HOME}/opt/src
     #WSF_HOME            = ${HOME}/opt/wso2/wsf
@@ -132,6 +134,7 @@ unix {
 
 mac {
     QT_HOME             = /opt/local/share/qt4
+    QT_SRC              = /Developer/QtSDK/QtSources/4.7.4/src
     #VLC_HOME            = ${HOME}/opt/vlc
     VLC_HOME            = /Applications/VLC.app/Contents/MacOS
     VLC_SRC             = ${HOME}/opt/src

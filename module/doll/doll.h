@@ -10,6 +10,7 @@ class AimlBot;
 class Doll : public QObject
 {
   Q_OBJECT
+  Q_DISABLE_COPY(Doll)
   typedef Doll Self;
   typedef QObject Base;
 

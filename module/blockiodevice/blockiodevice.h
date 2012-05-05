@@ -10,6 +10,7 @@
 class BlockIODevice : public QIODevice
 {
   Q_OBJECT
+  Q_DISABLE_COPY(BlockIODevice)
   typedef BlockIODevice Self;
   typedef QIODevice Base;
 

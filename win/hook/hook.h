@@ -84,6 +84,7 @@ class WindowsHookManagerImpl; ///< \internal
 class WindowsHookManager : public QObject
 {
   Q_OBJECT
+  Q_DISABLE_COPY(WindowsHookManager)
   typedef WindowsHookManager Self;
   typedef QObject Base;
   typedef WindowsHookManagerImpl Impl;

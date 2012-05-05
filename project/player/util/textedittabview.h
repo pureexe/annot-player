@@ -1,53 +1,31 @@
 #ifndef TEXTEDITTABVIEW_H
 #define TEXTEDITTABVIEW_H
 
-// backlogview.h
+// textedittabview.h
 // 1/1/2012
 
-#include <QtGui/QWidget>
-#include <QtCore/QList>
-
-QT_FORWARD_DECLARE_CLASS(QToolButton)
-QT_FORWARD_DECLARE_CLASS(QStackedLayout)
+#include "project/common/actabview.h"
 
 class AcTextView;
 
-class TextEditTabView : public QWidget
+class TextEditTabView : public AcTabView
 {
   Q_OBJECT
+  Q_DISABLE_COPY(TextEditTabView)
   typedef TextEditTabView Self;
-  typedef QWidget Base;
+  typedef AcTabView Base;
 
 public:
   explicit TextEditTabView(QWidget *parent = 0)
-  : Base(parent), tabCount_(0), tabIndex_(0)
-  { initializeLayout(); }
-
-  int tabCount() const { return tabCount_; }
+  : Base(parent) { }
 
 public slots:
   void appendText(const QString &text, int tab);
   void clear(int tab);
 
-protected slots:
-  void setTab(int index);
-  void previousTab();
-  void nextTab();
-  void invalidateTabIndex();
-
 public:
   void addTab(const QString &name);
-  void finalizeLayout();
-private:
-  void initializeLayout();
-
-private:
-  QStackedLayout *stackLayout_;
-
-  int tabCount_;
-  int tabIndex_;
-  QList<QToolButton *> tabButtons_;
-  QList<AcTextView *> tabViews_;
+  AcTextView *textWidget(int tab) const;
 };
 
 #endif // TEXTEDITTABVIEW_H

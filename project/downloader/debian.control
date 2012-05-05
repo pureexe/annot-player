@@ -1,7 +1,7 @@
 # debian/control
 # 11/26/2011
 Source: annot-down
-Standards-Version: 0.1.1.1
+Standards-Version: 0.1.1.2
 Section: network
 Maintainer: Annot Cloud <annotcloud@gmail.com>
 Priority: optional

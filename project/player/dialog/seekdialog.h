@@ -12,6 +12,7 @@ typedef QtExt::Dialog SeekDialogBase;
 class SeekDialog : public SeekDialogBase
 {
   Q_OBJECT
+  Q_DISABLE_COPY(SeekDialog)
   typedef SeekDialog Self;
   typedef SeekDialogBase Base;
 

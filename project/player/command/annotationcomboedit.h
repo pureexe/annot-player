@@ -15,6 +15,7 @@ class AnnotationEditor;
 class AnnotationComboEdit : public AcComboEdit, public QtExt::WithSizeHint
 {
   Q_OBJECT
+  Q_DISABLE_COPY(AnnotationComboEdit)
   typedef AnnotationComboEdit Self;
   typedef AcComboEdit Base;
 

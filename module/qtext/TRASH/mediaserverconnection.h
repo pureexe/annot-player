@@ -21,6 +21,7 @@ namespace Core {
   class MediaServerConnection : public QObject
   {
     Q_OBJECT
+    Q_DISABLE_COPY(MediaServerConnection)
     typedef MediaServerConnection Self;
     typedef QObject Base;
 

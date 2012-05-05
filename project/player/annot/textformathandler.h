@@ -13,6 +13,7 @@ class TextFormatHandler : public QObject, public QTextObjectInterface
 {
   Q_OBJECT
   Q_INTERFACES(QTextObjectInterface)
+  Q_DISABLE_COPY(TextFormatHandler)
   typedef TextFormatHandler Self;
   typedef QObject Base;
 

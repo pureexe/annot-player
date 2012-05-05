@@ -12,6 +12,7 @@ QT_FORWARD_DECLARE_CLASS(QNetworkReply)
 class AcFunCodec : public AnnotationCodec
 {
   Q_OBJECT
+  Q_DISABLE_COPY(AcFunCodec)
   typedef AcFunCodec Self;
   typedef AnnotationCodec Base;
 

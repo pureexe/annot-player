@@ -22,6 +22,7 @@ class ServerAgent;
 class ClientAgent: public QObject, public ClientDelegate
 {
   Q_OBJECT
+  Q_DISABLE_COPY(ClientAgent)
   typedef ClientAgent Self;
   typedef QObject Base;
 

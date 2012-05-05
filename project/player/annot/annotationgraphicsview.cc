@@ -3,6 +3,7 @@
 
 #include "annotationgraphicsview.h"
 #include "annotationgraphicsitem.h"
+#include "annotationgraphicsitempool.h"
 #include "annotationeditor.h"
 #include "annotationfilter.h"
 #include "stylesheet.h"
@@ -44,7 +45,8 @@ AnnotationGraphicsView::AnnotationGraphicsView(
     subtitleVisible_(true), nonSubtitleVisible_(true),
     currentTime_(-1), offset_(0), interval_(TIMER_INTERVAL), userId_(0), playbackEnabled_(true), subtitlePosition_(AP_Bottom),
     scale_(1.0), rotation_(0),
-    hoveredItemPaused_(false), hoveredItemResumed_(false), hoveredItemRemoved_(false), hoveredItemExiled_(false)
+    hoveredItemPaused_(false), hoveredItemResumed_(false), hoveredItemRemoved_(false), nearbyItemExpelled_(false), nearbyItemAttracted_(false),
+    itemVisible_(true)
 {
   Q_ASSERT(hub_);
   Q_ASSERT(player_);
@@ -63,6 +65,9 @@ AnnotationGraphicsView::AnnotationGraphicsView(
 
   QGraphicsScene *scene = new QGraphicsScene(this);
   setScene(scene);
+
+  pool_ = new AnnotationGraphicsItemPool(this, hub_, this);
+  pool_->reserve(40);
 
   timer_ = new QTimer(this);
   timer_->setInterval(TIMER_INTERVAL);
@@ -101,10 +106,6 @@ AnnotationGraphicsView::setRenderHint(int hint)
 //AnnotationGraphicsView::~AnnotationGraphicsView()
 //{ removeAnnotations(); }
 
-void
-AnnotationGraphicsView::setFilter(AnnotationFilter *filter)
-{ filter_ = filter; }
-
 AnnotationEditor*
 AnnotationGraphicsView::editor() const
 {
@@ -135,7 +136,7 @@ AnnotationGraphicsView::removeAnnotationWithId(qint64 id, bool deleteAnnot)
   if (id && !hash_.empty()) {
     AnnotationGraphicsItem *item = itemWithId(id);
     if (item)
-      item->removeMe();
+      item->disappear();
 
     bool found = false;
     for (BOOST_AUTO(h, hash_.begin()); h != hash_.end() && !found; ++h) {
@@ -179,7 +180,7 @@ AnnotationGraphicsView::removeAnnotations()
     foreach (QGraphicsItem *item, s->items()) {
       BOOST_AUTO(a, dynamic_cast<AnnotationGraphicsItem*>(item));
       if (a)
-        a->removeMe();
+        a->disappear();
       else
         s->removeItem(item);
     }
@@ -432,21 +433,60 @@ AnnotationGraphicsView::setPlaybackEnabled(bool enabled)
 // - Control -
 
 void
-AnnotationGraphicsView::exileItems(const QPoint &center)
+AnnotationGraphicsView::expelItems(const QPoint &center)
 {
-  enum { width = 300, height = 200 };
+  enum { width = 400, height = 300 };
   QRect r(0, 0, width, height);
   r.moveCenter(center);
-  exileItems(center, r, Qt::IntersectsItemBoundingRect);
+  expelItems(center, r, Qt::IntersectsItemBoundingRect);
 }
 
 void
-AnnotationGraphicsView::exileItems(const QPoint &center, const QRect &rect, Qt::ItemSelectionMode mode)
+AnnotationGraphicsView::expelItems(const QPoint &center, const QRect &rect, Qt::ItemSelectionMode mode)
 {
   foreach (QGraphicsItem *item, items(rect, mode)) {
     BOOST_AUTO(a, dynamic_cast<AnnotationGraphicsItem *>(item));
     if (a)
       a->escapeFrom(center);
+  }
+}
+
+void
+AnnotationGraphicsView::expelAllItems(const QPoint &center)
+{
+  foreach (QGraphicsItem *item, items()) {
+    BOOST_AUTO(a, dynamic_cast<AnnotationGraphicsItem *>(item));
+    if (a)
+      a->escapeFrom(center);
+  }
+}
+
+void
+AnnotationGraphicsView::attractItems(const QPoint &center)
+{
+  enum { width = 800, height = 600 };
+  QRect r(0, 0, width, height);
+  r.moveCenter(center);
+  attractItems(center, r, Qt::IntersectsItemBoundingRect);
+}
+
+void
+AnnotationGraphicsView::attractItems(const QPoint &center, const QRect &rect, Qt::ItemSelectionMode mode)
+{
+  foreach (QGraphicsItem *item, items(rect, mode)) {
+    BOOST_AUTO(a, dynamic_cast<AnnotationGraphicsItem *>(item));
+    if (a)
+      a->rushTo(center);
+  }
+}
+
+void
+AnnotationGraphicsView::attractAllItems(const QPoint &center)
+{
+  foreach (QGraphicsItem *item, items()) {
+    BOOST_AUTO(a, dynamic_cast<AnnotationGraphicsItem *>(item));
+    if (a)
+      a->rushTo(center);
   }
 }
 
@@ -467,15 +507,25 @@ AnnotationGraphicsView::resume()
 }
 
 void
+AnnotationGraphicsView::selectItem(AnnotationGraphicsItem *item)
+{
+  qint64 uid = item->annotation().userId();
+  if (uid)
+    emit selectedUserIds(QList<qint64>() << uid);
+}
+
+void
+AnnotationGraphicsView::releaseItem(AnnotationGraphicsItem *item)
+{ pool_->release(item); }
+
+void
 AnnotationGraphicsView::pauseItemAt(const QPoint &pos)
 {
   QGraphicsItem *item = itemAt(pos);
   BOOST_AUTO(a, dynamic_cast<AnnotationGraphicsItem *>(item));
   if (a) {
     a->pause();
-    qint64 uid = a->annotation().userId();
-    if (uid)
-      emit selectedUserIds(QList<qint64>() << uid);
+    selectItem(a);
   }
 }
 
@@ -494,7 +544,7 @@ AnnotationGraphicsView::removeItemAt(const QPoint &pos)
   QGraphicsItem *item = itemAt(pos);
   BOOST_AUTO(a, dynamic_cast<AnnotationGraphicsItem *>(item));
   if (a)
-    a->removeMe();
+    a->disappear();
 }
 
 void
@@ -531,7 +581,7 @@ AnnotationGraphicsView::removeItems(const QRect &rect, Qt::ItemSelectionMode mod
   foreach (QGraphicsItem *item, items(rect, mode)) {
     BOOST_AUTO(a, dynamic_cast<AnnotationGraphicsItem *>(item));
     if (a)
-      a->removeMe();
+      a->disappear();
   }
 }
 
@@ -568,7 +618,7 @@ AnnotationGraphicsView::removeItems(const QPoint &pos)
   foreach (QGraphicsItem *item, items(pos)) {
     BOOST_AUTO(a, dynamic_cast<AnnotationGraphicsItem *>(item));
     if (a)
-      a->removeMe();
+      a->disappear();
   }
 }
 
@@ -665,8 +715,6 @@ AnnotationGraphicsView::addAnnotation(const Annotation &annot, qint64 delaysecs)
 {
   DOUT("enter: aid =" << annot.id() << ", pos =" << annot.pos());
 
-  // CHECKPOINT LIVE
-
   qint64 pos = annot.pos();
   if (!hub_->isSignalTokenMode())
     pos = qRound64(pos / 1000.0); // msecs => secs, cluster media annotation by seconds
@@ -704,7 +752,8 @@ void
 AnnotationGraphicsView::showAnnotation(const Annotation &annot)
 {
   if (!isAnnotationBlocked(annot)) {
-    AnnotationGraphicsItem *item = new AnnotationGraphicsItem(annot, hub_, this);
+    AnnotationGraphicsItem *item = pool_->allocate();
+    item->setAnnotation(annot);
     if (!isItemBlocked(item))
       item->showMe();
     if (item->isSubtitle())
@@ -951,14 +1000,6 @@ AnnotationGraphicsView::globalRect() const
 bool
 AnnotationGraphicsView::isStarted() const
 { return timer_->isActive(); }
-
-void
-AnnotationGraphicsView::setInterval(int msecs)
-{
-  if (interval_ != msecs)
-    interval_ = msecs;
-  Q_ASSERT(interval_ >= 1000); // at least 1 secons
-}
 
 void
 AnnotationGraphicsView::start()

@@ -12,6 +12,7 @@ namespace QtExt {
 class ComboBox : public QComboBox
 {
   Q_OBJECT
+  Q_DISABLE_COPY(ComboBox)
   typedef ComboBox Self;
   typedef QComboBox Base;
 

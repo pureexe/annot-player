@@ -13,6 +13,7 @@ QT_FORWARD_DECLARE_CLASS(QMenu)
 class WbAddressEdit : public WbComboEdit
 {
   Q_OBJECT
+  Q_DISABLE_COPY(WbAddressEdit)
   typedef WbAddressEdit Self;
   typedef WbComboEdit Base;
 

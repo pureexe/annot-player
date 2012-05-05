@@ -10,6 +10,7 @@
 class MainPlayerDock : public QDockWidget
 {
   Q_OBJECT
+  Q_DISABLE_COPY(MainPlayerDock)
   typedef MainPlayerDock Self;
   typedef QDockWidget Base;
 
@@ -23,6 +24,7 @@ public:
 class MainPlayerUi : public PlayerUi
 {
   Q_OBJECT
+  Q_DISABLE_COPY(MainPlayerUi)
   typedef MainPlayerUi Self;
   typedef PlayerUi Base;
 

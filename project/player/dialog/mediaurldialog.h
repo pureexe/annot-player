@@ -9,6 +9,7 @@
 class MediaUrlDialog : public UrlDialog
 {
   Q_OBJECT
+  Q_DISABLE_COPY(MediaUrlDialog)
   typedef MediaUrlDialog Self;
   typedef UrlDialog Base;
 

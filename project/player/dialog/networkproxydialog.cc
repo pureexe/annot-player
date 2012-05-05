@@ -180,26 +180,28 @@ NetworkProxyDialog::updateButtons()
 void
 NetworkProxyDialog::save()
 {
-  if (!isEnabled()) {
+  QString host = hostEdit_->currentText().trimmed();
+  bool enabled = isEnabled();
+  if (!enabled) {
     hide();
     QNetworkProxy::setApplicationProxy(QNetworkProxy::NoProxy);
     log(tr("network proxy disabled"));
-  } else {
-    QString host = hostEdit_->currentText().trimmed();
-    if (host.isEmpty()) {
-      warn("empty proxy host name");
-      return;
-    }
+  } else if (host.isEmpty()) {
+    warn("empty proxy host name");
+    enabled = false;
+  } else
     hide();
-    QNetworkProxy::ProxyType type;
-    switch (typeCombo_->currentIndex()) {
-    case SocksProxy: type = QNetworkProxy::Socks5Proxy; break;
-    case HttpProxy: type = QNetworkProxy::HttpProxy; break;
-    default: Q_ASSERT(0); type = QNetworkProxy::Socks5Proxy;
-    }
-    quint16 port = portEdit_->currentText().trimmed().toUInt();
-    QString user = userNameEdit_->currentText().trimmed();
-    QString pass = passwordEdit_->text();
+
+  QNetworkProxy::ProxyType type;
+  switch (typeCombo_->currentIndex()) {
+  case SocksProxy: type = QNetworkProxy::Socks5Proxy; break;
+  case HttpProxy: type = QNetworkProxy::HttpProxy; break;
+  default: Q_ASSERT(0); type = QNetworkProxy::Socks5Proxy;
+  }
+  quint16 port = portEdit_->currentText().trimmed().toUInt();
+  QString user = userNameEdit_->currentText().trimmed();
+  QString pass = passwordEdit_->text();
+  if (enabled) {
     QNetworkProxy proxy(type, host, port, user, pass);
     QNetworkProxy::setApplicationProxy(proxy);
 
@@ -208,6 +210,15 @@ NetworkProxyDialog::save()
       url.prepend(user + "@");
     log(tr("network proxy enabled") + ": " + url);
   }
+
+  AcSettings *s = AcSettings::globalSettings();
+  s->setProxyEnabled(enabled);
+  s->setProxyHostName(host);
+  s->setProxyType(type);
+  s->setProxyPort(port);
+  s->setProxyUser(user);
+  s->setProxyPassword(pass);
+  s->sync();
 }
 
 // - Events -

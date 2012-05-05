@@ -16,6 +16,7 @@ typedef QtExt::Dialog AnnotationCountDialogBase;
 class AnnotationCountDialog : public AnnotationCountDialogBase
 {
   Q_OBJECT
+  Q_DISABLE_COPY(AnnotationCountDialog)
   typedef AnnotationCountDialog Self;
   typedef AnnotationCountDialogBase Base;
 

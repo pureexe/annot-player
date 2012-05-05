@@ -14,6 +14,7 @@ namespace Core {
   class DatabaseConnection : public QObject
   {
     Q_OBJECT
+    Q_DISABLE_COPY(DatabaseConnection)
     typedef DatabaseConnection Self;
     typedef QObject Base;
 

@@ -56,6 +56,7 @@ AcFunCodec::parseReply(QNetworkReply *reply)
 {
   DOUT("enter");
   Q_ASSERT(reply);
+  //QTimer::singleShot(0, reply, SLOT(deleteLater()));
   reply->deleteLater();
   if (!reply->isFinished() || reply->error() != QNetworkReply::NoError) {
     //emit error(reply->errorString());

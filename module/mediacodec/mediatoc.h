@@ -11,6 +11,7 @@
 class MediaToc : public QObject
 {
   Q_OBJECT
+  Q_DISABLE_COPY(MediaToc)
   typedef MediaToc Self;
   typedef QObject Base;
 

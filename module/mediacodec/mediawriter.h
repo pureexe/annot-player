@@ -16,6 +16,7 @@ class MediaToc;
 class MediaWriter : public QObject
 {
   Q_OBJECT
+  Q_DISABLE_COPY(MediaWriter)
   typedef MediaWriter Self;
   typedef QObject Base;
 
@@ -32,6 +33,7 @@ public:
 class DummyMediaWriter : public MediaWriter
 {
   Q_OBJECT
+  Q_DISABLE_COPY(DummyMediaWriter)
   typedef DummyMediaWriter Self;
   typedef MediaWriter Base;
 public:
@@ -45,6 +47,7 @@ public:
 class Mp3Writer : public DummyMediaWriter
 {
   Q_OBJECT
+  Q_DISABLE_COPY(Mp3Writer)
   typedef DummyMediaWriter Base;
 public:
   explicit Mp3Writer(QObject *parent = 0) : Base(parent) { }
@@ -53,6 +56,7 @@ public:
 class SpeexWriter : public DummyMediaWriter
 {
   Q_OBJECT
+  Q_DISABLE_COPY(SpeexWriter)
   typedef DummyMediaWriter Base;
 public:
   explicit SpeexWriter(QObject *parent = 0) : Base(parent) { }
@@ -61,6 +65,7 @@ public:
 class WavWriter : public DummyMediaWriter
 {
   Q_OBJECT
+  Q_DISABLE_COPY(WavWriter)
   typedef DummyMediaWriter Base;
 public:
   explicit WavWriter(QObject *parent = 0) : Base(parent) { }
@@ -69,6 +74,7 @@ public:
 class AviWriter : public DummyMediaWriter
 {
   Q_OBJECT
+  Q_DISABLE_COPY(AviWriter)
   typedef DummyMediaWriter Base;
 public:
   explicit AviWriter(QObject *parent = 0) : Base(parent) { }
@@ -77,6 +83,7 @@ public:
 
 class AacWriter : public MediaWriter {
   Q_OBJECT
+  Q_DISABLE_COPY(AacWriter)
   typedef AacWriter Self;
   typedef MediaWriter Base;
 
@@ -99,6 +106,7 @@ public:
 class RawH264Writer : public MediaWriter
 {
   Q_OBJECT
+  Q_DISABLE_COPY(RawH264Writer)
   typedef RawH264Writer Self;
   typedef MediaWriter Base;
 

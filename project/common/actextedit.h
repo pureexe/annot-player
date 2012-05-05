@@ -9,6 +9,7 @@
 class AcTextEdit : public QTextEdit
 {
   Q_OBJECT
+  Q_DISABLE_COPY(AcTextEdit)
   typedef AcTextEdit Self;
   typedef QTextEdit Base;
 

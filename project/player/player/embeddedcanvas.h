@@ -16,6 +16,7 @@ class Player;
 class EmbeddedCanvas : public QWidget
 {
   Q_OBJECT
+  Q_DISABLE_COPY(EmbeddedCanvas)
   typedef EmbeddedCanvas Self;
   typedef QWidget Base;
 

@@ -1,5 +1,5 @@
-#ifndef ANNOTATIONGRAPHICSVIEW_H
-#define ANNOTATIONGRAPHICSVIEW_H
+#ifndef ANNOTATIONGRAPHICSViEW_H
+#define ANNOTATIONGRAPHICSViEW_H
 
 // annotationview.h
 // 7/14/2011
@@ -16,6 +16,7 @@ class SignalHub;
 class Player;
 class VideoView;
 class AnnotationGraphicsItem;
+class AnnotationGraphicsItemPool;
 class AnnotationEditor;
 class AnnotationFilter;
 
@@ -23,6 +24,7 @@ class AnnotationFilter;
 class AnnotationGraphicsView : public QGraphicsView, public QtExt::EventListener
 {
   Q_OBJECT
+  Q_DISABLE_COPY(AnnotationGraphicsView)
   typedef AnnotationGraphicsView Self;
   typedef QGraphicsView Base;
 
@@ -67,7 +69,8 @@ signals:
   void hoveredItemPausedChanged(bool t);
   void hoveredItemResumedChanged(bool t);
   void hoveredItemRemovedChanged(bool t);
-  void hoveredItemExiledChanged(bool t);
+  void nearbyItemExpelledChanged(bool t);
+  void nearbyItemAttractedChanged(bool t);
   void scaleChanged(qreal value);
   void rotationChanged(qreal value);
   void offsetChanged(qint64 value);
@@ -181,6 +184,8 @@ signals:
   void playbackEnabledChanged(bool enabled);
   void visibleChanged(bool visible);
 
+  void itemVisibleChanged(bool visble);
+
   // - Properties -
 public:
   AnnotationEditor *editor() const;
@@ -188,7 +193,7 @@ public:
 
   RenderHint renderHint() const { return renderHint_; } ///< Default render hint
 
-  void setFilter(AnnotationFilter *filter);
+  void setFilter(AnnotationFilter *filter) { filter_ = filter; }
 
   int itemsCount() const;
   int itemsCount(int sec) const;
@@ -202,11 +207,18 @@ public:
 
   bool isStarted() const;
 
+  void selectItem(AnnotationGraphicsItem *item);
+
   bool isHoveredItemPaused() const { return hoveredItemPaused_; }
   bool isHoveredItemResumed() const { return hoveredItemResumed_; }
   bool isHoveredItemRemoved() const { return hoveredItemRemoved_; }
-  bool isHoveredItemExiled() const { return hoveredItemExiled_; }
+  bool isNearbyItemExpelled() const { return nearbyItemExpelled_; }
+  bool isNearbyItemAttracted() const { return nearbyItemAttracted_; }
 public slots:
+
+  void setItemVisible(bool visible)
+  { emit itemVisibleChanged( itemVisible_ = visible); }
+
   void setScale(qreal value);
   void resetScale() { setScale(1.0); }
 
@@ -216,7 +228,7 @@ public slots:
   void setRotation(qreal value);
   void resetRotation() { setRotation(0); }
 
-  void setInterval(int msecs);
+  void setInterval(int msecs) {  interval_ = msecs; Q_ASSERT(interval_ >= 1000); } // at least 1 secons
   void start();
   void stop();
   void tick();
@@ -229,7 +241,8 @@ public slots:
   void setHoveredItemPaused(bool t) { emit hoveredItemPausedChanged(hoveredItemPaused_ = t);}
   void setHoveredItemResumed(bool t) { emit hoveredItemResumedChanged(hoveredItemResumed_ = t);}
   void setHoveredItemRemoved(bool t) { emit hoveredItemRemovedChanged(hoveredItemRemoved_ = t);}
-  void setHoveredItemExiled(bool t) { emit hoveredItemExiledChanged(hoveredItemExiled_ = t);}
+  void setNearbyItemExpelled(bool t) { emit nearbyItemExpelledChanged(nearbyItemExpelled_ = t);}
+  void setNearbyItemAttracted(bool t) { emit nearbyItemAttractedChanged(nearbyItemAttracted_ = t);}
 
   void setRenderHint(int hint);
 
@@ -244,6 +257,8 @@ public slots:
 
   void pause();
   void resume();
+
+  void releaseItem(AnnotationGraphicsItem *item);
 
   void pauseItemAt(const QPoint &pos);
   void resumeItemAt(const QPoint &pos);
@@ -260,8 +275,13 @@ public slots:
   void scalePausedItems(qreal scale);
   void rotatePausedItems(qreal angle);
 
-  void exileItems(const QPoint &center);
-  void exileItems(const QPoint &center, const QRect &rect, Qt::ItemSelectionMode mode = Qt::IntersectsItemShape);
+  void expelItems(const QPoint &center);
+  void expelItems(const QPoint &center, const QRect &rect, Qt::ItemSelectionMode mode = Qt::IntersectsItemShape);
+  void expelAllItems(const QPoint &center);
+
+  void attractItems(const QPoint &center);
+  void attractAllItems(const QPoint &center);
+  void attractItems(const QPoint &center, const QRect &rect, Qt::ItemSelectionMode mode = Qt::IntersectsItemShape);
 
   // Annotations
 
@@ -296,8 +316,11 @@ public:
   bool isAnnotationBlocked(const Annotation &a) const;
   bool isItemBlocked(const AnnotationGraphicsItem *item) const;
 
+  bool isItemVisible() const { return itemVisible_; }
+
   // - Implementations -
 private:
+  AnnotationGraphicsItemPool *pool_;
   VideoView *videoView_;
   QWidget *fullScreenView_;
   WId trackedWindow_;
@@ -333,8 +356,10 @@ private:
 
   qreal scale_, rotation_;
 
-  bool hoveredItemPaused_, hoveredItemResumed_, hoveredItemRemoved_, hoveredItemExiled_;
+  bool hoveredItemPaused_, hoveredItemResumed_, hoveredItemRemoved_,
+       nearbyItemExpelled_, nearbyItemAttracted_;
+  bool itemVisible_;
 };
 
-#endif // ANNOTATIONGRAPHICSVIEW_H
+#endif // ANNOTATIONGRAPHICSViEW_H
 

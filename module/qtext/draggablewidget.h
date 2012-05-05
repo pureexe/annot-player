@@ -11,6 +11,7 @@ namespace QtExt {
 class DraggableWidget : public QWidget
 {
   Q_OBJECT
+  Q_DISABLE_COPY(DraggableWidget)
   typedef DraggableWidget Self;
   typedef QWidget Base;
 

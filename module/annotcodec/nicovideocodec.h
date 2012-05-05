@@ -9,6 +9,7 @@
 class NicovideoCodec : public AnnotationCodec
 {
   Q_OBJECT
+  Q_DISABLE_COPY(NicovideoCodec)
   typedef NicovideoCodec Self;
   typedef AnnotationCodec Base;
 

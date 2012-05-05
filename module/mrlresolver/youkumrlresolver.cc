@@ -30,8 +30,8 @@
 
 // - Construction -
 
-YoukuMrlResolver::YoukuMrlResolver(QObject *parent)
-  : Base(parent)
+void
+YoukuMrlResolver::init()
 {
   nam_ = new QNetworkAccessManager(this);
   connect(nam_, SIGNAL(finished(QNetworkReply*)), SLOT(resolveMedia(QNetworkReply*)));
@@ -63,6 +63,8 @@ YoukuMrlResolver::resolveMedia(const QString &href)
 
   DOUT("url =" << url);
   nam_->get(QNetworkRequest(url));
+  //QNetworkReply *reply = networkAccessManager()->get(QNetworkRequest(url));
+  //connect(new QtExt::NetworkReplyFinished(reply), SIGNAL(finished(QNetworkReply*)), SLOT(resolveMedia(QNetworkReply*)));
   return true;
 }
 
@@ -203,7 +205,7 @@ YoukuMrlResolver::resolveMedia(QNetworkReply *reply)
         mi.refurl = href;
         mi.title = title;
         // FIXME: for debugging only!
-        emit mediaResolved(mi, 0);
+        emit mediaResolved(mi);
         break;
       }
 

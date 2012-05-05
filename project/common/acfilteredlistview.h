@@ -23,6 +23,7 @@ QT_END_NAMESPACE
 class AcFilteredListView : public QWidget
 {
   Q_OBJECT
+  Q_DISABLE_COPY(AcFilteredListView)
   typedef AcFilteredListView Self;
   typedef QWidget Base;
 

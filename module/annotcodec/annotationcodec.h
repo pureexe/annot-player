@@ -9,6 +9,7 @@
 class AnnotationCodec : public QObject
 {
   Q_OBJECT
+  Q_DISABLE_COPY(AnnotationCodec)
   typedef AnnotationCodec Self;
   typedef QObject Base;
 

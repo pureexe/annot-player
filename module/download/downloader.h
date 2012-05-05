@@ -17,12 +17,18 @@ QT_END_NAMESPACE
 class DownloaderController : public QObject
 {
   Q_OBJECT
+  Q_DISABLE_COPY(DownloaderController)
   typedef DownloaderController Self;
   typedef QObject Base;
+
 public:
   static Self *globalController() { static Self g; return &g; }
 protected:
   explicit DownloaderController(QObject *parent = 0) : Base(parent) { }
+
+public:
+  //QNetworkAccessManager *networkAccessManager() const { return nam_; }
+  //void setNetworkAccessManager(QNetworkAccessManager *nam) { nam_ = nam; }
 
 signals:
   void message(QString);
@@ -57,8 +63,6 @@ public:
     : Base(parent), nam_(0), reply_(0), state_(OK), stopped_(false) { init(); }
 
   int state() const { return state_; }
-
-  QNetworkAccessManager *networkAccessManager() { return nam_; }
 
 private:
   void init();

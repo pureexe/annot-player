@@ -17,6 +17,7 @@ class EmbeddedInfoView;
 class EmbeddedPlayerUi : public PlayerUi
 {
   Q_OBJECT
+  Q_DISABLE_COPY(EmbeddedPlayerUi)
   typedef EmbeddedPlayerUi Self;
   typedef PlayerUi Base;
 

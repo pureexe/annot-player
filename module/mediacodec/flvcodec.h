@@ -19,6 +19,7 @@ class MediaToc;
 class FlvCodec : public QObject
 {
   Q_OBJECT
+  Q_DISABLE_COPY(FlvCodec)
   typedef FlvCodec Self;
   typedef QObject Base;
 

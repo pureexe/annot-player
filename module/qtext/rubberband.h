@@ -12,6 +12,7 @@ namespace QtExt {
 class RubberBandWithColor : public QRubberBand
 {
   Q_OBJECT
+  Q_DISABLE_COPY(RubberBandWithColor)
   typedef RubberBandWithColor Self;
   typedef QRubberBand Base;
 
@@ -31,6 +32,7 @@ protected:
 class MouseRubberBand : public RubberBandWithColor
 {
   Q_OBJECT
+  Q_DISABLE_COPY(MouseRubberBand)
   typedef MouseRubberBand Self;
   typedef RubberBandWithColor Base;
 

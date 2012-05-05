@@ -4,13 +4,14 @@
 // settings.h
 // 7/30/2011
 
-#include "module/download/downloadtask.h"
+#include "module/downloadtask/downloadtask.h"
 #include <QtCore/QSettings>
 #include <QtCore/QSize>
 
 class Settings : public QSettings
 {
   Q_OBJECT
+  Q_DISABLE_COPY(Settings)
   typedef Settings Self;
   typedef QSettings Base;
 

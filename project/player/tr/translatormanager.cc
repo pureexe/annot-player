@@ -650,6 +650,10 @@ TranslatorManager::translate(int tid) const
   case T_MENUTEXT_AUTOPLAYNEXT: return tr("Auto play next media");
   case T_TIP_AUTOPLAYNEXT:      return tr("Automatically play next media");
 
+  case T_AUTOPLAYCURRENT:       return tr("Repeat current media");
+
+  case T_NOAUTOPLAY:            return tr("No repeat");
+
   case T_MENUTEXT_SHOWMENUBAR:  return tr("Show menubar");
   case T_TIP_SHOWMENUBAR:       return tr("Show menubar");
 
@@ -794,6 +798,9 @@ TranslatorManager::translate(int tid) const
 
   case T_MENUTEXT_DECREASEANNOTROTATION:  return tr("Rotate down") + " [" K_SHIFT "+" + tr("Wheel") + "↓]";
   case T_TIP_DECREASEANNOTROTATION:       return tr("Rotate down");
+
+  case T_COPYCURRENTURL:       return tr("Copy current URL");
+  case T_ACTUALSIZE:       return tr("Actual size");
 
   case T_HUEUP: return tr("Hue up");
   case T_HUEDOWN: return tr("Hue down");

@@ -5,6 +5,10 @@
 #include "project/common/acui.h"
 #include "module/qtext/webview.h"
 #include <QtWebKit/QWebView>
+#include <QtCore/QEvent>
+
+#define DEBUG "acwebwindow"
+#include "module/debug/debug.h"
 
 // - Construction -
 
@@ -21,6 +25,10 @@ AcWebWindow::AcWebWindow(QWidget *parent, Qt::WindowFlags f)
     connect(w, SIGNAL(notification(QString)), SLOT(notify(QString)));
   }
   setCentralWidget(w);
+
+  //grabGesture(Qt::PanGesture);
+  //grabGesture(Qt::SwipeGesture);
+  //grabGesture(Qt::PinchGesture);
 }
 
 // - Properties -
@@ -28,5 +36,15 @@ AcWebWindow::AcWebWindow(QWidget *parent, Qt::WindowFlags f)
 QWebView*
 AcWebWindow::webView() const
 { return qobject_cast<QWebView *>(centralWidget()); }
+
+// - Events -
+
+bool
+AcWebWindow::event(QEvent *event)
+{
+  if (event->type() == QEvent::Gesture)
+    DOUT("gesture event");
+  return Base::event(event);
+}
 
 // EOF

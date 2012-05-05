@@ -3,9 +3,9 @@
 setlocal
 cd /d d:/devel/build || exit /b 1
 
-set VERSION=0.1.5.2
+set VERSION=0.1.5.3
 set APP=annot-player
-set FOLDER=Annot Player
+set TARGET=Annot Stream
 set ZIPFILE=%APP%-%VERSION%-win.zip
 
 ::set BASENAME=%APP%-%VERSION%-win
@@ -52,9 +52,9 @@ set GZIP_BIN=gzip.exe
 
 :: deploy into app dir
 
-rm -Rf "%FOLDER%"
-mkdir "%FOLDER%"
-cd "%FOLDER%" || exit /b 1
+rm -Rf "%TARGET%"
+mkdir "%TARGET%"
+cd "%TARGET%" || exit /b 1
 
 cp -v "%BUILD%/Annot Browser.exe" . || exit /b 1
 cp -v "%BUILD%/Annot Downloader.exe" . || exit /b 1
@@ -166,6 +166,6 @@ attrib +r .
 cd ..
 
 rm -f "%ZIPFILE%"
-zip -9r "%ZIPFILE%" "%FOLDER%" > nul
+zip -9r "%ZIPFILE%" "%TARGET%" > nul
 
 :: EOF

@@ -6,14 +6,15 @@
 #include "rc.h"
 #include "global.h"
 #include "application.h"
-#include "project/common/acaboutdialog.h"
+#include "project/common/acabout.h"
 #include "project/common/acsettings.h"
 #include "project/common/acui.h"
 #include "project/common/acbrowser.h"
 #include "project/common/acplayer.h"
 #include "project/common/acdownloader.h"
+#include "project/common/acconsole.h"
 #include "module/webbrowser/network/wbnetworkaccessmanager.h"
-#include "module/webbrowser/core/wbsearchenginefactory.h"
+#include "module/searchengine/searchenginefactory.h"
 #include "module/nicoutil/nicoutil.h"
 #include "module/download/downloader.h"
 #include "module/mousegesture/mousegesture.h"
@@ -37,9 +38,9 @@
 
 #define MIN_SIZE        QSize(400, 300)
 #ifdef Q_WS_WIN
-#  define DEFAULT_SIZE  QSize(1000 + 9*2, 600)
+#  define DEFAULT_SIZE  QSize(1000 + 6*2, 645)
 #else
-#  define DEFAULT_SIZE  QSize(1000 + 9*2, 655) // width for nicovideo.jp + margin*2, height for newtab on mac
+#  define DEFAULT_SIZE  QSize(1000 + 9*2, 710) // width for nicovideo.jp + margin*2, height for newtab on mac
 #endif // Q_WS_WIN
 
 // - Construction -
@@ -63,7 +64,7 @@
 #endif // Q_WS_MAC
 
 MainWindow::MainWindow(QWidget *parent)
-  : Base(parent)
+  : Base(parent), console_(0)
 {
   setWindowTitle(tr("Annot Browser"));
   setWindowIcon(QIcon(RC_IMAGE_APP));
@@ -156,10 +157,10 @@ MainWindow::MainWindow(QWidget *parent)
   int searchEngine = settings->searchEngine();
   if (searchEngine < 0)
     switch (lang) {
-    case QLocale::Japanese: searchEngine = WbSearchEngineFactory::Nicovideo; break;
-    case QLocale::Chinese:  searchEngine = WbSearchEngineFactory::Bilibili; break;
+    case QLocale::Japanese: searchEngine = SearchEngineFactory::Nicovideo; break;
+    case QLocale::Chinese:  searchEngine = SearchEngineFactory::Bilibili; break;
     case QLocale::English:
-    default:                searchEngine = WbSearchEngineFactory::Google;
+    default:                searchEngine = SearchEngineFactory::Google;
     }
   setSearchEngine(searchEngine);
 
@@ -183,8 +184,12 @@ MainWindow::MainWindow(QWidget *parent)
     resize(size);
   }
 
+  //grabGesture(Qt::PanGesture);
+  //grabGesture(Qt::SwipeGesture);
+  //grabGesture(Qt::PinchGesture);
+
   DOUT("size =" << size());
-  dynamic_cast<Application *>(qApp)->addWindow(this);
+  Application::globalInstance()->addWindow(this);
 }
 
 void
@@ -278,7 +283,7 @@ MainWindow::createMenus()
     m->addSeparator();
     m->addAction(tr("Close Tab"), this, SLOT(closeTab()), QKeySequence("CTRL+W"));
     m->addAction(tr("Close Window"), this, SLOT(close()));
-    m->addAction(tr("Exit"), dynamic_cast<Application *>(qApp), SLOT(close()), QKeySequence::Quit);
+    m->addAction(tr("Exit"), Application::globalInstance(), SLOT(close()), QKeySequence::Quit);
   }
 
   //editMenu = menuBar()->addMenu(tr("&Edit"));
@@ -302,8 +307,12 @@ MainWindow::createMenus()
     m->addAction(tr("Toggle Full Screen"), this, SLOT(toggleFullScreen()), QKeySequence("CTRL+META+F"));
   }
 
+  //m = menuBar()->addMenu(tr("&Settings")); {
+  //}
+
   m = menuBar()->addMenu(tr("&Help")); {
-    //helpMenu_->addAction(tr("&Help"), this, SLOT(help())); // DO NOT TRANSLATE ME
+    //m->addAction(tr("&Help"), this, SLOT(help())); // DO NOT TRANSLATE ME
+    m->addAction(tr("&Console"), this, SLOT(showConsole()));
     m->addAction(tr("&About"), this, SLOT(about())); // DO NOT TRANSLATE ME
   }
 }
@@ -337,11 +346,11 @@ MainWindow::login()
 {
   DOUT("enter");
   QString userName, password;
-  //boost::tie(userName, password) = AcSettings::globalSettings()->bilibiliAccount();
-  //if (!userName.isEmpty() && !password.isEmpty()) {
-  //  showMessage(tr("logging in bilibili.tv as %1 ...").arg(userName));
-  //  bilibili::login(userName, password, cookieJar());
-  //}
+  boost::tie(userName, password) = AcSettings::globalSettings()->bilibiliAccount();
+  if (!userName.isEmpty() && !password.isEmpty()) {
+    showMessage(tr("logging in bilibili.tv as %1 ...").arg(userName));
+    bilibili::login(userName, password, cookieJar());
+  }
   boost::tie(userName, password) = AcSettings::globalSettings()->nicovideoAccount();
   if (!userName.isEmpty() && !password.isEmpty()) {
     showMessage(tr("logging in nicovideo.jp as %1 ...").arg(userName));
@@ -359,7 +368,7 @@ MainWindow::mouseMoveEvent(QMouseEvent *event)
       isGlobalPosAroundToolBar(event->globalPos())) {
     setToolBarVisible(true);
     setTabBarVisible(true);
-    autoHideToolBarTimer_->start();
+    //autoHideToolBarTimer_->start();
   }
   Base::mouseMoveEvent(event);
 }
@@ -369,9 +378,11 @@ MainWindow::mousePressEvent(QMouseEvent *event)
 {
   if (isFullScreen() && event->button() == Qt::LeftButton &&
       isGlobalPosAroundToolBar(event->globalPos())) {
-    setToolBarVisible(true);
-    setTabBarVisible(true);
-    autoHideToolBarTimer_->start();
+    bool t = isTabBarVisible();
+    setToolBarVisible(!t);
+    setTabBarVisible(!t);
+   if (autoHideToolBarTimer_->isActive())
+      autoHideToolBarTimer_->stop();
   }
   Base::mousePressEvent(event);
 }
@@ -379,11 +390,23 @@ MainWindow::mousePressEvent(QMouseEvent *event)
 void
 MainWindow::focusInEvent(QFocusEvent *e)
 {
-  Application *a = dynamic_cast<Application *>(qApp);
-  Q_ASSERT(a);
-  if (this != a->activeMainWindow())
-    a->setActiveMainWindow(this);
+  if (this != Application::globalInstance()->activeMainWindow())
+    Application::globalInstance()->setActiveMainWindow(this);
   Base::focusInEvent(e);
+}
+
+void
+MainWindow::keyReleaseEvent(QKeyEvent *e)
+{
+  switch (e->key()) {
+  case Qt::Key_Alt:
+#ifdef Q_WS_WIN
+    menuBar()->setVisible(!menuBar()->isVisible());
+#endif // Q_WS_WIN
+    break;
+  default: ;
+  }
+  Base::keyReleaseEvent(e);
 }
 
 bool
@@ -398,11 +421,20 @@ MainWindow::event(QEvent *e)
       QString url = fe->file();
       if (!url.isEmpty())
         url.prepend("file:///");
-      else
+      else {
         url = fe->url().toString();
-      if (!url.isEmpty())
-        QTimer::singleShot(0, new slot_::NewTab(url, this), SLOT(trigger()));
+        if (!url.isEmpty())
+          url = QUrl::fromPercentEncoding(url.toLocal8Bit());
+      }
+      if (!url.isEmpty()) {
+        if (tabCount() && tabAddress(tabIndex()) == WB_BLANK_PAGE)
+          QTimer::singleShot(0, new slot_::OpenUrl(url, this), SLOT(trigger()));
+        else
+          QTimer::singleShot(0, new slot_::NewTab(url, this), SLOT(trigger()));
+      }
     } break;
+  case QEvent::Gesture:
+    DOUT("gesture event");
   default: accept = Base::event(e);
   }
   return accept;
@@ -431,7 +463,7 @@ MainWindow::closeEvent(QCloseEvent *event)
   enum { UrlSizeLimit = 20 };
   enum { SearchSizeLimit = 20 };
 
-  dynamic_cast<Application *>(qApp)->removeWindow(this);
+  Application::globalInstance()->removeWindow(this);
 
   // Save settings
   saveRecentTabs();
@@ -475,6 +507,8 @@ MainWindow::setVisible(bool visible)
 
     if (tabCount() <= 0)
       newTabAtLastWithBlankPage();
+
+    QTimer::singleShot(0, this, SLOT(focusLocationBar()));
   }
 }
 
@@ -575,7 +609,7 @@ MainWindow::isValidWindowSize(const QSize &size) const
   if (size.width() < MinWidth || size.height() < MinHeight)
     return false;
 
-  QSize desktop = QApplication::desktop()->screenGeometry(this).size();
+  QSize desktop = QApplication::desktop()->availableGeometry(this).size();
   return desktop.isEmpty() ||
          size.width() > desktop.width() && size.height() > desktop.height();
 }
@@ -660,9 +694,9 @@ MainWindow::scrollBottom()
 void
 MainWindow::about()
 {
-  static AcAboutDialog *w = 0;
+  static AcAbout *w = 0;
   if (!w)
-    w = new AcAboutDialog(G_APPLICATION, G_VERSION, this);
+    w = new AcAbout(G_APPLICATION, G_VERSION, this);
   w->show();
 }
 
@@ -706,7 +740,7 @@ MainWindow::autoHideToolBar()
       toolBarHasFocus() || tabBarHasFocus())
     autoHideToolBarTimer_->start();
   else {
-    notify(tr("Click any edge of the screen to show tool bars."));
+    notify(tr("Click any edge of the screen to toggle tool bars."));
     setToolBarVisible(false);
     setTabBarVisible(false);
   }
@@ -718,6 +752,18 @@ MainWindow::isGlobalPosAroundToolBar(const QPoint &pos) const
   enum { margin = 10, top = 10 };
   QRect r(margin, margin + top, width() - (margin + margin), height() - (margin + margin + top));
   return !r.contains(pos);
+}
+
+// - Console -
+void
+MainWindow::showConsole()
+{
+  if (!console_) {
+    Application::globalInstance()->installMessageHandlers();
+    console_ = new AcConsole(this);
+    Application::globalInstance()->addMessageHandler(AcConsole::messageHandler);
+  }
+  console_->show();
 }
 
 // EOF

@@ -74,7 +74,7 @@ AcPlayer::importUrl(const QString &url)
 {
   if (!url.isEmpty()) {
     QString a = url;
-    a.replace(QRegExp("^http://", Qt::CaseInsensitive), "http://annot/");
+    a.replace(QRegExp("^http://", Qt::CaseInsensitive), ACSCHEME_PLAYER_IMPORT);
     openUrl(a);
   }
 }

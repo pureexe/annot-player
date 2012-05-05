@@ -10,6 +10,7 @@ typedef QtExt::Slider PositionSliderBase;
 class PositionSlider : public PositionSliderBase
 {
   Q_OBJECT
+  Q_DISABLE_COPY(PositionSlider)
   typedef PositionSlider Self;
   typedef PositionSliderBase Base;
 

@@ -12,6 +12,7 @@ class WindowPickerPrivate; ///< \internal
 class WindowPicker : public QObject
 {
   Q_OBJECT
+  Q_DISABLE_COPY(WindowPicker)
   typedef WindowPicker Self;
   typedef QObject Base;
   typedef WindowPickerPrivate Private;

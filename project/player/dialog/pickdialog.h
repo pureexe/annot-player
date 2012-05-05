@@ -12,6 +12,7 @@ typedef QtExt::Dialog PickDialogBase;
 class PickDialog : public PickDialogBase
 {
   Q_OBJECT
+  Q_DISABLE_COPY(PickDialog)
   typedef PickDialog Self;
   typedef PickDialogBase Base;
 

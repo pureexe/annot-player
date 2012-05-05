@@ -11,6 +11,7 @@ namespace QtExt {
 class DraggableMainWindow : public QMainWindow
 {
   Q_OBJECT
+  Q_DISABLE_COPY(DraggableMainWindow)
   typedef DraggableMainWindow Self;
   typedef QMainWindow Base;
 

@@ -1,6 +1,7 @@
 # webbrowser_static.pri
 # 10/9/2011
 include(../../config.pri)
+include($$ROOTDIR/module/searchengine/searchengine.pri)
 
 DEFINES += WITH_MODULE_WEBBROWSER
 
@@ -20,8 +21,6 @@ FORMS   += \
     $$PWD/webbrowser.ui
 
 HEADERS += \
-    $$PWD/core/wbsearchengine.h \
-    $$PWD/core/wbsearchenginefactory.h \
     $$PWD/global/wbrc.h \
     $$PWD/global/wbss.h \
     $$PWD/gui/wbaddressedit.h \
@@ -38,7 +37,6 @@ HEADERS += \
     $$PWD/webbrowser_p.h
 
 SOURCES += \
-    $$PWD/core/wbsearchenginefactory.cc \
     $$PWD/gui/wbaddressedit.cc \
     $$PWD/gui/wbcomboedit.cc \
     $$PWD/gui/wblineedit.cc \

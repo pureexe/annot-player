@@ -12,8 +12,21 @@
 #include "module/debug/debug.h"
 
 // - Construction -
-MrlResolverManager::MrlResolverManager(QObject *parent)
-  : Base(parent)
+
+//QNetworkAccessManager*
+//MrlResolverManager::makeNetworkAccessManager()
+//{
+//  QNetworkAccessManager *ret = new QNetworkAccessManager;
+//#ifdef ANNOT_PROXY_DOMAIN
+//  ret->setCookieJar(new QtExt::NetworkCookieJarWithDomainAlias(".nicovideo.jp", ANNOT_PROXY_DOMAIN, ret));
+//#else
+//#  warning "nico alias domain is not defined"
+//#endif // ANNOT_PROXY_DOMAIN
+//  return ret;
+//}
+
+void
+MrlResolverManager::init()
 {
   MrlResolver *r;
 #define ADD(_resolver) \
@@ -29,6 +42,15 @@ MrlResolverManager::MrlResolverManager(QObject *parent)
   //ADD(YoukuMrlResolver)
   ADD(LuaMrlResolver)
 #undef ADD
+
+  connect(this, SIGNAL(synchronizedChanged(bool)), SLOT(updateSynchronized(bool)));
+}
+
+void
+MrlResolverManager::updateSynchronized(bool t)
+{
+  foreach(MrlResolver *r, resolvers_)
+    r->setSynchronized(t);
 }
 
 // - Analysis -

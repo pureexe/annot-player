@@ -13,7 +13,7 @@
 //#include "module/qtext/textcodec.h"
 #include "module/qtext/countdowntimer.h"
 #ifdef WITH_MODULE_VLCCORE
-#  include "module/vlccore/http.h"
+#  include "module/vlccore/httpplugin.h"
 #endif // WITH_MODULE_VLCCORE
 #include <QtCore/QObject>
 #include <QtCore/QList>

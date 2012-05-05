@@ -328,6 +328,7 @@ function getRealUrls (str_id, str_tmpfile, pDlg)
 	--str_tmpfile = "C:\\tempacfun.html";
 	--dbgMessage(str_tmpfile);
 	--dbgMessage(str_dynurl);
+    --
 	local re = dlFile(str_tmpfile, str_dynurl);
 	--dbgMessage("dl dynurl end.");
 	if re~=0
@@ -530,13 +531,14 @@ function getRealUrls_youku (str_id, str_tmpfile, pDlg)
 	local tbl_urls = {};
 	local index = 0;
 
-	local str_dynurl = "http://v.youku.com/player/getPlayList/VideoIDS/"..str_id.."...ezone/+08/version/5/source/video?password=&ran=1527&n=3";
+	local str_dynurl = "http://v.youku.com/player/getPlayList/VideoIDS/"..str_id.."/timezone/+08/version/5/source/video?password=&ran=1527&n=3";
 	--dbgMessage(str_dynurl);
 	if pDlg~=nil then
 		sShowMessage(pDlg, '正在读取转接页面..');
 	end
 
-	local re = dlFile(str_tmpfile, str_dynurl);
+	local header = "X-Forwarded-For: 202.108.8.82";
+	local re = dlFile(str_tmpfile, str_dynurl, header);
 	if re~=0
 	then
 		if pDlg~=nil then
@@ -677,7 +679,8 @@ function getRealUrls_tudou (str_id, str_tmpfile, pDlg)
 	if pDlg~=nil then
 		sShowMessage(pDlg, '正在读取转接页面..');
 	end
-	local re = dlFile(str_tmpfile, str_oriurl);
+	local header = "X-Forwarded-For: 202.108.8.82";
+	local re = dlFile(str_tmpfile, str_oriurl, header);
 	if re~=0
 	then
 		if pDlg~=nil then
@@ -703,6 +706,10 @@ function getRealUrls_tudou (str_id, str_tmpfile, pDlg)
 	local str_line_end = readIntoUntil(file , str_line, "</script>");
 	--dbgMessage(str_line_end);
 	local iid = getMedText(str_line_end, "iid = ", ",");
+
+	if iid==nil then
+		iid=str_id;
+	end
 
 	--read iid ok closefile
 	io.close(file);
@@ -846,6 +853,64 @@ function getRealUrls_6cn (str_id, str_tmpfile, pDlg)
 
 
 	return index, tbl_urls;
+end
+
+function getAcVideo_CommentID(str_acid, str_tmpfile, pDlg)
+	local str_apiurl = "http://www.acfun.tv/api/getVideoByID.aspx?vid="..str_acid;
+
+	--dbgMessage(str_apiurl);
+
+	if pDlg~=nil then
+		sShowMessage(pDlg, '正在读取转接页面..');
+	end
+	local re = dlFile(str_tmpfile, str_apiurl);
+	if re~=0
+	then
+		if pDlg~=nil then
+			sShowMessage(pDlg, '转接页面读取错误。');
+		end
+		return index, tbl_urls;
+	else
+		if pDlg~=nil then
+			sShowMessage(pDlg, '读取转接页面成功，正在分析..');
+		end
+	end
+
+	local file = io.open(str_tmpfile, "r");
+	if file==nil
+	then
+		if pDlg~=nil then
+			sShowMessage(pDlg, '转接页面读取错误。');
+		end
+		return;
+	end
+
+	local str_line = file:read("*l");
+	str_line = utf8_to_lua(str_line);
+	--dbgMessage(str_line);
+
+	--read str_v_realurl ok closefile
+	io.close(file);
+
+	local int_foreignlinksite = fls["realurl"];
+	local str_id = "";
+	local str_subid = str_id;
+	if string.find(str_line, "\"success\":true", 1, true)~=nil then
+		if string.find(str_line, "\"vtype\":\"sina\"", 1, true)~=nil then
+			int_foreignlinksite = fls["sina"];
+		elseif string.find(str_line, "\"vtype\":\"youku\"", 1, true)~=nil then
+			int_foreignlinksite = fls["youku"];
+		elseif string.find(str_line, "\"vtype\":\"qq\"", 1, true)~=nil then
+			int_foreignlinksite = fls["qq"];
+		end--[[may be there are other types for adding]]
+
+		str_id = getMedText(str_line, "\"vid\":\"", "\",");
+		str_subid = getMedText(str_line, "\"cid\":\"", "\",");
+		return int_foreignlinksite, str_id, str_subid;
+	else
+		return nil;
+	end
+
 end
 
 --[[copy table]]

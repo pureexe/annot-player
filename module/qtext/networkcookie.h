@@ -94,6 +94,7 @@ namespace QtExt {
   class NetworkCookieJarWithDomainAlias : public QNetworkCookieJar
   {
     Q_OBJECT
+    Q_DISABLE_COPY(NetworkCookieJarWithDomainAlias)
     typedef NetworkCookieJarWithDomainAlias Self;
     typedef QNetworkCookieJar Base;
 

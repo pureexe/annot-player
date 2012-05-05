@@ -23,6 +23,7 @@ class AcFilteredTableView;
 class TextFilterView : public QWidget
 {
   Q_OBJECT
+  Q_DISABLE_COPY(TextFilterView)
   typedef TextFilterView Self;
   typedef QWidget Base;
 
@@ -60,6 +61,7 @@ private:
 class UserFilterView : public QWidget
 {
   Q_OBJECT
+  Q_DISABLE_COPY(UserFilterView)
   typedef UserFilterView Self;
   typedef QWidget Base;
 
@@ -97,6 +99,7 @@ private:
 class AnnotationFilterView : public QWidget
 {
   Q_OBJECT
+  Q_DISABLE_COPY(AnnotationFilterView)
   typedef UserFilterView Self;
   typedef QWidget Base;
 

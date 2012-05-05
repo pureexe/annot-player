@@ -12,6 +12,7 @@ class Player;
 class SignalHub : public QObject
 {
   Q_OBJECT
+  Q_DISABLE_COPY(SignalHub)
   typedef SignalHub Self;
   typedef QObject Base;
 

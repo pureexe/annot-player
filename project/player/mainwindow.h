@@ -7,6 +7,7 @@
 #include "module/annotcloud/alias.h"
 #include "module/annotcloud/annotation.h"
 #include "module/mrlresolver/mrlinfo.h"
+#include "module/searchengine/searchenginefactory.h"
 #ifdef USE_MODE_SIGNAL
 #  include "processinfo.h"
 #endif // USE_MODE_SIGNAL
@@ -17,8 +18,13 @@
 #include <QtCore/QFileInfoList>
 
 QT_BEGIN_NAMESPACE
+class QGestureEvent;
 class QMimeData;
+class QNetworkAccessManager;
 class QNetworkCookieJar;
+class QPanGesture;
+class QPinchGesture;
+class QSwipeGesture;
 class QTimer;
 class QUrl;
 QT_END_NAMESPACE
@@ -92,6 +98,7 @@ class UrlDialog;
 class MainWindow : public QMainWindow
 {
   Q_OBJECT
+  Q_DISABLE_COPY(MainWindow)
   typedef MainWindow Self;
   typedef QMainWindow Base;
 
@@ -114,6 +121,7 @@ public:
 
   // - Signals -
 signals:
+  void openAnnotationUrlRequested(const QString &url);
   void annotationUrlAdded(QString url);
   void windowMaximized();
   void playingFinished();
@@ -160,8 +168,14 @@ public:
   bool isSubtitleOnTop() const;
 
   bool isAutoPlayNext() const;
+  bool repeatCurrent() const;
+  bool noRepeat() const;
 
 public slots:
+  void setAutoPlayNext();
+  void setRepeatCurrent();
+  void setNoRepeat();
+
   void maximizedToFullScreen();
 
   void setTranslateEnabled(bool enabled);
@@ -210,7 +224,7 @@ public slots:
   void openFile();
   void openUrl();
   void openAnnotationUrl();
-  void openAnnotationUrlFromAliases(const AliasList &l);
+  void openAnnotationUrlFromAliases(const AliasList &l, bool async = true);
   void openAnnotationUrl(const QString &url, bool save = false);
   void openUrl(const QString &url);
   void openUrl(const QString &url, bool save);
@@ -224,7 +238,7 @@ public slots:
   void openDirectory();
   void openMrl(const QString &path, bool checkPath = true);
   void openStreamUrl(const QString &rtsp);
-  void openRemoteMedia(const MediaInfo &mi, QNetworkCookieJar *jar = 0); ///< jar will be deleted6+
+  void openRemoteMedia(const MediaInfo &mi, QNetworkCookieJar *jar = 0);
   void openLocalUrl(const QUrl &url);
   void openLocalUrls(const QList<QUrl> &urls);
   void openMimeData(const QMimeData *urls);
@@ -285,11 +299,14 @@ public slots:
 
   void openInWebBrowser();
   void downloadCurrentUrl();
+  void copyCurrentUrl();
+  void copyCurrentTitle();
   void clickProgressButton();
 protected:
   bool hasNext() const;
   QString newWindowTitle() const;
   QString currentUrl() const;
+  QString currentTitle() const;
   static QString downloadSpeedToString(int speed);
 
 public slots:
@@ -500,8 +517,13 @@ protected slots:
 public slots:
   virtual void setVisible(bool visible); ///< \override
   void dispose();
-protected:
+public:
   virtual bool event(QEvent *event); ///< \override
+  void gestureEvent(QGestureEvent *e);
+  void panGesture(QPanGesture *g);
+  void pinchGesture(QPinchGesture *g);
+  void swipeGesture(QSwipeGesture *g);
+protected:
   virtual void mousePressEvent(QMouseEvent *event); ///< \override
   virtual void mouseMoveEvent(QMouseEvent *event); ///< \override
   virtual void mouseReleaseEvent(QMouseEvent *event); ///< \override
@@ -619,6 +641,7 @@ public slots:
   void openNextFile();
 
   void showMinimizedAndPause();
+  void actualSize();
 protected:
   void updateBrowseMenu(const QString &fileName);
   void updateBrowseMenu();
@@ -694,6 +717,26 @@ protected:
   bool isDigestReady(const QString &path) const;
   bool isAliasReady(const QString &path) const;
 
+  // - Search -
+protected:
+  void searchWithEngine(int engine, const QString &key);
+protected slots:
+  void searchCurrentTitleWithGoogle() { searchWithEngine(SearchEngineFactory::Google, currentTitle()); }
+  void searchCurrentTitleWithGoogleImages() { searchWithEngine(SearchEngineFactory::GoogleImages, currentTitle()); }
+  void searchCurrentTitleWithBing()   { searchWithEngine(SearchEngineFactory::Bing, currentTitle()); }
+  void searchCurrentTitleWithNicovideo() { searchWithEngine(SearchEngineFactory::Nicovideo, currentTitle()); }
+  void searchCurrentTitleWithBilibili() { searchWithEngine(SearchEngineFactory::Bilibili, currentTitle()); }
+  void searchCurrentTitleWithAcFun()  { searchWithEngine(SearchEngineFactory::AcFun, currentTitle()); }
+  void searchCurrentTitleWithYoutube() { searchWithEngine(SearchEngineFactory::Youtube, currentTitle()); }
+  void searchCurrentTitleWithYouku()  { searchWithEngine(SearchEngineFactory::Youku, currentTitle()); }
+  void searchCurrentTitleWithWikiEn() { searchWithEngine(SearchEngineFactory::WikiEn, currentTitle()); }
+  void searchCurrentTitleWithWikiJa() { searchWithEngine(SearchEngineFactory::WikiJa, currentTitle()); }
+  void searchCurrentTitleWithWikiZh() { searchWithEngine(SearchEngineFactory::WikiZh, currentTitle()); }
+
+  // - Dialogs -
+protected slots:
+  void showPreferences();
+
   // - Rubber band -
 protected slots:
   void pauseAnnotationsAt(const QRect &rect);
@@ -717,6 +760,8 @@ private:
   void createComponents(bool unique);
   void createActions();
   void createMenus();
+  void createSearchMenu();
+  void createSearchEngines();
   void createDockWindows();
   void createConnections();
 
@@ -729,6 +774,8 @@ private:
   mutable QMutex annotMutex_;
   Tray *tray_;
   SignalHub *hub_;
+
+  QList<SearchEngine *> searchEngines_;
 
   QtExt::CountdownTimer *loadSubtitlesTimer_;
   QtExt::CountdownTimer *resumePlayTimer_,
@@ -856,6 +903,8 @@ private:
 //#endif // !Q_OS_WIN
 
   QMenu *contextMenu_,
+        *currentMenu_,
+        *searchMenu_,
         *advancedMenu_,
         *helpContextMenu_,
         *recentMenu_,
@@ -950,6 +999,7 @@ private:
           *previousAct_,
           *nextAct_,
           *snapshotAct_,
+          *actualSizeAct_,
           *toggleAnnotationAnalyticsViewVisibleAct_,
           *toggleAnnotationVisibleAct_,
           *toggleAnnotationCountDialogVisibleAct_,
@@ -967,7 +1017,9 @@ private:
           *toggleTranslateAct_,
           *toggleSubtitleOnTopAct_,
           *toggleEmbeddedPlayerOnTopAct_,
-          *toggleAutoPlayNextAct_;
+          *toggleAutoPlayNextAct_,
+          *toggleRepeatCurrentAct_,
+          *toggleNoRepeatAct_;
 
   QAction *nothingAfterFinishedAct_,
           *sleepAfterFinishedAct_,
@@ -976,6 +1028,7 @@ private:
   QAction *toggleWindowOnTopAct_;
   QAction *togglePlayerLabelEnabled_;
   QAction *downloadCurrentUrlAct_,
+          *copyCurrentUrlAct_,
           *openInWebBrowserAct_,
           *openHomePageAct_;
 

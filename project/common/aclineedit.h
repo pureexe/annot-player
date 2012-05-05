@@ -9,6 +9,7 @@
 class AcLineEdit : public QLineEdit
 {
   Q_OBJECT
+  Q_DISABLE_COPY(AcLineEdit)
   typedef AcLineEdit Self;
   typedef QLineEdit Base;
 

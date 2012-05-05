@@ -11,6 +11,7 @@ class MetaCallFilter;
 class AcIpcController : public QObject
 {
   Q_OBJECT
+  Q_DISABLE_COPY(AcIpcController)
   typedef AcIpcController Self;
   typedef QObject Base;
 

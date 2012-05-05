@@ -1,7 +1,7 @@
 # browser.pro
 # 3/29/2012
 
-VERSION = 0.1.2.1
+VERSION = 0.1.2.2
 
 DEFINES += PROJECT_BROWSER
 

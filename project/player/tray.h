@@ -14,6 +14,7 @@ typedef QtExt::SystemTrayIcon TrayBase;
 class Tray : public TrayBase
 {
   Q_OBJECT
+  Q_DISABLE_COPY(Tray)
   typedef Tray Self;
   typedef TrayBase Base;
 

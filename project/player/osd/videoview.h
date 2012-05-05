@@ -22,6 +22,7 @@
 class VideoView : public VideoViewBase
 {
   Q_OBJECT
+  Q_DISABLE_COPY(VideoView)
   typedef VideoView Self;
   typedef VideoViewBase Base;
 

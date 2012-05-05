@@ -19,7 +19,7 @@
 #include <QtCore/QTextCodec>
 #include <QtCore/QThreadPool>
 
-//#define DEBUG "luaemrlresolver"
+#define DEBUG "luaemrlresolver"
 #include "module/debug/debug.h"
 
 // TODO: move to project source project instead of hard code here
@@ -108,8 +108,9 @@ LuaMrlResolver::resolveMedia(const QString &href, bool async)
 
   //LuaResolver *lua = makeResolver();
   LuaResolver lua(LUASCRIPT_PATH, LUAPACKAGE_PATH);
-  if (!lua.cookieJar())
-    lua.setCookieJar(new QNetworkCookieJar);
+  //lua.setNetworkAccessManager(networkAccessManager());
+  //if (!lua.cookieJar())
+  //  lua.setCookieJar(new QNetworkCookieJar);
   if (settings->hasNicovideoAccount())
     lua.setNicovideoAccount(settings->nicovideoAccount().username,
                             settings->nicovideoAccount().password);
@@ -175,12 +176,19 @@ LuaMrlResolver::resolveMedia(const QString &href, bool async)
     }
   }
 
+  //QNetworkCookieJar *jar = lua.cookieJar();
+  //Q_ASSERT(jar);
+  //if (jar)
+  //  jar->setParent(0);
   QNetworkCookieJar *jar = lua.cookieJar();
-  Q_ASSERT(jar);
   if (jar)
     jar->setParent(0);
 
   emit mediaResolved(mi, jar);
+  if (isSynchronized()) {
+    setResolvedCookieJar(jar);
+    setResolvedMediaInfo(mi);
+  }
   DOUT("exit: title =" << mi.title);
   return true;
 }
@@ -204,7 +212,8 @@ LuaMrlResolver::resolveSubtitle(const QString &href, bool async)
 
   //LuaResolver *lua = makeResolver();
   LuaResolver lua(LUASCRIPT_PATH, LUAPACKAGE_PATH);
-  lua.setCookieJar(new QNetworkCookieJar); // potential memory leak on error
+  //lua.setNetworkAccessManager(networkAccessManager());
+  //lua.setCookieJar(new QNetworkCookieJar); // potential memory leak on error
   if (settings->hasNicovideoAccount())
     lua.setNicovideoAccount(settings->nicovideoAccount().username,
                             settings->nicovideoAccount().password);
@@ -241,6 +250,8 @@ LuaMrlResolver::resolveSubtitle(const QString &href, bool async)
   suburl = formatUrl(suburl);
   if (!suburl.isEmpty())
     emit subtitleResolved(suburl);
+  if (isSynchronized())
+    setResolvedSubtitleUrl(suburl);
   DOUT("exit: suburl =" << suburl);
   return true;
 }
@@ -319,12 +330,15 @@ LuaMrlResolver::cleanUrl(const QString &url)
      .replace("http://bilibili.tv/" , "http://www.bilibili.tv", Qt::CaseInsensitive);
   if (ret.startsWith("http://www.nicovideo.jp/watch/", Qt::CaseInsensitive))
     ret.remove(QRegExp("\\?.*"));
-  else if (ret.startsWith("http://www.bilibili.tv/video/", Qt::CaseInsensitive)) {
+  else if (ret.startsWith("http://www.bilibili.tv/video/", Qt::CaseInsensitive))
     ret.remove(QRegExp("/#$"))
-       .remove(QRegExp("/$"))
+       //.remove(QRegExp("/$"))
        .remove(QRegExp("/index_1.html$", Qt::CaseInsensitive))
        .remove(QRegExp("/index.html$", Qt::CaseInsensitive));
-  }
+  else if (ret.startsWith("http://www.acfun.tv/v/", Qt::CaseInsensitive))
+    ret.remove(QRegExp("/#$"))
+       .remove(QRegExp("/$"))
+       .remove(QRegExp("/index.html$", Qt::CaseInsensitive));
   return ret;
 }
 

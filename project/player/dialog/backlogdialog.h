@@ -12,6 +12,7 @@ typedef QtExt::Dialog BacklogDialogBase;
 class BacklogDialog : public BacklogDialogBase
 {
   Q_OBJECT
+  Q_DISABLE_COPY(BacklogDialog)
   typedef BacklogDialog Self;
   typedef BacklogDialogBase Base;
 

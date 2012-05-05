@@ -29,6 +29,26 @@ namespace slot_ { // anonymous slot_
     }
   };
 
+  class OpenUrl : public QObject {
+    Q_OBJECT
+    typedef QObject Base;
+
+    MainWindow *w_;
+    QString url_;
+
+  public:
+    OpenUrl(const QString &url, MainWindow *w)
+      : Base(w), w_(w), url_(url)
+    { Q_ASSERT(w_); }
+
+  public slots:
+    void trigger()
+    {
+      w_->openUrl(url_);
+      QTimer::singleShot(0, this, SLOT(deleteLater()));
+    }
+  };
+
   class NewTab : public QObject {
     Q_OBJECT
     typedef QObject Base;
@@ -48,7 +68,6 @@ namespace slot_ { // anonymous slot_
       QTimer::singleShot(0, this, SLOT(deleteLater()));
     }
   };
-
 
 } // namespace slot_
 

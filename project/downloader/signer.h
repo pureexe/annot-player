@@ -12,6 +12,7 @@ class ServerAgent;
 class Signer : public QObject
 {
   Q_OBJECT
+  Q_DISABLE_COPY(Signer)
   typedef Signer Self;
   typedef QObject Base;
 

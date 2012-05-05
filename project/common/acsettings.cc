@@ -40,6 +40,8 @@
 #define SK_PROXY_USER   "ProxyUser"
 #define SK_PROXY_PASS   "ProxyPassword"
 
+#define SK_LOCATION_DOWNLOADS   "DownloadsLocation"
+
 // - Constructions -
 
 AcSettings::AcSettings(QObject *parent)
@@ -273,6 +275,21 @@ AcSettings::setProxyPassword(const QString &password)
     remove(SK_PROXY_PASS);
   else
     setValue(SK_PROXY_PASS, Crypt::encrypt(password));
+}
+
+// - Locations -
+
+QString
+AcSettings::downloadsLocation() const
+{ return value(SK_LOCATION_DOWNLOADS).toString(); }
+
+void
+AcSettings::setDownloadsLocation(const QString &path)
+{
+  if (path != downloadsLocation()) {
+    setValue(SK_LOCATION_DOWNLOADS, path);
+    emit downloadsLocationChanged(path);
+  }
 }
 
 // EOF

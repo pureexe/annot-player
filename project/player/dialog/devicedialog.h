@@ -17,6 +17,7 @@ typedef QtExt::Dialog DeviceDialogBase;
 class DeviceDialog : public DeviceDialogBase
 {
   Q_OBJECT
+  Q_DISABLE_COPY(DeviceDialog)
   typedef DeviceDialog Self;
   typedef DeviceDialogBase Base;
 

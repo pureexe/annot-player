@@ -88,7 +88,7 @@ AcIpcController::invalidateFilter()
   if (filter_) {
     filter_->stop();
     filter_->setWatchedObject(0);
-    QTimer::singleShot(0, filter_, SLOT(deleteLater()));
+    filter_->deleteLater();
   }
   filter_ = new MetaCallFilter(this);
   filter_->setWatchedObject(this);

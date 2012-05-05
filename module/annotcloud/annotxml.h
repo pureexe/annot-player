@@ -14,6 +14,7 @@ namespace AnnotCloud {
 class AnnotationXmlParser : public QObject
 {
   Q_OBJECT
+  Q_DISABLE_COPY(AnnotationXmlParser)
   typedef AnnotationXmlParser Self;
   typedef QObject Base;
 

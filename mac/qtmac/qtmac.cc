@@ -129,6 +129,7 @@ QtMac::run(const QString &bin, const QStringList &args, int timeout)
 bool
 QtMac::open(const QString &app, const QStringList &args)
 {
+  DOUT("app =" << app << ", args =" << args);
   return QProcess::startDetached("open", QStringList()
     <<"-a"
     << app
@@ -139,28 +140,37 @@ QtMac::open(const QString &app, const QStringList &args)
 bool
 QtMac::halt()
 {
+  DOUT("enter");
   //QProcess::startDetached("shutdown -s now");
-  return QProcess::startDetached("osascript -e '"
+  bool ret = QProcess::startDetached("osascript -e '"
     "tell app \"Finder\" to shut down"
   "'");
+  DOUT("exit: ret =" << ret);
+  return ret;
 }
 
 bool
 QtMac::reboot()
 {
+  DOUT("enter");
   //QProcess::startDetached("shutdown -r now");
-  return QProcess::startDetached("osascript", QStringList() << "-e" <<
+  bool ret = QProcess::startDetached("osascript", QStringList() << "-e" <<
     "tell app \"Finder\" to shut down"
   );
+  DOUT("exit: ret =" << ret);
+  return ret;
 }
 
 bool
 QtMac::sleep()
 {
+  DOUT("enter");
   //QProcess::startDetached("pmset sleepnow");
-  return QProcess::startDetached("osascript", QStringList() << "-e" <<
+  bool ret = QProcess::startDetached("osascript", QStringList() << "-e" <<
     "tell app \"Finder\" to sleep"
   );
+  DOUT("exit: ret =" << ret);
+  return ret;
 }
 
 // - Attributes -

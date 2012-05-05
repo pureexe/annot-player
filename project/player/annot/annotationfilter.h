@@ -12,6 +12,7 @@ class DataManager;
 class AnnotationFilter : public QObject
 {
   Q_OBJECT
+  Q_DISABLE_COPY(AnnotationFilter)
   typedef AnnotationFilter Self;
   typedef QObject Base;
 

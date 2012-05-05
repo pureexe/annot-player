@@ -9,6 +9,7 @@
 class Grabber : public QObject
 {
   Q_OBJECT
+  Q_DISABLE_COPY(Grabber)
   typedef Grabber Self;
   typedef QObject Base;
 

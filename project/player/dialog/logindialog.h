@@ -13,6 +13,7 @@ typedef QtExt::Dialog LoginDialogBase;
 class LoginDialog : public LoginDialogBase
 {
   Q_OBJECT
+  Q_DISABLE_COPY(LoginDialog)
   typedef LoginDialog Self;
   typedef LoginDialogBase Base;
 

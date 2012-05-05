@@ -16,6 +16,7 @@ class MouseGestureFilterPrivate;
 class MouseGestureFilter : public QObject
 {
   Q_OBJECT
+  Q_DISABLE_COPY(MouseGestureFilter)
   typedef MouseGestureFilter Self;
   typedef QObject Base;
   typedef MouseGestureFilterPrivate Private;

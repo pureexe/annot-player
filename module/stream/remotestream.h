@@ -15,6 +15,7 @@ QT_FORWARD_DECLARE_CLASS(QNetworkAccessManager)
 class RemoteStream : public QObject, public InputStream, public StoppableTask
 {
   Q_OBJECT
+  Q_DISABLE_COPY(RemoteStream)
   typedef RemoteStream Self;
   typedef QObject Base;
 
@@ -23,7 +24,8 @@ class RemoteStream : public QObject, public InputStream, public StoppableTask
   QNetworkRequest request_;
 
 public:
-  explicit RemoteStream(QObject *parent = 0);
+  explicit RemoteStream(QNetworkAccessManager *nam, QObject *parent = 0)
+    : Base(parent), nam_(nam), size_(0) { }
 
 signals:
   void finished();
@@ -34,6 +36,8 @@ signals:
 
 public:
   QNetworkAccessManager *networkAccessManager() const { return nam_; }
+  void setNetworkAccessManager(QNetworkAccessManager *nam) { nam_ = nam; }
+
   const QNetworkRequest &request() const { return request_; }
   QNetworkRequest &request() { return request_; }
   QUrl url() const { return request_.url(); }

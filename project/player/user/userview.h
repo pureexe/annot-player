@@ -14,6 +14,7 @@ typedef QtExt::Dialog UserViewBase;
 class UserView : public UserViewBase
 {
   Q_OBJECT
+  Q_DISABLE_COPY(UserView)
   typedef UserView Self;
   typedef UserViewBase Base;
 

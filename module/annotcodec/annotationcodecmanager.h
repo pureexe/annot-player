@@ -9,6 +9,7 @@
 class AnnotationCodecManager : public QObject
 {
   Q_OBJECT
+  Q_DISABLE_COPY(AnnotationCodecManager)
   typedef AnnotationCodecManager Self;
   typedef QObject Base;
 

@@ -11,6 +11,7 @@ typedef QtExt::NetworkCookieJarWithDomainAlias WbNetworkCookieJarBase;
 class WbNetworkCookieJar : public WbNetworkCookieJarBase
 {
   Q_OBJECT
+  Q_DISABLE_COPY(WbNetworkCookieJar)
   typedef WbNetworkCookieJarBase Base;
 
 public:

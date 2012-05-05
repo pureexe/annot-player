@@ -9,6 +9,7 @@
 class UserLabel : public QLabel
 {
   Q_OBJECT
+  Q_DISABLE_COPY(UserLabel)
 
   typedef UserLabel Self;
   typedef QLabel Base;

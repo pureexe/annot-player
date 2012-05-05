@@ -18,6 +18,7 @@ class PositionSlider;
 class PlayerPanel: public QWidget
 {
   Q_OBJECT
+  Q_DISABLE_COPY(PlayerPanel)
   typedef PlayerPanel Self;
   typedef QWidget Base;
 

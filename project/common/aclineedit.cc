@@ -6,7 +6,6 @@
 #include "project/common/acss.h"
 #include <QtGui/QContextMenuEvent>
 #include <QtGui/QMenu>
-#include <QtCore/QTimer>
 
 // - Constructions -
 
@@ -37,7 +36,7 @@ AcLineEdit::contextMenuEvent(QContextMenuEvent *event)
 
   m->exec(event->globalPos());
   delete scm;
-  QTimer::singleShot(0, m, SLOT(deleteLater()));
+  delete m;
   event->accept();
 #else
   Base::contextMenuEvent(event);

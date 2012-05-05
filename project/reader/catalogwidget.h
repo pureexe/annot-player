@@ -11,6 +11,7 @@
 class CatalogWidget : public QTreeView
 {
   Q_OBJECT
+  Q_DISABLE_COPY(CatalogWidget)
   typedef CatalogWidget Self;
   typedef QTreeView Base;
 

@@ -10,6 +10,7 @@
 class NullOutputStream : public QObject, public OutputStream
 {
   Q_OBJECT
+  Q_DISABLE_COPY(NullOutputStream)
   typedef NullOutputStream Self;
   typedef QObject Base;
 

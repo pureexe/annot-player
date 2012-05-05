@@ -1,0 +1,18 @@
+<RCC>
+    <qresource prefix="/" >
+        <file>favicons/acfun.ico</file>
+        <file>favicons/app.ico</file>
+        <file>favicons/apple.ico</file>
+        <file>favicons/bing.ico</file>
+        <file>favicons/cplusplus.ico</file>
+        <file>favicons/bilibili.ico</file>
+        <file>favicons/google.ico</file>
+        <file>favicons/msdn.ico</file>
+        <file>favicons/nicovideo.ico</file>
+        <file>favicons/qt.ico</file>
+        <file>favicons/ss64.ico</file>
+        <file>favicons/wiki.ico</file>
+        <file>favicons/youku.ico</file>
+        <file>favicons/youtube.ico</file>
+    </qresource>
+</RCC>

@@ -12,14 +12,17 @@ QT_FORWARD_DECLARE_CLASS(QNetworkReply)
 class YoukuMrlResolver : public MrlResolver
 {
   Q_OBJECT
+  Q_DISABLE_COPY(YoukuMrlResolver)
   typedef YoukuMrlResolver Self;
   typedef MrlResolver Base;
 
-  QNetworkAccessManager *nam_;
   QString preferredType_; // should be one of "mp4", "flv", or "flvhd"
 
+  QNetworkAccessManager *nam_;
+
 public:
-  explicit YoukuMrlResolver(QObject *parent = 0);
+  explicit YoukuMrlResolver(QObject *parent = 0)
+    : Base(parent) { init(); }
 
 public:
   bool matchMedia(const QString &href) const; ///< \override
@@ -33,6 +36,7 @@ protected slots:
   void resolveMedia(QNetworkReply *reply);
 
 private:
+  void init();
   static QString newSid();
   static QString decodeFileIdAlphabet(long seed);
   static QString decodeFileId(QString fileId, long seed);

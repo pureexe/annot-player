@@ -13,6 +13,7 @@ typedef QtExt::ComboBox ComboEditBase;
 class AcComboEdit : public ComboEditBase
 {
   Q_OBJECT
+  Q_DISABLE_COPY(AcComboEdit)
   typedef AcComboEdit Self;
   typedef ComboEditBase Base;
 

@@ -16,6 +16,7 @@ QT_END_NAMESPACE
 class OsdConsole : public QLabel
 {
   Q_OBJECT
+  Q_DISABLE_COPY(OsdConsole)
   typedef OsdConsole Self;
   typedef QLabel Base;
 

@@ -1,7 +1,7 @@
 # downloader.pro
 # 3/29/2012
 
-VERSION = 0.1.1.1
+VERSION = 0.1.1.2
 
 DEFINES += PROJECT_DOWNLOADER
 
@@ -16,7 +16,7 @@ include($$ROOTDIR/module/gsoap/gsoap.pri)
 include($$ROOTDIR/module/compress/compress.pri)
 include($$ROOTDIR/module/crypt/crypt.pri)
 include($$ROOTDIR/module/download/download.pri)
-include($$ROOTDIR/module/download/mrldownload.pri)
+include($$ROOTDIR/module/downloadtask/downloadtask.pri)
 include($$ROOTDIR/module/mediacodec/mediacodec.pri)
 include($$ROOTDIR/module/mrlresolver/mrlresolver.pri)
 include($$ROOTDIR/module/qt/qt.pri)

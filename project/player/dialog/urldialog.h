@@ -13,6 +13,7 @@ typedef QtExt::Dialog UrlDialogBase;
 class UrlDialog : public UrlDialogBase
 {
   Q_OBJECT
+  Q_DISABLE_COPY(UrlDialog)
   typedef UrlDialog Self;
   typedef UrlDialogBase Base;
 

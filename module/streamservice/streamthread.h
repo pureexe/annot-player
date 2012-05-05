@@ -25,6 +25,7 @@ struct MediaStreamInfo
 class StreamThread : public QThread
 {
   Q_OBJECT
+  Q_DISABLE_COPY(StreamThread)
   typedef StreamThread Self;
   typedef QThread Base;
 

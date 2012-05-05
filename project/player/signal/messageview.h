@@ -19,6 +19,7 @@ typedef QtExt::Dialog MessageViewBase;
 class MessageView : public MessageViewBase
 {
   Q_OBJECT
+  Q_DISABLE_COPY(MessageView)
   typedef MessageView Self;
   typedef MessageViewBase Base;
 

@@ -13,6 +13,7 @@ struct lua_State;
 class LuaResolver : public QObject
 {
   Q_OBJECT
+  Q_DISABLE_COPY(LuaResolver)
   typedef LuaResolver Self;
   typedef QObject Base;
 
@@ -20,15 +21,14 @@ class LuaResolver : public QObject
   QString packagePath_;
 
   QString nicovideoUsername_, nicovideoPassword_;
-
   QString bilibiliUsername_, bilibiliPassword_;
 
   QNetworkCookieJar *cookieJar_;
 
 public:
-  explicit LuaResolver(const QString &scriptPath,
-                       const QString &packagePath = QString(),
-                       QObject *parent = 0);
+  explicit LuaResolver(const QString &scriptPath, const QString &packagePath = QString(), QObject *parent = 0)
+    : Base(parent), scriptPath_(scriptPath), packagePath_(packagePath), cookieJar_(0)
+  { init(); }
 
 public:
   enum Site { UnknownSite = 0, AcFun = 1, Nicovideo = 2, Bilibili = 3 };
@@ -44,6 +44,8 @@ public:
 
   QNetworkCookieJar *cookieJar() const { return cookieJar_; }
   void setCookieJar(QNetworkCookieJar *cookieJar) { cookieJar_ = cookieJar; }
+
+  //void setNetworkAccessManager(QNetworkAccessManager *nam) { nam_ = nam; }
 
   bool hasNicovideoAccount() const
   { return !nicovideoUsername_.isEmpty() && !nicovideoPassword_.isEmpty(); }
@@ -72,7 +74,9 @@ public:
   int dlget(lua_State *L);
   int dlpost(lua_State *L);
 
-protected:
+private:
+  void init();
+
   static void printLastError(lua_State *L);
   static void appendLuaPath(lua_State *L, const QString &path);
   static QString decodeTitle(const char *text, int siteId);

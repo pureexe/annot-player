@@ -15,6 +15,7 @@ namespace AnnotCloud {
 class AnnotationPainter : public QObject
 {
   Q_OBJECT
+  Q_DISABLE_COPY(AnnotationPainter)
   typedef AnnotationPainter Self;
   typedef QObject Base;
 

@@ -11,6 +11,7 @@
 class MrlResolverManager : public MrlResolver
 {
   Q_OBJECT
+  Q_DISABLE_COPY(MrlResolverManager)
   typedef MrlResolverManager Self;
   typedef MrlResolver Base;
 
@@ -20,7 +21,9 @@ class MrlResolverManager : public MrlResolver
 public:
   enum Resolver { Youtube = 0, GoogleVideo, Lua, ResolverCount };
 
-  explicit MrlResolverManager(QObject *parent = 0);
+  explicit MrlResolverManager(QObject *parent = 0)
+    : Base(parent)
+  { init(); }
 
   // - Analysis -
 public:
@@ -49,8 +52,14 @@ public:
     return r == Lua && resolveSubtitle(r, url);
   }
 
+
 protected:
   static QString autoCompleteUrl(const QString &url);
+protected slots:
+  void updateSynchronized(bool t);
+
+private:
+  void init();
 };
 
 #endif // MRLRESOLVERMANAGER_H

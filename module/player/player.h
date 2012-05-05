@@ -7,10 +7,10 @@
 #include <QtGui/QWidget> // where WId is declared
 #include <QtCore/QStringList>
 
-QT_FORWARD_DECLARE_CLASS(QNetworkCookieJar)
-#ifdef Q_WS_MAC
-QT_FORWARD_DECLARE_CLASS(QMacCocoaViewContainer)
-#endif // Q_WS_MAC
+QT_BEGIN_NAMESPACE
+class QMacCocoaViewContainer;
+class QNetworkCookieJar;
+QT_END_NAMESPACE
 
 class PlayerPrivate; ///< \internal
 struct libvlc_media_t;
@@ -19,6 +19,7 @@ struct libvlc_media_t;
 class Player : public QObject
 {
   Q_OBJECT
+  Q_DISABLE_COPY(Player)
   typedef Player Self;
   typedef QObject Base;
   typedef PlayerPrivate Private;
@@ -62,9 +63,6 @@ public:
   };
 
   // - Constructions -
-private:
-  Player(const Self&); ///< Copy not allowed.
-
 public:
   explicit Player(QObject *parent = 0);
   ~Player();
@@ -186,7 +184,7 @@ public slots:
   void setUserAgent(const QString &agent = QString());
 
   void setCookieJar(QNetworkCookieJar *jar);
-  void clearCookieJar() { setCookieJar(0); }
+  //void clearCookieJar() { setCookieJar(0); }
 
 public:
   ///  Save the current frame as picture. Return if succeed.
@@ -244,8 +242,8 @@ public slots:
   bool openMediaAsCD(const QString &url);
   void closeMedia();
 
-  bool openStream(const QStringList &mrls);
-  void setStream(const QStringList &mrls, qint64 duration = 0);
+  //bool openStream(const QStringList &mrls);
+  void setStream(const QStringList &mrls, const QString &url, qint64 duration = 0);
 
   //void setEncoding(const QString &encoding); ///< See \c Encoding for details.
 
@@ -422,6 +420,7 @@ private:
 class PlayerListener : public QObject
 {
   Q_OBJECT
+  Q_DISABLE_COPY(PlayerListener)
   typedef PlayerListener Self;
   typedef QObject Base;
 

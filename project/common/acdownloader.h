@@ -9,6 +9,7 @@
 class AcDownloaderServer : public AcIpcController
 {
   Q_OBJECT
+  Q_DISABLE_COPY(AcDownloaderServer)
   typedef AcDownloaderServer Self;
   typedef AcIpcController Base;
 
@@ -27,6 +28,7 @@ public slots:
 class AcDownloader : public QObject
 {
   Q_OBJECT
+  Q_DISABLE_COPY(AcDownloader)
   typedef AcDownloader Self;
   typedef QObject Base;
   typedef AcIpcController Delegate;

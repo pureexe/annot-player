@@ -19,10 +19,15 @@
 #define DEBUG "httpbufferedsession"
 #include "module/debug/debug.h"
 
+enum { MaxDownloadRetries = 3 };
+
 // - Construction -
 
 HttpBufferedSession::~HttpBufferedSession()
-{ if (nam_) delete nam_; }
+{
+  if (nam_)
+    delete nam_;
+}
 
 // - Properties -
 
@@ -61,7 +66,7 @@ HttpBufferedSession::updateFileName()
 {
   bool mp4 = contentType_.contains("mp4", Qt::CaseInsensitive);
   QString suf = mp4 ? ".mp4" : ".flv";
-  fileName_ = cachePath() + "/" + QtExt::escapeFileName(mediaTitle()) + suf;
+  fileName_ = cachePath() + FILE_PATH_SEP + QtExt::escapeFileName(mediaTitle()) + suf;
 }
 
 // - Actions -
@@ -196,13 +201,22 @@ HttpBufferedSession::run()
   if (mediaTitle().isEmpty())
     setMediaTitle(QDateTime::currentDateTime().toString(Qt::ISODate));
 
+  if (nam_)
+    nam_->deleteLater();
   nam_ = new QNetworkAccessManager;
+
   if (cookieJar()) {
-    DOUT("use cookie jar");
     nam_->setCookieJar(cookieJar());
     cookieJar()->setParent(0);
   }
+
   emit message(tr("buffering") + ": " + url_.toString());
+
+  if (reply_) {
+    if (reply_->isRunning())
+      reply_->abort();
+    reply_->deleteLater();
+  }
   reply_ = nam_->get(QNetworkRequest(url_));
   Q_ASSERT(reply_);
   waitForReplyReady();

@@ -1,0 +1,26 @@
+#ifndef SEARCHENGINERC_H
+#define SEARCHENGINERC_H
+
+// searchenginerc.h
+// 3/31/2012
+
+#define WBRC_PREFIX_FAVICON ":/favicons/"
+
+#define WBRC_IMAGE_APP      WBRC_PREFIX_FAVICON "app.ico"
+
+#define WBRC_IMAGE_GOOGLE   WBRC_PREFIX_FAVICON "google.ico"
+#define WBRC_IMAGE_YOUTUBE  WBRC_PREFIX_FAVICON "youtube.ico"
+#define WBRC_IMAGE_NICOVIDEO WBRC_PREFIX_FAVICON "nicovideo.ico"
+#define WBRC_IMAGE_BILIBILI WBRC_PREFIX_FAVICON "bilibili.ico"
+#define WBRC_IMAGE_ACFUN    WBRC_PREFIX_FAVICON "acfun.ico"
+#define WBRC_IMAGE_YOUKU    WBRC_PREFIX_FAVICON "youku.ico"
+#define WBRC_IMAGE_WIKI     WBRC_PREFIX_FAVICON "wiki.ico"
+
+#define WBRC_IMAGE_MSDN     WBRC_PREFIX_FAVICON "msdn.ico"
+#define WBRC_IMAGE_APPLE    WBRC_PREFIX_FAVICON "apple.ico"
+#define WBRC_IMAGE_QT       WBRC_PREFIX_FAVICON "qt.ico"
+#define WBRC_IMAGE_BING     WBRC_PREFIX_FAVICON "bing.ico"
+#define WBRC_IMAGE_CPP      WBRC_PREFIX_FAVICON "cplusplus.ico"
+#define WBRC_IMAGE_SS64     WBRC_PREFIX_FAVICON "ss64.ico"
+
+#endif // SEARCHENGINERC_H

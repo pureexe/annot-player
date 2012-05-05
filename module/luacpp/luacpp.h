@@ -32,7 +32,7 @@ namespace detail
   inline void push_value(lua_State *vm, bool b)
   { lua_pushboolean(vm, b); }
 
-  inline void push_value(lua_State *vm, const std::string& s)
+  inline void push_value(lua_State *vm, const std::string &s)
   { lua_pushstring(vm, s.c_str()); }
 
   // other overloads, for stuff like userdata or C functions
@@ -125,7 +125,7 @@ public:
     m_func = luaL_ref(m_vm, LUA_REGISTRYINDEX);
   }
 
-  lua_function_base(const lua_function_base& func)
+  lua_function_base(const lua_function_base &func)
     : m_vm(func.m_vm)
   {
     // copy the registry reference
@@ -139,7 +139,7 @@ public:
     luaL_unref(m_vm, LUA_REGISTRYINDEX, m_func);
   }
 
-  lua_function_base& operator=(const lua_function_base& func)
+  lua_function_base &operator=(const lua_function_base &func)
   {
     if (this != &func) {
       m_vm = func.m_vm;
@@ -158,7 +158,7 @@ protected:
   {
     // call it with no return values
     int status = lua_pcall(m_vm, args, results, 0);
-    if (status != 0) {
+    if (status) {
       // call failed; throw an exception
       std::string error = lua_tostring(m_vm, -1);
       lua_pop(m_vm, 1);
@@ -173,7 +173,7 @@ template <typename Ret>
 class lua_function : public lua_function_base
 {
 public:
-  lua_function(lua_State *vm, const std::string& func)
+  lua_function(lua_State *vm, const std::string &func)
     : lua_function_base(vm, func)
   { }
 
@@ -188,7 +188,7 @@ public:
   }
 
   template <typename T1>
-  Ret operator()(const T1& p1)
+  Ret operator()(const T1 &p1)
   {
     lua_rawgeti(m_vm, LUA_REGISTRYINDEX, m_func);
     // push the argument and call with 1 arg
@@ -198,7 +198,7 @@ public:
   }
 
   template <typename T1, typename T2>
-  Ret operator()(const T1& p1, const T2& p2)
+  Ret operator()(const T1 &p1, const T2 &p2)
   {
     lua_rawgeti(m_vm, LUA_REGISTRYINDEX, m_func);
     // push the arguments and call with 2 args
@@ -209,7 +209,7 @@ public:
   }
 
   template <typename T1, typename T2, typename T3>
-  Ret operator()(const T1& p1, const T2& p2, const T3& p3)
+  Ret operator()(const T1 &p1, const T2 &p2, const T3 &p3)
   {
     lua_rawgeti(m_vm, LUA_REGISTRYINDEX, m_func);
     detail::push_value(m_vm, p1);
@@ -228,7 +228,7 @@ template <>
 class lua_function<void> : public lua_function_base
 {
 public:
-  lua_function(lua_State *vm, const std::string& func)
+  lua_function(lua_State *vm, const std::string &func)
     : lua_function_base(vm, func)
   { }
 
@@ -239,7 +239,7 @@ public:
   }
 
   template <typename T1>
-  void operator()(const T1& p1)
+  void operator()(const T1 &p1)
   {
     lua_rawgeti(m_vm, LUA_REGISTRYINDEX, m_func);
     detail::push_value(m_vm, p1);
@@ -247,7 +247,7 @@ public:
   }
 
   template <typename T1, typename T2>
-  void operator()(const T1& p1, const T2& p2)
+  void operator()(const T1 &p1, const T2 &p2)
   {
     lua_rawgeti(m_vm, LUA_REGISTRYINDEX, m_func);
     detail::push_value(m_vm, p1);
@@ -256,7 +256,7 @@ public:
   }
 
   template <typename T1, typename T2, typename T3>
-  void operator()(const T1& p1, const T2& p2, const T3& p3)
+  void operator()(const T1 &p1, const T2 &p2, const T3 &p3)
   {
     lua_rawgeti(m_vm, LUA_REGISTRYINDEX, m_func);
     detail::push_value(m_vm, p1);

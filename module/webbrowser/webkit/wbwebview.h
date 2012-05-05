@@ -6,12 +6,13 @@
 
 #include "module/qtext/webview.h"
 
-class WbSearchEngine;
+class SearchEngine;
 
 typedef QtExt::WebView WbWebViewBase;
 class WbWebView : public WbWebViewBase
 {
   Q_OBJECT
+  Q_DISABLE_COPY(WbWebView)
   typedef WbWebView Self;
   typedef WbWebViewBase Base;
 
@@ -26,6 +27,7 @@ signals:
   void undoClosedTabRequested();
   void newWindowRequested();
   void fullScreenRequested();
+  void toggleMenuBarVisibleRequested();
 
   void searchWithEngineRequested(const QString &text, int engine);
 
@@ -34,7 +36,7 @@ public:
 
 public slots:
   void setSearchEngine(int engine) { searchEngine_ = engine; }
-  void setSearchEngines(const QList<WbSearchEngine *> &l) { searchEngines_ = l; }
+  void setSearchEngines(const QList<SearchEngine *> &l) { searchEngines_ = l; }
 
   // - Events -
 protected:
@@ -44,6 +46,9 @@ protected:
   QString selectedUrl() const;
 
 protected slots:
+  void openSelectedLink()
+  { emit openLinkRequested(selectedUrl()); }
+
   void openWithAcPlayer()
   { emit openUrlWithAcPlayerRequested(currentUrl_); }
 
@@ -66,12 +71,14 @@ private:
           *importToAcPlayerAct_,
           *openWithAcDownloaderAct_,
           *undoClosedTabAct_,
+          *openSelectedLinkAct_,
           *newWindowAct_,
-          *fullScreenAct_;
+          *fullScreenAct_,
+          *menuBarAct_;
   QString currentUrl_;
 
   int searchEngine_;
-  QList<WbSearchEngine *> searchEngines_;
+  QList<SearchEngine *> searchEngines_;
 };
 
 #endif // WBWEBVIEW_H

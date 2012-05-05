@@ -1,7 +1,7 @@
 #ifndef CONSOLEDIALOG_H
 #define CONSOLEDIALOG_H
 
-// backlogview.h
+// consoledialog.h
 // 2/18/2012
 
 #include "module/qtext/dialog.h"
@@ -13,10 +13,11 @@ typedef QtExt::Dialog ConsoleDialogBase;
 class ConsoleDialog : public ConsoleDialogBase
 {
   Q_OBJECT
+  Q_DISABLE_COPY(ConsoleDialog)
   typedef ConsoleDialog Self;
   typedef ConsoleDialogBase Base;
 
-  static QList<Self*> instances_;
+  static QList<Self *> instances_;
 
   enum TabIndex {
     LogTabIndex = 0,

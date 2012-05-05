@@ -9,15 +9,18 @@
 
 class AcPlayer;
 class AcDownloader;
+class AcConsole;
 
 class MainWindow: public WebBrowser
 {
   Q_OBJECT
+  Q_DISABLE_COPY(MainWindow)
   typedef MainWindow Self;
   typedef WebBrowser Base;
 
   AcPlayer *playerDelegate_;
   AcDownloader *downloaderDelegate_;
+  AcConsole * console_;
 
   QTimer *autoHideToolBarTimer_;
 
@@ -58,6 +61,7 @@ public slots:
   virtual void setVisible(bool visible); ///< \override
 protected:
   virtual bool event(QEvent *e); ///< \override
+  virtual void keyReleaseEvent(QKeyEvent *e); ///< \override
   virtual void closeEvent(QCloseEvent *e); ///< \override
   virtual void focusInEvent(QFocusEvent *e); ///< \override
   virtual void mouseMoveEvent(QMouseEvent *event); ///< \override
@@ -66,6 +70,7 @@ protected:
   bool isGlobalPosAroundToolBar(const QPoint &pos) const;
 
 protected slots:
+  void showConsole();
   void autoHideToolBar();
 
   // - Helpers -

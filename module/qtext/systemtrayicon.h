@@ -11,6 +11,7 @@ namespace QtExt {
 class SystemTrayIcon : public QSystemTrayIcon
 {
   Q_OBJECT
+  Q_DISABLE_COPY(SystemTrayIcon)
   typedef SystemTrayIcon Self;
   typedef QSystemTrayIcon Base;
 

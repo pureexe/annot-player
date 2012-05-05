@@ -15,6 +15,7 @@ typedef QtExt::Dialog InputDialogBase;
 class InputDialog : public InputDialogBase
 {
   Q_OBJECT
+  Q_DISABLE_COPY(InputDialog)
   typedef InputDialog Self;
   typedef InputDialogBase Base;
 

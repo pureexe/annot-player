@@ -8,12 +8,11 @@
 #include <QtCore/QString>
 
 QT_FORWARD_DECLARE_CLASS(QNetworkCookieJar)
-QT_FORWARD_DECLARE_CLASS(QNetworkReply)
-QT_FORWARD_DECLARE_CLASS(QNetworkAccessManager)
 
 class VlcHttpSession : public StoppableThread
 {
   Q_OBJECT
+  Q_DISABLE_COPY(VlcHttpSession)
   typedef VlcHttpSession Self;
   typedef StoppableThread Base;
 
@@ -32,7 +31,7 @@ signals:
 
   // - Properties -
 public:
-  QNetworkCookieJar *cookieJar() const { return cookieJar_; }
+  const QString &originalUrl() const { return originalUrl_; }
   virtual QString contentType() const { return QString(); }
   QString mediaTitle() const { return mediaTitle_; }
   virtual qint64 read(char *data, qint64 maxSize) = 0;
@@ -51,12 +50,14 @@ public:
   bool isStopped() const { return state_ == Stopped; }
   bool isFinished() const { return state_ == Finished; }
 
-  QString cachePath() const { return cachePath_; }
+  const QString &cachePath() const { return cachePath_; }
 
   virtual void save() { }
 
   void setCookieJar(QNetworkCookieJar *jar) { cookieJar_ = jar; }
+
 public slots:
+  void setOriginalUrl(const QString &url) { originalUrl_ = url; }
   void setBufferSaved(bool t) { saveBuffer_ = t; }
 
   void setMediaTitle(const QString &title) { mediaTitle_ = title; }
@@ -64,6 +65,9 @@ public slots:
 
   virtual void waitForReady() = 0;
   virtual void waitForStopped() = 0;
+
+protected:
+  QNetworkCookieJar *cookieJar() const { return cookieJar_; }
 
 protected slots:
   void setState(State state) { state_ = state; }
@@ -74,6 +78,7 @@ private:
   State state_;
   bool saveBuffer_;
 
+  QString originalUrl_;
   QString cachePath_;
   QNetworkCookieJar *cookieJar_;
   QString mediaTitle_;

@@ -12,6 +12,7 @@ namespace QtExt {
 class WebPage: public QWebPage
 {
   Q_OBJECT
+  Q_DISABLE_COPY(WebPage)
   typedef WebPage Self;
   typedef QWebPage Base;
 

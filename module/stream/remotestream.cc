@@ -5,12 +5,6 @@
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtCore/QEventLoop>
 
-// - Construction -
-
-RemoteStream::RemoteStream(QObject *parent)
-  : Base(parent), size_(0)
-{ nam_ = new QNetworkAccessManager(this); }
-
 // - Wait -
 
 void

@@ -15,6 +15,7 @@ class ServerAgent;
 class PlayerUi : public PlayerPanel
 {
   Q_OBJECT
+  Q_DISABLE_COPY(PlayerUi)
   typedef PlayerUi Self;
   typedef PlayerPanel Base;
 

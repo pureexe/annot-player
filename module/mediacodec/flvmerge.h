@@ -14,6 +14,7 @@
 class FlvMerge : public QObject, public StreamListPipe
 {
   Q_OBJECT
+  Q_DISABLE_COPY(FlvMerge)
   typedef FlvMerge Self;
   typedef QObject Base;
 

@@ -12,6 +12,7 @@ namespace QtExt {
 class Slider : public QSlider
 {
   Q_OBJECT
+  Q_DISABLE_COPY(Slider)
   typedef Slider Self;
   typedef QSlider Base;
 

@@ -60,7 +60,8 @@ function getTaskAttribute_acfun ( str_url, str_tmpfile ,str_servername, pDlg, bS
 
 	--readin vice descriptor
 	--readUntil(file, "ึ๗าณ</a>");
-    readUntilFromUTF8(file, "</div><!--Tool -->");
+	--readUntilFromUTF8(file, "</div><!--Tool -->");
+	readUntilFromUTF8(file, "</div><!--Title -->");
 	str_line = "";
 	local str_tmp_vd = "";
 	--while str_line~=nil and string.find(str_line, "</tr>")==nil
@@ -94,9 +95,8 @@ function getTaskAttribute_acfun ( str_url, str_tmpfile ,str_servername, pDlg, bS
 	--dbgMessage(str_descriptor);
 
 	--find embed flash
-	--str_line = readUntil(file, "<embed ");
-	--local str_embed = readIntoUntil(file, str_line, "</td>");--"</embed>");
-    str_line = readUntilFromUTF8(file, "<embed ");
+    --str_line = readUntilFromUTF8(file, "<embed ");
+	str_line = readUntilFromUTF8(file, "<div id=\"area-player\"");
     local str_embed = readIntoUntilFromUTF8(file, str_line, "</div>");--"</td>");--"</embed>");
 	print(str_embed);
 	if str_embed==nil then
@@ -108,67 +108,87 @@ function getTaskAttribute_acfun ( str_url, str_tmpfile ,str_servername, pDlg, bS
 	end
 
 
-	--read foreign file
-	local str_notsinaurl = "";
-	if string.find(str_embed, "flashvars=\"file=", 1, true)~=nil
-	then
-		str_notsinaurl = getMedText2end(str_embed, "flashvars=\"file=", "\"", "&amp;");
-	elseif string.find(str_embed, "playerf.swf?file=")~=nil
-	then
-		str_notsinaurl = getMedText2end(str_embed, "playerf.swf?file=", "\"", "&amp;");
-	elseif string.find(str_embed, "file=")~=nil
-	then
-		str_notsinaurl = getMedText2end(str_embed, "file=", "\"", "&amp;");
+	local b_isArtemis = 0;
+	if string.find(str_embed, "Artemis",1,true)~=nil then
+		b_isArtemis = 1;
 	end
 
-	--certain foreign sitelink
 	local int_foreignlinksite = fls["realurl"];
-	if str_notsinaurl=="" then
-		if string.find(str_embed, "type2=qq", 1,true)~=nil then
-			int_foreignlinksite = fls["qq"];
-		elseif string.find(str_embed, "type2=youku", 1,true)~=nil then
-			int_foreignlinksite = fls["youku"];
-		else
-			int_foreignlinksite = fls["sina"];
-		end
-	end
-
-	--certain acfpv
-	if string.find(str_embed, "flvplayer/acplayer.swf")~=nil or string.find(str_embed, "flvplayer/acplayert.swf")~=nil
-	then
-		int_acfpv = 0; -- ACFPV_ORI
-	end
-
-	--read id
 	local str_id = "";
-	if string.find(str_embed, "flashvars=\"id=")~=nil
-	then
-		str_id = getMedText2end(str_embed, "flashvars=\"id=", "\"", "&amp;");
-	elseif string.find(str_embed, "flashvars=\"avid=")~=nil
-	then
-		str_id = getMedText2end(str_embed, "flashvars=\"avid=", "\"", "&amp;");
-	elseif string.find(str_embed, "?id=")~=nil
-	then
-		str_id = getMedText2end(str_embed, "?id=", "\"", "&amp;");
-	elseif string.find(str_embed, "id=")~=nil
-	then
-		str_embed_tmp = getAfterText(str_embed, "flashvars=");
-        if str_embed_tmp==nil 
- 		then
- 			str_embed_tmp = getAfterText(str_embed, "src=");
- 		end
-		str_id = getMedText2end(str_embed_tmp, "id=", "\"", "&amp;");
-	end
-
 	local str_subid = str_id;
-	--if there is a seperate subid
-	if string.find(str_embed, "mid=")~= nil then
-		str_subid = getMedText2end(str_embed, "mid=", "\"", "&amp;");
-	elseif string.find(str_embed, "cid=")~= nil then
-		str_subid = getMedText2end(str_embed, "cid=", "\"", "&amp;");
+	if b_isArtemis==0 then
+		--dbgMessage("old");
+		--read foreign file
+		local str_notsinaurl = "";
+		if string.find(str_embed, "flashvars=\"file=", 1, true)~=nil
+		then
+			str_notsinaurl = getMedText2end(str_embed, "flashvars=\"file=", "\"", "&amp;");
+		elseif string.find(str_embed, "playerf.swf?file=")~=nil
+		then
+			str_notsinaurl = getMedText2end(str_embed, "playerf.swf?file=", "\"", "&amp;");
+		elseif string.find(str_embed, "file=")~=nil
+		then
+			str_notsinaurl = getMedText2end(str_embed, "file=", "\"", "&amp;");
+		end
+
+		--certain foreign sitelink
+		if str_notsinaurl=="" then
+			if string.find(str_embed, "type2=qq", 1,true)~=nil then
+				int_foreignlinksite = fls["qq"];
+			elseif string.find(str_embed, "type2=youku", 1,true)~=nil then
+				int_foreignlinksite = fls["youku"];
+			elseif string.find(str_embed, "type2=tudou", 1,true)~=nil then
+				int_foreignlinksite = fls["tudou"];
+			else
+				int_foreignlinksite = fls["sina"];
+			end
+		end
+
+		--certain acfpv
+		if string.find(str_embed, "flvplayer/acplayer.swf")~=nil or string.find(str_embed, "flvplayer/acplayert.swf")~=nil
+		then
+			int_acfpv = 0; -- ACFPV_ORI
+		end
+
+		--read id
+
+		if string.find(str_embed, "flashvars=\"id=")~=nil
+		then
+			str_id = getMedText2end(str_embed, "flashvars=\"id=", "\"", "&amp;");
+		elseif string.find(str_embed, "flashvars=\"avid=")~=nil
+		then
+			str_id = getMedText2end(str_embed, "flashvars=\"avid=", "\"", "&amp;");
+		elseif string.find(str_embed, "?id=")~=nil
+		then
+			str_id = getMedText2end(str_embed, "?id=", "\"", "&amp;");
+		elseif string.find(str_embed, "id=")~=nil
+		then
+			str_embed_tmp = getAfterText(str_embed, "flashvars=");
+			if str_embed_tmp==nil
+			then
+				str_embed_tmp = getAfterText(str_embed, "src=");
+			end
+			str_id = getMedText2end(str_embed_tmp, "id=", "\"", "&amp;");
+        end
+
+		--dbgMessage(str_id);
+		--if there is a seperate subid
+		if string.find(str_embed, "mid=")~= nil then
+			str_subid = getMedText2end(str_embed, "mid=", "\"", "&amp;");
+		elseif string.find(str_embed, "cid=")~= nil then
+			str_subid = getMedText2end(str_embed, "cid=", "\"", "&amp;");
+		end
+	elseif b_isArtemis==1 then
+		int_acfpv = 1; -- ACFPV_NEW
+		local str_acinternalID = getMedText(str_embed, "{'id':'", "','system'");
+		--dbgMessage(str_acinternalID);
+
+		int_foreignlinksite, str_id, str_subid = getAcVideo_CommentID(str_acinternalID, str_tmpfile..".tmpac", pDlg);
 	end
 
-	--read id ok.close file
+	--dbgMessage(str_id);
+
+    --read id ok.close file
 	io.close(file);
 
 	if str_id == ""
@@ -183,6 +203,9 @@ function getTaskAttribute_acfun ( str_url, str_tmpfile ,str_servername, pDlg, bS
 
 	--dbgMessage(str_id);
 
+	if str_subid=="" then
+		str_subid = str_id;
+	end
 	--define subxmlurl
 	local str_subxmlurl = "";
 	local str_subxmlurl_lock = "";
@@ -218,6 +241,9 @@ function getTaskAttribute_acfun ( str_url, str_tmpfile ,str_servername, pDlg, bS
 	  elseif int_foreignlinksite == fls["youku"]
 	  then
 	  	int_realurlnum, tbl_realurls = getRealUrls_youku(str_id, str_tmpfile, pDlg);
+	  elseif int_foreignlinksite == fls["tudou"]
+	  then
+		int_realurlnum, tbl_readurls = getRealUrls_tudou(str_id, str_tmpfile, pdlg);
 	  else
 	  	int_realurlnum = 1;
 	  	tbl_realurls = {};

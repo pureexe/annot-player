@@ -13,6 +13,7 @@
 class Settings : public QSettings
 {
   Q_OBJECT
+  Q_DISABLE_COPY(Settings)
   typedef Settings Self;
   typedef QSettings Base;
 

@@ -33,7 +33,7 @@ namespace Bitwise {
     for (int i = 0; i <= qMin(endByte - startByte, 7); i++) {
       bits |= (quint64)bytes[startByte + i] << (56 - (i * 8));
     }
-    if (skipBits != 0)
+    if (skipBits)
       read(bits, skipBits);
     offset += length;
     return read(bits, length);

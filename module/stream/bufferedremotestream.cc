@@ -14,7 +14,12 @@
 // - Construction -
 
 BufferedRemoteStream::~BufferedRemoteStream()
-{ if (reply_) reply_->deleteLater(); }
+{
+  if (reply_ && reply_->isRunning()) {
+    reply_->abort();
+    reply_->deleteLater();
+  }
+}
 
 // - I/O -
 
@@ -111,6 +116,7 @@ void
 BufferedRemoteStream::run()
 {
   DOUT("enter");
+  Q_ASSERT(networkAccessManager());
   if (!data_.isEmpty()) {
     m_.lock();
     data_.clear();

@@ -60,7 +60,8 @@ Settings::recentTasks() const
     case DownloadTaskInfo::StateField:   t.state = v[i].toInt(); break;
     case DownloadTaskInfo::UrlField:     t.url = v[i]; break;
     case DownloadTaskInfo::TitleField:   t.title = v[i]; break;
-    case DownloadTaskInfo::FileNameField:t.fileName = v[i];
+    case DownloadTaskInfo::FileNameField:t.fileName = v[i]; break;
+    case DownloadTaskInfo::SizeField:    t.size = v[i].toLongLong();
                                          ret.append(t); break;
     default: Q_ASSERT(0);
     }
@@ -81,6 +82,7 @@ Settings::setRecentTasks(const DownloadTaskInfoList &l)
       v.append(t.url);
       v.append(t.title);
       v.append(t.fileName);
+      v.append(QString::number(t.size));
     }
     setValue(SK_RECENT, v);
   }

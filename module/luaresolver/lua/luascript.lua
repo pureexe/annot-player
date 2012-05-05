@@ -61,11 +61,11 @@ function file_size(name)
 end
 
 -- require clib.dlget(url, path)
-function dlFile(filesavepath, fileurl)
-  --return clib.dlget(fileurl, filesavepath);
+function dlFile(filesavepath, fileurl, httpheader)
+  --return clib.dlget(fileurl, filesavepath, header);
   -- FIXME: return value not worked
   os.remove(filesavepath);
-  clib.dlget(filesavepath, fileurl);
+  clib.dlget(filesavepath, fileurl, httpheader);
 --[[
   if not string.match(fileurl, "tp://") then
     return -1;

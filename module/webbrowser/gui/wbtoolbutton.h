@@ -10,6 +10,7 @@ typedef QtExt::ToolButton WbToolButtonBase;
 class WbToolButton : public WbToolButtonBase
 {
   Q_OBJECT
+  Q_DISABLE_COPY(WbToolButton)
   typedef WbToolButton Self;
   typedef WbToolButtonBase Base;
 

@@ -13,6 +13,7 @@ typedef QtExt::Dialog SyncDialogBase;
 class SyncDialog : public SyncDialogBase
 {
   Q_OBJECT
+  Q_DISABLE_COPY(SyncDialog)
   typedef SyncDialog Self;
   typedef SyncDialogBase Base;
 

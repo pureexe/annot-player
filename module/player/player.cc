@@ -28,6 +28,7 @@
 #ifdef Q_WS_MAC
 #  include <QtGui/QMacCocoaViewContainer>
 #endif // Q_WS_MAC
+#include <QtNetwork/QNetworkCookieJar>
 #include <QtGui/QMouseEvent>
 #include <QtCore/QEventLoop>
 #include <boost/tuple/tuple.hpp>
@@ -646,27 +647,29 @@ Player::openMediaAsCD(const QString &path)
 }
 
 void
-Player::setStream(const QStringList &mrls, qint64 duration)
+Player::setStream(const QStringList &mrls, const QString &url, qint64 duration)
 {
 #ifdef WITH_MODULE_VLCCORE
   VlcHttpPlugin::setUrls(mrls);
+  VlcHttpPlugin::setOriginalUrl(url);
   VlcHttpPlugin::setDuration(duration);
 #else
   Q_UNUSED(mrls)
+  Q_UNUSED(url)
   Q_UNUSED(duration)
 #endif // WITH_MODULE_VLCCORE
 }
 
-bool
-Player::openStream(const QStringList &mrls)
-{
-  if (hasMedia())
-    closeMedia();
-  if (mrls.isEmpty())
-    return false;
-  setStream(mrls);
-  return openMedia(mrls.first());
-}
+//bool
+//Player::openStream(const QStringList &mrls)
+//{
+//  if (hasMedia())
+//    closeMedia();
+//  if (mrls.isEmpty())
+//    return false;
+//  setStream(mrls);
+//  return openMedia(mrls.first());
+//}
 
 bool
 Player::openMedia(const QString &path)
@@ -1794,7 +1797,7 @@ void
 Player::setCookieJar(QNetworkCookieJar *jar)
 {
 #ifdef WITH_MODULE_VLCCORE
-  VlcHttpPlugin::setCookieJar(jar);
+  VlcHttpPlugin::setNetworkCookieJar(jar);
 #else
   Q_UNUSED(jar);
 #endif // WITH_MODULE_VLCCORE

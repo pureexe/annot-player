@@ -9,6 +9,7 @@
 class WbLineEdit : public QLineEdit
 {
   Q_OBJECT
+  Q_DISABLE_COPY(WbLineEdit)
   typedef WbLineEdit Self;
   typedef QLineEdit Base;
 

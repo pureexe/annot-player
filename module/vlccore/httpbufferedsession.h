@@ -10,13 +10,13 @@
 #include <QtCore/QMutex>
 #include <QtCore/QUrl>
 
-QT_FORWARD_DECLARE_CLASS(QNetworkCookieJar)
-QT_FORWARD_DECLARE_CLASS(QNetworkReply)
 QT_FORWARD_DECLARE_CLASS(QNetworkAccessManager)
+QT_FORWARD_DECLARE_CLASS(QNetworkReply)
 
 class HttpBufferedSession : public VlcHttpSession
 {
   Q_OBJECT
+  Q_DISABLE_COPY(HttpBufferedSession)
   typedef HttpBufferedSession Self;
   typedef VlcHttpSession Base;
 
@@ -34,10 +34,6 @@ class HttpBufferedSession : public VlcHttpSession
   QString contentType_, fileName_;
 
 public:
-  explicit HttpBufferedSession(QObject *parent = 0)
-    : Base(parent), nam_(0), reply_(0),
-      pos_(0), size_(0), ready_(false) { }
-
   explicit HttpBufferedSession(const QUrl &url, QObject *parent = 0)
     : Base(parent), url_(url), nam_(0), reply_(0),
       pos_(0), size_(0), ready_(false) { }

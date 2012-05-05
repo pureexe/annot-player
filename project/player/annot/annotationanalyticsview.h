@@ -14,6 +14,7 @@ class DataManager;
 class AnnotationAnalyticsView: public AcWebWindow
 {
   Q_OBJECT
+  Q_DISABLE_COPY(AnnotationAnalyticsView)
   typedef AnnotationAnalyticsView Self;
   typedef AcWebWindow Base;
 

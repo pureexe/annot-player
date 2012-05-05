@@ -9,6 +9,7 @@
 class SubUrlDialog : public UrlDialog
 {
   Q_OBJECT
+  Q_DISABLE_COPY(SubUrlDialog)
   typedef SubUrlDialog Self;
   typedef UrlDialog Base;
 

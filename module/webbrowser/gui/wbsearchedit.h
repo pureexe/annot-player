@@ -6,11 +6,12 @@
 
 #include "wbcomboedit.h"
 
-class WbSearchEngine;
+class SearchEngine;
 
 class WbSearchEdit : public WbComboEdit
 {
   Q_OBJECT
+  Q_DISABLE_COPY(WbSearchEdit)
   typedef WbSearchEdit Self;
   typedef WbComboEdit Base;
 
@@ -20,7 +21,7 @@ public:
   explicit WbSearchEdit(const QStringList &items, QWidget *parent = 0)
     : Base(items, parent), engine_(0) { init(); }
 
-  void setEngines(const QList<WbSearchEngine *> engines)
+  void setEngines(const QList<SearchEngine *> engines)
   { engines_ = engines; invalidateEngines(); }
 
   QStringList recent() const;
@@ -54,7 +55,7 @@ private:
 protected:
   int engine_;
 
-  QList<WbSearchEngine *> engines_;
+  QList<SearchEngine *> engines_;
 
   QString currentText_, lastText_;
 };

@@ -12,6 +12,7 @@
 #  include "module/qt/qtrc.h"
 #endif // WITH_MODULE_QT
 #include "module/mrlresolver/mrlresolversettings.h"
+//#include "module/download/downloader.h"
 #include <QtNetwork/QNetworkProxy>
 #include <QtNetwork/QNetworkReply>
 #include <QtGui>
@@ -46,7 +47,7 @@ namespace { // anonymous
     if (size.width() < DEFAULT_SIZE.width() || size.height() < DEFAULT_SIZE.height())
       return false;
 
-    QSize desktop = QApplication::desktop()->screenGeometry(w).size();
+    QSize desktop = QApplication::desktop()->availableGeometry(w).size();
     return desktop.isEmpty() ||
            size.width() > desktop.width() && size.height() > desktop.height();
   }
@@ -183,6 +184,10 @@ main(int argc, char *argv[])
     boost::tie(username, password) = settings->bilibiliAccount();
     ms->setBilibiliAccount(username, password);
   }
+
+  //DownloaderController::globalController()->setNetworkAccessManager(
+  //  new QNetworkAccessManager(&a)
+  //);
 
   DOUT("make mainwindow");
   MainWindow w;

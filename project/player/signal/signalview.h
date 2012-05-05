@@ -16,6 +16,7 @@ typedef QtExt::Dialog SignalViewBase;
 class SignalView : public SignalViewBase
 {
   Q_OBJECT
+  Q_DISABLE_COPY(SignalView)
   typedef SignalView Self;
   typedef SignalViewBase Base;
 

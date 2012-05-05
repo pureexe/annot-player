@@ -7,7 +7,6 @@
 #include <QtNetwork/QTcpSocket>
 #include <QtCore/QEvent>
 #include <QtCore/QEventLoop>
-#include <QtCore/QTimer>
 #include <memory>
 #include <utility>
 
@@ -66,13 +65,13 @@ MetaCallFilter::stop()
     if (socket_->isOpen())
       socket_->close();
     if (!server_)
-      QTimer::singleShot(0, socket_, SLOT(deleteLater()));
+      delete socket_;
     socket_ = 0;
   }
   if (server_) {
     if (server_->isListening())
       server_->close();
-    QTimer::singleShot(0, server_, SLOT(deleteLater()));
+    delete server_;
     server_ = 0;
   }
   running_ = false;
@@ -149,7 +148,7 @@ MetaCallFilter::sendMetaEvent(const QMetaCallEvent *m)
   QByteArray message;
   QDataStream out(&message, QIODevice::WriteOnly);
 
-  out << (message_size_t)0 // space holder for message size
+  out << message_size_t(0) // space holder for message size
       << m->id()
       << m->nargs();
 
@@ -163,7 +162,7 @@ MetaCallFilter::sendMetaEvent(const QMetaCallEvent *m)
 
   if (ok) {
     out.device()->seek(0);
-    out << (message_size_t)message.size();
+    out << message_size_t(message.size());
     socket_->write(message);
   }
   DOUT("exit: ok =" << ok);
@@ -176,7 +175,7 @@ MetaCallFilter::acceptConnection()
   if (socket_) {
     if (socket_->isOpen())
       socket_->close();
-    QTimer::singleShot(0, socket_, SLOT(deleteLater()));
+    delete socket_;
   }
   socket_ = server_->nextPendingConnection();
   dumpSocket();
@@ -202,7 +201,7 @@ MetaCallFilter::readSocket()
 
   QDataStream in(socket_);
   if (!messageSize_) { // Save messageSize_ since none-blocking read is used
-    if (socket_->bytesAvailable() < (int)sizeof(message_size_t)) {
+    if (socket_->bytesAvailable() < int(sizeof(message_size_t))) {
       DOUT("exit: insufficient messageSize");
       return;
     }

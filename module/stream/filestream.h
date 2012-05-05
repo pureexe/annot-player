@@ -11,6 +11,7 @@
 class FileStream : public QObject, public InputOutputStream
 {
   Q_OBJECT
+  Q_DISABLE_COPY(FileStream)
   typedef FileStream Self;
   typedef QObject Base;
 

@@ -22,6 +22,7 @@ class CastManager;
 class ServerAgent: public QObject
 {
   Q_OBJECT
+  Q_DISABLE_COPY(ServerAgent)
   typedef ServerAgent Self;
   typedef QObject Base;
 

@@ -13,6 +13,7 @@ QT_FORWARD_DECLARE_CLASS(QNetworkReply)
 class Translator : public QObject
 {
   Q_OBJECT
+  Q_DISABLE_COPY(Translator)
   typedef Translator Self;
   typedef QObject Base;
 

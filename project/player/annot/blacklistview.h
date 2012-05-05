@@ -24,6 +24,7 @@ typedef QtExt::Dialog BlacklistViewBase;
 class BlacklistView : public BlacklistViewBase
 {
   Q_OBJECT
+  Q_DISABLE_COPY(BlacklistView)
   typedef BlacklistView Self;
   typedef BlacklistViewBase Base;
 

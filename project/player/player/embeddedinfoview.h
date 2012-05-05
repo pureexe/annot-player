@@ -14,6 +14,7 @@ class AnnotationGraphicsView;
 class EmbeddedInfoView : public QLabel
 {
   Q_OBJECT
+  Q_DISABLE_COPY(EmbeddedInfoView)
   typedef EmbeddedInfoView Self;
   typedef QLabel Base;
 

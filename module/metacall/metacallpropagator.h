@@ -17,6 +17,7 @@ class MetaCallFilter;
 class MetaCallPropagator : public QObject
 {
   Q_OBJECT
+  Q_DISABLE_COPY(MetaCallPropagator)
   typedef MetaCallPropagator Self;
   typedef QObject Base;
   typedef MetaCallFilter Filter;

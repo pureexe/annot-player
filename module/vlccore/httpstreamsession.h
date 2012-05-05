@@ -13,9 +13,9 @@
 #include <QtCore/QUrl>
 #include <QtCore/QList>
 
+QT_FORWARD_DECLARE_CLASS(QNetworkAccessManager)
 QT_FORWARD_DECLARE_CLASS(QNetworkCookieJar)
 QT_FORWARD_DECLARE_CLASS(QNetworkReply)
-QT_FORWARD_DECLARE_CLASS(QNetworkAccessManager)
 
 class RemoteStream;
 class FlvMerge;
@@ -23,10 +23,12 @@ class FlvMerge;
 class HttpStreamSession : public VlcHttpSession
 {
   Q_OBJECT
+  Q_DISABLE_COPY(HttpStreamSession)
   typedef HttpStreamSession Self;
   typedef VlcHttpSession Base;
 
   QList<QUrl> urls_;
+  QNetworkAccessManager *nam_;
   qint64 duration_;
   InputStreamList ins_;
   FifoStream *fifo_;
@@ -48,15 +50,14 @@ class HttpStreamSession : public VlcHttpSession
   //QHash<long, Progress> progress_;
 
 public:
-  explicit HttpStreamSession(QObject *parent = 0)
-    : Base(parent), duration_(0), fifo_(0), merger_(0),
-      ready_(false), progressTask_(0) { }
-
   HttpStreamSession(const QList<QUrl> &urls, qint64 duration, QObject *parent = 0)
-    : Base(parent), urls_(urls), duration_(duration), fifo_(0), merger_(0),
+    : Base(parent), urls_(urls), nam_(0), duration_(duration), fifo_(0), merger_(0),
       ready_(false), progressTask_(0) { }
 
   ~HttpStreamSession();
+
+signals:
+  void stopped();
 
   // - Properties -
 public:

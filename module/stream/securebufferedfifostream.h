@@ -10,6 +10,7 @@
 class SecureBufferedFifoStream : public BufferedFifoStream
 {
   Q_OBJECT
+  Q_DISABLE_COPY(SecureBufferedFifoStream)
   typedef SecureBufferedFifoStream Self;
   typedef BufferedFifoStream Base;
 

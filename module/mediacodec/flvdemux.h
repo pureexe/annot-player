@@ -20,6 +20,7 @@ class MediaWriter;
 class FlvDemux : public QObject, public StoppableTask
 {
   Q_OBJECT
+  Q_DISABLE_COPY(FlvDemux)
   typedef FlvDemux Self;
   typedef QObject Base;
 
@@ -106,6 +107,7 @@ protected:
 class FlvListDemux : public QObject, public StoppableTask
 {
   Q_OBJECT
+  Q_DISABLE_COPY(FlvListDemux)
   typedef FlvListDemux Self;
   typedef QObject Base;
 

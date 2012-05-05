@@ -29,10 +29,11 @@
 #include "project/common/acsettings.h"
 #include "project/common/acplayer.h"
 #include "module/annotcloud/user.h"
+//#include "module/download/downloader.h"
 #include <QtWebKit/QWebSettings>
 #include <QtNetwork/QNetworkProxy>
 #include <QtNetwork/QNetworkReply>
-#include <QtGui/QDesktopServices>
+#include <QtGui>
 #include <QtCore>
 #include <ctime>
 #include <cstdlib>
@@ -57,9 +58,9 @@ namespace { // anonymous
 #ifdef Q_WS_WIN
     WindowsRegistry reg;
     reg.setClassesRoot(REG_HKCU_SOFTWARE_CLASSES);
-    reg.registerFileTypes(Player::supportedAudioSuffices());
+    //reg.registerFileTypes(Player::supportedAudioSuffices());
     reg.registerFileTypes(Player::supportedVideoSuffices());
-    reg.registerFileTypes(Player::supportedPictureSuffices());
+    //reg.registerFileTypes(Player::supportedPictureSuffices());
     reg.registerFileTypes(Player::supportedSubtitleSuffices());
 #endif // Q_WS_WIN
   }
@@ -156,9 +157,17 @@ main(int argc, char *argv[])
     settings->setVersion(G_VERSION);
 
     settings->setWindowOnTop(false);
+    settings->setAnnotationEffect(0);
     settings->setApplicationFilePath(QString());
     //settings->setAnnotationLanguages(Traits::AllLanguages);
     //settings->setAnnotationFilterEnabled(false);
+
+    settings->setSaturation(1.1*1.1*1.1);
+    settings->setGamma(1/1.1);
+    settings->setHue(2+2+2);
+    settings->setContrast(1.1);
+    settings->setBrightness(1.02*1.02);
+
     settings->sync();
 
     if (QFile::rename(QDir::homePath() + "/Annot", G_PATH_DOWNLOADS))
@@ -249,6 +258,10 @@ main(int argc, char *argv[])
     QNetworkProxy::setApplicationProxy(proxy);
   }
 
+  //DownloaderController::globalController()->setNetworkAccessManager(
+  //  new QNetworkAccessManager(&a)
+  //);
+
 //#ifdef USE_MODE_SIGNAL
 //  // Root window
 //  QMainWindow root; // Persistant visible root widget to prevent Qt from automatic closing invisible windows
@@ -333,7 +346,7 @@ main(int argc, char *argv[])
   //SubstructureNotifyMask, &xev);
 
 #if defined(USE_MODE_SIGNAL) && defined(Q_OS_WIN)
-  // jichi 11/29/2011: Use as a PERSISTENT hidden top level window.
+  // jichi 11/29/2011: Used as a PERSISTENT hidden top level window.
   QWidget dummy;
   dummy.resize(QSize()); // zero-sized to be hidden
   QObject::connect(&w, SIGNAL(windowClosed()), &dummy, SLOT(close()));
@@ -345,7 +358,6 @@ main(int argc, char *argv[])
 
   dummy.show();
   //QTimer::singleShot(0, &dummy, SLOT(show()));
-
 #endif // USE_MODE_SIGNAL && Q_OS_WIN
 
   //QWidget bk;

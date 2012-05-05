@@ -10,6 +10,7 @@
 class WbTabBar : public QTabBar
 {
   Q_OBJECT
+  Q_DISABLE_COPY(WbTabBar)
   typedef WbTabBar Self;
   typedef QTabBar Base;
 

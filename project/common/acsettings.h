@@ -14,6 +14,7 @@
 class AcSettings : public QSettings
 {
   Q_OBJECT
+  Q_DISABLE_COPY(AcSettings)
   typedef AcSettings Self;
   typedef QSettings Base;
 
@@ -86,6 +87,13 @@ public:
   bool isAeroEnabled() const;
 public slots:
   void setAeroEnabled(bool t);
+
+  // - Locations -
+signals:
+  void downloadsLocationChanged(const QString &path);
+public:
+  QString downloadsLocation() const;
+  void setDownloadsLocation(const QString &path);
 };
 
 #endif // ACSETTINGS_H

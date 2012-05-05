@@ -95,7 +95,7 @@ WbAddressEdit::contextMenuEvent(QContextMenuEvent *event)
 
   m->exec(event->globalPos());
   delete scm;
-  QTimer::singleShot(0, m, SLOT(deleteLater()));
+  delete m;
   event->accept();
 }
 

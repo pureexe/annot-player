@@ -24,6 +24,7 @@ typedef QtExt::Dialog ProcessViewBase;
 class ProcessView : public ProcessViewBase
 {
   Q_OBJECT
+  Q_DISABLE_COPY(ProcessView)
   typedef ProcessView Self;
   typedef ProcessViewBase Base;
 

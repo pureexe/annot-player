@@ -75,6 +75,7 @@ QT_END_NAMESPACE
 class AcUi : public QObject
 {
   Q_OBJECT
+  Q_DISABLE_COPY(AcUi)
   typedef AcUi Self;
   typedef QObject Base;
 

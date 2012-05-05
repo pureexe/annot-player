@@ -29,6 +29,7 @@ typedef QtExt::Dialog TokenViewBase;
 class TokenView : public TokenViewBase
 {
   Q_OBJECT
+  Q_DISABLE_COPY(TokenView)
   typedef TokenView Self;
   typedef TokenViewBase Base;
 

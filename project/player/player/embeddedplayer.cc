@@ -196,6 +196,7 @@ EmbeddedPlayerUi::setOnTop(bool t)
   if (top_ != t) {
     top_ = t;
     canvas_->setVisible(!top_);
+    infoView_->setVisible(!top_);
     updateGeometry();
   }
 }

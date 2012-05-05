@@ -9,6 +9,7 @@
 class InputComboBox : public AnnotationComboEdit
 {
   Q_OBJECT
+  Q_DISABLE_COPY(InputComboBox)
   typedef InputComboBox Self;
   typedef AnnotationComboEdit Base;
 

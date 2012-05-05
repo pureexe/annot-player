@@ -10,19 +10,22 @@
 QT_FORWARD_DECLARE_CLASS(QTimer)
 
 class Player;
+class SignalHub;
 
 class EventLogger : public QObject
 {
   Q_OBJECT
+  Q_DISABLE_COPY(EventLogger)
   typedef EventLogger Self;
   typedef QObject Base;
 
   Player *player_;
+  SignalHub *hub_;
   QTimer *logUntilPlayingTimer_;
   int logCount_;
 
 public:
-  explicit EventLogger(Player *player, QObject *parent = 0);
+  EventLogger(Player *player, SignalHub *hub, QObject *parent = 0);
 
 public slots:
   void logSubtitleChanged();
@@ -79,7 +82,8 @@ public slots:
   void logPauseHoveredAnnotations(bool t);
   void logResumeHoveredAnnotations(bool t);
   void logRemoveHoveredAnnotations(bool t);
-  void logExileHoveredAnnotations(bool t);
+  void logExpelNearbyAnnotations(bool t);
+  void logAttractNearbyAnnotations(bool t);
 
   void logPreferLocalDatabaseChanged(bool t);
 

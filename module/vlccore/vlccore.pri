@@ -8,7 +8,7 @@ DEFINES += WITH_MODULE_VLCCORE
 DEPENDPATH += $$PWD
 
 HEADERS += \
-    $$PWD/http.h \
+    $$PWD/httpplugin.h \
     $$PWD/httpbufferedsession.h \
     $$PWD/httpsession.h \
     $$PWD/httpstreamsession.h \
@@ -16,7 +16,7 @@ HEADERS += \
     $$PWD/video.h
 
 SOURCES += \
-    $$PWD/http.cc \
+    $$PWD/httpplugin.cc \
     $$PWD/httpbufferedsession.cc \
     $$PWD/httpsession.cc \
     $$PWD/httpstreamsession.cc \

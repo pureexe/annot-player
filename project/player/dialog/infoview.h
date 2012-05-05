@@ -13,6 +13,7 @@ typedef QtExt::Dialog InfoViewBase;
 class InfoView : public InfoViewBase
 {
   Q_OBJECT
+  Q_DISABLE_COPY(InfoView)
   typedef InfoView Self;
   typedef InfoViewBase Base;
 

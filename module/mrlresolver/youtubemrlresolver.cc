@@ -11,6 +11,7 @@
 // See: AcDown/Downloader/YouTube/YouTubePlugin.cs
 
 #include "module/mrlresolver/youtubemrlresolver.h"
+//#include "module/qtext/network.h"
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkReply>
 #include <QtNetwork/QNetworkRequest>
@@ -22,10 +23,10 @@
 #define DEBUG "youtubemrlresolver"
 #include "module/debug/debug.h"
 
-// - Consruction -
+// - Construction -
 
-YoutubeMrlResolver::YoutubeMrlResolver(QObject *parent)
-  : Base(parent)
+void
+YoutubeMrlResolver::init()
 {
   nam_ = new QNetworkAccessManager(this);
   connect(nam_, SIGNAL(finished(QNetworkReply*)), SLOT(resolveMedia(QNetworkReply*)));
@@ -66,6 +67,8 @@ YoutubeMrlResolver::resolveMedia(const QString &href)
   url = "http://www.youtube.com/watch?v=" + v;
   DOUT("url =" << url);
   nam_->get(QNetworkRequest(url));
+  //QNetworkReply *reply = networkAccessManager()->get(QNetworkRequest(url));
+  //connect(new QtExt::NetworkReplyFinished(reply), SIGNAL(finished(QNetworkReply*)), SLOT(resolveMedia(QNetworkReply*)));
   DOUT("exit: ret = true");
   return true;
 }
@@ -150,7 +153,7 @@ YoutubeMrlResolver::resolveMedia(QNetworkReply *reply)
   mi.title = title;
   mi.refurl = mrl;
   mi.mrls.append(MrlInfo(videoUrl));
-  emit mediaResolved(mi, 0);
+  emit mediaResolved(mi);
   DOUT("exit");
 }
 

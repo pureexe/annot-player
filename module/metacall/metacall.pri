@@ -15,4 +15,6 @@ SOURCES += \
 
 QT += core network
 
+#INCLUDEPATH += $$QT_SRC
+
 # EOF

@@ -9,6 +9,7 @@
 class GoogleVideoMrlResolver : public MrlResolver
 {
   Q_OBJECT
+  Q_DISABLE_COPY(GoogleVideoMrlResolver)
   typedef GoogleVideoMrlResolver Self;
   typedef MrlResolver Base;
 

@@ -12,6 +12,7 @@ namespace QtExt { class EventListener; }
 class OsdWindow : public QWidget
 {
   Q_OBJECT
+  Q_DISABLE_COPY(OsdWindow)
   typedef OsdWindow Self;
   typedef QWidget Base;
 

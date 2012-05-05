@@ -51,24 +51,31 @@ WbNetworkAccessManager::supportedSites()
 QNetworkReply*
 WbNetworkAccessManager::createRequest(Operation op, const QNetworkRequest &req, QIODevice *outgoingData)
 {
+  DOUT("url =" << req.url().toString());
   QUrl url = req.url();
   if (url.scheme() == "http") {
     QString host = url.host();
     if (!blockedUrls_.isEmpty() && isBlockedUrl(url)) {
       QNetworkRequest r(::rc_image_null_());
       return Base::createRequest(op, r, outgoingData);
-    } else if (host == "www.nicovideo.jp" && url.path().startsWith("/watch")
-               //|| host == "ext.nicovideo.jp" && url.path().startsWith("/thumb_watch") // disabled, not working at the time
-               ) {
-      DOUT("nico request =" << url.toString());
-      QNetworkRequest r = req;
-      DOUT("nico delegate =" << encodeNicoUrl(url).toString());
-      r.setUrl(encodeNicoUrl(url));
-      return Base::createRequest(op, r, outgoingData);
-    } else if (host == "erogamescape.dyndns.org") {
-      QNetworkRequest r = req;
-      r.setUrl(encodeEroUrl(url));
-      return Base::createRequest(op, r, outgoingData);
+    } else if (host == "www.nicovideo.jp") {
+      if (url.path().startsWith("/watch")
+           //|| host == "ext.nicovideo.jp" && url.path().startsWith("/thumb_watch") // disabled, not working at the time
+         ) {
+        DOUT("nico request =" << url.toString());
+        QNetworkRequest r = req;
+        DOUT("nico delegate =" << encodeNicoUrl(url).toString());
+        r.setUrl(encodeNicoUrl(url));
+        return Base::createRequest(op, r, outgoingData);
+      }
+    } else if (host == "v.youku.com") {
+      if (url.path().startsWith("/player/getPlayList/VideoIDS/")) {
+        DOUT("youku request =" << url.toString());
+        // See: http://www.lovelucy.info/watch-youku-tudou-without-proxy.html
+        QNetworkRequest r = req;
+        r.setRawHeader("X-Forwarded-For", "202.108.8.82"); // cctv.com
+        return Base::createRequest(op, r, outgoingData);
+      }
     }
 #define ELIF(_host, _encode) \
     else if (host.endsWith(_host, Qt::CaseInsensitive)) { \
@@ -76,6 +83,7 @@ WbNetworkAccessManager::createRequest(Operation op, const QNetworkRequest &req, 
       r.setUrl(_encode(url)); \
       return Base::createRequest(op, r, outgoingData); \
     }
+    ELIF("erogamescape.dyndns.org", encodeAb2Url)
     ELIF("akabeesoft2.com", encodeAb2Url)
     ELIF("syangrila.com", encodeSyangrilaUrl)
     ELIF("akatsukiworks.com", encodeAkatsukiWorksUrl)

@@ -9,6 +9,7 @@
 class Qth : public QObject
 {
   Q_OBJECT
+  Q_DISABLE_COPY(Qth)
   typedef Qth Self;
   typedef QObject Base;
 

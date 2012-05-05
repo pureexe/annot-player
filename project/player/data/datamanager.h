@@ -13,6 +13,7 @@
 class DataManager : public QObject
 {
   Q_OBJECT
+  Q_DISABLE_COPY(DataManager)
   typedef DataManager Self;
   typedef QObject Base;
 

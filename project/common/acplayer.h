@@ -6,9 +6,12 @@
 
 #include "project/common/acipc.h"
 
+#define ACSCHEME_PLAYER_IMPORT  "http://_/player/import/"
+
 class AcPlayerServer : public AcIpcController
 {
   Q_OBJECT
+  Q_DISABLE_COPY(AcPlayerServer)
   typedef AcPlayerServer Self;
   typedef AcIpcController Base;
 
@@ -27,6 +30,7 @@ public slots:
 class AcPlayer : public QObject
 {
   Q_OBJECT
+  Q_DISABLE_COPY(AcPlayer)
   typedef AcPlayer Self;
   typedef QObject Base;
   typedef AcIpcController Delegate;

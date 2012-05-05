@@ -34,6 +34,7 @@ namespace Core {
   class Annotation : public QObject
   {
     Q_OBJECT
+    //Q_DISABLE_COPY(Annotation)
     typedef Annotation Self;
     typedef QObject Base;
 

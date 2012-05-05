@@ -9,6 +9,7 @@
 class ClipboardMonitor : public QObject
 {
   Q_OBJECT
+  Q_DISABLE_COPY(ClipboardMonitor)
   typedef ClipboardMonitor Self;
   typedef QObject Base;
 

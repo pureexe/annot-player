@@ -9,6 +9,7 @@
 class ShutdownDialog : public CountdownDialog
 {
   Q_OBJECT
+  Q_DISABLE_COPY(ShutdownDialog)
   typedef ShutdownDialog Self;
   typedef CountdownDialog Base;
 

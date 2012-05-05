@@ -2,6 +2,7 @@
 // 4/23/2012
 
 #include "project/common/acpaths.h"
+#include "project/common/acsettings.h"
 #ifdef Q_WS_MAC
 #  include "mac/qtmac/qtmac.h"
 #  include "unix/qtunix/qtunix.h"
@@ -9,7 +10,9 @@
 #ifdef Q_WS_WIN
 #  include "win/qtwin/qtwin.h"
 #endif // Q_WS_WIN
+#include "module/qtext/filesystem.h"
 #include <QtGui/QDesktopServices>
+#include <QtCore/QUrl>
 #include <QtCore/QCoreApplication>
 #include <QtCore/QDir>
 #include <QtCore/QFile>
@@ -21,19 +24,62 @@
 #  define REZ_ICON_VIDEO  QCoreApplication::applicationDirPath() + "/../Resources/" "video.IconRez"
 #endif // Q_WS_MAC
 
+// - Constructions -
+
+void
+AcLocationManager::init()
+{ connect(this, SIGNAL(downloadsLocationChanged(QString)), SLOT(createDownloadsLocation())); }
+
+AcSettings*
+AcLocationManager::settings() const
+{
+  if (!settings_) {
+    settings_ = AcSettings::globalSettings();
+    connect(settings_, SIGNAL(downloadsLocationChanged(QString)), SIGNAL(downloadsLocationChanged(QString)));
+  }
+  return settings_;
+}
+
+// - Downloads -
+
 QString
 AcLocationManager::downloadsLocation() const
 {
-  QString desktop = QDesktopServices::storageLocation(QDesktopServices::DesktopLocation);
-  QString ret =  desktop + "/" + tr("Video");
+  QString ret = settings()->downloadsLocation();
+  if (ret.isEmpty())
+    ret = defaultDownloadsLocation();
   return ret;
+}
+
+QString
+AcLocationManager::defaultDownloadsLocation() const
+{
+  static QString ret;
+  if (ret.isEmpty()) {
+    QString desktop = QDesktopServices::storageLocation(QDesktopServices::DesktopLocation);
+    ret = desktop + FILE_PATH_SEP + tr("Video");
+  }
+  return ret;
+}
+
+void
+AcLocationManager::openDownloadsLocation()
+{
+  QString url = downloadsLocation();
+  if (QFile::exists(url)) {
+#ifdef Q_WS_WIN
+    url.replace('\\', '/');
+    url.prepend('/');
+#endif // Q_WS_WIN
+    url.prepend("file://");
+    QDesktopServices::openUrl(QUrl(url));
+  }
 }
 
 void
 AcLocationManager::createDownloadsLocation()
 {
-  QString desktop = QDesktopServices::storageLocation(QDesktopServices::DesktopLocation);
-  QString path =  desktop + "/" + tr("Video");
+  QString path =  downloadsLocation();
 
 #ifdef Q_WS_MAC
   QString targetIcon = path + "/" "Icon\r";

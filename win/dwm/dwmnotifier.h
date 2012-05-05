@@ -18,6 +18,7 @@
 class DwmWindowNotifier : public QWidget
 {
   //Q_OBJECT // Q_OBJECT is not required
+  Q_DISABLE_COPY(DwmWindowNotifier)
   typedef DwmWindowNotifier Self;
   typedef QWidget Base;
   QWidgetList widgets_;

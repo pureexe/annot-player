@@ -25,6 +25,7 @@ typedef QtExt::Dialog AnnotationEditorBase;
 class AnnotationEditor : public AnnotationEditorBase
 {
   Q_OBJECT
+  Q_DISABLE_COPY(AnnotationEditor)
   typedef AnnotationEditor Self;
   typedef AnnotationEditorBase Base;
 

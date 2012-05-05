@@ -38,7 +38,7 @@
 #define ZOOM_MAX        5.0
 #define ZOOM_MIN        0.5
 
-#define SAVE_PATH       QDesktopServices::storageLocation(QDesktopServices::DesktopLocation);
+#define SAVE_PATH       QDesktopServices::storageLocation(QDesktopServices::DesktopLocation)
 
 //#ifdef Q_WS_MAC
 //#  define K_CTRL        "cmd"
@@ -70,6 +70,7 @@ WebView::WebView(QWidget *parent)
     connect(page, SIGNAL(linkHovered(QString,QString,QString)), SLOT(showLink(QString,QString,QString)));
     connect(page, SIGNAL(openLinkRequested(QString)), SIGNAL(openLinkRequested(QString)));
     connect(page, SIGNAL(downloadRequested(QNetworkRequest)), SLOT(download(QNetworkRequest)));
+    connect(page, SIGNAL(menuBarVisibilityChangeRequested(bool)), SIGNAL(menuBarVisibilityChangeRequested(bool)));
 
     connect(page, SIGNAL(loadStarted()), SLOT(setLoading()));
     connect(page, SIGNAL(loadFinished(bool)), SLOT(setFinished()));
@@ -85,6 +86,10 @@ WebView::WebView(QWidget *parent)
   createActions();
 
   connect(this, SIGNAL(selectionChanged()), SLOT(invalidteSelection()));
+
+  //grabGesture(Qt::PanGesture);
+  grabGesture(Qt::SwipeGesture);
+  grabGesture(Qt::PinchGesture);
 
   //setStyleSheet(SS_WEBVIEW);
 }
@@ -206,6 +211,11 @@ WebView::hoveredLink() const
 
 // - Actions -
 
+void
+QtExt::
+WebView::clearHighlight()
+{ findText(QString(), QWebPage::HighlightAllOccurrences); }
+
 QString
 QtExt::
 WebView::fileNameFromUrl(const QUrl &url, const QString &suffix)
@@ -216,18 +226,27 @@ WebView::fileNameFromUrl(const QUrl &url, const QString &suffix)
       fileName = QtExt::escapeFileName(fileName);
     }
     if (fileName.isEmpty()) {
-      fileName = QtExt::escapeFileName(url.host() + url.path());
+      fileName = QtExt::escapeFileName(url.toString(QUrl::RemoveScheme | QUrl::RemovePort | QUrl::RemoveQuery | QUrl::StripTrailingSlash));
+      fileName = QFileInfo(fileName).fileName();
       if (fileName.isEmpty())
         fileName = tr("Unnamed");
     }
-    fileName = SAVE_PATH + FILE_PATH_SEP + fileName;
+    fileName.prepend(SAVE_PATH + FILE_PATH_SEP);
   }
-  QString ret = fileName;
-  if (!suffix.isEmpty() && !ret.endsWith(suffix, Qt::CaseInsensitive))
-    ret.append(suffix);
+  QString suf = suffix;
+  if (suf.isEmpty()) {
+    suf = QFileInfo(fileName).completeSuffix();
+    if (!suf.isEmpty()) {
+      suf.prepend('.');
+      fileName = fileName.left(fileName.size() - suf.size());
+    }
+  } else if (fileName.endsWith(suf, Qt::CaseInsensitive))
+    fileName = fileName.left(fileName.size() - suf.size());
+
+  QString ret = fileName + suf;
 
   for (int i = 2; QFile::exists(ret); i++)
-    ret = fileName + " " + QString::number(i) + suffix;
+    ret = fileName + " " + QString::number(i) + suf;
   Q_ASSERT(!ret.isEmpty());
   return ret;
 }
@@ -308,15 +327,19 @@ WebView::download(const QNetworkRequest &req)
 {
 #ifdef WITH_MODULE_DOWNLOAD
   enum { retries = 3 };
+  DOUT("enter: url =" << req.url().toString());
 
   QUrl url = req.url();
   QString fileName = fileNameFromUrl(url);
+
+  DOUT("fileName =" << fileName);
 
   bool ok = ::dlget(fileName, req, true, retries, this); // async = true
   if (ok)
     emit message(fileName);
   else
     emit warning(tr("failed to download %1").arg(url.toString()));
+  DOUT("exit: ok =" << ok);
 #else
   Q_UNUSED(req);
   emit warning(tr("download is not allowed"));
@@ -384,11 +407,38 @@ WebView::createContextMenu()
   m->addAction(openWithOperatingSystemAct);
 
   if (history)
-    QTimer::singleShot(0, history, SLOT(deleteLater()));
+    history->deleteLater();
   return m;
 }
 
 // - Events -
+
+bool
+QtExt::
+WebView::event(QEvent *e)
+{
+  bool accept = true;
+  switch (e->type()) {
+    // See: examples/gestures/imagegestures
+  case QEvent::Gesture: gestureEvent(static_cast<QGestureEvent *>(e)); break;
+  default:              accept = Base::event(e);
+  }
+  return accept;
+}
+
+void
+QtExt::
+WebView::gestureEvent(QGestureEvent *e)
+{
+  DOUT("enter");
+  if (QGesture *swipe = e->gesture(Qt::SwipeGesture))
+    swipeGesture(static_cast<QSwipeGesture *>(swipe));
+  else if (QGesture *pan = e->gesture(Qt::PanGesture))
+    panGesture(static_cast<QPanGesture *>(pan));
+  else if (QGesture *pinch = e->gesture(Qt::PinchGesture))
+    pinchGesture(static_cast<QPinchGesture *>(pinch));
+  DOUT("exit");
+}
 
 void
 QtExt::
@@ -420,10 +470,62 @@ WebView::wheelEvent(QWheelEvent *event)
     Base::wheelEvent(event);
 }
 
+// - Gestures -
+
 void
 QtExt::
-WebView::clearHighlight()
-{ findText(QString(), QWebPage::HighlightAllOccurrences); }
+WebView::panGesture(QPanGesture *g)
+{
+  DOUT("enter");
+  Q_UNUSED(g);
+  //switch (gesture->state()) {
+  //case Qt::GestureStarted:
+  //case Qt::GestureUpdated:
+  //  setCursor(Qt::SizeAllCursor);
+  //  break;
+  //default:
+  //  setCursor(Qt::ArrowCursor);
+  //}
+  //QPointF delta = gesture->delta();
+  //horizontalOffset += delta.x();
+  //verticalOffset += delta.y();
+  DOUT("exit");
+}
+
+void
+QtExt::
+WebView::pinchGesture(QPinchGesture *g)
+{
+  DOUT("enter");
+  QPinchGesture::ChangeFlags f = g->changeFlags();
+  if (f & QPinchGesture::ScaleFactorChanged) {
+    if (g->scaleFactor() > 1)
+      zoomIn();
+    else
+      zoomOut();
+  }
+  DOUT("exit");
+}
+
+void
+QtExt::
+WebView::swipeGesture(QSwipeGesture *g)
+{
+  DOUT("enter");
+  if (g->state() == Qt::GestureFinished) {
+    uint h = g->horizontalDirection(),
+         d = g->verticalDirection();
+    if (h ^ d)
+      switch (h | d) {
+      case QSwipeGesture::Left:   back(); break;
+      case QSwipeGesture::Right:  forward(); break;
+      case QSwipeGesture::Up:     scrollTop(); break;
+      case QSwipeGesture::Down:   scrollBottom(); break;
+      default: Q_ASSERT(0);
+      }
+  }
+  DOUT("exit");
+}
 
 // - Zoom -
 
@@ -485,20 +587,20 @@ void
 QtExt::
 WebView::setLoading()
 {
-  DOUT("enter");
+  //DOUT("enter");
   loading_ = true;
   setCursor(Qt::BusyCursor);
-  DOUT("exit");
+  //DOUT("exit");
 }
 
 void
 QtExt::
 WebView::setFinished()
 {
-  DOUT("enter");
+  //DOUT("enter");
   loading_ = false;
   setCursor(Qt::ArrowCursor);
-  DOUT("exit");
+  //DOUT("exit");
 }
 
 void

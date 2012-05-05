@@ -21,6 +21,7 @@ QT_END_NAMESPACE
 class MetaCallFilter : public QObject
 {
   Q_OBJECT
+  Q_DISABLE_COPY(MetaCallFilter)
   typedef MetaCallFilter Self;
   typedef QObject Base;
 

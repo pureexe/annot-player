@@ -11,10 +11,9 @@
 // - Alpha -
 enum { ALPHA = 0 };
 
-// - Options -
-#define INIT_WINDOW_SIZE   QSize(640, 480)
-
 //#define USE_MODE_DEBUG
+
+#define INIT_WINDOW_SIZE   QSize(570, 175)
 
 #define G_PREFIXLINE_MAXWIDTH       100
 
@@ -94,7 +93,7 @@ enum { ALPHA = 0 };
 
 #ifdef Q_WS_WIN
 #  define G_PATH_LOGS   ".."
-#  define G_PATH_DEBUG    G_PATH_LOGS "/" "Debug.txt"
+#  define G_PATH_DEBUG    G_PATH_LOGS "/" "Debug Player.txt"
 #elif defined Q_WS_MAC
 #  define G_PATH_LOGS   QtMac::homeLogsPath() + "/" G_ORGANIZATION "/" G_APPLICATION
 #  define G_PATH_DEBUG    G_PATH_LOGS "/" "Debug.txt"

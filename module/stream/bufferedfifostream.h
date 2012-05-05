@@ -12,6 +12,7 @@
 class BufferedFifoStream : public QObject, public FifoStream
 {
   Q_OBJECT
+  Q_DISABLE_COPY(BufferedFifoStream)
   typedef BufferedFifoStream Self;
   typedef QObject Base;
 

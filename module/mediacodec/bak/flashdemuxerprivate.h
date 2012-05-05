@@ -36,7 +36,7 @@ namespace BitHelper
     for (int i = 0; i <= qMin(endByte - startByte, 7); i++) {
       bits |= quint64(bytes[startByte + i]) << (56 - (i * 8));
     }
-    if (skipBits != 0)
+    if (skipBits)
       read(bits, skipBits);
     offset += length;
     return read(bits, length);
@@ -170,6 +170,7 @@ private:
 class IAudioWriter : public QObject
 {
   Q_OBJECT
+  Q_DISABLE_COPY(IAudioWriter)
   typedef IAudioWriter Self;
   typedef QObject Base;
 
@@ -188,6 +189,7 @@ public:
 class IVideoWriter : public QObject
 {
   Q_OBJECT
+  Q_DISABLE_COPY(IVideoWriter)
   typedef IVideoWriter Self;
   typedef QObject Base;
 
@@ -206,6 +208,7 @@ public:
 class DummyAudioWriter : public IAudioWriter
 {
   Q_OBJECT
+  Q_DISABLE_COPY(DummyAudioWriter)
   typedef DummyAudioWriter Self;
   typedef IAudioWriter Base;
 public:
@@ -219,6 +222,7 @@ public:
 class DummyVideoWriter : public IVideoWriter
 {
   Q_OBJECT
+  Q_DISABLE_COPY(DummyVideoWriter)
   typedef DummyVideoWriter Self;
   typedef IVideoWriter Base;
 public:
@@ -235,6 +239,7 @@ typedef DummyVideoWriter AVIWriter;
 
 class AACWriter : public IAudioWriter {
   Q_OBJECT
+  Q_DISABLE_COPY(AACWriter)
   typedef AACWriter Self;
   typedef IAudioWriter Base;
 
@@ -325,6 +330,7 @@ public:
 class RawH264Writer : public IVideoWriter
 {
   Q_OBJECT
+  Q_DISABLE_COPY(RawH264Writer)
   typedef RawH264Writer Self;
   typedef IVideoWriter Base;
 
@@ -417,6 +423,7 @@ public:
 class FlvFile : QObject
 {
   Q_OBJECT
+  Q_DISABLE_COPY(FlvFile)
   typedef FlvFile Self;
   typedef QObject Base;
 

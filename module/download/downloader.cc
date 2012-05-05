@@ -48,19 +48,20 @@ Downloader::get(const QNetworkRequest &req, bool async, int retries)
 {
   DOUT("enter: async =" << async << ", url =" << req.url().toString() << ", retries =" << retries);
   state_ = Downloading;
-  QUrl url = req.url();
+  QNetworkRequest request(req); // always backup request to avoid being destructed
+  QUrl url = request.url();
   emit message(tr("fetching") + ": " +
     ::filterHost_(url.host()) + url.path()
   );
 
-  reply_ = nam_->get(req);
+  reply_ = nam_->get(request);
   connect(reply_, SIGNAL(downloadProgress(qint64,qint64)), SIGNAL(progress(qint64,qint64)));
 
   // See: http://www.developer.nokia.com/Community/Wiki/CS001432_-_Handling_an_HTTP_redirect_with_QNetworkAccessManager
   if (!async) {
     QEventLoop loop;
-    connect(reply_, SIGNAL(finished()), &loop, SLOT(quit()), Qt::QueuedConnection);
-    connect(reply_, SIGNAL(error(QNetworkReply::NetworkError)), &loop, SLOT(quit()), Qt::QueuedConnection);
+    connect(reply_, SIGNAL(finished()), &loop, SLOT(quit()));
+    connect(reply_, SIGNAL(error(QNetworkReply::NetworkError)), &loop, SLOT(quit()));
     DOUT("eventloop enter");
     loop.exec();
     DOUT("eventloop leave");
@@ -73,7 +74,7 @@ Downloader::get(const QNetworkRequest &req, bool async, int retries)
         .arg(tr("retries"))
         .arg(QString::number(retries +1))
       );
-      get(req, false, retries); // async = false
+      get(request, false, retries); // async = false
     }
   }
 
@@ -104,8 +105,8 @@ Downloader::get(const QUrl &url, const QString &header, bool async, int retries)
   // See: http://www.developer.nokia.com/Community/Wiki/CS001432_-_Handling_an_HTTP_redirect_with_QNetworkAccessManager
   if (!async) {
     QEventLoop loop;
-    connect(reply_, SIGNAL(finished()), &loop, SLOT(quit()), Qt::QueuedConnection);
-    connect(reply_, SIGNAL(error(QNetworkReply::NetworkError)), &loop, SLOT(quit()), Qt::QueuedConnection);
+    connect(reply_, SIGNAL(finished()), &loop, SLOT(quit()));
+    connect(reply_, SIGNAL(error(QNetworkReply::NetworkError)), &loop, SLOT(quit()));
     DOUT("eventloop enter");
     loop.exec();
     DOUT("eventloop leave");
@@ -148,8 +149,8 @@ Downloader::post(const QUrl &url, const QByteArray &data, const QString &header,
 
   if (!async) {
     QEventLoop loop;
-    connect(reply_, SIGNAL(finished()), &loop, SLOT(quit()), Qt::QueuedConnection);
-    connect(reply_, SIGNAL(error(QNetworkReply::NetworkError)), &loop, SLOT(quit()), Qt::QueuedConnection);
+    connect(reply_, SIGNAL(finished()), &loop, SLOT(quit()));
+    connect(reply_, SIGNAL(error(QNetworkReply::NetworkError)), &loop, SLOT(quit()));
     DOUT("eventloop enter");
     loop.exec();
     DOUT("eventloop leave");

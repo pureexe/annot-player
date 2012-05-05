@@ -19,6 +19,7 @@ class StoppableTask : public QRunnable, public Stoppable
 class StoppableThread : public QThread, public Stoppable
 {
   Q_OBJECT
+  Q_DISABLE_COPY(StoppableThread)
   typedef QThread Base;
 public:
   explicit StoppableThread(QObject *parent = 0) : Base(parent) { }

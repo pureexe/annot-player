@@ -21,6 +21,7 @@
 class Database : public QObject
 {
   Q_OBJECT
+  Q_DISABLE_COPY(Database)
   typedef Database Self;
   typedef QObject Base;
 

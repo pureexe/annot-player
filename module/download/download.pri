@@ -9,15 +9,11 @@ DEPENDPATH += $$PWD
 
 HEADERS += \
     $$PWD/download.h \
-    $$PWD/downloader.h \
-    $$PWD/downloadmanager.h \
-    $$PWD/downloadtask.h
+    $$PWD/downloader.h
 
 SOURCES += \
     $$PWD/download.cc \
-    $$PWD/downloader.cc \
-    $$PWD/downloadmanager.cc \
-    $$PWD/downloadtask.cc
+    $$PWD/downloader.cc
 
 QT      += core network
 

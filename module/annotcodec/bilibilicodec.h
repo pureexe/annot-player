@@ -12,6 +12,7 @@ QT_FORWARD_DECLARE_CLASS(QNetworkReply)
 class BilibiliCodec : public AnnotationCodec
 {
   Q_OBJECT
+  Q_DISABLE_COPY(BilibiliCodec)
   typedef BilibiliCodec Self;
   typedef AnnotationCodec Base;
 

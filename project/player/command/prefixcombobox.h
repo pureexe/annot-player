@@ -9,6 +9,7 @@
 class PrefixComboBox : public AnnotationComboEdit
 {
   Q_OBJECT
+  Q_DISABLE_COPY(PrefixComboBox)
   typedef PrefixComboBox Self;
   typedef AnnotationComboEdit Base;
 

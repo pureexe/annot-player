@@ -11,6 +11,7 @@
 class HelpDialog: public AcWebWindow
 {
   Q_OBJECT
+  Q_DISABLE_COPY(HelpDialog)
   typedef HelpDialog Self;
   typedef AcWebWindow Base;
 

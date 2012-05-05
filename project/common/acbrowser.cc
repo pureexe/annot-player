@@ -24,4 +24,11 @@ void
 AcBrowser::openArguments(const QStringList &args)
 { AcIpcController::open(APP_NAME, args); }
 
+void
+AcBrowser::search(const QString &engine, const QString &key)
+{
+  QString url = ACSCHEME_BROWSER_SEARCH + engine + "/" + key;
+  openUrl(url);
+}
+
 // EOF

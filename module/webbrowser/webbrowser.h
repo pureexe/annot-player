@@ -22,7 +22,7 @@ QT_END_NAMESPACE
 
 namespace Ui { class WebBrowserUi; }
 
-class WbSearchEngine;
+class SearchEngine;
 class MouseGesture;
 class MouseGestureFilter;
 
@@ -30,6 +30,7 @@ typedef QtExt::DraggableMainWindow WebBrowserBase;
 class WebBrowser : public WebBrowserBase
 {
   Q_OBJECT
+  Q_DISABLE_COPY(WebBrowser)
   typedef WebBrowser Self;
   typedef WebBrowserBase Base;
   typedef Ui::WebBrowserUi Form;
@@ -133,8 +134,11 @@ protected slots:
   void setTabBarVisible(bool visible);
   bool isTabBarUnderMouse() const;
   bool tabBarHasFocus() const;
+  void toggleMenuBarVisible();
 
 protected:
+  bool isTabBarVisible() const;
+
   int tabCount() const;
   int tabIndex() const;
   QUrl tabUrl(int index) const;
@@ -154,6 +158,7 @@ protected:
 
   void addMouseGesture(MouseGesture *g);
 
+  // - Events -
 protected:
   virtual void closeEvent(QCloseEvent *event); ///< \override
 
@@ -183,7 +188,7 @@ private:
 
   QWidgetList toolBarWidgets_;
 
-  QList<WbSearchEngine *> searchEngines_;
+  QList<SearchEngine *> searchEngines_;
   int searchEngine_;
 
   QString homePage_;

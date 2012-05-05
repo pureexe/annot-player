@@ -53,9 +53,9 @@ ConsoleDialog::createLayout()
   tabView_->finalizeLayout();
 
   QToolButton *okButton = ui->makeToolButton(
-        AcUi::PushHint, TR(T_OK), this, SLOT(hide()));
+        AcUi::PushHint | AcUi::HighlightHint, TR(T_OK), this, SLOT(hide()));
   QToolButton *clearButton = ui->makeToolButton(
-        AcUi::PushHint | AcUi::HighlightHint, TR(T_CLEAR), this, SLOT(clear()));
+        AcUi::PushHint, TR(T_CLEAR), this, SLOT(clear()));
 
   // Layout
   QVBoxLayout *rows = new QVBoxLayout; {

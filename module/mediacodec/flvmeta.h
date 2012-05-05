@@ -55,6 +55,7 @@ struct FlvMeta
 class FlvMetaReader : public QObject, public StoppableTask
 {
   Q_OBJECT
+  Q_DISABLE_COPY(FlvMetaReader)
   typedef FlvMetaReader Self;
   typedef QObject Base;
 
@@ -131,6 +132,7 @@ protected:
 class FlvMetaWriter : public QObject, public StoppableTask
 {
   Q_OBJECT
+  Q_DISABLE_COPY(FlvMetaWriter)
   typedef FlvMetaWriter Self;
   typedef QObject Base;
 
@@ -198,6 +200,7 @@ protected:
 class FlvMetaCreator : public QObject, public StoppableTask
 {
   Q_OBJECT
+  Q_DISABLE_COPY(FlvMetaCreator)
   typedef FlvMetaCreator Self;
   typedef QObject Base;
 

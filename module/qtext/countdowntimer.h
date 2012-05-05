@@ -12,6 +12,7 @@ namespace QtExt {
 class CountdownTimer : public QObject
 {
   Q_OBJECT
+  Q_DISABLE_COPY(CountdownTimer)
   typedef CountdownTimer Self;
   typedef QObject Base;
 

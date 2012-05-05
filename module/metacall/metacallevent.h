@@ -6,6 +6,7 @@
 // Must be consistent with corelib/kernel/qobject_p.h
 // Last checked with Qt 4.7.4 and 4.8.1.
 
+//#include <corelib/kernel/qobject_p.h>
 #include <QtCore/QEvent>
 #include <QtCore/QMetaObject>
 
@@ -16,11 +17,13 @@ QT_FORWARD_DECLARE_CLASS(QObject)
 #  define MCE_HAS_STATIC_CALL
 #endif // QT_VERSION
 
+QT_BEGIN_HEADER
+
 QT_BEGIN_NAMESPACE
 
 #ifdef MCE_HAS_STATIC_CALL
 
-class QMetaCallEvent : public QEvent
+class Q_CORE_EXPORT QMetaCallEvent : public QEvent
 {
 public:
   ///< Must be consisitent with that in QObjectPrivate
@@ -55,7 +58,7 @@ private:
 
 #else
 
-class QMetaCallEvent : public QEvent
+class Q_CORE_EXPORT QMetaCallEvent : public QEvent
 {
 public:
   QMetaCallEvent(int id,
@@ -87,4 +90,7 @@ private:
 
 QT_END_NAMESPACE
 
+QT_END_HEADER
+
 #endif // METACALLEVENT_H
+

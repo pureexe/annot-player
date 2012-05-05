@@ -8,10 +8,10 @@ cd "$PREFIX"  || exit 1
 ## environment
 
 COLOR=purple
-VERSION=0.1.5.2
+VERSION=0.1.5.3
 DMG_SIZE=200m
 
-TARGET="Annot Player"
+TARGET="Annot Stream"
 TARGET_DMG=$TARGET.dmg
 TARGET_ZIP=annot-player-$VERSION-mac.zip
 

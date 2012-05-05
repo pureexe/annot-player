@@ -7,9 +7,9 @@
 #include "webkit/wbwebview.h"
 #include "network/wbnetworkaccessmanager.h"
 #include "network/wbnetworkcookiejar.h"
-#include "core/wbsearchenginefactory.h"
 #include "global/wbrc.h"
 #include "global/wbss.h"
+#include "module/searchengine/searchenginefactory.h"
 #include "module/mousegesture/mousegesture.h"
 #include "module/mousegesture/mousegesturefilter.h"
 #include "module/qtext/filesystem.h"
@@ -83,7 +83,7 @@ WebBrowser::searchEngineForAddress(const QString &address) const
     Q_ASSERT(rx.captureCount() == 1);
     QString a = rx.cap(1);
     DOUT("keyword =" << a);
-    foreach (const WbSearchEngine *e, searchEngines_)
+    foreach (const SearchEngine *e, searchEngines_)
       if (e->acronyms().contains(a, Qt::CaseInsensitive))
         return e->id();
   }
@@ -115,7 +115,7 @@ WebBrowser::completeUrl(const QString &url) const
         "~`!@#$%&*(){}_=+|:;<>/?"
       "]"
       )))
-      ret = searchAddress(url, WbSearchEngineFactory::Google);
+      ret = searchAddress(url, SearchEngineFactory::Google);
     else
       ret.prepend("http://");
   }
@@ -175,7 +175,7 @@ WebBrowser::WebBrowser(QWidget *parent)
   hideStatusBarTimer_->setInterval(StatusMessageTimeout);
   hideStatusBarTimer_->setSingleShot(true);
   connect(hideStatusBarTimer_, SIGNAL(timeout()), statusBar(), SLOT(hide()));
-  statusBar()->hide();
+  //statusBar()->hide();
 
   // Focus:
   ui_->addressEdit->setFocus();
@@ -207,13 +207,16 @@ WebBrowser::setupUi()
 
   ui_->addressEdit->setDefaultItems(homePages_);
 
-  ui_->searchEdit->setEngines(QtExt::subList(searchEngines_, WbSearchEngineFactory::VisibleEngineCount));
+  ui_->searchEdit->setEngines(QtExt::subList(searchEngines_, SearchEngineFactory::VisibleEngineCount));
 
   // Set up connections
   connect(ui_->tabWidget, SIGNAL(tabCloseRequested(int)), SLOT(closeTab(int)));
   connect(ui_->tabWidget, SIGNAL(currentChanged(int)), SLOT(updateAddressbar()));
   connect(ui_->tabWidget, SIGNAL(doubleClicked()), SLOT(newTabAtLastWithBlankPage()));
   connect(ui_->tabWidget, SIGNAL(tabDoubleClicked(int)), SIGNAL(fullScreenRequested()));
+#ifdef Q_WS_WIN
+  connect(ui_->tabWidget, SIGNAL(rightButtonClicked()), SLOT(toggleMenuBarVisible()));
+#endif // Q_WS_WIN
   connect(ui_->searchEdit, SIGNAL(textEntered(QString)), SLOT(search(QString)));
   connect(ui_->searchEdit, SIGNAL(engineChanged(int)), SLOT(setSearchEngine(int)));
   connect(ui_->searchEdit, SIGNAL(editTextChanged(QString)), SLOT(invalidateSearch()));
@@ -232,9 +235,12 @@ WebBrowser::setupUi()
 void
 WebBrowser::createSearchEngines()
 {
-  searchEngine_ = WbSearchEngineFactory::Google;
-  for (int engine = 0; engine < WbSearchEngineFactory::EngineCount; engine++)
-    searchEngines_.append(WbSearchEngineFactory::globalInstance()->create(engine));
+  searchEngine_ = SearchEngineFactory::Google;
+  for (int engine = 0; engine < SearchEngineFactory::EngineCount; engine++) {
+    SearchEngine *e = SearchEngineFactory::globalInstance()->create(engine);
+    e->setParent(this);
+    searchEngines_.append(e);
+  }
 }
 
 void
@@ -728,7 +734,7 @@ WebBrowser::newTab(QWebView *view, int index, bool focus)
 
   WbWebView *wbview = qobject_cast<WbWebView *>(view);
   if (wbview) {
-    wbview->setSearchEngines(QtExt::subList(searchEngines_, WbSearchEngineFactory::VisibleEngineCount));
+    wbview->setSearchEngines(QtExt::subList(searchEngines_, SearchEngineFactory::VisibleEngineCount));
     wbview->setSearchEngine(searchEngine_);
 
     connect(wbview, SIGNAL(message(QString)), SLOT(showMessage(QString)));
@@ -746,6 +752,10 @@ WebBrowser::newTab(QWebView *view, int index, bool focus)
     connect(wbview, SIGNAL(fullScreenRequested()), SIGNAL(fullScreenRequested()));
 
     connect(wbview, SIGNAL(searchWithEngineRequested(QString,int)), SLOT(searchInNewTab(QString,int)));
+#ifdef Q_WS_WIN
+    connect(wbview, SIGNAL(menuBarVisibilityChangeRequested(bool)), menuBar(), SLOT(setVisible(bool)));
+    connect(wbview, SIGNAL(toggleMenuBarVisibleRequested()), SLOT(toggleMenuBarVisible()));
+#endif // Q_WS_WIN
     connect(this, SIGNAL(searchEngineChanged(int)), wbview, SLOT(setSearchEngine(int)));
   }
 
@@ -957,6 +967,14 @@ WebBrowser::tabBarHasFocus() const
 void
 WebBrowser::setTabBarVisible(bool visible)
 { ui_->tabWidget->tabBar()->setVisible(visible); }
+
+bool
+WebBrowser::isTabBarVisible() const
+{ return ui_->tabWidget->tabBar()->isVisible(); }
+
+void
+WebBrowser::toggleMenuBarVisible()
+{ menuBar()->setVisible(!menuBar()->isVisible()); }
 
 // - Search -
 

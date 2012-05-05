@@ -17,6 +17,7 @@ typedef QtExt::Dialog NetworkProxyDialogBase;
 class NetworkProxyDialog : public NetworkProxyDialogBase
 {
   Q_OBJECT
+  Q_DISABLE_COPY(NetworkProxyDialog)
   typedef NetworkProxyDialog Self;
   typedef NetworkProxyDialogBase Base;
 

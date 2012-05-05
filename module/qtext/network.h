@@ -44,7 +44,29 @@ namespace QtExt {
     { Base::setUrl(url); }
   };
 
-  // - Helpers -
+  // - Signals and slots -
+
+  class NetworkReplyFinished : public QObject
+  {
+    Q_OBJECT
+    Q_DISABLE_COPY(NetworkReplyFinished)
+    typedef QObject Base;
+    QNetworkReply *reply_;
+
+  public:
+    explicit NetworkReplyFinished(QNetworkReply *reply)
+      : Base(0), reply_(reply)
+    {
+      Q_ASSERT(reply_);
+      connect(reply_, SIGNAL(finished()), SLOT(trigger()));
+    }
+
+  signals:
+    void finished(QNetworkReply *reply);
+
+  protected slots:
+    void trigger() { emit finished(reply_); }
+  };
 
   class ProgressWithId : public QObject
   {
@@ -61,7 +83,7 @@ namespace QtExt {
     void progress(qint64 receivedBytes, qint64 totalBytes, long id);
 
   public slots:
-    void emit_progress(qint64 receivedBytes, qint64 totalBytes)
+    void trigger(qint64 receivedBytes, qint64 totalBytes)
     { emit progress(receivedBytes, totalBytes, id_); }
   };
 

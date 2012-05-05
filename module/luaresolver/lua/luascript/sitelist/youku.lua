@@ -102,8 +102,6 @@ function getTaskAttributeBatch_youku ( str_url, str_tmpfile , pDlg)
 		return;
 	end
 
-	local str_listurl = "http://www.youku.com/playlist_show/id_".. str_listid .. ".html";
-
 	local re = dlFile(str_tmpfile, str_listurl);
 	if re~=0
 	then

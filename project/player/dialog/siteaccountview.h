@@ -24,6 +24,7 @@ typedef QtExt::Dialog SiteAccountViewBase;
 class SiteAccountView : public SiteAccountViewBase
 {
   Q_OBJECT
+  Q_DISABLE_COPY(SiteAccountView)
   typedef SiteAccountView Self;
   typedef SiteAccountViewBase Base;
 

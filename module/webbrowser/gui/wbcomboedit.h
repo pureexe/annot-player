@@ -14,6 +14,7 @@ typedef QtExt::ComboBox WbComboEditBase;
 class WbComboEdit : public WbComboEditBase
 {
   Q_OBJECT
+  Q_DISABLE_COPY(WbComboEdit)
   typedef WbComboEdit Self;
   typedef WbComboEditBase Base;
 
