@@ -1176,7 +1176,7 @@ void
 AnnotationGraphicsItem::rushTo(const QPointF &to)
 {
 
-  QPointF now = boundingRect().center();
+  QPointF now = boundingRect().center(); // use center, so that annot with diff length will have diff speed
   QPointF d = now - to;
   qreal len = ::sqrt(d.x()*d.x() + d.y()*d.y());
   if (len < 0.01)
@@ -1184,7 +1184,9 @@ AnnotationGraphicsItem::rushTo(const QPointF &to)
 
   qreal v = 1/(len/60.0 + 1) + 0.1;
   int msecs = qMax(int(len / v), 100);
-  rushTo(to, msecs);
+
+  QPointF stop = to + (pos() - to) * 0.2;
+  rushTo(stop, msecs);
 }
 
 void
