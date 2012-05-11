@@ -9,11 +9,11 @@
 #include <QtGui>
 
 #ifdef Q_OS_MAC
-  #define K_ENTER       "enter"
-  #define K_ESC         "esc"
+#  define K_ENTER       "enter"
+#  define K_ESC         "esc"
 #else
-  #define K_ENTER       "Enter"
-  #define K_ESC         "Esc"
+#  define K_ENTER       "Enter"
+#  define K_ESC         "Esc"
 #endif // Q_OS_MAC
 
 using namespace AnnotCloud;
@@ -22,18 +22,17 @@ using namespace Logger;
 #define WINDOW_FLAGS_BASE \
   Qt::Dialog | \
   Qt::CustomizeWindowHint | \
-  Qt::WindowStaysOnTopHint | \
-  Qt::WindowTitleHint | \
-  Qt::WindowCloseButtonHint
+  Qt::WindowStaysOnTopHint
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
   #define WINDOW_FLAGS ( \
     Qt::FramelessWindowHint | \
     WINDOW_FLAGS_BASE )
 #else
   #define WINDOW_FLAGS ( \
+    Qt::WindowTitleHint | \
     WINDOW_FLAGS_BASE )
-#endif // Q_WS_MAC
+#endif // Q_OS_MAC
 
 // - Constructions -
 
@@ -44,10 +43,6 @@ LoginDialog::LoginDialog(QWidget *parent)
 
   createLayout();
 
-  // Shortcuts
-  connect(new QShortcut(QKeySequence("Esc"), this), SIGNAL(activated()), SLOT(hide()));
-  connect(new QShortcut(QKeySequence("CTRL+W"), this), SIGNAL(activated()), SLOT(hide()));
-
   // Focus
   userNameEdit_->setFocus();
 }
@@ -56,7 +51,6 @@ void
 LoginDialog::createLayout()
 {
   AcUi *ui = AcUi::globalInstance();
-  ui->setWindowStyle(this);
 
   QStringList defaultUsers(User::guest().name());
   userNameEdit_ = ui->makeComboBox(
@@ -71,7 +65,7 @@ LoginDialog::createLayout()
         this, SLOT(login()));
   QToolButton *cancelButton = ui->makeToolButton(
         AcUi::PushHint, TR(T_CANCEL), TR(T_CANCEL), K_ESC,
-        this, SLOT(hide()));
+        this, SLOT(fadeOut()));
 
   QLabel *userNameLabel = ui->makeLabel(AcUi::BuddyHint, TR(T_USERNAME), userNameEdit_),
          *passwordLabel = ui->makeLabel(AcUi::BuddyHint, TR(T_PASSWORD), passwordEdit_);
@@ -139,7 +133,7 @@ LoginDialog::login()
 
   pass = User::encryptPassword(pass);
 
-  hide();
+  fadeOut();
   emit loginRequested(name, pass);
 }
 

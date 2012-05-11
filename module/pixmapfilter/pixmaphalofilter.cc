@@ -4,18 +4,12 @@
 #include <QtGui/QPainter>
 #include <QtGui/QPaintEngine>
 
-//#include "qpixmap.h"
-//#include "qpixmapfilter_p.h"
-//#include "qvarlengtharray.h"
-//
-//#include "private/qapplication_p.h"
-//#include "private/qgraphicssystem_p.h"
-//#include "private/qpaintengineex_p.h"
-//#include "private/qpaintengine_raster_p.h"
-//#include "qmath.h"
-//#include "private/qmath_p.h"
-//#include "private/qmemrotate_p.h"
-//#include "private/qdrawhelper_p.h"
+// See: gui/image/qpixmapfilter_p.h
+QT_BEGIN_NAMESPACE
+Q_GUI_EXPORT void qt_blurImage(QPainter *p, QImage &blurImage, qreal radius, bool quality, bool alphaOnly, int transposed = 0);
+Q_GUI_EXPORT void qt_blurImage(QImage &blurImage, qreal radius, bool quality, int transposed = 0);
+QT_END_NAMESPACE
+
 
 PixmapHaloFilter::PixmapHaloFilter(QObject *parent)
   : Base(UserFilter, parent),

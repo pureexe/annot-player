@@ -31,7 +31,7 @@ public:
   { init(); }
 
 public:
-  enum Site { UnknownSite = 0, AcFun = 1, Nicovideo = 2, Bilibili = 3 };
+  enum Site { UnknownSite = 0, Acfun = 1, Nicovideo = 2, Bilibili = 3 };
 
   bool resolve(const QString &href,
                int *siteid = 0,

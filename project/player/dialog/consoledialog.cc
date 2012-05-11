@@ -31,10 +31,6 @@ ConsoleDialog::ConsoleDialog(QWidget *parent)
   connect(this, SIGNAL(debugMessageReceived(QString)),
           SLOT(appendDebugText(QString)), Qt::QueuedConnection);
 
-  // Shortcuts
-  connect(new QShortcut(QKeySequence("Esc"), this), SIGNAL(activated()), SLOT(hide()));
-  connect(new QShortcut(QKeySequence("CTRL+W"), this), SIGNAL(activated()), SLOT(hide()));
-
   instances_.append(this);
 }
 
@@ -45,7 +41,6 @@ void
 ConsoleDialog::createLayout()
 {
   AcUi *ui = AcUi::globalInstance();
-  ui->setWindowStyle(this);
 
   tabView_ = new TextEditTabView;
   tabView_->addTab(tr("Log"));
@@ -53,7 +48,7 @@ ConsoleDialog::createLayout()
   tabView_->finalizeLayout();
 
   QToolButton *okButton = ui->makeToolButton(
-        AcUi::PushHint | AcUi::HighlightHint, TR(T_OK), this, SLOT(hide()));
+        AcUi::PushHint | AcUi::HighlightHint, TR(T_OK), this, SLOT(fadeOut()));
   QToolButton *clearButton = ui->makeToolButton(
         AcUi::PushHint, TR(T_CLEAR), this, SLOT(clear()));
 

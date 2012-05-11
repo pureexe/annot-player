@@ -4,17 +4,16 @@
 // backlogview.h
 // 1/1/2012
 
-#include "module/qtext/dialog.h"
+#include "project/common/acwindow.h"
 
 class TextEditTabView;
 
-typedef QtExt::Dialog BacklogDialogBase;
-class BacklogDialog : public BacklogDialogBase
+class BacklogDialog : public AcWindow
 {
   Q_OBJECT
   Q_DISABLE_COPY(BacklogDialog)
   typedef BacklogDialog Self;
-  typedef BacklogDialogBase Base;
+  typedef AcWindow Base;
 
   enum TabIndex {
     AnnotationTabIndex = 0,

@@ -32,7 +32,7 @@
 #define G_PATH_LOCK_RUNNING  G_PATH_LOCK "/" "running.lock"
 
 #ifdef Q_WS_WIN
-#  define G_PATH_CACHES "./caches"
+#  define G_PATH_CACHES QCoreApplication::applicationDirPath() + "/" " caches"
 #elif defined Q_WS_MAC
 #  define G_PATH_CACHES QtMac::homeCachesPath() + "/" G_ORGANIZATION "/" G_APPLICATION
 #else
@@ -42,14 +42,14 @@
 #define G_PATH_COOKIE   G_PATH_CACHES "/" "cookies.txt"
 
 #ifdef Q_WS_WIN
-#  define G_PATH_LOGS   ".."
-#  define G_PATH_DEBUG    G_PATH_LOGS "/" "Debug Browser.txt"
+#  define G_PATH_LOGS   QCoreApplication::applicationDirPath() + "/" ".."
+#  define G_PATH_DEBUG  G_PATH_LOGS "/" "Debug Browser.txt"
 #elif defined Q_WS_MAC
 #  define G_PATH_LOGS   QtMac::homeLogsPath() + "/" G_ORGANIZATION "/" G_APPLICATION
-#  define G_PATH_DEBUG    G_PATH_LOGS "/" "Debug.txt"
+#  define G_PATH_DEBUG  G_PATH_LOGS "/" "Debug.txt"
 #else
 #  define G_PATH_LOGS   G_PATH_PROFILE
-#  define G_PATH_DEBUG    G_PATH_LOGS "/" "debug.txt"
+#  define G_PATH_DEBUG  G_PATH_LOGS "/" "debug.txt"
 #endif // Q_WS_
 
 #endif // GLOBAL_H

@@ -4,18 +4,17 @@
 // consoledialog.h
 // 2/18/2012
 
-#include "module/qtext/dialog.h"
+#include "project/common/acwindow.h"
 #include <QtCore/QList>
 
 class TextEditTabView;
 
-typedef QtExt::Dialog ConsoleDialogBase;
-class ConsoleDialog : public ConsoleDialogBase
+class ConsoleDialog : public AcWindow
 {
   Q_OBJECT
   Q_DISABLE_COPY(ConsoleDialog)
   typedef ConsoleDialog Self;
-  typedef ConsoleDialogBase Base;
+  typedef AcWindow Base;
 
   static QList<Self *> instances_;
 

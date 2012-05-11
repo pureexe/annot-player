@@ -5,6 +5,7 @@
 #include "project/common/acss.h"
 #include "module/qtext/toolbutton.h"
 #include "module/qtext/toolbuttonwithid.h"
+#include "module/qtext/compactstackedlayout.h"
 #include <QtGui>
 
 #ifdef Q_OS_MAC
@@ -17,7 +18,7 @@
 
 void
 AcTabView::initializeLayout()
-{ stackLayout_ = new QStackedLayout; }
+{ stackLayout_ = new CompactStackedLayout; }
 
 void
 AcTabView::finalizeLayout()
@@ -47,16 +48,19 @@ AcTabView::finalizeLayout()
     setContentsMargins(0, 0, 0, 0);
   } setLayout(rows);
 
+  setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+  setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+
   connect(new QShortcut(QKeySequence("CTRL+0"), this),
           SIGNAL(activated()), tabButtons_[tabCount_ - 1], SLOT(click()));
   for (int i = 0; i < qMin(tabCount_,8); i++)
     connect(new QShortcut(QKeySequence("CTRL+" + QString::number(i+1)), this), SIGNAL(activated()),
             tabButtons_[i], SLOT(click()));
 
-  connect(new QShortcut(QKeySequence("CTRL+TAB"), this), SIGNAL(activated()), SLOT(nextTab()));
-  connect(new QShortcut(QKeySequence("CTRL+SHIFT+TAB"), this), SIGNAL(activated()), SLOT(previousTab()));
-  connect(new QShortcut(QKeySequence("CTRL+}"), this) , SIGNAL(activated()), SLOT(nextTab()));
-  connect(new QShortcut(QKeySequence("CTRL+{"), this) , SIGNAL(activated()), SLOT(previousTab()));
+  new QShortcut(QKeySequence("CTRL+TAB"), this, SLOT(nextTab()));
+  new QShortcut(QKeySequence("CTRL+SHIFT+TAB"), this, SLOT(previousTab()));
+  new QShortcut(QKeySequence("CTRL+}"), this, SLOT(nextTab()));
+  new QShortcut(QKeySequence("CTRL+{"), this, SLOT(previousTab()));
 
   if (tabCount_ > 0)
     setTab(0);
@@ -87,12 +91,29 @@ AcTabView::addTab(QWidget *tab)
 
 // - Actions -
 
+QSize
+AcTabView::sizeHint() const
+{
+  QSize base = Base::sizeHint();
+  QSize current;
+  if (QWidget *w = currentWidget())
+    current = w->sizeHint();
+  int headerHeight = 0;
+  if (!tabButtons_.isEmpty())
+    headerHeight = tabButtons_.first()->sizeHint().height();
+
+  int w = qMax(base.width(), current.width());
+  int h = current.height() + headerHeight;
+  return QSize(w, h);
+}
+
 void
 AcTabView::invalidateTabIndex()
 {
   stackLayout_->setCurrentIndex(tabIndex_);
   for (int i = 0; i < tabButtons_.size(); i++)
     tabButtons_[i]->setChecked(tabIndex_ == i);
+  emit tabChanged(tabIndex_);
 }
 
 void

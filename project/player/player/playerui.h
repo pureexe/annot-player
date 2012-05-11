@@ -8,13 +8,15 @@
 
 QT_FORWARD_DECLARE_CLASS(QMenu)
 
-class SignalHub;
+class FadeAnimation;
 class Player;
+class SignalHub;
 class ServerAgent;
 
 class PlayerUi : public PlayerPanel
 {
   Q_OBJECT
+  Q_PROPERTY(qreal windowOpacity READ windowOpacity WRITE setWindowOpacity)
   Q_DISABLE_COPY(PlayerUi)
   typedef PlayerUi Self;
   typedef PlayerPanel Base;
@@ -23,6 +25,7 @@ class PlayerUi : public PlayerPanel
   Player *player_;
   ServerAgent *server_;
   bool active_;
+  FadeAnimation *fadeAni_;
 
   // TODO: use signal hub_ to replace player_ and server_ signals.
 public:

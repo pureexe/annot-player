@@ -12,7 +12,7 @@
 using namespace AnnotCloud;
 using namespace Logger;
 
-//#define DEBUG "dataserver"
+#define DEBUG "dataserver"
 #include "module/debug/debug.h"
 
 // - Constructions -
@@ -310,11 +310,12 @@ DataServer::selectTokenWithDigest(const QString &digest, qint32 part)
 }
 
 AnnotationList
-DataServer::selectAnnotationsWithTokenId(qint64 tid)
+DataServer::selectAnnotationsWithTokenId(qint64 tid, bool invalidateCache)
 {
   DOUT("enter: tid =" << tid);
+  bool preferLocal = preferLocal_ && !invalidateCache;
   AnnotationList ret;
-  if (preferLocal_ && cache_->isValid())
+  if (preferLocal && cache_->isValid())
     ret = cache_->selectAnnotationsWithTokenId(tid);
   if (ret.isEmpty()) {
     if (server_->isConnected()) {
@@ -323,7 +324,7 @@ DataServer::selectAnnotationsWithTokenId(qint64 tid)
         cache_->deleteAnnotationsWithTokenId(tid);
         cache_->insertAnnotations(ret);
       }
-    } else if (!preferLocal_ && cache_->isValid())
+    } else if (!preferLocal && cache_->isValid())
       ret = cache_->selectAnnotationsWithTokenId(tid);
   }
   DOUT("exit: count =" << ret.size());
@@ -373,11 +374,12 @@ DataServer::selectRelatedAliasesWithTokenId(qint64 tid)
 }
 
 AnnotationList
-DataServer::selectRelatedAnnotationsWithTokenId(qint64 tid)
+DataServer::selectRelatedAnnotationsWithTokenId(qint64 tid, bool invalidateCache)
 {
   DOUT("enter: tid =" << tid);
+  bool preferLocal = preferLocal_ && !invalidateCache;
   AnnotationList ret;
-  if (preferLocal_ && cache_->isValid())
+  if (preferLocal && cache_->isValid())
     ret = cache_->selectAnnotationsWithTokenId(tid);
   if (ret.isEmpty()) {
     if (server_->isConnected()) {
@@ -386,7 +388,7 @@ DataServer::selectRelatedAnnotationsWithTokenId(qint64 tid)
         cache_->deleteAnnotationsWithTokenId(tid);
         cache_->insertAnnotations(ret);
       }
-    } else if (!preferLocal_ && cache_->isValid())
+    } else if (!preferLocal && cache_->isValid())
       ret = cache_->selectAnnotationsWithTokenId(tid);
   }
   DOUT("exit: count =" << ret.size());
@@ -444,11 +446,12 @@ DataServer::selectAliasesWithToken(const Token &token)
 }
 
 AnnotationList
-DataServer::selectAnnotationsWithToken(const Token &token)
+DataServer::selectAnnotationsWithToken(const Token &token, bool invalidateCache)
 {
   DOUT("enter");
+  bool preferLocal = preferLocal_ && !invalidateCache;
   AnnotationList ret;
-  if (preferLocal_ && cache_->isValid()) {
+  if (preferLocal && cache_->isValid()) {
     if (token.isValid())
       ret = cache_->selectAnnotationsWithTokenId(token.id());
     else
@@ -456,8 +459,8 @@ DataServer::selectAnnotationsWithToken(const Token &token)
   }
   if (ret.isEmpty()) {
     if (token.isValid())
-      ret = selectRelatedAnnotationsWithTokenId(token.id());
-    else if (!preferLocal_ && token.hasDigest() && cache_->isValid())
+      ret = selectRelatedAnnotationsWithTokenId(token.id(), invalidateCache);
+    else if (!preferLocal && token.hasDigest() && cache_->isValid())
       ret = cache_->selectAnnotationsWithTokenDigest(token.digest(), token.part());
   }
   DOUT("exit: count =" << ret.size());

@@ -38,14 +38,15 @@ void
 ClipboardMonitor::parseUrl(const QString &text)
 {
   QString t = text.trimmed();
-  if (t.startsWith("ttp://", Qt::CaseInsensitive))
-    t.prepend("h");
-  else if (!t.startsWith("http://", Qt::CaseInsensitive))
+  if (t.isEmpty())
     return;
-
   QStringList l = t.split('\n', QString::SkipEmptyParts);
   Q_ASSERT(!l.isEmpty());
   QString url = l.front().trimmed();
+  if (url.startsWith("ttp://"))
+    url.prepend("h");
+  else if (!url.startsWith("http://", Qt::CaseInsensitive))
+    url.prepend("http://");
   if (isSupportedAnnotationUrl(url)) {
     emit message(tr("annot URL from clipboard") + ": " + url);
     emit annotationUrlEntered(url);

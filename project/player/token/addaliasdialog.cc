@@ -25,10 +25,6 @@ AddAliasDialog::AddAliasDialog(QWidget *parent)
 
   createLayout();
 
-  // Shortcuts
-  connect(new QShortcut(QKeySequence("Esc"), this), SIGNAL(activated()), SLOT(hide()));
-  connect(new QShortcut(QKeySequence("CTRL+W"), this), SIGNAL(activated()), SLOT(hide()));
-
   // Initial status
   updateOKButton();
   aliasEdit_->setFocus();
@@ -38,7 +34,6 @@ void
 AddAliasDialog::createLayout()
 {
   AcUi *ui = AcUi::globalInstance();
-  ui->setWindowStyle(this);
 
   QStringList defvals = QStringList()
       << "DEATHNOTE 01"
@@ -99,7 +94,7 @@ AddAliasDialog::createLayout()
   okButton_ = ui->makeToolButton(
         AcUi::PushHint | AcUi::HighlightHint , TR(T_ADD), this, SLOT(ok()));
   cancelButton_ = ui->makeToolButton(
-        AcUi::PushHint, TR(T_CANCEL), this, SLOT(hide()));
+        AcUi::PushHint, TR(T_CANCEL), this, SLOT(fadeOut()));
   QToolButton *pasteButton = ui->makeToolButton(
         AcUi::PushHint, TR(T_PASTE), this, SLOT(paste()));
 
@@ -259,7 +254,7 @@ AddAliasDialog::paste()
 void
 AddAliasDialog::ok()
 {
-  hide();
+  fadeOut();
 
   QString alias = aliasEdit_->currentText().trimmed();
   if (alias.isEmpty())

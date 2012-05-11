@@ -55,7 +55,6 @@ AnnotationEditor::AnnotationEditor(QWidget *parent)
   : Base(parent, WINDOW_FLAGS), id_(0)
 {
   setWindowTitle(TR(T_TITLE_ANNOTATIONEDITOR));
-  AcUi::globalInstance()->setWindowStyle(this);
 
   textEdit_ = AcUi::globalInstance()->makeTextEdit(0, TR(T_ANNOT));
 
@@ -71,9 +70,6 @@ AnnotationEditor::AnnotationEditor(QWidget *parent)
   // Shortcuts
   saveShortcut_ = new QShortcut(QKeySequence::Save, this);
   connect(saveShortcut_, SIGNAL(activated()), SLOT(save()));
-
-  connect(new QShortcut(QKeySequence("Esc"), this), SIGNAL(activated()), SLOT(hide()));
-  connect(new QShortcut(QKeySequence("CTRL+W"), this), SIGNAL(activated()), SLOT(hide()));
 
   connect(new QShortcut(QKeySequence("CTRL+1"), this), SIGNAL(activated()), codeRibonButton_, SLOT(click()));
   connect(new QShortcut(QKeySequence("CTRL+2"), this), SIGNAL(activated()), htmlRibonButton_, SLOT(click()));
@@ -356,7 +352,7 @@ AnnotationEditor::createRibons()
     cancelButton_->setText(QString("[ %1 ]").arg(TR(T_CANCEL)));
     cancelButton_->setToolTip(TR(T_CANCEL) + " [ESC]");
   }
-  connect(cancelButton_, SIGNAL(clicked()), SLOT(cancel()));
+  connect(cancelButton_, SIGNAL(clicked()), SLOT(fadeOut()));
 
 #undef MAKE_CHECKABLE_BUTTON
 }
@@ -623,16 +619,12 @@ AnnotationEditor::setRenderEffect(int index)
 void
 AnnotationEditor::save()
 {
-  hide();
+  fadeOut();
 
   QString t = text();
   if (!t.isEmpty())
     emit textSaved(t);
 }
-
-void
-AnnotationEditor::cancel()
-{ hide(); }
 
 void
 AnnotationEditor::setCodeMode()

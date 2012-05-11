@@ -59,7 +59,7 @@ WbNetworkAccessManager::createRequest(Operation op, const QNetworkRequest &req, 
       QNetworkRequest r(::rc_image_null_());
       return Base::createRequest(op, r, outgoingData);
     } else if (host == "www.nicovideo.jp") {
-      if (url.path().startsWith("/watch")
+      if (url.path().startsWith("/watch/")
            //|| host == "ext.nicovideo.jp" && url.path().startsWith("/thumb_watch") // disabled, not working at the time
          ) {
         DOUT("nico request =" << url.toString());
@@ -68,6 +68,12 @@ WbNetworkAccessManager::createRequest(Operation op, const QNetworkRequest &req, 
         r.setUrl(encodeNicoUrl(url));
         return Base::createRequest(op, r, outgoingData);
       }
+    } else if (host == PROXY_HOST && url.path().startsWith("/watch/")) {
+      DOUT("nico watch request =" << url.toString());
+      QNetworkRequest r = req;
+      DOUT("nico watch delegate =" << encodeNicoWatchUrl(url).toString());
+      r.setUrl(encodeNicoWatchUrl(url));
+      return Base::createRequest(op, r, outgoingData);
     } else if (host == "v.youku.com") {
       if (url.path().startsWith("/player/getPlayList/VideoIDS/")) {
         DOUT("youku request =" << url.toString());
@@ -83,7 +89,7 @@ WbNetworkAccessManager::createRequest(Operation op, const QNetworkRequest &req, 
       r.setUrl(_encode(url)); \
       return Base::createRequest(op, r, outgoingData); \
     }
-    ELIF("erogamescape.dyndns.org", encodeAb2Url)
+    ELIF("erogamescape.dyndns.org", encodeEroUrl)
     ELIF("akabeesoft2.com", encodeAb2Url)
     ELIF("syangrila.com", encodeSyangrilaUrl)
     ELIF("akatsukiworks.com", encodeAkatsukiWorksUrl)
@@ -130,6 +136,15 @@ WbNetworkAccessManager::encodeNicoUrl(const QUrl &url)
   if (!u.isEmpty() && u[0] != '/')
     u.prepend('/');
   return QString("http://" PROXY_HOST "/nico/%1%2").arg(t).arg(u);
+}
+
+QUrl
+WbNetworkAccessManager::encodeNicoWatchUrl(const QUrl &url)
+{
+  QUrl ret = url;
+  ret.setHost(PROXY_HOST);
+  ret.setPath(ret.path().prepend("/nico/www"));
+  return ret;
 }
 
 QUrl

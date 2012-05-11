@@ -20,13 +20,12 @@ QT_END_NAMESPACE
 
 class AcFilteredTableView;
 
-typedef QtExt::Dialog ProcessViewBase;
-class ProcessView : public ProcessViewBase
+class ProcessView : public QtExt::Dialog
 {
   Q_OBJECT
   Q_DISABLE_COPY(ProcessView)
   typedef ProcessView Self;
-  typedef ProcessViewBase Base;
+  typedef QtExt::Dialog Base;
 
 protected:
   enum ProcessHeaderData {

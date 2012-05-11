@@ -1,7 +1,7 @@
 # player.pro
 # 6/30/2011
 
-VERSION = 0.1.5.3
+VERSION = 0.1.5.4
 
 DEFINES += PROJECT_PLAYER
 
@@ -12,6 +12,7 @@ include($$ROOTDIR/module/debug/debug.pri)
 
 ## Libraries
 
+include($$ROOTDIR/module/animation/animation.pri)
 include($$ROOTDIR/module/annotcloud/annotcloud.pri)
 include($$ROOTDIR/module/annotcodec/annotcodec.pri)
 include($$ROOTDIR/module/blockiodevice/blockiodevice.pri)
@@ -21,10 +22,12 @@ include($$ROOTDIR/module/download/download.pri)
 include($$ROOTDIR/module/graphicseffect/graphicseffect.pri)
 include($$ROOTDIR/module/gsoap/gsoap.pri)       # would static linking cause license conflicts?
 include($$ROOTDIR/module/ioutil/ioutil.pri)
+include($$ROOTDIR/module/magnifier/magnifier.pri)
 include($$ROOTDIR/module/mediacodec/mediacodec.pri)
 include($$ROOTDIR/module/mrlresolver/mrlresolver.pri)
 include($$ROOTDIR/module/nicoutil/nicoutil.pri)
 include($$ROOTDIR/module/player/player.pri)
+include($$ROOTDIR/module/pixmapfilter/pixmapfilter.pri)
 include($$ROOTDIR/module/qt/qt.pri)
 include($$ROOTDIR/module/qtext/qtext.pri)
 include($$ROOTDIR/module/searchengine/searchengine.pri)
@@ -78,7 +81,7 @@ mac:   TARGET = "Annot Player"
 
 win32: CONFIG += windows
 
-SUBPATH = \
+MYPATH = \
     $$PWD \
     $$PWD/annot \
     $$PWD/command \
@@ -93,8 +96,8 @@ SUBPATH = \
     $$PWD/tr \
     $$PWD/user \
     $$PWD/util
-INCLUDEPATH     += $$SUBPATH
-DEPENDPATH      += $$SUBPATH
+INCLUDEPATH     += $$MYPATH
+DEPENDPATH      += $$MYPATH
 
 HEADERS += \
     application.h \
@@ -123,7 +126,6 @@ HEADERS += \
     data/dataserver.h \
     db/db_config.h \
     db/db.h \
-    dialog/aboutdialog.h \
     dialog/annotationcountdialog.h \
     dialog/backlogdialog.h \
     dialog/consoledialog.h \
@@ -136,12 +138,10 @@ HEADERS += \
     dialog/logindialog.h \
     dialog/mediainfoview.h \
     dialog/mediaurldialog.h \
-    dialog/networkproxydialog.h \
     dialog/pickdialog.h \
     dialog/seekdialog.h \
     dialog/shutdowndialog.h \
     dialog/sleepdialog.h \
-    dialog/siteaccountview.h \
     dialog/suburldialog.h \
     dialog/syncdialog.h \
     dialog/urldialog.h \
@@ -163,6 +163,7 @@ HEADERS += \
     signal/signalhub.h \
     token/addaliasdialog.h \
     token/tokenview.h \
+    user/useranalyticsview.h \
     user/userview.h \
     util/closewidgetthread.h \
     util/grabber.h \
@@ -195,7 +196,6 @@ SOURCES += \
     data/datamanager.cc \
     data/dataserver.cc \
     db/db.cc \
-    dialog/aboutdialog.cc \
     dialog/annotationcountdialog.cc \
     dialog/backlogdialog.cc \
     dialog/consoledialog.cc \
@@ -208,12 +208,10 @@ SOURCES += \
     dialog/logindialog.cc \
     dialog/mediainfoview.cc \
     dialog/mediaurldialog.cc \
-    dialog/networkproxydialog.cc \
     dialog/pickdialog.cc \
     dialog/seekdialog.cc \
     dialog/shutdowndialog.cc \
     dialog/sleepdialog.cc \
-    dialog/siteaccountview.cc \
     dialog/suburldialog.cc \
     dialog/syncdialog.cc \
     dialog/urldialog.cc \
@@ -232,6 +230,7 @@ SOURCES += \
     signal/signalhub.cc \
     token/addaliasdialog.cc \
     token/tokenview.cc \
+    user/useranalyticsview.cc \
     user/userview.cc \
     util/grabber.cc \
     util/logger.cc \

@@ -1,6 +1,10 @@
 # TODO
 # 6/18/2011
+
 http://db.tt/SrtkzxIJ
+cleanup_aoisora_movie
+zhouxingchi 115 mkv
+94 shediao & 2000 bishejian 115
 
 # server
 - move wiki to sakuradite
@@ -28,54 +32,69 @@ http://db.tt/SrtkzxIJ
         integrate SNS
         freedom, anntotate deathnote
 
-# client
-- player
-  able to limit annotationgraphicsview position
-  say, only a portion of the screen
+# 0.1.5.4
 - windows
-  - improve annotation render, make it at least not worse than that on mac
-  - try graphicsrippleeffect
-- common
-  - add AcApplication, combine singleapplication, messagehandlers, etc
-  - preferences
-    - make association changable
-  - windows: change download folder icon to the one in mac
+  - debug
+        * LeftButton + RightButton: Select annotations
+          LeftButton + MiddleButton: Remove annotations
+          MiddleButton + RightButton: Release annotations
+  - move magnifier just below mouse in windows by grabbing mouse location in qtwin
+  - enable magnifier on game mode
+    use desktop wid and globalpos
+- mac
+  - debug translation of menubar, such as preferences
+
+# client
+- mac
+  - rippleEffect
+    - reduce CPU usage by removing background image
+      - using scaling
+- player
+  - FIXME: downloading get banned
+  - win: debug and select the same font as mac
+    - improve feelings on Windows XP/7
 - downloader
-  - option to copy url/open contextMenu in browser/open in player
-  - download: add filesave location option in add.*dialog
+  - FIXME: only one file is saved at a time
+
+- android
+  http://sourceforge.net/p/necessitas/wiki/How%20to%20write%20Qt%20apps%20for%20Android/
+- downloader
   - change to use qtreeview to indicate connection status
-    http://qt-project.org/doc/qt-4.8/qtreeview.html
   - color diff type of task according to its state
+- browser
+  - show loading progress in addressedit using css
+  - change path of addressline to path like buttons
+  - debug connect link clicked signal to address
+  - save list of icons for recent files as well
+    qdatastream << qicon
+- player
+  - able to limit annotationgraphicsview position
+    say, only a portion of the screen
+  - stream multiple video at once
+- downloader
+  - download: add filesave location option in add.*dialog
+    http://qt-project.org/doc/qt-4.8/qtreeview.html
   - debug download 2 files from nico bug
 - player
-  - gradually transparency startup
   - reduce action count
-  - left+right with ripple effect
+    create non-related actions directly in menu
+  - able to change audio channel
   - wait while diff filetype?
   - reduce buffering time
   - FIXME: pinch gesture not received
 - browser
-  - FIXME: cannot play video on bilibili.tv
-  - auto login as settings
-  - FIXME: cannot play video on bilibili.tv
-  - debug connect link clicked signal to address
-  - show loading progress in addressedit using css
-  - change path of addressline to path like buttons
   - merge webrowser module with browser project and accommon
-
+  - FIXME: cannot play video on bilibili.tv
+  - debug failure on no-internet state
+  - auto login as settings
 - common
+  - preferences
+    - make association changable
   - learn the source code of ith's updater
-- player
-  - finish halo effect by modifying qt_blurImage
-  - add transparency effect
-  - stream multiple video at once
 - windows
   - migrate to ith3
     inject.cc => ihf/main.cpp
     pipe.cc => ihf_dll/pipe.cpp
-- browser
-  - save list of icons for recent files as well
-    qdatastream << qicon
 - linux
   - FIXME: full screen issue
   - FIXME: mouse click behavior in osd mode

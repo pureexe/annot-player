@@ -32,15 +32,12 @@ UrlDialog::UrlDialog(QWidget *parent)
   Q_ASSERT(server_);
 
   createLayout();
-
-  edit_->setFocus();
 }
 
 void
 UrlDialog::createLayout()
 {
   AcUi *ui = AcUi::globalInstance();
-  ui->setWindowStyle(this);
 
   QString holder = tr("http://www.nicovideo.jp/watch/123456");
   edit_ = ui->makeComboBox(AcUi::EditHint, "", TR(T_URL), holder);
@@ -106,11 +103,8 @@ UrlDialog::createLayout()
   );
 
   // Shortcuts
-  connect(new QShortcut(QKeySequence("Esc"), this), SIGNAL(activated()), SLOT(hide()));
-  connect(new QShortcut(QKeySequence("CTRL+W"), this), SIGNAL(activated()), SLOT(hide()));
-
-  connect(new QShortcut(QKeySequence("CTRL+="), this), SIGNAL(activated()), SLOT(increase()));
-  connect(new QShortcut(QKeySequence("CTRL+-"), this), SIGNAL(activated()), SLOT(decrease()));
+  new QShortcut(QKeySequence("CTRL+="), this, SLOT(increase()));
+  new QShortcut(QKeySequence("CTRL+-"), this, SLOT(decrease()));
 }
 
 // - Slots -
@@ -118,7 +112,7 @@ UrlDialog::createLayout()
 void
 UrlDialog::open()
 {
-  hide();
+  fadeOut();
   QString url = text().trimmed();
   if (url.isEmpty() || url == "http://")
     return;
@@ -183,13 +177,14 @@ QString
 UrlDialog::autoCompleteUrl(const QString &url)
 {
   QString ret = url.trimmed();
-  if (!url.contains("://"))
-    ret = "http://" + ret;
-  else if (url.startsWith("ttp://"))
+  if (url.startsWith("ttp://"))
     ret.prepend('h');
+  else if (!url.startsWith("http://", Qt::CaseInsensitive))
+    ret.prepend("http://");
 
   ret.remove(QRegExp("#$"));
   ret.replace(QRegExp("/index.html$", Qt::CaseInsensitive), "/");
+  ret.replace(QRegExp("/index_1.html$", Qt::CaseInsensitive), "/");
   ret.replace(QRegExp("/#$"), "/");
 
   return ret;
@@ -216,6 +211,16 @@ UrlDialog::addHistory(const QString &url)
 
   if (edit_->currentText().trimmed().isEmpty())
     edit_->setEditText(url);
+}
+
+// - Events -
+
+void
+UrlDialog::setVisible(bool visible)
+{
+  if (visible)
+    edit_->setFocus();
+  Base::setVisible(visible);
 }
 
 // EOF

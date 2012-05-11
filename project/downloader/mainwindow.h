@@ -5,6 +5,7 @@
 // 2/17/2012
 
 #include "project/common/acmainwindow.h"
+#include "module/searchengine/searchenginefactory.h"
 
 QT_BEGIN_NAMESPACE
 class QAbstractItemModel;
@@ -18,17 +19,19 @@ class QTimer;
 class QToolButton;
 QT_END_NAMESPACE
 
-class AcFilteredListView;
-class AcDownloaderServer;
-class TaskDialog;
-
 struct DownloadTaskInfo;
-class MrlResolver;
+class AcAbout;
+class AcBrowser;
+class AcDownloaderServer;
+class AcFilteredListView;
+class AcPlayer;
+class AcPreferences;
+class ClipboardMonitor;
 class DownloadManager;
 class DownloadTask;
-class ClipboardMonitor;
+class MrlResolver;
 class Signer;
-class AcPlayer;
+class TaskDialog;
 class TrayIcon;
 
 class MainWindow : public AcMainWindow
@@ -62,6 +65,7 @@ public:
 
 public slots:
   void clear();
+  void quit();
   //void removeCurrent();
 
   void checkClipboard();
@@ -81,10 +85,12 @@ public slots:
 protected:
   static void setHeaderData(QAbstractItemModel *model);
   int currentId() const;
+  QString currentTitle() const;
   DownloadTask *currentTask() const;
 
 protected slots:
   void about();
+  void preferences();
   void add();
   void start();
   void restart();
@@ -93,13 +99,18 @@ protected slots:
   void removeAll();
   void stop();
   void remove();
-  void open();
+  void play();
+  void browse();
 
   void refresh();
   void updateButtons();
   void updateActions();
+  void updateCopyMenu();
 
   void finish(DownloadTask *task);
+
+  void copyTitle();
+  void copyUrl();
 
 protected:
   QString downloadStateToString(int state) const;
@@ -109,12 +120,27 @@ protected:
 
   TaskDialog *taskDialog();
 
+protected:
+  void searchWithEngine(int engine, const QString &key);
+protected slots:
+  void searchCurrentTitleWithGoogle() { searchWithEngine(SearchEngineFactory::Google, currentTitle()); }
+  void searchCurrentTitleWithGoogleImages() { searchWithEngine(SearchEngineFactory::GoogleImages, currentTitle()); }
+  void searchCurrentTitleWithBing()   { searchWithEngine(SearchEngineFactory::Bing, currentTitle()); }
+  void searchCurrentTitleWithNicovideo() { searchWithEngine(SearchEngineFactory::Nicovideo, currentTitle()); }
+  void searchCurrentTitleWithBilibili() { searchWithEngine(SearchEngineFactory::Bilibili, currentTitle()); }
+  void searchCurrentTitleWithAcfun()  { searchWithEngine(SearchEngineFactory::Acfun, currentTitle()); }
+  void searchCurrentTitleWithYoutube() { searchWithEngine(SearchEngineFactory::Youtube, currentTitle()); }
+  void searchCurrentTitleWithYouku()  { searchWithEngine(SearchEngineFactory::Youku, currentTitle()); }
+  void searchCurrentTitleWithWikiEn() { searchWithEngine(SearchEngineFactory::WikiEn, currentTitle()); }
+  void searchCurrentTitleWithWikiJa() { searchWithEngine(SearchEngineFactory::WikiJa, currentTitle()); }
+  void searchCurrentTitleWithWikiZh() { searchWithEngine(SearchEngineFactory::WikiZh, currentTitle()); }
+
   // - Events -
 public:
   virtual bool event(QEvent *event); ///< \override
 protected:
   virtual void contextMenuEvent(QContextMenuEvent *e); ///< \override
-  virtual void keyReleaseEvent(QKeyEvent *e); ///< \override
+  virtual void keyPressEvent(QKeyEvent *e); ///< \override
   virtual void closeEvent(QCloseEvent *e); ///< \override
 
   //void gestureEvent(QGestureEvent *e);
@@ -122,14 +148,20 @@ protected:
 private:
   void createModels();
   void createLayout();
+  void createSearchEngines();
   void createActions();
 private:
+  AcAbout *about_;
+  AcPreferences *preferences_;
   AcDownloaderServer *appServer_;
+  AcBrowser *browserDelegate_;
   AcPlayer *playerDelegate_;
   TrayIcon *trayIcon_;
   DownloadManager *downloadManager_;
   ClipboardMonitor *clipboardMonitor_;
   Signer *signer_;
+
+  QList<SearchEngine *> searchEngines_;
 
   TaskDialog *taskDialog_;
   AcFilteredListView *tableView_;
@@ -140,12 +172,14 @@ private:
               *stopButton_,
               *removeButton_,
               *addButton_,
-              *openButton_,
+              *playButton_,
+              *browseButton_,
               *openDirectoryButton_;
 
   QTimer *refreshTimer_;
 
   QMenu *contextMenu_;
+  QMenu *copyMenu_;
   QAction *newAct_,
           *menuBarAct_,
           *startAct_,
@@ -155,8 +189,12 @@ private:
           *stopAllAct_,
           *removeAllAct_,
           *removeAct_,
-          *openAct_,
+          *playAct_,
+          *browseAct_,
           *openDirectoryAct_;
+
+  QAction *copyTitleAct_,
+          *copyUrlAct_;
 
   QAction *quitAct_,
           *hideAct_;

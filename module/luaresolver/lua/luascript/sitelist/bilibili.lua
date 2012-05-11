@@ -1,23 +1,5 @@
-
----[[by lostangel 20100603]]
----[[edit 20110117 edit for bilibili embed tag changed]]
----[[add 20110119 bilibili login]]
----[[edit 20110215 bilibili subxml url changed]]
----[[edit 20110216 add parse for 6cn]]
----[[edit 20110402 bilibili subxml url changed]]
----[[edit 20110409 bilibili one line source html]]
----[[edit 20110414 bilibili for cannot extract multiple subpages.]]
----[[edit 20110415 bilibili for multiline vice descriptor]]
----[[edit 20110503 bilibili change ui]]
----[[edit 20110504 for batch one line source html]]
----[[edit 20110514 for bilibili inner video url parse]]
----[[edit 20110515 for login hint]]]
----[[edit 20110625 for bilibili.tv]]
----[[edit 20110731 for bilibili.tv batch parse for /avxxxxxx ori is /avxxxxxx/]]
----[[edit 20110815 for bilibili.tv rid (6cn) replace "=" for "/"]]
----[[edit 20110922 for suburl change to comment.bilibili.tv]]
----[[edit 20111206 for bilibili batch ]]
----[[edit 20111206 for bilibili no src html when batch ]]
+-- bilibili.lua
+-- 2011/12/6
 
 require "lalib"
 require "login"
@@ -34,7 +16,7 @@ function getTaskAttribute_bilibili ( str_url, str_tmpfile, pDlg, isNeedLogin, bS
 
   --dbgMessage("bilibili parse begin!");
   if pDlg~=nil then
-    sShowMessage(pDlg, '¿ªÊ¼½âÎö..');
+    sShowMessage(pDlg, 'å¼€å§‹è§£æ..');
   end
   local int_acfpv = getACFPV ( str_url );
 
@@ -53,12 +35,12 @@ function getTaskAttribute_bilibili ( str_url, str_tmpfile, pDlg, isNeedLogin, bS
   if re~=0
   then
     if pDlg~=nil then
-      sShowMessage(pDlg, '¶ÁÈ¡Ô­Ê¼Ò³Ãæ´íÎó¡£');
+      sShowMessage(pDlg, 'è¯»å–åŸå§‹é¡µé¢é”™è¯¯ã€‚');
     end
     return;
   else
     if pDlg~=nil then
-      sShowMessage(pDlg, 'ÒÑ¶ÁÈ¡Ô­Ê¼Ò³Ãæ£¬ÕıÔÚ·ÖÎö...');
+      sShowMessage(pDlg, 'å·²è¯»å–åŸå§‹é¡µé¢ï¼Œæ­£åœ¨åˆ†æ...');
     end
   end
 
@@ -67,7 +49,7 @@ function getTaskAttribute_bilibili ( str_url, str_tmpfile, pDlg, isNeedLogin, bS
   if file==nil
   then
     if pDlg~=nil then
-      sShowMessage(pDlg, '¶ÁÈ¡Ô­Ê¼Ò³Ãæ´íÎó¡£');
+      sShowMessage(pDlg, 'è¯»å–åŸå§‹é¡µé¢é”™è¯¯ã€‚');
     end
     return;
   end
@@ -79,15 +61,15 @@ function getTaskAttribute_bilibili ( str_url, str_tmpfile, pDlg, isNeedLogin, bS
 
   --dbgMessage(str_title);
 
-  if str_title == "ĞÅÏ¢ÌáÊ¾." then
-    dbgMessage("¸ÃÊÓÆµĞèÒªÄúÏÈÊ¹ÓÃIEµÇÂ¼bilibili£¬»ò¿ªÆôÊ¹ÓÃacfunlocalizerµÄ×Ô¶¯µÇÂ¼¹¦ÄÜ£¬·ñÔò¿ÉÄÜ³öÏÖ´íÎó¡£");
+  if str_title == "ä¿¡æ¯æç¤º." then
+    dbgMessage("è¯¥è§†é¢‘éœ€è¦æ‚¨å…ˆä½¿ç”¨IEç™»å½•bilibiliï¼Œæˆ–å¼€å¯ä½¿ç”¨acfunlocalizerçš„è‡ªåŠ¨ç™»å½•åŠŸèƒ½ï¼Œå¦åˆ™å¯èƒ½å‡ºç°é”™è¯¯ã€‚");
   end
 
   --readin vice descriptor
     
     -- FIXME jichi 2/1/2011:
     -- cus utf8_to_lua is not implemented, WCHAR matching is broken
-  --readUntilFromUTF8(file, "Ö÷ Ò³</a>", str_title_line);
+  --readUntilFromUTF8(file, "ä¸» é¡µ</a>", str_title_line);
 
   str_line = readUntilFromUTF8(file, "<div id=\"alist\"", str_title_line);
   --dbgMessage(str_line);
@@ -162,7 +144,7 @@ function getTaskAttribute_bilibili ( str_url, str_tmpfile, pDlg, isNeedLogin, bS
 --dbgMessage(str_line);
   if str_embed==nil then
     if pDlg~=nil then
-      sShowMessage(pDlg, "Ã»ÓĞÕÒµ½Ç¶ÈëµÄflash²¥·ÅÆ÷");
+      sShowMessage(pDlg, "æ²¡æœ‰æ‰¾åˆ°åµŒå…¥çš„flashæ’­æ”¾å™¨");
     end
     io.close(file);
     return;
@@ -234,7 +216,7 @@ function getTaskAttribute_bilibili ( str_url, str_tmpfile, pDlg, isNeedLogin, bS
   if str_id == ""
   then
     if pDlg~=nil then
-      sShowMessage(pDlg, '½âÎöFLV ID´íÎó¡£');
+      sShowMessage(pDlg, 'è§£æFLV IDé”™è¯¯ã€‚');
     end
     return;
   end
@@ -279,7 +261,7 @@ function getTaskAttribute_bilibili ( str_url, str_tmpfile, pDlg, isNeedLogin, bS
   end
 
   if pDlg~=nil then
-    sShowMessage(pDlg, 'Íê³É½âÎö..');
+    sShowMessage(pDlg, 'å®Œæˆè§£æ..');
   end
 
   local _, _, str_biliid = string.find(str_url, "video/av(%d+)");
@@ -318,7 +300,7 @@ function getTaskAttributeBatch_bilibili ( str_url, str_tmpfile , pDlg)
   end
 
   if pDlg~=nil then
-    sShowMessage(pDlg, '¿ªÊ¼½âÎö..');
+    sShowMessage(pDlg, 'å¼€å§‹è§£æ..');
   end
 
   --[[check login]]
@@ -333,12 +315,12 @@ function getTaskAttributeBatch_bilibili ( str_url, str_tmpfile , pDlg)
   if re~=0
   then
     if pDlg~=nil then
-      sShowMessage(pDlg, '¶ÁÈ¡Ô­Ê¼Ò³Ãæ´íÎó¡£');
+      sShowMessage(pDlg, 'è¯»å–åŸå§‹é¡µé¢é”™è¯¯ã€‚');
     end
     return;
   else
     if pDlg~=nil then
-      sShowMessage(pDlg, 'ÒÑ¶ÁÈ¡Ô­Ê¼Ò³Ãæ£¬ÕıÔÚ·ÖÎö...');
+      sShowMessage(pDlg, 'å·²è¯»å–åŸå§‹é¡µé¢ï¼Œæ­£åœ¨åˆ†æ...');
     end
   end
 
@@ -346,7 +328,7 @@ function getTaskAttributeBatch_bilibili ( str_url, str_tmpfile , pDlg)
   if file==nil
   then
     if pDlg~=nil then
-      sShowMessage(pDlg, '¶ÁÈ¡Ô­Ê¼Ò³Ãæ´íÎó¡£');
+      sShowMessage(pDlg, 'è¯»å–åŸå§‹é¡µé¢é”™è¯¯ã€‚');
     end
     return;
   end
@@ -359,8 +341,8 @@ function getTaskAttributeBatch_bilibili ( str_url, str_tmpfile , pDlg)
   --readin vice descriptor
     -- FIXME jichi 2/1/2011:
     -- cus utf8_to_lua is not implemented, WCHAR matching is broken
-  --readUntilFromUTF8(file, "Ö÷ Ò³</a>", str_title_line);
-  --str_line = readUntilFromUTF8(file, "Ö÷ Ò³</a>", str_line);
+  --readUntilFromUTF8(file, "ä¸» é¡µ</a>", str_title_line);
+  --str_line = readUntilFromUTF8(file, "ä¸» é¡µ</a>", str_line);
   --dbgMessage(str_line);
   str_line = readUntilFromUTF8(file, "<div id=\"alist\"", str_line);
   --dbgMessage(str_line);
@@ -447,7 +429,7 @@ function getTaskAttributeBatch_bilibili ( str_url, str_tmpfile , pDlg)
     local str_index = string.format("%d", ti);
     --dbgMessage(str_index);
     --dbgMessage(tbl_shorturls[str_index]);
-    sShowMessage(pDlg, string.format("ÕıÔÚ½âÎöµØÖ·(%d/%d)\"%s\",ÇëµÈ´ı..",ti+1,index,tbl_shorturls[str_index]));
+    sShowMessage(pDlg, string.format("æ­£åœ¨è§£æåœ°å€(%d/%d)\"%s\",è¯·ç­‰å¾…..",ti+1,index,tbl_shorturls[str_index]));
     for tj = 0, 5, 1 do
       local str_son_url = urlprefix..tbl_shorturls[str_index];
       --dbgMessage(str_son_url);
@@ -463,7 +445,7 @@ function getTaskAttributeBatch_bilibili ( str_url, str_tmpfile , pDlg)
 
   end
 
-  sShowMessage(pDlg, string.format("½âÎöÍê±Ï, ¹²ÓĞ%d¸öÊÓÆµ",index2));
+  sShowMessage(pDlg, string.format("è§£æå®Œæ¯•, å…±æœ‰%dä¸ªè§†é¢‘",index2));
 
   return tbl_re;
 

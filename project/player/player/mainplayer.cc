@@ -8,6 +8,8 @@
 #include <QtCore>
 #include <QtGui>
 
+//#define VOLUMN_SLIDE_MAX_WIDTH 30
+
 // + MainPlayerDock +
 
 MainPlayerDock::MainPlayerDock(QWidget *parent)
@@ -42,6 +44,7 @@ MainPlayerUi::MainPlayerUi(SignalHub *hub, Player *player, ServerAgent *server, 
 void
 MainPlayerUi::createLayout()
 {
+  //volumeSlider()->setMaximumWidth(VOLUMN_SLIDE_MAX_WIDTH);
   // Set layout
   QVBoxLayout *rows = new QVBoxLayout; {
     QHBoxLayout *row1 = new QHBoxLayout,

@@ -77,7 +77,7 @@ AcAbout::createLayout()
   // Components
 
   QToolButton *okButton = AcUi::globalInstance()->makeToolButton(
-       AcUi::PushHint, tr("OK"), this, SLOT(hide()));
+       AcUi::PushHint, tr("OK"), this, SLOT(fadeOut()));
 
   textEdit_ = AcUi::globalInstance()->makeTextEdit(
       AcUi::ReadOnlyHint, tr("About"));
@@ -97,10 +97,6 @@ AcAbout::createLayout()
   setContentsMargins(4, 4, 4, patch);
 
   resize(WINDOW_SIZE);
-
-  // Shortcuts
-  connect(new QShortcut(QKeySequence("Esc"), this), SIGNAL(activated()), SLOT(hide()));
-  connect(new QShortcut(QKeySequence("CTRL+W"), this), SIGNAL(activated()), SLOT(hide()));
 
   // Focus
   okButton->setFocus();

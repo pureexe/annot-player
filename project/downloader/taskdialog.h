@@ -42,6 +42,7 @@ protected slots:
   void clear();
 protected:
   QString lastUrl() const;
+  static QString formatUrl(const QString &url);
 private:
   void createLayout();
 };

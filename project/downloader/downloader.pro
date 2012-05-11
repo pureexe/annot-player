@@ -1,7 +1,7 @@
 # downloader.pro
 # 3/29/2012
 
-VERSION = 0.1.1.2
+VERSION = 0.1.1.3
 
 DEFINES += PROJECT_DOWNLOADER
 
@@ -11,6 +11,7 @@ include($$ROOTDIR/module/debug/debug.pri)
 
 ## Libraries
 
+include($$ROOTDIR/module/animation/animation.pri)
 include($$ROOTDIR/module/annotcloud/annotcloud.pri)
 include($$ROOTDIR/module/gsoap/gsoap.pri)
 include($$ROOTDIR/module/compress/compress.pri)
@@ -21,6 +22,7 @@ include($$ROOTDIR/module/mediacodec/mediacodec.pri)
 include($$ROOTDIR/module/mrlresolver/mrlresolver.pri)
 include($$ROOTDIR/module/qt/qt.pri)
 include($$ROOTDIR/module/qtext/qtext.pri)
+include($$ROOTDIR/module/searchengine/searchengine.pri)
 include($$ROOTDIR/module/serveragent/serveragent.pri)
 include($$ROOTDIR/module/stream/stream.pri)
 
@@ -52,9 +54,6 @@ unix:   TARGET = annot-down
 mac:   TARGET = "Annot Downloader"
 
 win32: CONFIG += windows
-
-INCLUDEPATH     += $$SUBPATH
-DEPENDPATH      += $$SUBPATH
 
 HEADERS += \
     application.h \

@@ -24,7 +24,7 @@ AnnotationCodecManager::AnnotationCodecManager(QObject *parent)
   } codecs_.append(c);
 
   ADD(BilibiliCodec)
-  ADD(AcFunCodec)
+  ADD(AcfunCodec)
   ADD(NicovideoCodec)
 #undef ADD
 }

@@ -4,18 +4,17 @@
 // addaliasdialog.h
 // 10/13/2011
 
-#include "module/qtext/dialog.h"
+#include "project/common/acwindow.h"
 
 QT_FORWARD_DECLARE_CLASS(QComboBox)
 QT_FORWARD_DECLARE_CLASS(QToolButton)
 
-typedef QtExt::Dialog AddAliasDialogBase;
-class AddAliasDialog : public AddAliasDialogBase
+class AddAliasDialog : public AcWindow
 {
   Q_OBJECT
   Q_DISABLE_COPY(AddAliasDialog)
   typedef AddAliasDialog Self;
-  typedef AddAliasDialogBase Base;
+  typedef AcWindow Base;
 
 public:
   explicit AddAliasDialog(QWidget *parent = 0);

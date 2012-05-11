@@ -12,6 +12,12 @@
 #  pragma GCC diagnostic ignored "-Wparentheses" // suggest parentheses around assignment
 #endif // __GNUC__
 
+#ifdef Q_WS_MAC
+#  define K_META  "META"
+#else
+#  define K_META  "ALT"
+#endif // Q_WS_MAC
+
 // - Construction -
 
 WbWebView::WbWebView(QWidget *parent)
@@ -62,13 +68,12 @@ WbWebView::createActions()
   fullScreenAct_ = new QAction(this); {
     fullScreenAct_->setText(tr("Toggle Full Screen"));
     fullScreenAct_->setStatusTip(tr("Toggle Full Screen"));
-    fullScreenAct_->setShortcut(QKeySequence("CTRL+META+F"));
+    fullScreenAct_->setShortcut(QKeySequence("CTRL+" K_META "+F"));
     connect(fullScreenAct_, SIGNAL(triggered()), SIGNAL(fullScreenRequested()));
   }
   menuBarAct_ = new QAction(this); {
     menuBarAct_->setText(tr("Toggle Menu Bar"));
     menuBarAct_->setStatusTip(tr("Toggle Menu Bar"));
-    menuBarAct_->setShortcut(QKeySequence("ALT"));
     connect(menuBarAct_, SIGNAL(triggered()), SIGNAL(toggleMenuBarVisibleRequested()));
   }
 
@@ -92,7 +97,7 @@ WbWebView::contextMenuEvent(QContextMenuEvent *event)
 {
   updateHoveredLink();
   Q_ASSERT(event);
-  QMenu *m = new QMenu(this);
+  QMenu *m = new QMenu;
 
   currentUrl_ = hoveredLink();
   QString selectedLink = selectedUrl();
@@ -158,6 +163,7 @@ WbWebView::contextMenuEvent(QContextMenuEvent *event)
   m->addSeparator();
   QMenu *history = createHistoryMenu();
   if (history) {
+    //history->setParent(this);
     m->addMenu(history);
     m->addSeparator();
   }
@@ -177,8 +183,8 @@ WbWebView::contextMenuEvent(QContextMenuEvent *event)
   m->addAction(menuBarAct_);
 #endif // Q_WS_WIN
 
+  scm->setParent(this); // WebKit bug: randomly crash if invoke delete scm
   m->exec(event->globalPos());
-  delete scm;
   delete m;
   if (history)
     delete history;
@@ -202,6 +208,10 @@ WbWebView::selectedUrl() const
   ret = ret.split('\n', QString::SkipEmptyParts).first();
   if (ret.contains(QRegExp("[a-zA-Z]{3,5}://[a-zA-Z]")))
     return ret;
+  else if (ret.startsWith("www."))
+    return ret.prepend("http://");
+  else if (ret.startsWith("ttp://"))
+    return ret.prepend('h');
   else
     return QString();
 }

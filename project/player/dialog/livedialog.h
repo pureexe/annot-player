@@ -4,18 +4,17 @@
 // livedialog.h
 // 10/7/2011
 
-#include "module/qtext/dialog.h"
+#include "project/common/acwindow.h"
 #include <QtCore/QList>
 
 QT_FORWARD_DECLARE_CLASS(QComboBox)
 
-typedef QtExt::Dialog LiveDialogBase;
-class LiveDialog : public LiveDialogBase
+class LiveDialog : public AcWindow
 {
   Q_OBJECT
   Q_DISABLE_COPY(LiveDialog)
   typedef LiveDialog Self;
-  typedef LiveDialogBase Base;
+  typedef AcWindow Base;
 
   QComboBox *comboBox_;
 

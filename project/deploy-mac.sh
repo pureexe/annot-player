@@ -8,7 +8,7 @@ cd "$PREFIX"  || exit 1
 ## environment
 
 COLOR=purple
-VERSION=0.1.5.3
+VERSION=0.1.5.4
 DMG_SIZE=200m
 
 TARGET="Annot Stream"
@@ -62,7 +62,7 @@ dos2unix "Read Me.txt"
 dos2unix ChangeLog.txt
 dos2unix COPYING.txt
 
-cp -v "$APP_SRC"/project/apps/share/apps.icns .VolumeIcon.icns || exit 1
+cp -v "$APP_SRC"/project/common/share/apps.icns .VolumeIcon.icns || exit 1
 
 cp -Rv "$APP_BUILD/$APP" "$APP" || exit 1
 rm -Rf "$APP_MACOS"/*

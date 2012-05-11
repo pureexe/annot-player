@@ -15,7 +15,10 @@
 #include "project/common/acabout.h"
 #include "project/common/acdownloader.h"
 #include "project/common/acfilteredlistview.h"
+#include "project/common/acbrowser.h"
 #include "project/common/acplayer.h"
+#include "project/common/acpreferences.h"
+#include "module/animation/fadeanimation.h"
 #include "module/qtext/datetime.h"
 #include "module/qtext/layoutwidget.h"
 #include "module/download/downloader.h"
@@ -47,7 +50,9 @@ enum { MaxDownloadThreadCount = 3 };
 //  Qt::WindowCloseButtonHint )
 
 MainWindow::MainWindow(QWidget *parent)
-  : Base(parent), playerDelegate_(0), trayIcon_(0), taskDialog_(0)
+  : Base(parent),
+    about_(0), preferences_(0),
+    trayIcon_(0), taskDialog_(0)
 {
   setWindowTitle(tr("Annot Downloader"));
   setWindowIcon(QIcon(RC_IMAGE_APP));
@@ -56,6 +61,7 @@ MainWindow::MainWindow(QWidget *parent)
   downloadManager_->setMaxThreadCount(MaxDownloadThreadCount);
 
   createModels();
+  createSearchEngines();
   createLayout();
   createActions();
 
@@ -90,6 +96,7 @@ MainWindow::MainWindow(QWidget *parent)
     addTask(t);
 
   // - IPC -
+  browserDelegate_ = new AcBrowser(this);
   playerDelegate_ = new AcPlayer(this);
 
   appServer_ = new AcDownloaderServer(this);
@@ -115,6 +122,17 @@ MainWindow::isAddingUrls() const
 { return taskDialog_ && taskDialog_->isVisible(); }
 
 void
+MainWindow::createSearchEngines()
+{
+  enum { LastEngine = SearchEngineFactory::WikiZh };
+  for (int i = 0; i <= LastEngine; i++) {
+    SearchEngine *e = SearchEngineFactory::globalInstance()->create(i);
+    e->setParent(this);
+    searchEngines_.append(e);
+  }
+}
+
+void
 MainWindow::createLayout()
 {
   AcUi *ui = AcUi::globalInstance();
@@ -124,7 +142,8 @@ MainWindow::createLayout()
   startButton_ = ui->makeToolButton(AcUi::PushHint, tr("Start"), this, SLOT(start()));
   stopButton_ = ui->makeToolButton(AcUi::PushHint, tr("Stop"), this, SLOT(stop()));
   removeButton_ = ui->makeToolButton(AcUi::PushHint, tr("Remove"), this, SLOT(remove()));
-  openButton_ = ui->makeToolButton(AcUi::PushHint, tr("Play"), this, SLOT(open()));
+  playButton_ = ui->makeToolButton(AcUi::PushHint, tr("Play"), this, SLOT(play()));
+  browseButton_ = ui->makeToolButton(AcUi::PushHint, tr("Browse"), this, SLOT(browse()));
   openDirectoryButton_ = ui->makeToolButton(
         AcUi::PushHint, tr("Dir"), tr("Open directory"), this, SLOT(openDirectory()));
   addButton_ = ui->makeToolButton(
@@ -133,7 +152,8 @@ MainWindow::createLayout()
   startButton_->setEnabled(false);
   stopButton_->setEnabled(false);
   removeButton_->setEnabled(false);
-  openButton_->setEnabled(false);
+  playButton_->setEnabled(false);
+  browseButton_->setEnabled(false);
 
   // Layout
   QVBoxLayout *rows = new QVBoxLayout; {
@@ -148,7 +168,8 @@ MainWindow::createLayout()
     header->addStretch();
     header->addWidget(removeButton_);
 
-    footer->addWidget(openButton_);
+    footer->addWidget(playButton_);
+    footer->addWidget(browseButton_);
     footer->addWidget(openDirectoryButton_);
     footer->addStretch();
     footer->addWidget(addButton_);
@@ -215,10 +236,14 @@ MainWindow::createActions()
     removeAllAct_->setText(tr("Remove All"));
     removeAllAct_->setStatusTip(tr("Remove All"));
   } connect(removeAllAct_, SIGNAL(triggered()), SLOT(removeAll()));
-  openAct_ = new QAction(this); {
-    openAct_->setText(tr("Play"));
-    openAct_->setStatusTip(tr("Open with Annot Player"));
-  } connect(openAct_, SIGNAL(triggered()), SLOT(open()));
+  playAct_ = new QAction(this); {
+    playAct_->setText(tr("Play"));
+    playAct_->setStatusTip(tr("Open with Annot Player"));
+  } connect(playAct_, SIGNAL(triggered()), SLOT(play()));
+  browseAct_ = new QAction(this); {
+    browseAct_->setText(tr("Browse"));
+    browseAct_->setStatusTip(tr("Open with Annot Browser"));
+  } connect(browseAct_, SIGNAL(triggered()), SLOT(browse()));
   openDirectoryAct_ = new QAction(this); {
     openDirectoryAct_->setText(tr("Open Directory"));
     openDirectoryAct_->setStatusTip(tr("Open Directory"));
@@ -226,12 +251,12 @@ MainWindow::createActions()
   hideAct_ = new QAction(this); {
     hideAct_->setText(tr("Hide"));
     hideAct_->setStatusTip(tr("Hide"));
-  } connect(hideAct_, SIGNAL(triggered()), SLOT(hide()));
+  } connect(hideAct_, SIGNAL(triggered()), SLOT(fadeOut()));
   quitAct_ = new QAction(this); {
     quitAct_->setText(tr("Quit"));
     quitAct_->setStatusTip(tr("Quit"));
     quitAct_->setShortcut(QKeySequence::Quit);
-  } connect(quitAct_, SIGNAL(triggered()), SLOT(close()));
+  } connect(quitAct_, SIGNAL(triggered()), SLOT(quit()));
   newAct_ = new QAction(this); {
     newAct_->setText(tr("New"));
     newAct_->setStatusTip(tr("New"));
@@ -241,38 +266,99 @@ MainWindow::createActions()
     menuBarAct_->setCheckable(true);
     menuBarAct_->setText(tr("Menu Bar"));
     menuBarAct_->setStatusTip(tr("Menu Bar"));
-    menuBarAct_->setShortcut(QKeySequence("ALT"));
   } connect(menuBarAct_, SIGNAL(triggered(bool)), menuBar(), SLOT(setVisible(bool)));
+ copyTitleAct_ = new QAction(this); {
+   copyTitleAct_->setStatusTip(tr("Copy Title"));
+ } connect(copyTitleAct_, SIGNAL(triggered()), SLOT(copyTitle()));
+ copyUrlAct_ = new QAction(this); {
+   copyUrlAct_->setStatusTip(tr("Copy Url"));
+ } connect(copyUrlAct_, SIGNAL(triggered()), SLOT(copyUrl()));
+
+  // Copy menu
+  copyMenu_ = new QMenu(tr("Copy") + " ...", this); {
+    AcUi::globalInstance()->setContextMenuStyle(copyMenu_, true); // persistent = true
+    copyMenu_->addAction(copyTitleAct_);
+    copyMenu_->addAction(copyUrlAct_);
+
+    copyMenu_->addSeparator();
+
+    QString t = tr("Search with %1");
+
+    SearchEngine *e = searchEngines_[SearchEngineFactory::Google];
+    copyMenu_->addAction(QIcon(e->icon()), t.arg(e->name()), this, SLOT(searchCurrentTitleWithGoogle()));
+
+    e = searchEngines_[SearchEngineFactory::GoogleImages];
+    copyMenu_->addAction(QIcon(e->icon()), t.arg(e->name()), this, SLOT(searchCurrentTitleWithGoogleImages()));
+
+    e = searchEngines_[SearchEngineFactory::Bing];
+    copyMenu_->addAction(QIcon(e->icon()), t.arg(e->name()), this, SLOT(searchCurrentTitleWithBing()));
+
+    copyMenu_->addSeparator();
+
+    e = searchEngines_[SearchEngineFactory::Nicovideo];
+    copyMenu_->addAction(QIcon(e->icon()), t.arg(e->name()), this, SLOT(searchCurrentTitleWithNicovideo()));
+
+    e = searchEngines_[SearchEngineFactory::Bilibili];
+    copyMenu_->addAction(QIcon(e->icon()), t.arg(e->name()), this, SLOT(searchCurrentTitleWithBilibili()));
+
+    e = searchEngines_[SearchEngineFactory::Acfun];
+    copyMenu_->addAction(QIcon(e->icon()), t.arg(e->name()), this, SLOT(searchCurrentTitleWithAcfun()));
+
+    e = searchEngines_[SearchEngineFactory::Youtube];
+    copyMenu_->addAction(QIcon(e->icon()), t.arg(e->name()), this, SLOT(searchCurrentTitleWithYoutube()));
+
+    e = searchEngines_[SearchEngineFactory::Youku];
+    copyMenu_->addAction(QIcon(e->icon()), t.arg(e->name()), this, SLOT(searchCurrentTitleWithYouku()));
+
+    copyMenu_->addSeparator();
+
+    e = searchEngines_[SearchEngineFactory::WikiEn];
+    copyMenu_->addAction(QIcon(e->icon()), t.arg(e->name()), this, SLOT(searchCurrentTitleWithWikiEn()));
+
+    e = searchEngines_[SearchEngineFactory::WikiJa];
+    copyMenu_->addAction(QIcon(e->icon()), t.arg(e->name()), this, SLOT(searchCurrentTitleWithWikiJa()));
+
+    e = searchEngines_[SearchEngineFactory::WikiZh];
+    copyMenu_->addAction(QIcon(e->icon()), t.arg(e->name()), this, SLOT(searchCurrentTitleWithWikiZh()));
+
+  } copyMenu_->setEnabled(false);
 
   // Create menus
-  contextMenu_ = new QMenu(this);
-  AcUi::globalInstance()->setContextMenuStyle(contextMenu_, true); // persistent = true
-  contextMenu_->addAction(startAct_);
-  contextMenu_->addAction(openAct_);
-  contextMenu_->addAction(openDirectoryAct_);
-  contextMenu_->addSeparator();
-  contextMenu_->addAction(stopAct_);
-  contextMenu_->addAction(restartAct_);
-  contextMenu_->addAction(removeAct_);
-  contextMenu_->addSeparator();
-  contextMenu_->addAction(startAllAct_);
-  contextMenu_->addAction(stopAllAct_);
-  contextMenu_->addAction(removeAllAct_);
-#ifndef Q_WS_MAC
-  contextMenu_->addSeparator();
-  contextMenu_->addAction(menuBarAct_);
-  contextMenu_->addAction(hideAct_);
-  contextMenu_->addAction(quitAct_);
-#endif // Q_WS_MAC
+  contextMenu_ = new QMenu(this); {
+    AcUi::globalInstance()->setContextMenuStyle(contextMenu_, true); // persistent = true
 
+    contextMenu_->addMenu(copyMenu_);
+    contextMenu_->addSeparator();
+    contextMenu_->addAction(startAct_);
+    contextMenu_->addAction(playAct_);
+    contextMenu_->addAction(browseAct_);
+    contextMenu_->addAction(openDirectoryAct_);
+    contextMenu_->addSeparator();
+    contextMenu_->addAction(stopAct_);
+    contextMenu_->addAction(restartAct_);
+    contextMenu_->addAction(removeAct_);
+    contextMenu_->addSeparator();
+    contextMenu_->addAction(startAllAct_);
+    contextMenu_->addAction(stopAllAct_);
+    contextMenu_->addAction(removeAllAct_);
+  #ifndef Q_WS_MAC
+    contextMenu_->addSeparator();
+    contextMenu_->addAction(menuBarAct_);
+    contextMenu_->addAction(tr("Preferences"), this, SLOT(preferences()), QKeySequence("CTRL+,"));
+    contextMenu_->addAction(hideAct_);
+    contextMenu_->addAction(quitAct_);
+  #endif // Q_WS_MAC
+    }
 
   hideAct_->setShortcut(QKeySequence("Esc"));
-  connect(new QShortcut(QKeySequence("Esc"), this), SIGNAL(activated()), SLOT(hide()));
+  new QShortcut(QKeySequence("Esc"), this, SLOT(fadeOut()));
 
-  quitAct_->setShortcut(QKeySequence("CTRL+W"));
-  connect(new QShortcut(QKeySequence("CTRL+W"), this), SIGNAL(activated()), SLOT(close()));
+  //quitAct_->setShortcut(QKeySequence("CTRL+W"));
+  new QShortcut(QKeySequence("CTRL+W"), this, SLOT(fadeOut()));
 
-  connect(new QShortcut(QKeySequence::New, this), SIGNAL(activated()), SLOT(add()));
+  new QShortcut(QKeySequence::New, this, SLOT(add()));
+
+  // Create menu bar
 
 #ifdef Q_WS_WIN
   menuBar()->hide();
@@ -284,16 +370,23 @@ MainWindow::createActions()
     m->addAction(stopAllAct_);
     m->addAction(removeAllAct_);
     m->addSeparator();
-    m->addAction(tr("Exit"), this, SLOT(close()), QKeySequence::Quit);
+    m->addAction(playAct_);
+    m->addAction(browseAct_);
+    m->addAction(openDirectoryAct_);
+#ifndef Q_WS_MAC
+    m->addSeparator();
+    m->addAction(tr("Quit"), this, SLOT(quit()), QKeySequence::Quit);
+#endif // Q_WS_MAC
   }
   m = menuBar()->addMenu(tr("&Edit")); {
     m->addAction(startAct_);
-    m->addAction(openAct_);
-    m->addAction(openDirectoryAct_);
     m->addSeparator();
     m->addAction(stopAct_);
     m->addAction(restartAct_);
     m->addAction(removeAct_);
+  }
+  m = menuBar()->addMenu(tr("&Settings")); {
+    m->addAction(tr("&Preferences"), this, SLOT(preferences()), QKeySequence("CTRL+,"));
   }
   m = menuBar()->addMenu(tr("&Help")); {
     //helpMenu_->addAction(tr("&Help"), this, SLOT(help())); // DO NOT TRANSLATE ME
@@ -341,6 +434,10 @@ MainWindow::currentId() const
   return ret;
 }
 
+QString
+MainWindow::currentTitle() const
+{ DownloadTask *t = currentTask(); return t ? t->title() : QString(); }
+
 DownloadTask*
 MainWindow::currentTask() const
 {
@@ -382,12 +479,14 @@ MainWindow::promptUrls(const QStringList &urls)
 void
 MainWindow::promptUrl(const QString &text)
 {
-  TaskDialog *dlg = taskDialog();
-  if (dlg->isVisible())
-    dlg->addText(text);
-  else {
-    dlg->setText(text);
-    dlg->show();
+  if (!downloadManager_->taskWithUrl(text)) {
+    TaskDialog *dlg = taskDialog();
+    if (dlg->isVisible())
+      dlg->addText(text);
+    else {
+      dlg->setText(text);
+      dlg->show();
+    }
   }
 }
 
@@ -457,11 +556,22 @@ MainWindow::remove()
 }
 
 void
-MainWindow::open()
+MainWindow::play()
 {
   DownloadTask *t = currentTask();
-  if (t && !t->fileName().isEmpty())
-    playerDelegate_->openUrl(t->fileName());
+  if (t) {
+    QString url = QFile::exists(t->fileName()) ? t->fileName() : t->url();
+    if (!url.isEmpty())
+      playerDelegate_->openUrl(url);
+  }
+}
+
+void
+MainWindow::browse()
+{
+  DownloadTask *t = currentTask();
+  if (t && !t->url().isEmpty())
+    browserDelegate_->openUrl(t->url());
 }
 
 void
@@ -656,17 +766,60 @@ void
 MainWindow::updateButtons()
 {
   DownloadTask *t = currentTask();
-  if (!t) {
-    startButton_->setEnabled(false);
-    stopButton_->setEnabled(false);
-    removeButton_->setEnabled(false);
-    openButton_->setEnabled(false);
-  } else {
+  if (t) {
     bool e = QFile::exists(t->fileName());
     startButton_->setEnabled(!t->isRunning() && !e);
     stopButton_->setEnabled(!t->isStopped());
     removeButton_->setEnabled(true);
-    openButton_->setEnabled(QFile::exists(t->fileName()));
+    playButton_->setEnabled(true);
+    browseButton_->setEnabled(true);
+  } else {
+    startButton_->setEnabled(false);
+    stopButton_->setEnabled(false);
+    removeButton_->setEnabled(false);
+    playButton_->setEnabled(false);
+    browseButton_->setEnabled(false);
+  }
+}
+
+void
+MainWindow::copyTitle()
+{
+  DownloadTask *t = currentTask();
+  if (t && QApplication::clipboard()) {
+    QString text = t->title();
+    if (!text.isEmpty()) {
+      QApplication::clipboard()->setText(text);
+      showMessage(text);
+    }
+  }
+}
+
+void
+MainWindow::copyUrl()
+{
+  DownloadTask *t = currentTask();
+  if (t && QApplication::clipboard()) {
+    QString text = t->url();
+    if (!text.isEmpty()) {
+      QApplication::clipboard()->setText(text);
+      showMessage(text);
+    }
+  }
+}
+
+void
+MainWindow::updateCopyMenu()
+{
+  copyUrlAct_->setText(tr("Copy URL"));
+  copyTitleAct_->setText(tr("Copy Title"));
+
+  DownloadTask *t = currentTask();
+  if (t) {
+    if (!t->url().isEmpty())
+      copyUrlAct_->setText(t->url());
+    if (!t->title().isEmpty())
+      copyTitleAct_->setText(t->title());
   }
 }
 
@@ -676,19 +829,23 @@ MainWindow::updateActions()
   menuBarAct_->setChecked(menuBar()->isVisible());
 
   DownloadTask *t = currentTask();
-  if (!t) {
-    startAct_->setEnabled(false);
-    restartAct_->setEnabled(false);
-    stopAct_->setEnabled(false);
-    removeAct_->setEnabled(false);
-    openAct_->setEnabled(false);
-  } else {
+  if (t) {
     bool e = QFile::exists(t->fileName());
+    copyMenu_->setEnabled(true);
     startAct_->setEnabled(!t->isRunning() && !e);
     restartAct_->setEnabled(true);
     stopAct_->setEnabled(!t->isStopped());
     removeAct_->setEnabled(true);
-    openAct_->setEnabled(t->isFinished());
+    playAct_->setEnabled(true);
+    browseAct_->setEnabled(true);
+  } else {
+    copyMenu_->setEnabled(false);
+    startAct_->setEnabled(false);
+    restartAct_->setEnabled(false);
+    stopAct_->setEnabled(false);
+    removeAct_->setEnabled(false);
+    playAct_->setEnabled(false);
+    browseAct_->setEnabled(false);
   }
 }
 
@@ -700,6 +857,7 @@ MainWindow::setVisible(bool visible)
     refreshTimer_->start();
   } else
     refreshTimer_->stop();
+
   Base::setVisible(visible);
 }
 
@@ -824,15 +982,17 @@ MainWindow::contextMenuEvent(QContextMenuEvent *event)
 {
   Q_ASSERT(event);
   updateActions();
+  if (copyMenu_->isEnabled())
+    updateCopyMenu();
   contextMenu_->exec(event->globalPos());
   event->accept();
 }
 
 void
-MainWindow::keyReleaseEvent(QKeyEvent *e)
+MainWindow::keyPressEvent(QKeyEvent *e)
 {
   switch (e->key()) {
-  case Qt::Key_Alt:
+  case Qt::Key_CapsLock:
 #ifdef Q_WS_WIN
     menuBar()->setVisible(!menuBar()->isVisible());
 #endif // Q_WS_WIN
@@ -845,10 +1005,39 @@ MainWindow::keyReleaseEvent(QKeyEvent *e)
 void
 MainWindow::about()
 {
-  static AcAbout *w = 0;
-  if (!w)
-    w = new AcAbout(G_APPLICATION, G_VERSION, this);
-  w->show();
+  if (!about_)
+    about_ = new AcAbout(G_APPLICATION, G_VERSION, this);
+  about_->show();
+}
+
+void
+MainWindow::preferences()
+{
+  if (!preferences_)
+    preferences_ = new AcPreferences(this);
+  preferences_->show();
+}
+
+void
+MainWindow::quit()
+{
+  fadeOut();
+  QTimer::singleShot(fadeAnimation()->duration(), this, SLOT(close()));
+}
+
+void
+MainWindow::searchWithEngine(int engine, const QString &key)
+{
+  if (engine >= 0 && engine < searchEngines_.size() && !key.isEmpty()) {
+    const SearchEngine *e = searchEngines_[engine];
+    if (e) {
+      QString url = e->search(key);
+      if (!url.isEmpty()) {
+        showMessage(url);
+        browserDelegate_->openUrl(url);
+      }
+    }
+  }
 }
 
 // EOF

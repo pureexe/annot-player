@@ -4,7 +4,7 @@
 #include "osdwindow.h"
 #include "module/qtext/eventlistener.h"
 #ifdef Q_WS_X11
-  #include "unix/qtx/qtx.h"
+#  include "unix/qtx/qtx.h"
 #endif // Q_WS_X11
 #include <QtGui>
 
@@ -14,12 +14,10 @@
 // - Constructions -
 
 #define WINDOW_FLAGS \
-( \
   Qt::SplashScreen | \
   Qt::FramelessWindowHint | \
-  Qt::CustomizeWindowHint | \
-  Qt::WindowStaysOnTopHint \
-)
+  Qt::CustomizeWindowHint
+//Qt::WindowStaysOnTopHint
 
 OsdWindow::OsdWindow(QWidget *parent)
   : Base(parent, WINDOW_FLAGS), listener_(0)

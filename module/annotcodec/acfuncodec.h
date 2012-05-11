@@ -4,27 +4,29 @@
 // acfuncodec.h
 // 2/4/2012
 
-#include "annotationcodec.h"
+#include "module/annotcodec/annotationcodec.h"
+#include <QtCore/QHash>
 
 QT_FORWARD_DECLARE_CLASS(QNetworkAccessManager)
 QT_FORWARD_DECLARE_CLASS(QNetworkReply)
 
-class AcFunCodec : public AnnotationCodec
+class AcfunCodec : public AnnotationCodec
 {
   Q_OBJECT
-  Q_DISABLE_COPY(AcFunCodec)
-  typedef AcFunCodec Self;
+  Q_DISABLE_COPY(AcfunCodec)
+  typedef AcfunCodec Self;
   typedef AnnotationCodec Base;
 
   typedef AnnotCloud::Annotation Annotation;
   typedef AnnotCloud::AnnotationList AnnotationList;
 
   QNetworkAccessManager *qnam_;
+  QHash<QString, int> retries_;
 
 public:
   enum Format { Json = 0, Xml, FormatCount };
 
-  explicit AcFunCodec(QObject *parent = 0);
+  explicit AcfunCodec(QObject *parent = 0);
 
 public:
   virtual bool match(const QString &url) const; ///< \override

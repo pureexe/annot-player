@@ -4,18 +4,17 @@
 // countdowndialog.h
 // 3/13/2012
 
-#include "module/qtext/dialog.h"
+#include "project/common/acwindow.h"
 
 QT_FORWARD_DECLARE_CLASS(QLabel)
 QT_FORWARD_DECLARE_CLASS(QTimer)
 
-typedef QtExt::Dialog CountdownDialogBase;
-class CountdownDialog : public CountdownDialogBase
+class CountdownDialog : public AcWindow
 {
   Q_OBJECT
   Q_DISABLE_COPY(CountdownDialog)
   typedef CountdownDialog Self;
-  typedef CountdownDialogBase Base;
+  typedef AcWindow Base;
 
   QLabel *messageLabel_;
   QTimer *timer_; // in seconds

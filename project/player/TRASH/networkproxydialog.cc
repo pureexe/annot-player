@@ -7,7 +7,7 @@
 #include "project/common/acsettings.h"
 #include "project/common/acui.h"
 #include <QtGui>
-#include <QNetworkProxy>
+#include <QtNetwork/QNetworkProxy>
 
 using namespace Logger;
 
@@ -43,7 +43,6 @@ void
 NetworkProxyDialog::createLayout()
 {
   AcUi *ui = AcUi::globalInstance();
-  ui->setWindowStyle(this);
 
   QStringList types("Socks5");
   types.append("HTTP");
@@ -62,7 +61,7 @@ NetworkProxyDialog::createLayout()
   QToolButton *saveButton = ui->makeToolButton(
         AcUi::PushHint | AcUi::HighlightHint, TR(T_SAVE), this, SLOT(save()));
   QToolButton *cancelButton = ui->makeToolButton(
-        AcUi::PushHint, TR(T_CANCEL), this, SLOT(hide()));
+        AcUi::PushHint, TR(T_CANCEL), this, SLOT(fadeOut()));
 
   enableButton_ = ui->makeToolButton(
         AcUi::CheckHint, TR(T_ENABLE), this, SLOT(updateButtons()));
@@ -100,10 +99,6 @@ NetworkProxyDialog::createLayout()
   setTabOrder(hostEdit_, portEdit_);
   setTabOrder(portEdit_, userNameEdit_);
   setTabOrder(userNameEdit_, passwordEdit_);
-
-  // Shortcuts
-  connect(new QShortcut(QKeySequence("Esc"), this), SIGNAL(activated()), SLOT(hide()));
-  connect(new QShortcut(QKeySequence("CTRL+W"), this), SIGNAL(activated()), SLOT(hide()));
 }
 
 // - Properties -
@@ -183,14 +178,14 @@ NetworkProxyDialog::save()
   QString host = hostEdit_->currentText().trimmed();
   bool enabled = isEnabled();
   if (!enabled) {
-    hide();
+    fadeOut();
     QNetworkProxy::setApplicationProxy(QNetworkProxy::NoProxy);
     log(tr("network proxy disabled"));
   } else if (host.isEmpty()) {
     warn("empty proxy host name");
     enabled = false;
   } else
-    hide();
+    fadeOut();
 
   QNetworkProxy::ProxyType type;
   switch (typeCombo_->currentIndex()) {

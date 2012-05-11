@@ -4,18 +4,17 @@
 // urldialog.h
 // 2/7/2012
 
-#include "module/qtext/dialog.h"
+#include "project/common/acwindow.h"
 
 QT_FORWARD_DECLARE_CLASS(QToolButton)
 QT_FORWARD_DECLARE_CLASS(QComboBox)
 
-typedef QtExt::Dialog UrlDialogBase;
-class UrlDialog : public UrlDialogBase
+class UrlDialog : public AcWindow
 {
   Q_OBJECT
   Q_DISABLE_COPY(UrlDialog)
   typedef UrlDialog Self;
-  typedef UrlDialogBase Base;
+  typedef AcWindow Base;
 
   QComboBox *edit_;
   QToolButton *urlButton_, *saveButton_;
@@ -38,6 +37,8 @@ public slots:
   void setSave(bool t);
   void increase();
   void decrease();
+
+  virtual void setVisible(bool visible); ///< \override
 
 protected:
   static QString autoCompleteUrl(const QString &url);

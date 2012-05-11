@@ -8,6 +8,7 @@
 #include "signalhub.h"
 #include "positionslider.h"
 #include "module/player/player.h"
+#include "module/animation/fadeanimation.h"
 #include "module/serveragent/serveragent.h"
 #include "module/qtext/datetime.h"
 #include "module/annotcloud/annotation.h"
@@ -80,7 +81,7 @@ PlayerUi::disconnectPlayer()
  // - Constructions -
 
 PlayerUi::PlayerUi(SignalHub *hub, Player *player, ServerAgent *server, QWidget *parent)
-  : Base(parent), hub_(hub), player_(player), server_(server), active_(false)
+  : Base(parent), hub_(hub), player_(player), server_(server), active_(false), fadeAni_(0)
 {
   Q_ASSERT(isValid());
 
@@ -229,6 +230,14 @@ void
 PlayerUi::setVisible(bool visible)
 {
   setActive(visible);
+  if (visible && !isVisible()) {
+    static qreal opacity = 0.0;
+    if (qFuzzyCompare(opacity + 1, 1))
+      opacity = windowOpacity();
+    if (!fadeAni_)
+      fadeAni_ = new FadeAnimation(this, "windowOpacity", this);
+    fadeAni_->fadeIn(opacity);
+  }
   Base::setVisible(visible);
 }
 
@@ -527,21 +536,21 @@ PlayerUi::updatePositionButton()
     //qint64 left_msecs = total_msecs - current_msecs;
     //QTime left = QtExt::msecs2time(left_msecs),
 
-    QTime current = QtExt::msecs2time(current_msecs),
-          total = QtExt::msecs2time(total_msecs);
+    QString current = QtExt::msecs2time(current_msecs).toString();
+    QString t = current;
+    if (total_msecs) {
+      QString total = QtExt::msecs2time(total_msecs).toString();
+      t.append(" / ").append(total);
+    }
 
-    b->setText(
-      QString("%1 / %2")
-        .arg(current.toString())
-        .arg(total.toString())
-    );
-
+    b->setText(t);
   } else {
     if (b->isEnabled())
       b->setEnabled(false);
 
-    QString zero = QTime(0, 0, 0).toString();
-    b->setText(zero + " / " + zero);
+    QString zero = "--:--:--"; //QTime(0, 0, 0).toString();
+    QString t = zero + " / " + zero;
+    b->setText(t);
   }
 #ifdef Q_OS_WIN
   QtWin::repaintWindow(b->winId());

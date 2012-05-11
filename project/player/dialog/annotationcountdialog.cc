@@ -38,10 +38,6 @@ AnnotationCountDialog::AnnotationCountDialog(DataManager *dm, QWidget *parent)
 
   createLayout();
 
-  // Shortcuts
-  connect(new QShortcut(QKeySequence("Esc"), this), SIGNAL(activated()), SLOT(hide()));
-  connect(new QShortcut(QKeySequence("CTRL+W"), this), SIGNAL(activated()), SLOT(hide()));
-
   // Focus
   edit_->setFocus();
 }
@@ -50,7 +46,6 @@ void
 AnnotationCountDialog::createLayout()
 {
   AcUi *ui = AcUi::globalInstance();
-  ui->setWindowStyle(this);
 
   totalCountLabel_ = ui->makeLabel(
         AcUi::UrlHint, "", tr("Number of annotations"));
@@ -66,7 +61,7 @@ AnnotationCountDialog::createLayout()
   QToolButton *okButton = ui->makeToolButton(
         AcUi::PushHint | AcUi::HighlightHint, TR(T_OK), this, SLOT(ok()));
   QToolButton *cancelButton = ui->makeToolButton(
-        AcUi::PushHint, TR(T_CANCEL), this, SLOT(hide()));
+        AcUi::PushHint, TR(T_CANCEL), this, SLOT(fadeOut()));
 
   // Layouts
   QVBoxLayout *rows = new QVBoxLayout; {
@@ -94,7 +89,7 @@ AnnotationCountDialog::setCount(int count)
 void
 AnnotationCountDialog::ok()
 {
-  hide();
+  fadeOut();
   uint count = edit_->currentText().toUInt();
   if (count)
     log(QString("%1: " HTML_STYLE_OPEN(color:red) " %2" HTML_STYLE_CLOSE())

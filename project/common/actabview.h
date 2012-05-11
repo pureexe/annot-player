@@ -24,6 +24,15 @@ public:
 
   int tabCount() const { return tabCount_; }
   QWidget *widget(int index) const { return tabs_[index]; }
+  const QWidgetList &widgets() const { return tabs_; }
+
+  QWidget *currentWidget() const
+  { return tabIndex_ >= 0 && tabIndex_ < tabs_.size() ? tabs_[tabIndex_] : (QWidget*)0; }
+
+  virtual QSize sizeHint() const; ///< \override
+
+signals:
+  void tabChanged(int index);
 
 protected slots:
   void setTab(int index);

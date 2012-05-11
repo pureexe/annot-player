@@ -89,7 +89,7 @@ QString
 LuaResolver::decodeTitle(const char *text, int siteId)
 {
   switch (siteId) {
-  case AcFun:
+  case Acfun:
     //return decodeText(text, "GBK");
   case Bilibili:
   case Nicovideo:

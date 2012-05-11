@@ -1,13 +1,5 @@
-
----[[by lostangel 20100528]]
----[[edit 20110117 add interface readNextLine and readNextLineFromUTF8]]
---[[edit 20110216 add parse for 6cn]]
---[[edit 20110401 add hd2 parse for youku]]
---[[edit 20110409 edit readuntil series function for one line bilibili source html]]
---[[edit 20110418 for forbidden 6cn video parse]]
---[[edit 20110704 for bili.tv,acfun.tv]]
---[[edit 20110729 for automate download tudou highest quality video]]
---[[edit 20110819 for youku new parse key]]
+-- lalib.lua
+-- 2011/12/8
 require "bit"
 
 function getACFPV ( str_url, str_servername)
@@ -323,7 +315,7 @@ function getRealUrls (str_id, str_tmpfile, pDlg)
 
 	local str_dynurl = "http://v.iask.com/v_play.php?vid="..str_id;
 	if pDlg~=nil then
-		sShowMessage(pDlg, 'ÕıÔÚ¶ÁÈ¡×ª½ÓÒ³Ãæ..');
+		sShowMessage(pDlg, 'æ­£åœ¨è¯»å–è½¬æ¥é¡µé¢..');
 	end
 	--str_tmpfile = "C:\\tempacfun.html";
 	--dbgMessage(str_tmpfile);
@@ -334,12 +326,12 @@ function getRealUrls (str_id, str_tmpfile, pDlg)
 	if re~=0
 	then
 		if pDlg~=nil then
-			sShowMessage(pDlg, '×ª½ÓÒ³Ãæ¶ÁÈ¡´íÎó¡£');
+			sShowMessage(pDlg, 'è½¬æ¥é¡µé¢è¯»å–é”™è¯¯ã€‚');
 		end
 		return index, tbl_urls, tbl_durations;
 	else
 		if pDlg~=nil then
-			sShowMessage(pDlg, '¶ÁÈ¡×ª½ÓÒ³Ãæ³É¹¦£¬ÕıÔÚ·ÖÎö..');
+			sShowMessage(pDlg, 'è¯»å–è½¬æ¥é¡µé¢æˆåŠŸï¼Œæ­£åœ¨åˆ†æ..');
 		end
 	end
 
@@ -347,7 +339,7 @@ function getRealUrls (str_id, str_tmpfile, pDlg)
 	if file==nil
 	then
 		if pDlg~=nil then
-			sShowMessage(pDlg, '×ª½ÓÒ³Ãæ¶ÁÈ¡´íÎó¡£');
+			sShowMessage(pDlg, 'è½¬æ¥é¡µé¢è¯»å–é”™è¯¯ã€‚');
 		end
 		return;
 	end
@@ -413,7 +405,7 @@ function getRealUrls_QQ (str_id, str_tmpfile, pDlg)
 	if re_cookie~=0
 	then
 		if pDlg~=nil then
-			sShowMessage(pDlg, '×ª½ÓÒ³Ãæ¶ÁÈ¡´íÎó¡£');
+			sShowMessage(pDlg, 'è½¬æ¥é¡µé¢è¯»å–é”™è¯¯ã€‚');
 		end
 		return index, tbl_urls;
 	end]]
@@ -421,7 +413,7 @@ function getRealUrls_QQ (str_id, str_tmpfile, pDlg)
 	local str_dynurl = "http://video.qq.com/v1/vstatus/geturl?ran=0%2E18432170618325472&vid="..str_id.."&platform=1&otype=xml";
 	--dbgMessage(str_dynurl);
 	if pDlg~=nil then
-		sShowMessage(pDlg, 'ÕıÔÚ¶ÁÈ¡×ª½ÓÒ³Ãæ..');
+		sShowMessage(pDlg, 'æ­£åœ¨è¯»å–è½¬æ¥é¡µé¢..');
 	end
 
 	local re = dlFile(str_tmpfile, str_dynurl);
@@ -429,12 +421,12 @@ function getRealUrls_QQ (str_id, str_tmpfile, pDlg)
 	if re~=0
 	then
 		if pDlg~=nil then
-			sShowMessage(pDlg, '×ª½ÓÒ³Ãæ¶ÁÈ¡´íÎó¡£');
+			sShowMessage(pDlg, 'è½¬æ¥é¡µé¢è¯»å–é”™è¯¯ã€‚');
 		end
 		return index, tbl_urls;
 	else
 		if pDlg~=nil then
-			sShowMessage(pDlg, '¶ÁÈ¡×ª½ÓÒ³Ãæ³É¹¦£¬ÕıÔÚ·ÖÎö..');
+			sShowMessage(pDlg, 'è¯»å–è½¬æ¥é¡µé¢æˆåŠŸï¼Œæ­£åœ¨åˆ†æ..');
 		end
 	end
 
@@ -442,7 +434,7 @@ function getRealUrls_QQ (str_id, str_tmpfile, pDlg)
 	if file==nil
 	then
 		if pDlg~=nil then
-			sShowMessage(pDlg, '×ª½ÓÒ³Ãæ¶ÁÈ¡´íÎó¡£');
+			sShowMessage(pDlg, 'è½¬æ¥é¡µé¢è¯»å–é”™è¯¯ã€‚');
 		end
 		return;
 	end
@@ -480,19 +472,19 @@ function getRealUrls_QQ (str_id, str_tmpfile, pDlg)
 	local str_dynurl = "http://vv.video.qq.com/geturl?vid=".. str_id.."&otype=xml&platform=1&ran=0%2E9652906153351068";
 
 	if pDlg~=nil then
-		sShowMessage(pDlg, 'ÕıÔÚ¶ÁÈ¡×ª½ÓÒ³Ãæ..');
+		sShowMessage(pDlg, 'æ­£åœ¨è¯»å–è½¬æ¥é¡µé¢..');
 	end
 
 	local re = dlFile(str_tmpfile, str_dynurl);
 	if re~=0
 	then
 		if pDlg~=nil then
-			sShowMessage(pDlg, '×ª½ÓÒ³Ãæ¶ÁÈ¡´íÎó¡£');
+			sShowMessage(pDlg, 'è½¬æ¥é¡µé¢è¯»å–é”™è¯¯ã€‚');
 		end
 		return index, tbl_urls;
 	else
 		if pDlg~=nil then
-			sShowMessage(pDlg, '¶ÁÈ¡×ª½ÓÒ³Ãæ³É¹¦£¬ÕıÔÚ·ÖÎö..');
+			sShowMessage(pDlg, 'è¯»å–è½¬æ¥é¡µé¢æˆåŠŸï¼Œæ­£åœ¨åˆ†æ..');
 		end
 	end
 
@@ -500,7 +492,7 @@ function getRealUrls_QQ (str_id, str_tmpfile, pDlg)
 	if file==nil
 	then
 		if pDlg~=nil then
-			sShowMessage(pDlg, '×ª½ÓÒ³Ãæ¶ÁÈ¡´íÎó¡£');
+			sShowMessage(pDlg, 'è½¬æ¥é¡µé¢è¯»å–é”™è¯¯ã€‚');
 		end
 		return;
 	end
@@ -531,10 +523,15 @@ function getRealUrls_youku (str_id, str_tmpfile, pDlg)
 	local tbl_urls = {};
 	local index = 0;
 
-	local str_dynurl = "http://v.youku.com/player/getPlayList/VideoIDS/"..str_id.."/timezone/+08/version/5/source/video?password=&ran=1527&n=3";
+    -- jichi 5/9/2012: use ran
+    -- see: http://cpansearch.perl.org/src/MONSIEUR/App-get_flash_videos-1.24/lib/FlashVideo/Site/Youku.pm
+	local now = os.time();
+	math.randomseed(now);
+    local rand = math.random(10000); -- four digits
+	local str_dynurl = "http://v.youku.com/player/getPlayList/VideoIDS/"..str_id.."/timezone/+08/version/5/source/video?password=&ran="..rand.."&n=3";
 	--dbgMessage(str_dynurl);
 	if pDlg~=nil then
-		sShowMessage(pDlg, 'ÕıÔÚ¶ÁÈ¡×ª½ÓÒ³Ãæ..');
+		sShowMessage(pDlg, 'æ­£åœ¨è¯»å–è½¬æ¥é¡µé¢..');
 	end
 
 	local header = "X-Forwarded-For: 202.108.8.82";
@@ -542,12 +539,12 @@ function getRealUrls_youku (str_id, str_tmpfile, pDlg)
 	if re~=0
 	then
 		if pDlg~=nil then
-			sShowMessage(pDlg, '×ª½ÓÒ³Ãæ¶ÁÈ¡´íÎó¡£');
+			sShowMessage(pDlg, 'è½¬æ¥é¡µé¢è¯»å–é”™è¯¯ã€‚');
 		end
 		return index, tbl_urls;
 	else
 		if pDlg~=nil then
-			sShowMessage(pDlg, '¶ÁÈ¡×ª½ÓÒ³Ãæ³É¹¦£¬ÕıÔÚ·ÖÎö..');
+			sShowMessage(pDlg, 'è¯»å–è½¬æ¥é¡µé¢æˆåŠŸï¼Œæ­£åœ¨åˆ†æ..');
 		end
 	end
 
@@ -555,7 +552,7 @@ function getRealUrls_youku (str_id, str_tmpfile, pDlg)
 	if file==nil
 	then
 		if pDlg~=nil then
-			sShowMessage(pDlg, '×ª½ÓÒ³Ãæ¶ÁÈ¡´íÎó¡£');
+			sShowMessage(pDlg, 'è½¬æ¥é¡µé¢è¯»å–é”™è¯¯ã€‚');
 		end
 		return;
 	end
@@ -677,19 +674,19 @@ function getRealUrls_tudou (str_id, str_tmpfile, pDlg)
 	local str_oriurl = "http://www.tudou.com/programs/view/" .. str_id .. "/";
 
 	if pDlg~=nil then
-		sShowMessage(pDlg, 'ÕıÔÚ¶ÁÈ¡×ª½ÓÒ³Ãæ..');
+		sShowMessage(pDlg, 'æ­£åœ¨è¯»å–è½¬æ¥é¡µé¢..');
 	end
 	local header = "X-Forwarded-For: 202.108.8.82";
 	local re = dlFile(str_tmpfile, str_oriurl, header);
 	if re~=0
 	then
 		if pDlg~=nil then
-			sShowMessage(pDlg, '×ª½ÓÒ³Ãæ¶ÁÈ¡´íÎó¡£');
+			sShowMessage(pDlg, 'è½¬æ¥é¡µé¢è¯»å–é”™è¯¯ã€‚');
 		end
 		return index, tbl_urls;
 	else
 		if pDlg~=nil then
-			sShowMessage(pDlg, '¶ÁÈ¡×ª½ÓÒ³Ãæ³É¹¦£¬ÕıÔÚ·ÖÎö..');
+			sShowMessage(pDlg, 'è¯»å–è½¬æ¥é¡µé¢æˆåŠŸï¼Œæ­£åœ¨åˆ†æ..');
 		end
 	end
 
@@ -697,7 +694,7 @@ function getRealUrls_tudou (str_id, str_tmpfile, pDlg)
 	if file==nil
 	then
 		if pDlg~=nil then
-			sShowMessage(pDlg, '×ª½ÓÒ³Ãæ¶ÁÈ¡´íÎó¡£');
+			sShowMessage(pDlg, 'è½¬æ¥é¡µé¢è¯»å–é”™è¯¯ã€‚');
 		end
 		return;
 	end
@@ -720,12 +717,12 @@ function getRealUrls_tudou (str_id, str_tmpfile, pDlg)
 	if re~=0
 	then
 		if pDlg~=nil then
-			sShowMessage(pDlg, '×ª½ÓÒ³Ãæ¶ÁÈ¡´íÎó¡£');
+			sShowMessage(pDlg, 'è½¬æ¥é¡µé¢è¯»å–é”™è¯¯ã€‚');
 		end
 		return index, tbl_urls;
 	else
 		if pDlg~=nil then
-			sShowMessage(pDlg, '¶ÁÈ¡×ª½ÓÒ³Ãæ³É¹¦£¬ÕıÔÚ·ÖÎö..');
+			sShowMessage(pDlg, 'è¯»å–è½¬æ¥é¡µé¢æˆåŠŸï¼Œæ­£åœ¨åˆ†æ..');
 		end
 	end
 
@@ -733,7 +730,7 @@ function getRealUrls_tudou (str_id, str_tmpfile, pDlg)
 	if file==nil
 	then
 		if pDlg~=nil then
-			sShowMessage(pDlg, '×ª½ÓÒ³Ãæ¶ÁÈ¡´íÎó¡£');
+			sShowMessage(pDlg, 'è½¬æ¥é¡µé¢è¯»å–é”™è¯¯ã€‚');
 		end
 		return;
 	end
@@ -786,18 +783,18 @@ function getRealUrls_6cn (str_id, str_tmpfile, pDlg)
 	local str_oriurl = "http://6.cn/v72.php?vid=" .. str_id;
 
 	if pDlg~=nil then
-		sShowMessage(pDlg, 'ÕıÔÚ¶ÁÈ¡×ª½ÓÒ³Ãæ..');
+		sShowMessage(pDlg, 'æ­£åœ¨è¯»å–è½¬æ¥é¡µé¢..');
 	end
 	local re = dlFile(str_tmpfile, str_oriurl);
 	if re~=0
 	then
 		if pDlg~=nil then
-			sShowMessage(pDlg, '×ª½ÓÒ³Ãæ¶ÁÈ¡´íÎó¡£');
+			sShowMessage(pDlg, 'è½¬æ¥é¡µé¢è¯»å–é”™è¯¯ã€‚');
 		end
 		return index, tbl_urls;
 	else
 		if pDlg~=nil then
-			sShowMessage(pDlg, '¶ÁÈ¡×ª½ÓÒ³Ãæ³É¹¦£¬ÕıÔÚ·ÖÎö..');
+			sShowMessage(pDlg, 'è¯»å–è½¬æ¥é¡µé¢æˆåŠŸï¼Œæ­£åœ¨åˆ†æ..');
 		end
 	end
 
@@ -805,7 +802,7 @@ function getRealUrls_6cn (str_id, str_tmpfile, pDlg)
 	if file==nil
 	then
 		if pDlg~=nil then
-			sShowMessage(pDlg, '×ª½ÓÒ³Ãæ¶ÁÈ¡´íÎó¡£');
+			sShowMessage(pDlg, 'è½¬æ¥é¡µé¢è¯»å–é”™è¯¯ã€‚');
 		end
 		return;
 	end
@@ -861,18 +858,18 @@ function getAcVideo_CommentID(str_acid, str_tmpfile, pDlg)
 	--dbgMessage(str_apiurl);
 
 	if pDlg~=nil then
-		sShowMessage(pDlg, 'ÕıÔÚ¶ÁÈ¡×ª½ÓÒ³Ãæ..');
+		sShowMessage(pDlg, 'æ­£åœ¨è¯»å–è½¬æ¥é¡µé¢..');
 	end
 	local re = dlFile(str_tmpfile, str_apiurl);
 	if re~=0
 	then
 		if pDlg~=nil then
-			sShowMessage(pDlg, '×ª½ÓÒ³Ãæ¶ÁÈ¡´íÎó¡£');
+			sShowMessage(pDlg, 'è½¬æ¥é¡µé¢è¯»å–é”™è¯¯ã€‚');
 		end
 		return index, tbl_urls;
 	else
 		if pDlg~=nil then
-			sShowMessage(pDlg, '¶ÁÈ¡×ª½ÓÒ³Ãæ³É¹¦£¬ÕıÔÚ·ÖÎö..');
+			sShowMessage(pDlg, 'è¯»å–è½¬æ¥é¡µé¢æˆåŠŸï¼Œæ­£åœ¨åˆ†æ..');
 		end
 	end
 
@@ -880,7 +877,7 @@ function getAcVideo_CommentID(str_acid, str_tmpfile, pDlg)
 	if file==nil
 	then
 		if pDlg~=nil then
-			sShowMessage(pDlg, '×ª½ÓÒ³Ãæ¶ÁÈ¡´íÎó¡£');
+			sShowMessage(pDlg, 'è½¬æ¥é¡µé¢è¯»å–é”™è¯¯ã€‚');
 		end
 		return;
 	end
@@ -948,7 +945,4 @@ function time_sleep(int_millisecond, int_random_max)
 		end
 	end
 end
-
-
-
 

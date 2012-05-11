@@ -63,10 +63,6 @@ DeviceDialog::DeviceDialog(QWidget *parent)
 
   createLayout();
 
-  // Shortcuts
-  connect(new QShortcut(QKeySequence("Esc"), this), SIGNAL(activated()), SLOT(hide()));
-  connect(new QShortcut(QKeySequence("CTRL+W"), this), SIGNAL(activated()), SLOT(hide()));
-
   // Post behaviors
   autoRadioButton_->setChecked(true);
   okButton_->setFocus();
@@ -76,7 +72,6 @@ void
 DeviceDialog::createLayout()
 {
   AcUi *ui = AcUi::globalInstance();
-  ui->setWindowStyle(this);
 
   QString holder =
 #ifdef Q_WS_WIN
@@ -99,7 +94,7 @@ DeviceDialog::createLayout()
   okButton_ = ui->makeToolButton(
         AcUi::PushHint | AcUi::HighlightHint, TR(T_OPEN), TR(T_TIP_OPENDEVICE), this, SLOT(ok()));
   QToolButton *cancelButton = ui->makeToolButton(
-        AcUi::PushHint, TR(T_CANCEL), this, SLOT(hide()));
+        AcUi::PushHint, TR(T_CANCEL), this, SLOT(fadeOut()));
   QToolButton *refreshButton = ui->makeToolButton(
         AcUi::PushHint, TR(T_REFRESH), this, SLOT(refresh()));
 
@@ -148,7 +143,7 @@ DeviceDialog::currentPath() const
 void
 DeviceDialog::ok()
 {
-  hide();
+  fadeOut();
 
   QString path = currentPath();
   if (!QFile::exists(path)) {

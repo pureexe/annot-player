@@ -4,18 +4,17 @@
 // syncdialog.h
 // 10/7/2011
 
-#include "module/qtext/dialog.h"
+#include "project/common/acwindow.h"
 #include <QtCore/QList>
 
 QT_FORWARD_DECLARE_CLASS(QComboBox)
 
-typedef QtExt::Dialog SyncDialogBase;
-class SyncDialog : public SyncDialogBase
+class SyncDialog : public AcWindow
 {
   Q_OBJECT
   Q_DISABLE_COPY(SyncDialog)
   typedef SyncDialog Self;
-  typedef SyncDialogBase Base;
+  typedef AcWindow Base;
 
   QComboBox *comboBox_;
 

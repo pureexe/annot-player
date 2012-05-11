@@ -166,6 +166,7 @@ TranslatorManager::translate(int tid) const
   case T_CODE:          return tr("Code");
   case T_TIMESLOT:      return tr("Slot");
   case T_PREVIOUS:      return tr("Previous");
+  case T_PREFERENCES:   return tr("Preferences");
   case T_NEXT:          return tr("Next");
   case T_FASTFORWARD:   return tr("Fast forward");
   case T_REWIND:        return tr("Rewind");
@@ -235,8 +236,8 @@ TranslatorManager::translate(int tid) const
   case T_TITLE_OPENVIDEODEVICE: return tr("Open video device");
   case T_TITLE_OPENAUDIODEVICE: return tr("Open audio device");
   case T_TITLE_OPENSUBTITLE:    return tr("Open subtitle");
-  case T_TITLE_ANNOTATIONBROWSER:       return tr("Annots");
-  case T_TITLE_ANNOTATIONEDITOR:        return tr("Annot Editor");
+  case T_TITLE_ANNOTATIONBROWSER:   tr("Annotations");
+  case T_TITLE_ANNOTATIONEDITOR:    tr("Annotation Editor");
   case T_TITLE_TOKENVIEW:       return tr("Token");
   case T_TITLE_COMMENTVIEW:     return tr("Comments");
   case T_TITLE_ANNOTANALYTICS:     return tr("Annotations analytics");
@@ -411,10 +412,10 @@ TranslatorManager::translate(int tid) const
   case T_MENUTEXT_PICKDIALOG:   return tr("Pick window");
   case T_TIP_PICKDIALOG:        return tr("Show pick dialog");
 
-  case T_MENUTEXT_PROCESSPICKDIALOG:   return tr("Pick process window");
+  case T_MENUTEXT_PROCESSPICKDIALOG:   return tr("Pick Game Window");
   case T_TIP_PROCESSPICKDIALOG:        return tr("Select process window");
 
-  case T_MENUTEXT_WINDOWPICKDIALOG:   return tr("Select annots window");
+  case T_MENUTEXT_WINDOWPICKDIALOG:   return tr("Select Annotation Window");
   case T_TIP_WINDOWPICKDIALOG:        return tr("Select window to show annots");
 
   case T_TITLE_ABOUT:           return tr("About");
@@ -433,7 +434,7 @@ TranslatorManager::translate(int tid) const
   case T_MENUTEXT_SUBTITLE:     return tr("Subtitle");
   case T_TIP_SUBTITLE:          return tr("Subtitle");
 
-  case T_MENUTEXT_ANNOTSUBTITLE: return tr("Annot subtitle");
+  case T_MENUTEXT_ANNOTSUBTITLE: return tr("Annotation subtitle");
   case T_TIP_ANNOTSUBTITLE:      return tr("Annotation as subtitle");
 
   case T_MENUTEXT_SECTION:      return tr("DVD sections");
@@ -523,10 +524,10 @@ TranslatorManager::translate(int tid) const
   case T_MENUTEXT_DISCONNECT:   return tr("Disconnect from server");
   case T_TIP_DISCONNECT:        return tr("Disconnect from server and use local cache only");
 
-  case T_MENUTEXT_ANNOTATIONEDITOR: return tr("Annot editor") + " [" K_CTRL "+F1]";
+  case T_MENUTEXT_ANNOTATIONEDITOR: return tr("Annotation Editor") + " [" K_CTRL "+F1]";
   case T_TIP_ANNOTATIONEDITOR: return tr("Show annotation editor");
 
-  case T_MENUTEXT_ANNOTATIONBROWSER: return tr("Annots") + " [" K_CTRL "+F2]";
+  case T_MENUTEXT_ANNOTATIONBROWSER: return tr("Search Annotations") + " [" K_CTRL "+F2]";
   case T_TIP_ANNOTATIONBROWSER: return tr("Show annotation browser");
 
   case T_MENUTEXT_TOKENVIEW:    return tr("Token") + " [" K_CTRL "+F3]";
@@ -547,7 +548,7 @@ TranslatorManager::translate(int tid) const
   case T_MENUTEXT_ADDALIAS:     return tr("Add alias");
   case T_TIP_ADDALIAS:          return tr("Add alias");
 
-  case T_MENUTEXT_SIGNALVIEW:     return tr("Select process");
+  case T_MENUTEXT_SIGNALVIEW:     return tr("Select Game Process");
   case T_TIP_SIGNALVIEW:          return tr("Select process signal");
 
   case T_MENUTEXT_ATTACHPROCESS: return tr("Attach process");
@@ -799,7 +800,8 @@ TranslatorManager::translate(int tid) const
   case T_MENUTEXT_DECREASEANNOTROTATION:  return tr("Rotate down") + " [" K_SHIFT "+" + tr("Wheel") + "↓]";
   case T_TIP_DECREASEANNOTROTATION:       return tr("Rotate down");
 
-  case T_COPYCURRENTURL:       return tr("Copy current URL");
+  case T_COPYCURRENTURL:       return tr("Copy URL");
+  case T_COPYCURRENTTITLE:     return tr("Copy Title");
   case T_ACTUALSIZE:       return tr("Actual size");
 
   case T_HUEUP: return tr("Hue up");

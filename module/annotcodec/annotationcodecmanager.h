@@ -4,7 +4,7 @@
 // annotationcodecmanager.h
 // 2/3/2012
 
-#include "annotationcodec.h"
+#include "module/annotcodec/annotationcodec.h"
 
 class AnnotationCodecManager : public QObject
 {
@@ -19,7 +19,7 @@ class AnnotationCodecManager : public QObject
   QList<AnnotationCodec*> codecs_;
 
 public:
-  enum Site { Bilibli = 0, AcFun, Nicovideo, SiteCount };
+  enum Site { Bilibli = 0, Acfun, Nicovideo, SiteCount };
 
   static Self *globalInstance() { static Self g; return &g; }
 

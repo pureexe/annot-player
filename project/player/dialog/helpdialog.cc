@@ -31,9 +31,7 @@ HelpDialog::HelpDialog(QWidget *parent)
     //QPainter::SmoothPixmapTransform
   );
 
-  // Shortcuts
-  connect(new QShortcut(QKeySequence("Esc"), this), SIGNAL(activated()), SLOT(hide()));
-  connect(new QShortcut(QKeySequence("CTRL+W"), this), SIGNAL(activated()), SLOT(hide()));
+  new QShortcut(QKeySequence("Esc"), this, SLOT(fadeOut()));
 }
 
 // - Properties -

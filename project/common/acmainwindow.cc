@@ -4,6 +4,9 @@
 #include "project/common/acmainwindow.h"
 #include "project/common/acss.h"
 #include "project/common/acui.h"
+#ifdef WITH_MODULE_ANIMATION
+#  include "module/animation/fadeanimation.h"
+#endif // WITH_MODULE_ANIMATION
 #include <QtGui/QStatusBar>
 #include <QtCore/QTimer>
 
@@ -26,9 +29,12 @@ enum { StatusMessageTimeout = 5000 };
 // - Constructions -
 
 AcMainWindow::AcMainWindow(QWidget *parent, Qt::WindowFlags f)
-  : Base(parent, f), autoHideMenuBar_(true)
+  : Base(parent, f), autoHideMenuBar_(true), fadeAni_(0), fadeEnabled_(true)
 {
   AcUi::globalInstance()->setWindowStyle(this);
+#ifdef WITH_MODULE_ANIMATION
+  fadeAni_ = new FadeAnimation(this, "windowOpacity", this);
+#endif // WITH_MODULE_ANIMATION
 
   messageTimer_ = new QTimer(this);
   messageTimer_->setInterval(StatusMessageTimeout);
@@ -90,6 +96,44 @@ AcMainWindow::notify(const QString &text)
     if (autoHideMenuBar_)
       messageTimer_->start();
   }
+}
+
+// - Events -
+
+void
+AcMainWindow::setVisible(bool visible)
+{
+#ifdef WITH_MODULE_ANIMATION
+  if (fadeEnabled_ && visible && !isVisible()) {
+    static qreal opacity = 0.0;
+    if (qFuzzyCompare(opacity + 1, 1))
+      opacity = windowOpacity();
+    fadeAni_->fadeIn(opacity);
+  }
+#endif // WITH_MODULE_ANIMATION
+  Base::setVisible(visible);
+}
+
+void
+AcMainWindow::closeEvent(QCloseEvent *e)
+{
+#ifdef WITH_MODULE_ANIMATION
+  if (fadeAni_->state() == QAbstractAnimation::Running)
+    fadeAni_->stop();
+#endif // WITH_MODULE_ANIMATION
+  Base::closeEvent(e);
+}
+
+void
+AcMainWindow::fadeOut()
+{
+#ifdef WITH_MODULE_ANIMATION
+  if (fadeEnabled_ && isVisible()) {
+    fadeAni_->fadeOut(windowOpacity());
+    QTimer::singleShot(fadeAni_->duration(), this, SLOT(hide()));
+  } else
+#endif // WITH_MODULE_ANIMATION
+  hide();
 }
 
 // EOF

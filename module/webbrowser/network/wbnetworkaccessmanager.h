@@ -32,6 +32,7 @@ protected:
                                        QIODevice *outgoingData = 0);
   bool isBlockedUrl(const QUrl &url) const;
   static QUrl encodeNicoUrl(const QUrl &url);
+  static QUrl encodeNicoWatchUrl(const QUrl &url);
   static QUrl encodeEroUrl(const QUrl &url);
   static QUrl encodeAb2Url(const QUrl &url);
   static QUrl encodeAb2TryUrl(const QUrl &url);

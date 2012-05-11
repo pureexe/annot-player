@@ -22,6 +22,8 @@
 
 using namespace AnnotCloud;
 
+enum { MaxRetries = 5 };
+
 // - Construction -
 
 BilibiliCodec::BilibiliCodec(QObject *parent)
@@ -54,12 +56,22 @@ BilibiliCodec::parseReply(QNetworkReply *reply)
   DOUT("enter");
   Q_ASSERT(reply);
   reply->deleteLater();
+  QString url = reply->url().toString();
   if (!reply->isFinished() || reply->error() != QNetworkReply::NoError) {
-    //emit error(reply->errorString());
-    emit error(tr("network error, failed to resolve media URL") + ": " + reply->url().toString());
-    DOUT("exit: network error");
+    int retry = ++retries_[url];
+    if (retry <= MaxRetries) {
+      emit error(
+        tr("network error, retry")
+        + QString(" (%1/%2):").arg(QString::number(retry)).arg(QString::number(MaxRetries))
+        + url
+      );
+      fetch(url);
+    } else
+      emit error(tr("network error, failed to resolve media URL") + ": " + url);
+    DOUT("exit: network error:" << reply->errorString());
     return;
   }
+  retries_.remove(url);
   QByteArray data = reply->readAll();
   AnnotationList l;
   if (!data.isEmpty()) {

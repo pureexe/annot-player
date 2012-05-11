@@ -126,6 +126,14 @@ namespace slot_ { // anonymous slot_
 
 namespace { namespace task_ { // anonymous
 
+  class updateAnnotations : public QRunnable
+  {
+    MainWindow *w_;
+    virtual void run() { w_->updateAnnotations(false); } // \override, async = false
+  public:
+    explicit updateAnnotations(MainWindow *w) : w_(w) { Q_ASSERT(w_); }
+  };
+
   class invalidateMediaAndPlay : public QRunnable
   {
     MainWindow *w_;

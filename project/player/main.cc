@@ -151,10 +151,15 @@ main(int argc, char *argv[])
   // Check update.
   if (settings->version() != G_VERSION) {
     DOUT("update from old version");
+
     QFile::remove(G_PATH_CACHEDB);
     QFile::remove(G_PATH_QUEUEDB);
     QFile::remove(G_PATH_DEBUG);
-    settings->setVersion(G_VERSION);
+    if (QFile::rename(QDir::homePath() + "/Annot", G_PATH_DOWNLOADS))
+      AcLocationManager::globalInstance()->createDownloadsLocation();
+
+    ac->setThemeId(AcUi::CyanTheme);
+    ac->sync();
 
     settings->setWindowOnTop(false);
     settings->setAnnotationEffect(0);
@@ -168,10 +173,8 @@ main(int argc, char *argv[])
     settings->setContrast(1.1);
     settings->setBrightness(1.02*1.02);
 
+    settings->setVersion(G_VERSION);
     settings->sync();
-
-    if (QFile::rename(QDir::homePath() + "/Annot", G_PATH_DOWNLOADS))
-      AcLocationManager::globalInstance()->createDownloadsLocation();
   }
 
   // Moved
@@ -365,7 +368,7 @@ main(int argc, char *argv[])
   //DWM_ENABLE_AERO_WIDGET(&bk);
   //bk.showMaximized();
 
-  //QTimer::singleShota(0, &w, SLOT(checkClipboard()));
+  //QTimer::singleShot(0, &w, SLOT(checkClipboard()));
 
   DOUT("exit: exec");
   return a.exec();

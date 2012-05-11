@@ -23,7 +23,7 @@ AcTextEdit::contextMenuEvent(QContextMenuEvent *event)
   QMenu *m = new QMenu(this);
   AcUi::globalInstance()->setWindowStyle(m, false); // resistent = false
 
-  QMenu *scm = createStandardContextMenu();
+  QMenu *scm = createStandardContextMenu(event->pos());
   m->addActions(scm->actions());
 
   m->exec(event->globalPos());

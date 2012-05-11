@@ -42,8 +42,8 @@ namespace { // anonymous
   inline void deallocateWaveMap(int **waveMap)
   {
     if (waveMap) {
-      delete [] *waveMap;
-      delete [] waveMap;
+      delete[] *waveMap;
+      delete[] waveMap;
     }
   }
 
@@ -117,15 +117,16 @@ void GraphicsRippleEffect::draw(QPainter *painter)
   const QImage currentImage = sourcePixmap(Qt::LogicalCoordinates, &offset).toImage();
   QImage modifiedImage = currentImage;
   if (!m_previousMap && !m_currentMap) {
-    m_previousMap = allocateWaveMap(currentImage.size());
-    m_currentMap = allocateWaveMap(currentImage.size());
+    m_previousMap = ::allocateWaveMap(currentImage.size());
+    m_currentMap = ::allocateWaveMap(currentImage.size());
   }
 
+  //DOUT("current image size =" << currentImage.size());
   int x, y;
-  if (qFuzzyCompare(m_opacity, qreal(0.0))) {
+  if (qFuzzyCompare(m_opacity +1, 1)) {
     for (x = 0; x < currentImage.width(); ++x) {
-      memset(m_currentMap[x], 0, sizeof(int) * currentImage.height());
-      memset(m_previousMap[x], 0, sizeof(int) * currentImage.height());
+      ::memset(m_currentMap[x], 0, sizeof(int) * currentImage.height());
+      ::memset(m_previousMap[x], 0, sizeof(int) * currentImage.height());
     }
     m_mapSize = currentImage.size();
     int waveLength = m_mapSize.width() > m_mapSize.height() ? m_mapSize.width() : m_mapSize.height();
@@ -178,14 +179,13 @@ void GraphicsRippleEffect::draw(QPainter *painter)
             qBound(0, yOffset, height - 1)));
     }
   }
-
   // Swap wave maps
   int **pointer = m_previousMap;
   m_previousMap = m_currentMap;
   m_currentMap = pointer;
 
   // Restart wave if image center has no wave
-  if (m_currentMap[width >> 1][height >> 1] == 0) {
+  if (!m_mapSize.isEmpty() && m_currentMap[width >> 1][height >> 1] == 0) {
     int waveLength = width > height ? width : height;
     m_currentMap[width >> 1][height >> 1] = waveLength << m_heigth;
   }

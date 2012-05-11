@@ -21,10 +21,6 @@ AcConsole::AcConsole(QWidget *parent)
   connect(this, SIGNAL(debugMessageReceived(QString)),
           textView_, SLOT(append(QString)), Qt::QueuedConnection);
 
-  // Shortcuts
-  connect(new QShortcut(QKeySequence("Esc"), this), SIGNAL(activated()), SLOT(hide()));
-  connect(new QShortcut(QKeySequence("CTRL+W"), this), SIGNAL(activated()), SLOT(hide()));
-
   instances_.append(this);
 }
 
@@ -39,7 +35,7 @@ AcConsole::createLayout()
   textView_ = new AcTextView;
 
   QToolButton *okButton = ui->makeToolButton(
-        AcUi::PushHint | AcUi::HighlightHint, tr("OK"), this, SLOT(hide()));
+        AcUi::PushHint | AcUi::HighlightHint, tr("OK"), this, SLOT(fadeOut()));
   QToolButton *clearButton = ui->makeToolButton(
         AcUi::PushHint, tr("Clear"), textView_, SLOT(clear()));
 

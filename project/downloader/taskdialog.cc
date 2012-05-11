@@ -27,10 +27,7 @@ TaskDialog::TaskDialog(QWidget *parent)
   createLayout();
 
   // Shortcuts
-  connect(new QShortcut(QKeySequence("Esc"), this), SIGNAL(activated()), SLOT(hide()));
-  connect(new QShortcut(QKeySequence("CTRL+W"), this), SIGNAL(activated()), SLOT(hide()));
-
-  connect(new QShortcut(QKeySequence::Save, this), SIGNAL(activated()), SLOT(add()));
+  new QShortcut(QKeySequence::Save, this, SLOT(add()));
 
   // Focus
   textView_->setFocus();
@@ -40,7 +37,6 @@ void
 TaskDialog::createLayout()
 {
   AcUi *ui = AcUi::globalInstance();
-  ui->setWindowStyle(this);
 
   textView_ = new AcTextView;
 
@@ -125,7 +121,7 @@ TaskDialog::lastUrl() const
 void
 TaskDialog::add()
 {
-  hide();
+  fadeOut();
   QString text = textView_->toPlainText();
   QStringList urls;
   foreach (QString t, text.split('\n', QString::SkipEmptyParts)) {
@@ -134,9 +130,11 @@ TaskDialog::add()
   }
   bool batch = false;
   if (!urls.isEmpty()) {
-    urls = QtExt::uniqueList(urls);
-    DOUT("urls =" << urls);
-    emit urlsAdded(urls, batch);
+    QStringList ret;
+    foreach (const QString &url, QtExt::uniqueList(urls))
+      ret.append(formatUrl(url));
+    DOUT("urls =" << ret);
+    emit urlsAdded(ret, batch);
   } else if (!text.isEmpty())
     emit warning(tr("invalid URLs") + ": " + text);
 }
@@ -207,6 +205,24 @@ TaskDialog::decrease()
 
   if (url != prevUrl)
     addText(url);
+}
+
+QString
+TaskDialog::formatUrl(const QString &url)
+{
+  QString ret = url.trimmed();
+  if (ret.isEmpty())
+    return ret;
+  if (ret.startsWith("ttp://"))
+    ret.prepend('h');
+  else if (!ret.startsWith("http://", Qt::CaseInsensitive))
+    ret.prepend("http://");
+
+  ret.remove(QRegExp("#$"));
+  ret.replace(QRegExp("/index.html$", Qt::CaseInsensitive), "/");
+  ret.replace(QRegExp("/index_1.html$", Qt::CaseInsensitive), "/");
+  ret.replace(QRegExp("/#$"), "/");
+  return ret;
 }
 
 // EOF

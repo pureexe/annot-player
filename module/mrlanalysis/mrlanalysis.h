@@ -7,7 +7,7 @@
 #include <QtCore/QString>
 
 // Video sites with annotations
-#define MA_EIGEN_NICOVIDEO      "www.nicovideo.jp/watch"
+#define MA_EIGEN_NICOVIDEO      "www.nicovideo.jp/watch/"
 #define MA_EIGEN_BILIBILI       "www.bilibili.tv/video/av"
 #define MA_EIGEN_ACFUN          "www.acfun.tv/v/ac"
 
@@ -24,7 +24,7 @@
 namespace MrlAnalysis
 {
   enum Site { NoSite = 0,
-    Nicovideo, Bilibili, AcFun, AnnotationSite,
+    Nicovideo, Bilibili, Acfun, AnnotationSite,
     Youku, Tudou, SinaVideo, QQVideo, ChineseVideoSite,
     Youtube, GoogleVideo, VideoSite
   };

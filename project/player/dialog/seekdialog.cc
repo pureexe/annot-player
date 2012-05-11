@@ -45,7 +45,6 @@ void
 SeekDialog::createLayout()
 {
   AcUi *ui = AcUi::globalInstance();
-  ui->setWindowStyle(this);
 
   QStringList defvals = QStringList()
     << "0" << "1" << "2" << "3" << "5"
@@ -70,7 +69,7 @@ SeekDialog::createLayout()
   QToolButton *okButton = ui->makeToolButton(
         AcUi::PushHint | AcUi::HighlightHint, TR(T_OK), this, SLOT(ok()));
   QToolButton *cancelButton = ui->makeToolButton(
-        AcUi::PushHint, TR(T_CANCEL), this, SLOT(hide()));
+        AcUi::PushHint, TR(T_CANCEL), this, SLOT(fadeOut()));
 
   // Layouts
   QVBoxLayout *rows = new QVBoxLayout; {
@@ -100,10 +99,6 @@ SeekDialog::createLayout()
   connect(ssEdit_->lineEdit(), SIGNAL(returnPressed()), SLOT(ok()));
   connect(mmEdit_->lineEdit(), SIGNAL(returnPressed()), SLOT(ok()));
   connect(hhEdit_->lineEdit(), SIGNAL(returnPressed()), SLOT(ok()));
-
-  // Shortcuts
-  connect(new QShortcut(QKeySequence("Esc"), this), SIGNAL(activated()), SLOT(hide()));
-  connect(new QShortcut(QKeySequence("CTRL+W"), this), SIGNAL(activated()), SLOT(hide()));
 }
 
 // - Properties -
@@ -151,7 +146,7 @@ SeekDialog::ok()
     warn(TR(T_ERROR_BAD_POS));
     return;
   }
-  hide();
+  fadeOut();
   emit seekRequested(msecs);
 }
 

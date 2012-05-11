@@ -4,7 +4,7 @@
 // annotationcountdialog.h
 // 2/8/2012
 
-#include "module/qtext/dialog.h"
+#include "project/common/acwindow.h"
 #include <QtCore/QStringList>
 
 QT_FORWARD_DECLARE_CLASS(QComboBox)
@@ -12,13 +12,12 @@ QT_FORWARD_DECLARE_CLASS(QLabel)
 
 class DataManager;
 
-typedef QtExt::Dialog AnnotationCountDialogBase;
-class AnnotationCountDialog : public AnnotationCountDialogBase
+class AnnotationCountDialog : public AcWindow
 {
   Q_OBJECT
   Q_DISABLE_COPY(AnnotationCountDialog)
   typedef AnnotationCountDialog Self;
-  typedef AnnotationCountDialogBase Base;
+  typedef AcWindow Base;
 
   DataManager *dm_;
   QComboBox *edit_;

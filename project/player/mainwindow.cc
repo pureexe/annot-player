@@ -37,8 +37,7 @@
 #include "tr.h"
 #include "translatormanager.h"
 #include "settings.h"
-#include "siteaccountview.h"
-#include "aboutdialog.h"
+//#include "siteaccountview.h"
 #include "annotationcountdialog.h"
 #include "blacklistview.h"
 #include "backlogdialog.h"
@@ -46,7 +45,7 @@
 #include "devicedialog.h"
 #include "helpdialog.h"
 #include "logindialog.h"
-#include "networkproxydialog.h"
+//#include "networkproxydialog.h"
 #include "pickdialog.h"
 #include "seekdialog.h"
 #include "livedialog.h"
@@ -56,6 +55,7 @@
 #include "shutdowndialog.h"
 #include "sleepdialog.h"
 #include "userview.h"
+#include "useranalyticsview.h"
 #include "global.h"
 #ifdef USE_MODE_SIGNAL
 #  include "signalview.h"
@@ -66,12 +66,14 @@
 #include "module/player/player.h"
 #include "module/player/playerdefs.h"
 #include "module/annotcodec/annotationcodecmanager.h"
+#include "module/animation/fadeanimation.h"
 #include "module/mrlanalysis/mrlanalysis.h"
 #include "module/mrlresolver/mrlresolvermanager.h"
 #include "module/mrlresolver/mrlresolversettings.h"
 #include "module/translator/translator.h"
 #include "module/download/downloader.h"
 #include "module/searchengine/searchenginerc.h"
+#include "module/magnifier/magnifier.h"
 #include "module/qtext/algorithm.h"
 #include "module/qtext/string.h"
 #include "module/qtext/actionwithid.h"
@@ -80,6 +82,7 @@
 #include "module/qtext/htmltag.h"
 #include "module/qtext/rubberband.h"
 #include "module/mediacodec/flvcodec.h"
+#include "module/pixmapfilter/pixmapripplefilter.h"
 #ifdef WITH_MODULE_SERVERAGENT
 #  include "module/serveragent/serveragent.h"
 #endif // WITH_MODULE_SERVERAGENT
@@ -118,13 +121,14 @@
 #ifdef Q_OS_UNIX
 #  include "unix/qtunix/qtunix.h"
 #endif // Q_OS_UNIX
-#include "project/common/acui.h"
-#include "project/common/acsettings.h"
+#include "project/common/acabout.h"
+#include "project/common/acbrowser.h"
+#include "project/common/acdownloader.h"
 #include "project/common/acpaths.h"
 #include "project/common/acplayer.h"
-#include "project/common/acdownloader.h"
-#include "project/common/acbrowser.h"
 #include "project/common/acpreferences.h"
+#include "project/common/acsettings.h"
+#include "project/common/acui.h"
 #include "module/annotcloud/annottag.h"
 #include "module/annotcloud/annothtml.h"
 #include <QtGui>
@@ -161,6 +165,7 @@ using namespace Logger;
 
 enum { DEFAULT_LIVE_INTERVAL = 3000 }; // 3 seconds
 enum { HISTORY_SIZE = 100 };   // Size of playPos/Sub/AudioTrack history
+enum { HOLD_TIMEOUT = 2000 };   // Size of playPos/Sub/AudioTrack history
 
 #define PREFERRED_WINDOW_SIZE   QSize(840, 480)
 #define PREFERRED_MIN_WIDTH     400
@@ -264,19 +269,20 @@ MainWindow::setupWindowStyle()
 MainWindow::MainWindow(bool unique, QWidget *parent, Qt::WindowFlags f)
   : Base(parent, f), disposed_(false), submit_(true),
     liveInterval_(DEFAULT_LIVE_INTERVAL),
-    tray_(0),//commentView_(0),
-    annotationAnalyticsView_(0), annotationEditor_(0), blacklistView_(0), backlogDialog_(0), consoleDialog_(0),
-    aboutDialog_(0), annotationCountDialog_(0), deviceDialog_(0), helpDialog_(0), loginDialog_(0), liveDialog_(0),
-    networkProxyDialog_(0), processPickDialog_(0), seekDialog_(0), syncDialog_(0), windowPickDialog_(0),
-    mediaUrlDialog_(0), annotationUrlDialog_(0), siteAccountView_(0), mediaInfoView_(0), userView_(0),
+    tray_(0), about_(0), magnifier_(0),
+    annotationAnalyticsView_(0), userAnalyticsView_(0), annotationEditor_(0), blacklistView_(0), backlogDialog_(0), consoleDialog_(0),
+    annotationCountDialog_(0), deviceDialog_(0), helpDialog_(0), loginDialog_(0), liveDialog_(0),
+    processPickDialog_(0), seekDialog_(0), syncDialog_(0), windowPickDialog_(0),
+    mediaUrlDialog_(0), annotationUrlDialog_(0), mediaInfoView_(0), userView_(0),
     dragPos_(BAD_POS), windowModeUpdateTime_(0),
     tokenType_(0), recentSourceLocked_(false), cursorVisible_(true), cancelContextMenu_(false),
+    ripple_(false), rippleFilter_(0), rippleTimer_(0),
     preferredSubtitleTrack_(0), preferredAudioTrack_(0)
 {
-#ifndef Q_OS_MAC
+#ifndef Q_WS_MAC
   if (Settings::globalSettings()->isWindowOnTop())
     setWindowFlags(windowFlags() | Qt::WindowStaysOnTopHint);
-#endif // Q_OS_MAC
+#endif // Q_WS_MAC
 
 //#ifdef Q_OS_MAC
 //  setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
@@ -286,6 +292,12 @@ MainWindow::MainWindow(bool unique, QWidget *parent, Qt::WindowFlags f)
   setWindowTitle(TR(T_TITLE_PROGRAM));
   setContentsMargins(0, 0, 0, 0);
 
+//#ifdef Q_WS_WIN
+//  if (!AcUi::isAeroAvailable())
+//#endif // Q_WS_WIN
+//  {
+//    ripple_ = true;
+//  }
   setupWindowStyle();
 
   menuBar()->setVisible(Settings::globalSettings()->isMenuBarVisible());
@@ -332,7 +344,7 @@ MainWindow::MainWindow(bool unique, QWidget *parent, Qt::WindowFlags f)
 
 #ifdef WITH_WIN_MOUSEHOOK
   MouseHook::globalInstance()->setEventListener(this);
-  MouseHook::globalInstance()->start();
+  //MouseHook::globalInstance()->start();
 #endif // WITH_WIN_MOUSEHOOK
 
   // Load settings
@@ -404,7 +416,7 @@ MainWindow::MainWindow(bool unique, QWidget *parent, Qt::WindowFlags f)
     if (isRemoteMrl(url)) {
       //browsedFile = url;
       break;
-    } else if (QFile::exists(url)) {
+    } else if (!url.endsWith(".exe", Qt::CaseInsensitive) && QFile::exists(url)) {
       browsedFile = url;
       break;
     }
@@ -467,6 +479,8 @@ MainWindow::createComponents(bool unique)
     connect(this, SIGNAL(progressMessageChanged(QString)), tray_, SLOT(setToolTip(QString)), Qt::QueuedConnection);
     connect(this, SIGNAL(trayMessage(QString,QString)), tray_, SLOT(showMessage(QString,QString)), Qt::QueuedConnection);
   }
+
+  fadeAni_ = new FadeAnimation(this, "windowOpacity", this);
 
   // Utilities
   grabber_ = new Grabber(this); {
@@ -632,6 +646,11 @@ MainWindow::createComponents(bool unique)
   connect(doll_, SIGNAL(said(QString)), SLOT(respond(QString)));
 #endif // WITH_MODULE_DOLL
 
+  holdTimer_ = new QTimer(this);
+  holdTimer_->setInterval(HOLD_TIMEOUT);
+  holdTimer_->setSingleShot(true);
+  connect(holdTimer_, SIGNAL(timeout()), SLOT(toggleMagnifierVisible()));
+
   windowStaysOnTopTimer_ = new QTimer(this);
   windowStaysOnTopTimer_->setInterval(G_WINDOWONTOP_TIMEOUT);
   connect(windowStaysOnTopTimer_, SIGNAL(timeout()), SLOT(setWindowOnTop()));
@@ -676,6 +695,14 @@ MainWindow::createConnections()
   connect(qApp, SIGNAL(focusChanged(QWidget*, QWidget*)), SLOT(onFocusedWidgetChanged(QWidget*, QWidget*)));
 #endif // Q_WS_WIN
 
+  connect(this, SIGNAL(posChanged()), embeddedPlayer_, SLOT(hide()));
+
+  // Settings
+  connect(AcSettings::globalSettings(), SIGNAL(nicovideoAccountChanged(QString,QString)),
+          MrlResolverSettings::globalSettings(), SLOT(setNicovideoAccount(QString,QString)));
+  connect(AcSettings::globalSettings(), SIGNAL(bilibiliAccountChanged(QString,QString)),
+          MrlResolverSettings::globalSettings(), SLOT(setBilibiliAccount(QString,QString)));
+
   // Player
   connect(player_, SIGNAL(mediaChanged()), annotationBrowser_, SLOT(clear()));
   connect(player_, SIGNAL(titleIdChanged(int)), SLOT(invalidateToken()));
@@ -697,6 +724,13 @@ MainWindow::createConnections()
   connect(player_, SIGNAL(stopping()), SLOT(rememberPlayPos()));
   connect(player_, SIGNAL(stopping()), SLOT(rememberSubtitle()));
   connect(player_, SIGNAL(stopping()), SLOT(rememberAudioTrack()));
+
+  if (ripple_) {
+    connect(player_, SIGNAL(opening()), SLOT(disableRipple()));
+    connect(player_, SIGNAL(playing()), SLOT(disableRipple()));
+    connect(player_, SIGNAL(stopped()), SLOT(enableRipple()));
+    connect(player_, SIGNAL(mediaClosed()), SLOT(enableRipple()));
+  }
 
   connect(loadSubtitlesTimer_, SIGNAL(timeout()), SLOT(loadSubtitles()));
   connect(resumePlayTimer_, SIGNAL(timeout()), SLOT(resumePlayPos()));
@@ -803,6 +837,10 @@ MainWindow::createConnections()
   connect(annotationView_, SIGNAL(annotationBlockedWithId(qint64)), SLOT(blockAnnotationWithId(qint64)));
 
   connect(annotationView_, SIGNAL(annotationBlockedWithText(QString)), annotationFilter_, SLOT(addBlockedText(QString)));
+
+  connect(annotationView_, SIGNAL(selectedUserId(qint64)), this, SLOT(showUserAnalytics(qint64)));
+
+  connect(player_, SIGNAL(seeked()), annotationView_, SLOT(removeAllItems()));
 
   connect(annotationBrowser_, SIGNAL(userBlessedWithId(qint64)), SLOT(blessUserWithId(qint64)));
   connect(annotationBrowser_, SIGNAL(userCursedWithId(qint64)), SLOT(curseUserWithId(qint64)));
@@ -1049,6 +1087,17 @@ MainWindow::isValid() const
 void
 MainWindow::createActions()
 {
+  connect(updateAnnotationsAct_ = new QAction(tr("Update Annotations"), this),
+         SIGNAL(triggered()), SLOT(updateAnnotations()));
+
+  toggleMagnifierVisibleAct_ = new QAction(tr("Magnifier"), this);
+  toggleMagnifierVisibleAct_->setCheckable(true);
+  toggleMagnifierVisibleAct_->setShortcut(QKeySequence("CTRL+E"));
+  connect(toggleMagnifierVisibleAct_, SIGNAL(triggered(bool)), SLOT(setMagnifierVisible(bool)));
+
+  // TODO clean up actions
+  // *** CHECKPOINT ***
+
 #define MAKE_ACTION(_action, _styleid, _receiver, _slot) { \
     _action = new QAction(QIcon(RC_IMAGE_##_styleid), TR(T_MENUTEXT_##_styleid), this); \
     _action->setToolTip(TR(T_TOOLTIP_##_styleid)); \
@@ -1066,6 +1115,7 @@ MainWindow::createActions()
   MAKE_ACTION(openDeviceAct_,   OPENDEVICE,     this,           SLOT(openDevice()))
   MAKE_ACTION(downloadCurrentUrlAct_,DOWNLOADCURRENT, this,    SLOT(downloadCurrentUrl()))
   MAKE_ACTION(copyCurrentUrlAct_,  COPYCURRENTURL,     this,    SLOT(copyCurrentUrl()))
+  MAKE_ACTION(copyCurrentTitleAct_,  COPYCURRENTTITLE, this,    SLOT(copyCurrentTitle()))
   MAKE_ACTION(openInWebBrowserAct_,OPENINWEBBROWSER, this,      SLOT(openInWebBrowser()))
   MAKE_ACTION(openVideoDeviceAct_, OPENVIDEODEVICE,  this,      SLOT(openVideoDevice()))
   MAKE_ACTION(openAudioDeviceAct_, OPENAUDIODEVICE,  this,      SLOT(openAudioDevice()))
@@ -1121,7 +1171,7 @@ MainWindow::createActions()
   MAKE_TOGGLE(shutdownAfterFinishedAct_, SHUTDOWNAFTERFINISHED, this, SLOT(shutdownAfterFinished()))
   MAKE_TOGGLE(toggleMultipleWindowsEnabledAct_, MULTIWINDOW, this, SLOT(setMultipleWindowsEnabled(bool)))
   MAKE_TOGGLE(toggleClipboardMonitorEnabledAct_, MONITORCLIPBOARD, clipboardMonitor_, SLOT(setEnabled(bool)))
-  MAKE_TOGGLE(toggleNetworkProxyDialogVisibleAct_, NETWORKPROXY, this, SLOT(setNetworkProxyDialogVisible(bool)))
+  //MAKE_TOGGLE(toggleNetworkProxyDialogVisibleAct_, NETWORKPROXY, this, SLOT(setNetworkProxyDialogVisible(bool)))
   MAKE_TOGGLE(toggleAeroEnabledAct_, ENABLEAERO, AcUi::globalInstance(), SLOT(setAeroEnabled(bool)))
   MAKE_TOGGLE(toggleMenuThemeEnabledAct_, MENUTHEME, AcUi::globalInstance(), SLOT(setMenuEnabled(bool)))
   MAKE_TOGGLE(toggleFullScreenModeAct_, FULLSCREEN, hub_,       SLOT(setFullScreenWindowMode(bool)))
@@ -1149,7 +1199,7 @@ MainWindow::createActions()
   MAKE_TOGGLE(toggleSeekDialogVisibleAct_,  SEEKDIALOG,  this,         SLOT(setSeekDialogVisible(bool)))
   MAKE_TOGGLE(toggleLiveDialogVisibleAct_,  LIVEDIALOG,  this,         SLOT(setLiveDialogVisible(bool)))
   MAKE_TOGGLE(toggleSyncDialogVisibleAct_,  SYNCDIALOG,  this,         SLOT(setSyncDialogVisible(bool)))
-  MAKE_TOGGLE(toggleSiteAccountViewVisibleAct_, SITEACCOUNT, this, SLOT(setSiteAccountViewVisible(bool)))
+  //MAKE_TOGGLE(toggleSiteAccountViewVisibleAct_, SITEACCOUNT, this, SLOT(setSiteAccountViewVisible(bool)))
   MAKE_TOGGLE(toggleMediaInfoViewVisibleAct_, MEDIAINFO, this, SLOT(setMediaInfoViewVisible(bool)))
   MAKE_TOGGLE(toggleAnnotationBrowserVisibleAct_, ANNOTATIONBROWSER, annotationBrowser_, SLOT(setVisible(bool)))
   MAKE_TOGGLE(toggleAnnotationEditorVisibleAct_, ANNOTATIONEDITOR, this, SLOT(setAnnotationEditorVisible(bool)))
@@ -1259,6 +1309,7 @@ MainWindow::createActions()
   }
 
   MAKE_ACTION(aboutAct_,        ABOUT,  this,   SLOT(about()))
+  MAKE_ACTION(preferencesAct_,  PREFERENCES,  this,   SLOT(showPreferences()))
   MAKE_ACTION(helpAct_,         HELP,   this,   SLOT(help()))
   MAKE_ACTION(updateAct_,       UPDATE, this,   SLOT(update()))
   MAKE_ACTION(quitAct_,         QUIT,   this,   SLOT(close()))
@@ -1267,6 +1318,8 @@ MainWindow::createActions()
 
   // Shortcuts
   {
+    preferencesAct_->setShortcut(QKeySequence("CTRL+,"));
+
     toggleSeekDialogVisibleAct_->setShortcuts(QKeySequence::Find);
     //QShortcut *f = new QShortcut(QKeySequence::Find, this);
     //connect(f, SIGNAL(activated()), SLOT(showSeekDialog()));
@@ -1305,9 +1358,7 @@ MainWindow::createActions()
     //resumeAnnotationAct_->setShortcut(QKeySequence::Refresh);
     resumeAnnotationAct_->setShortcut(QKeySequence("CTRL+R"));
 
-#ifndef Q_WS_MAC
     toggleWindowOnTopAct_->setShortcuts(QKeySequence::AddTab);
-#endif // !Q_WS_MAC
     //QShortcut *t = new QShortcut(QKeySequence::AddTab, this);
     //connect(t, SIGNAL(activated()), SLOT(toggleWindowOnTop()));
 
@@ -1489,7 +1540,7 @@ MainWindow::createSearchMenu()
     searchMenu_->setToolTip(tr("Search"));
   }
 
-  searchMenu_->addAction(tr("Copy Current Title"), this, SLOT(copyCurrentTitle()));
+  searchMenu_->addAction(copyCurrentTitleAct_);
   searchMenu_->addSeparator();
 
   QString t = tr("Search with %1");
@@ -1511,8 +1562,8 @@ MainWindow::createSearchMenu()
   e = searchEngines_[SearchEngineFactory::Bilibili];
   searchMenu_->addAction(QIcon(e->icon()), t.arg(e->name()), this, SLOT(searchCurrentTitleWithBilibili()));
 
-  e = searchEngines_[SearchEngineFactory::AcFun];
-  searchMenu_->addAction(QIcon(e->icon()), t.arg(e->name()), this, SLOT(searchCurrentTitleWithAcFun()));
+  e = searchEngines_[SearchEngineFactory::Acfun];
+  searchMenu_->addAction(QIcon(e->icon()), t.arg(e->name()), this, SLOT(searchCurrentTitleWithAcfun()));
 
   e = searchEngines_[SearchEngineFactory::Youtube];
   searchMenu_->addAction(QIcon(e->icon()), t.arg(e->name()), this, SLOT(searchCurrentTitleWithYoutube()));
@@ -1567,13 +1618,33 @@ MainWindow::createMenus()
     helpContextMenu_->addAction(aboutAct_);
   }
 
+  gameMenu_ = new QMenu(this); {
+    ui->setContextMenuStyle(gameMenu_, this);
+    gameMenu_->setTitle(tr("Sync with Galgame")  + " ...");
+    gameMenu_->setToolTip(tr("Sync with Galgame"));
+#ifdef USE_MODE_SIGNAL
+
+#ifdef WITH_WIN_PICKER
+    gameMenu_->addAction(toggleProcessPickDialogVisibleAct_);
+    gameMenu_->addAction(toggleWindowPickDialogVisibleAct_);
+#endif // WITH_WIN_PICKER
+    gameMenu_->addAction(toggleSignalViewVisibleAct_);
+    gameMenu_->addSeparator();
+    gameMenu_->addAction(toggleRecentMessageViewVisibleAct_);
+    gameMenu_->addAction(toggleBacklogDialogVisibleAct_);
+    gameMenu_->addSeparator();
+    gameMenu_->addAction(toggleTranslateAct_);
+#endif // USE_MODE_SIGNAL
+  }
+
   currentMenu_ = new QMenu(this); {
     ui->setContextMenuStyle(currentMenu_, this);
     currentMenu_->setTitle(tr("Current media")  + " ...");
     currentMenu_->setToolTip(tr("Current media"));
 
-    currentMenu_->addAction(openBrowsedDirectoryAct_);
     currentMenu_->addAction(copyCurrentUrlAct_);
+    currentMenu_->addSeparator();
+    //currentMenu_->addAction(openBrowsedDirectoryAct_);
     currentMenu_->addAction(openInWebBrowserAct_);
     currentMenu_->addAction(saveMediaAct_);
     currentMenu_->addAction(downloadCurrentUrlAct_);
@@ -1837,6 +1908,7 @@ MainWindow::createMenus()
     utilityMenu_->addSeparator();
     utilityMenu_->addAction(openProxyBrowserAct_);
     utilityMenu_->addAction(toggleDownloaderVisibleAct_);
+    utilityMenu_->addAction(toggleMagnifierVisibleAct_);
 #ifndef Q_WS_MAC
     utilityMenu_->addAction(newWindowAct_);
 #endif // !Q_WS_MAC
@@ -1847,11 +1919,10 @@ MainWindow::createMenus()
     settingsMenu_->setToolTip(tr("Settings"));
     ui->setContextMenuStyle(settingsMenu_, true); // persistent = true
 
-    settingsMenu_->addAction(tr("Preferences"), this, SLOT(showPreferences()), QKeySequence("CTRL+,"));
-    settingsMenu_->addAction(toggleSiteAccountViewVisibleAct_);
-    settingsMenu_->addAction(toggleNetworkProxyDialogVisibleAct_);
+    //settingsMenu_->addAction(tr("Preferences"), this, SLOT(showPreferences()), QKeySequence("CTRL+,"));
+    //settingsMenu_->addAction(toggleSiteAccountViewVisibleAct_);
+    //settingsMenu_->addAction(toggleNetworkProxyDialogVisibleAct_);
 
-    settingsMenu_->addSeparator();
     settingsMenu_->addAction(togglePreferLocalDatabaseAct_);
     settingsMenu_->addAction(toggleClipboardMonitorEnabledAct_);
     settingsMenu_->addAction(toggleSaveMediaAct_);
@@ -1864,15 +1935,15 @@ MainWindow::createMenus()
 
 #ifndef Q_WS_MAC
     settingsMenu_->addAction(toggleWindowOnTopAct_);
-#endif // !Q_WS_MAC
+#endif // Q_WS_MAC
 #ifndef Q_OS_LINUX
     settingsMenu_->addAction(toggleEmbeddedPlayerOnTopAct_); // FIXME: X11::zeroInput problem
 #endif // Q_OS_LINUX
     //settingsMenu_->addAction(togglePlayerLabelEnabled_);
 
-#ifdef Q_OS_LINUX
+#ifndef Q_WS_MAC
     settingsMenu_->addAction(toggleMenuBarVisibleAct_);
-#endif // Q_OS_LINUX
+#endif // !Q_WS_MAC
     settingsMenu_->addAction(toggleMenuThemeEnabledAct_);
 #ifdef Q_WS_WIN
     if (QtWin::isWindowsVistaOrLater())
@@ -1884,24 +1955,31 @@ MainWindow::createMenus()
   annotationMenu_ = new QMenu(this); {
     ui->setContextMenuStyle(annotationMenu_, true); // persistent = true
 
-    annotationMenu_->setTitle(tr("Annotation settings") + " ...");
-    annotationMenu_->setToolTip(tr("Annotation settings"));
+    annotationMenu_->setTitle(tr("Annotation Information") + " ...");
+    annotationMenu_->setToolTip(tr("Annotation Information"));
+  }
 
-    annotationMenu_->addMenu(annotationEffectMenu_);
-    annotationMenu_->addMenu(annotationSubtitleMenu_);
-    annotationMenu_->addMenu(subtitleStyleMenu_);
-    annotationMenu_->addSeparator();
-    annotationMenu_->addAction(increaseAnnotationScaleAct_);
-    annotationMenu_->addAction(decreaseAnnotationScaleAct_);
-    annotationMenu_->addAction(resetAnnotationScaleAct_);
-    annotationMenu_->addSeparator();
-    annotationMenu_->addAction(increaseAnnotationRotationAct_);
-    annotationMenu_->addAction(decreaseAnnotationRotationAct_);
-    annotationMenu_->addAction(resetAnnotationRotationAct_);
-    annotationMenu_->addSeparator();
-    annotationMenu_->addAction(increaseAnnotationOffsetAct_);
-    annotationMenu_->addAction(decreaseAnnotationOffsetAct_);
-    annotationMenu_->addAction(resetAnnotationOffsetAct_);
+  annotationSettingsMenu_ = new QMenu(this); {
+    ui->setContextMenuStyle(annotationSettingsMenu_, true); // persistent = true
+
+    annotationSettingsMenu_->setTitle(tr("Annotation settings") + " ...");
+    annotationSettingsMenu_->setToolTip(tr("Annotation settings"));
+
+    //annotationSettingsMenu_->addMenu(annotationEffectMenu_);
+    annotationSettingsMenu_->addMenu(annotationSubtitleMenu_);
+    annotationSettingsMenu_->addMenu(subtitleStyleMenu_);
+    annotationSettingsMenu_->addSeparator();
+    annotationSettingsMenu_->addAction(increaseAnnotationScaleAct_);
+    annotationSettingsMenu_->addAction(decreaseAnnotationScaleAct_);
+    annotationSettingsMenu_->addAction(resetAnnotationScaleAct_);
+    annotationSettingsMenu_->addSeparator();
+    annotationSettingsMenu_->addAction(increaseAnnotationRotationAct_);
+    annotationSettingsMenu_->addAction(decreaseAnnotationRotationAct_);
+    annotationSettingsMenu_->addAction(resetAnnotationRotationAct_);
+    annotationSettingsMenu_->addSeparator();
+    annotationSettingsMenu_->addAction(increaseAnnotationOffsetAct_);
+    annotationSettingsMenu_->addAction(decreaseAnnotationOffsetAct_);
+    annotationSettingsMenu_->addAction(resetAnnotationOffsetAct_);
   }
 
 
@@ -1914,19 +1992,20 @@ MainWindow::createMenus()
   // jichi 11/11/11:  It's important not to use act like quitAct_ or aboutAct_ with translations.
 
   //menuBar_ = new QMenuBar;
-  fileMenu_ = menuBar()->addMenu(tr("&File")); {
-    fileMenu_->addAction(openFileAct_);
-    fileMenu_->addAction(openUrlAct_);
-    fileMenu_->addSeparator();
-    fileMenu_->addAction(openDeviceAct_);
-    fileMenu_->addAction(openVideoDeviceAct_);
-    fileMenu_->addAction(openSubtitleAct_);
-    fileMenu_->addAction(openAnnotationUrlAct_);
+  QMenu *m;
+  m = menuBar()->addMenu(tr("&File")); {
+    m->addAction(openFileAct_);
+    m->addAction(openUrlAct_);
+    m->addSeparator();
+    m->addAction(openDeviceAct_);
+    m->addAction(openVideoDeviceAct_);
+    m->addAction(openSubtitleAct_);
+    m->addAction(openAnnotationUrlAct_);
 #ifdef Q_WS_WIN // TODO add support for Mac/Linux
-    fileMenu_->addAction(openAudioDeviceAct_);
+    m->addAction(openAudioDeviceAct_);
 #endif // Q_WS_WIN
-    fileMenu_->addSeparator();
-    fileMenu_->addAction(tr("&Quit"), this, SLOT(close())); // DO NOT TRANSLATE ME
+    m->addSeparator();
+    m->addAction(tr("&Quit"), this, SLOT(close())); // DO NOT TRANSLATE ME
   }
 
   //editMenu = menuBar()->addMenu(tr("&Edit"));
@@ -1939,10 +2018,13 @@ MainWindow::createMenus()
   //editMenu->addAction(clearAct);
 
   //viewMenu_ = menuBar()->addMenu(tr("&View"));
+  m = menuBar()->addMenu(tr("&Settings")); {
+    m->addAction(tr("&Preferences"), this, SLOT(showPreferences()), QKeySequence("CTRL+,"));
+  }
 
-  helpMenu_ = menuBar()->addMenu(tr("&Help"));
-  helpMenu_->addAction(tr("&Help"), this, SLOT(help())); // DO NOT TRANSLATE ME
-  helpMenu_->addAction(tr("&About"), this, SLOT(about())); // DO NOT TRANSLATE ME
+  m = menuBar()->addMenu(tr("&Help"));
+  m->addAction(tr("&Help"), this, SLOT(help())); // DO NOT TRANSLATE ME
+  m->addAction(tr("&About"), this, SLOT(about())); // DO NOT TRANSLATE ME
 //#endif // !Q_WS_WIN
 
   openButtonMenu_ = new QMenu(this); {
@@ -2029,11 +2111,17 @@ MainWindow::updateTokenMode()
 
   switch (hub_->tokenMode()) {
   case SignalHub::MediaTokenMode:
+#ifdef WITH_WIN_MOUSEHOOK
+    MouseHook::globalInstance()->stop();
+#endif // WITH_WIN_MOUSEHOOK
     break;
   case SignalHub::LiveTokenMode:
   case SignalHub::SignalTokenMode:
     if (annotationView_->trackedWindow())
       hub_->setEmbeddedPlayerMode();
+#ifdef WITH_WIN_MOUSEHOOK
+    MouseHook::globalInstance()->start();
+#endif // WITH_WIN_MOUSEHOOK
     break;
   }
 
@@ -2150,8 +2238,8 @@ MainWindow::updateWindowMode()
     break;
 
   case SignalHub::NormalWindowMode:
-    if (embeddedPlayer_->isVisible())
-      embeddedPlayer_->hide();
+    //if (embeddedPlayer_->isVisible())
+    //  embeddedPlayer_->hide();
 
     annotationView_->setFullScreenMode(false);
 
@@ -2193,6 +2281,8 @@ MainWindow::updateWindowMode()
     break;
   }
 
+  embeddedPlayer_->hide();
+  QTimer::singleShot(0, embeddedPlayer_, SLOT(hide()));
   dragPos_ = BAD_POS;
 }
 
@@ -3275,11 +3365,11 @@ MainWindow::setMiniMode(bool visible)
 void
 MainWindow::about()
 {
-  if (!aboutDialog_) {
-    aboutDialog_ = new AboutDialog(this);
-    windows_.append(aboutDialog_);
+  if (!about_) {
+    about_ = new AcAbout(G_APPLICATION, G_VERSION, this);
+    windows_.append(about_);
   }
-  aboutDialog_->show();
+  about_->show();
 }
 
 void
@@ -3471,17 +3561,17 @@ MainWindow::setAnnotationCountDialogVisible(bool visible)
     annotationCountDialog_->raise();
 }
 
-void
-MainWindow::setNetworkProxyDialogVisible(bool visible)
-{
-  if (!networkProxyDialog_) {
-    networkProxyDialog_ = new NetworkProxyDialog(this);
-    windows_.append(networkProxyDialog_);
-  }
-  networkProxyDialog_->setVisible(visible);
-  if (visible)
-    networkProxyDialog_->raise();
-}
+//void
+//MainWindow::setNetworkProxyDialogVisible(bool visible)
+//{
+//  if (!networkProxyDialog_) {
+//    networkProxyDialog_ = new NetworkProxyDialog(this);
+//    windows_.append(networkProxyDialog_);
+//  }
+//  networkProxyDialog_->setVisible(visible);
+//  if (visible)
+//    networkProxyDialog_->raise();
+//}
 
 void
 MainWindow::setLoginDialogVisible(bool visible)
@@ -3645,42 +3735,42 @@ MainWindow::toggleAnnotationEditorVisible()
   setAnnotationEditorVisible(!v);
 }
 
-void
-MainWindow::invalidateSiteAccounts()
-{
-  if (!siteAccountView_)
-    return;
-  showMessage(tr("site accounts updated"));
-  MrlResolverSettings *settings = MrlResolverSettings::globalSettings();
-  settings->setNicovideoAccount(
-    siteAccountView_->nicovideoAccount().username,
-    siteAccountView_->nicovideoAccount().password);
-  settings->setBilibiliAccount(
-    siteAccountView_->bilibiliAccount().username,
-    siteAccountView_->bilibiliAccount().password);
-}
+//void
+//MainWindow::invalidateSiteAccounts()
+//{
+//  if (!siteAccountView_)
+//    return;
+//  showMessage(tr("site accounts updated"));
+//  MrlResolverSettings *settings = MrlResolverSettings::globalSettings();
+//  settings->setNicovideoAccount(
+//    siteAccountView_->nicovideoAccount().username,
+//    siteAccountView_->nicovideoAccount().password);
+//  settings->setBilibiliAccount(
+//    siteAccountView_->bilibiliAccount().username,
+//    siteAccountView_->bilibiliAccount().password);
+//}
 
-void
-MainWindow::setSiteAccountViewVisible(bool visible)
-{
-  if (!siteAccountView_) {
-    siteAccountView_ = new SiteAccountView(this);
-    windows_.append(siteAccountView_);
-    connect(siteAccountView_, SIGNAL(accountChanged()), SLOT(invalidateSiteAccounts()));
-
-    QString username, password;
-    boost::tie(username, password) = AcSettings::globalSettings()->nicovideoAccount();
-    if (!username.isEmpty() && !password.isEmpty())
-      siteAccountView_->setNicovideoAccount(username, password);
-
-    boost::tie(username, password) = AcSettings::globalSettings()->bilibiliAccount();
-    if (!username.isEmpty() && !password.isEmpty())
-      siteAccountView_->setBilibiliAccount(username, password);
-  }
-  siteAccountView_->setVisible(visible);
-  if (visible)
-    siteAccountView_->raise();
-}
+//void
+//MainWindow::setSiteAccountViewVisible(bool visible)
+//{
+//  if (!siteAccountView_) {
+//    siteAccountView_ = new SiteAccountView(this);
+//    windows_.append(siteAccountView_);
+//    connect(siteAccountView_, SIGNAL(accountChanged()), SLOT(invalidateSiteAccounts()));
+//
+//    QString username, password;
+//    boost::tie(username, password) = AcSettings::globalSettings()->nicovideoAccount();
+//    if (!username.isEmpty() && !password.isEmpty())
+//      siteAccountView_->setNicovideoAccount(username, password);
+//
+//    boost::tie(username, password) = AcSettings::globalSettings()->bilibiliAccount();
+//    if (!username.isEmpty() && !password.isEmpty())
+//      siteAccountView_->setBilibiliAccount(username, password);
+//  }
+//  siteAccountView_->setVisible(visible);
+//  if (visible)
+//    siteAccountView_->raise();
+//}
 
 void
 MainWindow::setMediaInfoViewVisible(bool visible)
@@ -3838,7 +3928,7 @@ MainWindow::submitAliasText(const QString &text, qint32 type, bool async)
     return;
   }
   const Token &t = dataManager_->token();
-  if (!t.hasId() && !t.hasDigest()) {
+  if (!t.isValid() && !t.hasDigest()) {
     warn(tr("alias not saved for unknown media token") + ": " + text);
     return;
   }
@@ -3947,6 +4037,54 @@ MainWindow::fileType(const QString &fileName)
     return Token::TT_Audio;
 
   return Token::TT_Null; // Unknown
+}
+
+void
+MainWindow::updateAnnotations(bool async)
+{
+  DOUT("enter: async =" << async);
+  if (disposed_) {
+    DOUT("exit: returned from disposed branch");
+    return;
+  }
+  if (!server_->isConnected()) {
+    emit warning(tr("not connected to Internet"));
+    DOUT("exit: not connected");
+    return;
+  }
+  if (!dataManager_->token().hashId()) {
+    emit message(tr("unknown token"));
+    DOUT("exit: missing token ID");
+    return;
+  }
+  if (async) {
+    showMessage(tr("updating annotations ..."));
+    annotationView_->removeAnnotations();
+    QThreadPool::globalInstance()->start(new task_::updateAnnotations(this));
+    DOUT("exit: returned from async branch");
+    return;
+  }
+
+  DOUT("inetMutex locking");
+  inetMutex_.lock();
+  DOUT("inetMutex locked");
+  AnnotationList annots = dataServer_->selectAnnotationsWithToken(dataManager_->token(), true); // true = invalidateCache
+  openAnnotationUrlFromAliases(dataManager_->aliases());
+  DOUT("inetMutex unlocking");
+  inetMutex_.unlock();
+  DOUT("inetMutex unlocked");
+
+  if (!annots.isEmpty()) {
+    QString src = "http://annot.me";
+    QString msg = QString("%1 :" HTML_STYLE_OPEN(color:red) "+%2" HTML_STYLE_CLOSE() ", %3")
+      .arg(tr("annotations found"))
+      .arg(QString::number(annots.size()))
+      .arg(src);
+    emit message(msg);
+    emit setAnnotationsRequested(annots);
+  }
+
+  DOUT("exit");
 }
 
 void
@@ -4613,16 +4751,48 @@ MainWindow::setVisible(bool visible)
 #endif // WITH_WIN_DWM
     AcUi::globalInstance()->setWindowBackground(this, false); // persistent is false
   }
-
+  if (visible && !isVisible()) {
+    static qreal opacity = 0.0;
+    if (qFuzzyCompare(opacity + 1, 1))
+      opacity = windowOpacity();
+    fadeAni_->fadeIn(opacity);
+  }
+  QTimer::singleShot(0, osdWindow_, SLOT(raise()));
   Base::setVisible(visible);
+}
+
+void
+MainWindow::focusInEvent(QFocusEvent *e)
+{
+  osdWindow_->raise();
+  Base::focusInEvent(e);
+}
+
+void
+MainWindow::focusOutEvent(QFocusEvent *e)
+{
+  //osdWindow_->raise();
+  Base::focusOutEvent(e);
 }
 
 void
 MainWindow::mousePressEvent(QMouseEvent *event)
 {
-  //DOUT("enter");
+  //DOUT("enter: globalPos =" << event->globalPos());
+  QPoint gp = mapFromGlobal(event->globalPos());
+  osdWindow_->raise();
+  pressedPos_ = event->globalPos();
+  pressedButtons_ = event->buttons();
   QApplication::setOverrideCursor(Qt::ArrowCursor);
   resetAutoHideCursor();
+
+  if (magnifier_ && magnifier_->isVisible())
+    magnifier_->setCenter(gp);
+
+  if (rippleFilter_ && event->buttons() != Qt::RightButton) {
+    rippleFilter_->setDampling(16);
+    rippleFilter_->setCenter(gp);
+  }
 
   cancelContextMenu_ = annotationView_->isNearbyItemExpelled() ||
                        annotationView_->isHoveredItemPaused() ||
@@ -4665,6 +4835,7 @@ MainWindow::mousePressEvent(QMouseEvent *event)
 
   switch (event->buttons()) {
   case Qt::LeftButton:
+    holdTimer_->start();
     {
       bool shiftPressed = (event->modifiers() & Qt::ShiftModifier)
 #ifdef Q_OS_WIN
@@ -4689,27 +4860,28 @@ MainWindow::mousePressEvent(QMouseEvent *event)
 
       if (cmdPressed && shiftPressed) {
         showMessage(tr("remove annotations"));
-        removeRubberBand_->press(mapFromGlobal(event->globalPos()));
+        removeRubberBand_->press(gp);
       } else if (optPressed) {
         annotationView_->setNearbyItemAttracted(true);
+        //annotationView_->setHoveredItemRemoved(true);
         QApplication::setOverrideCursor(Qt::ClosedHandCursor);
-        //annotationView_->attractItems(mapFromGlobal(event->globalPos()));
-        annotationView_->attractAllItems(mapFromGlobal(event->globalPos()));
+        //annotationView_->attractItems(gp);
+        annotationView_->attractAllItems(gp);
       } else if (cmdPressed) {
         showMessage(tr("capture annotations"));
-        pauseRubberBand_->press(mapFromGlobal(event->globalPos()));
+        pauseRubberBand_->press(gp);
       } else if (shiftPressed) {
-        QPoint gp = mapFromGlobal(event->globalPos());
         annotationView_->setNearbyItemExpelled(true);
         annotationView_->setHoveredItemRemoved(true);
         annotationView_->removeItems(gp);
         annotationView_->expelItems(gp);
         QApplication::setOverrideCursor(Qt::OpenHandCursor);
-      } else if (hub_->isMediaTokenMode() && hub_->isFullScreenWindowMode()) {
-        //annotationView_->setNearbyItemExpelled(true);
+      } else if (hub_->isMediaTokenMode() && (
+          hub_->isFullScreenWindowMode() ||
+          !player_->isStopped() && dataManager_->hasAnnotations()
+        )) {
         annotationView_->setHoveredItemRemoved(true);
         annotationView_->setNearbyItemExpelled(true);
-        //QApplication::setOverrideCursor(Qt::PointingHandCursor);
       } else {
 #ifdef Q_WS_MAC
         if (videoView_->isViewVisible() && player_->titleCount() > 1)
@@ -4746,13 +4918,13 @@ MainWindow::mousePressEvent(QMouseEvent *event)
     )
       annotationView_->resetRotation();
     else {
-      //removeRubberBand_->press(mapFromGlobal(event->globalPos()));
-      QPoint gp = mapFromGlobal(event->globalPos());
+      //removeRubberBand_->press(gp);
+#ifdef Q_WS_MAC
+      annotationView_->setNearbyItemAttracted(true);
+#else
       annotationView_->setHoveredItemRemoved(true);
       annotationView_->removeItems(gp);
-      //annotationView_->setNearbyItemExpelled(true);
-      //annotationView_->expelItems(gp);
-      QApplication::setOverrideCursor(Qt::PointingHandCursor);
+#endif // Q_WS_MAC
     }
     event->accept();
     break;
@@ -4770,13 +4942,13 @@ MainWindow::mousePressEvent(QMouseEvent *event)
         || QtWin::isKeyControlPressed()
 #endif // Q_OS_WIN
     ) {
-      removeRubberBand_->press(mapFromGlobal(event->globalPos()));
+      removeRubberBand_->press(gp);
       cancelContextMenu_ = true;
     } else {
       annotationView_->setNearbyItemAttracted(true);
       if (event->modifiers()) {
+        annotationView_->attractAllItems(gp);
         QApplication::setOverrideCursor(Qt::ClosedHandCursor);
-        annotationView_->attractAllItems(mapFromGlobal(event->globalPos()));
         cancelContextMenu_ = true;
       }
     }
@@ -4785,25 +4957,32 @@ MainWindow::mousePressEvent(QMouseEvent *event)
     break;
 
   case Qt::LeftButton + Qt::RightButton:
+    cancelContextMenu_ = true;
+    pauseRubberBand_->press(gp);
+    event->accept();
+    break;
   case Qt::MiddleButton + Qt::RightButton:
     cancelContextMenu_ = true;
+    resumeRubberBand_->press(gp);
+    event->accept();
+    break;
   case Qt::LeftButton + Qt::MiddleButton:
-    annotationView_->setHoveredItemPaused(true);
+    removeRubberBand_->press(gp);
     event->accept();
     break;
   default: ;
   }
 
   //if (annotationView_->isHoveredItemPaused())
-  //  annotationView_->pauseItems(mapFromGlobal(event->globalPos()));
+  //  annotationView_->pauseItems(gp);
   //if (annotationView_->isHoveredItemResumed())
-  //  annotationView_->resumeItems(mapFromGlobal(event->globalPos()));
+  //  annotationView_->resumeItems(gp);
   //if (annotationView_->isHoveredItemRemoved())
-  //  annotationView_->removeItems(mapFromGlobal(event->globalPos()));
+  //  annotationView_->removeItems(gp);
   //if (annotationView_->isNearbyItemAttracted())
-  //  annotationView_->attractItems(mapFromGlobal(event->globalPos()));
+  //  annotationView_->attractItems(gp);
   //if (annotationView_->isNearbyItemExpelled())
-  //  annotationView_->expelItems(mapFromGlobal(event->globalPos()));
+  //  annotationView_->expelItems(gp);
 
   Base::mousePressEvent(event);
   //DOUT("exit");
@@ -4847,12 +5026,23 @@ MainWindow::updateAnnotationHoverGesture()
 void
 MainWindow::mouseReleaseEvent(QMouseEvent *event)
 {
-  //DOUT("enter");
+  //DOUT("enter: globalPos =" << event->globalPos());
   Q_ASSERT(event);
   QApplication::setOverrideCursor(Qt::ArrowCursor);
   resetAutoHideCursor();
 
+  holdTimer_->stop();
+
+  if (rippleFilter_) {
+     rippleFilter_->clearCenter();
+     rippleFilter_->setDampling(4);
+  }
+
   dragPos_ = BAD_POS;
+
+  if (annotationView_->isNearbyItemAttracted() &&
+      pressedPos_ != event->globalPos())
+    annotationView_->resume();
 
   //cancelContextMenu_ = annotationView_->isNearbyItemExpelled() ||
   //                     annotationView_->isHoveredItemPaused() ||
@@ -4897,6 +5087,19 @@ MainWindow::mouseReleaseEvent(QMouseEvent *event)
       videoView_->isViewVisible() && player_->titleCount() > 1)
     videoView_->setViewMouseReleasePos(event->globalPos());
 #endif // Q_WS_MAC
+
+  if (pressedButtons_ == Qt::MiddleButton && pressedPos_ == event->globalPos()) {
+    if (hub_->isEmbeddedPlayerMode()) {
+      if (hub_->isFullScreenWindowMode()) {
+        QPoint gp = mapFromGlobal(event->globalPos());
+        gp.rx() -= miniPlayer_->width() / 4;
+        gp.ry() += 10;
+        miniPlayer_->move(gp);
+      }
+      hub_->setMiniPlayerMode();
+    } else if (hub_->isMiniPlayerMode())
+      hub_->setEmbeddedPlayerMode();
+  }
 
   event->accept();
 
@@ -4953,7 +5156,27 @@ MainWindow::isGlobalPosOverOsdConsole(const QPoint &pos) const
 void
 MainWindow::mouseMoveEvent(QMouseEvent *event)
 {
-  //DOUT("enter");
+  //DOUT("enter: globalPos =" << event->globalPos());
+  //osdWindow_->raise();
+  if (event->globalPos() == pressedPos_)
+    return;
+
+  holdTimer_->stop();
+
+  QPoint gp = mapFromGlobal(event->globalPos());
+
+  if (magnifier_) {
+    if (magnifier_->isVisible())
+      magnifier_->setCenter(gp);
+    else {
+      magnifier_->move(gp + QPoint(300, 100));
+    }
+  }
+
+  if (rippleFilter_ && rippleFilter_->hasCenter())
+    rippleFilter_->setCenter(gp);
+
+  pressedButtons_ = Qt::NoButton;
   cancelContextMenu_ = true;
   Q_ASSERT(event);
   resetAutoHideCursor();
@@ -4974,20 +5197,20 @@ MainWindow::mouseMoveEvent(QMouseEvent *event)
 
   Qt::CursorShape cursor = Qt::ArrowCursor; // 0
   if (annotationView_->isHoveredItemPaused())
-    annotationView_->pauseItems(mapFromGlobal(event->globalPos()));
+    annotationView_->pauseItems(gp);
   if (annotationView_->isHoveredItemResumed())
-    annotationView_->resumeItems(mapFromGlobal(event->globalPos()));
+    annotationView_->resumeItems(gp);
   if (annotationView_->isHoveredItemRemoved()) {
-    annotationView_->removeItems(mapFromGlobal(event->globalPos()));
+    annotationView_->removeItems(gp);
     cursor = Qt::PointingHandCursor;
   }
   if (annotationView_->isNearbyItemAttracted()) {
-    //annotationView_->attractItems(mapFromGlobal(event->globalPos()));
-    annotationView_->attractAllItems(mapFromGlobal(event->globalPos()));
+    annotationView_->attractItems(gp);
+    //annotationView_->attractAllItems(mapFromGlobal(event->globalPos()));
     cursor = Qt::ClosedHandCursor;
   }
   if (annotationView_->isNearbyItemExpelled()) {
-    annotationView_->expelItems(mapFromGlobal(event->globalPos()));
+    annotationView_->expelItems(gp);
     cursor = Qt::OpenHandCursor;
   }
   if (cursor)
@@ -5011,11 +5234,11 @@ MainWindow::mouseMoveEvent(QMouseEvent *event)
   switch (event->buttons()) {
   case Qt::LeftButton:
     if (pauseRubberBand_->isPressed())
-      pauseRubberBand_->drag(mapFromGlobal(event->globalPos()));
+      pauseRubberBand_->drag(gp);
     else if (resumeRubberBand_->isPressed())
-      resumeRubberBand_->drag(mapFromGlobal(event->globalPos()));
+      resumeRubberBand_->drag(gp);
     else if (removeRubberBand_->isPressed())
-      removeRubberBand_->drag(mapFromGlobal(event->globalPos()));
+      removeRubberBand_->drag(gp);
     else if (dragPos_ != BAD_POS && !isFullScreen()
 #ifdef Q_WS_WIN
         &&
@@ -5037,11 +5260,11 @@ MainWindow::mouseMoveEvent(QMouseEvent *event)
     } break;
   default:
     if (pauseRubberBand_->isPressed())
-      pauseRubberBand_->drag(mapFromGlobal(event->globalPos()));
+      pauseRubberBand_->drag(gp);
     else if (resumeRubberBand_->isPressed())
-      resumeRubberBand_->drag(mapFromGlobal(event->globalPos()));
+      resumeRubberBand_->drag(gp);
     else if (removeRubberBand_->isPressed())
-      removeRubberBand_->drag(mapFromGlobal(event->globalPos()));
+      removeRubberBand_->drag(gp);
   }
 
   event->accept();
@@ -5056,6 +5279,8 @@ MainWindow::mouseDoubleClickEvent(QMouseEvent *event)
   Q_ASSERT(event);
   QApplication::setOverrideCursor(Qt::ArrowCursor);
   resetAutoHideCursor();
+
+  holdTimer_->stop();
 
   annotationView_->setHoveredItemPaused(false);
   annotationView_->setHoveredItemResumed(false);
@@ -5183,21 +5408,23 @@ MainWindow::contextMenuEvent(QContextMenuEvent *event)
   annotationView_->setHoveredItemRemoved(false);
   annotationView_->setNearbyItemExpelled(false);
   annotationView_->setNearbyItemAttracted(false);
+#ifndef Q_WS_MAC
+  if (!cancelContextMenu_ &&
+      (!resumeRubberBand_->isPressed() || resumeRubberBand_->isEmpty()) &&
+      (!removeRubberBand_->isPressed() || removeRubberBand_->isEmpty()) &&
+      (!pauseRubberBand_->isPressed() || pauseRubberBand_->isEmpty()))
+#endif // !Q_WS_MAC
+  {
+    updateContextMenu();
+    contextMenu_->popup(event->globalPos());
+  }
+
   if (resumeRubberBand_->isPressed())
     resumeRubberBand_->cancel();
   if (removeRubberBand_->isPressed())
     removeRubberBand_->cancel();
   if (pauseRubberBand_->isPressed())
     pauseRubberBand_->cancel();
-
-#ifndef Q_WS_MAC
-  if (!cancelContextMenu_)
-#endif // !Q_WS_MAC
-  {
-    updateContextMenu();
-    contextMenu_->popup(event->globalPos());
-    cancelContextMenu_ = false;
-  }
 
   event->accept();
 
@@ -5206,7 +5433,7 @@ MainWindow::contextMenuEvent(QContextMenuEvent *event)
 }
 
 void
-MainWindow::updateAnnotationMenu()
+MainWindow::updateAnnotationSettingsMenu()
 {
   updateAnnotationSubtitleMenu();
   updateAnnotationEffectMenu();
@@ -5221,6 +5448,20 @@ MainWindow::updateAnnotationSubtitleMenu()
 
   bool t = toggleSubtitleAnnotationVisibleAct_->isChecked();
   toggleSubtitleOnTopAct_->setEnabled(t);
+}
+
+void
+MainWindow::updateGameMenu()
+{
+#ifdef USE_MODE_SIGNAL
+#ifdef WITH_WIN_PICKER
+  toggleWindowPickDialogVisibleAct_->setChecked(windowPickDialog_ && windowPickDialog_->isVisible());
+  toggleProcessPickDialogVisibleAct_->setChecked(processPickDialog_ && processPickDialog_->isVisible());
+#endif // WITH_WIN_PICKER
+  toggleSignalViewVisibleAct_->setChecked(signalView_->isVisible());
+  toggleRecentMessageViewVisibleAct_->setChecked(recentMessageView_->isVisible());
+  toggleTranslateAct_->setEnabled(hub_->isSignalTokenMode() && server_->isConnected());
+#endif // USE_MODE_SIGNAL
 }
 
 void
@@ -5250,13 +5491,18 @@ MainWindow::updateContextMenu()
 #ifndef Q_WS_MAC
     //contextMenu_->addAction(newWindowAct_);
 #endif // !Q_WS_MAC
-    if (!currentUrl().isEmpty()) {
+    QString url = currentUrl();
+    if (!url.isEmpty()) {
+      copyCurrentUrlAct_->setText(tr("Copy") + ": " + shortenText(url));
       downloadCurrentUrlAct_->setVisible(!player_->isDownloadFinished());
       contextMenu_->addMenu(currentMenu_);
     }
 
-    if (!currentTitle().isEmpty())
+    QString title = currentTitle();
+    if (!title.isEmpty()) {
+      copyCurrentTitleAct_->setText(tr("Copy") + ": " + shortenText(title));
       contextMenu_->addMenu(searchMenu_);
+    }
 
     contextMenu_->addSeparator();
   }
@@ -5333,27 +5579,10 @@ MainWindow::updateContextMenu()
       contextMenu_->addMenu(sectionMenu_);
     }
 
-#ifdef WITH_WIN_PICKER
-    contextMenu_->addSeparator();
-    toggleWindowPickDialogVisibleAct_->setChecked(windowPickDialog_ && windowPickDialog_->isVisible());
-    contextMenu_->addAction(toggleWindowPickDialogVisibleAct_);
-#endif // WITH_WIN_PICKER
-
 #ifdef USE_MODE_SIGNAL
-    if (!player_->hasMedia() || player_->isStopped()) {
-#ifdef WITH_WIN_PICKER
-      toggleProcessPickDialogVisibleAct_->setChecked(processPickDialog_ && processPickDialog_->isVisible());
-      contextMenu_->addAction(toggleProcessPickDialogVisibleAct_);
-#endif // WITH_WIN_PICKER
-
-      toggleSignalViewVisibleAct_->setChecked(signalView_->isVisible());
-      contextMenu_->addAction(toggleSignalViewVisibleAct_ );
-
-      if (hub_->isSignalTokenMode()) {
-        toggleRecentMessageViewVisibleAct_->setChecked(recentMessageView_->isVisible());
-        contextMenu_->addAction(toggleRecentMessageViewVisibleAct_ );
-      }
-    }
+    contextMenu_->addSeparator();
+    contextMenu_->addMenu(gameMenu_);
+    updateGameMenu();
 #endif // USE_MODE_SIGNAL
 
     contextMenu_->addSeparator();
@@ -5529,40 +5758,44 @@ MainWindow::updateContextMenu()
 
     bool t = toggleAnnotationVisibleAct_->isChecked();
 
-    annotationMenu_->setEnabled(t);
-    resumeAnnotationAct_->setEnabled(t);
-    contextMenu_->addAction(resumeAnnotationAct_);
+    annotationSettingsMenu_->setEnabled(t);
+    //resumeAnnotationAct_->setEnabled(t);
 
     toggleAnnotationEditorVisibleAct_->setChecked(annotationEditor_ && annotationEditor_->isVisible());
     contextMenu_->addAction(toggleAnnotationEditorVisibleAct_ );
 
-    if (!hub_->isMediaTokenMode() || player_->hasMedia()) {
-      toggleAnnotationBrowserVisibleAct_->setChecked(annotationBrowser_->isVisible());
-      contextMenu_->addAction(toggleAnnotationBrowserVisibleAct_ );
+    toggleAnnotationBrowserVisibleAct_->setChecked(annotationBrowser_->isVisible());
+     contextMenu_->addAction(toggleAnnotationBrowserVisibleAct_ );
 
-      toggleTokenViewVisibleAct_->setChecked(tokenView_->isVisible());
-      contextMenu_->addAction(toggleTokenViewVisibleAct_ );
+    annotationMenu_->clear(); {
+      //if (!hub_->isMediaTokenMode() || player_->hasMedia()) {
+        toggleTokenViewVisibleAct_->setChecked(tokenView_->isVisible());
+        annotationMenu_->addAction(toggleTokenViewVisibleAct_ );
+        toggleAnnotationAnalyticsViewVisibleAct_->setChecked(annotationAnalyticsView_ && annotationAnalyticsView_->isVisible());
+        annotationMenu_->addAction(toggleAnnotationAnalyticsViewVisibleAct_);
+      //}
 
-      toggleAnnotationAnalyticsViewVisibleAct_->setChecked(annotationAnalyticsView_ && annotationAnalyticsView_->isVisible());
-      contextMenu_->addAction(toggleAnnotationAnalyticsViewVisibleAct_);
-    }
+      toggleBacklogDialogVisibleAct_->setChecked(backlogDialog_ && backlogDialog_->isVisible());
+      annotationMenu_->addAction(toggleBacklogDialogVisibleAct_);
 
-    toggleBacklogDialogVisibleAct_->setChecked(backlogDialog_ && backlogDialog_->isVisible());
-    contextMenu_->addAction(toggleBacklogDialogVisibleAct_);
+      annotationMenu_->addSeparator();
 
-    if (hub_->isSignalTokenMode()) {
-      toggleTranslateAct_->setEnabled(t && online);
-      contextMenu_->addAction(toggleTranslateAct_);
-    }
+      annotationMenu_->addAction(resumeAnnotationAct_);
+      if (dataManager_->token().isValid()) {
+        updateAnnotationsAct_->setEnabled(server_->isConnected());
+        annotationMenu_->addAction(updateAnnotationsAct_);
+      }
 
     //if (ALPHA) if (commentView_ && commentView_->tokenId()) {
     //  toggleCommentViewVisibleAct_->setChecked(commentView_ && commentView_->isVisible());
-    //  contextMenu_->addAction(toggleCommentViewVisibleAct_ );
+    //  annotationMenu_->addAction(toggleCommentViewVisibleAct_ );
     //}
+    }
+    contextMenu_->addMenu(annotationMenu_);
 
     if (t)
-      updateAnnotationMenu();
-    contextMenu_->addMenu(annotationMenu_);
+      updateAnnotationSettingsMenu();
+    contextMenu_->addMenu(annotationSettingsMenu_);
   }
 
   // Network
@@ -5618,11 +5851,14 @@ MainWindow::updateContextMenu()
   {
     contextMenu_->addSeparator();
 
+    contextMenu_->addAction(preferencesAct_);
+
     updateSettingsMenu();
     contextMenu_->addMenu(settingsMenu_);
 
     //contextMenu_->addAction(checkInternetConnectionAct_);
     toggleDownloaderVisibleAct_->setChecked(false);
+    toggleMagnifierVisibleAct_->setChecked(magnifier_ && magnifier_->isVisible());
     contextMenu_->addMenu(utilityMenu_);
 
     toggleConsoleDialogVisibleAct_->setChecked(consoleDialog_ && consoleDialog_->isVisible());
@@ -5649,8 +5885,8 @@ MainWindow::updateSettingsMenu()
 {
   togglePlayerLabelEnabled_->setChecked(embeddedCanvas_->isEnabled());
   toggleEmbeddedPlayerOnTopAct_->setChecked(embeddedPlayer_->isOnTop());
-  toggleSiteAccountViewVisibleAct_->setChecked(siteAccountView_ && siteAccountView_->isVisible());
-  toggleNetworkProxyDialogVisibleAct_->setChecked(networkProxyDialog_ && networkProxyDialog_->isVisible());
+  //toggleSiteAccountViewVisibleAct_->setChecked(siteAccountView_ && siteAccountView_->isVisible());
+  //toggleNetworkProxyDialogVisibleAct_->setChecked(networkProxyDialog_ && networkProxyDialog_->isVisible());
   toggleWindowOnTopAct_->setChecked(isWindowOnTop());
   toggleClipboardMonitorEnabledAct_->setChecked(clipboardMonitor_->isEnabled());
   togglePreferLocalDatabaseAct_->setChecked(dataServer_->preferLocal());
@@ -5861,6 +6097,12 @@ MainWindow::keyPressEvent(QKeyEvent *event)
     else forward25s();
     break;
 
+#ifdef Q_WS_WIN
+  case Qt::Key_CapsLock:
+    menuBar()->setVisible(!menuBar()->isVisible());
+    break;
+#endif // Q_WS_WIN
+
     // Modifiers
   case Qt::Key_Control:
     if (!isEditing()) {
@@ -5997,7 +6239,10 @@ MainWindow::dispose()
   }
   player_->dispose();
 
+  //connect(fadeAni_, SIGNAL(finished()), SLOT(hide()));
+  //fadeAni_->fadeOut(windowOpacity());
   hide();
+
   foreach (QWidget *w, windows_)
     w->hide();
 
@@ -6024,6 +6269,14 @@ MainWindow::dispose()
   DOUT("exit");
 }
 
+//void
+//MainWindow::quit()
+//{
+//  fadeAni_->fadeOut(windowOpacity());
+//  QTimer::singleShot(fadeAni_->duration(), this, SLOT(hide()));
+//  QTimer::singleShot(fadeAni_->duration(), this, SLOT(close()));
+//}
+
 void
 MainWindow::closeEvent(QCloseEvent *event)
 {
@@ -6046,10 +6299,15 @@ MainWindow::closeEvent(QCloseEvent *event)
 
   appServer_->stop();
 
+  if (fadeAni_->state() == QAbstractAnimation::Running)
+    fadeAni_->stop();
+
   // Save settings
   Settings *settings = Settings::globalSettings();
   AcSettings *ac = AcSettings::globalSettings();
   AcUi *ui = AcUi::globalInstance();
+
+  ac->dispose();
 
   //updateRecent();
 #ifdef Q_WS_WIN
@@ -6099,12 +6357,12 @@ MainWindow::closeEvent(QCloseEvent *event)
 
   settings->setWindowOnTop(isWindowOnTop());
 
-  if (siteAccountView_) { // Update account settings iff it is modified
-    ac->setNicovideoAccount(siteAccountView_->nicovideoAccount().username,
-                            siteAccountView_->nicovideoAccount().password);
-    ac->setBilibiliAccount(siteAccountView_->bilibiliAccount().username,
-                           siteAccountView_->bilibiliAccount().password);
-  }
+  //if (siteAccountView_) { // Update account settings iff it is modified
+  //  ac->setNicovideoAccount(siteAccountView_->nicovideoAccount().username,
+  //                          siteAccountView_->nicovideoAccount().password);
+  //  ac->setBilibiliAccount(siteAccountView_->bilibiliAccount().username,
+  //                         siteAccountView_->bilibiliAccount().password);
+  //}
 
   if (player_->isValid()) {
     settings->setHue(player_->hue());
@@ -6175,8 +6433,10 @@ MainWindow::setWindowOnTop(bool t)
 //    AcUi::globalInstance()->setDwmEnabled(false);
 //#endif // WITH_WIN_DWM
     bool visible = isVisible();
-    setWindowFlags( t ? windowFlags() | Qt::WindowStaysOnTopHint :
-                        windowFlags() & ~Qt::WindowStaysOnTopHint);
+    setWindowFlags(t ? windowFlags() | Qt::WindowStaysOnTopHint :
+                       windowFlags() & ~Qt::WindowStaysOnTopHint);
+    osdWindow_->setWindowFlags(t ? osdWindow_->windowFlags() | Qt::WindowStaysOnTopHint :
+                                   osdWindow_->windowFlags() & ~Qt::WindowStaysOnTopHint);
 //#ifdef WITH_WIN_QTH
 //    QTH->setParentWinId(winId());
 //#endif // WITH_WIN_QTH
@@ -7494,15 +7754,23 @@ MainWindow::subtitleColor() const
 void
 MainWindow::enableWindowTransparency()
 {
-  if (!AcUi::globalInstance()->isAeroEnabled())
+  if (!AcUi::globalInstance()->isAeroEnabled()) {
+    if (fadeAni_->state() == QAbstractAnimation::Running)
+      fadeAni_->stop();
+    //fadeAni_->fadeIn(AC_WINDOW_OPACITY);
     setWindowOpacity(AC_WINDOW_OPACITY);
+  }
 }
 
 void
 MainWindow::disableWindowTransparency()
 {
-  if (!AcUi::globalInstance()->isAeroEnabled())
+  if (!AcUi::globalInstance()->isAeroEnabled()) {
+    if (fadeAni_->state() == QAbstractAnimation::Running)
+      fadeAni_->stop();
+    //fadeAni_->fadeIn(1.0);
     setWindowOpacity(1.0);
+  }
 }
 
 // - Browse -
@@ -8503,6 +8771,14 @@ MainWindow::enterAnnotationUrl(const QString &url)
     );
     return;
   }
+  foreach (const Alias &a, dataManager_->aliases())
+    if (a.type() == Alias::AT_Url &&
+        a.text() == url) {
+      showMessage(tr("annotation URL already imported") + ": "
+        HTML_STYLE_OPEN(color:orange) + url + HTML_STYLE_CLOSE()
+      );
+      return;
+    }
   if (player_->isStopped()) {
     enterMediaUrl(url);
     return;
@@ -8679,6 +8955,17 @@ MainWindow::setWideScreenAspectRatio()
 }
 
 // - Annotation thread view -
+
+void
+MainWindow::showUserAnalytics(qint64 userId)
+{
+  if (!userAnalyticsView_) {
+    userAnalyticsView_ = new UserAnalyticsView(dataManager_, this);
+    windows_.append(userAnalyticsView_);
+  }
+  userAnalyticsView_->setUserId(userId);
+  userAnalyticsView_->show();
+}
 
 AnnotationAnalyticsView*
 MainWindow::annotationAnalyticsView()
@@ -9074,12 +9361,82 @@ MainWindow::searchWithEngine(int engine, const QString &key)
 void
 MainWindow::showPreferences()
 {
-  static QWidget *w = 0;
+  static AcPreferences *w = 0;
   if (!w) {
     w = new AcPreferences(this);
     windows_.append(w);
   }
   w->show();
+}
+
+// - Paint -
+
+void
+MainWindow::setRippleEnabled(bool t)
+{
+  if (t == ripple_)
+    return;
+  ripple_ = t;
+  if (t) {
+    if (rippleTimer_ && !rippleTimer_->isActive())
+      rippleTimer_->start();
+  } else {
+    if (rippleTimer_)
+      rippleTimer_->stop();
+    if (rippleFilter_)
+      rippleFilter_->clear();
+  }
+}
+
+void
+MainWindow::paintEvent(QPaintEvent *e)
+{
+  if (!ripple_) {
+    Base::paintEvent(e);
+    return;
+  }
+  //DOUT("enter");
+  if (!rippleTimer_) {
+    rippleTimer_ = new QTimer(this);
+    rippleTimer_->setInterval(1000 / 10); // 10 / seconds
+    connect(rippleTimer_, SIGNAL(timeout()), SLOT(repaint()));
+    rippleTimer_->start();
+  }
+  if (!rippleFilter_)
+    rippleFilter_ = new PixmapRippleFilter(this);
+
+  if (!rippleFilter_->needsDisplay())
+    return;
+
+  QPainter painter(this);
+  QImage image(AcUi::globalInstance()->backgroundImage());
+  rippleFilter_->draw(&painter, QPoint(), image);
+  //DOUT("exit");
+}
+
+// - Magnifier -
+
+void
+MainWindow::setMagnifierVisible(bool visible)
+{
+  if (!magnifier_) {
+    magnifier_ = new Magnifier(this);
+    magnifier_->setWidget(this);
+    new QShortcut(QKeySequence("CTRL+E"), magnifier_, SLOT(hide()));
+    windows_.append(magnifier_);
+  }
+  if (visible) {
+    magnifier_->show();
+    magnifier_->raise();
+  } else
+    magnifier_->fadeOut();
+}
+
+void
+MainWindow::toggleMagnifierVisible()
+{
+  bool v = magnifier_ && magnifier_->isVisible();
+  setMagnifierVisible(!v);
 }
 
 // EOF

@@ -133,7 +133,6 @@ MiniPlayerUi::setVisible(bool visible)
       disconnect(player(), SIGNAL(timeChanged()), this, SLOT(updateTitle()));
     }
   }
-
   Base::setVisible(visible);
 }
 
@@ -182,7 +181,10 @@ MiniPlayerUi::mousePressEvent(QMouseEvent *event)
       break;
 
     case Qt::MiddleButton:
-      hub()->toggleMiniPlayerMode();
+      if (hub()->isSignalTokenMode() || player()->isPlaying())
+        hub()->setEmbeddedPlayerMode();
+      else
+        hub()->setNormalPlayerMode();
       event->accept();
       break;
 

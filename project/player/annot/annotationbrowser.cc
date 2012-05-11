@@ -89,7 +89,6 @@ void
 AnnotationBrowser::createLayout()
 {
   AcUi *ui = AcUi::globalInstance();
-  ui->setWindowStyle(this);
 
   meButton_ = ui->makeToolButton(
         AcUi::CheckHint, tr("Mine"), tr("Display my annotations only"), K_CTRL "+1", this, SLOT(setMe(bool)));
@@ -144,9 +143,6 @@ AnnotationBrowser::createActions()
   AcUi::globalInstance()->setContextMenuStyle(contextMenu_, true); // persistent = true
 
   // Shortcuts
-  connect(new QShortcut(QKeySequence("Esc"), this), SIGNAL(activated()), SLOT(hide()));
-  connect(new QShortcut(QKeySequence("CTRL+W"), this), SIGNAL(activated()), SLOT(hide()));
-
   connect(new QShortcut(QKeySequence("CTRL+1"), this), SIGNAL(activated()), meButton_, SLOT(click()));
   connect(new QShortcut(QKeySequence("CTRL+2"), this), SIGNAL(activated()), nowButton_, SLOT(click()));
   connect(new QShortcut(QKeySequence("CTRL+3"), this), SIGNAL(activated()), subtitleButton_, SLOT(click()));

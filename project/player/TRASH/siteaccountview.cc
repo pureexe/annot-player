@@ -21,11 +21,11 @@ using namespace Logger;
   Qt::WindowCloseButtonHint
 
 #ifdef Q_WS_MAC
-  #define WINDOW_FLAGS ( \
+#  define WINDOW_FLAGS ( \
     Qt::FramelessWindowHint | \
     WINDOW_FLAGS_BASE )
 #else
-  #define WINDOW_FLAGS ( \
+#  define WINDOW_FLAGS ( \
     WINDOW_FLAGS_BASE )
 #endif // Q_WS_MAC
 
@@ -43,7 +43,6 @@ void
 SiteAccountView::createLayout()
 {
   AcUi *ui = AcUi::globalInstance();
-  ui->setWindowStyle(this);
 
 #define ADDSITE(_pref, _Pref, _name, _tip) \
   QToolButton *_pref##SiteButton = ui->makeToolButton( \
@@ -65,7 +64,7 @@ SiteAccountView::createLayout()
   QToolButton *saveButton = ui->makeToolButton(
         AcUi::PushHint | AcUi::HighlightHint, TR(T_SAVE), this, SLOT(save()));
   QToolButton *cancelButton = ui->makeToolButton(
-        AcUi::PushHint, TR(T_CANCEL), this, SLOT(hide()));
+        AcUi::PushHint, TR(T_CANCEL), this, SLOT(fadeOut()));
 
   // Layouts
   QGridLayout *grid = new QGridLayout; {
@@ -87,10 +86,6 @@ SiteAccountView::createLayout()
     grid->setContentsMargins(6, 6, 6, 6);
     setContentsMargins(0, 0, 0, 0);
   } setLayout(grid);
-
-  // Shortcuts
-  connect(new QShortcut(QKeySequence("Esc"), this), SIGNAL(activated()), SLOT(hide()));
-  connect(new QShortcut(QKeySequence("CTRL+W"), this), SIGNAL(activated()), SLOT(hide()));
 
   // Focus
   setTabOrder(nicovideoUsernameEdit_, nicovideoPasswordEdit_);
@@ -149,7 +144,7 @@ SiteAccountView::invalidateAccounts()
 void
 SiteAccountView::save()
 {
-  hide();
+  fadeOut();
   bool changed = false;
   if (nicovideoAccount_.username != nicovideoUsernameEdit_->currentText()) {
     nicovideoAccount_.username = nicovideoUsernameEdit_->currentText();

@@ -351,6 +351,7 @@ signals:
   void aspectRatioChanged(const QString &ratio);
   void downloadProgress(qint64 receivedBytes, qint64 totalBytes);
   void opening();
+  void seeked();
   void buffering();
   void playing();
   void paused();

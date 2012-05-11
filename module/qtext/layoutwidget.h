@@ -1,9 +1,11 @@
 #ifndef _QTEXT_LAYOUTWIDGET_H
 #define _QTEXT_LAYOUTWIDGET_H
 
+// layoutwidget.h
+// 4/8/2012
+
 #include <QtGui/QWidget>
 
-#include <QtGui>
 class LayoutWidget : public QWidget
 {
   Q_OBJECT

@@ -4,20 +4,19 @@
 // inputdialog.h
 // 2/8/2012
 
-#include "module/qtext/dialog.h"
+#include "project/common/acwindow.h"
 #include <QtCore/QStringList>
 
 QT_FORWARD_DECLARE_CLASS(QComboBox)
 
 class AcComboEdit;
 
-typedef QtExt::Dialog InputDialogBase;
-class InputDialog : public InputDialogBase
+class InputDialog : public AcWindow
 {
   Q_OBJECT
   Q_DISABLE_COPY(InputDialog)
   typedef InputDialog Self;
-  typedef InputDialogBase Base;
+  typedef AcWindow Base;
 
   AcComboEdit *edit_;
 

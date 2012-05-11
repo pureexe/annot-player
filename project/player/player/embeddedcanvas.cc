@@ -73,6 +73,7 @@ EmbeddedCanvas::setVisible(bool visible)
     Base::setVisible(t);
     emit visibleChanged(isVisible());
   }
+  Base::setVisible(visible);
 }
 
 void
@@ -91,6 +92,7 @@ EmbeddedCanvas::paintEvent(QPaintEvent *event)
     );
     paintHistogram(painter, view, data_->annotations());
   }
+  //Base::paintEvent(event);
   DOUT("exit");
 }
 

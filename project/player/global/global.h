@@ -92,18 +92,18 @@ enum { ALPHA = 0 };
 #endif // Q_OS_WIN
 
 #ifdef Q_WS_WIN
-#  define G_PATH_LOGS   ".."
-#  define G_PATH_DEBUG    G_PATH_LOGS "/" "Debug Player.txt"
+#  define G_PATH_LOGS   QCoreApplication::applicationDirPath() + "/" ".."
+#  define G_PATH_DEBUG  G_PATH_LOGS "/" "Debug Player.txt"
 #elif defined Q_WS_MAC
 #  define G_PATH_LOGS   QtMac::homeLogsPath() + "/" G_ORGANIZATION "/" G_APPLICATION
-#  define G_PATH_DEBUG    G_PATH_LOGS "/" "Debug.txt"
+#  define G_PATH_DEBUG  G_PATH_LOGS "/" "Debug.txt"
 #else
 #  define G_PATH_LOGS   G_PATH_PROFILE
-#  define G_PATH_DEBUG    G_PATH_LOGS "/" "debug.txt"
+#  define G_PATH_DEBUG  G_PATH_LOGS "/" "debug.txt"
 #endif // Q_WS_
 
 #ifdef Q_WS_WIN
-#  define G_PATH_CACHES  "./caches"
+#  define G_PATH_CACHES  QCoreApplication::applicationDirPath() + "/" "caches"
 #elif defined Q_WS_MAC
 #  define G_PATH_CACHES  QtMac::homeCachesPath() + "/" G_ORGANIZATION "/" G_APPLICATION
 #else

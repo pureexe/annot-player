@@ -129,6 +129,8 @@ WebBrowser::decodeUrl(const QUrl &url)
   QString host = ret.host();
   if (host == ANNOT_HOST_IP)
     ret.setHost("annot.me");
+  else if (host == ANNOT_PROXY_DOMAIN && url.path().startsWith("/watch/"))
+    ret.setHost("www.nicovideo.jp");
   else if (host == ANNOT_DOC_IP)
     ret.setHost("doc.annot.me");
   //else if (host == "niconicohost")
@@ -246,36 +248,36 @@ WebBrowser::createSearchEngines()
 void
 WebBrowser::createActions()
 {
-  connect(new QShortcut(QKeySequence(SHORTCUT_LOCATION), this), SIGNAL(activated()), SLOT(focusLocationBar()));
+  new QShortcut(QKeySequence(SHORTCUT_LOCATION), this, SLOT(focusLocationBar()));
 
-  connect(new QShortcut(QKeySequence(QKeySequence::Find), this), SIGNAL(activated()), SLOT(focusSearchBar()));
-  connect(new QShortcut(QKeySequence(SHORTCUT_SEARCH), this), SIGNAL(activated()), SLOT(focusSearchBar()));
+  new QShortcut(QKeySequence(QKeySequence::Find), this, SLOT(focusSearchBar()));
+  new QShortcut(QKeySequence(SHORTCUT_SEARCH), this, SLOT(focusSearchBar()));
 
-  connect(new QShortcut(QKeySequence("F11"), this), SIGNAL(activated()), SLOT(toggleFullScreen()));
+  new QShortcut(QKeySequence("F11"), this, SLOT(toggleFullScreen()));
 
-  connect(new QShortcut(QKeySequence::AddTab, this), SIGNAL(activated()), SLOT(newTabAfterCurrentWithBlankPage()));
+  new QShortcut(QKeySequence::AddTab, this, SLOT(newTabAfterCurrentWithBlankPage()));
 
-  connect(new QShortcut(QKeySequence("CTRL+W"), this) , SIGNAL(activated()), SLOT(closeTab()));
+  new QShortcut(QKeySequence("CTRL+W"), this, SLOT(closeTab()));
 
-  connect(new QShortcut(QKeySequence::Quit, this) , SIGNAL(activated()), SLOT(close()));
+  new QShortcut(QKeySequence::Quit, this, SLOT(quit()));
 
-  connect(new QShortcut(QKeySequence(K_META "+TAB"), this) , SIGNAL(activated()), SLOT(nextTab()));
-  connect(new QShortcut(QKeySequence(K_META "+SHIFT+TAB"), this) , SIGNAL(activated()), SLOT(previousTab()));
-  connect(new QShortcut(QKeySequence("CTRL+}"), this) , SIGNAL(activated()), SLOT(nextTab()));
-  connect(new QShortcut(QKeySequence("CTRL+{"), this) , SIGNAL(activated()), SLOT(previousTab()));
+  new QShortcut(QKeySequence(K_META "+TAB"), this, SLOT(nextTab()));
+  new QShortcut(QKeySequence(K_META "+SHIFT+TAB"), this, SLOT(previousTab()));
+  new QShortcut(QKeySequence("CTRL+}"), this, SLOT(nextTab()));
+  new QShortcut(QKeySequence("CTRL+{"), this, SLOT(previousTab()));
 
-  connect(new QShortcut(QKeySequence("CTRL+SHIFT+T"), this) , SIGNAL(activated()), SLOT(undoCloseTab()));
+  new QShortcut(QKeySequence("CTRL+SHIFT+T"), this, SLOT(undoCloseTab()));
 
-  connect(new QShortcut(QKeySequence("CTRL+1"), this) , SIGNAL(activated()), SLOT(focusTab0()));
-  connect(new QShortcut(QKeySequence("CTRL+2"), this), SIGNAL(activated()), SLOT(focusTab1()));
-  connect(new QShortcut(QKeySequence("CTRL+3"), this) , SIGNAL(activated()), SLOT(focusTab2()));
-  connect(new QShortcut(QKeySequence("CTRL+4"), this) , SIGNAL(activated()), SLOT(focusTab3()));
-  connect(new QShortcut(QKeySequence("CTRL+5"), this) , SIGNAL(activated()), SLOT(focusTab4()));
-  connect(new QShortcut(QKeySequence("CTRL+6"), this) , SIGNAL(activated()), SLOT(focusTab5()));
-  connect(new QShortcut(QKeySequence("CTRL+7"), this) , SIGNAL(activated()), SLOT(focusTab6()));
-  connect(new QShortcut(QKeySequence("CTRL+8"), this) , SIGNAL(activated()), SLOT(focusTab7()));
-  connect(new QShortcut(QKeySequence("CTRL+9"), this) , SIGNAL(activated()), SLOT(focusTab8()));
-  connect(new QShortcut(QKeySequence("CTRL+0"), this) , SIGNAL(activated()), SLOT(focusLastTab()));
+  new QShortcut(QKeySequence("CTRL+1"), this, SLOT(focusTab0()));
+  new QShortcut(QKeySequence("CTRL+2"), this, SLOT(focusTab1()));
+  new QShortcut(QKeySequence("CTRL+3"), this, SLOT(focusTab2()));
+  new QShortcut(QKeySequence("CTRL+4"), this, SLOT(focusTab3()));
+  new QShortcut(QKeySequence("CTRL+5"), this, SLOT(focusTab4()));
+  new QShortcut(QKeySequence("CTRL+6"), this, SLOT(focusTab5()));
+  new QShortcut(QKeySequence("CTRL+7"), this, SLOT(focusTab6()));
+  new QShortcut(QKeySequence("CTRL+8"), this, SLOT(focusTab7()));
+  new QShortcut(QKeySequence("CTRL+9"), this, SLOT(focusTab8()));
+  new QShortcut(QKeySequence("CTRL+0"), this, SLOT(focusLastTab()));
 }
 
 void
@@ -410,8 +412,32 @@ WebBrowser::openUrls(const QStringList &urls)
 void
 WebBrowser::focusTab(int index)
 {
+  WbWebView *v = dynamic_cast<WbWebView *>(tabWidget());
+  if (v)
+    disconnect(v, SIGNAL(loadProgress(int)), this, SLOT(showLoadProgress(int)));
+
   if (index >= 0 && index < tabCount())
     ui_->tabWidget->setCurrentIndex(index);
+
+  v = dynamic_cast<WbWebView *>(tabWidget());
+  if (v) {
+    if (v->isLoading())
+      showLoadProgress(v->progress());
+    connect(v, SIGNAL(loadProgress(int)), this, SLOT(showLoadProgress(int)));
+  }
+}
+
+void
+WebBrowser::showLoadProgress(int progress)
+{
+  QString message;
+  switch (progress) {
+  case 0: message = tr("Loading ..."); break;
+  case 100: message = tr("Loading complete"); break;
+  default:
+    message = tr("Loading ...") + QString(" %1/100").arg(QString::number(progress));
+  }
+  showMessage(message);
 }
 
 void
@@ -574,7 +600,7 @@ WebBrowser::closeTab(int tab)
     delete widget;
   }
   if (tabCount() <= 0)
-    close();
+    quit();
 }
 
 void
@@ -606,7 +632,7 @@ WebBrowser::closeTab()
   if (tabCount())
     closeTab(tabIndex());
   else
-    close();
+    quit();
 }
 
 void
@@ -863,11 +889,12 @@ WebBrowser::toggleFullScreen()
 void
 WebBrowser::closeEvent(QCloseEvent *event)
 {
+  DOUT("enter");
   //removeEventFilter(mouseGestureFilter_);
-
   while (tabCount())
     closeTab(0);
   Base::closeEvent(event);
+  DOUT("exit");
 }
 
 // - Log -
@@ -880,6 +907,10 @@ WebBrowser::showMessage(const QString &text)
   if (!text.isEmpty()) {
     statusBar()->show();
     hideStatusBarTimer_->start();
+  } else {
+    WbWebView *v = dynamic_cast<WbWebView *>(tabWidget());
+    if (v && v->isLoading())
+      showLoadProgress(v->progress());
   }
 }
 

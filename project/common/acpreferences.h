@@ -7,8 +7,9 @@
 #include "project/common/acmainwindow.h"
 #include <QtCore/QList>
 
-class AcSettings;
 class AcPreferencesTab;
+class AcSettings;
+class AcTabView;
 class AcPreferences : public AcMainWindow
 {
   Q_OBJECT
@@ -17,20 +18,29 @@ class AcPreferences : public AcMainWindow
   typedef AcMainWindow Base;
 
   AcSettings *settings_;
-  QList<AcPreferencesTab *> tabs_;
+  AcTabView *tabView_;
+  ulong tabs_;
 
 public:
-  explicit AcPreferences(AcSettings *settings, QWidget *parent = 0)
-    : Base(parent), settings_(settings) { init(); }
-  explicit AcPreferences(QWidget *parent = 0)
-    : Base(parent), settings_(0) { init(); }
+  enum Tab {
+    NoTab = 0x0,
+    LocationTab = 1,
+    AccountTab = 1,
+    NetworkProxyTab = 1 << 1
+  };
+
+  explicit AcPreferences(ulong tabs, QWidget *parent = 0);
+  explicit AcPreferences(QWidget *parent = 0);
+
+  virtual QSize sizeHint() const;
 
   // - Events -
 public slots:
   virtual void setVisible(bool visible); ///< \override
 protected slots:
   void save();
-  void refresh();
+  void load();
+  void updateSize();
 
 private:
   void init();

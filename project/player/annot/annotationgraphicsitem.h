@@ -19,8 +19,9 @@ class QStringList;
 class QTimer;
 QT_END_NAMESPACE
 
-class SignalHub;
+class AnnotationGraphicsEffect;
 class AnnotationGraphicsView;
+class SignalHub;
 
 class AnnotationGraphicsItem : public QGraphicsTextItem
 {
@@ -41,7 +42,7 @@ public:
 
   static void warmUp(); ///< optional, caching fonts on first load
 
-  enum Effect { DefaultEffect = 0, TransparentEffect, ShadowEffect, BlurEffect, EffectCount };
+  //enum Effect { DefaultEffect = 0, TransparentEffect, ShadowEffect, BlurEffect, EffectCount };
 
 public:
   explicit AnnotationGraphicsItem(SignalHub *hub, AnnotationGraphicsView *viewWithScene);
@@ -73,7 +74,7 @@ public:
 
   QPointF relativePos() const { return pos() - origin_; }
 
-  qreal opacity() const { return opacity_; }
+  qreal opacity() const;
 
 protected:
   //QString parse(const QString &text);
@@ -85,8 +86,6 @@ public slots:
   void setScale(qreal value) { Base::setScale(value); }
   void showMe();   // Add me to graphics scene, and autmatic remove me.
   void selectMe();
-  void updateEffect();
-  void setEffect(Effect e);
 
   void reset();
   void pause();
@@ -102,7 +101,6 @@ protected slots:
   void removeMe(); // Remove me from graphics scene
   void deleteMe(); // Delete corresponding annotation
 
-  void updateOpacity();
   void fly();
   void stay(Style location = TopStyle);
   void removeLater(int msecs);
@@ -122,7 +120,7 @@ protected:
   void fly(const QPointF &from, const QPointF &to, int msecs);
   void escapeTo(const QPointF &pos, int msecs);
   void rushTo(const QPointF &pos, int msecs);
-  void stay(const QPointF &pos, int msecs);
+  //void stay(const QPointF &pos, int msecs);
   void appear(const QPointF &pos, int msecs);
 
   int flyTime() const;  ///< in msecs
@@ -157,6 +155,7 @@ private:
 private:
   bool autoDelete_;
   Annotation annot_;
+  AnnotationGraphicsEffect *effect_;
 
   QPointF origin_;
   AnnotationGraphicsView *view_;
@@ -172,7 +171,6 @@ private:
   QPoint dragPos_;
   bool dragPaused_;
   QString richText_;
-  qreal opacity_;
 };
 
 #endif // ANNOTATIONGRAPHICSITEM_H

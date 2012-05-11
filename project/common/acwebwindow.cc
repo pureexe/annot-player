@@ -5,6 +5,7 @@
 #include "project/common/acui.h"
 #include "module/qtext/webview.h"
 #include <QtWebKit/QWebView>
+#include <QtGui/QShortcut>
 #include <QtCore/QEvent>
 
 #define DEBUG "acwebwindow"
@@ -29,6 +30,9 @@ AcWebWindow::AcWebWindow(QWidget *parent, Qt::WindowFlags f)
   //grabGesture(Qt::PanGesture);
   //grabGesture(Qt::SwipeGesture);
   //grabGesture(Qt::PinchGesture);
+
+  //new QShortcut(QKeySequence("Esc"), this, SLOT(fadeOut()));
+  new QShortcut(QKeySequence("CTRL+W"), this, SLOT(fadeOut()));
 }
 
 // - Properties -

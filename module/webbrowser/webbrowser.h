@@ -57,6 +57,7 @@ public:
   QList<QUrl> blockedUrls() { return blockedUrls_; }
 
 public slots:
+  virtual void quit() { close(); }
   void invalidateSearch();
   void setHomePage(const QString &url) { homePage_ = url; }
   void setHomePages(const QStringList &urls);
@@ -107,6 +108,7 @@ protected slots:
   void handleLoadStarted();
   void handleLoadFinished();
   void toggleFullScreen();
+  void showLoadProgress(int progress);
 
   void focusLocationBar();
   void focusSearchBar();

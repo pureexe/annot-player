@@ -55,10 +55,6 @@ TokenView::TokenView(ServerAgent *server, QWidget *parent)
   // Create context menu
   createActions();
 
-  // Shortcuts
-  connect(new QShortcut(QKeySequence("Esc"), this), SIGNAL(activated()), SLOT(hide()));
-  connect(new QShortcut(QKeySequence("CTRL+W"), this), SIGNAL(activated()), SLOT(hide()));
-
   // Set initial states
 
   tableView_->sortByColumn(HD_Type, Qt::AscendingOrder);
@@ -69,7 +65,6 @@ void
 TokenView::createLayout()
 {
   AcUi *ui = AcUi::globalInstance();
-  ui->setWindowStyle(this);
 
 #define MAKE_TOKEN_LABEL(_id, _styleid) \
   _id##Label_ = ui->makeLabel(AcUi::HighlightHint, TR(T_UNKNOWN), TR(T_TOOLTIP_##_styleid)); \

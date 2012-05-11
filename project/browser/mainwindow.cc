@@ -7,6 +7,7 @@
 #include "global.h"
 #include "application.h"
 #include "project/common/acabout.h"
+#include "project/common/acpreferences.h"
 #include "project/common/acsettings.h"
 #include "project/common/acui.h"
 #include "project/common/acbrowser.h"
@@ -14,6 +15,7 @@
 #include "project/common/acdownloader.h"
 #include "project/common/acconsole.h"
 #include "module/webbrowser/network/wbnetworkaccessmanager.h"
+#include "module/animation/fadeanimation.h"
 #include "module/searchengine/searchenginefactory.h"
 #include "module/nicoutil/nicoutil.h"
 #include "module/download/downloader.h"
@@ -38,7 +40,7 @@
 
 #define MIN_SIZE        QSize(400, 300)
 #ifdef Q_WS_WIN
-#  define DEFAULT_SIZE  QSize(1000 + 6*2, 645)
+#  define DEFAULT_SIZE  QSize(1000 + 9*2, 650)
 #else
 #  define DEFAULT_SIZE  QSize(1000 + 9*2, 710) // width for nicovideo.jp + margin*2, height for newtab on mac
 #endif // Q_WS_WIN
@@ -90,6 +92,7 @@ MainWindow::MainWindow(QWidget *parent)
     << QString("http://wangmeng.baidu.com")
     << QString("http://cpro.baidu.com")
     << QString("http://static.loli.my/ad-images")
+    << QString("http://ads.nicovideo.jp")
     << QString("http://u17.com")
     << QString("http://u17i.com")
     << QString("http://taobao.com")
@@ -114,6 +117,8 @@ MainWindow::MainWindow(QWidget *parent)
   AcUi::globalInstance()->setWindowStyle(this);
   AcUi::globalInstance()->setStatusBarStyle(statusBar());
   setWindowOpacity(1.0); // window is opaque
+
+  fadeAni_ = new FadeAnimation(this, "windowOpacity", this);
 
   // - IPC -
   playerDelegate_ = new AcPlayer(this);
@@ -144,7 +149,7 @@ MainWindow::MainWindow(QWidget *parent)
   connect(dc, SIGNAL(notification(QString)), SLOT(notify(QString)), Qt::QueuedConnection);
 
   // - Shortcuts -
-  connect(new QShortcut(QKeySequence::New, this), SIGNAL(activated()), SLOT(newWindow()));
+  new QShortcut(QKeySequence::New, this, SLOT(newWindow()));
 
   createMenus();
   createGestures();
@@ -282,7 +287,7 @@ MainWindow::createMenus()
     m->addAction(tr("Clip"), this, SLOT(clip()), QKeySequence::Save);
     m->addSeparator();
     m->addAction(tr("Close Tab"), this, SLOT(closeTab()), QKeySequence("CTRL+W"));
-    m->addAction(tr("Close Window"), this, SLOT(close()));
+    m->addAction(tr("Close Window"), this, SLOT(quit()));
     m->addAction(tr("Exit"), Application::globalInstance(), SLOT(close()), QKeySequence::Quit);
   }
 
@@ -307,8 +312,9 @@ MainWindow::createMenus()
     m->addAction(tr("Toggle Full Screen"), this, SLOT(toggleFullScreen()), QKeySequence("CTRL+META+F"));
   }
 
-  //m = menuBar()->addMenu(tr("&Settings")); {
-  //}
+  m = menuBar()->addMenu(tr("&Settings")); {
+    m->addAction(tr("&Preferences"), this, SLOT(preferences()), QKeySequence("CTRL+,"));
+  }
 
   m = menuBar()->addMenu(tr("&Help")); {
     //m->addAction(tr("&Help"), this, SLOT(help())); // DO NOT TRANSLATE ME
@@ -362,6 +368,14 @@ MainWindow::login()
 // - Events -
 
 void
+MainWindow::quit()
+{
+  fadeAni_->fadeOut();
+  QTimer::singleShot(fadeAni_->duration(), this, SLOT(hide()));
+  QTimer::singleShot(fadeAni_->duration(), this, SLOT(close()));
+}
+
+void
 MainWindow::mouseMoveEvent(QMouseEvent *event)
 {
   if (isFullScreen() &&
@@ -390,16 +404,16 @@ MainWindow::mousePressEvent(QMouseEvent *event)
 void
 MainWindow::focusInEvent(QFocusEvent *e)
 {
-  if (this != Application::globalInstance()->activeMainWindow())
-    Application::globalInstance()->setActiveMainWindow(this);
+  if (this != Application::globalInstance()->mainWindow())
+    Application::globalInstance()->setMainWindow(this);
   Base::focusInEvent(e);
 }
 
 void
-MainWindow::keyReleaseEvent(QKeyEvent *e)
+MainWindow::keyPressEvent(QKeyEvent *e)
 {
   switch (e->key()) {
-  case Qt::Key_Alt:
+  case Qt::Key_CapsLock:
 #ifdef Q_WS_WIN
     menuBar()->setVisible(!menuBar()->isVisible());
 #endif // Q_WS_WIN
@@ -465,6 +479,9 @@ MainWindow::closeEvent(QCloseEvent *event)
 
   Application::globalInstance()->removeWindow(this);
 
+  if (fadeAni_->state() == QAbstractAnimation::Running)
+    fadeAni_->stop();
+
   // Save settings
   saveRecentTabs();
   Settings *settings = Settings::globalSettings();
@@ -495,6 +512,8 @@ MainWindow::closeEvent(QCloseEvent *event)
 void
 MainWindow::setVisible(bool visible)
 {
+  if (visible && !isVisible())
+    fadeAni_->fadeIn();
   Base::setVisible(visible);
 
   if (visible && tabCount() <= 0) {
@@ -696,7 +715,16 @@ MainWindow::about()
 {
   static AcAbout *w = 0;
   if (!w)
-    w = new AcAbout(G_APPLICATION, G_VERSION, this);
+    w = new AcAbout(G_APPLICATION, G_VERSION);
+  w->show();
+}
+
+void
+MainWindow::preferences()
+{
+  static AcPreferences *w = 0;
+  if (!w)
+    w = new AcPreferences(AcPreferences::NetworkProxyTab);
   w->show();
 }
 
@@ -755,6 +783,7 @@ MainWindow::isGlobalPosAroundToolBar(const QPoint &pos) const
 }
 
 // - Console -
+
 void
 MainWindow::showConsole()
 {

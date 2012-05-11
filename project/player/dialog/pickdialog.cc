@@ -33,8 +33,6 @@ PickDialog::PickDialog(QWidget *parent)
 void
 PickDialog::createLayout()
 {
-  AcUi::globalInstance()->setWindowStyle(this);
-
   messageLabel_ = AcUi::globalInstance()->makeLabel(0, "", TR(T_MESSAGE));
 
   QToolButton *cancelButton = AcUi::globalInstance()->makeToolButton(
@@ -49,10 +47,6 @@ PickDialog::createLayout()
 
   // Connections
   connect(cancelButton, SIGNAL(clicked()), SLOT(cancel()));
-
-  // Shortcuts
-  connect(new QShortcut(QKeySequence("Esc"), this), SIGNAL(activated()), SLOT(hide()));
-  connect(new QShortcut(QKeySequence("CTRL+W"), this), SIGNAL(activated()), SLOT(hide()));
 
   // Focus
   cancelButton->setFocus();
@@ -89,7 +83,7 @@ void
 PickDialog::cancel()
 {
   DOUT("enter");
-  hide();
+  fadeOut();
   log(tr("window picking canceled"));
   DOUT("exit");
 }
@@ -106,7 +100,7 @@ PickDialog::pickWindow(WId winId)
 
   log(tr("window picked") + QString(" (hwnd = %1)").arg(QString::number((ulong)winId, 16)));
 
-  hide();
+  fadeOut();
   emit windowPicked(winId);
   DOUT("exit");
 }

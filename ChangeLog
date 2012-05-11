@@ -2,6 +2,14 @@ ChangeLog
 Annot Project
 6/18/2011
 
+5/11/2012	annot.player, down, browser	0.1.5.4, 0.1.2.3, 0.1.1.3
+        * FadeIn/FadeOut animation applied to all windows and annotations.
+        * Change menubar shortcuts from ALT to CAPSLOCK.
+        * Added magnifier (CTRL+E or hold LeftButton).
+        * Fixed mouse freezing issue on Windows.
+        * Fixed a bug while decoding AcFun.tv URLs.
+        * Fixed a bug in Browser when visiting SSL encrypted webs.
+
 5/5/2012	annot.player, down, browser	0.1.5.3, 0.1.2.2, 0.1.1.2
         * Able to play limited Youku video from outside of China.
         * Use annotion pool to reduce memory traffic and CPU usage significantly.

@@ -18,11 +18,13 @@
 //#define DEBUG "acfuncodec"
 #include "module/debug/debug.h"
 
+enum { MaxRetries = 5 };
+
 using namespace AnnotCloud;
 
 // - Construction -
 
-AcFunCodec::AcFunCodec(QObject *parent)
+AcfunCodec::AcfunCodec(QObject *parent)
   : Base(parent)
 {
   qnam_ = new QNetworkAccessManager(this);
@@ -32,7 +34,7 @@ AcFunCodec::AcFunCodec(QObject *parent)
 // - Fetch -
 
 bool
-AcFunCodec::match(const QString &url) const
+AcfunCodec::match(const QString &url) const
 {
   DOUT("enter: url =" << url);
   bool ret = url.contains("http://comment.acfun.tv/", Qt::CaseInsensitive);
@@ -41,7 +43,7 @@ AcFunCodec::match(const QString &url) const
 }
 
 void
-AcFunCodec::fetch(const QString &url)
+AcfunCodec::fetch(const QString &url)
 {
   Q_ASSERT(match(url));
   DOUT("enter: url =" << url);
@@ -52,18 +54,28 @@ AcFunCodec::fetch(const QString &url)
 // - Decode -
 
 void
-AcFunCodec::parseReply(QNetworkReply *reply)
+AcfunCodec::parseReply(QNetworkReply *reply)
 {
   DOUT("enter");
   Q_ASSERT(reply);
   //QTimer::singleShot(0, reply, SLOT(deleteLater()));
   reply->deleteLater();
+  QString url = reply->url().toString();
   if (!reply->isFinished() || reply->error() != QNetworkReply::NoError) {
-    //emit error(reply->errorString());
-    emit error(tr("network error, failed to resolve media URL") + " <br/> " + reply->url().toString());
-    DOUT("exit: network error");
+    int retry = retries_[url];
+    if (retry <= MaxRetries) {
+      emit error(
+        tr("network error, retry")
+        + QString(" (%1/%2):").arg(QString::number(retry)).arg(QString::number(MaxRetries))
+        + url
+      );
+      fetch(url);
+    } else
+      emit error(tr("network error, failed to resolve media URL") + ": " + url);
+    DOUT("exit: network error:" << reply->errorString());
     return;
   }
+  retries_.remove(url);
   AnnotationList l = parseDocument(reply->readAll());
   if (l.isEmpty())
     emit error(tr("failed to resolve annotations from URL") + ": " + reply->url().toString());
@@ -75,7 +87,7 @@ AcFunCodec::parseReply(QNetworkReply *reply)
 // - Decode -
 
 AnnotationList
-AcFunCodec::parseXmlDocument(const QByteArray &data)
+AcfunCodec::parseXmlDocument(const QByteArray &data)
 {
   DOUT("enter: data.size =" << data.size());
   if (data.isEmpty()) {
@@ -115,7 +127,7 @@ AcFunCodec::parseXmlDocument(const QByteArray &data)
 
 // Example: http://comment.acfun.tv/70590459.json?clientID=0.9264421034604311
 AnnotationList
-AcFunCodec::parseJsonDocument(const QByteArray &data)
+AcfunCodec::parseJsonDocument(const QByteArray &data)
 {
   DOUT("enter: data.size =" << data.size());
   if (data.isEmpty()) {
@@ -158,7 +170,7 @@ AcFunCodec::parseJsonDocument(const QByteArray &data)
 }
 
 QString
-AcFunCodec::parseText(const QString &text)
+AcfunCodec::parseText(const QString &text)
 {
   DOUT("text =" << text);
   if (text.isEmpty())
@@ -180,7 +192,7 @@ AcFunCodec::parseText(const QString &text)
 
 // Example: <l i="104.5,25,16776960,1,smdhk79eda608,1328249735"><![CDATA[......]]></l>
 Annotation
-AcFunCodec::parseAttribute(const QString &attr)
+AcfunCodec::parseAttribute(const QString &attr)
 {
   DOUT("attr =" << attr);
   enum { AttrPos = 0, AttrFontColor, AttrFloatStyle, AttrFontSize, AttrUserId, AttrCreateTime, AttrCount };

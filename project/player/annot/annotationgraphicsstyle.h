@@ -30,10 +30,8 @@
 #define ANNOTATION_STAY_TIME_SUBTITLE   3000
 #define ANNOTATION_STAY_TIME_MIN        1000
 #define ANNOTATION_STAY_TIME_MAX        10000
-#define ANNOTATION_FLY_TIME             6000 // the larger the slower
-#define ANNOTATION_FLY_TIME_MIN         1000
-#define ANNOTATION_FLY_TIME_MAX         10000
-
-#define ANNOTATION_OPACITY          0.8 // [0, 1]
+#define ANNOTATION_FLY_TIME             7000 // the larger the slower
+#define ANNOTATION_FLY_TIME_MIN         1500
+#define ANNOTATION_FLY_TIME_MAX         12000
 
 #endif // ANNOTATIONGRAPHICSSTYLE_H

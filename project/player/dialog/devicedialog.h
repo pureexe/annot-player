@@ -4,7 +4,7 @@
 // devicedialog.h
 // 12/2/2011
 
-#include "module/qtext/dialog.h"
+#include "project/common/acwindow.h"
 #include <QtCore/QStringList>
 
 QT_BEGIN_NAMESPACE
@@ -13,13 +13,12 @@ class QRadioButton;
 class QToolButton;
 QT_END_NAMESPACE
 
-typedef QtExt::Dialog DeviceDialogBase;
-class DeviceDialog : public DeviceDialogBase
+class DeviceDialog : public AcWindow
 {
   Q_OBJECT
   Q_DISABLE_COPY(DeviceDialog)
   typedef DeviceDialog Self;
-  typedef DeviceDialogBase Base;
+  typedef AcWindow Base;
 
 public:
   explicit DeviceDialog(QWidget *parent = 0);

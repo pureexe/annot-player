@@ -11,6 +11,7 @@ HEADERS += \
     $$PWD/algorithm.h \
     $$PWD/bitwise.h \
     $$PWD/combobox.h \
+    $$PWD/compactstackedlayout.h \
     $$PWD/countdowntimer.h \
     $$PWD/datetime.h \
     $$PWD/dialog.h \

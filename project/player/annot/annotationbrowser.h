@@ -4,7 +4,7 @@
 // annotationbrowser.h
 // 10/23/2011
 
-#include "module/qtext/dialog.h"
+#include "project/common/acwindow.h"
 #include "module/annotcloud/annotation.h"
 #include <QtCore/QModelIndex>
 
@@ -20,13 +20,12 @@ class AcFilteredTableView;
 class AnnotationEditor;
 class SignalHub;
 
-typedef QtExt::Dialog AnnotationBrowserBase;
-class AnnotationBrowser : public AnnotationBrowserBase
+class AnnotationBrowser : public AcWindow
 {
   Q_OBJECT
   Q_DISABLE_COPY(AnnotationBrowser)
   typedef AnnotationBrowser Self;
-  typedef AnnotationBrowserBase Base;
+  typedef AcWindow Base;
 
   typedef AnnotCloud::Annotation Annotation;
   typedef AnnotCloud::AnnotationList AnnotationList;

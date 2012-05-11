@@ -37,17 +37,12 @@ CountdownDialog::CountdownDialog(QWidget *parent)
   connect(timer_, SIGNAL(timeout()), SLOT(tick()));
 
   createLayout();
-
-  // Shortcuts
-  connect(new QShortcut(QKeySequence("Esc"), this), SIGNAL(activated()), SLOT(hide()));
-  connect(new QShortcut(QKeySequence("CTRL+W"), this), SIGNAL(activated()), SLOT(hide()));
 }
 
 void
 CountdownDialog::createLayout()
 {
   AcUi *ui = AcUi::globalInstance();
-  ui->setWindowStyle(this);
 
   QToolButton *okButton = ui->makeToolButton(
         AcUi::PushHint | AcUi::HighlightHint, TR(T_OK), this, SLOT(run()));

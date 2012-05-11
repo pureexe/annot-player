@@ -4,7 +4,7 @@
 // siteaccountview.h
 // 2/8/2012
 
-#include "module/qtext/dialog.h"
+#include "project/common/acwindow.h"
 
 struct SiteAccount
 {
@@ -20,13 +20,12 @@ struct SiteAccount
 QT_FORWARD_DECLARE_CLASS(QLineEdit)
 QT_FORWARD_DECLARE_CLASS(QComboBox)
 
-typedef QtExt::Dialog SiteAccountViewBase;
-class SiteAccountView : public SiteAccountViewBase
+class SiteAccountView : public AcWindow
 {
   Q_OBJECT
   Q_DISABLE_COPY(SiteAccountView)
   typedef SiteAccountView Self;
-  typedef SiteAccountViewBase Base;
+  typedef AcWindow Base;
 
   SiteAccount nicovideoAccount_;
   QComboBox *nicovideoUsernameEdit_;

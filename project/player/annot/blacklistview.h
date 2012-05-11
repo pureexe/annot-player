@@ -4,7 +4,7 @@
 // blacklistview.h
 // 11/16/2011
 
-#include "module/qtext/dialog.h"
+#include "project/common/acwindow.h"
 
 QT_BEGIN_NAMESPACE
 class QAction;
@@ -20,13 +20,12 @@ class TextFilterView;
 class UserFilterView;
 class AnnotationFilterView;
 
-typedef QtExt::Dialog BlacklistViewBase;
-class BlacklistView : public BlacklistViewBase
+class BlacklistView : public AcWindow
 {
   Q_OBJECT
   Q_DISABLE_COPY(BlacklistView)
   typedef BlacklistView Self;
-  typedef BlacklistViewBase Base;
+  typedef AcWindow Base;
 
   // - Types -
 protected:

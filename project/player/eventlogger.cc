@@ -477,8 +477,9 @@ EventLogger::logResumeHoveredAnnotations(bool t)
 void
 EventLogger::logRemoveHoveredAnnotations(bool t)
 {
-  if (t && !hub_->isFullScreenWindowMode())
-    log(tr("remove hovered annotations"));
+  Q_UNUSED(t);
+  //if (t && !hub_->isFullScreenWindowMode())
+  //  log(tr("remove hovered annotations"));
 }
 
 void
@@ -492,10 +493,10 @@ EventLogger::logExpelNearbyAnnotations(bool t)
 void
 EventLogger::logAttractNearbyAnnotations(bool t)
 {
-  if (t && !hub_->isFullScreenWindowMode())
-    log(tr("collect nearby annotations"));
+  Q_UNUSED(t);
+  //if (t && !hub_->isFullScreenWindowMode())
+  //  log(tr("collect nearby annotations"));
 }
-
 
 void
 EventLogger::logSelectedUserIds(const QList<qint64> &uids)

@@ -4,7 +4,7 @@
 // annotationeditor.h
 // 10/4/2011
 
-#include "module/qtext/dialog.h"
+#include "project/common/acwindow.h"
 
 QT_BEGIN_NAMESPACE
 class QAction;
@@ -21,13 +21,12 @@ QT_END_NAMESPACE
 
 // TODO: attach image!!!!!!!!!! or URL link as well!!!!
 
-typedef QtExt::Dialog AnnotationEditorBase;
-class AnnotationEditor : public AnnotationEditorBase
+class AnnotationEditor : public AcWindow
 {
   Q_OBJECT
   Q_DISABLE_COPY(AnnotationEditor)
   typedef AnnotationEditor Self;
-  typedef AnnotationEditorBase Base;
+  typedef AcWindow Base;
 
   enum RibonIndex {
     CodeRibonIndex = 0,
@@ -91,7 +90,6 @@ public slots:
 
 protected slots:
   void save();
-  void cancel();
 
   void setMode(Mode mode);
   void setCodeMode();

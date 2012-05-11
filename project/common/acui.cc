@@ -37,7 +37,7 @@ AcUi::setTheme(int tid)
 }
 
 const char*
-AcUi::backgroundImagePath() const
+AcUi::backgroundImage() const
 {
   int t = theme_;
   if (t == RandomTheme)
@@ -119,7 +119,7 @@ AcUi::setWindowBackground(QWidget *w, bool persistent)
   if (!w)
     return;
 
-  const char *rc = backgroundImagePath();
+  const char *rc = backgroundImage();
 
   QPalette palette;
   palette.setBrush(QPalette::Window, QPixmap(rc));
@@ -146,7 +146,7 @@ AcUi::setMenuBackground(QMenu *m, bool persistent)
   else
 //#endif // Q_WS_MAC
   {
-    QString rc = backgroundImagePath();
+    QString rc = backgroundImage();
     m->setStyleSheet(
       SS_CONTEXTMENU
       SS_BEGIN(QMenu)

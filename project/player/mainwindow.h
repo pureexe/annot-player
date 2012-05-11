@@ -42,14 +42,18 @@ class Database;
 class DataManager;
 class DataServer;
 class EventLogger;
+class FadeAnimation;
 class Grabber;
+class Magnifier;
 class MrlResolver;
+class PixmapRippleFilter;
 class Player;
 class ServerAgent;
 class SignalHub;
 class Tray;
 class Translator;
 
+class AcAbout;
 class AcPlayerServer;
 class AcDownloader;
 class AcBrowser;
@@ -75,6 +79,7 @@ class SignalView;
 class BacklogDialog;
 class ConsoleDialog;
 class TokenView;
+class UserAnalyticsView;
 class VideoView;
 
 // Dialogs
@@ -85,10 +90,10 @@ class DeviceDialog;
 class HelpDialog;
 class LiveDialog;
 class LoginDialog;
-class NetworkProxyDialog;
+//class NetworkProxyDialog;
 class PickDialog;
 class SeekDialog;
-class SiteAccountView;
+//class SiteAccountView;
 class MediaInfoView;
 class SyncDialog;
 class UserView;
@@ -119,8 +124,13 @@ public:
   explicit MainWindow(bool unique = true, QWidget *parent = 0, Qt::WindowFlags f = 0);
   bool isValid() const;
 
+public:
+  void move(const QPoint &pos) { Base::move(pos); emit posChanged(); }
+  void move(int x, int y) { Base::move(x, y); emit posChanged(); }
+
   // - Signals -
 signals:
+  void posChanged();
   void openAnnotationUrlRequested(const QString &url);
   void annotationUrlAdded(QString url);
   void windowMaximized();
@@ -207,6 +217,7 @@ public slots:
   void setEmbeddedWindow(WId winId);
 
   void about();
+  //void quit();
   void help();
   void update();
 
@@ -315,6 +326,10 @@ protected slots:
   void playMedia();
   void updateWindowSize();
 
+  void setRippleEnabled(bool t);
+  void enableRipple() { setRippleEnabled(true); }
+  void disableRipple() { setRippleEnabled(false); }
+
   // - Live -
 public slots:
   void openChannel();
@@ -354,12 +369,20 @@ protected:
   UrlDialog *mediaUrlDialog();
   AnnotationAnalyticsView *annotationAnalyticsView();
 
+protected slots:
+  void showUserAnalytics(qint64 userId);
+
 public slots:
   void showLoginDialog();
   void hideLoginDialog();
   void setLoginDialogVisible(bool visible);
 
-  void setNetworkProxyDialogVisible(bool visible);
+  void setMagnifierVisible(bool visible);
+  void showMagnifier() { setMagnifierVisible(true); }
+  void hideMagnifier() { setMagnifierVisible(true); }
+  void toggleMagnifierVisible();
+
+  //void setNetworkProxyDialogVisible(bool visible);
 
   void setUserViewVisible(bool visible);
 
@@ -411,9 +434,9 @@ public slots:
   void setMediaInfoViewVisible(bool visible);
   void showMediaInfoView() { setMediaInfoViewVisible(true); }
 
-  void setSiteAccountViewVisible(bool visible);
+  //void setSiteAccountViewVisible(bool visible);
 protected slots:
-  void invalidateSiteAccounts();
+  //void invalidateSiteAccounts();
   BacklogDialog *backlogDialog();
   ConsoleDialog *consoleDialog();
 
@@ -460,6 +483,7 @@ public slots:
 
   void showTextAsSubtitle(const QString &text, bool isSigned = false);
 
+  void updateAnnotations(bool async = true);
   void setToken(const QString &filePath = QString(), bool async = true);
   void invalidateToken(const QString &mrl = QString());
   void submitAlias(const Alias &alias, bool async = true);
@@ -524,6 +548,7 @@ public:
   void pinchGesture(QPinchGesture *g);
   void swipeGesture(QSwipeGesture *g);
 protected:
+  virtual void paintEvent(QPaintEvent *event);
   virtual void mousePressEvent(QMouseEvent *event); ///< \override
   virtual void mouseMoveEvent(QMouseEvent *event); ///< \override
   virtual void mouseReleaseEvent(QMouseEvent *event); ///< \override
@@ -542,6 +567,9 @@ protected:
 
   virtual void closeEvent(QCloseEvent *event); ///< \override
 
+  virtual void focusInEvent(QFocusEvent *e); ///< \override
+  virtual void focusOutEvent(QFocusEvent *e); ///< \override
+
 protected slots:
   virtual void dragEnterEvent(QDragEnterEvent *event); ///< \override
   virtual void dragMoveEvent(QDragMoveEvent *event); ///< \override
@@ -551,10 +579,11 @@ protected slots:
   void updateAnnotationHoverGesture();
 
   void updateContextMenu();
+  void updateGameMenu();
   void updateAspectRatioMenu();
   void updateSettingsMenu();
   void updateMenuTheme();
-  void updateAnnotationMenu();
+  void updateAnnotationSettingsMenu();
   void updateAnnotationSubtitleMenu();
   void updateUserMenu();
   void updateTrackMenu();
@@ -726,7 +755,7 @@ protected slots:
   void searchCurrentTitleWithBing()   { searchWithEngine(SearchEngineFactory::Bing, currentTitle()); }
   void searchCurrentTitleWithNicovideo() { searchWithEngine(SearchEngineFactory::Nicovideo, currentTitle()); }
   void searchCurrentTitleWithBilibili() { searchWithEngine(SearchEngineFactory::Bilibili, currentTitle()); }
-  void searchCurrentTitleWithAcFun()  { searchWithEngine(SearchEngineFactory::AcFun, currentTitle()); }
+  void searchCurrentTitleWithAcfun()  { searchWithEngine(SearchEngineFactory::Acfun, currentTitle()); }
   void searchCurrentTitleWithYoutube() { searchWithEngine(SearchEngineFactory::Youtube, currentTitle()); }
   void searchCurrentTitleWithYouku()  { searchWithEngine(SearchEngineFactory::Youku, currentTitle()); }
   void searchCurrentTitleWithWikiEn() { searchWithEngine(SearchEngineFactory::WikiEn, currentTitle()); }
@@ -773,7 +802,10 @@ private:
   mutable QMutex inetMutex_;    // mutext for remote communication
   mutable QMutex annotMutex_;
   Tray *tray_;
+  AcAbout *about_;
   SignalHub *hub_;
+
+  Magnifier *magnifier_;
 
   QList<SearchEngine *> searchEngines_;
 
@@ -787,6 +819,7 @@ private:
   QTimer *windowStaysOnTopTimer_;
   QTimer *navigationTimer_;
   QTimer *autoHideCursorTimer_;
+  QTimer *holdTimer_;
   QStringList annotationUrls_;
 
   //QTimer *windowStaysOnTopTimer_;
@@ -833,6 +866,7 @@ private:
 
   AnnotationGraphicsView *annotationView_;
   AnnotationAnalyticsView *annotationAnalyticsView_;
+  UserAnalyticsView *userAnalyticsView_;
   AnnotationBrowser *annotationBrowser_;
   AnnotationEditor *annotationEditor_;
   AnnotationFilter *annotationFilter_;
@@ -846,24 +880,25 @@ private:
   BacklogDialog *backlogDialog_;
   ConsoleDialog *consoleDialog_;
 
-  AboutDialog *aboutDialog_;
   AnnotationCountDialog *annotationCountDialog_;
   DeviceDialog *deviceDialog_;
   HelpDialog *helpDialog_;
   LoginDialog *loginDialog_;
   LiveDialog *liveDialog_;
-  NetworkProxyDialog *networkProxyDialog_;
+  //NetworkProxyDialog *networkProxyDialog_;
   PickDialog *processPickDialog_;
   SeekDialog *seekDialog_;
   SyncDialog *syncDialog_;
   PickDialog *windowPickDialog_;
   UrlDialog *mediaUrlDialog_;
   UrlDialog *annotationUrlDialog_;
-  SiteAccountView *siteAccountView_;
+  //SiteAccountView *siteAccountView_;
   MediaInfoView *mediaInfoView_;
   UserView *userView_;
 
   QPoint dragPos_;
+  QPoint pressedPos_;
+  Qt::MouseButtons pressedButtons_;
   qint64 windowModeUpdateTime_;
 
   qint32 tokenType_; // current token type tt
@@ -881,6 +916,10 @@ private:
 
   bool cancelContextMenu_;
 
+  bool ripple_;
+  PixmapRippleFilter *rippleFilter_;
+  QTimer *rippleTimer_;
+
   QStringList playlist_;
 
   QHash<qint64, qint64> playPosHistory_;
@@ -891,17 +930,11 @@ private:
   int preferredSubtitleTrack_,
       preferredAudioTrack_;
 
+  FadeAnimation *fadeAni_;
+
   QWidgetList windows_;
 
   // - Menus and actions -
-
-//#ifndef Q_OS_WIN
-  //QMenuBar *menuBar_;
-  QMenu *fileMenu_,
-        //*viewMenu_,
-        *helpMenu_;
-//#endif // !Q_OS_WIN
-
   QMenu *contextMenu_,
         *currentMenu_,
         *searchMenu_,
@@ -934,6 +967,7 @@ private:
   QList<QAction*> contextMenuActions_;
 
   QMenu *annotationMenu_;
+  QMenu *annotationSettingsMenu_;
   QAction *resumeAnnotationAct_,
           *increaseAnnotationScaleAct_,
           *decreaseAnnotationScaleAct_,
@@ -1003,9 +1037,10 @@ private:
           *toggleAnnotationAnalyticsViewVisibleAct_,
           *toggleAnnotationVisibleAct_,
           *toggleAnnotationCountDialogVisibleAct_,
+          *toggleMagnifierVisibleAct_,
           *toggleMenuBarVisibleAct_,
           *toggleClipboardMonitorEnabledAct_,
-          *toggleSiteAccountViewVisibleAct_,
+          //*toggleSiteAccountViewVisibleAct_,
           *toggleFullScreenModeAct_,
           *toggleEmbeddedModeAct_,
           *toggleMiniModeAct_,
@@ -1029,8 +1064,11 @@ private:
   QAction *togglePlayerLabelEnabled_;
   QAction *downloadCurrentUrlAct_,
           *copyCurrentUrlAct_,
+          *copyCurrentTitleAct_,
           *openInWebBrowserAct_,
           *openHomePageAct_;
+
+  QAction *updateAnnotationsAct_;
 
   QAction *loginAct_,
           *logoutAct_,
@@ -1039,12 +1077,13 @@ private:
 
   QAction *clearCacheAct_;
 
+  QMenu   *gameMenu_;
   QAction *toggleAnnotationBrowserVisibleAct_,
           *toggleAnnotationEditorVisibleAct_,
           *toggleTokenViewVisibleAct_,
           *toggleLiveDialogVisibleAct_,
           *toggleLoginDialogVisibleAct_,
-          *toggleNetworkProxyDialogVisibleAct_,
+          //*toggleNetworkProxyDialogVisibleAct_,
           *toggleWindowPickDialogVisibleAct_,
           *toggleProcessPickDialogVisibleAct_,
           *toggleSeekDialogVisibleAct_,
@@ -1132,6 +1171,7 @@ private:
           *helpAct_,
           *updateAct_,
           *aboutAct_,
+          *preferencesAct_,
           *quitAct_;
 };
 

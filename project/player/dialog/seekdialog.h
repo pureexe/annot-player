@@ -4,17 +4,16 @@
 // seekdialog.h
 // 8/16/2011
 
-#include "module/qtext/dialog.h"
+#include "project/common/acwindow.h"
 
 QT_FORWARD_DECLARE_CLASS(QComboBox)
 
-typedef QtExt::Dialog SeekDialogBase;
-class SeekDialog : public SeekDialogBase
+class SeekDialog : public AcWindow
 {
   Q_OBJECT
   Q_DISABLE_COPY(SeekDialog)
   typedef SeekDialog Self;
-  typedef SeekDialogBase Base;
+  typedef AcWindow Base;
 
   QComboBox *ssEdit_, *mmEdit_, *hhEdit_;
 

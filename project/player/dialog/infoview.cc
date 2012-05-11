@@ -25,19 +25,15 @@ InfoView::InfoView(QWidget *parent)
   createLayout();
 
   // Shortcuts
-  connect(new QShortcut(QKeySequence("Esc"), this), SIGNAL(activated()), SLOT(hide()));
-  connect(new QShortcut(QKeySequence("CTRL+W"), this), SIGNAL(activated()), SLOT(hide()));
-
-  connect(new QShortcut(QKeySequence("CTRL+R"), this), SIGNAL(activated()), SLOT(hide()));
+  new QShortcut(QKeySequence("CTRL+R"), this, SLOT(refreshButton()));
 }
 
 void
 InfoView::createLayout()
 {
   AcUi *ui = AcUi::globalInstance();
-  ui->setWindowStyle(this);
   QToolButton *okButton = ui->makeToolButton(
-       AcUi::PushHint | AcUi::HighlightHint, TR(T_OK), this, SLOT(hide()));
+       AcUi::PushHint | AcUi::HighlightHint, TR(T_OK), this, SLOT(fadeOut()));
   QToolButton *refreshButton = ui->makeToolButton(
        AcUi::PushHint, TR(T_REFRESH), this, SLOT(refresh()));
   QToolButton *copyButton = ui->makeToolButton(

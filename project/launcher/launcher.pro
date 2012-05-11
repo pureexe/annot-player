@@ -1,4 +1,4 @@
-# apps.pro
+# launcher.pro
 # 3/29/2012
 
 TEMPLATE = subdirs

@@ -4,17 +4,16 @@
 // pickdialog.h
 // 10/30/2011
 
-#include "module/qtext/dialog.h"
+#include "project/common/acwindow.h"
 
 QT_FORWARD_DECLARE_CLASS(QLabel)
 
-typedef QtExt::Dialog PickDialogBase;
-class PickDialog : public PickDialogBase
+class PickDialog : public AcWindow
 {
   Q_OBJECT
   Q_DISABLE_COPY(PickDialog)
   typedef PickDialog Self;
-  typedef PickDialogBase Base;
+  typedef AcWindow Base;
 
 public:
   explicit PickDialog(QWidget *parent = 0);

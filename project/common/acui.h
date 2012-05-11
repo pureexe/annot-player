@@ -178,6 +178,8 @@ public:
   void setMenuBackground(QMenu *m, bool persistent); ///< If the widget is persistant
   void setBlackBackground(QWidget *w);
 
+  const char *backgroundImage() const; // rc for current theme
+
 public slots:
   void updateBackground();
 
@@ -190,11 +192,6 @@ public slots:
 private:
   QWidgetList dwmEnabledWindows_;
 #endif // WITH_WIN_DWM
-
-  // - Implementations -
-
-protected:
-  const char *backgroundImagePath() const; // rc for current theme
 
 private:
   bool aero_, menu_;

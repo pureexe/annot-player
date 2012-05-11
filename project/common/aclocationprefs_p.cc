@@ -1,7 +1,7 @@
-// acpreferences_p.cc
+// aclocationprefs_p.cc
 // 5/5/2012
 
-#include "project/common/acpreferences_p.h"
+#include "project/common/aclocationprefs_p.h"
 #include "project/common/acui.h"
 #include "project/common/acpaths.h"
 #include "project/common/acsettings.h"
@@ -60,13 +60,14 @@ AcLocationPreferences::load()
     downloadsLocationEdit_->addItem(downloadsLocation);
 }
 
-void
+bool
 AcLocationPreferences::save()
 {
   QString location = downloadsLocationEdit_->currentText().trimmed();
   if (location.isEmpty())
     location = locationManager_->defaultDownloadsLocation();
   settings()->setDownloadsLocation(location);
+  return true;
 }
 
 void

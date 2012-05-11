@@ -24,10 +24,6 @@ LiveDialog::LiveDialog(QWidget *parent)
 
   createLayout();
 
-  // Shortcuts
-  connect(new QShortcut(QKeySequence("Esc"), this), SIGNAL(activated()), SLOT(hide()));
-  connect(new QShortcut(QKeySequence("CTRL+W"), this), SIGNAL(activated()), SLOT(hide()));
-
   // Focus
   comboBox_->setFocus();
 }
@@ -36,7 +32,6 @@ void
 LiveDialog::createLayout()
 {
   AcUi *ui = AcUi::globalInstance();
-  ui->setWindowStyle(this);
 
   comboBox_ = ui->makeComboBox();
   comboBox_->setMaximumWidth(SLOTLINE_MAXWIDTH);
@@ -44,7 +39,7 @@ LiveDialog::createLayout()
   QToolButton *okButton = ui->makeToolButton(
         AcUi::PushHint | AcUi::HighlightHint, TR(T_OK), this, SLOT(ok()));
   QToolButton *cancelButton = ui->makeToolButton(
-        AcUi::PushHint, TR(T_CANCEL), this, SLOT(hide()));
+        AcUi::PushHint, TR(T_CANCEL), this, SLOT(fadeOut()));
 
   QLabel *comboBoxLabel = ui->makeLabel(
         AcUi::BuddyHint, TR(T_LABEL_TIMESLOT), TR(T_TOOLTIP_TIMESLOT), comboBox_);

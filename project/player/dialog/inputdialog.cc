@@ -35,10 +35,6 @@ InputDialog::InputDialog(QWidget *parent)
 
   createLayout();
 
-  // Shortcuts
-  connect(new QShortcut(QKeySequence("Esc"), this), SIGNAL(activated()), SLOT(hide()));
-  connect(new QShortcut(QKeySequence("CTRL+W"), this), SIGNAL(activated()), SLOT(hide()));
-
   // Focus
   edit_->setFocus();
 }
@@ -47,7 +43,6 @@ void
 InputDialog::createLayout()
 {
   AcUi *ui = AcUi::globalInstance();
-  ui->setWindowStyle(this);
 
   //QLabel *timeLabel = new QLabel;
   //timeLabel->setStyleSheet(SS_LABEL);
@@ -95,7 +90,7 @@ InputDialog::setDefaultItems(const QStringList &l)
 void
 InputDialog::ok()
 {
-  hide();
+  fadeOut();
   QString t = edit_->currentText().trimmed();
   if (!t.isEmpty())
     emit textEntered(t);

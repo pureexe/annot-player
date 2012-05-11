@@ -16,7 +16,7 @@ SearchEngineFactory::create(int engine) const
   case Youtube:   return new SearchEngine(Youtube,  SE_YOUTUBE,  tr("Youtube"),  WBRC_IMAGE_YOUTUBE,  QStringList("y") << "youtube" << "yt" << "ヨウツベ" << "视频");
   case Nicovideo: return new SearchEngine(Nicovideo,SE_NICOVIDEO,tr("Nicovideo"),WBRC_IMAGE_NICOVIDEO,QStringList("n") << "nico" << "nicovideo" << "anime" << "にこ" << "ニコ" << "ニコニコ" << "ニコ動" << "アニメ");
   case Bilibili:  return new SearchEngine(Bilibili, SE_BILIBILI, tr("Bilibili"), WBRC_IMAGE_BILIBILI, QStringList("b") << "bili" << "bilibili" << "ビリビリ" << "哔哩哔哩" << "新番");
-  case AcFun:     return new SearchEngine(AcFun,    SE_ACFUN,    tr("AcFun"),    WBRC_IMAGE_ACFUN,    QStringList("a") << "ac" << "acfun");
+  case Acfun:     return new SearchEngine(Acfun,    SE_ACFUN,    tr("AcFun"),    WBRC_IMAGE_ACFUN,    QStringList("a") << "ac" << "acfun");
   case Youku:     return new SearchEngine(Youku,    SE_YOUKU,    tr("Youku"),    WBRC_IMAGE_YOUKU,    QStringList("youku") << "ヨウク" << "优酷");
 
   case WikiJa:    return new SearchEngine(WikiJa,   SE_WIKI_JA,  tr("Wikipedia (ja)"), WBRC_IMAGE_WIKI, QStringList("ja") << "j" << "ウィキ" << "百科");

@@ -288,6 +288,10 @@ BufferedRemoteStream::redirect()
     DOUT("exit: redirection attribute doesn't exist");
     return false;
   }
+  if (url.host().isEmpty())
+    url.setHost(reply_->url().host());
+  if (url.scheme().isEmpty())
+    url.setScheme(reply_->url().scheme());
   redirectUrl_ = url;
   DOUT("redirectUrl =" << redirectUrl_);
   run();

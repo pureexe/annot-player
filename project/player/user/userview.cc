@@ -23,7 +23,6 @@ UserView::UserView(QWidget *parent)
   : Base(parent, WINDOW_FLAGS)
 {
   setWindowTitle(TR(T_TITLE_USERVIEW));
-  AcUi::globalInstance()->setWindowStyle(this);
 
   createLayout();
 }

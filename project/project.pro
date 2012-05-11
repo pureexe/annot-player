@@ -8,8 +8,9 @@ SUBDIRS = \
     browser \
     downloader \
     player
+    #tester
 
-win32:  SUBDIRS += apps
+win32:  SUBDIRS += launcher
 #mac:    SUBDIRS += live
 #unix:   SUBDIRS += x
 

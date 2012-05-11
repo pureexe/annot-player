@@ -15,13 +15,12 @@ class QTextEdit;
 class QToolButton;
 QT_END_NAMESPACE
 
-typedef QtExt::Dialog MessageViewBase;
-class MessageView : public MessageViewBase
+class MessageView : public QtExt::Dialog
 {
   Q_OBJECT
   Q_DISABLE_COPY(MessageView)
   typedef MessageView Self;
-  typedef MessageViewBase Base;
+  typedef QtExt::Dialog Base;
 
   enum HookIndex {
     HI_AllHooks = 0,

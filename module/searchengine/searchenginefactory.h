@@ -42,7 +42,7 @@ protected:
   explicit SearchEngineFactory(QObject *parent = 0) : Base(parent) { }
 
 public:
-  enum Engine { Google = 0, GoogleImages, Bing, Youtube, Nicovideo, Bilibili, AcFun, Youku, WikiJa,
+  enum Engine { Google = 0, GoogleImages, Bing, Youtube, Nicovideo, Bilibili, Acfun, Youku, WikiJa,
                 WikiEn, WikiZh,
                 Manpage, CPlusPlus, Qt, Osx, Msdn, Bash, Cmd,
                 EngineCount, VisibleEngineCount = WikiJa +1

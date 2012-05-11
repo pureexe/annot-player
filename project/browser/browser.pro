@@ -1,7 +1,7 @@
 # browser.pro
 # 3/29/2012
 
-VERSION = 0.1.2.2
+VERSION = 0.1.2.3
 
 DEFINES += PROJECT_BROWSER
 
@@ -15,6 +15,7 @@ mac: CONFIG += x86
 
 ## Libraries
 
+include($$ROOTDIR/module/animation/animation.pri)
 include($$ROOTDIR/module/compress/compress.pri)
 include($$ROOTDIR/module/crypt/crypt.pri)
 include($$ROOTDIR/module/download/download.pri)
@@ -52,9 +53,6 @@ unix:   TARGET = annot-browser
 mac:   TARGET = "Annot Browser"
 
 win32: CONFIG += windows
-
-INCLUDEPATH     += $$SUBPATH
-DEPENDPATH      += $$SUBPATH
 
 HEADERS += \
     application.h \

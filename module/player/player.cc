@@ -250,12 +250,12 @@ namespace { // anonymous, vlccore callbacks
       Qt::MouseButtons buttons;
       boost::tie(button, buttons) = vlccore::vlcbuttons_to_qt(bt);
 
-#ifdef Q_WS_WIN
-      // Mouse-move without buttons is already provided by mousehook on Windows
-      // Skip to reduce overheads.
-      if (!buttons)
-        return VLC_SUCCESS;
-#endif // Q_WS_WIN
+//#ifdef Q_WS_WIN
+//      // Mouse-move without buttons is already provided by mousehook on Windows
+//      // Skip to reduce overheads.
+//      if (!buttons)
+//        return VLC_SUCCESS;
+//#endif // Q_WS_WIN
 
       // Post event across diff threads.
       QCoreApplication::postEvent(w,
@@ -1072,6 +1072,7 @@ Player::setPosition(qreal pos, bool checkPos)
       }
     }
     ::libvlc_media_player_set_position(d_->player(), pos);
+    emit seeked();
   }
   DOUT("exit");
 }
@@ -1212,8 +1213,10 @@ Player::setTime(qint64 time)
 {
   DOUT("enter");
   Q_ASSERT(isValid());
-  if (hasMedia())
+  if (hasMedia()) {
     ::libvlc_media_player_set_time(d_->player(), time);
+    emit seeked();
+  }
   DOUT("exit");
 }
 

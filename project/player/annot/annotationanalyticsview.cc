@@ -71,8 +71,7 @@ AnnotationAnalyticsView::AnnotationAnalyticsView(DataManager *data, QWidget *par
   connect(this, SIGNAL(visibleChanged(bool)), SLOT(setVisible(bool)), Qt::QueuedConnection);
 
   // Shortcuts
-  connect(new QShortcut(QKeySequence("Esc"), this), SIGNAL(activated()), SLOT(hide()));
-  connect(new QShortcut(QKeySequence("CTRL+W"), this), SIGNAL(activated()), SLOT(hide()));
+  new QShortcut(QKeySequence("Esc"), this, SLOT(fadeOut()));
 }
 
 void

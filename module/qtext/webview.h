@@ -26,8 +26,6 @@ class WebView: public QWebView
   typedef WebView Self;
   typedef QWebView Base;
 
-  bool loading_;
-
   // - Construction -
 public:
   explicit WebView(QWidget *parent = 0);
@@ -46,8 +44,9 @@ signals:
 public:
   QString hoveredLink() const;
 
-  bool isFinished() const { return !loading_; }
-  bool isLoading() const { return loading_; }
+  int progress() const { return progress_; }
+  bool isLoading() const { return progress_ < 100; }
+  bool isFinished() const { return progress_ == 100; }
 
   // - Actions -
 public slots:
@@ -70,6 +69,7 @@ protected slots:
 
   void setLoading();
   void setFinished();
+  void updateProgress(int progress) { progress_ = progress; }
   void goToRecent(int i);
   void invalidteSelection();
 
@@ -100,6 +100,7 @@ protected:
   static QString fileNameFromUrl(const QUrl &url, const QString &suffix = QString());
 
 protected:
+  int progress_;
   QAction *clipAct,
           *clearHighlightAct,
           *openWithOperatingSystemAct,

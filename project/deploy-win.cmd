@@ -3,7 +3,7 @@
 setlocal
 cd /d d:/devel/build || exit /b 1
 
-set VERSION=0.1.5.3
+set VERSION=0.1.5.4
 set APP=annot-player
 set TARGET=Annot Stream
 set ZIPFILE=%APP%-%VERSION%-win.zip
@@ -25,6 +25,9 @@ set QT_TRANSLATIONS=qt_ja.qm,qt_zh_CN.qm,qt_zh_TW.qm
 
 set ITH_HOME=/Volumes/win/dev/ith
 set ITH_DLLS=ITH.dll,ITH_engine.dll
+
+set OPENSSL_HOME=/Volumes/win/dev/openssl
+set OPENSSL_DLLS=libeay32.dll,libssl32.dll,ssleay32.dll
 
 set GPAC_HOME=/Volumes/win/dev/gpac
 set GPAC_DLLS=js32.dll,libgpac.dll,libeay32.dll,ssleay32.dll
@@ -94,6 +97,7 @@ cp -v "%QT_HOME%"/bin/{%QT_DLLS%} . || exit /b 1
 cp -v "%MSVC_HOME%"/{%MSVC_DLLS%} . || exit /b 1
 cp -Rv "%MSVC90_REDIST%" . || exit /b 1
 cp -v "%ITH_HOME%"/bin/{%ITH_DLLS%} . || exit /b 1
+cp -v "%OPENSSL_HOME%"/{%OPENSSL_DLLS%} . || exit /b 1
 ::cp -v "%GPAC_HOME%"/bin/{%GPAC_DLLS%} . || exit /b 1
 ::cp -v "%MP4BOX_HOME%"/bin/%MP4BOX_EXE% . || exit /b 1
 ::cp -v "%MP4V2_HOME%"/bin/%MP4V2_DLL% . || exit /b 1
@@ -114,6 +118,7 @@ rm -fv plugins/*.dat*
 cp -v "%BUILD%"/*.{exe,dll} .
 
 rm -fv "Annot Player.exe" "Annot Browser.exe" "Annot Downloader.exe"
+rm -fv "annot-tester.exe"
 rm -fv hook.dll
 rm -fv webbrowser.dll
 
@@ -144,8 +149,8 @@ cp -Rv "%SOURCE%"/module/annotcloud/jsf . || exit 1
 cd ..
 
 :: desktop.ini
-cp -v "%SOURCE%"/project/apps/share/apps.ico icon.ico || exit 1
-cp -v "%SOURCE%"/project/apps/share/desktop.ini.txt desktop.ini || exit 1
+cp -v "%SOURCE%"/project/common/share/apps.ico icon.ico || exit 1
+cp -v "%SOURCE%"/project/common/share/desktop.ini.txt desktop.ini || exit 1
 
 :: repair permissions
 

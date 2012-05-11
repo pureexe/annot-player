@@ -159,6 +159,10 @@ HttpBufferedSession::tryRedirect()
   if (url.isEmpty() || url == reply_->url())
     return false;
   DOUT("redirected");
+  if (url.host().isEmpty())
+    url.setHost(reply_->url().host());
+  if (url.scheme().isEmpty())
+    url.setScheme(reply_->url().scheme());
   url_ = url;
   run();
   return true;

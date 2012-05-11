@@ -148,7 +148,7 @@ LuaMrlResolver::resolveMedia(const QString &href, bool async)
   mi.refurl = formatUrl(refurl);
   mi.title = formatTitle(title);
   //switch (siteid) {
-  //case LuaResolver::AcFun: encoding = "GBK"; break;
+  //case LuaResolver::Acfun: encoding = "GBK"; break;
   ////case LuaResolver::Bilibili: encoding = "UTF-8"; break;
   //default: encoding = 0;
   //}
@@ -291,6 +291,7 @@ LuaMrlResolver::formatTitle(const QString &title)
   return title.isEmpty() ? title : QString(title)
     .remove(QRegExp("..ニコニコ動画\\(原宿\\)$"))
     .remove(QRegExp(" - 嗶哩嗶哩 - .*"))
+    .remove(QRegExp(" - Acfun - .*"))
     .remove(QRegExp(" - AcFun.tv$"))
      // Youku
 #ifdef _MSC_VER

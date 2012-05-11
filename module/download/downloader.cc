@@ -178,6 +178,10 @@ Downloader::tryRedirect(QNetworkReply *reply)
   QUrl url = reply->attribute(QNetworkRequest::RedirectionTargetAttribute).toUrl();
   bool ret = !url.isEmpty() && url != reply->url();
   if (ret) {
+    if (url.host().isEmpty())
+      url.setHost(reply->url().host());
+    if (url.scheme().isEmpty())
+      url.setScheme(reply->url().scheme());
     if (fileName_.isEmpty())
       state_ = OK;
     else
@@ -195,13 +199,13 @@ Downloader::save(QNetworkReply *reply)
 
   reply_ = 0;
   reply->deleteLater();
+  if (tryRedirect(reply)) {
+    DOUT("exit: redirected URL");
+    return;
+  }
   if (!reply->isFinished() || reply->error() != QNetworkReply::NoError) {
     state_ = Error;
     DOUT("exit: reply error: " + reply->errorString());
-    return;
-  }
-  if (tryRedirect(reply)) {
-    DOUT("exit: redirected URL");
     return;
   }
   if (fileName_.isEmpty()) {

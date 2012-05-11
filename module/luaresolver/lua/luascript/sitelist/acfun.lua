@@ -1,21 +1,9 @@
-
----[[by lostangel 20100528]]
----[[edit 20100827]]
----[[edit 20110117 adding parsing youku flv]]
----[[edit 20110222 editing xmlserver]]
----[[edit 20110402 editing xmllock and return struct]]
----[[edit 20110415 editing for seperate subid/ and acplayert.swf]]
----[[edit 20110507 for http://www.acfun.cn/html/zj/20100205/75086.html another mid= in wrong location ]]
----[[edit 20110527 for acfun_xml_servername value]]
----[[edit 20110705 for acfun.tv/v/acxxxxx]]
----[[edit 20110710 for acfun.tv/plus/view.php?aid=xxx&pageno=xxx]]
----[[edit 20110809 for cid= commentid equal to mid= messageid]]
----[[edit 20111102 for acfun new flashvar embed id]]
----[[edit 20111106 for new acfun sub]]
+-- acfun.lua
+-- 2011/11/6
 
 require "lalib"
 
--- jichi 2/4/2011: replace with permanent name
+-- jichi 2/4/2012: replace with permanent name
 --acfun_xml_servername = '124.228.254.234';--'www.sjfan.com.cn';
 acfun_xml_servername = "www.sjfan.com.cn";
 acfun_comment_servername = 'comment.acfun.tv';--'122.224.11.162';--
@@ -23,7 +11,7 @@ acfun_comment_servername = 'comment.acfun.tv';--'122.224.11.162';--
 --[[parse single acfun url]]
 function getTaskAttribute_acfun ( str_url, str_tmpfile ,str_servername, pDlg, bSubOnly)
 	if pDlg~=nil then
-		sShowMessage(pDlg, '¿ªÊ¼½âÎö..');
+		sShowMessage(pDlg, 'å¼€å§‹è§£æ..');
 	end
 	local int_acfpv = getACFPV ( str_url, str_servername );
 
@@ -33,12 +21,12 @@ function getTaskAttribute_acfun ( str_url, str_tmpfile ,str_servername, pDlg, bS
 	if re~=0
 	then
 		if pDlg~=nil then
-			sShowMessage(pDlg, '¶ÁÈ¡Ô­Ê¼Ò³Ãæ´íÎó¡£');
+			sShowMessage(pDlg, 'è¯»å–åŸå§‹é¡µé¢é”™è¯¯ã€‚');
 		end
 		return;
 	else
 		if pDlg~=nil then
-			sShowMessage(pDlg, 'ÒÑ¶ÁÈ¡Ô­Ê¼Ò³Ãæ£¬ÕıÔÚ·ÖÎö...');
+			sShowMessage(pDlg, 'å·²è¯»å–åŸå§‹é¡µé¢ï¼Œæ­£åœ¨åˆ†æ...');
 		end
 	end
 
@@ -48,7 +36,7 @@ function getTaskAttribute_acfun ( str_url, str_tmpfile ,str_servername, pDlg, bS
 	if file==nil
 	then
 		if pDlg~=nil then
-			sShowMessage(pDlg, '¶ÁÈ¡Ô­Ê¼Ò³Ãæ´íÎó¡£');
+			sShowMessage(pDlg, 'è¯»å–åŸå§‹é¡µé¢é”™è¯¯ã€‚');
 		end
 		return;
 	end
@@ -59,24 +47,27 @@ function getTaskAttribute_acfun ( str_url, str_tmpfile ,str_servername, pDlg, bS
 	local str_title = getMedText(str_title_line, "<title>", "</title>");
 
 	--readin vice descriptor
-	--readUntil(file, "Ö÷Ò³</a>");
+	--readUntil(file, "ä¸»é¡µ</a>");
 	--readUntilFromUTF8(file, "</div><!--Tool -->");
 	readUntilFromUTF8(file, "</div><!--Title -->");
 	str_line = "";
 	local str_tmp_vd = "";
 	--while str_line~=nil and string.find(str_line, "</tr>")==nil
-	while str_line~=nil and string.find(str_line, "</div>")==nil
+	while str_line~=nil and string.find(str_line, "ç»“æŸ")==nil
 	do
 		str_line = file:read("*l");
+		str_line = utf8_to_lua(str_line);
+		--dbgMessage(str_line);
 		--if str_line~=nil and string.find(str_line, "<option value='")~=nil
-        str_line = utf8_to_lua(str_line);
-        if str_line~=nil and string.find(str_line, "<a class=\"")~=nil
+		if str_line~=nil and string.find(str_line, "<a class=\"")~=nil
 		then
+			--dbgMessage("pager article");
 			--if str_tmp_vd=="" or string.find(str_line, "selected>")~=nil
-            if str_tmp_vd=="" or string.find(str_line, "pager-active")~=nil
+			if str_tmp_vd=="" or string.find(str_line, "pager-active")~=nil
 			then
-			--str_tmp_vd = getMedText(str_line, ">", "</option>");
-            str_tmp_vd = getMedText(str_line, "\">", "</a>");
+				--dbgMessage("pager active");
+				--str_tmp_vd = getMedText(str_line, ">", "</option>");
+				str_tmp_vd = getMedText(str_line, "\">", "</a>");
 			end
 		end
 	end
@@ -98,15 +89,15 @@ function getTaskAttribute_acfun ( str_url, str_tmpfile ,str_servername, pDlg, bS
     --str_line = readUntilFromUTF8(file, "<embed ");
 	str_line = readUntilFromUTF8(file, "<div id=\"area-player\"");
     local str_embed = readIntoUntilFromUTF8(file, str_line, "</div>");--"</td>");--"</embed>");
+    g_debug[1]=str_embed;
 	print(str_embed);
 	if str_embed==nil then
 		if pDlg~=nil then
-			sShowMessage(pDlg, "Ã»ÓĞÕÒµ½Ç¶ÈëµÄflash²¥·ÅÆ÷");
+			sShowMessage(pDlg, "æ²¡æœ‰æ‰¾åˆ°åµŒå…¥çš„flashæ’­æ”¾å™¨");
 		end
 		io.close(file);
 		return;
 	end
-
 
 	local b_isArtemis = 0;
 	if string.find(str_embed, "Artemis",1,true)~=nil then
@@ -194,7 +185,7 @@ function getTaskAttribute_acfun ( str_url, str_tmpfile ,str_servername, pDlg, bS
 	if str_id == ""
 	then
 		if pDlg~=nil then
-			sShowMessage(pDlg, '½âÎöFLV ID´íÎó¡£');
+			sShowMessage(pDlg, 'è§£æFLV IDé”™è¯¯ã€‚');
 		end
 		return;
 	end
@@ -252,7 +243,7 @@ function getTaskAttribute_acfun ( str_url, str_tmpfile ,str_servername, pDlg, bS
     end
 
 	if pDlg~=nil then
-		sShowMessage(pDlg, 'Íê³É½âÎö..');
+		sShowMessage(pDlg, 'å®Œæˆè§£æ..');
 	end
 
 	local tbl_subxmlurls={};
@@ -305,19 +296,19 @@ end
 --[[parse every video in acfun url]]
 function getTaskAttributeBatch_acfun ( str_url, str_tmpfile ,str_servername, pDlg)
 	if pDlg~=nil then
-		sShowMessage(pDlg, '¿ªÊ¼½âÎö..');
+		sShowMessage(pDlg, 'å¼€å§‹è§£æ..');
 	end
 
 	local re = dlFile(str_tmpfile, str_url);
 	if re~=0
 	then
 		if pDlg~=nil then
-			sShowMessage(pDlg, '¶ÁÈ¡Ô­Ê¼Ò³Ãæ´íÎó¡£');
+			sShowMessage(pDlg, 'è¯»å–åŸå§‹é¡µé¢é”™è¯¯ã€‚');
 		end
 		return;
 	else
 		if pDlg~=nil then
-			sShowMessage(pDlg, 'ÒÑ¶ÁÈ¡Ô­Ê¼Ò³Ãæ£¬ÕıÔÚ·ÖÎö...');
+			sShowMessage(pDlg, 'å·²è¯»å–åŸå§‹é¡µé¢ï¼Œæ­£åœ¨åˆ†æ...');
 		end
 	end
 
@@ -325,7 +316,7 @@ function getTaskAttributeBatch_acfun ( str_url, str_tmpfile ,str_servername, pDl
 	if file==nil
 	then
 		if pDlg~=nil then
-			sShowMessage(pDlg, '¶ÁÈ¡Ô­Ê¼Ò³Ãæ´íÎó¡£');
+			sShowMessage(pDlg, 'è¯»å–åŸå§‹é¡µé¢é”™è¯¯ã€‚');
 		end
 		return;
 	end
@@ -338,7 +329,7 @@ function getTaskAttributeBatch_acfun ( str_url, str_tmpfile ,str_servername, pDl
 	local str_title = getMedText(str_title_line, "<title>", "</title>");
 
 	--readin vice descriptor
-	--readUntil(file, "Ö÷Ò³</a>");
+	--readUntil(file, "ä¸»é¡µ</a>");
     readUntilFromUTF8(file, "</div><!--Tool -->");
 
 	str_line = "";
@@ -389,7 +380,7 @@ function getTaskAttributeBatch_acfun ( str_url, str_tmpfile ,str_servername, pDl
 	local index2= 0;
 	for ti = 0, index-1, 1 do
 		local str_index = string.format("%d", ti);
-		sShowMessage(pDlg, string.format("ÕıÔÚ½âÎöµØÖ·(%d/%d)\"%s\",ÇëµÈ´ı..",ti+1,index,tbl_shorturls[str_index]));
+		sShowMessage(pDlg, string.format("æ­£åœ¨è§£æåœ°å€(%d/%d)\"%s\",è¯·ç­‰å¾…..",ti+1,index,tbl_shorturls[str_index]));
 		for tj = 0, 5, 1 do
 			local str_son_url = urlprefix..tbl_shorturls[str_index];
 			--dbgMessage(str_son_url);
@@ -410,7 +401,7 @@ function getTaskAttributeBatch_acfun ( str_url, str_tmpfile ,str_servername, pDl
 
 	end
 
-	sShowMessage(pDlg, string.format("½âÎöÍê±Ï, ¹²ÓĞ%d¸öÊÓÆµ",index2));
+	sShowMessage(pDlg, string.format("è§£æå®Œæ¯•, å…±æœ‰%dä¸ªè§†é¢‘",index2));
 
 	return tbl_re;
 

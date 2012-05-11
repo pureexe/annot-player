@@ -4,7 +4,7 @@
 // networkproxydialog.h
 // 3/12/2012
 
-#include "module/qtext/dialog.h"
+#include "project/common/acwindow.h"
 
 QT_BEGIN_NAMESPACE
 class QComboBox;
@@ -13,13 +13,12 @@ class QLineEdit;
 class QToolButton;
 QT_END_NAMESPACE
 
-typedef QtExt::Dialog NetworkProxyDialogBase;
-class NetworkProxyDialog : public NetworkProxyDialogBase
+class NetworkProxyDialog : public AcWindow
 {
   Q_OBJECT
   Q_DISABLE_COPY(NetworkProxyDialog)
   typedef NetworkProxyDialog Self;
-  typedef NetworkProxyDialogBase Base;
+  typedef AcWindow Base;
 
   enum ProxyType { SocksProxy = 0, HttpProxy, ProxyTypeCount };
 

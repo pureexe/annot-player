@@ -6,6 +6,8 @@ DEPENDPATH  += $$PWD
 
 HEADERS += \
     $$PWD/acabout.h \
+    $$PWD/acaccountprefs_p.h \
+    $$PWD/acapplication.h \
     $$PWD/acbrowser.h \
     $$PWD/accomboedit.h \
     $$PWD/accomboedit_p.h \
@@ -16,7 +18,9 @@ HEADERS += \
     $$PWD/acglobal.h \
     $$PWD/acipc.h \
     $$PWD/aclineedit.h \
+    $$PWD/aclocationprefs_p.h \
     $$PWD/acmainwindow.h \
+    $$PWD/acnetworkproxyprefs_p.h \
     $$PWD/acpaths.h \
     $$PWD/acplayer.h \
     $$PWD/acpreferences.h \
@@ -33,6 +37,8 @@ HEADERS += \
 
 SOURCES += \
     $$PWD/acabout.cc \
+    $$PWD/acaccountprefs_p.cc \
+    $$PWD/acapplication.cc \
     $$PWD/acbrowser.cc \
     $$PWD/accomboedit.cc \
     $$PWD/acconsole.cc \
@@ -41,11 +47,12 @@ SOURCES += \
     $$PWD/acfilteredtableview.cc \
     $$PWD/acipc.cc \
     $$PWD/aclineedit.cc \
+    $$PWD/aclocationprefs_p.cc \
     $$PWD/acmainwindow.cc \
     $$PWD/acpaths.cc \
     $$PWD/acplayer.cc \
     $$PWD/acpreferences.cc \
-    $$PWD/acpreferences_p.cc \
+    $$PWD/acnetworkproxyprefs_p.cc \
     $$PWD/acsettings.cc \
     $$PWD/actabview.cc \
     $$PWD/actextedit.cc \

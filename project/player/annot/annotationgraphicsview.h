@@ -65,6 +65,7 @@ public:
   bool isNonSubtitleVisible() const { return nonSubtitleVisible_; }
 
 signals:
+  void selectedUserId(qint64 uid);
   void selectedUserIds(const QList<qint64> &ids);
   void hoveredItemPausedChanged(bool t);
   void hoveredItemResumedChanged(bool t);
@@ -207,7 +208,7 @@ public:
 
   bool isStarted() const;
 
-  void selectItem(AnnotationGraphicsItem *item);
+  void selectItem(AnnotationGraphicsItem *item, bool detail = false);
 
   bool isHoveredItemPaused() const { return hoveredItemPaused_; }
   bool isHoveredItemResumed() const { return hoveredItemResumed_; }
@@ -271,6 +272,7 @@ public slots:
   void pauseItems(const QPoint &pos);
   void resumeItems(const QPoint &pos);
   void removeItems(const QPoint &pos);
+  void removeAllItems();
 
   void scalePausedItems(qreal scale);
   void rotatePausedItems(qreal angle);

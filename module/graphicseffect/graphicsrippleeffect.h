@@ -1,9 +1,10 @@
 #ifndef GRAPHICSRIPPLEEFFECT_H
 #define GRAPHICSRIPPLEEFFECT_H
 
-// graphicrsippleeffect.h
-// 5/3 2012
+// graphicsrippleeffect.h
+// 5/3/2012
 // See: class RippleEffect from kdelibs/plasma/private/effects/ripple_p.h
+// See: http://freespace.virgin.net/hugo.elias/graphics/x_water.htm
 
 #include <QtGui/QGraphicsEffect>
 
@@ -94,7 +95,7 @@ signals:
    */
   void heigthChanged(qint8 heigth);
 
-protected:
+public:
   /**
    * Reimplemented from QGraphicsEffect::draw().
    * \param painter source painter

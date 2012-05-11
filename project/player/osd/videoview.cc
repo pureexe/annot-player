@@ -31,7 +31,7 @@ VideoView::VideoView(QWidget *parent)
   setContentsMargins(0, 0, 0, 0);
   //setAttribute(Qt::WA_TransparentForMouseEvents);
   //setWindowOpacity(1.0); // opaque
-  //setMouseTracking(true);
+  setMouseTracking(true);
 
 #ifdef Q_WS_MAC
   pressTime_ = releaseTime_ = 0;

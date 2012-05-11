@@ -57,7 +57,7 @@ WebView::shortenText(const QString &text, int len)
 
 QtExt::
 WebView::WebView(QWidget *parent)
-  : Base(parent), loading_(false)
+  : Base(parent), progress_(100)
 {
   //setWindowFlags(f ? f : WINDOW_FLAGS);
 
@@ -66,12 +66,15 @@ WebView::WebView(QWidget *parent)
   // Antialias and smooth pixel is not turned on to improve performance.
   setRenderHints(QPainter::TextAntialiasing);
 
+  //connect(this, SIGNAL(linkClicked(QUrl)), SLOT(setLoading()));
+
   WebPage *page = new WebPage(this); {
     connect(page, SIGNAL(linkHovered(QString,QString,QString)), SLOT(showLink(QString,QString,QString)));
     connect(page, SIGNAL(openLinkRequested(QString)), SIGNAL(openLinkRequested(QString)));
     connect(page, SIGNAL(downloadRequested(QNetworkRequest)), SLOT(download(QNetworkRequest)));
     connect(page, SIGNAL(menuBarVisibilityChangeRequested(bool)), SIGNAL(menuBarVisibilityChangeRequested(bool)));
 
+    connect(page, SIGNAL(loadProgress(int)), SLOT(updateProgress(int)));
     connect(page, SIGNAL(loadStarted()), SLOT(setLoading()));
     connect(page, SIGNAL(loadFinished(bool)), SLOT(setFinished()));
 
@@ -358,7 +361,7 @@ WebView::createHistoryMenu()
 
   QList<QWebHistoryItem> items = h->items();
 
-  QMenu *m = new QMenu(tr("History"), this);
+  QMenu *m = new QMenu(tr("History"));
   int i = 0;
   QList<QAction *> actions;
   foreach (const QWebHistoryItem &item, items) {
@@ -394,6 +397,7 @@ WebView::createContextMenu()
   m->addSeparator();
   QMenu *history = createHistoryMenu();
   if (history) {
+    history->setParent(this);
     m->addMenu(history);
     m->addSeparator();
   }
@@ -405,9 +409,6 @@ WebView::createContextMenu()
   m->addAction(zoomOutAct);
   m->addSeparator();
   m->addAction(openWithOperatingSystemAct);
-
-  if (history)
-    history->deleteLater();
   return m;
 }
 
@@ -447,6 +448,7 @@ WebView::contextMenuEvent(QContextMenuEvent *event)
   Q_ASSERT(event);
   updateHoveredLink();
   QMenu *m = createContextMenu();
+  //m->setParent(this);
   m->exec(event->globalPos());
   delete m;
   event->accept();
@@ -588,7 +590,7 @@ QtExt::
 WebView::setLoading()
 {
   //DOUT("enter");
-  loading_ = true;
+  progress_ = 0;
   setCursor(Qt::BusyCursor);
   //DOUT("exit");
 }
@@ -598,7 +600,7 @@ QtExt::
 WebView::setFinished()
 {
   //DOUT("enter");
-  loading_ = false;
+  progress_ = 100;
   setCursor(Qt::ArrowCursor);
   //DOUT("exit");
 }

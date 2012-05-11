@@ -4,18 +4,17 @@
 // logindialog.h
 // 8/14/2011
 
-#include "module/qtext/dialog.h"
+#include "project/common/acwindow.h"
 
 QT_FORWARD_DECLARE_CLASS(QLineEdit)
 QT_FORWARD_DECLARE_CLASS(QComboBox)
 
-typedef QtExt::Dialog LoginDialogBase;
-class LoginDialog : public LoginDialogBase
+class LoginDialog : public AcWindow
 {
   Q_OBJECT
   Q_DISABLE_COPY(LoginDialog)
   typedef LoginDialog Self;
-  typedef LoginDialogBase Base;
+  typedef AcWindow Base;
 
   QComboBox *userNameEdit_;
   QLineEdit *passwordEdit_;

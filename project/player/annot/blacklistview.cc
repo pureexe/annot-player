@@ -76,7 +76,6 @@ void
 BlacklistView::createTabs()
 {
   AcUi *ui = AcUi::globalInstance();
-  ui->setWindowStyle(this);
 
   // Tab layout
 
@@ -150,9 +149,6 @@ BlacklistView::createLayout()
 void
 BlacklistView::createActions()
 {
-  connect(new QShortcut(QKeySequence("Esc"), this), SIGNAL(activated()), SLOT(hide()));
-  connect(new QShortcut(QKeySequence("CTRL+W"), this), SIGNAL(activated()), SLOT(hide()));
-
   connect(new QShortcut(QKeySequence("CTRL+1"), this), SIGNAL(activated()), textTabButton_, SLOT(click()));
   connect(new QShortcut(QKeySequence("CTRL+2"), this), SIGNAL(activated()), userTabButton_, SLOT(click()));
 }

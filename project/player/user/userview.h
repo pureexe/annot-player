@@ -4,19 +4,17 @@
 // userview.h
 // 8/3/2011
 
-#include "module/qtext/dialog.h"
+#include "project/common/acwindow.h"
 #include "module/annotcloud/user.h"
 
 QT_FORWARD_DECLARE_CLASS(QLabel)
 
-typedef QtExt::Dialog UserViewBase;
-
-class UserView : public UserViewBase
+class UserView : public AcWindow
 {
   Q_OBJECT
   Q_DISABLE_COPY(UserView)
   typedef UserView Self;
-  typedef UserViewBase Base;
+  typedef AcWindow Base;
 
   typedef AnnotCloud::User User;
 

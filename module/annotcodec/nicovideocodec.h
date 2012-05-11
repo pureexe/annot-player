@@ -4,7 +4,7 @@
 // nicovideocodec.h
 // 2/6/2012
 
-#include "annotationcodec.h"
+#include "module/annotcodec/annotationcodec.h"
 
 class NicovideoCodec : public AnnotationCodec
 {

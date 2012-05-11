@@ -8,6 +8,7 @@
 #include "module/crypt/simplecrypt.h"
 #include "module/qtext/algorithm.h"
 #include <QtNetwork/QNetworkProxy>
+#include <boost/tuple/tuple.hpp>
 
 // - AcSettings keys -
 
@@ -48,7 +49,9 @@ AcSettings::AcSettings(QObject *parent)
   : Base(
       Base::NativeFormat, Base::UserScope,
       SK_ORGANIZATION, SK_APPLICATION,
-      parent)
+      parent),
+    disposed_(false)
+
 { }
 
 void
@@ -139,6 +142,11 @@ AcSettings::setNicovideoAccount(const QString &username, const QString &password
     v.append(c.encryptToString(password));
     setValue(SK_NICOACCOUNT, v);
   }
+  if (!disposed_) {
+    QString username, password;
+    boost::tie(username, password) = nicovideoAccount();
+    emit nicovideoAccountChanged(username, password);
+  }
 }
 
 std::pair<QString, QString>
@@ -157,14 +165,20 @@ AcSettings::bilibiliAccount()
 void
 AcSettings::setBilibiliAccount(const QString &username, const QString &password)
 {
-  if (username.isEmpty() || password.isEmpty()) {
+  if (username.isEmpty() || password.isEmpty())
     remove(SK_BILIACCOUNT);
-  } else {
+  else {
     SimpleCrypt c(0);
     QStringList v;
     v.append(c.encryptToString(username));
     v.append(c.encryptToString(password));
     setValue(SK_BILIACCOUNT, v);
+  }
+
+  if (!disposed_) {
+    QString username, password;
+    boost::tie(username, password) = bilibiliAccount();
+    emit bilibiliAccountChanged(username, password);
   }
 }
 
@@ -288,7 +302,8 @@ AcSettings::setDownloadsLocation(const QString &path)
 {
   if (path != downloadsLocation()) {
     setValue(SK_LOCATION_DOWNLOADS, path);
-    emit downloadsLocationChanged(path);
+    if (!disposed_)
+      emit downloadsLocationChanged(path);
   }
 }
 

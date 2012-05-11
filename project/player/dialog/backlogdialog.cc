@@ -23,17 +23,12 @@ BacklogDialog::BacklogDialog(QWidget *parent)
   setWindowTitle(TR(T_TITLE_BACKLOG));
 
   createLayout();
-
-  // Shortcuts
-  connect(new QShortcut(QKeySequence("Esc"), this), SIGNAL(activated()), SLOT(hide()));
-  connect(new QShortcut(QKeySequence("CTRL+W"), this), SIGNAL(activated()), SLOT(hide()));
 }
 
 void
 BacklogDialog::createLayout()
 {
   AcUi *ui = AcUi::globalInstance();
-  ui->setWindowStyle(this);
 
   tabView_ = new TextEditTabView;
   tabView_->addTab(tr("Annot"));
@@ -42,7 +37,7 @@ BacklogDialog::createLayout()
   tabView_->finalizeLayout();
 
   QToolButton *okButton = ui->makeToolButton(
-        AcUi::PushHint | AcUi::HighlightHint, TR(T_OK), this, SLOT(hide()));
+        AcUi::PushHint | AcUi::HighlightHint, TR(T_OK), this, SLOT(fadeOut()));
   QToolButton *clearButton = ui->makeToolButton(
         AcUi::PushHint, TR(T_CLEAR), this, SLOT(clear()));
 

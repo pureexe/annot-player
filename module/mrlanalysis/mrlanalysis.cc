@@ -21,7 +21,7 @@ MrlAnalysis::matchSite(const QString &url, bool href)
     else if (url.startsWith("http://" MA_EIGEN_BILIBILI, Qt::CaseInsensitive))
       ret = Bilibili;
     else if (url.startsWith("http://" MA_EIGEN_ACFUN, Qt::CaseInsensitive))
-      ret = AcFun;
+      ret = Acfun;
     else if (url.startsWith("http://" MA_EIGEN_YOUKU, Qt::CaseInsensitive))
       ret = Youku;
     else if (url.startsWith("http://" MA_EIGEN_SINAVIDEO, Qt::CaseInsensitive))
@@ -40,7 +40,7 @@ MrlAnalysis::matchSite(const QString &url, bool href)
     else if (url.contains(MA_EIGEN_BILIBILI, Qt::CaseInsensitive))
       ret = Bilibili;
     else if (url.contains(MA_EIGEN_ACFUN, Qt::CaseInsensitive))
-      ret = AcFun;
+      ret = Acfun;
     else if (url.contains(MA_EIGEN_YOUKU, Qt::CaseInsensitive))
       ret = Youku;
     else if (url.contains(MA_EIGEN_SINAVIDEO, Qt::CaseInsensitive))

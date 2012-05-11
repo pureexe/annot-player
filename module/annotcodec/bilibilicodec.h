@@ -4,7 +4,8 @@
 // bilibilicodec.h
 // 2/3/2012
 
-#include "annotationcodec.h"
+#include "module/annotcodec/annotationcodec.h"
+#include <QtCore/QHash>
 
 QT_FORWARD_DECLARE_CLASS(QNetworkAccessManager)
 QT_FORWARD_DECLARE_CLASS(QNetworkReply)
@@ -20,6 +21,7 @@ class BilibiliCodec : public AnnotationCodec
   typedef AnnotCloud::AnnotationList AnnotationList;
 
   QNetworkAccessManager *qnam_;
+  QHash<QString, int> retries_;
 
 public:
   explicit BilibiliCodec(QObject *parent = 0);

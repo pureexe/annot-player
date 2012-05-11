@@ -33,7 +33,6 @@ void
 SignalView::createLayout()
 {
   AcUi *ui = AcUi::globalInstance();
-  ui->setWindowStyle(this);
 
   // Views
   processView_ = new ProcessView;
@@ -116,7 +115,7 @@ SignalView::createLayout()
 void
 SignalView::selectHookAndHide(ulong hookId)
 {
-  hide();
+  fadeOut();
   ProcessInfo pi = processView_->attachedProcessInfo();
   emit hookSelected(hookId, pi);
 }

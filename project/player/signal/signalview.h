@@ -5,20 +5,18 @@
 // 8/13/2011
 
 #include "processinfo.h"
-#include "module/qtext/dialog.h"
+#include "project/common/acwindow.h"
 
 class ProcessView;
 class MessageView;
 //class TokenView;
 
-typedef QtExt::Dialog SignalViewBase;
-
-class SignalView : public SignalViewBase
+class SignalView : public AcWindow
 {
   Q_OBJECT
   Q_DISABLE_COPY(SignalView)
   typedef SignalView Self;
-  typedef SignalViewBase Base;
+  typedef AcWindow Base;
 
   ProcessView *processView_;
   MessageView *messageView_;

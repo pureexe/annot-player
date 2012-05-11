@@ -4,7 +4,7 @@
 // tokenview.h
 // 8/13/2011
 
-#include "module/qtext/dialog.h"
+#include "project/common/acwindow.h"
 #include "module/annotcloud/token.h"
 #include "module/annotcloud/alias.h"
 #include <QtCore/QModelIndex>
@@ -24,14 +24,12 @@ class AcFilteredTableView;
 class AddAliasDialog;
 class ServerAgent;
 
-typedef QtExt::Dialog TokenViewBase;
-
-class TokenView : public TokenViewBase
+class TokenView : public AcWindow
 {
   Q_OBJECT
   Q_DISABLE_COPY(TokenView)
   typedef TokenView Self;
-  typedef TokenViewBase Base;
+  typedef AcWindow Base;
 
   typedef AnnotCloud::Token Token;
   typedef AnnotCloud::TokenList TokenList;

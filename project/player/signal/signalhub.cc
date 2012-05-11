@@ -202,34 +202,34 @@ SignalHub::setLivePlayMode(bool t)
 void
 SignalHub::play()
 {
-  if (!playing_) {
+  //if (!playing_) {
     playing_ = true;
     stopped_ = false;
     paused_ = false;
     emit played();
-  }
+  //}
 }
 
 void
 SignalHub::pause()
 {
-  if (!paused_) {
+  //if (!paused_) {
     paused_ = true;
     playing_ = false;
     stopped_ = false;
     emit paused();
-  }
+  //}
 }
 
 void
 SignalHub::stop()
 {
-  if (!stopped_) {
+  //if (!stopped_) {
     stopped_ = true;
     playing_ = false;
     paused_ = false;
     emit stopped();
-  }
+  //}
 }
 
 void

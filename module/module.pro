@@ -2,6 +2,7 @@
 # 7/31/2011
 
 #include(aiml/aiml.pri)
+include(animation/animation.pri)
 include(annotcloud/annotcloud.pri)
 include(annotcodec/annotcodec.pri)
 include(blockiodevice/blockiodevice.pri)
@@ -17,6 +18,7 @@ include(gsoap/gsoap.pri)
 include(ioutil/ioutil.pri)
 include(luacpp/luacpp.pri)
 include(luaresolver/luaresolver.pri)
+include(magnifier/magnifier.pri)
 include(mediacodec/mediacodec.pri)
 include(metacall/metacall.pri)
 include(mrlanalysis/mrlanalysis.pri)

@@ -19,6 +19,7 @@ class AcSettings : public QSettings
   typedef QSettings Base;
 
   QMutex m_;
+  bool disposed_;
 
   // - Construction -
 public:
@@ -32,6 +33,12 @@ public:
 
 public slots:
   void sync(); ///< thread-safe
+  void dispose() { disposed_ = true; }
+
+signals:
+  void downloadsLocationChanged(const QString &path);
+  void nicovideoAccountChanged(const QString &username, const QString &password);
+  void bilibiliAccountChanged(const QString &username, const QString &password);
 
 public:
   // - Accounts -
@@ -89,8 +96,6 @@ public slots:
   void setAeroEnabled(bool t);
 
   // - Locations -
-signals:
-  void downloadsLocationChanged(const QString &path);
 public:
   QString downloadsLocation() const;
   void setDownloadsLocation(const QString &path);

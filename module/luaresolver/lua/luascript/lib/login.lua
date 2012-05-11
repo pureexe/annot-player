@@ -1,7 +1,5 @@
----[[by lostangel 20110119]]
---[[edit 20110215 bilibili password | add nico login]]
---[[edit 20110625 for bilibili.tv]]
---[[edit 20111206 for bilibili.tv]]
+-- login.lua
+-- 2011/12/8
 
 require "lalib"
 --require "loginconfig"
@@ -21,13 +19,13 @@ function Login_Bilibili( str_tmp_file )
 	if re~=0
 	then
 		if pDlg~=nil then
-			sShowMessage(pDlg, 'µÇÂ¼´íÎó¡£');
+			sShowMessage(pDlg, 'ç™»å½•é”™è¯¯ã€‚');
 		end
 		dbgMessage("error login.");
 		return FAILURE;
 	else
 		if pDlg~=nil then
-			sShowMessage(pDlg, 'ÒÑµÇÂ¼');
+			sShowMessage(pDlg, 'å·²ç™»å½•');
 		end
 	end
 
@@ -37,12 +35,12 @@ function Login_Bilibili( str_tmp_file )
 	--if file==nil
 	--then
 	--	if pDlg~=nil then
-	--		sShowMessage(pDlg, 'µÇÂ¼bilibiliÍøÕ¾³öÏÖ´íÎó');
+	--		sShowMessage(pDlg, 'ç™»å½•bilibiliç½‘ç«™å‡ºç°é”™è¯¯');
 	--	end
 	--	return FAILURE;
 	--end
 
-	--local str_line = readUntilFromUTF8(file, "³É¹¦µÇÂ¼");
+	--local str_line = readUntilFromUTF8(file, "æˆåŠŸç™»å½•");
 
 	--local login_state = FAILURE;
 	--if str_line ~= 0 then
@@ -73,13 +71,13 @@ function Login_Nico( str_tmp_file )
 	if re~=0
 	then
 		if pDlg~=nil then
-			sShowMessage(pDlg, 'µÇÂ¼´íÎó¡£');
+			sShowMessage(pDlg, 'ç™»å½•é”™è¯¯ã€‚');
 		end
 		dbgMessage("error login.");
 		return FAILURE;
 	else
 		if pDlg~=nil then
-			sShowMessage(pDlg, 'ÒÑµÇÂ¼');
+			sShowMessage(pDlg, 'å·²ç™»å½•');
 		end
 	end
 
@@ -87,12 +85,12 @@ function Login_Nico( str_tmp_file )
 	if file==nil
 	then
 		if pDlg~=nil then
-			sShowMessage(pDlg, 'µÇÂ¼bilibiliÍøÕ¾³öÏÖ´íÎó');
+			sShowMessage(pDlg, 'ç™»å½•bilibiliç½‘ç«™å‡ºç°é”™è¯¯');
 		end
 		return FAILURE;
 	end
 
-	local str_line = readUntilFromUTF8(file, "³É¹¦µÇÂ¼");]]
+	local str_line = readUntilFromUTF8(file, "æˆåŠŸç™»å½•");]]
 
 --	local login_state = SUCCESS;
 --[[	if str_line ~= 0 then

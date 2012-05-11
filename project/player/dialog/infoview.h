@@ -4,18 +4,17 @@
 // infoview.h
 // 4/10/2012:%s
 
-#include "module/qtext/dialog.h"
+#include "project/common/acwindow.h"
 #include <QtCore/QString>
 
 class AcTextView;
 
-typedef QtExt::Dialog InfoViewBase;
-class InfoView : public InfoViewBase
+class InfoView : public AcWindow
 {
   Q_OBJECT
   Q_DISABLE_COPY(InfoView)
   typedef InfoView Self;
-  typedef InfoViewBase Base;
+  typedef AcWindow Base;
 
   AcTextView *textView_;
 

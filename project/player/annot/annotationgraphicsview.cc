@@ -16,6 +16,9 @@
 #ifdef Q_WS_WIN
 #  include "win/qtwin/qtwin.h"
 #endif // Q_WS_WIN
+#ifdef WITH_WIN_MOUSEHOOK
+#  include "win/mousehook/mousehook.h"
+#endif // WITH_WIN_MOUSEHOOK
 #include <QtGui>
 #include <boost/typeof/typeof.hpp>
 #include <climits>
@@ -84,6 +87,8 @@ AnnotationGraphicsView::AnnotationGraphicsView(
     //QPainter::SmoothPixmapTransform // would cost so much CPU
   );
 //#endif // Q_WS_WIN
+
+  connect(this, SIGNAL(offsetChanged(qint64)), SLOT(removeAllItems()));
 
   //centerOn(0, 0);
 }
@@ -174,30 +179,9 @@ AnnotationGraphicsView::removeAnnotationWithId(qint64 id, bool deleteAnnot)
 void
 AnnotationGraphicsView::removeAnnotations()
 {
-  if (!hash_.empty()) {
-    QGraphicsScene *s = scene();
-    Q_ASSERT(s);
-    foreach (QGraphicsItem *item, s->items()) {
-      BOOST_AUTO(a, dynamic_cast<AnnotationGraphicsItem*>(item));
-      if (a)
-        a->disappear();
-      else
-        s->removeItem(item);
-    }
-
-    //foreach (QList<AnnotationGraphicsItem*> *l, annots_.values())
-    //  if (l) {
-    //    if (!l->empty())
-    //      foreach (AnnotationGraphicsItem *item, *l)
-    //        if (item)
-    //          delete item;
-    //    delete l;
-    //  }
-
-    hash_.clear();
-
-    emit annotationsRemoved();
-  }
+  removeAllItems();
+  hash_.clear();
+  emit annotationsRemoved();
 }
 
 void
@@ -386,6 +370,7 @@ AnnotationGraphicsView::setVisible(bool visible)
     _connect(player_, SIGNAL(playing()), this, SLOT(resume())); \
     _connect(player_, SIGNAL(stopped()), this, SLOT(resume())); \
     _connect(player_, SIGNAL(stopped()), this, SIGNAL(removeItemRequested())); \
+    _connect(player_, SIGNAL(stopped()), this, SLOT(removeAllItems())); \
   }
 
   SET_PLAYER_CONNECTIONS(connect)
@@ -400,6 +385,7 @@ AnnotationGraphicsView::setVisible(bool visible)
     _connect(hub_, SIGNAL(played()), this, SLOT(resume())); \
     _connect(hub_, SIGNAL(stopped()), this, SLOT(resume())); \
     _connect(hub_, SIGNAL(stopped()), this, SIGNAL(removeItemRequested())); \
+    _connect(hub_, SIGNAL(stopped()), this, SLOT(removeAllItems())); \
   }
 
   SET_HUB_CONNECTIONS(connect)
@@ -435,7 +421,7 @@ AnnotationGraphicsView::setPlaybackEnabled(bool enabled)
 void
 AnnotationGraphicsView::expelItems(const QPoint &center)
 {
-  enum { width = 400, height = 300 };
+  enum { width = 600, height = 400 };
   QRect r(0, 0, width, height);
   r.moveCenter(center);
   expelItems(center, r, Qt::IntersectsItemBoundingRect);
@@ -507,11 +493,13 @@ AnnotationGraphicsView::resume()
 }
 
 void
-AnnotationGraphicsView::selectItem(AnnotationGraphicsItem *item)
+AnnotationGraphicsView::selectItem(AnnotationGraphicsItem *item, bool detail)
 {
   qint64 uid = item->annotation().userId();
   if (uid)
     emit selectedUserIds(QList<qint64>() << uid);
+  if (detail)
+    emit selectedUserId(uid);
 }
 
 void
@@ -616,6 +604,16 @@ void
 AnnotationGraphicsView::removeItems(const QPoint &pos)
 {
   foreach (QGraphicsItem *item, items(pos)) {
+    BOOST_AUTO(a, dynamic_cast<AnnotationGraphicsItem *>(item));
+    if (a)
+      a->disappear();
+  }
+}
+
+void
+AnnotationGraphicsView::removeAllItems()
+{
+  foreach (QGraphicsItem *item, items()) {
     BOOST_AUTO(a, dynamic_cast<AnnotationGraphicsItem *>(item));
     if (a)
       a->disappear();
@@ -963,6 +961,12 @@ AnnotationGraphicsView::setTrackedWindow(WId hwnd)
      updateTrackingTimer();
      emit trackedWindowChanged(trackedWindow_);
   }
+#ifdef WITH_WIN_MOUSEHOOK
+  if (trackedWindow_)
+    MouseHook::globalInstance()->start();
+  else
+    MouseHook::globalInstance()->stop();
+#endif // WITH_WIN_MOUSEHOOK
 }
 
 void
