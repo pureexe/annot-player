@@ -33,24 +33,20 @@ WbComboEdit::createActions()
   popupAct = new QAction(this); {
     popupAct->setText(tr("History"));
     popupAct->setStatusTip(tr("History"));
-    connect(popupAct, SIGNAL(triggered()), SLOT(showPopup()));
-  }
+  } connect(popupAct, SIGNAL(triggered()), SLOT(showPopup()));
   clearAct = new QAction(this); {
     clearAct->setText(tr("Clear"));
     clearAct->setStatusTip(tr("Clear"));
-    connect(clearAct, SIGNAL(triggered()), SLOT(reset()));
-  }
+  } connect(clearAct, SIGNAL(triggered()), SLOT(reset()));
   pasteAndGoAct = new QAction(this); {
-    pasteAndGoAct->setText(tr("Paste and go"));
-    pasteAndGoAct->setStatusTip(tr("Paste and go"));
-    connect(pasteAndGoAct, SIGNAL(triggered()), SLOT(pasteAndGo()));
-  }
+    pasteAndGoAct->setText(tr("Paste and Go"));
+    pasteAndGoAct->setStatusTip(tr("Paste and Go"));
+  } connect(pasteAndGoAct, SIGNAL(triggered()), SLOT(pasteAndGo()));
 
   submitAct = new QAction(this); {
     submitAct->setText(tr("Submit"));
     submitAct->setStatusTip(tr("Submit"));
-    connect(submitAct, SIGNAL(triggered()), SLOT(submitText()));
-  }
+  } connect(submitAct, SIGNAL(triggered()), SLOT(submitText()));
 }
 
 void
@@ -59,6 +55,7 @@ WbComboEdit::setIcon(const QString &url)
   QString ss = url.isEmpty() ? SS_COMBOBOX_NOICON
                              : SS_COMBOBOX_ICON(+url+);
   setStyleSheet(ss);
+  emit styleSheetChanged();
 }
 
 // - Actions -

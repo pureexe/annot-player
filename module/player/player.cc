@@ -53,12 +53,8 @@
 
 // - Settings -
 
-namespace { // anonymous
-
-  enum { VOUT_COUNTDOWN = 30 }; // vout countdown timer
-  enum { VOUT_TIMEOUT = 500 };  // 0.5 secs
-
-} // anonymous namespace
+enum { VOUT_COUNTDOWN = 30 }; // vout countdown timer
+enum { VOUT_TIMEOUT = 500 };  // 0.5 secs
 
 // - PlayerPrivate -
 
@@ -223,7 +219,7 @@ namespace { // anonymous, vlccore callbacks
       Q_ASSERT(player);
       if (!player || !player->isMouseEventEnabled())
         return 0;
-      vout_thread_t *vout = reinterpret_cast<vout_thread_t*>(p_this);
+      vout_thread_t *vout = reinterpret_cast<vout_thread_t *>(p_this);
       Q_ASSERT(vout);
       //if (!vout ||
       //    !vout->render.i_width || !vout->render.i_height)
@@ -278,7 +274,7 @@ namespace { // anonymous, vlccore callbacks
       Q_ASSERT(player);
       if (!player || !player->isMouseEventEnabled())
         return 0;
-      vout_thread_t *vout = reinterpret_cast<vout_thread_t*>(p_this);
+      vout_thread_t *vout = reinterpret_cast<vout_thread_t *>(p_this);
       Q_ASSERT(vout);
       if (!vout)
         return 0;
@@ -341,7 +337,7 @@ namespace { // anonymous, vlccore callbacks
   int
   register_vout_callbacks_(libvlc_media_player_t *mp, Player *player)
   {
-    static QList<vout_thread_t*> vouts_;
+    static QList<vout_thread_t *> vouts_;
 
     Q_ASSERT(mp);
     vout_thread_t **vouts;
@@ -699,7 +695,7 @@ Player::openMedia(const QString &path)
 
   if (isSupportedPlaylist(path)) {
 #ifdef USE_PLAYER_PLAYLIST
-    QList<libvlc_media_t*> l = parsePlaylist(path);
+    QList<libvlc_media_t *> l = parsePlaylist(path);
     if (l.isEmpty()) {
       DOUT("empty play list");
       emit errorEncountered();
@@ -1598,7 +1594,7 @@ Player::handleError()
   if (d_->media() &&
       ::libvlc_media_subitems(d_->media())) {
 
-    QList<libvlc_media_t*> l = parsePlaylist(d_->media());
+    QList<libvlc_media_t *> l = parsePlaylist(d_->media());
     if (!l.isEmpty()) {
       d_->setMediaList(l);
       //setTrackNumber(d_->trackNumber());
@@ -1616,21 +1612,22 @@ Player::handleError()
 
 // - Playlist -
 
-QList<libvlc_media_t*>
+QList<libvlc_media_t *>
 Player::parsePlaylist(const QString &fileName) const
 {
-  QList<libvlc_media_t*> ret;
+  QList<libvlc_media_t *> ret;
 #ifdef USE_PLAYER_PLAYLIST
   QFileInfo fi(fileName);
   if (!fi.exists())
     return ret;
 
   // jichi 11/30/2011 FIXME: ml never released that could cause runtime memory leak.
-  libvlc_instance_t *parent = const_cast<libvlc_instance_t*>(d_->instance());
+  libvlc_instance_t *parent = const_cast<libvlc_instance_t *>(d_->instance());
   libvlc_media_list_t *ml = ::libvlc_media_list_new(parent);
 
   ::libvlc_media_list_add_file_content(ml, vlcpath(fileName)); // FIXME: deprecated in VLC 1.1.11
   int count = ::libvlc_media_list_count(ml);
+  Q_ASSERT(count == 1);
   for (int i = 0; i < count; i++) { // count should always be 1 if succeed
     libvlc_media_t *md = ::libvlc_media_list_item_at_index(ml, i);
     Q_ASSERT(md);
@@ -1645,10 +1642,10 @@ Player::parsePlaylist(const QString &fileName) const
   return ret;
 }
 
-QList<libvlc_media_t*>
+QList<libvlc_media_t *>
 Player::parsePlaylist(libvlc_media_t *md) const
 {
-  QList<libvlc_media_t*> ret;
+  QList<libvlc_media_t *> ret;
   Q_ASSERT(md);
   if (!md)
     return ret;
@@ -1893,6 +1890,9 @@ Player::dispose()
       mute();
     closeMedia();
   }
+#ifdef WITH_MODULE_VLCCORE
+  VlcHttpPlugin::unload();
+#endif // WITH_MODULE_VLCCORE
 }
 
 // - Adjustment -

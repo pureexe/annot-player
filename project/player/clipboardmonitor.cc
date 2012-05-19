@@ -74,7 +74,7 @@ ClipboardMonitor::parseUrl(const QString &text)
 bool
 ClipboardMonitor::isSupportedAnnotationUrl(const QString &url)
 {
-  MrlAnalysis::Site site;
+  int site;
   return (site = MrlAnalysis::matchSite(url)) &&
           site < MrlAnalysis::AnnotationSite;
 }
@@ -82,7 +82,7 @@ ClipboardMonitor::isSupportedAnnotationUrl(const QString &url)
 bool
 ClipboardMonitor::isSupportedMediaUrl(const QString &url)
 {
-  MrlAnalysis::Site site;
+  int site;
   return (site = MrlAnalysis::matchSite(url)) &&
           site < MrlAnalysis::VideoSite;
 }

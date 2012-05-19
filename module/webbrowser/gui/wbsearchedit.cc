@@ -16,8 +16,8 @@
 void
 WbSearchEdit::createActions()
 {
-  pasteAndGoAct->setText(tr("Paste and go"));
-  pasteAndGoAct->setStatusTip(tr("Paste and go"));
+  pasteAndGoAct->setText(tr("Paste and Go"));
+  pasteAndGoAct->setStatusTip(tr("Paste and Go"));
 
   submitAct->setText(tr("Search"));
   submitAct->setStatusTip(tr("Search"));

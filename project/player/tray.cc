@@ -24,58 +24,32 @@ Tray::Tray(MainWindow *w, QObject *parent)
 void
 Tray::createActions()
 {
-  // Actions
-#define MAKE_ACTION(_action, _styleid, _receiver, _slot) \
-  _action = new QAction(QIcon(RC_IMAGE_##_styleid), TR(T_MENUTEXT_##_styleid), this); \
-  _action->setStatusTip(TR(T_STATUSTIP_##_styleid)); \
-  connect(_action, SIGNAL(triggered()), _receiver, _slot);
-#define MAKE_TOGGLE(_action, _styleid, _receiver, _slot) \
-  _action = new QAction(QIcon(RC_IMAGE_##_styleid), TR(T_MENUTEXT_##_styleid), this); \
-  _action->setToolTip(TR(T_TOOLTIP_##_styleid)); \
-  _action->setCheckable(true); \
-  connect(_action, SIGNAL(triggered(bool)), _receiver, _slot);
-
-  //QAction *MAKE_ACTION(openAct,         OPENFILE,       w_,     SLOT(open()))
-  QAction *MAKE_ACTION(openFileAct,     OPENFILE,       w_,     SLOT(openFile()))
-  QAction *MAKE_ACTION(openUrlAct,      OPENURL,        w_,     SLOT(openUrl()))
-  QAction *MAKE_ACTION(openDirectoryAct,      OPENDIRECTORY,        w_,     SLOT(openBrowsedDirectory()))
-  QAction *MAKE_ACTION(openAnnotationUrlAct,   OPENANNOTATIONURL, w_,  SLOT(openAnnotationUrl()))
-  QAction *MAKE_ACTION(openWindowAct,   PROCESSPICKDIALOG,w_,   SLOT(openWindow()))
-  QAction *MAKE_ACTION(pickWindowAct,   WINDOWPICKDIALOG, w_,   SLOT(showWindowPickDialog()))
-  QAction *MAKE_ACTION(aboutAct,        ABOUT,          w_,     SLOT(about()))
-  QAction *MAKE_ACTION(helpAct,         HELP,           w_,     SLOT(help()))
-  QAction *MAKE_ACTION(quitAct,         QUIT,           w_,     SLOT(close()))
-  MAKE_ACTION(minimizeAct_,     MINIMIZE,       w_,     SLOT(showMinimized()))
-  MAKE_ACTION(restoreAct_,      RESTORE,        w_,      SLOT(showNormal()))
-
-  MAKE_TOGGLE(toggleWindowOnTopAct_, WINDOWSTAYSONTOP, w_, SLOT(setWindowOnTop(bool)))
-
-  openFileAct->setShortcuts(QKeySequence::Open);
-  openUrlAct->setShortcuts(QKeySequence::New);
-  helpAct->setShortcuts(QKeySequence::HelpContents);
-  quitAct->setShortcuts(QKeySequence::Quit);
-#undef MAKE_ACTION
-#undef MAKE_TOGGLE
+  connect(toggleWindowOnTopAct_ = new QAction(TR(T_MENUTEXT_WINDOWSTAYSONTOP), this),
+          SIGNAL(triggered(bool)), w_, SLOT(setWindowOnTop(bool)));
+  toggleWindowOnTopAct_->setCheckable(true);
 
   // Menu
   QMenu *menu = new QMenu(w_); {
-    menu->addAction(openFileAct);
-    menu->addAction(openUrlAct);
-    menu->addAction(openAnnotationUrlAct);
-    menu->addAction(openDirectoryAct);
+    menu->addAction(TR(T_MENUTEXT_OPENFILE), w_, SLOT(openFile()));
+    menu->addAction(TR(T_MENUTEXT_OPENURL), w_, SLOT(openUrl()));
+    menu->addAction(TR(T_MENUTEXT_OPENANNOTATIONURL), w_, SLOT(openAnnotationUrl()));
+    menu->addAction(TR(T_MENUTEXT_OPENDIRECTORY), w_, SLOT(openBrowsedDirectory()));
 #ifdef USE_MODE_SIGNAL
-    menu->addAction(openWindowAct);
+    menu->addAction(TR(T_MENUTEXT_PROCESSPICKDIALOG), w_, SLOT(openWindow()));
 #endif // USE_MODE_SIGNAL
 #ifdef WITH_WIN_PICKER
-    menu->addAction(pickWindowAct);
+    menu->addAction(TR(T_MENUTEXT_WINDOWPICKDIALOG), w_, SLOT(showWindowPickDialog()));
 #endif // WITH_WIN_PICKER
     menu->addSeparator();
-    menu->addAction(aboutAct);
-    menu->addAction(helpAct);
+#ifndef Q_WS_MAC
     menu->addAction(toggleWindowOnTopAct_);
-    menu->addAction(minimizeAct_);
-    menu->addAction(restoreAct_);
-    menu->addAction(quitAct);
+#endif // Q_WS_MAC
+    minimizeAct_ = menu->addAction(TR(T_MINIMIZE), w_, SLOT(showMinimized()));
+    restoreAct_ = menu->addAction(TR(T_RESTORE), w_, SLOT(showNormal()));
+    menu->addSeparator();
+    menu->addAction(TR(T_MENUTEXT_ABOUT), w_, SLOT(about()));
+    menu->addAction(TR(T_MENUTEXT_HELP), w_, SLOT(help()));
+    menu->addAction(TR(T_MENUTEXT_QUIT), w_, SLOT(close()));
   }
   setContextMenu(menu);
 }
@@ -86,18 +60,9 @@ void
 Tray::activate(ActivationReason reason)
 {
   switch (reason) {
-  case Context:
-    updateContextMenu();
-    break;
-
-  case Trigger:
-    restoreAct_->trigger();
-    break;
-
-  case DoubleClick: case MiddleClick:
-    break;
-    w_->openBrowsedDirectory();
-
+  case Context: updateContextMenu(); break;
+  case Trigger: restoreAct_->trigger(); break;
+  case DoubleClick: case MiddleClick: w_->openBrowsedDirectory(); break;
   default: ;
   }
 }
@@ -107,7 +72,6 @@ Tray::updateContextMenu()
 {
   minimizeAct_->setVisible(!w_->isMinimized());
   restoreAct_->setVisible(!w_->isVisible() || w_->isMinimized());
-
   toggleWindowOnTopAct_->setChecked(w_->isWindowOnTop());
 }
 

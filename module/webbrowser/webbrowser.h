@@ -108,7 +108,8 @@ protected slots:
   void handleLoadStarted();
   void handleLoadFinished();
   void toggleFullScreen();
-  void showLoadProgress(int progress);
+  void updateLoadProgress();
+  void showLoadProgress();
 
   void focusLocationBar();
   void focusSearchBar();
@@ -197,6 +198,7 @@ private:
   QString cacheDirectory_;
   QStringList homePages_;
   qreal textSizeMultiplier_;
+  int loadProgress_;
 };
 
 #endif // WEBBROWSER_H

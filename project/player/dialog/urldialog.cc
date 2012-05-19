@@ -168,8 +168,8 @@ UrlDialog::decrease()
   if (t.isEmpty())
     return;
   t = QtExt::decreaseString(t);
-  t.replace("/index_1.html", "/");
-  t.replace("/index_0.html", "/");
+  t.replace("/index_1.html", "/")
+   .replace("/index_0.html", "/");
   setText(t);
 }
 
@@ -182,10 +182,11 @@ UrlDialog::autoCompleteUrl(const QString &url)
   else if (!url.startsWith("http://", Qt::CaseInsensitive))
     ret.prepend("http://");
 
-  ret.remove(QRegExp("#$"));
-  ret.replace(QRegExp("/index.html$", Qt::CaseInsensitive), "/");
-  ret.replace(QRegExp("/index_1.html$", Qt::CaseInsensitive), "/");
-  ret.replace(QRegExp("/#$"), "/");
+  ret.remove(QRegExp("#$"))
+     .remove(QRegExp("#titles$"))
+     .replace(QRegExp("/index.html$", Qt::CaseInsensitive), "/")
+     .replace(QRegExp("/index_1.html$", Qt::CaseInsensitive), "/")
+     .replace(QRegExp("/#$"), "/");
 
   return ret;
 }

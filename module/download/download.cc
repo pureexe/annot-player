@@ -5,7 +5,7 @@
 #include "module/download/downloader.h"
 #include <QtNetwork/QNetworkRequest>
 
-#define DEBUG "download"
+//#define DEBUG "download"
 #include "module/debug/debug.h"
 
 bool

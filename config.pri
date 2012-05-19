@@ -81,36 +81,39 @@ DEFINES += \
 ## External libraries
 
 win32 {
+    #DEV_HOME            = c:/dev
+    DEV_HOME            = B:/Developer
     QT_HOME             = c:/qt/current
     QT_SRC              = $$QT_HOME/src
     #VLC_HOME            = "c:/Program Files/VideoLAN/VLC/sdk"
-    VLC_HOME            = c:/dev/vlc
+    VLC_HOME            = $$DEV_HOME/vlc
     VLC_SRC             = $$VLC_HOME/src
-    #WSF_HOME            = c:/dev/wso2
-    #CDIO_HOME          = c:/dev/cdio
-    #FFMPEG_HOME         = c:/dev/ffmpeg
-    GPAC_HOME           = c:/dev/gpac
-    MP4V2_HOME          = c:/dev/mp4v2
-    LIVE_HOME           = c:/dev/live
-    POPPLER_HOME        = c:/dev/poppler
-    BOOST_HOME          = c:/dev/boost
-    GSOAP_HOME          = c:/dev/gsoap
-    ZLIB_HOME           = c:/dev/zlib
-    LUA_HOME            = c:/dev/lua
+    #WSF_HOME            = $$DEV_HOME/wso2
+    #CDIO_HOME          = $$DEV_HOME/cdio
+    #FFMPEG_HOME         = $$DEV_HOME/ffmpeg
+    GPAC_HOME           = $$DEV_HOME/gpac
+    MP4V2_HOME          = $$DEV_HOME/mp4v2
+    LIVE_HOME           = $$DEV_HOME/live
+    POPPLER_HOME        = $$DEV_HOME/poppler
+    BOOST_HOME          = $$DEV_HOME/boost
+    GSOAP_HOME          = $$DEV_HOME/gsoap
+    ZLIB_HOME           = $$DEV_HOME/zlib
+    LUA_HOME            = $$DEV_HOME/lua
     LUA_VERSION =
 
-    ITH_HOME            = c:/dev/ith
-    WDK_HOME            = c:/winddk
+    ITH_HOME            = $$DEV_HOME/ith
+    WDK_HOME            = c:/winddk/current
 
-    INCLUDEPATH += c:/dev/inttypes/include
+    INCLUDEPATH        += $$DEV_HOME/inttypes/include
 
     #INCLUDEPATH        += $$ITH_HOME/include
     LIBS               += -L$$ITH_HOME/lib
 
     # wdk/inc/api/sal.h MUST be removed.
     # See:  http://stackoverflow.com/questions/1356653/multiple-compiling-errors-with-basic-c-application-on-vs2010-beta-1
-    INCLUDEPATH        += $$WDK_HOME/include
-    LIBS               += -L$$WDK_HOME/lib
+    # Select WinXP x86
+    INCLUDEPATH        += $$WDK_HOME/inc
+    LIBS               += -L$$WDK_HOME/lib/wxp/i386
 }
 
 unix {

@@ -32,7 +32,7 @@
 #define G_PATH_LOCK_RUNNING  G_PATH_LOCK "/" "running.lock"
 
 #ifdef Q_WS_WIN
-#  define G_PATH_CACHES QCoreApplication::applicationDirPath() + "/" " caches"
+#  define G_PATH_CACHES G_PATH_PROFILE "/" " Caches"
 #elif defined Q_WS_MAC
 #  define G_PATH_CACHES QtMac::homeCachesPath() + "/" G_ORGANIZATION "/" G_APPLICATION
 #else

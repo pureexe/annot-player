@@ -1,14 +1,15 @@
 #ifndef ACWINDOW_H
 #define ACWINDOW_H
 
-// backlogview.h
-// 2/18/2012
+// acwindow.h
+// 5/5/2012
 
 #include "module/qtext/draggablewidget.h"
 #include <QtCore/QList>
 
 class AcTextView;
 class FadeAnimation;
+class RippleImageFilter;
 typedef QtExt::DraggableWidget AcWindowBase;
 class AcWindow : public AcWindowBase
 {
@@ -25,15 +26,26 @@ public:
   void setFadeEnabled(bool t) { fadeEnabled_ = t; }
   FadeAnimation *fadeAnimation() const { return fadeAni_; }
 
+  bool isRippleEnabled() const { return rippleEnabled_; }
+  void setRippleEnabled(bool t);
+
   // - Events -
 public slots:
   virtual void setVisible(bool visible); ///< \override
   void fadeOut();
 protected:
+  virtual void mousePressEvent(QMouseEvent *event); ///< \override
+  virtual void mouseMoveEvent(QMouseEvent *event); ///< \override
+  virtual void mouseReleaseEvent(QMouseEvent *event); ///< \override
+  virtual void paintEvent(QPaintEvent *event); ///< \override
   virtual void closeEvent(QCloseEvent *e); ///< \override
 private:
   FadeAnimation *fadeAni_;
   bool fadeEnabled_;
+
+  bool rippleEnabled_;
+  RippleImageFilter *rippleFilter_;
+  QTimer *rippleTimer_;
 };
 
 #endif // ACWINDOW_H

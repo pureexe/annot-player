@@ -7,12 +7,12 @@
 #include "logger.h"
 #include "tr.h"
 #include "signalhub.h"
+#include "application.h"
 #include "project/common/acui.h"
 #include "module/qtext/htmltag.h"
 #include "module/qtext/datetime.h"
 #include "module/player/player.h"
 #include "module/serveragent/serveragent.h"
-#include <QtGui/QApplication>
 #include <QtCore>
 
 #define DEBUG "eventlogger"
@@ -66,15 +66,16 @@ EventLogger::startLogUntilPlaying()
 {
   //DOUT("enter");
   if (player_->hasMedia()) {
-    QApplication::setOverrideCursor(Qt::BusyCursor);
     logCount_ = 0;
     if (!logUntilPlayingTimer_) {
       logUntilPlayingTimer_ = new QTimer(this);
       logUntilPlayingTimer_->setInterval(G_LOGGER_PLAYING_WAITER_TIMEOUT);
       connect(logUntilPlayingTimer_, SIGNAL(timeout()), SLOT(logUntilPlaying()));
     }
-    if (!logUntilPlayingTimer_->isActive())
+    if (!logUntilPlayingTimer_->isActive()) {
+      Application::globalInstance()->setCursor(Qt::BusyCursor);
       logUntilPlayingTimer_->start();
+    }
   }
   //DOUT("exit");
 }
@@ -85,7 +86,7 @@ EventLogger::stopLogUntilPlaying()
   DOUT("enter");
   Q_ASSERT(logUntilPlayingTimer_);
   if (logUntilPlayingTimer_ && logUntilPlayingTimer_->isActive()) {
-    QApplication::setOverrideCursor(Qt::ArrowCursor);
+    Application::globalInstance()->setCursor(Qt::ArrowCursor);
     logUntilPlayingTimer_->stop();
   }
   DOUT("exit");

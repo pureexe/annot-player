@@ -29,20 +29,20 @@
 #define DEBUG "httpstreamsession"
 #include "module/debug/debug.h"
 
-enum { MaxDownloadRetries = 5 };
+enum { MaxDownloadRetries = 5, MinDownloadRetries = 2 };
 
 // - Progress -
 
 namespace { // anonymous
 
-  class ProgressTask_ : public StoppableTask
+  class ProgressTask : public StoppableTask
   {
     enum { SleepInterval = 1000 }; // wake up every 1 second
 
     HttpStreamSession *session_;
     bool stop_;
   public:
-    explicit ProgressTask_(HttpStreamSession *session)
+    explicit ProgressTask(HttpStreamSession *session)
       : session_(session), stop_(false) { Q_ASSERT(session_); }
 
     virtual void stop() ///< \override
@@ -56,6 +56,21 @@ namespace { // anonymous
       }
     }
   };
+
+  class SleepTimer
+  {
+    static bool stopped_;
+  public:
+    static void stop() { stopped_ = true; }
+
+    static void start(int secs)
+    {
+      stopped_ = false;
+      while (secs-- > 0 && !stopped_++)
+        QtExt::sleep(1000);
+    }
+  };
+  bool SleepTimer::stopped_;
 
 } // anonymous namespace
 
@@ -216,6 +231,8 @@ HttpStreamSession::stop()
       r->stop();
   }
 
+  SleepTimer::stop();
+
   emit stopped();
   quit();
   DOUT("exit");
@@ -346,6 +363,17 @@ HttpStreamSession::run()
         + originalUrl()
       );
 
+      if (j >= MinDownloadRetries) {
+        enum { WaitInterval = 5 }; // wait 5 seconds
+        emit warning(tr("wait %1 seconds and try again").arg(QString::number(WaitInterval)) + " ...");
+        DOUT(QString("wait for %1 seconds").arg(QString::number(WaitInterval)));
+        SleepTimer::start(WaitInterval);
+      }
+      if (isStopped()) {
+        DOUT("stopped, break");
+        break;
+      }
+
       DOUT("with mrlresolver");
       LuaMrlResolver resolver_impl;
       MrlResolver &resolver = resolver_impl;
@@ -448,7 +476,7 @@ HttpStreamSession::run()
   readyCond_.wakeAll();
 
   if (ok) {
-    progressTask_ = new ProgressTask_(this);
+    progressTask_ = new ProgressTask(this);
     QThreadPool::globalInstance()->start(progressTask_);
   }
 

@@ -35,7 +35,7 @@ using namespace Logger;
   Qt::WindowStaysOnTopHint)
 
 AnnotationBrowser::AnnotationBrowser(SignalHub *hub, QWidget *parent)
-  : Base(parent, WINDOW_FLAGS), hub_(hub), userId_(0), annotationPos_(0), editor_(0)
+  : Base(parent, WINDOW_FLAGS), hub_(hub), userId_(0), annotationPos_(0), editor_(0), contextMenu_(0)
 {
   Q_ASSERT(hub_);
 
@@ -44,7 +44,11 @@ AnnotationBrowser::AnnotationBrowser(SignalHub *hub, QWidget *parent)
 
   createModel();
   createLayout();
-  createActions();
+  //createActions();
+
+  connect(new QShortcut(QKeySequence("CTRL+1"), this), SIGNAL(activated()), meButton_, SLOT(click()));
+  connect(new QShortcut(QKeySequence("CTRL+2"), this), SIGNAL(activated()), nowButton_, SLOT(click()));
+  connect(new QShortcut(QKeySequence("CTRL+3"), this), SIGNAL(activated()), subtitleButton_, SLOT(click()));
 
   // Initial states
   tableView_->sortByColumn(HD_CreateTime, Qt::DescendingOrder);
@@ -119,33 +123,22 @@ AnnotationBrowser::createLayout()
 }
 
 void
-AnnotationBrowser::createActions()
+AnnotationBrowser::createContextMenu()
 {
-#define MAKE_ACTION(_action, _styleid, _slot) \
-  _action = new QAction(QIcon(RC_IMAGE_##_styleid), TR(T_MENUTEXT_##_styleid), this); \
-  _action->setToolTip(TR(T_TOOLTIP_##_styleid)); \
-  connect(_action, SIGNAL(triggered()), _slot);
-
-  MAKE_ACTION(editAnnotAct_,  EDITTHISANNOT,  SLOT(editAnnotation()))
-  MAKE_ACTION(deleteAnnotAct_,DELETETHISANNOT,SLOT(deleteAnnotation()))
-  MAKE_ACTION(copyAnnotAct_,  COPYTHISANNOT,  SLOT(copyAnnotation()))
-  MAKE_ACTION(blessAnnotAct_, BLESSTHISANNOT, SLOT(blessAnnotation()))
-  MAKE_ACTION(curseAnnotAct_, CURSETHISANNOT, SLOT(curseAnnotation()))
-  MAKE_ACTION(blockAnnotAct_, BLOCKTHISANNOT, SLOT(blockAnnotation()))
-
-  MAKE_ACTION(viewUserAct_,   VIEWTHISUSER,   SLOT(viewUser()))
-  MAKE_ACTION(blockUserAct_,  BLOCKTHISUSER,  SLOT(blockUser()))
-
-#undef MAKE_ACTION
-
   // Create menus
-  contextMenu_ = new QMenu(TR(T_TITLE_ANNOTATIONBROWSER), this);
-  AcUi::globalInstance()->setContextMenuStyle(contextMenu_, true); // persistent = true
-
-  // Shortcuts
-  connect(new QShortcut(QKeySequence("CTRL+1"), this), SIGNAL(activated()), meButton_, SLOT(click()));
-  connect(new QShortcut(QKeySequence("CTRL+2"), this), SIGNAL(activated()), nowButton_, SLOT(click()));
-  connect(new QShortcut(QKeySequence("CTRL+3"), this), SIGNAL(activated()), subtitleButton_, SLOT(click()));
+  contextMenu_ = new QMenu(TR(T_TITLE_ANNOTATIONBROWSER), this); {
+    AcUi::globalInstance()->setContextMenuStyle(contextMenu_, true); // persistent = true
+    editAnnotAct_ = contextMenu_->addAction(TR(T_MENUTEXT_EDITTHISANNOT), this, SLOT(editAnnotation()));
+    copyAnnotAct_ = contextMenu_->addAction(TR(T_MENUTEXT_COPYTHISANNOT), this, SLOT(copyAnnotation()));
+    contextMenu_->addSeparator();
+    deleteAnnotAct_ = contextMenu_->addAction(TR(T_MENUTEXT_DELETETHISANNOT), this, SLOT(deleteAnnotation()));
+    blessAnnotAct_ = contextMenu_->addAction(TR(T_MENUTEXT_BLESSTHISANNOT), this, SLOT(blessAnnotation()));
+    curseAnnotAct_ = contextMenu_->addAction(TR(T_MENUTEXT_CURSETHISANNOT), this, SLOT(curseAnnotation()));
+    blockAnnotAct_ = contextMenu_->addAction(TR(T_MENUTEXT_BLOCKTHISANNOT), this, SLOT(blockAnnotation()));
+    contextMenu_->addSeparator();
+    //viewUserAct_ = contextMenu_->addAction(TR(T_MENUTEXT_VIEWTHISUSER), this, SLOT(viewUser()));
+    blockUserAct_ = contextMenu_->addAction(TR(T_MENUTEXT_BLOCKTHISUSER), this, SLOT(blockUser()));
+  }
 }
 
 void
@@ -539,48 +532,30 @@ AnnotationBrowser::setVisible(bool visible)
 void
 AnnotationBrowser::contextMenuEvent(QContextMenuEvent *event)
 {
-  if (!event)
-    return;
   if (!currentIndex().isValid())
     return;
-
-  contextMenu_->clear();
-
-  qint64 cuid = currentUserId();
-
-  // Edit
-  {
-    contextMenu_->addAction(editAnnotAct_);
-    if (!currentText().isEmpty())
-      contextMenu_->addAction(copyAnnotAct_);
-
-    // Cast: TODO
-    qint64 id = currentId();
-    if (id) {
-      if (userId_ == cuid) {
-        contextMenu_->addSeparator();
-        contextMenu_->addAction(deleteAnnotAct_);
-      } else {
-        contextMenu_->addSeparator();
-        if (id > 0) {
-          contextMenu_->addAction(blessAnnotAct_);
-          contextMenu_->addAction(curseAnnotAct_);
-        }
-        contextMenu_->addAction(blockAnnotAct_);
-      }
-    }
-  }
-
-  // User
-  if (cuid != userId_) {
-    contextMenu_->addSeparator();
-    //contextMenu_->addAction(viewUserAct_);
-    contextMenu_->addAction(blockUserAct_);
-  }
-
-  // Pop up
+  updateContextMenu();
   contextMenu_->popup(event->globalPos());
   event->accept();
+}
+
+void
+AnnotationBrowser::updateContextMenu()
+{
+  if (!contextMenu_)
+    createContextMenu();
+  //editAnnotAct_->setVisible(true);
+  copyAnnotAct_->setVisible(!currentText().isEmpty());
+
+  qint64 id = currentId();
+  qint64 cuid = currentUserId();
+
+  deleteAnnotAct_->setVisible(id && userId_ == cuid);
+  blessAnnotAct_->setVisible(id > 0 && userId_ != cuid);
+  curseAnnotAct_->setVisible(id > 0 && userId_ != cuid);
+  blockAnnotAct_->setVisible(id && userId_ != cuid);
+  //viewUserAct_->setVisible(cuid && cuid != userId_);
+  blockUserAct_->setVisible(cuid && cuid != userId_);
 }
 
 void AnnotationBrowser::dragEnterEvent(QDragEnterEvent *event)     { emit dragEnterEventReceived(event); }

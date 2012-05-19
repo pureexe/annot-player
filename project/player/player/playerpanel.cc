@@ -9,9 +9,9 @@
 #include "global.h"
 #include "stylesheet.h"
 #include "tr.h"
+#include "project/common/achorizontalslider.h"
 #include "project/common/acui.h"
-#include "module/qtext/slider.h"
-#include "module/qtext/toolbutton.h"
+#include "module/qtext/iconbutton.h"
 #include <QtGui>
 
 PlayerPanel::PlayerPanel(QWidget *parent)
@@ -49,8 +49,7 @@ QSlider*
 PlayerPanel::volumeSlider()
 {
   if (!volumeSlider_) {
-    volumeSlider_ = new QtExt::Slider(Qt::Horizontal, this);
-    volumeSlider_->setStyleSheet(SS_SLIDER);
+    volumeSlider_ = new AcHorizontalSlider(this);
     volumeSlider_->setMaximum(G_VOLUME_MAX);
     volumeSlider_->setToolTip(TR(T_VOLUME));
   } return volumeSlider_;
@@ -63,7 +62,7 @@ PlayerPanel::volumeSlider()
   PlayerPanel::_button() \
   { \
     if (!_button##_) { \
-      _button##_ = new QtExt::ToolButton(this); \
+      _button##_ = new QtExt::IconButton(this); \
       _button##_->setStyleSheet(SS_TOOLBUTTON_##_styleid); \
       _button##_->setToolTip(TR(T_TOOLTIP_##_styleid)); \
       AcUi::globalInstance()->setToolButtonStyle(_button##_); \

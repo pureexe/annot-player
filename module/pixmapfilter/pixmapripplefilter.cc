@@ -2,11 +2,12 @@
 // 5/11/2012
 #include "module/pixmapfilter/pixmapripplefilter.h"
 #include <QtGui/QPainter>
-#include <QtGui/QPaintEngine>
+#include <QtGui/QPixmap>
+#include <QtGui/QImage>
 
 // - Construction -
 
-namespace {
+namespace { // anonymous
   inline int **allocateWaveMap(const QSize &size)
   {
     int **waveMap = new int *[size.width()];
@@ -31,8 +32,7 @@ namespace {
       delete[] waveMap;
     }
   }
-}
-
+} // anymous namespace
 
 PixmapRippleFilter::PixmapRippleFilter(QObject *parent)
   : Base(UserFilter, parent),
@@ -44,16 +44,16 @@ PixmapRippleFilter::PixmapRippleFilter(QObject *parent)
 
 PixmapRippleFilter::~PixmapRippleFilter()
 {
-  deallocateWaveMap(previousMap_);
-  deallocateWaveMap(currentMap_);
+  ::deallocateWaveMap(previousMap_);
+  ::deallocateWaveMap(currentMap_);
 }
 
 void
 PixmapRippleFilter::clear()
 {
   clearCenter();
-  deallocateWaveMap(previousMap_);
-  deallocateWaveMap(currentMap_);
+  ::deallocateWaveMap(previousMap_);
+  ::deallocateWaveMap(currentMap_);
 
   previousMap_ = currentMap_ = 0;
   mapSize_ = QSize();
@@ -63,11 +63,11 @@ PixmapRippleFilter::clear()
 // - Paint -
 
 void
-PixmapRippleFilter::draw(QPainter *p, const QPointF &pos, const QPixmap &px, const QRectF &src) const
+PixmapRippleFilter::draw(QPainter *p, const QPointF &pos, const QPixmap &pm, const QRectF &src) const
 {
   Q_ASSERT(p);
-  QImage image = src.isEmpty() ? px.toImage() :
-                 px.copy(src.toRect()).toImage();
+  QImage image = src.isEmpty() ? pm.toImage() :
+                 pm.copy(src.toRect()).toImage();
   if (image.isNull())
     return;
   draw(p, pos, image);
@@ -161,8 +161,9 @@ PixmapRippleFilter::draw(QPainter *p, const QPointF &pos, const QImage &currentI
       yOffset = y + currentMap_[x][y+offset_] - wave;
 
       modifiedImage.setPixel(x, y, currentImage.pixel(
-            qBound(0, xOffset, width - 1),
-            qBound(0, yOffset, height - 1)));
+        qBound(0, xOffset, width - 1),
+        qBound(0, yOffset, height - 1)
+      ));
     }
   }
   // Swap wave maps

@@ -278,7 +278,7 @@ AnnotationPainter::paintHistogramByPos(QPainter &p, const AnnotationList &l, con
     enum { TitleFontSize = 20, NoteFontSize = 10 };
     enum { TitleHeight = TitleFontSize, NoteHeight = NoteFontSize, NoteMargin = 5 };
 
-    int titleHeight = qMin(height, int(TitleHeight));
+    int titleHeight = qMin<int>(height, TitleHeight);
     {
       QFont f = p.font();
       f.setBold(true);
@@ -528,7 +528,7 @@ AnnotationPainter::paintHistogramByCreateTime(QPainter &p, const AnnotationList 
     enum { TitleFontSize = 20, NoteFontSize = 10 };
     enum { TitleHeight = TitleFontSize, NoteHeight = NoteFontSize, NoteMargin = 5 };
 
-    int titleHeight = qMin(height, int(TitleHeight));
+    int titleHeight = qMin<int>(height, TitleHeight);
     {
       QFont f = p.font();
       f.setBold(true);
@@ -669,7 +669,7 @@ AnnotationPainter::paintHistogramByUserId(QPainter &p, const AnnotationList &l, 
     enum { TitleFontSize = 20, NoteFontSize = 10 };
     enum { TitleHeight = TitleFontSize, NoteHeight = NoteFontSize, NoteMargin = 5 };
 
-    int titleHeight = qMin(height, int(TitleHeight));
+    int titleHeight = qMin<int>(height, TitleHeight);
     {
       QFont f = p.font();
       f.setBold(true);

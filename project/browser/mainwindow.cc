@@ -23,6 +23,12 @@
 #include "module/qtext/algorithm.h"
 #include "module/qtext/networkcookie.h"
 #include "module/qtext/webview.h"
+#ifdef WITH_MODULE_MAGNIFIER
+#  include "module/magnifier/magnifier.h"
+#endif // WITH_MODULE_MAGNIFIER
+#ifdef Q_WS_WIN
+#  include "win/qtwin/qtwin.h"
+#endif // Q_WS_WIN
 #include <boost/tuple/tuple.hpp>
 #include <QtGui>
 #include <QtWebKit>
@@ -66,17 +72,17 @@
 #endif // Q_WS_MAC
 
 MainWindow::MainWindow(QWidget *parent)
-  : Base(parent), console_(0)
+  : Base(parent), console_(0), magnifier_(0)
 {
   setWindowTitle(tr("Annot Browser"));
   setWindowIcon(QIcon(RC_IMAGE_APP));
   setWindowFlags(WINDOW_FLAGS);
   setTextSizeMultiplier(TEXT_SIZE_SCALE);
 
-#ifdef Q_WS_MAC
-  // void setContentsMargins(int left, int top, int right, int bottom);
-  setContentsMargins(4, 2, 4, 2);
-#endif // Q_WS_MAC
+#ifdef Q_WS_WIN
+  if (!QtWin::isWindowsVistaOrLater())
+#endif // Q_WS_WIN
+  { setContentsMargins(4, 2, 4, 2); }
 
   autoHideToolBarTimer_ = new QTimer(this);
   autoHideToolBarTimer_->setSingleShot(true);
@@ -713,18 +719,22 @@ MainWindow::scrollBottom()
 void
 MainWindow::about()
 {
-  static AcAbout *w = 0;
-  if (!w)
+  static QWidget *w = 0;
+  if (!w) {
     w = new AcAbout(G_APPLICATION, G_VERSION);
+    connect(qApp, SIGNAL(aboutToQuit()), w, SLOT(close()));
+  }
   w->show();
 }
 
 void
 MainWindow::preferences()
 {
-  static AcPreferences *w = 0;
-  if (!w)
+  static QWidget *w = 0;
+  if (!w) {
     w = new AcPreferences(AcPreferences::NetworkProxyTab);
+    connect(qApp, SIGNAL(aboutToQuit()), w, SLOT(close()));
+  }
   w->show();
 }
 
@@ -793,6 +803,28 @@ MainWindow::showConsole()
     Application::globalInstance()->addMessageHandler(AcConsole::messageHandler);
   }
   console_->show();
+}
+
+void
+MainWindow::toggleMagnifier()
+{
+#ifdef WITH_MODULE_MAGNIFIER
+  if (!magnifier_) {
+    magnifier_ = new Magnifier(this);
+    magnifier_->setWidget(QApplication::desktop());
+    new QShortcut(QKeySequence("CTRL+E"), magnifier_, SLOT(hide()));
+
+    QRect r = QApplication::desktop()->geometry();
+    QPoint pos = r.bottomRight() - magnifier_->rect().bottomRight();
+    magnifier_->move(pos);
+  }
+  if (magnifier_->isVisible())
+    magnifier_->fadeOut();
+  else {
+    magnifier_->show();
+    magnifier_->raise();
+  }
+#endif // WITH_MODULE_MAGNIFIER
 }
 
 // EOF

@@ -33,11 +33,14 @@
 
 #ifdef Q_OS_MAC
 #  define K_CTRL        "cmd"
+#  define K_CAPSLOCK    "capslock"
 #else
 #  define K_CTRL        "Ctrl"
+#  define K_CAPSLOCK    "CapsLock"
 #endif // Q_OS_MAC
 
 enum { RefreshInterval = 3000 };
+enum { SaveInterval = 60000 * 5 }; // every 5 minutes
 enum { MaxDownloadThreadCount = 3 };
 
 // - Constructions -
@@ -68,6 +71,10 @@ MainWindow::MainWindow(QWidget *parent)
   refreshTimer_ = new QTimer(this);
   refreshTimer_->setInterval(RefreshInterval);
   connect(refreshTimer_, SIGNAL(timeout()), SLOT(refresh()));
+
+  saveTimer_ = new QTimer(this);
+  saveTimer_->setInterval(SaveInterval);
+  connect(saveTimer_, SIGNAL(timeout()), SLOT(save()));
 
   connect(tableView_, SIGNAL(currentIndexChanged(QModelIndex)), SLOT(updateButtons()));
 
@@ -109,6 +116,7 @@ MainWindow::MainWindow(QWidget *parent)
   }
 
   // - Post behaviors -
+
   tableView_->sortByColumn(HD_Id);
   tableView_->setFocus();
 
@@ -264,13 +272,15 @@ MainWindow::createActions()
   } connect(newAct_, SIGNAL(triggered()), SLOT(add()));
   menuBarAct_ = new QAction(this); {
     menuBarAct_->setCheckable(true);
-    menuBarAct_->setText(tr("Menu Bar"));
+    menuBarAct_->setText(tr("Menu Bar") + " [" K_CAPSLOCK "]");
     menuBarAct_->setStatusTip(tr("Menu Bar"));
   } connect(menuBarAct_, SIGNAL(triggered(bool)), menuBar(), SLOT(setVisible(bool)));
  copyTitleAct_ = new QAction(this); {
+   copyTitleAct_->setText(tr("Copy Title"));
    copyTitleAct_->setStatusTip(tr("Copy Title"));
  } connect(copyTitleAct_, SIGNAL(triggered()), SLOT(copyTitle()));
  copyUrlAct_ = new QAction(this); {
+   copyUrlAct_->setText(tr("Copy Url"));
    copyUrlAct_->setStatusTip(tr("Copy Url"));
  } connect(copyUrlAct_, SIGNAL(triggered()), SLOT(copyUrl()));
 
@@ -925,6 +935,9 @@ MainWindow::closeEvent(QCloseEvent *event)
   if (taskDialog_)
     taskDialog_->hide();
 
+  saveTimer_->stop();
+  refreshTimer_->stop();
+
   Settings *settings = Settings::globalSettings();
   settings->setRecentTasks(downloadManager_->tasks().infoList());
   settings->setRecentSize(size());
@@ -1038,6 +1051,14 @@ MainWindow::searchWithEngine(int engine, const QString &key)
       }
     }
   }
+}
+
+void
+MainWindow::save()
+{
+  Settings *settings = Settings::globalSettings();
+  settings->setRecentTasks(downloadManager_->tasks().infoList());
+  settings->sync();
 }
 
 // EOF

@@ -101,6 +101,7 @@ protected slots:
   void remove();
   void play();
   void browse();
+  void save();
 
   void refresh();
   void updateButtons();
@@ -177,6 +178,7 @@ private:
               *openDirectoryButton_;
 
   QTimer *refreshTimer_;
+  QTimer *saveTimer_;
 
   QMenu *contextMenu_;
   QMenu *copyMenu_;

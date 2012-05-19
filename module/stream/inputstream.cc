@@ -43,7 +43,7 @@ InputStream::writeFile(const QString &path)
   //if (isEmpty())
   //  return true;
 
-  int bufsize = qMin((int)BufferSize, (int)size());
+  int bufsize = qMin<int>(BufferSize, size());
   if (bufsize <= 0)
     bufsize = BufferSize;
   char *buf = new char[bufsize];

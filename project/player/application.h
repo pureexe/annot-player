@@ -13,10 +13,18 @@ class Application : public AcApplication
   typedef Application Self;
   typedef AcApplication Base;
 
+  Qt::CursorShape cursor_;
+
   // - Constructions -
 public:
+  static Self *globalInstance() { return static_cast<Self *>(qApp); }
+
   Application(int &argc, char **argv);
   ~Application();
+
+  // - Properties -
+public:
+  void setCursor(Qt::CursorShape cursor);
 
   // - Implementation -
 private:

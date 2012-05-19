@@ -10,8 +10,9 @@ DEFINES += WITH_MODULE_MRLRESOLVER
 DEPENDPATH += $$PWD
 
 HEADERS += \
+    $$PWD/dummygooglevideomrlresolver.h \
+    $$PWD/dummyyoutubemrlresolver.h \
     $$PWD/luamrlresolver.h \
-    $$PWD/googlevideomrlresolver.h \
     $$PWD/mrlinfo.h \
     $$PWD/mrlresolver.h \
     $$PWD/mrlresolvermanager.h \
@@ -20,8 +21,9 @@ HEADERS += \
     $$PWD/youtubemrlresolver.h
 
 SOURCES += \
+    $$PWD/dummygooglevideomrlresolver.cc \
+    $$PWD/dummyyoutubemrlresolver.cc \
     $$PWD/luamrlresolver.cc \
-    $$PWD/googlevideomrlresolver.cc \
     $$PWD/mrlinfo.cc \
     $$PWD/mrlresolvermanager.cc \
     $$PWD/youkumrlresolver.cc \

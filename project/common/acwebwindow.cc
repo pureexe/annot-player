@@ -16,6 +16,7 @@
 AcWebWindow::AcWebWindow(QWidget *parent, Qt::WindowFlags f)
   : Base(parent, f)
 {
+  setRippleEnabled(false);
   AcUi::globalInstance()->setWindowStyle(this);
   setWindowOpacity(1.0);
 

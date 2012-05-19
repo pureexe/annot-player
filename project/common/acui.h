@@ -175,6 +175,7 @@ public:
   void setStatusBarStyle(QStatusBar *w);
 
   void setWindowBackground(QWidget *w, bool persistent); ///< If the widget is persistant
+  void removeWindowBackground(QWidget *w);
   void setMenuBackground(QMenu *m, bool persistent); ///< If the widget is persistant
   void setBlackBackground(QWidget *w);
 

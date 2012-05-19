@@ -46,8 +46,8 @@ class FadeAnimation;
 class Grabber;
 class Magnifier;
 class MrlResolver;
-class PixmapRippleFilter;
 class Player;
+class RippleImageFilter;
 class ServerAgent;
 class SignalHub;
 class Tray;
@@ -261,7 +261,8 @@ public slots:
   void pause();
   void stop();
   void nextFrame();
-  void snapshot();
+  void snapshot(bool mediaOnly = true);
+  void snapshotAll() { snapshot(false); }
 
   void previous();
   void next();
@@ -337,14 +338,14 @@ public slots:
   void updateLiveAnnotations(bool async = true);
 
   // - Cursor -
-protected:
-  bool isCursorVisible() const { return cursorVisible_; }
-protected slots:
-  void setCursorVisible(bool t);
-  void showCursor() { setCursorVisible(true); }
-  void hideCursor() { setCursorVisible(false); }
-  void resetAutoHideCursor();
-  void autoHideCursor();
+//protected:
+//  bool isCursorVisible() const { return cursorVisible_; }
+//protected slots:
+//  void setCursorVisible(bool t);
+//  void showCursor() { setCursorVisible(true); }
+//  void hideCursor() { setCursorVisible(false); }
+//  void resetAutoHideCursor();
+//  void autoHideCursor();
 
   // - Video adjustment -
 protected slots:
@@ -776,6 +777,7 @@ protected slots:
   void setDefaultAspectRatio();
   void setWideScreenAspectRatio(); // 16:9
   void setStandardAspectRatio(); // 4:3
+  void updateAnnotationMetaVisible();
 
 protected slots:
   void setSubmit(bool t) { submit_ = t; }
@@ -802,7 +804,6 @@ private:
   mutable QMutex inetMutex_;    // mutext for remote communication
   mutable QMutex annotMutex_;
   Tray *tray_;
-  AcAbout *about_;
   SignalHub *hub_;
 
   Magnifier *magnifier_;
@@ -818,7 +819,7 @@ private:
   QTimer *liveTimer_;
   QTimer *windowStaysOnTopTimer_;
   QTimer *navigationTimer_;
-  QTimer *autoHideCursorTimer_;
+  //QTimer *autoHideCursorTimer_;
   QTimer *holdTimer_;
   QStringList annotationUrls_;
 
@@ -912,12 +913,12 @@ private:
 
   bool recentSourceLocked_;
 
-  bool cursorVisible_;
+  //bool cursorVisible_;
 
   bool cancelContextMenu_;
 
-  bool ripple_;
-  PixmapRippleFilter *rippleFilter_;
+  bool rippleEnabled_;
+  RippleImageFilter *rippleFilter_;
   QTimer *rippleTimer_;
 
   QStringList playlist_;
@@ -1033,6 +1034,7 @@ private:
           *previousAct_,
           *nextAct_,
           *snapshotAct_,
+          *snapshotAllAct_,
           *actualSizeAct_,
           *toggleAnnotationAnalyticsViewVisibleAct_,
           *toggleAnnotationVisibleAct_,

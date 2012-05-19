@@ -52,7 +52,6 @@ public:
     return r == Lua && resolveSubtitle(r, url);
   }
 
-
 protected:
   static QString autoCompleteUrl(const QString &url);
 protected slots:

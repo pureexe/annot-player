@@ -21,6 +21,7 @@ QT_END_NAMESPACE
 
 class AnnotationGraphicsEffect;
 class AnnotationGraphicsView;
+class DataManager;
 class SignalHub;
 
 class AnnotationGraphicsItem : public QGraphicsTextItem
@@ -45,7 +46,7 @@ public:
   //enum Effect { DefaultEffect = 0, TransparentEffect, ShadowEffect, BlurEffect, EffectCount };
 
 public:
-  explicit AnnotationGraphicsItem(SignalHub *hub, AnnotationGraphicsView *viewWithScene);
+  AnnotationGraphicsItem(DataManager *data, SignalHub *hub, AnnotationGraphicsView *viewWithScene);
 
   const Annotation &annotation() const { return annot_; }
   Annotation &annotation() { return annot_; }
@@ -56,6 +57,7 @@ public:
   const QString &richText() const { return richText_; } ///< tidied HTML
 
   bool autoDelete() const { return autoDelete_; }
+  bool isMetaVisible() const { return metaVisible_; }
 
   ///  Override
   virtual int type() const { return AnnotationGraphicsItemType; }
@@ -77,10 +79,14 @@ public:
   qreal opacity() const;
 
 protected:
+  QString meta() const;
+
   //QString parse(const QString &text);
   static bool isSubtitle(const QString &text);
 
 public slots:
+  void setMetaVisible(bool t) { metaVisible_ = t; }
+  void setMetaVisibleAndUpdate(bool t);
   void setVisible(bool t) { Base::setVisible(t); }
   void setRelativePos(const QPointF &offset) { setPos(origin_ + offset); }
   void setScale(qreal value) { Base::setScale(value); }
@@ -154,12 +160,16 @@ private:
 
 private:
   bool autoDelete_;
+  bool metaVisible_;
   Annotation annot_;
+  mutable QString meta_; // cached
+  QString text_; // cached
   AnnotationGraphicsEffect *effect_;
 
   QPointF origin_;
   AnnotationGraphicsView *view_;
   QGraphicsScene *scene_;
+  DataManager *data_;
   SignalHub *hub_;
 
   Style style_;
@@ -168,8 +178,7 @@ private:
                      *escapeAni_, *rushAni_,
                      *appearOpacityAni_, *fadeAni_;
 
-  QPoint dragPos_;
-  bool dragPaused_;
+  QPointF dragPos_;
   QString richText_;
 };
 

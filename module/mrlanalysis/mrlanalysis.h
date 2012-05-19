@@ -13,7 +13,8 @@
 
 // Video sites from China
 #define MA_EIGEN_YOUKU          "v.youku.com/v_"
-#define MA_EIGEN_TUDOU          "www.tudou.com/"
+//#define MA_EIGEN_TUDOU          "www.tudou.com/p"
+#define MA_EIGEN_TUDOU          "www.tudou.com/programs/view/"
 #define MA_EIGEN_SINAVIDEO      "video.sina.com.cn/v/"
 #define MA_EIGEN_QQVIDEO        "v.qq.com/"
 

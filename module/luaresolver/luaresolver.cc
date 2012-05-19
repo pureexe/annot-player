@@ -16,6 +16,8 @@
 #include "module/qtext/networkcookie.h"
 #include "module/qtext/os.h"
 #include <QtNetwork/QNetworkAccessManager>
+#include <QtCore/QTextDecoder>
+#include <QtCore/QTextEncoder>
 #ifdef Q_WS_WIN
 #  include <QtCore/QCoreApplication>
 #  include <QtCore/QFileInfo>
@@ -69,7 +71,6 @@ namespace { // anonymous
 
 } // anonymous namespace
 
-/*
 QString
 LuaResolver::decodeText(const char *text, const char *encoding)
 {
@@ -83,14 +84,14 @@ LuaResolver::decodeText(const char *text, const char *encoding)
   }
   return QString::fromLocal8Bit(text);
 }
-*/
 
 QString
 LuaResolver::decodeTitle(const char *text, int siteId)
 {
   switch (siteId) {
+  case Tudou:
+    return decodeText(text, "GBK");
   case Acfun:
-    //return decodeText(text, "GBK");
   case Bilibili:
   case Nicovideo:
   case UnknownSite:

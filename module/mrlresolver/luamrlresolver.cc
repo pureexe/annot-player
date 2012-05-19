@@ -71,7 +71,7 @@ bool
 LuaMrlResolver::matchMedia(const QString &href) const
 {
   DOUT("enter");
-  MrlAnalysis::Site site;
+  int site;
   bool ret = (site = MrlAnalysis::matchSite(href)) &&
               site < MrlAnalysis::ChineseVideoSite;
   DOUT("exit: ret =" << ret);
@@ -82,7 +82,7 @@ bool
 LuaMrlResolver::matchSubtitle(const QString &href) const
 {
   DOUT("enter");
-  MrlAnalysis::Site site;
+  int site;
   bool ret = (site = MrlAnalysis::matchSite(href)) &&
               site < MrlAnalysis::AnnotationSite;
   DOUT("exit: ret =" << ret);
@@ -297,11 +297,15 @@ LuaMrlResolver::formatTitle(const QString &title)
 #ifdef _MSC_VER
     .remove(QRegExp(" - \xe7\x94\xb5\xe8\xa7\x86\xe5\x89\xa7 - .*"))
     .remove(QRegExp(" - \xe8\xa7\x86\xe9\xa2\x91 - .*"))
+    .remove(QRegExp(" - \xe8\xa7\x86\xe9\xa2\x91$"))
     .remove(QRegExp(" - ..\xe8\xa7\x86\xe9\xa2\x91 - .*"))
+    .remove(QRegExp("_\e5\9c\a8\e7\ba\bf.*"))
 #else
     .remove(QRegExp(" - 电视剧 - .*"))
     .remove(QRegExp(" - 视频 - .*"))
-    .remove(QRegExp(" - 优酷视频 - .*"))
+    .remove(QRegExp(" - 视频$"))
+    .remove(QRegExp(" - 优酷视频 - .*")) // Youku
+    .remove(QRegExp("_在线.*")) // Tudou
 #endif // _MSC_VER
   // See: http://htmlhelp.com/reference/html40/entities/special.html
      .replace("&quot;", "'")
@@ -317,6 +321,7 @@ LuaMrlResolver::formatUrl(const QString &href)
   QString ret = href.trimmed();
   return ret.isEmpty() ? ret : ret
     .remove(QRegExp("#$"))
+    .remove(QRegExp("#titles$"))
     .replace(QRegExp("/index.html$", Qt::CaseInsensitive), "/")
     .replace(QRegExp("/#$", Qt::CaseInsensitive), "/")
     .replace(QRegExp("/index_1.html$", Qt::CaseInsensitive), "/")

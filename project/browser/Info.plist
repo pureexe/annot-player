@@ -23,7 +23,7 @@
 	<key>LSMinimumSystemVersionByArchitecture</key>
 	<dict>
 		<key>x86_64</key>
-		<string>10.7.3</string>
+		<string>10.7.4</string>
 	</dict>
 	<key>CFBundleURLTypes</key>
 	<array>

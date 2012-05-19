@@ -8,7 +8,6 @@
 AnnotationGraphicsEffect::AnnotationGraphicsEffect(QObject *parent)
   : Base(parent)
 {
-  // Halo
 #ifdef Q_WS_WIN
   enum { offset = 1, radius = 18 };
 #else

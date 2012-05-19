@@ -5,6 +5,9 @@
 // 1/27/2012
 
 #include "module/qtext/webview.h"
+#include <QtCore/QObjectList>
+
+QT_FORWARD_DECLARE_CLASS(QMenu)
 
 class SearchEngine;
 
@@ -18,6 +21,7 @@ class WbWebView : public WbWebViewBase
 
 public:
   explicit WbWebView(QWidget *parent = 0);
+  ~WbWebView();
 
 signals:
   void windowCreated(QWebView *w);
@@ -46,6 +50,8 @@ protected:
   QString selectedUrl() const;
 
 protected slots:
+  void updateTitle();
+
   void openSelectedLink()
   { emit openLinkRequested(selectedUrl()); }
 
@@ -67,6 +73,8 @@ protected slots:
 private:
   void createActions();
 private:
+  QMenu *contextMenu_; // FIXME
+  QObjectList deleteLater_;
   QAction *openWithAcPlayerAct_,
           *importToAcPlayerAct_,
           *openWithAcDownloaderAct_,

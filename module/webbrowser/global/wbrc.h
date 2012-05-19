@@ -15,6 +15,7 @@
 //#define WBRC_TR_NULL      WBRC_NULL
 
 #define WBRC_IMAGE_COMBOBOX WBRC_PREFIX_IMAGE "comboedit.png"
+#define WBRC_IMAGE_LINEEDIT WBRC_PREFIX_IMAGE "lineedit.png"
 #define WBRC_IMAGE_COMMENT  WBRC_PREFIX_IMAGE "comment.png"
 
 #define WBRC_IMAGE_NEWTAB         WBRC_PREFIX_IMAGE "newtab.png"

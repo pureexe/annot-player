@@ -7,20 +7,21 @@ DEFINES += PROJECT_TESTER
 
 include(../../config.pri)
 include($$ROOTDIR/module/debug/debug.pri)
+include($$ROOTDIR/module/download/download.pri)
 
 ## Libraries
 #include($$ROOTDIR/module/graphicseffect/graphicseffect.pri)
 
-win32 {
-    include($$ROOTDIR/win/dwm/dwm.pri)
-    include($$ROOTDIR/win/qtwin/qtwin.pri)
-}
-unix: {
-    include($$ROOTDIR/unix/qtunix/qtunix.pri)
-}
-mac {
-    include($$ROOTDIR/mac/qtmac/qtmac.pri)
-}
+#win32 {
+#    include($$ROOTDIR/win/dwm/dwm.pri)
+#    include($$ROOTDIR/win/qtwin/qtwin.pri)
+#}
+#unix: {
+#    include($$ROOTDIR/unix/qtunix/qtunix.pri)
+#}
+#mac {
+#    include($$ROOTDIR/mac/qtmac/qtmac.pri)
+#}
 
 QT      += core gui
 

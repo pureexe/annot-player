@@ -6,6 +6,7 @@
 #include "annotationgraphicsstyle.h"
 #include "annotationgraphicseffect.h"
 #include "annotationeditor.h"
+#include "datamanager.h"
 //#include "textformathandler.h"
 #include "tr.h"
 #include "global.h"
@@ -36,6 +37,9 @@
 
 using namespace AnnotCloud;
 using namespace Logger;
+
+#define BAD_POSF        QPointF(-1,-1)
+namespace { inline bool isBadPosF(const QPointF &pos) { return pos.x() < 0 || pos.y() < 0; } }
 
 // - Helpers -
 
@@ -100,22 +104,33 @@ namespace { // anonymous, annotation display
      ANNOTATION_SIZE_DEFAULT
 #endif // Q_WS_WIN
     };
-    if (language == Traits::Chinese) {
-      QFont font(ANNOTATION_FONT_CHINESE, FontSize);
+    Q_UNUSED(language);
+    static bool init = true;
+    static QFont font(ANNOTATION_FONT, FontSize);
+    if (init) {
       font.setWeight(QFont::DemiBold);
       font.setStyleStrategy((QFont::StyleStrategy)(
-        QFont::ForceOutline | QFont::PreferQuality
+        QFont::PreferAntialias | QFont::PreferQuality
       ));
-      return font;
-
-    } else {
-      QFont font(ANNOTATION_FONT_JAPANESE, FontSize);
-      font.setWeight(QFont::DemiBold);
-      font.setStyleStrategy((QFont::StyleStrategy)(
-        QFont::ForceOutline | QFont::PreferQuality
-      ));
-      return font;
+      init = false;
     }
+    return font;
+    //if (language == Traits::Chinese) {
+    //  QFont font(ANNOTATION_FONT_CHINESE, FontSize);
+    //  font.setWeight(QFont::DemiBold);
+    //  font.setStyleStrategy((QFont::StyleStrategy)(
+    //    QFont::ForceOutline | QFont::PreferQuality
+    //  ));
+    //  return font;
+//
+    //} else {
+    //  QFont font(ANNOTATION_FONT_JAPANESE, FontSize);
+    //  font.setWeight(QFont::DemiBold);
+    //  font.setStyleStrategy((QFont::StyleStrategy)(
+    //    QFont::ForceOutline | QFont::PreferQuality
+    //  ));
+    //  return font;
+    //}
   }
 
   // Use std time() rather than QTime::currentTime() to improve performance.
@@ -213,35 +228,27 @@ AnnotationGraphicsItem::warmUp()
 #ifdef Q_OS_MAC
   QGraphicsTextItem dummy;
 
-  QFont j = ::default_annot_font_(Traits::Japanese),
-        c = ::default_annot_font_(Traits::Chinese);
-
-  j.setWeight(QFont::Light); dummy.setFont(j);
-  c.setWeight(QFont::Light); dummy.setFont(c);
-
-  j.setWeight(QFont::Normal); dummy.setFont(j);
-  c.setWeight(QFont::Normal); dummy.setFont(c);
-
-  j.setWeight(QFont::DemiBold); dummy.setFont(j);
-  c.setWeight(QFont::DemiBold); dummy.setFont(c);
-
-  j.setWeight(QFont::Bold); dummy.setFont(j);
-  c.setWeight(QFont::Bold); dummy.setFont(c);
-
-  j.setWeight(QFont::Black); dummy.setFont(j);
-  c.setWeight(QFont::Black); dummy.setFont(c);
+  QFont font = ::default_annot_font_(Traits::Japanese);
+  font.setWeight(QFont::Light); dummy.setFont(font);
+  font.setWeight(QFont::Normal); dummy.setFont(font);
+  font.setWeight(QFont::DemiBold); dummy.setFont(font);
+  font.setWeight(QFont::Bold); dummy.setFont(font);
+  font.setWeight(QFont::Black); dummy.setFont(font);
 #endif // Q_OS_MAC
 }
 
 AnnotationGraphicsItem::AnnotationGraphicsItem(
+  DataManager *data,
   SignalHub *hub,
   AnnotationGraphicsView *view)
-  : autoDelete_(true), view_(view), hub_(hub), style_(FloatStyle),
+  : autoDelete_(true), metaVisible_(true),
+    view_(view), data_(data), hub_(hub), style_(FloatStyle),
     removeLaterTimer_(0),
     flyAni_(0), flyOpacityAni_(0), escapeAni_(0), rushAni_(0), appearOpacityAni_(0), fadeAni_(0),
-    dragPos_(BAD_POS), dragPaused_(false)
+    dragPos_(BAD_POSF)
 {
   DOUT("enter");
+  Q_ASSERT(data_);
   Q_ASSERT(hub_);
   Q_ASSERT(view_);
   scene_ = view_->scene();
@@ -260,6 +267,7 @@ void
 AnnotationGraphicsItem::setAnnotation(const Annotation &annot)
 {
   annot_ = annot;
+  meta_.clear();
   invalidateAnnotation();
 }
 
@@ -292,6 +300,18 @@ AnnotationGraphicsItem::reset()
 }
 
 void
+AnnotationGraphicsItem::setMetaVisibleAndUpdate(bool t)
+{
+  if (metaVisible_ != t) {
+    metaVisible_ = t;
+    if (isMetaVisible())
+      setText(text_ + meta());
+    else
+      setText(text_);
+  }
+}
+
+void
 AnnotationGraphicsItem::invalidateAnnotation()
 {
   setDefaultStyle();
@@ -310,17 +330,104 @@ AnnotationGraphicsItem::invalidateAnnotation()
   if (isSubtitle(text))
     text = view_->subtitlePrefix() + text;
 
-  QString code;
   QStringList tags;
-  boost::tie(code, tags) = ANNOT_PARSE_CODE(text);
+  boost::tie(text_, tags) = ANNOT_PARSE_CODE(text);
   setTags(tags);
+  richText_ = text_;
   if (tags.contains(CORE_CMD_VERBATIM))
-    setPlainText(richText_ = code);
+    setPlainText(richText_);
   else {
-    setText(richText_ = code);
+    richText_.append(meta());
+    QString t = isMetaVisible() ? richText_ : text_;
+    setText(t);
     if (isOwner)
       richText_ = CORE_CMD_LATEX_ULINE " " + richText_;
   }
+}
+
+QString
+AnnotationGraphicsItem::meta() const
+{
+  if (!meta_.isEmpty())
+    return meta_;
+  QString ret;
+  qint64 t = annot_.createTime();
+  if (t > Traits::MIN_TIME && t < Traits::MAX_TIME) {
+    t *= 1000;
+    QString ts;
+
+    //QDateTime dt0 = QDateTime::currentDateTime();
+    //QTime t0 = dt0.time();
+    QDate d0 = QDate::currentDate();
+
+    QDateTime dt1 = QDateTime::fromMSecsSinceEpoch(t);
+    QDate d1 = dt1.date();
+    QTime t1 = dt1.time();
+
+    if (d0 != d1) {
+      QString fmt = "M/d";
+      //if (d0.month() != d1.month())
+      //  fmt.prepend("M/");
+      if (d0.year() != d1.year())
+        fmt.append("/yyyy");
+      ts.append(HTML_STYLE_OPEN(color:orange) + d1.toString(fmt) + HTML_STYLE_CLOSE());
+      QString w;
+      switch (d1.dayOfWeek()) {
+      case 1: w = tr("Mon"); break;
+      case 2: w = tr("Tue"); break;
+      case 3: w = tr("Wed"); break;
+      case 4: w = tr("Thu"); break;
+      case 5: w = tr("Fri"); break;
+      case 6: w = tr("Sat"); break;
+      case 7: w = tr("Sun"); break;
+      default: Q_ASSERT(0);
+      }
+      ts.append(HTML_STYLE_OPEN(font-size:12px;color:magenta) + w + HTML_STYLE_CLOSE());
+
+      ts.append(t1.toString("h:mm"));
+    } else {
+      QTime t0 = QTime::currentTime();
+      int d;;
+      if (d = t1.hour() - t0.hour())
+        ts.append(QString::number(qAbs(d)))
+          .append(tr("hr"));
+      else if (d = t1.minute() - t0.minute())
+        ts.append(QString::number(qAbs(d)))
+          .append(tr("min"));
+      else if (d = t1.second() - t0.second())
+        ts.append(QString::number(qAbs(d)))
+          .append(tr("sec"));
+
+    }
+    if (!ts.isEmpty()) {
+      ts = HTML_STYLE_OPEN(color:yellow)
+          + ts +
+          HTML_STYLE_CLOSE();
+      ret.append(ts);
+    }
+  }
+  QString u = annot_.userAlias();
+  if (!u.isEmpty()) {
+    enum { user_len = 4 };
+    u = HTML_STYLE_OPEN(color:cyan)
+        "@" + u.right(user_len) +
+        HTML_STYLE_CLOSE();
+    ret.append(u);
+  }
+  qint64 uid = annot_.userId();
+  if (uid) {
+    int count = data_->annotationCountForUserId(uid);
+    if (count > 1) {
+      QString c = QString::number(count);
+      c = HTML_STYLE_OPEN(font-size:11px;color:red) "x" + c + HTML_STYLE_CLOSE();
+      ret.append(c);
+    }
+  }
+  if (!ret.isEmpty()) {
+    ret = HTML_STYLE_OPEN(text-decoration:underline;font-size:11px) + ret + HTML_STYLE_CLOSE();
+    //ret.prepend(HTML_BR());
+  }
+  return meta_ = ret;
 }
 
 // TODO: How to use QTextCharFormat to set advanced format:
@@ -583,10 +690,11 @@ void
 AnnotationGraphicsItem::addMe()
 {
   if (!scene()) {
-    connect(view_, SIGNAL(itemVisibleChanged(bool)), SLOT(setVisible(bool)));
     connect(view_, SIGNAL(paused()), SLOT(pause()));
     connect(view_, SIGNAL(resumed()), SLOT(resume()));
     connect(view_, SIGNAL(scaleChanged(qreal)), SLOT(setScale(qreal)));
+    connect(view_, SIGNAL(itemVisibleChanged(bool)), SLOT(setVisible(bool)));
+    connect(view_, SIGNAL(itemMetaVisibleChanged(bool)), SLOT(setMetaVisibleAndUpdate(bool)));
 
     if (style_ == SubtitleStyle &&
         hub_->isSignalTokenMode())
@@ -629,9 +737,11 @@ AnnotationGraphicsItem::removeMe()
     //    !hub_->isStopped())
     if (hub_->isSignalTokenMode())
       disconnect(view_, SIGNAL(removeItemRequested()), this, SLOT(disappear()));
-    disconnect(view_, SIGNAL(itemVisibleChanged(bool)), this, SLOT(setVisible(bool)));
     disconnect(view_, SIGNAL(paused()), this, SLOT(pause()));
     disconnect(view_, SIGNAL(resumed()), this, SLOT(resume()));
+    disconnect(view_, SIGNAL(scaleChanged(qreal)), this, SLOT(setScale(qreal)));
+    disconnect(view_, SIGNAL(itemVisibleChanged(bool)), this, SLOT(setVisible(bool)));
+    disconnect(view_, SIGNAL(itemMetaVisibleChanged(bool)), this, SLOT(setMetaVisibleAndUpdate(bool)));
 
     scene_->removeItem(this);
     autoDelete_ = true;
@@ -707,6 +817,9 @@ AnnotationGraphicsItem::isPaused() const
 void
 AnnotationGraphicsItem::pause()
 {
+  if (!isMetaVisible())
+    setMetaVisibleAndUpdate(true);
+
   if (style_ == SubtitleStyle &&
       hub_->isSignalTokenMode() &&
       !hub_->isStopped())
@@ -743,6 +856,8 @@ AnnotationGraphicsItem::pause()
 void
 AnnotationGraphicsItem::resume()
 {
+  if (isMetaVisible())
+    setMetaVisibleAndUpdate(false);
   if (style_ == SubtitleStyle &&
       hub_->isSignalTokenMode() &&
       !hub_->isStopped())
@@ -775,9 +890,9 @@ AnnotationGraphicsItem::stayTime(Style style) const
 {
   int t = style == SubtitleStyle ? ANNOTATION_STAY_TIME_SUBTITLE
                                  : ANNOTATION_STAY_TIME;
-  int w0 = qMax(view_->width(), 100),
-      w = qMax(int(boundingRect().width()), 50),
-      h = qMax(int(boundingRect().height()), 20);
+  int w0 = qMax<int>(view_->width(), 100),
+      w = qMax<int>(boundingRect().width(), 50),
+      h = qMax<int>(boundingRect().height(), 20);
   qreal f = qreal(w0 + 200)/ (w + 200),
         g = qreal(h + 20) / (ANNOTATION_SIZE_DEFAULT + 15);
   qreal q = hub_->isSignalTokenMode() ? 1.0 : 0.8;
@@ -788,16 +903,15 @@ AnnotationGraphicsItem::stayTime(Style style) const
 int
 AnnotationGraphicsItem::flyTime() const
 {
-  int w0 = qMax(view_->width(), 100),
-      w = qMax(int(boundingRect().width()), 50);
+  int w0 = qMax<int>(view_->width(), 100),
+      w = qMax<int>(boundingRect().width(), 50);
   qreal f = qreal(w0 + 200) / (w + 200);
   int ret = ANNOTATION_FLY_TIME * ::pow(f, 0.2) + ANNOTATION_FLY_TIME_MIN;
   ret = qMin(ret, ANNOTATION_FLY_TIME_MAX);
-  if (style_ == FlyStyle) {
+  if (style_ == FlyStyle)
     ret /= 5;
-    if (view_->width() > 640)
-      ret = ret * view_->width() / 640;
-  }
+  //if (view_->width() > 640)
+  //  ret = ret * view_->width() / 640;
   return qMax(ret, ANNOTATION_FLY_TIME_MIN);
 }
 
@@ -988,41 +1102,37 @@ void
 AnnotationGraphicsItem::mouseDoubleClickEvent(QMouseEvent *event)
 {
   Q_UNUSED(event);
-  //if (dragPaused_ && isPaused())
-  //  resume();
+  if (!isPaused())
+    pause();
   view_->selectItem(this, true); // detail = true
 }
 
 void
 AnnotationGraphicsItem::mousePressEvent(QMouseEvent *event)
 {
-  dragPaused_ = isPaused();
-  if (!dragPaused_) {
+  if (!isPaused()) {
     pause();
     selectMe();
   }
-  if (event && event->button() == Qt::LeftButton && dragPos_ == BAD_POS)
-    dragPos_ = event->globalPos() -  QPoint(scenePos().x(), scenePos().y());
+  if (event && event->button() == Qt::LeftButton && ::isBadPosF(dragPos_))
+    dragPos_ = QPointF(event->globalPos()) -  scenePos();
 }
 
 void
 AnnotationGraphicsItem::mouseReleaseEvent(QMouseEvent *event)
 {
   Q_UNUSED(event);
-  dragPos_ = BAD_POS;
-  //if (dragPaused_ != isPaused()) {
-  //  if (dragPaused_)
-  //    pause();
-  //  else
-  //    resume();
-  //}
+  //if (dragPaused_ && isPaused() &&
+  //    dragPos_ == event->globalPos() -  scenePos().toPoint())
+  //  resume();
+  dragPos_ = BAD_POSF;
 }
 
 void
 AnnotationGraphicsItem::mouseMoveEvent(QMouseEvent *event)
 {
-  if (event && (event->buttons() & Qt::LeftButton) && dragPos_ != BAD_POS) {
-    QPoint newPos = event->globalPos() - dragPos_;
+  if (event && (event->buttons() & Qt::LeftButton) && !::isBadPosF(dragPos_)) {
+    QPointF newPos = QPointF(event->globalPos()) - dragPos_;
     // use QApplication::postEvent is more elegant but less efficient
     setPos(newPos);
   }
@@ -1043,8 +1153,7 @@ AnnotationGraphicsItem::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
   AnnotationGraphicsItem::_handler(QGraphicsSceneMouseEvent *event) \
   { \
     if (event) { \
-      QPoint pos(event->pos().x(), event->pos().y()); \
-      QMouseEvent e(event->type(), pos, event->screenPos(), event->button(), event->buttons(), event->modifiers()); \
+      QMouseEvent e(event->type(), event->pos().toPoint(), event->screenPos(), event->button(), event->buttons(), event->modifiers()); \
       _handler(&e); \
     } \
   }
@@ -1170,7 +1279,7 @@ AnnotationGraphicsItem::escapeFrom(const QPointF &from)
   QPointF to = pos() + d;
 
   qreal v = 1/(len/30.0 + 1) + 0.02;
-  int msecs = qMax(int(len / v), 100);
+  int msecs = qMax<int>(len/v, 100);
   escapeTo(to, msecs);
 }
 
@@ -1198,7 +1307,9 @@ AnnotationGraphicsItem::escapeTo(const QPointF &to, int msecs)
 void
 AnnotationGraphicsItem::rushTo(const QPointF &center)
 {
-  enum { radius = 300 }; // half of (800, 600) in annotationgraphicsview
+  // 300: half of (800, 600) in annotationgraphicsview
+  // 400: half of 1366x768
+  int radius = hub_->isFullScreenWindowMode() ? 400 : 300;
   qreal rx = qrand() / qreal(RAND_MAX),
         ry = qrand() / qreal(RAND_MAX);
   //QPointF now = boundingRect().center(); // use center, so that annot with diff length will have diff speed
@@ -1211,13 +1322,14 @@ AnnotationGraphicsItem::rushTo(const QPointF &center)
     rushTo(to, msecs);
     return;
   }
-  qreal dist = qMax(len * 0.2, qreal(radius));
+  qreal dist = qMax<qreal>(len*0.2, radius);
   qreal delta = qAbs(len - dist);
   if (delta < 2)
     return;
 
   qreal v = 1/(delta/60.0 + 1) + 0.1;
-  int msecs = qMax(int(len / v), 100);
+  enum { min_msecs = 800 };
+  int msecs = qMax<int>(len/v, min_msecs);
 
   QPointF to = now - d * (delta/len) + radius * QPointF(0.5-rx, 0.5-ry);
   rushTo(to, msecs);

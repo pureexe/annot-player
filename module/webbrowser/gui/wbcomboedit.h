@@ -28,6 +28,7 @@ public:
 
 signals:
   void textEntered(const QString &url);
+  void styleSheetChanged();
 
   // - Properties -
 public slots:

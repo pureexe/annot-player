@@ -1,8 +1,8 @@
 ﻿== ENGLISH ==
 
 Product:	Annot Player
-Version:	0.1.5.4
-Release:	2012/5/11
+Version:	0.1.5.5
+Release:	2012/5/19
 Homepage:	http://annot.me
 Help (Wiki):	http://annot.me/wiki/FAQ
 Download:	http://code.google.com/p/annot-player/downloads
@@ -40,9 +40,9 @@ CONTRIBUTIONS
 === Mouse Gestures and Shortcuts === -- 鼠标动作和快捷方式
 
 Annot Player - Shortcuts -- 快捷键
--                  LButton    : Scatter annotations                  -- 驱赶弹幕
+-                  LButton    : Collect annotations                  -- 收集弹幕
+-                  RButton    : Scatter annotations                  -- 驱赶弹幕
 -                  MButton    : Delete hovered annots  -- 删除弹幕
--                  RButton    : Collect annotations                  -- 收集弹幕
   ALT            + LButton
 - CTRL           + LButton    : Capture annotations using rubberband -- 捕捉弹幕
                    LButton+RButton

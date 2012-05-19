@@ -20,11 +20,7 @@ AnnotationComboEdit::AnnotationComboEdit(QWidget *parent)
 void
 AnnotationComboEdit::createActions()
 {
-  editAct = new QAction(this); {
-    editAct->setText(TR(T_MENUTEXT_EDIT));
-    editAct->setToolTip(TR(T_TOOLTIP_EDIT));
-    connect(editAct, SIGNAL(triggered()), SLOT(edit()));
-  }
+  connect(editAct = new QAction(TR(T_MENUTEXT_EDIT), this), SIGNAL(triggered()), SLOT(edit()));
 }
 
 // - Properties -

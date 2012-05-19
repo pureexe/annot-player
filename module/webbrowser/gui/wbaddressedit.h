@@ -19,9 +19,9 @@ class WbAddressEdit : public WbComboEdit
 
 public:
   explicit WbAddressEdit(QWidget *parent = 0)
-    : Base(parent) { init(); }
+    : Base(parent), progress_(100) { init(); }
   explicit WbAddressEdit(const QStringList &items, QWidget *parent = 0)
-    : Base(items, parent) { init(); }
+    : Base(items, parent), progress_(100) { init(); }
 
 signals:
   void openUrlWithAcPlayerRequested(const QString &url);
@@ -29,12 +29,18 @@ signals:
   void openUrlWithAcDownloaderRequested(const QString &url);
   void openUrlWithOperatingSystemRequested(const QString &url);
 
+  // - Properties -
+public slots:
+  void setProgress(int value);
+
   // - Events -
 protected:
   virtual void wheelEvent(QWheelEvent *) { } ///< \override disabled
   virtual void contextMenuEvent(QContextMenuEvent *event); ///< \override
 
 protected slots:
+  void updatePalette();
+
   void enterText()
   {
     QString t = currentText().trimmed();
@@ -59,6 +65,7 @@ private:
   void createConnections();
 
 protected:
+  int progress_;
   QAction *openAddressWithAcPlayerAct_,
           *importAddressToAcPlayerAct_,
           *openAddressWithAcDownloaderAct_,

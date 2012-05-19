@@ -8,7 +8,6 @@
 #include "signalhub.h"
 #include "positionslider.h"
 #include "module/player/player.h"
-#include "module/animation/fadeanimation.h"
 #include "module/serveragent/serveragent.h"
 #include "module/qtext/datetime.h"
 #include "module/annotcloud/annotation.h"
@@ -81,7 +80,7 @@ PlayerUi::disconnectPlayer()
  // - Constructions -
 
 PlayerUi::PlayerUi(SignalHub *hub, Player *player, ServerAgent *server, QWidget *parent)
-  : Base(parent), hub_(hub), player_(player), server_(server), active_(false), fadeAni_(0)
+  : Base(parent), hub_(hub), player_(player), server_(server), active_(false)
 {
   Q_ASSERT(isValid());
 
@@ -230,14 +229,14 @@ void
 PlayerUi::setVisible(bool visible)
 {
   setActive(visible);
-  if (visible && !isVisible()) {
-    static qreal opacity = 0.0;
-    if (qFuzzyCompare(opacity + 1, 1))
-      opacity = windowOpacity();
-    if (!fadeAni_)
-      fadeAni_ = new FadeAnimation(this, "windowOpacity", this);
-    fadeAni_->fadeIn(opacity);
-  }
+  //if (visible && !isVisible()) {
+  //  static qreal opacity = 0.0;
+  //  if (qFuzzyCompare(opacity + 1, 1))
+  //    opacity = windowOpacity();
+  //  if (!fadeAni_)
+  //    fadeAni_ = new FadeAnimation(this, "windowOpacity", this);
+  //  fadeAni_->fadeIn(opacity);
+  //}
   Base::setVisible(visible);
 }
 

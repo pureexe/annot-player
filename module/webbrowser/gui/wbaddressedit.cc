@@ -23,30 +23,27 @@ WbAddressEdit::init()
 void
 WbAddressEdit::createActions()
 {
-  submitAct->setText(tr("Go to this address"));
-  submitAct->setStatusTip(tr("Go to this address"));
+  submitAct->setText(tr("Go to This Address"));
+  submitAct->setStatusTip(tr("Go to This Address"));
 
-  pasteAndGoAct->setText(tr("Paste and go"));
-  pasteAndGoAct->setStatusTip(tr("Paste and go"));
+  pasteAndGoAct->setText(tr("Paste and Go"));
+  pasteAndGoAct->setStatusTip(tr("Paste and Go"));
 
   openAddressWithAcPlayerAct_ = new QAction(this); {
     openAddressWithAcPlayerAct_->setIcon(QIcon(ACRC_IMAGE_PLAYER));
     openAddressWithAcPlayerAct_->setText(tr("Play with Annot Player"));
     openAddressWithAcPlayerAct_->setStatusTip(tr("Open with Annot Player"));
-    connect(openAddressWithAcPlayerAct_, SIGNAL(triggered()), SLOT(openWithAcPlayer()));
-  }
+  } connect(openAddressWithAcPlayerAct_, SIGNAL(triggered()), SLOT(openWithAcPlayer()));
   importAddressToAcPlayerAct_ = new QAction(this); {
     importAddressToAcPlayerAct_->setIcon(QIcon(WBRC_IMAGE_COMMENT));
-    importAddressToAcPlayerAct_->setText(tr("Import annotations to Annot Player"));
-    importAddressToAcPlayerAct_->setStatusTip(tr("Import annotations to Annot Player"));
-    connect(importAddressToAcPlayerAct_, SIGNAL(triggered()), SLOT(importToAcPlayer()));
-  }
+    importAddressToAcPlayerAct_->setText(tr("Import Annotations to Annot Player"));
+    importAddressToAcPlayerAct_->setStatusTip(tr("Import Annotations to Annot Player"));
+  } connect(importAddressToAcPlayerAct_, SIGNAL(triggered()), SLOT(importToAcPlayer()));
   openAddressWithAcDownloaderAct_ = new QAction(this); {
     openAddressWithAcDownloaderAct_->setIcon(QIcon(ACRC_IMAGE_DOWNLOADER));
     openAddressWithAcDownloaderAct_->setText(tr("Download with Annot Downloader"));
     openAddressWithAcDownloaderAct_->setStatusTip(tr("Open with Annot Downloader"));
-    connect(openAddressWithAcDownloaderAct_, SIGNAL(triggered()), SLOT(openWithAcDownloader()));
-  }
+  } connect(openAddressWithAcDownloaderAct_, SIGNAL(triggered()), SLOT(openWithAcDownloader()));
 
   openWithOperatingSystemAct_ = new QAction(this); {
     openWithOperatingSystemAct_->setText(tr("Open in System Default Browser"));
@@ -56,7 +53,10 @@ WbAddressEdit::createActions()
 
 void
 WbAddressEdit::createConnections()
-{ connect(this, SIGNAL(activated(int)), SLOT(submitText())); }
+{
+  connect(this, SIGNAL(activated(int)), SLOT(submitText()));
+  connect(this, SIGNAL(styleSheetChanged()), SLOT(updatePalette()));
+}
 
 // - Events -
 
@@ -68,7 +68,7 @@ WbAddressEdit::contextMenuEvent(QContextMenuEvent *event)
 
   QMenu *m = new QMenu(this);
 
-  MrlAnalysis::Site site = MrlAnalysis::matchSite(currentText().trimmed(), false); // href = false
+  int site = MrlAnalysis::matchSite(currentText().trimmed(), false); // href = false
 
   if (site) {
     m->addAction(openAddressWithAcPlayerAct_);
@@ -97,6 +97,36 @@ WbAddressEdit::contextMenuEvent(QContextMenuEvent *event)
   delete scm;
   delete m;
   event->accept();
+}
+
+// - Properties -
+
+void
+WbAddressEdit::setProgress(int value)
+{
+  if (progress_ != value) {
+    progress_ = value;
+    updatePalette();
+  }
+}
+
+void
+WbAddressEdit::updatePalette()
+{
+  if (progress_ == 100)
+    setStyleSheet(styleSheet());
+  else if (int w = width()) {
+#define X_INIT  0.1
+    qreal x = X_INIT + progress_ *((1 - X_INIT)/100.0);
+#undef X_INIT
+    QLinearGradient g(0, 0, w*x, 0); // horizental
+    g.setColorAt(0, Qt::transparent);
+    g.setColorAt(0.99, QColor(113, 201, 244, 180)); // #71c9f4
+    g.setColorAt(1, Qt::transparent);
+    QPalette p;
+    p.setBrush(QPalette::Base, g);
+    lineEdit()->setPalette(p);
+  }
 }
 
 // EOF

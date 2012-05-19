@@ -2,21 +2,18 @@
 # 6/18/2011
 
 http://db.tt/SrtkzxIJ
-cleanup_aoisora_movie
-zhouxingchi 115 mkv
-94 shediao & 2000 bishejian 115
 
 # server
 - move wiki to sakuradite
 - add shortcuts && gestures to googlecode and herlpwiki
 - JSP: add a list of highligh features
+- make wiki like JSP able to share annot/video URL
 - make twitter-like system in JSP
 
 # ideas
 - Windows 8
   touchpad with annotations
 - control annot in detail, point: more informable and expressable
-  - not only float, but other way
 - integrate with SNS
 
 - bridge with other asian culture like thai
@@ -32,45 +29,99 @@ zhouxingchi 115 mkv
         integrate SNS
         freedom, anntotate deathnote
 
-# 0.1.5.4
-- windows
-  - debug
-        * LeftButton + RightButton: Select annotations
-          LeftButton + MiddleButton: Remove annotations
-          MiddleButton + RightButton: Release annotations
-  - move magnifier just below mouse in windows by grabbing mouse location in qtwin
-  - enable magnifier on game mode
-    use desktop wid and globalpos
-- mac
-  - debug translation of menubar, such as preferences
+# 0.1.5.6
+- win7
+  - change build directory
+  - compile openssl with msvc 2010 myself
+    remove dependency on msvc 2008
+  - http://okolovich.info/compile-openssl-by-visual-studio-2010-express/
+  - update openssl toolchain
+- Windows XP
+  - FIXME SSL issue: browser cannot login to niconico
+  - FIXME: player flashing in coherence mode
+  - flashing in full screen mode!
+- mac/windows XP
+  - use round corner for acwindow, acmainwindow
+- Windows
+  - debug and select the same font as mac
+  - improve app icon
+- player
+  - able to resume in mms mode
+  - able to change font for annotation
+  - FIXME: resolve acfun youku dahuaxiyou
+    the second part always get banned
+  - improve app icon
+  - preferences
+    - make association changable
+  - able to seek anywhere
+- player
+  - add unsharp masking (USM) and exposure correction
+  See: http://stackoverflow.com/questions/2938162/how-does-an-unsharp-mask-work
+    http://www.ephotozine.com/article/how-to-remove-fog-from-a-photo-in-photoshop-14809
+  - play a movie, to figure out best value
+    for darknessremoval and fog removal
+   foggy: http://www.52hutu.com/show.aspx?ID=63243197086078125081
+   - add halo filter  for alpha
+  - finish magnifier
+- downloader
+  - change to use qtreeview to indicate connection status
+  - able to download normal file
+  - color diff type of task according to its state
+  - FIXME: downloading get banned
+    - sleep 5 seconds and try again
+  - finally, port downloader UI back to player for stream multiple files at the same time
+- player
+  - add icon for replay with sth like an undo icon
+  - mosaic deconvolution: CLEAN algorithm
+    http://en.wikipedia.org/wiki/CLEAN_(algorithm)
+    http://www.mrao.cam.ac.uk/yerac/gueth/gueth.html
+  - face recognition
+    http://www.morethantechnical.com/2009/03/05/qt-opencv-combined-for-face-detecting-qwidgets/
+    facedetect.c sample
+    use face recognition as the step to recognize real object
+  - add support for tudou
+- player
+  - rewrite makeActions
+  - Black UI stylesheet
+    http://thesmithfam.org/blog/2009/09/17/qt-stylesheets-button-bar-tutorial/
+- Windows
+  - improve annotation effects for game goei2
+
+- improve server
+  - use JSP and a simpler HTML5 webpage
+  - add SNS
+- ads
+  - acfun
+    - statistics
+    - annot manipulation
+    - annot time shift
+    - browser
+      - nicovideo
+      - youku
+    - youtube e.g. liuzhiqinmo
+    - mms
+  - nicovideo
 
 # client
-- mac
-  - rippleEffect
-    - reduce CPU usage by removing background image
-      - using scaling
+- windows
+  - migrate to ith3
+    inject.cc => ihf/main.cpp
+    pipe.cc => ihf_dll/pipe.cpp
 - player
-  - FIXME: downloading get banned
-  - win: debug and select the same font as mac
-    - improve feelings on Windows XP/7
-- downloader
-  - FIXME: only one file is saved at a time
+  - integrate with weibo/facebook
+  - stream multiple video at once
+  - link with weibo,facebook,twitter,mixi
+- browser
+  - change path of addressline to path like buttons
+- common
+  - learn the source code of ith's updater
 
 - android
   http://sourceforge.net/p/necessitas/wiki/How%20to%20write%20Qt%20apps%20for%20Android/
-- downloader
-  - change to use qtreeview to indicate connection status
-  - color diff type of task according to its state
-- browser
-  - show loading progress in addressedit using css
-  - change path of addressline to path like buttons
-  - debug connect link clicked signal to address
-  - save list of icons for recent files as well
-    qdatastream << qicon
 - player
+  - FIXME: pinch gesture not received
   - able to limit annotationgraphicsview position
     say, only a portion of the screen
-  - stream multiple video at once
 - downloader
   - download: add filesave location option in add.*dialog
     http://qt-project.org/doc/qt-4.8/qtreeview.html
@@ -80,21 +131,11 @@ zhouxingchi 115 mkv
     create non-related actions directly in menu
   - able to change audio channel
   - wait while diff filetype?
-  - reduce buffering time
-  - FIXME: pinch gesture not received
 - browser
   - merge webrowser module with browser project and accommon
   - FIXME: cannot play video on bilibili.tv
   - debug failure on no-internet state
   - auto login as settings
-- common
-  - preferences
-    - make association changable
-  - learn the source code of ith's updater
-- windows
-  - migrate to ith3
-    inject.cc => ihf/main.cpp
-    pipe.cc => ihf_dll/pipe.cpp
 - linux
   - FIXME: full screen issue
   - FIXME: mouse click behavior in osd mode

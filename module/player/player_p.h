@@ -32,7 +32,11 @@ extern "C" {
 // http://wiki.videolan.org/VLC_command-line_help
 
 #define APP_PLUGIN_PATH QCoreApplication::applicationDirPath() + "/plugins"
-#define APP_DATA_PATH QCoreApplication::applicationDirPath() + "/share"
+#ifdef Q_WS_WIN
+#  define APP_DATA_PATH QCoreApplication::applicationDirPath()
+#else
+#  define APP_DATA_PATH QCoreApplication::applicationDirPath() + "/share"
+#endif // Q_WS_WIN
 
 #define _qs(cs) QString::fromAscii((cs))
 #define _cs(qs) (qs).toAscii()    // toLocal8Bit is not recognized by VLC
@@ -42,11 +46,11 @@ namespace { // anonymous
   inline
   QByteArray vlcpath(const QString &path)
   {
-#ifdef Q_OS_WIN
+#ifdef Q_WS_WIN
     return _cs(QString(path).replace("/", "\\"));
 #else
     return _cs(path);
-#endif // Q_OS_WIN
+#endif // Q_WS_WIN
   }
 
   inline void vlc_reset_env()
@@ -65,7 +69,7 @@ namespace { // anonymous
     static std::auto_ptr<char> auto_release_pool;
     char *ret = auto_release_pool.get();
     if (!ret) {
-      QString path = APP_PLUGIN_PATH;
+      QString path = vlcpath(APP_PLUGIN_PATH);
       int n = path.size() + 1;
       ret = new char[n];
       ::strncpy(ret, _cs(path), n); // use strncpy instead of strcpy in case sth goes wrong
@@ -79,7 +83,7 @@ namespace { // anonymous
     static std::auto_ptr<char> auto_release_pool;
     char *ret = auto_release_pool.get();
     if (!ret) {
-      QString path = APP_DATA_PATH;
+      QString path = vlcpath(APP_DATA_PATH);
       int n = path.size() + 1;
       ret = new char[n];
       ::strncpy(ret, _cs(path), n); // use strncpy instead of strcpy in case sth goes wrong
@@ -106,14 +110,12 @@ namespace { // anonymous
 // http://forums.techarena.in/windows-software/1403280.htm
 //#define VLC_ARGS_MAC            "--vout=minimal_macosx", "--opengl-provider=minimal_macosx"
 //#define VLC_ARGS_MAC            "--opengl-provider=minimal_macosx"
-#define VLC_ARGS_MAC            VLC_ARGS_NULL // use default macosx filter
-#ifdef Q_OS_MAC
-  #define VLC_ARGS_OS \
-    VLC_ARGS_DATA_PATH, \
-    VLC_ARGS_MAC
+//#define VLC_ARGS_MAC            VLC_ARGS_NULL // use default macosx filter
+#ifdef Q_WS_MAC
+#  define VLC_ARGS_OS           VLC_ARGS_DATA_PATH
 #else
-  #define VLC_ARGS_OS           VLC_ARGS_NULL
-#endif // Q_OS
+#  define VLC_ARGS_OS           VLC_ARGS_NULL
+#endif // Q_WS_MAC
 
 #define VLC_ARGS_RELEASE \
   VLC_ARGS_CONFIG, \
@@ -200,19 +202,23 @@ namespace { // anonymous: vlc handle
           ::libvlc_media_release(m);
     if (media_)
       ::libvlc_media_release(media_);
+#ifdef WITH_MODULE_VLCCORE
+    VlcHttpPlugin::unload();
+#endif // WITH_MODULE_VLCCORE
     if (player_) {
       ::libvlc_media_player_set_media(player_, 0);
       ::libvlc_media_player_release(player_);
-    } if (instance_)
+    }
+    if (instance_)
       ::libvlc_release(instance_);
   }
 
   inline void
   mp_handle_::reset()
   {
-#ifdef Q_OS_MAC
+#ifdef Q_WS_MAC
     ::vlc_reset_env();
-#endif // Q_OS_MAC
+#endif // Q_WS_MAC
 
     if (!media_list_.isEmpty()) {
       foreach (libvlc_media_t *m, media_list_)

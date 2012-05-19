@@ -27,7 +27,7 @@ using namespace Logger;
   Qt::WindowStaysOnTopHint)
 
 TokenView::TokenView(ServerAgent *server, QWidget *parent)
-  : Base(parent, WINDOW_FLAGS), server_(server)
+  : Base(parent, WINDOW_FLAGS), server_(server), contextMenu_(0)
 {
   Q_ASSERT(server_);
   setWindowTitle(TR(T_TITLE_TOKENVIEW));
@@ -51,9 +51,6 @@ TokenView::TokenView(ServerAgent *server, QWidget *parent)
   connect(aliasDialog_, SIGNAL(aliasAdded(QString,int,qint32)), SLOT(submitAlias(QString,int,qint32)));
 
   createLayout();
-
-  // Create context menu
-  createActions();
 
   // Set initial states
 
@@ -144,21 +141,14 @@ TokenView::setAliasHeaderData(QAbstractItemModel *model)
 }
 
 void
-TokenView::createActions()
+TokenView::createContextMenu()
 {
-#define MAKE_ACTION(_action, _styleid, _slot) \
-  _action = new QAction(QIcon(RC_IMAGE_##_styleid), TR(T_MENUTEXT_##_styleid), this); \
-  _action->setToolTip(TR(T_TOOLTIP_##_styleid)); \
-  connect(_action, SIGNAL(triggered()), _slot);
-
-  MAKE_ACTION(copyAliasAct_,  COPY,  SLOT(copyAlias()))
-  MAKE_ACTION(deleteAliasAct_,DELETE,SLOT(deleteAlias()))
-
-#undef MAKE_ACTION
-
   // Create menus
-  contextMenu_ = new QMenu(TR(T_TITLE_TOKENVIEW), this);
+  contextMenu_ = new QMenu(this);
   AcUi::globalInstance()->setContextMenuStyle(contextMenu_, true); // persistent = true
+
+  copyAliasAct_ = contextMenu_->addAction(TR(T_COPY), this, SLOT(copyAlias()));
+  deleteAliasAct_ = contextMenu_->addAction(TR(T_DELETE), this, SLOT(deleteAlias()));
 }
 
 // - Properties -
@@ -486,20 +476,15 @@ TokenView::copyAlias()
 void
 TokenView::contextMenuEvent(QContextMenuEvent *event)
 {
-  if (!event)
-    return;
   if (!currentIndex().isValid())
     return;
 
-  contextMenu_->clear();
-
-  contextMenu_->addAction(copyAliasAct_);
+  if (!contextMenu_)
+    createContextMenu();
 
   qint64 userId = server_->user().id();
-  if (userId && userId == currentAliasUserId())
-    contextMenu_->addAction(deleteAliasAct_);
+  deleteAliasAct_->setVisible(userId && userId == currentAliasUserId());
 
-  // Pop up
   contextMenu_->popup(event->globalPos());
   event->accept();
 }

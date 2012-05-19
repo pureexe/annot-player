@@ -55,6 +55,7 @@ public:
   bool aliasConflicts(const Alias &a) const;
 
   int userCount() const { return userAnnotCount_.size(); }
+  int annotationCountForUserId(qint64 uid) const;
   qint64 minAnnotationCreateTime() const { return minAnnotTime_; }
   qint64 maxAnnotationCreateTime() const { return maxAnnotTime_; }
 

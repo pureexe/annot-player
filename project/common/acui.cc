@@ -106,26 +106,29 @@ void
 AcUi::setBlackBackground(QWidget *w)
 {
   Q_ASSERT(w);
-  if (w) {
-    w->ensurePolished();
-    w->setPalette(Qt::black);
-  }
+  w->ensurePolished();
+  w->setPalette(Qt::black);
+}
+
+void
+AcUi::removeWindowBackground(QWidget *w)
+{
+  Q_ASSERT(w);
+  w->setPalette(QPalette());
+  windows_.removeAll(w);
 }
 
 void
 AcUi::setWindowBackground(QWidget *w, bool persistent)
 {
   Q_ASSERT(w);
-  if (!w)
-    return;
-
   const char *rc = backgroundImage();
 
-  QPalette palette;
-  palette.setBrush(QPalette::Window, QPixmap(rc));
+  QPalette p;
+  p.setBrush(QPalette::Window, QPixmap(rc));
 
   w->ensurePolished(); // must appear before setPalette to flush window manager, or system theme would override backgroud
-  w->setPalette(palette);
+  w->setPalette(p);
 
   if (persistent) {
     if (!windows_.contains(w))
@@ -213,8 +216,6 @@ void
 AcUi::setWindowStyle(QWidget *w, bool persistent)
 {
   Q_ASSERT(w);
-  if (!w)
-    return;
 
   //w->setGraphicsEffect(new QGraphicsBlurEffect(w));
 
@@ -285,7 +286,7 @@ void
 AcUi::setContextMenuStyle(QMenu *w, bool persistent)
 {
   Q_ASSERT(w);
-  if (!w || !menu_)
+  if (!menu_)
     return;
 
 #ifdef WITH_WIN_DWM
@@ -335,11 +336,11 @@ void
 AcUi::setStatusBarStyle(QStatusBar *w)
 {
   Q_ASSERT(w);
-  if (!w)
-    return;
 #ifdef WITH_WIN_DWM
   if (isAeroEnabled())
     w->setStyleSheet(SS_STATUSBAR_DWM);
+#else
+  Q_UNUSED(w);
 #endif // WITH_WIN_DWM
 }
 

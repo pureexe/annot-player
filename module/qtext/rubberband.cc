@@ -95,7 +95,8 @@ QtExt::
 MouseRubberBand::cancel()
 {
   hide();
-  QApplication::setOverrideCursor(Qt::ArrowCursor);
+  if (QApplication::overrideCursor())
+    QApplication::restoreOverrideCursor();
   pressed_ = QPoint();
 }
 

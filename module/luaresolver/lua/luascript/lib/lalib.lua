@@ -528,7 +528,7 @@ function getRealUrls_youku (str_id, str_tmpfile, pDlg)
 	local now = os.time();
 	math.randomseed(now);
     local rand = math.random(10000); -- four digits
-	local str_dynurl = "http://v.youku.com/player/getPlayList/VideoIDS/"..str_id.."/timezone/+08/version/5/source/video?password=&ran="..rand.."&n=3";
+	local str_dynurl = "http://v.youku.com/player/getPlayList/VideoIDS/"..str_id.."/timezone/+09/version/5/source/video?password=&ran="..rand.."&n=3";
 	--dbgMessage(str_dynurl);
 	if pDlg~=nil then
 		sShowMessage(pDlg, '正在读取转接页面..');

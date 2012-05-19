@@ -7,7 +7,7 @@ DEFINES += WITH_MODULE_BLOCKIODEVICE
 
 DEPENDPATH += $$PWD
 
-win32: INCLUDEPATH += $$WDK_HOME/include/api
+win32: INCLUDEPATH += $$WDK_HOME/inc/api
 
 HEADERS += $$PWD/blockiodevice.h
 SOURCES += $$PWD/blockiodevice.cc

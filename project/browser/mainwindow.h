@@ -13,6 +13,7 @@ class AcPlayer;
 class AcDownloader;
 class AcConsole;
 class FadeAnimation;
+class Magnifier;
 
 class MainWindow: public WebBrowser
 {
@@ -25,6 +26,7 @@ class MainWindow: public WebBrowser
   AcPlayer *playerDelegate_;
   AcDownloader *downloaderDelegate_;
   AcConsole * console_;
+  Magnifier *magnifier_;
 
   QTimer *autoHideToolBarTimer_;
 
@@ -79,7 +81,9 @@ protected:
 
 protected slots:
   void showConsole();
+  void toggleMagnifier();
   void autoHideToolBar();
+
 
   // - Helpers -
   bool isValidWindowSize(const QSize &sz) const;

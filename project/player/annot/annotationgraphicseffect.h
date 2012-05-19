@@ -4,14 +4,14 @@
 // annotationgraphicseffect.h
 // 5/3/2012
 
-#include "module/graphicseffect/graphicshaloeffect.h"
+#include "module/graphicseffect/graphicsshadoweffect.h"
 
-class AnnotationGraphicsEffect : public GraphicsHaloEffect
+class AnnotationGraphicsEffect : public GraphicsShadowEffect
 {
   Q_OBJECT
   Q_DISABLE_COPY(AnnotationGraphicsEffect)
   typedef AnnotationGraphicsEffect Self;
-  typedef GraphicsHaloEffect Base;
+  typedef GraphicsShadowEffect Base;
 
 public:
   explicit AnnotationGraphicsEffect(QObject *parent = 0);

@@ -47,6 +47,13 @@ DataManager::removeAliasWithId(qint64 id)
 
 // - Annotation -
 
+int
+DataManager::annotationCountForUserId(qint64 uid) const
+{
+  BOOST_AUTO(p, userAnnotCount_.find(uid));
+  return p == userAnnotCount_.end() ? 0 : p.value();
+}
+
 void
 DataManager::invalidateAnnotations()
 {

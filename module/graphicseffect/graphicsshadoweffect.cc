@@ -1,18 +1,20 @@
-// graphicshaloeffect.cc
+// graphicsshadoweffect.cc
 // 5/3/2012
-#include "module/graphicseffect/graphicshaloeffect.h"
+#include "module/graphicseffect/graphicsshadoweffect.h"
 //#ifdef WITH_MODULE_PIXMAPFILTER
-//#  include "module/pixmapfilter/pixmaphalofilter.h"
+//#  include "module/pixmapfilter/pixmapshadowfilter.h"
 //#else
 //#  error "pixmapfilter module is required"
 //#endif // WITH_MODULE_PIXMAPFILTER
 //#include <QtGui/QPaintEngine>
 #include <QtGui/QPainter>
+#include <QtGui/QPixmap>
+#include <QtGui/QImage>
 
 // - Properties -
 
 void
-GraphicsHaloEffect::setOpacity(qreal opacity)
+GraphicsShadowEffect::setOpacity(qreal opacity)
 {
   if (!qFuzzyCompare(opacity, opacity_)) {
     opacity_ = opacity;
@@ -24,7 +26,7 @@ GraphicsHaloEffect::setOpacity(qreal opacity)
 // - Draw -
 
 void
-GraphicsHaloEffect::draw(QPainter *painter)
+GraphicsShadowEffect::draw(QPainter *painter)
 {
   if (!qFuzzyCompare(opacity_, 1))
     painter->setOpacity(opacity_);
@@ -53,18 +55,18 @@ GraphicsHaloEffect::draw(QPainter *painter)
 // EOF
 
 /*
-GraphicsHaloEffect::GraphicsHaloEffect(QObject *parent)
+GraphicsShadowEffect::GraphicsShadowEffect(QObject *parent)
   : Base(parent), opacity_(1.0)
-{ filter_ = new PixmapHaloFilter(this); }
+{ filter_ = new PixmapShadowFilter(this); }
 
 // - Properties -
 
 QPointF
-GraphicsHaloEffect::offset() const
+GraphicsShadowEffect::offset() const
 { return filter_->offset(); }
 
 void
-GraphicsHaloEffect::setOffset(const QPointF &offset)
+GraphicsShadowEffect::setOffset(const QPointF &offset)
 {
   if (filter_->offset() != offset) {
     filter_->setOffset(offset);
@@ -74,11 +76,11 @@ GraphicsHaloEffect::setOffset(const QPointF &offset)
 }
 
 qreal
-GraphicsHaloEffect::blurRadius() const
+GraphicsShadowEffect::blurRadius() const
 { return filter_->blurRadius(); }
 
 void
-GraphicsHaloEffect::setBlurRadius(qreal blurRadius)
+GraphicsShadowEffect::setBlurRadius(qreal blurRadius)
 {
   if (!qFuzzyCompare(filter_->blurRadius(), blurRadius)) {
     filter_->setBlurRadius(blurRadius);
@@ -88,11 +90,11 @@ GraphicsHaloEffect::setBlurRadius(qreal blurRadius)
 }
 
 QColor
-GraphicsHaloEffect::color() const
+GraphicsShadowEffect::color() const
 { return filter_->color(); }
 
 void
-GraphicsHaloEffect::setColor(const QColor &color)
+GraphicsShadowEffect::setColor(const QColor &color)
 {
   if (filter_->color() != color) {
     filter_->setColor(color);
@@ -102,7 +104,7 @@ GraphicsHaloEffect::setColor(const QColor &color)
 }
 
 QRectF
-GraphicsHaloEffect::boundingRectFor(const QRectF &rect) const
+GraphicsShadowEffect::boundingRectFor(const QRectF &rect) const
 { return filter_->boundingRectFor(rect); }
 
 */

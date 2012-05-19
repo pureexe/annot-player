@@ -11,6 +11,9 @@
 #ifdef WITH_MODULE_QT
 #  include "module/qt/qtrc.h"
 #endif // WITH_MODULE_QT
+#ifdef Q_WS_WIN
+#  include "win/qtwin/qtwin.h"
+#endif // Q_WS_WIN
 #include <QtWebKit/QWebSettings>
 //#include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkProxy>
@@ -183,8 +186,6 @@ main(int argc, char *argv[])
   //  new QNetworkAccessManager(&a)
   //);
 
-  DOUT("make mainwindow");
-
   QStringList args = a.arguments();
   if (args.size() > 1) {
     args.removeFirst();
@@ -194,6 +195,7 @@ main(int argc, char *argv[])
     settings->setRecentTabIndex(urls.size() - 1);
   }
 
+  DOUT("create mainwindow");
   MainWindow *w = new MainWindow; {
     //QTimer::singleShot(0, w, SLOT(login()));
     //w->login();

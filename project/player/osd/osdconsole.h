@@ -66,13 +66,11 @@ protected:
   */
 
 private:
-  void createActions();
-  void createMenus();
-
-  QMenu *contextMenu_;
-  QAction *enableAutoClearAct_;
-  QAction *disableAutoClearAct_;
-
+  //void createActions();
+  //void createMenus();
+  //QMenu *contextMenu_;
+  //QAction *enableAutoClearAct_;
+  //QAction *disableAutoClearAct_;
 };
 
 // Default global console. Global instance must be set before invoke this function.

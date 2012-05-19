@@ -64,13 +64,13 @@ namespace { // anonymous
   Qt::WindowCloseButtonHint )
 
 ProcessView::ProcessView(QWidget *parent)
-  : Base(parent, WINDOW_FLAGS)
+  : Base(parent, WINDOW_FLAGS), contextMenu_(0)
 {
   setWindowTitle(tr("Process view"));
 
   createModel();
   createLayout();
-  createActions();
+  //createActions();
 
   // Set initial states
   tableView_->sortByColumn(HD_Status, Qt::DescendingOrder);
@@ -136,24 +136,17 @@ ProcessView::setProcessHeaderData(QAbstractItemModel *model)
 }
 
 void
-ProcessView::createActions()
+ProcessView::createContextMenu()
 {
-#define MAKE_ACTION(_action, _styleid, _slot) \
-  _action = new QAction(QIcon(RC_IMAGE_##_styleid), TR(T_MENUTEXT_##_styleid), this); \
-  _action->setToolTip(TR(T_TOOLTIP_##_styleid)); \
-  connect(_action, SIGNAL(triggered()), _slot);
-
-  MAKE_ACTION(attachAct_,  ATTACHPROCESS, SLOT(detachProcess()))
-  MAKE_ACTION(detachAct_,  DETACHPROCESS, SLOT(detachProcess()))
-  MAKE_ACTION(refreshAct_, REFRESHPROCESS, SLOT(refresh()))
-
-#undef MAKE_ACTION
-
   // Create menus
   contextMenu_ = new QMenu(windowTitle(), this);
   AcUi::globalInstance()->setContextMenuStyle(contextMenu_, true); // persistent = true
-}
 
+  attachAct_ = contextMenu_->addAction(TR(T_MENUTEXT_ATTACHPROCESS), this, SLOT(attachProcess()));
+  detachAct_ = contextMenu_->addAction(TR(T_MENUTEXT_DETACHPROCESS), this, SLOT(detachProcess()));
+  contextMenu_->addSeparator();
+  refreshAct_ = contextMenu_->addAction(TR(T_MENUTEXT_REFRESHPROCESS), this, SLOT(refresh()));
+}
 
 // - Properties -
 
@@ -180,12 +173,12 @@ ProcessView::currentPid() const
 ulong
 ProcessView::attachedPid() const
 {
-  QList<QStandardItem*> items =
+  QList<QStandardItem *> items =
       sourceModel_->findItems(TR(T_ATTACHED), Qt::MatchExactly, HD_Status);
   if (items.empty())
     return 0;
 
-  QStandardItem *item = items.front();
+  QStandardItem *item = items.first();
   item = sourceModel_->item(item->row(), HD_Pid);
   if (!item)
     return 0;
@@ -218,7 +211,7 @@ ProcessView::invalidateSourceModel(bool showAll)
 
   clear();
 
-  foreach (QtWin::ProcessInfo wpi, QtWin::getProcessesInfo()) {
+  foreach (const QtWin::ProcessInfo &wpi, QtWin::getProcessesInfo()) {
     ulong pid = wpi.id;
     QString name;
     QString folder;
@@ -370,25 +363,14 @@ ProcessView::setVisible(bool t)
 void
 ProcessView::contextMenuEvent(QContextMenuEvent *event)
 {
-  if (!event)
-    return;
-
-  contextMenu_->clear();
-
-  if (currentIndex().isValid()) {
-
-    if (attachButton_->isEnabled())
-      contextMenu_->addAction(attachAct_);
-
-    if (detachButton_->isEnabled())
-      contextMenu_->addAction(detachAct_);
-
-    contextMenu_->addSeparator();
-  }
-
-  contextMenu_->addAction(refreshAct_);
+  if (!contextMenu_)
+    createContextMenu();
+  bool v = currentIndex().isValid();
+  attachAct_->setVisible(v && attachButton_->isEnabled());
+  detachAct_->setVisible(v && detachButton_->isEnabled());
 
   contextMenu_->popup(event->globalPos());
+  event->accept();
 }
 
 // EOF

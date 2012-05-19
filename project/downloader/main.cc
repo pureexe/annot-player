@@ -189,7 +189,7 @@ main(int argc, char *argv[])
   //  new QNetworkAccessManager(&a)
   //);
 
-  DOUT("make mainwindow");
+  DOUT("create mainwindow");
   MainWindow w;
   a.setMainWindow(&w);
 

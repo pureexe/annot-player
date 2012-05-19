@@ -12,13 +12,14 @@
 
 QT_FORWARD_DECLARE_CLASS(QTimer)
 
-class SignalHub;
-class Player;
-class VideoView;
 class AnnotationGraphicsItem;
 class AnnotationGraphicsItemPool;
 class AnnotationEditor;
 class AnnotationFilter;
+class DataManager;
+class Player;
+class SignalHub;
+class VideoView;
 
 ///  An interactive shadow view.
 class AnnotationGraphicsView : public QGraphicsView, public QtExt::EventListener
@@ -47,7 +48,7 @@ public:
 
   // - Constructions -
 public:
-  AnnotationGraphicsView(SignalHub *hub, Player *player, VideoView *videoView, QWidget *parent = 0);
+  AnnotationGraphicsView(SignalHub *hub, DataManager *data, Player *player, VideoView *videoView, QWidget *parent = 0);
   //~AnnotationGraphicsView();
 
   // - Properties -
@@ -65,6 +66,7 @@ public:
   bool isNonSubtitleVisible() const { return nonSubtitleVisible_; }
 
 signals:
+  void itemMetaVisibleChanged(bool t);
   void selectedUserId(qint64 uid);
   void selectedUserIds(const QList<qint64> &ids);
   void hoveredItemPausedChanged(bool t);
@@ -215,7 +217,12 @@ public:
   bool isHoveredItemRemoved() const { return hoveredItemRemoved_; }
   bool isNearbyItemExpelled() const { return nearbyItemExpelled_; }
   bool isNearbyItemAttracted() const { return nearbyItemAttracted_; }
+
+  bool isItemMetaVisible() { return metaVisible_; }
+
 public slots:
+  void setItemMetaVisible(bool visible)
+  { if (metaVisible_ != visible) emit itemMetaVisibleChanged(metaVisible_ = visible); }
 
   void setItemVisible(bool visible)
   { emit itemVisibleChanged( itemVisible_ = visible); }
@@ -295,7 +302,7 @@ public slots:
   void addAnnotation(const Annotation &annot, qint64 delaysecs = 1);
   void addAndShowAnnotation(const Annotation &annot); ///< a shortcut for above with LLONG_MAX
   ///  Display without add annotation.
-  void showAnnotation(const Annotation &annot);
+  void showAnnotation(const Annotation &annot, bool showMeta = true);
   void addAnnotations(const AnnotationList &annots);
   void setAnnotations(const AnnotationList &annots);
   void showAnnotationOnce(const Annotation &annot);
@@ -328,6 +335,7 @@ private:
   WId trackedWindow_;
   AnnotationEditor *editor_;
   SignalHub *hub_;
+  DataManager *data_;
   Player *player_;
   AnnotationFilter *filter_;
   RenderHint renderHint_;
@@ -335,6 +343,7 @@ private:
   bool paused_;
   bool fullScreen_;
   bool subtitleVisible_, nonSubtitleVisible_;
+  bool metaVisible_;
 
   QString subtitlePrefix_;
 

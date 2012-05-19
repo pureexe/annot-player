@@ -31,7 +31,7 @@ public:
   { init(); }
 
 public:
-  enum Site { UnknownSite = 0, Acfun = 1, Nicovideo = 2, Bilibili = 3 };
+  enum Site { UnknownSite = 0, Acfun = 1, Nicovideo = 2, Bilibili = 3, Tudou = 4 };
 
   bool resolve(const QString &href,
                int *siteid = 0,
@@ -80,8 +80,8 @@ private:
   static void printLastError(lua_State *L);
   static void appendLuaPath(lua_State *L, const QString &path);
   static QString decodeTitle(const char *text, int siteId);
+  static QString decodeText(const char *text, const char *encoding);
   //static QString decodeUrl(const QString &url, const QString &href);
-  //static QString decodeText(const char *text, const char *encoding);
   //static void hackCookieJar(QNetworkCookieJar *jar);
 };
 

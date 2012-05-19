@@ -40,12 +40,14 @@ using namespace Logger;
 
 AnnotationGraphicsView::AnnotationGraphicsView(
   SignalHub *hub,
+  DataManager *data,
   Player *player,
   VideoView *view,
   QWidget *parent)
   : Base(parent), videoView_(view), fullScreenView_(0), trackedWindow_(0), editor_(0),
-    hub_(hub), player_(player), filter_(0), renderHint_(DefaultRenderHint), active_(false), paused_(false), fullScreen_(false),
-    subtitleVisible_(true), nonSubtitleVisible_(true),
+    hub_(hub), data_(data), player_(player),
+    filter_(0), renderHint_(DefaultRenderHint), active_(false), paused_(false), fullScreen_(false),
+    subtitleVisible_(true), nonSubtitleVisible_(true), metaVisible_(false),
     currentTime_(-1), offset_(0), interval_(TIMER_INTERVAL), userId_(0), playbackEnabled_(true), subtitlePosition_(AP_Bottom),
     scale_(1.0), rotation_(0),
     hoveredItemPaused_(false), hoveredItemResumed_(false), hoveredItemRemoved_(false), nearbyItemExpelled_(false), nearbyItemAttracted_(false),
@@ -69,7 +71,7 @@ AnnotationGraphicsView::AnnotationGraphicsView(
   QGraphicsScene *scene = new QGraphicsScene(this);
   setScene(scene);
 
-  pool_ = new AnnotationGraphicsItemPool(this, hub_, this);
+  pool_ = new AnnotationGraphicsItemPool(this, data_, hub_, this);
   pool_->reserve(40);
 
   timer_ = new QTimer(this);
@@ -747,10 +749,11 @@ AnnotationGraphicsView::addAndShowAnnotation(const Annotation &annot)
 { addAnnotation(annot, LLONG_MAX); }
 
 void
-AnnotationGraphicsView::showAnnotation(const Annotation &annot)
+AnnotationGraphicsView::showAnnotation(const Annotation &annot, bool showMeta)
 {
   if (!isAnnotationBlocked(annot)) {
     AnnotationGraphicsItem *item = pool_->allocate();
+    item->setMetaVisible(isItemMetaVisible() && showMeta);
     item->setAnnotation(annot);
     if (!isItemBlocked(item))
       item->showMe();

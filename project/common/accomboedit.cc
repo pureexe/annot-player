@@ -33,21 +33,12 @@ AcComboEdit::init()
 void
 AcComboEdit::createActions()
 {
-  popupAct = new QAction(this); {
-    popupAct->setText(tr("History"));
-    popupAct->setToolTip(tr("History"));
-    connect(popupAct, SIGNAL(triggered()), SLOT(showPopup()));
-  }
-  clearAct = new QAction(this); {
-    clearAct->setText(tr("Clear"));
-    clearAct->setToolTip(tr("Clear"));
-    connect(clearAct, SIGNAL(triggered()), SLOT(reset()));
-  }
-  pasteAndGoAct = new QAction(this); {
-    pasteAndGoAct->setText(tr("Paste and go"));
-    pasteAndGoAct->setToolTip(tr("Paste and go"));
-    connect(pasteAndGoAct, SIGNAL(triggered()), SLOT(pasteAndGo()));
-  }
+  connect(popupAct = new QAction(tr("History"), this),
+          SIGNAL(triggered()), SLOT(showPopup()));
+  connect(clearAct = new QAction(tr("Clear"), this),
+          SIGNAL(triggered()), SLOT(reset()));
+  connect(pasteAndGoAct = new QAction(tr("Paste and Go"), this),
+          SIGNAL(triggered()), SLOT(pasteAndGo()));
 }
 
 // - Actions -

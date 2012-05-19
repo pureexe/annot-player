@@ -102,6 +102,7 @@ public slots:
 
 protected:
   virtual void contextMenuEvent(QContextMenuEvent *event); ///< \override
+  void updateContextMenu();
 
 protected slots:
   virtual void dragEnterEvent(QDragEnterEvent *event); ///< \override
@@ -142,7 +143,7 @@ public:  // TO BE MOVED TO A COMMON PLACE
 private:
   void createModel();
   void createLayout();
-  void createActions();
+  void createContextMenu();
 
   AnnotationEditor *editor() const;
 
@@ -171,7 +172,7 @@ private:
           *blessAnnotAct_,
           *curseAnnotAct_;
 
-  QAction *viewUserAct_,
+  QAction //*viewUserAct_,
           *blockUserAct_;
 };
 

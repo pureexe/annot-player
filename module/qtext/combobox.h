@@ -5,7 +5,6 @@
 // 10/7/2011
 
 #include <QtGui/QComboBox>
-#include <QtGui/QCursor>
 
 namespace QtExt {
 
@@ -16,23 +15,10 @@ class ComboBox : public QComboBox
   typedef ComboBox Self;
   typedef QComboBox Base;
 
-  bool hovered_;
-  QCursor hoverCursor_,
-          lastCursor_;
-
 public:
   explicit ComboBox(QWidget *parent = 0);
 
-signals:
-  void hovered();
-  void leaved();
-
-public:
-  bool isHovered() const { return hovered_; }
-  QCursor hoverCursor() const { return hoverCursor_; }
 public slots:
-  void setHoverCursor(const QCursor &cursor) { hoverCursor_ = cursor; }
-
   virtual void showPopup() { Base::showPopup(); } ///< \override
   virtual void hidePopup() { clearFocus(); Base::hidePopup(); } ///< \override
 

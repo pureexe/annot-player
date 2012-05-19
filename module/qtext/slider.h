@@ -5,7 +5,6 @@
 // 8/6/2011
 
 #include <QtGui/QSlider>
-#include <QtGui/QCursor>
 
 namespace QtExt {
 
@@ -17,25 +16,15 @@ class Slider : public QSlider
   typedef QSlider Base;
 
   bool hovered_;
-  QCursor hoverCursor_,
-          lastCursor_;
 
 public:
   explicit Slider(QWidget *parent = 0)
-    : Base(parent), hovered_(false), hoverCursor_(Qt::PointingHandCursor) { }
+    : Base(parent), hovered_(false) { }
   explicit Slider(Qt::Orientation orientation, QWidget *parent = 0)
-    : Base(orientation, parent), hovered_(false), hoverCursor_(Qt::PointingHandCursor) { }
+    : Base(orientation, parent), hovered_(false) { }
 
+public:
   bool isHovered() const { return hovered_; }
-
-  QCursor hoverCursor() const { return hoverCursor_; }
-
-public slots:
-  void setHoverCursor(const QCursor &cursor) { hoverCursor_ = cursor; }
-
-signals:
-  void hovered();
-  void leaved();
 
   // - Events -
 protected:

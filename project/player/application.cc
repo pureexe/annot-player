@@ -16,7 +16,7 @@
 // - Construction -
 
 Application::Application(int &argc, char **argv)
-  : Base(argc, argv)
+  : Base(argc, argv), cursor_(Qt::ArrowCursor)
 {
   DOUT("enter");
   setOrganizationDomain(G_DOMAIN);
@@ -57,6 +57,20 @@ Application::createDirectories()
   QDir logs(G_PATH_LOGS);
   if (!logs.exists())
     logs.mkpath(logs.absolutePath());
+}
+
+// - Properties -
+
+void
+Application::setCursor(Qt::CursorShape cursor)
+{
+  if (cursor_ != cursor) {
+    if (overrideCursor())
+      restoreOverrideCursor();
+    cursor_ = cursor;
+    if (cursor_ != Qt::ArrowCursor)
+      setOverrideCursor(cursor_);
+  }
 }
 
 // EOF

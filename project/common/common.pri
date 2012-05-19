@@ -16,6 +16,7 @@ HEADERS += \
     $$PWD/acfilteredlistview.h \
     $$PWD/acfilteredtableview.h \
     $$PWD/acglobal.h \
+    $$PWD/achorizontalslider.h \
     $$PWD/acipc.h \
     $$PWD/aclineedit.h \
     $$PWD/aclocationprefs_p.h \
@@ -45,6 +46,7 @@ SOURCES += \
     $$PWD/acdownloader.cc \
     $$PWD/acfilteredlistview.cc \
     $$PWD/acfilteredtableview.cc \
+    $$PWD/achorizontalslider.cc \
     $$PWD/acipc.cc \
     $$PWD/aclineedit.cc \
     $$PWD/aclocationprefs_p.cc \

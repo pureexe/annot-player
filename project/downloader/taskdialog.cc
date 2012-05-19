@@ -218,10 +218,11 @@ TaskDialog::formatUrl(const QString &url)
   else if (!ret.startsWith("http://", Qt::CaseInsensitive))
     ret.prepend("http://");
 
-  ret.remove(QRegExp("#$"));
-  ret.replace(QRegExp("/index.html$", Qt::CaseInsensitive), "/");
-  ret.replace(QRegExp("/index_1.html$", Qt::CaseInsensitive), "/");
-  ret.replace(QRegExp("/#$"), "/");
+  ret.remove(QRegExp("#$"))
+     .remove(QRegExp("#titles$"))
+     .replace(QRegExp("/index.html$", Qt::CaseInsensitive), "/")
+     .replace(QRegExp("/index_1.html$", Qt::CaseInsensitive), "/")
+     .replace(QRegExp("/#$"), "/");
   return ret;
 }
 

@@ -1,11 +1,12 @@
-// googlevideomrlresolver.cc
+// dummygooglevideomrlresolver.cc
 // 2/2/2012
 
-#include "module/mrlresolver/googlevideomrlresolver.h"
+#include "module/mrlresolver/dummygooglevideomrlresolver.h"
+#include "module/mrlanalysis/mrlanalysis.h"
 #include <QtCore/QUrl>
 #include <cstdlib>
 
-//#define DEBUG "googlevideomrlresolver"
+//#define DEBUG "dummygooglevideomrlresolver"
 #include "module/debug/debug.h"
 
 // See: lua/playlist/googlevideo.lua
@@ -13,15 +14,15 @@
 // - Analysis -
 
 bool
-GoogleVideoMrlResolver::matchMedia(const QString &href) const
+DummyGoogleVideoMrlResolver::matchMedia(const QString &href) const
 {
-  QString pattern("http://video.google.com/videoplay?docid=");
+  QString pattern("http://" MA_EIGEN_GOOGLEVIDEO);
   return href.startsWith(pattern, Qt::CaseInsensitive);
 }
 
 // Example: http://video.google.com/videoplay?docid=-8070240344560020977
 bool
-GoogleVideoMrlResolver::resolveMedia(const QString &href)
+DummyGoogleVideoMrlResolver::resolveMedia(const QString &href)
 {
   static const QString errorMessage = tr("failed to resolve URL");
   QUrl url(href);

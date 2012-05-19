@@ -27,30 +27,25 @@ OsdConsole::OsdConsole(QWidget *parent)
   connect(this, SIGNAL(restartAutoClearTimerRequested()), SLOT(restartAutoClearTimer()), Qt::QueuedConnection);
   connect(this, SIGNAL(asyncSetText(QString)), SLOT(setText(QString)), Qt::QueuedConnection);
 
-  createActions();
-  createMenus();
+  //createActions();
+  //createMenus();
 }
 
-void
-OsdConsole::createActions()
-{
-#define MAKE_ACTION(_action, _styleid, _slot) \
-  _action = new QAction(QIcon(RC_IMAGE_##_styleid), TR(T_MENUTEXT_##_styleid), this); \
-  _action->setStatusTip(TR(T_STATUSTIP_##_styleid)); \
-  connect(_action, SIGNAL(triggered()), _slot);
+//void
+//OsdConsole::createActions()
+//{
+//  connect(enableAutoClearAct_ = new QAction(TR(T_MENUTEXT_ENABLEAUTOCLEARCONSOLE), this),
+//          SIGNAL(triggered()), SLOT(restartAutoClearTimer()));
+//  connect(disableAutoClearAct_ = new QAction(TR(T_MENUTEXT_DISABLEAUTOCLEARCONSOLE), this),
+//          SIGNAL(triggered()), SLOT(stopAutoClearTimer()));
+//}
 
-  MAKE_ACTION(enableAutoClearAct_, ENABLEAUTOCLEARCONSOLE, SLOT(restartAutoClearTimer()))
-  MAKE_ACTION(enableAutoClearAct_, DISABLEAUTOCLEARCONSOLE, SLOT(stopAutoClearTimer()))
-
-#undef MAKE_ACTION
-}
-
-void
-OsdConsole::createMenus()
-{
-  contextMenu_ = new QMenu(this);
-  AcUi::globalInstance()->setContextMenuStyle(contextMenu_, true); // persistent = true
-}
+//void
+//OsdConsole::createMenus()
+//{
+//  contextMenu_ = new QMenu(this);
+//  AcUi::globalInstance()->setContextMenuStyle(contextMenu_, true); // persistent = true
+//}
 
 void
 OsdConsole::setAutoClearInterval(int msecs)

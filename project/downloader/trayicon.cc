@@ -21,24 +21,12 @@ TrayIcon::TrayIcon(MainWindow *w, QObject *parent)
 void
 TrayIcon::createActions()
 {
-  // Actions
-  QAction *addAct = new QAction(tr("Add"), this);
-  connect(addAct, SIGNAL(triggered()), w_, SLOT(add()));
-
-  QAction *showAct = new QAction(tr("Show"), this);
-  connect(showAct, SIGNAL(triggered()), w_, SLOT(show()));
-
-  QAction *quitAct = new QAction(tr("Quit"), this);
-  connect(quitAct, SIGNAL(triggered()), w_, SLOT(close()));
-
-  // Menu
-  QMenu *menu = new QMenu(w_); {
-    menu->addAction(addAct);
-    menu->addSeparator();
-    menu->addAction(showAct);
-    menu->addAction(quitAct);
-  }
-  setContextMenu(menu);
+  QMenu *m = new QMenu(w_); {
+    m->addAction(tr("Add"), w_, SLOT(add()));
+    m->addSeparator();
+    m->addAction(tr("Show"), w_, SLOT(show()));
+    m->addAction(tr("Quit"), w_, SLOT(close()));
+  } setContextMenu(m);
 }
 
 // - Events -

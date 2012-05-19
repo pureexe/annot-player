@@ -15,7 +15,9 @@ HEADERS += \
 SOURCES += \
     $$PWD/downloadmanager.cc \
     $$PWD/downloadtask.cc \
-    $$PWD/mrldownloadtask.cc
+    $$PWD/mrldownloadtask.cc \
+    $$PWD/mrldownloadtask_m.cc \
+    $$PWD/mrldownloadtask_s.cc
 
 QT      += core network
 

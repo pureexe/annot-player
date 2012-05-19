@@ -13,19 +13,29 @@
 #endif // __GNUC__
 
 #ifdef Q_WS_MAC
-#  define K_META  "META"
+#  define K_META        "META"
+#  define K_CAPSLOCK    "capslock"
 #else
-#  define K_META  "ALT"
+#  define K_META        "ALT"
+#  define K_CAPSLOCK    "CapsLock"
 #endif // Q_WS_MAC
 
 // - Construction -
 
 WbWebView::WbWebView(QWidget *parent)
-  : Base(parent), searchEngine_(0)
+  : Base(parent), contextMenu_(0), searchEngine_(0)
 {
   createActions();
   connect(this, SIGNAL(selectionChanged()), SLOT(invalidateSelection()));
+  connect(this, SIGNAL(loadFinished(bool)), SLOT(updateTitle()));
   connect(page(), SIGNAL(linkHovered(QString,QString,QString)), SLOT(highlightDownloadableLink(QString,QString,QString)));
+}
+
+WbWebView::~WbWebView()
+{
+  if (!deleteLater_.isEmpty())
+    foreach (QObject *p, deleteLater_)
+      p->deleteLater();
 }
 
 void
@@ -34,50 +44,41 @@ WbWebView::createActions()
   openSelectedLinkAct_ = new QAction(this); {
     openSelectedLinkAct_->setText(tr("Open Link in New Tab"));
     openSelectedLinkAct_->setStatusTip(tr("Open Link in New Tab"));
-    connect(openSelectedLinkAct_, SIGNAL(triggered()), SLOT(openSelectedLink()));
-  }
+  } connect(openSelectedLinkAct_, SIGNAL(triggered()), SLOT(openSelectedLink()));
   openWithAcPlayerAct_ = new QAction(this); {
     openWithAcPlayerAct_->setIcon(QIcon(ACRC_IMAGE_PLAYER));
     openWithAcPlayerAct_->setText(tr("Play with Annot Player"));
     openWithAcPlayerAct_->setStatusTip(tr("Play with Annot Player"));
-    connect(openWithAcPlayerAct_, SIGNAL(triggered()), SLOT(openWithAcPlayer()));
-  }
+  } connect(openWithAcPlayerAct_, SIGNAL(triggered()), SLOT(openWithAcPlayer()));
   importToAcPlayerAct_ = new QAction(this); {
     importToAcPlayerAct_->setIcon(QIcon(WBRC_IMAGE_COMMENT));
     importToAcPlayerAct_->setText(tr("Import annotations to Annot Player"));
     importToAcPlayerAct_->setStatusTip(tr("Import annotations to Annot Player"));
-    connect(importToAcPlayerAct_, SIGNAL(triggered()), SLOT(importToAcPlayer()));
-  }
+  } connect(importToAcPlayerAct_, SIGNAL(triggered()), SLOT(importToAcPlayer()));
   openWithAcDownloaderAct_ = new QAction(this); {
     openWithAcDownloaderAct_->setIcon(QIcon(ACRC_IMAGE_DOWNLOADER));
     openWithAcDownloaderAct_->setText(tr("Download with Annot Downloader"));
     openWithAcDownloaderAct_->setStatusTip(tr("Download with Annot Downloader"));
-    connect(openWithAcDownloaderAct_, SIGNAL(triggered()), SLOT(openWithAcDownloader()));
-  }
+  } connect(openWithAcDownloaderAct_, SIGNAL(triggered()), SLOT(openWithAcDownloader()));
   undoClosedTabAct_ = new QAction(this); {
     undoClosedTabAct_->setText(tr("Undo Close Tab"));
     undoClosedTabAct_->setStatusTip(tr("Undo Close Tab"));
-    connect(undoClosedTabAct_, SIGNAL(triggered()), SIGNAL(undoClosedTabRequested()));
-  }
+    undoClosedTabAct_->setShortcut(QKeySequence("CTRL+SHIFT+T"));
+  } connect(undoClosedTabAct_, SIGNAL(triggered()), SIGNAL(undoClosedTabRequested()));
   newWindowAct_ = new QAction(this); {
     newWindowAct_->setText(tr("New Window"));
     newWindowAct_->setStatusTip(tr("New Window"));
     newWindowAct_->setShortcut(QKeySequence::New);
-    connect(newWindowAct_, SIGNAL(triggered()), SIGNAL(newWindowRequested()));
-  }
+  } connect(newWindowAct_, SIGNAL(triggered()), SIGNAL(newWindowRequested()));
   fullScreenAct_ = new QAction(this); {
     fullScreenAct_->setText(tr("Toggle Full Screen"));
     fullScreenAct_->setStatusTip(tr("Toggle Full Screen"));
     fullScreenAct_->setShortcut(QKeySequence("CTRL+" K_META "+F"));
-    connect(fullScreenAct_, SIGNAL(triggered()), SIGNAL(fullScreenRequested()));
-  }
+  } connect(fullScreenAct_, SIGNAL(triggered()), SIGNAL(fullScreenRequested()));
   menuBarAct_ = new QAction(this); {
-    menuBarAct_->setText(tr("Toggle Menu Bar"));
+    menuBarAct_->setText(tr("Toggle Menu Bar") + " [" K_CAPSLOCK "]");
     menuBarAct_->setStatusTip(tr("Toggle Menu Bar"));
-    connect(menuBarAct_, SIGNAL(triggered()), SIGNAL(toggleMenuBarVisibleRequested()));
-  }
-
-  undoClosedTabAct_->setShortcut(QKeySequence("CTRL+SHIFT+T"));
+  } connect(menuBarAct_, SIGNAL(triggered()), SIGNAL(toggleMenuBarVisibleRequested()));
 }
 
 // - Events -
@@ -97,7 +98,14 @@ WbWebView::contextMenuEvent(QContextMenuEvent *event)
 {
   updateHoveredLink();
   Q_ASSERT(event);
-  QMenu *m = new QMenu;
+  if (!contextMenu_)
+    contextMenu_ = new QMenu(this);
+  contextMenu_->clear();
+  if (!deleteLater_.isEmpty()) {
+    foreach (QObject *p, deleteLater_)
+      p->deleteLater();
+    deleteLater_.clear();
+  }
 
   currentUrl_ = hoveredLink();
   QString selectedLink = selectedUrl();
@@ -106,24 +114,28 @@ WbWebView::contextMenuEvent(QContextMenuEvent *event)
     if (currentUrl_.isEmpty())
       currentUrl_ = url().toString();
   }
-  MrlAnalysis::Site site = MrlAnalysis::matchSite(currentUrl_);
+  int site = MrlAnalysis::matchSite(currentUrl_);
   if (site) {
-    m->addAction(openWithAcPlayerAct_);
+    contextMenu_->addAction(openWithAcPlayerAct_);
     if (site < MrlAnalysis::AnnotationSite)
-      m->addAction(importToAcPlayerAct_);
+      contextMenu_->addAction(importToAcPlayerAct_);
     if (site < MrlAnalysis::ChineseVideoSite) // TODO: change to all sites after fixing youtube
-      m->addAction(openWithAcDownloaderAct_);
-    m->addSeparator();
+      contextMenu_->addAction(openWithAcDownloaderAct_);
+    contextMenu_->addSeparator();
   }
   if (!selectedLink.isEmpty()) {
-    m->addAction(openSelectedLinkAct_);
-    m->addSeparator();
+    contextMenu_->addAction(openSelectedLinkAct_);
+    contextMenu_->addSeparator();
   }
+
+  QMenu *scm = page()->createStandardContextMenu();
+  deleteLater_.append(scm);
 
   QString selection = selectedText().simplified();
   if (!selection.isEmpty() && hasSearchEngines()) {
     for (int engine = 0; engine < searchEngines_.size(); engine++) {
-      QtExt::ActionWithId *a = new QtExt::ActionWithId(engine, m);
+      QtExt::ActionWithId *a = new QtExt::ActionWithId(engine);
+      deleteLater_.append(a);
       SearchEngine *e = searchEngines_[engine];
       a->setText(tr("Search with %1").arg(e->name()));
       a->setStatusTip(e->search("@key"));
@@ -132,12 +144,13 @@ WbWebView::contextMenuEvent(QContextMenuEvent *event)
       if (engine == searchEngine_)
         a->setChecked(true);
       connect(a, SIGNAL(triggeredWithId(int,bool)), SLOT(searchWithEngine(int)));
-      m->addAction(a);
+      contextMenu_->addAction(a);
     }
 
     int engine = SearchEngineFactory::Qt;
     if (engine >= searchEngines_.size() && selection.startsWith('Q') && !selection.contains(' ')) {
-      QtExt::ActionWithId *a = new QtExt::ActionWithId(engine, m);
+      QtExt::ActionWithId *a = new QtExt::ActionWithId(engine);
+      deleteLater_.append(a);
       static SearchEngine *e = 0;
       if (!e)
         e = SearchEngineFactory::globalInstance()->create(engine);
@@ -148,46 +161,41 @@ WbWebView::contextMenuEvent(QContextMenuEvent *event)
       if (engine == searchEngine_)
         a->setChecked(true);
       connect(a, SIGNAL(triggeredWithId(int,bool)), SLOT(searchWithEngine(int)));
-      m->addAction(a);
+      contextMenu_->addAction(a);
     }
 
-    m->addSeparator();
+    contextMenu_->addSeparator();
   }
 
-  QMenu *scm = page()->createStandardContextMenu();
-  m->addActions(scm->actions());
+  contextMenu_->addActions(contextMenu_->actions());
   //QAction *a;
   //if (a = page()->action(QWebPage::ReloadAndBypassCache))
-  //  m->addAction(a);
+  //  contextMenu_->addAction(a);
 
-  m->addSeparator();
+  contextMenu_->addSeparator();
   QMenu *history = createHistoryMenu();
   if (history) {
-    //history->setParent(this);
-    m->addMenu(history);
-    m->addSeparator();
+    deleteLater_.append(history);
+    contextMenu_->addMenu(history);
+    contextMenu_->addSeparator();
   }
-  m->addSeparator();
-  m->addAction(clipAct);
-  m->addAction(undoClosedTabAct_);
-  m->addAction(clearHighlightAct);
-  m->addSeparator();
-  m->addAction(zoomResetAct);
-  m->addAction(zoomInAct);
-  m->addAction(zoomOutAct);
-  m->addSeparator();
-  m->addAction(openWithOperatingSystemAct);
-  m->addAction(newWindowAct_);
-  m->addAction(fullScreenAct_);
+  contextMenu_->addSeparator();
+  contextMenu_->addAction(clipAct);
+  contextMenu_->addAction(undoClosedTabAct_);
+  contextMenu_->addAction(clearHighlightAct);
+  contextMenu_->addSeparator();
+  contextMenu_->addAction(zoomResetAct);
+  contextMenu_->addAction(zoomInAct);
+  contextMenu_->addAction(zoomOutAct);
+  contextMenu_->addSeparator();
+  contextMenu_->addAction(openWithOperatingSystemAct);
+  contextMenu_->addAction(newWindowAct_);
+  contextMenu_->addAction(fullScreenAct_);
 #ifdef Q_WS_WIN
-  m->addAction(menuBarAct_);
+  contextMenu_->addAction(menuBarAct_);
 #endif // Q_WS_WIN
 
-  scm->setParent(this); // WebKit bug: randomly crash if invoke delete scm
-  m->exec(event->globalPos());
-  delete m;
-  if (history)
-    delete history;
+  contextMenu_->exec(event->globalPos());
   event->accept();
 }
 
@@ -214,6 +222,20 @@ WbWebView::selectedUrl() const
     return ret.prepend('h');
   else
     return QString();
+}
+
+// - Properties -
+
+void
+WbWebView::updateTitle()
+{
+  QString t = title().trimmed();
+  if (!t.isEmpty()) {
+    QTime now = QTime::currentTime();
+    QString ts = now.toString(" | h:mm");
+    t.append(ts);
+    emit titleChanged(t);
+  }
 }
 
 // - Search -

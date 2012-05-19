@@ -137,7 +137,7 @@ protected:
 
 private:
   void createLayout();
-  void createActions();
+  void createContextMenu();
 
 private:
   ServerAgent *server_;

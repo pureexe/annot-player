@@ -17,6 +17,7 @@
 #  define K_SPACE       "space"
 #  define K_BACKSPACE   "backspace"
 #  define K_ESC         "esc"
+#  define K_CAPSLOCK    "capslock"
 #else
 #  define K_CTRL        "Ctrl"
 #  define K_CMD         "Alt"
@@ -25,6 +26,7 @@
 #  define K_SPACE       "Space"
 #  define K_BACKSPACE   "Backspace"
 #  define K_ESC         "Esc"
+#  define K_CAPSLOCK    "CapsLock"
 #endif // Q_OS_MAC
 
 // - Constructions -
@@ -346,10 +348,10 @@ TranslatorManager::translate(int tid) const
   case T_MENUTEXT_REPLAY:       return tr("Replay");
   case T_TIP_REPLAY:            return tr("Restart playing");
 
-  case T_MENUTEXT_MINI:         return tr("Mini player") + " [" K_CMD "+2]";
+  case T_MENUTEXT_MINI:         return tr("Mini player");// + " [" K_CMD "+2]";
   case T_TIP_MINI:              return tr("Show mini player") + " [" K_CMD "+2]";
 
-  case T_MENUTEXT_EMBED:        return tr("Embed player") + " [" K_CMD "+1]";
+  case T_MENUTEXT_EMBED:        return tr("Embed player");// + " [" K_CMD "+1]";
   case T_TIP_EMBED:             return tr("Embed player window") + " [" K_CMD "+1]";
 
   case T_MENUTEXT_EMBEDONTOP:   return tr("Embed on top");
@@ -361,7 +363,7 @@ TranslatorManager::translate(int tid) const
   case T_MENUTEXT_SYNC:         return tr("Sync mode");
   case T_TIP_SYNC:              return tr("Toggle Sync mode");
 
-  case T_MENUTEXT_FULLSCREEN:   return tr("Fullscreen") + " [" K_CMD "+3]";
+  case T_MENUTEXT_FULLSCREEN:   return tr("Fullscreen");// + " [" K_CMD "+3]";
   case T_TIP_FULLSCREEN:        return tr("Show fullscreen") + " [" K_CMD "+3]";
 
   case T_MENUTEXT_SNAPSHOT:     return tr("Snapshot");
@@ -406,7 +408,7 @@ TranslatorManager::translate(int tid) const
   case T_MENUTEXT_NEXT:         return tr("Next") + " [" K_CTRL "+" K_SHIFT "+→]";
   case T_TIP_NEXT:              return tr("Next") + " [" K_CTRL "+" K_SHIFT "+→]";
 
-  case T_MENUTEXT_BLACKLIST:    return tr("Blacklist") + " [" K_CTRL + "+F4]";
+  case T_MENUTEXT_BLACKLIST:    return tr("Blacklist");// + " [" K_CTRL + "+F4]";
   case T_TIP_BLACKLIST:         return tr("Blacklist");
 
   case T_MENUTEXT_PICKDIALOG:   return tr("Pick window");
@@ -524,13 +526,13 @@ TranslatorManager::translate(int tid) const
   case T_MENUTEXT_DISCONNECT:   return tr("Disconnect from server");
   case T_TIP_DISCONNECT:        return tr("Disconnect from server and use local cache only");
 
-  case T_MENUTEXT_ANNOTATIONEDITOR: return tr("Annotation Editor") + " [" K_CTRL "+F1]";
+  case T_MENUTEXT_ANNOTATIONEDITOR: return tr("Annotation Editor");// + " [" K_CTRL "+F1]";
   case T_TIP_ANNOTATIONEDITOR: return tr("Show annotation editor");
 
-  case T_MENUTEXT_ANNOTATIONBROWSER: return tr("Search Annotations") + " [" K_CTRL "+F2]";
+  case T_MENUTEXT_ANNOTATIONBROWSER: return tr("Search Annotations");// + " [" K_CTRL "+F2]";
   case T_TIP_ANNOTATIONBROWSER: return tr("Show annotation browser");
 
-  case T_MENUTEXT_TOKENVIEW:    return tr("Token") + " [" K_CTRL "+F3]";
+  case T_MENUTEXT_TOKENVIEW:    return tr("Token");// + " [" K_CTRL "+F3]";
   case T_TIP_TOKENVIEW:         return tr("Show token view");
 
   case T_MENUTEXT_COMMENTVIEW:  return tr("Comments");
@@ -655,7 +657,7 @@ TranslatorManager::translate(int tid) const
 
   case T_NOAUTOPLAY:            return tr("No repeat");
 
-  case T_MENUTEXT_SHOWMENUBAR:  return tr("Show menubar");
+  case T_MENUTEXT_SHOWMENUBAR:  return tr("Show menubar") + " [" K_CAPSLOCK "]";
   case T_TIP_SHOWMENUBAR:       return tr("Show menubar");
 
   case T_MENUTEXT_ENABLEAERO:   return tr("Enable Aero");
@@ -673,10 +675,10 @@ TranslatorManager::translate(int tid) const
   case T_MENUTEXT_ENABLEBLACKLIST:  return tr("Enable blacklist");
   case T_TIP_ENABLEBLACKLIST:       return tr("Enable blacklist");
 
-  case T_MENUTEXT_DOWNLOAD:  return tr("Download") + " [" K_CTRL "+D]";
-  case T_TIP_DOWNLOAD:       return tr("Download") + " [" K_CTRL "+D]";
+  case T_MENUTEXT_DOWNLOAD:  return tr("Download");// + " [" K_CTRL "+D]";
+  case T_TIP_DOWNLOAD:       return tr("Download");// + " [" K_CTRL "+D]";
 
-  case T_MENUTEXT_ANNOTANALYTICS:  return tr("Annotation analytics") + " [" K_CTRL "+F5]";
+  case T_MENUTEXT_ANNOTANALYTICS:  return tr("Annotation analytics");// + " [" K_CTRL "+F5]";
   case T_TIP_ANNOTANALYTICS:       return tr("Show annotations as thread");
 
   case T_MENUTEXT_SAVEMEDIA:    return tr("Save buffered video");
@@ -770,7 +772,7 @@ TranslatorManager::translate(int tid) const
 
   case T_MENUTEXT_LABELPLAYER: return tr("Label player with annots");
   case T_MENUTEXT_AUTOSUBMIT:  return tr("Save annots associations");
-  case T_MENUTEXT_BACKLOG:     return tr("Backlog") + " [" K_CTRL "+F6]";
+  case T_MENUTEXT_BACKLOG:     return tr("Backlog");// + " [" K_CTRL "+F6]";
   case T_MENUTEXT_PREFERLOCALDB:     return tr("Prefer offline annotations");
 
   case T_MENUTEXT_RESETANNOTSCALE:  return tr("Reset scale") + " [" K_CTRL "+" + tr("Mid") + "]";

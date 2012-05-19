@@ -8,6 +8,9 @@
 #include "project/common/acui.h"
 #include "module/player/player.h"
 #include "module/qtext/overlaylayout.h"
+#ifdef Q_WS_WIN
+#  include "win/qtwin/qtwin.h"
+#endif // Q_WS_WIN
 #include <QtCore>
 #include <QtGui>
 
@@ -18,15 +21,15 @@
   Qt::CustomizeWindowHint | \
   Qt::WindowStaysOnTopHint
 
-#ifdef Q_OS_MAC
-  #define WINDOW_FLAGS ( \
+#ifdef Q_WS_MAC
+#  define WINDOW_FLAGS ( \
     Qt::FramelessWindowHint | \
     WINDOW_FLAGS_BASE )
 #else
-  #define WINDOW_FLAGS ( \
-    Qt::WindowTitleHint | \
+#  define WINDOW_FLAGS ( \
     WINDOW_FLAGS_BASE )
-#endif // Q_OS_MAC
+    //Qt::WindowTitleHint |
+#endif // Q_WS_MAC
 
 #define INPUTLINE_MAXIMUM_WIDTH   300
 
@@ -35,19 +38,24 @@
 MiniPlayerUi::MiniPlayerUi(SignalHub *hub, Player *player, ServerAgent *server, QWidget *parent)
   : Base(hub, player, server, parent), dragPos_(BAD_POS)
 {
-  setWindowFlags(WINDOW_FLAGS);
+  Qt::WindowFlags f = WINDOW_FLAGS;
+#ifdef Q_WS_WIN
+  if (QtWin::isWindowsVistaOrLater()) {
+    f |= Qt::WindowTitleHint;
+    setWindowOpacity(AC_WINDOW_OPACITY);
+  } else
+#endif // Q_WS_WIN
+  { setWindowOpacity(WINDOW_OPACITY); }
+  setWindowFlags(f);
   setContentsMargins(0, 0, 0, 0);
   setAcceptDrops(true);
   AcUi::globalInstance()->setWindowStyle(this);
-#ifdef Q_OS_MAC
-  setWindowOpacity(WINDOW_OPACITY);
-#endif // Q_OS_MAC
 
   createLayout();
 
-  connect(new QShortcut(QKeySequence("CTRL+1"), this), SIGNAL(activated()), hub, SLOT(toggleEmbeddedPlayerMode()));
-  connect(new QShortcut(QKeySequence("CTRL+2"), this), SIGNAL(activated()), hub, SLOT(toggleMiniPlayerMode()));
-  connect(new QShortcut(QKeySequence("CTRL+3"), this), SIGNAL(activated()), hub, SLOT(toggleFullScreenWindowMode()));
+  //connect(new QShortcut(QKeySequence("CTRL+1"), this), SIGNAL(activated()), hub, SLOT(toggleEmbeddedPlayerMode()));
+  //connect(new QShortcut(QKeySequence("CTRL+2"), this), SIGNAL(activated()), hub, SLOT(toggleMiniPlayerMode()));
+  //connect(new QShortcut(QKeySequence("CTRL+3"), this), SIGNAL(activated()), hub, SLOT(toggleFullScreenWindowMode()));
 }
 
 void
@@ -104,13 +112,16 @@ MiniPlayerUi::createLayout()
   // Note: there is no textChanged event in QLabel.
   progressButton()->hide();
   progressButton()->resize(QSize());
-#ifdef Q_OS_MAC
-  volumeSlider()->hide();
-  volumeSlider()->resize(QSize());
-#else
-  positionButton()->hide();
-  positionButton()->resize(QSize());
-#endif // Q_OS_MAC
+#ifdef Q_WS_WIN
+  if (QtWin::isWindowsVistaOrLater()) {
+    positionButton()->hide();
+    positionButton()->resize(QSize());
+  } else
+#endif // Q_WS_WIN
+  {
+    volumeSlider()->hide();
+    volumeSlider()->resize(QSize());
+  }
 
   //setStyleSheet(styleSheet() +
   //  SS_BEGIN(QToolButton)

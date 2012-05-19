@@ -13,7 +13,7 @@
 
 AnnotationGraphicsItemPool::value_type*
 AnnotationGraphicsItemPool::create() const
-{ return new value_type(hub_, view_); }
+{ return new value_type(data_, hub_, view_); }
 
 void
 AnnotationGraphicsItemPool::clear()

@@ -3,10 +3,10 @@
 
 #include "module/mrlresolver/mrlresolvermanager.h"
 #include "module/mrlresolver/mrlresolver.h"
-#include "module/mrlresolver/googlevideomrlresolver.h"
+#include "module/mrlresolver/dummygooglevideomrlresolver.h"
+#include "module/mrlresolver/youtubemrlresolver.h"
 #include "module/mrlresolver/luamrlresolver.h"
 #include "module/mrlresolver/youkumrlresolver.h"
-#include "module/mrlresolver/youtubemrlresolver.h"
 
 //#define DEBUG "mrlresolvermanager"
 #include "module/debug/debug.h"
@@ -38,7 +38,8 @@ MrlResolverManager::init()
   } resolvers_.append(r);
 
   ADD(YoutubeMrlResolver)
-  ADD(GoogleVideoMrlResolver)
+  //ADD(DummyYoutubeMrlResolver)
+  ADD(DummyGoogleVideoMrlResolver)
   //ADD(YoukuMrlResolver)
   ADD(LuaMrlResolver)
 #undef ADD

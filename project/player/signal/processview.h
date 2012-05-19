@@ -104,7 +104,7 @@ protected:
 private:
   void createModel();
   void createLayout();
-  void createActions();
+  void createContextMenu();
 
 private:
   AcFilteredTableView *tableView_; // process table

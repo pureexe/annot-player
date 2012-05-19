@@ -1,4 +1,3 @@
-#include <QDebug>
 // qtext/draggablemainwindow.cc
 // 9/3/2011
 

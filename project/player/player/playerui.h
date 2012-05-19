@@ -8,7 +8,6 @@
 
 QT_FORWARD_DECLARE_CLASS(QMenu)
 
-class FadeAnimation;
 class Player;
 class SignalHub;
 class ServerAgent;
@@ -25,7 +24,6 @@ class PlayerUi : public PlayerPanel
   Player *player_;
   ServerAgent *server_;
   bool active_;
-  FadeAnimation *fadeAni_;
 
   // TODO: use signal hub_ to replace player_ and server_ signals.
 public:

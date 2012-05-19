@@ -8,7 +8,7 @@
 
 QtExt::
 ComboBox::ComboBox(QWidget *parent)
-  : Base(parent), hovered_(false), hoverCursor_(Qt::PointingHandCursor)
+  : Base(parent)
 {
   setInsertPolicy(InsertAtTop);
   connect(this, SIGNAL(activated(int)), SLOT(hidePopup()));
@@ -20,11 +20,7 @@ void
 QtExt::
 ComboBox::enterEvent(QEvent *event)
 {
-  Q_UNUSED(event);
-  lastCursor_ = cursor();
-  setCursor(hoverCursor());
-  hovered_ = true;
-  emit hovered();
+  setCursor(Qt::PointingHandCursor);
   Base::enterEvent(event);
 }
 
@@ -32,9 +28,7 @@ void
 QtExt::
 ComboBox::leaveEvent(QEvent *event)
 {
-  setCursor(lastCursor_);
-  hovered_ = false;
-  emit leaved();
+  setCursor(Qt::ArrowCursor);
   Base::leaveEvent(event);
 }
 

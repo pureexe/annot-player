@@ -155,6 +155,17 @@ main(int argc, char *argv[])
     QFile::remove(G_PATH_CACHEDB);
     QFile::remove(G_PATH_QUEUEDB);
     QFile::remove(G_PATH_DEBUG);
+
+#ifdef Q_WS_WIN
+    // Delete plugins/*.dat
+    QDir plugins(QCoreApplication::applicationDirPath() + "/plugins");
+    Q_ASSERT(plugins.exists());
+    foreach (const QFileInfo &fi, plugins.entryInfoList(QStringList() << "*.dat", QDir::Files)) {
+      DOUT("remove old plugins caches:" << fi.absoluteFilePath());
+      QFile::remove(fi.absoluteFilePath());
+    }
+#endif // Q_WS_WIN
+
     if (QFile::rename(QDir::homePath() + "/Annot", G_PATH_DOWNLOADS))
       AcLocationManager::globalInstance()->createDownloadsLocation();
 
@@ -162,6 +173,8 @@ main(int argc, char *argv[])
     ac->sync();
 
     settings->setWindowOnTop(false);
+    settings->setAutoSubmit(true);
+    settings->setAnnotationScale(1.0);
     settings->setAnnotationEffect(0);
     settings->setApplicationFilePath(QString());
     //settings->setAnnotationLanguages(Traits::AllLanguages);
@@ -278,8 +291,9 @@ main(int argc, char *argv[])
 //  MainWindow w;
 //
 //#endif // USE_MODE_SIGNAL
-  DOUT("make mainwindow");
+  DOUT("create mainwindow");
   MainWindow w(unique); {
+    w.setWindowTitle(TR(T_TITLE_PROGRAM));
     Q_ASSERT(w.isValid());
     //if (!w.isValid()) {
     //  DOUT("FATAL ERROR: failed to initialize MainWindow, please contact " G_EMAIL);

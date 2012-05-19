@@ -2,58 +2,51 @@
 // 5/3/2012
 #include "module/pixmapfilter/pixmaphalofilter.h"
 #include <QtGui/QPainter>
-#include <QtGui/QPaintEngine>
+#include <QtGui/QPixmap>
+#include <QtGui/QImage>
 
-// See: gui/image/qpixmapfilter_p.h
-QT_BEGIN_NAMESPACE
-Q_GUI_EXPORT void qt_blurImage(QPainter *p, QImage &blurImage, qreal radius, bool quality, bool alphaOnly, int transposed = 0);
-Q_GUI_EXPORT void qt_blurImage(QImage &blurImage, qreal radius, bool quality, int transposed = 0);
-QT_END_NAMESPACE
-
+// - Construction -
 
 PixmapHaloFilter::PixmapHaloFilter(QObject *parent)
-  : Base(UserFilter, parent),
-    offset_(8, 8), color_(63, 63, 63, 180), radius_(1)
+  : Base(UserFilter, parent), radius_(0)
 { }
 
 
-QRectF
-PixmapHaloFilter::boundingRectFor(const QRectF &rect) const
-{ return rect.united(rect.translated(offset_).adjusted(-radius_, -radius_, radius_, radius_)); }
+// - Paint -
 
 void
-PixmapHaloFilter::draw(QPainter *p, const QPointF &pos, const QPixmap &px, const QRectF &src) const
+PixmapHaloFilter::draw(QPainter *p, const QPointF &pos, const QPixmap &pm, const QRectF &src) const
 {
-  if (px.isNull())
+  Q_ASSERT(p);
+  QImage image = src.isEmpty() ? pm.toImage() :
+                 pm.copy(src.toRect()).toImage();
+  if (image.isNull())
     return;
+  p->drawImage(pos, transform(image));
+}
 
-  QImage tmp(px.size(), QImage::Format_ARGB32_Premultiplied);
-  tmp.fill(0);
-  QPainter tmpPainter(&tmp);
-  tmpPainter.setCompositionMode(QPainter::CompositionMode_Source);
-  //if (!offset_.isNull())
-  //  tmpPainter.drawPixmap(-offset_, px); // surrounded halo
-  tmpPainter.drawPixmap(offset_, px);
-  tmpPainter.end();
+QImage&
+PixmapHaloFilter::transform(QImage &image) const
+{
+  if (image.isNull())
+    return image;
 
-  // blur the alpha channel
-  QImage blurred(tmp.size(), QImage::Format_ARGB32_Premultiplied);
-  blurred.fill(0);
-  QPainter blurPainter(&blurred);
-  qt_blurImage(&blurPainter, tmp, radius_, false, true);
-  blurPainter.end();
+  QSize size = image.size();
+  if (size.isEmpty())
+    return image;
 
-  // blacken the image...
-  QPainter blackenPainter(&blurred);
-  blackenPainter.setCompositionMode(QPainter::CompositionMode_SourceIn);
-  blackenPainter.fillRect(blurred.rect(), color_);
-  blackenPainter.end();
+  int width = image.width(),
+      height = image.height();
+  QColor c;
+  for (int y = 0; y < height; y++) {
+    for (int x = 0; x < width; x++) {
+      c = image.pixel(x, y);
+      //c.setAlpha(0); // CHECKPOINT
+      image.setPixel(x, y, c.rgba());
+    }
+  }
 
-  // draw the blurred drop shadow...
-  p->drawImage(pos, blurred);
-
-  // Draw the actual pixmap...
-  p->drawPixmap(pos, px, src);
+  return image;
 }
 
 // EOF

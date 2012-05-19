@@ -13,26 +13,16 @@ class PixmapHaloFilter : public QPixmapFilter
   typedef PixmapHaloFilter Self;
   typedef QPixmapFilter Base;
 
-  QPointF offset_;
-  QColor color_;
-  qreal radius_;
+  int radius_;
 
 public:
   explicit PixmapHaloFilter(QObject *parent = 0);
 
-  qreal blurRadius() const { return radius_; }
-  void setBlurRadius(qreal radius) { radius_ = radius; }
-
-  QColor color() const { return color_; }
-  void setColor(const QColor &color) { color_ = color; }
-
-  QPointF offset() const { return offset_; }
-  void setOffset(const QPointF &offset) { offset_ = offset; }
-  void setOffset(qreal dx, qreal dy) { setOffset(QPointF(dx, dy)); }
-
+  int radius() const { return radius_; }
+  void setRadius(int radius) { radius_ = radius; }
 public:
-  virtual QRectF boundingRectFor(const QRectF &rect) const; ///< \override
-  virtual void draw(QPainter *p, const QPointF &pos, const QPixmap &px, const QRectF &src = QRectF()) const; ///< \override
+  virtual void draw(QPainter *p, const QPointF &pos, const QPixmap &pm, const QRectF &src = QRectF()) const; ///< \override
+  QImage &transform(QImage &image) const;
 };
 
 #endif // PIXMAPHALOFILTER_H

@@ -8,7 +8,7 @@ cd "$PREFIX"  || exit 1
 ## environment
 
 COLOR=purple
-VERSION=0.1.5.4
+VERSION=0.1.5.5
 DMG_SIZE=200m
 
 TARGET="Annot Stream"
@@ -310,6 +310,6 @@ test -e "/Volumes/$TARGET" && {
   eject "$TARGET"
   popd
 }
-open "$TARGET_DMG"
+#open "$TARGET_DMG"
 
 # EOF

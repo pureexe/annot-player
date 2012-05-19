@@ -7,6 +7,11 @@
 #include "module/vlccore/httpsession.h"
 #include "module/vlccore/httpbufferedsession.h"
 #include "module/vlccore/httpstreamsession.h"
+#ifdef WITH_MODULE_MRLANALYSIS
+#  include "module/mrlanalysis/mrlanalysis.h"
+#else
+#  error "mrlanalysis module is required"
+#endif // WITH_MODULE_MRLANALYSIS
 #include <QtNetwork/QNetworkCookieJar>
 #include <QtCore/QDir>
 #include <QtCore/QEventLoop>
@@ -23,6 +28,7 @@ module_t *module_find(const char *name);
 
 // - Construction -
 
+bool VlcHttpPlugin::loaded_ = false;
 QNetworkCookieJar *VlcHttpPlugin::cookieJar_ = 0;
 VlcHttpSession *VlcHttpPlugin::session_ = 0;
 QString VlcHttpPlugin::url_;
@@ -32,6 +38,10 @@ qint64 VlcHttpPlugin::duration_ = 0;
 QString VlcHttpPlugin::mediaTitle_;
 bool VlcHttpPlugin::bufferSaved_ = true;
 QString VlcHttpPlugin::cachePath_;
+
+//VlcHttpPlugin::pf_activate_t VlcHttpPlugin::pf_activate = 0;
+//VlcHttpPlugin::pf_deactivate_t VlcHttpPlugin::pf_deactivate = 0;
+//bool VlcHttpPlugin::activated_ = false;
 
 void
 VlcHttpPlugin::setBufferSaved(bool t)
@@ -55,12 +65,23 @@ VlcHttpPlugin::save()
 void
 VlcHttpPlugin::load()
 {
+  if (loaded_)
+    return;
   DOUT("enter");
   module_t *m = ::module_find("access_http");
   Q_ASSERT(m);
   if (m) {
+    loaded_ = true;
+    // Keep current HTTP plugin as its next
+    module_t *next = new module_t;
+    *next = *m;
+    m->next = next;
+    //activated_ = false;
+    //pf_activate = reinterpret_cast<pf_activate_t>(m->pf_activate);
+    //pf_deactivate = reinterpret_cast<pf_deactivate_t>(m->pf_activate);
     DOUT("name =" << m->psz_shortname);
     DOUT("loaded =" << m->b_loaded << ", unloadable =" << m->b_unloadable);
+    DOUT("pf_activate =" << m->pf_activate << ", pf_deactivate =" << m->pf_deactivate);
     m->b_loaded = true;
     m->b_unloadable = false;
     m->pf_activate = (void *)open;
@@ -72,14 +93,20 @@ VlcHttpPlugin::load()
 void
 VlcHttpPlugin::unload()
 {
+  if (!loaded_)
+    return;
   DOUT("enter");
+  loaded_ = false;
   module_t *m = ::module_find("access_http");
-  Q_ASSERT(m);
-  if (m) {
-    m->pf_activate = 0;
-    m->pf_deactivate = 0;
-    m->b_loaded = false;
-    m->b_unloadable = true;
+  Q_ASSERT(m && m->next);
+  if (m && m->next) {
+    module_t *next = m->next;
+    *m = *next;
+    delete next;
+    //m->pf_activate = 0;
+    //m->pf_deactivate = 0;
+    //m->b_loaded = false;
+    //m->b_unloadable = true;
   }
   DOUT("exit");
 }
@@ -122,9 +149,18 @@ extern "C" {
 int
 VlcHttpPlugin::open(vlc_object_t *p_this)
 {
+  //return VLC_EGENERIC;
   Q_ASSERT(p_this);
   DOUT("enter");
-  access_t *p_access = (access_t *)p_this;
+  if (!bufferSaved_ && urls_.size() <= 1 && !originalUrl_.isEmpty()) {
+    int site = MrlAnalysis::matchSite(originalUrl_);
+    DOUT("try MMS, siteid =" << site << ", orignal URL =" << originalUrl_);
+    switch (site) {
+    case MrlAnalysis::Nicovideo: break;
+    default: DOUT("exit: use MMS"); return VLC_EGENERIC;
+    }
+  }
+  access_t *p_access = reinterpret_cast<access_t *>(p_this);
 
   QString path = QString::fromLocal8Bit(p_access->psz_location).trimmed();
   QString protocal = QString::fromLocal8Bit(p_access->psz_access);

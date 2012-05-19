@@ -9,6 +9,7 @@
 QT_FORWARD_DECLARE_CLASS(QTimer)
 
 class FadeAnimation;
+class RippleImageFilter;
 
 typedef QtExt::DraggableMainWindow AcMainWindowBase;
 class AcMainWindow : public AcMainWindowBase
@@ -26,6 +27,9 @@ public:
   bool isFadeEnabled() const { return fadeEnabled_; }
   void setFadeEnabled(bool t) { fadeEnabled_ = t; }
   FadeAnimation *fadeAnimation() const { return fadeAni_; }
+
+  bool isRippleEnabled() const { return rippleEnabled_; }
+  void setRippleEnabled(bool t);
 
   //-  Log -
 signals:
@@ -52,13 +56,22 @@ protected slots:
 public slots:
   virtual void setVisible(bool visible); ///< \override
 protected:
+  virtual void mousePressEvent(QMouseEvent *event); ///< \override
+  virtual void mouseMoveEvent(QMouseEvent *event); ///< \override
+  virtual void mouseReleaseEvent(QMouseEvent *event); ///< \override
+  virtual void paintEvent(QPaintEvent *event); ///< \override
   virtual void closeEvent(QCloseEvent *e); ///< \override
 
 private:
   QTimer *messageTimer_;
   bool autoHideMenuBar_;
+
   FadeAnimation *fadeAni_;
   bool fadeEnabled_;
+
+  bool rippleEnabled_;
+  RippleImageFilter *rippleFilter_;
+  QTimer *rippleTimer_;
 };
 
 #endif // ACMAINWINDOW_H

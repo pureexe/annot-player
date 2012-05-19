@@ -39,7 +39,7 @@ FramedStreamSource::doGetNextFrame()
 }
 
 // - Seek -
-#include <QDebug>
+
 double
 FramedStreamSource::seek(double seconds)
 {

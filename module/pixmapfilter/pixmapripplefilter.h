@@ -45,16 +45,18 @@ public:
   const QPoint &center() const { return center_; }
   bool hasCenter() const { return center_.x() >= 0 && center_.y() >= 0; }
   void setCenter(const QPoint &value) { center_ = value; }
-  void clearCenter() { setCenter(QPoint(-1, -1)); }
+  void setCenter(int x, int y) { setCenter(QPoint(x, y)); }
 
   bool isDirty() const { return dirty_; }
 
   bool needsDisplay() const { return isDirty() || hasCenter(); }
+
 public:
-  virtual void draw(QPainter *p, const QPointF &pos, const QPixmap &px, const QRectF &src = QRectF()) const; ///< \override
+  virtual void draw(QPainter *p, const QPointF &pos, const QPixmap &pm, const QRectF &src = QRectF()) const; ///< \override
   void draw(QPainter *p, const QPointF &pos, const QImage &image) const;
 
 public slots:
+  void clearCenter() { setCenter(-1, -1); }
   void clear();
 };
 

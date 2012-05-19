@@ -160,7 +160,7 @@ namespace daemon_ {
       if (!w_->count())
         return 0;
       int ret = QApplication::desktop()->width() / (w_->count() * FontWidth);
-      return qMax((int)MinCount, ret);
+      return qMax<int>(MinCount, ret);
     }
   };
 

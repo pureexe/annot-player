@@ -16,7 +16,7 @@ GraphicsOpaqueHaloEffect::GraphicsOpaqueHaloEffect(QObject *parent)
 void
 GraphicsOpaqueHaloEffect::setOpacity(qreal opacity)
 {
-  opacity = qBound(qreal(0.0), opacity, qreal(1.0));
+  opacity = qBound<qreal>(0.0, opacity, 1.0);
 
   if (qFuzzyCompare(opacity_, opacity))
       return;

@@ -1,13 +1,13 @@
-#ifndef GRAPHICSHALOEFFECT_H
-#define GRAPHICSHALOEFFECT_H
+#ifndef GRAPHICSSHADOWEFFECT_H
+#define GRAPHICSSHADOWEFFECT_H
 
-// graphicshaloeffect.h
+// graphicsshadoweffect.h
 // 5/3/2012
 
 #include <QtGui/QGraphicsDropShadowEffect>
 
-//class PixmapHaloFilter;
-class GraphicsHaloEffect: public QGraphicsDropShadowEffect
+//class PixmapShadowFilter;
+class GraphicsShadowEffect: public QGraphicsDropShadowEffect
 {
   Q_OBJECT
   //Q_PROPERTY(QPointF offset READ offset WRITE setOffset)  //NOTIFY offsetChanged
@@ -16,14 +16,14 @@ class GraphicsHaloEffect: public QGraphicsDropShadowEffect
   //Q_PROPERTY(qreal blurRadius READ blurRadius WRITE setBlurRadius) //NOTIFY blurRadiusChanged
   //Q_PROPERTY(QColor color READ color WRITE setColor)      //NOTIFY colorChanged
   Q_PROPERTY(qreal opacity READ opacity WRITE setOpacity) //NOTIFY opacityChanged
-  Q_DISABLE_COPY(GraphicsHaloEffect)
-  typedef GraphicsHaloEffect Self;
+  Q_DISABLE_COPY(GraphicsShadowEffect)
+  typedef GraphicsShadowEffect Self;
   typedef QGraphicsDropShadowEffect Base;
 
-  //PixmapHaloFilter *filter_;
+  //PixmapShadowFilter *filter_;
   qreal opacity_;
 public:
-  explicit GraphicsHaloEffect(QObject *parent = 0)
+  explicit GraphicsShadowEffect(QObject *parent = 0)
     : Base(parent), opacity_(1.0) { }
 
   // Disable signals to improve performance.

@@ -412,8 +412,8 @@ protected:
   void detachEvents();
 
 private:
-  QList<libvlc_media_t*> parsePlaylist(const QString &fileName) const;
-  QList<libvlc_media_t*> parsePlaylist(libvlc_media_t *md) const;
+  QList<libvlc_media_t *> parsePlaylist(const QString &fileName) const;
+  QList<libvlc_media_t *> parsePlaylist(libvlc_media_t *md) const;
 };
 
 

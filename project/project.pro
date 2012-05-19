@@ -14,7 +14,7 @@ win32:  SUBDIRS += launcher
 #mac:    SUBDIRS += live
 #unix:   SUBDIRS += x
 
-include(common/common.pri)
+#include(common/common.pri)
 
 OTHER_FILES += \
     deploy-debian.sh \

@@ -163,7 +163,7 @@ WebBrowser::encodeUrl(const QString &url)
 
 WebBrowser::WebBrowser(QWidget *parent)
   : Base(parent), ui_(new Form), nam_(0),
-    textSizeMultiplier_(TEXT_SIZE_SCALE)
+    textSizeMultiplier_(TEXT_SIZE_SCALE), loadProgress_(100)
 {
   cookieJar_ = new WbNetworkCookieJar(this);
   hideStatusBarTimer_ = new QTimer(this);
@@ -214,6 +214,7 @@ WebBrowser::setupUi()
   // Set up connections
   connect(ui_->tabWidget, SIGNAL(tabCloseRequested(int)), SLOT(closeTab(int)));
   connect(ui_->tabWidget, SIGNAL(currentChanged(int)), SLOT(updateAddressbar()));
+  connect(ui_->tabWidget, SIGNAL(currentChanged(int)), SLOT(updateLoadProgress()));
   connect(ui_->tabWidget, SIGNAL(doubleClicked()), SLOT(newTabAtLastWithBlankPage()));
   connect(ui_->tabWidget, SIGNAL(tabDoubleClicked(int)), SIGNAL(fullScreenRequested()));
 #ifdef Q_WS_WIN
@@ -412,30 +413,33 @@ WebBrowser::openUrls(const QStringList &urls)
 void
 WebBrowser::focusTab(int index)
 {
-  WbWebView *v = dynamic_cast<WbWebView *>(tabWidget());
-  if (v)
-    disconnect(v, SIGNAL(loadProgress(int)), this, SLOT(showLoadProgress(int)));
-
   if (index >= 0 && index < tabCount())
     ui_->tabWidget->setCurrentIndex(index);
+}
 
-  v = dynamic_cast<WbWebView *>(tabWidget());
-  if (v) {
-    if (v->isLoading())
-      showLoadProgress(v->progress());
-    connect(v, SIGNAL(loadProgress(int)), this, SLOT(showLoadProgress(int)));
+void
+WebBrowser::updateLoadProgress()
+{
+  int progress = loadProgress_;
+  WbWebView *v = dynamic_cast<WbWebView *>(tabWidget());
+  if (v)
+    progress = v->progress();
+  if (loadProgress_ != progress ) {
+    loadProgress_ = progress;
+    showLoadProgress();
+    ui_->addressEdit->setProgress(loadProgress_);
   }
 }
 
 void
-WebBrowser::showLoadProgress(int progress)
+WebBrowser::showLoadProgress()
 {
   QString message;
-  switch (progress) {
+  switch (loadProgress_) {
   case 0: message = tr("Loading ..."); break;
   case 100: message = tr("Loading complete"); break;
   default:
-    message = tr("Loading ...") + QString(" %1/100").arg(QString::number(progress));
+    message = tr("Loading ...") + QString(" %1/100").arg(QString::number(loadProgress_));
   }
   showMessage(message);
 }
@@ -785,6 +789,7 @@ WebBrowser::newTab(QWebView *view, int index, bool focus)
     connect(this, SIGNAL(searchEngineChanged(int)), wbview, SLOT(setSearchEngine(int)));
   }
 
+  connect(view, SIGNAL(loadProgress(int)), SLOT(updateLoadProgress()));
   connect(view, SIGNAL(statusBarMessage(QString)), SLOT(showMessage(QString)));
   connect(view, SIGNAL(urlChanged(QUrl)), SLOT(updateAddressbar()));
   connect(view, SIGNAL(loadStarted()), SLOT(handleLoadStarted()));
@@ -907,11 +912,10 @@ WebBrowser::showMessage(const QString &text)
   if (!text.isEmpty()) {
     statusBar()->show();
     hideStatusBarTimer_->start();
-  } else {
-    WbWebView *v = dynamic_cast<WbWebView *>(tabWidget());
-    if (v && v->isLoading())
-      showLoadProgress(v->progress());
   }
+  //  WbWebView *v = dynamic_cast<WbWebView *>(tabWidget());
+  //  if (v && v->isLoading())
+  //    showLoadProgress(v->progress());
 }
 
 void

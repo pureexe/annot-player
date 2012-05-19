@@ -28,7 +28,6 @@ protected slots:
   void updateContextMenu();
 private:
   void createActions();
-
 private:
   MainWindow *w_;
 

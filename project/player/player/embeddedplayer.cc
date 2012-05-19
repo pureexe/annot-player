@@ -101,6 +101,29 @@ EmbeddedPlayerUi::EmbeddedPlayerUi(SignalHub *hub, Player *player, ServerAgent *
   CONNECT_TO_AUTOHIDE(inputComboBox()->lineEdit(), SIGNAL(cursorPositionChanged(int,int)));
 #undef CONNECT_TO_AUTOHIDE
 
+  {
+    const int ButtonMaximumSize = 40; // "int" to match QVariant
+    playButton()->setProperty("maximumRadius", ButtonMaximumSize);
+    playButton()->setProperty("maximumRadius", ButtonMaximumSize);
+    openButton()->setProperty("maximumRadius", ButtonMaximumSize);
+    playButton()->setProperty("maximumRadius", ButtonMaximumSize);
+    stopButton()->setProperty("maximumRadius", ButtonMaximumSize);
+    nextFrameButton()->setProperty("maximumRadius", ButtonMaximumSize);
+    fastForwardButton()->setProperty("maximumRadius", ButtonMaximumSize);
+    fastFastForwardButton()->setProperty("maximumRadius", ButtonMaximumSize);
+    toggleFullScreenModeButton()->setProperty("maximumRadius", ButtonMaximumSize);
+    toggleMiniModeButton()->setProperty("maximumRadius", ButtonMaximumSize);
+    toggleEmbedModeButton()->setProperty("maximumRadius", ButtonMaximumSize);
+    positionButton()->setProperty("maximumRadius", ButtonMaximumSize);
+    progressButton()->setProperty("maximumRadius", ButtonMaximumSize);
+    previousButton()->setProperty("maximumRadius", ButtonMaximumSize);
+    nextButton()->setProperty("maximumRadius", ButtonMaximumSize);
+    menuButton()->setProperty("maximumRadius", ButtonMaximumSize);
+
+    const int PlayButtonMinimumSize = 35; // "int" to match QVariant
+    playButton()->setProperty("minimumRadius", PlayButtonMinimumSize);
+    playButton()->setProperty("radius", PlayButtonMinimumSize);
+  }
   resize(QSize()); // temporarily
 
   connect(new QShortcut(QKeySequence("F2"), this), SIGNAL(activated()), hub, SLOT(toggleEmbeddedPlayerMode()));
@@ -393,6 +416,7 @@ EmbeddedPlayerUi::setVisible(bool visible)
 
   Base::setVisible(visible);
   updateTrackingTimer();
+  emit visibleChanged(visible);
 }
 
 void

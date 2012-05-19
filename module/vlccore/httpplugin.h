@@ -30,6 +30,7 @@ class VlcHttpPlugin : public QObject
   typedef VlcHttpPlugin Self;
   typedef QObject Base;
 
+  static bool loaded_;
   static VlcHttpSession *session_;
   static QNetworkCookieJar *cookieJar_;
   static QString url_;
@@ -39,6 +40,12 @@ class VlcHttpPlugin : public QObject
   static QString mediaTitle_;
   static bool bufferSaved_;
   static QString cachePath_;
+
+  //typedef int (*pf_activate_t)(vlc_object_t *);
+  //typedef void (*pf_deactivate_t)(vlc_object_t *);
+  //static pf_activate_t pf_activate;
+  //static pf_deactivate_t pf_deactivate;
+  //static bool activated_;
 
 public:
   static Self *globalInstance() { static Self g; return &g; }

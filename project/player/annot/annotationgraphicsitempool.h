@@ -10,6 +10,7 @@
 class AnnotationGraphicsItem;
 
 class AnnotationGraphicsView;
+class DataManager;
 class SignalHub;
 
 class AnnotationGraphicsItemPool : public QObject
@@ -21,8 +22,8 @@ class AnnotationGraphicsItemPool : public QObject
 public:
   typedef AnnotationGraphicsItem value_type;
 
-  AnnotationGraphicsItemPool(AnnotationGraphicsView *view, SignalHub *hub, QObject *parent = 0)
-    : Base(parent), view_(view), hub_(hub) { }
+  AnnotationGraphicsItemPool(AnnotationGraphicsView *view, DataManager *data, SignalHub *hub, QObject *parent = 0)
+    : Base(parent), view_(view), data_(data), hub_(hub) { }
 
   ~AnnotationGraphicsItemPool() { clear(); }
 
@@ -42,6 +43,7 @@ private:
   Hash used_;
 
   mutable AnnotationGraphicsView *view_;
+  mutable DataManager *data_;
   mutable SignalHub *hub_;
   //QMutex m_;
 };

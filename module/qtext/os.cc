@@ -21,7 +21,6 @@
 
 #define DEBUG "os"
 #include "module/debug/debug.h"
-#include <QDebug>
 
 #define _qs(_cstr)      QString::fromLocal8Bit(_cstr)
 
@@ -75,6 +74,11 @@ QtExt::mktemp(const QString &suffix, bool deleteLater)
     QString fileName = QFileInfo(ret).fileName();
     ret = QDir::homePath() + "/" + fileName;
   }
+
+#ifdef Q_WS_WIN
+  while (ret.endsWith('.'))
+    ret.chop(1);
+#endif // Q_WS_WIN
 
   if (deleteLater)
     FileDeleter::globalInstance()->deleteFileLater(ret);

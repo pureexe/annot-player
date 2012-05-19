@@ -62,7 +62,7 @@ Token::digestFromFile(const QString &input)
       DOUT("exit: Failed to open file for hashing: " << filePath);
       return QByteArray();
     }
-    data = file.read(qMin(file.size(), qint64(DIGEST_SIZE)));
+    data = file.read(qMin<qint64>(file.size(), DIGEST_SIZE));
     file.close();
 #endif // WITH_MODULE_IOUTIL
   }

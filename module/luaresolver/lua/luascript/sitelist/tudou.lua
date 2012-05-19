@@ -8,7 +8,8 @@ function getTaskAttribute_tudou ( str_url, str_tmpfile ,str_servername, pDlg)
 	if pDlg~=nil then
 		sShowMessage(pDlg, '¿ªÊ¼½âÎö..');
 	end
-	local int_acfpv = getACFPV ( str_url );
+	--local int_acfpv = getACFPV ( str_url );
+	local int_acfpv = 4;
 
 	-------[[read flv id start]]
 

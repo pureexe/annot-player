@@ -27,6 +27,7 @@ public:
 
 signals:
   void fullScreenModeChanged(bool t);
+  void visibleChanged(bool t);
 public:
   EmbeddedCanvas *canvas() const { return canvas_; }
   EmbeddedInfoView *infoView() const { return infoView_; }

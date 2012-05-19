@@ -9,12 +9,12 @@ DEFINES += WITH_MODULE_GRAPHICSEFFECT
 DEPENDPATH += $$PWD
 
 HEADERS += \
-    $$PWD/graphicshaloeffect.h \
-    $$PWD/graphicsrippleeffect.h
+    $$PWD/graphicsrippleeffect.h \
+    $$PWD/graphicsshadoweffect.h
 
 SOURCES += \
-    $$PWD/graphicshaloeffect.cc \
-    $$PWD/graphicsrippleeffect.cc
+    $$PWD/graphicsrippleeffect.cc \
+    $$PWD/graphicsshadoweffect.cc
 
 QT      += core gui
 

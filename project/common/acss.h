@@ -10,67 +10,6 @@
 #include "module/qtext/ss.h"
 #include <QtGlobal>
 
-// - Sliders -
-
-// See: http://blog.sina.com.cn/s/blog_791f544a0100s2ml.html
-//#define SS_SLIDER "QSlider::groove:horizontal { border: 1px solid #bbb; background: white; height: 10px; border-radius: 4px; } QSlider::sub-page:horizontal { background: qlineargradient(x1: 0, y1: 0,    x2: 0, y2: 1, stop: 0 #66e, stop: 1 #bbf); background: qlineargradient(x1: 0, y1: 0.2, x2: 1, y2: 1, stop: 0 #bbf, stop: 1 #55f); border: 1px solid #777; height: 10px; border-radius: 4px; } QSlider::add-page:horizontal { background: #fff; border: 1px solid #777; height: 10px; border-radius: 4px; } QSlider::handle:horizontal { background: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 #eee, stop:1 #ccc); border: 1px solid #777; width: 13px; margin-top: -2px; margin-bottom: -2px; border-radius: 4px; } QSlider::handle:horizontal:hover { background: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 #fff, stop:1 #ddd); border: 1px solid #444; border-radius: 4px; } QSlider::sub-page:horizontal:disabled { background: #bbb; border-color: #999; } QSlider::add-page:horizontal:disabled { background: #eee; border-color: #999; } QSlider::handle:horizontal:disabled { background: #eee; border: 1px solid #aaa; border-radius: 4px; } "
-// - groove
-// - handle
-// - sub-page
-// - add-page
-#define SS_SLIDER \
-  SS_BEGIN(QSlider::groove:horizontal) \
-    SS_BORDER(1px) \
-    SS_HEIGHT(2px) \
-    SS_NO_MARGIN \
-    SS_LEFT(5px) SS_RIGHT(5px) \
-  SS_END \
-  SS_BEGIN(QSlider::sub-page:horizontal) \
-    SS_BACKGROUND( \
-      qlineargradient(spread:pad, \
-        x1:0, y1:1, x2:0, y2:0, \
-        stop:0    rgba(27, 5, 27, 255), \
-        stop:0.25 rgba(99, 20, 102, 255), \
-        stop:0.5  rgba(154, 30, 158, 255), \
-        stop:1    rgba(173, 57, 176, 255))) \
-  SS_END \
-  SS_BEGIN(QSlider::add-page:horizontal) \
-    SS_BACKGROUND(#555) \
-    SS_BORDER(1px solid #777) \
-    SS_HEIGHT(1px) \
-    SS_LEFT(5px) SS_RIGHT(5px) \
-  SS_END \
-  SS_BEGIN(QSlider::handle:horizontal) \
-    SS_TRANSPARENT \
-    SS_MARGIN(-4px) \
-    SS_WIDTH(8px) \
-    SS_BORDER_RADIUS(4px) \
-  SS_END \
-  SS_BEGIN(QSlider::handle:horizontal:hover) \
-    SS_BACKGROUND( \
-      qlineargradient( \
-        x1:0, y1:0, x2:1, y2:1, \
-        stop:0 #bbf, \
-        stop:1 #66e)) \
-  SS_END \
-  SS_BEGIN(QSlider::handle:horizontal:disabled) \
-    SS_TRANSPARENT \
-    SS_NO_MARGIN \
-    SS_NO_WIDTH \
-  SS_END \
-  SS_BEGIN(QSlider::sub-page:horizontal:disabled) \
-    SS_BACKGROUND(#bbb) \
-    SS_BORDER_COLOR(#999) \
-  SS_END \
-  SS_BEGIN(QSlider::add-page:horizontal:disabled) \
-    SS_BACKGROUND(#eee) \
-    SS_BORDER_COLOR(#999) \
-  SS_END \
-  SS_BEGIN(QSlider::handle:horizontal:disabled) \
-    SS_BACKGROUND(#eee) \
-    SS_BORDER(1px solid #aaa) \
-  SS_END
-
 // - Buttons -
 
 // Radio buttons

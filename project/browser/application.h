@@ -17,7 +17,7 @@ class Application : public AcApplication
 
   // - Constructions -
 public:
-  static Self *globalInstance() { return dynamic_cast<Self *>(qApp); }
+  static Self *globalInstance() { return static_cast<Self *>(qApp); }
 
   Application(int &argc, char **argv);
   ~Application() { close(); }

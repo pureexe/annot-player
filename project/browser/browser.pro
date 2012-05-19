@@ -1,7 +1,7 @@
 # browser.pro
 # 3/29/2012
 
-VERSION = 0.1.2.3
+VERSION = 0.1.2.4
 
 DEFINES += PROJECT_BROWSER
 
@@ -19,6 +19,8 @@ include($$ROOTDIR/module/animation/animation.pri)
 include($$ROOTDIR/module/compress/compress.pri)
 include($$ROOTDIR/module/crypt/crypt.pri)
 include($$ROOTDIR/module/download/download.pri)
+#include($$ROOTDIR/module/imagefilter/imagefilter.pri)
+#include($$ROOTDIR/module/magnifier/magnifier.pri)
 include($$ROOTDIR/module/mousegesture/mousegesture.pri)
 include($$ROOTDIR/module/mrlanalysis/mrlanalysis.pri)
 include($$ROOTDIR/module/nicoutil/nicoutil.pri)

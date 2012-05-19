@@ -1,7 +1,7 @@
 # player.pro
 # 6/30/2011
 
-VERSION = 0.1.5.4
+VERSION = 0.1.5.5
 
 DEFINES += PROJECT_PLAYER
 
@@ -21,13 +21,13 @@ include($$ROOTDIR/module/crypt/crypt.pri)
 include($$ROOTDIR/module/download/download.pri)
 include($$ROOTDIR/module/graphicseffect/graphicseffect.pri)
 include($$ROOTDIR/module/gsoap/gsoap.pri)       # would static linking cause license conflicts?
+include($$ROOTDIR/module/imagefilter/imagefilter.pri)
 include($$ROOTDIR/module/ioutil/ioutil.pri)
 include($$ROOTDIR/module/magnifier/magnifier.pri)
 include($$ROOTDIR/module/mediacodec/mediacodec.pri)
 include($$ROOTDIR/module/mrlresolver/mrlresolver.pri)
 include($$ROOTDIR/module/nicoutil/nicoutil.pri)
 include($$ROOTDIR/module/player/player.pri)
-include($$ROOTDIR/module/pixmapfilter/pixmapfilter.pri)
 include($$ROOTDIR/module/qt/qt.pri)
 include($$ROOTDIR/module/qtext/qtext.pri)
 include($$ROOTDIR/module/searchengine/searchengine.pri)

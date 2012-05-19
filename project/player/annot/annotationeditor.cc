@@ -297,25 +297,17 @@ AnnotationEditor::createRibons()
       menu->addAction(colorAct_);
       menu->addAction(backgroundColorAct_);
 
-      #define ADD_COLOR(_Color, _COLOR) \
-        QAction *_Color = new QAction(this); \
-        _Color->setText(TR(T_##_COLOR)); \
-        _Color->setToolTip(TR(T_##_COLOR)); \
-        connect(_Color, SIGNAL(triggered()), SLOT(set##_Color##Color())); \
-        menu->addAction(_Color);
-
-        ADD_COLOR(Black, BLACK)
-        ADD_COLOR(Blue, BLUE)
-        ADD_COLOR(Brown, BROWN)
-        ADD_COLOR(Cyan, CYAN)
-        ADD_COLOR(Gray, GRAY)
-        ADD_COLOR(Magenta, MAGENTA)
-        ADD_COLOR(Orange, ORANGE)
-        ADD_COLOR(Pink, PINK)
-        ADD_COLOR(Red, RED)
-        ADD_COLOR(White, WHITE)
-        ADD_COLOR(Yellow, YELLOW)
-      #undef ADD_COLOR
+      menu->addAction(TR(T_BLACK), this, SLOT(setBlackColor()));
+      menu->addAction(TR(T_BLUE), this, SLOT(setBlueColor()));
+      menu->addAction(TR(T_BROWN), this, SLOT(setBrownColor()));
+      menu->addAction(TR(T_CYAN), this, SLOT(setCyanColor()));
+      menu->addAction(TR(T_GRAY), this, SLOT(setGrayColor()));
+      menu->addAction(TR(T_MAGENTA), this, SLOT(setMagentaColor()));
+      menu->addAction(TR(T_ORANGE), this, SLOT(setOrangeColor()));
+      menu->addAction(TR(T_PINK), this, SLOT(setPinkColor()));
+      menu->addAction(TR(T_RED), this, SLOT(setRedColor()));
+      menu->addAction(TR(T_WHITE), this, SLOT(setWhiteColor()));
+      menu->addAction(TR(T_YELLOW), this, SLOT(setYellowColor()));
     }
 
     formatButton_->setMenu(menu);
@@ -361,25 +353,19 @@ void
 AnnotationEditor::createActions()
 {
 #define MAKE_ACTION(_action, _tr, _slot) \
-  _action = new QAction(this); \
-  _action->setText(_tr); \
-  _action->setToolTip(_tr); \
-  connect(_action, SIGNAL(triggered()), _slot);
+  connect(_action = new QAction(_tr, this), SIGNAL(triggered()), _slot);
 
 #define MAKE_TOGGLE(_action, _tr, _slot) \
-  _action = new QAction(this); \
-  _action->setText(_tr); \
-  _action->setToolTip(_tr); \
-  _action->setCheckable(true); \
-  connect(_action, SIGNAL(triggered(bool)), _slot);
+  connect(_action = new QAction(_tr, this), SIGNAL(triggered(bool)), _slot); \
+  _action->setCheckable(true);
+
+  MAKE_ACTION(colorAct_, TR(T_FOREGROUNDCOLOR), SLOT(showColorDialog()))
+  MAKE_ACTION(backgroundColorAct_, TR(T_BACKGROUNDCOLOR), SLOT(showBackgroundColorDialog()))
 
   MAKE_TOGGLE(boldAct_, TR(T_BOLD), SLOT(setBold(bool)))
   MAKE_TOGGLE(italicAct_, TR(T_ITALIC), SLOT(setItalic(bool)))
   MAKE_TOGGLE(underlineAct_, TR(T_UNDERLINE), SLOT(setUnderline(bool)))
   MAKE_TOGGLE(strikeOutAct_, TR(T_STRIKEOUT), SLOT(setStrikeOut(bool)))
-
-  MAKE_ACTION(colorAct_, TR(T_FOREGROUNDCOLOR), SLOT(showColorDialog()))
-  MAKE_ACTION(backgroundColorAct_, TR(T_BACKGROUNDCOLOR), SLOT(showBackgroundColorDialog()))
 
 #undef MAKE_ACTION
 #undef MAKE_TOGGLE

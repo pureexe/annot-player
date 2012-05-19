@@ -1,6 +1,7 @@
 // main.cc
 // 5/6/2012
 #include "window.h"
+#include "module/download/download.h"
 #include <QtGui>
 #include <cstdlib>
 #include <ctime>
@@ -37,6 +38,7 @@ main(int argc, char *argv[])
   //w.setGraphicsEffect(e);
   w.show();
   w2.show();
+  ::dlget("C:/Users/jichi/tmp/nico", QUrl("https://secure.nicovideo.jp/secure/login_form"), QString(), false);
   //  w.scene()->addRect(0, 0, 100, 100, QPen(Qt::red));
   //  w.scene()->addText("123");
   DOUT("exit: exec");

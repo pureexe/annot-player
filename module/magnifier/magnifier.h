@@ -9,9 +9,12 @@
 #include <QtCore/QSize>
 
 QT_FORWARD_DECLARE_CLASS(QTimer)
+QT_FORWARD_DECLARE_CLASS(QMenu)
+QT_FORWARD_DECLARE_CLASS(QAction)
 
-class PixmapRippleFilter;
+class ImageFilter;
 class FadeAnimation;
+class RippleImageFilter;
 class Magnifier : public QtExt::DraggableWidget
 {
   Q_OBJECT
@@ -26,9 +29,14 @@ class Magnifier : public QtExt::DraggableWidget
   QTimer *repaintTimer_;
   QTimer *hideTimer_;
 
-  PixmapRippleFilter *rippleFilter_;
+  ImageFilter *darknessFilter_, *fogFilter_, *mosaicFilter_;
+  RippleImageFilter *rippleFilter_;
   FadeAnimation *fadeAni_;
 
+  QMenu *contextMenu_;
+  QAction *darknessFilterAct_,
+          *fogFilterAct_,
+          *mosaicFilterAct_;
 public:
   explicit Magnifier(QWidget *parent = 0);
 
@@ -39,6 +47,8 @@ public:
 public slots:
   virtual void setVisible(bool visible);
   void fadeOut();
+  void trigger();
+
 protected:
   void paintEvent(QPaintEvent *event);
   void mousePressEvent(QMouseEvent *event);
