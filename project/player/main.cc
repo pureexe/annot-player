@@ -3,6 +3,7 @@
 #include "application.h"
 #include "mainwindow.h"
 #include "settings.h"
+#include "annotationsettings.h"
 #include "global.h"
 #include "tr.h"
 #include "translatormanager.h"
@@ -34,7 +35,6 @@
 #include <QtNetwork/QNetworkProxy>
 #include <QtNetwork/QNetworkReply>
 #include <QtGui>
-#include <QtCore>
 #include <ctime>
 #include <cstdlib>
 
@@ -77,6 +77,10 @@ namespace { // anonymous
 #endif // WITH_WIN_DWM
 
     // Cache fonts needed to render annotations
+    DOUT("default annotation font =" << AnnotationSettings::globalInstance()->fontFamily());
+    QString font = Settings::globalSettings()->annotationFontFamily();
+    DOUT("current annotation font =" << font);
+    AnnotationSettings::globalInstance()->setFontFamily(font);
     AnnotationGraphicsItem::warmUp();
   }
 
@@ -176,6 +180,7 @@ main(int argc, char *argv[])
     settings->setAutoSubmit(true);
     settings->setAnnotationScale(1.0);
     settings->setAnnotationEffect(0);
+    settings->setAnnotationOffset(0);
     settings->setApplicationFilePath(QString());
     //settings->setAnnotationLanguages(Traits::AllLanguages);
     //settings->setAnnotationFilterEnabled(false);
@@ -278,6 +283,18 @@ main(int argc, char *argv[])
   //  new QNetworkAccessManager(&a)
   //);
 
+  // Allocate more threads
+  enum { MinThreadCount = 3 };
+  if (QThreadPool::globalInstance()->maxThreadCount() < MinThreadCount)
+    QThreadPool::globalInstance()->setMaxThreadCount(MinThreadCount);
+  DOUT("thread pool size =" << QThreadPool::globalInstance()->maxThreadCount());
+
+//#ifdef WITH_WIN_QTH
+//  DOUT("load qth service");
+//  QTH;
+//  DOUT("qth service loaded");
+//#endif // WITH_WIN_QTH
+
 //#ifdef USE_MODE_SIGNAL
 //  // Root window
 //  QMainWindow root; // Persistant visible root widget to prevent Qt from automatic closing invisible windows
@@ -293,6 +310,7 @@ main(int argc, char *argv[])
 //#endif // USE_MODE_SIGNAL
   DOUT("create mainwindow");
   MainWindow w(unique); {
+    DOUT("mainwindow created");
     w.setWindowTitle(TR(T_TITLE_PROGRAM));
     Q_ASSERT(w.isValid());
     //if (!w.isValid()) {
@@ -362,7 +380,7 @@ main(int argc, char *argv[])
   //XSendEvent(dpy, DefaultRootWindow(dpy), False,
   //SubstructureNotifyMask, &xev);
 
-#if defined(USE_MODE_SIGNAL) && defined(Q_OS_WIN)
+#if defined USE_MODE_SIGNAL && defined Q_OS_WIN
   // jichi 11/29/2011: Used as a PERSISTENT hidden top level window.
   QWidget dummy;
   dummy.resize(QSize()); // zero-sized to be hidden

@@ -42,7 +42,7 @@ ConsoleDialog::createLayout()
 {
   AcUi *ui = AcUi::globalInstance();
 
-  tabView_ = new TextEditTabView;
+  tabView_ = new TextEditTabView(this);
   tabView_->addTab(tr("Log"));
   tabView_->addTab(tr("Debug"));
   tabView_->finalizeLayout();

@@ -7,6 +7,9 @@
 #include "datamanager.h"
 #include "logger.h"
 #include "module/annotcloud/annothtml.h"
+#ifdef Q_WS_MAC
+#  include "mac/qtmac/qtmac.h"
+#endif // Q_WS_MAC
 #include <QtGui>
 #include <QtWebKit>
 
@@ -56,6 +59,7 @@ AnnotationAnalyticsView::AnnotationAnalyticsView(DataManager *data, QWidget *par
   setWindowTitle(TR(T_TITLE_ANNOTANALYTICS));
   resize(WINDOW_SIZE);
 
+  setCacheDirectory(G_PATH_CACHES);
   webView()->setRenderHints(
     QPainter::Antialiasing |
     QPainter::TextAntialiasing |

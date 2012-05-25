@@ -36,8 +36,6 @@ public slots:
   void setEnabled(bool t);
   void updateVisible();
 
-  void setOffset(qint64 secs);
-
   void setUserIds(const QList<qint64> userIds) { userIds_ = userIds; invalidatePaint(); }
   void clearUserIds() { userIds_.clear(); invalidatePaint(); }
 
@@ -59,7 +57,6 @@ private:
   DataManager *data_;
   SignalHub *hub_;
   Player *player_;
-  qint64 offset_;
 
   QList<qint64> userIds_;
 };

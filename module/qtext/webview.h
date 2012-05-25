@@ -91,7 +91,6 @@ protected:
   void pinchGesture(QPinchGesture *g);
   void swipeGesture(QSwipeGesture *g);
 
-  QMenu *createContextMenu();
   QMenu *createHistoryMenu();
 
   // - Helpers -

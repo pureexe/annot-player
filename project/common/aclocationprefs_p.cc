@@ -5,6 +5,7 @@
 #include "project/common/acui.h"
 #include "project/common/acpaths.h"
 #include "project/common/acsettings.h"
+#include "module/qtext/ss.h"
 #include <QtGui>
 
 // - Locations -
@@ -28,6 +29,8 @@ AcLocationPreferences::createLayout()
   downloadsLocationEdit_->setStatusTip(tr("Downloads Location"));
   connect(downloadsLocationEdit_, SIGNAL(editTextChanged(QString)), SLOT(verifyLocation(QString)));
   QToolButton *downloadsLocationButton = ui->makeToolButton(0, tr("Downloads"), tr("Downloads Location"), locationManager_, SLOT(openDownloadsLocation()));
+
+  downloadsLocationEditStyleSheet_ = downloadsLocationEdit_->styleSheet();
 
   // Layouts
   QGridLayout *grid = new QGridLayout; {
@@ -73,10 +76,22 @@ AcLocationPreferences::save()
 void
 AcLocationPreferences::verifyLocation(const QString &path)
 {
-  if (QFile::exists(path))
+  bool ok = QFile::exists(path);
+
+  if (ok)
     emit message(tr("exists") + ": " + path);
   else
     emit warning(tr("not exist") + ": " + path);
+
+  downloadsLocationEdit_->setStyleSheet(downloadsLocationEditStyleSheet_ + (ok ?
+    SS_BEGIN(QComboBox)
+      SS_COLOR(black)
+    SS_END
+    :
+    SS_BEGIN(QComboBox)
+      SS_COLOR(red)
+    SS_END
+  ));
 }
 
 // EOF

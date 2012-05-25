@@ -10,7 +10,6 @@ void
 QtExt::
 Slider::enterEvent(QEvent *event)
 {
-  hovered_ = true;
   setCursor(Qt::PointingHandCursor);
   Base::enterEvent(event);
 }
@@ -19,7 +18,6 @@ void
 QtExt::
 Slider::leaveEvent(QEvent *event)
 {
-  hovered_ = false;
   setCursor(Qt::ArrowCursor);
   Base::leaveEvent(event);
 }

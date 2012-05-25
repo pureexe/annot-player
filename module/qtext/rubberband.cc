@@ -6,40 +6,49 @@
 #include <boost/algorithm/minmax.hpp>
 #include <boost/tuple/tuple.hpp>
 
-// - RubberBandWithColor -
+// - SquareRubberBand -
 
-void
 QtExt::
-RubberBandWithColor::setColor(const QColor &color)
+SquareRubberBand::SquareRubberBand(Shape s, QWidget *parent)
+  : Base(s, parent)
 {
-  color_ = color;
 #ifndef Q_WS_MAC
-  enum { length = 1 };
-  QGraphicsColorizeEffect *e = 0;
-  if (color_.isValid()) {
-    e = new QGraphicsColorizeEffect(this);
-    e->setColor(color_);
-    e->setStrength(1);
-  }
-  setGraphicsEffect(e);
+  connect(this, SIGNAL(colorChanged(QColor)), SLOT(invalidateColor()));
 #endif // Q_WS_MAC
 }
 
 void
 QtExt::
-RubberBandWithColor::paintEvent(QPaintEvent *e)
+SquareRubberBand::invalidateColor()
+{
+  enum { strength = 1 };
+  QGraphicsColorizeEffect *e = 0;
+  QColor c = color();
+  if (c.isValid()) {
+    e = qobject_cast<QGraphicsColorizeEffect *>(graphicsEffect());
+    if (!e)
+      e = new QGraphicsColorizeEffect(this);
+    e->setColor(c);
+    e->setStrength(strength);
+  }
+  setGraphicsEffect(e);
+}
+
+void
+QtExt::
+SquareRubberBand::paintEvent(QPaintEvent *e)
 {
 #ifdef Q_WS_MAC
-  if (color_.isValid()) {
+  QColor c = color();
+  if (c.isValid()) {
     enum { width = 2, alpha = 32 };
 
-    QPen pen(color_, width);
+    QPen pen(c, width);
     pen.setStyle(Qt::SolidLine);
     QPainter painter;
     painter.begin(this);
     painter.setPen(pen);
     if (shape() == Rectangle) {
-      QColor c = color_;
       c.setAlpha(alpha);
       QBrush brush(c);
       brush.setStyle(Qt::Dense1Pattern);
@@ -49,6 +58,45 @@ RubberBandWithColor::paintEvent(QPaintEvent *e)
     painter.end();
   } else
 #endif // Q_WS_MAC
+  Base::paintEvent(e);
+}
+
+// - CircularRubberBand -
+
+void
+QtExt::
+CircularRubberBand::updateGeometry()
+{
+  QRect r(0, 0, radius_*2, radius_*2);
+  r.moveCenter(center_);
+  setGeometry(r);
+}
+
+void
+QtExt::
+CircularRubberBand::paintEvent(QPaintEvent *e)
+{
+  QColor c = color();
+  if (c.isValid()) {
+    enum { width = 1, alpha = 32 };
+
+    QPen pen(c, width);
+    pen.setStyle(Qt::SolidLine);
+    QPainter painter;
+    painter.begin(this);
+    painter.setPen(pen);
+    if (shape() == Rectangle) {
+      c.setAlpha(alpha);
+      QBrush brush(c);
+      brush.setStyle(Qt::Dense1Pattern);
+      painter.setBrush(brush);
+    }
+    //painter.drawEllipse(e->rect());
+    QRect r = rect();
+    r.moveCenter(center_);
+    painter.drawEllipse(r);
+    painter.end();
+  } else
   Base::paintEvent(e);
 }
 

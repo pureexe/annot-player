@@ -38,7 +38,7 @@ TaskDialog::createLayout()
 {
   AcUi *ui = AcUi::globalInstance();
 
-  textView_ = new AcTextView;
+  textView_ = new AcTextView(this);
 
   urlButton_ = ui->makeToolButton(
         AcUi::UrlHint,
@@ -113,7 +113,7 @@ TaskDialog::lastUrl() const
     return QString();
   QString text = textView_->last().trimmed();
   QStringList urls = text.split('\n', QString::SkipEmptyParts);
-  return urls.isEmpty() ? QString() : urls.last();
+  return urls.isEmpty() ? QString() : urls.last().trimmed();
 }
 
 // - Actions -
@@ -124,10 +124,8 @@ TaskDialog::add()
   fadeOut();
   QString text = textView_->toPlainText();
   QStringList urls;
-  foreach (QString t, text.split('\n', QString::SkipEmptyParts)) {
-    t = t.trimmed();
-    urls.append(t);
-  }
+  foreach (const QString &t, text.split('\n', QString::SkipEmptyParts))
+    urls.append(t.trimmed());
   bool batch = false;
   if (!urls.isEmpty()) {
     QStringList ret;
@@ -162,7 +160,7 @@ TaskDialog::clear()
 void
 TaskDialog::increase()
 {
-  QString prevUrl  = lastUrl();
+  QString prevUrl = lastUrl();
   if (prevUrl.isEmpty())
     return;
   QString url = prevUrl;
@@ -183,7 +181,7 @@ TaskDialog::increase()
 void
 TaskDialog::decrease()
 {
-  QString prevUrl  = lastUrl();
+  QString prevUrl = lastUrl();
   if (prevUrl.isEmpty())
     return;
   QString url = prevUrl;

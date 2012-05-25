@@ -17,6 +17,7 @@
 #endif // WITH_MODULE_MEDIACODEC
 #include "module/qtext/filesystem.h"
 #include <QtNetwork/QNetworkAccessManager>
+#include <QtCore/QFileInfo>
 
 #define DEBUG "mrldownloadtask_s"
 #include "module/debug/debug.h"
@@ -38,11 +39,13 @@ MrlDownloadTask::downloadSingleMedia(const MediaInfo &mi, QNetworkCookieJar *jar
   if (mi.mrls.isEmpty()) {
     setFileName(QString());
     setState(Error);
+    quit();
     DOUT("exit: empty mrl");
     return;
   }
 
   if (stopped_) {
+    quit();
     DOUT("exit: stopped");
     return;
   }
@@ -51,7 +54,8 @@ MrlDownloadTask::downloadSingleMedia(const MediaInfo &mi, QNetworkCookieJar *jar
   if (jar)
     nam->setCookieJar(jar);
   BufferedRemoteStream in_impl(nam);
-  nam->setParent(&in_impl);
+  //nam->setParent(&in_impl);
+  nam->deleteLater();
 
   RemoteStream &in = in_impl;
   connect(&in, SIGNAL(progress(qint64,qint64)), SIGNAL(progress(qint64,qint64)));
@@ -67,6 +71,7 @@ MrlDownloadTask::downloadSingleMedia(const MediaInfo &mi, QNetworkCookieJar *jar
 
   if (stopped_) {
     stop();
+    quit();
     DOUT("exit: stopped");
     return;
   }
@@ -76,6 +81,8 @@ MrlDownloadTask::downloadSingleMedia(const MediaInfo &mi, QNetworkCookieJar *jar
     setState(Error);
     emit error(tr("access denied to download URL") + ": " + realUrl);
     in.stop();
+    quit();
+    DOUT("exit: invalid file type");
     return;
   }
 
@@ -96,6 +103,7 @@ MrlDownloadTask::downloadSingleMedia(const MediaInfo &mi, QNetworkCookieJar *jar
     setState(Error);
     emit error(tr("failed to open file to write") + ": " + tmpFile);
     in.stop();
+    quit();
     DOUT("exit: cannot write to file");
     return;
   }
@@ -111,6 +119,7 @@ MrlDownloadTask::downloadSingleMedia(const MediaInfo &mi, QNetworkCookieJar *jar
 
   bool flv;
   bool ok = isRunning() && pipe.isFinished() &&
+      QFileInfo(tmpFile).size() >= MinimumFileSize &&
       ((flv = FlvCodec::isFlvFile(tmpFile)) || Mp4Codec::isMp4File(tmpFile));
   if (ok) {
     suf = flv ? ".flv" : ".mp4";
@@ -135,6 +144,7 @@ MrlDownloadTask::downloadSingleMedia(const MediaInfo &mi, QNetworkCookieJar *jar
       setState(Error);;
     emit error(tr("download incomplete") + ": " + tmpFile);
   }
+  quit();
   DOUT("exit");
 }
 

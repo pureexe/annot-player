@@ -8,9 +8,23 @@
 
 namespace QtExt {
 
+  QString mktemp(const QString &suffix = QString(), bool deleteLater = true);
+
   void sleep(uint msecs);
 
-  QString mktemp(const QString &suffix = QString(), bool deleteLater = true);
+  class SleepTimer
+  {
+     bool stopped_;
+  public:
+    void stop() { stopped_ = true; }
+
+    void start(int secs)
+    {
+      stopped_ = false;
+      while (secs-- > 0 && !stopped_)
+        sleep(1000);
+    }
+  };
 
 } // namespace QtExt
 

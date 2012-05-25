@@ -41,7 +41,7 @@
 
 enum { RefreshInterval = 3000 };
 enum { SaveInterval = 60000 * 5 }; // every 5 minutes
-enum { MaxDownloadThreadCount = 3 };
+enum { MaxDownloadThreadCount = 5 };
 
 // - Constructions -
 
@@ -53,7 +53,7 @@ enum { MaxDownloadThreadCount = 3 };
 //  Qt::WindowCloseButtonHint )
 
 MainWindow::MainWindow(QWidget *parent)
-  : Base(parent),
+  : Base(parent), disposed_(false),
     about_(0), preferences_(0),
     trayIcon_(0), taskDialog_(0)
 {
@@ -62,6 +62,7 @@ MainWindow::MainWindow(QWidget *parent)
 
   downloadManager_ = new DownloadManager(this);
   downloadManager_->setMaxThreadCount(MaxDownloadThreadCount);
+  DOUT("thread pool size =" << QThreadPool::globalInstance()->maxThreadCount());
 
   createModels();
   createSearchEngines();
@@ -216,165 +217,171 @@ MainWindow::createModels()
 void
 MainWindow::createActions()
 {
-  startAct_ = new QAction(this); {
-    startAct_->setText(tr("Start"));
-    startAct_->setStatusTip(tr("Start"));
-  } connect(startAct_, SIGNAL(triggered()), SLOT(start()));
-  restartAct_ = new QAction(this); {
-    restartAct_->setText(tr("Restart"));
-    restartAct_->setStatusTip(tr("Restart"));
-  } connect(restartAct_, SIGNAL(triggered()), SLOT(restart()));
-  stopAct_ = new QAction(this); {
-    stopAct_->setText(tr("Stop"));
-    stopAct_->setStatusTip(tr("Stop"));
-  } connect(stopAct_, SIGNAL(triggered()), SLOT(stop()));
-  removeAct_ = new QAction(this); {
-    removeAct_->setText(tr("Remove"));
-    removeAct_->setStatusTip(tr("Remove"));
-  } connect(removeAct_, SIGNAL(triggered()), SLOT(remove()));
-  startAllAct_ = new QAction(this); {
-    startAllAct_->setText(tr("Start All"));
-    startAllAct_->setStatusTip(tr("Start All"));
-  } connect(startAllAct_, SIGNAL(triggered()), SLOT(startAll()));
-  stopAllAct_ = new QAction(this); {
-    stopAllAct_->setText(tr("Stop all"));
-    stopAllAct_->setStatusTip(tr("Stop All"));
-  } connect(stopAllAct_, SIGNAL(triggered()), SLOT(stopAll()));
-  removeAllAct_ = new QAction(this); {
-    removeAllAct_->setText(tr("Remove All"));
-    removeAllAct_->setStatusTip(tr("Remove All"));
-  } connect(removeAllAct_, SIGNAL(triggered()), SLOT(removeAll()));
-  playAct_ = new QAction(this); {
-    playAct_->setText(tr("Play"));
-    playAct_->setStatusTip(tr("Open with Annot Player"));
-  } connect(playAct_, SIGNAL(triggered()), SLOT(play()));
-  browseAct_ = new QAction(this); {
-    browseAct_->setText(tr("Browse"));
-    browseAct_->setStatusTip(tr("Open with Annot Browser"));
-  } connect(browseAct_, SIGNAL(triggered()), SLOT(browse()));
-  openDirectoryAct_ = new QAction(this); {
-    openDirectoryAct_->setText(tr("Open Directory"));
-    openDirectoryAct_->setStatusTip(tr("Open Directory"));
-  } connect(openDirectoryAct_, SIGNAL(triggered()), SLOT(openDirectory()));
-  hideAct_ = new QAction(this); {
-    hideAct_->setText(tr("Hide"));
-    hideAct_->setStatusTip(tr("Hide"));
-  } connect(hideAct_, SIGNAL(triggered()), SLOT(fadeOut()));
-  quitAct_ = new QAction(this); {
-    quitAct_->setText(tr("Quit"));
-    quitAct_->setStatusTip(tr("Quit"));
-    quitAct_->setShortcut(QKeySequence::Quit);
-  } connect(quitAct_, SIGNAL(triggered()), SLOT(quit()));
-  newAct_ = new QAction(this); {
-    newAct_->setText(tr("New"));
-    newAct_->setStatusTip(tr("New"));
-    newAct_->setShortcut(QKeySequence::New);
-  } connect(newAct_, SIGNAL(triggered()), SLOT(add()));
-  menuBarAct_ = new QAction(this); {
-    menuBarAct_->setCheckable(true);
-    menuBarAct_->setText(tr("Menu Bar") + " [" K_CAPSLOCK "]");
-    menuBarAct_->setStatusTip(tr("Menu Bar"));
-  } connect(menuBarAct_, SIGNAL(triggered(bool)), menuBar(), SLOT(setVisible(bool)));
- copyTitleAct_ = new QAction(this); {
-   copyTitleAct_->setText(tr("Copy Title"));
-   copyTitleAct_->setStatusTip(tr("Copy Title"));
- } connect(copyTitleAct_, SIGNAL(triggered()), SLOT(copyTitle()));
- copyUrlAct_ = new QAction(this); {
-   copyUrlAct_->setText(tr("Copy Url"));
-   copyUrlAct_->setStatusTip(tr("Copy Url"));
- } connect(copyUrlAct_, SIGNAL(triggered()), SLOT(copyUrl()));
+  menuBar_ =
+#ifdef Q_WS_MAC
+    new QMenuBar // global, no parent, see: http://qt-project.org/doc/qt-4.8/qmenubar.html#qmenubar-on-mac-os-x
+#else
+    menuBar()
+#endif // Q_WS_MAC
+  ;
+  QAction *
+  a = startAct_ = new QAction(tr("Start"), this); {
+    a->setStatusTip(a->text());
+    connect(a, SIGNAL(triggered()), SLOT(start()));
+  }
+  a = restartAct_ = new QAction(tr("Restart"), this); {
+    a->setStatusTip(a->text());
+    connect(a, SIGNAL(triggered()), SLOT(restart()));
+  }
+  a = stopAct_ = new QAction(tr("Stop"), this); {
+    a->setStatusTip(a->text());
+    connect(a, SIGNAL(triggered()), SLOT(stop()));
+  }
+  a = removeAct_ = new QAction(tr("Remove"), this); {
+    a->setStatusTip(a->text());
+    connect(a, SIGNAL(triggered()), SLOT(remove()));
+  }
+  a = startAllAct_ = new QAction(tr("Start All"), this); {
+    a->setStatusTip(a->text());
+    connect(a, SIGNAL(triggered()), SLOT(startAll()));
+  }
+  a = stopAllAct_ = new QAction(tr("Stop All"), this); {
+    a->setStatusTip(a->text());
+    connect(a, SIGNAL(triggered()), SLOT(stopAll()));
+  }
+  a = removeAllAct_ = new QAction(tr("Remove All"), this); {
+    a->setStatusTip(a->text());
+    connect(a, SIGNAL(triggered()), SLOT(removeAll()));
+  }
+  a = playAct_ = new QAction(QIcon(ACRC_IMAGE_PLAYER), tr("Play"), this); {
+    a->setStatusTip(tr("Open with Annot Player"));
+    connect(a, SIGNAL(triggered()), SLOT(play()));
+  }
+  a = browseAct_ = new QAction(QIcon(ACRC_IMAGE_BROWSER), tr("Browse"), this); {
+    a->setStatusTip(tr("Open with Annot Browser"));
+    connect(a, SIGNAL(triggered()), SLOT(browse()));
+  }
+  a = openDirectoryAct_ = new QAction(tr("Open Directory"), this); {
+    a->setStatusTip(a->text());
+    connect(a, SIGNAL(triggered()), SLOT(openDirectory()));
+  }
+  a = hideAct_ = new QAction(tr("Hide"), this); {
+    a->setStatusTip(a->text());
+    a->setShortcut(QKeySequence("Esc"));
+    connect(a, SIGNAL(triggered()), SLOT(fadeOut()));
+    addAction(a);
+    new QShortcut(QKeySequence("CTRL+W"), this, SLOT(fadeOut()));
+  }
+  a = quitAct_ = new QAction(tr("Quit"), this); {
+    a->setStatusTip(a->text());
+    connect(a, SIGNAL(triggered()), SLOT(quit()));
+  }
+  a = newAct_ = new QAction(tr("New"), this); {
+    a->setStatusTip(a->text());
+    a->setShortcut(QKeySequence::New);
+    addAction(a);
+    connect(a, SIGNAL(triggered()), SLOT(add()));
+  }
+  a = menuBarAct_ = new QAction(tr("Menu Bar") + " [" K_CAPSLOCK "]", this); {
+    a->setStatusTip(a->text());
+    a->setCheckable(true);
+    connect(a, SIGNAL(triggered(bool)), menuBar_, SLOT(setVisible(bool)));
+  }
+  a = copyTitleAct_ = new QAction(tr("Copy Title"), this); {
+    a->setStatusTip(a->text());
+    connect(a, SIGNAL(triggered()), SLOT(copyTitle()));
+  }
+  a = copyUrlAct_ = new QAction(this); {
+    a->setStatusTip(a->text());
+    connect(a, SIGNAL(triggered()), SLOT(copyUrl()));
+  }
 
   // Copy menu
-  copyMenu_ = new QMenu(tr("Copy") + " ...", this); {
-    AcUi::globalInstance()->setContextMenuStyle(copyMenu_, true); // persistent = true
-    copyMenu_->addAction(copyTitleAct_);
-    copyMenu_->addAction(copyUrlAct_);
+  QMenu *
+  m = copyMenu_ = new QMenu(tr("Copy") + " ...", this); {
+    m->setEnabled(false);
+    m->setStatusTip(tr("Copy"));
+    m->setToolTip(tr("Copy"));
+    AcUi::globalInstance()->setContextMenuStyle(m, true); // persistent = true
+    m->addAction(copyTitleAct_);
+    m->addAction(copyUrlAct_);
 
-    copyMenu_->addSeparator();
+    m->addSeparator();
 
     QString t = tr("Search with %1");
 
     SearchEngine *e = searchEngines_[SearchEngineFactory::Google];
-    copyMenu_->addAction(QIcon(e->icon()), t.arg(e->name()), this, SLOT(searchCurrentTitleWithGoogle()));
+    m->addAction(QIcon(e->icon()), t.arg(e->name()), this, SLOT(searchCurrentTitleWithGoogle()));
 
     e = searchEngines_[SearchEngineFactory::GoogleImages];
-    copyMenu_->addAction(QIcon(e->icon()), t.arg(e->name()), this, SLOT(searchCurrentTitleWithGoogleImages()));
+    m->addAction(QIcon(e->icon()), t.arg(e->name()), this, SLOT(searchCurrentTitleWithGoogleImages()));
 
     e = searchEngines_[SearchEngineFactory::Bing];
-    copyMenu_->addAction(QIcon(e->icon()), t.arg(e->name()), this, SLOT(searchCurrentTitleWithBing()));
+    m->addAction(QIcon(e->icon()), t.arg(e->name()), this, SLOT(searchCurrentTitleWithBing()));
 
-    copyMenu_->addSeparator();
+    m->addSeparator();
 
     e = searchEngines_[SearchEngineFactory::Nicovideo];
-    copyMenu_->addAction(QIcon(e->icon()), t.arg(e->name()), this, SLOT(searchCurrentTitleWithNicovideo()));
+    m->addAction(QIcon(e->icon()), t.arg(e->name()), this, SLOT(searchCurrentTitleWithNicovideo()));
 
     e = searchEngines_[SearchEngineFactory::Bilibili];
-    copyMenu_->addAction(QIcon(e->icon()), t.arg(e->name()), this, SLOT(searchCurrentTitleWithBilibili()));
+    m->addAction(QIcon(e->icon()), t.arg(e->name()), this, SLOT(searchCurrentTitleWithBilibili()));
 
     e = searchEngines_[SearchEngineFactory::Acfun];
-    copyMenu_->addAction(QIcon(e->icon()), t.arg(e->name()), this, SLOT(searchCurrentTitleWithAcfun()));
+    m->addAction(QIcon(e->icon()), t.arg(e->name()), this, SLOT(searchCurrentTitleWithAcfun()));
 
     e = searchEngines_[SearchEngineFactory::Youtube];
-    copyMenu_->addAction(QIcon(e->icon()), t.arg(e->name()), this, SLOT(searchCurrentTitleWithYoutube()));
+    m->addAction(QIcon(e->icon()), t.arg(e->name()), this, SLOT(searchCurrentTitleWithYoutube()));
 
     e = searchEngines_[SearchEngineFactory::Youku];
-    copyMenu_->addAction(QIcon(e->icon()), t.arg(e->name()), this, SLOT(searchCurrentTitleWithYouku()));
+    m->addAction(QIcon(e->icon()), t.arg(e->name()), this, SLOT(searchCurrentTitleWithYouku()));
 
-    copyMenu_->addSeparator();
+    m->addSeparator();
 
     e = searchEngines_[SearchEngineFactory::WikiEn];
-    copyMenu_->addAction(QIcon(e->icon()), t.arg(e->name()), this, SLOT(searchCurrentTitleWithWikiEn()));
+    m->addAction(QIcon(e->icon()), t.arg(e->name()), this, SLOT(searchCurrentTitleWithWikiEn()));
 
     e = searchEngines_[SearchEngineFactory::WikiJa];
-    copyMenu_->addAction(QIcon(e->icon()), t.arg(e->name()), this, SLOT(searchCurrentTitleWithWikiJa()));
+    m->addAction(QIcon(e->icon()), t.arg(e->name()), this, SLOT(searchCurrentTitleWithWikiJa()));
 
     e = searchEngines_[SearchEngineFactory::WikiZh];
-    copyMenu_->addAction(QIcon(e->icon()), t.arg(e->name()), this, SLOT(searchCurrentTitleWithWikiZh()));
+    m->addAction(QIcon(e->icon()), t.arg(e->name()), this, SLOT(searchCurrentTitleWithWikiZh()));
 
-  } copyMenu_->setEnabled(false);
+  }
 
   // Create menus
-  contextMenu_ = new QMenu(this); {
-    AcUi::globalInstance()->setContextMenuStyle(contextMenu_, true); // persistent = true
+  m = contextMenu_ = new QMenu(this); {
+    AcUi::globalInstance()->setContextMenuStyle(m, true); // persistent = true
 
-    contextMenu_->addMenu(copyMenu_);
-    contextMenu_->addSeparator();
-    contextMenu_->addAction(startAct_);
-    contextMenu_->addAction(playAct_);
-    contextMenu_->addAction(browseAct_);
-    contextMenu_->addAction(openDirectoryAct_);
-    contextMenu_->addSeparator();
-    contextMenu_->addAction(stopAct_);
-    contextMenu_->addAction(restartAct_);
-    contextMenu_->addAction(removeAct_);
-    contextMenu_->addSeparator();
-    contextMenu_->addAction(startAllAct_);
-    contextMenu_->addAction(stopAllAct_);
-    contextMenu_->addAction(removeAllAct_);
+    m->addMenu(copyMenu_);
+    m->addSeparator();
+    m->addAction(startAct_);
+    m->addAction(openDirectoryAct_);
+    m->addAction(playAct_);
+    m->addAction(browseAct_);
+    m->addSeparator();
+    m->addAction(stopAct_);
+    m->addAction(restartAct_);
+    m->addAction(removeAct_);
+    m->addSeparator();
+    m->addAction(startAllAct_);
+    m->addAction(stopAllAct_);
+    m->addAction(removeAllAct_);
+    m->addSeparator();
   #ifndef Q_WS_MAC
-    contextMenu_->addSeparator();
-    contextMenu_->addAction(menuBarAct_);
-    contextMenu_->addAction(tr("Preferences"), this, SLOT(preferences()), QKeySequence("CTRL+,"));
-    contextMenu_->addAction(hideAct_);
-    contextMenu_->addAction(quitAct_);
+    m->addAction(menuBarAct_);
+    m->addAction(tr("Preferences"), this, SLOT(preferences()), QKeySequence("CTRL+,"));
   #endif // Q_WS_MAC
-    }
-
-  hideAct_->setShortcut(QKeySequence("Esc"));
-  new QShortcut(QKeySequence("Esc"), this, SLOT(fadeOut()));
-
-  //quitAct_->setShortcut(QKeySequence("CTRL+W"));
-  new QShortcut(QKeySequence("CTRL+W"), this, SLOT(fadeOut()));
-
-  new QShortcut(QKeySequence::New, this, SLOT(add()));
+    m->addAction(hideAct_);
+    m->addAction(quitAct_);
+  }
 
   // Create menu bar
 
 #ifdef Q_WS_WIN
-  menuBar()->hide();
+  menuBar_->hide();
 #endif // Q_WS_WIN
-  QMenu *
-  m = menuBar()->addMenu(tr("&File")); {
+  m = menuBar_->addMenu(tr("&File")); {
     m->addAction(newAct_);
     m->addSeparator();
     m->addAction(stopAllAct_);
@@ -383,22 +390,20 @@ MainWindow::createActions()
     m->addAction(playAct_);
     m->addAction(browseAct_);
     m->addAction(openDirectoryAct_);
-#ifndef Q_WS_MAC
     m->addSeparator();
-    m->addAction(tr("Quit"), this, SLOT(quit()), QKeySequence::Quit);
-#endif // Q_WS_MAC
+    m->addAction(tr("&Quit"), this, SLOT(quit()), QKeySequence::Quit);
   }
-  m = menuBar()->addMenu(tr("&Edit")); {
+  m = menuBar_->addMenu(tr("&Edit")); {
     m->addAction(startAct_);
     m->addSeparator();
     m->addAction(stopAct_);
     m->addAction(restartAct_);
     m->addAction(removeAct_);
   }
-  m = menuBar()->addMenu(tr("&Settings")); {
+  m = menuBar_->addMenu(tr("&Settings")); {
     m->addAction(tr("&Preferences"), this, SLOT(preferences()), QKeySequence("CTRL+,"));
   }
-  m = menuBar()->addMenu(tr("&Help")); {
+  m = menuBar_->addMenu(tr("&Help")); {
     //helpMenu_->addAction(tr("&Help"), this, SLOT(help())); // DO NOT TRANSLATE ME
     m->addAction(tr("&About"), this, SLOT(about())); // DO NOT TRANSLATE ME
   }
@@ -481,7 +486,7 @@ void
 MainWindow::promptUrls(const QStringList &urls)
 {
   DOUT("enter: urls =" << urls);
-  foreach (QString text, urls)
+  foreach (const QString &text, urls)
     promptUrl(text);
   DOUT("exit");
 }
@@ -594,7 +599,7 @@ void
 MainWindow::addUrls(const QStringList &urls, bool batch)
 {
   Q_UNUSED(batch);
-  foreach (QString url, urls)
+  foreach (const QString &url, urls)
     addUrl(url);
 }
 
@@ -836,7 +841,7 @@ MainWindow::updateCopyMenu()
 void
 MainWindow::updateActions()
 {
-  menuBarAct_->setChecked(menuBar()->isVisible());
+  menuBarAct_->setChecked(menuBar_->isVisible());
 
   DownloadTask *t = currentTask();
   if (t) {
@@ -924,8 +929,13 @@ void
 MainWindow::closeEvent(QCloseEvent *event)
 {
   enum { CloseTimeout = 3000 };
-
   DOUT("enter");
+  if (!disposed_) {
+    event->ignore();
+    fadeOut();
+    DOUT("exit: not disposed");
+    return;
+  }
   appServer_->stop();
 
   hide();
@@ -1007,7 +1017,7 @@ MainWindow::keyPressEvent(QKeyEvent *e)
   switch (e->key()) {
   case Qt::Key_CapsLock:
 #ifdef Q_WS_WIN
-    menuBar()->setVisible(!menuBar()->isVisible());
+    menuBar_->setVisible(!menuBar_->isVisible());
 #endif // Q_WS_WIN
     break;
   default: ;
@@ -1021,19 +1031,22 @@ MainWindow::about()
   if (!about_)
     about_ = new AcAbout(G_APPLICATION, G_VERSION, this);
   about_->show();
+  about_->raise();
 }
 
 void
 MainWindow::preferences()
 {
   if (!preferences_)
-    preferences_ = new AcPreferences(this);
+    preferences_ = new AcPreferences(AcPreferences::AllTabs, this);
   preferences_->show();
+  preferences_->raise();
 }
 
 void
 MainWindow::quit()
 {
+  disposed_ = true;
   fadeOut();
   QTimer::singleShot(fadeAnimation()->duration(), this, SLOT(close()));
 }

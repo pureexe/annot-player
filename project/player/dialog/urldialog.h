@@ -17,7 +17,10 @@ class UrlDialog : public AcWindow
   typedef AcWindow Base;
 
   QComboBox *edit_;
-  QToolButton *urlButton_, *saveButton_;
+  QToolButton *urlButton_,
+              *openButton_,
+              *saveButton_;
+  QString editStyleSheet_;
 
 public:
   explicit UrlDialog(QWidget *parent = 0);
@@ -45,6 +48,7 @@ protected:
 
 protected slots:
   void showExampleUrl();
+  void verifyEditText();
 
 private:
   void createLayout();

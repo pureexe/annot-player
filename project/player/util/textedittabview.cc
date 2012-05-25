@@ -12,7 +12,7 @@
 void
 TextEditTabView::addTab(const QString &tabName)
 {
-  QWidget *tab = new AcTextView;
+  QWidget *tab = new AcTextView(this);
   tab->setWindowTitle(tabName);
   Base::addTab(tab);
 }

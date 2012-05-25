@@ -167,7 +167,7 @@ EventLogger::logOpening()
 void
 EventLogger::logBuffering()
 {
-  enum { interval = 2000 }; // 1 second
+  enum { interval = 2000 }; // 2 seconds
   static qint64 time = 0;
   qint64 now = QDateTime::currentMSecsSinceEpoch();
   if (now <= time + interval) {
@@ -445,7 +445,7 @@ EventLogger::logAnnotationRotationChanged(qreal value)
 }
 
 void
-EventLogger::logAnnotationOffsetChanged(qint64 value)
+EventLogger::logAnnotationOffsetChanged(int value)
 {
   static bool once = true;
   if (once) {
@@ -459,6 +459,35 @@ EventLogger::logAnnotationOffsetChanged(qint64 value)
         tr(" sec"));
   else
     log(tr("annotation offset reset"));
+}
+
+void
+EventLogger::logAnnotationCountLimitedChanged(bool value)
+{
+  static bool once = true;
+  if (once) {
+    once = false;
+    return;
+  }
+
+  if (value)
+    log(tr("limit annotations bandwidth"));
+  else
+    log(tr("display all annotations"));
+}
+
+void
+EventLogger::logAnnotationSkipped()
+{
+  enum { interval = 2000 }; // 2 seconds
+  static qint64 time = 0;
+  qint64 now = QDateTime::currentMSecsSinceEpoch();
+  if (now <= time + interval) {
+    time = now;
+    return;
+  }
+  time = now;
+  notify(tr("so many annotations, skipped"));
 }
 
 void

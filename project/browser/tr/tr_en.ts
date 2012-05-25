@@ -249,7 +249,7 @@
 <context>
     <name>AcPreferences</name>
     <message>
-        <location filename="../../common/acpreferences.cc" line="45"/>
+        <location filename="../../common/acpreferences.cc" line="47"/>
         <source>Preferences</source>
         <translation type="unfinished"></translation>
     </message>
@@ -291,199 +291,199 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="289"/>
+        <location filename="../mainwindow.cc" line="290"/>
         <source>&amp;File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="290"/>
+        <location filename="../mainwindow.cc" line="291"/>
         <source>New Window</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="228"/>
-        <location filename="../mainwindow.cc" line="291"/>
+        <location filename="../mainwindow.cc" line="229"/>
+        <location filename="../mainwindow.cc" line="292"/>
         <source>New Tab</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="293"/>
+        <location filename="../mainwindow.cc" line="294"/>
         <source>Clip</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="223"/>
-        <location filename="../mainwindow.cc" line="295"/>
+        <location filename="../mainwindow.cc" line="224"/>
+        <location filename="../mainwindow.cc" line="296"/>
         <source>Close Tab</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="296"/>
+        <location filename="../mainwindow.cc" line="297"/>
         <source>Close Window</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="297"/>
+        <location filename="../mainwindow.cc" line="298"/>
         <source>Exit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="309"/>
+        <location filename="../mainwindow.cc" line="310"/>
         <source>&amp;View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="238"/>
-        <location filename="../mainwindow.cc" line="310"/>
+        <location filename="../mainwindow.cc" line="239"/>
+        <location filename="../mainwindow.cc" line="311"/>
         <source>Reload</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="311"/>
+        <location filename="../mainwindow.cc" line="312"/>
         <source>Stop</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="312"/>
+        <location filename="../mainwindow.cc" line="313"/>
         <source>Inspect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="314"/>
+        <location filename="../mainwindow.cc" line="315"/>
         <source>Actual Size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="315"/>
+        <location filename="../mainwindow.cc" line="316"/>
         <source>Zoom In</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="316"/>
+        <location filename="../mainwindow.cc" line="317"/>
         <source>Zoom Out</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="268"/>
-        <location filename="../mainwindow.cc" line="318"/>
+        <location filename="../mainwindow.cc" line="269"/>
+        <location filename="../mainwindow.cc" line="319"/>
         <source>Toggle Full Screen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="213"/>
+        <location filename="../mainwindow.cc" line="214"/>
         <source>Unrecognized Gesture</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="218"/>
+        <location filename="../mainwindow.cc" line="219"/>
         <source>Open Link in Background Tab</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="233"/>
+        <location filename="../mainwindow.cc" line="234"/>
         <source>Undo Close Tab</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="243"/>
+        <location filename="../mainwindow.cc" line="244"/>
         <source>Forward</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="248"/>
+        <location filename="../mainwindow.cc" line="249"/>
         <source>Backward</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="253"/>
+        <location filename="../mainwindow.cc" line="254"/>
         <source>Previous Tab</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="258"/>
+        <location filename="../mainwindow.cc" line="259"/>
         <source>Next Tab</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="263"/>
+        <location filename="../mainwindow.cc" line="264"/>
         <source>Minimize Window</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="273"/>
+        <location filename="../mainwindow.cc" line="274"/>
         <source>Scroll Top</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="278"/>
+        <location filename="../mainwindow.cc" line="279"/>
         <source>Scroll Bottom</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="321"/>
+        <location filename="../mainwindow.cc" line="322"/>
         <source>&amp;Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="322"/>
+        <location filename="../mainwindow.cc" line="323"/>
         <source>&amp;Preferences</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="325"/>
+        <location filename="../mainwindow.cc" line="326"/>
         <source>&amp;Help</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="327"/>
+        <location filename="../mainwindow.cc" line="328"/>
         <source>&amp;Console</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="328"/>
+        <location filename="../mainwindow.cc" line="329"/>
         <source>&amp;About</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="337"/>
+        <location filename="../mainwindow.cc" line="338"/>
         <source>restoring last sessions ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="363"/>
+        <location filename="../mainwindow.cc" line="364"/>
         <source>logging in bilibili.tv as %1 ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="368"/>
+        <location filename="../mainwindow.cc" line="369"/>
         <source>logging in nicovideo.jp as %1 ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="546"/>
-        <location filename="../mainwindow.cc" line="560"/>
+        <location filename="../mainwindow.cc" line="547"/>
+        <location filename="../mainwindow.cc" line="561"/>
         <source>openning new window</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="562"/>
+        <location filename="../mainwindow.cc" line="563"/>
         <source>failed open new window</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="577"/>
-        <location filename="../mainwindow.cc" line="591"/>
-        <location filename="../mainwindow.cc" line="605"/>
+        <location filename="../mainwindow.cc" line="578"/>
+        <location filename="../mainwindow.cc" line="592"/>
+        <location filename="../mainwindow.cc" line="606"/>
         <source>openning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="754"/>
+        <location filename="../mainwindow.cc" line="755"/>
         <source>Double click any tab to exit full screen.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="781"/>
+        <location filename="../mainwindow.cc" line="782"/>
         <source>Click any edge of the screen to toggle tool bars.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -574,12 +574,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../module/qtext/webview.cc" line="364"/>
+        <location filename="../../../module/qtext/webview.cc" line="367"/>
         <source>History</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../module/qtext/webview.cc" line="378"/>
+        <location filename="../../../module/qtext/webview.cc" line="384"/>
         <source>Blank</source>
         <translation type="unfinished"></translation>
     </message>
@@ -734,56 +734,56 @@
 <context>
     <name>WbWebView</name>
     <message>
-        <location filename="../../../module/webbrowser/webkit/wbwebview.cc" line="45"/>
-        <location filename="../../../module/webbrowser/webkit/wbwebview.cc" line="46"/>
+        <location filename="../../../module/webbrowser/webkit/wbwebview.cc" line="38"/>
+        <location filename="../../../module/webbrowser/webkit/wbwebview.cc" line="39"/>
         <source>Open Link in New Tab</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../module/webbrowser/webkit/wbwebview.cc" line="50"/>
-        <location filename="../../../module/webbrowser/webkit/wbwebview.cc" line="51"/>
+        <location filename="../../../module/webbrowser/webkit/wbwebview.cc" line="43"/>
+        <location filename="../../../module/webbrowser/webkit/wbwebview.cc" line="44"/>
         <source>Play with Annot Player</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../module/webbrowser/webkit/wbwebview.cc" line="55"/>
-        <location filename="../../../module/webbrowser/webkit/wbwebview.cc" line="56"/>
+        <location filename="../../../module/webbrowser/webkit/wbwebview.cc" line="48"/>
+        <location filename="../../../module/webbrowser/webkit/wbwebview.cc" line="49"/>
         <source>Import annotations to Annot Player</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../module/webbrowser/webkit/wbwebview.cc" line="60"/>
-        <location filename="../../../module/webbrowser/webkit/wbwebview.cc" line="61"/>
+        <location filename="../../../module/webbrowser/webkit/wbwebview.cc" line="53"/>
+        <location filename="../../../module/webbrowser/webkit/wbwebview.cc" line="54"/>
         <source>Download with Annot Downloader</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../module/webbrowser/webkit/wbwebview.cc" line="64"/>
-        <location filename="../../../module/webbrowser/webkit/wbwebview.cc" line="65"/>
+        <location filename="../../../module/webbrowser/webkit/wbwebview.cc" line="57"/>
+        <location filename="../../../module/webbrowser/webkit/wbwebview.cc" line="58"/>
         <source>Undo Close Tab</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../module/webbrowser/webkit/wbwebview.cc" line="69"/>
-        <location filename="../../../module/webbrowser/webkit/wbwebview.cc" line="70"/>
+        <location filename="../../../module/webbrowser/webkit/wbwebview.cc" line="62"/>
+        <location filename="../../../module/webbrowser/webkit/wbwebview.cc" line="63"/>
         <source>New Window</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../module/webbrowser/webkit/wbwebview.cc" line="74"/>
-        <location filename="../../../module/webbrowser/webkit/wbwebview.cc" line="75"/>
+        <location filename="../../../module/webbrowser/webkit/wbwebview.cc" line="67"/>
+        <location filename="../../../module/webbrowser/webkit/wbwebview.cc" line="68"/>
         <source>Toggle Full Screen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../module/webbrowser/webkit/wbwebview.cc" line="79"/>
-        <location filename="../../../module/webbrowser/webkit/wbwebview.cc" line="80"/>
+        <location filename="../../../module/webbrowser/webkit/wbwebview.cc" line="72"/>
+        <location filename="../../../module/webbrowser/webkit/wbwebview.cc" line="73"/>
         <source>Toggle Menu Bar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../module/webbrowser/webkit/wbwebview.cc" line="140"/>
-        <location filename="../../../module/webbrowser/webkit/wbwebview.cc" line="157"/>
+        <location filename="../../../module/webbrowser/webkit/wbwebview.cc" line="122"/>
+        <location filename="../../../module/webbrowser/webkit/wbwebview.cc" line="138"/>
         <source>Search with %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -791,34 +791,34 @@
 <context>
     <name>WebBrowser</name>
     <message>
-        <location filename="../../../module/webbrowser/webbrowser.cc" line="439"/>
-        <location filename="../../../module/webbrowser/webbrowser.cc" line="442"/>
+        <location filename="../../../module/webbrowser/webbrowser.cc" line="441"/>
+        <location filename="../../../module/webbrowser/webbrowser.cc" line="444"/>
         <source>Loading ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../module/webbrowser/webbrowser.cc" line="440"/>
+        <location filename="../../../module/webbrowser/webbrowser.cc" line="442"/>
         <source>Loading complete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../module/webbrowser/webbrowser.cc" line="617"/>
+        <location filename="../../../module/webbrowser/webbrowser.cc" line="619"/>
         <source>openning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../module/webbrowser/webbrowser.cc" line="647"/>
+        <location filename="../../../module/webbrowser/webbrowser.cc" line="649"/>
         <source>no recent closed tabs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../module/webbrowser/webbrowser.cc" line="729"/>
+        <location filename="../../../module/webbrowser/webbrowser.cc" line="731"/>
         <source>Start Page</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../module/webbrowser/webbrowser.cc" line="203"/>
-        <location filename="../../../module/webbrowser/webbrowser.cc" line="204"/>
+        <location filename="../../../module/webbrowser/webbrowser.cc" line="205"/>
+        <location filename="../../../module/webbrowser/webbrowser.cc" line="206"/>
         <source>New Tab</source>
         <translation type="unfinished"></translation>
     </message>

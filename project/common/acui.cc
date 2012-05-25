@@ -298,10 +298,12 @@ AcUi::setContextMenuStyle(QMenu *w, bool persistent)
     //if (qss)
     //  w->setStyleSheet(SS_CONTEXTMENU_DWM);
 
-    QGraphicsColorizeEffect *effect = new QGraphicsColorizeEffect(w);
-    effect->setColor(AC_CONTEXTMENU_COLOR);
-    effect->setStrength(AC_CONTEXTMENU_COLOR_STRENGTH);
-    w->setGraphicsEffect(effect);
+    QGraphicsColorizeEffect *e = qobject_cast<QGraphicsColorizeEffect *>(w->graphicsEffect());
+    if (!e)
+      e = new QGraphicsColorizeEffect;
+    e->setColor(AC_CONTEXTMENU_COLOR);
+    e->setStrength(AC_CONTEXTMENU_COLOR_STRENGTH);
+    w->setGraphicsEffect(e);
 
     return;
   }
@@ -318,17 +320,19 @@ AcUi::setContextMenuStyle(QMenu *w, bool persistent)
 }
 
 void
-AcUi::setToolButtonStyle(QToolButton *button)
+AcUi::setToolButtonStyle(QToolButton *w)
 {
-  Q_ASSERT(button);
-  if (!button)
+  Q_ASSERT(w);
+  if (!w)
     return;
 
 #ifdef Q_WS_WIN
-  QGraphicsBlurEffect *blur = new QGraphicsBlurEffect(this);
-  blur->setBlurHints(QGraphicsBlurEffect::PerformanceHint);
-  blur->setBlurRadius(AC_TOOLBUTTON_BLUR_RADIUS);
-  button->setGraphicsEffect(blur);
+  QGraphicsBlurEffect *e = qobject_cast<QGraphicsBlurEffect *>(w->graphicsEffect());
+  if (!e)
+    e = new QGraphicsBlurEffect;
+  e->setBlurHints(QGraphicsBlurEffect::PerformanceHint);
+  e->setBlurRadius(AC_TOOLBUTTON_BLUR_RADIUS);
+  w->setGraphicsEffect(e);
 #endif // Q_WS_WIN
 }
 

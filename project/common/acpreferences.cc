@@ -2,7 +2,7 @@
 // 5/5/2012
 
 #include "project/common/acpreferences.h"
-#include "project/common/acpreferences_p.h"
+#include "project/common/acpreferencestab.h"
 #include "project/common/acaccountprefs_p.h"
 #include "project/common/aclocationprefs_p.h"
 #include "project/common/acnetworkproxyprefs_p.h"
@@ -29,20 +29,27 @@
 
 // - Constructions -
 
-AcPreferences::AcPreferences(ulong tabs, QWidget *parent)
-  : Base(parent, WINDOW_FLAGS), settings_(0), tabs_(tabs)
+AcPreferences::AcPreferences(QWidget *parent)
+  : Base(parent, WINDOW_FLAGS), settings_(0), tabView_(0), tabs_(0)
 { init(); }
 
-AcPreferences::AcPreferences(QWidget *parent)
-  : Base(parent, WINDOW_FLAGS), settings_(0), tabs_(0)
-{ init(); }
+AcPreferences::AcPreferences(ulong tabs, QWidget *parent)
+  : Base(parent, WINDOW_FLAGS), settings_(0), tabView_(0), tabs_(tabs)
+{ init(); finalize(); }
 
 void
 AcPreferences::init()
 {
+  setRippleEnabled(false);
+  tabView_ = new AcTabView(this);
   if (!settings_)
     settings_ = AcSettings::globalSettings();
   setWindowTitle(tr("Preferences"));
+}
+
+void
+AcPreferences::finalize()
+{
   createLayout();
 
   new QShortcut(QKeySequence("Esc"), this, SLOT(fadeOut()));
@@ -62,13 +69,12 @@ AcPreferences::addTab(AcPreferencesTab *tab)
 void
 AcPreferences::createLayout()
 {
-  tabView_ = new AcTabView;
   if (!tabs_ || tabs_ & LocationTab)
-    addTab(new AcLocationPreferences(settings_));
+    addTab(new AcLocationPreferences(settings_, this));
   if (!tabs_ || tabs_ & AccountTab)
-    addTab(new AcAccountPreferences(settings_));
+    addTab(new AcAccountPreferences(settings_, this));
   if (!tabs_ || tabs_ & NetworkProxyTab)
-    addTab(new AcNetworkProxyPreferences(settings_));
+    addTab(new AcNetworkProxyPreferences(settings_, this));
   tabView_->finalizeLayout();
 
   setCentralWidget(tabView_);

@@ -399,7 +399,7 @@ namespace { // anonymous, vlccore callbacks
   bool \
   Player::isSupported##_type(const QString &fileName) \
   { \
-    foreach (QString suffix, supported##_type##Suffices()) \
+    foreach (const QString &suffix, supported##_type##Suffices()) \
       if (fileName.endsWith("." + suffix, Qt::CaseInsensitive)) \
         return true; \
     return false; \
@@ -418,13 +418,13 @@ Player::Player(QObject *parent)
   : Base(parent), d_(0)
 {
   DOUT("enter");
-#ifdef WITH_MODULE_VLCCORE
+#ifdef WITH_MODULE_VLCHTTP
   connect(VlcHttpPlugin::globalInstance(), SIGNAL(error(QString)), SIGNAL(error(QString)));
   connect(VlcHttpPlugin::globalInstance(), SIGNAL(message(QString)), SIGNAL(message(QString)));
   connect(VlcHttpPlugin::globalInstance(), SIGNAL(warning(QString)), SIGNAL(warning(QString)));
   connect(VlcHttpPlugin::globalInstance(), SIGNAL(fileSaved(QString)), SIGNAL(fileSaved(QString)));
   connect(VlcHttpPlugin::globalInstance(), SIGNAL(progress(qint64,qint64)), SIGNAL(downloadProgress(qint64,qint64)));
-#endif // WITH_MODULE_VLCCORE
+#endif // WITH_MODULE_VLCHTTP
   DOUT("exit");
 }
 
@@ -645,7 +645,7 @@ Player::openMediaAsCD(const QString &path)
 void
 Player::setStream(const QStringList &mrls, const QString &url, qint64 duration)
 {
-#ifdef WITH_MODULE_VLCCORE
+#ifdef WITH_MODULE_VLCHTTP
   VlcHttpPlugin::setUrls(mrls);
   VlcHttpPlugin::setOriginalUrl(url);
   VlcHttpPlugin::setDuration(duration);
@@ -653,7 +653,7 @@ Player::setStream(const QStringList &mrls, const QString &url, qint64 duration)
   Q_UNUSED(mrls)
   Q_UNUSED(url)
   Q_UNUSED(duration)
-#endif // WITH_MODULE_VLCCORE
+#endif // WITH_MODULE_VLCHTTP
 }
 
 //bool
@@ -788,12 +788,12 @@ Player::closeMedia()
 
   d_->trackInfo().clear();;
 
-#ifdef WITH_MODULE_VLCCORE
+#ifdef WITH_MODULE_VLCHTTP
   VlcHttpPlugin::closeSession();
   VlcHttpPlugin::setMediaTitle(QString());
   VlcHttpPlugin::setUrls(QStringList());
   VlcHttpPlugin::setDuration(0);
-#endif // WITH_MODULE_VLCCORE
+#endif // WITH_MODULE_VLCHTTP
 
   if (!d_->mediaList().isEmpty()) {
     foreach (libvlc_media_t *m, d_->mediaList())
@@ -1163,7 +1163,7 @@ Player::availablePosition() const
   //if (!hasRemoteMedia())
   //  return 0;
 
-#ifdef WITH_MODULE_VLCCORE
+#ifdef WITH_MODULE_VLCHTTP
   qint64 duration, size;
   if ((duration = VlcHttpPlugin::duration()) > 0) {
     qint64 ts = VlcHttpPlugin::availableDuration();
@@ -1172,7 +1172,7 @@ Player::availablePosition() const
     qint64 sz = VlcHttpPlugin::availableSize();
     return sz / (double)size;
   } else
-#endif // WITH_MODULE_VLCCORE
+#endif // WITH_MODULE_VLCHTTP
     return 0;
 }
 
@@ -1183,10 +1183,10 @@ Player::mediaSize() const
 {
   Q_ASSERT(isValid());
   qint64 ret = d_->mediaSize();
-#ifdef WITH_MODULE_VLCCORE
+#ifdef WITH_MODULE_VLCHTTP
   if (!ret && d_->mediaPath().startsWith("http://"))
     ret = VlcHttpPlugin::size();
-#endif // WITH_MODULE_VLCCORE
+#endif // WITH_MODULE_VLCHTTP
   return ret;
 }
 
@@ -1379,9 +1379,9 @@ Player::searchExternalSubtitles() const
     if (dir.exists()) {
       QString baseName = QFileInfo(fileName).baseName() ;
       QStringList filters = supportedSubtitleFilters();
-      foreach (QString f, dir.entryList(filters, QDir::Files))
+      foreach (const QString &f, dir.entryList(filters, QDir::Files))
         if (f.startsWith(baseName + "."))
-          ret << dir.path() + "/" + f;
+          ret.append(dir.path() + "/" + f);
     } else
       DOUT("directory to search not existed");
   }
@@ -1796,69 +1796,69 @@ Player::setUserAgent(const QString &agent)
 void
 Player::setCookieJar(QNetworkCookieJar *jar)
 {
-#ifdef WITH_MODULE_VLCCORE
+#ifdef WITH_MODULE_VLCHTTP
   VlcHttpPlugin::setNetworkCookieJar(jar);
 #else
   Q_UNUSED(jar);
-#endif // WITH_MODULE_VLCCORE
+#endif // WITH_MODULE_VLCHTTP
 }
 
 bool
 Player::isBufferSaved() const
 {
-#ifdef WITH_MODULE_VLCCORE
+#ifdef WITH_MODULE_VLCHTTP
   return VlcHttpPlugin::isBufferSaved();
 #else
   return false;
-#endif // WITH_MODULE_VLCCORE
+#endif // WITH_MODULE_VLCHTTP
 }
 
 bool
 Player::isDownloadFinished() const
 {
-#ifdef WITH_MODULE_VLCCORE
+#ifdef WITH_MODULE_VLCHTTP
   return VlcHttpPlugin::isFinished();
 #else
   return false;
-#endif // WITH_MODULE_VLCCORE
+#endif // WITH_MODULE_VLCHTTP
 }
 
 QString
 Player::downloadPath() const
 {
-#ifdef WITH_MODULE_VLCCORE
+#ifdef WITH_MODULE_VLCHTTP
   return VlcHttpPlugin::cachePath();
 #else
   return QString();
-#endif // WITH_MODULE_VLCCORE
+#endif // WITH_MODULE_VLCHTTP
 }
 
 void
 Player::setDownloadPath(const QString &path)
 {
-#ifdef WITH_MODULE_VLCCORE
+#ifdef WITH_MODULE_VLCHTTP
   VlcHttpPlugin::setCachePath(path);
 #else
   Q_UNUSED(path);
-#endif // WITH_MODULE_VLCCORE
+#endif // WITH_MODULE_VLCHTTP
 }
 
 void
 Player::setBufferSaved(bool t)
 {
-#ifdef WITH_MODULE_VLCCORE
+#ifdef WITH_MODULE_VLCHTTP
   VlcHttpPlugin::setBufferSaved(t);
 #else
   Q_UNUSED(t);
-#endif // WITH_MODULE_VLCCORE
+#endif // WITH_MODULE_VLCHTTP
 }
 
 void
 Player::saveBuffer()
 {
-#ifdef WITH_MODULE_VLCCORE
+#ifdef WITH_MODULE_VLCHTTP
   VlcHttpPlugin::save();
-#endif // WITH_MODULE_VLCCORE
+#endif // WITH_MODULE_VLCHTTP
 }
 
 // - Title -
@@ -1869,9 +1869,9 @@ Player::setMediaTitle(const QString &t)
   Q_ASSERT(isValid());
   if (t != d_->mediaTitle()) {
     d_->setMediaTitle(t);
-#ifdef WITH_MODULE_VLCCORE
+#ifdef WITH_MODULE_VLCHTTP
     VlcHttpPlugin::setMediaTitle(t);
-#endif // WITH_MODULE_VLCCORE
+#endif // WITH_MODULE_VLCHTTP
     emit mediaTitleChanged(t);
   }
 }
@@ -1890,9 +1890,9 @@ Player::dispose()
       mute();
     closeMedia();
   }
-#ifdef WITH_MODULE_VLCCORE
+#ifdef WITH_MODULE_VLCHTTP
   VlcHttpPlugin::unload();
-#endif // WITH_MODULE_VLCCORE
+#endif // WITH_MODULE_VLCHTTP
 }
 
 // - Adjustment -

@@ -8,7 +8,24 @@
 
 namespace QtExt {
 
+  // - Constructors -
+
   QTime msecs2time(qint64 msecs);
+
+  // - Time zone -
+
+  enum TimeZone { JapanTimeZone = +9, ChinaTimeZone = +8 };
+
+  inline QDateTime currentDateTimeInTimeZone(int hours)
+  { return QDateTime::currentDateTimeUtc().addSecs(3600 * hours); }
+
+  inline QDateTime currentJapanDateTime()
+  { return currentDateTimeInTimeZone(JapanTimeZone); }
+  inline QDateTime currentChinaDateTime()
+  { return currentDateTimeInTimeZone(ChinaTimeZone); }
+
+  inline int currentTimeZone() ///< DST is not considered
+  { return QDateTime::currentDateTimeUtc().secsTo(QDateTime::currentDateTime()) / 3600; }
 
 } // namespace QtExt
 

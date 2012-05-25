@@ -264,7 +264,7 @@
 <context>
     <name>AcPreferences</name>
     <message>
-        <location filename="../../common/acpreferences.cc" line="45"/>
+        <location filename="../../common/acpreferences.cc" line="47"/>
         <source>Preferences</source>
         <translation>设定</translation>
     </message>
@@ -280,17 +280,17 @@
 <context>
     <name>AcfunCodec</name>
     <message>
-        <location filename="../../../module/annotcodec/acfuncodec.cc" line="68"/>
+        <location filename="../../../module/annotcodec/acfuncodec.cc" line="69"/>
         <source>network error, retry</source>
         <translation>网络错误，重试</translation>
     </message>
     <message>
-        <location filename="../../../module/annotcodec/acfuncodec.cc" line="74"/>
+        <location filename="../../../module/annotcodec/acfuncodec.cc" line="75"/>
         <source>network error, failed to resolve media URL</source>
         <translation>网络错误，解释媒体链接失败</translation>
     </message>
     <message>
-        <location filename="../../../module/annotcodec/acfuncodec.cc" line="81"/>
+        <location filename="../../../module/annotcodec/acfuncodec.cc" line="82"/>
         <source>failed to resolve annotations from URL</source>
         <translation>URL解析失败</translation>
     </message>
@@ -361,17 +361,17 @@
 <context>
     <name>AnnotCloud::AnnotationHtmlParser</name>
     <message>
-        <location filename="../../../module/annotcloud/annothtml_thread.cc" line="112"/>
+        <location filename="../../../module/annotcloud/annothtml_thread.cc" line="149"/>
         <source>Time - Count</source>
         <translation>再生时间 - 弹幕数</translation>
     </message>
     <message>
-        <location filename="../../../module/annotcloud/annothtml_thread.cc" line="112"/>
+        <location filename="../../../module/annotcloud/annothtml_thread.cc" line="149"/>
         <source>Date - Count</source>
         <translation>发布日期 - 弹幕数</translation>
     </message>
     <message>
-        <location filename="../../../module/annotcloud/annothtml_thread.cc" line="112"/>
+        <location filename="../../../module/annotcloud/annothtml_thread.cc" line="149"/>
         <source>User - Count</source>
         <translation>魔法师 - 弹幕数</translation>
     </message>
@@ -379,12 +379,12 @@
 <context>
     <name>AnnotationAnalyticsView</name>
     <message>
-        <location filename="../annot/annotationanalyticsview.cc" line="97"/>
+        <location filename="../annot/annotationanalyticsview.cc" line="101"/>
         <source>analyzing annotations ...</source>
         <translation>分析弹幕中...</translation>
     </message>
     <message>
-        <location filename="../annot/annotationanalyticsview.cc" line="100"/>
+        <location filename="../annot/annotationanalyticsview.cc" line="104"/>
         <source>Refreshing ...</source>
         <translation>更新中...</translation>
     </message>
@@ -645,13 +645,21 @@
     </message>
     <message>
         <location filename="../annot/annotationeditor.cc" line="223"/>
-        <source>Font family</source>
+        <source>Font Family</source>
         <translation>字体</translation>
     </message>
     <message>
         <location filename="../annot/annotationeditor.cc" line="228"/>
-        <source>Font size</source>
+        <source>Font Size</source>
         <translation>字号</translation>
+    </message>
+    <message>
+        <source>Font family</source>
+        <translation type="obsolete">字体</translation>
+    </message>
+    <message>
+        <source>Font size</source>
+        <translation type="obsolete">字号</translation>
     </message>
     <message>
         <location filename="../annot/annotationeditor.cc" line="281"/>
@@ -692,57 +700,115 @@
 <context>
     <name>AnnotationGraphicsItem</name>
     <message>
-        <location filename="../annot/annotationgraphicsitem.cc" line="376"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="352"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="420"/>
         <source>Mon</source>
         <translation>月</translation>
     </message>
     <message>
-        <location filename="../annot/annotationgraphicsitem.cc" line="377"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="353"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="421"/>
         <source>Tue</source>
         <translation>火</translation>
     </message>
     <message>
-        <location filename="../annot/annotationgraphicsitem.cc" line="378"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="354"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="422"/>
         <source>Wed</source>
         <translation>水</translation>
     </message>
     <message>
-        <location filename="../annot/annotationgraphicsitem.cc" line="379"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="355"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="423"/>
         <source>Thu</source>
         <translation>木</translation>
     </message>
     <message>
-        <location filename="../annot/annotationgraphicsitem.cc" line="380"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="356"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="424"/>
         <source>Fri</source>
         <translation>金</translation>
     </message>
     <message>
-        <location filename="../annot/annotationgraphicsitem.cc" line="381"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="357"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="425"/>
         <source>Sat</source>
         <translation>土</translation>
     </message>
     <message>
-        <location filename="../annot/annotationgraphicsitem.cc" line="382"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="358"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="426"/>
         <source>Sun</source>
         <translation>日</translation>
     </message>
     <message>
-        <location filename="../annot/annotationgraphicsitem.cc" line="393"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="413"/>
+        <source>days</source>
+        <translation>天前</translation>
+    </message>
+    <message>
+        <location filename="../annot/annotationgraphicsitem.cc" line="414"/>
+        <source>weeks</source>
+        <translation>周前</translation>
+    </message>
+    <message>
+        <location filename="../annot/annotationgraphicsitem.cc" line="415"/>
+        <source>months</source>
+        <translation>个月前</translation>
+    </message>
+    <message>
+        <location filename="../annot/annotationgraphicsitem.cc" line="437"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="440"/>
         <source>hr</source>
         <translation>小时前</translation>
     </message>
     <message>
-        <location filename="../annot/annotationgraphicsitem.cc" line="396"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="443"/>
         <source>min</source>
         <translation>分前</translation>
     </message>
     <message>
-        <location filename="../annot/annotationgraphicsitem.cc" line="399"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="446"/>
         <source>sec</source>
         <translation>秒前</translation>
     </message>
     <message>
-        <location filename="../annot/annotationgraphicsitem.cc" line="1184"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="1130"/>
+        <source>Edit</source>
+        <translation>编辑</translation>
+    </message>
+    <message>
+        <location filename="../annot/annotationgraphicsitem.cc" line="1131"/>
+        <source>Copy</source>
+        <translation>复制</translation>
+    </message>
+    <message>
+        <location filename="../annot/annotationgraphicsitem.cc" line="1132"/>
+        <source>Hide</source>
+        <translation>隐藏</translation>
+    </message>
+    <message>
+        <location filename="../annot/annotationgraphicsitem.cc" line="1134"/>
+        <source>Release</source>
+        <translation>释放</translation>
+    </message>
+    <message>
+        <location filename="../annot/annotationgraphicsitem.cc" line="1134"/>
+        <source>MButton</source>
+        <translation>鼠标中键</translation>
+    </message>
+    <message>
+        <location filename="../annot/annotationgraphicsitem.cc" line="1136"/>
+        <source>Analytics</source>
+        <translation>统计分析</translation>
+    </message>
+    <message>
+        <location filename="../annot/annotationgraphicsitem.cc" line="1136"/>
+        <source>DoubleClick</source>
+        <translation>双击</translation>
+    </message>
+    <message>
+        <location filename="../annot/annotationgraphicsitem.cc" line="1261"/>
         <source>cannot edit other&apos;s annotation text</source>
         <translation>无法编辑别人的弹幕</translation>
     </message>
@@ -752,6 +818,40 @@
     <message>
         <source>cannot edit other&apos;s annotation text</source>
         <translation type="obsolete">无法编辑别人的弹幕</translation>
+    </message>
+</context>
+<context>
+    <name>AnnotationPreferencesTab</name>
+    <message>
+        <location filename="../preferences_p.cc" line="36"/>
+        <location filename="../preferences_p.cc" line="40"/>
+        <source>Font Family</source>
+        <translation>字体</translation>
+    </message>
+    <message>
+        <location filename="../preferences_p.cc" line="40"/>
+        <source>Font</source>
+        <translation>字体</translation>
+    </message>
+    <message>
+        <location filename="../preferences_p.cc" line="50"/>
+        <source>Offset</source>
+        <translation>时间偏移</translation>
+    </message>
+    <message>
+        <location filename="../preferences_p.cc" line="100"/>
+        <source>font saved</source>
+        <translation>字体已保存</translation>
+    </message>
+    <message>
+        <location filename="../preferences_p.cc" line="121"/>
+        <source>offset saved</source>
+        <translation>偏移时间已保存</translation>
+    </message>
+    <message>
+        <location filename="../preferences_p.cc" line="123"/>
+        <source>invalid offset</source>
+        <translation>偏移时间无效</translation>
     </message>
 </context>
 <context>
@@ -782,17 +882,17 @@
 <context>
     <name>BilibiliCodec</name>
     <message>
-        <location filename="../../../module/annotcodec/bilibilicodec.cc" line="64"/>
+        <location filename="../../../module/annotcodec/bilibilicodec.cc" line="65"/>
         <source>network error, retry</source>
         <translation>网络错误，重试</translation>
     </message>
     <message>
-        <location filename="../../../module/annotcodec/bilibilicodec.cc" line="70"/>
+        <location filename="../../../module/annotcodec/bilibilicodec.cc" line="71"/>
         <source>network error, failed to resolve media URL</source>
         <translation>网络错误，解释媒体链接失败</translation>
     </message>
     <message>
-        <location filename="../../../module/annotcodec/bilibilicodec.cc" line="87"/>
+        <location filename="../../../module/annotcodec/bilibilicodec.cc" line="88"/>
         <source>failed to resolve annotations from URL</source>
         <translation>URL解析失败</translation>
     </message>
@@ -823,7 +923,7 @@
 <context>
     <name>BufferedRemoteStream</name>
     <message>
-        <location filename="../../../module/stream/bufferedremotestream.cc" line="318"/>
+        <location filename="../../../module/stream/bufferedremotestream.cc" line="322"/>
         <source>network error, failed to download remote resource</source>
         <translation>网络错误，下载失败</translation>
     </message>
@@ -1068,29 +1168,55 @@
     </message>
 </context>
 <context>
+    <name>DummyGoogleVideoMrlResolver</name>
+    <message>
+        <location filename="../../../module/mrlresolver/dummygooglevideomrlresolver.cc" line="27"/>
+        <source>failed to resolve URL</source>
+        <translation>解析链接失败</translation>
+    </message>
+    <message>
+        <location filename="../../../module/mrlresolver/dummygooglevideomrlresolver.cc" line="42"/>
+        <source>resolving media URL ...</source>
+        <translation>解析媒体链接中…</translation>
+    </message>
+</context>
+<context>
+    <name>DummyYoutubeMrlResolver</name>
+    <message>
+        <location filename="../../../module/mrlresolver/dummyyoutubemrlresolver.cc" line="26"/>
+        <source>failed to resolve URL</source>
+        <translation>解析链接失败</translation>
+    </message>
+    <message>
+        <location filename="../../../module/mrlresolver/dummyyoutubemrlresolver.cc" line="41"/>
+        <source>resolving media URL ...</source>
+        <translation>解析媒体链接中…</translation>
+    </message>
+</context>
+<context>
     <name>EmbeddedCanvas</name>
     <message>
-        <location filename="../player/embeddedcanvas.cc" line="108"/>
+        <location filename="../player/embeddedcanvas.cc" line="101"/>
         <source>peak</source>
         <translation>峰值</translation>
     </message>
     <message>
-        <location filename="../player/embeddedcanvas.cc" line="109"/>
+        <location filename="../player/embeddedcanvas.cc" line="102"/>
         <source>average</source>
         <translation>带宽</translation>
     </message>
     <message>
-        <location filename="../player/embeddedcanvas.cc" line="110"/>
+        <location filename="../player/embeddedcanvas.cc" line="103"/>
         <source>sec.</source>
         <translation>秒</translation>
     </message>
     <message>
-        <location filename="../player/embeddedcanvas.cc" line="452"/>
+        <location filename="../player/embeddedcanvas.cc" line="446"/>
         <source>traced users</source>
         <translation>捕获魔法师</translation>
     </message>
     <message>
-        <location filename="../player/embeddedcanvas.cc" line="454"/>
+        <location filename="../player/embeddedcanvas.cc" line="448"/>
         <source>u</source>
         <translation>人</translation>
     </message>
@@ -1102,133 +1228,183 @@
 <context>
     <name>EmbeddedInfoView</name>
     <message>
-        <location filename="../player/embeddedinfoview.cc" line="149"/>
+        <location filename="../player/embeddedinfoview.cc" line="150"/>
         <source>Render</source>
         <translation>渲染</translation>
     </message>
     <message>
-        <location filename="../player/embeddedinfoview.cc" line="107"/>
+        <location filename="../player/embeddedinfoview.cc" line="108"/>
         <source>Codec</source>
         <translation>编码</translation>
     </message>
     <message>
-        <location filename="../player/embeddedinfoview.cc" line="87"/>
+        <location filename="../player/embeddedinfoview.cc" line="88"/>
         <source>1</source>
         <translation>单</translation>
     </message>
     <message>
-        <location filename="../player/embeddedinfoview.cc" line="88"/>
+        <location filename="../player/embeddedinfoview.cc" line="89"/>
         <source>2</source>
         <translation>双</translation>
     </message>
     <message>
-        <location filename="../player/embeddedinfoview.cc" line="134"/>
+        <location filename="../player/embeddedinfoview.cc" line="135"/>
         <source>Hz</source>
         <translation>赫兹</translation>
     </message>
     <message>
-        <location filename="../player/embeddedinfoview.cc" line="135"/>
+        <location filename="../player/embeddedinfoview.cc" line="136"/>
         <source>ch</source>
         <translation>声道</translation>
     </message>
     <message>
-        <location filename="../player/embeddedinfoview.cc" line="204"/>
         <location filename="../player/embeddedinfoview.cc" line="205"/>
+        <location filename="../player/embeddedinfoview.cc" line="206"/>
         <source> ago</source>
         <translation>前</translation>
     </message>
     <message>
-        <location filename="../player/embeddedinfoview.cc" line="217"/>
+        <location filename="../player/embeddedinfoview.cc" line="218"/>
         <source>Annotations</source>
         <translation>弹幕</translation>
     </message>
     <message>
-        <location filename="../player/embeddedinfoview.cc" line="218"/>
+        <location filename="../player/embeddedinfoview.cc" line="219"/>
         <source>Users</source>
         <translation>魔法师</translation>
     </message>
     <message>
-        <location filename="../player/embeddedinfoview.cc" line="219"/>
+        <location filename="../player/embeddedinfoview.cc" line="220"/>
         <source>Average</source>
         <translation>平均</translation>
     </message>
     <message>
-        <location filename="../player/embeddedinfoview.cc" line="221"/>
+        <location filename="../player/embeddedinfoview.cc" line="222"/>
         <source>user</source>
         <translation>人</translation>
     </message>
     <message>
-        <location filename="../player/embeddedinfoview.cc" line="226"/>
+        <location filename="../player/embeddedinfoview.cc" line="227"/>
         <source>Scale</source>
         <translation>大小</translation>
     </message>
     <message>
-        <location filename="../player/embeddedinfoview.cc" line="232"/>
+        <location filename="../player/embeddedinfoview.cc" line="233"/>
         <source>Rotation</source>
         <translation>旋转</translation>
     </message>
     <message>
-        <location filename="../player/embeddedinfoview.cc" line="238"/>
+        <location filename="../player/embeddedinfoview.cc" line="239"/>
         <source>Offset</source>
-        <translation>时间调整</translation>
+        <translation>时间偏移</translation>
     </message>
     <message>
-        <location filename="../player/embeddedinfoview.cc" line="238"/>
+        <location filename="../player/embeddedinfoview.cc" line="239"/>
         <source> sec</source>
         <translation>秒</translation>
     </message>
     <message>
         <location filename="../player/embeddedinfoview.cc" line="283"/>
+        <source>Local</source>
+        <translation>本地</translation>
+    </message>
+    <message>
+        <location filename="../player/embeddedinfoview.cc" line="292"/>
+        <source>Japan</source>
+        <translation>日本</translation>
+    </message>
+    <message>
+        <location filename="../player/embeddedinfoview.cc" line="298"/>
+        <source>China</source>
+        <translation>中国</translation>
+    </message>
+    <message>
+        <location filename="../player/embeddedinfoview.cc" line="318"/>
+        <source>Mon</source>
+        <translation>月</translation>
+    </message>
+    <message>
+        <location filename="../player/embeddedinfoview.cc" line="319"/>
+        <source>Tue</source>
+        <translation>火</translation>
+    </message>
+    <message>
+        <location filename="../player/embeddedinfoview.cc" line="320"/>
+        <source>Wed</source>
+        <translation>水</translation>
+    </message>
+    <message>
+        <location filename="../player/embeddedinfoview.cc" line="321"/>
+        <source>Thu</source>
+        <translation>木</translation>
+    </message>
+    <message>
+        <location filename="../player/embeddedinfoview.cc" line="322"/>
+        <source>Fri</source>
+        <translation>金</translation>
+    </message>
+    <message>
+        <location filename="../player/embeddedinfoview.cc" line="323"/>
+        <source>Sat</source>
+        <translation>土</translation>
+    </message>
+    <message>
+        <location filename="../player/embeddedinfoview.cc" line="324"/>
+        <source>Sun</source>
+        <translation>日</translation>
+    </message>
+    <message>
+        <location filename="../player/embeddedinfoview.cc" line="338"/>
         <source> years</source>
         <translation>年</translation>
     </message>
     <message>
-        <location filename="../player/embeddedinfoview.cc" line="285"/>
+        <location filename="../player/embeddedinfoview.cc" line="340"/>
         <source> year</source>
         <translation>年</translation>
     </message>
     <message>
-        <location filename="../player/embeddedinfoview.cc" line="287"/>
+        <location filename="../player/embeddedinfoview.cc" line="342"/>
         <source> months</source>
-        <translation>月</translation>
+        <translation>个月</translation>
     </message>
     <message>
-        <location filename="../player/embeddedinfoview.cc" line="289"/>
+        <location filename="../player/embeddedinfoview.cc" line="344"/>
         <source> month</source>
-        <translation>月</translation>
+        <translation>个月</translation>
     </message>
     <message>
-        <location filename="../player/embeddedinfoview.cc" line="291"/>
+        <location filename="../player/embeddedinfoview.cc" line="346"/>
         <source> weeks</source>
         <translation>周</translation>
     </message>
     <message>
-        <location filename="../player/embeddedinfoview.cc" line="293"/>
+        <location filename="../player/embeddedinfoview.cc" line="348"/>
         <source> week</source>
         <translation>周</translation>
     </message>
     <message>
-        <location filename="../player/embeddedinfoview.cc" line="295"/>
+        <location filename="../player/embeddedinfoview.cc" line="350"/>
         <source> days</source>
         <translation>天</translation>
     </message>
     <message>
-        <location filename="../player/embeddedinfoview.cc" line="297"/>
+        <location filename="../player/embeddedinfoview.cc" line="352"/>
         <source> day</source>
         <translation>天</translation>
     </message>
     <message>
-        <location filename="../player/embeddedinfoview.cc" line="302"/>
+        <location filename="../player/embeddedinfoview.cc" line="357"/>
         <source> hr.</source>
         <translation>小时</translation>
     </message>
     <message>
-        <location filename="../player/embeddedinfoview.cc" line="304"/>
+        <location filename="../player/embeddedinfoview.cc" line="359"/>
         <source> min.</source>
         <translation>分</translation>
     </message>
     <message>
-        <location filename="../player/embeddedinfoview.cc" line="306"/>
+        <location filename="../player/embeddedinfoview.cc" line="361"/>
         <source> sec.</source>
         <translation>秒</translation>
     </message>
@@ -1526,12 +1702,27 @@
         <translation>无弹幕偏移时间</translation>
     </message>
     <message>
-        <location filename="../eventlogger.cc" line="468"/>
+        <location filename="../eventlogger.cc" line="474"/>
+        <source>limit annotations bandwidth</source>
+        <translation>限制弹幕刷屏</translation>
+    </message>
+    <message>
+        <location filename="../eventlogger.cc" line="476"/>
+        <source>display all annotations</source>
+        <translation>显示所有弹幕</translation>
+    </message>
+    <message>
+        <location filename="../eventlogger.cc" line="490"/>
+        <source>so many annotations, skipped</source>
+        <translation>限制弹幕刷屏</translation>
+    </message>
+    <message>
+        <location filename="../eventlogger.cc" line="497"/>
         <source>capture hovered annotations</source>
         <translation>捕捉弹幕</translation>
     </message>
     <message>
-        <location filename="../eventlogger.cc" line="475"/>
+        <location filename="../eventlogger.cc" line="504"/>
         <source>release hovered annotations</source>
         <translation>释放弹幕</translation>
     </message>
@@ -1552,27 +1743,27 @@
         <translation type="obsolete">驱逐弹幕</translation>
     </message>
     <message>
-        <location filename="../eventlogger.cc" line="511"/>
+        <location filename="../eventlogger.cc" line="540"/>
         <source>found %1 users</source>
         <translation>捕获了%1名魔法师</translation>
     </message>
     <message>
-        <location filename="../eventlogger.cc" line="528"/>
+        <location filename="../eventlogger.cc" line="557"/>
         <source>Prefer offline annotations over online ones</source>
         <translation>离线弹幕优先</translation>
     </message>
     <message>
-        <location filename="../eventlogger.cc" line="530"/>
+        <location filename="../eventlogger.cc" line="559"/>
         <source>Prefer online annotations over offline ones</source>
         <translation>在线弹幕优先</translation>
     </message>
     <message>
-        <location filename="../eventlogger.cc" line="542"/>
+        <location filename="../eventlogger.cc" line="571"/>
         <source>show annotation analytics while playing</source>
         <translation>播放时显示弹幕标注</translation>
     </message>
     <message>
-        <location filename="../eventlogger.cc" line="544"/>
+        <location filename="../eventlogger.cc" line="573"/>
         <source>hide annotation analytics while playing</source>
         <translation>播放时不显示弹幕标注</translation>
     </message>
@@ -1676,58 +1867,67 @@
 <context>
     <name>GoogleVideoMrlResolver</name>
     <message>
-        <location filename="../../../module/mrlresolver/googlevideomrlresolver.cc" line="26"/>
         <source>failed to resolve URL</source>
-        <translation>解析链接失败</translation>
-    </message>
-    <message>
-        <location filename="../../../module/mrlresolver/googlevideomrlresolver.cc" line="41"/>
-        <source>resolving media URL ...</source>
-        <translation></translation>
+        <translation type="obsolete">解析链接失败</translation>
     </message>
 </context>
 <context>
     <name>Grabber</name>
     <message>
-        <location filename="../util/grabber.cc" line="13"/>
         <source>unknown</source>
+        <translation type="obsolete">未知</translation>
+    </message>
+    <message>
+        <location filename="../util/grabber.cc" line="14"/>
+        <location filename="../util/grabber.cc" line="23"/>
+        <source>Unknown</source>
         <translation>未知</translation>
+    </message>
+    <message>
+        <location filename="../util/grabber.cc" line="47"/>
+        <source>file saved</source>
+        <translation>保存文件</translation>
+    </message>
+    <message>
+        <location filename="../util/grabber.cc" line="49"/>
+        <source>failed to save file</source>
+        <translation>保存文件失败</translation>
     </message>
 </context>
 <context>
     <name>HttpBufferedSession</name>
     <message>
-        <location filename="../../../module/vlccore/httpbufferedsession.cc" line="78"/>
+        <location filename="../../../module/vlchttp/httpbufferedsession.cc" line="78"/>
         <source>downloading</source>
         <translation>下载中</translation>
     </message>
     <message>
-        <location filename="../../../module/vlccore/httpbufferedsession.cc" line="90"/>
+        <location filename="../../../module/vlchttp/httpbufferedsession.cc" line="91"/>
         <source>cannot save to file</source>
         <translation>文件保存失败</translation>
     </message>
     <message>
-        <location filename="../../../module/vlccore/httpbufferedsession.cc" line="101"/>
+        <location filename="../../../module/vlchttp/httpbufferedsession.cc" line="102"/>
         <source>download failed</source>
         <translation>下载失败</translation>
     </message>
     <message>
-        <location filename="../../../module/vlccore/httpbufferedsession.cc" line="105"/>
+        <location filename="../../../module/vlchttp/httpbufferedsession.cc" line="106"/>
         <source>file saved</source>
         <translation>保存文件</translation>
     </message>
     <message>
-        <location filename="../../../module/vlccore/httpbufferedsession.cc" line="217"/>
+        <location filename="../../../module/vlchttp/httpbufferedsession.cc" line="226"/>
         <source>buffering</source>
         <translation>正在缓冲</translation>
     </message>
     <message>
-        <location filename="../../../module/vlccore/httpbufferedsession.cc" line="238"/>
+        <location filename="../../../module/vlchttp/httpbufferedsession.cc" line="242"/>
         <source>network error to access URL</source>
         <translation>网络错误，无法访问链接</translation>
     </message>
     <message>
-        <location filename="../../../module/vlccore/httpbufferedsession.cc" line="255"/>
+        <location filename="../../../module/vlchttp/httpbufferedsession.cc" line="259"/>
         <source>access forbidden</source>
         <translation>无法访问</translation>
     </message>
@@ -1735,62 +1935,62 @@
 <context>
     <name>HttpStreamSession</name>
     <message>
-        <location filename="../../../module/vlccore/httpstreamsession.cc" line="162"/>
+        <location filename="../../../module/vlchttp/httpstreamsession.cc" line="158"/>
         <source>downloading</source>
         <translation>下载中</translation>
     </message>
     <message>
-        <location filename="../../../module/vlccore/httpstreamsession.cc" line="179"/>
+        <location filename="../../../module/vlchttp/httpstreamsession.cc" line="176"/>
         <source>download failed</source>
         <translation>下载失败</translation>
     </message>
     <message>
-        <location filename="../../../module/vlccore/httpstreamsession.cc" line="188"/>
+        <location filename="../../../module/vlchttp/httpstreamsession.cc" line="185"/>
         <source>file saved</source>
         <translation>文件保存</translation>
     </message>
     <message>
-        <location filename="../../../module/vlccore/httpstreamsession.cc" line="308"/>
+        <location filename="../../../module/vlchttp/httpstreamsession.cc" line="367"/>
         <source>preparing</source>
         <translation>准备中</translation>
     </message>
     <message>
-        <location filename="../../../module/vlccore/httpstreamsession.cc" line="334"/>
+        <location filename="../../../module/vlchttp/httpstreamsession.cc" line="413"/>
         <source>failed to fetch HTTP header, retry</source>
         <translation>HTTP请求失败，重试</translation>
     </message>
     <message>
-        <location filename="../../../module/vlccore/httpstreamsession.cc" line="359"/>
+        <location filename="../../../module/vlchttp/httpstreamsession.cc" line="312"/>
         <source>failed to fetch part %1, retry</source>
-        <translation>下载第一P失败</translation>
+        <translation>下载第P%1失败</translation>
     </message>
     <message>
-        <location filename="../../../module/vlccore/httpstreamsession.cc" line="367"/>
+        <location filename="../../../module/vlchttp/httpstreamsession.cc" line="320"/>
         <source>wait %1 seconds and try again</source>
         <translation>等待%1秒后重试</translation>
     </message>
     <message>
-        <location filename="../../../module/vlccore/httpstreamsession.cc" line="419"/>
+        <location filename="../../../module/vlchttp/httpstreamsession.cc" line="447"/>
         <source>access forbidden</source>
         <translation>无法访问</translation>
     </message>
     <message>
-        <location filename="../../../module/vlccore/httpstreamsession.cc" line="463"/>
+        <location filename="../../../module/vlchttp/httpstreamsession.cc" line="493"/>
         <source>buffering ...</source>
         <translation>正在缓冲...</translation>
     </message>
     <message>
-        <location filename="../../../module/vlccore/httpstreamsession.cc" line="471"/>
+        <location filename="../../../module/vlchttp/httpstreamsession.cc" line="502"/>
         <source>failed to parse FLV streams</source>
         <translation>FLV流分析失败</translation>
     </message>
     <message>
-        <location filename="../../../module/vlccore/httpstreamsession.cc" line="489"/>
+        <location filename="../../../module/vlchttp/httpstreamsession.cc" line="520"/>
         <source>failed to merge FLV streams</source>
         <translation>FLV流合成失败</translation>
     </message>
     <message>
-        <location filename="../../../module/vlccore/httpstreamsession.cc" line="501"/>
+        <location filename="../../../module/vlchttp/httpstreamsession.cc" line="532"/>
         <source>failed to process remote media</source>
         <translation>分析在线动画失败</translation>
     </message>
@@ -1826,27 +2026,27 @@
 <context>
     <name>LuaMrlResolver</name>
     <message>
-        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="126"/>
-        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="140"/>
-        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="230"/>
-        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="244"/>
+        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="127"/>
+        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="141"/>
+        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="231"/>
+        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="245"/>
         <source>failed to resolve URL</source>
         <translation>解析链接失败</translation>
     </message>
     <message>
-        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="134"/>
-        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="238"/>
+        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="135"/>
+        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="239"/>
         <source>failed to resolve URL using nicovideo account</source>
         <translation>无效的链接或nicovideo账户</translation>
     </message>
     <message>
-        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="137"/>
-        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="241"/>
+        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="138"/>
+        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="242"/>
         <source>failed to resolve URL using bilibili account</source>
         <translation>无效的链接或bilibili账户</translation>
     </message>
     <message>
-        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="357"/>
+        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="353"/>
         <source>nicovideo.jp account is required to resolve URL</source>
         <translation>无法解析nico链接，请设置nico账户</translation>
     </message>
@@ -1854,32 +2054,32 @@
 <context>
     <name>Magnifier</name>
     <message>
-        <location filename="../../../module/magnifier/magnifier.cc" line="37"/>
+        <location filename="../../../module/magnifier/magnifier.cc" line="38"/>
         <source>Magnifier</source>
         <translation>放大镜</translation>
     </message>
     <message>
-        <location filename="../../../module/magnifier/magnifier.cc" line="65"/>
+        <location filename="../../../module/magnifier/magnifier.cc" line="72"/>
         <source>Reduce Darkness</source>
         <translation>驱散黑暗</translation>
     </message>
     <message>
-        <location filename="../../../module/magnifier/magnifier.cc" line="68"/>
+        <location filename="../../../module/magnifier/magnifier.cc" line="75"/>
         <source>Reduce Fog</source>
         <translation>驱散水蒸气</translation>
     </message>
     <message>
-        <location filename="../../../module/magnifier/magnifier.cc" line="72"/>
+        <location filename="../../../module/magnifier/magnifier.cc" line="79"/>
         <source>Remove Mosaic</source>
         <translation>去除马赛克</translation>
     </message>
     <message>
-        <location filename="../../../module/magnifier/magnifier.cc" line="176"/>
+        <location filename="../../../module/magnifier/magnifier.cc" line="187"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
     <message>
-        <location filename="../../../module/magnifier/magnifier.cc" line="176"/>
+        <location filename="../../../module/magnifier/magnifier.cc" line="187"/>
         <source>DoubleClick</source>
         <translation>双击</translation>
     </message>
@@ -1887,17 +2087,17 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../mainwindow.cc" line="3936"/>
+        <location filename="../mainwindow.cc" line="4003"/>
         <source>Select annots window</source>
         <translation>选择再生窗口</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3952"/>
+        <location filename="../mainwindow.cc" line="4019"/>
         <source>Select process window to open</source>
         <translation>选择需要监听的进程窗口</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2035"/>
+        <location filename="../mainwindow.cc" line="2019"/>
         <source>&amp;File</source>
         <translation></translation>
     </message>
@@ -1906,63 +2106,63 @@
         <translation type="obsolete">视图</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2047"/>
+        <location filename="../mainwindow.cc" line="2031"/>
         <source>&amp;Quit</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2064"/>
-        <location filename="../mainwindow.cc" line="2065"/>
+        <location filename="../mainwindow.cc" line="2048"/>
+        <location filename="../mainwindow.cc" line="2049"/>
         <source>&amp;Help</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2066"/>
+        <location filename="../mainwindow.cc" line="2050"/>
         <source>&amp;About</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2918"/>
+        <location filename="../mainwindow.cc" line="2902"/>
         <source>analyzing media ...</source>
         <translation>媒体分析中...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3072"/>
+        <location filename="../mainwindow.cc" line="3061"/>
         <source>detaching all processes ...</source>
         <translation>进程同步断开...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3203"/>
+        <location filename="../mainwindow.cc" line="3192"/>
         <source>saved</source>
         <translation>以保存</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3205"/>
+        <location filename="../mainwindow.cc" line="3194"/>
         <source>failed to save snapshot</source>
         <translation>保存截图失败</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3216"/>
+        <location filename="../mainwindow.cc" line="3218"/>
         <source>snapshot saved on the destop</source>
         <translation>截图保存到了桌面上</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3489"/>
+        <location filename="../mainwindow.cc" line="3493"/>
         <source>Buffering ...</source>
         <translation>正在缓冲…</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3519"/>
+        <location filename="../mainwindow.cc" line="3523"/>
         <source>Download finished</source>
         <translation>下载完成</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4015"/>
+        <location filename="../mainwindow.cc" line="4083"/>
         <source>connecting server to submit alias ...</source>
         <translation>正在连接服务器提交别名...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4031"/>
+        <location filename="../mainwindow.cc" line="4099"/>
         <source>alias saved</source>
         <translation>别名已保存</translation>
     </message>
@@ -1979,33 +2179,33 @@
         <translation type="obsolete">远程魔法修改弹幕失败</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4286"/>
+        <location filename="../mainwindow.cc" line="4354"/>
         <source>connecting server to query media/game token ...</source>
         <translation>搜索弹幕中...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4386"/>
+        <location filename="../mainwindow.cc" line="4457"/>
         <source>searching for token in cache ...</source>
         <translation>正在本地缓冲中搜索弹幕信息...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4427"/>
+        <location filename="../mainwindow.cc" line="4498"/>
         <source>offline database</source>
         <translation>离线数据库</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4505"/>
-        <location filename="../mainwindow.cc" line="4577"/>
+        <location filename="../mainwindow.cc" line="4576"/>
+        <location filename="../mainwindow.cc" line="4648"/>
         <source>connecting server to submit annot ...</source>
         <translation>提交弹幕中...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4918"/>
+        <location filename="../mainwindow.cc" line="4991"/>
         <source>remove annotations</source>
         <translation>删除弹幕</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4928"/>
+        <location filename="../mainwindow.cc" line="5003"/>
         <source>capture annotations</source>
         <translation>捕获弹幕</translation>
     </message>
@@ -2018,60 +2218,60 @@
         <translation type="obsolete">使用%1/%2加鼠标来捕捉/释放弹幕</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="6547"/>
+        <location filename="../mainwindow.cc" line="6666"/>
         <source>always on top enabled</source>
         <translation>总在前面有效</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="6549"/>
+        <location filename="../mainwindow.cc" line="6668"/>
         <source>always on top disabled</source>
         <translation>总在前面无效</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="6577"/>
-        <location filename="../mainwindow.cc" line="6620"/>
-        <location filename="../mainwindow.cc" line="6667"/>
-        <location filename="../mainwindow.cc" line="6712"/>
-        <location filename="../mainwindow.cc" line="6757"/>
+        <location filename="../mainwindow.cc" line="6696"/>
+        <location filename="../mainwindow.cc" line="6739"/>
+        <location filename="../mainwindow.cc" line="6786"/>
+        <location filename="../mainwindow.cc" line="6831"/>
+        <location filename="../mainwindow.cc" line="6876"/>
         <source>invalid cast id</source>
         <translation>无效的施法对象</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="6583"/>
-        <location filename="../mainwindow.cc" line="6626"/>
-        <location filename="../mainwindow.cc" line="6673"/>
-        <location filename="../mainwindow.cc" line="6718"/>
-        <location filename="../mainwindow.cc" line="6763"/>
+        <location filename="../mainwindow.cc" line="6702"/>
+        <location filename="../mainwindow.cc" line="6745"/>
+        <location filename="../mainwindow.cc" line="6792"/>
+        <location filename="../mainwindow.cc" line="6837"/>
+        <location filename="../mainwindow.cc" line="6882"/>
         <source>cannot perform cast when offline</source>
         <translation>离线中魔法无效</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="6589"/>
+        <location filename="../mainwindow.cc" line="6708"/>
         <source>submit bless cast to token ...</source>
         <translation>施展祝福魔法中...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="6601"/>
+        <location filename="../mainwindow.cc" line="6720"/>
         <source>token blessed</source>
         <translation>祝福标记成功</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="6607"/>
+        <location filename="../mainwindow.cc" line="6726"/>
         <source>failed to bless token</source>
         <translation>祝福标记失败</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="6632"/>
+        <location filename="../mainwindow.cc" line="6751"/>
         <source>submit curse cast to token ...</source>
         <translation>施展诅咒魔法中...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="6644"/>
+        <location filename="../mainwindow.cc" line="6763"/>
         <source>token cursed</source>
         <translation>诅咒标记成功</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="6650"/>
+        <location filename="../mainwindow.cc" line="6769"/>
         <source>failed to curse token</source>
         <translation>诅咒标记失败</translation>
     </message>
@@ -2080,13 +2280,13 @@
         <translation type="obsolete">退出登录中...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1097"/>
-        <location filename="../mainwindow.cc" line="1899"/>
+        <location filename="../mainwindow.cc" line="1072"/>
+        <location filename="../mainwindow.cc" line="1881"/>
         <source>Play</source>
         <translation>播放</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1900"/>
+        <location filename="../mainwindow.cc" line="1882"/>
         <source>Play menu</source>
         <translation>播放菜单</translation>
     </message>
@@ -2103,13 +2303,13 @@
         <translation type="obsolete">导入在线弹幕链接</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2421"/>
-        <location filename="../mainwindow.cc" line="2447"/>
+        <location filename="../mainwindow.cc" line="2405"/>
+        <location filename="../mainwindow.cc" line="2431"/>
         <source>analyzing URL ...</source>
         <translation>媒体链接分析中...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2425"/>
+        <location filename="../mainwindow.cc" line="2409"/>
         <source>failed to resolve URL</source>
         <translation>解析链接失败</translation>
     </message>
@@ -2118,7 +2318,7 @@
         <translation type="obsolete">解析动画链接失败</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3432"/>
+        <location filename="../mainwindow.cc" line="3436"/>
         <source>openning update URL ...</source>
         <translation>正在打开升级的URL...</translation>
     </message>
@@ -2127,27 +2327,27 @@
         <translation type="obsolete">账户信息已保存</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3971"/>
+        <location filename="../mainwindow.cc" line="4038"/>
         <source>please log in to save alias online</source>
         <translation>标记媒体失败，请登录</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3976"/>
+        <location filename="../mainwindow.cc" line="4043"/>
         <source>alias not saved for unknown media token</source>
         <translation>标记媒体失败</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3979"/>
+        <location filename="../mainwindow.cc" line="4046"/>
         <source>saving alias ...</source>
         <translation>标记媒体中...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4003"/>
+        <location filename="../mainwindow.cc" line="4071"/>
         <source>similar alias already exists</source>
         <translation>相似的标记已存在</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4009"/>
+        <location filename="../mainwindow.cc" line="4077"/>
         <source>source alias is not a valid URL</source>
         <translation>别名不是有效的URL</translation>
     </message>
@@ -2156,54 +2356,54 @@
         <translation type="obsolete">程序退出中...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="6678"/>
-        <location filename="../mainwindow.cc" line="6723"/>
-        <location filename="../mainwindow.cc" line="6768"/>
+        <location filename="../mainwindow.cc" line="6797"/>
+        <location filename="../mainwindow.cc" line="6842"/>
+        <location filename="../mainwindow.cc" line="6887"/>
         <source>cannot perform cast to yourself</source>
         <translation>不能对自己施法</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="6684"/>
+        <location filename="../mainwindow.cc" line="6803"/>
         <source>blessing user ...</source>
         <translation>正在祝福魔法师...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="6695"/>
+        <location filename="../mainwindow.cc" line="6814"/>
         <source>user blessed</source>
         <translation>魔法师被祝福</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="6729"/>
+        <location filename="../mainwindow.cc" line="6848"/>
         <source>cursing user ...</source>
         <translation>正在诅咒魔法师...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="6740"/>
+        <location filename="../mainwindow.cc" line="6859"/>
         <source>user cursed</source>
         <translation>魔法师被诅咒</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="6774"/>
+        <location filename="../mainwindow.cc" line="6893"/>
         <source>blocking user ...</source>
         <translation>正在屏蔽魔法师...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="6785"/>
+        <location filename="../mainwindow.cc" line="6904"/>
         <source>user blocked</source>
         <translation>魔法师被屏蔽</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="6885"/>
+        <location filename="../mainwindow.cc" line="7004"/>
         <source>connecting to server ...</source>
         <translation>正在连接服务器...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="6902"/>
+        <location filename="../mainwindow.cc" line="7021"/>
         <source>server connected</source>
         <translation>服务器已连接</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="6904"/>
+        <location filename="../mainwindow.cc" line="7023"/>
         <source>server disconnected</source>
         <translation>服务器断开</translation>
     </message>
@@ -2212,180 +2412,186 @@
         <translation type="obsolete">新版魔导书发现，下载地址：</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1997"/>
-        <location filename="../mainwindow.cc" line="1998"/>
+        <location filename="../mainwindow.cc" line="1979"/>
+        <location filename="../mainwindow.cc" line="1980"/>
         <source>Annotation Information</source>
         <translation>弹幕情报</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2060"/>
+        <location filename="../mainwindow.cc" line="2044"/>
         <source>&amp;Settings</source>
         <translation>偏好</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2061"/>
+        <location filename="../mainwindow.cc" line="2045"/>
         <source>&amp;Preferences</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4095"/>
+        <location filename="../mainwindow.cc" line="3198"/>
+        <location filename="../mainwindow.cc" line="3204"/>
+        <source>Unknown</source>
+        <translation>未知</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cc" line="4163"/>
         <source>not connected to Internet</source>
         <translation>无法连接Internet</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4100"/>
+        <location filename="../mainwindow.cc" line="4168"/>
         <source>unknown token</source>
         <translation>未知的标记</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4105"/>
+        <location filename="../mainwindow.cc" line="4173"/>
         <source>updating annotations ...</source>
         <translation>更新弹幕中...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5292"/>
+        <location filename="../mainwindow.cc" line="5370"/>
         <source>use %1 with mouse or wheel to control annotations</source>
         <translation>使用%1与鼠标左中右键和滚轮一起捕捉弹幕</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5568"/>
-        <location filename="../mainwindow.cc" line="5575"/>
+        <location filename="../mainwindow.cc" line="5653"/>
+        <location filename="../mainwindow.cc" line="5660"/>
         <source>Copy</source>
         <translation>复制</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="7102"/>
+        <location filename="../mainwindow.cc" line="7221"/>
         <source>found process id for window</source>
         <translation>发现窗口的进程</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="7105"/>
+        <location filename="../mainwindow.cc" line="7224"/>
         <source>process id for window was not found</source>
         <translation>窗口的进程没有找到</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="7116"/>
+        <location filename="../mainwindow.cc" line="7235"/>
         <source>process was attached</source>
         <translation>进程已同步</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="7120"/>
+        <location filename="../mainwindow.cc" line="7239"/>
         <source>process attached</source>
         <translation>同步进程成功</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="7126"/>
+        <location filename="../mainwindow.cc" line="7245"/>
         <source>failed to attach process </source>
         <translation>同步进程失败</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="7128"/>
+        <location filename="../mainwindow.cc" line="7247"/>
         <source>Is the process running now?</source>
         <translation>程序真的开了吗？</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="7130"/>
+        <location filename="../mainwindow.cc" line="7249"/>
         <source>Run me as administrator and try again (o^^o)</source>
         <translation>换成管理员的身份试试吧</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="7132"/>
+        <location filename="../mainwindow.cc" line="7251"/>
         <source>Restart the target process might help -_-</source>
         <translation>可能需要重启一下程序</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="7143"/>
+        <location filename="../mainwindow.cc" line="7262"/>
         <source>process was started</source>
         <translation>程序已经启动</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="7146"/>
+        <location filename="../mainwindow.cc" line="7265"/>
         <source>told process to start</source>
         <translation>刚刚让程序启动</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="7154"/>
+        <location filename="../mainwindow.cc" line="7273"/>
         <source>failed to start process</source>
         <translation>开始程序失败</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="7158"/>
+        <location filename="../mainwindow.cc" line="7277"/>
         <source>wait %1 seconds for process to start ...</source>
         <translation>等待%1秒程序启动...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="7174"/>
+        <location filename="../mainwindow.cc" line="7293"/>
         <source>openning process</source>
         <translation>正在打开程序</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="7272"/>
+        <location filename="../mainwindow.cc" line="7391"/>
         <source>connecting server to change anonymous status ...</source>
         <translation>远程魔法修改匿名属性中...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="7284"/>
+        <location filename="../mainwindow.cc" line="7403"/>
         <source>failed to change user anonymous state</source>
         <translation>远程魔法修改匿名属性失败</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="7294"/>
+        <location filename="../mainwindow.cc" line="7413"/>
         <source>you are anonymous now</source>
         <translation>主人已经匿名了</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="7296"/>
+        <location filename="../mainwindow.cc" line="7415"/>
         <source>you are not anonymous now</source>
         <translation>主人不再匿名了</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="7313"/>
+        <location filename="../mainwindow.cc" line="7432"/>
         <source>connecting server to change language ...</source>
         <translation>远程魔法修改语言属性中...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="7325"/>
+        <location filename="../mainwindow.cc" line="7444"/>
         <source>failed to change user language</source>
         <translation>远程魔法修改语言属性失败</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="7334"/>
+        <location filename="../mainwindow.cc" line="7453"/>
         <source>your language is </source>
         <translation>主人的语言属性是</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="7406"/>
+        <location filename="../mainwindow.cc" line="7525"/>
         <source>restart the app to use the new language</source>
         <translation>使用新的语言需要重启播放器</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8012"/>
+        <location filename="../mainwindow.cc" line="8146"/>
         <source>less files to browse</source>
         <translation>减少媒体</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8047"/>
+        <location filename="../mainwindow.cc" line="8181"/>
         <source>more files added</source>
         <translation>添加媒体</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8416"/>
-        <location filename="../mainwindow.cc" line="8429"/>
+        <location filename="../mainwindow.cc" line="8550"/>
+        <location filename="../mainwindow.cc" line="8563"/>
         <source>copied</source>
         <translation>复制</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8756"/>
+        <location filename="../mainwindow.cc" line="8894"/>
         <source>using last aspect ratio</source>
         <translation>使用上一次的长宽比</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8876"/>
+        <location filename="../mainwindow.cc" line="9014"/>
         <source>annotation URL already imported</source>
         <translation>弹幕链接已导入</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="9451"/>
+        <location filename="../mainwindow.cc" line="9597"/>
         <source>openning</source>
         <translation>正在打开</translation>
     </message>
@@ -2394,22 +2600,22 @@
         <translation type="obsolete">无法打开浏览器</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="9025"/>
+        <location filename="../mainwindow.cc" line="9163"/>
         <source>new window launched</source>
         <translation>打开新窗口</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="9102"/>
+        <location filename="../mainwindow.cc" line="9240"/>
         <source>buffered video will be saved on Desktop</source>
-        <translation>自动保存缓冲动画到桌面</translation>
+        <translation>保存缓冲动画到桌面</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="9104"/>
+        <location filename="../mainwindow.cc" line="9242"/>
         <source>buffered video will not be saved</source>
-        <translation>不自动保存缓冲动画</translation>
+        <translation>不保存缓冲动画</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="9147"/>
+        <location filename="../mainwindow.cc" line="9285"/>
         <source>resume annotations</source>
         <translation>释放捕捉的弹幕</translation>
     </message>
@@ -2418,105 +2624,105 @@
         <translation type="obsolete">使用上一次的长宽比</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8862"/>
+        <location filename="../mainwindow.cc" line="9000"/>
         <source>annot URL is already used</source>
         <translation>弹幕链接已导入</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8868"/>
-        <location filename="../mainwindow.cc" line="8900"/>
+        <location filename="../mainwindow.cc" line="9006"/>
+        <location filename="../mainwindow.cc" line="9038"/>
         <source>media URL is being played </source>
         <translation>媒体链接已播放</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8923"/>
+        <location filename="../mainwindow.cc" line="9061"/>
         <source>do nothings after finished playing all files</source>
         <translation>播放结束后什么都不做</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8932"/>
+        <location filename="../mainwindow.cc" line="9070"/>
         <source>put the computer to sleep after finished playing all files</source>
         <translation>播放结束后自动休眠</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8941"/>
+        <location filename="../mainwindow.cc" line="9079"/>
         <source>shutdown the computer after finished playing all files</source>
         <translation>播放结束后自动关闭计算机</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="9006"/>
+        <location filename="../mainwindow.cc" line="9144"/>
         <source>allow multiple player windows</source>
         <translation>允许多个再生窗口</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="9008"/>
+        <location filename="../mainwindow.cc" line="9146"/>
         <source>allow single player window</source>
         <translation>仅允许单一再生窗口</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4124"/>
-        <location filename="../mainwindow.cc" line="4429"/>
-        <location filename="../mainwindow.cc" line="8287"/>
+        <location filename="../mainwindow.cc" line="4192"/>
+        <location filename="../mainwindow.cc" line="4500"/>
+        <location filename="../mainwindow.cc" line="8421"/>
         <source>annotations found</source>
         <translation>发现新弹幕</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1095"/>
+        <location filename="../mainwindow.cc" line="1070"/>
         <source>Open</source>
         <translation>打开</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1099"/>
+        <location filename="../mainwindow.cc" line="1075"/>
         <source>Pause</source>
         <translation>暂停</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1101"/>
+        <location filename="../mainwindow.cc" line="1078"/>
         <source>Stop</source>
         <translation>停止</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1103"/>
+        <location filename="../mainwindow.cc" line="1080"/>
         <source>Replay</source>
         <translation>重新播放</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1105"/>
+        <location filename="../mainwindow.cc" line="1082"/>
         <source>Previous</source>
         <translation>前一个</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1107"/>
+        <location filename="../mainwindow.cc" line="1084"/>
         <source>Next</source>
         <translation>下一个</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1109"/>
+        <location filename="../mainwindow.cc" line="1086"/>
         <source>Next Frame</source>
         <translation>下一帧</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1111"/>
+        <location filename="../mainwindow.cc" line="1088"/>
         <source>Snapshot</source>
         <translation>截图</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1113"/>
+        <location filename="../mainwindow.cc" line="1090"/>
         <source>Snapshot All</source>
         <translation>截图（含弹幕）</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1116"/>
+        <location filename="../mainwindow.cc" line="1093"/>
         <source>Login</source>
         <translation>登录</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1118"/>
+        <location filename="../mainwindow.cc" line="1095"/>
         <source>Logout</source>
         <translation>退出登陆</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1121"/>
+        <location filename="../mainwindow.cc" line="1098"/>
         <source>Update Annotations</source>
         <translation>更新弹幕</translation>
     </message>
@@ -2525,40 +2731,40 @@
         <translation type="obsolete">放大镜</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1131"/>
+        <location filename="../mainwindow.cc" line="1113"/>
         <source>About</source>
         <translation>关于软件</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1132"/>
+        <location filename="../mainwindow.cc" line="1114"/>
         <source>Update</source>
         <translation>更新</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1140"/>
+        <location filename="../mainwindow.cc" line="1122"/>
         <source>Help</source>
         <translation>帮助</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1146"/>
+        <location filename="../mainwindow.cc" line="1128"/>
         <source>Quit</source>
         <translation>退出</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1712"/>
-        <location filename="../mainwindow.cc" line="1713"/>
+        <location filename="../mainwindow.cc" line="1694"/>
+        <location filename="../mainwindow.cc" line="1695"/>
         <source>Sync with Galgame</source>
         <translation>与Galgame同步</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1827"/>
-        <location filename="../mainwindow.cc" line="1828"/>
+        <location filename="../mainwindow.cc" line="1809"/>
+        <location filename="../mainwindow.cc" line="1810"/>
         <source>Adjust video</source>
         <translation>调整视频参数</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1577"/>
-        <location filename="../mainwindow.cc" line="1578"/>
+        <location filename="../mainwindow.cc" line="1559"/>
+        <location filename="../mainwindow.cc" line="1560"/>
         <source>Search</source>
         <translation>检索</translation>
     </message>
@@ -2567,61 +2773,66 @@
         <translation type="obsolete">复制名称到剪贴板</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1584"/>
+        <location filename="../mainwindow.cc" line="1566"/>
         <source>Search with %1</source>
         <translation>搜索：%1</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1661"/>
-        <location filename="../mainwindow.cc" line="1662"/>
+        <location filename="../mainwindow.cc" line="1643"/>
+        <location filename="../mainwindow.cc" line="1644"/>
         <source>Current media</source>
         <translation>动画链接</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1931"/>
+        <location filename="../mainwindow.cc" line="1913"/>
         <source>After finished</source>
         <translation>播放结束后</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1932"/>
+        <location filename="../mainwindow.cc" line="1914"/>
         <source>After finished playing all files in the same folder</source>
         <translation>在播放所有媒体结束后</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1942"/>
-        <location filename="../mainwindow.cc" line="1943"/>
+        <location filename="../mainwindow.cc" line="1924"/>
+        <location filename="../mainwindow.cc" line="1925"/>
         <source>Utilities</source>
         <translation>工具</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1957"/>
-        <location filename="../mainwindow.cc" line="1958"/>
+        <location filename="../mainwindow.cc" line="1939"/>
+        <location filename="../mainwindow.cc" line="1940"/>
         <source>Settings</source>
         <translation>偏好</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1134"/>
+        <location filename="../mainwindow.cc" line="1116"/>
         <source>Preferences</source>
         <translation>设定</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1125"/>
+        <location filename="../mainwindow.cc" line="1103"/>
         <source>Image Filter</source>
         <translation>滤镜</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2004"/>
-        <location filename="../mainwindow.cc" line="2005"/>
-        <source>Annotation settings</source>
-        <translation>弹幕设定</translation>
+        <location filename="../mainwindow.cc" line="1109"/>
+        <source>Limit Bandwidth</source>
+        <translation>限制刷屏</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2824"/>
+        <location filename="../mainwindow.cc" line="1986"/>
+        <location filename="../mainwindow.cc" line="1987"/>
+        <source>Annotation Settings</source>
+        <translation>弹幕设置</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cc" line="2808"/>
         <source>failed to open media</source>
         <translation>媒体再生失败</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3485"/>
+        <location filename="../mainwindow.cc" line="3489"/>
         <source>Complete</source>
         <translation>完成</translation>
     </message>
@@ -2630,37 +2841,37 @@
         <translation type="obsolete">缓冲</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4186"/>
+        <location filename="../mainwindow.cc" line="4254"/>
         <source>login is requied to to submit annotation URL</source>
         <translation>请登录以提交弹幕链接</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4191"/>
+        <location filename="../mainwindow.cc" line="4259"/>
         <source>File saved</source>
         <translation>文件保存</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4203"/>
+        <location filename="../mainwindow.cc" line="4271"/>
         <source>URL is too long</source>
         <translation>链接过长</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4207"/>
+        <location filename="../mainwindow.cc" line="4275"/>
         <source>signing media ...</source>
         <translation>正在为文件签名...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4215"/>
+        <location filename="../mainwindow.cc" line="4283"/>
         <source>failed to analyze media</source>
         <translation>分析文件标记失败</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4268"/>
+        <location filename="../mainwindow.cc" line="4336"/>
         <source>media signed</source>
         <translation>文件签名成功</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4270"/>
+        <location filename="../mainwindow.cc" line="4338"/>
         <source>failed to sign media</source>
         <translation>文件签名失败</translation>
     </message>
@@ -2669,34 +2880,34 @@
         <translation type="obsolete">使用%1/%2与鼠标和滚轮一起捕捉弹幕</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="7021"/>
+        <location filename="../mainwindow.cc" line="7140"/>
         <source>new version released, please check Help/Update menu</source>
         <translation>在Google Code发现新版魔法书</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8313"/>
+        <location filename="../mainwindow.cc" line="8447"/>
         <source>analyzing annotation URL ...</source>
         <translation>解析弹幕链接中...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8568"/>
+        <location filename="../mainwindow.cc" line="8706"/>
         <source>resuming last play</source>
         <translation>恢复上一次播放位置</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8628"/>
-        <location filename="../mainwindow.cc" line="8630"/>
+        <location filename="../mainwindow.cc" line="8766"/>
+        <location filename="../mainwindow.cc" line="8768"/>
         <source>loading last subtitle</source>
         <translation>加载上一次播放的字幕</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8635"/>
+        <location filename="../mainwindow.cc" line="8773"/>
         <source>hide last subtitle</source>
         <translation>隐藏上次的字幕</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8694"/>
-        <location filename="../mainwindow.cc" line="8696"/>
+        <location filename="../mainwindow.cc" line="8832"/>
+        <location filename="../mainwindow.cc" line="8834"/>
         <source>loading last audio track</source>
         <translation>切换到上一次播放的音轨</translation>
     </message>
@@ -2729,7 +2940,7 @@
         <translation type="obsolete">文件不存在</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="7660"/>
+        <location filename="../mainwindow.cc" line="7793"/>
         <source>invalid lnk</source>
         <translation>快捷方式好像无效</translation>
     </message>
@@ -2951,12 +3162,12 @@
 <context>
     <name>NicovideoCodec</name>
     <message>
-        <location filename="../../../module/annotcodec/nicovideocodec.cc" line="55"/>
+        <location filename="../../../module/annotcodec/nicovideocodec.cc" line="56"/>
         <source>network error, failed to resolve nicovideo comments</source>
         <translation>网络错误，解析nico链接失败</translation>
     </message>
     <message>
-        <location filename="../../../module/annotcodec/nicovideocodec.cc" line="62"/>
+        <location filename="../../../module/annotcodec/nicovideocodec.cc" line="63"/>
         <source>failed to resolve nicovideo comments</source>
         <translation>解析nico链接失败</translation>
     </message>
@@ -2986,7 +3197,7 @@
 <context>
     <name>Player</name>
     <message>
-        <location filename="../../../module/player/player.cc" line="1070"/>
+        <location filename="../../../module/player/player.cc" line="1066"/>
         <source>seek too much</source>
         <translation>缓冲未完成，无法快进</translation>
     </message>
@@ -2994,7 +3205,7 @@
 <context>
     <name>PlayerPanel</name>
     <message>
-        <location filename="../player/playerpanel.cc" line="96"/>
+        <location filename="../player/playerpanel.cc" line="101"/>
         <source>Character count</source>
         <translation>字数</translation>
     </message>
@@ -3275,12 +3486,12 @@
         <translation>无法下载</translation>
     </message>
     <message>
-        <location filename="../../../module/qtext/webview.cc" line="364"/>
+        <location filename="../../../module/qtext/webview.cc" line="367"/>
         <source>History</source>
         <translation>历史记录</translation>
     </message>
     <message>
-        <location filename="../../../module/qtext/webview.cc" line="378"/>
+        <location filename="../../../module/qtext/webview.cc" line="384"/>
         <source>Blank</source>
         <translation>空白</translation>
     </message>
@@ -3622,38 +3833,38 @@
         <translation type="obsolete">火星文</translation>
     </message>
     <message>
-        <location filename="../token/tokenview.cc" line="348"/>
-        <location filename="../token/tokenview.cc" line="374"/>
+        <location filename="../token/tokenview.cc" line="356"/>
+        <location filename="../token/tokenview.cc" line="382"/>
         <source>cannot perform cast when offline</source>
         <translation>离线中魔法无效</translation>
     </message>
     <message>
-        <location filename="../token/tokenview.cc" line="354"/>
+        <location filename="../token/tokenview.cc" line="362"/>
         <source>token is already blessed</source>
         <translation>标记已被祝福</translation>
     </message>
     <message>
-        <location filename="../token/tokenview.cc" line="380"/>
+        <location filename="../token/tokenview.cc" line="388"/>
         <source>token is already cursed</source>
         <translation>标记已被诅咒</translation>
     </message>
     <message>
-        <location filename="../token/tokenview.cc" line="436"/>
+        <location filename="../token/tokenview.cc" line="444"/>
         <source>name</source>
         <translation>name</translation>
     </message>
     <message>
-        <location filename="../token/tokenview.cc" line="437"/>
+        <location filename="../token/tokenview.cc" line="445"/>
         <source>source</source>
         <translation>source</translation>
     </message>
     <message>
-        <location filename="../token/tokenview.cc" line="438"/>
+        <location filename="../token/tokenview.cc" line="446"/>
         <source>tag</source>
         <translation>tag</translation>
     </message>
     <message>
-        <location filename="../token/tokenview.cc" line="439"/>
+        <location filename="../token/tokenview.cc" line="447"/>
         <source>URL</source>
         <translation>URL</translation>
     </message>
@@ -3662,7 +3873,7 @@
         <translation type="obsolete">标题</translation>
     </message>
     <message>
-        <location filename="../token/tokenview.cc" line="453"/>
+        <location filename="../token/tokenview.cc" line="461"/>
         <source>cannot delete other&apos;s alias</source>
         <translation>无法删除别人的别名</translation>
     </message>
@@ -5110,7 +5321,7 @@
         <location filename="translatormanager.cc" line="454"/>
         <location filename="translatormanager.cc" line="455"/>
         <source>Show non-sub annot</source>
-        <translation>显示非字母弹幕</translation>
+        <translation>显示非字幕弹幕</translation>
     </message>
     <message>
         <location filename="translatormanager.cc" line="457"/>
@@ -5306,13 +5517,13 @@
         <location filename="translatormanager.cc" line="684"/>
         <location filename="translatormanager.cc" line="687"/>
         <source>Save buffered video</source>
-        <translation>自动保存缓冲动画</translation>
+        <translation>保存缓冲动画</translation>
     </message>
     <message>
         <location filename="translatormanager.cc" line="685"/>
         <location filename="translatormanager.cc" line="688"/>
         <source>Save buffered video on desktop</source>
-        <translation>自动保存缓冲动画到桌面</translation>
+        <translation>保存缓冲动画到桌面</translation>
     </message>
     <message>
         <location filename="translatormanager.cc" line="770"/>
@@ -6160,12 +6371,12 @@
 <context>
     <name>UserAnalyticsView</name>
     <message>
-        <location filename="../user/useranalyticsview.cc" line="38"/>
+        <location filename="../user/useranalyticsview.cc" line="41"/>
         <source>User Analytics</source>
         <translation>魔法师分析</translation>
     </message>
     <message>
-        <location filename="../user/useranalyticsview.cc" line="104"/>
+        <location filename="../user/useranalyticsview.cc" line="108"/>
         <source>User</source>
         <translation>魔法师</translation>
     </message>
@@ -6268,13 +6479,13 @@
 <context>
     <name>YoutubeMrlResolver</name>
     <message>
-        <location filename="../../../module/mrlresolver/youtubemrlresolver.cc" line="49"/>
-        <location filename="../../../module/mrlresolver/youtubemrlresolver.cc" line="82"/>
+        <location filename="../../../module/mrlresolver/youtubemrlresolver.cc" line="50"/>
+        <location filename="../../../module/mrlresolver/youtubemrlresolver.cc" line="83"/>
         <source>failed to resolve URL</source>
         <translation>解析链接失败</translation>
     </message>
     <message>
-        <location filename="../../../module/mrlresolver/youtubemrlresolver.cc" line="88"/>
+        <location filename="../../../module/mrlresolver/youtubemrlresolver.cc" line="89"/>
         <source>network error, failed to resolve media URL</source>
         <translation>网络错误，解释媒体链接失败</translation>
     </message>

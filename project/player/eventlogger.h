@@ -77,7 +77,9 @@ public slots:
 
   void logAnnotationScaleChanged(qreal value);
   void logAnnotationRotationChanged(qreal value);
-  void logAnnotationOffsetChanged(qint64 value);
+  void logAnnotationOffsetChanged(int value);
+  void logAnnotationCountLimitedChanged(bool value);
+  void logAnnotationSkipped();
 
   void logPauseHoveredAnnotations(bool t);
   void logResumeHoveredAnnotations(bool t);

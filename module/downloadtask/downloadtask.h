@@ -44,10 +44,14 @@ public:
 
   explicit DownloadTask(const QString &url, QObject *parent = 0);
   explicit DownloadTask(const DownloadTaskInfo &info, QObject *parent = 0);
+
+  enum { MinimumFileSize = 1024 * 1024 }; // 1 MB
+
 private:
   void init();
 
 signals:
+  void quited();
   void titleChanged(QString title);
   void fileNameChanged(QString fileName);
   void stateChanged(int state);
@@ -80,8 +84,12 @@ public:
 
   // - Actions -
 public slots:
-  virtual void run() = 0; ///< \override
+  virtual void run(bool exec) = 0;
+  virtual void run() { run(true); } ///< \override
   virtual void stop() = 0; ///< \override
+
+  void exec();
+  void quit();
 
   //virtual void finish()
   //{ emit progress(totalSize_, totalSize_); emit finished(this); }

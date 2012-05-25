@@ -4,13 +4,15 @@
 #include "annotationgraphicsview.h"
 #include "annotationgraphicsitem.h"
 #include "annotationgraphicsitempool.h"
+#include "annotationsettings.h"
 #include "annotationeditor.h"
 #include "annotationfilter.h"
 #include "stylesheet.h"
 #include "signalhub.h"
 #include "videoview.h"
-#include "logger.h"
+//#include "logger.h"
 #include "global.h"
+#include "application.h"
 #include "module/player/player.h"
 #include "module/qtext/algorithm.h"
 #ifdef Q_WS_WIN
@@ -31,10 +33,12 @@
 #include "module/debug/debug.h"
 
 using namespace AnnotCloud;
-using namespace Logger;
+//using namespace Logger;
 
 #define MAX_SUBTITLE_HISTORY    30
 #define TIMER_INTERVAL        1000 // 1 second
+
+enum { MaxItemCount = 50 };
 
 // - Construction -
 
@@ -47,16 +51,17 @@ AnnotationGraphicsView::AnnotationGraphicsView(
   : Base(parent), videoView_(view), fullScreenView_(0), trackedWindow_(0), editor_(0),
     hub_(hub), data_(data), player_(player),
     filter_(0), renderHint_(DefaultRenderHint), active_(false), paused_(false), fullScreen_(false),
-    subtitleVisible_(true), nonSubtitleVisible_(true), metaVisible_(false),
+    subtitleVisible_(true), nonSubtitleVisible_(true), metaVisible_(false), itemCountLimited_(true),
     currentTime_(-1), offset_(0), interval_(TIMER_INTERVAL), userId_(0), playbackEnabled_(true), subtitlePosition_(AP_Bottom),
     scale_(1.0), rotation_(0),
     hoveredItemPaused_(false), hoveredItemResumed_(false), hoveredItemRemoved_(false), nearbyItemExpelled_(false), nearbyItemAttracted_(false),
-    itemVisible_(true)
+    itemVisible_(true), dragging_(false)
 {
   Q_ASSERT(hub_);
   Q_ASSERT(player_);
   Q_ASSERT(videoView_);
 
+  setMouseTracking(true);
   setContentsMargins(0, 0, 0, 0);
   setStyleSheet(SS_GRAPHICSVIEW);
 
@@ -72,7 +77,7 @@ AnnotationGraphicsView::AnnotationGraphicsView(
   setScene(scene);
 
   pool_ = new AnnotationGraphicsItemPool(this, data_, hub_, this);
-  pool_->reserve(40);
+  pool_->reserve(MaxItemCount);
 
   timer_ = new QTimer(this);
   timer_->setInterval(TIMER_INTERVAL);
@@ -91,6 +96,11 @@ AnnotationGraphicsView::AnnotationGraphicsView(
 //#endif // Q_WS_WIN
 
   connect(this, SIGNAL(offsetChanged(qint64)), SLOT(removeAllItems()));
+
+  AnnotationSettings *s = AnnotationSettings::globalInstance();
+  connect(s, SIGNAL(offsetChanged(int)), SLOT(setOffset(int)));
+  connect(s, SIGNAL(scaleChanged(qreal)), SLOT(setScale(qreal)));
+  connect(s, SIGNAL(rotationChanged(qreal)), SLOT(setRotation(qreal)));
 
   //centerOn(0, 0);
 }
@@ -452,7 +462,7 @@ AnnotationGraphicsView::expelAllItems(const QPoint &center)
 void
 AnnotationGraphicsView::attractItems(const QPoint &center)
 {
-  enum { width = 800, height = 600 };
+  enum { width = 800, height = 800 };
   QRect r(0, 0, width, height);
   r.moveCenter(center);
   attractItems(center, r, Qt::IntersectsItemBoundingRect);
@@ -751,6 +761,15 @@ AnnotationGraphicsView::addAndShowAnnotation(const Annotation &annot)
 void
 AnnotationGraphicsView::showAnnotation(const Annotation &annot, bool showMeta)
 {
+  if (itemCountLimited_ &&
+      pool_->size() >= MaxItemCount &&
+      annot.hasUserId() && annot.userId() != userId_ && !annot.isSubtitle()) {
+    //DOUT("too many annotations, skip");
+    emit annotationSkipped();
+    qDebug() << "AnnotationGraphicsView::showAnnotation: too many annotations, skip";
+    return;
+  }
+
   if (!isAnnotationBlocked(annot)) {
     AnnotationGraphicsItem *item = pool_->allocate();
     item->setMetaVisible(isItemMetaVisible() && showMeta);
@@ -810,27 +829,102 @@ AnnotationGraphicsView::itemsCount(int from, int to) const
 
 // - Events -
 
-#define SEND_EVENT(_sender, _receiver, _event) \
-  void \
-  AnnotationGraphicsView::_sender(_event *event) \
-  { \
-    DOUT("enter"); \
-    if (event) { \
-      QGraphicsItem *item = itemAt(mapFromGlobal(event->globalPos())); \
-      BOOST_AUTO(annot, dynamic_cast<AnnotationGraphicsItem *>(item)); \
-      if (annot) \
-        annot->_receiver(event); \
-    } \
-    DOUT("exit"); \
+void
+AnnotationGraphicsView::sendContextMenuEvent(QContextMenuEvent *event)
+{
+  Q_ASSERT(event);
+  QGraphicsItem *item = itemAt(mapFromGlobal(event->globalPos()));
+  BOOST_AUTO(a, dynamic_cast<AnnotationGraphicsItem *>(item));
+  if (a)
+    a->contextMenuEvent(event);
+}
+
+void
+AnnotationGraphicsView::sendMouseDoubleClickEvent(QMouseEvent *event)
+{
+  Q_ASSERT(event);
+  dragging_ = false;
+  QGraphicsItem *item = itemAt(mapFromGlobal(event->globalPos()));
+  BOOST_AUTO(a, dynamic_cast<AnnotationGraphicsItem *>(item));
+  if (a)
+    a->mouseDoubleClickEvent(event);
+}
+
+void
+AnnotationGraphicsView::sendMousePressEvent(QMouseEvent *event)
+{
+  Q_ASSERT(event);
+  dragging_ = false;
+  foreach (QGraphicsItem *item, items(mapFromGlobal(event->globalPos()))) {
+    BOOST_AUTO(a, dynamic_cast<AnnotationGraphicsItem *>(item));
+    if (a) {
+      a->mousePressEvent(event);
+      if (a->isDragging())
+        dragging_ = true;
+    }
   }
+  if (dragging_)
+    Application::globalInstance()->setCursor(Qt::ClosedHandCursor);
+}
 
-  SEND_EVENT(sendContextMenuEvent, contextMenuEvent, QContextMenuEvent)
-  SEND_EVENT(sendMouseMoveEvent, mouseMoveEvent, QMouseEvent)
-  SEND_EVENT(sendMousePressEvent, mousePressEvent, QMouseEvent)
-  SEND_EVENT(sendMouseReleaseEvent, mouseReleaseEvent, QMouseEvent)
-  SEND_EVENT(sendMouseDoubleClickEvent, mouseDoubleClickEvent, QMouseEvent)
+void
+AnnotationGraphicsView::sendMouseReleaseEvent(QMouseEvent *event)
+{
+  Q_ASSERT(event);
+  bool dragging = false;
+  foreach (QGraphicsItem *item, items(mapFromGlobal(event->globalPos()))) {
+    BOOST_AUTO(a, dynamic_cast<AnnotationGraphicsItem *>(item));
+    if (a) {
+      if (dragging_)
+        dragging = a->isDragging();
+      a->mouseReleaseEvent(event);
+    }
+  }
+  if (dragging)
+    Application::globalInstance()->setCursor(Qt::OpenHandCursor);
+  if (dragging_ && !dragging)
+    foreach (QGraphicsItem *item, items()) {
+      BOOST_AUTO(a, dynamic_cast<AnnotationGraphicsItem *>(item));
+      if (a && a->isDragging()) {
+        a->mouseReleaseEvent(event);
+        dragging = true;
+      }
+    }
+  dragging_ = false;
+}
 
-#undef SEND_EVENT
+void
+AnnotationGraphicsView::sendMouseMoveEvent(QMouseEvent *event)
+{
+  Q_ASSERT(event);
+  QList<QGraphicsItem *> l = items(mapFromGlobal(event->globalPos()));
+  bool dragging = false;
+  bool paused = false;
+  foreach (QGraphicsItem *item, l) {
+    BOOST_AUTO(a, dynamic_cast<AnnotationGraphicsItem *>(item));
+    if (a) {
+      a->mouseMoveEvent(event);
+      if (dragging_ && a->isDragging())
+        dragging = true;
+      paused = a->isPaused();
+    }
+  }
+  if (dragging_ && !dragging)
+    foreach (QGraphicsItem *item, items()) {
+      BOOST_AUTO(a, dynamic_cast<AnnotationGraphicsItem *>(item));
+      if (a && a->isDragging()) {
+        a->mouseMoveEvent(event);
+        dragging = true;
+      }
+    }
+
+  Application::globalInstance()->setCursor(
+       dragging ? Qt::ClosedHandCursor :
+         paused ? Qt::OpenHandCursor :
+    l.isEmpty() ? Qt::ArrowCursor :
+                  Qt::PointingHandCursor
+  );
+}
 
 // - Message mode -
 
@@ -884,7 +978,7 @@ AnnotationGraphicsView::updateAnnotationTextWithId(const QString &text, qint64 i
   if (item) {
     item->annotation().setText(text);
     item->annotation().setUpdateTime(QDateTime::currentMSecsSinceEpoch() / 1000);
-    item->invalidateAnnotation();
+    item->updateText();
   }
 
   Annotation *a = annotationWithId(id);
@@ -949,6 +1043,7 @@ AnnotationGraphicsView::trackedWindow() const
 void
 AnnotationGraphicsView::setTrackedWindow(WId hwnd)
 {
+  DOUT("enter: hwnd =" << hwnd);
   if (hwnd == videoView_->winId()
 #ifdef WITH_WIN_HOOK
       ||  videoView_->containsWindow(hwnd)
@@ -970,6 +1065,7 @@ AnnotationGraphicsView::setTrackedWindow(WId hwnd)
   else
     MouseHook::globalInstance()->stop();
 #endif // WITH_WIN_MOUSEHOOK
+  DOUT("exit");
 }
 
 void

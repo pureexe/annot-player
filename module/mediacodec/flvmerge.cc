@@ -18,11 +18,13 @@ FlvMerge::run()
   ins_.reset();
   if (!parse()) {
     emit error(tr("failed to parse FLV streams"));
+    DOUT("failed to parse FLV streams");
     return;
   }
   ins_.reset();
   if (!merge()) {
     emit error(tr("failed to merge FLV streams"));
+    DOUT("failed to merge FLV streams");
     return;
   }
   finish();
@@ -261,7 +263,10 @@ FlvMerge::readTag(InputStream *in, bool writeHeader)
   // - MediaInfo        UI8     Flags indicating codec, frame/sample rate, etc
   // - First byte       UI8     Often the size of media data (0 for header)
   //bool isHeader = tagType == ScriptTag || !data[1];
-  if (!writeHeader && (tagType == ScriptTag || !data[1])) {
+  //if (!writeHeader && (tagType == ScriptTag || !data[1])) {
+  //
+  // WARNING: intermediate header data[1] is not skipped, because some of the codec uses UI16
+  if (!writeHeader && tagType == ScriptTag) {
     DOUT("drop header at time" << newTimestamp);
     return true;
   }

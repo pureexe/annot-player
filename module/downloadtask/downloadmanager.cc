@@ -7,6 +7,16 @@
 #define DEBUG "downloadmanager"
 #include "module/debug/debug.h"
 
+// - Properties -
+
+void
+DownloadManager::setMaxThreadCount(int n)
+{
+  threadCount_ = n;
+  if (QThreadPool::globalInstance()->maxThreadCount() < threadCount_)
+    QThreadPool::globalInstance()->setMaxThreadCount(threadCount_);
+}
+
 // - Helper -
 
 QString
@@ -100,6 +110,7 @@ DownloadManager::refreshSchedule()
   enum { NicoTaskInterval = 2000 }; // 3 seconds
   int nicoCount = 0;
   int count = 0;
+  DOUT("enter: task count =" << tasks_.size());
   foreach (DownloadTask *t, tasks_)
     switch (t->state()) {
     case DownloadTask::Downloading:
@@ -116,6 +127,7 @@ DownloadManager::refreshSchedule()
       } break;
     default: ;
     }
+  DOUT("exit: count =" << count << ", nico count =" << nicoCount);
 }
 
 // EOF

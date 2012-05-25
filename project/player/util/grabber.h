@@ -16,20 +16,23 @@ class Grabber : public QObject
 public:
   explicit Grabber(QObject *parent = 0);
 
+  QString savePath_;
+  QString baseName_;
+
+signals:
+  void message(QString);
+  void warning(QString);
+
 public:
-  const QString &baseName() const;
-  const QString &savePath() const;
+  const QString &baseName() const { return baseName_; }
+  const QString &savePath() const { return savePath_; }
 
 public slots:
   void setBaseName(const QString &name);
-  void setSavePath(const QString &path);
+  void setSavePath(const QString &path) { savePath_ = path; }
 
   void grabWindow(WId winid);
   void grabDesktop();
-
-private:
-  QString savePath_;
-  QString baseName_;
 };
 
 #endif // GRABBER_H

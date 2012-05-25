@@ -67,7 +67,7 @@ void
 AnnotationFilter::addBlockedAnnotation(const Annotation &input)
 {
   if (!blockedAnnotations_.isEmpty())
-    foreach (Annotation a, blockedAnnotations_)
+    foreach (const Annotation &a, blockedAnnotations_)
       if (a.id() == input.id())
         return;
 
@@ -146,25 +146,25 @@ AnnotationFilter::filter(const Annotation &input) const
 
   // Annots filter
   if (!blockedAnnotations_.isEmpty() && input.hasId())
-    foreach (Annotation a, blockedAnnotations_)
+    foreach (const Annotation &a, blockedAnnotations_)
       if (a.id() == input.id())
         return true;
 
   // Alias filter
   //if (!blockedAliases_.isEmpty())
-  //  foreach (Alias a, blockedAliases_)
+  //  foreach (const Alias &a, blockedAliases_)
   //    if (a.tokenId() == input.tokenId())
   //      return true;
 
   // User filter
   if (!blockedUserAliases_.isEmpty() && input.hasUserAlias())
-    foreach (QString n, blockedUserAliases_)
+    foreach (const QString &n, blockedUserAliases_)
       if (n == input.userAlias())
         return true;
 
   // Text
   if (!blockedTexts_.isEmpty() && input.hasText())
-    foreach (QString k, blockedTexts_)
+    foreach (const QString &k, blockedTexts_)
       if (input.text().contains(k, Qt::CaseInsensitive))
         return true;
 

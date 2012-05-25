@@ -3,6 +3,7 @@
 
 #include "module/mrlresolver/luamrlresolver.h"
 #include "module/mrlresolver/mrlresolversettings.h"
+#include "module/qtext/htmltag.h"
 #ifdef WITH_MODULE_LUARESOLVER
 #  include "module/luaresolver/luaresolver.h"
 #else
@@ -288,7 +289,7 @@ LuaMrlResolver::decodeText(const QString &text, const char *encoding)
 QString
 LuaMrlResolver::formatTitle(const QString &title)
 {
-  return title.isEmpty() ? title : QString(title)
+  return title.isEmpty() ? title : ::html_unescape(title)
     .remove(QRegExp("..ニコニコ動画\\(原宿\\)$"))
     .remove(QRegExp(" - 嗶哩嗶哩 - .*"))
     .remove(QRegExp(" - Acfun - .*"))
@@ -299,7 +300,7 @@ LuaMrlResolver::formatTitle(const QString &title)
     .remove(QRegExp(" - \xe8\xa7\x86\xe9\xa2\x91 - .*"))
     .remove(QRegExp(" - \xe8\xa7\x86\xe9\xa2\x91$"))
     .remove(QRegExp(" - ..\xe8\xa7\x86\xe9\xa2\x91 - .*"))
-    .remove(QRegExp("_\e5\9c\a8\e7\ba\bf.*"))
+    .remove(QRegExp("_\xe5\x9c\xa8\xe7\xba\xbf.*"))
 #else
     .remove(QRegExp(" - 电视剧 - .*"))
     .remove(QRegExp(" - 视频 - .*"))
@@ -307,12 +308,7 @@ LuaMrlResolver::formatTitle(const QString &title)
     .remove(QRegExp(" - 优酷视频 - .*")) // Youku
     .remove(QRegExp("_在线.*")) // Tudou
 #endif // _MSC_VER
-  // See: http://htmlhelp.com/reference/html40/entities/special.html
-     .replace("&quot;", "'")
-     .replace("&amp;", "&")
-     .replace("&lt;", "<")
-     .replace("&gt;", ">")
-     .trimmed();
+     .simplified();
 }
 
 QString

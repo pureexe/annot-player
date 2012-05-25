@@ -82,7 +82,7 @@ StreamThread::run()
   bool hasSession = false;
   ServerMediaSession *sms
     = ServerMediaSession::createNew(*env, streamName, streamName, desc);
-  foreach (MediaStreamInfo inf, ins_) {
+  foreach (const MediaStreamInfo &inf, ins_) {
     ServerMediaSubsession *smss;
     switch (inf.mediaType) {
     case MT_H264: smss = H264VideoStreamSMSS::createNew(*env, inf.inputStream, inf.mediaToc, duration); break;

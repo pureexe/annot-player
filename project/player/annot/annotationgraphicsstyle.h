@@ -19,11 +19,6 @@
 #define ANNOTATION_SIZE_LARGE           "36"
 #define ANNOTATION_SIZE_HUGE            "60"
 
-#define ANNOTATION_FONT                 "Geneva"        // Helvetica on Mac
-//#define ANNOTATION_FONT_CHINESE       "SimSun"
-//#define ANNOTATION_FONT_JAPANESE      "MS Gothic"
-#define ANNOTATION_FONT_DEFAULT         ANNOTATION_FONT_JAPANESE
-
 #define ANNOTATION_STAY_TIME            2000
 #define ANNOTATION_STAY_TIME_SUBTITLE   3000
 #define ANNOTATION_STAY_TIME_MIN        1000

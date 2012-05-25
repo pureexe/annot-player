@@ -9,6 +9,7 @@
 #include <QtGui>
 
 //#define VOLUMN_SLIDE_MAX_WIDTH 30
+#define PLAY_BUTTON_SIZE        30
 
 // + MainPlayerDock +
 
@@ -44,6 +45,8 @@ MainPlayerUi::MainPlayerUi(SignalHub *hub, Player *player, ServerAgent *server, 
 void
 MainPlayerUi::createLayout()
 {
+  playButton()->setProperty("radius", int(PLAY_BUTTON_SIZE));
+
   //volumeSlider()->setMaximumWidth(VOLUMN_SLIDE_MAX_WIDTH);
   // Set layout
   QVBoxLayout *rows = new QVBoxLayout; {
@@ -54,7 +57,7 @@ MainPlayerUi::createLayout()
     rows->addLayout(row1);
     rows->addLayout(row2);
 
-    row1->addWidget(menuButton());
+    //row1->addWidget(menuButton());
     row1->addWidget(openButton());
     row1->addWidget(playButton());
     //row1->addWidget(toggleAnnotationButton());
@@ -85,10 +88,8 @@ MainPlayerUi::createLayout()
     row2->setContentsMargins(0, 0, 0, 9);
   }
   setLayout(rows);
-//#ifndef Q_OS_MAC
-//  menuButton()->hide();
-//  menuBButton()->resize(QSize());
-//#endif // Q_OS_MAC
+  menuButton()->hide();
+  menuButton()->resize(QSize());
   progressButton()->hide();
   progressButton()->resize(QSize());
   setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);

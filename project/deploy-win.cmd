@@ -1,9 +1,9 @@
-:: annot-player.update.cmd
+:: deploy-win.cmd
 :: 11/5/2011
 setlocal
 cd /d d:/devel/build || exit /b 1
 
-set VERSION=0.1.5.5
+set VERSION=0.1.5.6
 set APP=annot-player
 set TARGET=Annot Stream
 set ZIPFILE=%APP%-%VERSION%-win.zip
@@ -26,16 +26,19 @@ set QT_TRANSLATIONS=qt_ja.qm,qt_zh_CN.qm,qt_zh_TW.qm
 set ITH_HOME=/Volumes/win/dev/ith
 set ITH_DLLS=ITH.dll,ITH_engine.dll
 
-set OPENSSL_HOME=/Volumes/win/dev/openssl
-set OPENSSL_DLLS=libeay32.dll,libssl32.dll,ssleay32.dll
+::set OPENSSL_HOME=/Volumes/win/dev/openssl -- DO NOT WORK
+::set OPENSSL_HOME=/Volumes/win/apps/subversion -- ALSO WORK
+set OPENSSL_HOME=/Volumes/win/apps/php
+set OPENSSL_DLLS=libeay32.dll,ssleay32.dll
 
-set GPAC_HOME=/Volumes/win/dev/gpac
-set GPAC_DLLS=js32.dll,libgpac.dll,libeay32.dll,ssleay32.dll
-set MP4BOX_HOME=%GPAC_HOME%
-set MP4BOX_EXE=MP4Box.exe
+::set GPAC_HOME=/Volumes/win/dev/gpac
+::set GPAC_DLLS=js32.dll,libgpac.dll,libeay32.dll,ssleay32.dll
 
-set MP4V2_HOME=/Volumes/win/dev/mp4v2
-set MP4V2_DLL=libmp4v2.dll
+::set MP4BOX_HOME=%GPAC_HOME%
+::set MP4BOX_EXE=MP4Box.exe
+
+::set MP4V2_HOME=/Volumes/win/dev/mp4v2
+::set MP4V2_DLL=libmp4v2.dll
 
 set ZLIB_HOME=/Volumes/win/dev/zlib
 set ZLIB_DLL=zlib1.dll
@@ -47,11 +50,11 @@ set VLC_DATA=plugins,lua,locale
 set BUILD=/Volumes/local/devel/annot-build-desktop/build.win
 set SOURCE=/Volumes/local/devel/annot
 
-set CURL_HOME=/Volumes/win/dev/curl
-set CURL_BIN=curl.exe
+::set CURL_HOME=/Volumes/win/dev/curl
+::set CURL_BIN=curl.exe
 
-set GZIP_HOME=/Volumes/win/dev/gzip
-set GZIP_BIN=gzip.exe
+::set GZIP_HOME=/Volumes/win/dev/gzip
+::set GZIP_BIN=gzip.exe
 
 :: deploy into app dir
 
@@ -145,6 +148,9 @@ cp -Rv "%SOURCE%"/module/qtext/images . || exit 1
 
 :: jsf
 cp -Rv "%SOURCE%"/module/annotcloud/jsf . || exit 1
+
+:: images
+cp -Rv "%SOURCE%"/project/player/avatars . || exit 1
 
 cd ..
 

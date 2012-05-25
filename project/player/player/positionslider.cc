@@ -5,8 +5,10 @@
 #include "stylesheet.h"
 #include <QtGui>
 
-//#define RUNNING_COLOR   "rgba(0,255,255,200)" // cyan = #00ffff, see: http://ja.wikipedia.org/wiki/シアン_(色)
-#define RUNNING_COLOR   "rgba(255,165,0,200)" // orange = rgb(255,165,0), see: http://www.tayloredmktg.com/rgb/
+//#define RUNNING_COLOR "rgba(0,255,255,200)"   // cyan = #00ffff, see: http://ja.wikipedia.org/wiki/シアン_(色)
+//#define RUNNING_COLOR "rgba(255,0,0,200)"     // red
+//#define RUNNING_COLOR "rgba(190,190,190,200)" // gray = rgb(190,190,190), see: http://www.tayloredmktg.com/rgb/
+#define RUNNING_COLOR   "rgba(255,165,0,200)"   // orange = rgb(255,165,0), see: http://www.tayloredmktg.com/rgb/
 #define STOPPED_COLOR   "transparent"
 
 #define SS_BASE \
@@ -50,9 +52,9 @@
 
 #define SS_NO_ADDPAGE \
   SS_BEGIN(QSlider::add-page:horizontal) \
-    SS_TRANSPARENT \
     SS_BORDER(1px solid #777) \
     SS_LEFT(5px) SS_RIGHT(5px) \
+    SS_TRANSPARENT \
   SS_END
 
 #define SS_ADDPAGE(_start, _stop) \
@@ -67,6 +69,7 @@
         "stop:1"        " " STOPPED_COLOR ")" \
     SS_STMT_END \
   SS_END
+  //SS_BORDER(1px solid rgb(119,119,119))
 
 #define SS_NO_HANDLE \
   SS_BEGIN(QSlider::handle:horizontal) \

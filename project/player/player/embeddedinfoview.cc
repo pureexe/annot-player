@@ -5,12 +5,13 @@
 #include "datamanager.h"
 #include "signalhub.h"
 #include "tr.h"
-#include "annotationgraphicsview.h"
+#include "project/common/acsettings.h"
+#include "annotationsettings.h"
 #include "module/annotcloud/alias.h"
 #include "module/player/player.h"
+#include "module/qtext/datetime.h"
 #include "module/qtext/htmltag.h"
 #include "module/qtext/ss.h"
-#include "module/qtext/datetime.h"
 #include <QtGui>
 
 using namespace AnnotCloud;
@@ -35,8 +36,8 @@ using namespace AnnotCloud;
 
 // - Construction -
 
-EmbeddedInfoView::EmbeddedInfoView(Player *player, DataManager *data, AnnotationGraphicsView *annot, SignalHub *hub, QWidget *parent)
-  : Base(parent), player_(player), data_(data), annot_(annot), hub_(hub)
+EmbeddedInfoView::EmbeddedInfoView(Player *player, DataManager *data, SignalHub *hub, QWidget *parent)
+  : Base(parent), player_(player), data_(data), hub_(hub)
 {
   Q_ASSERT(player_);
   Q_ASSERT(data_);
@@ -57,9 +58,9 @@ EmbeddedInfoView::EmbeddedInfoView(Player *player, DataManager *data, Annotation
   connect(player_, SIGNAL(brightnessChanged(qreal)), SLOT(refresh()));
   connect(player_, SIGNAL(gammaChanged(qreal)), SLOT(refresh()));
   connect(player_, SIGNAL(positionChanged()), SLOT(refresh()));
-  connect(annot_, SIGNAL(scaleChanged(qreal)), SLOT(refresh()));
-  connect(annot_, SIGNAL(rotationChanged(qreal)), SLOT(refresh()));
-  connect(annot_, SIGNAL(offsetChanged(qint64)), SLOT(refresh()));
+  connect(AnnotationSettings::globalInstance(), SIGNAL(scaleChanged(qreal)), SLOT(refresh()));
+  connect(AnnotationSettings::globalInstance(), SIGNAL(rotationChanged(qreal)), SLOT(refresh()));
+  connect(AnnotationSettings::globalInstance(), SIGNAL(offsetChanged(int)), SLOT(refresh()));
 }
 
 // - Events -
@@ -105,7 +106,7 @@ EmbeddedInfoView::updateText()
     t.append(
       HTML_STYLE_OPEN(color:red)
       + QString("- %1 -").arg(tr("Codec")) +
-      HTML_STYLE_CLOSE() \
+      HTML_STYLE_CLOSE()
       HTML_BR()
       +
       QString("%1: %2" HTML_STYLE_OPEN(color:red) "%3" HTML_STYLE_CLOSE() " kbps" HTML_BR())
@@ -114,8 +115,8 @@ EmbeddedInfoView::updateText()
       .arg(QString::number(player_->bitrate() / 1000, 'f', 1))
       +
       QString(
-        "%1: %2" " " \
-        "%3x%4" " " \
+        "%1: %2" " "
+        "%3x%4" " "
         "%5" HTML_BR()
        )
       .arg(TR(T_VIDEO))
@@ -125,8 +126,8 @@ EmbeddedInfoView::updateText()
       .arg(fpsField)
       +
       QString(
-         "%1: %2" " " \
-         "%3%4" " " \
+         "%1: %2" " "
+         "%3%4" " "
          "%5%6" HTML_BR()
        )
       .arg(TR(T_AUDIO))
@@ -147,7 +148,7 @@ EmbeddedInfoView::updateText()
       t.append(
         HTML_STYLE_OPEN(color:red)
         + QString("- %1 -").arg(tr("Render")) +
-        HTML_STYLE_CLOSE() \
+        HTML_STYLE_CLOSE()
         HTML_BR()
       );
 
@@ -186,7 +187,7 @@ EmbeddedInfoView::updateText()
     t.append(
       HTML_STYLE_OPEN(color:red)
       + QString("- %1 -").arg(TR(T_ANNOTATION)) +
-      HTML_STYLE_CLOSE() \
+      HTML_STYLE_CLOSE()
       HTML_BR()
     );
     qint64 minT = data_->minAnnotationCreateTime(),
@@ -197,7 +198,7 @@ EmbeddedInfoView::updateText()
       if (!latest.isEmpty() && !oldest.isEmpty())
         t.append(
           QString(
-            "%1: %2%3" " - " \
+            "%1: %2%3" " - "
             "%4%5" HTML_BR()
           )
           .arg(TR(T_DATE))
@@ -210,8 +211,8 @@ EmbeddedInfoView::updateText()
       userCount = 1;
     t.append(
       QString(
-        "%1:" HTML_STYLE_OPEN(color:red) "%2" HTML_STYLE_CLOSE() " " \
-        "%3:" HTML_STYLE_OPEN(color:red) "%4" HTML_STYLE_CLOSE() " " \
+        "%1:" HTML_STYLE_OPEN(color:red) "%2" HTML_STYLE_CLOSE() " "
+        "%3:" HTML_STYLE_OPEN(color:red) "%4" HTML_STYLE_CLOSE() " "
         "%5:" HTML_STYLE_OPEN(color:red) "%6" HTML_STYLE_CLOSE() "/%7" HTML_BR()
       )
       .arg(tr("Annotations")).arg(QString::number(data_->annotations().size()))
@@ -221,19 +222,19 @@ EmbeddedInfoView::updateText()
         .arg(tr("user"))
     );
     bool newline = false;;
-    QString scale = QString::number(annot_->scale(), 'f', 2);
-    if (!qFuzzyCompare(annot_->scale() +1, 1)) {
+    QString scale = QString::number(AnnotationSettings::globalInstance()->scale(), 'f', 2);
+    if (!qFuzzyCompare(AnnotationSettings::globalInstance()->scale() +1, 1)) {
       t.append(tr("Scale") + ":" + scale + " ");
       newline = true;
     }
-    if (!qFuzzyCompare(annot_->rotation() +1, 1)) {
-      QString rotation = QString::number(annot_->rotation(), 'f', 1);
+    if (!qFuzzyCompare(AnnotationSettings::globalInstance()->rotation() +1, 1)) {
+      QString rotation = QString::number(AnnotationSettings::globalInstance()->rotation(), 'f', 1);
       rotation = HTML_STYLE_OPEN(color:red) + rotation + HTML_STYLE_CLOSE();
       t.append(tr("Rotation") + ":" + rotation + " ");
       newline = true;
     }
-    if (annot_->offset()) {
-      QString offset = QString::number(annot_->offset());
+    if (AnnotationSettings::globalInstance()->offset()) {
+      QString offset = QString::number(AnnotationSettings::globalInstance()->offset());
       offset = HTML_STYLE_OPEN(color:red) + offset + HTML_STYLE_CLOSE();
       t.append(tr("Offset") + ":" + offset + tr(" sec"));
       newline = true;
@@ -254,11 +255,50 @@ EmbeddedInfoView::updateText()
     t.append(
       HTML_STYLE_OPEN(color:red)
       + QString("- %1 -").arg(TR(T_URL)) +
-      HTML_STYLE_CLOSE() \
+      HTML_STYLE_CLOSE()
       HTML_BR()
     );
     foreach (const QString &url, urls)
       t.append(url + HTML_BR());
+  }
+
+  // Time
+  {
+    static int lang = 0;
+    if (!lang)
+      lang = AcSettings::globalSettings()->language();
+    t.append(
+      HTML_STYLE_OPEN(color:red)
+      + QString("- %1 -").arg(TR(T_TIME)) +
+      HTML_STYLE_CLOSE()
+      HTML_BR()
+    );
+    QDateTime utc = QDateTime::currentDateTimeUtc();
+    QDateTime local = utc.toLocalTime();
+    int currentTimeZone = utc.secsTo(local) / 3600;
+    bool showJapanTime = currentTimeZone != QtExt::JapanTimeZone,
+         showChinaTime = currentTimeZone != QtExt::ChinaTimeZone && lang == QLocale::Chinese;
+    static const QString fmt = "h:mm";
+    t.append(
+      tr("Local") + ": "
+      HTML_STYLE_OPEN(color:red)
+      + local.time().toString(fmt) + " "
+      + weekToString(local.date().dayOfWeek()) +
+      HTML_STYLE_CLOSE()
+    );
+    if (showJapanTime) {
+      QTime jst = utc.time().addSecs(3600 * QtExt::JapanTimeZone);
+      t.append(QString(" %1:%2")
+        .arg(tr("Japan")).arg(jst.toString(fmt))
+      );
+    }
+    if (showChinaTime) {
+      QTime cst = utc.time().addSecs(3600 * QtExt::ChinaTimeZone);
+      t.append(QString(" %1:%2")
+        .arg(tr("China")).arg(cst.toString(fmt))
+      );
+    }
+    t.append(HTML_BR());
   }
 
   //static const int tail = ::strlen(HTML_BR());
@@ -272,7 +312,22 @@ EmbeddedInfoView::updateText()
 // - Format -
 
 QString
-EmbeddedInfoView::timeToString(qint64 secs) const
+EmbeddedInfoView::weekToString(int dayOfWeek)
+{
+  switch (dayOfWeek) {
+  case 1: return tr("Mon");
+  case 2: return tr("Tue");
+  case 3: return tr("Wed");
+  case 4: return tr("Thu");
+  case 5: return tr("Fri");
+  case 6: return tr("Sat");
+  case 7: return tr("Sun");
+  default: return QString();
+  }
+}
+
+QString
+EmbeddedInfoView::timeToString(qint64 secs)
 {
   QString ret;
   QDateTime earlier = QDateTime::fromMSecsSinceEpoch(secs * 1000);

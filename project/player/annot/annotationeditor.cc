@@ -217,15 +217,15 @@ AnnotationEditor::createRibons()
   // - fontComboBox_
   fontComboBox_ = new QtExt::FontComboBox; {
     fontComboBox_->setStyleSheet(SS_COMBOBOX);
-    fontComboBox_->setEditable(true);
+    //fontComboBox_->setEditable(true);
     fontComboBox_->setMaximumWidth(FONTCOMBOBOX_WIDTH);
     fontComboBox_->setMinimumWidth(FONTCOMBOBOX_WIDTH);
-    fontComboBox_->setToolTip(tr("Font family"));
+    fontComboBox_->setToolTip(tr("Font Family"));
   }
   connect(fontComboBox_, SIGNAL(activated(QString)), SLOT(setFontFamily(QString)));
 
   // - sizeComboBox_
-  fontSizeComboBox_ = ui->makeComboBox(0, "", tr("Font size")); {
+  fontSizeComboBox_ = ui->makeComboBox(0, "", tr("Font Size")); {
     fontSizeComboBox_->setMaximumWidth(FONTSIZECOMBOBOX_WIDTH);
     fontSizeComboBox_->setMinimumWidth(FONTSIZECOMBOBOX_WIDTH);
 

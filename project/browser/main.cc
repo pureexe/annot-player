@@ -18,7 +18,6 @@
 //#include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkProxy>
 #include <QtNetwork/QNetworkReply>
-#include <QtCore>
 #include <QtGui>
 #include <ctime>
 #include <cstdlib>
@@ -194,6 +193,8 @@ main(int argc, char *argv[])
     settings->setRecentTabs(args);
     settings->setRecentTabIndex(urls.size() - 1);
   }
+
+  DOUT("thread pool size =" << QThreadPool::globalInstance()->maxThreadCount());
 
   DOUT("create mainwindow");
   MainWindow *w = new MainWindow; {

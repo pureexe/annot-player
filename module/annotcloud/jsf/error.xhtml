@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+	<title>Network Error ##{error}</title>
+	<style type="text/css">
+body {
+	background-color:#ececec;
+	color:#cacaca;
+	font:bold italic 1em arial,helvetica,clean,sans-serif;
+	text-align:center;
+	position:relative;
+	top:10%;
+
+	/* See: http://www.w3.org/Style/Examples/007/text-shadow */
+	text-shadow:1px 1px white,-1px -1px #555;
+}
+	</style>
+</head>
+
+<body>
+<div>
+	<h1>NETWORK ERROR</h1>
+	<p>Unable to connect to the address.</p>
+	<p>ホストに接続できません。</p>
+	<p>无法访问地址。</p>
+</div>
+<div style="margin-top:2em">
+	<h3>ERROR ##{error}: #{reason}</h3>
+	<p>URL: <a href="#{url}">#{url}</a></p>
+</div>
+</body>
+</html>

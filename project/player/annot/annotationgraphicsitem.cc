@@ -5,6 +5,7 @@
 #include "annotationgraphicsview.h"
 #include "annotationgraphicsstyle.h"
 #include "annotationgraphicseffect.h"
+#include "annotationsettings.h"
 #include "annotationeditor.h"
 #include "datamanager.h"
 //#include "textformathandler.h"
@@ -15,6 +16,7 @@
 #include "project/common/acui.h"
 #include "module/annotcloud/annottag.h"
 #include "module/annotcloud/annothtml.h"
+#include "module/qtext/filesystem.h"
 #include "module/qtext/htmltag.h"
 #include <boost/tuple/tuple.hpp>
 #include <boost/typeof/typeof.hpp>
@@ -40,6 +42,24 @@ using namespace Logger;
 
 #define BAD_POSF        QPointF(-1,-1)
 namespace { inline bool isBadPosF(const QPointF &pos) { return pos.x() < 0 || pos.y() < 0; } }
+
+// - RC -
+
+#ifdef Q_WS_LINUX
+#  define RC_AVATAR_PREFIX      AVATARDIR
+#else
+#  define RC_AVATAR_PREFIX      QCoreApplication::applicationDirPath() + "/avatars"
+#endif // Q_WS_LINUX
+#define RC_AVATAR_COUNT         AVATAR_USER_COUNT
+#define AVATAR_SIZE             "40"
+
+namespace { // anonymous
+  inline QString rc_avatar_url(qint64 i)
+  {
+    static QString fmt = RC_AVATAR_PREFIX "/user_%1.jpg";
+    return fmt.arg(QString::number(qAbs(i) % RC_AVATAR_COUNT));
+  }
+} // anonymous namespace
 
 // - Helpers -
 
@@ -93,45 +113,6 @@ namespace { namespace curve_ { // anonymous, curves
 } } // anonymous namespace
 
 namespace { // anonymous, annotation display
-
-  inline QFont
-  default_annot_font_(int language)
-  {
-    enum { FontSize =
-#ifdef Q_WS_WIN
-     int(ANNOTATION_SIZE_DEFAULT * 0.9)
-#else
-     ANNOTATION_SIZE_DEFAULT
-#endif // Q_WS_WIN
-    };
-    Q_UNUSED(language);
-    static bool init = true;
-    static QFont font(ANNOTATION_FONT, FontSize);
-    if (init) {
-      font.setWeight(QFont::DemiBold);
-      font.setStyleStrategy((QFont::StyleStrategy)(
-        QFont::PreferAntialias | QFont::PreferQuality
-      ));
-      init = false;
-    }
-    return font;
-    //if (language == Traits::Chinese) {
-    //  QFont font(ANNOTATION_FONT_CHINESE, FontSize);
-    //  font.setWeight(QFont::DemiBold);
-    //  font.setStyleStrategy((QFont::StyleStrategy)(
-    //    QFont::ForceOutline | QFont::PreferQuality
-    //  ));
-    //  return font;
-//
-    //} else {
-    //  QFont font(ANNOTATION_FONT_JAPANESE, FontSize);
-    //  font.setWeight(QFont::DemiBold);
-    //  font.setStyleStrategy((QFont::StyleStrategy)(
-    //    QFont::ForceOutline | QFont::PreferQuality
-    //  ));
-    //  return font;
-    //}
-  }
 
   // Use std time() rather than QTime::currentTime() to improve performance.
   inline int
@@ -222,13 +203,10 @@ AnnotationGraphicsItem::nextY(int msecs, Style style) const
 void
 AnnotationGraphicsItem::warmUp()
 {
-  //qDebug() << ::default_annot_font_(Traits::Japanese).rawName();
-  //qDebug() << ::default_annot_font_(Traits::Japanese).family();
-
 #ifdef Q_OS_MAC
   QGraphicsTextItem dummy;
 
-  QFont font = ::default_annot_font_(Traits::Japanese);
+  QFont font = AnnotationSettings::globalInstance()->font();
   font.setWeight(QFont::Light); dummy.setFont(font);
   font.setWeight(QFont::Normal); dummy.setFont(font);
   font.setWeight(QFont::DemiBold); dummy.setFont(font);
@@ -241,7 +219,7 @@ AnnotationGraphicsItem::AnnotationGraphicsItem(
   DataManager *data,
   SignalHub *hub,
   AnnotationGraphicsView *view)
-  : autoDelete_(true), metaVisible_(true),
+  : metaVisible_(false),
     view_(view), data_(data), hub_(hub), style_(FloatStyle),
     removeLaterTimer_(0),
     flyAni_(0), flyOpacityAni_(0), escapeAni_(0), rushAni_(0), appearOpacityAni_(0), fadeAni_(0),
@@ -254,7 +232,7 @@ AnnotationGraphicsItem::AnnotationGraphicsItem(
   scene_ = view_->scene();
   Q_ASSERT(scene_);
 
-  //setAcceptHoverEvents(true); // doesn't work, as the events are filtered by the firt responder
+  setAcceptHoverEvents(true);
   //setAcceptTouchEvents(true);
 
   setScale(view_->scale());
@@ -266,17 +244,14 @@ AnnotationGraphicsItem::AnnotationGraphicsItem(
 void
 AnnotationGraphicsItem::setAnnotation(const Annotation &annot)
 {
+  if (!prefix_.isEmpty())
+    prefix_.clear();
+  if (!suffix_.isEmpty())
+    suffix_.clear();
   annot_ = annot;
-  meta_.clear();
-  invalidateAnnotation();
-}
-
-bool
-AnnotationGraphicsItem::isSubtitle(const QString &text)
-{
-  // FIXME: deal with subtitle
-  //if (text.contains(CORE_CMD_SUB) || text.contains(CORE_CMD_SUBTITLE))
-  return text.contains(CORE_CMD_SUB);
+  setToolTip(QString());
+  updateText();
+  //updateToolTip();
 }
 
 void
@@ -302,32 +277,49 @@ AnnotationGraphicsItem::reset()
 void
 AnnotationGraphicsItem::setMetaVisibleAndUpdate(bool t)
 {
-  if (metaVisible_ != t) {
+  if (isMetaVisible() != t) {
     metaVisible_ = t;
-    if (isMetaVisible())
-      setText(text_ + meta());
-    else
+    if (isMetaVisible()) {
+      if (suffix_.isEmpty()) {
+        updateMeta();
+        richText_ = prefix_ + text_ + suffix_;
+      }
+      setText(richText_);
+    } else
       setText(text_);
   }
 }
 
+bool
+AnnotationGraphicsItem::isMetaVisible() const
+{
+  return annot_.hasUserId() && (
+    metaVisible_ ||
+    hub_->isSignalTokenMode() && !isSubtitle()
+  );
+}
+
 void
-AnnotationGraphicsItem::invalidateAnnotation()
+AnnotationGraphicsItem::updateText()
 {
   setDefaultStyle();
   //updateEffect();
 
+  // TODO: condition "isMediaTokenMode" is to be removed
+  //bool isOwner = view_->userId() &&
+  //               view_->userId() != User::UI_Guest &&
+  //               annot_.userId() == view_->userId();
   bool isOwner = view_->userId() &&
-                 view_->userId() != User::UI_Guest &&
+                 (view_->userId() != User::UI_Guest || hub_->isMediaTokenMode()) &&
                  annot_.userId() == view_->userId();
 
-  QFont font = ::default_annot_font_(annot_.language());
+  QFont font = AnnotationSettings::globalInstance()->font();
   if (isOwner)
     font.setUnderline(true);
   setFont(font);
 
   QString text = annot_.text();
-  if (isSubtitle(text))
+  if (annot_.isSubtitle())
     text = view_->subtitlePrefix() + text;
 
   QStringList tags;
@@ -336,20 +328,71 @@ AnnotationGraphicsItem::invalidateAnnotation()
   richText_ = text_;
   if (tags.contains(CORE_CMD_VERBATIM))
     setPlainText(richText_);
-  else {
-    richText_.append(meta());
-    QString t = isMetaVisible() ? richText_ : text_;
-    setText(t);
-    if (isOwner)
-      richText_ = CORE_CMD_LATEX_ULINE " " + richText_;
-  }
+  else if (isMetaVisible()) {
+    if (suffix_.isEmpty())
+      updateMeta();
+    richText_ = prefix_ + text_ + suffix_;
+    setText(richText_);
+  } else
+    setText(text_);
+  //if (isOwner)
+  //  richText_ = CORE_CMD_LATEX_ULINE " " + richText_;
 }
 
-QString
-AnnotationGraphicsItem::meta() const
+void
+AnnotationGraphicsItem::updateToolTip()
 {
-  if (!meta_.isEmpty())
-    return meta_;
+  QString tip;
+  qint64 t = annot_.createTime();
+  if (t > Traits::MIN_TIME && t < Traits::MAX_TIME) {
+    t *= 1000;
+    QDateTime ts = QDateTime::fromMSecsSinceEpoch(t);
+    QString d = ts.toString("M/d/yyyy");
+    QString w;
+    switch (ts.date().dayOfWeek()) {
+    case 1: w = tr("Mon"); break;
+    case 2: w = tr("Tue"); break;
+    case 3: w = tr("Wed"); break;
+    case 4: w = tr("Thu"); break;
+    case 5: w = tr("Fri"); break;
+    case 6: w = tr("Sat"); break;
+    case 7: w = tr("Sun"); break;
+    default: Q_ASSERT(0);
+    }
+
+    QString h = ts.toString("h:mm");
+    QString s = d + " " + w + " " + h;
+    if (tip.isEmpty())
+      tip = s;
+    else
+      tip.append(" " + s);
+  }
+  qint64 uid = annot_.userId();
+  if (uid) {
+    int count = data_->annotationCountForUserId(uid);
+    if (count > 1) {
+      QString c = QString::number(count);
+      QString s = "x" + c;
+      if (tip.isEmpty())
+        tip = s;
+      else
+        tip.append(" " + s);
+    }
+  }
+  QString u = annot_.userAlias();
+  if (!u.isEmpty()) {
+    QString s = "@" + u;
+    if (tip.isEmpty())
+      tip = s;
+    else
+      tip.append(" " + s);
+  }
+  setToolTip(tip);
+}
+
+void
+AnnotationGraphicsItem::updateMeta()
+{
   QString ret;
   qint64 t = annot_.createTime();
   if (t > Traits::MIN_TIME && t < Traits::MAX_TIME) {
@@ -364,13 +407,15 @@ AnnotationGraphicsItem::meta() const
     QDate d1 = dt1.date();
     QTime t1 = dt1.time();
 
-    if (d0 != d1) {
-      QString fmt = "M/d";
-      //if (d0.month() != d1.month())
-      //  fmt.prepend("M/");
-      if (d0.year() != d1.year())
-        fmt.append("/yyyy");
-      ts.append(HTML_STYLE_OPEN(color:orange) + d1.toString(fmt) + HTML_STYLE_CLOSE());
+    int days = d1.daysTo(d0);
+    if (days > 1) {
+      QString ds =
+        days < 0     ? d1.toString("M/d/yyyy") :
+        days < 15    ? QString::number(days) + tr("days") :
+        days < 7*5   ? QString::number(days/7) + tr("weeks") :
+        days < 30*12 ? QString::number((12+d0.month()-d1.month()) % 12) + tr("months") :
+                       d1.toString("M/d/yyyy");
+      ts.append(HTML_STYLE_OPEN(color:orange) + ds + HTML_STYLE_CLOSE());
       QString w;
       switch (d1.dayOfWeek()) {
       case 1: w = tr("Mon"); break;
@@ -387,15 +432,18 @@ AnnotationGraphicsItem::meta() const
       ts.append(t1.toString("h:mm"));
     } else {
       QTime t0 = QTime::currentTime();
-      int d;;
-      if (d = t1.hour() - t0.hour())
-        ts.append(QString::number(qAbs(d)))
+      int d;
+      if (days == 1)
+        ts.append(QString::number(24 + t1.hour() - t0.hour()))
+          .append(tr("hr"));
+      else if (d = t1.hour() - t0.hour())
+        ts.append(QString::number((24 + d) % 24))
           .append(tr("hr"));
       else if (d = t1.minute() - t0.minute())
-        ts.append(QString::number(qAbs(d)))
+        ts.append(QString::number((60 + d) % 60))
           .append(tr("min"));
       else if (d = t1.second() - t0.second())
-        ts.append(QString::number(qAbs(d)))
+        ts.append(QString::number((60 + d) % 60))
           .append(tr("sec"));
 
     }
@@ -414,6 +462,7 @@ AnnotationGraphicsItem::meta() const
         HTML_STYLE_CLOSE();
     ret.append(u);
   }
+  QString avatar;
   qint64 uid = annot_.userId();
   if (uid) {
     int count = data_->annotationCountForUserId(uid);
@@ -421,13 +470,21 @@ AnnotationGraphicsItem::meta() const
       QString c = QString::number(count);
       c = HTML_STYLE_OPEN(font-size:11px;color:red) "x" + c + HTML_STYLE_CLOSE();
       ret.append(c);
+
+      avatar =
+        "<img"
+        " src=\"" + ::rc_avatar_url(uid) + "\""
+        " alt=\"" + annot_.userAlias() + "\""
+        " border=\"0\""
+        " width=\"" AVATAR_SIZE "\""
+        " height=\"" AVATAR_SIZE "\""
+        "/> "; // a trailing space at the end
     }
   }
-  if (!ret.isEmpty()) {
+  if (!ret.isEmpty())
     ret = HTML_STYLE_OPEN(text-decoration:underline;font-size:11px) + ret + HTML_STYLE_CLOSE();
-    //ret.prepend(HTML_BR());
-  }
-  return meta_ = ret;
+  prefix_ = avatar;
+  suffix_ = ret;
 }
 
 // TODO: How to use QTextCharFormat to set advanced format:
@@ -493,8 +550,7 @@ AnnotationGraphicsItem::setDefaultStyle()
   setStyle(FloatStyle);
   setFlags(QGraphicsItem::ItemIsMovable); // Doesn't work when view_ is embedded in dock window orz
 
-  setToolTip(TR(T_TOOLTIP_ANNOTATIONITEM)); // TODO: Make this dynamically determined.
-
+  //setToolTip(TR(T_TOOLTIP_ANNOTATIONITEM));
   setDefaultTextColor(ANNOTATION_COLOR_DEFAULT);
 }
 
@@ -702,7 +758,6 @@ AnnotationGraphicsItem::addMe()
 
     if (isVisible() != view_->isItemVisible())
       setVisible(view_->isItemVisible());
-    autoDelete_ = false;
     scene_->addItem(this);
   }
 }
@@ -744,7 +799,6 @@ AnnotationGraphicsItem::removeMe()
     disconnect(view_, SIGNAL(itemMetaVisibleChanged(bool)), this, SLOT(setMetaVisibleAndUpdate(bool)));
 
     scene_->removeItem(this);
-    autoDelete_ = true;
     view_->releaseItem(this);
   }
 }
@@ -761,6 +815,12 @@ AnnotationGraphicsItem::deleteMe()
 void
 AnnotationGraphicsItem::selectMe()
 { view_->selectItem(this); }
+
+void
+AnnotationGraphicsItem::analyzeMe()
+{
+  view_->selectItem(this, true); // detail = true
+}
 
 void
 AnnotationGraphicsItem::showMe()
@@ -1057,44 +1117,47 @@ void
 AnnotationGraphicsItem::contextMenuEvent(QContextMenuEvent *event)
 {
   DOUT("enter");
-  if (event) {
-    bool paused = isPaused();
-    if (!paused)
-      pause();
+  Q_ASSERT(event);
 
-    QMenu *m = new QMenu(view_);
-    AcUi::globalInstance()->setContextMenuStyle(m, false); // persistent = false
+  bool paused = isPaused();
+  if (!paused)
+    pause();
 
-    if (!hub_->isLiveTokenMode())
-      m->addAction(TR(T_MENUTEXT_EDIT), this, SLOT(edit()));
-    m->addAction(TR(T_MENUTEXT_COPY), this, SLOT(copyToClipboard()));
-    m->addAction(TR(T_MENUTEXT_REMOVEANNOTATION), this, SLOT(disappear()));
-    m->addSeparator();
+  QMenu *m = new QMenu(view_);
+  AcUi::globalInstance()->setContextMenuStyle(m, false); // persistent = false
 
-    if (annot_.userId() == view_->userId()) {
-      if (annot_.hasId() && !hub_->isLiveTokenMode())
-        m->addAction(TR(T_MENUTEXT_DELETETHISANNOT), this, SLOT(deleteMe()));
+  if (!hub_->isLiveTokenMode())
+    m->addAction(tr("Edit"), this, SLOT(edit()));
+  m->addAction(tr("Copy"), this, SLOT(copyToClipboard()));
+  m->addAction(tr("Hide"), this, SLOT(disappear()));
+  if (paused)
+    m->addAction(tr("Release") + " ["+ tr("MButton")+"]", this, SLOT(resume()));
+  if (annot_.hasUserId())
+    m->addAction(tr("Analytics") + " ["+ tr("DoubleClick")+"]", this, SLOT(analyzeMe()));
+  m->addSeparator();
 
-    } else {
-      QString text = abstract();
-      if (annot_.id() > 0 && !hub_->isLiveTokenMode()) {
-        m->addAction(TR(T_BLESS) + ": " + text, this, SLOT(blessMe()));
-        m->addAction(TR(T_CURSE) + ": " + text, this, SLOT(curseMe()));
-      }
-      m->addAction(TR(T_BLOCK) + ": " + text, this, SLOT(blockMe()));
-      if (annot_.hasUserAlias()) {
-        m->addSeparator();
-        m->addAction(TR(T_MENUTEXT_BLOCKUSER) + ": " + annot_.userAlias(), this, SLOT(blockUser()));
-      }
+  if (annot_.userId() == view_->userId()) {
+    if (annot_.hasId() && !hub_->isLiveTokenMode())
+      m->addAction(TR(T_DELETE), this, SLOT(deleteMe()));
+  } else {
+    QString text = summary();
+    if (annot_.id() > 0 && !hub_->isLiveTokenMode()) {
+      m->addAction(TR(T_BLESS) + ": " + text, this, SLOT(blessMe()));
+      m->addAction(TR(T_CURSE) + ": " + text, this, SLOT(curseMe()));
     }
-
-    m->exec(event->globalPos());
-    delete m;
-    event->accept();
-
-    if (!paused)
-      resume();
+    m->addAction(TR(T_BLOCK) + ": " + text, this, SLOT(blockMe()));
+    if (annot_.hasUserAlias()) {
+      m->addSeparator();
+      m->addAction(TR(T_MENUTEXT_BLOCKUSER) + ": " + annot_.userAlias(), this, SLOT(blockUser()));
+    }
   }
+
+  m->exec(event->globalPos());
+  delete m;
+  event->accept();
+
+  //if (!paused)
+  //  resume();
   DOUT("exit");
 }
 
@@ -1104,18 +1167,47 @@ AnnotationGraphicsItem::mouseDoubleClickEvent(QMouseEvent *event)
   Q_UNUSED(event);
   if (!isPaused())
     pause();
-  view_->selectItem(this, true); // detail = true
+  analyzeMe();
 }
+
+bool
+AnnotationGraphicsItem::isDragging() const
+{ return !isBadPosF(dragPos_); }
 
 void
 AnnotationGraphicsItem::mousePressEvent(QMouseEvent *event)
 {
-  if (!isPaused()) {
-    pause();
-    selectMe();
+  Q_ASSERT(event);
+  switch (event->button()) {
+  case Qt::LeftButton:
+    if (::isBadPosF(dragPos_))
+      dragPos_ = QPointF(event->globalPos()) -  scenePos();
+  case Qt::RightButton:
+    if (!isPaused()) {
+      pause();
+      selectMe();
+    }
+    break;
+  case Qt::MiddleButton:
+  default:
+    if (isPaused())
+      resume();
+    break;
   }
-  if (event && event->button() == Qt::LeftButton && ::isBadPosF(dragPos_))
-    dragPos_ = QPointF(event->globalPos()) -  scenePos();
+
+  if (event->button() == Qt::LeftButton) {
+    if (toolTip().isEmpty())
+      updateToolTip();
+    // FIXME: HACK!
+    // Alternatively, use scene()->sendEvent or
+    // intercept QEvent::ToolTip and show tooltip using QToolTip::showText
+    // See: http://qt-project.org/doc/qt-4.8/widgets-tooltips.html
+    //scene_->sendEvent(this, &toolTipEvent);
+    view_->setToolTip(toolTip());
+    QCoreApplication::sendEvent(view_,
+      new QHelpEvent(QEvent::ToolTip, event->pos(), event->globalPos())
+    );
+  }
 }
 
 void
@@ -1131,31 +1223,39 @@ AnnotationGraphicsItem::mouseReleaseEvent(QMouseEvent *event)
 void
 AnnotationGraphicsItem::mouseMoveEvent(QMouseEvent *event)
 {
-  if (event && (event->buttons() & Qt::LeftButton) && !::isBadPosF(dragPos_)) {
+  Q_ASSERT(event);
+  if ((event->buttons() & Qt::LeftButton) && !::isBadPosF(dragPos_)) {
     QPointF newPos = QPointF(event->globalPos()) - dragPos_;
-    // use QApplication::postEvent is more elegant but less efficient
+    // use QCoreApplication::postEvent is more elegant but less efficient
     setPos(newPos);
   }
+
+#ifdef Q_WS_WIN
+  if (toolTip().isEmpty())
+    updateToolTip();
+  view_->setToolTip(toolTip()); // FIXME: HACK!
+  QCoreApplication::sendEvent(view_,
+    new QHelpEvent(QEvent::ToolTip, event->pos(), event->globalPos())
+  );
+#endif // Q_WS_WIN
 }
 
 void
 AnnotationGraphicsItem::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 {
-  if (event) {
-    QPoint pos(event->pos().x(), event->pos().y());
-    QContextMenuEvent e(QContextMenuEvent::Keyboard, pos, event->screenPos());
-    contextMenuEvent(&e);
-  }
+  Q_ASSERT(event);
+  QPoint pos(event->pos().x(), event->pos().y());
+  QContextMenuEvent e(QContextMenuEvent::Keyboard, pos, event->screenPos());
+  contextMenuEvent(&e);
 }
 
 #define GRAPHICS_SCENE_MOUSE_EVENT(_handler) \
   void \
   AnnotationGraphicsItem::_handler(QGraphicsSceneMouseEvent *event) \
   { \
-    if (event) { \
-      QMouseEvent e(event->type(), event->pos().toPoint(), event->screenPos(), event->button(), event->buttons(), event->modifiers()); \
-      _handler(&e); \
-    } \
+    Q_ASSERT(event); \
+    QMouseEvent e(event->type(), event->pos().toPoint(), event->screenPos(), event->button(), event->buttons(), event->modifiers()); \
+    _handler(&e); \
   }
 
   GRAPHICS_SCENE_MOUSE_EVENT(mouseDoubleClickEvent)
@@ -1229,7 +1329,7 @@ AnnotationGraphicsItem::blockUser()
 }
 
 QString
-AnnotationGraphicsItem::abstract() const
+AnnotationGraphicsItem::summary() const
 {
   enum { length = 11 } ;
   QString ret = annot_.text();
@@ -1280,7 +1380,7 @@ AnnotationGraphicsItem::escapeFrom(const QPointF &from)
 
   qreal v = 1/(len/30.0 + 1) + 0.02;
   int msecs = qMax<int>(len/v, 100);
-  escapeTo(to, msecs);
+  escapeTo(reflected(to), msecs);
 }
 
 void
@@ -1319,7 +1419,7 @@ AnnotationGraphicsItem::rushTo(const QPointF &center)
   if (len < 2) {
     QPointF to = now + radius * QPointF(0.5+rx, 0.5-ry);
     enum { msecs = 2000 };
-    rushTo(to, msecs);
+    rushTo(reflected(to), msecs);
     return;
   }
   qreal dist = qMax<qreal>(len*0.2, radius);
@@ -1332,7 +1432,7 @@ AnnotationGraphicsItem::rushTo(const QPointF &center)
   int msecs = qMax<int>(len/v, min_msecs);
 
   QPointF to = now - d * (delta/len) + radius * QPointF(0.5-rx, 0.5-ry);
-  rushTo(to, msecs);
+  rushTo(reflected(to), msecs);
 }
 
 void
@@ -1353,6 +1453,33 @@ AnnotationGraphicsItem::rushTo(const QPointF &to, int msecs)
   rushAni_->setStartValue(pos());
   rushAni_->setEndValue(to);
   rushAni_->start();
+}
+
+// - Helpers -
+
+QPointF
+AnnotationGraphicsItem::boundedToScene(const QPointF &pos) const
+{
+  QRectF rect = view_->sceneRect();
+  return QPointF(
+    qBound(rect.left(), pos.x(), rect.right()),
+    qBound(rect.top(), pos.y(), rect.bottom())
+  );
+}
+
+QPointF
+AnnotationGraphicsItem::reflected(const QPointF &pos) const
+{
+  QRectF rect = view_->sceneRect();
+  qreal x =
+    pos.x() < rect.left()  ? rect.left() * 2 - pos.x() :
+    pos.x() > rect.right() ? rect.right() * 2 - pos.x() :
+                             pos.x();
+  qreal y =
+    pos.y() < rect.top()   ? rect.top() * 2 - pos.y() :
+    pos.y() > rect.bottom()? rect.bottom() * 2 - pos.y() :
+                             pos.y();
+  return QPointF(x, y);
 }
 
 // EOF

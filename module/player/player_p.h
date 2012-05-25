@@ -12,9 +12,9 @@
 #include "module/player/player.h"
 //#include "module/qtext/textcodec.h"
 #include "module/qtext/countdowntimer.h"
-#ifdef WITH_MODULE_VLCCORE
-#  include "module/vlccore/httpplugin.h"
-#endif // WITH_MODULE_VLCCORE
+#ifdef WITH_MODULE_VLCHTTP
+#  include "module/vlchttp/httpplugin.h"
+#endif // WITH_MODULE_VLCHTTP
 #include <QtCore/QObject>
 #include <QtCore/QList>
 #include <memory>
@@ -202,9 +202,9 @@ namespace { // anonymous: vlc handle
           ::libvlc_media_release(m);
     if (media_)
       ::libvlc_media_release(media_);
-#ifdef WITH_MODULE_VLCCORE
+#ifdef WITH_MODULE_VLCHTTP
     VlcHttpPlugin::unload();
-#endif // WITH_MODULE_VLCCORE
+#endif // WITH_MODULE_VLCHTTP
     if (player_) {
       ::libvlc_media_player_set_media(player_, 0);
       ::libvlc_media_player_release(player_);
@@ -243,9 +243,9 @@ namespace { // anonymous: vlc handle
     instance_ = ::libvlc_new(vlc_argc, vlc_argv);
     Q_ASSERT(instance_);
 
-#ifdef WITH_MODULE_VLCCORE
+#ifdef WITH_MODULE_VLCHTTP
     VlcHttpPlugin::load();
-#endif // WITH_MODULE_VLCCORE
+#endif // WITH_MODULE_VLCHTTP
 
     player_ = ::libvlc_media_player_new(instance_);
     Q_ASSERT(player_);

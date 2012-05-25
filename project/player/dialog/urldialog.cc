@@ -6,6 +6,7 @@
 #include "project/common/acui.h"
 #include "project/common/accomboedit.h"
 #include "project/common/acsettings.h"
+#include "module/mrlanalysis/mrlanalysis.h"
 #include "module/qtext/ss.h"
 #include "module/qtext/string.h"
 #include "module/qtext/overlaylayout.h"
@@ -41,6 +42,8 @@ UrlDialog::createLayout()
 
   QString holder = tr("http://www.nicovideo.jp/watch/123456");
   edit_ = ui->makeComboBox(AcUi::EditHint, "", TR(T_URL), holder);
+  editStyleSheet_ = edit_->styleSheet();
+  connect(edit_, SIGNAL(editTextChanged(QString)), SLOT(verifyEditText()));
   connect(edit_->lineEdit(), SIGNAL(returnPressed()), SLOT(open()));
   AcComboEdit *edit = dynamic_cast<AcComboEdit *>(edit_);
   Q_ASSERT(edit);
@@ -54,7 +57,7 @@ UrlDialog::createLayout()
         AcUi::UrlHint, "", tr("Click to paste the URL example"), this, SLOT(showExampleUrl()));
   QLabel *urlLabel = ui->makeLabel(AcUi::BuddyHint, TR(T_EXAMPLE), urlButton_);
 
-  QToolButton *openButton = ui->makeToolButton(
+  openButton_ = ui->makeToolButton(
         AcUi::PushHint | AcUi::HighlightHint, TR(T_OPEN), this, SLOT(open()));
   QToolButton *pasteButton = ui->makeToolButton(
         AcUi::PushHint, TR(T_PASTE), this, SLOT(paste()));
@@ -88,7 +91,7 @@ UrlDialog::createLayout()
     footer->addWidget(pasteButton);
     footer->addStretch();
     footer->addWidget(saveButton_);
-    footer->addWidget(openButton);
+    footer->addWidget(openButton_);
 
     rows->setContentsMargins(9, 9, 9, 9);
     //setContentsMargins(0, 0, 0, 0);
@@ -219,9 +222,29 @@ UrlDialog::addHistory(const QString &url)
 void
 UrlDialog::setVisible(bool visible)
 {
-  if (visible)
+  if (visible) {
     edit_->setFocus();
+    verifyEditText();
+  }
   Base::setVisible(visible);
+}
+
+void
+UrlDialog::verifyEditText()
+{
+  QString t = edit_->currentText().trimmed();
+  bool valid = MrlAnalysis::matchSite(t, false); // href = false
+
+  openButton_->setEnabled(valid);
+  edit_->setStyleSheet(editStyleSheet_ + (valid ?
+    SS_BEGIN(QComboBox)
+      SS_COLOR(black)
+    SS_END
+    :
+    SS_BEGIN(QComboBox)
+      SS_COLOR(red)
+    SS_END
+  ));
 }
 
 // EOF

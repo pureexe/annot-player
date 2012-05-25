@@ -54,12 +54,12 @@ AcNetworkProxyPreferences::createLayout()
   QGridLayout *grid = new QGridLayout; {
     // (row, col, rowspan, colspan, alignment)
     int r, c;
-    grid->addWidget(hostLabel_, r=0, c=0);
+    grid->addWidget(hostLabel_, r=0, c=0, Qt::AlignRight);
     grid->addWidget(hostEdit_, r, ++c, 1, 2);
     grid->addWidget(portEdit_, r, c+=2);
     grid->addWidget(typeCombo_, r, ++c);
 
-    grid->addWidget(userNameLabel_, ++r, c=0);
+    grid->addWidget(userNameLabel_, ++r, c=0, Qt::AlignRight);
     grid->addWidget(userNameEdit_, r, ++c, 1, 2);
     grid->addWidget(passwordEdit_, r, c+=2, 1, 2);
 

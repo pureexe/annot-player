@@ -32,6 +32,7 @@ QT_END_NAMESPACE
 namespace QtExt {
   class CountdownTimer;
   class MouseRubberBand;
+  class CircularRubberBand;
 } // namespace QtExt
 
 // Objects
@@ -53,7 +54,6 @@ class SignalHub;
 class Tray;
 class Translator;
 
-class AcAbout;
 class AcPlayerServer;
 class AcDownloader;
 class AcBrowser;
@@ -74,6 +74,7 @@ class OsdConsole;
 class EmbeddedPlayerUi;
 class EmbeddedCanvas;
 class PlayerUi;
+class Preferences;
 class MessageView;
 class SignalView;
 class BacklogDialog;
@@ -83,7 +84,6 @@ class UserAnalyticsView;
 class VideoView;
 
 // Dialogs
-class AboutDialog;
 class AnnotationCountDialog;
 class BlacklistView;
 class DeviceDialog;
@@ -130,6 +130,7 @@ public:
 
   // - Signals -
 signals:
+  void userIdChanged(qint64 uid);
   void posChanged();
   void openAnnotationUrlRequested(const QString &url);
   void annotationUrlAdded(QString url);
@@ -393,7 +394,10 @@ public slots:
   void setBlacklistViewVisible(bool visible);
   void showBlacklistView() { setBlacklistViewVisible(true); }
 
+  void setTokenViewVisible(bool t);
   void toggleTokenViewVisible();
+
+  void setAnnotationBrowserVisible(bool t);
   void toggleAnnotationBrowserVisible();
 
   void setAnnotationAnalyticsViewVisible(bool visible);
@@ -607,6 +611,9 @@ protected slots:
   void loadSubtitlesLater();
 
 protected:
+  static bool canResume(const QString &url);
+
+protected:
   bool isGlobalPosNearEmbeddedPlayer(const QPoint &pos) const;
   bool isGlobalPosOverEmbeddedPositionSlider(const QPoint &pos) const;
   bool isGlobalPosOverOsdConsole(const QPoint &pos) const;
@@ -803,6 +810,7 @@ private:
   int liveInterval_; // TO BE REMOVED
   mutable QMutex inetMutex_;    // mutext for remote communication
   mutable QMutex annotMutex_;
+  Preferences *preferences_;
   Tray *tray_;
   SignalHub *hub_;
 
@@ -826,6 +834,7 @@ private:
   //QTimer *windowStaysOnTopTimer_;
 
   QStringList recentFiles_;
+  QHash<QString,QString> recentUrlTitles_;
   QString browsedUrl_;
   QFileInfoList browsedFiles_;
 
@@ -875,6 +884,8 @@ private:
   QtExt::MouseRubberBand *pauseRubberBand_,
                          *resumeRubberBand_,
                          *removeRubberBand_;
+  QtExt::CircularRubberBand *attractRubberBand_,
+                            *expelRubberBand_;
 
   BlacklistView *blacklistView_;
   //CommentView *commentView_;
@@ -897,8 +908,9 @@ private:
   MediaInfoView *mediaInfoView_;
   UserView *userView_;
 
-  QPoint dragPos_;
-  QPoint pressedPos_;
+  QPoint dragPos_,
+         pressedPos_,
+         movedPos_;
   Qt::MouseButtons pressedButtons_;
   qint64 windowModeUpdateTime_;
 
@@ -1037,6 +1049,7 @@ private:
           *snapshotAllAct_,
           *actualSizeAct_,
           *toggleAnnotationAnalyticsViewVisibleAct_,
+          *toggleAnnotationBandwidthLimitedAct_,
           *toggleAnnotationVisibleAct_,
           *toggleAnnotationCountDialogVisibleAct_,
           *toggleMagnifierVisibleAct_,

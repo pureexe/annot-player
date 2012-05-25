@@ -55,6 +55,7 @@ LUADIR=$$DESTDIR/lua
 DOCDIR=$$DESTDIR/doc
 IMAGEDIR=$$DESTDIR/images
 JSFDIR=$$DESTDIR/jsf
+AVATARDIR=$$DESTDIR/avatars
 
 unix:!mac {
     isEmpty(PREFIX): PREFIX = /usr
@@ -73,6 +74,7 @@ mac {
     DATADIR=\\\"$$DATADIR\\\"
 }
 DEFINES += \
+    AVATARDIR=\\\"$$AVATARDIR\\\" \
     DOCDIR=\\\"$$DOCDIR\\\" \
     IMAGEDIR=\\\"$$IMAGDIR\\\" \
     LUADIR=\\\"$$LUADIR\\\" \
@@ -81,8 +83,8 @@ DEFINES += \
 ## External libraries
 
 win32 {
-    #DEV_HOME            = c:/dev
-    DEV_HOME            = B:/Developer
+    DEV_HOME            = c:/dev
+    #DEV_HOME            = B:/Developer
     QT_HOME             = c:/qt/current
     QT_SRC              = $$QT_HOME/src
     #VLC_HOME            = "c:/Program Files/VideoLAN/VLC/sdk"

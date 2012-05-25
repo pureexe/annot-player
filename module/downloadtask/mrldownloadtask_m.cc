@@ -1,6 +1,11 @@
 ﻿// mrldownloadtask_m.cc
-// Download single part.
+// Download multiple parts.
 // 2/20/2012
+//
+// QNetworkAccessManager is not shared, because of 6 requests limits, as follows:
+// Note: http://qt-project.org/doc/qt-4.8/QNetworkAccessManager.html
+// QNetworkAccessManager queues the requests it receives. The number of requests executed in parallel is dependent on the protocol. Currently, for the HTTP protocol on desktop platforms, 6 requests are executed in parallel for one host/port combination.
+
 #include "module/downloadtask/mrldownloadtask.h"
 #ifdef WITH_MODULE_STREAM
 #  include "module/stream/bufferedremotestream.h"
@@ -14,15 +19,23 @@
 #else
 #  error "mediacodec module is required"
 #endif // WITH_MODULE_MEDIACODEC
+#ifdef WITH_MODULE_MRLRESOLVER
+#  include "module/mrlresolver/luamrlresolver.h"
+#else
+#  error "mrlresolver module is required"
+#endif // WITH_MODULE_MRLRESOLVER
+#include "module/qtext/algorithm.h"
 #include "module/qtext/filesystem.h"
 #include "module/qtext/network.h"
 #include <QtNetwork/QNetworkAccessManager>
-#include <QtCore/QTimer>
+#include <QtNetwork/QNetworkCookieJar>
+#include <QtCore/QFileInfo>
 
 #define DEBUG "mrldownloadtask_m"
 #include "module/debug/debug.h"
 
-enum { MaxDownloadRetries = 5 };
+enum { MaxDownloadRetries = 10, MinDownloadRetries = 2 };
+enum { MaxIndividualDownloadRetries = 5 };
 
 void
 MrlDownloadTask::downloadMultipleMedia(const MediaInfo &mi, QNetworkCookieJar *jar)
@@ -40,11 +53,13 @@ MrlDownloadTask::downloadMultipleMedia(const MediaInfo &mi, QNetworkCookieJar *j
   if (mi.mrls.isEmpty()) {
     setFileName(QString());
     setState(Error);
+    quit();
     DOUT("exit: empty mrl");
     return;
   }
 
   if (stopped_) {
+    quit();
     DOUT("exit: stopped");
     return;
   }
@@ -54,98 +69,166 @@ MrlDownloadTask::downloadMultipleMedia(const MediaInfo &mi, QNetworkCookieJar *j
   QList<QUrl> urls;
   qint64 duration = 0;
   //qint64 size = 0;
-  foreach (MrlInfo i, mi.mrls) {
+  foreach (const MrlInfo &i, mi.mrls) {
     urls.append(i.url);
     duration += i.duration;
     //size += i.size;
   }
 
-  QNetworkAccessManager *nam = new QNetworkAccessManager; // on the heap so that it is the last to delete
-  if (jar)
-    nam->setCookieJar(jar);
+  //QNetworkAccessManager *nam = new QNetworkAccessManager; // on the heap so that it is the last to delete
+  //if (jar)
+  //  nam->setCookieJar(jar);
   InputStreamList ins;
-  RemoteStream *first = 0;
+  //RemoteStream *first = 0;
   bool ok = false;
-  foreach (const QUrl &url, urls) {
-    ok = false;
-    for (int i = 0; i < MaxDownloadRetries && !ok; i++) {
-      RemoteStream *in = new BufferedRemoteStream(nam);
-      if (!first) {
-        first = in;
-        in->request().setPriority(QNetworkRequest::NormalPriority);
-      }
-      connect(this, SIGNAL(stopped()), in, SLOT(stop()));
-
-      QtExt::ProgressWithId *p = new QtExt::ProgressWithId((long)in, in);
-      connect(in, SIGNAL(progress(qint64,qint64)), p, SLOT(trigger(qint64,qint64)));
-      connect(p, SIGNAL(progress(qint64,qint64,long)), SLOT(updateProgressWithId(qint64,qint64,long)));
-
-      in->setUrl(url);
-
-      in->run();
-      ins.append(in);
-
-      if (stopped_) {
-        stop();
-        foreach (InputStream *s, ins)
-          dynamic_cast<QObject *>(s)->deleteLater();
-        nam->deleteLater();
-        DOUT("exit: stopped");
-        return;
-      }
-
-      in->waitForReady();
-
-      QString contentType = in->contentType();
-      ok = isMultiMediaMimeType(contentType);
-      if (!ok) {
-        DOUT("WARNING: invalid contentType =" << contentType << ", url =" << url.toString());
-        ins.removeLast();
-        p->deleteLater();
-        in->deleteLater();
-        if (first == in)
-          first = 0;
-
-        //emit warning(
-        //  QString("%1 (%2/%3): ")
-        //  .arg(tr("failed to fetch HTTP header, retry"))
-        //  .arg(QString::number(i+1))
-        //  .arg(QString::number(MaxDownloadRetries))
-        //  + url.toString()
-        //);
-      }
-    }
-    if (!ok)
-      break;
-  }
-
-  if (!ok) {
-    emit error(tr("failed to get the first part") + ": " + urls.first().toString());
-    emit stopped();
-    foreach (InputStream *s, ins)
-      dynamic_cast<QObject *>(s)->deleteLater();
-    nam->deleteLater();
-
-    if (retries_-- > 0 && !stopped_) {
-      emit error(QString("%1 (%2/$3)")
-        .arg(tr("retry"))
-        .arg(QString::number(retries_--))
+  int count = 0;
+  QNetworkAccessManager *nam = 0;
+  int namCount = 0;
+  DOUT("urls size =" << urls.size());
+  for (int j = 0; j < MaxDownloadRetries && !ok && !stopped_; j++) {
+    DOUT("j =" << j);
+    if (j && !stopped_) {
+      DOUT("download failed");
+      count--;
+      emit error(
+        QString("%1 (%2/%3): ")
+        .arg(tr("failed to fetch part %1, retry").arg(QString::number(count+1)))
+        .arg(QString::number(j+1))
         .arg(QString::number(MaxDownloadRetries))
-        + ": " + url()
+        + url()
       );
-      QTimer::singleShot(0, this, SLOT(run())); // retry
+
+      if (j >= MinDownloadRetries) {
+        enum { WaitInterval = 5 }; // wait 5 seconds
+        int secs = WaitInterval + j - MinDownloadRetries;
+        emit error(tr("wait %1 seconds and try again").arg(QString::number(secs)) + " ...");
+        DOUT(QString("wait for %1 seconds").arg(QString::number(secs)));
+        sleep_.start(secs);
+      }
+      if (stopped_) {
+        DOUT("stopped, break");
+        break;
+      }
+
+      DOUT("with mrlresolver");
+      LuaMrlResolver resolver_impl;
+      MrlResolver &resolver = resolver_impl;
+      resolver.setSynchronized(true);
+      //connect(resolver, SIGNAL(mediaResolved(MediaInfo,QNetworkCookieJar*)), SLOT(updateUrls(MediaInfo,QNetworkCookieJar*)));
+      resolver.resolveMedia(url());
+      const MediaInfo &mi = resolver.resolvedMediaInfo();
+      QNetworkCookieJar *jar = resolver.resolvedCookieJar();
+      if (jar)
+        jar->setParent(0); // memory leak
+      nam = 0; // reset nam
+
+      urls.clear();
+      foreach (const MrlInfo &i, mi.mrls)
+        urls.append(i.url);
     }
-    DOUT("exit: retry");
-    return;
+    ok = true;
+    for (; count < urls.size() && ok && !stopped_; count++) {
+      DOUT("count =" << count);
+      const QUrl url = urls[count];
+      //if (stopped_) {
+      //  stop();
+      //  foreach (InputStream *in, QtExt::revertList(ins)) { // revert list so that nam will be deleted later
+      //    RemoteStream *p = dynamic_cast<RemoteStream *>(in);
+      //    p->stop();
+      //    p->deleteLater();
+      //  }
+      //  //nam->deleteLater();
+      //  if (jar)
+      //    jar->deleteLater();
+      //  quit();
+      //  DOUT("exit: stopped");
+      //  return;
+      //}
+      ok = false;
+      for (int i = 0; i < MaxIndividualDownloadRetries && !ok && !stopped_; i++) {
+        RemoteStream *in = new BufferedRemoteStream(0);
+        if (!nam || count % QtExt::MaxConcurrentNetworkRequestCount == namCount) {
+          if (!nam)
+            namCount = count % QtExt::MaxConcurrentNetworkRequestCount;
+          nam = new QNetworkAccessManager(in);
+          if (jar) {
+            nam->setCookieJar(jar);
+            jar->setParent(0);
+          }
+        }
+        Q_ASSERT(nam);
+        in->setNetworkAccessManager(nam);
+        connect(this, SIGNAL(stopped()), in, SLOT(stop()));
+
+        QtExt::ProgressWithId *p = new QtExt::ProgressWithId((long)in, in);
+        connect(in, SIGNAL(progress(qint64,qint64)), p, SLOT(trigger(qint64,qint64)));
+        connect(p, SIGNAL(progress(qint64,qint64,long)), SLOT(updateProgressWithId(qint64,qint64,long)));
+
+        in->setUrl(url);
+        //if (!first) {
+        //  first = in;
+        //  //in->request().setPriority(QNetworkRequest::NormalPriority);
+        //}
+
+        DOUT("count =" << count << ", i =" << i);
+        in->run();
+        ins.append(in);
+
+        if (stopped_)
+          break;
+        in->waitForReady();
+        QString contentType = in->contentType();
+        ok = isMultiMediaMimeType(contentType);
+        if (!ok) {
+          DOUT("WARNING: invalid contentType =" << contentType << ", url =" << url.toString());
+          ins.removeLast();
+          //if (first == in)
+          //  first = 0;
+          //p->deleteLater();
+          //in->deleteLater();
+          in->stop();
+          in->deleteLater();
+          if (nam->parent() == in)
+            nam = 0;
+
+          //emit warning(
+          //  QString("%1 (%2/%3): ")
+          //  .arg(tr("failed to fetch HTTP header, retry"))
+          //  .arg(QString::number(i+1))
+          //  .arg(QString::number(MaxDownloadRetries))
+          //  + url.toString()
+          //);
+        }
+      }
+    }
+    DOUT("access HTTP header ok =" << ok);
   }
 
-  Q_ASSERT(first);
-
+   if (!ok || isStopped()) {
+     DOUT("ins size =" << ins.size());
+     if (!ins.isEmpty()) {
+       foreach (InputStream *in, QtExt::revertList(ins)) { // revert list so that nam will be deleted later
+         DOUT("deleting input stream");
+         RemoteStream *p = dynamic_cast<RemoteStream *>(in);
+         p->stop();
+         p->deleteLater();
+       }
+       ins.clear();
+     }
+     if (jar) {
+       DOUT("deleting cookie jar");
+       jar->deleteLater();
+     }
+   }
   if (ins.isEmpty()) {
     setState(Error);
-    emit error(tr("access denied to download URL") + ": " + first->url().toString());
+    emit error(tr("access denied to download URL") + ": " + url());
     emit stopped();
-    nam->deleteLater();
+    if (jar)
+      jar->deleteLater();
+    //nam->deleteLater();
+    quit();
+    DOUT("exit: download failure");
     return;
   }
 
@@ -170,9 +253,15 @@ MrlDownloadTask::downloadMultipleMedia(const MediaInfo &mi, QNetworkCookieJar *j
     setState(Error);
     emit error(tr("failed to open file to write") + ": " + tmpFile);
     emit stopped();
-    foreach (InputStream *s, ins)
-      dynamic_cast<QObject *>(s)->deleteLater();
-    nam->deleteLater();
+    foreach (InputStream *in, QtExt::revertList(ins)) { // revert list so that nam will be deleted later
+      RemoteStream *p = dynamic_cast<RemoteStream *>(in);
+      p->stop();
+      p->deleteLater();
+    }
+    if (jar)
+      jar->deleteLater();
+    //nam->deleteLater();
+    quit();
     DOUT("exit: cannot write to file");
     return;
   }
@@ -195,10 +284,16 @@ MrlDownloadTask::downloadMultipleMedia(const MediaInfo &mi, QNetworkCookieJar *j
     emit error(tr("failed to parse FLV streams"));
     emit stopped();
 
-   foreach (InputStream *s, ins)
-      dynamic_cast<QObject *>(s)->deleteLater();
-    nam->deleteLater();
+    foreach (InputStream *in, QtExt::revertList(ins)) { // revert list so that nam will be deleted later
+      RemoteStream *p = dynamic_cast<RemoteStream *>(in);
+      p->stop();
+      p->deleteLater();
+    }
+    if (jar)
+      jar->deleteLater();
+    //nam->deleteLater();
     QFile::remove(fileName());
+    quit();
     return;
   }
 
@@ -209,7 +304,9 @@ MrlDownloadTask::downloadMultipleMedia(const MediaInfo &mi, QNetworkCookieJar *j
 
   out.close();
 
-  if (ok && isRunning() && FlvCodec::isFlvFile(tmpFile)) {
+  if (ok && isRunning() &&
+      QFileInfo(tmpFile).size() >= MinimumFileSize &&
+      FlvCodec::isFlvFile(tmpFile)) {
     ok = FlvCodec::updateFlvFileMeta(tmpFile);
     if (!ok)
       DOUT("warning: failed to update FLV meta:" << tmpFile);
@@ -238,9 +335,15 @@ MrlDownloadTask::downloadMultipleMedia(const MediaInfo &mi, QNetworkCookieJar *j
 
   emit stopped();
 
-  foreach (InputStream *s, ins)
-    dynamic_cast<QObject *>(s)->deleteLater();
-  nam->deleteLater();
+  foreach (InputStream *in, QtExt::revertList(ins)) { // revert list so that nam will be deleted later
+    RemoteStream *p = dynamic_cast<RemoteStream *>(in);
+    p->stop();
+    p->deleteLater();
+  }
+  if (jar)
+    jar->deleteLater();
+  quit();
+  //nam->deleteLater();
   DOUT("exit");
 }
 

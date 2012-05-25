@@ -3,6 +3,7 @@
 
 include(../../config.pri)
 include($$ROOTDIR/module/vlccore/vlccore.pri)
+include($$ROOTDIR/module/vlchttp/vlchttp.pri)
 
 DEFINES += WITH_MODULE_PLAYER
 

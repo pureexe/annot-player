@@ -20,7 +20,7 @@ FileDeleter::deleteFileLater(const QString &path, bool async)
 void
 FileDeleter::deleteAll()
 {
-  foreach (QString path, files_)
+  foreach (const QString &path, files_)
     QFile::remove(path);
 }
 

@@ -23,19 +23,12 @@
 // - Construction -
 
 WbWebView::WbWebView(QWidget *parent)
-  : Base(parent), contextMenu_(0), searchEngine_(0)
+  : Base(parent), searchEngine_(0)
 {
   createActions();
   connect(this, SIGNAL(selectionChanged()), SLOT(invalidateSelection()));
   connect(this, SIGNAL(loadFinished(bool)), SLOT(updateTitle()));
   connect(page(), SIGNAL(linkHovered(QString,QString,QString)), SLOT(highlightDownloadableLink(QString,QString,QString)));
-}
-
-WbWebView::~WbWebView()
-{
-  if (!deleteLater_.isEmpty())
-    foreach (QObject *p, deleteLater_)
-      p->deleteLater();
 }
 
 void
@@ -98,14 +91,7 @@ WbWebView::contextMenuEvent(QContextMenuEvent *event)
 {
   updateHoveredLink();
   Q_ASSERT(event);
-  if (!contextMenu_)
-    contextMenu_ = new QMenu(this);
-  contextMenu_->clear();
-  if (!deleteLater_.isEmpty()) {
-    foreach (QObject *p, deleteLater_)
-      p->deleteLater();
-    deleteLater_.clear();
-  }
+  QMenu *m = new QMenu;
 
   currentUrl_ = hoveredLink();
   QString selectedLink = selectedUrl();
@@ -116,26 +102,22 @@ WbWebView::contextMenuEvent(QContextMenuEvent *event)
   }
   int site = MrlAnalysis::matchSite(currentUrl_);
   if (site) {
-    contextMenu_->addAction(openWithAcPlayerAct_);
+    m->addAction(openWithAcPlayerAct_);
     if (site < MrlAnalysis::AnnotationSite)
-      contextMenu_->addAction(importToAcPlayerAct_);
+      m->addAction(importToAcPlayerAct_);
     if (site < MrlAnalysis::ChineseVideoSite) // TODO: change to all sites after fixing youtube
-      contextMenu_->addAction(openWithAcDownloaderAct_);
-    contextMenu_->addSeparator();
+      m->addAction(openWithAcDownloaderAct_);
+    m->addSeparator();
   }
   if (!selectedLink.isEmpty()) {
-    contextMenu_->addAction(openSelectedLinkAct_);
-    contextMenu_->addSeparator();
+    m->addAction(openSelectedLinkAct_);
+    m->addSeparator();
   }
-
-  QMenu *scm = page()->createStandardContextMenu();
-  deleteLater_.append(scm);
 
   QString selection = selectedText().simplified();
   if (!selection.isEmpty() && hasSearchEngines()) {
     for (int engine = 0; engine < searchEngines_.size(); engine++) {
-      QtExt::ActionWithId *a = new QtExt::ActionWithId(engine);
-      deleteLater_.append(a);
+      QtExt::ActionWithId *a = new QtExt::ActionWithId(engine, m);
       SearchEngine *e = searchEngines_[engine];
       a->setText(tr("Search with %1").arg(e->name()));
       a->setStatusTip(e->search("@key"));
@@ -144,13 +126,12 @@ WbWebView::contextMenuEvent(QContextMenuEvent *event)
       if (engine == searchEngine_)
         a->setChecked(true);
       connect(a, SIGNAL(triggeredWithId(int,bool)), SLOT(searchWithEngine(int)));
-      contextMenu_->addAction(a);
+      m->addAction(a);
     }
 
     int engine = SearchEngineFactory::Qt;
     if (engine >= searchEngines_.size() && selection.startsWith('Q') && !selection.contains(' ')) {
-      QtExt::ActionWithId *a = new QtExt::ActionWithId(engine);
-      deleteLater_.append(a);
+      QtExt::ActionWithId *a = new QtExt::ActionWithId(engine, m);
       static SearchEngine *e = 0;
       if (!e)
         e = SearchEngineFactory::globalInstance()->create(engine);
@@ -161,41 +142,45 @@ WbWebView::contextMenuEvent(QContextMenuEvent *event)
       if (engine == searchEngine_)
         a->setChecked(true);
       connect(a, SIGNAL(triggeredWithId(int,bool)), SLOT(searchWithEngine(int)));
-      contextMenu_->addAction(a);
+      m->addAction(a);
     }
 
-    contextMenu_->addSeparator();
+    m->addSeparator();
   }
 
-  contextMenu_->addActions(contextMenu_->actions());
+  QMenu *scm = page()->createStandardContextMenu();
+  m->addActions(scm->actions());
   //QAction *a;
   //if (a = page()->action(QWebPage::ReloadAndBypassCache))
-  //  contextMenu_->addAction(a);
+  //  m->addAction(a);
 
-  contextMenu_->addSeparator();
+  m->addSeparator();
   QMenu *history = createHistoryMenu();
   if (history) {
-    deleteLater_.append(history);
-    contextMenu_->addMenu(history);
-    contextMenu_->addSeparator();
+    m->addMenu(history);
+    m->addSeparator();
   }
-  contextMenu_->addSeparator();
-  contextMenu_->addAction(clipAct);
-  contextMenu_->addAction(undoClosedTabAct_);
-  contextMenu_->addAction(clearHighlightAct);
-  contextMenu_->addSeparator();
-  contextMenu_->addAction(zoomResetAct);
-  contextMenu_->addAction(zoomInAct);
-  contextMenu_->addAction(zoomOutAct);
-  contextMenu_->addSeparator();
-  contextMenu_->addAction(openWithOperatingSystemAct);
-  contextMenu_->addAction(newWindowAct_);
-  contextMenu_->addAction(fullScreenAct_);
+  m->addSeparator();
+  m->addAction(clipAct);
+  m->addAction(undoClosedTabAct_);
+  m->addAction(clearHighlightAct);
+  m->addSeparator();
+  m->addAction(zoomResetAct);
+  m->addAction(zoomInAct);
+  m->addAction(zoomOutAct);
+  m->addSeparator();
+  m->addAction(openWithOperatingSystemAct);
+  m->addAction(newWindowAct_);
+  m->addAction(fullScreenAct_);
 #ifdef Q_WS_WIN
-  contextMenu_->addAction(menuBarAct_);
+  m->addAction(menuBarAct_);
 #endif // Q_WS_WIN
 
-  contextMenu_->exec(event->globalPos());
+  m->exec(event->globalPos());
+  delete m;
+  //delete scm; // FIXME
+  if (history)
+    delete history;
   event->accept();
 }
 

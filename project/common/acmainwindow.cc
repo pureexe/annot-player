@@ -38,7 +38,7 @@ enum { StatusMessageTimeout = 5000 };
 
 AcMainWindow::AcMainWindow(QWidget *parent, Qt::WindowFlags f)
   : Base(parent, f), autoHideMenuBar_(true), fadeAni_(0), fadeEnabled_(true),
-    rippleFilter_(0), rippleTimer_(0)
+    rippleEnabled_(false), rippleFilter_(0), rippleTimer_(0)
 {
 #ifdef Q_WS_WIN
   if (!AcUi::isAeroAvailable())
@@ -142,6 +142,10 @@ AcMainWindow::setRippleEnabled(bool t)
 void
 AcMainWindow::fadeOut()
 {
+#ifdef WITH_MODULE_IMAGEFILTER
+  if (rippleTimer_ && rippleTimer_->isActive())
+    rippleTimer_->stop();
+#endif // WITH_MODULE_IMAGEFILTER
 #ifdef WITH_MODULE_ANIMATION
   if (fadeEnabled_ && isVisible()) {
     fadeAni_->fadeOut(windowOpacity());
@@ -235,6 +239,8 @@ AcMainWindow::setVisible(bool visible)
   } else {
     if (rippleTimer_ && rippleTimer_->isActive())
       rippleTimer_->stop();
+    if (rippleFilter_)
+      rippleFilter_->clear();
   }
 #endif // WITH_MODULE_IMAGEFILTER
   Base::setVisible(visible);

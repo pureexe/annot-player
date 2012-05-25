@@ -158,7 +158,7 @@ namespace AnnotCloud {
   private: QString text_;
   public:
     const QString &text() const         { return text_; }
-    void setText(const QString &text)   { text_ = text; }
+    void setText(const QString &text)   { subtitle_ = -1; text_ = text; }
     bool hasText() const                { return !text_.isEmpty(); }
 
   private: quint32 blessed_;
@@ -185,18 +185,39 @@ namespace AnnotCloud {
       : id_(0), tokenId_(0), tokenPart_(0), userId_(0), status_(0), flags_(0), language_(0),
         createTime_(0), updateTime_(0),
         pos_(0), posType_(0), time_(0),
-        blessed_(0), cursed_(0), blocked_(0)
+        blessed_(0), cursed_(0), blocked_(0), subtitle_(-1)
     { }
 
     bool isValid() const { return hasId(); }
     bool isLive() const { return id() < 0; }
     bool isVisible() const { return status() >= 0; }
     bool isHidden() const { return status() < 0; }
-    bool isSubtitle() const { return hasText() && text().contains(CORE_CMD_SUB); } // FIXME
+
 
     void clear() { (*this) = Self(); }
 
+    bool isSubtitle() const
+    {
+      switch (subtitle_) {
+      case 0: return false;
+      case 1: return true;
+      case -1:
+        if (hasText() && text().contains(CORE_CMD_SUB)) {
+          subtitle_ = 1;
+          return true;
+        } else {
+          subtitle_ = 0;
+          return false;
+        } Q_ASSERT(0);
+      default: Q_ASSERT(0);
+        return false;
+      }
+    }
+  private:
+    mutable int subtitle_;
+
     // - Operators -
+  public:
     bool operator==(const Self &that) { return !operator!=(that); }
     bool operator!=(const Self &that) { return ::memcmp(this, &that, sizeof(Self)); }
 

@@ -14,7 +14,7 @@
 #include <QtCore>
 #include <QtGui>
 
-#define WINDOW_OPACITY  0.8
+#define WINDOW_OPACITY  0.7
 
 #define WINDOW_FLAGS_BASE \
   Qt::Dialog | \
@@ -31,7 +31,8 @@
     //Qt::WindowTitleHint |
 #endif // Q_WS_MAC
 
-#define INPUTLINE_MAXIMUM_WIDTH   300
+#define INPUTLINE_MAXIMUM_WIDTH 300
+#define PLAY_BUTTON_SIZE        30
 
 // - Constructions -
 
@@ -48,7 +49,7 @@ MiniPlayerUi::MiniPlayerUi(SignalHub *hub, Player *player, ServerAgent *server, 
   { setWindowOpacity(WINDOW_OPACITY); }
   setWindowFlags(f);
   setContentsMargins(0, 0, 0, 0);
-  setAcceptDrops(true);
+  //setAcceptDrops(true);
   AcUi::globalInstance()->setWindowStyle(this);
 
   createLayout();
@@ -63,6 +64,8 @@ MiniPlayerUi::createLayout()
 {
   inputComboBox()->setMaximumWidth(INPUTLINE_MAXIMUM_WIDTH);
 
+  playButton()->setProperty("radius", int(PLAY_BUTTON_SIZE));
+
   // Set layout
   QVBoxLayout *rows = new QVBoxLayout; {
     QHBoxLayout *row0 = new QHBoxLayout,
@@ -74,7 +77,7 @@ MiniPlayerUi::createLayout()
 
     row0->addWidget(positionSlider());
 
-    row1->addWidget(menuButton());
+    //row1->addWidget(menuButton());
     row1->addWidget(openButton());
     row1->addWidget(playButton());
     //row1->addWidget(toggleAnnotationButton());
@@ -112,6 +115,8 @@ MiniPlayerUi::createLayout()
   // Note: there is no textChanged event in QLabel.
   progressButton()->hide();
   progressButton()->resize(QSize());
+  menuButton()->hide();
+  menuButton()->resize(QSize());
 #ifdef Q_WS_WIN
   if (QtWin::isWindowsVistaOrLater()) {
     positionButton()->hide();
@@ -168,7 +173,7 @@ MiniPlayerUi::forward(QEvent *event)
 {
   // Forward event to parent
   if (event && parent())
-    QApplication::sendEvent(parent(), event);
+    QCoreApplication::sendEvent(parent(), event);
 }
 
 void MiniPlayerUi::contextMenuEvent(QContextMenuEvent *event) { forward(event); }
@@ -330,7 +335,7 @@ MiniPlayerDock::forward(QEvent *event)
   // Forward event to parent
   Q_ASSERT(event);
   if (parent())
-    QApplication::sendEvent(parent(), event);
+    QCoreApplication::sendEvent(parent(), event);
 }
 
 void MiniPlayerDock::contextMenuEvent(QContextMenuEvent *event) { forward(event); }

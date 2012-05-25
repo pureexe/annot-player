@@ -3,6 +3,7 @@
 
 #include "tokenview.h"
 #include "addaliasdialog.h"
+#include "datamanager.h"
 #include "tr.h"
 #include "rc.h"
 #include "global.h"
@@ -26,12 +27,17 @@ using namespace Logger;
   Qt::WindowCloseButtonHint | \
   Qt::WindowStaysOnTopHint)
 
-TokenView::TokenView(ServerAgent *server, QWidget *parent)
-  : Base(parent, WINDOW_FLAGS), server_(server), contextMenu_(0)
+TokenView::TokenView(DataManager *data, ServerAgent *server, QWidget *parent)
+  : Base(parent, WINDOW_FLAGS), data_(data), server_(server),
+    active_(false), contextMenu_(0)
 {
+  Q_ASSERT(data_);
   Q_ASSERT(server_);
   setWindowTitle(TR(T_TITLE_TOKENVIEW));
-  setAcceptDrops(true);
+  //setAcceptDrops(true);
+
+  connect(this, SIGNAL(aliasDeletedWithId(qint64)), data_, SLOT(removeAliasWithId(qint64)));
+  //connect(this, SIGNAL(aliasSubmitted(Alias)), data_, SLOT(addAlias(Alias)));
 
   // Create models
 
@@ -214,14 +220,16 @@ void
 TokenView::setToken(const Token &token)
 {
   token_ = token;
-  updateTokenLabels();
+  if (isVisible())
+    updateTokenLabels();
 }
 
 void
 TokenView::clearToken()
 {
   token_.setId(0);
-  updateTokenLabels();
+  if (isVisible())
+    updateTokenLabels();
 }
 
 bool
@@ -302,10 +310,10 @@ TokenView::clearAliases()
 
 // - Events -
 
-void TokenView::dragEnterEvent(QDragEnterEvent *event)     { emit dragEnterEventReceived(event); }
-void TokenView::dragMoveEvent(QDragMoveEvent *event)       { emit dragMoveEventReceived(event); }
-void TokenView::dragLeaveEvent(QDragLeaveEvent *event)     { emit dragLeaveEventReceived(event); }
-void TokenView::dropEvent(QDropEvent *event)               { emit dropEventReceived(event); }
+//void TokenView::dragEnterEvent(QDragEnterEvent *event)     { emit dragEnterEventReceived(event); }
+//void TokenView::dragMoveEvent(QDragMoveEvent *event)       { emit dragMoveEventReceived(event); }
+//void TokenView::dragLeaveEvent(QDragLeaveEvent *event)     { emit dragLeaveEventReceived(event); }
+//void TokenView::dropEvent(QDropEvent *event)               { emit dropEventReceived(event); }
 
 void
 TokenView::updateTokenLabels()
@@ -501,11 +509,37 @@ TokenView::openSource()
 }
 
 void
+TokenView::refresh()
+{
+  setToken(data_->token());
+  setAliases(data_->aliases());
+  if (!isVisible())
+    updateTokenLabels();
+  tableView_->updateCount();
+}
+
+void
 TokenView::setVisible(bool visible)
 {
   if (visible)
-    tableView_->updateCount();
+    refresh();
+  setActive(visible);
   Base::setVisible(visible);
+}
+
+void
+TokenView::setActive(bool t)
+{
+  if (active_ != t) {
+    active_ = t;
+    if (active_) {
+      connect(data_, SIGNAL(tokenChanged(Token)), SLOT(setToken(Token)), Qt::QueuedConnection);
+      connect(data_, SIGNAL(aliasesChanged(AliasList)), SLOT(setAliases(AliasList)), Qt::QueuedConnection);
+    } else {
+      disconnect(data_, SIGNAL(tokenChanged(Token)), this, SLOT(setToken(Token)));
+      disconnect(data_, SIGNAL(aliasesChanged(AliasList)), this, SLOT(setAliases(AliasList)));
+    }
+  }
 }
 
 // EOF

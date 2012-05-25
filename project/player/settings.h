@@ -79,6 +79,9 @@ public:
   int annotationEffect() const;
   void setAnnotationEffect(int effect);
 
+  QString annotationFontFamily() const;
+  void setAnnotationFontFamily(const QString &family);
+
   qint64 annotationOffset() const;
   void setAnnotationOffset(qint64 offset);
 
@@ -93,8 +96,14 @@ public:
   void setRecentFiles(const QStringList &files);
   //void clearRecentFiles();
 
+  QHash<QString,QString> recentTitles() const;
+  void setRecentTitles(const QHash<QString,QString> &titles);
+
   QString recentPath() const;
   void setRecentPath(const QString &path);
+
+  bool isAnnotationBandwidthLimited() const;
+  void setAnnotationBandwidthLimited(bool t);
 
   bool isAnnotationFilterEnabled() const;
   void setAnnotationFilterEnabled(bool t);

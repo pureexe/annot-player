@@ -82,7 +82,7 @@ MainWindow::MainWindow(QWidget *parent)
 #ifdef Q_WS_WIN
   if (!QtWin::isWindowsVistaOrLater())
 #endif // Q_WS_WIN
-  { setContentsMargins(4, 2, 4, 2); }
+  { setContentsMargins(4, 2, 4, 2); } // left, top, right, bottom
 
   autoHideToolBarTimer_ = new QTimer(this);
   autoHideToolBarTimer_->setSingleShot(true);
@@ -101,6 +101,7 @@ MainWindow::MainWindow(QWidget *parent)
     << QString("http://ads.nicovideo.jp")
     << QString("http://u17.com")
     << QString("http://u17i.com")
+    << QString("http://17kuxun.com")
     << QString("http://taobao.com")
     << QString("http://www.bilibili.tv/html/arcgg.html")
   );

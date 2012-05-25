@@ -20,21 +20,42 @@
 // - RC -
 
 #ifdef Q_OS_LINUX
-#  ifndef DOCDIR
-#    define DOCDIR      "/usr/share/annot"
-#  endif // DOCDIR
-#  define RC_PREFIX     DOCDIR "/"
+#  ifndef JSFDIR
+#    define JSFDIR      "/usr/share/annot"
+#  endif // JSFDIR
+#  define RC_PREFIX     JSFDIR "/"
 #else
-#  define RC_PREFIX     QCoreApplication::applicationDirPath() + "/doc/"
+#  define RC_PREFIX     QCoreApplication::applicationDirPath() + "/jsf/"
 #endif // Q_OS_LINUX
 
-#define RC_HTML_ERROR   RC_PREFIX "error.html"
+//#define RC_HTML_ERROR   RC_PREFIX "error.html"
+#define RC_JSF_ERROR    RC_PREFIX "error.xhtml"
 
 namespace { // anonymous
-  inline QByteArray rc_html_error_()
+  //inline QByteArray rc_html_error_()
+  //{
+  //  QFile f(RC_HTML_ERROR);
+  //  return f.open(QIODevice::ReadOnly) ? f.readAll() : QByteArray();
+  //}
+
+  inline QByteArray rc_jsf_error_()
   {
-    QFile f(RC_HTML_ERROR);
-    return f.open(QIODevice::ReadOnly) ? f.readAll() : QByteArray();
+    static QByteArray ret;
+    if (ret.isEmpty()) {
+      QFile f(RC_JSF_ERROR);
+      if (f.open(QIODevice::ReadOnly))
+        ret = f.readAll();
+    }
+    return ret;
+  }
+
+  inline QByteArray rc_jsf_error_(int error, const QString &reason, const QUrl &url)
+  {
+    return QString(rc_jsf_error_())
+      .replace("#{error}", QString::number(error))
+      .replace("#{reason}", reason)
+      .replace("#{url}", url.toString())
+      .toUtf8();
   }
 } // anonymous namespace
 
@@ -99,8 +120,8 @@ WebPage::errorPageExtension(const ErrorPageExtensionOption *option, ErrorPageExt
     return false;
   DOUT("enter: error =" << option->error << ", message =" << option->errorString);
   output->baseUrl = option->url;
-  output->content = rc_html_error_();
-  output->contentType = "text/html";
+  output->content = ::rc_jsf_error_(option->error, option->errorString, option->url);
+  //output->contentType = "text/html"; // automaticly detected
   output->encoding = "UTF-8";
   DOUT("exit");
   return true;

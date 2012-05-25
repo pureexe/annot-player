@@ -20,6 +20,7 @@ OTHER_FILES += \
     deploy-debian.sh \
     deploy-fedora.sh \
     deploy-mac.sh \
-    deploy-win.cmd
+    deploy-win.cmd \
+    deploy-win-delta.cmd
 
 # EOF

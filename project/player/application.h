@@ -9,6 +9,7 @@
 class Application : public AcApplication
 {
   Q_OBJECT
+  Q_PROPERTY(Qt::CursorShape cursor READ cursor WRITE setCursor)
   Q_DISABLE_COPY(Application)
   typedef Application Self;
   typedef AcApplication Base;
@@ -24,6 +25,7 @@ public:
 
   // - Properties -
 public:
+  Qt::CursorShape cursor() const { return cursor_; }
   void setCursor(Qt::CursorShape cursor);
 
   // - Implementation -

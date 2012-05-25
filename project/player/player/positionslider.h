@@ -4,19 +4,18 @@
 // positionslider.h
 // 3/20/2012
 
-#include "module/qtext/slider.h"
+#include "project/common/acslider.h"
 
 QT_FORWARD_DECLARE_CLASS(QPropertyAnimation)
 
-typedef QtExt::Slider PositionSliderBase;
-class PositionSlider : public PositionSliderBase
+class PositionSlider : public AcSlider
 {
   Q_OBJECT
   Q_PROPERTY(qreal grooveHeight READ grooveHeight WRITE setGrooveHeight)
   Q_PROPERTY(qreal handleRadius READ handleRadius WRITE setHandleRadius)
   Q_DISABLE_COPY(PositionSlider)
   typedef PositionSlider Self;
-  typedef PositionSliderBase Base;
+  typedef AcSlider Base;
 
   int availablePosition_;
   qreal grooveHeight_;

@@ -4,7 +4,7 @@
 // acaccountprefs_p.h
 // 2/8/2012
 
-#include "project/common/acpreferences_p.h"
+#include "project/common/acpreferencestab.h"
 
 QT_FORWARD_DECLARE_CLASS(QLineEdit)
 QT_FORWARD_DECLARE_CLASS(QComboBox)

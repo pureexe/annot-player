@@ -11,6 +11,7 @@
 // See: AcDown/Downloader/YouTube/YouTubePlugin.cs
 
 #include "module/mrlresolver/youtubemrlresolver.h"
+#include "module/qtext/htmltag.h"
 //#include "module/qtext/network.h"
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkReply>
@@ -162,13 +163,9 @@ YoutubeMrlResolver::resolveMedia(QNetworkReply *reply)
 QString
 YoutubeMrlResolver::formatTitle(const QString &text)
 {
-  return text.isEmpty() ? text : QString(text)
+  return text.isEmpty() ? text : ::html_unescape(text)
    .remove(QRegExp(" - YouTube$"))
-   .replace("&quot;", "'")
-   .replace("&amp;", "&")
-   .replace("&lt;", "<")
-   .replace("&gt;", ">")
-   .trimmed();
+   .simplified();
 }
 
 QString

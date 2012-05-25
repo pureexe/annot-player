@@ -8,6 +8,10 @@
 
 namespace QtExt {
 
+  // - Constants -
+
+  enum { MaxConcurrentNetworkRequestCount = 6 }; ///< See QNetworkAccessManager's documentation
+
   // - PublicNetworkReply -
   class PublicNetworkReply : public QNetworkReply
   {

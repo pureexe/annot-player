@@ -27,7 +27,7 @@
 
 AcWindow::AcWindow(QWidget *parent, Qt::WindowFlags f)
   : Base(parent, f ? f : WINDOW_FLAGS), fadeAni_(0), fadeEnabled_(true),
-    rippleFilter_(0), rippleTimer_(0)
+    rippleEnabled_(false), rippleFilter_(0), rippleTimer_(0)
 {
 #ifdef Q_WS_WIN
   if (!AcUi::isAeroAvailable())
@@ -73,6 +73,10 @@ AcWindow::setRippleEnabled(bool t)
 void
 AcWindow::fadeOut()
 {
+#ifdef WITH_MODULE_IMAGEFILTER
+  if (rippleTimer_ && rippleTimer_->isActive())
+    rippleTimer_->stop();
+#endif // WITH_MODULE_IMAGEFILTER
 #ifdef WITH_MODULE_ANIMATION
   if (fadeEnabled_ && isVisible()) {
     fadeAni_->fadeOut(windowOpacity());
@@ -166,6 +170,8 @@ AcWindow::setVisible(bool visible)
   } else {
     if (rippleTimer_ && rippleTimer_->isActive())
       rippleTimer_->stop();
+    if (rippleFilter_)
+      rippleFilter_->clear();
   }
 #endif // WITH_MODULE_IMAGEFILTER
   Base::setVisible(visible);

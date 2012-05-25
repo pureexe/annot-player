@@ -15,9 +15,13 @@ class FontComboBox : public QFontComboBox
   typedef FontComboBox Self;
   typedef QFontComboBox Base;
 
+  QString styleSheet_;
+
 public:
-  explicit FontComboBox(QWidget *parent = 0)
-    : Base(parent) { }
+  explicit FontComboBox(QWidget *parent = 0);
+
+public slots:
+  bool verifyCurrentText();
 
   // - Events -
 protected:

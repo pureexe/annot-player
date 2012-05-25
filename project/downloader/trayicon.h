@@ -6,6 +6,8 @@
 
 #include "module/qtext/systemtrayicon.h"
 
+QT_FORWARD_DECLARE_CLASS(QAction)
+
 class MainWindow;
 
 typedef QtExt::SystemTrayIcon TrayIconBase;
@@ -32,6 +34,7 @@ private:
 
 private:
   MainWindow *w_;
+  QAction *showAct_, *hideAct_;
 };
 
 #endif // SYSTEMTRAYICON_H

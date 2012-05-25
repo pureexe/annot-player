@@ -104,17 +104,17 @@ protected:
   virtual void contextMenuEvent(QContextMenuEvent *event); ///< \override
   void updateContextMenu();
 
-protected slots:
-  virtual void dragEnterEvent(QDragEnterEvent *event); ///< \override
-  virtual void dragMoveEvent(QDragMoveEvent *event); ///< \override
-  virtual void dragLeaveEvent(QDragLeaveEvent *event); ///< \override
-  virtual void dropEvent(QDropEvent *event); ///< \override
+//protected slots:
+//  virtual void dragEnterEvent(QDragEnterEvent *event); ///< \override
+//  virtual void dragMoveEvent(QDragMoveEvent *event); ///< \override
+//  virtual void dragLeaveEvent(QDragLeaveEvent *event); ///< \override
+//  virtual void dropEvent(QDropEvent *event); ///< \override
 
-signals:
-  void dragEnterEventReceived(QDragEnterEvent *event);
-  void dragMoveEventReceived(QDragMoveEvent *event);
-  void dragLeaveEventReceived(QDragLeaveEvent *event);
-  void dropEventReceived(QDropEvent *event);
+//signals:
+//  void dragEnterEventReceived(QDragEnterEvent *event);
+//  void dragMoveEventReceived(QDragMoveEvent *event);
+//  void dragLeaveEventReceived(QDragLeaveEvent *event);
+//  void dropEventReceived(QDropEvent *event);
 
   // - Implementations -
 protected slots:

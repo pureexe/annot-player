@@ -5,7 +5,6 @@
 #include "embeddedcanvas.h"
 #include "embeddedinfoview.h"
 #include "positionslider.h"
-#include "annotationgraphicsview.h"
 #include "global.h"
 #include "tr.h"
 #include "signalhub.h"
@@ -22,8 +21,8 @@
 #define DEBUG "embeddedplayerui"
 #include "module/debug/debug.h"
 
-#define INPUTLINE_MINWIDTH    400
-#define INPUTLINE_MINHEIGHT   25
+#define INPUTLINE_MINWIDTH      400
+#define INPUTLINE_MINHEIGHT     25
 
 #define SS_LINEEDIT_OSD \
   SS_BEGIN(QLineEdit) \
@@ -65,22 +64,19 @@
   SS_END
 
 // - Constructions -
-EmbeddedPlayerUi::EmbeddedPlayerUi(SignalHub *hub, Player *player, ServerAgent *server, DataManager *data, AnnotationGraphicsView *annot, QWidget *parent)
+EmbeddedPlayerUi::EmbeddedPlayerUi(SignalHub *hub, Player *player, ServerAgent *server, DataManager *data, QWidget *parent)
   : Base(hub, player, server, parent),
     containerWindow_(0), containerWidget_(0),
     fullScreen_(false), top_(false)
 {
   setWindowFlags(Qt::FramelessWindowHint);
 
-  infoView_ = new EmbeddedInfoView(player, data, annot, hub);
+  infoView_ = new EmbeddedInfoView(player, data, hub, this);
 
   canvas_ = new EmbeddedCanvas(data, hub, player);
   canvas_->hide();
   connect(canvas_, SIGNAL(visibleChanged(bool)), infoView_, SLOT(setInvisible(bool)));
   connect(canvas_, SIGNAL(visibleChanged(bool)), SLOT(updateGeometry()), Qt::QueuedConnection);
-  connect(annot, SIGNAL(offsetChanged(qint64)), canvas_, SLOT(setOffset(qint64)));
-  connect(annot, SIGNAL(selectedUserIds(QList<qint64>)), canvas_, SLOT(setUserIds(QList<qint64>)));
-  connect(annot, SIGNAL(resumed()), canvas_, SLOT(clearUserIds()));
 
   createLayout();
 
@@ -101,29 +97,6 @@ EmbeddedPlayerUi::EmbeddedPlayerUi(SignalHub *hub, Player *player, ServerAgent *
   CONNECT_TO_AUTOHIDE(inputComboBox()->lineEdit(), SIGNAL(cursorPositionChanged(int,int)));
 #undef CONNECT_TO_AUTOHIDE
 
-  {
-    const int ButtonMaximumSize = 40; // "int" to match QVariant
-    playButton()->setProperty("maximumRadius", ButtonMaximumSize);
-    playButton()->setProperty("maximumRadius", ButtonMaximumSize);
-    openButton()->setProperty("maximumRadius", ButtonMaximumSize);
-    playButton()->setProperty("maximumRadius", ButtonMaximumSize);
-    stopButton()->setProperty("maximumRadius", ButtonMaximumSize);
-    nextFrameButton()->setProperty("maximumRadius", ButtonMaximumSize);
-    fastForwardButton()->setProperty("maximumRadius", ButtonMaximumSize);
-    fastFastForwardButton()->setProperty("maximumRadius", ButtonMaximumSize);
-    toggleFullScreenModeButton()->setProperty("maximumRadius", ButtonMaximumSize);
-    toggleMiniModeButton()->setProperty("maximumRadius", ButtonMaximumSize);
-    toggleEmbedModeButton()->setProperty("maximumRadius", ButtonMaximumSize);
-    positionButton()->setProperty("maximumRadius", ButtonMaximumSize);
-    progressButton()->setProperty("maximumRadius", ButtonMaximumSize);
-    previousButton()->setProperty("maximumRadius", ButtonMaximumSize);
-    nextButton()->setProperty("maximumRadius", ButtonMaximumSize);
-    menuButton()->setProperty("maximumRadius", ButtonMaximumSize);
-
-    const int PlayButtonMinimumSize = 35; // "int" to match QVariant
-    playButton()->setProperty("minimumRadius", PlayButtonMinimumSize);
-    playButton()->setProperty("radius", PlayButtonMinimumSize);
-  }
   resize(QSize()); // temporarily
 
   connect(new QShortcut(QKeySequence("F2"), this), SIGNAL(activated()), hub, SLOT(toggleEmbeddedPlayerMode()));
@@ -140,6 +113,30 @@ EmbeddedPlayerUi::createLayout()
   prefixComboBox()->setStyleSheet(SS_COMBOBOX_OSD);
   prefixComboBox()->lineEdit()->setStyleSheet(SS_LINEEDIT_OSD);
 
+  {
+    //enum { ButtonSize = 25 };
+    //playButton()->setProperty("radius", int(ButtonSize));
+    //playButton()->setProperty("radius", int(ButtonSize));
+    //openButton()->setProperty("radius", int(ButtonSize));
+    //playButton()->setProperty("radius", int(ButtonSize));
+    //stopButton()->setProperty("radius", int(ButtonSize));
+    //nextFrameButton()->setProperty("radius", int(ButtonSize));
+    //fastForwardButton()->setProperty("radius", int(ButtonSize));
+    //fastFastForwardButton()->setProperty("radius", int(ButtonSize));
+    //toggleFullScreenModeButton()->setProperty("radius", int(ButtonSize));
+    //toggleMiniModeButton()->setProperty("radius", int(ButtonSize));
+    //toggleEmbedModeButton()->setProperty("radius", int(ButtonSize));
+    //positionButton()->setProperty("radius", int(ButtonSize));
+    //progressButton()->setProperty("radius", int(ButtonSize));
+    //previousButton()->setProperty("radius", int(ButtonSize));
+    //nextButton()->setProperty("radius", int(ButtonSize));
+    //menuButton()->setProperty("radius", int(ButtonSize));
+
+    enum { PlayButtonSize = 35 };
+    playButton()->setProperty("radius", int(PlayButtonSize));
+    //playButton()->setProperty("minimumRadius", int(PlayButtonMinimumSize));
+  }
+
   QtExt::WithSizeHint*
   w = dynamic_cast<QtExt::WithSizeHint*>(inputComboBox());
   if (w)
@@ -148,7 +145,7 @@ EmbeddedPlayerUi::createLayout()
   if (w)
     w->setSizeHint(QSize(G_PREFIXLINE_MAXWIDTH, INPUTLINE_MINHEIGHT));
 
-  //AcTextView *info_ = new AcTextView;
+  //AcTextView *info_ = new AcTextView(this);
   //info_->setText("awfwaefawfew\n22222", Qt::red);
 
   // Set layout

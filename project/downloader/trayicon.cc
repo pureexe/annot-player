@@ -21,12 +21,13 @@ TrayIcon::TrayIcon(MainWindow *w, QObject *parent)
 void
 TrayIcon::createActions()
 {
-  QMenu *m = new QMenu(w_); {
-    m->addAction(tr("Add"), w_, SLOT(add()));
-    m->addSeparator();
-    m->addAction(tr("Show"), w_, SLOT(show()));
-    m->addAction(tr("Quit"), w_, SLOT(close()));
-  } setContextMenu(m);
+  QMenu *m = new QMenu(w_);
+  m->addAction(tr("Add"), w_, SLOT(add()));
+  m->addSeparator();
+  showAct_ = m->addAction(tr("Show"), w_, SLOT(show()));
+  hideAct_ = m->addAction(tr("Hide"), w_, SLOT(fadeOut()));
+  m->addAction(tr("Quit"), w_, SLOT(quit()));
+  setContextMenu(m);
 }
 
 // - Events -
@@ -38,7 +39,6 @@ TrayIcon::activate(ActivationReason reason)
   case Context:
     updateContextMenu();
     break;
-
   case Trigger:
     w_->show();
     break;
@@ -46,14 +46,17 @@ TrayIcon::activate(ActivationReason reason)
   case MiddleClick:
     w_->openDirectory();
     break;
-
   default: ;
   }
 }
 
 void
 TrayIcon::updateContextMenu()
-{ }
+{
+  bool v = w_->isVisible();
+  showAct_->setVisible(!v);
+  hideAct_->setVisible(v);
+}
 
 // EOF
 

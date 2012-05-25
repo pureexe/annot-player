@@ -23,7 +23,6 @@ HEADERS += \
     $$PWD/fontcombobox.h \
     $$PWD/hash.h \
     $$PWD/htmltag.h \
-    $$PWD/iconbutton.h \
     $$PWD/layoutwidget.h \
     $$PWD/network.h \
     $$PWD/networkcookie.h \
@@ -53,7 +52,6 @@ SOURCES += \
     $$PWD/filedeleter.cc \
     $$PWD/filesystem.cc \
     $$PWD/fontcombobox.cc \
-    $$PWD/iconbutton.cc \
     $$PWD/networkcookie.cc \
     $$PWD/os.cc \
     $$PWD/rubberband.cc \

@@ -51,7 +51,7 @@ enum { ALPHA = 0 };
 
 #define G_VOLUME_DELTA      0.05   // 5 %
 
-#define G_RECENT_COUNT      30
+//#define G_RECENT_COUNT      30
 
 #define G_ANNOTATION_MAXSIZE 255
 

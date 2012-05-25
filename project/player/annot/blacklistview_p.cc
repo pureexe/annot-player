@@ -60,7 +60,7 @@ void
 TextFilterView::setRows(const QStringList &l)
 {
   clear();
-  foreach (QString t, l)
+  foreach (const QString &t, l)
     addRow(t);
 }
 
@@ -134,7 +134,7 @@ void
 UserFilterView::setRows(const QStringList &l)
 {
   clear();
-  foreach (QString t, l)
+  foreach (const QString &t, l)
     addRow(t);
 }
 
@@ -216,7 +216,7 @@ void
 AnnotationFilterView::setRows(const AnnotationList &l)
 {
   clear();
-  foreach (Annotation a, l)
+  foreach (const Annotation &a, l)
     addRow(a);
 }
 

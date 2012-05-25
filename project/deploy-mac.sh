@@ -8,7 +8,7 @@ cd "$PREFIX"  || exit 1
 ## environment
 
 COLOR=purple
-VERSION=0.1.5.5
+VERSION=0.1.5.6
 DMG_SIZE=200m
 
 TARGET="Annot Stream"
@@ -76,7 +76,9 @@ cp -Rv "$APP_BUILD/$DOWNLOADER_APP" . || exit 1
 rm -Rf "$DOWNLOADER_MACOS"/*
 cp -v "$APP_BUILD/$DOWNLOADER_BIN" "$DOWNLOADER_BIN" || exit 1
 
+echo "ignore error on /usr/lib/@loader_path@loader_path caused by @loader_path/lib/libvlc*.dylib"
 macdeployqt "$APP"
+
 macdeployqt "$BROWSER_APP"
 macdeployqt "$DOWNLOADER_APP"
 
@@ -98,12 +100,14 @@ cd "$DOWNLOADER_APP"/Contents/MacOS || exit 1
 ln -s ../../../"$APP_MACOS"/lua || exit 1
 ln -s ../../../"$APP_MACOS"/doc || exit 1
 ln -s ../../../"$APP_MACOS"/images || exit 1
+ln -s ../../../"$APP_MACOS"/jsf || exit 1
 ln -s ../../../"$APP_MACOS"/translations || exit 1
 cd ../../..
 
 cd "$BROWSER_APP"/Contents/MacOS || exit 1
 ln -s ../../../"$APP_MACOS"/doc || exit 1
 ln -s ../../../"$APP_MACOS"/images || exit 1
+ln -s ../../../"$APP_MACOS"/jsf || exit 1
 ln -s ../../../"$APP_MACOS"/translations || exit 1
 cd ../../..
 
@@ -129,7 +133,10 @@ change_macports_qt()
 {
   local qt=$1
   local target=$2
-  install_name_tool -change /opt/local/lib/$qt.framework/Versions/4/$qt @executable_path/../Frameworks/$qt.framework/Versions/4/$qt "$target"
+  install_name_tool -change \
+    /opt/local/lib/$qt.framework/Versions/4/$qt \
+    @executable_path/../Frameworks/$qt.framework/Versions/4/$qt \
+    "$target"
 }
 
 change_macports_lib()
@@ -137,7 +144,10 @@ change_macports_lib()
   local lib=$1
   local target=$2
   cp -rv /opt/local/lib/$lib "$APP_FRAMEWORKS/$lib"
-  install_name_tool -change /opt/local/lib/$lib @executable_path/../Frameworks/$lib "$target"
+  install_name_tool -change \
+    /opt/local/lib/$lib \
+    @executable_path/../Frameworks/$lib \
+    "$target"
 }
 
 ## deploy qt plugins
@@ -177,6 +187,16 @@ cp "$QT_HOME"/plugins/$dylib "$APP_PLUGINS/$dylib"
 change_macports_qt QtCore "$APP_PLUGINS/$dylib"
 change_macports_qt QtSql "$APP_PLUGINS/$dylib"
 change_macports_lib libsqlite3.0.dylib  "$APP_PLUGINS/$dylib"
+
+## alter vlc lib
+install_name_tool -change \
+  @loader_path/lib/libvlc.5.dylib \
+  @executable_path/lib/libvlc.5.dylib \
+ "$APP_BIN" || exit 1
+install_name_tool -change \
+  @loader_path/lib/libvlccore.5.dylib \
+  @executable_path/lib/libvlccore.5.dylib \
+ "$APP_BIN" || exit 1
 
 ## deploy vlc frameworks
 
@@ -222,6 +242,9 @@ cp -R "$APP_SRC"/module/qtext/images "$APP_MACOS"/ || exit 1
 
 ## copy jsf
 cp -R "$APP_SRC"/module/annotcloud/jsf "$APP_MACOS"/ || exit 1
+
+## copy images
+cp -R "$APP_SRC"/project/player/avatars "$APP_MACOS"/ || exit 1
 
 ## deploy macports libs
 

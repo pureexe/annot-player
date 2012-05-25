@@ -21,12 +21,13 @@ class OsdWindow : public QWidget
 public:
   explicit OsdWindow(QWidget *parent = 0);
 
-  QtExt::EventListener *eventListener() const;
-  void setEventListener(QtExt::EventListener *listener);
+  //QObject *eventListener() const { return listener_; }
+  void setEventListener(QtExt::EventListener *listener) { listener_ = listener; }
 
+  bool isWindowOnTop() const;
 public slots:
   void showInOsdMode();
-  void ensureStaysOnTop();
+  void setWindowOnTop(bool t = true);
 
 protected:
   void forward(QEvent *event);

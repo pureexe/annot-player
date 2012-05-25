@@ -4,7 +4,7 @@
 // acnetworkproxyprefs_p.h
 // 3/12/2012
 
-#include "project/common/acpreferences_p.h"
+#include "project/common/acpreferencestab.h"
 
 QT_BEGIN_NAMESPACE
 class QComboBox;

@@ -11,8 +11,12 @@
 #include "tr.h"
 #include "project/common/achorizontalslider.h"
 #include "project/common/acui.h"
-#include "module/qtext/iconbutton.h"
+#include "project/common/aciconbutton.h"
 #include <QtGui>
+
+//enum { VOLUME_SLIDE_MAX_WIDTH = 100 };
+
+// - Construction -
 
 PlayerPanel::PlayerPanel(QWidget *parent)
   : Base(parent),
@@ -52,6 +56,7 @@ PlayerPanel::volumeSlider()
     volumeSlider_ = new AcHorizontalSlider(this);
     volumeSlider_->setMaximum(G_VOLUME_MAX);
     volumeSlider_->setToolTip(TR(T_VOLUME));
+    //volumeSlider_->setMaximumWidth(VOLUME_SLIDE_MAX_WIDTH);
   } return volumeSlider_;
 }
 
@@ -62,7 +67,7 @@ PlayerPanel::volumeSlider()
   PlayerPanel::_button() \
   { \
     if (!_button##_) { \
-      _button##_ = new QtExt::IconButton(this); \
+      _button##_ = new AcIconButton(this); \
       _button##_->setStyleSheet(SS_TOOLBUTTON_##_styleid); \
       _button##_->setToolTip(TR(T_TOOLTIP_##_styleid)); \
       AcUi::globalInstance()->setToolButtonStyle(_button##_); \

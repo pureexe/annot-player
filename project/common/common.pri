@@ -17,6 +17,7 @@ HEADERS += \
     $$PWD/acfilteredtableview.h \
     $$PWD/acglobal.h \
     $$PWD/achorizontalslider.h \
+    $$PWD/aciconbutton.h \
     $$PWD/acipc.h \
     $$PWD/aclineedit.h \
     $$PWD/aclocationprefs_p.h \
@@ -25,10 +26,11 @@ HEADERS += \
     $$PWD/acpaths.h \
     $$PWD/acplayer.h \
     $$PWD/acpreferences.h \
-    $$PWD/acpreferences_p.h \
+    $$PWD/acpreferencestab.h \
     $$PWD/acrc.h \
     $$PWD/acsettings.h \
     $$PWD/acss.h \
+    $$PWD/acslider.h \
     $$PWD/actabview.h \
     $$PWD/actextedit.h \
     $$PWD/actextview.h \
@@ -47,6 +49,7 @@ SOURCES += \
     $$PWD/acfilteredlistview.cc \
     $$PWD/acfilteredtableview.cc \
     $$PWD/achorizontalslider.cc \
+    $$PWD/aciconbutton.cc \
     $$PWD/acipc.cc \
     $$PWD/aclineedit.cc \
     $$PWD/aclocationprefs_p.cc \
@@ -56,6 +59,7 @@ SOURCES += \
     $$PWD/acpreferences.cc \
     $$PWD/acnetworkproxyprefs_p.cc \
     $$PWD/acsettings.cc \
+    $$PWD/acslider.cc \
     $$PWD/actabview.cc \
     $$PWD/actextedit.cc \
     $$PWD/actextview.cc \

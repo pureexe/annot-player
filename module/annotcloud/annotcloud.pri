@@ -32,6 +32,7 @@ SOURCES += \
 
 JSF_FILES += \
     $$PWD/jsf/a.xhtml \
+    $$PWD/jsf/error.xhtml \
     $$PWD/jsf/i.xhtml \
     $$PWD/jsf/t.xhtml
 

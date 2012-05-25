@@ -4,6 +4,7 @@
 #include "module/annotcodec/acfuncodec.h"
 #include "module/annotcloud/annottag.h"
 #include "module/annotcloud/traits.h"
+#include "module/qtext/htmltag.h"
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkReply>
 #include <QtNetwork/QNetworkRequest>
@@ -175,7 +176,7 @@ AcfunCodec::parseText(const QString &text)
   DOUT("text =" << text);
   if (text.isEmpty())
     return QString();
-  QString ret = text.trimmed();
+  QString ret = ::html_escape(text.trimmed());
   if (ret == "/fly")
     return CORE_CMD_VIEW_FLY " " + QString::fromLocal8Bit("飞");
   ret.replace("/fly ", CORE_CMD_VIEW_FLY " ", Qt::CaseInsensitive);

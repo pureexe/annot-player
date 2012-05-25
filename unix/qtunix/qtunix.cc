@@ -40,7 +40,7 @@ QtUnix::getDevicesWithType(DeviceType type)
     {
       QStringList disks = getDevicesWithNameFilter("rdisk*");
       if (!disks.isEmpty())
-        foreach (QString path, disks)
+        foreach (const QString &path, disks)
           if (path.contains(QRegExp("^/dev/rdisk[1-9]$"))) // skip disk0 and partitions
             ret.append(path);
     }
@@ -60,7 +60,7 @@ QtUnix::getDevicesWithNameFilters(const QStringList &filters)
   QStringList names = QDir(DEVICE_PREFIX).entryList(filters, QDir::System);
 
   if (!names.isEmpty())
-    foreach (QString fileName, names)
+    foreach (const QString &fileName, names)
       ret.append(DEVICE_PREFIX + fileName);
   return ret;
 }

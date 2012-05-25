@@ -5,6 +5,7 @@
 #include "tr.h"
 #include "logger.h"
 #include "project/common/acui.h"
+#include "module/qtext/ss.h"
 #ifdef Q_OS_WIN
 #  include "win/qtwin/qtwin.h"
 #endif // Q_OS_WIN
@@ -83,9 +84,10 @@ DeviceDialog::createLayout()
 #endif // Q_WS_
   ;
 
-  pathComboBox_ = ui->makeComboBox(0, TR(T_PATH), TR(T_PATH), holder);
-  pathComboBox_->setMinimumWidth(COMBOBOX_MINWIDTH);
-  //connect(pathComboBox_, SIGNAL(activated(int)), SLOT(setMoveStyle(int)));
+  pathEdit_ = ui->makeComboBox(0, TR(T_PATH), TR(T_PATH), holder);
+  pathEdit_->setMinimumWidth(COMBOBOX_MINWIDTH);
+  pathEditStyleSheet_ = pathEdit_->styleSheet();
+  //connect(pathEdit_, SIGNAL(activated(int)), SLOT(setMoveStyle(int)));
 
   autoRadioButton_ = ui->makeRadioButton(0, tr("auto"));
   dvdRadioButton_ = ui->makeRadioButton(0, tr("DVD"));
@@ -107,7 +109,7 @@ DeviceDialog::createLayout()
     rows->addLayout(path);
     rows->addLayout(buttons);
 
-    path->addWidget(pathComboBox_);
+    path->addWidget(pathEdit_);
     path->addStretch();
     path->addWidget(autoRadioButton_);
     path->addWidget(dvdRadioButton_);
@@ -123,9 +125,9 @@ DeviceDialog::createLayout()
   } setLayout(rows);
 
   // Connections
-  connect(pathComboBox_, SIGNAL(currentIndexChanged(int)), SLOT(updateButtons()));
-  connect(pathComboBox_, SIGNAL(editTextChanged(QString)), SLOT(updateButtons()));
-  connect(pathComboBox_->lineEdit(), SIGNAL(returnPressed()), SLOT(ok()));
+  connect(pathEdit_, SIGNAL(currentIndexChanged(int)), SLOT(updateButtons()));
+  connect(pathEdit_, SIGNAL(editTextChanged(QString)), SLOT(updateButtons()));
+  connect(pathEdit_->lineEdit(), SIGNAL(returnPressed()), SLOT(ok()));
 }
 
 // - Properties -
@@ -136,7 +138,7 @@ DeviceDialog::createLayout()
 
 QString
 DeviceDialog::currentPath() const
-{ return pathComboBox_->currentText(); }
+{ return pathEdit_->currentText(); }
 
 // - Actions -
 
@@ -172,13 +174,13 @@ DeviceDialog::refresh()
 void
 DeviceDialog::updateComboBox()
 {
-  pathComboBox_->clear();
+  pathEdit_->clear();
   QStringList items = devices();
-  foreach (QString path, items)
-    pathComboBox_->addItem(path);
+  foreach (const QString &path, items)
+    pathEdit_->addItem(path);
 
-  if (pathComboBox_->count())
-    pathComboBox_->setCurrentIndex(0);
+  if (pathEdit_->count())
+    pathEdit_->setCurrentIndex(0);
 }
 
 // - Events -
@@ -197,6 +199,16 @@ DeviceDialog::updateButtons()
   QString path = currentPath();
   bool t = QFile::exists(path);
   okButton_->setEnabled(t);
+
+  pathEdit_->setStyleSheet(pathEditStyleSheet_ + (t ?
+    SS_BEGIN(QComboBox)
+      SS_COLOR(black)
+    SS_END
+    :
+    SS_BEGIN(QComboBox)
+      SS_COLOR(red)
+    SS_END
+  ));
 }
 
 // EOF

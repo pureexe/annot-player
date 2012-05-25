@@ -2,6 +2,19 @@ ChangeLog
 Annot Project
 6/18/2011
 
+5/25/2012	annot.player, down, browser	0.1.5.6, 0.1.2.5, 0.1.1.5
+        * Add randomized avatars to identify different users.
+        * Able to change annotation font in preferences ("Helvetia" as default).
+        * Option to limit annotation bandwith (enabled by default).
+        * Bugfix
+          * Fix a bug which could freeze the player when stream video with more than 6 parts.
+          * Fix a bug which bound # of download tasks to # of CPUs.
+          * Fix a bug which might mess up merged FLV streams, esp. Sina video from AcFun.tv.
+          * Fix a bug that could crash the browser when activate context menu.
+          * Fix a bug when prevent logging in to Nicovideo.jp on Windows.
+          * Fix a bug while annotating galgame.
+          * Fix a bug while rendering Aero on Windows 7.
+
 5/19/2012	annot.player, down, browser	0.1.5.5, 0.1.2.4, 0.1.1.4
         * Add water ripple effect to render windows (conflicts with Aero effect,
           Mac/WinXP only).

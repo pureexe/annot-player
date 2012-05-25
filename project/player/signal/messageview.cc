@@ -151,7 +151,7 @@ MessageView::currentHookId() const
 void
 MessageView::addMessages(QStringList &messages, ulong hookId)
 {
-  foreach (QString text, messages)
+  foreach (const QString &text, messages)
     processHookedText(text, hookId);
 }
 
@@ -272,7 +272,7 @@ MessageView::setTextList(const QStringList &l)
 {
   QString html;
   int i = 0;
-  foreach (QString s, l) {
+  foreach (const QString &s, l) {
     if (i++ % 2)
       html.append(HTML_STYLE(s, color:purple));
     else
@@ -299,9 +299,9 @@ MessageView::invalidateCurrentCharFormat()
 
 // - Events -
 
-void MessageView::dragEnterEvent(QDragEnterEvent *event)     { emit dragEnterEventReceived(event); }
-void MessageView::dragMoveEvent(QDragMoveEvent *event)       { emit dragMoveEventReceived(event); }
-void MessageView::dragLeaveEvent(QDragLeaveEvent *event)     { emit dragLeaveEventReceived(event); }
-void MessageView::dropEvent(QDropEvent *event)               { emit dropEventReceived(event); }
+//void MessageView::dragEnterEvent(QDragEnterEvent *event)     { emit dragEnterEventReceived(event); }
+//void MessageView::dragMoveEvent(QDragMoveEvent *event)       { emit dragMoveEventReceived(event); }
+//void MessageView::dragLeaveEvent(QDragLeaveEvent *event)     { emit dragLeaveEventReceived(event); }
+//void MessageView::dropEvent(QDropEvent *event)               { emit dropEventReceived(event); }
 
 // EOF

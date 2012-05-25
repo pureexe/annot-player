@@ -8,10 +8,12 @@
 #include "module/mediacodec/flvmerge.h"
 #include "module/mediacodec/flvmeta.h"
 #include "module/stream/fileinputstream.h"
+#include "module/stream/fileoutputstream.h"
 #include "module/stream/filestream.h"
 #include "module/stream/inputstream.h"
 #include "module/stream/outputstream.h"
 #include "module/qtext/stoppable.h"
+#include <QtCore/QStringList>
 #include <QtCore/QThreadPool>
 #include <cstring>
 
@@ -21,8 +23,8 @@
 // - Task -
 
 void
-FlvCodec::demuxStream(InputStream *flv, OutputStream *aout, OutputStream *vout,
-                      MediaToc *atoc, MediaToc *vtoc, bool async)
+FlvCodec::demuxFlvStream(InputStream *flv, OutputStream *aout, OutputStream *vout,
+                         MediaToc *atoc, MediaToc *vtoc, bool async)
 {
   DOUT("enter: async =" << async);
   Q_ASSERT(flv);
@@ -42,9 +44,9 @@ FlvCodec::demuxStream(InputStream *flv, OutputStream *aout, OutputStream *vout,
 }
 
 void
-FlvCodec::demuxStreams(const InputStreamList &flvs, const QList<qint64> &durations,
-                       OutputStream *aout, OutputStream *vout,
-                       MediaToc *atoc, MediaToc *vtoc, bool async)
+FlvCodec::demuxFlvStreams(const InputStreamList &flvs, const QList<qint64> &durations,
+                          OutputStream *aout, OutputStream *vout,
+                          MediaToc *atoc, MediaToc *vtoc, bool async)
 {
   DOUT("enter: async =" << async);
   Q_ASSERT(!flvs.isEmpty());
@@ -64,8 +66,8 @@ FlvCodec::demuxStreams(const InputStreamList &flvs, const QList<qint64> &duratio
 }
 
 void
-FlvCodec::demuxStreams(const InputStreamList &flvs,
-                       OutputStream *aout, OutputStream *vout, bool async)
+FlvCodec::demuxFlvStreams(const InputStreamList &flvs,
+                          OutputStream *aout, OutputStream *vout, bool async)
 {
   DOUT("enter: async =" << async);
   Q_ASSERT(!flvs.isEmpty());
@@ -162,7 +164,7 @@ FlvCodec::getLastTimestamp(const QByteArray &input)
 }
 
 void
-FlvCodec::mergeStream(const InputStreamList &ins, OutputStream *out, bool async)
+FlvCodec::mergeFlvStreams(const InputStreamList &ins, OutputStream *out, bool async)
 {
   DOUT("enter: async =" << async);
   Q_ASSERT(!ins.isEmpty());
@@ -178,9 +180,32 @@ FlvCodec::mergeStream(const InputStreamList &ins, OutputStream *out, bool async)
   DOUT("exit");
 }
 
+bool
+FlvCodec::mergeFlvFiles(const QStringList &input, const QString &output)
+{
+  if (input.isEmpty())
+    return false;
+  DOUT("enter");
+
+  FileOutputStream fout(output);
+  if (!fout.open()) {
+    DOUT("exit: failed to open output:" << output);
+    return false;
+  }
+
+  InputStreamList ins;
+  foreach (const QString &fileName, input)
+    ins.append(new FileInputStream(fileName));
+  globalInstance()->mergeFlvStreams(ins, &fout, false); // async = false
+  fout.finish();
+  foreach (InputStream *p, ins)
+    delete p;
+  return QFile::exists(output);
+}
+
 
 FlvMeta
-FlvCodec::analyzeStream(InputStream *in)
+FlvCodec::analyzeFlvStream(InputStream *in)
 {
   DOUT("enter");
   Q_ASSERT(in);
@@ -195,7 +220,7 @@ FlvCodec::analyzeStream(InputStream *in)
 }
 
 FlvMeta
-FlvCodec::analyzeStreams(const InputStreamList &ins)
+FlvCodec::analyzeFlvStreams(const InputStreamList &ins)
 {
   DOUT("enter: stream.count =" << ins.size());
   FlvMetaReader t;

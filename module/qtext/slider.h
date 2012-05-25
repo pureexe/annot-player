@@ -15,16 +15,11 @@ class Slider : public QSlider
   typedef Slider Self;
   typedef QSlider Base;
 
-  bool hovered_;
-
 public:
   explicit Slider(QWidget *parent = 0)
-    : Base(parent), hovered_(false) { }
+    : Base(parent) { }
   explicit Slider(Qt::Orientation orientation, QWidget *parent = 0)
-    : Base(orientation, parent), hovered_(false) { }
-
-public:
-  bool isHovered() const { return hovered_; }
+    : Base(orientation, parent) { }
 
   // - Events -
 protected:

@@ -4,18 +4,18 @@
 // achorizontalslider.h
 // 5/16/2012
 
-#include "module/qtext/slider.h"
+#include "project/common/acslider.h"
 #include <QtCore/QList>
 
 QT_FORWARD_DECLARE_CLASS(QPropertyAnimation)
 
-class AcHorizontalSlider : public QtExt::Slider
+class AcHorizontalSlider : public AcSlider
 {
   Q_OBJECT
   Q_PROPERTY(qreal grooveHeight READ grooveHeight WRITE setGrooveHeight)
   Q_DISABLE_COPY(AcHorizontalSlider)
   typedef AcHorizontalSlider Self;
-  typedef QtExt::Slider Base;
+  typedef AcSlider Base;
 
   qreal grooveHeight_,
         minimumGrooveHeight_,

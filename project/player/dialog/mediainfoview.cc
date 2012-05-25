@@ -70,11 +70,11 @@ MediaInfoView::updateText()
 
     t->append(QString("- %1 -").arg(tr("Render")), Qt::red);
     t->append(QString(
-         "%1: %2" HTML_BR() \
-         "%3: %4" HTML_BR() \
-         "%5: %6" HTML_BR() \
-         "%7: %8" HTML_BR() \
-         "%9: %10" HTML_BR() \
+         "%1: %2" HTML_BR()
+         "%3: %4" HTML_BR()
+         "%5: %6" HTML_BR()
+         "%7: %8" HTML_BR()
+         "%9: %10" HTML_BR()
        HTML_BR())
        .arg(TR(T_SATURATION)).arg(QString::number(saturation))
        .arg(TR(T_GAMMA)).arg(QString::number(gamma))

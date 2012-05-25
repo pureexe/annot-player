@@ -6,6 +6,7 @@
 #else
 #  error "mrlresolver module is required"
 #endif // WITH_MODULE_MRLRESOLVER
+#include <QtCore/QCoreApplication>
 #include <QtCore/QDir>
 
 #define DEBUG "mrldownloadtask"
@@ -40,13 +41,18 @@ MrlDownloadTask::reset()
 void
 MrlDownloadTask::stop()
 {
-  stopped_ = true;
-  setState(Stopped);
-  emit stopped();
+  sleep_.stop();
+  if (!stopped_) {
+    DOUT("enter");
+    stopped_ = true;
+    setState(Stopped);
+    emit stopped();
+    DOUT("exit");
+  }
 }
 
 void
-MrlDownloadTask::run()
+MrlDownloadTask::run(bool execute)
 {
   DOUT("enter");
   if (stopped_) {
@@ -61,13 +67,14 @@ MrlDownloadTask::run()
   resolver_ = new LuaMrlResolver;//new MrlResolverManager;
   resolver_->setSynchronized(true);
   connect(resolver_, SIGNAL(error(QString)), SIGNAL(error(QString)));
-  //connect(resolver_, SIGNAL(mediaResolved(MediaInfo,QNetworkCookieJar*)), SLOT(downloadMedia(MediaInfo,QNetworkCookieJar*)));
-  resolver_->setSynchronized(true);
+  connect(resolver_, SIGNAL(mediaResolved(MediaInfo,QNetworkCookieJar*)), SLOT(downloadMedia(MediaInfo,QNetworkCookieJar*)));
   bool ok = resolver_->resolveMedia(url());
   if (ok) {
-    const MediaInfo &mi = resolver_->resolvedMediaInfo();
-    QNetworkCookieJar *jar = resolver_->resolvedCookieJar();
-    downloadMedia(mi, jar);
+    //const MediaInfo &mi = resolver_->resolvedMediaInfo();
+    //QNetworkCookieJar *jar = resolver_->resolvedCookieJar();
+    //downloadMedia(mi, jar);
+    if (execute)
+      exec();
   } else {
     setState(Error);
     emit error(tr("failed to download from URL") + ": " + url());
@@ -82,6 +89,7 @@ MrlDownloadTask::downloadMedia(const MediaInfo &mi, QNetworkCookieJar *jar)
 {
   DOUT("enter");
   if (stopped_) {
+    quit();
     DOUT("exit: stopped");
     return;
   }
@@ -104,6 +112,7 @@ MrlDownloadTask::downloadMedia(const MediaInfo &mi, QNetworkCookieJar *jar)
   default: downloadMultipleMedia(mi, jar);
   }
 
+  quit();
   DOUT("exit");
 }
 

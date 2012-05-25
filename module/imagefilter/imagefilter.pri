@@ -13,6 +13,7 @@ HEADERS += \
     $$PWD/darknessimagefilter.h \
     $$PWD/fogimagefilter.h \
     $$PWD/gammaimagefilter.h \
+    $$PWD/glassimagefilter.h \
     $$PWD/imagefilter.h \
     $$PWD/pixelimagefilter.h \
     $$PWD/rippleimagefilter.h \

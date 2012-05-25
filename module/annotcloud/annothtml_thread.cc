@@ -13,6 +13,34 @@
 
 // - Resources -
 
+#ifdef Q_WS_LINUX
+#  define RC_AVATAR_PREFIX      AVATARDIR
+#else
+#  define RC_AVATAR_PREFIX      QCoreApplication::applicationDirPath() + "/avatars"
+#endif // Q_WS_LINUX
+#ifdef AVATAR_USER_COUNT
+#  define RC_AVATAR_COUNT       AVATAR_USER_COUNT
+#else
+#  define RC_AVATAR_COUNT       10
+#endif // AVATAR_USER_COUNT
+#define AVATAR_WIDTH            "40"
+#define AVATAR_HEIGHT           "40"
+
+namespace { // anonymous
+  inline QString rc_avatar_url(qint64 i)
+  {
+    static QString fmt =
+#ifdef Q_WS_WIN
+      QString("file:///" + RC_AVATAR_PREFIX "/user_%1.jpg").replace('\\', '/')
+#else
+      "file://" + RC_AVATAR_PREFIX "/user_%1.jpg"
+#endif  // Q_WS_WIN
+    ;
+    return fmt.arg(QString::number(qAbs(i) % RC_AVATAR_COUNT));
+  }
+} // anonymous namespace
+
+
 #ifdef Q_OS_LINUX
 #  define RC_PREFIX     JSFDIR "/"
 #else
@@ -37,11 +65,16 @@
 #define EL_I_WIDTH      "#{i_width}"
 #define EL_I_HEIGHT     "#{i_height}"
 
+#define EL_AVATAR_SRC    "#{avatar_src}"
+#define EL_AVATAR_TITLE  "#{avatar_title}"
+#define EL_AVATAR_WIDTH  "#{avatar_width}"
+#define EL_AVATAR_HEIGHT "#{avatar_height}"
+
 namespace { // anonymous
 
-  inline const QString &rc_jsf_t_()
+  inline const QByteArray &rc_jsf_t()
   {
-    static QString ret;
+    static QByteArray ret;
     if (ret.isEmpty()) {
       QFile f(RC_JSF_T);
       if (f.open(QIODevice::ReadOnly))
@@ -50,9 +83,9 @@ namespace { // anonymous
     return ret;
   }
 
-  inline const QString &rc_jsf_a_()
+  inline const QByteArray &rc_jsf_a()
   {
-    static QString ret;
+    static QByteArray ret;
     if (ret.isEmpty()) {
       QFile f(RC_JSF_A);
       if (f.open(QIODevice::ReadOnly))
@@ -61,9 +94,9 @@ namespace { // anonymous
     return ret;
   }
 
-  inline const QString &rc_jsf_i_()
+  inline const QByteArray &rc_jsf_i()
   {
-    static QString ret;
+    static QByteArray ret;
     if (ret.isEmpty()) {
       QFile f(RC_JSF_I);
       if (f.open(QIODevice::ReadOnly))
@@ -80,13 +113,17 @@ QString
 AnnotCloud::
 AnnotationHtmlParser::toHtml(const AnnotationList &l, const QString &title) const
 {
-  QString ret = rc_jsf_t_();
+  QString ret = ::rc_jsf_t();
   ret.replace(EL_TITLE, title);
 
   // Threads
   QString t;
   foreach (const Annotation &a, l) {
-    QString c = rc_jsf_a_();
+    QString c = ::rc_jsf_a();
+    c.replace(EL_AVATAR_WIDTH, AVATAR_WIDTH)
+     .replace(EL_AVATAR_HEIGHT, AVATAR_HEIGHT)
+     .replace(EL_AVATAR_TITLE, a.userAlias())
+     .replace(EL_AVATAR_SRC, ::rc_avatar_url(a.userId()));
     c.replace(EL_A_POS, FORMAT_POS(a.pos()))
      .replace(EL_A_CREATETIME, FORMAT_TIME(a.createTime()))
      .replace(EL_A_USER, a.userAlias());
@@ -112,7 +149,7 @@ AnnotationHtmlParser::toHtml(const AnnotationList &l, const QString &title) cons
   QString titles[] = { tr("Time - Count"), tr("Date - Count"), tr("User - Count") };
   enum { ImageCount = sizeof(titles) / sizeof(*titles) };
   for (int i = 0; i < ImageCount; i++) {
-    QString img = rc_jsf_i_();
+    QString img = ::rc_jsf_i();
     QString img_title = titles[i];
     QString img_file = QtExt::mktemp(".svg");
     QString img_src;
@@ -122,10 +159,10 @@ AnnotationHtmlParser::toHtml(const AnnotationList &l, const QString &title) cons
 #else
     img_src = "file://" + img_file;
 #endif // Q_WS_WIN
-    img.replace(EL_I_SRC, img_src)
+    img.replace(EL_I_WIDTH, QString::number(img_width))
+       .replace(EL_I_HEIGHT, QString::number(img_height))
        .replace(EL_I_TITLE, img_title)
-       .replace(EL_I_WIDTH, QString::number(img_width))
-       .replace(EL_I_HEIGHT, QString::number(img_height));
+       .replace(EL_I_SRC, img_src);
 
     AnnotCloud::AnnotationPainter::globalInstance()->
         saveHistogramAsFile(img_file, l, fields[i], img_width, img_height, img_title);

@@ -95,7 +95,7 @@ WebBrowser::completeUrl(const QString &url) const
 {
   int i, j;
   QString ret = url.trimmed();
-  if (!ret.contains(QRegExp("^\\w+://"))) {
+  if (!ret.isEmpty() && !ret.contains(QRegExp("^\\w+://"))) {
     int se = searchEngineForAddress(ret);
     if (se >= 0 && se < searchEngines_.size()) {
       DOUT("searchEngine =" << se);
@@ -103,7 +103,9 @@ WebBrowser::completeUrl(const QString &url) const
       ret = ret.trimmed();
       const_cast<Self *>(this)->addRecentSearch(ret);
       ret = searchAddress(ret, se);
-    } else if (ret.contains(QRegExp("^\\w")) &&
+    } else if (ret.startsWith('/'))
+      ret.prepend("file://");
+    else if (ret.contains(QRegExp("^\\w")) &&
         (i=ret.indexOf('/')) >= 0 &&
         ((j=ret.indexOf(' ')) < 0 || j > i))
       ret.prepend("http://");
@@ -403,7 +405,7 @@ WebBrowser::openUrls(const QStringList &urls)
   }
 
   int index = tabCount();
-  foreach (QString url, urls) {
+  foreach (const QString &url, urls) {
     newTab();
     openUrl(url);
   }

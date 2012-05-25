@@ -62,9 +62,9 @@ SeekDialog::createLayout()
   hhEdit_->lineEdit()->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
   hhEdit_->setMaximumWidth(SEEKLINEEDIT_MAXWIDTH);
 
-  QLabel *ssLabel = ui->makeLabel(AcUi::BuddyHint, tr("ss"), tr("seconds"), ssEdit_),
-         *mmLabel = ui->makeLabel(AcUi::BuddyHint, tr("mm"), tr("minutes"), mmEdit_),
-         *hhLabel = ui->makeLabel(AcUi::BuddyHint, tr("hh"), tr("hours"), hhEdit_);
+  QLabel *ssLabel = ui->makeLabel(0, tr("ss"), tr("seconds"), ssEdit_),
+         *mmLabel = ui->makeLabel(0, tr("mm"), tr("minutes"), mmEdit_),
+         *hhLabel = ui->makeLabel(0, tr("hh"), tr("hours"), hhEdit_);
 
   QToolButton *okButton = ui->makeToolButton(
         AcUi::PushHint | AcUi::HighlightHint, TR(T_OK), this, SLOT(ok()));

@@ -190,4 +190,27 @@ inline QString html_strong_close() { return HTML_STRONG_CLOSE(); }
 inline QString html_strong(const QString &content = "")
 { return html_strong_open() + content + html_strong_close(); }
 
+// - Escape -
+
+inline QString html_unescape(const QString &input)
+{
+  // See: http://htmlhelp.com/reference/html40/entities/special.html
+  return input.isEmpty() ? input : QString(input)
+   .replace("&amp;", "&")
+   .replace("&gt;", ">")
+   .replace("&lt;", "<")
+   .replace("&mdash;", "ー")
+   .replace("&ndash;", "-")
+   .replace("&nbsp;", " ")
+   .replace("&quot;", "'");
+}
+
+inline QString html_escape(const QString &input)
+{
+  return input.isEmpty() ? input : QString(input)
+   .replace('&', "&amp;")
+   .replace('>', "&gt;")
+   .replace('<', "&lt;");
+}
+
 #endif // _QTEXT_HTMLTAG_H

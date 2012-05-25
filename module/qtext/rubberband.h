@@ -4,37 +4,83 @@
 // qtext/rubberbound.h
 // 2012/3/28
 
-#include <QtGui/QRubberBand>
 #include <QtGui/QGraphicsColorizeEffect>
+#include <QtGui/QRubberBand>
+#include <QtCore/QPoint>
 
 namespace QtExt {
 
-class RubberBandWithColor : public QRubberBand
+class ColorizedRubberBand : public QRubberBand
 {
   Q_OBJECT
-  Q_DISABLE_COPY(RubberBandWithColor)
-  typedef RubberBandWithColor Self;
+  Q_DISABLE_COPY(ColorizedRubberBand)
+  typedef ColorizedRubberBand Self;
   typedef QRubberBand Base;
 
   QColor color_;
 public:
-  explicit RubberBandWithColor(Shape s, QWidget *parent = 0)
+  explicit ColorizedRubberBand(Shape s, QWidget *parent = 0)
     : Base(s, parent) { }
 
+signals:
+  void colorChanged(QColor color);
+public:
   QColor color() const { return color_; }
 public slots:
-  void setColor(const QColor &c);
+  void setColor(const QColor &c)
+  { if (color_ != c) emit colorChanged(color_ = c); }
+};
 
+class SquareRubberBand : public ColorizedRubberBand
+{
+  Q_OBJECT
+  Q_DISABLE_COPY(SquareRubberBand)
+  typedef SquareRubberBand Self;
+  typedef ColorizedRubberBand Base;
+
+public:
+  explicit SquareRubberBand(Shape s, QWidget *parent = 0);
+
+protected slots:
+  void invalidateColor();
 protected:
   virtual void paintEvent(QPaintEvent *e); ///< \override
 };
 
-class MouseRubberBand : public RubberBandWithColor
+class CircularRubberBand : public ColorizedRubberBand
+{
+  Q_OBJECT
+  Q_DISABLE_COPY(CircularRubberBand)
+  typedef CircularRubberBand Self;
+  typedef ColorizedRubberBand Base;
+
+  QPoint center_;
+  int radius_;
+
+public:
+  explicit CircularRubberBand(Shape s, QWidget *parent = 0)
+    : Base(s, parent), radius_(0) { }
+
+  int radius() const { return radius_; }
+  QPoint center() const { return center_; }
+public slots:
+  void setRadius(int value)
+  { if (radius_ != value) { radius_ = value; updateGeometry(); } }
+
+  void setCenter(const QPoint &pos)
+  { if (center_ != pos) { center_ = pos; updateGeometry(); } }
+
+  void updateGeometry();
+protected:
+  virtual void paintEvent(QPaintEvent *e); ///< \override
+};
+
+class MouseRubberBand : public SquareRubberBand
 {
   Q_OBJECT
   Q_DISABLE_COPY(MouseRubberBand)
   typedef MouseRubberBand Self;
-  typedef RubberBandWithColor Base;
+  typedef SquareRubberBand Base;
 
   QPoint pressed_;
 

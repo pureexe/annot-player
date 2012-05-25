@@ -26,7 +26,7 @@ OsdWindow::OsdWindow(QWidget *parent)
   setAttribute(Qt::WA_TranslucentBackground);
   //setAttribute(Qt::WA_MacNoClickThrough);
 
-  //setMouseTracking(true);
+  setMouseTracking(true);
 
   // FIXME: As a trade off, dragging annot etc does not work for mouse event anymore
   // Need a machanism similar to global hook.
@@ -40,17 +40,19 @@ OsdWindow::OsdWindow(QWidget *parent)
   //connect(poller_, SIGNAL(timeout()), SLOT(repaint()));
 }
 
-void
-OsdWindow::ensureStaysOnTop()
-{ setWindowFlags(windowFlags() | Qt::WindowStaysOnTopHint); }
-
-QtExt::EventListener*
-OsdWindow::eventListener() const
-{ return listener_; }
+bool
+OsdWindow::isWindowOnTop() const
+{ return windowFlags() & Qt::WindowStaysOnTopHint; }
 
 void
-OsdWindow::setEventListener(QtExt::EventListener *listener)
-{ listener_ = listener; }
+OsdWindow::setWindowOnTop(bool t)
+{
+  DOUT("enter: t =" << t);
+  if (t != isWindowOnTop())
+    setWindowFlags(t ? windowFlags() | Qt::WindowStaysOnTopHint :
+                       windowFlags() & ~Qt::WindowStaysOnTopHint);
+  DOUT("exit");
+}
 
 // - Events -
 
@@ -59,6 +61,12 @@ void OsdWindow::mouseMoveEvent(QMouseEvent *event)         { DOUT("enter"); if (
 void OsdWindow::mousePressEvent(QMouseEvent *event)        { DOUT("enter"); if (listener_) listener_->sendMousePressEvent(event);       DOUT("exit"); }
 void OsdWindow::mouseReleaseEvent(QMouseEvent *event)      { DOUT("enter"); if (listener_) listener_->sendMouseReleaseEvent(event);     DOUT("exit"); }
 void OsdWindow::mouseDoubleClickEvent(QMouseEvent *event)  { DOUT("enter"); if (listener_) listener_->sendMouseDoubleClickEvent(event); DOUT("exit"); }
+
+//void OsdWindow::contextMenuEvent(QContextMenuEvent *event) { if (listener_) QCoreApplication::sendEvent(listener_, event); }
+//void OsdWindow::mouseMoveEvent(QMouseEvent *event)         { if (listener_) QCoreApplication::sendEvent(listener_, event); }
+//void OsdWindow::mousePressEvent(QMouseEvent *event)        { if (listener_) QCoreApplication::sendEvent(listener_, event); }
+//void OsdWindow::mouseReleaseEvent(QMouseEvent *event)      { if (listener_) QCoreApplication::sendEvent(listener_, event); }
+//void OsdWindow::mouseDoubleClickEvent(QMouseEvent *event)  { if (listener_) QCoreApplication::sendEvent(listener_, event); }
 
 void
 OsdWindow::closeEvent(QCloseEvent *event)

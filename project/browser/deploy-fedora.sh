@@ -3,7 +3,7 @@
 # See: http://fedoraproject.org/wiki/How_to_create_an_RPM_package
 
 ## environment
-VERSION=0.1.2.4
+VERSION=0.1.2.5
 
 PACKAGE_NAME=annot-browser
 PACKAGE_VERSION=$VERSION

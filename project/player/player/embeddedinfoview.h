@@ -9,7 +9,6 @@
 class Player;
 class DataManager;
 class SignalHub;
-class AnnotationGraphicsView;
 
 class EmbeddedInfoView : public QLabel
 {
@@ -20,11 +19,10 @@ class EmbeddedInfoView : public QLabel
 
   Player *player_;
   DataManager *data_;
-  AnnotationGraphicsView *annot_;
   SignalHub *hub_;
 
 public:
-  EmbeddedInfoView(Player *player, DataManager *data, AnnotationGraphicsView *annot, SignalHub *hub, QWidget *parent = 0);
+  EmbeddedInfoView(Player *player, DataManager *data, SignalHub *hub, QWidget *parent = 0);
 
 public slots:
   virtual void setVisible(bool t); ///< \override
@@ -35,7 +33,8 @@ protected slots:
   void updateText(); ///< \override
 
 protected:
-  QString timeToString(qint64 secs) const;
+  static QString timeToString(qint64 secs);
+  static QString weekToString(int dayOfWeek);
 };
 
 #endif // EMBEDDEDINFOVIEW_H

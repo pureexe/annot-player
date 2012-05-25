@@ -40,7 +40,7 @@ AnnotationBrowser::AnnotationBrowser(SignalHub *hub, QWidget *parent)
   Q_ASSERT(hub_);
 
   setWindowTitle(TR(T_TITLE_ANNOTATIONBROWSER));
-  setAcceptDrops(true);
+  //setAcceptDrops(true);
 
   createModel();
   createLayout();
@@ -558,10 +558,10 @@ AnnotationBrowser::updateContextMenu()
   blockUserAct_->setVisible(cuid && cuid != userId_);
 }
 
-void AnnotationBrowser::dragEnterEvent(QDragEnterEvent *event)     { emit dragEnterEventReceived(event); }
-void AnnotationBrowser::dragMoveEvent(QDragMoveEvent *event)       { emit dragMoveEventReceived(event); }
-void AnnotationBrowser::dragLeaveEvent(QDragLeaveEvent *event)     { emit dragLeaveEventReceived(event); }
-void AnnotationBrowser::dropEvent(QDropEvent *event)               { emit dropEventReceived(event); }
+//void AnnotationBrowser::dragEnterEvent(QDragEnterEvent *event)     { emit dragEnterEventReceived(event); }
+//void AnnotationBrowser::dragMoveEvent(QDragMoveEvent *event)       { emit dragMoveEventReceived(event); }
+//void AnnotationBrowser::dragLeaveEvent(QDragLeaveEvent *event)     { emit dragLeaveEventReceived(event); }
+//void AnnotationBrowser::dropEvent(QDropEvent *event)               { emit dropEventReceived(event); }
 
 // - Filters -
 

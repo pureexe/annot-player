@@ -32,7 +32,7 @@ AcConsole::createLayout()
 {
   AcUi *ui = AcUi::globalInstance();
 
-  textView_ = new AcTextView;
+  textView_ = new AcTextView(this);
 
   QToolButton *okButton = ui->makeToolButton(
         AcUi::PushHint | AcUi::HighlightHint, tr("OK"), this, SLOT(fadeOut()));

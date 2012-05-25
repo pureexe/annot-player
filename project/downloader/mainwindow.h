@@ -13,6 +13,7 @@ class QAction;
 class QComboBox;
 //class QGestureEvent;
 class QMenu;
+class QMenuBar;
 class QSortFilterProxyModel;
 class QStandardItemModel;
 class QTimer;
@@ -152,6 +153,7 @@ private:
   void createSearchEngines();
   void createActions();
 private:
+  bool disposed_;
   AcAbout *about_;
   AcPreferences *preferences_;
   AcDownloaderServer *appServer_;
@@ -180,6 +182,7 @@ private:
   QTimer *refreshTimer_;
   QTimer *saveTimer_;
 
+  QMenuBar *menuBar_;
   QMenu *contextMenu_;
   QMenu *copyMenu_;
   QAction *newAct_,

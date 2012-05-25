@@ -37,6 +37,7 @@ include(stream/stream.pri)
 #include(streamservice/streamservice.pri)
 include(translator/translator.pri)
 include(vlccore/vlccore.pri)
+include(vlchttp/vlchttp.pri)
 include(webbrowser/webbrowser.pri)
 
 TEMPLATE = subdirs

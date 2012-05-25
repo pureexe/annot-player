@@ -89,7 +89,7 @@ function getTaskAttribute_acfun ( str_url, str_tmpfile ,str_servername, pDlg, bS
     --str_line = readUntilFromUTF8(file, "<embed ");
 	str_line = readUntilFromUTF8(file, "<div id=\"area-player\"");
     local str_embed = readIntoUntilFromUTF8(file, str_line, "</div>");--"</td>");--"</embed>");
-    g_debug[1]=str_embed;
+    --g_debug[1]=str_embed;
 	print(str_embed);
 	if str_embed==nil then
 		if pDlg~=nil then

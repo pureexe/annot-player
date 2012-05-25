@@ -24,7 +24,7 @@ AimlBot::AimlBot(bool showProgress)
 
   QProgressDialog *pd = 0;
   if (showProgress) {
-    pd = new QProgressDialog;
+    pd = new QProgressDialog(this);
     pd->setCancelButton(0);
     pd->setMaximum(files.count());
   }

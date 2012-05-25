@@ -39,7 +39,7 @@ InfoView::createLayout()
   QToolButton *copyButton = ui->makeToolButton(
        AcUi::PushHint, TR(T_COPY), textView_, SLOT(copy()));
 
-  textView_ = new AcTextView;
+  textView_ = new AcTextView(this);
 
   QVBoxLayout *rows = new QVBoxLayout; {
     QHBoxLayout *buttons = new QHBoxLayout;

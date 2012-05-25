@@ -53,10 +53,11 @@ private:
 
 private:
   QToolButton *okButton_;
-  QComboBox *pathComboBox_; // device path
+  QComboBox *pathEdit_; // device path
   QRadioButton *autoRadioButton_, // device type
                *dvdRadioButton_,
                *cdRadioButton_;
+  QString pathEditStyleSheet_;
 };
 
 #endif // DEVICEDIALOG_H

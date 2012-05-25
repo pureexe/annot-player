@@ -7,6 +7,7 @@
 #include "module/annotcodec/nicovideocodec.h"
 #include "module/annotcloud/annottag.h"
 #include "module/annotcloud/traits.h"
+#include "module/qtext/htmltag.h"
 #include <QtNetwork/QNetworkReply>
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkRequest>
@@ -133,11 +134,7 @@ NicovideoCodec::parseDocument(const QByteArray &data)
 
 QString
 NicovideoCodec::parseText(const QString &text)
-{
-  if (text.isEmpty())
-    return QString();
-  return text.trimmed();
-}
+{ return text.isEmpty() ? text : ::html_escape(text.trimmed()); }
 
 // See: http://nicowiki.com/elsecom.html
 QString
@@ -147,8 +144,7 @@ NicovideoCodec::parsePrefix(const QString &text)
     return QString();
 
   QString ret;
-  QStringList attrs = text.split(' ');
-  foreach (QString attr, attrs)
+  foreach (const QString &attr, text.split(' '))
     switch (qHash(attr)) {
     case NH_184:
     case NH_Docomo:

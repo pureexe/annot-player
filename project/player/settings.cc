@@ -41,12 +41,14 @@ using namespace AnnotCloud;
 #define SK_UPDATEDATE   "UpdateDate"
 #define SK_RECENTPATH   "RecentPath"
 #define SK_AUTOSUBMIT   "Submit"
+#define SK_ANNOTBANDWIDTH   "AnnotationBandwidth"
 #define SK_ANNOTSCALE   "AnnotationScale"
 //#define SK_ANNOTROTATE  "AnnotationRotation"
 #define SK_ANNOTFILTER  "AnnotationFilter"
 #define SK_ANNOTCOUNT   "AnnotationCount"
 #define SK_ANNOTEFFECT  "AnnotationEffect"
 #define SK_ANNOTOFFSET  "AnnotationOffset"
+#define SK_ANNOTFONT    "AnnotationFont"
 #define SK_AUTOPLAYNEXT "AutoPlayNext"
 #define SK_BLOCKEDUSERS "BlockedUsers"
 #define SK_BLOCKEDKEYS  "BlockedKeywords"
@@ -57,6 +59,7 @@ using namespace AnnotCloud;
 #define SK_MULTIWINDOW  "MultipleWindows"
 #define SK_QUEUEEMPTY   "QueueEmpty"
 #define SK_RECENT       "Recent"
+#define SK_RECENTTITLES "RecentTitles"
 #define SK_HUE          "Hue"
 #define SK_SATURATION   "Saturation"
 #define SK_BRIGHTNESS   "Brightness"
@@ -105,6 +108,14 @@ Settings::setAnnotationOffset(qint64 offset)
 qint64
 Settings::annotationOffset() const
 { return value(SK_ANNOTOFFSET).toLongLong(); }
+
+void
+Settings::setAnnotationFontFamily(const QString &family)
+{ setValue(SK_ANNOTFONT, family); }
+
+QString
+Settings::annotationFontFamily() const
+{ return value(SK_ANNOTFONT).toString(); }
 
 QDate
 Settings::updateDate() const
@@ -207,6 +218,14 @@ Settings::isPlayerLabelEnabled() const
 void
 Settings::setPlayerLabelEnabled(bool t)
 { setValue(SK_LABELPLAYER, t); }
+
+bool
+Settings::isAnnotationBandwidthLimited() const
+{ return value(SK_ANNOTBANDWIDTH, true).toBool(); }
+
+void
+Settings::setAnnotationBandwidthLimited(bool t)
+{ setValue(SK_ANNOTBANDWIDTH, t); }
 
 bool
 Settings::isAnnotationFilterEnabled() const
@@ -313,6 +332,30 @@ Settings::setRecentFiles(const QStringList &l)
   //r = l.size() <= 7 ? QString() : l[7]; setValue(SK_RECENT(7), r);
   //r = l.size() <= 8 ? QString() : l[8]; setValue(SK_RECENT(8), r);
   //r = l.size() <= 9 ? QString() : l[9]; setValue(SK_RECENT(9), r);
+}
+
+QHash<QString, QString>
+Settings::recentTitles() const
+{
+  QHash<QString, QString> ret;
+  QHash<QString, QVariant> h = value(SK_RECENTTITLES).toHash();
+  if (!h.isEmpty())
+    for (BOOST_AUTO(p, h.begin()); p != h.end(); ++p)
+      ret[p.key()] = p.value().toString();
+  return ret;
+}
+
+void
+Settings::setRecentTitles(const QHash<QString, QString> &input)
+{
+  if (input.isEmpty())
+    remove(SK_RECENTTITLES);
+  else {
+    QHash<QString, QVariant> h;
+    for (BOOST_AUTO(p, input.begin()); p != input.end(); ++p)
+      h[p.key()] = p.value();
+    setValue(SK_RECENTTITLES, h);
+  }
 }
 
 void

@@ -29,64 +29,7 @@ http://db.tt/SrtkzxIJ
         integrate SNS
         freedom, anntotate deathnote
 
-# 0.1.5.6
-- win7
-  - change build directory
-  - compile openssl with msvc 2010 myself
-    remove dependency on msvc 2008
-  - http://okolovich.info/compile-openssl-by-visual-studio-2010-express/
-  - update openssl toolchain
-- Windows XP
-  - FIXME SSL issue: browser cannot login to niconico
-  - FIXME: player flashing in coherence mode
-  - flashing in full screen mode!
-- mac/windows XP
-  - use round corner for acwindow, acmainwindow
-- Windows
-  - debug and select the same font as mac
-  - improve app icon
-- player
-  - able to resume in mms mode
-  - able to change font for annotation
-  - FIXME: resolve acfun youku dahuaxiyou
-    the second part always get banned
-  - improve app icon
-  - preferences
-    - make association changable
-  - able to seek anywhere
-- player
-  - add unsharp masking (USM) and exposure correction
-  See: http://stackoverflow.com/questions/2938162/how-does-an-unsharp-mask-work
-    http://www.ephotozine.com/article/how-to-remove-fog-from-a-photo-in-photoshop-14809
-  - play a movie, to figure out best value
-    for darknessremoval and fog removal
-   foggy: http://www.52hutu.com/show.aspx?ID=63243197086078125081
-   - add halo filter  for alpha
-  - finish magnifier
-- downloader
-  - change to use qtreeview to indicate connection status
-  - able to download normal file
-  - color diff type of task according to its state
-  - FIXME: downloading get banned
-    - sleep 5 seconds and try again
-  - finally, port downloader UI back to player for stream multiple files at the same time
-- player
-  - add icon for replay with sth like an undo icon
-  - mosaic deconvolution: CLEAN algorithm
-    http://en.wikipedia.org/wiki/CLEAN_(algorithm)
-    http://www.mrao.cam.ac.uk/yerac/gueth/gueth.html
-  - face recognition
-    http://www.morethantechnical.com/2009/03/05/qt-opencv-combined-for-face-detecting-qwidgets/
-    facedetect.c sample
-    use face recognition as the step to recognize real object
-  - add support for tudou
-- player
-  - rewrite makeActions
-  - Black UI stylesheet
-    http://thesmithfam.org/blog/2009/09/17/qt-stylesheets-button-bar-tutorial/
-- Windows
-  - improve annotation effects for game goei2
-
+#
 - improve server
   - use JSP and a simpler HTML5 webpage
   - add SNS
@@ -102,7 +45,120 @@ http://db.tt/SrtkzxIJ
     - mms
   - nicovideo
 
+# 0.1.6.0 -- last stable
+
+# Server
+- server
+  - backup mysql to my own machine
+  http://sqlserver2000.databases.aspfaq.com/how-should-i-store-an-ip-address-in-sql-server.html
+  - tracking IP for each annotation
+  - tracking IP for each user login ( getUser)
+  - relatedAnnotation also consider token.sourceURL
+  - FIXME: duplicated aliasname in database
+  - change DNS server to Japan
+
+# Game
+- windows xp
+  copy goei2 to mac
+  - continue translation on Mac OS X
+- windows
+  - improve annotation effects for game goei2
+- continue appcloud project everyday
+- continue game translation everyday
+
+# Player GUI
+- common windows
+  - improve player/browser/downloader icon
+  - add icon for replay
+- module
+  - rename qtext to sth else, replace namespace with prefix
+- player annot
+  - deal with the scenario when there are too many annotations
+- player prefs windows
+  - preferences for windows
+    - make association changable
+- player UI
+  - eliminate osdwindow
+    - eliminate annotationview from osdwindow
+    - eliminate embeddedPlayer from osdwindow
+  - using setAttribute(Qt::WA_TranslucentBackground);
+    - use a qobject with timer for tracking rather than hardcode to annotationview
+    - stand alone
+      embeddedplayer
+      annotationview
+      rather than a global osdwindow
+  - reduce embedded player's bottom margin
+  - FIXME: annotation item's toolTip does not work
+    need to directly send event from OsdWindow to annotationGraphicsView wihout recursivecall
+    the best way is to eliminiate OsdWindow
+  - Black UI stylesheet
+    http://thesmithfam.org/blog/2009/09/17/qt-stylesheets-button-bar-tutorial/
+    - steal style from Youtube
+      with transparent black
+    - volume slider, only hover to show
+  - move volume to the left, make it longer iff when hover
+  - double click screen to pause
+    - after pause, show two big button: resume, and fullscreen
+  - when write annot, able to chang annot color easily
+- player/download@mac
+  figure out which thread is consuming so much cpu
+  http://doc.qt.nokia.com/qtcreator-2.3/creator-cache-profiler.html
+  http://www.folding-hyperspace.com/program_tip_14.htm
+
+# DOWNLOAD
+# - Multiple task
+# - GUI
+- downloader
+  - merge mrldownloadtask with vlchttpplugin
+    make vlchttp abble to swiitch current process
+  - change to use qtreeview to indicate connection status
+  - able to download normal file
+  - color diff type of task according to its state
+  - finally, port downloader UI back to player for stream multiple files at the same time
+  - try to download from youtube
+    - try querying redirectURL before querying Error
+- player
+  - debug youku second part get banned issue
+    the second part always get banned
+- player
+  - able to stream more than one movie at the sametime
+    - normalize vlchttpplugin,
+      create a wrapper for downloadtask
+  - add an icon for reply with sth like an undo icon
+- player
+  - rewrite makeActions
+  - removeEventListener on mouseHook & osdwindow, use QObject::event and QCoreApplication::sendEvent
+- downloader
+  - FIXME: no speed if hide
+
+# DIP
+- player
+  - add unsharp masking (USM) and exposure correction
+  See: http://stackoverflow.com/questions/2938162/how-does-an-unsharp-mask-work
+    http://www.ephotozine.com/article/how-to-remove-fog-from-a-photo-in-photoshop-14809
+  - play a movie, to figure out best value
+    for darknessremoval and fog removal
+   foggy: http://www.52hutu.com/show.aspx?ID=63243197086078125081
+   - add halo filter  for alpha
+  - finish magnifier
+- player
+  - mosaic deconvolution: CLEAN algorithm
+    http://en.wikipedia.org/wiki/CLEAN_(algorithm)
+    http://www.mrao.cam.ac.uk/yerac/gueth/gueth.html
+    TODO: DV-007s @ 秋葉原
+  - face recognition
+    http://www.morethantechnical.com/2009/03/05/qt-opencv-combined-for-face-detecting-qwidgets/
+    facedetect.c sample
+    use face recognition as the step to recognize real object
+  - add support for tudou
+
 # client
+- Windows XP
+  - FIXME: player flashing in coherence mode
+  - flashing in full screen mode!
+- player
+  - able to seek anywhere
+  - able to resume in mms mode
 - windows
   - migrate to ith3
     inject.cc => ihf/main.cpp

@@ -331,10 +331,10 @@ ProcessView::detachProcess()
 
 // - Events -
 
-void ProcessView::dragEnterEvent(QDragEnterEvent *event)     { emit dragEnterEventReceived(event); }
-void ProcessView::dragMoveEvent(QDragMoveEvent *event)       { emit dragMoveEventReceived(event); }
-void ProcessView::dragLeaveEvent(QDragLeaveEvent *event)     { emit dragLeaveEventReceived(event); }
-void ProcessView::dropEvent(QDropEvent *event)               { emit dropEventReceived(event); }
+//void ProcessView::dragEnterEvent(QDragEnterEvent *event)     { emit dragEnterEventReceived(event); }
+//void ProcessView::dragMoveEvent(QDragMoveEvent *event)       { emit dragMoveEventReceived(event); }
+//void ProcessView::dragLeaveEvent(QDragLeaveEvent *event)     { emit dragLeaveEventReceived(event); }
+//void ProcessView::dropEvent(QDropEvent *event)               { emit dropEventReceived(event); }
 
 void
 ProcessView::setCurrentItemAttached(bool attached)

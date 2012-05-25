@@ -15,6 +15,7 @@
 
 BufferedRemoteStream::~BufferedRemoteStream()
 {
+  // Because careful: if nam is deleted before this, reply_ will become invalid.
   if (reply_ && reply_->isRunning()) {
     reply_->abort();
     reply_->deleteLater();
@@ -193,6 +194,7 @@ BufferedRemoteStream::waitForFinished()
   QEventLoop loop;
   connect(reply_, SIGNAL(finished()), &loop, SLOT(quit()));
   connect(this, SIGNAL(stopped()), &loop, SLOT(quit()));
+  connect(this, SIGNAL(finished()), &loop, SLOT(quit()));
   loop.exec();
   DOUT("exit");
 }
@@ -212,6 +214,8 @@ BufferedRemoteStream::waitForReadyRead()
   connect(reply_, SIGNAL(readyRead()), &loop, SLOT(quit()));
   connect(reply_, SIGNAL(finished()), &loop, SLOT(quit()));
   connect(this, SIGNAL(stopped()), &loop, SLOT(quit()));
+  connect(this, SIGNAL(finished()), &loop, SLOT(quit()));
+  connect(this, SIGNAL(readyRead()), &loop, SLOT(quit()));
   loop.exec();
   DOUT("exit");
 }

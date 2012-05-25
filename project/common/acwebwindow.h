@@ -19,8 +19,12 @@ class AcWebWindow : public AcMainWindow
 public:
   explicit AcWebWindow(QWidget *parent = 0, Qt::WindowFlags f = 0);
 
+  // - Properties -
+public:
   QWebView *webView() const; ///< central widget
+  void setCacheDirectory(const QString &path);
 
+public:
   virtual bool event(QEvent *event); ///< \override
 };
 

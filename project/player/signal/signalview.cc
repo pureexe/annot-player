@@ -24,7 +24,7 @@ SignalView::SignalView(QWidget *parent)
 {
   setWindowTitle(TR(T_TITLE_SIGNALVIEW));
   setContentsMargins(0, 0, 0, 0);
-  setAcceptDrops(true);
+  //setAcceptDrops(true);
 
   createLayout();
 }
@@ -35,9 +35,9 @@ SignalView::createLayout()
   AcUi *ui = AcUi::globalInstance();
 
   // Views
-  processView_ = new ProcessView;
-  messageView_ = new MessageView;
-  //tokenView_ = new TokenView;
+  processView_ = new ProcessView(this);
+  messageView_ = new MessageView(this);
+  //tokenView_ = new TokenView(this);
 
   processView_->setWindowFlags(Qt::Widget);
   messageView_->setWindowFlags(Qt::Widget);
@@ -84,15 +84,15 @@ SignalView::createLayout()
   connect(processView_, SIGNAL(attached(ProcessInfo)), messageView_, SLOT(setProcessNameFromProcessInfo(ProcessInfo)));
   connect(processView_, SIGNAL(detached(ProcessInfo)), messageView_, SLOT(clearProcessName()));
 
-  connect(messageView_, SIGNAL(dragEnterEventReceived(QDragEnterEvent*)), SLOT(dragEnterEvent(QDragEnterEvent*)));
-  connect(messageView_, SIGNAL(dragLeaveEventReceived(QDragLeaveEvent*)), SLOT(dragLeaveEvent(QDragLeaveEvent*)));
-  connect(messageView_, SIGNAL(dragMoveEventReceived(QDragMoveEvent*)), SLOT(dragMoveEvent(QDragMoveEvent*)));
-  connect(messageView_, SIGNAL(dropEventReceived(QDropEvent*)), SLOT(dropEvent(QDropEvent*)));
+  //connect(messageView_, SIGNAL(dragEnterEventReceived(QDragEnterEvent*)), SLOT(dragEnterEvent(QDragEnterEvent*)));
+  //connect(messageView_, SIGNAL(dragLeaveEventReceived(QDragLeaveEvent*)), SLOT(dragLeaveEvent(QDragLeaveEvent*)));
+  //connect(messageView_, SIGNAL(dragMoveEventReceived(QDragMoveEvent*)), SLOT(dragMoveEvent(QDragMoveEvent*)));
+  //connect(messageView_, SIGNAL(dropEventReceived(QDropEvent*)), SLOT(dropEvent(QDropEvent*)));
 
-  connect(processView_, SIGNAL(dragEnterEventReceived(QDragEnterEvent*)), SLOT(dragEnterEvent(QDragEnterEvent*)));
-  connect(processView_, SIGNAL(dragLeaveEventReceived(QDragLeaveEvent*)), SLOT(dragLeaveEvent(QDragLeaveEvent*)));
-  connect(processView_, SIGNAL(dragMoveEventReceived(QDragMoveEvent*)), SLOT(dragMoveEvent(QDragMoveEvent*)));
-  connect(processView_, SIGNAL(dropEventReceived(QDropEvent*)), SLOT(dropEvent(QDropEvent*)));
+  //connect(processView_, SIGNAL(dragEnterEventReceived(QDragEnterEvent*)), SLOT(dragEnterEvent(QDragEnterEvent*)));
+  //connect(processView_, SIGNAL(dragLeaveEventReceived(QDragLeaveEvent*)), SLOT(dragLeaveEvent(QDragLeaveEvent*)));
+  //connect(processView_, SIGNAL(dragMoveEventReceived(QDragMoveEvent*)), SLOT(dragMoveEvent(QDragMoveEvent*)));
+  //connect(processView_, SIGNAL(dropEventReceived(QDropEvent*)), SLOT(dropEvent(QDropEvent*)));
 
   //connect(tokenView_, SIGNAL(dragEnterEventReceived(QDragEnterEvent*)), SLOT(dragEnterEvent(QDragEnterEvent*)));
   //connect(tokenView_, SIGNAL(dragLeaveEventReceived(QDragLeaveEvent*)), SLOT(dragLeaveEvent(QDragLeaveEvent*)));
@@ -128,9 +128,9 @@ SignalView::setVisible(bool visible)
   Base::setVisible(visible);
 }
 
-void SignalView::dragEnterEvent(QDragEnterEvent *event)     { emit dragEnterEventReceived(event); }
-void SignalView::dragMoveEvent(QDragMoveEvent *event)       { emit dragMoveEventReceived(event); }
-void SignalView::dragLeaveEvent(QDragLeaveEvent *event)     { emit dragLeaveEventReceived(event); }
-void SignalView::dropEvent(QDropEvent *event)               { emit dropEventReceived(event); }
+//void SignalView::dragEnterEvent(QDragEnterEvent *event)     { emit dragEnterEventReceived(event); }
+//void SignalView::dragMoveEvent(QDragMoveEvent *event)       { emit dragMoveEventReceived(event); }
+//void SignalView::dragLeaveEvent(QDragLeaveEvent *event)     { emit dragLeaveEventReceived(event); }
+//void SignalView::dropEvent(QDropEvent *event)               { emit dropEventReceived(event); }
 
 // EOF

@@ -8,7 +8,6 @@
 #include <QtGui/QGraphicsTextItem>
 
 QT_BEGIN_NAMESPACE
-class QAction;
 class QContextMenuEvent;
 //class QGraphicsView;
 class QGraphicsScene;
@@ -52,12 +51,14 @@ public:
   Annotation &annotation() { return annot_; }
 
   void setAnnotation(const Annotation &annot);
-  void invalidateAnnotation();
+  void updateText();
+  void updateToolTip();
 
   const QString &richText() const { return richText_; } ///< tidied HTML
 
-  bool autoDelete() const { return autoDelete_; }
-  bool isMetaVisible() const { return metaVisible_; }
+  bool autoDelete() const { return !scene(); }
+  bool isMetaVisible() const;
+  bool isDragging() const;
 
   ///  Override
   virtual int type() const { return AnnotationGraphicsItemType; }
@@ -72,17 +73,17 @@ public:
 
   bool isSubtitle() const { return style_ == SubtitleStyle; }
 
-  QString abstract() const;
+  QString summary() const;
 
   QPointF relativePos() const { return pos() - origin_; }
 
   qreal opacity() const;
 
 protected:
-  QString meta() const;
+  void updateMeta();
 
   //QString parse(const QString &text);
-  static bool isSubtitle(const QString &text);
+  //static bool isSubtitle(const QString &text);
 
 public slots:
   void setMetaVisible(bool t) { metaVisible_ = t; }
@@ -92,6 +93,7 @@ public slots:
   void setScale(qreal value) { Base::setScale(value); }
   void showMe();   // Add me to graphics scene, and autmatic remove me.
   void selectMe();
+  void analyzeMe();
 
   void reset();
   void pause();
@@ -135,6 +137,9 @@ protected:
   void fadeIn(int msecs);
   void fadeOut(int msecs);
 
+  QPointF boundedToScene(const QPointF &pos) const;
+  QPointF reflected(const QPointF &pos) const;
+
   // Events:
 public:
   virtual void contextMenuEvent(QContextMenuEvent *event); ///< \override
@@ -159,10 +164,9 @@ private:
   int nextY(int visibleTime, Style style) const;
 
 private:
-  bool autoDelete_;
   bool metaVisible_;
   Annotation annot_;
-  mutable QString meta_; // cached
+  QString prefix_, suffix_; // cached
   QString text_; // cached
   AnnotationGraphicsEffect *effect_;
 

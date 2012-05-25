@@ -29,7 +29,7 @@ namespace { // anonymous
   {
     char **argv = new char*[args.size() + 1];
     char **p = argv;
-    foreach (QString s, args) {
+    foreach (const QString &s, args) {
       QByteArray c = s.toLocal8Bit();
       *p = new char[c.size() + 1];
       strncpy(*p, c.data(), c.size() + 1);
@@ -120,7 +120,7 @@ Mp4Box::muxMp4File(const QString &mp4, const QStringList &tracks,
   #define _qt(_path)      (_path)
 #endif // Q_OS_WIN
 
-  foreach (QString t, tracks) {
+  foreach (const QString &t, tracks) {
     QString path = _qs(t);
     if (path.isEmpty()) {
       DOUT("exit: invalid track path");

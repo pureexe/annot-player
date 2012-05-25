@@ -40,7 +40,7 @@ public slots:
   void stopAll();
   void removeAll();
   void refreshSchedule();
-  void setMaxThreadCount(int n) { threadCount_ = n; }
+  void setMaxThreadCount(int n);
 
 protected:
   QString normalizeUrl(const QString &url);

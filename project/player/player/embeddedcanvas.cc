@@ -4,6 +4,7 @@
 #include "embeddedcanvas.h"
 #include "datamanager.h"
 #include "signalhub.h"
+#include "annotationsettings.h"
 #include "module/player/player.h"
 #include "module/qtext/datetime.h"
 #include <QtGui>
@@ -21,7 +22,7 @@ enum { CanvasHeight = 160,
 // - Construction -
 
 EmbeddedCanvas::EmbeddedCanvas(DataManager *data, SignalHub *hub, Player *player, QWidget *parent)
-  : Base(parent), enabled_(true), data_(data), hub_(hub), player_(player), offset_(0)
+  : Base(parent), enabled_(true), data_(data), hub_(hub), player_(player)
 {
   Q_ASSERT(data_);
   Q_ASSERT(hub_);
@@ -29,6 +30,7 @@ EmbeddedCanvas::EmbeddedCanvas(DataManager *data, SignalHub *hub, Player *player
   setFixedHeight(0);
 
   connect(player_, SIGNAL(mediaChanged()), SLOT(clearUserIds()));
+  connect(AnnotationSettings::globalInstance(), SIGNAL(offsetChanged(int)), SLOT(invalidatePaint()));
 }
 
 // - Properties -
@@ -43,15 +45,6 @@ EmbeddedCanvas::setEnabled(bool t)
   enabled_ = t;
   emit enabledChanged(enabled_);
   setVisible(enabled_);
-}
-
-void
-EmbeddedCanvas::setOffset(qint64 secs)
-{
-  if (offset_ != secs) {
-    offset_ = secs;
-    invalidatePaint();
-  }
 }
 
 // - Events -
@@ -154,7 +147,8 @@ EmbeddedCanvas::paintHistogram(QPainter &painter, const QRect &view, const Annot
   if (hist.isEmpty())
     return;
 
-  int startX = offset_ * 1000/metric;
+  int offset = AnnotationSettings::globalInstance()->offset(); // in seconds
+  int startX = offset * 1000/metric;
 
   enum { TopCount = 3 };
   int top[TopCount] = { };

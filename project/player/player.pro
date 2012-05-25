@@ -1,7 +1,7 @@
 # player.pro
 # 6/30/2011
 
-VERSION = 0.1.5.5
+VERSION = 0.1.5.6
 
 DEFINES += PROJECT_PLAYER
 
@@ -103,6 +103,8 @@ HEADERS += \
     application.h \
     clipboardmonitor.h \
     eventlogger.h \
+    preferences.h \
+    preferences_p.h \
     mainwindow.h \
     mainwindow_p.h \
     settings.h \
@@ -110,12 +112,13 @@ HEADERS += \
     annot/annotationbrowser.h \
     annot/annotationeditor.h \
     annot/annotationfilter.h \
+    annot/annotationanalyticsview.h \
     annot/annotationgraphicseffect.h \
     annot/annotationgraphicsitem.h \
     annot/annotationgraphicsitempool.h \
     annot/annotationgraphicsview.h \
     annot/annotationgraphicsstyle.h \
-    annot/annotationanalyticsview.h \
+    annot/annotationsettings.h \
     annot/blacklistview.h \
     annot/blacklistview_p.h \
     annot/textformathandler.h \
@@ -175,6 +178,8 @@ SOURCES += \
     clipboardmonitor.cc \
     eventlogger.cc \
     main.cc \
+    preferences.cc \
+    preferences_p.cc \
     mainwindow.cc \
     settings.cc \
     tray.cc \
@@ -272,6 +277,23 @@ OTHER_FILES += \
     player.icns \
     rpm.spec
 
+AVATAR_FILES += \
+    avatars/user_0.jpg avatars/user_1.jpg avatars/user_2.jpg avatars/user_3.jpg avatars/user_4.jpg avatars/user_5.jpg avatars/user_6.jpg avatars/user_7.jpg avatars/user_8.jpg avatars/user_9.jpg \
+    avatars/user_10.jpg avatars/user_11.jpg avatars/user_12.jpg avatars/user_13.jpg avatars/user_14.jpg avatars/user_15.jpg avatars/user_16.jpg avatars/user_17.jpg avatars/user_18.jpg avatars/user_19.jpg \
+    avatars/user_20.jpg avatars/user_21.jpg avatars/user_22.jpg avatars/user_23.jpg avatars/user_24.jpg avatars/user_25.jpg avatars/user_26.jpg avatars/user_27.jpg avatars/user_28.jpg avatars/user_29.jpg \
+    avatars/user_30.jpg avatars/user_31.jpg avatars/user_32.jpg avatars/user_33.jpg avatars/user_34.jpg avatars/user_35.jpg avatars/user_36.jpg avatars/user_37.jpg avatars/user_38.jpg avatars/user_39.jpg \
+    avatars/user_40.jpg avatars/user_41.jpg avatars/user_42.jpg avatars/user_43.jpg avatars/user_44.jpg avatars/user_45.jpg avatars/user_46.jpg avatars/user_47.jpg avatars/user_48.jpg avatars/user_49.jpg \
+    avatars/user_50.jpg avatars/user_51.jpg avatars/user_52.jpg avatars/user_53.jpg avatars/user_54.jpg avatars/user_55.jpg avatars/user_56.jpg avatars/user_57.jpg avatars/user_58.jpg avatars/user_59.jpg \
+    avatars/user_60.jpg avatars/user_61.jpg avatars/user_62.jpg avatars/user_63.jpg avatars/user_64.jpg avatars/user_65.jpg avatars/user_66.jpg avatars/user_67.jpg avatars/user_68.jpg avatars/user_69.jpg \
+    avatars/user_70.jpg avatars/user_71.jpg avatars/user_72.jpg avatars/user_73.jpg avatars/user_74.jpg avatars/user_75.jpg avatars/user_76.jpg avatars/user_77.jpg avatars/user_78.jpg avatars/user_79.jpg \
+    avatars/user_80.jpg avatars/user_81.jpg avatars/user_82.jpg avatars/user_83.jpg avatars/user_84.jpg avatars/user_85.jpg avatars/user_86.jpg avatars/user_87.jpg avatars/user_88.jpg avatars/user_89.jpg \
+    avatars/user_90.jpg avatars/user_91.jpg avatars/user_92.jpg avatars/user_93.jpg avatars/user_94.jpg avatars/user_95.jpg avatars/user_96.jpg avatars/user_97.jpg avatars/user_98.jpg avatars/user_99.jpg \
+    avatars/user_100.jpg avatars/user_101.jpg avatars/user_102.jpg avatars/user_103.jpg avatars/user_104.jpg avatars/user_105.jpg avatars/user_106.jpg avatars/user_107.jpg avatars/user_108.jpg avatars/user_109.jpg \
+    avatars/user_110.jpg avatars/user_111.jpg avatars/user_112.jpg avatars/user_113.jpg avatars/user_114.jpg avatars/user_115.jpg avatars/user_116.jpg avatars/user_117.jpg avatars/user_118.jpg avatars/user_119.jpg \
+    avatars/user_120.jpg avatars/user_121.jpg avatars/user_122.jpg avatars/user_123.jpg avatars/user_124.jpg avatars/user_125.jpg avatars/user_126.jpg avatars/user_127.jpg avatars/user_128.jpg avatars/user_129.jpg \
+    avatars/user_130.jpg avatars/user_131.jpg avatars/user_132.jpg avatars/user_133.jpg avatars/user_134.jpg avatars/user_135.jpg
+DEFINES += AVATAR_USER_COUNT=136
+
 win32 {
     !wince*: LIBS += -lshell32
     RC_FILE += player.rc
@@ -312,6 +334,10 @@ unix:!mac {
     JSFDIR = $$DATADIR/annot/player/jsf
     jsf.path = $$JSFDIR
     jsf.files = $$JSF_FILES
+
+    AVATARDIR = $$DATADIR/annot/player/avatars
+    avatar.path = $$AVATARDIR
+    avatar.files = $$AVATAR_FILES
 }
 
 # EOF

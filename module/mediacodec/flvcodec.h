@@ -37,21 +37,22 @@ public slots:
   void stop(); ///< Stop all background tasks.
 
 public:
-  void demuxStream(InputStream *flv, OutputStream *aout, OutputStream *vout,
+  void demuxFlvStream(InputStream *flv, OutputStream *aout, OutputStream *vout,
                    MediaToc *atoc, MediaToc *vtoc, bool async = true);
-  void demuxStream(InputStream *flv, OutputStream *aout, OutputStream *vout, bool async = true)
-  { demuxStream(flv, aout, vout, 0, 0, async); }
+  void demuxFlvStream(InputStream *flv, OutputStream *aout, OutputStream *vout, bool async = true)
+  { demuxFlvStream(flv, aout, vout, 0, 0, async); }
 
-  void demuxStreams(const InputStreamList &flvs, const QList<qint64> &durations,
+  void demuxFlvStreams(const InputStreamList &flvs, const QList<qint64> &durations,
                     OutputStream *aout, OutputStream *vout,
                     MediaToc *atoc, MediaToc *vtoc, bool async = true);
-  void demuxStreams(const InputStreamList &flvs,
+  void demuxFlvStreams(const InputStreamList &flvs,
                     OutputStream *aout, OutputStream *vout, bool async = true);
 
-  void mergeStream(const InputStreamList &ins,  OutputStream *out, bool async = true);
+  void mergeFlvStreams(const InputStreamList &ins,  OutputStream *out, bool async = true);
+  static bool mergeFlvFiles(const QStringList &ins, const QString &out); // async = false
 
-  FlvMeta analyzeStream(InputStream *in);
-  FlvMeta analyzeStreams(const InputStreamList &ins);
+  FlvMeta analyzeFlvStream(InputStream *in);
+  FlvMeta analyzeFlvStreams(const InputStreamList &ins);
 
 public:
   static bool isFlvFile(const QString &fileName);

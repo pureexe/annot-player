@@ -4,7 +4,7 @@
 // aclocationprefs_p.h
 // 5/5/2012
 
-#include "project/common/acpreferences_p.h"
+#include "project/common/acpreferencestab.h"
 
 QT_FORWARD_DECLARE_CLASS(QComboBox)
 
@@ -19,6 +19,7 @@ class AcLocationPreferences : public AcPreferencesTab
   AcLocationManager *locationManager_;
 
   QComboBox *downloadsLocationEdit_;
+  QString downloadsLocationEditStyleSheet_;
 
 public:
   explicit AcLocationPreferences(AcSettings *settings, QWidget *parent = 0);

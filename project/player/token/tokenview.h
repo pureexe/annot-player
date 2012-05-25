@@ -22,6 +22,7 @@ QT_END_NAMESPACE
 class AcFilteredTableView;
 
 class AddAliasDialog;
+class DataManager;
 class ServerAgent;
 
 class TokenView : public AcWindow
@@ -56,7 +57,7 @@ protected:
   };
 
 public:
-  explicit TokenView(ServerAgent *server, QWidget *parent = 0);
+  TokenView(DataManager *data, ServerAgent *server, QWidget *parent = 0);
 
   //qint64 userId() const;
   //void setUserId(qint64 uid);
@@ -78,6 +79,7 @@ protected:
 
   // - Slots -
 public slots:
+  void refresh();
   void setToken(const Token &token);
   void clearToken(); ///< Clear token
 
@@ -96,23 +98,24 @@ public slots:
 public:
   virtual void setVisible(bool visible); ///< \override
 protected slots:
+  void setActive(bool t);
   void updateTokenLabels();
 
   void submitAlias(const QString &alias, int type, qint32 language);
 
 protected slots:
-  virtual void dragEnterEvent(QDragEnterEvent *event); ///< \override
-  virtual void dragMoveEvent(QDragMoveEvent *event); ///< \override
-  virtual void dragLeaveEvent(QDragLeaveEvent *event); ///< \override
-  virtual void dropEvent(QDropEvent *event); ///< \override
-
   virtual void contextMenuEvent(QContextMenuEvent *event); ///< \override
 
-signals:
-  void dragEnterEventReceived(QDragEnterEvent *event);
-  void dragMoveEventReceived(QDragMoveEvent *event);
-  void dragLeaveEventReceived(QDragLeaveEvent *event);
-  void dropEventReceived(QDropEvent *event);
+//  virtual void dragEnterEvent(QDragEnterEvent *event); ///< \override
+//  virtual void dragMoveEvent(QDragMoveEvent *event); ///< \override
+//  virtual void dragLeaveEvent(QDragLeaveEvent *event); ///< \override
+//  virtual void dropEvent(QDropEvent *event); ///< \override
+
+//signals:
+//  void dragEnterEventReceived(QDragEnterEvent *event);
+//  void dragMoveEventReceived(QDragMoveEvent *event);
+//  void dragLeaveEventReceived(QDragLeaveEvent *event);
+//  void dropEventReceived(QDropEvent *event);
 
   // - Format -
 protected:
@@ -140,7 +143,9 @@ private:
   void createContextMenu();
 
 private:
+  DataManager *data_;
   ServerAgent *server_;
+  bool active_;
   //qint64 userId_;
   QStandardItemModel *sourceModel_; // for alias
   QSortFilterProxyModel *proxyModel_;

@@ -1,5 +1,6 @@
 #ifndef _VLCCORE_VIDEO_H
 #define _VLCCORE_VIDEO_H
+
 // vlccore/video.h
 // 11/26/2011
 
@@ -26,7 +27,7 @@ struct vout_thread_t;
 
 #ifdef Q_WS_WIN
 #  define libvlc_media_player_get_drawable(_mp)         libvlc_media_player_get_hwnd(_mp)
-#elif defined(Q_WS_MAC)
+#elif defined Q_WS_MAC
 //#  define libvlc_media_player_get_drawable(_mp)         libvlc_media_player_get_agl(_mp)
 #  define libvlc_media_player_get_drawable(_mp)         libvlc_media_player_get_nsobject(_mp)
 #else //Linux

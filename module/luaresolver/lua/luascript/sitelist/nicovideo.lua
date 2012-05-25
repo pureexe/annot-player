@@ -10,7 +10,7 @@ require "lalib"
 local nico_sublice_num = 2000; -- change this to set how many comments you will download for one video.
 
 --[[parse single nico url]]
-function getTaskAttribute_nico ( str_url, str_tmpfile , pDlg)
+function getTaskAttribute_nico ( str_url, str_tmpfile , pDlg, bSubOnly)
   local IsAutoLogin;
   if g_nicovideo_login then
     IsAutoLogin = SUCCESS;
@@ -55,7 +55,9 @@ function getTaskAttribute_nico ( str_url, str_tmpfile , pDlg)
   --local nico_proxy_url = "http://nico.galstars.net/?t=www&u=/watch/"..str_id;
   --local nico_proxy_url = "http://sakuradite.com/nico/www/watch/"..str_id;
   local nico_proxy_url = "http://210.175.52.140/nico/www/watch/"..str_id;
-  re = dlFile(str_tmpfile, nico_proxy_url); -- bypass banning
+  --if bSubOnly then
+  --  re = dlFile(str_tmpfile, nico_url);
+    re = dlFile(str_tmpfile, nico_proxy_url); -- bypass banning
   --if re ~= 0 then
   --  re = dlFile(str_tmpfile, nico_url); -- redundant, in case galstars.net is down
   --end

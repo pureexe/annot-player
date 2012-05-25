@@ -30,7 +30,7 @@ BacklogDialog::createLayout()
 {
   AcUi *ui = AcUi::globalInstance();
 
-  tabView_ = new TextEditTabView;
+  tabView_ = new TextEditTabView(this);
   tabView_->addTab(tr("Annot"));
   tabView_->addTab(tr("Subtitle"));
   tabView_->addTab(tr("Text"));

@@ -65,7 +65,11 @@ public:
   bool isSubtitleVisible() const { return subtitleVisible_; }
   bool isNonSubtitleVisible() const { return nonSubtitleVisible_; }
 
+  bool isItemCountLimited() const { return itemCountLimited_; }
+
 signals:
+  void annotationSkipped();
+  void itemCountLimitedChanged(bool t);
   void itemMetaVisibleChanged(bool t);
   void selectedUserId(qint64 uid);
   void selectedUserIds(const QList<qint64> &ids);
@@ -146,13 +150,19 @@ public slots:
   virtual void setVisible(bool visible); ///< \override stop polling when hidden
 
 public:
-
   // Implement event listener.
   virtual void sendContextMenuEvent(QContextMenuEvent *event); ///< \override
   virtual void sendMouseMoveEvent(QMouseEvent *event); ///< \override
   virtual void sendMousePressEvent(QMouseEvent *event); ///< \override
   virtual void sendMouseReleaseEvent(QMouseEvent *event); ///< \override
   virtual void sendMouseDoubleClickEvent(QMouseEvent *event); ///< \override
+
+protected:
+  //virtual void contextMenuEvent(QContextMenuEvent *event); ///< \override
+  //virtual void mouseMoveEvent(QMouseEvent *event); ///< \override
+  //virtual void mousePressEvent(QMouseEvent *event); ///< \override
+  //virtual void mouseReleaseEvent(QMouseEvent *event); ///< \override
+  //virtual void mouseDoubleClickEvent(QMouseEvent *event); ///< \override
 
 protected:
   void connectPlayer();
@@ -180,7 +190,7 @@ signals:
 
 public:
   bool isPaused() const { return paused_; }
-  qint64 offset() const { return offset_; } ///< in seconds
+  int offset() const { return offset_; } ///< in seconds
 signals:
   void paused();
   void resumed();
@@ -227,14 +237,14 @@ public slots:
   void setItemVisible(bool visible)
   { emit itemVisibleChanged( itemVisible_ = visible); }
 
-  void setScale(qreal value);
-  void resetScale() { setScale(1.0); }
+  void setItemCountLimited(bool t)
+  { emit itemCountLimitedChanged(itemCountLimited_ = t); }
 
-  void setOffset(qint64 secs) { emit offsetChanged(offset_ = secs); }
-  void resetOffset() { setOffset(0); }
+  void setScale(qreal value);
+
+  void setOffset(int secs) { emit offsetChanged(offset_ = secs); }
 
   void setRotation(qreal value);
-  void resetRotation() { setRotation(0); }
 
   void setInterval(int msecs) {  interval_ = msecs; Q_ASSERT(interval_ >= 1000); } // at least 1 secons
   void start();
@@ -261,7 +271,7 @@ public slots:
 
   // Stream control
   void updateCurrentTime();
-  void invalidateAnnotations();       // reset annotations from database!
+  void invalidateAnnotations();
 
   void pause();
   void resume();
@@ -344,6 +354,7 @@ private:
   bool fullScreen_;
   bool subtitleVisible_, nonSubtitleVisible_;
   bool metaVisible_;
+  bool itemCountLimited_;
 
   QString subtitlePrefix_;
 
@@ -370,6 +381,7 @@ private:
   bool hoveredItemPaused_, hoveredItemResumed_, hoveredItemRemoved_,
        nearbyItemExpelled_, nearbyItemAttracted_;
   bool itemVisible_;
+  bool dragging_;
 };
 
 #endif // ANNOTATIONGRAPHICSViEW_H

@@ -6,6 +6,7 @@
 #  include "module/imagefilter/darknessimagefilter.h"
 #  include "module/imagefilter/fogimagefilter.h"
 #  include "module/imagefilter/rippleimagefilter.h"
+//#  include "module/imagefilter/glassimagefilter.h"
 #endif // WITH_MODULE_IMAGEFILTER
 #ifdef WITH_MODULE_ANIMATION
 #  include "module/animation/fadeanimation.h"
@@ -37,7 +38,7 @@ Magnifier::Magnifier(QWidget *parent)
   setWindowTitle(tr("Magnifier"));
 
   // See: http://stackoverflow.com/questions/1333610/displaying-translucent-irregular-shaped-windows-with-qt
-  //setAttribute(Qt::WA_TranslucentBackground);
+  setAttribute(Qt::WA_TranslucentBackground);
 
   resize(DEFAULT_SIZE);
 
@@ -53,6 +54,12 @@ Magnifier::Magnifier(QWidget *parent)
   darknessFilter_ = new DarknessImageFilter(this);
   fogFilter_ = new FogImageFilter(this);
   rippleFilter_ = new RippleImageFilter(this);
+
+  //glassFilter_ = new GlassImageFilter(this); {
+  //  QRect r = rect();
+  //  glassFilter_->setCenter(r.center());
+  //  glassFilter_->setRadius(qMin(r.width()/2, r.height()/2));
+  //}
 #endif // WITH_MODULE_IMAGEFILTER
 
   QGraphicsDropShadowEffect *e = new QGraphicsDropShadowEffect; {
@@ -83,6 +90,7 @@ void
 Magnifier::fadeOut()
 {
   if (isVisible()) {
+    repaintTimer_->stop();
 #ifdef WITH_MODULE_ANIMATION
     if (!fadeAni_)
       fadeAni_ = new FadeAnimation(this, "windowOpacity", this);
@@ -111,13 +119,14 @@ Magnifier::setVisible(bool visible)
     if (fadeAni_ && fadeAni_->state() != QAbstractAnimation::Stopped)
       fadeAni_->stop();
 #endif // WITH_MODULE_ANIMATION
-#ifdef WITH_MODULE_IMAGEFILTER
-    rippleFilter_->clearCenter();
-#endif // WITH_MODULE_IMAGEFILTER
   }
   Base::setVisible(visible);
   if (visible)
     repaint();
+#ifdef WITH_MODULE_IMAGEFILTER
+  else
+    rippleFilter_->clear();
+#endif // WITH_MODULE_IMAGEFILTER
 }
 
 void
@@ -136,7 +145,8 @@ Magnifier::paintEvent(QPaintEvent *e)
   QPixmap pm = QPixmap::grabWindow(w_->winId(), r.x(), r.y(), r.width(), r.height());
   if (pm.isNull())
     return;
-  pm = pm.scaled(size());
+  if (size() != pm.size())
+    pm = pm.scaled(size());
 
   QPainter painter(this);
 #ifdef WITH_MODULE_IMAGEFILTER
@@ -169,6 +179,7 @@ Magnifier::contextMenuEvent(QContextMenuEvent *event)
 #ifdef WITH_MODULE_IMAGEFILTER
   if (!contextMenu_) {
     contextMenu_ = new QMenu(this);
+    //AcUi::globalInstance()->setContextMenuStyle(m, false); // persistent = false
     contextMenu_->addAction(fogFilterAct_);
     contextMenu_->addAction(darknessFilterAct_);
     contextMenu_->addAction(mosaicFilterAct_);

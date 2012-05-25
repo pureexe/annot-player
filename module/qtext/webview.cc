@@ -355,9 +355,12 @@ QMenu*
 QtExt::
 WebView::createHistoryMenu()
 {
+  DOUT("enter");
   QWebHistory *h = history();
-  if (!h || h->count() <= 1)
+  if (!h || h->count() <= 1) {
+    DOUT("exit: no history");
     return 0;
+  }
 
   QList<QWebHistoryItem> items = h->items();
 
@@ -365,6 +368,8 @@ WebView::createHistoryMenu()
   int i = 0;
   QList<QAction *> actions;
   foreach (const QWebHistoryItem &item, items) {
+    if (!item.isValid())
+      continue;
     ActionWithId *a = new ActionWithId(i++, m);
     a->setCheckable(true);
     a->setChecked(item.url() == url());
@@ -372,24 +377,34 @@ WebView::createHistoryMenu()
     if (u.isEmpty())
       u = item.url();
     QString text;
-    if (!u.isEmpty())
-      text = u.toString(QUrl::RemoveAuthority | QUrl::RemoveFragment | QUrl::StripTrailingSlash);
-    else
+    if (!u.isEmpty()) {
+      text = u.toString(QUrl::RemoveUserInfo | QUrl::StripTrailingSlash);
+      text.remove(QRegExp("^http://"));
+    } else
       text = tr("Blank");
+    a->setStatusTip(text);
     text.prepend(QString::number(i) + ". ");
-    a->setText(text);
-    a->setIcon(item.icon());
+    a->setText(shortenText(text));
+    //a->setIcon(item.icon()); // FIXME: Randomly CRASH on Qt 4.7.4 and Qt 4.8.1
     connect(a, SIGNAL(triggeredWithId(int)), SLOT(goToRecent(int)));
     actions.append(a);
   }
-  m->addActions(revertList(actions));
+  if (actions.size() <= 1) {
+    delete m;
+    return 0;
+  }
+  m->addActions(QtExt::revertList(actions));
+  DOUT("exit");
   return m;
 }
 
-QMenu*
+void
 QtExt::
-WebView::createContextMenu()
+WebView::contextMenuEvent(QContextMenuEvent *event)
 {
+  Q_ASSERT(event);
+  updateHoveredLink();
+
   QMenu *m = page()->createStandardContextMenu();
   //QAction *a;
   //if (a = page()->action(QWebPage::ReloadAndBypassCache))
@@ -397,7 +412,6 @@ WebView::createContextMenu()
   m->addSeparator();
   QMenu *history = createHistoryMenu();
   if (history) {
-    history->setParent(this);
     m->addMenu(history);
     m->addSeparator();
   }
@@ -409,7 +423,12 @@ WebView::createContextMenu()
   m->addAction(zoomOutAct);
   m->addSeparator();
   m->addAction(openWithOperatingSystemAct);
-  return m;
+
+  m->exec(event->globalPos());
+  delete m;
+  if (history)
+    delete history;
+  event->accept();
 }
 
 // - Events -
@@ -439,19 +458,6 @@ WebView::gestureEvent(QGestureEvent *e)
   else if (QGesture *pinch = e->gesture(Qt::PinchGesture))
     pinchGesture(static_cast<QPinchGesture *>(pinch));
   DOUT("exit");
-}
-
-void
-QtExt::
-WebView::contextMenuEvent(QContextMenuEvent *event)
-{
-  Q_ASSERT(event);
-  updateHoveredLink();
-  QMenu *m = createContextMenu();
-  //m->setParent(this);
-  m->exec(event->globalPos());
-  delete m;
-  event->accept();
 }
 
 void

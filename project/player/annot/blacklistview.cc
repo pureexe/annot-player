@@ -79,9 +79,9 @@ BlacklistView::createTabs()
 
   // Tab layout
 
-  textTab_ = new TextFilterView;
-  userTab_ = new UserFilterView;
-  annotationTab_ = new AnnotationFilterView;
+  textTab_ = new TextFilterView(this);
+  userTab_ = new UserFilterView(this);
+  annotationTab_ = new AnnotationFilterView(this);
 
   stackedLayout_ = new QStackedLayout; {
     // Must be consistent with enum Tab.

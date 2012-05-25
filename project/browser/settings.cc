@@ -144,7 +144,7 @@ QList<QUrl>
 Settings::closedUrls() const
 {
   QList<QUrl> ret;
-  foreach (QVariant v, value(SK_RECENTCLOSED).toList()) {
+  foreach (const QVariant &v, value(SK_RECENTCLOSED).toList()) {
     QUrl url = v.toUrl();
     if (!url.isEmpty())
       ret.append(url);

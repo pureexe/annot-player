@@ -2,6 +2,7 @@
 // 10/10/2011
 
 #include "grabber.h"
+#include "module/qtext/filesystem.h"
 #include <QtGui>
 
 // - Constructions -
@@ -9,25 +10,20 @@
 Grabber::Grabber(QObject *parent)
   : Base(parent)
 {
-  savePath_ = QDir::homePath();
-  baseName_ = tr("unknown");
+  savePath_ = QDesktopServices::storageLocation(QDesktopServices::DesktopLocation);
+  baseName_ = tr("Unknown");
 }
 
-const QString&
-Grabber::baseName() const
-{ return baseName_; }
-
-const QString&
-Grabber::savePath() const
-{ return savePath_; }
+// - Properties -
 
 void
 Grabber::setBaseName(const QString &name)
-{ baseName_ = name; }
-
-void
-Grabber::setSavePath(const QString &path)
-{ savePath_ = path; }
+{
+  if (name.isEmpty())
+    baseName_ = tr("Unknown");
+  else
+    baseName_ = QtExt::escapeFileName(name);
+}
 
 // - Actions -
 
@@ -45,7 +41,12 @@ Grabber::grabWindow(WId winId)
 
   QString ts = QDateTime::currentDateTime().toString("-yyyy-mm-dd-hh-mm-ss");
   QString file = QString("%1/%2%3.png").arg(savePath_).arg(baseName_).arg(ts);
-  pm.save(file, "png");
+  bool ok = pm.save(file, "png");
+
+  if (ok)
+    emit message(tr("file saved") + ": " + file);
+  else
+    emit warning(tr("failed to save file") + ": " + file);
 }
 
 // EOF

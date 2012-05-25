@@ -4,8 +4,8 @@
 // annotationgraphicsitempool.h
 // 5/4/2012
 
-#include <QtCore/QHash>
 #include <QtCore/QObject>
+#include <QtCore/QStack>
 
 class AnnotationGraphicsItem;
 
@@ -23,12 +23,14 @@ public:
   typedef AnnotationGraphicsItem value_type;
 
   AnnotationGraphicsItemPool(AnnotationGraphicsView *view, DataManager *data, SignalHub *hub, QObject *parent = 0)
-    : Base(parent), view_(view), data_(data), hub_(hub) { }
+    : Base(parent), capacity_(0),
+      view_(view), data_(data), hub_(hub) { }
 
   ~AnnotationGraphicsItemPool() { clear(); }
 
 public:
-  int capacity() const { return used_.size(); }
+  int capacity() const { return capacity_; }
+  int size() const { return capacity_ - stack_.size(); }
   void reserve(int size);
   void clear();
 public:
@@ -36,12 +38,15 @@ public:
   void release(value_type *item);
 
 protected:
-  value_type *create() const;
+  value_type *create();
 
 private:
-  typedef QHash<value_type *, bool> Hash;
-  Hash used_;
+  //typedef QHash<value_type *, bool> Hash;
+  //Hash used_;
+  typedef QStack<value_type *> stack_t;
+  stack_t stack_;
 
+  int capacity_;
   mutable AnnotationGraphicsView *view_;
   mutable DataManager *data_;
   mutable SignalHub *hub_;

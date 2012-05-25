@@ -10,7 +10,6 @@ QT_FORWARD_DECLARE_CLASS(QTimer)
 QT_FORWARD_DECLARE_CLASS(QToolButton)
 
 class DataManager;
-class AnnotationGraphicsView;
 class EmbeddedCanvas;
 class EmbeddedInfoView;
 
@@ -23,7 +22,7 @@ class EmbeddedPlayerUi : public PlayerUi
 
 public:
   explicit EmbeddedPlayerUi(SignalHub *hub, Player *player, ServerAgent *server,
-                            DataManager *data, AnnotationGraphicsView *annot, QWidget *parent = 0);
+                            DataManager *data, QWidget *parent = 0);
 
 signals:
   void fullScreenModeChanged(bool t);

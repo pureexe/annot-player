@@ -5,6 +5,7 @@
 #include "bilibilicodec.h"
 #include "module/annotcloud/annottag.h"
 #include "module/annotcloud/traits.h"
+#include "module/qtext/htmltag.h"
 #ifdef WITH_MODULE_COMPRESS
 #  include "module/compress/qgzip.h"
 #else
@@ -131,7 +132,7 @@ BilibiliCodec::parseDocument(const QByteArray &data)
 QString
 BilibiliCodec::parseText(const QString &text)
 {
-  return text.isEmpty() ? text : QString(text)
+  return text.isEmpty() ? text : ::html_escape(text)
     .replace("/n", "\n ")
     .trimmed();
 }

@@ -3,6 +3,7 @@
 #include "module/downloadtask/downloadtask.h"
 #include <QtCore/QDateTime>
 #include <QtCore/QDir>
+#include <QtCore/QEventLoop>
 #include <QtCore/QTimer>
 
 //#define DEBUG "downloadtask"
@@ -83,5 +84,19 @@ DownloadTask::updateProgress(qint64 receivedBytes, qint64 totalBytes)
   receivedSize_ = receivedBytes;
   progressUpdateTime_ = currentTime;
 }
+
+// - Actions -
+
+void
+DownloadTask::exec()
+{
+  QEventLoop l;
+  connect(this, SIGNAL(quited()), &l, SLOT(quit()));
+  l.exec();
+}
+
+void
+DownloadTask::quit()
+{ QTimer::singleShot(0, this, SIGNAL(quited())); }
 
 // EOF
