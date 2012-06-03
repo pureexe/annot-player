@@ -85,6 +85,7 @@ public slots:
   void updateUserButton();
   void updatePositionButton();
   void updateProgressButton();
+  void updateTraceWindowButton();
 
   void updatePlayButton();
   void updateStopButton();

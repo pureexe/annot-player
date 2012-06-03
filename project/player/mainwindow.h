@@ -130,6 +130,7 @@ public:
 
   // - Signals -
 signals:
+  void windowPicked(WId);
   void userIdChanged(qint64 uid);
   void posChanged();
   void openAnnotationUrlRequested(const QString &url);
@@ -191,6 +192,7 @@ public slots:
 
   void setTranslateEnabled(bool enabled);
   void translate(const QString &text);
+  void translate(const QString &text, int lang);
 
   void setWindowOnTop(bool t = true);
   void toggleWindowOnTop()
@@ -328,6 +330,8 @@ protected slots:
   void playMedia();
   void updateWindowSize();
 
+  void updateTraceButtons();
+
   void setRippleEnabled(bool t);
   void enableRipple() { setRippleEnabled(true); }
   void disableRipple() { setRippleEnabled(false); }
@@ -424,9 +428,10 @@ public slots:
   //void hideCommentView();
   //void setCommentViewVisible(bool visible);
 
-  void showWindowPickDialog();
+  void showWindowPickDialog() { setWindowPickDialogVisible(true); }
   void setWindowPickDialogVisible(bool visible);
 
+  void showProcessPickDialog() { setProcessPickDialogVisible(true); }
   void setProcessPickDialogVisible(bool visible);
 
   void setBacklogDialogVisible(bool visible);
@@ -623,6 +628,7 @@ public slots:
   void updatePlayerMode();
   void updateTokenMode();
   void updateWindowMode();
+  void updateOsdWindowOnTop();
 
   void invalidatePlayerMode();
 
@@ -714,6 +720,9 @@ public slots:
   void openProcessId(ulong pid);
 #endif // WITH_WIN_QTH
 
+public slots:
+  void setWindowTrackingEnabled(bool t);
+
 #ifdef USE_MODE_SIGNAL
 public slots:
   void showSignalView();
@@ -755,7 +764,7 @@ protected:
   bool isAliasReady(const QString &path) const;
 
   // - Search -
-protected:
+public slots:
   void searchWithEngine(int engine, const QString &key);
 protected slots:
   void searchCurrentTitleWithGoogle() { searchWithEngine(SearchEngineFactory::Google, currentTitle()); }
@@ -1051,6 +1060,7 @@ private:
           *toggleAnnotationAnalyticsViewVisibleAct_,
           *toggleAnnotationBandwidthLimitedAct_,
           *toggleAnnotationVisibleAct_,
+          *toggleAnnotationAvatarVisibleAct_,
           *toggleAnnotationCountDialogVisibleAct_,
           *toggleMagnifierVisibleAct_,
           *toggleMenuBarVisibleAct_,
@@ -1099,8 +1109,8 @@ private:
           *toggleLiveDialogVisibleAct_,
           *toggleLoginDialogVisibleAct_,
           //*toggleNetworkProxyDialogVisibleAct_,
-          *toggleWindowPickDialogVisibleAct_,
-          *toggleProcessPickDialogVisibleAct_,
+          *showWindowPickDialogAct_,
+          *showProcessDialogAct_,
           *toggleSeekDialogVisibleAct_,
           *toggleSyncDialogVisibleAct_,
           *toggleMediaInfoViewVisibleAct_,
@@ -1111,6 +1121,8 @@ private:
           *toggleConsoleDialogVisibleAct_,
           *toggleAnnotationFilterEnabledAct_;
           //*toggleCommentViewVisibleAct_,
+  QAction *toggleWindowTrackingAct_;
+  WId lastTrackedWindow_;
 
   QAction *toggleUserAnonymousAct_;
   QAction *openProxyBrowserAct_;

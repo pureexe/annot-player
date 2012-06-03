@@ -12,22 +12,12 @@
 
 // - Buttons -
 
-// Radio buttons
-
-#define SS_RADIOBUTTON_TEXT_(_color) \
-  SS_BEGIN(QRadioButton) \
-    SS_TRANSPARENT \
-    SS_COLOR(_color) \
-  SS_END \
-
-#define SS_RADIOBUTTON_TEXT     SS_RADIOBUTTON_TEXT_(blue)
-
 // Tool buttons
 
-#define SS_TOOLBUTTON_TEXT_(_weight, _style, _dec, \
-                            _normal, _hover, _pressed, _checked, _checked_hover, _disabled) \
+#define ACSS_TOOLBUTTON_TEXT_(_weight, _style, _dec, \
+                              _normal, _hover, _pressed, _checked, _checked_hover, _disabled) \
   SS_BEGIN(QToolButton) \
-    SS_TRANSPARENT \
+    SS_SEMI_TRANSPARENT \
     SS_FONT_WEIGHT(_weight) \
     SS_FONT_STYLE(_style) \
     SS_TEXT_DECORATION(_dec) \
@@ -49,25 +39,25 @@
     SS_COLOR(_disabled) \
   SS_END
 
-#define SS_TOOLBUTTON_TEXT_NORMAL       SS_TOOLBUTTON_TEXT_(normal, normal, none, blue, red, purple, purple, red, gray)
+#define ACSS_TOOLBUTTON_TEXT_NORMAL       ACSS_TOOLBUTTON_TEXT_(normal, normal, none, blue, red, purple, purple, red, gray)
 #ifdef Q_OS_MAC
-#  define SS_TOOLBUTTON_TEXT_INVERT       SS_TOOLBUTTON_TEXT_(normal, normal, none, red, blue, purple, purple, red, gray)
-#  define SS_TOOLBUTTON_TEXT_HIGHLIGHT    SS_TOOLBUTTON_TEXT_(bold, normal, none, blue, red, purple, purple, red, gray)
-#  define SS_TOOLBUTTON_TEXT_CHECKABLE    SS_TOOLBUTTON_TEXT_(bold, italic, none, blue, red, purple, purple, red, gray)
-#  define SS_TOOLBUTTON_TEXT_TAB          SS_TOOLBUTTON_TEXT_(bold, normal, none, blue, red, purple, purple, red, gray)
-#  define SS_TOOLBUTTON_TEXT_URL          SS_TOOLBUTTON_TEXT_(normal, italic, underline, blue, red, purple, purple, red, gray)
-#  define SS_TOOLBUTTON_TEXT              SS_TOOLBUTTON_TEXT_NORMAL
+#  define ACSS_TOOLBUTTON_TEXT_INVERT     ACSS_TOOLBUTTON_TEXT_(normal, normal, none, red, blue, purple, purple, red, gray)
+#  define ACSS_TOOLBUTTON_TEXT_HIGHLIGHT  ACSS_TOOLBUTTON_TEXT_(bold, normal, none, blue, red, purple, purple, red, gray)
+#  define ACSS_TOOLBUTTON_TEXT_CHECKABLE  ACSS_TOOLBUTTON_TEXT_(bold, italic, none, blue, red, purple, purple, red, gray)
+#  define ACSS_TOOLBUTTON_TEXT_TAB        ACSS_TOOLBUTTON_TEXT_(bold, normal, none, blue, red, purple, purple, red, gray)
+#  define ACSS_TOOLBUTTON_TEXT_URL        ACSS_TOOLBUTTON_TEXT_(normal, italic, underline, blue, red, purple, purple, red, gray)
+#  define ACSS_TOOLBUTTON_TEXT            ACSS_TOOLBUTTON_TEXT_NORMAL
 #else
-#  define SS_TOOLBUTTON_TEXT_INVERT       SS_TOOLBUTTON_TEXT_(normal, normal, none, red, blue, orange, orange, red, gray)
-#  define SS_TOOLBUTTON_TEXT_HIGHLIGHT    SS_TOOLBUTTON_TEXT_(bold, normal, none, blue, red, orange, orange, red, gray)
-#  define SS_TOOLBUTTON_TEXT_CHECKABLE    SS_TOOLBUTTON_TEXT_(normal, italic, none, blue, red, orange, orange, red, gray)
-#  define SS_TOOLBUTTON_TEXT_TAB          SS_TOOLBUTTON_TEXT_(bold, normal, none, blue, red, orange, orange, red, gray)
-#  define SS_TOOLBUTTON_TEXT_URL          SS_TOOLBUTTON_TEXT_(normal, italic, underline, blue, red, orange, orange, red, gray)
-#  define SS_TOOLBUTTON_TEXT              SS_TOOLBUTTON_TEXT_NORMAL
+#  define ACSS_TOOLBUTTON_TEXT_INVERT     ACSS_TOOLBUTTON_TEXT_(normal, normal, none, red, blue, orange, orange, red, gray)
+#  define ACSS_TOOLBUTTON_TEXT_HIGHLIGHT  ACSS_TOOLBUTTON_TEXT_(bold, normal, none, blue, red, orange, orange, red, gray)
+#  define ACSS_TOOLBUTTON_TEXT_CHECKABLE  ACSS_TOOLBUTTON_TEXT_(normal, italic, none, blue, red, orange, orange, red, gray)
+#  define ACSS_TOOLBUTTON_TEXT_TAB        ACSS_TOOLBUTTON_TEXT_(bold, normal, none, blue, red, orange, orange, red, gray)
+#  define ACSS_TOOLBUTTON_TEXT_URL        ACSS_TOOLBUTTON_TEXT_(normal, italic, underline, blue, red, orange, orange, red, gray)
+#  define ACSS_TOOLBUTTON_TEXT            ACSS_TOOLBUTTON_TEXT_NORMAL
 #endif // Q_OS_MAC
 
 // - Labels -
-#define SS_LABEL_(_weight, _style, _dec, \
+#define ACSS_LABEL_(_weight, _style, _dec, \
                   _normal, _hover, _disabled) \
   SS_BEGIN(QLabel) \
     SS_FONT_WEIGHT(_weight) \
@@ -83,18 +73,18 @@
   SS_END
 
 #ifdef Q_OS_MAC
-  #define SS_LABEL           SS_LABEL_(normal, normal, none, blue, red, gray)
-  #define SS_LABEL_HIGHLIGHT SS_LABEL_(normal, italic, none, purple, red, gray)
-  #define SS_LABEL_URL       SS_LABEL_(normal, italic, underline, purple, red, gray)
+  #define ACSS_LABEL            ACSS_LABEL_(normal, normal, none, blue, red, gray)
+  #define ACSS_LABEL_HIGHLIGHT  ACSS_LABEL_(normal, italic, none, purple, red, gray)
+  #define ACSS_LABEL_URL        ACSS_LABEL_(normal, italic, underline, purple, red, gray)
 #else
-  #define SS_LABEL           SS_LABEL_(normal, normal, none, blue, red, gray)
-  #define SS_LABEL_HIGHLIGHT SS_LABEL_(normal, italic, none, orange, red, gray)
-  #define SS_LABEL_URL       SS_LABEL_(normal, italic, underline, orange, red, gray)
+  #define ACSS_LABEL            ACSS_LABEL_(normal, normal, none, blue, red, gray)
+  #define ACSS_LABEL_HIGHLIGHT  ACSS_LABEL_(normal, italic, none, orange, red, gray)
+  #define ACSS_LABEL_URL        ACSS_LABEL_(normal, italic, underline, orange, red, gray)
 #endif // Q_OS_MAC
 
 // - Lines -
 
-#define SS_LINEEDIT \
+#define ACSS_LINEEDIT \
   SS_BEGIN(QLineEdit) \
     SS_BORDER_IMAGE_URL(ACRC_IMAGE_LINEEDIT) \
     SS_BORDER(1px groove gray) \
@@ -103,9 +93,9 @@
     SS_COLOR(black) \
   SS_END
 
-//#define SS_LINEEDIT_OSD
+//#define ACSS_LINEEDIT_OSD
 //  SS_BEGIN(QLineEdit)
-//    SS_TRANSPARENT
+//    SS_SEMI_TRANSPARENT
 //    SS_BORDER(1px groove purple)
 //    SS_COLOR(blue)
 //  SS_END
@@ -116,11 +106,9 @@
 //    SS_COLOR(black)
 //  SS_END
 
-// - Boxes -
-
 // See: http://doc.qt.nokia.com/stable/stylesheet-examples.html#customizing-qcombobox
 // TODO: Change QAbstractItemView style as well!
-#define SS_COMBOBOX \
+#define ACSS_COMBOBOX \
   SS_BEGIN(QComboBox) \
     SS_BORDER_IMAGE_URL(ACRC_IMAGE_BACKGROUND) \
     SS_BORDER_WIDTH(4px) \
@@ -138,7 +126,7 @@
   SS_BEGIN(QComboBox QAbstractItemView) \
   SS_END
 
-//#define SS_COMBOBOX_OSD
+//#define ACSS_COMBOBOX_OSD
 //  SS_LINEEDIT_OSD
 //  SS_BEGIN(QComboBox)
 //    SS_TRANSPARENT
@@ -155,9 +143,56 @@
 //    SS_BORDER_IMAGE_URL(ACRC_IMAGE_BACKGROUND)
 //  SS_END
 
+// - Boxes -
+
+#define ACSS_CHECKBOX_(_normal, _hover, _checked, _checked_hover, _disabled) \
+  SS_BEGIN(QCheckBox) \
+    SS_COLOR(_normal) \
+  SS_END \
+  SS_BEGIN(QCheckBox:hover) \
+    SS_COLOR(_hover) \
+  SS_END \
+  SS_BEGIN(QCheckBox:checked) \
+    SS_COLOR(_checked) \
+  SS_END \
+  SS_BEGIN(QCheckBox:checked:hover) \
+    SS_COLOR(_checked_hover) \
+  SS_END \
+  SS_BEGIN(QCheckBox:disabled) \
+    SS_COLOR(_disabled) \
+  SS_END
+#define ACSS_CHECKBOX ACSS_CHECKBOX_(blue, red, cyan, orange, gray)
+
+#define ACSS_RADIOBUTTON_(_normal, _hover, _checked, _checked_hover, _disabled) \
+  SS_BEGIN(QRadioButton) \
+    SS_COLOR(_normal) \
+  SS_END \
+  SS_BEGIN(QRadioButton:hover) \
+    SS_COLOR(_hover) \
+  SS_END \
+  SS_BEGIN(QRadioButton:checked) \
+    SS_COLOR(_checked) \
+  SS_END \
+  SS_BEGIN(QRadioButton:checked:hover) \
+    SS_COLOR(_checked_hover) \
+  SS_END \
+  SS_BEGIN(QRadioButton:disabled) \
+    SS_COLOR(_disabled) \
+  SS_END
+#define ACSS_RADIOBUTTON  ACSS_RADIOBUTTON_(blue, red, orange, orange, gray)
+
+#define ACSS_GROUPBOX \
+  SS_BEGIN(QGroupBox) \
+    SS_FONT_WEIGHT(bold) \
+    SS_COLOR(orange) \
+  SS_END \
+  SS_BEGIN(QGroupBox::disabled) \
+    SS_COLOR(gray) \
+  SS_END
+
 // - Item views -
 
-#define SS_TREEVIEW \
+#define ACSS_TREEVIEW \
   SS_BEGIN(QTreeView) \
     SS_BACKGROUND_IMAGE_URL(ACRC_IMAGE_BACKGROUND) \
     SS_BORDER_WIDTH(4px) \
@@ -166,18 +201,18 @@
 
 // - Graphics views -
 
-#define SS_GRAPHICSVIEW \
+#define ACSS_GRAPHICSVIEW \
   SS_BEGIN(QGraphicsView) \
     SS_TRANSPARENT \
     SS_BORDERLESS \
   SS_END
 
 // - Menus -
-#define SS_MENU SS_NULL
+#define ACSS_MENU SS_NULL
 
 // See: http://doc.qt.nokia.com/latest/stylesheet-examples.html#customizing-qmenu
 // See: http://drpeterjones.com/colorcalc/
-#define SS_CONTEXTMENU \
+#define ACSS_CONTEXTMENU \
   SS_BEGIN(QMenu::item) \
     SS_COLOR(orange) \
   SS_END \
@@ -196,39 +231,38 @@
 
 // - Text edits -
 
-#define SS_TEXTEDIT \
+#define ACSS_TEXTEDIT \
   SS_BEGIN(QTextEdit) \
     SS_BORDER_IMAGE_URL(ACRC_IMAGE_TEXTEDIT) \
   SS_END
 
 // - Windows -
 
-//#define SS_WINDOW
+//#define ACSS_WINDOW
 //  SS_BEGIN(QWidget)
 //    SS_BACKGROUND_IMAGE_URL(ACRC_IMAGE_AERO)
 //  SS_END
-#define SS_WINDOW     SS_NULL
+#define ACSS_WINDOW     SS_NULL
 
 //#ifdef USE_WIN_DWM
-//  #define SS_WINDOW_DWM
+//  #define ACSS_WINDOW_DWM
 //    SS_BEGIN(QWidget)
 //      SS_BORDER_RADIUS(8px)
 //    SS_END
 //#endif // USE_WIN_DWM
 //
-#define SS_WINDOW_DWM   SS_NULL
-
+#define ACSS_WINDOW_DWM   SS_NULL
 
 // - Status bar -
 
-#define SS_STATUSBAR_DWM \
+#define ACSS_STATUSBAR_DWM \
   SS_BEGIN(QStatusBar) \
     SS_COLOR(cyan) \
   SS_END
 
 // - Customized -
 
-#define SS_BACKGROUND_CLASS(_class) \
+#define ACSS_BACKGROUND_CLASS(_class) \
   SS_BEGIN(_class) \
     SS_BACKGROUND_IMAGE_URL(ACRC_IMAGE_AERO) \
   SS_END

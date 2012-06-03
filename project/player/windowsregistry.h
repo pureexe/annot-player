@@ -18,6 +18,8 @@ class WindowsRegistry : public QObject
   QSettings *classes_;
 
 public:
+  static Self *globalInstance();
+
   explicit WindowsRegistry(QObject *parent = 0)
     : Base(parent), classes_(0) { }
 
@@ -25,11 +27,19 @@ public:
 
   bool isValid() const { return classes_; }
 
+public slots:
   void sync();
 
 public:
-  void registerFileTypes(const QStringList &suffices);
-  void registerFileType(const QString &suffix);
+  void registerTypes(const QStringList &suffices);
+  bool containsType(const QString &suffix) const;
+
+public slots:
+  void registerType(const QString &suffix);
+  void unregisterType(const QString &suffix);
+
+  void registerType(const QString &suffix, bool t)
+  { if (t) registerType(suffix); else unregisterType(suffix); }
 
   //void clearFileTypes();
 };

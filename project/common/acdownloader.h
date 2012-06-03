@@ -40,11 +40,13 @@ public:
 
 signals:
   void arguments(const QStringList &args);
+  void showRequested();
 
 public:
   bool isRunning() const;
 
 public slots:
+  void show();
   void open();
   void openArguments(const QStringList &args);
   void openUrls(const QStringList &urls) { openArguments(urls); }

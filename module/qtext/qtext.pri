@@ -10,10 +10,13 @@ HEADERS += \
     $$PWD/actionwithid.h \
     $$PWD/algorithm.h \
     $$PWD/bitwise.h \
+    $$PWD/checkbox.h \
     $$PWD/combobox.h \
     $$PWD/compactstackedlayout.h \
     $$PWD/countdowntimer.h \
+    $$PWD/dateedit.h \
     $$PWD/datetime.h \
+    $$PWD/datetimeedit.h \
     $$PWD/dialog.h \
     $$PWD/draggablemainwindow.h \
     $$PWD/draggablewidget.h \
@@ -24,16 +27,22 @@ HEADERS += \
     $$PWD/hash.h \
     $$PWD/htmltag.h \
     $$PWD/layoutwidget.h \
+    $$PWD/namedcheckbox.h \
+    $$PWD/namedradiobutton.h \
     $$PWD/network.h \
     $$PWD/networkcookie.h \
     $$PWD/os.h \
     $$PWD/overlaylayout.h \
+    $$PWD/radiobutton.h \
     $$PWD/rubberband.h \
     $$PWD/slider.h \
+    $$PWD/spinbox.h \
+    $$PWD/ss.h \
     $$PWD/stoppable.h \
     $$PWD/string.h \
-    $$PWD/ss.h \
     $$PWD/systemtrayicon.h \
+    $$PWD/textedit.h \
+    $$PWD/timeedit.h \
     $$PWD/toolbutton.h \
     $$PWD/toolbuttonwithid.h \
     $$PWD/webview.h \
@@ -43,9 +52,12 @@ HEADERS += \
 
 SOURCES += \
     $$PWD/actionwithid.cc \
+    $$PWD/checkbox.cc \
     $$PWD/combobox.cc \
     $$PWD/countdowntimer.cc \
+    $$PWD/dateedit.cc \
     $$PWD/datetime.cc \
+    $$PWD/datetimeedit.cc \
     $$PWD/dialog.cc \
     $$PWD/draggablemainwindow.cc \
     $$PWD/draggablewidget.cc \
@@ -54,9 +66,13 @@ SOURCES += \
     $$PWD/fontcombobox.cc \
     $$PWD/networkcookie.cc \
     $$PWD/os.cc \
+    $$PWD/radiobutton.cc \
     $$PWD/rubberband.cc \
     $$PWD/slider.cc \
+    $$PWD/spinbox.cc \
     $$PWD/string.cc \
+    $$PWD/textedit.cc \
+    $$PWD/timeedit.cc \
     $$PWD/toolbutton.cc \
     $$PWD/toolbuttonwithid.cc \
     $$PWD/webview.cc \

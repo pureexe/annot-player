@@ -558,14 +558,14 @@ private:
     if (tagType == 0x8) {  // Audio
       if (!_audioWriter) {
         _audioWriter = _extractAudio ? getAudioWriter(mediaInfo) : new DummyAudioWriter(this);
-        _extractedAudio = !(dynamic_cast<DummyAudioWriter*>(_audioWriter));
+        _extractedAudio = !(qobject_cast<DummyAudioWriter *>(_audioWriter));
       }
       _audioWriter->writeChunk(data, timeStamp);
 
     } else if ((tagType == 0x9) && ((mediaInfo >> 4) != 5)) { // Video
       if (!_videoWriter) {
         _videoWriter = _extractVideo ? getVideoWriter(mediaInfo) : new DummyVideoWriter(this);
-        _extractedVideo = !(dynamic_cast<DummyVideoWriter*>(_videoWriter));
+        _extractedVideo = !(qobject_cast<DummyVideoWriter *>(_videoWriter));
       }
       //if (_timeCodeWriter == null) {
       //  string path = _outputPathBase + ".txt";

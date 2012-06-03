@@ -24,7 +24,7 @@ void
 AcTabView::finalizeLayout()
 {
   //QToolButton *clearButton = new QtExt::ToolButton; {
-  //  clearButton->setStyleSheet(SS_TOOLBUTTON_TEXT);
+  //  clearButton->setStyleSheet(ACSS_TOOLBUTTON_TEXT);
   //  clearButton->setToolButtonStyle(Qt::ToolButtonTextOnly);
   //  clearButton->setText(QString("[ %1 ]").arg(TR(T_CLEAR)));
   //  clearButton->setToolTip(TR(T_CLEAR));
@@ -73,7 +73,7 @@ AcTabView::addTab(QWidget *tab)
 {
   QString tabName = tab->windowTitle();
   QtExt::ToolButtonWithId *tabButton = new QtExt::ToolButtonWithId(tabCount_); {
-    tabButton->setStyleSheet(SS_TOOLBUTTON_TEXT_TAB);
+    tabButton->setStyleSheet(ACSS_TOOLBUTTON_TEXT_TAB);
     tabButton->setToolButtonStyle(Qt::ToolButtonTextOnly);
     tabButton->setText(QString("- %1 -").arg(tabName));
     tabButton->setToolTip(

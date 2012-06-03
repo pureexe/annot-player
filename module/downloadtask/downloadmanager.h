@@ -27,6 +27,8 @@ public:
   const DownloadTaskList &tasks() const { return tasks_; }
 
   bool isEmpty() const { return tasks_.isEmpty(); }
+  bool isRunning() const;
+  bool isIdle() const { return !isRunning(); }
 
   void addTask(DownloadTask *t);
 

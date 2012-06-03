@@ -30,6 +30,8 @@ public:
   MessageView *messageView() const { return messageView_; }
 
 signals:
+  void message(QString);
+  void warning(QString);
   void hookSelected(ulong hookId, ProcessInfo pi);
 
   // - Events -

@@ -2,6 +2,17 @@ ChangeLog
 Annot Project
 6/18/2011
 
+6/3/2012	annot.player, down, browser	0.1.6.0, 0.1.2.6, 0.1.1.6
+        * Option to always show avatars (could be disabled from context menu).
+        * Able to translate annotations to different languages.
+        * Able to change file associations from Preferences.
+        * Enable HTTP pipelining to improve download and stream speed.
+        * Update to Qt 4.8.2. Switch from Carbon to Cocoa on Mac OS X.
+        * Add getchu.com to the browser's delegate list.
+        * Fix the issues that cause buttons in full screen difficult to press.
+        * Fix a bug in downloader which might result in incorrent file size.
+        * Fix bugs while tracking Galgame process and rendering annotations.
+
 5/25/2012	annot.player, down, browser	0.1.5.6, 0.1.2.5, 0.1.1.5
         * Add randomized avatars to identify different users.
         * Able to change annotation font in preferences ("Helvetia" as default).

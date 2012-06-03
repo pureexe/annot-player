@@ -132,6 +132,12 @@ namespace AnnotCloud {
     void setUpdateTime(qint64 secs)     { updateTime_ = secs; }
     bool hasUpdateTime() const          { return updateTime_ > 0; }
 
+  private: qint64 updateIp_;
+  public:
+    qint64 updateIp() const             { return updateIp_; }
+    void setUpdateIp(qint64 ip)         { updateIp_ = ip; }
+    bool hasUpdateIp() const            { return updateIp_; }
+
   private: qint64 pos_;
   public:
     qint64 pos() const                  { return pos_; }
@@ -183,7 +189,7 @@ namespace AnnotCloud {
   public:
     Annotation()
       : id_(0), tokenId_(0), tokenPart_(0), userId_(0), status_(0), flags_(0), language_(0),
-        createTime_(0), updateTime_(0),
+        createTime_(0), updateTime_(0), updateIp_(0),
         pos_(0), posType_(0), time_(0),
         blessed_(0), cursed_(0), blocked_(0), subtitle_(-1)
     { }

@@ -40,6 +40,7 @@ MainPlayerUi::MainPlayerUi(SignalHub *hub, Player *player, ServerAgent *server, 
 {
   setContentsMargins(0, 0, 0, 0);
   createLayout();
+  setTabOrder(inputComboBox(), prefixComboBox());
 }
 
 void
@@ -70,6 +71,7 @@ MainPlayerUi::createLayout()
     row1->addWidget(toggleEmbedModeButton());
     row1->addWidget(toggleMiniModeButton());
     row1->addWidget(toggleFullScreenModeButton());
+    row1->addWidget(toggleTraceWindowButton());
     row1->addStretch(1);
     row1->addWidget(volumeSlider());
     row1->addWidget(positionButton());
@@ -84,14 +86,18 @@ MainPlayerUi::createLayout()
 
     // margins (px): left, top, right, down
     rows->setContentsMargins(9, 0, 9, 0);
-    row1->setContentsMargins(0, 0, 0, 9);
-    row2->setContentsMargins(0, 0, 0, 9);
+    row1->setContentsMargins(0, 0, 0, 1);
+    row2->setContentsMargins(0, 1, 0, 9);
   }
   setLayout(rows);
   menuButton()->hide();
   menuButton()->resize(QSize());
   progressButton()->hide();
   progressButton()->resize(QSize());
+#ifndef WITH_WIN_PICKER
+  traceWindowButton()->hide();
+  traceWindowButton()->resize(QSize());
+#endif // WITH_WIN_PICKER
   setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
 
   setStyleSheet(styleSheet() +

@@ -33,21 +33,21 @@ protected:
   AcSettings *settings() const { return settings_; }
 
 public slots:
+  virtual void clear() { }
   virtual bool save() = 0;
   virtual void load() = 0;
 };
 
-class AcEmptyPreferences : public AcPreferencesTab
+class AcNullPreferencesTab : public AcPreferencesTab
 {
   Q_OBJECT
-  Q_DISABLE_COPY(AcEmptyPreferences)
-  typedef AcEmptyPreferences Self;
+  Q_DISABLE_COPY(AcNullPreferencesTab)
+  typedef AcNullPreferencesTab Self;
   typedef AcPreferencesTab Base;
 
 public:
-  explicit AcEmptyPreferences(AcSettings *settings, QWidget *parent = 0)
-    : Base(settings, parent)
-  { setWindowTitle("TODO"); }
+  explicit AcNullPreferencesTab(QWidget *parent = 0)
+    : Base(parent) { }
 
 public slots:
   virtual bool save() { return true; } ///< \override

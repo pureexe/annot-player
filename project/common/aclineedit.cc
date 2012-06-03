@@ -2,16 +2,13 @@
 // 10/10/2011
 
 #include "project/common/aclineedit.h"
-#include "project/common/acui.h"
 #include "project/common/acss.h"
-#include <QtGui/QContextMenuEvent>
-#include <QtGui/QMenu>
 
 // - Constructions -
 
 AcLineEdit::AcLineEdit(QWidget *parent)
   : Base(parent)
-{ setStyleSheet(SS_LINEEDIT); }
+{ setStyleSheet(ACSS_LINEEDIT); }
 
 void
 AcLineEdit::enterText(const QString &text)
@@ -20,8 +17,11 @@ AcLineEdit::enterText(const QString &text)
   emit returnPressed();
 }
 
-// - Events -
 
+// EOF
+
+// - Events -
+/*
 void
 AcLineEdit::contextMenuEvent(QContextMenuEvent *event)
 {
@@ -42,5 +42,4 @@ AcLineEdit::contextMenuEvent(QContextMenuEvent *event)
   Base::contextMenuEvent(event);
 #endif // WITH_WIN_DWM
 }
-
-// EOF
+*/

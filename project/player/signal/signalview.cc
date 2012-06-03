@@ -117,7 +117,10 @@ SignalView::selectHookAndHide(ulong hookId)
 {
   fadeOut();
   ProcessInfo pi = processView_->attachedProcessInfo();
-  emit hookSelected(hookId, pi);
+  if (pi.isValid() && hookId)
+    emit hookSelected(hookId, pi);
+  else
+    emit warning(tr("process is not attached properly. try retart the app first."));
 }
 
 void

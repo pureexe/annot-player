@@ -1,5 +1,7 @@
 #!/bin/bash -v
 # 11/12/2011
+#
+# Note: libssl and libcrypto is using the system default at runtime (usually /usr/lib).
 
 PREFIX=$HOME/build
 test -e "$PREFIX" || mkdir "$PREFIX"
@@ -8,8 +10,8 @@ cd "$PREFIX"  || exit 1
 ## environment
 
 COLOR=purple
-VERSION=0.1.5.6
-DMG_SIZE=200m
+VERSION=0.1.6.0
+DMG_SIZE=250m
 
 TARGET="Annot Stream"
 TARGET_DMG=$TARGET.dmg
@@ -17,11 +19,14 @@ TARGET_ZIP=annot-player-$VERSION-mac.zip
 
 APP_SRC=$HOME/Developer/Annot/Player/annot-player
 APP_BUILD=$HOME/Developer/Annot/Player/annot-build-desktop/build.mac
-QT_HOME=/opt/local/share/qt4
 #QT_HOME=/Developer/QtSDK/Desktop/Qt/default/gcc
+#QT_HOME=/opt/local/share/qt4
+QT_HOME=$HOME/opt/qt
 VLC_APP=/Applications/VLC.app
 VLC_HOME=$VLC_APP/Contents/MacOS
 VLC_FRAMEWORKS=$VLC_APP/Contents/Frameworks
+
+export PATH=$QT_HOME/bin:$PATH
 
 APP_NAME="Annot Player"
 APP=$APP_NAME.app
@@ -86,12 +91,14 @@ macdeployqt "$DOWNLOADER_APP"
 
 cd "$BROWSER_APP"/Contents || exit 1
 finder-remove Frameworks
+finder-remove PlugIns
 ln -s ../../"$APP_FRAMEWORKS" || exit 1
 ln -s ../../"$APP_PLUGINS" || exit 1
 cd ../..
 
 cd "$DOWNLOADER_APP"/Contents || exit 1
 finder-remove Frameworks
+finder-remove PlugIns
 ln -s ../../"$APP_FRAMEWORKS" || exit 1
 ln -s ../../"$APP_PLUGINS" || exit 1
 cd ../..
@@ -152,41 +159,41 @@ change_macports_lib()
 
 ## deploy qt plugins
 
-mkdir -p "$APP_PLUGINS"/{codecs,imageformats,sqldrivers} | exit 1
-
-for codec in cn jp kr tw; do
-  dylib=codecs/libq${codec}codecs.dylib
-  cp "$QT_HOME"/plugins/$dylib "$APP_PLUGINS/$dylib"
-  change_macports_qt QtCore "$APP_PLUGINS/$dylib"
-done
-
-for fmt in gif ico jpeg mng svg tiff; do
-  dylib=imageformats/libq$fmt.dylib
-  cp "$QT_HOME"/plugins/$dylib "$APP_PLUGINS/$dylib"
-  #install_name_tool -id @executable_path/../PlugIns/$dylib "$APP_PLUGINS/$dylib"
-  change_macports_qt QtCore "$APP_PLUGINS/$dylib"
-  change_macports_qt QtGui "$APP_PLUGINS/$dylib"
-done
-
-dylib=imageformats/libqsvg.dylib
-change_macports_qt QtSvg "$APP_PLUGINS/$dylib"
-change_macports_qt QtXml "$APP_PLUGINS/$dylib"
-
-dylib=imageformats/libqjpeg.dylib
-change_macports_lib libjpeg.8.dylib  "$APP_PLUGINS/$dylib"
-
-dylib=imageformats/libqmng.dylib
-change_macports_lib libmng.1.dylib  "$APP_PLUGINS/$dylib"
-
-dylib=imageformats/libqtiff.dylib
-change_macports_lib libtiff.3.dylib  "$APP_PLUGINS/$dylib"
-
-dylib=sqldrivers/libqsqlite.dylib
-cp "$QT_HOME"/plugins/$dylib "$APP_PLUGINS/$dylib"
-#install_name_tool -id @executable_path/../PlugIns/$dylib "$APP_PLUGINS/$dylib"
-change_macports_qt QtCore "$APP_PLUGINS/$dylib"
-change_macports_qt QtSql "$APP_PLUGINS/$dylib"
-change_macports_lib libsqlite3.0.dylib  "$APP_PLUGINS/$dylib"
+#mkdir -p "$APP_PLUGINS"/{codecs,imageformats,sqldrivers} | exit 1
+#
+#for codec in cn jp kr tw; do
+#  dylib=codecs/libq${codec}codecs.dylib
+#  cp "$QT_HOME"/plugins/$dylib "$APP_PLUGINS/$dylib"
+#  change_macports_qt QtCore "$APP_PLUGINS/$dylib"
+#done
+#
+#for fmt in gif ico jpeg mng svg tiff; do
+#  dylib=imageformats/libq$fmt.dylib
+#  cp "$QT_HOME"/plugins/$dylib "$APP_PLUGINS/$dylib"
+#  #install_name_tool -id @executable_path/../PlugIns/$dylib "$APP_PLUGINS/$dylib"
+#  change_macports_qt QtCore "$APP_PLUGINS/$dylib"
+#  change_macports_qt QtGui "$APP_PLUGINS/$dylib"
+#done
+#
+#dylib=imageformats/libqsvg.dylib
+#change_macports_qt QtSvg "$APP_PLUGINS/$dylib"
+#change_macports_qt QtXml "$APP_PLUGINS/$dylib"
+#
+#dylib=imageformats/libqjpeg.dylib
+#change_macports_lib libjpeg.8.dylib  "$APP_PLUGINS/$dylib"
+#
+#dylib=imageformats/libqmng.dylib
+#change_macports_lib libmng.1.dylib  "$APP_PLUGINS/$dylib"
+#
+#dylib=imageformats/libqtiff.dylib
+#change_macports_lib libtiff.3.dylib  "$APP_PLUGINS/$dylib"
+#
+#dylib=sqldrivers/libqsqlite.dylib
+#cp "$QT_HOME"/plugins/$dylib "$APP_PLUGINS/$dylib"
+##install_name_tool -id @executable_path/../PlugIns/$dylib "$APP_PLUGINS/$dylib"
+#change_macports_qt QtCore "$APP_PLUGINS/$dylib"
+#change_macports_qt QtSql "$APP_PLUGINS/$dylib"
+#change_macports_lib libsqlite3.0.dylib  "$APP_PLUGINS/$dylib"
 
 ## alter vlc lib
 install_name_tool -change \
@@ -287,18 +294,18 @@ change_all_libs()
   done
 }
 
-update_all_libs
-update_all_libs
-update_all_libs
-update_all_libs
-update_all_libs
-update_all_libs
-update_all_libs
-update_all_libs
-update_all_libs
-update_all_libs
-
-change_all_libs
+#update_all_libs
+#update_all_libs
+#update_all_libs
+#update_all_libs
+#update_all_libs
+#update_all_libs
+#update_all_libs
+#update_all_libs
+#update_all_libs
+#update_all_libs
+#
+#change_all_libs
 
 ## finalize
 

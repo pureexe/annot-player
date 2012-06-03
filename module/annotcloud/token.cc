@@ -8,6 +8,7 @@
 #endif // WITH_MODULE_IOUTIL
 #include <QtCore/QFile>
 #include <QtCore/QFileInfo>
+#include <QtCore/QStringList>
 #include <memory>
 
 #define DEBUG "module/annotcloud::token"
@@ -41,11 +42,18 @@ Token::digestFromFile(const QString &input)
   QFileInfo fi(input);
   if (fi.isDir()) {
     QString dir = fi.filePath();
-    filePath = dir + "/VIDEO_TS/VIDEO_TS.IFO";
-    if (!QFile::exists(filePath))
-      filePath = dir + "/VIDEO_TS/VIDEO_TS.BUP";
-    if (!QFile::exists(filePath))
-      filePath = input;
+    static QStringList files = QStringList()
+      << "/VIDEO_TS.IFO"
+      << "/VIDEO_TS.BUP"
+      << "/VIDEO_TS/VIDEO_TS.IFO"
+      << "/VIDEO_TS/VIDEO_TS.BUP";
+    foreach (const QString &f, files) {
+      QString path = dir + f;
+      if (QFile::exists(path)) {
+        filePath = path;
+        break;
+      }
+    }
   }
 
   DOUT("path =" << filePath);

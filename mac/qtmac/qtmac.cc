@@ -13,6 +13,7 @@
 #  include <IOKit/storage/IOMedia.h>
 #  include <CoreFoundation/CoreFoundation.h>
 #endif // WITH_IOKIT
+#include <cstring>
 #include <sys/param.h>
 #include <sys/xattr.h>
 #include <paths.h>

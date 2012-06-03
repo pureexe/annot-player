@@ -110,13 +110,14 @@ main(int argc, char *argv[])
 
   if (!a.isSingleInstance()) {
     DOUT("exit: not single instance");
+    AcDownloader delegate;
     QStringList args = a.arguments();
     args.removeFirst()  ;
-    if (!args.isEmpty()) {
-      AcDownloader delegate;
-      delegate.openArguments(args); // CHECKPOINT
-      a.processEvents();
-    }
+    if (args.isEmpty())
+      delegate.show();
+    else
+      delegate.openArguments(args);
+    a.processEvents();
     return 0;
   }
 

@@ -1,12 +1,12 @@
-#ifndef PREFERENCES_P_H
-#define PREFERENCES_P_H
+#ifndef ANNOTATIONPREFS_H
+#define ANNOTATIONPREFS_H
 
-// preferences_p.h
+// annotationprefs.h
 // 5/25/2012
 
 #include "project/common/acpreferencestab.h"
 
-QT_FORWARD_DECLARE_CLASS(QComboBox)
+QT_FORWARD_DECLARE_CLASS(QSpinBox)
 QT_FORWARD_DECLARE_CLASS(QFontComboBox)
 
 class AnnotationSettings;
@@ -21,13 +21,14 @@ class AnnotationPreferencesTab : public AcPreferencesTab
 
   //QComboBox *scaleEdit_,
   //          *rotationEdit_,
-  QComboBox     *offsetEdit_;
+  QSpinBox *offsetEdit_;
   QFontComboBox *fontEdit_;
 
-  QString offsetEditStyleSheet_;
-
 public:
-  explicit AnnotationPreferencesTab(AnnotationSettings *settings, QWidget *parent = 0);
+  explicit AnnotationPreferencesTab(AnnotationSettings *settings, QWidget *parent = 0)
+    : Base(parent), settings_(settings) { init(); }
+  explicit AnnotationPreferencesTab(QWidget *parent = 0)
+    : Base(parent), settings_(0) { init(); }
 
 public slots:
   virtual bool save(); ///< \override
@@ -42,7 +43,8 @@ protected slots:
   void loadOffsetIfVisible() { if (isVisible()) loadOffset(); }
   void resetOffset();
 private:
+  void init();
   void createLayout();
 };
 
-#endif // PREFERENCES_P_H
+#endif // ANNOTATIONPREFS_H

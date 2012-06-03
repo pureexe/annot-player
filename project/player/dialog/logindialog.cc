@@ -25,13 +25,9 @@ using namespace Logger;
   Qt::WindowStaysOnTopHint
 
 #ifdef Q_OS_MAC
-  #define WINDOW_FLAGS ( \
-    Qt::FramelessWindowHint | \
-    WINDOW_FLAGS_BASE )
+#  define WINDOW_FLAGS WINDOW_FLAGS_BASE | Qt::FramelessWindowHint
 #else
-  #define WINDOW_FLAGS ( \
-    Qt::WindowTitleHint | \
-    WINDOW_FLAGS_BASE )
+#  define WINDOW_FLAGS WINDOW_FLAGS_BASE | Qt::WindowTitleHint
 #endif // Q_OS_MAC
 
 // - Constructions -
@@ -39,6 +35,7 @@ using namespace Logger;
 LoginDialog::LoginDialog(QWidget *parent)
   : Base(parent, WINDOW_FLAGS)
 {
+  setRippleEnabled(false);
   setWindowTitle(TR(T_TITLE_LOGIN));
 
   createLayout();

@@ -42,6 +42,7 @@ using namespace AnnotCloud;
 #define SK_RECENTPATH   "RecentPath"
 #define SK_AUTOSUBMIT   "Submit"
 #define SK_ANNOTBANDWIDTH   "AnnotationBandwidth"
+#define SK_ANNOTAVATAR  "AnnotationAvatar"
 #define SK_ANNOTSCALE   "AnnotationScale"
 //#define SK_ANNOTROTATE  "AnnotationRotation"
 #define SK_ANNOTFILTER  "AnnotationFilter"
@@ -218,6 +219,14 @@ Settings::isPlayerLabelEnabled() const
 void
 Settings::setPlayerLabelEnabled(bool t)
 { setValue(SK_LABELPLAYER, t); }
+
+bool
+Settings::isAnnotationAvatarVisible() const
+{ return value(SK_ANNOTAVATAR, true).toBool(); }
+
+void
+Settings::setAnnotationAvatarVisible(bool t)
+{ setValue(SK_ANNOTAVATAR, t); }
 
 bool
 Settings::isAnnotationBandwidthLimited() const

@@ -23,6 +23,7 @@ public:
 
 signals:
   void arguments(QStringList);
+  void showRequested();
 
 #ifdef WITH_MODULE_METACALL
 public:

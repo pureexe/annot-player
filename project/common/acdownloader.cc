@@ -42,6 +42,8 @@ AcDownloader::AcDownloader(QObject *parent)
   delegate_ = new Delegate(this, APP_ID);
   connect(this, SIGNAL(arguments(QStringList)),
           delegate_, SIGNAL(arguments(QStringList)), Qt::QueuedConnection);
+  connect(this, SIGNAL(showRequested()),
+          delegate_, SIGNAL(showRequested()), Qt::QueuedConnection);
 #endif // WITH_MODULE_METACALL
 }
 
@@ -52,6 +54,22 @@ AcDownloader::isRunning() const
 void
 AcDownloader::open()
 { Delegate::open(APP_NAME); }
+
+void
+AcDownloader::show()
+{
+  DOUT("enter");
+#ifdef WITH_MODULE_METACALL
+  if (isRunning()) {
+    DOUT("isRunning = true");
+    if (!delegate_->isActive())
+      delegate_->startClient();
+    emit showRequested();
+  } else
+#endif // WITH_MODULE_METACALL
+  Delegate::open(APP_NAME);
+  DOUT("exit");
+}
 
 void
 AcDownloader::openArguments(const QStringList &args)

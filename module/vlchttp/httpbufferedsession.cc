@@ -1,4 +1,4 @@
-﻿// httpbufferedsession.cc
+// httpbufferedsession.cc
 // 2/21/2012
 
 #include "module/vlchttp/httpbufferedsession.h"
@@ -233,7 +233,9 @@ HttpBufferedSession::run()
 
   emit message(tr("buffering") + ": " + url_.toString());
 
-  reply_ = nam_->get(QNetworkRequest(url_));
+  QNetworkRequest req(url_);
+  req.setAttribute(QNetworkRequest::HttpPipeliningAllowedAttribute, true);
+  reply_ = nam_->get(req);
   Q_ASSERT(reply_);
   waitForReplyReady();
 

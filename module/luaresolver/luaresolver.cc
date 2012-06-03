@@ -119,7 +119,7 @@ LuaResolver::getObject(lua_State *L)
   void *p = lua_isnil(L, -1) ? 0 : lua_touserdata(L, -1);
   lua_pop(L, 1);
   DOUT("exit: ret =" << p);
-  return reinterpret_cast<Self*>(p);
+  return reinterpret_cast<Self *>(p);
 }
 
 // See: http://gamedevgeek.com/tutorials/calling-c-functions-from-lua/
@@ -368,7 +368,14 @@ LuaResolver::resolve(const QString &href, int *siteid, QString *refurl, QString 
               QString k = QString::number(i);
               lua_pushstring(L, k.toAscii());
               lua_gettable(L, -2);
-              mrls->append(_qs(lua_tostring(L,-1)));
+              QString url = _qs(lua_tostring(L,-1));
+              if (!url.isEmpty())
+                mrls->append(url);
+              else {
+                if (!mrls->isEmpty())
+                  mrls->clear();
+                DOUT("empty MRL, resolve failure");
+              }
               lua_pop(L,1);
             }
         }

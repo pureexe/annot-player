@@ -34,6 +34,7 @@ HEADERS += \
     $$PWD/actabview.h \
     $$PWD/actextedit.h \
     $$PWD/actextview.h \
+    $$PWD/actimeedit.h \
     $$PWD/acui.h \
     $$PWD/acwebwindow.h \
     $$PWD/acwindow.h
@@ -63,6 +64,7 @@ SOURCES += \
     $$PWD/actabview.cc \
     $$PWD/actextedit.cc \
     $$PWD/actextview.cc \
+    $$PWD/actimeedit.cc \
     $$PWD/acui.cc \
     $$PWD/acwebwindow.cc \
     $$PWD/acwindow.cc

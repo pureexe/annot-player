@@ -13,11 +13,17 @@
 
 // - Constructions -
 
-#define WINDOW_FLAGS \
+#define WINDOW_FLAGS_BASE \
   Qt::SplashScreen | \
   Qt::FramelessWindowHint | \
   Qt::CustomizeWindowHint
-//Qt::WindowStaysOnTopHint
+
+#ifdef Q_WS_MAC
+#  define WINDOW_FLAGS WINDOW_FLAGS_BASE //| Qt::WindowStaysOnTopHint
+#else
+#  define WINDOW_FLAGS WINDOW_FLAGS_BASE
+#endif // Q_WS_MA
+
 
 OsdWindow::OsdWindow(QWidget *parent)
   : Base(parent, WINDOW_FLAGS), listener_(0)
@@ -51,6 +57,9 @@ OsdWindow::setWindowOnTop(bool t)
   if (t != isWindowOnTop())
     setWindowFlags(t ? windowFlags() | Qt::WindowStaysOnTopHint :
                        windowFlags() & ~Qt::WindowStaysOnTopHint);
+  if (!isVisible())
+    show();
+  raise();
   DOUT("exit");
 }
 

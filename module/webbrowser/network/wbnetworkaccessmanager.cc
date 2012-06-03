@@ -44,6 +44,7 @@ WbNetworkAccessManager::supportedSites()
     << "applique-soft.com"
     << "shallotsoft.com"
     << "spermaniax.net"
+    << "getchu.com"
     << "erogamescape.dyndns.org/~ap2/ero/toukei_kaiseki"
     << "erogamescape.dyndns.org/~ap2/ero/toukei_kaiseki/index_toukei.php";
 }
@@ -84,12 +85,20 @@ WbNetworkAccessManager::createRequest(Operation op, const QNetworkRequest &req, 
       }
     }
 #define ELIF(_host, _encode) \
-    else if (host.endsWith(_host, Qt::CaseInsensitive)) { \
+    else if (!host.compare(_host, Qt::CaseInsensitive)) { \
       QNetworkRequest r = req; \
       r.setUrl(_encode(url)); \
       return Base::createRequest(op, r, outgoingData); \
     }
     ELIF("erogamescape.dyndns.org", encodeEroUrl)
+    ELIF("www.getchu.com", encodeGetchuUrl)
+#undef ELIF
+#define ELIF(_host, _encode) \
+    else if (host.endsWith(_host, Qt::CaseInsensitive)) { \
+      QNetworkRequest r = req; \
+      r.setUrl(_encode(url)); \
+      return Base::createRequest(op, r, outgoingData); \
+    }
     ELIF("akabeesoft2.com", encodeAb2Url)
     ELIF("syangrila.com", encodeSyangrilaUrl)
     ELIF("akatsukiworks.com", encodeAkatsukiWorksUrl)
@@ -167,6 +176,7 @@ WbNetworkAccessManager::encodeEroUrl(const QUrl &url)
     ret.setPath("/" _host + ret.path()); \
     return ret; \
   }
+  TRANSFORM("getchu", encodeGetchuUrl)
   TRANSFORM("akabeesoft2", encodeAb2Url)
   TRANSFORM("akabeesoft2-try", encodeAb2TryUrl)
   TRANSFORM("akatsukiworks", encodeAkatsukiWorksUrl)

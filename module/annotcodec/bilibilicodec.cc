@@ -161,7 +161,7 @@ BilibiliCodec::parseAttribute(const QString &attr)
   Annotation ret;
   QString t;
   // 0
-  ret.setPos(static_cast<qint64>(pos * 1000));
+  ret.setPos(pos * 1000);
 
   // 1
   switch (floatStyle) {

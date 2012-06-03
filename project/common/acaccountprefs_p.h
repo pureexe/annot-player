@@ -9,15 +9,15 @@
 QT_FORWARD_DECLARE_CLASS(QLineEdit)
 QT_FORWARD_DECLARE_CLASS(QComboBox)
 
-class AcAccountPreferences : public AcPreferencesTab
+class AcAccountPrefs : public AcPreferencesTab
 {
   Q_OBJECT
-  Q_DISABLE_COPY(AcAccountPreferences)
-  typedef AcAccountPreferences Self;
+  Q_DISABLE_COPY(AcAccountPrefs)
+  typedef AcAccountPrefs Self;
   typedef AcPreferencesTab Base;
 
 public:
-  explicit AcAccountPreferences(AcSettings *settings, QWidget *parent = 0);
+  explicit AcAccountPrefs(AcSettings *settings, QWidget *parent = 0);
 
 public slots:
   virtual bool save(); ///< \override

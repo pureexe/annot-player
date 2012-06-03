@@ -84,8 +84,7 @@ MainWindow::MainWindow(QWidget *parent)
   connect(clipboardMonitor_, SIGNAL(warning(QString)), SLOT(warn(QString)));
   connect(clipboardMonitor_, SIGNAL(error(QString)), SLOT(error(QString)));
   connect(clipboardMonitor_, SIGNAL(notification(QString)), SLOT(notify(QString)));
-  connect(clipboardMonitor_, SIGNAL(annotationUrlEntered(QString)), SLOT(promptUrl(QString)));
-  connect(clipboardMonitor_, SIGNAL(mediaUrlEntered(QString)), SLOT(promptUrl(QString)));
+  connect(clipboardMonitor_, SIGNAL(urlEntered(QString)), SLOT(promptUrl(QString)));
 
   signer_ = new Signer(this);
   connect(signer_, SIGNAL(message(QString)), SLOT(showMessage(QString)), Qt::QueuedConnection);
@@ -109,6 +108,7 @@ MainWindow::MainWindow(QWidget *parent)
 
   appServer_ = new AcDownloaderServer(this);
   connect(appServer_, SIGNAL(arguments(QStringList)), SLOT(promptUrls(QStringList)), Qt::QueuedConnection);
+  connect(appServer_, SIGNAL(showRequested()), SLOT(show()), Qt::QueuedConnection);
   appServer_->start();
 
   if (QSystemTrayIcon::isSystemTrayAvailable()) {
@@ -225,7 +225,7 @@ MainWindow::createActions()
 #endif // Q_WS_MAC
   ;
   QAction *
-  a = startAct_ = new QAction(tr("Start"), this); {
+  a = startAct_ = new QAction(QIcon(ACRC_IMAGE_DOWNLOADER), tr("Start"), this); {
     a->setStatusTip(a->text());
     connect(a, SIGNAL(triggered()), SLOT(start()));
   }
@@ -407,6 +407,10 @@ MainWindow::createActions()
     //helpMenu_->addAction(tr("&Help"), this, SLOT(help())); // DO NOT TRANSLATE ME
     m->addAction(tr("&About"), this, SLOT(about())); // DO NOT TRANSLATE ME
   }
+
+#ifdef Q_WS_WIN
+  new QShortcut(QKeySequence("ALT+O"), this, SLOT(preferences()));
+#endif // Q_WS_WIN
 }
 
 // - Table -
@@ -452,6 +456,10 @@ MainWindow::currentId() const
 QString
 MainWindow::currentTitle() const
 { DownloadTask *t = currentTask(); return t ? t->title() : QString(); }
+
+QString
+MainWindow::currentFile() const
+{ DownloadTask *t = currentTask(); return t ? t->fileName() : QString(); }
 
 DownloadTask*
 MainWindow::currentTask() const
@@ -591,7 +599,29 @@ MainWindow::browse()
 
 void
 MainWindow::openDirectory()
-{ AcLocationManager::globalInstance()->openDownloadsLocation(); }
+{
+  QString path = currentFile();
+  if (!path.isEmpty())
+    openLocation(QFileInfo(path).absolutePath());
+  else
+    AcLocationManager::globalInstance()->openDownloadsLocation();
+}
+
+void
+MainWindow::openLocation(const QString &path)
+{
+  if (QFile::exists(path)) {
+    QString url = path;
+#ifdef Q_WS_WIN
+    url.replace('\\', '/');
+    url.prepend('/');
+#endif // Q_WS_WIN
+    url.prepend("file://");
+    QDesktopServices::openUrl(QUrl(url));
+    showMessage(tr("openning") + ": " + path);
+  } else
+    warn(tr("not exist") + ": " + path);
+}
 
 // - Download -
 
@@ -930,12 +960,14 @@ MainWindow::closeEvent(QCloseEvent *event)
 {
   enum { CloseTimeout = 3000 };
   DOUT("enter");
-  if (!disposed_) {
+  if (!disposed_ && downloadManager_->isRunning()) {
     event->ignore();
     fadeOut();
+    trayIcon_->showMessage(tr("Hide Window"), tr("Minimize to Tray"));
     DOUT("exit: not disposed");
     return;
   }
+  disposed_ = true;
   appServer_->stop();
 
   hide();

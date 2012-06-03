@@ -114,19 +114,28 @@ WbWebView::contextMenuEvent(QContextMenuEvent *event)
     m->addSeparator();
   }
 
+  QMenu *searchMenu = 0;
   QString selection = selectedText().simplified();
   if (!selection.isEmpty() && hasSearchEngines()) {
+    searchMenu = new QMenu(tr("Search") + " ...");
     for (int engine = 0; engine < searchEngines_.size(); engine++) {
-      QtExt::ActionWithId *a = new QtExt::ActionWithId(engine, m);
+      QtExt::ActionWithId *a = new QtExt::ActionWithId(engine, searchMenu);
       SearchEngine *e = searchEngines_[engine];
-      a->setText(tr("Search with %1").arg(e->name()));
+      //a->setText(tr("Search with %1").arg(e->name()));
+      a->setText(e->name());
       a->setStatusTip(e->search("@key"));
       a->setIcon(QIcon(e->icon()));
       a->setCheckable(true);
       if (engine == searchEngine_)
         a->setChecked(true);
       connect(a, SIGNAL(triggeredWithId(int,bool)), SLOT(searchWithEngine(int)));
-      m->addAction(a);
+
+      switch (engine) {
+      case SearchEngineFactory::Youtube:
+      case SearchEngineFactory::WikiJa:
+        searchMenu->addSeparator();
+      }
+      searchMenu->addAction(a);
     }
 
     int engine = SearchEngineFactory::Qt;
@@ -142,9 +151,10 @@ WbWebView::contextMenuEvent(QContextMenuEvent *event)
       if (engine == searchEngine_)
         a->setChecked(true);
       connect(a, SIGNAL(triggeredWithId(int,bool)), SLOT(searchWithEngine(int)));
-      m->addAction(a);
+      searchMenu->addAction(a);
     }
 
+    m->addMenu(searchMenu);
     m->addSeparator();
   }
 
@@ -164,10 +174,10 @@ WbWebView::contextMenuEvent(QContextMenuEvent *event)
   m->addAction(clipAct);
   m->addAction(undoClosedTabAct_);
   m->addAction(clearHighlightAct);
-  m->addSeparator();
-  m->addAction(zoomResetAct);
-  m->addAction(zoomInAct);
-  m->addAction(zoomOutAct);
+  //m->addSeparator();
+  //m->addAction(zoomResetAct);
+  //m->addAction(zoomInAct);
+  //m->addAction(zoomOutAct);
   m->addSeparator();
   m->addAction(openWithOperatingSystemAct);
   m->addAction(newWindowAct_);
@@ -178,6 +188,8 @@ WbWebView::contextMenuEvent(QContextMenuEvent *event)
 
   m->exec(event->globalPos());
   delete m;
+  if (searchMenu)
+    delete searchMenu;
   //delete scm; // FIXME
   if (history)
     delete history;

@@ -6,7 +6,8 @@
 
 #include "project/common/acwindow.h"
 
-QT_FORWARD_DECLARE_CLASS(QComboBox)
+QT_FORWARD_DECLARE_CLASS(QSpinBox)
+QT_FORWARD_DECLARE_CLASS(QTimeEdit)
 
 class SeekDialog : public AcWindow
 {
@@ -15,7 +16,7 @@ class SeekDialog : public AcWindow
   typedef SeekDialog Self;
   typedef AcWindow Base;
 
-  QComboBox *ssEdit_, *mmEdit_, *hhEdit_;
+  QTimeEdit *timeEdit_;
 
 public:
   explicit SeekDialog(QWidget *parent = 0);
@@ -23,6 +24,7 @@ public:
   qint64 time() const;
 
 signals:
+  void warning(const QString &text);
   void seekRequested(qint64 msecs);
 
 public slots:

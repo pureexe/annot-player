@@ -118,6 +118,12 @@ namespace AnnotCloud {
     void setLoginTime(qint64 secs)      { loginTime_ = secs; }
     bool hasLoginTime() const           { return loginTime_ > 0; }
 
+  private: qint64 loginIp_;
+  public:
+    qint64 loginIp() const              { return loginIp_; }
+    void setLoginIp(qint64 ip)          { loginIp_ = ip; }
+    bool hasLoginIp() const             { return loginIp_; }
+
   private: quint32 blessed_;
   public:
     quint32 blessedCount() const        { return blessed_; }
@@ -150,7 +156,7 @@ namespace AnnotCloud {
   public:
     User()
       : id_(0), groupId_(0), status_(0), flags_(0), language_(0),
-        createTime_(0), loginTime_(0),
+        createTime_(0), loginTime_(0), loginIp_(0),
         blessed_(0), cursed_(0), blocked_(0), annot_(0)
     { }
 

@@ -25,7 +25,8 @@ class RemoteStream : public QObject, public InputStream, public StoppableTask
 
 public:
   explicit RemoteStream(QNetworkAccessManager *nam, QObject *parent = 0)
-    : Base(parent), nam_(nam), size_(0) { }
+    : Base(parent), nam_(nam), size_(0)
+  { request_.setAttribute(QNetworkRequest::HttpPipeliningAllowedAttribute, true); }
 
 signals:
   void finished();

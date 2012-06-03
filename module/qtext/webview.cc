@@ -82,7 +82,7 @@ WebView::WebView(QWidget *parent)
     //connect(this, SIGNAL(loadStarted()), SLOT(setLoading()));
     //connect(this, SIGNAL(loadFinished(bool)), SLOT(setFinished()));
     connect(page, SIGNAL(selectionChanged()), SIGNAL(selectionChanged()));
-    connect(page, SIGNAL(linkClicked(QUrl)), SIGNAL(linkClicked(QUrl)));
+    //connect(page, SIGNAL(linkClicked(QUrl)), SIGNAL(linkClicked(QUrl))); // links are not delegated
     //connect(page, SIGNAL(scrollRequested(int,int,QRect)), SLOT(scroll(int,int,QRect)));
   } setPage(page);
 
@@ -208,7 +208,7 @@ QString
 QtExt::
 WebView::hoveredLink() const
 {
-  WebPage *p = dynamic_cast<WebPage *>(page());
+  WebPage *p = qobject_cast<WebPage *>(page());
   return p ? p->hoveredLink() : QString();
 }
 
@@ -623,9 +623,9 @@ WebView::invalidteSelection()
   }
 }
 
-void QtExt::WebView::scrollTop()    { WebPage *p = dynamic_cast<WebPage *>(page()); if (p) p->scrollTop(); }
-void QtExt::WebView::scrollBottom() { WebPage *p = dynamic_cast<WebPage *>(page()); if (p) p->scrollBottom(); }
-void QtExt::WebView::scrollLeft()   { WebPage *p = dynamic_cast<WebPage *>(page()); if (p) p->scrollLeft(); }
-void QtExt::WebView::scrollRight()  { WebPage *p = dynamic_cast<WebPage *>(page()); if (p) p->scrollRight(); }
+void QtExt::WebView::scrollTop()    { WebPage *p = qobject_cast<WebPage *>(page()); if (p) p->scrollTop(); }
+void QtExt::WebView::scrollBottom() { WebPage *p = qobject_cast<WebPage *>(page()); if (p) p->scrollBottom(); }
+void QtExt::WebView::scrollLeft()   { WebPage *p = qobject_cast<WebPage *>(page()); if (p) p->scrollLeft(); }
+void QtExt::WebView::scrollRight()  { WebPage *p = qobject_cast<WebPage *>(page()); if (p) p->scrollRight(); }
 
 // EOF

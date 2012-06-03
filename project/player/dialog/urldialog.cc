@@ -45,7 +45,7 @@ UrlDialog::createLayout()
   editStyleSheet_ = edit_->styleSheet();
   connect(edit_, SIGNAL(editTextChanged(QString)), SLOT(verifyEditText()));
   connect(edit_->lineEdit(), SIGNAL(returnPressed()), SLOT(open()));
-  AcComboEdit *edit = dynamic_cast<AcComboEdit *>(edit_);
+  AcComboEdit *edit = qobject_cast<AcComboEdit *>(edit_);
   Q_ASSERT(edit);
   edit->setContextMenuFlags(edit->contextMenuFlags() | AcComboEdit::PasteAndGoAction);
 

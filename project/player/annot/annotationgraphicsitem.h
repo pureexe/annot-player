@@ -36,6 +36,9 @@ class AnnotationGraphicsItem : public QGraphicsTextItem
 
   typedef AnnotCloud::Annotation Annotation;
 
+signals:
+  void message(const QString &text);
+
 public:
   enum { AnnotationGraphicsItemType = UserType + 1 };
   enum Style { FloatStyle = 0, FlyStyle, SubtitleStyle, TopStyle, BottomStyle };  // Appear style
@@ -52,12 +55,14 @@ public:
 
   void setAnnotation(const Annotation &annot);
   void updateText();
+  void updateComponents();
   void updateToolTip();
 
-  const QString &richText() const { return richText_; } ///< tidied HTML
+  const QString &text() const { return text_; } ///< tidied HTML
 
   bool autoDelete() const { return !scene(); }
   bool isMetaVisible() const;
+  bool isAvatarVisible() const;
   bool isDragging() const;
 
   ///  Override
@@ -81,6 +86,7 @@ public:
 
 protected:
   void updateMeta();
+  void updateAvatar();
 
   //QString parse(const QString &text);
   //static bool isSubtitle(const QString &text);
@@ -88,6 +94,8 @@ protected:
 public slots:
   void setMetaVisible(bool t) { metaVisible_ = t; }
   void setMetaVisibleAndUpdate(bool t);
+  void setAvatarVisible(bool t) { avatarVisible_ = t; }
+  void setAvatarVisibleAndUpdate(bool t);
   void setVisible(bool t) { Base::setVisible(t); }
   void setRelativePos(const QPointF &offset) { setPos(origin_ + offset); }
   void setScale(qreal value) { Base::setScale(value); }
@@ -108,6 +116,16 @@ protected slots:
   void addMe();
   void removeMe(); // Remove me from graphics scene
   void deleteMe(); // Delete corresponding annotation
+
+  void searchWithEngine(int engine);
+  void searchWithGoogle();
+  void searchWithBing();
+
+  void translate(int lang);
+  void translateToEnglish();
+  void translateToJapanese();
+  void translateToChinese();
+  void translateToKorean();
 
   void fly();
   void stay(Style location = TopStyle);
@@ -165,6 +183,7 @@ private:
 
 private:
   bool metaVisible_;
+  bool avatarVisible_;
   Annotation annot_;
   QString prefix_, suffix_; // cached
   QString text_; // cached
@@ -183,7 +202,6 @@ private:
                      *appearOpacityAni_, *fadeAni_;
 
   QPointF dragPos_;
-  QString richText_;
 };
 
 #endif // ANNOTATIONGRAPHICSITEM_H

@@ -13,16 +13,16 @@ class QLineEdit;
 class QToolButton;
 QT_END_NAMESPACE
 
-class AcNetworkProxyPreferences : public AcPreferencesTab
+class AcNetworkProxyPrefs : public AcPreferencesTab
 {
   Q_OBJECT
-  Q_DISABLE_COPY(AcNetworkProxyPreferences)
-  typedef AcNetworkProxyPreferences Self;
+  Q_DISABLE_COPY(AcNetworkProxyPrefs)
+  typedef AcNetworkProxyPrefs Self;
   typedef AcPreferencesTab Base;
 
   enum ProxyType { SocksProxy = 0, HttpProxy, ProxyTypeCount };
 public:
-  explicit AcNetworkProxyPreferences(AcSettings *settings, QWidget *parent = 0);
+  explicit AcNetworkProxyPrefs(AcSettings *settings, QWidget *parent = 0);
 
 public slots:
   virtual bool save(); ///< \override

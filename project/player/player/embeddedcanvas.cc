@@ -36,8 +36,8 @@ EmbeddedCanvas::EmbeddedCanvas(DataManager *data, SignalHub *hub, Player *player
 // - Properties -
 
 bool
-EmbeddedCanvas::isEmpty() const
-{ return !data_->hasAnnotations(); }
+EmbeddedCanvas::needsDisplay() const
+{ return hub_->isMediaTokenMode() && player_->hasMedia(); }
 
 void
 EmbeddedCanvas::setEnabled(bool t)
@@ -52,7 +52,7 @@ EmbeddedCanvas::setEnabled(bool t)
 void
 EmbeddedCanvas::updateVisible()
 {
-  bool t = enabled_ && !isEmpty();
+  bool t = enabled_ && needsDisplay();
   if (t != isVisible())
     setVisible(t);
 }
@@ -60,7 +60,7 @@ EmbeddedCanvas::updateVisible()
 void
 EmbeddedCanvas::setVisible(bool visible)
 {
-  bool t = enabled_ && visible && !isEmpty();
+  bool t = enabled_ && visible && needsDisplay();
   if (t != isVisible()) {
     setFixedHeight(t ? CanvasHeight : 0);
     Base::setVisible(t);
@@ -74,22 +74,40 @@ EmbeddedCanvas::paintEvent(QPaintEvent *event)
 {
   DOUT("enter");
   Q_UNUSED(event);
-  if (hub_->isMediaTokenMode() && !isEmpty()) {
+  if (needsDisplay()) {
     QRect view(MarginLeft, MarginTop,
                width() - MarginLeft, height() - MarginTop);
     QPainter painter(this);
-    painter.setRenderHints(
-      //QPainter::Antialiasing |
-      QPainter::TextAntialiasing |
-      QPainter::SmoothPixmapTransform
-    );
-    paintHistogram(painter, view, data_->annotations());
+    if (data_->hasAnnotations()) {
+      painter.setRenderHints(
+        //QPainter::Antialiasing |
+        QPainter::TextAntialiasing |
+        QPainter::SmoothPixmapTransform
+      );
+      paintHistogram(painter, view, data_->annotations());
+    } else {
+      painter.setRenderHints(QPainter::TextAntialiasing );
+      paintCoordinate(painter, view);
+    }
   }
   //Base::paintEvent(event);
   DOUT("exit");
 }
 
 // - Paint -
+
+void
+EmbeddedCanvas::drawCross(QPainter &painter, const QPoint &center, int size)
+{
+  int x1, y1, x2, y2; {
+    QRect r(0, 0, size, size);
+    r.moveCenter(center);
+    r.getCoords(&x1, &y1, &x2, &y2);
+  }
+
+  painter.drawLine(x1, y1, x2, y2);
+  painter.drawLine(x1, y2, x2, y1);
+}
 
 void
 EmbeddedCanvas::paintHistogram(QPainter &painter, const QRect &view, const AnnotationList &l)
@@ -120,7 +138,9 @@ EmbeddedCanvas::paintHistogram(QPainter &painter, const QRect &view, const Annot
 
   enum { unit = 3000 }; // 3 sec
 
-  qint64 duration = player_->hasMedia() ? player_->mediaLength() : 0;
+  //qint64 duration = player_->hasMedia() ? player_->mediaLength() : 0;
+  Q_ASSERT(player_->hasMedia());
+  qint64 duration = player_->mediaLength();
 
   int metricScale = hub_->isFullScreenWindowMode() ? 1 : 2;
   int metric = (duration / (1800 * 1000) +1) * unit * metricScale; // unit / 30min
@@ -467,21 +487,73 @@ EmbeddedCanvas::paintHistogram(QPainter &painter, const QRect &view, const Annot
   }
 }
 
-// - Helper -
-
 void
-EmbeddedCanvas::drawCross(QPainter &painter, const QPoint &center, int size)
+EmbeddedCanvas::paintCoordinate(QPainter &painter, const QRect &view)
 {
-  int x1, y1, x2, y2; {
-    QRect r(0, 0, size, size);
-    r.moveCenter(center);
-    r.getCoords(&x1, &y1, &x2, &y2);
+  Q_ASSERT(player_->hasMedia());
+  enum { FontAlpha = quint8(255 * 0.9) };
+
+  enum { MarginSize = 3 };
+#ifdef Q_WS_WIN
+  enum { LabelFontSize = 9 };
+#else
+  enum { LabelFontSize = 10 };
+#endif // Q_WS_WIN
+  enum { LabelHeight = LabelFontSize + 2 };
+
+  enum { unit = 3000 }; // 3 sec
+
+  qint64 duration = player_->mediaLength();
+  if (duration <= 0)
+    return;
+
+  int metricScale = hub_->isFullScreenWindowMode() ? 1 : 2;
+  int metric = (duration / (1800 * 1000) +1) * unit * metricScale; // unit / 30min
+  Q_ASSERT(metric);
+  //if (!metric)
+  //  metric = 2 * 5*1000; // 10 seconds
+
+  enum { Stride = 90 * 1000 / unit }; // every 1.5 min for metric = unit
+
+  //enum { TopYCount = 3 };
+  //int topY[TopYCount] = { };
+
+
+  int rangeX = duration / metric;
+  if (rangeX <= 0)
+    return;
+
+  Q_ASSERT(rangeX);
+
+  // Draw histogram
+  int width = view.width(),
+      height = view.height();
+
+  // Draw label
+  {
+    QFont f = painter.font();
+    f.setPointSize(LabelFontSize);
+    f.setBold(true);
+    painter.setFont(f);
+
+    QColor color(Qt::cyan);
+    color.setAlpha(FontAlpha);
+
+    painter.setPen(color);
+    int labelCount = rangeX / Stride + 1;
+    Q_ASSERT(labelCount);
+    int labelWidth = width / labelCount;
+    for (int i = 0; i < labelCount; i++) {
+      qint64 msecs = i * Stride * metric;
+      QTime t = QtExt::msecs2time(msecs);
+      QString label = msecs >= 3600 * 1000 ? t.toString("h:mm:ss")
+                                           : t.toString("m:ss");
+      int x = MarginSize + i * labelWidth,
+          y = height - LabelHeight;
+      painter.drawText(QRect(view.x() + x, view.y() + y, labelWidth, LabelHeight), label);
+    }
   }
-
-  painter.drawLine(x1, y1, x2, y2);
-  painter.drawLine(x1, y2, x2, y1);
 }
-
 // EOF
 
 /*

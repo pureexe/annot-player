@@ -43,6 +43,7 @@
 #define SS_TOOLBUTTON_MINI      SS_TOOLBUTTON_(MINI)
 #define SS_TOOLBUTTON_EMBED     SS_TOOLBUTTON_(EMBED)
 #define SS_TOOLBUTTON_FULLSCREEN SS_TOOLBUTTON_(FULLSCREEN)
+#define SS_TOOLBUTTON_TRACE     SS_TOOLBUTTON_(TRACE)
 #define SS_TOOLBUTTON_SNAPSHOT  SS_TOOLBUTTON_(SNAPSHOT)
 #define SS_TOOLBUTTON_MENU      SS_TOOLBUTTON_(MENU)
 #define SS_TOOLBUTTON_MAXIMIZE  SS_TOOLBUTTON_(MAXIMIZE)
@@ -55,8 +56,8 @@
 #define SS_TOOLBUTTON_SHOWANNOT SS_TOOLBUTTON_(SHOWANNOT)
 #define SS_TOOLBUTTON_HIDEANNOT SS_TOOLBUTTON_(HIDEANNOT)
 
-#define SS_TOOLBUTTON_USER      SS_TOOLBUTTON_TEXT
-#define SS_TOOLBUTTON_SEEK      SS_TOOLBUTTON_TEXT
-#define SS_TOOLBUTTON_PROGRESS  SS_TOOLBUTTON_TEXT_(normal, normal, none, cyan, red, purple, purple, red, gray)
+#define SS_TOOLBUTTON_USER      ACSS_TOOLBUTTON_TEXT_(bold, normal, underline, blue, red, purple, purple, red, gray)
+#define SS_TOOLBUTTON_SEEK      ACSS_TOOLBUTTON_TEXT_(normal, normal, none, cyan, red, purple, purple, red, gray)
+#define SS_TOOLBUTTON_PROGRESS  ACSS_TOOLBUTTON_TEXT_(normal, italic, none, cyan, red, purple, purple, red, gray)
 
 #endif // STYLESHEET_H

@@ -74,7 +74,7 @@ namespace detail
   {
     static int get(lua_State *vm)
     {
-      int val = static_cast<int>(lua_tointeger(vm, -1));
+      int val = lua_tointeger(vm, -1);
       lua_pop(vm, 1);
       return val;
     }

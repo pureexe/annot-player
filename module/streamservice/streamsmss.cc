@@ -17,7 +17,7 @@ seekStreamSource(FramedSource *inputSource, double &seekNPT,
 {
   UNUSED(numBytes);
   UNUSED(streamDuration); // unimplemented
-  FramedStreamSource *src = dynamic_cast<FramedStreamSource*>(inputSource);
+  FramedStreamSource *src = dynamic_cast<FramedStreamSource *>(inputSource);
   if (src)
     seekNPT = src->seek(seekNPT);
 }

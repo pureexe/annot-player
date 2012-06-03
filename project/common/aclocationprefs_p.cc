@@ -10,7 +10,7 @@
 
 // - Locations -
 
-AcLocationPreferences::AcLocationPreferences(AcSettings *settings, QWidget *parent)
+AcLocationPrefs::AcLocationPrefs(AcSettings *settings, QWidget *parent)
   : Base(settings, parent)
 {
   locationManager_ = AcLocationManager::globalInstance();
@@ -19,7 +19,7 @@ AcLocationPreferences::AcLocationPreferences(AcSettings *settings, QWidget *pare
 }
 
 void
-AcLocationPreferences::createLayout()
+AcLocationPrefs::createLayout()
 {
   AcUi *ui = AcUi::globalInstance();
 
@@ -28,7 +28,7 @@ AcLocationPreferences::createLayout()
         AcUi::EditHint, "", tr("Downloads Location for Annot Player and Annot Downloader"), defvals.first(), defvals);
   downloadsLocationEdit_->setStatusTip(tr("Downloads Location"));
   connect(downloadsLocationEdit_, SIGNAL(editTextChanged(QString)), SLOT(verifyLocation(QString)));
-  QToolButton *downloadsLocationButton = ui->makeToolButton(0, tr("Downloads"), tr("Downloads Location"), locationManager_, SLOT(openDownloadsLocation()));
+  QToolButton *downloadsLocationButton = ui->makeToolButton(0, tr("Downloads"), tr("Open Downloads Location"), locationManager_, SLOT(openDownloadsLocation()));
 
   downloadsLocationEditStyleSheet_ = downloadsLocationEdit_->styleSheet();
 
@@ -55,7 +55,7 @@ AcLocationPreferences::createLayout()
 }
 
 void
-AcLocationPreferences::load()
+AcLocationPrefs::load()
 {
   QString downloadsLocation = AcLocationManager::globalInstance()->downloadsLocation();
   downloadsLocationEdit_->setEditText(downloadsLocation);
@@ -64,7 +64,7 @@ AcLocationPreferences::load()
 }
 
 bool
-AcLocationPreferences::save()
+AcLocationPrefs::save()
 {
   QString location = downloadsLocationEdit_->currentText().trimmed();
   if (location.isEmpty())
@@ -74,7 +74,7 @@ AcLocationPreferences::save()
 }
 
 void
-AcLocationPreferences::verifyLocation(const QString &path)
+AcLocationPrefs::verifyLocation(const QString &path)
 {
   bool ok = QFile::exists(path);
 

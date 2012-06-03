@@ -1,7 +1,7 @@
 # browser.pro
 # 3/29/2012
 
-VERSION = 0.1.2.5
+VERSION = 0.1.2.6
 
 DEFINES += PROJECT_BROWSER
 
@@ -61,6 +61,8 @@ HEADERS += \
     global.h \
     mainwindow.h \
     mainwindow_p.h \
+    preferences.h \
+    preferences_p.h \
     rc.h \
     settings.h
 
@@ -68,6 +70,8 @@ SOURCES += \
     application.cc \
     main.cc \
     mainwindow.cc \
+    preferences.cc \
+    preferences_p.cc \
     settings.cc
 
 

@@ -59,6 +59,9 @@
 #include "userview.h"
 #include "useranalyticsview.h"
 #include "global.h"
+#ifdef Q_WS_WIN
+#  include "windowsregistry.h"
+#endif // Q_WS_WIN
 #ifdef USE_MODE_SIGNAL
 #  include "signalview.h"
 #  include "messageview.h"
@@ -137,7 +140,6 @@
 #include <boost/foreach.hpp>
 #include <boost/tuple/tuple.hpp>
 #include <boost/typeof/typeof.hpp>
-#include <cstring>
 #include <ctime>
 
 #ifdef __GNUC__
@@ -218,6 +220,7 @@ MainWindow::prefixLineHasFocus() const
 void
 MainWindow::resetPlayer()
 {
+  DOUT("enter");
   Q_ASSERT(player_);
   player_->reset();
 
@@ -237,7 +240,7 @@ MainWindow::resetPlayer()
   QTimer::singleShot(0, videoView_, SLOT(hideView()));
   //videoView_->hideView();
 #else
-  player_->embed(videoView_);
+  setEmbeddedWindow(annotationView_->trackedWindow());
 #endif // Q_OS_MAC
   player_->setFullScreen(false);
 
@@ -247,6 +250,7 @@ MainWindow::resetPlayer()
   player_->setSaturation(settings->saturation());
   player_->setBrightness(settings->brightness());
   player_->setGamma(settings->gamma());
+  DOUT("exit");
 }
 
 void
@@ -285,7 +289,7 @@ MainWindow::MainWindow(bool unique, QWidget *parent, Qt::WindowFlags f)
     dragPos_(BAD_POS), windowModeUpdateTime_(0),
     tokenType_(0), recentSourceLocked_(false), cancelContextMenu_(false),
     rippleEnabled_(false), rippleFilter_(0), rippleTimer_(0),
-    preferredSubtitleTrack_(0), preferredAudioTrack_(0)
+    preferredSubtitleTrack_(0), preferredAudioTrack_(0), lastTrackedWindow_(0)
 {
   DOUT("unique =" << unique);
 #ifndef Q_WS_MAC
@@ -386,6 +390,7 @@ MainWindow::MainWindow(bool unique, QWidget *parent, Qt::WindowFlags f)
   annotationView_->setRenderHint(settings->annotationEffect());
   AnnotationSettings::globalInstance()->setScale(settings->annotationScale());
   AnnotationSettings::globalInstance()->setOffset(settings->annotationOffset());
+  AnnotationSettings::globalInstance()->setAvatarVisible(settings->isAnnotationAvatarVisible());
 
   dataServer_->setPreferLocal(settings->preferLocalDatabase());
 
@@ -593,7 +598,6 @@ MainWindow::createComponents(bool unique)
   //osdWindow_->setLayout(layout);
   osdWindow_->setEventListener(annotationView_);
 
-  //embeddedPlayer_ = new EmbeddedPlayerUi(hub_, player_, server_, osdWindow_);
   embeddedPlayer_ = new EmbeddedPlayerUi(hub_, player_, server_, dataManager_);
   embeddedCanvas_ = embeddedPlayer_->canvas();
 
@@ -616,6 +620,8 @@ MainWindow::createComponents(bool unique)
   embeddedPlayer_->setContainerWidget(this);
 
   annotationView_->updateGeometry();
+  annotationView_->show();
+  globalOsdConsole_->show();
 
   mainPlayer_ = new MainPlayerUi(hub_, player_, server_, this);
   miniPlayer_ = new MiniPlayerUi(hub_, player_, server_, this);
@@ -645,12 +651,6 @@ MainWindow::createComponents(bool unique)
 
   recentMessageView_ = new MessageView(this);
   windows_.append(recentMessageView_);
-
-  connect(this, SIGNAL(attached(ProcessInfo)), signalView_->processView(), SIGNAL(attached(ProcessInfo)));
-  connect(this, SIGNAL(detached(ProcessInfo)), signalView_->processView(), SIGNAL(detached(ProcessInfo)));
-
-  connect(signalView_->processView(), SIGNAL(attached(ProcessInfo)), recentMessageView_, SLOT(setProcessNameFromProcessInfo(ProcessInfo)));
-  connect(signalView_->processView(), SIGNAL(detached(ProcessInfo)), recentMessageView_, SLOT(clearProcessName()));
 #endif // USE_MODE_SIGNAL
 
 #ifdef WITH_MODULE_DOLL
@@ -771,6 +771,8 @@ MainWindow::createConnections()
     connect(_playerui->prefixComboBox()->lineEdit(), SIGNAL(textChanged(QString)), SLOT(syncPrefixLineText(QString))); \
     connect(_playerui->previousButton(), SIGNAL(clicked()), SLOT(previous())); \
     connect(_playerui->nextButton(), SIGNAL(clicked()), SLOT(next())); \
+    connect(_playerui->toggleTraceWindowButton(), SIGNAL(clicked(bool)), SLOT(setWindowTrackingEnabled(bool))); \
+    connect(_playerui->toggleTraceWindowButton(), SIGNAL(clicked(bool)), SLOT(updateTraceButtons())); \
     connect(_playerui, SIGNAL(updateMenuRequested()), SLOT(updateContextMenu())); \
     connect(this, SIGNAL(downloadProgressUpdated()), \
             _playerui, SLOT(updatePositionSlider()), Qt::QueuedConnection);
@@ -827,6 +829,11 @@ MainWindow::createConnections()
   connect(this, SIGNAL(showAnnotationOnceRequested(Annotation)),
           annotationView_, SLOT(showAnnotationOnce(Annotation)),
           Qt::QueuedConnection);
+
+  connect(annotationView_, SIGNAL(searchRequested(int,QString)), SLOT(searchWithEngine(int,QString)));
+  connect(annotationView_, SIGNAL(translateRequested(QString,int)), SLOT(translate(QString,int)));
+
+  connect(annotationView_, SIGNAL(message(QString)), SLOT(showMessage(QString)));
 
   // - Rubber band -
   connect(pauseRubberBand_, SIGNAL(selected(QRect)), SLOT(pauseAnnotationsAt(QRect)));
@@ -924,10 +931,11 @@ MainWindow::createConnections()
 #ifdef Q_WS_WIN
   connect(annotationView_, SIGNAL(trackedWindowChanged(WId)), SLOT(setEmbeddedWindow(WId)));
 #endif // Q_WS_WIN
+  connect(annotationView_, SIGNAL(trackedWindowChanged(WId)), SLOT(updateTraceButtons()));
 
-  //connect(annotationView_, SIGNAL(trackedWindowDestroyed()), hub_, SLOT(setNormalPlayerMode()));
-  //connect(embeddedPlayer_, SIGNAL(trackedWindowDestroyed()), hub_, SLOT(setNormalPlayerMode()));
   connect(annotationView_, SIGNAL(trackedWindowChanged(WId)), SLOT(invalidatePlayerMode()));
+  connect(annotationView_, SIGNAL(trackedWindowChanged(WId)), SLOT(updateOsdWindowOnTop()));
+  connect(annotationView_, SIGNAL(trackedWindowDestroyed()), hub_, SLOT(stop()));
 
   connect(annotationView_, SIGNAL(fullScreenModeChanged(bool)), embeddedPlayer_, SLOT(setFullScreenMode(bool)));
 
@@ -1017,14 +1025,24 @@ MainWindow::createConnections()
 #endif // WITH_MODULE_CLIENTAGENT
 
 #ifdef USE_MODE_SIGNAL
+  connect(this, SIGNAL(windowPicked(WId)), annotationView_, SLOT(setTrackedWindow(WId)));
+  connect(this, SIGNAL(windowPicked(WId)), SLOT(setWindowOnTop()));
+  //connect(this, SIGNAL(windowPicked(WId)), osdWindow_, SLOT(setWindowOnTop()));
+
+  connect(this, SIGNAL(attached(ProcessInfo)), signalView_->processView(), SIGNAL(attached(ProcessInfo)));
+  connect(this, SIGNAL(detached(ProcessInfo)), signalView_->processView(), SIGNAL(detached(ProcessInfo)));
+
+  connect(signalView_->processView(), SIGNAL(attached(ProcessInfo)), recentMessageView_, SLOT(setProcessNameFromProcessInfo(ProcessInfo)));
+  connect(signalView_->processView(), SIGNAL(detached(ProcessInfo)), recentMessageView_, SLOT(clearProcessName()));
+  connect(signalView_, SIGNAL(message(QString)), SLOT(showMessage(QString)));
+  connect(signalView_, SIGNAL(warning(QString)), SLOT(warn(QString)));
+  connect(signalView_, SIGNAL(hookSelected(ulong,ProcessInfo)), SLOT(backlogDialog()));
   connect(signalView_, SIGNAL(hookSelected(ulong,ProcessInfo)), SLOT(openProcessHook(ulong,ProcessInfo)));
+
   connect(recentMessageView_, SIGNAL(hookSelected(ulong)), SLOT(openProcessHook(ulong)));
   connect(recentMessageView_, SIGNAL(hookSelected(ulong)), recentMessageView_, SLOT(hide()));
   connect(messageHandler_, SIGNAL(messageReceivedWithId(qint64)), annotationView_, SLOT(showAnnotationsAtPos(qint64)));
   connect(messageHandler_, SIGNAL(messageReceivedWithText(QString)), SLOT(translate(QString)));
-
-  // Ensure backlogDialog enabled in signal mode.
-  connect(signalView_, SIGNAL(hookSelected(ulong,ProcessInfo)), SLOT(backlogDialog()));
 #endif // USE_MODE_SIGNAL
   //connect(player_, SIGNAL(opening()), SLOT(backlogDialog()));
   // MRL resolver
@@ -1079,10 +1097,10 @@ MainWindow::createActions()
           SIGNAL(triggered()), hub_, SLOT(open()));
   connect(playAct_ = new QAction(QIcon(RC_IMAGE_PLAY), tr("Play"), this),
           SIGNAL(triggered()), hub_, SLOT(play()));
-    playAct_->setShortcut(QKeySequence("SPACE"));
+          playAct_->setShortcut(QKeySequence("SPACE"));
   connect(pauseAct_ = new QAction(QIcon(RC_IMAGE_PAUSE), tr("Pause"), this),
           SIGNAL(triggered()), hub_, SLOT(pause()));
-    pauseAct_->setShortcut(QKeySequence("SPACE"));
+          pauseAct_->setShortcut(QKeySequence("SPACE"));
   connect(stopAct_ = new QAction(QIcon(RC_IMAGE_STOP), tr("Stop"), this),
           SIGNAL(triggered()), hub_, SLOT(stop()));
   connect(replayAct_ = new QAction(QIcon(RC_IMAGE_REPLAY), tr("Replay"), this),
@@ -1104,19 +1122,48 @@ MainWindow::createActions()
           SIGNAL(triggered()), SLOT(logout()));
 
   connect(updateAnnotationsAct_ = new QAction(tr("Update Annotations"), this),
-         SIGNAL(triggered()), SLOT(updateAnnotations()));
-    updateAnnotationsAct_->setShortcut(QKeySequence("CTRL+U"));
-    addAction(updateAnnotationsAct_);
+          SIGNAL(triggered()), SLOT(updateAnnotations()));
+          updateAnnotationsAct_->setShortcut(QKeySequence("CTRL+U"));
+          addAction(updateAnnotationsAct_);
+
+  connect(downloadCurrentUrlAct_ = new QAction(QIcon(ACRC_IMAGE_DOWNLOADER), TR(T_MENUTEXT_DOWNLOADCURRENT), this),
+          SIGNAL(triggered()), SLOT(downloadCurrentUrl()));
+          downloadCurrentUrlAct_->setShortcut(QKeySequence("CTRL+D"));
+          addAction(downloadCurrentUrlAct_);
+
+  connect(openProxyBrowserAct_ = new QAction(QIcon(ACRC_IMAGE_BROWSER), TR(T_MENUTEXT_PROXYVIEW), this),
+          SIGNAL(triggered()), SLOT(openProxyBrowser()));
+          openProxyBrowserAct_->setShortcut(QKeySequence("CTRL+B"));
+          addAction(openProxyBrowserAct_);
+
+  connect(toggleDownloaderVisibleAct_ = new QAction(QIcon(ACRC_IMAGE_DOWNLOADER), TR(T_MENUTEXT_DOWNLOAD), this),
+          SIGNAL(triggered()), SLOT(showDownloader()));
+
+  connect(openInWebBrowserAct_ = new QAction(QIcon(ACRC_IMAGE_BROWSER), TR(T_MENUTEXT_OPENINWEBBROWSER), this),
+          SIGNAL(triggered()), SLOT(openInWebBrowser()));
+
+  connect(showWindowPickDialogAct_ = new QAction(TR(T_MENUTEXT_WINDOWPICKDIALOG), this),
+          SIGNAL(triggered()), SLOT(showWindowPickDialog()));
+  connect(showProcessDialogAct_ = new QAction(TR(T_MENUTEXT_PROCESSPICKDIALOG), this),
+          SIGNAL(triggered()), SLOT(showProcessPickDialog()));
 
   connect(toggleMagnifierVisibleAct_ = new QAction(tr("Image Filter"), this),
           SIGNAL(triggered(bool)), SLOT(setMagnifierVisible(bool)));
-    toggleMagnifierVisibleAct_->setCheckable(true);
-    toggleMagnifierVisibleAct_->setShortcut(QKeySequence("CTRL+E"));
-    addAction(toggleMagnifierVisibleAct_);
+          toggleMagnifierVisibleAct_->setCheckable(true);
+          toggleMagnifierVisibleAct_->setShortcut(QKeySequence("CTRL+E"));
+          addAction(toggleMagnifierVisibleAct_);
 
   connect(toggleAnnotationBandwidthLimitedAct_ = new QAction(tr("Limit Bandwidth"), this),
           SIGNAL(triggered(bool)), annotationView_, SLOT(setItemCountLimited(bool)));
-    toggleAnnotationBandwidthLimitedAct_->setCheckable(true);
+          toggleAnnotationBandwidthLimitedAct_->setCheckable(true);
+
+  connect(toggleAnnotationAvatarVisibleAct_ = new QAction(tr("Always Show Avatar"), this),
+          SIGNAL(triggered(bool)), AnnotationSettings::globalInstance(), SLOT(setAvatarVisible(bool)));
+          toggleAnnotationAvatarVisibleAct_->setCheckable(true);
+
+  connect(toggleWindowTrackingAct_ = new QAction(QIcon(RC_IMAGE_TRACE), tr("Trace Window"), this),
+          SIGNAL(triggered(bool)), SLOT(setWindowTrackingEnabled(bool)));
+          toggleWindowTrackingAct_->setCheckable(true);
 
   connect(aboutAct_ = new QAction(tr("About"), this), SIGNAL(triggered()), SLOT(about()));
   connect(updateAct_ = new QAction(tr("Update"), this), SIGNAL(triggered()), SLOT(update()));
@@ -1126,6 +1173,9 @@ MainWindow::createActions()
     preferencesAct_->setShortcut(QKeySequence("CTRL+,"));
     addAction(preferencesAct_);
 #endif // !Q_WS_MAC
+#ifdef Q_WS_WIN
+    new QShortcut(QKeySequence("ALT+O"), this, SLOT(showPreferences()));
+#endif // Q_WS_WIN
 
   connect(helpAct_ = new QAction(tr("Help"), this), SIGNAL(triggered()), SLOT(help()));
     helpAct_->setShortcuts(QKeySequence::HelpContents);
@@ -1151,14 +1201,11 @@ MainWindow::createActions()
   MAKE_ACTION(openUrlAct_,      OPENURL,        this,           SLOT(openUrl()))
   MAKE_ACTION(openAnnotationUrlAct_, OPENANNOTATIONURL, this,   SLOT(openAnnotationUrl()))
   MAKE_ACTION(openDeviceAct_,   OPENDEVICE,     this,           SLOT(openDevice()))
-  MAKE_ACTION(downloadCurrentUrlAct_,DOWNLOADCURRENT, this,    SLOT(downloadCurrentUrl()))
   MAKE_ACTION(copyCurrentUrlAct_,  COPYCURRENTURL,     this,    SLOT(copyCurrentUrl()))
   MAKE_ACTION(copyCurrentTitleAct_,  COPYCURRENTTITLE, this,    SLOT(copyCurrentTitle()))
-  MAKE_ACTION(openInWebBrowserAct_,OPENINWEBBROWSER, this,      SLOT(openInWebBrowser()))
   MAKE_ACTION(openVideoDeviceAct_, OPENVIDEODEVICE,  this,      SLOT(openVideoDevice()))
   MAKE_ACTION(openAudioDeviceAct_, OPENAUDIODEVICE,  this,      SLOT(openAudioDevice()))
   MAKE_ACTION(openSubtitleAct_, OPENSUBTITLE,   this,           SLOT(openSubtitle()))
-  MAKE_ACTION(openProxyBrowserAct_, PROXYVIEW,   this,           SLOT(openProxyBrowser()))
   MAKE_ACTION(checkInternetConnectionAct_,      CHECKINTERNET,   this, SLOT(checkInternetConnection()))
   MAKE_ACTION(deleteCachesAct_, DELETECACHE,    this,           SLOT(deleteCaches()))
   MAKE_ACTION(newWindowAct_,    NEWWINDOW,      this,           SLOT(newWindow()))
@@ -1221,11 +1268,8 @@ MainWindow::createActions()
   MAKE_TOGGLE(toggleBlacklistViewVisibleAct_, BLACKLIST,   this,    SLOT(setBlacklistViewVisible(bool)))
   MAKE_TOGGLE(toggleAnnotationFilterEnabledAct_, ENABLEBLACKLIST,   annotationFilter_,    SLOT(setEnabled(bool)))
   MAKE_TOGGLE(toggleBacklogDialogVisibleAct_, BACKLOG,   this,    SLOT(setBacklogDialogVisible(bool)))
-  MAKE_TOGGLE(toggleDownloaderVisibleAct_, DOWNLOAD,   this,    SLOT(showDownloader()))
   MAKE_TOGGLE(toggleConsoleDialogVisibleAct_, CONSOLE,   this,    SLOT(setConsoleDialogVisible(bool)))
   MAKE_TOGGLE(toggleLoginDialogVisibleAct_, LOGINDIALOG, this,         SLOT(setLoginDialogVisible(bool)))
-  MAKE_TOGGLE(toggleWindowPickDialogVisibleAct_,  WINDOWPICKDIALOG,  this,         SLOT(setWindowPickDialogVisible(bool)))
-  MAKE_TOGGLE(toggleProcessPickDialogVisibleAct_, PROCESSPICKDIALOG, this,         SLOT(setProcessPickDialogVisible(bool)))
   MAKE_TOGGLE(toggleSeekDialogVisibleAct_,  SEEKDIALOG,  this,         SLOT(setSeekDialogVisible(bool)))
   MAKE_TOGGLE(toggleLiveDialogVisibleAct_,  LIVEDIALOG,  this,         SLOT(setLiveDialogVisible(bool)))
   MAKE_TOGGLE(toggleSyncDialogVisibleAct_,  SYNCDIALOG,  this,         SLOT(setSyncDialogVisible(bool)))
@@ -1361,12 +1405,6 @@ MainWindow::createActions()
     saveMediaAct_->setShortcuts(QKeySequence::Save);
     addAction(saveMediaAct_);
 
-    downloadCurrentUrlAct_->setShortcut(QKeySequence("CTRL+D"));
-    addAction(downloadCurrentUrlAct_);
-
-    openProxyBrowserAct_->setShortcut(QKeySequence("CTRL+B"));
-    addAction(openProxyBrowserAct_);
-
     resumeAnnotationAct_->setShortcut(QKeySequence("CTRL+R"));
     addAction(resumeAnnotationAct_);
 
@@ -1393,6 +1431,10 @@ MainWindow::createActions()
     addAction(toggleMiniModeAct_);
     toggleFullScreenModeAct_->setShortcut(QKeySequence(K_CMD "+3"));
     addAction(toggleFullScreenModeAct_);
+#ifdef WITH_WIN_PICKER
+    toggleWindowTrackingAct_->setShortcut(QKeySequence(K_CMD "+4"));
+    addAction(toggleWindowTrackingAct_);
+#endif // WITH_WIN_PICKER
 
     QShortcut *fs = new QShortcut(QKeySequence(K_CMD "+ENTER"), this);
     connect(fs, SIGNAL(activated()), hub_, SLOT(toggleFullScreenWindowMode()));
@@ -1704,8 +1746,7 @@ MainWindow::createMenus()
 #ifdef USE_MODE_SIGNAL
 
 #ifdef WITH_WIN_PICKER
-    gameMenu_->addAction(toggleProcessPickDialogVisibleAct_);
-    gameMenu_->addAction(toggleWindowPickDialogVisibleAct_);
+    gameMenu_->addAction(showProcessDialogAct_);
 #endif // WITH_WIN_PICKER
     gameMenu_->addAction(toggleSignalViewVisibleAct_);
     gameMenu_->addSeparator();
@@ -1938,6 +1979,8 @@ MainWindow::createMenus()
     utilityMenu_->addAction(openProxyBrowserAct_);
     utilityMenu_->addAction(toggleDownloaderVisibleAct_);
     utilityMenu_->addAction(toggleMagnifierVisibleAct_);
+    utilityMenu_->addAction(toggleAnnotationEditorVisibleAct_ );
+
 #ifndef Q_WS_MAC
     utilityMenu_->addAction(newWindowAct_);
 #endif // !Q_WS_MAC
@@ -1998,6 +2041,7 @@ MainWindow::createMenus()
     annotationSettingsMenu_->addMenu(annotationSubtitleMenu_);
     annotationSettingsMenu_->addMenu(subtitleStyleMenu_);
     annotationSettingsMenu_->addSeparator();
+    annotationSettingsMenu_->addAction(toggleAnnotationAvatarVisibleAct_);
     annotationSettingsMenu_->addAction(toggleAnnotationBandwidthLimitedAct_);
     annotationSettingsMenu_->addSeparator();
     annotationSettingsMenu_->addAction(increaseAnnotationScaleAct_);
@@ -2181,14 +2225,19 @@ MainWindow::invalidatePlayerMode()
   case SignalHub::MiniPlayerMode:
     if (annotationView_->trackedWindow())
       hub_->setEmbeddedPlayerMode();
+    else
+      hub_->setNormalPlayerMode();
     break;
   case SignalHub::EmbeddedPlayerMode:
     if (!annotationView_->trackedWindow())
-      //hub_->setNormalPlayerMode();
-      hub_->stop();
+      hub_->setNormalPlayerMode();
     break;
   }
 }
+
+void
+MainWindow::updateOsdWindowOnTop()
+{ osdWindow_->setWindowOnTop(annotationView_->trackedWindow()); }
 
 void
 MainWindow::updatePlayerMode()
@@ -2286,7 +2335,7 @@ MainWindow::updateWindowMode()
 
       QSize sz = size();
       QSize screen = QApplication::desktop()->availableGeometry(this).size();
-      if (hub_->isEmbeddedPlayerMode() &&
+      if (hub_->isEmbeddedPlayerMode() && !annotationView_->trackedWindow() &&
           isPlaying() &&
           (isMaximized() ||
           (sz == PREFERRED_WINDOW_SIZE ||
@@ -2457,7 +2506,7 @@ MainWindow::openFile()
   static const QString filter =
       TR(T_FORMAT_SUPPORTED) + ("(" G_FORMAT_SUPPORTED ")" ";;")
 #ifdef USE_MODE_SIGNAL
-    + TR(T_FORMAT_PROGRAM)   + ("(" G_FORMAT_PROGRAM ")" ";;")
+    + TR(T_GALGAME)   + ("(" G_FORMAT_PROGRAM ")" ";;")
 #endif // USE_MODE_SIGNAL
     + TR(T_FORMAT_VIDEO)     + ("(" G_FORMAT_VIDEO ")" ";;")
     + TR(T_FORMAT_AUDIO)     + ("(" G_FORMAT_AUDIO ")" ";;")
@@ -2616,10 +2665,8 @@ MainWindow::openLocalUrl(const QUrl &url)
 
   recentSourceLocked_ = false;
   QString path = url.toLocalFile();
-  if (!path.isEmpty())
-    openSource(path);
-  else
-    openMrl(url.toEncoded(), false); // check path = false
+  DOUT("url =" << url << ", path =" << path);
+  openSource(path.isEmpty() ? url.toString() : path);
 }
 
 void
@@ -2638,13 +2685,20 @@ MainWindow::openLocalUrls(const QList<QUrl> &urls)
           playlist.append(fileName);
       }
     }
-    if (!urls.isEmpty()) {
-      playlist_ = playlist;
-      openLocalUrl(urls.front());
-    }
-    if (player_->hasMedia() && !subs.isEmpty())
+    switch (playlist.size()) {
+    case 0:
+      if (!subs.isEmpty())
+        openLocalUrl(subs.first());
+      break;
+    case 1:
+      openLocalUrl(playlist.first());
       foreach (const QString &f, QtExt::revertList(subs))
         openSubtitleFile(f);
+      break;
+    default:
+      playlist_ = playlist;
+      openLocalUrl(playlist_.first());
+    }
   }
 }
 
@@ -2671,8 +2725,11 @@ MainWindow::openRemoteMedia(const MediaInfo &mi, QNetworkCookieJar *jar)
   DOUT("refurl =" << mi.refurl << ", mrls.size =" << mi.mrls.size());
   recentSourceLocked_ = false;
   playlist_.clear();
-  if (mi.mrls.isEmpty())
+  if (mi.mrls.isEmpty()) {
+    emit error(tr("failed to resolve URL") + ": " + mi.refurl);
+    DOUT("exit: empty mrls");
     return;
+  }
   //if (mi.mrls.size() > 1) {
   //  foreach (const MrlInfo &mrl, mi.mrls)
   //    playlist_.append(mrl.url);
@@ -2773,10 +2830,12 @@ MainWindow::openMrl(const QString &path, bool checkPath)
 
   disableNavigation();
 
-  if (!isVisible())
-    show();
-  if (isMinimized())
-    showNormal();
+  if (!annotationView_->trackedWindow()) {
+    if (!isVisible())
+      show();
+    if (isMinimized())
+      showNormal();
+  }
 
   bool fullScreen = hub_->isLiveTokenMode() && hub_->isEmbeddedPlayerMode();
   hub_->setMediaTokenMode();
@@ -2949,7 +3008,7 @@ MainWindow::playMedia()
 
     if (!isRemoteMrl(path) && Player::isSupportedAudio(path))
       resize(INIT_WINDOW_SIZE);
-    else
+    else if (!annotationView_->trackedWindow())
       updateWindowSize();
 
 #ifdef Q_OS_MAC
@@ -3931,6 +3990,7 @@ MainWindow::setSeekDialogVisible(bool visible)
     seekDialog_ = new SeekDialog(this);
     windows_.append(seekDialog_);
     connect(seekDialog_, SIGNAL(seekRequested(qint64)), SLOT(seek(qint64)));
+    connect(seekDialog_, SIGNAL(warning(QString)), SLOT(warn(QString)));
   }
 
   if (visible) {
@@ -3939,7 +3999,7 @@ MainWindow::setSeekDialogVisible(bool visible)
     seekDialog_->show();
     seekDialog_->raise();
   } else
-    seekDialog_->hide();
+    seekDialog_->fadeOut();
 }
 
 void
@@ -4003,18 +4063,13 @@ MainWindow::setSyncDialogVisible(bool visible)
 //}
 
 void
-MainWindow::showWindowPickDialog()
-{ setWindowPickDialogVisible(true); }
-
-void
 MainWindow::setWindowPickDialogVisible(bool visible)
 {
   if (!windowPickDialog_) {
     windowPickDialog_ = new PickDialog(this);
     windowPickDialog_->setMessage(tr("Select annots window"));
-    connect(windowPickDialog_, SIGNAL(windowPicked(WId)), annotationView_, SLOT(setTrackedWindow(WId)));
-    connect(windowPickDialog_, SIGNAL(windowPicked(WId)), SLOT(setWindowOnTop()));
-    //connect(windowPickDialog_, SIGNAL(windowPicked(WId)), osdWindow_, SLOT(setWindowOnTop()));
+    connect(windowPickDialog_, SIGNAL(windowPicked(WId)), SIGNAL(windowPicked(WId)));
+    connect(windowPickDialog_, SIGNAL(cancelled()), SLOT(updateOsdWindowOnTop()));
     windows_.append(windowPickDialog_);
 
     // FIXME
@@ -4033,11 +4088,11 @@ MainWindow::setProcessPickDialogVisible(bool visible)
     windows_.append(processPickDialog_);
     processPickDialog_->setMessage(tr("Select process window to open"));
 
-    connect(processPickDialog_, SIGNAL(windowPicked(WId)), annotationView_, SLOT(setTrackedWindow(WId)));
+    connect(processPickDialog_, SIGNAL(windowPicked(WId)), SIGNAL(windowPicked(WId)));
+    connect(processPickDialog_, SIGNAL(cancelled()), SLOT(updateOsdWindowOnTop()));
 #ifdef USE_MODE_SIGNAL
     connect(processPickDialog_, SIGNAL(windowPicked(WId)), SLOT(openProcessWindow(WId)));
 #endif // USE_MODE_SIGNAL
-    connect(processPickDialog_, SIGNAL(windowPicked(WId)), SLOT(setWindowOnTop()));
     //connect(processPickDialog_, SIGNAL(windowPicked(WId)), osdWindow_, SLOT(setWindowOnTop()));
 
     // FIXME
@@ -4129,13 +4184,13 @@ QString
 MainWindow::removeUrlPrefix(const QString &url)
 {
   if (url.startsWith(PLAYER_URL_CD, Qt::CaseInsensitive))
-    return url.mid(::strlen(PLAYER_URL_CD));
+    return url.mid(qstrlen(PLAYER_URL_CD));
 
   if (url.startsWith(PLAYER_URL_VCD, Qt::CaseInsensitive))
-    return url.mid(::strlen(PLAYER_URL_VCD));
+    return url.mid(qstrlen(PLAYER_URL_VCD));
 
   if (url.startsWith(PLAYER_URL_DVD, Qt::CaseInsensitive))
-    return url.mid(::strlen(PLAYER_URL_DVD));
+    return url.mid(qstrlen(PLAYER_URL_DVD));
 
   return url;
 }
@@ -4157,7 +4212,7 @@ MainWindow::fileType(const QString &fileName)
       return Token::TT_Program;
 #endif // USE_MODE_SIGNAL
 
-  if (Player::isSupportedVideo(fileName))
+  if (Player::isSupportedVideo(fileName) || Player::isSupportedImage(fileName))
     return Token::TT_Video;
   if (Player::isSupportedAudio(fileName))
     return Token::TT_Audio;
@@ -4230,6 +4285,7 @@ MainWindow::updateAnnotations(bool async)
 void
 MainWindow::invalidateToken(const QString &mrl)
 {
+  DOUT("enter: mrl =" << mrl);
   if (!recentDigest_.isEmpty() || isDigestReady(mrl)) {
     dataManager_->token().setId(0);
     dataManager_->removeAliases();
@@ -4252,7 +4308,9 @@ MainWindow::invalidateToken(const QString &mrl)
     annotationView_->invalidateAnnotations();
   }
 
-  QTimer::singleShot(0, this, SLOT(resumeAll()));
+  if (hub_->isMediaTokenMode())
+    QTimer::singleShot(0, this, SLOT(resumeAll()));
+  DOUT("exit");
 }
 
 void
@@ -4322,43 +4380,62 @@ MainWindow::signFileWithUrl(const QString &path, const QString &url, bool async)
     token.setType(Token::TT_Video);
   }
 
-  Alias srcAlias;
+  AliasList aliases;
   QString fileName = QFileInfo(path).fileName();
   if (!fileName.isEmpty()) {
     if (fileName.size() > Traits::MAX_ALIAS_LENGTH) {
       fileName = fileName.mid(0, Traits::MAX_ALIAS_LENGTH);
       warn(TR(T_WARNING_LONG_STRING_TRUNCATED) + ": " + fileName);
     }
-    srcAlias.setUserId(server_->user().id());
-    srcAlias.setType(Alias::AT_Source);
-    srcAlias.setLanguage(server_->user().language());
-    srcAlias.setText(fileName);
-    srcAlias.setUpdateTime(now);
+    Alias a;
+    a.setUserId(server_->user().id());
+    a.setType(Alias::AT_Source);
+    a.setLanguage(server_->user().language());
+    a.setText(fileName);
+    a.setUpdateTime(now);
+    aliases.append(a);
   }
 
-  Alias urlAlias; {
-    urlAlias.setType(Alias::AT_Url);
-    urlAlias.setUserId(server_->user().id());
+  if (!url.isEmpty()) {
+    Alias a;
+    a.setType(Alias::AT_Url);
+    a.setUserId(server_->user().id());
     qint32 lang = Alias::guessUrlLanguage(url, server_->user().language());
-    urlAlias.setLanguage(lang);
-    urlAlias.setText(url);
-    urlAlias.setUpdateTime(now);
+    a.setLanguage(lang);
+    a.setText(url);
+    a.setUpdateTime(now);
+    aliases.append(a);
   }
+  Q_ASSERT(!aliases.isEmpty());
 
-  AliasList aliases;
-  if (srcAlias.hasText())
-    aliases.append(srcAlias);
-  aliases.append(urlAlias);
+  qint64 tid = 0;
 
-  DOUT("inetMutex locking");
-  inetMutex_.lock();
-  DOUT("inetMutex locked");
+  if (!aliases.isEmpty()) {
+    DOUT("inetMutex locking");
+    inetMutex_.lock();
+    DOUT("inetMutex locked");
 
-  qint64 tid = dataServer_->submitTokenAndAliases(token, aliases);
+    tid = dataServer_->submitTokenAndAliases(token, aliases);
 
-  DOUT("inetMutex unlocking");
-  inetMutex_.unlock();
-  DOUT("inetMutex unlocked");
+    if (tid && dataManager_->hasAnnotations() && cache_->isValid()) {
+      if (!aliases.isEmpty()) {
+        cache_->deleteAliasesWithTokenId(tid);
+        cache_->insertAliases(aliases);
+      }
+      AnnotationList l;
+      foreach (Annotation a, dataManager_->annotations()) {
+        a.setTokenId(tid);
+        a.setTokenDigest(QString());
+        l.append(a);
+      }
+      cache_->deleteAnnotationsWithTokenId(tid);
+      cache_->insertAnnotations(l);
+    }
+
+    DOUT("inetMutex unlocking");
+    inetMutex_.unlock();
+    DOUT("inetMutex unlocked");
+  }
 
   if (tid)
     emit message(tr("media signed") + ": " + path);
@@ -4417,6 +4494,7 @@ MainWindow::setToken(const QString &input, bool async)
           }
 
           alias.setType(Alias::AT_Source);
+          alias.setUserId(server_->user().id());
           alias.setLanguage(server_->user().language());
           alias.setText(fileName);
           alias.setUpdateTime(QDateTime::currentMSecsSinceEpoch() / 1000);
@@ -4438,17 +4516,19 @@ MainWindow::setToken(const QString &input, bool async)
         recentUrlTitles_.erase(recentUrlTitles_.begin());
       recentUrlTitles_[recentSource_] = title;
       alias.setType(Alias::AT_Name);
+      alias.setUserId(server_->user().id());
       alias.setLanguage(server_->user().language());
       alias.setText(title);
       alias.setUpdateTime(QDateTime::currentMSecsSinceEpoch() / 1000);
     }
   }
 
- if (!token.hasDigest() && !token.hasSource()) {
+ if (//!token.hasType() ||
+     !token.hasDigest() && !token.hasSource()) {
     DOUT("inetMutex unlocking");
     inetMutex_.unlock();
     DOUT("inetMutex unlocked");
-    DOUT("exit from empty digest branch");
+    DOUT("exit from empty digest or tokenType branch");
     return;
   }
 
@@ -4467,10 +4547,31 @@ MainWindow::setToken(const QString &input, bool async)
   }
 
   AliasList aliases;
+  if (alias.hasText())
+    aliases.append(alias);
+
+#ifdef USE_MODE_SIGNAL
+  if (hub_->isSignalTokenMode()) {
+    WId hwnd = annotationView_->trackedWindow();
+    if (hwnd && QtWin::getWindowProcessId(hwnd) != QCoreApplication::applicationPid()) {
+      QString t = QtWin::getWindowText(hwnd).trimmed();
+      if (!t.isEmpty()) {
+        DOUT("galgame window title =" << t);
+        Alias a;
+        a.setType(Alias::AT_Name);
+        a.setUserId(server_->user().id());
+        a.setLanguage(server_->user().language());
+        a.setText(t);
+        a.setUpdateTime(QDateTime::currentMSecsSinceEpoch() / 1000);
+        aliases.append(a);
+      }
+    }
+  }
+#endif // USE_MODE_SIGNAL
 
   qint64 tid = 0;
   if (submit_)
-    tid = dataServer_->submitTokenAndAlias(token, alias);
+    tid = dataServer_->submitTokenAndAliases(token, aliases);
   //alias.setTokenId(tid)
   if (tid) {
     Token t = dataServer_->selectTokenWithId(tid);
@@ -4492,6 +4593,9 @@ MainWindow::setToken(const QString &input, bool async)
 
   dataManager_->setToken(token);
   dataManager_->setAliases(aliases);
+
+  DOUT("token type =" << token.type() << ", part =" << token.part() << ", source =" << token.source());
+  DOUT("alias count =" << aliases.size());
 
 //  if (commentView_)
 //    commentView_->setTokenId(token.id());
@@ -5036,7 +5140,7 @@ MainWindow::mousePressEvent(QMouseEvent *event)
         annotationView_->removeItems(gp);
         annotationView_->expelItems(gp);
         Application::globalInstance()->setCursor(Qt::OpenHandCursor);
-      } else if (hub_->isMediaTokenMode() && (
+      } else if (hub_->isMediaTokenMode() && annotationView_->isItemVisible() && (
           hub_->isFullScreenWindowMode() ||
           !player_->isStopped() && dataManager_->hasAnnotations() //&& annotationView_->hasItems()
         ))
@@ -5302,7 +5406,7 @@ MainWindow::isGlobalPosOverEmbeddedPositionSlider(const QPoint &pos) const
   QRect r(embeddedPlayer_->mapToGlobal(QPoint()), embeddedPlayer_->size()); // globalRect of embeddedPlayer
   if (embeddedPlayer_->infoView()->isVisible())
     r.setTop(r.top() + embeddedPlayer_->infoView()->height());
-  if (embeddedCanvas_->isVisible() && embeddedCanvas_->isEmpty())
+  if (embeddedCanvas_->isVisible() && !embeddedCanvas_->needsDisplay())
     r.setTop(r.top() + embeddedCanvas_->height());
   return !embeddedPlayer_->isOnTop() &&
          pos.x() > r.left() && pos.x() < r.right() &&
@@ -5359,8 +5463,8 @@ MainWindow::mouseMoveEvent(QMouseEvent *event)
     }
 
     if (embeddedPlayer_->isVisible())
-      embeddedCanvas_->setVisible(embeddedCanvas_->underMouse() ||
-                                  isGlobalPosOverEmbeddedPositionSlider(event->globalPos()));
+      embeddedCanvas_->setVisible(hub_->isMediaTokenMode() &&
+        (embeddedCanvas_->underMouse() || isGlobalPosOverEmbeddedPositionSlider(event->globalPos())));
   }
 
   if ((globalPos - movedPos_).manhattanLength() > 2) {
@@ -5612,8 +5716,8 @@ MainWindow::contextMenuEvent(QContextMenuEvent *event)
 
   event->accept();
 
-  //Base::contextMenuEvent(event);
-  //DOUT("exit");
+  Base::contextMenuEvent(event);
+  DOUT("exit");
 }
 
 void
@@ -5621,6 +5725,7 @@ MainWindow::updateAnnotationSettingsMenu()
 {
   updateAnnotationSubtitleMenu();
   updateAnnotationEffectMenu();
+  toggleAnnotationAvatarVisibleAct_->setChecked(AnnotationSettings::globalInstance()->isAvatarVisible());
   toggleAnnotationBandwidthLimitedAct_->setChecked(annotationView_->isItemCountLimited());
 }
 
@@ -5639,10 +5744,6 @@ void
 MainWindow::updateGameMenu()
 {
 #ifdef USE_MODE_SIGNAL
-#ifdef WITH_WIN_PICKER
-  toggleWindowPickDialogVisibleAct_->setChecked(windowPickDialog_ && windowPickDialog_->isVisible());
-  toggleProcessPickDialogVisibleAct_->setChecked(processPickDialog_ && processPickDialog_->isVisible());
-#endif // WITH_WIN_PICKER
   toggleSignalViewVisibleAct_->setChecked(signalView_->isVisible());
   toggleRecentMessageViewVisibleAct_->setChecked(recentMessageView_->isVisible());
   toggleTranslateAct_->setEnabled(hub_->isSignalTokenMode() && server_->isConnected());
@@ -5652,7 +5753,7 @@ MainWindow::updateGameMenu()
 void
 MainWindow::updateContextMenu()
 {
-  //DOUT("enter");
+  DOUT("enter");
   contextMenu_->clear();
   if (!contextMenuActions_.isEmpty()) {
     foreach (QAction *a, contextMenuActions_)
@@ -5894,6 +5995,13 @@ MainWindow::updateContextMenu()
   {
     contextMenu_->addSeparator();
 
+#ifdef WITH_WIN_PICKER
+    contextMenu_->addAction(showWindowPickDialogAct_);
+
+    toggleWindowTrackingAct_->setChecked(annotationView_->trackedWindow());
+    contextMenu_->addAction(toggleWindowTrackingAct_);
+#endif // WITH_WIN_PICKER
+
     toggleFullScreenModeAct_->setChecked(hub_->isFullScreenWindowMode());
     contextMenu_->addAction(toggleFullScreenModeAct_);
 
@@ -5911,6 +6019,7 @@ MainWindow::updateContextMenu()
         QString t = TR(T_ACTUALSIZE) + QString(": %1x%2")
             .arg(QString::number(sz.width())).arg(QString::number(sz.height()));
         actualSizeAct_->setText(t);
+        actualSizeAct_->setEnabled(!annotationView_->trackedWindow());
         contextMenu_->addAction(actualSizeAct_);
       }
     }
@@ -5927,13 +6036,13 @@ MainWindow::updateContextMenu()
       toggleBlacklistViewVisibleAct_->setChecked(blacklistView_ && blacklistView_->isVisible());
       contextMenu_->addAction(toggleBlacklistViewVisibleAct_);
 
-      toggleAnnotationCountDialogVisibleAct_->setChecked(annotationCountDialog_ && annotationCountDialog_->isVisible());
-      int count = annotationFilter_->annotationCountHint();
-      QString text = count <= 0 ? TR(T_MENUTEXT_ANNOTATIONLIMIT) :
-        QString("%1 (%2)").arg(TR(T_MENUTEXT_ANNOTATIONLIMIT))
-                          .arg(QString::number(count));
-      toggleAnnotationCountDialogVisibleAct_->setText(text);
-      contextMenu_->addAction(toggleAnnotationCountDialogVisibleAct_ );
+      //toggleAnnotationCountDialogVisibleAct_->setChecked(annotationCountDialog_ && annotationCountDialog_->isVisible());
+      //int count = annotationFilter_->annotationCountHint();
+      //QString text = count <= 0 ? TR(T_MENUTEXT_ANNOTATIONLIMIT) :
+      //  QString("%1 (%2)").arg(TR(T_MENUTEXT_ANNOTATIONLIMIT))
+      //                    .arg(QString::number(count));
+      //toggleAnnotationCountDialogVisibleAct_->setText(text);
+      //contextMenu_->addAction(toggleAnnotationCountDialogVisibleAct_ );
 
       contextMenu_->addMenu(annotationLanguageMenu_);
     }
@@ -5951,11 +6060,13 @@ MainWindow::updateContextMenu()
     annotationSettingsMenu_->setEnabled(t);
     //resumeAnnotationAct_->setEnabled(t);
 
-    toggleAnnotationEditorVisibleAct_->setChecked(annotationEditor_ && annotationEditor_->isVisible());
-    contextMenu_->addAction(toggleAnnotationEditorVisibleAct_ );
-
     toggleAnnotationBrowserVisibleAct_->setChecked(annotationBrowser_ && annotationBrowser_->isVisible());
-     contextMenu_->addAction(toggleAnnotationBrowserVisibleAct_ );
+    contextMenu_->addAction(toggleAnnotationBrowserVisibleAct_ );
+
+    if (dataManager_->token().isValid()) {
+      updateAnnotationsAct_->setEnabled(server_->isConnected());
+      annotationMenu_->addAction(updateAnnotationsAct_);
+    }
 
     annotationMenu_->clear(); {
       toggleTokenViewVisibleAct_->setChecked(tokenView_ && tokenView_->isVisible());
@@ -5970,10 +6081,6 @@ MainWindow::updateContextMenu()
       annotationMenu_->addSeparator();
 
       annotationMenu_->addAction(resumeAnnotationAct_);
-      if (dataManager_->token().isValid()) {
-        updateAnnotationsAct_->setEnabled(server_->isConnected());
-        annotationMenu_->addAction(updateAnnotationsAct_);
-      }
 
     //if (ALPHA) if (commentView_ && commentView_->tokenId()) {
     //  toggleCommentViewVisibleAct_->setChecked(commentView_ && commentView_->isVisible());
@@ -6048,13 +6155,14 @@ MainWindow::updateContextMenu()
     //contextMenu_->addAction(checkInternetConnectionAct_);
     toggleDownloaderVisibleAct_->setChecked(false);
     toggleMagnifierVisibleAct_->setChecked(magnifier_ && magnifier_->isVisible());
+    toggleAnnotationEditorVisibleAct_->setChecked(annotationEditor_ && annotationEditor_->isVisible());
     contextMenu_->addMenu(utilityMenu_);
 
     toggleConsoleDialogVisibleAct_->setChecked(consoleDialog_ && consoleDialog_->isVisible());
     contextMenu_->addMenu(helpContextMenu_);
     contextMenu_->addAction(quitAct_);
   }
-  //DOUT("exit");
+  DOUT("exit");
 }
 
 void
@@ -6201,30 +6309,18 @@ MainWindow::updateTrackMenu()
 void
 MainWindow::moveEvent(QMoveEvent *event)
 {
-  Q_UNUSED(event);
-  if (annotationView_->isVisible()) {
-    annotationView_->updatePos();
-//#ifdef Q_OS_MAC // FIXME: solve the postion tracking problem....
-//    QTimer::singleShot(200, annotationView_, SLOT(updatePos()));
-//#endif // Q_OS_MAC
-  }
   Base::moveEvent(event);
+  annotationView_->updatePos();
+  osdWindow_->raise();
 }
 
 void
 MainWindow::resizeEvent(QResizeEvent *event)
 {
-  Q_UNUSED(event);
-  //if (isMaximized()) {
-  //  setFullScreenPlayMode();
-  //  return;
-  //}
-  if (annotationView_->isVisible()) {
-    annotationView_->updateSize();
-    globalOsdConsole_->resize(annotationView_->size());
-  }
-
   Base::resizeEvent(event);
+  annotationView_->updateSize();
+  globalOsdConsole_->resize(annotationView_->size());
+  osdWindow_->raise();
 }
 
 void
@@ -6454,11 +6550,11 @@ MainWindow::dispose()
     foreach (QWidget *w, windows_)
       if (w->isVisible()) {
         DOUT("hide" << w);
-        if (BOOST_AUTO(p, dynamic_cast<AcWindow *>(w)))
-          p->fadeOut();
-        else if (BOOST_AUTO(p, dynamic_cast<AcMainWindow *>(w)))
-          p->fadeOut();
-        else
+        //if (BOOST_AUTO(p, qobject_cast<AcWindow *>(w)))
+        //  p->fadeOut();
+        //else if (BOOST_AUTO(p, qobject_cast<AcMainWindow *>(w)))
+        //  p->fadeOut();
+        //else
           w->hide();
       }
 
@@ -6570,6 +6666,7 @@ MainWindow::closeEvent(QCloseEvent *event)
   settings->setAnnotationScale(annotationSettings->scale());
   settings->setAnnotationOffset(annotationSettings->offset());
   settings->setAnnotationFontFamily(annotationSettings->fontFamily());
+  settings->setAnnotationAvatarVisible(annotationSettings->isAvatarVisible());
 
   // Disabled for saving closing time orz
   //if (server_->isConnected() && server_->isAuthorized())
@@ -7268,6 +7365,12 @@ MainWindow::openProcessId(ulong pid)
       ProcessInfo pi = signalView_->processView()->attachedProcessInfo();
       if (pi.isValid() && pid == pi.processId)
         emit attached(pi);
+      if (!annotationView_->trackedWindow() ||
+          pi.processId != QtWin::getWindowProcessId(annotationView_->trackedWindow())) {
+        WId hwnd = QtWin::getGoodWindowWithProcessId(pi.processId);
+        if (hwnd)
+          emit windowPicked(hwnd);
+      }
     } else {
       error(tr("failed to attach process ") + QString(" (pid = %1)").arg(QString::number(pid)));
       if (!QtWin::isProcessActiveWithId(pid))
@@ -7285,9 +7388,9 @@ MainWindow::openProcessPath(const QString &path)
 {
   QString processName = QFileInfo(path).fileName();
   ulong pid = QTH->processIdByName(processName);
-  if (pid) {
+  if (pid)
     showMessage(tr("process was started") + QString(" (pid = %1)").arg(pid));
-  } else {
+  else {
     QtWin::createProcessWithExecutablePath(path);
     showMessage(tr("told process to start") + QString(" (name = %1)").arg(processName));
     pid = QTH->processIdByName(processName);
@@ -7313,13 +7416,15 @@ MainWindow::openProcessPath(const QString &path)
 void
 MainWindow::openProcessHook(ulong hookId, const ProcessInfo &pi)
 {
+  DOUT("enter: hookId =" << hookId << ", pid =" << pi.processId << ", proc =" << pi.processName);
   if (player_->hasMedia() && !player_->isStopped())
     stop();
 
   if (pi.isValid()) {
     showMessage(tr("openning process") + ": " + pi.processName);
 
-    grabber_->setBaseName(pi.processName);
+    if (grabber_)
+      grabber_->setBaseName(pi.processName);
 
     QString title = pi.processName;
     setWindowTitle(title);
@@ -7333,18 +7438,37 @@ MainWindow::openProcessHook(ulong hookId, const ProcessInfo &pi)
 
     messageHandler_->setProcessInfo(pi);
     messageHandler_->setHookId(hookId);
+
+    if (!annotationView_->trackedWindow() ||
+        pi.processId != QtWin::getWindowProcessId(annotationView_->trackedWindow())) {
+      WId hwnd = QtWin::getGoodWindowWithProcessId(pi.processId);
+      if (hwnd)
+        emit windowPicked(hwnd);
+    }
   }
 
   hub_->setSignalTokenMode();
 
   QString mrl;
-  if (pi.isValid())
+  if (pi.isValid()) {
     mrl = pi.executablePath;
+
+    WId hwnd = annotationView_->trackedWindow();
+    if (hwnd && QtWin::getWindowProcessId(hwnd) == pi.processId) {
+      QString title = QtWin::getWindowText(hwnd).trimmed();
+      if (!title.isEmpty()) {
+        if (recentUrlTitles_.size() > RECENT_COUNT)
+          recentUrlTitles_.erase(recentUrlTitles_.begin());
+        recentUrlTitles_[mrl] = title;
+      }
+    }
+  }
   recentDigest_.clear();
   recentSource_.clear();
   invalidateToken(mrl);
 
   hub_->play();
+  DOUT("exit");
 }
 
 #endif // WITH_WIN_QTH
@@ -7374,8 +7498,11 @@ MainWindow::setSignalViewVisible(bool visible)
   //signalView_->tokenView()->setAliases(tokenView_->aliases());
   //signalView_->tokenView()->setUserId(tokenView_->userId());
   signalView_->setVisible(visible);
-  if (visible)
+  if (visible) {
+    // FIXME
+    osdWindow_->setWindowOnTop();
     signalView_->raise();
+  }
 }
 
 void
@@ -7400,6 +7527,37 @@ MainWindow::setRecentMessageViewVisible(bool visible)
 }
 
 #endif // USE_MODE_SIGNAL
+
+void
+MainWindow::setWindowTrackingEnabled(bool t)
+{
+#ifdef WITH_WIN_PICKER
+  if (lastTrackedWindow_ && (
+      lastTrackedWindow_ == annotationView_->trackedWindow() ||
+      !QtWin::windowHasText(lastTrackedWindow_)))
+    lastTrackedWindow_ = 0;
+
+  if (!annotationView_->trackedWindow() && !lastTrackedWindow_) {
+    showWindowPickDialog();
+    return;
+  }
+
+  if (t) {
+    if (!annotationView_->trackedWindow())
+      annotationView_->setTrackedWindow(lastTrackedWindow_);
+  } else if (annotationView_->trackedWindow()) {
+    lastTrackedWindow_ = annotationView_->trackedWindow();
+    annotationView_->setTrackedWindow(0);
+  }
+
+  if (annotationView_->trackedWindow())
+    hub_->setEmbeddedPlayerMode();
+  else if (hub_->isEmbeddedPlayerMode() && !hub_->isFullScreenWindowMode())
+    hub_->setNormalPlayerMode();
+#else
+  Q_UNUSED(t);
+#endif // WITH_WIN_PICKER
+}
 
 // - User -
 
@@ -7731,8 +7889,8 @@ MainWindow::updateRecentMenu()
         break;
 
       QString text;
+      BOOST_AUTO(p, recentUrlTitles_.find(f));
       if (isRemoteMrl(f)) {
-        BOOST_AUTO(p, recentUrlTitles_.find(f));
         if (p == recentUrlTitles_.end())
           text = f;
         else {
@@ -7749,11 +7907,29 @@ MainWindow::updateRecentMenu()
         }
       } else {
         QString path = removeUrlPrefix(f);
-        text = QFileInfo(path).fileName();
+        QFileInfo fi(path);
+        text = fi.fileName();
         if (text.isEmpty()) {
           text = QDir(path).dirName();
           if (text.isEmpty())
             text = f;
+#ifdef Q_WS_WIN
+          else if (text.size() > 3) {
+            if (char d = QtWin::getFileDriveLetter(fi.absolutePath()))
+              text.prepend(": ")
+                  .prepend(QChar(d).toUpper());
+          }
+#endif // Q_WS_WIN
+        }
+#ifdef Q_WS_WIN
+        else if (char d = QtWin::getFileDriveLetter(fi.absolutePath()))
+          text.prepend(": ")
+              .prepend(QChar(d).toUpper());
+#endif // Q_WS_WIN
+        if (p != recentUrlTitles_.end()) {
+          QString title = p.value();
+          if (title != fi.completeBaseName())
+            text.append(": " + p.value());
         }
       }
       Q_ASSERT(!text.isEmpty());
@@ -7825,7 +8001,18 @@ MainWindow::openSource(const QString &path)
     openProcessPath(path);
   else
 #endif // USE_MODE_SIGNAL
-  openMrl(path, true);
+  if (Player::isSupportedSubtitle(fi.fileName())) {
+    if (player_->hasMedia())
+      openSubtitleFile(path);
+    else {
+      QString mrl = Player::searchSubtitleMedia(fi.absoluteFilePath());
+      if (mrl.isEmpty())
+        openSubtitleFile(path);
+      else
+        openMrl(mrl, false); // check existence = false
+    }
+  } else
+    openMrl(path); // check existence = true
 }
 
 void
@@ -7835,6 +8022,15 @@ MainWindow::addRecent(const QString &path)
   if (!recentFiles_.isEmpty())
     recentFiles_.removeAll(path);
   recentFiles_.prepend(path);
+#ifdef Q_WS_WIN
+  if (!isRemoteMrl(path) &&
+      WindowsRegistry::globalInstance()->containsType(QFileInfo(path).suffix())) {
+    QString fileName = path;
+    fileName.remove(QRegExp("^file://"));
+    fileName.remove(QRegExp("^[/]+"));
+    QtWin::addRecentDocument(fileName);
+  }
+#endif // Q_WS_WIN
 
   // SingleShot to avoid multi-threading issue.
   QTimer::singleShot(0, this, SLOT(updateRecentMenu()));
@@ -7853,15 +8049,20 @@ MainWindow::setTranslateEnabled(bool enabled)
 void
 MainWindow::translate(const QString &text)
 {
-  if (!isTranslateEnabled() || text.isEmpty())
-    return;
-
-  if (!server_->isConnected())
+  if (!isTranslateEnabled() || text.isEmpty() || !server_->isConnected())
     return;
 
   int l = server_->user().language();
+  translate(text, l);
+}
+
+void
+MainWindow::translate(const QString &text, int lang)
+{
+  if (!server_->isConnected())
+    return;
   QString lcode;
-  switch (l) {
+  switch (lang) {
   case Traits::Japanese: lcode = Translator::Japanese; break;
   case Traits::Chinese:  lcode = Translator::SimplifiedChinese; break;
   case Traits::Korean:   lcode = Translator::Korean; break;
@@ -8126,8 +8327,7 @@ MainWindow::updateBrowseMenu(const QString &fileName)
   browseMenu_->addSeparator();
 
   bool remote = isRemoteMrl(fileName);
-  if (remote && browsedFiles_.isEmpty() ||
-      browsedFiles_.size() <= 1)
+  if (remote && browsedFiles_.isEmpty())
     return;
 
   if (browsedFiles_.size() > 10) {
@@ -8147,7 +8347,7 @@ MainWindow::updateBrowseMenu(const QString &fileName)
   QFileInfo fi(fileName);
 
   int id = 0;
-  foreach (QFileInfo f, browsedFiles_) {
+  foreach (const QFileInfo &f, browsedFiles_) {
     QString text = QString::number(id+1) + ". " + f.fileName();
     BOOST_AUTO(a, new QtExt::ActionWithId(id++, text, browseMenu_));
     if (f.fileName() == fi.fileName()) {
@@ -8223,7 +8423,7 @@ MainWindow::openBrowsedFile(int id)
     id = 0;
 
   if (id >= 0 && id < browsedFiles_.size())
-    openMrl(browsedFiles_[id].filePath());
+    openUrl(browsedFiles_[id].filePath());
 }
 
 int
@@ -8243,7 +8443,7 @@ MainWindow::currentBrowsedFileId() const
   //  return 0;
 
   int ret = 0;
-  foreach (QFileInfo f, browsedFiles_) {
+  foreach (const QFileInfo &f, browsedFiles_) {
     if (f.fileName() == fi.fileName())
       break;
     ret++;
@@ -8355,6 +8555,15 @@ MainWindow::autoPlayNext()
 }
 
 // - Tracking window -
+
+void
+MainWindow::updateTraceButtons()
+{
+  bool t = annotationView_->trackedWindow();
+  mainPlayer_->toggleTraceWindowButton()->setChecked(t);
+  miniPlayer_->toggleTraceWindowButton()->setChecked(t);
+  embeddedPlayer_->toggleTraceWindowButton()->setChecked(t);
+}
 
 void
 MainWindow::setEmbeddedWindow(WId winId)
@@ -9176,23 +9385,22 @@ MainWindow::setMultipleWindowsEnabled(bool t)
 void
 MainWindow::newWindow()
 {
+  DOUT("enter");
   Settings *s = Settings::globalSettings();
-  bool t = s->isMultipleWindowsEnabled();
-  if (!t)
-    s->setMultipleWindowsEnabled(true);
-
   s->sync();
+  bool t = s->isMultipleWindowsEnabled();
+  DOUT("is multiple window enabled =" << t);
+  if (!t) {
+    notify(tr("please enable Multiple Window from context menu"));
+    return;
+  }
+
   AcSettings::globalSettings()->sync();
 
-  QString exe = QCoreApplication::applicationFilePath();
-  QProcess::startDetached(exe);
+  QProcess::startDetached(QCoreApplication::applicationFilePath());
 
   showMessage(tr("new window launched"));
-
-  if (!t) {
-    s->setMultipleWindowsEnabled(false);
-    QTimer::singleShot(5000, s, SLOT(sync()));
-  }
+  DOUT("exit");
 }
 
 // - Aspect ratio -

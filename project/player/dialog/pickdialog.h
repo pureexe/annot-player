@@ -20,6 +20,7 @@ public:
 
 signals:
   void windowPicked(WId winId);
+  void cancelled();
 
   // - Properties -
 public:
@@ -46,6 +47,7 @@ private:
 
 private:
   bool active_;
+  WId pickedWindow_;
   QLabel *messageLabel_;
 };
 

@@ -5,7 +5,6 @@
 // 8/6/2011
 
 #include <QtGui/QToolButton>
-#include <QtGui/QCursor>
 
 namespace QtExt {
 

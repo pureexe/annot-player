@@ -57,8 +57,7 @@
     __VA_ARGS__ "vob" \
     __VA_ARGS__ "webm" \
     __VA_ARGS__ "wm" \
-    __VA_ARGS__ "wmv" \
-    PLAYER_FORMAT_IMAGE(__VA_ARGS__)
+    __VA_ARGS__ "wmv"
 
 #define PLAYER_FORMAT_AUDIO(...) \
     __VA_ARGS__ "a52" \
@@ -101,8 +100,7 @@
     __VA_ARGS__ "wav" \
     __VA_ARGS__ "wma" \
     __VA_ARGS__ "wv" \
-    __VA_ARGS__ "xm" \
-    PLAYER_FORMAT_IMAGE(__VA_ARGS__)
+    __VA_ARGS__ "xm"
 
 #define PLAYER_FORMAT_PICTURE(...) \
     __VA_ARGS__ "bmp" \
@@ -144,6 +142,14 @@
     __VA_ARGS__ "vlc" \
     __VA_ARGS__ "xspf"
 */
+
+#define PLAYER_FORMAT_ALL(...) \
+  PLAYER_FORMAT_IMAGE(...) \
+  PLAYER_FORMAT_VIDEO(...) \
+  PLAYER_FORMAT_AUDIO(...) \
+  PLAYER_FORMAT_PICTURE(...) \
+  PLAYER_FORMAT_PLAYLIST(...) \
+  PLAYER_FORMAT_SUBTITLE(...)
 
 // - MRL -
 

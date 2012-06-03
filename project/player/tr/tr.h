@@ -259,8 +259,9 @@
 #define T_FORMAT_VIDEO         0x73
 #define T_FORMAT_AUDIO         0x74
 #define T_FORMAT_PICTURE       0x75
-#define T_FORMAT_SUBTITLE      0x76
-#define T_FORMAT_PROGRAM       0x77
+#define T_FORMAT_IMAGE         0x76
+#define T_FORMAT_SUBTITLE      0x77
+#define T_FORMAT_PROGRAM       0x78
 
 // - Actions -
 
@@ -1505,5 +1506,10 @@
 #define T_TIP_COPYCURRENTTITLE       T_COPYCURRENTTITLE
 #define T_TOOLTIP_COPYCURRENTTITLE   T_TIP_COPYCURRENTTITLE
 #define T_STATUSTIP_COPYCURRENTTITLE T_TIP_COPYCURRENTTITLE
+
+#define T_APPLY           0x103a
+#define T_GALGAME         0x103b
+#define T_TOOLTIP_TRACE   0x103c
+
 
 #endif // TR_H

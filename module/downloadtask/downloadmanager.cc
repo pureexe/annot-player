@@ -1,7 +1,6 @@
 // downloadmanager.cc
 // 2/20/2012
 #include "module/downloadtask/downloadmanager.h"
-#include "module/mrlanalysis/mrlanalysis.h"
 #include <QtCore/QRegExp>
 
 #define DEBUG "downloadmanager"
@@ -58,6 +57,19 @@ DownloadManager::taskWithId(int tid)
   return 0;
 }
 
+bool
+DownloadManager::isRunning() const
+{
+  foreach (const DownloadTask *t, tasks_)
+    switch (t->state()) {
+    case DownloadTask::Downloading:
+    case DownloadTask::Pending:
+      return true;
+    default: ;
+    }
+  return false;
+}
+
 // - Controls -
 
 void
@@ -107,8 +119,8 @@ DownloadManager::addTask(DownloadTask *t)
 void
 DownloadManager::refreshSchedule()
 {
-  enum { NicoTaskInterval = 2000 }; // 3 seconds
-  int nicoCount = 0;
+  enum { PendingTaskInterval = 3000 }; // 3 seconds
+  int pendingCount = 0;
   int count = 0;
   DOUT("enter: task count =" << tasks_.size());
   foreach (DownloadTask *t, tasks_)
@@ -117,17 +129,13 @@ DownloadManager::refreshSchedule()
       count++;
       break;
     case DownloadTask::Pending:
-      t->setState(DownloadTask::Stopped);
       if (threadCount_ <= 0 || count < threadCount_) {
         count++;
-        if (t->url().startsWith("http://" MA_EIGEN_NICOVIDEO, Qt::CaseInsensitive))
-          t->startLater(NicoTaskInterval * nicoCount++);
-        else
-          t->start();
+        t->startLater(PendingTaskInterval * pendingCount++);
       } break;
     default: ;
     }
-  DOUT("exit: count =" << count << ", nico count =" << nicoCount);
+  DOUT("exit: count =" << count << ", pending count =" << pendingCount);
 }
 
 // EOF

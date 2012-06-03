@@ -22,7 +22,7 @@ PlayerPanel::PlayerPanel(QWidget *parent)
   : Base(parent),
     positionSlider_(0), volumeSlider_(0),
     openButton_(0), playButton_(0), stopButton_(0), nextFrameButton_(0), fastForwardButton_(0), fastFastForwardButton_(0),
-    toggleFullScreenModeButton_(0), toggleMiniModeButton_(0), toggleEmbedModeButton_(0),
+    toggleFullScreenModeButton_(0), toggleMiniModeButton_(0), toggleEmbedModeButton_(0), toggleTraceWindowButton_(0),
     userButton_(0), positionButton_(0), progressButton_(0), previousButton_(0), nextButton_(0), menuButton_(0),
     inputCountButton_(0), inputComboBox_(0), prefixComboBox_(0)
 {
@@ -83,6 +83,7 @@ PlayerPanel::volumeSlider()
   //MAKE_BUTTON(rewindButton, REWIND)
   MAKE_BUTTON(toggleMiniModeButton, MINI)
   MAKE_BUTTON(toggleEmbedModeButton, EMBED)
+  MAKE_BUTTON(toggleTraceWindowButton, TRACE)
   MAKE_BUTTON(toggleFullScreenModeButton, FULLSCREEN)
   //MAKE_BUTTON(toggleAnnotationButton, ANNOT)
   MAKE_BUTTON(previousButton, PREVIOUS)

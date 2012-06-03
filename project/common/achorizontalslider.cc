@@ -25,7 +25,7 @@
         stop:1    rgba(173,57,176,200))) \
   SS_END \
   SS_BEGIN(QSlider::add-page:horizontal) \
-    SS_TRANSPARENT \
+    SS_BACKGROUND_COLOR(rgba(255,0,0,100)) \
     SS_BORDER(1px solid #777) \
     SS_HEIGHT(1px) \
     SS_LEFT(5px) SS_RIGHT(5px) \

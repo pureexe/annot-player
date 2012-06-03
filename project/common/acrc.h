@@ -16,6 +16,22 @@
 #define ACRC_IMAGE_DOWNLOADER   ACRC_PREFIX_IMAGE "downloader.png"
 #define ACRC_IMAGE_BROWSER      ACRC_PREFIX_IMAGE "browser.png"
 
+// - Flags -
+
+#define ACRC_IMAGE_JAPAN        ACRC_PREFIX_IMAGE "flag_japan.png"
+#define ACRC_IMAGE_USA          ACRC_PREFIX_IMAGE "flag_usa.png"
+#define ACRC_IMAGE_PRC          ACRC_PREFIX_IMAGE "flag_prc.png"
+#define ACRC_IMAGE_ROC          ACRC_PREFIX_IMAGE "flag_roc.png"
+#define ACRC_IMAGE_ROK          ACRC_PREFIX_IMAGE "flag_rok.png"
+
+#define ACRC_IMAGE_CHINA        ACRC_IMAGE_ROC  // fack ccp
+#define ACRC_IMAGE_KOREA        ACRC_IMAGE_ROK  // fack ccp
+
+#define ACRC_IMAGE_JAPANESE     ACRC_IMAGE_JAPAN
+#define ACRC_IMAGE_ENGLISH      ACRC_IMAGE_USA
+#define ACRC_IMAGE_CHINESE      ACRC_IMAGE_CHINA
+#define ACRC_IMAGE_KOREAN       ACRC_IMAGE_KOREA
+
 // - Backgrounds -
 
 #define ACRC_IMAGE_AERO         ACRC_PREFIX_IMAGE "aero_mac.png"

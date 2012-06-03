@@ -1,12 +1,13 @@
-// preferences_p.cc
+// annotationprefs.cc
 // 5/25/2012
 
-#include "preferences_p.h"
+#include "annotationprefs.h"
 #include "annotationsettings.h"
 #include "global.h"
 #include "tr.h"
 #include "project/common/acss.h"
 #include "project/common/acui.h"
+#include "module/qtext/spinbox.h"
 #include "module/qtext/fontcombobox.h"
 #include <QtGui>
 
@@ -14,10 +15,11 @@
 
 // - Construction -
 
-AnnotationPreferencesTab::AnnotationPreferencesTab(AnnotationSettings *settings, QWidget *parent)
-  : Base(parent), settings_(settings)
+void
+AnnotationPreferencesTab::init()
 {
-  Q_ASSERT(settings_);
+  if (!settings_)
+    settings_ = AnnotationSettings::globalInstance();
   setWindowTitle(TR(T_ANNOTATION));
   createLayout();
 
@@ -30,7 +32,7 @@ AnnotationPreferencesTab::createLayout()
   AcUi *ui = AcUi::globalInstance();
 
   fontEdit_ = new QtExt::FontComboBox; {
-    fontEdit_->setStyleSheet(SS_COMBOBOX);
+    fontEdit_->setStyleSheet(ACSS_COMBOBOX);
     //fontEdit_->setMaximumWidth(FONTCOMBOBOX_WIDTH);
     //fontEdit_->setMinimumWidth(FONTCOMBOBOX_WIDTH);
     fontEdit_->setToolTip(tr("Font Family"));
@@ -40,14 +42,19 @@ AnnotationPreferencesTab::createLayout()
   QLabel *fontLabel = ui->makeLabel(AcUi::BuddyHint, tr("Font"), tr("Font Family"), fontEdit_);
   QToolButton *fontReset = ui->makeToolButton(AcUi::PushHint, TR(T_RESET), this, SLOT(resetFontFamily()));
 
-  QStringList defoffsets = QStringList()
-    << "0" << "10" << "30" << "60" << "3000"
-           << "-10" << "-30" << "-60" << "-3000";
-  offsetEdit_ = ui->makeComboBox(AcUi::EditHint, "", TR(T_SECOND), "", defoffsets);
-  offsetEdit_->lineEdit()->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-  connect(offsetEdit_, SIGNAL(editTextChanged(QString)), SLOT(saveOffset()));
+  offsetEdit_ = new QtExt::SpinBox;
+  offsetEdit_->setToolTip(TR(T_SECOND));
+  offsetEdit_->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+  connect(offsetEdit_, SIGNAL(valueChanged(int)), SLOT(saveOffset()));
 
-  offsetEditStyleSheet_ = offsetEdit_->styleSheet();
+  // See: http://qt-project.org/doc/qt-4.8/stylesheet-examples.html#customizing-qspinbox
+  //offsetEdit_->setStyleSheet(
+  //  SS_BEGIN(QSpinBox)
+  //    SS_BORDER_IMAGE_URL(ACRC_IMAGE_BACKGROUND)
+  //    SS_BORDER_WIDTH(4px)
+  //    SS_BORDER_RADIUS(3px)
+  //  SS_END
+  //);
 
   QLabel *offsetLabel = ui->makeLabel(AcUi::BuddyHint, tr("Offset"), TR(T_SECOND), offsetEdit_);
   QToolButton *offsetReset = ui->makeToolButton(AcUi::PushHint, TR(T_RESET), this, SLOT(resetOffset()));
@@ -111,27 +118,13 @@ AnnotationPreferencesTab::resetFontFamily()
 
 void
 AnnotationPreferencesTab::loadOffset()
-{ offsetEdit_->setEditText(QString::number(settings_->offset())); }
+{ offsetEdit_->setValue(settings_->offset()); }
 
 void
 AnnotationPreferencesTab::saveOffset()
 {
-  bool ok;
-  int offset = offsetEdit_->currentText().trimmed().toInt(&ok);
-  if (ok) {
-    settings_->setOffset(offset);
-    emit message(tr("offset saved"));
-  } else
-    emit warning(tr("invalid offset"));
-  offsetEdit_->setStyleSheet(offsetEditStyleSheet_ + (ok ?
-    SS_BEGIN(QComboBox)
-      SS_COLOR(black)
-    SS_END
-    :
-    SS_BEGIN(QComboBox)
-      SS_COLOR(red)
-    SS_END
-  ));
+  settings_->setOffset(offsetEdit_->value());
+  emit message(tr("offset saved"));
 }
 
 void

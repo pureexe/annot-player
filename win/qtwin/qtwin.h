@@ -115,12 +115,36 @@ namespace QtWin {
   WId getWindowAtPos(const QPoint &globalPos);
   WId getChildWindowAtPos(const QPoint &globalPos, WId parent);
 
+  ///  Reply from WM_GETTEXT, in most case the window's title
+  QString getWindowText(WId hwnd, size_t size = 0);
+
+  bool windowHasText(WId hwnd);
+
   ulong getWindowThreadId(WId hwnd);
   ulong getWindowProcessId(WId hwnd);
 
+  WId getWindowWithThreadId(ulong threadId);
+  WId getWindowWithProcessId(ulong processId);
+
+  WId getVisibleWindowWithThreadId(ulong threadId);
+  WId getVisibleWindowWithProcessId(ulong processId);
+
+  WId getGoodWindowWithThreadId(ulong threadId);
+  WId getGoodWindowWithProcessId(ulong processId);
+
+  //QList<WId> getWindowsWithThreadId(ulong threadId);
+  //QList<WId> getWindowsWithProcessId(ulong processId);
+
   QRect getWindowRect(WId hwnd);
+  bool windowHasRect(WId hwnd);
 
   bool isValidWindow(WId hwnd);
+
+  bool isVisibleWindow(WId hwnd);
+
+  ///  valid, visible, has non-empty title and non-empty rect
+  inline bool isGoodWindow(WId hwnd)
+  { return isVisibleWindow(hwnd) && windowHasRect(hwnd) && windowHasText(hwnd); }
 
   bool setTopWindow(WId hwnd);
   WId getTopWindow(WId hwnd = 0); ///< return top window on the desktop if hwnd is null
@@ -203,6 +227,8 @@ namespace QtWin {
   QString guessDeviceFileName(const QString &hint);
   bool isValidDeviceFileName(const QString &fileName);
 
+  char getFileDriveLetter(const QString &fileName);
+
   // - Run -
 
   bool run(const QString &cmd, bool visible = true);
@@ -211,6 +237,10 @@ namespace QtWin {
   bool reboot();
   bool hibernate();
   bool logoff();
+
+  // - Shell -
+
+  void addRecentDocument(const QString &fileName);
 
   // - String -
 

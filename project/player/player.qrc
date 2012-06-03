@@ -123,5 +123,10 @@
         <file>images/M_disabled.png</file>
         <file>images/M_hover.png</file>
         <file>images/M_pressed.png</file>
+        <file>images/T.png</file>
+        <file>images/T_checked.png</file>
+        <file>images/T_disabled.png</file>
+        <file>images/T_hover.png</file>
+        <file>images/T_pressed.png</file>
     </qresource>
 </RCC>

@@ -28,13 +28,12 @@ public:
     NetworkProxyTab = 1 << 1
   };
 
-  explicit AcPreferences(ulong tabs, QWidget *parent = 0);
+  explicit AcPreferences(ulong tabs, QWidget *parent = 0, bool finalize = true);
+  explicit AcPreferences(QWidget *parent = 0, bool finalize = true);
 
-protected:
-  explicit AcPreferences(QWidget *parent = 0); // need to manually invoke finalize()
+  void finalize();
   void setTabs(ulong mask) { tabs_ = mask; }
 
-public:
   virtual QSize sizeHint() const; ///< \override
 
   // - Events -
@@ -43,10 +42,10 @@ public slots:
 protected slots:
   void save();
   void load();
+  void clear();
   void updateSize();
 
 protected:
-  void finalize();
   void addTab(AcPreferencesTab *tab);
 private:
   void init();

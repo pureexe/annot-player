@@ -127,7 +127,7 @@ namespace { // anonymous, vlc event callbacks
     { \
       DOUT("enter"); \
       Q_UNUSED(event); \
-      Player *p = static_cast<Player*>(media_player_instance); \
+      Player *p = static_cast<Player *>(media_player_instance); \
       Q_ASSERT(p); \
       p->emit_##_signal(); \
       DOUT("exit"); \
@@ -151,7 +151,7 @@ namespace { // anonymous, vlc event callbacks
     {
       DOUT("enter");
       Q_UNUSED(event);
-      Player *p = static_cast<Player*>(media_player_instance);
+      Player *p = static_cast<Player *>(media_player_instance);
       Q_ASSERT(p);
       p->emit_lengthChanged();
 
@@ -166,7 +166,7 @@ namespace { // anonymous, vlc event callbacks
     {
       DOUT("enter");
       Q_UNUSED(event);
-      Player *p = static_cast<Player*>(media_player_instance);
+      Player *p = static_cast<Player *>(media_player_instance);
       Q_ASSERT(p);
       //p->emit_errorEncountered();
       p->handleError();
@@ -215,7 +215,7 @@ namespace { // anonymous, vlccore callbacks
       }
       recentClickTime_ = 0;
 
-      Player *player = reinterpret_cast<Player*>(p_data);
+      Player *player = reinterpret_cast<Player *>(p_data);
       Q_ASSERT(player);
       if (!player || !player->isMouseEventEnabled())
         return 0;
@@ -270,7 +270,7 @@ namespace { // anonymous, vlccore callbacks
 
       qint64 currentTime = QDateTime::currentMSecsSinceEpoch();
 
-      Player *player = reinterpret_cast<Player*>(p_data);
+      Player *player = reinterpret_cast<Player *>(p_data);
       Q_ASSERT(player);
       if (!player || !player->isMouseEventEnabled())
         return 0;
@@ -363,6 +363,41 @@ namespace { // anonymous, vlccore callbacks
 
 // - Static properties -
 
+const QStringList&
+Player::supportedSuffices()
+{
+  static const QStringList ret =
+    supportedVideoSuffices() +
+    supportedAudioSuffices() +
+    supportedPictureSuffices() +
+    supportedSubtitleSuffices() +
+    supportedPlaylistSuffices() +
+    supportedImageSuffices();
+  return ret;
+}
+
+const QStringList&
+Player::supportedFilters()
+{
+  static const QStringList ret =
+    supportedVideoFilters() +
+    supportedAudioFilters() +
+    supportedPictureFilters() +
+    supportedSubtitleFilters() +
+    supportedPlaylistFilters() +
+    supportedImageFilters();
+  return ret;
+}
+
+bool
+Player::isSupportedFile(const QString &fileName)
+{
+  foreach (const QString &suffix, supportedSuffices())
+    if (fileName.endsWith("." + suffix, Qt::CaseInsensitive))
+      return true;
+  return false;
+}
+
 #define SUPPORTED_SUFFICES_(_Type, _TYPE) \
   const QStringList& \
   Player::supported##_Type##Suffices() \
@@ -377,6 +412,7 @@ namespace { // anonymous, vlccore callbacks
   SUPPORTED_SUFFICES_(Picture, PICTURE)
   SUPPORTED_SUFFICES_(Subtitle, SUBTITLE)
   SUPPORTED_SUFFICES_(Playlist, PLAYLIST)
+  SUPPORTED_SUFFICES_(Image, IMAGE)
 #undef SUPPORTED_SUFFICES_
 
 #define SUPPORTED_FILTERS_(_Type, _TYPE) \
@@ -393,6 +429,7 @@ namespace { // anonymous, vlccore callbacks
   SUPPORTED_FILTERS_(Picture, PICTURE)
   SUPPORTED_FILTERS_(Subtitle, SUBTITLE)
   SUPPORTED_FILTERS_(Playlist, PLAYLIST)
+  SUPPORTED_FILTERS_(Image, IMAGE)
 #undef SUPPORTED_FILTERS_
 
 #define IS_SUPPORTED_(_type) \
@@ -410,6 +447,7 @@ namespace { // anonymous, vlccore callbacks
   IS_SUPPORTED_(Picture)
   IS_SUPPORTED_(Subtitle)
   IS_SUPPORTED_(Playlist)
+  IS_SUPPORTED_(Image)
 #undef IS_SUPPORTED_
 
 // - Constructions -
@@ -1368,25 +1406,44 @@ Player::loadExternalSubtitles()
 }
 
 QStringList
+Player::searchMediaSubtitles(const QString &fileName)
+{
+  QStringList ret;
+  QFileInfo fi(fileName);
+  QDir dir = fi.absolutePath();
+  if (dir.exists()) {
+    QString baseName = fi.baseName() ;
+    QStringList filters = supportedSubtitleFilters();
+    foreach (const QString &f, dir.entryList(filters, QDir::Files))
+      if (f.startsWith(baseName + "."))
+        ret.append(dir.absolutePath() + "/" + f);
+  }
+  return ret;
+}
+
+QString
+Player::searchSubtitleMedia(const QString &fileName)
+{
+  QFileInfo fi(fileName);
+  QDir dir = fi.absolutePath();
+  if (dir.exists()) {
+    QString baseName = fi.baseName() ;
+    QStringList filters = supportedVideoFilters();
+    foreach (const QString &f, dir.entryList(filters, QDir::Files))
+      if (f.startsWith(baseName + "."))
+        return fi.absolutePath() + "/" + f;
+  }
+  return QString();
+}
+
+QStringList
 Player::searchExternalSubtitles() const
 {
   DOUT("enter");
   QStringList ret;
-  if (hasMedia()) {
-    QString fileName = mediaPath();
-    QDir dir = QFileInfo(fileName).absolutePath();
-    DOUT("search in directory:" << dir.path());
-    if (dir.exists()) {
-      QString baseName = QFileInfo(fileName).baseName() ;
-      QStringList filters = supportedSubtitleFilters();
-      foreach (const QString &f, dir.entryList(filters, QDir::Files))
-        if (f.startsWith(baseName + "."))
-          ret.append(dir.path() + "/" + f);
-    } else
-      DOUT("directory to search not existed");
-  }
-  DOUT("found subtitles count:" << ret.size());
-  DOUT("exit");
+  if (hasMedia())
+    ret = searchMediaSubtitles(mediaPath());
+  DOUT("exit: count:" << ret.size());
   return ret;
 }
 

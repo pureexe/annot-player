@@ -631,7 +631,29 @@ AnnotationHtmlParser::translate(const QString &tag,
 
 #undef RETURN_HTML_TAG
 
-#define RETURN_HTML_STYLE(_html, _style) \
+#define RETURN_HTML_STYLE(_HTML, _style) \
+  { \
+    switch (params.size()) { \
+    case 0: return ""; \
+    case 1: return _HTML(+params.first()+, _style); \
+    default: { \
+        QString ret; \
+        int i = 0; \
+        foreach (const QString &param, params) { \
+          if (i == 0) \
+            ret = _HTML(+param+, _style); \
+          else \
+            ret += param; \
+          i++; \
+        } \
+        return ret; \
+      } \
+    } \
+    Q_ASSERT(0); \
+    break; \
+  }
+
+#define RETURN_html_style(_html, _style) \
   { \
     switch (params.size()) { \
     case 0: return ""; \
@@ -700,7 +722,7 @@ AnnotationHtmlParser::translate(const QString &tag,
 
 #define CASE_SIZE(_id, _size) \
   case H_##_id: \
-    RETURN_HTML_STYLE(html_style, "font-size:" + _size)
+    RETURN_html_style(html_style, "font-size:" + _size)
 
   CASE_SIZE(Tiny,       tinySize_)
   CASE_SIZE(Small,      smallSize_)
@@ -711,6 +733,7 @@ AnnotationHtmlParser::translate(const QString &tag,
 #undef CASE_SIZE
 
 #undef RETURN_HTML_STYLE
+#undef RETURN_html_style
 
     // Unknown tag
   default:

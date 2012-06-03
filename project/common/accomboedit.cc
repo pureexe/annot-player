@@ -19,7 +19,7 @@ AcComboEdit::init()
 
   createActions();
 
-  setStyleSheet(SS_COMBOBOX);
+  setStyleSheet(ACSS_COMBOBOX);
 
   if (!defaultItems.isEmpty())
     reset();
@@ -51,7 +51,7 @@ AcComboEdit::pasteAndGo()
     QString text = c->text().trimmed();
     if (!text.isEmpty()) {
       insertItem(0, text);
-      dynamic_cast<AcComboBoxLineEdit *>(lineEdit())->enterText(text);
+      qobject_cast<AcComboBoxLineEdit *>(lineEdit())->enterText(text);
       setEditText(text);
     }
   }

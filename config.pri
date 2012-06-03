@@ -138,7 +138,8 @@ unix {
 }
 
 mac {
-    QT_HOME             = /opt/local/share/qt4
+    #QT_HOME             = /opt/local/share/qt4
+    QT_HOME             = ${HOME}/opt/qt
     QT_SRC              = /Developer/QtSDK/QtSources/4.7.4/src
     #VLC_HOME            = ${HOME}/opt/vlc
     VLC_HOME            = /Applications/VLC.app/Contents/MacOS

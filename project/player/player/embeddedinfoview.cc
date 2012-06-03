@@ -83,6 +83,11 @@ EmbeddedInfoView::updateText()
   if (hub_->isMediaTokenMode() && player_->hasMedia()) {
     // Media
     QSize sz = player_->videoDimension();
+    QString szField;
+    if (!sz.isEmpty())
+      szField = QString("%1x%2 ")
+        .arg(QString::number(sz.width()))
+        .arg(QString::number(sz.height()));
     QString ch;
     switch (player_->audioChannels()) {
     case 1: ch = tr("1"); break;
@@ -103,27 +108,29 @@ EmbeddedInfoView::updateText()
       else
         sizeField = QString::number(size / (1024.0 * 1024), 'f', 1) + " MB" SPC SPC;
     }
+    qreal kbrate = player_->bitrate() / 1000;
+    QString kbrateField;
+    if (kbrate > 0.0)
+      kbrateField = QString(HTML_STYLE_OPEN(color:red) "%3" HTML_STYLE_CLOSE() " kbps")
+        .arg(QString::number(kbrate, 'f', 1));
     t.append(
       HTML_STYLE_OPEN(color:red)
       + QString("- %1 -").arg(tr("Codec")) +
       HTML_STYLE_CLOSE()
       HTML_BR()
       +
-      QString("%1: %2" HTML_STYLE_OPEN(color:red) "%3" HTML_STYLE_CLOSE() " kbps" HTML_BR())
+      QString("%1: %2" "%3" HTML_BR())
       .arg(TR(T_DATA))
       .arg(sizeField)
-      .arg(QString::number(player_->bitrate() / 1000, 'f', 1))
+      .arg(kbrateField)
       +
       QString(
         "%1: %2" " "
-        "%3x%4" " "
-        "%5" HTML_BR()
+        "%3" "%4" HTML_BR()
        )
       .arg(TR(T_VIDEO))
       .arg(player_->videoCodecName().toUpper())
-      .arg(QString::number(sz.width()))
-      .arg(QString::number(sz.height()))
-      .arg(fpsField)
+      .arg(szField).arg(fpsField)
       +
       QString(
          "%1: %2" " "
@@ -301,7 +308,7 @@ EmbeddedInfoView::updateText()
     t.append(HTML_BR());
   }
 
-  //static const int tail = ::strlen(HTML_BR());
+  //static const size_t tail = qstrlen(HTML_BR());
   //if (t.size() >= tail)
   //  t.chop(tail);
 

@@ -13,8 +13,10 @@
 //#include "logger.h"
 #include "global.h"
 #include "application.h"
+#include "project/common/acss.h"
 #include "module/player/player.h"
 #include "module/qtext/algorithm.h"
+#include "module/qtext/htmltag.h"
 #ifdef Q_WS_WIN
 #  include "win/qtwin/qtwin.h"
 #endif // Q_WS_WIN
@@ -38,7 +40,7 @@ using namespace AnnotCloud;
 #define MAX_SUBTITLE_HISTORY    30
 #define TIMER_INTERVAL        1000 // 1 second
 
-enum { MaxItemCount = 50 };
+enum { ReservedItemCount = 40 };
 
 // - Construction -
 
@@ -55,7 +57,7 @@ AnnotationGraphicsView::AnnotationGraphicsView(
     currentTime_(-1), offset_(0), interval_(TIMER_INTERVAL), userId_(0), playbackEnabled_(true), subtitlePosition_(AP_Bottom),
     scale_(1.0), rotation_(0),
     hoveredItemPaused_(false), hoveredItemResumed_(false), hoveredItemRemoved_(false), nearbyItemExpelled_(false), nearbyItemAttracted_(false),
-    itemVisible_(true), dragging_(false)
+    itemVisible_(true), dragging_(false), maxItemCount_(ReservedItemCount)
 {
   Q_ASSERT(hub_);
   Q_ASSERT(player_);
@@ -63,7 +65,7 @@ AnnotationGraphicsView::AnnotationGraphicsView(
 
   setMouseTracking(true);
   setContentsMargins(0, 0, 0, 0);
-  setStyleSheet(SS_GRAPHICSVIEW);
+  setStyleSheet(ACSS_GRAPHICSVIEW);
 
   //setAttribute(Qt::WA_TransparentForMouseEvents);
   //setFocusPolicy(Qt::NoFocus);
@@ -77,7 +79,7 @@ AnnotationGraphicsView::AnnotationGraphicsView(
   setScene(scene);
 
   pool_ = new AnnotationGraphicsItemPool(this, data_, hub_, this);
-  pool_->reserve(MaxItemCount);
+  pool_->reserve(ReservedItemCount);
 
   timer_ = new QTimer(this);
   timer_->setInterval(TIMER_INTERVAL);
@@ -89,9 +91,9 @@ AnnotationGraphicsView::AnnotationGraphicsView(
 
 //#ifdef Q_WS_WIN
   setRenderHints(
-    //QPainter::Antialiasing
-    QPainter::TextAntialiasing
-    //QPainter::SmoothPixmapTransform // would cost so much CPU
+    QPainter::Antialiasing |
+    QPainter::TextAntialiasing |
+    QPainter::SmoothPixmapTransform
   );
 //#endif // Q_WS_WIN
 
@@ -243,8 +245,10 @@ AnnotationGraphicsView::annotationsAtPos(qint64 pos) const
 void
 AnnotationGraphicsView::updateGeometry()
 {
+  DOUT("enter: fullScreen =" << fullScreen_);
   updatePos();
   updateSize();
+  DOUT("exit");
 }
 
 void
@@ -257,11 +261,11 @@ AnnotationGraphicsView::updateSize()
   } else if (trackedWindow_) {
 #ifdef Q_WS_WIN
     QRect r = QtWin::getWindowRect(trackedWindow_);
-    if (r.isNull()) {
-      if (!QtWin::isValidWindow(trackedWindow_)) {
-        setTrackedWindow(0);
-        emit trackedWindowDestroyed();
-      }
+    if (r.isEmpty()) {
+      //if (!QtWin::isValidWindow(trackedWindow_)) {
+      setTrackedWindow(0);
+      DOUT("tracked window destroyed");
+      emit trackedWindowDestroyed();
     } else if (size() != r.size()) {
       resize(r.size());
       update = true;
@@ -277,15 +281,17 @@ AnnotationGraphicsView::updateSize()
     update = true;
 //#endif // Q_WS_MAC
 
-  } else if (hub_->isSignalTokenMode() && fullScreenView_) {
-    resize(fullScreenView_->size());
-    update = true;
   }
+  //else if (hub_->isSignalTokenMode() && fullScreenView_) {
+  //  resize(fullScreenView_->size());
+  //  update = true;
+  //}
 
   if (update) {
     setSceneRect(0, 0, width(), height());
     emit sizeChanged();
   }
+  updateMaxItemCount();
 }
 
 void
@@ -297,16 +303,18 @@ AnnotationGraphicsView::updatePos()
   } else if (trackedWindow_) {
 #ifdef Q_WS_WIN
     QRect r = QtWin::getWindowRect(trackedWindow_);
-    if (r.isNull()) {
-      if (!QtWin::isValidWindow(trackedWindow_))
-        setTrackedWindow(0);
+    if (r.isEmpty()) {
+      //if (!QtWin::isValidWindow(trackedWindow_))
+      setTrackedWindow(0);
+      DOUT("tracked window destroyed");
+      emit trackedWindowDestroyed();
     } else {
       QPoint newPos = r.topLeft();
       moveToGlobalPos(newPos);
       return;
     }
 #endif // Q_WS_WIN
-  } else if (!hub_->isSignalTokenMode() || hub_->isNormalPlayerMode()) {
+  } else {
 
     QPoint newPos;
 #ifdef Q_WS_MAC
@@ -324,10 +332,11 @@ AnnotationGraphicsView::updatePos()
     newPos = videoView_->mapToGlobal(QPoint());
     moveToGlobalPos(newPos);
 
-  } else if (hub_->isSignalTokenMode() && fullScreenView_) {
-    move(fullScreenView_->pos());
-    emit posChanged();
   }
+  //else if (hub_->isSignalTokenMode() && fullScreenView_) {
+  //  move(fullScreenView_->pos());
+  //  emit posChanged();
+  //}
 }
 
 QPoint
@@ -723,7 +732,7 @@ AnnotationGraphicsView::addAnnotations(const AnnotationList &annots)
 void
 AnnotationGraphicsView::addAnnotation(const Annotation &annot, qint64 delaysecs)
 {
-  DOUT("enter: aid =" << annot.id() << ", pos =" << annot.pos());
+  //DOUT("enter: aid =" << annot.id() << ", pos =" << annot.pos());
 
   qint64 pos = annot.pos();
   if (!hub_->isSignalTokenMode())
@@ -751,7 +760,7 @@ AnnotationGraphicsView::addAnnotation(const Annotation &annot, qint64 delaysecs)
     showAnnotation(annot);
 
   emit annotationAdded(annot);
-  DOUT("exit");
+  //DOUT("exit");
 }
 
 void
@@ -759,10 +768,14 @@ AnnotationGraphicsView::addAndShowAnnotation(const Annotation &annot)
 { addAnnotation(annot, LLONG_MAX); }
 
 void
+AnnotationGraphicsView::updateMaxItemCount()
+{ maxItemCount_ = qMax<int>(ReservedItemCount, 30 + 10 * width() * height() / (800*600)); }
+
+void
 AnnotationGraphicsView::showAnnotation(const Annotation &annot, bool showMeta)
 {
   if (itemCountLimited_ &&
-      pool_->size() >= MaxItemCount &&
+      pool_->size() >= maxItemCount_ &&
       annot.hasUserId() && annot.userId() != userId_ && !annot.isSubtitle()) {
     //DOUT("too many annotations, skip");
     emit annotationSkipped();
@@ -772,14 +785,15 @@ AnnotationGraphicsView::showAnnotation(const Annotation &annot, bool showMeta)
 
   if (!isAnnotationBlocked(annot)) {
     AnnotationGraphicsItem *item = pool_->allocate();
-    item->setMetaVisible(isItemMetaVisible() && showMeta);
+    item->setMetaVisible(metaVisible_ && showMeta);
+    item->setAvatarVisible(AnnotationSettings::globalInstance()->isAvatarVisible());
     item->setAnnotation(annot);
     if (!isItemBlocked(item))
       item->showMe();
     if (item->isSubtitle())
-      emit subtitleAdded(item->richText());
+      emit subtitleAdded(item->text());
     else
-      emit annotationAdded(item->richText()); // non-subtitle added
+      emit annotationAdded(item->text()); // non-subtitle added
   }
 }
 
@@ -1036,27 +1050,26 @@ AnnotationGraphicsView::isItemBlocked(const AnnotationGraphicsItem *item) const
 
 // - Tracking -
 
-WId
-AnnotationGraphicsView::trackedWindow() const
-{ return trackedWindow_; }
-
 void
 AnnotationGraphicsView::setTrackedWindow(WId hwnd)
 {
   DOUT("enter: hwnd =" << hwnd);
-  if (hwnd == videoView_->winId()
+  if (hwnd && (
+      hwnd == videoView_->winId()
 #ifdef WITH_WIN_HOOK
       ||  videoView_->containsWindow(hwnd)
 #endif // WITH_WIN_HOOK
 #ifdef Q_WS_WIN
       || QtWin::getChildWindows(videoView_->winId()).contains(hwnd)
+      || QtWin::getWindowProcessId(hwnd) == QCoreApplication::applicationPid()
 #endif // Q_WS_WIN
-      )
+      ))
     hwnd = 0;
 
   if (trackedWindow_ != hwnd) {
      trackedWindow_ = hwnd;
      updateTrackingTimer();
+     DOUT("tracked window changed");
      emit trackedWindowChanged(trackedWindow_);
   }
 #ifdef WITH_WIN_MOUSEHOOK
@@ -1065,16 +1078,22 @@ AnnotationGraphicsView::setTrackedWindow(WId hwnd)
   else
     MouseHook::globalInstance()->stop();
 #endif // WITH_WIN_MOUSEHOOK
+  updateGeometry();
   DOUT("exit");
 }
 
 void
 AnnotationGraphicsView::updateTrackingTimer()
 {
-  if (isVisible() && !fullScreen_ && trackedWindow_)
+  DOUT("enter: visible =" << isVisible() << ", fullScreen =" << fullScreen_ << ", trackedWindow_ =" << trackedWindow_);
+  if (!fullScreen_ && trackedWindow_) {
+    DOUT("start tracking");
     startTracking();
-  else
+  } else {
+    DOUT("stop tracking");
     stopTracking();
+  }
+  DOUT("exit");
 }
 
 void
@@ -1175,6 +1194,23 @@ AnnotationGraphicsView::setRotation(qreal value)
 
   rotation_ = value;
   emit rotationChanged(rotation_);
+}
+
+
+// - Search/Translate -
+
+void
+AnnotationGraphicsView::searchText(const QString &text, int engine)
+{
+  emit message(tr("search") + ": " + HTML_STYLE_OPEN(color:orange) + text + HTML_STYLE_CLOSE());
+  emit searchRequested(engine,text);
+}
+
+void
+AnnotationGraphicsView::translateText(const QString &text, int lang)
+{
+  emit message(tr("translate") + ": " + HTML_STYLE_OPEN(color:orange) + text + HTML_STYLE_CLOSE());
+  emit translateRequested(text, lang);
 }
 
 // EOF

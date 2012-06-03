@@ -88,8 +88,10 @@ protected:
   int currentId() const;
   QString currentTitle() const;
   DownloadTask *currentTask() const;
+  QString currentFile() const;
 
 protected slots:
+  void openLocation(const QString &path);
   void about();
   void preferences();
   void add();
@@ -122,9 +124,8 @@ protected:
 
   TaskDialog *taskDialog();
 
-protected:
-  void searchWithEngine(int engine, const QString &key);
 protected slots:
+  void searchWithEngine(int engine, const QString &key);
   void searchCurrentTitleWithGoogle() { searchWithEngine(SearchEngineFactory::Google, currentTitle()); }
   void searchCurrentTitleWithGoogleImages() { searchWithEngine(SearchEngineFactory::GoogleImages, currentTitle()); }
   void searchCurrentTitleWithBing()   { searchWithEngine(SearchEngineFactory::Bing, currentTitle()); }

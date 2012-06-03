@@ -14,8 +14,11 @@
 #include "logger.h"
 #include "signalhub.h"
 #include "project/common/acui.h"
+#include "project/common/acrc.h"
 #include "module/annotcloud/annottag.h"
 #include "module/annotcloud/annothtml.h"
+#include "module/searchengine/searchenginefactory.h"
+#include "module/searchengine/searchenginerc.h"
 #include "module/qtext/filesystem.h"
 #include "module/qtext/htmltag.h"
 #include <boost/tuple/tuple.hpp>
@@ -219,7 +222,7 @@ AnnotationGraphicsItem::AnnotationGraphicsItem(
   DataManager *data,
   SignalHub *hub,
   AnnotationGraphicsView *view)
-  : metaVisible_(false),
+  : metaVisible_(false), avatarVisible_(false),
     view_(view), data_(data), hub_(hub), style_(FloatStyle),
     removeLaterTimer_(0),
     flyAni_(0), flyOpacityAni_(0), escapeAni_(0), rushAni_(0), appearOpacityAni_(0), fadeAni_(0),
@@ -231,6 +234,8 @@ AnnotationGraphicsItem::AnnotationGraphicsItem(
   Q_ASSERT(view_);
   scene_ = view_->scene();
   Q_ASSERT(scene_);
+
+  connect(this, SIGNAL(message(QString)), view_, SIGNAL(message(QString)));
 
   setAcceptHoverEvents(true);
   //setAcceptTouchEvents(true);
@@ -271,7 +276,17 @@ AnnotationGraphicsItem::reset()
     fadeAni_->stop();
   if (appearOpacityAni_ && appearOpacityAni_->state() != QAbstractAnimation::Stopped)
     appearOpacityAni_->stop();
+
   setOpacity(0.0);
+}
+
+void
+AnnotationGraphicsItem::setAvatarVisibleAndUpdate(bool t)
+{
+  if (avatarVisible_ != t) {
+    avatarVisible_ = t;
+    updateComponents();
+  }
 }
 
 void
@@ -279,15 +294,35 @@ AnnotationGraphicsItem::setMetaVisibleAndUpdate(bool t)
 {
   if (isMetaVisible() != t) {
     metaVisible_ = t;
-    if (isMetaVisible()) {
-      if (suffix_.isEmpty()) {
-        updateMeta();
-        richText_ = prefix_ + text_ + suffix_;
-      }
-      setText(richText_);
-    } else
-      setText(text_);
-  }
+    updateComponents();
+  } else
+    metaVisible_ = t;
+}
+
+void
+AnnotationGraphicsItem::updateComponents()
+{
+  QString t;
+  if (isMetaVisible()) {
+    if (suffix_.isEmpty())
+      updateMeta();
+    t = prefix_ + text_ + suffix_;
+  } else if (isAvatarVisible()) {
+    if (prefix_.isEmpty())
+      updateAvatar();
+    t = prefix_ + text_;
+  } else
+    t = text_;
+
+  setText(t);
+}
+
+bool
+AnnotationGraphicsItem::isAvatarVisible() const
+{
+  return avatarVisible_ &&
+    //annot_.hasUserId() && annot_.userAlias() != "guest" &&
+    !isSubtitle();
 }
 
 bool
@@ -325,14 +360,16 @@ AnnotationGraphicsItem::updateText()
   QStringList tags;
   boost::tie(text_, tags) = ANNOT_PARSE_CODE(text);
   setTags(tags);
-  richText_ = text_;
   if (tags.contains(CORE_CMD_VERBATIM))
-    setPlainText(richText_);
+    setPlainText(text_);
   else if (isMetaVisible()) {
     if (suffix_.isEmpty())
       updateMeta();
-    richText_ = prefix_ + text_ + suffix_;
-    setText(richText_);
+    setText(prefix_ + text_ + suffix_);
+  } else if (isAvatarVisible()) {
+    if (prefix_.isEmpty())
+      updateAvatar();
+    setText(prefix_ + text_);
   } else
     setText(text_);
   //if (isOwner)
@@ -388,6 +425,25 @@ AnnotationGraphicsItem::updateToolTip()
       tip.append(" " + s);
   }
   setToolTip(tip);
+}
+
+void
+AnnotationGraphicsItem::updateAvatar()
+{
+  prefix_.clear();
+  qint64 uid = annot_.userId();
+  if (uid) {
+    int count = data_->annotationCountForUserId(uid);
+    if (count > 1)
+      prefix_ =
+        "<img"
+        " src=\"" + ::rc_avatar_url(uid) + "\""
+        " alt=\"" + annot_.userAlias() + "\""
+        " border=\"0\""
+        " width=\"" AVATAR_SIZE "\""
+        " height=\"" AVATAR_SIZE "\""
+        "/> "; // a trailing space at the end
+  }
 }
 
 void
@@ -637,7 +693,7 @@ AnnotationGraphicsItem::setOpacity(qreal opacity)
 //  case DefaultEffect:
 //  default:
 //    {
-//      BOOST_AUTO(e, dynamic_cast<AnnotationGraphicsEffect *>(graphicsEffect()));
+//      BOOST_AUTO(e, qobjectcast<AnnotationGraphicsEffect *>(graphicsEffect()));
 //      if (!e) {
 //        e = new AnnotationGraphicsEffect;
 //        setGraphicsEffect(e);
@@ -751,6 +807,7 @@ AnnotationGraphicsItem::addMe()
     connect(view_, SIGNAL(scaleChanged(qreal)), SLOT(setScale(qreal)));
     connect(view_, SIGNAL(itemVisibleChanged(bool)), SLOT(setVisible(bool)));
     connect(view_, SIGNAL(itemMetaVisibleChanged(bool)), SLOT(setMetaVisibleAndUpdate(bool)));
+    connect(AnnotationSettings::globalInstance(), SIGNAL(avatarVisibleChanged(bool)), SLOT(setAvatarVisibleAndUpdate(bool)));
 
     if (style_ == SubtitleStyle &&
         hub_->isSignalTokenMode())
@@ -797,6 +854,7 @@ AnnotationGraphicsItem::removeMe()
     disconnect(view_, SIGNAL(scaleChanged(qreal)), this, SLOT(setScale(qreal)));
     disconnect(view_, SIGNAL(itemVisibleChanged(bool)), this, SLOT(setVisible(bool)));
     disconnect(view_, SIGNAL(itemMetaVisibleChanged(bool)), this, SLOT(setMetaVisibleAndUpdate(bool)));
+    disconnect(AnnotationSettings::globalInstance(), SIGNAL(avatarVisibleChanged(bool)), this, SLOT(setAvatarVisibleAndUpdate(bool)));
 
     scene_->removeItem(this);
     view_->releaseItem(this);
@@ -1124,11 +1182,17 @@ AnnotationGraphicsItem::contextMenuEvent(QContextMenuEvent *event)
     pause();
 
   QMenu *m = new QMenu(view_);
+  QMenu *searchMenu = new QMenu(tr("Search"), view_);
+  QMenu *translateMenu = new QMenu(tr("Translate"), view_);
   AcUi::globalInstance()->setContextMenuStyle(m, false); // persistent = false
+  AcUi::globalInstance()->setContextMenuStyle(searchMenu, false); // persistent = false
+  AcUi::globalInstance()->setContextMenuStyle(translateMenu, false); // persistent = false
 
-  if (!hub_->isLiveTokenMode())
+  if (!hub_->isLiveTokenMode()) {
     m->addAction(tr("Edit"), this, SLOT(edit()));
-  m->addAction(tr("Copy"), this, SLOT(copyToClipboard()));
+    m->addSeparator();
+  }
+  m->addAction(tr("Copy") + ": " + summary(), this, SLOT(copyToClipboard()));
   m->addAction(tr("Hide"), this, SLOT(disappear()));
   if (paused)
     m->addAction(tr("Release") + " ["+ tr("MButton")+"]", this, SLOT(resume()));
@@ -1136,16 +1200,28 @@ AnnotationGraphicsItem::contextMenuEvent(QContextMenuEvent *event)
     m->addAction(tr("Analytics") + " ["+ tr("DoubleClick")+"]", this, SLOT(analyzeMe()));
   m->addSeparator();
 
+  searchMenu->addAction(QIcon(WBRC_IMAGE_GOOGLE), "Google", this, SLOT(searchWithGoogle()));
+  searchMenu->addAction(QIcon(WBRC_IMAGE_BING), "Bing", this, SLOT(searchWithBing()));
+  m->addMenu(searchMenu);
+
+  translateMenu->addAction(QIcon(ACRC_IMAGE_ENGLISH), TR(T_ENGLISH), this, SLOT(translateToEnglish()));
+  translateMenu->addAction(QIcon(ACRC_IMAGE_JAPANESE), TR(T_JAPANESE), this, SLOT(translateToJapanese()));
+  translateMenu->addAction(QIcon(ACRC_IMAGE_CHINESE), TR(T_CHINESE), this, SLOT(translateToChinese()));
+  translateMenu->addAction(QIcon(ACRC_IMAGE_KOREAN), TR(T_KOREAN), this, SLOT(translateToKorean()));
+
+  m->addMenu(translateMenu);
+
+  m->addSeparator();
+
   if (annot_.userId() == view_->userId()) {
     if (annot_.hasId() && !hub_->isLiveTokenMode())
       m->addAction(TR(T_DELETE), this, SLOT(deleteMe()));
   } else {
-    QString text = summary();
     if (annot_.id() > 0 && !hub_->isLiveTokenMode()) {
-      m->addAction(TR(T_BLESS) + ": " + text, this, SLOT(blessMe()));
-      m->addAction(TR(T_CURSE) + ": " + text, this, SLOT(curseMe()));
+      m->addAction(TR(T_BLESS), this, SLOT(blessMe()));
+      m->addAction(TR(T_CURSE), this, SLOT(curseMe()));
     }
-    m->addAction(TR(T_BLOCK) + ": " + text, this, SLOT(blockMe()));
+    m->addAction(TR(T_BLOCK), this, SLOT(blockMe()));
     if (annot_.hasUserAlias()) {
       m->addSeparator();
       m->addAction(TR(T_MENUTEXT_BLOCKUSER) + ": " + annot_.userAlias(), this, SLOT(blockUser()));
@@ -1154,6 +1230,8 @@ AnnotationGraphicsItem::contextMenuEvent(QContextMenuEvent *event)
 
   m->exec(event->globalPos());
   delete m;
+  delete searchMenu;
+  delete translateMenu;
   event->accept();
 
   //if (!paused)
@@ -1332,7 +1410,7 @@ QString
 AnnotationGraphicsItem::summary() const
 {
   enum { length = 11 } ;
-  QString ret = annot_.text();
+  QString ret = toPlainText();
   if (ret.size() > length)
     ret = ret.left(length - 6) + "..." + ret.right(3);
   return ret;
@@ -1481,5 +1559,47 @@ AnnotationGraphicsItem::reflected(const QPointF &pos) const
                              pos.y();
   return QPointF(x, y);
 }
+
+// - Search -
+
+void
+AnnotationGraphicsItem::searchWithEngine(int engine)
+{
+  QString t = QtExt::htmlToPlainText(text_);
+  if (!t.isEmpty())
+    view_->searchText(t, engine);
+}
+
+void
+AnnotationGraphicsItem::searchWithBing()
+{ searchWithEngine(SearchEngineFactory::Bing); }
+
+void
+AnnotationGraphicsItem::searchWithGoogle()
+{ searchWithEngine(SearchEngineFactory::Google); }
+
+void
+AnnotationGraphicsItem::translate(int lang)
+{
+  QString t = QtExt::htmlToPlainText(text_);
+  if (!t.isEmpty())
+    view_->translateText(t, lang);
+}
+
+void
+AnnotationGraphicsItem::translateToEnglish()
+{ translate(Traits::English); }
+
+void
+AnnotationGraphicsItem::translateToJapanese()
+{ translate(Traits::Japanese); }
+
+void
+AnnotationGraphicsItem::translateToChinese()
+{ translate(Traits::Chinese); }
+
+void
+AnnotationGraphicsItem::translateToKorean()
+{ translate(Traits::Korean); }
 
 // EOF

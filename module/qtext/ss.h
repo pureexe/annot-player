@@ -37,6 +37,7 @@
 #define SS_BACKGROUND_IMAGE_URL(_url) "background-image: url(" _url ");"
 #define SS_BACKGROUND_IMAGE_URL_BEGIN "background-image: url("
 #define SS_TRANSPARENT          "background:transparent;"
+#define SS_SEMI_TRANSPARENT     SS_BACKGROUND_COLOR(rgba(0,0,0,1))
 #define SS_POSITION_BEGIN       "position:"
 #define SS_POSITION(_align)     "position:" #_align ";"
 #define SS_POSITION_ABSOLUTE    SS_POSITION(absolute)

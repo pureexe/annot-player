@@ -102,6 +102,9 @@ public:
   QString recentPath() const;
   void setRecentPath(const QString &path);
 
+  bool isAnnotationAvatarVisible() const;
+  void setAnnotationAvatarVisible(bool t);
+
   bool isAnnotationBandwidthLimited() const;
   void setAnnotationBandwidthLimited(bool t);
 

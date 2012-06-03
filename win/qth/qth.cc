@@ -168,7 +168,7 @@ Qth::isKnownHookForProcess(const QString &hook, const QString &proc) const
   static QSet<uint> hashes;
   if (hashes.isEmpty()) {
 #define ADD(_hook, _proc)  hashes.insert(qHash(QString(_hook) + "\n" + _proc))
-    ADD("Malie", "malie"); // light
+    //ADD("Malie", "malie"); // light
     ADD("GetGlyphOutlineA", "STEINSGATE");
     ADD("StuffScriptEngine", "EVOLIMIT");
 #undef ADD

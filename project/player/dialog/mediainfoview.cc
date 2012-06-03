@@ -122,7 +122,7 @@ MediaInfoView::updateText()
       t->append(url);
   }
 
-  //static const int tail = ::strlen(HTML_BR());
+  //static const size_t tail = qstrlen(HTML_BR());
 
   if (t->isEmpty())
     t->append(tr("No information"));

@@ -43,11 +43,11 @@
   #define SAVE_SHORTCUT "CTRL+S"
 #endif // Q_OS_MAC
 
-#define SS_TOOLBUTTON_TAG       SS_TOOLBUTTON_TEXT_(bold, italic, none, blue, red, purple, purple, red, gray)
-#define SS_TOOLBUTTON_BOLD      SS_TOOLBUTTON_TEXT_(bold, italic, none, blue, red, purple, purple, red, gray)
-#define SS_TOOLBUTTON_ITALIC    SS_TOOLBUTTON_TEXT_(bold, italic, none, blue, red, purple, purple, red, gray)
-#define SS_TOOLBUTTON_UNDERLINE SS_TOOLBUTTON_TEXT_(bold, italic, underline, blue, red, purple, purple, red, gray)
-#define SS_TOOLBUTTON_STRIKE    SS_TOOLBUTTON_TEXT_(bold, italic, line-through, blue, red, purple, purple, red, gray)
+#define SS_TOOLBUTTON_TAG       ACSS_TOOLBUTTON_TEXT_(bold, italic, none, blue, red, purple, purple, red, gray)
+#define SS_TOOLBUTTON_BOLD      ACSS_TOOLBUTTON_TEXT_(bold, italic, none, blue, red, purple, purple, red, gray)
+#define SS_TOOLBUTTON_ITALIC    ACSS_TOOLBUTTON_TEXT_(bold, italic, none, blue, red, purple, purple, red, gray)
+#define SS_TOOLBUTTON_UNDERLINE ACSS_TOOLBUTTON_TEXT_(bold, italic, underline, blue, red, purple, purple, red, gray)
+#define SS_TOOLBUTTON_STRIKE    ACSS_TOOLBUTTON_TEXT_(bold, italic, line-through, blue, red, purple, purple, red, gray)
 
 // - Constructions -
 
@@ -216,7 +216,7 @@ AnnotationEditor::createRibons()
 
   // - fontComboBox_
   fontComboBox_ = new QtExt::FontComboBox; {
-    fontComboBox_->setStyleSheet(SS_COMBOBOX);
+    fontComboBox_->setStyleSheet(ACSS_COMBOBOX);
     //fontComboBox_->setEditable(true);
     fontComboBox_->setMaximumWidth(FONTCOMBOBOX_WIDTH);
     fontComboBox_->setMinimumWidth(FONTCOMBOBOX_WIDTH);
@@ -316,12 +316,12 @@ AnnotationEditor::createRibons()
   // Footer
 
   countLabel_ = new QLabel; {
-    countLabel_->setStyleSheet(SS_LABEL);
+    countLabel_->setStyleSheet(ACSS_LABEL);
     countLabel_->setToolTip(TR(T_WORDCOUNT));
   }
 
   tidyButton_ = new QtExt::ToolButton; {
-    tidyButton_->setStyleSheet(SS_TOOLBUTTON_TEXT_CHECKABLE);
+    tidyButton_->setStyleSheet(ACSS_TOOLBUTTON_TEXT_CHECKABLE);
     tidyButton_->setToolButtonStyle(Qt::ToolButtonTextOnly);
     tidyButton_->setText(QString("| %1 |").arg(tr("tidy")));
     tidyButton_->setToolTip(tr("Tidy HTML"));
@@ -331,7 +331,7 @@ AnnotationEditor::createRibons()
   connect(tidyButton_, SIGNAL(clicked(bool)),SLOT(setTidyEnabled(bool)));
 
   saveButton_ = new QtExt::ToolButton; {
-    saveButton_->setStyleSheet(SS_TOOLBUTTON_TEXT_HIGHLIGHT);
+    saveButton_->setStyleSheet(ACSS_TOOLBUTTON_TEXT_HIGHLIGHT);
     saveButton_->setToolButtonStyle(Qt::ToolButtonTextOnly);
     saveButton_->setText(QString("[ %1 ]").arg(TR(T_SAVE)));
     saveButton_->setToolTip(TR(T_SAVE) + " [" SAVE_SHORTCUT "]");
@@ -339,7 +339,7 @@ AnnotationEditor::createRibons()
   connect(saveButton_, SIGNAL(clicked()), SLOT(save()));
 
   cancelButton_ = new QtExt::ToolButton; {
-    cancelButton_->setStyleSheet(SS_TOOLBUTTON_TEXT);
+    cancelButton_->setStyleSheet(ACSS_TOOLBUTTON_TEXT);
     cancelButton_->setToolButtonStyle(Qt::ToolButtonTextOnly);
     cancelButton_->setText(QString("[ %1 ]").arg(TR(T_CANCEL)));
     cancelButton_->setToolTip(TR(T_CANCEL) + " [ESC]");

@@ -61,8 +61,12 @@ enum { ALPHA = 0 };
 
 // TO BE MOVED INTO mediaplayer.h
 #define G_FORMAT_ALL            "*"
-#define G_FORMAT_AUDIO          PLAYER_FORMAT_PLAYLIST(" *.") PLAYER_FORMAT_AUDIO(" *.")
-#define G_FORMAT_VIDEO          PLAYER_FORMAT_VIDEO(" *.")
+#ifdef Q_WS_WIN
+#  define G_FORMAT_AUDIO        PLAYER_FORMAT_AUDIO(" *.")      PLAYER_FORMAT_PLAYLIST(" *.") PLAYER_FORMAT_IMAGE(".*.")
+#else
+#  define G_FORMAT_AUDIO        PLAYER_FORMAT_AUDIO(" *.")      PLAYER_FORMAT_IMAGE(".*.")
+#endif // Q_WS_WIN
+#define G_FORMAT_VIDEO          PLAYER_FORMAT_VIDEO(" *.")      PLAYER_FORMAT_IMAGE(".*.")
 #define G_FORMAT_PICTURE        PLAYER_FORMAT_PICTURE(" *.")
 #define G_FORMAT_SUBTITLE       PLAYER_FORMAT_SUBTITLE(" *.")
 

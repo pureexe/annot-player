@@ -34,7 +34,7 @@ protected slots:
 
   // - Events -
 protected:
-  //virtual void keyPressEvent(QKeyEvent *event); ///< \override
+  virtual void keyPressEvent(QKeyEvent *event); ///< \override
   virtual void contextMenuEvent(QContextMenuEvent *event); ///< \override
 
 private:

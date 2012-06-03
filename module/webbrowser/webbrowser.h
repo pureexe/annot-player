@@ -99,6 +99,7 @@ protected slots:
   void search(const QString &text, int engine = -1);
   void searchInNewTab(const QString &text, int engine = -1);
   void reload();
+  void updateWindowTitle();
   void updateAddressbar();
   void back();
   void forward();
@@ -154,6 +155,8 @@ protected:
 
   QWidget *tabWidget() const;
   QWidget *tabWidget(int i) const;
+  QString tabTitle() const { return tabTitle(tabIndex()); }
+  QString tabTitle(int i) const;
 
   int searchEngine() const { return searchEngine_; }
 
@@ -181,7 +184,7 @@ private:
   void createGestures();
 
 private:
-  Form *ui_;
+  Form *ui;
   QNetworkCookieJar *cookieJar_;
   QNetworkAccessManager *nam_;
   MouseGestureFilter *mouseGestureFilter_;

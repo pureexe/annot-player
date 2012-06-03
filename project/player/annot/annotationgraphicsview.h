@@ -68,6 +68,9 @@ public:
   bool isItemCountLimited() const { return itemCountLimited_; }
 
 signals:
+  void message(const QString &text);
+  void searchRequested(int engine, const QString &key);
+  void translateRequested(const QString &text, int lang);
   void annotationSkipped();
   void itemCountLimitedChanged(bool t);
   void itemMetaVisibleChanged(bool t);
@@ -103,7 +106,7 @@ signals:
   void trackedWindowDestroyed();
   void trackedWindowChanged(WId winId);
 public:
-  WId trackedWindow() const;
+  WId trackedWindow() const { return trackedWindow_; }
 public slots:
   void setTrackedWindow(WId winId);
 
@@ -182,6 +185,9 @@ public:
 
   QRect globalRect() const;
   QPoint fromGlobal(const QPoint &globalPos) const;
+
+  void searchText(const QString &text, int engine);
+  void translateText(const QString &text, int lang);
 
 signals:
   void annotationAdded(const Annotation &annot);
@@ -267,6 +273,7 @@ public slots:
   // Video view tracker
   void updateGeometry();
   void updateSize();
+  void updateMaxItemCount();
   void updatePos();
 
   // Stream control
@@ -382,6 +389,7 @@ private:
        nearbyItemExpelled_, nearbyItemAttracted_;
   bool itemVisible_;
   bool dragging_;
+  int maxItemCount_;
 };
 
 #endif // ANNOTATIONGRAPHICSViEW_H

@@ -16,17 +16,8 @@
 
 // - Constructions -
 
-#define WINDOW_FLAGS ( \
-  Qt::Dialog | \
-  Qt::CustomizeWindowHint | \
-  Qt::WindowTitleHint | \
-  Qt::WindowSystemMenuHint | \
-  Qt::WindowMinMaxButtonsHint | \
-  Qt::WindowStaysOnTopHint | \
-  Qt::WindowCloseButtonHint )
-
 AcWindow::AcWindow(QWidget *parent, Qt::WindowFlags f)
-  : Base(parent, f ? f : WINDOW_FLAGS), fadeAni_(0), fadeEnabled_(true),
+  : Base(parent, f ? f : AC_WINDOW_FLAGS), fadeAni_(0), fadeEnabled_(true),
     rippleEnabled_(false), rippleFilter_(0), rippleTimer_(0)
 {
 #ifdef Q_WS_WIN

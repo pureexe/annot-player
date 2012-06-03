@@ -104,6 +104,12 @@ namespace AnnotCloud {
     void setCreateTime(qint64 secs)     { createTime_ = secs; }
     bool hasCreateTime() const          { return createTime_ > 0; }
 
+  private: qint64 createIp_;
+  public:
+    qint64 createIp() const             { return createIp_; }
+    void setCreateIp(qint64 ip)         { createIp_ = ip; }
+    bool hasCreateIp() const            { return createIp_; }
+
   private: quint32 blessed_;
   public:
     quint32 blessedCount() const        { return blessed_; }
@@ -142,7 +148,7 @@ namespace AnnotCloud {
     // - Constructions -
   public:
     Token()
-      : id_(0), type_(0), userId_(0), part_(0), status_(0), flags_(0), createTime_(0),
+      : id_(0), type_(0), userId_(0), part_(0), status_(0), flags_(0), createTime_(0), createIp_(0),
         blessed_(0), cursed_(0), blocked_(0), visited_(0), annot_(0)
     { }
 

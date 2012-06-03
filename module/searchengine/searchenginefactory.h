@@ -23,6 +23,7 @@
 #define SE_MAN        "http://www.linuxmanpages.com/man1/%1.1.php"
 #define SE_CPP        "http://cplusplus.com/search.do?q=%1"
 #define SE_QT         "http://doc.qt.nokia.com/latest/%1.html"
+#define SE_IP         "http://ip-address-lookup-v4.com/ip/%1"
 #define SE_OSX        "https://developer.apple.com/library/mac/search/?q=%1"
 #define SE_MSDN       "http://social.msdn.microsoft.com/search/en-us/windows/desktop?Refinement=181&query=%1"
 #define SE_BASH       "http://ss64.com/bash/%1.html"
@@ -42,10 +43,11 @@ protected:
   explicit SearchEngineFactory(QObject *parent = 0) : Base(parent) { }
 
 public:
-  enum Engine { Google = 0, GoogleImages, Bing, Youtube, Nicovideo, Bilibili, Acfun, Youku, WikiJa,
-                WikiEn, WikiZh,
-                Manpage, CPlusPlus, Qt, Osx, Msdn, Bash, Cmd,
-                EngineCount, VisibleEngineCount = WikiJa +1
+  enum Engine { Google = 0, GoogleImages, Bing,
+                Youtube, Nicovideo, Bilibili, Acfun, Youku,
+                WikiJa, WikiEn, WikiZh,
+                Manpage, CPlusPlus, Qt, Ip, Osx, Msdn, Bash, Cmd,
+                EngineCount, VisibleEngineCount = WikiZh +1
   };
 
   SearchEngine *create(int engine) const;

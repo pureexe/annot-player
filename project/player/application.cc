@@ -9,6 +9,7 @@
 #  include "mac/qtmac/qtmac.h"
 #endif // Q_WS_MAC
 #include <QtCore/QDir>
+#include <QtCore/QProcess>
 
 #define DEBUG "application"
 #include "module/debug/debug.h"

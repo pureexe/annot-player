@@ -20,8 +20,8 @@ public slots:
   void enterText(const QString &text); // setText and emit enterPressed
 
   // - Events -
-protected:
-  virtual void contextMenuEvent(QContextMenuEvent *event); ///< \override
+//protected:
+//  virtual void contextMenuEvent(QContextMenuEvent *event); ///< \override
 };
 
 #endif // ACLINEEDIT_H

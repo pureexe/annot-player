@@ -65,6 +65,37 @@
 <context>
     <name>AcAccountPreferences</name>
     <message>
+        <source>Account</source>
+        <translation type="obsolete">账户</translation>
+    </message>
+    <message>
+        <source>Username</source>
+        <translation type="obsolete">用户名</translation>
+    </message>
+    <message>
+        <source>Password</source>
+        <translation type="obsolete">密码</translation>
+    </message>
+    <message>
+        <source>Clear</source>
+        <translation type="obsolete">清空</translation>
+    </message>
+    <message>
+        <source>clear</source>
+        <translation type="obsolete">清除</translation>
+    </message>
+    <message>
+        <source>Nicovideo.jp</source>
+        <translation type="obsolete">ニコニコ動画</translation>
+    </message>
+    <message>
+        <source>Bilibili.tv</source>
+        <translation type="obsolete">哔哩哔哩动画</translation>
+    </message>
+</context>
+<context>
+    <name>AcAccountPrefs</name>
+    <message>
         <location filename="../../common/acaccountprefs_p.cc" line="17"/>
         <source>Account</source>
         <translation>账户</translation>
@@ -83,10 +114,6 @@
         <location filename="../../common/acaccountprefs_p.cc" line="33"/>
         <source>Clear</source>
         <translation>清空</translation>
-    </message>
-    <message>
-        <source>clear</source>
-        <translation type="obsolete">清除</translation>
     </message>
     <message>
         <location filename="../../common/acaccountprefs_p.cc" line="40"/>
@@ -125,12 +152,12 @@
         <translation>控制台</translation>
     </message>
     <message>
-        <location filename="../../common/acconsole.cc" line="38"/>
+        <location filename="../../common/acconsole.cc" line="39"/>
         <source>OK</source>
         <translation>确定</translation>
     </message>
     <message>
-        <location filename="../../common/acconsole.cc" line="40"/>
+        <location filename="../../common/acconsole.cc" line="41"/>
         <source>Clear</source>
         <translation>清除</translation>
     </message>
@@ -215,39 +242,109 @@
 <context>
     <name>AcLocationPreferences</name>
     <message>
-        <location filename="../../common/aclocationprefs_p.cc" line="16"/>
+        <source>Locations</source>
+        <translation type="obsolete">路径</translation>
+    </message>
+    <message>
+        <source>Downloads Location for Annot Player and Annot Downloader</source>
+        <translation type="obsolete">播放器保存下载动画的位置</translation>
+    </message>
+    <message>
+        <source>Downloads Location</source>
+        <translation type="obsolete">下载路径</translation>
+    </message>
+    <message>
+        <source>Downloads</source>
+        <translation type="obsolete">下载位置</translation>
+    </message>
+    <message>
+        <source>exists</source>
+        <translation type="obsolete">存在</translation>
+    </message>
+    <message>
+        <source>not exist</source>
+        <translation type="obsolete">不存在</translation>
+    </message>
+</context>
+<context>
+    <name>AcLocationPrefs</name>
+    <message>
+        <location filename="../../common/aclocationprefs_p.cc" line="17"/>
         <source>Locations</source>
         <translation>路径</translation>
     </message>
     <message>
-        <location filename="../../common/aclocationprefs_p.cc" line="27"/>
+        <location filename="../../common/aclocationprefs_p.cc" line="28"/>
         <source>Downloads Location for Annot Player and Annot Downloader</source>
         <translation>播放器保存下载动画的位置</translation>
     </message>
     <message>
-        <location filename="../../common/aclocationprefs_p.cc" line="28"/>
-        <location filename="../../common/aclocationprefs_p.cc" line="30"/>
+        <location filename="../../common/aclocationprefs_p.cc" line="29"/>
         <source>Downloads Location</source>
         <translation>下载路径</translation>
     </message>
     <message>
-        <location filename="../../common/aclocationprefs_p.cc" line="30"/>
+        <location filename="../../common/aclocationprefs_p.cc" line="31"/>
         <source>Downloads</source>
         <translation>下载位置</translation>
     </message>
     <message>
-        <location filename="../../common/aclocationprefs_p.cc" line="77"/>
+        <location filename="../../common/aclocationprefs_p.cc" line="31"/>
+        <source>Open Downloads Location</source>
+        <translation>打开下载路径</translation>
+    </message>
+    <message>
+        <location filename="../../common/aclocationprefs_p.cc" line="82"/>
         <source>exists</source>
         <translation>存在</translation>
     </message>
     <message>
-        <location filename="../../common/aclocationprefs_p.cc" line="79"/>
+        <location filename="../../common/aclocationprefs_p.cc" line="84"/>
         <source>not exist</source>
         <translation>不存在</translation>
     </message>
 </context>
 <context>
     <name>AcNetworkProxyPreferences</name>
+    <message>
+        <source>Proxy</source>
+        <translation type="obsolete">代理</translation>
+    </message>
+    <message>
+        <source>Proxy type</source>
+        <translation type="obsolete">代理类型</translation>
+    </message>
+    <message>
+        <source>Host</source>
+        <translation type="obsolete">服务器</translation>
+    </message>
+    <message>
+        <source>Port</source>
+        <translation type="obsolete">端口</translation>
+    </message>
+    <message>
+        <source>Username</source>
+        <translation type="obsolete">用户名</translation>
+    </message>
+    <message>
+        <source>Password</source>
+        <translation type="obsolete">密码</translation>
+    </message>
+    <message>
+        <source>Enable</source>
+        <translation type="obsolete">有效</translation>
+    </message>
+    <message>
+        <source>network proxy disabled</source>
+        <translation type="obsolete">网络代理有效</translation>
+    </message>
+    <message>
+        <source>network proxy enabled</source>
+        <translation type="obsolete">网络代理无效</translation>
+    </message>
+</context>
+<context>
+    <name>AcNetworkProxyPrefs</name>
     <message>
         <location filename="../../common/acnetworkproxyprefs_p.cc" line="15"/>
         <source>Proxy</source>
@@ -299,7 +396,7 @@
 <context>
     <name>AcPreferences</name>
     <message>
-        <location filename="../../common/acpreferences.cc" line="47"/>
+        <location filename="../../common/acpreferences.cc" line="52"/>
         <source>Preferences</source>
         <translation>偏好</translation>
     </message>
@@ -342,6 +439,90 @@
     </message>
 </context>
 <context>
+    <name>GesturePreferencesTab</name>
+    <message>
+        <location filename="../preferences_p.cc" line="31"/>
+        <location filename="../preferences_p.cc" line="37"/>
+        <source>Gesture</source>
+        <translation>鼠标手势</translation>
+    </message>
+    <message>
+        <location filename="../preferences_p.cc" line="37"/>
+        <source>Function</source>
+        <translation>功能</translation>
+    </message>
+    <message>
+        <location filename="../preferences_p.cc" line="39"/>
+        <source>Open Link in Tab</source>
+        <translation>用Tab打开链接</translation>
+    </message>
+    <message>
+        <location filename="../preferences_p.cc" line="40"/>
+        <source>Previous in History</source>
+        <translation>前一个历史</translation>
+    </message>
+    <message>
+        <location filename="../preferences_p.cc" line="41"/>
+        <source>Next in History</source>
+        <translation>后一个历史</translation>
+    </message>
+    <message>
+        <location filename="../preferences_p.cc" line="42"/>
+        <source>Previous Tab</source>
+        <translation>前一个Tab</translation>
+    </message>
+    <message>
+        <location filename="../preferences_p.cc" line="43"/>
+        <source>Next Tab</source>
+        <translation>后一个Tab</translation>
+    </message>
+    <message>
+        <location filename="../preferences_p.cc" line="44"/>
+        <source>Close Tab</source>
+        <translation>关闭页面</translation>
+    </message>
+    <message>
+        <location filename="../preferences_p.cc" line="45"/>
+        <source>New Tab</source>
+        <translation>空白页</translation>
+    </message>
+    <message>
+        <location filename="../preferences_p.cc" line="46"/>
+        <source>Undo Close Tab</source>
+        <translation>还原关闭的页面</translation>
+    </message>
+    <message>
+        <location filename="../preferences_p.cc" line="47"/>
+        <source>Refresh</source>
+        <translation>刷新</translation>
+    </message>
+    <message>
+        <location filename="../preferences_p.cc" line="48"/>
+        <source>Full Screen</source>
+        <translation>全屏</translation>
+    </message>
+    <message>
+        <location filename="../preferences_p.cc" line="49"/>
+        <source>Minimize</source>
+        <translation>最小化</translation>
+    </message>
+    <message>
+        <location filename="../preferences_p.cc" line="50"/>
+        <source>Scroll Top</source>
+        <translation>移动到页面顶部</translation>
+    </message>
+    <message>
+        <location filename="../preferences_p.cc" line="51"/>
+        <source>Scroll Bottom</source>
+        <translation>移动到页面底部</translation>
+    </message>
+    <message>
+        <location filename="../preferences_p.cc" line="62"/>
+        <source>Read-only</source>
+        <translation>只读</translation>
+    </message>
+</context>
+<context>
     <name>MainWindow</name>
     <message>
         <location filename="../mainwindow.cc" line="77"/>
@@ -349,171 +530,171 @@
         <translation>とある浏览使</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="290"/>
+        <location filename="../mainwindow.cc" line="294"/>
         <source>&amp;File</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="291"/>
+        <location filename="../mainwindow.cc" line="295"/>
         <source>New Window</source>
         <translation>新窗口</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="229"/>
-        <location filename="../mainwindow.cc" line="292"/>
+        <location filename="../mainwindow.cc" line="233"/>
+        <location filename="../mainwindow.cc" line="296"/>
         <source>New Tab</source>
         <translation>空白页</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="294"/>
+        <location filename="../mainwindow.cc" line="298"/>
         <source>Clip</source>
         <translation>保存页面</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="224"/>
-        <location filename="../mainwindow.cc" line="296"/>
+        <location filename="../mainwindow.cc" line="228"/>
+        <location filename="../mainwindow.cc" line="300"/>
         <source>Close Tab</source>
         <translation>关闭页面</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="297"/>
+        <location filename="../mainwindow.cc" line="301"/>
         <source>Close Window</source>
         <translation>关闭窗口</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="298"/>
+        <location filename="../mainwindow.cc" line="302"/>
         <source>Exit</source>
         <translation>退出</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="310"/>
+        <location filename="../mainwindow.cc" line="314"/>
         <source>&amp;View</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="239"/>
-        <location filename="../mainwindow.cc" line="311"/>
+        <location filename="../mainwindow.cc" line="243"/>
+        <location filename="../mainwindow.cc" line="315"/>
         <source>Reload</source>
         <translation>刷新</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="214"/>
+        <location filename="../mainwindow.cc" line="218"/>
         <source>Unrecognized Gesture</source>
         <translation>未识别的鼠标手势</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="219"/>
+        <location filename="../mainwindow.cc" line="223"/>
         <source>Open Link in Background Tab</source>
         <translation>打开这个链接</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="234"/>
+        <location filename="../mainwindow.cc" line="238"/>
         <source>Undo Close Tab</source>
         <translation>还原关闭的页面</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="244"/>
+        <location filename="../mainwindow.cc" line="248"/>
         <source>Forward</source>
         <translation>前进</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="249"/>
+        <location filename="../mainwindow.cc" line="253"/>
         <source>Backward</source>
         <translation>后退</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="254"/>
+        <location filename="../mainwindow.cc" line="258"/>
         <source>Previous Tab</source>
         <translation>前一个Tab</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="259"/>
+        <location filename="../mainwindow.cc" line="263"/>
         <source>Next Tab</source>
         <translation>后一个Tab</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="264"/>
+        <location filename="../mainwindow.cc" line="268"/>
         <source>Minimize Window</source>
         <translation>最小化窗口</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="274"/>
+        <location filename="../mainwindow.cc" line="278"/>
         <source>Scroll Top</source>
         <translation>移动到页面顶部</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="279"/>
+        <location filename="../mainwindow.cc" line="283"/>
         <source>Scroll Bottom</source>
         <translation>移动到页面底部</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="312"/>
+        <location filename="../mainwindow.cc" line="316"/>
         <source>Stop</source>
         <translation>停止</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="313"/>
+        <location filename="../mainwindow.cc" line="317"/>
         <source>Inspect</source>
         <translation>查看源码</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="315"/>
+        <location filename="../mainwindow.cc" line="319"/>
         <source>Actual Size</source>
         <translation>原始尺寸</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="316"/>
+        <location filename="../mainwindow.cc" line="320"/>
         <source>Zoom In</source>
         <translation>扩大</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="317"/>
+        <location filename="../mainwindow.cc" line="321"/>
         <source>Zoom Out</source>
         <translation>缩小</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="322"/>
+        <location filename="../mainwindow.cc" line="326"/>
         <source>&amp;Settings</source>
         <translation>设定</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="323"/>
+        <location filename="../mainwindow.cc" line="327"/>
         <source>&amp;Preferences</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="782"/>
+        <location filename="../mainwindow.cc" line="789"/>
         <source>Click any edge of the screen to toggle tool bars.</source>
         <translation>点击屏幕的边缘来显示/隐藏地址栏。</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="269"/>
-        <location filename="../mainwindow.cc" line="319"/>
+        <location filename="../mainwindow.cc" line="273"/>
+        <location filename="../mainwindow.cc" line="323"/>
         <source>Toggle Full Screen</source>
         <translation>全屏显示</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="326"/>
+        <location filename="../mainwindow.cc" line="330"/>
         <source>&amp;Help</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="328"/>
+        <location filename="../mainwindow.cc" line="332"/>
         <source>&amp;Console</source>
         <translation>Debug控制台</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="329"/>
+        <location filename="../mainwindow.cc" line="333"/>
         <source>&amp;About</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="338"/>
+        <location filename="../mainwindow.cc" line="345"/>
         <source>restoring last sessions ...</source>
         <translation>恢复上次浏览的页面...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="755"/>
+        <location filename="../mainwindow.cc" line="762"/>
         <source>Double click any tab to exit full screen.</source>
         <translation>双击任何Tab即可退出全屏模式。</translation>
     </message>
@@ -522,30 +703,30 @@
         <translation type="obsolete">点击屏幕的边缘即可显示地址栏。</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="364"/>
+        <location filename="../mainwindow.cc" line="371"/>
         <source>logging in bilibili.tv as %1 ...</source>
         <translation>以%1登录bilibili.tv中...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="369"/>
+        <location filename="../mainwindow.cc" line="376"/>
         <source>logging in nicovideo.jp as %1 ...</source>
         <translation>以%1登录nicovideo.jp中...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="547"/>
-        <location filename="../mainwindow.cc" line="561"/>
+        <location filename="../mainwindow.cc" line="554"/>
+        <location filename="../mainwindow.cc" line="568"/>
         <source>openning new window</source>
         <translation>正在打开新窗口</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="563"/>
+        <location filename="../mainwindow.cc" line="570"/>
         <source>failed open new window</source>
         <translation>无法创建新窗口</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="578"/>
-        <location filename="../mainwindow.cc" line="592"/>
-        <location filename="../mainwindow.cc" line="606"/>
+        <location filename="../mainwindow.cc" line="585"/>
+        <location filename="../mainwindow.cc" line="599"/>
+        <location filename="../mainwindow.cc" line="613"/>
         <source>openning</source>
         <translation>正在打开</translation>
     </message>
@@ -863,14 +1044,15 @@
 <context>
     <name>WbSearchEdit</name>
     <message>
-        <location filename="../../../module/webbrowser/gui/wbsearchedit.cc" line="19"/>
         <location filename="../../../module/webbrowser/gui/wbsearchedit.cc" line="20"/>
+        <location filename="../../../module/webbrowser/gui/wbsearchedit.cc" line="21"/>
         <source>Paste and Go</source>
         <translation>粘贴并访问</translation>
     </message>
     <message>
-        <location filename="../../../module/webbrowser/gui/wbsearchedit.cc" line="22"/>
         <location filename="../../../module/webbrowser/gui/wbsearchedit.cc" line="23"/>
+        <location filename="../../../module/webbrowser/gui/wbsearchedit.cc" line="24"/>
+        <location filename="../../../module/webbrowser/gui/wbsearchedit.cc" line="185"/>
         <source>Search</source>
         <translation>检索</translation>
     </message>
@@ -949,8 +1131,12 @@
         <translation>显示菜单栏</translation>
     </message>
     <message>
-        <location filename="../../../module/webbrowser/webkit/wbwebview.cc" line="122"/>
-        <location filename="../../../module/webbrowser/webkit/wbwebview.cc" line="138"/>
+        <location filename="../../../module/webbrowser/webkit/wbwebview.cc" line="120"/>
+        <source>Search</source>
+        <translation>检索</translation>
+    </message>
+    <message>
+        <location filename="../../../module/webbrowser/webkit/wbwebview.cc" line="147"/>
         <source>Search with %1</source>
         <translation>搜索：%1</translation>
     </message>
@@ -962,38 +1148,43 @@
 <context>
     <name>WebBrowser</name>
     <message>
-        <location filename="../../../module/webbrowser/webbrowser.cc" line="441"/>
-        <location filename="../../../module/webbrowser/webbrowser.cc" line="444"/>
+        <location filename="../../../module/webbrowser/webbrowser.cc" line="449"/>
+        <location filename="../../../module/webbrowser/webbrowser.cc" line="452"/>
         <source>Loading ...</source>
         <translation>载入中...</translation>
     </message>
     <message>
-        <location filename="../../../module/webbrowser/webbrowser.cc" line="442"/>
+        <location filename="../../../module/webbrowser/webbrowser.cc" line="450"/>
         <source>Loading complete</source>
         <translation>载入完成</translation>
     </message>
     <message>
-        <location filename="../../../module/webbrowser/webbrowser.cc" line="619"/>
+        <location filename="../../../module/webbrowser/webbrowser.cc" line="627"/>
         <source>openning</source>
         <translation>正在打开</translation>
     </message>
     <message>
-        <location filename="../../../module/webbrowser/webbrowser.cc" line="649"/>
+        <location filename="../../../module/webbrowser/webbrowser.cc" line="657"/>
         <source>no recent closed tabs</source>
         <translation>没有关闭的标签</translation>
     </message>
     <message>
-        <location filename="../../../module/webbrowser/webbrowser.cc" line="731"/>
+        <location filename="../../../module/webbrowser/webbrowser.cc" line="739"/>
         <source>Start Page</source>
         <translation>世界の果て</translation>
+    </message>
+    <message>
+        <location filename="../../../module/webbrowser/webbrowser.cc" line="838"/>
+        <source>Annot Browser</source>
+        <translation>とある浏览使</translation>
     </message>
     <message>
         <source>Bookmarks</source>
         <translation type="obsolete">书签</translation>
     </message>
     <message>
-        <location filename="../../../module/webbrowser/webbrowser.cc" line="205"/>
-        <location filename="../../../module/webbrowser/webbrowser.cc" line="206"/>
+        <location filename="../../../module/webbrowser/webbrowser.cc" line="207"/>
+        <location filename="../../../module/webbrowser/webbrowser.cc" line="208"/>
         <source>New Tab</source>
         <translation>空白页</translation>
     </message>

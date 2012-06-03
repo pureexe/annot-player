@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SOAP-ENV:Envelope
+ xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+ xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+ xmlns:tns="http://service.annot.me/">
+ <SOAP-ENV:Body>
+  <tns:selectLiveAnnotationsWithTokenIdResponse>
+   <return>
+    <createTime>0</createTime>
+    <flags>0</flags>
+    <id>0</id>
+    <language>0</language>
+    <userAlias></userAlias>
+    <status>0</status>
+    <text></text>
+    <tokenId>0</tokenId>
+    <userId>0</userId>
+   </return>
+   <return>
+    <createTime>0</createTime>
+    <flags>0</flags>
+    <id>0</id>
+    <language>0</language>
+    <userAlias></userAlias>
+    <status>0</status>
+    <text></text>
+    <tokenId>0</tokenId>
+    <userId>0</userId>
+   </return>
+  </tns:selectLiveAnnotationsWithTokenIdResponse>
+ </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>

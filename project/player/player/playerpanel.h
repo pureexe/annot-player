@@ -41,6 +41,7 @@ public:
   ADD_WIDGET(QToolButton, toggleFullScreenModeButton)
   ADD_WIDGET(QToolButton, toggleMiniModeButton)
   ADD_WIDGET(QToolButton, toggleEmbedModeButton)
+  ADD_WIDGET(QToolButton, toggleTraceWindowButton)
   //ADD_WIDGET(QToolButton, toggleAnnotationButton)
   ADD_WIDGET(QToolButton, userButton)
   ADD_WIDGET(QToolButton, positionButton)

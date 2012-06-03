@@ -308,7 +308,7 @@ protected:
         return true;
 
       case QEvent::MouseButtonPress: {
-          //QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event);
+          //QMouseEvent *mouseEvent = qobject_cast<QMouseEvent*>(event);
           //Q_ASSERT(mouseEvent);
           //if (mouseEvent->button() == Qt::LeftButton
           //    && !contextMenuPoppedUp)

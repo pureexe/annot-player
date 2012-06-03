@@ -33,18 +33,24 @@ public:
   static const QStringList &supportedPictureSuffices();
   static const QStringList &supportedSubtitleSuffices();
   static const QStringList &supportedPlaylistSuffices();
+  static const QStringList &supportedImageSuffices();
+  static const QStringList &supportedSuffices();
 
   static const QStringList &supportedAudioFilters();
   static const QStringList &supportedVideoFilters();
   static const QStringList &supportedPictureFilters();
   static const QStringList &supportedSubtitleFilters();
   static const QStringList &supportedPlaylistFilters();
+  static const QStringList &supportedImageFilters();
+  static const QStringList &supportedFilters();
 
   static bool isSupportedAudio(const QString &fileName);
   static bool isSupportedVideo(const QString &fileName);
   static bool isSupportedPicture(const QString &fileName);
   static bool isSupportedSubtitle(const QString &fileName);
   static bool isSupportedPlaylist(const QString &fileName);
+  static bool isSupportedImage(const QString &fileName);
+  static bool isSupportedFile(const QString &fileName);
 
   static QString defaultUserAgent();
   QString userAgent() const;
@@ -197,7 +203,10 @@ public:
   bool isSubtitleVisible() const;
   void addSubtitleFromFile(const QString &fileName);
   bool setSubtitleFromFile(const QString &fileName);
+
   QStringList searchExternalSubtitles() const; ///< return external subtitle files
+  static QString searchSubtitleMedia(const QString &subtitleFile);
+  static QStringList searchMediaSubtitles(const QString &mediaFile);
 
   bool hasTitles() const;
   int titleId() const;

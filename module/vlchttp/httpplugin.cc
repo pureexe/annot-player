@@ -1,4 +1,4 @@
-﻿// httpplugin.cc
+// httpplugin.cc
 // See: vlc/modules/access/http.c
 // 2/21/2012
 // Icy, Proxy, and Authentification supports are not implemented.

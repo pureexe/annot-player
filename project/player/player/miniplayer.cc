@@ -22,13 +22,9 @@
   Qt::WindowStaysOnTopHint
 
 #ifdef Q_WS_MAC
-#  define WINDOW_FLAGS ( \
-    Qt::FramelessWindowHint | \
-    WINDOW_FLAGS_BASE )
+#  define WINDOW_FLAGS WINDOW_FLAGS_BASE | Qt::FramelessWindowHint
 #else
-#  define WINDOW_FLAGS ( \
-    WINDOW_FLAGS_BASE )
-    //Qt::WindowTitleHint |
+#  define WINDOW_FLAGS WINDOW_FLAGS_BASE
 #endif // Q_WS_MAC
 
 #define INPUTLINE_MAXIMUM_WIDTH 300
@@ -53,10 +49,12 @@ MiniPlayerUi::MiniPlayerUi(SignalHub *hub, Player *player, ServerAgent *server, 
   AcUi::globalInstance()->setWindowStyle(this);
 
   createLayout();
+  setTabOrder(inputComboBox(), prefixComboBox());
 
-  //connect(new QShortcut(QKeySequence("CTRL+1"), this), SIGNAL(activated()), hub, SLOT(toggleEmbeddedPlayerMode()));
-  //connect(new QShortcut(QKeySequence("CTRL+2"), this), SIGNAL(activated()), hub, SLOT(toggleMiniPlayerMode()));
-  //connect(new QShortcut(QKeySequence("CTRL+3"), this), SIGNAL(activated()), hub, SLOT(toggleFullScreenWindowMode()));
+  connect(new QShortcut(QKeySequence("ESC"), this), SIGNAL(activated()), hub, SLOT(toggleEmbeddedPlayerMode()));
+  connect(new QShortcut(QKeySequence("CTRL+1"), this), SIGNAL(activated()), hub, SLOT(toggleEmbeddedPlayerMode()));
+  connect(new QShortcut(QKeySequence("CTRL+2"), this), SIGNAL(activated()), hub, SLOT(toggleMiniPlayerMode()));
+  connect(new QShortcut(QKeySequence("CTRL+3"), this), SIGNAL(activated()), hub, SLOT(toggleFullScreenWindowMode()));
 }
 
 void
@@ -90,6 +88,7 @@ MiniPlayerUi::createLayout()
     row1->addWidget(toggleEmbedModeButton());
     row1->addWidget(toggleMiniModeButton());
     row1->addWidget(toggleFullScreenModeButton());
+    row1->addWidget(toggleTraceWindowButton());
     row1->addWidget(positionButton());
     row1->addWidget(volumeSlider());
 
@@ -104,8 +103,8 @@ MiniPlayerUi::createLayout()
     // void setContentsMargins(int left, int top, int right, int bottom);
     rows->setContentsMargins(9, 9, 9, 0);
     row0->setContentsMargins(0, 0, 0, 0);
-    row1->setContentsMargins(0, 0, 0, 9);
-    row2->setContentsMargins(0, 0, 0, 9);
+    row1->setContentsMargins(0, 0, 0, 1);
+    row2->setContentsMargins(0, 1, 0, 9);
   }
   setLayout(rows);
   //setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
@@ -117,6 +116,10 @@ MiniPlayerUi::createLayout()
   progressButton()->resize(QSize());
   menuButton()->hide();
   menuButton()->resize(QSize());
+#ifndef WITH_WIN_PICKER
+  traceWindowButton()->hide();
+  traceWindowButton()->resize(QSize());
+#endif // WITH_WIN_PICKER
 #ifdef Q_WS_WIN
   if (QtWin::isWindowsVistaOrLater()) {
     positionButton()->hide();

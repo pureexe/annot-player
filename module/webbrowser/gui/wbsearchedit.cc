@@ -2,7 +2,8 @@
 // 3/31/2012
 
 #include "gui/wbsearchedit.h"
-#include "module/searchengine/searchengine.h"
+#include "module/searchengine/searchenginefactory.h"
+#include "module/qtext/actionwithid.h"
 #include <QtGui>
 
 //#define DEBUG "wbsearchedit"
@@ -84,7 +85,6 @@ WbSearchEdit::invalidateEngines()
 {
   QStringList items,
               icons;
-
   items.append("アニメ"); icons.append(QString());
 
   foreach (const SearchEngine *e, engines_) {
@@ -162,6 +162,71 @@ WbSearchEdit::submitText()
     }
   }
   DOUT("exit");
+}
+
+void
+WbSearchEdit::searchWithEngine(int engine)
+{
+  QString t = currentText().trimmed();
+  if (!t.isEmpty())
+    emit searchWithEngineRequested(t, engine);
+}
+
+// - Event -
+
+void
+WbSearchEdit::contextMenuEvent(QContextMenuEvent *event)
+{
+  Q_ASSERT(event);
+  QMenu *m = new QMenu(this);
+
+  bool empty = currentText().trimmed().isEmpty();
+
+  QMenu *searchMenu = new QMenu(tr("Search") + " ...");
+  searchMenu->setEnabled(!empty);
+  if (!empty) {
+    for (int engine = 0; engine < engines_.size(); engine++) {
+      QtExt::ActionWithId *a = new QtExt::ActionWithId(engine, searchMenu);
+      SearchEngine *e = engines_[engine];
+      //a->setText(tr("Search with %1").arg(e->name()));
+      a->setText(e->name());
+      a->setStatusTip(e->search("@key"));
+      a->setIcon(QIcon(e->icon()));
+      a->setCheckable(true);
+      if (engine == engine_)
+        a->setChecked(true);
+      connect(a, SIGNAL(triggeredWithId(int,bool)), SLOT(searchWithEngine(int)));
+
+      switch (engine) {
+      case SearchEngineFactory::Youtube:
+      case SearchEngineFactory::WikiJa:
+        searchMenu->addSeparator();
+      }
+      searchMenu->addAction(a);
+    }
+  }
+  m->addMenu(searchMenu);
+  m->addSeparator();
+
+  m->addAction(submitAct);
+  m->addAction(pasteAndGoAct);
+  m->addAction(popupAct);
+  m->addAction(clearAct);
+  m->addSeparator();
+
+  submitAct->setEnabled(!empty);
+  pasteAndGoAct->setEnabled(!isClipboardEmpty());
+  popupAct->setEnabled(count());
+
+  QMenu *scm = lineEdit()->createStandardContextMenu();
+  m->addActions(scm->actions());
+
+  m->exec(event->globalPos());
+  delete m;
+  delete scm;
+  delete searchMenu;
+  event->accept();
+
 }
 
 // EOF

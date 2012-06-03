@@ -2,7 +2,6 @@
 // 10/7/2011
 
 #include "module/qtext/combobox.h"
-#include <QtGui/QLineEdit>
 
 // - Construction -
 

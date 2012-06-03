@@ -16,6 +16,9 @@
 #include "project/common/acui.h"
 #include <QtGui>
 
+#define DEBUG "processview"
+#include "module/debug/debug.h"
+
 using namespace Logger;
 
 // - Helpers -
@@ -24,30 +27,26 @@ namespace { // anonymous
 
   bool processNameIsNotGalGame(const QString &procName)
   {
-    static QStringList blacklist;
-    if (blacklist.isEmpty()) {
-#define ADD(_app)       blacklist.append(_app)
-      ADD("Activator"); ADD("ApMsgFwd"); ADD("Apntex"); ADD("Apoint"); ADD("APSDaemon"); ADD("AutoHotkey"); ADD("ApplePhotoStreams");
-      ADD("BookmarkDAV_client"); ADD("BoonSutazio"); ADD("Bootcamp"); ADD("BtStackServer"); ADD("BTTray");
-      ADD("CamtasiaStudio"); ADD("chrome");
-      ADD("Dropbox"); ADD("DTLite");
-      ADD("eclipse"); ADD("Evernote"); ADD("EvernoteTray");
-      ADD("firefox"); ADD("foobar2000");
-      ADD("GoogleIMEJaConverter"); ADD("GoogleIMEJaRenderer"); ADD("gvim");
-      ADD("Hamana"); ADD("HidFind");
-      ADD("iCloudServices"); ADD("IELowutil"); ADD("IEXPLOR"); ADD("iTunes"); ADD("iTunesHelper");
-      ADD("java"); ADD("javaw");
-      ADD("KHALMNPR"); ADD("KMPlayer");
-      ADD("MacDrive"); ADD("Maxthon"); ADD("MouseGesture"); ADD("mspdbsrv"); ADD("mysql");
-      ADD("netdrive");
-      ADD("oacrmonitor"); ADD("ONENOTEM"); ADD("opera");
-      ADD("php-cgi");
-      ADD("QQ"); ADD("qtcreator");
-      ADD("SecureCRT"); ADD("SetPoint"); ADD("sidebar"); ADD("softinfo"); ADD("SogouCloud"); ADD("sttray"); ADD("Switcher");
-      ADD("thunderbird"); ADD("TSCHelper"); ADD("TXPlatform");
-      ADD("volumouse");
-#undef ADD
-    }
+    static QStringList blacklist = QStringList()
+      << "Activator" << "ApMsgFwd" << "Apntex" << "Apoint" << "APSDaemon" << "AutoHotkey" << "ApplePhotoStreams"
+      << "BookmarkDAV_client" << "BoonSutazio" << "Bootcamp" << "BtStackServer" << "BTTray"
+      << "CamtasiaStudio" << "chrome"
+      << "Dropbox" << "DTLite"
+      << "eclipse" << "Evernote" << "EvernoteTray"
+      << "firefox" << "foobar2000"
+      << "GoogleIMEJaConverter" << "GoogleIMEJaRenderer" << "gvim"
+      << "Hamana" << "HidFind"
+      << "iCloudServices" << "IELowutil" << "IEXPLOR" << "iTunes" << "iTunesHelper"
+      << "java" << "javaw" << "jusched"
+      << "KHALMNPR" << "KMPlayer"
+      << "MacDrive" << "Maxthon" << "MouseGesture" << "mspdbsrv" << "mysql"
+      << "netdrive"
+      << "oacrmonitor" << "ONENOTEM" << "opera"
+      << "php-cgi" << "plugin-container"
+      << "QQ" << "qtcreator"
+      << "SecureCRT" << "SetPoint" << "sidebar" << "Skype" << "SogouCloud" << "sttray" << "Switcher"
+      << "thunderbird" << "TSCHelper" << "TXPlatform"
+      << "volumouse";
     return blacklist.indexOf(procName) >= 0;
   }
 
@@ -100,7 +99,7 @@ ProcessView::createLayout()
   ui->setWindowStyle(this);
 
   attachButton_ = ui->makeToolButton(
-        AcUi::PushHint, TR(T_ATTACH), TR(T_TOOLTIP_ATTACHPROCESS), this, SLOT(attachProcess()));
+        AcUi::PushHint | AcUi::HighlightHint, TR(T_ATTACH), TR(T_TOOLTIP_ATTACHPROCESS), this, SLOT(attachProcess()));
   detachButton_ = ui->makeToolButton(
         AcUi::PushHint, TR(T_DETACH), TR(T_TOOLTIP_DETACHPROCESS), this, SLOT(detachProcess()));
   QToolButton *refreshButton = ui->makeToolButton(

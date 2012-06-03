@@ -30,6 +30,37 @@
 <context>
     <name>AcAccountPreferences</name>
     <message>
+        <source>Account</source>
+        <translation type="obsolete">アカウント</translation>
+    </message>
+    <message>
+        <source>Username</source>
+        <translation type="obsolete">ユーザー名</translation>
+    </message>
+    <message>
+        <source>Password</source>
+        <translation type="obsolete">パスワード</translation>
+    </message>
+    <message>
+        <source>Clear</source>
+        <translation type="obsolete">消す</translation>
+    </message>
+    <message>
+        <source>clear</source>
+        <translation type="obsolete">消す</translation>
+    </message>
+    <message>
+        <source>Nicovideo.jp</source>
+        <translation type="obsolete">ニコニコ動画</translation>
+    </message>
+    <message>
+        <source>Bilibili.tv</source>
+        <translation type="obsolete">ビリビリ動画</translation>
+    </message>
+</context>
+<context>
+    <name>AcAccountPrefs</name>
+    <message>
         <location filename="../../common/acaccountprefs_p.cc" line="17"/>
         <source>Account</source>
         <translation>アカウント</translation>
@@ -48,10 +79,6 @@
         <location filename="../../common/acaccountprefs_p.cc" line="33"/>
         <source>Clear</source>
         <translation>消す</translation>
-    </message>
-    <message>
-        <source>clear</source>
-        <translation type="obsolete">消す</translation>
     </message>
     <message>
         <location filename="../../common/acaccountprefs_p.cc" line="40"/>
@@ -90,12 +117,12 @@
         <translation>コンソール</translation>
     </message>
     <message>
-        <location filename="../../common/acconsole.cc" line="38"/>
+        <location filename="../../common/acconsole.cc" line="39"/>
         <source>OK</source>
         <translation>確認</translation>
     </message>
     <message>
-        <location filename="../../common/acconsole.cc" line="40"/>
+        <location filename="../../common/acconsole.cc" line="41"/>
         <source>Clear</source>
         <translation>消す</translation>
     </message>
@@ -180,39 +207,109 @@
 <context>
     <name>AcLocationPreferences</name>
     <message>
-        <location filename="../../common/aclocationprefs_p.cc" line="16"/>
+        <source>Locations</source>
+        <translation type="obsolete">位置</translation>
+    </message>
+    <message>
+        <source>Downloads Location for Annot Player and Annot Downloader</source>
+        <translation type="obsolete">動画のﾀﾞｳﾝﾛｰﾄﾞ位置</translation>
+    </message>
+    <message>
+        <source>Downloads Location</source>
+        <translation type="obsolete">ﾀﾞｳﾝﾛｰﾄﾞ位置</translation>
+    </message>
+    <message>
+        <source>Downloads</source>
+        <translation type="obsolete">ﾀﾞｳﾝﾛｰﾄﾞ</translation>
+    </message>
+    <message>
+        <source>exists</source>
+        <translation type="obsolete">存在</translation>
+    </message>
+    <message>
+        <source>not exist</source>
+        <translation type="obsolete">存在しない</translation>
+    </message>
+</context>
+<context>
+    <name>AcLocationPrefs</name>
+    <message>
+        <location filename="../../common/aclocationprefs_p.cc" line="17"/>
         <source>Locations</source>
         <translation>位置</translation>
     </message>
     <message>
-        <location filename="../../common/aclocationprefs_p.cc" line="27"/>
+        <location filename="../../common/aclocationprefs_p.cc" line="28"/>
         <source>Downloads Location for Annot Player and Annot Downloader</source>
         <translation>動画のﾀﾞｳﾝﾛｰﾄﾞ位置</translation>
     </message>
     <message>
-        <location filename="../../common/aclocationprefs_p.cc" line="28"/>
-        <location filename="../../common/aclocationprefs_p.cc" line="30"/>
+        <location filename="../../common/aclocationprefs_p.cc" line="29"/>
         <source>Downloads Location</source>
         <translation>ﾀﾞｳﾝﾛｰﾄﾞ位置</translation>
     </message>
     <message>
-        <location filename="../../common/aclocationprefs_p.cc" line="30"/>
+        <location filename="../../common/aclocationprefs_p.cc" line="31"/>
         <source>Downloads</source>
         <translation>ﾀﾞｳﾝﾛｰﾄﾞ</translation>
     </message>
     <message>
-        <location filename="../../common/aclocationprefs_p.cc" line="77"/>
+        <location filename="../../common/aclocationprefs_p.cc" line="31"/>
+        <source>Open Downloads Location</source>
+        <translation>ﾀﾞｳﾝﾛｰﾄﾞ位置を開く</translation>
+    </message>
+    <message>
+        <location filename="../../common/aclocationprefs_p.cc" line="82"/>
         <source>exists</source>
         <translation>存在</translation>
     </message>
     <message>
-        <location filename="../../common/aclocationprefs_p.cc" line="79"/>
+        <location filename="../../common/aclocationprefs_p.cc" line="84"/>
         <source>not exist</source>
         <translation>存在しない</translation>
     </message>
 </context>
 <context>
     <name>AcNetworkProxyPreferences</name>
+    <message>
+        <source>Proxy</source>
+        <translation type="obsolete">プロクシ</translation>
+    </message>
+    <message>
+        <source>Proxy type</source>
+        <translation type="obsolete">タイプ</translation>
+    </message>
+    <message>
+        <source>Host</source>
+        <translation type="obsolete">ホスト</translation>
+    </message>
+    <message>
+        <source>Port</source>
+        <translation type="obsolete">ポート</translation>
+    </message>
+    <message>
+        <source>Username</source>
+        <translation type="obsolete">ユーザー名</translation>
+    </message>
+    <message>
+        <source>Password</source>
+        <translation type="obsolete">パスワード</translation>
+    </message>
+    <message>
+        <source>Enable</source>
+        <translation type="obsolete">有効</translation>
+    </message>
+    <message>
+        <source>network proxy disabled</source>
+        <translation type="obsolete">ネットプロクシを有効にする</translation>
+    </message>
+    <message>
+        <source>network proxy enabled</source>
+        <translation type="obsolete">ネットプロクシを無効にする</translation>
+    </message>
+</context>
+<context>
+    <name>AcNetworkProxyPrefs</name>
     <message>
         <location filename="../../common/acnetworkproxyprefs_p.cc" line="15"/>
         <source>Proxy</source>
@@ -264,7 +361,7 @@
 <context>
     <name>AcPreferences</name>
     <message>
-        <location filename="../../common/acpreferences.cc" line="47"/>
+        <location filename="../../common/acpreferences.cc" line="52"/>
         <source>Preferences</source>
         <translation>設定</translation>
     </message>
@@ -298,7 +395,7 @@
 <context>
     <name>BufferedRemoteStream</name>
     <message>
-        <location filename="../../../module/stream/bufferedremotestream.cc" line="322"/>
+        <location filename="../../../module/stream/bufferedremotestream.cc" line="324"/>
         <source>network error, failed to download remote resource</source>
         <translation>ﾀﾞｳﾝﾛｰﾄﾞに失敗した</translation>
     </message>
@@ -315,14 +412,12 @@
 <context>
     <name>ClipboardMonitor</name>
     <message>
-        <location filename="../clipboardmonitor.cc" line="51"/>
         <source>annot URL from clipboard</source>
-        <translation>弾幕URLを見つかった</translation>
+        <translation type="obsolete">弾幕URLを見つかった</translation>
     </message>
     <message>
-        <location filename="../clipboardmonitor.cc" line="54"/>
         <source>media URL from clipboard</source>
-        <translation>動画のURLを見つかった</translation>
+        <translation type="obsolete">動画のURLを見つかった</translation>
     </message>
 </context>
 <context>
@@ -399,12 +494,12 @@
 <context>
     <name>FlvMerge</name>
     <message>
-        <location filename="../../../module/mediacodec/flvmerge.cc" line="20"/>
+        <location filename="../../../module/mediacodec/flvmerge.cc" line="21"/>
         <source>failed to parse FLV streams</source>
         <translation>FLVの合成に失敗した</translation>
     </message>
     <message>
-        <location filename="../../../module/mediacodec/flvmerge.cc" line="25"/>
+        <location filename="../../../module/mediacodec/flvmerge.cc" line="27"/>
         <source>failed to merge FLV streams</source>
         <translation>FLVの合成に失敗した</translation>
     </message>
@@ -476,9 +571,9 @@
     <name>MainWindow</name>
     <message>
         <location filename="../mainwindow.cc" line="60"/>
-        <location filename="../mainwindow.cc" line="667"/>
-        <location filename="../mainwindow.cc" line="732"/>
-        <location filename="../mainwindow.cc" line="734"/>
+        <location filename="../mainwindow.cc" line="697"/>
+        <location filename="../mainwindow.cc" line="762"/>
+        <location filename="../mainwindow.cc" line="764"/>
         <source>Annot Downloader</source>
         <translation>とあるﾀﾞｳﾝﾛｰﾄﾞ</translation>
     </message>
@@ -601,7 +696,7 @@
     </message>
     <message>
         <location filename="../mainwindow.cc" line="290"/>
-        <location filename="../mainwindow.cc" line="830"/>
+        <location filename="../mainwindow.cc" line="860"/>
         <source>Copy Title</source>
         <translation>タイトルをコピー</translation>
     </message>
@@ -661,92 +756,112 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="418"/>
+        <location filename="../mainwindow.cc" line="422"/>
         <source>Name</source>
         <translation>名前</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="419"/>
+        <location filename="../mainwindow.cc" line="423"/>
         <source>State</source>
         <translation>状態</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="420"/>
+        <location filename="../mainwindow.cc" line="424"/>
         <source>Size</source>
         <translation>サイズ</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="421"/>
+        <location filename="../mainwindow.cc" line="425"/>
         <source>Speed</source>
         <translation>速度</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="423"/>
+        <location filename="../mainwindow.cc" line="427"/>
         <source>Remaining time</source>
         <translation>残り時間</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="424"/>
+        <location filename="../mainwindow.cc" line="428"/>
         <source>Path</source>
         <translation>位置</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="425"/>
+        <location filename="../mainwindow.cc" line="429"/>
         <source>URL</source>
         <translation>URL</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="426"/>
+        <location filename="../mainwindow.cc" line="430"/>
         <source>ID</source>
         <translation>ID</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="612"/>
+        <location filename="../mainwindow.cc" line="621"/>
+        <source>openning</source>
+        <translation>正在打开</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cc" line="623"/>
+        <source>not exist</source>
+        <translation>存在しない</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cc" line="642"/>
         <source>task exists</source>
         <translation>タスクが既に存在</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cc" line="966"/>
+        <source>Hide Window</source>
+        <translation>ウィンドウを非表示</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cc" line="966"/>
+        <source>Minimize to Tray</source>
+        <translation>トレイに隠れる</translation>
     </message>
     <message>
         <source>Download</source>
         <translation type="obsolete">ﾀﾞｳﾝﾛｰﾄﾞ</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="762"/>
+        <location filename="../mainwindow.cc" line="792"/>
         <source>download finished</source>
         <translation>ﾀﾞｳﾝﾛｰﾄﾞ完成</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="769"/>
+        <location filename="../mainwindow.cc" line="799"/>
         <source>download failed</source>
         <translation>ﾀﾞｳﾝﾛｰﾄﾞ失敗</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="829"/>
+        <location filename="../mainwindow.cc" line="859"/>
         <source>Copy URL</source>
         <translation>URLをコピー</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="886"/>
+        <location filename="../mainwindow.cc" line="916"/>
         <source>Stopped</source>
         <translation>停止</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="887"/>
+        <location filename="../mainwindow.cc" line="917"/>
         <source>Downloading</source>
         <translation>ﾀﾞｳﾝﾛｰﾄﾞ中</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="888"/>
+        <location filename="../mainwindow.cc" line="918"/>
         <source>Pending</source>
         <translation>待つ</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="889"/>
+        <location filename="../mainwindow.cc" line="919"/>
         <source>Finished</source>
         <translation>完成</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="890"/>
-        <location filename="../mainwindow.cc" line="891"/>
+        <location filename="../mainwindow.cc" line="920"/>
+        <location filename="../mainwindow.cc" line="921"/>
         <source>Error</source>
         <translation>エラー</translation>
     </message>
@@ -775,35 +890,35 @@
         <translation type="obsolete">ﾀﾞｳﾝﾛｰﾄﾞ失敗</translation>
     </message>
     <message>
-        <location filename="../../../module/downloadtask/mrldownloadtask_m.cc" line="93"/>
+        <location filename="../../../module/downloadtask/mrldownloadtask_m.cc" line="95"/>
         <source>failed to fetch part %1, retry</source>
         <translation>パート%1のﾀﾞｳﾝﾛｰﾄﾞに失敗した</translation>
     </message>
     <message>
-        <location filename="../../../module/downloadtask/mrldownloadtask_m.cc" line="101"/>
+        <location filename="../../../module/downloadtask/mrldownloadtask_m.cc" line="104"/>
         <source>wait %1 seconds and try again</source>
         <translation>%1秒まつ</translation>
     </message>
     <message>
-        <location filename="../../../module/downloadtask/mrldownloadtask_m.cc" line="218"/>
+        <location filename="../../../module/downloadtask/mrldownloadtask_m.cc" line="233"/>
         <location filename="../../../module/downloadtask/mrldownloadtask_s.cc" line="82"/>
         <source>access denied to download URL</source>
         <translation>URLにアクセスできません</translation>
     </message>
     <message>
-        <location filename="../../../module/downloadtask/mrldownloadtask_m.cc" line="247"/>
+        <location filename="../../../module/downloadtask/mrldownloadtask_m.cc" line="266"/>
         <location filename="../../../module/downloadtask/mrldownloadtask_s.cc" line="104"/>
         <source>failed to open file to write</source>
         <translation>ファイルの保存に失敗した</translation>
     </message>
     <message>
-        <location filename="../../../module/downloadtask/mrldownloadtask_m.cc" line="317"/>
+        <location filename="../../../module/downloadtask/mrldownloadtask_m.cc" line="350"/>
         <location filename="../../../module/downloadtask/mrldownloadtask_s.cc" line="135"/>
         <source>failed to rename downloaded file</source>
         <translation>ファイル名の変更に失敗した</translation>
     </message>
     <message>
-        <location filename="../../../module/downloadtask/mrldownloadtask_m.cc" line="326"/>
+        <location filename="../../../module/downloadtask/mrldownloadtask_m.cc" line="359"/>
         <location filename="../../../module/downloadtask/mrldownloadtask_s.cc" line="145"/>
         <source>download incomplete</source>
         <translation>ﾀﾞｳﾝﾛｰﾄﾞ失敗した</translation>
@@ -817,7 +932,7 @@
         <translation type="obsolete">リトライ</translation>
     </message>
     <message>
-        <location filename="../../../module/downloadtask/mrldownloadtask_m.cc" line="277"/>
+        <location filename="../../../module/downloadtask/mrldownloadtask_m.cc" line="303"/>
         <source>failed to parse FLV streams</source>
         <translation>FLVデータの分析に失敗した</translation>
     </message>

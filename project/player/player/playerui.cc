@@ -90,11 +90,7 @@ PlayerUi::PlayerUi(SignalHub *hub, Player *player, ServerAgent *server, QWidget 
   positionButton()->setToolTip(positionButton()->toolTip()  + " [" K_CTRL "+F]");
   positionSlider()->setToolTip(positionSlider()->toolTip()  + " [" K_CTRL "+F]");
 
-  toggleEmbedModeButton()->setCheckable(true);
-  toggleMiniModeButton()->setCheckable(true);
-  toggleFullScreenModeButton()->setCheckable(true);
-
-  setTabOrder(inputComboBox(), prefixComboBox());
+  //setTabOrder(inputComboBox(), prefixComboBox());
   //setTabOrder(prefixComboBox(), inputComboBox());
 
   createConnections();
@@ -105,6 +101,11 @@ PlayerUi::PlayerUi(SignalHub *hub, Player *player, ServerAgent *server, QWidget 
 void
 PlayerUi::createConnections()
 {
+  toggleEmbedModeButton()->setCheckable(true);
+  toggleMiniModeButton()->setCheckable(true);
+  toggleFullScreenModeButton()->setCheckable(true);
+  toggleTraceWindowButton()->setCheckable(true);
+
   connect(menuButton(), SIGNAL(clicked()), SLOT(popupMenu()));
   connect(openButton(), SIGNAL(clicked()), openButton(), SLOT(showMenu()));
   connect(playButton(), SIGNAL(clicked()), SLOT(play()));
@@ -131,7 +132,7 @@ PlayerUi::createConnections()
   connect(inputCountButton(), SIGNAL(clicked()), SLOT(popupInputItems()));
 
   // Always connected
-  connect(hub_, SIGNAL(tokenModeChanged(SignalHub::TokenMode)), SLOT(updateVisibleWidgets())); \
+  connect(hub_, SIGNAL(tokenModeChanged(SignalHub::TokenMode)), SLOT(updateVisibleWidgets()));
 
   //CommandLineEdit *p = dynamic_cast<CommandLineEdit*>(prefixLineEdit());
   //if (p)
@@ -157,6 +158,7 @@ PlayerUi::createConnections()
     static const char *update_slots[] = { \
       SLOT(updatePlayButton()), \
       SLOT(updateStopButton()), \
+      SLOT(updateTraceWindowButton()), \
     }; \
     BOOST_FOREACH (const char *signal, status_signals) \
       BOOST_FOREACH (const char *slot, update_slots) \
@@ -249,6 +251,7 @@ PlayerUi::setActive(bool active)
     updatePositionSlider();
     updatePositionButton();
     updateProgressButton();
+    updateTraceWindowButton();
     updatePlayButton();
     updateStopButton();
     updateNextFrameButton();
@@ -427,7 +430,7 @@ PlayerUi::updateVolumeSlider()
   // Update tool tip.
   int percentage = qRound(vol * 100);
   slider->setToolTip(
-    QString("%1 %2%" " [" K_CTRL "+" K_SHIFT "+↑/↓]")
+    QString("%1 %2%" " [↑/↓]")
       .arg(TR(T_VOLUME))
       .arg(QString::number(percentage))
   );
@@ -509,10 +512,10 @@ PlayerUi::updateUserButton()
 {
   QToolButton *b = userButton();
   if (server_->isAuthorized()) {
-    b->setStyleSheet(SS_TOOLBUTTON_TEXT_NORMAL);
+    b->setStyleSheet(ACSS_TOOLBUTTON_TEXT_NORMAL);
     b->setText(server_->user().name());
   } else {
-    b->setStyleSheet(SS_TOOLBUTTON_TEXT_INVERT);
+    b->setStyleSheet(ACSS_TOOLBUTTON_TEXT_INVERT);
     b->setText(TR(T_LOGIN));
   }
 #ifdef Q_OS_WIN
@@ -586,9 +589,16 @@ PlayerUi::updateTitle()
 }
 
 void
+PlayerUi::updateTraceWindowButton()
+{
+#ifdef WITH_WIN_PICKER
+#endif // WITH_WIN_PICKER
+}
+
+void
 PlayerUi::updatePlayButton()
 {
-  QToolButton *b= playButton();
+  QToolButton *b = playButton();
   switch (hub_->tokenMode()) {
   case SignalHub::LiveTokenMode:
   case SignalHub::SignalTokenMode:
@@ -821,10 +831,9 @@ PlayerUi::updateInputCountButton()
   QString text = QString("%1/%2").arg(count).arg(total);
   b->setText(text);
 
-  if (count < total)
-    b->setStyleSheet(SS_TOOLBUTTON_TEXT);
-  else
-    b->setStyleSheet(SS_TOOLBUTTON_TEXT_INVERT);
+  b->setStyleSheet(count < total ?
+      ACSS_TOOLBUTTON_TEXT :
+      ACSS_TOOLBUTTON_TEXT_INVERT);
 }
 
 // - Menu button -

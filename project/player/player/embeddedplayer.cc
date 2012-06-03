@@ -21,12 +21,21 @@
 #define DEBUG "embeddedplayerui"
 #include "module/debug/debug.h"
 
-#define INPUTLINE_MINWIDTH      400
-#define INPUTLINE_MINHEIGHT     25
+enum { INPUTLINE_MINWIDTH = 400, INPUTLINE_MINHEIGHT = 25 };
+enum { VolumeSliderMaximumWidth = 100 };
+
+// Style sheet of entire embedded player
+#define SS_PLAYER \
+  SS_BEGIN(QWidget) \
+    SS_SEMI_TRANSPARENT \
+  SS_END \
+  SS_BEGIN(QToolButton) \
+    SS_NO_BORDER \
+  SS_END
 
 #define SS_LINEEDIT_OSD \
   SS_BEGIN(QLineEdit) \
-    SS_TRANSPARENT \
+    SS_SEMI_TRANSPARENT \
     SS_BORDER(1px groove purple) \
     SS_COLOR(blue) \
   SS_END \
@@ -38,7 +47,7 @@
 
 #define SS_COMBOBOX_OSD \
   SS_BEGIN(QComboBox) \
-    SS_TRANSPARENT \
+    SS_SEMI_TRANSPARENT \
     SS_COLOR(blue) \
   SS_END \
   SS_BEGIN(QComboBox QAbstractItemView) \
@@ -47,7 +56,7 @@
 
 #define SS_COMBOBOX_OSD_NODROPDOWN \
   SS_BEGIN(QComboBox) \
-    SS_TRANSPARENT \
+    SS_SEMI_TRANSPARENT \
     SS_COLOR(blue) \
   SS_END \
   SS_BEGIN(QComboBox QAbstractItemView) \
@@ -70,6 +79,7 @@ EmbeddedPlayerUi::EmbeddedPlayerUi(SignalHub *hub, Player *player, ServerAgent *
     fullScreen_(false), top_(false)
 {
   setWindowFlags(Qt::FramelessWindowHint);
+  setAttribute(Qt::WA_TranslucentBackground);
 
   infoView_ = new EmbeddedInfoView(player, data, hub, this);
 
@@ -79,6 +89,8 @@ EmbeddedPlayerUi::EmbeddedPlayerUi(SignalHub *hub, Player *player, ServerAgent *
   connect(canvas_, SIGNAL(visibleChanged(bool)), SLOT(updateGeometry()), Qt::QueuedConnection);
 
   createLayout();
+
+  setTabOrder(inputComboBox(), prefixComboBox());
 
   // Auto hide player.
   autoHideTimer_ = new QTimer(this);
@@ -138,12 +150,14 @@ EmbeddedPlayerUi::createLayout()
   }
 
   QtExt::WithSizeHint*
-  w = dynamic_cast<QtExt::WithSizeHint*>(inputComboBox());
+  w = dynamic_cast<QtExt::WithSizeHint *>(inputComboBox());
   if (w)
     w->setSizeHint(QSize(INPUTLINE_MINWIDTH, INPUTLINE_MINHEIGHT));
-  w = dynamic_cast<QtExt::WithSizeHint*>(prefixComboBox());
+  w = dynamic_cast<QtExt::WithSizeHint *>(prefixComboBox());
   if (w)
     w->setSizeHint(QSize(G_PREFIXLINE_MAXWIDTH, INPUTLINE_MINHEIGHT));
+
+  volumeSlider()->setMaximumWidth(VolumeSliderMaximumWidth);
 
   //AcTextView *info_ = new AcTextView(this);
   //info_->setText("awfwaefawfew\n22222", Qt::red);
@@ -169,32 +183,39 @@ EmbeddedPlayerUi::createLayout()
     row->addWidget(toggleEmbedModeButton());
     row->addWidget(toggleMiniModeButton());
     row->addWidget(toggleFullScreenModeButton());
-    row->addStretch();
-    row->addWidget(userButton());
-    row->addWidget(prefixComboBox());
-
-    OverlayLayout *input = new OverlayLayout;
-    input->addWidget(inputComboBox());
-    input->addWidget(inputCountButton(), Qt::AlignRight);
-    row->addLayout(input);
-
-    //row->addStretch();
+    row->addWidget(toggleTraceWindowButton());
     row->addWidget(volumeSlider());
     row->addWidget(positionButton());
     row->addWidget(progressButton());
 
-    //rows->setContentsMargins(0, 0, 0, 0);
+    row->addStretch();
+
+    row->addWidget(userButton());
+    row->addWidget(prefixComboBox());
+    OverlayLayout *input = new OverlayLayout;
+    input->addWidget(inputComboBox());
+    input->addWidget(inputCountButton(), Qt::AlignRight);
+    input->setContentsMargins(0, 0, 0, 0);
+    row->addLayout(input);
+
+    //row->addStretch();
+    //row->addWidget(volumeSlider());
+    //row->addWidget(positionButton());
+    //row->addWidget(progressButton());
+
+    // left, top, right, bottom
+    rows->setContentsMargins(9, 4, 9, 4);
     rows->setSpacing(1);
     setContentsMargins(0, 0, 0, 0);
   }
   setLayout(rows);
   setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
-  setStyleSheet(styleSheet() +
-    SS_BEGIN(QToolButton)
-      SS_NO_BORDER
-    SS_END
-  );
+#ifndef WITH_WIN_PICKER
+  traceWindowButton()->hide();
+  traceWindowButton()->resize(QSize());
+#endif // WITH_WIN_PICKER
+  setStyleSheet(styleSheet() + SS_PLAYER);
 }
 
 // - Properties -
@@ -296,9 +317,9 @@ EmbeddedPlayerUi::updateGeometry()
   } else if (containerWindow_) {
 #ifdef Q_OS_WIN
     QRect r = QtWin::getWindowRect(containerWindow_);
-    if (r.isNull()) {
-      if (!QtWin::isValidWindow(containerWindow_))
-        setContainerWindow(0);
+    if (r.isEmpty()) {
+      //if (!QtWin::isValidWindow(containerWindow_))
+      setContainerWindow(0);
 
     } else {
       int w_max = r.width(),

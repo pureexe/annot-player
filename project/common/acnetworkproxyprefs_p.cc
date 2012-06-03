@@ -9,7 +9,7 @@
 
 // - Construction -
 
-AcNetworkProxyPreferences::AcNetworkProxyPreferences(AcSettings *settings, QWidget *parent)
+AcNetworkProxyPrefs::AcNetworkProxyPrefs(AcSettings *settings, QWidget *parent)
   : Base(settings, parent)
 {
   setWindowTitle(tr("Proxy"));
@@ -24,7 +24,7 @@ AcNetworkProxyPreferences::AcNetworkProxyPreferences(AcSettings *settings, QWidg
 }
 
 void
-AcNetworkProxyPreferences::createLayout()
+AcNetworkProxyPrefs::createLayout()
 {
   AcUi *ui = AcUi::globalInstance();
 
@@ -79,29 +79,29 @@ AcNetworkProxyPreferences::createLayout()
 // - Properties -
 
 bool
-AcNetworkProxyPreferences::isEnabled() const
+AcNetworkProxyPrefs::isEnabled() const
 { return enableButton_->isChecked(); }
 
 void
-AcNetworkProxyPreferences::setHost(const QString &host)
+AcNetworkProxyPrefs::setHost(const QString &host)
 { hostEdit_->setEditText(host); }
 
 void
-AcNetworkProxyPreferences::setPort(int port)
+AcNetworkProxyPrefs::setPort(int port)
 { portEdit_->setEditText(QString::number(port)); }
 
 void
-AcNetworkProxyPreferences::setUserName(const QString &userName)
+AcNetworkProxyPrefs::setUserName(const QString &userName)
 { userNameEdit_->setEditText(userName); }
 
 void
-AcNetworkProxyPreferences::setPassword(const QString &password)
+AcNetworkProxyPrefs::setPassword(const QString &password)
 { passwordEdit_->setText(password); }
 
 // - Actions -
 
 void
-AcNetworkProxyPreferences::updateButtons()
+AcNetworkProxyPrefs::updateButtons()
 {
   bool t = isEnabled();
   typeCombo_->setEnabled(t);
@@ -117,7 +117,7 @@ AcNetworkProxyPreferences::updateButtons()
 }
 
 bool
-AcNetworkProxyPreferences::save()
+AcNetworkProxyPrefs::save()
 {
   bool ok = true;
   QString host = hostEdit_->currentText().trimmed();
@@ -160,7 +160,7 @@ AcNetworkProxyPreferences::save()
 }
 
 void
-AcNetworkProxyPreferences::load()
+AcNetworkProxyPrefs::load()
 {
   enableButton_->setChecked(settings()->isProxyEnabled());
 

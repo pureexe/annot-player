@@ -59,9 +59,9 @@ AcTextView::setText(const QStringList &l, const QColor &color)
     if (color.isValid())
       t.append(html_style(s, "color:" + colorToString(color)));
     else if (line_++ % 2)
-      t.append(HTML_STYLE(s, color:purple));
+      t.append(HTML_STYLE(+s+, color:purple));
     else
-      t.append(HTML_STYLE(s, color:blue));
+      t.append(HTML_STYLE(+s+, color:blue));
     if (line_ != l.size())
       t.append(QString());
   }
@@ -79,9 +79,9 @@ AcTextView::append(const QString &text, const QColor &color)
   if (color.isValid())
     Base::append(html_style(text, "color:" + colorToString(color)));
   else if (line_++ % 2)
-    Base::append(HTML_STYLE(text, color:purple));
+    Base::append(HTML_STYLE(+text+, color:purple));
   else
-    Base::append(HTML_STYLE(text, color:blue));
+    Base::append(HTML_STYLE(+text+, color:blue));
   moveCursorToBottom();
 }
 

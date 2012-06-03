@@ -128,7 +128,9 @@ BufferedRemoteStream::run()
       reply_->deleteLater();
     QUrl url = redirectUrl_;
     redirectUrl_.clear();
-    reply_ = networkAccessManager()->get(QNetworkRequest(url));
+    QNetworkRequest req(url);
+    req.setAttribute(QNetworkRequest::HttpPipeliningAllowedAttribute, true);
+    reply_ = networkAccessManager()->get(req);
     if (bufferSize_ > 0)
       reply_->setReadBufferSize(bufferSize_);
   //} else if (reply_) {

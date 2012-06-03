@@ -17,7 +17,7 @@ compiling, linking, and/or using OpenSSL is allowed.
 
 namespace ServerSoap {
 
-SOAP_SOURCE_STAMP("@(#) ServerSoapC.cpp ver 2.8.8 2012-04-07 22:40:48 GMT")
+SOAP_SOURCE_STAMP("@(#) ServerSoapC.cpp ver 2.8.8 2012-06-03 08:11:54 GMT")
 
 
 #ifndef WITH_NOGLOBAL
@@ -15084,6 +15084,7 @@ void tns__user::soap_default(struct soap *soap)
 	soap_default_LONG64(soap, &this->tns__user::id);
 	soap_default_int(soap, &this->tns__user::language);
 	soap_default_LONG64(soap, &this->tns__user::loginTime);
+	soap_default_LONG64(soap, &this->tns__user::loginIp);
 	this->tns__user::name = NULL;
 	this->tns__user::nickname = NULL;
 	this->tns__user::password = NULL;
@@ -15132,6 +15133,8 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__user(struct soap *soap, const char *tag,
 		return soap->error;
 	if (soap_out_LONG64(soap, "loginTime", -1, &(a->tns__user::loginTime), ""))
 		return soap->error;
+	if (soap_out_LONG64(soap, "loginIp", -1, &(a->tns__user::loginIp), ""))
+		return soap->error;
 	if (soap_out_PointerTostd__string(soap, "name", -1, &(a->tns__user::name), ""))
 		return soap->error;
 	if (soap_out_PointerTostd__string(soap, "nickname", -1, &(a->tns__user::nickname), ""))
@@ -15175,6 +15178,7 @@ SOAP_FMAC3 tns__user * SOAP_FMAC4 soap_in_tns__user(struct soap *soap, const cha
 	size_t soap_flag_id1 = 1;
 	size_t soap_flag_language1 = 1;
 	size_t soap_flag_loginTime1 = 1;
+	size_t soap_flag_loginIp1 = 1;
 	size_t soap_flag_name1 = 1;
 	size_t soap_flag_nickname1 = 1;
 	size_t soap_flag_password1 = 1;
@@ -15238,6 +15242,11 @@ SOAP_FMAC3 tns__user * SOAP_FMAC4 soap_in_tns__user(struct soap *soap, const cha
 				{	soap_flag_loginTime1--;
 					continue;
 				}
+			if (soap_flag_loginIp1 && soap->error == SOAP_TAG_MISMATCH)
+				if (soap_in_LONG64(soap, "loginIp", &(a->tns__user::loginIp), "xsd:long"))
+				{	soap_flag_loginIp1--;
+					continue;
+				}
 			if (soap_flag_name1 && (soap->error == SOAP_TAG_MISMATCH || soap->error == SOAP_NO_TAG))
 				if (soap_in_PointerTostd__string(soap, "name", &(a->tns__user::name), "xsd:string"))
 				{	soap_flag_name1--;
@@ -15274,7 +15283,7 @@ SOAP_FMAC3 tns__user * SOAP_FMAC4 soap_in_tns__user(struct soap *soap, const cha
 		if (soap->body && soap_element_end_in(soap, tag))
 			return NULL;
 	}
-	if ((soap->mode & SOAP_XML_STRICT) && (soap_flag_annotCount1 > 0 || soap_flag_blessedCount1 > 0 || soap_flag_blockedCount1 > 0 || soap_flag_createTime1 > 0 || soap_flag_cursedCount1 > 0 || soap_flag_flags1 > 0 || soap_flag_groupId1 > 0 || soap_flag_id1 > 0 || soap_flag_language1 > 0 || soap_flag_loginTime1 > 0 || soap_flag_status1 > 0))
+	if ((soap->mode & SOAP_XML_STRICT) && (soap_flag_annotCount1 > 0 || soap_flag_blessedCount1 > 0 || soap_flag_blockedCount1 > 0 || soap_flag_createTime1 > 0 || soap_flag_cursedCount1 > 0 || soap_flag_flags1 > 0 || soap_flag_groupId1 > 0 || soap_flag_id1 > 0 || soap_flag_language1 > 0 || soap_flag_loginTime1 > 0 || soap_flag_loginIp1 > 0 || soap_flag_status1 > 0))
 	{	soap->error = SOAP_OCCURS;
 		return NULL;
 	}
@@ -15351,6 +15360,7 @@ void tns__mediaAlias::soap_default(struct soap *soap)
 	soap_default_LONG64(soap, &this->tns__mediaAlias::tokenId);
 	soap_default_int(soap, &this->tns__mediaAlias::type);
 	soap_default_LONG64(soap, &this->tns__mediaAlias::updateTime);
+	soap_default_LONG64(soap, &this->tns__mediaAlias::updateIp);
 	soap_default_LONG64(soap, &this->tns__mediaAlias::userId);
 	/* transient soap skipped */
 }
@@ -15393,6 +15403,8 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__mediaAlias(struct soap *soap, const char
 		return soap->error;
 	if (soap_out_LONG64(soap, "updateTime", -1, &(a->tns__mediaAlias::updateTime), ""))
 		return soap->error;
+	if (soap_out_LONG64(soap, "updateIp", -1, &(a->tns__mediaAlias::updateIp), ""))
+		return soap->error;
 	if (soap_out_LONG64(soap, "userId", -1, &(a->tns__mediaAlias::userId), ""))
 		return soap->error;
 	/* transient soap skipped */
@@ -15430,6 +15442,7 @@ SOAP_FMAC3 tns__mediaAlias * SOAP_FMAC4 soap_in_tns__mediaAlias(struct soap *soa
 	size_t soap_flag_tokenId1 = 1;
 	size_t soap_flag_type1 = 1;
 	size_t soap_flag_updateTime1 = 1;
+	size_t soap_flag_updateIp1 = 1;
 	size_t soap_flag_userId1 = 1;
 	if (soap->body && !*soap->href)
 	{
@@ -15490,6 +15503,11 @@ SOAP_FMAC3 tns__mediaAlias * SOAP_FMAC4 soap_in_tns__mediaAlias(struct soap *soa
 				{	soap_flag_updateTime1--;
 					continue;
 				}
+			if (soap_flag_updateIp1 && soap->error == SOAP_TAG_MISMATCH)
+				if (soap_in_LONG64(soap, "updateIp", &(a->tns__mediaAlias::updateIp), "xsd:long"))
+				{	soap_flag_updateIp1--;
+					continue;
+				}
 			if (soap_flag_userId1 && soap->error == SOAP_TAG_MISMATCH)
 				if (soap_in_LONG64(soap, "userId", &(a->tns__mediaAlias::userId), "xsd:long"))
 				{	soap_flag_userId1--;
@@ -15511,7 +15529,7 @@ SOAP_FMAC3 tns__mediaAlias * SOAP_FMAC4 soap_in_tns__mediaAlias(struct soap *soa
 		if (soap->body && soap_element_end_in(soap, tag))
 			return NULL;
 	}
-	if ((soap->mode & SOAP_XML_STRICT) && (soap_flag_blessedCount1 > 0 || soap_flag_blockedCount1 > 0 || soap_flag_cursedCount1 > 0 || soap_flag_flags1 > 0 || soap_flag_id1 > 0 || soap_flag_language1 > 0 || soap_flag_status1 > 0 || soap_flag_tokenId1 > 0 || soap_flag_type1 > 0 || soap_flag_updateTime1 > 0 || soap_flag_userId1 > 0))
+	if ((soap->mode & SOAP_XML_STRICT) && (soap_flag_blessedCount1 > 0 || soap_flag_blockedCount1 > 0 || soap_flag_cursedCount1 > 0 || soap_flag_flags1 > 0 || soap_flag_id1 > 0 || soap_flag_language1 > 0 || soap_flag_status1 > 0 || soap_flag_tokenId1 > 0 || soap_flag_type1 > 0 || soap_flag_updateTime1 > 0 || soap_flag_updateIp1 > 0 || soap_flag_userId1 > 0))
 	{	soap->error = SOAP_OCCURS;
 		return NULL;
 	}
@@ -15581,6 +15599,7 @@ void tns__mediaToken::soap_default(struct soap *soap)
 	soap_default_int(soap, &this->tns__mediaToken::blessedCount);
 	soap_default_int(soap, &this->tns__mediaToken::blockedCount);
 	soap_default_LONG64(soap, &this->tns__mediaToken::createTime);
+	soap_default_LONG64(soap, &this->tns__mediaToken::createIp);
 	soap_default_int(soap, &this->tns__mediaToken::cursedCount);
 	this->tns__mediaToken::digest = NULL;
 	this->tns__mediaToken::source = NULL;
@@ -15618,6 +15637,8 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__mediaToken(struct soap *soap, const char
 	if (soap_out_int(soap, "blockedCount", -1, &(a->tns__mediaToken::blockedCount), ""))
 		return soap->error;
 	if (soap_out_LONG64(soap, "createTime", -1, &(a->tns__mediaToken::createTime), ""))
+		return soap->error;
+	if (soap_out_LONG64(soap, "createIp", -1, &(a->tns__mediaToken::createIp), ""))
 		return soap->error;
 	if (soap_out_int(soap, "cursedCount", -1, &(a->tns__mediaToken::cursedCount), ""))
 		return soap->error;
@@ -15667,6 +15688,7 @@ SOAP_FMAC3 tns__mediaToken * SOAP_FMAC4 soap_in_tns__mediaToken(struct soap *soa
 	size_t soap_flag_blessedCount1 = 1;
 	size_t soap_flag_blockedCount1 = 1;
 	size_t soap_flag_createTime1 = 1;
+	size_t soap_flag_createIp1 = 1;
 	size_t soap_flag_cursedCount1 = 1;
 	size_t soap_flag_digest1 = 1;
 	size_t soap_flag_source1 = 1;
@@ -15699,6 +15721,11 @@ SOAP_FMAC3 tns__mediaToken * SOAP_FMAC4 soap_in_tns__mediaToken(struct soap *soa
 			if (soap_flag_createTime1 && soap->error == SOAP_TAG_MISMATCH)
 				if (soap_in_LONG64(soap, "createTime", &(a->tns__mediaToken::createTime), "xsd:long"))
 				{	soap_flag_createTime1--;
+					continue;
+				}
+			if (soap_flag_createIp1 && soap->error == SOAP_TAG_MISMATCH)
+				if (soap_in_LONG64(soap, "createIp", &(a->tns__mediaToken::createIp), "xsd:long"))
+				{	soap_flag_createIp1--;
 					continue;
 				}
 			if (soap_flag_cursedCount1 && soap->error == SOAP_TAG_MISMATCH)
@@ -15767,7 +15794,7 @@ SOAP_FMAC3 tns__mediaToken * SOAP_FMAC4 soap_in_tns__mediaToken(struct soap *soa
 		if (soap->body && soap_element_end_in(soap, tag))
 			return NULL;
 	}
-	if ((soap->mode & SOAP_XML_STRICT) && (soap_flag_annotCount1 > 0 || soap_flag_blessedCount1 > 0 || soap_flag_blockedCount1 > 0 || soap_flag_createTime1 > 0 || soap_flag_cursedCount1 > 0 || soap_flag_part1 > 0 || soap_flag_flags1 > 0 || soap_flag_id1 > 0 || soap_flag_type1 > 0 || soap_flag_status1 > 0 || soap_flag_userId1 > 0 || soap_flag_visitedCount1 > 0))
+	if ((soap->mode & SOAP_XML_STRICT) && (soap_flag_annotCount1 > 0 || soap_flag_blessedCount1 > 0 || soap_flag_blockedCount1 > 0 || soap_flag_createTime1 > 0 || soap_flag_createIp1 > 0 || soap_flag_cursedCount1 > 0 || soap_flag_part1 > 0 || soap_flag_flags1 > 0 || soap_flag_id1 > 0 || soap_flag_type1 > 0 || soap_flag_status1 > 0 || soap_flag_userId1 > 0 || soap_flag_visitedCount1 > 0))
 	{	soap->error = SOAP_OCCURS;
 		return NULL;
 	}
@@ -15847,6 +15874,7 @@ void tns__mediaAnnotation::soap_default(struct soap *soap)
 	this->tns__mediaAnnotation::text = NULL;
 	soap_default_LONG64(soap, &this->tns__mediaAnnotation::tokenId);
 	soap_default_LONG64(soap, &this->tns__mediaAnnotation::updateTime);
+	soap_default_LONG64(soap, &this->tns__mediaAnnotation::updateIp);
 	this->tns__mediaAnnotation::userAlias = NULL;
 	soap_default_LONG64(soap, &this->tns__mediaAnnotation::userId);
 	/* transient soap skipped */
@@ -15897,6 +15925,8 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__mediaAnnotation(struct soap *soap, const
 		return soap->error;
 	if (soap_out_LONG64(soap, "updateTime", -1, &(a->tns__mediaAnnotation::updateTime), ""))
 		return soap->error;
+	if (soap_out_LONG64(soap, "updateIp", -1, &(a->tns__mediaAnnotation::updateIp), ""))
+		return soap->error;
 	if (soap_out_PointerTostd__string(soap, "userAlias", -1, &(a->tns__mediaAnnotation::userAlias), ""))
 		return soap->error;
 	if (soap_out_LONG64(soap, "userId", -1, &(a->tns__mediaAnnotation::userId), ""))
@@ -15939,6 +15969,7 @@ SOAP_FMAC3 tns__mediaAnnotation * SOAP_FMAC4 soap_in_tns__mediaAnnotation(struct
 	size_t soap_flag_text1 = 1;
 	size_t soap_flag_tokenId1 = 1;
 	size_t soap_flag_updateTime1 = 1;
+	size_t soap_flag_updateIp1 = 1;
 	size_t soap_flag_userAlias1 = 1;
 	size_t soap_flag_userId1 = 1;
 	if (soap->body && !*soap->href)
@@ -16015,6 +16046,11 @@ SOAP_FMAC3 tns__mediaAnnotation * SOAP_FMAC4 soap_in_tns__mediaAnnotation(struct
 				{	soap_flag_updateTime1--;
 					continue;
 				}
+			if (soap_flag_updateIp1 && soap->error == SOAP_TAG_MISMATCH)
+				if (soap_in_LONG64(soap, "updateIp", &(a->tns__mediaAnnotation::updateIp), "xsd:long"))
+				{	soap_flag_updateIp1--;
+					continue;
+				}
 			if (soap_flag_userAlias1 && (soap->error == SOAP_TAG_MISMATCH || soap->error == SOAP_NO_TAG))
 				if (soap_in_PointerTostd__string(soap, "userAlias", &(a->tns__mediaAnnotation::userAlias), "xsd:string"))
 				{	soap_flag_userAlias1--;
@@ -16041,7 +16077,7 @@ SOAP_FMAC3 tns__mediaAnnotation * SOAP_FMAC4 soap_in_tns__mediaAnnotation(struct
 		if (soap->body && soap_element_end_in(soap, tag))
 			return NULL;
 	}
-	if ((soap->mode & SOAP_XML_STRICT) && (soap_flag_blessedCount1 > 0 || soap_flag_blockedCount1 > 0 || soap_flag_createTime1 > 0 || soap_flag_cursedCount1 > 0 || soap_flag_flags1 > 0 || soap_flag_id1 > 0 || soap_flag_language1 > 0 || soap_flag_pos1 > 0 || soap_flag_posType1 > 0 || soap_flag_time1 > 0 || soap_flag_status1 > 0 || soap_flag_tokenId1 > 0 || soap_flag_updateTime1 > 0 || soap_flag_userId1 > 0))
+	if ((soap->mode & SOAP_XML_STRICT) && (soap_flag_blessedCount1 > 0 || soap_flag_blockedCount1 > 0 || soap_flag_createTime1 > 0 || soap_flag_cursedCount1 > 0 || soap_flag_flags1 > 0 || soap_flag_id1 > 0 || soap_flag_language1 > 0 || soap_flag_pos1 > 0 || soap_flag_posType1 > 0 || soap_flag_time1 > 0 || soap_flag_status1 > 0 || soap_flag_tokenId1 > 0 || soap_flag_updateTime1 > 0 || soap_flag_updateIp1 > 0 || soap_flag_userId1 > 0))
 	{	soap->error = SOAP_OCCURS;
 		return NULL;
 	}

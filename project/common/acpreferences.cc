@@ -19,23 +19,28 @@
   Qt::WindowStaysOnTopHint
 
 #ifdef Q_OS_MAC
-  #define WINDOW_FLAGS ( \
-    Qt::FramelessWindowHint | \
-    WINDOW_FLAGS_BASE )
+#  define WINDOW_FLAGS  Qt::FramelessWindowHint | WINDOW_FLAGS_BASE
 #else
-  #define WINDOW_FLAGS ( \
-    WINDOW_FLAGS_BASE )
+#  define WINDOW_FLAGS  WINDOW_FLAGS_BASE
 #endif // Q_OS_MAC
 
 // - Constructions -
 
-AcPreferences::AcPreferences(QWidget *parent)
+AcPreferences::AcPreferences(QWidget *parent, bool final)
   : Base(parent, WINDOW_FLAGS), settings_(0), tabView_(0), tabs_(0)
-{ init(); }
+{
+  init();
+  if (final)
+    finalize();
+}
 
-AcPreferences::AcPreferences(ulong tabs, QWidget *parent)
+AcPreferences::AcPreferences(ulong tabs, QWidget *parent, bool final)
   : Base(parent, WINDOW_FLAGS), settings_(0), tabView_(0), tabs_(tabs)
-{ init(); finalize(); }
+{
+  init();
+  if (final)
+    finalize();
+}
 
 void
 AcPreferences::init()
@@ -70,11 +75,11 @@ void
 AcPreferences::createLayout()
 {
   if (!tabs_ || tabs_ & LocationTab)
-    addTab(new AcLocationPreferences(settings_, this));
+    addTab(new AcLocationPrefs(settings_, this));
   if (!tabs_ || tabs_ & AccountTab)
-    addTab(new AcAccountPreferences(settings_, this));
+    addTab(new AcAccountPrefs(settings_, this));
   if (!tabs_ || tabs_ & NetworkProxyTab)
-    addTab(new AcNetworkProxyPreferences(settings_, this));
+    addTab(new AcNetworkProxyPrefs(settings_, this));
   tabView_->finalizeLayout();
 
   setCentralWidget(tabView_);
@@ -130,8 +135,10 @@ AcPreferences::setVisible(bool visible)
     if (visible) {
       load();
       updateSize();
-    } else
+    } else {
       save();
+      clear();
+    }
   }
   Base::setVisible(visible);
 }
@@ -145,11 +152,11 @@ AcPreferences::save()
   QWidget *current = tabView_->currentWidget();
   foreach (QWidget *t, tabView_->widgets())
     if (t != current)
-      ok = dynamic_cast<AcPreferencesTab *>(t)->save()
+      ok = qobject_cast<AcPreferencesTab *>(t)->save()
          && ok;
 
   // Save current at last, so that its status messages are preserved
-  ok = dynamic_cast<AcPreferencesTab *>(current)->save()
+  ok = qobject_cast<AcPreferencesTab *>(current)->save()
      && ok;
 
   if (ok)
@@ -161,7 +168,14 @@ AcPreferences::load()
 {
   //settings_->sync();
   foreach (QWidget *t, tabView_->widgets())
-    dynamic_cast<AcPreferencesTab *>(t)->load();
+    qobject_cast<AcPreferencesTab *>(t)->load();
+}
+
+void
+AcPreferences::clear()
+{
+  foreach (QWidget *t, tabView_->widgets())
+    qobject_cast<AcPreferencesTab *>(t)->clear();
 }
 
 // EOF

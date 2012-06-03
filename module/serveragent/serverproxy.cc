@@ -269,6 +269,7 @@ ServerProxy::selectUser(const QString &userName, const QString &password)
     ret.setLanguage(p->language)   ;
     ret.setCreateTime(p->createTime);
     ret.setLoginTime(p->loginTime);
+    ret.setLoginIp(p->loginIp);
     ret.setBlessedCount(p->blessedCount);
     ret.setCursedCount(p->cursedCount);
     ret.setBlockedCount(p->blockedCount);
@@ -323,6 +324,7 @@ ServerProxy::submitToken(const Token &token, const QString &userName, const QStr
   }
   arg0.part = token.part();
   arg0.createTime = token.createTime();
+  arg0.createIp = 0;
   arg0.blessedCount = token.blessedCount();
   arg0.cursedCount = token.cursedCount();
   arg0.blockedCount = token.blockedCount();
@@ -515,6 +517,7 @@ ServerProxy::submitAlias(const Alias &alias, const QString &userName, const QStr
   arg0.text = &text;
   arg0.language = alias.language();
   arg0.updateTime = alias.updateTime();
+  arg0.updateIp = 0;
   arg0.blessedCount = alias.blessedCount();
   arg0.cursedCount = alias.cursedCount();
   arg0.blockedCount = alias.blockedCount();
@@ -659,6 +662,7 @@ ServerProxy::submitAnnotation(const Annotation &annot, const QString &userName, 
   arg0.language = annot.language();
   arg0.createTime = annot.createTime();
   arg0.updateTime = annot.updateTime();
+  arg0.updateIp = 0;
   arg0.blessedCount = annot.blessedCount();
   arg0.cursedCount = annot.cursedCount();
   arg0.blockedCount = annot.blockedCount();
@@ -809,6 +813,7 @@ ServerProxy::selectTokenWithId(qint64 id)
       ret.setSource(QString::fromStdString(*p->source));
     ret.setPart(p->part);
     ret.setCreateTime(p->createTime);
+    ret.setCreateIp(p->createIp);
     ret.setBlessedCount(p->blessedCount);
     ret.setCursedCount(p->cursedCount);
     ret.setBlockedCount(p->blockedCount);
@@ -853,6 +858,7 @@ ServerProxy::selectTokenWithDigest(const QString &digest, int part)
       ret.setSource(QString::fromStdString(*p->source));
     ret.setPart(p->part);
     ret.setCreateTime(p->createTime);
+    ret.setCreateIp(p->createIp);
     ret.setBlessedCount(p->blessedCount);
     ret.setCursedCount(p->cursedCount);
     ret.setBlockedCount(p->blockedCount);
@@ -898,6 +904,7 @@ ServerProxy::selectAliasesWithTokenId(qint64 tid)
         if (p->text)
           a.setText(QString::fromStdString(*p->text));
         a.setUpdateTime(p->updateTime);
+        a.setUpdateIp(p->updateIp);
         a.setBlessedCount(p->blessedCount);
         a.setCursedCount(p->cursedCount);
         a.setBlockedCount(p->blockedCount);
@@ -943,6 +950,7 @@ ServerProxy::selectRelatedAliasesWithTokenId(qint64 tid)
         if (p->text)
           a.setText(QString::fromStdString(*p->text));
         a.setUpdateTime(p->updateTime);
+        a.setUpdateIp(p->updateIp);
         a.setBlessedCount(p->blessedCount);
         a.setCursedCount(p->cursedCount);
         a.setBlockedCount(p->blockedCount);
@@ -993,6 +1001,7 @@ ServerProxy::selectAnnotationsWithTokenId(qint64 tid)
           a.setText(QString::fromStdString(*p->text));
         a.setCreateTime(p->createTime);
         a.setUpdateTime(p->updateTime);
+        a.setUpdateIp(p->updateIp);
         a.setBlessedCount(p->blessedCount);
         a.setCursedCount(p->cursedCount);
         a.setBlockedCount(p->blockedCount);
@@ -1043,6 +1052,7 @@ ServerProxy::selectRelatedAnnotationsWithTokenId(qint64 tid)
           a.setText(QString::fromStdString(*p->text));
         a.setCreateTime(p->createTime);
         a.setUpdateTime(p->updateTime);
+        a.setUpdateIp(p->updateIp);
         a.setBlessedCount(p->blessedCount);
         a.setCursedCount(p->cursedCount);
         a.setBlockedCount(p->blockedCount);

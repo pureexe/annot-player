@@ -10,6 +10,7 @@
 #endif // WITH_WIN_QTH
 #include "project/common/acui.h"
 #include "module/qtext/htmltag.h"
+#include "module/qtext/spinbox.h"
 #include <QtGui>
 
 //#define DEBUG "messageview"
@@ -53,14 +54,17 @@ MessageView::createLayout()
   }
   connect(textEdit_, SIGNAL(cursorPositionChanged()), SLOT(invalidateCurrentCharFormat()));
 
-  hookComboBox_ = ui->makeComboBox(AcUi::ReadOnlyHint, "", tr("Signal channel")); {
-    hookComboBox_->setMinimumWidth(HOOKCOMBOBOX_MINWIDTH);
-    hookComboBox_->setMaximumWidth(HOOKCOMBOBOX_MAXWIDTH);
-    //if (hookComboBox_->isEditable())
-    //  hookComboBox_->lineEdit()->setAlignment(Qt::AlignRight);
+  hookIndexEdit_ = new QtExt::SpinBox; {
+    hookIndexEdit_->setToolTip(tr("Signal channel"));
+    //hookIndexEdit_->setMinimumWidth(HOOKCOMBOBOX_MINWIDTH);
+    //hookIndexEdit_->setMaximumWidth(HOOKCOMBOBOX_MAXWIDTH);
+    //if (hookIndexEdit_->isEditable())
+    //  hookIndexEdit_->lineEdit()->setAlignment(Qt::AlignRight);
+    hookIndexEdit_->setMaximum(0);
+    hookIndexEdit_->setMinimum(0);
+    hookIndexEdit_->setEnabled(false);
   }
-  connect(hookComboBox_, SIGNAL(activated(int)), SLOT(selectHookIndex(int)));
-  connect(hookComboBox_, SIGNAL(currentIndexChanged(int)), SLOT(invalidateSelectButton()));
+  connect(hookIndexEdit_, SIGNAL(valueChanged(int)), SLOT(selectHookIndex(int)));
 
   autoButton_ = ui->makeToolButton(
         AcUi::CheckHint, TR(T_AUTO), tr("Auto-detect signal"), this, SLOT(invalidateCurrentHook()));
@@ -72,7 +76,7 @@ MessageView::createLayout()
   QToolButton *resetButton = ui->makeToolButton(
         AcUi::PushHint, TR(T_RESET), tr("Reset changes and texts"), this, SLOT(clear()));
 
-  hookCountLabel_ = ui->makeLabel(0, "0", tr("Current signal"), hookComboBox_);
+  hookCountLabel_ = ui->makeLabel(0, "/0", tr("Current signal"), hookIndexEdit_);
 
   // Set layout
 
@@ -81,7 +85,7 @@ MessageView::createLayout()
     rows->addLayout(header);
     rows->addWidget(textEdit_);
 
-    header->addWidget(hookComboBox_);
+    header->addWidget(hookIndexEdit_);
     header->addWidget(hookCountLabel_);
     header->addWidget(selectButton_);
     header->addStretch();
@@ -99,7 +103,7 @@ MessageView::createLayout()
   invalidateCurrentCharFormat();
   invalidateSelectButton();
 
-  hookComboBox_->setFocus();
+  hookIndexEdit_->setFocus();
 }
 
 // - Properties -
@@ -129,12 +133,12 @@ MessageView::setVisible(bool visible)
 
 int
 MessageView::currentIndex() const
-{ return hookComboBox_->currentIndex(); }
+{ return hookIndexEdit_->value(); }
 
 void
 MessageView::setCurrentIndex(int index)
 {
-  hookComboBox_->setCurrentIndex(index);
+  hookIndexEdit_->setValue(index);
   invalidateSelectButton();
 }
 
@@ -168,11 +172,13 @@ MessageView::selectCurrentHook()
 void
 MessageView::clear()
 {
-  hookComboBox_->clear();
+  hookIndexEdit_->clear();
   hooks_.clear();
   texts_.clear();
 
-  hookComboBox_->addItem("0");
+  hookIndexEdit_->setValue(0);
+  hookIndexEdit_->setMaximum(0);
+  hookIndexEdit_->setEnabled(false);
   hooks_.append(0);
   texts_.append(QStringList());
 
@@ -186,7 +192,7 @@ void
 MessageView::invalidateHookCountLabel()
 {
   int count = hooks_.size() - 1;
-  hookCountLabel_->setText(QString(" %1 ").arg(QString::number(count)));
+  hookCountLabel_->setText(QString("/%1 ").arg(QString::number(count)));
 }
 
 void
@@ -231,7 +237,8 @@ MessageView::processHookedText(const QString &text, ulong hookId)
     index = hooks_.size();
     hooks_.append(hookId);
     texts_.append(QStringList());
-    hookComboBox_->addItem(QString::number(index));
+    hookIndexEdit_->setMaximum(index);
+    hookIndexEdit_->setEnabled(true);
     invalidateHookCountLabel();
 
     log(QString("%1 (hid = %2)").arg(tr("new signal discovered")).arg(QString::number(hookId, 16)));
@@ -274,9 +281,9 @@ MessageView::setTextList(const QStringList &l)
   int i = 0;
   foreach (const QString &s, l) {
     if (i++ % 2)
-      html.append(HTML_STYLE(s, color:purple));
+      html.append(HTML_STYLE(+s+, color:purple));
     else
-      html.append(HTML_STYLE(s, color:blue));
+      html.append(HTML_STYLE(+s+, color:blue));
 
     if (i != l.size())
       html.append(HTML_BR() HTML_BR());

@@ -40,7 +40,7 @@ ClipboardMonitor::invalidateClipboard()
   QClipboard *c = QApplication::clipboard();
   if (!c)
     return;
-  QString text = c->text();
+  QString text = c->text().trimmed();
   if (!text.isEmpty())
     parseUrl(text);
 }
@@ -48,13 +48,10 @@ ClipboardMonitor::invalidateClipboard()
 void
 ClipboardMonitor::parseUrl(const QString &text)
 {
-  QString t = text.trimmed();
-  if (t.isEmpty())
+  QStringList l = text.split('\n', QString::SkipEmptyParts);
+  if (l.isEmpty())
     return;
-
-  QStringList l = t.split('\n', QString::SkipEmptyParts);
-  Q_ASSERT(!l.isEmpty());
-  QString url = l.front().trimmed();
+  QString url = l.first().trimmed();
   if (url.startsWith("ttp://"))
     url.prepend("h");
   else if (!url.startsWith("http://", Qt::CaseInsensitive))

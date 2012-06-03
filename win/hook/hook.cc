@@ -870,12 +870,12 @@ WindowsHookAdaptor::event(QEvent *event)
   Q_ASSERT(event);
 
   switch (event->type()) {
-  case QEvent::MouseMove:           mouseMoveEvent(dynamic_cast<QMouseEvent*>(event)); break;
-  case QEvent::MouseButtonPress:    mousePressEvent(dynamic_cast<QMouseEvent*>(event)); break;
-  case QEvent::MouseButtonRelease:  mouseReleaseEvent(dynamic_cast<QMouseEvent*>(event)); break;
-  case QEvent::MouseButtonDblClick: mouseDoubleClickEvent(dynamic_cast<QMouseEvent*>(event)); break;
-  case QEvent::Wheel:               wheelEvent(dynamic_cast<QWheelEvent*>(event)); break;
-  case QEvent::ContextMenu:         contextMenuEvent(dynamic_cast<QContextMenuEvent*>(event)); break;
+  case QEvent::MouseMove:           mouseMoveEvent(static_cast<QMouseEvent*>(event)); break;
+  case QEvent::MouseButtonPress:    mousePressEvent(static_cast<QMouseEvent*>(event)); break;
+  case QEvent::MouseButtonRelease:  mouseReleaseEvent(static_cast<QMouseEvent*>(event)); break;
+  case QEvent::MouseButtonDblClick: mouseDoubleClickEvent(static_cast<QMouseEvent*>(event)); break;
+  case QEvent::Wheel:               wheelEvent(static_cast<QWheelEvent*>(event)); break;
+  case QEvent::ContextMenu:         contextMenuEvent(static_cast<QContextMenuEvent*>(event)); break;
   default: return false;
   }
 

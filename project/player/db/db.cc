@@ -13,7 +13,7 @@
 // See: http://stackoverflow.com/questions/1711631/how-do-i-improve-the-performance-of-sqlite
 
 #include "db.h"
-#include "db_config.h"
+#include "dbdefs.h"
 #include <QtCore>
 #include <QtSql>
 

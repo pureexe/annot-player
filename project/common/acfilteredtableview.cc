@@ -44,7 +44,7 @@ AcFilteredTableView::createLayout()
   // Create widgets
 
   proxyView_ = new QTreeView(this); {
-    proxyView_->setStyleSheet(SS_TREEVIEW);
+    proxyView_->setStyleSheet(ACSS_TREEVIEW);
     proxyView_->setRootIsDecorated(true);
     proxyView_->setAlternatingRowColors(true);
     proxyView_->setSortingEnabled(true);

@@ -1,7 +1,7 @@
-#ifndef DB_CONFIG_H
-#define DB_CONFIG_H
+#ifndef DBDEFS_H
+#define DBDEFS_H
 
-// db_config.h
+// dbdefs.h
 // 9/13/2011
 
 // - SQLite helpers -
@@ -32,6 +32,7 @@
     "user_language "    "INT NOT NULL DEFAULT 0," \
     "user_create_time " DB_DATETIME " NOT NULL," \
     "user_login_time "  DB_DATETIME " NOT NULL," \
+    "user_login_ip "    "BIGINT," \
     "user_blessed_count " "INT UNSIGNED NOT NULL DEFAULT 0," \
     "user_cursed_count "  "INT UNSIGNED NOT NULL DEFAULT 0," \
     "user_blocked_count " "INT UNSIGNED NOT NULL DEFAULT 0," \
@@ -50,6 +51,7 @@
     "token_status "     "INT NOT NULL DEFAULT 0," \
     "token_flags "      "BIGINT UNSIGNED NOT NULL DEFAULT 0," \
     "token_create_time " DB_DATETIME " NOT NULL," \
+    "token_create_ip "  "BIGINT," \
     "token_blessed_count " "INT UNSIGNED NOT NULL DEFAULT 0," \
     "token_cursed_count "  "INT UNSIGNED NOT NULL DEFAULT 0," \
     "token_blocked_count " "INT UNSIGNED NOT NULL DEFAULT 0," \
@@ -73,6 +75,7 @@
     "alias_status "     "INT NOT NULL DEFAULT 0," \
     "alias_language "   "INT NOT NULL DEFAULT 0," \
     "alias_update_time " DB_DATETIME " NOT NULL," \
+    "alias_update_ip "  "BIGINT," \
     "alias_blessed_count " "INT UNSIGNED NOT NULL DEFAULT 0," \
     "alias_cursed_count "  "INT UNSIGNED NOT NULL DEFAULT 0," \
     "alias_blocked_count " "INT UNSIGNED NOT NULL DEFAULT 0" \
@@ -97,6 +100,7 @@
     "annot_language "   "INT NOT NULL DEFAULT 0," \
     "annot_create_time " DB_DATETIME " NOT NULL," \
     "annot_update_time " DB_DATETIME "," \
+    "annot_update_ip "  "BIGINT," \
     "annot_pos "        "BIGINT NOT NULL DEFAULT 0," \
     "annot_pos_type "   "INT NOT NULL DEFAULT 0," \
     "annot_time "       "INT NOT NULL DEFAULT 0," \
@@ -128,10 +132,11 @@
       "user_language,"          /* 8 */ \
       "user_create_time,"       /* 9 */ \
       "user_login_time,"        /* 10 */ \
-      "user_blessed_count,"     /* 11 */ \
-      "user_cursed_count,"      /* 12 */ \
-      "user_blocked_count,"     /* 13 */ \
-      "user_annot_count"        /* 14 */ \
+      "user_login_ip,"          /* 11 */ \
+      "user_blessed_count,"     /* 12 */ \
+      "user_cursed_count,"      /* 13 */ \
+      "user_blocked_count,"     /* 14 */ \
+      "user_annot_count"        /* 15 */ \
     ") VALUES (" \
       "?,"      /* 0: user_status */ \
       "?,"      /* 1: user_flags */ \
@@ -144,10 +149,11 @@
       "?,"      /* 8: user_language */ \
       DB_FROM_UNIXTIME("?") "," /* 9: user_create_time */ \
       DB_FROM_UNIXTIME("?") "," /* 10: user_login_time */ \
-      "?,"      /* 11: user_blessed_count */ \
-      "?,"      /* 12: user_cursed_count */ \
-      "?,"      /* 13: user_blocked_count */ \
-      "?"       /* 14: user_annot_count */ \
+      "?,"      /* 11: user_login_time */ \
+      "?,"      /* 12: user_blessed_count */ \
+      "?,"      /* 13: user_cursed_count */ \
+      "?,"      /* 14: user_blocked_count */ \
+      "?"       /* 15: user_annot_count */ \
     ")" \
   ); \
   (_query).addBindValue((_user).status());       /* 0 */ \
@@ -161,10 +167,11 @@
   (_query).addBindValue((_user).language());     /* 8 */ \
   (_query).addBindValue((_user).createTime());   /* 9 */ \
   (_query).addBindValue((_user).loginTime());    /* 10 */ \
-  (_query).addBindValue((_user).blessedCount()); /* 11 */ \
-  (_query).addBindValue((_user).cursedCount());  /* 12 */ \
-  (_query).addBindValue((_user).blockedCount()); /* 13 */ \
-  (_query).addBindValue((_user).annotCount());   /* 14 */ \
+  (_query).addBindValue((_user).loginIp());      /* 11 */ \
+  (_query).addBindValue((_user).blessedCount()); /* 12 */ \
+  (_query).addBindValue((_user).cursedCount());  /* 13 */ \
+  (_query).addBindValue((_user).blockedCount()); /* 14 */ \
+  (_query).addBindValue((_user).annotCount());   /* 15 */ \
 }
 
 #define DB_INSERT_TOKEN(_token, _query) \
@@ -180,11 +187,12 @@
       "token_source,"           /* 6 */ \
       "token_part,"             /* 7 */ \
       "token_create_time,"      /* 8 */ \
-      "token_blessed_count,"    /* 9 */ \
-      "token_cursed_count,"     /* 10 */ \
-      "token_blocked_count,"    /* 11 */ \
-      "token_visited_count,"    /* 12 */ \
-      "token_annot_count"       /* 13 */ \
+      "token_create_ip,"        /* 9 */ \
+      "token_blessed_count,"    /* 10 */ \
+      "token_cursed_count,"     /* 11 */ \
+      "token_blocked_count,"    /* 12 */ \
+      "token_visited_count,"    /* 13 */ \
+      "token_annot_count"       /* 14 */ \
     ") VALUES (" \
       "?,"      /* 0: token_status */ \
       "?,"      /* 1: token_flags */ \
@@ -195,11 +203,12 @@
       "?,"      /* 6: token_digest */ \
       "?,"      /* 7: token_part */ \
       DB_FROM_UNIXTIME("?") "," /* 8: token_create_time */ \
-      "?,"      /* 9: token_blessed_count */ \
-      "?,"      /* 10: token_cursed_count */ \
-      "?,"      /* 11: token_blocked_count */ \
-      "?,"      /* 12: token_visited_count */ \
-      "?"       /* 13: token_annot_count */ \
+      "?,"      /* 9: token_create_ip */ \
+      "?,"      /* 10: token_blessed_count */ \
+      "?,"      /* 11: token_cursed_count */ \
+      "?,"      /* 12: token_blocked_count */ \
+      "?,"      /* 13: token_visited_count */ \
+      "?"       /* 14: token_annot_count */ \
     ")" \
   ); \
   (_query).addBindValue((_token).status());       /* 0 */ \
@@ -211,11 +220,12 @@
   (_query).addBindValue((_token).source());       /* 6 */ \
   (_query).addBindValue((_token).part());         /* 7 */ \
   (_query).addBindValue((_token).createTime());   /* 8 */ \
-  (_query).addBindValue((_token).blessedCount()); /* 9 */ \
-  (_query).addBindValue((_token).cursedCount());  /* 10 */ \
-  (_query).addBindValue((_token).blockedCount()); /* 11 */ \
-  (_query).addBindValue((_token).visitedCount()); /* 12 */ \
-  (_query).addBindValue((_token).annotCount());   /* 13 */ \
+  (_query).addBindValue((_token).createIp());     /* 9 */ \
+  (_query).addBindValue((_token).blessedCount()); /* 10 */ \
+  (_query).addBindValue((_token).cursedCount());  /* 11 */ \
+  (_query).addBindValue((_token).blockedCount()); /* 12 */ \
+  (_query).addBindValue((_token).visitedCount()); /* 13 */ \
+  (_query).addBindValue((_token).annotCount());   /* 14 */ \
 }
 
 #define DB_INSERT_ALIAS(_alias, _query) \
@@ -233,9 +243,10 @@
       "alias_text,"             /* 8 */ \
       "alias_language,"         /* 9 */ \
       "alias_update_time,"      /* 10 */ \
-      "alias_blessed_count,"    /* 11 */ \
-      "alias_cursed_count,"     /* 12 */ \
-      "alias_blocked_count,"    /* 13 */ \
+      "alias_update_ip,"        /* 11 */ \
+      "alias_blessed_count,"    /* 12 */ \
+      "alias_cursed_count,"     /* 13 */ \
+      "alias_blocked_count,"    /* 14 */ \
     ") VALUES (" \
       "?,"      /* 0: alias_status */ \
       "?,"      /* 1: alias_flags */ \
@@ -248,9 +259,10 @@
       "?,"      /* 8: alias_text */ \
       "?,"      /* 9: alias_language */ \
       DB_FROM_UNIXTIME("?") "," /* 10: alias_update_time */ \
-      "?,"      /* 11: alias_blessed_count */ \
-      "?,"      /* 12: alias_cursed_count */ \
-      "?,"      /* 13: alias_blocked_count */ \
+      "?,"      /* 11: alias_update_ip */ \
+      "?,"      /* 12: alias_blessed_count */ \
+      "?,"      /* 13: alias_cursed_count */ \
+      "?,"      /* 14: alias_blocked_count */ \
     ")" \
   ); \
   (_query).addBindValue((_alias).status());       /* 0 */ \
@@ -264,9 +276,10 @@
   (_query).addBindValue((_alias).text());         /* 8 */ \
   (_query).addBindValue((_alias).language());     /* 9 */ \
   (_query).addBindValue((_alias).updateTime());   /* 10 */ \
-  (_query).addBindValue((_alias).blessedCount()); /* 11 */ \
-  (_query).addBindValue((_alias).cursedCount());  /* 12 */ \
-  (_query).addBindValue((_alias).blockedCount()); /* 13 */ \
+  (_query).addBindValue((_alias).updateIp());     /* 11 */ \
+  (_query).addBindValue((_alias).blessedCount()); /* 12 */ \
+  (_query).addBindValue((_alias).cursedCount());  /* 13 */ \
+  (_query).addBindValue((_alias).blockedCount()); /* 14 */ \
 }
 
 #define DB_INSERT_ANNOT(_annot, _query) \
@@ -288,9 +301,10 @@
       "annot_language," /* l2 */ \
       "annot_create_time,"      /* 13 */ \
       "annot_update_time,"      /* 14 */ \
-      "annot_blessed_count,"    /* 15 */ \
-      "annot_cursed_count,"     /* 16 */ \
-      "annot_blocked_count "    /* 17 */ \
+      "annot_update_ip,"        /* 15 */ \
+      "annot_blessed_count,"    /* 16 */ \
+      "annot_cursed_count,"     /* 17 */ \
+      "annot_blocked_count "    /* 18 */ \
     ") VALUES (" \
       "?,"      /* 0: annot_status */ \
       "?,"      /* 1: annot_flags */ \
@@ -307,9 +321,10 @@
       "?,"      /* 12: annot_language */ \
       DB_FROM_UNIXTIME("?") "," /* 13: annot_create_time */ \
       DB_FROM_UNIXTIME("?") "," /* 14: annot_update_time */ \
-      "?,"      /* 15: annot_blessed_count */ \
-      "?,"      /* 16: annot_cursed_count */ \
-      "?"       /* 17: annot_blocked_count */ \
+      "?,"      /* 15: annot_update_ip */ \
+      "?,"      /* 16: annot_blessed_count */ \
+      "?,"      /* 17: annot_cursed_count */ \
+      "?"       /* 18: annot_blocked_count */ \
     ")" \
   ); \
   (_query).addBindValue((_annot).status());       /* 0 */ \
@@ -327,9 +342,10 @@
   (_query).addBindValue((_annot).language());     /* 12 */ \
   (_query).addBindValue((_annot).createTime());   /* 13 */ \
   (_query).addBindValue((_annot).updateTime());   /* 14 */ \
-  (_query).addBindValue((_annot).blessedCount()); /* 15 */ \
-  (_query).addBindValue((_annot).cursedCount());  /* 16 */ \
-  (_query).addBindValue((_annot).blockedCount()); /* 17 */ \
+  (_query).addBindValue((_annot).updateIp());     /* 15 */ \
+  (_query).addBindValue((_annot).blessedCount()); /* 16 */ \
+  (_query).addBindValue((_annot).cursedCount());  /* 17 */ \
+  (_query).addBindValue((_annot).blockedCount()); /* 18 */ \
 }
 
 // - Queries -
@@ -347,10 +363,11 @@
     "user_language,"  /* 8 */ \
     DB_UNIX_TIMESTAMP("user_create_time") "," /* 9 */ \
     DB_UNIX_TIMESTAMP("user_login_time") ","  /* 10 */ \
-    "user_blessed_count," /* 11 */ \
-    "user_cursed_count,"  /* 12 */ \
-    "user_blocked_count," /* 13 */ \
-    "user_annot_count "   /* 14 */ \
+    "user_login_time,"    /* 11 */ \
+    "user_blessed_count," /* 12 */ \
+    "user_cursed_count,"  /* 13 */ \
+    "user_blocked_count," /* 14 */ \
+    "user_annot_count "   /* 15 */ \
   "FROM user "
 
 #define DB_SET_USER(_user, _query) \
@@ -370,17 +387,19 @@
   (_user).setEmail((_query).value(7).toString()); \
   (_user).setLanguage((_query).value(8).toInt(&ok)); \
   Q_ASSERT(ok); \
-  (_user).setCreateTime((_query).value(9).toULongLong(&ok)); \
+  (_user).setCreateTime((_query).value(9).toLongLong(&ok)); \
   Q_ASSERT(ok); \
-  (_user).setLoginTime((_query).value(10).toULongLong(&ok)); \
+  (_user).setLoginTime((_query).value(10).toLongLong(&ok)); \
   Q_ASSERT(ok); \
-  (_user).setBlessedCount((_query).value(11).toUInt(&ok)); \
+  (_user).setLoginIp((_query).value(11).toLongLong(&ok)); \
   Q_ASSERT(ok); \
-  (_user).setCursedCount((_query).value(12).toUInt(&ok)); \
+  (_user).setBlessedCount((_query).value(12).toUInt(&ok)); \
   Q_ASSERT(ok); \
-  (_user).setBlockedCount((_query).value(13).toUInt(&ok)); \
+  (_user).setCursedCount((_query).value(13).toUInt(&ok)); \
   Q_ASSERT(ok); \
-  (_user).setAnnotCount((_query).value(14).toUInt(&ok)); \
+  (_user).setBlockedCount((_query).value(14).toUInt(&ok)); \
+  Q_ASSERT(ok); \
+  (_user).setAnnotCount((_query).value(15).toUInt(&ok)); \
   Q_ASSERT(ok); \
 }
 
@@ -395,11 +414,12 @@
     "token_source,"        /* 6 */ \
     "token_part,"          /* 7 */ \
     DB_UNIX_TIMESTAMP("token_create_time") "," /* 8 */ \
-    "token_blessed_count," /* 9 */ \
-    "token_cursed_count,"  /* 10 */ \
-    "token_blocked_count," /* 11 */ \
-    "token_visited_count," /* 12 */ \
-    "token_annot_count "   /* 13 */ \
+    "token_create_ip,"     /* 9 */ \
+    "token_blessed_count," /* 10 */ \
+    "token_cursed_count,"  /* 11 */ \
+    "token_blocked_count," /* 12 */ \
+    "token_visited_count," /* 13 */ \
+    "token_annot_count "   /* 14 */ \
   "FROM token "
 
 #define DB_SET_TOKEN(_token, _query) \
@@ -421,15 +441,17 @@
   Q_ASSERT(ok); \
   (_token).setCreateTime((_query).value(8).toLongLong(&ok)); \
   Q_ASSERT(ok); \
-  (_token).setBlessedCount((_query).value(9).toUInt(&ok)); \
+  (_token).setCreateIp((_query).value(9).toLongLong(&ok)); \
   Q_ASSERT(ok); \
-  (_token).setCursedCount((_query).value(10).toUInt(&ok)); \
+  (_token).setBlessedCount((_query).value(10).toUInt(&ok)); \
   Q_ASSERT(ok); \
-  (_token).setBlockedCount((_query).value(11).toUInt(&ok)); \
+  (_token).setCursedCount((_query).value(11).toUInt(&ok)); \
   Q_ASSERT(ok); \
-  (_token).setVisitedCount((_query).value(12).toUInt(&ok)); \
+  (_token).setBlockedCount((_query).value(12).toUInt(&ok)); \
   Q_ASSERT(ok); \
-  (_token).setAnnotCount((_query).value(13).toUInt(&ok)); \
+  (_token).setVisitedCount((_query).value(13).toUInt(&ok)); \
+  Q_ASSERT(ok); \
+  (_token).setAnnotCount((_query).value(14).toUInt(&ok)); \
   Q_ASSERT(ok); \
 }
 
@@ -446,9 +468,10 @@
     "alias_text,"          /* 8 */ \
     "alias_language,"      /* 9 */ \
     DB_UNIX_TIMESTAMP("alias_update_time") "," /* 10 */ \
-    "alias_blessed_count," /* 11 */ \
-    "alias_cursed_count,"  /* 12 */ \
-    "alias_blocked_count " /* 13 */ \
+    "alias_update_ip,"     /* 11 */ \
+    "alias_blessed_count," /* 12 */ \
+    "alias_cursed_count,"  /* 13 */ \
+    "alias_blocked_count " /* 14 */ \
   "FROM alias "
 
 #define DB_SET_ALIAS(_alias, _query) \
@@ -474,11 +497,13 @@
   Q_ASSERT(ok); \
   (_alias).setUpdateTime((_query).value(10).toLongLong(&ok)); \
   Q_ASSERT(ok); \
-  (_alias).setBlessedCount((_query).value(11).toUInt(&ok)); \
+  (_alias).setUpdateIp((_query).value(11).toLongLong(&ok)); \
   Q_ASSERT(ok); \
-  (_alias).setCursedCount((_query).value(12).toUInt(&ok)); \
+  (_alias).setBlessedCount((_query).value(12).toUInt(&ok)); \
   Q_ASSERT(ok); \
-  (_alias).setBlockedCount((_query).value(13).toUInt(&ok)); \
+  (_alias).setCursedCount((_query).value(13).toUInt(&ok)); \
+  Q_ASSERT(ok); \
+  (_alias).setBlockedCount((_query).value(14).toUInt(&ok)); \
   Q_ASSERT(ok); \
 }
 
@@ -499,9 +524,10 @@
     "annot_language,"  /* 12 */ \
     DB_UNIX_TIMESTAMP("annot_create_time") "," /* 13 */ \
     DB_UNIX_TIMESTAMP("annot_update_time") "," /* 14 */ \
-    "annot_blessed_count," /* 15 */ \
-    "annot_cursed_count,"  /* 16 */ \
-    "annot_blocked_count " /* 17 */ \
+    "annot_update_ip," /* 15 */ \
+    "annot_blessed_count," /* 16 */ \
+    "annot_cursed_count,"  /* 17 */ \
+    "annot_blocked_count " /* 18 */ \
   "FROM annot "
 
 #define DB_SET_ANNOTATION(_annot, _query) \
@@ -534,12 +560,14 @@
   Q_ASSERT(ok); \
   (_annot).setUpdateTime((_query).value(14).toLongLong(&ok)); \
   Q_ASSERT(ok); \
-  (_annot).setBlessedCount((_query).value(15).toUInt(&ok)); \
+  (_annot).setUpdateIp((_query).value(15).toLongLong(&ok)); \
   Q_ASSERT(ok); \
-  (_annot).setCursedCount((_query).value(16).toUInt(&ok)); \
+  (_annot).setBlessedCount((_query).value(16).toUInt(&ok)); \
   Q_ASSERT(ok); \
-  (_annot).setBlockedCount((_query).value(17).toUInt(&ok)); \
+  (_annot).setCursedCount((_query).value(17).toUInt(&ok)); \
+  Q_ASSERT(ok); \
+  (_annot).setBlockedCount((_query).value(18).toUInt(&ok)); \
   Q_ASSERT(ok); \
 }
 
-#endif // DB_CONFIG_H
+#endif // DBDEFS_H

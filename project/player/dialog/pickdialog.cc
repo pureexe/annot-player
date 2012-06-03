@@ -4,13 +4,14 @@
 #include "pickdialog.h"
 #include "tr.h"
 #include "logger.h"
+#include "application.h"
 #ifdef WITH_WIN_PICKER
 #  include "win/picker/picker.h"
 #endif // WITH_WIN_PICKER
 #include "project/common/acui.h"
 #include <QtGui>
 
-#define DEBUG "pickdialog"
+//#define DEBUG "pickdialog"
 #include "module/debug/debug.h"
 
 using namespace Logger;
@@ -19,14 +20,26 @@ using namespace Logger;
 
 // - Constructions -
 
-PickDialog::PickDialog(QWidget *parent)
-  : Base(parent), active_(false)
-{
-#ifdef Q_WS_MAC
-  setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
-#endif // Q_WS_MAC
-  setWindowTitle(tr("Select window"));
+#define WINDOW_SIZE QSize(150,50)
 
+#define WINDOW_FLAGS_BASE \
+  Qt::Dialog | \
+  Qt::CustomizeWindowHint | \
+  Qt::WindowTitleHint | \
+  Qt::WindowCloseButtonHint | \
+  Qt::WindowStaysOnTopHint
+
+#ifdef Q_WS_MAC
+#  define WINDOW_FLAGS  WINDOW_FLAGS_BASE | Qt::FramelessWindowHint
+#else
+#  define WINDOW_FLAGS  WINDOW_FLAGS_BASE
+#endif // Q_WS_MAC
+
+PickDialog::PickDialog(QWidget *parent)
+  : Base(parent, WINDOW_FLAGS), active_(false), pickedWindow_(0)
+{
+  setWindowTitle(tr("Select window"));
+  resize(WINDOW_SIZE);
   createLayout();
 }
 
@@ -36,7 +49,8 @@ PickDialog::createLayout()
   messageLabel_ = AcUi::globalInstance()->makeLabel(0, "", TR(T_MESSAGE));
 
   QToolButton *cancelButton = AcUi::globalInstance()->makeToolButton(
-        AcUi::PushHint, TR(T_CANCEL), this, SLOT(cancel()));
+        AcUi::PushHint | AcUi::HighlightHint | AcUi::InvertHint,
+        TR(T_CANCEL), this, SLOT(cancel()));
 
   // Layouts
   QVBoxLayout *rows = new QVBoxLayout; {
@@ -83,25 +97,28 @@ void
 PickDialog::cancel()
 {
   DOUT("enter");
-  fadeOut();
+  //fadeOut();
+  hide();
   log(tr("window picking canceled"));
   DOUT("exit");
 }
 
 void
-PickDialog::pickWindow(WId winId)
+PickDialog::pickWindow(WId hwnd)
 {
   DOUT("enter");
-  if (winId == this->winId()) {
+  if (hwnd == winId()) {
     startPicking();
     DOUT("exit: skip picking myself");
     return;
   }
 
-  log(tr("window picked") + QString(" (hwnd = %1)").arg(QString::number((ulong)winId, 16)));
+  log(tr("window picked") + QString(" (hwnd = %1)").arg(QString::number((ulong)hwnd, 16)));
 
-  fadeOut();
-  emit windowPicked(winId);
+  pickedWindow_ = hwnd;
+  //fadeOut();
+  hide();
+  emit windowPicked(hwnd);
   DOUT("exit");
 }
 
@@ -112,6 +129,7 @@ PickDialog::startPicking()
 #ifdef WITH_WIN_PICKER
   PICKER->singleShot();
 #endif // WITH_WIN_PICKER
+  Application::globalInstance()->setCursor(Qt::PointingHandCursor);
   DOUT("exit");
 }
 
@@ -122,6 +140,7 @@ PickDialog::stopPicking()
 #ifdef WITH_WIN_PICKER
   PICKER->stop();
 #endif // WITH_WIN_PICKER
+  Application::globalInstance()->setCursor(Qt::ArrowCursor);
   DOUT("exit");
 }
 
@@ -140,6 +159,11 @@ PickDialog::setVisible(bool visible)
 
   setActive(visible);
   Base::setVisible(visible);
+
+  if (visible)
+    pickedWindow_ = 0; // reset picked window
+  else if (!pickedWindow_)
+    emit cancelled();
 }
 
 void

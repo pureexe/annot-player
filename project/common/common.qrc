@@ -6,6 +6,11 @@
         <file>images/player.png</file>
         <file>images/browser.png</file>
         <file>images/downloader.png</file>
+        <file>images/flag_japan.png</file>
+        <file>images/flag_usa.png</file>
+        <file>images/flag_roc.png</file>
+        <file>images/flag_prc.png</file>
+        <file>images/flag_rok.png</file>
         <file>images/aero_mac.png</file>
         <file>images/aero_mac_thumbnail.png</file>
         <file>images/aero_dark.jpg</file>

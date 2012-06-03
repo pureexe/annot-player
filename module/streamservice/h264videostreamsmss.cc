@@ -57,7 +57,7 @@ H264VideoStreamSMSS::
 seekStreamSource(FramedSource *inputSource, double &seekNPT,
                  double streamDuration, u_int64_t &numBytes)
 {
-  H264VideoStreamFramer *src = dynamic_cast<H264VideoStreamFramer*>(inputSource);
+  H264VideoStreamFramer *src = dynamic_cast<H264VideoStreamFramer *>(inputSource);
   if (src) {
     Base::seekStreamSource(src->inputSource(), seekNPT, streamDuration, numBytes);
     src->flushInput();

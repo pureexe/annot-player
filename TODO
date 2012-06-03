@@ -2,6 +2,7 @@
 # 6/18/2011
 
 http://db.tt/SrtkzxIJ
+http://qt-project.org/wiki/Category:Add-ons
 
 # server
 - move wiki to sakuradite
@@ -45,19 +46,49 @@ http://db.tt/SrtkzxIJ
     - mms
   - nicovideo
 
-# 0.1.6.0 -- last stable
-
-# Server
 - server
   - backup mysql to my own machine
-  http://sqlserver2000.databases.aspfaq.com/how-should-i-store-an-ip-address-in-sql-server.html
-  - tracking IP for each annotation
-  - tracking IP for each user login ( getUser)
-  - relatedAnnotation also consider token.sourceURL
-  - FIXME: duplicated aliasname in database
+  - automatic back database everyweek
   - change DNS server to Japan
+- use wiki to track annotation for same movies
 
-# Game
+
+# Mac
+- mac
+  - checkbox/radiobutton/groupbox stylesheet
+- player
+ - open file broken due to slow startup
+ - drag drop is not working
+
+## LATER
+
+- player annot
+  - make annot display vertical?
+    add annotationgraphicsscheduler
+
+- fixme
+  - server
+    - FIXME: duplicated aliasname in database
+  - player
+    - debug close video crash
+    - debug hang when close current video
+- player
+  - osdcontroller to replace osdwindow
+    - intercept raise request
+    - track target view size/pos
+  - remove embeddedplayer from osdwindow
+  - remove annotationview from osdwindow
+  - remove osdwindow
+  - fixme: alt press when play will cause it loose focus
+
+- windows
+  - jump list
+   See: http://nicug.blogspot.com/search/label/taskbar
+   - launch downloaer/browser from player
+
+# Download
+- able to stream more than 1 file at the same time, and switch between diff stream session
+
 - windows xp
   copy goei2 to mac
   - continue translation on Mac OS X
@@ -66,29 +97,31 @@ http://db.tt/SrtkzxIJ
 - continue appcloud project everyday
 - continue game translation everyday
 
-# Player GUI
-- common windows
-  - improve player/browser/downloader icon
-  - add icon for replay
+# Clean up
 - module
   - rename qtext to sth else, replace namespace with prefix
-- player annot
-  - deal with the scenario when there are too many annotations
-- player prefs windows
-  - preferences for windows
-    - make association changable
+
+# Player GUI
+- ffmpeg thumbnail
+  - use ffmpeg to provide thumbnails for image
+  http://stackoverflow.com/questions/1908411/how-to-use-ffmpeg
+  http://stackoverflow.com/questions/8679390/ffmpeg-extracting-20-images-from-a-video-of-variable-length
+
+- common
+  - add background to spinbox and timeedit
 - player UI
+  - steal preferences style from qbittorrent
   - eliminate osdwindow
-    - eliminate annotationview from osdwindow
-    - eliminate embeddedPlayer from osdwindow
-  - using setAttribute(Qt::WA_TranslucentBackground);
-    - use a qobject with timer for tracking rather than hardcode to annotationview
-    - stand alone
-      embeddedplayer
-      annotationview
-      rather than a global osdwindow
+    - using setAttribute(Qt::WA_TranslucentBackground);
+      - use a qobject with timer for tracking rather than hardcode to annotationview
+      - stand alone
+        embeddedplayer
+        annotationview
+        rather than a global osdwindow
+    - create a pseodu object saving current window
+    - eliminite osdwindow for embedded player
+    - eliminite osdwindow for annotationview
   - reduce embedded player's bottom margin
-  - FIXME: annotation item's toolTip does not work
     need to directly send event from OsdWindow to annotationGraphicsView wihout recursivecall
     the best way is to eliminiate OsdWindow
   - Black UI stylesheet
@@ -96,40 +129,9 @@ http://db.tt/SrtkzxIJ
     - steal style from Youtube
       with transparent black
     - volume slider, only hover to show
-  - move volume to the left, make it longer iff when hover
   - double click screen to pause
     - after pause, show two big button: resume, and fullscreen
   - when write annot, able to chang annot color easily
-- player/download@mac
-  figure out which thread is consuming so much cpu
-  http://doc.qt.nokia.com/qtcreator-2.3/creator-cache-profiler.html
-  http://www.folding-hyperspace.com/program_tip_14.htm
-
-# DOWNLOAD
-# - Multiple task
-# - GUI
-- downloader
-  - merge mrldownloadtask with vlchttpplugin
-    make vlchttp abble to swiitch current process
-  - change to use qtreeview to indicate connection status
-  - able to download normal file
-  - color diff type of task according to its state
-  - finally, port downloader UI back to player for stream multiple files at the same time
-  - try to download from youtube
-    - try querying redirectURL before querying Error
-- player
-  - debug youku second part get banned issue
-    the second part always get banned
-- player
-  - able to stream more than one movie at the sametime
-    - normalize vlchttpplugin,
-      create a wrapper for downloadtask
-  - add an icon for reply with sth like an undo icon
-- player
-  - rewrite makeActions
-  - removeEventListener on mouseHook & osdwindow, use QObject::event and QCoreApplication::sendEvent
-- downloader
-  - FIXME: no speed if hide
 
 # DIP
 - player
@@ -152,32 +154,90 @@ http://db.tt/SrtkzxIJ
     use face recognition as the step to recognize real object
   - add support for tudou
 
-# client
+# DEBUG
 - Windows XP
   - FIXME: player flashing in coherence mode
   - flashing in full screen mode!
+
+# FIXME
+- browser
+  - fixme: resize image
+- player
+  - FIXME: pinch gesture not received
+  - able to limit annotationgraphicsview position
+    say, only a portion of the screen
+  - replace player's logger with error|message|warning |notification signals
+  - fixme: alias id not saved in tokenview
+  - mac os x DVD navigation broken
+  - linux: linux: Read CD partially working before 120
+
+# ANNOT
+- able to add annotation to a specific position
+  use mouse double click to open a editor on the screen, and add annotation to it
+  (when many people start using it)
+  - reuse the same tech for PDF as well
+- use mouse gesture to case magic to annotations
+  - annotations with life?
+
+# DOWNLOAD
+# - Multiple task
+# - GUI
+- downloader
+  - merge mrldownloadtask with vlchttpplugin
+    make vlchttp abble to swiitch current process
+  - change to use qtreeview to indicate connection status
+  - able to download normal file
+  - color diff type of task according to its state
+  - finally, port downloader UI back to player for stream multiple files at the same time
+  - try to download from youtube
+    - try querying redirectURL before querying Error
+- player
+  - debug youku second part get banned issue
+    the second part always get banned
+- player
+  - able to stream more than one movie at the sametime
+    - normalize vlchttpplugin,
+      create a wrapper for downloadtask
+  - add an icon for reply with sth like an undo icon
+- player
+  - removeEventListener on mouseHook & osdwindow, use QObject::event and QCoreApplication::sendEvent
+- downloader
+  - FIXME: no speed if hide
 - player
   - able to seek anywhere
-  - able to resume in mms mode
+  - able to resume
+
+# GAME
 - windows
   - migrate to ith3
     inject.cc => ihf/main.cpp
     pipe.cc => ihf_dll/pipe.cpp
+
+# SNS
+- implement sns, using JSP, show online user status
+- post in annot.me/weibo/twitter/facebook with screenshot
+- osd comment on it in one line similar to zombie2
+- show online user with chating and sync enabled
+- how to annotate/share deathnote
+- server
+  annot.me/t
+  use \t to share feelings on annot.me, mixi, twitter, google+, facebook, and weibo
+- p2p chat use ipc library
+- mechanism to annotate deathnote
 - player
   - integrate with weibo/facebook
   - stream multiple video at once
   - link with weibo,facebook,twitter,mixi
 - browser
   - change path of addressline to path like buttons
+
+# UPDATE
 - common
   - learn the source code of ith's updater
 
+# ANDROID
 - android
   http://sourceforge.net/p/necessitas/wiki/How%20to%20write%20Qt%20apps%20for%20Android/
-- player
-  - FIXME: pinch gesture not received
-  - able to limit annotationgraphicsview position
-    say, only a portion of the screen
 - downloader
   - download: add filesave location option in add.*dialog
     http://qt-project.org/doc/qt-4.8/qtreeview.html
@@ -201,73 +261,7 @@ http://db.tt/SrtkzxIJ
   - able to login to youtube
      example: shikabanehime @ funimation
 
-# server
-  annot.me/w
-- automatic back database everyweek
-
-- design jsp front end, remove icefaces && jsf
-- implement twitter-like SNS using jsp
-  use \t to share feelings on annot.me, mixi, twitter, google+, facebook, and weibo
-
-  annot.me/t
-
-  combine movie with twitter
-
-- show annots as comments on the right with username similar to zombie2 of the dead
-  use embeded transparent webview
-  also, able to post new comments on it by hoverong on it
-  show only those from friends and \t in annot.me
-- p2p chat use ipc library
-- mechanism to annotate deathnote
-
-# key
-- implement sns, using JSP, show online user status
-- post in annot.me/weibo/twitter/facebook with screenshot
-- osd comment on it in one line similar to zombie2
-- show online user with chating and sync enabled
-- how to annotate/share deathnote
-
-# client later
-- webbrowser:
-  - true fullscreen for a specific tab
-- use tcpserver to simply server/client connection
-- able to add annotation to a specific position
-  use mouse double click to open a editor on the screen, and add annotation to it
-  (when many people start using it)
-  - reuse the same tech for PDF as well
-- use mouse gesture to case magic to annotations
-  - annotations with life?
-
-# TODO
-- create a shared preferences window for acsettings
-# FIXME
-- browser
-  - fixme: resize image
-- player
-  - replace player's logger with error|message|warning |notification signals
-  - fixme: alias id not saved in tokenview
-  - mac os x DVD navigation broken
-  - linux: linux: Read CD partially working before 120
-
-# cleanup
-  FIXME: difficult to implement since abort is not a slot of qnetworkreply
-
-- fixme: browser: google search for chinese/japanese
-- fix resize problem for acwebwindow
-  mainwindow resize policy
-
-- FIXME: images are not zoomed
-- CTRL+N to open a new browser window rathan then a new app
-- compile fixed package as lib using *.pro rather than *.pri to save compile time
-
-- downloader: add context menu for remove from downloader, launch from downloader
-
 # EOF
-
-# player
-- use ffmpeg to provide thumbnail for image
-http://stackoverflow.com/questions/1908411/how-to-use-ffmpeg
-http://stackoverflow.com/questions/8679390/ffmpeg-extracting-20-images-from-a-video-of-variable-length
 
 ##
 # implement SNS in server first
@@ -297,13 +291,6 @@ http://stackoverflow.com/questions/8679390/ffmpeg-extracting-20-images-from-a-vi
   chat with session id
   - online status
   - sending log out session instruction on exit
-
-- jump list -- see how jumplist is implemented in QtCreator
-  http://msdn.microsoft.com/en-us/library/dd378460%28VS.85%29.aspx
-  task bar extension, jump list
-  - recent list
-  - progress same as playtime
-  http://stackoverflow.com/questions/2515185/shaddtorecentdocs-without-a-file
 
 - qunit
 http://www.youtube.com/watch?v=P4kv-AoAJ-Q

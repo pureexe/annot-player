@@ -26,8 +26,16 @@ public:
 
   QStringList recent() const;
 
+protected:
+  int recentCount() const { return count() - engines_.size(); }
+
 signals:
   void engineChanged(int engine);
+  void searchWithEngineRequested(const QString &text, int engine);
+
+  // - Events -
+protected:
+  virtual void contextMenuEvent(QContextMenuEvent *event); ///< \override
 
   // - Actions -
 public slots:
@@ -37,14 +45,13 @@ public slots:
   void addRecent(const QString &text);
   void removeRecent(const QString &text);
 
-  int recentCount() const { return count() - engines_.size(); }
-
 protected slots:
   void invalidateEngines();
   void setEngineByIndex(int index);
   virtual void submitText(); ///< \override
 
   void updateText(const QString &text);
+  void searchWithEngine(int engine);
 
 private:
   void init()

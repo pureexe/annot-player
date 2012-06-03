@@ -9,11 +9,11 @@
 QT_FORWARD_DECLARE_CLASS(QComboBox)
 
 class AcLocationManager;
-class AcLocationPreferences : public AcPreferencesTab
+class AcLocationPrefs : public AcPreferencesTab
 {
   Q_OBJECT
-  Q_DISABLE_COPY(AcLocationPreferences)
-  typedef AcLocationPreferences Self;
+  Q_DISABLE_COPY(AcLocationPrefs)
+  typedef AcLocationPrefs Self;
   typedef AcPreferencesTab Base;
 
   AcLocationManager *locationManager_;
@@ -22,7 +22,7 @@ class AcLocationPreferences : public AcPreferencesTab
   QString downloadsLocationEditStyleSheet_;
 
 public:
-  explicit AcLocationPreferences(AcSettings *settings, QWidget *parent = 0);
+  explicit AcLocationPrefs(AcSettings *settings, QWidget *parent = 0);
 
 public slots:
   virtual bool save(); ///< \override

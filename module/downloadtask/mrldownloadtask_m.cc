@@ -1,4 +1,4 @@
-﻿// mrldownloadtask_m.cc
+// mrldownloadtask_m.cc
 // Download multiple parts.
 // 2/20/2012
 //
@@ -187,9 +187,12 @@ MrlDownloadTask::downloadMultipleMedia(const MediaInfo &mi, QNetworkCookieJar *j
           //p->deleteLater();
           //in->deleteLater();
           in->stop();
-          in->deleteLater();
-          if (nam->parent() == in)
+          //in->deleteLater();
+          if (nam && nam->parent() == in)
             nam = 0;
+          DOUT("deleting current stream");
+          delete in;
+          DOUT("current stream deleted");
 
           //emit warning(
           //  QString("%1 (%2/%3): ")
@@ -211,21 +214,30 @@ MrlDownloadTask::downloadMultipleMedia(const MediaInfo &mi, QNetworkCookieJar *j
          DOUT("deleting input stream");
          RemoteStream *p = dynamic_cast<RemoteStream *>(in);
          p->stop();
-         p->deleteLater();
+         DOUT("deleting previous stream");
+         //p->deleteLater();
+         delete p;
+         DOUT("previous stream deleted");
        }
        ins.clear();
      }
      if (jar) {
        DOUT("deleting cookie jar");
-       jar->deleteLater();
+       //jar->deleteLater();
+       delete jar;
+      DOUT("cookie jar deleted");
      }
    }
   if (ins.isEmpty()) {
     setState(Error);
     emit error(tr("access denied to download URL") + ": " + url());
     emit stopped();
-    if (jar)
-      jar->deleteLater();
+    if (jar) {
+      DOUT("deleting cookie jar");
+      //jar->deleteLater();
+      delete jar;
+      DOUT("cookie jar deleted");
+    }
     //nam->deleteLater();
     quit();
     DOUT("exit: download failure");
@@ -256,10 +268,17 @@ MrlDownloadTask::downloadMultipleMedia(const MediaInfo &mi, QNetworkCookieJar *j
     foreach (InputStream *in, QtExt::revertList(ins)) { // revert list so that nam will be deleted later
       RemoteStream *p = dynamic_cast<RemoteStream *>(in);
       p->stop();
-      p->deleteLater();
+      DOUT("deleting previous stream");
+      //p->deleteLater();
+      delete p;
+      DOUT("previous stream delete");
     }
-    if (jar)
-      jar->deleteLater();
+    if (jar) {
+      DOUT("deleting cookie jar");
+      //jar->deleteLater();
+      delete jar;
+      DOUT("cookie jar deleted");
+    }
     //nam->deleteLater();
     quit();
     DOUT("exit: cannot write to file");
@@ -287,10 +306,17 @@ MrlDownloadTask::downloadMultipleMedia(const MediaInfo &mi, QNetworkCookieJar *j
     foreach (InputStream *in, QtExt::revertList(ins)) { // revert list so that nam will be deleted later
       RemoteStream *p = dynamic_cast<RemoteStream *>(in);
       p->stop();
-      p->deleteLater();
+      DOUT("deleting previous stream");
+      //p->deleteLater();
+      delete p;
+      DOUT("previous stream deleted");
     }
-    if (jar)
-      jar->deleteLater();
+    if (jar) {
+      DOUT("deleting cookie jar");
+      //jar->deleteLater();
+      delete jar;
+      DOUT("cookie jar deleted");
+    }
     //nam->deleteLater();
     QFile::remove(fileName());
     quit();
@@ -338,10 +364,17 @@ MrlDownloadTask::downloadMultipleMedia(const MediaInfo &mi, QNetworkCookieJar *j
   foreach (InputStream *in, QtExt::revertList(ins)) { // revert list so that nam will be deleted later
     RemoteStream *p = dynamic_cast<RemoteStream *>(in);
     p->stop();
-    p->deleteLater();
+    DOUT("deleting previous stream");
+    //p->deleteLater();
+    delete p;
+    DOUT("previous stream deleted");
   }
-  if (jar)
-    jar->deleteLater();
+  if (jar) {
+    DOUT("deleting cookie jar");
+    //jar->deleteLater();
+    delete jar;
+    DOUT("cookie jar deleted");
+  }
   quit();
   //nam->deleteLater();
   DOUT("exit");

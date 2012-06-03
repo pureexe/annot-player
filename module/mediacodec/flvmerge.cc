@@ -9,6 +9,7 @@
 
 //#define DEBUG "flvmerge"
 #include "module/debug/debug.h"
+#include <QtCore/QDebug>
 
 // - Merge -
 
@@ -260,14 +261,15 @@ FlvMerge::readTag(InputStream *in, bool writeHeader)
   //emit timestampChanged(newTimestamp);
 
   // Data:
-  // - MediaInfo        UI8     Flags indicating codec, frame/sample rate, etc
-  // - First byte       UI8     Often the size of media data (0 for header)
+  // - MediaInfo        UI8             Flags indicating codec, frame/sample rate, etc
+  // - First byte       UI8 or UI16     Often the size of media data (0 for header)
   //bool isHeader = tagType == ScriptTag || !data[1];
   //if (!writeHeader && (tagType == ScriptTag || !data[1])) {
   //
   // WARNING: intermediate header data[1] is not skipped, because some of the codec uses UI16
-  if (!writeHeader && tagType == ScriptTag) {
-    DOUT("drop header at time" << newTimestamp);
+  if (!writeHeader && (tagType == ScriptTag || !data[1] && !data[2])) {
+    //DOUT("drop header at time" << newTimestamp);
+    qDebug() << "flvmerge::readTag: drop header at time" << newTimestamp;
     return true;
   }
 

@@ -11,7 +11,6 @@
 #ifdef Q_WS_WIN
 #  include "windowsregistry.h"
 #  include "module/player/player.h"
-#  include "win/qtwin/winreg.h"
 #endif // Q_WS_WIN
 #ifdef WITH_WIN_QTH
 #  include "win/qth/qth.h"
@@ -56,12 +55,14 @@ namespace { // anonymous
   inline void registerFileTypes()
   {
 #ifdef Q_WS_WIN
-    WindowsRegistry reg;
-    reg.setClassesRoot(REG_HKCU_SOFTWARE_CLASSES);
-    //reg.registerFileTypes(Player::supportedAudioSuffices());
-    reg.registerFileTypes(Player::supportedVideoSuffices());
-    //reg.registerFileTypes(Player::supportedPictureSuffices());
-    reg.registerFileTypes(Player::supportedSubtitleSuffices());
+    WindowsRegistry *reg = WindowsRegistry::globalInstance();
+    //reg->registerTypes(Player::supportedAudioSuffices());
+    reg->registerTypes(Player::supportedVideoSuffices());
+    //reg.registerTypes(Player::supportedPictureSuffices());
+    reg->registerTypes(Player::supportedImageSuffices());
+    reg->registerTypes(Player::supportedSubtitleSuffices());
+    reg->registerTypes(Player::supportedPlaylistSuffices());
+    //reg->registerTypes(QStringList() << ".exe" << ".lnk");
 #endif // Q_WS_WIN
   }
 
@@ -178,7 +179,8 @@ main(int argc, char *argv[])
 
     settings->setWindowOnTop(false);
     settings->setAutoSubmit(true);
-    settings->setAnnotationScale(1.0);
+    if (settings->annotationScale() < 1)
+      settings->setAnnotationScale(1.0);
     settings->setAnnotationEffect(0);
     settings->setAnnotationOffset(0);
     settings->setApplicationFilePath(QString());
@@ -197,7 +199,7 @@ main(int argc, char *argv[])
 
   // Moved
   if (settings->applicationFilePath() != QCoreApplication::applicationFilePath()) {
-    registerFileTypes();
+    registerFileTypes(); // REMOVE after 0.1.6.1
     settings->setApplicationFilePath(QCoreApplication::applicationFilePath());
     settings->sync();
   }

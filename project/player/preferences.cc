@@ -2,16 +2,18 @@
 // 5/24/2012
 
 #include "preferences.h"
-#include "preferences_p.h"
-#include "annotationsettings.h"
-#include <QtGui>
+#include "annotationprefs.h"
+#include "associationprefs.h"
 
 // - Constructions -
 
 Preferences::Preferences(QWidget *parent)
-  : Base(parent)
+  : Base(parent, false)
 {
-  addTab(new AnnotationPreferencesTab(AnnotationSettings::globalInstance(), this));
+#ifdef Q_WS_WIN
+  addTab(new AssociationPreferencesTab(this));
+#endif // Q_WS_WIN
+  addTab(new AnnotationPreferencesTab(this));
   finalize();
 }
 

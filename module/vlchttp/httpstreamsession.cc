@@ -1,4 +1,4 @@
-﻿// httpstreamsession.cc
+// httpstreamsession.cc
 // 3/14/2012
 //
 // QNetworkAccessManager is not shared, because of 6 requests limits, as follows:
@@ -35,7 +35,7 @@
 #define DEBUG "httpstreamsession"
 #include "module/debug/debug.h"
 
-enum { MaxDownloadRetries = 7, MinDownloadRetries = 2 };
+enum { MaxDownloadRetries = 10, MinDownloadRetries = 2 };
 enum { MaxIndividualDownloadRetries = 4 };
 
 // - Progress -
@@ -423,7 +423,7 @@ HttpStreamSession::run()
             QString("%1 (%2/%3): ")
             .arg(tr("failed to fetch HTTP header, retry"))
             .arg(QString::number(i+1))
-            .arg(QString::number(MaxIndividualDownloadRetries))
+            .arg(QString::number(MaxIndividualDownloadRetries-1))
             + url.toString()
           );
         }

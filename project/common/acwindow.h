@@ -7,6 +7,15 @@
 #include "module/qtext/draggablewidget.h"
 #include <QtCore/QList>
 
+#define AC_WINDOW_FLAGS ( \
+  Qt::Dialog | \
+  Qt::CustomizeWindowHint | \
+  Qt::WindowTitleHint | \
+  Qt::WindowSystemMenuHint | \
+  Qt::WindowMinMaxButtonsHint | \
+  Qt::WindowStaysOnTopHint | \
+  Qt::WindowCloseButtonHint )
+
 class AcTextView;
 class FadeAnimation;
 class RippleImageFilter;

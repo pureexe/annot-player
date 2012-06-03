@@ -151,6 +151,8 @@ TranslatorManager::translate(int tid) const
   case T_EMAIL:         return tr("Email");
   case T_LOGIN:         return tr("Login");
   case T_OK:            return tr("OK");
+  case T_APPLY:         return tr("Apply");
+  case T_GALGAME:       return tr("Galgame");
   case T_SAVE:          return tr("Save");
   case T_CANCEL:        return tr("Cancel");
   case T_ADD:           return tr("Add");
@@ -242,7 +244,7 @@ TranslatorManager::translate(int tid) const
   case T_TITLE_ANNOTATIONEDITOR:    tr("Annotation Editor");
   case T_TITLE_TOKENVIEW:       return tr("Token");
   case T_TITLE_COMMENTVIEW:     return tr("Comments");
-  case T_TITLE_ANNOTANALYTICS:     return tr("Annotations analytics");
+  case T_TITLE_ANNOTANALYTICS:     return tr("Annotations Analytics");
   case T_TITLE_SIGNALVIEW:      return tr("Select process signal");
   case T_TITLE_LIVE:            return tr("Live Channel");
   case T_TITLE_SYNC:            return tr("Sync Mode");
@@ -281,6 +283,7 @@ TranslatorManager::translate(int tid) const
   case T_TOOLTIP_ANNOTATIONITEM:return tr("Comment"); // TO BE GENERATED DYNAMICALL
   case T_TOOLTIP_INPUTLINE:     return tr("Annotation");
   case T_TOOLTIP_PREFIXLINE:    return tr("Annotation prefix");
+  case T_TOOLTIP_TRACE:         return tr("Trace Window");
 
   case T_SEEK:                  return tr("Seek");
 
@@ -290,6 +293,7 @@ TranslatorManager::translate(int tid) const
   case T_FORMAT_VIDEO:          return tr("Video");
   case T_FORMAT_AUDIO:          return tr("Audio");
   case T_FORMAT_PICTURE:        return tr("Picture");
+  case T_FORMAT_IMAGE:          return tr("Image");
   case T_FORMAT_SUBTITLE:       return tr("Subtitle");
   case T_FORMAT_PROGRAM:        return tr("Program");
 

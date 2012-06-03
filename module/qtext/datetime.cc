@@ -14,10 +14,10 @@ msecs2time(qint64 msecs)
   qint64 mins = secs ? secs/60 : 0;
   qint64 hours = mins ? mins/60 : 0;
 
-  int h = static_cast<int>(hours);
-  int m = mins ? static_cast<int>(mins % 60) : 0;
-  int s = secs ? static_cast<int>(secs % 60) : 0;
-  int ms = static_cast<int>(msecs % 1000);
+  int h = hours;
+  int m = mins ? int(mins % 60) : 0;
+  int s = secs ? int(secs % 60) : 0;
+  int ms = msecs % 1000;
 
   return QTime(h, m, s, ms);
 }

@@ -97,7 +97,7 @@ AcUi::setMainWindowStyle(QWidget *w)
   }
 #endif // WITH_WIN_DWM
   //if (qss)
-  //  w->setStyleSheet(SS_BACKGROUND_CLASS(MainWindow));
+  //  w->setStyleSheet(ACSS_BACKGROUND_CLASS(MainWindow));
   setWindowBackground(w, true); // persistent = true
   w->setWindowOpacity(AC_WINDOW_OPACITY);
 }
@@ -151,7 +151,7 @@ AcUi::setMenuBackground(QMenu *m, bool persistent)
   {
     QString rc = backgroundImage();
     m->setStyleSheet(
-      SS_CONTEXTMENU
+      ACSS_CONTEXTMENU
       SS_BEGIN(QMenu)
         SS_BACKGROUND_IMAGE_URL(+rc+)
       SS_END
@@ -230,9 +230,9 @@ AcUi::setWindowStyle(QWidget *w, bool persistent)
 
     //if (qss) {
     //  if(Dwm::isCompositionEnabled())
-    //    w->setStyleSheet(SS_WINDOW_DWM);
+    //    w->setStyleSheet(ACSS_WINDOW_DWM);
     //  else
-    //    w->setStyleSheet(SS_WINDOW);
+    //    w->setStyleSheet(ACSS_WINDOW);
     //}
   }
 #endif // WITH_WIN_DWM
@@ -246,7 +246,7 @@ AcUi::setWindowStyle(QWidget *w, bool persistent)
   w->setWindowOpacity(AC_WINDOW_OPACITY);
 
   //if (qss)
-  //  w->setStyleSheet(SS_WINDOW);
+  //  w->setStyleSheet(ACSS_WINDOW);
 
   /*
 #ifdef Q_WS_X11
@@ -278,7 +278,7 @@ AcUi::setMenuStyle(QMenu *menu)
   }
 #endif // WITH_WIN_DWM
 
-  menu->setStyleSheet(SS_MENU);
+  menu->setStyleSheet(ACSS_MENU);
 }
 */
 
@@ -296,7 +296,7 @@ AcUi::setContextMenuStyle(QMenu *w, bool persistent)
     else
       DWM_ENABLE_ONETIME_AERO_WIDGET(w)
     //if (qss)
-    //  w->setStyleSheet(SS_CONTEXTMENU_DWM);
+    //  w->setStyleSheet(ACSS_CONTEXTMENU_DWM);
 
     QGraphicsColorizeEffect *e = qobject_cast<QGraphicsColorizeEffect *>(w->graphicsEffect());
     if (!e)
@@ -326,14 +326,14 @@ AcUi::setToolButtonStyle(QToolButton *w)
   if (!w)
     return;
 
-#ifdef Q_WS_WIN
-  QGraphicsBlurEffect *e = qobject_cast<QGraphicsBlurEffect *>(w->graphicsEffect());
-  if (!e)
-    e = new QGraphicsBlurEffect;
-  e->setBlurHints(QGraphicsBlurEffect::PerformanceHint);
-  e->setBlurRadius(AC_TOOLBUTTON_BLUR_RADIUS);
-  w->setGraphicsEffect(e);
-#endif // Q_WS_WIN
+//#ifdef Q_WS_WIN
+//  QGraphicsBlurEffect *e = qobject_cast<QGraphicsBlurEffect *>(w->graphicsEffect());
+//  if (!e)
+//    e = new QGraphicsBlurEffect;
+//  e->setBlurHints(QGraphicsBlurEffect::PerformanceHint);
+//  e->setBlurRadius(AC_TOOLBUTTON_BLUR_RADIUS);
+//  w->setGraphicsEffect(e);
+//#endif // Q_WS_WIN
 }
 
 void
@@ -342,7 +342,7 @@ AcUi::setStatusBarStyle(QStatusBar *w)
   Q_ASSERT(w);
 #ifdef WITH_WIN_DWM
   if (isAeroEnabled())
-    w->setStyleSheet(SS_STATUSBAR_DWM);
+    w->setStyleSheet(ACSS_STATUSBAR_DWM);
 #else
   Q_UNUSED(w);
 #endif // WITH_WIN_DWM
@@ -358,13 +358,13 @@ AcUi::makeToolButton(ulong hints, const QString &title, const QString &tip, cons
   ret->setToolButtonStyle(Qt::ToolButtonTextOnly);
 
   ret->setStyleSheet(
-        hints & InvertHint ? SS_TOOLBUTTON_TEXT_INVERT :
-        hints & HighlightHint ? SS_TOOLBUTTON_TEXT_HIGHLIGHT :
-        hints & PushHint ? SS_TOOLBUTTON_TEXT_NORMAL :
-        hints & CheckHint ? SS_TOOLBUTTON_TEXT_CHECKABLE :
-        hints & TabHint ? SS_TOOLBUTTON_TEXT_TAB :
-        hints & UrlHint ? SS_TOOLBUTTON_TEXT_URL :
-        SS_TOOLBUTTON_TEXT
+        hints & InvertHint ? ACSS_TOOLBUTTON_TEXT_INVERT :
+        hints & HighlightHint ? ACSS_TOOLBUTTON_TEXT_HIGHLIGHT :
+        hints & PushHint ? ACSS_TOOLBUTTON_TEXT_NORMAL :
+        hints & CheckHint ? ACSS_TOOLBUTTON_TEXT_CHECKABLE :
+        hints & TabHint ? ACSS_TOOLBUTTON_TEXT_TAB :
+        hints & UrlHint ? ACSS_TOOLBUTTON_TEXT_URL :
+        ACSS_TOOLBUTTON_TEXT
   );
 
   if (!title.isEmpty())
@@ -403,9 +403,9 @@ AcUi::makeLabel(ulong hints, const QString &title, const QString &tip, QWidget *
 {
   QLabel *ret = new QLabel;
 
-  ret->setStyleSheet(hints & HighlightHint ? SS_LABEL_HIGHLIGHT :
-                     hints & UrlHint ? SS_LABEL_URL :
-                     SS_LABEL);
+  ret->setStyleSheet(hints & HighlightHint ? ACSS_LABEL_HIGHLIGHT :
+                     hints & UrlHint ? ACSS_LABEL_URL :
+                     ACSS_LABEL);
   ret->setText(hints & BuddyHint ? title + ":" : title);
   ret->setToolTip(tip.isEmpty() ? title : tip);
 
@@ -415,16 +415,41 @@ AcUi::makeLabel(ulong hints, const QString &title, const QString &tip, QWidget *
   return ret;
 }
 
+QGroupBox*
+AcUi::makeGroupBox(ulong hints, const QString &title, const QString &tip)
+{
+  QGroupBox *ret = new QGroupBox;
+  ret->setStyleSheet(ACSS_GROUPBOX);
+  if (!title.isEmpty()) {
+    if (hints & TabHint)
+      ret->setTitle(QString("- %1 -").arg(title));
+    else
+      ret->setTitle(title);
+  }
+  ret->setToolTip(tip.isEmpty() ? title : tip);
+
+  return ret;
+}
+
 QRadioButton*
-AcUi::makeRadioButton(ulong hints, const QString &title, const QString &tip)
+AcUi::makeRadioButton(ulong hints, const QString &text, const QString &tip)
 {
   Q_UNUSED(hints);
   QRadioButton *ret = new QRadioButton;
+  ret->setStyleSheet(ACSS_RADIOBUTTON);
+  ret->setText(text);
+  ret->setToolTip(tip.isEmpty() ? text : tip);
+  return ret;
+}
 
-  ret->setStyleSheet(SS_RADIOBUTTON_TEXT);
-  ret->setText(title);
-  ret->setToolTip(tip.isEmpty() ? title : tip);
-
+QCheckBox*
+AcUi::makeCheckBox(ulong hints, const QString &text, const QString &tip)
+{
+  Q_UNUSED(hints);
+  QCheckBox *ret = new QCheckBox;
+  ret->setStyleSheet(ACSS_CHECKBOX);
+  ret->setText(text);
+  ret->setToolTip(tip.isEmpty() ? text : tip);
   return ret;
 }
 
@@ -446,7 +471,7 @@ AcUi::makeComboBox(ulong hints, const QString &text, const QString &tip, const Q
     ret = new AcComboEdit(items);
   else {
     ret = new QtExt::ComboBox;
-    ret->setStyleSheet(SS_COMBOBOX);
+    ret->setStyleSheet(ACSS_COMBOBOX);
     ret->addItems(items);
   }
 

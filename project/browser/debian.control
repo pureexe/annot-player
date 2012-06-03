@@ -1,7 +1,7 @@
 # debian/control
 # 11/26/2011
 Source: annot-browser
-Standards-Version: 0.1.2.5
+Standards-Version: 0.1.2.6
 Section: network
 Maintainer: Annot Cloud <annotcloud@gmail.com>
 Priority: optional

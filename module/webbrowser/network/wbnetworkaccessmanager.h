@@ -34,6 +34,7 @@ protected:
   static QUrl encodeNicoUrl(const QUrl &url);
   static QUrl encodeNicoWatchUrl(const QUrl &url);
   static QUrl encodeEroUrl(const QUrl &url);
+  static QUrl encodeGetchuUrl(const QUrl &url);
   static QUrl encodeAb2Url(const QUrl &url);
   static QUrl encodeAb2TryUrl(const QUrl &url);
   static QUrl encodeAkatsukiWorksUrl(const QUrl &url);

@@ -11,7 +11,7 @@
 
 // - Constructions -
 
-AcAccountPreferences::AcAccountPreferences(AcSettings *settings, QWidget *parent)
+AcAccountPrefs::AcAccountPrefs(AcSettings *settings, QWidget *parent)
   : Base(settings, parent)
 {
   setWindowTitle(tr("Account"));
@@ -19,7 +19,7 @@ AcAccountPreferences::AcAccountPreferences(AcSettings *settings, QWidget *parent
 }
 
 void
-AcAccountPreferences::createLayout()
+AcAccountPrefs::createLayout()
 {
   AcUi *ui = AcUi::globalInstance();
 
@@ -69,15 +69,15 @@ AcAccountPreferences::createLayout()
 // - Actions -
 
 void
-AcAccountPreferences::visitNicovideo()
+AcAccountPrefs::visitNicovideo()
 { QDesktopServices::openUrl(QString("http://www.nicovideo.jp")); }
 
 void
-AcAccountPreferences::visitBilibili()
+AcAccountPrefs::visitBilibili()
 { QDesktopServices::openUrl(QString("http://www.bilibili.tv")); }
 
 void
-AcAccountPreferences::load()
+AcAccountPrefs::load()
 {
   QString username, password;
   boost::tie(username, password) = settings()->nicovideoAccount();
@@ -90,7 +90,7 @@ AcAccountPreferences::load()
 }
 
 bool
-AcAccountPreferences::save()
+AcAccountPrefs::save()
 {
   QString username, password;
   username = nicovideoUsernameEdit_->currentText().trimmed();
@@ -105,7 +105,7 @@ AcAccountPreferences::save()
 }
 
 void
-AcAccountPreferences::saveIfValid()
+AcAccountPrefs::saveIfValid()
 {
   QString username, password;
   username = nicovideoUsernameEdit_->currentText().trimmed();

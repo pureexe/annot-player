@@ -364,7 +364,8 @@ DataServer::selectRelatedAliasesWithTokenId(qint64 tid)
       ret = server_->selectRelatedAliasesWithTokenId(tid);
       if (cache_->isValid()) {
         cache_->deleteAliasesWithTokenId(tid);
-        cache_->insertAliases(ret);
+        if (!ret.isEmpty())
+          cache_->insertAliases(ret);
       }
     } else if (!preferLocal_ && cache_->isValid())
       ret = cache_->selectAliasesWithTokenId(tid);
@@ -386,7 +387,14 @@ DataServer::selectRelatedAnnotationsWithTokenId(qint64 tid, bool invalidateCache
       ret = server_->selectRelatedAnnotationsWithTokenId(tid);
       if (cache_->isValid()) {
         cache_->deleteAnnotationsWithTokenId(tid);
-        cache_->insertAnnotations(ret);
+        if (!ret.isEmpty()) {
+          AnnotationList l;
+          foreach (Annotation a, ret) {
+            a.setTokenId(tid);
+            l.append(a);
+          }
+          cache_->insertAnnotations(l);
+        }
       }
     } else if (!preferLocal && cache_->isValid())
       ret = cache_->selectAnnotationsWithTokenId(tid);
@@ -432,7 +440,7 @@ DataServer::selectAliasesWithToken(const Token &token)
   if (preferLocal_ && cache_->isValid()) {
     if (token.isValid())
       ret = cache_->selectAliasesWithTokenId(token.id());
-    else
+    else if (token.hasDigest())
       ret = cache_->selectAliasesWithTokenDigest(token.digest(), token.part());
   }
   if (ret.isEmpty()) {
@@ -454,7 +462,7 @@ DataServer::selectAnnotationsWithToken(const Token &token, bool invalidateCache)
   if (preferLocal && cache_->isValid()) {
     if (token.isValid())
       ret = cache_->selectAnnotationsWithTokenId(token.id());
-    else
+    else if (token.hasDigest())
       ret = cache_->selectAnnotationsWithTokenDigest(token.digest(), token.part());
   }
   if (ret.isEmpty()) {

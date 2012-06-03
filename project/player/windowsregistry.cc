@@ -4,6 +4,11 @@
 #include "windowsregistry.h"
 #include "global.h"
 #include "tr.h"
+#ifdef Q_WS_WIN
+#  include "win/qtwin/winreg.h"
+#else
+#  error "Windows only"
+#endif // Q_WS_WIN
 #include <QtCore>
 
 #define APPID   G_ORGANIZATION "." G_APPLICATION
@@ -12,6 +17,14 @@
 #include "module/debug/debug.h"
 
 // - Construction -
+
+WindowsRegistry*
+WindowsRegistry::globalInstance()
+{
+  static Self g;
+  g.setClassesRoot(REG_HKCU_SOFTWARE_CLASSES);
+  return &g;
+}
 
 void
 WindowsRegistry::setClassesRoot(const QString &regpath)
@@ -28,16 +41,35 @@ WindowsRegistry::sync()
 // - Register -
 
 void
-WindowsRegistry::registerFileTypes(const QStringList &suffices)
+WindowsRegistry::registerTypes(const QStringList &suffices)
 {
   DOUT("enter: suffices =" << suffices);
   foreach (const QString &suffix, suffices)
-    registerFileType(suffix);
+    registerType(suffix);
   DOUT("exit");
 }
 
+bool
+WindowsRegistry::containsType(const QString &type) const
+{
+  Q_ASSERT(isValid());
+  DOUT("type =" << type);
+
+  if (!classes_ || type.isEmpty())
+    return false;
+  QString suffix = type;
+  if (!suffix.startsWith('.'))
+    suffix.prepend('.');
+
+  QString alias = APPID + suffix;
+  QString aliasId = suffix + "/OpenWithProgIds/" + alias;
+  bool ret = classes_->contains(aliasId);
+  DOUT("ret =" << ret);
+  return ret;
+}
+
 void
-WindowsRegistry::registerFileType(const QString &type)
+WindowsRegistry::registerType(const QString &type)
 {
   Q_ASSERT(isValid());
   DOUT("type =" << type);
@@ -75,6 +107,27 @@ WindowsRegistry::registerFileType(const QString &type)
   classes_->setValue("shell/open/.", open);
   classes_->setValue("shell/open/command/.", command);
   classes_->endGroup();
+
+  DOUT("status =" << classes_->status());
+}
+
+void
+WindowsRegistry::unregisterType(const QString &type)
+{
+  Q_ASSERT(isValid());
+  DOUT("type =" << type);
+
+  if (!classes_ || type.isEmpty())
+    return;
+  QString suffix = type;
+  if (!suffix.startsWith('.'))
+    suffix.prepend('.');
+
+  QString alias = APPID + suffix;
+  QString aliasId = suffix + "/OpenWithProgIds/" + alias;
+
+  classes_->remove(aliasId);
+  classes_->remove(alias);
 
   DOUT("status =" << classes_->status());
 }

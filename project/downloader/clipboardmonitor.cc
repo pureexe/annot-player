@@ -29,7 +29,7 @@ ClipboardMonitor::invalidateClipboard()
   QClipboard *c = QApplication::clipboard();
   if (!c)
     return;
-  QString text = c->text();
+  QString text = c->text().trimmed();
   if (!text.isEmpty())
     parseUrl(text);
 }
@@ -37,35 +37,19 @@ ClipboardMonitor::invalidateClipboard()
 void
 ClipboardMonitor::parseUrl(const QString &text)
 {
-  QString t = text.trimmed();
-  if (t.isEmpty())
-    return;
-  QStringList l = t.split('\n', QString::SkipEmptyParts);
-  Q_ASSERT(!l.isEmpty());
-  QString url = l.front().trimmed();
-  if (url.startsWith("ttp://"))
-    url.prepend("h");
-  else if (!url.startsWith("http://", Qt::CaseInsensitive))
-    url.prepend("http://");
-  if (isSupportedAnnotationUrl(url)) {
-    emit message(tr("annot URL from clipboard") + ": " + url);
-    emit annotationUrlEntered(url);
-  } else if (isSupportedMediaUrl(url)) {
-    emit message(tr("media URL from clipboard") + ": " + url);
-    emit mediaUrlEntered(url);
-  } else
-    DOUT("unsupported URL:" << url);
+  QStringList l = text.split('\n', QString::SkipEmptyParts);
+  foreach (QString url, l) {
+    url = url.trimmed();
+    if (url.startsWith("ttp://"))
+      url.prepend("h");
+    else if (!url.startsWith("http://", Qt::CaseInsensitive))
+      url.prepend("http://");
+    if (isSupportedMediaUrl(url))
+      emit urlEntered(url);
+  }
 }
 
 // - Helpers -
-
-bool
-ClipboardMonitor::isSupportedAnnotationUrl(const QString &url)
-{
-  int site;
-  return (site = MrlAnalysis::matchSite(url)) &&
-          site < MrlAnalysis::AnnotationSite;
-}
 
 bool
 ClipboardMonitor::isSupportedMediaUrl(const QString &url)

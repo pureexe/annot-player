@@ -8,8 +8,10 @@
 #include <QWidgetList>
 
 QT_BEGIN_NAMESPACE
+class QCheckBox;
 class QComboBox;
 class QDialog;
+class QGroupBox;
 class QLabel;
 class QLineEdit;
 class QMenu;
@@ -55,9 +57,9 @@ QT_END_NAMESPACE
   }
 
 #else
-  #define DWM_ENABLE_AERO_WIDGET(_w)            ({ })
-  #define DWM_DISABLE_AERO_WIDGET(_w)           ({ })
-  #define DWM_ENABLE_ONETIME_AERO_WIDGET(_w) ({ })
+#  define DWM_ENABLE_AERO_WIDGET(_w)            ({ })
+#  define DWM_DISABLE_AERO_WIDGET(_w)           ({ })
+#  define DWM_ENABLE_ONETIME_AERO_WIDGET(_w) ({ })
 #endif // WITH_WIN_DWM
 
 #define AC_CONTEXTMENU_OPACITY           0.8
@@ -148,8 +150,12 @@ public:
       const QString &text = QString(), const QString &tip = QString(), const QString &holder = QString(), const QStringList &items = QStringList());
   QLineEdit *makeLineEdit(ulong hints = 0,
       const QString &text = QString(), const QString &tip = QString(), const QString &holder = QString());
+  QGroupBox *makeGroupBox(ulong hints = 0,
+      const QString &text = QString(), const QString &tip = QString());
   QRadioButton *makeRadioButton(ulong hints = 0,
-      const QString &title = QString(), const QString &tip = QString());
+      const QString &text = QString(), const QString &tip = QString());
+  QCheckBox *makeCheckBox(ulong hints = 0,
+      const QString &text = QString(), const QString &tip = QString());
 
   QToolButton *makeToolButton(ulong hints = 0,
       const QString &title = QString(), const QString &tip = QString(), const QString &key = QString(),

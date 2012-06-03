@@ -27,22 +27,27 @@ class AnnotationSettings : public QObject
   int offset_;
   QFont font_;
 
+  bool avatarVisible_;
+
 public:
   static Self *globalInstance() { static Self g; return &g; }
 protected:
   explicit AnnotationSettings(QObject *parent = 0)
-    : Base(parent), scale_(1), rotation_(0), offset_(0)
+    : Base(parent), scale_(1), rotation_(0), offset_(0),
+      avatarVisible_(false)
   { resetFont(); }
 
 signals:
   void scaleChanged(qreal value);
   void rotationChanged(qreal value);
   void offsetChanged(int value);
+  void avatarVisibleChanged(bool value);
   //void fontChanged(const QFont &value);
 public:
   qreal scale() const { return scale_; }
   qreal rotation() const { return rotation_; }
   int offset() const { return offset_; }
+  bool isAvatarVisible() const { return avatarVisible_; }
 
   QFont &font() { return font_; }
   QFont font() const { return font_; }
@@ -77,6 +82,9 @@ public slots:
     ));
     setFont(font);
   }
+
+  void setAvatarVisible(bool value)
+  { if (avatarVisible_ != value) emit avatarVisibleChanged(avatarVisible_ = value); }
 };
 
 #endif // ANNOTATIONSETTINGS_H

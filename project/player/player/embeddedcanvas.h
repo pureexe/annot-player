@@ -29,7 +29,8 @@ signals:
 
 public:
   bool isEnabled() const { return enabled_; }
-  bool isEmpty() const;
+  //bool isEmpty() const;
+  bool needsDisplay() const;
 public slots:
   void invalidatePaint() { if (isVisible()) repaint(); }
 
@@ -49,6 +50,7 @@ protected:
   // - Paint -
 protected:
   void paintHistogram(QPainter &painter, const QRect &view, const AnnotCloud::AnnotationList &l);
+  void paintCoordinate(QPainter &painter, const QRect &view);
 
   static void drawCross(QPainter &painter, const QPoint &center, int size = 5);
 

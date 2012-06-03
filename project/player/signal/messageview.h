@@ -9,8 +9,8 @@
 #include <QtCore/QStringList>
 
 QT_BEGIN_NAMESPACE
-class QComboBox;
 class QLabel;
+class QSpinBox;
 class QTextEdit;
 class QToolButton;
 QT_END_NAMESPACE
@@ -100,7 +100,7 @@ private:
 private:
   bool active_;
   QString processName_;
-  QComboBox *hookComboBox_;
+  QSpinBox *hookIndexEdit_;
   QTextEdit *textEdit_;
   QLabel *hookCountLabel_;
 

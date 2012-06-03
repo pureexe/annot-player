@@ -32,11 +32,11 @@ UserView::createLayout()
 {
 #define MAKE_BUDDY(_name, _text) \
   _name##Label_ = new QLabel; { \
-    _name##Label_->setStyleSheet(SS_LABEL); \
+    _name##Label_->setStyleSheet(ACSS_LABEL); \
     _name##Label_->setToolTip(_text); \
   } \
   QLabel *_name##Buddy = new QLabel; { \
-    _name##Buddy->setStyleSheet(SS_LABEL); \
+    _name##Buddy->setStyleSheet(ACSS_LABEL); \
     _name##Buddy->setBuddy(_name##Label_); \
     _name##Buddy->setText(_text + ":"); \
     _name##Buddy->setToolTip(_text); \

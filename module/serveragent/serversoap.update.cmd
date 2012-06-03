@@ -41,10 +41,16 @@ copy "%TYPEMAP_URL%"
 :: -j: C style global functions, this is default, opposite of -i
 :: -1: generate SOAP 1.1 bindings
 :: -2: generate SOAP 1.2 bindings
+
 wsdl2h -q%NAMESPACE% -o"%HEADER%" "%WSDL_URL%" && soapcpp2 -C -i -1 -I"%GSOAP_INCLUDE%" "%HEADER%"
+
+::wsdl2h -q%NAMESPACE% -o"%HEADER%" "%WSDL_URL%"
+::pause
+::soapcpp2 -C -i -1 -I"%GSOAP_INCLUDE%" "%HEADER%"
 
 echo %ERRORLEVEL%
 
 dos2unix * 2>nul
+touch *.cc *.h
 popd
 pause

@@ -39,6 +39,17 @@ AnnotationComboEdit::edit()
 // - Events -
 
 void
+AnnotationComboEdit::keyPressEvent(QKeyEvent *event)
+{
+  if (event->key() == Qt::Key_Space && currentText().isEmpty()) {
+    if (QObject *receiver = parent())
+      QCoreApplication::sendEvent(receiver, event);
+    return;
+  }
+  Base::keyPressEvent(event);
+}
+
+void
 AnnotationComboEdit::contextMenuEvent(QContextMenuEvent *event)
 {
   Q_ASSERT(event);

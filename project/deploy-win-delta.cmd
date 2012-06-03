@@ -3,12 +3,14 @@
 setlocal
 cd /d d:/devel/build || exit /b 1
 
-set MAJOR=0.1.5
-set MINOR=6
+set MAJOR=0.1.6
+set MINOR=0
 set VERSION=%MAJOR%.%MINOR%
+::set PREVMAJOR=%MAJOR%
+set PREVMAJOR=0.1.5
 set APP=annot-player
 set TARGET=Annot Stream
-set ZIPFILE=%APP%-%MAJOR%-%VERSION%-delta-win.zip
+set ZIPFILE=%APP%-%PREVMAJOR%-%VERSION%-delta-win.zip
 
 ::set BASENAME=%APP%-%VERSION%-win
 ::rm -Rf "%BASENAME%" || exit 1
@@ -21,16 +23,15 @@ set MSVC_DLLS=msvcp100.dll,msvcr100.dll
 ::set MSVC90_HOME=/Volumes/win/Program Files/Microsoft Visual Studio 9.0
 ::set MSVC90_REDIST=%MSVC90_HOME%/VC/redist/x86/Microsoft.VC90.CRT
 
-::set QT_HOME=/Volumes/win/qt/current
-set QT_DLLS=QtCore4.dll,QtGui4.dll,QtNetwork4.dll,QtScript4.dll,QtSql4.dll,QtSvg4.dll,QtWebkit4.dll,QtXml4.dll,phonon4.dll
-::set QT_TRANSLATIONS=qt_ja.qm,qt_zh_CN.qm,qt_zh_TW.qm
+set QT_HOME=/Volumes/win/qt/current
+set QT_DLLS=QtCore4.dll,QtDeclarative4.dll,QtGui4.dll,QtNetwork4.dll,QtScript4.dll,QtSql4.dll,QtSvg4.dll,QtWebkit4.dll,QtXml4.dll,QtXmlPatterns4.dll,phonon4.dll
+set QT_TRANSLATIONS=qt_ja.qm,qt_zh_CN.qm,qt_zh_TW.qm
+set QT_PLUGINS=accessible bearer codecs graphicssystems iconengines imageformats sqldrivers
 
 ::set ITH_HOME=/Volumes/win/dev/ith
 set ITH_DLLS=ITH.dll,ITH_engine.dll
 
-::set OPENSSL_HOME=/Volumes/win/dev/openssl -- DO NOT WORK
-::set OPENSSL_HOME=/Volumes/win/apps/subversion -- ALSO WORK
-set OPENSSL_HOME=/Volumes/win/apps/php
+set OPENSSL_HOME=/Volumes/win/dev/openssl/1.0.0j
 set OPENSSL_DLLS=libeay32.dll,ssleay32.dll
 
 ::set GPAC_HOME=/Volumes/win/dev/gpac
@@ -83,21 +84,17 @@ unix2dos COPYING.txt
 mkdir Data
 cd Data || exit /b 1
 
-::mkdir translations
-::cp -v "%QT_HOME%"/translations/{%QT_TRANSLATIONS%} translations/ || exit /b 1
-::
-::mkdir imageformats
-::cp -v "%QT_HOME%"/plugins/imageformats/*4.dll imageformats/ || exit /b 1
-::rm -f imageformats/*d4.dll
-::
-::mkdir codecs
-::cp -v "%QT_HOME%"/plugins/codecs/*4.dll codecs/ || exit /b 1
-::rm -f codecs/*d4.dll
-::
-::mkdir sqldrivers
-::cp -v "%QT_HOME%"/plugins/sqldrivers/qsqlite4.dll sqldrivers/ || exit /b 1
-::
-::cp -v "%QT_HOME%"/bin/{%QT_DLLS%} . || exit /b 1
+mkdir translations
+cp -v "%QT_HOME%"/translations/{%QT_TRANSLATIONS%} translations/ || exit /b 1
+
+for %%i in (%QT_PLUGINS%) do (
+  mkdir %%i
+  cp -v "%QT_HOME%"/plugins/%%i/*4.dll %%i/ || exit /b 1
+  rm -f %%i/*d4.dll
+)
+
+rm -f sqldrivers/{qsqlodbc4.dll,qsqlpsql4.dll}
+::rm -f graphicssystems/qglgraphicssystem4.dll
 
 ::cp -v "%MSVC_HOME%"/{%MSVC_DLLS%} . || exit /b 1
 ::cp -Rv "%MSVC90_REDIST%" . || exit /b 1
@@ -127,7 +124,7 @@ rm -fv hook.dll
 rm -fv webbrowser.dll
 
 rm -fv {%MSVC_DLLS%}
-rm -fv {%QT_DLLS%}
+::rm -fv {%QT_DLLS%}
 rm -fv {%ITH_DLLS%}
 rm -fv {%VLC_DLLS%}
 rm -fv %ZLIB_DLL%

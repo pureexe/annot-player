@@ -6,8 +6,8 @@
 #include "rc.h"
 #include "global.h"
 #include "application.h"
+#include "preferences.h"
 #include "project/common/acabout.h"
-#include "project/common/acpreferences.h"
 #include "project/common/acsettings.h"
 #include "project/common/acui.h"
 #include "project/common/acbrowser.h"
@@ -96,13 +96,17 @@ MainWindow::MainWindow(QWidget *parent)
   setBlockedUrls(QList<QUrl>()
     << QString("http://googlesyndication.com")
     << QString("http://wangmeng.baidu.com")
+    << QString("http://www.baidu.com/adrc.php")
     << QString("http://cpro.baidu.com")
     << QString("http://static.loli.my/ad-images")
     << QString("http://ads.nicovideo.jp")
+    << QString("http://taobao.com")
     << QString("http://u17.com")
     << QString("http://u17i.com")
+    << QString("http://u17t.com")
     << QString("http://17kuxun.com")
-    << QString("http://taobao.com")
+    << QString("http://huoying.com")
+    << QString("http://8864.com")
     << QString("http://www.bilibili.tv/html/arcgg.html")
   );
 
@@ -328,6 +332,9 @@ MainWindow::createMenus()
     m->addAction(tr("&Console"), this, SLOT(showConsole()));
     m->addAction(tr("&About"), this, SLOT(about())); // DO NOT TRANSLATE ME
   }
+#ifdef Q_WS_WIN
+  new QShortcut(QKeySequence("ALT+O"), this, SLOT(preferences()));
+#endif // Q_WS_WIN
 }
 
 QStringList
@@ -645,7 +652,7 @@ MainWindow::isValidWindowSize(const QSize &size) const
 void
 MainWindow::clip()
 {
-  QtExt::WebView *w = dynamic_cast<QtExt::WebView *>(tabWidget());
+  QtExt::WebView *w = qobject_cast<QtExt::WebView *>(tabWidget());
   if (w)
     w->clip();
 }
@@ -653,7 +660,7 @@ MainWindow::clip()
 void
 MainWindow::reload()
 {
-  QtExt::WebView *w = dynamic_cast<QtExt::WebView *>(tabWidget());
+  QtExt::WebView *w = qobject_cast<QtExt::WebView *>(tabWidget());
   if (w)
     w->reload();
 }
@@ -661,7 +668,7 @@ MainWindow::reload()
 void
 MainWindow::stop()
 {
-  QtExt::WebView *w = dynamic_cast<QtExt::WebView *>(tabWidget());
+  QtExt::WebView *w = qobject_cast<QtExt::WebView *>(tabWidget());
   if (w)
     w->stop();
 }
@@ -669,7 +676,7 @@ MainWindow::stop()
 void
 MainWindow::zoomIn()
 {
-  QtExt::WebView *w = dynamic_cast<QtExt::WebView *>(tabWidget());
+  QtExt::WebView *w = qobject_cast<QtExt::WebView *>(tabWidget());
   if (w)
     w->zoomIn();
 }
@@ -677,7 +684,7 @@ MainWindow::zoomIn()
 void
 MainWindow::zoomOut()
 {
-  QtExt::WebView *w = dynamic_cast<QtExt::WebView *>(tabWidget());
+  QtExt::WebView *w = qobject_cast<QtExt::WebView *>(tabWidget());
   if (w)
     w->zoomOut();
 }
@@ -685,7 +692,7 @@ MainWindow::zoomOut()
 void
 MainWindow::zoomReset()
 {
-  QtExt::WebView *w = dynamic_cast<QtExt::WebView *>(tabWidget());
+  QtExt::WebView *w = qobject_cast<QtExt::WebView *>(tabWidget());
   if (w)
     w->zoomReset();
 }
@@ -704,7 +711,7 @@ MainWindow::inspect()
 void
 MainWindow::scrollTop()
 {
-  QtExt::WebView *w = dynamic_cast<QtExt::WebView *>(tabWidget());
+  QtExt::WebView *w = qobject_cast<QtExt::WebView *>(tabWidget());
   if (w)
     w->scrollTop();
 }
@@ -712,7 +719,7 @@ MainWindow::scrollTop()
 void
 MainWindow::scrollBottom()
 {
-  QtExt::WebView *w = dynamic_cast<QtExt::WebView *>(tabWidget());
+  QtExt::WebView *w = qobject_cast<QtExt::WebView *>(tabWidget());
   if (w)
     w->scrollBottom();
 }
@@ -733,7 +740,7 @@ MainWindow::preferences()
 {
   static QWidget *w = 0;
   if (!w) {
-    w = new AcPreferences(AcPreferences::NetworkProxyTab);
+    w = new Preferences;
     connect(qApp, SIGNAL(aboutToQuit()), w, SLOT(close()));
   }
   w->show();

@@ -2,7 +2,7 @@ Annot Browser - web browser with proxy
 Homepage: http://annot.me
 Source:   http://code.google.com/p/annot-player
 
-Copyright (C) 2010-2011  Annot Cloud (annotcloud@gmail.com)
+Copyright (C) 2011-2012  Annot Cloud (annotcloud@gmail.com)
 
 Annot Player is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

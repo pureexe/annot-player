@@ -19,7 +19,7 @@ TextEditTabView::addTab(const QString &tabName)
 
 AcTextView*
 TextEditTabView::textWidget(int tab) const
-{ return dynamic_cast<AcTextView *>(widget(tab)); }
+{ return qobject_cast<AcTextView *>(widget(tab)); }
 
 // - Actions -
 

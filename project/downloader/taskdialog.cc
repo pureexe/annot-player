@@ -111,7 +111,7 @@ TaskDialog::lastUrl() const
 {
   if (textView_->isEmpty())
     return QString();
-  QString text = textView_->last().trimmed();
+  QString text = textView_->toPlainText().trimmed();
   QStringList urls = text.split('\n', QString::SkipEmptyParts);
   return urls.isEmpty() ? QString() : urls.last().trimmed();
 }
@@ -181,28 +181,29 @@ TaskDialog::increase()
 void
 TaskDialog::decrease()
 {
-  QString prevUrl = lastUrl();
-  if (prevUrl.isEmpty())
-    return;
-  QString url = prevUrl;
-  bool ac = url.contains(MA_EIGEN_BILIBILI, Qt::CaseInsensitive) ||
-            url.contains(MA_EIGEN_ACFUN, Qt::CaseInsensitive);
-  if (ac) {
-    if (url.endsWith('#'))
-      url.chop(1);
-    if (!url.endsWith('/') ||
-        url.endsWith("/index_1.html"))
-      return;
-  }
-  url = QtExt::decreaseString(url);
-
-  if (ac) {
-    url.replace(QRegExp("/index_1.html$"), "/")
-       .replace(QRegExp("/index_0.html$"), "/");
-  }
-
-  if (url != prevUrl)
-    addText(url);
+  textView_->removeLastLine();
+  //QString prevUrl = lastUrl();
+  //if (prevUrl.isEmpty())
+  //  return;
+  //QString url = prevUrl;
+  //bool ac = url.contains(MA_EIGEN_BILIBILI, Qt::CaseInsensitive) ||
+  //          url.contains(MA_EIGEN_ACFUN, Qt::CaseInsensitive);
+  //if (ac) {
+  //  if (url.endsWith('#'))
+  //    url.chop(1);
+  //  if (!url.endsWith('/') ||
+  //      url.endsWith("/index_1.html"))
+  //    return;
+  //}
+  //url = QtExt::decreaseString(url);
+//
+  //if (ac) {
+  //  url.replace(QRegExp("/index_1.html$"), "/")
+  //     .replace(QRegExp("/index_0.html$"), "/");
+  //}
+//
+  //if (url != prevUrl)
+  //  addText(url);
 }
 
 QString

@@ -1,4 +1,4 @@
-﻿// acfuncodec.cc
+// acfuncodec.cc
 // 2/4/2012
 
 #include "module/annotcodec/acfuncodec.h"
@@ -214,7 +214,7 @@ AcfunCodec::parseAttribute(const QString &attr)
   Annotation ret;
   QString t;
   // 1
-  ret.setPos(static_cast<qint64>(pos * 1000));
+  ret.setPos(pos * 1000);
 
   // 2
   //fontSize

@@ -1,7 +1,7 @@
 # player.pro
 # 6/30/2011
 
-VERSION = 0.1.5.6
+VERSION = 0.1.6.0
 
 DEFINES += PROJECT_PLAYER
 
@@ -100,11 +100,11 @@ INCLUDEPATH     += $$MYPATH
 DEPENDPATH      += $$MYPATH
 
 HEADERS += \
+    annotationprefs.h \
     application.h \
     clipboardmonitor.h \
     eventlogger.h \
     preferences.h \
-    preferences_p.h \
     mainwindow.h \
     mainwindow_p.h \
     settings.h \
@@ -127,8 +127,8 @@ HEADERS += \
     command/prefixcombobox.h \
     data/datamanager.h \
     data/dataserver.h \
-    db/db_config.h \
     db/db.h \
+    db/dbdefs.h \
     dialog/annotationcountdialog.h \
     dialog/backlogdialog.h \
     dialog/consoledialog.h \
@@ -174,12 +174,12 @@ HEADERS += \
     util/textedittabview.h
 
 SOURCES += \
+    annotationprefs.cc \
     application.cc \
     clipboardmonitor.cc \
     eventlogger.cc \
     main.cc \
     preferences.cc \
-    preferences_p.cc \
     mainwindow.cc \
     settings.cc \
     tray.cc \
@@ -242,8 +242,8 @@ SOURCES += \
     util/textedittabview.cc
 
 win32 {
-  HEADERS += windowsregistry.h
-  SOURCES += windowsregistry.cc
+  HEADERS += associationprefs.h windowsregistry.h
+  SOURCES += associationprefs.cc windowsregistry.cc
 
   DEFINES += USE_MODE_SIGNAL
 

@@ -27,8 +27,7 @@ signals:
   void error(const QString &text);
   void notification(const QString &text);
 
-  void mediaUrlEntered(const QString &url);
-  void annotationUrlEntered(const QString &url);
+  void urlEntered(const QString &url);
 
 public slots:
   void setEnabled(bool t) { enabled_ = t; }
@@ -39,7 +38,6 @@ protected slots:
 
 protected:
   static bool isSupportedMediaUrl(const QString &url);
-  static bool isSupportedAnnotationUrl(const QString &url);
 };
 
 #endif // CLIPBOARDMONITOR_H

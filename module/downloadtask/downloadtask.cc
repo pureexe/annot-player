@@ -50,7 +50,10 @@ DownloadTask::init()
 
 void
 DownloadTask::startLater(qint64 msecs)
-{ QTimer::singleShot(msecs, this, SLOT(start())); }
+{
+  setState(DownloadTask::Downloading);
+  QTimer::singleShot(msecs, this, SLOT(start()));
+}
 
 // - Properties -
 

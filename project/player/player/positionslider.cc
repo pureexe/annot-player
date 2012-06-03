@@ -54,8 +54,23 @@
   SS_BEGIN(QSlider::add-page:horizontal) \
     SS_BORDER(1px solid #777) \
     SS_LEFT(5px) SS_RIGHT(5px) \
-    SS_TRANSPARENT \
+    SS_SEMI_TRANSPARENT \
   SS_END
+
+#define SS_NO_ADDPAGE_HOVER \
+  SS_BEGIN(QSlider::add-page:horizontal) \
+    SS_BORDER(1px solid #777) \
+    SS_LEFT(5px) SS_RIGHT(5px) \
+    SS_BACKGROUND_COLOR(rgba(255,0,0,100)) \
+  SS_END
+//SS_BACKGROUND(
+//  qlineargradient(spread:pad,
+//    x1:0, y1:1, x2:0, y2:0,
+//    stop:0    rgba(0,0,0,1),
+//    stop:0.4  rgba(0,0,0,1),
+//    stop:0.5  rgba(255,0,0,100),
+//    stop:0.6  rgba(0,0,0,1),
+//    stop:1    rgba(0,0,0,1)))
 
 #define SS_ADDPAGE(_start, _stop) \
   SS_BEGIN(QSlider::add-page:horizontal) \
@@ -189,7 +204,7 @@ PositionSlider::updateStyleSheet(int current)
       availablePosition_ <= 0 || total <= availablePosition_ ||
       availablePosition_ <= current || total <= current) {
     if (isHovered() && isEnabled())
-      setStyleSheet(SS_BASE SS_HANDLE(+handleWidth+,+handleRadius+,+handleLeft+) SS_NO_ADDPAGE SS_GROOVE(+groove+));
+      setStyleSheet(SS_BASE SS_HANDLE(+handleWidth+,+handleRadius+,+handleLeft+) SS_NO_ADDPAGE_HOVER SS_GROOVE(+groove+));
     else
       setStyleSheet(SS_BASE SS_NO_HANDLE SS_NO_ADDPAGE SS_GROOVE(+groove+));
     return;
@@ -198,7 +213,7 @@ PositionSlider::updateStyleSheet(int current)
   qreal progress = (availablePosition_ - current) / qreal(total - current);
   if (progress <= 0 || progress >= 1) { // should never happen
     if (isHovered() && isEnabled())
-      setStyleSheet(SS_BASE SS_HANDLE(+handleWidth+,+handleRadius+,+handleLeft+) SS_NO_ADDPAGE SS_GROOVE(+groove+));
+      setStyleSheet(SS_BASE SS_HANDLE(+handleWidth+,+handleRadius+,+handleLeft+) SS_NO_ADDPAGE_HOVER SS_GROOVE(+groove+));
     else
       setStyleSheet(SS_BASE SS_NO_HANDLE SS_NO_ADDPAGE SS_GROOVE(+groove+));
     return;
