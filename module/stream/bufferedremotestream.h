@@ -37,6 +37,7 @@ public:
   virtual qint64 pos() const { return pos_; } ///< \override
 
   virtual qint64 read(char *data, qint64 maxSize); ///< \override
+  virtual qint64 tryRead(char *data, qint64 maxSize); ///< \override
 
   virtual QByteArray readAll(); ///< \override
 

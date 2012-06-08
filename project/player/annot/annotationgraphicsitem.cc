@@ -2,6 +2,7 @@
 // 7/16/2011
 
 #include "annotationgraphicsitem.h"
+#include "annotationgraphicsitemscheduler.h"
 #include "annotationgraphicsview.h"
 #include "annotationgraphicsstyle.h"
 #include "annotationgraphicseffect.h"
@@ -24,7 +25,6 @@
 #include <boost/tuple/tuple.hpp>
 #include <boost/typeof/typeof.hpp>
 #include <QtGui>
-#include <ctime>
 #include <cmath>
 
 #ifdef __GNUC__
@@ -45,6 +45,8 @@ using namespace Logger;
 
 #define BAD_POSF        QPointF(-1,-1)
 namespace { inline bool isBadPosF(const QPointF &pos) { return pos.x() < 0 || pos.y() < 0; } }
+
+enum { MOTIONLESS_STAY_TIME = ANNOTATION_FLY_TIME };
 
 // - RC -
 
@@ -108,93 +110,17 @@ namespace { namespace curve_ { // anonymous, curves
   }
 
   qreal NOINLINE appearOpacity(qreal progress)
-  { return linear_(progress, 0.2, 0.80); }
+  { return linear_(progress, 0.15, 0.80); }
 
   qreal NOINLINE flyOpacity(qreal progress)
   { return linear_(progress, 0.13, 0.80); }
 
 } } // anonymous namespace
 
-namespace { // anonymous, annotation display
-
-  // Use std time() rather than QTime::currentTime() to improve performance.
-  inline int
-  next_y_(int window_height, int visible_time, qreal scale, AnnotationGraphicsItem::Style style, const SignalHub *hub_)
-  {
-    Q_ASSERT(hub_);
-    enum { LaneHeight = ANNOTATION_SIZE_DEFAULT + ANNOTATION_SIZE_MARGIN * 2 + 6 }; // height of a piece of danmu
-    enum { LaneCount = 100 };                      // number of vertical lanes, large enough
-
-    int laneHeight = LaneHeight * scale;
-
-    static time_t last_time_fly_[LaneCount],
-                  last_time_top_[LaneCount],
-                  last_time_bottom_[LaneCount];
-
-    Q_ASSERT(visible_time > 0);
-    int wait_time = 500;
-    switch (style) {
-    case AnnotationGraphicsItem::FloatStyle:
-    case AnnotationGraphicsItem::FlyStyle: wait_time += visible_time / 2; break;
-    default: wait_time += visible_time;
-    }
-
-    time_t *last_time_;
-    switch (style) {
-    case AnnotationGraphicsItem::FloatStyle:
-    case AnnotationGraphicsItem::FlyStyle:      last_time_ = last_time_fly_; break;
-    case AnnotationGraphicsItem::TopStyle:      last_time_ = last_time_top_; break;
-    case AnnotationGraphicsItem::BottomStyle:
-    case AnnotationGraphicsItem::SubtitleStyle: last_time_ = last_time_bottom_; break;
-    default : Q_ASSERT(0);      last_time_ = last_time_fly_;
-    }
-
-    if (window_height <= laneHeight * 2) // Do not schedule when window size is so small
-      return 0;
-
-    time_t current_time = ::time(0);
-    int count = window_height / laneHeight;
-    if (count > LaneCount)
-      count = LaneCount;
-
-    int best_lane = 0;
-    time_t max_time = current_time;
-    for (int lane = 0; lane < count; lane++) {
-      time_t last_time = last_time_[lane]; // difftime is in seconds, while wait_time is in msecs
-      if (::difftime(current_time, last_time) * 1000 > wait_time) {
-        best_lane = lane;
-        break;
-      } else if (max_time > last_time) {
-        max_time = last_time;
-        best_lane = lane;
-      }
-    }
-
-    //qDebug() << best_lane;
-
-    last_time_[best_lane] = current_time;
-
-    switch (style) {
-    case AnnotationGraphicsItem::BottomStyle:
-    case AnnotationGraphicsItem::SubtitleStyle:
-      {
-        int window_footer = !hub_->isNormalPlayerMode() ? int(laneHeight * 1.5)   : 0;
-        return window_height - (best_lane + 2) * laneHeight - window_footer;
-      }
-    default:
-      {
-        int window_header = !hub_->isNormalPlayerMode() && !hub_->isMediaTokenMode() ? 50 : 0;
-        return best_lane * laneHeight + window_header;
-      }
-    }
-  }
-
-} // anonymous namespace
-
 int
 AnnotationGraphicsItem::nextY(int msecs, Style style) const
 {
-  int ret = ::next_y_(view_->height(), msecs, view_->scale(), style, hub_);
+  int ret = view_->scheduler()->nextY(view_->height(), msecs, view_->scale(), style);
   int max = view_->height() - boundingRect().height() ;
   if (ret > max - 5)
     ret = max;
@@ -380,7 +306,7 @@ void
 AnnotationGraphicsItem::updateToolTip()
 {
   QString tip;
-  qint64 t = annot_.createTime();
+  qint64 t = annot_.hasUpdateTime() ? annot_.updateTime() : annot_.createTime();
   if (t > Traits::MIN_TIME && t < Traits::MAX_TIME) {
     t *= 1000;
     QDateTime ts = QDateTime::fromMSecsSinceEpoch(t);
@@ -450,7 +376,7 @@ void
 AnnotationGraphicsItem::updateMeta()
 {
   QString ret;
-  qint64 t = annot_.createTime();
+  qint64 t = annot_.hasUpdateTime() ? annot_.updateTime() : annot_.createTime();
   if (t > Traits::MIN_TIME && t < Traits::MAX_TIME) {
     t *= 1000;
     QString ts;
@@ -490,7 +416,7 @@ AnnotationGraphicsItem::updateMeta()
       QTime t0 = QTime::currentTime();
       int d;
       if (days == 1)
-        ts.append(QString::number(24 + t1.hour() - t0.hour()))
+        ts.append(QString::number((24 + t1.hour() - t0.hour()) % 24))
           .append(tr("hr"));
       else if (d = t1.hour() - t0.hour())
         ts.append(QString::number((24 + d) % 24))
@@ -827,10 +753,14 @@ AnnotationGraphicsItem::disappear()
   switch (style_) {
   case TopStyle:
   case BottomStyle:
+  case MotionlessStyle:
     //removeMe();
     fadeOut(timeout);
     removeLater(timeout);
     break;
+  case SubtitleStyle:
+  case FlyStyle:
+  case FloatStyle:
   default:
     if (!removeLaterTimer_ || !removeLaterTimer_->isActive()) {
       fadeOut(timeout);
@@ -884,14 +814,27 @@ void
 AnnotationGraphicsItem::showMe()
 {
   switch (style_) {
-  case FloatStyle:
-  case FlyStyle:
-    fly(); break;
-
   case TopStyle:
   case BottomStyle:
   case SubtitleStyle:
-    stay(style_); break;
+    stay(style_);
+    break;
+  case FloatStyle:
+  case FlyStyle:
+  case MotionlessStyle:
+    if (!AnnotationSettings::globalInstance()->preferMotionless())
+      fly();
+    else {
+      int msecs = MOTIONLESS_STAY_TIME; //stayTime();
+      QPointF pos = view_->scheduler()->nextPos(view_->size(), boundingRect().size(), msecs, view_->scale());
+      if (pos.isNull()) {
+        style_ = FloatStyle;
+        fly();
+      } else {
+        style_ = MotionlessStyle;
+        appear(pos, msecs);
+      }
+    } break;
 
   default:
     Q_ASSERT(0); fly();
@@ -927,6 +870,7 @@ AnnotationGraphicsItem::isPaused() const
   case TopStyle:
   case BottomStyle:
   case SubtitleStyle:
+  case MotionlessStyle:
     return appearOpacityAni_ && appearOpacityAni_->state() == QAbstractAnimation::Paused;
   }
   return false;
@@ -960,6 +904,7 @@ AnnotationGraphicsItem::pause()
 
   case TopStyle:
   case BottomStyle:
+  case MotionlessStyle:
     if (appearOpacityAni_ && appearOpacityAni_->state() == QAbstractAnimation::Running)
       appearOpacityAni_->pause();
     break;
@@ -997,16 +942,19 @@ AnnotationGraphicsItem::resume()
   case TopStyle:
   case BottomStyle:
   case SubtitleStyle:
+  case MotionlessStyle:
     if (appearOpacityAni_ && appearOpacityAni_->state() == QAbstractAnimation::Paused)
       appearOpacityAni_->resume();
     break;
+  default:
+    Q_ASSERT(0);
   }
 }
 
 int
-AnnotationGraphicsItem::stayTime(Style style) const
+AnnotationGraphicsItem::stayTime() const
 {
-  int t = style == SubtitleStyle ? ANNOTATION_STAY_TIME_SUBTITLE
+  int t = style_ == SubtitleStyle ? ANNOTATION_STAY_TIME_SUBTITLE
                                  : ANNOTATION_STAY_TIME;
   int w0 = qMax<int>(view_->width(), 100),
       w = qMax<int>(boundingRect().width(), 50),
@@ -1036,7 +984,7 @@ AnnotationGraphicsItem::flyTime() const
 void
 AnnotationGraphicsItem::stay(Style style)
 {
-  int msecs = stayTime(style);
+  int msecs = stayTime();
 
   Style posStyle = style;
   if (style == SubtitleStyle)
@@ -1189,7 +1137,8 @@ AnnotationGraphicsItem::contextMenuEvent(QContextMenuEvent *event)
   AcUi::globalInstance()->setContextMenuStyle(translateMenu, false); // persistent = false
 
   if (!hub_->isLiveTokenMode()) {
-    m->addAction(tr("Edit"), this, SLOT(edit()));
+    QAction *a = m->addAction(tr("Edit"), this, SLOT(edit()));
+    a->setEnabled(isEditable());
     m->addSeparator();
   }
   m->addAction(tr("Copy") + ": " + summary(), this, SLOT(copyToClipboard()));
@@ -1355,10 +1304,14 @@ AnnotationGraphicsItem::copyToClipboard() const
     warn(TR(T_ERROR_CLIPBOARD_UNAVAILABLE));
 }
 
+bool
+AnnotationGraphicsItem::isEditable() const
+{ return !annot_.userId() || annot_.userId() == view_->userId(); }
+
 void
 AnnotationGraphicsItem::edit()
 {
-  if (annot_.userId() != view_->userId()) {
+  if (!isEditable()) {
     warn(tr("cannot edit other's annotation text"));
     return;
   }

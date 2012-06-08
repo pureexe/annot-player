@@ -5,13 +5,13 @@
 <context>
     <name>AcAbout</name>
     <message>
-        <location filename="../../common/acabout.cc" line="68"/>
-        <location filename="../../common/acabout.cc" line="83"/>
+        <location filename="../../common/acabout.cc" line="69"/>
+        <location filename="../../common/acabout.cc" line="84"/>
         <source>About</source>
         <translation>ソフトについて</translation>
     </message>
     <message>
-        <location filename="../../common/acabout.cc" line="80"/>
+        <location filename="../../common/acabout.cc" line="81"/>
         <source>OK</source>
         <translation>確定</translation>
     </message>
@@ -117,12 +117,12 @@
         <translation>コンソール</translation>
     </message>
     <message>
-        <location filename="../../common/acconsole.cc" line="39"/>
+        <location filename="../../common/acconsole.cc" line="38"/>
         <source>OK</source>
         <translation>確定</translation>
     </message>
     <message>
-        <location filename="../../common/acconsole.cc" line="41"/>
+        <location filename="../../common/acconsole.cc" line="40"/>
         <source>Clear</source>
         <translation>消す</translation>
     </message>
@@ -135,14 +135,18 @@
         <translation>ビュー</translation>
     </message>
     <message>
-        <location filename="../../common/acfilteredlistview.cc" line="53"/>
         <source>Filter pattern</source>
-        <translation>パターン</translation>
+        <translation type="obsolete">パターン</translation>
     </message>
     <message>
         <location filename="../../common/acfilteredlistview.cc" line="53"/>
         <source>Search</source>
         <translation>検索</translation>
+    </message>
+    <message>
+        <location filename="../../common/acfilteredlistview.cc" line="53"/>
+        <source>Filter Pattern</source>
+        <translation>パターン</translation>
     </message>
     <message>
         <location filename="../../common/acfilteredlistview.cc" line="54"/>
@@ -153,10 +157,8 @@
 <context>
     <name>AcFilteredTableView</name>
     <message>
-        <location filename="../../common/acfilteredtableview.cc" line="55"/>
-        <location filename="../../common/acfilteredtableview.cc" line="57"/>
         <source>Filter pattern</source>
-        <translation>パターン</translation>
+        <translation type="obsolete">パターン</translation>
     </message>
     <message>
         <location filename="../../common/acfilteredtableview.cc" line="55"/>
@@ -164,15 +166,12 @@
         <translation>検索</translation>
     </message>
     <message>
-        <location filename="../../common/acfilteredtableview.cc" line="59"/>
-        <location filename="../../common/acfilteredtableview.cc" line="65"/>
         <source>Filter syntax</source>
-        <translation>シンタックス</translation>
+        <translation type="obsolete">シンタックス</translation>
     </message>
     <message>
-        <location filename="../../common/acfilteredtableview.cc" line="60"/>
         <source>Regular expression</source>
-        <translation>正規表現</translation>
+        <translation type="obsolete">正規表現</translation>
     </message>
     <message>
         <location filename="../../common/acfilteredtableview.cc" line="61"/>
@@ -180,14 +179,39 @@
         <translation>ワイルドカード</translation>
     </message>
     <message>
-        <location filename="../../common/acfilteredtableview.cc" line="62"/>
         <source>Fixed string</source>
+        <translation type="obsolete">そのまま</translation>
+    </message>
+    <message>
+        <location filename="../../common/acfilteredtableview.cc" line="55"/>
+        <location filename="../../common/acfilteredtableview.cc" line="57"/>
+        <source>Filter Pattern</source>
+        <translation>パターン</translation>
+    </message>
+    <message>
+        <location filename="../../common/acfilteredtableview.cc" line="59"/>
+        <location filename="../../common/acfilteredtableview.cc" line="65"/>
+        <source>Filter Syntax</source>
+        <translation>シンタックス</translation>
+    </message>
+    <message>
+        <location filename="../../common/acfilteredtableview.cc" line="60"/>
+        <source>Regular Expression</source>
+        <translation>正規表現</translation>
+    </message>
+    <message>
+        <location filename="../../common/acfilteredtableview.cc" line="62"/>
+        <source>Fixed String</source>
         <translation>そのまま</translation>
+    </message>
+    <message>
+        <source>Filter column</source>
+        <translation type="obsolete">列</translation>
     </message>
     <message>
         <location filename="../../common/acfilteredtableview.cc" line="67"/>
         <location filename="../../common/acfilteredtableview.cc" line="72"/>
-        <source>Filter column</source>
+        <source>Filter Column</source>
         <translation>列</translation>
     </message>
     <message>
@@ -361,7 +385,7 @@
 <context>
     <name>AcPreferences</name>
     <message>
-        <location filename="../../common/acpreferences.cc" line="52"/>
+        <location filename="../../common/acpreferences.cc" line="51"/>
         <source>Preferences</source>
         <translation>設定</translation>
     </message>
@@ -495,171 +519,171 @@
         <translation>とあるブラウザ</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="294"/>
+        <location filename="../mainwindow.cc" line="295"/>
         <source>&amp;File</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="295"/>
+        <location filename="../mainwindow.cc" line="296"/>
         <source>New Window</source>
         <translation>新しいウィンドウ</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="233"/>
-        <location filename="../mainwindow.cc" line="296"/>
+        <location filename="../mainwindow.cc" line="234"/>
+        <location filename="../mainwindow.cc" line="297"/>
         <source>New Tab</source>
         <translation>新しいタブ</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="298"/>
+        <location filename="../mainwindow.cc" line="299"/>
         <source>Clip</source>
         <translation>ページを保存</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="228"/>
-        <location filename="../mainwindow.cc" line="300"/>
+        <location filename="../mainwindow.cc" line="229"/>
+        <location filename="../mainwindow.cc" line="301"/>
         <source>Close Tab</source>
         <translation>タブを閉じる</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="301"/>
+        <location filename="../mainwindow.cc" line="302"/>
         <source>Close Window</source>
         <translation>ウィンドウを閉じる</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="302"/>
+        <location filename="../mainwindow.cc" line="303"/>
         <source>Exit</source>
         <translation>終了</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="314"/>
+        <location filename="../mainwindow.cc" line="315"/>
         <source>&amp;View</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="243"/>
-        <location filename="../mainwindow.cc" line="315"/>
+        <location filename="../mainwindow.cc" line="244"/>
+        <location filename="../mainwindow.cc" line="316"/>
         <source>Reload</source>
         <translation>リロード</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="218"/>
+        <location filename="../mainwindow.cc" line="219"/>
         <source>Unrecognized Gesture</source>
         <translation>未知のジェスチャー</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="223"/>
+        <location filename="../mainwindow.cc" line="224"/>
         <source>Open Link in Background Tab</source>
         <translation>新規タブで開く</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="238"/>
+        <location filename="../mainwindow.cc" line="239"/>
         <source>Undo Close Tab</source>
         <translation>閉じたタブを開く</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="248"/>
+        <location filename="../mainwindow.cc" line="249"/>
         <source>Forward</source>
         <translation>次に進む</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="253"/>
+        <location filename="../mainwindow.cc" line="254"/>
         <source>Backward</source>
         <translation>前に戻る</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="258"/>
+        <location filename="../mainwindow.cc" line="259"/>
         <source>Previous Tab</source>
         <translation>前のタブ</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="263"/>
+        <location filename="../mainwindow.cc" line="264"/>
         <source>Next Tab</source>
         <translation>次のタブ</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="268"/>
+        <location filename="../mainwindow.cc" line="269"/>
         <source>Minimize Window</source>
         <translation>最小化</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="278"/>
+        <location filename="../mainwindow.cc" line="279"/>
         <source>Scroll Top</source>
         <translation>トップへ</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="283"/>
+        <location filename="../mainwindow.cc" line="284"/>
         <source>Scroll Bottom</source>
         <translation>ボトムへ</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="316"/>
+        <location filename="../mainwindow.cc" line="317"/>
         <source>Stop</source>
         <translation>停止</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="317"/>
+        <location filename="../mainwindow.cc" line="318"/>
         <source>Inspect</source>
         <translation>検查</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="319"/>
+        <location filename="../mainwindow.cc" line="320"/>
         <source>Actual Size</source>
         <translation>ズームをリセット</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="320"/>
+        <location filename="../mainwindow.cc" line="321"/>
         <source>Zoom In</source>
         <translation>ズームイン</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="321"/>
+        <location filename="../mainwindow.cc" line="322"/>
         <source>Zoom Out</source>
         <translation>ズームアウト</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="326"/>
+        <location filename="../mainwindow.cc" line="327"/>
         <source>&amp;Settings</source>
         <translation>設定</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="327"/>
+        <location filename="../mainwindow.cc" line="328"/>
         <source>&amp;Preferences</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="789"/>
+        <location filename="../mainwindow.cc" line="790"/>
         <source>Click any edge of the screen to toggle tool bars.</source>
         <translation>エッジをクリックしてば、ツールバーを非表示になります。</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="273"/>
-        <location filename="../mainwindow.cc" line="323"/>
+        <location filename="../mainwindow.cc" line="274"/>
+        <location filename="../mainwindow.cc" line="324"/>
         <source>Toggle Full Screen</source>
         <translation>フルスクリーン</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="330"/>
+        <location filename="../mainwindow.cc" line="331"/>
         <source>&amp;Help</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="332"/>
+        <location filename="../mainwindow.cc" line="333"/>
         <source>&amp;Console</source>
         <translation>コンソール</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="333"/>
+        <location filename="../mainwindow.cc" line="334"/>
         <source>&amp;About</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="345"/>
+        <location filename="../mainwindow.cc" line="346"/>
         <source>restoring last sessions ...</source>
         <translation>前回のセションを回復中…</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="762"/>
+        <location filename="../mainwindow.cc" line="763"/>
         <source>Double click any tab to exit full screen.</source>
         <translation>タブをﾀﾞﾌﾞﾙｸﾘｯｸでﾌﾙｽｸﾘｰﾝを終了。</translation>
     </message>
@@ -668,30 +692,30 @@
         <translation type="obsolete">ツールバーを非表示。</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="371"/>
+        <location filename="../mainwindow.cc" line="372"/>
         <source>logging in bilibili.tv as %1 ...</source>
         <translation>%1でビリビリ動画を登録中…</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="376"/>
+        <location filename="../mainwindow.cc" line="377"/>
         <source>logging in nicovideo.jp as %1 ...</source>
         <translation>%1でニコニコ動画を登録中…</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="554"/>
-        <location filename="../mainwindow.cc" line="568"/>
+        <location filename="../mainwindow.cc" line="555"/>
+        <location filename="../mainwindow.cc" line="569"/>
         <source>openning new window</source>
         <translation>新しいウィンドウを開く</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="570"/>
+        <location filename="../mainwindow.cc" line="571"/>
         <source>failed open new window</source>
         <translation>新規ウィンドウの開くに失敗した</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="585"/>
-        <location filename="../mainwindow.cc" line="599"/>
-        <location filename="../mainwindow.cc" line="613"/>
+        <location filename="../mainwindow.cc" line="586"/>
+        <location filename="../mainwindow.cc" line="600"/>
+        <location filename="../mainwindow.cc" line="614"/>
         <source>openning</source>
         <translation>開く</translation>
     </message>
@@ -864,46 +888,51 @@
     </message>
     <message>
         <location filename="../../../module/searchengine/searchenginefactory.cc" line="13"/>
+        <source>I&apos;m Feeling Lucky</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../../module/searchengine/searchenginefactory.cc" line="14"/>
         <source>Google Images</source>
         <translation>Google画像</translation>
     </message>
     <message>
-        <location filename="../../../module/searchengine/searchenginefactory.cc" line="16"/>
+        <location filename="../../../module/searchengine/searchenginefactory.cc" line="17"/>
         <source>Youtube</source>
         <translation>ヨウツベ</translation>
     </message>
     <message>
-        <location filename="../../../module/searchengine/searchenginefactory.cc" line="17"/>
+        <location filename="../../../module/searchengine/searchenginefactory.cc" line="18"/>
         <source>Nicovideo</source>
         <translation>ニコニコ動画</translation>
     </message>
     <message>
-        <location filename="../../../module/searchengine/searchenginefactory.cc" line="18"/>
+        <location filename="../../../module/searchengine/searchenginefactory.cc" line="19"/>
         <source>Bilibili</source>
         <translation>ビリビリ動画</translation>
     </message>
     <message>
-        <location filename="../../../module/searchengine/searchenginefactory.cc" line="19"/>
+        <location filename="../../../module/searchengine/searchenginefactory.cc" line="20"/>
         <source>AcFun</source>
         <translation>AcFun</translation>
     </message>
     <message>
-        <location filename="../../../module/searchengine/searchenginefactory.cc" line="20"/>
+        <location filename="../../../module/searchengine/searchenginefactory.cc" line="21"/>
         <source>Youku</source>
         <translation>ヨウク動画</translation>
     </message>
     <message>
-        <location filename="../../../module/searchengine/searchenginefactory.cc" line="22"/>
+        <location filename="../../../module/searchengine/searchenginefactory.cc" line="23"/>
         <source>Wikipedia (ja)</source>
         <translation>ウィキ（日本語）</translation>
     </message>
     <message>
-        <location filename="../../../module/searchengine/searchenginefactory.cc" line="23"/>
+        <location filename="../../../module/searchengine/searchenginefactory.cc" line="24"/>
         <source>Wikipedia (en)</source>
         <translation>ウィキ（英語）</translation>
     </message>
     <message>
-        <location filename="../../../module/searchengine/searchenginefactory.cc" line="24"/>
+        <location filename="../../../module/searchengine/searchenginefactory.cc" line="25"/>
         <source>Wikipedia (zh)</source>
         <translation>ウィキ（中国語）</translation>
     </message>
@@ -1117,33 +1146,33 @@
 <context>
     <name>WebBrowser</name>
     <message>
-        <location filename="../../../module/webbrowser/webbrowser.cc" line="449"/>
-        <location filename="../../../module/webbrowser/webbrowser.cc" line="452"/>
+        <location filename="../../../module/webbrowser/webbrowser.cc" line="450"/>
+        <location filename="../../../module/webbrowser/webbrowser.cc" line="453"/>
         <source>Loading ...</source>
         <translation>読み込み中…</translation>
     </message>
     <message>
-        <location filename="../../../module/webbrowser/webbrowser.cc" line="450"/>
+        <location filename="../../../module/webbrowser/webbrowser.cc" line="451"/>
         <source>Loading complete</source>
         <translation>完了</translation>
     </message>
     <message>
-        <location filename="../../../module/webbrowser/webbrowser.cc" line="627"/>
+        <location filename="../../../module/webbrowser/webbrowser.cc" line="628"/>
         <source>openning</source>
         <translation>開く</translation>
     </message>
     <message>
-        <location filename="../../../module/webbrowser/webbrowser.cc" line="657"/>
+        <location filename="../../../module/webbrowser/webbrowser.cc" line="658"/>
         <source>no recent closed tabs</source>
         <translation>閉じたタブがありません</translation>
     </message>
     <message>
-        <location filename="../../../module/webbrowser/webbrowser.cc" line="739"/>
+        <location filename="../../../module/webbrowser/webbrowser.cc" line="740"/>
         <source>Start Page</source>
         <translation>世界の果て</translation>
     </message>
     <message>
-        <location filename="../../../module/webbrowser/webbrowser.cc" line="838"/>
+        <location filename="../../../module/webbrowser/webbrowser.cc" line="839"/>
         <source>Annot Browser</source>
         <translation>とあるブラウザ</translation>
     </message>

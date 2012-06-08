@@ -12,9 +12,9 @@
 #  include "windowsregistry.h"
 #  include "module/player/player.h"
 #endif // Q_WS_WIN
-#ifdef WITH_WIN_QTH
-#  include "win/qth/qth.h"
-#endif // WITH_WIN_QTH
+#ifdef WITH_WIN_TEXTHOOK
+#  include "win/texthook/texthook.h"
+#endif // WITH_WIN_TEXTHOOK
 #ifdef WITH_WIN_DWM
 #  include "win/dwm/dwm.h"
 #endif // WITH_WIN_DWM
@@ -63,6 +63,20 @@ namespace { // anonymous
     reg->registerTypes(Player::supportedSubtitleSuffices());
     reg->registerTypes(Player::supportedPlaylistSuffices());
     //reg->registerTypes(QStringList() << ".exe" << ".lnk");
+#endif // Q_WS_WIN
+  }
+
+  inline void repairFileTypes()
+  {
+#ifdef Q_WS_WIN
+    WindowsRegistry *reg = WindowsRegistry::globalInstance();
+    foreach (const QString &type, Player::supportedSuffices())
+      if (reg->containsType(type))
+        reg->registerType(type);
+    if (reg->containsType(".exe"))
+      reg->registerType(".exe");
+    if (reg->containsType(".lnk"))
+      reg->registerType(".lnk");
 #endif // Q_WS_WIN
   }
 
@@ -193,13 +207,18 @@ main(int argc, char *argv[])
     settings->setContrast(1.1);
     settings->setBrightness(1.02*1.02);
 
+    if (settings->version().isEmpty()) {
+      registerFileTypes();
+      settings->setApplicationFilePath(QCoreApplication::applicationFilePath());
+    }
+
     settings->setVersion(G_VERSION);
     settings->sync();
   }
 
   // Moved
   if (settings->applicationFilePath() != QCoreApplication::applicationFilePath()) {
-    registerFileTypes(); // REMOVE after 0.1.6.1
+    repairFileTypes();
     settings->setApplicationFilePath(QCoreApplication::applicationFilePath());
     settings->sync();
   }
@@ -291,12 +310,6 @@ main(int argc, char *argv[])
     QThreadPool::globalInstance()->setMaxThreadCount(MinThreadCount);
   DOUT("thread pool size =" << QThreadPool::globalInstance()->maxThreadCount());
 
-//#ifdef WITH_WIN_QTH
-//  DOUT("load qth service");
-//  QTH;
-//  DOUT("qth service loaded");
-//#endif // WITH_WIN_QTH
-
 //#ifdef USE_MODE_SIGNAL
 //  // Root window
 //  QMainWindow root; // Persistant visible root widget to prevent Qt from automatic closing invisible windows
@@ -320,9 +333,9 @@ main(int argc, char *argv[])
     //  return -1;
     //}
 
-//#ifdef WITH_WIN_QTH
-//    QTH->setParentWinId(w.winId());
-//#endif // WITH_WIN_QTH
+//#ifdef WITH_WIN_TEXTHOOK
+//    TextHook::globalInstance()->setParentWinId(w.winId());
+//#endif // WITH_WIN_TEXTHOOK
 
     a.setMainWindow(&w);
 
@@ -388,13 +401,13 @@ main(int argc, char *argv[])
   dummy.resize(QSize()); // zero-sized to be hidden
   QObject::connect(&w, SIGNAL(windowClosed()), &dummy, SLOT(close()));
 
-#ifdef WITH_WIN_QTH
-  QTH->setParentWinId(dummy.winId());
-  QTH->setInterval(200); // Esential!
-#endif // WITH_WIN_QTH
-
   dummy.show();
-  //QTimer::singleShot(0, &dummy, SLOT(show()));
+
+#ifdef WITH_WIN_TEXTHOOK
+  TextHook::globalInstance()->setParentWinId(dummy.winId());
+  TextHook::globalInstance()->setInterval(500); // Esential!
+  //TextHook::globalInstance()->start();
+#endif // WITH_WIN_TEXTHOOK
 #endif // USE_MODE_SIGNAL && Q_OS_WIN
 
   //QWidget bk;

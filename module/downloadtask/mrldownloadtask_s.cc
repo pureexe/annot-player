@@ -1,4 +1,4 @@
-// mrldownloadtask_s.cc
+﻿// mrldownloadtask_s.cc
 // Download multiple parts.
 // 2/20/2012
 #include "module/downloadtask/mrldownloadtask.h"

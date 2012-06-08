@@ -7,6 +7,7 @@
 #include "module/searchengine/searchengine.h"
 
 #define SE_GOOGLE     "https://www.google.com/search?hl=ja&ie=UTF-8&q=%1"
+#define SE_GOOGLE_LUCKY  "http://www.google.com/search?hl=ja&ie=UTF-8&sourceid=navclient&gfns=1&q=%1"
 #define SE_GOOGLE_IMAGES "https://www.google.com/search?hl=ja&ie=UTF-8&tbm=isch&q=%1"
 #define SE_BING       "http://www.bing.com/search?q=%1"
 
@@ -46,6 +47,7 @@ public:
   enum Engine { Google = 0, GoogleImages, Bing,
                 Youtube, Nicovideo, Bilibili, Acfun, Youku,
                 WikiJa, WikiEn, WikiZh,
+                GoogleLucky,
                 Manpage, CPlusPlus, Qt, Ip, Osx, Msdn, Bash, Cmd,
                 EngineCount, VisibleEngineCount = WikiZh +1
   };

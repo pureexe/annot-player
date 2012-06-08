@@ -14,6 +14,7 @@ QT_FORWARD_DECLARE_CLASS(QTimer)
 
 class AnnotationGraphicsItem;
 class AnnotationGraphicsItemPool;
+class AnnotationGraphicsItemScheduler;
 class AnnotationEditor;
 class AnnotationFilter;
 class DataManager;
@@ -208,6 +209,7 @@ signals:
   // - Properties -
 public:
   AnnotationEditor *editor() const;
+  AnnotationGraphicsItemScheduler *scheduler() const { return scheduler_; }
   bool hasPausedItems() const;
 
   RenderHint renderHint() const { return renderHint_; } ///< Default render hint
@@ -351,6 +353,7 @@ private:
   QWidget *fullScreenView_;
   WId trackedWindow_;
   AnnotationEditor *editor_;
+  AnnotationGraphicsItemScheduler *scheduler_;
   SignalHub *hub_;
   DataManager *data_;
   Player *player_;

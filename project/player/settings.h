@@ -85,6 +85,9 @@ public:
   qint64 annotationOffset() const;
   void setAnnotationOffset(qint64 offset);
 
+  bool preferMotionlessAnnotation() const;
+  void setPreferMotionlessAnnotation(bool t);
+
   ///  Theme in UiStyle
   qint64 annotationLanguages() const; ///< Annotation language
   void setAnnotationLanguages(qint64 lang);

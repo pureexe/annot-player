@@ -147,8 +147,11 @@ ServerAgent::setAuthorized(bool yes)
 { authorized_ = yes; }
 
 void
-ServerAgent::setConnected(bool yes)
-{ connected_ = yes; }
+ServerAgent::setConnected(bool t)
+{
+  if (connected_ != t)
+    emit connectedChanged(connected_ = t);
+}
 
 void
 ServerAgent::disconnect()
@@ -164,9 +167,12 @@ ServerAgent::updateAuthorized()
 void
 ServerAgent::updateConnected()
 {
+  bool t = connected_;
   connected_ = proxy_->getConnected();
   if (connected_)
     emit connected();
+  if (connected_ != t)
+    emit connectedChanged(connected_);
 }
 
 // - User -

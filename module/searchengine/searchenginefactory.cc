@@ -1,4 +1,4 @@
-// searchenginefactory.cc
+﻿// searchenginefactory.cc
 // 4/25/2012
 #include "module/searchengine/searchenginefactory.h"
 #include "module/searchengine/searchenginerc.h"
@@ -10,18 +10,19 @@ SearchEngineFactory::create(int engine) const
 {
   switch (engine) {
   case Google:    return new SearchEngine(Google,   SE_GOOGLE,   tr("Google"),   WBRC_IMAGE_GOOGLE,   QStringList("g") << "gg" << "google");// << "ぐぐ" << "ググ" << "谷歌"
+  case GoogleLucky:return new SearchEngine(GoogleLucky,   SE_GOOGLE_LUCKY,  tr("I'm Feeling Lucky"),  WBRC_IMAGE_GOOGLE,   QStringList("l") << "luck" << "lucky");
   case GoogleImages:return new SearchEngine(GoogleImages, SE_GOOGLE_IMAGES, tr("Google Images"), WBRC_IMAGE_GOOGLE,   QStringList("image") << "img" << "画像" << "图片");
   case Bing:      return new SearchEngine(Bing,     SE_BING,     "Bing",         WBRC_IMAGE_BING,     QStringList("bing"));
 
-  case Youtube:   return new SearchEngine(Youtube,  SE_YOUTUBE,  tr("Youtube"),  WBRC_IMAGE_YOUTUBE,  QStringList("y") << "youtube" << "yt" << "ヨウツベ" << "视频");
+  case Youtube:   return new SearchEngine(Youtube,  SE_YOUTUBE,  tr("Youtube"),  WBRC_IMAGE_YOUTUBE,  QStringList("y") << "yt" << "youtube" << "ヨウツベ" << "视频");
   case Nicovideo: return new SearchEngine(Nicovideo,SE_NICOVIDEO,tr("Nicovideo"),WBRC_IMAGE_NICOVIDEO,QStringList("n") << "nico" << "nicovideo" << "anime" << "にこ" << "ニコ" << "ニコニコ" << "ニコ動" << "アニメ");
   case Bilibili:  return new SearchEngine(Bilibili, SE_BILIBILI, tr("Bilibili"), WBRC_IMAGE_BILIBILI, QStringList("b") << "bili" << "bilibili" << "ビリビリ" << "哔哩哔哩" << "新番");
   case Acfun:     return new SearchEngine(Acfun,    SE_ACFUN,    tr("AcFun"),    WBRC_IMAGE_ACFUN,    QStringList("a") << "ac" << "acfun");
   case Youku:     return new SearchEngine(Youku,    SE_YOUKU,    tr("Youku"),    WBRC_IMAGE_YOUKU,    QStringList("youku") << "ヨウク" << "优酷");
 
-  case WikiJa:    return new SearchEngine(WikiJa,   SE_WIKI_JA,  tr("Wikipedia (ja)"), WBRC_IMAGE_WIKI, QStringList("ja") << "j" << "ウィキ" << "百科");
-  case WikiEn:    return new SearchEngine(WikiEn,   SE_WIKI_EN,  tr("Wikipedia (en)"), WBRC_IMAGE_WIKI, QStringList("en") << "w" << "wiki" << "wikipedia");
-  case WikiZh:    return new SearchEngine(WikiZh,   SE_WIKI_ZH,  tr("Wikipedia (zh)"), WBRC_IMAGE_WIKI, QStringList("zh") << "维基");
+  case WikiJa:    return new SearchEngine(WikiJa,   SE_WIKI_JA,  tr("Wikipedia (ja)"), WBRC_IMAGE_WIKI, QStringList("j") << "ja" << "ウィキ" << "百科");
+  case WikiEn:    return new SearchEngine(WikiEn,   SE_WIKI_EN,  tr("Wikipedia (en)"), WBRC_IMAGE_WIKI, QStringList("w") << "en" << "wiki" << "wikipedia");
+  case WikiZh:    return new SearchEngine(WikiZh,   SE_WIKI_ZH,  tr("Wikipedia (zh)"), WBRC_IMAGE_WIKI, QStringList("z") << "zh" << "维基");
   case Manpage:   return new SearchEngine(Manpage,  SE_MAN,      "Manpages",     "",                  QStringList("man"));
   case CPlusPlus: return new SearchEngine(CPlusPlus,SE_CPP,      "C++",          WBRC_IMAGE_CPP,      QStringList("cpp") << "c++" << "cplusplus");
   case Qt:        return new SearchEngine(Qt,       SE_QT,       "Qt",           WBRC_IMAGE_QT,       QStringList("qt"));

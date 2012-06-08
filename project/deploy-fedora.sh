@@ -1,7 +1,7 @@
 #!/bin/bash -v
 # 4/4/2012
 
-VERSION=0.1.6.0
+VERSION=0.1.6.1
 APP=annot-player
 ZIPFILE=$APP-$VERSION-alpha-fedora.zip
 

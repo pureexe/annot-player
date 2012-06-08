@@ -91,6 +91,9 @@ public slots:
 
   void logSelectedUserIds(const QList<qint64> &uids);
 
+  void logInternetConnectionChanged(bool t);
+  void logPreferMotionlessAnnotationChanged(bool t);
+
 protected slots:
   void logAeroEnabledChanged(bool t);
   void logMenuEnabledChanged(bool t);

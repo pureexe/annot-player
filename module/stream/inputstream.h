@@ -24,6 +24,7 @@ public:
   virtual qint64 pos() const { return 0; }
 
   virtual qint64 read(char *data, qint64 maxSize) = 0;
+  virtual qint64 tryRead(char *data, qint64 maxSize) { Q_UNUSED(data); Q_UNUSED(maxSize); return 0; }
 
   qint64 read(QByteArray &data)
   { return read(data.data(), data.size()); }

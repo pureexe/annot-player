@@ -13,11 +13,16 @@
 #endif // WITH_MODULE_ANIMATION
 #include <QtGui>
 
-#define WINDOW_FLAGS \
+#define WINDOW_FLAGS_BASE \
   Qt::Dialog | \
   Qt::CustomizeWindowHint | \
-  Qt::FramelessWindowHint | \
   Qt::WindowStaysOnTopHint
+
+#ifdef Q_WS_MAC
+#  define WINDOW_FLAGS  WINDOW_FLAGS_BASE | Qt::FramelessWindowHint
+#else
+#  define WINDOW_FLAGS  WINDOW_FLAGS_BASE
+#endif // Q_WS_MAC
 
 #define MIN_SCALE       0.2
 #define MAX_SCALE       10.0
@@ -36,6 +41,7 @@ Magnifier::Magnifier(QWidget *parent)
     contextMenu_(0), darknessFilterAct_(0), fogFilterAct_(0), mosaicFilterAct_(0)
 {
   setWindowTitle(tr("Magnifier"));
+  setContentsMargins(0, 0, 0, 0);
 
   // See: http://stackoverflow.com/questions/1333610/displaying-translucent-irregular-shaped-windows-with-qt
   setAttribute(Qt::WA_TranslucentBackground);

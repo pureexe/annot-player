@@ -21,8 +21,8 @@ AssociationPreferencesTab::init()
   Q_ASSERT(registry_);
 
   supportedSuffices_ = Player::supportedSuffices();
-  supportedSuffices_.append(".exe");
-  supportedSuffices_.append(".lnk");
+  supportedSuffices_.append("exe");
+  supportedSuffices_.append("lnk");
 
   setWindowTitle(tr("Association"));
   createLayout();
@@ -66,7 +66,7 @@ AssociationPreferencesTab::createLayout()
   }
 
   count = 0;
-  foreach (const QString &suffix, QStringList() << ".exe" << ".lnk") {
+  foreach (const QString &suffix, QStringList() << "exe" << "lnk") {
     enum { Row = 7 };
     QtExt::NamedCheckBox *toggle = new QtExt::NamedCheckBox(suffix);
     toggle->setToolTip(suffix);

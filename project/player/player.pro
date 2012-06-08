@@ -1,7 +1,7 @@
 # player.pro
 # 6/30/2011
 
-VERSION = 0.1.6.0
+VERSION = 0.1.6.1
 
 DEFINES += PROJECT_PLAYER
 
@@ -15,6 +15,7 @@ include($$ROOTDIR/module/debug/debug.pri)
 include($$ROOTDIR/module/animation/animation.pri)
 include($$ROOTDIR/module/annotcloud/annotcloud.pri)
 include($$ROOTDIR/module/annotcodec/annotcodec.pri)
+include($$ROOTDIR/module/annotdb/annotdb.pri)
 include($$ROOTDIR/module/blockiodevice/blockiodevice.pri)
 include($$ROOTDIR/module/compress/compress.pri)
 include($$ROOTDIR/module/crypt/crypt.pri)
@@ -41,8 +42,9 @@ win32 {
     #include($$ROOTDIR/win/hook/hook.pri)
     include($$ROOTDIR/win/mousehook/mousehook.pri)
     include($$ROOTDIR/win/picker/picker.pri)
-    include($$ROOTDIR/win/qth/qth.pri)
     include($$ROOTDIR/win/qtwin/qtwin.pri)
+    include($$ROOTDIR/win/qtwinnt/qtwinnt.pri)
+    include($$ROOTDIR/win/texthook/texthook.pri)
 }
 unix: {
     include($$ROOTDIR/unix/qtunix/qtunix.pri)
@@ -116,6 +118,7 @@ HEADERS += \
     annot/annotationgraphicseffect.h \
     annot/annotationgraphicsitem.h \
     annot/annotationgraphicsitempool.h \
+    annot/annotationgraphicsitemscheduler.h \
     annot/annotationgraphicsview.h \
     annot/annotationgraphicsstyle.h \
     annot/annotationsettings.h \
@@ -127,8 +130,6 @@ HEADERS += \
     command/prefixcombobox.h \
     data/datamanager.h \
     data/dataserver.h \
-    db/db.h \
-    db/dbdefs.h \
     dialog/annotationcountdialog.h \
     dialog/backlogdialog.h \
     dialog/consoledialog.h \
@@ -155,12 +156,14 @@ HEADERS += \
     osd/osdwindow.h \
     osd/videoview.h \
     player/mainplayer.h \
+    player/mediathumbnail.h \
     player/miniplayer.h \
     player/embeddedcanvas.h \
     player/embeddedinfoview.h \
     player/embeddedplayer.h \
     player/playerpanel.h \
     player/playerui.h \
+    player/positioncalibration.h \
     player/positionslider.h \
     player/userlabel.h \
     signal/signalhub.h \
@@ -189,6 +192,7 @@ SOURCES += \
     annot/annotationgraphicseffect.cc \
     annot/annotationgraphicsitem.cc \
     annot/annotationgraphicsitempool.cc \
+    annot/annotationgraphicsitemscheduler.cc \
     annot/annotationgraphicsview.cc \
     annot/annotationgraphicsstyle.cc \
     annot/annotationanalyticsview.cc \
@@ -200,7 +204,6 @@ SOURCES += \
     command/prefixcombobox.cc \
     data/datamanager.cc \
     data/dataserver.cc \
-    db/db.cc \
     dialog/annotationcountdialog.cc \
     dialog/backlogdialog.cc \
     dialog/consoledialog.cc \
@@ -224,12 +227,14 @@ SOURCES += \
     osd/osdwindow.cc \
     osd/videoview.cc \
     player/mainplayer.cc \
+    player/mediathumbnail.cc \
     player/miniplayer.cc \
     player/embeddedcanvas.cc \
     player/embeddedinfoview.cc \
     player/embeddedplayer.cc \
     player/playerui.cc \
     player/playerpanel.cc \
+    player/positioncalibration.cc \
     player/positionslider.cc \
     player/userlabel.cc \
     signal/signalhub.cc \

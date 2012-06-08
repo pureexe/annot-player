@@ -32,7 +32,6 @@ enum { BAD_TIME = -1 };
 SeekDialog::SeekDialog(QWidget *parent)
   : Base(parent, WINDOW_FLAGS)
 {
-  setRippleEnabled(false);
   setWindowTitle(TR(T_TITLE_SEEK));
 
   createLayout();

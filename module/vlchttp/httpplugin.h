@@ -59,6 +59,7 @@ signals:
   void warning(const QString &msg);
   void fileSaved(const QString &fileName);
   void progress(qint64 receivedBytes, qint64 totalBytes);
+  void buffering();
 
 public:
   static void setNetworkCookieJar(QNetworkCookieJar *jar) { cookieJar_ = jar; }

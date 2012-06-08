@@ -36,10 +36,10 @@ namespace QtExt {
 } // namespace QtExt
 
 // Objects
+class AnnotationDatabase;
 class AnnotationFilter;
 class ClientAgent;
 class ClipboardMonitor;
-class Database;
 class DataManager;
 class DataServer;
 class EventLogger;
@@ -690,6 +690,8 @@ protected:
   void updateBrowseMenu();
   int currentBrowsedFileId() const;
 
+  QString browsedDirectory() const;
+
   // - Proxy browser -
 protected slots:
   void openProxyBrowser();
@@ -709,7 +711,7 @@ protected slots:
   void promptShutdown();
 
   // - Signal mode -
-#ifdef WITH_WIN_QTH
+#ifdef WITH_WIN_TEXTHOOK
 signals:
   void attached(ProcessInfo pi);
   void detached(ProcessInfo pi);
@@ -718,7 +720,7 @@ public slots:
   void openProcessHook(ulong hHook, const ProcessInfo &pi = ProcessInfo());
   void openProcessWindow(WId hwnd);
   void openProcessId(ulong pid);
-#endif // WITH_WIN_QTH
+#endif // WITH_WIN_TEXTHOOK
 
 public slots:
   void setWindowTrackingEnabled(bool t);
@@ -862,8 +864,8 @@ private:
 
   Player *player_;
 
-  Database *cache_,
-           *queue_;
+  AnnotationDatabase *cache_,
+                     *queue_;
   DataManager *dataManager_;
   DataServer *dataServer_;
 
@@ -1057,6 +1059,7 @@ private:
           *snapshotAct_,
           *snapshotAllAct_,
           *actualSizeAct_,
+          *togglePreferMotionlessAnnotationAct_,
           *toggleAnnotationAnalyticsViewVisibleAct_,
           *toggleAnnotationBandwidthLimitedAct_,
           *toggleAnnotationVisibleAct_,

@@ -65,6 +65,7 @@ AcAbout::templateText() const
 void
 AcAbout::init()
 {
+  setRippleEnabled(true);
   setWindowTitle(tr("About"));
   createLayout();
 }

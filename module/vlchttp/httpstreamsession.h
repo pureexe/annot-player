@@ -64,8 +64,7 @@ public:
   const QList<QUrl> &urls() const { return urls_; }
   virtual QString contentType() const; ///< \override
 
-  virtual qint64 read(char *data, qint64 maxSize)  ///< \override
-  { return fifo_ ? fifo_->read(data, maxSize) : 0; }
+  virtual qint64 read(char *data, qint64 maxSize);  ///< \override
 
   virtual bool seek(qint64 pos) ///< \override
   { return fifo_ ? fifo_->seek(pos) : false; } ///< \override

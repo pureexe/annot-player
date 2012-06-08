@@ -35,7 +35,6 @@ using namespace Logger;
 LoginDialog::LoginDialog(QWidget *parent)
   : Base(parent, WINDOW_FLAGS)
 {
-  setRippleEnabled(false);
   setWindowTitle(TR(T_TITLE_LOGIN));
 
   createLayout();

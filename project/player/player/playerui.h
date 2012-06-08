@@ -7,6 +7,7 @@
 #include "playerpanel.h"
 
 QT_FORWARD_DECLARE_CLASS(QMenu)
+QT_FORWARD_DECLARE_CLASS(QAction)
 
 class Player;
 class SignalHub;
@@ -24,6 +25,10 @@ class PlayerUi : public PlayerPanel
   Player *player_;
   ServerAgent *server_;
   bool active_;
+
+  QMenu *networkMenu_;
+  QAction *connectAct_,
+          *disconnectAct_;
 
   // TODO: use signal hub_ to replace player_ and server_ signals.
 public:
@@ -45,10 +50,11 @@ protected:
   void disconnectServer();
 
 public:
-  virtual void setVisible(bool visible); ///< \override
   bool isActive() const { return active_; }
 
   QString currentText() const;
+
+  //QMenu *networkMenu() const;
 
 signals:
   void updateMenuRequested();
@@ -57,7 +63,10 @@ signals:
   void showPositionPanelRequested();
   void updateUserMenuRequested();
 
+
 public slots:
+  virtual void setVisible(bool visible); ///< \override
+
   // - Player -
   void play();
   void stop();
@@ -81,6 +90,7 @@ public slots:
   void updateTitle();
   void updateVolumeSlider();
   void updatePositionSlider();
+  void updatePositionSliderToolTip();
 
   void updateUserButton();
   void updatePositionButton();
@@ -101,6 +111,8 @@ public slots:
   void updateWindowModeToggler();
 
   void clickUserButton();
+  void updateNetworkMenu();
+  void updateNetworkButton();
 
   void updateVisibleWidgets();
 

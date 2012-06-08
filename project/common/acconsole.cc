@@ -15,7 +15,6 @@ AcConsole::AcConsole(QWidget *parent)
   : Base(parent)
 {
   setWindowTitle(tr("Console"));
-  setRippleEnabled(false);
 
   createLayout();
 

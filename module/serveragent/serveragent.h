@@ -63,6 +63,7 @@ signals:
 
   // Error signals:
   void connected(); ///< succeeded
+  void connectedChanged(bool t);
   void connectionError();
   void error404();
   void serverError();
@@ -75,6 +76,7 @@ public slots:
   void logout();
 
   void setConnected(bool yes = true); ///< forcely set connection flag
+  void setDisconnected(bool yes = true) { return setConnected(!yes); }
   void setAuthorized(bool yes = true); ///< forcely set authorization flag
   void updateConnected();
   void updateAuthorized();

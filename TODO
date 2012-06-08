@@ -53,26 +53,45 @@ http://qt-project.org/wiki/Category:Add-ons
 - use wiki to track annotation for same movies
 
 
-# Mac
-- mac
-  - checkbox/radiobutton/groupbox stylesheet
-- player
- - open file broken due to slow startup
- - drag drop is not working
+# TODO
 
-## LATER
-
-- player annot
-  - make annot display vertical?
-    add annotationgraphicsscheduler
+- goei2 everyday 1h at least
+- writing proposal
+- scan and send material
+- get certification for driver license
+- ask for reference letters
+- car certification goto dmv
+- car certification goto walmart
 
 - fixme
   - server
     - FIXME: duplicated aliasname in database
+  - server: update
+
+# 0.1.6.2
+
+- player
+  - schelar: add support to deal with pause
+- windows fixme
   - player
     - debug close video crash
     - debug hang when close current video
+
 - player
+  - ffmpeg thumbnail
+    - use ffmpeg to provide thumbnails for image
+    http://stackoverflow.com/questions/1908411/how-to-use-ffmpeg
+    http://stackoverflow.com/questions/8679390/ffmpeg-extracting-20-images-from-a-video-of-variable-length
+  - eliminate osdwindow
+    - using setAttribute(Qt::WA_TranslucentBackground);
+      - use a qobject with timer for tracking rather than hardcode to annotationview
+      - stand alone
+        embeddedplayer
+        annotationview
+        rather than a global osdwindow
+    - create a pseodu object saving current window
+    - eliminite osdwindow for embedded player
+    - eliminite osdwindow for annotationview
   - osdcontroller to replace osdwindow
     - intercept raise request
     - track target view size/pos
@@ -80,11 +99,39 @@ http://qt-project.org/wiki/Category:Add-ons
   - remove annotationview from osdwindow
   - remove osdwindow
   - fixme: alt press when play will cause it loose focus
+- player UI
+  - steal preferences style from qbittorrent
+  - Black UI stylesheet
+    http://thesmithfam.org/blog/2009/09/17/qt-stylesheets-button-bar-tutorial/
+    - steal style from Youtube
+      with transparent black
+  - double click screen to pause
+    - after pause, show two big button: resume, and fullscreen
+  - when write annot, able to chang annot color easily
+- common
+  - add background to spinbox and timeedit
 
-- windows
-  - jump list
-   See: http://nicug.blogspot.com/search/label/taskbar
-   - launch downloaer/browser from player
+ - open file broken due to slow startup
+ - drag drop is not working
+
+## LATER
+
+- downloader
+  - use treeview instead
+- player
+  - able to stream more than 1 file at the same time, and switch between diff stream session
+  - player/downloader
+   - show taskbar progress
+     http://www.qtcentre.org/threads/26974-Qt-and-windows-7-new-Api
+     http://msdn.microsoft.com/en-us/library/dd391697(VS.85).aspx
+     deploy in windows xp to see if it works
+     - requires explorerframe.dll, might not available on windows xp
+
+- player
+
+# Clean up
+- module
+  - rename qtext to sth else, replace namespace with prefix
 
 # Download
 - able to stream more than 1 file at the same time, and switch between diff stream session
@@ -96,42 +143,6 @@ http://qt-project.org/wiki/Category:Add-ons
   - improve annotation effects for game goei2
 - continue appcloud project everyday
 - continue game translation everyday
-
-# Clean up
-- module
-  - rename qtext to sth else, replace namespace with prefix
-
-# Player GUI
-- ffmpeg thumbnail
-  - use ffmpeg to provide thumbnails for image
-  http://stackoverflow.com/questions/1908411/how-to-use-ffmpeg
-  http://stackoverflow.com/questions/8679390/ffmpeg-extracting-20-images-from-a-video-of-variable-length
-
-- common
-  - add background to spinbox and timeedit
-- player UI
-  - steal preferences style from qbittorrent
-  - eliminate osdwindow
-    - using setAttribute(Qt::WA_TranslucentBackground);
-      - use a qobject with timer for tracking rather than hardcode to annotationview
-      - stand alone
-        embeddedplayer
-        annotationview
-        rather than a global osdwindow
-    - create a pseodu object saving current window
-    - eliminite osdwindow for embedded player
-    - eliminite osdwindow for annotationview
-  - reduce embedded player's bottom margin
-    need to directly send event from OsdWindow to annotationGraphicsView wihout recursivecall
-    the best way is to eliminiate OsdWindow
-  - Black UI stylesheet
-    http://thesmithfam.org/blog/2009/09/17/qt-stylesheets-button-bar-tutorial/
-    - steal style from Youtube
-      with transparent black
-    - volume slider, only hover to show
-  - double click screen to pause
-    - after pause, show two big button: resume, and fullscreen
-  - when write annot, able to chang annot color easily
 
 # DIP
 - player
@@ -201,17 +212,9 @@ http://qt-project.org/wiki/Category:Add-ons
   - add an icon for reply with sth like an undo icon
 - player
   - removeEventListener on mouseHook & osdwindow, use QObject::event and QCoreApplication::sendEvent
-- downloader
-  - FIXME: no speed if hide
 - player
   - able to seek anywhere
   - able to resume
-
-# GAME
-- windows
-  - migrate to ith3
-    inject.cc => ihf/main.cpp
-    pipe.cc => ihf_dll/pipe.cpp
 
 # SNS
 - implement sns, using JSP, show online user status

@@ -2,6 +2,14 @@ ChangeLog
 Annot Project
 6/18/2011
 
+6/8/2012	annot.player, down, browser	0.1.6.1, 0.1.2.7, 0.1.1.7
+        * Add option to switch whether connect to the Internet.
+          If connected, the latest online annotations are preferred.
+          When disconnected, the local offline annotation database is used.
+        * Add new annotation scheduler to reduce annotation movement.
+        * Update from ITH2 to ITH3 for tracking Galgame.
+          Translation for Akatsuki no Goei 2 is partially broken.
+
 6/3/2012	annot.player, down, browser	0.1.6.0, 0.1.2.6, 0.1.1.6
         * Option to always show avatars (could be disabled from context menu).
         * Able to translate annotations to different languages.

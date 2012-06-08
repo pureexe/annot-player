@@ -25,6 +25,73 @@ BufferedRemoteStream::~BufferedRemoteStream()
 // - I/O -
 
 qint64
+BufferedRemoteStream::tryRead(char *data, qint64 maxSize)
+{
+  Q_ASSERT(data);
+  DOUT("enter: maxSize =" << maxSize << ", pos =" << pos_ << ", specifiedSize =" << Base::size());
+  if (maxSize <= 0) {
+    DOUT("exit: empty maxSize");
+    return 0;
+  }
+  if (!reply_) {
+    DOUT("exit: not running");
+    return 0;
+  }
+
+  if (reply_->isFinished()) {
+    DOUT("finished");
+    if (isRedirected()) {
+      redirect();
+      DOUT("exit: redirect");
+      return tryRead(data, maxSize);
+    }
+    if (data_.isEmpty()) {
+      DOUT("exit: return empty data");
+      return 0;
+    }
+    m_.lock();
+    qint64 ret = qMin(data_.size() - pos_, maxSize);
+    if (ret > 0) {
+      ::memcpy(data, data_.constData() + pos_, ret);
+      pos_ += ret;
+    } else
+      ret = 0;
+    m_.unlock();
+    DOUT("exit: ret =" << ret);
+    return ret;
+  }
+
+  qint64 leftSize = data_.size() - pos_;
+  if (maxSize <= leftSize) {
+    m_.lock();
+    ::memcpy(data, data_.constData() + pos_, maxSize);
+    pos_ += maxSize;
+    m_.unlock();
+    DOUT("exit: ret =" << maxSize);
+    return maxSize;
+  }
+
+  qint64 count;
+  if (stopped_ ||
+      (count = reply_->bytesAvailable()) < maxSize - leftSize) {
+    DOUT("exit: ret = 0, insufficient available data");
+    return 0;
+  }
+
+  qint64 ret = qMin(maxSize, count + leftSize);
+  DOUT("received size =" << count);
+  if (ret > 0) {
+    m_.lock();
+    data_.append(reply_->read(count));
+    ::memcpy(data, data_.constData() + pos_, ret);
+    pos_ += ret;
+    m_.unlock();
+  }
+  DOUT("exit: ret =" << ret);
+  return ret;
+}
+
+qint64
 BufferedRemoteStream::read(char *data, qint64 maxSize)
 {
   Q_ASSERT(data);
@@ -81,7 +148,7 @@ BufferedRemoteStream::read(char *data, qint64 maxSize)
 
   qint64 count;
   while ((count = reply_->bytesAvailable()) < maxSize - leftSize &&
-         reply_->isRunning() && ! stopped_) {
+         reply_->isRunning() && !stopped_) {
     waitForReadyRead();
     if (isRedirected()) {
       redirect();

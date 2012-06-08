@@ -3,7 +3,7 @@
 # See: http://fedoraproject.org/wiki/How_to_create_an_RPM_package
 
 ## environment
-VERSION=0.1.1.6
+VERSION=0.1.1.7
 
 PACKAGE_NAME=annot-down
 PACKAGE_VERSION=$VERSION

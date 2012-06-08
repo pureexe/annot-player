@@ -5,13 +5,13 @@
 <context>
     <name>AcAbout</name>
     <message>
-        <location filename="../../common/acabout.cc" line="68"/>
-        <location filename="../../common/acabout.cc" line="83"/>
+        <location filename="../../common/acabout.cc" line="69"/>
+        <location filename="../../common/acabout.cc" line="84"/>
         <source>About</source>
         <translation>ソフトについて</translation>
     </message>
     <message>
-        <location filename="../../common/acabout.cc" line="80"/>
+        <location filename="../../common/acabout.cc" line="81"/>
         <source>OK</source>
         <translation>確認</translation>
     </message>
@@ -117,12 +117,12 @@
         <translation>コンソール</translation>
     </message>
     <message>
-        <location filename="../../common/acconsole.cc" line="39"/>
+        <location filename="../../common/acconsole.cc" line="38"/>
         <source>OK</source>
         <translation>確認</translation>
     </message>
     <message>
-        <location filename="../../common/acconsole.cc" line="41"/>
+        <location filename="../../common/acconsole.cc" line="40"/>
         <source>Clear</source>
         <translation>消す</translation>
     </message>
@@ -135,14 +135,18 @@
         <translation>ビュー</translation>
     </message>
     <message>
-        <location filename="../../common/acfilteredlistview.cc" line="53"/>
         <source>Filter pattern</source>
-        <translation>パターン</translation>
+        <translation type="obsolete">パターン</translation>
     </message>
     <message>
         <location filename="../../common/acfilteredlistview.cc" line="53"/>
         <source>Search</source>
         <translation>検索</translation>
+    </message>
+    <message>
+        <location filename="../../common/acfilteredlistview.cc" line="53"/>
+        <source>Filter Pattern</source>
+        <translation>パターン</translation>
     </message>
     <message>
         <location filename="../../common/acfilteredlistview.cc" line="54"/>
@@ -155,8 +159,34 @@
     <message>
         <location filename="../../common/acfilteredtableview.cc" line="55"/>
         <location filename="../../common/acfilteredtableview.cc" line="57"/>
-        <source>Filter pattern</source>
+        <source>Filter Pattern</source>
         <translation>パターン</translation>
+    </message>
+    <message>
+        <source>Filter pattern</source>
+        <translation type="obsolete">パターン</translation>
+    </message>
+    <message>
+        <location filename="../../common/acfilteredtableview.cc" line="59"/>
+        <location filename="../../common/acfilteredtableview.cc" line="65"/>
+        <source>Filter Syntax</source>
+        <translation>シンタックス</translation>
+    </message>
+    <message>
+        <location filename="../../common/acfilteredtableview.cc" line="60"/>
+        <source>Regular Expression</source>
+        <translation>正規表現</translation>
+    </message>
+    <message>
+        <location filename="../../common/acfilteredtableview.cc" line="62"/>
+        <source>Fixed String</source>
+        <translation>そのまま</translation>
+    </message>
+    <message>
+        <location filename="../../common/acfilteredtableview.cc" line="67"/>
+        <location filename="../../common/acfilteredtableview.cc" line="72"/>
+        <source>Filter Column</source>
+        <translation>列</translation>
     </message>
     <message>
         <location filename="../../common/acfilteredtableview.cc" line="55"/>
@@ -164,15 +194,12 @@
         <translation>検索</translation>
     </message>
     <message>
-        <location filename="../../common/acfilteredtableview.cc" line="59"/>
-        <location filename="../../common/acfilteredtableview.cc" line="65"/>
         <source>Filter syntax</source>
-        <translation>シンタックス</translation>
+        <translation type="obsolete">シンタックス</translation>
     </message>
     <message>
-        <location filename="../../common/acfilteredtableview.cc" line="60"/>
         <source>Regular expression</source>
-        <translation>正規表現</translation>
+        <translation type="obsolete">正規表現</translation>
     </message>
     <message>
         <location filename="../../common/acfilteredtableview.cc" line="61"/>
@@ -180,15 +207,12 @@
         <translation>ワイルドカード</translation>
     </message>
     <message>
-        <location filename="../../common/acfilteredtableview.cc" line="62"/>
         <source>Fixed string</source>
-        <translation>そのまま</translation>
+        <translation type="obsolete">そのまま</translation>
     </message>
     <message>
-        <location filename="../../common/acfilteredtableview.cc" line="67"/>
-        <location filename="../../common/acfilteredtableview.cc" line="72"/>
         <source>Filter column</source>
-        <translation>列</translation>
+        <translation type="obsolete">列</translation>
     </message>
     <message>
         <location filename="../../common/acfilteredtableview.cc" line="74"/>
@@ -361,7 +385,7 @@
 <context>
     <name>AcPreferences</name>
     <message>
-        <location filename="../../common/acpreferences.cc" line="52"/>
+        <location filename="../../common/acpreferences.cc" line="51"/>
         <source>Preferences</source>
         <translation>設定</translation>
     </message>
@@ -395,7 +419,7 @@
 <context>
     <name>BufferedRemoteStream</name>
     <message>
-        <location filename="../../../module/stream/bufferedremotestream.cc" line="324"/>
+        <location filename="../../../module/stream/bufferedremotestream.cc" line="391"/>
         <source>network error, failed to download remote resource</source>
         <translation>ﾀﾞｳﾝﾛｰﾄﾞに失敗した</translation>
     </message>
@@ -562,7 +586,7 @@
         <translation>URLの解析に失敗した</translation>
     </message>
     <message>
-        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="353"/>
+        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="359"/>
         <source>nicovideo.jp account is required to resolve URL</source>
         <translation>ニコアカウントを入力してください</translation>
     </message>
@@ -571,59 +595,60 @@
     <name>MainWindow</name>
     <message>
         <location filename="../mainwindow.cc" line="60"/>
-        <location filename="../mainwindow.cc" line="697"/>
-        <location filename="../mainwindow.cc" line="762"/>
-        <location filename="../mainwindow.cc" line="764"/>
+        <location filename="../mainwindow.cc" line="698"/>
+        <location filename="../mainwindow.cc" line="763"/>
+        <location filename="../mainwindow.cc" line="765"/>
+        <location filename="../mainwindow.cc" line="967"/>
         <source>Annot Downloader</source>
         <translation>とあるﾀﾞｳﾝﾛｰﾄﾞ</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="151"/>
-        <location filename="../mainwindow.cc" line="228"/>
+        <location filename="../mainwindow.cc" line="152"/>
+        <location filename="../mainwindow.cc" line="229"/>
         <source>Start</source>
         <translation>開始</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="152"/>
-        <location filename="../mainwindow.cc" line="236"/>
+        <location filename="../mainwindow.cc" line="153"/>
+        <location filename="../mainwindow.cc" line="237"/>
         <source>Stop</source>
         <translation>停止</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="153"/>
-        <location filename="../mainwindow.cc" line="240"/>
+        <location filename="../mainwindow.cc" line="154"/>
+        <location filename="../mainwindow.cc" line="241"/>
         <source>Remove</source>
         <translation>消す</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="154"/>
-        <location filename="../mainwindow.cc" line="256"/>
+        <location filename="../mainwindow.cc" line="155"/>
+        <location filename="../mainwindow.cc" line="257"/>
         <source>Play</source>
         <translation>再生</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="155"/>
-        <location filename="../mainwindow.cc" line="260"/>
+        <location filename="../mainwindow.cc" line="156"/>
+        <location filename="../mainwindow.cc" line="261"/>
         <source>Browse</source>
         <translation>ブラウズ</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="157"/>
+        <location filename="../mainwindow.cc" line="158"/>
         <source>Dir</source>
         <translation>フォルダ</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="157"/>
+        <location filename="../mainwindow.cc" line="158"/>
         <source>Open directory</source>
         <translation>保存フォルダを開く</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="159"/>
+        <location filename="../mainwindow.cc" line="160"/>
         <source>Add</source>
         <translation>追加</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="232"/>
+        <location filename="../mainwindow.cc" line="233"/>
         <source>Restart</source>
         <translation>再開</translation>
     </message>
@@ -640,63 +665,63 @@
         <translation type="obsolete">全て消す</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="244"/>
+        <location filename="../mainwindow.cc" line="245"/>
         <source>Start All</source>
         <translation>全て開始</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="248"/>
+        <location filename="../mainwindow.cc" line="249"/>
         <source>Stop All</source>
         <translation>全て停止</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="252"/>
+        <location filename="../mainwindow.cc" line="253"/>
         <source>Remove All</source>
         <translation>全て消す</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="257"/>
+        <location filename="../mainwindow.cc" line="258"/>
         <source>Open with Annot Player</source>
         <translation>Annot Playerで再生</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="261"/>
+        <location filename="../mainwindow.cc" line="262"/>
         <source>Open with Annot Browser</source>
         <translation>Annot Browserで開く</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="264"/>
+        <location filename="../mainwindow.cc" line="265"/>
         <source>Open Directory</source>
         <translation>保存フォルダを開く</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="268"/>
+        <location filename="../mainwindow.cc" line="269"/>
         <source>Hide</source>
         <translation>非表示</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="275"/>
+        <location filename="../mainwindow.cc" line="276"/>
         <source>Quit</source>
         <translation>終了</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="279"/>
+        <location filename="../mainwindow.cc" line="280"/>
         <source>New</source>
         <translation>新しいタスク</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="285"/>
+        <location filename="../mainwindow.cc" line="286"/>
         <source>Menu Bar</source>
         <translation>メニュー・バー</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="373"/>
+        <location filename="../mainwindow.cc" line="374"/>
         <source>Preferences</source>
         <translation>設定</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="290"/>
-        <location filename="../mainwindow.cc" line="860"/>
+        <location filename="../mainwindow.cc" line="291"/>
+        <location filename="../mainwindow.cc" line="861"/>
         <source>Copy Title</source>
         <translation>タイトルをコピー</translation>
     </message>
@@ -705,19 +730,19 @@
         <translation type="obsolete">URLをコピー</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="301"/>
-        <location filename="../mainwindow.cc" line="303"/>
+        <location filename="../mainwindow.cc" line="302"/>
         <location filename="../mainwindow.cc" line="304"/>
+        <location filename="../mainwindow.cc" line="305"/>
         <source>Copy</source>
         <translation>コピー</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="311"/>
+        <location filename="../mainwindow.cc" line="312"/>
         <source>Search with %1</source>
         <translation>%1で検索</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="384"/>
+        <location filename="../mainwindow.cc" line="385"/>
         <source>&amp;File</source>
         <translation></translation>
     </message>
@@ -726,97 +751,96 @@
         <translation type="obsolete">終了</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="394"/>
+        <location filename="../mainwindow.cc" line="395"/>
         <source>&amp;Quit</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="396"/>
+        <location filename="../mainwindow.cc" line="397"/>
         <source>&amp;Edit</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="403"/>
+        <location filename="../mainwindow.cc" line="404"/>
         <source>&amp;Settings</source>
         <translation>設定</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="404"/>
+        <location filename="../mainwindow.cc" line="405"/>
         <source>&amp;Preferences</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="406"/>
+        <location filename="../mainwindow.cc" line="407"/>
         <source>&amp;Help</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="408"/>
+        <location filename="../mainwindow.cc" line="409"/>
         <source>&amp;About</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="422"/>
+        <location filename="../mainwindow.cc" line="423"/>
         <source>Name</source>
         <translation>名前</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="423"/>
+        <location filename="../mainwindow.cc" line="424"/>
         <source>State</source>
         <translation>状態</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="424"/>
+        <location filename="../mainwindow.cc" line="425"/>
         <source>Size</source>
         <translation>サイズ</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="425"/>
+        <location filename="../mainwindow.cc" line="426"/>
         <source>Speed</source>
         <translation>速度</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="427"/>
+        <location filename="../mainwindow.cc" line="428"/>
         <source>Remaining time</source>
         <translation>残り時間</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="428"/>
+        <location filename="../mainwindow.cc" line="429"/>
         <source>Path</source>
         <translation>位置</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="429"/>
+        <location filename="../mainwindow.cc" line="430"/>
         <source>URL</source>
         <translation>URL</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="430"/>
+        <location filename="../mainwindow.cc" line="431"/>
         <source>ID</source>
         <translation>ID</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="621"/>
+        <location filename="../mainwindow.cc" line="622"/>
         <source>openning</source>
         <translation>正在打开</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="623"/>
+        <location filename="../mainwindow.cc" line="624"/>
         <source>not exist</source>
         <translation>存在しない</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="642"/>
+        <location filename="../mainwindow.cc" line="643"/>
         <source>task exists</source>
         <translation>タスクが既に存在</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="966"/>
         <source>Hide Window</source>
-        <translation>ウィンドウを非表示</translation>
+        <translation type="obsolete">ウィンドウを非表示</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="966"/>
+        <location filename="../mainwindow.cc" line="967"/>
         <source>Minimize to Tray</source>
         <translation>トレイに隠れる</translation>
     </message>
@@ -825,43 +849,43 @@
         <translation type="obsolete">ﾀﾞｳﾝﾛｰﾄﾞ</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="792"/>
+        <location filename="../mainwindow.cc" line="793"/>
         <source>download finished</source>
         <translation>ﾀﾞｳﾝﾛｰﾄﾞ完成</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="799"/>
+        <location filename="../mainwindow.cc" line="800"/>
         <source>download failed</source>
         <translation>ﾀﾞｳﾝﾛｰﾄﾞ失敗</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="859"/>
+        <location filename="../mainwindow.cc" line="860"/>
         <source>Copy URL</source>
         <translation>URLをコピー</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="916"/>
+        <location filename="../mainwindow.cc" line="917"/>
         <source>Stopped</source>
         <translation>停止</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="917"/>
+        <location filename="../mainwindow.cc" line="918"/>
         <source>Downloading</source>
         <translation>ﾀﾞｳﾝﾛｰﾄﾞ中</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="918"/>
+        <location filename="../mainwindow.cc" line="919"/>
         <source>Pending</source>
         <translation>待つ</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="919"/>
+        <location filename="../mainwindow.cc" line="920"/>
         <source>Finished</source>
         <translation>完成</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="920"/>
         <location filename="../mainwindow.cc" line="921"/>
+        <location filename="../mainwindow.cc" line="922"/>
         <source>Error</source>
         <translation>エラー</translation>
     </message>
@@ -1097,46 +1121,51 @@
     </message>
     <message>
         <location filename="../../../module/searchengine/searchenginefactory.cc" line="13"/>
+        <source>I&apos;m Feeling Lucky</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../../module/searchengine/searchenginefactory.cc" line="14"/>
         <source>Google Images</source>
         <translation>Google画像</translation>
     </message>
     <message>
-        <location filename="../../../module/searchengine/searchenginefactory.cc" line="16"/>
+        <location filename="../../../module/searchengine/searchenginefactory.cc" line="17"/>
         <source>Youtube</source>
         <translation>ヨウツベ</translation>
     </message>
     <message>
-        <location filename="../../../module/searchengine/searchenginefactory.cc" line="17"/>
+        <location filename="../../../module/searchengine/searchenginefactory.cc" line="18"/>
         <source>Nicovideo</source>
         <translation>ニコニコ動画</translation>
     </message>
     <message>
-        <location filename="../../../module/searchengine/searchenginefactory.cc" line="18"/>
+        <location filename="../../../module/searchengine/searchenginefactory.cc" line="19"/>
         <source>Bilibili</source>
         <translation>ビリビリ動画</translation>
     </message>
     <message>
-        <location filename="../../../module/searchengine/searchenginefactory.cc" line="19"/>
+        <location filename="../../../module/searchengine/searchenginefactory.cc" line="20"/>
         <source>AcFun</source>
         <translation>AcFun</translation>
     </message>
     <message>
-        <location filename="../../../module/searchengine/searchenginefactory.cc" line="20"/>
+        <location filename="../../../module/searchengine/searchenginefactory.cc" line="21"/>
         <source>Youku</source>
         <translation>ヨウク動画</translation>
     </message>
     <message>
-        <location filename="../../../module/searchengine/searchenginefactory.cc" line="22"/>
+        <location filename="../../../module/searchengine/searchenginefactory.cc" line="23"/>
         <source>Wikipedia (ja)</source>
         <translation>ウィキ（日本語）</translation>
     </message>
     <message>
-        <location filename="../../../module/searchengine/searchenginefactory.cc" line="23"/>
+        <location filename="../../../module/searchengine/searchenginefactory.cc" line="24"/>
         <source>Wikipedia (en)</source>
         <translation>ウィキ（英語）</translation>
     </message>
     <message>
-        <location filename="../../../module/searchengine/searchenginefactory.cc" line="24"/>
+        <location filename="../../../module/searchengine/searchenginefactory.cc" line="25"/>
         <source>Wikipedia (zh)</source>
         <translation>ウィキ（中国語）</translation>
     </message>

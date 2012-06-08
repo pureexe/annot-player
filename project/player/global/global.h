@@ -138,10 +138,10 @@ enum { ALPHA = 0 };
 #endif // WITH_WIN_HOOK
 
 // - QTH -
-#ifdef WITH_WIN_QTH
-  #define QTH           Qth::globalInstance()
-#else
-  #define QTH           #error "Hook is not used"
-#endif // WITH_WIN_QTH
+//#ifdef WITH_WIN_QTH
+//#  define QTH           Qth::globalInstance()
+//#else
+//#  define QTH           #error "Hook is not used"
+//#endif // WITH_WIN_QTH
 
 #endif // GLOBAL_H

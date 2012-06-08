@@ -45,7 +45,6 @@ AcPreferences::AcPreferences(ulong tabs, QWidget *parent, bool final)
 void
 AcPreferences::init()
 {
-  setRippleEnabled(false);
   tabView_ = new AcTabView(this);
   if (!settings_)
     settings_ = AcSettings::globalSettings();

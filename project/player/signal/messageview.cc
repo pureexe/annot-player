@@ -5,9 +5,9 @@
 #include "tr.h"
 #include "global.h"
 #include "logger.h"
-#ifdef WITH_WIN_QTH
-#  include "win/qth/qth.h"
-#endif // WITH_WIN_QTH
+#ifdef WITH_WIN_TEXTHOOK
+#  include "win/texthook/texthook.h"
+#endif // WITH_WIN_TEXTHOOK
 #include "project/common/acui.h"
 #include "module/qtext/htmltag.h"
 #include "module/qtext/spinbox.h"
@@ -68,7 +68,7 @@ MessageView::createLayout()
 
   autoButton_ = ui->makeToolButton(
         AcUi::CheckHint, TR(T_AUTO), tr("Auto-detect signal"), this, SLOT(invalidateCurrentHook()));
-  autoButton_->setChecked(true);
+  autoButton_->setChecked(false);
 
   selectButton_ = ui->makeToolButton(
         AcUi::PushHint | AcUi::HighlightHint, TR(T_OK), tr("Use selected signal"), this, SLOT(selectCurrentHook()));
@@ -89,7 +89,7 @@ MessageView::createLayout()
     header->addWidget(hookCountLabel_);
     header->addWidget(selectButton_);
     header->addStretch();
-    header->addWidget(autoButton_);
+    //header->addWidget(autoButton_); // TODO: auto detect is disabled, because hookName is unimplemented
     header->addWidget(resetButton);
 
     // left, top, right, bottom
@@ -112,15 +112,14 @@ void
 MessageView::setActive(bool active)
 {
   active_ = active;
-#ifdef WITH_WIN_QTH
-  Q_ASSERT(QTH);
+#ifdef WITH_WIN_TEXTHOOK
   if (active_)
-    connect(QTH, SIGNAL(textReceived(QString,ulong,ulong,QString)),
+    connect(TextHook::globalInstance(), SIGNAL(textReceived(QString,ulong,ulong)),
             this, SLOT(processHookedText(QString,ulong)));
   else
-    disconnect(QTH, SIGNAL(textReceived(QString,ulong,ulong,QString)),
+    disconnect(TextHook::globalInstance(), SIGNAL(textReceived(QString,ulong,ulong)),
                this, SLOT(processHookedText(QString,ulong)));
-#endif WITH_WIN_QTH
+#endif // WITH_WIN_TEXTHOOK
 }
 
 void
@@ -205,32 +204,36 @@ MessageView::invalidateSelectButton()
 void
 MessageView::selectHookIndex(int index)
 {
-  Q_ASSERT(index >= 0 && index < texts_.size());
   //if (index < 0 || index >= texts_.size())
   //  return;
 
-  setTextList(texts_[index]);
+  if (index >= 0 && index < texts_.size())
+    setTextList(texts_[index]);
 }
 
 bool
 MessageView::isBetterHook(ulong goodHookId, ulong badHookId)
 {
-  QString badHookName = QTH->hookNameById(badHookId);
+  QString badHookName = TextHook::globalInstance()->hookNameById(badHookId);
   if (badHookName.isEmpty())
     return true;
-  QString goodHookName = QTH->hookNameById(goodHookId);
+  QString goodHookName = TextHook::globalInstance()->hookNameById(goodHookId);
   if (goodHookName.isEmpty())
     return false;
 
-  if (QTH->isStandardHookName(badHookName))
-    return true;
-  return !QTH->isStandardHookName(goodHookName);
+  return TextHook::globalInstance()->isStandardHookName(badHookName) ||
+         !TextHook::globalInstance()->isStandardHookName(goodHookName);
 }
 
 void
 MessageView::processHookedText(const QString &text, ulong hookId)
 {
   DOUT("enter: hookId =" << hookId << ", text =" << text);
+
+  if (text.trimmed().isEmpty()) {
+    DOUT("exit: skip empty text");
+    return;
+  }
 
   int index = hooks_.indexOf(hookId);
   if (index < 0) {
@@ -269,8 +272,8 @@ MessageView::invalidateCurrentHook()
     return;
 
   ulong hid = currentHookId();
-  QString hookName = QTH->hookNameById(hid);
-  if (!hookName.isEmpty() && QTH->isKnownHookForProcess(hookName, processName_))
+  QString hookName = TextHook::globalInstance()->hookNameById(hid);
+  if (!hookName.isEmpty() && TextHook::globalInstance()->isKnownHookForProcess(hookName, processName_))
     selectCurrentHook();
 }
 

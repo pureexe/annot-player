@@ -7,11 +7,12 @@
 #include "global.h"
 #include "logger.h"
 #include "win/qtwin/qtwin.h"
-#ifdef WITH_WIN_QTH
-#  include "win/qth/qth.h"
+#include "win/qtwinnt/qtwinnt.h"
+#ifdef WITH_WIN_TEXTHOOK
+#  include "win/texthook/texthook.h"
 #else
-#  error "QTH is indispensible"
-#endif // WITH_WIN_QTH
+#  error "TextHook is indispensible"
+#endif // WITH_WIN_TEXTHOOK
 #include "project/common/acfilteredtableview.h"
 #include "project/common/acui.h"
 #include <QtGui>
@@ -31,7 +32,7 @@ namespace { // anonymous
       << "Activator" << "ApMsgFwd" << "Apntex" << "Apoint" << "APSDaemon" << "AutoHotkey" << "ApplePhotoStreams"
       << "BookmarkDAV_client" << "BoonSutazio" << "Bootcamp" << "BtStackServer" << "BTTray"
       << "CamtasiaStudio" << "chrome"
-      << "Dropbox" << "DTLite"
+      << "distnoted" << "Dropbox" << "DTLite"
       << "eclipse" << "Evernote" << "EvernoteTray"
       << "firefox" << "foobar2000"
       << "GoogleIMEJaConverter" << "GoogleIMEJaRenderer" << "gvim"
@@ -244,7 +245,7 @@ ProcessView::invalidateSourceModel(bool showAll)
     }
 
     QString status;
-    if (QTH->isProcessAttached(pid))
+    if (TextHook::globalInstance()->isProcessAttached(pid))
       status = TR(T_ATTACHED);
 
     // TODO: hidden PID: pi.pid save as row attribute but hidden
@@ -295,7 +296,7 @@ void
 ProcessView::attachProcess()
 {
   ulong pid = currentPid();
-  if (pid && QTH->attachProcess(pid)) {
+  if (pid && TextHook::globalInstance()->attachProcess(pid)) {
     setCurrentItemAttached(true);
     invalidateButtons();
     log(QString("%1 (pid = %2)").arg(tr("process attached")).arg(QString::number(pid)));
@@ -304,7 +305,7 @@ ProcessView::attachProcess()
     error(tr("failed to attach process ") + QString(" (pid = %1)").arg(QString::number(pid)));
     if (!QtWin::isProcessActiveWithId(pid))
       notify(tr("Is the process running now?"));
-    else if (!QTH->isElevated())
+    else if (!QtWinnt::isElevated())
       notify(tr("Run me as administrator and try again &gt;_&lt;"));
     else
       notify(tr("Restart the target process might help -_-"));
@@ -320,7 +321,7 @@ ProcessView::detachProcess()
     pi = pis_[pid];
     setCurrentItemAttached(false);
   }
-  if (pid && QTH->detachProcess(pid)) {
+  if (pid && TextHook::globalInstance()->detachProcess(pid)) {
     invalidateButtons();
     log(tr("process detached") + QString(" (pid = %1)").arg(QString::number(pid)));
   } else

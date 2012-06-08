@@ -3,7 +3,7 @@
 setlocal
 cd /d d:/devel/build || exit /b 1
 
-set VERSION=0.1.6.0
+set VERSION=0.1.6.1
 set APP=annot-player
 set TARGET=Annot Stream
 set ZIPFILE=%APP%-%VERSION%-win.zip
@@ -25,7 +25,8 @@ set QT_TRANSLATIONS=qt_ja.qm,qt_zh_CN.qm,qt_zh_TW.qm
 set QT_PLUGINS=accessible bearer codecs graphicssystems iconengines imageformats sqldrivers
 
 set ITH_HOME=/Volumes/win/dev/ith
-set ITH_DLLS=ITH.dll,ITH_engine.dll
+::set ITH_DLLS=ITH.dll,ITH_engine.dll
+set ITH_DLLS=IHF.dll,IHF_DLL.dll,ITH_Engine.dll
 
 set OPENSSL_HOME=/Volumes/win/dev/openssl/1.0.0j
 set OPENSSL_DLLS=libeay32.dll,ssleay32.dll

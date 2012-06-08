@@ -14,6 +14,13 @@
 #include "project/common/aciconbutton.h"
 #include <QtGui>
 
+//#define ACSS_TOOLBUTTON_TEXT_(_weight, _style, _dec, _normal, _hover, _pressed, _checked, _checked_hover, _disabled)
+#define SS_TOOLBUTTON_USER      ACSS_TOOLBUTTON_TEXT_(bold, normal, none, blue, red, purple, purple, red, gray)
+#define SS_TOOLBUTTON_INTERNET  ACSS_TOOLBUTTON_TEXT_(normal, italic, none, blue, red, red, cyan, red, gray)
+#define SS_TOOLBUTTON_SEEK      ACSS_TOOLBUTTON_TEXT_(normal, normal, none, cyan, red, purple, purple, red, gray)
+#define SS_TOOLBUTTON_PROGRESS  ACSS_TOOLBUTTON_TEXT_(normal, italic, none, cyan, red, purple, purple, red, gray)
+
+
 //enum { VOLUME_SLIDE_MAX_WIDTH = 100 };
 
 // - Construction -
@@ -23,7 +30,7 @@ PlayerPanel::PlayerPanel(QWidget *parent)
     positionSlider_(0), volumeSlider_(0),
     openButton_(0), playButton_(0), stopButton_(0), nextFrameButton_(0), fastForwardButton_(0), fastFastForwardButton_(0),
     toggleFullScreenModeButton_(0), toggleMiniModeButton_(0), toggleEmbedModeButton_(0), toggleTraceWindowButton_(0),
-    userButton_(0), positionButton_(0), progressButton_(0), previousButton_(0), nextButton_(0), menuButton_(0),
+    userButton_(0), networkButton_(0), positionButton_(0), progressButton_(0), previousButton_(0), nextButton_(0), menuButton_(0),
     inputCountButton_(0), inputComboBox_(0), prefixComboBox_(0)
 {
   setContentsMargins(0, 0, 0, 0);
@@ -89,6 +96,7 @@ PlayerPanel::volumeSlider()
   MAKE_BUTTON(previousButton, PREVIOUS)
   MAKE_BUTTON(nextButton, NEXT)
   MAKE_BUTTON(userButton, USER)
+  MAKE_BUTTON(networkButton, INTERNET)
   MAKE_BUTTON(positionButton, SEEK)
   MAKE_BUTTON(progressButton, PROGRESS)
   MAKE_BUTTON(menuButton, MENU)

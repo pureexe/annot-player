@@ -2,12 +2,11 @@
 // 10/19/2011
 
 #include "messagehandler.h"
-#include "global.h"
-#ifdef WITH_WIN_QTH
-#  include "win/qth/qth.h"
+#ifdef WITH_WIN_TEXTHOOK
+#  include "win/texthook/texthook.h"
 #else
-#  error "QTH module is indispensible"
-#endif // WITH_WIN_QTH
+#  error "TextHook module is indispensible"
+#endif // WITH_WIN_TEXTHOOK
 #include "module/annotcloud/annotation.h"
 #include "module/annotcloud/annottag.h"
 #include <QtCore>
@@ -38,11 +37,11 @@ MessageHandler::MessageHandler(QObject *parent)
 
 void
 MessageHandler::connectTextHook()
-{ connect(QTH, SIGNAL(textReceived(QString,ulong,ulong,QString)), SLOT(processTextMessage(QString,ulong))); }
+{ connect(TextHook::globalInstance(), SIGNAL(textReceived(QString,ulong,ulong)), SLOT(processTextMessage(QString,ulong))); }
 
 void
 MessageHandler::disconnectTextHook()
-{ disconnect(QTH, SIGNAL(textReceived(QString,ulong,ulong,QString)), this, SLOT(processTextMessage(QString,ulong))); }
+{ disconnect(TextHook::globalInstance(), SIGNAL(textReceived(QString,ulong,ulong)), this, SLOT(processTextMessage(QString,ulong))); }
 
 // - Properties -
 
@@ -77,14 +76,14 @@ MessageHandler::processTextMessage(const QString &text, ulong hookId)
     return;
   }
 
-  emit messageReceivedWithText(text);
-
   lastMessageHash_.clear();
 
   if (text.trimmed().isEmpty()) {
     DOUT("exit: skipping empty text");
     return;
   }
+
+  emit messageReceivedWithText(text);
 
   messages_.prepend(text);
   if (messages_.size() > messageCount_)
@@ -99,7 +98,6 @@ MessageHandler::processTextMessage(const QString &text, ulong hookId)
       toHash.prepend(t);
       if (messages_.size() >= 4 && (t=messages_[3]) == text)
         toHash.prepend(t);
-
     }
 
   } else if (text.length() < 10) {
@@ -119,9 +117,7 @@ MessageHandler::processTextMessage(const QString &text, ulong hookId)
   }
 
   int count = toHash.size();
-  qint64 h = Annotation::hashTextPos(toHash.takeFirst());
-  while (!toHash.isEmpty())
-    h = Annotation::rehashTextPos(toHash.takeFirst(), h);
+  qint64 h = Annotation::hashTextsPos(toHash);
 
   lastMessageHash_.hash = h;
   lastMessageHash_.count = count;

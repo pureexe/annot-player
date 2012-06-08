@@ -117,7 +117,7 @@ WebBrowser::completeUrl(const QString &url) const
         "~`!@#$%&*(){}_=+|:;<>/?"
       "]"
       )))
-      ret = searchAddress(url, SearchEngineFactory::Google);
+      ret = searchAddress(url, SearchEngineFactory::GoogleLucky);
     else
       ret.prepend("http://");
   }
@@ -220,6 +220,7 @@ WebBrowser::setupUi()
   connect(ui->tabWidget, SIGNAL(currentChanged(int)), SLOT(updateAddressbar()));
   connect(ui->tabWidget, SIGNAL(currentChanged(int)), SLOT(updateLoadProgress()));
   connect(ui->tabWidget, SIGNAL(currentChanged(int)), SLOT(updateWindowTitle()));
+  connect(ui->tabWidget, SIGNAL(currentChanged(int)), SLOT(updateTabTexts()));
   connect(ui->tabWidget, SIGNAL(doubleClicked()), SLOT(newTabAtLastWithBlankPage()));
   connect(ui->tabWidget, SIGNAL(tabDoubleClicked(int)), SIGNAL(fullScreenRequested()));
 #ifdef Q_WS_WIN
@@ -1044,6 +1045,20 @@ WebBrowser::invalidateSearch()
     if (v) {
       v->findText(QString(), QWebPage::HighlightAllOccurrences);
       v->findText(t, QWebPage::FindWrapsAroundDocument | QWebPage::HighlightAllOccurrences);
+    }
+  }
+}
+
+void
+WebBrowser::updateTabTexts()
+{
+  for (int i = 0; i < tabCount(); i++) {
+    QString t = ui->tabWidget->tabText(i);
+    QString prefix = QString::number(i+1) + ". ";
+    if (!t.startsWith(prefix)) {
+      t.remove(QRegExp("^\\d+\\. "));
+      t.prepend(prefix);
+      ui->tabWidget->setTabText(i, t);
     }
   }
 }

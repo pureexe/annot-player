@@ -529,6 +529,15 @@ EventLogger::logAttractNearbyAnnotations(bool t)
 }
 
 void
+EventLogger::logInternetConnectionChanged(bool t)
+{
+  if (t)
+    log(tr("connected to the Internet"));
+  else
+    log(tr("disconnected from the Internet"));
+}
+
+void
 EventLogger::logSelectedUserIds(const QList<qint64> &uids)
 {
   enum { timeout = 500 }; // msecs
@@ -545,6 +554,21 @@ EventLogger::logSelectedUserIds(const QList<qint64> &uids)
 }
 
 void
+EventLogger::logPreferMotionlessAnnotationChanged(bool t)
+{
+  static bool once = true;
+  if (once) {
+    once = false;
+    return;
+  }
+
+  if (t)
+    log(tr("prefer motionless annotations"));
+  else
+    log(tr("prefer floating annotations"));
+}
+
+void
 EventLogger::logPreferLocalDatabaseChanged(bool t)
 {
   static bool once = true;
@@ -554,9 +578,9 @@ EventLogger::logPreferLocalDatabaseChanged(bool t)
   }
 
   if (t)
-    log(tr("Prefer offline annotations over online ones"));
+    log(tr("prefer offline annotations over online ones"));
   else
-    log(tr("Prefer online annotations over offline ones"));
+    log(tr("prefer online annotations over offline ones"));
 }
 
 void

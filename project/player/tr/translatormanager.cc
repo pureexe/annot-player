@@ -126,6 +126,7 @@ TranslatorManager::translate(int tid) const
   case T_LESS:          return tr("Less");
   case T_UPDATE:        return tr("Update");
   case T_DOWNLOAD:      return tr("Download");
+  case T_INTERNET:      return tr("Internet");
   case T_WINDOWS:       return tr("Windows");
   case T_SOURCE:        return tr("Source");
   case T_OPEN:          return tr("Open");
@@ -361,7 +362,7 @@ TranslatorManager::translate(int tid) const
   case T_MENUTEXT_EMBEDONTOP:   return tr("Embed on top");
   case T_TIP_EMBEDONTOP:        return tr("Embed player window on the top");
 
-  case T_MENUTEXT_LIVE:         return tr("Live channel");
+  case T_MENUTEXT_LIVE:         return tr("Live Channel") + " (" + tr("Experimental") + ")";
   case T_TIP_LIVE:              return tr("Toggle live mode");
 
   case T_MENUTEXT_SYNC:         return tr("Sync mode");
@@ -679,7 +680,7 @@ TranslatorManager::translate(int tid) const
   case T_MENUTEXT_ENABLEBLACKLIST:  return tr("Enable blacklist");
   case T_TIP_ENABLEBLACKLIST:       return tr("Enable blacklist");
 
-  case T_MENUTEXT_DOWNLOAD:  return tr("Download");// + " [" K_CTRL "+D]";
+  case T_MENUTEXT_DOWNLOAD:  return tr("Download") + " [" K_CTRL "+D]";
   case T_TIP_DOWNLOAD:       return tr("Download");// + " [" K_CTRL "+D]";
 
   case T_MENUTEXT_ANNOTANALYTICS:  return tr("Annotation analytics");// + " [" K_CTRL "+F5]";
@@ -704,12 +705,12 @@ TranslatorManager::translate(int tid) const
 
   case T_MENUTEXT_RESUMEANNOT:  return tr("Release annotations");
 
-  case T_FILTER_PATTERN:        return tr("Filter pattern");
-  case T_FILTER_SYNTAX:         return tr("Filter syntax");
-  case T_FILTER_COLUMN:         return tr("Filter column");
-  case T_FILTER_REGEX:          return tr("Regular expression");
+  case T_FILTER_PATTERN:        return tr("Filter Pattern");
+  case T_FILTER_SYNTAX:         return tr("Filter Syntax");
+  case T_FILTER_COLUMN:         return tr("Filter Column");
+  case T_FILTER_REGEX:          return tr("Regular Expression");
   case T_FILTER_WILDCARD:       return tr("Wildcard");
-  case T_FILTER_FIXED:          return tr("Fixed string");
+  case T_FILTER_FIXED:          return tr("Fixed String");
 
   case T_ID:            return tr("ID");
   case T_NAME:          return tr("Name");
@@ -828,6 +829,8 @@ TranslatorManager::translate(int tid) const
   case T_BRIGHTNESS:    return tr("Brightness");
 
   case T_MEDIAINFO:  return tr("Media information");
+
+  case T_EXPERIMENTAL:  return tr("Experimental");
 
   default:
     qWarning() << "TranslatorManager:translate: Unknown tid =" << tid;

@@ -1511,5 +1511,9 @@
 #define T_GALGAME         0x103b
 #define T_TOOLTIP_TRACE   0x103c
 
+#define T_EXPERIMENTAL    0x103d
+
+#define T_INTERNET        0x103e
+#define T_TOOLTIP_INTERNET T_INTERNET
 
 #endif // TR_H

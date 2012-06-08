@@ -100,6 +100,8 @@ MiniPlayerUi::createLayout()
     input->addWidget(inputCountButton(), Qt::AlignRight);
     row2->addLayout(input);
 
+    row2->addWidget(networkButton());
+
     // void setContentsMargins(int left, int top, int right, int bottom);
     rows->setContentsMargins(9, 9, 9, 0);
     row0->setContentsMargins(0, 0, 0, 0);
@@ -117,8 +119,8 @@ MiniPlayerUi::createLayout()
   menuButton()->hide();
   menuButton()->resize(QSize());
 #ifndef WITH_WIN_PICKER
-  traceWindowButton()->hide();
-  traceWindowButton()->resize(QSize());
+  toggleTraceWindowButton()->hide();
+  toggleTraceWindowButton()->resize(QSize());
 #endif // WITH_WIN_PICKER
 #ifdef Q_WS_WIN
   if (QtWin::isWindowsVistaOrLater()) {

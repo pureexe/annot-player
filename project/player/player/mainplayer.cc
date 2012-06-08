@@ -84,6 +84,8 @@ MainPlayerUi::createLayout()
     input->addWidget(inputCountButton(), Qt::AlignRight);
     row2->addLayout(input);
 
+    row2->addWidget(networkButton());
+
     // margins (px): left, top, right, down
     rows->setContentsMargins(9, 0, 9, 0);
     row1->setContentsMargins(0, 0, 0, 1);
@@ -95,8 +97,8 @@ MainPlayerUi::createLayout()
   progressButton()->hide();
   progressButton()->resize(QSize());
 #ifndef WITH_WIN_PICKER
-  traceWindowButton()->hide();
-  traceWindowButton()->resize(QSize());
+  toggleTraceWindowButton()->hide();
+  toggleTraceWindowButton()->resize(QSize());
 #endif // WITH_WIN_PICKER
   setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
 

@@ -16,7 +16,7 @@
 
 using namespace AnnotCloud;
 
-enum { CanvasHeight = 160,
+enum { CanvasHeight = 150,
        MarginLeft = 10, MarginTop = 10 };
 
 // - Construction -
@@ -37,7 +37,7 @@ EmbeddedCanvas::EmbeddedCanvas(DataManager *data, SignalHub *hub, Player *player
 
 bool
 EmbeddedCanvas::needsDisplay() const
-{ return hub_->isMediaTokenMode() && player_->hasMedia(); }
+{ return hub_->isMediaTokenMode() && data_->hasAnnotations() && player_->hasMedia(); }
 
 void
 EmbeddedCanvas::setEnabled(bool t)
@@ -78,17 +78,12 @@ EmbeddedCanvas::paintEvent(QPaintEvent *event)
     QRect view(MarginLeft, MarginTop,
                width() - MarginLeft, height() - MarginTop);
     QPainter painter(this);
-    if (data_->hasAnnotations()) {
-      painter.setRenderHints(
-        //QPainter::Antialiasing |
-        QPainter::TextAntialiasing |
-        QPainter::SmoothPixmapTransform
-      );
-      paintHistogram(painter, view, data_->annotations());
-    } else {
-      painter.setRenderHints(QPainter::TextAntialiasing );
-      paintCoordinate(painter, view);
-    }
+    painter.setRenderHints(
+      //QPainter::Antialiasing |
+      QPainter::TextAntialiasing |
+      QPainter::SmoothPixmapTransform
+    );
+    paintHistogram(painter, view, data_->annotations());
   }
   //Base::paintEvent(event);
   DOUT("exit");
@@ -207,7 +202,7 @@ EmbeddedCanvas::paintHistogram(QPainter &painter, const QRect &view, const Annot
   // Draw histogram
   int width = view.width(),
       height = view.height();
-  int histHeight = height - (MarginSize + LabelHeight);
+  int histHeight = height - MarginSize; // - LabelHeight;
   int lineWidth = hub_->isFullScreenWindowMode() && hist.size() < 250 ? 2
                 : 1;
 
@@ -395,6 +390,7 @@ EmbeddedCanvas::paintHistogram(QPainter &painter, const QRect &view, const Annot
   }
 
   // Draw label
+  /*
   {
     QFont f = painter.font();
     f.setPointSize(LabelFontSize);
@@ -418,6 +414,7 @@ EmbeddedCanvas::paintHistogram(QPainter &painter, const QRect &view, const Annot
       painter.drawText(QRect(view.x() + x, view.y() + y, labelWidth, LabelHeight), label);
     }
   }
+  */
 
   // Calculate highlighted positions.
   std::list<qint64> highlights;
@@ -487,6 +484,19 @@ EmbeddedCanvas::paintHistogram(QPainter &painter, const QRect &view, const Annot
   }
 }
 
+// EOF
+
+/*
+void
+EmbeddedCanvas::mouseDoubleClickEvent(QMouseEvent *event)
+{
+  Q_ASSERT(event);
+  if (event->buttons() == Qt::LeftButton && event->modifiers() == Qt::NoModifier)
+    emit clicked();
+  else
+    Base::mouseDoubleClickEvent(event);
+}
+
 void
 EmbeddedCanvas::paintCoordinate(QPainter &painter, const QRect &view)
 {
@@ -553,17 +563,5 @@ EmbeddedCanvas::paintCoordinate(QPainter &painter, const QRect &view)
       painter.drawText(QRect(view.x() + x, view.y() + y, labelWidth, LabelHeight), label);
     }
   }
-}
-// EOF
-
-/*
-void
-EmbeddedCanvas::mouseDoubleClickEvent(QMouseEvent *event)
-{
-  Q_ASSERT(event);
-  if (event->buttons() == Qt::LeftButton && event->modifiers() == Qt::NoModifier)
-    emit clicked();
-  else
-    Base::mouseDoubleClickEvent(event);
 }
 */

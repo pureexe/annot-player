@@ -44,6 +44,7 @@ public:
   ADD_WIDGET(QToolButton, toggleTraceWindowButton)
   //ADD_WIDGET(QToolButton, toggleAnnotationButton)
   ADD_WIDGET(QToolButton, userButton)
+  ADD_WIDGET(QToolButton, networkButton)
   ADD_WIDGET(QToolButton, positionButton)
   ADD_WIDGET(QToolButton, progressButton)
   ADD_WIDGET(QToolButton, previousButton)

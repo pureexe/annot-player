@@ -87,6 +87,7 @@ public slots:
   void addRecentSearches(const QStringList &l);
 
 protected slots:
+  void updateTabTexts();
   void openUrlWithOperatingSystem(const QString &url);
   void openLinkInNewTab();
   void closeTab(int index);

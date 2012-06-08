@@ -300,14 +300,18 @@ LuaMrlResolver::formatTitle(const QString &title)
     .remove(QRegExp(" - \xe8\xa7\x86\xe9\xa2\x91 - .*"))
     .remove(QRegExp(" - \xe8\xa7\x86\xe9\xa2\x91$"))
     .remove(QRegExp(" - ..\xe8\xa7\x86\xe9\xa2\x91 - .*"))
+    .remove(QRegExp(" - \xe5\x8a\xa8\xe6\xbc\xab$"))
     .remove(QRegExp("_\xe5\x9c\xa8\xe7\xba\xbf.*"))
 #else
     .remove(QRegExp(" - 电视剧 - .*"))
     .remove(QRegExp(" - 视频 - .*"))
     .remove(QRegExp(" - 视频$"))
     .remove(QRegExp(" - 优酷视频 - .*")) // Youku
+    .remove(QRegExp(" - 动漫$")) // Youku
     .remove(QRegExp("_在线.*")) // Tudou
 #endif // _MSC_VER
+    .remove(QRegExp(" - 20[01]\\d$")) // Youku
+    .remove(QRegExp(" - 19[89]\\d$")) // Youku
      .simplified();
 }
 
@@ -341,6 +345,8 @@ LuaMrlResolver::cleanUrl(const QString &url)
     ret.remove(QRegExp("/#$"))
        .remove(QRegExp("/$"))
        .remove(QRegExp("/index.html$", Qt::CaseInsensitive));
+  else if (ret.startsWith("http://www.tudou.com/programs/view/", Qt::CaseInsensitive))
+    ret.remove(QRegExp("\\?.*"));
   return ret;
 }
 

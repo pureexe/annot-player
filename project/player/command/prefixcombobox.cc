@@ -21,7 +21,7 @@ PrefixComboBox::PrefixComboBox(QWidget *parent)
   ADD(CORE_CMD_VERBATIM);
   ADD(CORE_CMD_REPEAT "[10]");
   ADD(CORE_CMD_SIZE "[20]");
-  ADD(CORE_CMD_COLOR "[ffffff]");
+  ADD(CORE_CMD_COLOR "[ff0000]");
 #undef ADD
   setMaxVisibleItems(20);
   reset();

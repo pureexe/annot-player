@@ -41,7 +41,7 @@ signals:
 
 public:
   enum { AnnotationGraphicsItemType = UserType + 1 };
-  enum Style { FloatStyle = 0, FlyStyle, SubtitleStyle, TopStyle, BottomStyle };  // Appear style
+  enum Style { FloatStyle = 0, FlyStyle, SubtitleStyle, TopStyle, BottomStyle, MotionlessStyle };  // Appear style
 
   static void warmUp(); ///< optional, caching fonts on first load
 
@@ -143,6 +143,7 @@ protected slots:
   void blockUser();
 
 protected:
+  bool isEditable() const;
   void fly(const QPointF &from, const QPointF &to, int msecs);
   void escapeTo(const QPointF &pos, int msecs);
   void rushTo(const QPointF &pos, int msecs);
@@ -150,7 +151,7 @@ protected:
   void appear(const QPointF &pos, int msecs);
 
   int flyTime() const;  ///< in msecs
-  int stayTime(Style style) const; ///< in msecs
+  int stayTime() const; ///< in msecs
 
   void fadeIn(int msecs);
   void fadeOut(int msecs);

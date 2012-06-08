@@ -3,6 +3,7 @@
 
 #include(aiml/aiml.pri)
 include(animation/animation.pri)
+include(annotdb/annotdb.pri)
 include(annotcloud/annotcloud.pri)
 include(annotcodec/annotcodec.pri)
 include(blockiodevice/blockiodevice.pri)

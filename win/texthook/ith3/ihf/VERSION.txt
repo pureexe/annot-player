@@ -1,0 +1,56 @@
+# 6/6/2012
+jichi@MITHRIL C:\dev\ith\src\interactive-text-hooker-read-only\ITH3\IHF
+ 4:15 $ svn info main.cpp
+パス: main.cpp
+名前: main.cpp
+Working Copy Root Path: C:\dev\ith\src\interactive-text-hooker-read-only
+URL: http://interactive-text-hooker.googlecode.com/svn/project/ITH3/IHF/main.cpp
+
+リポジトリのルート: http://interactive-text-hooker.googlecode.com/svn
+リポジトリ UUID: f00a7526-d054-7559-d0dc-e8cbdc5312aa
+リビジョン: 131
+ノード種別: ファイル
+準備中の処理: 特になし
+最終変更者: qiupf2000@gmail.com
+最終変更リビジョン: 111
+最終変更日時: 2012-04-08 09:18:23 -0500 (日, 08 4 2012)
+テキストの最終更新: 2012-06-05 16:37:30 -0500 (火, 05 6 2012)
+チェックサム: 6f2778f520a50ece17940040f7425113d6520b70
+
+jichi@MITHRIL C:\dev\ITH\src\interactive-text-hooker-read-only\ITH3\libs
+ 2:19 $ svn info IHF.lib
+パス: IHF.lib
+名前: IHF.lib
+Working Copy Root Path: C:\dev\ITH\src\interactive-text-hooker-read-only
+URL: http://interactive-text-hooker.googlecode.com/svn/project/ITH3/libs/IHF.li
+
+リポジトリのルート: http://interactive-text-hooker.googlecode.com/svn
+リポジトリ UUID: f00a7526-d054-7559-d0dc-e8cbdc5312aa
+リビジョン: 131
+ノード種別: ファイル
+準備中の処理: 特になし
+最終変更者: qiupf2000@gmail.com
+最終変更リビジョン: 128
+最終変更日時: 2012-05-05 09:36:22 -0500 (土, 05 5 2012)
+テキストの最終更新: 2012-06-05 16:37:29 -0500 (火, 05 6 2012)
+チェックサム: 8668bff6b96bb92e4c54c523f3a2c49704d5c641
+
+jichi@MITHRIL C:\dev\ITH\src\interactive-text-hooker-read-only\ITH3\Release
+ 2:20 $ svn info IHF.dll
+パス: IHF.dll
+名前: IHF.dll
+Working Copy Root Path: C:\dev\ITH\src\interactive-text-hooker-read-only
+URL: http://interactive-text-hooker.googlecode.com/svn/project/ITH3/Release/IHF. dll
+
+リポジトリのルート: http://interactive-text-hooker.googlecode.com/svn
+リポジトリ UUID: f00a7526-d054-7559-d0dc-e8cbdc5312aa
+リビジョン: 131
+ノード種別: ファイル
+準備中の処理: 特になし
+最終変更者: qiupf2000@gmail.com
+最終変更リビジョン: 128
+最終変更日時: 2012-05-05 09:36:22 -0500 (土, 05 5 2012)
+テキストの最終更新: 2012-06-05 16:37:27 -0500 (火, 05 6 2012)
+チェックサム: 0713ab3d9350fdce55f54c18830c8834b7a183e8
+
+

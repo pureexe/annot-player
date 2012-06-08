@@ -462,6 +462,7 @@ Player::Player(QObject *parent)
   connect(VlcHttpPlugin::globalInstance(), SIGNAL(warning(QString)), SIGNAL(warning(QString)));
   connect(VlcHttpPlugin::globalInstance(), SIGNAL(fileSaved(QString)), SIGNAL(fileSaved(QString)));
   connect(VlcHttpPlugin::globalInstance(), SIGNAL(progress(qint64,qint64)), SIGNAL(downloadProgress(qint64,qint64)));
+  connect(VlcHttpPlugin::globalInstance(), SIGNAL(buffering()), SIGNAL(buffering()), Qt::QueuedConnection);
 #endif // WITH_MODULE_VLCHTTP
   DOUT("exit");
 }

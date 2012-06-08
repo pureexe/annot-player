@@ -16,8 +16,6 @@
 
 using namespace AnnotCloud;
 
-#define SPC     "&nbsp;"
-
 //#define DEBUG "embeddedinfoview"
 #include "module/debug/debug.h"
 
@@ -102,11 +100,11 @@ EmbeddedInfoView::updateText()
     QString sizeField;
     if (size) {
       if (size < 1024)
-        sizeField = QString::number(size) + "B" SPC SPC;
+        sizeField = QString::number(size) + "B" " ";
       else if (size < 1024 * 1024)
-        sizeField = QString::number(size / 1014) + " KB" SPC SPC;
+        sizeField = QString::number(size / 1014) + " KB" " ";
       else
-        sizeField = QString::number(size / (1024.0 * 1024), 'f', 1) + " MB" SPC SPC;
+        sizeField = QString::number(size / (1024.0 * 1024), 'f', 1) + " MB" " ";
     }
     qreal kbrate = player_->bitrate() / 1000;
     QString kbrateField;

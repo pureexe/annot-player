@@ -9,7 +9,7 @@
 SubUrlDialog::SubUrlDialog(QWidget *parent)
   : Base(parent)
 {
-  setWindowTitle(tr("Import annotations from URL"));
+  setWindowTitle(tr("Import Annotations from URL"));
   setExampleUrl(tr("http://www.nicovideo.jp/watch/1284843355"));
 }
 

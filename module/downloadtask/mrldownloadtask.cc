@@ -1,4 +1,4 @@
-// mrldownloadtask.cc
+﻿// mrldownloadtask.cc
 // 2/20/2012
 #include "module/downloadtask/mrldownloadtask.h"
 #ifdef WITH_MODULE_MRLRESOLVER

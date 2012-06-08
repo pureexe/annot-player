@@ -50,6 +50,7 @@ using namespace AnnotCloud;
 #define SK_ANNOTEFFECT  "AnnotationEffect"
 #define SK_ANNOTOFFSET  "AnnotationOffset"
 #define SK_ANNOTFONT    "AnnotationFont"
+#define SK_MOTIONLESS   "Motionless"
 #define SK_AUTOPLAYNEXT "AutoPlayNext"
 #define SK_BLOCKEDUSERS "BlockedUsers"
 #define SK_BLOCKEDKEYS  "BlockedKeywords"
@@ -109,6 +110,15 @@ Settings::setAnnotationOffset(qint64 offset)
 qint64
 Settings::annotationOffset() const
 { return value(SK_ANNOTOFFSET).toLongLong(); }
+
+void
+Settings::setPreferMotionlessAnnotation(bool t)
+{ setValue(SK_MOTIONLESS, t); }
+
+bool
+Settings::preferMotionlessAnnotation() const
+{ return value(SK_MOTIONLESS, true).toBool(); }
+
 
 void
 Settings::setAnnotationFontFamily(const QString &family)

@@ -12,6 +12,7 @@ QT_FORWARD_DECLARE_CLASS(QToolButton)
 class DataManager;
 class EmbeddedCanvas;
 class EmbeddedInfoView;
+class PositionCalibration;
 
 class EmbeddedPlayerUi : public PlayerUi
 {
@@ -74,6 +75,7 @@ private:
 private:
   EmbeddedCanvas *canvas_;
   EmbeddedInfoView *infoView_;
+  PositionCalibration *calibration_;
   QTimer *autoHideTimer_;
   QTimer *trackingTimer_;
 

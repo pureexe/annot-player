@@ -235,6 +235,8 @@ inline QString html_td(const QString &content = "")
 
 // - Escape -
 
+#define HTML_SPACE      "&nbsp;"
+
 inline QString html_unescape(const QString &input)
 {
   // See: http://htmlhelp.com/reference/html40/entities/special.html

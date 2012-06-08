@@ -4,6 +4,7 @@
 #include "annotationgraphicsview.h"
 #include "annotationgraphicsitem.h"
 #include "annotationgraphicsitempool.h"
+#include "annotationgraphicsitemscheduler.h"
 #include "annotationsettings.h"
 #include "annotationeditor.h"
 #include "annotationfilter.h"
@@ -77,6 +78,9 @@ AnnotationGraphicsView::AnnotationGraphicsView(
 
   QGraphicsScene *scene = new QGraphicsScene(this);
   setScene(scene);
+
+  scheduler_ = new AnnotationGraphicsItemScheduler(hub_, this);
+  connect(this, SIGNAL(annotationsRemoved()), scheduler_, SLOT(clear()));
 
   pool_ = new AnnotationGraphicsItemPool(this, data_, hub_, this);
   pool_->reserve(ReservedItemCount);
@@ -500,16 +504,20 @@ AnnotationGraphicsView::attractAllItems(const QPoint &center)
 void
 AnnotationGraphicsView::pause()
 {
-  if (!paused_)
+  if (!paused_) {
     paused_ = true;
+    scheduler_->pause();
+  }
   emit paused();
 }
 
 void
 AnnotationGraphicsView::resume()
 {
-  if (paused_)
+  if (paused_) {
     paused_ = false;
+    scheduler_->resume();
+  }
   emit resumed();
 }
 
@@ -639,6 +647,7 @@ AnnotationGraphicsView::removeAllItems()
     if (a)
       a->disappear();
   }
+  scheduler_->clear();
 }
 
 bool

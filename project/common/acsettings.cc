@@ -14,9 +14,9 @@
 
 // See platform specific issue in QAcSettings manual.
 #ifdef Q_OS_MAC
-  #define SK_ORGANIZATION   AC_DOMAIN
+#  define SK_ORGANIZATION   AC_DOMAIN
 #else
-  #define SK_ORGANIZATION   AC_ORGANIZATION
+#  define SK_ORGANIZATION   AC_ORGANIZATION
 #endif // Q_OS_MAC
 
 #define SK_APPLICATION    AC_APPLICATION

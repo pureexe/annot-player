@@ -4,10 +4,10 @@ setlocal
 cd /d d:/devel/build || exit /b 1
 
 set MAJOR=0.1.6
-set MINOR=0
+set MINOR=1
 set VERSION=%MAJOR%.%MINOR%
 ::set PREVMAJOR=%MAJOR%
-set PREVMAJOR=0.1.5
+set PREVMAJOR=%MAJOR%
 set APP=annot-player
 set TARGET=Annot Stream
 set ZIPFILE=%APP%-%PREVMAJOR%-%VERSION%-delta-win.zip
@@ -28,8 +28,9 @@ set QT_DLLS=QtCore4.dll,QtDeclarative4.dll,QtGui4.dll,QtNetwork4.dll,QtScript4.d
 set QT_TRANSLATIONS=qt_ja.qm,qt_zh_CN.qm,qt_zh_TW.qm
 set QT_PLUGINS=accessible bearer codecs graphicssystems iconengines imageformats sqldrivers
 
-::set ITH_HOME=/Volumes/win/dev/ith
-set ITH_DLLS=ITH.dll,ITH_engine.dll
+set ITH_HOME=/Volumes/win/dev/ith
+::set ITH_DLLS=ITH.dll,ITH_engine.dll
+set ITH_DLLS=IHF.dll,IHF_DLL.dll,ITH_Engine.dll
 
 set OPENSSL_HOME=/Volumes/win/dev/openssl/1.0.0j
 set OPENSSL_DLLS=libeay32.dll,ssleay32.dll
@@ -84,22 +85,22 @@ unix2dos COPYING.txt
 mkdir Data
 cd Data || exit /b 1
 
-mkdir translations
-cp -v "%QT_HOME%"/translations/{%QT_TRANSLATIONS%} translations/ || exit /b 1
+::mkdir translations
+::cp -v "%QT_HOME%"/translations/{%QT_TRANSLATIONS%} translations/ || exit /b 1
 
-for %%i in (%QT_PLUGINS%) do (
-  mkdir %%i
-  cp -v "%QT_HOME%"/plugins/%%i/*4.dll %%i/ || exit /b 1
-  rm -f %%i/*d4.dll
-)
-
-rm -f sqldrivers/{qsqlodbc4.dll,qsqlpsql4.dll}
+::for %%i in (%QT_PLUGINS%) do (
+::  mkdir %%i
+::  cp -v "%QT_HOME%"/plugins/%%i/*4.dll %%i/ || exit /b 1
+::  rm -f %%i/*d4.dll
+::)
+::
+::rm -f sqldrivers/{qsqlodbc4.dll,qsqlpsql4.dll}
 ::rm -f graphicssystems/qglgraphicssystem4.dll
 
 ::cp -v "%MSVC_HOME%"/{%MSVC_DLLS%} . || exit /b 1
 ::cp -Rv "%MSVC90_REDIST%" . || exit /b 1
-::cp -v "%ITH_HOME%"/bin/{%ITH_DLLS%} . || exit /b 1
-cp -v "%OPENSSL_HOME%"/{%OPENSSL_DLLS%} . || exit /b 1
+cp -v "%ITH_HOME%"/bin/{%ITH_DLLS%} . || exit /b 1
+::cp -v "%OPENSSL_HOME%"/{%OPENSSL_DLLS%} . || exit /b 1
 ::cp -v "%GPAC_HOME%"/bin/{%GPAC_DLLS%} . || exit /b 1
 ::cp -v "%MP4BOX_HOME%"/bin/%MP4BOX_EXE% . || exit /b 1
 ::cp -v "%MP4V2_HOME%"/bin/%MP4V2_DLL% . || exit /b 1
@@ -124,9 +125,10 @@ rm -fv hook.dll
 rm -fv webbrowser.dll
 
 rm -fv {%MSVC_DLLS%}
-::rm -fv {%QT_DLLS%}
-rm -fv {%ITH_DLLS%}
+rm -fv {%QT_DLLS%}
+::rm -fv {%ITH_DLLS%}
 rm -fv {%VLC_DLLS%}
+rm -fv {%OPENSSL_DLLS%}
 rm -fv %ZLIB_DLL%
 
 :: compile lua
@@ -140,21 +142,21 @@ rm -fv %ZLIB_DLL%
 ::  popd
 ::)
 ::popd
-set LUA_PATH=lua/luascript
-mkdir "%LUA_PATH%" || exit 1
-cp "%SOURCE%"/module/luaresolver/lua/luascript.lua "%LUA_PATH%"/ || exit 1
-cp -v "%SOURCE%"/module/luaresolver/lua/luascript/*.lua "%LUA_PATH%"/  || exit 1
-cp -v "%SOURCE%"/module/luaresolver/lua/luascript/*/*.lua "%LUA_PATH%"/  || exit 1
+::set LUA_PATH=lua/luascript
+::mkdir "%LUA_PATH%" || exit 1
+::cp "%SOURCE%"/module/luaresolver/lua/luascript.lua "%LUA_PATH%"/ || exit 1
+::cp -v "%SOURCE%"/module/luaresolver/lua/luascript/*.lua "%LUA_PATH%"/  || exit 1
+::cp -v "%SOURCE%"/module/luaresolver/lua/luascript/*/*.lua "%LUA_PATH%"/  || exit 1
 
 :: doc
-cp -Rv "%SOURCE%"/module/qtext/doc . || exit 1
-cp -Rv "%SOURCE%"/module/qtext/images . || exit 1
+::cp -Rv "%SOURCE%"/module/qtext/doc . || exit 1
+::cp -Rv "%SOURCE%"/module/qtext/images . || exit 1
 
 :: jsf
-cp -Rv "%SOURCE%"/module/annotcloud/jsf . || exit 1
+::cp -Rv "%SOURCE%"/module/annotcloud/jsf . || exit 1
 
 :: images
-cp -Rv "%SOURCE%"/project/player/avatars . || exit 1
+::cp -Rv "%SOURCE%"/project/player/avatars . || exit 1
 
 cd ..
 

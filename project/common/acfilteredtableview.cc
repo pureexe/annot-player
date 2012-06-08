@@ -52,24 +52,24 @@ AcFilteredTableView::createLayout()
     //proxyView_->setToolTip(tr("Running processes"));
   }
 
-  filterPatternEdit_ = ui->makeComboBox(AcUi::EditHint, "", tr("Filter pattern"), tr("Search"));
+  filterPatternEdit_ = ui->makeComboBox(AcUi::EditHint, "", tr("Filter Pattern"), tr("Search"));
   QLabel *filterPatternLabel = ui->makeLabel(
-        AcUi::BuddyHint,tr("Filter pattern"), filterPatternEdit_);
+        AcUi::BuddyHint,tr("Filter Pattern"), filterPatternEdit_);
 
-  filterSyntaxComboBox_ = ui->makeComboBox(AcUi::ReadOnlyHint, "", tr("Filter syntax")); {
-    filterSyntaxComboBox_->addItem(tr("Regular expression"), QRegExp::RegExp);
+  filterSyntaxComboBox_ = ui->makeComboBox(AcUi::ReadOnlyHint, "", tr("Filter Syntax")); {
+    filterSyntaxComboBox_->addItem(tr("Regular Expression"), QRegExp::RegExp);
     filterSyntaxComboBox_->addItem(tr("Wildcard"), QRegExp::Wildcard);
-    filterSyntaxComboBox_->addItem(tr("Fixed string"), QRegExp::FixedString);
+    filterSyntaxComboBox_->addItem(tr("Fixed String"), QRegExp::FixedString);
   }
   QLabel *filterSyntaxLabel = ui->makeLabel(
-        AcUi::BuddyHint, tr("Filter syntax"), filterSyntaxComboBox_);
+        AcUi::BuddyHint, tr("Filter Syntax"), filterSyntaxComboBox_);
 
-  filterColumnComboBox_ = ui->makeComboBox(AcUi::ReadOnlyHint, "", tr("Filter column")); {
+  filterColumnComboBox_ = ui->makeComboBox(AcUi::ReadOnlyHint, "", tr("Filter Column")); {
     for (int i = 0; i < sourceModel_->columnCount(); i++)
       filterColumnComboBox_->addItem(sourceModel_->headerData(i, Qt::Horizontal).toString());
   }
   QLabel *filterColumnLabel = ui->makeLabel(
-        AcUi::BuddyHint, tr("Filter column"), filterColumnComboBox_);
+        AcUi::BuddyHint, tr("Filter Column"), filterColumnComboBox_);
 
   countButton_ = ui->makeToolButton(0, "0/0", tr("Count"), this, SLOT(popup()));
 

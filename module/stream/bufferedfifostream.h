@@ -49,6 +49,7 @@ public:
   virtual bool seek(qint64 pos); ///< \override
 
   virtual qint64 read(char *data, qint64 maxSize); ///< \override
+  virtual qint64 tryRead(char *data, qint64 maxSize); ///< \override
 
   virtual QByteArray readAll() ///< \override
   { if (!isFinished()) waitForFinished(); return data_; }

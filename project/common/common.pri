@@ -69,6 +69,8 @@ SOURCES += \
     $$PWD/acwebwindow.cc \
     $$PWD/acwindow.cc
 
+win32:  SOURCES += $$PWD/acapplication_win.cc
+
 RESOURCES += \
     $$PWD/common.qrc
 

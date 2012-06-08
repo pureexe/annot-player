@@ -28,13 +28,14 @@ class AnnotationSettings : public QObject
   QFont font_;
 
   bool avatarVisible_;
+  bool motionless_;
 
 public:
   static Self *globalInstance() { static Self g; return &g; }
 protected:
   explicit AnnotationSettings(QObject *parent = 0)
     : Base(parent), scale_(1), rotation_(0), offset_(0),
-      avatarVisible_(false)
+      avatarVisible_(false), motionless_(true)
   { resetFont(); }
 
 signals:
@@ -42,6 +43,7 @@ signals:
   void rotationChanged(qreal value);
   void offsetChanged(int value);
   void avatarVisibleChanged(bool value);
+  void preferMotionlessChanged(bool value);
   //void fontChanged(const QFont &value);
 public:
   qreal scale() const { return scale_; }
@@ -52,6 +54,8 @@ public:
   QFont &font() { return font_; }
   QFont font() const { return font_; }
   QString fontFamily() const { return font_.family(); }
+
+  bool preferMotionless() const { return motionless_; }
 
 public slots:
   void setScale(qreal value) { if (!qFuzzyCompare(scale_, value)) emit scaleChanged(scale_ = value); }
@@ -85,6 +89,9 @@ public slots:
 
   void setAvatarVisible(bool value)
   { if (avatarVisible_ != value) emit avatarVisibleChanged(avatarVisible_ = value); }
+
+  void setPreferMotionless(bool value)
+  { if (motionless_ != value) emit preferMotionlessChanged(motionless_ = value);}
 };
 
 #endif // ANNOTATIONSETTINGS_H

@@ -9,7 +9,7 @@
 #include "module/annotcloud/alias.h"
 #include <QtCore/QObject>
 
-class Database;
+class AnnotationDatabase;
 class ServerAgent;
 class SignalHub;
 
@@ -28,7 +28,8 @@ class DataServer : public QObject
   typedef AnnotCloud::AnnotationList AnnotationList;
 
 public:
-  DataServer(SignalHub *hub, ServerAgent *server, Database *cache, Database *queue, QObject *parent = 0)
+  DataServer(SignalHub *hub, ServerAgent *server,
+      AnnotationDatabase *cache, AnnotationDatabase *queue, QObject *parent = 0)
     : Base(parent), preferLocal_(false), hub_(hub), server_(server), cache_(cache), queue_(queue) { }
 
   bool preferLocal() const { return preferLocal_; }
@@ -88,8 +89,8 @@ private:
   bool preferLocal_;
   SignalHub *hub_;
   ServerAgent *server_;
-  Database *cache_,
-           *queue_;
+  AnnotationDatabase *cache_,
+                     *queue_;
 };
 
 #endif // DATASERVER_H

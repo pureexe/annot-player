@@ -4,6 +4,7 @@
 #include "embeddedplayer.h"
 #include "embeddedcanvas.h"
 #include "embeddedinfoview.h"
+#include "positioncalibration.h"
 #include "positionslider.h"
 #include "global.h"
 #include "tr.h"
@@ -88,6 +89,8 @@ EmbeddedPlayerUi::EmbeddedPlayerUi(SignalHub *hub, Player *player, ServerAgent *
   connect(canvas_, SIGNAL(visibleChanged(bool)), infoView_, SLOT(setInvisible(bool)));
   connect(canvas_, SIGNAL(visibleChanged(bool)), SLOT(updateGeometry()), Qt::QueuedConnection);
 
+  calibration_ = new PositionCalibration(hub, player, this);
+
   createLayout();
 
   setTabOrder(inputComboBox(), prefixComboBox());
@@ -167,6 +170,7 @@ EmbeddedPlayerUi::createLayout()
     QHBoxLayout *row = new QHBoxLayout;
     rows->addWidget(infoView_);
     rows->addWidget(canvas_);
+    rows->addWidget(calibration_);
     rows->addWidget(positionSlider());
     rows->addLayout(row);
 
@@ -190,8 +194,10 @@ EmbeddedPlayerUi::createLayout()
 
     row->addStretch();
 
+    row->addWidget(networkButton());
     row->addWidget(userButton());
     row->addWidget(prefixComboBox());
+
     OverlayLayout *input = new OverlayLayout;
     input->addWidget(inputComboBox());
     input->addWidget(inputCountButton(), Qt::AlignRight);
@@ -212,8 +218,8 @@ EmbeddedPlayerUi::createLayout()
   setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
 #ifndef WITH_WIN_PICKER
-  traceWindowButton()->hide();
-  traceWindowButton()->resize(QSize());
+  toggleTraceWindowButton()->hide();
+  toggleTraceWindowButton()->resize(QSize());
 #endif // WITH_WIN_PICKER
   setStyleSheet(styleSheet() + SS_PLAYER);
 }
@@ -428,6 +434,7 @@ EmbeddedPlayerUi::setVisible(bool visible)
 
   if (visible) {
     canvas_->updateVisible();
+    calibration_->updateVisible();
     infoView_->refresh();
     updateGeometry();
   }

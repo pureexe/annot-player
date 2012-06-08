@@ -56,8 +56,4 @@
 #define SS_TOOLBUTTON_SHOWANNOT SS_TOOLBUTTON_(SHOWANNOT)
 #define SS_TOOLBUTTON_HIDEANNOT SS_TOOLBUTTON_(HIDEANNOT)
 
-#define SS_TOOLBUTTON_USER      ACSS_TOOLBUTTON_TEXT_(bold, normal, underline, blue, red, purple, purple, red, gray)
-#define SS_TOOLBUTTON_SEEK      ACSS_TOOLBUTTON_TEXT_(normal, normal, none, cyan, red, purple, purple, red, gray)
-#define SS_TOOLBUTTON_PROGRESS  ACSS_TOOLBUTTON_TEXT_(normal, italic, none, cyan, red, purple, purple, red, gray)
-
 #endif // STYLESHEET_H

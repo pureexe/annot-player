@@ -106,6 +106,7 @@ MainWindow::MainWindow(QWidget *parent)
     << QString("http://u17t.com")
     << QString("http://17kuxun.com")
     << QString("http://huoying.com")
+    << QString("http://linekong.com")
     << QString("http://8864.com")
     << QString("http://www.bilibili.tv/html/arcgg.html")
   );

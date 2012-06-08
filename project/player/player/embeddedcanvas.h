@@ -50,7 +50,7 @@ protected:
   // - Paint -
 protected:
   void paintHistogram(QPainter &painter, const QRect &view, const AnnotCloud::AnnotationList &l);
-  void paintCoordinate(QPainter &painter, const QRect &view);
+  //void paintCoordinate(QPainter &painter, const QRect &view);
 
   static void drawCross(QPainter &painter, const QPoint &center, int size = 5);
 

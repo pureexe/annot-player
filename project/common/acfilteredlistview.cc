@@ -50,7 +50,7 @@ AcFilteredListView::createLayout()
     proxyView_->setToolTip(tr("View"));
   }
 
-  filterPatternEdit_ = ui->makeComboBox(AcUi::EditHint, "", tr("Filter pattern"), tr("Search"));
+  filterPatternEdit_ = ui->makeComboBox(AcUi::EditHint, "", tr("Filter Pattern"), tr("Search"));
   countButton_ = ui->makeToolButton(0, "0/0", tr("Count"), this, SLOT(popup()));
 
   // Set layout

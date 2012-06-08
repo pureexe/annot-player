@@ -108,7 +108,7 @@ win32 {
 
     INCLUDEPATH        += $$DEV_HOME/inttypes/include
 
-    #INCLUDEPATH        += $$ITH_HOME/include
+    INCLUDEPATH        += $$ITH_HOME/include
     LIBS               += -L$$ITH_HOME/lib
 
     # wdk/inc/api/sal.h MUST be removed.

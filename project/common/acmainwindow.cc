@@ -40,10 +40,10 @@ AcMainWindow::AcMainWindow(QWidget *parent, Qt::WindowFlags f)
   : Base(parent, f), autoHideMenuBar_(true), fadeAni_(0), fadeEnabled_(true),
     rippleEnabled_(false), rippleFilter_(0), rippleTimer_(0)
 {
-#ifdef Q_WS_WIN
-  if (!AcUi::isAeroAvailable())
-#endif // Q_WS_WIN
-  { rippleEnabled_ = true; }
+//#ifdef Q_WS_WIN
+//  if (!AcUi::isAeroAvailable())
+//#endif // Q_WS_WIN
+//  { rippleEnabled_ = true; }
 
   AcUi::globalInstance()->setWindowStyle(this);
 #ifdef WITH_MODULE_ANIMATION
@@ -118,6 +118,10 @@ void
 AcMainWindow::setRippleEnabled(bool t)
 {
 #ifdef WITH_MODULE_IMAGEFILTER
+#ifdef Q_WS_WIN
+  if (AcUi::isAeroAvailable())
+    return;
+#endif // Q_WS_WIN
   if (t == rippleEnabled_)
     return;
   if (t)

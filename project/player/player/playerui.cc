@@ -80,12 +80,9 @@ PlayerUi::disconnectPlayer()
  // - Constructions -
 
 PlayerUi::PlayerUi(SignalHub *hub, Player *player, ServerAgent *server, QWidget *parent)
-  : Base(parent), hub_(hub), player_(player), server_(server), active_(false)
+  : Base(parent), hub_(hub), player_(player), server_(server), active_(false), networkMenu_(0)
 {
   Q_ASSERT(isValid());
-
-  // Post fix: remove blurred graphics effects for text buttons
-  userButton()->setGraphicsEffect(0);
 
   positionButton()->setToolTip(positionButton()->toolTip()  + " [" K_CTRL "+F]");
   positionSlider()->setToolTip(positionSlider()->toolTip()  + " [" K_CTRL "+F]");
@@ -94,6 +91,13 @@ PlayerUi::PlayerUi(SignalHub *hub, Player *player, ServerAgent *server, QWidget 
   //setTabOrder(prefixComboBox(), inputComboBox());
 
   createConnections();
+
+  fastFastForwardButton()->hide();
+  fastFastForwardButton()->resize(QSize());
+
+  networkButton()->setText(TR(T_INTERNET));
+  networkButton()->setCheckable(true);
+  updateNetworkMenu();
 
   inputComboBox()->setFocus();
 }
@@ -119,9 +123,13 @@ PlayerUi::createConnections()
   //connect(rewindButton(), SIGNAL(released()), player_, SLOT(clearRate()));
 
   connect(userButton(), SIGNAL(clicked()), SLOT(clickUserButton()));
+  connect(networkButton(), SIGNAL(clicked()), SLOT(updateNetworkMenu()));
+  connect(networkButton(), SIGNAL(clicked()), SLOT(updateNetworkButton()));
+  connect(networkButton(), SIGNAL(clicked()), networkButton(), SLOT(showMenu()));
   connect(positionButton(), SIGNAL(clicked()), SIGNAL(showPositionPanelRequested()));
 
   connect(positionSlider(), SIGNAL(valueChanged(int)), SLOT(setPosition(int)));
+  //connect(positionSlider(), SIGNAL(hoverValueChanged(int)), SLOT(updatePositionSliderToolTip()));
   connect(volumeSlider(), SIGNAL(valueChanged(int)), SLOT(setVolume(int)));
 
   connect(inputComboBox()->lineEdit(), SIGNAL(returnPressed()), SLOT(postAnnotation()));
@@ -213,6 +221,7 @@ PlayerUi::createConnections()
   PlayerUi::_connect##Server() \
   { \
     _connect(server_, SIGNAL(userChanged()), this, SLOT(updateUserButton())); \
+    _connect(server_, SIGNAL(connectedChanged(bool)), this, SLOT(updateNetworkButton())); \
   }
 
   CREATE_SERVER_CONNECTIONS(connect)
@@ -246,6 +255,7 @@ void
 PlayerUi::setActive(bool active)
 {
   if (active) {
+    updateNetworkButton();
     updateTitle();
     updateVolumeSlider();
     updatePositionSlider();
@@ -470,38 +480,62 @@ PlayerUi::updatePositionSlider()
       slider->setSliderPosition(pos * G_POSITION_MAX);
     }
 
-    qreal progress = 0;
     if (player_->isDownloadFinished())
       slider->clearAvailablePosition();
     else {
-      progress = player_->availablePosition();
+      qreal progress = player_->availablePosition();
       slider->setAvailablePosition(progress * G_POSITION_MAX);
     }
 
+  } else if (slider->isEnabled())
+    slider->setEnabled(false);
+
+  updatePositionSliderToolTip();
+#ifdef Q_OS_WIN
+  //QtWin::repaintWindow(slider->winId());
+#endif // Q_OS_WIN
+}
+
+void
+PlayerUi::updatePositionSliderToolTip()
+{
+  //if (!active_)
+  //  return;
+  if (!hub_->isMediaTokenMode() || !player_->isValid())
+    return;
+
+  PositionSlider *slider = positionSlider();
+  QString tip;
+  if (player_->hasMedia()) {
+    qreal progress = 0;
+    if (!player_->isDownloadFinished())
+      progress = player_->availablePosition();
+
     // Update slider's tool tip and label's text.
-    qint64 current_msecs = player_->time(),
-           total_msecs = player_->mediaLength();
+    qint64 total_msecs = player_->mediaLength();
+    //qint64 current_msecs = slider->isHovered() ?
+    //  total_msecs * slider->hoverValue() / G_POSITION_MAX :
+    //  player_->time();
+    qint64 current_msecs = player_->time();
     qint64 left_msecs = total_msecs - current_msecs;
 
     QTime current = QtExt::msecs2time(current_msecs),
           left = QtExt::msecs2time(left_msecs);
 
-    QString tip = current.toString() + " / -" + left.toString();
+    tip = current.toString() + " / -" + left.toString();
     if (total_msecs) {
       tip += QString(" (%1%").arg(QString::number(current_msecs * 100.0 / total_msecs, 'f', 1));
       if (!qFuzzyCompare(progress + 1, 1))
         tip += QString(" / %1%").arg(QString::number(progress * 100, 'f', 2));
       tip += ")";
     }
-    slider->setToolTip(tip);
 
   } else {
-    if (slider->isEnabled())
-      slider->setEnabled(false);
-
-    QString zero = QTime(0, 0, 0).toString();
-    slider->setToolTip(zero + " / -" + zero);
+    static const QString zero = QTime(0, 0, 0).toString();
+    tip = zero + " / -" + zero;
   }
+
+  slider->setToolTip(tip);
 #ifdef Q_OS_WIN
   //QtWin::repaintWindow(slider->winId());
 #endif // Q_OS_WIN
@@ -796,6 +830,35 @@ PlayerUi::clickUserButton()
     emit updateUserMenuRequested();
     userButton()->showMenu();
   }
+}
+
+//QMenu*
+//PlayerUi::networkMenu() const
+//{
+//  const_cast<Self *>(this)->updateNetworkMenu();
+//  return networkMenu_;
+//}
+
+void
+PlayerUi::updateNetworkMenu()
+{
+  if (!networkMenu_) {
+    networkMenu_ = new QMenu;//(this); essential, to avoid inheriting translucent attribute from its parent
+    connectAct_ = networkMenu_->addAction(tr("Connect to the Internet"), server_, SLOT(updateConnected()));
+    connectAct_->setCheckable(true);
+    disconnectAct_ = networkMenu_->addAction(tr("Disconnect from the Internet"), server_, SLOT(setDisconnected()));
+    disconnectAct_->setCheckable(true);
+    networkButton()->setMenu(networkMenu_);
+  }
+
+  connectAct_->setChecked(server_->isConnected());
+  disconnectAct_->setChecked(!server_->isConnected());
+}
+
+void
+PlayerUi::updateNetworkButton()
+{
+  networkButton()->setChecked(!server_->isConnected());
 }
 
 void

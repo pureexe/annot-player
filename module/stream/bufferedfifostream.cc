@@ -18,7 +18,28 @@ BufferedFifoStream::finish()
 }
 
 qint64
-BufferedFifoStream::read(char *data, qint64 maxSize) ///< \override
+BufferedFifoStream::tryRead(char *data, qint64 maxSize)
+{
+  DOUT("enter: maxSize =" << maxSize);
+  if (maxSize > data_.size() - pos_) {
+    DOUT("exit: insufficient data.size =" << data_.size());
+    return 0;
+  }
+  DOUT("data.size =" << data_.size() << ", finished =" << finished_);
+
+  m_.lock();
+  qint64 ret = qMin(data_.size() - pos_, maxSize);
+  if (ret > 0) {
+    ::memcpy(data, data_.constData() + pos_, ret);
+    pos_ += ret;
+  }
+  m_.unlock();
+  DOUT("exit: ret =" << ret);
+  return ret;
+}
+
+qint64
+BufferedFifoStream::read(char *data, qint64 maxSize)
 {
   DOUT("enter: maxSize =" << maxSize);
   while (!finished_ && maxSize > data_.size() - pos_) {

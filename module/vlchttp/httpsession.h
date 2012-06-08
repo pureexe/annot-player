@@ -30,6 +30,7 @@ signals:
   void warning(QString msg);
   void fileSaved(QString msg);
   void progress(qint64 receivedBytes, qint64 totalBytes);
+  void buffering();
 
   // - Properties -
 public:

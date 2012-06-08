@@ -1,4 +1,4 @@
-// httpplugin.cc
+﻿// httpplugin.cc
 // See: vlc/modules/access/http.c
 // 2/21/2012
 // Icy, Proxy, and Authentification supports are not implemented.
@@ -243,6 +243,7 @@ VlcHttpPlugin::openSession()
   connect(session_, SIGNAL(warning(QString)), globalInstance(), SIGNAL(warning(QString)));
   connect(session_, SIGNAL(fileSaved(QString)), globalInstance(), SIGNAL(fileSaved(QString)));
   connect(session_, SIGNAL(progress(qint64,qint64)), globalInstance(), SIGNAL(progress(qint64,qint64)));
+  connect(session_, SIGNAL(buffering()), globalInstance(), SIGNAL(buffering()));
   session_->setMediaTitle(mediaTitle_);
 
   session_->start();
@@ -262,6 +263,7 @@ VlcHttpPlugin::closeSession()
     session_->stop();
     session_->waitForStopped();
     session_->wait(5000); // wait at most 5 seconds
+    session_->quit();
   }
   session_->deleteLater();
   session_ = 0;

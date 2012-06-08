@@ -1,4 +1,4 @@
-// httpbufferedsession.cc
+﻿// httpbufferedsession.cc
 // 2/21/2012
 
 #include "module/vlchttp/httpbufferedsession.h"
@@ -9,6 +9,7 @@
 #  error "mediacodec module is required"
 #endif // WITH_MODULE_MEDIACODEC
 #include "module/qtext/filesystem.h"
+#include "module/qtext/os.h"
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkCookieJar>
 #include <QtNetwork/QNetworkReply>
@@ -20,6 +21,9 @@
 #include "module/debug/debug.h"
 
 enum { MaxDownloadRetries = 3 };
+
+enum { StopTimeout = 1000 }; // 1 second
+enum { BufferingInterval = 1000 }; // 1 second
 
 // - Construction -
 
@@ -140,8 +144,11 @@ void
 HttpBufferedSession::stop()
 {
   DOUT("enter");
-  setState(Stopped);
-  quit();
+  if (!isStopped()) {
+    setState(Stopped);
+    QtExt::sleep(StopTimeout);
+  }
+  //quit();
   DOUT("exit");
 }
 
@@ -204,78 +211,101 @@ HttpBufferedSession::run()
   Q_ASSERT(!url_.isEmpty());
   setState(Running);
 
+  int retry = 0;
   ready_ = false;
   pos_ = size_ = 0;
-  if (!buffer_.isEmpty())
-    buffer_.clear();
-  contentType_.clear();
   fileName_.clear();
 
-  if (mediaTitle().isEmpty())
-    setMediaTitle(QDateTime::currentDateTime().toString(Qt::ISODate));
+  if (!buffer_.isEmpty())
+    buffer_.clear();
 
-  if (reply_) {
-    if (reply_->isRunning())
-      reply_->abort();
-    reply_->deleteLater();
+  while (!isStopped() && retry < MaxDownloadRetries) {
+    if (retry)
+      emit warning(
+        QString("%1 (%2/%3): ")
+        .arg(tr("network error, retry")
+        .arg(QString::number(retry)))
+        .arg(QString::number(MaxDownloadRetries))
+        + url_.toString()
+      );
+    retry++;
+    setState(Running);
+    contentType_.clear();
+
+    if (mediaTitle().isEmpty())
+      setMediaTitle(QDateTime::currentDateTime().toString(Qt::ISODate));
+
+    if (reply_) {
+      if (reply_->isRunning())
+        reply_->abort();
+      reply_->deleteLater();
+    }
+    if (nam_) {
+      DOUT("delete nam");
+      //nam_->deleteLater();
+      delete nam_;
+    }
+    nam_ = new QNetworkAccessManager;
+
+    if (cookieJar()) {
+      nam_->setCookieJar(cookieJar());
+      cookieJar()->setParent(0);
+    }
+
+    emit message(tr("buffering") + ": " + url_.toString());
+
+    QNetworkRequest req(url_);
+    req.setAttribute(QNetworkRequest::HttpPipeliningAllowedAttribute, true);
+    reply_ = nam_->get(req);
+    Q_ASSERT(reply_);
+    waitForReplyReady();
+
+    if (isStopped())
+      break;
+
+    if (tryRedirect()) {
+      DOUT("exit: redirected");
+      return;
+    }
+
+    if (reply_->error() != QNetworkReply::NoError) {
+      setState(Error);
+      //ready_ = true;
+      //readyCond_.wakeAll();
+      //stoppedCond_.wakeAll();
+      emit error(tr("network error to access URL") + ": " + url_.toString());
+      DOUT("continue: network error:" << reply_->error() << reply_->errorString());
+    } else {
+      updateContentType();
+      if (!isMultiMediaMimeType(contentType_)) {
+        setState(Error);
+        emit error(tr("access forbidden") + ": " + url_.toString());
+      } else {
+        // Succeed
+        break;
+      }
+    }
   }
-  if (nam_) {
-    DOUT("delete nam");
-    //nam_->deleteLater();
-    delete nam_;
-  }
-  nam_ = new QNetworkAccessManager;
 
-  if (cookieJar()) {
-    nam_->setCookieJar(cookieJar());
-    cookieJar()->setParent(0);
-  }
+  if (isRunning()) {
+    if (reply_->isFinished()) {
+      m_.lock();
+      buffer_ = reply_->readAll();
+      m_.unlock();
+    }
 
-  emit message(tr("buffering") + ": " + url_.toString());
-
-  QNetworkRequest req(url_);
-  req.setAttribute(QNetworkRequest::HttpPipeliningAllowedAttribute, true);
-  reply_ = nam_->get(req);
-  Q_ASSERT(reply_);
-  waitForReplyReady();
-
-  if (tryRedirect()) {
-    DOUT("exit: redirected");
-    return;
-  }
-
-  if (reply_->error() != QNetworkReply::NoError) {
-    setState(Error);
-    ready_ = true;
-    readyCond_.wakeAll();
-    stoppedCond_.wakeAll();
-    emit error(tr("network error to access URL") + ": " + url_.toString());
-    DOUT("exit: network error:" << reply_->error() << reply_->errorString());
-    return;
-  }
-
-  if (reply_->isFinished()) {
-    m_.lock();
-    buffer_ = reply_->readAll();
-    m_.unlock();
-  }
-
-  updateSize();
-  updateContentType();
-  updateFileName();
-
-  if (!isMultiMediaMimeType(contentType_)) {
-    setState(Error);
-    emit error(tr("access forbidden") + ": " + url_.toString());
+    updateSize();
+    updateFileName();
   }
 
   DOUT("ready: finished =" << reply_->isFinished() << ", error =" << reply_->error());
   ready_ = true;
   readyCond_.wakeAll();
+  //stoppedCond_.wakeAll();
 
-  while (!reply_->isFinished() &&
-         reply_->error() == QNetworkReply::NoError &&
-         isRunning()) {
+  while (isRunning() &&
+         !reply_->isFinished() &&
+         reply_->error() == QNetworkReply::NoError) {
     qint64 count = reply_->bytesAvailable();
     emit progress(buffer_.size(), size_);
     if (count <= 0) {
@@ -314,8 +344,12 @@ HttpBufferedSession::read(char *data, qint64 maxSize)
 
   QMutexLocker lock(&m_);
   while (isRunning() &&
-         buffer_.size() - pos_ < maxSize)
+         buffer_.size() - pos_ < maxSize) {
+    emit buffering();
     readyReadCond_.wait(&m_);
+    if (isRunning())
+      QtExt::sleep(BufferingInterval);
+  }
 
   qint64 ret = qMin(maxSize, buffer_.size() - pos_);
   if (ret) {

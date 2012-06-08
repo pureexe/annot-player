@@ -10,6 +10,7 @@
 #include <QtCore/QList>
 #include <QtCore/QMetaType>
 #include <QtCore/QString>
+#include <QtCore/QStringList>
 #include <cstring>
 
 namespace AnnotCloud {
@@ -244,6 +245,19 @@ namespace AnnotCloud {
     ///  Compute the text position incrementally from previous hash and added text.
     static qint64 rehashTextPos(const QString &text, qint64 h)
     { return rehash(text.toLocal8Bit(), h); }
+
+    static qint64 hashTextsPos(const QStringList &l)
+    {
+      qint64 h;
+      if (l.isEmpty())
+        h = hash(QByteArray());
+      else for (int i = 0; i < l.size(); i++)
+        if (i == 0)
+          h = hashTextPos(l.first());
+        else
+          h = rehashTextPos(l[i], h);
+      return h;
+    }
 
   protected:
     static QByteArray digest(const QByteArray &input);

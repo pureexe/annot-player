@@ -1,0 +1,65 @@
+#pragma once
+
+// texthook.h  10/14/2011
+
+#include "texthook_config.h"
+#include <QtGui/QWidget> // where WId is declared
+#include <QtCore/QList>
+
+class TextHook : public QObject
+{
+  Q_OBJECT
+  Q_DISABLE_COPY(TextHook)
+  typedef TextHook Self;
+  typedef QObject Base;
+
+  // - Constructions -
+public:
+  TEXTHOOKAPI static Self *globalInstance() { static Self g; return &g; }
+
+signals: // No import/export needed for Qt signals.
+  void textReceived(const QString &text, ulong hookId, ulong processId);
+
+  // - Properties -
+public:
+  TEXTHOOKAPI bool isActive() const;
+
+  TEXTHOOKAPI WId parentWinId() const;
+  TEXTHOOKAPI void setParentWinId(WId hwnd); ///< Must be set to a valid window so that ::SetTimer works
+
+  TEXTHOOKAPI int interval() const;
+  TEXTHOOKAPI void setInterval(int msecs); ///< Interval to differentiate sentence
+
+  // - Queries -
+public:
+  TEXTHOOKAPI bool isStandardHookName(const QString &name) const;
+  TEXTHOOKAPI bool isKnownHookForProcess(const QString &hookName, const QString &processName) const;
+
+  TEXTHOOKAPI QString hookNameById(ulong hookId) const; ///< Broken in ITH3
+
+  // - Injection -
+public:
+  TEXTHOOKAPI bool attachProcess(ulong pid, bool checkActive = false);
+  TEXTHOOKAPI bool detachProcess(ulong pid, bool checkActive = false);
+  TEXTHOOKAPI void detachAllProcesses();
+  TEXTHOOKAPI bool isProcessAttached(ulong pid) const;
+  TEXTHOOKAPI bool isEmpty() const { return pids_.isEmpty(); }
+
+public slots:
+  TEXTHOOKAPI void start();
+  TEXTHOOKAPI void stop();
+  TEXTHOOKAPI void clear();
+
+  // - Implementations -
+protected:
+  explicit TextHook(QObject *parent = 0) : Base(parent) { }
+  ~TextHook() { if (isActive()) stop(); }
+public:
+  void sendText(const QString &text, ulong tid, ulong pid) // text thread callback
+  { emit textReceived(text, tid, pid); }
+
+private:
+  QList<ulong> pids_;
+};
+
+// EOF

@@ -59,6 +59,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
   setWindowTitle(tr("Annot Downloader"));
   setWindowIcon(QIcon(RC_IMAGE_APP));
+  //setRippleEnabled(true);
 
   downloadManager_ = new DownloadManager(this);
   downloadManager_->setMaxThreadCount(MaxDownloadThreadCount);
@@ -963,7 +964,7 @@ MainWindow::closeEvent(QCloseEvent *event)
   if (!disposed_ && downloadManager_->isRunning()) {
     event->ignore();
     fadeOut();
-    trayIcon_->showMessage(tr("Hide Window"), tr("Minimize to Tray"));
+    trayIcon_->showMessage(tr("Annot Downloader"), tr("Minimize to Tray"));
     DOUT("exit: not disposed");
     return;
   }

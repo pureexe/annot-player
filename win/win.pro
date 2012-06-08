@@ -3,14 +3,14 @@
 win32 {
 
 TEMPLATE = subdirs
-#include(disk/disk.pri)
-include(dwm/dwm.pri)
-include(qtwin/qtwin.pri)
+#include(dwm/dwm.pri)
+#include(qtwin/qtwin.pri)
+#include(qtwinnt/qtwinnt.pri)
+#include(wmtimer/wmtimer.pri)
 #SUBDIRS += hook
 SUBDIRS += mousehook
 SUBDIRS += picker
-SUBDIRS += qth
-#SUBDIRS += qtith
+SUBDIRS += texthook
 
 }
 # EOF

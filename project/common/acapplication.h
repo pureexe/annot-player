@@ -56,6 +56,14 @@ public:
   virtual bool event(QEvent *e); ///< \override
 
   // - Implementation -
+protected:
+  void ignoreWindowsExcetions()
+#ifdef Q_WS_WIN
+  ;
+#else
+  { }
+#endif // Q_WS_WIN
+
 private:
   static void messageHandler(QtMsgType type, const char *msg);
   static void loggedMessageHandler(QtMsgType type, const char *msg);

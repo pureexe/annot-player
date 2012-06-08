@@ -3,6 +3,7 @@
 
 #include "module/qtext/slider.h"
 #include <QtGui/QMouseEvent>
+#include <QtCore/QDebug>
 
 // - Events -
 
@@ -28,13 +29,25 @@ void
 QtExt::
 Slider::mousePressEvent(QMouseEvent *event)
 {
-  if (event && event->button() == Qt::LeftButton) {
-    if (orientation() == Qt::Vertical)
-      setValue(minimum() + ((maximum()-minimum()) * (height()-event->y())) / height() ) ;
-    else
-      setValue(minimum() + ((maximum()-minimum()) * event->x()) / width() ) ;
-  }
+  Q_ASSERT(!size().isEmpty());
+  if (event->button() == Qt::LeftButton)
+    setValue(orientation() == Qt::Vertical ?
+      minimum() + ((maximum()-minimum()) * (height()-event->y())) / height() :
+      minimum() + ((maximum()-minimum()) * event->x()) / width()
+    );
   Base::mousePressEvent(event);
 }
+
+//void
+//QtExt::
+//Slider::mouseMoveEvent(QMouseEvent *event)
+//{
+//  Q_ASSERT(!size().isEmpty());
+//  setHoverValue(orientation() == Qt::Vertical ?
+//    minimum() + ((maximum()-minimum()) * (height()-event->y())) / height() :
+//    minimum() + ((maximum()-minimum()) * event->x()) / width()
+//  );
+//  Base::mouseMoveEvent(event);
+//}
 
 // EOF
