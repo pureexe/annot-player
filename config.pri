@@ -179,10 +179,10 @@ INCLUDEPATH     += $$ZLIB_HOME/include
 LIBS            += -L$$ZLIB_HOME/lib
 #INCLUDEPATH     += $$FFMPEG_HOME/include
 #LIBS            += -L$$FFMPEG_HOME/lib
-INCLUDEPATH     += $$GPAC_HOME/include
-LIBS            += -L$$GPAC_HOME/lib
-INCLUDEPATH     += $$MP4V2_HOME/include
-LIBS            += -L$$MP4V2_HOME/lib
+#INCLUDEPATH     += $$GPAC_HOME/include
+#LIBS            += -L$$GPAC_HOME/lib
+#INCLUDEPATH     += $$MP4V2_HOME/include
+#LIBS            += -L$$MP4V2_HOME/lib
 #INCLUDEPATH     += \
 #    $$LIVE_HOME/BasicUsageEnvironment/include \
 #    $$LIVE_HOME/UsageEnvironment/include \
@@ -237,6 +237,8 @@ DEFINES += VERSION=\\\"$$VERSION\\\"
 
 DEFINES += NICOVIDEO_USERNAME=\\\"oedivocin@gmail.com\\\" \
            NICOVIDEO_PASSWORD=\\\"nicovideo.jp\\\"
+DEFINES += BILIBILI_USERNAME=\\\"oedivocin@gmail.com\\\" \
+           BILIBILI_PASSWORD=\\\"nicovideo.jp\\\"
 
 #DEFINES += ANNOT_PROXY_DOMAIN=\\\"sakuradite.com\\\"
 DEFINES += ANNOT_PROXY_DOMAIN=\\\"210.175.52.140\\\"

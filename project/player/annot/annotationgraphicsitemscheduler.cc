@@ -110,6 +110,8 @@ AnnotationGraphicsItemScheduler::nextPos(const QSize &windowSize, const QSizeF &
     return QPointF();
   int cellXCount = (windowSize.width() - MarginLeft)  / cellWidth,
       cellYCount = windowSize.height() / cellHeight - 1; // do not use the last row
+  if (hub_->isSignalTokenMode())
+    cellYCount = cellYCount * 3 / 4;
   if (cellXCount <= 0 || cellYCount <= 0)
     return QPointF();
   int itemXCount = itemSize.width() / cellWidth + 1; // TODO: itemYCount is ignored
@@ -124,10 +126,17 @@ AnnotationGraphicsItemScheduler::nextPos(const QSize &windowSize, const QSizeF &
   qint64 now = QDateTime::currentMSecsSinceEpoch();
   bool ok = false;
   int x, y;
+  qint64 pausedTime = resumeTime_ - pauseTime_;
   for (x = 0; x < maxXCount; x++) {
     for (y = 0; y < cellYCount; y++) {
       for (int i = 0; i < itemXCount; i++) {
         qint64 t = cells_[QPoint(x + i, y)];
+        if (pausedTime && t > pauseTime_) {
+          if (t < resumeTime_)
+            t += pausedTime;
+          else if (pausedTime < 0)
+            break;
+        }
         if (now < t)
           break;
         else if (i == itemXCount - 1)
@@ -144,9 +153,11 @@ AnnotationGraphicsItemScheduler::nextPos(const QSize &windowSize, const QSizeF &
     return QPointF();
 
   int cooldownTime = visibleMsecs;
-  qint64 future = now + visibleMsecs + cooldownTime;
+  qint64 availableTime = now + visibleMsecs;
   for (int i = 0; i < itemXCount; i++)
-    cells_[QPoint(x + i, y)] = future;
+    cells_[QPoint(x + i, y)] = i == 0 ?
+      availableTime + cooldownTime :
+      availableTime;
   return QPointF(MarginLeft + x * cellWidth, y * cellHeight);
 }
 

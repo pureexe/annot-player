@@ -4,7 +4,7 @@ setlocal
 cd /d d:/devel/build || exit /b 1
 
 set MAJOR=0.1.6
-set MINOR=1
+set MINOR=2
 set VERSION=%MAJOR%.%MINOR%
 ::set PREVMAJOR=%MAJOR%
 set PREVMAJOR=%MAJOR%
@@ -142,11 +142,12 @@ rm -fv %ZLIB_DLL%
 ::  popd
 ::)
 ::popd
-::set LUA_PATH=lua/luascript
-::mkdir "%LUA_PATH%" || exit 1
+set LUA_PATH=lua/luascript
+mkdir "%LUA_PATH%" || exit 1
 ::cp "%SOURCE%"/module/luaresolver/lua/luascript.lua "%LUA_PATH%"/ || exit 1
 ::cp -v "%SOURCE%"/module/luaresolver/lua/luascript/*.lua "%LUA_PATH%"/  || exit 1
 ::cp -v "%SOURCE%"/module/luaresolver/lua/luascript/*/*.lua "%LUA_PATH%"/  || exit 1
+cp -v "%SOURCE%"/module/luaresolver/lua/luascript/sitelist/bilibili.lua "%LUA_PATH%"/  || exit 1
 
 :: doc
 ::cp -Rv "%SOURCE%"/module/qtext/doc . || exit 1

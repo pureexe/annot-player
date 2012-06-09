@@ -17,6 +17,7 @@ TextThreadProperty::send()
   ulong pid = t_->PID();
   //ulong tid = t_->Number();
   ulong tid = reinterpret_cast<ulong>(t_);
+
   TextHook::globalInstance()->sendText(text(), tid, pid);
 }
 

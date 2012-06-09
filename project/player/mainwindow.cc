@@ -1162,7 +1162,7 @@ MainWindow::createActions()
           SIGNAL(triggered(bool)), AnnotationSettings::globalInstance(), SLOT(setAvatarVisible(bool)));
           toggleAnnotationAvatarVisibleAct_->setCheckable(true);
 
-  connect(togglePreferMotionlessAnnotationAct_ = new QAction(tr("Reduce Movement") + QString(" (%1)").arg(TR(T_EXPERIMENTAL)), this),
+  connect(togglePreferMotionlessAnnotationAct_ = new QAction(tr("Reduce Movement"), this),
           SIGNAL(triggered(bool)), AnnotationSettings::globalInstance(), SLOT(setPreferMotionless(bool)));
           togglePreferMotionlessAnnotationAct_->setCheckable(true);
 

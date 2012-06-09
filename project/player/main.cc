@@ -168,8 +168,11 @@ main(int argc, char *argv[])
   }
 
   // Check update.
-  if (settings->version() != G_VERSION) {
+  QString previousVersion = settings->version();
+  if (previousVersion != G_VERSION) {
     DOUT("update from old version");
+
+    bool initial = previousVersion.isEmpty();
 
     QFile::remove(G_PATH_CACHEDB);
     QFile::remove(G_PATH_QUEUEDB);
@@ -191,23 +194,26 @@ main(int argc, char *argv[])
     ac->setThemeId(AcUi::CyanTheme);
     ac->sync();
 
-    settings->setWindowOnTop(false);
+    //settings->setWindowOnTop(false);
     settings->setAutoSubmit(true);
     if (settings->annotationScale() < 1)
       settings->setAnnotationScale(1.0);
+    settings->setPreferMotionlessAnnotation(true);
     settings->setAnnotationEffect(0);
     settings->setAnnotationOffset(0);
     settings->setApplicationFilePath(QString());
     //settings->setAnnotationLanguages(Traits::AllLanguages);
     //settings->setAnnotationFilterEnabled(false);
 
-    settings->setSaturation(1.1*1.1*1.1);
-    settings->setGamma(1/1.1);
-    settings->setHue(2+2+2);
-    settings->setContrast(1.1);
-    settings->setBrightness(1.02*1.02);
+    if (initial) {
+      settings->setSaturation(1.1*1.1*1.1);
+      settings->setGamma(1/1.1);
+      settings->setHue(2+2+2);
+      settings->setContrast(1.1);
+      settings->setBrightness(1.02*1.02);
+    }
 
-    if (settings->version().isEmpty()) {
+    if (initial) {
       registerFileTypes();
       settings->setApplicationFilePath(QCoreApplication::applicationFilePath());
     }

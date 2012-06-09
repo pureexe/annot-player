@@ -1,4 +1,4 @@
-﻿// httpstreamsession.cc
+// httpstreamsession.cc
 // 3/14/2012
 //
 // QNetworkAccessManager is not shared, because of 6 requests limits, as follows:

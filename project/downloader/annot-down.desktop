@@ -5,7 +5,7 @@ X-AppInstall-Package=annot-down
 #X-AppInstall-Popcon=63720
 X-AppInstall-Section=universe
 
-Version=0.1.1.7
+Version=0.1.1.8
 Name=Annot Downloader
 Comment=Media and annotation downloader
 Exec=annot-down %U

@@ -53,6 +53,7 @@ function getTaskAttribute_bilibili ( str_url, str_tmpfile, pDlg, isNeedLogin, bS
     end
     return;
   end
+
   --readin descriptor
   local str_line = readUntilFromUTF8(file, "<title>");
   local str_title_line = readIntoUntilFromUTF8(file, str_line, "</title>", str_line);
@@ -70,41 +71,37 @@ function getTaskAttribute_bilibili ( str_url, str_tmpfile, pDlg, isNeedLogin, bS
     -- cus utf8_to_lua is not implemented, WCHAR matching is broken
   --readUntilFromUTF8(file, "主 页</a>", str_title_line);
 
-  -- jichi 6/8/2012: skip parsing pageno and vice_descriptor
---
---  str_line = readUntilFromUTF8(file, "<div id=\"alist\"", str_title_line);
---  --dbgMessage(str_line);
---  str_line = getAfterText(str_line,"<div id=\"alist\"");
+  str_line = readUntilFromUTF8(file, "<div id=\"alist\"", str_title_line);
+  --dbgMessage(str_line);
+  str_line = getAfterText(str_line,"<div id=\"alist\"");
   local str_tmp_vd = "";
   local tbl_bilibili_vice_descriptor = {};
   local tbl_bilibili_vice_url = {};
   local vicedes_index = 1;
---  while str_line~=nil and (string.find(str_line, "<option value='")~=nil or string.find(str_line, "</div>", 1, true)==nil)
---  do
---
---    --dbgMessage(str_line);
---    --str_line = readIntoUntilFromUTF8(file, str_line, "<option value='", str_line);
---    if str_line ~= nil and string.find(str_line, "<option value='", 1, true)==nil then
---      local tmp_str_line = file:read("*l");
---      str_line = utf8_to_lua(tmp_str_line);
---    end
---    --dbgMessage(str_line);
---    if str_line~=nil and string.find(str_line, "<option value='", 1, true)~=nil
---    then
---      str_line = readIntoUntilFromUTF8(file, str_line, "</option>", str_line);
---      local tmp_vdindex = string.format("%d", vicedes_index);
---      --dbgMessage(str_line);
---      tbl_bilibili_vice_url[tmp_vdindex] = getMedText(str_line, "<option value='", "'");
---      tbl_bilibili_vice_descriptor[tmp_vdindex] = cutTags(getMedText(str_line, ">", "</option>"));
---      --dbgMessage(tbl_bilibili_vice_descriptor[tmp_vdindex]);
---      vicedes_index = vicedes_index+1;
---      str_line = string.sub(str_line, string.find(str_line, "</option>")+string.len("</option>"));
---    end
---  end
---  str_line = readUntilFromUTF8(file, "var pageno =", str_line);
-  str_line = readUntilFromUTF8(file, "var pageno =");
-  --dbgMessage(str_line);
+  while str_line~=nil and (string.find(str_line, "<option value='")~=nil or string.find(str_line, "</div>", 1, true)==nil)
+  do
 
+    --dbgMessage(str_line);
+    --str_line = readIntoUntilFromUTF8(file, str_line, "<option value='", str_line);
+    if str_line ~= nil and string.find(str_line, "<option value='", 1, true)==nil then
+      local tmp_str_line = file:read("*l");
+      str_line = utf8_to_lua(tmp_str_line);
+    end
+    --dbgMessage(str_line);
+    if str_line~=nil and string.find(str_line, "<option value='", 1, true)~=nil
+    then
+      str_line = readIntoUntilFromUTF8(file, str_line, "</option>", str_line);
+      local tmp_vdindex = string.format("%d", vicedes_index);
+      --dbgMessage(str_line);
+      tbl_bilibili_vice_url[tmp_vdindex] = getMedText(str_line, "<option value='", "'");
+      tbl_bilibili_vice_descriptor[tmp_vdindex] = cutTags(getMedText(str_line, ">", "</option>"));
+      --dbgMessage(tbl_bilibili_vice_descriptor[tmp_vdindex]);
+      vicedes_index = vicedes_index+1;
+      str_line = string.sub(str_line, string.find(str_line, "</option>")+string.len("</option>"));
+    end
+  end
+  str_line = readUntilFromUTF8(file, "var pageno =", str_line);
+  --dbgMessage(str_line);
   if str_line == nil then
     io.close(file);
     return;
@@ -120,7 +117,6 @@ function getTaskAttribute_bilibili ( str_url, str_tmpfile, pDlg, isNeedLogin, bS
       --dbgMessage(str_tmp_vd);
     end
   end
-
   --save descriptor
   local str_descriptor = "";
 

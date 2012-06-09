@@ -1,4 +1,4 @@
-﻿// httpbufferedsession.cc
+// httpbufferedsession.cc
 // 2/21/2012
 
 #include "module/vlchttp/httpbufferedsession.h"

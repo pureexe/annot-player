@@ -3,7 +3,7 @@
 # See: http://fedoraproject.org/wiki/How_to_create_an_RPM_package
 # See: http://dl.atrpms.net/all/vlc.spec
 Name:	annot-browser
-Version:	0.1.2.7
+Version:	0.1.2.8
 Release:	1%{?dist}
 Summary:	Web browser with proxy.
 

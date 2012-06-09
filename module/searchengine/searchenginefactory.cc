@@ -1,4 +1,4 @@
-﻿// searchenginefactory.cc
+// searchenginefactory.cc
 // 4/25/2012
 #include "module/searchengine/searchenginefactory.h"
 #include "module/searchengine/searchenginerc.h"

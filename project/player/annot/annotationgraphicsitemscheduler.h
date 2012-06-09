@@ -41,9 +41,10 @@ public:
     : Base(parent), hub_(hub), pauseTime_(0), resumeTime_(0) { Q_ASSERT(hub); }
 
 public slots:
-  void clear() { if (!cells_.isEmpty()) cells_.clear(); }
   void pause();
   void resume();
+  void clear()
+  { if (!cells_.isEmpty()) cells_.clear(); pauseTime_ = resumeTime_ = 0; }
 
   // - Float Scheduling -
 public:

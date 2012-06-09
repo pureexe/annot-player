@@ -1,4 +1,4 @@
-﻿// mousegesture.cc
+// mousegesture.cc
 // 4/25/2012
 
 #include "module/mousegesture/mousegesture.h"

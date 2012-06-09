@@ -1,4 +1,4 @@
-﻿// mrldownloadtask_m.cc
+// mrldownloadtask_m.cc
 // Download multiple parts.
 // 2/20/2012
 //
