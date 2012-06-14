@@ -30,7 +30,7 @@ EmbeddedCanvas::EmbeddedCanvas(DataManager *data, SignalHub *hub, Player *player
   setFixedHeight(0);
 
   connect(player_, SIGNAL(mediaChanged()), SLOT(clearUserIds()));
-  connect(AnnotationSettings::globalInstance(), SIGNAL(offsetChanged(int)), SLOT(invalidatePaint()));
+  connect(AnnotationSettings::globalSettings(), SIGNAL(offsetChanged(int)), SLOT(invalidatePaint()));
 }
 
 // - Properties -
@@ -162,7 +162,7 @@ EmbeddedCanvas::paintHistogram(QPainter &painter, const QRect &view, const Annot
   if (hist.isEmpty())
     return;
 
-  int offset = AnnotationSettings::globalInstance()->offset(); // in seconds
+  int offset = AnnotationSettings::globalSettings()->offset(); // in seconds
   int startX = offset * 1000/metric;
 
   enum { TopCount = 3 };

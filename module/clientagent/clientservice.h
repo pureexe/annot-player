@@ -44,15 +44,15 @@ public:
 
   // - Methods overriding ClientSoapService -
 public:
-  virtual int authorize(ClientSoap::tns__authorize *request, ClientSoap::tns__authorizeResponse *response); /// \override
-  virtual int deauthorize(ClientSoap::tns__deauthorize *request, ClientSoap::tns__deauthorizeResponse *response); ///< \override
-  virtual int isAuthorized(ClientSoap::tns__isAuthorized *request, ClientSoap::tns__isAuthorizedResponse *response); ///< \override
-  virtual int isConnected(ClientSoap::tns__isConnected *request, ClientSoap::tns__isConnectedResponse *response); ///< \override
-  virtual int chat(ClientSoap::tns__chat *request, ClientSoap::tns__chatResponse *response); ///< \override
+  virtual int authorize(ClientSoap::tns__authorize *request, ClientSoap::tns__authorizeResponse *response); /// \reimp
+  virtual int deauthorize(ClientSoap::tns__deauthorize *request, ClientSoap::tns__deauthorizeResponse *response); ///< \reimp
+  virtual int isAuthorized(ClientSoap::tns__isAuthorized *request, ClientSoap::tns__isAuthorizedResponse *response); ///< \reimp
+  virtual int isConnected(ClientSoap::tns__isConnected *request, ClientSoap::tns__isConnectedResponse *response); ///< \reimp
+  virtual int chat(ClientSoap::tns__chat *request, ClientSoap::tns__chatResponse *response); ///< \reimp
 
   // - Methods overriding QThread -
 protected:
-  virtual void run(); ///< \override
+  virtual void run(); ///< \reimp
 };
 
 /**

@@ -72,6 +72,7 @@ TextHook::attachProcess(ulong pid, bool checkActive)
   if (ret && !isProcessAttached(pid)) {
     pids_.removeAll(pid);
     pids_.append(pid);
+    emit processAttached(pid);
   }
 
   DOUT("exit: ret =" << ret);
@@ -169,6 +170,17 @@ TextHook::hookNameById(ulong hookId) const
   // FIXME: supposed to be the engine name, unimplemented
   Q_UNUSED(hookId);
   return QString();
+}
+
+QString
+TextHook::guessEncodingForFile(const QString &fileName)
+{
+  static QHash<QString, QString> db;
+  if (db.isEmpty()) {
+    db["malie.exe"] = "UTF-16";
+  }
+  auto p = db.find(fileName);
+  return p == db.end() ? QString() : p.value();
 }
 
 // EOF

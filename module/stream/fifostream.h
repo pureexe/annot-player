@@ -13,7 +13,7 @@ class FifoStream : public InputStream, public OutputStream
 public:
   explicit FifoStream(qint64 size = 0) : size_(size) { }
 
-  virtual qint64 size() const { return size_; } ///< \override
+  virtual qint64 size() const { return size_; } ///< \reimp
 
   void setSize(qint64 size) { size_ = size; }
 };

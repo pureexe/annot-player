@@ -45,10 +45,10 @@ public:
     }
   }
 
-  virtual bool needsDisplay() const ///< \override
+  virtual bool needsDisplay() const ///< \reimp
   { return needsDisplay(gamma_); }
 
-  virtual quint8 filterColor(quint8 value) const ///< \override
+  virtual quint8 filterColor(quint8 value) const ///< \reimp
   { return filterColor(value, gamma_); }
 };
 

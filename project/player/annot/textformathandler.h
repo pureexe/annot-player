@@ -27,10 +27,10 @@ public:
 
   // - Overridings -
 public:
-  ///  \override \c QTextObjectInterface
+  ///  \reimp \c QTextObjectInterface
   virtual void drawObject(QPainter *painter, const QRectF &rect, QTextDocument *doc, int posInDocument, const QTextFormat &format);
 
-  ///  \override \c QTextObjectInterface
+  ///  \reimp \c QTextObjectInterface
   virtual QSizeF intrinsicSize(QTextDocument *doc, int posInDocument, const QTextFormat &format);
 };
 

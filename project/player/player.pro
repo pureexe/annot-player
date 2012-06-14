@@ -1,9 +1,15 @@
 # player.pro
 # 6/30/2011
 
-VERSION = 0.1.6.2
-
 DEFINES += PROJECT_PLAYER
+
+VERSION_MAJOR = 0.1.6.
+VERSION_MINOR = 3
+
+VERSION = $$VERSION_MAJOR$$VERSION_MINOR
+
+DEFINES += VERSION_MAJOR=\\\"$$VERSION_MAJOR\\\" \
+           VERSION_MINOR=\\\"$$VERSION_MINOR\\\"
 
 include(../../config.pri)
 include(tr/tr.pri)
@@ -110,6 +116,7 @@ HEADERS += \
     mainwindow.h \
     mainwindow_p.h \
     settings.h \
+    textcodecmanager.h \
     tray.h \
     annot/annotationbrowser.h \
     annot/annotationeditor.h \
@@ -131,6 +138,7 @@ HEADERS += \
     data/datamanager.h \
     data/dataserver.h \
     dialog/annotationcountdialog.h \
+    dialog/audiodelaydialog.h \
     dialog/backlogdialog.h \
     dialog/consoledialog.h \
     dialog/countdowndialog.h \
@@ -143,11 +151,13 @@ HEADERS += \
     dialog/mediainfoview.h \
     dialog/mediaurldialog.h \
     dialog/pickdialog.h \
+    dialog/secondinputdialog.h \
     dialog/seekdialog.h \
     dialog/shutdowndialog.h \
     dialog/sleepdialog.h \
     dialog/suburldialog.h \
     dialog/syncdialog.h \
+    dialog/timeinputdialog.h \
     dialog/urldialog.h \
     global/global.h \
     global/rc.h \
@@ -185,6 +195,7 @@ SOURCES += \
     preferences.cc \
     mainwindow.cc \
     settings.cc \
+    textcodecmanager.cc \
     tray.cc \
     annot/annotationbrowser.cc \
     annot/annotationeditor.cc \
@@ -205,6 +216,7 @@ SOURCES += \
     data/datamanager.cc \
     data/dataserver.cc \
     dialog/annotationcountdialog.cc \
+    dialog/audiodelaydialog.cc \
     dialog/backlogdialog.cc \
     dialog/consoledialog.cc \
     dialog/countdowndialog.cc \
@@ -217,11 +229,13 @@ SOURCES += \
     dialog/mediainfoview.cc \
     dialog/mediaurldialog.cc \
     dialog/pickdialog.cc \
+    dialog/secondinputdialog.cc \
     dialog/seekdialog.cc \
     dialog/shutdowndialog.cc \
     dialog/sleepdialog.cc \
     dialog/suburldialog.cc \
     dialog/syncdialog.cc \
+    dialog/timeinputdialog.cc \
     dialog/urldialog.cc \
     osd/osdconsole.cc \
     osd/osdwindow.cc \
@@ -312,7 +326,7 @@ mac {
 # Deployment
 
 unix:!mac {
-    INSTALLS += target desktop desktop-kde icon lua doc jsf
+    INSTALLS += target desktop desktop-kde icon lua doc jsf avatar image
 
     target.path = $$BINDIR
 
@@ -343,6 +357,10 @@ unix:!mac {
     AVATARDIR = $$DATADIR/annot/player/avatars
     avatar.path = $$AVATARDIR
     avatar.files = $$AVATAR_FILES
+
+    IMAGEDIR = $$DATADIR/annot/player/images
+    image.path = $$IMAGEDIR
+    image.files = $$IMAGE_FILES
 }
 
 # EOF

@@ -8,7 +8,7 @@
 #include <QtCore/QStringList>
 #include <QtCore/QDate>
 #include <QtCore/QHash>
-#include <utility>
+#include <QtGui/QColor>
 
 class Settings : public QSettings
 {
@@ -76,11 +76,23 @@ public:
   int subtitleColor() const;
   void setSubtitleColor(int colorId);
 
+  QColor annotationOutlineColor() const;
+  void setAnnotationOutlineColor(const QColor &value);
+
+  QColor subtitleOutlineColor() const;
+  void setSubtitleOutlineColor(const QColor &value);
+
   int annotationEffect() const;
   void setAnnotationEffect(int effect);
 
   QString annotationFontFamily() const;
   void setAnnotationFontFamily(const QString &family);
+
+  QString annotationJapaneseFontFamily() const;
+  void setAnnotationJapaneseFontFamily(const QString &family);
+
+  QString annotationChineseFontFamily() const;
+  void setAnnotationChineseFontFamily(const QString &family);
 
   qint64 annotationOffset() const;
   void setAnnotationOffset(qint64 offset);
@@ -102,11 +114,17 @@ public:
   QHash<QString,QString> recentTitles() const;
   void setRecentTitles(const QHash<QString,QString> &titles);
 
+  QHash<QString,QString> gameEncodings() const;
+  void setGameEncodings(const QHash<QString,QString> &l, int limit = 0);
+
   QString recentPath() const;
   void setRecentPath(const QString &path);
 
   bool isAnnotationAvatarVisible() const;
   void setAnnotationAvatarVisible(bool t);
+
+  bool isAnnotationMetaVisible() const;
+  void setAnnotationMetaVisible(bool t);
 
   bool isAnnotationBandwidthLimited() const;
   void setAnnotationBandwidthLimited(bool t);
@@ -133,6 +151,9 @@ public:
 
   QHash<qint64, int> audioTrackHistory() const;
   void setAudioTrackHistory(const QHash<qint64, int> &h);
+
+  QHash<qint64, int> audioChannelHistory() const;
+  void setAudioChannelHistory(const QHash<qint64, int> &h);
 
   QHash<qint64, QString> aspectRatioHistory() const;
   void setAspectRatioHistory(const QHash<qint64, QString> &h);

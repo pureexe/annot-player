@@ -58,7 +58,7 @@ MediaInfoView::updateText()
       .arg(TR(T_AUDIO))
       .arg(player_->audioCodecName().toUpper())
       .arg(QString::number(player_->audioRate())).arg(tr("Hz"))
-      .arg(QString::number(player_->audioChannels())).arg(tr("ch"))
+      .arg(QString::number(player_->audioChannelCount())).arg(tr("ch"))
     );
 
     // Render

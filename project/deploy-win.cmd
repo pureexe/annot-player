@@ -1,9 +1,9 @@
 :: deploy-win.cmd
 :: 11/5/2011
 setlocal
-cd /d d:/devel/build || exit /b 1
+cd /d d:/dev/build || exit /b 1
 
-set VERSION=0.1.6.2
+set VERSION=0.1.6.3
 set APP=annot-player
 set TARGET=Annot Stream
 set ZIPFILE=%APP%-%VERSION%-win.zip
@@ -40,6 +40,9 @@ set OPENSSL_DLLS=libeay32.dll,ssleay32.dll
 ::set MP4V2_HOME=/Volumes/win/dev/mp4v2
 ::set MP4V2_DLL=libmp4v2.dll
 
+::set LUA_HOME=/Volumes/win/dev/lua
+::set LUA_DLL=lua52.dll
+
 set ZLIB_HOME=/Volumes/win/dev/zlib
 set ZLIB_DLL=zlib1.dll
 
@@ -47,8 +50,8 @@ set VLC_HOME=/Volumes/win/Program Files/VideoLAN/VLC
 set VLC_DLLS=libvlc.dll,libvlccore.dll
 set VLC_DATA=plugins,lua,locale
 
-set BUILD=/Volumes/local/devel/annot-build-desktop/build.win
-set SOURCE=/Volumes/local/devel/annot
+set BUILD=/Volumes/local/dev/annot-build-desktop/build.win
+set SOURCE=/Volumes/local/dev/annot
 
 ::set CURL_HOME=/Volumes/win/dev/curl
 ::set CURL_BIN=curl.exe
@@ -102,6 +105,7 @@ cp -v "%OPENSSL_HOME%"/{%OPENSSL_DLLS%} . || exit /b 1
 ::cp -v "%GPAC_HOME%"/bin/{%GPAC_DLLS%} . || exit /b 1
 ::cp -v "%MP4BOX_HOME%"/bin/%MP4BOX_EXE% . || exit /b 1
 ::cp -v "%MP4V2_HOME%"/bin/%MP4V2_DLL% . || exit /b 1
+::cp -v "%LUA_HOME%"/bin/%LUA_DLL% . || exit /b 1
 cp -v "%ZLIB_HOME%"/bin/%ZLIB_DLL% . || exit /b 1
 
 ::cp -v "%CURL_HOME%"/bin/%CURL_BIN% . || exit /b 1

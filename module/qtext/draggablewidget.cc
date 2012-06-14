@@ -19,47 +19,33 @@ void
 QtExt::
 DraggableWidget::mousePressEvent(QMouseEvent *event)
 {
-  if (!draggable_) {
-    Base::mousePressEvent(event);
-    return;
-  }
-
-  if (event && event->button() == Qt::LeftButton
-      && dragPos_ == BAD_POS) {
+  if (draggable_ && !isMaximized() && !isFullScreen() &&
+      event->button() == Qt::LeftButton && dragPos_ == BAD_POS) {
     dragPos_ = event->globalPos() - frameGeometry().topLeft();
     event->accept();
   }
+  Base::mousePressEvent(event);
 }
 
 void
 QtExt::
 DraggableWidget::mouseMoveEvent(QMouseEvent *event)
 {
-  if (!draggable_) {
-    Base::mouseMoveEvent(event);
-    return;
-  }
-
-  if (event && event->buttons() & Qt::LeftButton
-      && dragPos_ != BAD_POS) {
+  if (draggable_ && !isMaximized() && !isFullScreen() &&
+      (event->buttons() & Qt::LeftButton) && dragPos_ != BAD_POS) {
     QPoint newPos = event->globalPos() - dragPos_;
     move(newPos);
     event->accept();
   }
+  Base::mouseMoveEvent(event);
 }
 
 void
 QtExt::
 DraggableWidget::mouseReleaseEvent(QMouseEvent *event)
 {
-  if (!draggable_) {
-    Base::mouseReleaseEvent(event);
-    return;
-  }
-
   dragPos_ = BAD_POS;
-  if (event)
-    event->accept();
+  Base::mouseReleaseEvent(event);
 }
 
 // EOF

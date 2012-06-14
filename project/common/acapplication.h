@@ -53,7 +53,7 @@ public:
 
   // - Events -
 public:
-  virtual bool event(QEvent *e); ///< \override
+  virtual bool event(QEvent *e); ///< \reimp
 
   // - Implementation -
 protected:

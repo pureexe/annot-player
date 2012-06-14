@@ -33,36 +33,36 @@ public:
   bool isFinished() const { return finished_; }
 
   // - Shared -
-  virtual qint64 size() const ///< \override
+  virtual qint64 size() const ///< \reimp
   { return FifoStream::size() ? FifoStream::size() : data_.size(); }
 
-  virtual qint64 availableSize() const ///< \override
+  virtual qint64 availableSize() const ///< \reimp
   { return data_.size(); }
 
   // - Input -
-  virtual qint64 pos() const { return pos_; } ///< \override
+  virtual qint64 pos() const { return pos_; } ///< \reimp
 
-  virtual bool reset() { m_.lock(); pos_ = 0; m_.unlock(); return true; } ///< \override
+  virtual bool reset() { m_.lock(); pos_ = 0; m_.unlock(); return true; } ///< \reimp
 
-  virtual qint64 skip(qint64 count); ///< \override
+  virtual qint64 skip(qint64 count); ///< \reimp
 
-  virtual bool seek(qint64 pos); ///< \override
+  virtual bool seek(qint64 pos); ///< \reimp
 
-  virtual qint64 read(char *data, qint64 maxSize); ///< \override
-  virtual qint64 tryRead(char *data, qint64 maxSize); ///< \override
+  virtual qint64 read(char *data, qint64 maxSize); ///< \reimp
+  virtual qint64 tryRead(char *data, qint64 maxSize); ///< \reimp
 
-  virtual QByteArray readAll() ///< \override
+  virtual QByteArray readAll() ///< \reimp
   { if (!isFinished()) waitForFinished(); return data_; }
 
   QByteArray &data() { return data_; }
   const QByteArray &data() const { return data_; }
 
-  virtual bool writeFile(const QString &path); ///< \override
+  virtual bool writeFile(const QString &path); ///< \reimp
 
   // - Output -
 
-  virtual qint64 write(const char *data, qint64 maxSize); ///< \override
-  virtual void finish(); ///< \override
+  virtual qint64 write(const char *data, qint64 maxSize); ///< \reimp
+  virtual void finish(); ///< \reimp
 
 public slots:
   virtual void waitForFinished();

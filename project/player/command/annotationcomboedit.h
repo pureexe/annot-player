@@ -26,7 +26,7 @@ public:
 
   // - Properties -
 public slots:
-  virtual QSize sizeHint() const ///< \override QWidget
+  virtual QSize sizeHint() const ///< \reimp QWidget
   { return QtExt::WithSizeHint::sizeHint(); }
 
 protected slots:
@@ -34,8 +34,8 @@ protected slots:
 
   // - Events -
 protected:
-  virtual void keyPressEvent(QKeyEvent *event); ///< \override
-  virtual void contextMenuEvent(QContextMenuEvent *event); ///< \override
+  virtual void keyPressEvent(QKeyEvent *event); ///< \reimp
+  virtual void contextMenuEvent(QContextMenuEvent *event); ///< \reimp
 
 private:
   void createActions();

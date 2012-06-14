@@ -112,8 +112,8 @@ namespace QtExt {
    const QString &alias() const { return alias_; }
 
   public:
-    virtual QList<QNetworkCookie> cookiesForUrl(const QUrl &url) const; ///< \override
-    virtual bool setCookiesFromUrl(const QList<QNetworkCookie> &cookies, const QUrl &url); ///< \override
+    virtual QList<QNetworkCookie> cookiesForUrl(const QUrl &url) const; ///< \reimp
+    virtual bool setCookiesFromUrl(const QList<QNetworkCookie> &cookies, const QUrl &url); ///< \reimp
 
   public:
     void setDomainAlias(const QString &domain, const QString &alias)

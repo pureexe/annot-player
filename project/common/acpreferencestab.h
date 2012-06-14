@@ -50,8 +50,8 @@ public:
     : Base(parent) { }
 
 public slots:
-  virtual bool save() { return true; } ///< \override
-  virtual void load() { } ///< \override
+  virtual bool save() { return true; } ///< \reimp
+  virtual void load() { } ///< \reimp
 };
 
 #endif // ACPREFERENCESTAB_H

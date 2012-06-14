@@ -16,6 +16,8 @@ extern "C" {
 } // extern "C"
 #endif // Q_WS_X11
 #include <QtGui>
+#include <climits>
+#include <cstdlib>
 
 #define DEBUG "acapplication"
 #include "module/debug/debug.h"
@@ -26,6 +28,14 @@ AcApplication::AcApplication(int &argc, char **argv)
   : Base(argc, argv)
 {
   DOUT("enter");
+
+  // Seed global random generator.
+  qint64 now = QDateTime::currentMSecsSinceEpoch();
+  uint seed = now % qint64(UINT_MAX); // prevent overflow
+  DOUT("seed =" << seed);
+  ::srand(seed);
+  ::qsrand(seed);
+
   DOUT("exit");
 }
 
@@ -102,7 +112,6 @@ AcApplication::isSingleInstance() const
     }
   }
   return fd_lock >= 0;
-}
 #else // Q_WS_MAC
   return true;
 #endif // Q_WS_

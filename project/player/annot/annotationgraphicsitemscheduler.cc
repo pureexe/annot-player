@@ -5,6 +5,7 @@
 #include "annotationgraphicsstyle.h"
 #include "signalhub.h"
 #include <QtCore>
+#include <boost/typeof/typeof.hpp>
 
 //#define DEBUG "annotationgraphicsitemscheduler"
 #include "module/debug/debug.h"
@@ -20,6 +21,16 @@ AnnotationGraphicsItemScheduler::pause()
 void
 AnnotationGraphicsItemScheduler::resume()
 { resumeTime_ = QDateTime::currentMSecsSinceEpoch();  }
+
+void
+AnnotationGraphicsItemScheduler::clear()
+{
+  //cells_.clear();
+  for (BOOST_AUTO(p, cells_.begin()); p != cells_.end(); p++)
+    p.value() = 0;
+  lastCell_ = std::make_pair(QPoint(), qint64(0));
+  pauseTime_ = resumeTime_ = 0;
+}
 
 // - Float Scheduling -
 
@@ -125,38 +136,65 @@ AnnotationGraphicsItemScheduler::nextPos(const QSize &windowSize, const QSizeF &
     maxXCount = MaxColumnCount;
   qint64 now = QDateTime::currentMSecsSinceEpoch();
   bool ok = false;
-  int x, y;
   qint64 pausedTime = resumeTime_ - pauseTime_;
-  for (x = 0; x < maxXCount; x++) {
-    for (y = 0; y < cellYCount; y++) {
+  int x, y;
+  if (pausedTime >= 0 && (
+        lastCell_.second >= now ||
+        lastCell_.second < resumeTime_ && lastCell_.second > pauseTime_ && lastCell_.second + pausedTime > now
+     )) {
+    x = lastCell_.first.x();
+    y = lastCell_.first.y();
+    if (y == cellYCount - 1) {
+      x++;
+      y = 0;
+    } else
+      y++;
+
+    if (x < maxXCount && y < cellYCount)
       for (int i = 0; i < itemXCount; i++) {
         qint64 t = cells_[QPoint(x + i, y)];
-        if (pausedTime && t > pauseTime_) {
-          if (t < resumeTime_)
-            t += pausedTime;
-          else if (pausedTime < 0)
-            break;
-        }
+        if (t < resumeTime_ && t > pauseTime_)
+          t += pausedTime;
         if (now < t)
           break;
         else if (i == itemXCount - 1)
           ok = true;
       }
+  }
+  if (!ok) {
+    for (x = 0; x < maxXCount; x++) {
+      for (y = 0; y < cellYCount; y++) {
+        for (int i = 0; i < itemXCount; i++) {
+          qint64 t = cells_[QPoint(x + i, y)];
+          if (pausedTime && t > pauseTime_) {
+            if (t < resumeTime_)
+              t += pausedTime;
+            else if (pausedTime < 0)
+              break;
+          }
+          if (now < t)
+            break;
+          else if (i == itemXCount - 1)
+            ok = true;
+        }
+        if (ok)
+          break;
+      }
       if (ok)
         break;
     }
-    if (ok)
-      break;
+    if (!ok)
+      return QPointF();
   }
 
-  if (!ok)
-    return QPointF();
-
-  int cooldownTime = visibleMsecs;
+  //int cooldownTime = visibleMsecs + 1010;
+  //int cooldownTime = visibleMsecs;
+  enum { CooldownTime = 1010 };
   qint64 availableTime = now + visibleMsecs;
+  lastCell_ = std::make_pair(QPoint(x, y), availableTime);
   for (int i = 0; i < itemXCount; i++)
     cells_[QPoint(x + i, y)] = i == 0 ?
-      availableTime + cooldownTime :
+      availableTime + CooldownTime :
       availableTime;
   return QPointF(MarginLeft + x * cellWidth, y * cellHeight);
 }

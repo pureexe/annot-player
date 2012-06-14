@@ -79,7 +79,7 @@ public slots:
   void promptUrl(const QString &text);
   void promptUrls(const QStringList &urls);
 
-  virtual void setVisible(bool visible); ///< \override
+  virtual void setVisible(bool visible); ///< \reimp
   void openDirectory();
 
   // - Implementations -
@@ -140,11 +140,11 @@ protected slots:
 
   // - Events -
 public:
-  virtual bool event(QEvent *event); ///< \override
+  virtual bool event(QEvent *event); ///< \reimp
 protected:
-  virtual void contextMenuEvent(QContextMenuEvent *e); ///< \override
-  virtual void keyPressEvent(QKeyEvent *e); ///< \override
-  virtual void closeEvent(QCloseEvent *e); ///< \override
+  virtual void contextMenuEvent(QContextMenuEvent *e); ///< \reimp
+  virtual void keyPressEvent(QKeyEvent *e); ///< \reimp
+  virtual void closeEvent(QCloseEvent *e); ///< \reimp
 
   //void gestureEvent(QGestureEvent *e);
 

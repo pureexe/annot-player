@@ -18,10 +18,10 @@ public:
     : Base(parent) { }
 
 public:
-  bool matchMedia(const QString &href) const; ///< \override
+  bool matchMedia(const QString &href) const; ///< \reimp
 
 public slots:
-  bool resolveMedia(const QString &href); ///< \override
+  bool resolveMedia(const QString &href); ///< \reimp
 };
 
 #endif // DUMMYGOOGLEVIDEOMRLRESOLVER_H

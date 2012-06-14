@@ -48,10 +48,10 @@ public:
 
   bool isDirty() const { return dirty_; }
 
-  virtual bool needsDisplay() const { return isDirty() || hasCenter(); } ///< \override
+  virtual bool needsDisplay() const { return isDirty() || hasCenter(); } ///< \reimp
 
 public:
-  virtual void drawImage(QPainter &painter, const QPointF &pos, const QImage &image) const; ///< \override
+  virtual void drawImage(QPainter &painter, const QPointF &pos, const QImage &image) const; ///< \reimp
 
   // FIXME
   void drawImage(QPainter &painter, const QImage &image) const

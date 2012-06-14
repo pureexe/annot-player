@@ -101,6 +101,8 @@ win32 {
     GSOAP_HOME          = $$DEV_HOME/gsoap
     ZLIB_HOME           = $$DEV_HOME/zlib
     LUA_HOME            = $$DEV_HOME/lua
+    #LUA_VERSION = 52
+    #LUA_VERSION = 5.1
     LUA_VERSION =
 
     ITH_HOME            = $$DEV_HOME/ith
@@ -138,6 +140,7 @@ unix {
 }
 
 mac {
+    MACPORTS_HOME       = /opt/local
     #QT_HOME             = /opt/local/share/qt4
     QT_HOME             = ${HOME}/opt/qt
     QT_SRC              = /Developer/QtSDK/QtSources/4.7.4/src
@@ -146,15 +149,17 @@ mac {
     VLC_SRC             = ${HOME}/opt/src
     #WSF_HOME           = ${HOME}/opt/wso2/wsf
     #CDIO_HOME          = ${HOME}/opt/libcdio
-    #FFMPEG_HOME         = /opt/local
+    #FFMPEG_HOME         = $$MACPORTS_HOME
     GPAC_HOME           = ${HOME}/opt/gpac
-    MP4V2_HOME          = /opt/local
+    MP4V2_HOME          = $$MACPORTS_HOME
     LIVE_HOME           = ${HOME}/opt/live
     POPPLER_HOME        = ${HOME}/opt/poppler
-    BOOST_HOME          = /opt/local
-    GSOAP_HOME          = /opt/local
+    BOOST_HOME          = $$MACPORTS_HOME
+    GSOAP_HOME          = $$MACPORTS_HOME
     ZLIB_HOME           = /usr
-    LUA_HOME            = /usr
+    #LUA_HOME            = ${HOME}/opt/lua
+    LUA_HOME            = $$MACPORTS_HOME
+    #LUA_VERSION = 52
     LUA_VERSION =
 }
 
@@ -172,11 +177,11 @@ INCLUDEPATH     += $$BOOST_HOME/include
 LIBS            += -L$$BOOST_HOME/lib
 INCLUDEPATH     += $$GSOAP_HOME/include
 LIBS            += -L$$GSOAP_HOME/lib
+INCLUDEPATH     += $$ZLIB_HOME/include
+LIBS            += -L$$ZLIB_HOME/lib
 INCLUDEPATH     += $$LUA_HOME/include \
                    $$LUA_HOME/include/lua$$LUA_VERSION
 LIBS            += -L$$LUA_HOME/lib
-INCLUDEPATH     += $$ZLIB_HOME/include
-LIBS            += -L$$ZLIB_HOME/lib
 #INCLUDEPATH     += $$FFMPEG_HOME/include
 #LIBS            += -L$$FFMPEG_HOME/lib
 #INCLUDEPATH     += $$GPAC_HOME/include

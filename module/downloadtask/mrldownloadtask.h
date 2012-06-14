@@ -47,8 +47,8 @@ signals:
 public slots:
   virtual void run(bool exec);
 
-  virtual void stop(); ///< \override
-  virtual void reset(); ///< \override
+  virtual void stop(); ///< \reimp
+  virtual void reset(); ///< \reimp
 
 protected slots:
   void downloadMedia(const MediaInfo &mi, QNetworkCookieJar *jar);

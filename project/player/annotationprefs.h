@@ -6,8 +6,9 @@
 
 #include "project/common/acpreferencestab.h"
 
-QT_FORWARD_DECLARE_CLASS(QSpinBox)
 QT_FORWARD_DECLARE_CLASS(QFontComboBox)
+QT_FORWARD_DECLARE_CLASS(QSpinBox)
+QT_FORWARD_DECLARE_CLASS(QToolButton)
 
 class AnnotationSettings;
 class AnnotationPreferencesTab : public AcPreferencesTab
@@ -22,7 +23,11 @@ class AnnotationPreferencesTab : public AcPreferencesTab
   //QComboBox *scaleEdit_,
   //          *rotationEdit_,
   QSpinBox *offsetEdit_;
-  QFontComboBox *fontEdit_;
+  QFontComboBox *fontEdit_,
+                *japaneseFontEdit_,
+                *chineseFontEdit_;
+  QToolButton *annotColorButton_,
+              *subtitleColorButton_;
 
 public:
   explicit AnnotationPreferencesTab(AnnotationSettings *settings, QWidget *parent = 0)
@@ -31,17 +36,33 @@ public:
     : Base(parent), settings_(0) { init(); }
 
 public slots:
-  virtual bool save(); ///< \override
-  virtual void load(); ///< \override
+  virtual bool save(); ///< \reimp
+  virtual void load(); ///< \reimp
 protected slots:
-  void saveFontFamily();
-  void loadFontFamily();
-  void resetFontFamily();
+  void saveFont();
+  void loadFont();
+  void resetFont();
+
+  void saveJapaneseFont();
+  void loadJapaneseFont();
+  void resetJapaneseFont();
+
+  void saveChineseFont();
+  void loadChineseFont();
+  void resetChineseFont();
 
   void saveOffset();
   void loadOffset();
   void loadOffsetIfVisible() { if (isVisible()) loadOffset(); }
   void resetOffset();
+
+  void loadAnnotationColor();
+  void resetAnnotationColor();
+  void promptAnnotationColor();
+
+  void loadSubtitleColor();
+  void resetSubtitleColor();
+  void promptSubtitleColor();
 private:
   void init();
   void createLayout();

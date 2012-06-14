@@ -50,8 +50,8 @@ public:
   bool isRunning() const { return state_ == Running; }
   bool isFinished() const { return state_ == Finished; }
 
-  void setInputStreams(const InputStreamList &ins) { ins_ = ins; } ///< \override
-  void setOutputStream(OutputStream *out) { out_ = out; } ///< \override
+  void setInputStreams(const InputStreamList &ins) { ins_ = ins; } ///< \reimp
+  void setOutputStream(OutputStream *out) { out_ = out; } ///< \reimp
   void setDuration(qint64 msec) { duration_ = msec; }
 
   qint64 duration() const { return duration_; }
@@ -64,9 +64,9 @@ signals:
   void error(QString message);
 
 public slots:
-  virtual void run(); ///< \override
+  virtual void run(); ///< \reimp
 
-  virtual void stop() ///< \override
+  virtual void stop() ///< \reimp
   {
     state_ = Stopped;
     emit stopped();
@@ -79,8 +79,8 @@ public:
   bool merge();
 
 protected:
-  InputStreamList inputStreams() const { return ins_; } ///< \override
-  OutputStream *outputStream()  const { return out_; } ///< \override
+  InputStreamList inputStreams() const { return ins_; } ///< \reimp
+  OutputStream *outputStream()  const { return out_; } ///< \reimp
 
   bool append(InputStream *in, bool writeHeader);
   bool readTag(InputStream *in, bool writeHeader);

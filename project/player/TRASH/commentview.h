@@ -33,7 +33,7 @@ public:
 
   // - Events -
 public:
-  virtual void setVisible(bool visible); ///< \override
+  virtual void setVisible(bool visible); ///< \reimp
 };
 
 #endif // COMMENTVIEW_H

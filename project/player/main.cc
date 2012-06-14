@@ -34,8 +34,6 @@
 #include <QtNetwork/QNetworkProxy>
 #include <QtNetwork/QNetworkReply>
 #include <QtGui>
-#include <ctime>
-#include <cstdlib>
 
 #define DEBUG "main"
 #include "module/debug/debug.h"
@@ -62,7 +60,12 @@ namespace { // anonymous
     reg->registerTypes(Player::supportedImageSuffices());
     reg->registerTypes(Player::supportedSubtitleSuffices());
     reg->registerTypes(Player::supportedPlaylistSuffices());
-    //reg->registerTypes(QStringList() << ".exe" << ".lnk");
+
+    //reg->registerTypes(QStringList() G_FORMAT_PROGRAM(<<));
+    //reg->registerTypes(QStringList() G_FORMAT_ANNOTATION(<<));
+
+    //reg->registerRawTypes(QStringList() G_FORMAT_DEVICE(<<));
+    reg->registerRawType("DVD");
 #endif // Q_WS_WIN
   }
 
@@ -73,10 +76,14 @@ namespace { // anonymous
     foreach (const QString &type, Player::supportedSuffices())
       if (reg->containsType(type))
         reg->registerType(type);
-    if (reg->containsType(".exe"))
-      reg->registerType(".exe");
-    if (reg->containsType(".lnk"))
-      reg->registerType(".lnk");
+
+    foreach (const QString &type, QStringList() G_FORMAT_PROGRAM(<<) G_FORMAT_ANNOTATION(<<))
+      if (reg->containsType(type))
+        reg->registerType(type);
+
+    foreach (const QString &type, QStringList() G_FORMAT_DEVICE(<<))
+      if (reg->containsRawType(type))
+        reg->registerRawType(type);
 #endif // Q_WS_WIN
   }
 
@@ -92,10 +99,11 @@ namespace { // anonymous
 #endif // WITH_WIN_DWM
 
     // Cache fonts needed to render annotations
-    DOUT("default annotation font =" << AnnotationSettings::globalInstance()->fontFamily());
-    QString font = Settings::globalSettings()->annotationFontFamily();
-    DOUT("current annotation font =" << font);
-    AnnotationSettings::globalInstance()->setFontFamily(font);
+    //DOUT("default annotation font =" << AnnotationSettings::globalSettings()->fontFamily());
+    //DOUT("current annotation font =" << font);
+    AnnotationSettings::globalSettings()->setFontFamily(Settings::globalSettings()->annotationFontFamily());
+    AnnotationSettings::globalSettings()->setJapaneseFontFamily(Settings::globalSettings()->annotationJapaneseFontFamily());
+    AnnotationSettings::globalSettings()->setChineseFontFamily(Settings::globalSettings()->annotationChineseFontFamily());
     AnnotationGraphicsItem::warmUp();
   }
 
@@ -103,13 +111,13 @@ namespace { // anonymous
 
 // - Main -
 
-#define WINDOW_FLAGS ( \
-  Qt::Dialog | \
-  Qt::CustomizeWindowHint | \
-  Qt::WindowTitleHint | \
-  Qt::WindowSystemMenuHint | \
-  Qt::WindowMinMaxButtonsHint | \
-  Qt::WindowCloseButtonHint )
+//#define WINDOW_FLAGS (
+//  Qt::Dialog |
+//  Qt::CustomizeWindowHint
+//  Qt::WindowTitleHint |
+//  Qt::WindowSystemMenuHint |
+//  Qt::WindowMinMaxButtonsHint |
+//  Qt::WindowCloseButtonHint )
 
 int
 main(int argc, char *argv[])
@@ -136,11 +144,6 @@ main(int argc, char *argv[])
     }
     return 0;
   }
-
-  // Seed global random generator.
-  time_t now = ::time(0);
-  ::srand(now);
-  ::qsrand(now);
 
   // Register meta types.
   ::registerMetaTypes();
@@ -171,41 +174,53 @@ main(int argc, char *argv[])
   QString previousVersion = settings->version();
   if (previousVersion != G_VERSION) {
     DOUT("update from old version");
+    bool majorUpdate = !previousVersion.startsWith(G_VERSION_MAJOR);
 
-    bool initial = previousVersion.isEmpty();
+    //bool initial = previousVersion.isEmpty();
 
-    QFile::remove(G_PATH_CACHEDB);
+    if (majorUpdate)
+      QFile::remove(G_PATH_CACHEDB);
     QFile::remove(G_PATH_QUEUEDB);
     QFile::remove(G_PATH_DEBUG);
 
 #ifdef Q_WS_WIN
-    // Delete plugins/*.dat
-    QDir plugins(QCoreApplication::applicationDirPath() + "/plugins");
-    Q_ASSERT(plugins.exists());
-    foreach (const QFileInfo &fi, plugins.entryInfoList(QStringList() << "*.dat", QDir::Files)) {
-      DOUT("remove old plugins caches:" << fi.absoluteFilePath());
-      QFile::remove(fi.absoluteFilePath());
+    if (majorUpdate) {
+      // Delete plugins/*.dat
+      QDir plugins(QCoreApplication::applicationDirPath() + "/plugins");
+      Q_ASSERT(plugins.exists());
+      foreach (const QFileInfo &fi, plugins.entryInfoList(QStringList() << "*.dat", QDir::Files)) {
+        DOUT("remove old plugins caches:" << fi.absoluteFilePath());
+        QFile::remove(fi.absoluteFilePath());
+      }
     }
 #endif // Q_WS_WIN
 
     if (QFile::rename(QDir::homePath() + "/Annot", G_PATH_DOWNLOADS))
       AcLocationManager::globalInstance()->createDownloadsLocation();
 
+    WindowsRegistry::globalInstance()->registerRawType("DVD");
+
     ac->setThemeId(AcUi::CyanTheme);
     ac->sync();
 
+    settings->setAnnotationFontFamily(QString());
+    settings->setAnnotationJapaneseFontFamily(QString());
+    settings->setAnnotationChineseFontFamily(QString());
+
     //settings->setWindowOnTop(false);
     settings->setAutoSubmit(true);
-    if (settings->annotationScale() < 1)
+    if (majorUpdate)
       settings->setAnnotationScale(1.0);
     settings->setPreferMotionlessAnnotation(true);
+    settings->setAnnotationAvatarVisible(true);
     settings->setAnnotationEffect(0);
     settings->setAnnotationOffset(0);
+    settings->setSubtitleColor(0);
     settings->setApplicationFilePath(QString());
     //settings->setAnnotationLanguages(Traits::AllLanguages);
     //settings->setAnnotationFilterEnabled(false);
 
-    if (initial) {
+    if (majorUpdate) {
       settings->setSaturation(1.1*1.1*1.1);
       settings->setGamma(1/1.1);
       settings->setHue(2+2+2);
@@ -213,7 +228,7 @@ main(int argc, char *argv[])
       settings->setBrightness(1.02*1.02);
     }
 
-    if (initial) {
+    if (majorUpdate) {
       registerFileTypes();
       settings->setApplicationFilePath(QCoreApplication::applicationFilePath());
     }
@@ -333,7 +348,7 @@ main(int argc, char *argv[])
   MainWindow w(unique); {
     DOUT("mainwindow created");
     w.setWindowTitle(TR(T_TITLE_PROGRAM));
-    Q_ASSERT(w.isValid());
+    //Q_ASSERT(w.isValid());
     //if (!w.isValid()) {
     //  DOUT("FATAL ERROR: failed to initialize MainWindow, please contact " G_EMAIL);
     //  return -1;

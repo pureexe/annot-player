@@ -42,10 +42,10 @@ public slots:
 
   // - Events -
 public slots:
-  //virtual void mouseDoubleClickEvent(QMouseEvent *event); ///< \override
-  virtual void setVisible(bool visible); ///< \override
+  //virtual void mouseDoubleClickEvent(QMouseEvent *event); ///< \reimp
+  virtual void setVisible(bool visible); ///< \reimp
 protected:
-  virtual void paintEvent(QPaintEvent *event); ///< \override
+  virtual void paintEvent(QPaintEvent *event); ///< \reimp
 
   // - Paint -
 protected:

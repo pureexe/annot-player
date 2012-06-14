@@ -27,7 +27,7 @@ public slots:
   void setBlockedUrls(const QList<QUrl> &urls) { blockedUrls_ = urls; }
 
 protected:
-  ///  \override
+  ///  \reimp
   virtual QNetworkReply *createRequest(Operation op, const QNetworkRequest &req,
                                        QIODevice *outgoingData = 0);
   bool isBlockedUrl(const QUrl &url) const;

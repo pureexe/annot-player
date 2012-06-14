@@ -32,16 +32,16 @@ public slots:
 protected:
   void forward(QEvent *event);
 
-  //virtual bool event(QEvent *event); ///< \override
+  //virtual bool event(QEvent *event); ///< \reimp
 
-  virtual void contextMenuEvent(QContextMenuEvent *event); ///< override
-  virtual void mouseMoveEvent(QMouseEvent *event); ///< override
-  virtual void mousePressEvent(QMouseEvent *event); ///< override
-  virtual void mouseReleaseEvent(QMouseEvent *event); ///< override
-  virtual void mouseDoubleClickEvent(QMouseEvent *event); ///< override
+  virtual void contextMenuEvent(QContextMenuEvent *event); ///< \reimp
+  virtual void mouseMoveEvent(QMouseEvent *event); ///< \reimp
+  virtual void mousePressEvent(QMouseEvent *event); ///< \reimp
+  virtual void mouseReleaseEvent(QMouseEvent *event); ///< \reimp
+  virtual void mouseDoubleClickEvent(QMouseEvent *event); ///< \reimp
 
-  virtual void closeEvent(QCloseEvent *event); ///< \override
-  virtual void resizeEvent(QResizeEvent *event); ///< \override
+  virtual void closeEvent(QCloseEvent *event); ///< \reimp
+  virtual void resizeEvent(QResizeEvent *event); ///< \reimp
 };
 
 #endif // OSDWINDOW_H

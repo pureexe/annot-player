@@ -33,7 +33,7 @@ public slots:
   void setCount(int count) { count_ = count; }
   void setText(const QString &text) { message_ = text; } ///< must contain %1
 
-  virtual void setVisible(bool visible); ///< \override
+  virtual void setVisible(bool visible); ///< \reimp
 
 protected slots:
   virtual void run() { emit timeout(); }

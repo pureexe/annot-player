@@ -38,47 +38,42 @@ void
 WindowsRegistry::sync()
 { if (classes_) classes_->sync(); }
 
-// - Register -
+// - Types -
 
-void
-WindowsRegistry::registerTypes(const QStringList &suffices)
+QString
+WindowsRegistry::aliasOf(const QString &t)
 {
-  DOUT("enter: suffices =" << suffices);
-  foreach (const QString &suffix, suffices)
-    registerType(suffix);
-  DOUT("exit");
+  //QString alias = APPID + '.' + type;
+  QString ret = t;
+  if (!t.startsWith('.'))
+    ret.prepend('.');
+  ret.prepend(APPID);
+  return ret;
 }
 
 bool
-WindowsRegistry::containsType(const QString &type) const
+WindowsRegistry::containsRawType(const QString &type) const
 {
   Q_ASSERT(isValid());
   DOUT("type =" << type);
 
   if (!classes_ || type.isEmpty())
     return false;
-  QString suffix = type;
-  if (!suffix.startsWith('.'))
-    suffix.prepend('.');
 
-  QString alias = APPID + suffix;
-  QString aliasId = suffix + "/OpenWithProgIds/" + alias;
+  QString aliasId = type + "/OpenWithProgIds/" + aliasOf(type);
   bool ret = classes_->contains(aliasId);
   DOUT("ret =" << ret);
   return ret;
 }
 
 void
-WindowsRegistry::registerType(const QString &type)
+WindowsRegistry::registerRawType(const QString &type)
 {
   Q_ASSERT(isValid());
   DOUT("type =" << type);
 
   if (!classes_ || type.isEmpty())
     return;
-  QString suffix = type;
-  if (!suffix.startsWith('.'))
-    suffix.prepend('.');
 
   static QString command;
   if (command.isEmpty()) {
@@ -87,9 +82,9 @@ WindowsRegistry::registerType(const QString &type)
     command = "\"" + app  + "\" \"%1\"";
   }
 
-  QString alias = APPID + suffix;
+  QString alias = aliasOf(type);
 
-  classes_->beginGroup(suffix);
+  classes_->beginGroup(type);
 
   classes_->setValue("OpenWithProgIds/" + alias, "");
   classes_->endGroup();
@@ -112,19 +107,16 @@ WindowsRegistry::registerType(const QString &type)
 }
 
 void
-WindowsRegistry::unregisterType(const QString &type)
+WindowsRegistry::unregisterRawType(const QString &type)
 {
   Q_ASSERT(isValid());
   DOUT("type =" << type);
 
   if (!classes_ || type.isEmpty())
     return;
-  QString suffix = type;
-  if (!suffix.startsWith('.'))
-    suffix.prepend('.');
 
-  QString alias = APPID + suffix;
-  QString aliasId = suffix + "/OpenWithProgIds/" + alias;
+  QString alias = aliasOf(type);
+  QString aliasId = type + "/OpenWithProgIds/" + alias;
 
   classes_->remove(aliasId);
   classes_->remove(alias);

@@ -35,8 +35,8 @@ public slots:
 
   // - Events -
 protected:
-  virtual void wheelEvent(QWheelEvent *) { } ///< \override disabled
-  virtual void contextMenuEvent(QContextMenuEvent *event); ///< \override
+  virtual void wheelEvent(QWheelEvent *) { } ///< \reimp disabled
+  virtual void contextMenuEvent(QContextMenuEvent *event); ///< \reimp
 
 protected slots:
   void updatePalette();

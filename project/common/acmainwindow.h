@@ -54,13 +54,13 @@ protected slots:
 
   // - Events -
 public slots:
-  virtual void setVisible(bool visible); ///< \override
+  virtual void setVisible(bool visible); ///< \reimp
 protected:
-  virtual void mousePressEvent(QMouseEvent *event); ///< \override
-  virtual void mouseMoveEvent(QMouseEvent *event); ///< \override
-  virtual void mouseReleaseEvent(QMouseEvent *event); ///< \override
-  virtual void paintEvent(QPaintEvent *event); ///< \override
-  virtual void closeEvent(QCloseEvent *e); ///< \override
+  virtual void mousePressEvent(QMouseEvent *event); ///< \reimp
+  virtual void mouseMoveEvent(QMouseEvent *event); ///< \reimp
+  virtual void mouseReleaseEvent(QMouseEvent *event); ///< \reimp
+  virtual void paintEvent(QPaintEvent *event); ///< \reimp
+  virtual void closeEvent(QCloseEvent *e); ///< \reimp
 
 private:
   QTimer *messageTimer_;

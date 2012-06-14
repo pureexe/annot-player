@@ -5,7 +5,7 @@ Standards-Version: 0.1.1.8
 Section: network
 Maintainer: Annot Cloud <annotcloud@gmail.com>
 Priority: optional
-Build-Depends: debhelper (>= 8.0.0), liblua5.1-dev, qt-sdk
+Build-Depends: debhelper (>= 8.0.0), liblua5.2-dev, qt4-dev-tools
 Homepage: http://annot.me
 Vcs-Git: git://code.google.com/p/annot-player
 Vcs-Browser: http://code.google.com/p/annot-player/source/checkout

@@ -26,7 +26,7 @@ TextEditTabView::textWidget(int tab) const
 void
 TextEditTabView::appendText(const QString &text, int tab)
 {
-  Q_ASSERT(tab >= 0 && tab < tabViews_.size());
+  Q_ASSERT(tab >= 0 && tab < tabCount());
   if (tab >= 0 && tab < tabCount())
     textWidget(tab)->append(text);
 }
@@ -34,7 +34,7 @@ TextEditTabView::appendText(const QString &text, int tab)
 void
 TextEditTabView::clear(int tab)
 {
-  Q_ASSERT(tab >= 0 && tab < tabViews_.size());
+  Q_ASSERT(tab >= 0 && tab < tabCount());
   if (tab >= 0 && tab < tabCount())
     textWidget(tab)->clear();
 }

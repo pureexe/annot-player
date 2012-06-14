@@ -9,12 +9,10 @@ DEPENDPATH += $$PWD
 
 HEADERS += \
     $$PWD/pixmapfilter.h \
-    $$PWD/pixmaphalofilter.h \
-    $$PWD/pixmapripplefilter.h
+    $$PWD/pixmaphalofilter.h
 
 SOURCES += \
-    $$PWD/pixmaphalofilter.cc \
-    $$PWD/pixmapripplefilter.cc
+    $$PWD/pixmaphalofilter.cc
 
 QT      += core gui
 

@@ -145,8 +145,8 @@ protected slots:
 
   // - Events -
 protected:
-  //virtual void mouseDoubleClickEvent(QMouseEvent *event); ///< \override
-  //virtual void contextMenuEvent(QContextMenuEvent *event); ///< \override
+  //virtual void mouseDoubleClickEvent(QMouseEvent *event); ///< \reimp
+  //virtual void contextMenuEvent(QContextMenuEvent *event); ///< \reimp
 
   // - Implementations -
 protected:

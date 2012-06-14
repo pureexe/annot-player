@@ -31,10 +31,10 @@ public:
   ~VideoView();
 
 protected:
-  //virtual bool macEvent(EventHandlerCallRef caller, EventRef event); ///< \override
+  //virtual bool macEvent(EventHandlerCallRef caller, EventRef event); ///< \reimp
 
 #ifdef Q_WS_X11
-  virtual bool x11Event(XEvent *event); ///< \override
+  virtual bool x11Event(XEvent *event); ///< \reimp
 #endif // Q_WS_X11
 
 #ifdef WITH_WIN_HOOK

@@ -8,6 +8,7 @@
 #include "module/crypt/simplecrypt.h"
 #include "module/qtext/algorithm.h"
 #include <QtNetwork/QNetworkProxy>
+#include <QtCore/QLocale>
 #include <boost/tuple/tuple.hpp>
 
 // - AcSettings keys -
@@ -191,6 +192,22 @@ AcSettings::language() const
 void
 AcSettings::setLanguage(int language)
 { setValue(SK_LANGUAGE, language); }
+
+bool
+AcSettings::isEnglish() const
+{ return language() == QLocale::English; }
+
+bool
+AcSettings::isJapanese() const
+{ return language() == QLocale::Japanese; }
+
+bool
+AcSettings::isChinese() const
+{ return language() == QLocale::Chinese; }
+
+bool
+AcSettings::isKorean() const
+{ return language() == QLocale::Korean; }
 
 // - GUI -
 

@@ -19,8 +19,8 @@ class ConsoleDialog : public AcWindow
   static QList<Self *> instances_;
 
   enum TabIndex {
-    LogTabIndex = 0,
-    DebugTabIndex,
+    DebugTabIndex = 0,
+    LogTabIndex,
     TabIndexCount
   };
 

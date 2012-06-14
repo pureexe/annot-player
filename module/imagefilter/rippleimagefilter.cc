@@ -64,7 +64,6 @@ RippleImageFilter::clear()
 void
 RippleImageFilter::drawImage(QPainter &painter, const QPointF &pos, const QImage &currentImage) const
 {
-  Q_ASSERT(p);
   if (currentImage.isNull())
     return;
   if (!needsDisplay()) {

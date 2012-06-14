@@ -73,6 +73,10 @@ AnnotationEditor::AnnotationEditor(QWidget *parent)
 
   connect(new QShortcut(QKeySequence("CTRL+1"), this), SIGNAL(activated()), codeRibonButton_, SLOT(click()));
   connect(new QShortcut(QKeySequence("CTRL+2"), this), SIGNAL(activated()), htmlRibonButton_, SLOT(click()));
+#ifndef Q_WS_MAC
+  connect(new QShortcut(QKeySequence("ALT+1"), this), SIGNAL(activated()), codeRibonButton_, SLOT(click()));
+  connect(new QShortcut(QKeySequence("ALT+2"), this), SIGNAL(activated()), htmlRibonButton_, SLOT(click()));
+#endif // Q_WS_MAC
 
   // Start up states
   setFontType(QApplication::font());
@@ -111,8 +115,7 @@ AnnotationEditor::createRibons()
 
   // - moveStyleComboBox_
   moveStyleComboBox_ = ui->makeComboBox(0, "", tr("Style tag")); {
-    moveStyleComboBox_->setMaximumWidth(MOVESTYLECOMBOBOX_WIDTH);
-    moveStyleComboBox_->setMinimumWidth(MOVESTYLECOMBOBOX_WIDTH);
+    moveStyleComboBox_->setFixedWidth(MOVESTYLECOMBOBOX_WIDTH);
 
     // Must be consistent with MoveStyleIndex
     moveStyleComboBox_->addItem(tr("fly"));
@@ -121,8 +124,7 @@ AnnotationEditor::createRibons()
   } connect(moveStyleComboBox_, SIGNAL(activated(int)), SLOT(setMoveStyle(int)));
 
   renderEffectComboBox_ = ui->makeComboBox(0, "", TR(T_ANNOTATIONEFFECT)); {
-    renderEffectComboBox_->setMaximumWidth(RENDEREFFECTCOMBOBOX_WIDTH);
-    renderEffectComboBox_->setMinimumWidth(RENDEREFFECTCOMBOBOX_WIDTH);
+    renderEffectComboBox_->setFixedWidth(RENDEREFFECTCOMBOBOX_WIDTH);
 
     // Must be consistent with RenderEffectIndex
     renderEffectComboBox_->addItem(tr("transp"));
@@ -204,8 +206,7 @@ AnnotationEditor::createRibons()
 
   // - alignComboBox_
   alignComboBox_ = ui->makeComboBox(AcUi::ReadOnlyHint, "", tr("Alignment")); {
-    alignComboBox_->setMaximumWidth(ALIGNCOMBOBOX_WIDTH);
-    alignComboBox_->setMinimumWidth(ALIGNCOMBOBOX_WIDTH);
+    alignComboBox_->setFixedWidth(ALIGNCOMBOBOX_WIDTH);
 
     // Must be consisitent with AlignIndex
     alignComboBox_->addItem(tr("Left"));
@@ -218,16 +219,14 @@ AnnotationEditor::createRibons()
   fontComboBox_ = new QtExt::FontComboBox; {
     fontComboBox_->setStyleSheet(ACSS_COMBOBOX);
     //fontComboBox_->setEditable(true);
-    fontComboBox_->setMaximumWidth(FONTCOMBOBOX_WIDTH);
-    fontComboBox_->setMinimumWidth(FONTCOMBOBOX_WIDTH);
+    fontComboBox_->setFixedWidth(FONTCOMBOBOX_WIDTH);
     fontComboBox_->setToolTip(tr("Font Family"));
   }
   connect(fontComboBox_, SIGNAL(activated(QString)), SLOT(setFontFamily(QString)));
 
   // - sizeComboBox_
   fontSizeComboBox_ = ui->makeComboBox(0, "", tr("Font Size")); {
-    fontSizeComboBox_->setMaximumWidth(FONTSIZECOMBOBOX_WIDTH);
-    fontSizeComboBox_->setMinimumWidth(FONTSIZECOMBOBOX_WIDTH);
+    fontSizeComboBox_->setFixedWidth(FONTSIZECOMBOBOX_WIDTH);
 
     QFontDatabase db;
     foreach(int size, db.standardSizes())

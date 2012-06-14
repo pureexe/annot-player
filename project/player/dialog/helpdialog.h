@@ -25,7 +25,7 @@ protected:
 
   // - Events -
 public:
-  virtual void setVisible(bool visible); ///< \override
+  virtual void setVisible(bool visible); ///< \reimp
 };
 
 #endif // HELPDIALOG_H

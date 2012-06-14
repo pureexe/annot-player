@@ -167,7 +167,7 @@ protected:
 
   // - Events -
 protected:
-  virtual void closeEvent(QCloseEvent *event); ///< \override
+  virtual void closeEvent(QCloseEvent *event); ///< \reimp
 
 protected:
   QString completeUrl(const QString &address) const;

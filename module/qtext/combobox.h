@@ -19,15 +19,15 @@ public:
   explicit ComboBox(QWidget *parent = 0);
 
 public slots:
-  virtual void showPopup() { Base::showPopup(); } ///< \override
-  virtual void hidePopup() { clearFocus(); Base::hidePopup(); } ///< \override
+  virtual void showPopup() { Base::showPopup(); } ///< \reimp
+  virtual void hidePopup() { clearFocus(); Base::hidePopup(); } ///< \reimp
 
   void setPopupVisible(bool t) { if (t) showPopup(); else hidePopup(); }
 
   // - Events -
 protected:
-  virtual void enterEvent(QEvent *event); ///< \override
-  virtual void leaveEvent(QEvent *event); ///< \override
+  virtual void enterEvent(QEvent *event); ///< \reimp
+  virtual void leaveEvent(QEvent *event); ///< \reimp
 };
 
 } // namespace QtExt

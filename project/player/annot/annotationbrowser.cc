@@ -49,6 +49,11 @@ AnnotationBrowser::AnnotationBrowser(SignalHub *hub, QWidget *parent)
   connect(new QShortcut(QKeySequence("CTRL+1"), this), SIGNAL(activated()), meButton_, SLOT(click()));
   connect(new QShortcut(QKeySequence("CTRL+2"), this), SIGNAL(activated()), nowButton_, SLOT(click()));
   connect(new QShortcut(QKeySequence("CTRL+3"), this), SIGNAL(activated()), subtitleButton_, SLOT(click()));
+#ifndef Q_WS_MAC
+  connect(new QShortcut(QKeySequence("ALT+1"), this), SIGNAL(activated()), meButton_, SLOT(click()));
+  connect(new QShortcut(QKeySequence("ALT+2"), this), SIGNAL(activated()), nowButton_, SLOT(click()));
+  connect(new QShortcut(QKeySequence("ALT+3"), this), SIGNAL(activated()), subtitleButton_, SLOT(click()));
+#endif // Q_WS_MAC
 
   // Initial states
   tableView_->sortByColumn(HD_CreateTime, Qt::DescendingOrder);

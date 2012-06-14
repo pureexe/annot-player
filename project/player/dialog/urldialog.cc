@@ -29,18 +29,14 @@
 
 UrlDialog::UrlDialog(QWidget *parent)
   : Base(parent, WINDOW_FLAGS)
-{
-  Q_ASSERT(server_);
-
-  createLayout();
-}
+{ createLayout(); }
 
 void
 UrlDialog::createLayout()
 {
   AcUi *ui = AcUi::globalInstance();
 
-  QString holder = tr("http://www.nicovideo.jp/watch/123456");
+  QString holder = "http://www.nicovideo.jp/watch/1327400176";
   edit_ = ui->makeComboBox(AcUi::EditHint, "", TR(T_URL), holder);
   editStyleSheet_ = edit_->styleSheet();
   connect(edit_, SIGNAL(editTextChanged(QString)), SLOT(verifyEditText()));
@@ -67,7 +63,7 @@ UrlDialog::createLayout()
   QToolButton *increaseButton = ui->makeToolButton(
         AcUi::NoHint, "+", TR(T_INCREASE), K_CTRL "+=", this, SLOT(increase()));
   QToolButton *decreaseButton = ui->makeToolButton(
-        AcUi::NoHint, "-", TR(T_INCREASE), K_CTRL "+-", this, SLOT(decrease()));
+        AcUi::NoHint, "-", TR(T_DECREASE), K_CTRL "+-", this, SLOT(decrease()));
 
   QVBoxLayout *rows = new QVBoxLayout; {
     QHBoxLayout *header = new QHBoxLayout,

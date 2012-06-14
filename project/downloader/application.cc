@@ -30,6 +30,7 @@ Application::Application(int &argc, char **argv)
 #endif // Q_WS_X11
 
   createDirectories();
+  ignoreWindowsExcetions();
   DOUT("exit");
 }
 

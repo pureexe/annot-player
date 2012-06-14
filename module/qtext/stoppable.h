@@ -24,8 +24,8 @@ class StoppableThread : public QThread, public Stoppable
 public:
   explicit StoppableThread(QObject *parent = 0) : Base(parent) { }
 public slots:
-  virtual void run() { Base::run(); } ///< \override
-  virtual void stop() { } ///< \override
+  virtual void run() { Base::run(); } ///< \reimp
+  virtual void stop() { } ///< \reimp
 };
 
 #endif // STOPPABLE_H

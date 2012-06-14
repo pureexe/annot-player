@@ -8,6 +8,7 @@
 #include <QtCore/QHash>
 #include <QtCore/QObject>
 #include <QtCore/QPoint>
+#include <utility>
 
 QT_FORWARD_DECLARE_CLASS(QWidget)
 
@@ -32,6 +33,7 @@ class AnnotationGraphicsItemScheduler : public QObject
          resumeTime_;
 
   QHash<QPoint, qint64> cells_; // timestamps for each cell
+  std::pair<QPoint, qint64> lastCell_;
 
 signals:
   void message(const QString &text);
@@ -43,8 +45,7 @@ public:
 public slots:
   void pause();
   void resume();
-  void clear()
-  { if (!cells_.isEmpty()) cells_.clear(); pauseTime_ = resumeTime_ = 0; }
+  void clear();
 
   // - Float Scheduling -
 public:

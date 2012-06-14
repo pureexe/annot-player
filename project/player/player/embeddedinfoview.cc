@@ -56,9 +56,11 @@ EmbeddedInfoView::EmbeddedInfoView(Player *player, DataManager *data, SignalHub 
   connect(player_, SIGNAL(brightnessChanged(qreal)), SLOT(refresh()));
   connect(player_, SIGNAL(gammaChanged(qreal)), SLOT(refresh()));
   connect(player_, SIGNAL(positionChanged()), SLOT(refresh()));
-  connect(AnnotationSettings::globalInstance(), SIGNAL(scaleChanged(qreal)), SLOT(refresh()));
-  connect(AnnotationSettings::globalInstance(), SIGNAL(rotationChanged(qreal)), SLOT(refresh()));
-  connect(AnnotationSettings::globalInstance(), SIGNAL(offsetChanged(int)), SLOT(refresh()));
+  connect(player_, SIGNAL(audioDelayChanged(qint64)), SLOT(refresh()));
+  connect(player_, SIGNAL(audioChannelChanged(int)), SLOT(refresh()));
+  connect(AnnotationSettings::globalSettings(), SIGNAL(scaleChanged(qreal)), SLOT(refresh()));
+  connect(AnnotationSettings::globalSettings(), SIGNAL(rotationChanged(qreal)), SLOT(refresh()));
+  connect(AnnotationSettings::globalSettings(), SIGNAL(offsetChanged(int)), SLOT(refresh()));
 }
 
 // - Events -
@@ -86,11 +88,11 @@ EmbeddedInfoView::updateText()
       szField = QString("%1x%2 ")
         .arg(QString::number(sz.width()))
         .arg(QString::number(sz.height()));
-    QString ch;
-    switch (player_->audioChannels()) {
-    case 1: ch = tr("1"); break;
-    case 2: ch = tr("2"); break;
-    default: ch = QString::number(player_->audioChannels());
+    QString nch;
+    switch (player_->audioChannelCount()) {
+    case 1: nch = tr("1"); break;
+    case 2: nch = tr("2"); break;
+    default: nch = QString::number(player_->audioChannelCount());
     }
     qreal fps = player_->fps();
     QString fpsField;
@@ -126,7 +128,7 @@ EmbeddedInfoView::updateText()
         "%1: %2" " "
         "%3" "%4" HTML_BR()
        )
-      .arg(TR(T_VIDEO))
+      .arg(tr("Video"))
       .arg(player_->videoCodecName().toUpper())
       .arg(szField).arg(fpsField)
       +
@@ -135,13 +137,13 @@ EmbeddedInfoView::updateText()
          "%3%4" " "
          "%5%6" HTML_BR()
        )
-      .arg(TR(T_AUDIO))
+      .arg(tr("Audio"))
       .arg(player_->audioCodecName().toUpper())
       .arg(QString::number(player_->audioRate())).arg(tr("Hz"))
-      .arg(ch).arg(tr("ch"))
+      .arg(nch).arg(tr("ch"))
     );
 
-    // Render
+    // Video
     qreal saturation = player_->saturation();
     qreal gamma = player_->gamma();
     int hue = player_->hue();
@@ -152,7 +154,7 @@ EmbeddedInfoView::updateText()
     //    !qFuzzyCompare(contrast, 1) || !qFuzzyCompare(brightness, 1)) {
       t.append(
         HTML_STYLE_OPEN(color:red)
-        + QString("- %1 -").arg(tr("Render")) +
+        + QString("- %1 -").arg(tr("Video")) +
         HTML_STYLE_CLOSE()
         HTML_BR()
       );
@@ -185,6 +187,41 @@ EmbeddedInfoView::updateText()
         );
       t.append(HTML_BR());
     //}
+
+    qint64 delay = player_->audioDelay() / 1000;
+    Player::AudioChannel ch = player_->audioChannel();
+    if (delay ||
+        ch && ch != Player::StereoChannel) {
+      t.append(
+        HTML_STYLE_OPEN(color:red)
+        + QString("- %1 -").arg(tr("Audio")) +
+        HTML_STYLE_CLOSE()
+        HTML_BR()
+      );
+
+      QString chstr;
+      switch (ch) {
+      case Player::LeftChannel:     chstr = tr("Left"); break;
+      case Player::RightChannel:    chstr = tr("Right"); break;
+      case Player::StereoChannel:   chstr = tr("Stereo"); break;
+      case Player::ReverseStereoChannel: chstr = tr("Reverse"); break;
+      case Player::DolbysChannel:   chstr = tr("Dolby's"); break;
+      case Player::NoChannel:
+      default: chstr = tr("None");
+      }
+      if (ch != Player::StereoChannel)
+        chstr = HTML_STYLE_OPEN(color:orange) + chstr + HTML_STYLE_CLOSE();
+      t.append(QString("%1: %2")
+        .arg(tr("Channel")).arg(chstr)
+      );
+
+      if (delay)
+        t.append(QString(" %1: " HTML_STYLE_OPEN(color:red) "%2" "%3" HTML_STYLE_CLOSE())
+          .arg(tr("Delay")).arg(QString::number(delay)).arg(tr(" sec."))
+        );
+
+      t.append(HTML_BR());
+    }
   }
 
   // Annotation
@@ -227,19 +264,19 @@ EmbeddedInfoView::updateText()
         .arg(tr("user"))
     );
     bool newline = false;;
-    QString scale = QString::number(AnnotationSettings::globalInstance()->scale(), 'f', 2);
-    if (!qFuzzyCompare(AnnotationSettings::globalInstance()->scale() +1, 1)) {
+    QString scale = QString::number(AnnotationSettings::globalSettings()->scale(), 'f', 2);
+    if (!qFuzzyCompare(AnnotationSettings::globalSettings()->scale() +1, 1)) {
       t.append(tr("Scale") + ":" + scale + " ");
       newline = true;
     }
-    if (!qFuzzyCompare(AnnotationSettings::globalInstance()->rotation() +1, 1)) {
-      QString rotation = QString::number(AnnotationSettings::globalInstance()->rotation(), 'f', 1);
+    if (!qFuzzyCompare(AnnotationSettings::globalSettings()->rotation() +1, 1)) {
+      QString rotation = QString::number(AnnotationSettings::globalSettings()->rotation(), 'f', 1);
       rotation = HTML_STYLE_OPEN(color:red) + rotation + HTML_STYLE_CLOSE();
       t.append(tr("Rotation") + ":" + rotation + " ");
       newline = true;
     }
-    if (AnnotationSettings::globalInstance()->offset()) {
-      QString offset = QString::number(AnnotationSettings::globalInstance()->offset());
+    if (AnnotationSettings::globalSettings()->offset()) {
+      QString offset = QString::number(AnnotationSettings::globalSettings()->offset());
       offset = HTML_STYLE_OPEN(color:red) + offset + HTML_STYLE_CLOSE();
       t.append(tr("Offset") + ":" + offset + tr(" sec"));
       newline = true;

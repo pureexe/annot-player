@@ -63,6 +63,11 @@ public:
   int language() const; ///< Application language
   void setLanguage(int lang);
 
+  bool isEnglish() const;
+  bool isJapanese() const;
+  bool isChinese() const;
+  bool isKorean() const;
+
   // - GUI -
 
   bool isMenuThemeEnabled() const;

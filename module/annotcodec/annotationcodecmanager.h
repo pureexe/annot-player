@@ -19,7 +19,7 @@ class AnnotationCodecManager : public QObject
   QList<AnnotationCodec*> codecs_;
 
 public:
-  enum Site { Bilibli = 0, Acfun, Nicovideo, SiteCount };
+  enum Site { UnknownSite = -1, Nicovideo = 0, Acfun, Bilibili, SiteCount };
 
   static Self *globalInstance() { static Self g; return &g; }
 
@@ -34,6 +34,9 @@ signals:
 
 public:
   int match(const QString &url) const;
+
+  static AnnotationList parseFile(const QString &fileName);
+  static Site fileSite(const QString &fileName);
 
 public slots:
   void fetch(int id, const QString &url);

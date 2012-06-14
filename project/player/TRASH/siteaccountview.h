@@ -45,7 +45,7 @@ signals:
   void accountChanged();
 
 public slots:
-  virtual void setVisible(bool visible); ///< \override
+  virtual void setVisible(bool visible); ///< \reimp
 
   void setNicovideoAccount(const QString &username, const QString &password);
   void setBilibiliAccount(const QString &username, const QString &password);

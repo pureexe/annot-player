@@ -35,7 +35,7 @@ signals:
 
   // - Events -
 protected:
-  virtual void contextMenuEvent(QContextMenuEvent *event); ///< \override
+  virtual void contextMenuEvent(QContextMenuEvent *event); ///< \reimp
 
   // - Actions -
 public slots:
@@ -48,7 +48,7 @@ public slots:
 protected slots:
   void invalidateEngines();
   void setEngineByIndex(int index);
-  virtual void submitText(); ///< \override
+  virtual void submitText(); ///< \reimp
 
   void updateText(const QString &text);
   void searchWithEngine(int engine);

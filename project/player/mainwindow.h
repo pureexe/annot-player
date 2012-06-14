@@ -92,10 +92,10 @@ class LiveDialog;
 class LoginDialog;
 //class NetworkProxyDialog;
 class PickDialog;
-class SeekDialog;
 //class SiteAccountView;
 class MediaInfoView;
 class SyncDialog;
+class TimeInputDialog;
 class UserView;
 class UrlDialog;
 
@@ -122,7 +122,7 @@ public:
   // - Constructions -
 public:
   explicit MainWindow(bool unique = true, QWidget *parent = 0, Qt::WindowFlags f = 0);
-  bool isValid() const;
+  //bool isValid() const;
 
 public:
   void move(const QPoint &pos) { Base::move(pos); emit posChanged(); }
@@ -148,7 +148,7 @@ signals:
   void notification(const QString &text);
   void showTextRequested(const QString &text);
   void windowClosed();
-  void windowTitleToChange(QString title);
+  void windowTitleSuffixToChange(QString suffix);
   void downloadProgressUpdated();
   void downloadFinished();
   void progressMessageChanged(const QString &text);
@@ -236,6 +236,8 @@ public slots:
   void openSources(const QStringList &l);
   void open();  ///< By default the same as openFile()
   void openFile();
+  void openAnnotationFile();
+  void openAnnotationFile(const QString &fileName);
   void openUrl();
   void openAnnotationUrl();
   void openAnnotationUrlFromAliases(const AliasList &l, bool async = true);
@@ -251,6 +253,7 @@ public slots:
   void openSubtitle();
   void openDirectory();
   void openMrl(const QString &path, bool checkPath = true);
+  void loadExternalAnnotations();
   void openStreamUrl(const QString &rtsp);
   void openRemoteMedia(const MediaInfo &mi, QNetworkCookieJar *jar = 0);
   void openLocalUrl(const QUrl &url);
@@ -301,6 +304,9 @@ public slots:
   //void help(); // TODO
 
   void updateWindowTitle();
+  void setWindowTitleSuffix(const QString &suffix)
+  { windowTitleSuffix_ = suffix; updateWindowTitle(); }
+
   void updateDownloadProgress(qint64 receivedBytes, qint64 totalBytes);
   void syncInputLineText(const QString &text);
   void syncPrefixLineText(const QString &text);
@@ -319,7 +325,7 @@ public slots:
   void clickProgressButton();
 protected:
   bool hasNext() const;
-  QString newWindowTitle() const;
+  QString windowTitleBase() const;
   QString currentUrl() const;
   QString currentTitle() const;
   static QString downloadSpeedToString(int speed);
@@ -413,6 +419,8 @@ public slots:
   void showSeekDialog();
   void hideSeekDialog();
   void setSeekDialogVisible(bool visible);
+
+  void showAudioDelayDialog();
 
   void setAnnotationCountDialogVisible(bool visible);
 
@@ -523,9 +531,13 @@ public slots:
   void importAnnotationsFromUrl(const QString &suburl);
   bool isAnnotationUrlRegistered(const QString &suburl) const;
 protected slots:
-  bool registerAnnotationUrl(const QString &suburl);
   void addRemoteAnnotations(const AnnotationList &l, const QString &url = QString());
+
+  bool registerAnnotationUrl(const QString &suburl);
   void clearAnnotationUrls();
+
+  bool registerAnnotationFile(const QString &fileName);
+  void clearAnnotationFiles();
 
   // - Recent -
 protected slots:
@@ -533,6 +545,7 @@ protected slots:
   void openRecent(int i);
   void clearRecent();
   void updateRecent();
+  void validateRecent();
   void updateRecentMenu();
 
   // - Playlist -
@@ -549,48 +562,49 @@ protected slots:
 
   // - Events -
 public slots:
-  virtual void setVisible(bool visible); ///< \override
+  virtual void setVisible(bool visible); ///< \reimp
   void dispose();
 public:
-  virtual bool event(QEvent *event); ///< \override
+  virtual bool event(QEvent *event); ///< \reimp
   void gestureEvent(QGestureEvent *e);
   void panGesture(QPanGesture *g);
   void pinchGesture(QPinchGesture *g);
   void swipeGesture(QSwipeGesture *g);
 protected:
   virtual void paintEvent(QPaintEvent *event);
-  virtual void mousePressEvent(QMouseEvent *event); ///< \override
-  virtual void mouseMoveEvent(QMouseEvent *event); ///< \override
-  virtual void mouseReleaseEvent(QMouseEvent *event); ///< \override
-  virtual void mouseDoubleClickEvent(QMouseEvent *event); ///< \override
-  virtual void wheelEvent(QWheelEvent *event); ///< \override
+  virtual void mousePressEvent(QMouseEvent *event); ///< \reimp
+  virtual void mouseMoveEvent(QMouseEvent *event); ///< \reimp
+  virtual void mouseReleaseEvent(QMouseEvent *event); ///< \reimp
+  virtual void mouseDoubleClickEvent(QMouseEvent *event); ///< \reimp
+  virtual void wheelEvent(QWheelEvent *event); ///< \reimp
 
-  virtual void moveEvent(QMoveEvent *event); ///< \override
-  virtual void resizeEvent(QResizeEvent *event); ///< \override
+  virtual void moveEvent(QMoveEvent *event); ///< \reimp
+  virtual void resizeEvent(QResizeEvent *event); ///< \reimp
 
-  virtual void changeEvent(QEvent *event); ///< \override
+  virtual void changeEvent(QEvent *event); ///< \reimp
 
-  virtual void keyPressEvent(QKeyEvent *event); ///< \override
-  virtual void keyReleaseEvent(QKeyEvent *event); ///< \override
+  virtual void keyPressEvent(QKeyEvent *event); ///< \reimp
+  virtual void keyReleaseEvent(QKeyEvent *event); ///< \reimp
 
-  virtual void contextMenuEvent(QContextMenuEvent *event); ///< \override
+  virtual void contextMenuEvent(QContextMenuEvent *event); ///< \reimp
 
-  virtual void closeEvent(QCloseEvent *event); ///< \override
+  virtual void closeEvent(QCloseEvent *event); ///< \reimp
 
-  virtual void focusInEvent(QFocusEvent *e); ///< \override
-  virtual void focusOutEvent(QFocusEvent *e); ///< \override
+  virtual void focusInEvent(QFocusEvent *e); ///< \reimp
+  virtual void focusOutEvent(QFocusEvent *e); ///< \reimp
 
 protected slots:
-  virtual void dragEnterEvent(QDragEnterEvent *event); ///< \override
-  virtual void dragMoveEvent(QDragMoveEvent *event); ///< \override
-  virtual void dragLeaveEvent(QDragLeaveEvent *event); ///< \override
-  virtual void dropEvent(QDropEvent *event); ///< \override
+  virtual void dragEnterEvent(QDragEnterEvent *event); ///< \reimp
+  virtual void dragMoveEvent(QDragMoveEvent *event); ///< \reimp
+  virtual void dragLeaveEvent(QDragLeaveEvent *event); ///< \reimp
+  virtual void dropEvent(QDropEvent *event); ///< \reimp
 
   void updateAnnotationHoverGesture();
 
   void updateContextMenu();
   void updateGameMenu();
   void updateAspectRatioMenu();
+  void updateAudioChannelMenu();
   void updateSettingsMenu();
   void updateMenuTheme();
   void updateAnnotationSettingsMenu();
@@ -606,6 +620,9 @@ protected slots:
 
   void rememberAudioTrack();
   void resumeAudioTrack();
+
+  void rememberAudioChannel();
+  void resumeAudioChannel();
 
   void rememberAspectRatio();
   void resumeAspectRatio();
@@ -720,6 +737,10 @@ public slots:
   void openProcessHook(ulong hHook, const ProcessInfo &pi = ProcessInfo());
   void openProcessWindow(WId hwnd);
   void openProcessId(ulong pid);
+
+protected slots:
+  void rememberGameEncoding(const ProcessInfo &pi);
+  void resumeGameEncoding(const ProcessInfo &pi);
 #endif // WITH_WIN_TEXTHOOK
 
 public slots:
@@ -802,6 +823,13 @@ protected slots:
   void setSaveMedia(bool t);
   void saveMedia();
 
+protected slots:
+  void setLeftChannel();
+  void setRightChannel();
+  void setStereoChannel();
+  void setReverseStereoChannel();
+  void setDolbysChannel();
+
   // - Members for initialization. -
 private:
   void setupWindowStyle();
@@ -833,6 +861,7 @@ private:
   QtExt::CountdownTimer *resumePlayTimer_,
                         *resumeSubtitleTimer_,
                         *resumeAudioTrackTimer_,
+                        *resumeAudioChannelTimer_,
                         *resumeAspectRatioTimer_;
 
   QTimer *liveTimer_;
@@ -841,13 +870,17 @@ private:
   //QTimer *autoHideCursorTimer_;
   QTimer *holdTimer_;
   QStringList annotationUrls_;
+  QStringList annotationFiles_;
 
   //QTimer *windowStaysOnTopTimer_;
 
   QStringList recentFiles_;
   QHash<QString,QString> recentUrlTitles_;
+  QHash<QString,QString> recentGameEncodings_;
   QString browsedUrl_;
   QFileInfoList browsedFiles_;
+
+  QString windowTitleSuffix_;
 
   Translator *translator_;
 
@@ -910,7 +943,7 @@ private:
   LiveDialog *liveDialog_;
   //NetworkProxyDialog *networkProxyDialog_;
   PickDialog *processPickDialog_;
-  SeekDialog *seekDialog_;
+  TimeInputDialog *seekDialog_;
   SyncDialog *syncDialog_;
   PickDialog *windowPickDialog_;
   UrlDialog *mediaUrlDialog_;
@@ -949,10 +982,12 @@ private:
   QHash<qint64, qint64> playPosHistory_;
   QHash<qint64, int> subtitleHistory_;
   QHash<qint64, int> audioTrackHistory_;
+  QHash<qint64, int> audioChannelHistory_;
   QHash<qint64, QString> aspectRatioHistory_;
 
   int preferredSubtitleTrack_,
-      preferredAudioTrack_;
+      preferredAudioTrack_,
+      preferredAudioChannel_;
 
   FadeAnimation *fadeAni_;
 
@@ -967,16 +1002,19 @@ private:
         *recentMenu_,
         *userMenu_,
         *openMenu_,
+        *importAnnotationMenu_,
         *openButtonMenu_,
         *playMenu_,
         *subtitleMenu_,
         *audioTrackMenu_,
+        *audioChannelMenu_,
         *browseMenu_,
         *trackMenu_,
         *sectionMenu_,
         *backwardMenu_,
         *forwardMenu_,
-        *adjustMenu_,
+        *videoMenu_,
+        *audioMenu_,
         *appLanguageMenu_,
         *annotationEffectMenu_,
         *userLanguageMenu_,
@@ -1045,6 +1083,7 @@ private:
           *openFileAct_,
           *openUrlAct_,
           *openAnnotationUrlAct_,
+          *openAnnotationFileAct_,
           *openDeviceAct_,
           *openVideoDeviceAct_,
           *openAudioDeviceAct_,
@@ -1064,6 +1103,7 @@ private:
           *toggleAnnotationBandwidthLimitedAct_,
           *toggleAnnotationVisibleAct_,
           *toggleAnnotationAvatarVisibleAct_,
+          *toggleAnnotationMetaVisibleAct_,
           *toggleAnnotationCountDialogVisibleAct_,
           *toggleMagnifierVisibleAct_,
           *toggleMenuBarVisibleAct_,
@@ -1147,7 +1187,8 @@ private:
           *forward10mAct_,
           *backward10mAct_;
 
-  QAction *clearRecentAct_;
+  QAction *clearRecentAct_,
+          *validateRecentAct_;
   QAction *clearPlaylistAct_,
           *nextPlaylistItemAct_,
           *previousPlaylistItemAct_;
@@ -1203,6 +1244,14 @@ private:
           *aboutAct_,
           *preferencesAct_,
           *quitAct_;
+
+  QAction *setLeftChannelAct_,
+          *setRightChannelAct_,
+          *setStereoChannelAct_,
+          *setReverseStereoChannelAct_,
+          *setDolbysChannelAct_;
+
+  QAction *setAudioDelayAct_;
 };
 
 #endif // MAINWINDOW_H

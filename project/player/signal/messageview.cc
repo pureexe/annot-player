@@ -2,6 +2,7 @@
 // 10/16/2011
 
 #include "messageview.h"
+#include "textcodecmanager.h"
 #include "tr.h"
 #include "global.h"
 #include "logger.h"
@@ -54,6 +55,27 @@ MessageView::createLayout()
   }
   connect(textEdit_, SIGNAL(cursorPositionChanged()), SLOT(invalidateCurrentCharFormat()));
 
+  QString ja = tr("ja"),
+          en = tr("en"),
+          chs = tr("chs"),
+          cht = tr("cht"),
+          ko = tr("ko");
+  QStringList defaultEncodings = QStringList()
+    << QString("SHIFT-JIS [%1]").arg(ja)
+    << "UTF-16"
+    << "UTF-8"
+    << QString("EUC-JP [%1]").arg(ja)
+    << QString("ISO-2022-JP [%1]").arg(ja)
+    << QString("ISO-8859-1 [%1]").arg(en)
+    << QString("GBK [%1]").arg(chs)
+    << QString("BIG5 [%1]").arg(cht)
+    << QString("EUC-KR [%1]").arg(ko)
+    << "UNICODE"
+    << TEXT_CODEC_DEFAULT;
+
+  encodingEdit_ = ui->makeComboBox(AcUi::ReadOnlyHint, "", tr("Text Encoding"), tr("Encoding"), defaultEncodings);
+  connect(encodingEdit_, SIGNAL(activated(QString)), SLOT(setEncoding(QString)));
+
   hookIndexEdit_ = new QtExt::SpinBox; {
     hookIndexEdit_->setToolTip(tr("Signal channel"));
     //hookIndexEdit_->setMinimumWidth(HOOKCOMBOBOX_MINWIDTH);
@@ -65,6 +87,7 @@ MessageView::createLayout()
     hookIndexEdit_->setEnabled(false);
   }
   connect(hookIndexEdit_, SIGNAL(valueChanged(int)), SLOT(selectHookIndex(int)));
+  connect(hookIndexEdit_, SIGNAL(valueChanged(int)), SLOT(invalidateSelectButton()));
 
   autoButton_ = ui->makeToolButton(
         AcUi::CheckHint, TR(T_AUTO), tr("Auto-detect signal"), this, SLOT(invalidateCurrentHook()));
@@ -85,11 +108,12 @@ MessageView::createLayout()
     rows->addLayout(header);
     rows->addWidget(textEdit_);
 
+    header->addWidget(encodingEdit_);
     header->addWidget(hookIndexEdit_);
     header->addWidget(hookCountLabel_);
     header->addWidget(selectButton_);
-    header->addStretch();
     //header->addWidget(autoButton_); // TODO: auto detect is disabled, because hookName is unimplemented
+    //header->addStretch();
     header->addWidget(resetButton);
 
     // left, top, right, bottom
@@ -113,13 +137,33 @@ MessageView::setActive(bool active)
 {
   active_ = active;
 #ifdef WITH_WIN_TEXTHOOK
-  if (active_)
-    connect(TextHook::globalInstance(), SIGNAL(textReceived(QString,ulong,ulong)),
-            this, SLOT(processHookedText(QString,ulong)));
-  else
-    disconnect(TextHook::globalInstance(), SIGNAL(textReceived(QString,ulong,ulong)),
-               this, SLOT(processHookedText(QString,ulong)));
+  if (active_) {
+    connect(TextHook::globalInstance(), SIGNAL(messageReceived(QByteArray,ulong,ulong)),
+            SLOT(processMessage(QByteArray,ulong)));
+    connect(TextCodecManager::globalInstance(), SIGNAL(encodingChanged(QString)),
+            SLOT(refresh()));
+  } else {
+    disconnect(TextHook::globalInstance(), SIGNAL(messageReceived(QByteArray,ulong,ulong)),
+               this, SLOT(processMessage(QByteArray,ulong)));
+    disconnect(TextCodecManager::globalInstance(), SIGNAL(encodingChanged(QString)),
+               this, SLOT(refresh()));
+  }
 #endif // WITH_WIN_TEXTHOOK
+}
+
+void
+MessageView::refresh()
+{
+  selectHookIndex(currentIndex());
+  refreshEncodingEdit();
+}
+
+void
+MessageView::refreshEncodingEdit()
+{
+  int i = encodingEdit_->findText(TextCodecManager::globalInstance()->encoding());
+  if (i >= 0 && i < encodingEdit_->count())
+    encodingEdit_->setCurrentIndex(i);
 }
 
 void
@@ -127,6 +171,8 @@ MessageView::setVisible(bool visible)
 {
   if (active_ != visible)
     setActive(visible);
+  if (visible)
+    refreshEncodingEdit();
   Base::setVisible(visible);
 }
 
@@ -152,10 +198,10 @@ MessageView::currentHookId() const
 // - Actions -
 
 void
-MessageView::addMessages(QStringList &messages, ulong hookId)
+MessageView::addMessages(const QList<QByteArray> &l, ulong hookId)
 {
-  foreach (const QString &text, messages)
-    processHookedText(text, hookId);
+  foreach (const QByteArray &data, l)
+    processMessage(data, hookId);
 }
 
 void
@@ -173,13 +219,13 @@ MessageView::clear()
 {
   hookIndexEdit_->clear();
   hooks_.clear();
-  texts_.clear();
+  messages_.clear();
 
   hookIndexEdit_->setValue(0);
   hookIndexEdit_->setMaximum(0);
   hookIndexEdit_->setEnabled(false);
   hooks_.append(0);
-  texts_.append(QStringList());
+  messages_.append(QList<QByteArray>());
 
   textEdit_->clear();
 
@@ -204,11 +250,11 @@ MessageView::invalidateSelectButton()
 void
 MessageView::selectHookIndex(int index)
 {
-  //if (index < 0 || index >= texts_.size())
+  //if (index < 0 || index >= messages_.size())
   //  return;
 
-  if (index >= 0 && index < texts_.size())
-    setTextList(texts_[index]);
+  if (index >= 0 && index < messages_.size())
+    setData(messages_[index]);
 }
 
 bool
@@ -226,11 +272,11 @@ MessageView::isBetterHook(ulong goodHookId, ulong badHookId)
 }
 
 void
-MessageView::processHookedText(const QString &text, ulong hookId)
+MessageView::processMessage(const QByteArray &data, ulong hookId)
 {
-  DOUT("enter: hookId =" << hookId << ", text =" << text);
+  DOUT("enter: hookId =" << hookId << ", data size =" << data.size());
 
-  if (text.trimmed().isEmpty()) {
+  if (data.isEmpty()) {
     DOUT("exit: skip empty text");
     return;
   }
@@ -239,7 +285,7 @@ MessageView::processHookedText(const QString &text, ulong hookId)
   if (index < 0) {
     index = hooks_.size();
     hooks_.append(hookId);
-    texts_.append(QStringList());
+    messages_.append(QList<QByteArray>());
     hookIndexEdit_->setMaximum(index);
     hookIndexEdit_->setEnabled(true);
     invalidateHookCountLabel();
@@ -250,15 +296,15 @@ MessageView::processHookedText(const QString &text, ulong hookId)
       setCurrentIndex(index);
   }
 
-  texts_[index].append(text);
+  messages_[index].append(data);
   if (index)
-    texts_[0].append(text);
+    messages_[0].append(data);
 
   int ci = currentIndex();
   if (ci == index)
-    setTextList(texts_[index]);
+    setData(messages_[index]);
   else if (ci == 0)
-    setTextList(texts_[0]);
+    setData(messages_[0]);
 
   invalidateCurrentHook();
 
@@ -278,11 +324,12 @@ MessageView::invalidateCurrentHook()
 }
 
 void
-MessageView::setTextList(const QStringList &l)
+MessageView::setData(const QList<QByteArray> &l)
 {
   QString html;
   int i = 0;
-  foreach (const QString &s, l) {
+  foreach (const QByteArray &b, l) {
+    QString s = TextCodecManager::globalInstance()->decode(b);
     if (i++ % 2)
       html.append(HTML_STYLE(+s+, color:purple));
     else
@@ -305,6 +352,15 @@ MessageView::invalidateCurrentCharFormat()
   QTextCharFormat fmt;
   fmt.setForeground(Qt::red);
   textEdit_->mergeCurrentCharFormat(fmt);
+}
+
+void
+MessageView::setEncoding(const QString &name)
+{
+  QString e = name;
+  e.remove(QRegExp(" .*"));
+  DOUT("encoding =" << e);
+  TextCodecManager::globalInstance()->setEncoding(e);
 }
 
 // - Events -

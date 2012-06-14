@@ -79,7 +79,7 @@ WbAddressEdit::contextMenuEvent(QContextMenuEvent *event)
     m->addSeparator();
   }
 
-  //m->addAction(submitAct);
+  m->addAction(submitAct);
   m->addAction(pasteAndGoAct);
   m->addAction(popupAct);
   m->addAction(clearAct);

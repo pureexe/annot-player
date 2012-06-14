@@ -40,8 +40,8 @@ public:
 public slots:
   void setBufferSize(int size) { bufferSize_ = size; }
 
-  virtual void run(); ///< \override
-  virtual void stop() { setState(Stopped); emit stopped(); } ///< \override
+  virtual void run(); ///< \reimp
+  virtual void stop() { setState(Stopped); emit stopped(); } ///< \reimp
 
 protected:
   void setState(State state) { state_ = state; }

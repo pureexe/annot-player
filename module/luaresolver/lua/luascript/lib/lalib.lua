@@ -361,7 +361,9 @@ function getRealUrls (str_id, str_tmpfile, pDlg)
 		if str_line~=nil and string.find(str_line, "<url>")~=nil
 		then
 			local str_index = string.format("%d",index);
-			tbl_urls[str_index] = getMedText(str_line, "<url><!\[CDATA\[", "\]\]></url>");
+            -- jichi 6/10/2012: escape \\ is not required in lua 5.2
+			--tbl_urls[str_index] = getMedText(str_line, "<url><!\[CDATA\[", "\]\]></url>");
+			tbl_urls[str_index] = getMedText(str_line, "<url><![CDATA[", "]]></url>");
 			print(tbl_urls[str_index]);
 			index = index+1;
 		end

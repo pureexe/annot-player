@@ -2,7 +2,18 @@ ChangeLog
 Annot Project
 6/18/2011
 
-6/8/2012	annot.player, down, browser	0.1.6.2, 0.1.2.7, 0.1.1.7
+6/14/2012	annot.player, down, browser	0.1.6.3, 0.1.2.8, 0.1.1.8
+        * Annotation motionless scheduling and rendering improved.
+        * Add halo effect to render annotations (able to change colors in Preferences).
+        * Annotations will glow when focusd on.
+        * Able to change audio channels and delay time in context menu.
+        * Able to import annotation files in XML/JSON format downloaded from nicovideo/acfun/bilibili.
+          Automatically load external annotation files whose name starts with the file name of current media.
+        * Able to select text encoding for the annotated Galgame (usually Shift-JIS or UTF-16).
+          Enforce Shift-JIS as default.
+        * Fix the encoding issue for Galgame from light (malie.exe).
+
+6/8/2012	annot.player, down, browser	0.1.6.2, 0.1.2.8, 0.1.1.7
         * Update the scripts to resolve annotations from bilibili's new web ui.
 
 6/8/2012	annot.player, down, browser	0.1.6.1, 0.1.2.7, 0.1.1.7

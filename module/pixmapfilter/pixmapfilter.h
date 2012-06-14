@@ -6,4 +6,6 @@
 
 #include <gui/image/qpixmapfilter_p.h>
 
+//ntypedef QPixmapFilter PixmapFilter;
+
 #endif // PIXMAPFILTER_H

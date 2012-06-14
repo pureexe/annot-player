@@ -41,7 +41,7 @@ public slots:
   void increase();
   void decrease();
 
-  virtual void setVisible(bool visible); ///< \override
+  virtual void setVisible(bool visible); ///< \reimp
 
 protected:
   static QString autoCompleteUrl(const QString &url);

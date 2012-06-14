@@ -43,23 +43,23 @@ public:
   // - Properties -
 public:
   const QUrl &url() const { return url_; }
-  virtual QString contentType() const { return contentType_; } ///< \override
-  virtual qint64 read(char *data, qint64 maxSize); ///< \override
-  virtual bool seek(qint64 pos); ///< \override
-  virtual qint64 size() const { return size_; } ///< \override
-  virtual qint64 pos() const { return pos_; } ///< \override
-  virtual qint64 availableSize() const { return buffer_.size(); } ///< \override
+  virtual QString contentType() const { return contentType_; } ///< \reimp
+  virtual qint64 read(char *data, qint64 maxSize); ///< \reimp
+  virtual bool seek(qint64 pos); ///< \reimp
+  virtual qint64 size() const { return size_; } ///< \reimp
+  virtual qint64 pos() const { return pos_; } ///< \reimp
+  virtual qint64 availableSize() const { return buffer_.size(); } ///< \reimp
 
 public slots:
   void setUrl(const QUrl &url) { url_ = url; }
-  virtual void run(); ///< \override
-  virtual void stop(); ///< \override
+  virtual void run(); ///< \reimp
+  virtual void stop(); ///< \reimp
 
-  virtual void waitForReady(); ///< \override
-  virtual void waitForStopped(); ///< \override
+  virtual void waitForReady(); ///< \reimp
+  virtual void waitForStopped(); ///< \reimp
 
 protected slots:
-  virtual void save(); ///< \override
+  virtual void save(); ///< \reimp
 
   void updateSize();
   void updateContentType();

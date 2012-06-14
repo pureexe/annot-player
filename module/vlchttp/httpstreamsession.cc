@@ -53,10 +53,10 @@ namespace { // anonymous
     explicit ProgressTask(HttpStreamSession *session)
       : session_(session), stop_(false) { Q_ASSERT(session_); }
 
-    virtual void stop() ///< \override
+    virtual void stop() ///< \reimp
     { stop_ = true; }
 
-    virtual void run() ///< \override
+    virtual void run() ///< \reimp
     {
       while (!stop_ && session_->isRunning()) {
         session_->updateProgress();
@@ -161,8 +161,8 @@ HttpStreamSession::read(char *data, qint64 maxSize)
     return ret;
   emit buffering();
   if (isRunning()) {
-    sleep_.start(BufferingInterval);
-    if (isRunning())
+    //sleep_.start(BufferingInterval);
+    //if (isRunning())
       return fifo_->read(data, maxSize);
   }
   return 0;
@@ -328,7 +328,7 @@ HttpStreamSession::run()
     DOUT("total retry =" << j);
     //foreach (const QUrl &url, urls_) {
 #ifdef WITH_MODULE_MRLRESOLVER
-    if (j && !originalUrl().isEmpty() && !isStopped()) {
+    if (j && !originalUrl().isEmpty()) {
       DOUT("retry resolving mrl, orignal url =" << originalUrl());
       count--;
       emit warning(

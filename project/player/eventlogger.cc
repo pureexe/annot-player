@@ -30,6 +30,9 @@ EventLogger::EventLogger(Player *player, SignalHub *hub, QObject *parent)
 void
 EventLogger::createConnections()
 {
+  connect(player_, SIGNAL(buffering()), SLOT(startLogUntilPlaying()));
+  connect(player_, SIGNAL(stopped()), SLOT(stopLogUntilPlaying()));
+
   //connect(player_, SIGNAL(titleIdChanged(int)), SLOT(logTitleChanged()));
   connect(player_, SIGNAL(mediaChanged()), SLOT(logMediaChanged()));
   connect(player_, SIGNAL(mediaClosed()), SLOT(logMediaClosed()));
@@ -51,9 +54,8 @@ EventLogger::createConnections()
   connect(player_, SIGNAL(hueChanged(int)), SLOT(logHueChanged(int)));
   connect(player_, SIGNAL(saturationChanged(qreal)), SLOT(logSaturationChanged(qreal)));
   connect(player_, SIGNAL(gammaChanged(qreal)), SLOT(logGammaChanged(qreal)));
-
-  connect(player_, SIGNAL(buffering()), SLOT(startLogUntilPlaying()));
-  connect(player_, SIGNAL(stopped()), SLOT(stopLogUntilPlaying()));
+  connect(player_, SIGNAL(audioChannelChanged(int)), SLOT(logAudioChannelChanged(int)));
+  connect(player_, SIGNAL(audioDelayChanged(qint64)), SLOT(logAudioDelayChanged(qint64)));
 
   connect(AcUi::globalInstance(), SIGNAL(aeroEnabledChanged(bool)), SLOT(logAeroEnabledChanged(bool)));
   connect(AcUi::globalInstance(), SIGNAL(menuEnabledChanged(bool)), SLOT(logMenuEnabledChanged(bool)));
@@ -107,7 +109,7 @@ EventLogger::logUntilPlaying()
   }
 
   if (!logCount_)
-    log(tr("caching fonts on first launch ... this could take up to 10min, don't panic!"));
+    notify(tr("caching fonts on first launch ... this could take up to 10min, don't panic!"));
   else {
     int msecs = logCount_ * G_LOGGER_PLAYING_WAITER_TIMEOUT;
     QTime t = QtExt::msecs2time(msecs);
@@ -116,7 +118,7 @@ EventLogger::logUntilPlaying()
         s = s.arg("10:00");
     else
         s = s.arg("15:00");
-    log(tr("patient ... ") + s);
+    notify(tr("patient ... ") + s);
   }
   logCount_++;
 }
@@ -210,6 +212,24 @@ EventLogger::logTrackNumberChanged(int track)
 { log(tr("openning track %1").arg(QString::number(track))); }
 
 void
+EventLogger::logAudioChannelChanged(int ch)
+{
+  QString msg;
+  switch (ch) {
+  case Player::LeftChannel: msg = tr("left"); break;
+  case Player::RightChannel: msg = tr("right"); break;
+  case Player::StereoChannel: msg = tr("stereo"); break;
+  case Player::ReverseStereoChannel: msg = tr("reverse stereo"); break;
+  case Player::DolbysChannel: msg = tr("Dolby's"); break;
+  case Player::NoChannel: msg = tr("none");
+  default: ;
+  }
+  msg = HTML_STYLE_OPEN(color:orange) + msg + HTML_STYLE_CLOSE();
+  msg.prepend(tr("audio channel") + ": ");
+  log(msg);
+}
+
+void
 EventLogger::logPlayRateChanged(qreal rate)
 {
   int r = qRound(rate);
@@ -262,6 +282,17 @@ EventLogger::logSeeked(qint64 msecs)
   }
 }
 
+
+void
+EventLogger::logAudioDelayChanged(qint64 msecs)
+{
+  QTime t = QtExt::msecs2time(msecs);
+  QString msg = QString("%1: " HTML_STYLE_OPEN(color:orange) "%2" HTML_STYLE_CLOSE())
+      .arg(tr("audio delay time"))
+      .arg(t.toString("m:ss"));
+  log(msg);
+}
+
 void
 EventLogger::logCacheCleared()
 { log(tr("offline cache removed")); }
@@ -301,6 +332,10 @@ EventLogger::logClientAgentAuthorizationError()
 void
 EventLogger::logTranslatorNetworkError(const QString &message)
 { warn(tr("translator got network error") + ": " + message); }
+
+void
+EventLogger::logTextEncodingChanged(const QString &enc)
+{ log(tr("text encoding") + ": " HTML_STYLE_OPEN(color:orange) + enc + HTML_STYLE_CLOSE()); }
 
 void
 EventLogger::logAspectRatioChanged(const QString &ratio)

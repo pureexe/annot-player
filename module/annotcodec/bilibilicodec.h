@@ -6,6 +6,7 @@
 
 #include "module/annotcodec/annotationcodec.h"
 #include <QtCore/QHash>
+#include <QtCore/QFile>
 
 QT_FORWARD_DECLARE_CLASS(QNetworkAccessManager)
 QT_FORWARD_DECLARE_CLASS(QNetworkReply)
@@ -27,8 +28,15 @@ public:
   explicit BilibiliCodec(QObject *parent = 0);
 
 public:
-  virtual bool match(const QString &url) const; ///< \override
-  virtual void fetch(const QString &url); ///< \override
+  virtual bool match(const QString &url) const; ///< \reimp
+  virtual void fetch(const QString &url); ///< \reimp
+
+public:
+  static AnnotationList parseFile(const QString &fileName)
+  {
+    QFile f(fileName);
+    return f.open(QIODevice::ReadOnly) ? parseDocument(f.readAll()) : AnnotationList();
+  }
 
   static AnnotationList parseDocument(const QByteArray &data);
 protected:

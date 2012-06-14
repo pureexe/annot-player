@@ -62,19 +62,19 @@ signals:
   // - Properties -
 public:
   const QList<QUrl> &urls() const { return urls_; }
-  virtual QString contentType() const; ///< \override
+  virtual QString contentType() const; ///< \reimp
 
-  virtual qint64 read(char *data, qint64 maxSize);  ///< \override
+  virtual qint64 read(char *data, qint64 maxSize);  ///< \reimp
 
-  virtual bool seek(qint64 pos) ///< \override
-  { return fifo_ ? fifo_->seek(pos) : false; } ///< \override
+  virtual bool seek(qint64 pos) ///< \reimp
+  { return fifo_ ? fifo_->seek(pos) : false; } ///< \reimp
 
-  virtual qint64 size() const { return fifo_ ? fifo_->size() : 0; } ///< \override
-  virtual qint64 pos() const { return fifo_ ? fifo_->pos() : 0; } ///< \override
-  virtual qint64 availableSize() const { return fifo_ ? fifo_->availableSize() : 0; } ///< \override
+  virtual qint64 size() const { return fifo_ ? fifo_->size() : 0; } ///< \reimp
+  virtual qint64 pos() const { return fifo_ ? fifo_->pos() : 0; } ///< \reimp
+  virtual qint64 availableSize() const { return fifo_ ? fifo_->availableSize() : 0; } ///< \reimp
 
-  virtual qint64 duration() const { return duration_; } ///< \override
-  virtual qint64 availableDuration() const; ///< \override
+  virtual qint64 duration() const { return duration_; } ///< \reimp
+  virtual qint64 availableDuration() const; ///< \reimp
 
   qint64 receivedSize() const;
 
@@ -82,16 +82,16 @@ public slots:
   void setUrls(const QList<QUrl> &urls) { urls_ = urls; }
   void setDuration(qint64 duration) { duration_ = duration; }
 
-  virtual void run(); ///< \override
-  virtual void stop(); ///< \override
+  virtual void run(); ///< \reimp
+  virtual void stop(); ///< \reimp
 
-  virtual void waitForReady(); ///< \override
-  virtual void waitForStopped(); ///< \override
+  virtual void waitForReady(); ///< \reimp
+  virtual void waitForStopped(); ///< \reimp
 
   void updateProgress() { emit progress(receivedSize(), size()); }
 
 protected slots:
-  virtual void save(); ///< \override
+  virtual void save(); ///< \reimp
 
   void updateSize();
   void updateFileName();

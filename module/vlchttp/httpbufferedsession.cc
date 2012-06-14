@@ -8,6 +8,9 @@
 #else
 #  error "mediacodec module is required"
 #endif // WITH_MODULE_MEDIACODEC
+#ifdef WITH_MODULE_MRLRESOLVER
+#  include "module/mrlresolver/luamrlresolver.h"
+#endif // WITH_MODULE_LUARESOLVER
 #include "module/qtext/filesystem.h"
 #include "module/qtext/os.h"
 #include <QtNetwork/QNetworkAccessManager>
@@ -20,10 +23,18 @@
 #define DEBUG "httpbufferedsession"
 #include "module/debug/debug.h"
 
-enum { MaxDownloadRetries = 3 };
 
 enum { StopTimeout = 1000 }; // 1 second
 enum { BufferingInterval = 1000 }; // 1 second
+
+enum { MaxTotalDownloadRetries = 3 };
+enum { MaxIndividualDownloadRetries = 3 };
+
+namespace { // anonymous
+
+  QtExt::SleepTimer sleep_;
+
+} // anonymous namespace
 
 // - Construction -
 
@@ -146,8 +157,10 @@ HttpBufferedSession::stop()
   DOUT("enter");
   if (!isStopped()) {
     setState(Stopped);
+    sleep_.stop();
     QtExt::sleep(StopTimeout);
-  }
+  } else
+    sleep_.stop();
   //quit();
   DOUT("exit");
 }
@@ -211,7 +224,6 @@ HttpBufferedSession::run()
   Q_ASSERT(!url_.isEmpty());
   setState(Running);
 
-  int retry = 0;
   ready_ = false;
   pos_ = size_ = 0;
   fileName_.clear();
@@ -219,75 +231,118 @@ HttpBufferedSession::run()
   if (!buffer_.isEmpty())
     buffer_.clear();
 
-  while (!isStopped() && retry < MaxDownloadRetries) {
-    if (retry)
+  bool ok = false;
+  for (int totalRetry = 0; !isStopped() && !ok && totalRetry < MaxTotalDownloadRetries; totalRetry++) {
+#ifdef WITH_MODULE_MRLRESOLVER
+    if (totalRetry && !originalUrl().isEmpty()) {
+      DOUT("retry resolving mrl, orignal url =" << originalUrl());
       emit warning(
         QString("%1 (%2/%3): ")
-        .arg(tr("network error, retry")
-        .arg(QString::number(retry)))
-        .arg(QString::number(MaxDownloadRetries))
-        + url_.toString()
+        .arg(tr("failed to download, retry"))
+        .arg(QString::number(totalRetry))
+        .arg(QString::number(MaxTotalDownloadRetries))
+        + originalUrl()
       );
-    retry++;
-    setState(Running);
-    contentType_.clear();
 
-    if (mediaTitle().isEmpty())
-      setMediaTitle(QDateTime::currentDateTime().toString(Qt::ISODate));
-
-    if (reply_) {
-      if (reply_->isRunning())
-        reply_->abort();
-      reply_->deleteLater();
-    }
-    if (nam_) {
-      DOUT("delete nam");
-      //nam_->deleteLater();
-      delete nam_;
-    }
-    nam_ = new QNetworkAccessManager;
-
-    if (cookieJar()) {
-      nam_->setCookieJar(cookieJar());
-      cookieJar()->setParent(0);
-    }
-
-    emit message(tr("buffering") + ": " + url_.toString());
-
-    QNetworkRequest req(url_);
-    req.setAttribute(QNetworkRequest::HttpPipeliningAllowedAttribute, true);
-    reply_ = nam_->get(req);
-    Q_ASSERT(reply_);
-    waitForReplyReady();
-
-    if (isStopped())
-      break;
-
-    if (tryRedirect()) {
-      DOUT("exit: redirected");
-      return;
-    }
-
-    if (reply_->error() != QNetworkReply::NoError) {
-      setState(Error);
-      //ready_ = true;
-      //readyCond_.wakeAll();
-      //stoppedCond_.wakeAll();
-      emit error(tr("network error to access URL") + ": " + url_.toString());
-      DOUT("continue: network error:" << reply_->error() << reply_->errorString());
-    } else {
-      updateContentType();
-      if (!isMultiMediaMimeType(contentType_)) {
-        setState(Error);
-        emit error(tr("access forbidden") + ": " + url_.toString());
-      } else {
-        // Succeed
+      //if (totalRetry >= MinDownloadRetries) {
+        enum { WaitInterval = 5 }; // wait 5 seconds
+        int secs = WaitInterval + totalRetry;
+        emit warning(tr("wait %1 seconds and try again").arg(QString::number(secs)) + " ...");
+        DOUT(QString("wait for %1 seconds").arg(QString::number(secs)));
+        sleep_.start(secs);
+      //}
+      if (isStopped()) {
+        DOUT("stopped, break");
         break;
+      }
+
+      DOUT("with mrlresolver");
+      LuaMrlResolver resolver_impl;
+      MrlResolver &resolver = resolver_impl;
+      resolver.setSynchronized(true);
+      //connect(resolver, SIGNAL(mediaResolved(MediaInfo,QNetworkCookieJar*)), SLOT(updateUrls(MediaInfo,QNetworkCookieJar*)));
+      resolver.resolveMedia(originalUrl());
+      const MediaInfo &mi = resolver.resolvedMediaInfo();
+      QNetworkCookieJar *jar = resolver.resolvedCookieJar();
+      if (jar) {
+        setCookieJar(jar);
+        //nam_->setCookieJar(jar);
+        jar->setParent(0); // memory leak
+      }
+
+      if (!mi.mrls.isEmpty())
+        url_ = mi.mrls.first().url;
+    }
+#endif // WITH_MODULE_MRLRESOLVER
+    for (int individualRetry = 0; !isStopped() && !ok && individualRetry < MaxIndividualDownloadRetries; individualRetry++) {
+      if (individualRetry)
+        emit warning(
+          QString("%1 (%2/%3): ")
+          .arg(tr("network error, retry")
+          .arg(QString::number(individualRetry)))
+          .arg(QString::number(MaxIndividualDownloadRetries))
+          + url_.toString()
+        );
+      setState(Running);
+      contentType_.clear();
+
+      if (mediaTitle().isEmpty())
+        setMediaTitle(QDateTime::currentDateTime().toString(Qt::ISODate));
+
+      if (reply_) {
+        if (reply_->isRunning())
+          reply_->abort();
+        reply_->deleteLater();
+      }
+      if (nam_) {
+        DOUT("delete nam");
+        //nam_->deleteLater();
+        delete nam_;
+      }
+      nam_ = new QNetworkAccessManager;
+
+      if (cookieJar()) {
+        nam_->setCookieJar(cookieJar());
+        cookieJar()->setParent(0);
+      }
+
+      emit message(tr("buffering") + ": " + url_.toString());
+
+      QNetworkRequest req(url_);
+      req.setAttribute(QNetworkRequest::HttpPipeliningAllowedAttribute, true);
+      reply_ = nam_->get(req);
+      Q_ASSERT(reply_);
+      waitForReplyReady();
+
+      if (isStopped())
+        break;
+
+      if (tryRedirect()) {
+        DOUT("exit: redirected");
+        return;
+      }
+
+      if (reply_->error() != QNetworkReply::NoError) {
+        setState(Error);
+        //ready_ = true;
+        //readyCond_.wakeAll();
+        //stoppedCond_.wakeAll();
+        emit error(tr("network error to access URL") + ": " + url_.toString());
+        DOUT("continue: network error:" << reply_->error() << reply_->errorString());
+      } else {
+        updateContentType();
+        if (!isMultiMediaMimeType(contentType_)) {
+          setState(Error);
+          emit error(tr("access forbidden") + ": " + url_.toString());
+        } else {
+          // succeed
+          ok = true;
+        }
       }
     }
   }
 
-  if (isRunning()) {
+  if (isRunning() && ok) {
     if (reply_->isFinished()) {
       m_.lock();
       buffer_ = reply_->readAll();
@@ -347,8 +402,8 @@ HttpBufferedSession::read(char *data, qint64 maxSize)
          buffer_.size() - pos_ < maxSize) {
     emit buffering();
     readyReadCond_.wait(&m_);
-    if (isRunning())
-      QtExt::sleep(BufferingInterval);
+    //if (isRunning())
+    //  QtExt::sleep(BufferingInterval);
   }
 
   qint64 ret = qMin(maxSize, buffer_.size() - pos_);

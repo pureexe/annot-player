@@ -28,7 +28,7 @@ signals:
   void refreshRequested();
 
 public slots:
-  virtual void setVisible(bool t); ///< \override
+  virtual void setVisible(bool t); ///< \reimp
 
 protected slots:
   void refresh() { emit refreshRequested(); }

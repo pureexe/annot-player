@@ -28,12 +28,12 @@ protected:
   MediaToc *toc() const { return toc_; }
 
 protected:
-  ///  \override
+  ///  \reimp
   virtual void seekStreamSource(FramedSource* inputSource,
                                 double &seekNPT,
                                 double streamDuration,
                                 u_int64_t &numBytes);
-  virtual float duration() const { return duration_; }  ///< \override
+  virtual float duration() const { return duration_; }  ///< \reimp
 };
 
 #endif // STREAMSMSS_H

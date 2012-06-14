@@ -30,14 +30,14 @@ public:
   int resolverForMedia(const QString &href) const;
   int resolverForSubtitle(const QString &href) const;
 
-  virtual bool matchMedia(const QString &href) const ///< \override
+  virtual bool matchMedia(const QString &href) const ///< \reimp
   { return resolverForMedia(href) >= 0; }
-  virtual bool matchSubtitle(const QString &href) const ///< \override
+  virtual bool matchSubtitle(const QString &href) const ///< \reimp
   { return resolverForSubtitle(href) >= 0; }
 
   bool resolveMedia(int id, const QString &href);
 
-  virtual bool resolveMedia(const QString &href) ///< \override
+  virtual bool resolveMedia(const QString &href) ///< \reimp
   {
     QString url = autoCompleteUrl(href);
     int r = resolverForMedia(url);
@@ -45,7 +45,7 @@ public:
   }
 
   bool resolveSubtitle(int id, const QString &href);
-  virtual bool resolveSubtitle(const QString &href) ///< \override
+  virtual bool resolveSubtitle(const QString &href) ///< \reimp
   {
     QString url = autoCompleteUrl(href);
     int r = resolverForSubtitle(url);

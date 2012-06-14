@@ -31,7 +31,7 @@ namespace { namespace task_ {
   class InvalidateAnnotations : public QRunnable
   {
     AnnotationAnalyticsView *w_;
-    virtual void run() ///< \override
+    virtual void run() ///< \reimp
     { w_->invalidateAnnotations(false);} // async = false
 
   public:

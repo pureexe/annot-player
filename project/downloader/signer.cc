@@ -24,7 +24,7 @@ namespace { namespace task_ {
     Signer *w_;
     QString path_, url_;
 
-    virtual void run() { w_->signFileWithUrl(path_, url_, false); } // \override, async = false
+    virtual void run() { w_->signFileWithUrl(path_, url_, false); } // \reimp, async = false
   public:
     signFileWithUrl(const QString &path, const QString &url, Signer *w)
       : w_(w), path_(path), url_(url) { Q_ASSERT(w_); }
@@ -34,7 +34,7 @@ namespace { namespace task_ {
   {
     Signer *w_;
 
-    virtual void run() { w_->login(false); } // \override, async = false
+    virtual void run() { w_->login(false); } // \reimp, async = false
   public:
     explicit login(Signer *w) : w_(w) { Q_ASSERT(w_); }
   };

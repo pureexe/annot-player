@@ -25,9 +25,9 @@ public:
   QByteArray &data() { return data_; }
 
 public:
-  virtual qint64 availableSize() const { return data_.size(); } ///< \override
+  virtual qint64 availableSize() const { return data_.size(); } ///< \reimp
 
-  virtual qint64 write(const char *data, qint64 maxSize) ///< \override
+  virtual qint64 write(const char *data, qint64 maxSize) ///< \reimp
   { data_.append(data, maxSize); return maxSize; }
 };
 

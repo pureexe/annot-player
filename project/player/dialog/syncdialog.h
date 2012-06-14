@@ -39,7 +39,7 @@ public slots:
   void setActiveCounts(const QList<int> &counts);
   void setTimeSlotIndex(int index);
 
-  virtual void setVisible(bool visible); ///< \override
+  virtual void setVisible(bool visible); ///< \reimp
 
 protected slots:
   void ok();

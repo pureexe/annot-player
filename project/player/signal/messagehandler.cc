@@ -2,6 +2,7 @@
 // 10/19/2011
 
 #include "messagehandler.h"
+#include "textcodecmanager.h"
 #ifdef WITH_WIN_TEXTHOOK
 #  include "win/texthook/texthook.h"
 #else
@@ -37,11 +38,11 @@ MessageHandler::MessageHandler(QObject *parent)
 
 void
 MessageHandler::connectTextHook()
-{ connect(TextHook::globalInstance(), SIGNAL(textReceived(QString,ulong,ulong)), SLOT(processTextMessage(QString,ulong))); }
+{ connect(TextHook::globalInstance(), SIGNAL(messageReceived(QByteArray,ulong,ulong)), SLOT(processMessage(QByteArray,ulong))); }
 
 void
 MessageHandler::disconnectTextHook()
-{ disconnect(TextHook::globalInstance(), SIGNAL(textReceived(QString,ulong,ulong)), this, SLOT(processTextMessage(QString,ulong))); }
+{ disconnect(TextHook::globalInstance(), SIGNAL(messageReceived(QByteArray,ulong,ulong)), this, SLOT(processMessage(QByteArray,ulong))); }
 
 // - Properties -
 
@@ -67,9 +68,9 @@ MessageHandler::clearRecentMessages()
 }
 
 void
-MessageHandler::processTextMessage(const QString &text, ulong hookId)
+MessageHandler::processMessage(const QByteArray &data, ulong hookId)
 {
-  DOUT("enter: hookId =" << hookId << ", text =" << text);
+  DOUT("enter: hookId =" << hookId << ", data size =" << data.size());
   if (hookId != hookId_) {
     //lastMessageHash_.clear();
     DOUT("exit: hook mismatch");
@@ -78,49 +79,51 @@ MessageHandler::processTextMessage(const QString &text, ulong hookId)
 
   lastMessageHash_.clear();
 
-  if (text.trimmed().isEmpty()) {
-    DOUT("exit: skipping empty text");
+  if (data.isEmpty()) {
+    DOUT("exit: skipping empty data");
     return;
   }
 
-  emit messageReceivedWithText(text);
+  {
+    QString text = TextCodecManager::globalInstance()->decode(data);
+    emit messageReceivedWithText(text);
+  }
 
-  messages_.prepend(text);
+  messages_.prepend(data);
   if (messages_.size() > messageCount_)
-    messages_.removeLast();
+    messages_.pop_back();
 
-  QStringList toHash(text);
-  QString t;
+  QList<QByteArray> range;
+  range.append(data);
 
-  if (messages_.size() >= 2 && (t=messages_[1]) == text) {
-    toHash.prepend(t);
-    if (messages_.size() >= 3 && (t=messages_[2]) == text) {
-      toHash.prepend(t);
-      if (messages_.size() >= 4 && (t=messages_[3]) == text)
-        toHash.prepend(t);
+  QByteArray t;
+  if (messages_.size() >= 2 && (t=messages_[1]) == data) {
+    range.prepend(t);
+    if (messages_.size() >= 3 && (t=messages_[2]) == data) {
+      range.prepend(t);
+      if (messages_.size() >= 4 && (t=messages_[3]) == data)
+        range.prepend(t);
     }
 
-  } else if (text.length() < 10) {
+  } else if (data.length() < 10*2) {
     if (messages_.size() < 2)
       return;
-    toHash.prepend(t = messages_[1]);
-    if (t.length() < 7) {
+    range.prepend(t = messages_[1]);
+    if (t.length() < 7*2) {
       if (messages_.size() < 3)
         return;
-      toHash.prepend(t = messages_[2]);
-      if (t.length() < 4) {
+      range.prepend(t = messages_[2]);
+      if (t.length() < 4*2) {
         if (messages_.size() < 4)
           return;
-        toHash.prepend(messages_[3]);
+        range.prepend(messages_[3]);
       }
     }
   }
 
-  int count = toHash.size();
-  qint64 h = Annotation::hashTextsPos(toHash);
-
-  lastMessageHash_.hash = h;
-  lastMessageHash_.count = count;
+  qint64 h = lastMessageHash_.hash = Annotation::hash(range);
+  int count = lastMessageHash_.count = range.size();
+  Q_UNUSED(count);
 
   emit messageReceivedWithId(h);
   DOUT("exit: hashCount =" << count << ", h =" << h);

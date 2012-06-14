@@ -48,11 +48,11 @@ enum { StatusMessageTimeout = 10000 }; // 10 seconds
 
 // - RC -
 
-#ifdef Q_OS_LINUX
+#ifdef Q_WS_X11
 #  define RC_PREFIX     DOCDIR "/"
 #else
 #  define RC_PREFIX     QCoreApplication::applicationDirPath() + "/doc/"
-#endif // Q_OS_LINUX
+#endif // Q_WS_X11
 
 #define RC_HTML_START   RC_PREFIX "start.html"
 
@@ -286,6 +286,18 @@ WebBrowser::createActions()
   new QShortcut(QKeySequence("CTRL+8"), this, SLOT(focusTab7()));
   new QShortcut(QKeySequence("CTRL+9"), this, SLOT(focusTab8()));
   new QShortcut(QKeySequence("CTRL+0"), this, SLOT(focusLastTab()));
+#ifndef Q_WS_MAC
+  new QShortcut(QKeySequence("ALT+1"), this, SLOT(focusTab0()));
+  new QShortcut(QKeySequence("ALT+2"), this, SLOT(focusTab1()));
+  new QShortcut(QKeySequence("ALT+3"), this, SLOT(focusTab2()));
+  new QShortcut(QKeySequence("ALT+4"), this, SLOT(focusTab3()));
+  new QShortcut(QKeySequence("ALT+5"), this, SLOT(focusTab4()));
+  new QShortcut(QKeySequence("ALT+6"), this, SLOT(focusTab5()));
+  new QShortcut(QKeySequence("ALT+7"), this, SLOT(focusTab6()));
+  new QShortcut(QKeySequence("ALT+8"), this, SLOT(focusTab7()));
+  new QShortcut(QKeySequence("ALT+9"), this, SLOT(focusTab8()));
+  new QShortcut(QKeySequence("ALT+0"), this, SLOT(focusLastTab()));
+#endif // Q_WS_MAC
 }
 
 void

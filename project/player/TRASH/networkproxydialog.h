@@ -31,7 +31,7 @@ public slots:
   void setUserName(const QString &userName);
   void setPassword(const QString &password);
 
-  virtual void setVisible(bool visible); ///< \override
+  virtual void setVisible(bool visible); ///< \reimp
 
 protected slots:
   void save();

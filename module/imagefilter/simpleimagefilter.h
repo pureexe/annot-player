@@ -50,14 +50,14 @@ public slots:
   }
 
 public:
-  virtual QImage &filterImage(QImage &image) const ///< \override
+  virtual QImage &filterImage(QImage &image) const ///< \reimp
   {
     return (*gammaFilter_)
           ((*contrastFilter_)
           ((*brightnessFilter_)(image)));
   }
 
-  virtual bool needsDisplay() const ///< \override
+  virtual bool needsDisplay() const ///< \reimp
   {
     return *brightnessFilter_ ||
            *contrastFilter_ ||

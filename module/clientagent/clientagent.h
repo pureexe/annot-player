@@ -81,11 +81,11 @@ public slots:
 
   // - Implementations -
 public:
-  virtual bool authorize(long key); ///< \override
-  virtual void deauthorize(); ///< \override
-  virtual bool isAuthorized() const; ///< \override
-  virtual bool isConnected() const; ///< \override
-  virtual void chat(const QString &text); ///< \override
+  virtual bool authorize(long key); ///< \reimp
+  virtual void deauthorize(); ///< \reimp
+  virtual bool isAuthorized() const; ///< \reimp
+  virtual bool isConnected() const; ///< \reimp
+  virtual void chat(const QString &text); ///< \reimp
 
 };
 

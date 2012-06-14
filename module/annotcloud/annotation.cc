@@ -56,4 +56,19 @@ Annotation::rehash(const QByteArray &input, qint64 h)
   return qint64(ret);
 }
 
+qint64
+AnnotCloud::
+Annotation::hash(const QList<QByteArray> &l)
+{
+  qint64 h;
+  if (l.isEmpty())
+    h = hash(QByteArray());
+  else for (int i = 0; i < l.size(); i++)
+    if (i == 0)
+      h = hash(l.first());
+    else
+      h = rehash(l[i], h);
+  return h;
+}
+
 // EOF

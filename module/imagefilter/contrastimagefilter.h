@@ -39,10 +39,10 @@ public:
   static bool needsDisplay(int contrast)
   { return contrast != DefaultValue; }
 
-  virtual quint8 filterColor(quint8 value) const ///< \override
+  virtual quint8 filterColor(quint8 value) const ///< \reimp
   { return filterColor(value, contrast_); }
 
-  virtual bool needsDisplay() const ///< \override
+  virtual bool needsDisplay() const ///< \reimp
   { return needsDisplay(contrast_); }
 };
 

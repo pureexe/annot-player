@@ -30,7 +30,7 @@ public slots:
 
   // - Events -
 public:
-  virtual void setVisible(bool visible); ///< \override
+  virtual void setVisible(bool visible); ///< \reimp
 
 protected slots:
   void setContent(const QString &html);

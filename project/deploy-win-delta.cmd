@@ -1,10 +1,10 @@
 :: deploy-win-delta.cmd
 :: 5/23/2012
 setlocal
-cd /d d:/devel/build || exit /b 1
+cd /d d:/dev/build || exit /b 1
 
 set MAJOR=0.1.6
-set MINOR=2
+set MINOR=3
 set VERSION=%MAJOR%.%MINOR%
 ::set PREVMAJOR=%MAJOR%
 set PREVMAJOR=%MAJOR%
@@ -44,6 +44,9 @@ set OPENSSL_DLLS=libeay32.dll,ssleay32.dll
 ::set MP4V2_HOME=/Volumes/win/dev/mp4v2
 ::set MP4V2_DLL=libmp4v2.dll
 
+::set LUA_HOME=/Volumes/win/dev/lua
+::set LUA_DLL=lua52.dll
+
 ::set ZLIB_HOME=/Volumes/win/dev/zlib
 set ZLIB_DLL=zlib1.dll
 
@@ -51,8 +54,8 @@ set ZLIB_DLL=zlib1.dll
 set VLC_DLLS=libvlc.dll,libvlccore.dll
 ::set VLC_DATA=plugins,lua,locale
 
-set BUILD=/Volumes/local/devel/annot-build-desktop/build.win
-set SOURCE=/Volumes/local/devel/annot
+set BUILD=/Volumes/local/dev/annot-build-desktop/build.win
+set SOURCE=/Volumes/local/dev/annot
 
 ::set CURL_HOME=/Volumes/win/dev/curl
 ::set CURL_BIN=curl.exe
@@ -104,6 +107,7 @@ cp -v "%ITH_HOME%"/bin/{%ITH_DLLS%} . || exit /b 1
 ::cp -v "%GPAC_HOME%"/bin/{%GPAC_DLLS%} . || exit /b 1
 ::cp -v "%MP4BOX_HOME%"/bin/%MP4BOX_EXE% . || exit /b 1
 ::cp -v "%MP4V2_HOME%"/bin/%MP4V2_DLL% . || exit /b 1
+::cp -v "%LUA_HOME%"/bin/%LUA_DLL% . || exit /b 1
 ::cp -v "%ZLIB_HOME%"/bin/%ZLIB_DLL% . || exit /b 1
 
 ::cp -v "%CURL_HOME%"/bin/%CURL_BIN% . || exit /b 1
@@ -129,6 +133,7 @@ rm -fv {%QT_DLLS%}
 ::rm -fv {%ITH_DLLS%}
 rm -fv {%VLC_DLLS%}
 rm -fv {%OPENSSL_DLLS%}
+::rm -fv %LUA_DLL%
 rm -fv %ZLIB_DLL%
 
 :: compile lua
@@ -148,6 +153,7 @@ mkdir "%LUA_PATH%" || exit 1
 ::cp -v "%SOURCE%"/module/luaresolver/lua/luascript/*.lua "%LUA_PATH%"/  || exit 1
 ::cp -v "%SOURCE%"/module/luaresolver/lua/luascript/*/*.lua "%LUA_PATH%"/  || exit 1
 cp -v "%SOURCE%"/module/luaresolver/lua/luascript/sitelist/bilibili.lua "%LUA_PATH%"/  || exit 1
+cp -v "%SOURCE%"/module/luaresolver/lua/luascript/lib/lalib.lua "%LUA_PATH%"/  || exit 1
 
 :: doc
 ::cp -Rv "%SOURCE%"/module/qtext/doc . || exit 1

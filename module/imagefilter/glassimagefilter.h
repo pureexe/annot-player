@@ -29,7 +29,7 @@ public slots:
   void setCenter(const QPoint &pos) { center_ = pos; }
 
 public:
-  virtual QImage &filterImage(QImage &image) const ///< \override
+  virtual QImage &filterImage(QImage &image) const ///< \reimp
   {
     if (!image.isNull())
       for (int x = 0; x < image.width(); x++)

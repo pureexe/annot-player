@@ -98,17 +98,17 @@ protected:
 
   // - Events -
 public slots:
-  virtual void setVisible(bool visible); ///< \overrride
+  virtual void setVisible(bool visible); ///< \reimp
 
 protected:
-  virtual void contextMenuEvent(QContextMenuEvent *event); ///< \override
+  virtual void contextMenuEvent(QContextMenuEvent *event); ///< \reimp
   void updateContextMenu();
 
 //protected slots:
-//  virtual void dragEnterEvent(QDragEnterEvent *event); ///< \override
-//  virtual void dragMoveEvent(QDragMoveEvent *event); ///< \override
-//  virtual void dragLeaveEvent(QDragLeaveEvent *event); ///< \override
-//  virtual void dropEvent(QDropEvent *event); ///< \override
+//  virtual void dragEnterEvent(QDragEnterEvent *event); ///< \reimp
+//  virtual void dragMoveEvent(QDragMoveEvent *event); ///< \reimp
+//  virtual void dragLeaveEvent(QDragLeaveEvent *event); ///< \reimp
+//  virtual void dropEvent(QDropEvent *event); ///< \reimp
 
 //signals:
 //  void dragEnterEventReceived(QDragEnterEvent *event);

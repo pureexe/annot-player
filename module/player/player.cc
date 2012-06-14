@@ -1372,7 +1372,7 @@ Player::setSubtitleFromFile(const QString &fileName)
   bool ok = ::libvlc_video_set_subtitle_file(d_->player(), vlcpath(path));
   if (ok) {
     DOUT("succeeded, number of subtitles (0 for the first time):" << ::libvlc_video_get_spu_count(d_->player()));
-    d_->externalSubtitles() << path;
+    d_->externalSubtitles().append(path);
     d_->setSubtitleId(::libvlc_video_get_spu_count(d_->player()) - 1);
     emit subtitleChanged();
   } else
@@ -1825,7 +1825,53 @@ Player::setAudioTrackId(int id)
     emit audioTrackChanged();
 }
 
-// - User agent -
+// - Audio Channel -
+
+Player::AudioChannel
+Player::audioChannel() const
+{
+  Q_ASSERT(isValid());
+  switch (::libvlc_audio_get_channel(d_->player())) {
+  case libvlc_AudioChannel_Stereo:  return StereoChannel;
+  case libvlc_AudioChannel_RStereo: return ReverseStereoChannel;
+  case libvlc_AudioChannel_Left:    return LeftChannel;
+  case libvlc_AudioChannel_Right:   return RightChannel;
+  case libvlc_AudioChannel_Dolbys:  return DolbysChannel;
+  case libvlc_AudioChannel_Error:
+  default: return NoChannel;
+  }
+}
+
+void
+Player::setAudioChannel(int channel)
+{
+  Q_ASSERT(isValid());
+  Q_ASSERT(channel > 0 && channel <= DolbysChannel);
+  channel = qBound<int>(StereoChannel, channel, DolbysChannel);
+  if (channel != audioChannel()) {
+    ::libvlc_audio_set_channel(d_->player(), channel);
+    emit audioChannelChanged(audioChannel());
+  }
+}
+
+qint64
+Player::audioDelay() const
+{
+  Q_ASSERT(isValid());
+  return ::libvlc_audio_get_delay(d_->player());
+}
+
+void
+Player::setAudioDelay(qint64 msecs)
+{
+  Q_ASSERT(isValid());
+  if (hasMedia()) {
+    ::libvlc_audio_set_delay(d_->player(), msecs);
+    emit audioDelayChanged(audioDelay());
+  }
+}
+
+// - User Agent -
 
 QString
 Player::defaultUserAgent()
@@ -2041,7 +2087,7 @@ Player::audioCodecId() const
 }
 
 int
-Player::audioChannels() const
+Player::audioChannelCount() const
 {
   if (!hasMedia())
     return 0;

@@ -108,7 +108,7 @@ public:
   QSize videoDimension() const;
   int videoCodecId() const;
   int audioCodecId() const;
-  int audioChannels() const;
+  int audioChannelCount() const;
   int audioRate() const;
 
   QString videoCodecName() const { return codecName(videoCodecId()); }
@@ -127,6 +127,8 @@ public:
 
   ///  Current played time in msecs, always in [0, mediaLength()].
   qint64 time() const;
+
+  qint64 audioDelay() const;
 
   // - Adjustment -
 public:
@@ -284,6 +286,10 @@ public:
   qreal fps() const;
   qreal bitrate() const;
 
+  ///  Consistent with ibvlc_audio_output_channel_t
+  enum AudioChannel { NoChannel = 0, StereoChannel, ReverseStereoChannel, LeftChannel, RightChannel, DolbysChannel };
+  AudioChannel audioChannel() const;
+
   // - Meta -
   QString metaTitle() const;
   QString metaArtist() const;
@@ -315,6 +321,8 @@ public slots:
   void clearAspectRatio();
 
   void setTime(qint64 msecs); ///< same effect as setPosition
+  void setAudioDelay(qint64 msecs);
+  void resetAudioDelay() { setAudioDelay(0); }
 
   void setSubtitleId(int id);   ///< id of available subtitles
   void showSubtitle();
@@ -322,6 +330,8 @@ public slots:
   void setSubtitleVisible(bool visible);
 
   void setAudioTrackId(int id);   ///< id of available subtitles
+
+  void setAudioChannel(int channel);
 
   void setChapterId(int cid);
   void setPreviousChapter();
@@ -371,6 +381,7 @@ signals:
   void mediaTitleChanged(const QString &title);
   void mediaClosed();
   void timeChanged();
+  void audioDelayChanged(qint64 msecs);
   void lengthChanged(); // Due to deficency of VLC, the length is changed after mediaChangd.
   void positionChanged();
   void volumeChanged();
@@ -378,6 +389,7 @@ signals:
   void errorEncountered();
   void subtitleChanged();
   void audioTrackChanged();
+  void audioChannelChanged(int channel);
   void endReached();
 
   // FIXME: This is not a good style to expose emit outside.

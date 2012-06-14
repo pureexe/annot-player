@@ -25,10 +25,10 @@ public:
     : Base(parent) { init(); }
 
 public:
-  bool matchMedia(const QString &href) const; ///< \override
+  bool matchMedia(const QString &href) const; ///< \reimp
 
 public slots:
-  bool resolveMedia(const QString &href); ///< \override
+  bool resolveMedia(const QString &href); ///< \reimp
 
   void setPreferredType(const QString &type) { preferredType_ = type; }
 

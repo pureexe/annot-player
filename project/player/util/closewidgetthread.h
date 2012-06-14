@@ -16,7 +16,7 @@ class CloseWidgetThread : public QThread
 
   QWidget *w_;
 
-  virtual void run() { w_->close(); } // \override
+  virtual void run() { w_->close(); } // \reimp
 
 public:
   explicit CloseWidgetThread(QWidget *w, QObject *parent = 0)

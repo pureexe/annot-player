@@ -151,29 +151,24 @@ protected slots:
 
   // - Events -
 public slots:
-  virtual void setVisible(bool visible); ///< \override stop polling when hidden
+  virtual void setVisible(bool visible); ///< \reimp stop polling when hidden
 
 public:
   // Implement event listener.
-  virtual void sendContextMenuEvent(QContextMenuEvent *event); ///< \override
-  virtual void sendMouseMoveEvent(QMouseEvent *event); ///< \override
-  virtual void sendMousePressEvent(QMouseEvent *event); ///< \override
-  virtual void sendMouseReleaseEvent(QMouseEvent *event); ///< \override
-  virtual void sendMouseDoubleClickEvent(QMouseEvent *event); ///< \override
+  virtual void sendContextMenuEvent(QContextMenuEvent *event); ///< \reimp
+  virtual void sendMouseMoveEvent(QMouseEvent *event); ///< \reimp
+  virtual void sendMousePressEvent(QMouseEvent *event); ///< \reimp
+  virtual void sendMouseReleaseEvent(QMouseEvent *event); ///< \reimp
+  virtual void sendMouseDoubleClickEvent(QMouseEvent *event); ///< \reimp
 
 protected:
-  //virtual void contextMenuEvent(QContextMenuEvent *event); ///< \override
-  //virtual void mouseMoveEvent(QMouseEvent *event); ///< \override
-  //virtual void mousePressEvent(QMouseEvent *event); ///< \override
-  //virtual void mouseReleaseEvent(QMouseEvent *event); ///< \override
-  //virtual void mouseDoubleClickEvent(QMouseEvent *event); ///< \override
+  //virtual void contextMenuEvent(QContextMenuEvent *event); ///< \reimp
+  //virtual void mouseMoveEvent(QMouseEvent *event); ///< \reimp
+  //virtual void mousePressEvent(QMouseEvent *event); ///< \reimp
+  //virtual void mouseReleaseEvent(QMouseEvent *event); ///< \reimp
+  //virtual void mouseDoubleClickEvent(QMouseEvent *event); ///< \reimp
 
 protected:
-  void connectPlayer();
-  void disconnectPlayer();
-  void connectHub();
-  void disconnectHub();
-
   void moveToGlobalPos(const QPoint &globalPos);
 
   AnnotationGraphicsItem *itemWithId(qint64 aid) const;
@@ -220,7 +215,6 @@ public:
   int itemsCount(int sec) const;
   int itemsCount(int from, int to) const; ///< Count of items within [from, to] in seconds
 
-  bool isActive() const { return active_; }
   bool isPlaybackEnabled() const {  return playbackEnabled_; }
 
   qreal scale() const { return scale_; }
@@ -259,7 +253,6 @@ public slots:
   void stop();
   void tick();
 
-  void setActive(bool active); // start polling when active
   void setPlaybackEnabled(bool enabled);
   void togglePlaybackEnabled() { setPlaybackEnabled(!playbackEnabled_); }
   void toggleVisible() { setVisible(!isVisible()); }
@@ -359,7 +352,6 @@ private:
   Player *player_;
   AnnotationFilter *filter_;
   RenderHint renderHint_;
-  bool active_;
   bool paused_;
   bool fullScreen_;
   bool subtitleVisible_, nonSubtitleVisible_;

@@ -21,16 +21,16 @@ public:
     : Base(parent) { }
 
 public:
-  bool matchMedia(const QString &href) const; ///< \override
-  bool matchSubtitle(const QString &href) const; ///< \override
+  bool matchMedia(const QString &href) const; ///< \reimp
+  bool matchSubtitle(const QString &href) const; ///< \reimp
 
 public slots:
-  bool resolveMedia(const QString &href) ///< \override
+  bool resolveMedia(const QString &href) ///< \reimp
   { return resolveMedia(href, !isSynchronized()); }
 
   bool resolveMedia(const QString &href, bool async);
 
-  bool resolveSubtitle(const QString &href) ///< \override
+  bool resolveSubtitle(const QString &href) ///< \reimp
   { return resolveSubtitle(href, !isSynchronized()); }
 
   bool resolveSubtitle(const QString &href, bool async);

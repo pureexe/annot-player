@@ -23,9 +23,9 @@ AnnotationCodecManager::AnnotationCodecManager(QObject *parent)
     connect(c, SIGNAL(fetched(AnnotationList,QString)), SIGNAL(fetched(AnnotationList,QString))); \
   } codecs_.append(c);
 
-  ADD(BilibiliCodec)
-  ADD(AcfunCodec)
   ADD(NicovideoCodec)
+  ADD(AcfunCodec)
+  ADD(BilibiliCodec)
 #undef ADD
 }
 
@@ -49,6 +49,46 @@ AnnotationCodecManager::fetch(int id, const QString &url)
     return;
   }
   codecs_[id]->fetch(url);
+}
+
+// - Parse -
+
+AnnotationList
+AnnotationCodecManager::parseFile(const QString &fileName)
+{
+  Site site = fileSite(fileName);
+  DOUT("site =" << site << ", fileName =" << fileName);
+  switch (site) {
+  case Nicovideo: return NicovideoCodec::parseFile(fileName);
+  case Acfun:     return AcfunCodec::parseFile(fileName);
+  case Bilibili:  return BilibiliCodec::parseFile(fileName);
+  case UnknownSite:
+  default:        return AnnotationList();
+  }
+}
+
+AnnotationCodecManager::Site
+AnnotationCodecManager::fileSite(const QString &fileName)
+{
+  enum { HeadSize = 100 };
+  if (!QFileInfo(fileName).suffix().compare("json", Qt::CaseInsensitive))
+    return Acfun;
+
+  QFile f(fileName);
+  if (!f.open(QIODevice::ReadOnly))
+    return UnknownSite;
+
+  QString head(f.read(HeadSize * 2)); // wchar_t for UTF-8 file
+  DOUT("head =" << head);
+  if (head.isEmpty())
+    return UnknownSite;
+  if (head.contains("<packet>"))
+    return Nicovideo;
+  if (head.contains("<chatserver>"))
+    return Bilibili;
+  if (head.contains("<c>"))
+    return Acfun;
+  return UnknownSite;
 }
 
 // EOF

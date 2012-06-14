@@ -42,9 +42,9 @@ protected slots:
 
   // - Events -
 protected:
-  virtual void changeEvent(QEvent *event); ///< \override
-  virtual void enterEvent(QEvent *event); ///< \override
-  virtual void leaveEvent(QEvent *event); ///< \override
+  virtual void changeEvent(QEvent *event); ///< \reimp
+  virtual void enterEvent(QEvent *event); ///< \reimp
+  virtual void leaveEvent(QEvent *event); ///< \reimp
 };
 
 #endif // POSITIONSLIDER_H

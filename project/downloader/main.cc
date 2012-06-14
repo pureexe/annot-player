@@ -17,8 +17,6 @@
 #include <QtNetwork/QNetworkReply>
 #include <QtGui>
 #include <boost/tuple/tuple.hpp>
-#include <cstdlib>
-#include <ctime>
 
 #define DEBUG "main"
 #include "module/debug/debug.h"
@@ -120,11 +118,6 @@ main(int argc, char *argv[])
     a.processEvents();
     return 0;
   }
-
-  // Seed global random generator.
-  time_t now = ::time(0);
-  ::srand(now);
-  ::qsrand(now);
 
   // Register meta types.
   ::registerMetaTypes();

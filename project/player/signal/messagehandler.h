@@ -6,8 +6,6 @@
 
 #include "processinfo.h"
 #include <QtCore/QObject>
-#include <QtCore/QStringList>
-#include <QtCore/QList>
 #include <QtCore/QVector>
 
 class MessageHandler : public QObject
@@ -43,8 +41,8 @@ public:
   const ProcessInfo &processInfo() const { return pi_; }
 
   ///  Most recent on the top.
-  const QStringList &recentMessages() const { return messages_; }
-  int recentMessageCapacity() const { return messageCount_; }
+  const QVector<QByteArray> &recentMessages() const { return messages_; }
+  //int recentMessageCapacity() const { return messageCount_; }
 
   const MessageHash &lastMessageHash() const { return lastMessageHash_; }
 
@@ -57,7 +55,7 @@ public slots:
 
   // - Actions
 protected slots:
-  void processTextMessage(const QString &text, ulong hookId);
+  void processMessage(const QByteArray &data, ulong hookId);
 
   void connectTextHook();
   void disconnectTextHook();
@@ -71,7 +69,7 @@ private:
   ulong hookId_;
   ProcessInfo pi_;
 
-  QStringList messages_; // recent messages queue
+  QVector<QByteArray> messages_; // recent messages queue
   int messageCount_;     // recent message capacity
 
   MessageHash lastMessageHash_;

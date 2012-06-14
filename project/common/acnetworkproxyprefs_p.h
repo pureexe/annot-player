@@ -25,8 +25,8 @@ public:
   explicit AcNetworkProxyPrefs(AcSettings *settings, QWidget *parent = 0);
 
 public slots:
-  virtual bool save(); ///< \override
-  virtual void load(); ///< \override
+  virtual bool save(); ///< \reimp
+  virtual void load(); ///< \reimp
   void updateButtons();
 
 protected:

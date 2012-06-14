@@ -19,7 +19,7 @@ public:
   explicit CompactStackedLayout(QWidget *parent) : Base(parent) { }
   explicit CompactStackedLayout(QLayout *parentLayout) : Base(parentLayout) { }
 
-  virtual QSize sizeHint() const ///< \override
+  virtual QSize sizeHint() const ///< \reimp
   {
     QWidget *w = currentWidget();
     return w ? w->sizeHint() : QSize();

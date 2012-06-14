@@ -98,12 +98,15 @@ MainWindow::MainWindow(QWidget *parent)
     << QString("http://wangmeng.baidu.com")
     << QString("http://www.baidu.com/adrc.php")
     << QString("http://cpro.baidu.com")
+    << QString("http://drmcmm.baidu.com")
+    << QString("http://www.baidu.com/cb.php")
     << QString("http://static.loli.my/ad-images")
     << QString("http://ads.nicovideo.jp")
     << QString("http://taobao.com")
     << QString("http://u17.com")
     << QString("http://u17i.com")
     << QString("http://u17t.com")
+    << QString("http://37cs.com")
     << QString("http://17kuxun.com")
     << QString("http://huoying.com")
     << QString("http://linekong.com")
@@ -246,13 +249,13 @@ MainWindow::createGestures()
 
   addMouseGesture(g = new MouseGesture(MouseGesture::DirectionList()
     << MouseGesture::Left,
-    tr("Forward")
-  )); connect(g, SIGNAL(triggered()), SLOT(forward()), Qt::QueuedConnection);
+    tr("Backward")
+  )); connect(g, SIGNAL(triggered()), SLOT(back()), Qt::QueuedConnection);
 
   addMouseGesture(g = new MouseGesture(MouseGesture::DirectionList()
     << MouseGesture::Right,
-    tr("Backward")
-  )); connect(g, SIGNAL(triggered()), SLOT(back()), Qt::QueuedConnection);
+    tr("Forward")
+  )); connect(g, SIGNAL(triggered()), SLOT(forward()), Qt::QueuedConnection);
 
   addMouseGesture(g = new MouseGesture(MouseGesture::DirectionList()
     << MouseGesture::Up << MouseGesture::Left,
@@ -489,8 +492,9 @@ void
 MainWindow::closeEvent(QCloseEvent *event)
 {
   DOUT("enter");
-  enum { UrlSizeLimit = 20 };
-  enum { SearchSizeLimit = 20 };
+  enum { RecentUrlsLimit = 30 };
+  enum { ClosedUrlsLimit = 10 };
+  enum { RecentSearchLimit = 20 };
 
   Application::globalInstance()->removeWindow(this);
 
@@ -500,9 +504,9 @@ MainWindow::closeEvent(QCloseEvent *event)
   // Save settings
   saveRecentTabs();
   Settings *settings = Settings::globalSettings();
-  settings->setClosedUrls(QtExt::skipEmpty(closedUrls()), UrlSizeLimit);
-  settings->setRecentUrls(QtExt::skipEmpty(recentUrls()), UrlSizeLimit);
-  settings->setRecentSearches(recentSearches(), SearchSizeLimit);
+  settings->setClosedUrls(QtExt::skipEmpty(closedUrls()), ClosedUrlsLimit);
+  settings->setRecentUrls(QtExt::skipEmpty(recentUrls()), RecentUrlsLimit);
+  settings->setRecentSearches(recentSearches(), RecentSearchLimit);
   settings->setRecentTabIndex(tabIndex());
   if (isFullScreen())
     settings->clearRecentSize();

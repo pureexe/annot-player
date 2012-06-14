@@ -24,10 +24,10 @@ public:
     : Base(parent) { init(); }
 
 public:
-  bool matchMedia(const QString &href) const; ///< \override
+  bool matchMedia(const QString &href) const; ///< \reimp
 
 public slots:
-  bool resolveMedia(const QString &href); ///< \override
+  bool resolveMedia(const QString &href); ///< \reimp
 protected slots:
   void resolveMedia(QNetworkReply *reply);
 

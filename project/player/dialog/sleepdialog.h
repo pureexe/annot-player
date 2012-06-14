@@ -17,7 +17,7 @@ public:
   explicit SleepDialog(QWidget *parent = 0);
 
 protected:
-  virtual void run(); ///< \override
+  virtual void run(); ///< \reimp
 };
 
 #endif // SLEEPDIALOG_H

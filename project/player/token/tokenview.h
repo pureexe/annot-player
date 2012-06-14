@@ -96,7 +96,7 @@ public slots:
 
   // - Events -
 public:
-  virtual void setVisible(bool visible); ///< \override
+  virtual void setVisible(bool visible); ///< \reimp
 protected slots:
   void setActive(bool t);
   void updateTokenLabels();
@@ -104,12 +104,12 @@ protected slots:
   void submitAlias(const QString &alias, int type, qint32 language);
 
 protected slots:
-  virtual void contextMenuEvent(QContextMenuEvent *event); ///< \override
+  virtual void contextMenuEvent(QContextMenuEvent *event); ///< \reimp
 
-//  virtual void dragEnterEvent(QDragEnterEvent *event); ///< \override
-//  virtual void dragMoveEvent(QDragMoveEvent *event); ///< \override
-//  virtual void dragLeaveEvent(QDragLeaveEvent *event); ///< \override
-//  virtual void dropEvent(QDropEvent *event); ///< \override
+//  virtual void dragEnterEvent(QDragEnterEvent *event); ///< \reimp
+//  virtual void dragMoveEvent(QDragMoveEvent *event); ///< \reimp
+//  virtual void dragLeaveEvent(QDragLeaveEvent *event); ///< \reimp
+//  virtual void dropEvent(QDropEvent *event); ///< \reimp
 
 //signals:
 //  void dragEnterEventReceived(QDragEnterEvent *event);

@@ -13,11 +13,11 @@
 
 // - Resources -
 
-#ifdef Q_WS_LINUX
+#ifdef Q_WS_X11
 #  define RC_AVATAR_PREFIX      AVATARDIR
 #else
 #  define RC_AVATAR_PREFIX      QCoreApplication::applicationDirPath() + "/avatars"
-#endif // Q_WS_LINUX
+#endif // Q_WS_X11
 #ifdef AVATAR_USER_COUNT
 #  define RC_AVATAR_COUNT       AVATAR_USER_COUNT
 #else
@@ -33,7 +33,7 @@ namespace { // anonymous
 #ifdef Q_WS_WIN
       QString("file:///" + RC_AVATAR_PREFIX "/user_%1.jpg").replace('\\', '/')
 #else
-      "file://" + RC_AVATAR_PREFIX "/user_%1.jpg"
+      "file://" + QString(RC_AVATAR_PREFIX) + "/user_%1.jpg"
 #endif  // Q_WS_WIN
     ;
     return fmt.arg(QString::number(qAbs(i) % RC_AVATAR_COUNT));
@@ -41,11 +41,11 @@ namespace { // anonymous
 } // anonymous namespace
 
 
-#ifdef Q_OS_LINUX
+#ifdef Q_WS_X11
 #  define RC_PREFIX     JSFDIR "/"
 #else
 #  define RC_PREFIX     QCoreApplication::applicationDirPath() + "/jsf/"
-#endif // Q_OS_LINUX
+#endif // Q_WS_X11
 
 #define RC_JSF_T        RC_PREFIX "t.xhtml"
 #define RC_JSF_A        RC_PREFIX "a.xhtml"

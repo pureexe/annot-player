@@ -85,8 +85,8 @@ public:
   // - Actions -
 public slots:
   virtual void run(bool exec) = 0;
-  virtual void run() { run(true); } ///< \override
-  virtual void stop() = 0; ///< \override
+  virtual void run() { run(true); } ///< \reimp
+  virtual void stop() = 0; ///< \reimp
 
   void exec();
   void quit();

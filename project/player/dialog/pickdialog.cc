@@ -50,7 +50,7 @@ PickDialog::createLayout()
 
   QToolButton *cancelButton = AcUi::globalInstance()->makeToolButton(
         AcUi::PushHint | AcUi::HighlightHint | AcUi::InvertHint,
-        TR(T_CANCEL), this, SLOT(cancel()));
+        TR(T_CANCEL) + " (ESC)", this, SLOT(cancel()));
 
   // Layouts
   QVBoxLayout *rows = new QVBoxLayout; {
@@ -65,11 +65,6 @@ PickDialog::createLayout()
   // Focus
   cancelButton->setFocus();
 }
-
-bool
-PickDialog::isActive() const
-{ return active_; }
-
 
 void
 PickDialog::setActive(bool t)

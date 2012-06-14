@@ -39,7 +39,7 @@ namespace { namespace task_ { // anonymous
     AnnotationDatabase *db_;
     AliasList l_;
     int limit_;
-    virtual void run() { db_->updateAliases(l_, false, limit_); } // \override, async = false
+    virtual void run() { db_->updateAliases(l_, false, limit_); } // \reimp, async = false
   public:
     updateAliases(const AliasList &l, int limit, AnnotationDatabase *db)
       : db_(db), l_(l), limit_(limit) { Q_ASSERT(db_); }
@@ -50,7 +50,7 @@ namespace { namespace task_ { // anonymous
     AnnotationDatabase *db_;
     AnnotationList l_;
     int limit_;
-    virtual void run() { db_->updateAnnotations(l_, false, limit_); } // \override, async = false
+    virtual void run() { db_->updateAnnotations(l_, false, limit_); } // \reimp, async = false
   public:
     updateAnnotations(const AnnotationList &l, int limit, AnnotationDatabase *db)
       : db_(db), l_(l), limit_(limit) { Q_ASSERT(db_); }

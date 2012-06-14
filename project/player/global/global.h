@@ -22,6 +22,7 @@ enum { ALPHA = 0 };
 #define G_ORGANIZATION  AC_ORGANIZATION
 #define G_APPLICATION   "Player"
 #define G_VERSION       VERSION
+#define G_VERSION_MAJOR VERSION_MAJOR
 //#define G_HOMEPAGE      "http://annot.me"
 //#define G_HOMEPAGE      "http://annotcloud.com"
 #define G_HOMEPAGE      AC_HOMEPAGE
@@ -60,23 +61,27 @@ enum { ALPHA = 0 };
 #define G_TRACKING_INTERVAL     200 // msec
 
 // TO BE MOVED INTO mediaplayer.h
-#define G_FORMAT_ALL            "*"
+#define G_FILTER_ALL            "*"
 #ifdef Q_WS_WIN
-#  define G_FORMAT_AUDIO        PLAYER_FORMAT_AUDIO(" *.")      PLAYER_FORMAT_PLAYLIST(" *.") PLAYER_FORMAT_IMAGE(".*.")
+#  define G_FILTER_AUDIO        PLAYER_FORMAT_AUDIO(" *.")      PLAYER_FORMAT_PLAYLIST(" *.") PLAYER_FORMAT_IMAGE(".*.")
 #else
-#  define G_FORMAT_AUDIO        PLAYER_FORMAT_AUDIO(" *.")      PLAYER_FORMAT_IMAGE(".*.")
+#  define G_FILTER_AUDIO        PLAYER_FORMAT_AUDIO(" *.")      PLAYER_FORMAT_IMAGE(".*.")
 #endif // Q_WS_WIN
-#define G_FORMAT_VIDEO          PLAYER_FORMAT_VIDEO(" *.")      PLAYER_FORMAT_IMAGE(".*.")
-#define G_FORMAT_PICTURE        PLAYER_FORMAT_PICTURE(" *.")
-#define G_FORMAT_SUBTITLE       PLAYER_FORMAT_SUBTITLE(" *.")
+#define G_FILTER_VIDEO          PLAYER_FORMAT_VIDEO(" *.")      PLAYER_FORMAT_IMAGE(".*.")
+#define G_FILTER_PICTURE        PLAYER_FORMAT_PICTURE(" *.")
+#define G_FILTER_SUBTITLE       PLAYER_FORMAT_SUBTITLE(" *.")
 
-#define G_FORMAT_PROGRAM_(...)  __VA_ARGS__ "exe" __VA_ARGS__ "lnk"
-#define G_FORMAT_PROGRAM        G_FORMAT_PROGRAM_(" *.")
-#define G_FORMAT_MEDIA          G_FORMAT_VIDEO G_FORMAT_AUDIO G_FORMAT_PICTURE
+#define G_FORMAT_PROGRAM(...)   __VA_ARGS__ "exe" __VA_ARGS__ "lnk"
+#define G_FORMAT_ANNOTATION(...) __VA_ARGS__ "xml" __VA_ARGS__ "json"
+#define G_FORMAT_DEVICE(...)    __VA_ARGS__ "DVD" __VA_ARGS__ "AudioCD"
+
+#define G_FILTER_PROGRAM        G_FORMAT_PROGRAM(" *.")
+#define G_FILTER_ANNOTATION     G_FORMAT_ANNOTATION(" *.")
+#define G_FILTER_MEDIA          G_FILTER_VIDEO G_FILTER_AUDIO G_FILTER_PICTURE
 #ifdef USE_MODE_SIGNAL
-#  define G_FORMAT_SUPPORTED    G_FORMAT_PROGRAM G_FORMAT_MEDIA
+#  define G_FILTER_SUPPORTED    G_FILTER_PROGRAM G_FILTER_MEDIA
 #else
-#  define G_FORMAT_SUPPORTED    G_FORMAT_MEDIA
+#  define G_FILTER_SUPPORTED    G_FILTER_MEDIA
 #endif // USE_MODE_SIGNAL
 
 #define VLC_AUTOHIDE_TIMEOUT    1500    // in msecs, same as VLC
@@ -89,7 +94,7 @@ enum { ALPHA = 0 };
 
 #ifdef Q_OS_WIN
 #  define G_PATH_PROFILE        QtWin::getAppDataPath() + "/" G_ORGANIZATION "/" G_APPLICATION
-#elif defined(Q_OS_MAC)
+#elif defined Q_OS_MAC
 #  define G_PATH_PROFILE        QtMac::homeApplicationSupportPath() + "/" G_ORGANIZATION "/" G_APPLICATION
 #else
 #  define G_PATH_PROFILE        QDir::homePath() + "/.annot/player"

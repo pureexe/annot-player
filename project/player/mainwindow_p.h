@@ -129,7 +129,7 @@ namespace { namespace task_ { // anonymous
   class updateAnnotations : public QRunnable
   {
     MainWindow *w_;
-    virtual void run() { w_->updateAnnotations(false); } // \override, async = false
+    virtual void run() { w_->updateAnnotations(false); } // \reimp, async = false
   public:
     explicit updateAnnotations(MainWindow *w) : w_(w) { Q_ASSERT(w_); }
   };
@@ -137,7 +137,7 @@ namespace { namespace task_ { // anonymous
   class invalidateMediaAndPlay : public QRunnable
   {
     MainWindow *w_;
-    virtual void run() { w_->invalidateMediaAndPlay(false); } // \override, async = false
+    virtual void run() { w_->invalidateMediaAndPlay(false); } // \reimp, async = false
   public:
     explicit invalidateMediaAndPlay(MainWindow *w) : w_(w) { Q_ASSERT(w_); }
   };
@@ -145,7 +145,7 @@ namespace { namespace task_ { // anonymous
   class checkInternetConnection : public QRunnable
   {
     MainWindow *w_;
-    virtual void run() { w_->checkInternetConnection(false); } // \override, async = false
+    virtual void run() { w_->checkInternetConnection(false); } // \reimp, async = false
   public:
     explicit checkInternetConnection(MainWindow *w)
       : w_(w) { Q_ASSERT(w_); }
@@ -155,7 +155,7 @@ namespace { namespace task_ { // anonymous
   {
     MainWindow *w_;
     QString name_, pass_;
-    virtual void run() { w_->login(name_, pass_, false); } // \override, async = false
+    virtual void run() { w_->login(name_, pass_, false); } // \reimp, async = false
   public:
     login(const QString userName, const QString &password, MainWindow *w)
       : w_(w), name_(userName), pass_(password) { Q_ASSERT(w_); }
@@ -164,7 +164,7 @@ namespace { namespace task_ { // anonymous
   class logout : public QRunnable
   {
     MainWindow *w_;
-    virtual void run() { w_->logout(false); } // \override, async = false
+    virtual void run() { w_->logout(false); } // \reimp, async = false
   public:
     explicit logout(MainWindow *w) : w_(w) { Q_ASSERT(w_); }
   };
@@ -173,7 +173,7 @@ namespace { namespace task_ { // anonymous
   {
     MainWindow *w_;
     bool t_;
-    virtual void run() { w_->setUserAnonymous(t_, false); } // \override, async = false
+    virtual void run() { w_->setUserAnonymous(t_, false); } // \reimp, async = false
   public:
     setUserAnonymous(bool t, MainWindow *w) : w_(w), t_(t) { Q_ASSERT(w_); }
   };
@@ -182,7 +182,7 @@ namespace { namespace task_ { // anonymous
   {
     MainWindow *w_;
     int l_;
-    virtual void run() { w_->setUserLanguage(l_, false); } // \override, async = false
+    virtual void run() { w_->setUserLanguage(l_, false); } // \reimp, async = false
   public:
     setUserLanguage(int l, MainWindow *w) : w_(w), l_(l) { Q_ASSERT(w_); }
   };
@@ -191,7 +191,7 @@ namespace { namespace task_ { // anonymous
   {
     MainWindow *w_;
     QString text_;
-    virtual void run() { w_->chat(text_, false); } // \override, async = false
+    virtual void run() { w_->chat(text_, false); } // \reimp, async = false
   public:
     chat(const QString &text, MainWindow *w) : w_(w), text_(text) { Q_ASSERT(w_); }
   };
@@ -199,7 +199,7 @@ namespace { namespace task_ { // anonymous
   class updateLiveAnnotations : public QRunnable
   {
     MainWindow *w_;
-    virtual void run() { w_->updateLiveAnnotations(false); } // \override, async = false
+    virtual void run() { w_->updateLiveAnnotations(false); } // \reimp, async = false
   public:
     explicit updateLiveAnnotations(MainWindow *w) : w_(w) { Q_ASSERT(w_); }
   };
@@ -208,7 +208,7 @@ namespace { namespace task_ { // anonymous
   {
     MainWindow *w_;
     QString text_;
-    virtual void run() { w_->submitLiveText(text_, false); } // \override, async = false
+    virtual void run() { w_->submitLiveText(text_, false); } // \reimp, async = false
   public:
     submitLiveText(const QString &text, MainWindow *w) : w_(w), text_(text) { Q_ASSERT(w_); }
   };
@@ -217,7 +217,7 @@ namespace { namespace task_ { // anonymous
   {
     MainWindow *w_;
     QString text_;
-    virtual void run() { w_->submitText(text_, false); } // \override, async = false
+    virtual void run() { w_->submitText(text_, false); } // \reimp, async = false
   public:
     submitText(const QString &text, MainWindow *w) : w_(w), text_(text) { Q_ASSERT(w_); }
   };
@@ -226,7 +226,7 @@ namespace { namespace task_ { // anonymous
   {
     MainWindow *w_;
     Alias a_;
-    virtual void run() { w_->submitAlias(a_, false); } // \override, async = false
+    virtual void run() { w_->submitAlias(a_, false); } // \reimp, async = false
   public:
     submitAlias(const Alias &a, MainWindow *w) : w_(w), a_(a) { Q_ASSERT(w_); }
   };
@@ -235,7 +235,7 @@ namespace { namespace task_ { // anonymous
   {
     MainWindow *w_;
     QString t_;
-    virtual void run() { w_->setToken(t_, false); } // \override, async = false
+    virtual void run() { w_->setToken(t_, false); } // \reimp, async = false
   public:
     setToken(const QString &t, MainWindow *w) : w_(w), t_(t) { Q_ASSERT(w_); }
   };
@@ -245,7 +245,7 @@ namespace { namespace task_ { // anonymous
     MainWindow *w_;
     QString path_;
     QString url_;
-    virtual void run() { w_->signFileWithUrl(path_, url_, false); } // \override, async = false
+    virtual void run() { w_->signFileWithUrl(path_, url_, false); } // \reimp, async = false
   public:
     signFileWithUrl(const QString &path, const QString &url, MainWindow *w)
       : w_(w), path_(path), url_(url) { Q_ASSERT(w_); }
@@ -287,7 +287,7 @@ public:
 
 protected:
   virtual bool
-  eventFilter(QObject *hook, QEvent *event) // \override  Hook event filter.
+  eventFilter(QObject *hook, QEvent *event) // \reimp  Hook event filter.
   {
     // jichi 8/2/2011: Ugly fix for cancelling context menu.
     //static bool contextMenuPoppedUp = false;

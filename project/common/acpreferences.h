@@ -34,11 +34,11 @@ public:
   void finalize();
   void setTabs(ulong mask) { tabs_ = mask; }
 
-  virtual QSize sizeHint() const; ///< \override
+  virtual QSize sizeHint() const; ///< \reimp
 
   // - Events -
 public slots:
-  virtual void setVisible(bool visible); ///< \override
+  virtual void setVisible(bool visible); ///< \reimp
 protected slots:
   void save();
   void load();

@@ -41,11 +41,13 @@ public slots:
   void logStopped();
   void logPlayerError();
   void logTrackNumberChanged(int track);
+  void logAudioChannelChanged(int ch);
   void logPlayRateChanged(qreal rate);
 
   void logCanvasEnabled(bool t);
 
   void logTranslatorNetworkError(const QString &message);
+  void logTextEncodingChanged(const QString &enc);
 
   void logLoginRequested(const QString &userName);
   void logLoginSucceeded(const QString &userName);
@@ -54,6 +56,7 @@ public slots:
   void logLogoutFinished();
 
   void logSeeked(qint64 msecs);
+  void logAudioDelayChanged(qint64 msecs);
 
   void logCacheCleared();
 

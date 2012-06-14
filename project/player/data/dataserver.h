@@ -30,16 +30,16 @@ class DataServer : public QObject
 public:
   DataServer(SignalHub *hub, ServerAgent *server,
       AnnotationDatabase *cache, AnnotationDatabase *queue, QObject *parent = 0)
-    : Base(parent), preferLocal_(false), hub_(hub), server_(server), cache_(cache), queue_(queue) { }
+    : Base(parent), preferCache_(false), hub_(hub), server_(server), cache_(cache), queue_(queue) { }
 
-  bool preferLocal() const { return preferLocal_; }
+  bool preferCache() const { return preferCache_; }
 
 signals:
-  void preferLocalChanged(bool t);
+  void preferCacheChanged(bool t);
 
 public slots:
   void dispose();
-  void setPreferLocal(bool t) { preferLocal_ = t; emit preferLocalChanged(preferLocal_); }
+  void setPreferCache(bool t) { preferCache_ = t; emit preferCacheChanged(preferCache_); }
 
   // - Submission -
 public:
@@ -74,11 +74,11 @@ public:
 
   AnnotationList selectAnnotationsWithTokenId(qint64 tid, bool invalidateCache = false);
   AliasList selectAliasesWithTokenId(qint64 tid);
-  AnnotationList selectRelatedAnnotationsWithTokenId(qint64 tid, bool invalidateCache = false);
+  AnnotationList selectRelatedAnnotationsWithTokenId(qint64 tid, bool invalidateCache = false, bool *fromCache = 0);
   AliasList selectRelatedAliasesWithTokenId(qint64 tid);
 
   AliasList selectAliasesWithToken(const Token &token);
-  AnnotationList selectAnnotationsWithToken(const Token &token, bool invalidateCache = false);
+  AnnotationList selectAnnotationsWithToken(const Token &token, bool invalidateCache = false, bool *fromCache = 0);
 
   // - Sync -
 public:
@@ -86,7 +86,7 @@ public:
 
   // - Implementations -
 private:
-  bool preferLocal_;
+  bool preferCache_;
   SignalHub *hub_;
   ServerAgent *server_;
   AnnotationDatabase *cache_,

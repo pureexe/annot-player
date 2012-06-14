@@ -70,7 +70,7 @@ public slots:
   void setDuration(qint64 msecs) { duration_ = msecs; }
 
 protected slots:
-  virtual void run(); ///< \override
+  virtual void run(); ///< \reimp
 
   void onStreamReady()
   { if (!url_.isEmpty()) emit streamReady(url_); }

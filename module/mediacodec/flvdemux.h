@@ -80,9 +80,9 @@ signals:
   void error(QString message);
 
 public slots:
-  virtual void run(); ///< \override
+  virtual void run(); ///< \reimp
 
-  virtual void stop() ///< \override
+  virtual void stop() ///< \reimp
   {
     state_ = Stopped;
     emit stopped();
@@ -163,9 +163,9 @@ signals:
   void error(QString message);
 
 public slots:
-  virtual void run(); ///< \override
+  virtual void run(); ///< \reimp
 
-  virtual void stop() ///< \override
+  virtual void stop() ///< \reimp
   {
     state_ = Stopped;
     demux_->stop();

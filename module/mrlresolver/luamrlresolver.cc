@@ -28,7 +28,7 @@
 #  define LUA_PATH "lua/luascript" // omit applicationDirPath, which might contains non-ascii chars and cannot handled by liblua
 #elif defined Q_OS_MAC
 #  define LUA_PATH QCoreApplication::applicationDirPath() + "/lua"
-#elif defined Q_OS_LINUX
+#elif defined Q_WS_X11
 #  define LUA_PATH LUADIR
 #endif // Q_OS_
 
@@ -48,7 +48,7 @@ namespace { namespace task_ {
   {
     LuaMrlResolver *r_;
     QString ref_;
-    virtual void run() { r_->resolveMedia(ref_, false); } // \override, async = false
+    virtual void run() { r_->resolveMedia(ref_, false); } // \reimp, async = false
   public:
     ResolveMedia(const QString &ref, LuaMrlResolver *r)
       : r_(r), ref_(ref) { Q_ASSERT(r_); }
@@ -58,7 +58,7 @@ namespace { namespace task_ {
   {
     LuaMrlResolver *r_;
     QString ref_;
-    virtual void run() { r_->resolveSubtitle(ref_, false); } // \override, async = false
+    virtual void run() { r_->resolveSubtitle(ref_, false); } // \reimp, async = false
   public:
     ResolveSubtitle(const QString &ref, LuaMrlResolver *r)
       : r_(r), ref_(ref) { Q_ASSERT(r_); }

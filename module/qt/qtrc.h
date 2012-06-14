@@ -9,11 +9,11 @@
 
 #define QTRC_TR_NULL      QTRC_NULL
 //#define QTRC_PREFIX_TR    ":/tr/"
-#ifdef Q_OS_LINUX
+#ifdef Q_WS_X11
 #  define QTRC_PREFIX_TR    QT_HOME "translations/"
 #else
 #  define QTRC_PREFIX_TR    QCoreApplication::applicationDirPath() + "/translations/"
-#endif // Q_OS_LINUX
+#endif // Q_WS_X11
 
 // - Backgrounds -
 

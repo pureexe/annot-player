@@ -19,8 +19,6 @@
 #include <QtNetwork/QNetworkProxy>
 #include <QtNetwork/QNetworkReply>
 #include <QtGui>
-#include <ctime>
-#include <cstdlib>
 
 #define DEBUG "main"
 #include "module/debug/debug.h"
@@ -90,10 +88,6 @@ main(int argc, char *argv[])
 
   // Applications
   Application a(argc, argv);
-  // Seed global random generator.
-  time_t now = ::time(0);
-  ::srand(now);
-  ::qsrand(now);
 
   // Register meta types.
   ::registerMetaTypes();

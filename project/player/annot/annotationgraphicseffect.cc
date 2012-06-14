@@ -15,7 +15,9 @@ AnnotationGraphicsEffect::AnnotationGraphicsEffect(QObject *parent)
 #endif // Q_WS_WIN
   setBlurRadius(radius); // in pixels
   setOffset(offset); // in pixels
-  setColor(Qt::black);
+  //setColor(Qt::black);
+  //setColor(Qt::red);
+  //setColor(HALO_COLOR);
   setOpacity(0.0);
 }
 

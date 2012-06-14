@@ -47,7 +47,7 @@ public slots:
   void clear(); ///< also delete the gesetures owned by the object
 
 protected:
-  virtual bool eventFilter(QObject *obj, QEvent *event); ///< \override
+  virtual bool eventFilter(QObject *obj, QEvent *event); ///< \reimp
 
   bool mousePressEventFilter(QMouseEvent *event);
   bool mouseReleaseEventFilter(QMouseEvent *event);

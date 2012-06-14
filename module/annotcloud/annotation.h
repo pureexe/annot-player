@@ -7,6 +7,7 @@
 #include "module/annotcloud/annottag.h"
 #include "module/annotcloud/traits.h"
 #include "module/annotcloud/user.h"
+#include <QtCore/QByteArray>
 #include <QtCore/QList>
 #include <QtCore/QMetaType>
 #include <QtCore/QString>
@@ -259,11 +260,12 @@ namespace AnnotCloud {
       return h;
     }
 
-  protected:
+  public:
     static QByteArray digest(const QByteArray &input);
 
     static qint64 hash(const QByteArray &input);
     static qint64 rehash(const QByteArray &input, qint64 h);
+    static qint64 hash(const QList<QByteArray> &l);
   };
 
   typedef QList<Annotation> AnnotationList;

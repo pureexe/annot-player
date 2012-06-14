@@ -35,10 +35,10 @@ public:
 
   // - Events -
 protected:
-  virtual void enterEvent(QEvent *event); ///< \override
-  virtual void leaveEvent(QEvent *event); ///< \override
+  virtual void enterEvent(QEvent *event); ///< \reimp
+  virtual void leaveEvent(QEvent *event); ///< \reimp
 
-  virtual void mousePressEvent(QMouseEvent *event); ///< \override
+  virtual void mousePressEvent(QMouseEvent *event); ///< \reimp
   //virtual void mouseMoveEvent(QMouseEvent *event); // NEVER TRIGGERED orz
 };
 

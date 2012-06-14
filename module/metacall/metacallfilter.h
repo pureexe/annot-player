@@ -49,7 +49,7 @@ public slots:
 
   // - Implementation -
 public:
-  virtual bool eventFilter(QObject *watched, QEvent *e); ///< \override
+  virtual bool eventFilter(QObject *watched, QEvent *e); ///< \reimp
 private slots:
   void acceptConnection(); ///< server creates connection
   void readSocket();  ///< receive and invoke meta call from connected socket

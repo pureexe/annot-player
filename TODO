@@ -35,16 +35,10 @@ http://qt-project.org/wiki/Category:Add-ons
   - use JSP and a simpler HTML5 webpage
   - add SNS
 - ads
-  - acfun
-    - statistics
-    - annot manipulation
-    - annot time shift
-    - browser
-      - nicovideo
-      - youku
-    - youtube e.g. liuzhiqinmo
-    - mms
   - nicovideo
+  - 4chan/hongfire
+    - english nicovideo subtitle
+    - english galgame
 
 - server
   - backup mysql to my own machine
@@ -63,53 +57,53 @@ http://qt-project.org/wiki/Category:Add-ons
 - car certification goto dmv
 - car certification goto walmart
 
-- fixme
-  - server
-    - FIXME: duplicated aliasname in database
-  - server: update
+# features
+  - acfun
+    - motionless scheduling
+    - avatar
+    - catch/push annot
+    - statistics
+    - select annot and show userid
+    - delete annot
+    - scale/direction
+    - annot time shift
+  - local file
+    - update latest
+  - browser
+    - downloader
+    - nicovideo
+    - translation
+    - youku
 
-# 0.1.6.2
+  - nico
+    - motionless scheduling
+    - avatar
+    - catch/push annot
+    - statistics
+    - select annot and show userid
+    - delete annot
+    - scale/direction
+    - annot time shift
+  - browser
+    - downloader
+    - nicovideo
+    - translation
+    - youku
+
+  - galgame
+    - translation
+      - channel
+      - encoding
+    - annotation
+
+# 0.1.6.4
 
 - translation
-  - fixme: able to change text encoding
-  - text encoding for malie is broken
-
+  - BING api si depricated after Aug 1!!!!!
+    - steal Google API again.
+  - check if it is possible to bypass apploc on Chinese Windows XP
 - player
-  - schelar: add support to deal with pause
-- windows fixme
-  - player
-    - debug close video crash
-    - debug hang when close current video
-- player
-  - remove osdwindow
-  - double click screen to pause
-    - after pause, show two big button: resume, and fullscreen
-- downloader
-  - change downloadtask to inherit qthread
-  - use treeview instead
-- player
-  - able to stream more than 1 file at the same time, and switch between diff stream session
-  - player/downloader
-   - show taskbar progress
-     http://www.qtcentre.org/threads/26974-Qt-and-windows-7-new-Api
-     http://msdn.microsoft.com/en-us/library/dd391697(VS.85).aspx
-     deploy in windows xp to see if it works
-     - requires explorerframe.dll, might not available on windows xp
-- player
-  - ffmpeg thumbnail
-    - use ffmpeg to provide thumbnails for image
-    http://stackoverflow.com/questions/1908411/how-to-use-ffmpeg
-    http://stackoverflow.com/questions/8679390/ffmpeg-extracting-20-images-from-a-video-of-variable-length
-
-- common
-  - add background to spinbox and timeedit
-- mac
-  - open file broken due to slow startup
-  - drag drop is not working
-
-## LATER
-
-- player UI
+  - debug register DVD/VCD SDVD
   - eliminate osdwindow
     - using setAttribute(Qt::WA_TranslucentBackground);
       - use a qobject with timer for tracking rather than hardcode to annotationview
@@ -120,6 +114,50 @@ http://qt-project.org/wiki/Category:Add-ons
     - create a pseodu object saving current window
     - eliminite osdwindow for embedded player
     - eliminite osdwindow for annotationview
+  - double click fullscreen screen to pause
+    - after pause, show two big button: resume, and fullscreen
+      - fullscreen
+      - minimize
+      - play
+      - stop
+    - design it as QUICK LAUNCH similar to appstore or galgame
+
+- linux
+  - update to lua5.2
+- player
+  - FIXME: CTRL+=  and CTRL+SHIFT+= sometimes do work, maybe osdwindow has focus?
+- common
+  - add background to spinbox and timeedit
+- windows fixme
+  - player
+    - debug close video crash
+    - debug hang when close current video
+- mac
+  - open file broken due to slow startup
+  - drag drop is not working
+
+- player
+  - player/downloader
+   - show taskbar progress
+     http://www.qtcentre.org/threads/26974-Qt-and-windows-7-new-Api
+     http://msdn.microsoft.com/en-us/library/dd391697(VS.85).aspx
+     deploy in windows xp to see if it works
+     - requires explorerframe.dll, might not available on windows xp
+
+## LATER
+
+- downloader
+  - use treeview instead
+ - player
+  - able to stream more than 1 file at the same time, and switch between diff stream session
+
+- player
+  - reuse indicator icon from my website
+  - ffmpeg thumbnail
+    - use ffmpeg to provide thumbnails for image
+    http://stackoverflow.com/questions/1908411/how-to-use-ffmpeg
+    http://stackoverflow.com/questions/8679390/ffmpeg-extracting-20-images-from-a-video-of-variable-length
+- player UI
   - osdcontroller to replace osdwindow
     - intercept raise request
     - track target view size/pos

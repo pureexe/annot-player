@@ -33,7 +33,7 @@ signals:
 
   // - Events -
 protected:
-  virtual void mouseDoubleClickEvent(QMouseEvent *e) ///< \override
+  virtual void mouseDoubleClickEvent(QMouseEvent *e) ///< \reimp
   {
     if (e->button() == Qt::LeftButton && !e->modifiers()) {
       emit doubleClicked();
@@ -42,7 +42,7 @@ protected:
       Base::mouseDoubleClickEvent(e);
   }
 
-  virtual void mouseReleaseEvent(QMouseEvent *e) ///< \override
+  virtual void mouseReleaseEvent(QMouseEvent *e) ///< \reimp
   {
     if (e->button() == Qt::RightButton)
       emit rightButtonClicked();

@@ -40,8 +40,8 @@ public slots:
 
   // - Events -
 protected:
-  virtual void contextMenuEvent(QContextMenuEvent *e); ///< \override
-  virtual QWebView *createWindow(QWebPage::WebWindowType type); ///< \override
+  virtual void contextMenuEvent(QContextMenuEvent *e); ///< \reimp
+  virtual QWebView *createWindow(QWebPage::WebWindowType type); ///< \reimp
 
   QString selectedUrl() const;
 
@@ -63,7 +63,7 @@ protected slots:
   void searchWithEngine(int engine);
   void invalidateSelection();
 
-  virtual void showLink(const QString &url, const QString &title, const QString &content); ///< \override
+  virtual void showLink(const QString &url, const QString &title, const QString &content); ///< \reimp
   void highlightDownloadableLink(const QString &link, const QString &title, const QString &content);
 
 private:

@@ -8,6 +8,7 @@
 #include <QtGui/QGraphicsTextItem>
 
 QT_BEGIN_NAMESPACE
+class QColor;
 class QContextMenuEvent;
 //class QGraphicsView;
 class QGraphicsScene;
@@ -64,6 +65,7 @@ public:
   bool isMetaVisible() const;
   bool isAvatarVisible() const;
   bool isDragging() const;
+  bool isOwner() const;
 
   ///  Override
   virtual int type() const { return AnnotationGraphicsItemType; }
@@ -72,7 +74,7 @@ public:
 
   bool isPaused() const;
 
-  //  \override  Make the item easier to be selected. - TODO: It is better to do this at viewer level rather the messing up the item itself.
+  //  \reimp  Make the item easier to be selected. - TODO: It is better to do this at viewer level rather the messing up the item itself.
   //virtual bool contains(const QPointF &point) const
   //{ return Base::boundingRect().contains(point); }
 
@@ -92,6 +94,9 @@ protected:
   //static bool isSubtitle(const QString &text);
 
 public slots:
+  void setOutlineColor(const QColor &color);
+  void resetOutlineColor();
+  void updateOutlineColor();
   void setMetaVisible(bool t) { metaVisible_ = t; }
   void setMetaVisibleAndUpdate(bool t);
   void setAvatarVisible(bool t) { avatarVisible_ = t; }
@@ -161,21 +166,21 @@ protected:
 
   // Events:
 public:
-  virtual void contextMenuEvent(QContextMenuEvent *event); ///< \override
-  virtual void mouseDoubleClickEvent(QMouseEvent *event); ///< \override
-  virtual void mousePressEvent(QMouseEvent *event); ///< \override
-  virtual void mouseReleaseEvent(QMouseEvent *event); ///< \override
-  virtual void mouseMoveEvent(QMouseEvent *event); ///< \override
+  virtual void contextMenuEvent(QContextMenuEvent *event); ///< \reimp
+  virtual void mouseDoubleClickEvent(QMouseEvent *event); ///< \reimp
+  virtual void mousePressEvent(QMouseEvent *event); ///< \reimp
+  virtual void mouseReleaseEvent(QMouseEvent *event); ///< \reimp
+  virtual void mouseMoveEvent(QMouseEvent *event); ///< \reimp
 protected:
-  virtual void contextMenuEvent(QGraphicsSceneContextMenuEvent *event); ///< \override
-  virtual void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event); ///< \override
-  virtual void mousePressEvent(QGraphicsSceneMouseEvent *event); ///< \override
-  virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event); ///< \override
-  virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *event); ///< \override
+  virtual void contextMenuEvent(QGraphicsSceneContextMenuEvent *event); ///< \reimp
+  virtual void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event); ///< \reimp
+  virtual void mousePressEvent(QGraphicsSceneMouseEvent *event); ///< \reimp
+  virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event); ///< \reimp
+  virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *event); ///< \reimp
 
-  //virtual void hoverEnterEvent(QGraphicsSceneHoverEvent *event); ///< \override
-  //virtual void hoverMoveEvent(QGraphicsSceneHoverEvent *event); ///< \override
-  //virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent *event); ///< \override
+  //virtual void hoverEnterEvent(QGraphicsSceneHoverEvent *event); ///< \reimp
+  //virtual void hoverMoveEvent(QGraphicsSceneHoverEvent *event); ///< \reimp
+  //virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent *event); ///< \reimp
 
 private:
   void setDefaultStyle();

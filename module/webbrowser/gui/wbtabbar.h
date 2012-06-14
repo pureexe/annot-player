@@ -23,7 +23,7 @@ signals:
 
   // - Events -
 protected:
-  virtual void mouseDoubleClickEvent(QMouseEvent *e) ///< \override
+  virtual void mouseDoubleClickEvent(QMouseEvent *e) ///< \reimp
   {
     if (e->button() == Qt::LeftButton && !e->modifiers()) {
       emit doubleClicked(tabAt(e->globalPos()));

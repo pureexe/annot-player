@@ -25,23 +25,23 @@ public:
   const QByteArray &data() const { return data_; }
 
 public:
-  virtual qint64 size() const { return data_.size(); } ///< \override
-  virtual qint64 pos() const { return pos_; } ///< \override
+  virtual qint64 size() const { return data_.size(); } ///< \reimp
+  virtual qint64 pos() const { return pos_; } ///< \reimp
 
-  virtual bool reset()  { pos_ = 0; return true; } ///< \override
+  virtual bool reset()  { pos_ = 0; return true; } ///< \reimp
 
-  virtual bool seek(qint64 pos) ///< \override
+  virtual bool seek(qint64 pos) ///< \reimp
   { if (pos_ >= data_.size()) return false; pos_ = pos; return true; }
 
-  virtual qint64 skip(qint64 count) ///< \override
+  virtual qint64 skip(qint64 count) ///< \reimp
   { qint64 diff = qMin(count, data_.size() - pos_); pos_ += diff; return diff; }
 
-  virtual qint64 read(char *data, qint64 maxSize); ///< \override
+  virtual qint64 read(char *data, qint64 maxSize); ///< \reimp
 
-  virtual QByteArray readAll()  ///< \override
+  virtual QByteArray readAll()  ///< \reimp
   { return pos_ ? data_.mid(pos_) : data_; }
 
-  virtual bool writeFile(const QString &path); ///< \override
+  virtual bool writeFile(const QString &path); ///< \reimp
 };
 
 #endif // DATAINPUTSTREAM_H

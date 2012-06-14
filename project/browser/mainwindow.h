@@ -36,7 +36,7 @@ public:
   explicit MainWindow(QWidget *parent = 0);
 
 public slots:
-  virtual void quit(); ///< \override
+  virtual void quit(); ///< \reimp
   void login();
   void newWindow();
 protected:
@@ -68,14 +68,14 @@ protected slots:
 
   // - Events -
 public slots:
-  virtual void setVisible(bool visible); ///< \override
+  virtual void setVisible(bool visible); ///< \reimp
 protected:
-  virtual bool event(QEvent *e); ///< \override
-  virtual void keyPressEvent(QKeyEvent *e); ///< \override
-  virtual void closeEvent(QCloseEvent *e); ///< \override
-  virtual void focusInEvent(QFocusEvent *e); ///< \override
-  virtual void mouseMoveEvent(QMouseEvent *event); ///< \override
-  virtual void mousePressEvent(QMouseEvent *event); ///< \override
+  virtual bool event(QEvent *e); ///< \reimp
+  virtual void keyPressEvent(QKeyEvent *e); ///< \reimp
+  virtual void closeEvent(QCloseEvent *e); ///< \reimp
+  virtual void focusInEvent(QFocusEvent *e); ///< \reimp
+  virtual void mouseMoveEvent(QMouseEvent *event); ///< \reimp
+  virtual void mousePressEvent(QMouseEvent *event); ///< \reimp
 
   bool isGlobalPosAroundToolBar(const QPoint &pos) const;
 

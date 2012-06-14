@@ -19,7 +19,8 @@ class AssociationPreferencesTab : public AcPreferencesTab
   typedef AssociationPreferencesTab Self;
   typedef AcPreferencesTab Base;
 
-  QStringList supportedSuffices_;
+  QStringList supportedTypes_,
+              supportedRawTypes_;
   WindowsRegistry *registry_;
   QHash<QString, QCheckBox *> toggles_;
   QLineEdit *searchEdit_;
@@ -32,12 +33,13 @@ public:
     : Base(parent), registry_(0) { init(); }
 
 public slots:
-  virtual bool save(); ///< \override
-  virtual void load(); ///< \override
-  virtual void clear(); ///< \override
+  virtual bool save(); ///< \reimp
+  virtual void load(); ///< \reimp
+  virtual void clear(); ///< \reimp
 protected slots:
   void filterToggles(const QString &regexp);
   void toggleType(bool checked, const QString &type);
+  void toggleRawType(bool checked, const QString &type);
 private:
   void init();
   void createLayout();

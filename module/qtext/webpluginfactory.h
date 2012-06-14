@@ -24,14 +24,14 @@ protected:
   explicit WebPluginFactory(QObject *parent = 0);
 
 public:
-  ///  \override;
+  ///  \reimp;
   virtual QObject *create(const QString &mimeType, const QUrl &url,
                           const QStringList &argNames, const QStringList &argValues) const;
 
-  ///  \override;
+  ///  \reimp;
   virtual QList<Plugin> plugins() const { return plugins_; }
 
-  virtual void refreshPlugins() { } ///< \override;
+  virtual void refreshPlugins() { } ///< \reimp;
 
 protected slots:
   void updatePlugins();

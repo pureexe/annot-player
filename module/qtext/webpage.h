@@ -24,7 +24,7 @@ public:
 
   QString hoveredLink() const { return hoveredLink_; }
 
-  virtual bool event(QEvent *e); ///< \override
+  virtual bool event(QEvent *e); ///< \reimp
 
 public slots:
   void scrollTop();
@@ -41,12 +41,14 @@ private slots:
 
   // - Extensions -
 public:
-  virtual bool supportsExtension(Extension extension) const; ///< \override
-  virtual bool extension(Extension extension, const ExtensionOption *option = 0, ExtensionReturn *output = 0); ///< \override
+  virtual bool supportsExtension(Extension extension) const; ///< \reimp
+  virtual bool extension(Extension extension, const ExtensionOption *option = 0, ExtensionReturn *output = 0); ///< \reimp
 
 protected:
   bool errorPageExtension(const ErrorPageExtensionOption *option = 0, ErrorPageExtensionReturn *output = 0);
-  //virtual QObject *createPlugin(const QString &classid, const QUrl &url, const QStringList &paramNames, const QStringList &paramValues); ///< \override
+  //virtual QObject *createPlugin(const QString &classid, const QUrl &url, const QStringList &paramNames, const QStringList &paramValues); ///< \reimp
+
+  virtual QString userAgentForUrl(const QUrl &url) const; ///< \reimp
 };
 
 } // namespace QtExt

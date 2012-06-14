@@ -81,11 +81,11 @@ protected slots:
 
   // - Events -
 public:
-  virtual bool event(QEvent *e); ///< \override
+  virtual bool event(QEvent *e); ///< \reimp
   void gestureEvent(QGestureEvent *e);
 protected:
-  virtual void contextMenuEvent(QContextMenuEvent *e); ///< \override
-  virtual void wheelEvent(QWheelEvent *e); ///< \override
+  virtual void contextMenuEvent(QContextMenuEvent *e); ///< \reimp
+  virtual void wheelEvent(QWheelEvent *e); ///< \reimp
 
   void panGesture(QPanGesture *g);
   void pinchGesture(QPinchGesture *g);

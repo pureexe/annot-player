@@ -53,9 +53,18 @@ AcTabView::finalizeLayout()
 
   connect(new QShortcut(QKeySequence("CTRL+0"), this),
           SIGNAL(activated()), tabButtons_[tabCount_ - 1], SLOT(click()));
-  for (int i = 0; i < qMin(tabCount_,8); i++)
+#ifndef Q_WS_MAC
+  connect(new QShortcut(QKeySequence("ALT+0"), this),
+          SIGNAL(activated()), tabButtons_[tabCount_ - 1], SLOT(click()));
+#endif // Q_WS_MAC
+  for (int i = 0; i < qMin(tabCount_,8); i++) {
     connect(new QShortcut(QKeySequence("CTRL+" + QString::number(i+1)), this), SIGNAL(activated()),
             tabButtons_[i], SLOT(click()));
+#ifndef Q_WS_MAC
+    connect(new QShortcut(QKeySequence("ALT+" + QString::number(i+1)), this), SIGNAL(activated()),
+            tabButtons_[i], SLOT(click()));
+#endif // Q_WS_MAC
+  }
 
   new QShortcut(QKeySequence("CTRL+TAB"), this, SLOT(nextTab()));
   new QShortcut(QKeySequence("CTRL+SHIFT+TAB"), this, SLOT(previousTab()));

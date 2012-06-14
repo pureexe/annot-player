@@ -32,6 +32,9 @@ public slots:
   void setUserName(const QString &userName);
   void setPassword(const QString &password);
 
+  void clearUserName() { setUserName(QString()); }
+  void clearPassword() { setPassword(QString()); }
+
 protected slots:
   void login();
 

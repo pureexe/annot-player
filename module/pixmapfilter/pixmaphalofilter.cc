@@ -1,52 +1,70 @@
 // pixmaphalofilter.cc
 // 5/3/2012
+// See: gui/image/pixmapfilter_p.cpp
+
 #include "module/pixmapfilter/pixmaphalofilter.h"
-#include <QtGui/QPainter>
-#include <QtGui/QPixmap>
-#include <QtGui/QImage>
+#include "module/imagefilter/filters.h"
+#include <gui/painting/qpaintengineex_p.h>
+#include <QtGui>
 
 // - Construction -
 
 PixmapHaloFilter::PixmapHaloFilter(QObject *parent)
-  : Base(UserFilter, parent), radius_(0)
+  : Base(UserFilter, parent), offset_(8, 8), color_(63, 63, 63, 180), radius_(1)
 { }
 
+// - Properties -
+
+QRectF
+PixmapHaloFilter::boundingRectFor(const QRectF &rect) const
+{ return rect.united(rect.translated(offset_).adjusted(-radius_, -radius_, radius_, radius_)); }
 
 // - Paint -
 
 void
-PixmapHaloFilter::draw(QPainter *p, const QPointF &pos, const QPixmap &pm, const QRectF &src) const
+PixmapHaloFilter::draw(QPainter *p, const QPointF &pos, const QPixmap &px, const QRectF &src) const
 {
-  Q_ASSERT(p);
-  QImage image = src.isEmpty() ? pm.toImage() :
-                 pm.copy(src.toRect()).toImage();
-  if (image.isNull())
+  if (px.isNull())
     return;
-  p->drawImage(pos, transform(image));
-}
 
-QImage&
-PixmapHaloFilter::transform(QImage &image) const
-{
-  if (image.isNull())
-    return image;
-
-  QSize size = image.size();
-  if (size.isEmpty())
-    return image;
-
-  int width = image.width(),
-      height = image.height();
-  QColor c;
-  for (int y = 0; y < height; y++) {
-    for (int x = 0; x < width; x++) {
-      c = image.pixel(x, y);
-      //c.setAlpha(0); // CHECKPOINT
-      image.setPixel(x, y, c.rgba());
-    }
+  QPaintEngine *e = p->paintEngine();
+  Base *filter = e && e->isExtended() ?
+        static_cast<QPaintEngineEx *>(e)->pixmapFilter(type(), this) :
+        0;
+  Self *haloFilter = static_cast<Self *>(filter);
+  if (haloFilter) {
+    haloFilter->setColor(color_);
+    haloFilter->setBlurRadius(radius_);
+    haloFilter->setOffset(offset_);
+    haloFilter->draw(p, pos, px, src);
+    return;
   }
 
-  return image;
+  QImage tmp(px.size(), QImage::Format_ARGB32_Premultiplied);
+  tmp.fill(0);
+  QPainter tmpPainter(&tmp);
+  tmpPainter.setCompositionMode(QPainter::CompositionMode_Source);
+  tmpPainter.drawPixmap(offset_, px);
+  tmpPainter.end();
+
+  // blur the alpha channel
+  QImage blurred(tmp.size(), QImage::Format_ARGB32_Premultiplied);
+  blurred.fill(0);
+  QPainter blurPainter(&blurred);
+  ::blurImage(&blurPainter, tmp, radius_, false, true);
+  blurPainter.end();
+
+  // blacken the image...
+  QPainter blackenPainter(&blurred);
+  blackenPainter.setCompositionMode(QPainter::CompositionMode_SourceIn);
+  blackenPainter.fillRect(blurred.rect(), color_);
+  blackenPainter.end();
+
+  // draw the blurred drop shadow...
+  p->drawImage(pos, blurred);
+
+  // Draw the actual pixmap...
+  p->drawPixmap(pos, px, src);
 }
 
 // EOF

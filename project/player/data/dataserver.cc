@@ -31,7 +31,7 @@ DataServer::submitToken(const Token &token)
 {
   DOUT("enter");
   qint64 id = 0;
-  if (preferLocal_ && cache_->isValid() && token.hasDigest())
+  if (preferCache_ && cache_->isValid() && token.hasDigest())
     id = cache_->selectTokenWithDigest(token.digest(), token.part()).id();
   if (!id && server_->isConnected()) {
     if (server_->isAuthorized())
@@ -39,7 +39,7 @@ DataServer::submitToken(const Token &token)
     else
       id = server_->selectTokenId(token);
   }
-  if (!preferLocal_ && !id && cache_->isValid() && token.hasDigest())
+  if (!preferCache_ && !id && cache_->isValid() && token.hasDigest())
     id = cache_->selectTokenWithDigest(token.digest(), token.part()).id();
   DOUT("exit: ret =" << id);
   return id;
@@ -272,7 +272,7 @@ DataServer::selectTokenWithId(qint64 id)
 {
   DOUT("enter: id =" << id);
   Token ret;
-  if (preferLocal_ && cache_->isValid())
+  if (preferCache_ && cache_->isValid())
     ret = cache_->selectTokenWithId(id);
   if (!ret.isValid()) {
     if (server_->isConnected()) {
@@ -281,7 +281,7 @@ DataServer::selectTokenWithId(qint64 id)
         cache_->deleteTokenWithId(ret.id());
         cache_->insertToken(ret);
       }
-    } else if (!preferLocal_ && cache_->isValid())
+    } else if (!preferCache_ && cache_->isValid())
       ret = cache_->selectTokenWithId(id);
   }
   DOUT("exit: tid =" << ret.id());
@@ -293,7 +293,7 @@ DataServer::selectTokenWithDigest(const QString &digest, qint32 part)
 {
   DOUT("enter: digest =" << digest);
   Token ret;
-  if (preferLocal_ && cache_->isValid())
+  if (preferCache_ && cache_->isValid())
     ret = cache_->selectTokenWithDigest(digest, part);
   if (!ret.isValid()) {
     if (server_->isConnected()) {
@@ -302,7 +302,7 @@ DataServer::selectTokenWithDigest(const QString &digest, qint32 part)
         cache_->deleteTokenWithId(ret.id());
         cache_->insertToken(ret);
       }
-    } else if (!preferLocal_ && cache_->isValid())
+    } else if (!preferCache_ && cache_->isValid())
       ret = cache_->selectTokenWithDigest(digest, part);
   }
   DOUT("exit: tid =" << ret.id());
@@ -313,9 +313,9 @@ AnnotationList
 DataServer::selectAnnotationsWithTokenId(qint64 tid, bool invalidateCache)
 {
   DOUT("enter: tid =" << tid);
-  bool preferLocal = preferLocal_ && !invalidateCache;
+  bool preferCache = preferCache_ && !invalidateCache;
   AnnotationList ret;
-  if (preferLocal && cache_->isValid())
+  if (preferCache && cache_->isValid())
     ret = cache_->selectAnnotationsWithTokenId(tid);
   if (ret.isEmpty()) {
     if (server_->isConnected()) {
@@ -324,7 +324,7 @@ DataServer::selectAnnotationsWithTokenId(qint64 tid, bool invalidateCache)
         cache_->deleteAnnotationsWithTokenId(tid);
         cache_->insertAnnotations(ret);
       }
-    } else if (!preferLocal && cache_->isValid())
+    } else if (!preferCache && cache_->isValid())
       ret = cache_->selectAnnotationsWithTokenId(tid);
   }
   DOUT("exit: count =" << ret.size());
@@ -336,7 +336,7 @@ DataServer::selectAliasesWithTokenId(qint64 tid)
 {
   DOUT("enter: tid =" << tid);
   AliasList ret;
-  if (preferLocal_ && cache_->isValid())
+  if (preferCache_ && cache_->isValid())
     ret = cache_->selectAliasesWithTokenId(tid);
   if (ret.isEmpty()) {
     if (server_->isConnected()) {
@@ -345,7 +345,7 @@ DataServer::selectAliasesWithTokenId(qint64 tid)
         cache_->deleteAliasesWithTokenId(tid);
         cache_->insertAliases(ret);
       }
-    } else if (!preferLocal_ && cache_->isValid())
+    } else if (!preferCache_ && cache_->isValid())
       ret = cache_->selectAliasesWithTokenId(tid);
   }
   DOUT("exit: count =" << ret.size());
@@ -357,7 +357,7 @@ DataServer::selectRelatedAliasesWithTokenId(qint64 tid)
 {
   DOUT("enter: tid =" << tid);
   AliasList ret;
-  if (preferLocal_ && cache_->isValid())
+  if (preferCache_ && cache_->isValid())
     ret = cache_->selectAliasesWithTokenId(tid);
   if (ret.isEmpty()) {
     if (server_->isConnected()) {
@@ -367,7 +367,7 @@ DataServer::selectRelatedAliasesWithTokenId(qint64 tid)
         if (!ret.isEmpty())
           cache_->insertAliases(ret);
       }
-    } else if (!preferLocal_ && cache_->isValid())
+    } else if (!preferCache_ && cache_->isValid())
       ret = cache_->selectAliasesWithTokenId(tid);
   }
   DOUT("exit: count =" << ret.size());
@@ -375,13 +375,16 @@ DataServer::selectRelatedAliasesWithTokenId(qint64 tid)
 }
 
 AnnotationList
-DataServer::selectRelatedAnnotationsWithTokenId(qint64 tid, bool invalidateCache)
+DataServer::selectRelatedAnnotationsWithTokenId(qint64 tid, bool invalidateCache, bool *fromCache)
 {
   DOUT("enter: tid =" << tid);
-  bool preferLocal = preferLocal_ && !invalidateCache;
+  bool preferCache = preferCache_ && !invalidateCache;
   AnnotationList ret;
-  if (preferLocal && cache_->isValid())
+  bool cached = false;
+  if (preferCache && cache_->isValid()) {
     ret = cache_->selectAnnotationsWithTokenId(tid);
+    cached = true;
+  }
   if (ret.isEmpty()) {
     if (server_->isConnected()) {
       ret = server_->selectRelatedAnnotationsWithTokenId(tid);
@@ -396,9 +399,13 @@ DataServer::selectRelatedAnnotationsWithTokenId(qint64 tid, bool invalidateCache
           cache_->insertAnnotations(l);
         }
       }
-    } else if (!preferLocal && cache_->isValid())
+    } else if (!preferCache && cache_->isValid()) {
       ret = cache_->selectAnnotationsWithTokenId(tid);
+      cached = true;
+    }
   }
+  if (fromCache)
+    *fromCache = cached;
   DOUT("exit: count =" << ret.size());
   return ret;
 }
@@ -437,7 +444,7 @@ DataServer::selectAliasesWithToken(const Token &token)
 {
   DOUT("enter");
   AliasList ret;
-  if (preferLocal_ && cache_->isValid()) {
+  if (preferCache_ && cache_->isValid()) {
     if (token.isValid())
       ret = cache_->selectAliasesWithTokenId(token.id());
     else if (token.hasDigest())
@@ -446,7 +453,7 @@ DataServer::selectAliasesWithToken(const Token &token)
   if (ret.isEmpty()) {
     if (token.isValid())
       ret = selectAliasesWithTokenId(token.id());
-    else if (!preferLocal_ && token.hasDigest() && cache_->isValid())
+    else if (!preferCache_ && token.hasDigest() && cache_->isValid())
       ret = cache_->selectAliasesWithTokenDigest(token.digest(), token.part());
   }
   DOUT("exit");
@@ -454,23 +461,33 @@ DataServer::selectAliasesWithToken(const Token &token)
 }
 
 AnnotationList
-DataServer::selectAnnotationsWithToken(const Token &token, bool invalidateCache)
+DataServer::selectAnnotationsWithToken(const Token &token, bool invalidateCache, bool *fromCache)
 {
   DOUT("enter");
-  bool preferLocal = preferLocal_ && !invalidateCache;
+  bool preferCache = preferCache_ && !invalidateCache;
   AnnotationList ret;
-  if (preferLocal && cache_->isValid()) {
-    if (token.isValid())
+  if (fromCache)
+    *fromCache = false;
+  bool cached = false;
+  if (preferCache && cache_->isValid()) {
+    if (token.isValid()) {
       ret = cache_->selectAnnotationsWithTokenId(token.id());
-    else if (token.hasDigest())
+      cached = true;
+    } else if (token.hasDigest()) {
       ret = cache_->selectAnnotationsWithTokenDigest(token.digest(), token.part());
+      cached = true;
+    }
   }
   if (ret.isEmpty()) {
     if (token.isValid())
-      ret = selectRelatedAnnotationsWithTokenId(token.id(), invalidateCache);
-    else if (!preferLocal && token.hasDigest() && cache_->isValid())
+      ret = selectRelatedAnnotationsWithTokenId(token.id(), invalidateCache, fromCache);
+    else if (!preferCache && token.hasDigest() && cache_->isValid()) {
       ret = cache_->selectAnnotationsWithTokenDigest(token.digest(), token.part());
+      cached = true;
+    }
   }
+  if (fromCache && !*fromCache && cached)
+    *fromCache = true;
   DOUT("exit: count =" << ret.size());
   return ret;
 }

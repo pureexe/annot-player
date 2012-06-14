@@ -21,10 +21,10 @@ protected:
     : Base(env, in, toc, duration) { }
 
 protected:
-  ///  \override
+  ///  \reimp
   virtual FramedSource *createNewStreamSource(unsigned clientSessionId,
                                               unsigned &estBitrate);
-  ///  \override
+  ///  \reimp
   virtual RTPSink *createNewRTPSink(Groupsock *rtpGroupsock,
                                     unsigned char rtpPayloadTypeIfDynamic,
                                     FramedSource *inputSource);

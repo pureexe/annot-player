@@ -39,8 +39,8 @@ protected:
   InputStream *in() const { return in_; }
 
 private:
-  virtual void doGetNextFrame(); ///< \override
-  virtual void doStopGettingFrames(); ///< \override
+  virtual void doGetNextFrame(); ///< \reimp
+  virtual void doStopGettingFrames(); ///< \reimp
 };
 
 #endif // FRAMEDSTREAMSOURCE_H

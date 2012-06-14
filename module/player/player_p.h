@@ -28,6 +28,10 @@ extern "C" {
 #  define VLC_DEBUG
 #endif // PLAYER_DEBUG
 
+#ifdef Q_OS_MAC
+#  define unique_ptr  auto_ptr  // as llvm does not support c++0x at the moment
+#endif // Q_OS_MAC
+
 // - VLC arguments -
 // http://wiki.videolan.org/VLC_command-line_help
 
@@ -55,7 +59,7 @@ namespace { // anonymous
 
   inline void vlc_reset_env()
   {
-    static std::auto_ptr<char> auto_release_pool;
+    static std::unique_ptr<char> auto_release_pool;
     QString qs = "VLC_PLUGIN_PATH=" + APP_PLUGIN_PATH;
     int n = qs.size() + 1;
     char *env = new char[n];
@@ -66,7 +70,7 @@ namespace { // anonymous
 
   inline const char *vlc_plugin_path()
   {
-    static std::auto_ptr<char> auto_release_pool;
+    static std::unique_ptr<char> auto_release_pool;
     char *ret = auto_release_pool.get();
     if (!ret) {
       QString path = vlcpath(APP_PLUGIN_PATH);
@@ -80,7 +84,7 @@ namespace { // anonymous
 
   inline const char *vlc_data_path()
   {
-    static std::auto_ptr<char> auto_release_pool;
+    static std::unique_ptr<char> auto_release_pool;
     char *ret = auto_release_pool.get();
     if (!ret) {
       QString path = vlcpath(APP_DATA_PATH);

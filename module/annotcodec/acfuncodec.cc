@@ -77,7 +77,7 @@ AcfunCodec::parseReply(QNetworkReply *reply)
     return;
   }
   retries_.remove(url);
-  AnnotationList l = parseDocument(reply->readAll());
+  AnnotationList l = parseDocument(reply->readAll(), Json);
   if (l.isEmpty())
     emit error(tr("failed to resolve annotations from URL") + ": " + reply->url().toString());
   else

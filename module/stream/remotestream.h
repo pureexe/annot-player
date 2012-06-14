@@ -42,15 +42,15 @@ public:
   const QNetworkRequest &request() const { return request_; }
   QNetworkRequest &request() { return request_; }
   QUrl url() const { return request_.url(); }
-  virtual qint64 size() const { return size_; } ///< \override
+  virtual qint64 size() const { return size_; } ///< \reimp
 
   virtual QString contentType() const { return QString(); }
 
   void waitForReady();
 
 public slots:
-  virtual void run() = 0; ///< \override as slot
-  virtual void stop() = 0; ///< \override as slot
+  virtual void run() = 0; ///< \reimp as slot
+  virtual void stop() = 0; ///< \reimp as slot
 
   void setRequest(const QNetworkRequest &req) { request_ = req; }
   void setUrl(const QUrl &url) { request_.setUrl(url); }

@@ -25,7 +25,7 @@ public:
   void setCacheDirectory(const QString &path);
 
 public:
-  virtual bool event(QEvent *event); ///< \override
+  virtual bool event(QEvent *event); ///< \reimp
 };
 
 #endif // ACWEBWINDOW_H

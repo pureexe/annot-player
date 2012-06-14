@@ -25,12 +25,12 @@ public:
   EmbeddedInfoView(Player *player, DataManager *data, SignalHub *hub, QWidget *parent = 0);
 
 public slots:
-  virtual void setVisible(bool t); ///< \override
+  virtual void setVisible(bool t); ///< \reimp
   void refresh() { updateText(); }
   void setInvisible(bool t) { setVisible(!t); }
 
 protected slots:
-  void updateText(); ///< \override
+  void updateText(); ///< \reimp
 
 protected:
   static QString timeToString(qint64 secs);

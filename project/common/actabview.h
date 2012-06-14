@@ -29,7 +29,7 @@ public:
   QWidget *currentWidget() const
   { return tabIndex_ >= 0 && tabIndex_ < tabs_.size() ? tabs_[tabIndex_] : (QWidget*)0; }
 
-  virtual QSize sizeHint() const; ///< \override
+  virtual QSize sizeHint() const; ///< \reimp
 
 signals:
   void tabChanged(int index);

@@ -34,7 +34,7 @@ public:
   // http://stackoverflow.com/questions/8679390/ffmpeg-extracting-20-images-from-a-video-of-variable-length
 
 //public slots:
-//  virtual void setVisible(bool visible); ///< \override
+//  virtual void setVisible(bool visible); ///< \reimp
 };
 
 #endif // MEDIATHUMBNAIL_H

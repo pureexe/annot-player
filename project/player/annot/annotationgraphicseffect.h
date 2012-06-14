@@ -4,27 +4,23 @@
 // annotationgraphicseffect.h
 // 5/3/2012
 
-#include "module/graphicseffect/graphicsshadoweffect.h"
+// Original Qt implementation for drop shadow
+//#include "module/graphicseffect/graphicsshadoweffect.h"
+//typedef GraphicsShadowEffect AnnotationGraphicsEffectBase;
 
-class AnnotationGraphicsEffect : public GraphicsShadowEffect
+// Faster and with thicker color
+#include "module/graphicseffect/graphicshaloeffect.h"
+typedef GraphicsHaloEffect AnnotationGraphicsEffectBase;
+
+class AnnotationGraphicsEffect : public AnnotationGraphicsEffectBase
 {
   Q_OBJECT
   Q_DISABLE_COPY(AnnotationGraphicsEffect)
   typedef AnnotationGraphicsEffect Self;
-  typedef GraphicsShadowEffect Base;
+  typedef AnnotationGraphicsEffectBase Base;
 
 public:
   explicit AnnotationGraphicsEffect(QObject *parent = 0);
-
-  static qreal defaultOpacity() {
-    return
-#ifdef Q_WS_WIN
-      0.95
-#else
-      1.0
-#endif // Q_WS_WIN
-    ;
-  }
 };
 
 #endif // ANNOTATIONGRAPHICSEFFECT_H

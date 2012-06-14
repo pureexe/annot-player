@@ -122,6 +122,7 @@ TranslatorManager::translate(int tid) const
 
   case T_TIME:          return tr("Time");
   case T_DATE:          return tr("Date");
+  case T_DEVICE:        return tr("Device");
   case T_MORE:          return tr("More");
   case T_LESS:          return tr("Less");
   case T_UPDATE:        return tr("Update");

@@ -43,7 +43,7 @@ public slots:
 
   // - Events -
 protected:
-  virtual void contextMenuEvent(QContextMenuEvent *event); ///< \override
+  virtual void contextMenuEvent(QContextMenuEvent *event); ///< \reimp
 
   static bool isClipboardEmpty();
 

@@ -50,7 +50,7 @@ protected slots:
 
   // - Events -
 public:
-  virtual void setVisible(bool visible); ///< \override
+  virtual void setVisible(bool visible); ///< \reimp
 
   // - Slots -
 public slots:

@@ -73,13 +73,13 @@
   SS_END
 
 #ifdef Q_OS_MAC
-  #define ACSS_LABEL            ACSS_LABEL_(normal, normal, none, blue, red, gray)
-  #define ACSS_LABEL_HIGHLIGHT  ACSS_LABEL_(normal, italic, none, purple, red, gray)
-  #define ACSS_LABEL_URL        ACSS_LABEL_(normal, italic, underline, purple, red, gray)
+#  define ACSS_LABEL            ACSS_LABEL_(normal, normal, none, blue, red, gray)
+#  define ACSS_LABEL_HIGHLIGHT  ACSS_LABEL_(normal, italic, none, purple, red, gray)
+#  define ACSS_LABEL_URL        ACSS_LABEL_(normal, italic, underline, purple, red, gray)
 #else
-  #define ACSS_LABEL            ACSS_LABEL_(normal, normal, none, blue, red, gray)
-  #define ACSS_LABEL_HIGHLIGHT  ACSS_LABEL_(normal, italic, none, orange, red, gray)
-  #define ACSS_LABEL_URL        ACSS_LABEL_(normal, italic, underline, orange, red, gray)
+#  define ACSS_LABEL            ACSS_LABEL_(normal, normal, none, cyan, red, gray)
+#  define ACSS_LABEL_HIGHLIGHT  ACSS_LABEL_(normal, italic, none, orange, red, gray)
+#  define ACSS_LABEL_URL        ACSS_LABEL_(normal, italic, underline, orange, red, gray)
 #endif // Q_OS_MAC
 
 // - Lines -

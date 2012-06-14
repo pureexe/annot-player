@@ -35,7 +35,7 @@ private:
 
 private:
   // redefined virtual functions:
-  virtual void doGetNextFrame(); ///< \override
+  virtual void doGetNextFrame(); ///< \reimp
 
 private:
   unsigned fSamplingFrequency;

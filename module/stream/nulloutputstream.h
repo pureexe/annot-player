@@ -18,7 +18,7 @@ public:
   explicit NullOutputStream(QObject *parent = 0)
     : Base(parent) { }
 
-  virtual qint64 write(const char *data, qint64 maxSize) ///< \override
+  virtual qint64 write(const char *data, qint64 maxSize) ///< \reimp
   { Q_UNUSED(data); return maxSize; }
 };
 

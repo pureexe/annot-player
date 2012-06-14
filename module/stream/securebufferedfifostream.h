@@ -20,8 +20,8 @@ public:
   explicit SecureBufferedFifoStream(QObject *parent = 0);
 
 public slots:
-  virtual void waitForFinished(); ///< \override
-  virtual void waitForReadyRead(); ///< \override
+  virtual void waitForFinished(); ///< \reimp
+  virtual void waitForReadyRead(); ///< \reimp
 
 protected slots:
   void wakeAllReadyRead() { readyReadCond_.wakeAll(); }

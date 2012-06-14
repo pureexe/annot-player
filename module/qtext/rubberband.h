@@ -44,7 +44,7 @@ public:
 protected slots:
   void invalidateColor();
 protected:
-  virtual void paintEvent(QPaintEvent *e); ///< \override
+  virtual void paintEvent(QPaintEvent *e); ///< \reimp
 };
 
 class CircularRubberBand : public ColorizedRubberBand
@@ -72,7 +72,7 @@ public slots:
 
   void updateGeometry();
 protected:
-  virtual void paintEvent(QPaintEvent *e); ///< \override
+  virtual void paintEvent(QPaintEvent *e); ///< \reimp
 };
 
 class MouseRubberBand : public SquareRubberBand

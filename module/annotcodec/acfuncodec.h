@@ -6,6 +6,8 @@
 
 #include "module/annotcodec/annotationcodec.h"
 #include <QtCore/QHash>
+#include <QtCore/QFile>
+#include <QtCore/QFileInfo>
 
 QT_FORWARD_DECLARE_CLASS(QNetworkAccessManager)
 QT_FORWARD_DECLARE_CLASS(QNetworkReply)
@@ -24,26 +26,72 @@ class AcfunCodec : public AnnotationCodec
   QHash<QString, int> retries_;
 
 public:
-  enum Format { Json = 0, Xml, FormatCount };
+  enum Format { UnknownFormat = 0, Json, Xml };
 
   explicit AcfunCodec(QObject *parent = 0);
 
 public:
-  virtual bool match(const QString &url) const; ///< \override
-  virtual void fetch(const QString &url); ///< \override
+  virtual bool match(const QString &url) const; ///< \reimp
+  virtual void fetch(const QString &url); ///< \reimp
 
-  static AnnotationList parseDocument(const QByteArray &data, Format f = (Format)0)
+public:
+  static AnnotationList parseFile(const QString &fileName, Format f = UnknownFormat)
+  {
+    switch (f) {
+    case Xml: return parseXmlFile(fileName);
+    case Json: return parseJsonFile(fileName);
+    default:
+      {
+        QString suffix = QFileInfo(fileName).suffix();
+        if (!suffix.compare("xml", Qt::CaseInsensitive))
+          return parseXmlFile(fileName);
+        else if (!suffix.compare("json", Qt::CaseInsensitive))
+          return parseJsonFile(fileName);
+        else {
+          QFile f(fileName);
+          return f.open(QIODevice::ReadOnly) ? parseDocument(f.readAll(), UnknownFormat) : AnnotationList();
+        }
+      }
+    }
+  }
+
+  static AnnotationList parseDocument(const QByteArray &data, Format f = UnknownFormat)
   {
     switch (f) {
     case Xml: return parseXmlDocument(data);
     case Json: return parseJsonDocument(data);
-    default: Q_ASSERT(0); return AnnotationList();
+    default:
+      if (data.size() < 4)
+        return AnnotationList();
+      {
+        QString t = QString::fromLocal8Bit(data.data(), 4);
+        if (t.isEmpty())
+          return AnnotationList();
+        switch (t[0].toAscii()) {
+        case '<': return parseXmlDocument(data);
+        default:  return parseJsonDocument(data);
+        }
+      }
     }
+  }
+
+protected:
+
+  static AnnotationList parseXmlFile(const QString &fileName)
+  {
+    QFile f(fileName);
+    return f.open(QIODevice::ReadOnly) ? parseXmlDocument(f.readAll()) : AnnotationList();
+  }
+
+  static AnnotationList parseJsonFile(const QString &fileName)
+  {
+    QFile f(fileName);
+    return f.open(QIODevice::ReadOnly) ? parseJsonDocument(f.readAll()) : AnnotationList();
   }
 
   static AnnotationList parseXmlDocument(const QByteArray &data);
   static AnnotationList parseJsonDocument(const QByteArray &data);
-protected:
+
   static Annotation parseAttribute(const QString &attr);
   static QString parseText(const QString &text);
 

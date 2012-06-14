@@ -40,7 +40,7 @@ signals:
   void opacityMaskChanged(const QBrush &mask);
 
 protected:
-  virtual void draw(QPainter *painter); ///< \override
+  virtual void draw(QPainter *painter); ///< \reimp
 };
 
 #endif // GRAPHICSOPAQUEEFFECT_H

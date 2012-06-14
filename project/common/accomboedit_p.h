@@ -26,7 +26,7 @@ public slots:
   }
 
 protected:
-  virtual void keyPressEvent(QKeyEvent *event) ///< \override
+  virtual void keyPressEvent(QKeyEvent *event) ///< \reimp
   {
     switch (event->key()) {
     case Qt::Key_Escape:

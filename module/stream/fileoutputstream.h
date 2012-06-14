@@ -28,16 +28,16 @@ public:
   bool isOpen() const { return file_ && file_->isOpen(); }
 
 public:
-  virtual qint64 availableSize() const { return file_->size(); } ///< \override
+  virtual qint64 availableSize() const { return file_->size(); } ///< \reimp
 
-  virtual qint64 write(const char *data, qint64 maxSize) ///< \override
+  virtual qint64 write(const char *data, qint64 maxSize) ///< \reimp
   { return file_->write(data, maxSize); }
 
   QString fileName() const { return file_->fileName(); }
 
   bool open() { return file_->open(QIODevice::WriteOnly); }
 public slots:
-  virtual void flush() { file_->flush(); } ///< \override
+  virtual void flush() { file_->flush(); } ///< \reimp
   void close() { file_->close(); }
 
   void setFileName(const QString &path)

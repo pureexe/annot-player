@@ -17,6 +17,10 @@
 #  pragma GCC diagnostic ignored "-Wparentheses" // suggest parentheses
 #endif // __GNUC__
 
+#ifdef Q_OS_MAC
+#  define unique_ptr  auto_ptr  // as llvm does not support c++0x at the moment
+#endif // Q_OS_MAC
+
 // - Construction -
 
 void
@@ -36,12 +40,12 @@ MetaCallFilter::eventFilter(QObject *watched, QEvent *e)
 {
   DOUT("enter: event type =" << e->type());
   Q_ASSERT(e);
-  Q_ASSERT(socket_);
   if (watched_ != watched || e->type() !=  QEvent::MetaCall || !running_) {
     DOUT("exit: not running");
     return QObject::eventFilter(watched, e);
   }
 
+  Q_ASSERT(socket_);
   sendMetaEvent(static_cast<QMetaCallEvent *>(e));
   DOUT("exit: ret = true");
   return true;
@@ -230,10 +234,10 @@ MetaCallFilter::readSocket()
   }
 
   int *m_types = new int[m_nargs];
-  std::auto_ptr<int> autorelease_types(m_types);
+  std::unique_ptr<int> autorelease_types(m_types);
 
   void **m_args = new void *[m_nargs];
-  std::auto_ptr<void *> autorelease_args(m_args);
+  std::unique_ptr<void *> autorelease_args(m_args);
   m_args[0] = 0;
 
   bool ok = true;

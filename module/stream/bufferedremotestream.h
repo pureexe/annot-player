@@ -31,40 +31,40 @@ public:
   ~BufferedRemoteStream();
 
 public:
-  virtual qint64 size() const { return Base::size() ? Base::size() : data_.size(); } ///< \override
+  virtual qint64 size() const { return Base::size() ? Base::size() : data_.size(); } ///< \reimp
   qint64 availableSize() const;
 
-  virtual qint64 pos() const { return pos_; } ///< \override
+  virtual qint64 pos() const { return pos_; } ///< \reimp
 
-  virtual qint64 read(char *data, qint64 maxSize); ///< \override
-  virtual qint64 tryRead(char *data, qint64 maxSize); ///< \override
+  virtual qint64 read(char *data, qint64 maxSize); ///< \reimp
+  virtual qint64 tryRead(char *data, qint64 maxSize); ///< \reimp
 
-  virtual QByteArray readAll(); ///< \override
+  virtual QByteArray readAll(); ///< \reimp
 
-  virtual bool reset() { m_.lock(); pos_ = 0; m_.unlock(); return true; } ///< \override
-  virtual bool seek(qint64 pos); ///< \override
+  virtual bool reset() { m_.lock(); pos_ = 0; m_.unlock(); return true; } ///< \reimp
+  virtual bool seek(qint64 pos); ///< \reimp
 
-  virtual qint64 skip(qint64 count); ///< \override
+  virtual qint64 skip(qint64 count); ///< \reimp
 
-  virtual QString contentType() const; ///< \override
+  virtual QString contentType() const; ///< \reimp
 
   QByteArray &data() { return data_; }
   const QByteArray &data() const { return data_; }
 
-  virtual bool writeFile(const QString &path); ///< \override
+  virtual bool writeFile(const QString &path); ///< \reimp
 
   bool isRunning() const { return reply_ && reply_->isRunning(); }
   bool isFinished() const { return reply_ && reply_->isFinished(); }
 
   void waitForFinished();
-  virtual void waitForReadyRead(); ///< \override
+  virtual void waitForReadyRead(); ///< \reimp
 
 public slots:
 
-  virtual void run(); ///< \override
-  virtual void stop(); ///< \override
+  virtual void run(); ///< \reimp
+  virtual void stop(); ///< \reimp
 
-  virtual void setBufferSize(qint64 size) { bufferSize_ = size; } ///< \override
+  virtual void setBufferSize(qint64 size) { bufferSize_ = size; } ///< \reimp
 
 protected slots:
   void finish();
@@ -73,7 +73,7 @@ protected slots:
 
 protected:
   bool isRedirected() const; ///< override
-  bool redirect(); ///< \override
+  bool redirect(); ///< \reimp
 };
 
 #endif // BUFFEREDREMOTESTREAM_H

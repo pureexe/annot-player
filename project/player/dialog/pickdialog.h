@@ -28,11 +28,11 @@ public:
 
   // - Events -
 public:
-  virtual void setVisible(bool visible); ///< \override
-  virtual void keyPressEvent(QKeyEvent *event); ///< \override
+  virtual void setVisible(bool visible); ///< \reimp
+  virtual void keyPressEvent(QKeyEvent *event); ///< \reimp
 
   void setActive(bool t);
-  bool isActive() const;
+  bool isActive() const { return active_; }
 
   // - Slots -
 protected slots:

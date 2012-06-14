@@ -20,8 +20,8 @@ public:
   { }
 
 protected:
-  virtual QUrl toDomainUrl(const QUrl &aliasUrl) const; ///< \override
-  QUrl decodeNicoUrl(const QUrl &url) const; ///< \overrride
+  virtual QUrl toDomainUrl(const QUrl &aliasUrl) const; ///< \reimp
+  QUrl decodeNicoUrl(const QUrl &url) const; ///< \reimp
 };
 
 #else

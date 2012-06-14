@@ -28,7 +28,8 @@
 #include <cmath>
 
 #ifdef __GNUC__
-#  pragma GCC diagnostic ignored "-Wparentheses" // suggest parentheses around && within ||
+#  pragma GCC diagnostic ignored "-Wparentheses"    // suggest parentheses around '&&' within '||'
+#  pragma GCC diagnostic ignored "-Wsequence-point" // operation on variable may be undefined
 #endif // __GNUC__
 
 #ifdef __GNUC__
@@ -46,17 +47,17 @@ using namespace Logger;
 #define BAD_POSF        QPointF(-1,-1)
 namespace { inline bool isBadPosF(const QPointF &pos) { return pos.x() < 0 || pos.y() < 0; } }
 
-enum { MOTIONLESS_STAY_TIME = ANNOTATION_FLY_TIME };
+enum { MOTIONLESS_STAY_TIME = 7000 }; // 7 seconds
 
 // - RC -
 
-#ifdef Q_WS_LINUX
+#ifdef Q_WS_X11
 #  define RC_AVATAR_PREFIX      AVATARDIR
 #else
 #  define RC_AVATAR_PREFIX      QCoreApplication::applicationDirPath() + "/avatars"
-#endif // Q_WS_LINUX
+#endif // Q_WS_X11
 #define RC_AVATAR_COUNT         AVATAR_USER_COUNT
-#define AVATAR_SIZE             "40"
+#define AVATAR_SIZE             "33" // 100/3
 
 namespace { // anonymous
   inline QString rc_avatar_url(qint64 i)
@@ -69,7 +70,7 @@ namespace { // anonymous
 // - Helpers -
 
 #define ANNOTATION_LIFE_SCHEDULE   ((ANNOTATION_LIFE_ViSIBLE + 1) / 4)
-#define OPACITY         AnnotationGraphicsEffect::defaultOpacity()
+#define OPACITY                    ANNOTATION_EFFECT_OPACITY
 
 namespace { namespace curve_ { // anonymous, curves
 
@@ -135,7 +136,22 @@ AnnotationGraphicsItem::warmUp()
 #ifdef Q_OS_MAC
   QGraphicsTextItem dummy;
 
-  QFont font = AnnotationSettings::globalInstance()->font();
+  QFont
+  font = AnnotationSettings::globalSettings()->font();
+  font.setWeight(QFont::Light); dummy.setFont(font);
+  font.setWeight(QFont::Normal); dummy.setFont(font);
+  font.setWeight(QFont::DemiBold); dummy.setFont(font);
+  font.setWeight(QFont::Bold); dummy.setFont(font);
+  font.setWeight(QFont::Black); dummy.setFont(font);
+
+  font = AnnotationSettings::globalSettings()->japaneseFont();
+  font.setWeight(QFont::Light); dummy.setFont(font);
+  font.setWeight(QFont::Normal); dummy.setFont(font);
+  font.setWeight(QFont::DemiBold); dummy.setFont(font);
+  font.setWeight(QFont::Bold); dummy.setFont(font);
+  font.setWeight(QFont::Black); dummy.setFont(font);
+
+  font = AnnotationSettings::globalSettings()->chineseFont();
   font.setWeight(QFont::Light); dummy.setFont(font);
   font.setWeight(QFont::Normal); dummy.setFont(font);
   font.setWeight(QFont::DemiBold); dummy.setFont(font);
@@ -203,7 +219,27 @@ AnnotationGraphicsItem::reset()
   if (appearOpacityAni_ && appearOpacityAni_->state() != QAbstractAnimation::Stopped)
     appearOpacityAni_->stop();
 
-  setOpacity(0.0);
+  //effect_->setOpacity(0);
+  resetOutlineColor();
+  setOpacity(0);
+}
+
+void
+AnnotationGraphicsItem::setOutlineColor(const QColor &color)
+{ effect_->setColor(color); }
+
+void
+AnnotationGraphicsItem::resetOutlineColor()
+{ setOutlineColor(AnnotationSettings::globalSettings()->outlineColor()); }
+
+void
+AnnotationGraphicsItem::updateOutlineColor()
+{
+  setOutlineColor(
+    isOwner() ? QColor(ANNOTATION_OUTLINE_COLOR_SELF) :
+    isSubtitle() ? AnnotationSettings::globalSettings()->subtitleColor() :
+    AnnotationSettings::globalSettings()->outlineColor()
+  );
 }
 
 void
@@ -256,8 +292,17 @@ AnnotationGraphicsItem::isMetaVisible() const
 {
   return annot_.hasUserId() && (
     metaVisible_ ||
+    AnnotationSettings::globalSettings()->isMetaVisible() ||
     hub_->isSignalTokenMode() && !isSubtitle()
   );
+}
+
+bool
+AnnotationGraphicsItem::isOwner() const
+{
+  return view_->userId() &&
+         (view_->userId() != User::UI_Guest || hub_->isMediaTokenMode()) &&
+         annot_.userId() == view_->userId();
 }
 
 void
@@ -270,18 +315,34 @@ AnnotationGraphicsItem::updateText()
   //bool isOwner = view_->userId() &&
   //               view_->userId() != User::UI_Guest &&
   //               annot_.userId() == view_->userId();
-  bool isOwner = view_->userId() &&
-                 (view_->userId() != User::UI_Guest || hub_->isMediaTokenMode()) &&
-                 annot_.userId() == view_->userId();
+  bool owner = isOwner();
 
-  QFont font = AnnotationSettings::globalInstance()->font();
-  if (isOwner)
+  QFont font;
+  if (annot_.hasLanguage())
+    switch (annot_.language()) {
+    case Traits::Japanese: font = AnnotationSettings::globalSettings()->defaultJapaneseFont(); break;
+    case Traits::Chinese: font = AnnotationSettings::globalSettings()->defaultChineseFont(); break;
+    default:  font = AnnotationSettings::globalSettings()->font();
+    }
+  else
+    switch (AcSettings::globalSettings()->language()) {
+    case QLocale::Japanese: font = AnnotationSettings::globalSettings()->defaultJapaneseFont(); break;
+    case QLocale::Chinese: font = AnnotationSettings::globalSettings()->defaultChineseFont(); break;
+    default:  font = AnnotationSettings::globalSettings()->font();
+    }
+
+  if (owner) {
     font.setUnderline(true);
+    setOutlineColor(ANNOTATION_OUTLINE_COLOR_SELF);
+  }
   setFont(font);
 
   QString text = annot_.text();
-  if (annot_.isSubtitle())
+  if (annot_.isSubtitle()) {
     text = view_->subtitlePrefix() + text;
+    if (!owner)
+      setOutlineColor(ANNOTATION_OUTLINE_COLOR_SUB);
+  }
 
   QStringList tags;
   boost::tie(text_, tags) = ANNOT_PARSE_CODE(text);
@@ -298,7 +359,7 @@ AnnotationGraphicsItem::updateText()
     setText(prefix_ + text_);
   } else
     setText(text_);
-  //if (isOwner)
+  //if (owner)
   //  richText_ = CORE_CMD_LATEX_ULINE " " + richText_;
 }
 
@@ -534,6 +595,7 @@ AnnotationGraphicsItem::setDefaultStyle()
 
   //setToolTip(TR(T_TOOLTIP_ANNOTATIONITEM));
   setDefaultTextColor(ANNOTATION_COLOR_DEFAULT);
+  //effect_->setColor(AnnotationSettings::outlineColor());
 }
 
 qreal
@@ -733,7 +795,10 @@ AnnotationGraphicsItem::addMe()
     connect(view_, SIGNAL(scaleChanged(qreal)), SLOT(setScale(qreal)));
     connect(view_, SIGNAL(itemVisibleChanged(bool)), SLOT(setVisible(bool)));
     connect(view_, SIGNAL(itemMetaVisibleChanged(bool)), SLOT(setMetaVisibleAndUpdate(bool)));
-    connect(AnnotationSettings::globalInstance(), SIGNAL(avatarVisibleChanged(bool)), SLOT(setAvatarVisibleAndUpdate(bool)));
+    connect(AnnotationSettings::globalSettings(), SIGNAL(metaVisibleChanged(bool)), SLOT(setMetaVisibleAndUpdate(bool)));
+    connect(AnnotationSettings::globalSettings(), SIGNAL(avatarVisibleChanged(bool)), SLOT(setAvatarVisibleAndUpdate(bool)));
+    connect(AnnotationSettings::globalSettings(), SIGNAL(outlineColorChanged(QColor)), SLOT(updateOutlineColor()));
+    connect(AnnotationSettings::globalSettings(), SIGNAL(subtitleColorChanged(QColor)), SLOT(updateOutlineColor()));
 
     if (style_ == SubtitleStyle &&
         hub_->isSignalTokenMode())
@@ -784,7 +849,10 @@ AnnotationGraphicsItem::removeMe()
     disconnect(view_, SIGNAL(scaleChanged(qreal)), this, SLOT(setScale(qreal)));
     disconnect(view_, SIGNAL(itemVisibleChanged(bool)), this, SLOT(setVisible(bool)));
     disconnect(view_, SIGNAL(itemMetaVisibleChanged(bool)), this, SLOT(setMetaVisibleAndUpdate(bool)));
-    disconnect(AnnotationSettings::globalInstance(), SIGNAL(avatarVisibleChanged(bool)), this, SLOT(setAvatarVisibleAndUpdate(bool)));
+    disconnect(AnnotationSettings::globalSettings(), SIGNAL(metaVisibleChanged(bool)), this, SLOT(setMetaVisibleAndUpdate(bool)));
+    disconnect(AnnotationSettings::globalSettings(), SIGNAL(avatarVisibleChanged(bool)), this, SLOT(setAvatarVisibleAndUpdate(bool)));
+    disconnect(AnnotationSettings::globalSettings(), SIGNAL(outlineColorChanged(QColor)), this, SLOT(updateOutlineColor()));
+    disconnect(AnnotationSettings::globalSettings(), SIGNAL(subtitleColorChanged(QColor)), this, SLOT(updateOutlineColor()));
 
     scene_->removeItem(this);
     view_->releaseItem(this);
@@ -822,7 +890,8 @@ AnnotationGraphicsItem::showMe()
   case FloatStyle:
   case FlyStyle:
   case MotionlessStyle:
-    if (!AnnotationSettings::globalInstance()->preferMotionless())
+    if (!AnnotationSettings::globalSettings()->preferMotionless() ||
+        isOwner())
       fly();
     else {
       int msecs = MOTIONLESS_STAY_TIME; //stayTime();
@@ -914,11 +983,13 @@ AnnotationGraphicsItem::pause()
       removeLaterTimer_->stop();
     break;
   }
+  setOutlineColor(ANNOTATION_OUTLINE_COLOR_HOVER);
 }
 
 void
 AnnotationGraphicsItem::resume()
 {
+  updateOutlineColor();
   if (isMetaVisible())
     setMetaVisibleAndUpdate(false);
   if (style_ == SubtitleStyle &&
@@ -1194,12 +1265,15 @@ AnnotationGraphicsItem::mouseDoubleClickEvent(QMouseEvent *event)
   Q_UNUSED(event);
   if (!isPaused())
     pause();
-  analyzeMe();
+
+  //analyzeMe();
+  bool detail = hub_->isFullScreenWindowMode();
+  view_->selectItem(this, detail);
 }
 
 bool
 AnnotationGraphicsItem::isDragging() const
-{ return !isBadPosF(dragPos_); }
+{ return !::isBadPosF(dragPos_); }
 
 void
 AnnotationGraphicsItem::mousePressEvent(QMouseEvent *event)
@@ -1231,10 +1305,10 @@ AnnotationGraphicsItem::mousePressEvent(QMouseEvent *event)
     // See: http://qt-project.org/doc/qt-4.8/widgets-tooltips.html
     //scene_->sendEvent(this, &toolTipEvent);
     view_->setToolTip(toolTip());
-    QCoreApplication::sendEvent(view_,
-      new QHelpEvent(QEvent::ToolTip, event->pos(), event->globalPos())
-    );
+    QHelpEvent e(QEvent::ToolTip, event->pos(), event->globalPos());
+    QCoreApplication::sendEvent(view_, &e);
   }
+  setOutlineColor(ANNOTATION_OUTLINE_COLOR_HOVER);
 }
 
 void
@@ -1257,6 +1331,7 @@ AnnotationGraphicsItem::mouseMoveEvent(QMouseEvent *event)
     setPos(newPos);
   }
 
+  setOutlineColor(ANNOTATION_OUTLINE_COLOR_HOVER);
 #ifdef Q_WS_WIN
   if (toolTip().isEmpty())
     updateToolTip();

@@ -19,6 +19,10 @@ end
 function dprint() end;
 function dump() end;
 
+-- Import clib (after Lua 5.2)
+-- See: http://d.hatena.ne.jp/E_Mattsan/20120416/1334584047
+--clib = require "clib";
+
 -- Global variables required by ImageCreator --
 
 username = {};
@@ -66,6 +70,7 @@ function dlFile(filesavepath, fileurl, httpheader)
   -- FIXME: return value not worked
   os.remove(filesavepath);
   clib.dlget(filesavepath, fileurl, httpheader);
+  --dlget(filesavepath, fileurl, httpheader);
 --[[
   if not string.match(fileurl, "tp://") then
     return -1;
@@ -88,6 +93,7 @@ function postdlFile(filesavepath, posturl, postdata, postheader)
   -- FIXME: return value not worked
   os.remove(filesavepath);
   clib.dlpost(filesavepath, posturl, postdata, postheader);
+  --dlpost(filesavepath, posturl, postdata, postheader);
 
   return 0;
 end

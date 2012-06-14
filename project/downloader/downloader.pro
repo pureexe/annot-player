@@ -121,7 +121,7 @@ OTHER_FILES += $$TRANSLATIONS \
 # Deployment
 
 unix:!mac {
-    INSTALLS += target desktop desktop-kde icon lua doc
+    INSTALLS += target desktop desktop-kde icon lua doc #avatar
 
     target.path = $$BINDIR
 
@@ -144,6 +144,10 @@ unix:!mac {
     DOCDIR = $$DATADIR/annot/down/doc
     doc.path = $$DOCDIR
     doc.files = $$DOC_FILES
+
+    AVATARDIR = $$DATADIR/annot/downloader/avatars
+    avatar.path = $$AVATARDIR
+    avatar.files = $$AVATAR_FILES
 }
 
 # EOF

@@ -33,7 +33,7 @@ public:
   { return templateText().arg(app_).arg(version_); }
 
 public slots:
-  virtual void setVisible(bool visible); ///< \override
+  virtual void setVisible(bool visible); ///< \reimp
 
   void setVersion(const QString v) { version_ = v; }
   void setApplicationName(const QString n) { app_ = n; }

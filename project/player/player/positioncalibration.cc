@@ -18,7 +18,7 @@ enum { CanvasHeight = 11, // Exactly the same as LabelHeight
 PositionCalibration::PositionCalibration(SignalHub *hub, Player *player, QWidget *parent)
   : Base(parent), hub_(hub), player_(player)
 {
-  Q_ASSERT(data_);
+  Q_ASSERT(player_);
   Q_ASSERT(hub_);
   setContentsMargins(0, 0, 0, 0);
   setFixedHeight(0);

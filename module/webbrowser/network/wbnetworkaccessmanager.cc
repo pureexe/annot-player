@@ -8,11 +8,11 @@
 //#define DEBUG "wbnetworkaccessmanager"
 #include "module/debug/debug.h"
 
-#ifdef Q_OS_LINUX
+#ifdef Q_WS_X11
 #  define RC_IMAGE_NULL IMAGEDIR "/null.png"
 #else
 #  define RC_IMAGE_NULL "file:///" + QCoreApplication::applicationDirPath() + "/images/null.png"
-#endif // Q_OS_LINUX
+#endif // Q_WS_X11
 
 #define PROXY_HOST  ANNOT_PROXY_DOMAIN
 

@@ -3,7 +3,6 @@
 
 #include "settings.h"
 #include "global.h"
-#include "mainwindow.h"
 #include "module/annotcloud/traits.h"
 #include "module/qtext/algorithm.h"
 #include <QtCore>
@@ -34,15 +33,19 @@ using namespace AnnotCloud;
 #define SK_TRANSLATE    "Translate"
 #define SK_SUBTITLECOLOR "SubtitleColor"
 #define SK_SUBTITLEONTOP "SubtitleOnTop"
+#define SK_SUBOUTCOLOR  "SubtitleOutline"
+#define SK_ANNOTOUTCOLOR  "AnnotationOutline"
 #define SK_EMBEDONTOP   "EmbedOnTop"
 #define SK_LABELPLAYER  "LabelPlayer"
 #define SK_SAVEBUFFER   "SaveBuffer"
 #define SK_WINDOWONTOP  "WindowOnTop"
 #define SK_UPDATEDATE   "UpdateDate"
 #define SK_RECENTPATH   "RecentPath"
+#define SK_GAMEENCODINGS "GameEncodings"
 #define SK_AUTOSUBMIT   "Submit"
 #define SK_ANNOTBANDWIDTH   "AnnotationBandwidth"
 #define SK_ANNOTAVATAR  "AnnotationAvatar"
+#define SK_ANNOTMETA  "AnnotationMeta"
 #define SK_ANNOTSCALE   "AnnotationScale"
 //#define SK_ANNOTROTATE  "AnnotationRotation"
 #define SK_ANNOTFILTER  "AnnotationFilter"
@@ -50,6 +53,8 @@ using namespace AnnotCloud;
 #define SK_ANNOTEFFECT  "AnnotationEffect"
 #define SK_ANNOTOFFSET  "AnnotationOffset"
 #define SK_ANNOTFONT    "AnnotationFont"
+#define SK_ANNOTJAPANFONT "AnnotationJapaneseFont"
+#define SK_ANNOTCHINAFONT "AnnotationChineseFont"
 #define SK_MOTIONLESS   "Motionless"
 #define SK_AUTOPLAYNEXT "AutoPlayNext"
 #define SK_BLOCKEDUSERS "BlockedUsers"
@@ -57,6 +62,7 @@ using namespace AnnotCloud;
 #define SK_PLAYPOSHIST  "PlayPosHistory"
 #define SK_SUBTITLEHIST "SubtitleHistory"
 #define SK_TRACKHIST    "TrackHistory"
+#define SK_CHANNELHIST  "ChannelHistory"
 #define SK_ASPECTHIST   "AspectHistory"
 #define SK_MULTIWINDOW  "MultipleWindows"
 #define SK_QUEUEEMPTY   "QueueEmpty"
@@ -128,6 +134,22 @@ QString
 Settings::annotationFontFamily() const
 { return value(SK_ANNOTFONT).toString(); }
 
+void
+Settings::setAnnotationJapaneseFontFamily(const QString &family)
+{ setValue(SK_ANNOTJAPANFONT, family); }
+
+QString
+Settings::annotationJapaneseFontFamily() const
+{ return value(SK_ANNOTJAPANFONT).toString(); }
+
+void
+Settings::setAnnotationChineseFontFamily(const QString &family)
+{ setValue(SK_ANNOTCHINAFONT, family); }
+
+QString
+Settings::annotationChineseFontFamily() const
+{ return value(SK_ANNOTCHINAFONT).toString(); }
+
 QDate
 Settings::updateDate() const
 { return value(SK_UPDATEDATE).toDate(); }
@@ -138,10 +160,7 @@ Settings::setUpdateDate(const QDate &date)
 
 int
 Settings::subtitleColor() const
-{
-  enum { defval = MainWindow::Cyan };
-  return value(SK_SUBTITLECOLOR, defval).toInt();
-}
+{ return value(SK_SUBTITLECOLOR).toInt(); }
 
 void
 Settings::setSubtitleColor(int colorId)
@@ -157,6 +176,22 @@ Settings::annotationLanguages() const
 void
 Settings::setAnnotationLanguages(qint64 bits)
 { setValue(SK_ANNOTLANGUAGES, bits); }
+
+QColor
+Settings::annotationOutlineColor() const
+{ return value(SK_ANNOTOUTCOLOR).value<QColor>(); }
+
+void
+Settings::setAnnotationOutlineColor(const QColor &value)
+{ setValue(SK_ANNOTOUTCOLOR, value); }
+
+QColor
+Settings::subtitleOutlineColor() const
+{ return value(SK_SUBOUTCOLOR).value<QColor>(); }
+
+void
+Settings::setSubtitleOutlineColor(const QColor &value)
+{ setValue(SK_SUBOUTCOLOR, value); }
 
 bool
 Settings::isMultipleWindowsEnabled() const
@@ -237,6 +272,14 @@ Settings::isAnnotationAvatarVisible() const
 void
 Settings::setAnnotationAvatarVisible(bool t)
 { setValue(SK_ANNOTAVATAR, t); }
+
+bool
+Settings::isAnnotationMetaVisible() const
+{ return value(SK_ANNOTMETA).toBool(); }
+
+void
+Settings::setAnnotationMetaVisible(bool t)
+{ setValue(SK_ANNOTMETA, t); }
 
 bool
 Settings::isAnnotationBandwidthLimited() const
@@ -377,6 +420,34 @@ Settings::setRecentTitles(const QHash<QString, QString> &input)
   }
 }
 
+QHash<QString, QString>
+Settings::gameEncodings() const
+{
+  QHash<QString, QString> ret;
+  QHash<QString, QVariant> h = value(SK_GAMEENCODINGS).toHash();
+  if (!h.isEmpty())
+    for (BOOST_AUTO(p, h.begin()); p != h.end(); ++p)
+      ret[p.key()] = p.value().toString();
+  return ret;
+}
+
+void
+Settings::setGameEncodings(const QHash<QString, QString> &input, int limit)
+{
+  if (input.isEmpty())
+    remove(SK_GAMEENCODINGS);
+  else {
+    QHash<QString, QVariant> h;
+    int count = 0;
+    for (BOOST_AUTO(p, input.begin()); p != input.end(); ++p) {
+      if (limit && count++ >= limit)
+        break;
+      h[p.key()] = p.value();
+    }
+    setValue(SK_GAMEENCODINGS, h);
+  }
+}
+
 void
 Settings::setAnnotationCountHint(int v)
 { setValue(SK_ANNOTCOUNT, v); }
@@ -482,6 +553,30 @@ Settings::setAudioTrackHistory(const QHash<qint64, int> &input)
     for (BOOST_AUTO(p, input.begin()); p != input.end(); ++p)
       h[QString::number(p.key())] = p.value();
     setValue(SK_TRACKHIST, h);
+  }
+}
+
+QHash<qint64, int>
+Settings::audioChannelHistory() const
+{
+  QHash<qint64, int> ret;
+  QHash<QString, QVariant> h = value(SK_CHANNELHIST).toHash();
+  if (!h.isEmpty())
+    for (BOOST_AUTO(p, h.begin()); p != h.end(); ++p)
+      ret[p.key().toLongLong()] = p.value().toInt();
+  return ret;
+}
+
+void
+Settings::setAudioChannelHistory(const QHash<qint64, int> &input)
+{
+  if (input.isEmpty())
+    remove(SK_CHANNELHIST);
+  else {
+    QHash<QString, QVariant> h;
+    for (BOOST_AUTO(p, input.begin()); p != input.end(); ++p)
+      h[QString::number(p.key())] = p.value();
+    setValue(SK_CHANNELHIST, h);
   }
 }
 

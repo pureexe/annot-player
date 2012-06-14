@@ -6,9 +6,10 @@
 
 #include "processinfo.h"
 #include "module/qtext/dialog.h"
-#include <QtCore/QStringList>
+#include <QtCore/QVector>
 
 QT_BEGIN_NAMESPACE
+class QComboBox;
 class QLabel;
 class QSpinBox;
 class QTextEdit;
@@ -59,30 +60,34 @@ protected:
 public slots:
   void clear();
   void selectCurrentHook();
-  void processHookedText(const QString &text, ulong hookId);
+  //void processHookedText(const QString &text, ulong hookId);
+  void processMessage(const QByteArray &data, ulong hookId);
 
   void setActive(bool active);
 
-  void addMessages(QStringList &messages, ulong hookId);
+  void addMessages(const QList<QByteArray> &l, ulong hookId);
   void setCurrentIndex(int index);
 
 protected slots:
-  void setTextList(const QStringList& text);
+  void setData(const QList<QByteArray> &l);
   void selectHookIndex(int index);
   void invalidateHookCountLabel();
   void invalidateCurrentCharFormat();
   void invalidateSelectButton();
   void invalidateCurrentHook();
 
+  void refresh();
+  void refreshEncodingEdit();
+
   // - Events -
 public:
-  virtual void setVisible(bool visible); ///< \override
+  virtual void setVisible(bool visible); ///< \reimp
 
 //protected slots:
-//  virtual void dragEnterEvent(QDragEnterEvent *event); ///< \override
-//  virtual void dragMoveEvent(QDragMoveEvent *event); ///< \override
-//  virtual void dragLeaveEvent(QDragLeaveEvent *event); ///< \override
-//  virtual void dropEvent(QDropEvent *event); ///< \override
+//  virtual void dragEnterEvent(QDragEnterEvent *event); ///< \reimp
+//  virtual void dragMoveEvent(QDragMoveEvent *event); ///< \reimp
+//  virtual void dragLeaveEvent(QDragLeaveEvent *event); ///< \reimp
+//  virtual void dropEvent(QDropEvent *event); ///< \reimp
 //
 //signals:
 //  void dragEnterEventReceived(QDragEnterEvent *event);
@@ -94,6 +99,9 @@ public:
 protected:
   static bool isBetterHook(ulong goodHookId, ulong badHookId);
 
+protected slots:
+  void setEncoding(const QString &name);
+
 private:
   void createLayout();
 
@@ -104,8 +112,10 @@ private:
   QTextEdit *textEdit_;
   QLabel *hookCountLabel_;
 
+  QComboBox *encodingEdit_;
+
   QVector<ulong> hooks_;
-  QVector<QStringList> texts_;
+  QVector<QList<QByteArray> > messages_;
 
   QToolButton *autoButton_, *selectButton_;
 };

@@ -37,7 +37,7 @@ public:
   }
 
 public:
-  virtual void draw(QPainter *painter) ///< \override
+  virtual void draw(QPainter *painter) ///< \reimp
   {
     foreach (Drawable *d, d_)
       d->draw(painter);
@@ -54,7 +54,7 @@ class DrawableGraphicsBlurEffect : public QGraphicsBlurEffect, public Drawable
 public:
   explicit DrawableGraphicsBlurEffect(QObject *parent = 0)
     : Base(parent) { }
-  void draw(QPainter *painter) { Base::draw(painter); } ///< \override
+  void draw(QPainter *painter) { Base::draw(painter); } ///< \reimp
 };
 
 #include <QtGui/QGraphicsColorizeEffect>
@@ -67,7 +67,7 @@ class DrawableGraphicsColorizeEffect : public QGraphicsColorizeEffect, public Dr
 public:
   explicit DrawableGraphicsColorizeEffect(QObject *parent = 0)
     : Base(parent) { }
-  void draw(QPainter *painter) { Base::draw(painter); } ///< \override
+  void draw(QPainter *painter) { Base::draw(painter); } ///< \reimp
 };
 
 #include <QtGui/QGraphicsDropShadowEffect>
@@ -80,7 +80,7 @@ class DrawableGraphicsDropShadowEffect : public QGraphicsDropShadowEffect, publi
 public:
   explicit DrawableGraphicsDropShadowEffect(QObject *parent = 0)
     : Base(parent) { }
-  void draw(QPainter *painter) { Base::draw(painter); } ///< \override
+  void draw(QPainter *painter) { Base::draw(painter); } ///< \reimp
 };
 
 #include <QtGui/QGraphicsOpacityEffect>
@@ -93,7 +93,7 @@ class DrawableGraphicsOpacityEffect : public QGraphicsOpacityEffect, public Draw
 public:
   explicit DrawableGraphicsOpacityEffect(QObject *parent = 0)
     : Base(parent) { }
-  void draw(QPainter *painter) { Base::draw(painter); } ///< \override
+  void draw(QPainter *painter) { Base::draw(painter); } ///< \reimp
 };
 
 #endif // DRAWABLEGRAPHICSEFFECT_H

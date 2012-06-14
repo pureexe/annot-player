@@ -518,12 +518,12 @@
 <context>
     <name>FlvMerge</name>
     <message>
-        <location filename="../../../module/mediacodec/flvmerge.cc" line="21"/>
+        <location filename="../../../module/mediacodec/flvmerge.cc" line="25"/>
         <source>failed to parse FLV streams</source>
         <translation>分析FLV数据流失败</translation>
     </message>
     <message>
-        <location filename="../../../module/mediacodec/flvmerge.cc" line="27"/>
+        <location filename="../../../module/mediacodec/flvmerge.cc" line="31"/>
         <source>failed to merge FLV streams</source>
         <translation>合成FLV数据流失败</translation>
     </message>

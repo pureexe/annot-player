@@ -1,13 +1,15 @@
 // luaresolver.cc
 // 2/1/2012
+// See: http://www.lua.org/manual/5.2/manual.html
 // See: http://csl.sublevel3.org/lua/
 #include "module/luaresolver/luaresolver.h"
 #include "module/mrlanalysis/mrlanalysis.h"
-#ifdef WITH_MODULE_LUACPP
-#  include "module/luacpp/luacpp.h"
+#ifdef WITH_MODULE_LUATL
+#  include "module/luatl/lua_defines.h"
+#  include "module/luatl/lua_function.h"
 #else
-#  error "luacpp is required"
-#endif // WITH_MODULE_LUACPP
+#  error "luatl is required"
+#endif // WITH_MODULE_LUATL
 #ifdef WITH_MODULE_DOWNLOAD
 #  include "module/download/downloader.h"
 #else
@@ -227,11 +229,19 @@ LuaResolver::resolve(const QString &href, int *siteid, QString *refurl, QString 
   DOUT("href =" << href);
 
   lua_State *L = 0;
+  bool closeL = true;
 
   try {
-    L = lua_open();
+    L = luaL_newstate();
+    Q_ASSERT(L);
     if (!L)
       return false;
+
+    // See: http://karetta.jp/book-node/lua/228933
+    //if( lua_checkstack(L, 1000) == 0 ) {
+    //  DOUT("exit: スタックの容量が確保できませんでした");
+    //  return false;
+    //}
 
     luaL_openlibs(L);
 
@@ -259,6 +269,7 @@ LuaResolver::resolve(const QString &href, int *siteid, QString *refurl, QString 
     if (!packagePath_.isEmpty())
       appendLuaPath(L, packagePath_);
 
+    //err = lua_pcall(L, 0, 0, 0);
     err = lua_pcall(L, 0, LUA_MULTRET, 0);
     if (err) {
 #ifdef DEBUG
@@ -282,6 +293,7 @@ LuaResolver::resolve(const QString &href, int *siteid, QString *refurl, QString 
         lua_close(L);
         return false;
       }
+      closeL = false;
     }
 
     if (hasBilibiliAccount() &&
@@ -297,6 +309,7 @@ LuaResolver::resolve(const QString &href, int *siteid, QString *refurl, QString 
         lua_close(L);
         return false;
       }
+      closeL = false;
     }
 
     // Invoke MRL resolver
@@ -427,7 +440,13 @@ LuaResolver::resolve(const QString &href, int *siteid, QString *refurl, QString 
     }
 #endif // DEBUG
 
-    lua_close(L);
+    DOUT("LUA closing");
+#if LUA_VERSION_NUM >= 502
+    if (closeL) // FIXME 6/11/2012: multiple calls to lua_function would crash lua on close.
+                // Unclosed L would cause memory leak!
+#endif // LUA_VERSION_NUM >= 502
+      lua_close(L);
+    DOUT("LUA closed");
 
 #ifdef DEBUG
     DOUT("siteid =" << sid);
@@ -454,7 +473,7 @@ LuaResolver::resolve(const QString &href, int *siteid, QString *refurl, QString 
 #else
     Q_UNUSED(e);
 #endif // DEBUG
-    if (L)
+    if (L && closeL)
       lua_close(L);
     return false;
   }

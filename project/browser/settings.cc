@@ -73,15 +73,13 @@ Settings::setRecentUrls(const QStringList &urls, int limit)
 {
   if (urls.isEmpty())
     remove(SK_RECENT);
+  else if (!limit || urls.size() <= limit)
+    setValue(SK_RECENT, urls);
   else {
-    if (!limit || urls.size() <= limit)
-      setValue(SK_RECENT, urls);
-    else {
-      QStringList l = urls;
-      while (l.size() > limit)
-        l.removeLast();
-      setValue(SK_RECENT, l);
-    }
+    QStringList l = urls;
+    while (l.size() > limit)
+      l.removeLast();
+    setValue(SK_RECENT, l);
   }
 }
 
@@ -99,15 +97,13 @@ Settings::setRecentSearches(const QStringList &urls, int limit)
 {
   if (urls.isEmpty())
     remove(SK_SEARCH);
+  else if (!limit || urls.size() <= limit)
+    setValue(SK_SEARCH, urls);
   else {
-    if (!limit || urls.size() <= limit)
-      setValue(SK_SEARCH, urls);
-    else {
-      QStringList l = urls;
-      while (l.size() > limit)
-        l.removeLast();
-      setValue(SK_SEARCH, l);
-    }
+    QStringList l = urls;
+    while (l.size() > limit)
+      l.removeLast();
+    setValue(SK_SEARCH, l);
   }
 }
 
@@ -124,15 +120,13 @@ Settings::setRecentTabs(const QStringList &urls, int limit)
 {
   if (urls.isEmpty())
     remove(SK_RECENTTABS);
+  else if (!limit || urls.size() <= limit)
+    setValue(SK_RECENTTABS, urls);
   else {
-    if (!limit || urls.size() <= limit)
-      setValue(SK_RECENTTABS, urls);
-    else {
-      QStringList l = urls;
-      while (l.size() > limit)
-        l.removeLast();
-      setValue(SK_RECENTTABS, l);
-    }
+    QStringList l = urls;
+    while (l.size() > limit)
+      l.removeLast();
+    setValue(SK_RECENTTABS, l);
   }
 }
 

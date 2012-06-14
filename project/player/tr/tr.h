@@ -262,6 +262,8 @@
 #define T_FORMAT_IMAGE         0x76
 #define T_FORMAT_SUBTITLE      0x77
 #define T_FORMAT_PROGRAM       0x78
+#define T_FORMAT_ANNOTATION    T_ANNOTATION
+#define T_FORMAT_DEVICE        T_DEVICE
 
 // - Actions -
 
@@ -1515,5 +1517,7 @@
 
 #define T_INTERNET        0x103e
 #define T_TOOLTIP_INTERNET T_INTERNET
+
+#define T_DEVICE          0x103f
 
 #endif // TR_H

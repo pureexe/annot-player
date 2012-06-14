@@ -20,32 +20,32 @@ public:
   explicit MiniPlayerUi(SignalHub *hub, Player *player, ServerAgent *server, QWidget *parent = 0);
 
 public:
-  virtual void setTitle(const QString &title); ///< \override
+  virtual void setTitle(const QString &title); ///< \reimp
 
 public slots:
   void updateTitle();
-  virtual void setVisible(bool visible); ///< \override
+  virtual void setVisible(bool visible); ///< \reimp
 
   // - Events -
 protected:
   void forward(QEvent *event);
 
-  virtual void mousePressEvent(QMouseEvent *event); ///< \override
-  virtual void mouseMoveEvent(QMouseEvent *event); ///< \override
-  virtual void mouseReleaseEvent(QMouseEvent *event); ///< \override
+  virtual void mousePressEvent(QMouseEvent *event); ///< \reimp
+  virtual void mouseMoveEvent(QMouseEvent *event); ///< \reimp
+  virtual void mouseReleaseEvent(QMouseEvent *event); ///< \reimp
 
-  virtual void mouseDoubleClickEvent(QMouseEvent *event); ///< \override
+  virtual void mouseDoubleClickEvent(QMouseEvent *event); ///< \reimp
 
-  virtual void contextMenuEvent(QContextMenuEvent *event); ///< \override
+  virtual void contextMenuEvent(QContextMenuEvent *event); ///< \reimp
 
-  virtual void keyPressEvent(QKeyEvent *event); ///< \override
-  virtual void keyReleaseEvent(QKeyEvent *event); ///< \override
+  virtual void keyPressEvent(QKeyEvent *event); ///< \reimp
+  virtual void keyReleaseEvent(QKeyEvent *event); ///< \reimp
 
 protected slots:
-  virtual void dragEnterEvent(QDragEnterEvent *event); ///< \override
-  virtual void dragMoveEvent(QDragMoveEvent *event); ///< \override
-  virtual void dragLeaveEvent(QDragLeaveEvent *event); ///< \override
-  virtual void dropEvent(QDropEvent *event); ///< \override
+  virtual void dragEnterEvent(QDragEnterEvent *event); ///< \reimp
+  virtual void dragMoveEvent(QDragMoveEvent *event); ///< \reimp
+  virtual void dragLeaveEvent(QDragLeaveEvent *event); ///< \reimp
+  virtual void dropEvent(QDropEvent *event); ///< \reimp
 
 signals:
   void dragEnterEventReceived(QDragEnterEvent *event);

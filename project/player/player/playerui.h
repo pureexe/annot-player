@@ -65,7 +65,7 @@ signals:
 
 
 public slots:
-  virtual void setVisible(bool visible); ///< \override
+  virtual void setVisible(bool visible); ///< \reimp
 
   // - Player -
   void play();

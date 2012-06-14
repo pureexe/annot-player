@@ -20,9 +20,13 @@ AssociationPreferencesTab::init()
     registry_ = WindowsRegistry::globalInstance();
   Q_ASSERT(registry_);
 
-  supportedSuffices_ = Player::supportedSuffices();
-  supportedSuffices_.append("exe");
-  supportedSuffices_.append("lnk");
+  supportedTypes_ = Player::supportedSuffices();
+  supportedTypes_
+    G_FORMAT_PROGRAM(<<)
+    G_FORMAT_ANNOTATION(<<)
+  ;
+
+  supportedRawTypes_ G_FORMAT_DEVICE(<<);
 
   setWindowTitle(tr("Association"));
   createLayout();
@@ -37,9 +41,12 @@ AssociationPreferencesTab::createLayout()
               *audioLayout = new QGridLayout,
               *pictureLayout = new QGridLayout,
               *imageLayout = new QGridLayout,
-              *subtitleLayout = new QGridLayout;
+              *subtitleLayout = new QGridLayout,
+              *annotationLayout = new QGridLayout,
+              *deviceLayout = new QGridLayout;
 
-  int count = 0;
+  int
+  count = 0;
   foreach (const QString &suffix, Player::supportedPlaylistSuffices()) {
     enum { Row = 7 };
     QtExt::NamedCheckBox *toggle = new QtExt::NamedCheckBox(suffix);
@@ -64,9 +71,11 @@ AssociationPreferencesTab::createLayout()
     audioLayout->addWidget(toggle, r, c);
     count++;
   }
+  QGroupBox *audioGroup = ui->makeGroupBox(0, TR(T_FORMAT_AUDIO));
+  audioGroup->setLayout(audioLayout);
 
   count = 0;
-  foreach (const QString &suffix, QStringList() << "exe" << "lnk") {
+  foreach (const QString &suffix, QStringList() G_FORMAT_PROGRAM(<<)) {
     enum { Row = 7 };
     QtExt::NamedCheckBox *toggle = new QtExt::NamedCheckBox(suffix);
     toggle->setToolTip(suffix);
@@ -81,8 +90,37 @@ AssociationPreferencesTab::createLayout()
   QGroupBox *gameGroup = ui->makeGroupBox(0, TR(T_GALGAME));
   gameGroup->setLayout(gameLayout);
 
-  QGroupBox *audioGroup = ui->makeGroupBox(0, TR(T_FORMAT_AUDIO));
-  audioGroup->setLayout(audioLayout);
+  count = 0;
+  foreach (const QString &suffix, QStringList() G_FORMAT_ANNOTATION(<<)) {
+    enum { Row = 7 };
+    QtExt::NamedCheckBox *toggle = new QtExt::NamedCheckBox(suffix);
+    toggle->setToolTip(suffix);
+    toggle->setStyleSheet(ACSS_CHECKBOX);
+    connect(toggle, SIGNAL(toggledWithName(bool,QString)), SLOT(toggleType(bool,QString)));
+    toggles_[suffix] = toggle;
+    int r = count / Row,
+        c = count % Row;
+    annotationLayout->addWidget(toggle, r, c);
+    count++;
+  }
+  QGroupBox *annotationGroup = ui->makeGroupBox(0, TR(T_FORMAT_ANNOTATION));
+  annotationGroup->setLayout(annotationLayout);
+
+  count = 0;
+  foreach (const QString &suffix, QStringList() G_FORMAT_DEVICE(<<)) {
+    enum { Row = 7 };
+    QtExt::NamedCheckBox *toggle = new QtExt::NamedCheckBox(suffix);
+    toggle->setToolTip(suffix);
+    toggle->setStyleSheet(ACSS_CHECKBOX);
+    connect(toggle, SIGNAL(toggledWithName(bool,QString)), SLOT(toggleRawType(bool,QString)));
+    toggles_[suffix] = toggle;
+    int r = count / Row,
+        c = count % Row;
+    deviceLayout->addWidget(toggle, r, c);
+    count++;
+  }
+  QGroupBox *deviceGroup = ui->makeGroupBox(0, TR(T_FORMAT_DEVICE));
+  deviceGroup->setLayout(deviceLayout);
 
 #define REGISTER(_group, _Group, _GROUP) \
   count = 0; \
@@ -113,9 +151,11 @@ AssociationPreferencesTab::createLayout()
 
   QVBoxLayout *rows = new QVBoxLayout; {
     rows->addWidget(searchEdit_);
+    rows->addWidget(deviceGroup);
     rows->addWidget(gameGroup);
-    rows->addWidget(imageGroup);
+    rows->addWidget(annotationGroup);
     rows->addWidget(subtitleGroup);
+    rows->addWidget(imageGroup);
     rows->addWidget(videoGroup);
     rows->addWidget(audioGroup);
     rows->addWidget(pictureGroup);
@@ -140,11 +180,18 @@ AssociationPreferencesTab::save()
 void
 AssociationPreferencesTab::load()
 {
-  foreach (const QString &suffix, supportedSuffices_) {
-    QCheckBox *toggle = toggles_[suffix];
+  foreach (const QString &type, supportedTypes_) {
+    QCheckBox *toggle = toggles_[type];
     Q_ASSERT(toggle);
     if (toggle)
-      toggle->setChecked(registry_->containsType(suffix));
+      toggle->setChecked(registry_->containsType(type));
+  }
+
+  foreach (const QString &type, supportedRawTypes_) {
+    QCheckBox *toggle = toggles_[type];
+    Q_ASSERT(toggle);
+    if (toggle)
+      toggle->setChecked(registry_->containsRawType(type));
   }
 }
 
@@ -167,11 +214,17 @@ AssociationPreferencesTab::filterToggles(const QString &regexp)
       toggle->show();
   else {
     QRegExp rx(t, Qt::CaseInsensitive);
-    foreach (const QString &suffix, supportedSuffices_) {
-      QCheckBox *toggle = toggles_[suffix];
+    foreach (const QString &type, supportedTypes_) {
+      QCheckBox *toggle = toggles_[type];
       Q_ASSERT(toggle);
       if (toggle)
-        toggle->setVisible(suffix.contains(rx));
+        toggle->setVisible(type.contains(rx));
+    }
+    foreach (const QString &type, supportedRawTypes_) {
+      QCheckBox *toggle = toggles_[type];
+      Q_ASSERT(toggle);
+      if (toggle)
+        toggle->setVisible(type.contains(rx));
     }
   }
 }
@@ -181,6 +234,15 @@ AssociationPreferencesTab::toggleType(bool checked, const QString &type)
 {
   Q_ASSERT(registry_);
   registry_->registerType(type, checked);
+  registry_->sync();
+  emit message(tr("file type saved") + ": " + type);
+}
+
+void
+AssociationPreferencesTab::toggleRawType(bool checked, const QString &type)
+{
+  Q_ASSERT(registry_);
+  registry_->registerRawType(type, checked);
   registry_->sync();
   emit message(tr("file type saved") + ": " + type);
 }

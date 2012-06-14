@@ -5,6 +5,7 @@
 // 2/6/2012
 
 #include "module/annotcodec/annotationcodec.h"
+#include <QFile>
 
 class NicovideoCodec : public AnnotationCodec
 {
@@ -21,10 +22,17 @@ public:
     : Base(parent) { }
 
 public:
-  virtual bool match(const QString &url) const; ///< \override
-  virtual void fetch(const QString &url); ///< \overrride
+  virtual bool match(const QString &url) const; ///< \reimp
+  virtual void fetch(const QString &url); ///< \reimp
 
   void fetchLocalFile(const QString &path);
+
+public:
+  static AnnotationList parseFile(const QString &fileName)
+  {
+    QFile f(fileName);
+    return f.open(QIODevice::ReadOnly) ? parseDocument(f.readAll()) : AnnotationList();
+  }
 
   static AnnotationList parseDocument(const QByteArray &data);
 protected:

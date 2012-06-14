@@ -65,9 +65,9 @@ public slots:
   void setOpacity(qreal opacity);
 
 //public:
-//  virtual QRectF boundingRectFor(const QRectF &rect) const; ///< \override
+//  virtual QRectF boundingRectFor(const QRectF &rect) const; ///< \reimp
 protected:
-  virtual void draw(QPainter *painter); ///< \override
+  virtual void draw(QPainter *painter); ///< \reimp
 };
 
 #endif // GRAPHICSEFFECT_H

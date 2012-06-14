@@ -45,7 +45,7 @@ public slots:
 
 protected slots:
   void showWhenEmbedded();
-  virtual void updateInputCountButton(); ///< \override
+  virtual void updateInputCountButton(); ///< \reimp
 
 public slots:
   void setAutoHideEnabled(bool enabled = true);
@@ -57,7 +57,7 @@ public slots:
   void setContainerWindow(WId winId);
   void setContainerWidget(QWidget *w);
 
-  virtual void setVisible(bool visible); ///< \override
+  virtual void setVisible(bool visible); ///< \reimp
 
   void setFullScreenMode(bool t = true);
 

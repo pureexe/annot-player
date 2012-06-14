@@ -29,10 +29,10 @@ public slots:
 
   // - Events -
 protected:
-  //virtual void setVisible(bool visible); ///< \override
-  virtual void mousePressEvent(QMouseEvent *event); ///< \override
-  virtual void mouseMoveEvent(QMouseEvent *event); ///< \override
-  virtual void mouseReleaseEvent(QMouseEvent *event); ///< \override
+  //virtual void setVisible(bool visible); ///< \reimp
+  virtual void mousePressEvent(QMouseEvent *event); ///< \reimp
+  virtual void mouseMoveEvent(QMouseEvent *event); ///< \reimp
+  virtual void mouseReleaseEvent(QMouseEvent *event); ///< \reimp
 };
 
 } // namespace QtExt

@@ -92,7 +92,7 @@ signals:
 
   // - Implementation -
 protected:
-  virtual void draw(QPainter *painter); ///< \override
+  virtual void draw(QPainter *painter); ///< \reimp
 };
 
 #endif // GRAPHICSRIPPLEEFFECT_H

@@ -118,7 +118,7 @@ OTHER_FILES += $$TRANSLATIONS \
 # Deployment
 
 unix:!mac {
-    INSTALLS += target desktop desktop-kde icon doc image
+    INSTALLS += target desktop desktop-kde icon doc jsf image
 
     target.path = $$BINDIR
 
@@ -137,6 +137,10 @@ unix:!mac {
     DOCDIR = $$DATADIR/annot/browser/doc
     doc.path = $$DOCDIR
     doc.files = $$DOC_FILES
+
+    JSFDIR = $$DATADIR/annot/browser/jsf
+    jsf.path = $$JSFDIR
+    jsf.files = $$JSF_FILES
 
     IMAGEDIR = $$DATADIR/annot/browser/images
     image.path = $$IMAGEDIR

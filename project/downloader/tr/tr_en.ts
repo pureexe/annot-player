@@ -367,12 +367,12 @@
 <context>
     <name>FlvMerge</name>
     <message>
-        <location filename="../../../module/mediacodec/flvmerge.cc" line="21"/>
+        <location filename="../../../module/mediacodec/flvmerge.cc" line="25"/>
         <source>failed to parse FLV streams</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../module/mediacodec/flvmerge.cc" line="27"/>
+        <location filename="../../../module/mediacodec/flvmerge.cc" line="31"/>
         <source>failed to merge FLV streams</source>
         <translation type="unfinished"></translation>
     </message>

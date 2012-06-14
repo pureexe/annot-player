@@ -30,7 +30,7 @@ signals:
   void countChanged(int count);
 
 public slots:
-  virtual void setVisible(bool visible); ///< \override
+  virtual void setVisible(bool visible); ///< \reimp
   void setCount(int count);
 protected slots:
   void ok();

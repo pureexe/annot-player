@@ -17,7 +17,7 @@ public:
   explicit ShutdownDialog(QWidget *parent = 0);
 
 protected:
-  virtual void run(); ///< \override
+  virtual void run(); ///< \reimp
 };
 
 #endif // SHUTDOWNDIALOG_H

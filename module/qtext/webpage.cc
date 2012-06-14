@@ -19,14 +19,14 @@
 
 // - RC -
 
-#ifdef Q_OS_LINUX
+#ifdef Q_WS_X11
 #  ifndef JSFDIR
 #    define JSFDIR      "/usr/share/annot"
 #  endif // JSFDIR
 #  define RC_PREFIX     JSFDIR "/"
 #else
 #  define RC_PREFIX     QCoreApplication::applicationDirPath() + "/jsf/"
-#endif // Q_OS_LINUX
+#endif // Q_WS_X11
 
 //#define RC_HTML_ERROR   RC_PREFIX "error.html"
 #define RC_JSF_ERROR    RC_PREFIX "error.xhtml"
@@ -148,6 +148,21 @@ void
 QtExt::
 WebPage::scrollRight()
 { mainFrame()->setScrollBarValue(Qt::Horizontal, mainFrame()->scrollBarMaximum(Qt::Horizontal)); }
+
+// - User Agent -
+
+// See: WebKit/qt/Api/qwebpage.cpp
+// Example: Mozilla/5.0 (Windows NT 6.1) AppleWebKit/534.34 (KHTML, like Gecko) MYAPP/MYVERSION Safari/534.34
+QString
+QtExt::
+WebPage::userAgentForUrl(const QUrl &url) const
+{
+  static QString ret;
+  if (ret.isEmpty())
+    ret = Base::userAgentForUrl(url)
+        .replace(QRegExp(" \\S+ Safari/"), " Safari/");
+  return ret;
+}
 
 // EOF
 

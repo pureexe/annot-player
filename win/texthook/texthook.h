@@ -18,7 +18,10 @@ public:
   TEXTHOOKAPI static Self *globalInstance() { static Self g; return &g; }
 
 signals: // No import/export needed for Qt signals.
-  void textReceived(const QString &text, ulong hookId, ulong processId);
+  //void textReceived(const QString &text, ulong hookId, ulong processId);
+  void messageReceived(const QByteArray &data, ulong hookId, ulong processId);
+  void processAttached(qint64 pid);
+  //void processDetached(qint64 pid);
 
   // - Properties -
 public:
@@ -30,12 +33,15 @@ public:
   TEXTHOOKAPI int interval() const;
   TEXTHOOKAPI void setInterval(int msecs); ///< Interval to differentiate sentence
 
-  // - Queries -
+  // - Profiles -
+  // TODO: move game profiles to another class
 public:
   TEXTHOOKAPI bool isStandardHookName(const QString &name) const;
   TEXTHOOKAPI bool isKnownHookForProcess(const QString &hookName, const QString &processName) const;
 
   TEXTHOOKAPI QString hookNameById(ulong hookId) const; ///< Broken in ITH3
+
+  static TEXTHOOKAPI QString guessEncodingForFile(const QString &fileName);
 
   // - Injection -
 public:
@@ -54,9 +60,13 @@ public slots:
 protected:
   explicit TextHook(QObject *parent = 0) : Base(parent) { }
   ~TextHook() { if (isActive()) stop(); }
+
 public:
-  void sendText(const QString &text, ulong tid, ulong pid) // text thread callback
-  { emit textReceived(text, tid, pid); }
+  //void sendText(const QString &text, ulong tid, ulong pid) // text thread callback
+  //{ emit textReceived(text, tid, pid); }
+
+  void sendMessage(const QByteArray &data, ulong tid, ulong pid) // text thread callback
+  { emit messageReceived(data, tid, pid); }
 
 private:
   QList<ulong> pids_;
