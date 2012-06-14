@@ -15,8 +15,8 @@ public:
   GraphicsHaloEffectPrivate() : filter(new PixmapHaloFilter), opacity(1.0) {}
   ~GraphicsHaloEffectPrivate() { delete filter; }
 
-  qreal opacity;
   PixmapHaloFilter *filter;
+  qreal opacity;
 };
 
 #endif // GRAPHICSHALOEFFECT_P_H

@@ -4021,11 +4021,11 @@ MainWindow::backlogDialog()
     backlogDialog_ = new BacklogDialog(this);
     windows_.append(backlogDialog_);
     connect(hub_, SIGNAL(tokenModeChanged(SignalHub::TokenMode)), backlogDialog_, SLOT(clear()));
-    connect(signalView_, SIGNAL(hookSelected(ulong,ProcessInfo)), backlogDialog_, SLOT(clear()));
     connect(player_, SIGNAL(mediaChanged()), backlogDialog_, SLOT(clear()));
     connect(annotationView_, SIGNAL(subtitleAdded(QString)), backlogDialog_, SLOT(appendSubtitle(QString)));
     connect(annotationView_, SIGNAL(annotationAdded(QString)), backlogDialog_, SLOT(appendAnnotation(QString)));
 #ifdef USE_MODE_SIGNAL
+    connect(signalView_, SIGNAL(hookSelected(ulong,ProcessInfo)), backlogDialog_, SLOT(clear()));
     connect(messageHandler_, SIGNAL(messageReceivedWithText(QString)), backlogDialog_, SLOT(appendText(QString)));
 #endif // USE_MODE_SIGNAL
   }

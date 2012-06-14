@@ -198,7 +198,9 @@ main(int argc, char *argv[])
     if (QFile::rename(QDir::homePath() + "/Annot", G_PATH_DOWNLOADS))
       AcLocationManager::globalInstance()->createDownloadsLocation();
 
+#ifdef Q_WS_WIN
     WindowsRegistry::globalInstance()->registerRawType("DVD");
+#endif // Q_WS_WIN
 
     ac->setThemeId(AcUi::CyanTheme);
     ac->sync();
