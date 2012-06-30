@@ -2,6 +2,7 @@
 // 2/20/2012
 #include "module/downloadtask/downloadmanager.h"
 #include <QtCore/QRegExp>
+#include <QtCore/QThreadPool>
 
 #define DEBUG "downloadmanager"
 #include "module/debug/debug.h"
@@ -102,6 +103,7 @@ DownloadManager::removeTask(DownloadTask *t)
   if (t) {
     tasks_.removeAll(t);
     t->stop();
+    emit taskRemoved(t);
     if (t->parent() == this)
       t->deleteLater();
   }
@@ -114,6 +116,7 @@ DownloadManager::addTask(DownloadTask *t)
   connect(t, SIGNAL(finished(DownloadTask*)), SLOT(refreshSchedule()), Qt::QueuedConnection);
   connect(t, SIGNAL(error(QString)), SLOT(refreshSchedule()), Qt::QueuedConnection);
   tasks_.append(t);
+  emit taskAdded(t);
 }
 
 void

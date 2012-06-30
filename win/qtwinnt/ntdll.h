@@ -5,10 +5,10 @@
 #include <qt_windows.h>
 
 #ifdef _MSC_VER
-#  pragma warning(disable:4005) // C4005: macro redefinition
-#  pragma warning(disable:4200) // C4200: nonstandard extension used : zero-sized array in struct/union
-#  pragma warning(disable:4010) // C4010: single-line comment contains line-continuation character
-#  pragma warning(disable:4996) // C4996: unsafe function or variable used such as swprintf, wcscpy; alternatively use __CRT_SECURE_NO_WARNINGS
+# pragma warning(disable:4005) // C4005: macro redefinition
+# pragma warning(disable:4200) // C4200: nonstandard extension used : zero-sized array in struct/union
+# pragma warning(disable:4010) // C4010: single-line comment contains line-continuation character
+# pragma warning(disable:4996) // C4996: unsafe function or variable used such as swprintf, wcscpy; alternatively use __CRT_SECURE_NO_WARNINGS
 #endif // _MSC_VER
 
 #define NT_INCLUDED
@@ -61,10 +61,10 @@
 #include "ntstatus.h"
 
 #if (_MSC_VER >= 800) || defined(_STDCALL_SUPPORTED)
-#  define NTAPI __stdcall
+# define NTAPI __stdcall
 #else
-#  define _cdecl
-#  define NTAPI
+# define _cdecl
+# define NTAPI
 #endif // STDCALL
 
 #ifdef __cplusplus

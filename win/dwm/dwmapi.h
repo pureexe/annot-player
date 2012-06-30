@@ -15,10 +15,10 @@
 // Blur behind data structures, must be consistent with Windows 7 SDK
 // http://msdn.microsoft.com/en-us/library/aa969533(v=vs.85).aspx
 #ifdef WITH_DWM_STATIC
-#  include <dwmapi.h>
-#  define DWMAPI
+# include <dwmapi.h>
+# define DWMAPI
 #else
-#  define DWMAPI dwmapi_
+# define DWMAPI dwmapi_
 
 #define DWM_BB_ENABLE                 0x00000001  // fEnable has been specified
 #define DWM_BB_BLURREGION             0x00000002  // hRgnBlur has been specified

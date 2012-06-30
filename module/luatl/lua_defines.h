@@ -6,7 +6,7 @@
 // See: http://www.lua.org/manual/5.2/manual.html
 
 extern "C" {
-#  include <lua.h>
+# include <lua.h>
 } // extern "C"
 
 // See: http://stackoverflow.com/questions/8552560/embedding-lua-in-c

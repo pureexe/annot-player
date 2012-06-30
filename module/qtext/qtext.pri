@@ -1,8 +1,6 @@
 # qtext.pri
 # 6/28/2011
 
-include(../../config.pri)
-
 DEFINES += WITH_MODULE_QTEXT
 DEPENDPATH += $$PWD
 
@@ -82,7 +80,6 @@ SOURCES += \
 QT +=   core gui network webkit
 
 DOC_FILES += \
-    $$PWD/doc/error.html \
     $$PWD/doc/start.html
 
 IMAGE_FILES += \

@@ -4,9 +4,9 @@
 #include "messagehandler.h"
 #include "textcodecmanager.h"
 #ifdef WITH_WIN_TEXTHOOK
-#  include "win/texthook/texthook.h"
+# include "win/texthook/texthook.h"
 #else
-#  error "TextHook module is indispensible"
+# error "TextHook module is indispensible"
 #endif // WITH_WIN_TEXTHOOK
 #include "module/annotcloud/annotation.h"
 #include "module/annotcloud/annottag.h"

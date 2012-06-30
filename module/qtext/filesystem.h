@@ -7,9 +7,9 @@
 #include <QtCore/QString>
 
 #ifdef Q_WS_WIN
-#  define FILE_PATH_SEP      "\\"
+# define FILE_PATH_SEP      "\\"
 #else
-#  define FILE_PATH_SEP      "/"
+# define FILE_PATH_SEP      "/"
 #endif // Q_WS_WIN
 
 namespace QtExt {

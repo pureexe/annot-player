@@ -2,9 +2,12 @@
 #define PLAYER_P_H
 
 #ifdef _MSC_VER
-#  pragma warning (disable:4819)       // C4819: The file contains a character that cannot be represented in the current code page.
-#  pragma warning (disable:4996)       // C4996: MS' deprecated std functions orz.
+# pragma warning (disable:4819)       // C4819: The file contains a character that cannot be represented in the current code page.
+# pragma warning (disable:4996)       // C4996: MS' deprecated std functions orz.
 #endif // _MSC_VER
+#ifdef __clang__
+# pragma clang diagnostic ignored "-Wunused-function" // vlc_plugin_path might be unused
+#endif // __clang__
 
 // player_p.h
 // 11/26/2011
@@ -13,23 +16,23 @@
 //#include "module/qtext/textcodec.h"
 #include "module/qtext/countdowntimer.h"
 #ifdef WITH_MODULE_VLCHTTP
-#  include "module/vlchttp/httpplugin.h"
+# include "module/vlchttp/httpplugin.h"
 #endif // WITH_MODULE_VLCHTTP
 #include <QtCore/QObject>
 #include <QtCore/QList>
 #include <memory>
 extern "C" {
-#  include <vlc/vlc.h>
+# include <vlc/vlc.h>
 } // extern "C"
 #include <QtCore>
 
 //#define VLC_DEBUG
 #ifdef PLAYER_DEBUG
-#  define VLC_DEBUG
+# define VLC_DEBUG
 #endif // PLAYER_DEBUG
 
 #ifdef Q_OS_MAC
-#  define unique_ptr  auto_ptr  // as llvm does not support c++0x at the moment
+# define unique_ptr  auto_ptr  // TR1 requires libc++
 #endif // Q_OS_MAC
 
 // - VLC arguments -
@@ -37,9 +40,9 @@ extern "C" {
 
 #define APP_PLUGIN_PATH QCoreApplication::applicationDirPath() + "/plugins"
 #ifdef Q_WS_WIN
-#  define APP_DATA_PATH QCoreApplication::applicationDirPath()
+# define APP_DATA_PATH QCoreApplication::applicationDirPath()
 #else
-#  define APP_DATA_PATH QCoreApplication::applicationDirPath() + "/share"
+# define APP_DATA_PATH QCoreApplication::applicationDirPath() + "/share"
 #endif // Q_WS_WIN
 
 #define _qs(cs) QString::fromAscii((cs))
@@ -116,9 +119,9 @@ namespace { // anonymous
 //#define VLC_ARGS_MAC            "--opengl-provider=minimal_macosx"
 //#define VLC_ARGS_MAC            VLC_ARGS_NULL // use default macosx filter
 #ifdef Q_WS_MAC
-#  define VLC_ARGS_OS           VLC_ARGS_DATA_PATH
+# define VLC_ARGS_OS           VLC_ARGS_DATA_PATH
 #else
-#  define VLC_ARGS_OS           VLC_ARGS_NULL
+# define VLC_ARGS_OS           VLC_ARGS_NULL
 #endif // Q_WS_MAC
 
 #define VLC_ARGS_RELEASE \

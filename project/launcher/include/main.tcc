@@ -19,11 +19,11 @@
 namespace { // anonymous
 
   inline std::string
-  dirname_(const std::string &path)
+  dirname(const std::string &path)
   { return path.substr(0, path.find_last_of('\\')); }
 
   inline std::wstring
-  dirname_(const std::wstring &path)
+  dirname(const std::wstring &path)
   { return path.substr(0, path.find_last_of(L'\\')); }
 
 } // anonymous namespace
@@ -45,9 +45,9 @@ WinMain(__in HINSTANCE hInstance, __in HINSTANCE hPrevInstance, __in LPSTR lpCmd
       return -1;
   }
   std::wstring wsApp(wszBuffer);
-  std::wstring wsDir = dirname_(wszBuffer);
+  std::wstring wsDir = dirname(wszBuffer);
   std::wstring wsNextApp = wsDir + (L"\\" APP_PREFIX APP_EXE);
-  std::wstring wsNextAppPath = dirname_(wsNextApp);
+  std::wstring wsNextAppPath = dirname(wsNextApp);
 
   // See: http://msdn.microsoft.com/en-us/library/windows/desktop/cc144102(v=vs.85).aspx
   ::SetFileAttributesW(wsDir.c_str(), FILE_ATTRIBUTE_READONLY);

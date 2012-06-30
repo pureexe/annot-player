@@ -5,9 +5,7 @@ VERSION = 0.1.5.1
 
 CONFIG += noqt nocrt
 include(../../../config.pri)
-
-INCLUDEPATH += ../include
-DEPENDPATH  += ../include
+include($$ROOTDIR/project/launcher/launcher.pri)
 
 ## Libraries
 

@@ -1,4 +1,4 @@
-// searchenginefactory.cc
+﻿// searchenginefactory.cc
 // 4/25/2012
 #include "module/searchengine/searchenginefactory.h"
 #include "module/searchengine/searchenginerc.h"
@@ -21,7 +21,7 @@ SearchEngineFactory::create(int engine) const
   case Youku:     return new SearchEngine(Youku,    SE_YOUKU,    tr("Youku"),    WBRC_IMAGE_YOUKU,    QStringList("youku") << "ヨウク" << "优酷");
 
   case WikiJa:    return new SearchEngine(WikiJa,   SE_WIKI_JA,  tr("Wikipedia (ja)"), WBRC_IMAGE_WIKI, QStringList("j") << "ja" << "ウィキ" << "百科");
-  case WikiEn:    return new SearchEngine(WikiEn,   SE_WIKI_EN,  tr("Wikipedia (en)"), WBRC_IMAGE_WIKI, QStringList("w") << "en" << "wiki" << "wikipedia");
+  case WikiEn:    return new SearchEngine(WikiEn,   SE_WIKI_EN,  tr("Wikipedia (en)"), WBRC_IMAGE_WIKI, QStringList("w") << "e" << "en" << "wiki" << "wikipedia");
   case WikiZh:    return new SearchEngine(WikiZh,   SE_WIKI_ZH,  tr("Wikipedia (zh)"), WBRC_IMAGE_WIKI, QStringList("z") << "zh" << "维基");
   case Manpage:   return new SearchEngine(Manpage,  SE_MAN,      "Manpages",     "",                  QStringList("man"));
   case CPlusPlus: return new SearchEngine(CPlusPlus,SE_CPP,      "C++",          WBRC_IMAGE_CPP,      QStringList("cpp") << "c++" << "cplusplus");

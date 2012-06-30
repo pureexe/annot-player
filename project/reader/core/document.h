@@ -156,7 +156,7 @@ namespace Core {
 
     void clear(); ///< Delete Poppler::Document and Document::Pages
 
-    int hash() const { return reinterpret_cast<long>(impl()); }
+    int hash() const { return reinterpret_cast<ulong>(impl()); }
 
     //void close();
 

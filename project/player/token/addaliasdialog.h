@@ -9,6 +9,7 @@
 QT_FORWARD_DECLARE_CLASS(QComboBox)
 QT_FORWARD_DECLARE_CLASS(QToolButton)
 
+class SignalHub;
 class AddAliasDialog : public AcWindow
 {
   Q_OBJECT
@@ -17,7 +18,7 @@ class AddAliasDialog : public AcWindow
   typedef AcWindow Base;
 
 public:
-  explicit AddAliasDialog(QWidget *parent = 0);
+  explicit AddAliasDialog(SignalHub *hub, QWidget *parent = 0);
 
 private:
   void createLayout();
@@ -27,20 +28,24 @@ signals:
 
   // - Properties -
 public:
-  quint32 languageFlags() const;
+  //quint32 languageFlags() const;
 
-  // - Slots -
+  // - Actions -
+public slots:
+  virtual void setVisible(bool visible); ///< \reimp
+  void refresh();
 protected slots:
   void ok();
   void paste();
+  void verifyEditText();
 
-  void tag01()          { tag("01"); }
-  void tag02()          { tag("02"); }
-  void tag03()          { tag("03"); }
-  void tag04()          { tag("04"); }
-  void tag05()          { tag("05"); }
-  void tagOVA()         { tag("OVA"); }
-  void tagOAD()         { tag("OAD"); }
+  //void tag01()          { tag("01"); }
+  //void tag02()          { tag("02"); }
+  //void tag03()          { tag("03"); }
+  //void tag04()          { tag("04"); }
+  //void tag05()          { tag("05"); }
+  //void tagOVA()         { tag("OVA"); }
+  //void tagOAD()         { tag("OAD"); }
 
   //void tagBD()          { tag("BD"); }
   //void tagDVD()         { tag("DVD"); }
@@ -48,10 +53,11 @@ protected slots:
   //void tagWeb()         { tag("Web"); }
 
   void updateOKButton();
+  void updateUrlButton();
 
-  void setTypeToName(bool t);
-  void setTypeToTag(bool t);
-  void setTypeToUrl(bool t);
+  void setTypeToName(bool t = true);
+  //void setTypeToTag(bool t);
+  void setTypeToUrl(bool t = true);
 
 protected:
   void tag(const QString &tag);
@@ -61,15 +67,19 @@ protected:
   //virtual void contextMenuEvent(QContextMenuEvent *event);
 
 private:
-  QComboBox *aliasEdit_;
+  SignalHub *hub_;
+  QComboBox *edit_;
+  QString editStyleSheet_;
   QToolButton *okButton_, *cancelButton_;
 
-  QToolButton *isNameButton_, *isTagButton_, *isUrlButton_;
+  QToolButton *isNameButton_,
+              //*isTagButton_,
+              *isUrlButton_;
 
-  QToolButton *isEnglishButton_,
-              *isJapaneseButton_,
-              *isChineseButton_,
-              *isAlienButton_;
+  //QToolButton *isEnglishButton_,
+  //            *isJapaneseButton_,
+  //            *isChineseButton_,
+  //            *isAlienButton_;
 };
 
 #endif // ADDALIASDIALOG_H

@@ -90,16 +90,16 @@ DownloadTask::updateProgress(qint64 receivedBytes, qint64 totalBytes)
 
 // - Actions -
 
-void
-DownloadTask::exec()
-{
-  QEventLoop l;
-  connect(this, SIGNAL(quited()), &l, SLOT(quit()));
-  l.exec();
-}
-
-void
-DownloadTask::quit()
-{ QTimer::singleShot(0, this, SIGNAL(quited())); }
+//void
+//DownloadTask::exec()
+//{
+//  QEventLoop l;
+//  connect(this, SIGNAL(quited()), &l, SLOT(quit()));
+//  l.exec();
+//}
+//
+//void
+//DownloadTask::quit()
+//{ QTimer::singleShot(0, this, SIGNAL(quited())); }
 
 // EOF

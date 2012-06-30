@@ -13,9 +13,9 @@
 #include "module/debug/debug.h"
 
 #ifdef Q_OS_MAC
-#  define K_CTRL        "cmd"
+# define K_CTRL        "cmd"
 #else
-#  define K_CTRL        "Ctrl"
+# define K_CTRL        "Ctrl"
 #endif // Q_OS_MAC
 
 // - Construciton -

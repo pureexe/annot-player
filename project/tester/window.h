@@ -7,11 +7,11 @@
 //#include "module/graphicseffect/graphicsrippleeffect.h"
 #include <QtGlobal>
 //#ifdef Q_WS_WIN
-//#  include "win/dwm/dwm.h"
+//# include "win/dwm/dwm.h"
 //#endif // Q_WS_WIN
 #include <QtGui>
 #ifdef Q_WS_MAC
-#  include <QtGui/QMacCocoaViewContainer>
+# include <QtGui/QMacCocoaViewContainer>
 #endif // Q_WS_MAC
 
 inline int **allocateWaveMap(const QSize &size)

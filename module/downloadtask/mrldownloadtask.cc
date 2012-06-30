@@ -2,9 +2,9 @@
 // 2/20/2012
 #include "module/downloadtask/mrldownloadtask.h"
 #ifdef WITH_MODULE_MRLRESOLVER
-#  include "module/mrlresolver/luamrlresolver.h"
+# include "module/mrlresolver/luamrlresolver.h"
 #else
-#  error "mrlresolver module is required"
+# error "mrlresolver module is required"
 #endif // WITH_MODULE_MRLRESOLVER
 #include <QtCore/QCoreApplication>
 #include <QtCore/QDir>
@@ -35,7 +35,8 @@ void
 MrlDownloadTask::reset()
 {
   retries_ = MaxDownloadRetries;
-  stopped_ = false; Base::reset();
+  stopped_ = false;
+  Base::reset();
 }
 
 void

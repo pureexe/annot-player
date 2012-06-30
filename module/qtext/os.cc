@@ -5,18 +5,18 @@
 #include <QtCore/QFileInfo>
 #include <QtCore/QDir>
 #ifdef Q_WS_WIN
-#  include <QtCore/QCoreApplication>
-#  include <qt_windows.h>
-//#  define TEMP_PATH     QCoreApplication::applicationDirPath() + "/" "tmp"
-#  define TEMP_PATH     QCoreApplication::applicationDirPath() // compromise liblua in luaresolver
+# include <QtCore/QCoreApplication>
+# include <qt_windows.h>
+//# define TEMP_PATH     QCoreApplication::applicationDirPath() + "/" "tmp"
+# define TEMP_PATH     QCoreApplication::applicationDirPath() // compromise liblua in luaresolver
 #else
-#  include <ctime>
-#  include <unistd.h>
+# include <ctime> // where nanosleep() and timespec is declared
+# include <unistd.h>
 #endif // Q_WS_WIN
 #include <cstdio>
 
 #ifdef _MSC_VER
-#  pragma warning (disable:4996)     // C4996: This function or variable may be unsafe. (tmpnam, getenv)
+# pragma warning (disable:4996)     // C4996: This function or variable may be unsafe. (tmpnam, getenv)
 #endif // _MSC_VER
 
 #define DEBUG "os"

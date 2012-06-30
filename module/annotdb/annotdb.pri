@@ -1,8 +1,6 @@
 # annotdb.pri
 # 6/5/2012
 
-include(../../config.pri)
-
 DEFINES += WITH_MODULE_ANNOTDB
 
 DEPENDPATH += $$PWD

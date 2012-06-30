@@ -8,21 +8,21 @@
 
 #include "module/downloadtask/mrldownloadtask.h"
 #ifdef WITH_MODULE_STREAM
-#  include "module/stream/bufferedremotestream.h"
-#  include "module/stream/fileoutputstream.h"
+# include "module/stream/bufferedremotestream.h"
+# include "module/stream/fileoutputstream.h"
 #else
-#  error "stream module is required"
+# error "stream module is required"
 #endif // WITH_MODULE_STREAM
 #ifdef WITH_MODULE_MEDIACODEC
-#  include "module/mediacodec/flvcodec.h"
-#  include "module/mediacodec/flvmerge.h"
+# include "module/mediacodec/flvcodec.h"
+# include "module/mediacodec/flvmerge.h"
 #else
-#  error "mediacodec module is required"
+# error "mediacodec module is required"
 #endif // WITH_MODULE_MEDIACODEC
 #ifdef WITH_MODULE_MRLRESOLVER
-#  include "module/mrlresolver/luamrlresolver.h"
+# include "module/mrlresolver/luamrlresolver.h"
 #else
-#  error "mrlresolver module is required"
+# error "mrlresolver module is required"
 #endif // WITH_MODULE_MRLRESOLVER
 #include "module/qtext/algorithm.h"
 #include "module/qtext/filesystem.h"
@@ -212,7 +212,7 @@ MrlDownloadTask::downloadMultipleMedia(const MediaInfo &mi, QNetworkCookieJar *j
      if (!ins.isEmpty()) {
        foreach (InputStream *in, QtExt::revertList(ins)) { // revert list so that nam will be deleted later
          DOUT("deleting input stream");
-         RemoteStream *p = dynamic_cast<RemoteStream *>(in);
+         auto p = static_cast<RemoteStream *>(in);
          p->stop();
          DOUT("deleting previous stream");
          //p->deleteLater();
@@ -266,7 +266,7 @@ MrlDownloadTask::downloadMultipleMedia(const MediaInfo &mi, QNetworkCookieJar *j
     emit error(tr("failed to open file to write") + ": " + tmpFile);
     emit stopped();
     foreach (InputStream *in, QtExt::revertList(ins)) { // revert list so that nam will be deleted later
-      RemoteStream *p = dynamic_cast<RemoteStream *>(in);
+      auto p = static_cast<RemoteStream *>(in);
       p->stop();
       DOUT("deleting previous stream");
       //p->deleteLater();
@@ -304,7 +304,7 @@ MrlDownloadTask::downloadMultipleMedia(const MediaInfo &mi, QNetworkCookieJar *j
     emit stopped();
 
     foreach (InputStream *in, QtExt::revertList(ins)) { // revert list so that nam will be deleted later
-      RemoteStream *p = dynamic_cast<RemoteStream *>(in);
+      auto p = static_cast<RemoteStream *>(in);
       p->stop();
       DOUT("deleting previous stream");
       //p->deleteLater();
@@ -330,7 +330,7 @@ MrlDownloadTask::downloadMultipleMedia(const MediaInfo &mi, QNetworkCookieJar *j
 
   out.close();
 
-  if (ok && isRunning() &&
+  if (ok && isDownloading() &&
       QFileInfo(tmpFile).size() >= MinimumFileSize &&
       FlvCodec::isFlvFile(tmpFile)) {
     ok = FlvCodec::updateFlvFileMeta(tmpFile);
@@ -362,7 +362,7 @@ MrlDownloadTask::downloadMultipleMedia(const MediaInfo &mi, QNetworkCookieJar *j
   emit stopped();
 
   foreach (InputStream *in, QtExt::revertList(ins)) { // revert list so that nam will be deleted later
-    RemoteStream *p = dynamic_cast<RemoteStream *>(in);
+    auto p = static_cast<RemoteStream *>(in);
     p->stop();
     DOUT("deleting previous stream");
     //p->deleteLater();

@@ -2,11 +2,12 @@
 // 11/18/2011
 #include "application.h"
 #include "global.h"
+#include "project/common/acpaths.h"
 #ifdef Q_WS_WIN
-#  include "win/qtwin/qtwin.h"
+# include "win/qtwin/qtwin.h"
 #endif // Q_WS_WIN
 #ifdef Q_WS_MAC
-#  include "mac/qtmac/qtmac.h"
+# include "mac/qtmac/qtmac.h"
 #endif // Q_WS_MAC
 #include <QtCore/QDir>
 #include <QtCore/QProcess>
@@ -45,21 +46,25 @@ Application::~Application()
 void
 Application::createDirectories()
 {
-  QDir profile(G_PATH_PROFILE);
-  if (!profile.exists())
-    profile.mkpath(profile.absolutePath());
+  QDir d(AC_PATH_CACHES);
+  if (!d.exists())
+    d.mkpath(d.absolutePath());
 
-  QDir lock(G_PATH_LOCK);
-  if (!lock.exists())
-    lock.mkpath(lock.absolutePath());
+  d = QDir(G_PATH_PROFILE);
+  if (!d.exists())
+    d.mkpath(d.absolutePath());
 
-  QDir caches(G_PATH_CACHES);
-  if (!caches.exists())
-    caches.mkpath(caches.absolutePath());
+  d = QDir(G_PATH_LOCK);
+  if (!d.exists())
+    d.mkpath(d.absolutePath());
 
-  QDir logs(G_PATH_LOGS);
-  if (!logs.exists())
-    logs.mkpath(logs.absolutePath());
+  d = QDir(G_PATH_CACHES);
+  if (!d.exists())
+    d.mkpath(d.absolutePath());
+
+  d = QDir(G_PATH_LOGS);
+  if (!d.exists())
+    d.mkpath(d.absolutePath());
 }
 
 // - Properties -

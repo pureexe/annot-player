@@ -10,21 +10,13 @@
 #include <QtGui/QFont>
 #include <QtCore/QObject>
 
-#ifdef Q_WS_MAC
-#  define ANNOTATION_JAPANESE_FONT_FAMILY "Helvetica"
-#else
-#  define ANNOTATION_JAPANESE_FONT_FAMILY "MS Gothic"
-#endif // Q_WS_MAC
+#define ANNOTATION_JAPANESE_FONT_FAMILY "MS Gothic"
 
 #define ANNOTATION_CHINESE_FONT_FAMILY  "YouYuan"
 
 #define ANNOTATION_FONT_FAMILY  "Helvetica"
 
-#ifdef Q_WS_WIN
-#  define ANNOTATION_FONT_SIZE  18
-#else
-#  define ANNOTATION_FONT_SIZE  20
-#endif // Q_WS_WIN
+#define ANNOTATION_FONT_SIZE  18
 
 #define ANNOTATION_OUTLINE_COLOR        QColor(50,100,100)
 #define ANNOTATION_OUTLINE_COLOR_HOVER  Qt::red
@@ -32,6 +24,8 @@
 #define ANNOTATION_OUTLINE_COLOR_SUB    Qt::magenta
 
 #define ANNOTATION_EFFECT_OPACITY 0.9
+
+#define ANNOTATION_POSITION_RESOLUTION  18
 
 class AnnotationSettings : public QObject
 {
@@ -43,6 +37,7 @@ class AnnotationSettings : public QObject
   qreal scale_;
   qreal rotation_;
   int offset_;
+  int positionResolution_;
   QFont font_,
         japaneseFont_,
         chineseFont_;
@@ -51,17 +46,22 @@ class AnnotationSettings : public QObject
   bool metaVisible_;
   bool motionless_;
 
+  bool traditionalChinese_;
+
   QColor outlineColor_,
-         subtitleColor_;
+         subtitleColor_,
+         highlightColor_;
 
 public:
   static Self *globalSettings() { static Self g; return &g; }
 protected:
   explicit AnnotationSettings(QObject *parent = 0)
-    : Base(parent), scale_(1), rotation_(0), offset_(0),
-      avatarVisible_(false), motionless_(true)
+    : Base(parent), scale_(1), rotation_(0), offset_(0), positionResolution_(ANNOTATION_POSITION_RESOLUTION),
+      avatarVisible_(false), motionless_(true), traditionalChinese_(false)
   {
     resetOutlineColor();
+    resetSubtitleColor();
+    resetHighlightColor();
     resetFont();
     resetJapaneseFont();
     resetChineseFont();
@@ -69,18 +69,22 @@ protected:
 
 signals:
   void scaleChanged(qreal value);
+  void positionResolutionChanged(int value);
   void rotationChanged(qreal value);
   void offsetChanged(int value);
   void avatarVisibleChanged(bool value);
   void metaVisibleChanged(bool value);
   void preferMotionlessChanged(bool value);
   void outlineColorChanged(QColor color);
+  void highlightColorChanged(QColor color);
   void subtitleColorChanged(QColor color);
+  void preferTraditionalChineseChange(bool t);
   //void fontChanged(const QFont &value);
 public:
   qreal scale() const { return scale_; }
   qreal rotation() const { return rotation_; }
   int offset() const { return offset_; }
+  int positionResolution() const { return positionResolution_; }
   bool isAvatarVisible() const { return avatarVisible_; }
   bool isMetaVisible() const { return metaVisible_; }
 
@@ -98,11 +102,13 @@ public:
 
   const QColor &outlineColor() const { return outlineColor_; }
   const QColor &subtitleColor() const { return subtitleColor_; }
+  const QColor &highlightColor() const { return highlightColor_; }
 
   bool preferMotionless() const { return motionless_; }
 
-public slots:
+  bool preferTraditionalChinese() const { return traditionalChinese_; }
 
+public slots:
   void setScale(qreal value) { if (!qFuzzyCompare(scale_, value)) emit scaleChanged(scale_ = value); }
   void resetScale() { setScale(0); }
 
@@ -111,6 +117,15 @@ public slots:
 
   void setOffset(int value) { if (offset_ != value) emit offsetChanged(offset_ = value); }
   void resetOffset() { setOffset(0); }
+
+  void setPositionResolution(int value) { if (positionResolution_ != value) emit positionResolutionChanged(positionResolution_ = value); }
+  void resetPositionResolution() { setPositionResolution(ANNOTATION_POSITION_RESOLUTION); }
+
+  void setPreferTraditionalChinese(bool t = true)
+  {
+    if (traditionalChinese_ != t)
+      emit preferTraditionalChineseChange(traditionalChinese_ = t);
+  }
 
   void setOutlineColor(const QColor &c)
   {
@@ -133,6 +148,17 @@ public slots:
   }
 
   void resetSubtitleColor() { setSubtitleColor(QColor()); }
+
+  void setHighlightColor(const QColor &c)
+  {
+    if (c.isValid()) {
+      if (highlightColor_ != c)
+        emit highlightColorChanged(highlightColor_ = c);
+    } else if (highlightColor_ != ANNOTATION_OUTLINE_COLOR_HOVER)
+      emit highlightColorChanged(highlightColor_ = ANNOTATION_OUTLINE_COLOR_HOVER);
+  }
+
+  void resetHighlightColor() { setHighlightColor(QColor()); }
 
   void setFont(const QFont &value) { font_ = value; }
   void setJapaneseFont(const QFont &value) { japaneseFont_ = value; }

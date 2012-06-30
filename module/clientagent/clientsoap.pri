@@ -1,8 +1,6 @@
 # clientsoap.pri
 # 10/6/2011
 
-## TODO: Automatic generate this pri file!!
-
 CLIENT_SOAP_BINDING = ClientAgentServiceSoapBinding
 CLIENT_SOAP_PREFIX = ClientSoap
 

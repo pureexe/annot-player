@@ -5,7 +5,7 @@
 // 10/8/2011
 
 #ifndef WITH_MODULE_GSOAP
-#  error "gsoap is required"
+# error "gsoap is required"
 #endif // WITH_MODULE_GSOAP
 
 #include <QtGlobal>

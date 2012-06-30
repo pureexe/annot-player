@@ -18,8 +18,8 @@ class UrlDialog : public AcWindow
 
   QComboBox *edit_;
   QToolButton *urlButton_,
-              *openButton_,
-              *saveButton_;
+              *openButton_;
+              //*saveButton_;
   QString editStyleSheet_;
 
 public:
@@ -29,7 +29,7 @@ public:
   bool isEmpty() const;
 
 signals:
-  void urlEntered(const QString &url, bool save);
+  void urlEntered(const QString &url);
 
 public slots:
   void addHistory(const QString &url);
@@ -37,7 +37,7 @@ public slots:
   void paste();
   void setExampleUrl(const QString &text);
   void setText(const QString &url);
-  void setSave(bool t);
+  //void setSave(bool t);
   void increase();
   void decrease();
 

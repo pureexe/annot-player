@@ -1,8 +1,6 @@
 # translator.pri
 # 11/2/2011
 
-include(../../config.pri)
-
 DEFINES += WITH_MODULE_TRANSLATOR
 
 DEPENDPATH += $$PWD

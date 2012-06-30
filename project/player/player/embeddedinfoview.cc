@@ -19,6 +19,10 @@ using namespace AnnotCloud;
 //#define DEBUG "embeddedinfoview"
 #include "module/debug/debug.h"
 
+#ifdef __clang__
+# pragma clang diagnostic ignored "-Wlogical-op-parentheses" // '&&' within '||'
+#endif // __clang__
+
 #define STYLESHEET \
   SS_BEGIN(QLabel) \
     SS_COLOR(cyan) \
@@ -27,9 +31,9 @@ using namespace AnnotCloud;
 #define MAX_WIDTH       300
 
 #ifdef Q_WS_WIN
-#  define FONT_SIZE     8 // 8 em
+# define FONT_SIZE     8 // 8 em
 #else
-#  define FONT_SIZE     10 // 10 em
+# define FONT_SIZE     10 // 10 em
 #endif
 
 // - Construction -

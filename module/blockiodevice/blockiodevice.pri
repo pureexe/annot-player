@@ -1,8 +1,6 @@
 # blockiodevice.pri
 # 12/3/2011
 
-include(../../config.pri)
-
 DEFINES += WITH_MODULE_BLOCKIODEVICE
 
 DEPENDPATH += $$PWD

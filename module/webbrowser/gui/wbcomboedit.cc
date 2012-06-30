@@ -35,8 +35,8 @@ WbComboEdit::createActions()
     popupAct->setStatusTip(tr("History"));
   } connect(popupAct, SIGNAL(triggered()), SLOT(showPopup()));
   clearAct = new QAction(this); {
-    clearAct->setText(tr("Clear"));
-    clearAct->setStatusTip(tr("Clear"));
+    clearAct->setText(tr("Clear All"));
+    clearAct->setStatusTip(tr("Clear All"));
   } connect(clearAct, SIGNAL(triggered()), SLOT(reset()));
   pasteAndGoAct = new QAction(this); {
     pasteAndGoAct->setText(tr("Paste and Go"));

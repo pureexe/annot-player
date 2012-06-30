@@ -12,7 +12,7 @@
 #include <QtCore/QDebug>
 
 #ifdef __GNUC__
-#  pragma GCC diagnostic ignored "-Wparentheses" // suggest parentheses arround '&&' within '||'
+# pragma GCC diagnostic ignored "-Wparentheses" // suggest parentheses arround '&&' within '||'
 #endif // __GNUC__
 
 // - Merge -
@@ -271,8 +271,8 @@ FlvMerge::readTag(InputStream *in, bool writeHeader)
   //if (!writeHeader && (tagType == ScriptTag || !data[1])) {
   //
   // WARNING: intermediate header data[1] is not skipped, because some of the codec uses UI16
-  //if (!writeHeader && (tagType == ScriptTag || !data[1] && !data[2])) {
-  if (!writeHeader && tagType == ScriptTag) {
+  //if (!writeHeader && tagType == ScriptTag) {
+  if (!writeHeader && (tagType == ScriptTag || !data[1] && !data[2])) {
     //DOUT("drop header at time" << newTimestamp);
     qDebug() << "flvmerge::readTag: drop header at time" << newTimestamp;
     return true;

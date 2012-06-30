@@ -1,8 +1,6 @@
 # serveragent.pri
 # 9/10/2011
 
-include(../../config.pri)
-
 DEFINES += WITH_MODULE_SERVERAGENT
 
 INCLUDEPATH += \

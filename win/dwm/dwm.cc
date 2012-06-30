@@ -4,7 +4,7 @@
 #include "dwm/dwm.h"
 #include "dwm/dwmapi.h"
 #ifdef WITH_DWM_NOTIFIER
-#  include "dwm/dwmnotifier.h"
+# include "dwm/dwmnotifier.h"
 #endif // WITH_DWM_NOTIFIER
 
 void

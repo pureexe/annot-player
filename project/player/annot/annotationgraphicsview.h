@@ -72,6 +72,7 @@ signals:
   void message(const QString &text);
   void searchRequested(int engine, const QString &key);
   void translateRequested(const QString &text, int lang);
+  void traditionalChineseRequested(const QString &text);
   void annotationSkipped();
   void itemCountLimitedChanged(bool t);
   void itemMetaVisibleChanged(bool t);
@@ -184,6 +185,7 @@ public:
 
   void searchText(const QString &text, int engine);
   void translateText(const QString &text, int lang);
+  void showTraditionalChinese(const QString &text);
 
 signals:
   void annotationAdded(const Annotation &annot);

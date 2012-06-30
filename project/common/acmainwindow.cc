@@ -5,12 +5,12 @@
 #include "project/common/acss.h"
 #include "project/common/acui.h"
 #ifdef WITH_MODULE_ANIMATION
-#  include "module/animation/fadeanimation.h"
+# include "module/animation/fadeanimation.h"
 #endif // WITH_MODULE_ANIMATION
 #ifdef WITH_MODULE_IMAGEFILTER
-#  include "module/imagefilter/rippleimagefilter.h"
-#  include <QtGui/QMouseEvent>
-#  include <QtGui/QPainter>
+# include "module/imagefilter/rippleimagefilter.h"
+# include <QtGui/QMouseEvent>
+# include <QtGui/QPainter>
 #endif // WITH_MODULE_IMAGEFILTER
 #include <QtGui/QStatusBar>
 #include <QtCore/QTimer>
@@ -27,9 +27,9 @@
 #define SS_STATUSBAR_ERROR      SS_STATUSBAR_(red,bold)
 #define SS_STATUSBAR_NOTIFY     SS_STATUSBAR_(orange,bold)
 #ifdef Q_WS_X11
-#  define SS_STATUSBAR_MESSAGE    SS_STATUSBAR_(black,normal)
+# define SS_STATUSBAR_MESSAGE    SS_STATUSBAR_(black,normal)
 #else
-#  define SS_STATUSBAR_MESSAGE    SS_STATUSBAR_(cyan,normal)
+# define SS_STATUSBAR_MESSAGE    SS_STATUSBAR_(cyan,normal)
 #endif //Q_WS_X11
 
 enum { StatusMessageTimeout = 5000 };

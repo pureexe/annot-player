@@ -27,8 +27,14 @@ AcLocationPrefs::createLayout()
   downloadsLocationEdit_ = ui->makeComboBox(
         AcUi::EditHint, "", tr("Downloads Location for Annot Player and Annot Downloader"), defvals.first(), defvals);
   downloadsLocationEdit_->setStatusTip(tr("Downloads Location"));
-  connect(downloadsLocationEdit_, SIGNAL(editTextChanged(QString)), SLOT(verifyLocation(QString)));
-  QToolButton *downloadsLocationButton = ui->makeToolButton(0, tr("Downloads"), tr("Open Downloads Location"), locationManager_, SLOT(openDownloadsLocation()));
+  connect(downloadsLocationEdit_, SIGNAL(editTextChanged(QString)), SLOT(verifyDownloadsLocation()));
+
+  QToolButton *openButton = ui->makeToolButton(AcUi::HighlightHint, tr("Downloads"), tr("Open Downloads Location"), locationManager_, SLOT(openDownloadsLocation()));
+  resetDownloadsLocationButton_ = ui->makeToolButton(AcUi::PushHint, tr("Default"), tr("Default Location"), this, SLOT(resetDownloadsLocation())),
+  createDownloadsLocationButton_ = ui->makeToolButton(AcUi::PushHint, tr("Create"), tr("Create Directory"), locationManager_, SLOT(createDownloadsLocation()));
+
+  connect(resetDownloadsLocationButton_, SIGNAL(clicked()), SLOT(verifyDownloadsLocation()));
+  connect(createDownloadsLocationButton_, SIGNAL(clicked()), SLOT(verifyDownloadsLocation()));
 
   downloadsLocationEditStyleSheet_ = downloadsLocationEdit_->styleSheet();
 
@@ -36,14 +42,10 @@ AcLocationPrefs::createLayout()
   QGridLayout *grid = new QGridLayout; {
     // (row, col, rowspan, colspan, alignment)
     int r, c;
-    grid->addWidget(downloadsLocationButton, r=0, c=0, 1, 1);
-    grid->addWidget(downloadsLocationEdit_, r, ++c,   1, 3);
-
-    //grid->addWidget(passwordLabel, ++r, c=0);
-    //grid->addWidget(passwordEdit_, r, ++c);
-//
-    //grid->addWidget(cancelButton, ++r, c=0, Qt::AlignHCenter);
-    //grid->addWidget(loginButton, r, ++c, Qt::AlignHCenter);
+    grid->addWidget(openButton, r=0, c=0);
+    grid->addWidget(downloadsLocationEdit_, r, ++c);
+    grid->addWidget(createDownloadsLocationButton_, r, ++c);
+    grid->addWidget(resetDownloadsLocationButton_, r, ++c);
 
     grid->setContentsMargins(9, 9, 9, 9);
     setContentsMargins(0, 0, 0, 0);
@@ -57,14 +59,16 @@ AcLocationPrefs::createLayout()
 void
 AcLocationPrefs::load()
 {
-  QString downloadsLocation = AcLocationManager::globalInstance()->downloadsLocation();
-  downloadsLocationEdit_->setEditText(downloadsLocation);
-  if (downloadsLocationEdit_->count() && downloadsLocation != downloadsLocationEdit_->itemText(0))
-    downloadsLocationEdit_->addItem(downloadsLocation);
+  loadDownloadsLocation();
+  verifyDownloadsLocation();
 }
 
 bool
 AcLocationPrefs::save()
+{ return saveDownloadsLocation(); }
+
+bool
+AcLocationPrefs::saveDownloadsLocation()
 {
   QString location = downloadsLocationEdit_->currentText().trimmed();
   if (location.isEmpty())
@@ -74,14 +78,27 @@ AcLocationPrefs::save()
 }
 
 void
-AcLocationPrefs::verifyLocation(const QString &path)
+AcLocationPrefs::loadDownloadsLocation()
 {
-  bool ok = QFile::exists(path);
+  QString downloadsLocation = AcLocationManager::globalInstance()->downloadsLocation();
+  downloadsLocationEdit_->setEditText(downloadsLocation);
+  if (downloadsLocationEdit_->count() && downloadsLocation != downloadsLocationEdit_->itemText(0))
+    downloadsLocationEdit_->addItem(downloadsLocation);
+}
+
+void
+AcLocationPrefs::verifyDownloadsLocation()
+{
+  QString location = downloadsLocationEdit_->currentText().trimmed();
+  bool ok = QFile::exists(location);
 
   if (ok)
-    emit message(tr("exists") + ": " + path);
+    emit message(tr("exists") + ": " + location);
   else
-    emit warning(tr("not exist") + ": " + path);
+    emit warning(tr("not exist") + ": " + location);
+
+  resetDownloadsLocationButton_->setEnabled(location == locationManager_->defaultDownloadsLocation());
+  createDownloadsLocationButton_->setEnabled(!ok);
 
   downloadsLocationEdit_->setStyleSheet(downloadsLocationEditStyleSheet_ + (ok ?
     SS_BEGIN(QComboBox)
@@ -92,6 +109,13 @@ AcLocationPrefs::verifyLocation(const QString &path)
       SS_COLOR(red)
     SS_END
   ));
+}
+
+void
+AcLocationPrefs::resetDownloadsLocation()
+{
+  QString location = locationManager_->defaultDownloadsLocation();
+  settings()->setDownloadsLocation(location);
 }
 
 // EOF

@@ -5,12 +5,12 @@
 #include <QtGlobal>
 #import <AppKit/AppKit.h>
 #ifdef USE_MAC_CARBON
-#  import <Carbon/CarbonEvents.h>
+# import <Carbon/CarbonEvents.h>
 #endif // USE_MAC_CARBON
 //#import <objc/runtime.h>
 
 #ifndef USE_MAC_CARBON
-#  define GetCurrentEventTime()   nil
+# define GetCurrentEventTime()   nil
 #endif // USE_MAC_CARBON
 
 //#define DEBUG "qtstep"

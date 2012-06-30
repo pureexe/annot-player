@@ -5,14 +5,19 @@
 #include "module/mrlresolver/mrlresolversettings.h"
 #include "module/qtext/htmltag.h"
 #ifdef WITH_MODULE_LUARESOLVER
-#  include "module/luaresolver/luaresolver.h"
+# include "module/luaresolver/luaresolver.h"
 #else
-#  error "luaresolver module is required"
+# error "luaresolver module is required"
 #endif // WITH_MODULE_LUARESOLVER
 #ifdef WITH_MODULE_MRLANALYSIS
-#  include "module/mrlanalysis/mrlanalysis.h"
+# include "module/mrlanalysis/mrlanalysis.h"
 #else
-#  error "mrlanalysis module is required"
+# error "mrlanalysis module is required"
+#endif // WITH_MODULE_MRLANALYSIS
+#ifdef WITH_MODULE_DOWNLOAD
+# include "module/download/download.h"
+#else
+# error "download module is required"
 #endif // WITH_MODULE_MRLANALYSIS
 #include <QtNetwork/QNetworkCookieJar>
 #include <QtCore/QCoreApplication>
@@ -25,19 +30,19 @@
 
 // TODO: move to project source project instead of hard code here
 #ifdef Q_OS_WIN
-#  define LUA_PATH "lua/luascript" // omit applicationDirPath, which might contains non-ascii chars and cannot handled by liblua
-#elif defined Q_OS_MAC
-#  define LUA_PATH QCoreApplication::applicationDirPath() + "/lua"
-#elif defined Q_WS_X11
-#  define LUA_PATH LUADIR
+# define LUA_PATH "lua/luascript" // omit applicationDirPath, which might contains non-ascii chars and cannot handled by liblua
+#elif defined(Q_OS_MAC)
+# define LUA_PATH QCoreApplication::applicationDirPath() + "/lua"
+#elif defined(Q_WS_X11)
+# define LUA_PATH LUADIR
 #endif // Q_OS_
 
 #ifdef LUA_PATH
-#  define LUAPACKAGE_PATH LUA_PATH "/?.lua"
-#  define LUASCRIPT_PATH  LUA_PATH "/luascript.lua"
+# define LUAPACKAGE_PATH LUA_PATH "/?.lua"
+# define LUASCRIPT_PATH  LUA_PATH "/luascript.lua"
 #else
-#  define LUAPACKAGE_PATH ""
-#  define LUASCRIPT_PATH  "luascript.lua"
+# define LUAPACKAGE_PATH ""
+# define LUASCRIPT_PATH  "luascript.lua"
 #endif // LUA_PATH
 
 // - Tasks -
@@ -224,8 +229,8 @@ LuaMrlResolver::resolveSubtitle(const QString &href, bool async)
 
   // LuaResolver::resolve(const QString &href, QString *refurl, QString *title, QString *suburl, QStringList *mrls) const
   int siteid;
-  QString suburl;
-  bool ok = lua.resolve(url, &siteid, 0, 0, &suburl);
+  QString suburl, refurl;
+  bool ok = lua.resolve(url, &siteid, &refurl, 0, &suburl);
 
   if (!ok) {
     emit error(tr("failed to resolve URL") + ": " + url);
@@ -249,8 +254,9 @@ LuaMrlResolver::resolveSubtitle(const QString &href, bool async)
   }
 
   suburl = formatUrl(suburl);
+  refurl = formatUrl(refurl);
   if (!suburl.isEmpty())
-    emit subtitleResolved(suburl);
+    emit subtitleResolved(suburl, refurl);
   if (isSynchronized())
     setResolvedSubtitleUrl(suburl);
   DOUT("exit: suburl =" << suburl);
@@ -338,7 +344,7 @@ LuaMrlResolver::cleanUrl(const QString &url)
     ret.remove(QRegExp("\\?.*"));
   else if (ret.startsWith("http://www.bilibili.tv/video/", Qt::CaseInsensitive))
     ret.remove(QRegExp("/#$"))
-       //.remove(QRegExp("/$"))
+       .remove(QRegExp("/$"))
        .remove(QRegExp("/index_1.html$", Qt::CaseInsensitive))
        .remove(QRegExp("/index.html$", Qt::CaseInsensitive));
   else if (ret.startsWith("http://www.acfun.tv/v/", Qt::CaseInsensitive))
@@ -347,6 +353,13 @@ LuaMrlResolver::cleanUrl(const QString &url)
        .remove(QRegExp("/index.html$", Qt::CaseInsensitive));
   else if (ret.startsWith("http://www.tudou.com/programs/view/", Qt::CaseInsensitive))
     ret.remove(QRegExp("\\?.*"));
+
+  if (ret.startsWith("http://www.nicovideo.jp/watch/so", Qt::CaseInsensitive)) {
+    DOUT("try redirect: url =" << url);
+    QUrl r = ::dlredirect(url);
+    if (!r.isEmpty())
+      ret = r.toString();
+  }
   return ret;
 }
 

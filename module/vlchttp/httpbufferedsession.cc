@@ -3,13 +3,13 @@
 
 #include "module/vlchttp/httpbufferedsession.h"
 #ifdef WITH_MODULE_MEDIACODEC
-#  include "module/mediacodec/flvcodec.h"
-#  include "module/mediacodec/mp4codec.h"
+# include "module/mediacodec/flvcodec.h"
+# include "module/mediacodec/mp4codec.h"
 #else
-#  error "mediacodec module is required"
+# error "mediacodec module is required"
 #endif // WITH_MODULE_MEDIACODEC
 #ifdef WITH_MODULE_MRLRESOLVER
-#  include "module/mrlresolver/luamrlresolver.h"
+# include "module/mrlresolver/luamrlresolver.h"
 #endif // WITH_MODULE_LUARESOLVER
 #include "module/qtext/filesystem.h"
 #include "module/qtext/os.h"
@@ -278,8 +278,8 @@ HttpBufferedSession::run()
       if (individualRetry)
         emit warning(
           QString("%1 (%2/%3): ")
-          .arg(tr("network error, retry")
-          .arg(QString::number(individualRetry)))
+          .arg(tr("network error, retry"))
+          .arg(QString::number(individualRetry))
           .arg(QString::number(MaxIndividualDownloadRetries))
           + url_.toString()
         );

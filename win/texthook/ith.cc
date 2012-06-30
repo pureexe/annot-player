@@ -97,7 +97,7 @@ Ith::threadOutputCallback(TextThread *t, BYTE *data,DWORD dataLength, DWORD newL
   Q_UNUSED(t);
   Q_ASSERT(data);
 
-  TextThreadProperty *d = static_cast<TextThreadProperty *>(pUserData);
+  auto d = static_cast<TextThreadProperty *>(pUserData);
   Q_ASSERT(d);
   if (newLine)
     d->flush();

@@ -22,20 +22,24 @@
 #include "module/searchengine/searchenginerc.h"
 #include "module/qtext/filesystem.h"
 #include "module/qtext/htmltag.h"
+#include "module/textcodec/textcodec.h"
 #include <boost/tuple/tuple.hpp>
-#include <boost/typeof/typeof.hpp>
 #include <QtGui>
-#include <cmath>
 
 #ifdef __GNUC__
-#  pragma GCC diagnostic ignored "-Wparentheses"    // suggest parentheses around '&&' within '||'
-#  pragma GCC diagnostic ignored "-Wsequence-point" // operation on variable may be undefined
+# pragma GCC diagnostic ignored "-Wparentheses"    // suggest parentheses around '&&' within '||'
+# pragma GCC diagnostic ignored "-Wsequence-point" // operation on variable may be undefined
+#endif // __GNUC__
+#ifdef __GNUC__
+# pragma GCC diagnostic ignored "-Wuninitialized"      // variable 't' is unitialized when used
+# pragma GCC diagnostic ignored "-Wunused-function"    // unused curve functions
+# pragma GCC diagnostic ignored "-Wlogical-op-parentheses" // '&&' within '||'
 #endif // __GNUC__
 
 #ifdef __GNUC__
-#  define NOINLINE      __attribute__((noinline))
+# define NOINLINE      __attribute__((noinline))
 #else
-#  define NOINLINE
+# define NOINLINE
 #endif // __GNUC__
 
 //#define DEBUG "annotationgraphicsitem"
@@ -52,18 +56,28 @@ enum { MOTIONLESS_STAY_TIME = 7000 }; // 7 seconds
 // - RC -
 
 #ifdef Q_WS_X11
-#  define RC_AVATAR_PREFIX      AVATARDIR
+# define RC_AVATAR_PREFIX      AVATARDIR
 #else
-#  define RC_AVATAR_PREFIX      QCoreApplication::applicationDirPath() + "/avatars"
+# define RC_AVATAR_PREFIX      QCoreApplication::applicationDirPath() + "/avatars"
 #endif // Q_WS_X11
-#define RC_AVATAR_COUNT         AVATAR_USER_COUNT
+
 #define AVATAR_SIZE             "33" // 100/3
+
+enum { RC_AVATAR_COUNT = AVATAR_USER_COUNT };
+//enum { RC_AVATAR_GIF_COUNT = AVATAR_GIF_COUNT };
 
 namespace { // anonymous
   inline QString rc_avatar_url(qint64 i)
   {
     static QString fmt = RC_AVATAR_PREFIX "/user_%1.jpg";
     return fmt.arg(QString::number(qAbs(i) % RC_AVATAR_COUNT));
+
+    //static QString jpg = RC_AVATAR_PREFIX "/user_%1.jpg",
+    //               gif = RC_AVATAR_PREFIX "/user_%1.gif";
+    //int hash = qAbs(i) % (RC_AVATAR_GIF_COUNT + RC_AVATAR_JPG_COUNT);
+    //return hash < RC_AVATAR_JPG_COUNT ?
+    //  jpg.arg(QString::number(hash)) :
+    //  gif.arg(QString::number(hash - RC_AVATAR_JPG_COUNT));
   }
 } // anonymous namespace
 
@@ -121,7 +135,7 @@ namespace { namespace curve_ { // anonymous, curves
 int
 AnnotationGraphicsItem::nextY(int msecs, Style style) const
 {
-  int ret = view_->scheduler()->nextY(view_->height(), msecs, view_->scale(), style);
+  int ret = view_->scheduler()->nextY(view_->height(), msecs, style);
   int max = view_->height() - boundingRect().height() ;
   if (ret > max - 5)
     ret = max;
@@ -165,7 +179,7 @@ AnnotationGraphicsItem::AnnotationGraphicsItem(
   SignalHub *hub,
   AnnotationGraphicsView *view)
   : metaVisible_(false), avatarVisible_(false),
-    view_(view), data_(data), hub_(hub), style_(FloatStyle),
+    view_(view), data_(data), hub_(hub), style_(FloatStyle), positionResolution_(0),
     removeLaterTimer_(0),
     flyAni_(0), flyOpacityAni_(0), escapeAni_(0), rushAni_(0), appearOpacityAni_(0), fadeAni_(0),
     dragPos_(BAD_POSF)
@@ -186,6 +200,24 @@ AnnotationGraphicsItem::AnnotationGraphicsItem(
   setGraphicsEffect(effect_ = new AnnotationGraphicsEffect);
 
   DOUT("exit");
+}
+
+// - Properties -
+
+void
+AnnotationGraphicsItem::setRelativeXSmoothly(qreal xOffset)
+{
+  qreal newX = origin_.x() + xOffset;
+  if (qAbs(newX - x()) > positionResolution_)
+    setX(newX);
+}
+
+const QString&
+AnnotationGraphicsItem::plainText() const
+{
+  if (plainText_.isEmpty() && !text_.isEmpty())
+    plainText_ = QtExt::htmlToPlainText(text_).simplified();
+  return plainText_;
 }
 
 void
@@ -338,6 +370,9 @@ AnnotationGraphicsItem::updateText()
   setFont(font);
 
   QString text = annot_.text();
+  if (annot_.language() == Traits::Chinese &&
+      AnnotationSettings::globalSettings()->preferTraditionalChinese())
+    text = TextCodec::zhs2zht(text);
   if (annot_.isSubtitle()) {
     text = view_->subtitlePrefix() + text;
     if (!owner)
@@ -346,6 +381,7 @@ AnnotationGraphicsItem::updateText()
 
   QStringList tags;
   boost::tie(text_, tags) = ANNOT_PARSE_CODE(text);
+  plainText_.clear();
   setTags(tags);
   if (tags.contains(CORE_CMD_VERBATIM))
     setPlainText(text_);
@@ -616,7 +652,7 @@ AnnotationGraphicsItem::setOpacity(qreal opacity)
 //  if (qFuzzyCompare(opacity_, 1))
 //    updateEffect();
 //  else {
-//    BOOST_AUTO(e, qobject_cast<QGraphicsOpacityEffect *>(graphicsEffect()));
+//    auto e = qobject_cast<QGraphicsOpacityEffect *>(graphicsEffect()));
 //    if (!e)
 //      e = new QGraphicsOpacityEffect;
 //    e->setOpacity(opacity_);
@@ -650,7 +686,7 @@ AnnotationGraphicsItem::setOpacity(qreal opacity)
 //#else
 //      enum { offset = 1, radius = 12 };
 //#endif // Q_WS_WIN
-//      BOOST_AUTO(e, qobject_cast<QGraphicsDropShadowEffect *>(graphicsEffect()));
+//      auto e = qobject_cast<QGraphicsDropShadowEffect *>(graphicsEffect());
 //      if (!e) {
 //        e = new QGraphicsDropShadowEffect;
 //        e->setBlurRadius(radius); // in pixels
@@ -661,7 +697,7 @@ AnnotationGraphicsItem::setOpacity(qreal opacity)
 //    } break;
 //  case TransparentEffect:
 //    {
-//      BOOST_AUTO(e, qobject_cast<QGraphicsOpacityEffect *>(graphicsEffect()));
+//      auto e = qobject_cast<QGraphicsOpacityEffect *>(graphicsEffect());
 //      if (!e) {
 //        e = new QGraphicsOpacityEffect;
 //        e->setOpacity(ANNOTATION_OPACITY);
@@ -670,7 +706,7 @@ AnnotationGraphicsItem::setOpacity(qreal opacity)
 //    } break;
 //  case BlurEffect:
 //    {
-//      BOOST_AUTO(e, qobject_cast<QGraphicsBlurEffect *>(graphicsEffect()));
+//      auto e = qobject_cast<QGraphicsBlurEffect *>(graphicsEffect());
 //      if (!e) {
 //        e = new QGraphicsBlurEffect;
 //        e->setBlurHints(QGraphicsBlurEffect::PerformanceHint);
@@ -681,7 +717,7 @@ AnnotationGraphicsItem::setOpacity(qreal opacity)
 //  case DefaultEffect:
 //  default:
 //    {
-//      BOOST_AUTO(e, qobjectcast<AnnotationGraphicsEffect *>(graphicsEffect()));
+//      auto e = qobjectcast<AnnotationGraphicsEffect *>(graphicsEffect());
 //      if (!e) {
 //        e = new AnnotationGraphicsEffect;
 //        setGraphicsEffect(e);
@@ -799,6 +835,8 @@ AnnotationGraphicsItem::addMe()
     connect(AnnotationSettings::globalSettings(), SIGNAL(avatarVisibleChanged(bool)), SLOT(setAvatarVisibleAndUpdate(bool)));
     connect(AnnotationSettings::globalSettings(), SIGNAL(outlineColorChanged(QColor)), SLOT(updateOutlineColor()));
     connect(AnnotationSettings::globalSettings(), SIGNAL(subtitleColorChanged(QColor)), SLOT(updateOutlineColor()));
+    connect(AnnotationSettings::globalSettings(), SIGNAL(highlightColorChanged(QColor)), SLOT(updateOutlineColor()));
+    connect(AnnotationSettings::globalSettings(), SIGNAL(positionResolutionChanged(int)), SLOT(setPositionResolution(int)));
 
     if (style_ == SubtitleStyle &&
         hub_->isSignalTokenMode())
@@ -853,6 +891,8 @@ AnnotationGraphicsItem::removeMe()
     disconnect(AnnotationSettings::globalSettings(), SIGNAL(avatarVisibleChanged(bool)), this, SLOT(setAvatarVisibleAndUpdate(bool)));
     disconnect(AnnotationSettings::globalSettings(), SIGNAL(outlineColorChanged(QColor)), this, SLOT(updateOutlineColor()));
     disconnect(AnnotationSettings::globalSettings(), SIGNAL(subtitleColorChanged(QColor)), this, SLOT(updateOutlineColor()));
+    disconnect(AnnotationSettings::globalSettings(), SIGNAL(highlightColorChanged(QColor)), this, SLOT(updateOutlineColor()));
+    disconnect(AnnotationSettings::globalSettings(), SIGNAL(positionResolutionChanged(int)), this, SLOT(setPositionResolution(int)));
 
     scene_->removeItem(this);
     view_->releaseItem(this);
@@ -895,7 +935,7 @@ AnnotationGraphicsItem::showMe()
       fly();
     else {
       int msecs = MOTIONLESS_STAY_TIME; //stayTime();
-      QPointF pos = view_->scheduler()->nextPos(view_->size(), boundingRect().size(), msecs, view_->scale());
+      QPointF pos = view_->scheduler()->nextPos(view_->size(), boundingRect().size(), msecs);
       if (pos.isNull()) {
         style_ = FloatStyle;
         fly();
@@ -983,7 +1023,8 @@ AnnotationGraphicsItem::pause()
       removeLaterTimer_->stop();
     break;
   }
-  setOutlineColor(ANNOTATION_OUTLINE_COLOR_HOVER);
+  if (!view_->isPaused())
+    setOutlineColor(AnnotationSettings::globalSettings()->highlightColor());
 }
 
 void
@@ -1033,7 +1074,7 @@ AnnotationGraphicsItem::stayTime() const
   qreal f = qreal(w0 + 200)/ (w + 200),
         g = qreal(h + 20) / (ANNOTATION_SIZE_DEFAULT + 15);
   qreal q = hub_->isSignalTokenMode() ? 1.0 : 0.8;
-  int ret = t * ::pow(f, 0.3)* g * q + ANNOTATION_STAY_TIME_MIN;
+  int ret = t * qPow(f, 0.3)* g * q + ANNOTATION_STAY_TIME_MIN;
   return qMin(ret, ANNOTATION_STAY_TIME_MAX);
 }
 
@@ -1043,7 +1084,7 @@ AnnotationGraphicsItem::flyTime() const
   int w0 = qMax<int>(view_->width(), 100),
       w = qMax<int>(boundingRect().width(), 50);
   qreal f = qreal(w0 + 200) / (w + 200);
-  int ret = ANNOTATION_FLY_TIME * ::pow(f, 0.2) + ANNOTATION_FLY_TIME_MIN;
+  int ret = ANNOTATION_FLY_TIME * f + ANNOTATION_FLY_TIME_MIN;
   ret = qMin(ret, ANNOTATION_FLY_TIME_MAX);
   if (style_ == FlyStyle)
     ret /= 5;
@@ -1150,17 +1191,19 @@ AnnotationGraphicsItem::fly()
   int msecs = flyTime();
   int y = nextY(msecs, style_);
 
-  QPoint from(view_->width(), y);
-  QPoint to(- boundingRect().width(), y);
-  fly(from, to, msecs);
+  qreal fromX = view_->width(),
+        toX = - boundingRect().width();
+
+  positionResolution_ = AnnotationSettings::globalSettings()->positionResolution();
+  fly(fromX, toX, y, msecs);
 }
 
 void
-AnnotationGraphicsItem::fly(const QPointF &from, const QPointF &to, int msecs)
+AnnotationGraphicsItem::fly(qreal from, qreal to, qreal y, int msecs)
 {
   Q_ASSERT(msecs > 0);
   if (!flyAni_) {
-    flyAni_ = new QPropertyAnimation(this, "relativePos", this);
+    flyAni_ = new QPropertyAnimation(this, "relativeX", this);
     flyAni_->setEasingCurve(QEasingCurve::Linear);
   } else if (flyAni_->state() != QAbstractAnimation::Stopped)
     flyAni_->stop();
@@ -1176,13 +1219,14 @@ AnnotationGraphicsItem::fly(const QPointF &from, const QPointF &to, int msecs)
     flyOpacityAni_->stop();
 
   setOpacity(0.0);
-  origin_ = from;
+  origin_ = QPointF(from, y);
   flyAni_->setDuration(msecs);
-  flyAni_->setStartValue(QPointF());
+  flyAni_->setStartValue(qreal(0.0));
   flyAni_->setEndValue(to - from);
 
   flyOpacityAni_->setDuration(msecs);
 
+  setY(y);
   flyAni_->start();
   flyOpacityAni_->start();
   addMe();
@@ -1230,6 +1274,10 @@ AnnotationGraphicsItem::contextMenuEvent(QContextMenuEvent *event)
   translateMenu->addAction(QIcon(ACRC_IMAGE_KOREAN), TR(T_KOREAN), this, SLOT(translateToKorean()));
 
   m->addMenu(translateMenu);
+
+  if (annot_.language() == Traits::Chinese &&
+      !AnnotationSettings::globalSettings()->preferTraditionalChinese())
+    m->addAction(QIcon(ACRC_IMAGE_TRADITIONAL_CHINESE), tr("Show Traditional Chinese"), this, SLOT(showTraditionalChinese()));
 
   m->addSeparator();
 
@@ -1308,7 +1356,7 @@ AnnotationGraphicsItem::mousePressEvent(QMouseEvent *event)
     QHelpEvent e(QEvent::ToolTip, event->pos(), event->globalPos());
     QCoreApplication::sendEvent(view_, &e);
   }
-  setOutlineColor(ANNOTATION_OUTLINE_COLOR_HOVER);
+  setOutlineColor(AnnotationSettings::globalSettings()->highlightColor());
 }
 
 void
@@ -1331,7 +1379,7 @@ AnnotationGraphicsItem::mouseMoveEvent(QMouseEvent *event)
     setPos(newPos);
   }
 
-  setOutlineColor(ANNOTATION_OUTLINE_COLOR_HOVER);
+  setOutlineColor(AnnotationSettings::globalSettings()->highlightColor());
 #ifdef Q_WS_WIN
   if (toolTip().isEmpty())
     updateToolTip();
@@ -1438,7 +1486,7 @@ QString
 AnnotationGraphicsItem::summary() const
 {
   enum { length = 11 } ;
-  QString ret = toPlainText();
+  QString ret = plainText();
   if (ret.size() > length)
     ret = ret.left(length - 6) + "..." + ret.right(3);
   return ret;
@@ -1472,7 +1520,7 @@ AnnotationGraphicsItem::escapeFrom(const QPointF &from)
                                      QPointF(x2, y2)               ; // 9
   d -= from;
 
-  qreal len = ::sqrt(d.x()*d.x() + d.y()*d.y());
+  qreal len = qSqrt(d.x()*d.x() + d.y()*d.y());
   if (len < 0.0) {
     d.rx() += rmax;
     len = rmax;
@@ -1521,7 +1569,7 @@ AnnotationGraphicsItem::rushTo(const QPointF &center)
   //QPointF now = boundingRect().center(); // use center, so that annot with diff length will have diff speed
   QPointF now = pos();
   QPointF d = now - center;
-  qreal len = ::sqrt(d.x()*d.x() + d.y()*d.y());
+  qreal len = qSqrt(d.x()*d.x() + d.y()*d.y());
   if (len < 2) {
     QPointF to = now + radius * QPointF(0.5+rx, 0.5-ry);
     enum { msecs = 2000 };
@@ -1593,7 +1641,7 @@ AnnotationGraphicsItem::reflected(const QPointF &pos) const
 void
 AnnotationGraphicsItem::searchWithEngine(int engine)
 {
-  QString t = QtExt::htmlToPlainText(text_);
+  QString t = plainText();
   if (!t.isEmpty())
     view_->searchText(t, engine);
 }
@@ -1609,9 +1657,17 @@ AnnotationGraphicsItem::searchWithGoogle()
 void
 AnnotationGraphicsItem::translate(int lang)
 {
-  QString t = QtExt::htmlToPlainText(text_);
+  QString t = plainText();
   if (!t.isEmpty())
     view_->translateText(t, lang);
+}
+
+void
+AnnotationGraphicsItem::showTraditionalChinese()
+{
+  QString t = plainText();
+  if (!t.isEmpty())
+    view_->showTraditionalChinese(t);
 }
 
 void

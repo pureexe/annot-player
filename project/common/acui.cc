@@ -10,10 +10,10 @@
 #include "module/qtext/combobox.h"
 #include "module/qtext/toolbutton.h"
 #ifdef WITH_WIN_DWM
-#  include "win/dwm/dwm.h"
+# include "win/dwm/dwm.h"
 #endif // WITH_WIN_DWM
 #ifdef Q_WS_WIN
-#  include "win/qtwin/qtwin.h"
+# include "win/qtwin/qtwin.h"
 #endif // Q_WS_WIN
 #include <QtGui>
 
@@ -298,7 +298,7 @@ AcUi::setContextMenuStyle(QMenu *w, bool persistent)
     //if (qss)
     //  w->setStyleSheet(ACSS_CONTEXTMENU_DWM);
 
-    QGraphicsColorizeEffect *e = qobject_cast<QGraphicsColorizeEffect *>(w->graphicsEffect());
+    auto e = qobject_cast<QGraphicsColorizeEffect *>(w->graphicsEffect());
     if (!e)
       e = new QGraphicsColorizeEffect;
     e->setColor(AC_CONTEXTMENU_COLOR);
@@ -327,7 +327,7 @@ AcUi::setToolButtonStyle(QToolButton *w)
     return;
 
 //#ifdef Q_WS_WIN
-//  QGraphicsBlurEffect *e = qobject_cast<QGraphicsBlurEffect *>(w->graphicsEffect());
+//  auto e = qobject_cast<QGraphicsBlurEffect *>(w->graphicsEffect());
 //  if (!e)
 //    e = new QGraphicsBlurEffect;
 //  e->setBlurHints(QGraphicsBlurEffect::PerformanceHint);

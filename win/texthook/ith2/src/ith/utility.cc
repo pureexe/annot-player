@@ -50,7 +50,7 @@ namespace { namespace callback_ {
 
     ::KillTimer(hwnd, idEvent);
 
-    auto p = reinterpret_cast<TextThread*>(idEvent);
+    auto p = reinterpret_cast<TextThread *>(idEvent);
     //if (p->Status()&CURRENT_SELECT)
     {
       ::texts->SetLine();

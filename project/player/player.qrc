@@ -2,7 +2,8 @@
     <qresource prefix="/">
         <file>tr/tr_en.qm</file>
         <file>tr/tr_ja.qm</file>
-        <file>tr/tr_zh.qm</file>
+        <file>tr/tr_zh_CN.qm</file>
+        <file>tr/tr_zh_TW.qm</file>
         <file>images/comment.png</file>
         <file>images/comment_checked.png</file>
         <file>images/comment_disabled.png</file>

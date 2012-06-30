@@ -7,13 +7,13 @@
 // See: http://stackoverflow.com/questions/7885299/c-call-lua-function-with-variable-parameters
 
 #ifdef _MSC_VER
-#  pragma warning (disable:4800)     // C4800: forcing value to bool 'true' or 'false' (performance warning)
+# pragma warning (disable:4800)     // C4800: forcing value to bool 'true' or 'false' (performance warning)
 #endif // _MSC_VER
 
 extern "C" {
-#  include <lua.h>
-#  include <lualib.h>
-#  include <lauxlib.h>
+# include <lua.h>
+# include <lualib.h>
+# include <lauxlib.h>
 } // extern "C"
 #include <stdexcept>
 #include <string>

@@ -22,6 +22,10 @@ public:
   explicit DownloadManager(QObject *parent = 0)
     : Base(parent), threadCount_(0) { }
 
+signals:
+  void taskAdded(DownloadTask *t);
+  void taskRemoved(DownloadTask *t);
+
   // - Properties -
 public:
   const DownloadTaskList &tasks() const { return tasks_; }

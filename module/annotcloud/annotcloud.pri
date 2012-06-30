@@ -1,8 +1,6 @@
 # annotcloud.pri
 # 6/28/2011
 
-include(../../config.pri)
-
 DEFINES += WITH_MODULE_ANNOTCLOUD
 
 DEPENDPATH +=$$PWD

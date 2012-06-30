@@ -4,7 +4,6 @@
 #include "logger.h"
 #include "module/player/player.h"
 #include <QtCore>
-#include <cmath>
 
 //#define DEBUG "signalhub"
 //#include "module/debug/debug.h"
@@ -42,7 +41,7 @@ SignalHub::volume() const
 #ifdef Q_WS_X11
   // de-expand percentage
   if (ret > 0)
-    ret = ::sqrt(ret);
+    ret = qSqrt(ret);
 #endif // Q_WS_X11
   return ret;
 }

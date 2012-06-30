@@ -25,6 +25,6 @@
 #define ANNOTATION_STAY_TIME_MAX        10000
 #define ANNOTATION_FLY_TIME             7000 // the larger the slower
 #define ANNOTATION_FLY_TIME_MIN         1500
-#define ANNOTATION_FLY_TIME_MAX         10000
+#define ANNOTATION_FLY_TIME_MAX         15000
 
 #endif // ANNOTATIONGRAPHICSSTYLE_H

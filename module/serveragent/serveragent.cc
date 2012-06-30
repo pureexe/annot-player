@@ -6,7 +6,7 @@
 #include "module/serveragent/serverproxy_config.h"
 #include "module/serveragent/castmanager.h"
 #ifdef WITH_MODULE_CLIENTAGENT
-#  include "module/clientagent/clientagent.h"
+# include "module/clientagent/clientagent.h"
 #endif // WITH_MODULE_CLIENTAGENT
 #include <QtCore/QMutexLocker>
 

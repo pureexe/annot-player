@@ -1,8 +1,6 @@
 # imagefilter.pri
 # 5/16/2012
 
-include(../../config.pri)
-
 DEFINES += WITH_MODULE_IMAGEFILTER
 
 DEPENDPATH += $$PWD

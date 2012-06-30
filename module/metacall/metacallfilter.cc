@@ -14,11 +14,11 @@
 #include "module/debug/debug.h"
 
 #ifdef __GNUC__
-#  pragma GCC diagnostic ignored "-Wparentheses" // suggest parentheses
+# pragma GCC diagnostic ignored "-Wparentheses" // suggest parentheses
 #endif // __GNUC__
 
 #ifdef Q_OS_MAC
-#  define unique_ptr  auto_ptr  // as llvm does not support c++0x at the moment
+# define unique_ptr  auto_ptr  // TR1 requires libc++
 #endif // Q_OS_MAC
 
 // - Construction -

@@ -7,7 +7,6 @@
 
 #include "module/imagefilter/pixelimagefilter.h"
 #include <QtCore/QObject>
-#include <cmath>
 
 class BrightnessImageFilter : public QObject, public PixelImageFilter
 {

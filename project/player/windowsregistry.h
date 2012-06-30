@@ -31,32 +31,47 @@ public:
 public slots:
   void sync();
 
+  // - Type -
 public:
   bool containsType(const QString &type) const
   { return containsRawType(rawTypeOf(type)); }
-
   void registerTypes(const QStringList &types)
   { foreach (const QString &t, types) registerType(t); }
-
-  bool containsRawType(const QString &suffix) const;
-
-  void registerRawTypes(const QStringList &suffices)
-  { foreach (const QString &s, suffices) registerRawType(s); }
-
+  void unregisterTypes(const QStringList &types)
+  { foreach (const QString &t, types) unregisterType(t); }
 public slots:
   void registerType(const QString &type)
   { registerRawType(rawTypeOf(type)); }
-
   void unregisterType(const QString &type)
   { unregisterRawType(rawTypeOf(type)); }
-
   void registerType(const QString &type, bool t)
   { if (t) registerType(type); else unregisterType(type); }
 
+  // - Raw Type -
+public:
+  bool containsRawType(const QString &suffix) const;
+  void registerRawTypes(const QStringList &suffices)
+  { foreach (const QString &s, suffices) registerRawType(s); }
+  void unregisterRawTypes(const QStringList &suffices)
+  { foreach (const QString &s, suffices) unregisterRawType(s); }
+public slots:
   void registerRawType(const QString &suffix);
   void unregisterRawType(const QString &suffix);
   void registerRawType(const QString &suffix, bool t)
   { if (t) registerRawType(suffix); else unregisterRawType(suffix); }
+
+  // - Shell -
+public:
+  bool containsShell(const QString &type) const;
+  void registerShells(const QStringList &types)
+  { foreach (const QString &s, types) registerShell(s); }
+  void unregisterShells(const QStringList &types)
+  { foreach (const QString &s, types) unregisterShell(s); }
+public slots:
+  void registerShell(const QString &type);
+  void unregisterShell(const QString &type);
+  void registerShell(const QString &type, bool t)
+  { if (t) registerShell(type); else unregisterShell(type); }
 
 protected:
   static QString rawTypeOf(const QString &t)

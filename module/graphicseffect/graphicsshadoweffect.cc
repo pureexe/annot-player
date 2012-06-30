@@ -2,9 +2,9 @@
 // 5/3/2012
 #include "module/graphicseffect/graphicsshadoweffect.h"
 //#ifdef WITH_MODULE_PIXMAPFILTER
-//#  include "module/pixmapfilter/pixmapshadowfilter.h"
+//# include "module/pixmapfilter/pixmapshadowfilter.h"
 //#else
-//#  error "pixmapfilter module is required"
+//# error "pixmapfilter module is required"
 //#endif // WITH_MODULE_PIXMAPFILTER
 //#include <QtGui/QPaintEngine>
 #include <QtGui/QPainter>

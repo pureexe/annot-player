@@ -7,7 +7,7 @@
 
 #include "module/imagefilter/pixelimagefilter.h"
 #include <QtCore/QObject>
-#include <cmath>
+#include <QtCore/qmath.h>
 
 class GammaImageFilter : public QObject, public PixelImageFilter
 {
@@ -41,7 +41,7 @@ public:
     switch (value) {
     case 0:   return 0;
     case 255: return 255;
-    default:  return gamma ? qBound<int>(0, ::pow(value/255.0,100.0/gamma)*255, 255) : 0;
+    default:  return gamma ? qBound<int>(0, qPow(value/255.0,100.0/gamma)*255, 255) : 0;
     }
   }
 

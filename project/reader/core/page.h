@@ -44,7 +44,7 @@ namespace Core {
 
     bool bad() const { return !page_; }
     void clear() { page_ = 0; }
-    int hash() const { return reinterpret_cast<long>(impl()); }
+    int hash() const { return reinterpret_cast<ulong>(impl()); }
 
     // Properties:
   public:

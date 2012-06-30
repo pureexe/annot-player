@@ -9,34 +9,51 @@
 #include "translatormanager.h"
 #include "annotationgraphicsitem.h"
 #ifdef Q_WS_WIN
-#  include "windowsregistry.h"
-#  include "module/player/player.h"
+# include "windowsregistry.h"
+# include "module/player/player.h"
 #endif // Q_WS_WIN
 #ifdef WITH_WIN_TEXTHOOK
-#  include "win/texthook/texthook.h"
+# include "win/texthook/texthook.h"
 #endif // WITH_WIN_TEXTHOOK
 #ifdef WITH_WIN_DWM
-#  include "win/dwm/dwm.h"
+# include "win/dwm/dwm.h"
 #endif // WITH_WIN_DWM
 #ifdef Q_OS_WIN
-#  include "win/qtwin/qtwin.h"
+# include "win/qtwin/qtwin.h"
 #endif // Q_OS_WIN
 #ifdef Q_OS_MAC
-#  include "mac/qtmac/qtmac.h"
+# include "mac/qtmac/qtmac.h"
 #endif // Q_OS_MAC
 #include "project/common/acui.h"
 #include "project/common/acglobal.h"
 #include "project/common/acsettings.h"
 #include "project/common/acplayer.h"
 #include "module/annotcloud/user.h"
+#include "module/annotcache/annotationcachemanager.h"
+//#include "module/qt/qtsettings.h"
 //#include "module/download/downloader.h"
 #include <QtWebKit/QWebSettings>
 #include <QtNetwork/QNetworkProxy>
 #include <QtNetwork/QNetworkReply>
 #include <QtGui>
+//#include <fontconfig/fontconfig.h>
+//#include <freetype/ftsynth.h>
+//#include <freetype/freetype.h>
+//#include <freetype/ftglyph.h>
+//#include <freetype/ftstroke.h>
+
+//#include <vlc/plugins/vlc_common.h>
+//extern "C" {
+//# include <vlc/src/modules/modules.h>
+//module_t *module_find(const char *name);
+//} // extern "C"
 
 #define DEBUG "main"
 #include "module/debug/debug.h"
+
+#ifdef __clang__
+# pragma clang diagnostic ignored "-Wlogical-op-parentheses" // '&&' within '||'
+#endif // __clang__
 
 // - Startup stages -
 
@@ -50,7 +67,7 @@ namespace { // anonymous
   }
 
   // Register file types
-  inline void registerFileTypes()
+  inline void registerAssociations()
   {
 #ifdef Q_WS_WIN
     WindowsRegistry *reg = WindowsRegistry::globalInstance();
@@ -65,11 +82,11 @@ namespace { // anonymous
     //reg->registerTypes(QStringList() G_FORMAT_ANNOTATION(<<));
 
     //reg->registerRawTypes(QStringList() G_FORMAT_DEVICE(<<));
-    reg->registerRawType("DVD");
+    reg->registerShell("DVD");
 #endif // Q_WS_WIN
   }
 
-  inline void repairFileTypes()
+  inline void repairAssociations()
   {
 #ifdef Q_WS_WIN
     WindowsRegistry *reg = WindowsRegistry::globalInstance();
@@ -82,8 +99,8 @@ namespace { // anonymous
         reg->registerType(type);
 
     foreach (const QString &type, QStringList() G_FORMAT_DEVICE(<<))
-      if (reg->containsRawType(type))
-        reg->registerRawType(type);
+      if (reg->containsShell(type))
+        reg->registerShell(type);
 #endif // Q_WS_WIN
   }
 
@@ -153,9 +170,13 @@ main(int argc, char *argv[])
 
   // Initialize translator
   {
-    int lang = ac->language();
-    if (!lang) {
-      lang =  QLocale::system().language();
+    int lang = ac->language(),
+        script = ac->languageScript();
+    if (!lang ||
+        lang == QLocale::Chinese && !script) {
+      QLocale system = QLocale::system();
+      lang =  system.language();
+      script = system.script();
       if (lang == QLocale::Japanese) {
         settings->setAnnotationLanguages( // Ban Chinese language
           Traits::JapaneseBit | Traits::UnknownLanguageBit |
@@ -163,9 +184,9 @@ main(int argc, char *argv[])
         );
         settings->setAnnotationFilterEnabled(true);
       }
-      ac->setLanguage(lang);
+      ac->setLanguage(lang, script);
     }
-    TranslatorManager::globalInstance()->setLanguage(lang, false); // auto-update translator = false
+    TranslatorManager::globalInstance()->setLocale(lang, script, false); // auto-update translator = false
     TranslatorManager::globalInstance()->installCurrentTranslator(&a);
     DOUT("app language =" << lang);
   }
@@ -178,8 +199,9 @@ main(int argc, char *argv[])
 
     //bool initial = previousVersion.isEmpty();
 
-    if (majorUpdate)
-      QFile::remove(G_PATH_CACHEDB);
+    // FIXME: check when remove cache db
+    //if (majorUpdate)
+    //  QFile::remove(G_PATH_CACHEDB);
     QFile::remove(G_PATH_QUEUEDB);
     QFile::remove(G_PATH_DEBUG);
 
@@ -199,8 +221,10 @@ main(int argc, char *argv[])
       AcLocationManager::globalInstance()->createDownloadsLocation();
 
 #ifdef Q_WS_WIN
-    WindowsRegistry::globalInstance()->registerRawType("DVD");
-#endif // Q_WS_WIN
+    WindowsRegistry::globalInstance()->unregisterRawType("DVD");
+    WindowsRegistry::globalInstance()->unregisterRawType("AudioCD");
+    WindowsRegistry::globalInstance()->registerShell("DVD");
+#endif // Q__WS_WIN
 
     ac->setThemeId(AcUi::CyanTheme);
     ac->sync();
@@ -211,10 +235,9 @@ main(int argc, char *argv[])
 
     //settings->setWindowOnTop(false);
     settings->setAutoSubmit(true);
-    if (majorUpdate)
-      settings->setAnnotationScale(1.0);
+    settings->setAnnotationScale(1.0);
     settings->setPreferMotionlessAnnotation(true);
-    settings->setAnnotationAvatarVisible(true);
+    //settings->setAnnotationAvatarVisible(true);
     settings->setAnnotationEffect(0);
     settings->setAnnotationOffset(0);
     settings->setSubtitleColor(0);
@@ -222,16 +245,16 @@ main(int argc, char *argv[])
     //settings->setAnnotationLanguages(Traits::AllLanguages);
     //settings->setAnnotationFilterEnabled(false);
 
+    settings->setLive(false);
+
     if (majorUpdate) {
       settings->setSaturation(1.1*1.1*1.1);
       settings->setGamma(1/1.1);
       settings->setHue(2+2+2);
       settings->setContrast(1.1);
       settings->setBrightness(1.02*1.02);
-    }
 
-    if (majorUpdate) {
-      registerFileTypes();
+      registerAssociations();
       settings->setApplicationFilePath(QCoreApplication::applicationFilePath());
     }
 
@@ -241,7 +264,7 @@ main(int argc, char *argv[])
 
   // Moved
   if (settings->applicationFilePath() != QCoreApplication::applicationFilePath()) {
-    repairFileTypes();
+    repairAssociations();
     settings->setApplicationFilePath(QCoreApplication::applicationFilePath());
     settings->sync();
   }
@@ -299,6 +322,9 @@ main(int argc, char *argv[])
   }
 //#endif // WITH_MODULE_WEBBROWSER
 
+  // Set annotation cache directory
+  AnnotationCacheManager::globalInstance()->setLocation(AC_PATH_CACHES);
+
   // Set theme.
   {
     AcUi *ui = AcUi::globalInstance();
@@ -332,6 +358,12 @@ main(int argc, char *argv[])
   if (QThreadPool::globalInstance()->maxThreadCount() < MinThreadCount)
     QThreadPool::globalInstance()->setMaxThreadCount(MinThreadCount);
   DOUT("thread pool size =" << QThreadPool::globalInstance()->maxThreadCount());
+
+  // Reduce animation timing interval to improve animation rendering performance
+  // DEFAULT_TIMING_INTERVAL defined in qabstractanimation.cpp is 16
+  // As 1 sec / 24 frames = 41.6 msec, timing interval should be at lease 41 msec
+  //enum { AnimationTimingInterval = 40 };
+  //QtSettings::globalInstance()->setAnimationTimingInterval(AnimationTimingInterval);
 
 //#ifdef USE_MODE_SIGNAL
 //  // Root window
@@ -418,7 +450,7 @@ main(int argc, char *argv[])
   //XSendEvent(dpy, DefaultRootWindow(dpy), False,
   //SubstructureNotifyMask, &xev);
 
-#if defined USE_MODE_SIGNAL && defined Q_OS_WIN
+#if defined(USE_MODE_SIGNAL) && defined(Q_OS_WIN)
   // jichi 11/29/2011: Used as a PERSISTENT hidden top level window.
   QWidget dummy;
   dummy.resize(QSize()); // zero-sized to be hidden
@@ -439,6 +471,25 @@ main(int argc, char *argv[])
   //bk.showMaximized();
 
   //QTimer::singleShot(0, &w, SLOT(checkClipboard()));
+
+  //module_t *m = module_find("freetype");;
+  //qDebug()<<111111<< m->b_loaded<< m->b_unloadable;
+
+    //FcInit();
+//  qDebug()<<111111;
+//  FcConfig *fcConfig = FcInitLoadConfig();
+//  FcConfigBuildFonts(fcConfig);
+//  qDebug()<<22222;
+//#ifdef Q_OS_MAC
+//    // By default, scan only the directory /System/Library/Fonts.
+//    // So build the set of available fonts under another directories,
+//    // and add the set to the current configuration.
+//    FcConfigAppFontAddDir(NULL, "~/Library/Fonts" );
+//    FcConfigAppFontAddDir(NULL, "/Library/Fonts" );
+//    FcConfigAppFontAddDir(NULL, "/Network/Library/Fonts" );
+//    //FcConfigAppFontAddDir( NULL, "/System/Library/Fonts" );
+//    // By default, scan only the directory /System/Library/Fonts.
+//#endif // Q_OS_MAC
 
   DOUT("exit: exec");
   return a.exec();

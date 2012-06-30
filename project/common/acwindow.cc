@@ -4,12 +4,12 @@
 #include "project/common/acwindow.h"
 #include "project/common/acui.h"
 #ifdef WITH_MODULE_ANIMATION
-#  include "module/animation/fadeanimation.h"
+# include "module/animation/fadeanimation.h"
 #endif // WITH_MODULE_ANIMATION
 #ifdef WITH_MODULE_IMAGEFILTER
-#  include "module/imagefilter/rippleimagefilter.h"
-#  include <QtGui/QMouseEvent>
-#  include <QtGui/QPainter>
+# include "module/imagefilter/rippleimagefilter.h"
+# include <QtGui/QMouseEvent>
+# include <QtGui/QPainter>
 #endif // WITH_MODULE_IMAGEFILTER
 #include <QtGui/QShortcut>
 #include <QtCore/QTimer>

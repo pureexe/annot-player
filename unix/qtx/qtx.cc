@@ -3,7 +3,7 @@
 
 #include <QtGlobal>
 #ifndef Q_WS_X11
-#  error "This file is for X11 only."
+# error "This file is for X11 only."
 #endif // Q_WS_X11
 
 #include "qtx/qtx.h"

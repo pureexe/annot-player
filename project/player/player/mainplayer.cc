@@ -26,9 +26,9 @@ MainPlayerDock::MainPlayerDock(QWidget *parent)
 void
 MainPlayerDock::setVisible(bool visible)
 {
-  MainPlayerUi *ui = qobject_cast<MainPlayerUi*>(widget());
-  if (ui)
-    ui->setActive(visible);
+  auto p = qobject_cast<MainPlayerUi *>(widget());
+  if (p)
+    p->setActive(visible);
 
   Base::setVisible(visible);
 }

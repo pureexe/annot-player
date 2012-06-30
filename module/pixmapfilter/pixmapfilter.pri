@@ -1,8 +1,6 @@
 # pixmapfilter.pri
 # 5/3/2012
 
-include(../../config.pri)
-
 DEFINES += WITH_MODULE_PIXMAPFILTER
 
 DEPENDPATH += $$PWD

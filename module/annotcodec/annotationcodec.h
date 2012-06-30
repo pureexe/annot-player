@@ -24,11 +24,15 @@ signals:
   void error(QString msg);
   void message(QString msg);
 
-  void fetched(AnnotationList annots, QString url);
+  void fetched(AnnotationList annots, QString url, QString originalUrl);
 
 public:
   virtual bool match(const QString &url) const = 0;
-  virtual void fetch(const QString &url) = 0;
+  virtual void fetch(const QString &url, const QString &originalUrl) = 0;
+
+  // - Helpers -
+protected:
+  static QByteArray skipLeadingCommentAndNewLine(const QByteArray &data, const char *start, const char *stop);
 };
 
 #endif // ANNOTATIONCODEC_H

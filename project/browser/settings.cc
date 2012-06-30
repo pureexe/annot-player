@@ -14,12 +14,13 @@
 
 // See platform specific issue in QSettings manual.
 #ifdef Q_OS_MAC
-#  define SK_ORGANIZATION   G_DOMAIN
+# define SK_ORGANIZATION G_DOMAIN
+# define SK_APPLICATION  "browser"
 #else
-#  define SK_ORGANIZATION   G_ORGANIZATION
+# define SK_ORGANIZATION G_ORGANIZATION
+# define SK_APPLICATION  G_APPLICATION
 #endif // Q_OS_MAC
 
-#define SK_APPLICATION  G_APPLICATION
 #define SK_VERSION      "Version"
 
 #define SK_SIZE         "Size"

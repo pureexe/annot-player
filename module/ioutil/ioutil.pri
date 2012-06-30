@@ -1,8 +1,6 @@
 # ioutil.pri
 # 12/6/2011
 
-include(../../config.pri)
-
 DEFINES += WITH_MODULE_IOUTIL
 
 #win32:  include($$ROOTDIR/win/qtwin/qtwin.pri)

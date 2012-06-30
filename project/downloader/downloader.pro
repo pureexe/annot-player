@@ -1,7 +1,7 @@
 # downloader.pro
 # 3/29/2012
 
-VERSION = 0.1.1.8
+VERSION = 0.1.1.9
 
 DEFINES += PROJECT_DOWNLOADER
 
@@ -108,7 +108,8 @@ mac {
 TRANSLATIONS += \
     $$PWD/tr/tr_en.ts \
     $$PWD/tr/tr_ja.ts \
-    $$PWD/tr/tr_zh.ts
+    $$PWD/tr/tr_zh_TW.ts \
+    $$PWD/tr/tr_zh_CN.ts
 
 CODECFORTR = UTF-8
 

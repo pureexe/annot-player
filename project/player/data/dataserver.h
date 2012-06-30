@@ -72,13 +72,13 @@ public:
   Token selectTokenWithId(qint64 id);
   Token selectTokenWithDigest(const QString &digest, qint32 part);
 
-  AnnotationList selectAnnotationsWithTokenId(qint64 tid, bool invalidateCache = false);
-  AliasList selectAliasesWithTokenId(qint64 tid);
-  AnnotationList selectRelatedAnnotationsWithTokenId(qint64 tid, bool invalidateCache = false, bool *fromCache = 0);
+  AnnotationList selectAnnotationsWithTokenId(qint64 tid, bool ignoreCache = false);
+  AliasList selectAliasesWithTokenId(qint64 tid, bool ignoreCache = false, bool *fromCache = 0);
+  AnnotationList selectRelatedAnnotationsWithTokenId(qint64 tid, bool ignoreCache = false, bool *fromCache = 0);
   AliasList selectRelatedAliasesWithTokenId(qint64 tid);
 
-  AliasList selectAliasesWithToken(const Token &token);
-  AnnotationList selectAnnotationsWithToken(const Token &token, bool invalidateCache = false, bool *fromCache = 0);
+  AliasList selectAliasesWithToken(const Token &token, bool ignoreCache = false, bool *fromCache = 0);
+  AnnotationList selectAnnotationsWithToken(const Token &token, bool ignoreCache = false, bool *fromCache = 0);
 
   // - Sync -
 public:

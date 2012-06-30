@@ -7,13 +7,13 @@
 #include "project/common/acui.h"
 #include "module/qtext/ss.h"
 #ifdef Q_OS_WIN
-#  include "win/qtwin/qtwin.h"
+# include "win/qtwin/qtwin.h"
 #endif // Q_OS_WIN
 #ifdef Q_OS_UNIX
-#  include "unix/qtunix/qtunix.h"
+# include "unix/qtunix/qtunix.h"
 #endif // Q_OS_UNIX
 #ifdef WITH_MODULE_IOUTIL
-#  include "module/ioutil/ioutil.h"
+# include "module/ioutil/ioutil.h"
 #endif // WITH_MODULE_IOUTIL
 #include <QtGui>
 
@@ -41,7 +41,7 @@ DeviceDialog::devices()
   if (ret.isEmpty())
     ret.append("X:\\");
   return ret;
-#elif defined (Q_OS_UNIX)
+#elif defined(Q_OS_UNIX)
   QStringList ret = QtUnix::getDevicesWithType(QtUnix::CdRom);
   if (ret.isEmpty())
     ret.append("/dev/cdrom");
@@ -77,7 +77,7 @@ DeviceDialog::createLayout()
   QString holder =
 #ifdef Q_WS_WIN
     "x:\\"
-#elif defined Q_WS_MAC
+#elif defined(Q_WS_MAC)
     "/dev/cdrom"
 #else
     "/dev/cdrom"

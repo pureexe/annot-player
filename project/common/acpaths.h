@@ -3,8 +3,12 @@
 
 // ac/acpaths.h
 // 4/23/2012
+#include <QtCore/QCoreApplication>
 #include <QtCore/QObject>
 #include <QtCore/QString>
+#ifdef Q_WS_MAC
+# include "mac/qtmac/qtmac.h"
+#endif // Q_WS_MAC
 
 // - Resources -
 
@@ -12,8 +16,16 @@
 #define AC_PATH_JSF     ""      // TODO
 #define AC_PATH_DOC     ""      // TODO
 #define AC_PATH_IMAGES  ""      // TODO
-#define AC_PATH_CACHES  ""      // TODO
 #define AC_PATH_LOGS    ""      // TODO
+
+#ifdef Q_WS_WIN
+# define AC_PATH_CACHES  QCoreApplication::applicationDirPath() + "/" "caches"
+#elif defined(Q_WS_MAC)
+# define AC_PATH_CACHES  QtMac::homeCachesPath() + "/me.annot.cloud"
+#else
+# define AC_PATH_CACHES  QDir::homePath() + "/.annot/cloud"
+#endif // Q_WS_
+
 #define AC_PATH_DOWNLOADS       AcLocationManager::globalInstance()->downloadsLocation()
 
 class AcSettings;

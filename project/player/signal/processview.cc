@@ -9,13 +9,15 @@
 #include "win/qtwin/qtwin.h"
 #include "win/qtwinnt/qtwinnt.h"
 #ifdef WITH_WIN_TEXTHOOK
-#  include "win/texthook/texthook.h"
+# include "win/texthook/texthook.h"
 #else
-#  error "TextHook is indispensible"
+# error "TextHook is indispensible"
 #endif // WITH_WIN_TEXTHOOK
 #include "project/common/acfilteredtableview.h"
 #include "project/common/acui.h"
 #include <QtGui>
+#include <boost/assign/list_of.hpp>
+#include <set>
 
 #define DEBUG "processview"
 #include "module/debug/debug.h"
@@ -28,27 +30,31 @@ namespace { // anonymous
 
   bool processNameIsNotGalGame(const QString &procName)
   {
-    static QStringList blacklist = QStringList()
-      << "Activator" << "ApMsgFwd" << "Apntex" << "Apoint" << "APSDaemon" << "AutoHotkey" << "ApplePhotoStreams"
-      << "BookmarkDAV_client" << "BoonSutazio" << "Bootcamp" << "BtStackServer" << "BTTray"
-      << "CamtasiaStudio" << "chrome"
-      << "distnoted" << "Dropbox" << "DTLite"
-      << "eclipse" << "Evernote" << "EvernoteTray"
-      << "firefox" << "foobar2000"
-      << "GoogleIMEJaConverter" << "GoogleIMEJaRenderer" << "gvim"
-      << "Hamana" << "HidFind"
-      << "iCloudServices" << "IELowutil" << "IEXPLOR" << "iTunes" << "iTunesHelper"
-      << "java" << "javaw" << "jusched"
-      << "KHALMNPR" << "KMPlayer"
-      << "MacDrive" << "Maxthon" << "MouseGesture" << "mspdbsrv" << "mysql"
-      << "netdrive"
-      << "oacrmonitor" << "ONENOTEM" << "opera"
-      << "php-cgi" << "plugin-container"
-      << "QQ" << "qtcreator"
-      << "SecureCRT" << "SetPoint" << "sidebar" << "Skype" << "SogouCloud" << "sttray" << "Switcher"
-      << "thunderbird" << "TSCHelper" << "TXPlatform"
-      << "volumouse";
-    return blacklist.indexOf(procName) >= 0;
+#define H(_cstr) qHash(QString(_cstr))  // use std::set with qHash to improve search performance
+    static const std::set<uint> blacklist = boost::assign::list_of
+      (H("annot-browser")) (H("annot-down")) (H("annot-player"))
+      (H("Activator")) (H("ApMsgFwd")) (H("Apntex")) (H("Apoint")) (H("APSDaemon")) (H("AutoHotkey")) (H("ApplePhotoStreams"))
+      (H("BitComet")) (H("BookmarkDAV_client")) (H("BoonSutazio")) (H("Bootcamp")) (H("BtStackServer")) (H("BTTray"))
+      (H("CamtasiaStudio")) (H("chrome"))
+      (H("distnoted")) (H("Dropbox")) (H("DTLite"))
+      (H("eclipse")) (H("Evernote")) (H("EvernoteTray"))
+      (H("firefox")) (H("foobar2000"))
+      (H("GoogleIMEJaConverter")) (H("GoogleIMEJaRenderer")) (H("gvim"))
+      (H("Hamana")) (H("HidFind"))
+      (H("iCloudServices")) (H("IELowutil")) (H("IEXPLOR")) (H("iTunes")) (H("iTunesHelper"))
+      (H("java")) (H("javaw")) (H("jusched"))
+      (H("KHALMNPR")) (H("KMPlayer"))
+      (H("MacDrive")) (H("Maxthon")) (H("MouseGesture")) (H("mspdbsrv")) (H("mysql"))
+      (H("netdrive"))
+      (H("oacrmonitor")) (H("ONENOTEM")) (H("opera"))
+      (H("php-cgi")) (H("plugin-container"))
+      (H("QQ")) (H("qtcreator"))
+      (H("SecureCRT")) (H("SetPoint")) (H("sidebar")) (H("Skype")) (H("SogouCloud")) (H("sttray")) (H("Switcher"))
+      (H("thunderbird")) (H("TSCHelper")) (H("TXPlatform"))
+      (H("volumouse"))
+    ;
+#undef H
+    return blacklist.find(qHash(procName)) != blacklist.end();
   }
 
 } // anonymous namespace

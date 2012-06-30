@@ -40,6 +40,9 @@ public:
   bool isBufferedMediaSaved() const;
   void setBufferedMediaSaved(bool t);
 
+  bool isAnnotationFileSaved() const;
+  void setAnnotationFileSaved(bool t);
+
   bool isAutoSubmit() const;
   void setAutoSubmit(bool t);
 
@@ -76,6 +79,9 @@ public:
   int subtitleColor() const;
   void setSubtitleColor(int colorId);
 
+  QColor annotationHighlightColor() const;
+  void setAnnotationHighlightColor(const QColor &color);
+
   QColor annotationOutlineColor() const;
   void setAnnotationOutlineColor(const QColor &value);
 
@@ -84,6 +90,9 @@ public:
 
   int annotationEffect() const;
   void setAnnotationEffect(int effect);
+
+  int annotationPositionResolution() const;
+  void setAnnotationPositionResolution(int value);
 
   QString annotationFontFamily() const;
   void setAnnotationFontFamily(const QString &family);
@@ -99,6 +108,9 @@ public:
 
   bool preferMotionlessAnnotation() const;
   void setPreferMotionlessAnnotation(bool t);
+
+  bool preferTraditionalChinese() const;
+  void setPreferTraditionalChinese(bool t);
 
   ///  Theme in UiStyle
   qint64 annotationLanguages() const; ///< Annotation language

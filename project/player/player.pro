@@ -4,7 +4,7 @@
 DEFINES += PROJECT_PLAYER
 
 VERSION_MAJOR = 0.1.6.
-VERSION_MINOR = 3
+VERSION_MINOR = 4
 
 VERSION = $$VERSION_MAJOR$$VERSION_MINOR
 
@@ -20,6 +20,7 @@ include($$ROOTDIR/module/debug/debug.pri)
 
 include($$ROOTDIR/module/animation/animation.pri)
 include($$ROOTDIR/module/annotcloud/annotcloud.pri)
+include($$ROOTDIR/module/annotcache/annotcache.pri)
 include($$ROOTDIR/module/annotcodec/annotcodec.pri)
 include($$ROOTDIR/module/annotdb/annotdb.pri)
 include($$ROOTDIR/module/blockiodevice/blockiodevice.pri)
@@ -40,6 +41,7 @@ include($$ROOTDIR/module/qtext/qtext.pri)
 include($$ROOTDIR/module/searchengine/searchengine.pri)
 include($$ROOTDIR/module/stream/stream.pri)
 include($$ROOTDIR/module/serveragent/serveragent.pri)
+include($$ROOTDIR/module/textcodec/textcodec.pri)
 include($$ROOTDIR/module/translator/translator.pri)
 
 !mac: include($$ROOTDIR/module/metacall/metacall.pri)

@@ -14,21 +14,21 @@
 #include "module/blockiodevice/blockiodevice.h"
 extern "C" {
 #ifdef Q_OS_WIN
-#  include <qt_windows.h>
-#  include <ntddcdrm.h>
-#  include <winioctl.h>
+# include <qt_windows.h>
+# include <ntddcdrm.h>
+# include <winioctl.h>
 #endif // Q_OS_WIN
 #ifdef Q_OS_UNIX
-#  ifdef Q_OS_LINUX
-#    include <linux/cdrom.h>
-//#    include <linux/hdreg.h>
-#  elif defined Q_OS_MAC
-#    include <sys/disk.h>
-#  endif // Q_OS_
-#  include <sys/ioctl.h>
-#  include <fcntl.h>
-#  include <cstring>
-#  include <cerrno>
+# ifdef Q_OS_LINUX
+#  include <linux/cdrom.h>
+//#  include <linux/hdreg.h>
+# elif defined(Q_OS_MAC)
+#  include <sys/disk.h>
+# endif // Q_OS_
+# include <sys/ioctl.h>
+# include <fcntl.h>
+# include <cstring>
+# include <cerrno>
 #endif // Q_OS_UNIX
 } // extern "C"
 

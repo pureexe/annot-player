@@ -17,27 +17,26 @@
 #include <QtWebKit/QWebHistory>
 #include <QtNetwork/QNetworkDiskCache>
 #include <QtGui>
-#include <boost/typeof/typeof.hpp>
 
 #define DEBUG "webbrowser"
 #include "module/debug/debug.h"
 
 #ifdef __GNUC__
-#  pragma GCC diagnostic ignored "-Wparentheses" // suggest parentheses
+# pragma GCC diagnostic ignored "-Wparentheses" // suggest parentheses
 #endif // __GNUC__
 
 #define TEXT_SIZE_SCALE 0.85
 
 #ifdef Q_WS_MAC
-#  define SHORTCUT_LOCATION     "CTRL+L"
+# define SHORTCUT_LOCATION     "CTRL+L"
 #else
-#  define SHORTCUT_LOCATION     "ALT+D"
+# define SHORTCUT_LOCATION     "ALT+D"
 #endif // Q_WS_MAC
 
 #ifdef Q_WS_MAC
-#  define K_META     "META"
+# define K_META     "META"
 #else
-#  define K_META     "CTRL"
+# define K_META     "CTRL"
 #endif // Q_WS_MAC
 
 #define SHORTCUT_SEARCH         "CTRL+E"
@@ -49,9 +48,9 @@ enum { StatusMessageTimeout = 10000 }; // 10 seconds
 // - RC -
 
 #ifdef Q_WS_X11
-#  define RC_PREFIX     DOCDIR "/"
+# define RC_PREFIX     DOCDIR "/"
 #else
-#  define RC_PREFIX     QCoreApplication::applicationDirPath() + "/doc/"
+# define RC_PREFIX     QCoreApplication::applicationDirPath() + "/doc/"
 #endif // Q_WS_X11
 
 #define RC_HTML_START   RC_PREFIX "start.html"
@@ -376,7 +375,7 @@ WebBrowser::tabUrl(int index) const
 {
   QWidget *w = tabWidget(index);
   if (w) {
-    QWebView *view = qobject_cast<QWebView *>(w);
+    auto view = qobject_cast<QWebView *>(w);
     if (w)
       return view->url();
   }
@@ -444,7 +443,7 @@ void
 WebBrowser::updateLoadProgress()
 {
   int progress = loadProgress_;
-  WbWebView *v = qobject_cast<WbWebView *>(tabWidget());
+  auto v = qobject_cast<WbWebView *>(tabWidget());
   if (v)
     progress = v->progress();
   if (loadProgress_ != progress ) {
@@ -504,7 +503,7 @@ WebBrowser::openUrl(const QString &url, QWebView *view)
 
   addRecentUrl(url);
 
-  BOOST_AUTO(iconDaemon, new daemon_::SetAddressIcon(ui->addressEdit, url, ui->tabWidget, view));
+  auto iconDaemon = new daemon_::SetAddressIcon(ui->addressEdit, url, ui->tabWidget, view);
   connect(view, SIGNAL(loadStarted()), iconDaemon, SLOT(trigger()));
   connect(view, SIGNAL(loadFinished(bool)), iconDaemon, SLOT(trigger(bool)));
   if (view == tabWidget()) {
@@ -617,7 +616,7 @@ WebBrowser::closeTab(int tab)
   }
   QWidget *widget = tabWidget(tab);
   if (widget) {
-    QWebView *w = qobject_cast<QWebView *>(widget);
+    auto w = qobject_cast<QWebView *>(widget);
     if (w) {
       QUrl url = w->url();
       if (!url.isEmpty())
@@ -645,7 +644,7 @@ WebBrowser::openUrlWithOperatingSystem(const QString &url)
 void
 WebBrowser::openLinkInNewTab()
 {
-  WbWebView *v = qobject_cast<WbWebView *>(tabWidget());
+  auto v = qobject_cast<WbWebView *>(tabWidget());
   if (v) {
     QString url = v->hoveredLink();
     if (!url.isEmpty())
@@ -678,7 +677,7 @@ WebBrowser::undoCloseTab()
 void
 WebBrowser::updateButtons()
 {
-  QWebView *view = qobject_cast<QWebView *>(tabWidget());
+  auto view = qobject_cast<QWebView *>(tabWidget());
   if (view) {
     ui->backButton->setEnabled(view->history()->canGoBack());
     ui->forwardButton->setEnabled(view->history()->canGoForward());
@@ -688,7 +687,7 @@ WebBrowser::updateButtons()
 void
 WebBrowser::back()
 {
-  QWebView *view = qobject_cast<QWebView *>(tabWidget());
+  auto view = qobject_cast<QWebView *>(tabWidget());
   if (view)
     view->back();
 }
@@ -696,7 +695,7 @@ WebBrowser::back()
 void
 WebBrowser::forward()
 {
-  QWebView *view = qobject_cast<QWebView *>(tabWidget());
+  auto view = qobject_cast<QWebView *>(tabWidget());
   if (view)
     view->forward();
 }
@@ -746,7 +745,7 @@ WebBrowser::openBlankPage()
 {
   if (tabCount() <= 0)
     newTab();
-  QWebView *v = qobject_cast<QWebView *>(tabWidget());
+  auto v = qobject_cast<QWebView *>(tabWidget());
   if (v) {
     v->setContent(::rc_html_start_(), "text/html");
     ui->tabWidget->setTabText(tabIndex(), tr("Start Page"));
@@ -785,7 +784,7 @@ WebBrowser::newTab(QWebView *view, int index, bool focus)
   if (textSizeMultiplier_ > 0)
     view->setTextSizeMultiplier(textSizeMultiplier_);
 
-  WbWebView *wbview = qobject_cast<WbWebView *>(view);
+  auto wbview = qobject_cast<WbWebView *>(view);
   if (wbview) {
     wbview->setSearchEngines(QtExt::subList(searchEngines_, SearchEngineFactory::VisibleEngineCount));
     wbview->setSearchEngine(searchEngine_);
@@ -827,14 +826,14 @@ WebBrowser::newTab(QWebView *view, int index, bool focus)
   else
     ui->tabWidget->insertTab(index, view, t);
 
-  BOOST_AUTO(textDaemon, new daemon_::SetTabText(ui->tabWidget, view));
+  auto textDaemon = new daemon_::SetTabText(ui->tabWidget, view);
   connect(view, SIGNAL(titleChanged(QString)), textDaemon, SLOT(trigger(QString)));
 
-  BOOST_AUTO(iconDaemon, new daemon_::SetTabIcon(ui->tabWidget, view));
+  auto iconDaemon = new daemon_::SetTabIcon(ui->tabWidget, view);
   connect(view, SIGNAL(loadStarted()), iconDaemon, SLOT(trigger()));
   connect(view, SIGNAL(loadFinished(bool)), iconDaemon, SLOT(trigger(bool)));
 
-  BOOST_AUTO(searchDaemon, new daemon_::SearchTab(this, ui->tabWidget, view));
+  auto searchDaemon = new daemon_::SearchTab(this, ui->tabWidget, view);
   connect(view, SIGNAL(loadFinished(bool)), searchDaemon, SLOT(trigger(bool)));
 
   connect(view, SIGNAL(titleChanged(QString)), SLOT(updateWindowTitle()));
@@ -855,7 +854,7 @@ WebBrowser::updateWindowTitle()
 void
 WebBrowser::reload()
 {
-  QWebView *view = qobject_cast<QWebView  *>(tabWidget());
+  auto view = qobject_cast<QWebView  *>(tabWidget());
   if (view)
     view->reload();
 }
@@ -863,7 +862,7 @@ WebBrowser::reload()
 void
 WebBrowser::updateAddressbar()
 {
-  QWebView *view = qobject_cast<QWebView *>(tabWidget());
+  auto view = qobject_cast<QWebView *>(tabWidget());
   if (view) {
     WbComboEdit *edit = ui->addressEdit;
     QUrl url = view->url();
@@ -887,7 +886,7 @@ WebBrowser::updateAddressbar()
 void
 WebBrowser::handleLoadFinished()
 {
-  QWebView *view = qobject_cast<QWebView *>(tabWidget());
+  auto view = qobject_cast<QWebView *>(tabWidget());
   if (view)
     view->setCursor(QCursor());
 }
@@ -895,7 +894,7 @@ WebBrowser::handleLoadFinished()
 void
 WebBrowser::handleLoadStarted()
 {
-  QWebView *view = qobject_cast<QWebView *>(tabWidget());
+  auto view = qobject_cast<QWebView *>(tabWidget());
   if (view)
     view->setCursor(QCursor(Qt::BusyCursor));
 }
@@ -1053,7 +1052,7 @@ WebBrowser::invalidateSearch()
   enum { min = 2, max = 100 };
   QString t = ui->searchEdit->currentText().trimmed();
   if (t.size() >= min && t.size() <= max) {
-    QWebView *v = qobject_cast<QWebView *>(tabWidget());
+    auto v = qobject_cast<QWebView *>(tabWidget());
     if (v) {
       v->findText(QString(), QWebPage::HighlightAllOccurrences);
       v->findText(t, QWebPage::FindWrapsAroundDocument | QWebPage::HighlightAllOccurrences);
@@ -1116,7 +1115,7 @@ WebBrowser::openUrl()
 
   openUrl(url);
 
-  //QWebView *view = qobject_cast<QWebView *>(ui->tabWidget->currentWidget());
+  //auto view = qobject_cast<QWebView *>(ui->tabWidget->currentWidget());
   //if (view) {
   //  QString address = ui->addressLine->text();
   //  if (!address.startsWith("http://")) {

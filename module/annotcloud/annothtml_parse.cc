@@ -5,7 +5,6 @@
 #include "module/annotcloud/annottag.h"
 #include "module/qtext/htmltag.h"
 #include <boost/tuple/tuple.hpp>
-#include <boost/typeof/typeof.hpp>
 #include <stack>
 
 //#define DEBUG "annothtmlparse"
@@ -137,7 +136,7 @@ AnnotationHtmlParser::toHtml(const QString &text) const
 
       QStringList params, attrs;
       while (!stack.empty()) {
-        BOOST_AUTO(front, stack.top());
+        auto front = stack.top();
         stack.pop();
 
         switch (front.second) {
@@ -204,7 +203,7 @@ AnnotationHtmlParser::toHtml(const QString &text) const
         if (stack.empty())
           DOUT("parse: '^]' mismatched");
         while (!stack.empty()) {
-          BOOST_AUTO(front, stack.top());
+          auto front = stack.top();
           stack.pop();
 
           switch (front.second) {
@@ -275,7 +274,7 @@ AnnotationHtmlParser::toHtml(const QString &text) const
         if (stack.empty())
           DOUT("parse: '^]' mismatched");
         while (!stack.empty()) {
-          BOOST_AUTO(front, stack.top());
+          auto front = stack.top();
           stack.pop();
 
           switch (front.second) {

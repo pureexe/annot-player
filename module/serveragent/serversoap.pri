@@ -1,8 +1,6 @@
 # soap.pri
 # 9/10/2011
 
-## TODO: Automatic generate this pri file!!
-
 SERVER_SOAP_BINDING = ServerAgentServiceSoapBinding
 SERVER_SOAP_PREFIX = ServerSoap
 

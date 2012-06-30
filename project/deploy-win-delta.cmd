@@ -4,7 +4,7 @@ setlocal
 cd /d d:/dev/build || exit /b 1
 
 set MAJOR=0.1.6
-set MINOR=3
+set MINOR=4
 set VERSION=%MAJOR%.%MINOR%
 ::set PREVMAJOR=%MAJOR%
 set PREVMAJOR=%MAJOR%
@@ -13,9 +13,9 @@ set TARGET=Annot Stream
 set ZIPFILE=%APP%-%PREVMAJOR%-%VERSION%-delta-win.zip
 
 ::set BASENAME=%APP%-%VERSION%-win
-::rm -Rf "%BASENAME%" || exit 1
-::mkdir "%BASENAME%" || exit 1
-::cd "%BASENAME%" || exit 1
+::rm -Rf "%BASENAME%" || exit /b 1
+::mkdir "%BASENAME%" || exit /b 1
+::cd "%BASENAME%" || exit /b 1
 
 ::set MSVC_HOME=/Volumes/win/Windows/System32
 set MSVC_DLLS=msvcp100.dll,msvcr100.dll
@@ -138,38 +138,38 @@ rm -fv %ZLIB_DLL%
 
 :: compile lua
 
-::luac -s -o luascript.luac "%SOURCE%"/module/mrlresolver/lua/luascript.lua  || exit 1
-::cp -Rv "%SOURCE%"/module/mrlresolver/lua/luascript .  || exit 1
-::pushd luascript || exit 1
+::luac -s -o luascript.luac "%SOURCE%"/module/mrlresolver/lua/luascript.lua  || exit /b 1
+::cp -Rv "%SOURCE%"/module/mrlresolver/lua/luascript .  || exit /b 1
+::pushd luascript || exit /b 1
 ::for %%d in (lib sitelist .) do (
-::  pushd %%d || exit 1
+::  pushd %%d || exit /b 1
 ::  for %%i in (*.lua) do luac -s -o %%ic %%i && rm -f %%i
 ::  popd
 ::)
 ::popd
 set LUA_PATH=lua/luascript
-mkdir "%LUA_PATH%" || exit 1
-::cp "%SOURCE%"/module/luaresolver/lua/luascript.lua "%LUA_PATH%"/ || exit 1
-::cp -v "%SOURCE%"/module/luaresolver/lua/luascript/*.lua "%LUA_PATH%"/  || exit 1
-::cp -v "%SOURCE%"/module/luaresolver/lua/luascript/*/*.lua "%LUA_PATH%"/  || exit 1
-cp -v "%SOURCE%"/module/luaresolver/lua/luascript/sitelist/bilibili.lua "%LUA_PATH%"/  || exit 1
-cp -v "%SOURCE%"/module/luaresolver/lua/luascript/lib/lalib.lua "%LUA_PATH%"/  || exit 1
+mkdir "%LUA_PATH%" || exit /b 1
+::cp "%SOURCE%"/module/luaresolver/lua/luascript.lua "%LUA_PATH%"/ || exit /b 1
+::cp -v "%SOURCE%"/module/luaresolver/lua/luascript/*.lua "%LUA_PATH%"/  || exit /b 1
+::cp -v "%SOURCE%"/module/luaresolver/lua/luascript/*/*.lua "%LUA_PATH%"/  || exit /b 1
+cp -v "%SOURCE%"/module/luaresolver/lua/luascript/sitelist/bilibili.lua "%LUA_PATH%"/  || exit /b 1
+cp -v "%SOURCE%"/module/luaresolver/lua/luascript/lib/lalib.lua "%LUA_PATH%"/  || exit /b 1
 
 :: doc
-::cp -Rv "%SOURCE%"/module/qtext/doc . || exit 1
-::cp -Rv "%SOURCE%"/module/qtext/images . || exit 1
+cp -Rv "%SOURCE%"/module/qtext/doc . || exit /b 1
+::cp -Rv "%SOURCE%"/module/qtext/images . || exit /b 1
 
 :: jsf
-::cp -Rv "%SOURCE%"/module/annotcloud/jsf . || exit 1
+::cp -Rv "%SOURCE%"/module/annotcloud/jsf . || exit /b 1
 
 :: images
-::cp -Rv "%SOURCE%"/project/player/avatars . || exit 1
+::cp -Rv "%SOURCE%"/project/player/avatars . || exit /b 1
 
 cd ..
 
 :: desktop.ini
-::cp -v "%SOURCE%"/project/common/share/apps.ico icon.ico || exit 1
-::cp -v "%SOURCE%"/project/common/share/desktop.ini.txt desktop.ini || exit 1
+::cp -v "%SOURCE%"/project/common/share/apps.ico icon.ico || exit /b 1
+::cp -v "%SOURCE%"/project/common/share/desktop.ini.txt desktop.ini || exit /b 1
 
 :: repair permissions
 

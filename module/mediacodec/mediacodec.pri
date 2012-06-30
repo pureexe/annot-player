@@ -1,8 +1,6 @@
 # mediacodec.pri
 # 2/12/2012
 
-include(../../config.pri)
-
 DEFINES += WITH_MODULE_MEDIACODEC
 
 DEPENDPATH += $$PWD

@@ -15,12 +15,13 @@
 
 // See platform specific issue in QAcSettings manual.
 #ifdef Q_OS_MAC
-#  define SK_ORGANIZATION   AC_DOMAIN
+# define SK_ORGANIZATION   AC_DOMAIN
+# define SK_APPLICATION    "cloud"
 #else
-#  define SK_ORGANIZATION   AC_ORGANIZATION
+# define SK_ORGANIZATION   AC_ORGANIZATION
+# define SK_APPLICATION    AC_APPLICATION
 #endif // Q_OS_MAC
 
-#define SK_APPLICATION    AC_APPLICATION
 #define SK_VERSION        "Version"
 
 #define SK_USERID       "UserId"
@@ -30,6 +31,7 @@
 #define SK_BILIACCOUNT  "BilibiliAccount"
 
 #define SK_LANGUAGE     "Language"
+#define SK_LANGUAGESCRIPT "LanguageScript"
 
 #define SK_THEME        "Theme"
 #define SK_AERO         "Aero"
@@ -190,8 +192,19 @@ AcSettings::language() const
 { return value(SK_LANGUAGE).toInt(); }
 
 void
-AcSettings::setLanguage(int language)
-{ setValue(SK_LANGUAGE, language); }
+AcSettings::setLanguage(int language, int script)
+{
+  setValue(SK_LANGUAGE, language);
+  setLanguageScript(script);
+}
+
+int
+AcSettings::languageScript() const
+{ return value(SK_LANGUAGESCRIPT).toInt(); }
+
+void
+AcSettings::setLanguageScript(int script)
+{ setValue(SK_LANGUAGESCRIPT, script); }
 
 bool
 AcSettings::isEnglish() const

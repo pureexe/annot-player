@@ -13,7 +13,7 @@
 	<key>CFBundleVersion</key>
 	<string>@VERSION@</string>
 	<key>CFBundleIdentifier</key>
-	<string>me.annot.Player</string>
+	<string>me.annot.player</string>
 	<key>CFBundleExecutable</key>
 	<string>@executable@</string>
 	<key>LSArchitecturePriority</key>

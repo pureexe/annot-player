@@ -7,6 +7,7 @@
 #include "project/common/acpreferencestab.h"
 
 QT_FORWARD_DECLARE_CLASS(QComboBox)
+QT_FORWARD_DECLARE_CLASS(QToolButton)
 
 class AcLocationManager;
 class AcLocationPrefs : public AcPreferencesTab
@@ -19,6 +20,8 @@ class AcLocationPrefs : public AcPreferencesTab
   AcLocationManager *locationManager_;
 
   QComboBox *downloadsLocationEdit_;
+  QToolButton *createDownloadsLocationButton_,
+              *resetDownloadsLocationButton_;
   QString downloadsLocationEditStyleSheet_;
 
 public:
@@ -29,7 +32,10 @@ public slots:
   virtual void load(); ///< \reimp
 
 protected slots:
-  void verifyLocation(const QString &path);
+  void loadDownloadsLocation();
+  bool saveDownloadsLocation();
+  void resetDownloadsLocation();
+  void verifyDownloadsLocation();
 
 private:
   void createLayout();

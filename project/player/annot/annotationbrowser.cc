@@ -18,9 +18,9 @@ using namespace AnnotCloud;
 using namespace Logger;
 
 #ifdef Q_OS_MAC
-#  define K_CTRL        "cmd"
+# define K_CTRL        "cmd"
 #else
-#  define K_CTRL        "Ctrl"
+# define K_CTRL        "Ctrl"
 #endif // Q_OS_MAC
 
 // - Constructions -
@@ -171,8 +171,8 @@ AnnotationEditor*
 AnnotationBrowser::editor() const
 {
   if (!editor_) {
-    Self *self = const_cast<Self*>(this);
-    AnnotationEditor *ret= new AnnotationEditor(self);
+    auto self = const_cast<Self *>(this);
+    AnnotationEditor *ret = new AnnotationEditor(self);
     connect(ret, SIGNAL(textSaved(QString)), SLOT(saveAnnotationText(QString)));
     self->editor_ = ret;
   }

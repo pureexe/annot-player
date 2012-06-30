@@ -15,23 +15,23 @@ nsobject_cast(From x)
 
 #define NSOBJECT_TYPE_REGISTER(_type, _obj) \
   template <> \
-  inline _type *nsobject_cast<_type*>(objc_object *obj) \
-  { return reinterpret_cast<_type*>(obj); } \
+  inline _type *nsobject_cast<_type *>(objc_object *obj) \
+  { return reinterpret_cast<_type *>(obj); } \
   template <> \
-  inline objc_object *nsobject_cast<objc_object*>(_type *obj) \
-  { return reinterpret_cast<objc_object*>(obj); } \
+  inline objc_object *nsobject_cast<objc_object *>(_type *obj) \
+  { return reinterpret_cast<objc_object *>(obj); } \
   template <> \
-  inline objc_object *nsobject_cast<objc_object*>(const _type *obj) \
-  { return reinterpret_cast<objc_object*>(const_cast<_type*>(obj)); } \
+  inline objc_object *nsobject_cast<objc_object *>(const _type *obj) \
+  { return reinterpret_cast<objc_object *>(const_cast<_type *>(obj)); } \
   template <> \
-  inline _type *nsobject_cast<_type*>(_obj *obj) \
-  { return reinterpret_cast<_type*>(obj); } \
+  inline _type *nsobject_cast<_type *>(_obj *obj) \
+  { return reinterpret_cast<_type *>(obj); } \
   template <> \
-  inline _obj *nsobject_cast<_obj*>(_type *obj) \
-  { return reinterpret_cast<objc_object*>(obj); } \
+  inline _obj *nsobject_cast<_obj *>(_type *obj) \
+  { return reinterpret_cast<_obj *>(obj); } \
   template <> \
-  inline _obj *nsobject_cast<_obj*>(const _type *obj) \
-  { return reinterpret_cast<objc_object*>(const_cast<_type*>(obj)); }
+  inline _obj *nsobject_cast<_obj *>(const _type *obj) \
+  { return reinterpret_cast<_obj *>(const_cast<_type *>(obj)); }
 
 // - NSObject -
 

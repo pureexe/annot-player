@@ -4,93 +4,127 @@
 #include "translatormanager.h"
 #include "tr.h"
 #include "rc.h" // This breaks the modularity of this pri
-#ifdef WITH_MODULE_QT
-#  include "module/qt/qtrc.h"
-#endif // WITH_MODULE_QT
+#include "module/qt/qtrc.h"
 #include <QtCore>
 
 #ifdef Q_OS_MAC
-#  define K_CTRL        "cmd"
-#  define K_CMD         "cmd"
-#  define K_ALT         "opt"
-#  define K_SHIFT       "shift"
-#  define K_SPACE       "space"
-#  define K_BACKSPACE   "backspace"
-#  define K_ESC         "esc"
-#  define K_CAPSLOCK    "capslock"
+# define K_CTRL        "cmd"
+# define K_CMD         "cmd"
+# define K_ALT         "opt"
+# define K_SHIFT       "shift"
+# define K_SPACE       "space"
+# define K_BACKSPACE   "backspace"
+# define K_ESC         "esc"
+# define K_CAPSLOCK    "capslock"
 #else
-#  define K_CTRL        "Ctrl"
-#  define K_CMD         "Alt"
-#  define K_ALT         "Alt"
-#  define K_SHIFT       "Shift"
-#  define K_SPACE       "Space"
-#  define K_BACKSPACE   "Backspace"
-#  define K_ESC         "Esc"
-#  define K_CAPSLOCK    "CapsLock"
+# define K_CTRL        "Ctrl"
+# define K_CMD         "Alt"
+# define K_ALT         "Alt"
+# define K_SHIFT       "Shift"
+# define K_SPACE       "Space"
+# define K_BACKSPACE   "Backspace"
+# define K_ESC         "Esc"
+# define K_CAPSLOCK    "CapsLock"
 #endif // Q_OS_MAC
 
 // - Constructions -
 
 void
-TranslatorManager::setLanguage(int language, bool updateTranslator)
+TranslatorManager::setLocale(int language, int script, bool updateTranslator)
 {
-  if (language_ != language) {
+  if (language_ != language || script_ != script) {
     if (updateTranslator)
       removeCurrentTranslator(qApp);
     language_ = language;
+    script_ = script;
     if (updateTranslator)
       installCurrentTranslator(qApp);
 
-    emit languageChanged();
+    emit localeChanged();
   }
 }
 
-#ifdef WITH_MODULE_QT
-  #define MAKE_TR(_tr, _TR) \
-  const TranslatorManager::QTranslatorList& \
-  TranslatorManager::tr_##_tr() const \
-  { \
-    if (tr_##_tr##_.isEmpty()) { \
-      QTranslator *t = new QTranslator(const_cast<Self*>(this)); \
-      t->load(RC_TR_##_TR); \
-      tr_##_tr##_.append(t); \
-      if (!QString(QTRC_TR_##_TR).isEmpty()) { \
-        t = new QTranslator(const_cast<Self*>(this)); \
-        t->load(QTRC_TR_##_TR); \
-        tr_##_tr##_.append(t); \
-      } \
-    } \
-    return tr_##_tr##_; \
-  }
-#else
-  #define MAKE_TR(_tr, _TR) \
-  const TranslatorManager::QTranslatorList& \
-  TranslatorManager::tr_##_tr() const \
-  { \
-    if (tr_##_tr##_.isEmpty()) { \
-      QTranslator *t = new QTranslator(const_cast<Self*>(this)); \
-      t->load(RC_TR_##_TR); \
-      tr_##_tr##_.append(t); \
-    } \
-    return tr_##_tr##_; \
-  }
-#endif // WITH_MODULE_QT
+// - Properties -
 
-  MAKE_TR(en, EN)
-  MAKE_TR(ja, JA)
-  MAKE_TR(tw, TW)
-  MAKE_TR(zh, ZH)
-#undef MAKE_TR
+const TranslatorManager::QTranslatorList&
+TranslatorManager::tr_en() const
+{
+  if (tr_en_.isEmpty()) {
+    QTranslator*
+    t = new QTranslator(const_cast<Self *>(this));
+    t->load(RC_TR_EN);
+    tr_en_.append(t);
+
+    if (!QString(RC_TR_EN).isEmpty()) {
+      t = new QTranslator(const_cast<Self *>(this));
+      t->load(RC_TR_EN);
+      tr_en_.append(t);
+    }
+  }
+  return tr_en_;
+}
+
+const TranslatorManager::QTranslatorList&
+TranslatorManager::tr_ja() const
+{
+  if (tr_ja_.isEmpty()) {
+    QTranslator*
+    t = new QTranslator(const_cast<Self *>(this));
+    t->load(RC_TR_JA);
+    tr_ja_.append(t);
+
+    if (!QString(RC_TR_JA).isEmpty()) {
+      t = new QTranslator(const_cast<Self *>(this));
+      t->load(QTRC_TR_JA);
+      tr_ja_.append(t);
+    }
+  }
+  return tr_ja_;
+}
+
+const TranslatorManager::QTranslatorList&
+TranslatorManager::tr_zh_CN() const
+{
+  if (tr_zh_CN_.isEmpty()) {
+    QTranslator*
+    t = new QTranslator(const_cast<Self *>(this));
+    t->load(RC_TR_ZH_CN);
+    tr_zh_CN_.append(t);
+
+    if (!QString(RC_TR_ZH_CN).isEmpty()) {
+      t = new QTranslator(const_cast<Self *>(this));
+      t->load(QTRC_TR_ZH_CN);
+      tr_zh_CN_.append(t);
+    }
+  }
+  return tr_zh_CN_;
+}
+
+const TranslatorManager::QTranslatorList&
+TranslatorManager::tr_zh_TW() const
+{
+  if (tr_zh_TW_.isEmpty()) {
+    QTranslator*
+    t = new QTranslator(const_cast<Self *>(this));
+    t->load(RC_TR_ZH_TW);
+    tr_zh_TW_.append(t);
+
+    if (!QString(RC_TR_ZH_TW).isEmpty()) {
+      t = new QTranslator(const_cast<Self *>(this));
+      t->load(QTRC_TR_ZH_TW);
+      tr_zh_TW_.append(t);
+    }
+  }
+  return tr_zh_TW_;
+}
 
 TranslatorManager::QTranslatorList
 TranslatorManager::currentTranslators() const
 {
   switch (language_) {
-  case NoLanguage:         return QTranslatorList();
   case QLocale::English:   return tr_en();
   case QLocale::Japanese:  return tr_ja();
-  case TraditionalChinese: return tr_tw();
-  case QLocale::Chinese:   return tr_zh();
+  case QLocale::Chinese:   return script_ == QLocale::SimplifiedChineseScript ? tr_zh_CN() : tr_zh_TW();
   default: return tr_en();
   }
 }
@@ -123,6 +157,8 @@ TranslatorManager::translate(int tid) const
   case T_TIME:          return tr("Time");
   case T_DATE:          return tr("Date");
   case T_DEVICE:        return tr("Device");
+  case T_PREVIEW:       return tr("Preview");
+  case T_PIXEL:         return tr("Pixel");
   case T_MORE:          return tr("More");
   case T_LESS:          return tr("Less");
   case T_UPDATE:        return tr("Update");
@@ -237,17 +273,17 @@ TranslatorManager::translate(int tid) const
   case T_TITLE_LOGIN:           return tr("Login");
   case T_TITLE_SEEK:            return tr("Seek");
 
-  case T_TITLE_OPENFILE:        return tr("Open media file");
-  case T_TITLE_OPENDEVICE:      return tr("Select media device");
-  case T_TITLE_OPENVIDEODEVICE: return tr("Open video device");
-  case T_TITLE_OPENAUDIODEVICE: return tr("Open audio device");
-  case T_TITLE_OPENSUBTITLE:    return tr("Open subtitle");
+  case T_TITLE_OPENFILE:        return tr("Open Media File");
+  case T_TITLE_OPENDEVICE:      return tr("Select Media Device");
+  case T_TITLE_OPENVIDEODEVICE: return tr("Open Video Device");
+  case T_TITLE_OPENAUDIODEVICE: return tr("Open Audio Device");
+  case T_TITLE_OPENSUBTITLE:    return tr("Open Subtitle");
   case T_TITLE_ANNOTATIONBROWSER:   tr("Annotations");
   case T_TITLE_ANNOTATIONEDITOR:    tr("Annotation Editor");
-  case T_TITLE_TOKENVIEW:       return tr("Token");
+  case T_TITLE_TOKENVIEW:       return tr("Annotation Source");
   case T_TITLE_COMMENTVIEW:     return tr("Comments");
   case T_TITLE_ANNOTANALYTICS:     return tr("Annotations Analytics");
-  case T_TITLE_SIGNALVIEW:      return tr("Select process signal");
+  case T_TITLE_SIGNALVIEW:      return tr("Select Process Signal");
   case T_TITLE_LIVE:            return tr("Live Channel");
   case T_TITLE_SYNC:            return tr("Sync Mode");
 
@@ -304,39 +340,39 @@ TranslatorManager::translate(int tid) const
   case T_MENUTEXT_OPEN:         return tr("Open");
   case T_TIP_OPEN:              return tr("Open media file or game process");
 
-  case T_MENUTEXT_OPENFILE:     return tr("Open file");
+  case T_MENUTEXT_OPENFILE:     return tr("Open File");
   case T_TIP_OPENFILE:          return tr("Open media file");
 
-  case T_MENUTEXT_OPENURL:     return tr("Open media URL");
+  case T_MENUTEXT_OPENURL:     return tr("Open Media URL");
   case T_TIP_OPENURL:          return tr("Open media from Internet or local URL");
 
   case T_MENUTEXT_OPENANNOTATIONURL:     return tr("Import annots from URL");
   case T_TIP_OPENANNOTATIONURL:          return tr("Add annotations from URL");
 
-  case T_MENUTEXT_OPENDEVICE:   return tr("Open DVD/VCD/CD device");
+  case T_MENUTEXT_OPENDEVICE:   return tr("Open DVD/VCD/CD Device");
   case T_TIP_OPENDEVICE:        return tr("Open media device");
 
-  case T_MENUTEXT_OPENVIDEODEVICE:   return tr("Open DVD/VCD folder");
+  case T_MENUTEXT_OPENVIDEODEVICE:   return tr("Open DVD/VCD Folder");
   case T_TIP_OPENVIDEODEVICE:        return tr("Open video folder");
 
-  case T_MENUTEXT_OPENAUDIODEVICE:   return tr("Open CD folder");
+  case T_MENUTEXT_OPENAUDIODEVICE:   return tr("Open CD Folder");
   case T_TIP_OPENAUDIODEVICE:        return tr("Open audio folder");
 
-  case T_MENUTEXT_OPENSUBTITLE: return tr("Open subtitle");
+  case T_MENUTEXT_OPENSUBTITLE: return tr("Open Subtitle");
   case T_TIP_OPENSUBTITLE:      return tr("Load subtitle from file");
 
   case T_MENUTEXT_OPENCONTEXTMENU: return tr("Open");
   case T_TIP_OPENCONTEXTMENU:      return tr("Open");
 
-  case T_OPENINWEBBROWSER:      return tr("Open in web browser");
+  case T_OPENINWEBBROWSER:      return tr("Open in Web Browser");
   case T_DOWNLOADCURRENT:       return tr("Download current media");
 
-  case T_MENUTEXT_OPENDIRECTORY:         return tr("Open directory");
+  case T_MENUTEXT_OPENDIRECTORY:         return tr("Open Directory");
 
   case T_MENUTEXT_PLAY:         return tr("Play") + " [" K_SPACE "]";
   case T_TIP_PLAY:              return tr("Play media") + " [" K_SPACE "]";
 
-  case T_MENUTEXT_FASTFORWARD:  return tr("Fast forward") + " " "x4";
+  case T_MENUTEXT_FASTFORWARD:  return tr("Fast Forward") + " " "x4";
   case T_MENUTEXT_FASTFASTFORWARD: return tr("Fast forward") + " " "x16";
 
   case T_MENUTEXT_MENU:         return tr("Menu");
@@ -348,25 +384,25 @@ TranslatorManager::translate(int tid) const
   case T_MENUTEXT_STOP:         return tr("Stop");
   case T_TIP_STOP:              return tr("Stop playing");
 
-  case T_MENUTEXT_NEXTFRAME:    return tr("Next frame");
+  case T_MENUTEXT_NEXTFRAME:    return tr("Next Frame");
   case T_TIP_NEXTFRAME:         return tr("Next frame");
 
   case T_MENUTEXT_REPLAY:       return tr("Replay");
   case T_TIP_REPLAY:            return tr("Restart playing");
 
-  case T_MENUTEXT_MINI:         return tr("Mini player");// + " [" K_CMD "+2]";
+  case T_MENUTEXT_MINI:         return tr("Mini Player");// + " [" K_CMD "+2]";
   case T_TIP_MINI:              return tr("Show mini player") + " [" K_CMD "+2]";
 
-  case T_MENUTEXT_EMBED:        return tr("Embed player");// + " [" K_CMD "+1]";
+  case T_MENUTEXT_EMBED:        return tr("Embed Player");// + " [" K_CMD "+1]";
   case T_TIP_EMBED:             return tr("Embed player window") + " [" K_CMD "+1]";
 
-  case T_MENUTEXT_EMBEDONTOP:   return tr("Embed on top");
+  case T_MENUTEXT_EMBEDONTOP:   return tr("Embed On Top");
   case T_TIP_EMBEDONTOP:        return tr("Embed player window on the top");
 
-  case T_MENUTEXT_LIVE:         return tr("Live Channel") + " (" + tr("Experimental") + ")";
+  case T_MENUTEXT_LIVE:         return tr("Live Channel") + " (" + tr("experimental") + ")";
   case T_TIP_LIVE:              return tr("Toggle live mode");
 
-  case T_MENUTEXT_SYNC:         return tr("Sync mode");
+  case T_MENUTEXT_SYNC:         return tr("Sync Mode");
   case T_TIP_SYNC:              return tr("Toggle Sync mode");
 
   case T_MENUTEXT_FULLSCREEN:   return tr("Fullscreen");// + " [" K_CMD "+3]";
@@ -375,18 +411,18 @@ TranslatorManager::translate(int tid) const
   case T_MENUTEXT_SNAPSHOT:     return tr("Snapshot");
   case T_TIP_SNAPSHOT:          return tr("Taks a snapshot of current frame");
 
-  case T_MENUTEXT_ANNOT:        return tr("Toggle annot");
+  case T_MENUTEXT_ANNOT:        return tr("Toggle Annotations");
   case T_TIP_ANNOT:             return tr("Toggle annotations");
-  case T_MENUTEXT_SHOWANNOT:    return tr("Show annots");
-  case T_TIP_SHOWANNOT:         return tr("Show annots");
-  case T_MENUTEXT_HIDEANNOT:    return tr("Hide annots");
+  case T_MENUTEXT_SHOWANNOT:    return tr("Show Annotations");
+  case T_TIP_SHOWANNOT:         return tr("Show Annotations");
+  case T_MENUTEXT_HIDEANNOT:    return tr("Hide Annotations");
   case T_TIP_HIDEANNOT:         return tr("Hide annotations");
 
   case T_MENUTEXT_QUIT:         return tr("Exit");
   case T_TIP_QUIT:              return tr("Quit the application");
 
-  case T_MENUTEXT_USER:         return tr("User panel");
-  case T_TIP_USER:              return tr("Show user panel");
+  case T_MENUTEXT_USER:         return tr("About Me");
+  case T_TIP_USER:              return tr("Show user informatin");
 
   case T_MENUTEXT_SEEK:         return tr("Seek");
   case T_TIP_SEEK:              return tr("Seek position");
@@ -400,10 +436,10 @@ TranslatorManager::translate(int tid) const
   case T_MENUTEXT_LOGINDIALOG:  return tr("Login");
   case T_TIP_LOGINDIALOG:       return tr("Show login dialog");
 
-  case T_MENUTEXT_LIVEDIALOG:   return tr("Choose live time");
+  case T_MENUTEXT_LIVEDIALOG:   return tr("Choose Live Time");
   case T_TIP_LIVEDIALOG:        return tr("Show live mode dialog");
 
-  case T_MENUTEXT_SYNCDIALOG:   return tr("Choose sync time");
+  case T_MENUTEXT_SYNCDIALOG:   return tr("Choose Sync Time");
   case T_TIP_SYNCDIALOG:        return tr("Show sync mode dialog");
 
   case T_MENUTEXT_SEEKDIALOG:   return tr("Seek");
@@ -417,7 +453,7 @@ TranslatorManager::translate(int tid) const
   case T_MENUTEXT_BLACKLIST:    return tr("Blacklist");// + " [" K_CTRL + "+F4]";
   case T_TIP_BLACKLIST:         return tr("Blacklist");
 
-  case T_MENUTEXT_PICKDIALOG:   return tr("Pick window");
+  case T_MENUTEXT_PICKDIALOG:   return tr("Pick Window");
   case T_TIP_PICKDIALOG:        return tr("Show pick dialog");
 
   case T_MENUTEXT_PROCESSPICKDIALOG:   return tr("Pick Game Window");
@@ -442,109 +478,109 @@ TranslatorManager::translate(int tid) const
   case T_MENUTEXT_SUBTITLE:     return tr("Subtitle");
   case T_TIP_SUBTITLE:          return tr("Subtitle");
 
-  case T_MENUTEXT_ANNOTSUBTITLE: return tr("Annotation subtitle");
+  case T_MENUTEXT_ANNOTSUBTITLE: return tr("Annotation Subtitle");
   case T_TIP_ANNOTSUBTITLE:      return tr("Annotation as subtitle");
 
-  case T_MENUTEXT_SECTION:      return tr("DVD sections");
+  case T_MENUTEXT_SECTION:      return tr("DVD Sections");
   case T_TIP_SECTION:           return tr("Select DVD sections");
 
-  case T_MENUTEXT_SHOWSUBTITLE: return tr("Show subtitle");
+  case T_MENUTEXT_SHOWSUBTITLE: return tr("Show Subtitle");
   case T_TIP_SHOWSUBTITLE:      return tr("Show subtitle");
 
-  case T_MENUTEXT_HIDESUBTITLE: return tr("Hide subtitle");
+  case T_MENUTEXT_HIDESUBTITLE: return tr("Hide Subtitle");
   case T_TIP_HIDESUBTITLE:      return tr("Hide subtitle");
 
-  case T_MENUTEXT_SUBANNOT:     return tr("Show subtitle annot");
+  case T_MENUTEXT_SUBANNOT:     return tr("Show Sub Annotations");
   case T_TIP_SUBANNOT:          return tr("Show subtitle annot");
 
-  case T_MENUTEXT_NONSUBANNOT:  return tr("Show non-sub annot");
+  case T_MENUTEXT_NONSUBANNOT:  return tr("Show Non-sub Annotations");
   case T_TIP_NONSUBANNOT:       return tr("Show non-sub annot");
 
   case T_MENUTEXT_REMOVEANNOTATION:   return tr("Hide");
   case T_TIP_REMOVEANNOTATION:        return tr("Hide");
 
-  case T_MENUTEXT_ENABLEAUTOCLEARCONSOLE: return tr("Auto clear console");
+  case T_MENUTEXT_ENABLEAUTOCLEARCONSOLE: return tr("Auto Clear Console");
   case T_TIP_ENABLEAUTOCLEARCONSOLE:      return tr("Enable auto clear console");
 
-  case T_MENUTEXT_DISABLEAUTOCLEARCONSOLE: return tr("Stick console");
+  case T_MENUTEXT_DISABLEAUTOCLEARCONSOLE: return tr("Stick Console");
   case T_TIP_DISABLEAUTOCLEARCONSOLE:      return tr("Disable auto clear console");
 
-  case T_MENUTEXT_WINDOWSTAYSONTOP:   return tr("Always on top"); // + " [" K_CTRL "+T]";
+  case T_MENUTEXT_WINDOWSTAYSONTOP:   return tr("Always On Top"); // + " [" K_CTRL "+T]";
   case T_TIP_WINDOWSTAYSONTOP:        return tr("Show window on top");
 
   case T_MENUTEXT_ADVANCED:     return tr("Advanced");
   case T_TIP_ADVANCED:          return tr("Advanced menu");
 
-  case T_MENUTEXT_BLESSUSER:    return tr("Bless user");
+  case T_MENUTEXT_BLESSUSER:    return tr("Bless User");
   case T_TIP_BLESSUSER:         return tr("Bless user");
 
-  case T_MENUTEXT_CURSEUSER:    return tr("Curse user");
+  case T_MENUTEXT_CURSEUSER:    return tr("Curse User");
   case T_TIP_CURSEUSER:         return tr("Curse user");
 
-  case T_MENUTEXT_BLOCKUSER:    return tr("Block user");
+  case T_MENUTEXT_BLOCKUSER:    return tr("Block User");
   case T_TIP_BLOCKUSER:         return tr("Block user");
 
-  case T_MENUTEXT_EDITTHISANNOT:return tr("Edit annot");
+  case T_MENUTEXT_EDITTHISANNOT:return tr("Edit Annotation");
   case T_TIP_EDITTHISANNOT:     return tr("Edit annotation");
 
-  case T_MENUTEXT_DELETETHISANNOT:return tr("Delete annot");
+  case T_MENUTEXT_DELETETHISANNOT:return tr("Delete Annotation");
   case T_TIP_DELETETHISANNOT:     return tr("Delete annotation");
 
-  case T_MENUTEXT_BLOCKTHISANNOT:return tr("Block annot");
+  case T_MENUTEXT_BLOCKTHISANNOT:return tr("Block Annotation");
   case T_TIP_BLOCKTHISANNOT:    return tr("Block annotation");
 
-  case T_MENUTEXT_BLESSTHISANNOT:return tr("Bless annot");
+  case T_MENUTEXT_BLESSTHISANNOT:return tr("Bless Annotation");
   case T_TIP_BLESSTHISANNOT:    return tr("Bless annotation");
 
-  case T_MENUTEXT_CURSETHISANNOT:return tr("Curse annot");
+  case T_MENUTEXT_CURSETHISANNOT:return tr("Curse Annotation");
   case T_TIP_CURSETHISANNOT:    return tr("Curse annotation");
 
-  case T_MENUTEXT_BLESSTHISTOKEN:return tr("Bless token");
+  case T_MENUTEXT_BLESSTHISTOKEN:return tr("Bless Token");
   case T_TIP_BLESSTHISTOKEN:    return tr("Bless token");
 
-  case T_MENUTEXT_CURSETHISTOKEN:return tr("Curse token");
+  case T_MENUTEXT_CURSETHISTOKEN:return tr("Curse Token");
   case T_TIP_CURSETHISTOKEN:    return tr("Curse token");
 
-  case T_MENUTEXT_HIDETHISANNOT:return tr("Hide annot");
+  case T_MENUTEXT_HIDETHISANNOT:return tr("Hide Annotation");
   case T_TIP_HIDETHISANNOT:     return tr("Hide annotation");
 
-  case T_MENUTEXT_SHOWTHISANNOT:return tr("Show annot");
+  case T_MENUTEXT_SHOWTHISANNOT:return tr("Show Annotation");
   case T_TIP_SHOWTHISANNOT:     return tr("Show annotation");
 
-  case T_MENUTEXT_COPYTHISANNOT:return tr("Copy annot");
+  case T_MENUTEXT_COPYTHISANNOT:return tr("Copy Annotation");
   case T_TIP_COPYTHISANNOT:     return tr("Copy annotation");
 
-  case T_MENUTEXT_VIEWTHISUSER: return tr("Display user");
+  case T_MENUTEXT_VIEWTHISUSER: return tr("Display User");
   case T_TIP_VIEWTHISUSER:      return tr("Display user");
 
-  case T_TITLE_SUBTITLEVIEW:    return tr("Subtitle history");
-  case T_MENUTEXT_SUBTITLEVIEW: return tr("Subtitle history");
+  case T_TITLE_SUBTITLEVIEW:    return tr("Subtitle History");
+  case T_MENUTEXT_SUBTITLEVIEW: return tr("Subtitle History");
   case T_TIP_SUBTITLEVIEW:      return tr("Show subtitle history");
 
-  case T_MENUTEXT_BLOCKTHISUSER:return tr("Block user");
+  case T_MENUTEXT_BLOCKTHISUSER:return tr("Block User");
   case T_TIP_BLOCKTHISUSER:     return tr("Block user");
 
-  case T_MENUTEXT_CLEARCACHE:   return tr("Clear offline cache");
+  case T_MENUTEXT_CLEARCACHE:   return tr("Clear Offline Cache");
   case T_TIP_CLEARCACHE:        return tr("Remove offline cache");
 
-  case T_MENUTEXT_CONNECT:      return tr("Synchronize with server");
+  case T_MENUTEXT_CONNECT:      return tr("Synchronize with Server");
   case T_TIP_CONNECT:           return tr("Connect to server and synchronize local cache");
-  case T_MENUTEXT_DISCONNECT:   return tr("Disconnect from server");
+  case T_MENUTEXT_DISCONNECT:   return tr("Disconnect from Server");
   case T_TIP_DISCONNECT:        return tr("Disconnect from server and use local cache only");
 
   case T_MENUTEXT_ANNOTATIONEDITOR: return tr("Annotation Editor");// + " [" K_CTRL "+F1]";
   case T_TIP_ANNOTATIONEDITOR: return tr("Show annotation editor");
 
-  case T_MENUTEXT_ANNOTATIONBROWSER: return tr("Search Annotations");// + " [" K_CTRL "+F2]";
+  case T_MENUTEXT_ANNOTATIONBROWSER: return tr("Search Annotations") + " [" K_CTRL "+F2]";
   case T_TIP_ANNOTATIONBROWSER: return tr("Show annotation browser");
 
-  case T_MENUTEXT_TOKENVIEW:    return tr("Token");// + " [" K_CTRL "+F3]";
+  case T_MENUTEXT_TOKENVIEW:    return tr("Annotation Source") + " [" K_CTRL "+F3]";
   case T_TIP_TOKENVIEW:         return tr("Show token view");
 
   case T_MENUTEXT_COMMENTVIEW:  return tr("Comments");
   case T_TIP_COMMENTVIEW:       return tr("Show comment browser");
 
-  case T_MENUTEXT_PROXYVIEW:    return tr("Proxy browser");
+  case T_MENUTEXT_PROXYVIEW:    return tr("Browser");
   case T_TIP_PROXYVIEW:         return tr("Proxy web browser");
 
   case T_MENUTEXT_EDIT:         return tr("Edit");
@@ -553,50 +589,50 @@ TranslatorManager::translate(int tid) const
   case T_MENUTEXT_CLEAR:        return tr("Clear");
   case T_TIP_CLEAR:             return tr("Clear");
 
-  case T_MENUTEXT_ADDALIAS:     return tr("Add alias");
+  case T_MENUTEXT_ADDALIAS:     return tr("Add Alias");
   case T_TIP_ADDALIAS:          return tr("Add alias");
 
   case T_MENUTEXT_SIGNALVIEW:     return tr("Select Game Process");
   case T_TIP_SIGNALVIEW:          return tr("Select process signal");
 
-  case T_MENUTEXT_ATTACHPROCESS: return tr("Attach process");
+  case T_MENUTEXT_ATTACHPROCESS: return tr("Attach Process");
   case T_TIP_ATTACHPROCESS:     return tr("Attach process");
 
-  case T_MENUTEXT_DETACHPROCESS: return tr("Detach process");
+  case T_MENUTEXT_DETACHPROCESS: return tr("Detach Process");
   case T_TIP_DETACHPROCESS:     return tr("Detach process");
 
-  case T_MENUTEXT_REFRESHPROCESS: return tr("Refresh process");
+  case T_MENUTEXT_REFRESHPROCESS: return tr("Refresh Process");
   case T_TIP_REFRESHPROCESS:    return tr("Refresh process");
 
-  case T_MENUTEXT_RECENTMESSAGES: return tr("Switch channel");
+  case T_MENUTEXT_RECENTMESSAGES: return tr("Switch Channel");
   case T_TIP_RECENTMESSAGES:    return tr("Switch channel");
 
   case T_MENUTEXT_PLAYLIST:     return tr("Playlist");
   case T_TIP_PLAYLIST:          return tr("Playlist");
 
-  case T_MENUTEXT_APPLANGUAGE:  return tr("Application language");
+  case T_MENUTEXT_APPLANGUAGE:  return tr("Application Language");
   case T_TIP_APPLANGUAGE:       return tr("Choose application language");
 
-  case T_ANYLANGUAGE:           return tr("Any language");
+  case T_ANYLANGUAGE:           return tr("Any Language");
   case T_MENUTEXT_ANYLANGUAGE:  return tr("All");
   case T_TIP_ANYLANGUAGE:       return tr("Choose all languages");
 
-  case T_MENUTEXT_ANNOTATIONLANGUAGE:  return tr("Annot languages");
+  case T_MENUTEXT_ANNOTATIONLANGUAGE:  return tr("Annotation Languages");
   case T_TIP_ANNOTATIONLANGUAGE:       return tr("Choose annotation language");
 
-  case T_MENUTEXT_USERLANGUAGE:  return tr("User language");
+  case T_MENUTEXT_USERLANGUAGE:  return tr("User Language");
   case T_TIP_USERLANGUAGE:       return tr("Choose user language");
 
   case T_MENUTEXT_ANONYMOUS:  return tr("Anonymous");
   case T_TIP_ANONYMOUS:       return tr("User anonymous");
 
-  case T_MENUTEXT_TRANSLATE:  return tr("Show translation");
+  case T_MENUTEXT_TRANSLATE:  return tr("Show Translation");
   case T_TIP_TRANSLATE:       return tr("Display translation");
 
-  case T_MENUTEXT_SUBTITLEONTOP:  return tr("Subtitle on top");
+  case T_MENUTEXT_SUBTITLEONTOP:  return tr("Subtitle On Top");
   case T_TIP_SUBTITLEONTOP:       return tr("Display subtitle on the top/bottom");
 
-  case T_MENUTEXT_SUBTITLESTYLE:  return tr("Subtitle color");
+  case T_MENUTEXT_SUBTITLESTYLE:  return tr("Subtitle Color");
   case T_TIP_SUBTITLESTYLE:       return tr("Select subtitle color");
 
   case T_MENUTEXT_THEME:  return tr("Theme");
@@ -640,14 +676,14 @@ TranslatorManager::translate(int tid) const
   case T_MENUTEXT_BACKWARD10M:  return tr("Backward %1 min").arg("10");
 
   case T_MENUTEXT_RECENT:       return tr("Recent");
-  case T_TIP_RECENT:            return tr("Recent file");
+  case T_TIP_RECENT:            return tr("Recent File");
   case T_MENUTEXT_CLEARRECENT:  return tr("Clear");
   case T_TIP_CLEARRECENT:       return tr("Clear recent files");
 
-  case T_MENUTEXT_MINIMIZE:     return tr("Minimize and pause") + " [" K_CTRL "+" K_ESC "]";
+  case T_MENUTEXT_MINIMIZE:     return tr("Minimize and Pause") + " [" K_CTRL "+" K_ESC "]";
   case T_TIP_MINIMIZE:          return tr("Minimize and pause") + " [" K_CTRL "+" K_ESC "]";
 
-  case T_MENUTEXT_ANNOTATIONLIMIT: return tr("Annot count");
+  case T_MENUTEXT_ANNOTATIONLIMIT: return tr("Annotation Count");
   case T_TIP_ANNOTATIONLIMIT:      return tr("Hint maximum annotation count");
 
   case T_MENUTEXT_BROWSE:       return tr("Browse");
@@ -656,14 +692,14 @@ TranslatorManager::translate(int tid) const
   case T_MENUTEXT_TRACK:        return tr("Tracks");
   case T_TIP_TRACK:             return tr("Media tracks");
 
-  case T_MENUTEXT_AUTOPLAYNEXT: return tr("Auto play next media");
+  case T_MENUTEXT_AUTOPLAYNEXT: return tr("Auto Play Next Media");
   case T_TIP_AUTOPLAYNEXT:      return tr("Automatically play next media");
 
-  case T_AUTOPLAYCURRENT:       return tr("Repeat current media");
+  case T_AUTOPLAYCURRENT:       return tr("Repeat Current Media");
 
-  case T_NOAUTOPLAY:            return tr("No repeat");
+  case T_NOAUTOPLAY:            return tr("No Repeat");
 
-  case T_MENUTEXT_SHOWMENUBAR:  return tr("Show menubar") + " [" K_CAPSLOCK "]";
+  case T_MENUTEXT_SHOWMENUBAR:  return tr("Show Menubar") + " [" K_CAPSLOCK "]";
   case T_TIP_SHOWMENUBAR:       return tr("Show menubar");
 
   case T_MENUTEXT_ENABLEAERO:   return tr("Enable Aero");
@@ -672,28 +708,28 @@ TranslatorManager::translate(int tid) const
   case T_MENUTEXT_CHECKINTERNET:return tr("Check Internet");
   case T_TIP_CHECKINTERNET:     return tr("Check Internet connection");
 
-  case T_MENUTEXT_DELETECACHE:  return tr("Remove caches");
+  case T_MENUTEXT_DELETECACHE:  return tr("Remove Caches");
   case T_TIP_DELETECACHE:       return tr("Remove offline caches");
 
-  case T_MENUTEXT_SITEACCOUNT:  return tr("Link accounts");
+  case T_MENUTEXT_SITEACCOUNT:  return tr("Link Accounts");
   case T_TIP_SITEACCOUNT:       return tr("Set accounts for websites");
 
-  case T_MENUTEXT_ENABLEBLACKLIST:  return tr("Enable blacklist");
+  case T_MENUTEXT_ENABLEBLACKLIST:  return tr("Enable Blacklist");
   case T_TIP_ENABLEBLACKLIST:       return tr("Enable blacklist");
 
   case T_MENUTEXT_DOWNLOAD:  return tr("Download") + " [" K_CTRL "+D]";
   case T_TIP_DOWNLOAD:       return tr("Download");// + " [" K_CTRL "+D]";
 
-  case T_MENUTEXT_ANNOTANALYTICS:  return tr("Annotation analytics");// + " [" K_CTRL "+F5]";
+  case T_MENUTEXT_ANNOTANALYTICS:  return tr("Annotation Analytics");// + " [" K_CTRL "+F5]";
   case T_TIP_ANNOTANALYTICS:       return tr("Show annotations as thread");
 
-  case T_MENUTEXT_SAVEMEDIA:    return tr("Save buffered video");
-  case T_TIP_SAVEMEDIA:         return tr("Save buffered video on desktop");
+  case T_MENUTEXT_SAVEMEDIA:    return tr("Save Buffered Video");
+  case T_TIP_SAVEMEDIA:         return tr("Save Buffered Video");
 
-  case T_MENUTEXT_AUTOSAVEMEDIA:  return tr("Save buffered video");
-  case T_TIP_AUTOSAVEMEDIA:       return tr("Save buffered video on desktop");
+  case T_MENUTEXT_AUTOSAVEMEDIA:  return tr("Save Buffered Video");
+  case T_TIP_AUTOSAVEMEDIA:       return tr("Save Buffered Video");
 
-  case T_MENUTEXT_MONITORCLIPBOARD:  return tr("Monitor clipboard");
+  case T_MENUTEXT_MONITORCLIPBOARD:  return tr("Monitor Clipboard");
 
   case T_MENUTEXT_NOTHINGAFTERFINISHED: return tr("Nothing");
   case T_MENUTEXT_SHUTDOWNAFTERFINISHED: return tr("Shutdown");
@@ -702,9 +738,9 @@ TranslatorManager::translate(int tid) const
   case T_MENUTEXT_ASPECTRATIOSTANDARD: return tr("Standard") + " (4:3)";
   case T_MENUTEXT_ASPECTRATIOWIDESCREEN: return tr("Wide screen") + " (16:9)";
 
-  case T_MENUTEXT_MULTIWINDOW: return tr("Allow multiple windows");
+  case T_MENUTEXT_MULTIWINDOW: return tr("Allow Multiple Windows");
 
-  case T_MENUTEXT_RESUMEANNOT:  return tr("Release annotations");
+  case T_MENUTEXT_RESUMEANNOT:  return tr("Release Annotations");
 
   case T_FILTER_PATTERN:        return tr("Filter Pattern");
   case T_FILTER_SYNTAX:         return tr("Filter Syntax");
@@ -767,8 +803,8 @@ TranslatorManager::translate(int tid) const
   case T_MINUTE:        return tr("Minute");
   case T_HOUR:          return tr("Hour");
 
-  case T_NETWORKPROXY:  return tr("Network proxy");
-  case T_MENUTHEME:     return tr("Render context menu");
+  case T_NETWORKPROXY:  return tr("Network Proxy");
+  case T_MENUTHEME:     return tr("Render Context Menu");
 
   case T_URL_NICOVIDEO: return tr("http://nicovideo.jp");
   case T_URL_BILIBILI:  return tr("http://bilibili.tv");
@@ -776,41 +812,41 @@ TranslatorManager::translate(int tid) const
   case T_ASPECTRATIO:   return tr("Aspect ratio");
   case T_NEWWINDOW:     return tr("New window"); // + " [" K_CTRL "+" K_SHIFT "+" "N]";
 
-  case T_MENUTEXT_LABELPLAYER: return tr("Label player with annots");
-  case T_MENUTEXT_AUTOSUBMIT:  return tr("Save annots associations");
+  case T_MENUTEXT_LABELPLAYER: return tr("Label Player with Annotations");
+  case T_MENUTEXT_AUTOSUBMIT:  return tr("Save Annotation Associations");
   case T_MENUTEXT_BACKLOG:     return tr("Backlog");// + " [" K_CTRL "+F6]";
-  case T_MENUTEXT_PREFERLOCALDB:     return tr("Prefer offline annotations");
+  case T_MENUTEXT_PREFERLOCALDB:     return tr("Prefer Offline Annotations");
 
-  case T_MENUTEXT_RESETANNOTSCALE:  return tr("Reset scale") + " [" K_CTRL "+" + tr("Mid") + "]";
+  case T_MENUTEXT_RESETANNOTSCALE:  return tr("Reset Scale") + " [" K_CTRL "+" + tr("Mid") + "]";
   case T_TIP_RESETANNOTSCALE:       return tr("Reset annotation scale");
 
-  case T_MENUTEXT_INCREASEANNOTSCALE:  return tr("Scale up") + " [" K_CTRL "+" + tr("Wheel") + "↑]";
+  case T_MENUTEXT_INCREASEANNOTSCALE:  return tr("Scale Up") + " [" K_CTRL "+" + tr("Wheel") + "↑]";
   case T_TIP_INCREASEANNOTSCALE:       return tr("Scale up");
 
-  case T_MENUTEXT_DECREASEANNOTSCALE:  return tr("Scale down") + " [" K_CTRL "+" + tr("Wheel") + "↓]";
+  case T_MENUTEXT_DECREASEANNOTSCALE:  return tr("Scale Down") + " [" K_CTRL "+" + tr("Wheel") + "↓]";
   case T_TIP_DECREASEANNOTSCALE:       return tr("Scale down");
 
-  case T_MENUTEXT_RESETANNOTOFFSET:  return tr("Reset offset") + " [" K_CTRL "+" K_ALT "+" + tr("Mid") + "]";
+  case T_MENUTEXT_RESETANNOTOFFSET:  return tr("Reset Offset") + " [" K_CTRL "+" K_ALT "+" + tr("Mid") + "]";
   case T_TIP_RESETANNOTOFFSET:       return tr("Reset annotation offset in time");
 
-  case T_MENUTEXT_INCREASEANNOTOFFSET:  return tr("Increase offset") + " [" K_CTRL "+" K_ALT "+" + tr("Wheel") + "↑]";
+  case T_MENUTEXT_INCREASEANNOTOFFSET:  return tr("Increase Offset") + " [" K_CTRL "+" K_ALT "+" + tr("Wheel") + "↑]";
   case T_TIP_INCREASEANNOTOFFSET:       return tr("Increase offset");
 
-  case T_MENUTEXT_DECREASEANNOTOFFSET:  return tr("Decrease offset") + " [" K_CTRL "+" K_ALT "+" + tr("Wheel") + "↓]";
+  case T_MENUTEXT_DECREASEANNOTOFFSET:  return tr("Decrease Offset") + " [" K_CTRL "+" K_ALT "+" + tr("Wheel") + "↓]";
   case T_TIP_DECREASEANNOTOFFSET:       return tr("Decrease offset");
 
-  case T_MENUTEXT_RESETANNOTROTATION:  return tr("Reset rotation") + " [" K_SHIFT "+" + tr("Mid") + "]";
+  case T_MENUTEXT_RESETANNOTROTATION:  return tr("Reset Rotation") + " [" K_SHIFT "+" + tr("Mid") + "]";
   case T_TIP_RESETANNOTROTATION:       return tr("Reset annotation rotation");
 
-  case T_MENUTEXT_INCREASEANNOTROTATION:  return tr("Rotate up") + " [" K_SHIFT "+" + tr("Wheel") + "↑]";
+  case T_MENUTEXT_INCREASEANNOTROTATION:  return tr("Rotate Up") + " [" K_SHIFT "+" + tr("Wheel") + "↑]";
   case T_TIP_INCREASEANNOTROTATION:       return tr("Rotate up");
 
-  case T_MENUTEXT_DECREASEANNOTROTATION:  return tr("Rotate down") + " [" K_SHIFT "+" + tr("Wheel") + "↓]";
+  case T_MENUTEXT_DECREASEANNOTROTATION:  return tr("Rotate Down") + " [" K_SHIFT "+" + tr("Wheel") + "↓]";
   case T_TIP_DECREASEANNOTROTATION:       return tr("Rotate down");
 
   case T_COPYCURRENTURL:       return tr("Copy URL");
   case T_COPYCURRENTTITLE:     return tr("Copy Title");
-  case T_ACTUALSIZE:       return tr("Actual size");
+  case T_ACTUALSIZE:       return tr("Actual Size");
 
   case T_HUEUP: return tr("Hue up");
   case T_HUEDOWN: return tr("Hue down");
@@ -831,7 +867,7 @@ TranslatorManager::translate(int tid) const
 
   case T_MEDIAINFO:  return tr("Media information");
 
-  case T_EXPERIMENTAL:  return tr("Experimental");
+  case T_EXPERIMENTAL:  return tr("experimental");
 
   default:
     qWarning() << "TranslatorManager:translate: Unknown tid =" << tid;

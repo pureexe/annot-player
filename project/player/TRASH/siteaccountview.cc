@@ -21,11 +21,11 @@ using namespace Logger;
   Qt::WindowCloseButtonHint
 
 #ifdef Q_WS_MAC
-#  define WINDOW_FLAGS ( \
+# define WINDOW_FLAGS ( \
     Qt::FramelessWindowHint | \
     WINDOW_FLAGS_BASE )
 #else
-#  define WINDOW_FLAGS ( \
+# define WINDOW_FLAGS ( \
     WINDOW_FLAGS_BASE )
 #endif // Q_WS_MAC
 

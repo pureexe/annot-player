@@ -19,9 +19,9 @@
   Qt::WindowStaysOnTopHint
 
 #ifdef Q_OS_MAC
-#  define WINDOW_FLAGS  Qt::FramelessWindowHint | WINDOW_FLAGS_BASE
+# define WINDOW_FLAGS  Qt::FramelessWindowHint | WINDOW_FLAGS_BASE
 #else
-#  define WINDOW_FLAGS  WINDOW_FLAGS_BASE
+# define WINDOW_FLAGS  WINDOW_FLAGS_BASE
 #endif // Q_OS_MAC
 
 // - Constructions -

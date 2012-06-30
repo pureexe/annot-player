@@ -29,6 +29,8 @@ class DataManager : public QObject
   AliasList aliases_;
   AnnotationList annots_;
 
+  mutable QStringList urls_; // annotation urls
+
   // Statistics
   QHash<qint64, int> userAnnotCount_;
   qint64 minAnnotTime_, maxAnnotTime_;
@@ -53,16 +55,23 @@ public:
   bool hasAnnotations() const { return !annots_.isEmpty(); }
 
   bool aliasConflicts(const Alias &a) const;
+  bool urlConflicts(const QString &url) const;
+
+  static QString normalizeUrl(const QString &url);
 
   int userCount() const { return userAnnotCount_.size(); }
   int annotationCountForUserId(qint64 uid) const;
   qint64 minAnnotationCreateTime() const { return minAnnotTime_; }
   qint64 maxAnnotationCreateTime() const { return maxAnnotTime_; }
 
+  const QStringList &urls() const
+  { if (urls_.isEmpty()) updateUrls(); return urls_; }
+
 public slots:
   void setUser(const User &user) { user_ = user; invalidateUser(); }
   void setToken(const Token &token) { token_ = token; invalidateToken(); }
-  void addAlias(const Alias &alias) { aliases_.append(alias); emit aliasAdded(alias); }
+  void clearToken() { setToken(Token()); }
+  void addAlias(const Alias &alias) { aliases_.append(alias); invalidateUrls(); emit aliasAdded(alias); }
   void setAliases(const AliasList &aliases) { aliases_ = aliases; invalidateAliases(); }
   void updateAlias(const Alias &alias);
   void setAnnotations(const AnnotationList &l) { annots_ = l; invalidateAnnotations(); }
@@ -81,9 +90,13 @@ public slots:
   void clear() { removeToken(); removeAliases(); removeAnnotations(); }
 
   void invalidateUser() { emit userChanged(user_); }
-  void invalidateToken() { emit tokenChanged(token_); }
-  void invalidateAliases() { emit aliasesChanged(aliases_); }
+  void invalidateToken() { invalidateUrls(); emit tokenChanged(token_); }
+  void invalidateAliases() { invalidateUrls(); emit aliasesChanged(aliases_); }
   void invalidateAnnotations();
+
+protected:
+  void invalidateUrls() const { if (!urls_.isEmpty()) urls_.clear(); }
+  void updateUrls() const;
 
 signals:
   void userChanged(User user);
@@ -91,6 +104,7 @@ signals:
   void aliasesChanged(AliasList aliases);
   void aliasAdded(Alias alias);
   void aliasUpdated(Alias alias);
+  void aliasRemoved(Alias);
   void aliasRemovedWithId(qint64 id);
   void annotationsChanged(AnnotationList annots);
   void annotationAdded(Annotation annot);

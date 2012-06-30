@@ -20,7 +20,7 @@
 //#ifdef ANNOT_PROXY_DOMAIN
 //  ret->setCookieJar(new QtExt::NetworkCookieJarWithDomainAlias(".nicovideo.jp", ANNOT_PROXY_DOMAIN, ret));
 //#else
-//#  warning "nico alias domain is not defined"
+//# warning "nico alias domain is not defined"
 //#endif // ANNOT_PROXY_DOMAIN
 //  return ret;
 //}
@@ -34,7 +34,7 @@ MrlResolverManager::init()
     connect(r, SIGNAL(error(QString)), SIGNAL(error(QString))); \
     connect(r, SIGNAL(message(QString)), SIGNAL(message(QString))); \
     connect(r, SIGNAL(mediaResolved(MediaInfo,QNetworkCookieJar*)), SIGNAL(mediaResolved(MediaInfo,QNetworkCookieJar*))); \
-    connect(r, SIGNAL(subtitleResolved(QString)), SIGNAL(subtitleResolved(QString))); \
+    connect(r, SIGNAL(subtitleResolved(QString,QString)), SIGNAL(subtitleResolved(QString,QString))); \
   } resolvers_.append(r);
 
   ADD(YoutubeMrlResolver)

@@ -22,12 +22,14 @@ class AnnotationPreferencesTab : public AcPreferencesTab
 
   //QComboBox *scaleEdit_,
   //          *rotationEdit_,
-  QSpinBox *offsetEdit_;
+  QSpinBox *resolutionEdit_,
+           *offsetEdit_;
   QFontComboBox *fontEdit_,
                 *japaneseFontEdit_,
                 *chineseFontEdit_;
   QToolButton *annotColorButton_,
-              *subtitleColorButton_;
+              *subtitleColorButton_,
+              *highlightColorButton_;
 
 public:
   explicit AnnotationPreferencesTab(AnnotationSettings *settings, QWidget *parent = 0)
@@ -51,6 +53,11 @@ protected slots:
   void loadChineseFont();
   void resetChineseFont();
 
+  void saveResolution();
+  void loadResolution();
+  void loadResolutionIfVisible() { if (isVisible()) loadResolution(); }
+  void resetResolution();
+
   void saveOffset();
   void loadOffset();
   void loadOffsetIfVisible() { if (isVisible()) loadOffset(); }
@@ -63,6 +70,10 @@ protected slots:
   void loadSubtitleColor();
   void resetSubtitleColor();
   void promptSubtitleColor();
+
+  void loadHighlightColor();
+  void resetHighlightColor();
+  void promptHighlightColor();
 private:
   void init();
   void createLayout();

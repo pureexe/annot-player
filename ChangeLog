@@ -2,6 +2,26 @@ ChangeLog
 Annot Project
 6/18/2011
 
+6/30/2012	annot.player, down, browser	0.1.6.4, 0.1.2.9, 0.1.1.9
+        * Able to convert all Chinese annotations to Traditional Chinese.
+        * Add translation for Traditional Chinese.
+        * Able to adjust annotation movement resolution for floating annotations.
+        * Switch from llvm gcc to clang with C++11 enabled on Mac.
+        * Fix a bug while rendering translations in Galgame with multiple lines.
+        * Fix a bug which results in failure to resolve nico anime from nicovideo.jp/watch/so[0-9]*
+        * Fix severe multi-threading bugs in downloader.
+        * Switch from qthreadpool task to qthread in downloader to deal with concurrency bugs.
+        * Imported annotations will be saved to XML/JSON files.
+          New annotation searching logic follows:
+          * Search offline annotations in "Annot Stream/Data/cache/cache.db"
+                    (or ~/Library/Caches/me.annot.player/cache.db on Mac OS X).
+          * Search offline annotations from XML/JSON files in the same folder of the video.
+            Assume the current file being played is ABC.mp4, then
+            ABC.whatever.xml and ABC.whatever.json will be imported.
+          * If no offline annotations exist, fetch latest annotations online.
+          Trigger "Update Annotations" from context menu will sync all three sources of annotations.
+          Edit annotations sources from "Annotation Source" in context menu.
+
 6/14/2012	annot.player, down, browser	0.1.6.3, 0.1.2.8, 0.1.1.8
         * Annotation motionless scheduling and rendering improved.
         * Add halo effect to render annotations (able to change colors in Preferences).
@@ -127,15 +147,6 @@ Annot Project
           * Added menus on Mac and Linux.
           * Able to go full screen by double clicking any tab.
           * Added mouse gestures with right or middle button, as follow.
-            * Open link in background tab: ↓
-            * Close tab: ↓ →
-            * New tab: → ←
-            * Undo close tab: ← →
-            * Refresh: ↑ ↓
-            * Full screen: → ↑
-            * Minimize: → ↓
-            * Scroll Top: ← ↑
-            * Scroll Bottom: ← ↓
 
 4/22/2012	annot.player, down, browser	0.1.5.0, 0.1.1.0, 0.1.1.0
         * Offline caching improved. Most network accesses are cached if possible.

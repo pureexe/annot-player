@@ -35,7 +35,7 @@ AcComboEdit::createActions()
 {
   connect(popupAct = new QAction(tr("History"), this),
           SIGNAL(triggered()), SLOT(showPopup()));
-  connect(clearAct = new QAction(tr("Clear"), this),
+  connect(clearAct = new QAction(tr("Clear All"), this),
           SIGNAL(triggered()), SLOT(reset()));
   connect(pasteAndGoAct = new QAction(tr("Paste and Go"), this),
           SIGNAL(triggered()), SLOT(pasteAndGo()));

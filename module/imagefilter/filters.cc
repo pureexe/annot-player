@@ -3,7 +3,9 @@
 #include "module/imagefilter/filters.h"
 #include "module/imagefilter/qtfilters.h"
 
-enum { blurImage_aprec = 12, blurImage_zprec = 10 };
+// Alpha precsion & z precision, must be assigned at compile-time to specialize template
+//enum { blurImage_aprec = 12, blurImage_zprec = 10 }; // defaults
+enum { blurImage_aprec = 8, blurImage_zprec = 4 }; // essential, decide how halo effect is rendered
 
 void
 blurImage(QImage &blurImage, qreal radius, bool quality, int transposed)

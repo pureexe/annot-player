@@ -9,7 +9,7 @@
 #include "module/player/player.h"
 #include "module/qtext/overlaylayout.h"
 #ifdef Q_WS_WIN
-#  include "win/qtwin/qtwin.h"
+# include "win/qtwin/qtwin.h"
 #endif // Q_WS_WIN
 #include <QtCore>
 #include <QtGui>
@@ -22,9 +22,9 @@
   Qt::WindowStaysOnTopHint
 
 #ifdef Q_WS_MAC
-#  define WINDOW_FLAGS WINDOW_FLAGS_BASE | Qt::FramelessWindowHint
+# define WINDOW_FLAGS WINDOW_FLAGS_BASE | Qt::FramelessWindowHint
 #else
-#  define WINDOW_FLAGS WINDOW_FLAGS_BASE
+# define WINDOW_FLAGS WINDOW_FLAGS_BASE
 #endif // Q_WS_MAC
 
 #define INPUTLINE_MAXIMUM_WIDTH 300
@@ -265,9 +265,9 @@ MiniPlayerDock::MiniPlayerDock(QWidget *parent)
 void
 MiniPlayerDock::setVisible(bool visible)
 {
-  //MiniPlayerUi *ui = qobject_cast<MiniPlayerUi*>(widget());
-  //if (ui)
-  //  ui->setActive(visible);
+  //auto p = qobject_cast<MiniPlayerUi *>(widget());
+  //if (p)
+  //  p->setActive(visible);
   if (widget())
     widget()->setVisible(visible);
   Base::setVisible(visible);

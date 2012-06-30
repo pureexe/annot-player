@@ -24,9 +24,10 @@ AssociationPreferencesTab::init()
   supportedTypes_
     G_FORMAT_PROGRAM(<<)
     G_FORMAT_ANNOTATION(<<)
+    G_FORMAT_PREVIEW(<<)
   ;
 
-  supportedRawTypes_ G_FORMAT_DEVICE(<<);
+  supportedShells_ G_FORMAT_DEVICE(<<);
 
   setWindowTitle(tr("Association"));
   createLayout();
@@ -43,7 +44,8 @@ AssociationPreferencesTab::createLayout()
               *imageLayout = new QGridLayout,
               *subtitleLayout = new QGridLayout,
               *annotationLayout = new QGridLayout,
-              *deviceLayout = new QGridLayout;
+              *deviceLayout = new QGridLayout,
+              *previewLayout = new QGridLayout;
 
   int
   count = 0;
@@ -112,7 +114,7 @@ AssociationPreferencesTab::createLayout()
     QtExt::NamedCheckBox *toggle = new QtExt::NamedCheckBox(suffix);
     toggle->setToolTip(suffix);
     toggle->setStyleSheet(ACSS_CHECKBOX);
-    connect(toggle, SIGNAL(toggledWithName(bool,QString)), SLOT(toggleRawType(bool,QString)));
+    connect(toggle, SIGNAL(toggledWithName(bool,QString)), SLOT(toggleShell(bool,QString)));
     toggles_[suffix] = toggle;
     int r = count / Row,
         c = count % Row;
@@ -121,6 +123,22 @@ AssociationPreferencesTab::createLayout()
   }
   QGroupBox *deviceGroup = ui->makeGroupBox(0, TR(T_FORMAT_DEVICE));
   deviceGroup->setLayout(deviceLayout);
+
+  count = 0;
+  foreach (const QString &suffix, QStringList() G_FORMAT_PREVIEW(<<)) {
+    enum { Row = 7 };
+    QtExt::NamedCheckBox *toggle = new QtExt::NamedCheckBox(suffix);
+    toggle->setToolTip(suffix);
+    toggle->setStyleSheet(ACSS_CHECKBOX);
+    connect(toggle, SIGNAL(toggledWithName(bool,QString)), SLOT(toggleShell(bool,QString)));
+    toggles_[suffix] = toggle;
+    int r = count / Row,
+        c = count % Row;
+    previewLayout->addWidget(toggle, r, c);
+    count++;
+  }
+  QGroupBox *previewGroup = ui->makeGroupBox(0, TR(T_FORMAT_PREVIEW));
+  previewGroup->setLayout(previewLayout);
 
 #define REGISTER(_group, _Group, _GROUP) \
   count = 0; \
@@ -159,6 +177,7 @@ AssociationPreferencesTab::createLayout()
     rows->addWidget(videoGroup);
     rows->addWidget(audioGroup);
     rows->addWidget(pictureGroup);
+    rows->addWidget(previewGroup);
   } setLayout(rows);
 }
 
@@ -187,11 +206,11 @@ AssociationPreferencesTab::load()
       toggle->setChecked(registry_->containsType(type));
   }
 
-  foreach (const QString &type, supportedRawTypes_) {
+  foreach (const QString &type, supportedShells_) {
     QCheckBox *toggle = toggles_[type];
     Q_ASSERT(toggle);
     if (toggle)
-      toggle->setChecked(registry_->containsRawType(type));
+      toggle->setChecked(registry_->containsShell(type));
   }
 }
 
@@ -220,7 +239,7 @@ AssociationPreferencesTab::filterToggles(const QString &regexp)
       if (toggle)
         toggle->setVisible(type.contains(rx));
     }
-    foreach (const QString &type, supportedRawTypes_) {
+    foreach (const QString &type, supportedShells_) {
       QCheckBox *toggle = toggles_[type];
       Q_ASSERT(toggle);
       if (toggle)
@@ -239,10 +258,10 @@ AssociationPreferencesTab::toggleType(bool checked, const QString &type)
 }
 
 void
-AssociationPreferencesTab::toggleRawType(bool checked, const QString &type)
+AssociationPreferencesTab::toggleShell(bool checked, const QString &type)
 {
   Q_ASSERT(registry_);
-  registry_->registerRawType(type, checked);
+  registry_->registerShell(type, checked);
   registry_->sync();
   emit message(tr("file type saved") + ": " + type);
 }

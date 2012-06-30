@@ -32,15 +32,15 @@
 #include "module/debug/debug.h"
 
 #ifdef Q_OS_MAC
-#  define K_CTRL        "cmd"
-#  define K_CAPSLOCK    "capslock"
+# define K_CTRL        "cmd"
+# define K_CAPSLOCK    "capslock"
 #else
-#  define K_CTRL        "Ctrl"
-#  define K_CAPSLOCK    "CapsLock"
+# define K_CTRL        "Ctrl"
+# define K_CAPSLOCK    "CapsLock"
 #endif // Q_OS_MAC
 
 enum { RefreshInterval = 3000 };
-enum { SaveInterval = 60000 * 5 }; // every 5 minutes
+enum { SaveInterval = 1000 * 30 }; // after 30 seconds
 enum { MaxDownloadThreadCount = 5 };
 
 // - Constructions -
@@ -65,6 +65,9 @@ MainWindow::MainWindow(QWidget *parent)
   downloadManager_->setMaxThreadCount(MaxDownloadThreadCount);
   DOUT("thread pool size =" << QThreadPool::globalInstance()->maxThreadCount());
 
+  //connect(downloadManager_, SIGNAL(taskAdded(DownloadTask*)), SLOT(saveLater()));
+  connect(downloadManager_, SIGNAL(taskRemoved(DownloadTask*)), SLOT(saveLater()));
+
   createModels();
   createSearchEngines();
   createLayout();
@@ -76,6 +79,7 @@ MainWindow::MainWindow(QWidget *parent)
 
   saveTimer_ = new QTimer(this);
   saveTimer_->setInterval(SaveInterval);
+  saveTimer_->setSingleShot(true);
   connect(saveTimer_, SIGNAL(timeout()), SLOT(save()));
 
   connect(tableView_, SIGNAL(currentIndexChanged(QModelIndex)), SLOT(updateButtons()));
@@ -94,7 +98,7 @@ MainWindow::MainWindow(QWidget *parent)
   connect(signer_, SIGNAL(notification(QString)), SLOT(notify(QString)), Qt::QueuedConnection);
   //connect(this, SIGNAL(downloadFinished(QString,QString)), signer_, SLOT(signFileWithUrl(QString,QString)));
 
-  DownloaderController *dc = DownloaderController::globalController();
+  auto dc = DownloaderController::globalController();
   connect(dc, SIGNAL(message(QString)), SLOT(showMessage(QString)), Qt::QueuedConnection);
   connect(dc, SIGNAL(warning(QString)), SLOT(warn(QString)), Qt::QueuedConnection);
   connect(dc, SIGNAL(error(QString)), SLOT(error(QString)), Qt::QueuedConnection);
@@ -484,6 +488,7 @@ MainWindow::taskDialog()
     taskDialog_ = new TaskDialog(this);
     connect(taskDialog_, SIGNAL(urlsAdded(QStringList,bool)), SLOT(addUrls(QStringList,bool)));
     connect(taskDialog_, SIGNAL(urlsAdded(QStringList,bool)), downloadManager_, SLOT(refreshSchedule()));
+    connect(taskDialog_, SIGNAL(urlsAdded(QStringList,bool)), SLOT(saveLater()));
     connect(taskDialog_, SIGNAL(message(QString)), SLOT(showMessage(QString)));
     connect(taskDialog_, SIGNAL(warning(QString)), SLOT(warn(QString)));
     connect(taskDialog_, SIGNAL(error(QString)), SLOT(error(QString)));
@@ -533,8 +538,12 @@ MainWindow::restart()
 {
   DownloadTask *t = currentTask();
   if (t) {
-    t->stop();
-    t->start();
+    if (t->isRunning()) {
+      enum { StopTimeout = 3000 };
+      t->stop();
+      t->startLater(StopTimeout);
+    } else
+      t->start();
   }
 }
 
@@ -659,7 +668,7 @@ void
 MainWindow::addTask(DownloadTask *t)
 {
   Q_ASSERT(t);
-  t->setAutoDelete(false);
+  //t->setAutoDelete(false);
   t->setDownloadPath(G_PATH_DOWNLOADS);
   connect(t, SIGNAL(error(QString)), SLOT(warn(QString)), Qt::QueuedConnection);
   connect(t, SIGNAL(finished(DownloadTask*)), SLOT(finish(DownloadTask*)), Qt::QueuedConnection);
@@ -981,11 +990,7 @@ MainWindow::closeEvent(QCloseEvent *event)
   saveTimer_->stop();
   refreshTimer_->stop();
 
-  Settings *settings = Settings::globalSettings();
-  settings->setRecentTasks(downloadManager_->tasks().infoList());
-  settings->setRecentSize(size());
-
-  settings->sync();
+  save();
 
   downloadManager_->stopAll();
 
@@ -1018,7 +1023,7 @@ MainWindow::event(QEvent *e)
   switch (e->type()) {
   case QEvent::FileOpen: // See: http://www.qtcentre.org/wiki/index.php?title=Opening_documents_in_the_Mac_OS_X_Finder
     {
-      QFileOpenEvent *fe = static_cast<QFileOpenEvent *>(e);
+      auto fe = static_cast<QFileOpenEvent *>(e);
       Q_ASSERT(fe);
       QString url = fe->url().toString();
       if (!url.isEmpty())
@@ -1104,7 +1109,12 @@ MainWindow::save()
 {
   Settings *settings = Settings::globalSettings();
   settings->setRecentTasks(downloadManager_->tasks().infoList());
+  settings->setRecentSize(size());
   settings->sync();
 }
+
+void
+MainWindow::saveLater()
+{ saveTimer_->start(); }
 
 // EOF

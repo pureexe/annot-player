@@ -5,7 +5,7 @@
 #include "clientservice.h"
 #include "clientservice_config.h"
 #ifdef WITH_MODULE_SERVERAGENT
-#  include "module/serveragent/serveragent.h"
+# include "module/serveragent/serveragent.h"
 #endif // WITH_MODULE_SERVERAGENT
 #include <QtCore>
 

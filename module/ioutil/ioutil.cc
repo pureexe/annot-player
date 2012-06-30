@@ -5,21 +5,21 @@
 #include <QtCore/QFile>
 
 #ifdef WITH_MODULE_BLOCKIODEVICE
-#  include "module/blockiodevice/blockiodevice.h"
-#  ifdef Q_OS_WIN
-#    ifdef WITH_WIN_QTWIN
-#      include "win/qtwin/qtwin.h"
-#    else
-#      error "qtwin is required"
-#    endif // WITH_WIN_QTWIN
-#  endif // Q_OS_WIN
-#  ifdef Q_OS_UNIX
-#    ifdef WITH_UNIX_QTUNIX
-#      include "unix/qtunix/qtunix.h"
-#    else
-#      error "qtunix is required"
-#    endif // WITH_UNIX_QTUNIX
-#  endif // Q_OS_UNIX
+# include "module/blockiodevice/blockiodevice.h"
+# ifdef Q_OS_WIN
+#  ifdef WITH_WIN_QTWIN
+#   include "win/qtwin/qtwin.h"
+#  else
+#   error "qtwin is required"
+#  endif // WITH_WIN_QTWIN
+# endif // Q_OS_WIN
+# ifdef Q_OS_UNIX
+#  ifdef WITH_UNIX_QTUNIX
+#   include "unix/qtunix/qtunix.h"
+#  else
+#   error "qtunix is required"
+#  endif // WITH_UNIX_QTUNIX
+# endif // Q_OS_UNIX
 #endif // WITH_MODULE_BLOCKIODEVICE
 
 #define DEBUG "ioutil"
@@ -36,7 +36,7 @@ IOUtil::isAudioCD(const QString &input)
     QString deviceFileName = QtWin::guessDeviceFileName(filePath);
     if (QtWin::isValidDeviceFileName(deviceFileName)) {
       filePath = deviceFileName;
-#elif defined (Q_OS_UNIX)
+#elif defined(Q_OS_UNIX)
     if (QtUnix::isDeviceFile(filePath)) {
 #else
     if (0) {
@@ -65,7 +65,7 @@ IOUtil::readBytes(const QString &input, qint64 maxSize)
     QString deviceFileName = QtWin::guessDeviceFileName(filePath);
     if (QtWin::isValidDeviceFileName(deviceFileName)) {
       filePath = deviceFileName;
-#elif defined (Q_OS_UNIX)
+#elif defined(Q_OS_UNIX)
     if (QtUnix::isDeviceFile(filePath)) {
 #else
     if (0) {

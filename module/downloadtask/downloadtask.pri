@@ -1,8 +1,6 @@
 # downloatask.pri
 # 2/4/2012
 
-include(../../config.pri)
-
 DEFINES += WITH_MODULE_DOWNLOADTASK
 
 DEPENDPATH += $$PWD

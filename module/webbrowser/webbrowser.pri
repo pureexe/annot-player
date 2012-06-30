@@ -1,5 +1,6 @@
 # webbrowser_static.pri
 # 10/9/2011
+
 include(../../config.pri)
 include($$ROOTDIR/module/searchengine/searchengine.pri)
 

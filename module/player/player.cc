@@ -2,12 +2,12 @@
 // 6/30/2011
 
 #ifdef _MSC_VER
-#  pragma warning (disable:4819)       // C4819: The file contains a character that cannot be represented in the current code page.
-#  pragma warning (disable:4996)       // C4996: MS' deprecated std functions orz.
+# pragma warning (disable:4819)       // C4819: The file contains a character that cannot be represented in the current code page.
+# pragma warning (disable:4996)       // C4996: MS' deprecated std functions orz.
 #endif // _MSC_VER
 
 #ifndef __LIBVLC__
-#  define __LIBVLC__ // disable unnecessary warnings
+# define __LIBVLC__ // disable unnecessary warnings
 #endif // __LIBVLC__
 
 #include "module/player/player.h"
@@ -15,18 +15,18 @@
 #include "module/player/player_p.h"
 //#include "module/qtext/os.h"
 #ifdef WITH_MODULE_VLCCORE
-#  include "module/vlccore/video.h"
-#  include "module/vlccore/sound.h"
-#  ifdef Q_WS_WIN
-#    ifdef WITH_WIN_QTWIN
-#      include "win/qtwin/qtwin.h"
-#    else
-#      warning "qtwin is not used"
-#    endif // WITH_WIN_QTWIN
-#  endif // Q_WS_WIN
+# include "module/vlccore/video.h"
+# include "module/vlccore/sound.h"
+# ifdef Q_WS_WIN
+#  ifdef WITH_WIN_QTWIN
+#   include "win/qtwin/qtwin.h"
+#  else
+#   warning "qtwin is not used"
+#  endif // WITH_WIN_QTWIN
+# endif // Q_WS_WIN
 #endif // WITH_MODULE_VLCCORE
 #ifdef Q_WS_MAC
-#  include <QtGui/QMacCocoaViewContainer>
+# include <QtGui/QMacCocoaViewContainer>
 #endif // Q_WS_MAC
 #include <QtNetwork/QNetworkCookieJar>
 #include <QtGui/QMouseEvent>
@@ -37,7 +37,7 @@
 #include <memory>
 
 #ifndef MODULE_STRING
-#  define MODULE_STRING "main"  // needed by VLC
+# define MODULE_STRING "main"  // needed by VLC
 #endif
 #include <inttypes.h>
 #include <vlc/plugins/vlc_vout.h>
@@ -1413,7 +1413,7 @@ Player::searchMediaSubtitles(const QString &fileName)
   QFileInfo fi(fileName);
   QDir dir = fi.absolutePath();
   if (dir.exists()) {
-    QString baseName = fi.baseName() ;
+    QString baseName = fi.completeBaseName();
     QStringList filters = supportedSubtitleFilters();
     foreach (const QString &f, dir.entryList(filters, QDir::Files))
       if (f.startsWith(baseName + "."))

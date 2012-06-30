@@ -5,6 +5,9 @@
 // See:  http://blog.smartnetwork.co.jp/staff/node/22
 
 #include "module/annotcodec/nicovideocodec.h"
+#ifdef WITH_MODULE_ANNOTCACHE
+# include "module/annotcache/annotationcachemanager.h"
+#endif // WITH_MODULE_ANNOTCACHE
 #include "module/annotcloud/annottag.h"
 #include "module/annotcloud/traits.h"
 #include "module/qtext/htmltag.h"
@@ -38,17 +41,17 @@ NicovideoCodec::match(const QString &url) const
 { return url.startsWith("file:///", Qt::CaseInsensitive); }
 
 void
-NicovideoCodec::fetch(const QString &url)
+NicovideoCodec::fetch(const QString &url, const QString &originalUrl)
 {
   DOUT("enter: url =" << url);
   QString path = QUrl(url).toLocalFile();
   if (!path.isEmpty())
-    fetchLocalFile(path);
+    fetchLocalFile(path, originalUrl);
   DOUT("exit");
 }
 
 void
-NicovideoCodec::fetchLocalFile(const QString &path)
+NicovideoCodec::fetchLocalFile(const QString &path, const QString &originalUrl)
 {
   DOUT("enter: path =" << path);
   QFile file(path);
@@ -61,8 +64,12 @@ NicovideoCodec::fetchLocalFile(const QString &path)
   AnnotationList l = parseDocument(data);
   if (l.isEmpty())
     emit error(tr("failed to resolve nicovideo comments"));
-  else
-    emit fetched(l, path);
+  else {
+#ifdef WITH_MODULE_ANNOTCACHE
+    AnnotationCacheManager::globalInstance()->saveData(data, originalUrl);
+#endif // WITH_MODULE_ANNOTCACHE
+    emit fetched(l, path, originalUrl);
+  }
   DOUT("exit: annots.size =" << l.size());
 }
 
@@ -80,7 +87,7 @@ NicovideoCodec::parseDocument(const QByteArray &data)
     return AnnotationList();
   }
   QDomDocument doc;
-  doc.setContent(data);
+  doc.setContent(skipXmlLeadingComment(data));
   if (doc.isNull()) {
     DOUT("exit: invalid document root");
     return AnnotationList();

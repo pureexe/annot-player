@@ -94,7 +94,7 @@ namespace Core {
     }
 
     bool bad() const { return !root_; }
-    int hash() const { return reinterpret_cast<long>(impl()); }
+    int hash() const { return reinterpret_cast<ulong>(impl()); }
 
     // Implement base class.
     //@{

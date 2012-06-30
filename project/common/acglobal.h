@@ -23,13 +23,13 @@
 #define AC_BROWSER_ID    3
 
 #ifdef Q_WS_MAC
-#  define AC_BROWSER    "Annot Browser"
-#  define AC_DOWNLOADER "Annot Downloader"
-#  define AC_PLAYER     "Annot Player"
+# define AC_BROWSER    "Annot Browser"
+# define AC_DOWNLOADER "Annot Downloader"
+# define AC_PLAYER     "Annot Player"
 #else
-#  define AC_BROWSER    "annot-browser"
-#  define AC_DOWNLOADER "annot-down"
-#  define AC_PLAYER     "annot-player"
+# define AC_BROWSER    "annot-browser"
+# define AC_DOWNLOADER "annot-down"
+# define AC_PLAYER     "annot-player"
 #endif // Q_WS_MAC
 
 #endif // ACGLOBAL_H

@@ -9,15 +9,15 @@
 #include <QtGui>
 
 #ifdef __GNUC__
-#  pragma GCC diagnostic ignored "-Wparentheses" // suggest parentheses around assignment
+# pragma GCC diagnostic ignored "-Wparentheses" // suggest parentheses around assignment
 #endif // __GNUC__
 
 #ifdef Q_WS_MAC
-#  define K_META        "META"
-#  define K_CAPSLOCK    "capslock"
+# define K_META        "META"
+# define K_CAPSLOCK    "capslock"
 #else
-#  define K_META        "ALT"
-#  define K_CAPSLOCK    "CapsLock"
+# define K_META        "ALT"
+# define K_CAPSLOCK    "CapsLock"
 #endif // Q_WS_MAC
 
 // - Construction -

@@ -8,11 +8,7 @@
 AnnotationGraphicsEffect::AnnotationGraphicsEffect(QObject *parent)
   : Base(parent)
 {
-#ifdef Q_WS_WIN
-  enum { offset = 1, radius = 18 };
-#else
-  enum { offset = 1, radius = 12 };
-#endif // Q_WS_WIN
+  enum { offset = 1, radius = 16 };
   setBlurRadius(radius); // in pixels
   setOffset(offset); // in pixels
   //setColor(Qt::black);

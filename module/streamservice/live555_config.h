@@ -5,11 +5,11 @@
 // 10/16/2011
 
 #ifdef _MSC_VER
-#  pragma warning (disable:4005)     // C4005: macro redifinition
+# pragma warning (disable:4005)     // C4005: macro redifinition
 #endif // _MSC_VER
 
 #ifndef WITH_MODULE_STREAM
-#  error "stream module is required"
+# error "stream module is required"
 #endif // WITH_MODULE_STREAM
 
 #endif // LIVE555CONFIG_H

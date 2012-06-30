@@ -1,8 +1,6 @@
 # nicoutil.pri
 # 3/14/2012
 
-include(../../config.pri)
-
 DEFINES += WITH_MODULE_NICOUTIL
 
 DEPENDPATH += $$PWD

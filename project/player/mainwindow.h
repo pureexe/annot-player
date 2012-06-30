@@ -9,7 +9,7 @@
 #include "module/mrlresolver/mrlinfo.h"
 #include "module/searchengine/searchenginefactory.h"
 #ifdef USE_MODE_SIGNAL
-#  include "processinfo.h"
+# include "processinfo.h"
 #endif // USE_MODE_SIGNAL
 #include <QtGui/QMainWindow>
 #include <QtCore/QMutex>
@@ -134,6 +134,8 @@ signals:
   void userIdChanged(qint64 uid);
   void posChanged();
   void openAnnotationUrlRequested(const QString &url);
+  void removeAnnotationsFromAnnotationViewRequested();
+  void openAnnotationFileRequested(const QString &file);
   void annotationUrlAdded(QString url);
   void windowMaximized();
   void playingFinished();
@@ -194,6 +196,8 @@ public slots:
   void translate(const QString &text);
   void translate(const QString &text, int lang);
 
+  void showTraditionalChinese(const QString &gbk);
+
   void setWindowOnTop(bool t = true);
   void toggleWindowOnTop()
   { setWindowOnTop(!isWindowOnTop()); }
@@ -237,13 +241,20 @@ public slots:
   void open();  ///< By default the same as openFile()
   void openFile();
   void openAnnotationFile();
-  void openAnnotationFile(const QString &fileName);
+  void openAnnotationFile(const QString &fileName, bool import = true);
+  void importAnnotationFile(const QString &fileName, const QString &url);
+
   void openUrl();
   void openAnnotationUrl();
-  void openAnnotationUrlFromAliases(const AliasList &l, bool async = true);
-  void openAnnotationUrl(const QString &url, bool save = false);
+
+  void openAnnotationUrlFromAliases(const AliasList &l, const QHash<QString, QString> &cache, bool async = true);
+  void openAnnotationUrlFromAliases(const AliasList &l, bool async = true)
+  { openAnnotationUrlFromAliases(l, QHash<QString, QString>(), async); } // bypass clang compile error for qhash default initializer
+
+  void openAnnotationUrl(const QString &url, bool submit = false);
+  void openAnnotationUrlAndSubmit(const QString &url) { openAnnotationUrl(url, true); }
   void openUrl(const QString &url);
-  void openUrl(const QString &url, bool save);
+  //void openUrl(const QString &url, bool save);
   void openProcess();
   void openWindow();
   void openDevice();
@@ -253,7 +264,6 @@ public slots:
   void openSubtitle();
   void openDirectory();
   void openMrl(const QString &path, bool checkPath = true);
-  void loadExternalAnnotations();
   void openStreamUrl(const QString &rtsp);
   void openRemoteMedia(const MediaInfo &mi, QNetworkCookieJar *jar = 0);
   void openLocalUrl(const QUrl &url);
@@ -499,13 +509,15 @@ public slots:
 
   void submitLiveText(const QString &text, bool async = true);
 
-  void showTextAsSubtitle(const QString &text, bool isSigned = false);
+  void showSubtitle(const QString &text, bool isSigned = false);
 
   void updateAnnotations(bool async = true);
+  void updateOnlineAnnotations(bool async = true);
+  void updateOfflineAnnotations(bool async = true);
   void setToken(const QString &filePath = QString(), bool async = true);
   void invalidateToken(const QString &mrl = QString());
-  void submitAlias(const Alias &alias, bool async = true);
-  void submitAliasText(const QString &text, qint32 type = 0, bool async = true);
+  void submitAlias(const Alias &alias, bool async = true, bool lockfree = false);
+  void submitAliasText(const QString &text, qint32 type = 0, bool async = true, bool lock = true);
 
   void signFile(const QString &path, bool async = true);
   void signFileWithUrl(const QString &path, const QString &url, bool async = true);
@@ -528,10 +540,10 @@ public slots:
   // - Remote annotations -
 public slots:
   void importUrl(const QString &url);
-  void importAnnotationsFromUrl(const QString &suburl);
+  void importAnnotationsFromUrl(const QString &suburl, const QString &refurl);
   bool isAnnotationUrlRegistered(const QString &suburl) const;
 protected slots:
-  void addRemoteAnnotations(const AnnotationList &l, const QString &url = QString());
+  void addRemoteAnnotations(const AnnotationList &l, const QString &url, const QString &originalUrl);
 
   bool registerAnnotationUrl(const QString &suburl);
   void clearAnnotationUrls();
@@ -806,11 +818,27 @@ protected slots:
 protected slots:
   void showPreferences();
 
+  // - External Annotations -
+protected slots:
+  //void loadExternalAnnotations();
+
+  void removeAliasAnnotationFile(const Alias &a);
+  void removeAnnotationFile(const QString &url);
+  void repairExternalAnnotationFileNames();
+protected:
+  bool hasExternalAnnotationFiles() const;
+  QStringList externalAnnotationFiles() const;
+  QStringList externalAnnotationUrls() const;
+
   // - Rubber band -
 protected slots:
   void pauseAnnotationsAt(const QRect &rect);
   void resumeAnnotationsAt(const QRect &rect);
   void removeAnnotationsAt(const QRect &rect);
+
+protected slots:
+  void saveSettings();
+  void saveSettingsLater();
 
 protected slots:
   void setDefaultAspectRatio();
@@ -867,6 +895,7 @@ private:
   QTimer *liveTimer_;
   QTimer *windowStaysOnTopTimer_;
   QTimer *navigationTimer_;
+  QTimer *saveSettingsTimer_;
   //QTimer *autoHideCursorTimer_;
   QTimer *holdTimer_;
   QStringList annotationUrls_;
@@ -1099,6 +1128,7 @@ private:
           *snapshotAllAct_,
           *actualSizeAct_,
           *togglePreferMotionlessAnnotationAct_,
+          *toggleSaveAnnotationFileAct_,
           *toggleAnnotationAnalyticsViewVisibleAct_,
           *toggleAnnotationBandwidthLimitedAct_,
           *toggleAnnotationVisibleAct_,
@@ -1162,7 +1192,8 @@ private:
           *toggleBacklogDialogVisibleAct_,
           *toggleDownloaderVisibleAct_,
           *toggleConsoleDialogVisibleAct_,
-          *toggleAnnotationFilterEnabledAct_;
+          *toggleAnnotationFilterEnabledAct_,
+          *toggleAnnotationTraditionalChineseAct_;
           //*toggleCommentViewVisibleAct_,
   QAction *toggleWindowTrackingAct_;
   WId lastTrackedWindow_;

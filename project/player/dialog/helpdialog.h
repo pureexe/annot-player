@@ -5,7 +5,6 @@
 // 11/16/2011
 
 #include "project/common/acwebwindow.h"
-#include <QtCore/QLocale>
 #include <QtCore/QUrl>
 
 class HelpDialog: public AcWebWindow
@@ -21,7 +20,7 @@ public:
 
   // - Properties -
 protected:
-  static QUrl urlForLanguage(QLocale::Language lang);
+  static QUrl urlForLanguage(int lang);
 
   // - Events -
 public:

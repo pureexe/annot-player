@@ -1,8 +1,6 @@
 # mp4box.pri
 # 2/15/2012
 
-include(../../config.pri)
-
 DEFINES += WITH_MODULE_MP4BOX
 
 INCLUDEPATH += $$PWD

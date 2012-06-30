@@ -16,13 +16,13 @@
 //#include <strsafe.h>
 
 //#ifdef _MSC_VER
-//#  pragma warning (disable: 4996)     // C4996: 'getenv': This function or variable may be unsafe. Consider using _dupenv_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+//# pragma warning (disable: 4996)     // C4996: 'getenv': This function or variable may be unsafe. Consider using _dupenv_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
 //#endif // _MSC_VER
 
-#if defined _MSC_VER || defined _MSC_EXTENSIONS
-#  define DELTA_EPOCH_IN_MICROSECS  11644473600000000Ui64
+#if defined(_MSC_VER) || defined(_MSC_EXTENSIONS)
+# define DELTA_EPOCH_IN_MICROSECS  11644473600000000Ui64
 #else
-#  define DELTA_EPOCH_IN_MICROSECS  11644473600000000ULL
+# define DELTA_EPOCH_IN_MICROSECS  11644473600000000ULL
 #endif // _MSC_VER
 
 // - Helpers -
@@ -490,7 +490,7 @@ namespace { // anonymous
   BOOL CALLBACK
   getWindowWithThreadId_p(HWND hwnd, LPARAM lparam)
   {
-    HWND_DWORD *lp = reinterpret_cast<HWND_DWORD *>(lparam);
+    auto lp = reinterpret_cast<HWND_DWORD *>(lparam);
     Q_ASSERT(lp);
     if (QtWin::getWindowThreadId(hwnd) == lp->dword) {
       lp->hwnd = hwnd;
@@ -502,7 +502,7 @@ namespace { // anonymous
   BOOL CALLBACK
   getVisibleWindowWithThreadId_p(HWND hwnd, LPARAM lparam)
   {
-    HWND_DWORD *lp = reinterpret_cast<HWND_DWORD *>(lparam);
+    auto lp = reinterpret_cast<HWND_DWORD *>(lparam);
     Q_ASSERT(lp);
     if (::IsWindowVisible(hwnd) &&
         QtWin::getWindowThreadId(hwnd) == lp->dword) {
@@ -515,7 +515,7 @@ namespace { // anonymous
   BOOL CALLBACK
   getGoodWindowWithThreadId_p(HWND hwnd, LPARAM lparam)
   {
-    HWND_DWORD *lp = reinterpret_cast<HWND_DWORD *>(lparam);
+    auto lp = reinterpret_cast<HWND_DWORD *>(lparam);
     Q_ASSERT(lp);
     if (QtWin::getWindowThreadId(hwnd) == lp->dword &&
         QtWin::isGoodWindow(hwnd)) {
@@ -528,7 +528,7 @@ namespace { // anonymous
   BOOL CALLBACK
   getWindowWithProcessId_p(HWND hwnd, LPARAM lparam)
   {
-    HWND_DWORD *lp = reinterpret_cast<HWND_DWORD *>(lparam);
+    auto lp = reinterpret_cast<HWND_DWORD *>(lparam);
     Q_ASSERT(lp);
     if (QtWin::getWindowProcessId(hwnd) == lp->dword) {
       lp->hwnd = hwnd;
@@ -540,7 +540,7 @@ namespace { // anonymous
   BOOL CALLBACK
   getVisibleWindowWithProcessId_p(HWND hwnd, LPARAM lparam)
   {
-    HWND_DWORD *lp = reinterpret_cast<HWND_DWORD *>(lparam);
+    auto lp = reinterpret_cast<HWND_DWORD *>(lparam);
     Q_ASSERT(lp);
     if (::IsWindowVisible(hwnd) &&
         QtWin::getWindowProcessId(hwnd) == lp->dword) {
@@ -553,7 +553,7 @@ namespace { // anonymous
   BOOL CALLBACK
   getGoodWindowWithProcessId_p(HWND hwnd, LPARAM lparam)
   {
-    HWND_DWORD *lp = reinterpret_cast<HWND_DWORD *>(lparam);
+    auto lp = reinterpret_cast<HWND_DWORD *>(lparam);
     Q_ASSERT(lp);
     if (QtWin::getWindowProcessId(hwnd) == lp->dword &&
         QtWin::isGoodWindow(hwnd)) {

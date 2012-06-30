@@ -1,8 +1,6 @@
 # animation.pri
 # 5/5/2012
 
-include(../../config.pri)
-
 DEFINES += WITH_MODULE_ANIMATION
 
 DEPENDPATH += $$PWD

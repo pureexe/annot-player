@@ -1,8 +1,6 @@
 # annotcodec.pri
 # 2/3/2012
 
-include(../../config.pri)
-
 DEFINES += WITH_MODULE_ANNOTCODEC
 
 DEPENDPATH += $$PWD
@@ -16,6 +14,7 @@ HEADERS += \
 
 SOURCES += \
     $$PWD/acfuncodec.cc \
+    $$PWD/annotationcodec.cc \
     $$PWD/annotationcodecmanager.cc \
     $$PWD/bilibilicodec.cc \
     $$PWD/nicovideocodec.cc

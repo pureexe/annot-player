@@ -5,15 +5,15 @@
 #include "module/luaresolver/luaresolver.h"
 #include "module/mrlanalysis/mrlanalysis.h"
 #ifdef WITH_MODULE_LUATL
-#  include "module/luatl/lua_defines.h"
-#  include "module/luatl/lua_function.h"
+# include "module/luatl/lua_defines.h"
+# include "module/luatl/lua_function.h"
 #else
-#  error "luatl is required"
+# error "luatl is required"
 #endif // WITH_MODULE_LUATL
 #ifdef WITH_MODULE_DOWNLOAD
-#  include "module/download/downloader.h"
+# include "module/download/downloader.h"
 #else
-#  error "download module is required"
+# error "download module is required"
 #endif // WITH_MODULE_DOWNLOAD
 #include "module/qtext/networkcookie.h"
 #include "module/qtext/os.h"
@@ -21,8 +21,8 @@
 #include <QtCore/QTextDecoder>
 #include <QtCore/QTextEncoder>
 #ifdef Q_WS_WIN
-#  include <QtCore/QCoreApplication>
-#  include <QtCore/QFileInfo>
+# include <QtCore/QCoreApplication>
+# include <QtCore/QFileInfo>
 #endif // Q_WS_WIN
 #include <boost/function.hpp>
 #include <exception>
@@ -33,9 +33,9 @@
 #include "module/debug/debug.h"
 
 #ifdef __GNUC__
-#  define NOINLINE      __attribute__((noinline))
+# define NOINLINE      __attribute__((noinline))
 #else
-#  define NOINLINE
+# define NOINLINE
 #endif // __GNUC__
 
 // - Construction -
@@ -46,7 +46,7 @@ LuaResolver::init()
 #ifdef ANNOT_PROXY_DOMAIN
   cookieJar_ = new QtExt::NetworkCookieJarWithDomainAlias(".nicovideo.jp", ANNOT_PROXY_DOMAIN, this);
 #else
-#  warning "nico alias domain is not defined"
+# warning "nico alias domain is not defined"
 #endif // ANNOT_PROXY_DOMAIN
 
 }

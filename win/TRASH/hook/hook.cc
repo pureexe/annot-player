@@ -12,7 +12,7 @@
 #include "module/debug/debug.h"
 
 #ifndef HOOK_DLL_NAME
-#  error "Please specify target DLL name."
+# error "Please specify target DLL name."
 #endif
 #define HOOK_MODULE_NAME        HOOK_DLL_NAME
 

@@ -2,8 +2,8 @@
 // 12/5/2011
 
 #include "datamanager.h"
-#include <QtGui>
-#include <boost/typeof/typeof.hpp>
+#include "module/mrlanalysis/mrlanalysis.h"
+#include <QtCore>
 #include <climits>
 
 using namespace AnnotCloud;
@@ -20,7 +20,7 @@ void
 DataManager::updateAlias(const Alias &alias)
 {
   if (!aliases_.isEmpty() && alias.hasId()) {
-    BOOST_AUTO(p, aliases_.begin());
+    auto p = aliases_.begin();
     while (p != aliases_.end())
       if (p->id() == alias.id())
         p = aliases_.erase(p);
@@ -28,6 +28,7 @@ DataManager::updateAlias(const Alias &alias)
         ++p;
   }
   aliases_.append(alias);
+  invalidateUrls();;
   emit aliasUpdated(alias);
 }
 
@@ -35,12 +36,16 @@ void
 DataManager::removeAliasWithId(qint64 id)
 {
   if (!aliases_.isEmpty() && id) {
-    BOOST_AUTO(p, aliases_.begin());
+    Alias a;
+    auto p = aliases_.begin();
     while (p != aliases_.end())
-      if (p->id() == id)
+      if (p->id() == id) {
+        a = *p;
         p = aliases_.erase(p);
-      else
+      } else
         ++p;
+    if (a.hasId())
+      emit aliasRemoved(a);
   }
   emit aliasRemovedWithId(id);
 }
@@ -50,7 +55,7 @@ DataManager::removeAliasWithId(qint64 id)
 int
 DataManager::annotationCountForUserId(qint64 uid) const
 {
-  BOOST_AUTO(p, userAnnotCount_.find(uid));
+  auto p = userAnnotCount_.find(uid);
   return p == userAnnotCount_.end() ? 0 : p.value();
 }
 
@@ -99,7 +104,7 @@ void
 DataManager::updateAnnotation(const Annotation &a)
 {
   if (!annots_.isEmpty() && a.hasId()) {
-    BOOST_AUTO(p, annots_.begin());
+    auto p = annots_.begin();
     while (p != annots_.end())
       if (p->id() == a.id())
         p = annots_.erase(p);
@@ -114,7 +119,7 @@ void
 DataManager::removeAnnotationWithId(qint64 id)
 {
   if (!annots_.isEmpty() && id) {
-    BOOST_AUTO(p, annots_.begin());
+    auto p = annots_.begin();
     while (p != annots_.end())
       if (p->id() == id)
         p = annots_.erase(p);
@@ -130,7 +135,7 @@ void
 DataManager::updateAnnotationTextWithId(const QString &text, qint64 id)
 {
   if (!annots_.isEmpty() && id) {
-    BOOST_AUTO(p, annots_.begin());
+    auto p = annots_.begin();
     while (p != annots_.end())
       if (p->id() == id) {
         p->setText(text);
@@ -154,6 +159,50 @@ DataManager::aliasConflicts(const Alias &input) const
         !a.text().compare(input.text(), Qt::CaseInsensitive))
       return true;
   return false;
+}
+
+// - Urls -
+
+bool
+DataManager::urlConflicts(const QString &url) const
+{
+  if (urls_.isEmpty())
+    updateUrls();
+  return !urls_.isEmpty() && !url.isEmpty() &&
+         urls_.contains(normalizeUrl(url), Qt::CaseInsensitive);
+}
+
+void
+DataManager::updateUrls() const
+{
+  if (!urls_.isEmpty())
+    urls_.clear();
+  MrlAnalysis::Site site;
+  if (token_.hasSource() &&
+      (site = MrlAnalysis::matchSite(token_.source())) && site < MrlAnalysis::AnnotationSite)
+    urls_.append(normalizeUrl(token_.source()));
+
+  if (!aliases_.isEmpty()) {
+    QString url;
+    foreach (const Alias &a, aliases_)
+      if (a.type() == Alias::AT_Url &&
+          (site = MrlAnalysis::matchSite(a.text())) && site < MrlAnalysis::AnnotationSite &&
+          !urls_.contains(url=normalizeUrl(a.text()), Qt::CaseInsensitive))
+        urls_.append(url);
+  }
+}
+
+QString
+DataManager::normalizeUrl(const QString &url)
+{
+  QString ret = url;
+  if (ret.endsWith('/'))
+    ret.chop(1);
+  else if (ret.endsWith("/index.html", Qt::CaseInsensitive))
+    ret.remove(QRegExp("/index.html$"));
+  else if (ret.endsWith("index_1.html", Qt::CaseInsensitive))
+    ret.remove(QRegExp("/index_1.html$"));
+  return ret;
 }
 
 // EOF

@@ -5,7 +5,7 @@
 // 1/27/2012
 
 #ifdef ANNOT_PROXY_DOMAIN
-#  include "module/qtext/networkcookie.h"
+# include "module/qtext/networkcookie.h"
 
 typedef QtExt::NetworkCookieJarWithDomainAlias WbNetworkCookieJarBase;
 class WbNetworkCookieJar : public WbNetworkCookieJarBase
@@ -25,8 +25,8 @@ protected:
 };
 
 #else
-#  warning "nico proxy domain is not defined"
-#  include <QtNetwork/QNetworkCookieJar>
+# warning "nico proxy domain is not defined"
+# include <QtNetwork/QNetworkCookieJar>
 
 class WbNetworkCookieJar : public QNetworkCookieJar
 {

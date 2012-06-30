@@ -14,18 +14,18 @@
 #include "module/debug/debug.h"
 
 #ifdef __GNUC__
-#  pragma GCC diagnostic ignored "-Wparentheses" // suggest parentheses around assignment
+# pragma GCC diagnostic ignored "-Wparentheses" // suggest parentheses around assignment
 #endif // __GNUC__
 
 // - RC -
 
 #ifdef Q_WS_X11
-#  ifndef JSFDIR
-#    define JSFDIR      "/usr/share/annot"
-#  endif // JSFDIR
-#  define RC_PREFIX     JSFDIR "/"
+# ifndef JSFDIR
+#  define JSFDIR      "/usr/share/annot"
+# endif // JSFDIR
+# define RC_PREFIX     JSFDIR "/"
 #else
-#  define RC_PREFIX     QCoreApplication::applicationDirPath() + "/jsf/"
+# define RC_PREFIX     QCoreApplication::applicationDirPath() + "/jsf/"
 #endif // Q_WS_X11
 
 //#define RC_HTML_ERROR   RC_PREFIX "error.html"
@@ -74,7 +74,7 @@ WebPage::event(QEvent *event)
 {
   Q_ASSERT(event);
   if (event->type() == QEvent::MouseButtonRelease) {
-    QMouseEvent *e = static_cast<QMouseEvent *>(event);
+    auto e = static_cast<QMouseEvent *>(event);
     if (e->button() == Qt::LeftButton && e->modifiers() == Qt::ControlModifier)  {
       if (!hoveredLink_.isEmpty())
         emit openLinkRequested(hoveredLink_);

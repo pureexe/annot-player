@@ -2,20 +2,25 @@
 // 2/3/2012
 // See:  http://9ch.co/t17836,1-1.html
 
-#include "bilibilicodec.h"
+#include "module/annotcodec/bilibilicodec.h"
+#ifdef WITH_MODULE_ANNOTCACHE
+# include "module/annotcache/annotationcachemanager.h"
+#endif // WITH_MODULE_ANNOTCACHE
 #include "module/annotcloud/annottag.h"
 #include "module/annotcloud/traits.h"
 #include "module/qtext/htmltag.h"
+#include "module/qtext/network.h"
 #ifdef WITH_MODULE_COMPRESS
-#  include "module/compress/qgzip.h"
+# include "module/compress/qgzip.h"
 #else
-#  error "gzip is required to uncompress bilibili reply"
+# error "gzip is required to uncompress bilibili reply"
 #endif // WITH_MODULE_COMPRESS
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkReply>
 #include <QtNetwork/QNetworkRequest>
 #include <QtXml/QDomDocument>
 #include <QtXml/QDomElement>
+#include <QtCore/QByteArray>
 #include <QtCore/QStringList>
 
 //#define DEBUG "bilibilicodec"
@@ -41,11 +46,13 @@ BilibiliCodec::match(const QString &url) const
 { return url.contains("http://comment.bilibili.tv/", Qt::CaseInsensitive); }
 
 void
-BilibiliCodec::fetch(const QString &url)
+BilibiliCodec::fetch(const QString &url, const QString &originalUrl)
 {
   Q_ASSERT(match(url));
   DOUT("enter: url =" << url);
-  qnam_->get(QNetworkRequest(url));
+  QNetworkReply *reply = qnam_->get(QNetworkRequest(url));
+  QtExt::PublicNetworkReply::fromReply(reply)
+      ->setAttribute(QNetworkRequest::UserMax, originalUrl);
   DOUT("exit");
 }
 
@@ -66,7 +73,8 @@ BilibiliCodec::parseReply(QNetworkReply *reply)
         + QString(" (%1/%2):").arg(QString::number(retry)).arg(QString::number(MaxRetries))
         + url
       );
-      fetch(url);
+      QString originalUrl = reply->attribute(QNetworkRequest::UserMax).toString();
+      fetch(url, originalUrl);
     } else
       emit error(tr("network error, failed to resolve media URL") + ": " + url);
     DOUT("exit: network error:" << reply->errorString());
@@ -79,15 +87,20 @@ BilibiliCodec::parseReply(QNetworkReply *reply)
 #ifdef WITH_MODULE_COMPRESS
     QByteArray unzipped = ::gHttpUncompress(data);
     if (!unzipped.isEmpty())
-      l = parseDocument(unzipped);
-    else
+      data = unzipped;
 #endif // WITH_MODULE_COMPRESS
-      l = parseDocument(data);
+    l = parseDocument(data);
   }
   if (l.isEmpty())
     emit error(tr("failed to resolve annotations from URL") + ": " + reply->url().toString());
-  else
-    emit fetched(l, reply->url().toString());
+  else {
+    QString url = reply->url().toString(),
+            originalUrl = reply->attribute(QNetworkRequest::UserMax).toString();
+#ifdef WITH_MODULE_ANNOTCACHE
+    AnnotationCacheManager::globalInstance()->saveData(data, originalUrl);
+#endif // WITH_MODULE_ANNOTCACHE
+    emit fetched(l, url, originalUrl);
+  }
   DOUT("exit: annots.size =" << l.size());
 }
 
@@ -102,7 +115,7 @@ BilibiliCodec::parseDocument(const QByteArray &data)
     return AnnotationList();
   }
   QDomDocument doc;
-  doc.setContent(data);
+  doc.setContent(skipXmlLeadingComment(data));
   if (doc.isNull()) {
     DOUT("exit: invalid document root");
     return AnnotationList();

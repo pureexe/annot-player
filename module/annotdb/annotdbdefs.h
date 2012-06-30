@@ -8,13 +8,13 @@
 
 #ifdef ANNOTDB_WITH_DATETIME
   // See: http://www.sqlite.org/lang_datefunc.html
-#  define ANNOTDB_UNIX_TIMESTAMP(_t) "strftime('%s'," _t ")"
-#  define ANNOTDB_FROM_UNIXTIME(_ts) "datetime(" _ts ",'unixepoch')"
-#  define ANNOTDB_DATETIME           "DATETIME"
+# define ANNOTDB_UNIX_TIMESTAMP(_t) "strftime('%s'," _t ")"
+# define ANNOTDB_FROM_UNIXTIME(_ts) "datetime(" _ts ",'unixepoch')"
+# define ANNOTDB_DATETIME           "DATETIME"
 #else
-#  define ANNOTDB_UNIX_TIMESTAMP(_t) _t
-#  define ANNOTDB_FROM_UNIXTIME(_ts) _ts
-#  define ANNOTDB_DATETIME           "BIGINT"
+# define ANNOTDB_UNIX_TIMESTAMP(_t) _t
+# define ANNOTDB_FROM_UNIXTIME(_ts) _ts
+# define ANNOTDB_DATETIME           "BIGINT"
 #endif // ANNOTDB_WITH_DATETIME
 
 // - Creation -
@@ -246,7 +246,7 @@
       "alias_update_ip,"        /* 11 */ \
       "alias_blessed_count,"    /* 12 */ \
       "alias_cursed_count,"     /* 13 */ \
-      "alias_blocked_count,"    /* 14 */ \
+      "alias_blocked_count"     /* 14 */ \
     ") VALUES (" \
       "?,"      /* 0: alias_status */ \
       "?,"      /* 1: alias_flags */ \
@@ -262,7 +262,7 @@
       "?,"      /* 11: alias_update_ip */ \
       "?,"      /* 12: alias_blessed_count */ \
       "?,"      /* 13: alias_cursed_count */ \
-      "?,"      /* 14: alias_blocked_count */ \
+      "?"       /* 14: alias_blocked_count */ \
     ")" \
   ); \
   (_query).addBindValue((_alias).status());       /* 0 */ \
@@ -304,7 +304,7 @@
       "annot_update_ip,"        /* 15 */ \
       "annot_blessed_count,"    /* 16 */ \
       "annot_cursed_count,"     /* 17 */ \
-      "annot_blocked_count "    /* 18 */ \
+      "annot_blocked_count"     /* 18 */ \
     ") VALUES (" \
       "?,"      /* 0: annot_status */ \
       "?,"      /* 1: annot_flags */ \

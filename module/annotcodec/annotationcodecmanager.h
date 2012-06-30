@@ -16,10 +16,10 @@ class AnnotationCodecManager : public QObject
   typedef AnnotCloud::Annotation Annotation;
   typedef AnnotCloud::AnnotationList AnnotationList;
 
-  QList<AnnotationCodec*> codecs_;
+  QList<AnnotationCodec *> codecs_;
 
 public:
-  enum Site { UnknownSite = -1, Nicovideo = 0, Acfun, Bilibili, SiteCount };
+  enum Format { UnknownFormat = -1, Nicovideo = 0, Acfun, Bilibili, FormatCount };
 
   static Self *globalInstance() { static Self g; return &g; }
 
@@ -30,22 +30,28 @@ signals:
   void error(QString msg);
   void message(QString msg);
 
-  void fetched(AnnotationList annots, QString url);
+  void fetched(AnnotationList annots, QString url, QString originalUrl);
 
 public:
   int match(const QString &url) const;
 
   static AnnotationList parseFile(const QString &fileName);
-  static Site fileSite(const QString &fileName);
+  static Format fileFormat(const QString &fileName);
+
+  static bool isAnnotatedFile(const QString &fileName);
+  static QString parseAnnotatedUrl(const QString &fileName);
+
+protected:
+  static QString parseAnnotatedHeader(const QString &fileName);
 
 public slots:
-  void fetch(int id, const QString &url);
-  bool fetch(const QString &url)
+  void fetch(int id, const QString &url, const QString &originalUrl);
+  bool fetch(const QString &url, const QString &originalUrl)
   {
     int r = match(url);
     if (r < 0)
       return false;
-    fetch(r, url);
+    fetch(r, url, originalUrl);
     return true;
   }
 };

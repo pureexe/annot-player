@@ -10,10 +10,10 @@
 #include <QtCore/QStringList>
 
 #ifdef Q_OS_MAC
-#  include <paths.h>
-#  define DEVICE_PREFIX _PATH_DEV
+# include <paths.h>
+# define DEVICE_PREFIX _PATH_DEV
 #else
-#  define DEVICE_PREFIX "/dev/"
+# define DEVICE_PREFIX "/dev/"
 #endif // Q_OS_MAC
 
 #define DEBUG "qtunix"

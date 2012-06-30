@@ -57,9 +57,9 @@ QT_END_NAMESPACE
   }
 
 #else
-#  define DWM_ENABLE_AERO_WIDGET(_w)            ({ })
-#  define DWM_DISABLE_AERO_WIDGET(_w)           ({ })
-#  define DWM_ENABLE_ONETIME_AERO_WIDGET(_w) ({ })
+# define DWM_ENABLE_AERO_WIDGET(_w)            ({ })
+# define DWM_DISABLE_AERO_WIDGET(_w)           ({ })
+# define DWM_ENABLE_ONETIME_AERO_WIDGET(_w) ({ })
 #endif // WITH_WIN_DWM
 
 #define AC_CONTEXTMENU_OPACITY           0.8

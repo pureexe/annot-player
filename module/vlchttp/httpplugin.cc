@@ -8,19 +8,19 @@
 #include "module/vlchttp/httpbufferedsession.h"
 #include "module/vlchttp/httpstreamsession.h"
 #ifdef WITH_MODULE_MRLANALYSIS
-#  include "module/mrlanalysis/mrlanalysis.h"
+# include "module/mrlanalysis/mrlanalysis.h"
 #else
-#  error "mrlanalysis module is required"
+# error "mrlanalysis module is required"
 #endif // WITH_MODULE_MRLANALYSIS
 #include <QtNetwork/QNetworkCookieJar>
 #include <QtCore/QDir>
 #include <QtCore/QEventLoop>
-#include <cstdarg>
+//#include <cstdarg>
 
 #include <vlc/plugins/vlc_common.h>
 extern "C" {
-#  include <vlc/src/modules/modules.h>
-module_t *module_find(const char *name);
+# include <vlc/plugins/vlc_modules.h>
+# include <vlc/src/modules/modules.h>
 } // extern "C"
 
 #define DEBUG "httpplugin"
@@ -121,9 +121,9 @@ VlcHttpPlugin::unload()
 #endif // MODULE_STRING
 
 extern "C" {
-#  include <vlc_plugin.h>
-#  include <vlc_access.h>
-//#  include <vlc_meta.h>
+# include <vlc_plugin.h>
+# include <vlc_access.h>
+//# include <vlc_meta.h>
 } // extern "C"
 
 //#ifdef WIN32

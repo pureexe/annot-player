@@ -3,17 +3,17 @@
 // 2/20/2012
 #include "module/downloadtask/mrldownloadtask.h"
 #ifdef WITH_MODULE_STREAM
-#  include "module/stream/bufferedremotestream.h"
-#  include "module/stream/bufferedstreampipe.h"
-#  include "module/stream/fileoutputstream.h"
+# include "module/stream/bufferedremotestream.h"
+# include "module/stream/bufferedstreampipe.h"
+# include "module/stream/fileoutputstream.h"
 #else
-#  error "stream module is required"
+# error "stream module is required"
 #endif // WITH_MODULE_STREAM
 #ifdef WITH_MODULE_MEDIACODEC
-#  include "module/mediacodec/mp4codec.h"
-#  include "module/mediacodec/flvcodec.h"
+# include "module/mediacodec/mp4codec.h"
+# include "module/mediacodec/flvcodec.h"
 #else
-#  error "mediacodec module is required"
+# error "mediacodec module is required"
 #endif // WITH_MODULE_MEDIACODEC
 #include "module/qtext/filesystem.h"
 #include <QtNetwork/QNetworkAccessManager>
@@ -118,7 +118,7 @@ MrlDownloadTask::downloadSingleMedia(const MediaInfo &mi, QNetworkCookieJar *jar
   out.close();
 
   bool flv;
-  bool ok = isRunning() && pipe.isFinished() &&
+  bool ok = isDownloading() && pipe.isFinished() &&
       QFileInfo(tmpFile).size() >= MinimumFileSize &&
       ((flv = FlvCodec::isFlvFile(tmpFile)) || Mp4Codec::isMp4File(tmpFile));
   if (ok) {

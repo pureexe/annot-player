@@ -6,9 +6,8 @@
 
 #include "module/qtext/stoppable.h"
 #include <QtCore/QList>
-#include <QtCore/QObject>
 #include <QtCore/QString>
-#include <QtCore/QThreadPool>
+#include <QtCore/QThread>
 
 struct DownloadTaskInfo
 {
@@ -32,12 +31,12 @@ public:
 };
 typedef QList<DownloadTaskInfo> DownloadTaskInfoList;
 
-class DownloadTask : public QObject, public StoppableTask
+class DownloadTask : public QThread, public Stoppable
 {
   Q_OBJECT
   Q_DISABLE_COPY(DownloadTask)
   typedef DownloadTask Self;
-  typedef QObject Base;
+  typedef QThread Base;
 
 public:
   enum State { Error = -1, Stopped = 0, Downloading = 1, Pending, Finished };
@@ -73,7 +72,7 @@ public:
 
   bool isStopped() const { return state_ == Stopped; }
   bool isPending() const { return state_ == Pending; }
-  bool isRunning() const { return state_ == Downloading; }
+  bool isDownloading() const { return state_ == Downloading; }
   bool isFinished() const { return state_ == Finished; }
 
   qint64 size() const { return totalSize_; }
@@ -84,12 +83,13 @@ public:
 
   // - Actions -
 public slots:
+  void start(Priority p = InheritPriority) { reset(); Base::start(p); }
   virtual void run(bool exec) = 0;
   virtual void run() { run(true); } ///< \reimp
-  virtual void stop() = 0; ///< \reimp
+  //virtual void stop() = 0; ///< \reimp
 
-  void exec();
-  void quit();
+  //void exec();
+  //void quit();
 
   //virtual void finish()
   //{ emit progress(totalSize_, totalSize_); emit finished(this); }
@@ -97,7 +97,7 @@ public slots:
   virtual void reset() { setState(Stopped); }
   void setDownloadPath(const QString &path) { downloadPath_ = path; }
 
-  void start() { reset(); QThreadPool::globalInstance()->start(this); }
+  //void start() { reset(); QThreadPool::globalInstance()->start(this); }
   void startLater(qint64 msecs);
 
 protected slots:

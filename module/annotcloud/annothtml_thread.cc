@@ -14,17 +14,25 @@
 // - Resources -
 
 #ifdef Q_WS_X11
-#  define RC_AVATAR_PREFIX      AVATARDIR
+# define RC_AVATAR_PREFIX      AVATARDIR
 #else
-#  define RC_AVATAR_PREFIX      QCoreApplication::applicationDirPath() + "/avatars"
+# define RC_AVATAR_PREFIX      QCoreApplication::applicationDirPath() + "/avatars"
 #endif // Q_WS_X11
-#ifdef AVATAR_USER_COUNT
-#  define RC_AVATAR_COUNT       AVATAR_USER_COUNT
-#else
-#  define RC_AVATAR_COUNT       10
-#endif // AVATAR_USER_COUNT
+
 #define AVATAR_WIDTH            "40"
 #define AVATAR_HEIGHT           "40"
+
+#ifdef AVATAR_USER_COUNT
+enum { RC_AVATAR_COUNT = AVATAR_USER_COUNT };
+#else
+enum { RC_AVATAR_COUNT = 10 };
+#endif // AVATAR_USER_COUNT
+
+//#ifdef AVATAR_GIF_COUNT
+//enum { RC_AVATAR_GIF_COUNT = AVATAR_GIF_COUNT };
+//#else
+//enum { RC_AVATAR_GIF_COUNT = 10 };
+//#endif // AVATAR_GIF_COUNT
 
 namespace { // anonymous
   inline QString rc_avatar_url(qint64 i)
@@ -37,14 +45,26 @@ namespace { // anonymous
 #endif  // Q_WS_WIN
     ;
     return fmt.arg(QString::number(qAbs(i) % RC_AVATAR_COUNT));
+
+//#ifdef Q_WS_WIN
+//    static QString jpg = QString("file:///" + RC_AVATAR_PREFIX "/user_%1.jpg").replace('\\', '/'),
+//                   gif = QString("file:///" + RC_AVATAR_PREFIX "/user_%1.gif").replace('\\', '/');
+//#else
+//    static QString jpg = "file://" + RC_AVATAR_PREFIX + "/user_%1.jpg",
+//                   gif = "file://" + RC_AVATAR_PREFIX + "/user_%1.gif";
+//#endif // Q_WS_WIN
+//    int hash = qAbs(i) % (RC_AVATAR_GIF_COUNT + RC_AVATAR_JPG_COUNT);
+//    return hash < RC_AVATAR_JPG_COUNT ?
+//      jpg.arg(QString::number(hash)) :
+//      gif.arg(QString::number(hash - RC_AVATAR_JPG_COUNT));
   }
 } // anonymous namespace
 
 
 #ifdef Q_WS_X11
-#  define RC_PREFIX     JSFDIR "/"
+# define RC_PREFIX     JSFDIR "/"
 #else
-#  define RC_PREFIX     QCoreApplication::applicationDirPath() + "/jsf/"
+# define RC_PREFIX     QCoreApplication::applicationDirPath() + "/jsf/"
 #endif // Q_WS_X11
 
 #define RC_JSF_T        RC_PREFIX "t.xhtml"

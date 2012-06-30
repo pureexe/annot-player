@@ -41,19 +41,19 @@
 
 #define ACSS_TOOLBUTTON_TEXT_NORMAL       ACSS_TOOLBUTTON_TEXT_(normal, normal, none, blue, red, purple, purple, red, gray)
 #ifdef Q_OS_MAC
-#  define ACSS_TOOLBUTTON_TEXT_INVERT     ACSS_TOOLBUTTON_TEXT_(normal, normal, none, red, blue, purple, purple, red, gray)
-#  define ACSS_TOOLBUTTON_TEXT_HIGHLIGHT  ACSS_TOOLBUTTON_TEXT_(bold, normal, none, blue, red, purple, purple, red, gray)
-#  define ACSS_TOOLBUTTON_TEXT_CHECKABLE  ACSS_TOOLBUTTON_TEXT_(bold, italic, none, blue, red, purple, purple, red, gray)
-#  define ACSS_TOOLBUTTON_TEXT_TAB        ACSS_TOOLBUTTON_TEXT_(bold, normal, none, blue, red, purple, purple, red, gray)
-#  define ACSS_TOOLBUTTON_TEXT_URL        ACSS_TOOLBUTTON_TEXT_(normal, italic, underline, blue, red, purple, purple, red, gray)
-#  define ACSS_TOOLBUTTON_TEXT            ACSS_TOOLBUTTON_TEXT_NORMAL
+# define ACSS_TOOLBUTTON_TEXT_INVERT     ACSS_TOOLBUTTON_TEXT_(normal, normal, none, red, blue, purple, purple, red, gray)
+# define ACSS_TOOLBUTTON_TEXT_HIGHLIGHT  ACSS_TOOLBUTTON_TEXT_(bold, normal, none, blue, red, purple, purple, red, gray)
+# define ACSS_TOOLBUTTON_TEXT_CHECKABLE  ACSS_TOOLBUTTON_TEXT_(bold, italic, none, blue, red, purple, purple, red, gray)
+# define ACSS_TOOLBUTTON_TEXT_TAB        ACSS_TOOLBUTTON_TEXT_(bold, normal, none, blue, red, purple, purple, red, gray)
+# define ACSS_TOOLBUTTON_TEXT_URL        ACSS_TOOLBUTTON_TEXT_(normal, italic, underline, blue, red, purple, purple, red, gray)
+# define ACSS_TOOLBUTTON_TEXT            ACSS_TOOLBUTTON_TEXT_NORMAL
 #else
-#  define ACSS_TOOLBUTTON_TEXT_INVERT     ACSS_TOOLBUTTON_TEXT_(normal, normal, none, red, blue, orange, orange, red, gray)
-#  define ACSS_TOOLBUTTON_TEXT_HIGHLIGHT  ACSS_TOOLBUTTON_TEXT_(bold, normal, none, blue, red, orange, orange, red, gray)
-#  define ACSS_TOOLBUTTON_TEXT_CHECKABLE  ACSS_TOOLBUTTON_TEXT_(normal, italic, none, blue, red, orange, orange, red, gray)
-#  define ACSS_TOOLBUTTON_TEXT_TAB        ACSS_TOOLBUTTON_TEXT_(bold, normal, none, blue, red, orange, orange, red, gray)
-#  define ACSS_TOOLBUTTON_TEXT_URL        ACSS_TOOLBUTTON_TEXT_(normal, italic, underline, blue, red, orange, orange, red, gray)
-#  define ACSS_TOOLBUTTON_TEXT            ACSS_TOOLBUTTON_TEXT_NORMAL
+# define ACSS_TOOLBUTTON_TEXT_INVERT     ACSS_TOOLBUTTON_TEXT_(normal, normal, none, red, blue, orange, orange, red, gray)
+# define ACSS_TOOLBUTTON_TEXT_HIGHLIGHT  ACSS_TOOLBUTTON_TEXT_(bold, normal, none, blue, red, orange, orange, red, gray)
+# define ACSS_TOOLBUTTON_TEXT_CHECKABLE  ACSS_TOOLBUTTON_TEXT_(normal, italic, none, blue, red, orange, orange, red, gray)
+# define ACSS_TOOLBUTTON_TEXT_TAB        ACSS_TOOLBUTTON_TEXT_(bold, normal, none, blue, red, orange, orange, red, gray)
+# define ACSS_TOOLBUTTON_TEXT_URL        ACSS_TOOLBUTTON_TEXT_(normal, italic, underline, blue, red, orange, orange, red, gray)
+# define ACSS_TOOLBUTTON_TEXT            ACSS_TOOLBUTTON_TEXT_NORMAL
 #endif // Q_OS_MAC
 
 // - Labels -
@@ -73,13 +73,13 @@
   SS_END
 
 #ifdef Q_OS_MAC
-#  define ACSS_LABEL            ACSS_LABEL_(normal, normal, none, blue, red, gray)
-#  define ACSS_LABEL_HIGHLIGHT  ACSS_LABEL_(normal, italic, none, purple, red, gray)
-#  define ACSS_LABEL_URL        ACSS_LABEL_(normal, italic, underline, purple, red, gray)
+# define ACSS_LABEL            ACSS_LABEL_(normal, normal, none, blue, red, gray)
+# define ACSS_LABEL_HIGHLIGHT  ACSS_LABEL_(normal, italic, none, purple, red, gray)
+# define ACSS_LABEL_URL        ACSS_LABEL_(normal, italic, underline, purple, red, gray)
 #else
-#  define ACSS_LABEL            ACSS_LABEL_(normal, normal, none, cyan, red, gray)
-#  define ACSS_LABEL_HIGHLIGHT  ACSS_LABEL_(normal, italic, none, orange, red, gray)
-#  define ACSS_LABEL_URL        ACSS_LABEL_(normal, italic, underline, orange, red, gray)
+# define ACSS_LABEL            ACSS_LABEL_(normal, normal, none, cyan, red, gray)
+# define ACSS_LABEL_HIGHLIGHT  ACSS_LABEL_(normal, italic, none, orange, red, gray)
+# define ACSS_LABEL_URL        ACSS_LABEL_(normal, italic, underline, orange, red, gray)
 #endif // Q_OS_MAC
 
 // - Lines -

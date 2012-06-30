@@ -5,9 +5,9 @@
 #include "global.h"
 #include "tr.h"
 #ifdef Q_WS_WIN
-#  include "win/qtwin/winreg.h"
+# include "win/qtwin/winreg.h"
 #else
-#  error "Windows only"
+# error "Windows only"
 #endif // Q_WS_WIN
 #include <QtCore>
 
@@ -38,7 +38,7 @@ void
 WindowsRegistry::sync()
 { if (classes_) classes_->sync(); }
 
-// - Types -
+// - Raw Types -
 
 QString
 WindowsRegistry::aliasOf(const QString &t)
@@ -124,4 +124,59 @@ WindowsRegistry::unregisterRawType(const QString &type)
   DOUT("status =" << classes_->status());
 }
 
+// - Shells -
+
+bool
+WindowsRegistry::containsShell(const QString &type) const
+{
+  Q_ASSERT(isValid());
+  DOUT("type =" << type);
+
+  if (!classes_ || type.isEmpty())
+    return false;
+
+  QString shellCommand = type + "/shell/playWithAnnotPlayer/command/." ;
+  bool ret = classes_->contains(shellCommand);
+  DOUT("ret =" << ret);
+  return ret;
+}
+
+void
+WindowsRegistry::registerShell(const QString &type)
+{
+  Q_ASSERT(isValid());
+  DOUT("type =" << type);
+
+  if (!classes_ || type.isEmpty())
+    return;
+
+  static QString command;
+  if (command.isEmpty()) {
+    QString app = QCoreApplication::applicationFilePath();
+    app.replace('/', '\\');
+    command = "\"" + app  + "\" %1"; // NOTE: %1 is not quoted, as DVD/AudioCD won't strip off quotes
+  }
+
+  QString text = tr("Play with Annot Player");
+  classes_->beginGroup(type);
+  classes_->setValue("shell/playWithAnnotPlayer/.", text);
+  classes_->setValue("shell/playWithAnnotPlayer/command/.", command);
+  classes_->endGroup();
+  DOUT("status =" << classes_->status());
+}
+
+void
+WindowsRegistry::unregisterShell(const QString &type)
+{
+  Q_ASSERT(isValid());
+  DOUT("type =" << type);
+
+  if (!classes_ || type.isEmpty())
+    return;
+
+  QString shell = type + "/shell/playWithAnnotPlayer" ;
+  classes_->remove(shell);
+
+  DOUT("status =" << classes_->status());
+}
 // EOF

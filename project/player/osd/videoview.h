@@ -5,14 +5,14 @@
 // 7/10/2011
 #include <QtGlobal>
 #ifdef Q_WS_MAC
-#  include <QtGui/QMacCocoaViewContainer>
+# include <QtGui/QMacCocoaViewContainer>
   typedef QMacCocoaViewContainer VideoViewBase;
   struct vlcvideoview_t;
-#elif defined Q_WS_X11
-#  include <QtGui/QX11EmbedContainer>
+#elif defined(Q_WS_X11)
+# include <QtGui/QX11EmbedContainer>
   typedef QX11EmbedContainer VideoViewBase;
 #else
-#  include <QtGui/QFrame>
+# include <QtGui/QFrame>
   typedef QFrame VideoViewBase;
 #endif // Q_WS_X11
 #include <QtCore/QList>

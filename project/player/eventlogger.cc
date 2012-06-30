@@ -303,31 +303,31 @@ EventLogger::logTrackedWindowDestroyed()
 
 void
 EventLogger::logServerAgentConnectionError()
-{ warn(tr("serveragent: failed to connect to server")); }
+{ warn(tr("failed to connect to the Internet")); }
 
 void
 EventLogger::logServerAgentError404()
-{ warn(tr("serveragent: got error 404 from server")); }
+{ warn(tr("got error 404 from remote server")); }
 
 void
 EventLogger::logServerAgentServerError()
-{ warn(tr("serveragent: got error reply from server")); }
+{ warn(tr("got error reply from remote server")); }
 
 void
 EventLogger::logServerAgentUnknownError()
-{ warn(tr("serveragent: unknown SOAP error")); }
+{ warn(tr("unknown SOAP error")); }
 
 void
 EventLogger::logClientAgentAuthorized()
-{ log(tr("clientagent: server authorization succeeded")); }
+{ log(tr("server authorization succeeded")); }
 
 void
 EventLogger::logClientAgentDeauthorized()
-{ log(tr("clientagent: server deauthorized")); }
+{ log(tr("server deauthorized")); }
 
 void
 EventLogger::logClientAgentAuthorizationError()
-{ warn(tr("clientagent: failed to authorize server, mismatched public key")); }
+{ warn(tr("failed to authorize server, mismatched public key")); }
 
 void
 EventLogger::logTranslatorNetworkError(const QString &message)

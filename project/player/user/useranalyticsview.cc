@@ -8,7 +8,7 @@
 #include "logger.h"
 #include "module/annotcloud/annothtml.h"
 #ifdef Q_WS_MAC
-#  include "mac/qtmac/qtmac.h"
+# include "mac/qtmac/qtmac.h"
 #endif // Q_WS_MAC
 #include <QtGui>
 #include <QtWebKit>

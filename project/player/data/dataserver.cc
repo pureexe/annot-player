@@ -310,10 +310,10 @@ DataServer::selectTokenWithDigest(const QString &digest, qint32 part)
 }
 
 AnnotationList
-DataServer::selectAnnotationsWithTokenId(qint64 tid, bool invalidateCache)
+DataServer::selectAnnotationsWithTokenId(qint64 tid, bool ignoreCache)
 {
   DOUT("enter: tid =" << tid);
-  bool preferCache = preferCache_ && !invalidateCache;
+  bool preferCache = preferCache_ && !ignoreCache;
   AnnotationList ret;
   if (preferCache && cache_->isValid())
     ret = cache_->selectAnnotationsWithTokenId(tid);
@@ -332,22 +332,31 @@ DataServer::selectAnnotationsWithTokenId(qint64 tid, bool invalidateCache)
 }
 
 AliasList
-DataServer::selectAliasesWithTokenId(qint64 tid)
+DataServer::selectAliasesWithTokenId(qint64 tid, bool ignoreCache, bool *fromCache)
 {
   DOUT("enter: tid =" << tid);
+  bool preferCache = preferCache_ && !ignoreCache;
   AliasList ret;
-  if (preferCache_ && cache_->isValid())
+  bool cached = false;
+  if (preferCache && cache_->isValid()) {
     ret = cache_->selectAliasesWithTokenId(tid);
+    cached = true;
+  }
   if (ret.isEmpty()) {
     if (server_->isConnected()) {
       ret = server_->selectAliasesWithTokenId(tid);
+      cached = false;
       if (cache_->isValid()) {
         cache_->deleteAliasesWithTokenId(tid);
         cache_->insertAliases(ret);
       }
-    } else if (!preferCache_ && cache_->isValid())
+    } else if (!preferCache && cache_->isValid()) {
       ret = cache_->selectAliasesWithTokenId(tid);
+      cached = false;
+    }
   }
+  if (fromCache)
+    *fromCache = cached;
   DOUT("exit: count =" << ret.size());
   return ret;
 }
@@ -375,10 +384,10 @@ DataServer::selectRelatedAliasesWithTokenId(qint64 tid)
 }
 
 AnnotationList
-DataServer::selectRelatedAnnotationsWithTokenId(qint64 tid, bool invalidateCache, bool *fromCache)
+DataServer::selectRelatedAnnotationsWithTokenId(qint64 tid, bool ignoreCache, bool *fromCache)
 {
   DOUT("enter: tid =" << tid);
-  bool preferCache = preferCache_ && !invalidateCache;
+  bool preferCache = preferCache_ && !ignoreCache;
   AnnotationList ret;
   bool cached = false;
   if (preferCache && cache_->isValid()) {
@@ -440,31 +449,42 @@ DataServer::updateAnnotations(const AnnotationList &l)
 */
 
 AliasList
-DataServer::selectAliasesWithToken(const Token &token)
+DataServer::selectAliasesWithToken(const Token &token, bool ignoreCache, bool *fromCache)
 {
   DOUT("enter");
+  bool preferCache = preferCache_ && !ignoreCache;
+  bool cached = false;
+  if (fromCache)
+    *fromCache = false;
   AliasList ret;
-  if (preferCache_ && cache_->isValid()) {
-    if (token.isValid())
+  if (preferCache && cache_->isValid()) {
+    if (token.isValid()) {
       ret = cache_->selectAliasesWithTokenId(token.id());
-    else if (token.hasDigest())
+      cached = true;
+    } else if (token.hasDigest()) {
       ret = cache_->selectAliasesWithTokenDigest(token.digest(), token.part());
+      cached = true;
+    }
   }
   if (ret.isEmpty()) {
     if (token.isValid())
-      ret = selectAliasesWithTokenId(token.id());
-    else if (!preferCache_ && token.hasDigest() && cache_->isValid())
+      ret = selectAliasesWithTokenId(token.id(), ignoreCache, fromCache);
+    else if (!preferCache && token.hasDigest() && cache_->isValid()) {
       ret = cache_->selectAliasesWithTokenDigest(token.digest(), token.part());
+      cached = true;
+    }
   }
-  DOUT("exit");
+  if (fromCache && !*fromCache && cached)
+    *fromCache = true;
+  DOUT("exit: size =" << ret.size());
   return ret;
 }
 
 AnnotationList
-DataServer::selectAnnotationsWithToken(const Token &token, bool invalidateCache, bool *fromCache)
+DataServer::selectAnnotationsWithToken(const Token &token, bool ignoreCache, bool *fromCache)
 {
   DOUT("enter");
-  bool preferCache = preferCache_ && !invalidateCache;
+  bool preferCache = preferCache_ && !ignoreCache;
   AnnotationList ret;
   if (fromCache)
     *fromCache = false;
@@ -480,7 +500,7 @@ DataServer::selectAnnotationsWithToken(const Token &token, bool invalidateCache,
   }
   if (ret.isEmpty()) {
     if (token.isValid())
-      ret = selectRelatedAnnotationsWithTokenId(token.id(), invalidateCache, fromCache);
+      ret = selectRelatedAnnotationsWithTokenId(token.id(), ignoreCache, fromCache);
     else if (!preferCache && token.hasDigest() && cache_->isValid()) {
       ret = cache_->selectAnnotationsWithTokenDigest(token.digest(), token.part());
       cached = true;

@@ -10,7 +10,7 @@
 #include <QtGlobal>
 
 #ifdef __GNUC__
-#  pragma GCC diagnostic ignored "-Wstrict-aliasing" // dereferencing type-punned pointer
+# pragma GCC diagnostic ignored "-Wstrict-aliasing" // dereferencing type-punned pointer
 #endif // __GNUC__
 
 namespace Bitwise {

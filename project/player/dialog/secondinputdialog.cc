@@ -23,9 +23,9 @@ enum { BAD_TIME = -1 };
   Qt::WindowStaysOnTopHint
 
 #ifdef Q_OS_MAC
-#  define WINDOW_FLAGS  WINDOW_FLAGS_BASE | Qt::FramelessWindowHint
+# define WINDOW_FLAGS  WINDOW_FLAGS_BASE | Qt::FramelessWindowHint
 #else
-#  define WINDOW_FLAGS  WINDOW_FLAGS_BASE
+# define WINDOW_FLAGS  WINDOW_FLAGS_BASE
 #endif // Q_OS_MAC
 
 // - Constructions -

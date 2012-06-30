@@ -11,7 +11,7 @@
 #include "module/debug/debug.h"
 
 //#ifdef __GNUC__
-//#  pragma GCC diagnostic ignored "-Wparentheses" // suggest parentheses
+//# pragma GCC diagnostic ignored "-Wparentheses" // suggest parentheses
 //#endif // __GNUC__
 
 // - Construction -

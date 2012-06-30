@@ -16,7 +16,7 @@ namespace Core {
       child = children_[i];
     else if (i >= 0 && i < node_children_.size()) {
       child = new Self(node_children_.item(i), i,
-                       const_cast<Self*>(this));
+                       const_cast<Self *>(this));
       children_[i] = child;
     }
     return child;
@@ -36,7 +36,7 @@ namespace Core {
     if (bad() || parent.column() > 0)
       return 0;
 
-    CatalogItem *parentItem = parent.isValid()? static_cast<CatalogItem*>(parent.internalPointer())
+    CatalogItem *parentItem = parent.isValid()? static_cast<CatalogItem *>(parent.internalPointer())
                                               : root_;
     Q_ASSERT(parentItem);
     return parentItem->degree();
@@ -48,7 +48,7 @@ namespace Core {
     if (bad() || !child.isValid())
       return QModelIndex();
 
-    CatalogItem *childItem = static_cast<CatalogItem*>(child.internalPointer());
+    CatalogItem *childItem = static_cast<CatalogItem *>(child.internalPointer());
     Q_ASSERT(childItem);
     CatalogItem *parentItem = childItem->parent();
 
@@ -64,7 +64,7 @@ namespace Core {
     if (bad() || !index.isValid() || role != Qt::DisplayRole)
       return QVariant();
 
-    CatalogItem *item = static_cast<CatalogItem*>(index.internalPointer());
+    CatalogItem *item = static_cast<CatalogItem *>(index.internalPointer());
     Q_ASSERT(item);
     QDomNode node = item->node();
 
@@ -119,7 +119,7 @@ namespace Core {
     if (bad() || !hasIndex(row, column, parent))
       return QModelIndex();
 
-    CatalogItem *parentItem = parent.isValid()? static_cast<CatalogItem*>(parent.internalPointer())
+    CatalogItem *parentItem = parent.isValid()? static_cast<CatalogItem *>(parent.internalPointer())
                                               : root_;
     Q_ASSERT(parentItem);
     CatalogItem *childItem = parentItem->child(row);

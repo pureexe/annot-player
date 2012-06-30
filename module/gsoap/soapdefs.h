@@ -5,13 +5,17 @@
 // Don't forget to regenerate envC.cpp after modifying this file.
 
 #ifdef _MSC_VER
-#  pragma warning (disable:4100)  // C4100: unreferenced formal parameter
-#  pragma warning (disable:4244)  // C4244: conversion from 'std::streamsize' to 'size_t', possible loss of data
+# pragma warning (disable:4100)  // C4100: unreferenced formal parameter
+# pragma warning (disable:4244)  // C4244: conversion from 'std::streamsize' to 'size_t', possible loss of data
 #endif // _MSC_VER
 #ifdef __GNUC__
-#  pragma GCC diagnostic ignored "-Wunused-parameter" // unused function parameters
-#  pragma GCC diagnostic ignored "-Wsequence-point" // soap::bufidx
+# pragma GCC diagnostic ignored "-Wunused-parameter" // unused function parameters
+# pragma GCC diagnostic ignored "-Wsequence-point" // soap::bufidx
 #endif // __GNUC__
+#ifdef __clang__
+# pragma clang diagnostic ignored "-Wformat-extra-args" // extra parameters found in sprintf
+# pragma clang diagnostic ignored "-Wsign-compare"      // operands of ? are integers of different signs
+#endif // __clang__
 
 // Increase buffer length
 // http://www.cs.fsu.edu/~engelen/soapdoc2.html#tth_sEc19.18

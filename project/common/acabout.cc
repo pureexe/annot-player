@@ -13,11 +13,11 @@
   Qt::WindowStaysOnTopHint
 
 #ifdef Q_WS_MAC
-#  define WINDOW_FLAGS ( \
+# define WINDOW_FLAGS ( \
     Qt::FramelessWindowHint | \
     WINDOW_FLAGS_BASE )
 #else
-#  define WINDOW_FLAGS ( \
+# define WINDOW_FLAGS ( \
     Qt::WindowTitleHint | \
     WINDOW_FLAGS_BASE )
 #endif // Q_WS_MAC
@@ -25,9 +25,9 @@
 // - Constructions -
 
 #ifdef Q_WS_MAC
-#  define WINDOW_SIZE   QSize(300, 200)
+# define WINDOW_SIZE   QSize(300, 200)
 #else
-#  define WINDOW_SIZE   QSize(270, 160)
+# define WINDOW_SIZE   QSize(270, 160)
 #endif // Q_WS_MAC
 
 QString

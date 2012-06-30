@@ -2,7 +2,7 @@
 // Objective C header.
 
 #ifndef MODULE_STRING
-#  define MODULE_STRING "main" // VLC module string, defined in VLC's Makefile
+# define MODULE_STRING "main" // VLC module string, defined in VLC's Makefile
 #endif // MODULE_STRING
 #import <vlc/modules/gui/minimal_macosx/VLCOpenGLVoutView.h>
 #import <vlc/modules/gui/minimal_macosx/voutgl.h> // declare vout_sys_t

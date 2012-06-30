@@ -56,16 +56,14 @@ enum { ALPHA = 0 };
 
 #define G_ANNOTATION_MAXSIZE 255
 
-#define G_ANNOT_CHAR_WIDTH      20
-
 #define G_TRACKING_INTERVAL     200 // msec
 
 // TO BE MOVED INTO mediaplayer.h
 #define G_FILTER_ALL            "*"
 #ifdef Q_WS_WIN
-#  define G_FILTER_AUDIO        PLAYER_FORMAT_AUDIO(" *.")      PLAYER_FORMAT_PLAYLIST(" *.") PLAYER_FORMAT_IMAGE(".*.")
+# define G_FILTER_AUDIO        PLAYER_FORMAT_AUDIO(" *.")      PLAYER_FORMAT_PLAYLIST(" *.") PLAYER_FORMAT_IMAGE(".*.")
 #else
-#  define G_FILTER_AUDIO        PLAYER_FORMAT_AUDIO(" *.")      PLAYER_FORMAT_IMAGE(".*.")
+# define G_FILTER_AUDIO        PLAYER_FORMAT_AUDIO(" *.")      PLAYER_FORMAT_IMAGE(".*.")
 #endif // Q_WS_WIN
 #define G_FILTER_VIDEO          PLAYER_FORMAT_VIDEO(" *.")      PLAYER_FORMAT_IMAGE(".*.")
 #define G_FILTER_PICTURE        PLAYER_FORMAT_PICTURE(" *.")
@@ -74,49 +72,56 @@ enum { ALPHA = 0 };
 #define G_FORMAT_PROGRAM(...)   __VA_ARGS__ "exe" __VA_ARGS__ "lnk"
 #define G_FORMAT_ANNOTATION(...) __VA_ARGS__ "xml" __VA_ARGS__ "json"
 #define G_FORMAT_DEVICE(...)    __VA_ARGS__ "DVD" __VA_ARGS__ "AudioCD"
+#define G_FORMAT_PREVIEW(...) \
+  __VA_ARGS__ "bc!" \
+  __VA_ARGS__ "jc!" \
+  __VA_ARGS__ "met" \
+  __VA_ARGS__ "td" \
+  __VA_ARGS__ "ut!"
 
 #define G_FILTER_PROGRAM        G_FORMAT_PROGRAM(" *.")
 #define G_FILTER_ANNOTATION     G_FORMAT_ANNOTATION(" *.")
+#define G_FILTER_PREVIEW        G_FORMAT_PREVIEW(" *.")
 #define G_FILTER_MEDIA          G_FILTER_VIDEO G_FILTER_AUDIO G_FILTER_PICTURE
 #ifdef USE_MODE_SIGNAL
-#  define G_FILTER_SUPPORTED    G_FILTER_PROGRAM G_FILTER_MEDIA
+# define G_FILTER_SUPPORTED    G_FILTER_PROGRAM G_FILTER_MEDIA
 #else
-#  define G_FILTER_SUPPORTED    G_FILTER_MEDIA
+# define G_FILTER_SUPPORTED    G_FILTER_MEDIA
 #endif // USE_MODE_SIGNAL
 
 #define VLC_AUTOHIDE_TIMEOUT    1500    // in msecs, same as VLC
 #define G_AUTOHIDE_TIMEOUT (VLC_AUTOHIDE_TIMEOUT * 2)
 
-#define G_CONSOLE_AUTOClEAR_TIMEOUT     5000
+#define G_CONSOLE_AUTOClEAR_TIMEOUT     4000
 #define G_LOGGER_PLAYING_WAITER_TIMEOUT 5100
 
 // - Path -
 
 #ifdef Q_OS_WIN
-#  define G_PATH_PROFILE        QtWin::getAppDataPath() + "/" G_ORGANIZATION "/" G_APPLICATION
-#elif defined Q_OS_MAC
-#  define G_PATH_PROFILE        QtMac::homeApplicationSupportPath() + "/" G_ORGANIZATION "/" G_APPLICATION
+# define G_PATH_PROFILE        QtWin::getAppDataPath() + "/" G_ORGANIZATION "/" G_APPLICATION
+#elif defined(Q_OS_MAC)
+# define G_PATH_PROFILE        QtMac::homeApplicationSupportPath() + "/" G_ORGANIZATION "/" G_APPLICATION
 #else
-#  define G_PATH_PROFILE        QDir::homePath() + "/.annot/player"
+# define G_PATH_PROFILE        QDir::homePath() + "/.annot/player"
 #endif // Q_OS_WIN
 
 #ifdef Q_WS_WIN
-#  define G_PATH_LOGS   QCoreApplication::applicationDirPath() + "/" ".."
-#  define G_PATH_DEBUG  G_PATH_LOGS "/" "Debug Player.txt"
-#elif defined Q_WS_MAC
-#  define G_PATH_LOGS   QtMac::homeLogsPath() + "/" G_ORGANIZATION "/" G_APPLICATION
-#  define G_PATH_DEBUG  G_PATH_LOGS "/" "Debug.txt"
+# define G_PATH_LOGS   QCoreApplication::applicationDirPath() + "/" ".."
+# define G_PATH_DEBUG  G_PATH_LOGS "/" "Debug Player.txt"
+#elif defined(Q_WS_MAC)
+# define G_PATH_LOGS   QtMac::homeLogsPath() + "/" G_ORGANIZATION "/" G_APPLICATION
+# define G_PATH_DEBUG  G_PATH_LOGS "/" "Debug.txt"
 #else
-#  define G_PATH_LOGS   G_PATH_PROFILE
-#  define G_PATH_DEBUG  G_PATH_LOGS "/" "debug.txt"
+# define G_PATH_LOGS   G_PATH_PROFILE
+# define G_PATH_DEBUG  G_PATH_LOGS "/" "debug.txt"
 #endif // Q_WS_
 
 #ifdef Q_WS_WIN
-#  define G_PATH_CACHES  QCoreApplication::applicationDirPath() + "/" "caches"
-#elif defined Q_WS_MAC
-#  define G_PATH_CACHES  QtMac::homeCachesPath() + "/" G_ORGANIZATION "/" G_APPLICATION
+# define G_PATH_CACHES  QCoreApplication::applicationDirPath() + "/" "caches"
+#elif defined(Q_WS_MAC)
+# define G_PATH_CACHES  QtMac::homeCachesPath() + "/me.annot.player"
 #else
-#  define G_PATH_CACHES  G_PATH_PROFILE
+# define G_PATH_CACHES  G_PATH_PROFILE
 #endif // Q_WS_
 
 #define G_PATH_LOCK     G_PATH_PROFILE
@@ -144,9 +149,9 @@ enum { ALPHA = 0 };
 
 // - QTH -
 //#ifdef WITH_WIN_QTH
-//#  define QTH           Qth::globalInstance()
+//# define QTH           Qth::globalInstance()
 //#else
-//#  define QTH           #error "Hook is not used"
+//# define QTH           #error "Hook is not used"
 //#endif // WITH_WIN_QTH
 
 #endif // GLOBAL_H

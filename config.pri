@@ -28,10 +28,15 @@ DEFINES += UNICODE
 
 #CONFIG += x86 x86_64 ppc64
 
-# C++0x
+# C++11
 win32:  QMAKE_CXXFLAGS += -Zc:auto
 unix:   QMAKE_CXXFLAGS += -std=c++0x
-mac:    QMAKE_CXXFLAGS -= -std=c++0x
+mac    {
+    # Enable TR1 such as tuple
+    # Clang is required to take place of llvm gcc, which uses /usr/lib/libstdc++.dylib
+    #QMAKE_CXXFLAGS += -stdlib=libc++
+    #QMAKE_LFLAGS += -stdlib=libc++
+}
 
 # MSVC
 win32 {
@@ -101,6 +106,8 @@ win32 {
     GSOAP_HOME          = $$DEV_HOME/gsoap
     ZLIB_HOME           = $$DEV_HOME/zlib
     LUA_HOME            = $$DEV_HOME/lua
+    FREETYPE_HOME       = $$DEV_HOME/freetype
+    FONTCONFIG_HOME     = $$DEV_HOME/fontconfig
     #LUA_VERSION = 52
     #LUA_VERSION = 5.1
     LUA_VERSION =
@@ -121,6 +128,7 @@ win32 {
 }
 
 unix {
+    X11_HOME            = /usr/X11
     QT_HOME             = /usr/share/qt4
     QT_SRC              =
     VLC_HOME            = /usr
@@ -136,10 +144,14 @@ unix {
     GSOAP_HOME          = /usr
     LUA_HOME            = /usr
     ZLIB_HOME           = /usr
+    FREETYPE_HOME       = $$X11_HOME
+    FONTCONFIG_HOME     = $$X11_HOME
     LUA_VERSION = 5.1
 }
 
 mac {
+    SDK_HOME            = /Developer/SDKs/MacOSX10.7.sdk
+    X11_HOME            = $$SDK_HOME/usr/X11
     MACPORTS_HOME       = /opt/local
     #QT_HOME             = /opt/local/share/qt4
     QT_HOME             = ${HOME}/opt/qt
@@ -157,7 +169,9 @@ mac {
     POPPLER_HOME        = ${HOME}/opt/poppler
     BOOST_HOME          = $$MACPORTS_HOME
     GSOAP_HOME          = $$MACPORTS_HOME
-    ZLIB_HOME           = /usr
+    ZLIB_HOME           = $$SDK_HOME/usr
+    FREETYPE_HOME       = $$X11_HOME
+    FONTCONFIG_HOME     = $$X11_HOME
     #LUA_HOME            = ${HOME}/opt/lua
     LUA_HOME            = $$MACPORTS_HOME
     #LUA_VERSION = 52
@@ -180,6 +194,11 @@ INCLUDEPATH     += $$GSOAP_HOME/include
 LIBS            += -L$$GSOAP_HOME/lib
 INCLUDEPATH     += $$ZLIB_HOME/include
 LIBS            += -L$$ZLIB_HOME/lib
+INCLUDEPATH     += $$FREETYPE_HOME/include \
+                   $$FREETYPE_HOME/include/freetype2
+LIBS            += -L$$FREETYPE_HOME/lib
+INCLUDEPATH     += $$FONTCONFIG_HOME/include
+LIBS            += -L$$FONTCONFIG_HOME/lib
 INCLUDEPATH     += $$LUA_HOME/include \
                    $$LUA_HOME/include/lua$$LUA_VERSION
 LIBS            += -L$$LUA_HOME/lib
@@ -203,6 +222,8 @@ LIBS            += -L$$LUA_HOME/lib
 #    -L$$LIVE_HOME/UsageEnvironment \
 #    -L$$LIVE_HOME/groupsock \
 #    -L$$LIVE_HOME/liveMedia
+
+mac: INCLUDEPATH += $$SDK_HOME/usr/include
 
 CONFIG(release) {
   #DEFINES += QT_NO_DEBUG_OUTPUT QT_NO_WARNING_OUTPUT

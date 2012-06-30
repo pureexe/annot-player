@@ -3,7 +3,6 @@
 
 #include "mousegesturefilter_p.h"
 #include <boost/foreach.hpp>
-#include <boost/typeof/typeof.hpp>
 #include <climits>
 #include <list>
 
@@ -11,7 +10,7 @@
 #include "module/debug/debug.h"
 
 #ifdef __GNUC__
-#  pragma GCC diagnostic ignored "-Wparentheses" // suggest parentheses
+# pragma GCC diagnostic ignored "-Wparentheses" // suggest parentheses
 #endif // __GNUC__
 
 // - Begin/End -
@@ -52,8 +51,8 @@ MouseGestureFilterPrivate::triggerGesture()
     foreach (MouseGesture *g, gestures_)
       if (directions.size() == size_t(g->directions().size())) {
         bool match = true;
-        BOOST_AUTO(pi, directions.begin());
-        BOOST_AUTO(di, g->directions().begin());
+        auto pi = directions.begin();
+        auto di = g->directions().begin();
         for (; di != g->directions().end() && match; ++di, ++pi)
           switch (*di) {
           case MouseGesture::Up:        if (pi->y() >= 0) match = false;  break;
@@ -169,16 +168,17 @@ MouseGestureFilterPrivate::joinDirections_(const PointList &positions)
 void
 MouseGestureFilterPrivate::removeShortest_(PointList &positions)
 {
-  PointList::iterator shortest;
+  auto shortest = positions.end();
   int shortestLength = INT_MAX;
-  for (PointList::iterator p = positions.begin(); p != positions.end(); ++p ) {
+  for (auto p = positions.begin(); p != positions.end(); ++p ) {
     int len = p->x()*p->x() + p->y()*p->y();
     if (len < shortestLength) {
       shortestLength = len;
       shortest = p;
     }
   }
-  positions.erase(shortest);
+  if (shortest != positions.end())
+    positions.erase(shortest);
 }
 
 /*

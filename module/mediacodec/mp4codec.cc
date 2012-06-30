@@ -4,7 +4,7 @@
 #include "module/mediacodec/mp4codec.h"
 #include "module/stream/fileinputstream.h"
 #ifdef WITH_MP4V2
-#  include <mp4v2/mp4v2.h>
+# include <mp4v2/mp4v2.h>
 #endif // WITH_MP4V2
 #include <cstdlib>
 #include <cstring>

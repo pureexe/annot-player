@@ -9,11 +9,11 @@
 #include <QtGui>
 
 #ifdef Q_OS_MAC
-#  define K_ENTER       "enter"
-#  define K_ESC         "esc"
+# define K_ENTER       "enter"
+# define K_ESC         "esc"
 #else
-#  define K_ENTER       "Enter"
-#  define K_ESC         "Esc"
+# define K_ENTER       "Enter"
+# define K_ESC         "Esc"
 #endif // Q_OS_MAC
 
 using namespace AnnotCloud;
@@ -25,9 +25,9 @@ using namespace Logger;
   Qt::WindowStaysOnTopHint
 
 #ifdef Q_OS_MAC
-#  define WINDOW_FLAGS WINDOW_FLAGS_BASE | Qt::FramelessWindowHint
+# define WINDOW_FLAGS WINDOW_FLAGS_BASE | Qt::FramelessWindowHint
 #else
-#  define WINDOW_FLAGS WINDOW_FLAGS_BASE | Qt::WindowTitleHint
+# define WINDOW_FLAGS WINDOW_FLAGS_BASE | Qt::WindowTitleHint
 #endif // Q_OS_MAC
 
 // - Constructions -

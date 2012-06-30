@@ -4,11 +4,11 @@
 #include "project/common/acpaths.h"
 #include "project/common/acsettings.h"
 #ifdef Q_WS_MAC
-#  include "mac/qtmac/qtmac.h"
-#  include "unix/qtunix/qtunix.h"
+# include "mac/qtmac/qtmac.h"
+# include "unix/qtunix/qtunix.h"
 #endif // Q_WS_MAC
 #ifdef Q_WS_WIN
-#  include "win/qtwin/qtwin.h"
+# include "win/qtwin/qtwin.h"
 #endif // Q_WS_WIN
 #include "module/qtext/filesystem.h"
 #include <QtGui/QDesktopServices>
@@ -21,7 +21,7 @@
 #include "module/debug/debug.h"
 
 #ifdef Q_WS_MAC
-#  define REZ_ICON_VIDEO  QCoreApplication::applicationDirPath() + "/../Resources/" "video.IconRez"
+# define REZ_ICON_VIDEO  QCoreApplication::applicationDirPath() + "/../Resources/" "video.IconRez"
 #endif // Q_WS_MAC
 
 // - Constructions -
@@ -101,7 +101,7 @@ AcLocationManager::createDownloadsLocation()
   Q_UNUSED(ok);
   DOUT("ok =" << ok);
 
-#elif defined Q_WS_WIN
+#elif defined(Q_WS_WIN)
   QString targetIni = path + "/" "desktop.ini";
   if (QFile::exists(targetIni))
     return;

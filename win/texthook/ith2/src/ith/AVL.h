@@ -5,7 +5,7 @@
 // TODO: clean up this file
 
 #ifdef _MSC_VER
-#  pragma warning(disable:4996) // C4996: unsafe function or variable used such as swprintf, wcscpy; alternatively use __CRT_SECURE_NO_WARNINGS
+# pragma warning(disable:4996) // C4996: unsafe function or variable used such as swprintf, wcscpy; alternatively use __CRT_SECURE_NO_WARNINGS
 #endif // _MSC_VER
 
 #define STACK_SIZE 32

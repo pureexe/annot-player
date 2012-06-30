@@ -5,6 +5,7 @@
 // 2/3/2012
 
 #include <QtCore/QHash>
+#include <QtCore/QObject>
 #include <QtCore/QString>
 
 QT_BEGIN_NAMESPACE

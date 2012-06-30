@@ -4,7 +4,7 @@
 #include "osdwindow.h"
 #include "module/qtext/eventlistener.h"
 #ifdef Q_WS_X11
-#  include "unix/qtx/qtx.h"
+# include "unix/qtx/qtx.h"
 #endif // Q_WS_X11
 #include <QtGui>
 
@@ -19,9 +19,9 @@
   Qt::CustomizeWindowHint
 
 #ifdef Q_WS_MAC
-#  define WINDOW_FLAGS WINDOW_FLAGS_BASE //| Qt::WindowStaysOnTopHint
+# define WINDOW_FLAGS WINDOW_FLAGS_BASE //| Qt::WindowStaysOnTopHint
 #else
-#  define WINDOW_FLAGS WINDOW_FLAGS_BASE
+# define WINDOW_FLAGS WINDOW_FLAGS_BASE
 #endif // Q_WS_MA
 
 

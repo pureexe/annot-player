@@ -2,17 +2,17 @@
 // 11/18/2011
 #include "project/common/acapplication.h"
 #ifdef Q_WS_WIN
-#  include "win/qtwin/qtwin.h"
+# include "win/qtwin/qtwin.h"
 #endif // Q_OS_WIN
 #ifdef Q_WS_MAC
-#  include "mac/qtmac/qtmac.h"
+# include "mac/qtmac/qtmac.h"
 #endif // Q_OS_MAC
 #ifdef Q_WS_X11
 extern "C" {
-#  include <sys/types.h>
-#  include <sys/stat.h>
-#  include <unistd.h>
-#  include <fcntl.h>
+# include <sys/types.h>
+# include <sys/stat.h>
+# include <unistd.h>
+# include <fcntl.h>
 } // extern "C"
 #endif // Q_WS_X11
 #include <QtGui>
@@ -93,7 +93,7 @@ AcApplication::isSingleInstance() const
   QList<ulong> pids = QtWin::getProcessIdsByName(processName);
   return pids.size() <= 1;
   return true;
-#elif defined Q_WS_X11
+#elif defined(Q_WS_X11)
   // See: http://www.linuxquestions.org/questions/programming-9/restricting-multiple-instance-of-a-program-242069/
   static int fd_lock = -1;
   if (fd_lock < 0) {

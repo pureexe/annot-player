@@ -6,7 +6,7 @@
 
 #include "mainwindow.h"
 #ifdef WITH_WIN_HOOK
-#  include "win/hook/hook.h"
+# include "win/hook/hook.h"
 #endif // WITH_WIN_HOOK
 #include <QtGui>
 
@@ -39,17 +39,18 @@ namespace slot_ { // anonymous slot_
     typedef QObject Base;
 
     MainWindow *w_;
-    QString url_;
+    QString suburl_;
+    QString refurl_;
 
   public:
-    ImportAnnotationsFromUrl(const QString &url, MainWindow *w)
-      : Base(w), w_(w), url_(url)
+    ImportAnnotationsFromUrl(const QString &suburl, const QString &refurl, MainWindow *w)
+      : Base(w), w_(w), suburl_(suburl), refurl_(refurl)
     { Q_ASSERT(w_); }
 
   public slots:
     void trigger()
     {
-      w_->importAnnotationsFromUrl(url_);
+      w_->importAnnotationsFromUrl(suburl_, refurl_);
       QTimer::singleShot(0, this, SLOT(deleteLater()));
     }
   };
@@ -126,12 +127,20 @@ namespace slot_ { // anonymous slot_
 
 namespace { namespace task_ { // anonymous
 
-  class updateAnnotations : public QRunnable
+  class updateOnlineAnnotations : public QRunnable
   {
     MainWindow *w_;
-    virtual void run() { w_->updateAnnotations(false); } // \reimp, async = false
+    virtual void run() { w_->updateOnlineAnnotations(false); } // \reimp, async = false
   public:
-    explicit updateAnnotations(MainWindow *w) : w_(w) { Q_ASSERT(w_); }
+    explicit updateOnlineAnnotations(MainWindow *w) : w_(w) { Q_ASSERT(w_); }
+  };
+
+  class updateOfflineAnnotations : public QRunnable
+  {
+    MainWindow *w_;
+    virtual void run() { w_->updateOfflineAnnotations(false); } // \reimp, async = false
+  public:
+    explicit updateOfflineAnnotations(MainWindow *w) : w_(w) { Q_ASSERT(w_); }
   };
 
   class invalidateMediaAndPlay : public QRunnable

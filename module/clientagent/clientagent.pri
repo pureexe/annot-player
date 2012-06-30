@@ -1,8 +1,6 @@
 # clientdelegate.pri
 # 10/6/2011
 
-include(../../config.pri)
-
 DEFINES += WITH_MODULE_CLIENTAGENT
 
 INCLUDEPATH += $$PWD

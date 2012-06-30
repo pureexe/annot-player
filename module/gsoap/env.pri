@@ -1,8 +1,6 @@
 # env.pri
 # 10/7/2011
 
-## TODO: Automatic generate this pri file!!
-
 ENV_SOAP_HOME=$$PWD/env
 
 INCLUDEPATH += $$PWD

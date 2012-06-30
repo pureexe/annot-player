@@ -29,7 +29,7 @@ public:
 
 public:
   virtual bool match(const QString &url) const; ///< \reimp
-  virtual void fetch(const QString &url); ///< \reimp
+  virtual void fetch(const QString &url, const QString &originalUrl); ///< \reimp
 
 public:
   static AnnotationList parseFile(const QString &fileName)
@@ -53,6 +53,9 @@ protected:
       a.setText(a.text() + " " + t);
     return a;
   }
+
+  static QByteArray skipXmlLeadingComment(const QByteArray &data)
+  { return skipLeadingCommentAndNewLine(data, "<!--", "-->"); }
 
 protected slots:
   void parseReply(QNetworkReply *reply);

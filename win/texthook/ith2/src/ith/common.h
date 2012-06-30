@@ -12,9 +12,9 @@
 //}
 
 #ifdef _MSC_VER
-#  pragma warning(disable:4100) // C4100: unreferenced formal parameter
-#  pragma warning(disable:4996) // C4996: unsafe function or variable used such as swprintf, wcscpy; alternatively use __CRT_SECURE_NO_WARNINGS
-#  pragma warning(disable:4146) // C4146: unary minus operator applied to unsigned type, result still unsigned
+# pragma warning(disable:4100) // C4100: unreferenced formal parameter
+# pragma warning(disable:4996) // C4996: unsafe function or variable used such as swprintf, wcscpy; alternatively use __CRT_SECURE_NO_WARNINGS
+# pragma warning(disable:4146) // C4146: unary minus operator applied to unsigned type, result still unsigned
 #endif // _MSC_VER
 
 #define ENGINE_KIRIKIRI 1

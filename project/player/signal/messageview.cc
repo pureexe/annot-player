@@ -7,7 +7,7 @@
 #include "global.h"
 #include "logger.h"
 #ifdef WITH_WIN_TEXTHOOK
-#  include "win/texthook/texthook.h"
+# include "win/texthook/texthook.h"
 #endif // WITH_WIN_TEXTHOOK
 #include "project/common/acui.h"
 #include "module/qtext/htmltag.h"

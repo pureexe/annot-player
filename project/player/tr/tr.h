@@ -264,6 +264,7 @@
 #define T_FORMAT_PROGRAM       0x78
 #define T_FORMAT_ANNOTATION    T_ANNOTATION
 #define T_FORMAT_DEVICE        T_DEVICE
+#define T_FORMAT_PREVIEW       T_PREVIEW
 
 // - Actions -
 
@@ -1519,5 +1520,7 @@
 #define T_TOOLTIP_INTERNET T_INTERNET
 
 #define T_DEVICE          0x103f
+#define T_PREVIEW         0x1040
+#define T_PIXEL           0x1041
 
 #endif // TR_H

@@ -10,16 +10,16 @@
 
 #include "x.h"
 extern "C" {
-#  include <libssh2.h>
-#  include <sys/ioctl.h>
-#  include <sys/socket.h>
-#  include <sys/types.h>
-#  include <sys/un.h>
-#  include <netinet/in.h>
-#  include <arpa/inet.h>
-#  include <fcntl.h>
-#  include <termios.h>
-#  include <unistd.h>
+# include <libssh2.h>
+# include <sys/ioctl.h>
+# include <sys/socket.h>
+# include <sys/types.h>
+# include <sys/un.h>
+# include <netinet/in.h>
+# include <arpa/inet.h>
+# include <fcntl.h>
+# include <termios.h>
+# include <unistd.h>
 } // extern "C"
 //#include <QtCore> // for debug use only -- TO BE REMOVED
 #include <cerrno>

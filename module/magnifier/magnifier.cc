@@ -3,13 +3,13 @@
 
 #include "module/magnifier/magnifier.h"
 #ifdef WITH_MODULE_IMAGEFILTER
-#  include "module/imagefilter/darknessimagefilter.h"
-#  include "module/imagefilter/fogimagefilter.h"
-#  include "module/imagefilter/rippleimagefilter.h"
-//#  include "module/imagefilter/glassimagefilter.h"
+# include "module/imagefilter/darknessimagefilter.h"
+# include "module/imagefilter/fogimagefilter.h"
+# include "module/imagefilter/rippleimagefilter.h"
+//# include "module/imagefilter/glassimagefilter.h"
 #endif // WITH_MODULE_IMAGEFILTER
 #ifdef WITH_MODULE_ANIMATION
-#  include "module/animation/fadeanimation.h"
+# include "module/animation/fadeanimation.h"
 #endif // WITH_MODULE_ANIMATION
 #include <QtGui>
 
@@ -19,9 +19,9 @@
   Qt::WindowStaysOnTopHint
 
 #ifdef Q_WS_MAC
-#  define WINDOW_FLAGS  WINDOW_FLAGS_BASE | Qt::FramelessWindowHint
+# define WINDOW_FLAGS  WINDOW_FLAGS_BASE | Qt::FramelessWindowHint
 #else
-#  define WINDOW_FLAGS  WINDOW_FLAGS_BASE
+# define WINDOW_FLAGS  WINDOW_FLAGS_BASE
 #endif // Q_WS_MAC
 
 #define MIN_SCALE       0.2

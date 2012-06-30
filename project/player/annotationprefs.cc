@@ -12,7 +12,7 @@
 #include "module/qtext/toolbutton.h"
 #include <QtGui>
 
-enum { FONTEDIT_WIDTH = 100, OFFSETEDIT_WIDTH = 50 };
+enum { FONTEDIT_WIDTH = 100, OFFSETEDIT_WIDTH = 50, RESOLUTIONEDIT_WIDTH = 50 };
 
 #define ICON_SIZE QSize(32, 16)
 
@@ -27,6 +27,7 @@ AnnotationPreferencesTab::init()
   createLayout();
 
   connect(settings_, SIGNAL(offsetChanged(int)), SLOT(loadOffsetIfVisible()));
+  connect(settings_, SIGNAL(positionResolutionChanged(int)), SLOT(loadResolutionIfVisible()));
 }
 
 void
@@ -41,7 +42,7 @@ AnnotationPreferencesTab::createLayout()
   connect(annotColorButton_, SIGNAL(clicked()), SLOT(promptAnnotationColor()));
 
   QLabel *annotColorLabel = ui->makeLabel(AcUi::BuddyHint, TR(T_ANNOTATION), tr("Halo Color"), annotColorButton_);
-  QToolButton *annotColorReset = ui->makeToolButton(AcUi::PushHint, TR(T_RESET), this, SLOT(resetAnnotationColor()));
+  QToolButton *annotColorReset = ui->makeToolButton(AcUi::PushHint, TR(T_DEFAULT), this, SLOT(resetAnnotationColor()));
 
   subtitleColorButton_ = new QtExt::ToolButton; {
     subtitleColorButton_->setStyleSheet(SS_TRANSPARENT);
@@ -51,6 +52,15 @@ AnnotationPreferencesTab::createLayout()
 
   QLabel *subtitleColorLabel = ui->makeLabel(AcUi::BuddyHint, TR(T_SUBTITLE), tr("Halo Color"), subtitleColorButton_);
   QToolButton *subtitleColorReset = ui->makeToolButton(AcUi::PushHint, TR(T_RESET), this, SLOT(resetSubtitleColor()));
+
+  highlightColorButton_ = new QtExt::ToolButton; {
+    highlightColorButton_->setStyleSheet(SS_TRANSPARENT);
+    highlightColorButton_->setToolTip(tr("Highlight Color"));
+  }
+  connect(highlightColorButton_, SIGNAL(clicked()), SLOT(promptHighlightColor()));
+
+  QLabel *highlightColorLabel = ui->makeLabel(AcUi::BuddyHint, tr("Highlight"), tr("Halo Color"), highlightColorButton_);
+  QToolButton *highlightColorReset = ui->makeToolButton(AcUi::PushHint, TR(T_RESET), this, SLOT(resetHighlightColor()));
 
   fontEdit_ = new QtExt::FontComboBox; {
     fontEdit_->setStyleSheet(ACSS_COMBOBOX);
@@ -88,6 +98,15 @@ AnnotationPreferencesTab::createLayout()
   offsetEdit_->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
   connect(offsetEdit_, SIGNAL(valueChanged(int)), SLOT(saveOffset()));
 
+  enum { MaxResolution = 100 }; // 100 pixel
+  resolutionEdit_ = new QtExt::SpinBox;
+  resolutionEdit_->setMaximum(MaxResolution);
+  resolutionEdit_->setMinimum(0);
+  resolutionEdit_->setToolTip(TR(T_PIXEL));
+  resolutionEdit_->setFixedWidth(RESOLUTIONEDIT_WIDTH);
+  resolutionEdit_->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+  connect(resolutionEdit_, SIGNAL(valueChanged(int)), SLOT(saveResolution()));
+
   // See: http://qt-project.org/doc/qt-4.8/stylesheet-examples.html#customizing-qspinbox
   //offsetEdit_->setStyleSheet(
   //  SS_BEGIN(QSpinBox)
@@ -97,8 +116,11 @@ AnnotationPreferencesTab::createLayout()
   //  SS_END
   //);
 
-  QLabel *offsetLabel = ui->makeLabel(AcUi::BuddyHint, tr("Offset"), TR(T_SECOND), offsetEdit_);
+  QLabel *offsetLabel = ui->makeLabel(AcUi::BuddyHint, tr("Offset"), tr("Offset in time"), offsetEdit_);
   QToolButton *offsetReset = ui->makeToolButton(AcUi::PushHint, TR(T_RESET), this, SLOT(resetOffset()));
+
+  QLabel *resolutionLabel = ui->makeLabel(AcUi::BuddyHint, tr("Resolution"), tr("Position resolution for floating annotations in pixels"), resolutionEdit_);
+  QToolButton *resolutionReset = ui->makeToolButton(AcUi::PushHint, TR(T_RESET), this, SLOT(resetResolution()));
 
   // Layouts
   QGridLayout *grid = new QGridLayout; {
@@ -124,9 +146,18 @@ AnnotationPreferencesTab::createLayout()
     grid->addWidget(fontEdit_, r, ++c);
     grid->addWidget(fontReset, r, ++c);
 
+    grid->addWidget(highlightColorLabel, r, ++c, Qt::AlignRight);
+    grid->addWidget(highlightColorButton_, r, ++c);
+    grid->addWidget(highlightColorReset, r, ++c);
+
+    grid->addWidget(resolutionLabel, ++r, c=0, Qt::AlignRight);
+    grid->addWidget(resolutionEdit_, r, ++c);
+    grid->addWidget(resolutionReset, r, ++c);
+
     grid->addWidget(offsetLabel, r, ++c, Qt::AlignRight);
     grid->addWidget(offsetEdit_, r, ++c);
     grid->addWidget(offsetReset, r, ++c);
+
 
     //grid->addWidget(cancelButton, ++r, c=0, Qt::AlignHCenter);
     //grid->addWidget(loginButton, r, ++c, Qt::AlignHCenter);
@@ -146,6 +177,10 @@ AnnotationPreferencesTab::save()
   saveChineseFont();
   saveJapaneseFont();
   saveOffset();
+  saveResolution();
+  //saveAnnotationColor();
+  //saveSubtitleColor();
+  //saveHighlightColor();
   return true;
 }
 
@@ -156,19 +191,25 @@ AnnotationPreferencesTab::load()
   loadChineseFont();
   loadJapaneseFont();
   loadOffset();
+  loadResolution();
   loadAnnotationColor();
   loadSubtitleColor();
+  loadHighlightColor();
 }
 
 void
 AnnotationPreferencesTab::loadFont()
-{ fontEdit_->setCurrentFont(QFont(settings_->fontFamily())); }
+{
+  // Has to load twice. no idea why ...
+  fontEdit_->setCurrentFont(QFont(settings_->fontFamily()));
+  fontEdit_->setCurrentFont(QFont(settings_->fontFamily()));
+}
 
 void
 AnnotationPreferencesTab::saveFont()
 {
-  QString font = fontEdit_->currentFont().family();
-  settings_->setFontFamily(font);
+  QString ff = fontEdit_->currentFont().family();
+  settings_->setFontFamily(ff);
   emit message(tr("font saved"));
 }
 
@@ -187,8 +228,8 @@ AnnotationPreferencesTab::loadJapaneseFont()
 void
 AnnotationPreferencesTab::saveJapaneseFont()
 {
-  QString font = japaneseFontEdit_->currentFont().family();
-  settings_->setJapaneseFontFamily(font);
+  QString ff = japaneseFontEdit_->currentFont().family();
+  settings_->setJapaneseFontFamily(ff);
   emit message(tr("Japanese font saved"));
 }
 
@@ -207,8 +248,8 @@ AnnotationPreferencesTab::loadChineseFont()
 void
 AnnotationPreferencesTab::saveChineseFont()
 {
-  QString font = chineseFontEdit_->currentFont().family();
-  settings_->setChineseFontFamily(font);
+  QString ff = chineseFontEdit_->currentFont().family();
+  settings_->setChineseFontFamily(ff);
   emit message(tr("Chinese font saved"));
 }
 
@@ -237,6 +278,25 @@ AnnotationPreferencesTab::resetOffset()
   settings_->resetOffset();
   loadOffset();
   emit message(tr("offset saved"));
+}
+
+void
+AnnotationPreferencesTab::loadResolution()
+{ resolutionEdit_->setValue(settings_->positionResolution()); }
+
+void
+AnnotationPreferencesTab::saveResolution()
+{
+  settings_->setPositionResolution(resolutionEdit_->value());
+  emit message(tr("resolution saved"));
+}
+
+void
+AnnotationPreferencesTab::resetResolution()
+{
+  settings_->resetPositionResolution();
+  loadResolution();
+  emit message(tr("resolution saved"));
 }
 
 // - Color -
@@ -297,6 +357,35 @@ AnnotationPreferencesTab::resetSubtitleColor()
   settings_->resetSubtitleColor();
   loadSubtitleColor();
   emit message(tr("subtitle color saved"));
+}
+
+void
+AnnotationPreferencesTab::promptHighlightColor()
+{
+  QColor c = QColorDialog::getColor(settings_->highlightColor(), this, tr("Highlight Color"));
+  if (c.isValid() &&
+      c != settings_->highlightColor()) {
+    settings_->setHighlightColor(c);
+    loadHighlightColor();
+    emit message(tr("highlight color saved"));
+  }
+}
+
+void
+AnnotationPreferencesTab::loadHighlightColor()
+{
+  QPixmap icon(ICON_SIZE);
+  icon.fill(settings_->highlightColor());
+  highlightColorButton_->setIcon(icon);
+  highlightColorButton_->setIconSize(icon.size());
+}
+
+void
+AnnotationPreferencesTab::resetHighlightColor()
+{
+  settings_->resetHighlightColor();
+  loadHighlightColor();
+  emit message(tr("highlight color saved"));
 }
 
 // EOF

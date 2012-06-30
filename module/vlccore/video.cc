@@ -3,8 +3,8 @@
 // 11/26/2011
 
 #ifdef _MSC_VER
-#  pragma warning (disable:4819)       // C4819: The file contains a character that cannot be represented in the current code page.
-#  pragma warning (disable:4996)       // C4996: MS' deprecated std functions orz.
+# pragma warning (disable:4819)       // C4819: The file contains a character that cannot be represented in the current code page.
+# pragma warning (disable:4996)       // C4996: MS' deprecated std functions orz.
 #endif // _MSC_VER
 
 #include "module/vlccore/video.h"
@@ -14,10 +14,10 @@
 #include "module/debug/debug.h"
 
 #ifndef MODULE_STRING
-#  define MODULE_STRING "main"  // needed by VLC
+# define MODULE_STRING "main"  // needed by VLC
 #endif // MODULE_STRING
 #ifdef _MSC_VER
-#  include <inttypes.h>
+# include <inttypes.h>
 #endif // _MSC_VER
 #include <vlc/vlc.h>
 #include <vlc/plugins/vlc_input.h>

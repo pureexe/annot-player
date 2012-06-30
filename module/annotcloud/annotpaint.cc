@@ -5,7 +5,7 @@
 #include "module/qtext/algorithm.h"
 #include "module/qtext/datetime.h"
 #ifdef WITH_QT_SVG
-#  include <QtSvg/QSvgGenerator>
+# include <QtSvg/QSvgGenerator>
 #endif // WITH_QT_SVG
 #include <QtGui/QPainter>
 #include <QtCore/QDateTime>
@@ -21,13 +21,13 @@
 #include "module/debug/debug.h"
 
 #ifdef __GNUC__
-#  pragma GCC diagnostic ignored "-Wparentheses" // suggest parentheses
+# pragma GCC diagnostic ignored "-Wparentheses" // suggest parentheses
 #endif // __GNUC__
 
 #ifdef Q_WS_WIN
-#  define ITALIC        false
+# define ITALIC        false
 #else
-#  define ITALIC        true
+# define ITALIC        true
 #endif // Q_WS_WIN
 
 enum LineColor

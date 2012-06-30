@@ -13,9 +13,9 @@
 #include <QtGui>
 
 #ifdef Q_OS_MAC
-#  define K_CTRL        "cmd"
+# define K_CTRL        "cmd"
 #else
-#  define K_CTRL        "Ctrl"
+# define K_CTRL        "Ctrl"
 #endif // Q_OS_MAC
 
 // - Constructions -
@@ -41,13 +41,13 @@ UrlDialog::createLayout()
   editStyleSheet_ = edit_->styleSheet();
   connect(edit_, SIGNAL(editTextChanged(QString)), SLOT(verifyEditText()));
   connect(edit_->lineEdit(), SIGNAL(returnPressed()), SLOT(open()));
-  AcComboEdit *edit = qobject_cast<AcComboEdit *>(edit_);
+  auto edit = qobject_cast<AcComboEdit *>(edit_);
   Q_ASSERT(edit);
   edit->setContextMenuFlags(edit->contextMenuFlags() | AcComboEdit::PasteAndGoAction);
 
-  saveButton_ = ui->makeToolButton(
-        AcUi::CheckHint, TR(T_SAVE), tr("Save the association online"));
-  saveButton_->setChecked(true);
+  //saveButton_ = ui->makeToolButton(
+  //      AcUi::CheckHint, TR(T_SAVE), tr("Save the association online"));
+  //saveButton_->setChecked(true);
 
   urlButton_ = ui->makeToolButton(
         AcUi::UrlHint, "", tr("Click to paste the URL example"), this, SLOT(showExampleUrl()));
@@ -86,7 +86,7 @@ UrlDialog::createLayout()
     footer->addWidget(clearButton);
     footer->addWidget(pasteButton);
     footer->addStretch();
-    footer->addWidget(saveButton_);
+    //footer->addWidget(saveButton_);
     footer->addWidget(openButton_);
 
     rows->setContentsMargins(9, 9, 9, 9);
@@ -121,7 +121,7 @@ UrlDialog::open()
     edit_->addItem(url);
 
   url = autoCompleteUrl(url);
-  emit urlEntered(url, saveButton_->isChecked());
+  emit urlEntered(url);
 }
 
 void
@@ -198,9 +198,9 @@ void
 UrlDialog::setExampleUrl(const QString &text)
 { urlButton_->setText(text); }
 
-void
-UrlDialog::setSave(bool t)
-{ saveButton_->setChecked(t); }
+//void
+//UrlDialog::setSave(bool t)
+//{ saveButton_->setChecked(t); }
 
 void
 UrlDialog::addHistory(const QString &url)
@@ -220,6 +220,7 @@ UrlDialog::setVisible(bool visible)
 {
   if (visible) {
     edit_->setFocus();
+    paste();
     verifyEditText();
   }
   Base::setVisible(visible);

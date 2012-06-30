@@ -74,7 +74,7 @@ public:
   const QString &name() const
   {
     if (name_.isEmpty())
-      const_cast<Self*>(this)->updateName();
+      const_cast<Self *>(this)->updateName();
     return name_;
   }
 

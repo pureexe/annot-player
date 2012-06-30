@@ -105,6 +105,7 @@ protected slots:
   void play();
   void browse();
   void save();
+  void saveLater();
 
   void refresh();
   void updateButtons();

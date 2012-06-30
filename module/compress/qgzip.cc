@@ -3,9 +3,9 @@
 
 #include "module/compress/qgzip.h"
 #ifdef WITH_GZIP
-#  include <zlib.h>
+# include <zlib.h>
 #else
-#  error "gzip is required"
+# error "gzip is required"
 #endif // WITH_GZIP
 #include <cstring>
 

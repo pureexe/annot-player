@@ -60,9 +60,9 @@ DwmWindowNotifier::winEvent(MSG *message, long *result)
 namespace static_ { // anonymous
   inline DwmWindowNotifier *windowNotifier() { static DwmWindowNotifier g; return &g; }
 } // namespace static_
-#  define DWM_NOTIFIER       static_::windowNotifier()
+# define DWM_NOTIFIER       static_::windowNotifier()
 #else
-#  define DWM_NOTIFIER       Q_ASSERT(0)
+# define DWM_NOTIFIER       Q_ASSERT(0)
 #endif // WITH_DWM_NOTIFIER
 
 // EOF

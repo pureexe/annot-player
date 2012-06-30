@@ -32,7 +32,7 @@ public:
 
 public:
   virtual bool match(const QString &url) const; ///< \reimp
-  virtual void fetch(const QString &url); ///< \reimp
+  virtual void fetch(const QString &url, const QString &originalUrl); ///< \reimp
 
 public:
   static AnnotationList parseFile(const QString &fileName, Format f = UnknownFormat)
@@ -94,6 +94,9 @@ protected:
 
   static Annotation parseAttribute(const QString &attr);
   static QString parseText(const QString &text);
+
+  static QByteArray skipJsonLeadingComment(const QByteArray &data)
+  { return skipLeadingCommentAndNewLine(data, "/*", "*/"); }
 
   static Annotation parseComment(const QString &attr, const QString &text)
   {

@@ -2,8 +2,6 @@
 # 2/2/2012
 # LUA template library for C++
 
-include(../../config.pri)
-
 DEFINES         += WITH_MODULE_LUATL
 DEPENDPATH      += $$PWD
 HEADERS         += \

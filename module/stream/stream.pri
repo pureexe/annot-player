@@ -1,8 +1,6 @@
 # stream.pri
 # 2/9/2012
 
-include(../../config.pri)
-
 DEFINES += WITH_MODULE_STREAM
 
 DEPENDPATH += $$PWD

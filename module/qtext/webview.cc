@@ -7,8 +7,8 @@
 #include "module/qtext/ss.h"
 #include "module/qtext/webpage.h"
 #ifdef WITH_MODULE_DOWNLOAD
-#  include "module/qtext/filesystem.h"
-#  include "module/download/download.h"
+# include "module/qtext/filesystem.h"
+# include "module/download/download.h"
 #endif // WITH_MODULE_DOWNLOAD
 #include <QtWebKit>
 #include <QtGui>
@@ -18,7 +18,7 @@
 #include "module/debug/debug.h"
 
 #ifdef __GNUC__
-#  pragma GCC diagnostic ignored "-Wparentheses" // suggest parentheses around assignment
+# pragma GCC diagnostic ignored "-Wparentheses" // suggest parentheses around assignment
 #endif // __GNUC__
 
 #define SS_WEBVIEW \
@@ -41,9 +41,9 @@
 #define SAVE_PATH       QDesktopServices::storageLocation(QDesktopServices::DesktopLocation)
 
 //#ifdef Q_WS_MAC
-//#  define K_CTRL        "cmd"
+//# define K_CTRL        "cmd"
 //#else
-//#  define K_CTRL        "Ctrl"
+//# define K_CTRL        "Ctrl"
 //#endif // Q_WS_MAC
 
 QString
@@ -208,7 +208,7 @@ QString
 QtExt::
 WebView::hoveredLink() const
 {
-  WebPage *p = qobject_cast<WebPage *>(page());
+  auto p = qobject_cast<WebPage *>(page());
   return p ? p->hoveredLink() : QString();
 }
 
@@ -623,9 +623,9 @@ WebView::invalidteSelection()
   }
 }
 
-void QtExt::WebView::scrollTop()    { WebPage *p = qobject_cast<WebPage *>(page()); if (p) p->scrollTop(); }
-void QtExt::WebView::scrollBottom() { WebPage *p = qobject_cast<WebPage *>(page()); if (p) p->scrollBottom(); }
-void QtExt::WebView::scrollLeft()   { WebPage *p = qobject_cast<WebPage *>(page()); if (p) p->scrollLeft(); }
-void QtExt::WebView::scrollRight()  { WebPage *p = qobject_cast<WebPage *>(page()); if (p) p->scrollRight(); }
+void QtExt::WebView::scrollTop()    { auto p = qobject_cast<WebPage *>(page()); if (p) p->scrollTop(); }
+void QtExt::WebView::scrollBottom() { auto p = qobject_cast<WebPage *>(page()); if (p) p->scrollBottom(); }
+void QtExt::WebView::scrollLeft()   { auto p = qobject_cast<WebPage *>(page()); if (p) p->scrollLeft(); }
+void QtExt::WebView::scrollRight()  { auto p = qobject_cast<WebPage *>(page()); if (p) p->scrollRight(); }
 
 // EOF

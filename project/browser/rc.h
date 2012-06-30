@@ -18,8 +18,8 @@
 
 #define RC_TR_EN        RC_PREFIX_TR "tr_en"
 #define RC_TR_JA        RC_PREFIX_TR "tr_ja"
-#define RC_TR_ZH        RC_PREFIX_TR "tr_zh"
-#define RC_TR_TW        RC_TR_ZH
+#define RC_TR_ZH_TW     RC_PREFIX_TR "tr_zh_TW"
+#define RC_TR_ZH_CN     RC_PREFIX_TR "tr_zh_CN"
 
 // - Images -
 

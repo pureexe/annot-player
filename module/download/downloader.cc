@@ -2,7 +2,7 @@
 // 2/4/2011
 #include "module/download/downloader.h"
 #ifdef WITH_MODULE_COMPRESS
-#  include "module/compress/qgzip.h"
+# include "module/compress/qgzip.h"
 #endif // WITH_MODULE_COMPRESS
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkReply>
@@ -29,7 +29,7 @@ Downloader::init()
   nam_ = new QNetworkAccessManager(this);
   connect(nam_, SIGNAL(finished(QNetworkReply*)), SLOT(save(QNetworkReply*)));
 
-  DownloaderController *c = DownloaderController::globalController();
+  auto c = DownloaderController::globalController();
   connect(this, SIGNAL(message(QString)), c, SIGNAL(message(QString)));
   connect(this, SIGNAL(error(QString)), c, SIGNAL(error(QString)));
   connect(this, SIGNAL(warning(QString)), c, SIGNAL(warning(QString)));
@@ -94,8 +94,7 @@ Downloader::get(const QUrl &url, const QString &header, bool async, int retries)
   QNetworkRequest request(url);
   if (!header.isEmpty()) {
     QHash<QString, QString> h = parseHttpHeader(header);
-    for (QHash<QString, QString>::ConstIterator
-         p = h.begin(); p != h.end(); ++p)
+    for (auto p = h.begin(); p != h.end(); ++p)
       request.setRawHeader(p.key().toAscii(), p.value().toAscii());
   }
 
@@ -140,8 +139,7 @@ Downloader::post(const QUrl &url, const QByteArray &data, const QString &header,
   QNetworkRequest request(url);
   if (!header.isEmpty()) {
     QHash<QString, QString> h = parseHttpHeader(header);
-    for (QHash<QString, QString>::ConstIterator
-         p = h.begin(); p != h.end(); ++p)
+    for (auto p = h.begin(); p != h.end(); ++p)
       request.setRawHeader(p.key().toAscii(), p.value().toAscii());
   }
   reply_ = nam_->post(request, data);

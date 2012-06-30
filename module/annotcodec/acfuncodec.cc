@@ -1,10 +1,14 @@
-// acfuncodec.cc
+﻿// acfuncodec.cc
 // 2/4/2012
 
 #include "module/annotcodec/acfuncodec.h"
 #include "module/annotcloud/annottag.h"
 #include "module/annotcloud/traits.h"
+#ifdef WITH_MODULE_ANNOTCACHE
+# include "module/annotcache/annotationcachemanager.h"
+#endif // WITH_MODULE_ANNOTCACHE
 #include "module/qtext/htmltag.h"
+#include "module/qtext/network.h"
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkReply>
 #include <QtNetwork/QNetworkRequest>
@@ -44,11 +48,13 @@ AcfunCodec::match(const QString &url) const
 }
 
 void
-AcfunCodec::fetch(const QString &url)
+AcfunCodec::fetch(const QString &url, const QString &originalUrl)
 {
   Q_ASSERT(match(url));
   DOUT("enter: url =" << url);
-  qnam_->get(QNetworkRequest(url));
+  QNetworkReply *reply = qnam_->get(QNetworkRequest(url));
+  QtExt::PublicNetworkReply::fromReply(reply)
+      ->setAttribute(QNetworkRequest::UserMax, originalUrl);
   DOUT("exit");
 }
 
@@ -70,18 +76,27 @@ AcfunCodec::parseReply(QNetworkReply *reply)
         + QString(" (%1/%2):").arg(QString::number(retry)).arg(QString::number(MaxRetries))
         + url
       );
-      fetch(url);
+
+      QString originalUrl = reply->attribute(QNetworkRequest::UserMax).toString();
+      fetch(url, originalUrl);
     } else
       emit error(tr("network error, failed to resolve media URL") + ": " + url);
     DOUT("exit: network error:" << reply->errorString());
     return;
   }
   retries_.remove(url);
-  AnnotationList l = parseDocument(reply->readAll(), Json);
+  QByteArray data = reply->readAll();
+  AnnotationList l = parseDocument(data, Json);
   if (l.isEmpty())
     emit error(tr("failed to resolve annotations from URL") + ": " + reply->url().toString());
-  else
-    emit fetched(l, reply->url().toString());
+  else {
+    QString url =reply->url().toString(),
+            originalUrl = reply->attribute(QNetworkRequest::UserMax).toString();
+#ifdef WITH_MODULE_ANNOTCACHE
+    AnnotationCacheManager::globalInstance()->saveData(data, originalUrl);
+#endif // WITH_MODULE_ANNOTCACHE
+    emit fetched(l, url, originalUrl);
+  }
   DOUT("exit: annots.size =" << l.size());
 }
 
@@ -136,9 +151,13 @@ AcfunCodec::parseJsonDocument(const QByteArray &data)
     return AnnotationList();
   }
 
+  // Comments will be skipped by QScriptEngine.
+  //data = skipJsonLeadingComment(data);
+
   // json parser: http://qtwiki.org/Parsing_JSON_with_QT_using_standard_QT_library
   QScriptEngine engine;
   QString json(data);
+
   QScriptValue root = engine.evaluate("(" + json + ")");
   if (!root.isValid()) {
     DOUT("exit: invalid JSON document");

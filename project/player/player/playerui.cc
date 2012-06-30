@@ -12,7 +12,7 @@
 #include "module/qtext/datetime.h"
 #include "module/annotcloud/annotation.h"
 #ifdef Q_OS_WIN
-#  include "win/qtwin/qtwin.h"
+# include "win/qtwin/qtwin.h"
 #endif // Q_OS_WIN
 #include "boost/foreach.hpp"
 #include <map>
@@ -22,15 +22,14 @@
 using namespace AnnotCloud;
 
 #ifdef Q_OS_MAC
-#  define K_CTRL        "cmd"
-#  define K_SHIFT       "shift"
+# define K_CTRL        "cmd"
+# define K_SHIFT       "shift"
 #else
-#  define K_CTRL        "Ctrl"
-#  define K_SHIFT       "Shift"
+# define K_CTRL        "Ctrl"
+# define K_SHIFT       "Shift"
 #endif // Q_OS_MAC
 
 /* jichi 7/25/2011: using boost is so bloated while less efficient than directly expanding the code.
-#include <boost/typeof/typeof.hpp>
 #include <boost/assign/list_of.hpp>
 namespace { // anonymous
   // Player connections
@@ -65,14 +64,14 @@ namespace { // anonymous
 void
 PlayerUi::connectPlayer()
 {
-  for (BOOST_AUTO(i, ::playerConnections_().begin()); i != ::playerConnections_().end(); ++i)
+  for (auto i = ::playerConnections_().begin(); i != ::playerConnections_().end(); ++i)
     connect(player_, i.key(), i.value());
 }
 
 void
 PlayerUi::disconnectPlayer()
 {
-  for (BOOST_AUTO(i, ::playerConnections_().begin()); i != ::playerConnections_().end(); ++i)
+  for (auto i = ::playerConnections_().begin(); i != ::playerConnections_().end(); ++i)
     disconnect(player_, i.key(), i.value());
 }
 */

@@ -6,7 +6,7 @@
 #include "logger.h"
 #include "application.h"
 #ifdef WITH_WIN_PICKER
-#  include "win/picker/picker.h"
+# include "win/picker/picker.h"
 #endif // WITH_WIN_PICKER
 #include "project/common/acui.h"
 #include <QtGui>
@@ -30,9 +30,9 @@ using namespace Logger;
   Qt::WindowStaysOnTopHint
 
 #ifdef Q_WS_MAC
-#  define WINDOW_FLAGS  WINDOW_FLAGS_BASE | Qt::FramelessWindowHint
+# define WINDOW_FLAGS  WINDOW_FLAGS_BASE | Qt::FramelessWindowHint
 #else
-#  define WINDOW_FLAGS  WINDOW_FLAGS_BASE
+# define WINDOW_FLAGS  WINDOW_FLAGS_BASE
 #endif // Q_WS_MAC
 
 PickDialog::PickDialog(QWidget *parent)

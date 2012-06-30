@@ -5,10 +5,13 @@
 #include "annotationgraphicsstyle.h"
 #include "signalhub.h"
 #include <QtCore>
-#include <boost/typeof/typeof.hpp>
 
 //#define DEBUG "annotationgraphicsitemscheduler"
 #include "module/debug/debug.h"
+
+#ifdef __clang__
+# pragma clang diagnostic ignored "-Wlogical-op-parentheses" // '&&' within '||'
+#endif // __clang__
 
 // - Properties -
 
@@ -26,7 +29,7 @@ void
 AnnotationGraphicsItemScheduler::clear()
 {
   //cells_.clear();
-  for (BOOST_AUTO(p, cells_.begin()); p != cells_.end(); p++)
+  for (auto p = cells_.begin(); p != cells_.end(); ++p)
     p.value() = 0;
   lastCell_ = std::make_pair(QPoint(), qint64(0));
   pauseTime_ = resumeTime_ = 0;
@@ -36,14 +39,14 @@ AnnotationGraphicsItemScheduler::clear()
 
 // Use std time() rather than QTime::currentTime() to improve performance.
 int
-AnnotationGraphicsItemScheduler::nextY(int window_height, int visible_time, qreal scale, AnnotationGraphicsItem::Style style)
+AnnotationGraphicsItemScheduler::nextY(int window_height, int visible_time, AnnotationGraphicsItem::Style style)
 {
   Q_ASSERT(hub_);
   enum { LaneCount = 200 };                      // number of vertical lanes, large enough
 
   Q_ASSERT(LaneCount * LaneHeight * 0.5 > 1200); // min scale is 0.5
 
-  int laneHeight = LaneHeight * scale;
+  int laneHeight = LaneHeight * scale_;
   if (!laneHeight)
     return 0;
 
@@ -55,7 +58,7 @@ AnnotationGraphicsItemScheduler::nextY(int window_height, int visible_time, qrea
   int wait_time = 500;
   switch (style) {
   case AnnotationGraphicsItem::FloatStyle:
-  case AnnotationGraphicsItem::FlyStyle: wait_time += visible_time / 5; break;
+  case AnnotationGraphicsItem::FlyStyle: wait_time += visible_time / 4; break;
   default: wait_time += visible_time;
   }
 
@@ -110,13 +113,13 @@ AnnotationGraphicsItemScheduler::nextY(int window_height, int visible_time, qrea
 // - Motionless Scheduling -
 
 QPointF
-AnnotationGraphicsItemScheduler::nextPos(const QSize &windowSize, const QSizeF &itemSize, int visibleMsecs, qreal scale)
+AnnotationGraphicsItemScheduler::nextPos(const QSize &windowSize, const QSizeF &itemSize, int visibleMsecs)
 {
   enum { MarginLeft = 10 };
-  enum { CellWidth = 250, CellHeight = int(LaneHeight * 1.2) };
+  enum { CellWidth = 250, CellFullScreenWidth = 300, CellHeight = int(LaneHeight * 1.2) };
   enum { MaxColumnCount = 2 }; // no more than 3 columns
-  int cellWidth = CellWidth * scale,
-      cellHeight = CellHeight * scale;
+  int cellWidth = scale_ * (hub_->isFullScreenWindowMode() ? CellFullScreenWidth : CellWidth),
+      cellHeight = scale_ * CellHeight;
   if (!cellWidth || !cellHeight)
     return QPointF();
   int cellXCount = (windowSize.width() - MarginLeft)  / cellWidth,

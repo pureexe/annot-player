@@ -5,7 +5,7 @@
 // 10/7/2011
 
 #ifndef WITH_MODULE_GSOAP
-#  error "gsoap is required"
+# error "gsoap is required"
 #endif // WITH_MODULE_GSOAP
 
 #define CLIENT_SERVICE_PORT     233 // infact useless

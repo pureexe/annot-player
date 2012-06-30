@@ -4,10 +4,8 @@
 #include "datamanager.h"
 #include "module/annotcloud/annotation.h"
 #include "module/annotcloud/traits.h"
-#include <boost/typeof/typeof.hpp>
 #include <QtCore>
 #include <ctime>
-#include <cmath>
 
 using namespace AnnotCloud;
 
@@ -99,15 +97,14 @@ AnnotationFilter::removeBlockedAnnotationWithId(qint64 id)
   if (blockedAnnotations_.isEmpty())
     return;
 
-  BOOST_AUTO(p, blockedAnnotations_.begin());
+  auto p = blockedAnnotations_.begin();
   bool update = false;
-  while (p != blockedAnnotations_.end()) {
+  while (p != blockedAnnotations_.end())
     if (p->id() == id) {
       p = blockedAnnotations_.erase(p);
       update = true;
     } else
       ++p;
-  }
 
   if (update)
     emit blockedAnnotationsChanged(blockedAnnotations_);

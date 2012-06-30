@@ -37,7 +37,7 @@ HelpDialog::HelpDialog(QWidget *parent)
 // - Properties -
 
 QUrl
-HelpDialog::urlForLanguage(QLocale::Language lang)
+HelpDialog::urlForLanguage(int lang)
 {
   switch (lang) {
   case QLocale::Japanese: return QString(G_HELPPAGE_URL "/ja");
@@ -53,9 +53,7 @@ void
 HelpDialog::setVisible(bool visible)
 {
   if (visible) {
-    QUrl url = urlForLanguage(
-      (QLocale::Language)AcSettings::globalSettings()->language()
-    );
+    QUrl url = urlForLanguage(AcSettings::globalSettings()->language());
     webView()->load(url);
   }
   Base::setVisible(visible);

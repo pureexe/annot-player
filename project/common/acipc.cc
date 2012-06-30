@@ -3,13 +3,13 @@
 
 #include "project/common/acipc.h"
 #ifdef WITH_MODULE_METACALL
-#  include "module/metacall/metacallfilter.h"
+# include "module/metacall/metacallfilter.h"
 #endif // WITH_MODULE_METACALL
 #ifdef Q_WS_WIN
-#  include "win/qtwin/qtwin.h"
+# include "win/qtwin/qtwin.h"
 #endif // Q_WS_WIN
 #ifdef Q_WS_MAC
-#  include "mac/qtmac/qtmac.h"
+# include "mac/qtmac/qtmac.h"
 #endif // Q_WS_MAC
 #include <QtNetwork/QHostAddress>
 #include <QtCore>

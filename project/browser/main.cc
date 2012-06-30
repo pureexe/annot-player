@@ -9,10 +9,10 @@
 #include "project/common/acui.h"
 //#include "module/download/downloader.h"
 #ifdef WITH_MODULE_QT
-#  include "module/qt/qtrc.h"
+# include "module/qt/qtrc.h"
 #endif // WITH_MODULE_QT
 #ifdef Q_WS_WIN
-#  include "win/qtwin/qtwin.h"
+# include "win/qtwin/qtwin.h"
 #endif // Q_WS_WIN
 #include <QtWebKit/QWebSettings>
 //#include <QtNetwork/QNetworkAccessManager>
@@ -20,8 +20,13 @@
 #include <QtNetwork/QNetworkReply>
 #include <QtGui>
 
+
 #define DEBUG "main"
 #include "module/debug/debug.h"
+
+#ifdef __clang__
+# pragma clang diagnostic ignored "-Wlogical-op-parentheses" // '&&' within '||'
+#endif // __clang__
 
 // - Startup stages -
 
@@ -35,14 +40,13 @@ namespace { // anonymous
 
   // i18n
 
-  inline QTranslator *translatorForLanguage(int lang)
+  inline QTranslator *translatorForLanguage(int lang, int script = 0)
   {
     QString qm;
     switch (lang) {
     case QLocale::English: qm = RC_TR_EN; break;
     case QLocale::Japanese: qm = RC_TR_JA; break;
-    case QLocale::Chinese: qm = RC_TR_ZH; break;
-    case QLocale::Taiwan: qm = RC_TR_TW; break;
+    case QLocale::Chinese: qm = script == QLocale::SimplifiedChineseScript ? RC_TR_ZH_CN : RC_TR_ZH_TW; break;
     default: qm = RC_TR_EN;
     }
 
@@ -52,17 +56,15 @@ namespace { // anonymous
   }
 
 #ifdef WITH_MODULE_QT
-  inline QTranslator *qtTranslatorForLanguage(int lang)
+  inline QTranslator *qtTranslatorForLanguage(int lang, int script = 0)
   {
-    QString qm;
+    const char *qm = 0;
     switch (lang) {
-    case QLocale::English: break;
     case QLocale::Japanese: qm = "qt_ja"; break;
-    case QLocale::Chinese: qm = "qt_zh_CN"; break;
-    case QLocale::Taiwan: qm = "qt_zh_TW"; break;
+    case QLocale::Chinese: qm = script == QLocale::SimplifiedChineseScript ? "qt_zh_CN" : "qt_zh_TW"; break;
     }
 
-    if (!qm.isEmpty()) {
+    if (qm) {
       QTranslator *t = new QTranslator(qApp);
       if (t->load(qm, QTRC_PREFIX_TR))
         return t;
@@ -95,17 +97,21 @@ main(int argc, char *argv[])
   AcSettings *ac = AcSettings::globalSettings();
   Settings *settings = Settings::globalSettings();
   {
-    int lang = ac->language();
-    if (!lang) {
-      lang =  QLocale::system().language();
-      ac->setLanguage(lang);
+    int lang = ac->language(),
+        script = ac->languageScript();
+    if (!lang ||
+        lang == QLocale::Chinese && !script) {
+      const QLocale system = QLocale::system();
+      lang = system.language();
+      script = system.script();
+      ac->setLanguage(lang, script);
     }
-    QTranslator *t = translatorForLanguage(lang);
+    QTranslator *t = translatorForLanguage(lang, script);
     Q_ASSERT(t);
     if (t)
       a.installTranslator(t);
 #ifdef WITH_MODULE_QT
-    t = qtTranslatorForLanguage(lang);
+    t = qtTranslatorForLanguage(lang, script);
     if (t)
       a.installTranslator(t);
 #endif // WITH_MODULE_QT

@@ -7,19 +7,19 @@
 
 #include "module/vlchttp/httpstreamsession.h"
 #ifdef WITH_MODULE_STREAM
-#  include "module/stream/bufferedremotestream.h"
-#  include "module/stream/securebufferedfifostream.h"
+# include "module/stream/bufferedremotestream.h"
+# include "module/stream/securebufferedfifostream.h"
 #else
-#  error "stream module is required"
+# error "stream module is required"
 #endif // WITH_MODULE_STREAM
 #ifdef WITH_MODULE_MEDIACODEC
-#  include "module/mediacodec/flvcodec.h"
-#  include "module/mediacodec/flvmerge.h"
+# include "module/mediacodec/flvcodec.h"
+# include "module/mediacodec/flvmerge.h"
 #else
-#  error "mediacodec module is required"
+# error "mediacodec module is required"
 #endif // WITH_MODULE_MEDIACODEC
 #ifdef WITH_MODULE_MRLRESOLVER
-#  include "module/mrlresolver/luamrlresolver.h"
+# include "module/mrlresolver/luamrlresolver.h"
 #endif // WITH_MODULE_LUARESOLVER
 #include "module/qtext/algorithm.h"
 #include "module/qtext/network.h"
@@ -104,10 +104,8 @@ HttpStreamSession::receivedSize() const
 
   qint64 ret = 0;
   foreach (InputStream *in, ins_) {
-    BufferedRemoteStream *r = dynamic_cast<BufferedRemoteStream *>(in);
-    Q_ASSERT(r);
-    if (r)
-      ret += r->availableSize();
+    auto p = static_cast<BufferedRemoteStream *>(in);
+    ret += p->availableSize();
   }
   return ret;
 }
@@ -118,7 +116,7 @@ HttpStreamSession::contentType() const
   if (ins_.isEmpty())
     return QString();
 
-  RemoteStream *in = dynamic_cast<RemoteStream *>(ins_.first());
+  auto in = static_cast<RemoteStream *>(ins_.first());
   Q_ASSERT(in);
   return in ? in->contentType() : QString();
 }
@@ -130,10 +128,8 @@ HttpStreamSession::updateSize()
     return;
   qint64 size = 0;
   foreach (InputStream *in, ins_) {
-    RemoteStream *r = dynamic_cast<RemoteStream *>(in);
-    Q_ASSERT(r);
-    if (r)
-      size += r->size();
+    auto p = static_cast<RemoteStream *>(in);
+    size += p->size();
   }
 
   if (size)
@@ -244,9 +240,8 @@ HttpStreamSession::stop()
     progressTask_->stop();
 
   foreach (InputStream *in, ins_) {
-    RemoteStream *r = dynamic_cast<RemoteStream *>(in);
-    if (r)
-      r->stop();
+    auto p = static_cast<RemoteStream *>(in);
+    p->stop();
   }
 
   sleep_.stop();
@@ -380,7 +375,7 @@ HttpStreamSession::run()
       const QUrl url = urls_[count];
       //if (isStopped()) {
       //  foreach (InputStream *is, QtExt::revertList(ins_)) { // revert list so that nam will be deleted later
-      //    RemoteStream *p = dynamic_cast<RemoteStream *>(is);
+      //    auto p = static_cast<RemoteStream *>(is);
       //    p->stop();
       //    delete p;
       //  }
@@ -462,7 +457,7 @@ HttpStreamSession::run()
 
   if (!ok || isStopped()) {
     foreach (InputStream *in, QtExt::revertList(ins_)) { // revert list so that nam will be deleted later
-      RemoteStream *p = dynamic_cast<RemoteStream *>(in);
+      auto p = static_cast<RemoteStream *>(in);
       p->stop();
       delete p;
     }

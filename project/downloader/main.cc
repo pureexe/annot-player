@@ -7,9 +7,11 @@
 #include "settings.h"
 #include "project/common/acdownloader.h"
 #include "project/common/acsettings.h"
+#include "project/common/acpaths.h"
 #include "project/common/acui.h"
+//#include "module/annotcodec/annotationcachemanager.h"
 #ifdef WITH_MODULE_QT
-#  include "module/qt/qtrc.h"
+# include "module/qt/qtrc.h"
 #endif // WITH_MODULE_QT
 #include "module/mrlresolver/mrlresolversettings.h"
 //#include "module/download/downloader.h"
@@ -22,7 +24,7 @@
 #include "module/debug/debug.h"
 
 #ifdef __GNUC__
-#  pragma GCC diagnostic ignored "-Wparentheses" // suggest parentheses
+# pragma GCC diagnostic ignored "-Wparentheses" // suggest parentheses
 #endif // __GNUC__
 
 #define DEFAULT_SIZE    QSize(400, 300)
@@ -52,14 +54,13 @@ namespace { // anonymous
 
   // i18n
 
-  inline QTranslator *translatorForLanguage(int lang)
+  inline QTranslator *translatorForLanguage(int lang, int script = 0)
   {
     QString qm;
     switch (lang) {
     case QLocale::English: qm = RC_TR_EN; break;
     case QLocale::Japanese: qm = RC_TR_JA; break;
-    case QLocale::Chinese: qm = RC_TR_ZH; break;
-    case QLocale::Taiwan: qm = RC_TR_TW; break;
+    case QLocale::Chinese: qm = script == QLocale::SimplifiedChineseScript ? RC_TR_ZH_CN : RC_TR_ZH_TW; break;
     default: qm = RC_TR_EN;
     }
 
@@ -69,17 +70,15 @@ namespace { // anonymous
   }
 
 #ifdef WITH_MODULE_QT
-  inline QTranslator *qtTranslatorForLanguage(int lang)
+  inline QTranslator *qtTranslatorForLanguage(int lang, int script = 0)
   {
-    QString qm;
+    const char *qm = 0;
     switch (lang) {
-    case QLocale::English: break;
     case QLocale::Japanese: qm = "qt_ja"; break;
-    case QLocale::Chinese: qm = "qt_zh_CN"; break;
-    case QLocale::Taiwan: qm = "qt_zh_TW"; break;
+    case QLocale::Chinese: qm = script == QLocale::SimplifiedChineseScript ? "qt_zh_CN" : "qt_zh_TW"; break;
     }
 
-    if (!qm.isEmpty()) {
+    if (qm) {
       QTranslator *t = new QTranslator(qApp);
       if (t->load(qm, QTRC_PREFIX_TR))
         return t;
@@ -124,17 +123,21 @@ main(int argc, char *argv[])
 
   AcSettings *settings = AcSettings::globalSettings();
   {
-    int lang = settings->language();
-    if (!lang) {
-      lang =  QLocale::system().language();
-      settings->setLanguage(lang);
+    int lang = settings->language(),
+        script = settings->languageScript();
+    if (!lang ||
+        lang == QLocale::Chinese && !script) {
+      const QLocale system = QLocale::system();
+      lang =  system.language();
+      script =  system.script();
+      settings->setLanguage(lang, script);
     }
-    QTranslator *t = translatorForLanguage(lang);
+    QTranslator *t = translatorForLanguage(lang, script);
     Q_ASSERT(t);
     if (t)
       a.installTranslator(t);
 #ifdef WITH_MODULE_QT
-    t = qtTranslatorForLanguage(lang);
+    t = qtTranslatorForLanguage(lang, script);
     if (t)
       a.installTranslator(t);
 #endif // WITH_MODULE_QT
@@ -154,6 +157,9 @@ main(int argc, char *argv[])
     ui->setAeroEnabled(settings->isAeroEnabled());
 #endif // Q_WS_WIN
   }
+
+  // Set cache location
+  //AnnotationCacheManager::globalInstance()->setLocation(AC_PATH_CACHES);
 
   // Set network proxy
   if (settings->isProxyEnabled()) {

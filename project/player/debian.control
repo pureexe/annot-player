@@ -1,11 +1,11 @@
 # debian/control
 # 11/26/2011
 Source: annot-player
-Standards-Version: 0.1.6.3
+Standards-Version: 0.1.6.4
 Section: video
 Maintainer: Annot Cloud <annotcloud@gmail.com>
 Priority: optional
-Build-Depends: debhelper (>= 8.0.0), liblua5.2-dev, libvlc-dev (>= 2.0.0), qt4-dev-tools
+Build-Depends: debhelper (>= 8.0.0), liblua5.1-dev, libvlc-dev (>= 2.0.0), qt4-dev-tools
 Homepage: http://annot.me
 Vcs-Git: git://code.google.com/p/annot-player
 Vcs-Browser: http://code.google.com/p/annot-player/source/checkout

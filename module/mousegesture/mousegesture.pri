@@ -2,8 +2,6 @@
 # 4/25/2012
 # See: http://doc.qt.nokia.com/qq/qq18-mousegestures.html
 
-include(../../config.pri)
-
 DEFINES += WITH_MODULE_MOUSEGESTURE
 
 DEPENDPATH += $$PWD

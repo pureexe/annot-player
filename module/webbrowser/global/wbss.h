@@ -51,9 +51,9 @@
 #define SS_STATUSBAR_ERROR      SS_STATUSBAR_(red,bold)
 #define SS_STATUSBAR_NOTIFY     SS_STATUSBAR_(red,normal)
 #ifdef Q_WS_X11
-#  define SS_STATUSBAR_MESSAGE  SS_STATUSBAR_(black,normal)
+# define SS_STATUSBAR_MESSAGE  SS_STATUSBAR_(black,normal)
 #else
-#  define SS_STATUSBAR_MESSAGE  SS_STATUSBAR_(cyan,normal)
+# define SS_STATUSBAR_MESSAGE  SS_STATUSBAR_(cyan,normal)
 #endif // Q_WS_X11
 
 // - Tool button -

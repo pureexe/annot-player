@@ -10,7 +10,7 @@
 #include "tr.h"
 #include "signalhub.h"
 #ifdef Q_OS_WIN
-#  include "win/qtwin/qtwin.h"
+# include "win/qtwin/qtwin.h"
 #endif // Q_OS_WIN
 #include "project/common/acss.h"
 #include "module/qtext/toolbutton.h"
@@ -152,13 +152,13 @@ EmbeddedPlayerUi::createLayout()
     //playButton()->setProperty("minimumRadius", int(PlayButtonMinimumSize));
   }
 
-  QtExt::WithSizeHint*
+  auto
   w = dynamic_cast<QtExt::WithSizeHint *>(inputComboBox());
-  if (w)
-    w->setSizeHint(QSize(INPUTLINE_MINWIDTH, INPUTLINE_MINHEIGHT));
+  Q_ASSERT(w);
+  w->setSizeHint(QSize(INPUTLINE_MINWIDTH, INPUTLINE_MINHEIGHT));
   w = dynamic_cast<QtExt::WithSizeHint *>(prefixComboBox());
-  if (w)
-    w->setSizeHint(QSize(G_PREFIXLINE_MAXWIDTH, INPUTLINE_MINHEIGHT));
+  Q_ASSERT(w);
+  w->setSizeHint(QSize(G_PREFIXLINE_MAXWIDTH, INPUTLINE_MINHEIGHT));
 
   volumeSlider()->setMaximumWidth(VolumeSliderMaximumWidth);
 
@@ -455,9 +455,9 @@ void
 EmbeddedPlayerUi::updateInputCountButton()
 {
 #ifdef Q_WS_MAC
-#  define PADDING "    "
+# define PADDING "    "
 #else
-#  define PADDING "   "
+# define PADDING "   "
 #endif // Q_WS_MAC
   Base::updateInputCountButton();
   QToolButton *b = inputCountButton();

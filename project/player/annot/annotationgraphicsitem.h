@@ -30,6 +30,8 @@ class AnnotationGraphicsItem : public QGraphicsTextItem
   Q_DISABLE_COPY(AnnotationGraphicsItem)
   Q_PROPERTY(QPointF pos READ pos WRITE setPos)
   Q_PROPERTY(QPointF relativePos READ relativePos WRITE setRelativePos)
+  Q_PROPERTY(qreal x READ x WRITE setX)
+  Q_PROPERTY(qreal relativeX READ relativeX WRITE setRelativeXSmoothly)
   Q_PROPERTY(qreal opacity READ opacity WRITE setOpacity)
 
   typedef AnnotationGraphicsItem Self;
@@ -60,6 +62,7 @@ public:
   void updateToolTip();
 
   const QString &text() const { return text_; } ///< tidied HTML
+  const QString &plainText() const;
 
   bool autoDelete() const { return !scene(); }
   bool isMetaVisible() const;
@@ -83,6 +86,8 @@ public:
   QString summary() const;
 
   QPointF relativePos() const { return pos() - origin_; }
+  qreal relativeX() const { return x() - origin_.x(); }
+  qreal relativeY() const { return y() - origin_.y(); }
 
   qreal opacity() const;
 
@@ -103,6 +108,9 @@ public slots:
   void setAvatarVisibleAndUpdate(bool t);
   void setVisible(bool t) { Base::setVisible(t); }
   void setRelativePos(const QPointF &offset) { setPos(origin_ + offset); }
+  void setRelativeX(qreal xOffset) { setX(origin_.x() + xOffset); }
+  void setRelativeY(qreal yOffset) { setY(origin_.y() + yOffset); }
+  void setRelativeXSmoothly(qreal xOffset);
   void setScale(qreal value) { Base::setScale(value); }
   void showMe();   // Add me to graphics scene, and autmatic remove me.
   void selectMe();
@@ -127,6 +135,7 @@ protected slots:
   void searchWithBing();
 
   void translate(int lang);
+  void showTraditionalChinese();
   void translateToEnglish();
   void translateToJapanese();
   void translateToChinese();
@@ -147,9 +156,11 @@ protected slots:
   void blockMe();
   void blockUser();
 
+  void setPositionResolution(int value) { positionResolution_ = value; }
+
 protected:
   bool isEditable() const;
-  void fly(const QPointF &from, const QPointF &to, int msecs);
+  void fly(qreal fromX, qreal toX, qreal y, int msecs);
   void escapeTo(const QPointF &pos, int msecs);
   void rushTo(const QPointF &pos, int msecs);
   //void stay(const QPointF &pos, int msecs);
@@ -193,6 +204,7 @@ private:
   Annotation annot_;
   QString prefix_, suffix_; // cached
   QString text_; // cached
+  mutable QString plainText_; // cached
   AnnotationGraphicsEffect *effect_;
 
   QPointF origin_;
@@ -202,6 +214,7 @@ private:
   SignalHub *hub_;
 
   Style style_;
+  int positionResolution_;
   QTimer *removeLaterTimer_;
   QPropertyAnimation *flyAni_,*flyOpacityAni_,
                      *escapeAni_, *rushAni_,

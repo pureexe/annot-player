@@ -51,7 +51,7 @@ vlcglview_vout(vlcglview_t *handle)
   VLCOpenGLVoutView *view = vlcobject_cast<VLCOpenGLVoutView *>(handle);
   VLCOpenGLVoutView_public *glview = reinterpret_cast<VLCOpenGLVoutView_public *>(view);
 
-  Q_ASSERT(glview == glview->p_vout->p_sys->o_glview);
+  //Q_ASSERT(glview == glview->p_vout->p_sys->o_glview);
   return glview->p_vout;
 }
 

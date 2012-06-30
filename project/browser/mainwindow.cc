@@ -24,10 +24,10 @@
 #include "module/qtext/networkcookie.h"
 #include "module/qtext/webview.h"
 #ifdef WITH_MODULE_MAGNIFIER
-#  include "module/magnifier/magnifier.h"
+# include "module/magnifier/magnifier.h"
 #endif // WITH_MODULE_MAGNIFIER
 #ifdef Q_WS_WIN
-#  include "win/qtwin/qtwin.h"
+# include "win/qtwin/qtwin.h"
 #endif // Q_WS_WIN
 #include <boost/tuple/tuple.hpp>
 #include <QtGui>
@@ -37,7 +37,7 @@
 #include "module/debug/debug.h"
 
 #ifdef __GNUC__
-#  pragma GCC diagnostic ignored "-Wparentheses" // suggest parentheses
+# pragma GCC diagnostic ignored "-Wparentheses" // suggest parentheses
 #endif // __GNUC__
 
 #define HOMEPAGE_EN    "http://www.youtube.com/FUNimation"
@@ -46,9 +46,9 @@
 
 #define MIN_SIZE        QSize(400, 300)
 #ifdef Q_WS_WIN
-#  define DEFAULT_SIZE  QSize(1000 + 9*2, 650)
+# define DEFAULT_SIZE  QSize(1000 + 9*2, 650)
 #else
-#  define DEFAULT_SIZE  QSize(1000 + 9*2, 710) // width for nicovideo.jp + margin*2, height for newtab on mac
+# define DEFAULT_SIZE  QSize(1000 + 9*2, 710) // width for nicovideo.jp + margin*2, height for newtab on mac
 #endif // Q_WS_WIN
 
 // - Construction -
@@ -62,13 +62,13 @@
   Qt::WindowCloseButtonHint )
 
 #ifdef Q_WS_WIN
-#  define TEXT_SIZE_SCALE 0.9
+# define TEXT_SIZE_SCALE 0.9
 #else
-#  define TEXT_SIZE_SCALE 1.0
+# define TEXT_SIZE_SCALE 1.0
 #endif // Q_WS_MAC
 
 #ifdef Q_WS_MAC
-#  define USE_MDI
+# define USE_MDI
 #endif // Q_WS_MAC
 
 MainWindow::MainWindow(QWidget *parent)
@@ -103,6 +103,7 @@ MainWindow::MainWindow(QWidget *parent)
     << QString("http://static.loli.my/ad-images")
     << QString("http://ads.nicovideo.jp")
     << QString("http://taobao.com")
+    << QString("http://taobaocdn.com")
     << QString("http://u17.com")
     << QString("http://u17i.com")
     << QString("http://u17t.com")
@@ -448,7 +449,7 @@ MainWindow::event(QEvent *e)
   switch (e->type()) {
   case QEvent::FileOpen: // See: http://www.qtcentre.org/wiki/index.php?title=Opening_documents_in_the_Mac_OS_X_Finder
     {
-      QFileOpenEvent *fe = static_cast<QFileOpenEvent *>(e);
+      auto fe = static_cast<QFileOpenEvent *>(e);
       Q_ASSERT(fe);
       QString url = fe->file();
       if (!url.isEmpty())
@@ -564,7 +565,7 @@ MainWindow::newWindow()
 #ifdef Q_WS_MAC
   Q_UNUSED(app);
   //ok = QtMac::open(app);
-#elif defined Q_WS_WIN
+#elif defined(Q_WS_WIN)
   ok = QProcess::startDetached('"' + app + '"');
 #else
   ok = QProcess::startDetached(app);
@@ -657,7 +658,7 @@ MainWindow::isValidWindowSize(const QSize &size) const
 void
 MainWindow::clip()
 {
-  QtExt::WebView *w = qobject_cast<QtExt::WebView *>(tabWidget());
+  auto w = qobject_cast<QtExt::WebView *>(tabWidget());
   if (w)
     w->clip();
 }
@@ -665,7 +666,7 @@ MainWindow::clip()
 void
 MainWindow::reload()
 {
-  QtExt::WebView *w = qobject_cast<QtExt::WebView *>(tabWidget());
+  auto w = qobject_cast<QtExt::WebView *>(tabWidget());
   if (w)
     w->reload();
 }
@@ -673,7 +674,7 @@ MainWindow::reload()
 void
 MainWindow::stop()
 {
-  QtExt::WebView *w = qobject_cast<QtExt::WebView *>(tabWidget());
+  auto w = qobject_cast<QtExt::WebView *>(tabWidget());
   if (w)
     w->stop();
 }
@@ -681,7 +682,7 @@ MainWindow::stop()
 void
 MainWindow::zoomIn()
 {
-  QtExt::WebView *w = qobject_cast<QtExt::WebView *>(tabWidget());
+  auto w = qobject_cast<QtExt::WebView *>(tabWidget());
   if (w)
     w->zoomIn();
 }
@@ -689,7 +690,7 @@ MainWindow::zoomIn()
 void
 MainWindow::zoomOut()
 {
-  QtExt::WebView *w = qobject_cast<QtExt::WebView *>(tabWidget());
+  auto w = qobject_cast<QtExt::WebView *>(tabWidget());
   if (w)
     w->zoomOut();
 }
@@ -697,7 +698,7 @@ MainWindow::zoomOut()
 void
 MainWindow::zoomReset()
 {
-  QtExt::WebView *w = qobject_cast<QtExt::WebView *>(tabWidget());
+  auto w = qobject_cast<QtExt::WebView *>(tabWidget());
   if (w)
     w->zoomReset();
 }
@@ -705,7 +706,7 @@ MainWindow::zoomReset()
 void
 MainWindow::inspect()
 {
-  QWebView *w = qobject_cast<QWebView *>(tabWidget());
+  auto w = qobject_cast<QWebView *>(tabWidget());
   if (w) {
     QWebPage *page = w->page();
     if (page)
@@ -716,7 +717,7 @@ MainWindow::inspect()
 void
 MainWindow::scrollTop()
 {
-  QtExt::WebView *w = qobject_cast<QtExt::WebView *>(tabWidget());
+  auto w = qobject_cast<QtExt::WebView *>(tabWidget());
   if (w)
     w->scrollTop();
 }
@@ -724,7 +725,7 @@ MainWindow::scrollTop()
 void
 MainWindow::scrollBottom()
 {
-  QtExt::WebView *w = qobject_cast<QtExt::WebView *>(tabWidget());
+  auto w = qobject_cast<QtExt::WebView *>(tabWidget());
   if (w)
     w->scrollBottom();
 }

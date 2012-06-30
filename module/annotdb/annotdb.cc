@@ -18,7 +18,7 @@
 #include <QtSql>
 
 #ifdef __GNUC__
-#  pragma GCC diagnostic ignored "-Wparentheses" // suggest parentheses around && within ||
+# pragma GCC diagnostic ignored "-Wparentheses" // suggest parentheses around && within ||
 #endif // __GNUC__
 
 //#define DEBUG "annotdb"
@@ -27,7 +27,7 @@
 using namespace AnnotCloud;
 
 //#ifdef Q_OS_WIN
-//#  define ANNOTDB_TUNE
+//# define ANNOTDB_TUNE
 //#endif // Q_OS_WIN
 
 // - Threads -
@@ -100,6 +100,8 @@ AnnotationDatabase::open(const QString &fileName)
       db_.close();
       DOUT("try to remove corrupted db:" << fileName);
       QFile::remove(fileName);
+    } else {
+      insertUser(User::guest());
     }
   }
 
@@ -358,7 +360,9 @@ AnnotationDatabase::isAliasExists(const Alias &alias) const
     return false;
   }
 
-  bool ret = query.size();
+  //bool ret = query.size() > 0; // NOT supported by sqlite
+  //DOUT("query size =" << query.size());
+  bool ret = query.next();
   DOUT("exit: ret =" << ret);
   return ret;
 }
@@ -370,7 +374,8 @@ AnnotationDatabase::insertAliases(const AliasList &l)
   Q_ASSERT(isValid());
   bool ok = true;
   foreach (const Alias &a, l)
-    if (disposed_ || !isAliasExists(a) && !insertAlias(a)) {
+    if (disposed_ ||
+        !isAliasExists(a) && !insertAlias(a)) {
        DOUT("failed at id =" << a.id() << ", ignored");
        ok = false;
     }

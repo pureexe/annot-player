@@ -9,9 +9,9 @@
 #include <cstdlib>
 
 #ifdef Q_WS_WIN
-#  include <qt_windows.h>
-#  include <io.h>
-#  include <fcntl.h>
+# include <qt_windows.h>
+# include <io.h>
+# include <fcntl.h>
 #endif
 
 namespace { // anonymous
@@ -38,8 +38,8 @@ namespace { // anonymous, regexp
       return false;
     if (regExpWords.count() > strWords.count())
       return false;
-    QStringList::ConstIterator regExpIt = regExpWords.begin();
-    QStringList::ConstIterator strIt = strWords.begin();
+    QStringList::ConstIterator regExpIt = regExpWords.begin(),
+                               strIt = strWords.begin();
     while (strIt != strWords.end() && regExpIt != regExpWords.end()) {
       if (*regExpIt == "*" || *regExpIt == "_") {
         regExpIt++;
@@ -682,7 +682,7 @@ QString AimlParser::executeCommand(const QString &commandStr)
   si.wShowWindow = 0;
   QString exec = QString("cmd.exe /c \"") + commandStr + "\"";
   create = CreateProcess(NULL,                   // The full path of app to launch
-               (unsigned short*)const_cast<char*>(exec.toAscii().constData()),  // Command line parameters
+               (unsigned short *)const_cast<char*>(exec.toAscii().constData()),  // Command line parameters
                NULL,                   // Default process security attributes
                NULL,                   // Default thread security attributes
                TRUE,                   // Inherit handles from the parent
@@ -1393,7 +1393,7 @@ QString AimlParser::executeCommand(const QString &commandStr)
   si.wShowWindow = 0;
   QString exec = QString("cmd.exe /c \"") + commandStr + "\"";
   create = CreateProcess(NULL,                   // The full path of app to launch
-               (unsigned short*)const_cast<char*>(exec.toAscii().constData()),  // Command line parameters
+               (unsigned short *)const_cast<char*>(exec.toAscii().constData()),  // Command line parameters
                NULL,                   // Default process security attributes
                NULL,                   // Default thread security attributes
                TRUE,                   // Inherit handles from the parent

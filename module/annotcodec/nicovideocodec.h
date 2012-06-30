@@ -23,9 +23,9 @@ public:
 
 public:
   virtual bool match(const QString &url) const; ///< \reimp
-  virtual void fetch(const QString &url); ///< \reimp
+  virtual void fetch(const QString &url, const QString &originalUrl); ///< \reimp
 
-  void fetchLocalFile(const QString &path);
+  void fetchLocalFile(const QString &path, const QString &originalUrl);
 
 public:
   static AnnotationList parseFile(const QString &fileName)
@@ -38,6 +38,9 @@ public:
 protected:
   static QString parseText(const QString &text);
   static QString parsePrefix(const QString &text);
+
+  static QByteArray skipXmlLeadingComment(const QByteArray &data)
+  { return skipLeadingCommentAndNewLine(data, "<!--", "-->"); }
 };
 
 #endif // ANNOTATIONCODEC_H

@@ -4,7 +4,7 @@
 #include "mp4box.h"
 #include "module/mediacodec/mp4codec.h"
 #ifdef WITH_GPAC
-#  include "gpac/gpac.h"
+# include "gpac/gpac.h"
 #endif // WITH_GPAC
 #include <QtCore/QCoreApplication>
 #include <QtCore/QFile>

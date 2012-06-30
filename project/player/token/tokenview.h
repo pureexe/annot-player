@@ -7,6 +7,7 @@
 #include "project/common/acwindow.h"
 #include "module/annotcloud/token.h"
 #include "module/annotcloud/alias.h"
+#include "module/searchengine/searchenginefactory.h"
 #include <QtCore/QModelIndex>
 
 QT_BEGIN_NAMESPACE
@@ -24,6 +25,7 @@ class AcFilteredTableView;
 class AddAliasDialog;
 class DataManager;
 class ServerAgent;
+class SignalHub;
 
 class TokenView : public AcWindow
 {
@@ -37,8 +39,8 @@ class TokenView : public AcWindow
   typedef AnnotCloud::Alias Alias;
   typedef AnnotCloud::AliasList AliasList;
 
-  Token token_;
-  AliasList aliases_;
+  //Token token_;
+  //AliasList aliases_;
 
 protected:
   enum AliasHeaderData {
@@ -57,7 +59,7 @@ protected:
   };
 
 public:
-  TokenView(DataManager *data, ServerAgent *server, QWidget *parent = 0);
+  TokenView(DataManager *data, ServerAgent *server, SignalHub *hub, QWidget *parent = 0);
 
   //qint64 userId() const;
   //void setUserId(qint64 uid);
@@ -67,12 +69,15 @@ signals:
   void aliasDeletedWithId(qint64 id);
   void tokenBlessedWithId(qint64 tid);
   void tokenCursedWithId(qint64 tid);
+  void updateAnnotationsRequested();
+  void openUrlRequested(QString url);
+  void searchRequested(int engine, const QString &key);
 
   // - Properties -
 public:
-  const Token &token() const { return token_; }
-  Token &token() { return token_; }
-  bool hasToken() const;
+  //const Token &token() const { return token_; }
+  //Token &token() { return token_; }
+  //bool hasToken() const;
 
 protected:
   QModelIndex currentIndex() const;
@@ -80,10 +85,11 @@ protected:
   // - Slots -
 public slots:
   void refresh();
-  void setToken(const Token &token);
-  void clearToken(); ///< Clear token
+  //void setToken(const Token &token);
+  //void clearToken(); ///< Clear token
+  void invalidateToken();
 
-  void setSource(const QString &source);
+  //void setSource(const QString &source);
 
   void setAliases(const AliasList &l);
   void addAlias(const Alias &alias);
@@ -91,15 +97,15 @@ public slots:
   void clearAliases();
 
   void addAlias();
-  void bless();
-  void curse();
+  //void bless();
+  //void curse();
 
   // - Events -
 public:
   virtual void setVisible(bool visible); ///< \reimp
 protected slots:
-  void setActive(bool t);
-  void updateTokenLabels();
+  void updateLabels();
+  void updateButtons();
 
   void submitAlias(const QString &alias, int type, qint32 language);
 
@@ -128,11 +134,26 @@ protected:
 protected slots:
   void deleteAlias();
   void copyAlias();
-  void openSource();
+  void openAliasUrl();
+  void setActive(bool active);
 
   qint64 currentAliasId() const;
   qint64 currentAliasUserId() const;
   QString currentAliasText() const;
+  int currentAliasType() const;
+
+protected slots:
+  void searchAliasWithGoogle() { emit searchRequested(SearchEngineFactory::Google, currentAliasText()); }
+  void searchAliasWithGoogleImages() { emit searchRequested(SearchEngineFactory::GoogleImages, currentAliasText()); }
+  void searchAliasWithBing()   { emit searchRequested(SearchEngineFactory::Bing, currentAliasText()); }
+  void searchAliasWithNicovideo() { emit searchRequested(SearchEngineFactory::Nicovideo, currentAliasText()); }
+  void searchAliasWithBilibili() { emit searchRequested(SearchEngineFactory::Bilibili, currentAliasText()); }
+  void searchAliasWithAcfun()  { emit searchRequested(SearchEngineFactory::Acfun, currentAliasText()); }
+  void searchAliasWithYoutube() { emit searchRequested(SearchEngineFactory::Youtube, currentAliasText()); }
+  void searchAliasWithYouku()  { emit searchRequested(SearchEngineFactory::Youku, currentAliasText()); }
+  void searchAliasWithWikiEn() { emit searchRequested(SearchEngineFactory::WikiEn, currentAliasText()); }
+  void searchAliasWithWikiJa() { emit searchRequested(SearchEngineFactory::WikiJa, currentAliasText()); }
+  void searchAliasWithWikiZh() { emit searchRequested(SearchEngineFactory::WikiZh, currentAliasText()); }
 
   // - Implementations -
 protected:
@@ -141,33 +162,40 @@ protected:
 private:
   void createLayout();
   void createContextMenu();
+  void createSearchEngines();
+  void createSearchMenu();
 
 private:
+  bool active_;
   DataManager *data_;
   ServerAgent *server_;
-  bool active_;
+  SignalHub *hub_;
   //qint64 userId_;
   QStandardItemModel *sourceModel_; // for alias
   QSortFilterProxyModel *proxyModel_;
   AcFilteredTableView *tableView_; // for alias
 
-  QLabel *createDateLabel_,
-         *annotCountLabel_,
-         *blessedCountLabel_,
-         *cursedCountLabel_,
-         *visitedCountLabel_;
+  //QLabel *createDateLabel_,
+  //       *annotCountLabel_,
+  //       *blessedCountLabel_,
+  //       *cursedCountLabel_,
+  //       *visitedCountLabel_;
 
-  QToolButton *sourceButton_;
+  QToolButton *addButton_,
+              *updateButton_;
 
-  QMenu *contextMenu_;
+  QMenu *contextMenu_,
+        *searchMenu_;
   QAction *copyAliasAct_,
-          *deleteAliasAct_;
+          *deleteAliasAct_,
+          *openAliasUrlAct_;
           //*editAliasAct_,
           //*blockAliasAct_,
           //*blessAliasAct_,
           //*curseAliasAct_;
 
   AddAliasDialog *aliasDialog_;
+  QList<SearchEngine *> searchEngines_;
 };
 
 #endif // TOKENVIEW_H

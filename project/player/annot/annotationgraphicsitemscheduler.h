@@ -29,6 +29,9 @@ class AnnotationGraphicsItemScheduler : public QObject
   typedef QObject Base;
 
   SignalHub *hub_;
+
+  qreal scale_;
+
   qint64 pauseTime_,
          resumeTime_;
 
@@ -40,20 +43,24 @@ signals:
 
 public:
   explicit AnnotationGraphicsItemScheduler(SignalHub *hub, QObject *parent = 0)
-    : Base(parent), hub_(hub), pauseTime_(0), resumeTime_(0) { Q_ASSERT(hub); }
+    : Base(parent), hub_(hub), scale_(1.0), pauseTime_(0), resumeTime_(0) { Q_ASSERT(hub); }
+
+  qreal scale() const { return scale_; }
 
 public slots:
   void pause();
   void resume();
   void clear();
 
+  void setScale(qreal value) { scale_ = value; }
+
   // - Float Scheduling -
 public:
-  int nextY(int windowHeight, int visibleMsecs, qreal scale, AnnotationGraphicsItem::Style style);
+  int nextY(int windowHeight, int visibleMsecs, AnnotationGraphicsItem::Style style);
 
   // - Motionless Scheduling -
 public:
-  QPointF nextPos(const QSize &windowSize, const QSizeF &itemSize, int visibleMsecs, qreal scale);
+  QPointF nextPos(const QSize &windowSize, const QSizeF &itemSize, int visibleMsecs);
 };
 
 #endif // ANNOTATIONGRAPHICSITEMSCHEDULER_H

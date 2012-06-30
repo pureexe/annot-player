@@ -3,11 +3,12 @@
 #include "application.h"
 #include "global.h"
 #ifdef Q_WS_WIN
-#  include "win/qtwin/qtwin.h"
+# include "win/qtwin/qtwin.h"
 #endif // Q_WS_WIN
 #ifdef Q_WS_MAC
-#  include "mac/qtmac/qtmac.h"
+# include "mac/qtmac/qtmac.h"
 #endif // Q_WS_MAC
+#include "project/common/acpaths.h"
 #include <QtCore/QDir>
 
 #define DEBUG "application"
@@ -43,12 +44,17 @@ Application::~Application()
 void
 Application::createDirectories()
 {
-  QDir profile(G_PATH_PROFILE);
-  if (!profile.exists())
-    profile.mkpath(profile.absolutePath());
-  QDir logs(G_PATH_LOGS);
-  if (!logs.exists())
-    logs.mkpath(logs.absolutePath());
+  QDir d(AC_PATH_CACHES);
+  if (!d.exists())
+    d.mkpath(d.absolutePath());
+
+  d = QDir(G_PATH_PROFILE);
+  if (!d.exists())
+    d.mkpath(d.absolutePath());
+
+  d = QDir(G_PATH_LOGS);
+  if (!d.exists())
+    d.mkpath(d.absolutePath());
 }
 
 // EOF

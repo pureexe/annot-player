@@ -52,58 +52,41 @@ http://qt-project.org/wiki/Category:Add-ons
 - goei2 everyday 1h at least
 - writing proposal
 - scan and send material
-- get certification for driver license
 - ask for reference letters
-- car certification goto dmv
-- car certification goto walmart
+- car tax  goto dmv
+- car inspection goto walmart
+
 
 # features
-  - acfun
-    - motionless scheduling
-    - avatar
-    - catch/push annot
-    - statistics
-    - select annot and show userid
-    - delete annot
-    - scale/direction
-    - annot time shift
-  - local file
-    - update latest
-  - browser
-    - downloader
-    - nicovideo
-    - translation
-    - youku
+- create a demo video for download annotation xml
 
-  - nico
-    - motionless scheduling
-    - avatar
-    - catch/push annot
-    - statistics
-    - select annot and show userid
-    - delete annot
-    - scale/direction
-    - annot time shift
-  - browser
-    - downloader
-    - nicovideo
-    - translation
-    - youku
+# 0.1.6.5
 
-  - galgame
-    - translation
-      - channel
-      - encoding
-    - annotation
-
-# 0.1.6.4
-
-- translation
-  - BING api si depricated after Aug 1!!!!!
-    - steal Google API again.
-  - check if it is possible to bypass apploc on Chinese Windows XP
+- downloader
+  - debug downloader
+    - start single task when running
+    - delete single task when running
+    - add/delete/start/stop multiple task
+    - add multiple task without waiting
+- mac
+  - fixme; drag-drop is broken
 - player
-  - debug register DVD/VCD SDVD
+  context menu to totally disable annotation
+  - add notification textedit to topleft
+    to show important message once such as volume, etc
+    - need an object for tracking
+    - alternative, make osdwindow the same geometry as the target view rather then full screen
+
+- browser
+  - need a annotdown module
+  - option to download subtitle only to desktop
+- player
+  - debug annotation submit when alias does not exist
+
+- galgame
+  - download and debug DCIII
+
+- player
   - eliminate osdwindow
     - using setAttribute(Qt::WA_TranslucentBackground);
       - use a qobject with timer for tracking rather than hardcode to annotationview
@@ -114,27 +97,28 @@ http://qt-project.org/wiki/Category:Add-ons
     - create a pseodu object saving current window
     - eliminite osdwindow for embedded player
     - eliminite osdwindow for annotationview
-  - double click fullscreen screen to pause
-    - after pause, show two big button: resume, and fullscreen
-      - fullscreen
-      - minimize
-      - play
-      - stop
-    - design it as QUICK LAUNCH similar to appstore or galgame
+  - use an delete-at-once alternative osdconsole
 
-- linux
-  - update to lua5.2
-- player
-  - FIXME: CTRL+=  and CTRL+SHIFT+= sometimes do work, maybe osdwindow has focus?
-- common
-  - add background to spinbox and timeedit
-- windows fixme
-  - player
-    - debug close video crash
-    - debug hang when close current video
-- mac
-  - open file broken due to slow startup
-  - drag drop is not working
+- browser
+  - LATER: need a downloadmanager, using treeview
+    also prepare for future reuse
+- downloader
+  - able to download subtitle as well
+
+# 0.1.7.0
+
+- player windows
+  - check if it is possible to bypass apploc on Chinese Windows XP
+  - figure out how to force recache fonts in libvlc
+    - force load freetype module similar to vlc http plugin
+    modules/text_renderer
+    use the same way as how I flash video with http vlc plugin
+
+- translation
+  - steal Google API again without appkey.
+    evaluate javascript in translate google
+    http://stackoverflow.com/questions/6151668/alternative-to-google-translate-api
+  - BING api will be depricated after Aug 1!!!!!
 
 - player
   - player/downloader
@@ -144,12 +128,55 @@ http://qt-project.org/wiki/Category:Add-ons
      deploy in windows xp to see if it works
      - requires explorerframe.dll, might not available on windows xp
 
+- player
+  - change livemode to toggle
+    in live play mode, it is the same as before, except all annotations also went to live mode
+
+- player
+  - fixme: open from explorer cannot resolve subtitle
+    - it must because current directory changed
+  - fixme: infinite retry downloading annotations
+
+- downlaoder
+  BUG: the way to get next taskId in downloader is incorrect
+- player
+  - fixme: annotationview contextmenu/doubleclick might crash
+- common
+  - add background to spinbox and timeedit
+- windows fixme
+  - player
+    - debug close video crash
+    - debug hang when close current video
+
+- server
+  - finish based memory-less stateless robot at server side
+cloud/bot
+table bot_message
+message_id session_id message_pos user_id message_create_time message_create_ip message_text
+table bot_memory
+memory_id user_id memory_create_ip memory_create_time  memory_type memory_first memory_second
+
 ## LATER
+
+- player
+  - double click fullscreen screen to pause
+    - after pause, show two big button: resume, and fullscreen
+      - fullscreen
+      - minimize
+      - play
+      - stop
+    - design it as QUICK LAUNCH similar to appstore or galgame
+- mac
+  - open file broken due to slow startup
+  - drag drop is not working
 
 - downloader
   - use treeview instead
  - player
   - able to stream more than 1 file at the same time, and switch between diff stream session
+
+-fixme
+  - register DVD/VCD SDVD: diff audiocd from video dvd
 
 - player
   - reuse indicator icon from my website
@@ -341,3 +368,9 @@ http://qt-project.org/wiki/Category:Add-ons
 - qunit
 http://www.youtube.com/watch?v=P4kv-AoAJ-Q
 https://gitorious.org/quint
+
+##
+# Code Snips
+##
+- enable drag/drop image to textedit
+ http://stackoverflow.com/questions/3254652/several-ways-of-placing-an-image-in-a-qtextedit
