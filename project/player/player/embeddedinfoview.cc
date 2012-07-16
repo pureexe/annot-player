@@ -48,8 +48,10 @@ EmbeddedInfoView::EmbeddedInfoView(Player *player, DataManager *data, SignalHub 
 
   { // Outline font
     QGraphicsEffect *e = AcUi::globalInstance()->makeHaloEffect(QColor("orange")); // orange is the complementary color of cyan
-    e->setProperty("opacity", 0.95);
-    setGraphicsEffect(e);
+    if (e) {
+      e->setProperty("opacity", 0.95);
+      setGraphicsEffect(e);
+    }
   }
 
   connect(player_, SIGNAL(hueChanged(int)), SLOT(refresh()));

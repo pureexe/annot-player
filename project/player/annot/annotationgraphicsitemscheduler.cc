@@ -47,7 +47,7 @@ AnnotationGraphicsItemScheduler::nextY(int windowHeight, int itemHeight, int vis
 {
   Q_ASSERT(hub_);
   // min scale is 0.5, LaneHeight is around 30, 2000 is the max vertical resolution
-  static_assert(LaneCount * LaneHeight * 0.5 > 2000, "insufficient vertical lanes");
+  static_assert(LaneCount * LaneHeight / 2 > 2000, "insufficient vertical lanes");
 
   int laneHeight = LaneHeight * scale_;
   if (!laneHeight)

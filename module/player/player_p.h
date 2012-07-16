@@ -226,7 +226,7 @@ namespace { namespace detail {
   mp_handle::reset()
   {
 #ifdef Q_WS_MAC
-    ::vlc_reset_env();
+    detail::vlc_reset_env();
 #endif // Q_WS_MAC
 
     if (!media_list_.isEmpty()) {

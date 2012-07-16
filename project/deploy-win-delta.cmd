@@ -121,7 +121,7 @@ cp -Rv "%VLC_HOME%"/{%VLC_DATA%} . || exit /b 1
 
 ::rm -Rfv plugins || exit /b 1
 ::mkdir plugins || exit /b 1
-cp -Rv "%VLC_HOME%"/plugins/*/*.dll plugins/
+::cp -Rv "%VLC_HOME%"/plugins/*/*.dll plugins/
 rm -fv plugins/*.dat* || exit /b 1
 
 :: FIXME: playlist plugin bug in VLC 2.0.2

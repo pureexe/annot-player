@@ -83,6 +83,10 @@ AcUi::makeHaloEffect(ulong hints)
 QGraphicsEffect*
 AcUi::makeHaloEffect(const QColor &c)
 {
+#ifdef Q_WS_MAC
+  Q_UNUSED(c);
+  return 0;
+#else
   enum { offset = 1, radius = 16 };
   auto e = new
 #ifdef WITH_MODULE_GRAPHICSEFFECT
@@ -96,6 +100,7 @@ AcUi::makeHaloEffect(const QColor &c)
   if (c.isValid())
     e->setColor(c);
   return e;
+#endif // Q_WS_MAC
 }
 
 bool

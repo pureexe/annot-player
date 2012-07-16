@@ -31,8 +31,10 @@ OsdConsole::OsdConsole(QWidget *parent)
   }
   { // Outline font
     QGraphicsEffect *e = AcUi::globalInstance()->makeHaloEffect(Qt::yellow);
-    e->setProperty("opacity", 0.95);
-    setGraphicsEffect(e);
+    if (e) {
+      e->setProperty("opacity", 0.95);
+      setGraphicsEffect(e);
+    }
   }
 
   timer_ = new QTimer(this);
