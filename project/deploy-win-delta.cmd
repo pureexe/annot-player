@@ -3,11 +3,12 @@
 setlocal
 cd /d d:/dev/build || exit /b 1
 
-set MAJOR=0.1.6
-set MINOR=4
-set VERSION=%MAJOR%.%MINOR%
+set MAJOR=0.1.7
+set MINOR=0
+::set VERSION=%MAJOR%.%MINOR%
+set VERSION=%MAJOR%
 ::set PREVMAJOR=%MAJOR%
-set PREVMAJOR=%MAJOR%
+set PREVMAJOR=0.1.6
 set APP=annot-player
 set TARGET=Annot Stream
 set ZIPFILE=%APP%-%PREVMAJOR%-%VERSION%-delta-win.zip
@@ -51,8 +52,10 @@ set OPENSSL_DLLS=libeay32.dll,ssleay32.dll
 set ZLIB_DLL=zlib1.dll
 
 ::set VLC_HOME=/Volumes/win/Program Files/VideoLAN/VLC
+::set VLC_HOME=/Volumes/local/Applications/VideoLAN/VLC
+set VLC_HOME=D:/Applications/VideoLAN/VLC
 set VLC_DLLS=libvlc.dll,libvlccore.dll
-::set VLC_DATA=plugins,lua,locale
+set VLC_DATA=plugins,lua,locale
 
 set BUILD=/Volumes/local/dev/annot-build-desktop/build.win
 set SOURCE=/Volumes/local/dev/annot
@@ -69,9 +72,9 @@ rm -Rf "%TARGET%"
 mkdir "%TARGET%"
 cd "%TARGET%" || exit /b 1
 
-::cp -v "%BUILD%/Annot Browser.exe" . || exit /b 1
-::cp -v "%BUILD%/Annot Downloader.exe" . || exit /b 1
-::cp -v "%BUILD%/Annot Player.exe" . || exit /b 1
+cp -v "%BUILD%/Annot Browser.exe" . || exit /b 1
+cp -v "%BUILD%/Annot Downloader.exe" . || exit /b 1
+cp -v "%BUILD%/Annot Player.exe" . || exit /b 1
 
 cp -v "%SOURCE%/README" "Read Me.txt" || exit /b 1
 unix2dos "Read Me.txt"
@@ -102,6 +105,7 @@ cd Data || exit /b 1
 
 ::cp -v "%MSVC_HOME%"/{%MSVC_DLLS%} . || exit /b 1
 ::cp -Rv "%MSVC90_REDIST%" . || exit /b 1
+cp -v "%VLC_HOME%"/{%VLC_DLLS%} . || exit /b 1
 cp -v "%ITH_HOME%"/bin/{%ITH_DLLS%} . || exit /b 1
 ::cp -v "%OPENSSL_HOME%"/{%OPENSSL_DLLS%} . || exit /b 1
 ::cp -v "%GPAC_HOME%"/bin/{%GPAC_DLLS%} . || exit /b 1
@@ -113,12 +117,15 @@ cp -v "%ITH_HOME%"/bin/{%ITH_DLLS%} . || exit /b 1
 ::cp -v "%CURL_HOME%"/bin/%CURL_BIN% . || exit /b 1
 ::cp -v "%GZIP_HOME%"/bin/%GZIP_BIN% . || exit /b 1
 
-::cp -Rv "%VLC_HOME%"/{%VLC_DATA%} . || exit /b 1
+cp -Rv "%VLC_HOME%"/{%VLC_DATA%} . || exit /b 1
 
 ::rm -Rfv plugins || exit /b 1
 ::mkdir plugins || exit /b 1
-::cp -Rv "%VLC_HOME%"/plugins/*/*.dll plugins/
-::rm -fv plugins/*.dat*
+cp -Rv "%VLC_HOME%"/plugins/*/*.dll plugins/
+rm -fv plugins/*.dat* || exit /b 1
+
+:: FIXME: playlist plugin bug in VLC 2.0.2
+cp -v "%VLC_HOME%"/../VLC-2.0.1/plugins/demux/libplaylist_plugin.dll plugins/demux/ || exit /b 1
 
 ::cp -v "%BUILD%"/*.{exe,dll} . || exit /b 1
 cp -v "%BUILD%"/*.{exe,dll} .
@@ -131,7 +138,7 @@ rm -fv webbrowser.dll
 rm -fv {%MSVC_DLLS%}
 rm -fv {%QT_DLLS%}
 ::rm -fv {%ITH_DLLS%}
-rm -fv {%VLC_DLLS%}
+::rm -fv {%VLC_DLLS%}
 rm -fv {%OPENSSL_DLLS%}
 ::rm -fv %LUA_DLL%
 rm -fv %ZLIB_DLL%
@@ -166,6 +173,9 @@ cp -Rv "%SOURCE%"/module/qtext/doc . || exit /b 1
 ::cp -Rv "%SOURCE%"/project/player/avatars . || exit /b 1
 
 cd ..
+
+:: Scripts
+cp -v "%SOURCE%"/scripts/* . || exit /b 1
 
 :: desktop.ini
 ::cp -v "%SOURCE%"/project/common/share/apps.ico icon.ico || exit /b 1

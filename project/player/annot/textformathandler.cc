@@ -4,13 +4,7 @@
 #include "textformathandler.h"
 #include <QtGui>
 
-// - Constructions -
-
-TextFormatHandler::TextFormatHandler(const QString &text, QObject *parent)
-  : Base(parent), text_(text) { }
-
-
-// - Implementations -
+ // - Paint -
 
 void
 TextFormatHandler::drawObject(QPainter *painter, const QRectF &rect, QTextDocument *doc, int posInDocument, const QTextFormat &format)

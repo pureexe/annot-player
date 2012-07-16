@@ -2,91 +2,27 @@
 // 11/2/2011
 
 #include "module/translator/translator.h"
-#include "module/translator/translator_config.h"
-#include <QtNetwork/QNetworkAccessManager>
-#include <QtNetwork/QNetworkReply>
-#include <QtNetwork/QNetworkRequest>
-#include <QtXml/QDomDocument>
-#include <QtXml/QDomElement>
+#include <QtCore/QLocale>
 
-//#define DEBUG "translator"
-#include "module/debug/debug.h"
+// Helpers
 
-// - Construction -
-
-// See: http://www.emreakkas.com/internationalization/microsoft-translator-api-languages-list-language-codes-and-names
-const char *Translator::English = "en";
-const char *Translator::Japanese = "ja";
-const char *Translator::Korean = "ko";
-const char *Translator::SimplifiedChinese = "zh-CHS";
-const char *Translator::TraditionalChinese = "zh-CHT";
-
-Translator::Translator(QObject *parent)
-  : Base(parent)
+// See: http://msdn.microsoft.com/en-us/library/hh456380.aspx
+QString
+Translator::languageCode(int lang, int script)
 {
-  qnam_ = new QNetworkAccessManager(this);
-  connect(qnam_, SIGNAL(finished(QNetworkReply*)), SLOT(processNetworkReply(QNetworkReply*)));
-}
-
-// - Translate -
-
-QUrl
-Translator::translationQuery(const QString &text, const QString &to, const QString &from)
-{
-  QUrl ret(BING_API);
-  if (!from.isEmpty())
-    ret.addQueryItem(BING_APIKEY_FROM, from);
-  ret.addQueryItem(BING_APIKEY_TO, to);
-  ret.addQueryItem(BING_APIKEY_APPID, BING_APPID);
-  ret.addEncodedQueryItem(BING_APIKEY_TEXT, QUrl::toPercentEncoding(text));
-  return ret;
-}
-
-void
-Translator::translate(const QString &text, const QString &to, const QString &from) const
-{
-  DOUT("enter");
-  QUrl query = translationQuery(text, to, from);
-  DOUT("query =" << query);
-  qnam_->get(QNetworkRequest(query));
-  DOUT("exit");
-}
-
-// Sample request: http://api.microsofttranslator.com/v2/Http.svc/Translate?appId=FCB48AFBE3CB7B0E7AA146C950762FC87EA13FBB&text=hello&from=en&to=ja
-// Sample reply: <string xmlns="http://schemas.microsoft.com/2003/10/Serialization/">こんにちは</string>
-void
-Translator::processNetworkReply(QNetworkReply *reply)
-{
-  DOUT("enter");
-  Q_ASSERT(reply);
-  reply->deleteLater();
-
-  if (!reply->isFinished() || reply->error() != QNetworkReply::NoError) {
-    emit networkError(reply->errorString());
-    DOUT("exit: error =" << reply->error());
-    return;
+  switch (lang) {
+  case QLocale::English:  return "en";
+  case QLocale::Japanese: return "ja";
+  case QLocale::Korean:   return "ko";
+  case QLocale::French:   return "fr";
+  case QLocale::German:   return "de";
+  case QLocale::Spanish:  return "es";
+  case QLocale::Portuguese: return "pt";
+  case QLocale::Chinese:  return script == QLocale::SimplifiedChineseScript ?
+                                 "zh-CHS" : //"zh-CN" :
+                                 "zh-CHT";  //"zh-TW" or "zh-HK";
+  default: return QString();
   }
-
-  QDomDocument doc;
-  doc.setContent(reply->readAll());
-  if (doc.isNull()) {
-    emit networkError(tr("invalid server reply with null document root"));
-    DOUT("exit: error, invalid document root");
-    return;
-  }
-
-  QDomElement e = doc.documentElement();
-
-  if (e.tagName() != "string") {
-    emit networkError(tr("server reply with root tag") + QString(" (tag = %1)").arg(e.tagName()));
-    DOUT("exit: error, invalid root tag =" << e.tagName());
-    return;
-  }
-
-  QString received = e.text();
-  DOUT("received =" << received);
-  emit translated(received);
-  DOUT("exit");
 }
 
 // EOF

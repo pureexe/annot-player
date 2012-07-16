@@ -51,14 +51,16 @@ TaskDialog::createLayout()
   QToolButton *addButton = ui->makeToolButton(
         AcUi::PushHint | AcUi::HighlightHint, tr("Add"), "", K_CTRL "+S",
         this, SLOT(add()));
-  QToolButton *increaseButton = ui->makeToolButton(
-        0, "+", tr("Increase"), this, SLOT(increase()));
-  QToolButton *decreaseButton = ui->makeToolButton(
-        0, "-", tr("Decrease"), this, SLOT(decrease()));
+  //QToolButton *increaseButton = ui->makeToolButton(
+  //      0, "+", tr("Increase"), this, SLOT(increase()));
+  //QToolButton *decreaseButton = ui->makeToolButton(
+  //      0, "-", tr("Decrease"), this, SLOT(decrease()));
   QToolButton *pasteButton = ui->makeToolButton(
         AcUi::PushHint, tr("Paste"), this, SLOT(paste()));
   QToolButton *clearButton = ui->makeToolButton(
         AcUi::PushHint, tr("Clear"), this, SLOT(clear()));
+
+  annotOnlyButton_ = ui->makeToolButton(AcUi::CheckHint, tr("Annot Only"), tr("Download annotation only"));
 
   // Layout
   QVBoxLayout *rows = new QVBoxLayout; {
@@ -74,8 +76,9 @@ TaskDialog::createLayout()
     footer->addWidget(clearButton);
     footer->addWidget(pasteButton);
     footer->addStretch();
-    footer->addWidget(decreaseButton);
-    footer->addWidget(increaseButton);
+    //footer->addWidget(decreaseButton);
+    //footer->addWidget(increaseButton);
+    footer->addWidget(annotOnlyButton_);
     footer->addWidget(addButton);
 
     // l, t, r, b
@@ -126,13 +129,13 @@ TaskDialog::add()
   QStringList urls;
   foreach (const QString &t, text.split('\n', QString::SkipEmptyParts))
     urls.append(t.trimmed());
-  bool batch = false;
+  bool annotOnly = annotOnlyButton_->isChecked();
   if (!urls.isEmpty()) {
     QStringList ret;
     foreach (const QString &url, QtExt::uniqueList(urls))
       ret.append(formatUrl(url));
     DOUT("urls =" << ret);
-    emit urlsAdded(ret, batch);
+    emit urlsAdded(ret, annotOnly);
   } else if (!text.isEmpty())
     emit warning(tr("invalid URLs") + ": " + text);
 }

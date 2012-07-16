@@ -7,6 +7,7 @@
 #include "module/downloadtask/downloadtask.h"
 #include <QtCore/QObject>
 
+class AnnotationDownloader;
 class DownloadManager : public QObject
 {
   Q_OBJECT
@@ -17,14 +18,22 @@ class DownloadManager : public QObject
   DownloadTaskList tasks_;
 
   int threadCount_;
+#ifdef WITH_MODULE_ANNOTDOWN
+  AnnotationDownloader *downloader_;
+#else
+  QString downloadsLocation_;
+#endif // WITH_MODULE_ANNOTDOWN
 
 public:
-  explicit DownloadManager(QObject *parent = 0)
-    : Base(parent), threadCount_(0) { }
+  explicit DownloadManager(QObject *parent = 0);
 
 signals:
   void taskAdded(DownloadTask *t);
   void taskRemoved(DownloadTask *t);
+
+  void message(QString msg);
+  void error(QString msg);
+  void warning(QString msg);
 
   // - Properties -
 public:
@@ -41,6 +50,13 @@ public:
   void removeTask(DownloadTask *t); // also delete task if owned
 
   int maxThreadCount() const { return threadCount_; }
+
+  QString downloadsLocation() const;
+public slots:
+  void setDownloadsLocation(const QString &path);
+  void downloadAnnotation(const QString &refurl);
+protected slots:
+  void downloadAnnotation(const QString &url, const QString &refurl, const QString &title);
 
 public slots:
   void stopAll();

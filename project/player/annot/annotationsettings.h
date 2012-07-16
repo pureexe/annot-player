@@ -10,6 +10,26 @@
 #include <QtGui/QFont>
 #include <QtCore/QObject>
 
+//QColor(r, g, b, a), sample color RGB palatte: http://www.tayloredmktg.com/rgb/
+#define ANNOTATION_COLOR_DEFAULT    QColor(255, 250, 250, 255) // Disable alpha for better performance.
+
+#define ANNOTATION_SIZE_DEFAULT         20
+#define ANNOTATION_SIZE_MARGIN          2
+
+#define ANNOTATION_SIZE_TINY            "10"
+#define ANNOTATION_SIZE_SMALL           "18"
+#define ANNOTATION_SIZE_NORMAL          "25"
+#define ANNOTATION_SIZE_LARGE           "36"
+#define ANNOTATION_SIZE_HUGE            "60"
+
+#define ANNOTATION_STAY_TIME            2000
+#define ANNOTATION_STAY_TIME_SUBTITLE   3000
+#define ANNOTATION_STAY_TIME_MIN        1000
+#define ANNOTATION_STAY_TIME_MAX        10000 // 10 seconds
+#define ANNOTATION_FLY_TIME             15000 // 15 seconds, the larger the slower
+#define ANNOTATION_FLY_TIME_MIN         1500
+#define ANNOTATION_FLY_TIME_MAX         20000 // 20 seconds
+
 #define ANNOTATION_JAPANESE_FONT_FAMILY "MS Gothic"
 
 #define ANNOTATION_CHINESE_FONT_FAMILY  "YouYuan"
@@ -25,7 +45,8 @@
 
 #define ANNOTATION_EFFECT_OPACITY 0.9
 
-#define ANNOTATION_POSITION_RESOLUTION  18
+#define ANNOTATION_POSITION_RESOLUTION  0
+#define ANNOTATION_SPEED_FACTOR  100
 
 class AnnotationSettings : public QObject
 {
@@ -36,6 +57,7 @@ class AnnotationSettings : public QObject
 
   qreal scale_;
   qreal rotation_;
+  int speedFactor_;
   int offset_;
   int positionResolution_;
   QFont font_,
@@ -56,7 +78,7 @@ public:
   static Self *globalSettings() { static Self g; return &g; }
 protected:
   explicit AnnotationSettings(QObject *parent = 0)
-    : Base(parent), scale_(1), rotation_(0), offset_(0), positionResolution_(ANNOTATION_POSITION_RESOLUTION),
+    : Base(parent), scale_(1), rotation_(0), speedFactor_(ANNOTATION_SPEED_FACTOR), offset_(0), positionResolution_(ANNOTATION_POSITION_RESOLUTION),
       avatarVisible_(false), motionless_(true), traditionalChinese_(false)
   {
     resetOutlineColor();
@@ -69,6 +91,7 @@ protected:
 
 signals:
   void scaleChanged(qreal value);
+  void speedFactorChanged(int value);
   void positionResolutionChanged(int value);
   void rotationChanged(qreal value);
   void offsetChanged(int value);
@@ -83,6 +106,8 @@ signals:
 public:
   qreal scale() const { return scale_; }
   qreal rotation() const { return rotation_; }
+  int speedFactor() const { return speedFactor_; } ///< supposed to be positive
+  qreal speedup() const { return speedFactor_ / qreal(ANNOTATION_SPEED_FACTOR); }
   int offset() const { return offset_; }
   int positionResolution() const { return positionResolution_; }
   bool isAvatarVisible() const { return avatarVisible_; }
@@ -112,8 +137,11 @@ public slots:
   void setScale(qreal value) { if (!qFuzzyCompare(scale_, value)) emit scaleChanged(scale_ = value); }
   void resetScale() { setScale(0); }
 
-  void setRotation(qreal value) { if (!qFuzzyCompare(rotation_, value)) emit rotationChanged(rotation_ = value); }
+  void setRotation(qreal value) { if (!qFuzzyCompare(rotation_+1, value+1)) emit rotationChanged(rotation_ = value); }
   void resetRotation() { setRotation(0); }
+
+  void setSpeedFactor(int value) { if (speedFactor_ != value) emit speedFactorChanged(speedFactor_ = value); }
+  void resetSpeedFactor() { setSpeedFactor(ANNOTATION_SPEED_FACTOR); }
 
   void setOffset(int value) { if (offset_ != value) emit offsetChanged(offset_ = value); }
   void resetOffset() { setOffset(0); }

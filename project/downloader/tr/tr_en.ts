@@ -58,7 +58,7 @@
     </message>
     <message>
         <location filename="../../common/accomboedit.cc" line="38"/>
-        <source>Clear All</source>
+        <source>Clear History</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -297,9 +297,57 @@
     </message>
 </context>
 <context>
+    <name>AnnotationDownloader</name>
+    <message>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="63"/>
+        <source>analyzing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="88"/>
+        <source>downloading</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="103"/>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="122"/>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="144"/>
+        <source>network error, failed to resolve URL</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="106"/>
+        <source>saving</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="130"/>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="151"/>
+        <source>failed to resolve URL</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="164"/>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="177"/>
+        <source>file saved</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="166"/>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="182"/>
+        <source>failed to save file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="172"/>
+        <source>failed to cache annotation from URL</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>BufferedRemoteStream</name>
     <message>
-        <location filename="../../../module/stream/bufferedremotestream.cc" line="391"/>
+        <location filename="../../../module/stream/bufferedremotestream.cc" line="390"/>
         <source>network error, failed to download remote resource</source>
         <translation type="unfinished"></translation>
     </message>
@@ -444,7 +492,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="372"/>
+        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="373"/>
         <source>nicovideo.jp account is required to resolve URL</source>
         <translation type="unfinished"></translation>
     </message>
@@ -453,269 +501,274 @@
     <name>MainWindow</name>
     <message>
         <location filename="../mainwindow.cc" line="60"/>
-        <location filename="../mainwindow.cc" line="707"/>
-        <location filename="../mainwindow.cc" line="772"/>
-        <location filename="../mainwindow.cc" line="774"/>
-        <location filename="../mainwindow.cc" line="976"/>
+        <location filename="../mainwindow.cc" line="716"/>
+        <location filename="../mainwindow.cc" line="781"/>
+        <location filename="../mainwindow.cc" line="783"/>
+        <location filename="../mainwindow.cc" line="985"/>
         <source>Annot Downloader</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="156"/>
-        <location filename="../mainwindow.cc" line="233"/>
+        <location filename="../mainwindow.cc" line="161"/>
+        <location filename="../mainwindow.cc" line="238"/>
         <source>Start</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="157"/>
-        <location filename="../mainwindow.cc" line="241"/>
+        <location filename="../mainwindow.cc" line="162"/>
+        <location filename="../mainwindow.cc" line="246"/>
         <source>Stop</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="158"/>
-        <location filename="../mainwindow.cc" line="245"/>
+        <location filename="../mainwindow.cc" line="163"/>
+        <location filename="../mainwindow.cc" line="250"/>
         <source>Remove</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="159"/>
-        <location filename="../mainwindow.cc" line="261"/>
+        <location filename="../mainwindow.cc" line="164"/>
+        <location filename="../mainwindow.cc" line="266"/>
         <source>Play</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="160"/>
-        <location filename="../mainwindow.cc" line="265"/>
+        <location filename="../mainwindow.cc" line="165"/>
+        <location filename="../mainwindow.cc" line="270"/>
         <source>Browse</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="162"/>
+        <location filename="../mainwindow.cc" line="167"/>
         <source>Dir</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="162"/>
+        <location filename="../mainwindow.cc" line="167"/>
         <source>Open directory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="164"/>
+        <location filename="../mainwindow.cc" line="169"/>
         <source>Add</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="237"/>
+        <location filename="../mainwindow.cc" line="242"/>
         <source>Restart</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="249"/>
+        <location filename="../mainwindow.cc" line="254"/>
         <source>Start All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="253"/>
+        <location filename="../mainwindow.cc" line="258"/>
         <source>Stop All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="257"/>
+        <location filename="../mainwindow.cc" line="262"/>
         <source>Remove All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="262"/>
+        <location filename="../mainwindow.cc" line="267"/>
         <source>Open with Annot Player</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="266"/>
+        <location filename="../mainwindow.cc" line="271"/>
         <source>Open with Annot Browser</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="269"/>
+        <location filename="../mainwindow.cc" line="274"/>
         <source>Open Directory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="273"/>
+        <location filename="../mainwindow.cc" line="278"/>
         <source>Hide</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="280"/>
+        <location filename="../mainwindow.cc" line="285"/>
         <source>Quit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="284"/>
+        <location filename="../mainwindow.cc" line="289"/>
         <source>New</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="290"/>
+        <location filename="../mainwindow.cc" line="295"/>
         <source>Menu Bar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="378"/>
+        <location filename="../mainwindow.cc" line="383"/>
         <source>Preferences</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="295"/>
-        <location filename="../mainwindow.cc" line="870"/>
+        <location filename="../mainwindow.cc" line="300"/>
+        <location filename="../mainwindow.cc" line="879"/>
         <source>Copy Title</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="306"/>
-        <location filename="../mainwindow.cc" line="308"/>
-        <location filename="../mainwindow.cc" line="309"/>
+        <location filename="../mainwindow.cc" line="311"/>
+        <location filename="../mainwindow.cc" line="313"/>
+        <location filename="../mainwindow.cc" line="314"/>
         <source>Copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="316"/>
+        <location filename="../mainwindow.cc" line="321"/>
         <source>Search with %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="389"/>
+        <location filename="../mainwindow.cc" line="394"/>
         <source>&amp;File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="399"/>
+        <location filename="../mainwindow.cc" line="404"/>
         <source>&amp;Quit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="401"/>
+        <location filename="../mainwindow.cc" line="406"/>
         <source>&amp;Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="408"/>
+        <location filename="../mainwindow.cc" line="413"/>
         <source>&amp;Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="409"/>
+        <location filename="../mainwindow.cc" line="414"/>
         <source>&amp;Preferences</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="411"/>
+        <location filename="../mainwindow.cc" line="416"/>
         <source>&amp;Help</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="413"/>
+        <location filename="../mainwindow.cc" line="418"/>
         <source>&amp;About</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="427"/>
+        <location filename="../mainwindow.cc" line="432"/>
         <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="428"/>
+        <location filename="../mainwindow.cc" line="433"/>
         <source>State</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="429"/>
+        <location filename="../mainwindow.cc" line="434"/>
         <source>Size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="430"/>
+        <location filename="../mainwindow.cc" line="435"/>
         <source>Speed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="432"/>
+        <location filename="../mainwindow.cc" line="437"/>
         <source>Remaining time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="433"/>
+        <location filename="../mainwindow.cc" line="438"/>
         <source>Path</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="434"/>
+        <location filename="../mainwindow.cc" line="439"/>
         <source>URL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="435"/>
+        <location filename="../mainwindow.cc" line="440"/>
         <source>ID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="631"/>
+        <location filename="../mainwindow.cc" line="636"/>
         <source>openning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="633"/>
+        <location filename="../mainwindow.cc" line="638"/>
         <source>not exist</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="652"/>
+        <location filename="../mainwindow.cc" line="655"/>
+        <source>download annotations</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cc" line="661"/>
         <source>task exists</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="802"/>
+        <location filename="../mainwindow.cc" line="811"/>
         <source>download finished</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="809"/>
+        <location filename="../mainwindow.cc" line="818"/>
         <source>download failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="869"/>
+        <location filename="../mainwindow.cc" line="878"/>
         <source>Copy URL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="926"/>
+        <location filename="../mainwindow.cc" line="935"/>
         <source>Stopped</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="927"/>
+        <location filename="../mainwindow.cc" line="936"/>
         <source>Downloading</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="928"/>
+        <location filename="../mainwindow.cc" line="937"/>
         <source>Pending</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="929"/>
+        <location filename="../mainwindow.cc" line="938"/>
         <source>Finished</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="930"/>
-        <location filename="../mainwindow.cc" line="931"/>
+        <location filename="../mainwindow.cc" line="939"/>
+        <location filename="../mainwindow.cc" line="940"/>
         <source>Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="976"/>
+        <location filename="../mainwindow.cc" line="985"/>
         <source>Minimize to Tray</source>
         <translation type="unfinished"></translation>
     </message>
@@ -728,14 +781,14 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../module/downloadtask/mrldownloadtask.cc" line="104"/>
+        <location filename="../../../module/downloadtask/mrldownloadtask.cc" line="105"/>
         <location filename="../../../module/downloadtask/mrldownloadtask_m.cc" line="49"/>
         <location filename="../../../module/downloadtask/mrldownloadtask_s.cc" line="34"/>
         <source>unknown</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../module/downloadtask/mrldownloadtask.cc" line="111"/>
+        <location filename="../../../module/downloadtask/mrldownloadtask.cc" line="114"/>
         <source>failed to resolve media URL</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1016,16 +1069,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../taskdialog.cc" line="55"/>
-        <source>Increase</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../taskdialog.cc" line="57"/>
-        <source>Decrease</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../taskdialog.cc" line="59"/>
         <source>Paste</source>
         <translation type="unfinished"></translation>
@@ -1036,12 +1079,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../taskdialog.cc" line="106"/>
+        <location filename="../taskdialog.cc" line="63"/>
+        <source>Annot Only</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../taskdialog.cc" line="63"/>
+        <source>Download annotation only</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../taskdialog.cc" line="109"/>
         <source>duplicated</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../taskdialog.cc" line="137"/>
+        <location filename="../taskdialog.cc" line="140"/>
         <source>invalid URLs</source>
         <translation type="unfinished"></translation>
     </message>

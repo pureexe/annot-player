@@ -59,11 +59,11 @@ enum { VOUT_TIMEOUT = 500 };  // 0.5 secs
 // - PlayerPrivate -
 
 class PlayerPrivate
-  : public mp_handle_,
-    public mp_states_,
-    public mp_properties_,
-    public mp_trackers_
-    //public mp_intl_
+  : public detail::mp_handle,
+    public detail::mp_states,
+    public detail::mp_properties,
+    public detail::mp_trackers
+    //public detail::mp_intl
 { };
 
 // - Event handlers -
@@ -185,7 +185,7 @@ namespace { // anonymous, vlccore callbacks
 #ifdef WITH_WIN_QTWIN
      QtWin::getDoubleClickInterval() * 1.5
 #else
-     600
+     800
 #endif // Q_WS_WIN
     ;
 
@@ -754,7 +754,7 @@ Player::openMedia(const QString &path)
 
   libvlc_media_t *md = path.contains("://") ?
     ::libvlc_media_new_location(d_->instance(), _cs(path)) :   // MRL
-    ::libvlc_media_new_path(d_->instance(), vlcpath(path)); // local file
+    ::libvlc_media_new_path(d_->instance(), detail::vlcpath(path)); // local file
   d_->setMedia(md);
 
   //libvlc_media_list_player_t *mlp = libvlc_media_list_player_new(d_->instance());
@@ -1035,7 +1035,7 @@ Player::snapshot(const QString &path)
     return false;
   }
 
-  int err = ::libvlc_video_take_snapshot(d_->player(), 0, vlcpath(path), 0, 0);
+  int err = ::libvlc_video_take_snapshot(d_->player(), 0, detail::vlcpath(path), 0, 0);
   DOUT("exit: ret =" << !err);
   return !err;
 }
@@ -1369,7 +1369,7 @@ Player::setSubtitleFromFile(const QString &fileName)
     return true;
   }
 
-  bool ok = ::libvlc_video_set_subtitle_file(d_->player(), vlcpath(path));
+  bool ok = ::libvlc_video_set_subtitle_file(d_->player(), detail::vlcpath(path));
   if (ok) {
     DOUT("succeeded, number of subtitles (0 for the first time):" << ::libvlc_video_get_spu_count(d_->player()));
     d_->externalSubtitles().append(path);
@@ -1389,7 +1389,7 @@ Player::addSubtitleFromFile(const QString &fileName)
   int bak = ::libvlc_video_get_spu(d_->player());
   if (bak > 0)
     d_->setSubtitleId(bak);
-  ::libvlc_video_set_subtitle_file(d_->player(), vlcpath(fileName));
+  ::libvlc_video_set_subtitle_file(d_->player(), detail::vlcpath(fileName));
   ::libvlc_video_set_spu(d_->player(), d_->subtitleId());
 }
 
@@ -1683,7 +1683,7 @@ Player::parsePlaylist(const QString &fileName) const
   libvlc_instance_t *parent = const_cast<libvlc_instance_t *>(d_->instance());
   libvlc_media_list_t *ml = ::libvlc_media_list_new(parent);
 
-  ::libvlc_media_list_add_file_content(ml, vlcpath(fileName)); // FIXME: deprecated in VLC 1.1.11
+  ::libvlc_media_list_add_file_content(ml, detail::vlcpath(fileName)); // FIXME: deprecated in VLC 1.1.11
   int count = ::libvlc_media_list_count(ml);
   Q_ASSERT(count == 1);
   for (int i = 0; i < count; i++) { // count should always be 1 if succeed
@@ -2112,7 +2112,7 @@ void
 Player::updateTrackInfo()
 {
   Q_ASSERT(isValid());
-  TrackInfo &info = d_->trackInfo();
+  detail::TrackInfo &info = d_->trackInfo();
   info.clear();
   if (hasMedia()) {
     libvlc_media_track_info_t *tracks;

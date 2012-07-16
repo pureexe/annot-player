@@ -106,6 +106,7 @@ public:
   // - Update -
 public:
   bool updateAnnotationTextWithId(const QString &text, qint64 id);
+  bool updateAnnotationUserIdWithId(qint64 userId, qint64 id);
 
   // - Queries -
 public:

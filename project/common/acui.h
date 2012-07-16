@@ -4,13 +4,15 @@
 // ac/acui.h
 // 7/30/2011
 
-#include <QWidget>
-#include <QWidgetList>
+#include <QtGui/QColor>
+#include <QtGui/QWidget>
+#include <QtGui/QWidgetList>
 
 QT_BEGIN_NAMESPACE
 class QCheckBox;
 class QComboBox;
 class QDialog;
+class QGraphicsEffect;
 class QGroupBox;
 class QLabel;
 class QLineEdit;
@@ -126,17 +128,18 @@ public:
 public:
   enum RenderHint {
     NoHint = 0x0,
-    PushHint = 0x1,             // [ push button ]
-    CheckHint = 0x1 << 1,       // / checkable button /
-    TabHint = 0x1 << 2,         // - tab button -
-    HighlightHint = 0x1 << 3,   // with highlighted text
-    InvertHint = 0x1 << 4,      // with inverted color
-    UrlHint = 0x1 << 5,         // as URL
-    BuddyHint = 0x1 << 6,       // label as buddy
-    ReadOnlyHint = 0x1 << 7,    // read-only or editable
-    EditHint = 0x1 << 8,        // used as line edit
-    PasswordHint = 0x1 << 9,
-    MenuHint = 0x1 << 10
+    DefaultHint = 0x1,
+    PushHint = 0x1 << 1,        // [ push button ]
+    CheckHint = 0x1 << 2,       // / checkable button /
+    TabHint = 0x1 << 3,         // - tab button -
+    HighlightHint = 0x1 << 4,   // with highlighted text
+    InvertHint = 0x1 << 5,      // with inverted color
+    UrlHint = 0x1 << 6,         // as URL
+    BuddyHint = 0x1 << 7,       // label as buddy
+    ReadOnlyHint = 0x1 << 8,    // read-only or editable
+    EditHint = 0x1 << 9,        // used as line edit
+    PasswordHint = 0x1 << 10,
+    MenuHint = 0x1 << 11
   };
 
   QTextEdit *makeTextEdit(ulong hints = 0, const QString &tip = QString());
@@ -156,6 +159,10 @@ public:
       const QString &text = QString(), const QString &tip = QString());
   QCheckBox *makeCheckBox(ulong hints = 0,
       const QString &text = QString(), const QString &tip = QString());
+
+  QGraphicsEffect *makeHaloEffect(const QColor &c);
+  QGraphicsEffect *makeHaloEffect(Qt::GlobalColor c) { return makeHaloEffect(QColor(c)); }
+  QGraphicsEffect *makeHaloEffect(ulong hints = DefaultHint);
 
   QToolButton *makeToolButton(ulong hints = 0,
       const QString &title = QString(), const QString &tip = QString(), const QString &key = QString(),

@@ -23,6 +23,8 @@
 //#define DEBUG "acfuncodec"
 #include "module/debug/debug.h"
 
+#define RequestUrlAttribute QNetworkRequest::UserMax
+
 enum { MaxRetries = 5 };
 
 using namespace AnnotCloud;
@@ -54,7 +56,7 @@ AcfunCodec::fetch(const QString &url, const QString &originalUrl)
   DOUT("enter: url =" << url);
   QNetworkReply *reply = qnam_->get(QNetworkRequest(url));
   QtExt::PublicNetworkReply::fromReply(reply)
-      ->setAttribute(QNetworkRequest::UserMax, originalUrl);
+      ->setAttribute(RequestUrlAttribute, originalUrl);
   DOUT("exit");
 }
 
@@ -77,7 +79,7 @@ AcfunCodec::parseReply(QNetworkReply *reply)
         + url
       );
 
-      QString originalUrl = reply->attribute(QNetworkRequest::UserMax).toString();
+      QString originalUrl = reply->attribute(RequestUrlAttribute).toString();
       fetch(url, originalUrl);
     } else
       emit error(tr("network error, failed to resolve media URL") + ": " + url);
@@ -91,7 +93,7 @@ AcfunCodec::parseReply(QNetworkReply *reply)
     emit error(tr("failed to resolve annotations from URL") + ": " + reply->url().toString());
   else {
     QString url =reply->url().toString(),
-            originalUrl = reply->attribute(QNetworkRequest::UserMax).toString();
+            originalUrl = reply->attribute(RequestUrlAttribute).toString();
 #ifdef WITH_MODULE_ANNOTCACHE
     AnnotationCacheManager::globalInstance()->saveData(data, originalUrl);
 #endif // WITH_MODULE_ANNOTCACHE

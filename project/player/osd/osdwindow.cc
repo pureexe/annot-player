@@ -2,7 +2,7 @@
 // 7/12/2011
 
 #include "osdwindow.h"
-#include "module/qtext/eventlistener.h"
+#include "module/qtext/eventforwarder.h"
 #ifdef Q_WS_X11
 # include "unix/qtx/qtx.h"
 #endif // Q_WS_X11
@@ -26,7 +26,7 @@
 
 
 OsdWindow::OsdWindow(QWidget *parent)
-  : Base(parent, WINDOW_FLAGS), listener_(0)
+  : Base(parent, WINDOW_FLAGS), forwarder_(0)
 {
   setContentsMargins(0, 0, 0, 0);
   setAttribute(Qt::WA_TranslucentBackground);
@@ -65,17 +65,17 @@ OsdWindow::setWindowOnTop(bool t)
 
 // - Events -
 
-void OsdWindow::contextMenuEvent(QContextMenuEvent *event) { DOUT("enter"); if (listener_) listener_->sendContextMenuEvent(event);      DOUT("exit"); }
-void OsdWindow::mouseMoveEvent(QMouseEvent *event)         { DOUT("enter"); if (listener_) listener_->sendMouseMoveEvent(event);        DOUT("exit"); }
-void OsdWindow::mousePressEvent(QMouseEvent *event)        { DOUT("enter"); if (listener_) listener_->sendMousePressEvent(event);       DOUT("exit"); }
-void OsdWindow::mouseReleaseEvent(QMouseEvent *event)      { DOUT("enter"); if (listener_) listener_->sendMouseReleaseEvent(event);     DOUT("exit"); }
-void OsdWindow::mouseDoubleClickEvent(QMouseEvent *event)  { DOUT("enter"); if (listener_) listener_->sendMouseDoubleClickEvent(event); DOUT("exit"); }
+void OsdWindow::contextMenuEvent(QContextMenuEvent *event) { DOUT("enter"); if (forwarder_) forwarder_->sendContextMenuEvent(event);      DOUT("exit"); }
+void OsdWindow::mouseMoveEvent(QMouseEvent *event)         { DOUT("enter"); if (forwarder_) forwarder_->sendMouseMoveEvent(event);        DOUT("exit"); }
+void OsdWindow::mousePressEvent(QMouseEvent *event)        { DOUT("enter"); if (forwarder_) forwarder_->sendMousePressEvent(event);       DOUT("exit"); }
+void OsdWindow::mouseReleaseEvent(QMouseEvent *event)      { DOUT("enter"); if (forwarder_) forwarder_->sendMouseReleaseEvent(event);     DOUT("exit"); }
+void OsdWindow::mouseDoubleClickEvent(QMouseEvent *event)  { DOUT("enter"); if (forwarder_) forwarder_->sendMouseDoubleClickEvent(event); DOUT("exit"); }
 
-//void OsdWindow::contextMenuEvent(QContextMenuEvent *event) { if (listener_) QCoreApplication::sendEvent(listener_, event); }
-//void OsdWindow::mouseMoveEvent(QMouseEvent *event)         { if (listener_) QCoreApplication::sendEvent(listener_, event); }
-//void OsdWindow::mousePressEvent(QMouseEvent *event)        { if (listener_) QCoreApplication::sendEvent(listener_, event); }
-//void OsdWindow::mouseReleaseEvent(QMouseEvent *event)      { if (listener_) QCoreApplication::sendEvent(listener_, event); }
-//void OsdWindow::mouseDoubleClickEvent(QMouseEvent *event)  { if (listener_) QCoreApplication::sendEvent(listener_, event); }
+//void OsdWindow::contextMenuEvent(QContextMenuEvent *event) { if (forwarder_) QCoreApplication::sendEvent(forwarder_, event); }
+//void OsdWindow::mouseMoveEvent(QMouseEvent *event)         { if (forwarder_) QCoreApplication::sendEvent(forwarder_, event); }
+//void OsdWindow::mousePressEvent(QMouseEvent *event)        { if (forwarder_) QCoreApplication::sendEvent(forwarder_, event); }
+//void OsdWindow::mouseReleaseEvent(QMouseEvent *event)      { if (forwarder_) QCoreApplication::sendEvent(forwarder_, event); }
+//void OsdWindow::mouseDoubleClickEvent(QMouseEvent *event)  { if (forwarder_) QCoreApplication::sendEvent(forwarder_, event); }
 
 void
 OsdWindow::closeEvent(QCloseEvent *event)

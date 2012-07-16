@@ -28,6 +28,7 @@ signals:
   void importUrlToAcPlayerRequested(const QString &url);
   void openUrlWithAcDownloaderRequested(const QString &url);
   void openUrlWithOperatingSystemRequested(const QString &url);
+  void downloadAnnotationUrlRequested(const QString &url);
 
   // - Properties -
 public slots:
@@ -56,6 +57,9 @@ protected slots:
   void openWithAcDownloader()
   { emit openUrlWithAcDownloaderRequested(currentText().trimmed()); }
 
+  void downloadAnnotations()
+  { emit downloadAnnotationUrlRequested(currentText().trimmed()); }
+
   void openWithOperatingSystem()
   { emit openUrlWithOperatingSystemRequested(currentText().trimmed()); }
 
@@ -69,6 +73,7 @@ protected:
   QAction *openAddressWithAcPlayerAct_,
           *importAddressToAcPlayerAct_,
           *openAddressWithAcDownloaderAct_,
+          *downloadAnnotationsFromAddressAct_,
           *openWithOperatingSystemAct_;
 };
 

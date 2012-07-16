@@ -44,6 +44,7 @@ signals:
   void openUrlWithAcPlayerRequested(const QString &url);
   void importUrlToAcPlayerRequested(const QString &url);
   void openUrlWithAcDownloaderRequested(const QString &url);
+  void downloadAnnotationUrlRequested(const QString &url);
   void newWindowRequested();
   void fullScreenRequested();
 

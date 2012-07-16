@@ -4,9 +4,7 @@
 // annotcloud/traits.h
 // 8/17/2011
 
-#include <QtCore/QByteArray>
-#include <QtCore/QList>
-#include <QtCore/QString>
+#include <QtCore/QLocale>
 
 namespace AnnotCloud {
 
@@ -22,9 +20,50 @@ namespace AnnotCloud {
       English = 0x10,
       Japanese = 0x11,
       Chinese = 0x12,
-      Korean = 0x13
+      Korean = 0x13,
+      French = 0x14,
+      German = 0x15,
+      Spanish = 0x16,
+      Portuguese = 0x17
     };
-    enum { LanguageCount = 5 };
+    enum { LanguageCount = 9 };
+
+    inline QLocale::Language localeLanguage(int lang)
+    {
+      switch (lang) {
+      case English: return QLocale::English;
+      case Japanese:return QLocale::Japanese;
+      case Chinese: return QLocale::Chinese;
+      case Korean:  return QLocale::Korean;
+      case French:  return QLocale::French;
+      case German:  return QLocale::German;
+      case Spanish: return QLocale::Spanish;
+      case Portuguese: return QLocale::Portuguese;
+      default:      return QLocale::AnyLanguage;
+      }
+    }
+
+    inline bool isRomanLanguage(int lang)
+    {
+      switch (lang) {
+      case English:
+      case French: case German:
+      case Spanish:case Portuguese:
+        return true;
+      default: return false;
+      }
+    }
+
+    inline bool isAsianLanguage(int lang)
+    {
+      switch (lang) {
+      case Japanese:
+      case Chinese:
+      case Korean:
+        return true;
+      default: return false;
+      }
+    }
 
     enum LanguageBit {
       NoLanguageBit =   1L << NoLanguage,
@@ -33,11 +72,16 @@ namespace AnnotCloud {
       EnglishBit =      1L << English,
       JapaneseBit =     1L << Japanese,
       ChineseBit =      1L << Chinese,
-      KoreanBit =       1L << Korean
+      KoreanBit =       1L << Korean,
+      FrenchBit =       1L << French,
+      GermanBit =       1L << German,
+      SpanishBit =      1L << Spanish,
+      PortugueseBit =   1L << Portuguese
     };
     enum { AllLanguages =
       AnyLanguageBit | UnknownLanguageBit |
-      EnglishBit | JapaneseBit | ChineseBit | KoreanBit
+      EnglishBit | JapaneseBit | ChineseBit | KoreanBit |
+      FrenchBit | GermanBit | SpanishBit | PortugueseBit
     };
 
     enum Entity {

@@ -1,0 +1,6 @@
+Windows Registry Editor Version 5.00
+; Reset preferences for apps from http://annot.me.
+; 2012/7/1
+; See: http://support.microsoft.com/kb/310516
+
+[-HKEY_CURRENT_USER\Software\Annot]

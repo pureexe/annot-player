@@ -3,7 +3,6 @@
 
 #include "module/annotcodec/annotationcodec.h"
 #include <QtCore/QByteArray>
-#include <cstring>
 
 // - Helpers -
 
@@ -17,7 +16,7 @@ AnnotationCodec::skipLeadingCommentAndNewLine(const QByteArray &data, const char
   int pos = data.indexOf(stop);
   if (pos < 0)
     return data;
-  int len = ::strlen(stop);
+  int len = qstrlen(stop);
   while (data.size() > pos+len  &&
          data[pos+len] == '\n')
     pos++;

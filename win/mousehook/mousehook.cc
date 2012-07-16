@@ -19,19 +19,13 @@
 
 // - Helper -
 
-namespace { // anonymous, type-cast
+namespace { namespace detail {
 
   inline QPoint POINT2QPoint(const POINT &pt)
   { return QPoint((int)pt.x, (int)pt.y); }
 
   inline POINT QPoint2POINT(const QPoint &pos)
   { POINT ret = { pos.x(), pos.y() }; return ret; }
-
-} // anonymous namespace
-
-// - Hook implementation -
-
-namespace { // anonymous, hook callbacks
 
   LRESULT CALLBACK
   MouseProc(__in int nCode, __in WPARAM wparam, __in LPARAM lparam)
@@ -55,7 +49,7 @@ namespace { // anonymous, hook callbacks
 
     LPMOUSEHOOKSTRUCT lpMouseEvent = (LPMOUSEHOOKSTRUCT)lparam;
     Q_ASSERT(lpMouseEvent);
-    QPoint globalPos = ::POINT2QPoint(lpMouseEvent->pt);
+    QPoint globalPos = POINT2QPoint(lpMouseEvent->pt);
     QPoint pos = globalPos;
 
     if (HOOKMAN->isWindowPosEnabled()) {
@@ -81,7 +75,7 @@ namespace { // anonymous, hook callbacks
     #undef NEXT
   }
 
-} // anonymouss namespace
+} } // anonymouss detail
 
 // - Constructions -
 //
@@ -140,7 +134,7 @@ MouseHook::start()
   }
 
   // Global mode
-  d_->hook = ::SetWindowsHookEx(WH_MOUSE_LL, ::MouseProc, hInstance, 0);
+  d_->hook = ::SetWindowsHookEx(WH_MOUSE_LL, detail::MouseProc, hInstance, 0);
   DOUT("start: started");
 }
 

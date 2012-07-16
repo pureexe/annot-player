@@ -38,9 +38,6 @@ public:
 protected:
   static QString parseText(const QString &text);
   static QString parsePrefix(const QString &text);
-
-  static QByteArray skipXmlLeadingComment(const QByteArray &data)
-  { return skipLeadingCommentAndNewLine(data, "<!--", "-->"); }
 };
 
 #endif // ANNOTATIONCODEC_H

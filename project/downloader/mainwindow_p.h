@@ -7,7 +7,9 @@
 #include "mainwindow.h"
 #include <QtCore/QTimer>
 
-namespace slot_ { // anonymous slot_
+namespace detail {
+
+  // - Slots -
 
   class PromptUrl : public QObject {
     Q_OBJECT
@@ -29,6 +31,6 @@ namespace slot_ { // anonymous slot_
     }
   };
 
-} // namespace slot_
+} // namespace detail
 
 #endif // MAINWINDOW_P_H

@@ -50,6 +50,8 @@ private:
   void init();
 
 signals:
+  void downloadAnnotationRequested(const QString &refurl);
+  void downloadAnnotationRequested(const QString &url, const QString &refurl, const QString &title);
   void quited();
   void titleChanged(QString title);
   void fileNameChanged(QString fileName);

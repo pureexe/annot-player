@@ -9,6 +9,8 @@
 #include <QtCore/QRect>
 #include <QtCore/QString>
 
+#define QTWIN_INVALID_POS QPoint(-32000, -32000)
+
 namespace QtWin {
 
   // Direct access to windows DLL module
@@ -135,16 +137,18 @@ namespace QtWin {
   //QList<WId> getWindowsWithThreadId(ulong threadId);
   //QList<WId> getWindowsWithProcessId(ulong processId);
 
+  ///  Return QTWIN_INVALID_POS when miniized
   QRect getWindowRect(WId hwnd);
   bool windowHasRect(WId hwnd);
 
-  bool isValidWindow(WId hwnd);
+  bool isWindowValid(WId hwnd);
 
-  bool isVisibleWindow(WId hwnd);
+  bool isWindowVisible(WId hwnd);
+
+  bool isWindowMinimized(WId hwnd);
 
   ///  valid, visible, has non-empty title and non-empty rect
-  inline bool isGoodWindow(WId hwnd)
-  { return isVisibleWindow(hwnd) && windowHasRect(hwnd) && windowHasText(hwnd); }
+  bool isGoodWindow(WId hwnd);
 
   bool setTopWindow(WId hwnd);
   WId getTopWindow(WId hwnd = 0); ///< return top window on the desktop if hwnd is null

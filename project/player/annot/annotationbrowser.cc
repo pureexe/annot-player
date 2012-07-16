@@ -39,7 +39,7 @@ AnnotationBrowser::AnnotationBrowser(SignalHub *hub, QWidget *parent)
 {
   Q_ASSERT(hub_);
 
-  setWindowTitle(TR(T_TITLE_ANNOTATIONBROWSER));
+  setWindowTitle(tr("Annotation Browser"));
   //setAcceptDrops(true);
 
   createModel();
@@ -131,20 +131,20 @@ void
 AnnotationBrowser::createContextMenu()
 {
   // Create menus
-  contextMenu_ = new QMenu(TR(T_TITLE_ANNOTATIONBROWSER), this); {
-    AcUi::globalInstance()->setContextMenuStyle(contextMenu_, true); // persistent = true
-    editAnnotAct_ = contextMenu_->addAction(TR(T_MENUTEXT_EDITTHISANNOT), this, SLOT(editAnnotation()));
-    copyAnnotAct_ = contextMenu_->addAction(TR(T_MENUTEXT_COPYTHISANNOT), this, SLOT(copyAnnotation()));
-    contextMenu_->addSeparator();
-    deleteAnnotAct_ = contextMenu_->addAction(TR(T_MENUTEXT_DELETETHISANNOT), this, SLOT(deleteAnnotation()));
-    blessAnnotAct_ = contextMenu_->addAction(TR(T_MENUTEXT_BLESSTHISANNOT), this, SLOT(blessAnnotation()));
-    curseAnnotAct_ = contextMenu_->addAction(TR(T_MENUTEXT_CURSETHISANNOT), this, SLOT(curseAnnotation()));
-    blockAnnotAct_ = contextMenu_->addAction(TR(T_MENUTEXT_BLOCKTHISANNOT), this, SLOT(blockAnnotation()));
-    contextMenu_->addSeparator();
-    //viewUserAct_ = contextMenu_->addAction(TR(T_MENUTEXT_VIEWTHISUSER), this, SLOT(viewUser()));
-    blockUserAct_ = contextMenu_->addAction(TR(T_MENUTEXT_BLOCKTHISUSER), this, SLOT(blockUser()));
-  }
+  contextMenu_ = new QMenu(this);
+  AcUi::globalInstance()->setContextMenuStyle(contextMenu_, true); // persistent = true
+  editAnnotAct_ = contextMenu_->addAction(TR(T_MENUTEXT_EDITTHISANNOT), this, SLOT(editAnnotation()));
+  copyAnnotAct_ = contextMenu_->addAction(TR(T_MENUTEXT_COPYTHISANNOT), this, SLOT(copyAnnotation()));
+  contextMenu_->addSeparator();
+  deleteAnnotAct_ = contextMenu_->addAction(TR(T_MENUTEXT_DELETETHISANNOT), this, SLOT(deleteAnnotation()));
+  blessAnnotAct_ = contextMenu_->addAction(TR(T_MENUTEXT_BLESSTHISANNOT), this, SLOT(blessAnnotation()));
+  curseAnnotAct_ = contextMenu_->addAction(TR(T_MENUTEXT_CURSETHISANNOT), this, SLOT(curseAnnotation()));
+  blockAnnotAct_ = contextMenu_->addAction(TR(T_MENUTEXT_BLOCKTHISANNOT), this, SLOT(blockAnnotation()));
+  contextMenu_->addSeparator();
+  //viewUserAct_ = contextMenu_->addAction(TR(T_MENUTEXT_VIEWTHISUSER), this, SLOT(viewUser()));
+  blockUserAct_ = contextMenu_->addAction(TR(T_MENUTEXT_BLOCKTHISUSER), this, SLOT(blockUser()));
 }
+
 
 void
 AnnotationBrowser::setHeaderData(QAbstractItemModel *model)
@@ -361,6 +361,10 @@ AnnotationBrowser::languageToString(int lang)
   case Traits::Japanese:        return TR(T_JAPANESE);
   case Traits::Chinese:         return TR(T_CHINESE);
   case Traits::Korean:          return TR(T_KOREAN);
+  case Traits::French:          return TR(T_FRENCH);
+  case Traits::German:          return TR(T_GERMAN);
+  case Traits::Spanish:         return TR(T_SPANISH);
+  case Traits::Portuguese:      return TR(T_PORTUGUESE);
 
   case Traits::UnknownLanguage:
   default : return TR(T_ALIEN);
@@ -391,6 +395,29 @@ AnnotationBrowser::annotationStatusToString(int status)
 }
 
 // - Actions -
+
+void
+AnnotationBrowser::takeAnnotationOwnership()
+{
+  QModelIndex index = currentIndex();
+  if (!index.isValid())
+    return;
+
+  if (!userId_ || currentUserId() != User::guest().id()) {
+    warn(tr("cannot modify other's annotation"));
+    return;
+  }
+
+  int row = index.row();
+  QModelIndex mi = index.sibling(row, HD_UserId);
+  sourceModel_->setData(mi, userId_, Qt::DisplayRole);
+
+  qint64 id = currentId();
+  if (id) {
+    updateAnnotationUserIdWithId(userId_, id);
+    emit annotationUserIdUpdatedWithId(userId_, id);
+  }
+}
 
 void
 AnnotationBrowser::saveAnnotationText(const QString &text)
@@ -424,6 +451,14 @@ AnnotationBrowser::updateAnnotationTextWithId(const QString &text, qint64 id)
     sourceModel_->setData(sourceModel_->index(row, HD_Text), text, Qt::DisplayRole);
     sourceModel_->setData(sourceModel_->index(row, HD_UpdateTime), QDateTime::currentDateTime(), Qt::DisplayRole);
   }
+}
+
+void
+AnnotationBrowser::updateAnnotationUserIdWithId(qint64 userId, qint64 id)
+{
+  int row = rowWithId(id);
+  if (row >= 0)
+    sourceModel_->setData(sourceModel_->index(row, HD_UserId), userId, Qt::DisplayRole);
 }
 
 void

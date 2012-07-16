@@ -54,9 +54,6 @@ protected:
     return a;
   }
 
-  static QByteArray skipXmlLeadingComment(const QByteArray &data)
-  { return skipLeadingCommentAndNewLine(data, "<!--", "-->"); }
-
 protected slots:
   void parseReply(QNetworkReply *reply);
 };

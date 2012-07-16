@@ -51,7 +51,7 @@ public:
   // TODO: return attributes for unparsed tags as well! i.e. return std::pair<QString, QList<std::pair<QString, QStringList> > >
   std::pair<QString, QStringList> toHtml(const QString &annot) const;
 
-  QString toHtml(const AnnotationList &l, const QString &title = QString()) const;
+  QString toHtml(const AnnotationList &l, const QString &title = QString(), bool ignorePos = false) const;
 
   ///  Unparse rich text to annotation.
   QString reduceHtml(const QString &html) const;

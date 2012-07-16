@@ -94,7 +94,7 @@ UserView::createLayout()
 void
 UserView::updateUser()
 {
-#define FORMAT_TIME(_secs)        QDateTime::fromMSecsSinceEpoch(_secs * 1000).toString(Qt::ISODate)
+#define FORMAT_TIME(_secs)        QDateTime::fromMSecsSinceEpoch(_secs * 1000).toString(Qt::ISODate).remove('T')
 #define FORMAT_COUNT(_count)      QString::number(_count)
   nameLabel_->setText(user_.name());
   nicknameLabel_->setText(user_.nickname());

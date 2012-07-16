@@ -30,7 +30,7 @@ BufferedFifoStream::tryRead(char *data, qint64 maxSize)
   m_.lock();
   qint64 ret = qMin(data_.size() - pos_, maxSize);
   if (ret > 0) {
-    ::memcpy(data, data_.constData() + pos_, ret);
+    qMemCopy(data, data_.constData() + pos_, ret);
     pos_ += ret;
   }
   m_.unlock();
@@ -51,7 +51,7 @@ BufferedFifoStream::read(char *data, qint64 maxSize)
   m_.lock();
   qint64 ret = qMin(data_.size() - pos_, maxSize);
   if (ret > 0) {
-    ::memcpy(data, data_.constData() + pos_, ret);
+    qMemCopy(data, data_.constData() + pos_, ret);
     pos_ += ret;
   }
   m_.unlock();

@@ -56,6 +56,7 @@ public:
   // - Update -
 public slots:
   bool updateAnnotationTextWithId(const QString &text, qint64 id);
+  bool updateAnnotationUserIdWithId(qint64 userId, qint64 id);
 
   //void updateAliases(const AliasList &l);
   //void updateAnnotations(const AnnotationList &l);

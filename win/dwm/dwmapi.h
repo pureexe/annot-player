@@ -18,7 +18,7 @@
 # include <dwmapi.h>
 # define DWMAPI
 #else
-# define DWMAPI dwmapi_
+# define DWMAPI dwmapi
 
 #define DWM_BB_ENABLE                 0x00000001  // fEnable has been specified
 #define DWM_BB_BLURREGION             0x00000002  // hRgnBlur has been specified
@@ -68,7 +68,7 @@ public:
   bool bad() const { return dwmLib_.isLoaded(); }
 };
 
-namespace dwmapi_ {
+namespace dwmapi {
   inline DwmApi *api() { static DwmApi g; return &g; }
 
   inline HRESULT WINAPI
@@ -111,7 +111,7 @@ namespace dwmapi_ {
       return api()->pDwmGetColorizationColor(pcrColorization, pfOpaqueBlend);
   }
 
-} // anonymous namespace dwmapi_
+} // anonymous namespace dwmapi
 
 #endif // WITH_DWM_STATIC
 

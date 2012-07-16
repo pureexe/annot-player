@@ -7,10 +7,10 @@
 #define DEBUG "acapplication_win"
 #include "module/debug/debug.h"
 
-namespace { // anonymous
+namespace { namespace detail {
 
   LONG WINAPI
-  exceptionFilter_(PEXCEPTION_POINTERS e)
+  exceptionFilter(PEXCEPTION_POINTERS e)
   {
     DOUT("enter");
     Q_ASSERT(e);
@@ -42,14 +42,14 @@ namespace { // anonymous
     return 0;
   }
 
-} // anonymous namespace
+} } // anonymous detail
 
 
 void
 AcApplication::ignoreWindowsExcetions()
 {
   DOUT("enter");
-  ::SetUnhandledExceptionFilter(::exceptionFilter_);
+  ::SetUnhandledExceptionFilter(detail::exceptionFilter);
   DOUT("exit");
 }
 

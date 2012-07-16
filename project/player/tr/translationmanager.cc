@@ -1,7 +1,7 @@
-// translatormanager.cc
+// translationmanager.cc
 // 9/16/2011
 
-#include "translatormanager.h"
+#include "translationmanager.h"
 #include "tr.h"
 #include "rc.h" // This breaks the modularity of this pri
 #include "module/qt/qtrc.h"
@@ -30,7 +30,7 @@
 // - Constructions -
 
 void
-TranslatorManager::setLocale(int language, int script, bool updateTranslator)
+TranslationManager::setLocale(int language, int script, bool updateTranslator)
 {
   if (language_ != language || script_ != script) {
     if (updateTranslator)
@@ -46,8 +46,8 @@ TranslatorManager::setLocale(int language, int script, bool updateTranslator)
 
 // - Properties -
 
-const TranslatorManager::QTranslatorList&
-TranslatorManager::tr_en() const
+const TranslationManager::QTranslatorList&
+TranslationManager::tr_en() const
 {
   if (tr_en_.isEmpty()) {
     QTranslator*
@@ -64,8 +64,8 @@ TranslatorManager::tr_en() const
   return tr_en_;
 }
 
-const TranslatorManager::QTranslatorList&
-TranslatorManager::tr_ja() const
+const TranslationManager::QTranslatorList&
+TranslationManager::tr_ja() const
 {
   if (tr_ja_.isEmpty()) {
     QTranslator*
@@ -82,8 +82,8 @@ TranslatorManager::tr_ja() const
   return tr_ja_;
 }
 
-const TranslatorManager::QTranslatorList&
-TranslatorManager::tr_zh_CN() const
+const TranslationManager::QTranslatorList&
+TranslationManager::tr_zh_CN() const
 {
   if (tr_zh_CN_.isEmpty()) {
     QTranslator*
@@ -100,8 +100,8 @@ TranslatorManager::tr_zh_CN() const
   return tr_zh_CN_;
 }
 
-const TranslatorManager::QTranslatorList&
-TranslatorManager::tr_zh_TW() const
+const TranslationManager::QTranslatorList&
+TranslationManager::tr_zh_TW() const
 {
   if (tr_zh_TW_.isEmpty()) {
     QTranslator*
@@ -118,8 +118,8 @@ TranslatorManager::tr_zh_TW() const
   return tr_zh_TW_;
 }
 
-TranslatorManager::QTranslatorList
-TranslatorManager::currentTranslators() const
+TranslationManager::QTranslatorList
+TranslationManager::currentTranslators() const
 {
   switch (language_) {
   case QLocale::English:   return tr_en();
@@ -130,7 +130,7 @@ TranslatorManager::currentTranslators() const
 }
 
 void
-TranslatorManager::installCurrentTranslator(QCoreApplication *a)
+TranslationManager::installCurrentTranslator(QCoreApplication *a)
 {
   if (a)
     foreach (QTranslator *t, currentTranslators())
@@ -138,7 +138,7 @@ TranslatorManager::installCurrentTranslator(QCoreApplication *a)
 }
 
 void
-TranslatorManager::removeCurrentTranslator(QCoreApplication *a)
+TranslationManager::removeCurrentTranslator(QCoreApplication *a)
 {
   if (a)
     foreach (QTranslator *t, currentTranslators())
@@ -148,7 +148,7 @@ TranslatorManager::removeCurrentTranslator(QCoreApplication *a)
 // - Translations -
 
 QString
-TranslatorManager::translate(int tid) const
+TranslationManager::translate(int tid) const
 {
 #define SELF(_t)      translate(_t)
   switch (tid) {
@@ -254,6 +254,10 @@ TranslatorManager::translate(int tid) const
   case T_TRADITIONALCHINESE: return tr("Traditional Chinese");
   case T_SIMPLIFIEDCHINESE:  return tr("Simplified Chinese");
   case T_KOREAN:        return tr("Korean");
+  case T_FRENCH:        return tr("French");
+  case T_GERMAN:        return tr("German");
+  case T_SPANISH:       return tr("Spanish");
+  case T_PORTUGUESE:    return tr("Portuguese");
 
   case T_ATTACH:        return tr("Attach");
   case T_DETACH:        return tr("Detach");
@@ -278,9 +282,6 @@ TranslatorManager::translate(int tid) const
   case T_TITLE_OPENVIDEODEVICE: return tr("Open Video Device");
   case T_TITLE_OPENAUDIODEVICE: return tr("Open Audio Device");
   case T_TITLE_OPENSUBTITLE:    return tr("Open Subtitle");
-  case T_TITLE_ANNOTATIONBROWSER:   tr("Annotations");
-  case T_TITLE_ANNOTATIONEDITOR:    tr("Annotation Editor");
-  case T_TITLE_TOKENVIEW:       return tr("Annotation Source");
   case T_TITLE_COMMENTVIEW:     return tr("Comments");
   case T_TITLE_ANNOTANALYTICS:     return tr("Annotations Analytics");
   case T_TITLE_SIGNALVIEW:      return tr("Select Process Signal");
@@ -365,7 +366,7 @@ TranslatorManager::translate(int tid) const
   case T_TIP_OPENCONTEXTMENU:      return tr("Open");
 
   case T_OPENINWEBBROWSER:      return tr("Open in Web Browser");
-  case T_DOWNLOADCURRENT:       return tr("Download current media");
+  case T_DOWNLOADCURRENT:       return tr("Download Current Media");
 
   case T_MENUTEXT_OPENDIRECTORY:         return tr("Open Directory");
 
@@ -459,7 +460,7 @@ TranslatorManager::translate(int tid) const
   case T_MENUTEXT_PROCESSPICKDIALOG:   return tr("Pick Game Window");
   case T_TIP_PROCESSPICKDIALOG:        return tr("Select process window");
 
-  case T_MENUTEXT_WINDOWPICKDIALOG:   return tr("Select Annotation Window");
+  case T_MENUTEXT_WINDOWPICKDIALOG:   return tr("Pick Annotation Window");
   case T_TIP_WINDOWPICKDIALOG:        return tr("Select window to show annots");
 
   case T_TITLE_ABOUT:           return tr("About");
@@ -705,7 +706,7 @@ TranslatorManager::translate(int tid) const
   case T_MENUTEXT_ENABLEAERO:   return tr("Enable Aero");
   case T_MENUTEXT_DISABLEAERO:  return tr("Disable Aero");
 
-  case T_MENUTEXT_CHECKINTERNET:return tr("Check Internet");
+  case T_MENUTEXT_CHECKINTERNET:return tr("Check Internet Connection");
   case T_TIP_CHECKINTERNET:     return tr("Check Internet connection");
 
   case T_MENUTEXT_DELETECACHE:  return tr("Remove Caches");
@@ -870,7 +871,7 @@ TranslatorManager::translate(int tid) const
   case T_EXPERIMENTAL:  return tr("experimental");
 
   default:
-    qWarning() << "TranslatorManager:translate: Unknown tid =" << tid;
+    qWarning() << "TranslationManager:translate: Unknown tid =" << tid;
     Q_ASSERT(0);
     return QString();
   }

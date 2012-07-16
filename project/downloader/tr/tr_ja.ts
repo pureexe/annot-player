@@ -96,12 +96,16 @@
     <message>
         <location filename="../../common/accomboedit.cc" line="36"/>
         <source>History</source>
-        <translation>歴史</translation>
+        <translation>歴史記録</translation>
     </message>
     <message>
         <location filename="../../common/accomboedit.cc" line="38"/>
+        <source>Clear History</source>
+        <translation>歴史記録を消す</translation>
+    </message>
+    <message>
         <source>Clear All</source>
-        <translation>全て消す</translation>
+        <translation type="obsolete">全て消す</translation>
     </message>
     <message>
         <source>Clear</source>
@@ -441,9 +445,57 @@
     </message>
 </context>
 <context>
+    <name>AnnotationDownloader</name>
+    <message>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="63"/>
+        <source>analyzing</source>
+        <translation>分析中</translation>
+    </message>
+    <message>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="88"/>
+        <source>downloading</source>
+        <translation>会話中</translation>
+    </message>
+    <message>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="103"/>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="122"/>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="144"/>
+        <source>network error, failed to resolve URL</source>
+        <translation>URLの解析に失敗した</translation>
+    </message>
+    <message>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="106"/>
+        <source>saving</source>
+        <translation>保存中</translation>
+    </message>
+    <message>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="130"/>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="151"/>
+        <source>failed to resolve URL</source>
+        <translation>URLの解析に失敗した</translation>
+    </message>
+    <message>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="164"/>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="177"/>
+        <source>file saved</source>
+        <translation>保存成功</translation>
+    </message>
+    <message>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="166"/>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="182"/>
+        <source>failed to save file</source>
+        <translation>ファイルの保存に失敗した</translation>
+    </message>
+    <message>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="172"/>
+        <source>failed to cache annotation from URL</source>
+        <translation>弾幕をキャッシュできない</translation>
+    </message>
+</context>
+<context>
     <name>BufferedRemoteStream</name>
     <message>
-        <location filename="../../../module/stream/bufferedremotestream.cc" line="391"/>
+        <location filename="../../../module/stream/bufferedremotestream.cc" line="390"/>
         <source>network error, failed to download remote resource</source>
         <translation>ﾀﾞｳﾝﾛｰﾄﾞに失敗した</translation>
     </message>
@@ -610,7 +662,7 @@
         <translation>URLの解析に失敗した</translation>
     </message>
     <message>
-        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="372"/>
+        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="373"/>
         <source>nicovideo.jp account is required to resolve URL</source>
         <translation>ニコアカウントを入力してください</translation>
     </message>
@@ -619,60 +671,60 @@
     <name>MainWindow</name>
     <message>
         <location filename="../mainwindow.cc" line="60"/>
-        <location filename="../mainwindow.cc" line="707"/>
-        <location filename="../mainwindow.cc" line="772"/>
-        <location filename="../mainwindow.cc" line="774"/>
-        <location filename="../mainwindow.cc" line="976"/>
+        <location filename="../mainwindow.cc" line="716"/>
+        <location filename="../mainwindow.cc" line="781"/>
+        <location filename="../mainwindow.cc" line="783"/>
+        <location filename="../mainwindow.cc" line="985"/>
         <source>Annot Downloader</source>
-        <translation>とあるﾀﾞｳﾝﾛｰﾄﾞ</translation>
+        <translation>とあるﾀﾞｳﾝﾛｰﾄﾞ使い</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="156"/>
-        <location filename="../mainwindow.cc" line="233"/>
+        <location filename="../mainwindow.cc" line="161"/>
+        <location filename="../mainwindow.cc" line="238"/>
         <source>Start</source>
         <translation>開始</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="157"/>
-        <location filename="../mainwindow.cc" line="241"/>
+        <location filename="../mainwindow.cc" line="162"/>
+        <location filename="../mainwindow.cc" line="246"/>
         <source>Stop</source>
         <translation>停止</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="158"/>
-        <location filename="../mainwindow.cc" line="245"/>
+        <location filename="../mainwindow.cc" line="163"/>
+        <location filename="../mainwindow.cc" line="250"/>
         <source>Remove</source>
         <translation>消す</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="159"/>
-        <location filename="../mainwindow.cc" line="261"/>
+        <location filename="../mainwindow.cc" line="164"/>
+        <location filename="../mainwindow.cc" line="266"/>
         <source>Play</source>
         <translation>再生</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="160"/>
-        <location filename="../mainwindow.cc" line="265"/>
+        <location filename="../mainwindow.cc" line="165"/>
+        <location filename="../mainwindow.cc" line="270"/>
         <source>Browse</source>
         <translation>ブラウズ</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="162"/>
+        <location filename="../mainwindow.cc" line="167"/>
         <source>Dir</source>
         <translation>フォルダ</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="162"/>
+        <location filename="../mainwindow.cc" line="167"/>
         <source>Open directory</source>
         <translation>保存フォルダを開く</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="164"/>
+        <location filename="../mainwindow.cc" line="169"/>
         <source>Add</source>
         <translation>追加</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="237"/>
+        <location filename="../mainwindow.cc" line="242"/>
         <source>Restart</source>
         <translation>再開</translation>
     </message>
@@ -689,63 +741,63 @@
         <translation type="obsolete">全て消す</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="249"/>
+        <location filename="../mainwindow.cc" line="254"/>
         <source>Start All</source>
         <translation>全て開始</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="253"/>
+        <location filename="../mainwindow.cc" line="258"/>
         <source>Stop All</source>
         <translation>全て停止</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="257"/>
+        <location filename="../mainwindow.cc" line="262"/>
         <source>Remove All</source>
         <translation>全て消す</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="262"/>
+        <location filename="../mainwindow.cc" line="267"/>
         <source>Open with Annot Player</source>
         <translation>Annot Playerで再生</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="266"/>
+        <location filename="../mainwindow.cc" line="271"/>
         <source>Open with Annot Browser</source>
         <translation>Annot Browserで開く</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="269"/>
+        <location filename="../mainwindow.cc" line="274"/>
         <source>Open Directory</source>
         <translation>保存フォルダを開く</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="273"/>
+        <location filename="../mainwindow.cc" line="278"/>
         <source>Hide</source>
         <translation>非表示</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="280"/>
+        <location filename="../mainwindow.cc" line="285"/>
         <source>Quit</source>
         <translation>終了</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="284"/>
+        <location filename="../mainwindow.cc" line="289"/>
         <source>New</source>
         <translation>新しいタスク</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="290"/>
+        <location filename="../mainwindow.cc" line="295"/>
         <source>Menu Bar</source>
         <translation>メニュー・バー</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="378"/>
+        <location filename="../mainwindow.cc" line="383"/>
         <source>Preferences</source>
         <translation>設定</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="295"/>
-        <location filename="../mainwindow.cc" line="870"/>
+        <location filename="../mainwindow.cc" line="300"/>
+        <location filename="../mainwindow.cc" line="879"/>
         <source>Copy Title</source>
         <translation>タイトルをコピー</translation>
     </message>
@@ -754,19 +806,19 @@
         <translation type="obsolete">URLをコピー</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="306"/>
-        <location filename="../mainwindow.cc" line="308"/>
-        <location filename="../mainwindow.cc" line="309"/>
+        <location filename="../mainwindow.cc" line="311"/>
+        <location filename="../mainwindow.cc" line="313"/>
+        <location filename="../mainwindow.cc" line="314"/>
         <source>Copy</source>
         <translation>コピー</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="316"/>
+        <location filename="../mainwindow.cc" line="321"/>
         <source>Search with %1</source>
-        <translation>%1で検索</translation>
+        <translation>検索：%1</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="389"/>
+        <location filename="../mainwindow.cc" line="394"/>
         <source>&amp;File</source>
         <translation></translation>
     </message>
@@ -775,87 +827,92 @@
         <translation type="obsolete">終了</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="399"/>
+        <location filename="../mainwindow.cc" line="404"/>
         <source>&amp;Quit</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="401"/>
+        <location filename="../mainwindow.cc" line="406"/>
         <source>&amp;Edit</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="408"/>
+        <location filename="../mainwindow.cc" line="413"/>
         <source>&amp;Settings</source>
         <translation>設定</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="409"/>
+        <location filename="../mainwindow.cc" line="414"/>
         <source>&amp;Preferences</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="411"/>
+        <location filename="../mainwindow.cc" line="416"/>
         <source>&amp;Help</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="413"/>
+        <location filename="../mainwindow.cc" line="418"/>
         <source>&amp;About</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="427"/>
+        <location filename="../mainwindow.cc" line="432"/>
         <source>Name</source>
         <translation>名前</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="428"/>
+        <location filename="../mainwindow.cc" line="433"/>
         <source>State</source>
         <translation>状態</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="429"/>
+        <location filename="../mainwindow.cc" line="434"/>
         <source>Size</source>
         <translation>サイズ</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="430"/>
+        <location filename="../mainwindow.cc" line="435"/>
         <source>Speed</source>
         <translation>速度</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="432"/>
+        <location filename="../mainwindow.cc" line="437"/>
         <source>Remaining time</source>
         <translation>残り時間</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="433"/>
+        <location filename="../mainwindow.cc" line="438"/>
         <source>Path</source>
         <translation>位置</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="434"/>
+        <location filename="../mainwindow.cc" line="439"/>
         <source>URL</source>
         <translation>URL</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="435"/>
+        <location filename="../mainwindow.cc" line="440"/>
         <source>ID</source>
         <translation>ID</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="631"/>
+        <location filename="../mainwindow.cc" line="636"/>
         <source>openning</source>
         <translation>正在打开</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="633"/>
+        <location filename="../mainwindow.cc" line="638"/>
         <source>not exist</source>
         <translation>存在しない</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="652"/>
+        <location filename="../mainwindow.cc" line="655"/>
+        <source>download annotations</source>
+        <translation>弾幕を落とす</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cc" line="661"/>
         <source>task exists</source>
         <translation>タスクが既に存在</translation>
     </message>
@@ -864,7 +921,7 @@
         <translation type="obsolete">ウィンドウを非表示</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="976"/>
+        <location filename="../mainwindow.cc" line="985"/>
         <source>Minimize to Tray</source>
         <translation>トレイに隠れる</translation>
     </message>
@@ -873,43 +930,43 @@
         <translation type="obsolete">ﾀﾞｳﾝﾛｰﾄﾞ</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="802"/>
+        <location filename="../mainwindow.cc" line="811"/>
         <source>download finished</source>
         <translation>ﾀﾞｳﾝﾛｰﾄﾞ完成</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="809"/>
+        <location filename="../mainwindow.cc" line="818"/>
         <source>download failed</source>
         <translation>ﾀﾞｳﾝﾛｰﾄﾞ失敗</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="869"/>
+        <location filename="../mainwindow.cc" line="878"/>
         <source>Copy URL</source>
         <translation>URLをコピー</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="926"/>
+        <location filename="../mainwindow.cc" line="935"/>
         <source>Stopped</source>
         <translation>停止</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="927"/>
+        <location filename="../mainwindow.cc" line="936"/>
         <source>Downloading</source>
         <translation>ﾀﾞｳﾝﾛｰﾄﾞ中</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="928"/>
+        <location filename="../mainwindow.cc" line="937"/>
         <source>Pending</source>
         <translation>待つ</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="929"/>
+        <location filename="../mainwindow.cc" line="938"/>
         <source>Finished</source>
         <translation>完成</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="930"/>
-        <location filename="../mainwindow.cc" line="931"/>
+        <location filename="../mainwindow.cc" line="939"/>
+        <location filename="../mainwindow.cc" line="940"/>
         <source>Error</source>
         <translation>エラー</translation>
     </message>
@@ -922,14 +979,14 @@
         <translation>ﾀﾞｳﾝﾛｰﾄﾞに失敗した</translation>
     </message>
     <message>
-        <location filename="../../../module/downloadtask/mrldownloadtask.cc" line="104"/>
+        <location filename="../../../module/downloadtask/mrldownloadtask.cc" line="105"/>
         <location filename="../../../module/downloadtask/mrldownloadtask_m.cc" line="49"/>
         <location filename="../../../module/downloadtask/mrldownloadtask_s.cc" line="34"/>
         <source>unknown</source>
         <translation>未知</translation>
     </message>
     <message>
-        <location filename="../../../module/downloadtask/mrldownloadtask.cc" line="111"/>
+        <location filename="../../../module/downloadtask/mrldownloadtask.cc" line="114"/>
         <source>failed to resolve media URL</source>
         <translation>動画URLの解析に失敗した</translation>
     </message>
@@ -1265,7 +1322,7 @@
     <name>SystemTrayIcon</name>
     <message>
         <source>Annot Downloader</source>
-        <translation type="obsolete">とあるﾀﾞｳﾝﾛｰﾄﾞ</translation>
+        <translation type="obsolete">とあるﾀﾞｳﾝﾛｰﾄﾞ使い</translation>
     </message>
     <message>
         <source>Add</source>
@@ -1308,14 +1365,12 @@
         <translation>追加</translation>
     </message>
     <message>
-        <location filename="../taskdialog.cc" line="55"/>
         <source>Increase</source>
-        <translation>増える</translation>
+        <translation type="obsolete">増える</translation>
     </message>
     <message>
-        <location filename="../taskdialog.cc" line="57"/>
         <source>Decrease</source>
-        <translation>減る</translation>
+        <translation type="obsolete">減る</translation>
     </message>
     <message>
         <location filename="../taskdialog.cc" line="59"/>
@@ -1328,12 +1383,22 @@
         <translation>消す</translation>
     </message>
     <message>
-        <location filename="../taskdialog.cc" line="106"/>
+        <location filename="../taskdialog.cc" line="63"/>
+        <source>Annot Only</source>
+        <translation>弾幕だけ</translation>
+    </message>
+    <message>
+        <location filename="../taskdialog.cc" line="63"/>
+        <source>Download annotation only</source>
+        <translation>弾幕だけを落とす</translation>
+    </message>
+    <message>
+        <location filename="../taskdialog.cc" line="109"/>
         <source>duplicated</source>
         <translation>既にある</translation>
     </message>
     <message>
-        <location filename="../taskdialog.cc" line="137"/>
+        <location filename="../taskdialog.cc" line="140"/>
         <source>invalid URLs</source>
         <translation>無効なURL</translation>
     </message>
@@ -1343,7 +1408,7 @@
     <message>
         <location filename="../trayicon.cc" line="15"/>
         <source>Annot Downloader</source>
-        <translation>とあるﾀﾞｳﾝﾛｰﾄﾞ</translation>
+        <translation>とあるﾀﾞｳﾝﾛｰﾄﾞ使い</translation>
     </message>
     <message>
         <location filename="../trayicon.cc" line="25"/>

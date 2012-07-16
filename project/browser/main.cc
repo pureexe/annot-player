@@ -5,9 +5,11 @@
 #include "rc.h"
 #include "settings.h"
 #include "global.h"
+#include "project/common/acpaths.h"
 #include "project/common/acsettings.h"
 #include "project/common/acui.h"
 //#include "module/download/downloader.h"
+#include "module/annotcache/annotationcachemanager.h"
 #ifdef WITH_MODULE_QT
 # include "module/qt/qtrc.h"
 #endif // WITH_MODULE_QT
@@ -20,7 +22,6 @@
 #include <QtNetwork/QNetworkReply>
 #include <QtGui>
 
-
 #define DEBUG "main"
 #include "module/debug/debug.h"
 
@@ -30,7 +31,7 @@
 
 // - Startup stages -
 
-namespace { // anonymous
+namespace { namespace detail {
 
   // Meta types
   inline void registerMetaTypes()
@@ -75,7 +76,7 @@ namespace { // anonymous
   }
 #endif // WITH_MODULE_QT
 
-} // namespace anonymous
+} } // anonymous detail
 
 // - Main -
 
@@ -92,7 +93,7 @@ main(int argc, char *argv[])
   Application a(argc, argv);
 
   // Register meta types.
-  ::registerMetaTypes();
+  detail::registerMetaTypes();
 
   AcSettings *ac = AcSettings::globalSettings();
   Settings *settings = Settings::globalSettings();
@@ -106,12 +107,12 @@ main(int argc, char *argv[])
       script = system.script();
       ac->setLanguage(lang, script);
     }
-    QTranslator *t = translatorForLanguage(lang, script);
+    QTranslator *t = detail::translatorForLanguage(lang, script);
     Q_ASSERT(t);
     if (t)
       a.installTranslator(t);
 #ifdef WITH_MODULE_QT
-    t = qtTranslatorForLanguage(lang, script);
+    t = detail::qtTranslatorForLanguage(lang, script);
     if (t)
       a.installTranslator(t);
 #endif // WITH_MODULE_QT
@@ -166,6 +167,9 @@ main(int argc, char *argv[])
     ws->setMaximumPagesInCache(30);
   }
 
+  // Set annotation cache directory, shared across different annot apps
+  AnnotationCacheManager::globalInstance()->setLocation(AC_PATH_CACHES);
+
   //void *p = dlopen("/Library/Internet Plug-Ins/QuickTime Plugin.plugin/Contents/MacOS/QuickTime Plugin", 265);
 
   // Set network proxy
@@ -203,7 +207,6 @@ main(int argc, char *argv[])
     w->show();
   }
 
-  DOUT("exit: exec");
   return a.exec();
 }
 

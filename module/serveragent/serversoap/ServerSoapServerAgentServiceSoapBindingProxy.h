@@ -223,6 +223,10 @@ class SOAP_CMAC ServerAgentServiceSoapBindingProxy : public soap
 	/// Web service operation 'updateMediaAnnotationTextWithId' (returns error code or SOAP_OK)
 	virtual	int updateMediaAnnotationTextWithId(tns__updateMediaAnnotationTextWithId *tns__updateMediaAnnotationTextWithId_, tns__updateMediaAnnotationTextWithIdResponse *tns__updateMediaAnnotationTextWithIdResponse_) { return updateMediaAnnotationTextWithId(NULL, NULL, tns__updateMediaAnnotationTextWithId_, tns__updateMediaAnnotationTextWithIdResponse_); }
 	virtual	int updateMediaAnnotationTextWithId(const char *endpoint, const char *soap_action, tns__updateMediaAnnotationTextWithId *tns__updateMediaAnnotationTextWithId_, tns__updateMediaAnnotationTextWithIdResponse *tns__updateMediaAnnotationTextWithIdResponse_);
+
+	/// Web service operation 'updateMediaAnnotationUserIdWithId' (returns error code or SOAP_OK)
+	virtual	int updateMediaAnnotationUserIdWithId(tns__updateMediaAnnotationUserIdWithId *tns__updateMediaAnnotationUserIdWithId_, tns__updateMediaAnnotationUserIdWithIdResponse *tns__updateMediaAnnotationUserIdWithIdResponse_) { return updateMediaAnnotationUserIdWithId(NULL, NULL, tns__updateMediaAnnotationUserIdWithId_, tns__updateMediaAnnotationUserIdWithIdResponse_); }
+	virtual	int updateMediaAnnotationUserIdWithId(const char *endpoint, const char *soap_action, tns__updateMediaAnnotationUserIdWithId *tns__updateMediaAnnotationUserIdWithId_, tns__updateMediaAnnotationUserIdWithIdResponse *tns__updateMediaAnnotationUserIdWithIdResponse_);
 };
 
 } // namespace ServerSoap

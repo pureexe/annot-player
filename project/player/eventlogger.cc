@@ -109,7 +109,7 @@ EventLogger::logUntilPlaying()
   }
 
   if (!logCount_)
-    notify(tr("caching fonts on first launch ... this could take up to 10min, don't panic!"));
+    notify(tr("caching media or fonts ... this could take up to 10min on first launch, don't panic!"));
   else {
     int msecs = logCount_ * G_LOGGER_PLAYING_WAITER_TIMEOUT;
     QTime t = QtExt::msecs2time(msecs);
@@ -328,10 +328,6 @@ EventLogger::logClientAgentDeauthorized()
 void
 EventLogger::logClientAgentAuthorizationError()
 { warn(tr("failed to authorize server, mismatched public key")); }
-
-void
-EventLogger::logTranslatorNetworkError(const QString &message)
-{ warn(tr("translator got network error") + ": " + message); }
 
 void
 EventLogger::logTextEncodingChanged(const QString &enc)

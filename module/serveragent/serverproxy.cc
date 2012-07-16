@@ -1176,6 +1176,35 @@ ServerProxy::updateAnnotationTextWithId(const QString &text, qint64 id, const QS
   return ret;
 }
 
+bool
+ServerProxy::updateAnnotationUserIdWithId(qint64 userId, qint64 id, const QString &userName, const QString &password)
+{
+  DOUT("enter: id =" << id << ", userId =" << userId);
+
+  tns__updateMediaAnnotationUserIdWithId request;
+  request.arg0 = userId;
+  request.arg1 = id;
+  std::string s_userName = userName.toStdString();
+  request.userName = &s_userName;
+  std::string s_password = password.toStdString();
+  request.password = &s_password;
+
+  tns__updateMediaAnnotationUserIdWithIdResponse response;
+  mutex_.lock();
+  int err = proxy_->updateMediaAnnotationUserIdWithId(&request, &response);
+  mutex_.unlock();
+  if (err) {
+    DOUT("soap error, err =" << err);
+    emit soapError(err);
+    DOUT("exit");
+    return false;
+  }
+
+  bool ret = response.return_;
+  DOUT("exit: ret =" << ret);
+  return ret;
+}
+
 // - Live -
 
 qint32

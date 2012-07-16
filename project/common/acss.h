@@ -39,21 +39,22 @@
     SS_COLOR(_disabled) \
   SS_END
 
-#define ACSS_TOOLBUTTON_TEXT_NORMAL       ACSS_TOOLBUTTON_TEXT_(normal, normal, none, blue, red, purple, purple, red, gray)
 #ifdef Q_OS_MAC
-# define ACSS_TOOLBUTTON_TEXT_INVERT     ACSS_TOOLBUTTON_TEXT_(normal, normal, none, red, blue, purple, purple, red, gray)
-# define ACSS_TOOLBUTTON_TEXT_HIGHLIGHT  ACSS_TOOLBUTTON_TEXT_(bold, normal, none, blue, red, purple, purple, red, gray)
-# define ACSS_TOOLBUTTON_TEXT_CHECKABLE  ACSS_TOOLBUTTON_TEXT_(bold, italic, none, blue, red, purple, purple, red, gray)
-# define ACSS_TOOLBUTTON_TEXT_TAB        ACSS_TOOLBUTTON_TEXT_(bold, normal, none, blue, red, purple, purple, red, gray)
-# define ACSS_TOOLBUTTON_TEXT_URL        ACSS_TOOLBUTTON_TEXT_(normal, italic, underline, blue, red, purple, purple, red, gray)
-# define ACSS_TOOLBUTTON_TEXT            ACSS_TOOLBUTTON_TEXT_NORMAL
+# define ACSS_TOOLBUTTON_TEXT            ACSS_TOOLBUTTON_TEXT_(normal, normal, none, blue, red, purple, purple, red, gray)
+# define ACSS_TOOLBUTTON_TEXT_NORMAL     ACSS_TOOLBUTTON_TEXT_(normal, normal, none, white, red, purple, purple, red, gray)
+# define ACSS_TOOLBUTTON_TEXT_INVERT     ACSS_TOOLBUTTON_TEXT_(normal, normal, none, red, white, purple, purple, red, gray)
+# define ACSS_TOOLBUTTON_TEXT_HIGHLIGHT  ACSS_TOOLBUTTON_TEXT_(bold, normal, none, white, red, purple, purple, red, gray)
+# define ACSS_TOOLBUTTON_TEXT_CHECKABLE  ACSS_TOOLBUTTON_TEXT_(bold, italic, none, white, red, purple, purple, red, gray)
+# define ACSS_TOOLBUTTON_TEXT_TAB        ACSS_TOOLBUTTON_TEXT_(bold, normal, none, white, red, purple, purple, red, gray)
+# define ACSS_TOOLBUTTON_TEXT_URL        ACSS_TOOLBUTTON_TEXT_(normal, italic, underline, white, red, purple, purple, red, gray)
 #else
-# define ACSS_TOOLBUTTON_TEXT_INVERT     ACSS_TOOLBUTTON_TEXT_(normal, normal, none, red, blue, orange, orange, red, gray)
-# define ACSS_TOOLBUTTON_TEXT_HIGHLIGHT  ACSS_TOOLBUTTON_TEXT_(bold, normal, none, blue, red, orange, orange, red, gray)
-# define ACSS_TOOLBUTTON_TEXT_CHECKABLE  ACSS_TOOLBUTTON_TEXT_(normal, italic, none, blue, red, orange, orange, red, gray)
-# define ACSS_TOOLBUTTON_TEXT_TAB        ACSS_TOOLBUTTON_TEXT_(bold, normal, none, blue, red, orange, orange, red, gray)
-# define ACSS_TOOLBUTTON_TEXT_URL        ACSS_TOOLBUTTON_TEXT_(normal, italic, underline, blue, red, orange, orange, red, gray)
-# define ACSS_TOOLBUTTON_TEXT            ACSS_TOOLBUTTON_TEXT_NORMAL
+# define ACSS_TOOLBUTTON_TEXT            ACSS_TOOLBUTTON_TEXT_(normal, normal, none, blue, red, orange, orange, red, gray)
+# define ACSS_TOOLBUTTON_TEXT_NORMAL     ACSS_TOOLBUTTON_TEXT_(normal, normal, none, white, red, orange, orange, red, gray)
+# define ACSS_TOOLBUTTON_TEXT_INVERT     ACSS_TOOLBUTTON_TEXT_(normal, normal, none, red, white, orange, orange, red, gray)
+# define ACSS_TOOLBUTTON_TEXT_HIGHLIGHT  ACSS_TOOLBUTTON_TEXT_(bold, normal, none, white, red, orange, orange, red, gray)
+# define ACSS_TOOLBUTTON_TEXT_CHECKABLE  ACSS_TOOLBUTTON_TEXT_(normal, italic, none, white, red, orange, orange, red, gray)
+# define ACSS_TOOLBUTTON_TEXT_TAB        ACSS_TOOLBUTTON_TEXT_(bold, normal, none, white, red, orange, orange, red, gray)
+# define ACSS_TOOLBUTTON_TEXT_URL        ACSS_TOOLBUTTON_TEXT_(normal, italic, underline, white, red, orange, orange, red, gray)
 #endif // Q_OS_MAC
 
 // - Labels -
@@ -161,7 +162,7 @@
   SS_BEGIN(QCheckBox:disabled) \
     SS_COLOR(_disabled) \
   SS_END
-#define ACSS_CHECKBOX ACSS_CHECKBOX_(blue, red, cyan, orange, gray)
+#define ACSS_CHECKBOX ACSS_CHECKBOX_(white, red, cyan, orange, gray)
 
 #define ACSS_RADIOBUTTON_(_normal, _hover, _checked, _checked_hover, _disabled) \
   SS_BEGIN(QRadioButton) \
@@ -179,7 +180,7 @@
   SS_BEGIN(QRadioButton:disabled) \
     SS_COLOR(_disabled) \
   SS_END
-#define ACSS_RADIOBUTTON  ACSS_RADIOBUTTON_(blue, red, orange, orange, gray)
+#define ACSS_RADIOBUTTON  ACSS_RADIOBUTTON_(white, red, orange, orange, gray)
 
 #define ACSS_GROUPBOX \
   SS_BEGIN(QGroupBox) \

@@ -81,7 +81,7 @@ MiniPlayerUi::createLayout()
     //row1->addWidget(toggleAnnotationButton());
     row1->addWidget(nextFrameButton());
     row1->addWidget(fastForwardButton());
-    row1->addWidget(fastFastForwardButton());
+    //row1->addWidget(fastFastForwardButton());
     row1->addWidget(stopButton());
     row1->addWidget(previousButton());
     row1->addWidget(nextButton());
@@ -116,6 +116,8 @@ MiniPlayerUi::createLayout()
   // Note: there is no textChanged event in QLabel.
   progressButton()->hide();
   progressButton()->resize(QSize());
+  //fastFastForwardButton()->hide();
+  //fastFastForwardButton()->resize(QSize());
   menuButton()->hide();
   menuButton()->resize(QSize());
 #ifndef WITH_WIN_PICKER

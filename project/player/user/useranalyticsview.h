@@ -10,6 +10,7 @@
 QT_FORWARD_DECLARE_CLASS(QUrl)
 
 class DataManager;
+class SignalHub;
 
 class UserAnalyticsView: public AcWebWindow
 {
@@ -22,7 +23,7 @@ class UserAnalyticsView: public AcWebWindow
 
   // - Constructions -
 public:
-  explicit UserAnalyticsView(DataManager *data, QWidget *parent = 0);
+  UserAnalyticsView(DataManager *data, SignalHub *hub, QWidget *parent = 0);
 
 public slots:
   void refresh();
@@ -45,6 +46,7 @@ private:
 
 private:
   DataManager *data_;
+  SignalHub *hub_;
   qint64 userId_;
 };
 

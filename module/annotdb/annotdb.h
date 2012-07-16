@@ -123,6 +123,11 @@ public:
   ///  Insert alias if not exist, or replace the old one. Return updated aid.
   void updateAlias(const Alias &alias);
   void updateAliases(const AliasList &l, bool async = false, int limit = 0);
+
+  // - Modification -
+
+  bool updateAnnotationTextWithId(const QString &text, qint64 id);
+  bool updateAnnotationUserIdWithId(qint64 userId, qint64 id);
 };
 
 #endif // ANNOTDB_H

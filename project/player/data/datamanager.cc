@@ -148,6 +148,22 @@ DataManager::updateAnnotationTextWithId(const QString &text, qint64 id)
   }
 }
 
+void
+DataManager::updateAnnotationUserIdWithId(qint64 userId, qint64 id)
+{
+  if (!annots_.isEmpty() && id) {
+    auto p = annots_.begin();
+    while (p != annots_.end())
+      if (p->id() == id) {
+        p->setUserId(userId);
+        break;
+      } else
+        ++p;
+
+    emit annotationUserIdUpdatedWithId(userId, id);
+  }
+}
+
 bool
 DataManager::aliasConflicts(const Alias &input) const
 {

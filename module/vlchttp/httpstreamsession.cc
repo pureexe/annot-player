@@ -41,7 +41,7 @@ enum { BufferingInterval = 3000 }; // 3 second
 
 // - Progress -
 
-namespace { // anonymous
+namespace { namespace detail {
 
   class ProgressTask : public StoppableTask
   {
@@ -65,9 +65,9 @@ namespace { // anonymous
     }
   };
 
-  QtExt::SleepTimer sleep_;
+  QtExt::SleepTimer sleep;
 
-} // anonymous namespace
+} } // anonymous detail
 
 // - Construction -
 
@@ -157,7 +157,7 @@ HttpStreamSession::read(char *data, qint64 maxSize)
     return ret;
   emit buffering();
   if (isRunning()) {
-    //sleep_.start(BufferingInterval);
+    //detail::sleep.start(BufferingInterval);
     //if (isRunning())
       return fifo_->read(data, maxSize);
   }
@@ -244,7 +244,7 @@ HttpStreamSession::stop()
     p->stop();
   }
 
-  sleep_.stop();
+  detail::sleep.stop();
 
   emit stopped();
   //quit();
@@ -339,7 +339,7 @@ HttpStreamSession::run()
         int secs = WaitInterval + j - MinDownloadRetries;
         emit warning(tr("wait %1 seconds and try again").arg(QString::number(secs)) + " ...");
         DOUT(QString("wait for %1 seconds").arg(QString::number(secs)));
-        sleep_.start(secs);
+        detail::sleep.start(secs);
       }
       if (isStopped()) {
         DOUT("stopped, break");
@@ -530,7 +530,7 @@ HttpStreamSession::run()
   readyCond_.wakeAll();
 
   if (ok) {
-    progressTask_ = new ProgressTask(this);
+    progressTask_ = new detail::ProgressTask(this);
     QThreadPool::globalInstance()->start(progressTask_);
   }
 

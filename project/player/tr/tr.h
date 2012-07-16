@@ -5,9 +5,9 @@
 // 7/18/2011
 // Global parameters.
 
-#include "translatormanager.h"
+#include "translationmanager.h"
 
-#define TR(_tid)        TranslatorManager::globalInstance()->translate(_tid)
+#define TR(_tid)        TranslationManager::globalInstance()->translate(_tid)
 
 // TODO: Clean up id define
 // remove redundent translation
@@ -77,16 +77,21 @@
 #define T_TRADITIONALCHINESE    0x315
 #define T_SIMPLIFIEDCHINESE     0x316
 #define T_KOREAN                0x317
+#define T_FRENCH                0x318
+#define T_GERMAN                0x319
+#define T_SPANISH               0x31a
+#define T_PORTUGUESE            0x31b
+
 #define T_UNKNOWNLANGUAGE       T_ALIEN
-#define T_ANYLANGUAGE           0x318
+#define T_ANYLANGUAGE           0x31c
 
 #define T_MENUTEXT_UNKNOWNLANGUAGE  T_UNKNOWNLANGUAGE
 #define T_TIP_UNKNOWNLANGUAGE       T_UNKNOWNLANGUAGE
 #define T_TOOLTIP_UNKNOWNLANGUAGE   T_TIP_UNKNOWNLANGUAGE
 #define T_STATUSTIP_UNKNOWNLANGUAGE T_TIP_UNKNOWNLANGUAGE
 
-#define T_MENUTEXT_ANYLANGUAGE  0x319
-#define T_TIP_ANYLANGUAGE       0x31a
+#define T_MENUTEXT_ANYLANGUAGE  0x31d
+#define T_TIP_ANYLANGUAGE       0x31e
 #define T_TOOLTIP_ANYLANGUAGE   T_TIP_ANYLANGUAGE
 #define T_STATUSTIP_ANYLANGUAGE T_TIP_ANYLANGUAGE
 
@@ -109,6 +114,26 @@
 #define T_TIP_KOREAN            T_KOREAN
 #define T_TOOLTIP_KOREAN        T_TIP_KOREAN
 #define T_STATUSTIP_KOREAN      T_TIP_KOREAN
+
+#define T_MENUTEXT_FRENCH       T_FRENCH
+#define T_TIP_FRENCH            T_FRENCH
+#define T_TOOLTIP_FRENCH        T_TIP_FRENCH
+#define T_STATUSTIP_FRENCH      T_TIP_FRENCH
+
+#define T_MENUTEXT_GERMAN       T_GERMAN
+#define T_TIP_GERMAN            T_GERMAN
+#define T_TOOLTIP_GERMAN        T_TIP_GERMAN
+#define T_STATUSTIP_GERMAN      T_TIP_GERMAN
+
+#define T_MENUTEXT_SPANISH      T_SPANISH
+#define T_TIP_SPANISH           T_SPANISH
+#define T_TOOLTIP_SPANISH       T_TIP_SPANISH
+#define T_STATUSTIP_SPANISH     T_TIP_SPANISH
+
+#define T_MENUTEXT_PORTUGUESE   T_PORTUGUESE
+#define T_TIP_PORTUGUESE        T_PORTUGUESE
+#define T_TOOLTIP_PORTUGUESE    T_TIP_PORTUGUESE
+#define T_STATUSTIP_PORTUGUESE  T_TIP_PORTUGUESE
 
 #define T_MENUTEXT_TRADITIONALCHINESE  T_TRADITIONALCHINESE
 #define T_TIP_TRADITIONALCHINESE       T_TRADITIONALCHINESE
@@ -197,14 +222,11 @@
 #define T_TITLE_OPENAUDIODEVICE 0x14
 #define T_TITLE_OPENSUBTITLE    0x15
 
-#define T_TITLE_ANNOTATIONBROWSER       0x19
-#define T_TITLE_TOKENVIEW       0x1a
 #define T_TITLE_COMMENTVIEW     0x1b
 #define T_TITLE_ANNOTANALYTICS  0x1c
 #define T_TITLE_SIGNALVIEW      0x1d
 #define T_TITLE_LIVE            0x1e
 #define T_TITLE_SYNC            0x1f
-#define T_TITLE_ANNOTATIONEDITOR        0x20
 #define T_TITLE_USERVIEW       T_USER
 
 // - Messages -

@@ -64,7 +64,7 @@ MainPlayerUi::createLayout()
     //row1->addWidget(toggleAnnotationButton());
     row1->addWidget(nextFrameButton());
     row1->addWidget(fastForwardButton());
-    row1->addWidget(fastFastForwardButton());
+    //row1->addWidget(fastFastForwardButton());
     row1->addWidget(stopButton());
     row1->addWidget(previousButton());
     row1->addWidget(nextButton());
@@ -96,6 +96,8 @@ MainPlayerUi::createLayout()
   menuButton()->resize(QSize());
   progressButton()->hide();
   progressButton()->resize(QSize());
+  //fastFastForwardButton()->hide();
+  //fastFastForwardButton()->resize(QSize());
 #ifndef WITH_WIN_PICKER
   toggleTraceWindowButton()->hide();
   toggleTraceWindowButton()->resize(QSize());

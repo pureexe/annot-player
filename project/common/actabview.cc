@@ -3,6 +3,7 @@
 
 #include "project/common/actabview.h"
 #include "project/common/acss.h"
+#include "project/common/acui.h"
 #include "module/qtext/toolbutton.h"
 #include "module/qtext/toolbuttonwithid.h"
 #include "module/qtext/compactstackedlayout.h"
@@ -89,6 +90,7 @@ AcTabView::addTab(QWidget *tab)
       QString("%1 [" K_CTRL "+%2]").arg(tabName).arg(QString::number(tabCount_+1))
     );
     tabButton->setCheckable(true);
+    tabButton->setGraphicsEffect(AcUi::globalInstance()->makeHaloEffect(AcUi::TabHint));
     connect(tabButton, SIGNAL(clickedWithId(int)), SLOT(setTab(int)));
   }
   tabButtons_.append(tabButton);

@@ -22,7 +22,7 @@ class AnnotationPreferencesTab : public AcPreferencesTab
 
   //QComboBox *scaleEdit_,
   //          *rotationEdit_,
-  QSpinBox *resolutionEdit_,
+  QSpinBox *speedEdit_,
            *offsetEdit_;
   QFontComboBox *fontEdit_,
                 *japaneseFontEdit_,
@@ -53,10 +53,10 @@ protected slots:
   void loadChineseFont();
   void resetChineseFont();
 
-  void saveResolution();
-  void loadResolution();
-  void loadResolutionIfVisible() { if (isVisible()) loadResolution(); }
-  void resetResolution();
+  void saveSpeed();
+  void loadSpeed();
+  void loadSpeedIfVisible() { if (isVisible()) loadSpeed(); }
+  void resetSpeed();
 
   void saveOffset();
   void loadOffset();

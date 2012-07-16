@@ -7,7 +7,7 @@
 //#define DEBUG "wmtimer"
 #include "module/debug/debug.h"
 
-namespace { // anonymous
+namespace { namespace detail {
   VOID CALLBACK TimerProc(
     HWND hwnd,         // ウィンドウのハンドル
     UINT uMsg,         // WM_TIMER メッセージ
@@ -29,7 +29,7 @@ namespace { // anonymous
     t->trigger();
     DOUT("exit");
   }
-} // anonymous
+} } // anonymous detail
 
 // - Construction -
 
@@ -53,7 +53,7 @@ WmTimer::start()
 {
   DOUT("enter: active =" << active_ << ", interval =" << interval_);
   active_ = true;
-  ::SetTimer(parentWindow_, reinterpret_cast<UINT_PTR>(this), interval_, ::TimerProc);
+  ::SetTimer(parentWindow_, reinterpret_cast<UINT_PTR>(this), interval_, detail::TimerProc);
   DOUT("exit");
 }
 

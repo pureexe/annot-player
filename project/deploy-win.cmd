@@ -3,7 +3,7 @@
 setlocal
 cd /d d:/dev/build || exit /b 1
 
-set VERSION=0.1.6.4
+set VERSION=0.1.7
 set APP=annot-player
 set TARGET=Annot Stream
 set ZIPFILE=%APP%-%VERSION%-win.zip
@@ -46,7 +46,9 @@ set OPENSSL_DLLS=libeay32.dll,ssleay32.dll
 set ZLIB_HOME=/Volumes/win/dev/zlib
 set ZLIB_DLL=zlib1.dll
 
-set VLC_HOME=/Volumes/win/Program Files/VideoLAN/VLC
+::set VLC_HOME=/Volumes/win/Program Files/VideoLAN/VLC
+::set VLC_HOME=/Volumes/local/Applications/VideoLAN/VLC
+set VLC_HOME=D:/Applications/VideoLAN/VLC
 set VLC_DLLS=libvlc.dll,libvlccore.dll
 set VLC_DATA=plugins,lua,locale
 
@@ -100,6 +102,7 @@ cp -v "%QT_HOME%"/bin/{%QT_DLLS%} . || exit /b 1
 
 cp -v "%MSVC_HOME%"/{%MSVC_DLLS%} . || exit /b 1
 cp -Rv "%MSVC90_REDIST%" . || exit /b 1
+cp -v "%VLC_HOME%"/{%VLC_DLLS%} . || exit /b 1
 cp -v "%ITH_HOME%"/bin/{%ITH_DLLS%} . || exit /b 1
 cp -v "%OPENSSL_HOME%"/{%OPENSSL_DLLS%} . || exit /b 1
 ::cp -v "%GPAC_HOME%"/bin/{%GPAC_DLLS%} . || exit /b 1
@@ -117,7 +120,10 @@ cp -Rv "%VLC_HOME%"/{%VLC_DATA%} . || exit /b 1
 ::mkdir plugins || exit /b 1
 ::cp -Rv "%VLC_HOME%"/plugins/*/*.dll plugins/
 
-rm -fv plugins/*.dat*
+rm -fv plugins/*.dat* || exit /b 1
+
+:: FIXME: playlist plugin bug in VLC 2.0.2
+cp -v "%VLC_HOME%"/../VLC-2.0.1/plugins/demux/libplaylist_plugin.dll plugins/demux/ || exit /b 1
 
 ::cp -v "%BUILD%"/*.{exe,dll} . || exit /b 1
 cp -v "%BUILD%"/*.{exe,dll} .
@@ -155,6 +161,9 @@ cp -Rv "%SOURCE%"/module/annotcloud/jsf . || exit /b 1
 cp -Rv "%SOURCE%"/project/player/avatars . || exit /b 1
 
 cd ..
+
+:: Scripts
+cp -v "%SOURCE%"/scripts/* . || exit /b 1
 
 :: desktop.ini
 cp -v "%SOURCE%"/project/common/share/apps.ico icon.ico || exit /b 1

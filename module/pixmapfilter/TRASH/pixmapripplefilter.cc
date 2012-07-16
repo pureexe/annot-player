@@ -93,8 +93,8 @@ PixmapRippleFilter::draw(QPainter *p, const QPointF &pos, const QImage &currentI
     currentMap_ = ::allocateWaveMap(currentSize);
 
     for (x = 0; x < currentSize.width(); ++x) {
-      ::memset(currentMap_[x], 0, sizeof(int) * currentSize.height());
-      ::memset(previousMap_[x], 0, sizeof(int) * currentSize.height());
+      qMemSet(currentMap_[x], 0, sizeof(int) * currentSize.height());
+      qMemSet(previousMap_[x], 0, sizeof(int) * currentSize.height());
     }
     mapSize_ = currentSize;
     if (hasCenter() &&
@@ -106,8 +106,8 @@ PixmapRippleFilter::draw(QPainter *p, const QPointF &pos, const QImage &currentI
 
   //if (qFuzzyCompare(m_opacity +1, 1)) {
   //  for (x = 0; x < width(); ++x) {
-  //    ::memset(m_currentMap[x], 0, sizeof(int) * height());
-  //    ::memset(m_previousMap[x], 0, sizeof(int) * height());
+  //    qMemSet(m_currentMap[x], 0, sizeof(int) * height());
+  //    qMemSet(m_previousMap[x], 0, sizeof(int) * height());
   //  }
   //  m_mapSize = size();
   //  int waveLength = m_mapSize.width() > m_mapSize.height() ? m_mapSize.width() : m_mapSize.height();

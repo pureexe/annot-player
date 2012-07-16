@@ -60,33 +60,90 @@ http://qt-project.org/wiki/Category:Add-ons
 # features
 - create a demo video for download annotation xml
 
-# 0.1.6.5
+# projects
+- stream galgame
+- server design: build my own jsp wiki
+  - how to associate with wiki
+  - make similar to wikimedia
+    - add translation/annotation viewer as tabs
+  annot wiki
+  see jspwiki
+- chat
 
+steal http://icefaces-showcase.icesoft.org/showcase.jsf?grp=aceMenu
+try ace to replace current homepage
+
+## FIXME
+- windows xp
+  - check if it is possible to bypass apploc on Chinese Windows XP
+
+- player
+  - fixme: open from explorer cannot resolve subtitle
+    - it must because current directory changed
+  - fixme: infinite retry downloading annotations
 - downloader
+  BUG: the way to get next taskId in downloader is incorrect
   - debug downloader
     - start single task when running
     - delete single task when running
     - add/delete/start/stop multiple task
     - add multiple task without waiting
-- mac
-  - fixme; drag-drop is broken
 - player
-  context menu to totally disable annotation
-  - add notification textedit to topleft
-    to show important message once such as volume, etc
-    - need an object for tracking
-    - alternative, make osdwindow the same geometry as the target view rather then full screen
+  - fixme: annotationview contextmenu/doubleclick might crash
+- common
+  - add background to spinbox and timeedit
+- windows fixme
+  - player
+    - debug close video crash
+    - debug hang when close current video
 
-- browser
-  - need a annotdown module
-  - option to download subtitle only to desktop
+## LATER
+- backlog
+  - betterway to show game text
+    - highlight diff words, etc
+    - hover with meanings
+
+- windows game
+  - submit game text as context as well
+  - flag it's already finished, or locked.
+  - directly edit translations
+  - a different way to display galgame text with phrases splitted
+  - Able to manually dumping galgame and upload text online.
+    - redisign database, diveup pos, add textid
+      game_text
+      text_id
+    - split media_token into media_xxx and game_xxx in the future
+    - split media_annot and game_annot
+    - upload game text for subtitles/annotations as well
+  - cache google translation for offline subtitle annot, or use a db for translation?
+  - game_text
+    text_id token_id user_id text_create_time text_create_ip text_text
+  was thinking to add something like a universal user dictionary for names/expressions or even complete phrases that are most common used in games so it gets immediately translated, as an example of a user dictionary there is http://www.hongfire.com/forum/showthread.php/79006-fhc-dictionary-of-ATLAS-Japanese-Translator or http://www.hongfire.com/forum/showthread.php/94395-Translation-Aggregator-v0-4-9?p=2269439#post2269439
+  I see. Sharing translation efforts across different games is really a good idea!
+- add issubtitle to annot's flag when submit or edit
+  - repair my old subtitles a week later
+- dialogs
+  - learn QtForms, QML and QtQuick
+  - remove aero/transparency from dialogs, windows, preferences, etc
+    atleast disable on mac/windowxp
+
 - player
-  - debug annotation submit when alias does not exist
-
-- galgame
-  - download and debug DCIII
+  - take the ownership over guest annotations
+    - don't forget to change userAlias together with userId
+- player
+  - automatically pause before buffering when streaming
 
 - player
+  - check cache before download xml
+  - context menu to totally disable annotation
+- player windows
+  - figure out how to force recache fonts in libvlc
+    - force load freetype module similar to vlc http plugin
+    modules/text_renderer
+    use the same way as how I flash video with http vlc plugin
+- player
+  - split osdwindow into a module
+  - split annotationview into a module
   - eliminate osdwindow
     - using setAttribute(Qt::WA_TranslucentBackground);
       - use a qobject with timer for tracking rather than hardcode to annotationview
@@ -97,28 +154,19 @@ http://qt-project.org/wiki/Category:Add-ons
     - create a pseodu object saving current window
     - eliminite osdwindow for embedded player
     - eliminite osdwindow for annotationview
-  - use an delete-at-once alternative osdconsole
+  - add notification textedit to topleft
+    use an delete-at-once alternative osdconsole
+    to show important message once such as volume, etc
+    - need an object for tracking
+    - alternative, make osdwindow the same geometry as the target view rather then full screen
+  - split annot-player into game and media
 
-- browser
-  - LATER: need a downloadmanager, using treeview
-    also prepare for future reuse
-- downloader
-  - able to download subtitle as well
+- annot.me/api/soap
+- split Annot Streamer out
 
-# 0.1.7.0
-
-- player windows
-  - check if it is possible to bypass apploc on Chinese Windows XP
-  - figure out how to force recache fonts in libvlc
-    - force load freetype module similar to vlc http plugin
-    modules/text_renderer
-    use the same way as how I flash video with http vlc plugin
-
-- translation
-  - steal Google API again without appkey.
-    evaluate javascript in translate google
-    http://stackoverflow.com/questions/6151668/alternative-to-google-translate-api
-  - BING api will be depricated after Aug 1!!!!!
+- able to change annotation's userid and groupid
+- able to lock annot position
+- ogt: http://gmrusaku.blogspot.com/2011/07/oagt-online-anime-game-translator-tool.html
 
 - player
   - player/downloader
@@ -127,26 +175,31 @@ http://qt-project.org/wiki/Category:Add-ons
      http://msdn.microsoft.com/en-us/library/dd391697(VS.85).aspx
      deploy in windows xp to see if it works
      - requires explorerframe.dll, might not available on windows xp
+- browser
+  - LATER: need a downloadmanager, using treeview
+    also prepare for future reuse
+- downloader
+  - able to download subtitle only
+  - able to download subtitle as well
 
+- mac
+  - fixme; drag-drop is broken
 - player
-  - change livemode to toggle
-    in live play mode, it is the same as before, except all annotations also went to live mode
+    add chatroon
 
-- player
-  - fixme: open from explorer cannot resolve subtitle
-    - it must because current directory changed
-  - fixme: infinite retry downloading annotations
+- split game from playe- split galgame out of annot player
+  Annot Stream {
+    Annot Player
+    Annot Browser
+    Annot Downloader
+    Annot Editor? Annot Gamer? Annot Reader? Annot Explorer?r
 
-- downlaoder
-  BUG: the way to get next taskId in downloader is incorrect
-- player
-  - fixme: annotationview contextmenu/doubleclick might crash
-- common
-  - add background to spinbox and timeedit
-- windows fixme
-  - player
-    - debug close video crash
-    - debug hang when close current video
+- new features
+ - Group of people could share annotations/ or rename group as circle
+ - Multiple chat rooms, at least per game
+ - Also having on the site an universal translated text bank of the most common used phrases, expressions or names present on games (like a user dictionary) that can be easily accessed by all the people would be awesome. This way you can choose when playing whatever game, and even if there isn't any notes available for it, to use the universal bank so the most well-known Japanese expressions/names/phrases that Annot Player detects present on the universal bank are displayed accordingly.
+   - highilght keywords on annotation for translation
+   - use apache text split tor
 
 - server
   - finish based memory-less stateless robot at server side
@@ -155,8 +208,7 @@ table bot_message
 message_id session_id message_pos user_id message_create_time message_create_ip message_text
 table bot_memory
 memory_id user_id memory_create_ip memory_create_time  memory_type memory_first memory_second
-
-## LATER
+\learn A=>B A<=B A<=>B
 
 - player
   - double click fullscreen screen to pause

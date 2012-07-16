@@ -14,6 +14,7 @@ class AcDownloader;
 class AcConsole;
 class FadeAnimation;
 class Magnifier;
+class AnnotationDownloader;
 
 class MainWindow: public WebBrowser
 {
@@ -26,6 +27,7 @@ class MainWindow: public WebBrowser
   AcPlayer *playerDelegate_;
   AcDownloader *downloaderDelegate_;
   AcConsole * console_;
+  AnnotationDownloader *annotationDownloader_;
   Magnifier *magnifier_;
 
   QTimer *autoHideToolBarTimer_;
@@ -47,6 +49,7 @@ protected slots:
   void openUrlWithAcDownloader(const QString &url);
   void openUrlWithAcPlayer(const QString &url);
   void importUrlToAcPlayer(const QString &url);
+  void downloadAnnotationUrl(const QString &url);
 
   void loadCookieJar();
   void saveCookieJar();

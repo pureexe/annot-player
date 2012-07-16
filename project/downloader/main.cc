@@ -9,7 +9,7 @@
 #include "project/common/acsettings.h"
 #include "project/common/acpaths.h"
 #include "project/common/acui.h"
-//#include "module/annotcodec/annotationcachemanager.h"
+#include "module/annotcache/annotationcachemanager.h"
 #ifdef WITH_MODULE_QT
 # include "module/qt/qtrc.h"
 #endif // WITH_MODULE_QT
@@ -31,7 +31,7 @@
 
 // - Startup stages -
 
-namespace { // anonymous
+namespace { namespace detail {
 
   // Meta types
   inline void registerMetaTypes()
@@ -89,7 +89,7 @@ namespace { // anonymous
   }
 #endif // WITH_MODULE_QT
 
-} // namespace anonymous
+} } // namespace detail
 
 // - Main -
 
@@ -119,7 +119,7 @@ main(int argc, char *argv[])
   }
 
   // Register meta types.
-  ::registerMetaTypes();
+  detail::registerMetaTypes();
 
   AcSettings *settings = AcSettings::globalSettings();
   {
@@ -132,12 +132,12 @@ main(int argc, char *argv[])
       script =  system.script();
       settings->setLanguage(lang, script);
     }
-    QTranslator *t = translatorForLanguage(lang, script);
+    QTranslator *t = detail::translatorForLanguage(lang, script);
     Q_ASSERT(t);
     if (t)
       a.installTranslator(t);
 #ifdef WITH_MODULE_QT
-    t = qtTranslatorForLanguage(lang, script);
+    t = detail::qtTranslatorForLanguage(lang, script);
     if (t)
       a.installTranslator(t);
 #endif // WITH_MODULE_QT
@@ -159,7 +159,7 @@ main(int argc, char *argv[])
   }
 
   // Set cache location
-  //AnnotationCacheManager::globalInstance()->setLocation(AC_PATH_CACHES);
+  AnnotationCacheManager::globalInstance()->setLocation(AC_PATH_CACHES);
 
   // Set network proxy
   if (settings->isProxyEnabled()) {
@@ -194,7 +194,7 @@ main(int argc, char *argv[])
   a.setMainWindow(&w);
 
   QSize sz = Settings::globalSettings()->recentSize();
-  if (sz.isEmpty() || !isValidWindowSize(sz, &w))
+  if (sz.isEmpty() || !detail::isValidWindowSize(sz, &w))
     sz = DEFAULT_SIZE;
   w.resize(sz);
   w.show();

@@ -280,11 +280,11 @@ AnnotationGraphicsView::updateSize()
 #ifdef Q_WS_WIN
     QRect r = QtWin::getWindowRect(trackedWindow_);
     if (r.isEmpty()) {
-      //if (!QtWin::isValidWindow(trackedWindow_)) {
+      //if (!QtWin::isWindowValid(trackedWindow_)) {
       setTrackedWindow(0);
       DOUT("tracked window destroyed");
       emit trackedWindowDestroyed();
-    } else if (size() != r.size()) {
+    } else if (r.topLeft() != QTWIN_INVALID_POS && r.size() != size()) {
       resize(r.size());
       update = true;
     }
@@ -322,13 +322,17 @@ AnnotationGraphicsView::updatePos()
 #ifdef Q_WS_WIN
     QRect r = QtWin::getWindowRect(trackedWindow_);
     if (r.isEmpty()) {
-      //if (!QtWin::isValidWindow(trackedWindow_))
+      //if (!QtWin::isWindowValid(trackedWindow_))
       setTrackedWindow(0);
       DOUT("tracked window destroyed");
       emit trackedWindowDestroyed();
     } else {
       QPoint newPos = r.topLeft();
-      moveToGlobalPos(newPos);
+      if (newPos == QTWIN_INVALID_POS) {
+        //if (QtWin::isWindowMinimized(trackedWindow_))
+        //  TODO: minimize();
+      } else
+        moveToGlobalPos(newPos);
       return;
     }
 #endif // Q_WS_WIN
@@ -482,10 +486,13 @@ AnnotationGraphicsView::resume()
 void
 AnnotationGraphicsView::selectItem(AnnotationGraphicsItem *item, bool detail)
 {
+  Q_ASSERT(item);
+  if (!item)
+    return;
   qint64 uid = item->annotation().userId();
   if (uid)
     emit selectedUserIds(QList<qint64>() << uid);
-  if (detail)
+  if (detail && uid)
     emit selectedUserId(uid);
 }
 
@@ -497,25 +504,29 @@ void
 AnnotationGraphicsView::pauseItemAt(const QPoint &pos)
 {
   QGraphicsItem *item = itemAt(pos);
-  auto a = static_cast<AnnotationGraphicsItem *>(item);
-  a->pause();
-  selectItem(a);
+  if (item) {
+    auto a = static_cast<AnnotationGraphicsItem *>(item);
+    a->pause();
+    selectItem(a);
+  }
 }
 
 void
 AnnotationGraphicsView::resumeItemAt(const QPoint &pos)
 {
   QGraphicsItem *item = itemAt(pos);
-  auto a = static_cast<AnnotationGraphicsItem *>(item);
-  a->resume();
+  if (item)
+   static_cast<AnnotationGraphicsItem *>(item)
+     ->resume();
 }
 
 void
 AnnotationGraphicsView::removeItemAt(const QPoint &pos)
 {
   QGraphicsItem *item = itemAt(pos);
-  auto a = static_cast<AnnotationGraphicsItem *>(item);
-  a->disappear();
+  if (item)
+    static_cast<AnnotationGraphicsItem *>(item)
+      ->disappear();
 }
 
 void
@@ -744,6 +755,8 @@ AnnotationGraphicsView::showAnnotation(const Annotation &annot, bool showMeta)
       emit subtitleAdded(item->text());
     else
       emit annotationAdded(item->text()); // non-subtitle added
+
+    //qDebug()<< isVisible() << size() << pos() << trackedWindow_ << trackingTimer_->isActive();
   }
 }
 
@@ -798,8 +811,9 @@ AnnotationGraphicsView::sendContextMenuEvent(QContextMenuEvent *event)
 {
   Q_ASSERT(event);
   QGraphicsItem *item = itemAt(mapFromGlobal(event->globalPos()));
-  auto a = static_cast<AnnotationGraphicsItem *>(item);
-  a->contextMenuEvent(event);
+  if (item)
+    static_cast<AnnotationGraphicsItem *>(item)
+      ->contextMenuEvent(event);
 }
 
 void
@@ -808,8 +822,9 @@ AnnotationGraphicsView::sendMouseDoubleClickEvent(QMouseEvent *event)
   Q_ASSERT(event);
   dragging_ = false;
   QGraphicsItem *item = itemAt(mapFromGlobal(event->globalPos()));
-  auto a = static_cast<AnnotationGraphicsItem *>(item);
-  a->mouseDoubleClickEvent(event);
+  if (item)
+    static_cast<AnnotationGraphicsItem *>(item)
+      ->mouseDoubleClickEvent(event);
 }
 
 void
@@ -921,11 +936,14 @@ AnnotationGraphicsView::showAnnotationsAtPos(qint64 pos)
 void
 AnnotationGraphicsView::updateAnnotationText(const QString &text)
 {
+  if (text.isEmpty())
+    return;
   qint64 id = editor()->id();
   if (id) {
     updateAnnotationTextWithId(text, id);
     emit annotationTextUpdatedWithId(text, id);
-  }
+  } else
+    emit annotationTextSubmitted(text);
 }
 
 void

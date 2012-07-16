@@ -36,7 +36,7 @@ public:
   ADD_WIDGET(QToolButton, stopButton)
   ADD_WIDGET(QToolButton, nextFrameButton)
   ADD_WIDGET(QToolButton, fastForwardButton)
-  ADD_WIDGET(QToolButton, fastFastForwardButton)
+  //ADD_WIDGET(QToolButton, fastFastForwardButton)
   //ADD_WIDGET(QToolButton, rewindButton)
   ADD_WIDGET(QToolButton, toggleFullScreenModeButton)
   ADD_WIDGET(QToolButton, toggleMiniModeButton)

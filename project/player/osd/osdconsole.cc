@@ -6,6 +6,7 @@
 #include "rc.h"
 #include "global.h"
 #include "project/common/acui.h"
+#include "module/qtext/ss.h"
 #include <QtGui>
 
 #define DEBUG "osdconsole"
@@ -19,6 +20,20 @@ OsdConsole::OsdConsole(QWidget *parent)
   : Base(parent), dragPos_(BAD_POS)
 {
   setContentsMargins(0, 0, 0, 0);
+
+  { // Font color and size
+    setStyleSheet(
+      SS_BEGIN(QLabel)
+        SS_COLOR(white)
+        SS_FONT_SIZE(12pt)
+      SS_END
+    );
+  }
+  { // Outline font
+    QGraphicsEffect *e = AcUi::globalInstance()->makeHaloEffect(Qt::yellow);
+    e->setProperty("opacity", 0.95);
+    setGraphicsEffect(e);
+  }
 
   timer_ = new QTimer(this);
   timer_->setSingleShot(true);
@@ -78,7 +93,7 @@ OsdConsole::append(const QString &t)
   mutex_.lock();
   emit restartAutoClearTimerRequested();
   //setText(text() + append);
-  emit asyncSetText(text() + t);
+  emit asyncSetText(text().append(QString(t)));
   mutex_.unlock();
 }
 

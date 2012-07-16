@@ -48,7 +48,7 @@ extern "C" {
 #define _qs(cs) QString::fromAscii((cs))
 #define _cs(qs) (qs).toAscii()    // toLocal8Bit is not recognized by VLC
 
-namespace { // anonymous
+namespace { namespace detail {
 
   inline
   QByteArray vlcpath(const QString &path)
@@ -99,11 +99,11 @@ namespace { // anonymous
     return ret;
   }
 
-} // anonymous namespace
+} } // anonymous detail
 
 #define VLC_ARGS_NULL           ""
-#define VLC_PLUGIN_PATH         ::vlc_plugin_path()
-#define VLC_DATA_PATH           ::vlc_data_path()
+#define VLC_PLUGIN_PATH         detail::vlc_plugin_path()
+#define VLC_DATA_PATH           detail::vlc_data_path()
 #define VLC_ARGS_CONFIG         "--ignore-config"       // Don't use VLC's config
 #define VLC_ARGS_TITLE          "--no-video-title-show" // Don't display title
 #define VLC_ARGS_LIBRARY        "--no-media-library"    // メディアライブラリーを使用 (デフォルトで有効)
@@ -145,7 +145,9 @@ namespace { // anonymous
 
 // - PlayerPrivate bases -
 
-namespace { // anonymous: vlc handle
+namespace { namespace detail {
+
+  // - Handles -
 
   // See: libvlc_media_track_info_t
   struct TrackInfo
@@ -165,7 +167,7 @@ namespace { // anonymous: vlc handle
     { width = height = channels = rate = videoCodecId = audioCodecId = 0; }
   };
 
-  class mp_handle_ {
+  class mp_handle {
     typedef QList<libvlc_media_t*> MediaList;
 
     libvlc_instance_t *instance_;     // library handle
@@ -187,21 +189,21 @@ namespace { // anonymous: vlc handle
     bool valid() const { return instance_ && player_; }
 
   public:
-    mp_handle_();
-    ~mp_handle_();
+    mp_handle();
+    ~mp_handle();
 
     void reset();
   };
 
   inline
-  mp_handle_::mp_handle_()
+  mp_handle::mp_handle()
     : instance_(0), player_(0), media_(0)
   {
     //reset();
   }
 
   inline
-  mp_handle_::~mp_handle_()
+  mp_handle::~mp_handle()
   {
     if (!media_list_.isEmpty())
       foreach (libvlc_media_t *m, media_list_)
@@ -221,7 +223,7 @@ namespace { // anonymous: vlc handle
   }
 
   inline void
-  mp_handle_::reset()
+  mp_handle::reset()
   {
 #ifdef Q_WS_MAC
     ::vlc_reset_env();
@@ -262,12 +264,10 @@ namespace { // anonymous: vlc handle
     //::libvlc_media_list_player_set_media_player(list_player_, player_);
   }
 
-} // anonymous namespace
-
-namespace { // anonymous: player states
+  // - Properties -
 
   // Track player states
-  class mp_states_
+  class mp_states
   {
     bool paused_;
     bool embedded_;
@@ -288,7 +288,7 @@ namespace { // anonymous: player states
     QWidget *voutWindow_; // vout container
 
   public:
-    mp_states_()
+    mp_states()
       : paused_(false), embedded_(false),
         mouseEnabled_(true), keyEnabled_(false), mouseEventEnabled_(false),
         mediaSize_(0),
@@ -344,7 +344,7 @@ namespace { // anonymous: player states
     void setVoutWindow(QWidget *w = 0) { voutWindow_ = w; }
   };
 
-  class mp_properties_
+  class mp_properties
   {
     TrackInfo trackInfo_;
   public:
@@ -352,11 +352,11 @@ namespace { // anonymous: player states
     const TrackInfo &trackInfo() const { return trackInfo_; }
   };
 
-  class mp_trackers_
+  class mp_trackers
   {
     QtExt::CountdownTimer *voutCountdown_;
   public:
-    mp_trackers_() : voutCountdown_(0) { }
+    mp_trackers() : voutCountdown_(0) { }
 
   public:
     QtExt::CountdownTimer *voutCountdown() const { return voutCountdown_; }
@@ -364,12 +364,12 @@ namespace { // anonymous: player states
   };
 
   /*
-  class mp_intl_
+  class mp_intl
   {
     Core::TextCodec *codec_;
 
   public:
-    mp_intl_() : codec_(0) { }
+    mp_intl() : codec_(0) { }
 
   public:
     Core::TextCodec *codec() const { return codec_; }
@@ -377,7 +377,7 @@ namespace { // anonymous: player states
   };
   */
 
-} // anonymous namespace
+} } // anonymous detail
 
 // - Slots -
 

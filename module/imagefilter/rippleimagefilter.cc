@@ -6,7 +6,7 @@
 
 // - Construction -
 
-namespace { // anonymous
+namespace { namespace detail {
   inline int **allocateWaveMap(const QSize &size)
   {
     int **waveMap = new int *[size.width()];
@@ -31,7 +31,7 @@ namespace { // anonymous
       delete[] waveMap;
     }
   }
-} // anymous namespace
+} } // anonymous detail
 
 RippleImageFilter::RippleImageFilter(QObject *parent)
   : Base(parent),
@@ -43,16 +43,16 @@ RippleImageFilter::RippleImageFilter(QObject *parent)
 
 RippleImageFilter::~RippleImageFilter()
 {
-  ::deallocateWaveMap(previousMap_);
-  ::deallocateWaveMap(currentMap_);
+  detail::deallocateWaveMap(previousMap_);
+  detail::deallocateWaveMap(currentMap_);
 }
 
 void
 RippleImageFilter::clear()
 {
   clearCenter();
-  ::deallocateWaveMap(previousMap_);
-  ::deallocateWaveMap(currentMap_);
+  detail::deallocateWaveMap(previousMap_);
+  detail::deallocateWaveMap(currentMap_);
 
   previousMap_ = currentMap_ = 0;
   mapSize_ = QSize();
@@ -84,12 +84,12 @@ RippleImageFilter::drawImage(QPainter &painter, const QPointF &pos, const QImage
 
   int x, y;
   if (!previousMap_ && !currentMap_) {
-    previousMap_ = ::allocateWaveMap(currentSize);
-    currentMap_ = ::allocateWaveMap(currentSize);
+    previousMap_ = detail::allocateWaveMap(currentSize);
+    currentMap_ = detail::allocateWaveMap(currentSize);
 
     for (x = 0; x < currentSize.width(); ++x) {
-      ::memset(currentMap_[x], 0, sizeof(int) * currentSize.height());
-      ::memset(previousMap_[x], 0, sizeof(int) * currentSize.height());
+      qMemSet(currentMap_[x], 0, sizeof(int) * currentSize.height());
+      qMemSet(previousMap_[x], 0, sizeof(int) * currentSize.height());
     }
     mapSize_ = currentSize;
     if (hasCenter() &&
@@ -101,8 +101,8 @@ RippleImageFilter::drawImage(QPainter &painter, const QPointF &pos, const QImage
 
   //if (qFuzzyCompare(m_opacity +1, 1)) {
   //  for (x = 0; x < width(); ++x) {
-  //    ::memset(m_currentMap[x], 0, sizeof(int) * height());
-  //    ::memset(m_previousMap[x], 0, sizeof(int) * height());
+  //    qMemSet(m_currentMap[x], 0, sizeof(int) * height());
+  //    qMemSet(m_previousMap[x], 0, sizeof(int) * height());
   //  }
   //  m_mapSize = size();
   //  int waveLength = m_mapSize.width() > m_mapSize.height() ? m_mapSize.width() : m_mapSize.height();
@@ -112,8 +112,8 @@ RippleImageFilter::drawImage(QPainter &painter, const QPointF &pos, const QImage
   if (mapSize_ != currentSize) {
     const qreal scaleFactorX = currentSize.width() / qreal(mapSize_.width());
     const qreal scaleFactorY = currentSize.height() / qreal(mapSize_.height());
-    int **newPreviousMap = ::allocateWaveMap(currentSize);
-    int **newCurrentMap = ::allocateWaveMap(currentSize);
+    int **newPreviousMap = detail::allocateWaveMap(currentSize);
+    int **newCurrentMap = detail::allocateWaveMap(currentSize);
     int i, j;
     for (y = 0; y < currentSize.height(); ++y) {
       for (x = 0; x < currentSize.width(); ++x) {
@@ -123,8 +123,8 @@ RippleImageFilter::drawImage(QPainter &painter, const QPointF &pos, const QImage
         newCurrentMap[x][y] = currentMap_[i][j];
       }
     }
-    ::deallocateWaveMap(previousMap_);
-    ::deallocateWaveMap(currentMap_);
+    detail::deallocateWaveMap(previousMap_);
+    detail::deallocateWaveMap(currentMap_);
     mapSize_ = currentSize;
     previousMap_ = newPreviousMap;
     currentMap_ = newCurrentMap;

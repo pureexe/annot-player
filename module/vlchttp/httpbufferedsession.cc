@@ -18,7 +18,6 @@
 #include <QtNetwork/QNetworkReply>
 #include <QtNetwork/QNetworkRequest>
 #include <QtCore>
-#include <cstring>
 
 #define DEBUG "httpbufferedsession"
 #include "module/debug/debug.h"
@@ -30,11 +29,9 @@ enum { BufferingInterval = 1000 }; // 1 second
 enum { MaxTotalDownloadRetries = 3 };
 enum { MaxIndividualDownloadRetries = 3 };
 
-namespace { // anonymous
-
-  QtExt::SleepTimer sleep_;
-
-} // anonymous namespace
+namespace { namespace detail {
+  QtExt::SleepTimer sleep;
+} } // anonymous detail
 
 // - Construction -
 
@@ -157,10 +154,10 @@ HttpBufferedSession::stop()
   DOUT("enter");
   if (!isStopped()) {
     setState(Stopped);
-    sleep_.stop();
+    detail::sleep.stop();
     QtExt::sleep(StopTimeout);
   } else
-    sleep_.stop();
+    detail::sleep.stop();
   //quit();
   DOUT("exit");
 }
@@ -249,7 +246,7 @@ HttpBufferedSession::run()
         int secs = WaitInterval + totalRetry;
         emit warning(tr("wait %1 seconds and try again").arg(QString::number(secs)) + " ...");
         DOUT(QString("wait for %1 seconds").arg(QString::number(secs)));
-        sleep_.start(secs);
+        detail::sleep.start(secs);
       //}
       if (isStopped()) {
         DOUT("stopped, break");
@@ -408,7 +405,7 @@ HttpBufferedSession::read(char *data, qint64 maxSize)
 
   qint64 ret = qMin(maxSize, buffer_.size() - pos_);
   if (ret) {
-    ::memcpy(data, buffer_.constData() + pos_, ret);
+    qMemCopy(data, buffer_.constData() + pos_, ret);
     pos_ += ret;
   }
   return ret;

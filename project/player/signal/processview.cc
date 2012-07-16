@@ -26,38 +26,39 @@ using namespace Logger;
 
 // - Helpers -
 
-namespace { // anonymous
+namespace { namespace detail {
 
   bool processNameIsNotGalGame(const QString &procName)
   {
-#define H(_cstr) qHash(QString(_cstr))  // use std::set with qHash to improve search performance
+#define H(_cstr) qHash(QString(#_cstr))  // use std::set with qHash to improve search performance
     static const std::set<uint> blacklist = boost::assign::list_of
-      (H("annot-browser")) (H("annot-down")) (H("annot-player"))
-      (H("Activator")) (H("ApMsgFwd")) (H("Apntex")) (H("Apoint")) (H("APSDaemon")) (H("AutoHotkey")) (H("ApplePhotoStreams"))
-      (H("BitComet")) (H("BookmarkDAV_client")) (H("BoonSutazio")) (H("Bootcamp")) (H("BtStackServer")) (H("BTTray"))
-      (H("CamtasiaStudio")) (H("chrome"))
-      (H("distnoted")) (H("Dropbox")) (H("DTLite"))
-      (H("eclipse")) (H("Evernote")) (H("EvernoteTray"))
-      (H("firefox")) (H("foobar2000"))
-      (H("GoogleIMEJaConverter")) (H("GoogleIMEJaRenderer")) (H("gvim"))
-      (H("Hamana")) (H("HidFind"))
-      (H("iCloudServices")) (H("IELowutil")) (H("IEXPLOR")) (H("iTunes")) (H("iTunesHelper"))
-      (H("java")) (H("javaw")) (H("jusched"))
-      (H("KHALMNPR")) (H("KMPlayer"))
-      (H("MacDrive")) (H("Maxthon")) (H("MouseGesture")) (H("mspdbsrv")) (H("mysql"))
-      (H("netdrive"))
-      (H("oacrmonitor")) (H("ONENOTEM")) (H("opera"))
-      (H("php-cgi")) (H("plugin-container"))
-      (H("QQ")) (H("qtcreator"))
-      (H("SecureCRT")) (H("SetPoint")) (H("sidebar")) (H("Skype")) (H("SogouCloud")) (H("sttray")) (H("Switcher"))
-      (H("thunderbird")) (H("TSCHelper")) (H("TXPlatform"))
-      (H("volumouse"))
+(H(annot-browser))(H(annot-down))(H(annot-player))
+(H(Activator))(H(ApMsgFwd))(H(Apntex))(H(Apoint))(H(AppleMobileDeviceService))(H(APSDaemon))(H(armsvc))(H(AutoHotkey))(H(ApplePhotoStreams))
+(H(BitComet))(H(BookmarkDAV_client))(H(BoonSutazio))(H(Bootcamp))(H(BtStackServer))(H(BTTray))(H(btwdins))
+(H(CamtasiaStudio))(H(chrome))
+(H(distnoted))(H(Dropbox))(H(DTLite))
+(H(eclipse))(H(Evernote))(H(EvernoteTray))
+(H(firefox))(H(foobar2000))
+(H(GoogleIMEJaConverter))(H(GoogleIMEJaRenderer))(H(gvim))
+(H(Hamana))(H(HidFind))
+(H(iCloudServices))(H(IELowutil))(H(IEXPLOR))(H(iTunes))(H(iTunesHelper))
+(H(java))(H(javaw))(H(jusched))
+(H(KHALMNPR))(H(KMPlayer))
+(H(MacDrive))(H(MacDrive8Service))(H(Maxthon))(H(mDNSResponder))(H(MouseGesture))(H(mpclaunch))(H(mspdbsrv))(H(mysql))(H(mysqld))
+(H(netdrive))
+(H(oacrmonitor))(H(ONENOTEM))(H(opera))
+(H(php-cgi))(H(plugin-container))
+(H(QQ))(H(qtcreator))
+(H(SecureCRT))(H(SetPoint))(H(sidebar))(H(Skype))(H(SogouCloud))(H(SROSVC))(H(sttray))(H(Switcher))(H(SUService))
+(H(thunderbird))(H(TSCHelper))(H(TXPlatform))
+(H(VIPAppService))(H(volumouse))
+(H(WINWORD))(H(wmpnetwk))
     ;
 #undef H
     return blacklist.find(qHash(procName)) != blacklist.end();
   }
 
-} // anonymous namespace
+} } // anonymous detail
 
 // - Constructions -
 
@@ -244,7 +245,7 @@ ProcessView::invalidateSourceModel(bool showAll)
         continue;
 
       name = fi.baseName();
-      if (::processNameIsNotGalGame(name))
+      if (detail::processNameIsNotGalGame(name))
         continue;
 
       folder = fi.dir().dirName();

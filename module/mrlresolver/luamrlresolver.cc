@@ -47,7 +47,7 @@
 
 // - Tasks -
 
-namespace { namespace task_ {
+namespace detail {
 
   class ResolveMedia : public QRunnable
   {
@@ -69,7 +69,7 @@ namespace { namespace task_ {
       : r_(r), ref_(ref) { Q_ASSERT(r_); }
   };
 
-} } // anonymous namespace task_
+} // namespace detail
 
 // - Analysis -
 
@@ -101,7 +101,7 @@ LuaMrlResolver::resolveMedia(const QString &href, bool async)
   if (async) {
     if (!checkSiteAccount(href))
       return false;
-    QThreadPool::globalInstance()->start(new task_::ResolveMedia(href, this));
+    QThreadPool::globalInstance()->start(new detail::ResolveMedia(href, this));
     return true;
   }
   if (!checkSiteAccount(href))
@@ -205,7 +205,7 @@ LuaMrlResolver::resolveSubtitle(const QString &href, bool async)
   if (async) {
     if (!checkSiteAccount(href))
       return false;
-    QThreadPool::globalInstance()->start(new task_::ResolveSubtitle(href, this));
+    QThreadPool::globalInstance()->start(new detail::ResolveSubtitle(href, this));
     return true;
   }
   if (!checkSiteAccount(href))
@@ -229,8 +229,8 @@ LuaMrlResolver::resolveSubtitle(const QString &href, bool async)
 
   // LuaResolver::resolve(const QString &href, QString *refurl, QString *title, QString *suburl, QStringList *mrls) const
   int siteid;
-  QString suburl, refurl;
-  bool ok = lua.resolve(url, &siteid, &refurl, 0, &suburl);
+  QString suburl, title, refurl;
+  bool ok = lua.resolve(url, &siteid, &refurl, &title, &suburl);
 
   if (!ok) {
     emit error(tr("failed to resolve URL") + ": " + url);
@@ -255,8 +255,9 @@ LuaMrlResolver::resolveSubtitle(const QString &href, bool async)
 
   suburl = formatUrl(suburl);
   refurl = formatUrl(refurl);
+  title = formatTitle(title);
   if (!suburl.isEmpty())
-    emit subtitleResolved(suburl, refurl);
+    emit subtitleResolved(suburl, refurl, title);
   if (isSynchronized())
     setResolvedSubtitleUrl(suburl);
   DOUT("exit: suburl =" << suburl);
@@ -326,10 +327,10 @@ LuaMrlResolver::formatUrl(const QString &href)
 {
   QString ret = href.trimmed();
   return ret.isEmpty() ? ret : ret
-    .remove(QRegExp("#$"))
     .remove(QRegExp("#titles$"))
+    .remove(QRegExp("/#$"))
+    .remove(QRegExp("/$"))
     .replace(QRegExp("/index.html$", Qt::CaseInsensitive), "/")
-    .replace(QRegExp("/#$", Qt::CaseInsensitive), "/")
     .replace(QRegExp("/index_1.html$", Qt::CaseInsensitive), "/")
     .replace(QRegExp("/default.html$", Qt::CaseInsensitive), "/");
 }
@@ -340,26 +341,26 @@ LuaMrlResolver::cleanUrl(const QString &url)
   QString ret = url.trimmed();
   ret.replace("http://acfun.tv/" , "http://www.acfun.tv", Qt::CaseInsensitive)
      .replace("http://bilibili.tv/" , "http://www.bilibili.tv", Qt::CaseInsensitive);
-  if (ret.startsWith("http://www.nicovideo.jp/watch/", Qt::CaseInsensitive))
+  if (ret.startsWith("http://www.nicovideo.jp/watch/", Qt::CaseInsensitive)) {
     ret.remove(QRegExp("\\?.*"));
-  else if (ret.startsWith("http://www.bilibili.tv/video/", Qt::CaseInsensitive))
-    ret.remove(QRegExp("/#$"))
+    if (ret.startsWith("http://www.nicovideo.jp/watch/so", Qt::CaseInsensitive)) {
+      DOUT("try redirect: url =" << url);
+      QUrl r = ::dlredirect(url);
+      if (!r.isEmpty())
+        ret = r.toString();
+    }
+  } else if (ret.startsWith("http://www.bilibili.tv/video/", Qt::CaseInsensitive))
+    ret.remove(QRegExp("/#.*$"))
        .remove(QRegExp("/$"))
        .remove(QRegExp("/index_1.html$", Qt::CaseInsensitive))
        .remove(QRegExp("/index.html$", Qt::CaseInsensitive));
   else if (ret.startsWith("http://www.acfun.tv/v/", Qt::CaseInsensitive))
-    ret.remove(QRegExp("/#$"))
+    ret.remove(QRegExp("/#.*$"))
        .remove(QRegExp("/$"))
        .remove(QRegExp("/index.html$", Qt::CaseInsensitive));
   else if (ret.startsWith("http://www.tudou.com/programs/view/", Qt::CaseInsensitive))
     ret.remove(QRegExp("\\?.*"));
 
-  if (ret.startsWith("http://www.nicovideo.jp/watch/so", Qt::CaseInsensitive)) {
-    DOUT("try redirect: url =" << url);
-    QUrl r = ::dlredirect(url);
-    if (!r.isEmpty())
-      ret = r.toString();
-  }
   return ret;
 }
 

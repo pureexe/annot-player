@@ -23,6 +23,8 @@
 #include <QtCore/QByteArray>
 #include <QtCore/QStringList>
 
+#define RequestUrlAttribute QNetworkRequest::UserMax
+
 //#define DEBUG "bilibilicodec"
 #include "module/debug/debug.h"
 
@@ -52,7 +54,7 @@ BilibiliCodec::fetch(const QString &url, const QString &originalUrl)
   DOUT("enter: url =" << url);
   QNetworkReply *reply = qnam_->get(QNetworkRequest(url));
   QtExt::PublicNetworkReply::fromReply(reply)
-      ->setAttribute(QNetworkRequest::UserMax, originalUrl);
+      ->setAttribute(RequestUrlAttribute, originalUrl);
   DOUT("exit");
 }
 
@@ -73,7 +75,7 @@ BilibiliCodec::parseReply(QNetworkReply *reply)
         + QString(" (%1/%2):").arg(QString::number(retry)).arg(QString::number(MaxRetries))
         + url
       );
-      QString originalUrl = reply->attribute(QNetworkRequest::UserMax).toString();
+      QString originalUrl = reply->attribute(RequestUrlAttribute).toString();
       fetch(url, originalUrl);
     } else
       emit error(tr("network error, failed to resolve media URL") + ": " + url);

@@ -53,9 +53,9 @@ LuaResolver::init()
 
 // - Helpers -
 
-namespace { // anonymous
+namespace detail {
 
-  int NOINLINE clib_dlget_(lua_State *L)
+  int NOINLINE clib_dlget(lua_State *L)
   {
     LuaResolver *obj = LuaResolver::getObject(L);
     if (!obj)
@@ -63,7 +63,7 @@ namespace { // anonymous
     return obj->dlget(L);
   }
 
-  int NOINLINE clib_dlpost_(lua_State *L)
+  int NOINLINE clib_dlpost(lua_State *L)
   {
     LuaResolver *obj = LuaResolver::getObject(L);
     if (!obj)
@@ -71,7 +71,7 @@ namespace { // anonymous
     return obj->dlpost(L);
   }
 
-} // anonymous namespace
+} // anonymous detail
 
 QString
 LuaResolver::decodeText(const char *text, const char *encoding)
@@ -247,8 +247,8 @@ LuaResolver::resolve(const QString &href, int *siteid, QString *refurl, QString 
 
     // See: http://stackoverflow.com/questions/2710194/register-c-function-in-lua-table
     const luaL_Reg ft[] = {
-      { "dlget", clib_dlget_ },
-      { "dlpost", clib_dlpost_ },
+      { "dlget", detail::clib_dlget },
+      { "dlpost", detail::clib_dlpost },
       { 0, 0 }
     };
     luaL_register(L, "clib", ft);

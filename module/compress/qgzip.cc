@@ -7,7 +7,6 @@
 #else
 # error "gzip is required"
 #endif // WITH_GZIP
-#include <cstring>
 
 //#define DEBUG "qgzip"
 #include "module/debug/debug.h"
@@ -25,7 +24,7 @@ gUncompress(const QByteArray &input, int zWindowBits)
   }
 
   z_stream strm;
-  ::memset(&strm, 0, sizeof(z_stream));
+  qMemSet(&strm, 0, sizeof(z_stream));
   int status = zWindowBits ? ::inflateInit2(&strm, zWindowBits)
                            : ::inflateInit(&strm);
   if (status != Z_OK) {

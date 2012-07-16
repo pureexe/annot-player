@@ -33,7 +33,9 @@ BacklogDialog::createLayout()
   tabView_ = new TextEditTabView(this);
   tabView_->addTab(tr("Annot"));
   tabView_->addTab(tr("Subtitle"));
+#ifdef BACKLOGDIALOG_HAS_TEXT_TAB
   tabView_->addTab(tr("Text"));
+#endif // BACKLOGDIALOG_HAS_TEXT_TAB
   tabView_->finalizeLayout();
 
   QToolButton *okButton = ui->makeToolButton(
@@ -70,9 +72,14 @@ void
 BacklogDialog::appendSubtitle(const QString &text)
 { tabView_->appendText(text, SubtitleTabIndex); }
 
+#ifdef BACKLOGDIALOG_HAS_TEXT_TAB
 void
 BacklogDialog::appendText(const QString &text)
-{ tabView_->appendText(text, TextTabIndex); }
+{
+  tabView_->appendText(text, TextTabIndex);
+  appendSubtitle(text);
+}
+#endif // BACKLOGDIALOG_HAS_TEXT_TAB
 
 void
 BacklogDialog::clear()

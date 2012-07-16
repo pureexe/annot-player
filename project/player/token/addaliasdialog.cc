@@ -3,6 +3,7 @@
 
 #include "addaliasdialog.h"
 #include "signalhub.h"
+#include "datamanager.h"
 #include "tr.h"
 #include "project/common/acui.h"
 #include "module/qtext/ss.h"
@@ -84,13 +85,12 @@ AddAliasDialog::createLayout()
 //#undef MAKE_LANGUAGE
 
 #define MAKE_TYPE(_id, _text, _tip) \
-  is##_id##Button_ = ui->makeToolButton(0, _text, _tip); { \
+  is##_id##Button_ = ui->makeToolButton(0, _text, _tip, this, SLOT(setTypeTo##_id(bool))); { \
     is##_id##Button_->setCheckable(true); \
     QFont font = is##_id##Button_->font(); \
     font.setBold(true); \
     is##_id##Button_->setFont(font); \
   } \
-  connect(is##_id##Button_, SIGNAL(clicked(bool)), SLOT(setTypeTo##_id(bool)));
 
   MAKE_TYPE(Name, tr("name"), tr("Add a name to the token"))
   //MAKE_TYPE(Tag, tr("tag"), tr("Add a tag to the token"))
@@ -280,8 +280,10 @@ AddAliasDialog::ok()
   int type = isNameButton_->isChecked() ? Alias::AT_Name :
              isUrlButton_->isChecked() ? Alias::AT_Url :
                                          Alias::AT_Tag;
-  if (type == Alias::AT_Url)
+  if (type == Alias::AT_Url) {
     lang = Alias::guessUrlLanguage(alias, lang);
+    alias = DataManager::normalizeUrl(alias);
+  }
 
   emit aliasAdded(alias, type, lang);
 }

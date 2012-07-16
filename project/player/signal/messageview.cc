@@ -94,7 +94,7 @@ MessageView::createLayout()
   autoButton_->setChecked(false);
 
   selectButton_ = ui->makeToolButton(
-        AcUi::PushHint | AcUi::HighlightHint, TR(T_OK), tr("Use selected signal"), this, SLOT(selectCurrentHook()));
+        AcUi::PushHint | AcUi::HighlightHint | AcUi::InvertHint, TR(T_OK), tr("Use selected signal"), this, SLOT(selectCurrentHook()));
 
   QToolButton *resetButton = ui->makeToolButton(
         AcUi::PushHint, TR(T_RESET), tr("Reset changes and texts"), this, SLOT(clear()));

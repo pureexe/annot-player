@@ -2,6 +2,7 @@
 // 11/16/2011
 
 #include "annotationanalyticsview.h"
+#include "signalhub.h"
 #include "global.h"
 #include "tr.h"
 #include "datamanager.h"
@@ -26,7 +27,7 @@ using namespace AnnotCloud;
 
 // - Task -
 
-namespace { namespace task_ {
+namespace { namespace detail {
 
   class InvalidateAnnotations : public QRunnable
   {
@@ -39,7 +40,7 @@ namespace { namespace task_ {
       : w_(w) { Q_ASSERT(w_); }
   };
 
-} } // anonymous namespace task_
+} } // anonymous detail
 
 
 // - Construction -
@@ -52,8 +53,8 @@ namespace { namespace task_ {
   Qt::WindowMinMaxButtonsHint | \
   Qt::WindowCloseButtonHint
 
-AnnotationAnalyticsView::AnnotationAnalyticsView(DataManager *data, QWidget *parent)
-  : Base(parent, WINDOW_FLAGS), data_(data), refreshing_(false)
+AnnotationAnalyticsView::AnnotationAnalyticsView(DataManager *data, SignalHub *hub, QWidget *parent)
+  : Base(parent, WINDOW_FLAGS), data_(data), hub_(hub), refreshing_(false)
 {
   Q_ASSERT(data_);
   setWindowTitle(TR(T_TITLE_ANNOTANALYTICS));
@@ -126,7 +127,7 @@ AnnotationAnalyticsView::invalidateAnnotations(bool async)
   DOUT("enter: async =" << async << ", refreshing =" << refreshing_);
   refreshing_ = true;
   if (async) {
-    QThreadPool::globalInstance()->start(new task_::InvalidateAnnotations(this));
+    QThreadPool::globalInstance()->start(new detail::InvalidateAnnotations(this));
     DOUT("exit: async branch");
     return;
   }
@@ -135,7 +136,8 @@ AnnotationAnalyticsView::invalidateAnnotations(bool async)
   if (data_->hasAnnotations()) {
     title.append(QString(" (%1)").arg(QString::number(data_->annotations().size())));
 
-    QString html = AnnotationHtmlParser::globalInstance()->toHtml(data_->annotations());
+    bool ignorePos = !hub_->isMediaTokenMode();
+    QString html = AnnotationHtmlParser::globalInstance()->toHtml(data_->annotations(), title, ignorePos);
     emit contentChanged(html);
   } else
     emit urlChanged(QUrl(EMPTY_URL));

@@ -31,14 +31,14 @@
 //#define RC_HTML_ERROR   RC_PREFIX "error.html"
 #define RC_JSF_ERROR    RC_PREFIX "error.xhtml"
 
-namespace { // anonymous
+namespace { namespace detail {
   //inline QByteArray rc_html_error_()
   //{
   //  QFile f(RC_HTML_ERROR);
   //  return f.open(QIODevice::ReadOnly) ? f.readAll() : QByteArray();
   //}
 
-  inline QByteArray rc_jsf_error_()
+  inline QByteArray rc_jsf_error()
   {
     static QByteArray ret;
     if (ret.isEmpty()) {
@@ -49,15 +49,15 @@ namespace { // anonymous
     return ret;
   }
 
-  inline QByteArray rc_jsf_error_(int error, const QString &reason, const QUrl &url)
+  inline QByteArray rc_jsf_error(int error, const QString &reason, const QUrl &url)
   {
-    return QString(rc_jsf_error_())
+    return QString(rc_jsf_error())
       .replace("#{error}", QString::number(error))
       .replace("#{reason}", reason)
       .replace("#{url}", url.toString())
       .toUtf8();
   }
-} // anonymous namespace
+} } // anonymous detail
 
 // - Construction -
 
@@ -120,7 +120,7 @@ WebPage::errorPageExtension(const ErrorPageExtensionOption *option, ErrorPageExt
     return false;
   DOUT("enter: error =" << option->error << ", message =" << option->errorString);
   output->baseUrl = option->url;
-  output->content = ::rc_jsf_error_(option->error, option->errorString, option->url);
+  output->content = detail::rc_jsf_error(option->error, option->errorString, option->url);
   //output->contentType = "text/html"; // automaticly detected
   output->encoding = "UTF-8";
   DOUT("exit");

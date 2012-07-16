@@ -137,7 +137,6 @@ EmbeddedPlayerUi::createLayout()
     //stopButton()->setProperty("radius", int(ButtonSize));
     //nextFrameButton()->setProperty("radius", int(ButtonSize));
     //fastForwardButton()->setProperty("radius", int(ButtonSize));
-    //fastFastForwardButton()->setProperty("radius", int(ButtonSize));
     //toggleFullScreenModeButton()->setProperty("radius", int(ButtonSize));
     //toggleMiniModeButton()->setProperty("radius", int(ButtonSize));
     //toggleEmbedModeButton()->setProperty("radius", int(ButtonSize));
@@ -180,7 +179,6 @@ EmbeddedPlayerUi::createLayout()
     //row->addWidget(toggleAnnotationButton());
     row->addWidget(nextFrameButton());
     row->addWidget(fastForwardButton());
-    row->addWidget(fastFastForwardButton());
     row->addWidget(stopButton());
     row->addWidget(previousButton());
     row->addWidget(nextButton());
@@ -324,9 +322,12 @@ EmbeddedPlayerUi::updateGeometry()
 #ifdef Q_OS_WIN
     QRect r = QtWin::getWindowRect(containerWindow_);
     if (r.isEmpty()) {
-      //if (!QtWin::isValidWindow(containerWindow_))
+      //if (!QtWin::isWindowValid(containerWindow_))
       setContainerWindow(0);
 
+    } else if (r.topLeft() == QTWIN_INVALID_POS) {
+      //if (QtWin::isWindowMinimized(containerWindow_))
+      //  TODO: minimize();
     } else {
       int w_max = r.width(),
           h_hint = sizeHint().height();

@@ -33,6 +33,12 @@ public:
   // - Helpers -
 protected:
   static QByteArray skipLeadingCommentAndNewLine(const QByteArray &data, const char *start, const char *stop);
+
+  static QByteArray skipXmlLeadingComment(const QByteArray &data)
+  { return skipLeadingCommentAndNewLine(data, "<!--", "-->"); }
+
+  static QByteArray skipJsonLeadingComment(const QByteArray &data)
+  { return skipLeadingCommentAndNewLine(data, "/*", "*/"); }
 };
 
 #endif // ANNOTATIONCODEC_H

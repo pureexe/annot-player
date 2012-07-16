@@ -1,12 +1,13 @@
 :: libvlccore.gen.cmd
 :: 2/28/2012
-@echo echo off
 setlocal
-
-cd /d %~dp1
+cd /d %~dp0
 
 set DLL=libvlccore.dll
 call dll2lib "%DLL%"
 
-ren libvlccore.exp vlccore.exp
-ren libvlccore.lib vlccore.lib
+move /y libvlccore.exp vlccore.exp
+move /y libvlccore.lib vlccore.lib
+
+pause
+:: EOF

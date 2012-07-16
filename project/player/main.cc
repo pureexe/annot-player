@@ -6,8 +6,9 @@
 #include "annotationsettings.h"
 #include "global.h"
 #include "tr.h"
-#include "translatormanager.h"
+#include "translationmanager.h"
 #include "annotationgraphicsitem.h"
+#include "module/translator/translatorsettings.h"
 #ifdef Q_WS_WIN
 # include "windowsregistry.h"
 # include "module/player/player.h"
@@ -57,7 +58,7 @@
 
 // - Startup stages -
 
-namespace { // anonymous
+namespace { namespace detail {
 
   // Meta types
   inline void registerMetaTypes()
@@ -124,7 +125,7 @@ namespace { // anonymous
     AnnotationGraphicsItem::warmUp();
   }
 
-} // namespace anonymous
+} } // namespace detail
 
 // - Main -
 
@@ -163,10 +164,10 @@ main(int argc, char *argv[])
   }
 
   // Register meta types.
-  ::registerMetaTypes();
+  detail::registerMetaTypes();
 
   // Warm up startup caches
-  ::warmUp();
+  detail::warmUp();
 
   // Initialize translator
   {
@@ -180,14 +181,16 @@ main(int argc, char *argv[])
       if (lang == QLocale::Japanese) {
         settings->setAnnotationLanguages( // Ban Chinese language
           Traits::JapaneseBit | Traits::UnknownLanguageBit |
-          Traits::EnglishBit | Traits::KoreanBit
+          Traits::EnglishBit | Traits::KoreanBit |
+          Traits::FrenchBit | Traits::GermanBit |
+          Traits::SpanishBit | Traits::PortugueseBit
         );
         settings->setAnnotationFilterEnabled(true);
       }
       ac->setLanguage(lang, script);
     }
-    TranslatorManager::globalInstance()->setLocale(lang, script, false); // auto-update translator = false
-    TranslatorManager::globalInstance()->installCurrentTranslator(&a);
+    TranslationManager::globalInstance()->setLocale(lang, script, false); // auto-update translator = false
+    TranslationManager::globalInstance()->installCurrentTranslator(&a);
     DOUT("app language =" << lang);
   }
 
@@ -232,18 +235,26 @@ main(int argc, char *argv[])
     settings->setAnnotationFontFamily(QString());
     settings->setAnnotationJapaneseFontFamily(QString());
     settings->setAnnotationChineseFontFamily(QString());
+    settings->setAnnotationPositionResolution(0);
 
-    //settings->setWindowOnTop(false);
+    settings->setWindowOnTop(false);
     settings->setAutoSubmit(true);
     settings->setAnnotationScale(1.0);
     settings->setPreferMotionlessAnnotation(true);
-    //settings->setAnnotationAvatarVisible(true);
+    settings->setAnnotationAvatarVisible(false);
+    settings->setAnnotationPositionResolution(0);
     settings->setAnnotationEffect(0);
     settings->setAnnotationOffset(0);
     settings->setSubtitleColor(0);
     settings->setApplicationFilePath(QString());
     //settings->setAnnotationLanguages(Traits::AllLanguages);
     //settings->setAnnotationFilterEnabled(false);
+
+    settings->setAnnotationLanguages(
+      settings->annotationLanguages() |
+      Traits::FrenchBit | Traits::GermanBit |
+      Traits::SpanishBit | Traits::PortugueseBit
+    );
 
     settings->setLive(false);
 
@@ -254,7 +265,7 @@ main(int argc, char *argv[])
       settings->setContrast(1.1);
       settings->setBrightness(1.02*1.02);
 
-      registerAssociations();
+      detail::registerAssociations();
       settings->setApplicationFilePath(QCoreApplication::applicationFilePath());
     }
 
@@ -264,7 +275,7 @@ main(int argc, char *argv[])
 
   // Moved
   if (settings->applicationFilePath() != QCoreApplication::applicationFilePath()) {
-    repairAssociations();
+    detail::repairAssociations();
     settings->setApplicationFilePath(QCoreApplication::applicationFilePath());
     settings->sync();
   }
@@ -297,7 +308,7 @@ main(int argc, char *argv[])
     ws->setAttribute(QWebSettings::JavaEnabled, true);
     ws->setAttribute(QWebSettings::DnsPrefetchEnabled, true); // better performance
 
-    ws->setAttribute(QWebSettings::JavascriptCanOpenWindows, true);
+    ws->setAttribute(QWebSettings::JavascriptCanOpenWindows, false);
     ws->setAttribute(QWebSettings::JavascriptCanAccessClipboard, true);
     ws->setAttribute(QWebSettings::DeveloperExtrasEnabled, true);
 
@@ -322,7 +333,10 @@ main(int argc, char *argv[])
   }
 //#endif // WITH_MODULE_WEBBROWSER
 
-  // Set annotation cache directory
+  // Set translate network cache directory, same as web settings' offline cache
+  TranslatorSettings::globalSettings()->setCacheDirectory(G_PATH_CACHES);
+
+  // Set annotation cache directory, shared across different annot apps
   AnnotationCacheManager::globalInstance()->setLocation(AC_PATH_CACHES);
 
   // Set theme.
@@ -438,7 +452,7 @@ main(int argc, char *argv[])
   //Atom wm_state = XInternAtom(dpy, "_NET_WM_STATE", False);
   //Atom fullscreen = XInternAtom(dpy, "_NET_WM_STATE_FULLSCREEN", False);
 //
-  //memset(&xev, 0, sizeof(xev));
+  //qMemSet(&xev, 0, sizeof(xev));
   //xev.type = ClientMessage;
   //xev.xclient.window = w.winId();
   //xev.xclient.message_type = wm_state;

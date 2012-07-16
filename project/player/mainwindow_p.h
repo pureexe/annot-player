@@ -12,7 +12,9 @@
 
 // - Slots -
 
-namespace slot_ { // anonymous slot_
+namespace detail {
+
+  // - Slots -
 
   class OpenSource : public QObject {
     Q_OBJECT
@@ -121,163 +123,160 @@ namespace slot_ { // anonymous slot_
   };
 #endif // USE_MODE_SIGNAL
 
-} // anonymous namespace slot_
 
-// - Tasks -
+  // - Tasks -
 
-namespace { namespace task_ { // anonymous
-
-  class updateOnlineAnnotations : public QRunnable
+  class UpdateOnlineAnnotations : public QRunnable
   {
     MainWindow *w_;
     virtual void run() { w_->updateOnlineAnnotations(false); } // \reimp, async = false
   public:
-    explicit updateOnlineAnnotations(MainWindow *w) : w_(w) { Q_ASSERT(w_); }
+    explicit UpdateOnlineAnnotations(MainWindow *w) : w_(w) { Q_ASSERT(w_); }
   };
 
-  class updateOfflineAnnotations : public QRunnable
+  class UpdateOfflineAnnotations : public QRunnable
   {
     MainWindow *w_;
     virtual void run() { w_->updateOfflineAnnotations(false); } // \reimp, async = false
   public:
-    explicit updateOfflineAnnotations(MainWindow *w) : w_(w) { Q_ASSERT(w_); }
+    explicit UpdateOfflineAnnotations(MainWindow *w) : w_(w) { Q_ASSERT(w_); }
   };
 
-  class invalidateMediaAndPlay : public QRunnable
+  class InvalidateMediaAndPlay : public QRunnable
   {
     MainWindow *w_;
     virtual void run() { w_->invalidateMediaAndPlay(false); } // \reimp, async = false
   public:
-    explicit invalidateMediaAndPlay(MainWindow *w) : w_(w) { Q_ASSERT(w_); }
+    explicit InvalidateMediaAndPlay(MainWindow *w) : w_(w) { Q_ASSERT(w_); }
   };
 
-  class checkInternetConnection : public QRunnable
+  class CheckInternetConnection : public QRunnable
   {
     MainWindow *w_;
     virtual void run() { w_->checkInternetConnection(false); } // \reimp, async = false
   public:
-    explicit checkInternetConnection(MainWindow *w)
+    explicit CheckInternetConnection(MainWindow *w)
       : w_(w) { Q_ASSERT(w_); }
   };
 
-  class login : public QRunnable
+  class Login : public QRunnable
   {
     MainWindow *w_;
     QString name_, pass_;
     virtual void run() { w_->login(name_, pass_, false); } // \reimp, async = false
   public:
-    login(const QString userName, const QString &password, MainWindow *w)
+    Login(const QString userName, const QString &password, MainWindow *w)
       : w_(w), name_(userName), pass_(password) { Q_ASSERT(w_); }
   };
 
-  class logout : public QRunnable
+  class Logout : public QRunnable
   {
     MainWindow *w_;
     virtual void run() { w_->logout(false); } // \reimp, async = false
   public:
-    explicit logout(MainWindow *w) : w_(w) { Q_ASSERT(w_); }
+    explicit Logout(MainWindow *w) : w_(w) { Q_ASSERT(w_); }
   };
 
-  class setUserAnonymous : public QRunnable
+  class SetUserAnonymous : public QRunnable
   {
     MainWindow *w_;
     bool t_;
     virtual void run() { w_->setUserAnonymous(t_, false); } // \reimp, async = false
   public:
-    setUserAnonymous(bool t, MainWindow *w) : w_(w), t_(t) { Q_ASSERT(w_); }
+    SetUserAnonymous(bool t, MainWindow *w) : w_(w), t_(t) { Q_ASSERT(w_); }
   };
 
-  class setUserLanguage : public QRunnable
+  class SetUserLanguage : public QRunnable
   {
     MainWindow *w_;
     int l_;
     virtual void run() { w_->setUserLanguage(l_, false); } // \reimp, async = false
   public:
-    setUserLanguage(int l, MainWindow *w) : w_(w), l_(l) { Q_ASSERT(w_); }
+    SetUserLanguage(int l, MainWindow *w) : w_(w), l_(l) { Q_ASSERT(w_); }
   };
 
-  class chat : public QRunnable
+  class Chat : public QRunnable
   {
     MainWindow *w_;
     QString text_;
     virtual void run() { w_->chat(text_, false); } // \reimp, async = false
   public:
-    chat(const QString &text, MainWindow *w) : w_(w), text_(text) { Q_ASSERT(w_); }
+    Chat(const QString &text, MainWindow *w) : w_(w), text_(text) { Q_ASSERT(w_); }
   };
 
-  class updateLiveAnnotations : public QRunnable
+  class UpdateLiveAnnotations : public QRunnable
   {
     MainWindow *w_;
     virtual void run() { w_->updateLiveAnnotations(false); } // \reimp, async = false
   public:
-    explicit updateLiveAnnotations(MainWindow *w) : w_(w) { Q_ASSERT(w_); }
+    explicit UpdateLiveAnnotations(MainWindow *w) : w_(w) { Q_ASSERT(w_); }
   };
 
-  class submitLiveText : public QRunnable
+  class SubmitLiveText : public QRunnable
   {
     MainWindow *w_;
     QString text_;
     virtual void run() { w_->submitLiveText(text_, false); } // \reimp, async = false
   public:
-    submitLiveText(const QString &text, MainWindow *w) : w_(w), text_(text) { Q_ASSERT(w_); }
+    SubmitLiveText(const QString &text, MainWindow *w) : w_(w), text_(text) { Q_ASSERT(w_); }
   };
 
-  class submitText : public QRunnable
+  class SubmitText : public QRunnable
   {
     MainWindow *w_;
     QString text_;
     virtual void run() { w_->submitText(text_, false); } // \reimp, async = false
   public:
-    submitText(const QString &text, MainWindow *w) : w_(w), text_(text) { Q_ASSERT(w_); }
+    SubmitText(const QString &text, MainWindow *w) : w_(w), text_(text) { Q_ASSERT(w_); }
   };
 
-  class submitAlias : public QRunnable
+  class SubmitAlias : public QRunnable
   {
     MainWindow *w_;
     Alias a_;
     virtual void run() { w_->submitAlias(a_, false); } // \reimp, async = false
   public:
-    submitAlias(const Alias &a, MainWindow *w) : w_(w), a_(a) { Q_ASSERT(w_); }
+    SubmitAlias(const Alias &a, MainWindow *w) : w_(w), a_(a) { Q_ASSERT(w_); }
   };
 
-  class setToken : public QRunnable
+  class SetToken : public QRunnable
   {
     MainWindow *w_;
     QString t_;
     virtual void run() { w_->setToken(t_, false); } // \reimp, async = false
   public:
-    setToken(const QString &t, MainWindow *w) : w_(w), t_(t) { Q_ASSERT(w_); }
+    SetToken(const QString &t, MainWindow *w) : w_(w), t_(t) { Q_ASSERT(w_); }
   };
 
-  class signFileWithUrl : public QRunnable
+  class SignFileWithUrl : public QRunnable
   {
     MainWindow *w_;
     QString path_;
     QString url_;
     virtual void run() { w_->signFileWithUrl(path_, url_, false); } // \reimp, async = false
   public:
-    signFileWithUrl(const QString &path, const QString &url, MainWindow *w)
+    SignFileWithUrl(const QString &path, const QString &url, MainWindow *w)
       : w_(w), path_(path), url_(url) { Q_ASSERT(w_); }
   };
 
 
-#define CAST(_cast, _entity) \
-  class _cast##_entity##WithId : public QRunnable \
+#define CAST(_cast, _Cast, _entity) \
+  class _Cast##_entity##WithId : public QRunnable \
   { \
     MainWindow *w_; \
     qint64 id_; \
     virtual void run() { w_->_cast##_entity##WithId(id_, false); } \
   public: \
-    _cast##_entity##WithId(qint64 id, MainWindow *w) : w_(w), id_(id) { Q_ASSERT(w_); } \
+    _Cast##_entity##WithId(qint64 id, MainWindow *w) : w_(w), id_(id) { Q_ASSERT(w_); } \
   };
 
-  CAST(bless, Token) CAST(curse, Token)
-  CAST(bless, User) CAST(block, User) CAST(curse, User)
-  CAST(bless, Alias) CAST(block, Alias) CAST(curse, Alias)
-  CAST(bless, Annotation) CAST(block, Annotation) CAST(curse, Annotation)
+  CAST(bless, Bless, Token)      CAST(curse, Curse, Token)
+  CAST(bless, Bless, User)       CAST(curse, Curse, User)       CAST(block, Block, User)
+  CAST(bless, Bless, Alias)      CAST(curse, Curse, Alias)      CAST(block, Block, Alias)
+  CAST(bless, Bless, Annotation) CAST(curse, Curse, Annotation) CAST(block, Block, Annotation)
 #undef CAST
 
-} } // anonymous namespace task_
+} // namespace detail
 
 // - Hook -
 #ifdef WITH_WIN_HOOK

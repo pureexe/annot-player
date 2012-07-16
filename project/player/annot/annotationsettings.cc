@@ -1,13 +1,12 @@
-// annotationgraphicsstyle.cc
+// annotationsettings.cc
 // 8/22/2011
 
-#include "annotationgraphicsstyle.h"
+#include "annotationsettings.h"
 #include "module/annotcloud/annothtml.h"
 
-namespace { struct parser_config_ {
-
-    // Potential run time error if this class is linked before PARSER get initialized.
-  parser_config_()
+namespace { struct parser_init_ {
+  // Potential run time error if this class is linked before PARSER get initialized.
+  parser_init_()
   {
     auto p = AnnotCloud::AnnotationHtmlParser::globalInstance();
 
@@ -17,7 +16,6 @@ namespace { struct parser_config_ {
     p->setLargeSize(ANNOTATION_SIZE_LARGE "px");
     p->setHugeSize(ANNOTATION_SIZE_HUGE "px");
   }
-
-} parser_config_; }
+} parser_init_; }
 
 // EOF

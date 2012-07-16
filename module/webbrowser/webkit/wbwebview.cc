@@ -45,14 +45,19 @@ WbWebView::createActions()
   } connect(openWithAcPlayerAct_, SIGNAL(triggered()), SLOT(openWithAcPlayer()));
   importToAcPlayerAct_ = new QAction(this); {
     importToAcPlayerAct_->setIcon(QIcon(WBRC_IMAGE_COMMENT));
-    importToAcPlayerAct_->setText(tr("Import annotations to Annot Player"));
-    importToAcPlayerAct_->setStatusTip(tr("Import annotations to Annot Player"));
+    importToAcPlayerAct_->setText(tr("Import Annotations to Annot Player"));
+    importToAcPlayerAct_->setStatusTip(tr("Import Annotations to Annot Player"));
   } connect(importToAcPlayerAct_, SIGNAL(triggered()), SLOT(importToAcPlayer()));
   openWithAcDownloaderAct_ = new QAction(this); {
     openWithAcDownloaderAct_->setIcon(QIcon(ACRC_IMAGE_DOWNLOADER));
     openWithAcDownloaderAct_->setText(tr("Download with Annot Downloader"));
     openWithAcDownloaderAct_->setStatusTip(tr("Download with Annot Downloader"));
   } connect(openWithAcDownloaderAct_, SIGNAL(triggered()), SLOT(openWithAcDownloader()));
+  downloadAnnotationsAct_ = new QAction(this); {
+    downloadAnnotationsAct_->setIcon(QIcon(ACRC_IMAGE_BROWSER));
+    downloadAnnotationsAct_->setText(tr("Save Annotations to Desktop"));
+    downloadAnnotationsAct_->setStatusTip(tr("Download Annotations to Desktop"));
+  } connect(downloadAnnotationsAct_, SIGNAL(triggered()), SLOT(downloadAnnotations()));
   undoClosedTabAct_ = new QAction(this); {
     undoClosedTabAct_->setText(tr("Undo Close Tab"));
     undoClosedTabAct_->setStatusTip(tr("Undo Close Tab"));
@@ -107,6 +112,8 @@ WbWebView::contextMenuEvent(QContextMenuEvent *event)
       m->addAction(importToAcPlayerAct_);
     if (site < MrlAnalysis::ChineseVideoSite) // TODO: change to all sites after fixing youtube
       m->addAction(openWithAcDownloaderAct_);
+    if (site < MrlAnalysis::AnnotationSite)
+      m->addAction(downloadAnnotationsAct_);
     m->addSeparator();
   }
   if (!selectedLink.isEmpty()) {
@@ -144,7 +151,8 @@ WbWebView::contextMenuEvent(QContextMenuEvent *event)
       static SearchEngine *e = 0;
       if (!e)
         e = SearchEngineFactory::globalInstance()->create(engine);
-      a->setText(tr("Search with %1").arg(e->name()));
+      //a->setText(tr("Search with %1").arg(e->name()));
+      a->setText(e->name());
       a->setStatusTip(e->search("@key"));
       a->setIcon(QIcon(e->icon()));
       a->setCheckable(true);

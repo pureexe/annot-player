@@ -79,6 +79,7 @@ public slots:
   void updateAnnotation(const Annotation &annot);
 
   void updateAnnotationTextWithId(const QString &text, qint64 id);
+  void updateAnnotationUserIdWithId(qint64 userId, qint64 id);
 
   void removeAnnotationWithId(qint64 id);
   void removeAliasWithId(qint64 id);
@@ -111,6 +112,7 @@ signals:
   void annotationUpdated(Annotation annot);
   void annotationRemovedWithId(qint64 id);
   void annotationTextUpdatedWithId(const QString &text, qint64 id);
+  void annotationUserIdUpdatedWithId(qint64 userId, qint64 id);
 };
 
 #endif // DATAMANAGER_H

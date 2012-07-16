@@ -8,6 +8,7 @@
 #include "module/annotcloud/annotation.h"
 #include "module/mrlresolver/mrlinfo.h"
 #include "module/searchengine/searchenginefactory.h"
+#include "module/translator/translatormanager.h"
 #ifdef USE_MODE_SIGNAL
 # include "processinfo.h"
 #endif // USE_MODE_SIGNAL
@@ -52,11 +53,13 @@ class RippleImageFilter;
 class ServerAgent;
 class SignalHub;
 class Tray;
-class Translator;
+class TranslatorManager;
 
 class AcPlayerServer;
 class AcDownloader;
 class AcBrowser;
+
+class MouseClickEventListener;
 
 // Views
 class AnnotationGraphicsView;
@@ -143,7 +146,7 @@ signals:
   void trayToolTip(const QString &tip);
   void trayMessage(const QString &title, const QString &message);
   void response(const QString &text);
-  void said(const QString &text, const QString &color);
+  void said(const QString &text, const QString &color = QString());
   void message(const QString &text);
   void errorMessage(const QString &text);
   void warning(const QString &text);
@@ -273,6 +276,7 @@ public slots:
   void closeMedia();
   void play();
   void playPause();
+  void playPauseMedia();
   void replay(); /// Restart from the beginning.
   void pause();
   void stop();
@@ -485,6 +489,10 @@ protected slots:
   void setUserLanguageToJapanese();
   void setUserLanguageToChinese();
   void setUserLanguageToKorean();
+  void setUserLanguageToFrench();
+  void setUserLanguageToGerman();
+  void setUserLanguageToSpanish();
+  void setUserLanguageToPortuguese();
   void setUserLanguageToUnknown();
 
   void invalidateAnnotationLanguages();
@@ -498,7 +506,7 @@ public slots:
   void eval(const QString &cmd);
   void chat(const QString &text, bool async = true);
   void respond(const QString &text);
-  void say(const QString &text, const QString &color = "blue");
+  void say(const QString &text, const QString &color = QString());
   void warn(const QString &text);
   void showMessage(const QString &text);
   void notify(const QString &text);
@@ -509,7 +517,7 @@ public slots:
 
   void submitLiveText(const QString &text, bool async = true);
 
-  void showSubtitle(const QString &text, bool isSigned = false);
+  void showSubtitle(const QString &text, int userLang = 0, const QString &prefix = QString());
 
   void updateAnnotations(bool async = true);
   void updateOnlineAnnotations(bool async = true);
@@ -536,6 +544,13 @@ public slots:
   void blessAnnotationWithId(qint64 tid, bool async = true);
   void curseAnnotationWithId(qint64 tid, bool async = true);
   void blockAnnotationWithId(qint64 tid, bool async = true);
+
+  // - Translation -
+protected slots:
+  void showTranslation(const QString &text, int service);
+  void showGoogleTranslation(const QString &text) { showTranslation(text, TranslatorManager::Google); }
+  void showMicrosoftTranslation(const QString &text) { showTranslation(text, TranslatorManager::Microsoft); }
+  void showRomajiTranslation(const QString &text) { showTranslation(text, TranslatorManager::Romaji); }
 
   // - Remote annotations -
 public slots:
@@ -614,6 +629,7 @@ protected slots:
   void updateAnnotationHoverGesture();
 
   void updateContextMenu();
+  void updateTranslatorMenu();
   void updateGameMenu();
   void updateAspectRatioMenu();
   void updateAudioChannelMenu();
@@ -830,6 +846,12 @@ protected:
   QStringList externalAnnotationFiles() const;
   QStringList externalAnnotationUrls() const;
 
+  // - Translation -
+protected slots:
+  void toggleGoogleTranslator(bool t);
+  void toggleMicrosoftTranslator(bool t);
+  void toggleRomajiTranslator(bool t);
+
   // - Rubber band -
 protected slots:
   void pauseAnnotationsAt(const QRect &rect);
@@ -869,6 +891,7 @@ private:
   void createSearchEngines();
   void createDockWindows();
   void createConnections();
+  void installEventFilters();
 
   // - Attributes -
 private:
@@ -882,6 +905,8 @@ private:
   SignalHub *hub_;
 
   Magnifier *magnifier_;
+
+  MouseClickEventListener *clickListener_;
 
   QList<SearchEngine *> searchEngines_;
 
@@ -911,7 +936,7 @@ private:
 
   QString windowTitleSuffix_;
 
-  Translator *translator_;
+  TranslatorManager *translator_;
 
   AcPlayerServer *appServer_;
   AcBrowser *browserDelegate_;
@@ -1053,9 +1078,13 @@ private:
         *annotationLanguageMenu_,
         *themeMenu_,
         *playlistMenu_,
-        *subtitleStyleMenu_,
-        *annotationSubtitleMenu_;
+        *subtitleColorMenu_;
   QList<QAction*> contextMenuActions_;
+
+  QMenu *translatorMenu_;
+  QAction *toggleGoogleTranslatorAct_,
+          *toggleMicrosoftTranslatorAct_,
+          *toggleRomajiTranslatorAct_;
 
   QMenu *annotationMenu_;
   QMenu *annotationSettingsMenu_;
@@ -1233,12 +1262,20 @@ private:
           *setUserLanguageToJapaneseAct_,
           *setUserLanguageToChineseAct_,
           *setUserLanguageToKoreanAct_,
+          *setUserLanguageToFrenchAct_,
+          *setUserLanguageToGermanAct_,
+          *setUserLanguageToSpanishAct_,
+          *setUserLanguageToPortugueseAct_,
           *setUserLanguageToUnknownAct_;
 
   QAction *toggleAnnotationLanguageToEnglishAct_,
           *toggleAnnotationLanguageToJapaneseAct_,
           *toggleAnnotationLanguageToChineseAct_,
           *toggleAnnotationLanguageToKoreanAct_,
+          *toggleAnnotationLanguageToFrenchAct_,
+          *toggleAnnotationLanguageToGermanAct_,
+          *toggleAnnotationLanguageToSpanishAct_,
+          *toggleAnnotationLanguageToPortugueseAct_,
           *toggleAnnotationLanguageToUnknownAct_,
           *toggleAnnotationLanguageToAnyAct_;
 

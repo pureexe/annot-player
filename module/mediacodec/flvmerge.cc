@@ -243,7 +243,7 @@ FlvMerge::readTag(InputStream *in, bool writeHeader)
     quint8 ts[4];
     Bitwise::BigEndian::getBytes(ts, newTimestamp << 8);
     ts[3] = newTimestamp >> 24;
-    ::memcpy(tagData.data() + TimestampOffset, ts, 4);
+    qMemCopy(tagData.data() + TimestampOffset, ts, 4);
   }
 
   // Read tag data
@@ -452,7 +452,7 @@ FlvMerge::updateScriptTagDoubleValue(quint8 *data, const QString &var) const
     quint8 bytes[size] = { };
     if (!zero)
       Bitwise::BigEndian::getBytes(bytes, value);
-    ::memcpy(data, bytes, size);
+    qMemCopy(data, bytes, size);
   }
   return update;
 }

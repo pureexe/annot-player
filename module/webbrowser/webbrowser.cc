@@ -234,6 +234,7 @@ WebBrowser::setupUi()
   connect(ui->addressEdit, SIGNAL(importUrlToAcPlayerRequested(QString)), SIGNAL(importUrlToAcPlayerRequested(QString)));
   connect(ui->addressEdit, SIGNAL(openUrlWithAcDownloaderRequested(QString)), SIGNAL(openUrlWithAcDownloaderRequested(QString)));
   connect(ui->addressEdit, SIGNAL(openUrlWithOperatingSystemRequested(QString)), SLOT(openUrlWithOperatingSystem(QString)));
+  connect(ui->addressEdit, SIGNAL(downloadAnnotationUrlRequested(QString)), SIGNAL(downloadAnnotationUrlRequested(QString)));
   connect(ui->backButton, SIGNAL(clicked()), SLOT(back()));
   connect(ui->forwardButton, SIGNAL(clicked()), SLOT(forward()));
   connect(ui->reloadButton, SIGNAL(clicked()), SLOT(reload()));
@@ -503,14 +504,14 @@ WebBrowser::openUrl(const QString &url, QWebView *view)
 
   addRecentUrl(url);
 
-  auto iconDaemon = new daemon_::SetAddressIcon(ui->addressEdit, url, ui->tabWidget, view);
+  auto iconDaemon = new detail::SetAddressIcon(ui->addressEdit, url, ui->tabWidget, view);
   connect(view, SIGNAL(loadStarted()), iconDaemon, SLOT(trigger()));
   connect(view, SIGNAL(loadFinished(bool)), iconDaemon, SLOT(trigger(bool)));
   if (view == tabWidget()) {
     QString address = tidyUrl(url);
     ui->addressEdit->setEditText(address);
     ui->addressEdit->lineEdit()->setCursorPosition(0);
-    ui->tabWidget->setTabText(tabIndex(), ::shortenText(url));
+    ui->tabWidget->setTabText(tabIndex(), detail::shortenText(url));
   }
   view->load(realUrl);
   DOUT("exit: ok");
@@ -799,6 +800,7 @@ WebBrowser::newTab(QWebView *view, int index, bool focus)
     connect(wbview, SIGNAL(openUrlWithAcPlayerRequested(QString)), SIGNAL(openUrlWithAcPlayerRequested(QString)));
     connect(wbview, SIGNAL(importUrlToAcPlayerRequested(QString)), SIGNAL(importUrlToAcPlayerRequested(QString)));
     connect(wbview, SIGNAL(openUrlWithAcDownloaderRequested(QString)), SIGNAL(openUrlWithAcDownloaderRequested(QString)));
+    connect(wbview, SIGNAL(downloadAnnotationUrlRequested(QString)), SIGNAL(downloadAnnotationUrlRequested(QString)));
     connect(wbview, SIGNAL(undoClosedTabRequested()), SLOT(undoCloseTab()));
     connect(wbview, SIGNAL(newWindowRequested()), SIGNAL(newWindowRequested()));
     connect(wbview, SIGNAL(fullScreenRequested()), SIGNAL(fullScreenRequested()));
@@ -826,14 +828,14 @@ WebBrowser::newTab(QWebView *view, int index, bool focus)
   else
     ui->tabWidget->insertTab(index, view, t);
 
-  auto textDaemon = new daemon_::SetTabText(ui->tabWidget, view);
+  auto textDaemon = new detail::SetTabText(ui->tabWidget, view);
   connect(view, SIGNAL(titleChanged(QString)), textDaemon, SLOT(trigger(QString)));
 
-  auto iconDaemon = new daemon_::SetTabIcon(ui->tabWidget, view);
+  auto iconDaemon = new detail::SetTabIcon(ui->tabWidget, view);
   connect(view, SIGNAL(loadStarted()), iconDaemon, SLOT(trigger()));
   connect(view, SIGNAL(loadFinished(bool)), iconDaemon, SLOT(trigger(bool)));
 
-  auto searchDaemon = new daemon_::SearchTab(this, ui->tabWidget, view);
+  auto searchDaemon = new detail::SearchTab(this, ui->tabWidget, view);
   connect(view, SIGNAL(loadFinished(bool)), searchDaemon, SLOT(trigger(bool)));
 
   connect(view, SIGNAL(titleChanged(QString)), SLOT(updateWindowTitle()));

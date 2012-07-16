@@ -8,6 +8,7 @@ HEADERS += \
     $$PWD/actionwithid.h \
     $$PWD/algorithm.h \
     $$PWD/bitwise.h \
+    $$PWD/bytearray.h \
     $$PWD/checkbox.h \
     $$PWD/combobox.h \
     $$PWD/compactstackedlayout.h \
@@ -18,7 +19,7 @@ HEADERS += \
     $$PWD/dialog.h \
     $$PWD/draggablemainwindow.h \
     $$PWD/draggablewidget.h \
-    $$PWD/eventlistener.h \
+    $$PWD/eventforwarder.h \
     $$PWD/filedeleter.h \
     $$PWD/filesystem.h \
     $$PWD/fontcombobox.h \

@@ -14,6 +14,7 @@ OTHER_FILES = \
     licenses/annot-browser.txt \
     licenses/annot-down.txt \
     licenses/annot-player.txt \
+    scripts/"Reset Preferences.reg" \
     ChangeLog \
     COPYING \
     README \

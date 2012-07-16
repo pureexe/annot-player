@@ -6,6 +6,10 @@
 
 #include "project/common/acwindow.h"
 
+#ifdef USE_MODE_SIGNAL
+# define BACKLOGDIALOG_HAS_TEXT_TAB
+#endif // USE_MODE_SIGNAL
+
 class TextEditTabView;
 
 class BacklogDialog : public AcWindow
@@ -18,7 +22,9 @@ class BacklogDialog : public AcWindow
   enum TabIndex {
     AnnotationTabIndex = 0,
     SubtitleTabIndex,
+#ifdef BACKLOGDIALOG_HAS_TEXT_TAB
     TextTabIndex,
+#endif // BACKLOGDIALOG_HAS_TEXT_TAB
     TabIndexCount
   };
 
@@ -28,7 +34,9 @@ public:
 public slots:
   void appendAnnotation(const QString &text);
   void appendSubtitle(const QString &text);
+#ifdef BACKLOGDIALOG_HAS_TEXT_TAB
   void appendText(const QString &text);
+#endif // BACKLOGDIALOG_HAS_TEXT_TAB
   void clear();
 
 private:

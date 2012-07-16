@@ -94,6 +94,9 @@ public:
   int annotationPositionResolution() const;
   void setAnnotationPositionResolution(int value);
 
+  int annotationSpeedFactor() const;
+  void setAnnotationSpeedFactor(int value);
+
   QString annotationFontFamily() const;
   void setAnnotationFontFamily(const QString &family);
 
@@ -152,6 +155,11 @@ public:
 
   int annotationCountHint() const;
   void setAnnotationCountHint(int count);
+
+  // - Service providers -
+
+  ulong translationServices() const;
+  void setTranslationServices(ulong services);
 
   // - History per token -
 

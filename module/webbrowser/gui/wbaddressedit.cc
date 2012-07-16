@@ -44,6 +44,11 @@ WbAddressEdit::createActions()
     openAddressWithAcDownloaderAct_->setText(tr("Download with Annot Downloader"));
     openAddressWithAcDownloaderAct_->setStatusTip(tr("Open with Annot Downloader"));
   } connect(openAddressWithAcDownloaderAct_, SIGNAL(triggered()), SLOT(openWithAcDownloader()));
+  downloadAnnotationsFromAddressAct_ = new QAction(this); {
+    downloadAnnotationsFromAddressAct_->setIcon(QIcon(ACRC_IMAGE_BROWSER));
+    downloadAnnotationsFromAddressAct_->setText(tr("Save Annotations to Desktop"));
+    downloadAnnotationsFromAddressAct_->setStatusTip(tr("Download Annotations to Desktop"));
+  } connect(downloadAnnotationsFromAddressAct_, SIGNAL(triggered()), SLOT(downloadAnnotations()));
 
   openWithOperatingSystemAct_ = new QAction(this); {
     openWithOperatingSystemAct_->setText(tr("Open in System Default Browser"));
@@ -76,6 +81,8 @@ WbAddressEdit::contextMenuEvent(QContextMenuEvent *event)
       m->addAction(importAddressToAcPlayerAct_);
     if (site < MrlAnalysis::ChineseVideoSite) // TODO: change to all sites after fixing youtube
       m->addAction(openAddressWithAcDownloaderAct_);
+    if (site < MrlAnalysis::AnnotationSite)
+      m->addAction(downloadAnnotationsFromAddressAct_);
     m->addSeparator();
   }
 

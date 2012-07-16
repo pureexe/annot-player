@@ -5,7 +5,7 @@
 // 7/14/2011
 
 #include "module/annotcloud/annotation.h"
-#include "module/qtext/eventlistener.h"
+#include "module/qtext/eventforwarder.h"
 #include <QtGui/QGraphicsView>
 #include <QtCore/QHash>
 #include <QtCore/QList>
@@ -23,7 +23,7 @@ class SignalHub;
 class VideoView;
 
 ///  An interactive shadow view.
-class AnnotationGraphicsView : public QGraphicsView, public QtExt::EventListener
+class AnnotationGraphicsView : public QGraphicsView, public QtExt::EventForwarder
 {
   Q_OBJECT
   Q_DISABLE_COPY(AnnotationGraphicsView)
@@ -121,6 +121,7 @@ signals:
 
   void posChanged(); ///< manually moved
   void sizeChanged(); ///< manually resized
+  void annotationTextSubmitted(const QString &text);
   void annotationTextUpdatedWithId(const QString &text, qint64 id);
   void annotationDeletedWithId(qint64 id);
 
@@ -155,7 +156,7 @@ public slots:
   virtual void setVisible(bool visible); ///< \reimp stop polling when hidden
 
 public:
-  // Implement event listener.
+  // Implement EventForwarder.
   virtual void sendContextMenuEvent(QContextMenuEvent *event); ///< \reimp
   virtual void sendMouseMoveEvent(QMouseEvent *event); ///< \reimp
   virtual void sendMousePressEvent(QMouseEvent *event); ///< \reimp

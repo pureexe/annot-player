@@ -22,7 +22,7 @@ AssociationPreferencesTab::init()
 
   supportedTypes_ = Player::supportedSuffices();
   supportedTypes_
-    G_FORMAT_PROGRAM(<<)
+    //G_FORMAT_PROGRAM(<<)
     G_FORMAT_ANNOTATION(<<)
     G_FORMAT_PREVIEW(<<)
   ;
@@ -37,7 +37,7 @@ void
 AssociationPreferencesTab::createLayout()
 {
   AcUi *ui = AcUi::globalInstance();
-  QGridLayout *gameLayout = new QGridLayout,
+  QGridLayout //*gameLayout = new QGridLayout,
               *videoLayout = new QGridLayout,
               *audioLayout = new QGridLayout,
               *pictureLayout = new QGridLayout,
@@ -76,21 +76,21 @@ AssociationPreferencesTab::createLayout()
   QGroupBox *audioGroup = ui->makeGroupBox(0, TR(T_FORMAT_AUDIO));
   audioGroup->setLayout(audioLayout);
 
-  count = 0;
-  foreach (const QString &suffix, QStringList() G_FORMAT_PROGRAM(<<)) {
-    enum { Row = 7 };
-    QtExt::NamedCheckBox *toggle = new QtExt::NamedCheckBox(suffix);
-    toggle->setToolTip(suffix);
-    toggle->setStyleSheet(ACSS_CHECKBOX);
-    connect(toggle, SIGNAL(toggledWithName(bool,QString)), SLOT(toggleType(bool,QString)));
-    toggles_[suffix] = toggle;
-    int r = count / Row,
-        c = count % Row;
-    gameLayout->addWidget(toggle, r, c);
-    count++;
-  }
-  QGroupBox *gameGroup = ui->makeGroupBox(0, TR(T_GALGAME));
-  gameGroup->setLayout(gameLayout);
+  //count = 0;
+  //foreach (const QString &suffix, QStringList() G_FORMAT_PROGRAM(<<)) {
+  //  enum { Row = 7 };
+  //  QtExt::NamedCheckBox *toggle = new QtExt::NamedCheckBox(suffix);
+  //  toggle->setToolTip(suffix);
+  //  toggle->setStyleSheet(ACSS_CHECKBOX);
+  //  connect(toggle, SIGNAL(toggledWithName(bool,QString)), SLOT(toggleType(bool,QString)));
+  //  toggles_[suffix] = toggle;
+  //  int r = count / Row,
+  //      c = count % Row;
+  //  gameLayout->addWidget(toggle, r, c);
+  //  count++;
+  //}
+  //QGroupBox *gameGroup = ui->makeGroupBox(0, TR(T_GALGAME));
+  //gameGroup->setLayout(gameLayout);
 
   count = 0;
   foreach (const QString &suffix, QStringList() G_FORMAT_ANNOTATION(<<)) {
@@ -170,7 +170,7 @@ AssociationPreferencesTab::createLayout()
   QVBoxLayout *rows = new QVBoxLayout; {
     rows->addWidget(searchEdit_);
     rows->addWidget(deviceGroup);
-    rows->addWidget(gameGroup);
+    //rows->addWidget(gameGroup);
     rows->addWidget(annotationGroup);
     rows->addWidget(subtitleGroup);
     rows->addWidget(imageGroup);

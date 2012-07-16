@@ -8,14 +8,14 @@
 #define DEBUG "aaccodec"
 #include "module/debug/debug.h"
 
-namespace { // anonymous
-  unsigned const samplingFrequencyTable[16] = {
+namespace { namespace detail {
+  const unsigned samplingFrequencyTable[16] = {
     96000, 88200, 64000, 48000,
     44100, 32000, 24000, 22050,
     16000, 12000, 11025, 8000,
     7350, 0, 0, 0
   };
-} // anonymous namespace
+} } // anonymous detail
 
 AacInfo
 AacCodec::parseAacInfo(InputStream *in)
@@ -48,7 +48,7 @@ AacCodec::parseAacInfo(InputStream *in)
 
   // Get and check the 'sampling_frequency_index':
   quint8 samplingFrequencyIndex = (fixedHeader[2]&0x3C)>>2; // 4 bits
-  if (samplingFrequencyTable[samplingFrequencyIndex] == 0) {
+  if (detail::samplingFrequencyTable[samplingFrequencyIndex] == 0) {
     DOUT("exit: bad 'sampling_frequency_index' in first frame of ADTS file");
     return AacInfo();
   }
@@ -61,7 +61,7 @@ AacCodec::parseAacInfo(InputStream *in)
   // Reset the fid to the beginning of the file:
   in->reset();
 
-  uint fSamplingFrequency = samplingFrequencyTable[samplingFrequencyIndex];
+  uint fSamplingFrequency = detail::samplingFrequencyTable[samplingFrequencyIndex];
   uint fNumChannels = channelConfiguration == 0 ? 2 : channelConfiguration;
   //uint fuSecsPerFrame
   //  = (1024/*samples-per-frame*/*1000000) / fSamplingFrequency/*samples-per-second*/;

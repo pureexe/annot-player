@@ -43,18 +43,18 @@
   #define SAVE_SHORTCUT "CTRL+S"
 #endif // Q_OS_MAC
 
-#define SS_TOOLBUTTON_TAG       ACSS_TOOLBUTTON_TEXT_(bold, italic, none, blue, red, purple, purple, red, gray)
-#define SS_TOOLBUTTON_BOLD      ACSS_TOOLBUTTON_TEXT_(bold, italic, none, blue, red, purple, purple, red, gray)
-#define SS_TOOLBUTTON_ITALIC    ACSS_TOOLBUTTON_TEXT_(bold, italic, none, blue, red, purple, purple, red, gray)
-#define SS_TOOLBUTTON_UNDERLINE ACSS_TOOLBUTTON_TEXT_(bold, italic, underline, blue, red, purple, purple, red, gray)
-#define SS_TOOLBUTTON_STRIKE    ACSS_TOOLBUTTON_TEXT_(bold, italic, line-through, blue, red, purple, purple, red, gray)
+#define SS_TOOLBUTTON_TAG       ACSS_TOOLBUTTON_TEXT_(bold, italic, none, white, red, purple, purple, red, gray)
+#define SS_TOOLBUTTON_BOLD      ACSS_TOOLBUTTON_TEXT_(bold, italic, none, white, red, purple, purple, red, gray)
+#define SS_TOOLBUTTON_ITALIC    ACSS_TOOLBUTTON_TEXT_(bold, italic, none, white, red, purple, purple, red, gray)
+#define SS_TOOLBUTTON_UNDERLINE ACSS_TOOLBUTTON_TEXT_(bold, italic, underline, white, red, purple, purple, red, gray)
+#define SS_TOOLBUTTON_STRIKE    ACSS_TOOLBUTTON_TEXT_(bold, italic, line-through, white, red, purple, purple, red, gray)
 
 // - Constructions -
 
 AnnotationEditor::AnnotationEditor(QWidget *parent)
   : Base(parent, WINDOW_FLAGS), id_(0)
 {
-  setWindowTitle(TR(T_TITLE_ANNOTATIONEDITOR));
+  setWindowTitle(tr("Annotation Editor"));
 
   textEdit_ = AcUi::globalInstance()->makeTextEdit(0, TR(T_ANNOT));
 
@@ -319,31 +319,11 @@ AnnotationEditor::createRibons()
     countLabel_->setToolTip(TR(T_WORDCOUNT));
   }
 
-  tidyButton_ = new QtExt::ToolButton; {
-    tidyButton_->setStyleSheet(ACSS_TOOLBUTTON_TEXT_CHECKABLE);
-    tidyButton_->setToolButtonStyle(Qt::ToolButtonTextOnly);
-    tidyButton_->setText(QString("| %1 |").arg(tr("tidy")));
-    tidyButton_->setToolTip(tr("Tidy HTML"));
-    tidyButton_->setCheckable(true);
-    tidyButton_->setChecked(true);
-  }
-  connect(tidyButton_, SIGNAL(clicked(bool)),SLOT(setTidyEnabled(bool)));
+  saveButton_ = ui->makeToolButton(AcUi::PushHint | AcUi::HighlightHint, TR(T_SAVE), TR(T_SAVE), SAVE_SHORTCUT, this, SLOT(save()));
+  cancelButton_ = ui->makeToolButton(AcUi::PushHint, TR(T_CANCEL), TR(T_CANCEL), "ESC", this, SLOT(fadeOut()));
 
-  saveButton_ = new QtExt::ToolButton; {
-    saveButton_->setStyleSheet(ACSS_TOOLBUTTON_TEXT_HIGHLIGHT);
-    saveButton_->setToolButtonStyle(Qt::ToolButtonTextOnly);
-    saveButton_->setText(QString("[ %1 ]").arg(TR(T_SAVE)));
-    saveButton_->setToolTip(TR(T_SAVE) + " [" SAVE_SHORTCUT "]");
-  }
-  connect(saveButton_, SIGNAL(clicked()), SLOT(save()));
-
-  cancelButton_ = new QtExt::ToolButton; {
-    cancelButton_->setStyleSheet(ACSS_TOOLBUTTON_TEXT);
-    cancelButton_->setToolButtonStyle(Qt::ToolButtonTextOnly);
-    cancelButton_->setText(QString("[ %1 ]").arg(TR(T_CANCEL)));
-    cancelButton_->setToolTip(TR(T_CANCEL) + " [ESC]");
-  }
-  connect(cancelButton_, SIGNAL(clicked()), SLOT(fadeOut()));
+  tidyButton_ = ui->makeToolButton(AcUi::CheckHint, tr("tidy"), tr("Tidy HTML"), this, SLOT(setTidyEnabled(bool)));
+  tidyButton_->setChecked(true);
 
 #undef MAKE_CHECKABLE_BUTTON
 }

@@ -55,7 +55,6 @@ bool
 VlcHttpPlugin::isFinished()
 { return session_ && session_->isFinished(); }
 
-
 void
 VlcHttpPlugin::save()
 { if (session_) session_->save(); }

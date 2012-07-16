@@ -3,7 +3,6 @@
 
 #include "module/stream/datainputstream.h"
 #include <QtCore/QFile>
-#include <cstring>
 
 //#define DEBUG "datainputstream"
 #include "module/debug/debug.h"
@@ -29,7 +28,7 @@ DataInputStream::read(char *data, qint64 maxSize)
 {
   qint64 count = qMin(maxSize, data_.size() - pos_);
   if (count > 0) {
-    ::memcpy(data, data_.data() + pos_, count);
+    qMemCopy(data, data_.data() + pos_, count);
     pos_ += count;
   }
   return count;

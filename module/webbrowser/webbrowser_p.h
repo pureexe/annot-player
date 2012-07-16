@@ -11,7 +11,7 @@
 
 // - Helpers -
 
-namespace { // Anonyomous
+namespace detail {
 
   inline QString shortenText(const QString &text, int len = 40)
   {
@@ -20,11 +20,7 @@ namespace { // Anonyomous
            text.left(len - 3).append("...");
   }
 
-} // Anonyomous namespace
-
-// - Daemons -
-
-namespace daemon_ {
+  // - Daemons -
 
   class SetTabText : public QObject {
     Q_OBJECT
@@ -43,16 +39,9 @@ namespace daemon_ {
     {
       int index = tab_->indexOf(w_);
       if (index >= 0) {
-        tab_->setTabText(index, ::shortenText(text));
+        tab_->setTabText(index, detail::shortenText(text));
         tab_->setTabToolTip(index, text);
       }
-    }
-  protected:
-    static QString shortenText(const QString &text)
-    {
-      enum { len = 40 };
-      return len && text.size() < len ? text :
-             text.left(len - 3).append("...");
     }
   };
 
@@ -132,7 +121,7 @@ namespace daemon_ {
     }
   };
 
-} // namespace daemon_
+} // namespace detail
 
 #endif // WEBBROWSER_P_H
 

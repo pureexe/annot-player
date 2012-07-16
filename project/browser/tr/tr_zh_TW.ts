@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="zh_CN">
+<TS version="2.0" language="zh_TW">
 <defaultcodec>UTF-8</defaultcodec>
 <context>
     <name></name>
@@ -131,12 +131,16 @@
     <message>
         <location filename="../../common/accomboedit.cc" line="36"/>
         <source>History</source>
-        <translation>歷史</translation>
+        <translation>歷史記錄</translation>
     </message>
     <message>
         <location filename="../../common/accomboedit.cc" line="38"/>
+        <source>Clear History</source>
+        <translation>清除歷史記錄</translation>
+    </message>
+    <message>
         <source>Clear All</source>
-        <translation>全部清除</translation>
+        <translation type="obsolete">全部清除</translation>
     </message>
     <message>
         <source>Clear</source>
@@ -458,6 +462,54 @@
     </message>
 </context>
 <context>
+    <name>AnnotationDownloader</name>
+    <message>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="63"/>
+        <source>analyzing</source>
+        <translation>分析中</translation>
+    </message>
+    <message>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="88"/>
+        <source>downloading</source>
+        <translation>下載中</translation>
+    </message>
+    <message>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="103"/>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="122"/>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="144"/>
+        <source>network error, failed to resolve URL</source>
+        <translation>網絡錯誤，解析地址失敗</translation>
+    </message>
+    <message>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="106"/>
+        <source>saving</source>
+        <translation>保存中</translation>
+    </message>
+    <message>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="130"/>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="151"/>
+        <source>failed to resolve URL</source>
+        <translation>解析地址失敗</translation>
+    </message>
+    <message>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="164"/>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="177"/>
+        <source>file saved</source>
+        <translation>文件已保存</translation>
+    </message>
+    <message>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="166"/>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="182"/>
+        <source>failed to save file</source>
+        <translation>保存文件失敗</translation>
+    </message>
+    <message>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="172"/>
+        <source>failed to cache annotation from URL</source>
+        <translation>無法緩衝彈幕</translation>
+    </message>
+</context>
+<context>
     <name>Downloader</name>
     <message>
         <location filename="../../../module/download/downloader.cc" line="53"/>
@@ -484,6 +536,32 @@
         <location filename="../../../module/download/downloader.cc" line="232"/>
         <source>failed to save file</source>
         <translation>保存文件失敗</translation>
+    </message>
+</context>
+<context>
+    <name>DummyGoogleVideoMrlResolver</name>
+    <message>
+        <location filename="../../../module/mrlresolver/dummygooglevideomrlresolver.cc" line="27"/>
+        <source>failed to resolve URL</source>
+        <translation>解析地址失敗</translation>
+    </message>
+    <message>
+        <location filename="../../../module/mrlresolver/dummygooglevideomrlresolver.cc" line="42"/>
+        <source>resolving media URL ...</source>
+        <translation>解析地址中...</translation>
+    </message>
+</context>
+<context>
+    <name>DummyYoutubeMrlResolver</name>
+    <message>
+        <location filename="../../../module/mrlresolver/dummyyoutubemrlresolver.cc" line="26"/>
+        <source>failed to resolve URL</source>
+        <translation>解析地址失敗</translation>
+    </message>
+    <message>
+        <location filename="../../../module/mrlresolver/dummyyoutubemrlresolver.cc" line="41"/>
+        <source>resolving media URL ...</source>
+        <translation>解析地址中...</translation>
     </message>
 </context>
 <context>
@@ -571,178 +649,211 @@
     </message>
 </context>
 <context>
+    <name>LuaMrlResolver</name>
+    <message>
+        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="132"/>
+        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="146"/>
+        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="236"/>
+        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="250"/>
+        <source>failed to resolve URL</source>
+        <translation>解析地址失敗</translation>
+    </message>
+    <message>
+        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="140"/>
+        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="244"/>
+        <source>failed to resolve URL using nicovideo account</source>
+        <translation>使用nico賬戶解析地址失敗</translation>
+    </message>
+    <message>
+        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="143"/>
+        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="247"/>
+        <source>failed to resolve URL using bilibili account</source>
+        <translation>使用嗶哩嗶哩賬戶解析地址失敗</translation>
+    </message>
+    <message>
+        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="373"/>
+        <source>nicovideo.jp account is required to resolve URL</source>
+        <translation>請輸入nico賬戶</translation>
+    </message>
+</context>
+<context>
     <name>MainWindow</name>
     <message>
-        <location filename="../mainwindow.cc" line="77"/>
+        <location filename="../mainwindow.cc" line="78"/>
         <source>Annot Browser</source>
         <translation>とある瀏覽使</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="299"/>
+        <location filename="../mainwindow.cc" line="310"/>
         <source>&amp;File</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="300"/>
+        <location filename="../mainwindow.cc" line="311"/>
         <source>New Window</source>
         <translation>新窗口</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="238"/>
-        <location filename="../mainwindow.cc" line="301"/>
+        <location filename="../mainwindow.cc" line="249"/>
+        <location filename="../mainwindow.cc" line="312"/>
         <source>New Tab</source>
         <translation>空白頁</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="303"/>
+        <location filename="../mainwindow.cc" line="314"/>
         <source>Clip</source>
         <translation>保存頁面</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="233"/>
-        <location filename="../mainwindow.cc" line="305"/>
+        <location filename="../mainwindow.cc" line="244"/>
+        <location filename="../mainwindow.cc" line="316"/>
         <source>Close Tab</source>
         <translation>關閉頁面</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="306"/>
+        <location filename="../mainwindow.cc" line="317"/>
         <source>Close Window</source>
         <translation>關閉窗口</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="307"/>
+        <location filename="../mainwindow.cc" line="318"/>
         <source>Exit</source>
         <translation>退出</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="319"/>
+        <location filename="../mainwindow.cc" line="330"/>
         <source>&amp;View</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="248"/>
-        <location filename="../mainwindow.cc" line="320"/>
+        <location filename="../mainwindow.cc" line="259"/>
+        <location filename="../mainwindow.cc" line="331"/>
         <source>Reload</source>
         <translation>刷新</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="223"/>
+        <location filename="../mainwindow.cc" line="234"/>
         <source>Unrecognized Gesture</source>
         <translation>未識別的鼠標手勢</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="228"/>
+        <location filename="../mainwindow.cc" line="239"/>
         <source>Open Link in Background Tab</source>
         <translation>打開這個鏈接</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="243"/>
+        <location filename="../mainwindow.cc" line="254"/>
         <source>Undo Close Tab</source>
         <translation>還原關閉的頁面</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="258"/>
+        <location filename="../mainwindow.cc" line="269"/>
         <source>Forward</source>
         <translation>前進</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="253"/>
+        <location filename="../mainwindow.cc" line="264"/>
         <source>Backward</source>
         <translation>后退</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="263"/>
+        <location filename="../mainwindow.cc" line="274"/>
         <source>Previous Tab</source>
         <translation>前一個Tab</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="268"/>
+        <location filename="../mainwindow.cc" line="279"/>
         <source>Next Tab</source>
         <translation>后一個Tab</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="273"/>
+        <location filename="../mainwindow.cc" line="284"/>
         <source>Minimize Window</source>
         <translation>最小化窗口</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="283"/>
+        <location filename="../mainwindow.cc" line="294"/>
         <source>Scroll Top</source>
         <translation>移動到頁面頂部</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="288"/>
+        <location filename="../mainwindow.cc" line="299"/>
         <source>Scroll Bottom</source>
         <translation>移動到頁面底部</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="321"/>
+        <location filename="../mainwindow.cc" line="332"/>
         <source>Stop</source>
         <translation>停止</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="322"/>
+        <location filename="../mainwindow.cc" line="333"/>
         <source>Inspect</source>
         <translation>查看源碼</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="324"/>
+        <location filename="../mainwindow.cc" line="335"/>
         <source>Actual Size</source>
         <translation>原始尺寸</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="325"/>
+        <location filename="../mainwindow.cc" line="336"/>
         <source>Zoom In</source>
         <translation>擴大</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="326"/>
+        <location filename="../mainwindow.cc" line="337"/>
         <source>Zoom Out</source>
         <translation>縮小</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="331"/>
+        <location filename="../mainwindow.cc" line="342"/>
         <source>&amp;Settings</source>
         <translation>設定</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="332"/>
+        <location filename="../mainwindow.cc" line="343"/>
         <source>&amp;Preferences</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="795"/>
+        <location filename="../mainwindow.cc" line="644"/>
+        <source>saving</source>
+        <translation>保存中</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cc" line="820"/>
         <source>Click any edge of the screen to toggle tool bars.</source>
         <translation>點擊屏幕的邊緣來顯示/隱藏地址欄。</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="278"/>
-        <location filename="../mainwindow.cc" line="328"/>
+        <location filename="../mainwindow.cc" line="289"/>
+        <location filename="../mainwindow.cc" line="339"/>
         <source>Toggle Full Screen</source>
         <translation>全屏顯示</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="335"/>
+        <location filename="../mainwindow.cc" line="346"/>
         <source>&amp;Help</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="337"/>
+        <location filename="../mainwindow.cc" line="348"/>
         <source>&amp;Console</source>
         <translation>Debug控制台</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="338"/>
+        <location filename="../mainwindow.cc" line="349"/>
         <source>&amp;About</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="350"/>
+        <location filename="../mainwindow.cc" line="361"/>
         <source>restoring last sessions ...</source>
         <translation>恢复上次瀏覽的頁面...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="768"/>
+        <location filename="../mainwindow.cc" line="793"/>
         <source>Double click any tab to exit full screen.</source>
         <translation>雙擊任何Tab即可退出全屏模式。</translation>
     </message>
@@ -751,30 +862,30 @@
         <translation type="obsolete">點擊屏幕的邊緣即可顯示地址欄。</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="376"/>
+        <location filename="../mainwindow.cc" line="387"/>
         <source>logging in bilibili.tv as %1 ...</source>
         <translation>以%1登錄bilibili.tv中...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="381"/>
+        <location filename="../mainwindow.cc" line="392"/>
         <source>logging in nicovideo.jp as %1 ...</source>
         <translation>以%1登錄nicovideo.jp中...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="560"/>
-        <location filename="../mainwindow.cc" line="574"/>
+        <location filename="../mainwindow.cc" line="571"/>
+        <location filename="../mainwindow.cc" line="585"/>
         <source>openning new window</source>
         <translation>正在打開新窗口</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="576"/>
+        <location filename="../mainwindow.cc" line="587"/>
         <source>failed open new window</source>
         <translation>無法創建新窗口</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="591"/>
-        <location filename="../mainwindow.cc" line="605"/>
-        <location filename="../mainwindow.cc" line="619"/>
+        <location filename="../mainwindow.cc" line="602"/>
+        <location filename="../mainwindow.cc" line="616"/>
+        <location filename="../mainwindow.cc" line="630"/>
         <source>openning</source>
         <translation>正在打開</translation>
     </message>
@@ -1062,7 +1173,17 @@
     </message>
     <message>
         <location filename="../../../module/webbrowser/gui/wbaddressedit.cc" line="49"/>
+        <source>Save Annotations to Desktop</source>
+        <translation>保存彈幕XML/JSON到桌面</translation>
+    </message>
+    <message>
         <location filename="../../../module/webbrowser/gui/wbaddressedit.cc" line="50"/>
+        <source>Download Annotations to Desktop</source>
+        <translation>下載彈幕XML/JSON到桌面</translation>
+    </message>
+    <message>
+        <location filename="../../../module/webbrowser/gui/wbaddressedit.cc" line="54"/>
+        <location filename="../../../module/webbrowser/gui/wbaddressedit.cc" line="55"/>
         <source>Open in System Default Browser</source>
         <translation>用系統默認瀏覽器打開</translation>
     </message>
@@ -1080,10 +1201,14 @@
         <translation type="obsolete">清除</translation>
     </message>
     <message>
+        <source>Clear All</source>
+        <translation type="obsolete">全部清除</translation>
+    </message>
+    <message>
         <location filename="../../../module/webbrowser/gui/wbcomboedit.cc" line="38"/>
         <location filename="../../../module/webbrowser/gui/wbcomboedit.cc" line="39"/>
-        <source>Clear All</source>
-        <translation>全部清除</translation>
+        <source>Clear History</source>
+        <translation>清除歷史記錄</translation>
     </message>
     <message>
         <location filename="../../../module/webbrowser/gui/wbcomboedit.cc" line="42"/>
@@ -1152,9 +1277,13 @@
         <translation>用Annot Player播放</translation>
     </message>
     <message>
+        <source>Import annotations to Annot Player</source>
+        <translation type="obsolete">向Annot Player導入彈幕</translation>
+    </message>
+    <message>
         <location filename="../../../module/webbrowser/webkit/wbwebview.cc" line="48"/>
         <location filename="../../../module/webbrowser/webkit/wbwebview.cc" line="49"/>
-        <source>Import annotations to Annot Player</source>
+        <source>Import Annotations to Annot Player</source>
         <translation>向Annot Player導入彈幕</translation>
     </message>
     <message>
@@ -1164,38 +1293,47 @@
         <translation>用Annot Downloader下載</translation>
     </message>
     <message>
-        <location filename="../../../module/webbrowser/webkit/wbwebview.cc" line="57"/>
         <location filename="../../../module/webbrowser/webkit/wbwebview.cc" line="58"/>
-        <source>Undo Close Tab</source>
-        <translation>還原關閉的頁面</translation>
+        <source>Save Annotations to Desktop</source>
+        <translation>保存彈幕XML/JSON到桌面</translation>
+    </message>
+    <message>
+        <location filename="../../../module/webbrowser/webkit/wbwebview.cc" line="59"/>
+        <source>Download Annotations to Desktop</source>
+        <translation>下載彈幕XML/JSON到桌面</translation>
     </message>
     <message>
         <location filename="../../../module/webbrowser/webkit/wbwebview.cc" line="62"/>
         <location filename="../../../module/webbrowser/webkit/wbwebview.cc" line="63"/>
-        <source>New Window</source>
-        <translation>新窗口</translation>
+        <source>Undo Close Tab</source>
+        <translation>還原關閉的頁面</translation>
     </message>
     <message>
         <location filename="../../../module/webbrowser/webkit/wbwebview.cc" line="67"/>
         <location filename="../../../module/webbrowser/webkit/wbwebview.cc" line="68"/>
-        <source>Toggle Full Screen</source>
-        <translation>全屏顯示</translation>
+        <source>New Window</source>
+        <translation>新窗口</translation>
     </message>
     <message>
         <location filename="../../../module/webbrowser/webkit/wbwebview.cc" line="72"/>
         <location filename="../../../module/webbrowser/webkit/wbwebview.cc" line="73"/>
+        <source>Toggle Full Screen</source>
+        <translation>全屏顯示</translation>
+    </message>
+    <message>
+        <location filename="../../../module/webbrowser/webkit/wbwebview.cc" line="77"/>
+        <location filename="../../../module/webbrowser/webkit/wbwebview.cc" line="78"/>
         <source>Toggle Menu Bar</source>
         <translation>顯示菜單欄</translation>
     </message>
     <message>
-        <location filename="../../../module/webbrowser/webkit/wbwebview.cc" line="120"/>
+        <location filename="../../../module/webbrowser/webkit/wbwebview.cc" line="127"/>
         <source>Search</source>
         <translation>檢索</translation>
     </message>
     <message>
-        <location filename="../../../module/webbrowser/webkit/wbwebview.cc" line="147"/>
         <source>Search with %1</source>
-        <translation>搜索：%1</translation>
+        <translation type="obsolete">搜索：%1</translation>
     </message>
     <message>
         <source>Undo closed tab</source>
@@ -1205,33 +1343,33 @@
 <context>
     <name>WebBrowser</name>
     <message>
-        <location filename="../../../module/webbrowser/webbrowser.cc" line="461"/>
-        <location filename="../../../module/webbrowser/webbrowser.cc" line="464"/>
+        <location filename="../../../module/webbrowser/webbrowser.cc" line="462"/>
+        <location filename="../../../module/webbrowser/webbrowser.cc" line="465"/>
         <source>Loading ...</source>
         <translation>載入中...</translation>
     </message>
     <message>
-        <location filename="../../../module/webbrowser/webbrowser.cc" line="462"/>
+        <location filename="../../../module/webbrowser/webbrowser.cc" line="463"/>
         <source>Loading complete</source>
         <translation>載入完成</translation>
     </message>
     <message>
-        <location filename="../../../module/webbrowser/webbrowser.cc" line="639"/>
+        <location filename="../../../module/webbrowser/webbrowser.cc" line="640"/>
         <source>openning</source>
         <translation>正在打開</translation>
     </message>
     <message>
-        <location filename="../../../module/webbrowser/webbrowser.cc" line="669"/>
+        <location filename="../../../module/webbrowser/webbrowser.cc" line="670"/>
         <source>no recent closed tabs</source>
         <translation>沒有關閉的標簽</translation>
     </message>
     <message>
-        <location filename="../../../module/webbrowser/webbrowser.cc" line="751"/>
+        <location filename="../../../module/webbrowser/webbrowser.cc" line="752"/>
         <source>Start Page</source>
         <translation>世界の果て</translation>
     </message>
     <message>
-        <location filename="../../../module/webbrowser/webbrowser.cc" line="850"/>
+        <location filename="../../../module/webbrowser/webbrowser.cc" line="852"/>
         <source>Annot Browser</source>
         <translation>とある瀏覽使</translation>
     </message>
@@ -1281,6 +1419,39 @@
     <message>
         <source>Tab 1</source>
         <translation type="obsolete">標簽1</translation>
+    </message>
+</context>
+<context>
+    <name>YoukuMrlResolver</name>
+    <message>
+        <location filename="../../../module/mrlresolver/youkumrlresolver.cc" line="52"/>
+        <location filename="../../../module/mrlresolver/youkumrlresolver.cc" line="75"/>
+        <source>failed to resolve URL</source>
+        <translation>解析地址失敗</translation>
+    </message>
+    <message>
+        <location filename="../../../module/mrlresolver/youkumrlresolver.cc" line="62"/>
+        <source>resolving media URL ...</source>
+        <translation>解析地址中...</translation>
+    </message>
+    <message>
+        <location filename="../../../module/mrlresolver/youkumrlresolver.cc" line="81"/>
+        <source>network error, failed to resolve media URL</source>
+        <translation>網絡錯誤，解析地址失敗</translation>
+    </message>
+</context>
+<context>
+    <name>YoutubeMrlResolver</name>
+    <message>
+        <location filename="../../../module/mrlresolver/youtubemrlresolver.cc" line="50"/>
+        <location filename="../../../module/mrlresolver/youtubemrlresolver.cc" line="83"/>
+        <source>failed to resolve URL</source>
+        <translation>解析地址失敗</translation>
+    </message>
+    <message>
+        <location filename="../../../module/mrlresolver/youtubemrlresolver.cc" line="89"/>
+        <source>network error, failed to resolve media URL</source>
+        <translation>網絡錯誤，解析地址失敗</translation>
     </message>
 </context>
 </TS>

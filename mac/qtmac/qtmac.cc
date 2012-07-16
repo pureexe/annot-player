@@ -60,7 +60,7 @@ QtMac::homeApplicationSupportPath()
 #ifdef WITH_IOKIT
 
 // See: WorkingWStorage.pdf
-namespace { // anonymous
+namespace { namespace detail {
   kern_return_t getCDMediaIterator(io_iterator_t *mediaIterator)
   {
     mach_port_t masterPort;
@@ -79,14 +79,14 @@ namespace { // anonymous
     return ret;
   }
 
-} // anonymous namespace
+} } // anonymous detail
 
 QStringList
 QtMac::getCDMediaPaths()
 {
   QStringList ret;
   io_iterator_t mediaIterator;
-  if (::getCDMediaIterator(&mediaIterator) == KERN_SUCCESS && mediaIterator) {
+  if (detail::getCDMediaIterator(&mediaIterator) == KERN_SUCCESS && mediaIterator) {
     char buf[MAXPATHLEN];
     io_iterator_t current = ::IOIteratorNext(mediaIterator);
     while (current) {
@@ -95,9 +95,9 @@ QtMac::getCDMediaPaths()
            current, CFSTR(kIOBSDNameKey), kCFAllocatorDefault, (IOOptionBits)0
       ));
       if (cfstr) {
-        ::strcpy(buf, _PATH_DEV);
+        qstrcpy(buf, _PATH_DEV);
         ::strcat(buf, "r"); // r-disk
-        size_t len = ::strlen(buf);
+        size_t len = qstrlen(buf);
         if (::CFStringGetCString(cfstr, buf + len, sizeof(buf) - len, kCFStringEncodingASCII))
           ret.append(buf);
         CFRelease(cfstr);

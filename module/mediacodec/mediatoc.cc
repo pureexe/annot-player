@@ -1,7 +1,8 @@
 // mediatoc.cc
 // 2/13/2012
 #include "module/mediacodec/mediatoc.h"
-namespace { // anonymous
+
+namespace { namespace detail {
 
   int roundIndex(qint64 pos, const QList<qint64> &l, int start, int stop)
   {
@@ -16,7 +17,7 @@ namespace { // anonymous
       return SELF(pos, l, mid, stop);
     #undef SELF
   }
-} // anonymous namespace
+} } // anonymous detail
 
 qint64
 MediaToc::roundOffset(qint64 pos) const
@@ -38,7 +39,7 @@ MediaToc::roundOffset(qint64 pos) const
     return q;
   }
 
-  int i = ::roundIndex(pos, l, 0, l.size() - 1);
+  int i = detail::roundIndex(pos, l, 0, l.size() - 1);
   q = l[i];
   m_.unlock();
   return q;
@@ -64,7 +65,7 @@ MediaToc::roundTimestamp(qint64 pos) const
     return q;
   }
 
-  int i = ::roundIndex(pos, l, 0, l.size() - 1);
+  int i = detail::roundIndex(pos, l, 0, l.size() - 1);
   q = l[i];
   m_.unlock();
   return q;
@@ -84,7 +85,7 @@ MediaToc::offsetByTime(qint64 msecs) const
   else if (msecs >= timestamps_.last())
     index = timestamps_.size() - 1;
   else
-    index = ::roundIndex(msecs, timestamps_, 0, timestamps_.size() - 1);
+    index = detail::roundIndex(msecs, timestamps_, 0, timestamps_.size() - 1);
   qint64 ret = offsets_[index];
   m_.unlock();
   return ret;

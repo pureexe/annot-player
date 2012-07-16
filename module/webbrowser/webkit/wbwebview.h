@@ -24,6 +24,7 @@ signals:
   void openUrlWithAcPlayerRequested(const QString &url);
   void importUrlToAcPlayerRequested(const QString &url);
   void openUrlWithAcDownloaderRequested(const QString &url);
+  void downloadAnnotationUrlRequested(const QString &url);
   void undoClosedTabRequested();
   void newWindowRequested();
   void fullScreenRequested();
@@ -60,6 +61,9 @@ protected slots:
   void openWithAcDownloader()
   { emit openUrlWithAcDownloaderRequested(currentUrl_); }
 
+  void downloadAnnotations()
+  { emit downloadAnnotationUrlRequested(currentUrl_); }
+
   void searchWithEngine(int engine);
   void invalidateSelection();
 
@@ -72,6 +76,7 @@ private:
   QAction *openWithAcPlayerAct_,
           *importToAcPlayerAct_,
           *openWithAcDownloaderAct_,
+          *downloadAnnotationsAct_,
           *undoClosedTabAct_,
           *openSelectedLinkAct_,
           *newWindowAct_,

@@ -470,6 +470,16 @@ ServerAgent::updateAnnotationTextWithId(const QString &text, qint64 id)
   return proxy_->updateAnnotationTextWithId(text, id, user_.name(), user_.password());
 }
 
+bool
+ServerAgent::updateAnnotationUserIdWithId(qint64 userId, qint64 id)
+{
+  if (!id)
+    return false;
+  if (!isAuthorized() || userId != user_.id())
+    return false;
+  return proxy_->updateAnnotationUserIdWithId(userId, id, user_.name(), user_.password());
+}
+
 // - Live -
 
 qint64

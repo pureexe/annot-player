@@ -165,13 +165,40 @@ bool
 DataServer::updateAnnotationTextWithId(const QString &text, qint64 id)
 {
   DOUT("enter: text =" << text);
+  if (id <= 0) {
+    DOUT("exit: invalid id");
+    return false;
+  }
   bool ret = false;
   if (server_->isConnected() && server_->isAuthorized())
     ret = server_->updateAnnotationTextWithId(text, id);
-  if (ret)
+  if (ret) {
+    if (cache_->isValid())
+      cache_->updateAnnotationTextWithId(text, id);
     log(tr("annotation saved") + ": " + text);
-  else
+  } else
     warn(tr("failed to update annotation text") + ": " + text);
+  DOUT("exit: ret =" << ret);
+  return ret;
+}
+
+bool
+DataServer::updateAnnotationUserIdWithId(qint64 userId, qint64 id)
+{
+  DOUT("enter: userId =" << userId);
+  if (id <= 0) {
+    DOUT("exit: invalid id");
+    return false;
+  }
+  bool ret = false;
+  if (server_->isConnected() && server_->isAuthorized())
+    ret = server_->updateAnnotationUserIdWithId(userId, id);
+  if (ret) {
+    if (cache_->isValid())
+      cache_->updateAnnotationUserIdWithId(userId, id);
+    log(tr("annotation ownership saved "));
+  } else
+    warn(tr("failed to change annotation ownership"));
   DOUT("exit: ret =" << ret);
   return ret;
 }

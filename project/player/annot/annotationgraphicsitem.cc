@@ -4,7 +4,6 @@
 #include "annotationgraphicsitem.h"
 #include "annotationgraphicsitemscheduler.h"
 #include "annotationgraphicsview.h"
-#include "annotationgraphicsstyle.h"
 #include "annotationgraphicseffect.h"
 #include "annotationsettings.h"
 #include "annotationeditor.h"
@@ -49,7 +48,9 @@ using namespace AnnotCloud;
 using namespace Logger;
 
 #define BAD_POSF        QPointF(-1,-1)
-namespace { inline bool isBadPosF(const QPointF &pos) { return pos.x() < 0 || pos.y() < 0; } }
+namespace { namespace detail {
+  inline bool isBadPosF(const QPointF &pos) { return pos.x() < 0 || pos.y() < 0; }
+} } // anonymous detail
 
 enum { MOTIONLESS_STAY_TIME = 7000 }; // 7 seconds
 
@@ -66,7 +67,7 @@ enum { MOTIONLESS_STAY_TIME = 7000 }; // 7 seconds
 enum { RC_AVATAR_COUNT = AVATAR_USER_COUNT };
 //enum { RC_AVATAR_GIF_COUNT = AVATAR_GIF_COUNT };
 
-namespace { // anonymous
+namespace { namespace detail {
   inline QString rc_avatar_url(qint64 i)
   {
     static QString fmt = RC_AVATAR_PREFIX "/user_%1.jpg";
@@ -79,14 +80,14 @@ namespace { // anonymous
     //  jpg.arg(QString::number(hash)) :
     //  gif.arg(QString::number(hash - RC_AVATAR_JPG_COUNT));
   }
-} // anonymous namespace
+} } // anonymous detail
 
 // - Helpers -
 
 #define ANNOTATION_LIFE_SCHEDULE   ((ANNOTATION_LIFE_ViSIBLE + 1) / 4)
 #define OPACITY                    ANNOTATION_EFFECT_OPACITY
 
-namespace { namespace curve_ { // anonymous, curves
+namespace { namespace curve_ { // anonymous curves
 
   inline qreal linear_(qreal progress, qreal start, qreal stop)
   {
@@ -128,14 +129,17 @@ namespace { namespace curve_ { // anonymous, curves
   { return linear_(progress, 0.15, 0.80); }
 
   qreal NOINLINE flyOpacity(qreal progress)
-  { return linear_(progress, 0.13, 0.80); }
+  { return linear_(progress, 0.15, 0.80); }
 
-} } // anonymous namespace
+  qreal NOINLINE linear(qreal progress)
+  { return progress; }
+
+} } // anonymous namespace curve_
 
 int
 AnnotationGraphicsItem::nextY(int msecs, Style style) const
 {
-  int ret = view_->scheduler()->nextY(view_->height(), msecs, style);
+  int ret = view_->scheduler()->nextY(view_->height(), boundingRect().height(), msecs, style);
   int max = view_->height() - boundingRect().height() ;
   if (ret > max - 5)
     ret = max;
@@ -460,7 +464,7 @@ AnnotationGraphicsItem::updateAvatar()
     if (count > 1)
       prefix_ =
         "<img"
-        " src=\"" + ::rc_avatar_url(uid) + "\""
+        " src=\"" + detail::rc_avatar_url(uid) + "\""
         " alt=\"" + annot_.userAlias() + "\""
         " border=\"0\""
         " width=\"" AVATAR_SIZE "\""
@@ -552,7 +556,7 @@ AnnotationGraphicsItem::updateMeta()
 
       avatar =
         "<img"
-        " src=\"" + ::rc_avatar_url(uid) + "\""
+        " src=\"" + detail::rc_avatar_url(uid) + "\""
         " alt=\"" + annot_.userAlias() + "\""
         " border=\"0\""
         " width=\"" AVATAR_SIZE "\""
@@ -851,7 +855,7 @@ AnnotationGraphicsItem::addMe()
 void
 AnnotationGraphicsItem::disappear()
 {
-  enum { timeout = 1000 };
+  enum { timeout = 600 };
 
   switch (style_) {
   case TopStyle:
@@ -1081,16 +1085,16 @@ AnnotationGraphicsItem::stayTime() const
 int
 AnnotationGraphicsItem::flyTime() const
 {
+  Q_ASSERT(AnnotationSettings::globalSettings()->speedFactor());
   int w0 = qMax<int>(view_->width(), 100),
       w = qMax<int>(boundingRect().width(), 50);
-  qreal f = qreal(w0 + 200) / (w + 200);
-  int ret = ANNOTATION_FLY_TIME * f + ANNOTATION_FLY_TIME_MIN;
+  int ret = ANNOTATION_FLY_TIME_MIN + ANNOTATION_FLY_TIME * (w0 + 200)/(w + 1000);
   ret = qMin(ret, ANNOTATION_FLY_TIME_MAX);
-  if (style_ == FlyStyle)
+  if (style_ == FlyStyle) {
     ret /= 5;
-  //if (view_->width() > 640)
-  //  ret = ret * view_->width() / 640;
-  return qMax(ret, ANNOTATION_FLY_TIME_MIN);
+    ret = qMax(ret, ANNOTATION_FLY_TIME_MIN);
+  }
+  return ret / AnnotationSettings::globalSettings()->speedup();
 }
 
 void
@@ -1269,9 +1273,15 @@ AnnotationGraphicsItem::contextMenuEvent(QContextMenuEvent *event)
   m->addMenu(searchMenu);
 
   translateMenu->addAction(QIcon(ACRC_IMAGE_ENGLISH), TR(T_ENGLISH), this, SLOT(translateToEnglish()));
+  translateMenu->addSeparator();
   translateMenu->addAction(QIcon(ACRC_IMAGE_JAPANESE), TR(T_JAPANESE), this, SLOT(translateToJapanese()));
   translateMenu->addAction(QIcon(ACRC_IMAGE_CHINESE), TR(T_CHINESE), this, SLOT(translateToChinese()));
   translateMenu->addAction(QIcon(ACRC_IMAGE_KOREAN), TR(T_KOREAN), this, SLOT(translateToKorean()));
+  translateMenu->addSeparator();
+  translateMenu->addAction(QIcon(ACRC_IMAGE_FRENCH), TR(T_FRENCH), this, SLOT(translateToFrench()));
+  translateMenu->addAction(QIcon(ACRC_IMAGE_GERMAN), TR(T_GERMAN), this, SLOT(translateToGerman()));
+  translateMenu->addAction(QIcon(ACRC_IMAGE_SPANISH), TR(T_SPANISH), this, SLOT(translateToSpanish()));
+  translateMenu->addAction(QIcon(ACRC_IMAGE_PORTUGUESE), TR(T_PORTUGUESE), this, SLOT(translateToPortuguese()));
 
   m->addMenu(translateMenu);
 
@@ -1315,13 +1325,13 @@ AnnotationGraphicsItem::mouseDoubleClickEvent(QMouseEvent *event)
     pause();
 
   //analyzeMe();
-  bool detail = hub_->isFullScreenWindowMode();
+  bool detail = true;//hub_->isFullScreenWindowMode();
   view_->selectItem(this, detail);
 }
 
 bool
 AnnotationGraphicsItem::isDragging() const
-{ return !::isBadPosF(dragPos_); }
+{ return !detail::isBadPosF(dragPos_); }
 
 void
 AnnotationGraphicsItem::mousePressEvent(QMouseEvent *event)
@@ -1329,7 +1339,7 @@ AnnotationGraphicsItem::mousePressEvent(QMouseEvent *event)
   Q_ASSERT(event);
   switch (event->button()) {
   case Qt::LeftButton:
-    if (::isBadPosF(dragPos_))
+    if (detail::isBadPosF(dragPos_))
       dragPos_ = QPointF(event->globalPos()) -  scenePos();
   case Qt::RightButton:
     if (!isPaused()) {
@@ -1373,7 +1383,7 @@ void
 AnnotationGraphicsItem::mouseMoveEvent(QMouseEvent *event)
 {
   Q_ASSERT(event);
-  if ((event->buttons() & Qt::LeftButton) && !::isBadPosF(dragPos_)) {
+  if ((event->buttons() & Qt::LeftButton) && !detail::isBadPosF(dragPos_)) {
     QPointF newPos = QPointF(event->globalPos()) - dragPos_;
     // use QCoreApplication::postEvent is more elegant but less efficient
     setPos(newPos);
@@ -1685,5 +1695,21 @@ AnnotationGraphicsItem::translateToChinese()
 void
 AnnotationGraphicsItem::translateToKorean()
 { translate(Traits::Korean); }
+
+void
+AnnotationGraphicsItem::translateToFrench()
+{ translate(Traits::French); }
+
+void
+AnnotationGraphicsItem::translateToGerman()
+{ translate(Traits::German); }
+
+void
+AnnotationGraphicsItem::translateToSpanish()
+{ translate(Traits::Spanish); }
+
+void
+AnnotationGraphicsItem::translateToPortuguese()
+{ translate(Traits::Portuguese); }
 
 // EOF

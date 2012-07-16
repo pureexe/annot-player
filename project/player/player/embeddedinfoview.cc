@@ -6,6 +6,7 @@
 #include "signalhub.h"
 #include "tr.h"
 #include "project/common/acsettings.h"
+#include "project/common/acui.h"
 #include "annotationsettings.h"
 #include "module/annotcloud/alias.h"
 #include "module/player/player.h"
@@ -23,18 +24,7 @@ using namespace AnnotCloud;
 # pragma clang diagnostic ignored "-Wlogical-op-parentheses" // '&&' within '||'
 #endif // __clang__
 
-#define STYLESHEET \
-  SS_BEGIN(QLabel) \
-    SS_COLOR(cyan) \
-  SS_END
-
 #define MAX_WIDTH       300
-
-#ifdef Q_WS_WIN
-# define FONT_SIZE     8 // 8 em
-#else
-# define FONT_SIZE     10 // 10 em
-#endif
 
 // - Construction -
 
@@ -46,13 +36,21 @@ EmbeddedInfoView::EmbeddedInfoView(Player *player, DataManager *data, SignalHub 
   Q_ASSERT(hub_);
   //connect(this, SIGNAL(refreshRequested()), SLOT(updateText()));
 
-  setStyleSheet(STYLESHEET);
+  setStyleSheet(
+    SS_BEGIN(QLabel)
+      SS_COLOR(cyan)
+      SS_FONT_SIZE(9pt)
+      //SS_FONT_WEIGHT(bold)
+    SS_END
+  );
 
   setMaximumWidth(MAX_WIDTH);
 
-  QFont f = font();
-  f.setPointSize(FONT_SIZE);
-  setFont(f);
+  { // Outline font
+    QGraphicsEffect *e = AcUi::globalInstance()->makeHaloEffect(QColor("orange")); // orange is the complementary color of cyan
+    e->setProperty("opacity", 0.95);
+    setGraphicsEffect(e);
+  }
 
   connect(player_, SIGNAL(hueChanged(int)), SLOT(refresh()));
   connect(player_, SIGNAL(contrastChanged(qreal)), SLOT(refresh()));
@@ -63,6 +61,7 @@ EmbeddedInfoView::EmbeddedInfoView(Player *player, DataManager *data, SignalHub 
   connect(player_, SIGNAL(audioDelayChanged(qint64)), SLOT(refresh()));
   connect(player_, SIGNAL(audioChannelChanged(int)), SLOT(refresh()));
   connect(AnnotationSettings::globalSettings(), SIGNAL(scaleChanged(qreal)), SLOT(refresh()));
+  connect(AnnotationSettings::globalSettings(), SIGNAL(speedFactorChanged(int)), SLOT(refresh()));
   connect(AnnotationSettings::globalSettings(), SIGNAL(rotationChanged(qreal)), SLOT(refresh()));
   connect(AnnotationSettings::globalSettings(), SIGNAL(offsetChanged(int)), SLOT(refresh()));
 }
@@ -268,9 +267,14 @@ EmbeddedInfoView::updateText()
         .arg(tr("user"))
     );
     bool newline = false;;
-    QString scale = QString::number(AnnotationSettings::globalSettings()->scale(), 'f', 2);
-    if (!qFuzzyCompare(AnnotationSettings::globalSettings()->scale() +1, 1)) {
+    if (!qFuzzyCompare(AnnotationSettings::globalSettings()->scale(), 1)) {
+      QString scale = QString::number(AnnotationSettings::globalSettings()->scale(), 'f', 2);
       t.append(tr("Scale") + ":" + scale + " ");
+      newline = true;
+    }
+    if (!qFuzzyCompare(AnnotationSettings::globalSettings()->speedup(), 1)) {
+      QString speed = QString::number(AnnotationSettings::globalSettings()->speedup(), 'f', 2);
+      t.append(tr("Speed") + ":" + speed + " ");
       newline = true;
     }
     if (!qFuzzyCompare(AnnotationSettings::globalSettings()->rotation() +1, 1)) {

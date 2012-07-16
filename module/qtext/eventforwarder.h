@@ -1,7 +1,7 @@
-#ifndef _QTEXT_EVENTLISTENER_H
-#define _QTEXT_EVENTLISTENER_H
+#ifndef _QTEXT_EVENTFORWARDER_H
+#define _QTEXT_EVENTFORWARDER_H
 
-// qtext/eventlistener.h
+// qtext/eventforwarder.h
 // 8/6/2011
 
 #include <QtGlobal>
@@ -11,7 +11,7 @@ QT_FORWARD_DECLARE_CLASS(QMouseEvent)
 
 namespace QtExt {
 
-class EventListener
+class EventForwarder
 {
 public:
   virtual void sendContextMenuEvent(QContextMenuEvent *) { }
@@ -24,4 +24,4 @@ public:
 
 } // namespace QtExt
 
-#endif // _QTEXT_EVENTLISTENER_H
+#endif // _QTEXT_EVENTFORWARDER_H

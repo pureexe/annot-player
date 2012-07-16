@@ -6,7 +6,6 @@
 #include <QtNetwork/QNetworkRequest>
 #include <QtCore/QEventLoop>
 #include <QtCore/QFile>
-#include <cstring>
 
 //#define DEBUG "bufferedremotestream"
 #include "module/debug/debug.h"
@@ -52,7 +51,7 @@ BufferedRemoteStream::tryRead(char *data, qint64 maxSize)
     m_.lock();
     qint64 ret = qMin(data_.size() - pos_, maxSize);
     if (ret > 0) {
-      ::memcpy(data, data_.constData() + pos_, ret);
+      qMemCopy(data, data_.constData() + pos_, ret);
       pos_ += ret;
     } else
       ret = 0;
@@ -64,7 +63,7 @@ BufferedRemoteStream::tryRead(char *data, qint64 maxSize)
   qint64 leftSize = data_.size() - pos_;
   if (maxSize <= leftSize) {
     m_.lock();
-    ::memcpy(data, data_.constData() + pos_, maxSize);
+    qMemCopy(data, data_.constData() + pos_, maxSize);
     pos_ += maxSize;
     m_.unlock();
     DOUT("exit: ret =" << maxSize);
@@ -83,7 +82,7 @@ BufferedRemoteStream::tryRead(char *data, qint64 maxSize)
   if (ret > 0) {
     m_.lock();
     data_.append(reply_->read(count));
-    ::memcpy(data, data_.constData() + pos_, ret);
+    qMemCopy(data, data_.constData() + pos_, ret);
     pos_ += ret;
     m_.unlock();
   }
@@ -127,7 +126,7 @@ BufferedRemoteStream::read(char *data, qint64 maxSize)
     m_.lock();
     qint64 ret = qMin(data_.size() - pos_, maxSize);
     if (ret > 0) {
-      ::memcpy(data, data_.constData() + pos_, ret);
+      qMemCopy(data, data_.constData() + pos_, ret);
       pos_ += ret;
     } else
       ret = 0;
@@ -139,7 +138,7 @@ BufferedRemoteStream::read(char *data, qint64 maxSize)
   qint64 leftSize = data_.size() - pos_;
   if (maxSize <= leftSize) {
     m_.lock();
-    ::memcpy(data, data_.constData() + pos_, maxSize);
+    qMemCopy(data, data_.constData() + pos_, maxSize);
     pos_ += maxSize;
     m_.unlock();
     DOUT("exit: ret =" << maxSize);
@@ -163,7 +162,7 @@ BufferedRemoteStream::read(char *data, qint64 maxSize)
   if (ret > 0) {
     m_.lock();
     data_.append(reply_->read(count));
-    ::memcpy(data, data_.constData() + pos_, ret);
+    qMemCopy(data, data_.constData() + pos_, ret);
     pos_ += ret;
     m_.unlock();
   }

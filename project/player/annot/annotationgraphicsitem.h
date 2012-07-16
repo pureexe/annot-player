@@ -31,7 +31,8 @@ class AnnotationGraphicsItem : public QGraphicsTextItem
   Q_PROPERTY(QPointF pos READ pos WRITE setPos)
   Q_PROPERTY(QPointF relativePos READ relativePos WRITE setRelativePos)
   Q_PROPERTY(qreal x READ x WRITE setX)
-  Q_PROPERTY(qreal relativeX READ relativeX WRITE setRelativeXSmoothly)
+  //Q_PROPERTY(qreal relativeX READ relativeX WRITE setRelativeXSmoothly)
+  Q_PROPERTY(qreal relativeX READ relativeX WRITE setRelativeX)
   Q_PROPERTY(qreal opacity READ opacity WRITE setOpacity)
 
   typedef AnnotationGraphicsItem Self;
@@ -110,7 +111,7 @@ public slots:
   void setRelativePos(const QPointF &offset) { setPos(origin_ + offset); }
   void setRelativeX(qreal xOffset) { setX(origin_.x() + xOffset); }
   void setRelativeY(qreal yOffset) { setY(origin_.y() + yOffset); }
-  void setRelativeXSmoothly(qreal xOffset);
+  void setRelativeXSmoothly(qreal xOffset); // not used
   void setScale(qreal value) { Base::setScale(value); }
   void showMe();   // Add me to graphics scene, and autmatic remove me.
   void selectMe();
@@ -140,6 +141,10 @@ protected slots:
   void translateToJapanese();
   void translateToChinese();
   void translateToKorean();
+  void translateToFrench();
+  void translateToGerman();
+  void translateToSpanish();
+  void translateToPortuguese();
 
   void fly();
   void stay(Style location = TopStyle);

@@ -34,7 +34,7 @@ enum { RC_AVATAR_COUNT = 10 };
 //enum { RC_AVATAR_GIF_COUNT = 10 };
 //#endif // AVATAR_GIF_COUNT
 
-namespace { // anonymous
+namespace { namespace detail {
   inline QString rc_avatar_url(qint64 i)
   {
     static QString fmt =
@@ -58,7 +58,7 @@ namespace { // anonymous
 //      jpg.arg(QString::number(hash)) :
 //      gif.arg(QString::number(hash - RC_AVATAR_JPG_COUNT));
   }
-} // anonymous namespace
+} } // anonymous detail
 
 
 #ifdef Q_WS_X11
@@ -90,7 +90,7 @@ namespace { // anonymous
 #define EL_AVATAR_WIDTH  "#{avatar_width}"
 #define EL_AVATAR_HEIGHT "#{avatar_height}"
 
-namespace { // anonymous
+namespace { namespace detail {
 
   inline const QByteArray &rc_jsf_t()
   {
@@ -125,25 +125,25 @@ namespace { // anonymous
     return ret;
   }
 
-} // anonymous namespace
+} } // anonymous detail
 
 // - API -
 
 QString
 AnnotCloud::
-AnnotationHtmlParser::toHtml(const AnnotationList &l, const QString &title) const
+AnnotationHtmlParser::toHtml(const AnnotationList &l, const QString &title, bool ignorePos) const
 {
-  QString ret = ::rc_jsf_t();
+  QString ret = detail::rc_jsf_t();
   ret.replace(EL_TITLE, title);
 
   // Threads
   QString t;
   foreach (const Annotation &a, l) {
-    QString c = ::rc_jsf_a();
+    QString c = detail::rc_jsf_a();
     c.replace(EL_AVATAR_WIDTH, AVATAR_WIDTH)
      .replace(EL_AVATAR_HEIGHT, AVATAR_HEIGHT)
      .replace(EL_AVATAR_TITLE, a.userAlias())
-     .replace(EL_AVATAR_SRC, ::rc_avatar_url(a.userId()));
+     .replace(EL_AVATAR_SRC, detail::rc_avatar_url(a.userId()));
     c.replace(EL_A_POS, FORMAT_POS(a.pos()))
      .replace(EL_A_CREATETIME, FORMAT_TIME(a.createTime()))
      .replace(EL_A_USER, a.userAlias());
@@ -169,7 +169,9 @@ AnnotationHtmlParser::toHtml(const AnnotationList &l, const QString &title) cons
   QString titles[] = { tr("Time - Count"), tr("Date - Count"), tr("User - Count") };
   enum { ImageCount = sizeof(titles) / sizeof(*titles) };
   for (int i = 0; i < ImageCount; i++) {
-    QString img = ::rc_jsf_i();
+    if (ignorePos && fields[i] == Annotation::Pos)
+      continue;
+    QString img = detail::rc_jsf_i();
     QString img_title = titles[i];
     QString img_file = QtExt::mktemp(".svg");
     QString img_src;

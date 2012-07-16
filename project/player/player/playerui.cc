@@ -91,9 +91,6 @@ PlayerUi::PlayerUi(SignalHub *hub, Player *player, ServerAgent *server, QWidget 
 
   createConnections();
 
-  fastFastForwardButton()->hide();
-  fastFastForwardButton()->resize(QSize());
-
   networkButton()->setText(TR(T_INTERNET));
   networkButton()->setCheckable(true);
   updateNetworkMenu();
@@ -115,10 +112,10 @@ PlayerUi::createConnections()
   connect(stopButton(), SIGNAL(clicked()), SLOT(stop()));
   connect(nextFrameButton(), SIGNAL(clicked()), SLOT(nextFrame()));
   connect(fastForwardButton(), SIGNAL(pressed()), SLOT(fastForward()));
-  connect(fastFastForwardButton(), SIGNAL(pressed()), SLOT(fastFastForward()));
+  //connect(fastFastForwardButton(), SIGNAL(pressed()), SLOT(fastFastForward()));
   //connect(rewindButton(), SIGNAL(pressed()), SLOT(rewind()));
   connect(fastForwardButton(), SIGNAL(released()), player_, SLOT(clearRate()));
-  connect(fastFastForwardButton(), SIGNAL(released()), player_, SLOT(clearRate()));
+  //connect(fastFastForwardButton(), SIGNAL(released()), player_, SLOT(clearRate()));
   //connect(rewindButton(), SIGNAL(released()), player_, SLOT(clearRate()));
 
   connect(userButton(), SIGNAL(clicked()), SLOT(clickUserButton()));
@@ -204,7 +201,6 @@ PlayerUi::createConnections()
       SLOT(updateStopButton()), \
       SLOT(updateNextFrameButton()), \
       SLOT(updateFastForwardButton()), \
-      SLOT(updateFastFastForwardButton()), \
     }; \
     BOOST_FOREACH (const char *signal, status_signals) \
       BOOST_FOREACH (const char *slot, update_slots) \
@@ -265,7 +261,7 @@ PlayerUi::setActive(bool active)
     updateStopButton();
     updateNextFrameButton();
     updateFastForwardButton();
-    updateFastFastForwardButton();
+    //updateFastFastForwardButton();
     updateNextButton();
     updatePreviousButton();
     updatePlayerModeToggler();
@@ -370,9 +366,10 @@ PlayerUi::fastForward(qreal rate)
 void
 PlayerUi::fastForward()
 { fastForward(4.0); }
-void
-PlayerUi::fastFastForward()
-{ fastForward(16.0); }
+
+//void
+//PlayerUi::fastFastForward()
+//{ fastForward(16.0); }
 
 void
 PlayerUi::rewind()
@@ -545,7 +542,7 @@ PlayerUi::updateUserButton()
 {
   QToolButton *b = userButton();
   if (server_->isAuthorized()) {
-    b->setStyleSheet(ACSS_TOOLBUTTON_TEXT_NORMAL);
+    b->setStyleSheet(ACSS_TOOLBUTTON_TEXT);
     b->setText(server_->user().name());
   } else {
     b->setStyleSheet(ACSS_TOOLBUTTON_TEXT_INVERT);
@@ -734,31 +731,32 @@ PlayerUi::updateFastForwardButton()
   QtWin::repaintWindow(b->winId());
 #endif // Q_OS_WIN
 }
-void
-PlayerUi::updateFastFastForwardButton()
-{
-  QToolButton *b = fastFastForwardButton();
-  if (!hub_->isMediaTokenMode()) {
-    b->hide();
-    b->setEnabled(false);
-    return;
-  }
 
-  switch (player_->status()) {
-  case Player::Playing:
-  case Player::Paused:
-    b->setEnabled(true);
-    break;
-  case Player::Stopped:
-    b->setEnabled(false);
-    break;
-  }
-
-  b->show();
-#ifdef Q_OS_WIN
-  QtWin::repaintWindow(b->winId());
-#endif // Q_OS_WIN
-}
+//void
+//PlayerUi::updateFastFastForwardButton()
+//{
+//  QToolButton *b = fastFastForwardButton();
+//  if (!hub_->isMediaTokenMode()) {
+//    b->hide();
+//    b->setEnabled(false);
+//    return;
+//  }
+//
+//  switch (player_->status()) {
+//  case Player::Playing:
+//  case Player::Paused:
+//    b->setEnabled(true);
+//    break;
+//  case Player::Stopped:
+//    b->setEnabled(false);
+//    break;
+//  }
+//
+//  b->show();
+//#ifdef Q_OS_WIN
+//  QtWin::repaintWindow(b->winId());
+//#endif // Q_OS_WIN
+//}
 
 void
 PlayerUi::updateNextButton()

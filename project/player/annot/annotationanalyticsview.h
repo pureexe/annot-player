@@ -10,6 +10,7 @@
 QT_FORWARD_DECLARE_CLASS(QUrl)
 
 class DataManager;
+class SignalHub;
 
 class AnnotationAnalyticsView: public AcWebWindow
 {
@@ -22,7 +23,7 @@ class AnnotationAnalyticsView: public AcWebWindow
 
   // - Constructions -
 public:
-  explicit AnnotationAnalyticsView(DataManager *data, QWidget *parent = 0);
+  AnnotationAnalyticsView(DataManager *data, SignalHub *hub, QWidget *parent = 0);
 
 signals:
   void contentChanged(const QString &html);
@@ -49,6 +50,7 @@ private:
 
 private:
   DataManager *data_;
+  SignalHub *hub_;
   bool refreshing_;
 };
 

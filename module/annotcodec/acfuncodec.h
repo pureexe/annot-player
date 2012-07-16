@@ -95,9 +95,6 @@ protected:
   static Annotation parseAttribute(const QString &attr);
   static QString parseText(const QString &text);
 
-  static QByteArray skipJsonLeadingComment(const QByteArray &data)
-  { return skipLeadingCommentAndNewLine(data, "/*", "*/"); }
-
   static Annotation parseComment(const QString &attr, const QString &text)
   {
     Annotation a = parseAttribute(attr);

@@ -16,7 +16,7 @@
 
 // - Helper -
 
-namespace { // anonymous, type-cast
+namespace { namespace detail { // type-cast
 
   inline XRectangle
   XRectangleFromQRect(const QRect &qrect)
@@ -54,7 +54,7 @@ namespace { // anonymous, type-cast
     }
   }
 
-} // anonymous namespace
+} } // anonymous detail
 
 // - X Windows -
 
@@ -75,7 +75,7 @@ QtX::setWindowInputShape(WId window, const QPoint &pos, const QRegion &region)
     return;
   }
   ::XFixesSetWindowShapeRegion(QX11Info::display(), window, ShapeInput,
-                               pos.x(), pos.y(), XserverRegionFromQRegion(region));
+                               pos.x(), pos.y(), detail::XserverRegionFromQRegion(region));
 }
 
 // - Keyboard -

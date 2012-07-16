@@ -29,12 +29,12 @@
 
 #define MAKEDWORD(_a, _b)       ((DWORD)(((WORD)(((DWORD_PTR)(_a)) & 0xffff)) | ((DWORD)((WORD)(((DWORD_PTR)(_b)) & 0xffff))) << 16))
 
-namespace { // anonymous
+namespace { namespace detail {
 
-  struct HWND_DWORD {
+  typedef struct tag_HWND_DWORD {
     HWND hwnd;
     DWORD dword;
-  };
+  } HWND_DWORD, *PHWND_DWORD;
 
   // Conversions between qt and win32 data structures
 
@@ -59,7 +59,7 @@ namespace { // anonymous
 
   // Return ached OS version info
   // See: http://msdn.microsoft.com/en-us/library/ms724451(v=VS.85).aspx
-  LPOSVERSIONINFO lposvi_()
+  LPOSVERSIONINFO lposvi()
   {
     static std::unique_ptr<OSVERSIONINFO> autoReleasePool;
     LPOSVERSIONINFO ret = autoReleasePool.get();
@@ -75,7 +75,7 @@ namespace { // anonymous
     return ret;
   }
 
-} // anonymous namespace
+} } // anonymous detail
 
 // - Maintence -
 
@@ -284,11 +284,11 @@ QtWin::createProcessWithExecutablePath(const QString &filePath)
   std::wstring wszExeDir = fileDir.toStdWString();
 
   STARTUPINFOW siStartupInfo;
-  ::memset(&siStartupInfo, 0, sizeof(siStartupInfo));
+  ::ZeroMemory(&siStartupInfo, sizeof(siStartupInfo));
   siStartupInfo.cb = sizeof(siStartupInfo);
 
   PROCESS_INFORMATION piProcessInfo;
-  ::memset(&piProcessInfo, 0, sizeof(piProcessInfo));
+  ::ZeroMemory(&piProcessInfo, sizeof(piProcessInfo));
 
   LPCWSTR lpAppName = wszExePath.c_str();
   LPWSTR pwszParam = 0;
@@ -374,11 +374,11 @@ QtWin::getChildWindows(HWND hwnd)
 
 HWND
 QtWin::getWindowAtPos(const QPoint &globalPos)
-{ return ::WindowFromPoint(::QPoint2POINT(globalPos)); }
+{ return ::WindowFromPoint(detail::QPoint2POINT(globalPos)); }
 
 HWND
 QtWin::getChildWindowAtPos(const QPoint &globalPos, HWND parent)
-{ return ::ChildWindowFromPoint(parent, ::QPoint2POINT(globalPos)); }
+{ return ::ChildWindowFromPoint(parent, detail::QPoint2POINT(globalPos)); }
 
 QRect
 QtWin::getWindowRect(HWND hwnd)
@@ -386,7 +386,7 @@ QtWin::getWindowRect(HWND hwnd)
   QRect ret;
   RECT rect;
   if (::GetWindowRect(hwnd, &rect))
-    ret = ::RECT2QRect(rect);
+    ret = detail::RECT2QRect(rect);
   return ret;
 }
 
@@ -400,12 +400,25 @@ QtWin::windowHasRect(WId hwnd)
 }
 
 bool
-QtWin::isValidWindow(HWND hwnd)
+QtWin::isGoodWindow(WId hwnd)
+{
+  return windowHasText(hwnd) && (
+    isWindowVisible(hwnd) && windowHasRect(hwnd) ||
+    isWindowMinimized(hwnd)
+  );
+}
+
+bool
+QtWin::isWindowValid(HWND hwnd)
 { return ::IsWindow(hwnd); }
 
 bool
-QtWin::isVisibleWindow(WId hwnd)
+QtWin::isWindowVisible(WId hwnd)
 { return ::IsWindowVisible(hwnd); }
+
+bool
+QtWin::isWindowMinimized(WId hwnd)
+{ return ::IsIconic(hwnd); }
 
 bool
 QtWin::setTopWindow(HWND hwnd)
@@ -490,7 +503,7 @@ namespace { // anonymous
   BOOL CALLBACK
   getWindowWithThreadId_p(HWND hwnd, LPARAM lparam)
   {
-    auto lp = reinterpret_cast<HWND_DWORD *>(lparam);
+    auto lp = reinterpret_cast<detail::PHWND_DWORD>(lparam);
     Q_ASSERT(lp);
     if (QtWin::getWindowThreadId(hwnd) == lp->dword) {
       lp->hwnd = hwnd;
@@ -502,7 +515,7 @@ namespace { // anonymous
   BOOL CALLBACK
   getVisibleWindowWithThreadId_p(HWND hwnd, LPARAM lparam)
   {
-    auto lp = reinterpret_cast<HWND_DWORD *>(lparam);
+    auto lp = reinterpret_cast<detail::PHWND_DWORD>(lparam);
     Q_ASSERT(lp);
     if (::IsWindowVisible(hwnd) &&
         QtWin::getWindowThreadId(hwnd) == lp->dword) {
@@ -515,7 +528,7 @@ namespace { // anonymous
   BOOL CALLBACK
   getGoodWindowWithThreadId_p(HWND hwnd, LPARAM lparam)
   {
-    auto lp = reinterpret_cast<HWND_DWORD *>(lparam);
+    auto lp = reinterpret_cast<detail::PHWND_DWORD>(lparam);
     Q_ASSERT(lp);
     if (QtWin::getWindowThreadId(hwnd) == lp->dword &&
         QtWin::isGoodWindow(hwnd)) {
@@ -528,7 +541,7 @@ namespace { // anonymous
   BOOL CALLBACK
   getWindowWithProcessId_p(HWND hwnd, LPARAM lparam)
   {
-    auto lp = reinterpret_cast<HWND_DWORD *>(lparam);
+    auto lp = reinterpret_cast<detail::PHWND_DWORD>(lparam);
     Q_ASSERT(lp);
     if (QtWin::getWindowProcessId(hwnd) == lp->dword) {
       lp->hwnd = hwnd;
@@ -540,7 +553,7 @@ namespace { // anonymous
   BOOL CALLBACK
   getVisibleWindowWithProcessId_p(HWND hwnd, LPARAM lparam)
   {
-    auto lp = reinterpret_cast<HWND_DWORD *>(lparam);
+    auto lp = reinterpret_cast<detail::PHWND_DWORD>(lparam);
     Q_ASSERT(lp);
     if (::IsWindowVisible(hwnd) &&
         QtWin::getWindowProcessId(hwnd) == lp->dword) {
@@ -553,7 +566,7 @@ namespace { // anonymous
   BOOL CALLBACK
   getGoodWindowWithProcessId_p(HWND hwnd, LPARAM lparam)
   {
-    auto lp = reinterpret_cast<HWND_DWORD *>(lparam);
+    auto lp = reinterpret_cast<detail::PHWND_DWORD>(lparam);
     Q_ASSERT(lp);
     if (QtWin::getWindowProcessId(hwnd) == lp->dword &&
         QtWin::isGoodWindow(hwnd)) {
@@ -567,7 +580,7 @@ namespace { // anonymous
 HWND
 QtWin::getWindowWithThreadId(DWORD threadId)
 {
-  HWND_DWORD tuple;
+  detail::HWND_DWORD tuple;
   tuple.hwnd = 0;
   tuple.dword = threadId;
   ::EnumWindows(::getWindowWithThreadId_p, reinterpret_cast<LPARAM>(&tuple));
@@ -577,7 +590,7 @@ QtWin::getWindowWithThreadId(DWORD threadId)
 HWND
 QtWin::getWindowWithProcessId(DWORD processId)
 {
-  HWND_DWORD tuple;
+  detail::HWND_DWORD tuple;
   tuple.hwnd = 0;
   tuple.dword = processId;
   ::EnumWindows(::getWindowWithProcessId_p, reinterpret_cast<LPARAM>(&tuple));
@@ -587,7 +600,7 @@ QtWin::getWindowWithProcessId(DWORD processId)
 HWND
 QtWin::getVisibleWindowWithThreadId(DWORD threadId)
 {
-  HWND_DWORD tuple;
+  detail::HWND_DWORD tuple;
   tuple.hwnd = 0;
   tuple.dword = threadId;
   ::EnumWindows(::getVisibleWindowWithThreadId_p, reinterpret_cast<LPARAM>(&tuple));
@@ -597,7 +610,7 @@ QtWin::getVisibleWindowWithThreadId(DWORD threadId)
 HWND
 QtWin::getVisibleWindowWithProcessId(DWORD processId)
 {
-  HWND_DWORD tuple;
+  detail::HWND_DWORD tuple;
   tuple.hwnd = 0;
   tuple.dword = processId;
   ::EnumWindows(::getVisibleWindowWithProcessId_p, reinterpret_cast<LPARAM>(&tuple));
@@ -607,7 +620,7 @@ QtWin::getVisibleWindowWithProcessId(DWORD processId)
 HWND
 QtWin::getGoodWindowWithThreadId(DWORD threadId)
 {
-  HWND_DWORD tuple;
+  detail::HWND_DWORD tuple;
   tuple.hwnd = 0;
   tuple.dword = threadId;
   ::EnumWindows(::getGoodWindowWithThreadId_p, reinterpret_cast<LPARAM>(&tuple));
@@ -617,7 +630,7 @@ QtWin::getGoodWindowWithThreadId(DWORD threadId)
 HWND
 QtWin::getGoodWindowWithProcessId(DWORD processId)
 {
-  HWND_DWORD tuple;
+  detail::HWND_DWORD tuple;
   tuple.hwnd = 0;
   tuple.dword = processId;
   ::EnumWindows(::getGoodWindowWithProcessId_p, reinterpret_cast<LPARAM>(&tuple));
@@ -678,7 +691,10 @@ QtWin::isMouseRightButtonPressed()
 
 int
 QtWin::getDoubleClickInterval()
-{ return ::GetDoubleClickTime(); }
+{
+  static const int ret = ::GetDoubleClickTime();
+  return ret;
+}
 
 void
 QtWin::sendMouseMove(const QPoint &globalPos, bool relative)
@@ -717,7 +733,7 @@ QPoint
 QtWin::getMousePos()
 {
   POINT pt;
-  return ::GetCursorPos(&pt) ? ::POINT2QPoint(pt) : QPoint();
+  return ::GetCursorPos(&pt) ? detail::POINT2QPoint(pt) : QPoint();
 }
 
 // - Paths -
@@ -783,7 +799,7 @@ QtWin::isWindowsXpOrLater()
 {
   static int ret = -1;
   if (ret < 0) {
-    LPOSVERSIONINFO lp = ::lposvi_();
+    LPOSVERSIONINFO lp = detail::lposvi();
     ret = (lp->dwMajorVersion > 5 ||
            lp->dwMajorVersion == 5 && lp->dwMinorVersion >= 1) // dwMinorVersion == 0 => Windows 2000
         ? 1 : 0;
@@ -796,7 +812,7 @@ QtWin::isWindowsVistaOrLater()
 {
   static int ret = -1;
   if (ret < 0)
-    ret = ::lposvi_()->dwMajorVersion >= 6 ? 1 : 0;
+    ret = detail::lposvi()->dwMajorVersion >= 6 ? 1 : 0;
   return ret;
 }
 
@@ -980,7 +996,7 @@ QtWin::getLogicalDrives()
     char *pch = szBuffer;
     while (*pch) {
       ret.append(pch);
-      pch += ::strlen(pch) + 1;
+      pch += qstrlen(pch) + 1;
     }
   }
 
@@ -1008,7 +1024,7 @@ QtWin::getLogicalDrivesWithType(DriveType type)
     while (*pch) {
       if (::GetDriveTypeA(pch) == type)
         ret.append(pch);
-      pch += ::strlen(pch) + 1;
+      pch += qstrlen(pch) + 1;
     }
   }
 
@@ -1139,14 +1155,14 @@ QtWin::toUtf8(const wchar_t *pStr)
 
 bool
 QtWin::setFileAttributes(const QString &fileName, uint flags)
-{ return ::SetFileAttributesW(::QPath2WinPath(fileName).toStdWString().c_str(), flags); }
+{ return ::SetFileAttributesW(detail::QPath2WinPath(fileName).toStdWString().c_str(), flags); }
 
 // - Shell -
 
 // See: http://nicug.blogspot.com/search/label/taskbar
 void
 QtWin::addRecentDocument(const QString &fileName)
-{ ::SHAddToRecentDocs(SHARD_PATHW, ::QPath2WinPath(fileName).toStdWString().c_str()); }
+{ ::SHAddToRecentDocs(SHARD_PATHW, detail::QPath2WinPath(fileName).toStdWString().c_str()); }
 
 // EOF
 

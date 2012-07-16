@@ -5,10 +5,10 @@
 #include "module/qtext/htmltag.h"
 #include <QtGui>
 
-namespace { // anonymous
+namespace { namespace detail {
   inline QString colorToString(const QColor &c)
   { return QString().sprintf("#%02x%02x%02x",c.red(), c.green(), c.blue()); }
-} // anonymous namespace
+} } // anonymous detail
 
 // - Slots -
 
@@ -23,7 +23,7 @@ AcTextView::setText(const QString &text, const QColor &color)
       last_ = text;
 
     if (color.isValid())
-      setHtml(html_style(text, "color:" + colorToString(color)));
+      setHtml(html_style(text, "color:" + detail::colorToString(color)));
     else
       setHtml(text);
     moveCursorToBottom();
@@ -57,7 +57,7 @@ AcTextView::setText(const QStringList &l, const QColor &color)
     if (!s.trimmed().isEmpty())
       last_ = s;
     if (color.isValid())
-      t.append(html_style(s, "color:" + colorToString(color)));
+      t.append(html_style(s, "color:" + detail::colorToString(color)));
     else if (line_++ % 2)
       t.append(HTML_STYLE(+s+, color:purple));
     else
@@ -77,7 +77,7 @@ AcTextView::append(const QString &text, const QColor &color)
   if (!isEmpty())
     Base::append(QString());
   if (color.isValid())
-    Base::append(html_style(text, "color:" + colorToString(color)));
+    Base::append(html_style(text, "color:" + detail::colorToString(color)));
   else if (line_++ % 2)
     Base::append(HTML_STYLE(+text+, color:purple));
   else

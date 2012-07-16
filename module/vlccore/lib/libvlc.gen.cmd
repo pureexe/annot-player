@@ -2,6 +2,9 @@
 :: Since 6/30/2011
 :: http://wiki.videolan.org/GenerateLibFromDll
 :: dump: libvlc.dll => libvlc.def => libvlc.lib
+setlocal
+cd /d %~dp0
+
 set VLC_DLL=libvlc.dll
 set VLC_DEF=libvlc.def
 set VLC_LIB=vlc.lib

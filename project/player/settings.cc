@@ -38,6 +38,7 @@ using namespace AnnotCloud;
 #define SK_SUBOUTCOLOR  "SubtitleOutline"
 #define SK_ANNOTOUTCOLOR  "AnnotationOutline"
 #define SK_EMBEDONTOP   "EmbedOnTop"
+#define SK_TRANSLATOR   "Translator"
 #define SK_LABELPLAYER  "LabelPlayer"
 #define SK_SAVEBUFFER   "SaveBuffer"
 #define SK_SAVEANNOT    "SaveAnnotation"
@@ -52,6 +53,7 @@ using namespace AnnotCloud;
 #define SK_ANNOTSCALE   "AnnotationScale"
 //#define SK_ANNOTROTATE  "AnnotationRotation"
 #define SK_ANNOTRESOLUTION "AnnotationResolution"
+#define SK_ANNOTSPEED "AnnotationSpeed"
 #define SK_ANNOTFILTER  "AnnotationFilter"
 #define SK_ANNOTCOUNT   "AnnotationCount"
 #define SK_ANNOTEFFECT  "AnnotationEffect"
@@ -121,6 +123,14 @@ Settings::setAnnotationPositionResolution(int value)
 int
 Settings::annotationPositionResolution() const
 { return value(SK_ANNOTRESOLUTION, ANNOTATION_POSITION_RESOLUTION).toInt(); }
+
+void
+Settings::setAnnotationSpeedFactor(int value)
+{ setValue(SK_ANNOTSPEED, value); }
+
+int
+Settings::annotationSpeedFactor() const
+{ return value(SK_ANNOTSPEED, ANNOTATION_SPEED_FACTOR).toInt(); }
 
 void
 Settings::setAnnotationOffset(qint64 offset)
@@ -697,6 +707,16 @@ Settings::setAnnotationScale(qreal v)
 qreal
 Settings::annotationScale() const
 { return value(SK_ANNOTSCALE, 1.0).toReal(); }
+
+// - Services -
+
+void
+Settings::setTranslationServices(ulong value)
+{ setValue(SK_TRANSLATOR, uint(value)); }
+
+ulong
+Settings::translationServices() const
+{ return value(SK_TRANSLATOR).toUInt(); }
 
 // EOF
 

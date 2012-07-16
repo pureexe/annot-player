@@ -71,8 +71,8 @@ public slots:
 
   void checkClipboard();
 
-  void addUrls(const QStringList &urls, bool batch = false);
-  void addUrl(const QString &url);
+  void addUrls(const QStringList &urls, bool annotOnly = false);
+  void addUrl(const QString &url, bool annotOnly = false);
   void addTask(DownloadTask *t);
   void addTask(const DownloadTaskInfo &t);
 

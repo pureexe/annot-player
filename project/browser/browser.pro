@@ -1,7 +1,7 @@
 # browser.pro
 # 3/29/2012
 
-VERSION = 0.1.2.9
+VERSION = 0.1.3.0
 
 DEFINES += PROJECT_BROWSER
 
@@ -16,13 +16,15 @@ mac: CONFIG += x86
 ## Libraries
 
 include($$ROOTDIR/module/animation/animation.pri)
+include($$ROOTDIR/module/annotcache/annotcache.pri)
+include($$ROOTDIR/module/annotdown/annotdown.pri)
 include($$ROOTDIR/module/compress/compress.pri)
 include($$ROOTDIR/module/crypt/crypt.pri)
 include($$ROOTDIR/module/download/download.pri)
 #include($$ROOTDIR/module/imagefilter/imagefilter.pri)
 #include($$ROOTDIR/module/magnifier/magnifier.pri)
 include($$ROOTDIR/module/mousegesture/mousegesture.pri)
-include($$ROOTDIR/module/mrlanalysis/mrlanalysis.pri)
+include($$ROOTDIR/module/mrlresolver/mrlresolver.pri)
 include($$ROOTDIR/module/nicoutil/nicoutil.pri)
 include($$ROOTDIR/module/qt/qt.pri)
 include($$ROOTDIR/module/qtext/qtext.pri)

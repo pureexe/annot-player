@@ -12,7 +12,9 @@
 #include "module/qtext/toolbutton.h"
 #include <QtGui>
 
-enum { FONTEDIT_WIDTH = 100, OFFSETEDIT_WIDTH = 50, RESOLUTIONEDIT_WIDTH = 50 };
+enum { FONTEDIT_WIDTH = 100, OFFSETEDIT_WIDTH = 50, SPEEDEDIT_WIDTH = 50 };
+
+enum { SPEED_FACTOR = 10 };
 
 #define ICON_SIZE QSize(32, 16)
 
@@ -27,7 +29,7 @@ AnnotationPreferencesTab::init()
   createLayout();
 
   connect(settings_, SIGNAL(offsetChanged(int)), SLOT(loadOffsetIfVisible()));
-  connect(settings_, SIGNAL(positionResolutionChanged(int)), SLOT(loadResolutionIfVisible()));
+  connect(settings_, SIGNAL(speedFactorChanged(int)), SLOT(loadSpeedIfVisible()));
 }
 
 void
@@ -98,14 +100,15 @@ AnnotationPreferencesTab::createLayout()
   offsetEdit_->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
   connect(offsetEdit_, SIGNAL(valueChanged(int)), SLOT(saveOffset()));
 
-  enum { MaxResolution = 100 }; // 100 pixel
-  resolutionEdit_ = new QtExt::SpinBox;
-  resolutionEdit_->setMaximum(MaxResolution);
-  resolutionEdit_->setMinimum(0);
-  resolutionEdit_->setToolTip(TR(T_PIXEL));
-  resolutionEdit_->setFixedWidth(RESOLUTIONEDIT_WIDTH);
-  resolutionEdit_->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-  connect(resolutionEdit_, SIGNAL(valueChanged(int)), SLOT(saveResolution()));
+  enum { MinSpeed = SPEED_FACTOR/10, MaxSpeed = SPEED_FACTOR*10 }; // 10 times
+  Q_ASSERT(MinSpeed);
+  speedEdit_ = new QtExt::SpinBox;
+  speedEdit_->setMaximum(MaxSpeed);
+  speedEdit_->setMinimum(MinSpeed);
+  speedEdit_->setToolTip(tr("Speedup") + " x" + QString::number(SPEED_FACTOR));
+  speedEdit_->setFixedWidth(SPEEDEDIT_WIDTH);
+  speedEdit_->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+  connect(speedEdit_, SIGNAL(valueChanged(int)), SLOT(saveSpeed()));
 
   // See: http://qt-project.org/doc/qt-4.8/stylesheet-examples.html#customizing-qspinbox
   //offsetEdit_->setStyleSheet(
@@ -119,8 +122,8 @@ AnnotationPreferencesTab::createLayout()
   QLabel *offsetLabel = ui->makeLabel(AcUi::BuddyHint, tr("Offset"), tr("Offset in time"), offsetEdit_);
   QToolButton *offsetReset = ui->makeToolButton(AcUi::PushHint, TR(T_RESET), this, SLOT(resetOffset()));
 
-  QLabel *resolutionLabel = ui->makeLabel(AcUi::BuddyHint, tr("Resolution"), tr("Position resolution for floating annotations in pixels"), resolutionEdit_);
-  QToolButton *resolutionReset = ui->makeToolButton(AcUi::PushHint, TR(T_RESET), this, SLOT(resetResolution()));
+  QLabel *speedLabel = ui->makeLabel(AcUi::BuddyHint, tr("Speed"), tr("Moving speed, the larger the faster"), speedEdit_);
+  QToolButton *speedReset = ui->makeToolButton(AcUi::PushHint, TR(T_RESET), this, SLOT(resetSpeed()));
 
   // Layouts
   QGridLayout *grid = new QGridLayout; {
@@ -150,9 +153,9 @@ AnnotationPreferencesTab::createLayout()
     grid->addWidget(highlightColorButton_, r, ++c);
     grid->addWidget(highlightColorReset, r, ++c);
 
-    grid->addWidget(resolutionLabel, ++r, c=0, Qt::AlignRight);
-    grid->addWidget(resolutionEdit_, r, ++c);
-    grid->addWidget(resolutionReset, r, ++c);
+    grid->addWidget(speedLabel, ++r, c=0, Qt::AlignRight);
+    grid->addWidget(speedEdit_, r, ++c);
+    grid->addWidget(speedReset, r, ++c);
 
     grid->addWidget(offsetLabel, r, ++c, Qt::AlignRight);
     grid->addWidget(offsetEdit_, r, ++c);
@@ -177,7 +180,7 @@ AnnotationPreferencesTab::save()
   saveChineseFont();
   saveJapaneseFont();
   saveOffset();
-  saveResolution();
+  saveSpeed();
   //saveAnnotationColor();
   //saveSubtitleColor();
   //saveHighlightColor();
@@ -191,7 +194,7 @@ AnnotationPreferencesTab::load()
   loadChineseFont();
   loadJapaneseFont();
   loadOffset();
-  loadResolution();
+  loadSpeed();
   loadAnnotationColor();
   loadSubtitleColor();
   loadHighlightColor();
@@ -281,22 +284,22 @@ AnnotationPreferencesTab::resetOffset()
 }
 
 void
-AnnotationPreferencesTab::loadResolution()
-{ resolutionEdit_->setValue(settings_->positionResolution()); }
+AnnotationPreferencesTab::loadSpeed()
+{ speedEdit_->setValue(settings_->speedFactor() / SPEED_FACTOR); }
 
 void
-AnnotationPreferencesTab::saveResolution()
+AnnotationPreferencesTab::saveSpeed()
 {
-  settings_->setPositionResolution(resolutionEdit_->value());
-  emit message(tr("resolution saved"));
+  settings_->setSpeedFactor(speedEdit_->value() * SPEED_FACTOR);
+  emit message(tr("annotation speed saved"));
 }
 
 void
-AnnotationPreferencesTab::resetResolution()
+AnnotationPreferencesTab::resetSpeed()
 {
-  settings_->resetPositionResolution();
-  loadResolution();
-  emit message(tr("resolution saved"));
+  settings_->resetSpeedFactor();
+  loadSpeed();
+  emit message(tr("annotation speed saved"));
 }
 
 // - Color -

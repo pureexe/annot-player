@@ -26,11 +26,7 @@
 #define SS_STATUSBAR_WARNING    SS_STATUSBAR_(orange,normal)
 #define SS_STATUSBAR_ERROR      SS_STATUSBAR_(red,bold)
 #define SS_STATUSBAR_NOTIFY     SS_STATUSBAR_(orange,bold)
-#ifdef Q_WS_X11
-# define SS_STATUSBAR_MESSAGE    SS_STATUSBAR_(black,normal)
-#else
-# define SS_STATUSBAR_MESSAGE    SS_STATUSBAR_(cyan,normal)
-#endif //Q_WS_X11
+#define SS_STATUSBAR_MESSAGE    SS_STATUSBAR_(white,normal)
 
 enum { StatusMessageTimeout = 5000 };
 
@@ -54,6 +50,8 @@ AcMainWindow::AcMainWindow(QWidget *parent, Qt::WindowFlags f)
   messageTimer_->setInterval(StatusMessageTimeout);
   messageTimer_->setSingleShot(true);
   connect(messageTimer_, SIGNAL(timeout()), statusBar(), SLOT(hide()));
+
+  AcUi::globalInstance()->setStatusBarStyle(statusBar());
   statusBar()->hide();
 
   connect(this, SIGNAL(message(QString)), SLOT(showMessage(QString)), Qt::QueuedConnection);

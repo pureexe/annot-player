@@ -15,7 +15,13 @@
 #ifdef Q_WS_WIN
 # include "win/qtwin/qtwin.h"
 #endif // Q_WS_WIN
+#ifdef WITH_MODULE_GRAPHICSEFFECT
+# include "module/graphicseffect/graphicshaloeffect.h"
+#endif // WITH_MODULE_GRAPHICSEFFECT
 #include <QtGui>
+
+#define HALO_COLOR       Qt::darkYellow
+#define HIGHLIGHT_COLOR  Qt::yellow
 
 // - Constructions -
 
@@ -64,6 +70,32 @@ AcUi::backgroundImage() const
   }
 
   return rc;
+}
+
+QGraphicsEffect*
+AcUi::makeHaloEffect(ulong hints)
+{
+  return !hints || hints & (UrlHint | TabHint) ? (QGraphicsEffect *)0 : makeHaloEffect(
+    hints & HighlightHint ? HIGHLIGHT_COLOR : HALO_COLOR
+  );
+}
+
+QGraphicsEffect*
+AcUi::makeHaloEffect(const QColor &c)
+{
+  enum { offset = 1, radius = 16 };
+  auto e = new
+#ifdef WITH_MODULE_GRAPHICSEFFECT
+    GraphicsHaloEffect
+#else
+    QGraphicsDropShadowEffect
+#endif // WITH_MODULE_GRAPHICSEFFECT
+  ;
+  e->setBlurRadius(radius); // in pixels
+  e->setOffset(offset); // in pixels
+  if (c.isValid())
+    e->setColor(c);
+  return e;
 }
 
 bool
@@ -323,29 +355,20 @@ void
 AcUi::setToolButtonStyle(QToolButton *w)
 {
   Q_ASSERT(w);
-  if (!w)
-    return;
-
-//#ifdef Q_WS_WIN
-//  auto e = qobject_cast<QGraphicsBlurEffect *>(w->graphicsEffect());
-//  if (!e)
-//    e = new QGraphicsBlurEffect;
-//  e->setBlurHints(QGraphicsBlurEffect::PerformanceHint);
-//  e->setBlurRadius(AC_TOOLBUTTON_BLUR_RADIUS);
-//  w->setGraphicsEffect(e);
-//#endif // Q_WS_WIN
+  //Q_UNUSED(w);
+  //if (!w->text().isEmpty())
+  w->setGraphicsEffect(makeHaloEffect(Qt::blue));
 }
 
 void
 AcUi::setStatusBarStyle(QStatusBar *w)
 {
   Q_ASSERT(w);
-#ifdef WITH_WIN_DWM
-  if (isAeroEnabled())
-    w->setStyleSheet(ACSS_STATUSBAR_DWM);
-#else
-  Q_UNUSED(w);
-#endif // WITH_WIN_DWM
+//#ifdef WITH_WIN_DWM
+//  if (isAeroEnabled())
+//    w->setStyleSheet(ACSS_STATUSBAR_DWM);
+//#endif // WITH_WIN_DWM
+  w->setGraphicsEffect(makeHaloEffect());
 }
 
 // - Maker
@@ -387,6 +410,8 @@ AcUi::makeToolButton(ulong hints, const QString &title, const QString &tip, cons
   if (hints & UrlHint)
     ret->setChecked(true);
 
+  ret->setGraphicsEffect(makeHaloEffect(hints));
+
   if (receiver && slot) {
     if (hints & (CheckHint | TabHint | UrlHint))
       connect(ret, SIGNAL(clicked(bool)), receiver, slot, type);
@@ -408,10 +433,9 @@ AcUi::makeLabel(ulong hints, const QString &title, const QString &tip, QWidget *
                      ACSS_LABEL);
   ret->setText(hints & BuddyHint ? title + ":" : title);
   ret->setToolTip(tip.isEmpty() ? title : tip);
-
   if (buddy)
     ret->setBuddy(buddy);
-
+  //ret->setGraphicsEffect(makeHaloEffect(hints));
   return ret;
 }
 
@@ -427,7 +451,7 @@ AcUi::makeGroupBox(ulong hints, const QString &title, const QString &tip)
       ret->setTitle(title);
   }
   ret->setToolTip(tip.isEmpty() ? title : tip);
-
+  ret->setGraphicsEffect(makeHaloEffect(hints));
   return ret;
 }
 
@@ -439,6 +463,7 @@ AcUi::makeRadioButton(ulong hints, const QString &text, const QString &tip)
   ret->setStyleSheet(ACSS_RADIOBUTTON);
   ret->setText(text);
   ret->setToolTip(tip.isEmpty() ? text : tip);
+  ret->setGraphicsEffect(makeHaloEffect(hints));
   return ret;
 }
 
@@ -450,6 +475,7 @@ AcUi::makeCheckBox(ulong hints, const QString &text, const QString &tip)
   ret->setStyleSheet(ACSS_CHECKBOX);
   ret->setText(text);
   ret->setToolTip(tip.isEmpty() ? text : tip);
+  ret->setGraphicsEffect(makeHaloEffect(hints));
   return ret;
 }
 
@@ -459,7 +485,7 @@ AcUi::makeTextEdit(ulong hints, const QString &tip)
   QTextEdit *ret = new AcTextEdit;
   ret->setToolTip(tip);
   ret->setReadOnly(hints & ReadOnlyHint);
-
+  //ret->setGraphicsEffect(makeHaloEffect(hints));
   return ret;
 }
 
@@ -480,7 +506,7 @@ AcUi::makeComboBox(ulong hints, const QString &text, const QString &tip, const Q
   ret->setToolTip(tip);
   ret->lineEdit()->setPlaceholderText(holder);
   ret->setEditable(!(hints & ReadOnlyHint));
-
+  //ret->setGraphicsEffect(makeHaloEffect(hints));
   return ret;
 }
 
@@ -494,6 +520,7 @@ AcUi::makeLineEdit(ulong hints, const QString &text, const QString &tip, const Q
   ret->setReadOnly(hints & ReadOnlyHint);
   if (hints & PasswordHint)
     ret->setEchoMode(QLineEdit::Password);
+  //ret->setGraphicsEffect(makeHaloEffect(hints));
   return ret;
 }
 

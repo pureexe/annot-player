@@ -5,10 +5,10 @@ include(../../../config.pri)
 
 HEADERS += \
     tr.h \
-    translatormanager.h
+    translationmanager.h
 
 SOURCES += \
-    translatormanager.cc
+    translationmanager.cc
 
 TRANSLATIONS += \
     $$PWD/tr_en.ts \

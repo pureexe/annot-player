@@ -15,7 +15,6 @@
 #include "module/qtext/stoppable.h"
 #include <QtCore/QStringList>
 #include <QtCore/QThreadPool>
-#include <cstring>
 
 #define DEBUG "flvcodec"
 #include "module/debug/debug.h"
@@ -155,11 +154,11 @@ FlvCodec::getLastTimestamp(const QByteArray &input)
     return 0;
   char data[4];
   data[0] = 0;
-  ::memcpy(data + 1, input.data() + pos, 3);
+  qMemCopy(data + 1, input.data() + pos, 3);
   pos = size - (qint64)Bitwise::BigEndian::toUInt32((quint8*)data);
   if (pos < 0 || pos >= size)
     return 0;
-  ::memcpy(data + 1, input.data() + pos, 3);
+  qMemCopy(data + 1, input.data() + pos, 3);
   return Bitwise::BigEndian::toUInt32((quint8*)data);
 }
 

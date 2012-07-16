@@ -35,9 +35,15 @@ class AnnotationGraphicsItemScheduler : public QObject
   qint64 pauseTime_,
          resumeTime_;
 
+  // Schedule by cell
   QHash<QPoint, qint64> cells_; // timestamps for each cell
   std::pair<QPoint, qint64> lastCell_;
 
+  // Schedule by lane
+  enum { LaneCount = 200 }; // number of vertical lanes, large enough
+  qint64 flyLaneTime_[LaneCount],
+         topLaneTime_[LaneCount],
+         bottomLaneTime_[LaneCount];
 signals:
   void message(const QString &text);
 
@@ -54,11 +60,11 @@ public slots:
 
   void setScale(qreal value) { scale_ = value; }
 
-  // - Float Scheduling -
+  // - Float scheduling, lane by lane -
 public:
-  int nextY(int windowHeight, int visibleMsecs, AnnotationGraphicsItem::Style style);
+  int nextY(int windowHeight, int itemHeight, int visibleMsecs, AnnotationGraphicsItem::Style style);
 
-  // - Motionless Scheduling -
+  // - Motionless scheduling, cell by cell -
 public:
   QPointF nextPos(const QSize &windowSize, const QSizeF &itemSize, int visibleMsecs);
 };

@@ -73,7 +73,7 @@ public slots:
   void nextFrame();
   void fastForward(qreal reate);
   void fastForward();
-  void fastFastForward();
+  //void fastFastForward();
   void rewind();
 
   //void setAnnotationEnabled(bool enabled); // updateToggleAnnotationButton
@@ -101,7 +101,7 @@ public slots:
   void updateStopButton();
   void updateNextFrameButton();
   void updateFastForwardButton();
-  void updateFastFastForwardButton();
+  //void updateFastFastForwardButton();
   //void updateRewindButton();
   void updateNextButton();
   void updatePreviousButton();

@@ -3,8 +3,8 @@
 
 DEFINES += PROJECT_PLAYER
 
-VERSION_MAJOR = 0.1.6.
-VERSION_MINOR = 4
+VERSION_MAJOR = 0.1.7.
+VERSION_MINOR = 0
 
 VERSION = $$VERSION_MAJOR$$VERSION_MINOR
 
@@ -27,6 +27,7 @@ include($$ROOTDIR/module/blockiodevice/blockiodevice.pri)
 include($$ROOTDIR/module/compress/compress.pri)
 include($$ROOTDIR/module/crypt/crypt.pri)
 include($$ROOTDIR/module/download/download.pri)
+include($$ROOTDIR/module/eventlistener/eventlistener.pri)
 include($$ROOTDIR/module/graphicseffect/graphicseffect.pri)
 include($$ROOTDIR/module/gsoap/gsoap.pri)       # would static linking cause license conflicts?
 include($$ROOTDIR/module/imagefilter/imagefilter.pri)
@@ -129,7 +130,6 @@ HEADERS += \
     annot/annotationgraphicsitempool.h \
     annot/annotationgraphicsitemscheduler.h \
     annot/annotationgraphicsview.h \
-    annot/annotationgraphicsstyle.h \
     annot/annotationsettings.h \
     annot/blacklistview.h \
     annot/blacklistview_p.h \
@@ -207,8 +207,8 @@ SOURCES += \
     annot/annotationgraphicsitempool.cc \
     annot/annotationgraphicsitemscheduler.cc \
     annot/annotationgraphicsview.cc \
-    annot/annotationgraphicsstyle.cc \
     annot/annotationanalyticsview.cc \
+    annot/annotationsettings.cc \
     annot/blacklistview.cc \
     annot/blacklistview_p.cc \
     annot/textformathandler.cc \

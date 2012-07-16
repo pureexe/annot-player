@@ -16,8 +16,8 @@
 
 #define PROXY_HOST  ANNOT_PROXY_DOMAIN
 
-namespace {
-  const QString &rc_image_null_()
+namespace { namespace detail {
+  const QString &rc_image_null()
   {
     static QString url;
     if (url.isEmpty()) {
@@ -28,7 +28,7 @@ namespace {
     }
     return url;
   }
-}
+} } // anonymous detail
 
 QStringList
 WbNetworkAccessManager::supportedSites()
@@ -57,7 +57,7 @@ WbNetworkAccessManager::createRequest(Operation op, const QNetworkRequest &req, 
   if (url.scheme() == "http") {
     QString host = url.host();
     if (!blockedUrls_.isEmpty() && isBlockedUrl(url)) {
-      QNetworkRequest r(::rc_image_null_());
+      QNetworkRequest r(detail::rc_image_null());
       return Base::createRequest(op, r, outgoingData);
     } else if (host == "www.nicovideo.jp") {
       if (url.path().startsWith("/watch/")

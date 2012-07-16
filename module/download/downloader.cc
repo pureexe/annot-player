@@ -12,10 +12,10 @@
 //#define DEBUG "downloader"
 #include "module/debug/debug.h"
 
-namespace { // anonymous
-  inline QString filterHost_(const QString &host)
+namespace { namespace detail {
+  inline QString filterHost(const QString &host)
   { return host == ANNOT_PROXY_DOMAIN ? QString() : host; }
-} // anonymous namespace
+} } // anonymous detail
 
 // - Construction -
 
@@ -51,7 +51,7 @@ Downloader::get(const QNetworkRequest &req, bool async, int retries)
   QNetworkRequest request(req); // always backup request to avoid being destructed
   QUrl url = request.url();
   emit message(tr("fetching") + ": " +
-    ::filterHost_(url.host()) + url.path()
+    detail::filterHost(url.host()) + url.path()
   );
 
   reply_ = nam_->get(request);
@@ -88,7 +88,7 @@ Downloader::get(const QUrl &url, const QString &header, bool async, int retries)
   DOUT("enter: async =" << async << ", url =" << url.toString() << ", retries =" << retries);
   state_ = Downloading;
   emit message(tr("fetching") + ": " +
-    ::filterHost_(url.host()) + url.path()
+    detail::filterHost(url.host()) + url.path()
   );
 
   QNetworkRequest request(url);
@@ -133,7 +133,7 @@ Downloader::post(const QUrl &url, const QByteArray &data, const QString &header,
   state_ = Downloading;
 
   emit message(tr("fetching") + ": " +
-    ::filterHost_(url.host()) + url.path()
+    detail::filterHost(url.host()) + url.path()
   );
 
   QNetworkRequest request(url);

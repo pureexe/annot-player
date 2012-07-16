@@ -20,6 +20,7 @@
 #include "module/nicoutil/nicoutil.h"
 #include "module/download/downloader.h"
 #include "module/mousegesture/mousegesture.h"
+#include "module/annotdown/annotationdownloader.h"
 #include "module/qtext/algorithm.h"
 #include "module/qtext/networkcookie.h"
 #include "module/qtext/webview.h"
@@ -79,6 +80,8 @@ MainWindow::MainWindow(QWidget *parent)
   setWindowFlags(WINDOW_FLAGS);
   setTextSizeMultiplier(TEXT_SIZE_SCALE);
 
+  AcUi::globalInstance()->setStatusBarStyle(statusBar());
+
 #ifdef Q_WS_WIN
   if (!QtWin::isWindowsVistaOrLater())
 #endif // Q_WS_WIN
@@ -102,6 +105,7 @@ MainWindow::MainWindow(QWidget *parent)
     << QString("http://www.baidu.com/cb.php")
     << QString("http://static.loli.my/ad-images")
     << QString("http://ads.nicovideo.jp")
+    << QString("http://static.atm.youku.com")
     << QString("http://taobao.com")
     << QString("http://taobaocdn.com")
     << QString("http://u17.com")
@@ -142,6 +146,7 @@ MainWindow::MainWindow(QWidget *parent)
   connect(this, SIGNAL(openUrlWithAcPlayerRequested(QString)), SLOT(openUrlWithAcPlayer(QString)));
   connect(this, SIGNAL(importUrlToAcPlayerRequested(QString)), SLOT(importUrlToAcPlayer(QString)));
   connect(this, SIGNAL(openUrlWithAcDownloaderRequested(QString)), SLOT(openUrlWithAcDownloader(QString)));
+  connect(this, SIGNAL(downloadAnnotationUrlRequested(QString)), SLOT(downloadAnnotationUrl(QString)));
   connect(this, SIGNAL(newWindowRequested()), SLOT(newWindow()));
   connect(this, SIGNAL(fullScreenRequested()), SLOT(toggleFullScreen()));
   /*
@@ -156,6 +161,12 @@ MainWindow::MainWindow(QWidget *parent)
   connect(AcBrowserController::globalController(), SIGNAL(arguments(QStringList)),
           SLOT(openUrls(QStringList)), Qt::QueuedConnection);
   */
+
+  annotationDownloader_ = new AnnotationDownloader(this);
+  annotationDownloader_->setDownloadsLocation(QDesktopServices::storageLocation(QDesktopServices::DesktopLocation));
+  connect(annotationDownloader_, SIGNAL(message(QString)), SLOT(showMessage(QString)), Qt::QueuedConnection);
+  connect(annotationDownloader_, SIGNAL(warning(QString)), SLOT(warn(QString)), Qt::QueuedConnection);
+  connect(annotationDownloader_, SIGNAL(error(QString)), SLOT(error(QString)), Qt::QueuedConnection);
 
   // - Message -
   DownloaderController *dc = DownloaderController::globalController();
@@ -461,9 +472,9 @@ MainWindow::event(QEvent *e)
       }
       if (!url.isEmpty()) {
         if (tabCount() && tabAddress(tabIndex()) == WB_BLANK_PAGE)
-          QTimer::singleShot(0, new slot_::OpenUrl(url, this), SLOT(trigger()));
+          QTimer::singleShot(0, new detail::OpenUrl(url, this), SLOT(trigger()));
         else
-          QTimer::singleShot(0, new slot_::NewTab(url, this), SLOT(trigger()));
+          QTimer::singleShot(0, new detail::NewTab(url, this), SLOT(trigger()));
       }
     } break;
   case QEvent::Gesture:
@@ -588,7 +599,7 @@ MainWindow::openUrlWithAcPlayer(const QString &address)
     return;
   if (!url.startsWith("http://"))
     url.prepend("http://");
-  showMessage(tr("openning") + " " + url);
+  showMessage(tr("openning") + ": " + url);
   playerDelegate_->openUrl(url);
   DOUT("exit");
 }
@@ -602,7 +613,7 @@ MainWindow::importUrlToAcPlayer(const QString &address)
     return;
   if (!url.startsWith("http://"))
     url.prepend("http://");
-  showMessage(tr("openning") + " " + url);
+  showMessage(tr("openning") + ": " + url);
   playerDelegate_->importUrl(url);
   DOUT("exit");
 }
@@ -616,8 +627,22 @@ MainWindow::openUrlWithAcDownloader(const QString &address)
     return;
   if (!url.startsWith("http://", Qt::CaseInsensitive))
     url.prepend("http://");
-  showMessage(tr("openning") + " " + url);
+  showMessage(tr("openning") + ": " + url);
   downloaderDelegate_->openUrl(url);
+  DOUT("exit");
+}
+
+void
+MainWindow::downloadAnnotationUrl(const QString &address)
+{
+  DOUT("enter: address =" << address);
+  QString url = address.trimmed();
+  if (url.isEmpty())
+    return;
+  if (!url.startsWith("http://", Qt::CaseInsensitive))
+    url.prepend("http://");
+  showMessage(tr("saving") + ": " + url);
+  annotationDownloader_->download(address);
   DOUT("exit");
 }
 

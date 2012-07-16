@@ -2,6 +2,29 @@ ChangeLog
 Annot Project
 6/18/2011
 
+7/16/2012 MON	annot.player, down, browser	0.1.7, 0.1.3, 0.1.2.0
+        * Able to edit and save machine-translated subtitles.
+          The user will take the ownership of the editted subtitles.
+        * Render widgets (such as push buttons) as annotations.
+        * Bing API is replaced with Microsoft Azure API for default Galgame translation.
+          Because Microsoft will stop Bing translation service after Aug. 1, 2012,
+          galgame translation before version 0.1.7 will stop functioning after Aug.1.
+        * Add Google Translator and Romaji translation service.
+        * Able to turn on more than one translation providers.
+        * Enble translation for French/German/Spanish/Portuguese
+        * Opion to change annotation moving speed in preferences.
+          Modification to movement resolution is removed.
+        * Prefetch annotations and save to XML/JSON before streaming media is completed.
+        * Able to download annotation XML/JSON from Annot Browser or Annot Downloader.
+          To associate the downloaded XML/JSON subtitle with media file, rename the subtitle
+          as the same basename as the media file.
+        * Update VLC plugins to version 2.0.2.
+        * Fix the bug for creating Annotation Analytics view for galgame.
+          Double-click the annotation will show analytics of all annotations from its owner user.
+        * Fix the bug which causes annot-player window to disappear after the galgame is minimized,
+        * Fix a bug that might randomly crashes annot-player when dragging annotations.
+        * Fix the offline-cache inconsistent bug when editing annotations.
+
 6/30/2012	annot.player, down, browser	0.1.6.4, 0.1.2.9, 0.1.1.9
         * Able to convert all Chinese annotations to Traditional Chinese.
         * Add translation for Traditional Chinese.

@@ -73,6 +73,7 @@ public:
   // - Update -
 public:
   bool updateAnnotationTextWithId(const QString &text, qint64 id, const QString &userName, const QString &password);
+  bool updateAnnotationUserIdWithId(qint64 userId, qint64 id, const QString &userName, const QString &password);
 
   // - Queries -
 public:

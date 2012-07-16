@@ -23,7 +23,7 @@
 
 // - Hook implementation -
 
-namespace { // anonymous, hook callbacks
+namespace { namespace detail {
 
   LRESULT CALLBACK
   MouseProc(__in int nCode, __in WPARAM wparam, __in LPARAM lparam)
@@ -56,7 +56,7 @@ namespace { // anonymous, hook callbacks
     #undef NEXT
   }
 
-} // anonymouss namespace
+} } // anonymouss detail
 
 // - Constructions -
 
@@ -130,7 +130,7 @@ WindowPicker::start()
   }
 
   // Global mode
-  d_->hook = ::SetWindowsHookEx(WH_MOUSE_LL, ::MouseProc, hInstance, 0);
+  d_->hook = ::SetWindowsHookEx(WH_MOUSE_LL, detail::MouseProc, hInstance, 0);
   DOUT("start: started");
 }
 

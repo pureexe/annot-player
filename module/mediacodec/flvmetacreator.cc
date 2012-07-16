@@ -191,7 +191,7 @@ FlvMetaReader::updateScriptTagDoubleValue(quint8 *data, const QString &var) cons
     DOUT(var << "=" << value);
     quint8 bytes[size];
     Bitwise::BigEndian::getBytes(bytes, value);
-    ::memcpy(data, bytes, size);
+    qMemCopy(data, bytes, size);
   }
   return update;
 }

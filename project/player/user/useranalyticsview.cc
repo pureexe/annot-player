@@ -5,6 +5,7 @@
 #include "global.h"
 #include "tr.h"
 #include "datamanager.h"
+#include "signalhub.h"
 #include "logger.h"
 #include "module/annotcloud/annothtml.h"
 #ifdef Q_WS_MAC
@@ -34,8 +35,8 @@ using namespace AnnotCloud;
   Qt::WindowMinMaxButtonsHint | \
   Qt::WindowCloseButtonHint
 
-UserAnalyticsView::UserAnalyticsView(DataManager *data, QWidget *parent)
-  : Base(parent, WINDOW_FLAGS), data_(data), userId_(0)
+UserAnalyticsView::UserAnalyticsView(DataManager *data, SignalHub *hub, QWidget *parent)
+  : Base(parent, WINDOW_FLAGS), data_(data), hub_(hub), userId_(0)
 {
   Q_ASSERT(data_);
   setWindowTitle(tr("User Analytics"));
@@ -111,7 +112,8 @@ UserAnalyticsView::invalidateAnnotations()
     setUrl(QUrl(EMPTY_URL));
   else {
     title.append(QString(" (%1)").arg(QString::number(userId_, 16)));
-    QString html = AnnotationHtmlParser::globalInstance()->toHtml(a);
+    bool ignorePos = !hub_->isMediaTokenMode();
+    QString html = AnnotationHtmlParser::globalInstance()->toHtml(data_->annotations(), title, ignorePos);
     setContent(html);
   }
 

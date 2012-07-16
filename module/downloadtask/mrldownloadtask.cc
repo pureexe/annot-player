@@ -79,6 +79,7 @@ MrlDownloadTask::run(bool execute)
   } else {
     setState(Error);
     emit error(tr("failed to download from URL") + ": " + url());
+    //emit downloadAnnotationRequested(url);
   }
   DOUT("exit");
 }
@@ -107,6 +108,8 @@ MrlDownloadTask::downloadMedia(const MediaInfo &mi, QNetworkCookieJar *jar)
   if (!mi.refurl.isEmpty())
     setUrl(mi.refurl);
 
+  if (!mi.suburl.isEmpty())
+    emit downloadAnnotationRequested(mi.suburl, mi.refurl, mi.title);
   switch (mi.mrls.size()) {
   case 0: emit error(tr("failed to resolve media URL") +": " + mi.refurl); break;
   case 1: downloadSingleMedia(mi, jar); break;

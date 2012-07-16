@@ -31,7 +31,7 @@
 // Must be consistent with: vlc/lib/control/media_player.c
 // Revision: VLC 2.0.0
 
-namespace { // anonymous
+namespace { namespace detail {
 
   // Defined in vlc/src/control/media_player.c
   inline void lock_input(libvlc_media_player_t *mp)
@@ -41,7 +41,7 @@ namespace { // anonymous
   inline void unlock_input(libvlc_media_player_t *mp)
   { ::vlc_mutex_unlock(&mp->input.lock); }
 
-} // anonymous namespace
+} } // anonymous detail
 
 input_thread_t*
 libvlc_get_input_thread(libvlc_media_player_t *p_mi)
@@ -49,13 +49,13 @@ libvlc_get_input_thread(libvlc_media_player_t *p_mi)
   input_thread_t *p_input_thread;
   Q_ASSERT(p_mi);
 
-  lock_input(p_mi);
+  detail::lock_input(p_mi);
   p_input_thread = p_mi->input.p_thread;
   if( p_input_thread )
     vlc_object_hold( p_input_thread );
   else
     libvlc_printerr( "No active input" );
-  unlock_input(p_mi);
+  detail::unlock_input(p_mi);
 
   return p_input_thread;
 }

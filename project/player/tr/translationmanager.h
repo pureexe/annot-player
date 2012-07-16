@@ -1,7 +1,7 @@
-#ifndef TRANSLATORMANAGER_H
-#define TRANSLATORMANAGER_H
+#ifndef TRANSLATIONMANAGER_H
+#define TRANSLATIONMANAGER_H
 
-// translatormanager.h
+// translationmanager.h
 // 8/7/2011
 
 #include <QObject>
@@ -11,11 +11,11 @@
 QT_FORWARD_DECLARE_CLASS(QTranslator)
 QT_FORWARD_DECLARE_CLASS(QCoreApplication)
 
-class TranslatorManager : public QObject
+class TranslationManager : public QObject
 {
   Q_OBJECT
-  Q_DISABLE_COPY(TranslatorManager)
-  typedef TranslatorManager Self;
+  Q_DISABLE_COPY(TranslationManager)
+  typedef TranslationManager Self;
   typedef QObject Base;
 
   int language_,
@@ -24,7 +24,7 @@ class TranslatorManager : public QObject
 protected:
   typedef QList<QTranslator *> QTranslatorList;
 
-  explicit TranslatorManager(QObject *parent = 0)
+  explicit TranslationManager(QObject *parent = 0)
     : Base(parent), language_(0), script_(0) { }
 public:
   static Self *globalInstance() { static Self g; return &g; }
@@ -57,4 +57,4 @@ private:
                           tr_zh_CN_;
 };
 
-#endif // TRANSLATORMANAGER_H
+#endif // TRANSLATIONMANAGER_H

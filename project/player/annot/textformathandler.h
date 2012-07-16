@@ -23,7 +23,8 @@ public:
   enum { TextFormat = QTextFormat::UserFormat + 1 };
 
 public:
-  explicit TextFormatHandler(const QString &text, QObject *parent = 0);
+  explicit TextFormatHandler(const QString &text, QObject *parent = 0)
+    : Base(parent), text_(text) { }
 
   // - Overridings -
 public:

@@ -18,14 +18,15 @@ class TaskDialog : public AcWindow
   typedef AcWindow Base;
 
   AcTextView *textView_;
-  QToolButton *urlButton_;
+  QToolButton *urlButton_,
+              *annotOnlyButton_;
 
 signals:
   void message(const QString &text);
   void warning(const QString &text);
   void error(const QString &text);
 
-  void urlsAdded(const QStringList &urls, bool batch);
+  void urlsAdded(const QStringList &urls, bool annotOnly);
 public:
   explicit TaskDialog(QWidget *parent = 0);
 

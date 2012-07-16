@@ -62,11 +62,16 @@ MainWindow::MainWindow(QWidget *parent)
   //setRippleEnabled(true);
 
   downloadManager_ = new DownloadManager(this);
+  downloadManager_->setDownloadsLocation(G_PATH_DOWNLOADS);
   downloadManager_->setMaxThreadCount(MaxDownloadThreadCount);
   DOUT("thread pool size =" << QThreadPool::globalInstance()->maxThreadCount());
 
   //connect(downloadManager_, SIGNAL(taskAdded(DownloadTask*)), SLOT(saveLater()));
+  connect(AcLocationManager::globalInstance(), SIGNAL(downloadsLocationChanged(QString)), downloadManager_, SLOT(setDownloadsLocation(QString)));
   connect(downloadManager_, SIGNAL(taskRemoved(DownloadTask*)), SLOT(saveLater()));
+  connect(downloadManager_, SIGNAL(message(QString)), SLOT(showMessage(QString)), Qt::QueuedConnection);
+  connect(downloadManager_, SIGNAL(error(QString)), SLOT(error(QString)), Qt::QueuedConnection);
+  connect(downloadManager_, SIGNAL(warning(QString)), SLOT(warn(QString)), Qt::QueuedConnection);
 
   createModels();
   createSearchEngines();
@@ -636,17 +641,21 @@ MainWindow::openLocation(const QString &path)
 // - Download -
 
 void
-MainWindow::addUrls(const QStringList &urls, bool batch)
+MainWindow::addUrls(const QStringList &urls, bool annotOnly)
 {
-  Q_UNUSED(batch);
   foreach (const QString &url, urls)
-    addUrl(url);
+    addUrl(url, annotOnly);
 }
 
 void
-MainWindow::addUrl(const QString &url)
+MainWindow::addUrl(const QString &url, bool annotOnly)
 {
-  DOUT("enter: url =" << url);
+  DOUT("enter: url =" << url << ", annotOnly =" << annotOnly);
+  if (annotOnly) {
+    showMessage(tr("download annotations") + ": " + url);
+    downloadManager_->downloadAnnotation(url);
+    return;
+  }
 
   if (downloadManager_->taskWithUrl(url)) {
     showMessage(tr("task exists") + ": " + url);
@@ -1029,7 +1038,7 @@ MainWindow::event(QEvent *e)
       if (!url.isEmpty())
         url = QUrl::fromPercentEncoding(url.toLocal8Bit());
       if (!url.isEmpty())
-        QTimer::singleShot(0, new slot_::PromptUrl(url, this), SLOT(trigger()));
+        QTimer::singleShot(0, new detail::PromptUrl(url, this), SLOT(trigger()));
     } break;
   case QEvent::Gesture:
     DOUT("gesture event");

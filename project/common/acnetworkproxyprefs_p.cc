@@ -43,7 +43,7 @@ AcNetworkProxyPrefs::createLayout()
   passwordEdit_ = ui->makeLineEdit(AcUi::PasswordHint, "", tr("Password"), "password");
 
   enableButton_ = ui->makeToolButton(
-        AcUi::CheckHint, tr("Enable"), this, SLOT(updateButtons()));
+        AcUi::CheckHint | AcUi::HighlightHint, tr("Enable"), this, SLOT(updateButtons()));
 
   //typeLabel_ = ui->makeLabel(AcUi::BuddyHint, tr("Type"), typeCombo_);
   hostLabel_ = ui->makeLabel(AcUi::BuddyHint, tr("Host"), hostEdit_);

@@ -53,6 +53,7 @@ public:
 
 signals:
   void annotationTextUpdatedWithId(QString text, qint64 id);
+  void annotationUserIdUpdatedWithId(qint64 userId, qint64 id);
   void annotationDeletedWithId(qint64 id);
 
   void userBlessedWithId(qint64 uid);
@@ -82,9 +83,11 @@ public slots:
   void setAnnotationPos(qint64 pos);
 
   void updateAnnotationTextWithId(const QString &text, qint64 id);
+  void updateAnnotationUserIdWithId(qint64 userId, qint64 id);
 
 protected slots:
   void saveAnnotationText(const QString &text);
+  void takeAnnotationOwnership();
   void invalidateFilters();
 
 protected:

@@ -4,6 +4,7 @@
 // qtext/network.h
 // 2/21/2011
 
+#include <QtNetwork/QNetworkRequest>
 #include <QtNetwork/QNetworkReply>
 
 namespace QtExt {
@@ -12,7 +13,15 @@ namespace QtExt {
 
   enum { MaxConcurrentNetworkRequestCount = 6 }; ///< See QNetworkAccessManager's documentation
 
+  // - NetworkRequest -
+
+  // See: http://www.developer.nokia.com/Community/Discussion/showthread.php?211356-QNetworkRequest-Authentication
+  inline void
+  setNetworkRequestAuthentificationHeader(QNetworkRequest *request, const QString &username, const QString &password)
+  { request->setRawHeader("Authorization", "Basic " + QByteArray(QString("%1:%2").arg(username).arg(password).toAscii()).toBase64()); }
+
   // - PublicNetworkReply -
+
   class PublicNetworkReply : public QNetworkReply
   {
     typedef PublicNetworkReply Self;

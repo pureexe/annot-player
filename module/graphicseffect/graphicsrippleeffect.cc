@@ -11,7 +11,7 @@
 
 // - Construction -
 
-namespace { // anonymous
+namespace { namespace detail{
 
   /**
    * Allocates an integer matrix with the given size.
@@ -49,7 +49,7 @@ namespace { // anonymous
     }
   }
 
-} // anonymous namespace
+} } // anonymous detail
 
 GraphicsRippleEffect::GraphicsRippleEffect(QObject *parent)
   : QGraphicsEffect(parent),
@@ -64,8 +64,8 @@ GraphicsRippleEffect::GraphicsRippleEffect(QObject *parent)
 
 GraphicsRippleEffect::~GraphicsRippleEffect()
 {
-  ::deallocateWaveMap(previousMap_);
-  ::deallocateWaveMap(currentMap_);
+  detail::deallocateWaveMap(previousMap_);
+  detail::deallocateWaveMap(currentMap_);
 }
 
 // - Properties -
@@ -89,16 +89,16 @@ GraphicsRippleEffect::draw(QPainter *painter)
   const QImage currentImage = sourcePixmap(Qt::LogicalCoordinates, &offset).toImage();
   QImage modifiedImage = currentImage;
   if (!previousMap_ && !currentMap_) {
-    previousMap_ = ::allocateWaveMap(currentImage.size());
-    currentMap_ = ::allocateWaveMap(currentImage.size());
+    previousMap_ = detail::allocateWaveMap(currentImage.size());
+    currentMap_ = detail::allocateWaveMap(currentImage.size());
   }
 
   //DOUT("current image size =" << currentImage.size());
   int x, y;
   if (qFuzzyCompare(opacity_ +1, 1)) {
     for (x = 0; x < currentImage.width(); ++x) {
-      ::memset(currentMap_[x], 0, sizeof(int) * currentImage.height());
-      ::memset(previousMap_[x], 0, sizeof(int) * currentImage.height());
+      qMemSet(currentMap_[x], 0, sizeof(int) * currentImage.height());
+      qMemSet(previousMap_[x], 0, sizeof(int) * currentImage.height());
     }
     mapSize_ = currentImage.size();
     if (QRect(QPoint(), mapSize_).contains(center_)) {
@@ -108,8 +108,8 @@ GraphicsRippleEffect::draw(QPainter *painter)
   } else if (mapSize_ != currentImage.size()) {
     const qreal scaleFactorX = qreal(currentImage.width()) / qreal(mapSize_.width());
     const qreal scaleFactorY = qreal(currentImage.height()) / qreal(mapSize_.height());
-    int **newPreviousMap = allocateWaveMap(currentImage.size());
-    int **newCurrentMap = allocateWaveMap(currentImage.size());
+    int **newPreviousMap = detail::allocateWaveMap(currentImage.size());
+    int **newCurrentMap = detail::allocateWaveMap(currentImage.size());
     int i, j;
     for (y = 0; y < currentImage.height(); ++y) {
       for (x = 0; x < currentImage.width(); ++x) {
@@ -119,8 +119,8 @@ GraphicsRippleEffect::draw(QPainter *painter)
         newCurrentMap[x][y] = currentMap_[i][j];
       }
     }
-    ::deallocateWaveMap(previousMap_);
-    ::deallocateWaveMap(currentMap_);
+    detail::deallocateWaveMap(previousMap_);
+    detail::deallocateWaveMap(currentMap_);
     mapSize_ = currentImage.size();
     previousMap_ = newPreviousMap;
     currentMap_ = newCurrentMap;

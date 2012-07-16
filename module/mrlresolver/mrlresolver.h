@@ -32,7 +32,7 @@ signals:
   void synchronizedChanged(bool t);
 
   void mediaResolved(MediaInfo mi, QNetworkCookieJar *cookieJar = 0);
-  void subtitleResolved(QString suburl, QString refurl);
+  void subtitleResolved(QString suburl, QString refurl, QString title);
 
 public:
   virtual bool matchMedia(const QString &) const { return false; }

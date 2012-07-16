@@ -11,10 +11,10 @@
 #define DEBUG "nicoutil"
 #include "module/debug/debug.h"
 
-namespace { // anonymous
+namespace { namespace detail {
 
   bool
-  login_(const QString &url, const QString &post, QNetworkCookieJar *cookieJar, int retries)
+  login(const QString &url, const QString &post, QNetworkCookieJar *cookieJar, int retries)
   {
     DOUT("enter: url =" << url);
     Q_ASSERT(cookieJar);
@@ -41,12 +41,12 @@ namespace { // anonymous
     bool ok = reply->isFinished() && reply->error() == QNetworkReply::NoError;
     if (!ok && retries-- > 0) {
       DOUT("exit: try again");
-      return login_(url, post, cookieJar, retries);
+      return login(url, post, cookieJar, retries);
     }
     DOUT("exit: ret =" << ok);
     return ok;
   }
-} // anonymous namespace
+} } // anonymous detail
 
 bool
 nico::login(const QString &username, const QString &password, QNetworkCookieJar *cookieJar, int retries)
@@ -54,7 +54,7 @@ nico::login(const QString &username, const QString &password, QNetworkCookieJar 
   QString url = "https://secure.nicovideo.jp/secure/login?site=niconico",
           post = QString("next_url=&mail=%1&password=%2")
                  .arg(username).arg(password);
-  return login_(url, post, cookieJar, retries);
+  return detail::login(url, post, cookieJar, retries);
 }
 
 bool
@@ -63,7 +63,7 @@ bilibili::login(const QString &username, const QString &password, QNetworkCookie
   QString url = "https://secure.bilibili.tv/member/index_do.php",
           post = QString("fmdo=login&dopost=login&gourl=&keeptime=604800&userid=%1&pwd=%2&keeptime=604800")
                  .arg(username).arg(password);
-  return login_(url, post, cookieJar, retries);
+  return detail::login(url, post, cookieJar, retries);
 }
 
 // EOF

@@ -12,13 +12,14 @@
 #include "project/common/achorizontalslider.h"
 #include "project/common/acui.h"
 #include "project/common/aciconbutton.h"
+#include "module/qtext/toolbutton.h"
 #include <QtGui>
 
 //#define ACSS_TOOLBUTTON_TEXT_(_weight, _style, _dec, _normal, _hover, _pressed, _checked, _checked_hover, _disabled)
-#define SS_TOOLBUTTON_USER      ACSS_TOOLBUTTON_TEXT_(bold, normal, none, blue, red, purple, purple, red, gray)
+#define SS_TOOLBUTTON_USER      ACSS_TOOLBUTTON_TEXT_(bold, normal, none, blue, red, orange, orange, red, gray)
 #define SS_TOOLBUTTON_INTERNET  ACSS_TOOLBUTTON_TEXT_(normal, italic, none, blue, red, red, cyan, red, gray)
-#define SS_TOOLBUTTON_SEEK      ACSS_TOOLBUTTON_TEXT_(normal, normal, none, cyan, red, purple, purple, red, gray)
-#define SS_TOOLBUTTON_PROGRESS  ACSS_TOOLBUTTON_TEXT_(normal, italic, none, cyan, red, purple, purple, red, gray)
+#define SS_TOOLBUTTON_SEEK      ACSS_TOOLBUTTON_TEXT_(normal, normal, none, cyan, red, orange, orange, red, gray)
+#define SS_TOOLBUTTON_PROGRESS  ACSS_TOOLBUTTON_TEXT_(normal, italic, none, cyan, red, orange, orange, red, gray)
 
 
 //enum { VOLUME_SLIDE_MAX_WIDTH = 100 };
@@ -28,7 +29,7 @@
 PlayerPanel::PlayerPanel(QWidget *parent)
   : Base(parent),
     positionSlider_(0), volumeSlider_(0),
-    openButton_(0), playButton_(0), stopButton_(0), nextFrameButton_(0), fastForwardButton_(0), fastFastForwardButton_(0),
+    openButton_(0), playButton_(0), stopButton_(0), nextFrameButton_(0), fastForwardButton_(0),
     toggleFullScreenModeButton_(0), toggleMiniModeButton_(0), toggleEmbedModeButton_(0), toggleTraceWindowButton_(0),
     userButton_(0), networkButton_(0), positionButton_(0), progressButton_(0), previousButton_(0), nextButton_(0), menuButton_(0),
     inputCountButton_(0), inputComboBox_(0), prefixComboBox_(0)
@@ -69,7 +70,7 @@ PlayerPanel::volumeSlider()
 
 // - Buttons -
 
-#define MAKE_BUTTON(_button, _styleid) \
+#define MAKE_ICON_BUTTON(_button, _styleid) \
   QToolButton* \
   PlayerPanel::_button() \
   { \
@@ -77,30 +78,43 @@ PlayerPanel::volumeSlider()
       _button##_ = new AcIconButton(this); \
       _button##_->setStyleSheet(SS_TOOLBUTTON_##_styleid); \
       _button##_->setToolTip(TR(T_TOOLTIP_##_styleid)); \
-      AcUi::globalInstance()->setToolButtonStyle(_button##_); \
+      _button##_->setGraphicsEffect(AcUi::globalInstance()->makeHaloEffect(QColor("orange"))); \
     } return _button##_; \
   }
 
-  MAKE_BUTTON(openButton, OPEN)
-  MAKE_BUTTON(playButton, PLAY)
-  MAKE_BUTTON(stopButton, STOP)
-  MAKE_BUTTON(nextFrameButton, NEXTFRAME)
-  MAKE_BUTTON(fastForwardButton, FASTFORWARD)
-  MAKE_BUTTON(fastFastForwardButton, FASTFASTFORWARD)
-  //MAKE_BUTTON(rewindButton, REWIND)
-  MAKE_BUTTON(toggleMiniModeButton, MINI)
-  MAKE_BUTTON(toggleEmbedModeButton, EMBED)
-  MAKE_BUTTON(toggleTraceWindowButton, TRACE)
-  MAKE_BUTTON(toggleFullScreenModeButton, FULLSCREEN)
-  //MAKE_BUTTON(toggleAnnotationButton, ANNOT)
-  MAKE_BUTTON(previousButton, PREVIOUS)
-  MAKE_BUTTON(nextButton, NEXT)
-  MAKE_BUTTON(userButton, USER)
-  MAKE_BUTTON(networkButton, INTERNET)
-  MAKE_BUTTON(positionButton, SEEK)
-  MAKE_BUTTON(progressButton, PROGRESS)
-  MAKE_BUTTON(menuButton, MENU)
-#undef MAKE_BUTTON
+  MAKE_ICON_BUTTON(openButton, OPEN)
+  MAKE_ICON_BUTTON(playButton, PLAY)
+  MAKE_ICON_BUTTON(stopButton, STOP)
+  MAKE_ICON_BUTTON(nextFrameButton, NEXTFRAME)
+  MAKE_ICON_BUTTON(fastForwardButton, FASTFORWARD)
+  //MAKE_ICON_BUTTON(fastFastForwardButton, FASTFASTFORWARD)
+  //MAKE_ICON_BUTTON(rewindButton, REWIND)
+  MAKE_ICON_BUTTON(toggleMiniModeButton, MINI)
+  MAKE_ICON_BUTTON(toggleEmbedModeButton, EMBED)
+  MAKE_ICON_BUTTON(toggleTraceWindowButton, TRACE)
+  MAKE_ICON_BUTTON(toggleFullScreenModeButton, FULLSCREEN)
+  //MAKE_ICON_BUTTON(toggleAnnotationButton, ANNOT)
+  MAKE_ICON_BUTTON(previousButton, PREVIOUS)
+  MAKE_ICON_BUTTON(nextButton, NEXT)
+  MAKE_ICON_BUTTON(menuButton, MENU)
+#undef MAKE_ICON_BUTTON
+
+#define MAKE_TEXT_BUTTON(_button, _styleid) \
+  QToolButton* \
+  PlayerPanel::_button() \
+  { \
+    if (!_button##_) { \
+      _button##_ = new QtExt::ToolButton(this); \
+      _button##_->setStyleSheet(SS_TOOLBUTTON_##_styleid); \
+      _button##_->setToolTip(TR(T_TOOLTIP_##_styleid)); \
+    } return _button##_; \
+  }
+  MAKE_TEXT_BUTTON(networkButton, INTERNET)
+  MAKE_TEXT_BUTTON(userButton, USER)
+  MAKE_TEXT_BUTTON(positionButton, SEEK)
+  MAKE_TEXT_BUTTON(progressButton, PROGRESS)
+
+#undef MAKE_TEXT_BUTTON
 
 QToolButton*
 PlayerPanel::inputCountButton()

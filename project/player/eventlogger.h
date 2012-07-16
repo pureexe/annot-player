@@ -46,7 +46,6 @@ public slots:
 
   void logCanvasEnabled(bool t);
 
-  void logTranslatorNetworkError(const QString &message);
   void logTextEncodingChanged(const QString &enc);
 
   void logLoginRequested(const QString &userName);

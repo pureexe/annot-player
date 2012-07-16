@@ -22,7 +22,7 @@
 #include "module/debug/debug.h"
 
 // - Helper -
-namespace { // anonymous
+namespace { namespace detail {
 
   inline
   char **allocate_argv(const QStringList &args)
@@ -92,7 +92,7 @@ namespace { // anonymous
   };
 #endif // Q_OS_WIN
 
-} // anonymous namespace
+} } // anonymous detail
 
 bool
 Mp4Box::muxMp4File(const QString &mp4, const QStringList &tracks,
@@ -109,12 +109,12 @@ Mp4Box::muxMp4File(const QString &mp4, const QStringList &tracks,
     }
   }
 
-  QStringList args(fix_win_path(MP4BOX_BIN));
+  QStringList args(detail::fix_win_path(MP4BOX_BIN));
 
 #ifdef Q_OS_WIN
-  FileMangler m;
-  #define _qs(_path)      fix_win_path(m.mangle(_path))
-  #define _qt(_path)      fix_win_path(m.mangleLater(_path))
+  detail::FileMangler m;
+  #define _qs(_path)      detail::fix_win_path(m.mangle(_path))
+  #define _qt(_path)      detail::fix_win_path(m.mangleLater(_path))
 #else
   #define _qs(_path)      (_path)
   #define _qt(_path)      (_path)
@@ -142,9 +142,9 @@ Mp4Box::muxMp4File(const QString &mp4, const QStringList &tracks,
 #ifdef WITH_GPAC
   {
     int argc = args.size();
-    char **argv = allocate_argv(args);
+    char **argv = detail::allocate_argv(args);
     err = mp4boxMain(argc, argv);
-    release_argv(argv);
+    detail::release_argv(argv);
   }
 #else
   {

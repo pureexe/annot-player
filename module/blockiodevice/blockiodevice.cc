@@ -62,11 +62,11 @@ extern "C" {
 
 // - Helpers -
 
-namespace { // anonymous, CD access
+namespace { namespace detail {
 
   typedef BlockIODevice::fd_t fd_t;
 
-  inline bool isValidFd_(fd_t fd)
+  inline bool isValidFd(fd_t fd)
   {
 #ifdef Q_OS_WIN
     return fd != INVALID_HANDLE_VALUE;
@@ -75,7 +75,7 @@ namespace { // anonymous, CD access
 #endif // Q_OS_WIN
   }
 
-  inline bool isAudioCD_(fd_t fd)
+  inline bool isAudioCd(fd_t fd)
   {
     bool ret = false;
 #ifdef Q_OS_WIN
@@ -99,11 +99,11 @@ namespace { // anonymous, CD access
     return ret;
   }
 
-  inline int getBlockSize_(fd_t fd)
+  inline int getBlockSize(fd_t fd)
   {
-    Q_ASSERT(::isValidFd_(fd));
+    Q_ASSERT(detail::isValidFd(fd));
     uint ret;
-    if (isAudioCD_(fd))
+    if (detail::isAudioCd(fd))
       ret = CD_FRAMESIZE_RAW; // 2352
     else
 #ifdef Q_OS_WIN
@@ -131,13 +131,13 @@ namespace { // anonymous, CD access
     return (int)ret;
   }
 
-} // anonymous namespace
+} } // anonymous detail
 
 // - Properties -
 
 bool
 BlockIODevice::isAudioCD() const
-{ return ::isValidFd_(fd_ ) ? ::isAudioCD_(fd_) : false; }
+{ return detail::isValidFd(fd_ ) ? detail::isAudioCd(fd_) : false; }
 
 // - Open/close -
 
@@ -145,7 +145,7 @@ bool
 BlockIODevice::open(OpenMode mode)
 {
   DOUT("open:enter: mode =" << mode << ", fileName_ =" << fileName_);
-  Q_ASSERT(!isOpen() && !::isValidFd_(fd_));
+  Q_ASSERT(!isOpen() && !detail::isValidFd(fd_));
   Q_ASSERT(mode == ReadOnly);
   if (mode != ReadOnly) {
     DOUT("open:exit: ret = false, exit from non ReadOnly path");
@@ -166,9 +166,9 @@ BlockIODevice::open(OpenMode mode)
 #else
   fd_ = ::open(fileName_.toLocal8Bit(), O_RDONLY | O_NONBLOCK);
 #endif // Q_OS_WIN
-  if (::isValidFd_(fd_)) { // succeedded
+  if (detail::isValidFd(fd_)) { // succeedded
     setOpenMode(mode);
-    blockSize_ = ::getBlockSize_(fd_);
+    blockSize_ = detail::getBlockSize(fd_);
     if (!blockSize_)
       DOUT("open: WARNING: device is not blocked");
     else
@@ -182,8 +182,8 @@ void
 BlockIODevice::close()
 {
   DOUT("close:enter: isOpen =" << isOpen() << ", fd_ =" << fd_);
-  Q_ASSERT(isOpen() && ::isValidFd_(fd_ ));
-  if (::isValidFd_(fd_)) {
+  Q_ASSERT(isOpen() && detail::isValidFd(fd_ ));
+  if (detail::isValidFd(fd_)) {
 #ifdef Q_OS_WIN
     ::CloseHandle((HANDLE)fd_);
 #else
@@ -200,7 +200,7 @@ BlockIODevice::close()
 qint64
 BlockIODevice::readData(char *data, qint64 maxSize)
 {
-  Q_ASSERT(isOpen() && ::isValidFd_(fd_));
+  Q_ASSERT(isOpen() && detail::isValidFd(fd_));
   Q_ASSERT(maxSize);
   DOUT("readData:enter: maxSize =" << maxSize);
 
@@ -324,7 +324,7 @@ BlockIODevice::readData(char *data, qint64 maxSize)
 qint64
 BlockIODevice::writeData(const char *data, qint64 maxSize)
 {
-  Q_ASSERT(isOpen() && ::isValidFd_(fd_));
+  Q_ASSERT(isOpen() && detail::isValidFd(fd_));
   DOUT("writeData:enter: maxSize =" << maxSize);
   qint64 ret = 0;
 #ifdef Q_OS_UNIX

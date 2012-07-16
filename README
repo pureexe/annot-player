@@ -1,8 +1,8 @@
 == ENGLISH ==
 
 Product:	Annot Player
-Version:	0.1.6.4
-Release:	2012/6/30
+Version:	0.1.7
+Release:	2012/7/16
 Homepage:	http://annot.me
 Help (Wiki):	http://annot.me/wiki/FAQ
 Download:	http://code.google.com/p/annot-player/downloads
@@ -14,6 +14,13 @@ Requirements:
 - Microsoft Windows XP SP3/Vista/7
 - Mac OS X Lion 10.7
 - Linux (Debian/Ubuntu/Fedora)
+
+Contributions:
+- 0.1.7 (2012.7): Thanks for the ideas and feature requests from M M, Aaeru, Niokun and spoxxy!
+                  感谢VAN老师的建议！
+- 0.1.6 (2012.6): 感谢马猴烧酒对于离线弹幕的建议！
+- 0.1.5 (2012.5): 感谢落とし神和藍染指出的各种BUG！
+- 0.1.3 (2012.3): 感谢VAN和郁闷中提出的各种建议！
 
 == 日本語 ==
 
@@ -33,16 +40,11 @@ Galgame即时翻译：	http://youtu.be/-Eo9Mo9F-Us
 
 有各种bug或者希望和建议欢迎联系AnnotCloud@gmail.com。
 
-CONTRIBUTIONS
-- 0.1.3版(2012.3)：非常感谢VAN兄和郁闷中大哥提出的各种建议！
-- 0.1.5版(2012.5)：感谢落とし神和藍染指出的各种BUG！
-
 === Mouse Gestures and Shortcuts === -- 鼠标动作和快捷方式
 
 Annot Player - Shortcuts -- 快捷键
--                  LButton    : Collect annotations                  -- 收集弹幕
--                  RButton    : Scatter annotations                  -- 驱赶弹幕
--                  MButton    : Delete hovered annots  -- 删除弹幕
+-                  MButton    : Scatter annotations                  -- 驱赶弹幕
+-                  RButton    : Collect annotations                  -- 收集弹幕
   ALT            + LButton
 - CTRL           + LButton    : Capture annotations using rubberband -- 捕捉弹幕
                    LButton+RButton

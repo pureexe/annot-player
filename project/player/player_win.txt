@@ -1,0 +1,6 @@
+GIMP => Filters => Light and Shadow => Drop Shadow
+
+Offset X: 12
+Offset Y: 12
+Blur radius: 50
+Opaciy: 100

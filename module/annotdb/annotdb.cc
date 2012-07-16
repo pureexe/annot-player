@@ -32,31 +32,31 @@ using namespace AnnotCloud;
 
 // - Threads -
 
-namespace { namespace task_ { // anonymous
+namespace { namespace detail {
 
-  class updateAliases : public QRunnable
+  class UpdateAliases : public QRunnable
   {
     AnnotationDatabase *db_;
     AliasList l_;
     int limit_;
     virtual void run() { db_->updateAliases(l_, false, limit_); } // \reimp, async = false
   public:
-    updateAliases(const AliasList &l, int limit, AnnotationDatabase *db)
+    UpdateAliases(const AliasList &l, int limit, AnnotationDatabase *db)
       : db_(db), l_(l), limit_(limit) { Q_ASSERT(db_); }
   };
 
-  class updateAnnotations : public QRunnable
+  class UpdateAnnotations : public QRunnable
   {
     AnnotationDatabase *db_;
     AnnotationList l_;
     int limit_;
     virtual void run() { db_->updateAnnotations(l_, false, limit_); } // \reimp, async = false
   public:
-    updateAnnotations(const AnnotationList &l, int limit, AnnotationDatabase *db)
+    UpdateAnnotations(const AnnotationList &l, int limit, AnnotationDatabase *db)
       : db_(db), l_(l), limit_(limit) { Q_ASSERT(db_); }
   };
 
-} } // anonymous namespace task_
+} } // anonymous detail
 
 // - Constructions -
 
@@ -1180,7 +1180,7 @@ AnnotationDatabase::updateAnnotations(const AnnotationList &l, bool async, int l
     return;
   }
   if (async) {
-    QThreadPool::globalInstance()->start(new task_::updateAnnotations(l, limit, this));
+    QThreadPool::globalInstance()->start(new detail::UpdateAnnotations(l, limit, this));
     DOUT("exit: returned from async branch");
     return;
   }
@@ -1229,7 +1229,7 @@ AnnotationDatabase::updateAliases(const AliasList &l, bool async, int limit)
     return;
   }
   if (async) {
-    QThreadPool::globalInstance()->start(new task_::updateAliases(l, limit, this));
+    QThreadPool::globalInstance()->start(new detail::UpdateAliases(l, limit, this));
     DOUT("exit: returned from async branch");
     return;
   }
@@ -1245,5 +1245,39 @@ AnnotationDatabase::updateAliases(const AliasList &l, bool async, int limit)
   }
   DOUT("exit");
   return;
+}
+
+// - Modification -
+
+bool
+AnnotationDatabase::updateAnnotationTextWithId(const QString &text, qint64 id)
+{
+  DOUT("enter: id =" << id << ", text =" << text);
+  Q_ASSERT(isValid());
+  QSqlQuery query(db_);
+
+  query.prepare("UPDATE annot SET annot_text = ? WHERE annot_id = ?");
+  query.addBindValue(text); // 0
+  query.addBindValue(id);   // 1
+
+  bool ok = query.exec();
+  DOUT("exit: ret =" << ok);
+  return ok;
+}
+
+bool
+AnnotationDatabase::updateAnnotationUserIdWithId(qint64 userId, qint64 id)
+{
+  DOUT("enter: id =" << id << ", userId =" << userId);
+  Q_ASSERT(isValid());
+  QSqlQuery query(db_);
+
+  query.prepare("UPDATE annot SET user_id = ? WHERE annot_id = ?");
+  query.addBindValue(userId); // 0
+  query.addBindValue(id);   // 1
+
+  bool ok = query.exec();
+  DOUT("exit: ret =" << ok);
+  return ok;
 }
 // EOF

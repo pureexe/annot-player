@@ -1,7 +1,7 @@
 # downloader.pro
 # 3/29/2012
 
-VERSION = 0.1.1.9
+VERSION = 0.1.2.0
 
 DEFINES += PROJECT_DOWNLOADER
 
@@ -12,7 +12,9 @@ include($$ROOTDIR/module/debug/debug.pri)
 ## Libraries
 
 include($$ROOTDIR/module/animation/animation.pri)
+include($$ROOTDIR/module/annotcache/annotcache.pri)
 include($$ROOTDIR/module/annotcloud/annotcloud.pri)
+include($$ROOTDIR/module/annotdown/annotdown.pri)
 include($$ROOTDIR/module/compress/compress.pri)
 include($$ROOTDIR/module/crypt/crypt.pri)
 include($$ROOTDIR/module/download/download.pri)
