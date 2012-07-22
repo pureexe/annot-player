@@ -19,8 +19,8 @@ AnnotationCodecManager::AnnotationCodecManager(QObject *parent)
   AnnotationCodec *c;
 #define ADD(_codec) \
   c = new _codec(this); { \
-    connect(c, SIGNAL(error(QString)), SIGNAL(error(QString))); \
     connect(c, SIGNAL(message(QString)), SIGNAL(message(QString))); \
+    connect(c, SIGNAL(errorMessage(QString)), SIGNAL(errorMessage(QString))); \
     connect(c, SIGNAL(fetched(AnnotationList,QString,QString)), SIGNAL(fetched(AnnotationList,QString,QString))); \
   } codecs_.append(c);
 
@@ -83,6 +83,8 @@ AnnotationCodecManager::fileFormat(const QString &fileName)
   DOUT("head =" << head);
   if (head.isEmpty())
     return UnknownFormat;
+  if (head[0].isSpace())
+    head = head.trimmed();
   if (head.startsWith("<!-- annotation")) {
     if (head.contains("www.nicovideo.jp"))
       return Nicovideo;
@@ -113,6 +115,10 @@ AnnotationCodecManager::isAnnotatedFile(const QString &fileName)
   if (!file.open(QIODevice::ReadOnly))
     return false;
   QByteArray data = file.read(HeaderSize);
+  if (data.isEmpty())
+    return false;
+  if (QChar(data[0]).isSpace())
+    data = data.trimmed();
   return
     data.startsWith("<!-- annotation") ||
     data.startsWith("/** annotation");
@@ -126,6 +132,10 @@ AnnotationCodecManager::parseAnnotatedHeader(const QString &fileName)
   if (!file.open(QIODevice::ReadOnly))
     return QString();
   QByteArray data = file.read(HeaderSize);
+  if (data.isEmpty())
+    return QString();
+  if (QChar(data[0]).isSpace())
+    data = data.trimmed();
   int pos = data.startsWith("<!-- annotation") ? data.indexOf("-->") :
             data.startsWith("/** annotation") ? data.indexOf("*/") :
             -1;

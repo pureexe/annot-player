@@ -1,6 +1,5 @@
 #ifndef ANNOTATIONSETTINGS_H
 #define ANNOTATIONSETTINGS_H
-#include <QDebug>
 
 // annotationsettings.h
 // 5/24/2012
@@ -24,6 +23,7 @@
 
 #define ANNOTATION_STAY_TIME            2000
 #define ANNOTATION_STAY_TIME_SUBTITLE   3000
+//#define ANNOTATION_STAY_TIME_SUBTITLE_GAME 400 // Should be larger than translator delay. BTW, texthook interval is 200 msecs
 #define ANNOTATION_STAY_TIME_MIN        1000
 #define ANNOTATION_STAY_TIME_MAX        10000 // 10 seconds
 #define ANNOTATION_FLY_TIME             15000 // 15 seconds, the larger the slower
@@ -77,7 +77,7 @@ class AnnotationSettings : public QObject
 public:
   static Self *globalSettings() { static Self g; return &g; }
 protected:
-  explicit AnnotationSettings(QObject *parent = 0)
+  explicit AnnotationSettings(QObject *parent = nullptr)
     : Base(parent), scale_(1), rotation_(0), speedFactor_(ANNOTATION_SPEED_FACTOR), offset_(0), positionResolution_(ANNOTATION_POSITION_RESOLUTION),
       avatarVisible_(false), motionless_(true), traditionalChinese_(false)
   {

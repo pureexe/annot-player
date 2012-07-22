@@ -4,7 +4,6 @@
 #include "annotationcountdialog.h"
 #include "datamanager.h"
 #include "tr.h"
-#include "logger.h"
 #include "project/common/acui.h"
 #include "module/qtext/htmltag.h"
 #include "module/qtext/datetime.h"
@@ -12,8 +11,6 @@
 
 #define DEBUG "annotationcountdialog"
 #include "module/debug/debug.h"
-
-using namespace Logger;
 
 //#define INPUTLINEEDIT_MAXWIDTH         100
 
@@ -30,9 +27,9 @@ AnnotationCountDialog::AnnotationCountDialog(DataManager *dm, QWidget *parent)
   : Base(parent, WINDOW_FLAGS), dm_(dm)
 {
   Q_ASSERT(dm_);
-//#ifdef Q_WS_MAC
+//#ifdef Q_OS_MAC
 //  setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
-//#endif // Q_WS_MAC
+//#endif // Q_OS_MAC
   setWindowTitle(tr("Annot Max Count Hint"));
   setToolTip(tr("Maximum numbers of annotations to display"));
 
@@ -92,11 +89,11 @@ AnnotationCountDialog::ok()
   fadeOut();
   uint count = edit_->currentText().toUInt();
   if (count)
-    log(QString("%1: " HTML_STYLE_OPEN(color:red) " %2" HTML_STYLE_CLOSE())
+    emit message(QString("%1: " HTML_STYLE_OPEN(color:red) " %2" HTML_STYLE_CLOSE())
         .arg(tr("annotation max count"))
         .arg(QString::number(count)));
   else
-    log(tr("annotation maximum count disabled"));
+    emit message(tr("annotation maximum count disabled"));
   emit countChanged(count);
 }
 

@@ -40,7 +40,7 @@ public:
   typedef QList<Direction> DirectionList;
 
 public:
-  explicit MouseGesture(const DirectionList &directions, const QString &description = QString(), QObject *parent = 0)
+  explicit MouseGesture(const DirectionList &directions, const QString &description = QString(), QObject *parent = nullptr)
     : Base(parent), directions_(directions), description_(description) { }
 
   const DirectionList &directions() const { return directions_; }

@@ -40,7 +40,7 @@ class MainWindow : public QMainWindow
 private:
   MainWindow(const Self&);
 public:
-  explicit MainWindow(QWidget *parent = 0);
+  explicit MainWindow(QWidget *parent = nullptr);
   ~MainWindow();
 
 public slots:

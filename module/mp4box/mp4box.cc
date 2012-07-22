@@ -67,8 +67,8 @@ namespace { namespace detail {
     QString mangle(const QString &path)
     {
       QFileInfo fi(path);
-      QString ret = fi.absolutePath() + "/" + ::tmpnam(0) + "." + fi.suffix();
-      //QString ret = ::tmpnam(0) + ("." + fi.suffix());
+      QString ret = fi.absolutePath() + "/" + ::tmpnam(nullptr) + "." + fi.suffix();
+      //QString ret = ::tmpnam(nullptr) + ("." + fi.suffix());
       if (!QFile::rename(path, ret))
         return QString();
       store_.append(Pair(path, ret));
@@ -78,8 +78,8 @@ namespace { namespace detail {
     QString mangleLater(const QString &path)
     {
       QFileInfo fi(path);
-      QString ret = fi.absolutePath() + "/" + ::tmpnam(0) + "." + fi.suffix();
-      //QString ret = ::tmpnam(0) + ("." + fi.suffix());
+      QString ret = fi.absolutePath() + "/" + ::tmpnam(nullptr) + "." + fi.suffix();
+      //QString ret = ::tmpnam(nullptr) + ("." + fi.suffix());
       store_.append(Pair(path, ret));
       return ret;
     }

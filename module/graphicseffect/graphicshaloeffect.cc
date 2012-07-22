@@ -3,15 +3,11 @@
 // See: gui/effects/qgraphicseffect.cpp
 #include "module/graphicseffect/graphicshaloeffect.h"
 #include "module/graphicseffect/graphicshaloeffect_p.h"
-
-#include <QtGui/qgraphicsitem.h>
-
-#include <QtGui/qimage.h>
-#include <QtGui/qpainter.h>
-#include <QtGui/qpaintengine.h>
-#include <QtCore/qrect.h>
-#include <QtCore/qdebug.h>
 #include <private/qdrawhelper_p.h>
+#include <QtGui/QImage>
+#include <QtGui/QPainter>
+#include <QtGui/QPaintEngine>
+#include <QtCore/QRectF>
 
 // - Construction -
 
@@ -109,6 +105,14 @@ GraphicsHaloEffect::boundingRectFor(const QRectF &rect) const
 void
 GraphicsHaloEffect::draw(QPainter *painter)
 {
+  Q_ASSERT(painter);
+  Q_ASSERT(painter->isActive());    // NOT true when rendering widgets on mac
+#ifdef Q_OS_MAC // FIXME
+  if (!painter->isActive()) {
+    drawSource(painter);
+    return;
+  }
+#endif // Q_OS_MAC
   Q_D(GraphicsHaloEffect);
   if (!qFuzzyCompare(d->opacity, 1))
     painter->setOpacity(d->opacity);
@@ -118,14 +122,17 @@ GraphicsHaloEffect::draw(QPainter *painter)
   }
 
   PixmapPadMode mode = PadToEffectiveBoundingRect;
+  Q_ASSERT(painter->paintEngine()); // NOT true when rendering widgets on mac
   if (painter->paintEngine()->type() == QPaintEngine::OpenGL2)
     mode = NoPad;
 
   // Draw pixmap in device coordinates to avoid pixmap scaling.
   QPoint offset;
   const QPixmap pixmap = sourcePixmap(Qt::DeviceCoordinates, &offset, mode);
-  if (pixmap.isNull())
+  if (pixmap.isNull()) {
+    drawSource(painter);
     return;
+  }
 
   QTransform restoreTransform = painter->worldTransform();
   painter->setWorldTransform(QTransform());

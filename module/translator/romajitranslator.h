@@ -26,10 +26,10 @@ class RomajiTranslator : public Translator
 
   // - Constructions -
 public:
-  explicit RomajiTranslator(QObject *parent = 0);
+  explicit RomajiTranslator(QObject *parent = nullptr);
 
 public slots:
-  virtual void translate(const QString &text, const QString &to, const QString &from = QString()) ///< \reimp
+  void translate(const QString &text, const QString &to, const QString &from = QString()) override
   { translate(text); Q_UNUSED(to); Q_UNUSED(from); }
 
   void translate(const QString &text);

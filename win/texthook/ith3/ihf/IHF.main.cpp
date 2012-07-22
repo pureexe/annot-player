@@ -105,7 +105,7 @@ HANDLE IthOpenPipe(LPWSTR name, ACCESS_MASK direction)
 }
 DWORD Inject(HANDLE hProc, LPWSTR engine)
 {
-	LPVOID lpvAllocAddr = 0;
+	LPVOID lpvAllocAddr = nullptr;
 	DWORD dwWrite = 0x1000, len = 0;
 	HANDLE hTH;
 	WCHAR path[MAX_PATH];
@@ -213,7 +213,7 @@ IHFSERVICE DWORD IHFAPI IHF_Cleanup()
 		NtClearEvent(hPipeExist);
 		//delete cmdq;
 		delete man;
-		NtClose(hMutex);		
+		NtClose(hMutex);
 		NtClose(hPipeExist);
 		DeleteCriticalSection(&detach_cs);
 		result = true;

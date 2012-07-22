@@ -4,11 +4,11 @@
 #include "windowsregistry.h"
 #include "global.h"
 #include "tr.h"
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
 # include "win/qtwin/winreg.h"
 #else
 # error "Windows only"
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
 #include <QtCore>
 
 #define APPID   G_ORGANIZATION "." G_APPLICATION
@@ -22,7 +22,7 @@ WindowsRegistry*
 WindowsRegistry::globalInstance()
 {
   static Self g;
-  g.setClassesRoot(REG_HKCU_SOFTWARE_CLASSES);
+  g.setClassesRoot(REG_HKCU_CLASSES);
   return &g;
 }
 

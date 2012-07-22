@@ -20,7 +20,7 @@ class CommentView: public CommentViewBase
   // - Constructions -
 public:
   explicit
-  CommentView(QWidget *parent = 0);
+  CommentView(QWidget *parent = nullptr);
 
   // - Properties -
 public:
@@ -33,7 +33,7 @@ public:
 
   // - Events -
 public:
-  virtual void setVisible(bool visible); ///< \reimp
+  void setVisible(bool visible) override;
 };
 
 #endif // COMMENTVIEW_H

@@ -42,17 +42,17 @@ class FlvDemux : public QObject, public StoppableTask
   //QList<quint32> _videoTimeStamps;
 
 public:
-  explicit FlvDemux(InputStream *in, QObject *parent = 0)
+  explicit FlvDemux(InputStream *in, QObject *parent = nullptr)
     : Base(parent), state_(Stopped),
-      in_(in), audioOut_(0), videoOut_(0),
-      audioToc_(0), videoToc_(0),
-      audioWriter_(0), videoWriter_(0), writeHeader_(true) { }
+      in_(in), audioOut_(nullptr), videoOut_(nullptr),
+      audioToc_(nullptr), videoToc_(nullptr),
+      audioWriter_(nullptr), videoWriter_(nullptr), writeHeader_(true) { }
 
-  explicit FlvDemux(QObject *parent = 0)
+  explicit FlvDemux(QObject *parent = nullptr)
     : Base(parent), state_(Stopped),
-      in_(0), audioOut_(0), videoOut_(0),
-      audioToc_(0), videoToc_(0),
-      audioWriter_(0), videoWriter_(0), writeHeader_(true) {  }
+      in_(nullptr), audioOut_(nullptr), videoOut_(nullptr),
+      audioToc_(nullptr), videoToc_(nullptr),
+      audioWriter_(nullptr), videoWriter_(nullptr), writeHeader_(true) {  }
 
   ~FlvDemux();
 
@@ -77,12 +77,12 @@ public:
 signals:
   void stopped();
   //void timestampChanged(qint64);
-  void error(QString message);
+  void errorMessage(QString message);
 
 public slots:
-  virtual void run(); ///< \reimp
+  void run() override;
 
-  virtual void stop() ///< \reimp
+  void stop() override
   {
     state_ = Stopped;
     emit stopped();
@@ -127,13 +127,13 @@ class FlvListDemux : public QObject, public StoppableTask
   //QList<quint32> _videoTimeStamps;
 
 public:
-  FlvListDemux(const InputStreamList &ins, const QList<qint64> &durations, QObject *parent = 0)
+  FlvListDemux(const InputStreamList &ins, const QList<qint64> &durations, QObject *parent = nullptr)
     : Base(parent), state_(Stopped), ins_(ins), durations_(durations) { init(); }
 
-  explicit FlvListDemux(const InputStreamList &ins, QObject *parent = 0)
+  explicit FlvListDemux(const InputStreamList &ins, QObject *parent = nullptr)
     : Base(parent), state_(Stopped), ins_(ins) { init(); }
 
-  explicit FlvListDemux(QObject *parent = 0)
+  explicit FlvListDemux(QObject *parent = nullptr)
     : Base(parent), state_(Stopped) { init(); }
 
 public:
@@ -160,12 +160,12 @@ private:
 signals:
   void stopped();
   //void timestampChanged(qint64);
-  void error(QString message);
+  void errorMessage(QString message);
 
 public slots:
-  virtual void run(); ///< \reimp
+  void run() override;
 
-  virtual void stop() ///< \reimp
+  void stop() override
   {
     state_ = Stopped;
     demux_->stop();

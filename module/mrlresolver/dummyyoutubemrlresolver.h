@@ -14,14 +14,14 @@ class DummyYoutubeMrlResolver : public MrlResolver
   typedef MrlResolver Base;
 
 public:
-  explicit DummyYoutubeMrlResolver(QObject *parent = 0)
+  explicit DummyYoutubeMrlResolver(QObject *parent = nullptr)
     : Base(parent) { }
 
 public:
-  bool matchMedia(const QString &href) const; ///< \reimp
+  bool matchMedia(const QString &href) const override;
 
 public slots:
-  bool resolveMedia(const QString &href); ///< \reimp
+  bool resolveMedia(const QString &href) override;
 };
 
 #endif // DUMMYYOUTUBEMRLRESOLVER_H

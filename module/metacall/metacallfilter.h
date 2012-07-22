@@ -27,8 +27,8 @@ class MetaCallFilter : public QObject
 
   // - Construction -
 public:
-  explicit MetaCallFilter(QObject *parent = 0)
-    : Base(parent), running_(false), watched_(0), server_(0), socket_(0), messageSize_(0)
+  explicit MetaCallFilter(QObject *parent = nullptr)
+    : Base(parent), running_(false), watched_(0), server_(nullptr), socket_(nullptr), messageSize_(0)
   { }
 
 public:
@@ -49,7 +49,7 @@ public slots:
 
   // - Implementation -
 public:
-  virtual bool eventFilter(QObject *watched, QEvent *e); ///< \reimp
+  bool eventFilter(QObject *watched, QEvent *e) override;
 private slots:
   void acceptConnection(); ///< server creates connection
   void readSocket();  ///< receive and invoke meta call from connected socket

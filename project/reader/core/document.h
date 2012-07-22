@@ -135,11 +135,11 @@ namespace Core {
   private:
     Document(const Self&);
   public:
-    explicit Document(QObject *parent = 0)
-      : Base(parent), doc_(0), catalog_(0) { }
+    explicit Document(QObject *parent = nullptr)
+      : Base(parent), doc_(nullptr), catalog_(nullptr) { }
 
-    explicit Document(const QString &path, QObject *parent = 0)
-     : Base(parent), doc_(0), catalog_(0) { open(path); }
+    explicit Document(const QString &path, QObject *parent = nullptr)
+     : Base(parent), doc_(nullptr), catalog_(nullptr) { open(path); }
 
     ~Document() { clear(); }
 

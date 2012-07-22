@@ -3,6 +3,7 @@
 
 #include "project/common/acwebwindow.h"
 #include "project/common/acui.h"
+#include "project/common/acprotocol.h"
 #include "module/qtext/webview.h"
 #include <QtWebKit/QWebPage>
 #include <QtWebKit/QWebView>
@@ -22,12 +23,8 @@ AcWebWindow::AcWebWindow(QWidget *parent, Qt::WindowFlags f)
   AcUi::globalInstance()->setWindowStyle(this);
   setWindowOpacity(1.0);
 
-  QtExt::WebView *w = new QtExt::WebView(this); {
-    connect(w, SIGNAL(message(QString)), SLOT(showMessage(QString)));
-    connect(w, SIGNAL(errorMessage(QString)), SLOT(error(QString)));
-    connect(w, SIGNAL(warning(QString)), SLOT(warn(QString)));
-    connect(w, SIGNAL(notification(QString)), SLOT(notify(QString)));
-  }
+  QtExt::WebView *w = new QtExt::WebView(this);
+  AC_CONNECT_MESSAGES(w, this, Qt::AutoConnection);
   setCentralWidget(w);
 
   //grabGesture(Qt::PanGesture);
@@ -52,7 +49,7 @@ AcWebWindow::setCacheDirectory(const QString &path)
   QNetworkAccessManager *nam = page->networkAccessManager();
   if (!nam)
     return;
-  QNetworkDiskCache *cache = 0;
+  QNetworkDiskCache *cache = nullptr;
   if (!path.isEmpty()) {
     cache = new QNetworkDiskCache(nam);
     cache->setCacheDirectory(path);

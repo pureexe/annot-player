@@ -24,18 +24,18 @@ class AnnotationDownloader : public QObject
 
   // - Construction -
 public:
-  explicit AnnotationDownloader(QObject *parent = 0);
-
-  void setDownloadsLocation(const QString &path) { downloadsLocation_ = path; }
+  explicit AnnotationDownloader(QObject *parent = nullptr);
 
   QString downloadsLocation() const { return downloadsLocation_; }
 
 signals:
-  void error(QString msg);
   void warning(QString msg);
+  void errorMessage(QString msg);
   void message(QString msg);
+  void fileSaved(const QString &fileName);
 
 public slots:
+  void setDownloadsLocation(const QString &path) { downloadsLocation_ = path; }
   void download(const QString &refurl);
   void download(const QString &url, const QString &refurl, const QString &title);
 

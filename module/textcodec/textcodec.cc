@@ -14,14 +14,14 @@
 //#define DEBUG "textcodec"
 #include "module/debug/debug.h"
 
-#ifdef Q_WS_X11
+#ifdef Q_OS_LINUX
 # ifndef DOCDIR
 #  define DOCDIR    "/usr/share/annot"
 # endif // DOCDIR
 # define RC_PREFIX   DOCDIR "/"
 #else
 # define RC_PREFIX   QCoreApplication::applicationDirPath() + "/doc/"
-#endif // Q_WS_11
+#endif // Q_OS_LINUX
 
 #define RC_UTFTABLE_ZHS_ZHT RC_PREFIX "utftable.zhs_zht.txt"
 #define RC_UTFTABLE_ZHT_ZHS RC_PREFIX "utftable.zht_zhs.txt"

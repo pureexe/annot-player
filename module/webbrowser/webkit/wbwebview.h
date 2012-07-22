@@ -17,7 +17,7 @@ class WbWebView : public WbWebViewBase
   typedef WbWebViewBase Base;
 
 public:
-  explicit WbWebView(QWidget *parent = 0);
+  explicit WbWebView(QWidget *parent = nullptr);
 
 signals:
   void windowCreated(QWebView *w);
@@ -41,8 +41,8 @@ public slots:
 
   // - Events -
 protected:
-  virtual void contextMenuEvent(QContextMenuEvent *e); ///< \reimp
-  virtual QWebView *createWindow(QWebPage::WebWindowType type); ///< \reimp
+  void contextMenuEvent(QContextMenuEvent *e) override;
+  QWebView *createWindow(QWebPage::WebWindowType type) override;
 
   QString selectedUrl() const;
 
@@ -67,7 +67,7 @@ protected slots:
   void searchWithEngine(int engine);
   void invalidateSelection();
 
-  virtual void showLink(const QString &url, const QString &title, const QString &content); ///< \reimp
+  void showLink(const QString &url, const QString &title, const QString &content) override;
   void highlightDownloadableLink(const QString &link, const QString &title, const QString &content);
 
 private:

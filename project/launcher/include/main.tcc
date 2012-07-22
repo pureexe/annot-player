@@ -61,9 +61,9 @@ WinMain(__in HINSTANCE hInstance, __in HINSTANCE hPrevInstance, __in LPSTR lpCmd
   PROCESS_INFORMATION piProcessInfo;
   ::memset(&piProcessInfo, 0, sizeof(piProcessInfo));
 
-  LPVOID lpEnvironment = 0;     // TODO
+  LPVOID lpEnvironment = nullptr;     // TODO
 
-  LPWSTR lpwCmdLine = 0;;
+  LPWSTR lpwCmdLine = nullptr;;
   if (lpCmdLine) {
     BOOL bResult = ::MultiByteToWideChar(CP_ACP, 0, lpCmdLine, -1, wszBuffer, BUFFER_SIZE);
     if (bResult)

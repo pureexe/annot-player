@@ -216,7 +216,7 @@ TranslationManager::translate(int tid) const
   case T_SUBTITLE:      return tr("Subtitle");
   case T_AUDIOTRACK:    return tr("Audio track");
   case T_SECTION:       return tr("Section");
-  case T_WORDCOUNT:     return tr("Word count");
+  case T_WORDCOUNT:     return tr("Word Count");
   case T_UNKNOWN:       return tr("unknown");
   case T_BLESS:         return tr("Bless");
   case T_CURSE:         return tr("Curse");
@@ -256,6 +256,7 @@ TranslationManager::translate(int tid) const
   case T_KOREAN:        return tr("Korean");
   case T_FRENCH:        return tr("French");
   case T_GERMAN:        return tr("German");
+  case T_ITALIAN:       return tr("Italian");
   case T_SPANISH:       return tr("Spanish");
   case T_PORTUGUESE:    return tr("Portuguese");
 
@@ -291,16 +292,16 @@ TranslationManager::translate(int tid) const
   // Messages:
 
   case T_ERROR_UNKNOWN_COMMAND:         return tr("unrecognized command");
-  case T_ERROR_HASH_TOKEN:              return tr("failed to hash token");
+  case T_ERROR_HASH_TOKEN:              return tr("failed to digest media ID");
   case T_ERROR_BAD_USERNAME:            return tr("invalid username");
   case T_ERROR_BAD_PASSWORD:            return tr("invalid password");
   case T_ERROR_BAD_POS:                 return tr("invalid time format");
-  case T_ERROR_BAD_TOKEN:               return tr("invalid token");
+  case T_ERROR_BAD_TOKEN:               return tr("invalid media");
   case T_ERROR_BAD_DEVICEPATH:          return tr("invalid device path");
   case T_ERROR_BAD_FILEPATH:            return tr("file does not exist");
   case T_ERROR_BAD_SUBTITLE:            return tr("failed to load subtitle");
   case T_ERROR_CLIPBOARD_UNAVAILABLE:   return tr("clipboard not available");
-  case T_ERROR_SUBMIT_TOKEN:            return tr("failed to submit token");
+  case T_ERROR_SUBMIT_TOKEN:            return tr("failed to query media");
   case T_ERROR_SUBMIT_ANNOTATION:       return tr("failed to submit annotation");
   case T_ERROR_SYNC_FAILURE:            return tr("failed to synchronize offline queue,:return try later");
   case T_ERROR_NO_MEDIA:                return tr("no media");
@@ -536,11 +537,11 @@ TranslationManager::translate(int tid) const
   case T_MENUTEXT_CURSETHISANNOT:return tr("Curse Annotation");
   case T_TIP_CURSETHISANNOT:    return tr("Curse annotation");
 
-  case T_MENUTEXT_BLESSTHISTOKEN:return tr("Bless Token");
-  case T_TIP_BLESSTHISTOKEN:    return tr("Bless token");
+  case T_MENUTEXT_BLESSTHISTOKEN:return tr("Bless Media");
+  case T_TIP_BLESSTHISTOKEN:    return tr("Bless media");
 
-  case T_MENUTEXT_CURSETHISTOKEN:return tr("Curse Token");
-  case T_TIP_CURSETHISTOKEN:    return tr("Curse token");
+  case T_MENUTEXT_CURSETHISTOKEN:return tr("Curse Media");
+  case T_TIP_CURSETHISTOKEN:    return tr("Curse media");
 
   case T_MENUTEXT_HIDETHISANNOT:return tr("Hide Annotation");
   case T_TIP_HIDETHISANNOT:     return tr("Hide annotation");
@@ -576,7 +577,7 @@ TranslationManager::translate(int tid) const
   case T_TIP_ANNOTATIONBROWSER: return tr("Show annotation browser");
 
   case T_MENUTEXT_TOKENVIEW:    return tr("Annotation Source") + " [" K_CTRL "+F3]";
-  case T_TIP_TOKENVIEW:         return tr("Show token view");
+  case T_TIP_TOKENVIEW:         return tr("Show media information");
 
   case T_MENUTEXT_COMMENTVIEW:  return tr("Comments");
   case T_TIP_COMMENTVIEW:       return tr("Show comment browser");
@@ -639,20 +640,20 @@ TranslationManager::translate(int tid) const
   case T_MENUTEXT_THEME:  return tr("Theme");
   case T_TIP_THEME:       return tr("Select GUI theme");
 
-  case T_LABEL_CREATEDATE:      return tr("Create date");
-  case T_TIP_CREATEDATE:        return tr("Create date");
-  case T_LABEL_UPDATEDATE:      return tr("Update date");
-  case T_TIP_UPDATEDATE:        return tr("Update date");
+  case T_LABEL_CREATEDATE:      return tr("Create Date");
+  case T_TIP_CREATEDATE:        return tr("Create Date");
+  case T_LABEL_UPDATEDATE:      return tr("Update Date");
+  case T_TIP_UPDATEDATE:        return tr("Update Date");
   case T_LABEL_BLESSEDCOUNT:    return tr("Blessed");
-  case T_TIP_BLESSEDCOUNT:      return tr("Blessed count");
+  case T_TIP_BLESSEDCOUNT:      return tr("Blessed Count");
   case T_LABEL_CURSEDCOUNT:     return tr("Cursed");
-  case T_TIP_CURSEDCOUNT:       return tr("Cursed count");
+  case T_TIP_CURSEDCOUNT:       return tr("Cursed Count");
   case T_LABEL_BLOCKEDCOUNT:    return tr("Blocked");
-  case T_TIP_BLOCKEDCOUNT:      return tr("Blocked count");
+  case T_TIP_BLOCKEDCOUNT:      return tr("Blocked Count");
   case T_LABEL_VISITEDCOUNT:    return tr("Visited");
-  case T_TIP_VISITEDCOUNT:      return tr("Visited count");
+  case T_TIP_VISITEDCOUNT:      return tr("Visited Count");
   case T_LABEL_ANNOTCOUNT:      return tr("Annot");
-  case T_TIP_ANNOTCOUNT:        return tr("Annotation count");
+  case T_TIP_ANNOTCOUNT:        return tr("Annotation Count");
 
   case T_LABEL_ALIAS:           return tr("Alias");
   case T_TIP_ALIAS:             return tr("Alias");
@@ -697,6 +698,12 @@ TranslationManager::translate(int tid) const
   case T_TIP_AUTOPLAYNEXT:      return tr("Automatically play next media");
 
   case T_AUTOPLAYCURRENT:       return tr("Repeat Current Media");
+
+  case T_MENUTEXT_DOCK_TOP:     return tr("Dock to the Top");
+  case T_TOOLTIP_DOCK_TOP:      return tr("Dock to the top");
+
+  case T_MENUTEXT_DOCK_BOTTOM:  return tr("Dock to the Bottom");
+  case T_TOOLTIP_DOCK_BOTTOM:   return tr("Dock to the bottom");
 
   case T_NOAUTOPLAY:            return tr("No Repeat");
 
@@ -762,17 +769,19 @@ TranslationManager::translate(int tid) const
   case T_HASH:          return tr("Hash");
   case T_TEXT:          return tr("Text");
   case T_POS:           return tr("Pos");
-  case T_CREATETIME:    return tr("CreateTime");
-  case T_LOGINTIME:     return tr("LoginTime");
-  case T_UPDATETIME:    return tr("UpdateTime");
+  case T_CREATETIME:    return tr("Create Time");
+  case T_LOGINTIME:     return tr("Login Time");
+  case T_UPDATETIME:    return tr("Update Time");
+  case T_LOGINIP:       return tr("Login IP");
+  case T_LOGINCOUNT:    return tr("Login Count");
   case T_LANGUAGE:      return tr("Language");
   case T_STATUS:        return tr("Status");
   case T_FLAGS:         return tr("Flags");
-  case T_BLESSEDCOUNT:  return tr("BlessedCount");
-  case T_CURSEDCOUNT:   return tr("CursedCount");
-  case T_BLOCKEDCOUNT:  return tr("BlockedCount");
-  case T_ANNOTCOUNT:    return tr("AnnotCount");
-  case T_VISITEDCOUNT:  return tr("VisitedCount");
+  case T_BLESSEDCOUNT:  return tr("Blessed Count");
+  case T_CURSEDCOUNT:   return tr("Cursed Count");
+  case T_BLOCKEDCOUNT:  return tr("Blocked Count");
+  case T_ANNOTCOUNT:    return tr("Annot Count");
+  case T_VISITEDCOUNT:  return tr("Visited Count");
 
   case T_PID:           return tr("PID");
   case T_FOLDER:        return tr("Folder");
@@ -821,10 +830,10 @@ TranslationManager::translate(int tid) const
   case T_MENUTEXT_RESETANNOTSCALE:  return tr("Reset Scale") + " [" K_CTRL "+" + tr("Mid") + "]";
   case T_TIP_RESETANNOTSCALE:       return tr("Reset annotation scale");
 
-  case T_MENUTEXT_INCREASEANNOTSCALE:  return tr("Scale Up") + " [" K_CTRL "+" + tr("Wheel") + "↑]";
+  case T_MENUTEXT_INCREASEANNOTSCALE:  return tr("Scale Up") + " [" K_CTRL "+" + tr("Wheel") + "↑]" " [" + tr("LButton") + "+" + tr("Wheel") + "↑]";
   case T_TIP_INCREASEANNOTSCALE:       return tr("Scale up");
 
-  case T_MENUTEXT_DECREASEANNOTSCALE:  return tr("Scale Down") + " [" K_CTRL "+" + tr("Wheel") + "↓]";
+  case T_MENUTEXT_DECREASEANNOTSCALE:  return tr("Scale Down") + " [" K_CTRL "+" + tr("Wheel") + "↓]" " [" + tr("LButton") + "+" + tr("Wheel") + "↓]";
   case T_TIP_DECREASEANNOTSCALE:       return tr("Scale down");
 
   case T_MENUTEXT_RESETANNOTOFFSET:  return tr("Reset Offset") + " [" K_CTRL "+" K_ALT "+" + tr("Mid") + "]";

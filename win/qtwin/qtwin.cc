@@ -2,6 +2,7 @@
 // 7/21/2011
 
 #include "qtwin/qtwin.h"
+#include "qtwin/winreg.h"
 #include <QtCore>
 #include <cstdlib>
 #include <memory>
@@ -9,9 +10,11 @@
 
 #include <qt_windows.h>
 #include <Psapi.h>
+#include <ShellAPI.h>
 #include <ShlGuid.h>
 #include <ShlObj.h>
 #include <ShObjIdl.h>
+//#include <Shlwapi.h>
 #include <TlHelp32.h>
 //#include <strsafe.h>
 
@@ -29,6 +32,9 @@
 
 #define MAKEDWORD(_a, _b)       ((DWORD)(((WORD)(((DWORD_PTR)(_a)) & 0xffff)) | ((DWORD)((WORD)(((DWORD_PTR)(_b)) & 0xffff))) << 16))
 
+#define QSTRING_LPCSTR(_qs)     (_qs).toStdString().c_str()
+#define QSTRING_LPCWSTR(_qs)    (_qs).toStdWString().c_str()
+
 namespace { namespace detail {
 
   typedef struct tag_HWND_DWORD {
@@ -38,12 +44,9 @@ namespace { namespace detail {
 
   // Conversions between qt and win32 data structures
 
-  inline QString QPath2WinPath(const QString &fileName)
-  {
-    QString ret = fileName;
-    ret.replace('/', '\\');
-    return ret;
-  }
+  inline QString qpath2win(const QString &fileName)
+  { return QString(fileName).replace('/', '\\'); }
+
 
   inline QPoint POINT2QPoint(const POINT &pt)
   { return QPoint(pt.x, pt.y); }
@@ -278,10 +281,10 @@ QtWin::getModulesInfo()
 bool
 QtWin::createProcessWithExecutablePath(const QString &filePath)
 {
-  std::wstring wszExePath = filePath.toStdWString();
+  std::wstring wszExePath = detail::qpath2win(filePath).toStdWString();
 
   QString fileDir = QFileInfo(filePath).absolutePath();
-  std::wstring wszExeDir = fileDir.toStdWString();
+  std::wstring wszExeDir = detail::qpath2win(fileDir).toStdWString();
 
   STARTUPINFOW siStartupInfo;
   ::ZeroMemory(&siStartupInfo, sizeof(siStartupInfo));
@@ -291,8 +294,8 @@ QtWin::createProcessWithExecutablePath(const QString &filePath)
   ::ZeroMemory(&piProcessInfo, sizeof(piProcessInfo));
 
   LPCWSTR lpAppName = wszExePath.c_str();
-  LPWSTR pwszParam = 0;
-  LPVOID lpEnvironment = 0;
+  LPWSTR pwszParam = nullptr;
+  LPVOID lpEnvironment = nullptr;
   LPCWSTR lpCurrentDirectory = wszExeDir.c_str();
   // See: http://msdn.microsoft.com/en-us/library/windows/desktop/ms682425(v=vs.85).aspx
   //
@@ -581,7 +584,7 @@ HWND
 QtWin::getWindowWithThreadId(DWORD threadId)
 {
   detail::HWND_DWORD tuple;
-  tuple.hwnd = 0;
+  tuple.hwnd = nullptr;
   tuple.dword = threadId;
   ::EnumWindows(::getWindowWithThreadId_p, reinterpret_cast<LPARAM>(&tuple));
   return tuple.hwnd;
@@ -591,7 +594,7 @@ HWND
 QtWin::getWindowWithProcessId(DWORD processId)
 {
   detail::HWND_DWORD tuple;
-  tuple.hwnd = 0;
+  tuple.hwnd = nullptr;
   tuple.dword = processId;
   ::EnumWindows(::getWindowWithProcessId_p, reinterpret_cast<LPARAM>(&tuple));
   return tuple.hwnd;
@@ -601,7 +604,7 @@ HWND
 QtWin::getVisibleWindowWithThreadId(DWORD threadId)
 {
   detail::HWND_DWORD tuple;
-  tuple.hwnd = 0;
+  tuple.hwnd = nullptr;
   tuple.dword = threadId;
   ::EnumWindows(::getVisibleWindowWithThreadId_p, reinterpret_cast<LPARAM>(&tuple));
   return tuple.hwnd;
@@ -611,7 +614,7 @@ HWND
 QtWin::getVisibleWindowWithProcessId(DWORD processId)
 {
   detail::HWND_DWORD tuple;
-  tuple.hwnd = 0;
+  tuple.hwnd = nullptr;
   tuple.dword = processId;
   ::EnumWindows(::getVisibleWindowWithProcessId_p, reinterpret_cast<LPARAM>(&tuple));
   return tuple.hwnd;
@@ -621,7 +624,7 @@ HWND
 QtWin::getGoodWindowWithThreadId(DWORD threadId)
 {
   detail::HWND_DWORD tuple;
-  tuple.hwnd = 0;
+  tuple.hwnd = nullptr;
   tuple.dword = threadId;
   ::EnumWindows(::getGoodWindowWithThreadId_p, reinterpret_cast<LPARAM>(&tuple));
   return tuple.hwnd;
@@ -631,7 +634,7 @@ HWND
 QtWin::getGoodWindowWithProcessId(DWORD processId)
 {
   detail::HWND_DWORD tuple;
-  tuple.hwnd = 0;
+  tuple.hwnd = nullptr;
   tuple.dword = processId;
   ::EnumWindows(::getGoodWindowWithProcessId_p, reinterpret_cast<LPARAM>(&tuple));
   return tuple.hwnd;
@@ -750,37 +753,29 @@ QtWin::getAppDataPath()
 QString
 QtWin::getFontsPath()
 {
-  return QSettings(
-    "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders",
-    QSettings::NativeFormat
-  ).value("Fonts").toString();
+  return QSettings(REG_HKCU_SHELLFOLDERS, QSettings::NativeFormat)
+      .value("Fonts").toString();
 }
 
 QString
 QtWin::getMusicPath()
 {
-  return QSettings(
-    "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders",
-    QSettings::NativeFormat
-  ).value("My Music").toString();
+  return QSettings(REG_HKCU_SHELLFOLDERS, QSettings::NativeFormat)
+      .value("My Music").toString();
 }
 
 QString
 QtWin::getVideoPath()
 {
-  return QSettings(
-    "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders",
-    QSettings::NativeFormat
-  ).value("My Video").toString();
+  return QSettings(REG_HKCU_SHELLFOLDERS, QSettings::NativeFormat)
+      .value("My Video").toString();
 }
 
 QString
 QtWin::getDocumentsPath()
 {
-  return QSettings(
-    "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders",
-    QSettings::NativeFormat
-  ).value("Personal").toString();
+  return QSettings(REG_HKCU_SHELLFOLDERS, QSettings::NativeFormat)
+      .value("Personal").toString();
 }
 
 // See: http://msdn.microsoft.com/en-us/library/windows/desktop/bb762188(v=vs.85).aspx
@@ -825,9 +820,9 @@ QtWin::createLink(const QString &lnkPath, const QString &targetPath, const QStri
   if (lnkPath.isEmpty() || targetPath.isEmpty())
     return false;
 
-  std::wstring wszLnkPath = lnkPath.toStdWString();
-  std::wstring wszTargetPath = targetPath.toStdWString();
-  std::wstring wszDescription = description.toStdWString();
+  std::wstring wszLnkPath = detail::qpath2win(lnkPath).toStdWString(),
+               wszTargetPath = detail::qpath2win(targetPath).toStdWString(),
+               wszDescription = detail::qpath2win(description).toStdWString();
 
   // See: http://msdn.microsoft.com/en-us/library/bb776891(VS.85).aspx
   //
@@ -844,12 +839,12 @@ QtWin::createLink(const QString &lnkPath, const QString &targetPath, const QStri
   // lpszDesc     - Address of a buffer that contains a description of the
   //                Shell link, stored in the Comment field of the link
   //                properties.
-  LPCWSTR lpszPathLink = wszLnkPath.c_str();
-  LPCWSTR lpszPathObj = wszTargetPath.c_str();
-  LPCWSTR lpszDesc = wszDescription.empty() ? 0 : wszDescription.c_str();
+  LPCWSTR lpszPathLink = wszLnkPath.c_str(),
+          lpszPathObj = wszTargetPath.c_str(),
+          lpszDesc = wszDescription.empty() ? 0 : wszDescription.c_str();
 
   HRESULT hres;
-  IShellLink* psl;
+  IShellLink *psl;
 
   // Get a pointer to the IShellLink interface. It is assumed that CoInitialize
   // has already been called.
@@ -890,7 +885,7 @@ QtWin::resolveLink(const QString &lnkPath, HWND hwnd)
   if (lnkPath.isEmpty())
     return ret;
 
-  std::wstring wszLnkPath = lnkPath.toStdWString();
+  std::wstring wszLnkPath = detail::qpath2win(lnkPath).toStdWString();
   //WCHAR wszRet[MAX_PATH];
 
   // ResolveIt - Uses the Shell's IShellLink and IPersistFile interfaces
@@ -919,8 +914,8 @@ QtWin::resolveLink(const QString &lnkPath, HWND hwnd)
   //WCHAR szDescription[MAX_PATH];
   WIN32_FIND_DATA wfd;
 
-  szGotPath[0] = 0;
-  //*lpszPath = 0; // Assume failure
+  szGotPath[0] = '\0';
+  //*lpszPath = '\0'; // Assume failure
 
   // Get a pointer to the IShellLink interface. It is assumed that CoInitialize
   // has already been called.
@@ -979,6 +974,44 @@ QtWin::resolveLink(const QString &lnkPath, HWND hwnd)
     ret = QString::fromWCharArray(szGotPath);
   return ret;
 }
+
+bool
+QtWin::trashFile(const QString &fileName, bool confirm, WId hwnd)
+{
+  enum { BufferSize = MAX_PATH + 1 };
+  QString filePath = detail::qpath2win(fileName);
+  if (BufferSize < filePath.size())
+    return false;
+  //std::wstring wszFilePath = filePath.toStdWString();
+  wchar_t wszFilePath[BufferSize];
+  filePath.toWCharArray(wszFilePath);
+  wszFilePath[filePath.size()] = L'\0';
+
+  SHFILEOPSTRUCT op = { };
+  op.hwnd = hwnd;
+  op.wFunc = FO_DELETE;
+  //op.pTo = nullptr;
+  //op.pFrom = const_cast<PWSTR>(wszFilePath.c_str());
+  op.pFrom = wszFilePath;
+  op.fFlags = confirm ? FOF_ALLOWUNDO : FOF_ALLOWUNDO|FOF_NOCONFIRMATION;
+  int err = SHFileOperationW(&op);
+  //qDebug() << QString::fromStdWString(wszFilePath) << QString::number(err, 16);
+  return !err;
+}
+
+bool
+QtWin::isFileExists(const QString &fileName)
+{
+#ifdef _INC_SHLWAPI // Require Shlwapi.sll
+  return ::PathFileExistsW(QSTRING_LPCWSTR(detail::qpath2win(fileName)));
+#else
+  return QFile::exists(fileName);
+#endif // _INC_SHLWAPI
+}
+
+bool
+QtWin::deleteFile(const QString &fileName)
+{ return ::DeleteFileW(QSTRING_LPCWSTR(detail::qpath2win(fileName))); }
 
 // - Devices -
 
@@ -1155,14 +1188,22 @@ QtWin::toUtf8(const wchar_t *pStr)
 
 bool
 QtWin::setFileAttributes(const QString &fileName, uint flags)
-{ return ::SetFileAttributesW(detail::QPath2WinPath(fileName).toStdWString().c_str(), flags); }
+{
+  return ::SetFileAttributesW(
+        QSTRING_LPCWSTR(detail::qpath2win(fileName)),
+        flags);
+}
 
 // - Shell -
 
 // See: http://nicug.blogspot.com/search/label/taskbar
 void
 QtWin::addRecentDocument(const QString &fileName)
-{ ::SHAddToRecentDocs(SHARD_PATHW, detail::QPath2WinPath(fileName).toStdWString().c_str()); }
+{
+  ::SHAddToRecentDocs(
+        SHARD_PATHW,
+        QSTRING_LPCWSTR(detail::qpath2win(fileName)));
+}
 
 // EOF
 
@@ -1302,7 +1343,7 @@ HRESULT ResolveIt(HWND hwnd, LPCSTR lpszLinkFile, LPWSTR lpszPath, int iPathBuff
     WCHAR szDescription[MAX_PATH];
     WIN32_FIND_DATA wfd;
 
-    *lpszPath = 0; // Assume failure
+    *lpszPath = nullptr; // Assume failure
 
     // Get a pointer to the IShellLink interface. It is assumed that CoInitialize
     // has already been called.

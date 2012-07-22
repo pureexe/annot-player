@@ -2,9 +2,8 @@
 // 8/7/2011
 
 #include "eventlogger.h"
-#include "osdconsole.h"
+#include "mainwindow.h"
 #include "global.h"
-#include "logger.h"
 #include "tr.h"
 #include "signalhub.h"
 #include "application.h"
@@ -13,52 +12,57 @@
 #include "module/qtext/datetime.h"
 #include "module/player/player.h"
 #include "module/serveragent/serveragent.h"
+#include <QtGui/QApplication>
 #include <QtCore>
 
 #define DEBUG "eventlogger"
 #include "module/debug/debug.h"
 
-using namespace Logger;
-
-EventLogger::EventLogger(Player *player, SignalHub *hub, QObject *parent)
-  : Base(parent), player_(player), hub_(hub), logUntilPlayingTimer_(0), logCount_(0)
+EventLogger::EventLogger(MainWindow *logger, Player *player, SignalHub *hub, QObject *parent)
+  : Base(parent), logger_(logger), player_(player), hub_(hub), logCount_(0)
 {
   Q_ASSERT(player_);
+
+  logUntilPlayingTimer_ = new QTimer(this);
+  logUntilPlayingTimer_->setInterval(G_LOGGER_PLAYING_WAITER_TIMEOUT);
+
   createConnections();
 }
 
 void
 EventLogger::createConnections()
 {
-  connect(player_, SIGNAL(buffering()), SLOT(startLogUntilPlaying()));
-  connect(player_, SIGNAL(stopped()), SLOT(stopLogUntilPlaying()));
+  connect(player_, SIGNAL(buffering()), SLOT(startLogUntilPlaying()), Qt::QueuedConnection);
+  connect(player_, SIGNAL(stopped()), SLOT(stopLogUntilPlaying()), Qt::QueuedConnection);
 
   //connect(player_, SIGNAL(titleIdChanged(int)), SLOT(logTitleChanged()));
-  connect(player_, SIGNAL(mediaChanged()), SLOT(logMediaChanged()));
-  connect(player_, SIGNAL(mediaClosed()), SLOT(logMediaClosed()));
-  connect(player_, SIGNAL(volumeChanged()), SLOT(logVolumeChanged()));
-  connect(player_, SIGNAL(subtitleChanged()), SLOT(logSubtitleChanged()));
-  connect(player_, SIGNAL(audioTrackChanged()), SLOT(logAudioTrackChanged()));
-  connect(player_, SIGNAL(opening()), SLOT(logOpening()));
-  connect(player_, SIGNAL(buffering()), SLOT(logBuffering()));
-  connect(player_, SIGNAL(playing()), SLOT(logPlaying()));
-  connect(player_, SIGNAL(paused()), SLOT(logPaused()));
-  connect(player_, SIGNAL(stopped()), SLOT(logStopped()));
-  connect(player_, SIGNAL(errorEncountered()), SLOT(logPlayerError()));
-  connect(player_, SIGNAL(errorEncountered()), SLOT(stopLogUntilPlaying()));
-  connect(player_, SIGNAL(trackNumberChanged(int)), SLOT(logTrackNumberChanged(int)));
-  connect(player_, SIGNAL(rateChanged(qreal)), SLOT(logPlayRateChanged(qreal)));
-  connect(player_, SIGNAL(aspectRatioChanged(QString)), SLOT(logAspectRatioChanged(QString)));
-  connect(player_, SIGNAL(contrastChanged(qreal)), SLOT(logContrastChanged(qreal)));
-  connect(player_, SIGNAL(brightnessChanged(qreal)), SLOT(logBrightnessChanged(qreal)));
-  connect(player_, SIGNAL(hueChanged(int)), SLOT(logHueChanged(int)));
-  connect(player_, SIGNAL(saturationChanged(qreal)), SLOT(logSaturationChanged(qreal)));
-  connect(player_, SIGNAL(gammaChanged(qreal)), SLOT(logGammaChanged(qreal)));
-  connect(player_, SIGNAL(audioChannelChanged(int)), SLOT(logAudioChannelChanged(int)));
-  connect(player_, SIGNAL(audioDelayChanged(qint64)), SLOT(logAudioDelayChanged(qint64)));
+  connect(player_, SIGNAL(mediaChanged()), SLOT(logMediaChanged()), Qt::QueuedConnection);
+  connect(player_, SIGNAL(mediaClosed()), SLOT(logMediaClosed()), Qt::QueuedConnection);
+  connect(player_, SIGNAL(volumeChanged()), SLOT(logVolumeChanged()), Qt::QueuedConnection);
+  connect(player_, SIGNAL(subtitleChanged()), SLOT(logSubtitleChanged()), Qt::QueuedConnection);
+  connect(player_, SIGNAL(audioTrackChanged()), SLOT(logAudioTrackChanged()), Qt::QueuedConnection);
+  connect(player_, SIGNAL(opening()), SLOT(logOpening()), Qt::QueuedConnection);
+  connect(player_, SIGNAL(buffering()), SLOT(logBuffering()), Qt::QueuedConnection);
+  connect(player_, SIGNAL(playing()), SLOT(logPlaying()), Qt::QueuedConnection);
+  connect(player_, SIGNAL(paused()), SLOT(logPaused()), Qt::QueuedConnection);
+  connect(player_, SIGNAL(stopped()), SLOT(logStopped()), Qt::QueuedConnection);
+  connect(player_, SIGNAL(errorEncountered()), SLOT(logPlayerError()), Qt::QueuedConnection);
+  connect(player_, SIGNAL(errorEncountered()), SLOT(stopLogUntilPlaying()), Qt::QueuedConnection);
+  connect(player_, SIGNAL(trackNumberChanged(int)), SLOT(logTrackNumberChanged(int)), Qt::QueuedConnection);
+  connect(player_, SIGNAL(rateChanged(qreal)), SLOT(logPlayRateChanged(qreal)), Qt::QueuedConnection);
+  connect(player_, SIGNAL(aspectRatioChanged(QString)), SLOT(logAspectRatioChanged(QString)), Qt::QueuedConnection);
+  connect(player_, SIGNAL(contrastChanged(qreal)), SLOT(logContrastChanged(qreal)), Qt::QueuedConnection);
+  connect(player_, SIGNAL(brightnessChanged(qreal)), SLOT(logBrightnessChanged(qreal)), Qt::QueuedConnection);
+  connect(player_, SIGNAL(hueChanged(int)), SLOT(logHueChanged(int)), Qt::QueuedConnection);
+  connect(player_, SIGNAL(saturationChanged(qreal)), SLOT(logSaturationChanged(qreal)), Qt::QueuedConnection);
+  connect(player_, SIGNAL(gammaChanged(qreal)), SLOT(logGammaChanged(qreal)), Qt::QueuedConnection);
+  connect(player_, SIGNAL(audioChannelChanged(int)), SLOT(logAudioChannelChanged(int)), Qt::QueuedConnection);
+  connect(player_, SIGNAL(audioDelayChanged(qint64)), SLOT(logAudioDelayChanged(qint64)), Qt::QueuedConnection);
 
   connect(AcUi::globalInstance(), SIGNAL(aeroEnabledChanged(bool)), SLOT(logAeroEnabledChanged(bool)));
   connect(AcUi::globalInstance(), SIGNAL(menuEnabledChanged(bool)), SLOT(logMenuEnabledChanged(bool)));
+
+  connect(logUntilPlayingTimer_, SIGNAL(timeout()), SLOT(logUntilPlaying()));
 }
 
 // - Logging -
@@ -69,11 +73,6 @@ EventLogger::startLogUntilPlaying()
   //DOUT("enter");
   if (player_->hasMedia()) {
     logCount_ = 0;
-    if (!logUntilPlayingTimer_) {
-      logUntilPlayingTimer_ = new QTimer(this);
-      logUntilPlayingTimer_->setInterval(G_LOGGER_PLAYING_WAITER_TIMEOUT);
-      connect(logUntilPlayingTimer_, SIGNAL(timeout()), SLOT(logUntilPlaying()));
-    }
     if (!logUntilPlayingTimer_->isActive()) {
       Application::globalInstance()->setCursor(Qt::BusyCursor);
       logUntilPlayingTimer_->start();
@@ -109,7 +108,7 @@ EventLogger::logUntilPlaying()
   }
 
   if (!logCount_)
-    notify(tr("caching media or fonts ... this could take up to 10min on first launch, don't panic!"));
+    logger_->notify(tr("caching media or fonts ... this could take up to 10min on first launch, don't panic!"));
   else {
     int msecs = logCount_ * G_LOGGER_PLAYING_WAITER_TIMEOUT;
     QTime t = QtExt::msecs2time(msecs);
@@ -118,22 +117,22 @@ EventLogger::logUntilPlaying()
         s = s.arg("10:00");
     else
         s = s.arg("15:00");
-    notify(tr("patient ... ") + s);
+    logger_->notifyOnce(tr("Patient ... ") + s);
   }
   logCount_++;
 }
 
 void
 EventLogger::logMediaChanged()
-{ log(tr("media changed")); }
+{ logger_->showMessage(tr("media changed")); }
 
 void
 EventLogger::logTitleChanged()
-{ log(tr("title changed")); }
+{ logger_->showMessage(tr("title changed")); }
 
 void
 EventLogger::logMediaClosed()
-{ log(tr("media closed")); }
+{ logger_->showMessage(tr("media closed")); }
 
 void
 EventLogger::logVolumeChanged()
@@ -150,21 +149,21 @@ EventLogger::logVolumeChanged()
       return;
     QString msg = QString("%1: " HTML_STYLE_OPEN(color:orange) "%2%" HTML_STYLE_CLOSE())
         .arg(TR(T_VOLUME)).arg(QString::number(v));
-    log(msg);
+    logger_->showMessageOnce(msg);
   }
 }
 
 void
 EventLogger::logSubtitleChanged()
-{ log(tr("subtitle changed")); }
+{ logger_->showMessage(tr("subtitle changed")); }
 
 void
 EventLogger::logAudioTrackChanged()
-{ log(tr("audio track changed")); }
+{ logger_->showMessage(tr("audio track changed")); }
 
 void
 EventLogger::logOpening()
-{ log(tr("opening ...")); }
+{ logger_->showMessageOnce(tr("Opening ...")); }
 
 void
 EventLogger::logBuffering()
@@ -177,7 +176,8 @@ EventLogger::logBuffering()
     return;
   }
   time = now;
-  log(tr("buffering ..."));
+  logger_->showMessageOnce(tr("Buffering ..."));
+  //logger_->showMessage(tr("buffering ..."));
 }
 
 void
@@ -192,24 +192,25 @@ EventLogger::logPlaying()
         title = QFileInfo(title).fileName();
     }
   }
-  log(tr("playing") + ": " + title);
+  logger_->showMessageOnce(tr("Playing"));
+  logger_->showMessage(tr("playing") + ": " + title);
 }
 
 void
 EventLogger::logStopped()
-{ log(tr("stopped")); }
+{ logger_->showMessageOnce(tr("Stopped")); }
 
 void
 EventLogger::logPaused()
-{ log(tr("paused")); }
+{ logger_->showMessageOnce(tr("Paused")); }
 
 void
 EventLogger::logPlayerError()
-{ warn(tr("player error")); }
+{ logger_->warnOnce(tr("Player Error")); }
 
 void
 EventLogger::logTrackNumberChanged(int track)
-{ log(tr("openning track %1").arg(QString::number(track))); }
+{ logger_->showMessage(tr("opening track %1").arg(QString::number(track))); }
 
 void
 EventLogger::logAudioChannelChanged(int ch)
@@ -226,7 +227,7 @@ EventLogger::logAudioChannelChanged(int ch)
   }
   msg = HTML_STYLE_OPEN(color:orange) + msg + HTML_STYLE_CLOSE();
   msg.prepend(tr("audio channel") + ": ");
-  log(msg);
+  logger_->showMessage(msg);
 }
 
 void
@@ -234,11 +235,11 @@ EventLogger::logPlayRateChanged(qreal rate)
 {
   int r = qRound(rate);
   if (r == 1)
-    log(tr("resume playing"));
+    logger_->showMessage(tr("resume playing"));
   else
-    log(tr("fast forward") +
-        QString(": " HTML_STYLE_OPEN(color:orange) "x%1" HTML_STYLE_CLOSE())
-        .arg(QString::number(r))
+    logger_->showMessage(tr("fast forward") +
+      QString(": " HTML_STYLE_OPEN(color:orange) "x%1" HTML_STYLE_CLOSE())
+      .arg(QString::number(r))
     );
 }
 
@@ -246,23 +247,23 @@ EventLogger::logPlayRateChanged(qreal rate)
 
 void
 EventLogger::logLoginRequested(const QString &userName)
-{ log(tr("logging in as %1 ...").arg(userName)); }
+{ logger_->showMessage(tr("logging in as %1 ...").arg(userName)); }
 
 void
 EventLogger::logLoginSucceeded(const QString &userName)
-{ log(tr("login succeeded as %1").arg(userName)); }
+{ logger_->showMessage(tr("login succeeded as %1").arg(userName)); }
 
 void
 EventLogger::logLoginFailed(const QString &userName)
-{ warn(tr("failed to login as %1").arg(userName)); }
+{ logger_->warn(tr("failed to login as %1").arg(userName)); }
 
 void
 EventLogger::logLogoutRequested()
-{ log(tr("logging out ...")); }
+{ logger_->showMessage(tr("logging out ...")); }
 
 void
 EventLogger::logLogoutFinished()
-{ log(tr("user logged out")); }
+{ logger_->showMessage(tr("user logged out")); }
 
 void
 EventLogger::logSeeked(qint64 msecs)
@@ -272,13 +273,13 @@ EventLogger::logSeeked(qint64 msecs)
     QTime t = QtExt::msecs2time(msecs);
     QTime l = QtExt::msecs2time(len);
     QString msg = QString("%1: " HTML_STYLE_OPEN(color:orange) "%2" HTML_STYLE_CLOSE() " / %3")
-        .arg(tr("seek"))
+        .arg(tr("Seek"))
         .arg(t.toString())
         .arg(l.toString());
     if (len)
       msg += QString(" (" HTML_STYLE_OPEN(color:orange) "%1%" HTML_STYLE_CLOSE() ")")
              .arg(QString::number(msecs * 100.0 / len, 'f', 1));
-    log(msg);
+    logger_->showMessageOnce(msg);
   }
 }
 
@@ -288,58 +289,58 @@ EventLogger::logAudioDelayChanged(qint64 msecs)
 {
   QTime t = QtExt::msecs2time(msecs);
   QString msg = QString("%1: " HTML_STYLE_OPEN(color:orange) "%2" HTML_STYLE_CLOSE())
-      .arg(tr("audio delay time"))
+      .arg(tr("Audio Delay Time"))
       .arg(t.toString("m:ss"));
-  log(msg);
+  logger_->showMessageOnce(msg);
 }
 
 void
 EventLogger::logCacheCleared()
-{ log(tr("offline cache removed")); }
+{ logger_->showMessage(tr("offline cache removed")); }
 
 void
 EventLogger::logTrackedWindowDestroyed()
-{ log(tr("tracked window closed")); }
+{ logger_->showMessage(tr("tracked window closed")); }
 
 void
 EventLogger::logServerAgentConnectionError()
-{ warn(tr("failed to connect to the Internet")); }
+{ logger_->warn(tr("not connected to the Internet")); }
 
 void
 EventLogger::logServerAgentError404()
-{ warn(tr("got error 404 from remote server")); }
+{ logger_->warn(tr("got error 404 from remote server")); }
 
 void
 EventLogger::logServerAgentServerError()
-{ warn(tr("got error reply from remote server")); }
+{ logger_->warn(tr("got error reply from remote server")); }
 
 void
 EventLogger::logServerAgentUnknownError()
-{ warn(tr("unknown SOAP error")); }
+{ logger_->warn(tr("unknown SOAP error")); }
 
 void
 EventLogger::logClientAgentAuthorized()
-{ log(tr("server authorization succeeded")); }
+{ logger_->showMessage(tr("server authorization succeeded")); }
 
 void
 EventLogger::logClientAgentDeauthorized()
-{ log(tr("server deauthorized")); }
+{ logger_->showMessage(tr("server deauthorized")); }
 
 void
 EventLogger::logClientAgentAuthorizationError()
-{ warn(tr("failed to authorize server, mismatched public key")); }
+{ logger_->warn(tr("failed to authorize server, mismatched public key")); }
 
 void
 EventLogger::logTextEncodingChanged(const QString &enc)
-{ log(tr("text encoding") + ": " HTML_STYLE_OPEN(color:orange) + enc + HTML_STYLE_CLOSE()); }
+{ logger_->showMessage(tr("text encoding") + ": " HTML_STYLE_OPEN(color:orange) + enc + HTML_STYLE_CLOSE()); }
 
 void
 EventLogger::logAspectRatioChanged(const QString &ratio)
 {
   if (ratio.isEmpty())
-    log(tr("video aspect ratio set to default"));
+    logger_->showMessage(tr("video aspect ratio set to default"));
   else
-    log(tr("video aspect ratio") + ": "
+    logger_->showMessage(tr("video aspect ratio") + ": "
         HTML_STYLE_OPEN(color:orange) + ratio + HTML_STYLE_CLOSE());
 }
 
@@ -347,20 +348,20 @@ void
 EventLogger::logAeroEnabledChanged(bool t)
 {
   if (AcUi::globalInstance()->isAeroEnabled())
-    notify(tr("Aero is enabled, please restart the program"));
+    logger_->notify(tr("Aero is enabled, please restart the program"));
   else if (t)
-    warn(tr("failed to enable Aero"));
+    logger_->warn(tr("failed to enable Aero"));
   else
-    notify(tr("Aero is disabled, please restart the program"));
+    logger_->notify(tr("Aero is disabled, please restart the program"));
 }
 
 void
 EventLogger::logMenuEnabledChanged(bool t)
 {
   if (t)
-    notify(tr("Menu theme is enabled, please restart the program"));
+    logger_->notify(tr("Menu theme is enabled, please restart the program"));
   else
-    notify(tr("Menu theme is disabled, please restart the program"));
+    logger_->notify(tr("Menu theme is disabled, please restart the program"));
 }
 
 void
@@ -373,9 +374,9 @@ EventLogger::logContrastChanged(qreal value)
   }
 
   if (qFuzzyCompare(value, 1.0))
-    log(tr("contrast reset"));
+    logger_->showMessageOnce(tr("Reset Contrast"));
   else
-    log(tr("contrast") + ": "
+    logger_->showMessageOnce(tr("Contrast") + ": "
         HTML_STYLE_OPEN(color:orange) + QString::number(value) + HTML_STYLE_CLOSE());
 }
 
@@ -389,9 +390,9 @@ EventLogger::logBrightnessChanged(qreal value)
   }
 
   if (qFuzzyCompare(value, 1.0))
-    log(tr("brightness reset"));
+    logger_->showMessageOnce(tr("Rest Brightness"));
   else
-    log(tr("brightness") + ": "
+    logger_->showMessageOnce(tr("Brightness") + ": "
         HTML_STYLE_OPEN(color:orange) + QString::number(value) + HTML_STYLE_CLOSE());
 }
 
@@ -405,10 +406,10 @@ EventLogger::logHueChanged(int value)
   }
 
   if (value)
-    log(tr("hue") + ": "
+    logger_->showMessageOnce(tr("Hue") + ": "
         HTML_STYLE_OPEN(color:orange) + QString::number(value) + HTML_STYLE_CLOSE());
   else
-    log(tr("hue reset"));
+    logger_->showMessageOnce(tr("Reset Hue"));
 }
 
 void
@@ -421,9 +422,9 @@ EventLogger::logSaturationChanged(qreal value)
   }
 
   if (qFuzzyCompare(value, 1.0))
-    log(tr("saturation reset"));
+    logger_->showMessageOnce(tr("Reset Saturation"));
   else
-    log(tr("saturation") + ": "
+    logger_->showMessageOnce(tr("Saturation") + ": "
         HTML_STYLE_OPEN(color:orange) + QString::number(value) + HTML_STYLE_CLOSE());
 }
 
@@ -437,9 +438,9 @@ EventLogger::logGammaChanged(qreal value)
   }
 
   if (qFuzzyCompare(value, 1.0))
-    log(tr("gamma reset"));
+    logger_->showMessageOnce(tr("Reset Gamma"));
   else
-    log(tr("gamma") + ": "
+    logger_->showMessageOnce(tr("Gamma") + ": "
         HTML_STYLE_OPEN(color:orange) + QString::number(value) + HTML_STYLE_CLOSE());
 }
 
@@ -453,10 +454,29 @@ EventLogger::logAnnotationScaleChanged(qreal value)
   }
 
   if (qFuzzyCompare(value, 1.0))
-    log(tr("scale reset"));
+    logger_->showMessageOnce(tr("Reset Scale"));
   else
-    log(tr("scale") + ": "
+    logger_->showMessageOnce(tr("Scale") + ": "
         HTML_STYLE_OPEN(color:orange) + QString::number(value) + HTML_STYLE_CLOSE());
+}
+
+void
+EventLogger::logAnnotationSpeedFactorChanged(int value)
+{
+  enum { DefaultValue = 100 };
+  static bool once = true;
+  if (once) {
+    once = false;
+    return;
+  }
+
+  if (value == DefaultValue)
+    logger_->showMessageOnce(tr("Reset Moving Speed"));
+  else {
+    QString t = QString("X%1").arg(QString::number(value/qreal(DefaultValue), 'f', 2));
+    logger_->showMessageOnce(tr("Moving Speed") + ": "
+        HTML_STYLE_OPEN(color:orange) + t + HTML_STYLE_CLOSE());
+  }
 }
 
 void
@@ -469,9 +489,9 @@ EventLogger::logAnnotationRotationChanged(qreal value)
   }
 
   if (qFuzzyCompare(value + 1, 1.0))
-    log(tr("rotation reset"));
+    logger_->showMessageOnce(tr("Reset Rotation"));
   else
-    log(tr("rotate") + ": "
+    logger_->showMessageOnce(tr("Rotate") + ": "
         HTML_STYLE_OPEN(color:orange) + QString::number(value) + HTML_STYLE_CLOSE());
 }
 
@@ -485,11 +505,11 @@ EventLogger::logAnnotationOffsetChanged(int value)
   }
 
   if (value)
-    log(tr("annotation offset") + ": "
+    logger_->showMessageOnce(tr("Annotation Delay Time") + ": "
         HTML_STYLE_OPEN(color:orange) + QString::number(value) + HTML_STYLE_CLOSE() +
         tr(" sec"));
   else
-    log(tr("annotation offset reset"));
+    logger_->showMessageOnce(tr("Reset Annotation Time"));
 }
 
 void
@@ -502,9 +522,9 @@ EventLogger::logAnnotationCountLimitedChanged(bool value)
   }
 
   if (value)
-    log(tr("limit annotations bandwidth"));
+    logger_->showMessage(tr("limit annotations bandwidth"));
   else
-    log(tr("display all annotations"));
+    logger_->showMessage(tr("display all annotations"));
 }
 
 void
@@ -518,21 +538,21 @@ EventLogger::logAnnotationSkipped()
     return;
   }
   time = now;
-  notify(tr("so many annotations, skipped"));
+  logger_->notify(tr("so many annotations, skipped"));
 }
 
 void
 EventLogger::logPauseHoveredAnnotations(bool t)
 {
   if (t)
-    log(tr("capture hovered annotations"));
+    logger_->showMessage(tr("capture hovered annotations"));
 }
 
 void
 EventLogger::logResumeHoveredAnnotations(bool t)
 {
   if (t)
-    log(tr("release hovered annotations"));
+    logger_->showMessage(tr("release hovered annotations"));
 }
 
 void
@@ -540,7 +560,7 @@ EventLogger::logRemoveHoveredAnnotations(bool t)
 {
   Q_UNUSED(t);
   //if (t && !hub_->isFullScreenWindowMode())
-  //  log(tr("remove hovered annotations"));
+  //  logger_->showMessage(tr("remove hovered annotations"));
 }
 
 void
@@ -548,7 +568,7 @@ EventLogger::logExpelNearbyAnnotations(bool t)
 {
   Q_UNUSED(t);
   //if (t && !hub_->isFullScreenWindowMode())
-  //  log(tr("scatter nearby annotations"));
+  //  logger_->showMessage(tr("scatter nearby annotations"));
 }
 
 void
@@ -556,16 +576,16 @@ EventLogger::logAttractNearbyAnnotations(bool t)
 {
   Q_UNUSED(t);
   //if (t && !hub_->isFullScreenWindowMode())
-  //  log(tr("collect nearby annotations"));
+  //  logger_->showMessage(tr("collect nearby annotations"));
 }
 
 void
 EventLogger::logInternetConnectionChanged(bool t)
 {
   if (t)
-    log(tr("connected to the Internet"));
+    logger_->showMessage(tr("connected to the Internet"));
   else
-    log(tr("disconnected from the Internet"));
+    logger_->showMessage(tr("disconnected from the Internet"));
 }
 
 void
@@ -577,7 +597,7 @@ EventLogger::logSelectedUserIds(const QList<qint64> &uids)
   if (count) {
     qint64 now = QDateTime::currentMSecsSinceEpoch();
     if (now > ts + timeout)
-      log(tr("found %1 users").arg(
+      logger_->showMessageOnce(tr("Found %1 Users").arg(
         HTML_STYLE_OPEN(color:orange) + QString::number(count) + HTML_STYLE_CLOSE()
       ));
     ts = now;
@@ -594,9 +614,9 @@ EventLogger::logPreferMotionlessAnnotationChanged(bool t)
   }
 
   if (t)
-    log(tr("prefer motionless annotations"));
+    logger_->showMessage(tr("prefer motionless annotations"));
   else
-    log(tr("prefer floating annotations"));
+    logger_->showMessage(tr("prefer floating annotations"));
 }
 
 void
@@ -609,9 +629,9 @@ EventLogger::logPreferLocalDatabaseChanged(bool t)
   }
 
   if (t)
-    log(tr("prefer offline annotations over online ones"));
+    logger_->showMessage(tr("prefer offline annotations over online ones"));
   else
-    log(tr("prefer online annotations over offline ones"));
+    logger_->showMessage(tr("prefer online annotations over offline ones"));
 }
 
 void
@@ -623,9 +643,16 @@ EventLogger::logCanvasEnabled(bool t)
     return;
   }
   if (t)
-    log(tr("show annotation analytics while playing"));
+    logger_->showMessage(tr("show annotation analytics while playing"));
   else
-    log(tr("hide annotation analytics while playing"));
+    logger_->showMessage(tr("hide annotation analytics while playing"));
+}
+
+void
+EventLogger::logFileSaved(const QString &fileName)
+{
+  logger_->showMessage(tr("file saved") + ": " + fileName);
+  QApplication::beep();
 }
 
 // EOF

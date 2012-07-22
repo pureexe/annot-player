@@ -8,11 +8,11 @@
 //#define DEBUG "wbnetworkaccessmanager"
 #include "module/debug/debug.h"
 
-#ifdef Q_WS_X11
+#ifdef Q_OS_LINUX
 # define RC_IMAGE_NULL IMAGEDIR "/null.png"
 #else
 # define RC_IMAGE_NULL "file:///" + QCoreApplication::applicationDirPath() + "/images/null.png"
-#endif // Q_WS_X11
+#endif // Q_OS_LINUX
 
 #define PROXY_HOST  ANNOT_PROXY_DOMAIN
 
@@ -22,9 +22,9 @@ namespace { namespace detail {
     static QString url;
     if (url.isEmpty()) {
       url = RC_IMAGE_NULL;
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
       url.replace("\\", "/");
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
     }
     return url;
   }
@@ -45,6 +45,7 @@ WbNetworkAccessManager::supportedSites()
     << "shallotsoft.com"
     << "spermaniax.net"
     << "getchu.com"
+    //<< "dmm.co.jp"
     << "erogamescape.dyndns.org/~ap2/ero/toukei_kaiseki"
     << "erogamescape.dyndns.org/~ap2/ero/toukei_kaiseki/index_toukei.php";
 }
@@ -92,6 +93,7 @@ WbNetworkAccessManager::createRequest(Operation op, const QNetworkRequest &req, 
     }
     ELIF("erogamescape.dyndns.org", encodeEroUrl)
     ELIF("www.getchu.com", encodeGetchuUrl)
+    //ELIF("www.dmm.co.jp", encodeDmmUrl)
 #undef ELIF
 #define ELIF(_host, _encode) \
     else if (host.endsWith(_host, Qt::CaseInsensitive)) { \
@@ -176,7 +178,10 @@ WbNetworkAccessManager::encodeEroUrl(const QUrl &url)
     ret.setPath("/" _host + ret.path()); \
     return ret; \
   }
+
   TRANSFORM("getchu", encodeGetchuUrl)
+  TRANSFORM("dmm", encodeDmmUrl)
+
   TRANSFORM("akabeesoft2", encodeAb2Url)
   TRANSFORM("akabeesoft2-try", encodeAb2TryUrl)
   TRANSFORM("akatsukiworks", encodeAkatsukiWorksUrl)

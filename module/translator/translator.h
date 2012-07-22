@@ -19,10 +19,10 @@ public:
   static QString languageCode(int language, int script = 0);
 
 public:
-  explicit Translator(QObject *parent = 0) : Base(parent) { }
+  explicit Translator(QObject *parent = nullptr) : Base(parent) { }
 
 signals:
-  void error(const QString &msg);
+  void errorMessage(const QString &msg);
   void translated(const QString &text); ///< Requested translation received
 
 public slots:

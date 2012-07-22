@@ -23,7 +23,7 @@ class PlayerPanel: public QWidget
   typedef QWidget Base;
 
 public:
-  explicit PlayerPanel(QWidget *parent = 0);
+  explicit PlayerPanel(QWidget *parent = nullptr);
 
 #define ADD_WIDGET(_type, _name) \
   public: _type *_name(); \

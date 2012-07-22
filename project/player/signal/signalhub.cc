@@ -1,14 +1,11 @@
 // signalhub.h
 // 10/16/2011
 #include "signalhub.h"
-#include "logger.h"
 #include "module/player/player.h"
 #include <QtCore>
 
 //#define DEBUG "signalhub"
 //#include "module/debug/debug.h"
-
-using namespace Logger;
 
 // - Constructions -
 SignalHub::SignalHub(Player *player, QObject *parent)
@@ -38,21 +35,21 @@ SignalHub::volume() const
   default: Q_ASSERT(0);
   }
 
-#ifdef Q_WS_X11
+#ifdef Q_OS_LINUX
   // de-expand percentage
   if (ret > 0)
     ret = qSqrt(ret);
-#endif // Q_WS_X11
+#endif // Q_OS_LINUX
   return ret;
 }
 
 void
 SignalHub::setVolume(qreal percentage)
 {
-#ifdef Q_WS_X11
+#ifdef Q_OS_LINUX
   // expand percentage
   percentage = percentage * percentage;
-#endif // Q_WS_X11
+#endif // Q_OS_LINUX
 
   if (percentage < 0)
     percentage = 0;
@@ -89,9 +86,9 @@ SignalHub::setTokenMode(TokenMode mode)
   if (tokenMode_ != mode) {
     tokenMode_ = mode;
     switch (mode) {
-    case MediaTokenMode:  log(tr("switched to media mode")); break;
-    case LiveTokenMode:   log(tr("switched to live mode")); break;
-    case SignalTokenMode: log(tr("switched to signal mode")); break;
+    case MediaTokenMode:  emit message(tr("switched to media mode")); break;
+    case LiveTokenMode:   emit message(tr("switched to live mode")); break;
+    case SignalTokenMode: emit message(tr("switched to signal mode")); break;
     }
     emit tokenModeChanged(mode);
   }
@@ -119,9 +116,9 @@ SignalHub::setPlayerMode(PlayerMode mode)
 
 #ifdef DEBUG
     switch (mode) {
-    case NormalPlayerMode: log(tr("switched to normal player mode")); break;
-    case EmbeddedPlayerMode: log(tr("switched to embedded player mode")); break;
-    case MiniPlayerMode: log(tr("switched to mini player mode")); break;
+    case NormalPlayerMode: emit message(tr("switched to normal player mode")); break;
+    case EmbeddedPlayerMode: emit message(tr("switched to embedded player mode")); break;
+    case MiniPlayerMode: emit message(tr("switched to mini player mode")); break;
     }
 #endif // DEBUG
     emit playerModeChanged(mode);
@@ -155,8 +152,8 @@ SignalHub::setWindowMode(WindowMode mode)
 
 #ifdef DEBUG
     switch (mode) {
-    case NormalWindowMode: log(tr("switched to normal video mode")); break;
-    case FullScreenWindowMode: log(tr("switched to full screen video mode")); break;
+    case NormalWindowMode: emit message(tr("switched to normal video mode")); break;
+    case FullScreenWindowMode: emit message(tr("switched to full screen video mode")); break;
     }
 #endif // DEBUG
     emit windowModeChanged(mode);
@@ -180,9 +177,9 @@ SignalHub::setPlayMode(PlayMode mode)
     playMode_ = mode;
 
     switch (mode) {
-    case NormalPlayMode: log(tr("switched to normal play mode")); break;
-    case SyncPlayMode: log(tr("switched to synchronized play mode")); break;
-    case LivePlayMode: log(tr("switched to live play mode")); break;
+    case NormalPlayMode: emit message(tr("switched to normal play mode")); break;
+    case SyncPlayMode: emit message(tr("switched to synchronized play mode")); break;
+    case LivePlayMode: emit message(tr("switched to live play mode")); break;
     }
     emit playModeChanged(mode);
   }

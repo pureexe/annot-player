@@ -28,17 +28,17 @@ public:
     NetworkProxyTab = 1 << 1
   };
 
-  explicit AcPreferences(ulong tabs, QWidget *parent = 0, bool finalize = true);
-  explicit AcPreferences(QWidget *parent = 0, bool finalize = true);
+  explicit AcPreferences(ulong tabs, QWidget *parent = nullptr, bool finalize = true);
+  explicit AcPreferences(QWidget *parent = nullptr, bool finalize = true);
 
   void finalize();
   void setTabs(ulong mask) { tabs_ = mask; }
 
-  virtual QSize sizeHint() const; ///< \reimp
+  QSize sizeHint() const override;
 
   // - Events -
 public slots:
-  virtual void setVisible(bool visible); ///< \reimp
+  void setVisible(bool visible) override;
 protected slots:
   void save();
   void load();

@@ -19,7 +19,7 @@ class ColorizedRubberBand : public QRubberBand
 
   QColor color_;
 public:
-  explicit ColorizedRubberBand(Shape s, QWidget *parent = 0)
+  explicit ColorizedRubberBand(Shape s, QWidget *parent = nullptr)
     : Base(s, parent) { }
 
 signals:
@@ -39,12 +39,12 @@ class SquareRubberBand : public ColorizedRubberBand
   typedef ColorizedRubberBand Base;
 
 public:
-  explicit SquareRubberBand(Shape s, QWidget *parent = 0);
+  explicit SquareRubberBand(Shape s, QWidget *parent = nullptr);
 
 protected slots:
   void invalidateColor();
 protected:
-  virtual void paintEvent(QPaintEvent *e); ///< \reimp
+  void paintEvent(QPaintEvent *e) override;
 };
 
 class CircularRubberBand : public ColorizedRubberBand
@@ -58,7 +58,7 @@ class CircularRubberBand : public ColorizedRubberBand
   int radius_;
 
 public:
-  explicit CircularRubberBand(Shape s, QWidget *parent = 0)
+  explicit CircularRubberBand(Shape s, QWidget *parent = nullptr)
     : Base(s, parent), radius_(0) { }
 
   int radius() const { return radius_; }
@@ -72,7 +72,7 @@ public slots:
 
   void updateGeometry();
 protected:
-  virtual void paintEvent(QPaintEvent *e); ///< \reimp
+  void paintEvent(QPaintEvent *e) override;
 };
 
 class MouseRubberBand : public SquareRubberBand
@@ -85,7 +85,7 @@ class MouseRubberBand : public SquareRubberBand
   QPoint pressed_;
 
 public:
-  explicit MouseRubberBand(Shape s, QWidget *parent = 0)
+  explicit MouseRubberBand(Shape s, QWidget *parent = nullptr)
     : Base(s, parent) { }
 
   bool isPressed() const

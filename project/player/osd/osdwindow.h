@@ -19,7 +19,7 @@ class OsdWindow : public QWidget
   QtExt::EventForwarder *forwarder_;
 
 public:
-  explicit OsdWindow(QWidget *parent = 0);
+  explicit OsdWindow(QWidget *parent = nullptr);
 
   //QObject *eventForwarder() const { return forward; }
   void setEventForwarder(QtExt::EventForwarder *forwarder) { forwarder_ = forwarder; }
@@ -32,16 +32,16 @@ public slots:
 protected:
   void forward(QEvent *event);
 
-  //virtual bool event(QEvent *event); ///< \reimp
+  //bool event(QEvent *event) override;
 
-  virtual void contextMenuEvent(QContextMenuEvent *event); ///< \reimp
-  virtual void mouseMoveEvent(QMouseEvent *event); ///< \reimp
-  virtual void mousePressEvent(QMouseEvent *event); ///< \reimp
-  virtual void mouseReleaseEvent(QMouseEvent *event); ///< \reimp
-  virtual void mouseDoubleClickEvent(QMouseEvent *event); ///< \reimp
+  void contextMenuEvent(QContextMenuEvent *event) override;
+  void mouseMoveEvent(QMouseEvent *event) override;
+  void mousePressEvent(QMouseEvent *event) override;
+  void mouseReleaseEvent(QMouseEvent *event) override;
+  void mouseDoubleClickEvent(QMouseEvent *event) override;
 
-  virtual void closeEvent(QCloseEvent *event); ///< \reimp
-  virtual void resizeEvent(QResizeEvent *event); ///< \reimp
+  void closeEvent(QCloseEvent *event) override;
+  void resizeEvent(QResizeEvent *event) override;
 };
 
 #endif // OSDWINDOW_H

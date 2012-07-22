@@ -12,7 +12,7 @@ namespace Core {
   /**
    * Document
    */
-  QNetworkReply *reply = 0;
+  QNetworkReply *reply = nullptr;
   void
   Document::httpReadyRead()
   {
@@ -52,7 +52,7 @@ namespace Core {
 
     int n = doc_->numPages();
     if (n <= 0) {
-      doc_ = 0;
+      doc_ = nullptr;
       return false;
     }
 

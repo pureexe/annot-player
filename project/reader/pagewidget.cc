@@ -16,7 +16,7 @@
  */
 
 PagePreviewWidget::PagePreviewWidget(Core::Page *page, qreal zoom, RenderThread *renderer, QWidget *parent)
-  : Base(parent), page_(page), renderer_(renderer), zoom_(zoom), mouse_(0)
+  : Base(parent), page_(page), renderer_(renderer), zoom_(zoom), mouse_(nullptr)
 {
   setScene(new QGraphicsScene(this));
 

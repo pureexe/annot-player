@@ -78,7 +78,7 @@ vlccore::GetVouts(libvlc_media_player_t *p_mi, size_t *n)
   vout_thread_t **pp_vouts; // return
   if (::input_Control(p_input, INPUT_GET_VOUTS, &pp_vouts, n)) {
     *n = 0;
-    pp_vouts = 0;
+    pp_vouts = nullptr;
   }
   ::vlc_object_release(p_input);
   return pp_vouts;

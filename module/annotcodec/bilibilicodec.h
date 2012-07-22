@@ -25,11 +25,11 @@ class BilibiliCodec : public AnnotationCodec
   QHash<QString, int> retries_;
 
 public:
-  explicit BilibiliCodec(QObject *parent = 0);
+  explicit BilibiliCodec(QObject *parent = nullptr);
 
 public:
-  virtual bool match(const QString &url) const; ///< \reimp
-  virtual void fetch(const QString &url, const QString &originalUrl); ///< \reimp
+  bool match(const QString &url) const override;
+  void fetch(const QString &url, const QString &originalUrl) override;
 
 public:
   static AnnotationList parseFile(const QString &fileName)

@@ -16,23 +16,23 @@ struct vout_thread_t;
 
 // http://mailman.videolan.org/pipermail/vlc-devel/2010-April/074742.html
 // Adapt container window type
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
 # define libvlc_media_player_set_drawable(_mp, _wid)   libvlc_media_player_set_hwnd(_mp, _wid)
-#elif defined(Q_WS_MAC)
+#elif defined(Q_OS_MAC)
 //# define libvlc_media_player_set_drawable(_mp, _wid)   libvlc_media_player_set_agl(_mp, _wid)
 # define libvlc_media_player_set_drawable(_mp, _wid)   libvlc_media_player_set_nsobject(_mp, _wid)
 #else // Linux
 # define libvlc_media_player_set_drawable(_mp, _wid)   libvlc_media_player_set_xwindow(_mp, _wid)
-#endif // Q_WS_
+#endif // Q_OS_
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
 # define libvlc_media_player_get_drawable(_mp)         libvlc_media_player_get_hwnd(_mp)
-#elif defined(Q_WS_MAC)
+#elif defined(Q_OS_MAC)
 //# define libvlc_media_player_get_drawable(_mp)         libvlc_media_player_get_agl(_mp)
 # define libvlc_media_player_get_drawable(_mp)         libvlc_media_player_get_nsobject(_mp)
 #else //Linux
 # define libvlc_media_player_get_drawable(_mp)         libvlc_media_player_get_xwindow(_mp)
-#endif // Q_WS_
+#endif // Q_OS_
 
 namespace vlccore {
 
@@ -54,13 +54,13 @@ namespace vlccore {
 
   enum vlcbutton {
     vlcbutton_left = 1,
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     vlcbutton_right = 1 << 1,
     vlcbutton_mid = 1 << 2
 #else // only tested on Windows
     vlcbutton_mid = 1 << 1,
     vlcbutton_right = 1 << 2
-#endif // Q_WS_MAC
+#endif // Q_OS_MAC
   };
   typedef quint8 vlcbuttons;
 

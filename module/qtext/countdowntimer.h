@@ -17,7 +17,7 @@ class CountdownTimer : public QObject
   typedef QObject Base;
 
 public:
-  explicit CountdownTimer(QObject *parent = 0);
+  explicit CountdownTimer(QObject *parent = nullptr);
 
 signals:
   void timeout();

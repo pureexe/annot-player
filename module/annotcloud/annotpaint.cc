@@ -2,7 +2,6 @@
 // 4/6/2012
 
 #include "module/annotcloud/annotpaint.h"
-#include "module/qtext/algorithm.h"
 #include "module/qtext/datetime.h"
 #ifdef WITH_QT_SVG
 # include <QtSvg/QSvgGenerator>
@@ -24,11 +23,11 @@
 # pragma GCC diagnostic ignored "-Wparentheses" // suggest parentheses
 #endif // __GNUC__
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
 # define ITALIC        false
 #else
 # define ITALIC        true
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
 
 enum LineColor
 {
@@ -129,9 +128,8 @@ AnnotationPainter::paintHistogramByPos(QPainter &p, const AnnotationList &l, con
   Histogram hist;
   foreach (const Annotation &a, l) {
     int x = a.pos() / metric;
-    if (x < 0)
-      continue;
-    ++hist[x];
+    if (x >= 0)
+      ++hist[x];
   }
   enum { TopCount = 3 };
   int top[TopCount] = { };
@@ -143,9 +141,8 @@ AnnotationPainter::paintHistogramByPos(QPainter &p, const AnnotationList &l, con
     } else if (top[1] < y) {
       top[2] = top[1];
       top[1] = y;
-    } else if (top[2] < y) {
+    } else if (top[2] < y)
       top[2] = y;
-    }
   int maxY = qMax(top[0], 1);
   Q_ASSERT(maxY);
 
@@ -164,7 +161,7 @@ AnnotationPainter::paintHistogramByPos(QPainter &p, const AnnotationList &l, con
   int width = view.width() ? view.width() : p.device()->width(),
       height = view.height() ? view.height() : p.device()->height();
   int histHeight = height - (MarginSize + LabelHeight);
-  for (Histogram::ConstIterator i = hist.begin(); i != hist.end(); ++i) {
+  for (auto i = hist.constBegin(); i != hist.constEnd(); ++i) {
     int x = i.key(),
         y = i.value();
 
@@ -220,7 +217,7 @@ AnnotationPainter::paintHistogramByPos(QPainter &p, const AnnotationList &l, con
       }
     int limitY = t *5/8 + 1;
     Q_ASSERT(limitY);
-    for (Histogram::ConstIterator i = hist.begin(); i != hist.end(); ++i) {
+    for (auto i = hist.constBegin(); i != hist.constEnd(); ++i) {
       int x = i.key(),
           y = i.value();
       if (y < limitY)
@@ -383,7 +380,7 @@ AnnotationPainter::paintHistogramByCreateTime(QPainter &p, const AnnotationList 
   int width = view.width() ? view.width() : p.device()->width(),
       height = view.height() ? view.height() : p.device()->height();
   int histHeight = height - (MarginSize + LabelHeight);
-  for (Histogram::ConstIterator i = hist.begin(); i != hist.end(); ++i) {
+  for (auto i = hist.constBegin(); i != hist.constEnd(); ++i) {
     qint64 x = i.key();
     int y = i.value();
 
@@ -417,7 +414,7 @@ AnnotationPainter::paintHistogramByCreateTime(QPainter &p, const AnnotationList 
       }
     int limitY = t / 2 + 1;
     Q_ASSERT(limitY);
-    for (Histogram::ConstIterator i = hist.begin(); i != hist.end(); ++i) {
+    for (auto i = hist.constBegin(); i != hist.constEnd(); ++i) {
       qint64 x = i.key();
       int y = i.value();
       if (y < limitY)
@@ -438,11 +435,11 @@ AnnotationPainter::paintHistogramByCreateTime(QPainter &p, const AnnotationList 
     enum { LabelRotation = -20 };
     QFont f = p.font();
     f.setPointSize(PeakFontSize);
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     f.setBold(false);
 #else
     f.setBold(true);
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
     p.setFont(f);
     p.setPen(Qt::green);
 
@@ -486,11 +483,11 @@ AnnotationPainter::paintHistogramByCreateTime(QPainter &p, const AnnotationList 
 
     QFont f = p.font();
     f.setPointSize(DateFontSize);
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     f.setBold(false);
 #else
     f.setBold(true);
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
     p.setFont(f);
 
     int hourCount = range / 3600 + 1;
@@ -576,9 +573,9 @@ AnnotationPainter::paintHistogramByUserId(QPainter &p, const AnnotationList &l, 
   H h;
   foreach (const Annotation &a, l) // skip anonymous user, skip UI_Guest here in the future
     if (a.createTime() > Traits::MIN_TIME
-#ifndef Q_WS_WIN
+#ifndef Q_OS_WIN
         && a.createTime() < Traits::MAX_TIME // FIXME sth must be broken on windows.
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
         ) {
       int y = ++h[a.userId()];
       if (y > maxY)
@@ -591,7 +588,7 @@ AnnotationPainter::paintHistogramByUserId(QPainter &p, const AnnotationList &l, 
   // Sort hash by value
   typedef QMultiMap<int, qint64> M;
   M m;
-  for (H::ConstIterator i = h.begin(); i != h.end(); ++i)
+  for (auto i = h.constBegin(); i != h.constEnd(); ++i)
     m.insert(i.value(), i.key());
 
   int rangeX = m.size();
@@ -603,11 +600,11 @@ AnnotationPainter::paintHistogramByUserId(QPainter &p, const AnnotationList &l, 
 
   QFont labelFont = p.font();
   labelFont.setPointSize(LabelFontSize);
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
   labelFont.setBold(false);
 #else
   labelFont.setBold(true);
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
   p.setFont(labelFont);
   int labelCount = qMax(1, width/LabelWidth);
   int stride = rangeX / labelCount;
@@ -616,7 +613,9 @@ AnnotationPainter::paintHistogramByUserId(QPainter &p, const AnnotationList &l, 
 
   int labelY = view.y() + height - LabelHeight;
   int i = 0;
-  foreach (int key, QtExt::revertList(m.keys())) {
+  auto mp = m.constEnd();
+  while (mp != m.constBegin()) { // foreach (int key, QtExt::revertList(m.keys()))
+    int key = *--mp;
     { // Histogram
       int x = i,
           y = key;

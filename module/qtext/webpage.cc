@@ -19,14 +19,14 @@
 
 // - RC -
 
-#ifdef Q_WS_X11
+#ifdef Q_OS_LINUX
 # ifndef JSFDIR
 #  define JSFDIR      "/usr/share/annot"
 # endif // JSFDIR
 # define RC_PREFIX     JSFDIR "/"
 #else
 # define RC_PREFIX     QCoreApplication::applicationDirPath() + "/jsf/"
-#endif // Q_WS_X11
+#endif // Q_OS_LINUX
 
 //#define RC_HTML_ERROR   RC_PREFIX "error.html"
 #define RC_JSF_ERROR    RC_PREFIX "error.xhtml"

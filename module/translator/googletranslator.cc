@@ -17,7 +17,7 @@
 // - Construction -
 
 GoogleTranslator::GoogleTranslator(QObject *parent)
-  : Base(parent), nam_(0)
+  : Base(parent), nam_(nullptr)
 { }
 
 QNetworkAccessManager*
@@ -105,7 +105,7 @@ GoogleTranslator::processWebPage(QWebPage *page, bool success)
       }
     }
   }
-  emit error("network error from google translator");
+  emit errorMessage("network error from google translator");
   DOUT("exit");
 }
 

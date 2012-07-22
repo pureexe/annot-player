@@ -2,10 +2,25 @@ ChangeLog
 Annot Project
 6/18/2011
 
-7/16/2012 MON	annot.player, down, browser	0.1.7, 0.1.3, 0.1.2.0
+7/22/2012 SUN	annot.player, down, browser	0.1.7.1, 0.1.3.1, 0.1.2.1
+        * Long annotations/subtitles will be wrapped by word boundaries.
+        * Game subtitles will be rendered stably on the top or bottom.
+        * Add dock button to embedded mode, to toggle whether embed to the top or bottom.
+        * Add Italian language for galgame translation.
+        * Existing files to overwrite will be moved to trash instead of being deleted or renamed.
+        * Press the "Play/Pause" button after sync with galgame will start or pause listening to game signals.
+        * Add XML/JSON annotations download dialog to annot-player.
+        * Some unstable experimental features are temporarily disabled.
+        * Annotation Downloader is changed to use single download thread to avoid parallel bugs.
+        * Fix the bug that makes wmv and ISO images invisible from openning.
+        * Fix the bug that causes annot-player unable to fetch annotations when openning files in Windows Explorer.
+        * Fix a bug that might cause context menu to render in full black.
+        * Reimplement thread-safe message logging mechanism which could result in mystery crashes.
+
+7/16/2012 MON	annot.player, down, browser	0.1.7, 0.1.3, 0.1.2
         * Able to edit and save machine-translated subtitles.
           The user will take the ownership of the editted subtitles.
-        * Render widgets (such as push buttons) as annotations (currently not for Mac only).
+        * Render widgets (such as push buttons) as annotations (currently not for Mac).
         * Bing API is replaced with Microsoft Azure API for default Galgame translation.
           Because Microsoft will stop Bing translation service after Aug. 1, 2012,
           galgame translation before version 0.1.7 will stop functioning after Aug.1.

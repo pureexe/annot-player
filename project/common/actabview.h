@@ -18,7 +18,7 @@ class AcTabView : public QWidget
   typedef QWidget Base;
 
 public:
-  explicit AcTabView(QWidget *parent = 0)
+  explicit AcTabView(QWidget *parent = nullptr)
   : Base(parent), tabCount_(0), tabIndex_(0)
   { initializeLayout(); }
 
@@ -29,7 +29,7 @@ public:
   QWidget *currentWidget() const
   { return tabIndex_ >= 0 && tabIndex_ < tabs_.size() ? tabs_[tabIndex_] : (QWidget*)0; }
 
-  virtual QSize sizeHint() const; ///< \reimp
+  QSize sizeHint() const override;
 
 signals:
   void tabChanged(int index);

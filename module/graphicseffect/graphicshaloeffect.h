@@ -22,7 +22,7 @@ class GraphicsHaloEffect: public QGraphicsEffect
   typedef GraphicsHaloEffect Self;
   typedef QGraphicsEffect Base;
 public:
-  explicit GraphicsHaloEffect(QObject *parent = 0);
+  explicit GraphicsHaloEffect(QObject *parent = nullptr);
 
   QRectF boundingRectFor(const QRectF &rect) const;
   QPointF offset() const;

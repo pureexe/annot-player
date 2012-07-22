@@ -17,7 +17,7 @@ class DarknessImageFilter : public SimpleImageFilter
 public:
   enum { Brightness = 0, Contrast = 200, Gamma = 200 };
 
-  explicit DarknessImageFilter(QObject *parent = 0)
+  explicit DarknessImageFilter(QObject *parent = nullptr)
     : Base(parent) { reset(); }
 
 public slots:

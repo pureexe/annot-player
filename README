@@ -1,8 +1,6 @@
-== ENGLISH ==
-
 Product:	Annot Player
-Version:	0.1.7
-Release:	2012/7/16
+Version:	0.1.7.1
+Release:	2012/7/22
 Homepage:	http://annot.me
 Help (Wiki):	http://annot.me/wiki/FAQ
 Download:	http://code.google.com/p/annot-player/downloads
@@ -14,6 +12,16 @@ Requirements:
 - Microsoft Windows XP SP3/Vista/7
 - Mac OS X Lion 10.7
 - Linux (Debian/Ubuntu/Fedora)
+
+Distribution (Windows):
+- Data/ (hidden)        Apps' data files
+- Annot Browser.exe     App launcher of data/annot-browser.exe
+- Annot Downloader.exe  App launcher of data/annot-down.exe
+- Annot Player.exe      App launcher of data/annot-player.exe
+- ChangeLog.txt         Log of changes (UTF-8)
+- COPYING.txt           GPLv3 license
+- Read Me.txt           Readme (UTF-8)
+- Reset Preferences.reg Remove all registry settings (HKCU/Software/Annot)
 
 Contributions:
 - 0.1.7 (2012.7): Thanks for the ideas and feature requests from M M, Aaeru, Niokun and spoxxy!

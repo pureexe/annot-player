@@ -3,11 +3,8 @@
 
 #include "countdowndialog.h"
 #include "tr.h"
-#include "logger.h"
 #include "project/common/acui.h"
 #include <QtGui>
-
-using namespace Logger;
 
 #define WINDOW_FLAGS_BASE \
   Qt::Dialog | \
@@ -16,14 +13,14 @@ using namespace Logger;
   Qt::WindowTitleHint | \
   Qt::WindowCloseButtonHint
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
   #define WINDOW_FLAGS ( \
     Qt::FramelessWindowHint | \
     WINDOW_FLAGS_BASE )
 #else
   #define WINDOW_FLAGS ( \
     WINDOW_FLAGS_BASE )
-#endif // Q_WS_MAC
+#endif // Q_OS_MAC
 
 // - Constructions -
 
@@ -73,7 +70,7 @@ CountdownDialog::createLayout()
 void
 CountdownDialog::start()
 {
-  warn(messageLabel_->text());
+  emit notification(messageLabel_->text());
   currentCount_ = count_;
   timer_->start();
 }
@@ -81,7 +78,7 @@ CountdownDialog::start()
 void
 CountdownDialog::stop()
 {
-  log(tr("countdown stopped"));
+  emit message(tr("countdown stopped"));
   timer_->stop();
 }
 

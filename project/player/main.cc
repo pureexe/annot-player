@@ -9,10 +9,10 @@
 #include "translationmanager.h"
 #include "annotationgraphicsitem.h"
 #include "module/translator/translatorsettings.h"
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
 # include "windowsregistry.h"
 # include "module/player/player.h"
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
 #ifdef WITH_WIN_TEXTHOOK
 # include "win/texthook/texthook.h"
 #endif // WITH_WIN_TEXTHOOK
@@ -29,6 +29,7 @@
 #include "project/common/acglobal.h"
 #include "project/common/acsettings.h"
 #include "project/common/acplayer.h"
+#include "module/qtext/filesystem.h"
 #include "module/annotcloud/user.h"
 #include "module/annotcache/annotationcachemanager.h"
 //#include "module/qt/qtsettings.h"
@@ -70,7 +71,7 @@ namespace { namespace detail {
   // Register file types
   inline void registerAssociations()
   {
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     WindowsRegistry *reg = WindowsRegistry::globalInstance();
     //reg->registerTypes(Player::supportedAudioSuffices());
     reg->registerTypes(Player::supportedVideoSuffices());
@@ -84,12 +85,12 @@ namespace { namespace detail {
 
     //reg->registerRawTypes(QStringList() G_FORMAT_DEVICE(<<));
     reg->registerShell("DVD");
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
   }
 
   inline void repairAssociations()
   {
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     WindowsRegistry *reg = WindowsRegistry::globalInstance();
     foreach (const QString &type, Player::supportedSuffices())
       if (reg->containsType(type))
@@ -102,7 +103,7 @@ namespace { namespace detail {
     foreach (const QString &type, QStringList() G_FORMAT_DEVICE(<<))
       if (reg->containsShell(type))
         reg->registerShell(type);
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
   }
 
   // Warm up
@@ -148,6 +149,12 @@ main(int argc, char *argv[])
 
   // Applications
   Application a(argc, argv);
+
+// Delayed after args are parsed
+//#ifdef Q_OS_WIN
+//  QDir::setCurrent(QCoreApplication::applicationDirPath());
+//#endif // Q_OS_WIN
+
   Settings *settings = Settings::globalSettings();
   AcSettings *ac = AcSettings::globalSettings();
 
@@ -183,6 +190,7 @@ main(int argc, char *argv[])
           Traits::JapaneseBit | Traits::UnknownLanguageBit |
           Traits::EnglishBit | Traits::KoreanBit |
           Traits::FrenchBit | Traits::GermanBit |
+          Traits::ItalianBit |
           Traits::SpanishBit | Traits::PortugueseBit
         );
         settings->setAnnotationFilterEnabled(true);
@@ -202,13 +210,18 @@ main(int argc, char *argv[])
 
     //bool initial = previousVersion.isEmpty();
 
-    // FIXME: check when remove cache db
-    //if (majorUpdate)
-    //  QFile::remove(G_PATH_CACHEDB);
-    QFile::remove(G_PATH_QUEUEDB);
-    QFile::remove(G_PATH_DEBUG);
 
-#ifdef Q_WS_WIN
+    QFile::rename(G_PATH_CACHES "/" "cache.db", G_PATH_CACHEDB);
+    QtExt::trashOrRemoveFile(G_PATH_CACHES "/" "queue.db");
+
+    // FIXME: check when remove cache db on Windows
+//#ifdef Q_OS_MAC
+    QtExt::trashOrRemoveFile(G_PATH_CACHEDB);
+//#endif // Q_OS_MAC
+    QtExt::trashOrRemoveFile(G_PATH_QUEUEDB);
+    QtExt::trashOrRemoveFile(G_PATH_DEBUG);
+
+#ifdef Q_OS_WIN
     if (majorUpdate) {
       // Delete plugins/*.dat
       QDir plugins(QCoreApplication::applicationDirPath() + "/plugins");
@@ -218,17 +231,18 @@ main(int argc, char *argv[])
         QFile::remove(fi.absoluteFilePath());
       }
     }
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
 
     if (QFile::rename(QDir::homePath() + "/Annot", G_PATH_DOWNLOADS))
       AcLocationManager::globalInstance()->createDownloadsLocation();
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     WindowsRegistry::globalInstance()->unregisterRawType("DVD");
     WindowsRegistry::globalInstance()->unregisterRawType("AudioCD");
     WindowsRegistry::globalInstance()->registerShell("DVD");
 #endif // Q__WS_WIN
 
+    ac->setMenuThemeEnabled(false); // disable aero context menu effect, unless I combine qcolorization effect with my haloeffect
     ac->setThemeId(AcUi::CyanTheme);
     ac->sync();
 
@@ -238,6 +252,7 @@ main(int argc, char *argv[])
     settings->setAnnotationPositionResolution(0);
 
     settings->setWindowOnTop(false);
+    settings->setMultipleWindowsEnabled(false);
     settings->setAutoSubmit(true);
     settings->setAnnotationScale(1.0);
     settings->setPreferMotionlessAnnotation(true);
@@ -253,6 +268,7 @@ main(int argc, char *argv[])
     settings->setAnnotationLanguages(
       settings->annotationLanguages() |
       Traits::FrenchBit | Traits::GermanBit |
+      Traits::ItalianBit |
       Traits::SpanishBit | Traits::PortugueseBit
     );
 
@@ -345,9 +361,9 @@ main(int argc, char *argv[])
     int tid = ac->themeId();
     ui->setTheme(tid);
     ui->setMenuEnabled(ac->isMenuThemeEnabled());
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     ui->setAeroEnabled(ac->isAeroEnabled());
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
   }
 
   // Set network proxy
@@ -433,6 +449,11 @@ main(int argc, char *argv[])
     }
   }
 
+  // Do this after args are parsed by mainwindow so that annot-player works well from command line
+#ifdef Q_OS_WIN
+  QDir::setCurrent(QCoreApplication::applicationDirPath());
+#endif // Q_OS_WIN
+
   //QWidget t;
   //t.setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint);
   //DWM_ENABLE_AERO_WIDGET((&t));
@@ -484,11 +505,9 @@ main(int argc, char *argv[])
   //DWM_ENABLE_AERO_WIDGET(&bk);
   //bk.showMaximized();
 
-  //QTimer::singleShot(0, &w, SLOT(checkClipboard()));
-
+  // CHECKPOINT
   //module_t *m = module_find("freetype");;
   //qDebug()<<111111<< m->b_loaded<< m->b_unloadable;
-
     //FcInit();
 //  qDebug()<<111111;
 //  FcConfig *fcConfig = FcInitLoadConfig();

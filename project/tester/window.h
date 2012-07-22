@@ -6,13 +6,13 @@
 
 //#include "module/graphicseffect/graphicsrippleeffect.h"
 #include <QtGlobal>
-//#ifdef Q_WS_WIN
+//#ifdef Q_OS_WIN
 //# include "win/dwm/dwm.h"
-//#endif // Q_WS_WIN
+//#endif // Q_OS_WIN
 #include <QtGui>
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
 # include <QtGui/QMacCocoaViewContainer>
-#endif // Q_WS_MAC
+#endif // Q_OS_MAC
 
 inline int **allocateWaveMap(const QSize &size)
 {
@@ -58,15 +58,15 @@ class Window : public WindowBase
   bool pressed_;
 public:
   Window()
-    : m_previousMap(0), m_currentMap(0), m_opacity(0.2), m_damping(4), m_heigth(2), m_offset(1),
+    : m_previousMap(nullptr), m_currentMap(nullptr), m_opacity(0.2), m_damping(4), m_heigth(2), m_offset(1),
       pressed_(false), winId_(0)
   {
-//#ifdef Q_WS_WIN
+//#ifdef Q_OS_WIN
 //    setAttribute(Qt::WA_TranslucentBackground);
 //    setAttribute(Qt::WA_NoSystemBackground);
 //    Dwm::enableBlurBehindWindow(this);
 //    Dwm::extendFrameIntoClientArea(this);
-//#endif // Q_WS_WIN
+//#endif // Q_OS_WIN
     setMouseTracking(true);
     resetCenter();
 

@@ -18,15 +18,15 @@ class FontComboBox : public QFontComboBox
   QString styleSheet_;
 
 public:
-  explicit FontComboBox(QWidget *parent = 0);
+  explicit FontComboBox(QWidget *parent = nullptr);
 
 public slots:
   bool verifyCurrentText();
 
   // - Events -
 protected:
-  virtual void enterEvent(QEvent *event); ///< \reimp
-  virtual void leaveEvent(QEvent *event); ///< \reimp
+  void enterEvent(QEvent *event) override;
+  void leaveEvent(QEvent *event) override;
 };
 
 } // namespace QtExt

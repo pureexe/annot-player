@@ -16,7 +16,7 @@ namespace Core {
     typedef QObject Base;
 
   public:
-    explicit User(QObject *parent = 0) : Base(parent) { }
+    explicit User(QObject *parent = nullptr) : Base(parent) { }
 
     // Properties:
   public:

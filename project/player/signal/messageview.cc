@@ -5,7 +5,6 @@
 #include "textcodecmanager.h"
 #include "tr.h"
 #include "global.h"
-#include "logger.h"
 #ifdef WITH_WIN_TEXTHOOK
 # include "win/texthook/texthook.h"
 #endif // WITH_WIN_TEXTHOOK
@@ -16,8 +15,6 @@
 
 //#define DEBUG "messageview"
 #include "module/debug/debug.h"
-
-using namespace Logger;
 
 #define WINDOW_FLAGS ( \
   Qt::Dialog | \
@@ -209,7 +206,7 @@ MessageView::selectCurrentHook()
 {
   ulong hookId = currentHookId();
   if (hookId) {
-    log(QString("%1 (hid = %2)").arg(tr("process signal selected")).arg(QString::number(hookId, 16)));
+    emit message(QString("%1 (hid = %2)").arg(tr("process signal selected")).arg(QString::number(hookId, 16)));
     emit hookSelected(hookId);
   }
 }
@@ -290,7 +287,7 @@ MessageView::processMessage(const QByteArray &data, ulong hookId)
     hookIndexEdit_->setEnabled(true);
     invalidateHookCountLabel();
 
-    log(QString("%1 (hid = %2)").arg(tr("new signal discovered")).arg(QString::number(hookId, 16)));
+    emit message(QString("%1 (hid = %2)").arg(tr("new signal discovered")).arg(QString::number(hookId, 16)));
 
     if (isBetterHook(hookId, currentHookId()))
       setCurrentIndex(index);

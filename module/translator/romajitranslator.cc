@@ -89,7 +89,7 @@ RomajiTranslator::processNetworkReply(QNetworkReply *reply)
   reply->deleteLater();
 
   if (!reply->isFinished() || reply->error() != QNetworkReply::NoError) {
-    emit error(tr("network error from Romaji Translator") + ": " + reply->errorString());
+    emit errorMessage(tr("network error from Romaji Translator") + ": " + reply->errorString());
     DOUT("exit: error =" << reply->error() << ", reason =" << reply->errorString());
     return;
   }
@@ -140,7 +140,7 @@ RomajiTranslator::processNetworkReply(QNetworkReply *reply)
     }
   }
 
-  emit error(tr("network error from Romaji Translator"));
+  emit errorMessage(tr("network error from Romaji Translator"));
   DOUT("exit: error");
 }
 

@@ -79,19 +79,20 @@
 #define T_KOREAN                0x317
 #define T_FRENCH                0x318
 #define T_GERMAN                0x319
-#define T_SPANISH               0x31a
-#define T_PORTUGUESE            0x31b
+#define T_ITALIAN               0x31a
+#define T_SPANISH               0x31b
+#define T_PORTUGUESE            0x31c
 
 #define T_UNKNOWNLANGUAGE       T_ALIEN
-#define T_ANYLANGUAGE           0x31c
+#define T_ANYLANGUAGE           0x31d
 
 #define T_MENUTEXT_UNKNOWNLANGUAGE  T_UNKNOWNLANGUAGE
 #define T_TIP_UNKNOWNLANGUAGE       T_UNKNOWNLANGUAGE
 #define T_TOOLTIP_UNKNOWNLANGUAGE   T_TIP_UNKNOWNLANGUAGE
 #define T_STATUSTIP_UNKNOWNLANGUAGE T_TIP_UNKNOWNLANGUAGE
 
-#define T_MENUTEXT_ANYLANGUAGE  0x31d
-#define T_TIP_ANYLANGUAGE       0x31e
+#define T_MENUTEXT_ANYLANGUAGE  0x31e
+#define T_TIP_ANYLANGUAGE       0x31f
 #define T_TOOLTIP_ANYLANGUAGE   T_TIP_ANYLANGUAGE
 #define T_STATUSTIP_ANYLANGUAGE T_TIP_ANYLANGUAGE
 
@@ -124,6 +125,11 @@
 #define T_TIP_GERMAN            T_GERMAN
 #define T_TOOLTIP_GERMAN        T_TIP_GERMAN
 #define T_STATUSTIP_GERMAN      T_TIP_GERMAN
+
+#define T_MENUTEXT_ITALIAN      T_ITALIAN
+#define T_TIP_ITALIAN           T_ITALIAN
+#define T_TOOLTIP_ITALIAN       T_TIP_ITALIAN
+#define T_STATUSTIP_ITALIAN     T_TIP_ITALIAN
 
 #define T_MENUTEXT_SPANISH      T_SPANISH
 #define T_TIP_SPANISH           T_SPANISH
@@ -199,6 +205,8 @@
 #define T_FOLDER        0x517
 #define T_PATH          0x518
 #define T_LOGINTIME     0x519
+#define T_LOGINIP       0x51a
+#define T_LOGINCOUNT    0x51b
 
 // - Defaults -
 #define T_DEFAULT_USERNAME      0x9
@@ -1544,5 +1552,10 @@
 #define T_DEVICE          0x103f
 #define T_PREVIEW         0x1040
 #define T_PIXEL           0x1041
+
+#define T_MENUTEXT_DOCK_TOP     0x1042
+#define T_TOOLTIP_DOCK_TOP      0x1043
+#define T_MENUTEXT_DOCK_BOTTOM  0x1044
+#define T_TOOLTIP_DOCK_BOTTOM   0x1045
 
 #endif // TR_H

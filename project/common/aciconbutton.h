@@ -25,7 +25,7 @@ class AcIconButton : public QtExt::ToolButton
   QTimer *leaveTimer_;
 
 public:
-  explicit AcIconButton(QWidget *parent = 0);
+  explicit AcIconButton(QWidget *parent = nullptr);
 
   // - Properties -
 public:

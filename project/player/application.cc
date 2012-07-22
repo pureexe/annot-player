@@ -3,12 +3,12 @@
 #include "application.h"
 #include "global.h"
 #include "project/common/acpaths.h"
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
 # include "win/qtwin/qtwin.h"
-#endif // Q_WS_WIN
-#ifdef Q_WS_MAC
+#endif // Q_OS_WIN
+#ifdef Q_OS_MAC
 # include "mac/qtmac/qtmac.h"
-#endif // Q_WS_MAC
+#endif // Q_OS_MAC
 #include <QtCore/QDir>
 #include <QtCore/QProcess>
 
@@ -27,9 +27,9 @@ Application::Application(int &argc, char **argv)
   setApplicationVersion(G_VERSION);
 
   setLogFileName(G_PATH_DEBUG);
-#ifdef Q_WS_X11
+#ifdef Q_OS_LINUX
   setLockFileName(G_PATH_LOCK_RUNNING);
-#endif // Q_WS_X11
+#endif // Q_OS_LINUX
 
   createDirectories();
 

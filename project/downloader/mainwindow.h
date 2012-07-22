@@ -58,7 +58,7 @@ protected:
 
   // - Construction -
 public:
-  explicit MainWindow(QWidget *parent = 0);
+  explicit MainWindow(QWidget *parent = nullptr);
   bool isAddingUrls() const;
 
 //signals:
@@ -79,7 +79,7 @@ public slots:
   void promptUrl(const QString &text);
   void promptUrls(const QStringList &urls);
 
-  virtual void setVisible(bool visible); ///< \reimp
+  void setVisible(bool visible) override;
   void openDirectory();
 
   // - Implementations -
@@ -141,13 +141,17 @@ protected slots:
 
   // - Events -
 public:
-  virtual bool event(QEvent *event); ///< \reimp
+  bool event(QEvent *event) override;
 protected:
-  virtual void contextMenuEvent(QContextMenuEvent *e); ///< \reimp
-  virtual void keyPressEvent(QKeyEvent *e); ///< \reimp
-  virtual void closeEvent(QCloseEvent *e); ///< \reimp
+  void contextMenuEvent(QContextMenuEvent *e) override;
+  void keyPressEvent(QKeyEvent *e) override;
+  void closeEvent(QCloseEvent *e) override;
 
   //void gestureEvent(QGestureEvent *e);
+
+  // - Logs -
+protected slots:
+  void notifyFileSaved(const QString &fileName);
 
 private:
   void createModels();

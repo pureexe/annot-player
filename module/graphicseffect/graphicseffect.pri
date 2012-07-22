@@ -12,13 +12,11 @@ HEADERS += \
     $$PWD/graphicseffect_p.h \
     $$PWD/graphicshaloeffect.h \
     $$PWD/graphicshaloeffect_p.h \
-    $$PWD/graphicsrippleeffect.h \
-    $$PWD/graphicsshadoweffect.h
+    $$PWD/graphicsrippleeffect.h
 
 SOURCES += \
     $$PWD/graphicshaloeffect.cc \
-    $$PWD/graphicsrippleeffect.cc \
-    $$PWD/graphicsshadoweffect.cc
+    $$PWD/graphicsrippleeffect.cc
 
 INCLUDEPATH     += $$QT_SRC
 QT      += core gui

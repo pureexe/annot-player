@@ -20,14 +20,14 @@ class YoutubeMrlResolver : public MrlResolver
   QNetworkAccessManager *nam_;
 
 public:
-  explicit YoutubeMrlResolver(QObject *parent = 0)
+  explicit YoutubeMrlResolver(QObject *parent = nullptr)
     : Base(parent) { init(); }
 
 public:
-  bool matchMedia(const QString &href) const; ///< \reimp
+  bool matchMedia(const QString &href) const override;
 
 public slots:
-  bool resolveMedia(const QString &href); ///< \reimp
+  bool resolveMedia(const QString &href) override;
 protected slots:
   void resolveMedia(QNetworkReply *reply);
 

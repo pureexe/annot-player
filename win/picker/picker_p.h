@@ -12,7 +12,7 @@ public:
   bool singleShot;
 
 public:
-  WindowPickerPrivate() : hook(0), singleShot(false) { }
+  WindowPickerPrivate() : hook(nullptr), singleShot(false) { }
 };
 
 // EOF

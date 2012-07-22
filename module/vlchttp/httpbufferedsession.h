@@ -34,8 +34,8 @@ class HttpBufferedSession : public VlcHttpSession
   QString contentType_, fileName_;
 
 public:
-  explicit HttpBufferedSession(const QUrl &url, QObject *parent = 0)
-    : Base(parent), url_(url), nam_(0), reply_(0),
+  explicit HttpBufferedSession(const QUrl &url, QObject *parent = nullptr)
+    : Base(parent), url_(url), nam_(nullptr), reply_(nullptr),
       pos_(0), size_(0), ready_(false) { }
 
   ~HttpBufferedSession();
@@ -43,23 +43,23 @@ public:
   // - Properties -
 public:
   const QUrl &url() const { return url_; }
-  virtual QString contentType() const { return contentType_; } ///< \reimp
-  virtual qint64 read(char *data, qint64 maxSize); ///< \reimp
-  virtual bool seek(qint64 pos); ///< \reimp
-  virtual qint64 size() const { return size_; } ///< \reimp
-  virtual qint64 pos() const { return pos_; } ///< \reimp
-  virtual qint64 availableSize() const { return buffer_.size(); } ///< \reimp
+  QString contentType() const override { return contentType_; }
+  qint64 read(char *data, qint64 maxSize) override;
+  bool seek(qint64 pos) override;
+  qint64 size() const override { return size_; }
+  qint64 pos() const override { return pos_; }
+  qint64 availableSize() const override { return buffer_.size(); }
 
 public slots:
   void setUrl(const QUrl &url) { url_ = url; }
-  virtual void run(); ///< \reimp
-  virtual void stop(); ///< \reimp
+  void run() override;
+  void stop() override;
 
-  virtual void waitForReady(); ///< \reimp
-  virtual void waitForStopped(); ///< \reimp
+  void waitForReady() override;
+  void waitForStopped() override;
 
 protected slots:
-  virtual void save(); ///< \reimp
+  void save() override;
 
   void updateSize();
   void updateContentType();

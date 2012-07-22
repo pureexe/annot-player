@@ -6,17 +6,20 @@
 
 #include <QtCore/QString>
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
 # define FILE_PATH_SEP      "\\"
 #else
 # define FILE_PATH_SEP      "/"
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
 
 namespace QtExt {
 
   QString escapeFileName(const QString &name);
 
   bool touchFile(const QString &fileName);
+
+  bool trashFile(const QString &fileName);
+  bool trashOrRemoveFile(const QString &fileName);
 
 } // namespace QtExt
 

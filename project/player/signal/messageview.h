@@ -29,10 +29,15 @@ class MessageView : public QtExt::Dialog
   };
 
 public:
-  explicit MessageView(QWidget *parent = 0);
+  explicit MessageView(QWidget *parent = nullptr);
 
 signals:
   void hookSelected(ulong hookId);
+
+  void message(QString msg);
+  void warning(QString msg);
+  void errorMessage(QString msg);
+  void notification(QString msg);
 
   // - Properties -
 public:
@@ -81,13 +86,13 @@ protected slots:
 
   // - Events -
 public:
-  virtual void setVisible(bool visible); ///< \reimp
+  void setVisible(bool visible) override;
 
 //protected slots:
-//  virtual void dragEnterEvent(QDragEnterEvent *event); ///< \reimp
-//  virtual void dragMoveEvent(QDragMoveEvent *event); ///< \reimp
-//  virtual void dragLeaveEvent(QDragLeaveEvent *event); ///< \reimp
-//  virtual void dropEvent(QDropEvent *event); ///< \reimp
+//  void dragEnterEvent(QDragEnterEvent *event) override;
+//  void dragMoveEvent(QDragMoveEvent *event) override;
+//  void dragLeaveEvent(QDragLeaveEvent *event) override;
+//  void dropEvent(QDropEvent *event) override;
 //
 //signals:
 //  void dragEnterEventReceived(QDragEnterEvent *event);

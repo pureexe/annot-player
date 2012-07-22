@@ -21,7 +21,7 @@ class SearchEngine : public QObject
   QStringList acronyms_;
 
 public:
-  SearchEngine(int id, const QString &queryUrl, const QString &name, const QString &icon, const QStringList &acronyms, QObject *parent = 0)
+  SearchEngine(int id, const QString &queryUrl, const QString &name, const QString &icon, const QStringList &acronyms, QObject *parent = nullptr)
     : Base(parent), id_(id), query_(queryUrl), name_(name), icon_(icon), acronyms_(acronyms) { }
 
   int id() const { return id_; }

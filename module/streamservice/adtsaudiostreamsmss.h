@@ -21,13 +21,10 @@ protected:
     : Base(env, in, toc, duration) { }
 
 protected:
-  ///  \reimp
-  virtual FramedSource *createNewStreamSource(unsigned clientSessionId,
-                                              unsigned &estBitrate);
-  ///  \reimp
-  virtual RTPSink *createNewRTPSink(Groupsock *rtpGroupsock,
-                                    unsigned char rtpPayloadTypeIfDynamic,
-                                    FramedSource *inputSource);
+  FramedSource *createNewStreamSource(unsigned clientSessionId, unsigned &estBitrate) override;
+  RTPSink *createNewRTPSink(Groupsock *rtpGroupsock,
+                            unsigned char rtpPayloadTypeIfDynamic,
+                            FramedSource *inputSource) override;
 };
 
 #endif // ADTSAUDIOSTREAMSMSS_H

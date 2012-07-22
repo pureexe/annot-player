@@ -50,9 +50,9 @@ class HttpStreamSession : public VlcHttpSession
   //QHash<long, Progress> progress_;
 
 public:
-  HttpStreamSession(const QList<QUrl> &urls, qint64 duration, QObject *parent = 0)
-    : Base(parent), urls_(urls), duration_(duration), fifo_(0), merger_(0),
-      ready_(false), progressTask_(0) { }
+  HttpStreamSession(const QList<QUrl> &urls, qint64 duration, QObject *parent = nullptr)
+    : Base(parent), urls_(urls), duration_(duration), fifo_(nullptr), merger_(nullptr),
+      ready_(false), progressTask_(nullptr) { }
 
   ~HttpStreamSession();
 
@@ -62,19 +62,19 @@ signals:
   // - Properties -
 public:
   const QList<QUrl> &urls() const { return urls_; }
-  virtual QString contentType() const; ///< \reimp
+  QString contentType() const override;
 
-  virtual qint64 read(char *data, qint64 maxSize);  ///< \reimp
+  qint64 read(char *data, qint64 maxSize) override;
 
-  virtual bool seek(qint64 pos) ///< \reimp
-  { return fifo_ ? fifo_->seek(pos) : false; } ///< \reimp
+  bool seek(qint64 pos) override
+  { return fifo_ ? fifo_->seek(pos) : false; }
 
-  virtual qint64 size() const { return fifo_ ? fifo_->size() : 0; } ///< \reimp
-  virtual qint64 pos() const { return fifo_ ? fifo_->pos() : 0; } ///< \reimp
-  virtual qint64 availableSize() const { return fifo_ ? fifo_->availableSize() : 0; } ///< \reimp
+  qint64 size() const override { return fifo_ ? fifo_->size() : 0; }
+  qint64 pos() const override { return fifo_ ? fifo_->pos() : 0; }
+  qint64 availableSize() const override { return fifo_ ? fifo_->availableSize() : 0; }
 
-  virtual qint64 duration() const { return duration_; } ///< \reimp
-  virtual qint64 availableDuration() const; ///< \reimp
+  qint64 duration() const override { return duration_; }
+  qint64 availableDuration() const override;
 
   qint64 receivedSize() const;
 
@@ -82,16 +82,16 @@ public slots:
   void setUrls(const QList<QUrl> &urls) { urls_ = urls; }
   void setDuration(qint64 duration) { duration_ = duration; }
 
-  virtual void run(); ///< \reimp
-  virtual void stop(); ///< \reimp
+  void run() override;
+  void stop() override;
 
-  virtual void waitForReady(); ///< \reimp
-  virtual void waitForStopped(); ///< \reimp
+  void waitForReady() override;
+  void waitForStopped() override;
 
   void updateProgress() { emit progress(receivedSize(), size()); }
 
 protected slots:
-  virtual void save(); ///< \reimp
+  void save() override;
 
   void updateSize();
   void updateFileName();

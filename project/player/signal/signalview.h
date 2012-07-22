@@ -5,44 +5,42 @@
 // 8/13/2011
 
 #include "processinfo.h"
-#include "project/common/acwindow.h"
+#include "project/common/acmainwindow.h"
 
 class ProcessView;
 class MessageView;
 //class TokenView;
 
-class SignalView : public AcWindow
+class SignalView : public AcMainWindow
 {
   Q_OBJECT
   Q_DISABLE_COPY(SignalView)
   typedef SignalView Self;
-  typedef AcWindow Base;
+  typedef AcMainWindow Base;
 
   ProcessView *processView_;
   MessageView *messageView_;
   //TokenView *tokenView_;
 
 public:
-  explicit SignalView(QWidget *parent = 0);
+  explicit SignalView(QWidget *parent = nullptr);
 
   //TokenView *tokenView() const { return tokenView_; }
   ProcessView *processView() const { return processView_; }
   MessageView *messageView() const { return messageView_; }
 
 signals:
-  void message(QString);
-  void warning(QString);
   void hookSelected(ulong hookId, ProcessInfo pi);
 
   // - Events -
 public:
-  virtual void setVisible(bool visible); ///< \reimp
+  void setVisible(bool visible) override;
 
 //protected slots:
-//  virtual void dragEnterEvent(QDragEnterEvent *event); ///< \reimp
-//  virtual void dragMoveEvent(QDragMoveEvent *event); ///< \reimp
-//  virtual void dragLeaveEvent(QDragLeaveEvent *event); ///< \reimp
-//  virtual void dropEvent(QDropEvent *event); ///< \reimp
+//  void dragEnterEvent(QDragEnterEvent *event) override;
+//  void dragMoveEvent(QDragMoveEvent *event) override;
+//  void dragLeaveEvent(QDragLeaveEvent *event) override;
+//  void dropEvent(QDropEvent *event) override;
 //
 //signals:
 //  void dragEnterEventReceived(QDragEnterEvent *event);

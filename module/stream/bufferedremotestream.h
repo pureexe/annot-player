@@ -25,46 +25,46 @@ class BufferedRemoteStream :  public RemoteStream
   bool stopped_;
 
 public:
-  explicit BufferedRemoteStream(QNetworkAccessManager *nam, QObject *parent = 0)
-    : Base(nam, parent), pos_(0), reply_(0), bufferSize_(0), stopped_(false) { }
+  explicit BufferedRemoteStream(QNetworkAccessManager *nam, QObject *parent = nullptr)
+    : Base(nam, parent), pos_(0), reply_(nullptr), bufferSize_(0), stopped_(false) { }
 
   ~BufferedRemoteStream();
 
 public:
-  virtual qint64 size() const { return Base::size() ? Base::size() : data_.size(); } ///< \reimp
+  qint64 size() const override { return Base::size() ? Base::size() : data_.size(); }
   qint64 availableSize() const;
 
-  virtual qint64 pos() const { return pos_; } ///< \reimp
+  qint64 pos() const override { return pos_; }
 
-  virtual qint64 read(char *data, qint64 maxSize); ///< \reimp
-  virtual qint64 tryRead(char *data, qint64 maxSize); ///< \reimp
+  qint64 read(char *data, qint64 maxSize) override;
+  qint64 tryRead(char *data, qint64 maxSize) override;
 
-  virtual QByteArray readAll(); ///< \reimp
+  QByteArray readAll() override;
 
-  virtual bool reset() { m_.lock(); pos_ = 0; m_.unlock(); return true; } ///< \reimp
-  virtual bool seek(qint64 pos); ///< \reimp
+  bool reset() override { m_.lock(); pos_ = 0; m_.unlock(); return true; }
+  bool seek(qint64 pos) override;
 
-  virtual qint64 skip(qint64 count); ///< \reimp
+  qint64 skip(qint64 count) override;
 
-  virtual QString contentType() const; ///< \reimp
+  QString contentType() const override;
 
   QByteArray &data() { return data_; }
   const QByteArray &data() const { return data_; }
 
-  virtual bool writeFile(const QString &path); ///< \reimp
+  bool writeFile(const QString &path) override;
 
   bool isRunning() const { return reply_ && reply_->isRunning(); }
   bool isFinished() const { return reply_ && reply_->isFinished(); }
 
   void waitForFinished();
-  virtual void waitForReadyRead(); ///< \reimp
+  void waitForReadyRead() override;
 
 public slots:
 
-  virtual void run(); ///< \reimp
-  virtual void stop(); ///< \reimp
+  void run() override;
+  void stop() override;
 
-  virtual void setBufferSize(qint64 size) { bufferSize_ = size; } ///< \reimp
+  void setBufferSize(qint64 size) override { bufferSize_ = size; }
 
 protected slots:
   void finish();
@@ -73,7 +73,7 @@ protected slots:
 
 protected:
   bool isRedirected() const; ///< override
-  bool redirect(); ///< \reimp
+  bool redirect() override;
 };
 
 #endif // BUFFEREDREMOTESTREAM_H

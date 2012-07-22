@@ -67,7 +67,7 @@ MrlDownloadTask::run(bool execute)
     resolver_->deleteLater();
   resolver_ = new LuaMrlResolver;//new MrlResolverManager;
   resolver_->setSynchronized(true);
-  connect(resolver_, SIGNAL(error(QString)), SIGNAL(error(QString)));
+  connect(resolver_, SIGNAL(errorMessage(QString)), SIGNAL(errorMessage(QString)));
   connect(resolver_, SIGNAL(mediaResolved(MediaInfo,QNetworkCookieJar*)), SLOT(downloadMedia(MediaInfo,QNetworkCookieJar*)));
   bool ok = resolver_->resolveMedia(url());
   if (ok) {
@@ -78,7 +78,7 @@ MrlDownloadTask::run(bool execute)
       exec();
   } else {
     setState(Error);
-    emit error(tr("failed to download from URL") + ": " + url());
+    emit errorMessage(tr("failed to download from URL") + ": " + url());
     //emit downloadAnnotationRequested(url);
   }
   DOUT("exit");
@@ -111,7 +111,7 @@ MrlDownloadTask::downloadMedia(const MediaInfo &mi, QNetworkCookieJar *jar)
   if (!mi.suburl.isEmpty())
     emit downloadAnnotationRequested(mi.suburl, mi.refurl, mi.title);
   switch (mi.mrls.size()) {
-  case 0: emit error(tr("failed to resolve media URL") +": " + mi.refurl); break;
+  case 0: emit errorMessage(tr("failed to resolve media URL") +": " + mi.refurl); break;
   case 1: downloadSingleMedia(mi, jar); break;
   default: downloadMultipleMedia(mi, jar);
   }

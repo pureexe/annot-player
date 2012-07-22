@@ -35,7 +35,7 @@ protected:
   };
 
 public:
-  explicit TextFilterView(QWidget *parent = 0);
+  explicit TextFilterView(QWidget *parent = nullptr);
 
   QLineEdit *lineEdit() const;
 
@@ -73,7 +73,7 @@ protected:
   };
 
 public:
-  explicit UserFilterView(QWidget *parent = 0);
+  explicit UserFilterView(QWidget *parent = nullptr);
 
   QLineEdit *lineEdit() const;
 
@@ -126,7 +126,7 @@ protected:
     HD_Count
   };
 public:
-  explicit AnnotationFilterView(QWidget *parent = 0);
+  explicit AnnotationFilterView(QWidget *parent = nullptr);
 
   qint64 currentAnnotationId() const;
 

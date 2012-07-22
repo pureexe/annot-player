@@ -27,17 +27,17 @@
 
 #define TEXT_SIZE_SCALE 0.85
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
 # define SHORTCUT_LOCATION     "CTRL+L"
 #else
 # define SHORTCUT_LOCATION     "ALT+D"
-#endif // Q_WS_MAC
+#endif // Q_OS_MAC
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
 # define K_META     "META"
 #else
 # define K_META     "CTRL"
-#endif // Q_WS_MAC
+#endif // Q_OS_MAC
 
 #define SHORTCUT_SEARCH         "CTRL+E"
 
@@ -47,11 +47,11 @@ enum { StatusMessageTimeout = 10000 }; // 10 seconds
 
 // - RC -
 
-#ifdef Q_WS_X11
+#ifdef Q_OS_LINUX
 # define RC_PREFIX     DOCDIR "/"
 #else
 # define RC_PREFIX     QCoreApplication::applicationDirPath() + "/doc/"
-#endif // Q_WS_X11
+#endif // Q_OS_LINUX
 
 #define RC_HTML_START   RC_PREFIX "start.html"
 
@@ -163,7 +163,7 @@ WebBrowser::encodeUrl(const QString &url)
 // - Constructions -
 
 WebBrowser::WebBrowser(QWidget *parent)
-  : Base(parent), nam_(0),
+  : Base(parent), nam_(nullptr),
     textSizeMultiplier_(TEXT_SIZE_SCALE), loadProgress_(100)
 {
   ui = new Form;
@@ -222,9 +222,9 @@ WebBrowser::setupUi()
   connect(ui->tabWidget, SIGNAL(currentChanged(int)), SLOT(updateTabTexts()));
   connect(ui->tabWidget, SIGNAL(doubleClicked()), SLOT(newTabAtLastWithBlankPage()));
   connect(ui->tabWidget, SIGNAL(tabDoubleClicked(int)), SIGNAL(fullScreenRequested()));
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
   connect(ui->tabWidget, SIGNAL(rightButtonClicked()), SLOT(toggleMenuBarVisible()));
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
   connect(ui->searchEdit, SIGNAL(textEntered(QString)), SLOT(search(QString)));
   connect(ui->searchEdit, SIGNAL(engineChanged(int)), SLOT(setSearchEngine(int)));
   connect(ui->searchEdit, SIGNAL(editTextChanged(QString)), SLOT(invalidateSearch()));
@@ -286,7 +286,7 @@ WebBrowser::createActions()
   new QShortcut(QKeySequence("CTRL+8"), this, SLOT(focusTab7()));
   new QShortcut(QKeySequence("CTRL+9"), this, SLOT(focusTab8()));
   new QShortcut(QKeySequence("CTRL+0"), this, SLOT(focusLastTab()));
-#ifndef Q_WS_MAC
+#ifndef Q_OS_MAC
   new QShortcut(QKeySequence("ALT+1"), this, SLOT(focusTab0()));
   new QShortcut(QKeySequence("ALT+2"), this, SLOT(focusTab1()));
   new QShortcut(QKeySequence("ALT+3"), this, SLOT(focusTab2()));
@@ -297,16 +297,16 @@ WebBrowser::createActions()
   new QShortcut(QKeySequence("ALT+8"), this, SLOT(focusTab7()));
   new QShortcut(QKeySequence("ALT+9"), this, SLOT(focusTab8()));
   new QShortcut(QKeySequence("ALT+0"), this, SLOT(focusLastTab()));
-#endif // Q_WS_MAC
+#endif // Q_OS_MAC
 }
 
 void
 WebBrowser::createGestures()
 {
   Qt::MouseButtons buttons = Qt::MiddleButton;
-#ifndef Q_WS_MAC
+#ifndef Q_OS_MAC
   buttons |= Qt::RightButton;
-#endif // Q_WS_MAC
+#endif // Q_OS_MAC
   mouseGestureFilter_ = new MouseGestureFilter(buttons, Qt::NoModifier, this);
 }
 
@@ -520,9 +520,9 @@ WebBrowser::openUrl(const QString &url, QWebView *view)
 void
 WebBrowser::addRecentUrls(const QStringList &urls)
 {
-  if (!urls.isEmpty())
-    foreach (const QString &url, QtExt::revertList(urls))
-      addRecentUrl(url);
+  auto p = urls.constEnd();
+  while (p != urls.constBegin())
+    addRecentUrl(*--p);
 }
 
 void
@@ -573,8 +573,9 @@ WebBrowser::addRecentSearch(const QString &text)
 void
 WebBrowser::addRecentSearches(const QStringList &l)
 {
-  foreach (const QString &t, QtExt::revertList(l))
-    addRecentSearch(t);
+  auto p = l.constEnd();
+  while (p != l.constBegin())
+    addRecentSearch(*--p);
 }
 
 void
@@ -637,7 +638,7 @@ WebBrowser::openUrlWithOperatingSystem(const QString &url)
   if (!href.isEmpty() && !href.contains("://"))
     href.prepend("http://");
   if (!href.isEmpty()) {
-    showMessage(tr("openning") + ": " + href);
+    showMessage(tr("opening") + ": " + href);
     QDesktopServices::openUrl(QUrl(href));
   }
 }
@@ -791,7 +792,7 @@ WebBrowser::newTab(QWebView *view, int index, bool focus)
     wbview->setSearchEngine(searchEngine_);
 
     connect(wbview, SIGNAL(message(QString)), SLOT(showMessage(QString)));
-    connect(wbview, SIGNAL(errorMessage(QString)), SLOT(error(QString)));
+    connect(wbview, SIGNAL(errorMessage(QString)), SLOT(showError(QString)));
     connect(wbview, SIGNAL(warning(QString)), SLOT(warn(QString)));
     connect(wbview, SIGNAL(notification(QString)), SLOT(notify(QString)));
     connect(wbview, SIGNAL(windowCreated(QWebView*)), SLOT(newTab(QWebView*)));
@@ -806,10 +807,10 @@ WebBrowser::newTab(QWebView *view, int index, bool focus)
     connect(wbview, SIGNAL(fullScreenRequested()), SIGNAL(fullScreenRequested()));
 
     connect(wbview, SIGNAL(searchWithEngineRequested(QString,int)), SLOT(searchInNewTab(QString,int)));
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     connect(wbview, SIGNAL(menuBarVisibilityChangeRequested(bool)), menuBar(), SLOT(setVisible(bool)));
     connect(wbview, SIGNAL(toggleMenuBarVisibleRequested()), SLOT(toggleMenuBarVisible()));
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
     connect(this, SIGNAL(searchEngineChanged(int)), wbview, SLOT(setSearchEngine(int)));
   }
 
@@ -954,7 +955,7 @@ WebBrowser::showMessage(const QString &text)
 }
 
 void
-WebBrowser::error(const QString &text)
+WebBrowser::showError(const QString &text)
 {
   statusBar()->setStyleSheet(SS_STATUSBAR_ERROR);
   statusBar()->showMessage(text);

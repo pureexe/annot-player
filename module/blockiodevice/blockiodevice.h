@@ -16,13 +16,13 @@ class BlockIODevice : public QIODevice
 
   // - Constructions -
 public:
-  explicit BlockIODevice(QObject *parent = 0)
+  explicit BlockIODevice(QObject *parent = nullptr)
     : Base(parent), fd_((fd_t)-1), blockSize_(0) { }
 
-  explicit BlockIODevice(const QString &fileName, QObject *parent = 0)
+  explicit BlockIODevice(const QString &fileName, QObject *parent = nullptr)
     : Base(parent), fd_((fd_t)-1), blockSize_(0), fileName_(fileName) { }
 
-  virtual ~BlockIODevice() { if (isOpen()) close(); } ///< \reimp
+  ~BlockIODevice() { if (isOpen()) close(); } ///< \reimp
 
   // - Properties -
 public:
@@ -36,30 +36,29 @@ public:
 
   // - Overriden -
 public:
-  virtual bool open(OpenMode mode); ///< \reimp Only read mode is implemented.
-  virtual void close(); ///< \reimp
+  bool open(OpenMode mode) override; ///< Only read mode is implemented.
+  void close() override;
 
   /*
-  virtual bool atEnd() const; ///< \reimp
-  virtual qint64 bytesAvailable() const; ///< \reimp
-  virtual qint64 bytesToWrite() const; ///< \reimp
-  virtual bool isSequential() const; ///< \reimp
-  virtual qint64 pos() const; ///< \reimp
-  virtual bool reset(); ///< \reimp
-  virtual bool seek( qint64 pos ); ///< \reimp
-  virtual qint64 size() const; ///< \reimp
-  virtual bool waitForBytesWritten( int msecs ); ///< \reimp
-  virtual bool waitForReadyRead( int msecs ); ///< \reimp
+  bool atEnd() const override;
+  qint64 bytesAvailable() const override;
+  qint64 bytesToWrite() const override;
+  bool isSequential() const override;
+  qint64 pos() const override;
+  bool reset() override;
+  bool seek( qint64 pos ) override;
+  qint64 size() const override;
+  bool waitForBytesWritten( int msecs ) override;
+  bool waitForReadyRead( int msecs ) override;
   */
 
-  ///  \reimp Not implemented.
-  virtual bool canReadLine() const
+  bool canReadLine() const override ///< Not implemented.
   { return false; }
 
 protected:
-  //virtual qint64 readLineData( char * data, qint64 maxSize); ///< \reimp
-  virtual qint64 readData(char *data, qint64 maxSize ); ///< \reimp
-  virtual qint64 writeData(const char *data, qint64 maxSize); ///< \reimp
+  //qint64 readLineData( char * data, qint64 maxSize) override;
+  qint64 readData(char *data, qint64 maxSize ) override;
+  qint64 writeData(const char *data, qint64 maxSize) override;
 
   // - Implementations -
 public:

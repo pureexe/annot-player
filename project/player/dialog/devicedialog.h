@@ -21,10 +21,11 @@ class DeviceDialog : public AcWindow
   typedef AcWindow Base;
 
 public:
-  explicit DeviceDialog(QWidget *parent = 0);
+  explicit DeviceDialog(QWidget *parent = nullptr);
 
 signals:
   void deviceSelected(const QString &path, bool isAudioCD);
+  void warning(const QString &text);
 
   // - Helpers -
 public:
@@ -37,7 +38,7 @@ public:
 
   // - Events -
 public:
-  virtual void setVisible(bool visible); ///< \reimp
+  void setVisible(bool visible) override;
 
   // - Slots -
 public slots:

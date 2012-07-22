@@ -28,7 +28,7 @@ BufferedStreamPipe::run()
       count = outputStream()->write(buf, bufferSize_);
       if (count != bufferSize_) {
         setState(Error);
-        emit error(tr("failed to write to outputstream"));
+        emit errorMessage(tr("failed to write to outputstream"));
         delete[] buf;
         DOUT("exit: ERROR: failed to write to outputstream, count =" << count);
         return;
@@ -40,7 +40,7 @@ BufferedStreamPipe::run()
   if (count > 0 &&
       count != outputStream()->write(buf, count)) {
     setState(Error);
-    emit error(tr("failed to write to outputstream"));
+    emit errorMessage(tr("failed to write to outputstream"));
     delete[] buf;
     DOUT("exit: ERROR: failed to write to outputstream, count =" << count);
     return;

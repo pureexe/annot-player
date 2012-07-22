@@ -16,10 +16,10 @@ class DateEdit : public QDateEdit
   typedef QDateEdit Base;
 
 public:
-  explicit DateEdit(QWidget *parent = 0)
+  explicit DateEdit(QWidget *parent = nullptr)
     : Base(parent) { }
 
-  explicit DateEdit(const QDate &date, QWidget *parent = 0)
+  explicit DateEdit(const QDate &date, QWidget *parent = nullptr)
     : Base(date, parent) { }
 
   QLineEdit *lineEdit() const { return Base::lineEdit(); }
@@ -29,9 +29,9 @@ signals:
 
   // - Events -
 protected:
-  virtual void keyPressEvent(QKeyEvent *event);
-  virtual void enterEvent(QEvent *event); ///< \reimp
-  virtual void leaveEvent(QEvent *event); ///< \reimp
+  void keyPressEvent(QKeyEvent *event) override;
+  void enterEvent(QEvent *event) override;
+  void leaveEvent(QEvent *event) override;
 };
 
 } // namespace QtExt

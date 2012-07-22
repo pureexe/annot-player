@@ -79,7 +79,7 @@ PlayerUi::disconnectPlayer()
  // - Constructions -
 
 PlayerUi::PlayerUi(SignalHub *hub, Player *player, ServerAgent *server, QWidget *parent)
-  : Base(parent), hub_(hub), player_(player), server_(server), active_(false), networkMenu_(0)
+  : Base(parent), hub_(hub), player_(player), server_(server), active_(false), networkMenu_(nullptr)
 {
   Q_ASSERT(isValid());
 

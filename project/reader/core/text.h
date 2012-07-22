@@ -82,10 +82,10 @@ namespace Core {
   public:
     typedef QList<Poppler::TextBox*> TextList;
 
-    explicit TextRectCatalog(QObject *parent = 0)
+    explicit TextRectCatalog(QObject *parent = nullptr)
       : Base(parent) { }
 
-    explicit TextRectCatalog(const TextList &l, QObject *parent = 0)
+    explicit TextRectCatalog(const TextList &l, QObject *parent = nullptr)
       : Base(parent) { build(l); }
 
     ~TextRectCatalog()

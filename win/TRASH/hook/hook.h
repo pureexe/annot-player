@@ -180,7 +180,7 @@ public:
 
   // - Implementation -
 protected:
-  explicit WindowsHookManager(QObject *parent = 0);   ///< \internal
+  explicit WindowsHookManager(QObject *parent = nullptr);   ///< \internal
   ~WindowsHookManager();  ///< \internal
 protected:
   virtual bool event(QEvent *e); ///< \internal

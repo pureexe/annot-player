@@ -11,20 +11,22 @@
 #include "stylesheet.h"
 #include "signalhub.h"
 #include "videoview.h"
-//#include "logger.h"
 #include "global.h"
 #include "application.h"
 #include "project/common/acss.h"
 #include "module/player/player.h"
-#include "module/qtext/algorithm.h"
 #include "module/qtext/htmltag.h"
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
 # include "win/qtwin/qtwin.h"
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
 #ifdef WITH_WIN_MOUSEHOOK
 # include "win/mousehook/mousehook.h"
 #endif // WITH_WIN_MOUSEHOOK
 #include <QtGui>
+#ifdef __clang__
+# pragma clang diagnostic ignored "-Wunused-parameter" // in boost algorithm
+#endif // __clang__
+#include <boost/range/algorithm.hpp>
 #include <climits>
 
 #ifdef __GNUC__
@@ -35,12 +37,11 @@
 #include "module/debug/debug.h"
 
 using namespace AnnotCloud;
-//using namespace Logger;
 
 #define MAX_SUBTITLE_HISTORY    30
 #define TIMER_INTERVAL        1000 // 1 second
 
-enum { ReservedItemCount = 40 };
+enum { ReservedItemCount = 10 };
 
 // - Construction -
 
@@ -50,9 +51,9 @@ AnnotationGraphicsView::AnnotationGraphicsView(
   Player *player,
   VideoView *view,
   QWidget *parent)
-  : Base(parent), videoView_(view), fullScreenView_(0), trackedWindow_(0), editor_(0),
+  : Base(parent), videoView_(view), fullScreenView_(nullptr), trackedWindow_(0), editor_(nullptr),
     hub_(hub), data_(data), player_(player),
-    filter_(0), renderHint_(DefaultRenderHint), paused_(false), fullScreen_(false),
+    filter_(nullptr), renderHint_(DefaultRenderHint), paused_(false), fullScreen_(false),
     subtitleVisible_(true), nonSubtitleVisible_(true), metaVisible_(false), itemCountLimited_(true),
     currentTime_(-1), offset_(0), interval_(TIMER_INTERVAL), userId_(0), playbackEnabled_(true), subtitlePosition_(AP_Bottom),
     scale_(1.0), rotation_(0),
@@ -93,13 +94,13 @@ AnnotationGraphicsView::AnnotationGraphicsView(
   trackingTimer_->setInterval(G_TRACKING_INTERVAL);
   connect(trackingTimer_, SIGNAL(timeout()), SLOT(updateGeometry()));
 
-//#ifdef Q_WS_WIN
+//#ifdef Q_OS_WIN
   setRenderHints(
     QPainter::Antialiasing |
     QPainter::TextAntialiasing |
     QPainter::SmoothPixmapTransform
   );
-//#endif // Q_WS_WIN
+//#endif // Q_OS_WIN
 
   connect(this, SIGNAL(offsetChanged(qint64)), SLOT(removeAllItems()));
 
@@ -234,7 +235,7 @@ AnnotationGraphicsView::annotations() const
   //        if (item)
   //          ret.append(item->annotation());
   if (!hash_.empty())
-    for (auto p = hash_.begin(); p != hash_.end(); ++p)
+    for (auto p = hash_.constBegin(); p != hash_.constEnd(); ++p)
       ret.append(p.value());
   return ret;
 }
@@ -277,27 +278,27 @@ AnnotationGraphicsView::updateSize()
     resize(fullScreenView_->size());
     update = true;
   } else if (trackedWindow_) {
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     QRect r = QtWin::getWindowRect(trackedWindow_);
     if (r.isEmpty()) {
       //if (!QtWin::isWindowValid(trackedWindow_)) {
-      setTrackedWindow(0);
+      setTrackedWindow(nullptr);
       DOUT("tracked window destroyed");
       emit trackedWindowDestroyed();
     } else if (r.topLeft() != QTWIN_INVALID_POS && r.size() != size()) {
       resize(r.size());
       update = true;
     }
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
   } else if (!hub_->isSignalTokenMode() || hub_->isNormalPlayerMode()) {
     // FIXME: 10/24/2011: Screen not working orz
-//#ifdef Q_WS_MAC
+//#ifdef Q_OS_MAC
 //    if (fullScreenView_)
 //      resize(fullScreenView_->size());
 //#else
     resize(videoView_->size());
     update = true;
-//#endif // Q_WS_MAC
+//#endif // Q_OS_MAC
 
   }
   //else if (hub_->isSignalTokenMode() && fullScreenView_) {
@@ -307,7 +308,7 @@ AnnotationGraphicsView::updateSize()
 
   if (update) {
     setSceneRect(0, 0, width(), height());
-    emit sizeChanged();
+    emit sizeChanged(size());
   }
   updateMaxItemCount();
 }
@@ -319,11 +320,11 @@ AnnotationGraphicsView::updatePos()
     move(fullScreenView_->pos());
     emit posChanged();
   } else if (trackedWindow_) {
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     QRect r = QtWin::getWindowRect(trackedWindow_);
     if (r.isEmpty()) {
       //if (!QtWin::isWindowValid(trackedWindow_))
-      setTrackedWindow(0);
+      setTrackedWindow(nullptr);
       DOUT("tracked window destroyed");
       emit trackedWindowDestroyed();
     } else {
@@ -335,22 +336,22 @@ AnnotationGraphicsView::updatePos()
         moveToGlobalPos(newPos);
       return;
     }
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
   } else {
 
     QPoint newPos;
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     // Since videoView_ could change its pos() while playing video, use its parent widget instead.
     if (videoView_->parentWidget())
       newPos = videoView_->parentWidget()->mapToGlobal(QPoint());
     else
 #endif // Q_QW_MAC
-#ifdef Q_WS_X11
+#ifdef Q_OS_LINUX
     // FIXME: Hot fix for Ubuntu Unity top bar. TO BE REMOVED!
     if (fullScreen_ && fullScreenView_ && hub_->isEmbeddedPlayerMode())
       newPos = fullScreenView_->mapToGlobal(QPoint());
     else
-#endif // Q_WS_X11
+#endif // Q_OS_LINUX
     newPos = videoView_->mapToGlobal(QPoint());
     moveToGlobalPos(newPos);
 
@@ -365,13 +366,13 @@ QPoint
 AnnotationGraphicsView::fromGlobal(const QPoint &globalPos) const
 {
   return
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
       mapFromGlobal(globalPos) - mapFromGlobal(QPoint())
 #else
       // Currently only work on Windows
       frameGeometry().topLeft() + pos() + // relative position
       globalPos - mapToGlobal(pos()) // absolute distance
-#endif // Q_WS_MAC
+#endif // Q_OS_MAC
   ;
 }
 
@@ -541,8 +542,10 @@ AnnotationGraphicsView::pauseItems(const QRect &rect, Qt::ItemSelectionMode mode
       uids.append(uid);
   }
 
-  if (!uids.isEmpty())
-    emit selectedUserIds(QtExt::uniqueList(uids));
+  if (!uids.isEmpty()) {
+    boost::unique(uids);
+    emit selectedUserIds(uids);
+  }
 }
 
 void
@@ -572,8 +575,10 @@ AnnotationGraphicsView::pauseItems(const QPoint &pos)
     if (uid)
       uids.append(uid);
   }
-  if (!uids.isEmpty())
-    emit selectedUserIds(QtExt::uniqueList(uids));
+  if (!uids.isEmpty()) {
+    boost::unique(uids);
+    emit selectedUserIds(uids);
+  }
 }
 
 void
@@ -775,7 +780,7 @@ AnnotationGraphicsView::itemsCount() const
 {
   int ret = 0;
   if (!hash_.isEmpty())
-    for (auto p = hash_.begin(); p != hash_.end(); ++p)
+    for (auto p = hash_.constBegin(); p != hash_.constEnd(); ++p)
       ret += p.value().size();
 
   return ret;
@@ -904,11 +909,13 @@ void
 AnnotationGraphicsView::showAnnotationsAtPos(qint64 pos)
 {
   DOUT("enter: pos =" << pos);
-  emit removeItemRequested();
 
   emit annotationPosChanged(pos);
 
-  if (!hub_->isSignalTokenMode()) {
+  if (hub_->isSignalTokenMode()) {
+    emit removeSubtitlesRequested();
+    scheduler_->clearSubtitles();
+  } else {
     //pos = qRound64(pos / 1000.0); // msecs => secs
     pos /= 1000;
     pos -= offset_;
@@ -927,7 +934,7 @@ AnnotationGraphicsView::showAnnotationsAtPos(qint64 pos)
   //  showAnnotation(a);
   const AnnotationList &l = annotationsAtPos(pos);
   if (!l.isEmpty())
-    for (auto p = l.begin(); p != l.end(); ++p)
+    for (auto p = l.constBegin(); p != l.constEnd(); ++p)
       showAnnotation(*p);
 
   DOUT("exit");
@@ -1020,10 +1027,10 @@ AnnotationGraphicsView::setTrackedWindow(WId hwnd)
 #ifdef WITH_WIN_HOOK
       ||  videoView_->containsWindow(hwnd)
 #endif // WITH_WIN_HOOK
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
       || QtWin::getChildWindows(videoView_->winId()).contains(hwnd)
       || QtWin::getWindowProcessId(hwnd) == QCoreApplication::applicationPid()
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
       ))
     hwnd = 0;
 
@@ -1108,7 +1115,7 @@ AnnotationGraphicsView::appendAnnotations(const AnnotationList &annots)
 {
   if (annots.isEmpty())
     return;
-  auto p = annots.begin();
+  auto p = annots.constBegin();
 
   int n = annots.size();
   int k = interval_ / 1000;
@@ -1123,10 +1130,10 @@ AnnotationGraphicsView::appendAnnotations(const AnnotationList &annots)
     }
 
   AnnotationList &l = hash_[currentTime_+ k - 1];
-  while (p != annots.end())
+  while (p != annots.constEnd())
     l.append(*p++);
 
-  foreach (Annotation a, annots)
+  foreach (const Annotation &a, annots)
     emit annotationAdded(a);
 }
 

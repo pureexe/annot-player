@@ -20,10 +20,10 @@
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtCore/QTextDecoder>
 #include <QtCore/QTextEncoder>
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
 # include <QtCore/QCoreApplication>
 # include <QtCore/QFileInfo>
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
 #include <boost/function.hpp>
 #include <exception>
 
@@ -228,7 +228,7 @@ LuaResolver::resolve(const QString &href, int *siteid, QString *refurl, QString 
     return false;
   DOUT("href =" << href);
 
-  lua_State *L = 0;
+  lua_State *L = nullptr;
   bool closeL = true;
 
   try {
@@ -320,10 +320,10 @@ LuaResolver::resolve(const QString &href, int *siteid, QString *refurl, QString 
       boost::function<int (std::string, std::string)>
           call = lua_function<int>(L, callee);
       QString dlfile = QtExt::mktemp();
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
       // FIXME: Because liblua 5.1 cannot handle Chinese characters in path,
       dlfile = QFileInfo(dlfile).fileName();
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
       DOUT("dlfile =" << dlfile);
       err = call(href.toStdString(), dlfile.toStdString());
       if (err) {
@@ -358,11 +358,11 @@ LuaResolver::resolve(const QString &href, int *siteid, QString *refurl, QString 
       lua_getglobal(L, "g_suburl");
       if (!lua_isnil(L, -1)) {
         *suburl = _qs(lua_tostring(L, -1));
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
         // FIXME: must be consist with QtExt::mktemp.
         // Remove me after liblua support Asian Characters.
         suburl->replace(QRegExp("^file://"), "file:///" + QCoreApplication::applicationDirPath());
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
       }
     }
 

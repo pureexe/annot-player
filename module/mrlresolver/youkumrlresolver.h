@@ -21,14 +21,14 @@ class YoukuMrlResolver : public MrlResolver
   QNetworkAccessManager *nam_;
 
 public:
-  explicit YoukuMrlResolver(QObject *parent = 0)
+  explicit YoukuMrlResolver(QObject *parent = nullptr)
     : Base(parent) { init(); }
 
 public:
-  bool matchMedia(const QString &href) const; ///< \reimp
+  bool matchMedia(const QString &href) const override;
 
 public slots:
-  bool resolveMedia(const QString &href); ///< \reimp
+  bool resolveMedia(const QString &href) override;
 
   void setPreferredType(const QString &type) { preferredType_ = type; }
 

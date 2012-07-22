@@ -39,7 +39,7 @@ namespace { namespace detail {
     AnnotationDatabase *db_;
     AliasList l_;
     int limit_;
-    virtual void run() { db_->updateAliases(l_, false, limit_); } // \reimp, async = false
+    void run() override { db_->updateAliases(l_, false, limit_); } // async = false
   public:
     UpdateAliases(const AliasList &l, int limit, AnnotationDatabase *db)
       : db_(db), l_(l), limit_(limit) { Q_ASSERT(db_); }
@@ -50,7 +50,7 @@ namespace { namespace detail {
     AnnotationDatabase *db_;
     AnnotationList l_;
     int limit_;
-    virtual void run() { db_->updateAnnotations(l_, false, limit_); } // \reimp, async = false
+    void run() override { db_->updateAnnotations(l_, false, limit_); } // async = false
   public:
     UpdateAnnotations(const AnnotationList &l, int limit, AnnotationDatabase *db)
       : db_(db), l_(l), limit_(limit) { Q_ASSERT(db_); }
@@ -422,11 +422,11 @@ AnnotationDatabase::insertAnnotations(const AnnotationList &l)
 
   bool ok = true;
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
   enum { TransactionLimit = 10 };
 #else
   enum { TransactionLimit = 100 };
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
 
   if (TransactionLimit && l.size() > TransactionLimit) {
     QMutexLocker lock(&m_);

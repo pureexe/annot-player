@@ -39,11 +39,11 @@ extern "C" {
 // http://wiki.videolan.org/VLC_command-line_help
 
 #define APP_PLUGIN_PATH QCoreApplication::applicationDirPath() + "/plugins"
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
 # define APP_DATA_PATH QCoreApplication::applicationDirPath()
 #else
 # define APP_DATA_PATH QCoreApplication::applicationDirPath() + "/share"
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
 
 #define _qs(cs) QString::fromAscii((cs))
 #define _cs(qs) (qs).toAscii()    // toLocal8Bit is not recognized by VLC
@@ -53,11 +53,11 @@ namespace { namespace detail {
   inline
   QByteArray vlcpath(const QString &path)
   {
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     return _cs(QString(path).replace("/", "\\"));
 #else
     return _cs(path);
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
   }
 
   inline void vlc_reset_env()
@@ -113,16 +113,26 @@ namespace { namespace detail {
 #define VLC_ARGS_PLUGIN_PATH    "--plugin-path", VLC_PLUGIN_PATH
 #define VLC_ARGS_DATA_PATH      "--data-path", VLC_DATA_PATH
 #define VLC_ARGS_VERBOSE(_lvl)  "--verbose=" #_lvl     // >= 0
+#define VLC_ARGS_FILE_CACHING(_int)     "--file-caching=" #_int     // [0 .. 60000], default 300 msec
+#define VLC_ARGS_DISK_CACHING(_int)     "--disc-caching=" #_int     // [0 .. 60000], default 300 msec
+#define VLC_ARGS_NETWORK_CACHING(_int)  "--network-caching=" #_int  // [0 .. 60000], default 1000 msec
+
+// Increase caching time
+// See: <vlc/src/libvlc-module.c>
+#define VLC_ARGS_CACHING \
+  VLC_ARGS_FILE_CACHING(600), \
+  VLC_ARGS_DISK_CACHING(600)
+  //VLC_ARGS_NETWORK_CACHING(2000)
 
 // http://forums.techarena.in/windows-software/1403280.htm
 //#define VLC_ARGS_MAC            "--vout=minimal_macosx", "--opengl-provider=minimal_macosx"
 //#define VLC_ARGS_MAC            "--opengl-provider=minimal_macosx"
 //#define VLC_ARGS_MAC            VLC_ARGS_NULL // use default macosx filter
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
 # define VLC_ARGS_OS           VLC_ARGS_DATA_PATH
 #else
 # define VLC_ARGS_OS           VLC_ARGS_NULL
-#endif // Q_WS_MAC
+#endif // Q_OS_MAC
 
 #define VLC_ARGS_RELEASE \
   VLC_ARGS_CONFIG, \
@@ -130,6 +140,7 @@ namespace { namespace detail {
   VLC_ARGS_TITLE, \
   VLC_ARGS_LIBRARY, \
   VLC_ARGS_PLAYLIST, \
+  VLC_ARGS_CACHING, \
   VLC_ARGS_OS
 #define VLC_ARGS_DEBUG \
   VLC_ARGS_RELEASE, \
@@ -138,9 +149,9 @@ namespace { namespace detail {
 
 // TODO: make this an option
 #ifdef VLC_DEBUG
-  #define VLC_ARGS                VLC_ARGS_DEBUG
+# define VLC_ARGS                VLC_ARGS_DEBUG
 #else
-  #define VLC_ARGS                VLC_ARGS_RELEASE
+# define VLC_ARGS                VLC_ARGS_RELEASE
 #endif
 
 // - PlayerPrivate bases -
@@ -183,7 +194,7 @@ namespace { namespace detail {
     libvlc_media_t *media() const { return media_; }
     const MediaList &mediaList() const { return media_list_; }
     MediaList &mediaList() { return media_list_; }
-    void setMedia(libvlc_media_t *media = 0) { media_ = media; }
+    void setMedia(libvlc_media_t *media = nullptr) { media_ = media; }
     void setMediaList(const MediaList &l = MediaList()) { media_list_ = l; }
 
     bool valid() const { return instance_ && player_; }
@@ -197,7 +208,7 @@ namespace { namespace detail {
 
   inline
   mp_handle::mp_handle()
-    : instance_(0), player_(0), media_(0)
+    : instance_(nullptr), player_(nullptr), media_(nullptr)
   {
     //reset();
   }
@@ -225,9 +236,9 @@ namespace { namespace detail {
   inline void
   mp_handle::reset()
   {
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     detail::vlc_reset_env();
-#endif // Q_WS_MAC
+#endif // Q_OS_MAC
 
     if (!media_list_.isEmpty()) {
       foreach (libvlc_media_t *m, media_list_)
@@ -237,7 +248,7 @@ namespace { namespace detail {
     }
     if (media_) {
       ::libvlc_media_release(media_);
-      media_ = 0;
+      media_ = nullptr;
     }
 
     if (player_) {
@@ -293,7 +304,7 @@ namespace { namespace detail {
         mouseEnabled_(true), keyEnabled_(false), mouseEventEnabled_(false),
         mediaSize_(0),
         subtitleId_(0), titleId_(0), trackNumber_(0),
-        voutWindow_(0)
+        voutWindow_(nullptr)
     { }
 
     bool isPaused() const { return paused_; }
@@ -341,7 +352,7 @@ namespace { namespace detail {
     void setExternalSubtitles(const QStringList &paths = QStringList()) { externalSubtitles_ = paths; }
 
     QWidget *voutWindow() const { return voutWindow_; }
-    void setVoutWindow(QWidget *w = 0) { voutWindow_ = w; }
+    void setVoutWindow(QWidget *w = nullptr) { voutWindow_ = w; }
   };
 
   class mp_properties
@@ -356,7 +367,7 @@ namespace { namespace detail {
   {
     QtExt::CountdownTimer *voutCountdown_;
   public:
-    mp_trackers() : voutCountdown_(0) { }
+    mp_trackers() : voutCountdown_(nullptr) { }
 
   public:
     QtExt::CountdownTimer *voutCountdown() const { return voutCountdown_; }
@@ -369,7 +380,7 @@ namespace { namespace detail {
     Core::TextCodec *codec_;
 
   public:
-    mp_intl() : codec_(0) { }
+    mp_intl() : codec_(nullptr) { }
 
   public:
     Core::TextCodec *codec() const { return codec_; }

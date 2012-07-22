@@ -16,12 +16,12 @@ class PixmapHaloFilter : public QPixmapFilter
   int radius_;
 
 public:
-  explicit PixmapHaloFilter(QObject *parent = 0);
+  explicit PixmapHaloFilter(QObject *parent = nullptr);
 
   int radius() const { return radius_; }
   void setRadius(int radius) { radius_ = radius; }
 public:
-  virtual void draw(QPainter *p, const QPointF &pos, const QPixmap &pm, const QRectF &src = QRectF()) const; ///< \reimp
+  void draw(QPainter *p, const QPointF &pos, const QPixmap &pm, const QRectF &src = QRectF()) const override;
   QImage &transform(QImage &image) const;
 };
 

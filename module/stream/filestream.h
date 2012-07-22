@@ -18,11 +18,11 @@ class FileStream : public QObject, public InputOutputStream
   QFile *file_;
 
 public:
-  explicit FileStream(QFile *file, QObject *parent = 0)
+  explicit FileStream(QFile *file, QObject *parent = nullptr)
     : Base(parent), file_(file)
   { Q_ASSERT(file); }
 
-  explicit FileStream(const QString &path, QObject *parent = 0)
+  explicit FileStream(const QString &path, QObject *parent = nullptr)
     : Base(parent)
   { file_ = new QFile(path, this); file_->open(QIODevice::ReadWrite); }
 
@@ -30,33 +30,33 @@ public:
 
   // - Read -
 public:
-  virtual qint64 size() const { return file_->size(); } ///< \reimp
-  virtual qint64 pos() const { return file_->pos(); } ///< \reimp
+  qint64 size() const override { return file_->size(); }
+  qint64 pos() const override { return file_->pos(); }
 
-  virtual bool reset()  { return file_->reset(); } ///< \reimp
+  bool reset() override { return file_->reset(); }
 
-  virtual bool seek(qint64 pos) { return file_->seek(pos); } ///< \reimp
+  bool seek(qint64 pos) override { return file_->seek(pos); }
 
-  virtual qint64 skip(qint64 count) ///< \reimp
+  qint64 skip(qint64 count) override
   { return seek(file_->pos() + count) ? count : 0; }
 
-  virtual qint64 read(char *data, qint64 maxSize) { return file_->read(data, maxSize); } ///< \reimp
-  virtual QByteArray readAll() { return file_->readAll(); } ///< \reimp
+  qint64 read(char *data, qint64 maxSize) override { return file_->read(data, maxSize); }
+  QByteArray readAll() override { return file_->readAll(); }
 
-  virtual bool writeFile(const QString &fileName) ///< \reimp
+  bool writeFile(const QString &fileName) override
   { flush(); return QFile::copy(file_->fileName(), fileName); }
 
   // - Write -
 public:
-  virtual qint64 availableSize() const { return file_->size(); } ///< \reimp
+  qint64 availableSize() const override { return file_->size(); }
 
-  virtual qint64 write(const char *data, qint64 maxSize) ///< \reimp
+  qint64 write(const char *data, qint64 maxSize) override
   { return file_->write(data, maxSize); }
 
   QString fileName() const { return file_->fileName(); }
 
 public slots:
-  virtual void flush() { file_->flush(); } ///< \reimp
+  void flush() override { file_->flush(); }
 };
 
 #endif // FILESTREAM_H

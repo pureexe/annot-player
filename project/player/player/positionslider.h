@@ -24,7 +24,7 @@ class PositionSlider : public AcSlider
   QPropertyAnimation *handleRadiusAni_;
 
 public:
-  explicit PositionSlider(QWidget *parent = 0);
+  explicit PositionSlider(QWidget *parent = nullptr);
 
   // - Properties -
 
@@ -42,9 +42,9 @@ protected slots:
 
   // - Events -
 protected:
-  virtual void changeEvent(QEvent *event); ///< \reimp
-  virtual void enterEvent(QEvent *event); ///< \reimp
-  virtual void leaveEvent(QEvent *event); ///< \reimp
+  void changeEvent(QEvent *event) override;
+  void enterEvent(QEvent *event) override;
+  void leaveEvent(QEvent *event) override;
 };
 
 #endif // POSITIONSLIDER_H

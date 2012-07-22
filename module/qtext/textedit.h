@@ -16,10 +16,10 @@ class TextEdit : public QTextEdit
   typedef QTextEdit Base;
 
 public:
-  explicit TextEdit(QWidget *parent = 0)
+  explicit TextEdit(QWidget *parent = nullptr)
     :  Base(parent) { }
 
-  explicit TextEdit(const QString &text, QWidget *parent = 0)
+  explicit TextEdit(const QString &text, QWidget *parent = nullptr)
     :  Base(text, parent) { }
 
 public slots:

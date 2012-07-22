@@ -23,7 +23,7 @@ class AnnotationPainter : public QObject
 public:
   static Self *globalInstance() { static Self g; return &g; }
 
-  explicit AnnotationPainter(QObject *parent = 0)
+  explicit AnnotationPainter(QObject *parent = nullptr)
     : Base(parent) { }
 
 public:

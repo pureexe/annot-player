@@ -43,7 +43,7 @@ class ClientAgent: public QObject, public ClientDelegate
 #endif // WITH_MODULE_SERVERAGENT
 
 public:
-  explicit ClientAgent(QObject *parent = 0);
+  explicit ClientAgent(QObject *parent = nullptr);
 
 #ifdef WITH_MODULE_SERVERAGENT
   void setServerAgent(ServerAgent *server);
@@ -81,12 +81,11 @@ public slots:
 
   // - Implementations -
 public:
-  virtual bool authorize(long key); ///< \reimp
-  virtual void deauthorize(); ///< \reimp
-  virtual bool isAuthorized() const; ///< \reimp
-  virtual bool isConnected() const; ///< \reimp
-  virtual void chat(const QString &text); ///< \reimp
-
+  bool authorize(long key) override;
+  void deauthorize() override;
+  bool isAuthorized() const override;
+  bool isConnected() const override;
+  void chat(const QString &text) override;
 };
 
 #endif // CLIENTAGENT_H

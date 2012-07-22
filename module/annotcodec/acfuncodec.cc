@@ -73,7 +73,7 @@ AcfunCodec::parseReply(QNetworkReply *reply)
   if (!reply->isFinished() || reply->error() != QNetworkReply::NoError) {
     int retry = retries_[url];
     if (retry <= MaxRetries) {
-      emit error(
+      emit errorMessage(
         tr("network error, retry")
         + QString(" (%1/%2):").arg(QString::number(retry)).arg(QString::number(MaxRetries))
         + url
@@ -82,7 +82,7 @@ AcfunCodec::parseReply(QNetworkReply *reply)
       QString originalUrl = reply->attribute(RequestUrlAttribute).toString();
       fetch(url, originalUrl);
     } else
-      emit error(tr("network error, failed to resolve media URL") + ": " + url);
+      emit errorMessage(tr("network error, failed to resolve media URL") + ": " + url);
     DOUT("exit: network error:" << reply->errorString());
     return;
   }
@@ -90,7 +90,7 @@ AcfunCodec::parseReply(QNetworkReply *reply)
   QByteArray data = reply->readAll();
   AnnotationList l = parseDocument(data, Json);
   if (l.isEmpty())
-    emit error(tr("failed to resolve annotations from URL") + ": " + reply->url().toString());
+    emit errorMessage(tr("failed to resolve annotations from URL") + ": " + reply->url().toString());
   else {
     QString url =reply->url().toString(),
             originalUrl = reply->attribute(RequestUrlAttribute).toString();
@@ -113,7 +113,9 @@ AcfunCodec::parseXmlDocument(const QByteArray &data)
     return AnnotationList();
   }
   QDomDocument doc;
-  doc.setContent(data);
+  doc.setContent(skipXmlLeadingComment(
+    QChar(data[0]).isSpace() ? data.trimmed() : data
+  ));
   if (doc.isNull()) {
     DOUT("exit: invalid document root");
     return AnnotationList();
@@ -153,8 +155,8 @@ AcfunCodec::parseJsonDocument(const QByteArray &data)
     return AnnotationList();
   }
 
-  // Comments will be skipped by QScriptEngine.
-  //data = skipJsonLeadingComment(data);
+  // Comments and spaces will be skipped by QScriptEngine.
+  //data = skipJsonLeadingComment(QChar(data[0]).isSpace() ? data.trimmed() : data);
 
   // json parser: http://qtwiki.org/Parsing_JSON_with_QT_using_standard_QT_library
   QScriptEngine engine;
@@ -239,9 +241,9 @@ AcfunCodec::parseAttribute(const QString &attr)
 
   // 2
   //fontSize
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
   fontSize *= 0.9;
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
   if (fontSize > 0)
     t += CORE_CMD_SIZE  "[" + QString::number(fontSize) + "]";
 

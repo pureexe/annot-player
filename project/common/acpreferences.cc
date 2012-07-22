@@ -8,6 +8,7 @@
 #include "project/common/acnetworkproxyprefs_p.h"
 #include "project/common/acsettings.h"
 #include "project/common/actabview.h"
+#include "project/common/acprotocol.h"
 #include "module/qtext/layoutwidget.h"
 #include <QtGui>
 
@@ -63,10 +64,7 @@ AcPreferences::finalize()
 void
 AcPreferences::addTab(AcPreferencesTab *tab)
 {
-  connect(tab, SIGNAL(message(QString)), SLOT(showMessage(QString)));
-  connect(tab, SIGNAL(error(QString)), SLOT(error(QString)));
-  connect(tab, SIGNAL(warning(QString)), SLOT(warn(QString)));
-  connect(tab, SIGNAL(notification(QString)), SLOT(notify(QString)));
+  AC_CONNECT_MESSAGES(tab, this, Qt::AutoConnection);
   tabView_->addTab(tab);
 }
 
@@ -107,7 +105,7 @@ AcPreferences::createLayout()
   //  footer->setContentsMargins(0, 0, 0, 0);
   //  rows->setContentsMargins(9, patch, 9, 9);
   //  setContentsMargins(0, 0, 0, 0);
-  //} setCentralWidget(new LayoutWidget(rows));
+  //} setCentralWidget(new LayoutWidget(rows, this));
 }
 
 // - Properties -

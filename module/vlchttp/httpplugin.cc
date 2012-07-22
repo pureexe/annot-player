@@ -37,7 +37,7 @@ QStringList VlcHttpPlugin::urls_;
 qint64 VlcHttpPlugin::duration_ = 0;
 QString VlcHttpPlugin::mediaTitle_;
 bool VlcHttpPlugin::bufferSaved_ = true;
-QString VlcHttpPlugin::cachePath_;
+QString VlcHttpPlugin::cacheDirectory_;
 
 //VlcHttpPlugin::pf_activate_t VlcHttpPlugin::pf_activate = 0;
 //VlcHttpPlugin::pf_deactivate_t VlcHttpPlugin::pf_deactivate = 0;
@@ -232,12 +232,12 @@ VlcHttpPlugin::openSession()
 
   session_->setBufferSaved(bufferSaved_);
 
-  QString cachePath = cachePath_;
-  if (cachePath.isEmpty())
-    cachePath = QDir::homePath();
-  session_->setCachePath(cachePath);
+  QString cacheDirectory = cacheDirectory_;
+  if (cacheDirectory.isEmpty())
+    cacheDirectory = QDir::homePath();
+  session_->setCacheDirectory(cacheDirectory);
 
-  connect(session_, SIGNAL(error(QString)), globalInstance(), SIGNAL(error(QString)));
+  connect(session_, SIGNAL(errorMessage(QString)), globalInstance(), SIGNAL(errorMessage(QString)));
   connect(session_, SIGNAL(message(QString)), globalInstance(), SIGNAL(message(QString)));
   connect(session_, SIGNAL(warning(QString)), globalInstance(), SIGNAL(warning(QString)));
   connect(session_, SIGNAL(fileSaved(QString)), globalInstance(), SIGNAL(fileSaved(QString)));
@@ -379,9 +379,14 @@ VlcHttpPlugin::control(access_t *p_access, int i_query, va_list args)
 
   case ACCESS_GET_PTS_DELAY:
     //DOUT("query = ACCESS_GET_PTS_DELAY");
-    pi_64 = (int64_t*)va_arg( args, int64_t * );
-    //*pi_64 = (int64_t)var_GetInteger( p_access, "http-caching" ) * 1000;
-    *pi_64 = 1000 * 1000; // in msecs, large enough to prevent jitter from youku video
+    pi_64 = (int64_t*)va_arg(args, int64_t *);
+    //*pi_64 = (int64_t)var_GetInteger(p_access, "http-caching" ) * 1000;
+    //*pi_64 = (int64_t)var_GetInteger(p_access, "network-caching") * 1000; // assigned in player_p.h
+
+    // in msecs, large enough to prevent jitter
+    // PTS delay should be equal to network-caching time / 1000.
+    *pi_64 = 1000 * 1000;
+    DOUT("PTS DELAY =" << *pi_64);
     break;
 
   case ACCESS_SET_PAUSE_STATE:

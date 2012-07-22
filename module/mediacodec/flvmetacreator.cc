@@ -16,7 +16,7 @@ void
 FlvMetaCreator::run()
 {
   if (!parse())
-    emit error(tr("failed to parse FLV streams"));
+    emit errorMessage(tr("failed to parse FLV streams"));
 }
 
 // - FLV Header -

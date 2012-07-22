@@ -17,11 +17,11 @@ class SecureBufferedFifoStream : public BufferedFifoStream
   QWaitCondition readyReadCond_, finishedCond_;
 
 public:
-  explicit SecureBufferedFifoStream(QObject *parent = 0);
+  explicit SecureBufferedFifoStream(QObject *parent = nullptr);
 
 public slots:
-  virtual void waitForFinished(); ///< \reimp
-  virtual void waitForReadyRead(); ///< \reimp
+  void waitForFinished() override;
+  void waitForReadyRead() override;
 
 protected slots:
   void wakeAllReadyRead() { readyReadCond_.wakeAll(); }

@@ -25,6 +25,7 @@
 #define ACRC_IMAGE_ROK          ACRC_PREFIX_IMAGE "flag_rok.png"
 #define ACRC_IMAGE_FRANCE       ACRC_PREFIX_IMAGE "flag_france.png"
 #define ACRC_IMAGE_GERMANY      ACRC_PREFIX_IMAGE "flag_germany.png"
+#define ACRC_IMAGE_ITALY        ACRC_PREFIX_IMAGE "flag_italy.png"
 #define ACRC_IMAGE_SPAIN        ACRC_PREFIX_IMAGE "flag_spain.png"
 #define ACRC_IMAGE_PORTUGAL     ACRC_PREFIX_IMAGE "flag_portugal.png"
 
@@ -37,10 +38,15 @@
 #define ACRC_IMAGE_KOREAN       ACRC_IMAGE_KOREA
 #define ACRC_IMAGE_FRENCH       ACRC_IMAGE_FRANCE
 #define ACRC_IMAGE_GERMAN       ACRC_IMAGE_GERMANY
+#define ACRC_IMAGE_ITALIAN      ACRC_IMAGE_ITALY
 #define ACRC_IMAGE_SPANISH      ACRC_IMAGE_SPAIN
 #define ACRC_IMAGE_PORTUGUESE   ACRC_IMAGE_PORTUGAL
 #define ACRC_IMAGE_SIMPLIFIED_CHINESE   ACRC_IMAGE_PRC
 #define ACRC_IMAGE_TRADITIONAL_CHINESE  ACRC_IMAGE_ROC
+
+// - Special -
+
+#define ACRC_IMAGE_MATRIX       ACRC_PREFIX_IMAGE "matrix.png"
 
 // - Backgrounds -
 

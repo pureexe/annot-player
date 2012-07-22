@@ -19,9 +19,9 @@ class WbComboEdit : public WbComboEditBase
   typedef WbComboEditBase Base;
 
 public:
-  explicit WbComboEdit(QWidget *parent = 0)
+  explicit WbComboEdit(QWidget *parent = nullptr)
     : Base(parent) { init(); }
-  explicit WbComboEdit(const QStringList &items, QWidget *parent = 0)
+  explicit WbComboEdit(const QStringList &items, QWidget *parent = nullptr)
     : Base(parent), defaultItems_(items) { init(); }
 
   QStringList defaultItems() const { return defaultItems_; }
@@ -43,7 +43,7 @@ public slots:
 
   // - Events -
 protected:
-  virtual void contextMenuEvent(QContextMenuEvent *event); ///< \reimp
+  void contextMenuEvent(QContextMenuEvent *event) override;
 
   static bool isClipboardEmpty();
 

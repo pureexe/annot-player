@@ -11,6 +11,13 @@
 
 // - Constructions -
 
+void
+TextHook::setEnabled(bool t)
+{
+  if (enabled_ != t)
+    emit enabledChanged(enabled_ = t);
+}
+
 bool
 TextHook::isActive() const
 { return Ith::isLoaded(); }

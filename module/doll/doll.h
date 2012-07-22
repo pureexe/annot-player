@@ -18,7 +18,7 @@ class Doll : public QObject
 
 public:
   ///  If \p async, perform initialization from another thread.
-  explicit Doll(QObject *parent = 0, bool async = true);
+  explicit Doll(QObject *parent = nullptr, bool async = true);
   ~Doll();
 
 signals:

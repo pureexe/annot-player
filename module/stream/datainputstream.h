@@ -19,29 +19,29 @@ class DataInputStream : public QObject, public InputStream
   qint64 pos_;
 
 public:
-  explicit DataInputStream(const QByteArray &data, QObject *parent = 0)
+  explicit DataInputStream(const QByteArray &data, QObject *parent = nullptr)
     : Base(parent), data_(data), pos_(0) { }
 
   const QByteArray &data() const { return data_; }
 
 public:
-  virtual qint64 size() const { return data_.size(); } ///< \reimp
-  virtual qint64 pos() const { return pos_; } ///< \reimp
+  qint64 size() const override { return data_.size(); }
+  qint64 pos() const override { return pos_; }
 
-  virtual bool reset()  { pos_ = 0; return true; } ///< \reimp
+  bool reset()  override { pos_ = 0; return true; }
 
-  virtual bool seek(qint64 pos) ///< \reimp
+  bool seek(qint64 pos) override
   { if (pos_ >= data_.size()) return false; pos_ = pos; return true; }
 
-  virtual qint64 skip(qint64 count) ///< \reimp
+  qint64 skip(qint64 count) override
   { qint64 diff = qMin(count, data_.size() - pos_); pos_ += diff; return diff; }
 
-  virtual qint64 read(char *data, qint64 maxSize); ///< \reimp
+  qint64 read(char *data, qint64 maxSize) override;
 
-  virtual QByteArray readAll()  ///< \reimp
+  QByteArray readAll() override
   { return pos_ ? data_.mid(pos_) : data_; }
 
-  virtual bool writeFile(const QString &path); ///< \reimp
+  bool writeFile(const QString &path) override;
 };
 
 #endif // DATAINPUTSTREAM_H

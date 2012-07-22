@@ -37,16 +37,30 @@ AnnotationGraphicsItemScheduler::clear()
   qMemSet(flyLaneTime_, 0, sizeof(flyLaneTime_)/sizeof(*flyLaneTime_));
   qMemSet(topLaneTime_, 0, sizeof(topLaneTime_)/sizeof(*topLaneTime_));
   qMemSet(bottomLaneTime_, 0, sizeof(bottomLaneTime_)/sizeof(*bottomLaneTime_));
+  qMemSet(subLaneStyle_, 0, sizeof(subLaneStyle_)/sizeof(*subLaneStyle_));
+}
+
+void
+AnnotationGraphicsItemScheduler::clearSubtitles()
+{
+  for (int i = 0; i < LaneCount; i++)
+    if (subLaneStyle_[i]) {
+      switch (subLaneStyle_[i]) {
+      case AnnotationGraphicsItem::TopStyle: topLaneTime_[i] = 0; break;
+      case AnnotationGraphicsItem::BottomStyle: bottomLaneTime_[i] = 0; break;
+      }
+      subLaneStyle_[i] = 0;
+    }
 }
 
 // - Float Scheduling -
 
 // Use std time() rather than QTime::currentTime() to improve performance.
 int
-AnnotationGraphicsItemScheduler::nextY(int windowHeight, int itemHeight, int visibleTime, AnnotationGraphicsItem::Style style)
+AnnotationGraphicsItemScheduler::nextY(int windowHeight, int itemHeight, int visibleTime, AnnotationGraphicsItem::Style style, bool sub)
 {
   Q_ASSERT(hub_);
-  // min scale is 0.5, LaneHeight is around 30, 2000 is the max vertical resolution
+  // min scale is 1/2 (0.5), LaneHeight is around 30, 2000 is the max vertical resolution
   static_assert(LaneCount * LaneHeight / 2 > 2000, "insufficient vertical lanes");
 
   int laneHeight = LaneHeight * scale_;
@@ -120,11 +134,15 @@ AnnotationGraphicsItemScheduler::nextY(int windowHeight, int itemHeight, int vis
     for (int i = 0; i < itemLaneCount; i++)
       lastLaneTime[bestLane + i] = now;
 
+  if (hub_->isSignalTokenMode() && sub)
+    for (int i = 0; i < itemLaneCount; i++)
+      subLaneStyle_[bestLane + i] = style;
+
   switch (style) {
   case AnnotationGraphicsItem::BottomStyle:
   case AnnotationGraphicsItem::SubtitleStyle:
     {
-      int windowFooter = !hub_->isNormalPlayerMode() ? int(laneHeight * 1.5)   : 0;
+      int windowFooter = !hub_->isNormalPlayerMode() ? int(laneHeight * 1.5) : 0;
       return windowHeight - (bestLane + 2) * laneHeight - windowFooter;
     }
   default:

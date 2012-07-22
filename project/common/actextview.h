@@ -17,7 +17,7 @@ class AcTextView : public AcTextEdit
   typedef AcTextEdit Base;
 
 public:
-  explicit AcTextView(QWidget *parent = 0)
+  explicit AcTextView(QWidget *parent = nullptr)
     : Base(parent), line_(0) { }
 
   bool isEmpty() const { return !line_; }

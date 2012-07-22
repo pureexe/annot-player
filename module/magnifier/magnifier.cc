@@ -18,11 +18,11 @@
   Qt::CustomizeWindowHint | \
   Qt::WindowStaysOnTopHint
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
 # define WINDOW_FLAGS  WINDOW_FLAGS_BASE | Qt::FramelessWindowHint
 #else
 # define WINDOW_FLAGS  WINDOW_FLAGS_BASE
-#endif // Q_WS_MAC
+#endif // Q_OS_MAC
 
 #define MIN_SCALE       0.2
 #define MAX_SCALE       10.0
@@ -35,10 +35,10 @@
 // - Construction -
 
 Magnifier::Magnifier(QWidget *parent)
-  : Base(parent, WINDOW_FLAGS), w_(0), scale_(DEFAULT_SCALE),
-    darknessFilter_(0), fogFilter_(0), mosaicFilter_(0), rippleFilter_(0),
-    fadeAni_(0),
-    contextMenu_(0), darknessFilterAct_(0), fogFilterAct_(0), mosaicFilterAct_(0)
+  : Base(parent, WINDOW_FLAGS), w_(nullptr), scale_(DEFAULT_SCALE),
+    darknessFilter_(nullptr), fogFilter_(nullptr), mosaicFilter_(nullptr), rippleFilter_(nullptr),
+    fadeAni_(nullptr),
+    contextMenu_(nullptr), darknessFilterAct_(nullptr), fogFilterAct_(nullptr), mosaicFilterAct_(nullptr)
 {
   setWindowTitle(tr("Magnifier"));
   setContentsMargins(0, 0, 0, 0);
@@ -53,7 +53,7 @@ Magnifier::Magnifier(QWidget *parent)
   connect(repaintTimer_, SIGNAL(timeout()), SLOT(repaint()));
 
   hideTimer_ = new QTimer(this);
-  hideTimer_->setSingleShot(0);
+  hideTimer_->setSingleShot(true);
   connect(hideTimer_, SIGNAL(timeout()), SLOT(hide()));
 
 #ifdef WITH_MODULE_IMAGEFILTER

@@ -28,11 +28,11 @@
 
 PlayerPanel::PlayerPanel(QWidget *parent)
   : Base(parent),
-    positionSlider_(0), volumeSlider_(0),
-    openButton_(0), playButton_(0), stopButton_(0), nextFrameButton_(0), fastForwardButton_(0),
-    toggleFullScreenModeButton_(0), toggleMiniModeButton_(0), toggleEmbedModeButton_(0), toggleTraceWindowButton_(0),
-    userButton_(0), networkButton_(0), positionButton_(0), progressButton_(0), previousButton_(0), nextButton_(0), menuButton_(0),
-    inputCountButton_(0), inputComboBox_(0), prefixComboBox_(0)
+    positionSlider_(nullptr), volumeSlider_(nullptr),
+    openButton_(nullptr), playButton_(nullptr), stopButton_(nullptr), nextFrameButton_(nullptr), fastForwardButton_(nullptr),
+    toggleFullScreenModeButton_(nullptr), toggleMiniModeButton_(nullptr), toggleEmbedModeButton_(nullptr), toggleTraceWindowButton_(nullptr),
+    userButton_(nullptr), networkButton_(nullptr), positionButton_(nullptr), progressButton_(nullptr), previousButton_(nullptr), nextButton_(nullptr), menuButton_(nullptr),
+    inputCountButton_(nullptr), inputComboBox_(nullptr), prefixComboBox_(nullptr)
 {
   setContentsMargins(0, 0, 0, 0);
   setStyleSheet(

@@ -112,6 +112,7 @@ ln -s ../../../"$APP_MACOS"/translations || exit 1
 cd ../../..
 
 cd "$BROWSER_APP"/Contents/MacOS || exit 1
+ln -s ../../../"$APP_MACOS"/lua || exit 1
 ln -s ../../../"$APP_MACOS"/doc || exit 1
 ln -s ../../../"$APP_MACOS"/images || exit 1
 ln -s ../../../"$APP_MACOS"/jsf || exit 1

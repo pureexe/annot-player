@@ -3,9 +3,9 @@
 mac {
 
 TEMPLATE = subdirs
+include(qtcocoa/qtcocoa.pri)
 include(qtmac/qtmac.pri)
-include(qtstep/qtstep.pri)
-include(vlcstep/vlcstep.pri)
+include(vlccocoa/vlccocoa.pri)
 #include(VLCKit/VLCKit.pri)
 #SUBDIRS = VLCKit
 }

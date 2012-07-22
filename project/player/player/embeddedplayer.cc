@@ -8,11 +8,13 @@
 #include "positionslider.h"
 #include "global.h"
 #include "tr.h"
+#include "stylesheet.h"
 #include "signalhub.h"
 #ifdef Q_OS_WIN
 # include "win/qtwin/qtwin.h"
 #endif // Q_OS_WIN
-#include "project/common/acss.h"
+#include "project/common/acui.h"
+#include "project/common/aciconbutton.h"
 #include "module/qtext/toolbutton.h"
 #include "module/qtext/withsizehint.h"
 #include "module/qtext/overlaylayout.h"
@@ -73,10 +75,13 @@ enum { VolumeSliderMaximumWidth = 100 };
     SS_TRANSPARENT \
   SS_END
 
+#define SS_TOOLBUTTON_DOCK_TOP      SS_TOOLBUTTON_UPARROW
+#define SS_TOOLBUTTON_DOCK_BOTTOM   SS_TOOLBUTTON_DOWNARROW
+
 // - Constructions -
 EmbeddedPlayerUi::EmbeddedPlayerUi(SignalHub *hub, Player *player, ServerAgent *server, DataManager *data, QWidget *parent)
   : Base(hub, player, server, parent),
-    containerWindow_(0), containerWidget_(0),
+    containerWindow_(0), containerWidget_(nullptr),
     fullScreen_(false), top_(false)
 {
   setWindowFlags(Qt::FramelessWindowHint);
@@ -86,10 +91,18 @@ EmbeddedPlayerUi::EmbeddedPlayerUi(SignalHub *hub, Player *player, ServerAgent *
 
   canvas_ = new EmbeddedCanvas(data, hub, player);
   canvas_->hide();
-  connect(canvas_, SIGNAL(visibleChanged(bool)), infoView_, SLOT(setInvisible(bool)));
+  connect(canvas_, SIGNAL(visibleChanged(bool)), SLOT(hideInfoView(bool)));
   connect(canvas_, SIGNAL(visibleChanged(bool)), SLOT(updateGeometry()), Qt::QueuedConnection);
 
   calibration_ = new PositionCalibration(hub, player, this);
+
+  toggleDockButton_ = new AcIconButton(this); {
+    toggleDockButton_->setCheckable(true);
+    toggleDockButton_->setChecked(true);
+    toggleDockButton_->setGraphicsEffect(AcUi::globalInstance()->makeHaloEffect(QColor("orange")));
+    connect(toggleDockButton_, SIGNAL(clicked()), SLOT(toggleOnTop()));
+    updateDockButton();
+  }
 
   createLayout();
 
@@ -173,6 +186,7 @@ EmbeddedPlayerUi::createLayout()
     rows->addWidget(positionSlider());
     rows->addLayout(row);
 
+    row->addWidget(toggleDockButton_);
     row->addWidget(menuButton());
     row->addWidget(openButton());
     row->addWidget(playButton());
@@ -242,6 +256,7 @@ EmbeddedPlayerUi::setOnTop(bool t)
     top_ = t;
     canvas_->setVisible(!top_);
     infoView_->setVisible(!top_);
+    updateDockButton();
     updateGeometry();
   }
 }
@@ -323,7 +338,7 @@ EmbeddedPlayerUi::updateGeometry()
     QRect r = QtWin::getWindowRect(containerWindow_);
     if (r.isEmpty()) {
       //if (!QtWin::isWindowValid(containerWindow_))
-      setContainerWindow(0);
+      setContainerWindow(nullptr);
 
     } else if (r.topLeft() == QTWIN_INVALID_POS) {
       //if (QtWin::isWindowMinimized(containerWindow_))
@@ -446,6 +461,13 @@ EmbeddedPlayerUi::setVisible(bool visible)
 }
 
 void
+EmbeddedPlayerUi::hideInfoView(bool invisible)
+{
+  bool visible = !top_ && !invisible;
+  infoView_->setVisible(visible);
+}
+
+void
 EmbeddedPlayerUi::showWhenEmbedded()
 {
   if (!isVisible() && hub()->isEmbeddedPlayerMode())
@@ -453,13 +475,26 @@ EmbeddedPlayerUi::showWhenEmbedded()
 }
 
 void
+EmbeddedPlayerUi::updateDockButton()
+{
+  toggleDockButton_->setChecked(true);
+  if (top_) {
+    toggleDockButton_->setStyleSheet(SS_TOOLBUTTON_DOCK_BOTTOM);
+    toggleDockButton_->setToolTip(TR(T_TOOLTIP_DOCK_BOTTOM));
+  } else {
+    toggleDockButton_->setStyleSheet(SS_TOOLBUTTON_DOCK_TOP);
+    toggleDockButton_->setToolTip(TR(T_TOOLTIP_DOCK_TOP));
+  }
+}
+
+void
 EmbeddedPlayerUi::updateInputCountButton()
 {
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
 # define PADDING "    "
 #else
 # define PADDING "   "
-#endif // Q_WS_MAC
+#endif // Q_OS_MAC
   Base::updateInputCountButton();
   QToolButton *b = inputCountButton();
   b->setText(b->text() + PADDING); // padding

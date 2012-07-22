@@ -16,9 +16,9 @@ class WbSearchEdit : public WbComboEdit
   typedef WbComboEdit Base;
 
 public:
-  explicit WbSearchEdit(QWidget *parent = 0)
+  explicit WbSearchEdit(QWidget *parent = nullptr)
     : Base(parent), engine_(0) { init(); }
-  explicit WbSearchEdit(const QStringList &items, QWidget *parent = 0)
+  explicit WbSearchEdit(const QStringList &items, QWidget *parent = nullptr)
     : Base(items, parent), engine_(0) { init(); }
 
   void setEngines(const QList<SearchEngine *> engines)
@@ -35,7 +35,7 @@ signals:
 
   // - Events -
 protected:
-  virtual void contextMenuEvent(QContextMenuEvent *event); ///< \reimp
+  void contextMenuEvent(QContextMenuEvent *event) override;
 
   // - Actions -
 public slots:
@@ -48,7 +48,7 @@ public slots:
 protected slots:
   void invalidateEngines();
   void setEngineByIndex(int index);
-  virtual void submitText(); ///< \reimp
+  void submitText() override;
 
   void updateText(const QString &text);
   void searchWithEngine(int engine);

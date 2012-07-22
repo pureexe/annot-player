@@ -39,7 +39,7 @@ namespace Core {
     typedef QObject Base;
 
   public:
-    explicit Annotation(QObject *parent = 0) : Base(parent) { }
+    explicit Annotation(QObject *parent = nullptr) : Base(parent) { }
 
   public:
     // Meta data

@@ -13,7 +13,7 @@ TranslatorManager::TranslatorManager(QObject *parent)
 {
 #define ADD(_service) \
   t = t_[_service] = new _service##Translator(this); \
-  connect(t, SIGNAL(error(QString)), SIGNAL(error(QString))); \
+  connect(t, SIGNAL(errorMessage(QString)), SIGNAL(errorMessage(QString))); \
   connect(t, SIGNAL(translated(QString)), SIGNAL(translated(QString)));
 
   Translator*

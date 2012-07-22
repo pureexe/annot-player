@@ -32,7 +32,7 @@ class PlayerUi : public PlayerPanel
 
   // TODO: use signal hub_ to replace player_ and server_ signals.
 public:
-  explicit PlayerUi(SignalHub *hub_, Player *player, ServerAgent *server, QWidget *parent = 0);
+  explicit PlayerUi(SignalHub *hub_, Player *player, ServerAgent *server, QWidget *parent = nullptr);
 
   bool isValid() const;
 
@@ -65,7 +65,7 @@ signals:
 
 
 public slots:
-  virtual void setVisible(bool visible); ///< \reimp
+  void setVisible(bool visible) override;
 
   // - Player -
   void play();

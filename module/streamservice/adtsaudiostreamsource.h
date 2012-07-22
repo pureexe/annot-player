@@ -18,7 +18,7 @@ class ADTSAudioStreamSource: public FramedStreamSource
   float duration_;
 
 public:
-  static ADTSAudioStreamSource* createNew(UsageEnvironment &env, InputStream *in, MediaToc *toc = 0, float duration = 0);
+  static ADTSAudioStreamSource* createNew(UsageEnvironment &env, InputStream *in, MediaToc *toc = nullptr, float duration = 0);
 
   unsigned samplingFrequency() const { return fSamplingFrequency; }
   unsigned numChannels() const { return fNumChannels; }
@@ -35,7 +35,7 @@ private:
 
 private:
   // redefined virtual functions:
-  virtual void doGetNextFrame(); ///< \reimp
+  void doGetNextFrame() override;
 
 private:
   unsigned fSamplingFrequency;

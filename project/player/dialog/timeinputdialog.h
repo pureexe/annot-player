@@ -18,7 +18,7 @@ class TimeInputDialog : public AcWindow
   QTimeEdit *timeEdit_;
 
 public:
-  explicit TimeInputDialog(QWidget *parent = 0);
+  explicit TimeInputDialog(QWidget *parent = nullptr);
 
   qint64 time() const;
 

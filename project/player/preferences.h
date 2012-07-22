@@ -15,7 +15,7 @@ class Preferences : public AcPreferences
   typedef AcPreferences Base;
 
 public:
-  explicit Preferences(QWidget *parent = 0);
+  explicit Preferences(QWidget *parent = nullptr);
 };
 
 #endif // PREFERENCES_H

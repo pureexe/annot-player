@@ -17,11 +17,11 @@ class AcAccountPrefs : public AcPreferencesTab
   typedef AcPreferencesTab Base;
 
 public:
-  explicit AcAccountPrefs(AcSettings *settings, QWidget *parent = 0);
+  explicit AcAccountPrefs(AcSettings *settings, QWidget *parent = nullptr);
 
 public slots:
-  virtual bool save(); ///< \reimp
-  virtual void load(); ///< \reimp
+  bool save() override;
+  void load() override;
 
 protected slots:
   void visitNicovideo();

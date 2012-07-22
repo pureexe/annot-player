@@ -28,7 +28,7 @@ class TextCodecManager : public QObject
 public:
   static Self *globalInstance() { static Self g; return &g; }
 public:
-  explicit TextCodecManager(QObject *parent = 0);
+  explicit TextCodecManager(QObject *parent = nullptr);
 
   QTextCodec *codec() const { return codec_; }
   QTextDecoder *decoder() const { return decoder_; }

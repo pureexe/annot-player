@@ -4,6 +4,7 @@
 #include "project/common/acmainwindow.h"
 #include "project/common/acss.h"
 #include "project/common/acui.h"
+#include "project/common/acprotocol.h"
 #ifdef WITH_MODULE_ANIMATION
 # include "module/animation/fadeanimation.h"
 #endif // WITH_MODULE_ANIMATION
@@ -36,9 +37,11 @@ AcMainWindow::AcMainWindow(QWidget *parent, Qt::WindowFlags f)
   : Base(parent, f), autoHideMenuBar_(true), fadeAni_(0), fadeEnabled_(true),
     rippleEnabled_(false), rippleFilter_(0), rippleTimer_(0)
 {
-//#ifdef Q_WS_WIN
+  AC_CONNECT_MESSAGES(this, this, Qt::QueuedConnection);
+
+//#ifdef Q_OS_WIN
 //  if (!AcUi::isAeroAvailable())
-//#endif // Q_WS_WIN
+//#endif // Q_OS_WIN
 //  { rippleEnabled_ = true; }
 
   AcUi::globalInstance()->setWindowStyle(this);
@@ -53,11 +56,6 @@ AcMainWindow::AcMainWindow(QWidget *parent, Qt::WindowFlags f)
 
   AcUi::globalInstance()->setStatusBarStyle(statusBar());
   statusBar()->hide();
-
-  connect(this, SIGNAL(message(QString)), SLOT(showMessage(QString)), Qt::QueuedConnection);
-  connect(this, SIGNAL(errorMessage(QString)), SLOT(error(QString)), Qt::QueuedConnection);
-  connect(this, SIGNAL(warning(QString)), SLOT(warn(QString)), Qt::QueuedConnection);
-  connect(this, SIGNAL(notification(QString)), SLOT(notify(QString)), Qt::QueuedConnection);
 }
 
 // - Log -
@@ -75,7 +73,7 @@ AcMainWindow::showMessage(const QString &text)
 }
 
 void
-AcMainWindow::error(const QString &text)
+AcMainWindow::showError(const QString &text)
 {
   statusBar()->setStyleSheet(SS_STATUSBAR_ERROR);
   statusBar()->showMessage(text);
@@ -116,10 +114,10 @@ void
 AcMainWindow::setRippleEnabled(bool t)
 {
 #ifdef WITH_MODULE_IMAGEFILTER
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
   if (AcUi::isAeroAvailable())
     return;
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
   if (t == rippleEnabled_)
     return;
   if (t)

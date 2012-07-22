@@ -23,7 +23,7 @@ class UrlDialog : public AcWindow
   QString editStyleSheet_;
 
 public:
-  explicit UrlDialog(QWidget *parent = 0);
+  explicit UrlDialog(QWidget *parent = nullptr);
 
   QString text() const;
   bool isEmpty() const;
@@ -41,7 +41,7 @@ public slots:
   void increase();
   void decrease();
 
-  virtual void setVisible(bool visible); ///< \reimp
+  void setVisible(bool visible) override;
 
 protected:
   static QString autoCompleteUrl(const QString &url);

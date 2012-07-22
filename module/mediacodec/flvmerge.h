@@ -33,16 +33,16 @@ class FlvMerge : public QObject, public StreamListPipe
        scriptTagStripped_;
 
 public:
-  FlvMerge(const InputStreamList &ins, OutputStream *out, QObject *parent = 0)
+  FlvMerge(const InputStreamList &ins, OutputStream *out, QObject *parent = nullptr)
     : Base(parent), state_(Stopped), ins_(ins), out_(out),
       audioTimestamp_(0), videoTimestamp_(0), duration_(0) { }
 
-  explicit FlvMerge(const InputStreamList &ins, QObject *parent = 0)
-    : Base(parent), state_(Stopped), ins_(ins), out_(0),
+  explicit FlvMerge(const InputStreamList &ins, QObject *parent = nullptr)
+    : Base(parent), state_(Stopped), ins_(ins), out_(nullptr),
       audioTimestamp_(0), videoTimestamp_(0), duration_(0) { }
 
-  explicit FlvMerge(QObject *parent = 0)
-    : Base(parent), out_(0),
+  explicit FlvMerge(QObject *parent = nullptr)
+    : Base(parent), out_(nullptr),
       audioTimestamp_(0), videoTimestamp_(0), duration_(0) { }
 
 public:
@@ -50,8 +50,8 @@ public:
   bool isRunning() const { return state_ == Running; }
   bool isFinished() const { return state_ == Finished; }
 
-  void setInputStreams(const InputStreamList &ins) { ins_ = ins; } ///< \reimp
-  void setOutputStream(OutputStream *out) { out_ = out; } ///< \reimp
+  void setInputStreams(const InputStreamList &ins) override { ins_ = ins; }
+  void setOutputStream(OutputStream *out) override { out_ = out; }
   void setDuration(qint64 msec) { duration_ = msec; }
 
   qint64 duration() const { return duration_; }
@@ -61,12 +61,12 @@ public:
 signals:
   void stopped();
   //void timestampChanged(qint64);
-  void error(QString message);
+  void errorMessage(QString message);
 
 public slots:
-  virtual void run(); ///< \reimp
+  void run() override;
 
-  virtual void stop() ///< \reimp
+  void stop() override
   {
     state_ = Stopped;
     emit stopped();
@@ -79,8 +79,8 @@ public:
   bool merge();
 
 protected:
-  InputStreamList inputStreams() const { return ins_; } ///< \reimp
-  OutputStream *outputStream()  const { return out_; } ///< \reimp
+  InputStreamList inputStreams() const override { return ins_; }
+  OutputStream *outputStream()  const override { return out_; }
 
   bool append(InputStream *in, bool writeHeader);
   bool readTag(InputStream *in, bool writeHeader);

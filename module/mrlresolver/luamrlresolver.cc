@@ -33,7 +33,7 @@
 # define LUA_PATH "lua/luascript" // omit applicationDirPath, which might contains non-ascii chars and cannot handled by liblua
 #elif defined(Q_OS_MAC)
 # define LUA_PATH QCoreApplication::applicationDirPath() + "/lua"
-#elif defined(Q_WS_X11)
+#elif defined(Q_OS_LINUX)
 # define LUA_PATH LUADIR
 #endif // Q_OS_
 
@@ -53,7 +53,7 @@ namespace detail {
   {
     LuaMrlResolver *r_;
     QString ref_;
-    virtual void run() { r_->resolveMedia(ref_, false); } // \reimp, async = false
+    void run() override { r_->resolveMedia(ref_, false); } // async = false
   public:
     ResolveMedia(const QString &ref, LuaMrlResolver *r)
       : r_(r), ref_(ref) { Q_ASSERT(r_); }
@@ -63,7 +63,7 @@ namespace detail {
   {
     LuaMrlResolver *r_;
     QString ref_;
-    virtual void run() { r_->resolveSubtitle(ref_, false); } // \reimp, async = false
+    void run() override { r_->resolveSubtitle(ref_, false); } // async = false
   public:
     ResolveSubtitle(const QString &ref, LuaMrlResolver *r)
       : r_(r), ref_(ref) { Q_ASSERT(r_); }
@@ -129,7 +129,7 @@ LuaMrlResolver::resolveMedia(const QString &href, bool async)
   QList<qint64> durations, sizes;
   bool ok = lua.resolve(url, &siteid, &refurl, &title, &suburl, &mrls, &durations, &sizes);
   if (!ok) {
-    emit error(tr("failed to resolve URL") + ": " + url);
+    emit errorMessage(tr("failed to resolve URL") + ": " + url);
     DOUT("exit: LuaResolver returned false");
     return false;
   }
@@ -137,13 +137,13 @@ LuaMrlResolver::resolveMedia(const QString &href, bool async)
   if (mrls.isEmpty()) {
     switch (siteid) {
     case LuaResolver::Nicovideo:
-      emit error(tr("failed to resolve URL using nicovideo account") + ": " + url);
+      emit errorMessage(tr("failed to resolve URL using nicovideo account") + ": " + url);
       break;
     case LuaResolver::Bilibili:
-      emit error(tr("failed to resolve URL using bilibili account") + ": " + url);
+      emit errorMessage(tr("failed to resolve URL using bilibili account") + ": " + url);
       break;
     default:
-      emit error(tr("failed to resolve URL") + ": " + url);
+      emit errorMessage(tr("failed to resolve URL") + ": " + url);
     }
     DOUT("exit: mrls is empty");
     return false;
@@ -185,10 +185,10 @@ LuaMrlResolver::resolveMedia(const QString &href, bool async)
   //QNetworkCookieJar *jar = lua.cookieJar();
   //Q_ASSERT(jar);
   //if (jar)
-  //  jar->setParent(0);
+  //  jar->setParent(nullptr);
   QNetworkCookieJar *jar = lua.cookieJar();
   if (jar)
-    jar->setParent(0);
+    jar->setParent(nullptr);
 
   emit mediaResolved(mi, jar);
   if (isSynchronized()) {
@@ -233,7 +233,7 @@ LuaMrlResolver::resolveSubtitle(const QString &href, bool async)
   bool ok = lua.resolve(url, &siteid, &refurl, &title, &suburl);
 
   if (!ok) {
-    emit error(tr("failed to resolve URL") + ": " + url);
+    emit errorMessage(tr("failed to resolve URL") + ": " + url);
     DOUT("exit: LuaResolver returned false");
     return false;
   }
@@ -241,13 +241,13 @@ LuaMrlResolver::resolveSubtitle(const QString &href, bool async)
   if (suburl.isEmpty()) {
     switch (siteid) {
     case LuaResolver::Nicovideo:
-      emit error(tr("failed to resolve URL using nicovideo account") + ": " + url);
+      emit errorMessage(tr("failed to resolve URL using nicovideo account") + ": " + url);
       break;
     case LuaResolver::Bilibili:
-      emit error(tr("failed to resolve URL using bilibili account") + ": " + url);
+      emit errorMessage(tr("failed to resolve URL using bilibili account") + ": " + url);
       break;
     default:
-      emit error(tr("failed to resolve URL") + ": " + url);
+      emit errorMessage(tr("failed to resolve URL") + ": " + url);
     }
     DOUT("exit: suburl is empty");
     return false;
@@ -370,7 +370,7 @@ LuaMrlResolver::checkSiteAccount(const QString &href)
   DOUT("enter");
   if (href.contains("nicovideo.jp/", Qt::CaseInsensitive)
       && !MrlResolverSettings::globalSettings()->hasNicovideoAccount()) {
-    emit error(tr("nicovideo.jp account is required to resolve URL") + ": " + href);
+    emit errorMessage(tr("nicovideo.jp account is required to resolve URL") + ": " + href);
     DOUT("exit: ret = false, nico account required");
     return false;
   }

@@ -6,7 +6,7 @@
 #include <QApplication>
 #include <QMenuBar>
 //#include <QCleanLooksStyle>
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
   #include "win/dwm/dwm.h"
 #endif
 
@@ -21,7 +21,7 @@ namespace { // anonymous
   setWindowStyle(QMainWindow *w)
   {
     Q_ASSERT(w);
-#if defined(Q_WS_WIN) && defined(USE_DWM)
+#if defined(Q_OS_WIN) && defined(USE_DWM)
     if (Dwm::isCompositionEnabled()) {
       Dwm::enableBlurBehindWindow(w, true);
       Dwm::extendFrameIntoClientArea(w);
@@ -30,7 +30,7 @@ namespace { // anonymous
 
       w->setContentsMargins(0, 0, 0, 0);
     }
-#elif defined(Q_WS_X11)
+#elif defined(Q_OS_LINUX)
     w->setAttribute(Qt::WA_TranslucentBackground);
     w->setAttribute(Qt::WA_NoSystemBackground, false);
     QPalette pal = w->palette();

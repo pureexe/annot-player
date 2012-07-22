@@ -13,7 +13,7 @@ class H264VideoStreamSMSS : public StreamSMSS
 
   // - Construction -
 public:
-  static Self *createNew(UsageEnvironment &env, InputStream *in, MediaToc *toc = 0, float duration = 0)
+  static Self *createNew(UsageEnvironment &env, InputStream *in, MediaToc *toc = nullptr, float duration = 0)
   { return new Self(env, in, toc, duration); }
 
 protected:
@@ -21,18 +21,15 @@ protected:
     : Base(env, in, toc, duration) { }
 
 protected:
-  ///  \reimp
-  virtual FramedSource *createNewStreamSource(unsigned clientSessionId,
-                                              unsigned &estBitrate);
-  ///  \reimp
-  virtual RTPSink *createNewRTPSink(Groupsock *rtpGroupsock,
-                                    unsigned char rtpPayloadTypeIfDynamic,
-                                    FramedSource *inputSource);
-  ///  \reimp
-  virtual void seekStreamSource(FramedSource* inputSource,
-                                double &seekNPT,
-                                double streamDuration,
-                                u_int64_t &numBytes);
+  FramedSource *createNewStreamSource(unsigned clientSessionId,
+                                      unsigned &estBitrate) override;
+  RTPSink *createNewRTPSink(Groupsock *rtpGroupsock,
+                            unsigned char rtpPayloadTypeIfDynamic,
+                            FramedSource *inputSource) override;
+  void seekStreamSource(FramedSource* inputSource,
+                        double &seekNPT,
+                        double streamDuration,
+                        u_int64_t &numBytes) override;
 };
 
 #endif // H264VIDEOSTREAMSMSS_H

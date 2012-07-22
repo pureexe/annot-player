@@ -21,10 +21,10 @@ class BingTranslator : public Translator
 
   // - Constructions -
 public:
-  explicit BingTranslator(QObject *parent = 0);
+  explicit BingTranslator(QObject *parent = nullptr);
 
 public slots:
-  virtual void translate(const QString &text, const QString &to, const QString &from = QString()); ///< \reimp
+  void translate(const QString &text, const QString &to, const QString &from = QString()) override;
 
 protected:
   static QUrl translateUrl(const QString &text, const QString &to, const QString &from = QString());

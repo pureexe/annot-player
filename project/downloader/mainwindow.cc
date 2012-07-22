@@ -18,6 +18,7 @@
 #include "project/common/acbrowser.h"
 #include "project/common/acplayer.h"
 #include "project/common/acpreferences.h"
+#include "project/common/acprotocol.h"
 #include "module/animation/fadeanimation.h"
 #include "module/qtext/datetime.h"
 #include "module/qtext/layoutwidget.h"
@@ -41,7 +42,7 @@
 
 enum { RefreshInterval = 3000 };
 enum { SaveInterval = 1000 * 30 }; // after 30 seconds
-enum { MaxDownloadThreadCount = 5 };
+enum { MaxDownloadThreadCount = 1 };
 
 // - Constructions -
 
@@ -69,9 +70,11 @@ MainWindow::MainWindow(QWidget *parent)
   //connect(downloadManager_, SIGNAL(taskAdded(DownloadTask*)), SLOT(saveLater()));
   connect(AcLocationManager::globalInstance(), SIGNAL(downloadsLocationChanged(QString)), downloadManager_, SLOT(setDownloadsLocation(QString)));
   connect(downloadManager_, SIGNAL(taskRemoved(DownloadTask*)), SLOT(saveLater()));
-  connect(downloadManager_, SIGNAL(message(QString)), SLOT(showMessage(QString)), Qt::QueuedConnection);
-  connect(downloadManager_, SIGNAL(error(QString)), SLOT(error(QString)), Qt::QueuedConnection);
-  connect(downloadManager_, SIGNAL(warning(QString)), SLOT(warn(QString)), Qt::QueuedConnection);
+  connect(downloadManager_, SIGNAL(fileSaved(QString)), SLOT(notifyFileSaved(QString)));
+
+  AC_CONNECT_MESSAGE(downloadManager_, this, Qt::QueuedConnection);
+  AC_CONNECT_ERROR(downloadManager_, this, Qt::QueuedConnection);
+  AC_CONNECT_WARNING(downloadManager_, this, Qt::QueuedConnection);
 
   createModels();
   createSearchEngines();
@@ -90,24 +93,13 @@ MainWindow::MainWindow(QWidget *parent)
   connect(tableView_, SIGNAL(currentIndexChanged(QModelIndex)), SLOT(updateButtons()));
 
   clipboardMonitor_ = new ClipboardMonitor(this);
-  connect(clipboardMonitor_, SIGNAL(message(QString)), SLOT(showMessage(QString)));
-  connect(clipboardMonitor_, SIGNAL(warning(QString)), SLOT(warn(QString)));
-  connect(clipboardMonitor_, SIGNAL(error(QString)), SLOT(error(QString)));
-  connect(clipboardMonitor_, SIGNAL(notification(QString)), SLOT(notify(QString)));
+  AC_CONNECT_MESSAGES(clipboardMonitor_, this, Qt::AutoConnection);
   connect(clipboardMonitor_, SIGNAL(urlEntered(QString)), SLOT(promptUrl(QString)));
 
   signer_ = new Signer(this);
-  connect(signer_, SIGNAL(message(QString)), SLOT(showMessage(QString)), Qt::QueuedConnection);
-  connect(signer_, SIGNAL(warning(QString)), SLOT(warn(QString)), Qt::QueuedConnection);
-  connect(signer_, SIGNAL(error(QString)), SLOT(error(QString)), Qt::QueuedConnection);
-  connect(signer_, SIGNAL(notification(QString)), SLOT(notify(QString)), Qt::QueuedConnection);
-  //connect(this, SIGNAL(downloadFinished(QString,QString)), signer_, SLOT(signFileWithUrl(QString,QString)));
+  AC_CONNECT_MESSAGES(signer_, this, Qt::QueuedConnection);
 
-  auto dc = DownloaderController::globalController();
-  connect(dc, SIGNAL(message(QString)), SLOT(showMessage(QString)), Qt::QueuedConnection);
-  connect(dc, SIGNAL(warning(QString)), SLOT(warn(QString)), Qt::QueuedConnection);
-  connect(dc, SIGNAL(error(QString)), SLOT(error(QString)), Qt::QueuedConnection);
-  connect(dc, SIGNAL(notification(QString)), SLOT(notify(QString)), Qt::QueuedConnection);
+  AC_CONNECT_MESSAGES(DownloaderController::globalController(), this, Qt::QueuedConnection);
 
   foreach (const DownloadTaskInfo &t, Settings::globalSettings()->recentTasks())
     addTask(t);
@@ -228,11 +220,11 @@ void
 MainWindow::createActions()
 {
   menuBar_ =
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     new QMenuBar // global, no parent, see: http://qt-project.org/doc/qt-4.8/qmenubar.html#qmenubar-on-mac-os-x
 #else
     menuBar()
-#endif // Q_WS_MAC
+#endif // Q_OS_MAC
   ;
   QAction *
   a = startAct_ = new QAction(QIcon(ACRC_IMAGE_DOWNLOADER), tr("Start"), this); {
@@ -378,19 +370,19 @@ MainWindow::createActions()
     m->addAction(stopAllAct_);
     m->addAction(removeAllAct_);
     m->addSeparator();
-  #ifndef Q_WS_MAC
+  #ifndef Q_OS_MAC
     m->addAction(menuBarAct_);
     m->addAction(tr("Preferences"), this, SLOT(preferences()), QKeySequence("CTRL+,"));
-  #endif // Q_WS_MAC
+  #endif // Q_OS_MAC
     m->addAction(hideAct_);
     m->addAction(quitAct_);
   }
 
   // Create menu bar
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
   menuBar_->hide();
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
   m = menuBar_->addMenu(tr("&File")); {
     m->addAction(newAct_);
     m->addSeparator();
@@ -418,9 +410,9 @@ MainWindow::createActions()
     m->addAction(tr("&About"), this, SLOT(about())); // DO NOT TRANSLATE ME
   }
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
   new QShortcut(QKeySequence("ALT+O"), this, SLOT(preferences()));
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
 }
 
 // - Table -
@@ -494,9 +486,9 @@ MainWindow::taskDialog()
     connect(taskDialog_, SIGNAL(urlsAdded(QStringList,bool)), SLOT(addUrls(QStringList,bool)));
     connect(taskDialog_, SIGNAL(urlsAdded(QStringList,bool)), downloadManager_, SLOT(refreshSchedule()));
     connect(taskDialog_, SIGNAL(urlsAdded(QStringList,bool)), SLOT(saveLater()));
-    connect(taskDialog_, SIGNAL(message(QString)), SLOT(showMessage(QString)));
-    connect(taskDialog_, SIGNAL(warning(QString)), SLOT(warn(QString)));
-    connect(taskDialog_, SIGNAL(error(QString)), SLOT(error(QString)));
+    AC_CONNECT_MESSAGE(taskDialog_, this, Qt::AutoConnection);
+    AC_CONNECT_ERROR(taskDialog_, this, Qt::AutoConnection);
+    AC_CONNECT_WARNING(taskDialog_, this, Qt::AutoConnection);
   }
   return taskDialog_;
 }
@@ -627,13 +619,13 @@ MainWindow::openLocation(const QString &path)
 {
   if (QFile::exists(path)) {
     QString url = path;
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     url.replace('\\', '/');
     url.prepend('/');
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
     url.prepend("file://");
     QDesktopServices::openUrl(QUrl(url));
-    showMessage(tr("openning") + ": " + path);
+    showMessage(tr("opening") + ": " + path);
   } else
     warn(tr("not exist") + ": " + path);
 }
@@ -679,7 +671,7 @@ MainWindow::addTask(DownloadTask *t)
   Q_ASSERT(t);
   //t->setAutoDelete(false);
   t->setDownloadPath(G_PATH_DOWNLOADS);
-  connect(t, SIGNAL(error(QString)), SLOT(warn(QString)), Qt::QueuedConnection);
+  connect(t, SIGNAL(errorMessage(QString)), SLOT(warn(QString)), Qt::QueuedConnection);
   connect(t, SIGNAL(finished(DownloadTask*)), SLOT(finish(DownloadTask*)), Qt::QueuedConnection);
   downloadManager_->addTask(t);
 
@@ -1017,9 +1009,9 @@ MainWindow::closeEvent(QCloseEvent *event)
 #endif  // QT_VERSION
   }
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
   QTimer::singleShot(0, qApp, SLOT(quit())); // ensure quit app and clean up zombie threads
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
 
   Base::closeEvent(event);
   DOUT("exit");
@@ -1063,9 +1055,9 @@ MainWindow::keyPressEvent(QKeyEvent *e)
 {
   switch (e->key()) {
   case Qt::Key_CapsLock:
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     menuBar_->setVisible(!menuBar_->isVisible());
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
     break;
   default: ;
   }
@@ -1125,5 +1117,14 @@ MainWindow::save()
 void
 MainWindow::saveLater()
 { saveTimer_->start(); }
+
+// - Log messagse -
+
+void
+MainWindow::notifyFileSaved(const QString &fileName)
+{
+  showMessage(tr("file saved") + ": " + fileName);
+  QApplication::beep();
+}
 
 // EOF

@@ -22,6 +22,7 @@ public:
 
   // - Properties -
 signals:
+  void message(const QString &text);
   void volumeChanged(qreal volume);
 
 public:

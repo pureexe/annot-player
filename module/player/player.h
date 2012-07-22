@@ -70,7 +70,7 @@ public:
 
   // - Constructions -
 public:
-  explicit Player(QObject *parent = 0);
+  explicit Player(QObject *parent = nullptr);
   ~Player();
 
   bool isValid() const;
@@ -160,31 +160,31 @@ signals:
   void gammaChanged(qreal value);
 
 public:
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
   typedef void *WindowHandle; ///< NSView
 #else
   typedef WId WindowHandle;
-#endif // Q_WS_MAC
+#endif // Q_OS_MAC
   WindowHandle embeddedWindow() const;
 
 public slots:
   void dispose();
 
   // Do not use WindowHandle to bypass qMetatype registration.
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
   void setEmbeddedWindow(void *cocoaView);
 #else
   void setEmbeddedWindow(WId winId);
-#endif // Q_WS_MAC
+#endif // Q_OS_MAC
 
   ///  A shortcut of setWinId for QWidget.
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
   void embed(QMacCocoaViewContainer *w);
 #else
   void embed(QWidget *w);
-#endif // Q_WS_MAC
+#endif // Q_OS_MAC
 
-  void setDownloadPath(const QString &path);
+  void setDownloadsLocation(const QString &dir);
 
   void setBufferSaved(bool t);
   void saveBuffer();
@@ -363,8 +363,8 @@ public:
 
   // - Signals -
 signals:
-  void error(const QString &msg);
   void message(const QString &msg);
+  void errorMessage(const QString &msg);
   void warning(const QString &msg);
   void fileSaved(const QString &fileName);
   void aspectRatioChanged(const QString &ratio);
@@ -449,7 +449,7 @@ class PlayerListener : public QObject
   Player *player_;
 
 public:
-  explicit PlayerListener(Player *player, QObject *parent = 0);
+  explicit PlayerListener(Player *player, QObject *parent = nullptr);
 
 #define ADD_SIGNAL(_signal) \
   signals: \

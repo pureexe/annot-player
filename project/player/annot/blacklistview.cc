@@ -7,7 +7,6 @@
 #include "global.h"
 #include "tr.h"
 #include "project/common/acui.h"
-#include "logger.h"
 #include <QtGui>
 
 #ifdef Q_OS_MAC

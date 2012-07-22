@@ -27,7 +27,7 @@ class PreviewWidget : public QWidget
   qreal zoom_;
 
 public:
-  explicit PreviewWidget(Core::Document *document, RenderThread *renderer = 0, QWidget *parent = 0);
+  explicit PreviewWidget(Core::Document *document, RenderThread *renderer = 0, QWidget *parent = nullptr);
 
   bool bad() const { return !document_ || document_->bad(); }
   Core::Document *document() const { return document_; }

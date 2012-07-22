@@ -22,7 +22,7 @@ class MediaToc : public QObject
   qint64 baseTimestamp_;
 
 public:
-  explicit MediaToc(QObject *parent = 0)
+  explicit MediaToc(QObject *parent = nullptr)
     : Base(parent), baseTimestamp_(0) { }
 
 public:

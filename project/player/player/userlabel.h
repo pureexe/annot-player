@@ -15,14 +15,14 @@ class UserLabel : public QLabel
   typedef QLabel Base;
 
 public:
-  explicit UserLabel(QWidget *parent = 0)
+  explicit UserLabel(QWidget *parent = nullptr)
     : Base(parent) { }
 
 signals:
   void showUserPanelRequested();
 
 protected:
-  virtual void mouseDoubleClickEvent(QMouseEvent *event);
+  void mouseDoubleClickEvent(QMouseEvent *event) override;
 };
 
 #endif // USERLABEL_H

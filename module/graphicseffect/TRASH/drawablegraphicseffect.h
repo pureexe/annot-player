@@ -19,7 +19,7 @@ class DrawableGraphicsEffect : public QGraphicsEffect
   QList<Drawable *> d_;
 
 public:
-  explicit DrawableGraphicsEffect(QObject *parent = 0)
+  explicit DrawableGraphicsEffect(QObject *parent = nullptr)
     : Base(parent) { }
 
   ~DrawableGraphicsEffect() { clear(); }
@@ -37,7 +37,7 @@ public:
   }
 
 public:
-  virtual void draw(QPainter *painter) ///< \reimp
+  void draw(QPainter *painter) override
   {
     foreach (Drawable *d, d_)
       d->draw(painter);
@@ -52,9 +52,9 @@ class DrawableGraphicsBlurEffect : public QGraphicsBlurEffect, public Drawable
   typedef DrawableGraphicsBlurEffect Self;
   typedef QGraphicsBlurEffect Base;
 public:
-  explicit DrawableGraphicsBlurEffect(QObject *parent = 0)
+  explicit DrawableGraphicsBlurEffect(QObject *parent = nullptr)
     : Base(parent) { }
-  void draw(QPainter *painter) { Base::draw(painter); } ///< \reimp
+  void draw(QPainter *painter) override { Base::draw(painter); }
 };
 
 #include <QtGui/QGraphicsColorizeEffect>
@@ -65,9 +65,9 @@ class DrawableGraphicsColorizeEffect : public QGraphicsColorizeEffect, public Dr
   typedef DrawableGraphicsColorizeEffect Self;
   typedef QGraphicsColorizeEffect Base;
 public:
-  explicit DrawableGraphicsColorizeEffect(QObject *parent = 0)
+  explicit DrawableGraphicsColorizeEffect(QObject *parent = nullptr)
     : Base(parent) { }
-  void draw(QPainter *painter) { Base::draw(painter); } ///< \reimp
+  void draw(QPainter *painter) override { Base::draw(painter); }
 };
 
 #include <QtGui/QGraphicsDropShadowEffect>
@@ -78,9 +78,9 @@ class DrawableGraphicsDropShadowEffect : public QGraphicsDropShadowEffect, publi
   typedef DrawableGraphicsDropShadowEffect Self;
   typedef QGraphicsDropShadowEffect Base;
 public:
-  explicit DrawableGraphicsDropShadowEffect(QObject *parent = 0)
+  explicit DrawableGraphicsDropShadowEffect(QObject *parent = nullptr)
     : Base(parent) { }
-  void draw(QPainter *painter) { Base::draw(painter); } ///< \reimp
+  void draw(QPainter *painter) override { Base::draw(painter); }
 };
 
 #include <QtGui/QGraphicsOpacityEffect>
@@ -91,9 +91,9 @@ class DrawableGraphicsOpacityEffect : public QGraphicsOpacityEffect, public Draw
   typedef DrawableGraphicsOpacityEffect Self;
   typedef QGraphicsOpacityEffect Base;
 public:
-  explicit DrawableGraphicsOpacityEffect(QObject *parent = 0)
+  explicit DrawableGraphicsOpacityEffect(QObject *parent = nullptr)
     : Base(parent) { }
-  void draw(QPainter *painter) { Base::draw(painter); } ///< \reimp
+  void draw(QPainter *painter) override { Base::draw(painter); }
 };
 
 #endif // DRAWABLEGRAPHICSEFFECT_H

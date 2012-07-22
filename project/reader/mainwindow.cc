@@ -184,7 +184,7 @@ MainWindow::openFile()
   QString title = tr("Open document");
   QString filters = tr("Documents") + FILEFILTER_DOCUMENT
                   + tr("All files") + "(*)";
-  QString *selectedFilter = 0;
+  QString *selectedFilter = nullptr;
 
   QStringList l = QFileDialog::getOpenFileNames(
         this, title, last_path, filters, selectedFilter);

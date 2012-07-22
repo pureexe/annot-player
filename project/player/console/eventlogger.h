@@ -9,6 +9,7 @@
 
 QT_FORWARD_DECLARE_CLASS(QTimer)
 
+class MainWindow;
 class Player;
 class SignalHub;
 
@@ -19,13 +20,14 @@ class EventLogger : public QObject
   typedef EventLogger Self;
   typedef QObject Base;
 
+  MainWindow *logger_;
   Player *player_;
   SignalHub *hub_;
   QTimer *logUntilPlayingTimer_;
   int logCount_;
 
 public:
-  EventLogger(Player *player, SignalHub *hub, QObject *parent = 0);
+  EventLogger(MainWindow *logger, Player *player, SignalHub *hub, QObject *parent = nullptr);
 
 public slots:
   void logSubtitleChanged();
@@ -78,6 +80,7 @@ public slots:
   void logGammaChanged(qreal value);
 
   void logAnnotationScaleChanged(qreal value);
+  void logAnnotationSpeedFactorChanged(int value);
   void logAnnotationRotationChanged(qreal value);
   void logAnnotationOffsetChanged(int value);
   void logAnnotationCountLimitedChanged(bool value);
@@ -95,6 +98,8 @@ public slots:
 
   void logInternetConnectionChanged(bool t);
   void logPreferMotionlessAnnotationChanged(bool t);
+
+  void logFileSaved(const QString &fileName);
 
 protected slots:
   void logAeroEnabledChanged(bool t);

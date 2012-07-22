@@ -40,10 +40,10 @@ class DocumentWidget : public QMainWindow
   RenderThread *renderer_;
 
 public:
-  //explicit DocumentWidget(QWidget *parent = 0);
+  //explicit DocumentWidget(QWidget *parent = nullptr);
 
   /// Use render thread if \a parallel is true.
-  explicit DocumentWidget(const QString &filePath, bool parallel = true, QWidget *parent = 0);
+  explicit DocumentWidget(const QString &filePath, bool parallel = true, QWidget *parent = nullptr);
 
   bool bad() const { return !document_ || document_->bad(); }
   Core::Document *document() const { return document_; }

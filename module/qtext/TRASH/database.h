@@ -22,7 +22,7 @@ namespace Core {
 
     // Constructions
   public:
-    explicit DatabaseConnection(QObject *parent = 0);
+    explicit DatabaseConnection(QObject *parent = nullptr);
     ~DatabaseConnection();
 
   protected:

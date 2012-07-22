@@ -18,9 +18,9 @@ class WbAddressEdit : public WbComboEdit
   typedef WbComboEdit Base;
 
 public:
-  explicit WbAddressEdit(QWidget *parent = 0)
+  explicit WbAddressEdit(QWidget *parent = nullptr)
     : Base(parent), progress_(100) { init(); }
-  explicit WbAddressEdit(const QStringList &items, QWidget *parent = 0)
+  explicit WbAddressEdit(const QStringList &items, QWidget *parent = nullptr)
     : Base(items, parent), progress_(100) { init(); }
 
 signals:
@@ -36,8 +36,8 @@ public slots:
 
   // - Events -
 protected:
-  virtual void wheelEvent(QWheelEvent *) { } ///< \reimp disabled
-  virtual void contextMenuEvent(QContextMenuEvent *event); ///< \reimp
+  void wheelEvent(QWheelEvent *) override { } ///< ignored
+  void contextMenuEvent(QContextMenuEvent *event) override;
 
 protected slots:
   void updatePalette();

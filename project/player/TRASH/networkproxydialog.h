@@ -23,7 +23,7 @@ class NetworkProxyDialog : public AcWindow
   enum ProxyType { SocksProxy = 0, HttpProxy, ProxyTypeCount };
 
 public:
-  explicit NetworkProxyDialog(QWidget *parent = 0);
+  explicit NetworkProxyDialog(QWidget *parent = nullptr);
 
 public slots:
   void setHost(const QString &url);
@@ -31,7 +31,7 @@ public slots:
   void setUserName(const QString &userName);
   void setPassword(const QString &password);
 
-  virtual void setVisible(bool visible); ///< \reimp
+  void setVisible(bool visible) override;
 
 protected slots:
   void save();
@@ -39,8 +39,8 @@ protected slots:
   void updateButtons();
 
 protected:
-  //virtual void mouseDoubleClickEvent(QMouseEvent *event);
-  //virtual void contextMenuEvent(QContextMenuEvent *event);
+  //void mouseDoubleClickEvent(QMouseEvent *event) override;
+  //void contextMenuEvent(QContextMenuEvent *event) override;
   bool isEnabled() const;
 
 private:

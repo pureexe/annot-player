@@ -30,23 +30,6 @@ http://qt-project.org/wiki/Category:Add-ons
         integrate SNS
         freedom, anntotate deathnote
 
-#
-- improve server
-  - use JSP and a simpler HTML5 webpage
-  - add SNS
-- ads
-  - nicovideo
-  - 4chan/hongfire
-    - english nicovideo subtitle
-    - english galgame
-
-- server
-  - backup mysql to my own machine
-  - automatic back database everyweek
-  - change DNS server to Japan
-- use wiki to track annotation for same movies
-
-
 # TODO
 
 - goei2 everyday 1h at least
@@ -56,9 +39,12 @@ http://qt-project.org/wiki/Category:Add-ons
 - car tax  goto dmv
 - car inspection goto walmart
 
-
 # features
-- create a demo video for download annotation xml
+- show how to associate XML
+  - download from annot-browser
+  drag-and-drop
+  rename
+
 
 # projects
 - stream galgame
@@ -70,16 +56,117 @@ http://qt-project.org/wiki/Category:Add-ons
   see jspwiki
 - chat
 
-steal http://icefaces-showcase.icesoft.org/showcase.jsf?grp=aceMenu
-try ace to replace current homepage
+# 0.1.7.2
 
-## FIXME
 - windows xp
   - check if it is possible to bypass apploc on Chinese Windows XP
+    - also, if windows title is correct
+
+- sever:
+  - game_scene
+    scene_text scene_context
+- windows game
+  - submit game text as context as well
+  - flag it's already finished, or locked.
+  - a different way to display galgame text with phrases splitted
+  - Able to manually dumping galgame and upload text online.
+    - redisign database, diveup pos, add textid
+      game_text
+      text_id
+    - split media_token into media_xxx and game_xxx in the future
+    - split media_annot and game_annot
+    - upload game text for subtitles/annotations as well
+  - cache google translation for offline subtitle annot, or use a db for translation?
+  - game_text
+    text_id token_id user_id text_create_time text_create_ip text_text
+  was thinking to add something like a universal user dictionary for names/expressions or even complete phrases that are most common used in games so it gets immediately translated, as an example of a user dictionary there is http://www.hongfire.com/forum/showthread.php/79006-fhc-dictionary-of-ATLAS-Japanese-Translator or http://www.hongfire.com/forum/showthread.php/94395-Translation-Aggregator-v0-4-9?p=2269439#post2269439
+  I see. Sharing translation efforts across different games is really a good idea!
+- add issubtitle to annot's flag when submit or edit
+  - repair my old subtitles a week later
+
+- annot down is so buggy
+
+# server
+- backup mysql log in mithril to server and mac as well
+  copy source code of server to mac as well
+- LEARN JSF and ICEfaces
+  - use glassfish + maven + primefaces to redesign the homepage
+  - steal html static: http://www.primefaces.org/index.html
+  - hello world: http://www.techbrainwave.com/?p=198
+    http://www.primefaces.org/
+    htth://www.primefaces.org/showcase/ui/home.jsf
+    http://code.google.com/p/primefaces-extensions/
+    http://www.techbrainwave.com/?p=198
+
+  - move tomcat services to glassfish
+
+- maintain
+  - backup mysql to my own machine
+  - automatic back database everyweek
+  - change DNS server to Japan
+
+# 0.1.7.2
+
+- backlog
+  - betterway to show game text, able to split japanese with clucene
+    - highlight diff words, etc
+    - hover with meanings
+
+- figure out how to utilize ITH profiles
+  - using SHA1256 in qt5
+    compute sha1 256 for game as well
 
 - player
-  - fixme: open from explorer cannot resolve subtitle
-    - it must because current directory changed
+  - add a window tracker class to replace annotationview and embeddedplayer
+  - add another console on the topleft corner, flush only once
+    - make it reusable
+    - make a console on the bottomleft to browser as well
+
+- chat
+  - remove livechannel
+    remove live mode!
+- server
+  - deprecate liveannotation
+  - add chatmessage, also redy for bot_message
+  ChatMessage
+    userId  user_id
+    roomId  room_id
+    text    message_text
+    time    message_time
+  ChatRoom
+
+- chat
+  - show online status
+  - standalone chat server, a public chat room
+
+- share to faceook
+   - facbook: http://stackoverflow.com/questions/8635674/publish-on-facebook-wall-from-c-c-or-linux
+  @F facebook: make a screenshot and upload
+  @T twitter: make a screenshot and upload
+  @G google+: make a screenshot and upload
+  @S sina: make a screenshot and upload
+  @M mixi: make a screenshot and upload
+- chatroom
+- usergroup
+
+- server
+  - finish based memory-less stateless robot at server side
+cloud/bot
+table bot_message
+message_id session_id message_pos user_id message_create_time message_create_ip message_text
+table bot_memory
+memory_id user_id memory_create_ip memory_create_time  memory_type memory_first memory_second
+\learn A=>B A<=B A<=>B
+\learn A \is B
+
+- dialogs
+  - learn QtForms, QML and QtQuick
+  - remove aero/transparency from dialogs, windows, preferences, etc
+    atleast disable on mac/windowxp
+
+## FIXME
+
+- player
   - fixme: infinite retry downloading annotations
 - downloader
   BUG: the way to get next taskId in downloader is incorrect
@@ -98,34 +185,15 @@ try ace to replace current homepage
     - debug hang when close current video
 
 ## LATER
-- backlog
-  - betterway to show game text
-    - highlight diff words, etc
-    - hover with meanings
+- integrate player and downloader
+   - subscript to nicovideo/bilibili threads
+- qt5:  migration
+  http://www.devbean.info/2012/06/porting-from-qt4-to-qt5/
+  - explicit <QDebug>
+  - <QtWidgets>
+  - exploit <QtLocation> for desktop
 
-- windows game
-  - submit game text as context as well
-  - flag it's already finished, or locked.
-  - directly edit translations
-  - a different way to display galgame text with phrases splitted
-  - Able to manually dumping galgame and upload text online.
-    - redisign database, diveup pos, add textid
-      game_text
-      text_id
-    - split media_token into media_xxx and game_xxx in the future
-    - split media_annot and game_annot
-    - upload game text for subtitles/annotations as well
-  - cache google translation for offline subtitle annot, or use a db for translation?
-  - game_text
-    text_id token_id user_id text_create_time text_create_ip text_text
-  was thinking to add something like a universal user dictionary for names/expressions or even complete phrases that are most common used in games so it gets immediately translated, as an example of a user dictionary there is http://www.hongfire.com/forum/showthread.php/79006-fhc-dictionary-of-ATLAS-Japanese-Translator or http://www.hongfire.com/forum/showthread.php/94395-Translation-Aggregator-v0-4-9?p=2269439#post2269439
-  I see. Sharing translation efforts across different games is really a good idea!
-- add issubtitle to annot's flag when submit or edit
-  - repair my old subtitles a week later
-- dialogs
-  - learn QtForms, QML and QtQuick
-  - remove aero/transparency from dialogs, windows, preferences, etc
-    atleast disable on mac/windowxp
+- livemode & syncmode when more people are using it
 
 - player
   - take the ownership over guest annotations
@@ -201,23 +269,6 @@ try ace to replace current homepage
    - highilght keywords on annotation for translation
    - use apache text split tor
 
-- server
-  - finish based memory-less stateless robot at server side
-cloud/bot
-table bot_message
-message_id session_id message_pos user_id message_create_time message_create_ip message_text
-table bot_memory
-memory_id user_id memory_create_ip memory_create_time  memory_type memory_first memory_second
-\learn A=>B A<=B A<=>B
-
-- player
-  - double click fullscreen screen to pause
-    - after pause, show two big button: resume, and fullscreen
-      - fullscreen
-      - minimize
-      - play
-      - stop
-    - design it as QUICK LAUNCH similar to appstore or galgame
 - mac
   - open file broken due to slow startup
   - drag drop is not working
@@ -280,8 +331,7 @@ memory_id user_id memory_create_ip memory_create_time  memory_type memory_first 
   - mosaic deconvolution: CLEAN algorithm
     http://en.wikipedia.org/wiki/CLEAN_(algorithm)
     http://www.mrao.cam.ac.uk/yerac/gueth/gueth.html
-    TODO: DV-007s @ 秋葉原
-  - face recognition
+    TODO: DV-007s @ 秋葉��  - face recognition
     http://www.morethantechnical.com/2009/03/05/qt-opencv-combined-for-face-detecting-qwidgets/
     facedetect.c sample
     use face recognition as the step to recognize real object
@@ -293,6 +343,9 @@ memory_id user_id memory_create_ip memory_create_time  memory_type memory_first 
   - flashing in full screen mode!
 
 # FIXME
+- Mac
+  - GraphicsEffect coun't be applied to widgets, maybe because I compile qt source incorrectly
+
 - browser
   - fixme: resize image
 - player

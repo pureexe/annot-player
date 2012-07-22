@@ -1,12 +1,11 @@
-// suburldialog.cc
+// annoturldialog.cc
 // 2/7/2012
 
-#include "suburldialog.h"
-#include <QtGui>
+#include "annoturldialog.h"
 
 // - Constructions -
 
-SubUrlDialog::SubUrlDialog(QWidget *parent)
+AnnotUrlDialog::AnnotUrlDialog(QWidget *parent)
   : Base(parent)
 {
   setWindowTitle(tr("Import Annotations from URL"));

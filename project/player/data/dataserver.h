@@ -29,13 +29,15 @@ class DataServer : public QObject
 
 public:
   DataServer(SignalHub *hub, ServerAgent *server,
-      AnnotationDatabase *cache, AnnotationDatabase *queue, QObject *parent = 0)
+      AnnotationDatabase *cache, AnnotationDatabase *queue, QObject *parent = nullptr)
     : Base(parent), preferCache_(false), hub_(hub), server_(server), cache_(cache), queue_(queue) { }
 
   bool preferCache() const { return preferCache_; }
 
 signals:
   void preferCacheChanged(bool t);
+  void message(QString text);
+  void warning(QString text);
 
 public slots:
   void dispose();
@@ -74,12 +76,12 @@ public:
   Token selectTokenWithDigest(const QString &digest, qint32 part);
 
   AnnotationList selectAnnotationsWithTokenId(qint64 tid, bool ignoreCache = false);
-  AliasList selectAliasesWithTokenId(qint64 tid, bool ignoreCache = false, bool *fromCache = 0);
-  AnnotationList selectRelatedAnnotationsWithTokenId(qint64 tid, bool ignoreCache = false, bool *fromCache = 0);
+  AliasList selectAliasesWithTokenId(qint64 tid, bool ignoreCache = false, bool *fromCache = nullptr);
+  AnnotationList selectRelatedAnnotationsWithTokenId(qint64 tid, bool ignoreCache = false, bool *fromCache = nullptr);
   AliasList selectRelatedAliasesWithTokenId(qint64 tid);
 
-  AliasList selectAliasesWithToken(const Token &token, bool ignoreCache = false, bool *fromCache = 0);
-  AnnotationList selectAnnotationsWithToken(const Token &token, bool ignoreCache = false, bool *fromCache = 0);
+  AliasList selectAliasesWithToken(const Token &token, bool ignoreCache = false, bool *fromCache = nullptr);
+  AnnotationList selectAnnotationsWithToken(const Token &token, bool ignoreCache = false, bool *fromCache = nullptr);
 
   // - Sync -
 public:

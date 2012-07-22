@@ -24,7 +24,7 @@ class TranslationManager : public QObject
 protected:
   typedef QList<QTranslator *> QTranslatorList;
 
-  explicit TranslationManager(QObject *parent = 0)
+  explicit TranslationManager(QObject *parent = nullptr)
     : Base(parent), language_(0), script_(0) { }
 public:
   static Self *globalInstance() { static Self g; return &g; }

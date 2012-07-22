@@ -18,7 +18,7 @@ class ToolButtonWithId : public ToolButton
   int id_;
 
 public:
-  explicit ToolButtonWithId(int id, QWidget *parent = 0);
+  explicit ToolButtonWithId(int id, QWidget *parent = nullptr);
 
 signals:
   void clickedWithId(int id, bool checked = false);

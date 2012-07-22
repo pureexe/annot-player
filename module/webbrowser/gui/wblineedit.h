@@ -14,12 +14,12 @@ class WbLineEdit : public QLineEdit
   typedef QLineEdit Base;
 
 public:
-  explicit WbLineEdit(QWidget *parent = 0)
+  explicit WbLineEdit(QWidget *parent = nullptr)
     : Base(parent)
   { setAlignment(Qt::AlignLeft | Qt::AlignVCenter); }
 
 protected:
-  virtual void keyPressEvent(QKeyEvent *event);
+  void keyPressEvent(QKeyEvent *event) override;
 };
 
 #endif // WBLINEEDIT_H

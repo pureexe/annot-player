@@ -14,7 +14,7 @@ class Grabber : public QObject
   typedef QObject Base;
 
 public:
-  explicit Grabber(QObject *parent = 0);
+  explicit Grabber(QObject *parent = nullptr);
 
   QString savePath_;
   QString baseName_;

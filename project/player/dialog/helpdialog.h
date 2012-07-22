@@ -16,7 +16,7 @@ class HelpDialog: public AcWebWindow
 
   // - Constructions -
 public:
-  explicit HelpDialog(QWidget *parent = 0);
+  explicit HelpDialog(QWidget *parent = nullptr);
 
   // - Properties -
 protected:
@@ -24,7 +24,7 @@ protected:
 
   // - Events -
 public:
-  virtual void setVisible(bool visible); ///< \reimp
+  void setVisible(bool visible) override;
 };
 
 #endif // HELPDIALOG_H

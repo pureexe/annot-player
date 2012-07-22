@@ -22,7 +22,7 @@ class AnnotationGraphicsItemPool : public QObject
 public:
   typedef AnnotationGraphicsItem value_type;
 
-  AnnotationGraphicsItemPool(AnnotationGraphicsView *view, DataManager *data, SignalHub *hub, QObject *parent = 0)
+  AnnotationGraphicsItemPool(AnnotationGraphicsView *view, DataManager *data, SignalHub *hub, QObject *parent = nullptr)
     : Base(parent), capacity_(0),
       view_(view), data_(data), hub_(hub) { }
 

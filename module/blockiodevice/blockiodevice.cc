@@ -127,7 +127,7 @@ namespace { namespace detail {
     if (::ioctl(fd, IOCTL_BLOCKSIZE, &ret) < 0)
   #endif // IOCTL_BLOCKSIZE
     ret = 0;
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
     return (int)ret;
   }
 

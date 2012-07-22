@@ -23,7 +23,7 @@ class UserAnalyticsView: public AcWebWindow
 
   // - Constructions -
 public:
-  UserAnalyticsView(DataManager *data, SignalHub *hub, QWidget *parent = 0);
+  UserAnalyticsView(DataManager *data, SignalHub *hub, QWidget *parent = nullptr);
 
 public slots:
   void refresh();
@@ -31,7 +31,7 @@ public slots:
 
   // - Events -
 public:
-  virtual void setVisible(bool visible); ///< \reimp
+  void setVisible(bool visible) override;
 
 protected slots:
   void setContent(const QString &html);

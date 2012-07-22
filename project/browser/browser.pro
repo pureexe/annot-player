@@ -1,7 +1,7 @@
 # browser.pro
 # 3/29/2012
 
-VERSION = 0.1.3.0
+VERSION = 0.1.3.1
 
 DEFINES += PROJECT_BROWSER
 
@@ -38,6 +38,7 @@ win32 {
 }
 mac {
     include($$ROOTDIR/mac/qtmac/qtmac.pri)
+    include($$ROOTDIR/mac/qtcocoa/qtcocoa.pri)
     include($$ROOTDIR/unix/qtunix/qtunix.pri)
 }
 

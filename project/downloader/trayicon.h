@@ -20,7 +20,7 @@ class TrayIcon : public TrayIconBase
 
   // - Construction -
 public:
-  explicit TrayIcon(MainWindow *w, QObject *parent = 0);
+  explicit TrayIcon(MainWindow *w, QObject *parent = nullptr);
 
 public slots:
   void setToolTip(const QString &text) { Base::setToolTip(text); }

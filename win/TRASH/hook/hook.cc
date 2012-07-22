@@ -135,7 +135,7 @@ namespace { // anonymous, low level mouse procedure with double-click support
     inline void flush()
     {
       //if (!callbacks.empty()) {
-      //  BOOST_FOREACH (param_tuple param, callbacks)
+      //   for each(param_tuple param, callbacks)
       //    LowLevelMouseProc(param.get<0>(), param.get<1>(), param.get<2>());
       //  callbacks.clear();
       //}

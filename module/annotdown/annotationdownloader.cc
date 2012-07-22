@@ -35,8 +35,8 @@ AnnotationDownloader::AnnotationDownloader(QObject *parent)
   : Base(parent)
 {
   resolver_ = new LuaMrlResolver(this);
-  connect(resolver_, SIGNAL(error(QString)), SIGNAL(error(QString)));
   connect(resolver_, SIGNAL(message(QString)), SIGNAL(message(QString)));
+  connect(resolver_, SIGNAL(errorMessage(QString)), SIGNAL(errorMessage(QString)));
   connect(resolver_, SIGNAL(subtitleResolved(QString,QString,QString)), SLOT(download(QString,QString,QString)));
 
   nam_ = new QNetworkAccessManager(this);
@@ -100,7 +100,7 @@ AnnotationDownloader::saveFile(const QString &fileName, const QString &refurl, c
 {
   QFile file(fileName);
   if (!file.exists() || !file.open(QIODevice::ReadOnly)) {
-    emit error(tr("network error, failed to resolve URL") + ": " + refurl);
+    emit errorMessage(tr("network error, failed to resolve URL") + ": " + refurl);
     return;
   }
   emit message(tr("saving") + ": " + title + " | " + refurl);
@@ -119,7 +119,7 @@ AnnotationDownloader::processReply(QNetworkReply *reply)
   reply->deleteLater();
   QString url = reply->url().toString();
   if (!reply->isFinished() || reply->error() != QNetworkReply::NoError) {
-    emit error(tr("network error, failed to resolve URL") + ": " + url);
+    emit errorMessage(tr("network error, failed to resolve URL") + ": " + url);
     DOUT("exit: network error:" << reply->errorString());
     return;
   }
@@ -127,7 +127,7 @@ AnnotationDownloader::processReply(QNetworkReply *reply)
   QString refurl = reply->attribute(RequestUrlAttribute).toString(),
           title = reply->attribute(RequestTitleAttribute).toString();
   if (refurl.isEmpty() || title.isEmpty()) {
-    emit error(tr("failed to resolve URL") + ": " + url);
+    emit errorMessage(tr("failed to resolve URL") + ": " + url);
     DOUT("exit: invalid attribute");
     return;
   }
@@ -141,14 +141,14 @@ AnnotationDownloader::saveData(const QByteArray &data, const QString &refurl, co
 {
   DOUT("enter: title =" << title << "refurl =" << refurl);
   if (data.isEmpty()) {
-    emit error(tr("network error, failed to resolve URL") + ": " + refurl);
+    emit errorMessage(tr("network error, failed to resolve URL") + ": " + refurl);
     DOUT("exit: empty data");
     return;
   }
 
   QString fileName = hashFileName(refurl, title);
   if (fileName.isEmpty()) {
-    emit error(tr("failed to resolve URL") + ": " + refurl);
+    emit errorMessage(tr("failed to resolve URL") + ": " + refurl);
     DOUT("exit: failed to hash file name");
     return;
   }
@@ -159,11 +159,12 @@ AnnotationDownloader::saveData(const QByteArray &data, const QString &refurl, co
   if (AnnotationCacheManager::globalInstance()->saveData(data, refurl)) {
     QString cache = AnnotationCacheManager::globalInstance()->findFile(refurl);
     if (!cache.isEmpty()) {
-      QFile::remove(fileName);
-      if (QFile::copy(cache, fileName))
+      QtExt::trashOrRemoveFile(fileName);
+      if (QFile::copy(cache, fileName)) {
+        emit fileSaved(fileName);
         emit message(tr("file saved") + ": " + fileName);
-      else
-        emit error(tr("failed to save file") + ": " + fileName);
+      } else
+        emit errorMessage(tr("failed to save file") + ": " + fileName);
       DOUT("exit: from cache branch");
       return;
     }
@@ -174,12 +175,13 @@ AnnotationDownloader::saveData(const QByteArray &data, const QString &refurl, co
   if (!f.open(QIODevice::WriteOnly)) {
     f.write(data);
     if (f.error() == QFile::NoError) {
+      emit fileSaved(fileName);
       emit message(tr("file saved") + ": " + fileName);
       DOUT("exit: failed to cache URL:" << refurl);
       return;
     }
   }
-  emit error(tr("failed to save file") + ": " + fileName);
+  emit errorMessage(tr("failed to save file") + ": " + fileName);
   DOUT("exit: failed to save file:" << fileName);
 }
 

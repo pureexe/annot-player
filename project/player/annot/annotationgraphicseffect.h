@@ -20,7 +20,7 @@ class AnnotationGraphicsEffect : public AnnotationGraphicsEffectBase
   typedef AnnotationGraphicsEffectBase Base;
 
 public:
-  explicit AnnotationGraphicsEffect(QObject *parent = 0);
+  explicit AnnotationGraphicsEffect(QObject *parent = nullptr);
 };
 
 #endif // ANNOTATIONGRAPHICSEFFECT_H

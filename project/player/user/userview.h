@@ -19,7 +19,7 @@ class UserView : public AcWindow
   typedef AnnotCloud::User User;
 
 public:
-  explicit UserView(QWidget *parent = 0);
+  explicit UserView(QWidget *parent = nullptr);
 
   // - Properties -
 public:
@@ -45,6 +45,8 @@ private:
          *emailLabel_,
          *createTimeLabel_,
          *loginTimeLabel_,
+         *loginIpLabel_,
+         *loginCountLabel_,
          *annotCountLabel_,
          *blessedCountLabel_,
          *cursedCountLabel_,

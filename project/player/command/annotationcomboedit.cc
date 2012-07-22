@@ -14,7 +14,7 @@
 // - Constructions -
 
 AnnotationComboEdit::AnnotationComboEdit(QWidget *parent)
-  : Base(parent), editor_(0)
+  : Base(parent), editor_(nullptr)
 { createActions(); }
 
 void
@@ -54,7 +54,7 @@ AnnotationComboEdit::contextMenuEvent(QContextMenuEvent *event)
 {
   Q_ASSERT(event);
 
-  QMenu *m = new QMenu(this);
+  QMenu *m = new QMenu;//(this); otherwise, rendered incorrect in OsdWindow
   AcUi::globalInstance()->setContextMenuStyle(m, false); // persistent = false
 
   if (contextMenuFlags() & PasteAndGoAction)
@@ -72,9 +72,9 @@ AnnotationComboEdit::contextMenuEvent(QContextMenuEvent *event)
   m->addActions(scm->actions());
 
   m->exec(event->globalPos());
+  event->accept();
   delete scm;
   delete m;
-  event->accept();
 }
 
 // EOF

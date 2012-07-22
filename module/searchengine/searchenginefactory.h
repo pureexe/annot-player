@@ -41,7 +41,7 @@ class SearchEngineFactory : public QObject
 public:
   static Self *globalInstance() { static Self g; return &g; }
 protected:
-  explicit SearchEngineFactory(QObject *parent = 0) : Base(parent) { }
+  explicit SearchEngineFactory(QObject *parent = nullptr) : Base(parent) { }
 
 public:
   enum Engine { Google = 0, GoogleImages, Bing,

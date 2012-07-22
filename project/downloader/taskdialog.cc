@@ -5,9 +5,14 @@
 #include "project/common/acui.h"
 #include "project/common/actextview.h"
 #include "module/mrlanalysis/mrlanalysis.h"
-#include "module/qtext/algorithm.h"
 #include "module/qtext/string.h"
 #include <QtGui>
+
+#ifdef __clang__
+# pragma clang diagnostic ignored "-Wunused-parameter" // in boost algorithm
+#endif // __clang__
+#include <boost/range/algorithm.hpp>
+#include <boost/foreach.hpp>
 
 #define DEBUG "taskdialog"
 #include "module/debug/debug.h"
@@ -132,7 +137,7 @@ TaskDialog::add()
   bool annotOnly = annotOnlyButton_->isChecked();
   if (!urls.isEmpty()) {
     QStringList ret;
-    foreach (const QString &url, QtExt::uniqueList(urls))
+    BOOST_FOREACH (const QString &url, boost::unique(urls))
       ret.append(formatUrl(url));
     DOUT("urls =" << ret);
     emit urlsAdded(ret, annotOnly);

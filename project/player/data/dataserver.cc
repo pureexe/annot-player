@@ -3,14 +3,12 @@
 
 #include "dataserver.h"
 #include "settings.h"
-#include "logger.h"
 #include "signalhub.h"
 #include "module/annotdb/annotdb.h"
 #include "module/serveragent/serveragent.h"
 #include <QtCore>
 
 using namespace AnnotCloud;
-using namespace Logger;
 
 #define DEBUG "dataserver"
 #include "module/debug/debug.h"
@@ -175,9 +173,9 @@ DataServer::updateAnnotationTextWithId(const QString &text, qint64 id)
   if (ret) {
     if (cache_->isValid())
       cache_->updateAnnotationTextWithId(text, id);
-    log(tr("annotation saved") + ": " + text);
+    emit message(tr("annotation saved") + ": " + text);
   } else
-    warn(tr("failed to update annotation text") + ": " + text);
+    emit warning(tr("failed to update annotation text") + ": " + text);
   DOUT("exit: ret =" << ret);
   return ret;
 }
@@ -196,9 +194,9 @@ DataServer::updateAnnotationUserIdWithId(qint64 userId, qint64 id)
   if (ret) {
     if (cache_->isValid())
       cache_->updateAnnotationUserIdWithId(userId, id);
-    log(tr("annotation ownership saved "));
+    emit message(tr("annotation ownership saved "));
   } else
-    warn(tr("failed to change annotation ownership"));
+    emit warning(tr("failed to change annotation ownership"));
   DOUT("exit: ret =" << ret);
   return ret;
 }
@@ -210,12 +208,12 @@ DataServer::deleteAnnotation(const Annotation &a)
 {
   DOUT("enter: text =" << a.text());
   if (!a.hasId()) {
-    warn("cannot delete offline annotation");
+    emit warning("cannot delete offline annotation");
     DOUT("exit: failed");
     return false;
   }
   if (!a.hasUserId() || a.userId() != server_->user().id()) {
-    warn("cannot delete other's annotation");
+    emit warning("cannot delete other's annotation");
     DOUT("exit: failed");
     return false;
   }
@@ -241,9 +239,9 @@ DataServer::deleteAnnotationWithId(qint64 id)
     cache_->deleteAnnotationWithId(id);
 
   if (ret)
-    log(tr("annotation deleted"));
+    emit message(tr("annotation deleted"));
   else
-    warn(tr("failed to delete annotation"));
+    emit warning(tr("failed to delete annotation"));
   DOUT("exit: ret =" << ret);
   return ret;
 }
@@ -253,12 +251,12 @@ DataServer::deleteAlias(const Alias &a)
 {
   DOUT("enter: text =" << a.text());
   if (!a.hasId()) {
-    warn("cannot delete offline alias");
+    emit warning("cannot delete offline alias");
     DOUT("exit: failed");
     return false;
   }
   if (!a.hasUserId() || a.userId() != server_->user().id()) {
-    warn("cannot delete other's alias");
+    emit warning("cannot delete other's alias");
     DOUT("exit: failed");
     return false;
   }
@@ -285,9 +283,9 @@ DataServer::deleteAliasWithId(qint64 id)
     cache_->deleteAliasWithId(id);
 
   if (ret)
-    log(tr("alias deleted"));
+    emit message(tr("alias deleted"));
   else
-    warn(tr("failed to delete alias"));
+    emit warning(tr("failed to delete alias"));
   DOUT("exit: ret =" << ret);
   return ret;
 }
@@ -563,7 +561,7 @@ DataServer::commitQueue()
     if (ok)
       queue_->deleteAnnotations();
     else {
-      warn(tr("failed to commit offline annotations")); // TODO: singleShot try again later
+      emit warning(tr("failed to commit offline annotations")); // TODO: singleShot try again later
       empty = false;
     }
   }
@@ -574,7 +572,7 @@ DataServer::commitQueue()
     if (ok)
       queue_->deleteAliases();
     else {
-      warn(tr("failed to commit offline aliases")); // TODO: singleShot try again later
+      emit warning(tr("failed to commit offline aliases")); // TODO: singleShot try again later
       empty = false;
     }
   }

@@ -20,7 +20,7 @@ class Tray : public TrayBase
 
   // - Constructions -
 public:
-  explicit Tray(MainWindow *w, QObject *parent = 0);
+  explicit Tray(MainWindow *w, QObject *parent = nullptr);
 
   // - Implementations -
 protected slots:

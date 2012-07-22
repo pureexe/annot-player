@@ -18,16 +18,16 @@ class DataOutputStream : public QObject, public OutputStream
   QByteArray data_;
 
 public:
-  explicit DataOutputStream(QObject *parent = 0)
+  explicit DataOutputStream(QObject *parent = nullptr)
     : Base(parent) { }
 
   const QByteArray &data() const { return data_; }
   QByteArray &data() { return data_; }
 
 public:
-  virtual qint64 availableSize() const { return data_.size(); } ///< \reimp
+  qint64 availableSize() const override { return data_.size(); }
 
-  virtual qint64 write(const char *data, qint64 maxSize) ///< \reimp
+  qint64 write(const char *data, qint64 maxSize) override
   { data_.append(data, maxSize); return maxSize; }
 };
 

@@ -24,11 +24,11 @@ class TaskDialog : public AcWindow
 signals:
   void message(const QString &text);
   void warning(const QString &text);
-  void error(const QString &text);
+  void errorMessage(const QString &text);
 
   void urlsAdded(const QStringList &urls, bool annotOnly);
 public:
-  explicit TaskDialog(QWidget *parent = 0);
+  explicit TaskDialog(QWidget *parent = nullptr);
 
 public slots:
   void setText(const QString &urls);

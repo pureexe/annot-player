@@ -29,7 +29,7 @@ class BacklogDialog : public AcWindow
   };
 
 public:
-  explicit BacklogDialog(QWidget *parent = 0);
+  explicit BacklogDialog(QWidget *parent = nullptr);
 
 public slots:
   void appendAnnotation(const QString &text);

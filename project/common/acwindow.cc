@@ -20,9 +20,9 @@ AcWindow::AcWindow(QWidget *parent, Qt::WindowFlags f)
   : Base(parent, f ? f : AC_WINDOW_FLAGS), fadeAni_(0), fadeEnabled_(true),
     rippleEnabled_(false), rippleFilter_(0), rippleTimer_(0)
 {
-//#ifdef Q_WS_WIN
+//#ifdef Q_OS_WIN
 //  if (!AcUi::isAeroAvailable())
-//#endif // Q_WS_WIN
+//#endif // Q_OS_WIN
 //  { rippleEnabled_ = true; }
 
   AcUi::globalInstance()->setWindowStyle(this);
@@ -40,10 +40,10 @@ void
 AcWindow::setRippleEnabled(bool t)
 {
 #ifdef WITH_MODULE_IMAGEFILTER
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
   if (AcUi::isAeroAvailable())
     return;
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
   if (t == rippleEnabled_)
     return;
   if (t)

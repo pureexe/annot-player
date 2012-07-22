@@ -24,7 +24,7 @@ namespace detail {
     Signer *w_;
     QString path_, url_;
 
-    virtual void run() { w_->signFileWithUrl(path_, url_, false); } // \reimp, async = false
+    void run() override { w_->signFileWithUrl(path_, url_, false); } // async = false
   public:
     SignFileWithUrl(const QString &path, const QString &url, Signer *w)
       : w_(w), path_(path), url_(url) { Q_ASSERT(w_); }
@@ -34,7 +34,7 @@ namespace detail {
   {
     Signer *w_;
 
-    virtual void run() { w_->login(false); } // \reimp, async = false
+    void run() override { w_->login(false); } // async = false
   public:
     explicit Login(Signer *w) : w_(w) { Q_ASSERT(w_); }
   };
@@ -141,7 +141,7 @@ Signer::signFileWithUrl(const QString &fileName, const QString &url, bool async)
   if (tid)
     emit message(tr("media signed") + ": " + fileName);
   else
-    emit error(tr("failed to sign media") + ": " + fileName);
+    emit errorMessage(tr("failed to sign media") + ": " + fileName);
 
   DOUT("exit");
 }

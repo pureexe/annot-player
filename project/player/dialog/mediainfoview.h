@@ -23,10 +23,12 @@ class MediaInfoView : public InfoView
   SignalHub *hub_;
 
 public:
-  MediaInfoView(Player *player, DataManager *data, SignalHub *hub, QWidget *parent = 0);
+  MediaInfoView(Player *player, DataManager *data, SignalHub *hub, QWidget *parent = nullptr);
 
 public slots:
-  void updateText(); ///< \reimp
+  void refresh() override { updateText(); }
+protected slots:
+  void updateText();
 };
 
 #endif // MEDIAINFOVIEW_H

@@ -45,7 +45,7 @@ public:
   qint64 read(quint8 *data, qint64 count)
   { return read(reinterpret_cast<char *>(data), count); }
 
-  quint8 readUInt8(bool *ok = 0)
+  quint8 readUInt8(bool *ok = nullptr)
   {
     quint8 x = 0;
     if (ok)
@@ -55,7 +55,7 @@ public:
     return x;
   }
 
-  quint16 readUInt16(bool *ok = 0)
+  quint16 readUInt16(bool *ok = nullptr)
   {
     quint8 x[2] = { };
     if (ok)
@@ -65,7 +65,7 @@ public:
     return Bitwise::BigEndian::toUInt16(x);
   }
 
-  quint32 readUInt24(bool *ok = 0)
+  quint32 readUInt24(bool *ok = nullptr)
   {
     quint8 x[4] = { };
     if (ok)
@@ -76,7 +76,7 @@ public:
   }
 
   quint32
-  readUInt32(bool *ok = 0)
+  readUInt32(bool *ok = nullptr)
   {
     quint8 x[4] = { };
     if (ok)
@@ -86,7 +86,7 @@ public:
     return Bitwise::BigEndian::toUInt32(x);
   }
 
-  quint64 readUInt64(bool *ok = 0)
+  quint64 readUInt64(bool *ok = nullptr)
   {
     quint8 x[8] = { };
     if (ok)
@@ -96,7 +96,7 @@ public:
     return Bitwise::BigEndian::toUInt64(x);
   }
 
-  float readFloat(bool *ok = 0)
+  float readFloat(bool *ok = nullptr)
   {
     enum { size = sizeof(float) }; // 4
     quint8 x[size] = { };
@@ -107,7 +107,7 @@ public:
     return Bitwise::BigEndian::toFloat(x);
   }
 
-  double readDouble(bool *ok = 0)
+  double readDouble(bool *ok = nullptr)
   {
     enum { size = sizeof(double) }; // 8
     quint8 x[size] = { };

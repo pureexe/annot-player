@@ -19,7 +19,6 @@ MediaInfoView::MediaInfoView(Player *player, DataManager *data, SignalHub *hub, 
   Q_ASSERT(player_);
   Q_ASSERT(data_);
   Q_ASSERT(hub_);
-  connect(this, SIGNAL(refreshRequested()), SLOT(updateText()));
 }
 
 void

@@ -3,7 +3,6 @@
 
 #include "inputdialog.h"
 #include "tr.h"
-#include "logger.h"
 #include "project/common/acui.h"
 #include "project/common/accomboedit.h"
 #include "module/qtext/datetime.h"
@@ -11,8 +10,6 @@
 
 #define DEBUG "inputdialog"
 #include "module/debug/debug.h"
-
-using namespace Logger;
 
 #define INPUTLINEEDIT_MAXWIDTH         100
 
@@ -28,9 +25,9 @@ using namespace Logger;
 InputDialog::InputDialog(QWidget *parent)
   : Base(parent, WINDOW_FLAGS)
 {
-//#ifdef Q_WS_MAC
+//#ifdef Q_OS_MAC
 //  setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
-//#endif // Q_WS_MAC
+//#endif // Q_OS_MAC
   setWindowTitle(tr("Input Dialog"));
 
   createLayout();

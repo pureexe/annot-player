@@ -59,7 +59,7 @@ FlvListDemux::run()
   if (demux())
     demux_->finish();
   else
-    emit error(tr("failed to demux FLV stream list"));
+    emit errorMessage(tr("failed to demux FLV stream list"));
 }
 
 void
@@ -68,7 +68,7 @@ FlvDemux::run()
   if (demux())
     finish();
   else
-    emit error(tr("failed to demux FLV stream"));
+    emit errorMessage(tr("failed to demux FLV stream"));
 }
 
 bool

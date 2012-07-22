@@ -1,10 +1,10 @@
-# vlcstep.pri
+# vlccocoa.pri
 # 6/30/2011
 
-DEFINES += WITH_MAC_VLCSTEP
+DEFINES += WITH_MAC_VLCCOCOA
 
 include(../../config.pri)
-include($$ROOTDIR/mac/qtstep/qtstep.pri)
+#include($$ROOTDIR/mac/qtcocoa/qtcocoa.pri)
 #include($$PWD/minimal_macosx/minimal_macosx.pri)
 
 # Static link mostly because framework would complicate deployment on mac
@@ -16,9 +16,9 @@ include($$ROOTDIR/mac/VLCKit/VLCKit_static.pri)
 INCLUDEPATH     += $$PWD/..
 DEPENDPATH      += $$PWD
 
-HEADERS         +=  $$PWD/vlcstep.h
+HEADERS         +=  $$PWD/vlccocoa.h
 OBJECTIVE_HEADERS += $$PWD/VLCOpenGLVoutView_public.h
-OBJECTIVE_SOURCES +=  $$PWD/vlcstep.mm
+OBJECTIVE_SOURCES +=  $$PWD/vlccocoa.mm
 
 QT      += core
 LIBS    += -framework Foundation

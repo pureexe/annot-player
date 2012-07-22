@@ -6,15 +6,12 @@
 #include "global.h"
 #include "tr.h"
 #include "datamanager.h"
-#include "logger.h"
 #include "module/annotcloud/annothtml.h"
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
 # include "mac/qtmac/qtmac.h"
-#endif // Q_WS_MAC
+#endif // Q_OS_MAC
 #include <QtGui>
 #include <QtWebKit>
-
-using namespace Logger;
 
 #define DEBUG "annotationanalyticsview"
 #include "module/debug/debug.h"
@@ -32,7 +29,7 @@ namespace { namespace detail {
   class InvalidateAnnotations : public QRunnable
   {
     AnnotationAnalyticsView *w_;
-    virtual void run() ///< \reimp
+    void run() override
     { w_->invalidateAnnotations(false);} // async = false
 
   public:
@@ -99,7 +96,7 @@ AnnotationAnalyticsView::refresh()
   enum { AsyncLimit = 500 };
 
   DOUT("enter: refreshing =" << refreshing_);
-  log(tr("analyzing annotations ..."));
+  emit message(tr("analyzing annotations ..."));
   if (!refreshing_) {
     refreshing_ = true;
     setWindowTitle(tr("Refreshing ..."));

@@ -15,10 +15,10 @@ class MainPlayerDock : public QDockWidget
   typedef QDockWidget Base;
 
 public:
-  explicit MainPlayerDock(QWidget *parent = 0);
+  explicit MainPlayerDock(QWidget *parent = nullptr);
 
 public:
-  virtual void setVisible(bool visible);
+  void setVisible(bool visible) override;
 };
 
 class MainPlayerUi : public PlayerUi
@@ -29,7 +29,7 @@ class MainPlayerUi : public PlayerUi
   typedef PlayerUi Base;
 
 public:
-  explicit MainPlayerUi(SignalHub *hub, Player *player, ServerAgent *server, QWidget *parent = 0);
+  explicit MainPlayerUi(SignalHub *hub, Player *player, ServerAgent *server, QWidget *parent = nullptr);
 
 private:
   void createLayout();

@@ -20,7 +20,7 @@ class MouseHoldEventListener : public EventListener
   QTimer *timer_;
 
 public:
-  explicit MouseHoldEventListener(QObject *parent = 0);
+  explicit MouseHoldEventListener(QObject *parent = nullptr);
 
 signals:
   void triggered();
@@ -32,7 +32,7 @@ public slots:
   void clear(); ///< clear status
 
 protected:
-  virtual void eventListener(QEvent *event); ///< \reimp
+  void eventListener(QEvent *event) override;
 };
 
 #endif // MOUSEHOLDEVENTLISTENER_H

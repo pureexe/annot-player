@@ -353,9 +353,9 @@ main(int argc, char *argv[])
   winsize w_size = { };
   winsize w_size_bck = { };
 
-  chan_X11_list *current_node = 0; // Chan List struct
+  chan_X11_list *current_node = nullptr; // Chan List struct
 
-  char *buf = 0;
+  char *buf = nullptr;
   //char buf[bufsize];
   do {
     fd_set set; { // For select on stdin

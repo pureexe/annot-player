@@ -58,8 +58,8 @@ GraphicsRippleEffect::GraphicsRippleEffect(QObject *parent)
     heigth_(1),
     opacity_(0.0),
     mapSize_(boundingRect().size().toSize()),
-    previousMap_(0),
-    currentMap_(0)
+    previousMap_(nullptr),
+    currentMap_(nullptr)
 { }
 
 GraphicsRippleEffect::~GraphicsRippleEffect()

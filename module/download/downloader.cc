@@ -31,7 +31,7 @@ Downloader::init()
 
   auto c = DownloaderController::globalController();
   connect(this, SIGNAL(message(QString)), c, SIGNAL(message(QString)));
-  connect(this, SIGNAL(error(QString)), c, SIGNAL(error(QString)));
+  connect(this, SIGNAL(errorMessage(QString)), c, SIGNAL(errorMessage(QString)));
   connect(this, SIGNAL(warning(QString)), c, SIGNAL(warning(QString)));
   connect(this, SIGNAL(notification(QString)), c, SIGNAL(notification(QString)));
   connect(c, SIGNAL(aborted()), SLOT(abort()));
@@ -94,7 +94,7 @@ Downloader::get(const QUrl &url, const QString &header, bool async, int retries)
   QNetworkRequest request(url);
   if (!header.isEmpty()) {
     QHash<QString, QString> h = parseHttpHeader(header);
-    for (auto p = h.begin(); p != h.end(); ++p)
+    for (auto p = h.constBegin(); p != h.constEnd(); ++p)
       request.setRawHeader(p.key().toAscii(), p.value().toAscii());
   }
 
@@ -139,7 +139,7 @@ Downloader::post(const QUrl &url, const QByteArray &data, const QString &header,
   QNetworkRequest request(url);
   if (!header.isEmpty()) {
     QHash<QString, QString> h = parseHttpHeader(header);
-    for (auto p = h.begin(); p != h.end(); ++p)
+    for (auto p = h.constBegin(); p != h.constEnd(); ++p)
       request.setRawHeader(p.key().toAscii(), p.value().toAscii());
   }
   reply_ = nam_->post(request, data);
@@ -229,7 +229,7 @@ Downloader::save(QNetworkReply *reply)
   if (ok)
     emit finished();
   else
-    emit error(tr("failed to save file") + ": " + fileName_);
+    emit errorMessage(tr("failed to save file") + ": " + fileName_);
   DOUT("exit: state =" << state_);
 }
 

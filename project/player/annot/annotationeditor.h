@@ -65,7 +65,7 @@ public:
   };
 
 public:
-  explicit AnnotationEditor(QWidget *parent = 0);
+  explicit AnnotationEditor(QWidget *parent = nullptr);
 
 signals:
   void textSaved(const QString &text);
@@ -145,8 +145,8 @@ protected slots:
 
   // - Events -
 protected:
-  //virtual void mouseDoubleClickEvent(QMouseEvent *event); ///< \reimp
-  //virtual void contextMenuEvent(QContextMenuEvent *event); ///< \reimp
+  //void mouseDoubleClickEvent(QMouseEvent *event) override;
+  //void contextMenuEvent(QContextMenuEvent *event) override;
 
   // - Implementations -
 protected:

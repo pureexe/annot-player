@@ -44,11 +44,13 @@ class AnnotationGraphicsItemScheduler : public QObject
   qint64 flyLaneTime_[LaneCount],
          topLaneTime_[LaneCount],
          bottomLaneTime_[LaneCount];
+  int subLaneStyle_[LaneCount];
+
 signals:
   void message(const QString &text);
 
 public:
-  explicit AnnotationGraphicsItemScheduler(SignalHub *hub, QObject *parent = 0)
+  explicit AnnotationGraphicsItemScheduler(SignalHub *hub, QObject *parent = nullptr)
     : Base(parent), hub_(hub), scale_(1.0), pauseTime_(0), resumeTime_(0) { Q_ASSERT(hub); }
 
   qreal scale() const { return scale_; }
@@ -57,12 +59,13 @@ public slots:
   void pause();
   void resume();
   void clear();
+  void clearSubtitles();
 
   void setScale(qreal value) { scale_ = value; }
 
   // - Float scheduling, lane by lane -
 public:
-  int nextY(int windowHeight, int itemHeight, int visibleMsecs, AnnotationGraphicsItem::Style style);
+  int nextY(int windowHeight, int itemHeight, int visibleMsecs, AnnotationGraphicsItem::Style style, bool sub);
 
   // - Motionless scheduling, cell by cell -
 public:

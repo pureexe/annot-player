@@ -18,12 +18,12 @@ class NicovideoCodec : public AnnotationCodec
   typedef AnnotCloud::AnnotationList AnnotationList;
 
 public:
-  explicit NicovideoCodec(QObject *parent = 0)
+  explicit NicovideoCodec(QObject *parent = nullptr)
     : Base(parent) { }
 
 public:
-  virtual bool match(const QString &url) const; ///< \reimp
-  virtual void fetch(const QString &url, const QString &originalUrl); ///< \reimp
+  bool match(const QString &url) const override;
+  void fetch(const QString &url, const QString &originalUrl) override;
 
   void fetchLocalFile(const QString &path, const QString &originalUrl);
 

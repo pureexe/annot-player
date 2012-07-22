@@ -13,9 +13,9 @@
 #ifdef WITH_MODULE_QT
 # include "module/qt/qtrc.h"
 #endif // WITH_MODULE_QT
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
 # include "win/qtwin/qtwin.h"
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
 #include <QtWebKit/QWebSettings>
 //#include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkProxy>
@@ -59,7 +59,7 @@ namespace { namespace detail {
 #ifdef WITH_MODULE_QT
   inline QTranslator *qtTranslatorForLanguage(int lang, int script = 0)
   {
-    const char *qm = 0;
+    const char *qm = nullptr;
     switch (lang) {
     case QLocale::Japanese: qm = "qt_ja"; break;
     case QLocale::Chinese: qm = script == QLocale::SimplifiedChineseScript ? "qt_zh_CN" : "qt_zh_TW"; break;
@@ -91,6 +91,9 @@ main(int argc, char *argv[])
 
   // Applications
   Application a(argc, argv);
+#ifdef Q_OS_WIN
+  QDir::setCurrent(QCoreApplication::applicationDirPath());
+#endif // Q_OS_WIN
 
   // Register meta types.
   detail::registerMetaTypes();
@@ -131,9 +134,9 @@ main(int argc, char *argv[])
     int tid = ac->themeId();
     ui->setTheme(tid);
     ui->setMenuEnabled(ac->isMenuThemeEnabled());
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     ui->setAeroEnabled(ac->isAeroEnabled());
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
   }
 
   // Set webkit settings
@@ -198,15 +201,22 @@ main(int argc, char *argv[])
     settings->setRecentTabIndex(urls.size() - 1);
   }
 
+  // Allocate more threads
+  enum { MinThreadCount = 3 };
+  if (QThreadPool::globalInstance()->maxThreadCount() < MinThreadCount)
+    QThreadPool::globalInstance()->setMaxThreadCount(MinThreadCount);
   DOUT("thread pool size =" << QThreadPool::globalInstance()->maxThreadCount());
 
   DOUT("create mainwindow");
-  MainWindow *w = new MainWindow; {
-    //QTimer::singleShot(0, w, SLOT(login()));
-    //w->login();
-    w->show();
-  }
+  MainWindow *w = new MainWindow;
 
+  //QTimer::singleShot(0, w, SLOT(login()));
+  //w->login();
+
+  DOUT("showing mainwindow");
+  w->show();
+
+  DOUT("exit: exec");
   return a.exec();
 }
 

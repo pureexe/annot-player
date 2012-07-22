@@ -11,7 +11,6 @@
 //#include "textformathandler.h"
 #include "tr.h"
 #include "global.h"
-#include "logger.h"
 #include "signalhub.h"
 #include "project/common/acui.h"
 #include "project/common/acrc.h"
@@ -45,7 +44,6 @@
 #include "module/debug/debug.h"
 
 using namespace AnnotCloud;
-using namespace Logger;
 
 #define BAD_POSF        QPointF(-1,-1)
 namespace { namespace detail {
@@ -56,11 +54,11 @@ enum { MOTIONLESS_STAY_TIME = 7000 }; // 7 seconds
 
 // - RC -
 
-#ifdef Q_WS_X11
+#ifdef Q_OS_LINUX
 # define RC_AVATAR_PREFIX      AVATARDIR
 #else
 # define RC_AVATAR_PREFIX      QCoreApplication::applicationDirPath() + "/avatars"
-#endif // Q_WS_X11
+#endif // Q_OS_LINUX
 
 #define AVATAR_SIZE             "33" // 100/3
 
@@ -139,7 +137,7 @@ namespace { namespace curve_ { // anonymous curves
 int
 AnnotationGraphicsItem::nextY(int msecs, Style style) const
 {
-  int ret = view_->scheduler()->nextY(view_->height(), boundingRect().height(), msecs, style);
+  int ret = view_->scheduler()->nextY(view_->height(), boundingRect().height(), msecs, style, isSubtitle());
   int max = view_->height() - boundingRect().height() ;
   if (ret > max - 5)
     ret = max;
@@ -184,8 +182,8 @@ AnnotationGraphicsItem::AnnotationGraphicsItem(
   AnnotationGraphicsView *view)
   : metaVisible_(false), avatarVisible_(false),
     view_(view), data_(data), hub_(hub), style_(FloatStyle), positionResolution_(0),
-    removeLaterTimer_(0),
-    flyAni_(0), flyOpacityAni_(0), escapeAni_(0), rushAni_(0), appearOpacityAni_(0), fadeAni_(0),
+    removeLaterTimer_(nullptr),
+    flyAni_(nullptr), flyOpacityAni_(nullptr), escapeAni_(nullptr), rushAni_(nullptr), appearOpacityAni_(nullptr), fadeAni_(nullptr),
     dragPos_(BAD_POSF)
 {
   DOUT("enter");
@@ -202,6 +200,12 @@ AnnotationGraphicsItem::AnnotationGraphicsItem(
 
   setScale(view_->scale());
   setGraphicsEffect(effect_ = new AnnotationGraphicsEffect);
+
+  Q_ASSERT(document());
+  QTextOption opt = document()->defaultTextOption();
+  opt.setWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
+  opt.setAlignment(Qt::AlignCenter);
+  document()->setDefaultTextOption(opt);
 
   DOUT("exit");
 }
@@ -387,6 +391,20 @@ AnnotationGraphicsItem::updateText()
   boost::tie(text_, tags) = ANNOT_PARSE_CODE(text);
   plainText_.clear();
   setTags(tags);
+
+  enum { MinWrapWidth = 300, MinWrapHeight = 200 };
+  int textWidth = -1;
+  switch (style_) {
+  case FloatStyle: case FlyStyle: break;
+  default:
+    {
+      int w = view_->width() * 4/5;
+      if (w > MinWrapWidth && view_->height() > MinWrapHeight)
+        textWidth = w;
+    }
+  }
+  setTextWidth(textWidth);
+
   if (tags.contains(CORE_CMD_VERBATIM))
     setPlainText(text_);
   else if (isMetaVisible()) {
@@ -622,7 +640,7 @@ AnnotationGraphicsItem::setTags(const QStringList &tags)
         // Warn if the annot is submitted by current user
         if (!annot_.hasUserId() && !annot_.hasUserAlias() ||
             view_->userId() == annot_.userId())
-        warn(TR(T_ERROR_UNKNOWN_COMMAND) + ": " + tag);
+        view_->warn(TR(T_ERROR_UNKNOWN_COMMAND) + ": " + tag);
       }
     }
 }
@@ -685,11 +703,11 @@ AnnotationGraphicsItem::setOpacity(qreal opacity)
 //  switch (e) {
 //  case ShadowEffect:
 //    {
-//#ifdef Q_WS_WIN
+//#ifdef Q_OS_WIN
 //      enum { offset = 1, radius = 18 };
 //#else
 //      enum { offset = 1, radius = 12 };
-//#endif // Q_WS_WIN
+//#endif // Q_OS_WIN
 //      auto e = qobject_cast<QGraphicsDropShadowEffect *>(graphicsEffect());
 //      if (!e) {
 //        e = new QGraphicsDropShadowEffect;
@@ -818,7 +836,7 @@ AnnotationGraphicsItem::setOpacity(qreal opacity)
 //#undef ELIF_SIZE
 //
 //  else {
-//    warn(TR(T_ERROR_UNKNOWN_COMMAND) + ": " + text);
+//    view_->warn(TR(T_ERROR_UNKNOWN_COMMAND) + ": " + text);
 //    return text;
 //  }
 //#undef SELF
@@ -842,9 +860,8 @@ AnnotationGraphicsItem::addMe()
     connect(AnnotationSettings::globalSettings(), SIGNAL(highlightColorChanged(QColor)), SLOT(updateOutlineColor()));
     connect(AnnotationSettings::globalSettings(), SIGNAL(positionResolutionChanged(int)), SLOT(setPositionResolution(int)));
 
-    if (style_ == SubtitleStyle &&
-        hub_->isSignalTokenMode())
-      connect(view_, SIGNAL(removeItemRequested()), SLOT(disappear()));
+    if (isSubtitle())
+      connect(view_, SIGNAL(removeSubtitlesRequested()), SLOT(disappear()));
 
     if (isVisible() != view_->isItemVisible())
       setVisible(view_->isItemVisible());
@@ -881,11 +898,7 @@ AnnotationGraphicsItem::removeMe()
 {
   if (scene()) {
     // Always try to disconnect to avoid segmentation fault
-    //if (style_ == SubtitleStyle &&
-    //    hub_->isSignalTokenMode() &&
-    //    !hub_->isStopped())
-    if (hub_->isSignalTokenMode())
-      disconnect(view_, SIGNAL(removeItemRequested()), this, SLOT(disappear()));
+    disconnect(view_, SIGNAL(removeSubtitlesRequested()), this, SLOT(disappear()));
     disconnect(view_, SIGNAL(paused()), this, SLOT(pause()));
     disconnect(view_, SIGNAL(resumed()), this, SLOT(resume()));
     disconnect(view_, SIGNAL(scaleChanged(qreal)), this, SLOT(setScale(qreal)));
@@ -970,8 +983,8 @@ AnnotationGraphicsItem::removeLater(int msecs)
 bool
 AnnotationGraphicsItem::isPaused() const
 {
-  if (style_ == SubtitleStyle &&
-      hub_->isSignalTokenMode() &&
+  if (hub_->isSignalTokenMode() &&
+      isSubtitle() &&
       !hub_->isStopped())
     return false;
 
@@ -995,8 +1008,8 @@ AnnotationGraphicsItem::pause()
   if (!isMetaVisible())
     setMetaVisibleAndUpdate(true);
 
-  if (style_ == SubtitleStyle &&
-      hub_->isSignalTokenMode() &&
+  if (hub_->isSignalTokenMode() &&
+      isSubtitle() &&
       !hub_->isStopped())
     return;
 
@@ -1037,8 +1050,8 @@ AnnotationGraphicsItem::resume()
   updateOutlineColor();
   if (isMetaVisible())
     setMetaVisibleAndUpdate(false);
-  if (style_ == SubtitleStyle &&
-      hub_->isSignalTokenMode() &&
+  if (hub_->isSignalTokenMode() &&
+      isSubtitle() &&
       !hub_->isStopped())
     return;
 
@@ -1070,8 +1083,7 @@ AnnotationGraphicsItem::resume()
 int
 AnnotationGraphicsItem::stayTime() const
 {
-  int t = style_ == SubtitleStyle ? ANNOTATION_STAY_TIME_SUBTITLE
-                                 : ANNOTATION_STAY_TIME;
+  int t = style_ != SubtitleStyle ? ANNOTATION_STAY_TIME : ANNOTATION_STAY_TIME_SUBTITLE;
   int w0 = qMax<int>(view_->width(), 100),
       w = qMax<int>(boundingRect().width(), 50),
       h = qMax<int>(boundingRect().height(), 20);
@@ -1103,20 +1115,21 @@ AnnotationGraphicsItem::stay(Style style)
   int msecs = stayTime();
 
   Style posStyle = style;
-  if (style == SubtitleStyle)
+  if (isSubtitle())
     switch (view_->subtitlePosition()) {
     case AnnotationGraphicsView::AP_Top:    posStyle = TopStyle; break;
     case AnnotationGraphicsView::AP_Bottom: posStyle = BottomStyle; break;
+    default: ;
     }
 
   int x = (view_->width() - boundingRect().width()) / 2,
       y = nextY(msecs, posStyle);
 
-  if (style_ == SubtitleStyle &&
-      hub_->isSignalTokenMode() &&
+  if (hub_->isSignalTokenMode() &&
+      isSubtitle() &&
       !hub_->isStopped())
     msecs = -1;
-  //if (style == SubtitleStyle || msecs <= 0)
+  //if (isSubtitle() || msecs <= 0)
   //  stay(QPointF(x, y), msecs);
   //else
   appear(QPointF(x, y), msecs);
@@ -1280,6 +1293,7 @@ AnnotationGraphicsItem::contextMenuEvent(QContextMenuEvent *event)
   translateMenu->addSeparator();
   translateMenu->addAction(QIcon(ACRC_IMAGE_FRENCH), TR(T_FRENCH), this, SLOT(translateToFrench()));
   translateMenu->addAction(QIcon(ACRC_IMAGE_GERMAN), TR(T_GERMAN), this, SLOT(translateToGerman()));
+  translateMenu->addAction(QIcon(ACRC_IMAGE_ITALIAN), TR(T_ITALIAN), this, SLOT(translateToItalian()));
   translateMenu->addAction(QIcon(ACRC_IMAGE_SPANISH), TR(T_SPANISH), this, SLOT(translateToSpanish()));
   translateMenu->addAction(QIcon(ACRC_IMAGE_PORTUGUESE), TR(T_PORTUGUESE), this, SLOT(translateToPortuguese()));
 
@@ -1390,14 +1404,14 @@ AnnotationGraphicsItem::mouseMoveEvent(QMouseEvent *event)
   }
 
   setOutlineColor(AnnotationSettings::globalSettings()->highlightColor());
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
   if (toolTip().isEmpty())
     updateToolTip();
   view_->setToolTip(toolTip()); // FIXME: HACK!
   QCoreApplication::sendEvent(view_,
     new QHelpEvent(QEvent::ToolTip, event->pos(), event->globalPos())
   );
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
 }
 
 void
@@ -1432,9 +1446,9 @@ AnnotationGraphicsItem::copyToClipboard() const
   QClipboard *clipboard = QApplication::clipboard();
   if (clipboard) {
     clipboard->setText(annot_.text());
-    log(TR(T_SUCCEED_COPIED) + ": " + annot_.text());
+    view_->showMessage(TR(T_SUCCEED_COPIED) + ": " + annot_.text());
   } else
-    warn(TR(T_ERROR_CLIPBOARD_UNAVAILABLE));
+    view_->warn(TR(T_ERROR_CLIPBOARD_UNAVAILABLE));
 }
 
 bool
@@ -1445,7 +1459,7 @@ void
 AnnotationGraphicsItem::edit()
 {
   if (!isEditable()) {
-    warn(tr("cannot edit other's annotation text"));
+    view_->warn(tr("cannot edit other's annotation text"));
     return;
   }
 
@@ -1703,6 +1717,10 @@ AnnotationGraphicsItem::translateToFrench()
 void
 AnnotationGraphicsItem::translateToGerman()
 { translate(Traits::German); }
+
+void
+AnnotationGraphicsItem::translateToItalian()
+{ translate(Traits::Italian); }
 
 void
 AnnotationGraphicsItem::translateToSpanish()

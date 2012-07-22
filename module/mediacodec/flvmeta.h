@@ -71,10 +71,10 @@ class FlvMetaReader : public QObject, public StoppableTask
        scriptTagStripped_;
 
 public:
-  explicit FlvMetaReader(const InputStreamList &ins, QObject *parent = 0)
+  explicit FlvMetaReader(const InputStreamList &ins, QObject *parent = nullptr)
     : Base(parent), state_(Stopped), ins_(ins) { }
 
-  explicit FlvMetaReader(QObject *parent = 0)
+  explicit FlvMetaReader(QObject *parent = nullptr)
     : Base(parent), state_(Stopped) { }
 
 public:
@@ -89,12 +89,12 @@ public:
 signals:
   void stopped();
   //void timestampChanged(qint64);
-  void error(QString message);
+  void errorMessage(QString message);
 
 public slots:
-  virtual void run(); ///< \reimp
+  void run() override;
 
-  virtual void stop() ///< \reimp
+  void stop() override
   {
     state_ = Stopped;
     emit stopped();
@@ -144,13 +144,13 @@ class FlvMetaWriter : public QObject, public StoppableTask
   FlvMeta meta_;
 
 public:
-  explicit FlvMetaWriter(const FlvMeta &meta, InputOutputStream *ios = 0, QObject *parent = 0)
+  explicit FlvMetaWriter(const FlvMeta &meta, InputOutputStream *ios = 0, QObject *parent = nullptr)
     : Base(parent), state_(Stopped), ios_(ios), meta_(meta) { }
-  explicit FlvMetaWriter(InputOutputStream *ios, QObject *parent = 0)
+  explicit FlvMetaWriter(InputOutputStream *ios, QObject *parent = nullptr)
     : Base(parent), state_(Stopped), ios_(ios) { }
 
-  explicit FlvMetaWriter(QObject *parent = 0)
-    : Base(parent), state_(Stopped), ios_(0) { }
+  explicit FlvMetaWriter(QObject *parent = nullptr)
+    : Base(parent), state_(Stopped), ios_(nullptr) { }
 
 public:
   bool isStopped() const { return state_ == Stopped; }
@@ -165,12 +165,12 @@ public:
 signals:
   void stopped();
   //void timestampChanged(qint64);
-  void error(QString message);
+  void errorMessage(QString message);
 
 public slots:
-  virtual void run(); ///< \reimp
+  void run() override;
 
-  virtual void stop() ///< \reimp
+  void stop() override
   {
     state_ = Stopped;
     emit stopped();
@@ -212,11 +212,11 @@ class FlvMetaCreator : public QObject, public StoppableTask
   InputStream *in_;
 
 public:
-  explicit FlvMetaCreator(InputStream *in, QObject *parent = 0)
+  explicit FlvMetaCreator(InputStream *in, QObject *parent = nullptr)
     : Base(parent), state_(Stopped), in_(in) { }
 
-  explicit FlvMetaCreator(QObject *parent = 0)
-    : Base(parent), state_(Stopped), in_(0) { }
+  explicit FlvMetaCreator(QObject *parent = nullptr)
+    : Base(parent), state_(Stopped), in_(nullptr) { }
 
 public:
   bool isStopped() const { return state_ == Stopped; }
@@ -230,12 +230,12 @@ public:
 signals:
   void stopped();
   //void timestampChanged(qint64);
-  void error(QString message);
+  void errorMessage(QString message);
 
 public slots:
-  virtual void run(); ///< \reimp
+  void run() override;
 
-  virtual void stop() ///< \reimp
+  void stop() override
   {
     state_ = Stopped;
     emit stopped();

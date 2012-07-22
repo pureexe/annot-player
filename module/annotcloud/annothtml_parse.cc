@@ -181,8 +181,7 @@ AnnotationHtmlParser::toHtml(const QString &text) const
           parsed = front.first + parsed;
           break;
 
-        default:
-          Q_ASSERT(0);
+        default: Q_ASSERT(0);
         }
       }
       if (!params.empty())

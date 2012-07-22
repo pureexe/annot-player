@@ -26,16 +26,16 @@ class AssociationPreferencesTab : public AcPreferencesTab
   QLineEdit *searchEdit_;
 
 public:
-  explicit AssociationPreferencesTab(WindowsRegistry *registry, QWidget *parent = 0)
+  explicit AssociationPreferencesTab(WindowsRegistry *registry, QWidget *parent = nullptr)
     : Base(parent), registry_(registry) { init(); }
 
-  explicit AssociationPreferencesTab(QWidget *parent = 0)
-    : Base(parent), registry_(0) { init(); }
+  explicit AssociationPreferencesTab(QWidget *parent = nullptr)
+    : Base(parent), registry_(nullptr) { init(); }
 
 public slots:
-  virtual bool save(); ///< \reimp
-  virtual void load(); ///< \reimp
-  virtual void clear(); ///< \reimp
+  bool save() override;
+  void load() override;
+  void clear() override;
 protected slots:
   void filterToggles(const QString &regexp);
   void toggleType(bool checked, const QString &type);

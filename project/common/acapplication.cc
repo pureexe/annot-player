@@ -1,20 +1,20 @@
 // acapplication.cc
 // 11/18/2011
 #include "project/common/acapplication.h"
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
 # include "win/qtwin/qtwin.h"
 #endif // Q_OS_WIN
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
 # include "mac/qtmac/qtmac.h"
 #endif // Q_OS_MAC
-#ifdef Q_WS_X11
+#ifdef Q_OS_LINUX
 extern "C" {
 # include <sys/types.h>
 # include <sys/stat.h>
 # include <unistd.h>
 # include <fcntl.h>
 } // extern "C"
-#endif // Q_WS_X11
+#endif // Q_OS_LINUX
 #include <QtGui>
 #include <climits>
 #include <cstdlib>
@@ -58,13 +58,13 @@ AcApplication::abort()
 {
   DOUT("enter");
   qint64 pid = applicationPid();
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
   //QtWin::killCurrentProcess();
   QString cmd = QString("tskill %1").arg(QString::number(pid));
   QtWin::run(cmd, false); // visible = false
 #else
   QProcess::startDetached(QString("kill -9 %1").arg(QString::number(pid)));
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
   DOUT("exit");
 }
 
@@ -73,12 +73,12 @@ AcApplication::abortAll()
 {
   DOUT("enter");
   QString app = QFileInfo(applicationFilePath()).fileName();
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
   QString cmd = QString("tskill \"%1\"").arg(app);
   QtWin::run(cmd, false); // visible = fales
 #else
   QProcess::startDetached("killall", QStringList(app));
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
   DOUT("exit");
 }
 
@@ -87,13 +87,13 @@ AcApplication::abortAll()
 bool
 AcApplication::isSingleInstance() const
 {
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
   QFileInfo fi(applicationFilePath());
   QString processName = fi.fileName();
   QList<ulong> pids = QtWin::getProcessIdsByName(processName);
   return pids.size() <= 1;
   return true;
-#elif defined(Q_WS_X11)
+#elif defined(Q_OS_LINUX)
   // See: http://www.linuxquestions.org/questions/programming-9/restricting-multiple-instance-of-a-program-242069/
   static int fd_lock = -1;
   if (fd_lock < 0) {
@@ -112,9 +112,9 @@ AcApplication::isSingleInstance() const
     }
   }
   return fd_lock >= 0;
-#else // Q_WS_MAC
+#else // Q_OS_MAC
   return true;
-#endif // Q_WS_
+#endif // Q_OS_
 }
 
 // - Debug -

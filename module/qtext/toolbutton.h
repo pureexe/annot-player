@@ -16,13 +16,13 @@ class ToolButton : public QToolButton
   typedef QToolButton Base;
 
 public:
-  explicit ToolButton(QWidget *parent = 0)
+  explicit ToolButton(QWidget *parent = nullptr)
     : Base(parent) { }
 
   // - Events -
 protected:
-  virtual void enterEvent(QEvent *event); ///< \reimp
-  virtual void leaveEvent(QEvent *event); ///< \reimp
+  void enterEvent(QEvent *event) override;
+  void leaveEvent(QEvent *event) override;
 };
 
 } // namespace QtExt

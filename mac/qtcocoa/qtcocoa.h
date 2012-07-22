@@ -1,10 +1,11 @@
-#ifndef QTSTEP_H
-#define QTSTEP_H
+#ifndef QTCOCOA_H
+#define QTCOCOA_H
 
-// qtstep.h
+// qtcocoa.h
 // 7/30/2011
 
 #include <QtCore/QPoint>
+#include <QtCore/QString>
 
 // - Type cast -
 
@@ -33,6 +34,8 @@ nsobject_cast(From x)
   inline _obj *nsobject_cast<_obj *>(const _type *obj) \
   { return reinterpret_cast<_obj *>(const_cast<_type *>(obj)); }
 
+#define NSBOOL(_cond)   ((_cond) ? YES : NO)
+
 // - NSObject -
 
 struct nsobject_t { };
@@ -46,6 +49,16 @@ struct nsresponder_t : public nsobject_t{ };
 
 nsresponder_t *nsresponder_new();
 void nsresponder_release(nsresponder_t *obj);
+
+// - NSString -
+
+struct nsstring_t : public nsobject_t{ };
+
+nsstring_t *nsstring_new();
+void nsstring_release(nsstring_t *obj);
+
+//nsstring_t *nsstring_string();
+nsstring_t *nsstring_new_with_characters(const ushort *chars, ulong len);
 
 // - NSWindow -
 
@@ -70,12 +83,21 @@ void nsview_set_hidden(nsview_t *obj, bool hidden);
 nswindow_t *nsview_window(nsview_t *obj);
 const nswindow_t *nsview_window(const nsview_t *obj);
 
-// - QtStep -
+// - QtCocoa -
 
-namespace QtStep {
+namespace QtCocoa {
 
-  // Send mouse click event
+  // - Type Conversion -
+
+  QString NSStringToQString(const nsstring_t *ns);
+  nsstring_t *QStringToNSString(const QString &qs);
+
+  // - Mouse and Keyboards -
+
+  ///  Send mouse click event
   void mouseClickEvent(nsview_t *view, const QPoint &pos);
+
+  // - Events -
 
   bool isModifierKeyPressed(uint mask);
   bool isCommandKeyPressed();
@@ -85,6 +107,12 @@ namespace QtStep {
   bool isHelpKeyPressed();
   bool isFunctionKeyPressed();
   bool isCapsLockKeyPressed();
-} // namespace QtStep
 
-#endif // QTSTEP_H
+  // - Shell Interaction -
+
+  bool trashFile(const QString &fileName);
+  bool trashFileWithFullPath(const QString &fullPath);
+
+} // namespace QtCocoa
+
+#endif // QTCOCOA_H

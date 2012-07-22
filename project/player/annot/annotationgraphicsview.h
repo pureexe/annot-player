@@ -49,7 +49,7 @@ public:
 
   // - Constructions -
 public:
-  AnnotationGraphicsView(SignalHub *hub, DataManager *data, Player *player, VideoView *videoView, QWidget *parent = 0);
+  AnnotationGraphicsView(SignalHub *hub, DataManager *data, Player *player, VideoView *videoView, QWidget *parent = nullptr);
   //~AnnotationGraphicsView();
 
   // - Properties -
@@ -70,6 +70,7 @@ public:
 
 signals:
   void message(const QString &text);
+  void warning(const QString &text);
   void searchRequested(int engine, const QString &key);
   void translateRequested(const QString &text, int lang);
   void traditionalChineseRequested(const QString &text);
@@ -100,6 +101,9 @@ public slots:
   void setSubtitleVisible(bool t) { subtitleVisible_ = t; }
   void setNonSubtitleVisible(bool t) { nonSubtitleVisible_ = t; }
 
+  void showMessage(const QString text) { emit message(text); }
+  void warn(const QString text) { emit warning(text); }
+
   /**
    *  Set the windows to track.
    *  Currently only works on Windows.
@@ -113,14 +117,14 @@ public slots:
   void setTrackedWindow(WId winId);
 
 signals:
-  void removeItemRequested();
+  void removeSubtitlesRequested();
   void annotationPosChanged(qint64 msecs); ///< current pos changed by show at pos, not the pos of the widget
 
   void subtitleAdded(const QString &richText);
   void annotationAdded(const QString &richText);
 
   void posChanged(); ///< manually moved
-  void sizeChanged(); ///< manually resized
+  void sizeChanged(const QSize &sz); ///< manually resized
   void annotationTextSubmitted(const QString &text);
   void annotationTextUpdatedWithId(const QString &text, qint64 id);
   void annotationDeletedWithId(qint64 id);
@@ -153,22 +157,22 @@ protected slots:
 
   // - Events -
 public slots:
-  virtual void setVisible(bool visible); ///< \reimp stop polling when hidden
+  void setVisible(bool visible) override; ///< stop polling when hidden
 
 public:
   // Implement EventForwarder.
-  virtual void sendContextMenuEvent(QContextMenuEvent *event); ///< \reimp
-  virtual void sendMouseMoveEvent(QMouseEvent *event); ///< \reimp
-  virtual void sendMousePressEvent(QMouseEvent *event); ///< \reimp
-  virtual void sendMouseReleaseEvent(QMouseEvent *event); ///< \reimp
-  virtual void sendMouseDoubleClickEvent(QMouseEvent *event); ///< \reimp
+  void sendContextMenuEvent(QContextMenuEvent *event) override;
+  void sendMouseMoveEvent(QMouseEvent *event) override;
+  void sendMousePressEvent(QMouseEvent *event) override;
+  void sendMouseReleaseEvent(QMouseEvent *event) override;
+  void sendMouseDoubleClickEvent(QMouseEvent *event) override;
 
 protected:
-  //virtual void contextMenuEvent(QContextMenuEvent *event); ///< \reimp
-  //virtual void mouseMoveEvent(QMouseEvent *event); ///< \reimp
-  //virtual void mousePressEvent(QMouseEvent *event); ///< \reimp
-  //virtual void mouseReleaseEvent(QMouseEvent *event); ///< \reimp
-  //virtual void mouseDoubleClickEvent(QMouseEvent *event); ///< \reimp
+  //void contextMenuEvent(QContextMenuEvent *event) override;
+  //void mouseMoveEvent(QMouseEvent *event) override;
+  //void mousePressEvent(QMouseEvent *event) override;
+  //void mouseReleaseEvent(QMouseEvent *event) override;
+  //void mouseDoubleClickEvent(QMouseEvent *event) override;
 
 protected:
   void moveToGlobalPos(const QPoint &globalPos);

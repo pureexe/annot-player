@@ -20,11 +20,11 @@ class WebPage: public QWebPage
   bool hoveredLinkLocked_;
 
 public:
-  explicit WebPage(QWidget *parent = 0);
+  explicit WebPage(QWidget *parent = nullptr);
 
   QString hoveredLink() const { return hoveredLink_; }
 
-  virtual bool event(QEvent *e); ///< \reimp
+  bool event(QEvent *e) override;
 
 public slots:
   void scrollTop();
@@ -41,14 +41,14 @@ private slots:
 
   // - Extensions -
 public:
-  virtual bool supportsExtension(Extension extension) const; ///< \reimp
-  virtual bool extension(Extension extension, const ExtensionOption *option = 0, ExtensionReturn *output = 0); ///< \reimp
+  bool supportsExtension(Extension extension) const override;
+  bool extension(Extension extension, const ExtensionOption *option = nullptr, ExtensionReturn *output = nullptr) override;
 
 protected:
-  bool errorPageExtension(const ErrorPageExtensionOption *option = 0, ErrorPageExtensionReturn *output = 0);
-  //virtual QObject *createPlugin(const QString &classid, const QUrl &url, const QStringList &paramNames, const QStringList &paramValues); ///< \reimp
+  bool errorPageExtension(const ErrorPageExtensionOption *option = nullptr, ErrorPageExtensionReturn *output = nullptr);
+  //QObject *createPlugin(const QString &classid, const QUrl &url, const QStringList &paramNames, const QStringList &paramValues) override;
 
-  virtual QString userAgentForUrl(const QUrl &url) const; ///< \reimp
+  QString userAgentForUrl(const QUrl &url) const override;
 };
 
 } // namespace QtExt

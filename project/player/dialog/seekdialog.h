@@ -14,7 +14,7 @@ class SeekDialog : public TimeInputDialog
   typedef TimeInputDialog Base;
 
 public:
-  explicit SeekDialog(QWidget *parent = 0);
+  explicit SeekDialog(QWidget *parent = nullptr);
 };
 
 #endif // SEEKDIALOG_H

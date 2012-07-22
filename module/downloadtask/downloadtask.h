@@ -41,8 +41,8 @@ class DownloadTask : public QThread, public Stoppable
 public:
   enum State { Error = -1, Stopped = 0, Downloading = 1, Pending, Finished };
 
-  explicit DownloadTask(const QString &url, QObject *parent = 0);
-  explicit DownloadTask(const DownloadTaskInfo &info, QObject *parent = 0);
+  explicit DownloadTask(const QString &url, QObject *parent = nullptr);
+  explicit DownloadTask(const DownloadTaskInfo &info, QObject *parent = nullptr);
 
   enum { MinimumFileSize = 1024 * 1024 }; // 1 MB
 
@@ -58,7 +58,7 @@ signals:
   void stateChanged(int state);
   void progress(qint64 receivedBytes, qint64 totalBytes);
   void finished(DownloadTask *self);
-  void error(QString message);
+  void errorMessage(const QString &message);
 
   // - Properties -
 public:
@@ -87,8 +87,8 @@ public:
 public slots:
   void start(Priority p = InheritPriority) { reset(); Base::start(p); }
   virtual void run(bool exec) = 0;
-  virtual void run() { run(true); } ///< \reimp
-  //virtual void stop() = 0; ///< \reimp
+  void run() override { run(true); }
+  //void stop() override = 0;
 
   //void exec();
   //void quit();

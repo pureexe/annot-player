@@ -18,9 +18,9 @@ class Slider : public QSlider
   //int hoverValue_;
 
 public:
-  explicit Slider(QWidget *parent = 0)
+  explicit Slider(QWidget *parent = nullptr)
     : Base(parent) { }
-  explicit Slider(Qt::Orientation orientation, QWidget *parent = 0)
+  explicit Slider(Qt::Orientation orientation, QWidget *parent = nullptr)
     : Base(orientation, parent) { }
 
 //signals:
@@ -35,11 +35,11 @@ public:
 
   // - Events -
 protected:
-  virtual void enterEvent(QEvent *event); ///< \reimp
-  virtual void leaveEvent(QEvent *event); ///< \reimp
+  void enterEvent(QEvent *event) override;
+  void leaveEvent(QEvent *event) override;
 
-  virtual void mousePressEvent(QMouseEvent *event); ///< \reimp
-  //virtual void mouseMoveEvent(QMouseEvent *event); // NEVER TRIGGERED orz
+  void mousePressEvent(QMouseEvent *event) override;
+  //void mouseMoveEvent(QMouseEvent *event) override; // NEVER TRIGGERED orz
 };
 
 } // namespace QtExt

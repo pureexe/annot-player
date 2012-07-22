@@ -49,11 +49,9 @@ YoukuMrlResolver::matchMedia(const QString &href) const
 bool
 YoukuMrlResolver::resolveMedia(const QString &href)
 {
-  static const QString errorMessage = tr("failed to resolve URL");
-
   QRegExp rx("v.youku.com/v_show/id_([a-z0-9]+)", Qt::CaseInsensitive);
   if (rx.indexIn(href) < 0) {
-    emit error(errorMessage + ": " + href);
+    emit errorMessage(tr("failed to resolve URL") + ": " + href);
     return false;
   }
   QString id = rx.cap(1);
@@ -72,13 +70,12 @@ void
 YoukuMrlResolver::resolveMedia(QNetworkReply *reply)
 {
   DOUT("enter");
-  static const QString resolveErrorMessage = tr("failed to resolve URL");
 
   Q_ASSERT(reply);
   reply->deleteLater();
   if (!reply->isFinished() || reply->error() != QNetworkReply::NoError) {
-    //emit error(reply->errorString());
-    emit error(tr("network error, failed to resolve media URL") + ": " + reply->url().toString());
+    //emit errorMessage(reply->errorString());
+    emit errorMessage(tr("network error, failed to resolve media URL") + ": " + reply->url().toString());
     DOUT("exit: error =" << reply->error());
     return;
   }
@@ -95,19 +92,19 @@ YoukuMrlResolver::resolveMedia(QNetworkReply *reply)
   // data => ( seed, title, streamfileids,  segs { } )
   QScriptValue data = root.property("data");
   if (!data.isValid())
-    emit error(resolveErrorMessage + ": " + reply->url().toString());
+    emit errorMessage(tr("failed to resolve URL") + ": " + reply->url().toString());
   else {
     QScriptValueIterator it(data);
     it.next();
     if (!it.hasNext())
-      emit error(resolveErrorMessage + ": " + reply->url().toString());
+      emit errorMessage(tr("failed to resolve URL") + ": " + reply->url().toString());
     else while (it.hasNext()) {
       QScriptValue dataValue = it.value();
 
       QStringList types;
       QScriptValue streamTypes = dataValue.property("streamtypes");
       if (!streamTypes.isArray()) {
-        emit error(resolveErrorMessage + ": " + reply->url().toString());
+        emit errorMessage(tr("failed to resolve URL") + ": " + reply->url().toString());
         continue;
       }
       qScriptValueToSequence(streamTypes, types);
@@ -143,7 +140,7 @@ YoukuMrlResolver::resolveMedia(QNetworkReply *reply)
           QString reason = dataValue.property("error").toString();
           if (reason.isEmpty())
             reason = reply->url().toString();
-          emit error(resolveErrorMessage + ": " + reason);
+          emit errorMessage(tr("failed to resolve URL") + ": " + reason);
           continue;
         }
 
@@ -152,7 +149,7 @@ YoukuMrlResolver::resolveMedia(QNetworkReply *reply)
           QString reason = dataValue.property("error").toString();
           if (reason.isEmpty())
             reason = reply->url().toString();
-          emit error(resolveErrorMessage + ": " + reason);
+          emit errorMessage(tr("failed to resolve URL") + ": " + reason);
           continue;
         }
         fileId = decodeFileId(fileId, seed);
@@ -160,7 +157,7 @@ YoukuMrlResolver::resolveMedia(QNetworkReply *reply)
           QString reason = dataValue.property("error").toString();
           if (reason.isEmpty())
             reason = reply->url().toString();
-          emit error(resolveErrorMessage + ": " + reason);
+          emit errorMessage(tr("failed to resolve URL") + ": " + reason);
           continue;
         }
 
@@ -194,7 +191,7 @@ YoukuMrlResolver::resolveMedia(QNetworkReply *reply)
         }
 
         if (mi.mrls.isEmpty()) {
-          emit error(resolveErrorMessage + ": " + reply->url().toString());
+          emit errorMessage(tr("failed to resolve URL") + ": " + reply->url().toString());
           continue;
         }
 

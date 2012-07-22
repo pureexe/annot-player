@@ -13,11 +13,11 @@
 
 // - Resources -
 
-#ifdef Q_WS_X11
+#ifdef Q_OS_LINUX
 # define RC_AVATAR_PREFIX      AVATARDIR
 #else
 # define RC_AVATAR_PREFIX      QCoreApplication::applicationDirPath() + "/avatars"
-#endif // Q_WS_X11
+#endif // Q_OS_LINUX
 
 #define AVATAR_WIDTH            "40"
 #define AVATAR_HEIGHT           "40"
@@ -38,21 +38,21 @@ namespace { namespace detail {
   inline QString rc_avatar_url(qint64 i)
   {
     static QString fmt =
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
       QString("file:///" + RC_AVATAR_PREFIX "/user_%1.jpg").replace('\\', '/')
 #else
       "file://" + QString(RC_AVATAR_PREFIX) + "/user_%1.jpg"
-#endif  // Q_WS_WIN
+#endif  // Q_OS_WIN
     ;
     return fmt.arg(QString::number(qAbs(i) % RC_AVATAR_COUNT));
 
-//#ifdef Q_WS_WIN
+//#ifdef Q_OS_WIN
 //    static QString jpg = QString("file:///" + RC_AVATAR_PREFIX "/user_%1.jpg").replace('\\', '/'),
 //                   gif = QString("file:///" + RC_AVATAR_PREFIX "/user_%1.gif").replace('\\', '/');
 //#else
 //    static QString jpg = "file://" + RC_AVATAR_PREFIX + "/user_%1.jpg",
 //                   gif = "file://" + RC_AVATAR_PREFIX + "/user_%1.gif";
-//#endif // Q_WS_WIN
+//#endif // Q_OS_WIN
 //    int hash = qAbs(i) % (RC_AVATAR_GIF_COUNT + RC_AVATAR_JPG_COUNT);
 //    return hash < RC_AVATAR_JPG_COUNT ?
 //      jpg.arg(QString::number(hash)) :
@@ -61,11 +61,11 @@ namespace { namespace detail {
 } } // anonymous detail
 
 
-#ifdef Q_WS_X11
+#ifdef Q_OS_LINUX
 # define RC_PREFIX     JSFDIR "/"
 #else
 # define RC_PREFIX     QCoreApplication::applicationDirPath() + "/jsf/"
-#endif // Q_WS_X11
+#endif // Q_OS_LINUX
 
 #define RC_JSF_T        RC_PREFIX "t.xhtml"
 #define RC_JSF_A        RC_PREFIX "a.xhtml"
@@ -175,12 +175,12 @@ AnnotationHtmlParser::toHtml(const AnnotationList &l, const QString &title, bool
     QString img_title = titles[i];
     QString img_file = QtExt::mktemp(".svg");
     QString img_src;
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     img_src = "file:///" + img_file;
     img_src.replace('\\', '/');
 #else
     img_src = "file://" + img_file;
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
     img.replace(EL_I_WIDTH, QString::number(img_width))
        .replace(EL_I_HEIGHT, QString::number(img_height))
        .replace(EL_I_TITLE, img_title)

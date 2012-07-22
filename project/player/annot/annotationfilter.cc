@@ -97,16 +97,13 @@ AnnotationFilter::removeBlockedAnnotationWithId(qint64 id)
   if (blockedAnnotations_.isEmpty())
     return;
 
-  auto p = blockedAnnotations_.begin();
-  bool update = false;
-  while (p != blockedAnnotations_.end())
-    if (p->id() == id) {
-      p = blockedAnnotations_.erase(p);
-      update = true;
-    } else
-      ++p;
+  int size = blockedAnnotations_.size();
+  QMutableListIterator<Annotation> i(blockedAnnotations_);
+  while (i.hasNext())
+    if (i.next().id() == id)
+      i.remove();
 
-  if (update)
+  if (size != blockedAnnotations_.size())
     emit blockedAnnotationsChanged(blockedAnnotations_);
 }
 

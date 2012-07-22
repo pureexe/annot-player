@@ -31,8 +31,8 @@ MrlResolverManager::init()
   MrlResolver *r;
 #define ADD(_resolver) \
   r = new _resolver(this); { \
-    connect(r, SIGNAL(error(QString)), SIGNAL(error(QString))); \
     connect(r, SIGNAL(message(QString)), SIGNAL(message(QString))); \
+    connect(r, SIGNAL(errorMessage(QString)), SIGNAL(errorMessage(QString))); \
     connect(r, SIGNAL(mediaResolved(MediaInfo,QNetworkCookieJar*)), SIGNAL(mediaResolved(MediaInfo,QNetworkCookieJar*))); \
     connect(r, SIGNAL(subtitleResolved(QString,QString,QString)), SIGNAL(subtitleResolved(QString,QString,QString))); \
   } resolvers_.append(r);

@@ -6,15 +6,12 @@
 #include "tr.h"
 #include "datamanager.h"
 #include "signalhub.h"
-#include "logger.h"
 #include "module/annotcloud/annothtml.h"
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
 # include "mac/qtmac/qtmac.h"
-#endif // Q_WS_MAC
+#endif // Q_OS_MAC
 #include <QtGui>
 #include <QtWebKit>
-
-using namespace Logger;
 
 #define DEBUG "annotationanalyticsview"
 #include "module/debug/debug.h"

@@ -16,9 +16,10 @@ class PickDialog : public AcWindow
   typedef AcWindow Base;
 
 public:
-  explicit PickDialog(QWidget *parent = 0);
+  explicit PickDialog(QWidget *parent = nullptr);
 
 signals:
+  void message(QString text);
   void windowPicked(WId winId);
   void cancelled();
 
@@ -28,8 +29,8 @@ public:
 
   // - Events -
 public:
-  virtual void setVisible(bool visible); ///< \reimp
-  virtual void keyPressEvent(QKeyEvent *event); ///< \reimp
+  void setVisible(bool visible) override;
+  void keyPressEvent(QKeyEvent *event) override;
 
   void setActive(bool t);
   bool isActive() const { return active_; }

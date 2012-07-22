@@ -23,9 +23,10 @@ class AnnotationAnalyticsView: public AcWebWindow
 
   // - Constructions -
 public:
-  AnnotationAnalyticsView(DataManager *data, SignalHub *hub, QWidget *parent = 0);
+  AnnotationAnalyticsView(DataManager *data, SignalHub *hub, QWidget *parent = nullptr);
 
 signals:
+  void message(QString text);
   void contentChanged(const QString &html);
   void windowTitleChanged(const QString &title);
   void urlChanged(const QUrl &url);
@@ -36,7 +37,7 @@ public slots:
 
   // - Events -
 public:
-  virtual void setVisible(bool visible); ///< \reimp
+  void setVisible(bool visible) override;
 
 protected slots:
   void setContent(const QString &html);

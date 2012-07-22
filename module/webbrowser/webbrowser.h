@@ -36,7 +36,7 @@ class WebBrowser : public WebBrowserBase
   typedef Ui::WebBrowserUi Form;
 
 public:
-  explicit WebBrowser(QWidget *parent = 0);
+  explicit WebBrowser(QWidget *parent = nullptr);
   ~WebBrowser();
 
 signals:
@@ -70,11 +70,11 @@ public slots:
   // - Actions -
 public slots:
   void showMessage(const QString &text);
-  void error(const QString &text);
+  void showError(const QString &text);
   void warn(const QString &text);
   void notify(const QString &text);
 
-  void openUrl(const QString &url, QWebView *view = 0);
+  void openUrl(const QString &url, QWebView *view = nullptr);
   void openBlankPage();
   void openUrls(const QStringList &urls);
   void newTab(const QString &url);
@@ -94,7 +94,7 @@ protected slots:
   void closeTab(int index);
   void closeTab();
   void undoCloseTab();
-  void newTab(QWebView *w = 0, int index = -1, bool focus = true);
+  void newTab(QWebView *w = nullptr, int index = -1, bool focus = true);
   void newTabAfterCurrent(bool focus = true);
   void newTabAfterCurrentWithBlankPage();
   void newTabAtLastWithBlankPage();
@@ -168,7 +168,7 @@ protected:
 
   // - Events -
 protected:
-  virtual void closeEvent(QCloseEvent *event); ///< \reimp
+  void closeEvent(QCloseEvent *event) override;
 
 protected:
   QString completeUrl(const QString &address) const;

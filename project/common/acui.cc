@@ -12,9 +12,9 @@
 #ifdef WITH_WIN_DWM
 # include "win/dwm/dwm.h"
 #endif // WITH_WIN_DWM
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
 # include "win/qtwin/qtwin.h"
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
 #ifdef WITH_MODULE_GRAPHICSEFFECT
 # include "module/graphicseffect/graphicshaloeffect.h"
 #endif // WITH_MODULE_GRAPHICSEFFECT
@@ -28,11 +28,11 @@
 AcUi::AcUi(QObject *parent)
   : Base(parent), menu_(false), theme_(DefaultTheme)
 {
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
   aero_ = true;
 #else
   aero_ = false;
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
 }
 
 void
@@ -49,7 +49,7 @@ AcUi::backgroundImage() const
   if (t == RandomTheme)
     t = ::qrand() % (ThemeCount - 2) + 2; // eliminate first 2 themes (default and random)
 
-  const char *rc = 0;
+  const char *rc = nullptr;
   switch (t) {
   case DarkTheme:       rc = ACRC_IMAGE_AERO_DARK; break;
   case BlackTheme:      rc = ACRC_IMAGE_AERO_BLACK; break;
@@ -83,7 +83,7 @@ AcUi::makeHaloEffect(ulong hints)
 QGraphicsEffect*
 AcUi::makeHaloEffect(const QColor &c)
 {
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
   Q_UNUSED(c);
   return 0;
 #else
@@ -100,21 +100,21 @@ AcUi::makeHaloEffect(const QColor &c)
   if (c.isValid())
     e->setColor(c);
   return e;
-#endif // Q_WS_MAC
+#endif // Q_OS_MAC
 }
 
 bool
 AcUi::isAeroAvailable()
 {
   return
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
   QtWin::isWindowsVistaOrLater()
 #if WITH_WIN_DWM
   && Dwm::isCompositionEnabled()
 #endif // WITH_WIN_DWM
 #else
   false
-#endif // Q_WS_WIN;
+#endif // Q_OS_WIN;
   ;
 }
 
@@ -180,11 +180,11 @@ AcUi::setMenuBackground(QMenu *m, bool persistent)
   if (!m || !menu_)
     return;
 
-//#ifdef Q_WS_MAC
+//#ifdef Q_OS_MAC
   if (theme_ == DefaultTheme)
     m->setStyleSheet(QString());
   else
-//#endif // Q_WS_MAC
+//#endif // Q_OS_MAC
   {
     QString rc = backgroundImage();
     m->setStyleSheet(
@@ -286,7 +286,7 @@ AcUi::setWindowStyle(QWidget *w, bool persistent)
   //  w->setStyleSheet(ACSS_WINDOW);
 
   /*
-#ifdef Q_WS_X11
+#ifdef Q_OS_LINUX
   w->setAttribute(Qt::WA_TranslucentBackground);
   w->setAttribute(Qt::WA_NoSystemBackground, false);
   w->setAttribute(Qt::WA_StyledBackground, false);
@@ -296,7 +296,7 @@ AcUi::setWindowStyle(QWidget *w, bool persistent)
   pal.setColor(QPalette::Window, bg);
   w->setPalette(pal);
   w->ensurePolished(); // workaround Oxygen filling the background
-#endif // Q_WS_X11
+#endif // Q_OS_LINUX
   */
 }
 
@@ -335,11 +335,12 @@ AcUi::setContextMenuStyle(QMenu *w, bool persistent)
     //if (qss)
     //  w->setStyleSheet(ACSS_CONTEXTMENU_DWM);
 
-    auto e = qobject_cast<QGraphicsColorizeEffect *>(w->graphicsEffect());
-    if (!e)
-      e = new QGraphicsColorizeEffect;
-    e->setColor(AC_CONTEXTMENU_COLOR);
-    e->setStrength(AC_CONTEXTMENU_COLOR_STRENGTH);
+    //auto e = qobject_cast<QGraphicsColorizeEffect *>(w->graphicsEffect());
+    //if (!e)
+    //  e = new QGraphicsColorizeEffect;
+    //e->setColor(AC_CONTEXTMENU_COLOR);
+    //e->setStrength(AC_CONTEXTMENU_COLOR_STRENGTH);
+    auto e = makeHaloEffect(Qt::yellow);
     w->setGraphicsEffect(e);
 
     return;
@@ -347,7 +348,7 @@ AcUi::setContextMenuStyle(QMenu *w, bool persistent)
 #endif // WITH_WIN_DWM
 
   setMenuBackground(w, persistent);
-  w->setWindowOpacity(AC_CONTEXTMENU_OPACITY);
+  w->setWindowOpacity(0.9);
 
   //QGraphicsOpacityEffect *transparent = new QGraphicsOpacityEffect(w);
   //w->setGraphicsEffect(transparent);

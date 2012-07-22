@@ -12,13 +12,13 @@
 # pragma GCC diagnostic ignored "-Wparentheses" // suggest parentheses around assignment
 #endif // __GNUC__
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
 # define K_META        "META"
 # define K_CAPSLOCK    "capslock"
 #else
 # define K_META        "ALT"
 # define K_CAPSLOCK    "CapsLock"
-#endif // Q_WS_MAC
+#endif // Q_OS_MAC
 
 // - Construction -
 
@@ -121,7 +121,7 @@ WbWebView::contextMenuEvent(QContextMenuEvent *event)
     m->addSeparator();
   }
 
-  QMenu *searchMenu = 0;
+  QMenu *searchMenu = nullptr;
   QString selection = selectedText().simplified();
   if (!selection.isEmpty() && hasSearchEngines()) {
     searchMenu = new QMenu(tr("Search") + " ...");
@@ -148,7 +148,7 @@ WbWebView::contextMenuEvent(QContextMenuEvent *event)
     int engine = SearchEngineFactory::Qt;
     if (engine >= searchEngines_.size() && selection.startsWith('Q') && !selection.contains(' ')) {
       QtExt::ActionWithId *a = new QtExt::ActionWithId(engine, m);
-      static SearchEngine *e = 0;
+      static SearchEngine *e = nullptr;
       if (!e)
         e = SearchEngineFactory::globalInstance()->create(engine);
       //a->setText(tr("Search with %1").arg(e->name()));
@@ -190,9 +190,9 @@ WbWebView::contextMenuEvent(QContextMenuEvent *event)
   m->addAction(openWithOperatingSystemAct);
   m->addAction(newWindowAct_);
   m->addAction(fullScreenAct_);
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
   m->addAction(menuBarAct_);
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
 
   m->exec(event->globalPos());
   delete m;

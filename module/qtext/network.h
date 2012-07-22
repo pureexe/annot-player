@@ -68,7 +68,7 @@ namespace QtExt {
 
   public:
     explicit NetworkReplyFinished(QNetworkReply *reply)
-      : Base(0), reply_(reply)
+      : Base(nullptr), reply_(reply)
     {
       Q_ASSERT(reply_);
       connect(reply_, SIGNAL(finished()), SLOT(trigger()));
@@ -89,7 +89,7 @@ namespace QtExt {
     long id_;
 
   public:
-    ProgressWithId(long id, QObject *parent = 0)
+    ProgressWithId(long id, QObject *parent = nullptr)
       : Base(parent), id_(id) { }
 
   signals:

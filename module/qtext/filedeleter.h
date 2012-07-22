@@ -25,7 +25,7 @@ public:
   static Self *globalInstance() { static Self g; return &g; }
 
 protected:
-  explicit FileDeleter(QObject *parent = 0)
+  explicit FileDeleter(QObject *parent = nullptr)
     : Base(parent) { }
 
   ~FileDeleter() { deleteAll(); }

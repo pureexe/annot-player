@@ -34,9 +34,9 @@ class MrlDownloadTask : public DownloadTask
   QtExt::SleepTimer sleep_;
 
 public:
-  explicit MrlDownloadTask(const QString &url, QObject *parent = 0)
+  explicit MrlDownloadTask(const QString &url, QObject *parent = nullptr)
     : Base(url, parent), stopped_(false), resolver_(0), retries_(5) { }
-  explicit MrlDownloadTask(const DownloadTaskInfo &info, QObject *parent = 0)
+  explicit MrlDownloadTask(const DownloadTaskInfo &info, QObject *parent = nullptr)
     : Base(info, parent), stopped_(false), resolver_(0), retries_(5) {  }
 
   ~MrlDownloadTask();
@@ -47,8 +47,8 @@ signals:
 public slots:
   virtual void run(bool exec);
 
-  virtual void stop(); ///< \reimp
-  virtual void reset(); ///< \reimp
+  void stop() override;
+  void reset() override;
 
 protected slots:
   void downloadMedia(const MediaInfo &mi, QNetworkCookieJar *jar);

@@ -26,7 +26,7 @@ class AnnotationHtmlParser : public QObject
 public:
   static Self *globalInstance() { static Self g; return &g; }
 
-  explicit AnnotationHtmlParser(QObject *parent = 0);
+  explicit AnnotationHtmlParser(QObject *parent = nullptr);
 
   // - Properties -
 public:

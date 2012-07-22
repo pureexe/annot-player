@@ -32,14 +32,14 @@ class AnnotationPreferencesTab : public AcPreferencesTab
               *highlightColorButton_;
 
 public:
-  explicit AnnotationPreferencesTab(AnnotationSettings *settings, QWidget *parent = 0)
+  explicit AnnotationPreferencesTab(AnnotationSettings *settings, QWidget *parent = nullptr)
     : Base(parent), settings_(settings) { init(); }
-  explicit AnnotationPreferencesTab(QWidget *parent = 0)
-    : Base(parent), settings_(0) { init(); }
+  explicit AnnotationPreferencesTab(QWidget *parent = nullptr)
+    : Base(parent), settings_(nullptr) { init(); }
 
 public slots:
-  virtual bool save(); ///< \reimp
-  virtual void load(); ///< \reimp
+  bool save() override;
+  void load() override;
 protected slots:
   void saveFont();
   void loadFont();

@@ -21,7 +21,7 @@ class InputDialog : public AcWindow
   AcComboEdit *edit_;
 
 public:
-  explicit InputDialog(QWidget *parent = 0);
+  explicit InputDialog(QWidget *parent = nullptr);
 
 signals:
   void textEntered(QString text);
@@ -35,8 +35,8 @@ protected slots:
   void ok();
 
 protected:
-  //virtual void mouseDoubleClickEvent(QMouseEvent *event);
-  //virtual void contextMenuEvent(QContextMenuEvent *event);
+  //void mouseDoubleClickEvent(QMouseEvent *event) override;
+  //void contextMenuEvent(QContextMenuEvent *event) override;
 
 private:
   void createLayout();

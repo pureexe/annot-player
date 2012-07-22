@@ -14,7 +14,7 @@ class StreamPipe : public StoppableTask
   OutputStream *out_;
 
 public:
-  explicit StreamPipe(InputStream *in = 0, OutputStream *out = 0)
+  explicit StreamPipe(InputStream *in = nullptr, OutputStream *out = nullptr)
     : in_(in), out_(out) { }
 
 public:

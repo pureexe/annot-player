@@ -16,7 +16,7 @@ class TextEditTabView : public AcTabView
   typedef AcTabView Base;
 
 public:
-  explicit TextEditTabView(QWidget *parent = 0)
+  explicit TextEditTabView(QWidget *parent = nullptr)
   : Base(parent) { }
 
 public slots:

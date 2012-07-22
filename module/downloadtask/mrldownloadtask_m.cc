@@ -24,7 +24,6 @@
 #else
 # error "mrlresolver module is required"
 #endif // WITH_MODULE_MRLRESOLVER
-#include "module/qtext/algorithm.h"
 #include "module/qtext/filesystem.h"
 #include "module/qtext/network.h"
 #include <QtNetwork/QNetworkAccessManager>
@@ -82,7 +81,7 @@ MrlDownloadTask::downloadMultipleMedia(const MediaInfo &mi, QNetworkCookieJar *j
   //RemoteStream *first = 0;
   bool ok = false;
   int count = 0;
-  QNetworkAccessManager *nam = 0;
+  QNetworkAccessManager *nam = nullptr;
   int namCount = 0;
   DOUT("urls size =" << urls.size());
   for (int j = 0; j < MaxDownloadRetries && !ok && !stopped_; j++) {
@@ -90,7 +89,7 @@ MrlDownloadTask::downloadMultipleMedia(const MediaInfo &mi, QNetworkCookieJar *j
     if (j && !stopped_) {
       DOUT("download failed");
       count--;
-      emit error(
+      emit errorMessage(
         QString("%1 (%2/%3): ")
         .arg(tr("failed to fetch part %1, retry").arg(QString::number(count+1)))
         .arg(QString::number(j+1))
@@ -101,7 +100,7 @@ MrlDownloadTask::downloadMultipleMedia(const MediaInfo &mi, QNetworkCookieJar *j
       if (j >= MinDownloadRetries) {
         enum { WaitInterval = 5 }; // wait 5 seconds
         int secs = WaitInterval + j - MinDownloadRetries;
-        emit error(tr("wait %1 seconds and try again").arg(QString::number(secs)) + " ...");
+        emit errorMessage(tr("wait %1 seconds and try again").arg(QString::number(secs)) + " ...");
         DOUT(QString("wait for %1 seconds").arg(QString::number(secs)));
         sleep_.start(secs);
       }
@@ -119,8 +118,8 @@ MrlDownloadTask::downloadMultipleMedia(const MediaInfo &mi, QNetworkCookieJar *j
       const MediaInfo &mi = resolver.resolvedMediaInfo();
       QNetworkCookieJar *jar = resolver.resolvedCookieJar();
       if (jar)
-        jar->setParent(0); // memory leak
-      nam = 0; // reset nam
+        jar->setParent(nullptr); // memory leak
+      nam = nullptr; // reset nam
 
       urls.clear();
       foreach (const MrlInfo &i, mi.mrls)
@@ -146,14 +145,14 @@ MrlDownloadTask::downloadMultipleMedia(const MediaInfo &mi, QNetworkCookieJar *j
       //}
       ok = false;
       for (int i = 0; i < MaxIndividualDownloadRetries && !ok && !stopped_; i++) {
-        RemoteStream *in = new BufferedRemoteStream(0);
+        RemoteStream *in = new BufferedRemoteStream(nullptr);
         if (!nam || count % QtExt::MaxConcurrentNetworkRequestCount == namCount) {
           if (!nam)
             namCount = count % QtExt::MaxConcurrentNetworkRequestCount;
           nam = new QNetworkAccessManager(in);
           if (jar) {
             nam->setCookieJar(jar);
-            jar->setParent(0);
+            jar->setParent(nullptr);
           }
         }
         Q_ASSERT(nam);
@@ -189,7 +188,7 @@ MrlDownloadTask::downloadMultipleMedia(const MediaInfo &mi, QNetworkCookieJar *j
           in->stop();
           //in->deleteLater();
           if (nam && nam->parent() == in)
-            nam = 0;
+            nam = nullptr;
           DOUT("deleting current stream");
           delete in;
           DOUT("current stream deleted");
@@ -210,13 +209,14 @@ MrlDownloadTask::downloadMultipleMedia(const MediaInfo &mi, QNetworkCookieJar *j
    if (!ok || isStopped()) {
      DOUT("ins size =" << ins.size());
      if (!ins.isEmpty()) {
-       foreach (InputStream *in, QtExt::revertList(ins)) { // revert list so that nam will be deleted later
+       auto p = ins.constEnd(); // revert list so that nam will be deleted later
+       while (p != ins.constBegin()) { // foreach (InputStream *in, QtExt::revertList(ins)) {
          DOUT("deleting input stream");
-         auto p = static_cast<RemoteStream *>(in);
-         p->stop();
+         auto in = static_cast<RemoteStream *>(*--p);
+         in->stop();
          DOUT("deleting previous stream");
-         //p->deleteLater();
-         delete p;
+         //in->deleteLater();
+         delete in;
          DOUT("previous stream deleted");
        }
        ins.clear();
@@ -230,7 +230,7 @@ MrlDownloadTask::downloadMultipleMedia(const MediaInfo &mi, QNetworkCookieJar *j
    }
   if (ins.isEmpty()) {
     setState(Error);
-    emit error(tr("access denied to download URL") + ": " + url());
+    emit errorMessage(tr("access denied to download URL") + ": " + url());
     emit stopped();
     if (jar) {
       DOUT("deleting cookie jar");
@@ -263,14 +263,15 @@ MrlDownloadTask::downloadMultipleMedia(const MediaInfo &mi, QNetworkCookieJar *j
   out.setFileName(tmpFile);
   if (!out.open() || stopped_) {
     setState(Error);
-    emit error(tr("failed to open file to write") + ": " + tmpFile);
+    emit errorMessage(tr("failed to open file to write") + ": " + tmpFile);
     emit stopped();
-    foreach (InputStream *in, QtExt::revertList(ins)) { // revert list so that nam will be deleted later
-      auto p = static_cast<RemoteStream *>(in);
-      p->stop();
+    auto p = ins.constEnd(); // revert list so that nam will be deleted later
+    while (p != ins.constBegin()) { // foreach (InputStream *in, QtExt::revertList(ins)) {
+      auto in = static_cast<RemoteStream *>(*--p);
+      in->stop();
       DOUT("deleting previous stream");
-      //p->deleteLater();
-      delete p;
+      //in->deleteLater();
+      delete in;
       DOUT("previous stream delete");
     }
     if (jar) {
@@ -292,7 +293,7 @@ MrlDownloadTask::downloadMultipleMedia(const MediaInfo &mi, QNetworkCookieJar *j
     merger.setOutputStream(&out);
     merger.setDuration(duration);
 
-    connect(&merger, SIGNAL(error(QString)), SIGNAL(error(QString)));
+    connect(&merger, SIGNAL(errorMessage(QString)), SIGNAL(errorMessage(QString)));
     connect(this, SIGNAL(stopped()), &merger, SLOT(stop()));
   }
 
@@ -300,15 +301,16 @@ MrlDownloadTask::downloadMultipleMedia(const MediaInfo &mi, QNetworkCookieJar *j
   ok = merger.parse();
   if (!ok || stopped_) {
     setState(Error);
-    emit error(tr("failed to parse FLV streams"));
+    emit errorMessage(tr("failed to parse FLV streams"));
     emit stopped();
 
-    foreach (InputStream *in, QtExt::revertList(ins)) { // revert list so that nam will be deleted later
-      auto p = static_cast<RemoteStream *>(in);
-      p->stop();
+    auto p = ins.constEnd(); // revert list so that nam will be deleted later
+    while (p != ins.constBegin()) { // foreach (InputStream *in, QtExt::revertList(ins))
+      auto in = static_cast<RemoteStream *>(*--p);
+      in->stop();
       DOUT("deleting previous stream");
-      //p->deleteLater();
-      delete p;
+      //in->deleteLater();
+      delete in;
       DOUT("previous stream deleted");
     }
     if (jar) {
@@ -318,7 +320,7 @@ MrlDownloadTask::downloadMultipleMedia(const MediaInfo &mi, QNetworkCookieJar *j
       DOUT("cookie jar deleted");
     }
     //nam->deleteLater();
-    QFile::remove(fileName());
+    QtExt::trashOrRemoveFile(fileName());
     quit();
     return;
   }
@@ -340,33 +342,34 @@ MrlDownloadTask::downloadMultipleMedia(const MediaInfo &mi, QNetworkCookieJar *j
     qint64 size = QFile(tmpFile).size();
 
     QString fileName = downloadPath() + FILE_PATH_SEP + name + suf;
-    for (int i = 2; QFile::exists(fileName); i++)
-      fileName = downloadPath() + FILE_PATH_SEP + name + " " + QString::number(i) + suf;
-    //QFile::remove(fileName);
+    //for (int i = 2; QFile::exists(fileName); i++)
+    //  fileName = downloadPath() + FILE_PATH_SEP + name + " " + QString::number(i) + suf;
+    QtExt::trashOrRemoveFile(fileName);
     ok =  QFile::rename(tmpFile, fileName);
     if (ok)
       setFileName(fileName);
     else
-      emit error(tr("failed to rename downloaded file") + ": " + fileName);
+      emit errorMessage(tr("failed to rename downloaded file") + ": " + fileName);
 
     setState(Finished);
     emit progress(size, size);
     emit finished(this);
   } else {
-    QFile::remove(tmpFile);
+    QtExt::trashOrRemoveFile(tmpFile);
     if (!isStopped())
       setState(Error);;
-    emit error(tr("download incomplete") + ": " + tmpFile);
+    emit errorMessage(tr("download incomplete") + ": " + tmpFile);
   }
 
   emit stopped();
 
-  foreach (InputStream *in, QtExt::revertList(ins)) { // revert list so that nam will be deleted later
-    auto p = static_cast<RemoteStream *>(in);
-    p->stop();
+  auto p = ins.constEnd(); // revert list so that nam will be deleted later
+  while (p != ins.constBegin()) { // foreach (InputStream *in, QtExt::revertList(ins))
+    auto in = static_cast<RemoteStream *>(*--p);
+    in->stop();
     DOUT("deleting previous stream");
-    //p->deleteLater();
-    delete p;
+    //in->deleteLater();
+    delete in;
     DOUT("previous stream deleted");
   }
   if (jar) {

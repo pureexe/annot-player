@@ -17,7 +17,7 @@ class AcDownloaderServer : public AcIpcController
 
   // - Construction -
 public:
-  explicit AcDownloaderServer(QObject *parent = 0);
+  explicit AcDownloaderServer(QObject *parent = nullptr);
   ~AcDownloaderServer() { stop(); }
 
 public slots:
@@ -36,7 +36,7 @@ class AcDownloader : public QObject
   Delegate *delegate_;
 
 public:
-  explicit AcDownloader(QObject *parent = 0);
+  explicit AcDownloader(QObject *parent = nullptr);
 
 signals:
   void arguments(const QStringList &args);

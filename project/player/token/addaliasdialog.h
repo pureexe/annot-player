@@ -18,7 +18,7 @@ class AddAliasDialog : public AcWindow
   typedef AcWindow Base;
 
 public:
-  explicit AddAliasDialog(SignalHub *hub, QWidget *parent = 0);
+  explicit AddAliasDialog(SignalHub *hub, QWidget *parent = nullptr);
 
 private:
   void createLayout();
@@ -32,7 +32,7 @@ public:
 
   // - Actions -
 public slots:
-  virtual void setVisible(bool visible); ///< \reimp
+  void setVisible(bool visible) override;
   void refresh();
 protected slots:
   void ok();
@@ -63,8 +63,8 @@ protected:
   void tag(const QString &tag);
   //void postfix(const QString &tag);
 
-  //virtual void mouseDoubleClickEvent(QMouseEvent *event);
-  //virtual void contextMenuEvent(QContextMenuEvent *event);
+  //void mouseDoubleClickEvent(QMouseEvent *event) override;
+  //void contextMenuEvent(QContextMenuEvent *event) override;
 
 private:
   SignalHub *hub_;

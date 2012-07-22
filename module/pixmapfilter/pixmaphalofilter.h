@@ -21,10 +21,10 @@ class PixmapHaloFilter : public QPixmapFilter
 
 public:
   //enum { Type = UserFilter + DropShadowFilter }; ///< must be unique to all QPixMapFilter class
-  explicit PixmapHaloFilter(QObject *parent = 0);
+  explicit PixmapHaloFilter(QObject *parent = nullptr);
 
-  virtual QRectF boundingRectFor(const QRectF &rect) const; ///< \reimp
-  virtual void draw(QPainter *p, const QPointF &pos, const QPixmap &px, const QRectF &src = QRectF()) const; ///< \reimp
+  QRectF boundingRectFor(const QRectF &rect) const override;
+  void draw(QPainter *p, const QPointF &pos, const QPixmap &px, const QRectF &src = QRectF()) const override;
 
   qreal blurRadius() const { return radius_; }
   void setBlurRadius(qreal radius) { radius_ = radius; }

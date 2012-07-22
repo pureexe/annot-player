@@ -10,9 +10,9 @@
 Preferences::Preferences(QWidget *parent)
   : Base(parent, false)
 {
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
   addTab(new AssociationPreferencesTab(this));
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
   addTab(new AnnotationPreferencesTab(this));
   finalize();
 }

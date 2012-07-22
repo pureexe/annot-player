@@ -27,7 +27,7 @@ class ThumbnailWidget : public QWidget
   qreal zoom_;
 
 public:
-  explicit ThumbnailWidget(Core::Document *document, RenderThread *renderer_ = 0, QWidget *parent = 0);
+  explicit ThumbnailWidget(Core::Document *document, RenderThread *renderer_ = 0, QWidget *parent = nullptr);
 
   bool bad() const { return !document_ || document_->bad(); }
   Core::Document *document() const { return document_; }

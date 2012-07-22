@@ -25,11 +25,11 @@ class AcLocationPrefs : public AcPreferencesTab
   QString downloadsLocationEditStyleSheet_;
 
 public:
-  explicit AcLocationPrefs(AcSettings *settings, QWidget *parent = 0);
+  explicit AcLocationPrefs(AcSettings *settings, QWidget *parent = nullptr);
 
 public slots:
-  virtual bool save(); ///< \reimp
-  virtual void load(); ///< \reimp
+  bool save() override;
+  void load() override;
 
 protected slots:
   void loadDownloadsLocation();

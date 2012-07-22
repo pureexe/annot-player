@@ -45,7 +45,7 @@ public:
 
   // - Implementation -
 protected:
-  //explicit MouseHook(QObject *parent = 0);   ///< \internal
+  //explicit MouseHook(QObject *parent = nullptr);   ///< \internal
   MouseHook();   ///< \internal
   ~MouseHook();  ///< \internal
 

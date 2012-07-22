@@ -20,12 +20,10 @@ void
 DataManager::updateAlias(const Alias &alias)
 {
   if (!aliases_.isEmpty() && alias.hasId()) {
-    auto p = aliases_.begin();
-    while (p != aliases_.end())
-      if (p->id() == alias.id())
-        p = aliases_.erase(p);
-      else
-        ++p;
+    QMutableListIterator<Alias> i(aliases_);
+    while (i.hasNext())
+      if (i.next().id() == alias.id())
+        i.remove();
   }
   aliases_.append(alias);
   invalidateUrls();;
@@ -88,9 +86,9 @@ DataManager::addAnnotation(const Annotation &a)
 
   qint64 t = a.createTime();
   if (t > Traits::MIN_TIME
-#ifndef Q_WS_WIN
+#ifndef Q_OS_WIN
       && t < Traits::MAX_TIME // FIXME
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
       ) {
     if (t > maxAnnotTime_)
       maxAnnotTime_ = t;
@@ -104,12 +102,10 @@ void
 DataManager::updateAnnotation(const Annotation &a)
 {
   if (!annots_.isEmpty() && a.hasId()) {
-    auto p = annots_.begin();
-    while (p != annots_.end())
-      if (p->id() == a.id())
-        p = annots_.erase(p);
-      else
-        ++p;
+    QMutableListIterator<Annotation> i(annots_);
+    while (i.hasNext())
+      if (i.next().id() == a.id())
+        i.remove();
   }
   annots_.append(a);
   emit annotationUpdated(a);
@@ -119,12 +115,10 @@ void
 DataManager::removeAnnotationWithId(qint64 id)
 {
   if (!annots_.isEmpty() && id) {
-    auto p = annots_.begin();
-    while (p != annots_.end())
-      if (p->id() == id)
-        p = annots_.erase(p);
-      else
-        ++p;
+    QMutableListIterator<Annotation> i(annots_);
+    while (i.hasNext())
+      if (i.next().id() == id)
+        i.remove();
   }
   emit annotationRemovedWithId(id);
 }

@@ -3,7 +3,6 @@
 
 #include "pickdialog.h"
 #include "tr.h"
-#include "logger.h"
 #include "application.h"
 #ifdef WITH_WIN_PICKER
 # include "win/picker/picker.h"
@@ -13,8 +12,6 @@
 
 //#define DEBUG "pickdialog"
 #include "module/debug/debug.h"
-
-using namespace Logger;
 
 #define PICKER  WindowPicker::globalInstance()
 
@@ -29,11 +26,11 @@ using namespace Logger;
   Qt::WindowCloseButtonHint | \
   Qt::WindowStaysOnTopHint
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
 # define WINDOW_FLAGS  WINDOW_FLAGS_BASE | Qt::FramelessWindowHint
 #else
 # define WINDOW_FLAGS  WINDOW_FLAGS_BASE
-#endif // Q_WS_MAC
+#endif // Q_OS_MAC
 
 PickDialog::PickDialog(QWidget *parent)
   : Base(parent, WINDOW_FLAGS), active_(false), pickedWindow_(0)
@@ -94,7 +91,7 @@ PickDialog::cancel()
   DOUT("enter");
   //fadeOut();
   hide();
-  log(tr("window picking canceled"));
+  emit message(tr("window picking canceled"));
   DOUT("exit");
 }
 
@@ -108,7 +105,7 @@ PickDialog::pickWindow(WId hwnd)
     return;
   }
 
-  log(tr("window picked") + QString(" (hwnd = %1)").arg(QString::number((ulong)hwnd, 16)));
+  emit message(tr("window picked") + QString(" (hwnd = %1)").arg(QString::number((ulong)hwnd, 16)));
 
   pickedWindow_ = hwnd;
   //fadeOut();

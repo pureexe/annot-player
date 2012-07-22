@@ -29,7 +29,7 @@ namespace Core {
     mutable QHash<int, Self*> children_;
 
   public:
-    explicit CatalogItem(const node_type &node = node_type(), int row = 0, Self *parent = 0)
+    explicit CatalogItem(const node_type &node = node_type(), int row = 0, Self *parent = nullptr)
       : node_(node), row_(row), parent_(parent)
     {
       if (!node_.isNull() && node_.hasChildNodes())
@@ -70,8 +70,8 @@ namespace Core {
 
     // Constructions:
   public:
-    explicit CatalogModel(QDomDocument *dom = 0, QObject *parent = 0)
-      : Base(parent), dom_(dom), root_(0)
+    explicit CatalogModel(QDomDocument *dom = nullptr, QObject *parent = nullptr)
+      : Base(parent), dom_(dom), root_(nullptr)
     { if (dom_) build(*dom_); }
 
     ~CatalogModel()
@@ -122,8 +122,8 @@ namespace Core {
     const QDomDocument *impl() const { return model_? model_->impl() : 0; }
 
   public:
-    explicit Catalog(QDomDocument *dom = 0, QObject *parent = 0)
-      : Base(parent), model_(0)
+    explicit Catalog(QDomDocument *dom = nullptr, QObject *parent = nullptr)
+      : Base(parent), model_(nullptr)
     { if (dom) model_ = new CatalogModel(dom, this); }
 
     // Properties:

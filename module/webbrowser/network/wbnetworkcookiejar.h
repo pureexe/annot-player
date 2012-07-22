@@ -15,13 +15,13 @@ class WbNetworkCookieJar : public WbNetworkCookieJarBase
   typedef WbNetworkCookieJarBase Base;
 
 public:
-  explicit WbNetworkCookieJar(QObject *parent = 0)
+  explicit WbNetworkCookieJar(QObject *parent = nullptr)
     : Base(".nicovideo.jp", ANNOT_PROXY_DOMAIN, parent)
   { }
 
 protected:
-  virtual QUrl toDomainUrl(const QUrl &aliasUrl) const; ///< \reimp
-  QUrl decodeNicoUrl(const QUrl &url) const; ///< \reimp
+  QUrl toDomainUrl(const QUrl &aliasUrl) const override;
+  QUrl decodeNicoUrl(const QUrl &url) const;
 };
 
 #else
@@ -34,7 +34,7 @@ class WbNetworkCookieJar : public QNetworkCookieJar
   typedef QNetworkCookieJar Base;
 
 public:
-  explicit WbNetworkCookieJar(QObject *parent = 0)
+  explicit WbNetworkCookieJar(QObject *parent = nullptr)
     : Base(parent)
   { }
 };

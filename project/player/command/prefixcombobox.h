@@ -14,7 +14,7 @@ class PrefixComboBox : public AnnotationComboEdit
   typedef AnnotationComboEdit Base;
 
 public:
-  explicit PrefixComboBox(QWidget *parent = 0);
+  explicit PrefixComboBox(QWidget *parent = nullptr);
 };
 
 #endif // PREFIXCOMBOBOX_H

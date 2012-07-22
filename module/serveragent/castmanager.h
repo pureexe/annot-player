@@ -38,7 +38,7 @@ class CastManager : public QObject
   mutable QMutex mutex_;
 
 public:
-  explicit CastManager(QObject *parent = 0)
+  explicit CastManager(QObject *parent = nullptr)
     : Base(parent) { }
 
   bool containsEvent(const CastEvent &e) const;

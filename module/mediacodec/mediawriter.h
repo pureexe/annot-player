@@ -21,7 +21,7 @@ class MediaWriter : public QObject
   typedef QObject Base;
 
 public:
-  explicit MediaWriter(QObject *parent = 0) : Base(parent) { }
+  explicit MediaWriter(QObject *parent = nullptr) : Base(parent) { }
   virtual ~MediaWriter() { }
 
   virtual QString codecName() const = 0;
@@ -37,11 +37,11 @@ class DummyMediaWriter : public MediaWriter
   typedef DummyMediaWriter Self;
   typedef MediaWriter Base;
 public:
-  explicit DummyMediaWriter(QObject *parent = 0) : Base(parent) { }
+  explicit DummyMediaWriter(QObject *parent = nullptr) : Base(parent) { }
 
-  virtual QString codecName() const { return "Dummy"; } ///< \reimp
+  QString codecName() const override { return "Dummy"; }
 
-  virtual void writeFrame(const QByteArray &, quint32, bool) { } ///< \reimp
+  void writeFrame(const QByteArray &, quint32, bool) override { }
 };
 
 class Mp3Writer : public DummyMediaWriter
@@ -50,8 +50,8 @@ class Mp3Writer : public DummyMediaWriter
   Q_DISABLE_COPY(Mp3Writer)
   typedef DummyMediaWriter Base;
 public:
-  explicit Mp3Writer(QObject *parent = 0) : Base(parent) { }
-  virtual QString codecName() const { return "MP3"; } ///< \reimp
+  explicit Mp3Writer(QObject *parent = nullptr) : Base(parent) { }
+  QString codecName() const override { return "MP3"; }
 };
 class SpeexWriter : public DummyMediaWriter
 {
@@ -59,8 +59,8 @@ class SpeexWriter : public DummyMediaWriter
   Q_DISABLE_COPY(SpeexWriter)
   typedef DummyMediaWriter Base;
 public:
-  explicit SpeexWriter(QObject *parent = 0) : Base(parent) { }
-  virtual QString codecName() const { return "Speex"; } ///< \reimp
+  explicit SpeexWriter(QObject *parent = nullptr) : Base(parent) { }
+  QString codecName() const override { return "Speex"; }
 };
 class WavWriter : public DummyMediaWriter
 {
@@ -68,8 +68,8 @@ class WavWriter : public DummyMediaWriter
   Q_DISABLE_COPY(WavWriter)
   typedef DummyMediaWriter Base;
 public:
-  explicit WavWriter(QObject *parent = 0) : Base(parent) { }
-  virtual QString codecName() const { return "WAV"; } ///< \reimp
+  explicit WavWriter(QObject *parent = nullptr) : Base(parent) { }
+  QString codecName() const override { return "WAV"; }
 };
 class AviWriter : public DummyMediaWriter
 {
@@ -77,8 +77,8 @@ class AviWriter : public DummyMediaWriter
   Q_DISABLE_COPY(AviWriter)
   typedef DummyMediaWriter Base;
 public:
-  explicit AviWriter(QObject *parent = 0) : Base(parent) { }
-  virtual QString codecName() const { return "AVI"; } ///< \reimp
+  explicit AviWriter(QObject *parent = nullptr) : Base(parent) { }
+  QString codecName() const override { return "AVI"; }
 };
 
 class AacWriter : public MediaWriter {
@@ -94,13 +94,13 @@ class AacWriter : public MediaWriter {
   int _channelConfig;
 
 public:
-  explicit AacWriter(OutputStream *out, MediaToc *toc = 0, QObject *parent = 0)
+  explicit AacWriter(OutputStream *out, MediaToc *toc = nullptr, QObject *parent = nullptr)
     : Base(parent), out_(out), toc_(toc) { Q_ASSERT(out_); }
 
-  virtual QString codecName() const { return "AAC"; } ///< \reimp
+  QString codecName() const override { return "AAC"; }
 
-  virtual void writeFrame(const QByteArray &chunk, quint32 timestamp, bool writeHeader); ///< \reimp
-  virtual void finish() { out_->finish(); } ///< \reimp
+  void writeFrame(const QByteArray &chunk, quint32 timestamp, bool writeHeader) override;
+  void finish() override { out_->finish(); }
 };
 
 class RawH264Writer : public MediaWriter
@@ -115,13 +115,13 @@ class RawH264Writer : public MediaWriter
   int nalLengthSize_; // 2 for 16bit or 4 for 32bit
 
 public:
-  explicit RawH264Writer(OutputStream *out, MediaToc *toc = 0, QObject *parent = 0)
+  explicit RawH264Writer(OutputStream *out, MediaToc *toc = nullptr, QObject *parent = nullptr)
     : Base(parent), out_(out), toc_(toc), nalLengthSize_(0) { Q_ASSERT(out_); }
 
-  virtual QString codecName() const { return "H264"; } ///< \reimp
+  QString codecName() const override { return "H264"; }
 
-  virtual void writeFrame(const QByteArray &chunk, quint32 timestamp, bool writeHeader); ///< \reimp
-  virtual void finish() { out_->finish(); } ///< \reimp
+  void writeFrame(const QByteArray &chunk, quint32 timestamp, bool writeHeader) override;
+  void finish() override { out_->finish(); }
 };
 
 #endif // MEDIAWRITER_H

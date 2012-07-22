@@ -41,9 +41,9 @@ Tray::createActions()
     menu->addAction(TR(T_MENUTEXT_WINDOWPICKDIALOG), w_, SLOT(showWindowPickDialog()));
 #endif // WITH_WIN_PICKER
     menu->addSeparator();
-#ifndef Q_WS_MAC
+#ifndef Q_OS_MAC
     menu->addAction(toggleWindowOnTopAct_);
-#endif // Q_WS_MAC
+#endif // Q_OS_MAC
     minimizeAct_ = menu->addAction(TR(T_MINIMIZE), w_, SLOT(showMinimized()));
     restoreAct_ = menu->addAction(TR(T_RESTORE), w_, SLOT(showNormal()));
     menu->addSeparator();

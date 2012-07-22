@@ -17,7 +17,7 @@ class AcWebWindow : public AcMainWindow
 
   // - Construction -
 public:
-  explicit AcWebWindow(QWidget *parent = 0, Qt::WindowFlags f = 0);
+  explicit AcWebWindow(QWidget *parent = nullptr, Qt::WindowFlags f = 0);
 
   // - Properties -
 public:
@@ -25,7 +25,7 @@ public:
   void setCacheDirectory(const QString &path);
 
 public:
-  virtual bool event(QEvent *event); ///< \reimp
+  bool event(QEvent *event) override;
 };
 
 #endif // ACWEBWINDOW_H

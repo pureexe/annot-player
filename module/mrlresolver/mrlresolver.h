@@ -23,15 +23,15 @@ class MrlResolver : public QObject
   QString resolvedSubtitleUrl_;
 
 public:
-  explicit MrlResolver(QObject *parent = 0)
-    : Base(parent), sync_(false), resolvedCookieJar_(0) { }
+  explicit MrlResolver(QObject *parent = nullptr)
+    : Base(parent), sync_(false), resolvedCookieJar_(nullptr) { }
 
 signals:
-  void error(QString msg);
-  void message(QString msg);
+  void message(const QString &text);
+  void errorMessage(const QString &text);
   void synchronizedChanged(bool t);
 
-  void mediaResolved(MediaInfo mi, QNetworkCookieJar *cookieJar = 0);
+  void mediaResolved(MediaInfo mi, QNetworkCookieJar *cookieJar = nullptr);
   void subtitleResolved(QString suburl, QString refurl, QString title);
 
 public:

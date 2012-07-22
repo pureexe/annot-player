@@ -7,7 +7,7 @@
 // TODO: use union instead of pointer magic to improve performance.
 // See: qIsNull in QtGlobal
 
-#include <QtGlobal>
+#include <QtCore/QString>
 
 #ifdef __GNUC__
 # pragma GCC diagnostic ignored "-Wstrict-aliasing" // dereferencing type-punned pointer
@@ -47,6 +47,25 @@ namespace Bitwise {
 
   // - BitConverterBE -
 namespace BigEndian {
+
+  // - Helpers -
+
+  inline QString long2ip(qint64 value, const QString &delim = ".")
+  {
+    quint8 *p = reinterpret_cast<uchar *>(&value);
+    return  QString::number(p[3])
+      .append(delim).append(QString::number(p[2]))
+      .append(delim).append(QString::number(p[1]))
+      .append(delim).append(QString::number(p[0]));
+  }
+
+  //inline qint64 ip2long(char *ip)
+  //{
+  //  quint8 addr[16];
+  //  sscanf(ip,"%d.%d.%d.%d",addr+3,addr+2,addr+1,addr+0);
+  //  qint64 *vl = (u_long*)(&addr);
+  //  return *vl;
+  //}
 
   inline quint64 toUInt64(const quint8 *value, int startIndex = 0)
   {
@@ -153,6 +172,15 @@ namespace BigEndian {
 
   // - BitConverterLE -
 namespace LittleEndian {
+
+  inline QString long2ip(qint64 value, const QString &delim = ".")
+  {
+    quint8 *p = reinterpret_cast<uchar *>(&value);
+    return  QString::number(p[0])
+      .append(delim).append(QString::number(p[1]))
+      .append(delim).append(QString::number(p[2]))
+      .append(delim).append(QString::number(p[3]));
+  }
 
   inline float toFloat(const quint8 *value, int startIndex = 0)
   { return *(float *)(value + startIndex); }

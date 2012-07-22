@@ -23,16 +23,14 @@ public:
   enum { TextFormat = QTextFormat::UserFormat + 1 };
 
 public:
-  explicit TextFormatHandler(const QString &text, QObject *parent = 0)
+  explicit TextFormatHandler(const QString &text, QObject *parent = nullptr)
     : Base(parent), text_(text) { }
 
   // - Overridings -
 public:
-  ///  \reimp \c QTextObjectInterface
-  virtual void drawObject(QPainter *painter, const QRectF &rect, QTextDocument *doc, int posInDocument, const QTextFormat &format);
+  void drawObject(QPainter *painter, const QRectF &rect, QTextDocument *doc, int posInDocument, const QTextFormat &format) override;
 
-  ///  \reimp \c QTextObjectInterface
-  virtual QSizeF intrinsicSize(QTextDocument *doc, int posInDocument, const QTextFormat &format);
+  QSizeF intrinsicSize(QTextDocument *doc, int posInDocument, const QTextFormat &format) override;
 };
 
 #endif // TEXTFORMATHANDLER_H

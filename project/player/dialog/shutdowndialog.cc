@@ -3,7 +3,6 @@
 
 #include "shutdowndialog.h"
 #include "tr.h"
-#include "logger.h"
 #include "module/qtext/htmltag.h"
 #ifdef Q_OS_WIN
 # include "win/qtwin/qtwin.h"
@@ -13,8 +12,6 @@
 # include "unix/qtunix/qtunix.h"
 #endif // Q_OS_
 #include <QtGui>
-
-using namespace Logger;
 
 #define DEBUG "shutdowndialog"
 #include "module/debug/debug.h"
@@ -35,7 +32,7 @@ ShutdownDialog::run()
   DOUT("enter");
   QApplication::beep();
   hide();
-  warn(tr("shutting down the computer ..."));
+  emit warning(tr("shutting down the computer ..."));
   bool ok = false;
 #ifdef Q_OS_WIN
   ok = QtWin::halt();
@@ -45,7 +42,7 @@ ShutdownDialog::run()
   ok = QtUnix::halt();
 #endif // Q_OS_
   if (!ok)
-    warn(tr("failed to shut down the computer"));
+    emit warning(tr("failed to shut down the computer"));
   DOUT("exit");
 }
 

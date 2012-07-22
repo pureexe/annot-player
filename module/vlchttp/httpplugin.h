@@ -39,7 +39,7 @@ class VlcHttpPlugin : public QObject
   static qint64 duration_;
   static QString mediaTitle_;
   static bool bufferSaved_;
-  static QString cachePath_;
+  static QString cacheDirectory_;
 
   //typedef int (*pf_activate_t)(vlc_object_t *);
   //typedef void (*pf_deactivate_t)(vlc_object_t *);
@@ -50,12 +50,12 @@ class VlcHttpPlugin : public QObject
 public:
   static Self *globalInstance() { static Self g; return &g; }
 protected:
-  explicit VlcHttpPlugin(QObject *parent = 0)
+  explicit VlcHttpPlugin(QObject *parent = nullptr)
     : Base(parent) { }
 
 signals:
-  void error(const QString &msg);
   void message(const QString &msg);
+  void errorMessage(const QString &msg);
   void warning(const QString &msg);
   void fileSaved(const QString &fileName);
   void progress(qint64 receivedBytes, qint64 totalBytes);
@@ -68,9 +68,9 @@ public:
   static void unload();
 
   static bool isBufferSaved() { return bufferSaved_; }
-  static QString cachePath() { return cachePath_; }
+  static QString cacheDirectory() { return cacheDirectory_; }
 
-  static void setCachePath(const QString &path) { cachePath_ = path; }
+  static void setCacheDirectory(const QString &path) { cacheDirectory_ = path; }
   static void setBufferSaved(bool t);
   static void setOriginalUrl(const QString &url) { originalUrl_ = url; }
   static void setUrls(const QStringList &urls) { urls_ = urls; }

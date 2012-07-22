@@ -25,13 +25,13 @@ class StreamService : public QObject
 public:
   static Self *globalInstance() { static Self g; return &g; }
 protected:
-  explicit StreamService(QObject *parent = 0);
+  explicit StreamService(QObject *parent = nullptr);
   ~StreamService();
 
 signals:
   void streamReady(QString url);
-  void error(QString msg);
   void message(QString msg);
+  void errorMessage(QString msg);
 
   // - Service -
 public:
@@ -47,7 +47,7 @@ public slots:
   // - Properties -
 public:
   bool hasStream() const;
-  int addStream(MediaType t, InputStream *in, MediaToc *toc = 0);
+  int addStream(MediaType t, InputStream *in, MediaToc *toc = nullptr);
 public slots:
   void setDuration(qint64 msecs);
   void removeStream(int streamId);

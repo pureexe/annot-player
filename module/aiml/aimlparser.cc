@@ -8,11 +8,11 @@
 #include <QtXml>
 #include <cstdlib>
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
 # include <qt_windows.h>
 # include <io.h>
 # include <fcntl.h>
-#endif
+#endif // Q_OS_WIN
 
 namespace { // anonymous
 
@@ -643,7 +643,7 @@ QString AimlParser::executeCommand(const QString &commandStr)
   qDebug() << "Executing " << commandStr;
 #endif // AIML_DEBUG
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
   STARTUPINFO si;
   SECURITY_ATTRIBUTES sa;
   SECURITY_DESCRIPTOR sd;
@@ -944,7 +944,7 @@ AimlParser::AimlParser(QTextStream *logStream)
   : logStream(logStream)
 {
   indent = 0;
-  root.parent = 0;
+  root.parent = nullptr;
   QTime currentTime = QTime::currentTime();
   int val = currentTime.msec() + currentTime.second() + currentTime.minute();
   srand(val);
@@ -1354,7 +1354,7 @@ QString AimlParser::executeCommand(const QString &commandStr)
   QString spaceIndent = QString().fill(' ', 2*indent);
   (*logStream) << spaceIndent + "Executing \"" + commandStr + "\" ...\n";
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
 
   STARTUPINFO si;
   SECURITY_ATTRIBUTES sa;

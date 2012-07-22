@@ -6,9 +6,9 @@
 #include <QtCore/QCoreApplication>
 #include <QtCore/QObject>
 #include <QtCore/QString>
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
 # include "mac/qtmac/qtmac.h"
-#endif // Q_WS_MAC
+#endif // Q_OS_MAC
 
 // - Resources -
 
@@ -18,13 +18,13 @@
 #define AC_PATH_IMAGES  ""      // TODO
 #define AC_PATH_LOGS    ""      // TODO
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
 # define AC_PATH_CACHES  QCoreApplication::applicationDirPath() + "/" "caches"
-#elif defined(Q_WS_MAC)
+#elif defined(Q_OS_MAC)
 # define AC_PATH_CACHES  QtMac::homeCachesPath() + "/me.annot.cloud"
 #else
 # define AC_PATH_CACHES  QDir::homePath() + "/.annot/cloud"
-#endif // Q_WS_
+#endif // Q_OS_
 
 #define AC_PATH_DOWNLOADS       AcLocationManager::globalInstance()->downloadsLocation()
 
@@ -41,7 +41,7 @@ class AcLocationManager : public QObject
 public:
   static Self *globalInstance() { static Self g; return &g; }
 protected:
-  explicit AcLocationManager(QObject *parent = 0)
+  explicit AcLocationManager(QObject *parent = nullptr)
     : Base(parent), settings_(0) { init(); }
 
 signals:

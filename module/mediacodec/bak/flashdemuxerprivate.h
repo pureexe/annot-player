@@ -176,7 +176,7 @@ class IAudioWriter : public QObject
 
   QString path_;
 public:
-  explicit IAudioWriter(QObject *parent = 0) : Base(parent) { }
+  explicit IAudioWriter(QObject *parent = nullptr) : Base(parent) { }
   virtual ~IAudioWriter() { }
 
   const QString &path() const { return path_; }
@@ -195,7 +195,7 @@ class IVideoWriter : public QObject
 
   QString path_;
 public:
-  explicit IVideoWriter(QObject *parent = 0) : Base(parent) { }
+  explicit IVideoWriter(QObject *parent = nullptr) : Base(parent) { }
   virtual ~IVideoWriter() { }
 
   const QString &path() const { return path_; }
@@ -212,7 +212,7 @@ class DummyAudioWriter : public IAudioWriter
   typedef DummyAudioWriter Self;
   typedef IAudioWriter Base;
 public:
-  explicit DummyAudioWriter(QObject *parent = 0) : Base(parent) { }
+  explicit DummyAudioWriter(QObject *parent = nullptr) : Base(parent) { }
 
   virtual void writeChunk(const QByteArray &, quint32) { }
   virtual void finish() { }
@@ -226,7 +226,7 @@ class DummyVideoWriter : public IVideoWriter
   typedef DummyVideoWriter Self;
   typedef IVideoWriter Base;
 public:
-  explicit DummyVideoWriter(QObject *parent = 0) : Base(parent) { }
+  explicit DummyVideoWriter(QObject *parent = nullptr) : Base(parent) { }
 
   virtual void writeChunk(const QByteArray &, quint32, int) { }
   virtual void finish(const FractionUInt32 &) { }
@@ -250,7 +250,7 @@ class AACWriter : public IAudioWriter {
   int _channelConfig;
 
 public:
-  explicit AACWriter(const QString &path, QObject *parent = 0)
+  explicit AACWriter(const QString &path, QObject *parent = nullptr)
     : Base(parent), _path(path)
   {
     DOUT("enter: path =" << _path);
@@ -443,10 +443,10 @@ class FlvFile : QObject
   QList<QString> _warnings;
 
 public:
-  explicit FlvFile(QString path, QObject *parent = 0)
+  explicit FlvFile(QString path, QObject *parent = nullptr)
     : Base(parent),
       _inputPath(path), _fileOffset(0), _fileLength(0),
-      _audioWriter(0), _videoWriter(0)
+      _audioWriter(nullptr), _videoWriter(nullptr)
   {
     DOUT("enter: path =" << path);
     _outputDirectory = QFileInfo(path).absolutePath();

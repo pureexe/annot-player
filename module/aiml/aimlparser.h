@@ -37,7 +37,7 @@ protected:
     QString topic;
     QString that;
 
-    Leaf() : parent(0), topic(""), that("") { }
+    Leaf() : parent(nullptr), topic(""), that("") { }
   };
 
   struct Node
@@ -47,7 +47,7 @@ protected:
     QList<Node*> children;
     QList<Leaf*> leaves;
 
-    Node() : parent(0), word("") { }
+    Node() : parent(nullptr), word("") { }
 
     bool match(QStringList::const_iterator input, const QStringList &inputWords,
                const QString &currentThat, const QString &currentTopic, QStringList &capturedThatTexts,

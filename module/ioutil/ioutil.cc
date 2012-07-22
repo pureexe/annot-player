@@ -99,7 +99,7 @@ IOUtil::readBytes(const QString &input, qint64 maxSize)
       }
 
       data = file.read(qMin(file.size(), maxSize));
-      file.close();
+      //file.close();
     }
   }
 

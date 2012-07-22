@@ -16,7 +16,7 @@ namespace Mp4Box {
   };
 
   bool muxMp4File(const QString &mp4, const QStringList &tracks,
-                  Mp4Info *info = 0);
+                  Mp4Info *info = nullptr);
 
 } // namepsace MP4Box
 

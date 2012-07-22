@@ -32,7 +32,7 @@ class GraphicsRippleEffect : public QGraphicsEffect
   QPoint center_;
 
 public:
-  explicit GraphicsRippleEffect(QObject *parent = 0);
+  explicit GraphicsRippleEffect(QObject *parent = nullptr);
   ~GraphicsRippleEffect();
 
   // - Properties -
@@ -92,7 +92,7 @@ signals:
 
   // - Implementation -
 protected:
-  virtual void draw(QPainter *painter); ///< \reimp
+  void draw(QPainter *painter) override;
 };
 
 #endif // GRAPHICSRIPPLEEFFECT_H

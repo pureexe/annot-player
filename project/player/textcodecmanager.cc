@@ -10,11 +10,11 @@
 // - Construction -
 
 TextCodecManager::TextCodecManager(QObject *parent)
-  : Base(parent), codec_(0), decoder_(0), encoding_(TEXT_CODEC_DEFAULT)
+  : Base(parent), codec_(nullptr), decoder_(nullptr), encoding_(TEXT_CODEC_DEFAULT)
 {
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
   setEncoding(TEXT_CODEC_JAPANESE); // Enforce Japanese encoding
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
 }
 
 // - Properties -

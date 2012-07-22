@@ -7,6 +7,8 @@
 #include "processview.h"
 #include "tr.h"
 #include "project/common/acui.h"
+#include "project/common/acprotocol.h"
+#include "module/qtext/layoutwidget.h"
 #include <QtGui>
 
 // - Constructions -
@@ -77,12 +79,15 @@ SignalView::createLayout()
     header->setContentsMargins(0, 0, 0, 0);
     center->setContentsMargins(0, 0, 0, 0);
     rows->setContentsMargins(4, 0, 4, 4);
-  } setLayout(rows);
+  } setCentralWidget(new LayoutWidget(rows, this));
 
   connect(messageView_, SIGNAL(hookSelected(ulong)), SLOT(selectHookAndHide(ulong)));
 
   connect(processView_, SIGNAL(attached(ProcessInfo)), messageView_, SLOT(setProcessNameFromProcessInfo(ProcessInfo)));
   connect(processView_, SIGNAL(detached(ProcessInfo)), messageView_, SLOT(clearProcessName()));
+
+  AC_FORWARD_MESSAGES(messageView_, this, Qt::AutoConnection);
+  AC_FORWARD_MESSAGES(processView_, this, Qt::AutoConnection);
 
   //connect(messageView_, SIGNAL(dragEnterEventReceived(QDragEnterEvent*)), SLOT(dragEnterEvent(QDragEnterEvent*)));
   //connect(messageView_, SIGNAL(dragLeaveEventReceived(QDragLeaveEvent*)), SLOT(dragLeaveEvent(QDragLeaveEvent*)));

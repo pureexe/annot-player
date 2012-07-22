@@ -20,12 +20,13 @@ class LoginDialog : public AcWindow
   QLineEdit *passwordEdit_;
 
 public:
-  explicit LoginDialog(QWidget *parent = 0);
+  explicit LoginDialog(QWidget *parent = nullptr);
 
   QString userName() const;
   QString password() const;
 
 signals:
+  void warning(const QString &text);
   void loginRequested(const QString &userName, const QString &password);
 
 public slots:
@@ -40,8 +41,8 @@ protected slots:
 
 protected:
   bool containsUserName(const QString &name) const;
-  //virtual void mouseDoubleClickEvent(QMouseEvent *event);
-  //virtual void contextMenuEvent(QContextMenuEvent *event);
+  //void mouseDoubleClickEvent(QMouseEvent *event) override;
+  //void contextMenuEvent(QContextMenuEvent *event) override;
 
 private:
   void createLayout();

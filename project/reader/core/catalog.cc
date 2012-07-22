@@ -11,7 +11,7 @@ namespace Core {
   CatalogItem*
   CatalogItem::child(int i) const
   {
-    Self *child = 0;
+    Self *child = nullptr;
     if (children_.contains(i))
       child = children_[i];
     else if (i >= 0 && i < node_children_.size()) {

@@ -22,15 +22,14 @@ class EmbeddedInfoView : public QLabel
   SignalHub *hub_;
 
 public:
-  EmbeddedInfoView(Player *player, DataManager *data, SignalHub *hub, QWidget *parent = 0);
+  EmbeddedInfoView(Player *player, DataManager *data, SignalHub *hub, QWidget *parent = nullptr);
 
 public slots:
-  virtual void setVisible(bool t); ///< \reimp
+  void setVisible(bool t) override;
   void refresh() { updateText(); }
-  void setInvisible(bool t) { setVisible(!t); }
 
 protected slots:
-  void updateText(); ///< \reimp
+  void updateText();
 
 protected:
   static QString timeToString(qint64 secs);

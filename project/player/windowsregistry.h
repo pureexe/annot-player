@@ -21,8 +21,8 @@ class WindowsRegistry : public QObject
 public:
   static Self *globalInstance();
 
-  explicit WindowsRegistry(QObject *parent = 0)
-    : Base(parent), classes_(0) { }
+  explicit WindowsRegistry(QObject *parent = nullptr)
+    : Base(parent), classes_(nullptr) { }
 
   void setClassesRoot(const QString &regpath);
 

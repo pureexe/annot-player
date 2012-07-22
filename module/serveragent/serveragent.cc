@@ -22,7 +22,7 @@ using namespace AnnotCloud;
 ServerAgent::ServerAgent(QObject *parent)
   : Base(parent), authorized_(false), connected_(false)
 #ifdef WITH_MODULE_CLIENTAGENT
-  , client_(0)
+  , client_(nullptr)
 #endif // WITH_MODULE_CLIENTAGENT
 {
   proxy_ = new ServerProxy(this);

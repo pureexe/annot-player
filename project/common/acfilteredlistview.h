@@ -28,7 +28,7 @@ class AcFilteredListView : public QWidget
   typedef QWidget Base;
 
 public:
-  AcFilteredListView(QStandardItemModel *sourceModel, QSortFilterProxyModel *proxyModel, QWidget *parent = 0);
+  AcFilteredListView(QStandardItemModel *sourceModel, QSortFilterProxyModel *proxyModel, QWidget *parent = nullptr);
 
 signals:
   void currentIndexChanged(QModelIndex index);

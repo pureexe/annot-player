@@ -55,7 +55,7 @@ BingTranslator::processNetworkReply(QNetworkReply *reply)
   reply->deleteLater();
 
   if (!reply->isFinished() || reply->error() != QNetworkReply::NoError) {
-    emit error(tr("network error from Bing Translator") + ": " + reply->errorString());
+    emit errorMessage(tr("network error from Bing Translator") + ": " + reply->errorString());
     DOUT("exit: error =" << reply->error());
     return;
   }
@@ -74,7 +74,7 @@ BingTranslator::processNetworkReply(QNetworkReply *reply)
     }
   }
 
-  emit error(tr("network error from Bing Translator"));
+  emit errorMessage(tr("network error from Bing Translator"));
   DOUT("exit");
 }
 

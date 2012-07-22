@@ -14,7 +14,7 @@ class InputComboBox : public AnnotationComboEdit
   typedef AnnotationComboEdit Base;
 
 public:
-  explicit InputComboBox(QWidget *parent = 0);
+  explicit InputComboBox(QWidget *parent = nullptr);
 };
 
 #endif // INPUTCOMBOBOX_H

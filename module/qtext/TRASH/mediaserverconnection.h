@@ -48,7 +48,7 @@ namespace Core {
 
     // -- Constructions --
   public:
-    explicit MediaServerConnection(QObject *parent = 0);
+    explicit MediaServerConnection(QObject *parent = nullptr);
     ~MediaServerConnection();
 
     // -- Login --

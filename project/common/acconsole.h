@@ -18,7 +18,7 @@ class AcConsole : public AcWindow
   static QList<Self *> instances_;
 
 public:
-  explicit AcConsole(QWidget *parent = 0);
+  explicit AcConsole(QWidget *parent = nullptr);
   ~AcConsole();
 
   static void messageHandler(QtMsgType type, const char *msg);

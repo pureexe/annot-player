@@ -24,17 +24,16 @@ DummyGoogleVideoMrlResolver::matchMedia(const QString &href) const
 bool
 DummyGoogleVideoMrlResolver::resolveMedia(const QString &href)
 {
-  static const QString errorMessage = tr("failed to resolve URL");
   QUrl url(href);
   if (url.host().compare("video.google.com", Qt::CaseInsensitive) ||
       url.path().compare("/videoplay", Qt::CaseInsensitive)) {
-    emit error(errorMessage + ": " + href);
+    emit errorMessage(tr("failed to resolve URL") + ": " + href);
     //return;
   }
 
   QString docid = url.queryItemValue("docid");
   if (docid.isEmpty()) {
-    emit error(errorMessage + ": " + href);
+    emit errorMessage(tr("failed to resolve URL") + ": " + href);
     return false;
   }
 

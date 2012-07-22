@@ -28,7 +28,7 @@ public:
   };
 
 public:
-  explicit MessageHandler(QObject *parent = 0);
+  explicit MessageHandler(QObject *parent = nullptr);
 
 signals:
   void messageReceivedWithText(const QString &text);

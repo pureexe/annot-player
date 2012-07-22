@@ -151,7 +151,7 @@ namespace QtWin {
   bool isGoodWindow(WId hwnd);
 
   bool setTopWindow(WId hwnd);
-  WId getTopWindow(WId hwnd = 0); ///< return top window on the desktop if hwnd is null
+  WId getTopWindow(WId hwnd = nullptr); ///< return top window on the desktop if hwnd is null
 
   WId getPreviousWindow(WId hwnd); ///< below accordint to Z-order
   WId getNextWindow(WId hwnd);     ///< above accordint to Z-order
@@ -199,7 +199,13 @@ namespace QtWin {
   bool createLink(const QString &lnkPath, const QString &targetPath, const QString &description = QString());
 
   ///  Prompt using hwnd if target to return is not valid.
-  QString resolveLink(const QString &lnkPath, WId winId = 0);
+  QString resolveLink(const QString &lnkPath, WId hwnd = nullptr);
+
+  ///  Move to Recycle Bin instead of delete. Complete path required.
+  bool trashFile(const QString &fileFullPath, bool confirm = false, WId hwnd = nullptr);
+
+  bool isFileExists(const QString &fileName);
+  bool deleteFile(const QString &fileName);
 
   // - Devices -
 

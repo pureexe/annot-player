@@ -7,14 +7,12 @@
 #include "tr.h"
 #include "rc.h"
 #include "global.h"
-#include "logger.h"
 #include "project/common/acui.h"
 #include "project/common/acfilteredtableview.h"
 #include "module/serveragent/serveragent.h"
 #include <QtGui>
 
 using namespace AnnotCloud;
-using namespace Logger;
 
 // - Constructions -
 
@@ -29,7 +27,7 @@ using namespace Logger;
 
 TokenView::TokenView(DataManager *data, ServerAgent *server, SignalHub *hub, QWidget *parent)
   : Base(parent, WINDOW_FLAGS), active_(false), data_(data), server_(server), hub_(hub),
-    contextMenu_(0), aliasDialog_(0)
+    contextMenu_(nullptr), aliasDialog_(nullptr)
 {
   Q_ASSERT(data_);
   Q_ASSERT(server_);
@@ -461,13 +459,13 @@ TokenView::bless()
     return;
 
   if (!server_->isConnected() || !server_->isAuthorized()) {
-    warn(tr("cannot perform cast when offline"));
+    emit warning(tr("cannot perform cast when offline"));
     return;
   }
 
   qint64 tid = token_.id();
   if (server_->isTokenBlessedWithId(tid)) {
-    log(tr("token is already blessed"));
+    emit message(tr("token is already blessed"));
     return;
   }
 
@@ -487,13 +485,13 @@ TokenView::curse()
     return;
 
   if (!server_->isConnected() || !server_->isAuthorized()) {
-    warn(tr("cannot perform cast when offline"));
+    emit warning(tr("cannot perform cast when offline"));
     return;
   }
 
   qint64 tid = token_.id();
   if (server_->isTokenCursedWithId(tid)) {
-    log(tr("token is already cursed"));
+    emit message(tr("token is already cursed"));
     return;
   }
 
@@ -530,6 +528,7 @@ TokenView::languageToString(int lang)
   case Traits::Korean:          return TR(T_KOREAN);
   case Traits::French:          return TR(T_FRENCH);
   case Traits::German:          return TR(T_GERMAN);
+  case Traits::Italian:         return TR(T_ITALIAN);
   case Traits::Spanish:         return TR(T_SPANISH);
   case Traits::Portuguese:      return TR(T_PORTUGUESE);
 
@@ -595,9 +594,9 @@ TokenView::copyAlias()
   QClipboard *clipboard = QApplication::clipboard();
   if (clipboard) {
     clipboard->setText(text);
-    log(TR(T_SUCCEED_COPIED) + ": " + text);
+    emit message(TR(T_SUCCEED_COPIED) + ": " + text);
   } else
-    warn(TR(T_ERROR_CLIPBOARD_UNAVAILABLE));
+    emit warning(TR(T_ERROR_CLIPBOARD_UNAVAILABLE));
 }
 
 void
@@ -631,7 +630,7 @@ TokenView::openAliasUrl()
 {
   QString url = currentAliasText();
   if (!url.isEmpty()) {
-    log(TR(T_MENUTEXT_OPENURL) + ": " + url);
+    emit message(TR(T_MENUTEXT_OPENURL) + ": " + url);
     emit openUrlRequested(url);
   }
 }

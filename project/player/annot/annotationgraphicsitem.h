@@ -78,8 +78,8 @@ public:
 
   bool isPaused() const;
 
-  //  \reimp  Make the item easier to be selected. - TODO: It is better to do this at viewer level rather the messing up the item itself.
-  //virtual bool contains(const QPointF &point) const
+  //  Make the item easier to be selected. - TODO: It is better to do this at viewer level rather the messing up the item itself.
+  //bool contains(const QPointF &point) const override
   //{ return Base::boundingRect().contains(point); }
 
   bool isSubtitle() const { return style_ == SubtitleStyle; }
@@ -143,6 +143,7 @@ protected slots:
   void translateToKorean();
   void translateToFrench();
   void translateToGerman();
+  void translateToItalian();
   void translateToSpanish();
   void translateToPortuguese();
 
@@ -182,21 +183,21 @@ protected:
 
   // Events:
 public:
-  virtual void contextMenuEvent(QContextMenuEvent *event); ///< \reimp
-  virtual void mouseDoubleClickEvent(QMouseEvent *event); ///< \reimp
-  virtual void mousePressEvent(QMouseEvent *event); ///< \reimp
-  virtual void mouseReleaseEvent(QMouseEvent *event); ///< \reimp
-  virtual void mouseMoveEvent(QMouseEvent *event); ///< \reimp
+  void contextMenuEvent(QContextMenuEvent *event); ///< not override
+  void mouseDoubleClickEvent(QMouseEvent *event); ///< not override
+  void mousePressEvent(QMouseEvent *event); ///< not override
+  void mouseReleaseEvent(QMouseEvent *event); ///< not override
+  void mouseMoveEvent(QMouseEvent *event); ///< not override
 protected:
-  virtual void contextMenuEvent(QGraphicsSceneContextMenuEvent *event); ///< \reimp
-  virtual void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event); ///< \reimp
-  virtual void mousePressEvent(QGraphicsSceneMouseEvent *event); ///< \reimp
-  virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event); ///< \reimp
-  virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *event); ///< \reimp
+  void contextMenuEvent(QGraphicsSceneContextMenuEvent *event) override;
+  void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) override;
+  void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
+  void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
+  void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
 
-  //virtual void hoverEnterEvent(QGraphicsSceneHoverEvent *event); ///< \reimp
-  //virtual void hoverMoveEvent(QGraphicsSceneHoverEvent *event); ///< \reimp
-  //virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent *event); ///< \reimp
+  //void hoverEnterEvent(QGraphicsSceneHoverEvent *event) override;
+  //void hoverMoveEvent(QGraphicsSceneHoverEvent *event) override;
+  //void hoverLeaveEvent(QGraphicsSceneHoverEvent *event) override;
 
 private:
   void setDefaultStyle();

@@ -17,17 +17,17 @@
 #ifdef WITH_MODULE_VLCCORE
 # include "module/vlccore/video.h"
 # include "module/vlccore/sound.h"
-# ifdef Q_WS_WIN
+# ifdef Q_OS_WIN
 #  ifdef WITH_WIN_QTWIN
 #   include "win/qtwin/qtwin.h"
 #  else
 #   warning "qtwin is not used"
 #  endif // WITH_WIN_QTWIN
-# endif // Q_WS_WIN
+# endif // Q_OS_WIN
 #endif // WITH_MODULE_VLCCORE
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
 # include <QtGui/QMacCocoaViewContainer>
-#endif // Q_WS_MAC
+#endif // Q_OS_MAC
 #include <QtNetwork/QNetworkCookieJar>
 #include <QtGui/QMouseEvent>
 #include <QtCore/QEventLoop>
@@ -186,7 +186,7 @@ namespace { // anonymous, vlccore callbacks
      QtWin::getDoubleClickInterval() * 1.5
 #else
      800
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
     ;
 
     qint64 recentClickTime_ = 0; // in msecs
@@ -239,19 +239,19 @@ namespace { // anonymous, vlccore callbacks
           QtWin::getMousePos()
 #else
           pos + w->mapToGlobal(QPoint())
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
       ;
 
       Qt::MouseButton button;
       Qt::MouseButtons buttons;
       boost::tie(button, buttons) = vlccore::vlcbuttons_to_qt(bt);
 
-//#ifdef Q_WS_WIN
+//#ifdef Q_OS_WIN
 //      // Mouse-move without buttons is already provided by mousehook on Windows
 //      // Skip to reduce overheads.
 //      if (!buttons)
 //        return VLC_SUCCESS;
-//#endif // Q_WS_WIN
+//#endif // Q_OS_WIN
 
       // Post event across diff threads.
       QCoreApplication::postEvent(w,
@@ -289,7 +289,7 @@ namespace { // anonymous, vlccore callbacks
           QtWin::getMousePos()
 #else
           pos + w->mapToGlobal(QPoint())
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
       ;
 
       Qt::MouseButton button;
@@ -321,7 +321,7 @@ namespace { // anonymous, vlccore callbacks
         int offset = rand_ ? 4 : -4;
         QtWin::sendMouseMove(QPoint(offset, 0), true); // relative == true
       }
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
 
       // Post event across diff threads.
       QCoreApplication::postEvent(w,
@@ -453,12 +453,12 @@ Player::isSupportedFile(const QString &fileName)
 // - Constructions -
 
 Player::Player(QObject *parent)
-  : Base(parent), d_(0)
+  : Base(parent), d_(nullptr)
 {
   DOUT("enter");
 #ifdef WITH_MODULE_VLCHTTP
-  connect(VlcHttpPlugin::globalInstance(), SIGNAL(error(QString)), SIGNAL(error(QString)));
   connect(VlcHttpPlugin::globalInstance(), SIGNAL(message(QString)), SIGNAL(message(QString)));
+  connect(VlcHttpPlugin::globalInstance(), SIGNAL(errorMessage(QString)), SIGNAL(errorMessage(QString)));
   connect(VlcHttpPlugin::globalInstance(), SIGNAL(warning(QString)), SIGNAL(warning(QString)));
   connect(VlcHttpPlugin::globalInstance(), SIGNAL(fileSaved(QString)), SIGNAL(fileSaved(QString)));
   connect(VlcHttpPlugin::globalInstance(), SIGNAL(progress(qint64,qint64)), SIGNAL(downloadProgress(qint64,qint64)));
@@ -559,7 +559,7 @@ Player::embeddedWindow() const
   );
 }
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
 void
 Player::embed(QMacCocoaViewContainer *w)
 {
@@ -584,7 +584,7 @@ Player::embed(QWidget *w)
   d_->setVoutWindow(w);
   DOUT("exit");
 }
-#endif // Q_WS_MAC
+#endif // Q_OS_MAC
 
 bool
 Player::isEmbedded() const
@@ -1102,7 +1102,7 @@ Player::setPosition(qreal pos, bool checkPos)
     if (checkPos) {
       double max = availablePosition();
       if (!qFuzzyCompare(1 + max, 1) && pos > max) {
-        emit error(tr("seek too much"));
+        emit errorMessage(tr("seek too much"));
         return;
       }
     }
@@ -1358,9 +1358,9 @@ Player::setSubtitleFromFile(const QString &fileName)
   Q_ASSERT(isValid());
 
   QString path = fileName;
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
   path.replace('/', '\\');
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
 
   DOUT("opening subtitle:" << path);
   if (d_->externalSubtitles().indexOf(path) >= 0) {
@@ -1931,19 +1931,19 @@ QString
 Player::downloadPath() const
 {
 #ifdef WITH_MODULE_VLCHTTP
-  return VlcHttpPlugin::cachePath();
+  return VlcHttpPlugin::cacheDirectory();
 #else
   return QString();
 #endif // WITH_MODULE_VLCHTTP
 }
 
 void
-Player::setDownloadPath(const QString &path)
+Player::setDownloadsLocation(const QString &dir)
 {
 #ifdef WITH_MODULE_VLCHTTP
-  VlcHttpPlugin::setCachePath(path);
+  VlcHttpPlugin::setCacheDirectory(dir);
 #else
-  Q_UNUSED(path);
+  Q_UNUSED(dir);
 #endif // WITH_MODULE_VLCHTTP
 }
 

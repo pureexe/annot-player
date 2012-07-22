@@ -79,7 +79,7 @@ inline void q_toPercentEncoding(QByteArray *ba, const char *dontEncode, const ch
   QByteArray input = *ba;
   int len = input.count();
   const char *inputData = input.constData();
-  char *output = 0;
+  char *output = nullptr;
   int length = 0;
 
   for (int i = 0; i < len; ++i) {

@@ -7,22 +7,22 @@
 # include "win/hook/hook.h"
 # include "win/qtwin/qtwin.h"
 #endif // WITH_WIN_HOOK
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
 # include "module/vlccore/video.h"
-# include "mac/vlcstep/vlcstep.h"
+# include "mac/vlccocoa/vlccocoa.h"
 # define DOUBLE_CLICK_TIMEOUT  1000 // 1 second
-#endif // Q_WS_MAC
+#endif // Q_OS_MAC
 #include <QtGui>
-#ifdef Q_WS_X11
+#ifdef Q_OS_LINUX
 //# include <QX11Info>
 # include <X11/Xlib.h>
-#endif // Q_WS_X11
+#endif // Q_OS_LINUX
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
 # define BASE(_parent)   Base(0, _parent)
 #else
 # define BASE(_parent)   Base(_parent)
-#endif // Q_WS_MAC
+#endif // Q_OS_MAC
 
 // - Constructions -
 VideoView::VideoView(QWidget *parent)
@@ -33,32 +33,32 @@ VideoView::VideoView(QWidget *parent)
   //setWindowOpacity(1.0); // opaque
   setMouseTracking(true);
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
   pressTime_ = releaseTime_ = 0;
 
   //setMouseTracking(true); // No effect since this is not a top-level window
   view_ = ::vlcvideoview_new();
   //setCocoaView(view_);
-#endif // Q_WS_MAC
+#endif // Q_OS_MAC
 
-#ifdef Q_WS_X11
+#ifdef Q_OS_LINUX
   //connect(this, SIGNAL(clientIsEmbedded()), SLOT(updatelientWindow()));
   //connect(this, SIGNAL(clientClosed()), SLOT(updateClientWindow()));
-#endif // Q_WS_X11
+#endif // Q_OS_LINUX
 }
 #undef BASE
 
 VideoView::~VideoView()
 {
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
   if (view_)
     ::vlcvideoview_release(view_);
-#endif // Q_WS_MAC
+#endif // Q_OS_MAC
 }
 
 // - Mac OS X Cocoa View -
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
 
 bool
 VideoView::isViewVisible() const
@@ -79,7 +79,7 @@ VideoView::setViewVisible(bool visible)
       setCocoaView(view_);
   } else {
     if (cocoaView())
-      setCocoaView(0);
+      setCocoaView(nullptr);
   }
 }
 
@@ -174,7 +174,7 @@ VideoView::setViewMouseMovePos(const QPoint &globalPos)
   vlccore::vout_mouse_moved(vout, pos);
 }
 
-#endif // Q_WS_MAC
+#endif // Q_OS_MAC
 
 // - Windows Hook -
 
@@ -270,7 +270,7 @@ VideoView::updateClientWindow()
 }
 */
 
-#ifdef Q_WS_X11
+#ifdef Q_OS_LINUX
 // CHECKPOINT: simulate double click event here
 
 bool
@@ -366,7 +366,7 @@ VideoView::x11Event(XEvent *event)
   return Base::x11Event(event);
 }
 
-#endif // Q_WS_X11
+#endif // Q_OS_LINUX
 
 // EOF
 

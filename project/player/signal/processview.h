@@ -43,11 +43,16 @@ protected:
   //};
 
 public:
-  explicit ProcessView(QWidget *parent = 0);
+  explicit ProcessView(QWidget *parent = nullptr);
 
 signals:
   void attached(ProcessInfo pi);
   void detached(ProcessInfo pi);
+
+  void message(QString msg);
+  void warning(QString msg);
+  void errorMessage(QString msg);
+  void notification(QString msg);
 
   // - Properties -
 public:
@@ -68,16 +73,16 @@ protected slots:
 
   // - Events -
 public:
-  virtual void setVisible(bool t); ///< \reimp
+  void setVisible(bool t) override;
 
 protected:
-  virtual void contextMenuEvent(QContextMenuEvent *event); ///< \reimp
+  void contextMenuEvent(QContextMenuEvent *event) override;
 
 //protected slots:
-//  virtual void dragEnterEvent(QDragEnterEvent *event); ///< \reimp
-//  virtual void dragMoveEvent(QDragMoveEvent *event); ///< \reimp
-//  virtual void dragLeaveEvent(QDragLeaveEvent *event); ///< \reimp
-//  virtual void dropEvent(QDropEvent *event); ///< \reimp
+//  void dragEnterEvent(QDragEnterEvent *event) override;
+//  void dragMoveEvent(QDragMoveEvent *event) override;
+//  void dragLeaveEvent(QDragLeaveEvent *event) override;
+//  void dropEvent(QDropEvent *event) override;
 //
 //signals:
 //  void dragEnterEventReceived(QDragEnterEvent *event);

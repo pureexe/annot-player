@@ -14,10 +14,10 @@ class ShutdownDialog : public CountdownDialog
   typedef CountdownDialog Base;
 
 public:
-  explicit ShutdownDialog(QWidget *parent = 0);
+  explicit ShutdownDialog(QWidget *parent = nullptr);
 
 protected:
-  virtual void run(); ///< \reimp
+  void run() override;
 };
 
 #endif // SHUTDOWNDIALOG_H

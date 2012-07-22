@@ -17,12 +17,12 @@ class AnnotationCodec : public QObject
   typedef AnnotCloud::AnnotationList AnnotationList;
 
 public:
-  explicit AnnotationCodec(QObject *parent = 0)
+  explicit AnnotationCodec(QObject *parent = nullptr)
     : Base(parent) { }
 
 signals:
-  void error(QString msg);
-  void message(QString msg);
+  void message(const QString &text);
+  void errorMessage(const QString &text);
 
   void fetched(AnnotationList annots, QString url, QString originalUrl);
 

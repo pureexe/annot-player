@@ -85,7 +85,7 @@ bool
 QtX::isKeyPressed(uint mask)
 {
   bool ret = false;
-  Display *d = ::XOpenDisplay(0);
+  Display *d = ::XOpenDisplay(nullptr);
   if (d) {
     uint n;
     if (::XkbGetIndicatorState(d, XkbUseCoreKbd, &n))

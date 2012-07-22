@@ -23,17 +23,16 @@ DummyYoutubeMrlResolver::matchMedia(const QString &href) const
 bool
 DummyYoutubeMrlResolver::resolveMedia(const QString &href)
 {
-  static const QString errorMessage = tr("failed to resolve URL");
   QUrl url(href);
   if (url.host().compare("www.youtube.com", Qt::CaseInsensitive) ||
       url.path().compare("/watch", Qt::CaseInsensitive)) {
-    emit error(errorMessage + ": " + href);
+    emit errorMessage(tr("failed to resolve URL") + ": " + href);
     //return;
   }
 
   QString v = url.queryItemValue("v");
   if (v.isEmpty()) {
-    emit error(errorMessage + ": " + href);
+    emit errorMessage(tr("failed to resolve URL") + ": " + href);
     return false;
   }
 

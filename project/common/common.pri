@@ -27,6 +27,7 @@ HEADERS += \
     $$PWD/acplayer.h \
     $$PWD/acpreferences.h \
     $$PWD/acpreferencestab.h \
+    $$PWD/acprotocol.h \
     $$PWD/acrc.h \
     $$PWD/acsettings.h \
     $$PWD/acss.h \

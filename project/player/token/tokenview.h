@@ -59,12 +59,15 @@ protected:
   };
 
 public:
-  TokenView(DataManager *data, ServerAgent *server, SignalHub *hub, QWidget *parent = 0);
+  TokenView(DataManager *data, ServerAgent *server, SignalHub *hub, QWidget *parent = nullptr);
 
   //qint64 userId() const;
   //void setUserId(qint64 uid);
 
 signals:
+  void message(QString text);
+  void warning(QString text);
+
   void aliasSubmitted(const Alias &alias);
   void aliasDeletedWithId(qint64 id);
   void tokenBlessedWithId(qint64 tid);
@@ -102,7 +105,7 @@ public slots:
 
   // - Events -
 public:
-  virtual void setVisible(bool visible); ///< \reimp
+  void setVisible(bool visible) override;
 protected slots:
   void updateLabels();
   void updateButtons();
@@ -110,12 +113,12 @@ protected slots:
   void submitAlias(const QString &alias, int type, qint32 language);
 
 protected slots:
-  virtual void contextMenuEvent(QContextMenuEvent *event); ///< \reimp
+  void contextMenuEvent(QContextMenuEvent *event) override;
 
-//  virtual void dragEnterEvent(QDragEnterEvent *event); ///< \reimp
-//  virtual void dragMoveEvent(QDragMoveEvent *event); ///< \reimp
-//  virtual void dragLeaveEvent(QDragLeaveEvent *event); ///< \reimp
-//  virtual void dropEvent(QDropEvent *event); ///< \reimp
+//  void dragEnterEvent(QDragEnterEvent *event) override;
+//  void dragMoveEvent(QDragMoveEvent *event) override;
+//  void dragLeaveEvent(QDragLeaveEvent *event) override;
+//  void dropEvent(QDropEvent *event) override;
 
 //signals:
 //  void dragEnterEventReceived(QDragEnterEvent *event);

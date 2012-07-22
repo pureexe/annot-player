@@ -36,7 +36,7 @@ class DataManager : public QObject
   qint64 minAnnotTime_, maxAnnotTime_;
 
 public:
-  explicit DataManager(QObject *parent = 0);
+  explicit DataManager(QObject *parent = nullptr);
 
   // - Properties -
 public:

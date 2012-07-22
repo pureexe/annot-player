@@ -12,9 +12,9 @@ QtExt::
 SquareRubberBand::SquareRubberBand(Shape s, QWidget *parent)
   : Base(s, parent)
 {
-#ifndef Q_WS_MAC
+#ifndef Q_OS_MAC
   connect(this, SIGNAL(colorChanged(QColor)), SLOT(invalidateColor()));
-#endif // Q_WS_MAC
+#endif // Q_OS_MAC
 }
 
 void
@@ -22,7 +22,7 @@ QtExt::
 SquareRubberBand::invalidateColor()
 {
   enum { strength = 1 };
-  QGraphicsColorizeEffect *e = 0;
+  QGraphicsColorizeEffect *e = nullptr;
   QColor c = color();
   if (c.isValid()) {
     e = qobject_cast<QGraphicsColorizeEffect *>(graphicsEffect());
@@ -38,7 +38,7 @@ void
 QtExt::
 SquareRubberBand::paintEvent(QPaintEvent *e)
 {
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
   QColor c = color();
   if (c.isValid()) {
     enum { width = 2, alpha = 32 };
@@ -57,7 +57,7 @@ SquareRubberBand::paintEvent(QPaintEvent *e)
     painter.drawRect(e->rect());
     painter.end();
   } else
-#endif // Q_WS_MAC
+#endif // Q_OS_MAC
   Base::paintEvent(e);
 }
 

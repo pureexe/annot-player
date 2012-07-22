@@ -17,14 +17,14 @@ class ClipboardMonitor : public QObject
 
   // - Constructions -
 public:
-  explicit ClipboardMonitor(QObject *parent = 0);
+  explicit ClipboardMonitor(QObject *parent = nullptr);
 
   bool isEnabled() const { return enabled_; }
 
 signals:
   void message(const QString &text);
   void warning(const QString &text);
-  void error(const QString &text);
+  void errorMessage(const QString &text);
   void notification(const QString &text);
 
   void urlEntered(const QString &url);

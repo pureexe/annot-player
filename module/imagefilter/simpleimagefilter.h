@@ -24,7 +24,7 @@ class SimpleImageFilter : public QObject, public ImageFilter
   GammaImageFilter *gammaFilter_;
 
 public:
-  explicit SimpleImageFilter(QObject *parent = 0)
+  explicit SimpleImageFilter(QObject *parent = nullptr)
     : Base(parent)
   {
     brightnessFilter_ = new BrightnessImageFilter(this);
@@ -50,14 +50,14 @@ public slots:
   }
 
 public:
-  virtual QImage &filterImage(QImage &image) const ///< \reimp
+  QImage &filterImage(QImage &image) const override
   {
     return (*gammaFilter_)
           ((*contrastFilter_)
           ((*brightnessFilter_)(image)));
   }
 
-  virtual bool needsDisplay() const ///< \reimp
+  bool needsDisplay() const override
   {
     return *brightnessFilter_ ||
            *contrastFilter_ ||

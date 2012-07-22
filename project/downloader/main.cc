@@ -42,7 +42,7 @@ namespace { namespace detail {
 
   // Window size
 
-  inline bool isValidWindowSize(const QSize &size, const QWidget *w = 0)
+  inline bool isValidWindowSize(const QSize &size, const QWidget *w = nullptr)
   {
     if (size.width() < DEFAULT_SIZE.width() || size.height() < DEFAULT_SIZE.height())
       return false;
@@ -72,7 +72,7 @@ namespace { namespace detail {
 #ifdef WITH_MODULE_QT
   inline QTranslator *qtTranslatorForLanguage(int lang, int script = 0)
   {
-    const char *qm = 0;
+    const char *qm = nullptr;
     switch (lang) {
     case QLocale::Japanese: qm = "qt_ja"; break;
     case QLocale::Chinese: qm = script == QLocale::SimplifiedChineseScript ? "qt_zh_CN" : "qt_zh_TW"; break;
@@ -104,6 +104,9 @@ main(int argc, char *argv[])
 
   // Applications
   Application a(argc, argv);
+#ifdef Q_OS_WIN
+  QDir::setCurrent(QCoreApplication::applicationDirPath());
+#endif // Q_OS_WIN
 
   if (!a.isSingleInstance()) {
     DOUT("exit: not single instance");
@@ -153,9 +156,9 @@ main(int argc, char *argv[])
     int tid = settings->themeId();
     ui->setTheme(tid);
     ui->setMenuEnabled(settings->isMenuThemeEnabled());
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     ui->setAeroEnabled(settings->isAeroEnabled());
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
   }
 
   // Set cache location
@@ -188,6 +191,12 @@ main(int argc, char *argv[])
   //DownloaderController::globalController()->setNetworkAccessManager(
   //  new QNetworkAccessManager(&a)
   //);
+
+  // Allocate more threads
+  enum { MinThreadCount = 3 };
+  if (QThreadPool::globalInstance()->maxThreadCount() < MinThreadCount)
+    QThreadPool::globalInstance()->setMaxThreadCount(MinThreadCount);
+  DOUT("thread pool size =" << QThreadPool::globalInstance()->maxThreadCount());
 
   DOUT("create mainwindow");
   MainWindow w;

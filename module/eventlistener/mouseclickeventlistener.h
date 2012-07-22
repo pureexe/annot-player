@@ -25,7 +25,7 @@ class MouseClickEventListener : public EventListener
   QTimer *timer_;
 
 public:
-  explicit MouseClickEventListener(QObject *parent = 0);
+  explicit MouseClickEventListener(QObject *parent = nullptr);
 
 signals:
   void triggered();
@@ -37,7 +37,7 @@ public slots:
   void clear();
 
 protected:
-  virtual void eventListener(QEvent *event); ///< \reimp
+  void eventListener(QEvent *event) override;
 protected slots:
   void updateEnabled(bool t);
   void start();

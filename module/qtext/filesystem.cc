@@ -2,6 +2,12 @@
 // 3/16/2012
 #include "module/qtext/filesystem.h"
 #include <QtCore/QFile>
+#ifdef Q_OS_WIN
+# include "win/qtwin/qtwin.h"
+#endif // Q_OS_WIN
+#ifdef WITH_MAC_QTCOCOA
+# include "mac/qtcocoa/qtcocoa.h"
+#endif // WITH_MAC_QTCOCOA
 
 QString
 QtExt::escapeFileName(const QString &name)
@@ -32,5 +38,27 @@ QtExt::escapeFileName(const QString &name)
 bool
 QtExt::touchFile(const QString &fileName)
 { return QFile(fileName).open(QIODevice::WriteOnly); }
+
+bool
+QtExt::trashFile(const QString &fileName)
+{
+#ifdef Q_OS_WIN
+  return QtWin::trashFile(fileName);
+#elif defined(WITH_MAC_QTCOCOA)
+  return QtCocoa::trashFile(fileName);
+#else
+  Q_UNUSED(fileName);
+  return false;
+#endif // Q_OS_WIN
+}
+
+bool
+QtExt::trashOrRemoveFile(const QString &fileName)
+{
+  return QFile::exists(fileName) && (
+    trashFile(fileName) ||
+    QFile::remove(fileName)
+  );
+}
 
 // EOF

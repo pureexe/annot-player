@@ -4,17 +4,17 @@
 // videoview.h
 // 7/10/2011
 #include <QtGlobal>
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
 # include <QtGui/QMacCocoaViewContainer>
   typedef QMacCocoaViewContainer VideoViewBase;
   struct vlcvideoview_t;
-#elif defined(Q_WS_X11)
+#elif defined(Q_OS_LINUX)
 # include <QtGui/QX11EmbedContainer>
   typedef QX11EmbedContainer VideoViewBase;
 #else
 # include <QtGui/QFrame>
   typedef QFrame VideoViewBase;
-#endif // Q_WS_X11
+#endif // Q_OS_LINUX
 #include <QtCore/QList>
 
 // class VideoView
@@ -27,15 +27,15 @@ class VideoView : public VideoViewBase
   typedef VideoViewBase Base;
 
 public:
-  explicit VideoView(QWidget *parent = 0);
+  explicit VideoView(QWidget *parent = nullptr);
   ~VideoView();
 
 protected:
-  //virtual bool macEvent(EventHandlerCallRef caller, EventRef event); ///< \reimp
+  //bool macEvent(EventHandlerCallRef caller, EventRef event) override;
 
-#ifdef Q_WS_X11
-  virtual bool x11Event(XEvent *event); ///< \reimp
-#endif // Q_WS_X11
+#ifdef Q_OS_LINUX
+  bool x11Event(XEvent *event) override;
+#endif // Q_OS_LINUX
 
 #ifdef WITH_WIN_HOOK
   // Be careful to add child widget to this class!!
@@ -47,7 +47,7 @@ private:
   QList<WId> children_;
 #endif // WITH_WIN_HOOK
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
 private:
   vlcvideoview_t *view_; // cocoa view
   qint64 pressTime_, releaseTime_;
@@ -64,7 +64,7 @@ public slots:
   void setViewVisible(bool visible = true);
   void showView();
   void hideView();
-#endif // Q_WS_MAC
+#endif // Q_OS_MAC
 };
 
 #endif // VIDEOVIEW_H

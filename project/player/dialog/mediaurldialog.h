@@ -14,7 +14,7 @@ class MediaUrlDialog : public UrlDialog
   typedef UrlDialog Base;
 
 public:
-  explicit MediaUrlDialog(QWidget *parent = 0);
+  explicit MediaUrlDialog(QWidget *parent = nullptr);
 };
 
 #endif // MEDIAURLDIALOG_H

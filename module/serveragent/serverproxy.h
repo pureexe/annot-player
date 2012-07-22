@@ -31,7 +31,7 @@ class ServerProxy: public QObject
   boost::scoped_ptr<ServerSoap::ServerSoapProxy> proxy_;
 
 public:
-  explicit ServerProxy(QObject *parent = 0)
+  explicit ServerProxy(QObject *parent = nullptr)
     : Base(parent) { reset(); }
 
 signals:

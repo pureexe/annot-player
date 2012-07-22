@@ -16,7 +16,7 @@ class WbTabWidget : public QTabWidget
   typedef QTabWidget Base;
 
 public:
-  explicit WbTabWidget(QWidget *parent = 0)
+  explicit WbTabWidget(QWidget *parent = nullptr)
     : Base(parent)
   {
     WbTabBar *tb = new WbTabBar;
@@ -33,7 +33,7 @@ signals:
 
   // - Events -
 protected:
-  virtual void mouseDoubleClickEvent(QMouseEvent *e) ///< \reimp
+  void mouseDoubleClickEvent(QMouseEvent *e) override
   {
     if (e->button() == Qt::LeftButton && !e->modifiers()) {
       emit doubleClicked();
@@ -42,7 +42,7 @@ protected:
       Base::mouseDoubleClickEvent(e);
   }
 
-  virtual void mouseReleaseEvent(QMouseEvent *e) ///< \reimp
+  void mouseReleaseEvent(QMouseEvent *e) override
   {
     if (e->button() == Qt::RightButton)
       emit rightButtonClicked();

@@ -19,7 +19,7 @@ class TranslatorSettings : public QObject
 public:
   static Self *globalSettings() { static Self g; return &g; }
 protected:
-  explicit TranslatorSettings(QObject *parent = 0) : Base(parent) { }
+  explicit TranslatorSettings(QObject *parent = nullptr) : Base(parent) { }
 
   // - Properties -
 public:

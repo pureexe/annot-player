@@ -21,12 +21,12 @@ class Signer : public QObject
   ServerAgent *server_;
 
 public:
-  explicit Signer(QObject *parent = 0);
+  explicit Signer(QObject *parent = nullptr);
 
 signals:
   void message(const QString &text);
   void warning(const QString &text);
-  void error(const QString &text);
+  void errorMessage(const QString &text);
   void notification(const QString &text);
 
 public slots:

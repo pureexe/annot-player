@@ -20,20 +20,20 @@ class AcAbout : public AcWindow
   QString app_, version_;
 
 public:
-  explicit AcAbout(QWidget *parent = 0)
+  explicit AcAbout(QWidget *parent = nullptr)
     : Base(parent) { init(); }
 
-  explicit AcAbout(const QString &appName, QWidget *parent = 0)
+  explicit AcAbout(const QString &appName, QWidget *parent = nullptr)
     : Base(parent), app_(appName) { init(); }
 
-  AcAbout(const QString &appName, const QString &version, QWidget *parent = 0)
+  AcAbout(const QString &appName, const QString &version, QWidget *parent = nullptr)
     : Base(parent), app_(appName), version_(version) { init(); }
 
   virtual QString text() const
   { return templateText().arg(app_).arg(version_); }
 
 public slots:
-  virtual void setVisible(bool visible); ///< \reimp
+  void setVisible(bool visible) override;
 
   void setVersion(const QString v) { version_ = v; }
   void setApplicationName(const QString n) { app_ = n; }

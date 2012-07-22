@@ -19,7 +19,7 @@ class DraggableMainWindow : public QMainWindow
   QPoint dragPos_;
 
 public:
-  explicit DraggableMainWindow(QWidget *parent = 0, Qt::WindowFlags f = 0);
+  explicit DraggableMainWindow(QWidget *parent = nullptr, Qt::WindowFlags f = 0);
 
   // - Properties -
 public:
@@ -29,10 +29,10 @@ public slots:
 
   // - Events -
 protected:
-  //virtual void setVisible(bool visible); ///< \reimp
-  virtual void mousePressEvent(QMouseEvent *event); ///< \reimp
-  virtual void mouseMoveEvent(QMouseEvent *event); ///< \reimp
-  virtual void mouseReleaseEvent(QMouseEvent *event); ///< \reimp
+  //void setVisible(bool visible) override;
+  void mousePressEvent(QMouseEvent *event) override;
+  void mouseMoveEvent(QMouseEvent *event) override;
+  void mouseReleaseEvent(QMouseEvent *event) override;
 };
 
 } // namespace QtExt

@@ -28,7 +28,9 @@ ConsoleDialog::ConsoleDialog(QWidget *parent)
 
   createLayout();
 
-  connect(this, SIGNAL(debugMessageReceived(QString)),
+  connect(this, SIGNAL(asyncLogText(QString)),
+          SLOT(appendLogText(QString)), Qt::QueuedConnection);
+  connect(this, SIGNAL(asyncDebugText(QString)),
           SLOT(appendDebugText(QString)), Qt::QueuedConnection);
 
   instances_.append(this);
@@ -106,7 +108,7 @@ ConsoleDialog::messageHandler(QtMsgType type, const char *msg)
     }
 
     foreach (Self *t, instances_)
-      t->emit_debugMessageReceived(text);
+      t->sendDebugText(text);
   }
 #undef TIMESTAMP
 }

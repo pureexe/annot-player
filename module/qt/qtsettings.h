@@ -19,7 +19,7 @@ public:
   static Self *globalInstance() { static Self g; return &g; }
 
 protected:
-  explicit QtSettings(QObject *parent = 0);
+  explicit QtSettings(QObject *parent = nullptr);
 
 public:
   /**

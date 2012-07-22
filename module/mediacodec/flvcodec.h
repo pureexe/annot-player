@@ -30,7 +30,7 @@ public:
   static Self *globalInstance() { static Self g; return &g; }
 
 protected:
-  explicit FlvCodec(QObject *parent = 0) : Base(parent) { }
+  explicit FlvCodec(QObject *parent = nullptr) : Base(parent) { }
   ~FlvCodec() { stop(); }
 
 public slots:

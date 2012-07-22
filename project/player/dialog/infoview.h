@@ -19,19 +19,16 @@ class InfoView : public AcWindow
   AcTextView *textView_;
 
 public:
-  explicit InfoView(QWidget *parent = 0);
+  explicit InfoView(QWidget *parent = nullptr);
 
 protected:
   AcTextView *textView() const { return textView_; }
 
-signals:
-  void refreshRequested();
+public slots:
+  void setVisible(bool t) override;
 
 public slots:
-  virtual void setVisible(bool t); ///< \reimp
-
-protected slots:
-  void refresh() { emit refreshRequested(); }
+  virtual void refresh() { }
 
 private:
   void createLayout();

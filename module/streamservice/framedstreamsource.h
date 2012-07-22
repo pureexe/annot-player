@@ -23,7 +23,7 @@ class FramedStreamSource: public FramedSource
   // - Construction -
 public:
   static Self *createNew(UsageEnvironment &env, InputStream *in,
-                         MediaToc *toc = 0, float duration = 0)
+                         MediaToc *toc = nullptr, float duration = 0)
   { return new Self(env, in, toc, duration); }
 
 protected:
@@ -39,8 +39,8 @@ protected:
   InputStream *in() const { return in_; }
 
 private:
-  virtual void doGetNextFrame(); ///< \reimp
-  virtual void doStopGettingFrames(); ///< \reimp
+  void doGetNextFrame() override;
+  void doStopGettingFrames() override;
 };
 
 #endif // FRAMEDSTREAMSOURCE_H

@@ -5,8 +5,11 @@
 #include "global.h"
 #include "annotationsettings.h"
 #include "module/annotcloud/traits.h"
-#include "module/qtext/algorithm.h"
 #include <QtCore>
+#ifdef __clang__
+# pragma clang diagnostic ignored "-Wunused-parameter" // in boost algorithm
+#endif // __clang__
+#include <boost/range/algorithm.hpp>
 
 #define DEBUG "settings"
 #include "module/debug/debug.h"
@@ -402,7 +405,7 @@ Settings::recentFiles() const
   //r = value(SK_RECENT(9)).toString(); if (!r.isEmpty()) ret.append(r);
 
   if (!ret.isEmpty())
-    ret = QtExt::uniqueList(ret);
+    boost::unique(ret);
   return ret;
 }
 
@@ -449,7 +452,7 @@ Settings::recentTitles() const
   QHash<QString, QString> ret;
   QHash<QString, QVariant> h = value(SK_RECENTTITLES).toHash();
   if (!h.isEmpty())
-    for (auto p = h.begin(); p != h.end(); ++p)
+    for (auto p = h.constBegin(); p != h.constEnd(); ++p)
       ret[p.key()] = p.value().toString();
   return ret;
 }
@@ -461,7 +464,7 @@ Settings::setRecentTitles(const QHash<QString, QString> &input)
     remove(SK_RECENTTITLES);
   else {
     QHash<QString, QVariant> h;
-    for (auto p = input.begin(); p != input.end(); ++p)
+    for (auto p = input.constBegin(); p != input.constEnd(); ++p)
       h[p.key()] = p.value();
     setValue(SK_RECENTTITLES, h);
   }
@@ -473,7 +476,7 @@ Settings::gameEncodings() const
   QHash<QString, QString> ret;
   QHash<QString, QVariant> h = value(SK_GAMEENCODINGS).toHash();
   if (!h.isEmpty())
-    for (auto p = h.begin(); p != h.end(); ++p)
+    for (auto p = h.constBegin(); p != h.constEnd(); ++p)
       ret[p.key()] = p.value().toString();
   return ret;
 }
@@ -486,7 +489,7 @@ Settings::setGameEncodings(const QHash<QString, QString> &input, int limit)
   else {
     QHash<QString, QVariant> h;
     int count = 0;
-    for (auto p = input.begin(); p != input.end(); ++p) {
+    for (auto p = input.constBegin(); p != input.constEnd(); ++p) {
       if (limit && count++ >= limit)
         break;
       h[p.key()] = p.value();
@@ -537,7 +540,7 @@ Settings::playPosHistory() const
   QHash<qint64, qint64> ret;
   QHash<QString, QVariant> h = value(SK_PLAYPOSHIST).toHash();
   if (!h.isEmpty())
-    for (auto p = h.begin(); p != h.end(); ++p)
+    for (auto p = h.constBegin(); p != h.constEnd(); ++p)
       ret[p.key().toLongLong()] = p.value().toLongLong();
   return ret;
 }
@@ -549,7 +552,7 @@ Settings::setPlayPosHistory(const QHash<qint64, qint64> &input)
     remove(SK_PLAYPOSHIST);
   else {
     QHash<QString, QVariant> h;
-    for (auto p = input.begin(); p != input.end(); ++p)
+    for (auto p = input.constBegin(); p != input.constEnd(); ++p)
       h[QString::number(p.key())] = p.value();
     setValue(SK_PLAYPOSHIST, h);
   }
@@ -561,7 +564,7 @@ Settings::subtitleHistory() const
   QHash<qint64, int> ret;
   QHash<QString, QVariant> h = value(SK_SUBTITLEHIST).toHash();
   if (!h.isEmpty())
-    for (auto p = h.begin(); p != h.end(); ++p)
+    for (auto p = h.constBegin(); p != h.constEnd(); ++p)
       ret[p.key().toLongLong()] = p.value().toInt();
   return ret;
 }
@@ -573,7 +576,7 @@ Settings::setSubtitleHistory(const QHash<qint64, int> &input)
     remove(SK_SUBTITLEHIST);
   else {
     QHash<QString, QVariant> h;
-    for (auto p = input.begin(); p != input.end(); ++p)
+    for (auto p = input.constBegin(); p != input.constEnd(); ++p)
       h[QString::number(p.key())] = p.value();
     setValue(SK_SUBTITLEHIST, h);
   }
@@ -585,7 +588,7 @@ Settings::audioTrackHistory() const
   QHash<qint64, int> ret;
   QHash<QString, QVariant> h = value(SK_TRACKHIST).toHash();
   if (!h.isEmpty())
-    for (auto p = h.begin(); p != h.end(); ++p)
+    for (auto p = h.constBegin(); p != h.constEnd(); ++p)
       ret[p.key().toLongLong()] = p.value().toInt();
   return ret;
 }
@@ -597,7 +600,7 @@ Settings::setAudioTrackHistory(const QHash<qint64, int> &input)
     remove(SK_TRACKHIST);
   else {
     QHash<QString, QVariant> h;
-    for (auto p = input.begin(); p != input.end(); ++p)
+    for (auto p = input.constBegin(); p != input.constEnd(); ++p)
       h[QString::number(p.key())] = p.value();
     setValue(SK_TRACKHIST, h);
   }
@@ -609,7 +612,7 @@ Settings::audioChannelHistory() const
   QHash<qint64, int> ret;
   QHash<QString, QVariant> h = value(SK_CHANNELHIST).toHash();
   if (!h.isEmpty())
-    for (auto p = h.begin(); p != h.end(); ++p)
+    for (auto p = h.constBegin(); p != h.constEnd(); ++p)
       ret[p.key().toLongLong()] = p.value().toInt();
   return ret;
 }
@@ -621,7 +624,7 @@ Settings::setAudioChannelHistory(const QHash<qint64, int> &input)
     remove(SK_CHANNELHIST);
   else {
     QHash<QString, QVariant> h;
-    for (auto p = input.begin(); p != input.end(); ++p)
+    for (auto p = input.constBegin(); p != input.constEnd(); ++p)
       h[QString::number(p.key())] = p.value();
     setValue(SK_CHANNELHIST, h);
   }
@@ -633,7 +636,7 @@ Settings::aspectRatioHistory() const
   QHash<qint64, QString> ret;
   QHash<QString, QVariant> h = value(SK_ASPECTHIST).toHash();
   if (!h.isEmpty())
-    for (auto p = h.begin(); p != h.end(); ++p)
+    for (auto p = h.constBegin(); p != h.constEnd(); ++p)
       ret[p.key().toLongLong()] = p.value().toString();
   return ret;
 }
@@ -645,7 +648,7 @@ Settings::setAspectRatioHistory(const QHash<qint64, QString> &input)
     remove(SK_PLAYPOSHIST);
   else {
     QHash<QString, QVariant> h;
-    for (auto p = input.begin(); p != input.end(); ++p)
+    for (auto p = input.constBegin(); p != input.constEnd(); ++p)
       h[QString::number(p.key())] = p.value();
     setValue(SK_ASPECTHIST, h);
   }

@@ -26,8 +26,8 @@ class LuaResolver : public QObject
   QNetworkCookieJar *cookieJar_;
 
 public:
-  explicit LuaResolver(const QString &scriptPath, const QString &packagePath = QString(), QObject *parent = 0)
-    : Base(parent), scriptPath_(scriptPath), packagePath_(packagePath), cookieJar_(0)
+  explicit LuaResolver(const QString &scriptPath, const QString &packagePath = QString(), QObject *parent = nullptr)
+    : Base(parent), scriptPath_(scriptPath), packagePath_(packagePath), cookieJar_(nullptr)
   { init(); }
 
 public:

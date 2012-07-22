@@ -21,9 +21,9 @@ class ContrastImageFilter : public QObject, public PixelImageFilter
 public:
   enum { DefaultValue = 100 };
 
-  explicit ContrastImageFilter(QObject *parent = 0)
+  explicit ContrastImageFilter(QObject *parent = nullptr)
     : Base(parent), contrast_(DefaultValue) { }
-  explicit ContrastImageFilter(int contrast, QObject *parent = 0)
+  explicit ContrastImageFilter(int contrast, QObject *parent = nullptr)
     : Base(parent), contrast_(contrast) { }
 
   int value() const { return contrast_; }
@@ -38,10 +38,10 @@ public:
   static bool needsDisplay(int contrast)
   { return contrast != DefaultValue; }
 
-  virtual quint8 filterColor(quint8 value) const ///< \reimp
+  quint8 filterColor(quint8 value) const override
   { return filterColor(value, contrast_); }
 
-  virtual bool needsDisplay() const ///< \reimp
+  bool needsDisplay() const override
   { return needsDisplay(contrast_); }
 };
 

@@ -29,7 +29,7 @@ public:
   void removeWidget(QWidget *w) { widgets_.removeAll(w); }
 
 protected:
-  virtual bool winEvent(MSG *message, long *result); ///> override
+  bool winEvent(MSG *message, long *result) override;
 };
 
 bool

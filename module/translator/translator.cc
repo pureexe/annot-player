@@ -16,6 +16,7 @@ Translator::languageCode(int lang, int script)
   case QLocale::Korean:   return "ko";
   case QLocale::French:   return "fr";
   case QLocale::German:   return "de";
+  case QLocale::Italian:  return "it";
   case QLocale::Spanish:  return "es";
   case QLocale::Portuguese: return "pt";
   case QLocale::Chinese:  return script == QLocale::SimplifiedChineseScript ?

@@ -1,7 +1,7 @@
 # downloader.pro
 # 3/29/2012
 
-VERSION = 0.1.2.0
+VERSION = 0.1.2.1
 
 DEFINES += PROJECT_DOWNLOADER
 
@@ -40,6 +40,7 @@ unix: {
 }
 mac {
     include($$ROOTDIR/mac/qtmac/qtmac.pri)
+    include($$ROOTDIR/mac/qtcocoa/qtcocoa.pri)
 }
 
 QT      += core gui network

@@ -14,7 +14,7 @@ public:
   QObject *listener;
 
 public:
-  MouseHookPrivate() : hook(0), windowPosEnabled(false), listener(0) { }
+  MouseHookPrivate() : hook(nullptr), windowPosEnabled(false), listener(nullptr) { }
 };
 
 // EOF

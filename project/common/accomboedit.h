@@ -26,9 +26,9 @@ public:
     CustomAction = 1 << 3
   };
 
-  explicit AcComboEdit(QWidget *parent = 0)
+  explicit AcComboEdit(QWidget *parent = nullptr)
     : Base(parent) { init(); }
-  explicit AcComboEdit(const QStringList &items, QWidget *parent = 0)
+  explicit AcComboEdit(const QStringList &items, QWidget *parent = nullptr)
     : Base(parent), defaultItems(items) { init(); }
 
   uint contextMenuFlags() const { return contextMenuFlags_; }
@@ -45,8 +45,8 @@ protected slots:
 
   // - Events -
 protected:
-  //virtual void keyPressEvent(QKeyEvent *event); ///< \reimp
-  virtual void contextMenuEvent(QContextMenuEvent *event); ///< \reimp
+  //void keyPressEvent(QKeyEvent *event) override;
+  void contextMenuEvent(QContextMenuEvent *event) override;
 
 protected:
   static bool isClipboardEmpty();

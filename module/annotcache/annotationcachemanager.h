@@ -23,7 +23,7 @@ public:
   static Self *globalInstance() { static Self g; return &g; }
 
 protected:
-  explicit AnnotationCacheManager(QObject *parent = 0)
+  explicit AnnotationCacheManager(QObject *parent = nullptr)
     : Base(parent) { }
 
 public:

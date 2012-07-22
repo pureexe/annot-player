@@ -27,7 +27,7 @@ public:
   static Self *globalSettings() { static Self g; return &g; }
 
 protected:
-  explicit MrlResolverSettings(QObject *parent = 0) : Base(parent) { }
+  explicit MrlResolverSettings(QObject *parent = nullptr) : Base(parent) { }
 
   // - Account -
 public slots:

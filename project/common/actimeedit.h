@@ -14,10 +14,10 @@ class AcTimeEdit : public QtExt::TimeEdit
   typedef QtExt::TimeEdit Base;
 
 public:
-  explicit AcTimeEdit(QWidget *parent = 0)
+  explicit AcTimeEdit(QWidget *parent = nullptr)
     : Base(parent) { init(); }
 
-  explicit AcTimeEdit(const QTime &time, QWidget *parent = 0)
+  explicit AcTimeEdit(const QTime &time, QWidget *parent = nullptr)
     : Base(time, parent) { init(); }
 
 private:

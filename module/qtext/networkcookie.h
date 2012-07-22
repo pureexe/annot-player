@@ -101,19 +101,19 @@ namespace QtExt {
     QString domain_, alias_;
 
   public:
-    explicit NetworkCookieJarWithDomainAlias(QObject *parent = 0)
+    explicit NetworkCookieJarWithDomainAlias(QObject *parent = nullptr)
       : Base(parent) { }
 
    NetworkCookieJarWithDomainAlias(const QString &domain, const QString &alias,
-                                   QObject *parent = 0)
+                                   QObject *parent = nullptr)
       : Base(parent), domain_(domain), alias_(alias) { }
 
    const QString &domain() const { return domain_; }
    const QString &alias() const { return alias_; }
 
   public:
-    virtual QList<QNetworkCookie> cookiesForUrl(const QUrl &url) const; ///< \reimp
-    virtual bool setCookiesFromUrl(const QList<QNetworkCookie> &cookies, const QUrl &url); ///< \reimp
+    QList<QNetworkCookie> cookiesForUrl(const QUrl &url) const override;
+    bool setCookiesFromUrl(const QList<QNetworkCookie> &cookies, const QUrl &url) override;
 
   public:
     void setDomainAlias(const QString &domain, const QString &alias)

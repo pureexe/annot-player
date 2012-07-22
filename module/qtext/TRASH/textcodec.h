@@ -29,11 +29,11 @@ namespace Core {
     // - Constructions -
   public:
     explicit TextCodec(const QString &encoding)
-      : type_(Default), codec_(0), decoder_(0)
+      : type_(Default), codec_(nullptr), decoder_(nullptr)
     { setEncoding(encoding); }
 
     explicit TextCodec(Type type)
-      : type_(Default), codec_(0), decoder_(0)
+      : type_(Default), codec_(nullptr), decoder_(nullptr)
     { setType(type); }
 
     // - Properties -

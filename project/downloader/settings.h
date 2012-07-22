@@ -19,7 +19,7 @@ class Settings : public QSettings
 public:
   static Self *globalSettings() { static Self g; return &g; }
 protected:
-  explicit Settings(QObject *parent = 0);
+  explicit Settings(QObject *parent = nullptr);
 
 public slots:
   void sync() { Base::sync(); }

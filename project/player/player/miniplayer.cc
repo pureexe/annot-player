@@ -8,9 +8,9 @@
 #include "project/common/acui.h"
 #include "module/player/player.h"
 #include "module/qtext/overlaylayout.h"
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
 # include "win/qtwin/qtwin.h"
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
 #include <QtCore>
 #include <QtGui>
 
@@ -21,11 +21,11 @@
   Qt::CustomizeWindowHint | \
   Qt::WindowStaysOnTopHint
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
 # define WINDOW_FLAGS WINDOW_FLAGS_BASE | Qt::FramelessWindowHint
 #else
 # define WINDOW_FLAGS WINDOW_FLAGS_BASE
-#endif // Q_WS_MAC
+#endif // Q_OS_MAC
 
 #define INPUTLINE_MAXIMUM_WIDTH 300
 #define PLAY_BUTTON_SIZE        30
@@ -36,12 +36,12 @@ MiniPlayerUi::MiniPlayerUi(SignalHub *hub, Player *player, ServerAgent *server, 
   : Base(hub, player, server, parent), dragPos_(BAD_POS)
 {
   Qt::WindowFlags f = WINDOW_FLAGS;
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
   if (QtWin::isWindowsVistaOrLater()) {
     f |= Qt::WindowTitleHint;
     setWindowOpacity(AC_WINDOW_OPACITY);
   } else
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
   { setWindowOpacity(WINDOW_OPACITY); }
   setWindowFlags(f);
   setContentsMargins(0, 0, 0, 0);
@@ -124,12 +124,12 @@ MiniPlayerUi::createLayout()
   toggleTraceWindowButton()->hide();
   toggleTraceWindowButton()->resize(QSize());
 #endif // WITH_WIN_PICKER
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
   if (QtWin::isWindowsVistaOrLater()) {
     positionButton()->hide();
     positionButton()->resize(QSize());
   } else
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
   {
     volumeSlider()->hide();
     volumeSlider()->resize(QSize());

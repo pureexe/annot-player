@@ -1,10 +1,10 @@
-// vlcstep.mm
+// vlccocoa.mm
 // 7/30/2011
 //
-// Assume that global NSAutoreleasePool is already defined in qtstep module.
+// Assume that global NSAutoreleasePool is already defined in qtcocoa module.
 
-#include "vlcstep/vlcstep.h"
-#import "vlcstep/VLCOpenGLVoutView_public.h"
+#include "vlccocoa/vlccocoa.h"
+#import "vlccocoa/VLCOpenGLVoutView_public.h"
 #import "VLCKit/VLCKit.h"
 #include "module/vlccore/video.h"
 //#include <objc/runtime.h>
@@ -21,17 +21,11 @@ VLCOBJECT_TYPE_REGISTER(vlcglview_t, VLCOpenGLVoutView)
 
 vlcvideoview_t*
 vlcvideoview_new()
-{
-  VLCVideoView *obj = [VLCVideoView new];
-  return vlcobject_cast<vlcvideoview_t *>(obj);
-}
+{ return vlcobject_cast<vlcvideoview_t *>([VLCVideoView new]); }
 
 void
 vlcvideoview_release(vlcvideoview_t *handle)
-{
-  VLCVideoView *obj = vlcobject_cast<VLCVideoView *>(handle);
-  [obj release] ;
-}
+{ [vlcobject_cast<VLCVideoView *>(handle) release]; }
 
 vlcglview_t*
 vlcvideoview_glview(vlcvideoview_t *handle)

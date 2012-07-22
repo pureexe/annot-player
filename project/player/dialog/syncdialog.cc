@@ -20,9 +20,9 @@
 SyncDialog::SyncDialog(QWidget *parent)
   : Base(parent, WINDOW_FLAGS), timeSlotIndex_(0)
 {
-//#ifdef Q_WS_MAC
+//#ifdef Q_OS_MAC
 //  setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
-//#endif // Q_WS_MAC
+//#endif // Q_OS_MAC
   setWindowTitle(TR(T_TITLE_SYNC));
 
   createLayout();

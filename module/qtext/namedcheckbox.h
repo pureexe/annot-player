@@ -16,10 +16,10 @@ class NamedCheckBox : public CheckBox
   typedef CheckBox Base;
 
 public:
-  explicit NamedCheckBox(QWidget *parent = 0)
+  explicit NamedCheckBox(QWidget *parent = nullptr)
     : Base(parent) { init(); }
 
-  explicit NamedCheckBox(const QString &text, QWidget *parent = 0)
+  explicit NamedCheckBox(const QString &text, QWidget *parent = nullptr)
     : Base(text, parent) { init(); }
 
 signals:

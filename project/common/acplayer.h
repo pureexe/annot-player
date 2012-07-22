@@ -19,7 +19,7 @@ class AcPlayerServer : public AcIpcController
 
   // - Construction -
 public:
-  explicit AcPlayerServer(QObject *parent = 0);
+  explicit AcPlayerServer(QObject *parent = nullptr);
   ~AcPlayerServer() { stop(); }
 
 public slots:
@@ -37,7 +37,7 @@ class AcPlayer : public QObject
 
   Delegate *delegate_;
 public:
-  explicit AcPlayer(QObject *parent = 0);
+  explicit AcPlayer(QObject *parent = nullptr);
 
 signals:
   void arguments(const QStringList &args);

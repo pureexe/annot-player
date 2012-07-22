@@ -387,7 +387,7 @@ BufferedRemoteStream::updateSize()
 
 void
 BufferedRemoteStream::networkError()
-{ emit error(tr("network error, failed to download remote resource")); }
+{ emit errorMessage(tr("network error, failed to download remote resource")); }
 
 bool
 BufferedRemoteStream::writeFile(const QString &path)

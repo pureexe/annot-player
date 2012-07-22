@@ -16,7 +16,7 @@ class SpinBox : public QSpinBox
   typedef QSpinBox Base;
 
 public:
-  explicit SpinBox(QWidget *parent = 0)
+  explicit SpinBox(QWidget *parent = nullptr)
     : Base(parent) { }
 
   QLineEdit *lineEdit() const { return Base::lineEdit(); }
@@ -26,9 +26,9 @@ signals:
 
   // - Events -
 protected:
-  virtual void keyPressEvent(QKeyEvent *event);
-  virtual void enterEvent(QEvent *event); ///< \reimp
-  virtual void leaveEvent(QEvent *event); ///< \reimp
+  void keyPressEvent(QKeyEvent *event) override;
+  void enterEvent(QEvent *event) override;
+  void leaveEvent(QEvent *event) override;
 };
 
 } // namespace QtExt

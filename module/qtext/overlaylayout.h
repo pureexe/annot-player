@@ -11,7 +11,7 @@ class OverlayLayout : public QGridLayout
   typedef QGridLayout Base;
 
 public:
-  explicit OverlayLayout(QWidget *parent = 0)
+  explicit OverlayLayout(QWidget *parent = nullptr)
     : Base(parent) { }
 
   void addWidget(QWidget *w, Qt::Alignment alignment = 0)

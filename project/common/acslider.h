@@ -16,9 +16,9 @@ class AcSlider : public QtExt::Slider
   bool hovered_;
 
 public:
-  explicit AcSlider(QWidget *parent = 0)
+  explicit AcSlider(QWidget *parent = nullptr)
     : Base(parent), hovered_(false) { }
-  explicit AcSlider(Qt::Orientation orientation, QWidget *parent = 0)
+  explicit AcSlider(Qt::Orientation orientation, QWidget *parent = nullptr)
     : Base(orientation, parent), hovered_(false) { }
 
 public:
@@ -26,8 +26,8 @@ public:
 
   // - Events -
 protected:
-  virtual void enterEvent(QEvent *event); ///< \reimp
-  virtual void leaveEvent(QEvent *event); ///< \reimp
+  void enterEvent(QEvent *event) override;
+  void leaveEvent(QEvent *event) override;
 };
 
 #endif // ACSLIDER_H

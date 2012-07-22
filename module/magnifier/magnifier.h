@@ -38,14 +38,14 @@ class Magnifier : public QtExt::DraggableWidget
           *fogFilterAct_,
           *mosaicFilterAct_;
 public:
-  explicit Magnifier(QWidget *parent = 0);
+  explicit Magnifier(QWidget *parent = nullptr);
 
   void setWidget(const QWidget *w) { w_ = w; }
   void setScale(qreal scale) { scale_ = scale; }
   void setCenter(const QPoint &pos) { center_ = pos; }
 
 public slots:
-  virtual void setVisible(bool visible);
+  void setVisible(bool visible) override;
   void fadeOut();
   void trigger();
 

@@ -32,7 +32,7 @@ class ClientServant : public QThread, public ClientSoap::ClientSoapService
   int port_;
 
 public:
-  explicit ClientServant(QObject *parent = 0);
+  explicit ClientServant(QObject *parent = nullptr);
 
   // - Properties -
 public:
@@ -44,15 +44,15 @@ public:
 
   // - Methods overriding ClientSoapService -
 public:
-  virtual int authorize(ClientSoap::tns__authorize *request, ClientSoap::tns__authorizeResponse *response); /// \reimp
-  virtual int deauthorize(ClientSoap::tns__deauthorize *request, ClientSoap::tns__deauthorizeResponse *response); ///< \reimp
-  virtual int isAuthorized(ClientSoap::tns__isAuthorized *request, ClientSoap::tns__isAuthorizedResponse *response); ///< \reimp
-  virtual int isConnected(ClientSoap::tns__isConnected *request, ClientSoap::tns__isConnectedResponse *response); ///< \reimp
-  virtual int chat(ClientSoap::tns__chat *request, ClientSoap::tns__chatResponse *response); ///< \reimp
+  int authorize(ClientSoap::tns__authorize *request, ClientSoap::tns__authorizeResponse *response) override;
+  int deauthorize(ClientSoap::tns__deauthorize *request, ClientSoap::tns__deauthorizeResponse *response) override;
+  int isAuthorized(ClientSoap::tns__isAuthorized *request, ClientSoap::tns__isAuthorizedResponse *response) override;
+  int isConnected(ClientSoap::tns__isConnected *request, ClientSoap::tns__isConnectedResponse *response) override;
+  int chat(ClientSoap::tns__chat *request, ClientSoap::tns__chatResponse *response) override;
 
   // - Methods overriding QThread -
 protected:
-  virtual void run(); ///< \reimp
+  void run() override;
 };
 
 /**
@@ -69,7 +69,7 @@ class ClientService: public QObject
   int port_;
 
 public:
-  explicit ClientService(QObject *parent = 0);
+  explicit ClientService(QObject *parent = nullptr);
   ~ClientService();
 
   // - Properties -

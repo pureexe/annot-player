@@ -35,7 +35,7 @@ namespace { namespace detail {
 
 RippleImageFilter::RippleImageFilter(QObject *parent)
   : Base(parent),
-    previousMap_(0), currentMap_(0), dirty_(false),
+    previousMap_(nullptr), currentMap_(nullptr), dirty_(false),
     opacity_(0.2), damping_(4), heigth_(2), offset_(1)
 {
   clearCenter();

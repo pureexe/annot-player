@@ -17,9 +17,8 @@ class MediaThumbnail : public QLabel
   qint64 time_;
 
 public:
-  explicit MediaThumbnail(QWidget *parent = 0)
-    : Base(parent)
-  { }
+  explicit MediaThumbnail(QWidget *parent = nullptr)
+    : Base(parent) { }
 
 public:
   qint64 time() const { return time_; }
@@ -34,7 +33,7 @@ public:
   // http://stackoverflow.com/questions/8679390/ffmpeg-extracting-20-images-from-a-video-of-variable-length
 
 //public slots:
-//  virtual void setVisible(bool visible); ///< \reimp
+//  void setVisible(bool visible) override;
 };
 
 #endif // MEDIATHUMBNAIL_H

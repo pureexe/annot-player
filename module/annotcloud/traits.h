@@ -23,8 +23,9 @@ namespace AnnotCloud {
       Korean = 0x13,
       French = 0x14,
       German = 0x15,
-      Spanish = 0x16,
-      Portuguese = 0x17
+      Italian = 0x16,
+      Spanish = 0x17,
+      Portuguese = 0x18
     };
     enum { LanguageCount = 9 };
 
@@ -37,6 +38,7 @@ namespace AnnotCloud {
       case Korean:  return QLocale::Korean;
       case French:  return QLocale::French;
       case German:  return QLocale::German;
+      case Italian: return QLocale::Italian;
       case Spanish: return QLocale::Spanish;
       case Portuguese: return QLocale::Portuguese;
       default:      return QLocale::AnyLanguage;
@@ -48,6 +50,7 @@ namespace AnnotCloud {
       switch (lang) {
       case English:
       case French: case German:
+      case Italian:
       case Spanish:case Portuguese:
         return true;
       default: return false;
@@ -75,13 +78,14 @@ namespace AnnotCloud {
       KoreanBit =       1L << Korean,
       FrenchBit =       1L << French,
       GermanBit =       1L << German,
+      ItalianBit =      1L << Italian,
       SpanishBit =      1L << Spanish,
       PortugueseBit =   1L << Portuguese
     };
     enum { AllLanguages =
       AnyLanguageBit | UnknownLanguageBit |
       EnglishBit | JapaneseBit | ChineseBit | KoreanBit |
-      FrenchBit | GermanBit | SpanishBit | PortugueseBit
+      FrenchBit | GermanBit | ItalianBit | SpanishBit | PortugueseBit
     };
 
     enum Entity {
@@ -105,7 +109,7 @@ namespace AnnotCloud {
     enum { MYSQL_MAX_VARCHAR_SIZE = 255 };
 
     // user:
-    enum { SER_PASSWORD_LENGTH = SHA1_DIGEST_LENGTH * 2 };
+    enum { MAX_USER_PASSWORD_LENGTH = SHA1_DIGEST_LENGTH * 2 };
     enum { MAX_USER_NAME_LENGTH = 64 };
     enum { MAX_USER_NICKNAME_LENGTH = 255 } ;
     enum { MAX_USER_EMAIL_LENGTH = 160 };

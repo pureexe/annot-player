@@ -16,16 +16,16 @@ class RadioButton : public QRadioButton
   typedef QRadioButton Base;
 
 public:
-  explicit RadioButton(QWidget *parent = 0)
+  explicit RadioButton(QWidget *parent = nullptr)
     : Base(parent) { }
 
-  explicit RadioButton(const QString &text, QWidget *parent = 0)
+  explicit RadioButton(const QString &text, QWidget *parent = nullptr)
     : Base(text, parent) { }
 
   // - Events -
 protected:
-  virtual void enterEvent(QEvent *event); ///< \reimp
-  virtual void leaveEvent(QEvent *event); ///< \reimp
+  void enterEvent(QEvent *event) override;
+  void leaveEvent(QEvent *event) override;
 };
 
 } // namespace QtExt

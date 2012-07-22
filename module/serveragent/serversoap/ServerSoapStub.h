@@ -225,8 +225,9 @@ public:
 	LONG64 groupId;	/* required element of type xsd:long */
 	LONG64 id;	/* required element of type xsd:long */
 	int language;	/* required element of type xsd:int */
-	LONG64 loginTime;	/* required element of type xsd:long */
+	LONG64 loginCount;	/* required element of type xsd:long */
 	LONG64 loginIp;	/* required element of type xsd:long */
+	LONG64 loginTime;	/* required element of type xsd:long */
 	std::string *name;	/* optional element of type xsd:string */
 	std::string *nickname;	/* optional element of type xsd:string */
 	std::string *password;	/* optional element of type xsd:string */

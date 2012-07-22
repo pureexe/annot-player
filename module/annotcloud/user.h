@@ -31,7 +31,8 @@ namespace AnnotCloud {
     };
 
     enum UserId {
-      UI_Guest = 4L
+      UI_Developer = 2,
+      UI_Guest = 4
     };
 
     static const Self &guest();
@@ -124,6 +125,12 @@ namespace AnnotCloud {
     void setLoginIp(qint64 ip)          { loginIp_ = ip; }
     bool hasLoginIp() const             { return loginIp_; }
 
+  private: qint64 loginCount_;
+  public:
+    qint64 loginCount() const           { return loginCount_; }
+    qint64 &loginCount()                { return loginCount_; }
+    void setLoginCount(qint64 count)    { loginCount_ = count; }
+
   private: quint32 blessed_;
   public:
     quint32 blessedCount() const        { return blessed_; }
@@ -157,11 +164,12 @@ namespace AnnotCloud {
     User()
       : id_(0), groupId_(0), status_(0), flags_(0), language_(0),
         createTime_(0), loginTime_(0), loginIp_(0),
-        blessed_(0), cursed_(0), blocked_(0), annot_(0)
+        loginCount_(0), blessed_(0), cursed_(0), blocked_(0), annot_(0)
     { }
 
     bool isValid() const { return hasId(); }
     bool isGuest() const { return id() == UI_Guest; }
+    bool isDeveloper() const { return id() == UI_Developer; }
 
     void clear() { (*this) = Self(); }
 

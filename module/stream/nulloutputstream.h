@@ -15,10 +15,10 @@ class NullOutputStream : public QObject, public OutputStream
   typedef QObject Base;
 
 public:
-  explicit NullOutputStream(QObject *parent = 0)
+  explicit NullOutputStream(QObject *parent = nullptr)
     : Base(parent) { }
 
-  virtual qint64 write(const char *data, qint64 maxSize) ///< \reimp
+  qint64 write(const char *data, qint64 maxSize) override
   { Q_UNUSED(data); return maxSize; }
 };
 

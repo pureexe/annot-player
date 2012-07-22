@@ -14,7 +14,7 @@ class PixelImageFilter : public ImageFilter
   typedef ImageFilter Base;
 
 public:
-  virtual QImage &filterImage(QImage &image) const ///< \reimp
+  QImage &filterImage(QImage &image) const override
   {
     if (!image.isNull() && needsDisplay())
       for (int x = 0; x < image.width(); x++)

@@ -31,7 +31,7 @@ InjectProcess(HANDLE hProc)
   //if (!IthCheckFile(ITH_MODULE_DLL)) return -1;
   //if (!IthCheckFile(ITH_ENGINE_DLL)) return -1;
 
-  LPVOID lpvAllocAddr = 0;
+  LPVOID lpvAllocAddr = nullptr;
   DWORD dwWrite = 0x1000;
   ::NtAllocateVirtualMemory(hProc, &lpvAllocAddr, 0, &dwWrite, MEM_COMMIT, PAGE_READWRITE);
   if (!lpvAllocAddr)

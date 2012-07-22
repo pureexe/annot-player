@@ -3,13 +3,13 @@
 
 #include "project/common/acpaths.h"
 #include "project/common/acsettings.h"
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
 # include "mac/qtmac/qtmac.h"
 # include "unix/qtunix/qtunix.h"
-#endif // Q_WS_MAC
-#ifdef Q_WS_WIN
+#endif // Q_OS_MAC
+#ifdef Q_OS_WIN
 # include "win/qtwin/qtwin.h"
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
 #include "module/qtext/filesystem.h"
 #include <QtGui/QDesktopServices>
 #include <QtCore/QUrl>
@@ -20,9 +20,9 @@
 #define DEBUG "acpath"
 #include "module/debug/debug.h"
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
 # define REZ_ICON_VIDEO  QCoreApplication::applicationDirPath() + "/../Resources/" "video.IconRez"
-#endif // Q_WS_MAC
+#endif // Q_OS_MAC
 
 // - Constructions -
 
@@ -67,10 +67,10 @@ AcLocationManager::openDownloadsLocation()
 {
   QString url = downloadsLocation();
   if (QFile::exists(url)) {
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     url.replace('\\', '/');
     url.prepend('/');
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
     url.prepend("file://");
     QDesktopServices::openUrl(QUrl(url));
   }
@@ -81,7 +81,7 @@ AcLocationManager::createDownloadsLocation()
 {
   QString path =  downloadsLocation();
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
   QString targetIcon = path + "/" "Icon\r";
   if (QFile::exists(targetIcon))
     return;
@@ -101,7 +101,7 @@ AcLocationManager::createDownloadsLocation()
   Q_UNUSED(ok);
   DOUT("ok =" << ok);
 
-#elif defined(Q_WS_WIN)
+#elif defined(Q_OS_WIN)
   QString targetIni = path + "/" "desktop.ini";
   if (QFile::exists(targetIni))
     return;

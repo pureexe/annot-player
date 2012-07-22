@@ -16,10 +16,10 @@ class TimeEdit : public QTimeEdit
   typedef QTimeEdit Base;
 
 public:
-  explicit TimeEdit(QWidget *parent = 0)
+  explicit TimeEdit(QWidget *parent = nullptr)
     : Base(parent) { }
 
-  explicit TimeEdit(const QTime &time, QWidget *parent = 0)
+  explicit TimeEdit(const QTime &time, QWidget *parent = nullptr)
     : Base(time, parent) { }
 
   QLineEdit *lineEdit() const { return Base::lineEdit(); }
@@ -29,9 +29,9 @@ signals:
 
   // - Events -
 protected:
-  virtual void keyPressEvent(QKeyEvent *event);
-  virtual void enterEvent(QEvent *event); ///< \reimp
-  virtual void leaveEvent(QEvent *event); ///< \reimp
+  void keyPressEvent(QKeyEvent *event) override;
+  void enterEvent(QEvent *event) override;
+  void leaveEvent(QEvent *event) override;
 };
 
 } // namespace QtExt

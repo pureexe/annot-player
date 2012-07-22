@@ -35,7 +35,7 @@ class ServerAgent: public QObject
   typedef AnnotCloud::AnnotationList AnnotationList;
 
 public:
-  explicit ServerAgent(QObject *parent = 0);
+  explicit ServerAgent(QObject *parent = nullptr);
 
 #ifdef WITH_MODULE_CLIENTAGENT
   void setClientAgent(ClientAgent *client);

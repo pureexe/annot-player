@@ -64,9 +64,9 @@ QT_END_NAMESPACE
 # define DWM_ENABLE_ONETIME_AERO_WIDGET(_w) ({ })
 #endif // WITH_WIN_DWM
 
-#define AC_CONTEXTMENU_OPACITY           0.8
-#define AC_CONTEXTMENU_COLOR             "orange"
-#define AC_CONTEXTMENU_COLOR_STRENGTH    1       // 0 = no color, 1 = full color (default)
+//#define AC_CONTEXTMENU_OPACITY           0.8
+//#define AC_CONTEXTMENU_COLOR             Qt::white
+//#define AC_CONTEXTMENU_COLOR_STRENGTH    1       // 0 = no color, 1 = full color (default)
 #define AC_TOOLBUTTON_BLUR_RADIUS        1.2     // By default, the blur radius is 5 pixels.
 
 #define AC_DIALOG_COLOR                  "blue"
@@ -108,7 +108,7 @@ public:
   static bool isAeroAvailable();
 
 protected:
-  explicit AcUi(QObject *parent = 0);
+  explicit AcUi(QObject *parent = nullptr);
 
 signals:
   void aeroEnabledChanged(bool t);
@@ -145,7 +145,7 @@ public:
   QTextEdit *makeTextEdit(ulong hints = 0, const QString &tip = QString());
 
   QLabel *makeLabel(ulong hints = 0,
-      const QString &title = QString(), const QString &tip = QString(), QWidget *buddy = 0);
+      const QString &title = QString(), const QString &tip = QString(), QWidget *buddy = nullptr);
   QLabel *makeLabel(ulong hints, const QString &title, QWidget *buddy)
   { return makeLabel(hints, title, QString(), buddy); }
 

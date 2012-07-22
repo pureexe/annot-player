@@ -18,7 +18,7 @@ class GesturePreferencesTab : public AcNullPreferencesTab
   QTextEdit *textEdit_;
 
 public:
-  explicit GesturePreferencesTab(QWidget *parent = 0);
+  explicit GesturePreferencesTab(QWidget *parent = nullptr);
 private:
   void createLayout();
 };

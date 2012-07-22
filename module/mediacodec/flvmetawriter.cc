@@ -13,7 +13,7 @@ void
 FlvMetaWriter::run()
 {
   if (!update())
-    emit error(tr("failed to merge FLV streams"));
+    emit errorMessage(tr("failed to merge FLV streams"));
 }
 
 // - FLV Header -

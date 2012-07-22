@@ -73,10 +73,10 @@ AnnotationEditor::AnnotationEditor(QWidget *parent)
 
   connect(new QShortcut(QKeySequence("CTRL+1"), this), SIGNAL(activated()), codeRibonButton_, SLOT(click()));
   connect(new QShortcut(QKeySequence("CTRL+2"), this), SIGNAL(activated()), htmlRibonButton_, SLOT(click()));
-#ifndef Q_WS_MAC
+#ifndef Q_OS_MAC
   connect(new QShortcut(QKeySequence("ALT+1"), this), SIGNAL(activated()), codeRibonButton_, SLOT(click()));
   connect(new QShortcut(QKeySequence("ALT+2"), this), SIGNAL(activated()), htmlRibonButton_, SLOT(click()));
-#endif // Q_WS_MAC
+#endif // Q_OS_MAC
 
   // Start up states
   setFontType(QApplication::font());

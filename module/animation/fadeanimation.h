@@ -12,7 +12,7 @@ class FadeAnimation : public QPropertyAnimation
   typedef QPropertyAnimation Base;
 
 public:
-  explicit FadeAnimation(QObject *target, const QByteArray &propertyName, QObject *parent = 0)
+  explicit FadeAnimation(QObject *target, const QByteArray &propertyName, QObject *parent = nullptr)
     : Base(target, propertyName, parent) { }
 
 public:

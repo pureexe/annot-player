@@ -4,18 +4,17 @@
 #include "annotationbrowser.h"
 #include "annotationeditor.h"
 #include "rc.h"
-#include "logger.h"
 #include "tr.h"
 #include "project/common/acfilteredtableview.h"
 #include "signalhub.h"
 #include "project/common/acui.h"
 #include "module/qtext/datetime.h"
+#include "module/qtext/layoutwidget.h"
 #include "module/annotcloud/traits.h"
 #include "module/annotcloud/annottag.h"
 #include <QtGui>
 
 using namespace AnnotCloud;
-using namespace Logger;
 
 #ifdef Q_OS_MAC
 # define K_CTRL        "cmd"
@@ -49,11 +48,11 @@ AnnotationBrowser::AnnotationBrowser(SignalHub *hub, QWidget *parent)
   connect(new QShortcut(QKeySequence("CTRL+1"), this), SIGNAL(activated()), meButton_, SLOT(click()));
   connect(new QShortcut(QKeySequence("CTRL+2"), this), SIGNAL(activated()), nowButton_, SLOT(click()));
   connect(new QShortcut(QKeySequence("CTRL+3"), this), SIGNAL(activated()), subtitleButton_, SLOT(click()));
-#ifndef Q_WS_MAC
+#ifndef Q_OS_MAC
   connect(new QShortcut(QKeySequence("ALT+1"), this), SIGNAL(activated()), meButton_, SLOT(click()));
   connect(new QShortcut(QKeySequence("ALT+2"), this), SIGNAL(activated()), nowButton_, SLOT(click()));
   connect(new QShortcut(QKeySequence("ALT+3"), this), SIGNAL(activated()), subtitleButton_, SLOT(click()));
-#endif // Q_WS_MAC
+#endif // Q_OS_MAC
 
   // Initial states
   tableView_->sortByColumn(HD_CreateTime, Qt::DescendingOrder);
@@ -118,7 +117,7 @@ AnnotationBrowser::createLayout()
     rows->setContentsMargins(9, 9, 9, 9);
     setContentsMargins(0, 0, 0, 0);
 
-  } setLayout(rows);
+  } setCentralWidget(new LayoutWidget(rows, this));
 
   // Set initial states
 
@@ -143,6 +142,10 @@ AnnotationBrowser::createContextMenu()
   contextMenu_->addSeparator();
   //viewUserAct_ = contextMenu_->addAction(TR(T_MENUTEXT_VIEWTHISUSER), this, SLOT(viewUser()));
   blockUserAct_ = contextMenu_->addAction(TR(T_MENUTEXT_BLOCKTHISUSER), this, SLOT(blockUser()));
+
+  contextMenu_->addSeparator();
+  analyzeUserAct_ = contextMenu_->addAction(tr("User Analytics"), this, SLOT(analyzeUser()));
+  analyticsAct_ = contextMenu_->addAction(tr("Annotation Analytics"), this, SIGNAL(annotationAnalyticsRequested()));
 }
 
 
@@ -363,6 +366,7 @@ AnnotationBrowser::languageToString(int lang)
   case Traits::Korean:          return TR(T_KOREAN);
   case Traits::French:          return TR(T_FRENCH);
   case Traits::German:          return TR(T_GERMAN);
+  case Traits::Italian:         return TR(T_ITALIAN);
   case Traits::Spanish:         return TR(T_SPANISH);
   case Traits::Portuguese:      return TR(T_PORTUGUESE);
 
@@ -404,7 +408,7 @@ AnnotationBrowser::takeAnnotationOwnership()
     return;
 
   if (!userId_ || currentUserId() != User::guest().id()) {
-    warn(tr("cannot modify other's annotation"));
+    emit warning(tr("cannot modify other's annotation"));
     return;
   }
 
@@ -426,7 +430,7 @@ AnnotationBrowser::saveAnnotationText(const QString &text)
     return;
 
   if (!userId_ || currentUserId() != userId_) {
-    warn(tr("cannot edit other's annotation"));
+    emit warning(tr("cannot edit other's annotation"));
     return;
   }
 
@@ -487,16 +491,16 @@ AnnotationBrowser::copyAnnotation()
   QClipboard *clipboard = QApplication::clipboard();
   if (clipboard) {
     clipboard->setText(text);
-    log(TR(T_SUCCEED_COPIED) + ": " + text);
+    emit message(TR(T_SUCCEED_COPIED) + ": " + text);
   } else
-    warn(TR(T_ERROR_CLIPBOARD_UNAVAILABLE));
+    emit warning(TR(T_ERROR_CLIPBOARD_UNAVAILABLE));
 }
 
 void
 AnnotationBrowser::deleteAnnotation()
 {
   if (!userId_ || currentUserId() != userId_) {
-    warn(tr("cannot delete other's annotation"));
+    emit warning(tr("cannot delete other's annotation"));
     return;
   }
 
@@ -557,6 +561,14 @@ AnnotationBrowser::blockUser()
     emit userBlockedWithId(uid);
 }
 
+void
+AnnotationBrowser::analyzeUser()
+{
+  qint64 uid = currentUserId();
+  if (uid)
+    emit userAnalyticsRequested(uid);
+}
+
 // - Events -
 
 void
@@ -596,6 +608,8 @@ AnnotationBrowser::updateContextMenu()
   blockAnnotAct_->setVisible(id && userId_ != cuid);
   //viewUserAct_->setVisible(cuid && cuid != userId_);
   blockUserAct_->setVisible(cuid && cuid != userId_);
+  analyzeUserAct_->setVisible(cuid);
+  analyticsAct_->setVisible(true);
 }
 
 //void AnnotationBrowser::dragEnterEvent(QDragEnterEvent *event)     { emit dragEnterEventReceived(event); }

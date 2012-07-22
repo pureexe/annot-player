@@ -70,7 +70,7 @@ BilibiliCodec::parseReply(QNetworkReply *reply)
   if (!reply->isFinished() || reply->error() != QNetworkReply::NoError) {
     int retry = ++retries_[url];
     if (retry <= MaxRetries) {
-      emit error(
+      emit errorMessage(
         tr("network error, retry")
         + QString(" (%1/%2):").arg(QString::number(retry)).arg(QString::number(MaxRetries))
         + url
@@ -78,7 +78,7 @@ BilibiliCodec::parseReply(QNetworkReply *reply)
       QString originalUrl = reply->attribute(RequestUrlAttribute).toString();
       fetch(url, originalUrl);
     } else
-      emit error(tr("network error, failed to resolve media URL") + ": " + url);
+      emit errorMessage(tr("network error, failed to resolve media URL") + ": " + url);
     DOUT("exit: network error:" << reply->errorString());
     return;
   }
@@ -94,7 +94,7 @@ BilibiliCodec::parseReply(QNetworkReply *reply)
     l = parseDocument(data);
   }
   if (l.isEmpty())
-    emit error(tr("failed to resolve annotations from URL") + ": " + reply->url().toString());
+    emit errorMessage(tr("failed to resolve annotations from URL") + ": " + reply->url().toString());
   else {
     QString url = reply->url().toString(),
             originalUrl = reply->attribute(QNetworkRequest::UserMax).toString();
@@ -117,7 +117,9 @@ BilibiliCodec::parseDocument(const QByteArray &data)
     return AnnotationList();
   }
   QDomDocument doc;
-  doc.setContent(skipXmlLeadingComment(data));
+  doc.setContent(skipXmlLeadingComment(
+    QChar(data[0]).isSpace() ? data.trimmed() : data
+  ));
   if (doc.isNull()) {
     DOUT("exit: invalid document root");
     return AnnotationList();
@@ -190,9 +192,9 @@ BilibiliCodec::parseAttribute(const QString &attr)
 
   // 2
   //fontSize
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
   fontSize *= 0.9;
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
   if (fontSize > 0)
     t += CORE_CMD_SIZE  "[" + QString::number(fontSize) + "]";
 

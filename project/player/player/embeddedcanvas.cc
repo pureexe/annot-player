@@ -122,11 +122,11 @@ EmbeddedCanvas::paintHistogram(QPainter &painter, const QRect &view, const Annot
   enum { FontAlpha = quint8(255 * 0.9) };
 
   enum { MarginSize = 3 };
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
   enum { AxisFontSize = 9, LabelFontSize = 9, NoteFontSize = 9, PeakFontSize = 8 };
 #else
   enum { AxisFontSize = 10, LabelFontSize = 10, NoteFontSize = 10, PeakFontSize = 9 };
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
   enum { PeakRotation = -20 };
   enum { LabelHeight = LabelFontSize + 2, PeakFontHeight = PeakFontSize + 3 };
   enum { LabelWidth = 100 };
@@ -208,7 +208,7 @@ EmbeddedCanvas::paintHistogram(QPainter &painter, const QRect &view, const Annot
 
   int x0 = width * startX / rangeX;
 
-  for (Histogram::ConstIterator i = hist.begin(); i != hist.end(); ++i) {
+  for (auto i = hist.constBegin(); i != hist.constEnd(); ++i) {
     int x = i.key(),
         y = i.value();
 
@@ -252,11 +252,11 @@ EmbeddedCanvas::paintHistogram(QPainter &painter, const QRect &view, const Annot
 
     QFont f = painter.font();
     f.setPointSize(AxisFontSize);
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     f.setBold(false);
 #else
     f.setBold(true);
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
     painter.setFont(f);
 
     QColor axisColor(Qt::green);
@@ -315,7 +315,7 @@ EmbeddedCanvas::paintHistogram(QPainter &painter, const QRect &view, const Annot
     int limitY = qMax(relativeY * 5/8, minY);
     while (peaks.size() < MinPeakCount && limitY && limitY >= minY) {
       peaks.clear();
-      for (Histogram::ConstIterator i = hist.begin(); i != hist.end(); ++i) {
+      for (auto i = hist.constBegin(); i != hist.constEnd(); ++i) {
         int x = i.key(),
             y = i.value();
         if (y < limitY)
@@ -467,11 +467,11 @@ EmbeddedCanvas::paintHistogram(QPainter &painter, const QRect &view, const Annot
 
     QFont f = painter.font();
     //f.setItalic(true);
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     f.setBold(false);
 #else
     f.setBold(true);
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
     f.setPointSize(NoteFontSize);
     painter.setFont(f);
     painter.setPen(Qt::red);
@@ -504,11 +504,11 @@ EmbeddedCanvas::paintCoordinate(QPainter &painter, const QRect &view)
   enum { FontAlpha = quint8(255 * 0.9) };
 
   enum { MarginSize = 3 };
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
   enum { LabelFontSize = 9 };
 #else
   enum { LabelFontSize = 10 };
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
   enum { LabelHeight = LabelFontSize + 2 };
 
   enum { unit = 3000 }; // 3 sec

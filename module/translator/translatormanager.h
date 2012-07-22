@@ -20,7 +20,7 @@ public:
   enum ServiceProviderBit { MicrosoftBit = 1 << Microsoft, GoogleBit = 1 << Google, RomajiBit = 1 << Romaji };
   enum { AllServices = MicrosoftBit | GoogleBit | RomajiBit };
 public:
-  explicit TranslatorManager(QObject *parent = 0);
+  explicit TranslatorManager(QObject *parent = nullptr);
 
   ulong services() const { return services_; }
   bool hasServices() const { return services_; }
@@ -54,7 +54,7 @@ public slots:
     );
   }
 
-  virtual void translate(const QString &text, const QString &to, const QString &from = QString()) ///< \reimp
+  void translate(const QString &text, const QString &to, const QString &from = QString()) override
   {
     for (int service = 0; service < ServiceCount; service++)
       if (hasService(service))

@@ -21,7 +21,6 @@
 #ifdef WITH_MODULE_MRLRESOLVER
 # include "module/mrlresolver/luamrlresolver.h"
 #endif // WITH_MODULE_LUARESOLVER
-#include "module/qtext/algorithm.h"
 #include "module/qtext/network.h"
 #include "module/qtext/filesystem.h"
 #include "module/qtext/htmltag.h"
@@ -53,10 +52,10 @@ namespace { namespace detail {
     explicit ProgressTask(HttpStreamSession *session)
       : session_(session), stop_(false) { Q_ASSERT(session_); }
 
-    virtual void stop() ///< \reimp
+    void stop() override
     { stop_ = true; }
 
-    virtual void run() ///< \reimp
+    void run() override
     {
       while (!stop_ && session_->isRunning()) {
         session_->updateProgress();
@@ -75,9 +74,11 @@ HttpStreamSession::~HttpStreamSession()
 {
   if (progressTask_)
     progressTask_->stop();
-  if (!ins_.isEmpty())
-    foreach (InputStream *in, QtExt::revertList(ins_)) // revert list so that nam will be deleted later
-      delete in;
+  if (!ins_.isEmpty()) {
+    auto p = ins_.constEnd(); // revert list so that nam will be deleted later
+    while (p != ins_.constBegin()) // foreach (InputStream *in, QtExt::revertList(ins_))
+      delete *--p;
+  }
   if (fifo_)
     delete fifo_;
   if (merger_)
@@ -142,7 +143,7 @@ HttpStreamSession::updateFileName()
 {
   //bool mp4 = contentType().contains("mp4", Qt::CaseInsensitive);
   QString suf = ".flv";
-  fileName_ = cachePath() + FILE_PATH_SEP + QtExt::escapeFileName(mediaTitle()) + suf;
+  fileName_ = cacheDirectory() + FILE_PATH_SEP + QtExt::escapeFileName(mediaTitle()) + suf;
 }
 
 // - Actions -
@@ -169,7 +170,7 @@ HttpStreamSession::save()
 {
   DOUT("enter");
   if (!isFinished()) {
-    emit error(tr("downloading"));
+    emit errorMessage(tr("downloading"));
     DOUT("exit: not finished");
     return;
   }
@@ -184,14 +185,15 @@ HttpStreamSession::save()
   if (!dir.exists())
     dir.mkpath(dir.absolutePath());
 
-  //QFile::remove(fileName_);
-  for (int i = 2; QFile::exists(fileName_); i++)
-    fileName_ = fi.absolutePath() + FILE_PATH_SEP + fi.completeBaseName() + " " + QString::number(i) + "." + fi.suffix();
+  //for (int i = 2; QFile::exists(fileName_); i++)
+  //  fileName_ = fi.absolutePath() + FILE_PATH_SEP + fi.completeBaseName() + " " + QString::number(i) + "." + fi.suffix();
+  QtExt::trashOrRemoveFile(fileName_);
 
   bool ok = fifo_->writeFile(fileName_);
   if (!ok || !FlvCodec::isFlvFile(fileName_)) {
-    QFile::remove(fileName_);
-    emit error(tr("download failed") + ": " + fileName_);
+    //QFile::remove(fileName_);
+    QtExt::trashOrRemoveFile(fileName_);
+    emit errorMessage(tr("download failed") + ": " + fileName_);
     DOUT("exit: fifo failed to write to file");
     return;
   }
@@ -297,8 +299,9 @@ HttpStreamSession::run()
   }
   if (!ins_.isEmpty()) {
     DOUT("delete last ins");
-    foreach (InputStream *in, QtExt::revertList(ins_)) // revert list so that nam will be deleted later
-      delete in;
+    auto p = ins_.constEnd(); // revert list so that nam will be deleted later
+    while (p != ins_.constBegin()) // foreach (InputStream *in, QtExt::revertList(ins_))
+      delete *--p;
     ins_.clear();
   }
 
@@ -312,12 +315,12 @@ HttpStreamSession::run()
 
   //if (cookieJar()) {
   //  nam_->setCookieJar(cookieJar());
-  //  cookieJar()->setParent(0);
+  //  cookieJar()->setParent(nullptr);
   //}
 
   bool ok = false;
   int count = 0;
-  QNetworkAccessManager *nam = 0;
+  QNetworkAccessManager *nam = nullptr;
   int namCount = 0;
   for (int j = 0; j < MaxDownloadRetries && !ok && !isStopped(); j++) {
     DOUT("total retry =" << j);
@@ -357,9 +360,9 @@ HttpStreamSession::run()
       if (jar) {
         setCookieJar(jar);
         //nam_->setCookieJar(jar);
-        jar->setParent(0); // memory leak
+        jar->setParent(nullptr); // memory leak
       }
-      nam = 0; // reset nam
+      nam = nullptr; // reset nam
 
       urls_.clear();
       bool updateDuration = !duration_;
@@ -395,14 +398,14 @@ HttpStreamSession::run()
       for (int i = 0; i < MaxIndividualDownloadRetries && !ok && !isStopped(); i++) {
         DOUT("individual retry =" << i);
 
-        RemoteStream *in = new BufferedRemoteStream(0);
+        RemoteStream *in = new BufferedRemoteStream(nullptr);
         if (!nam || count % QtExt::MaxConcurrentNetworkRequestCount == namCount) {
           if (!nam)
             namCount = count % QtExt::MaxConcurrentNetworkRequestCount;
           nam = new QNetworkAccessManager(in);
           if (cookieJar()) {
             nam->setCookieJar(cookieJar());
-            cookieJar()->setParent(0);
+            cookieJar()->setParent(nullptr);
           }
         }
         Q_ASSERT(nam);
@@ -429,7 +432,7 @@ HttpStreamSession::run()
           //in->deleteLater();
           DOUT("deleting remote stream");
           if (nam->parent() == in)
-            nam = 0;
+            nam = nullptr;
           delete in;
           DOUT("remote stream deleted");
           emit warning(
@@ -450,16 +453,17 @@ HttpStreamSession::run()
   //  ready_ = true;
   //  readyCond_.wakeAll();
   //  stoppedCond_.wakeAll();
-  //  emit error(tr("network error to access URL") + ": " + url_.toString());
+  //  emit errorMessage(tr("network error to access URL") + ": " + url_.toString());
   //  DOUT("exit: network error");
   //  return;
   //}
 
   if (!ok || isStopped()) {
-    foreach (InputStream *in, QtExt::revertList(ins_)) { // revert list so that nam will be deleted later
-      auto p = static_cast<RemoteStream *>(in);
-      p->stop();
-      delete p;
+    auto p = ins_.constEnd(); // revert list so that nam will be deleted later
+    while (p != ins_.constBegin()) { // foreach (InputStream *in, QtExt::revertList(ins_))
+      auto in = static_cast<RemoteStream *>(*--p);
+      in->stop();
+      delete in;
     }
     ins_.clear();
     DOUT("WARNING: failed to download url:");
@@ -468,7 +472,7 @@ HttpStreamSession::run()
  if (ins_.isEmpty()) {
     DOUT("access forbidden");
     setState(Error);
-    emit error(tr("access forbidden") + ": " + urls_.first().toString());
+    emit errorMessage(tr("access forbidden") + ": " + urls_.first().toString());
 
     //if (nam_) {
     //  nam_->deleteLater();
@@ -499,8 +503,8 @@ HttpStreamSession::run()
     merger_->setOutputStream(fifo_);
     merger_->setDuration(duration_);
 
-    connect(merger_, SIGNAL(error(QString)), SIGNAL(error(QString)));
-    connect(merger_, SIGNAL(error(QString)), SLOT(stop()));
+    connect(merger_, SIGNAL(errorMessage(QString)), SIGNAL(errorMessage(QString)));
+    connect(merger_, SIGNAL(errorMessage(QString)), SLOT(stop()));
     //connect(merger_, SIGNAL(timestampChanged(qint64)), SLOT(updateProgress()));
   }
 
@@ -523,7 +527,7 @@ HttpStreamSession::run()
     DOUT("duration =" << duration_);
   } else {
     setState(Error);
-    emit error(tr("failed to parse FLV streams"));
+    emit errorMessage(tr("failed to parse FLV streams"));
   }
 
   ready_ = true;
@@ -541,7 +545,7 @@ HttpStreamSession::run()
       merger_->finish();
     else {
       setState(Error);
-      emit error(tr("failed to merge FLV streams"));
+      emit errorMessage(tr("failed to merge FLV streams"));
     }
   }
 

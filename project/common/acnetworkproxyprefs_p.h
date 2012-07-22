@@ -22,11 +22,11 @@ class AcNetworkProxyPrefs : public AcPreferencesTab
 
   enum ProxyType { SocksProxy = 0, HttpProxy, ProxyTypeCount };
 public:
-  explicit AcNetworkProxyPrefs(AcSettings *settings, QWidget *parent = 0);
+  explicit AcNetworkProxyPrefs(AcSettings *settings, QWidget *parent = nullptr);
 
 public slots:
-  virtual bool save(); ///< \reimp
-  virtual void load(); ///< \reimp
+  bool save() override;
+  void load() override;
   void updateButtons();
 
 protected:

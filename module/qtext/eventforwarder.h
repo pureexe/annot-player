@@ -14,6 +14,8 @@ namespace QtExt {
 class EventForwarder
 {
 public:
+  virtual ~EventForwarder() { }
+
   virtual void sendContextMenuEvent(QContextMenuEvent *) { }
 
   virtual void sendMouseMoveEvent(QMouseEvent *) { }

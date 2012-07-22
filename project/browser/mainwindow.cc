@@ -14,6 +14,7 @@
 #include "project/common/acplayer.h"
 #include "project/common/acdownloader.h"
 #include "project/common/acconsole.h"
+#include "project/common/acprotocol.h"
 #include "module/webbrowser/network/wbnetworkaccessmanager.h"
 #include "module/animation/fadeanimation.h"
 #include "module/searchengine/searchenginefactory.h"
@@ -27,12 +28,17 @@
 #ifdef WITH_MODULE_MAGNIFIER
 # include "module/magnifier/magnifier.h"
 #endif // WITH_MODULE_MAGNIFIER
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
 # include "win/qtwin/qtwin.h"
-#endif // Q_WS_WIN
-#include <boost/tuple/tuple.hpp>
+#endif // Q_OS_WIN
 #include <QtGui>
 #include <QtWebKit>
+
+#ifdef __clang__
+# pragma clang diagnostic ignored "-Wunused-parameter" // in boost algorithm
+#endif // __clang__
+#include <boost/range/algorithm.hpp>
+#include <boost/tuple/tuple.hpp>
 
 #define DEBUG "mainwindow"
 #include "module/debug/debug.h"
@@ -46,11 +52,11 @@
 #define HOMEPAGE_ZH    "http://www.bilibili.tv/video/bangumi.html"
 
 #define MIN_SIZE        QSize(400, 300)
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
 # define DEFAULT_SIZE  QSize(1000 + 9*2, 650)
 #else
 # define DEFAULT_SIZE  QSize(1000 + 9*2, 710) // width for nicovideo.jp + margin*2, height for newtab on mac
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
 
 // - Construction -
 
@@ -62,15 +68,15 @@
   Qt::WindowMinMaxButtonsHint | \
   Qt::WindowCloseButtonHint )
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
 # define TEXT_SIZE_SCALE 0.9
 #else
 # define TEXT_SIZE_SCALE 1.0
-#endif // Q_WS_MAC
+#endif // Q_OS_MAC
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
 # define USE_MDI
-#endif // Q_WS_MAC
+#endif // Q_OS_MAC
 
 MainWindow::MainWindow(QWidget *parent)
   : Base(parent), console_(0), magnifier_(0)
@@ -82,9 +88,9 @@ MainWindow::MainWindow(QWidget *parent)
 
   AcUi::globalInstance()->setStatusBarStyle(statusBar());
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
   if (!QtWin::isWindowsVistaOrLater())
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
   { setContentsMargins(4, 2, 4, 2); } // left, top, right, bottom
 
   autoHideToolBarTimer_ = new QTimer(this);
@@ -141,6 +147,7 @@ MainWindow::MainWindow(QWidget *parent)
   fadeAni_ = new FadeAnimation(this, "windowOpacity", this);
 
   // - IPC -
+  DOUT("create app delegates");
   playerDelegate_ = new AcPlayer(this);
   downloaderDelegate_ = new AcDownloader(this);
   connect(this, SIGNAL(openUrlWithAcPlayerRequested(QString)), SLOT(openUrlWithAcPlayer(QString)));
@@ -149,43 +156,39 @@ MainWindow::MainWindow(QWidget *parent)
   connect(this, SIGNAL(downloadAnnotationUrlRequested(QString)), SLOT(downloadAnnotationUrl(QString)));
   connect(this, SIGNAL(newWindowRequested()), SLOT(newWindow()));
   connect(this, SIGNAL(fullScreenRequested()), SLOT(toggleFullScreen()));
-  /*
-  connect(AcBrowserController::globalController(), SIGNAL(message(QString)),
-          SLOT(showMessage(QString)), Qt::QueuedConnection);
-  connect(AcBrowserController::globalController(), SIGNAL(error(QString)),
-          SLOT(error(QString)), Qt::QueuedConnection);
-  connect(AcBrowserController::globalController(), SIGNAL(warning(QString)),
-          SLOT(warn(QString)), Qt::QueuedConnection);
-  connect(AcBrowserController::globalController(), SIGNAL(notification(QString)),
-          SLOT(notify(QString)), Qt::QueuedConnection);
-  connect(AcBrowserController::globalController(), SIGNAL(arguments(QStringList)),
-          SLOT(openUrls(QStringList)), Qt::QueuedConnection);
-  */
+
+  //AC_CONNECT_MESSAGES(AcBrowserController::globalController(), this, Qt::QueuedConnection);
+  //connect(AcBrowserController::globalController(), SIGNAL(arguments(QStringList)),
+  //        SLOT(openUrls(QStringList)), Qt::QueuedConnection);
 
   annotationDownloader_ = new AnnotationDownloader(this);
   annotationDownloader_->setDownloadsLocation(QDesktopServices::storageLocation(QDesktopServices::DesktopLocation));
-  connect(annotationDownloader_, SIGNAL(message(QString)), SLOT(showMessage(QString)), Qt::QueuedConnection);
-  connect(annotationDownloader_, SIGNAL(warning(QString)), SLOT(warn(QString)), Qt::QueuedConnection);
-  connect(annotationDownloader_, SIGNAL(error(QString)), SLOT(error(QString)), Qt::QueuedConnection);
+  connect(annotationDownloader_, SIGNAL(fileSaved(QString)), SLOT(notifyFileSaved(QString)), Qt::QueuedConnection);
 
-  // - Message -
-  DownloaderController *dc = DownloaderController::globalController();
-  connect(dc, SIGNAL(message(QString)), SLOT(showMessage(QString)), Qt::QueuedConnection);
-  connect(dc, SIGNAL(warning(QString)), SLOT(warn(QString)), Qt::QueuedConnection);
-  connect(dc, SIGNAL(error(QString)), SLOT(error(QString)), Qt::QueuedConnection);
-  connect(dc, SIGNAL(notification(QString)), SLOT(notify(QString)), Qt::QueuedConnection);
+  // - Messages -
+  AC_CONNECT_MESSAGE(annotationDownloader_, this, Qt::QueuedConnection);
+  AC_CONNECT_ERROR(annotationDownloader_, this, Qt::QueuedConnection);
+  AC_CONNECT_WARNING(annotationDownloader_, this, Qt::QueuedConnection);
+
+  AC_CONNECT_MESSAGES(DownloaderController::globalController(), this, Qt::QueuedConnection);
 
   // - Shortcuts -
   new QShortcut(QKeySequence::New, this, SLOT(newWindow()));
 
+  DOUT("create menus");
   createMenus();
+
+  DOUT("create gestures");
   createGestures();
 
   // - Settings -
+
+  DOUT("load settings");
   Settings *settings = Settings::globalSettings();
   setClosedUrls(settings->closedUrls());
   addRecentUrls(settings->recentUrls() << WB_BLANK_PAGE);
 
+  DOUT("load search history");
   int searchEngine = settings->searchEngine();
   if (searchEngine < 0)
     switch (lang) {
@@ -303,9 +306,9 @@ MainWindow::createGestures()
 void
 MainWindow::createMenus()
 {
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
   menuBar()->hide();
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
   QMenu *
   m = menuBar()->addMenu(tr("&File")); {
     m->addAction(tr("New Window"), this, SLOT(newWindow()), QKeySequence::New);
@@ -348,9 +351,9 @@ MainWindow::createMenus()
     m->addAction(tr("&Console"), this, SLOT(showConsole()));
     m->addAction(tr("&About"), this, SLOT(about())); // DO NOT TRANSLATE ME
   }
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
   new QShortcut(QKeySequence("ALT+O"), this, SLOT(preferences()));
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
 }
 
 QStringList
@@ -444,9 +447,9 @@ MainWindow::keyPressEvent(QKeyEvent *e)
 {
   switch (e->key()) {
   case Qt::Key_CapsLock:
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     menuBar()->setVisible(!menuBar()->isVisible());
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
     break;
   default: ;
   }
@@ -494,7 +497,7 @@ MainWindow::saveRecentTabs()
       if (!t.isEmpty() && t != WB_BLANK_PAGE)
         urls.append(t);
     }
-    urls = QtExt::uniqueList(urls);
+    boost::unique(urls);
     Settings::globalSettings()->setRecentTabs(urls);
   } else
     Settings::globalSettings()->clearRecentTabs();
@@ -532,9 +535,9 @@ MainWindow::closeEvent(QCloseEvent *event)
 
   saveCookieJar();
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
   QTimer::singleShot(0, qApp, SLOT(quit())); // ensure quit app and clean up zombie threads
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
 
   Base::closeEvent(event);
   DOUT("close");
@@ -568,21 +571,21 @@ void
 MainWindow::newWindow()
 {
 #ifdef USE_MDI
-  showMessage(tr("openning new window") + " ...");
+  showMessage(tr("opening new window") + " ...");
   (new Self)->show();
 #else
   bool ok = false;
   QString app = QCoreApplication::applicationFilePath();
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
   Q_UNUSED(app);
   //ok = QtMac::open(app);
-#elif defined(Q_WS_WIN)
+#elif defined(Q_OS_WIN)
   ok = QProcess::startDetached('"' + app + '"');
 #else
   ok = QProcess::startDetached(app);
-#endif // Q_WS_
+#endif // Q_OS_
   if (ok)
-    showMessage(tr("openning new window") + " ...");
+    showMessage(tr("opening new window") + " ...");
   else
     warn(tr("failed open new window"));
 #endif // USE_MDI
@@ -599,7 +602,7 @@ MainWindow::openUrlWithAcPlayer(const QString &address)
     return;
   if (!url.startsWith("http://"))
     url.prepend("http://");
-  showMessage(tr("openning") + ": " + url);
+  showMessage(tr("opening") + ": " + url);
   playerDelegate_->openUrl(url);
   DOUT("exit");
 }
@@ -613,7 +616,7 @@ MainWindow::importUrlToAcPlayer(const QString &address)
     return;
   if (!url.startsWith("http://"))
     url.prepend("http://");
-  showMessage(tr("openning") + ": " + url);
+  showMessage(tr("opening") + ": " + url);
   playerDelegate_->importUrl(url);
   DOUT("exit");
 }
@@ -627,7 +630,7 @@ MainWindow::openUrlWithAcDownloader(const QString &address)
     return;
   if (!url.startsWith("http://", Qt::CaseInsensitive))
     url.prepend("http://");
-  showMessage(tr("openning") + ": " + url);
+  showMessage(tr("opening") + ": " + url);
   downloaderDelegate_->openUrl(url);
   DOUT("exit");
 }
@@ -758,7 +761,7 @@ MainWindow::scrollBottom()
 void
 MainWindow::about()
 {
-  static QWidget *w = 0;
+  static QWidget *w = nullptr;
   if (!w) {
     w = new AcAbout(G_APPLICATION, G_VERSION);
     connect(qApp, SIGNAL(aboutToQuit()), w, SLOT(close()));
@@ -769,7 +772,7 @@ MainWindow::about()
 void
 MainWindow::preferences()
 {
-  static QWidget *w = 0;
+  static QWidget *w = nullptr;
   if (!w) {
     w = new Preferences;
     connect(qApp, SIGNAL(aboutToQuit()), w, SLOT(close()));
@@ -780,10 +783,10 @@ MainWindow::preferences()
 void
 MainWindow::setFullScreen(bool t)
 {
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
   if (AcUi::globalInstance()->isAeroEnabled())
     AcUi::globalInstance()->setWindowDwmEnabled(this, false);
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
 
   //setMouseTracking(t);
   setDraggable(!t);
@@ -796,10 +799,10 @@ MainWindow::setFullScreen(bool t)
     showNormal();
   }
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
   if (AcUi::globalInstance()->isAeroEnabled())
     AcUi::globalInstance()->setWindowDwmEnabled(this, true);
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
 
   if (t)
     autoHideToolBarTimer_->start();
@@ -864,6 +867,15 @@ MainWindow::toggleMagnifier()
     magnifier_->raise();
   }
 #endif // WITH_MODULE_MAGNIFIER
+}
+
+// - Log messages -
+
+void
+MainWindow::notifyFileSaved(const QString &fileName)
+{
+  showMessage(tr("file saved") + ": " + fileName);
+  QApplication::beep();
 }
 
 // EOF

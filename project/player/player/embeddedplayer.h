@@ -7,7 +7,6 @@
 #include "playerui.h"
 
 QT_FORWARD_DECLARE_CLASS(QTimer)
-QT_FORWARD_DECLARE_CLASS(QToolButton)
 
 class DataManager;
 class EmbeddedCanvas;
@@ -23,7 +22,7 @@ class EmbeddedPlayerUi : public PlayerUi
 
 public:
   explicit EmbeddedPlayerUi(SignalHub *hub, Player *player, ServerAgent *server,
-                            DataManager *data, QWidget *parent = 0);
+                            DataManager *data, QWidget *parent = nullptr);
 
 signals:
   void fullScreenModeChanged(bool t);
@@ -42,22 +41,25 @@ public:
   bool isOnTop() const { return top_; }
 public slots:
   void setOnTop(bool t);
+  void toggleOnTop() { setOnTop(!isOnTop()); }
 
 protected slots:
   void showWhenEmbedded();
-  virtual void updateInputCountButton(); ///< \reimp
+  void updateInputCountButton() override;
+  void hideInfoView(bool invisible);
 
 public slots:
   void setAutoHideEnabled(bool enabled = true);
   void autoHide();
 
+  void updateDockButton();
   void updateGeometry();    ///< Automatically adjust from its parent
   void resetAutoHideTimeout();  ///< Reset timeout for autohide EmbeddedPlayer
 
   void setContainerWindow(WId winId);
   void setContainerWidget(QWidget *w);
 
-  virtual void setVisible(bool visible); ///< \reimp
+  void setVisible(bool visible) override;
 
   void setFullScreenMode(bool t = true);
 
@@ -79,7 +81,7 @@ private:
   QTimer *autoHideTimer_;
   QTimer *trackingTimer_;
 
-  QToolButton *menuButton_;
+  QToolButton *toggleDockButton_;
 
   WId containerWindow_;
   QWidget *containerWidget_;

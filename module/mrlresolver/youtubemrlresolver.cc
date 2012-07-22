@@ -47,20 +47,19 @@ bool
 YoutubeMrlResolver::resolveMedia(const QString &href)
 {
   DOUT("enter: href =" << href);
-  static const QString errorMessage = tr("failed to resolve URL");
   QUrl url(href);
   if (url.path().compare("/watch", Qt::CaseInsensitive) ||
       (url.host().compare("youtube.com", Qt::CaseInsensitive) &&
        url.host().compare("www.youtube.com"))
       ) {
-    emit error(errorMessage + ": " + href);
+    emit errorMessage(tr("failed to resolve URL") + ": " + href);
     DOUT("exit: mimatched host or path");
     return false;
   }
 
   QString v = url.queryItemValue("v");
   if (v.isEmpty()) {
-    emit error(errorMessage + ": " + href);
+    emit errorMessage(tr("failed to resolve URL") + ": " + href);
     DOUT("exit: mimatched query value");
     return false;
   }
@@ -80,20 +79,19 @@ void
 YoutubeMrlResolver::resolveMedia(QNetworkReply *reply)
 {
   DOUT("enter");
-  static const QString resolveErrorMessage = tr("failed to resolve URL");
 
   Q_ASSERT(reply);
   reply->deleteLater();
   if (!reply->isFinished() || reply->error() != QNetworkReply::NoError) {
-    //emit error(reply->errorString());
-    emit error(tr("network error, failed to resolve media URL") + ": " + reply->url().toString());
+    //emit errorMessage(reply->errorString());
+    emit errorMessage(tr("network error, failed to resolve media URL") + ": " + reply->url().toString());
     DOUT("exit: error =" << reply->error());
     return;
   }
 
   QString data = reply->readAll();
   if (data.isEmpty()) {
-    emit error(resolveErrorMessage + ": " + reply->url().toString());
+    emit errorMessage(tr("failed to resolve URL")+ ": " + reply->url().toString());
     DOUT("exit: empty data");
     return;
   }
@@ -142,7 +140,7 @@ YoutubeMrlResolver::resolveMedia(QNetworkReply *reply)
     url = urls.first();
 
   if (url.isEmpty())  {
-    emit error(resolveErrorMessage + ": " + reply->url().toString());
+    emit errorMessage(tr("failed to resolve URL") + ": " + reply->url().toString());
     DOUT("exit: empty data");
     return;
   }

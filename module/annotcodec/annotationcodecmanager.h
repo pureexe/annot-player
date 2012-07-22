@@ -24,11 +24,11 @@ public:
   static Self *globalInstance() { static Self g; return &g; }
 
 protected:
-  explicit AnnotationCodecManager(QObject *parent = 0);
+  explicit AnnotationCodecManager(QObject *parent = nullptr);
 
 signals:
-  void error(QString msg);
-  void message(QString msg);
+  void message(const QString &text);
+  void errorMessage(const QString &text);
 
   void fetched(AnnotationList annots, QString url, QString originalUrl);
 

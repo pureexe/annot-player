@@ -23,7 +23,7 @@ class AcHorizontalSlider : public AcSlider
   QPropertyAnimation *grooveHeightAni_;
 
 public:
-  explicit AcHorizontalSlider(QWidget *parent = 0);
+  explicit AcHorizontalSlider(QWidget *parent = nullptr);
 
   // - Properties -
 
@@ -40,9 +40,9 @@ protected slots:
 
   // - Events -
 protected:
-  virtual void enterEvent(QEvent *event); ///< \reimp
-  virtual void leaveEvent(QEvent *event); ///< \reimp
-  virtual void changeEvent(QEvent *event); ///< \reimp
+  void enterEvent(QEvent *event) override;
+  void leaveEvent(QEvent *event) override;
+  void changeEvent(QEvent *event) override;
 };
 
 #endif // ACHORIZONTALSLIDER_H

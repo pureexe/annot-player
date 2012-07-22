@@ -22,10 +22,10 @@ class StoppableThread : public QThread, public Stoppable
   Q_DISABLE_COPY(StoppableThread)
   typedef QThread Base;
 public:
-  explicit StoppableThread(QObject *parent = 0) : Base(parent) { }
+  explicit StoppableThread(QObject *parent = nullptr) : Base(parent) { }
 public slots:
-  virtual void run() { Base::run(); } ///< \reimp
-  virtual void stop() { } ///< \reimp
+  void run() override { Base::run(); }
+  void stop() override { }
 };
 
 #endif // STOPPABLE_H

@@ -14,14 +14,14 @@
  */
 
 DocumentWidget::DocumentWidget(const QString &filePath, bool parallel, QWidget *parent)
-  : Base(parent), document_(0), catalog_(0), preview_(0), thumbnail_(0), renderer_(0)
+  : Base(parent), document_(nullptr), catalog_(nullptr), preview_(nullptr), thumbnail_(nullptr), renderer_(nullptr)
 {
   setContentsMargins(0, 0, 0, 0);
 
   document_ = new Core::Document(filePath, this);
   if (document_->bad()) {
     delete document_;
-    document_ = 0;
+    document_ = nullptr;
     return;
   }
 
@@ -95,7 +95,7 @@ DocumentWidget::createDockWindows()
     previewArea->setWidget(preview_);
     setCentralWidget(previewArea);
 
-    QDockWidget *catalogDock = 0;
+    QDockWidget *catalogDock = nullptr;
     if (document_->catalog()) {
       catalog_ = new CatalogWidget(document_->catalog(), this);
       catalogDock = new QDockWidget(this);
@@ -186,7 +186,7 @@ DocumentRenderThread::DocumentRenderThread(const Poppler::Document *toRender,
 { }
 
 DocumentRenderThread::DocumentRenderThread(DocumentRenderWidget *parent)
-  : QThread(parent), document(0)
+  : QThread(parent), document(nullptr)
 { }
 
 void DocumentRenderThread::setDocument(const Poppler::Document *toRender)

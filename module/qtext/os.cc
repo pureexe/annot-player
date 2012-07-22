@@ -4,7 +4,7 @@
 #include "module/qtext/filedeleter.h"
 #include <QtCore/QFileInfo>
 #include <QtCore/QDir>
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
 # include <QtCore/QCoreApplication>
 # include <qt_windows.h>
 //# define TEMP_PATH     QCoreApplication::applicationDirPath() + "/" "tmp"
@@ -12,7 +12,7 @@
 #else
 # include <ctime> // where nanosleep() and timespec is declared
 # include <unistd.h>
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
 #include <cstdio>
 
 #ifdef _MSC_VER
@@ -28,7 +28,7 @@ void
 QtExt::sleep(uint ms)
 {
   //DOUT("enter: ms =" << ms);
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
   Sleep(ms);
 #else
   uint r = ms % 1000,
@@ -38,7 +38,7 @@ QtExt::sleep(uint ms)
     ::nanosleep(&ts, NULL);
   } else
     ::sleep(s);
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
   //DOUT("exit");
 }
 
@@ -46,8 +46,8 @@ QString
 QtExt::mktemp(const QString &suffix, bool deleteLater)
 {
   static bool ok = true;
-  QString ret = _qs(::tmpnam(0)) + suffix;
-#ifdef Q_WS_WIN
+  QString ret = _qs(::tmpnam(nullptr)) + suffix;
+#ifdef Q_OS_WIN
   //ret = _qs(qgetenv("tmp"));
   //if (ret.isEmpty()) {
   //  ret = _qs(qgetenv("temp"));
@@ -56,7 +56,7 @@ QtExt::mktemp(const QString &suffix, bool deleteLater)
   //}
   // Use application folder instead, in case %temp% is pointed to a readonly location.
   ret.prepend(TEMP_PATH);
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
 
   static bool once = true;
   if (once) {
@@ -75,10 +75,10 @@ QtExt::mktemp(const QString &suffix, bool deleteLater)
     ret = QDir::homePath() + "/" + fileName;
   }
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
   while (ret.endsWith('.'))
     ret.chop(1);
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
 
   if (deleteLater)
     FileDeleter::globalInstance()->deleteFileLater(ret);

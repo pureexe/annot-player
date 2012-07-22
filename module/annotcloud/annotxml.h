@@ -21,7 +21,7 @@ class AnnotationXmlParser : public QObject
 public:
   static Self *globalInstance() { static Self g; return &g; }
 
-  explicit AnnotationXmlParser(QObject *parent = 0)
+  explicit AnnotationXmlParser(QObject *parent = nullptr)
     : Base(parent) { }
 
 public:

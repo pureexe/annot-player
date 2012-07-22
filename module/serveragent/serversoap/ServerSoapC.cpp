@@ -17,7 +17,7 @@ compiling, linking, and/or using OpenSSL is allowed.
 
 namespace ServerSoap {
 
-SOAP_SOURCE_STAMP("@(#) ServerSoapC.cpp ver 2.8.9 2012-07-16 08:01:55 GMT")
+SOAP_SOURCE_STAMP("@(#) ServerSoapC.cpp ver 2.8.9 2012-07-18 02:35:01 GMT")
 
 
 #ifndef WITH_NOGLOBAL
@@ -15449,8 +15449,9 @@ void tns__user::soap_default(struct soap *soap)
 	soap_default_LONG64(soap, &this->tns__user::groupId);
 	soap_default_LONG64(soap, &this->tns__user::id);
 	soap_default_int(soap, &this->tns__user::language);
-	soap_default_LONG64(soap, &this->tns__user::loginTime);
+	soap_default_LONG64(soap, &this->tns__user::loginCount);
 	soap_default_LONG64(soap, &this->tns__user::loginIp);
+	soap_default_LONG64(soap, &this->tns__user::loginTime);
 	this->tns__user::name = NULL;
 	this->tns__user::nickname = NULL;
 	this->tns__user::password = NULL;
@@ -15497,9 +15498,11 @@ SOAP_FMAC3 int SOAP_FMAC4 soap_out_tns__user(struct soap *soap, const char *tag,
 		return soap->error;
 	if (soap_out_int(soap, "language", -1, &(a->tns__user::language), ""))
 		return soap->error;
-	if (soap_out_LONG64(soap, "loginTime", -1, &(a->tns__user::loginTime), ""))
+	if (soap_out_LONG64(soap, "loginCount", -1, &(a->tns__user::loginCount), ""))
 		return soap->error;
 	if (soap_out_LONG64(soap, "loginIp", -1, &(a->tns__user::loginIp), ""))
+		return soap->error;
+	if (soap_out_LONG64(soap, "loginTime", -1, &(a->tns__user::loginTime), ""))
 		return soap->error;
 	if (soap_out_PointerTostd__string(soap, "name", -1, &(a->tns__user::name), ""))
 		return soap->error;
@@ -15543,8 +15546,9 @@ SOAP_FMAC3 tns__user * SOAP_FMAC4 soap_in_tns__user(struct soap *soap, const cha
 	size_t soap_flag_groupId1 = 1;
 	size_t soap_flag_id1 = 1;
 	size_t soap_flag_language1 = 1;
-	size_t soap_flag_loginTime1 = 1;
+	size_t soap_flag_loginCount1 = 1;
 	size_t soap_flag_loginIp1 = 1;
+	size_t soap_flag_loginTime1 = 1;
 	size_t soap_flag_name1 = 1;
 	size_t soap_flag_nickname1 = 1;
 	size_t soap_flag_password1 = 1;
@@ -15603,14 +15607,19 @@ SOAP_FMAC3 tns__user * SOAP_FMAC4 soap_in_tns__user(struct soap *soap, const cha
 				{	soap_flag_language1--;
 					continue;
 				}
-			if (soap_flag_loginTime1 && soap->error == SOAP_TAG_MISMATCH)
-				if (soap_in_LONG64(soap, "loginTime", &(a->tns__user::loginTime), "xsd:long"))
-				{	soap_flag_loginTime1--;
+			if (soap_flag_loginCount1 && soap->error == SOAP_TAG_MISMATCH)
+				if (soap_in_LONG64(soap, "loginCount", &(a->tns__user::loginCount), "xsd:long"))
+				{	soap_flag_loginCount1--;
 					continue;
 				}
 			if (soap_flag_loginIp1 && soap->error == SOAP_TAG_MISMATCH)
 				if (soap_in_LONG64(soap, "loginIp", &(a->tns__user::loginIp), "xsd:long"))
 				{	soap_flag_loginIp1--;
+					continue;
+				}
+			if (soap_flag_loginTime1 && soap->error == SOAP_TAG_MISMATCH)
+				if (soap_in_LONG64(soap, "loginTime", &(a->tns__user::loginTime), "xsd:long"))
+				{	soap_flag_loginTime1--;
 					continue;
 				}
 			if (soap_flag_name1 && (soap->error == SOAP_TAG_MISMATCH || soap->error == SOAP_NO_TAG))
@@ -15649,7 +15658,7 @@ SOAP_FMAC3 tns__user * SOAP_FMAC4 soap_in_tns__user(struct soap *soap, const cha
 		if (soap->body && soap_element_end_in(soap, tag))
 			return NULL;
 	}
-	if ((soap->mode & SOAP_XML_STRICT) && (soap_flag_annotCount1 > 0 || soap_flag_blessedCount1 > 0 || soap_flag_blockedCount1 > 0 || soap_flag_createTime1 > 0 || soap_flag_cursedCount1 > 0 || soap_flag_flags1 > 0 || soap_flag_groupId1 > 0 || soap_flag_id1 > 0 || soap_flag_language1 > 0 || soap_flag_loginTime1 > 0 || soap_flag_loginIp1 > 0 || soap_flag_status1 > 0))
+	if ((soap->mode & SOAP_XML_STRICT) && (soap_flag_annotCount1 > 0 || soap_flag_blessedCount1 > 0 || soap_flag_blockedCount1 > 0 || soap_flag_createTime1 > 0 || soap_flag_cursedCount1 > 0 || soap_flag_flags1 > 0 || soap_flag_groupId1 > 0 || soap_flag_id1 > 0 || soap_flag_language1 > 0 || soap_flag_loginCount1 > 0 || soap_flag_loginIp1 > 0 || soap_flag_loginTime1 > 0 || soap_flag_status1 > 0))
 	{	soap->error = SOAP_OCCURS;
 		return NULL;
 	}

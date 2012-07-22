@@ -23,7 +23,7 @@ class GraphicsShadowEffect: public QGraphicsDropShadowEffect
   //PixmapShadowFilter *filter_;
   qreal opacity_;
 public:
-  explicit GraphicsShadowEffect(QObject *parent = 0)
+  explicit GraphicsShadowEffect(QObject *parent = nullptr)
     : Base(parent), opacity_(1.0) { }
 
   // Disable signals to improve performance.
@@ -65,9 +65,9 @@ public slots:
   void setOpacity(qreal opacity);
 
 //public:
-//  virtual QRectF boundingRectFor(const QRectF &rect) const; ///< \reimp
+//  QRectF boundingRectFor(const QRectF &rect) const override;
 protected:
-  virtual void draw(QPainter *painter); ///< \reimp
+  void draw(QPainter *painter) override;
 };
 
 #endif // GRAPHICSEFFECT_H

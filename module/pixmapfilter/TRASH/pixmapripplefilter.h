@@ -30,7 +30,7 @@ class PixmapRippleFilter : public QPixmapFilter
   qint8 offset_;
 
 public:
-  explicit PixmapRippleFilter(QObject *parent = 0);
+  explicit PixmapRippleFilter(QObject *parent = nullptr);
   ~PixmapRippleFilter();
 
   qreal opacity() const { return opacity_; }
@@ -52,7 +52,7 @@ public:
   bool needsDisplay() const { return isDirty() || hasCenter(); }
 
 public:
-  virtual void draw(QPainter *p, const QPointF &pos, const QPixmap &pm, const QRectF &src = QRectF()) const; ///< \reimp
+  void draw(QPainter *p, const QPointF &pos, const QPixmap &pm, const QRectF &src = QRectF()) const override;
   void draw(QPainter *p, const QPointF &pos, const QImage &image) const;
 
 public slots:

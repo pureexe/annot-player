@@ -24,13 +24,14 @@ class AnnotationCountDialog : public AcWindow
   QLabel *totalCountLabel_;
 
 public:
-  explicit AnnotationCountDialog(DataManager *dm, QWidget *parent = 0);
+  explicit AnnotationCountDialog(DataManager *dm, QWidget *parent = nullptr);
 
 signals:
+  void message(QString text);
   void countChanged(int count);
 
 public slots:
-  virtual void setVisible(bool visible); ///< \reimp
+  void setVisible(bool visible) override;
   void setCount(int count);
 protected slots:
   void ok();

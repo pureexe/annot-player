@@ -1,10 +1,14 @@
-#ifndef VLCSTEP_H
-#define VLCSTEP_H
+#ifndef VLCCOCOA_H
+#define VLCCOCOA_H
 
-// vlcstep.h
+// vlccocoa.h
 // 7/30/2011
 
-#include "qtstep/qtstep.h"
+#ifdef WITH_MAC_QTCOCOA
+# include "qtcocoa/qtcocoa.h"
+#else
+# error "qtcocoa is required"
+#endif // WITH_MAC_QTCOCOA
 #include <QtCore/QPoint>
 #include <QtCore/QRect>
 
@@ -43,4 +47,4 @@ vlcglview_t *vlcvideoview_glview(vlcvideoview_t *view);
 
 vlcvout_t *vlcglview_vout(vlcglview_t *view);
 
-#endif // VLCSTEP_H
+#endif // VLCCOCOA_H

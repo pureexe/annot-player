@@ -14,7 +14,7 @@ class LayoutWidget : public QWidget
   typedef QWidget Base;
 
 public:
-  explicit LayoutWidget(QLayout *layout, QWidget *parent = 0)
+  explicit LayoutWidget(QLayout *layout, QWidget *parent = nullptr)
     : Base(parent)
   {
     setLayout(layout);

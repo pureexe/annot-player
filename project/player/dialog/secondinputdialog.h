@@ -18,7 +18,7 @@ class SecondInputDialog : public AcWindow
   QSpinBox *timeEdit_;
 
 public:
-  explicit SecondInputDialog(QWidget *parent = 0);
+  explicit SecondInputDialog(QWidget *parent = nullptr);
 
   qint64 time() const; ///< in msecs
 

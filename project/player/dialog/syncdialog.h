@@ -24,7 +24,7 @@ class SyncDialog : public AcWindow
   int timeSlotIndex_;
 
 public:
-  explicit SyncDialog(QWidget *parent = 0);
+  explicit SyncDialog(QWidget *parent = nullptr);
 
 signals:
   void timeSlotSelected(qint64 secs);
@@ -39,7 +39,7 @@ public slots:
   void setActiveCounts(const QList<int> &counts);
   void setTimeSlotIndex(int index);
 
-  virtual void setVisible(bool visible); ///< \reimp
+  void setVisible(bool visible) override;
 
 protected slots:
   void ok();

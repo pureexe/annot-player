@@ -21,9 +21,9 @@ class BrightnessImageFilter : public QObject, public PixelImageFilter
 public:
   enum { DefaultValue = 0 };
 
-  explicit BrightnessImageFilter(QObject *parent = 0)
+  explicit BrightnessImageFilter(QObject *parent = nullptr)
     : Base(parent), brightness_(DefaultValue) { }
-  explicit BrightnessImageFilter(int brightness, QObject *parent = 0)
+  explicit BrightnessImageFilter(int brightness, QObject *parent = nullptr)
     : Base(parent), brightness_(brightness) { }
 
   int value() const { return brightness_; }
@@ -38,10 +38,10 @@ public:
   static bool needsDisplay(int brightness)
   { return brightness != DefaultValue; }
 
-  virtual quint8 filterColor(quint8 value) const ///< \reimp
+  quint8 filterColor(quint8 value) const override
   { return filterColor(value, brightness_); }
 
-  virtual bool needsDisplay() const ///< \reimp
+  bool needsDisplay() const override
   { return needsDisplay(brightness_); }
 };
 

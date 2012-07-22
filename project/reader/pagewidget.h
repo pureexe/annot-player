@@ -64,7 +64,7 @@ namespace detail {
     qreal xres_, yres_;
 
   public:
-    PageRenderTask(Renderable *device, Core::Page *page, qreal xres, qreal yres, QObject *parent = 0)
+    PageRenderTask(Renderable *device, Core::Page *page, qreal xres, qreal yres, QObject *parent = nullptr)
       : Base(device, parent), page_(page), xres_(xres), yres_(yres) { }
 
     bool bad() const { return !device() || !page_ || page_->bad(); }
@@ -88,7 +88,7 @@ class MouseRubberBand : public QRubberBand
   QPoint pressed_;
 
 public:
-  explicit MouseRubberBand(QWidget *parent = 0)
+  explicit MouseRubberBand(QWidget *parent = nullptr)
     : Base(Rectangle, parent) { }
 
   bool pressed() const
@@ -143,7 +143,7 @@ class PagePreviewWidget : public QGraphicsView, public Renderable
 
 public:
   explicit PagePreviewWidget(Core::Page *page, qreal zoom_ = 1.2,
-                             RenderThread *renderer = 0, QWidget *parent = 0);
+                             RenderThread *renderer = 0, QWidget *parent = nullptr);
 
   bool bad() const { return !page_ || page_->bad(); }
   Core::Page *page() const { return page_; }
@@ -215,7 +215,7 @@ class PageThumbnailWidget : public QLabel, public Renderable
   qreal zoom_;
 
 public:
-  explicit PageThumbnailWidget(Core::Page *page, qreal zoom_ = 2.0, RenderThread *renderer = 0, QWidget *parent = 0);
+  explicit PageThumbnailWidget(Core::Page *page, qreal zoom_ = 2.0, RenderThread *renderer = 0, QWidget *parent = nullptr);
 
   bool bad() const { return !page_ || page_->bad(); }
   Core::Page *page() const { return page_; }

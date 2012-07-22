@@ -15,7 +15,7 @@ class EventListener : public QObject
 
   bool enabled_;
 public:
-  explicit EventListener(QObject *parent = 0)
+  explicit EventListener(QObject *parent = nullptr)
     : Base(parent), enabled_(true) { }
 
 signals:
@@ -28,7 +28,7 @@ public slots:
   void setEnabled(bool t) { emit enabledChanged(enabled_ = t); }
 
 protected:
-  virtual bool eventFilter(QObject *obj, QEvent *event) ///< \reimp
+  bool eventFilter(QObject *obj, QEvent *event) override
   {
     if (enabled_)
       eventListener(event);

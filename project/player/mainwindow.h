@@ -38,6 +38,7 @@ namespace QtExt {
 
 // Objects
 class AnnotationDatabase;
+class AnnotationDownloader;
 class AnnotationFilter;
 class ClientAgent;
 class ClipboardMonitor;
@@ -73,7 +74,8 @@ class MiniPlayerUi;
 //class MiniPlayerDock;
 //class OsdDock;
 class OsdWindow;
-class OsdConsole;
+class MainConsole;
+class MiniConsole;
 class EmbeddedPlayerUi;
 class EmbeddedCanvas;
 class PlayerUi;
@@ -124,7 +126,7 @@ public:
 
   // - Constructions -
 public:
-  explicit MainWindow(bool unique = true, QWidget *parent = 0, Qt::WindowFlags f = 0);
+  explicit MainWindow(bool unique = true, QWidget *parent = nullptr, Qt::WindowFlags f = 0);
   //bool isValid() const;
 
 public:
@@ -147,16 +149,21 @@ signals:
   void trayMessage(const QString &title, const QString &message);
   void response(const QString &text);
   void said(const QString &text, const QString &color = QString());
-  void message(const QString &text);
-  void errorMessage(const QString &text);
-  void warning(const QString &text);
-  void notification(const QString &text);
   void showTextRequested(const QString &text);
   void windowClosed();
   void windowTitleSuffixToChange(QString suffix);
   void downloadProgressUpdated();
   void downloadFinished();
   void progressMessageChanged(const QString &text);
+
+  void message(const QString &text);
+  void errorMessage(const QString &text);
+  void warning(const QString &text);
+  void notification(const QString &text);
+  void messageOnce(const QString &text);
+  void errorMessageOnce(const QString &text);
+  void warningOnce(const QString &text);
+  void notificationOnce(const QString &text);
 
   void seeked();
   void addAndShowAnnotationRequested(const Annotation &a);
@@ -268,7 +275,7 @@ public slots:
   void openDirectory();
   void openMrl(const QString &path, bool checkPath = true);
   void openStreamUrl(const QString &rtsp);
-  void openRemoteMedia(const MediaInfo &mi, QNetworkCookieJar *jar = 0);
+  void openRemoteMedia(const MediaInfo &mi, QNetworkCookieJar *jar = nullptr);
   void openLocalUrl(const QUrl &url);
   void openLocalUrls(const QList<QUrl> &urls);
   void openMimeData(const QMimeData *urls);
@@ -334,6 +341,7 @@ public slots:
 
   void openInWebBrowser();
   void downloadCurrentUrl();
+  void downloadAnnotations();
   void copyCurrentUrl();
   void copyCurrentTitle();
   void clickProgressButton();
@@ -393,12 +401,12 @@ protected slots:
 protected:
   UrlDialog *annotationUrlDialog();
   UrlDialog *mediaUrlDialog();
+  UrlDialog *annotationDownloaderDialog();
   AnnotationAnalyticsView *annotationAnalyticsView();
 
 protected slots:
   void showUserAnalytics(qint64 userId);
 
-public slots:
   void showLoginDialog();
   void hideLoginDialog();
   void setLoginDialogVisible(bool visible);
@@ -491,6 +499,7 @@ protected slots:
   void setUserLanguageToKorean();
   void setUserLanguageToFrench();
   void setUserLanguageToGerman();
+  void setUserLanguageToItalian();
   void setUserLanguageToSpanish();
   void setUserLanguageToPortuguese();
   void setUserLanguageToUnknown();
@@ -507,10 +516,16 @@ public slots:
   void chat(const QString &text, bool async = true);
   void respond(const QString &text);
   void say(const QString &text, const QString &color = QString());
-  void warn(const QString &text);
+
   void showMessage(const QString &text);
+  void showError(const QString &text);
   void notify(const QString &text);
-  void error(const QString &text);
+  void warn(const QString &text);
+  void showMessageOnce(const QString &text);
+  void showErrorOnce(const QString &text);
+  void notifyOnce(const QString &text);
+  void warnOnce(const QString &text);
+
 
   void submitText(const QString &text, bool async = true);
   void showText(const QString &text, bool isSigned = false);
@@ -589,42 +604,42 @@ protected slots:
 
   // - Events -
 public slots:
-  virtual void setVisible(bool visible); ///< \reimp
+  void setVisible(bool visible) override;
   void dispose();
 public:
-  virtual bool event(QEvent *event); ///< \reimp
+  bool event(QEvent *event) override;
   void gestureEvent(QGestureEvent *e);
   void panGesture(QPanGesture *g);
   void pinchGesture(QPinchGesture *g);
   void swipeGesture(QSwipeGesture *g);
 protected:
-  virtual void paintEvent(QPaintEvent *event);
-  virtual void mousePressEvent(QMouseEvent *event); ///< \reimp
-  virtual void mouseMoveEvent(QMouseEvent *event); ///< \reimp
-  virtual void mouseReleaseEvent(QMouseEvent *event); ///< \reimp
-  virtual void mouseDoubleClickEvent(QMouseEvent *event); ///< \reimp
-  virtual void wheelEvent(QWheelEvent *event); ///< \reimp
+  void paintEvent(QPaintEvent *event) override;
+  void mousePressEvent(QMouseEvent *event) override;
+  void mouseMoveEvent(QMouseEvent *event) override;
+  void mouseReleaseEvent(QMouseEvent *event) override;
+  void mouseDoubleClickEvent(QMouseEvent *event) override;
+  void wheelEvent(QWheelEvent *event) override;
 
-  virtual void moveEvent(QMoveEvent *event); ///< \reimp
-  virtual void resizeEvent(QResizeEvent *event); ///< \reimp
+  void moveEvent(QMoveEvent *event) override;
+  void resizeEvent(QResizeEvent *event) override;
 
-  virtual void changeEvent(QEvent *event); ///< \reimp
+  void changeEvent(QEvent *event) override;
 
-  virtual void keyPressEvent(QKeyEvent *event); ///< \reimp
-  virtual void keyReleaseEvent(QKeyEvent *event); ///< \reimp
+  void keyPressEvent(QKeyEvent *event) override;
+  void keyReleaseEvent(QKeyEvent *event) override;
 
-  virtual void contextMenuEvent(QContextMenuEvent *event); ///< \reimp
+  void contextMenuEvent(QContextMenuEvent *event) override;
 
-  virtual void closeEvent(QCloseEvent *event); ///< \reimp
+  void closeEvent(QCloseEvent *event) override;
 
-  virtual void focusInEvent(QFocusEvent *e); ///< \reimp
-  virtual void focusOutEvent(QFocusEvent *e); ///< \reimp
+  void focusInEvent(QFocusEvent *e) override;
+  void focusOutEvent(QFocusEvent *e) override;
 
 protected slots:
-  virtual void dragEnterEvent(QDragEnterEvent *event); ///< \reimp
-  virtual void dragMoveEvent(QDragMoveEvent *event); ///< \reimp
-  virtual void dragLeaveEvent(QDragLeaveEvent *event); ///< \reimp
-  virtual void dropEvent(QDropEvent *event); ///< \reimp
+  void dragEnterEvent(QDragEnterEvent *event) override;
+  void dragMoveEvent(QDragMoveEvent *event) override;
+  void dragLeaveEvent(QDragLeaveEvent *event) override;
+  void dropEvent(QDropEvent *event) override;
 
   void updateAnnotationHoverGesture();
 
@@ -666,7 +681,7 @@ protected:
 protected:
   bool isGlobalPosNearEmbeddedPlayer(const QPoint &pos) const;
   bool isGlobalPosOverEmbeddedPositionSlider(const QPoint &pos) const;
-  bool isGlobalPosOverOsdConsole(const QPoint &pos) const;
+  bool isGlobalPosOverMainConsole(const QPoint &pos) const;
 
 public slots:
   void updatePlayMode();
@@ -941,6 +956,7 @@ private:
   AcPlayerServer *appServer_;
   AcBrowser *browserDelegate_;
   AcDownloader *downloaderDelegate_;
+  AnnotationDownloader *annotationDownloader_;
 
 #ifdef WITH_MODULE_SERVERAGENT
   ServerAgent *server_;
@@ -960,7 +976,8 @@ private:
   MrlResolver *mrlResolver_;
 
   EventLogger *logger_;
-  OsdConsole *globalOsdConsole_;
+  MainConsole *mainConsole_;
+  MiniConsole *miniConsole_;
 
   //OsdDock *osdDock_;
   OsdWindow *osdWindow_;
@@ -1000,8 +1017,6 @@ private:
   TimeInputDialog *seekDialog_;
   SyncDialog *syncDialog_;
   PickDialog *windowPickDialog_;
-  UrlDialog *mediaUrlDialog_;
-  UrlDialog *annotationUrlDialog_;
   //SiteAccountView *siteAccountView_;
   MediaInfoView *mediaInfoView_;
   UserView *userView_;
@@ -1141,6 +1156,7 @@ private:
           *openFileAct_,
           *openUrlAct_,
           *openAnnotationUrlAct_,
+          *downloadAnnotationsAct_,
           *openAnnotationFileAct_,
           *openDeviceAct_,
           *openVideoDeviceAct_,
@@ -1264,6 +1280,7 @@ private:
           *setUserLanguageToKoreanAct_,
           *setUserLanguageToFrenchAct_,
           *setUserLanguageToGermanAct_,
+          *setUserLanguageToItalianAct_,
           *setUserLanguageToSpanishAct_,
           *setUserLanguageToPortugueseAct_,
           *setUserLanguageToUnknownAct_;
@@ -1274,6 +1291,7 @@ private:
           *toggleAnnotationLanguageToKoreanAct_,
           *toggleAnnotationLanguageToFrenchAct_,
           *toggleAnnotationLanguageToGermanAct_,
+          *toggleAnnotationLanguageToItalianAct_,
           *toggleAnnotationLanguageToSpanishAct_,
           *toggleAnnotationLanguageToPortugueseAct_,
           *toggleAnnotationLanguageToUnknownAct_,

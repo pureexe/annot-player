@@ -2,7 +2,6 @@
 // 2/7/2012
 
 #include "mediaurldialog.h"
-#include <QtGui>
 
 // - Constructions -
 

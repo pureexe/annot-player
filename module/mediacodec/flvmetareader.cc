@@ -18,7 +18,7 @@ FlvMetaReader::run()
 {
   DOUT("enter");
   if (!parse())
-    emit error(tr("failed to parse FLV"));
+    emit errorMessage(tr("failed to parse FLV"));
   DOUT("exit");
 }
 

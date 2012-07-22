@@ -20,7 +20,7 @@ class PositionCalibration : public QWidget
   typedef QWidget Base;
 
 public:
-  PositionCalibration(SignalHub *hub, Player *player, QWidget *parent = 0);
+  PositionCalibration(SignalHub *hub, Player *player, QWidget *parent = nullptr);
 
 signals:
   void visibleChanged(bool visible);
@@ -35,9 +35,9 @@ public slots:
 
   // - Events -
 public slots:
-  virtual void setVisible(bool visible); ///< \reimp
+  void setVisible(bool visible) override;
 protected:
-  virtual void paintEvent(QPaintEvent *event); ///< \reimp
+  void paintEvent(QPaintEvent *event) override;
 
   // - Paint -
 protected:

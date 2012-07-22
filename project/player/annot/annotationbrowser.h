@@ -4,7 +4,7 @@
 // annotationbrowser.h
 // 10/23/2011
 
-#include "project/common/acwindow.h"
+#include "project/common/acmainwindow.h"
 #include "module/annotcloud/annotation.h"
 #include <QtCore/QModelIndex>
 
@@ -20,12 +20,12 @@ class AcFilteredTableView;
 class AnnotationEditor;
 class SignalHub;
 
-class AnnotationBrowser : public AcWindow
+class AnnotationBrowser : public AcMainWindow
 {
   Q_OBJECT
   Q_DISABLE_COPY(AnnotationBrowser)
   typedef AnnotationBrowser Self;
-  typedef AcWindow Base;
+  typedef AcMainWindow Base;
 
   typedef AnnotCloud::Annotation Annotation;
   typedef AnnotCloud::AnnotationList AnnotationList;
@@ -49,7 +49,7 @@ protected:
   };
 
 public:
-  explicit AnnotationBrowser(SignalHub *hub, QWidget *parent = 0);
+  explicit AnnotationBrowser(SignalHub *hub, QWidget *parent = nullptr);
 
 signals:
   void annotationTextUpdatedWithId(QString text, qint64 id);
@@ -60,7 +60,9 @@ signals:
   void userCursedWithId(qint64 uid);
   void userBlockedWithId(qint64 uid);
   void userBlockedWithAlias(QString alias);
+  void userAnalyticsRequested(qint64 uid);
 
+  void annotationAnalyticsRequested();
   void annotationBlessedWithId(qint64 aid);
   void annotationCursedWithId(qint64 aid);
   void annotationBlockedWithId(qint64 aid);
@@ -101,17 +103,17 @@ protected:
 
   // - Events -
 public slots:
-  virtual void setVisible(bool visible); ///< \reimp
+  void setVisible(bool visible) override;
 
 protected:
-  virtual void contextMenuEvent(QContextMenuEvent *event); ///< \reimp
+  void contextMenuEvent(QContextMenuEvent *event) override;
   void updateContextMenu();
 
 //protected slots:
-//  virtual void dragEnterEvent(QDragEnterEvent *event); ///< \reimp
-//  virtual void dragMoveEvent(QDragMoveEvent *event); ///< \reimp
-//  virtual void dragLeaveEvent(QDragLeaveEvent *event); ///< \reimp
-//  virtual void dropEvent(QDropEvent *event); ///< \reimp
+//  void dragEnterEvent(QDragEnterEvent *event) override;
+//  void dragMoveEvent(QDragMoveEvent *event) override;
+//  void dragLeaveEvent(QDragLeaveEvent *event) override;
+//  void dropEvent(QDropEvent *event) override;
 
 //signals:
 //  void dragEnterEventReceived(QDragEnterEvent *event);
@@ -130,6 +132,7 @@ protected slots:
 
   void viewUser();
   void blockUser();
+  void analyzeUser();
 
   void setMe(bool t);
   void setNow(bool t);
@@ -173,10 +176,12 @@ private:
           *blockAnnotAct_,
           *deleteAnnotAct_,
           *blessAnnotAct_,
-          *curseAnnotAct_;
+          *curseAnnotAct_,
+          *analyticsAct_;
 
   QAction //*viewUserAct_,
-          *blockUserAct_;
+          *blockUserAct_,
+          *analyzeUserAct_;
 };
 
 #endif // ANNOTATIONBROWSER_H

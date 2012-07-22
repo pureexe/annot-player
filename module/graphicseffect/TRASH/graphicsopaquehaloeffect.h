@@ -26,7 +26,7 @@ class GraphicsOpaqueHaloEffect: public QGraphicsEffect
   uint hasOpacityMask_;
 
 public:
-  explicit GraphicsOpaqueHaloEffect(QObject *parent = 0);
+  explicit GraphicsOpaqueHaloEffect(QObject *parent = nullptr);
 
   qreal opacity() const { return opacity_; }
   QBrush opacityMask() const { return opacityMask_; }
@@ -40,7 +40,7 @@ signals:
   void opacityMaskChanged(const QBrush &mask);
 
 protected:
-  virtual void draw(QPainter *painter); ///< \reimp
+  void draw(QPainter *painter) override;
 };
 
 #endif // GRAPHICSOPAQUEEFFECT_H

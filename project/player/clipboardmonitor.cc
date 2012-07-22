@@ -2,11 +2,8 @@
 // 3/10/2012
 
 #include "clipboardmonitor.h"
-#include "logger.h"
 #include "module/mrlanalysis/mrlanalysis.h"
 #include <QtGui>
-
-using namespace Logger;
 
 #define DEBUG "clipboardmonitor"
 #include "module/debug/debug.h"
@@ -57,10 +54,10 @@ ClipboardMonitor::parseUrl(const QString &text)
   else if (!url.startsWith("http://", Qt::CaseInsensitive))
     url.prepend("http://");
   if (isSupportedAnnotationUrl(url)) {
-    log(tr("annot URL from clipboard") + ": " + url);
+    emit message(tr("annot URL from clipboard") + ": " + url);
     emit annotationUrlEntered(url);
   } else if (isSupportedMediaUrl(url)) {
-    log(tr("media URL from clipboard") + ": " + url);
+    emit message(tr("media URL from clipboard") + ": " + url);
     emit mediaUrlEntered(url);
   } else
     DOUT("unsupported URL:" << url);

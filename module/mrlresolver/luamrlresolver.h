@@ -17,32 +17,32 @@ class LuaMrlResolver : public MrlResolver
   typedef MrlResolver Base;
 
 public:
-  explicit LuaMrlResolver(QObject *parent = 0)
+  explicit LuaMrlResolver(QObject *parent = nullptr)
     : Base(parent) { }
 
 public:
-  bool matchMedia(const QString &href) const; ///< \reimp
-  bool matchSubtitle(const QString &href) const; ///< \reimp
+  bool matchMedia(const QString &href) const override;
+  bool matchSubtitle(const QString &href) const override;
 
 public slots:
-  bool resolveMedia(const QString &href) ///< \reimp
+  bool resolveMedia(const QString &href) override
   { return resolveMedia(href, !isSynchronized()); }
 
   bool resolveMedia(const QString &href, bool async);
 
-  bool resolveSubtitle(const QString &href) ///< \reimp
+  bool resolveSubtitle(const QString &href) override
   { return resolveSubtitle(href, !isSynchronized()); }
 
   bool resolveSubtitle(const QString &href, bool async);
 
 protected:
-  //LuaResolver *makeResolver(QObject *parent = 0);
+  //LuaResolver *makeResolver(QObject *parent = nullptr);
 
   ///  Return true if succeed.
   bool checkSiteAccount(const QString &href);
 
   // It's important to keep these methods stateless.
-  static QString decodeText(const QString &text, const char *encoding = 0);
+  static QString decodeText(const QString &text, const char *encoding = nullptr);
   static QString formatTitle(const QString &title);
   static QString formatUrl(const QString &url);
 

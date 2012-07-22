@@ -22,9 +22,9 @@ class GammaImageFilter : public QObject, public PixelImageFilter
 public:
   enum { DefaultValue = 100 };
 
-  explicit GammaImageFilter(QObject *parent = 0)
+  explicit GammaImageFilter(QObject *parent = nullptr)
     : Base(parent), gamma_(DefaultValue) { }
-  explicit GammaImageFilter(int gamma, QObject *parent = 0)
+  explicit GammaImageFilter(int gamma, QObject *parent = nullptr)
     : Base(parent), gamma_(gamma) { }
 
   int value() const { return gamma_; }
@@ -45,10 +45,10 @@ public:
     }
   }
 
-  virtual bool needsDisplay() const ///< \reimp
+  bool needsDisplay() const override
   { return needsDisplay(gamma_); }
 
-  virtual quint8 filterColor(quint8 value) const ///< \reimp
+  quint8 filterColor(quint8 value) const override
   { return filterColor(value, gamma_); }
 };
 

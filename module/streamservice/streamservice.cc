@@ -15,7 +15,7 @@ StreamService::StreamService(QObject *parent)
   : Base(parent)
 {
   t_ = new StreamThread(this);
-  connect(t_, SIGNAL(error(QString)), SIGNAL(error(QString)), Qt::QueuedConnection);
+  connect(t_, SIGNAL(errorMessage(QString)), SIGNAL(errorMessage(QString)), Qt::QueuedConnection);
   connect(t_, SIGNAL(message(QString)), SIGNAL(message(QString)), Qt::QueuedConnection);
   connect(t_, SIGNAL(streamReady(QString)), SIGNAL(streamReady(QString)), Qt::QueuedConnection);
 }

@@ -22,11 +22,11 @@ class AnnotationComboEdit : public AcComboEdit, public QtExt::WithSizeHint
 public:
   enum { EditAction = CustomAction };
 
-  explicit AnnotationComboEdit(QWidget *parent = 0);
+  explicit AnnotationComboEdit(QWidget *parent = nullptr);
 
   // - Properties -
 public slots:
-  virtual QSize sizeHint() const ///< \reimp QWidget
+  QSize sizeHint() const override
   { return QtExt::WithSizeHint::sizeHint(); }
 
 protected slots:
@@ -34,8 +34,8 @@ protected slots:
 
   // - Events -
 protected:
-  virtual void keyPressEvent(QKeyEvent *event); ///< \reimp
-  virtual void contextMenuEvent(QContextMenuEvent *event); ///< \reimp
+  void keyPressEvent(QKeyEvent *event) override;
+  void contextMenuEvent(QContextMenuEvent *event) override;
 
 private:
   void createActions();

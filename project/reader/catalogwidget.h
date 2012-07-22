@@ -18,7 +18,7 @@ class CatalogWidget : public QTreeView
   Core::Catalog *catalog_;
 
 public:
-  explicit CatalogWidget(Core::Catalog *catalog = 0, QWidget *parent = 0);
+  explicit CatalogWidget(Core::Catalog *catalog = nullptr, QWidget *parent = nullptr);
 
   bool bad() const { return !catalog_ || catalog_->bad(); }
 

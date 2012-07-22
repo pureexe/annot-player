@@ -273,7 +273,7 @@
 <context>
     <name>AcPreferences</name>
     <message>
-        <location filename="../../common/acpreferences.cc" line="51"/>
+        <location filename="../../common/acpreferences.cc" line="52"/>
         <source>Preferences</source>
         <translation type="unfinished"></translation>
     </message>
@@ -309,19 +309,19 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../module/annotdown/annotationdownloader.cc" line="164"/>
-        <location filename="../../../module/annotdown/annotationdownloader.cc" line="177"/>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="165"/>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="179"/>
         <source>file saved</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../module/annotdown/annotationdownloader.cc" line="166"/>
-        <location filename="../../../module/annotdown/annotationdownloader.cc" line="182"/>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="167"/>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="184"/>
         <source>failed to save file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../module/annotdown/annotationdownloader.cc" line="172"/>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="173"/>
         <source>failed to cache annotation from URL</source>
         <translation type="unfinished"></translation>
     </message>
@@ -358,12 +358,13 @@
 <context>
     <name>DummyGoogleVideoMrlResolver</name>
     <message>
-        <location filename="../../../module/mrlresolver/dummygooglevideomrlresolver.cc" line="27"/>
+        <location filename="../../../module/mrlresolver/dummygooglevideomrlresolver.cc" line="30"/>
+        <location filename="../../../module/mrlresolver/dummygooglevideomrlresolver.cc" line="36"/>
         <source>failed to resolve URL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../module/mrlresolver/dummygooglevideomrlresolver.cc" line="42"/>
+        <location filename="../../../module/mrlresolver/dummygooglevideomrlresolver.cc" line="41"/>
         <source>resolving media URL ...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -371,12 +372,13 @@
 <context>
     <name>DummyYoutubeMrlResolver</name>
     <message>
-        <location filename="../../../module/mrlresolver/dummyyoutubemrlresolver.cc" line="26"/>
+        <location filename="../../../module/mrlresolver/dummyyoutubemrlresolver.cc" line="29"/>
+        <location filename="../../../module/mrlresolver/dummyyoutubemrlresolver.cc" line="35"/>
         <source>failed to resolve URL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../module/mrlresolver/dummyyoutubemrlresolver.cc" line="41"/>
+        <location filename="../../../module/mrlresolver/dummyyoutubemrlresolver.cc" line="40"/>
         <source>resolving media URL ...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -496,210 +498,215 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../mainwindow.cc" line="78"/>
+        <location filename="../mainwindow.cc" line="84"/>
         <source>Annot Browser</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="310"/>
+        <location filename="../mainwindow.cc" line="313"/>
         <source>&amp;File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="311"/>
+        <location filename="../mainwindow.cc" line="314"/>
         <source>New Window</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="249"/>
-        <location filename="../mainwindow.cc" line="312"/>
+        <location filename="../mainwindow.cc" line="252"/>
+        <location filename="../mainwindow.cc" line="315"/>
         <source>New Tab</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="314"/>
+        <location filename="../mainwindow.cc" line="317"/>
         <source>Clip</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="244"/>
-        <location filename="../mainwindow.cc" line="316"/>
+        <location filename="../mainwindow.cc" line="247"/>
+        <location filename="../mainwindow.cc" line="319"/>
         <source>Close Tab</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="317"/>
+        <location filename="../mainwindow.cc" line="320"/>
         <source>Close Window</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="318"/>
+        <location filename="../mainwindow.cc" line="321"/>
         <source>Exit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="330"/>
+        <location filename="../mainwindow.cc" line="333"/>
         <source>&amp;View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="259"/>
-        <location filename="../mainwindow.cc" line="331"/>
+        <location filename="../mainwindow.cc" line="262"/>
+        <location filename="../mainwindow.cc" line="334"/>
         <source>Reload</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="332"/>
+        <location filename="../mainwindow.cc" line="335"/>
         <source>Stop</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="333"/>
+        <location filename="../mainwindow.cc" line="336"/>
         <source>Inspect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="335"/>
+        <location filename="../mainwindow.cc" line="338"/>
         <source>Actual Size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="336"/>
+        <location filename="../mainwindow.cc" line="339"/>
         <source>Zoom In</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="337"/>
+        <location filename="../mainwindow.cc" line="340"/>
         <source>Zoom Out</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="289"/>
-        <location filename="../mainwindow.cc" line="339"/>
+        <location filename="../mainwindow.cc" line="292"/>
+        <location filename="../mainwindow.cc" line="342"/>
         <source>Toggle Full Screen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="234"/>
+        <location filename="../mainwindow.cc" line="237"/>
         <source>Unrecognized Gesture</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="239"/>
+        <location filename="../mainwindow.cc" line="242"/>
         <source>Open Link in Background Tab</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="254"/>
+        <location filename="../mainwindow.cc" line="257"/>
         <source>Undo Close Tab</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="269"/>
+        <location filename="../mainwindow.cc" line="272"/>
         <source>Forward</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="264"/>
+        <location filename="../mainwindow.cc" line="267"/>
         <source>Backward</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="274"/>
+        <location filename="../mainwindow.cc" line="277"/>
         <source>Previous Tab</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="279"/>
+        <location filename="../mainwindow.cc" line="282"/>
         <source>Next Tab</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="284"/>
+        <location filename="../mainwindow.cc" line="287"/>
         <source>Minimize Window</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="294"/>
+        <location filename="../mainwindow.cc" line="297"/>
         <source>Scroll Top</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="299"/>
+        <location filename="../mainwindow.cc" line="302"/>
         <source>Scroll Bottom</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="342"/>
+        <location filename="../mainwindow.cc" line="345"/>
         <source>&amp;Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="343"/>
+        <location filename="../mainwindow.cc" line="346"/>
         <source>&amp;Preferences</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="346"/>
+        <location filename="../mainwindow.cc" line="349"/>
         <source>&amp;Help</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="348"/>
+        <location filename="../mainwindow.cc" line="351"/>
         <source>&amp;Console</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="349"/>
+        <location filename="../mainwindow.cc" line="352"/>
         <source>&amp;About</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="361"/>
+        <location filename="../mainwindow.cc" line="364"/>
         <source>restoring last sessions ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="387"/>
+        <location filename="../mainwindow.cc" line="390"/>
         <source>logging in bilibili.tv as %1 ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="392"/>
+        <location filename="../mainwindow.cc" line="395"/>
         <source>logging in nicovideo.jp as %1 ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="571"/>
-        <location filename="../mainwindow.cc" line="585"/>
-        <source>openning new window</source>
+        <location filename="../mainwindow.cc" line="574"/>
+        <location filename="../mainwindow.cc" line="588"/>
+        <source>opening new window</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="587"/>
+        <location filename="../mainwindow.cc" line="605"/>
+        <location filename="../mainwindow.cc" line="619"/>
+        <location filename="../mainwindow.cc" line="633"/>
+        <source>opening</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cc" line="590"/>
         <source>failed open new window</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="602"/>
-        <location filename="../mainwindow.cc" line="616"/>
-        <location filename="../mainwindow.cc" line="630"/>
-        <source>openning</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.cc" line="644"/>
+        <location filename="../mainwindow.cc" line="647"/>
         <source>saving</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="793"/>
+        <location filename="../mainwindow.cc" line="796"/>
         <source>Double click any tab to exit full screen.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="820"/>
+        <location filename="../mainwindow.cc" line="823"/>
         <source>Click any edge of the screen to toggle tool bars.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cc" line="877"/>
+        <source>file saved</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -714,87 +721,87 @@
 <context>
     <name>QtExt::WebView</name>
     <message>
-        <location filename="../../../module/qtext/webview.cc" line="106"/>
+        <location filename="../../../module/qtext/webview.cc" line="105"/>
         <source>Save the web page as image to disk and clipboard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../module/qtext/webview.cc" line="105"/>
+        <location filename="../../../module/qtext/webview.cc" line="104"/>
         <source>Clip the Page</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../../module/qtext/webview.cc" line="112"/>
         <location filename="../../../module/qtext/webview.cc" line="113"/>
-        <location filename="../../../module/qtext/webview.cc" line="114"/>
         <source>Zoom In</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../../module/qtext/webview.cc" line="120"/>
         <location filename="../../../module/qtext/webview.cc" line="121"/>
-        <location filename="../../../module/qtext/webview.cc" line="122"/>
         <source>Zoom Out</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../../module/qtext/webview.cc" line="128"/>
         <location filename="../../../module/qtext/webview.cc" line="129"/>
-        <location filename="../../../module/qtext/webview.cc" line="130"/>
         <source>Actual Size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../../module/qtext/webview.cc" line="136"/>
         <location filename="../../../module/qtext/webview.cc" line="137"/>
-        <location filename="../../../module/qtext/webview.cc" line="138"/>
         <source>Clear Highlight</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../../module/qtext/webview.cc" line="141"/>
         <location filename="../../../module/qtext/webview.cc" line="142"/>
-        <location filename="../../../module/qtext/webview.cc" line="143"/>
         <source>Open in System Default Browser</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../module/qtext/webview.cc" line="235"/>
+        <location filename="../../../module/qtext/webview.cc" line="234"/>
         <source>Unnamed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../module/qtext/webview.cc" line="274"/>
-        <source>openning</source>
+        <location filename="../../../module/qtext/webview.cc" line="273"/>
+        <source>opening</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../module/qtext/webview.cc" line="298"/>
+        <location filename="../../../module/qtext/webview.cc" line="297"/>
         <source>clipping</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../module/qtext/webview.cc" line="322"/>
+        <location filename="../../../module/qtext/webview.cc" line="321"/>
         <source>saved</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../module/qtext/webview.cc" line="324"/>
+        <location filename="../../../module/qtext/webview.cc" line="323"/>
         <source>unable to save</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../module/qtext/webview.cc" line="344"/>
+        <location filename="../../../module/qtext/webview.cc" line="343"/>
         <source>failed to download %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../module/qtext/webview.cc" line="348"/>
+        <location filename="../../../module/qtext/webview.cc" line="347"/>
         <source>download is not allowed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../module/qtext/webview.cc" line="367"/>
+        <location filename="../../../module/qtext/webview.cc" line="366"/>
         <source>History</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../module/qtext/webview.cc" line="384"/>
+        <location filename="../../../module/qtext/webview.cc" line="383"/>
         <source>Blank</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1042,22 +1049,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../module/webbrowser/webbrowser.cc" line="640"/>
-        <source>openning</source>
+        <location filename="../../../module/webbrowser/webbrowser.cc" line="641"/>
+        <source>opening</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../module/webbrowser/webbrowser.cc" line="670"/>
+        <location filename="../../../module/webbrowser/webbrowser.cc" line="671"/>
         <source>no recent closed tabs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../module/webbrowser/webbrowser.cc" line="752"/>
+        <location filename="../../../module/webbrowser/webbrowser.cc" line="753"/>
         <source>Start Page</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../module/webbrowser/webbrowser.cc" line="852"/>
+        <location filename="../../../module/webbrowser/webbrowser.cc" line="853"/>
         <source>Annot Browser</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1092,18 +1099,24 @@
 <context>
     <name>YoukuMrlResolver</name>
     <message>
-        <location filename="../../../module/mrlresolver/youkumrlresolver.cc" line="52"/>
-        <location filename="../../../module/mrlresolver/youkumrlresolver.cc" line="75"/>
+        <location filename="../../../module/mrlresolver/youkumrlresolver.cc" line="54"/>
+        <location filename="../../../module/mrlresolver/youkumrlresolver.cc" line="95"/>
+        <location filename="../../../module/mrlresolver/youkumrlresolver.cc" line="100"/>
+        <location filename="../../../module/mrlresolver/youkumrlresolver.cc" line="107"/>
+        <location filename="../../../module/mrlresolver/youkumrlresolver.cc" line="143"/>
+        <location filename="../../../module/mrlresolver/youkumrlresolver.cc" line="152"/>
+        <location filename="../../../module/mrlresolver/youkumrlresolver.cc" line="160"/>
+        <location filename="../../../module/mrlresolver/youkumrlresolver.cc" line="194"/>
         <source>failed to resolve URL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../module/mrlresolver/youkumrlresolver.cc" line="62"/>
+        <location filename="../../../module/mrlresolver/youkumrlresolver.cc" line="60"/>
         <source>resolving media URL ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../module/mrlresolver/youkumrlresolver.cc" line="81"/>
+        <location filename="../../../module/mrlresolver/youkumrlresolver.cc" line="78"/>
         <source>network error, failed to resolve media URL</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1111,13 +1124,15 @@
 <context>
     <name>YoutubeMrlResolver</name>
     <message>
-        <location filename="../../../module/mrlresolver/youtubemrlresolver.cc" line="50"/>
-        <location filename="../../../module/mrlresolver/youtubemrlresolver.cc" line="83"/>
+        <location filename="../../../module/mrlresolver/youtubemrlresolver.cc" line="55"/>
+        <location filename="../../../module/mrlresolver/youtubemrlresolver.cc" line="62"/>
+        <location filename="../../../module/mrlresolver/youtubemrlresolver.cc" line="94"/>
+        <location filename="../../../module/mrlresolver/youtubemrlresolver.cc" line="143"/>
         <source>failed to resolve URL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../module/mrlresolver/youtubemrlresolver.cc" line="89"/>
+        <location filename="../../../module/mrlresolver/youtubemrlresolver.cc" line="87"/>
         <source>network error, failed to resolve media URL</source>
         <translation type="unfinished"></translation>
     </message>

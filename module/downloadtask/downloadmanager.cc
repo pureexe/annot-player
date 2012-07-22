@@ -17,9 +17,11 @@ DownloadManager::DownloadManager(QObject *parent)
 {
 #ifdef WITH_MODULE_ANNOTDOWN
   downloader_ = new AnnotationDownloader(this);
-  connect(downloader_, SIGNAL(error(QString)), SIGNAL(error(QString)));
+  connect(downloader_, SIGNAL(errorMessage(QString)), SIGNAL(errorMessage(QString)));
   connect(downloader_, SIGNAL(warning(QString)), SIGNAL(warning(QString)));
   connect(downloader_, SIGNAL(message(QString)), SIGNAL(message(QString)));
+
+  connect(downloader_, SIGNAL(fileSaved(QString)), SIGNAL(fileSaved(QString)));
 #endif // WITH_MODULE_ANNOTDOWN
 }
 
@@ -152,7 +154,7 @@ DownloadManager::addTask(DownloadTask *t)
 {
   Q_ASSERT(t);
   connect(t, SIGNAL(finished(DownloadTask*)), SLOT(refreshSchedule()), Qt::QueuedConnection);
-  connect(t, SIGNAL(error(QString)), SLOT(refreshSchedule()), Qt::QueuedConnection);
+  connect(t, SIGNAL(errorMessage(QString)), SLOT(refreshSchedule()), Qt::QueuedConnection);
   connect(t, SIGNAL(downloadAnnotationRequested(QString)), SLOT(downloadAnnotation(QString)));
   connect(t, SIGNAL(downloadAnnotationRequested(QString,QString,QString)), SLOT(downloadAnnotation(QString,QString,QString)));
   tasks_.append(t);

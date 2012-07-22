@@ -25,22 +25,22 @@ class ConsoleDialog : public AcWindow
   };
 
 public:
-  explicit ConsoleDialog(QWidget *parent = 0);
+  explicit ConsoleDialog(QWidget *parent = nullptr);
   ~ConsoleDialog();
 
   static void messageHandler(QtMsgType type, const char *msg);
 
+signals:
+  void asyncLogText(const QString &text);
+  void asyncDebugText(const QString &text);
 public slots:
+  void sendLogText(const QString &text) { emit asyncLogText(text); }
+  void sendDebugText(const QString &text) { emit asyncDebugText(text); }
+
   void appendLogText(const QString &text);
   void appendDebugText(const QString &text);
+
   void clear();
-
-  // - Implementation -
-signals:
-  void debugMessageReceived(QString msg); ///< \internal
-private slots:
-  void emit_debugMessageReceived(const QString &msg) { emit debugMessageReceived(msg); }
-
 private:
   void createLayout();
 

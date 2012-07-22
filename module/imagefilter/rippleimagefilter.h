@@ -29,7 +29,7 @@ class RippleImageFilter : public QObject, public ImageFilter
   qint8 offset_;
 
 public:
-  explicit RippleImageFilter(QObject *parent = 0);
+  explicit RippleImageFilter(QObject *parent = nullptr);
   ~RippleImageFilter();
 
   qreal opacity() const { return opacity_; }
@@ -48,10 +48,10 @@ public:
 
   bool isDirty() const { return dirty_; }
 
-  virtual bool needsDisplay() const { return isDirty() || hasCenter(); } ///< \reimp
+  bool needsDisplay() const override { return isDirty() || hasCenter(); }
 
 public:
-  virtual void drawImage(QPainter &painter, const QPointF &pos, const QImage &image) const; ///< \reimp
+  void drawImage(QPainter &painter, const QPointF &pos, const QImage &image) const override;
 
   // FIXME
   void drawImage(QPainter &painter, const QImage &image) const

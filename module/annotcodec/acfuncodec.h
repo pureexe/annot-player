@@ -28,11 +28,11 @@ class AcfunCodec : public AnnotationCodec
 public:
   enum Format { UnknownFormat = 0, Json, Xml };
 
-  explicit AcfunCodec(QObject *parent = 0);
+  explicit AcfunCodec(QObject *parent = nullptr);
 
 public:
-  virtual bool match(const QString &url) const; ///< \reimp
-  virtual void fetch(const QString &url, const QString &originalUrl); ///< \reimp
+  bool match(const QString &url) const override;
+  void fetch(const QString &url, const QString &originalUrl) override;
 
 public:
   static AnnotationList parseFile(const QString &fileName, Format f = UnknownFormat)

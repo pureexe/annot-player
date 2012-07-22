@@ -40,7 +40,7 @@ class AnnotationDatabase : public QObject
 
   // - Construction -
 public:
-  explicit AnnotationDatabase(QObject *parent = 0)
+  explicit AnnotationDatabase(QObject *parent = nullptr)
     : Base(parent), disposed_(false) { }
   ~AnnotationDatabase();
 

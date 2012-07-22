@@ -56,14 +56,14 @@ NicovideoCodec::fetchLocalFile(const QString &path, const QString &originalUrl)
   DOUT("enter: path =" << path);
   QFile file(path);
   if (!file.exists() || !file.open(QIODevice::ReadOnly)) {
-    emit error(tr("network error, failed to resolve nicovideo comments"));
+    emit errorMessage(tr("network error, failed to resolve nicovideo comments"));
     return;
   }
   QByteArray data = file.readAll();
   //DOUT("data =" << QString(data));
   AnnotationList l = parseDocument(data);
   if (l.isEmpty())
-    emit error(tr("failed to resolve nicovideo comments"));
+    emit errorMessage(tr("failed to resolve nicovideo comments"));
   else {
 #ifdef WITH_MODULE_ANNOTCACHE
     AnnotationCacheManager::globalInstance()->saveData(data, originalUrl);
@@ -87,7 +87,9 @@ NicovideoCodec::parseDocument(const QByteArray &data)
     return AnnotationList();
   }
   QDomDocument doc;
-  doc.setContent(skipXmlLeadingComment(data));
+  doc.setContent(skipXmlLeadingComment(
+    QChar(data[0]).isSpace() ? data.trimmed() : data
+  ));
   if (doc.isNull()) {
     DOUT("exit: invalid document root");
     return AnnotationList();

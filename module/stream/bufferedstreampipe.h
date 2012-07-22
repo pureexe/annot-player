@@ -20,14 +20,14 @@ public:
   enum State { Error = -1, Stopped = 0, Running, Finished };
   enum { DefaultBufferSize = 10240 };
 
-  BufferedStreamPipe(InputStream *in, OutputStream *out, QObject *parent = 0)
+  BufferedStreamPipe(InputStream *in, OutputStream *out, QObject *parent = nullptr)
     : Base(parent), StreamPipe(in, out), bufferSize_(DefaultBufferSize), state_(Stopped)
   { }
 
 signals:
   void finished();
   void stopped();
-  void error(QString message);
+  void errorMessage(QString message);
 
 public:
   int bufferSize() const { return bufferSize_; }
@@ -40,8 +40,8 @@ public:
 public slots:
   void setBufferSize(int size) { bufferSize_ = size; }
 
-  virtual void run(); ///< \reimp
-  virtual void stop() { setState(Stopped); emit stopped(); } ///< \reimp
+  void run() override;
+  void stop() override { setState(Stopped); emit stopped(); }
 
 protected:
   void setState(State state) { state_ = state; }

@@ -32,7 +32,7 @@ class RenderTask : public QObject
   Renderable *device_;
 
 public:
-  explicit RenderTask(Renderable *device, QObject *parent = 0)
+  explicit RenderTask(Renderable *device, QObject *parent = nullptr)
     : Base(parent), device_(device) { }
 
   virtual Renderable *device() const { return device_; }
@@ -52,7 +52,7 @@ class RenderThread  : public QThread
   QList<RenderTask*> tasks_;
 
 public:
-  explicit RenderThread(QObject *parent = 0)
+  explicit RenderThread(QObject *parent = nullptr)
     : Base(parent) { }
 
   void addTask(RenderTask *t)

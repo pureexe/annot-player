@@ -59,7 +59,7 @@ MrlDownloadTask::downloadSingleMedia(const MediaInfo &mi, QNetworkCookieJar *jar
 
   RemoteStream &in = in_impl;
   connect(&in, SIGNAL(progress(qint64,qint64)), SIGNAL(progress(qint64,qint64)));
-  connect(&in, SIGNAL(error(QString)), SIGNAL(error(QString)));
+  connect(&in, SIGNAL(errorMessage(QString)), SIGNAL(errorMessage(QString)));
   connect(this, SIGNAL(stopped()), &in, SLOT(stop()));
 
   QString realUrl = mi.mrls.first().url;
@@ -79,7 +79,7 @@ MrlDownloadTask::downloadSingleMedia(const MediaInfo &mi, QNetworkCookieJar *jar
   QString contentType = in.contentType();
   if (!isMultiMediaMimeType(contentType)) {
     setState(Error);
-    emit error(tr("access denied to download URL") + ": " + realUrl);
+    emit errorMessage(tr("access denied to download URL") + ": " + realUrl);
     in.stop();
     quit();
     DOUT("exit: invalid file type");
@@ -101,7 +101,7 @@ MrlDownloadTask::downloadSingleMedia(const MediaInfo &mi, QNetworkCookieJar *jar
   out.setFileName(tmpFile);
   if (!out.open()) {
     setState(Error);
-    emit error(tr("failed to open file to write") + ": " + tmpFile);
+    emit errorMessage(tr("failed to open file to write") + ": " + tmpFile);
     in.stop();
     quit();
     DOUT("exit: cannot write to file");
@@ -110,7 +110,7 @@ MrlDownloadTask::downloadSingleMedia(const MediaInfo &mi, QNetworkCookieJar *jar
 
   // - Pipe -
   BufferedStreamPipe pipe(&in, &out);
-  connect(&pipe, SIGNAL(error(QString)), SIGNAL(error(QString)));
+  connect(&pipe, SIGNAL(errorMessage(QString)), SIGNAL(errorMessage(QString)));
   connect(this, SIGNAL(stopped()), &pipe, SLOT(stop()));
 
   if (!isStopped())
@@ -125,24 +125,24 @@ MrlDownloadTask::downloadSingleMedia(const MediaInfo &mi, QNetworkCookieJar *jar
     suf = flv ? ".flv" : ".mp4";
 
     QString fileName = downloadPath() + FILE_PATH_SEP + name + suf;
-    for (int i = 2; QFile::exists(fileName); i++)
-      fileName = downloadPath() + FILE_PATH_SEP + name + " " + QString::number(i) + suf;
-    //QFile::remove(fileName);
+    //for (int i = 2; QFile::exists(fileName); i++)
+    //  fileName = downloadPath() + FILE_PATH_SEP + name + " " + QString::number(i) + suf;
+    QtExt::trashOrRemoveFile(fileName);
     ok =  QFile::rename(tmpFile, fileName);
     if (ok)
       setFileName(fileName);
     else
-      emit error(tr("failed to rename downloaded file") + ": " + fileName);
+      emit errorMessage(tr("failed to rename downloaded file") + ": " + fileName);
 
     setState(Finished);
     qint64 size = in.size();
     emit progress(size, size);
     emit finished(this);
   } else {
-    QFile::remove(tmpFile);
+    QtExt::trashOrRemoveFile(tmpFile);
     if (!isStopped())
       setState(Error);;
-    emit error(tr("download incomplete") + ": " + tmpFile);
+    emit errorMessage(tr("download incomplete") + ": " + tmpFile);
   }
   quit();
   DOUT("exit");

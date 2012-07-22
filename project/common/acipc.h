@@ -18,7 +18,7 @@ class AcIpcController : public QObject
   uint id_;
   MetaCallFilter *filter_;
 public:
-  explicit AcIpcController(QObject *parent = 0, uint id = 0)
+  explicit AcIpcController(QObject *parent = nullptr, uint id = 0)
     : Base(parent), id_(id), filter_(0) { }
 
 signals:

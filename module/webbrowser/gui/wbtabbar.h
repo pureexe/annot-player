@@ -15,7 +15,7 @@ class WbTabBar : public QTabBar
   typedef QTabBar Base;
 
 public:
-  explicit WbTabBar(QWidget *parent = 0)
+  explicit WbTabBar(QWidget *parent = nullptr)
     : Base(parent) { }
 
 signals:
@@ -23,7 +23,7 @@ signals:
 
   // - Events -
 protected:
-  virtual void mouseDoubleClickEvent(QMouseEvent *e) ///< \reimp
+  void mouseDoubleClickEvent(QMouseEvent *e) override
   {
     if (e->button() == Qt::LeftButton && !e->modifiers()) {
       emit doubleClicked(tabAt(e->globalPos()));

@@ -17,7 +17,7 @@ class Dialog : public DraggableWidget
 
 public:
   ///  Default f: Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint;
-  explicit Dialog(QWidget *parent = 0, Qt::WindowFlags f = 0);
+  explicit Dialog(QWidget *parent = nullptr, Qt::WindowFlags f = 0);
 };
 
 } // namespace QtExt

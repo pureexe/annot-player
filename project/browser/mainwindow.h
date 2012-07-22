@@ -35,10 +35,10 @@ class MainWindow: public WebBrowser
   FadeAnimation *fadeAni_;
 
 public:
-  explicit MainWindow(QWidget *parent = 0);
+  explicit MainWindow(QWidget *parent = nullptr);
 
 public slots:
-  virtual void quit(); ///< \reimp
+  void quit() override;
   void login();
   void newWindow();
 protected:
@@ -71,14 +71,14 @@ protected slots:
 
   // - Events -
 public slots:
-  virtual void setVisible(bool visible); ///< \reimp
+  void setVisible(bool visible) override;
 protected:
-  virtual bool event(QEvent *e); ///< \reimp
-  virtual void keyPressEvent(QKeyEvent *e); ///< \reimp
-  virtual void closeEvent(QCloseEvent *e); ///< \reimp
-  virtual void focusInEvent(QFocusEvent *e); ///< \reimp
-  virtual void mouseMoveEvent(QMouseEvent *event); ///< \reimp
-  virtual void mousePressEvent(QMouseEvent *event); ///< \reimp
+  bool event(QEvent *e) override;
+  void keyPressEvent(QKeyEvent *e) override;
+  void closeEvent(QCloseEvent *e) override;
+  void focusInEvent(QFocusEvent *e) override;
+  void mouseMoveEvent(QMouseEvent *event) override;
+  void mousePressEvent(QMouseEvent *event) override;
 
   bool isGlobalPosAroundToolBar(const QPoint &pos) const;
 
@@ -87,9 +87,10 @@ protected slots:
   void toggleMagnifier();
   void autoHideToolBar();
 
-
-  // - Helpers -
   bool isValidWindowSize(const QSize &sz) const;
+
+protected slots:
+  void notifyFileSaved(const QString &fileName);
 
 private:
   void createMenus();

@@ -21,7 +21,7 @@ class AnnotationFilter : public QObject
 
   // - Constructions -
 public:
-  explicit AnnotationFilter(DataManager *dm, QObject *parent = 0)
+  explicit AnnotationFilter(DataManager *dm, QObject *parent = nullptr)
     : Base(parent), dm_(dm), enabled_(false), languages_(0), annotationCountHint_(0)
   { Q_ASSERT(dm_); }
 

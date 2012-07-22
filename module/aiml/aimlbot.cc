@@ -10,7 +10,7 @@
 
 // - Constructions -
 AimlBot::AimlBot(bool showProgress)
-  : parser_(0)
+  : parser_(nullptr)
 {
   // TODO: async!
   AimlParser *parser = new AimlParser;
@@ -22,10 +22,10 @@ AimlBot::AimlBot(bool showProgress)
   QDir dir(dirname);
   QStringList files = dir.entryList(QStringList()<<"*.aiml");
 
-  QProgressDialog *pd = 0;
+  QProgressDialog *pd = nullptr;
   if (showProgress) {
     pd = new QProgressDialog(this);
-    pd->setCancelButton(0);
+    pd->setCancelButton(nullptr);
     pd->setMaximum(files.count());
   }
 

@@ -16,16 +16,16 @@ class CheckBox : public QCheckBox
   typedef QCheckBox Base;
 
 public:
-  explicit CheckBox(QWidget *parent = 0)
+  explicit CheckBox(QWidget *parent = nullptr)
     : Base(parent) { }
 
-  explicit CheckBox(const QString &text, QWidget *parent = 0)
+  explicit CheckBox(const QString &text, QWidget *parent = nullptr)
     : Base(text, parent) { }
 
   // - Events -
 protected:
-  virtual void enterEvent(QEvent *event); ///< \reimp
-  virtual void leaveEvent(QEvent *event); ///< \reimp
+  void enterEvent(QEvent *event) override;
+  void leaveEvent(QEvent *event) override;
 };
 
 } // namespace QtExt

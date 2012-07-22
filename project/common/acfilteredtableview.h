@@ -26,7 +26,7 @@ class AcFilteredTableView : public QWidget
   typedef QWidget Base;
 
 public:
-  AcFilteredTableView(QStandardItemModel *sourceModel, QSortFilterProxyModel *proxyModel, QWidget *parent = 0);
+  AcFilteredTableView(QStandardItemModel *sourceModel, QSortFilterProxyModel *proxyModel, QWidget *parent = nullptr);
 
 signals:
   void currentIndexChanged(QModelIndex index);

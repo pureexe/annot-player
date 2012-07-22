@@ -14,14 +14,14 @@ class AcLineEdit : public QLineEdit
   typedef QLineEdit Base;
 
 public:
-  explicit AcLineEdit(QWidget *parent = 0);
+  explicit AcLineEdit(QWidget *parent = nullptr);
 
 public slots:
   void enterText(const QString &text); // setText and emit enterPressed
 
   // - Events -
 //protected:
-//  virtual void contextMenuEvent(QContextMenuEvent *event); ///< \reimp
+//  void contextMenuEvent(QContextMenuEvent *event) override;
 };
 
 #endif // ACLINEEDIT_H

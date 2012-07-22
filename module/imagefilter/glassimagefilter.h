@@ -18,7 +18,7 @@ class GlassImageFilter : public QObject, public ImageFilter
   int radius_;
   QPoint center_;
 public:
-  explicit GlassImageFilter(QObject *parent = 0)
+  explicit GlassImageFilter(QObject *parent = nullptr)
     : Base(parent), radius_(0) { }
 
   int radius() const { return radius_; }
@@ -29,7 +29,7 @@ public slots:
   void setCenter(const QPoint &pos) { center_ = pos; }
 
 public:
-  virtual QImage &filterImage(QImage &image) const ///< \reimp
+  QImage &filterImage(QImage &image) const override
   {
     if (!image.isNull())
       for (int x = 0; x < image.width(); x++)

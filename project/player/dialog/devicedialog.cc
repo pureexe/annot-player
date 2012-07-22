@@ -3,7 +3,6 @@
 
 #include "devicedialog.h"
 #include "tr.h"
-#include "logger.h"
 #include "project/common/acui.h"
 #include "module/qtext/ss.h"
 #ifdef Q_OS_WIN
@@ -21,8 +20,6 @@
 #include "module/debug/debug.h"
 
 #define COMBOBOX_MINWIDTH      100
-
-using namespace Logger;
 
 #define WINDOW_FLAGS ( \
   Qt::Dialog | \
@@ -75,13 +72,13 @@ DeviceDialog::createLayout()
   AcUi *ui = AcUi::globalInstance();
 
   QString holder =
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     "x:\\"
-#elif defined(Q_WS_MAC)
+#elif defined(Q_OS_MAC)
     "/dev/cdrom"
 #else
     "/dev/cdrom"
-#endif // Q_WS_
+#endif // Q_OS_
   ;
 
   pathEdit_ = ui->makeComboBox(0, TR(T_PATH), TR(T_PATH), holder);
@@ -149,7 +146,7 @@ DeviceDialog::ok()
 
   QString path = currentPath();
   if (!QFile::exists(path)) {
-    warn(TR(T_ERROR_BAD_FILEPATH) + ": " + path);
+    emit warning(TR(T_ERROR_BAD_FILEPATH) + ": " + path);
     return;
   }
 

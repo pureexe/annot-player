@@ -20,7 +20,7 @@ void
 RemoteStream::waitForReadyRead()
 {
   QEventLoop loop;
-  connect(this, SIGNAL(error(QString)), &loop, SLOT(quit()));
+  connect(this, SIGNAL(errorMessage(QString)), &loop, SLOT(quit()));
   connect(this, SIGNAL(finished()), &loop, SLOT(quit()));
   connect(this, SIGNAL(readyRead()), &loop, SLOT(quit()));
   connect(this, SIGNAL(stopped()), &loop, SLOT(quit()));

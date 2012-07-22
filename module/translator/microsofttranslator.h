@@ -23,10 +23,10 @@ class MicrosoftTranslator : public Translator
 
   // - Constructions -
 public:
-  explicit MicrosoftTranslator(QObject *parent = 0);
+  explicit MicrosoftTranslator(QObject *parent = nullptr);
 
 public slots:
-  virtual void translate(const QString &text, const QString &to, const QString &from = QString()); ///< \reimp
+  void translate(const QString &text, const QString &to, const QString &from = QString()) override;
 
 protected slots:
   void processNetworkReply(QNetworkReply *reply);

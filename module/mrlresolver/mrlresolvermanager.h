@@ -21,7 +21,7 @@ class MrlResolverManager : public MrlResolver
 public:
   enum Resolver { Youtube = 0, GoogleVideo, Lua, ResolverCount };
 
-  explicit MrlResolverManager(QObject *parent = 0)
+  explicit MrlResolverManager(QObject *parent = nullptr)
     : Base(parent)
   { init(); }
 
@@ -30,14 +30,14 @@ public:
   int resolverForMedia(const QString &href) const;
   int resolverForSubtitle(const QString &href) const;
 
-  virtual bool matchMedia(const QString &href) const ///< \reimp
+  bool matchMedia(const QString &href) const override
   { return resolverForMedia(href) >= 0; }
-  virtual bool matchSubtitle(const QString &href) const ///< \reimp
+  bool matchSubtitle(const QString &href) const override
   { return resolverForSubtitle(href) >= 0; }
 
   bool resolveMedia(int id, const QString &href);
 
-  virtual bool resolveMedia(const QString &href) ///< \reimp
+  bool resolveMedia(const QString &href) override
   {
     QString url = autoCompleteUrl(href);
     int r = resolverForMedia(url);
@@ -45,7 +45,7 @@ public:
   }
 
   bool resolveSubtitle(int id, const QString &href);
-  virtual bool resolveSubtitle(const QString &href) ///< \reimp
+  bool resolveSubtitle(const QString &href) override
   {
     QString url = autoCompleteUrl(href);
     int r = resolverForSubtitle(url);

@@ -16,10 +16,10 @@ class NamedRadioButton : public RadioButton
   typedef RadioButton Base;
 
 public:
-  explicit NamedRadioButton(QWidget *parent = 0)
+  explicit NamedRadioButton(QWidget *parent = nullptr)
     : Base(parent) { init(); }
 
-  explicit NamedRadioButton(const QString &text, QWidget *parent = 0)
+  explicit NamedRadioButton(const QString &text, QWidget *parent = nullptr)
     : Base(text, parent) { init(); }
 
 signals:

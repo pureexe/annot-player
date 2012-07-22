@@ -33,6 +33,7 @@
     "user_create_time " ANNOTDB_DATETIME " NOT NULL," \
     "user_login_time "  ANNOTDB_DATETIME " NOT NULL," \
     "user_login_ip "    "BIGINT," \
+    "user_login_count "   "BIGINT NOT NULL DEFAULT 0," \
     "user_blessed_count " "INT UNSIGNED NOT NULL DEFAULT 0," \
     "user_cursed_count "  "INT UNSIGNED NOT NULL DEFAULT 0," \
     "user_blocked_count " "INT UNSIGNED NOT NULL DEFAULT 0," \
@@ -133,10 +134,11 @@
       "user_create_time,"       /* 9 */ \
       "user_login_time,"        /* 10 */ \
       "user_login_ip,"          /* 11 */ \
-      "user_blessed_count,"     /* 12 */ \
-      "user_cursed_count,"      /* 13 */ \
-      "user_blocked_count,"     /* 14 */ \
-      "user_annot_count"        /* 15 */ \
+      "user_login_count,"       /* 12 */ \
+      "user_blessed_count,"     /* 13 */ \
+      "user_cursed_count,"      /* 14 */ \
+      "user_blocked_count,"     /* 15 */ \
+      "user_annot_count"        /* 16 */ \
     ") VALUES (" \
       "?,"      /* 0: user_status */ \
       "?,"      /* 1: user_flags */ \
@@ -149,11 +151,12 @@
       "?,"      /* 8: user_language */ \
       ANNOTDB_FROM_UNIXTIME("?") "," /* 9: user_create_time */ \
       ANNOTDB_FROM_UNIXTIME("?") "," /* 10: user_login_time */ \
-      "?,"      /* 11: user_login_time */ \
-      "?,"      /* 12: user_blessed_count */ \
-      "?,"      /* 13: user_cursed_count */ \
-      "?,"      /* 14: user_blocked_count */ \
-      "?"       /* 15: user_annot_count */ \
+      "?,"      /* 11: user_login_ip */ \
+      "?,"      /* 12: user_login_count */ \
+      "?,"      /* 13: user_blessed_count */ \
+      "?,"      /* 14: user_cursed_count */ \
+      "?,"      /* 15: user_blocked_count */ \
+      "?"       /* 16: user_annot_count */ \
     ")" \
   ); \
   (_query).addBindValue((_user).status());       /* 0 */ \
@@ -168,10 +171,11 @@
   (_query).addBindValue((_user).createTime());   /* 9 */ \
   (_query).addBindValue((_user).loginTime());    /* 10 */ \
   (_query).addBindValue((_user).loginIp());      /* 11 */ \
-  (_query).addBindValue((_user).blessedCount()); /* 12 */ \
-  (_query).addBindValue((_user).cursedCount());  /* 13 */ \
-  (_query).addBindValue((_user).blockedCount()); /* 14 */ \
-  (_query).addBindValue((_user).annotCount());   /* 15 */ \
+  (_query).addBindValue((_user).loginCount());   /* 12 */ \
+  (_query).addBindValue((_user).blessedCount()); /* 13 */ \
+  (_query).addBindValue((_user).cursedCount());  /* 14 */ \
+  (_query).addBindValue((_user).blockedCount()); /* 15 */ \
+  (_query).addBindValue((_user).annotCount());   /* 16 */ \
 }
 
 #define ANNOTDB_INSERT_TOKEN(_token, _query) \
@@ -393,13 +397,15 @@
   Q_ASSERT(ok); \
   (_user).setLoginIp((_query).value(11).toLongLong(&ok)); \
   Q_ASSERT(ok); \
-  (_user).setBlessedCount((_query).value(12).toUInt(&ok)); \
+  (_user).setLoginCount((_query).value(12).toLongLong(&ok)); \
   Q_ASSERT(ok); \
-  (_user).setCursedCount((_query).value(13).toUInt(&ok)); \
+  (_user).setBlessedCount((_query).value(13).toUInt(&ok)); \
   Q_ASSERT(ok); \
-  (_user).setBlockedCount((_query).value(14).toUInt(&ok)); \
+  (_user).setCursedCount((_query).value(14).toUInt(&ok)); \
   Q_ASSERT(ok); \
-  (_user).setAnnotCount((_query).value(15).toUInt(&ok)); \
+  (_user).setBlockedCount((_query).value(15).toUInt(&ok)); \
+  Q_ASSERT(ok); \
+  (_user).setAnnotCount((_query).value(16).toUInt(&ok)); \
   Q_ASSERT(ok); \
 }
 

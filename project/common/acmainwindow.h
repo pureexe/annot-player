@@ -20,9 +20,20 @@ class AcMainWindow : public AcMainWindowBase
   typedef AcMainWindow Self;
   typedef AcMainWindowBase Base;
 
+signals:
+  void message(const QString &text);
+  void errorMessage(const QString &text);
+  void warning(const QString &text);
+  void notification(const QString &text);
+protected slots:
+  void showMessage(const QString &text);
+  void showError(const QString &text);
+  void warn(const QString &text);
+  void notify(const QString &text);
+
   // - Construction -
 public:
-  explicit AcMainWindow(QWidget *parent = 0, Qt::WindowFlags f = 0);
+  explicit AcMainWindow(QWidget *parent = nullptr, Qt::WindowFlags f = 0);
 
   bool isFadeEnabled() const { return fadeEnabled_; }
   void setFadeEnabled(bool t) { fadeEnabled_ = t; }
@@ -31,21 +42,8 @@ public:
   bool isRippleEnabled() const { return rippleEnabled_; }
   void setRippleEnabled(bool t);
 
-  //-  Log -
-signals:
-  void message(const QString &text);
-  void errorMessage(const QString &text);
-  void warning(const QString &text);
-  void notification(const QString &text);
-
 public slots:
   void fadeOut();
-
-protected slots:
-  void showMessage(const QString &text);
-  void error(const QString &text);
-  void warn(const QString &text);
-  void notify(const QString &text);
 
 protected:
   bool autoHideMenuBar() const { return autoHideMenuBar_; }
@@ -54,13 +52,13 @@ protected slots:
 
   // - Events -
 public slots:
-  virtual void setVisible(bool visible); ///< \reimp
+  void setVisible(bool visible) override;
 protected:
-  virtual void mousePressEvent(QMouseEvent *event); ///< \reimp
-  virtual void mouseMoveEvent(QMouseEvent *event); ///< \reimp
-  virtual void mouseReleaseEvent(QMouseEvent *event); ///< \reimp
-  virtual void paintEvent(QPaintEvent *event); ///< \reimp
-  virtual void closeEvent(QCloseEvent *e); ///< \reimp
+  void mousePressEvent(QMouseEvent *event) override;
+  void mouseMoveEvent(QMouseEvent *event) override;
+  void mouseReleaseEvent(QMouseEvent *event) override;
+  void paintEvent(QPaintEvent *event) override;
+  void closeEvent(QCloseEvent *e) override;
 
 private:
   QTimer *messageTimer_;

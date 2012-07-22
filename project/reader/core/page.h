@@ -36,14 +36,14 @@ namespace Core {
   private:
     Page(const Self&);
   public:
-    explicit Page(QObject *parent = 0)
-      : Base(parent), page_(0), num_(0), catalog_(0) { }
+    explicit Page(QObject *parent = nullptr)
+      : Base(parent), page_(nullptr), num_(0), catalog_(nullptr) { }
 
-    explicit Page(Poppler::Page *page, int number, QObject *parent = 0)
-      : Base(parent), page_(page), num_(number), catalog_(0) { }
+    explicit Page(Poppler::Page *page, int number, QObject *parent = nullptr)
+      : Base(parent), page_(page), num_(number), catalog_(nullptr) { }
 
     bool bad() const { return !page_; }
-    void clear() { page_ = 0; }
+    void clear() { page_ = nullptr; }
     int hash() const { return reinterpret_cast<ulong>(impl()); }
 
     // Properties:

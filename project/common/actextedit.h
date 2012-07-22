@@ -14,9 +14,9 @@ class AcTextEdit : public QtExt::TextEdit
   typedef QtExt::TextEdit Base;
 
 public:
-  explicit AcTextEdit(QWidget *parent = 0)
+  explicit AcTextEdit(QWidget *parent = nullptr)
     : Base(parent) { init(); }
-  explicit AcTextEdit(const QString &text, QWidget *parent = 0)
+  explicit AcTextEdit(const QString &text, QWidget *parent = nullptr)
     : Base(text, parent) { init(); }
 
   bool containsPlainText(const QString &text) const;

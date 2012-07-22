@@ -25,7 +25,7 @@ class DownloaderController : public QObject
 public:
   static Self *globalController() { static Self g; return &g; }
 protected:
-  explicit DownloaderController(QObject *parent = 0) : Base(parent) { }
+  explicit DownloaderController(QObject *parent = nullptr) : Base(parent) { }
 
 public:
   //QNetworkAccessManager *networkAccessManager() const { return nam_; }
@@ -33,7 +33,7 @@ public:
 
 signals:
   void message(QString);
-  void error(QString);
+  void errorMessage(QString);
   void warning(QString);
   void notification(QString);
   void aborted();
@@ -58,9 +58,9 @@ public:
   enum State { Error = -1, OK = 0, Downloading = 1 };
 
 public:
- explicit Downloader(const QString &fileName, QObject *parent = 0)
+ explicit Downloader(const QString &fileName, QObject *parent = nullptr)
     : Base(parent), nam_(0), reply_(0), state_(OK), fileName_(fileName), stopped_(false) { init(); }
- explicit Downloader(QObject *parent = 0)
+ explicit Downloader(QObject *parent = nullptr)
     : Base(parent), nam_(0), reply_(0), state_(OK), stopped_(false) { init(); }
 
   int state() const { return state_; }
@@ -71,7 +71,7 @@ private:
 signals:
   void progress(qint64 bytesReceived, qint64 bytesTotal);
   void finished();
-  void error(QString);
+  void errorMessage(QString);
   void message(QString);
   void warning(QString);
   void notification(QString);

@@ -16,10 +16,10 @@ class CloseWidgetThread : public QThread
 
   QWidget *w_;
 
-  virtual void run() { w_->close(); } // \reimp
+  void run() override { w_->close(); }
 
 public:
-  explicit CloseWidgetThread(QWidget *w, QObject *parent = 0)
+  explicit CloseWidgetThread(QWidget *w, QObject *parent = nullptr)
     : Base(parent), w_(w) { Q_ASSERT(w_); }
 };
 

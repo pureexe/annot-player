@@ -3,7 +3,6 @@
 
 #include "logindialog.h"
 #include "tr.h"
-#include "logger.h"
 #include "project/common/acui.h"
 #include "module/annotcloud/user.h"
 #include <QtGui>
@@ -17,7 +16,6 @@
 #endif // Q_OS_MAC
 
 using namespace AnnotCloud;
-using namespace Logger;
 
 #define WINDOW_FLAGS_BASE \
   Qt::Dialog | \
@@ -118,12 +116,12 @@ LoginDialog::login()
     userNameEdit_->addItem(name);
 
   if (!User::isValidName(name)) {
-    warn(TR(T_ERROR_BAD_USERNAME));
+    emit warning(TR(T_ERROR_BAD_USERNAME));
     return;
   }
 
   if (!User::isValidPassword(pass)) {
-    warn(TR(T_ERROR_BAD_PASSWORD));
+    emit warning(TR(T_ERROR_BAD_PASSWORD));
     return;
   }
 

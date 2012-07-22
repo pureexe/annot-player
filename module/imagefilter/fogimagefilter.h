@@ -17,7 +17,7 @@ class FogImageFilter : public SimpleImageFilter
 public:
   enum { Brightness = 0, Contrast = 100, Gamma = 300 };
 
-  explicit FogImageFilter(QObject *parent = 0)
+  explicit FogImageFilter(QObject *parent = nullptr)
     : Base(parent) { reset(); }
 
 public slots:

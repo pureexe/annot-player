@@ -15,7 +15,7 @@ class WbToolButton : public WbToolButtonBase
   typedef WbToolButtonBase Base;
 
 public:
-  explicit WbToolButton(QWidget *parent = 0)
+  explicit WbToolButton(QWidget *parent = nullptr)
     : Base(parent) { }
 
 };

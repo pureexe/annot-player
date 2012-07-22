@@ -24,16 +24,21 @@ class CountdownDialog : public AcWindow
 public:
   enum { DefaultCount = 30 }; ///< in second
 
-  explicit CountdownDialog(QWidget *parent = 0);
+  explicit CountdownDialog(QWidget *parent = nullptr);
 
 signals:
   void timeout();
+
+  void message(QString text);
+  void errorMessage(QString text);
+  void warning(QString text);
+  void notification(QString text);
 
 public slots:
   void setCount(int count) { count_ = count; }
   void setText(const QString &text) { message_ = text; } ///< must contain %1
 
-  virtual void setVisible(bool visible); ///< \reimp
+  void setVisible(bool visible) override;
 
 protected slots:
   virtual void run() { emit timeout(); }

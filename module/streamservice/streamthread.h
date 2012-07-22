@@ -18,7 +18,7 @@ struct MediaStreamInfo
   InputStream *inputStream;
   MediaToc    *mediaToc;
 
-  explicit MediaStreamInfo(MediaType t, InputStream *s = 0, MediaToc *toc = 0)
+  explicit MediaStreamInfo(MediaType t, InputStream *s = nullptr, MediaToc *toc = nullptr)
     : mediaType(t), inputStream(s), mediaToc(toc) { }
 };
 
@@ -38,7 +38,7 @@ class StreamThread : public QThread
   QString url_;
 
 public:
-  explicit StreamThread(QObject *parent = 0)
+  explicit StreamThread(QObject *parent = nullptr)
     : Base(parent), duration_(0), port_(0)
   { initLive555(); }
 
@@ -47,8 +47,8 @@ private:
 
 signals:
   void streamReady(QString url);
-  void error(QString msg);
   void message(QString msg);
+  void errorMessage(QString msg);
 
 public:
   int port() const { return port_; }
@@ -70,7 +70,7 @@ public slots:
   void setDuration(qint64 msecs) { duration_ = msecs; }
 
 protected slots:
-  virtual void run(); ///< \reimp
+  void run() override;
 
   void onStreamReady()
   { if (!url_.isEmpty()) emit streamReady(url_); }

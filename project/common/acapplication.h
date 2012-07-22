@@ -53,16 +53,16 @@ public:
 
   // - Events -
 public:
-  virtual bool event(QEvent *e); ///< \reimp
+  bool event(QEvent *e) override;
 
   // - Implementation -
 protected:
   void ignoreWindowsExcetions()
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
   ;
 #else
   { }
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
 
 private:
   static void messageHandler(QtMsgType type, const char *msg);

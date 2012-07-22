@@ -18,6 +18,7 @@ public:
   TEXTHOOKAPI static Self *globalInstance() { static Self g; return &g; }
 
 signals: // No import/export needed for Qt signals.
+  void enabledChanged(bool value);
   //void textReceived(const QString &text, ulong hookId, ulong processId);
   void messageReceived(const QByteArray &data, ulong hookId, ulong processId);
   void processAttached(qint64 pid);
@@ -25,6 +26,7 @@ signals: // No import/export needed for Qt signals.
 
   // - Properties -
 public:
+  TEXTHOOKAPI bool isEnabled() const { return enabled_; }
   TEXTHOOKAPI bool isActive() const;
 
   TEXTHOOKAPI WId parentWinId() const;
@@ -52,13 +54,14 @@ public:
   TEXTHOOKAPI bool isEmpty() const { return pids_.isEmpty(); }
 
 public slots:
+  TEXTHOOKAPI void setEnabled(bool t);
   TEXTHOOKAPI void start();
   TEXTHOOKAPI void stop();
   TEXTHOOKAPI void clear();
 
   // - Implementations -
 protected:
-  explicit TextHook(QObject *parent = 0) : Base(parent) { }
+  explicit TextHook(QObject *parent = nullptr) : Base(parent), enabled_(true) { }
   ~TextHook() { if (isActive()) stop(); }
 
 public:
@@ -66,9 +69,13 @@ public:
   //{ emit textReceived(text, tid, pid); }
 
   void sendMessage(const QByteArray &data, ulong tid, ulong pid) // text thread callback
-  { emit messageReceived(data, tid, pid); }
+  {
+    if (enabled_)
+      emit messageReceived(data, tid, pid);
+  }
 
 private:
+  bool enabled_;
   QList<ulong> pids_;
 };
 

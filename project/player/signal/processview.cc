@@ -5,7 +5,6 @@
 #include "tr.h"
 #include "rc.h"
 #include "global.h"
-#include "logger.h"
 #include "win/qtwin/qtwin.h"
 #include "win/qtwinnt/qtwinnt.h"
 #ifdef WITH_WIN_TEXTHOOK
@@ -21,8 +20,6 @@
 
 #define DEBUG "processview"
 #include "module/debug/debug.h"
-
-using namespace Logger;
 
 // - Helpers -
 
@@ -71,7 +68,7 @@ namespace { namespace detail {
   Qt::WindowCloseButtonHint )
 
 ProcessView::ProcessView(QWidget *parent)
-  : Base(parent, WINDOW_FLAGS), contextMenu_(0)
+  : Base(parent, WINDOW_FLAGS), contextMenu_(nullptr)
 {
   setWindowTitle(tr("Process view"));
 
@@ -205,7 +202,7 @@ ProcessView::attachedProcessInfo() const
 void
 ProcessView::refresh()
 {
-  log(tr("refreshing process list ..."));
+  emit message(tr("refreshing process list ..."));
   invalidateSourceModel();
   invalidateButtons();
 }
@@ -306,16 +303,16 @@ ProcessView::attachProcess()
   if (pid && TextHook::globalInstance()->attachProcess(pid)) {
     setCurrentItemAttached(true);
     invalidateButtons();
-    log(QString("%1 (pid = %2)").arg(tr("process attached")).arg(QString::number(pid)));
+    emit message(QString("%1 (pid = %2)").arg(tr("process attached")).arg(QString::number(pid)));
     emit attached(pis_[pid]);
   } else {
-    error(tr("failed to attach process ") + QString(" (pid = %1)").arg(QString::number(pid)));
+    errorMessage(tr("failed to attach process ") + QString(" (pid = %1)").arg(QString::number(pid)));
     if (!QtWin::isProcessActiveWithId(pid))
-      notify(tr("Is the process running now?"));
+      emit notification(tr("Is the process running now?"));
     else if (!QtWinnt::isElevated())
-      notify(tr("Run me as administrator and try again &gt;_&lt;"));
+      emit notification(tr("Run me as administrator and try again &gt;_&lt;"));
     else
-      notify(tr("Restart the target process might help -_-"));
+      emit notification(tr("Restart the target process might help -_-"));
   }
 }
 
@@ -330,9 +327,9 @@ ProcessView::detachProcess()
   }
   if (pid && TextHook::globalInstance()->detachProcess(pid)) {
     invalidateButtons();
-    log(tr("process detached") + QString(" (pid = %1)").arg(QString::number(pid)));
+    emit message(tr("process detached") + QString(" (pid = %1)").arg(QString::number(pid)));
   } else
-    warn(tr("failed to detach process") + QString(" (pid = %1)").arg(QString::number(pid)));
+    emit warning(tr("failed to detach process") + QString(" (pid = %1)").arg(QString::number(pid)));
   emit detached(pi);
 }
 

@@ -78,11 +78,11 @@ PositionCalibration::paintCoordinate(QPainter &painter, const QRect &view)
   enum { FontAlpha = quint8(255 * 0.9) };
 
   enum { MarginSize = 3 };
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
   enum { LabelFontSize = 9 };
 #else
   enum { LabelFontSize = 10 };
-#endif // Q_WS_WIN
+#endif // Q_OS_WIN
   enum { LabelHeight = LabelFontSize + 2 };
 
   enum { unit = 3000 }; // 3 sec

@@ -24,7 +24,7 @@ class LiveDialog : public AcWindow
   int timeSlotIndex_;
 
 public:
-  explicit LiveDialog(QWidget *parent = 0);
+  explicit LiveDialog(QWidget *parent = nullptr);
 
 signals:
   void timeSlotSelected(qint64 secs);
@@ -39,15 +39,15 @@ public slots:
   void setActiveCounts(const QList<int> &counts);
   void setTimeSlotIndex(int index);
 
-  virtual void setVisible(bool visible); ///< \reimp
+  void setVisible(bool visible) override;
 
 protected slots:
   void ok();
   void updateComboBox();
 
 protected:
-  //virtual void mouseDoubleClickEvent(QMouseEvent *event);
-  //virtual void contextMenuEvent(QContextMenuEvent *event);
+  //void mouseDoubleClickEvent(QMouseEvent *event) override;
+  //void contextMenuEvent(QContextMenuEvent *event) override;
 
 private:
   void createLayout();

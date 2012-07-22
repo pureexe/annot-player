@@ -35,7 +35,7 @@ public:
    *  Notice that this all events for this button are
    *  swallowed by the filter.
    */
-  explicit MouseGestureFilter(Qt::MouseButtons = Qt::RightButton, Qt::KeyboardModifiers = Qt::NoModifier, QObject *parent = 0);
+  explicit MouseGestureFilter(Qt::MouseButtons = Qt::RightButton, Qt::KeyboardModifiers = Qt::NoModifier, QObject *parent = nullptr);
   ~MouseGestureFilter();
 
   void add(MouseGesture *gesture);
@@ -47,7 +47,7 @@ public slots:
   void clear(); ///< also delete the gesetures owned by the object
 
 protected:
-  virtual bool eventFilter(QObject *obj, QEvent *event); ///< \reimp
+  bool eventFilter(QObject *obj, QEvent *event) override;
 
   bool mousePressEventFilter(QMouseEvent *event);
   bool mouseReleaseEventFilter(QMouseEvent *event);

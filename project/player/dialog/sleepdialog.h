@@ -14,10 +14,10 @@ class SleepDialog : public CountdownDialog
   typedef CountdownDialog Base;
 
 public:
-  explicit SleepDialog(QWidget *parent = 0);
+  explicit SleepDialog(QWidget *parent = nullptr);
 
 protected:
-  virtual void run(); ///< \reimp
+  void run() override;
 };
 
 #endif // SLEEPDIALOG_H

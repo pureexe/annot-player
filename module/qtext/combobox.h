@@ -16,18 +16,18 @@ class ComboBox : public QComboBox
   typedef QComboBox Base;
 
 public:
-  explicit ComboBox(QWidget *parent = 0);
+  explicit ComboBox(QWidget *parent = nullptr);
 
 public slots:
-  virtual void showPopup() { Base::showPopup(); } ///< \reimp
-  virtual void hidePopup() { clearFocus(); Base::hidePopup(); } ///< \reimp
+  void showPopup() override { Base::showPopup(); }
+  void hidePopup() override { clearFocus(); Base::hidePopup(); }
 
   void setPopupVisible(bool t) { if (t) showPopup(); else hidePopup(); }
 
   // - Events -
 protected:
-  virtual void enterEvent(QEvent *event); ///< \reimp
-  virtual void leaveEvent(QEvent *event); ///< \reimp
+  void enterEvent(QEvent *event) override;
+  void leaveEvent(QEvent *event) override;
 };
 
 } // namespace QtExt

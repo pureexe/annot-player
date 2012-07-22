@@ -15,7 +15,7 @@ class AcBrowser : public QObject
   typedef AcBrowser Self;
   typedef QObject Base;
 public:
-  explicit AcBrowser(QObject *parent = 0)
+  explicit AcBrowser(QObject *parent = nullptr)
     : Base(parent) { }
 
 public:

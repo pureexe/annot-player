@@ -40,6 +40,7 @@ Token::digestFromFile(const QString &input)
   QByteArray data;
   QString filePath = input;
   QFileInfo fi(input);
+
   if (fi.isDir()) {
     QString dir = fi.filePath();
     static QStringList files = QStringList()
@@ -54,11 +55,21 @@ Token::digestFromFile(const QString &input)
         break;
       }
     }
+  } else if (filePath.endsWith(".exe", Qt::CaseInsensitive)) {
+    DOUT("dygest all bytes for game exe");
+    QFile file(filePath);
+    bool ok = file.open(QIODevice::ReadOnly);
+    if (!ok) {
+      DOUT("exit: Failed to open file for hashing: " << filePath);
+      return QByteArray();
+    }
+    data = file.readAll();
+    //file.close();
   }
 
   DOUT("path =" << filePath);
 
-  if (!filePath.isEmpty()) {
+  if (data.isEmpty() && !filePath.isEmpty()) {
 #ifdef WITH_MODULE_IOUTIL
     DOUT("with module ioutil");
     data = IOUtil::readBytes(filePath, DIGEST_SIZE);
@@ -71,7 +82,7 @@ Token::digestFromFile(const QString &input)
       return QByteArray();
     }
     data = file.read(qMin<qint64>(file.size(), DIGEST_SIZE));
-    file.close();
+    //file.close();
 #endif // WITH_MODULE_IOUTIL
   }
 

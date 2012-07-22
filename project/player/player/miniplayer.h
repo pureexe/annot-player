@@ -17,35 +17,35 @@ class MiniPlayerUi : public PlayerUi
   QPoint dragPos_;
 
 public:
-  explicit MiniPlayerUi(SignalHub *hub, Player *player, ServerAgent *server, QWidget *parent = 0);
+  explicit MiniPlayerUi(SignalHub *hub, Player *player, ServerAgent *server, QWidget *parent = nullptr);
 
 public:
-  virtual void setTitle(const QString &title); ///< \reimp
+  void setTitle(const QString &title) override;
 
 public slots:
   void updateTitle();
-  virtual void setVisible(bool visible); ///< \reimp
+  void setVisible(bool visible) override;
 
   // - Events -
 protected:
   void forward(QEvent *event);
 
-  virtual void mousePressEvent(QMouseEvent *event); ///< \reimp
-  virtual void mouseMoveEvent(QMouseEvent *event); ///< \reimp
-  virtual void mouseReleaseEvent(QMouseEvent *event); ///< \reimp
+  void mousePressEvent(QMouseEvent *event) override;
+  void mouseMoveEvent(QMouseEvent *event) override;
+  void mouseReleaseEvent(QMouseEvent *event) override;
 
-  virtual void mouseDoubleClickEvent(QMouseEvent *event); ///< \reimp
+  void mouseDoubleClickEvent(QMouseEvent *event) override;
 
-  virtual void contextMenuEvent(QContextMenuEvent *event); ///< \reimp
+  void contextMenuEvent(QContextMenuEvent *event) override;
 
-  virtual void keyPressEvent(QKeyEvent *event); ///< \reimp
-  virtual void keyReleaseEvent(QKeyEvent *event); ///< \reimp
+  void keyPressEvent(QKeyEvent *event) override;
+  void keyReleaseEvent(QKeyEvent *event) override;
 
 protected slots:
-  virtual void dragEnterEvent(QDragEnterEvent *event); ///< \reimp
-  virtual void dragMoveEvent(QDragMoveEvent *event); ///< \reimp
-  virtual void dragLeaveEvent(QDragLeaveEvent *event); ///< \reimp
-  virtual void dropEvent(QDropEvent *event); ///< \reimp
+  void dragEnterEvent(QDragEnterEvent *event) override;
+  void dragMoveEvent(QDragMoveEvent *event) override;
+  void dragLeaveEvent(QDragLeaveEvent *event) override;
+  void dropEvent(QDropEvent *event) override;
 
 signals:
   void dragEnterEventReceived(QDragEnterEvent *event);
@@ -70,10 +70,10 @@ class MiniPlayerDock : public QDockWidget
   QPoint dragPos_;
 
 public:
-  explicit MiniPlayerDock(QWidget *parent = 0);
+  explicit MiniPlayerDock(QWidget *parent = nullptr);
 
 public:
-  virtual void setVisible(bool visible); // stop polling when hidden
+  void setVisible(bool visible) override; // stop polling when hidden
 
 signals:
   void toggleFullScreenModeRequested();
@@ -82,21 +82,21 @@ signals:
 protected:
   void forward(QEvent *event);
 
-  virtual void mousePressEvent(QMouseEvent *event);
-  virtual void mouseMoveEvent(QMouseEvent *event);
-  virtual void mouseReleaseEvent(QMouseEvent *event);
+  void mousePressEvent(QMouseEvent *event) override;
+  void mouseMoveEvent(QMouseEvent *event) override;
+  void mouseReleaseEvent(QMouseEvent *event) override;
 
-  virtual void mouseDoubleClickEvent(QMouseEvent *event);
-  virtual void closeEvent(QCloseEvent *event);
-  virtual void contextMenuEvent(QContextMenuEvent *event);
+  void mouseDoubleClickEvent(QMouseEvent *event) override;
+  void closeEvent(QCloseEvent *event) override;
+  void contextMenuEvent(QContextMenuEvent *event) override;
 
-  virtual void dragEnterEvent(QDragEnterEvent *event);
-  virtual void dragMoveEvent(QDragMoveEvent *event);
-  virtual void dragLeaveEvent(QDragLeaveEvent *event);
-  virtual void dropEvent(QDropEvent *event);
+  void dragEnterEvent(QDragEnterEvent *event) override;
+  void dragMoveEvent(QDragMoveEvent *event) override;
+  void dragLeaveEvent(QDragLeaveEvent *event) override;
+  void dropEvent(QDropEvent *event) override;
 
-  virtual void keyPressEvent(QKeyEvent *event);
-  virtual void keyReleaseEvent(QKeyEvent *event);
+  void keyPressEvent(QKeyEvent *event) override;
+  void keyReleaseEvent(QKeyEvent *event) override;
 };
 */
 

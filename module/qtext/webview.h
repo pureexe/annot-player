@@ -28,7 +28,7 @@ class WebView: public QWebView
 
   // - Construction -
 public:
-  explicit WebView(QWidget *parent = 0);
+  explicit WebView(QWidget *parent = nullptr);
 private:
   void createActions();
 
@@ -81,11 +81,11 @@ protected slots:
 
   // - Events -
 public:
-  virtual bool event(QEvent *e); ///< \reimp
+  bool event(QEvent *e) override;
   void gestureEvent(QGestureEvent *e);
 protected:
-  virtual void contextMenuEvent(QContextMenuEvent *e); ///< \reimp
-  virtual void wheelEvent(QWheelEvent *e); ///< \reimp
+  void contextMenuEvent(QContextMenuEvent *e) override;
+  void wheelEvent(QWheelEvent *e) override;
 
   void panGesture(QPanGesture *g);
   void pinchGesture(QPinchGesture *g);

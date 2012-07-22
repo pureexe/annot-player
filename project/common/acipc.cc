@@ -5,12 +5,12 @@
 #ifdef WITH_MODULE_METACALL
 # include "module/metacall/metacallfilter.h"
 #endif // WITH_MODULE_METACALL
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
 # include "win/qtwin/qtwin.h"
-#endif // Q_WS_WIN
-#ifdef Q_WS_MAC
+#endif // Q_OS_WIN
+#ifdef Q_OS_MAC
 # include "mac/qtmac/qtmac.h"
-#endif // Q_WS_MAC
+#endif // Q_OS_MAC
 #include <QtNetwork/QHostAddress>
 #include <QtCore>
 
@@ -28,7 +28,7 @@
 bool
 AcIpcController::isProcessRunning(const QString &processName)
 {
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
   QString exe = processName;
   if (!exe.endsWith(".exe", Qt::CaseInsensitive))
     exe.append(".exe");
@@ -36,17 +36,17 @@ AcIpcController::isProcessRunning(const QString &processName)
 #else
   Q_UNUSED(processName); // TODO
   return false;
-#endif // Q_WS_MAC
+#endif // Q_OS_MAC
 }
 
 bool
 AcIpcController::open(const QString &app, const QStringList &args)
 {
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
   return QtMac::open(app, args);
 #else
   return QProcess::startDetached(app, args);
-#endif // Q_WS_MAC
+#endif // Q_OS_MAC
 }
 
 #ifdef WITH_MODULE_METACALL

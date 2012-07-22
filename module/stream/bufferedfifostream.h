@@ -22,7 +22,7 @@ class BufferedFifoStream : public QObject, public FifoStream
   bool finished_;
 
 public:
-  explicit BufferedFifoStream(QObject *parent = 0)
+  explicit BufferedFifoStream(QObject *parent = nullptr)
     : Base(parent), pos_(0), finished_(false) { }
 
 signals:
@@ -33,36 +33,36 @@ public:
   bool isFinished() const { return finished_; }
 
   // - Shared -
-  virtual qint64 size() const ///< \reimp
+  qint64 size() const override
   { return FifoStream::size() ? FifoStream::size() : data_.size(); }
 
-  virtual qint64 availableSize() const ///< \reimp
+  qint64 availableSize() const override
   { return data_.size(); }
 
   // - Input -
-  virtual qint64 pos() const { return pos_; } ///< \reimp
+  qint64 pos() const override { return pos_; }
 
-  virtual bool reset() { m_.lock(); pos_ = 0; m_.unlock(); return true; } ///< \reimp
+  bool reset() override { m_.lock(); pos_ = 0; m_.unlock(); return true; }
 
-  virtual qint64 skip(qint64 count); ///< \reimp
+  qint64 skip(qint64 count) override;
 
-  virtual bool seek(qint64 pos); ///< \reimp
+  bool seek(qint64 pos) override;
 
-  virtual qint64 read(char *data, qint64 maxSize); ///< \reimp
-  virtual qint64 tryRead(char *data, qint64 maxSize); ///< \reimp
+  qint64 read(char *data, qint64 maxSize) override;
+  qint64 tryRead(char *data, qint64 maxSize) override;
 
-  virtual QByteArray readAll() ///< \reimp
+  QByteArray readAll() override
   { if (!isFinished()) waitForFinished(); return data_; }
 
   QByteArray &data() { return data_; }
   const QByteArray &data() const { return data_; }
 
-  virtual bool writeFile(const QString &path); ///< \reimp
+  bool writeFile(const QString &path) override;
 
   // - Output -
 
-  virtual qint64 write(const char *data, qint64 maxSize); ///< \reimp
-  virtual void finish(); ///< \reimp
+  qint64 write(const char *data, qint64 maxSize) override;
+  void finish() override;
 
 public slots:
   virtual void waitForFinished();

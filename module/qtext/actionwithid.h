@@ -18,17 +18,17 @@ class ActionWithId : public QAction
   int id_; // init to be zero
 
 public:
-  explicit ActionWithId(QObject *parent = 0)
+  explicit ActionWithId(QObject *parent = nullptr)
     : Base(parent), id_(0) { init(); }
-  ActionWithId(const QString &text, QObject *parent = 0)
+  ActionWithId(const QString &text, QObject *parent = nullptr)
     : Base(text, parent), id_(0) { init(); }
-  explicit ActionWithId(int id, QObject *parent = 0)
+  explicit ActionWithId(int id, QObject *parent = nullptr)
     : Base(parent), id_(id) { init(); }
-  ActionWithId(int id, const QString &text, QObject *parent = 0)
+  ActionWithId(int id, const QString &text, QObject *parent = nullptr)
     : Base(text, parent), id_(id) { init(); }
-  ActionWithId(const QIcon &icon, const QString &text, QObject *parent = 0)
+  ActionWithId(const QIcon &icon, const QString &text, QObject *parent = nullptr)
     : Base(icon, text, parent), id_(0) { init(); }
-  ActionWithId(int id, const QIcon &icon, const QString &text, QObject *parent = 0)
+  ActionWithId(int id, const QIcon &icon, const QString &text, QObject *parent = nullptr)
     : Base(icon, text, parent), id_(id) { init(); }
 
   int id() const { return id_; }

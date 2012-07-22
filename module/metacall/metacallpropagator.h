@@ -27,8 +27,8 @@ class MetaCallPropagator : public QObject
   // - Construction -
 public:
 protected:
-  explicit MetaCallPropagator(QObject *parent = 0)
-    : Base(parent), filter_(0) { }
+  explicit MetaCallPropagator(QObject *parent = nullptr)
+    : Base(parent), filter_(nullptr) { }
 
   bool isActive() const;
 

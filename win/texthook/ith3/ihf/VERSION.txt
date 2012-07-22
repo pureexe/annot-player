@@ -1,4 +1,19 @@
-# 6/6/2012
+# 7/18/2012
+# Revision 133, 6/30/2012
+jichi@MITHRIL C:\dev\ITH\src\interactive-text-hooker-read-only
+ 3:55 $ svn up
+Updating '.':
+U    ITH3\Release\ITH_TLS.dll
+U    ITH3\Release\Profile\index.xml
+A    ITH3\Release\Profile\20120701.xml
+U    ITH3\Release\ITH_Engine.dll
+U    ITH3\Release\index.xml
+U    ITH3\libs\ITH_TLS.exp
+U    ITH3\libs\ITH_TLS.lib
+U    ITH3\ITH_Engine\engine.cpp
+リビジョン 133 に更新しました。
+
+# Source
 jichi@MITHRIL C:\dev\ith\src\interactive-text-hooker-read-only\ITH3\IHF
  4:15 $ svn info main.cpp
 パス: main.cpp

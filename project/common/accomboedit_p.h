@@ -15,7 +15,7 @@ class AcComboBoxLineEdit : public QLineEdit
   typedef QLineEdit Base;
 
 public:
-  explicit AcComboBoxLineEdit(QWidget *parent = 0)
+  explicit AcComboBoxLineEdit(QWidget *parent = nullptr)
     : Base(parent) { }
 
 public slots:
@@ -26,7 +26,7 @@ public slots:
   }
 
 protected:
-  virtual void keyPressEvent(QKeyEvent *event) ///< \reimp
+  void keyPressEvent(QKeyEvent *event) override
   {
     switch (event->key()) {
     case Qt::Key_Escape:

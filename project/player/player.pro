@@ -4,7 +4,7 @@
 DEFINES += PROJECT_PLAYER
 
 VERSION_MAJOR = 0.1.7.
-VERSION_MINOR = 0
+VERSION_MINOR = 1
 
 VERSION = $$VERSION_MAJOR$$VERSION_MINOR
 
@@ -23,6 +23,7 @@ include($$ROOTDIR/module/annotcloud/annotcloud.pri)
 include($$ROOTDIR/module/annotcache/annotcache.pri)
 include($$ROOTDIR/module/annotcodec/annotcodec.pri)
 include($$ROOTDIR/module/annotdb/annotdb.pri)
+include($$ROOTDIR/module/annotdown/annotdown.pri)
 include($$ROOTDIR/module/blockiodevice/blockiodevice.pri)
 include($$ROOTDIR/module/compress/compress.pri)
 include($$ROOTDIR/module/crypt/crypt.pri)
@@ -63,7 +64,8 @@ unix:!mac {
 }
 mac {
     include($$ROOTDIR/mac/qtmac/qtmac.pri)
-    include($$ROOTDIR/mac/vlcstep/vlcstep.pri)
+    include($$ROOTDIR/mac/qtcocoa/qtcocoa.pri)
+    include($$ROOTDIR/mac/vlccocoa/vlccocoa.pri)
 }
 
 QT      += core gui network sql svg webkit xml
@@ -96,6 +98,7 @@ MYPATH = \
     $$PWD \
     $$PWD/annot \
     $$PWD/command \
+    $$PWD/console \
     $$PWD/data \
     $$PWD/db \
     $$PWD/dialog \
@@ -114,7 +117,6 @@ HEADERS += \
     annotationprefs.h \
     application.h \
     clipboardmonitor.h \
-    eventlogger.h \
     preferences.h \
     mainwindow.h \
     mainwindow_p.h \
@@ -137,12 +139,17 @@ HEADERS += \
     command/annotationcomboedit.h \
     command/inputcombobox.h \
     command/prefixcombobox.h \
+    console/consoledialog.h \
+    console/eventlogger.h \
+    console/mainconsole.h \
+    console/miniconsole.h \
     data/datamanager.h \
     data/dataserver.h \
     dialog/annotationcountdialog.h \
+    dialog/annotdownurldialog.h \
+    dialog/annoturldialog.h \
     dialog/audiodelaydialog.h \
     dialog/backlogdialog.h \
-    dialog/consoledialog.h \
     dialog/countdowndialog.h \
     dialog/devicedialog.h \
     dialog/helpdialog.h \
@@ -157,14 +164,12 @@ HEADERS += \
     dialog/seekdialog.h \
     dialog/shutdowndialog.h \
     dialog/sleepdialog.h \
-    dialog/suburldialog.h \
     dialog/syncdialog.h \
     dialog/timeinputdialog.h \
     dialog/urldialog.h \
     global/global.h \
     global/rc.h \
     global/stylesheet.h \
-    osd/osdconsole.h \
     osd/osdwindow.h \
     osd/videoview.h \
     player/mainplayer.h \
@@ -185,17 +190,16 @@ HEADERS += \
     user/userview.h \
     util/closewidgetthread.h \
     util/grabber.h \
-    util/logger.h \
     util/textedittabview.h
 
 SOURCES += \
     annotationprefs.cc \
     application.cc \
     clipboardmonitor.cc \
-    eventlogger.cc \
     main.cc \
     preferences.cc \
     mainwindow.cc \
+    mainwindow_log.cc \
     settings.cc \
     textcodecmanager.cc \
     tray.cc \
@@ -215,12 +219,17 @@ SOURCES += \
     command/annotationcomboedit.cc \
     command/inputcombobox.cc \
     command/prefixcombobox.cc \
+    console/consoledialog.cc \
+    console/eventlogger.cc \
+    console/mainconsole.cc \
+    console/miniconsole.cc \
     data/datamanager.cc \
     data/dataserver.cc \
     dialog/annotationcountdialog.cc \
+    dialog/annotdownurldialog.cc \
+    dialog/annoturldialog.cc \
     dialog/audiodelaydialog.cc \
     dialog/backlogdialog.cc \
-    dialog/consoledialog.cc \
     dialog/countdowndialog.cc \
     dialog/devicedialog.cc \
     dialog/helpdialog.cc \
@@ -235,11 +244,9 @@ SOURCES += \
     dialog/seekdialog.cc \
     dialog/shutdowndialog.cc \
     dialog/sleepdialog.cc \
-    dialog/suburldialog.cc \
     dialog/syncdialog.cc \
     dialog/timeinputdialog.cc \
     dialog/urldialog.cc \
-    osd/osdconsole.cc \
     osd/osdwindow.cc \
     osd/videoview.cc \
     player/mainplayer.cc \
@@ -259,7 +266,6 @@ SOURCES += \
     user/useranalyticsview.cc \
     user/userview.cc \
     util/grabber.cc \
-    util/logger.cc \
     util/textedittabview.cc
 
 win32 {

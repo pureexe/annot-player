@@ -18,8 +18,9 @@
     <groupId>0</groupId>
     <id>0</id>
     <language>0</language>
-    <loginTime>0</loginTime>
+    <loginCount>0</loginCount>
     <loginIp>0</loginIp>
+    <loginTime>0</loginTime>
     <name></name>
     <nickname></nickname>
     <password></password>

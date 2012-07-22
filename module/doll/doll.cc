@@ -17,7 +17,7 @@ namespace { // anonymous, task
   class doll_init_task_ : public QRunnable
   {
     Doll *doll_;
-    virtual void run() {  doll_->setBot(new AimlBot); }
+    void run() override {  doll_->setBot(new AimlBot); }
 
   public:
     doll_init_task_(Doll *doll) : doll_(doll) { Q_ASSERT(doll_); }
@@ -28,7 +28,7 @@ namespace { // anonymous, task
     Doll *doll_;
     QString text_;
 
-    virtual void run() { doll_->chat(text_, false); }
+    void run() override { doll_->chat(text_, false); }
 
   public:
     doll_chat_task_(Doll *doll, const QString &text)

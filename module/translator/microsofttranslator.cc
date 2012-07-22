@@ -101,7 +101,7 @@ MicrosoftTranslator::processNetworkReply(QNetworkReply *reply)
   reply->deleteLater();
 
   if (!reply->isFinished() || reply->error() != QNetworkReply::NoError) {
-    emit error(tr("network error from Microsoft Translator") + ": " + reply->errorString());
+    emit errorMessage(tr("network error from Microsoft Translator") + ": " + reply->errorString());
     DOUT("exit: error =" << reply->error() << ", reason =" << reply->errorString());
     return;
   }
@@ -126,7 +126,7 @@ MicrosoftTranslator::processNetworkReply(QNetworkReply *reply)
     }
   }
 
-  emit error(tr("network error from Microsoft Translator"));
+  emit errorMessage(tr("network error from Microsoft Translator"));
   DOUT("exit: error");
 }
 

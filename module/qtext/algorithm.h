@@ -4,8 +4,6 @@
 // qtext/algorithm.h
 // 3/16/2012
 
-#include <QtCore/QList>
-
 namespace QtExt {
 
   template <typename L>
@@ -20,6 +18,7 @@ namespace QtExt {
     return ret;
   }
 
+  ///  Consider std::unique instead if possible
   template <typename L>
   inline L
   uniqueList(const L &l)
@@ -58,7 +57,6 @@ namespace QtExt {
         ret.push_back(v);
     return ret;
   }
-
 
 } // namespace QtExt
 

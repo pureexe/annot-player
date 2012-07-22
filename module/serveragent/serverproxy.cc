@@ -270,6 +270,7 @@ ServerProxy::selectUser(const QString &userName, const QString &password)
     ret.setCreateTime(p->createTime);
     ret.setLoginTime(p->loginTime);
     ret.setLoginIp(p->loginIp);
+    ret.setLoginCount(p->loginCount);
     ret.setBlessedCount(p->blessedCount);
     ret.setCursedCount(p->cursedCount);
     ret.setBlockedCount(p->blockedCount);

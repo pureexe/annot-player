@@ -14,7 +14,7 @@ class AudioDelayDialog : public SecondInputDialog
   typedef SecondInputDialog Base;
 
 public:
-  explicit AudioDelayDialog(QWidget *parent = 0);
+  explicit AudioDelayDialog(QWidget *parent = nullptr);
 };
 
 #endif // AUDIODELAYDIALOG_H

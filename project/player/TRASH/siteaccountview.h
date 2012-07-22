@@ -36,7 +36,7 @@ class SiteAccountView : public AcWindow
   QLineEdit *bilibiliPasswordEdit_;
 
 public:
-  explicit SiteAccountView(QWidget *parent = 0);
+  explicit SiteAccountView(QWidget *parent = nullptr);
 
   const SiteAccount &nicovideoAccount() const { return nicovideoAccount_; }
   const SiteAccount &bilibiliAccount() const { return bilibiliAccount_; }
@@ -45,7 +45,7 @@ signals:
   void accountChanged();
 
 public slots:
-  virtual void setVisible(bool visible); ///< \reimp
+  void setVisible(bool visible) override;
 
   void setNicovideoAccount(const QString &username, const QString &password);
   void setBilibiliAccount(const QString &username, const QString &password);

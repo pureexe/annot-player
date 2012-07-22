@@ -23,10 +23,10 @@ class GoogleTranslator : public Translator
 
   // - Constructions -
 public:
-  explicit GoogleTranslator(QObject *parent = 0);
+  explicit GoogleTranslator(QObject *parent = nullptr);
 
 public slots:
-  virtual void translate(const QString &text, const QString &to, const QString &from = QString()); ///< \reimp
+  void translate(const QString &text, const QString &to, const QString &from = QString()) override;
 
 protected:
   static QUrl translateUrl(const QString &text, const QString &to, const QString &from = QString());

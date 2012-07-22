@@ -16,18 +16,18 @@ class AcPreferencesTab : public QWidget
 
   AcSettings *settings_;
 
-public:
-  explicit AcPreferencesTab(AcSettings *settings, QWidget *parent = 0)
-    : Base(parent), settings_(settings) { }
-
-  explicit AcPreferencesTab(QWidget *parent = 0)
-    : Base(parent), settings_(0) { }
-
 signals:
   void message(const QString &text);
   void warning(const QString &text);
-  void error(const QString &text);
+  void errorMessage(const QString &text);
   void notification(const QString &text);
+
+public:
+  explicit AcPreferencesTab(AcSettings *settings, QWidget *parent = nullptr)
+    : Base(parent), settings_(settings) { }
+
+  explicit AcPreferencesTab(QWidget *parent = nullptr)
+    : Base(parent), settings_(0) { }
 
 protected:
   AcSettings *settings() const { return settings_; }
@@ -46,12 +46,12 @@ class AcNullPreferencesTab : public AcPreferencesTab
   typedef AcPreferencesTab Base;
 
 public:
-  explicit AcNullPreferencesTab(QWidget *parent = 0)
+  explicit AcNullPreferencesTab(QWidget *parent = nullptr)
     : Base(parent) { }
 
 public slots:
-  virtual bool save() { return true; } ///< \reimp
-  virtual void load() { } ///< \reimp
+  bool save() override { return true; }
+  void load() override { }
 };
 
 #endif // ACPREFERENCESTAB_H

@@ -17,9 +17,9 @@ class SystemTrayIcon : public QSystemTrayIcon
 
   // - Constructions -
 public:
-  explicit SystemTrayIcon(QObject *parent = 0)
+  explicit SystemTrayIcon(QObject *parent = nullptr)
     : Base(parent) { }
-  explicit SystemTrayIcon(const QIcon &icon, QObject *parent = 0)
+  explicit SystemTrayIcon(const QIcon &icon, QObject *parent = nullptr)
     : Base(icon, parent) { }
 
 public slots:

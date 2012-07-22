@@ -38,7 +38,7 @@ public slots:
 
   // - Implementation -
 protected:
-  explicit WindowPicker(QObject *parent = 0);   ///< \internal
+  explicit WindowPicker(QObject *parent = nullptr);   ///< \internal
   ~WindowPicker();  ///< \internal
 
 public:

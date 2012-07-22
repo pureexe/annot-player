@@ -25,15 +25,16 @@ class DownloadManager : public QObject
 #endif // WITH_MODULE_ANNOTDOWN
 
 public:
-  explicit DownloadManager(QObject *parent = 0);
+  explicit DownloadManager(QObject *parent = nullptr);
 
 signals:
   void taskAdded(DownloadTask *t);
   void taskRemoved(DownloadTask *t);
+  void fileSaved(QString path);
 
-  void message(QString msg);
-  void error(QString msg);
-  void warning(QString msg);
+  void message(const QString &text);
+  void errorMessage(const QString &text);
+  void warning(const QString &text);
 
   // - Properties -
 public:

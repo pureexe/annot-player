@@ -24,7 +24,7 @@ class AcSettings : public QSettings
   // - Construction -
 public:
   static Self *globalSettings() { static Self g; return &g; }
-  explicit AcSettings(QObject *parent = 0);
+  explicit AcSettings(QObject *parent = nullptr);
 
   QString version() const;
   void setVersion(const QString &version);

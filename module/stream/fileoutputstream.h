@@ -18,26 +18,26 @@ class FileOutputStream : public QObject, public OutputStream
   QFile *file_;
 
 public:
-  explicit FileOutputStream(QObject *parent = 0)
-    : Base(parent), file_(0) { file_ = new QFile(this); }
-  explicit FileOutputStream(QFile *file, QObject *parent = 0)
+  explicit FileOutputStream(QObject *parent = nullptr)
+    : Base(parent) { file_ = new QFile(this); }
+  explicit FileOutputStream(QFile *file, QObject *parent = nullptr)
     : Base(parent), file_(file) { if (!file_) file_ = new QFile(this); }
-  explicit FileOutputStream(const QString &fileName, QObject *parent = 0)
+  explicit FileOutputStream(const QString &fileName, QObject *parent = nullptr)
     : Base(parent) { file_ = new QFile(fileName, this); }
 
   bool isOpen() const { return file_ && file_->isOpen(); }
 
 public:
-  virtual qint64 availableSize() const { return file_->size(); } ///< \reimp
+  qint64 availableSize() const override { return file_->size(); }
 
-  virtual qint64 write(const char *data, qint64 maxSize) ///< \reimp
+  qint64 write(const char *data, qint64 maxSize) override
   { return file_->write(data, maxSize); }
 
   QString fileName() const { return file_->fileName(); }
 
   bool open() { return file_->open(QIODevice::WriteOnly); }
 public slots:
-  virtual void flush() { file_->flush(); } ///< \reimp
+  void flush() override { file_->flush(); }
   void close() { file_->close(); }
 
   void setFileName(const QString &path)

@@ -22,13 +22,13 @@ FlvMerge::run()
 {
   ins_.reset();
   if (!parse()) {
-    emit error(tr("failed to parse FLV streams"));
+    emit errorMessage(tr("failed to parse FLV streams"));
     DOUT("failed to parse FLV streams");
     return;
   }
   ins_.reset();
   if (!merge()) {
-    emit error(tr("failed to merge FLV streams"));
+    emit errorMessage(tr("failed to merge FLV streams"));
     DOUT("failed to merge FLV streams");
     return;
   }
@@ -44,7 +44,7 @@ FlvMerge::parse()
     return false;
 
   FlvMetaReader parser;
-  //connect(&parser, SIGNAL(error(QString)), SIGNAL(error(QString)));
+  //connect(&parser, SIGNAL(errorMessage(QString)), SIGNAL(errorMessage(QString)));
   //connect(this, SIGNAL(stopped()), &parser, SLOT(parse()));
 
   if (parser.parseStreams(ins_)) {

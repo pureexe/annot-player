@@ -19,14 +19,14 @@ class VlcHttpSession : public StoppableThread
 protected:
   enum State { Error = -1, Stopped = 0, Running, Finished };
 public:
-  explicit VlcHttpSession(QObject *parent = 0)
-    : Base(parent), state_(Stopped), cookieJar_(0) { }
+  explicit VlcHttpSession(QObject *parent = nullptr)
+    : Base(parent), state_(Stopped), cookieJar_(nullptr) { }
 
   enum { MinimumFileSize = 1024 * 1024 }; // 1 MB
 
 signals:
-  void error(QString msg);
   void message(QString msg);
+  void errorMessage(QString msg);
   void warning(QString msg);
   void fileSaved(QString msg);
   void progress(qint64 receivedBytes, qint64 totalBytes);
@@ -53,7 +53,7 @@ public:
   bool isStopped() const { return state_ == Stopped; }
   bool isFinished() const { return state_ == Finished; }
 
-  const QString &cachePath() const { return cachePath_; }
+  const QString &cacheDirectory() const { return cacheDirectory_; }
 
   virtual void save() { }
 
@@ -64,7 +64,7 @@ public slots:
   void setBufferSaved(bool t) { saveBuffer_ = t; }
 
   void setMediaTitle(const QString &title) { mediaTitle_ = title; }
-  void setCachePath(const QString &path) { cachePath_ = path; }
+  void setCacheDirectory(const QString &path) { cacheDirectory_ = path; }
 
   virtual void waitForReady() = 0;
   virtual void waitForStopped() = 0;
@@ -82,7 +82,7 @@ private:
   bool saveBuffer_;
 
   QString originalUrl_;
-  QString cachePath_;
+  QString cacheDirectory_;
   QNetworkCookieJar *cookieJar_;
   QString mediaTitle_;
 };

@@ -13,7 +13,7 @@ class MainTabWidget : public QTabWidget
   typedef QTabWidget Base;
 
 public:
-  explicit MainTabWidget(QWidget *parent = 0);
+  explicit MainTabWidget(QWidget *parent = nullptr);
 protected:
   void createToolButtons();
   void createStartPage();

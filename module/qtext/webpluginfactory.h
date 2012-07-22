@@ -21,17 +21,15 @@ public:
   static Self *globalInstance() { static Self g; return &g; };
 
 protected:
-  explicit WebPluginFactory(QObject *parent = 0);
+  explicit WebPluginFactory(QObject *parent = nullptr);
 
 public:
-  ///  \reimp;
-  virtual QObject *create(const QString &mimeType, const QUrl &url,
-                          const QStringList &argNames, const QStringList &argValues) const;
+  QObject *create(const QString &mimeType, const QUrl &url,
+                  const QStringList &argNames, const QStringList &argValues) const override;
 
-  ///  \reimp;
-  virtual QList<Plugin> plugins() const { return plugins_; }
+  QList<Plugin> plugins() const override { return plugins_; }
 
-  virtual void refreshPlugins() { } ///< \reimp;
+  void refreshPlugins() override { }
 
 protected slots:
   void updatePlugins();

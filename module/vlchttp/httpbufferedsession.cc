@@ -78,7 +78,7 @@ HttpBufferedSession::updateFileName()
 {
   bool mp4 = contentType_.contains("mp4", Qt::CaseInsensitive);
   QString suf = mp4 ? ".mp4" : ".flv";
-  fileName_ = cachePath() + FILE_PATH_SEP + QtExt::escapeFileName(mediaTitle()) + suf;
+  fileName_ = cacheDirectory() + FILE_PATH_SEP + QtExt::escapeFileName(mediaTitle()) + suf;
 }
 
 // - Actions -
@@ -88,7 +88,7 @@ HttpBufferedSession::save()
 {
   DOUT("enter");
   if (!isFinished()) {
-    emit error(tr("downloading"));
+    emit errorMessage(tr("downloading"));
     DOUT("exit: not finished");
     return;
   }
@@ -99,13 +99,14 @@ HttpBufferedSession::save()
   QDir dir = fi.absoluteDir();
   if (!dir.exists())
     dir.mkpath(dir.absolutePath());
-  //QFile::remove(fileName_);
-  for (int i = 2; QFile::exists(fileName_); i++)
-    fileName_ = fi.absolutePath() + FILE_PATH_SEP + fi.completeBaseName() + " " + QString::number(i) + "." + fi.suffix();
+
+  //for (int i = 2; QFile::exists(fileName_); i++)
+  //  fileName_ = fi.absolutePath() + FILE_PATH_SEP + fi.completeBaseName() + " " + QString::number(i) + "." + fi.suffix();
+  QtExt::trashOrRemoveFile(fileName_);
 
   QFile file(fileName_);
   if (!file.open(QIODevice::WriteOnly)) {
-    emit error(tr("cannot save to file") + ": " + fileName_);
+    emit errorMessage(tr("cannot save to file") + ": " + fileName_);
     DOUT("exit: failed to write to file:" << fileName_);
     return;
   }
@@ -116,8 +117,8 @@ HttpBufferedSession::save()
   file.close();
 
   if (!FlvCodec::isFlvFile(fileName_) && !Mp4Codec::isMp4File(fileName_)) {
-    QFile::remove(fileName_);
-    emit error(tr("download failed") + ": " + fileName_);
+    QtExt::trashOrRemoveFile(fileName_);
+    emit errorMessage(tr("download failed") + ": " + fileName_);
     DOUT("exit: failed to write to file:" << fileName_);
     return;
   }
@@ -264,7 +265,7 @@ HttpBufferedSession::run()
       if (jar) {
         setCookieJar(jar);
         //nam_->setCookieJar(jar);
-        jar->setParent(0); // memory leak
+        jar->setParent(nullptr); // memory leak
       }
 
       if (!mi.mrls.isEmpty())
@@ -300,7 +301,7 @@ HttpBufferedSession::run()
 
       if (cookieJar()) {
         nam_->setCookieJar(cookieJar());
-        cookieJar()->setParent(0);
+        cookieJar()->setParent(nullptr);
       }
 
       emit message(tr("buffering") + ": " + url_.toString());
@@ -324,13 +325,13 @@ HttpBufferedSession::run()
         //ready_ = true;
         //readyCond_.wakeAll();
         //stoppedCond_.wakeAll();
-        emit error(tr("network error to access URL") + ": " + url_.toString());
+        emit errorMessage(tr("network error to access URL") + ": " + url_.toString());
         DOUT("continue: network error:" << reply_->error() << reply_->errorString());
       } else {
         updateContentType();
         if (!isMultiMediaMimeType(contentType_)) {
           setState(Error);
-          emit error(tr("access forbidden") + ": " + url_.toString());
+          emit errorMessage(tr("access forbidden") + ": " + url_.toString());
         } else {
           // succeed
           ok = true;

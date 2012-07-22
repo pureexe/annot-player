@@ -3,7 +3,6 @@
 
 #include "module/qtext/webview.h"
 #include "module/qtext/actionwithid.h"
-#include "module/qtext/algorithm.h"
 #include "module/qtext/ss.h"
 #include "module/qtext/webpage.h"
 #ifdef WITH_MODULE_DOWNLOAD
@@ -40,11 +39,11 @@
 
 #define SAVE_PATH       QDesktopServices::storageLocation(QDesktopServices::DesktopLocation)
 
-//#ifdef Q_WS_MAC
+//#ifdef Q_OS_MAC
 //# define K_CTRL        "cmd"
 //#else
 //# define K_CTRL        "Ctrl"
-//#endif // Q_WS_MAC
+//#endif // Q_OS_MAC
 
 QString
 QtExt::
@@ -271,7 +270,7 @@ WebView::openWithOperatingSystem()
 
   QUrl u = address.isEmpty() ? url() : QUrl(address);
   if (!u.isEmpty()) {
-    emit message(tr("openning") + ": " + u.toString());
+    emit message(tr("opening") + ": " + u.toString());
     QDesktopServices::openUrl(u);
   }
 }
@@ -393,7 +392,10 @@ WebView::createHistoryMenu()
     delete m;
     return 0;
   }
-  m->addActions(QtExt::revertList(actions));
+  //m->addActions(QtExt::revertList(actions));
+  auto p = actions.constEnd();
+  while (p != actions.constBegin())
+    m->addAction(*--p);
   DOUT("exit");
   return m;
 }

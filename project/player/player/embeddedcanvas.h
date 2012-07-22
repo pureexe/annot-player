@@ -21,7 +21,7 @@ class EmbeddedCanvas : public QWidget
   typedef QWidget Base;
 
 public:
-  EmbeddedCanvas(DataManager *data, SignalHub *hub, Player *player, QWidget *parent = 0);
+  EmbeddedCanvas(DataManager *data, SignalHub *hub, Player *player, QWidget *parent = nullptr);
 
 signals:
   void enabledChanged(bool enabled);
@@ -42,10 +42,10 @@ public slots:
 
   // - Events -
 public slots:
-  //virtual void mouseDoubleClickEvent(QMouseEvent *event); ///< \reimp
-  virtual void setVisible(bool visible); ///< \reimp
+  //void mouseDoubleClickEvent(QMouseEvent *event) override;
+  void setVisible(bool visible) override;
 protected:
-  virtual void paintEvent(QPaintEvent *event); ///< \reimp
+  void paintEvent(QPaintEvent *event) override;
 
   // - Paint -
 protected:

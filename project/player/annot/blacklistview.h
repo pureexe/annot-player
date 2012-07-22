@@ -38,7 +38,7 @@ protected:
 
   // - Constructions -
 public:
-  explicit BlacklistView(AnnotationFilter *filter, QWidget *parent = 0);
+  explicit BlacklistView(AnnotationFilter *filter, QWidget *parent = nullptr);
 
   // - Properties -
 protected:
@@ -50,7 +50,7 @@ protected slots:
 
   // - Events -
 public:
-  virtual void setVisible(bool visible); ///< \reimp
+  void setVisible(bool visible) override;
 
   // - Slots -
 public slots:

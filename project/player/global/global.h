@@ -60,12 +60,12 @@ enum { ALPHA = 0 };
 
 // TO BE MOVED INTO mediaplayer.h
 #define G_FILTER_ALL            "*"
-#ifdef Q_WS_WIN
-# define G_FILTER_AUDIO        PLAYER_FORMAT_AUDIO(" *.")      PLAYER_FORMAT_PLAYLIST(" *.") PLAYER_FORMAT_IMAGE(".*.")
+#ifdef Q_OS_WIN
+# define G_FILTER_AUDIO        PLAYER_FORMAT_AUDIO(" *.")      PLAYER_FORMAT_PLAYLIST(" *.") PLAYER_FORMAT_IMAGE(" *.")
 #else
-# define G_FILTER_AUDIO        PLAYER_FORMAT_AUDIO(" *.")      PLAYER_FORMAT_IMAGE(".*.")
-#endif // Q_WS_WIN
-#define G_FILTER_VIDEO          PLAYER_FORMAT_VIDEO(" *.")      PLAYER_FORMAT_IMAGE(".*.")
+# define G_FILTER_AUDIO        PLAYER_FORMAT_AUDIO(" *.")      PLAYER_FORMAT_IMAGE(" *.")
+#endif // Q_OS_WIN
+#define G_FILTER_VIDEO          PLAYER_FORMAT_VIDEO(" *.")      PLAYER_FORMAT_IMAGE(" *.")
 #define G_FILTER_PICTURE        PLAYER_FORMAT_PICTURE(" *.")
 #define G_FILTER_SUBTITLE       PLAYER_FORMAT_SUBTITLE(" *.")
 
@@ -92,7 +92,6 @@ enum { ALPHA = 0 };
 #define VLC_AUTOHIDE_TIMEOUT    1500    // in msecs, same as VLC
 #define G_AUTOHIDE_TIMEOUT (VLC_AUTOHIDE_TIMEOUT * 2)
 
-#define G_CONSOLE_AUTOClEAR_TIMEOUT     4000
 #define G_LOGGER_PLAYING_WAITER_TIMEOUT 5100
 
 // - Path -
@@ -105,29 +104,29 @@ enum { ALPHA = 0 };
 # define G_PATH_PROFILE        QDir::homePath() + "/.annot/player"
 #endif // Q_OS_WIN
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
 # define G_PATH_LOGS   QCoreApplication::applicationDirPath() + "/" ".."
 # define G_PATH_DEBUG  G_PATH_LOGS "/" "Debug Player.txt"
-#elif defined(Q_WS_MAC)
+#elif defined(Q_OS_MAC)
 # define G_PATH_LOGS   QtMac::homeLogsPath() + "/" G_ORGANIZATION "/" G_APPLICATION
 # define G_PATH_DEBUG  G_PATH_LOGS "/" "Debug.txt"
 #else
 # define G_PATH_LOGS   G_PATH_PROFILE
 # define G_PATH_DEBUG  G_PATH_LOGS "/" "debug.txt"
-#endif // Q_WS_
+#endif // Q_OS_
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
 # define G_PATH_CACHES  QCoreApplication::applicationDirPath() + "/" "caches"
-#elif defined(Q_WS_MAC)
+#elif defined(Q_OS_MAC)
 # define G_PATH_CACHES  QtMac::homeCachesPath() + "/me.annot.player"
 #else
 # define G_PATH_CACHES  G_PATH_PROFILE
-#endif // Q_WS_
+#endif // Q_OS_
 
 #define G_PATH_LOCK     G_PATH_PROFILE
 
-#define G_PATH_CACHEDB  G_PATH_CACHES "/" "cache.db"
-#define G_PATH_QUEUEDB  G_PATH_CACHES "/" "queue.db"
+#define G_PATH_CACHEDB  G_PATH_CACHES "/" "online.db"
+#define G_PATH_QUEUEDB  G_PATH_CACHES "/" "offline.db"
 
 #define G_PATH_DOWNLOADS AC_PATH_DOWNLOADS
 
