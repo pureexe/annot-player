@@ -43,29 +43,9 @@ MainWindow::showMessage(const QString &message)
 void
 MainWindow::showMessageOnce(const QString &message)
 {
-  if (message.size() < LEFT_LENGTH + RIGHT_LENGTH)
-    miniConsole_->sendMessage(
-      //HTML_STYLE_OPEN(color:blue)
-      message
-      //HTML_STYLE_CLOSE()
-    );
-  else
-    miniConsole_->sendMessage(
-      //HTML_STYLE_OPEN(color:blue)
-      message.left(LEFT_LENGTH) +
-      HTML_STYLE_OPEN(color:orange) " ..." HTML_STYLE_CLOSE()
-      //+ message.right(RIGHT_LENGTH) +
-      //HTML_STYLE_CLOSE()
-    );
-
+  miniConsole_->sendMessage(message);
   if (consoleDialog_)
-    consoleDialog_->sendLogText(
-      //HTML_STYLE_OPEN(color:blue)
-      "* " +
-      message +
-      //HTML_STYLE_CLOSE()
-      HTML_BR()
-    );
+    consoleDialog_->sendLogText("* " + message + HTML_BR());
 }
 
 
@@ -98,20 +78,11 @@ MainWindow::notify(const QString &message)
 void
 MainWindow::notifyOnce(const QString &message)
 {
-  if (message.size() < LEFT_LENGTH + RIGHT_LENGTH)
-    miniConsole_->sendMessage(
-      HTML_STYLE_OPEN(color:cyan)
-      + message +
-      HTML_STYLE_CLOSE()
-    );
-  else
-    miniConsole_->sendMessage(
-      HTML_STYLE_OPEN(color:cyan)
-      + message.left(LEFT_LENGTH) +
-      HTML_STYLE_OPEN(color:orange) " ..." HTML_STYLE_CLOSE()
-      //+ message.right(RIGHT_LENGTH) +
-      HTML_STYLE_CLOSE()
-    );
+  miniConsole_->sendMessage(
+    HTML_STYLE_OPEN(color:cyan)
+    + message +
+    HTML_STYLE_CLOSE()
+  );
 
   if (consoleDialog_)
     consoleDialog_->sendLogText(
@@ -149,20 +120,11 @@ MainWindow::warn(const QString &message)
 void
 MainWindow::warnOnce(const QString &message)
 {
-  if (message.size() < LEFT_LENGTH + RIGHT_LENGTH)
-    miniConsole_->sendMessage(
-      HTML_STYLE_OPEN(color:cyan)
-      + message +
-      HTML_STYLE_CLOSE()
-    );
-  else
-    miniConsole_->sendMessage(
-      HTML_STYLE_OPEN(color:cyan)
-      + message.left(LEFT_LENGTH) +
-      HTML_STYLE_OPEN(color:orange) " ..." HTML_STYLE_CLOSE()
-      //+ message.right(RIGHT_LENGTH) +
-      HTML_STYLE_CLOSE()
-    );
+  miniConsole_->sendMessage(
+    HTML_STYLE_OPEN(color:cyan)
+    + message +
+    HTML_STYLE_CLOSE()
+  );
   if (consoleDialog_)
     consoleDialog_->sendLogText(
       HTML_STYLE_OPEN(color:cyan) "* "
@@ -200,20 +162,12 @@ MainWindow::showError(const QString &message)
 void
 MainWindow::showErrorOnce(const QString &message)
 {
-  if (message.size() < LEFT_LENGTH + RIGHT_LENGTH)
-    miniConsole_->sendMessage(
-      HTML_STYLE_OPEN(color:red)
-      + message +
-      HTML_STYLE_CLOSE()
-    );
-  else
-    miniConsole_->sendMessage(
-      HTML_STYLE_OPEN(color:red)
-      + message.left(LEFT_LENGTH) +
-      HTML_STYLE_OPEN(color:orange) " ..." HTML_STYLE_CLOSE()
-      //+ message.right(RIGHT_LENGTH) +
-      HTML_STYLE_CLOSE()
-    );
+  miniConsole_->sendMessage(
+    HTML_STYLE_OPEN(color:red)
+    + message +
+    HTML_STYLE_CLOSE()
+  );
+
   if (consoleDialog_)
     consoleDialog_->sendLogText(
       HTML_STYLE_OPEN(color:red) "* "
@@ -223,4 +177,3 @@ MainWindow::showErrorOnce(const QString &message)
 }
 
 // EOF
-

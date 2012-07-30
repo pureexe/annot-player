@@ -1,0 +1,26 @@
+# soap.pri
+# 9/10/2011
+
+SERVER_SOAP_BINDING = CloudServiceSoapBinding
+SERVER_SOAP_PREFIX = ServerSoap
+
+SERVER_SOAP_HOME=$$PWD/serversoap
+
+INCLUDEPATH += $$PWD
+INCLUDEPATH += $$SERVER_SOAP_HOME
+
+HEADERS += \
+    $$SERVER_SOAP_HOME/$${SERVER_SOAP_PREFIX}$${SERVER_SOAP_BINDING}Proxy.h \
+    $$SERVER_SOAP_HOME/$${SERVER_SOAP_PREFIX}H.h \
+    $$SERVER_SOAP_HOME/$${SERVER_SOAP_PREFIX}Stub.h
+
+SOURCES += \
+    $$SERVER_SOAP_HOME/$${SERVER_SOAP_PREFIX}C.cpp \
+    $$SERVER_SOAP_HOME/$${SERVER_SOAP_PREFIX}Client.cpp
+    #$$SERVER_SOAP_HOME/$${SERVER_SOAP_PREFIX}ClientLib.cpp
+
+OTHER_FILES += \
+    $$PWD/serversoap.update.cmd \
+    $$PWD/serversoap.update.sh
+
+# EOF

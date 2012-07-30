@@ -21,9 +21,8 @@
 #endif // WITH_MODULE_MRLANALYSIS
 #include <QtNetwork/QNetworkCookieJar>
 #include <QtCore/QCoreApplication>
-#include <QtCore/QRunnable>
 #include <QtCore/QTextCodec>
-#include <QtCore/QThreadPool>
+#include <QtCore/QtConcurrentRun>
 
 #define DEBUG "luaemrlresolver"
 #include "module/debug/debug.h"
@@ -44,32 +43,6 @@
 # define LUAPACKAGE_PATH ""
 # define LUASCRIPT_PATH  "luascript.lua"
 #endif // LUA_PATH
-
-// - Tasks -
-
-namespace detail {
-
-  class ResolveMedia : public QRunnable
-  {
-    LuaMrlResolver *r_;
-    QString ref_;
-    void run() override { r_->resolveMedia(ref_, false); } // async = false
-  public:
-    ResolveMedia(const QString &ref, LuaMrlResolver *r)
-      : r_(r), ref_(ref) { Q_ASSERT(r_); }
-  };
-
-  class ResolveSubtitle : public QRunnable
-  {
-    LuaMrlResolver *r_;
-    QString ref_;
-    void run() override { r_->resolveSubtitle(ref_, false); } // async = false
-  public:
-    ResolveSubtitle(const QString &ref, LuaMrlResolver *r)
-      : r_(r), ref_(ref) { Q_ASSERT(r_); }
-  };
-
-} // namespace detail
 
 // - Analysis -
 
@@ -101,7 +74,7 @@ LuaMrlResolver::resolveMedia(const QString &href, bool async)
   if (async) {
     if (!checkSiteAccount(href))
       return false;
-    QThreadPool::globalInstance()->start(new detail::ResolveMedia(href, this));
+    QtConcurrent::run(this, &Self::resolveMedia, href, false);
     return true;
   }
   if (!checkSiteAccount(href))
@@ -205,7 +178,7 @@ LuaMrlResolver::resolveSubtitle(const QString &href, bool async)
   if (async) {
     if (!checkSiteAccount(href))
       return false;
-    QThreadPool::globalInstance()->start(new detail::ResolveSubtitle(href, this));
+    QtConcurrent::run(this, &Self::resolveSubtitle, href, false);
     return true;
   }
   if (!checkSiteAccount(href))

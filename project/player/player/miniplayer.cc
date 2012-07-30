@@ -32,7 +32,7 @@
 
 // - Constructions -
 
-MiniPlayerUi::MiniPlayerUi(SignalHub *hub, Player *player, ServerAgent *server, QWidget *parent)
+MiniPlayerUi::MiniPlayerUi(SignalHub *hub, Player *player, AnnotationServerAgent *server, QWidget *parent)
   : Base(hub, player, server, parent), dragPos_(BAD_POS)
 {
   Qt::WindowFlags f = WINDOW_FLAGS;

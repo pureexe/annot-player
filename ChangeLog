@@ -2,6 +2,12 @@ ChangeLog
 Annot Project
 6/18/2011
 
+7/29/2012 MON	annot.player, down, browser	0.1.8.0, 0.1.3.2, 0.1.2.2
+        * Fix the severe issue for synchronizing annotations caused by the changes of the server framework.
+          App before version 0.1.8.0 might not function well anymore.
+        * Fix the bug which might cause downloaded gzipped annotations failed to be unzipped and parsed.
+        * Utilize cookies to reduce network traffic.
+
 7/22/2012 SUN	annot.player, down, browser	0.1.7.1, 0.1.3.1, 0.1.2.1
         * Long annotations/subtitles will be wrapped by word boundaries.
         * Game subtitles will be rendered stably on the top or bottom.

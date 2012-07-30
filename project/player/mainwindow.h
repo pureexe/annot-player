@@ -40,6 +40,7 @@ namespace QtExt {
 class AnnotationDatabase;
 class AnnotationDownloader;
 class AnnotationFilter;
+class AnnotationServerAgent;
 class ClientAgent;
 class ClipboardMonitor;
 class DataManager;
@@ -51,7 +52,6 @@ class Magnifier;
 class MrlResolver;
 class Player;
 class RippleImageFilter;
-class ServerAgent;
 class SignalHub;
 class Tray;
 class TranslatorManager;
@@ -351,6 +351,9 @@ protected:
   QString currentUrl() const;
   QString currentTitle() const;
   static QString downloadSpeedToString(int speed);
+
+protected slots:
+  void checkReachEnd();
 
 public slots:
   void invalidateMediaAndPlay(bool async = true);
@@ -958,12 +961,7 @@ private:
   AcDownloader *downloaderDelegate_;
   AnnotationDownloader *annotationDownloader_;
 
-#ifdef WITH_MODULE_SERVERAGENT
-  ServerAgent *server_;
-#endif // WITH_MODULE_SERVERAGENT
-#ifdef WITH_MODULE_CLIENTAGENT
-  ClientAgent *client_;
-#endif // WITH_MODULE_CLIENTAGENT
+  AnnotationServerAgent *server_;
 
   Player *player_;
 
@@ -1034,9 +1032,9 @@ private:
   QString recentOpenedFile_;
   QString recentPath_;
   QString recentDigest_;
-  QString recentSource_;
+  QString recentUrl_;
 
-  bool recentSourceLocked_;
+  bool recentUrlLocked_;
 
   //bool cursorVisible_;
 

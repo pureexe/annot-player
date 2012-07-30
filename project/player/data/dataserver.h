@@ -10,7 +10,7 @@
 #include <QtCore/QObject>
 
 class AnnotationDatabase;
-class ServerAgent;
+class AnnotationServerAgent;
 class SignalHub;
 
 class DataServer : public QObject
@@ -28,7 +28,7 @@ class DataServer : public QObject
   typedef AnnotCloud::AnnotationList AnnotationList;
 
 public:
-  DataServer(SignalHub *hub, ServerAgent *server,
+  DataServer(SignalHub *hub, AnnotationServerAgent *server,
       AnnotationDatabase *cache, AnnotationDatabase *queue, QObject *parent = nullptr)
     : Base(parent), preferCache_(false), hub_(hub), server_(server), cache_(cache), queue_(queue) { }
 
@@ -73,7 +73,7 @@ public slots:
   // - Queries -
 public:
   Token selectTokenWithId(qint64 id);
-  Token selectTokenWithDigest(const QString &digest, qint32 part);
+  Token selectTokenWithDigest(const QString &digest, qint32 section);
 
   AnnotationList selectAnnotationsWithTokenId(qint64 tid, bool ignoreCache = false);
   AliasList selectAliasesWithTokenId(qint64 tid, bool ignoreCache = false, bool *fromCache = nullptr);
@@ -91,7 +91,7 @@ public:
 private:
   bool preferCache_;
   SignalHub *hub_;
-  ServerAgent *server_;
+  AnnotationServerAgent *server_;
   AnnotationDatabase *cache_,
                      *queue_;
 };

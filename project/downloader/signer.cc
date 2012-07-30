@@ -7,7 +7,7 @@
 #include "module/annotcloud/token.h"
 #include "module/annotcloud/traits.h"
 #include "module/annotcloud/user.h"
-#include "module/serveragent/serveragent.h"
+#include "module/annotservice/annotserveragent.h"
 #include <QtCore>
 
 using namespace AnnotCloud;
@@ -15,40 +15,11 @@ using namespace AnnotCloud;
 #define DEBUG "signer"
 #include "module/debug/debug.h"
 
-// - Taaks -
-
-namespace detail {
-
-  class SignFileWithUrl : public QRunnable
-  {
-    Signer *w_;
-    QString path_, url_;
-
-    void run() override { w_->signFileWithUrl(path_, url_, false); } // async = false
-  public:
-    SignFileWithUrl(const QString &path, const QString &url, Signer *w)
-      : w_(w), path_(path), url_(url) { Q_ASSERT(w_); }
-  };
-
-  class Login : public QRunnable
-  {
-    Signer *w_;
-
-    void run() override { w_->login(false); } // async = false
-  public:
-    explicit Login(Signer *w) : w_(w) { Q_ASSERT(w_); }
-  };
-
-} // namespace
-
-
 // - Construction -
 
 Signer::Signer(QObject *parent)
   : Base(parent), disposed_(false)
-{
-  server_ = new ServerAgent(this);
-}
+{ server_ = new AnnotationServerAgent(this); }
 
 // - Sign -
 
@@ -66,7 +37,7 @@ Signer::signFileWithUrl(const QString &fileName, const QString &url, bool async)
   }
   if (async) {
     emit message(tr("signing media ...") + " " + fileName);
-    QThreadPool::globalInstance()->start(new detail::SignFileWithUrl(fileName, url, this));
+    QtConcurrent::run(this, &Self::signFileWithUrl, fileName, url, false);
     DOUT("exit: returned from async branch");
     return;
   }
@@ -109,7 +80,7 @@ Signer::signFileWithUrl(const QString &fileName, const QString &url, bool async)
       emit warning(tr("truncate long file name") + ": " + name);
     }
     srcAlias.setUserId(server_->user().id());
-    srcAlias.setType(Alias::AT_Source);
+    srcAlias.setType(Alias::AT_File);
     srcAlias.setLanguage(server_->user().language());
     srcAlias.setText(name);
     srcAlias.setUpdateTime(now);
@@ -171,7 +142,7 @@ Signer::login(bool async)
     return;
   }
   if (async) {
-    QThreadPool::globalInstance()->start(new detail::Login(this));
+    QtConcurrent::run(this, &Self::login, false);
     DOUT("exit: returned from async branch");
     return;
   }

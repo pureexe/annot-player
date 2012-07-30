@@ -9,9 +9,9 @@
 QT_FORWARD_DECLARE_CLASS(QMenu)
 QT_FORWARD_DECLARE_CLASS(QAction)
 
+class AnnotationServerAgent;
 class Player;
 class SignalHub;
-class ServerAgent;
 
 class PlayerUi : public PlayerPanel
 {
@@ -23,7 +23,7 @@ class PlayerUi : public PlayerPanel
 
   SignalHub *hub_;
   Player *player_;
-  ServerAgent *server_;
+  AnnotationServerAgent *server_;
   bool active_;
 
   QMenu *networkMenu_;
@@ -32,20 +32,20 @@ class PlayerUi : public PlayerPanel
 
   // TODO: use signal hub_ to replace player_ and server_ signals.
 public:
-  explicit PlayerUi(SignalHub *hub_, Player *player, ServerAgent *server, QWidget *parent = nullptr);
+  explicit PlayerUi(SignalHub *hub_, Player *player, AnnotationServerAgent *server, QWidget *parent = nullptr);
 
   bool isValid() const;
 
 protected:
-  SignalHub *hub() const;
+  SignalHub *hub() const { return hub_; }
   void connectHub();
   void disconnectHub();
 
-  Player *player() const;
+  Player *player() const { return player_; }
   void connectPlayer();
   void disconnectPlayer();
 
-  ServerAgent *server() const;
+  AnnotationServerAgent *server() const { return server_; }
   void connectServer();
   void disconnectServer();
 

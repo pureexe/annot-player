@@ -109,7 +109,7 @@ MediaInfoView::updateText()
 
   // Data
   QStringList urls;
-  QString src = data_->token().source();
+  QString src = data_->token().url();
   if (!src.isEmpty())
     urls.append(src);
   foreach (const Alias &a, data_->aliases())

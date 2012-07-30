@@ -211,13 +211,10 @@ main(int argc, char *argv[])
     //bool initial = previousVersion.isEmpty();
 
 
-    QFile::rename(G_PATH_CACHES "/" "cache.db", G_PATH_CACHEDB);
+    QtExt::trashOrRemoveFile(G_PATH_CACHES "/" "cache.db");
     QtExt::trashOrRemoveFile(G_PATH_CACHES "/" "queue.db");
 
-    // FIXME: check when remove cache db on Windows
-//#ifdef Q_OS_MAC
     QtExt::trashOrRemoveFile(G_PATH_CACHEDB);
-//#endif // Q_OS_MAC
     QtExt::trashOrRemoveFile(G_PATH_QUEUEDB);
     QtExt::trashOrRemoveFile(G_PATH_DEBUG);
 

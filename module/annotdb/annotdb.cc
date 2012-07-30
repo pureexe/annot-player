@@ -30,34 +30,6 @@ using namespace AnnotCloud;
 //# define ANNOTDB_TUNE
 //#endif // Q_OS_WIN
 
-// - Threads -
-
-namespace { namespace detail {
-
-  class UpdateAliases : public QRunnable
-  {
-    AnnotationDatabase *db_;
-    AliasList l_;
-    int limit_;
-    void run() override { db_->updateAliases(l_, false, limit_); } // async = false
-  public:
-    UpdateAliases(const AliasList &l, int limit, AnnotationDatabase *db)
-      : db_(db), l_(l), limit_(limit) { Q_ASSERT(db_); }
-  };
-
-  class UpdateAnnotations : public QRunnable
-  {
-    AnnotationDatabase *db_;
-    AnnotationList l_;
-    int limit_;
-    void run() override { db_->updateAnnotations(l_, false, limit_); } // async = false
-  public:
-    UpdateAnnotations(const AnnotationList &l, int limit, AnnotationDatabase *db)
-      : db_(db), l_(l), limit_(limit) { Q_ASSERT(db_); }
-  };
-
-} } // anonymous detail
-
 // - Constructions -
 
 AnnotationDatabase::~AnnotationDatabase()
@@ -581,9 +553,9 @@ AnnotationDatabase::selectTokenWithId(qint64 id) const
 }
 
 Token
-AnnotationDatabase::selectTokenWithDigest(const QString &digest, qint32 part) const
+AnnotationDatabase::selectTokenWithDigest(const QString &digest, qint32 section) const
 {
-  DOUT("enter: part =" << part << ", digest =" << digest);
+  DOUT("enter: section =" << section << ", digest =" << digest);
   Q_ASSERT(isValid());
   //if (digest.isEmpty())
   //  return;
@@ -591,9 +563,9 @@ AnnotationDatabase::selectTokenWithDigest(const QString &digest, qint32 part) co
 
   QSqlQuery query(db_);
 
-  query.prepare(ANNOTDB_SELECT_TOKEN "WHERE token_digest = ? AND token_part = ?");
+  query.prepare(ANNOTDB_SELECT_TOKEN "WHERE token_digest = ? AND token_section = ?");
   query.addBindValue(digest);
-  query.addBindValue(part);
+  query.addBindValue(section);
 
   DOUT("locking"); m_.lock(); DOUT("locked");
   bool ok = query.exec();
@@ -704,17 +676,17 @@ AnnotationDatabase::selectAliasesWithTokenId(qint64 tid) const
 }
 
 AliasList
-AnnotationDatabase::selectAliasesWithTokenDigest(const QString &digest, qint32 part)
+AnnotationDatabase::selectAliasesWithTokenDigest(const QString &digest, qint32 section)
 {
-  DOUT("enter: part =" << part);
+  DOUT("enter: section =" << section);
 
   Q_ASSERT(isValid());
   AliasList ret;
 
   QSqlQuery query(db_);
-  query.prepare(ANNOTDB_SELECT_ALIAS "WHERE token_digest = ? AND token_part = ?");
+  query.prepare(ANNOTDB_SELECT_ALIAS "WHERE token_digest = ? AND token_section = ?");
   query.addBindValue(digest);
-  query.addBindValue(part);
+  query.addBindValue(section);
 
   DOUT("locking"); m_.lock(); DOUT("locked");
   bool ok = query.exec();
@@ -826,17 +798,17 @@ AnnotationDatabase::selectAnnotationsWithTokenId(qint64 tid) const
 }
 
 AnnotationList
-AnnotationDatabase::selectAnnotationsWithTokenDigest(const QString &digest, qint32 part) const
+AnnotationDatabase::selectAnnotationsWithTokenDigest(const QString &digest, qint32 section) const
 {
-  DOUT("enter: part =" << part);
+  DOUT("enter: section =" << section);
 
   Q_ASSERT(isValid());
   AnnotationList ret;
 
   QSqlQuery query(db_);
-  query.prepare(ANNOTDB_SELECT_ANNOTATION "WHERE token_digest = ? AND token_part = ?");
+  query.prepare(ANNOTDB_SELECT_ANNOTATION "WHERE token_digest = ? AND token_section = ?");
   query.addBindValue(digest);
-  query.addBindValue(part);
+  query.addBindValue(section);
 
   DOUT("locking"); m_.lock(); DOUT("locked");
   bool ok = query.exec();
@@ -997,14 +969,14 @@ AnnotationDatabase::deleteTokenWithId(qint64 id)
 }
 
 void
-AnnotationDatabase::deleteTokenWithDigest(const QString &digest, qint32 part)
+AnnotationDatabase::deleteTokenWithDigest(const QString &digest, qint32 section)
 {
-  DOUT("enter: part =" << part);
+  DOUT("enter: section =" << section);
   Q_ASSERT(isValid());
   QSqlQuery query(db_);
-  query.prepare("DELETE FROM token WHERE token_digest = ? AND token_part = ?");
+  query.prepare("DELETE FROM token WHERE token_digest = ? AND token_section = ?");
   query.addBindValue(digest);
-  query.addBindValue(part);
+  query.addBindValue(section);
   DOUT("locking"); m_.lock(); DOUT("locked");
   query.exec();
   DOUT("unlocking"); m_.unlock(); DOUT("unlocked");
@@ -1041,14 +1013,14 @@ AnnotationDatabase::deleteAliasesWithTokenId(qint64 tid)
 }
 
 void
-AnnotationDatabase::deleteAliasesWithTokenDigest(const QString &digest, qint32 part)
+AnnotationDatabase::deleteAliasesWithTokenDigest(const QString &digest, qint32 section)
 {
-  DOUT("enter: part =" << part);
+  DOUT("enter: section =" << section);
   Q_ASSERT(isValid());
   QSqlQuery query(db_);
-  query.prepare("DELETE FROM alias WHERE token_digest = ? AND token_part = ?");
+  query.prepare("DELETE FROM alias WHERE token_digest = ? AND token_section = ?");
   query.addBindValue(digest);
-  query.addBindValue(part);
+  query.addBindValue(section);
   DOUT("locking"); m_.lock(); DOUT("locked");
   query.exec();
   DOUT("unlocking"); m_.unlock(); DOUT("unlocked");
@@ -1085,14 +1057,14 @@ AnnotationDatabase::deleteAnnotationsWithTokenId(qint64 tid)
 }
 
 void
-AnnotationDatabase::deleteAnnotationsWithTokenDigest(const QString &digest, qint32 part)
+AnnotationDatabase::deleteAnnotationsWithTokenDigest(const QString &digest, qint32 section)
 {
-  DOUT("enter: part =" << part);
+  DOUT("enter: section =" << section);
   Q_ASSERT(isValid());
   QSqlQuery query(db_);
-  query.prepare("DELETE FROM annot WHERE token_digest = ? AND token_part = ?");
+  query.prepare("DELETE FROM annot WHERE token_digest = ? AND token_section = ?");
   query.addBindValue(digest);
-  query.addBindValue(part);
+  query.addBindValue(section);
   DOUT("locking"); m_.lock(); DOUT("locked");
   query.exec();
   DOUT("unlocking"); m_.unlock(); DOUT("unlocked");
@@ -1180,7 +1152,7 @@ AnnotationDatabase::updateAnnotations(const AnnotationList &l, bool async, int l
     return;
   }
   if (async) {
-    QThreadPool::globalInstance()->start(new detail::UpdateAnnotations(l, limit, this));
+    QtConcurrent::run(this, &Self::updateAnnotations, l, false, limit);
     DOUT("exit: returned from async branch");
     return;
   }
@@ -1229,7 +1201,7 @@ AnnotationDatabase::updateAliases(const AliasList &l, bool async, int limit)
     return;
   }
   if (async) {
-    QThreadPool::globalInstance()->start(new detail::UpdateAliases(l, limit, this));
+    QtConcurrent::run(this, &Self::updateAliases, l, false, limit);
     DOUT("exit: returned from async branch");
     return;
   }

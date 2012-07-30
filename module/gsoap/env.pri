@@ -3,8 +3,9 @@
 
 ENV_SOAP_HOME=$$PWD/env
 
-INCLUDEPATH += $$PWD
-INCLUDEPATH += $$SOAP_PREFIX
+INCLUDEPATH += \
+  $$PWD \
+  $$ENV_SOAP_HOME
 
 HEADERS += \
     $$CLIENT_SOAP_HOME/env.h \
@@ -15,6 +16,7 @@ SOURCES += \
     $$CLIENT_SOAP_HOME/envC.cpp
 
 OTHER_FILES += \
-    $$PWD/env.gen.cmd
+    $$PWD/env.gen.cmd \
+    $$PWD/env.gen.sh
 
 # EOF

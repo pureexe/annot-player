@@ -66,14 +66,9 @@ Application::close()
   DownloaderController::globalController()->abort();
 
   if (QThreadPool::globalInstance()->activeThreadCount()) {
-#if QT_VERSION >= 0x040800
     // wait for at most 2 seconds ant kill all threads
     enum { CloseTimeout = 2000 };
     QThreadPool::globalInstance()->waitForDone(CloseTimeout);
-#else
-    //DOUT("WARNING: killing active threads; will be fixed in Qt 4.8");
-    QThreadPool::globalInstance()->waitForDone();
-#endif  // QT_VERSION
   }
 
   closeAllWindows();

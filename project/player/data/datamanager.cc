@@ -188,9 +188,9 @@ DataManager::updateUrls() const
   if (!urls_.isEmpty())
     urls_.clear();
   MrlAnalysis::Site site;
-  if (token_.hasSource() &&
-      (site = MrlAnalysis::matchSite(token_.source())) && site < MrlAnalysis::AnnotationSite)
-    urls_.append(normalizeUrl(token_.source()));
+  if (token_.hasUrl() &&
+      (site = MrlAnalysis::matchSite(token_.url())) && site < MrlAnalysis::AnnotationSite)
+    urls_.append(normalizeUrl(token_.url()));
 
   if (!aliases_.isEmpty()) {
     QString url;

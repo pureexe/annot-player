@@ -79,7 +79,7 @@ enum { VolumeSliderMaximumWidth = 100 };
 #define SS_TOOLBUTTON_DOCK_BOTTOM   SS_TOOLBUTTON_DOWNARROW
 
 // - Constructions -
-EmbeddedPlayerUi::EmbeddedPlayerUi(SignalHub *hub, Player *player, ServerAgent *server, DataManager *data, QWidget *parent)
+EmbeddedPlayerUi::EmbeddedPlayerUi(SignalHub *hub, Player *player, AnnotationServerAgent *server, DataManager *data, QWidget *parent)
   : Base(hub, player, server, parent),
     containerWindow_(0), containerWidget_(nullptr),
     fullScreen_(false), top_(false)

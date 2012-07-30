@@ -1,5 +1,5 @@
 :: Generate global common environment including serialization codes.
-:: Since 10/7/2011
+:: 10/7/2011
 :: See: http://www.cs.fsu.edu/~engelen/soapdoc2.html#tth_sEc19.33
 ::echo off
 setlocal

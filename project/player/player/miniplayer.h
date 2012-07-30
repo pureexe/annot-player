@@ -17,7 +17,7 @@ class MiniPlayerUi : public PlayerUi
   QPoint dragPos_;
 
 public:
-  explicit MiniPlayerUi(SignalHub *hub, Player *player, ServerAgent *server, QWidget *parent = nullptr);
+  explicit MiniPlayerUi(SignalHub *hub, Player *player, AnnotationServerAgent *server, QWidget *parent = nullptr);
 
 public:
   void setTitle(const QString &title) override;

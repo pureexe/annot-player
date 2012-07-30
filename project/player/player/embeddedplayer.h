@@ -21,7 +21,7 @@ class EmbeddedPlayerUi : public PlayerUi
   typedef PlayerUi Base;
 
 public:
-  explicit EmbeddedPlayerUi(SignalHub *hub, Player *player, ServerAgent *server,
+  explicit EmbeddedPlayerUi(SignalHub *hub, Player *player, AnnotationServerAgent *server,
                             DataManager *data, QWidget *parent = nullptr);
 
 signals:

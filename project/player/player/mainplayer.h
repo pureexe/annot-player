@@ -29,7 +29,7 @@ class MainPlayerUi : public PlayerUi
   typedef PlayerUi Base;
 
 public:
-  explicit MainPlayerUi(SignalHub *hub, Player *player, ServerAgent *server, QWidget *parent = nullptr);
+  explicit MainPlayerUi(SignalHub *hub, Player *player, AnnotationServerAgent *server, QWidget *parent = nullptr);
 
 private:
   void createLayout();

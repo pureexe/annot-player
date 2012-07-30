@@ -7,8 +7,8 @@
 #include "tr.h"
 #include "signalhub.h"
 #include "positionslider.h"
+#include "module/annotservice/annotserveragent.h"
 #include "module/player/player.h"
-#include "module/serveragent/serveragent.h"
 #include "module/qtext/datetime.h"
 #include "module/annotcloud/annotation.h"
 #ifdef Q_OS_WIN
@@ -78,7 +78,7 @@ PlayerUi::disconnectPlayer()
 
  // - Constructions -
 
-PlayerUi::PlayerUi(SignalHub *hub, Player *player, ServerAgent *server, QWidget *parent)
+PlayerUi::PlayerUi(SignalHub *hub, Player *player, AnnotationServerAgent *server, QWidget *parent)
   : Base(parent), hub_(hub), player_(player), server_(server), active_(false), networkMenu_(nullptr)
 {
   Q_ASSERT(isValid());
@@ -378,18 +378,6 @@ PlayerUi::rewind()
 }
 
 // - Set/get properties -
-
-SignalHub*
-PlayerUi::hub() const
-{ Q_ASSERT(hub_); return hub_; }
-
-Player*
-PlayerUi::player() const
-{ Q_ASSERT(player_); return player_; }
-
-ServerAgent*
-PlayerUi::server() const
-{ Q_ASSERT(server_); return server_; }
 
 void
 PlayerUi::setVolume(int vol)

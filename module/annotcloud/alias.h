@@ -22,7 +22,7 @@ namespace AnnotCloud {
     enum AliasType {
       AT_Null = 0, // invalid
       AT_Name = 1,
-      AT_Source = 2,
+      AT_File = 2,
       AT_Tag = 3,
       AT_Url = 4
     };
@@ -64,11 +64,11 @@ namespace AnnotCloud {
     bool hasTokenDigest() const             { return !tokenDigest_.isEmpty(); }
 
     ///  Used only in offline mode
-  private: qint32 tokenPart_;
+  private: qint32 tokenSection_;
   public:
-    qint32 tokenPart() const            { return tokenPart_; }
-    void setTokenPart(qint32 part)      { tokenPart_ = part; }
-    bool hasTokenPart() const           { return tokenPart_; }
+    qint32 tokenSection() const            { return tokenSection_; }
+    void setTokenSection(qint32 section)   { tokenSection_ = section; }
+    bool hasTokenSection() const           { return tokenSection_; }
 
   private: qint64 userId_;
   public:
@@ -149,7 +149,7 @@ namespace AnnotCloud {
     // - Constructions -
   public:
     Alias()
-      : id_(0), tokenId_(0), tokenPart_(0), userId_(0), type_(0),
+      : id_(0), tokenId_(0), tokenSection_(0), userId_(0), type_(0),
         status_(0), flags_(0), language_(0), updateTime_(0), updateIp_(0),
         blessed_(0), cursed_(0), blocked_(0)
     { }

@@ -11,7 +11,6 @@
 #include "module/qtext/htmltag.h"
 #include "module/qtext/datetime.h"
 #include "module/player/player.h"
-#include "module/serveragent/serveragent.h"
 #include <QtGui/QApplication>
 #include <QtCore>
 

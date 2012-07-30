@@ -3,8 +3,8 @@
 
 DEFINES += PROJECT_PLAYER
 
-VERSION_MAJOR = 0.1.7.
-VERSION_MINOR = 1
+VERSION_MAJOR = 0.1.8.
+VERSION_MINOR = 0
 
 VERSION = $$VERSION_MAJOR$$VERSION_MINOR
 
@@ -24,6 +24,7 @@ include($$ROOTDIR/module/annotcache/annotcache.pri)
 include($$ROOTDIR/module/annotcodec/annotcodec.pri)
 include($$ROOTDIR/module/annotdb/annotdb.pri)
 include($$ROOTDIR/module/annotdown/annotdown.pri)
+include($$ROOTDIR/module/annotservice/annotservice.pri)
 include($$ROOTDIR/module/blockiodevice/blockiodevice.pri)
 include($$ROOTDIR/module/compress/compress.pri)
 include($$ROOTDIR/module/crypt/crypt.pri)
@@ -42,7 +43,6 @@ include($$ROOTDIR/module/qt/qt.pri)
 include($$ROOTDIR/module/qtext/qtext.pri)
 include($$ROOTDIR/module/searchengine/searchengine.pri)
 include($$ROOTDIR/module/stream/stream.pri)
-include($$ROOTDIR/module/serveragent/serveragent.pri)
 include($$ROOTDIR/module/textcodec/textcodec.pri)
 include($$ROOTDIR/module/translator/translator.pri)
 

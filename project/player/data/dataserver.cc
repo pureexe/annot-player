@@ -5,7 +5,7 @@
 #include "settings.h"
 #include "signalhub.h"
 #include "module/annotdb/annotdb.h"
-#include "module/serveragent/serveragent.h"
+#include "module/annotservice/annotserveragent.h"
 #include <QtCore>
 
 using namespace AnnotCloud;
@@ -30,7 +30,7 @@ DataServer::submitToken(const Token &token)
   DOUT("enter");
   qint64 id = 0;
   if (preferCache_ && cache_->isValid() && token.hasDigest())
-    id = cache_->selectTokenWithDigest(token.digest(), token.part()).id();
+    id = cache_->selectTokenWithDigest(token.digest(), token.section()).id();
   if (!id && server_->isConnected()) {
     if (server_->isAuthorized())
       id = server_->submitToken(token);
@@ -38,7 +38,7 @@ DataServer::submitToken(const Token &token)
       id = server_->selectTokenId(token);
   }
   if (!preferCache_ && !id && cache_->isValid() && token.hasDigest())
-    id = cache_->selectTokenWithDigest(token.digest(), token.part()).id();
+    id = cache_->selectTokenWithDigest(token.digest(), token.section()).id();
   DOUT("exit: ret =" << id);
   return id;
 }
@@ -314,21 +314,21 @@ DataServer::selectTokenWithId(qint64 id)
 }
 
 Token
-DataServer::selectTokenWithDigest(const QString &digest, qint32 part)
+DataServer::selectTokenWithDigest(const QString &digest, qint32 section)
 {
   DOUT("enter: digest =" << digest);
   Token ret;
   if (preferCache_ && cache_->isValid())
-    ret = cache_->selectTokenWithDigest(digest, part);
+    ret = cache_->selectTokenWithDigest(digest, section);
   if (!ret.isValid()) {
     if (server_->isConnected()) {
-      ret = server_->selectTokenWithDigest(digest, part);
+      ret = server_->selectTokenWithDigest(digest, section);
       if (ret.isValid() && cache_->isValid()) {
         cache_->deleteTokenWithId(ret.id());
         cache_->insertToken(ret);
       }
     } else if (!preferCache_ && cache_->isValid())
-      ret = cache_->selectTokenWithDigest(digest, part);
+      ret = cache_->selectTokenWithDigest(digest, section);
   }
   DOUT("exit: tid =" << ret.id());
   return ret;
@@ -487,7 +487,7 @@ DataServer::selectAliasesWithToken(const Token &token, bool ignoreCache, bool *f
       ret = cache_->selectAliasesWithTokenId(token.id());
       cached = true;
     } else if (token.hasDigest()) {
-      ret = cache_->selectAliasesWithTokenDigest(token.digest(), token.part());
+      ret = cache_->selectAliasesWithTokenDigest(token.digest(), token.section());
       cached = true;
     }
   }
@@ -495,7 +495,7 @@ DataServer::selectAliasesWithToken(const Token &token, bool ignoreCache, bool *f
     if (token.isValid())
       ret = selectAliasesWithTokenId(token.id(), ignoreCache, fromCache);
     else if (!preferCache && token.hasDigest() && cache_->isValid()) {
-      ret = cache_->selectAliasesWithTokenDigest(token.digest(), token.part());
+      ret = cache_->selectAliasesWithTokenDigest(token.digest(), token.section());
       cached = true;
     }
   }
@@ -519,7 +519,7 @@ DataServer::selectAnnotationsWithToken(const Token &token, bool ignoreCache, boo
       ret = cache_->selectAnnotationsWithTokenId(token.id());
       cached = true;
     } else if (token.hasDigest()) {
-      ret = cache_->selectAnnotationsWithTokenDigest(token.digest(), token.part());
+      ret = cache_->selectAnnotationsWithTokenDigest(token.digest(), token.section());
       cached = true;
     }
   }
@@ -527,7 +527,7 @@ DataServer::selectAnnotationsWithToken(const Token &token, bool ignoreCache, boo
     if (token.isValid())
       ret = selectRelatedAnnotationsWithTokenId(token.id(), ignoreCache, fromCache);
     else if (!preferCache && token.hasDigest() && cache_->isValid()) {
-      ret = cache_->selectAnnotationsWithTokenDigest(token.digest(), token.part());
+      ret = cache_->selectAnnotationsWithTokenDigest(token.digest(), token.section());
       cached = true;
     }
   }

@@ -46,11 +46,11 @@ namespace AnnotCloud {
     void setId(qint64 id)               { id_ = id; }
     bool hasId() const                  { return id_; }
 
-  private: qint64 groupId_;
-  public:
-    qint64 groupId() const              { return groupId_; }
-    void setGroupId(qint64 gid)         { groupId_ = gid; }
-    bool hasGroupId() const             { return groupId_; }
+  //private: qint64 groupId_;
+  //public:
+  //  qint64 groupId() const              { return groupId_; }
+  //  void setGroupId(qint64 gid)         { groupId_ = gid; }
+  //  bool hasGroupId() const             { return groupId_; }
 
   private: QString name_;
   public:
@@ -113,6 +113,12 @@ namespace AnnotCloud {
     void setCreateTime(qint64 secs)     { createTime_ = secs; }
     bool hasCreateTime() const          { return createTime_ > 0; }
 
+  private: qint64 createIp_;
+  public:
+    qint64 createIp() const              { return createIp_; }
+    void setCreateIp(qint64 ip)          { createIp_ = ip; }
+    bool hasCreateIp() const             { return createIp_; }
+
   private: qint64 loginTime_;
   public:
     qint64 loginTime() const            { return loginTime_; }
@@ -162,8 +168,8 @@ namespace AnnotCloud {
     // - Constructions -
   public:
     User()
-      : id_(0), groupId_(0), status_(0), flags_(0), language_(0),
-        createTime_(0), loginTime_(0), loginIp_(0),
+      : id_(0), status_(0), flags_(0), language_(0),
+        createTime_(0), createIp_(0), loginTime_(0), loginIp_(0),
         loginCount_(0), blessed_(0), cursed_(0), blocked_(0), annot_(0)
     { }
 

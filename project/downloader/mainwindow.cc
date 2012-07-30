@@ -999,15 +999,9 @@ MainWindow::closeEvent(QCloseEvent *event)
 
   DownloaderController::globalController()->abort();
 
-  if (QThreadPool::globalInstance()->activeThreadCount()) {
-#if QT_VERSION >= 0x040800
+  if (QThreadPool::globalInstance()->activeThreadCount())
     // wait for at most 2 seconds ant kill all threads
     QThreadPool::globalInstance()->waitForDone(CloseTimeout);
-#else
-    //DOUT("WARNING: killing active threads; will be fixed in Qt 4.8");
-    QThreadPool::globalInstance()->waitForDone();
-#endif  // QT_VERSION
-  }
 
 #ifdef Q_OS_WIN
   QTimer::singleShot(0, qApp, SLOT(quit())); // ensure quit app and clean up zombie threads

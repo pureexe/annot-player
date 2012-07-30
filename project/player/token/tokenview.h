@@ -22,9 +22,9 @@ QT_END_NAMESPACE
 
 class AcFilteredTableView;
 
+class AnnotationServerAgent;
 class AddAliasDialog;
 class DataManager;
-class ServerAgent;
 class SignalHub;
 
 class TokenView : public AcWindow
@@ -59,7 +59,7 @@ protected:
   };
 
 public:
-  TokenView(DataManager *data, ServerAgent *server, SignalHub *hub, QWidget *parent = nullptr);
+  TokenView(DataManager *data, AnnotationServerAgent *server, SignalHub *hub, QWidget *parent = nullptr);
 
   //qint64 userId() const;
   //void setUserId(qint64 uid);
@@ -171,7 +171,7 @@ private:
 private:
   bool active_;
   DataManager *data_;
-  ServerAgent *server_;
+  AnnotationServerAgent *server_;
   SignalHub *hub_;
   //qint64 userId_;
   QStandardItemModel *sourceModel_; // for alias

@@ -40,7 +40,7 @@ protected slots:
   // - Implementations
 protected:
   void invalidateAnnotations();
-  AnnotationList userAnnotatinons() const;
+  AnnotationList userAnnotations() const;
 private:
   void setupActions();
 

@@ -3,7 +3,7 @@
 // This file is supposed to be consistent with all *.nsmap.
 #ifndef WITH_NONAMESPACES
 
-#include "stdsoap2.h"
+#include <stdsoap2.h>
 
 SOAP_NMAC struct Namespace namespaces[] = {
   { "SOAP-ENV", "http://www.w3.org/2003/05/soap-envelope", "http://schemas.xmlsoap.org/soap/envelope/", NULL },

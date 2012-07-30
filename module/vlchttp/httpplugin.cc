@@ -4,9 +4,8 @@
 // Icy, Proxy, and Authentification supports are not implemented.
 
 #include "module/vlchttp/httpplugin.h"
-#include "module/vlchttp/httpsession.h"
-#include "module/vlchttp/httpbufferedsession.h"
-#include "module/vlchttp/httpstreamsession.h"
+#include "module/vlchttp/httpbufferedsession_p.h"
+#include "module/vlchttp/httpstreamsession_p.h"
 #ifdef WITH_MODULE_MRLANALYSIS
 # include "module/mrlanalysis/mrlanalysis.h"
 #else

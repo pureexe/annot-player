@@ -22,7 +22,6 @@
 #define ANNOTDB_CREATE_TABLE_USER \
   "CREATE TABLE user(" \
     "user_id "          "BIGINT NOT NULL PRIMARY KEY," /* AUTO_INCREMENT */ \
-    "group_id "         "BIGINT NOT NULL DEFAULT 0," \
     "user_name "        "VARCHAR(64) NOT NULL UNIQUE," /* 64 is the maximum allowed for email username */ \
     "user_password "    "CHAR(40),"     /* SHA1 */ \
     "user_nickname "    "VARCHAR(255)," \
@@ -31,6 +30,7 @@
     "user_flags "       "BIGINT UNSIGNED NOT NULL DEFAULT 0," \
     "user_language "    "INT NOT NULL DEFAULT 0," \
     "user_create_time " ANNOTDB_DATETIME " NOT NULL," \
+    "user_create_ip "   "BIGINT," \
     "user_login_time "  ANNOTDB_DATETIME " NOT NULL," \
     "user_login_ip "    "BIGINT," \
     "user_login_count "   "BIGINT NOT NULL DEFAULT 0," \
@@ -47,8 +47,8 @@
     "user_id "          "BIGINT NOT NULL DEFAULT 0," \
     "token_type "       "INT NOT NULL DEFAULT 0," \
     "token_digest "     "CHAR(32) DEFAULT NULL," /* MD5, since unhex not supported in SQLite */ \
-    "token_source "     "VARCHAR(255) DEFAULT NULL," \
-    "token_part "       "INT NOT NULL DEFAULT 0," \
+    "token_url "        "VARCHAR(255) DEFAULT NULL," \
+    "token_section "    "INT NOT NULL DEFAULT 0," \
     "token_status "     "INT NOT NULL DEFAULT 0," \
     "token_flags "      "BIGINT UNSIGNED NOT NULL DEFAULT 0," \
     "token_create_time " ANNOTDB_DATETIME " NOT NULL," \
@@ -68,7 +68,7 @@
     "alias_id "         "BIGINT NOT NULL," /* PRIMARY KEY AUTO_INCREMENT */ \
     "token_id "         "BIGINT NOT NULL DEFAULT 0," /* AUTO_INCREMENT */ \
     "token_digest "     "CHAR(32) DEFAULT NULL," /* MD5, since unhex not supported in SQLite */ \
-    "token_part "       "INT NOT NULL DEFAULT 0," \
+    "token_section "    "INT NOT NULL DEFAULT 0," \
     "user_id "          "BIGINT NOT NULL DEFAULT 0," \
     "alias_type "       "INT NOT NULL DEFAULT 0," \
     "alias_text "       "VARCHAR(255)," \
@@ -93,13 +93,14 @@
     "annot_id "         "BIGINT NOT NULL DEFAULT 0," /* PRIMARY KEY AUTO_INCREMENT */ \
     "token_id "         "BIGINT NOT NULL DEFAULT 0," \
     "token_digest "     "CHAR(32) DEFAULT NULL," /* MD5, since unhex not supported in SQLite */ \
-    "token_part "       "INT NOT NULL DEFAULT 0," \
+    "token_section "    "INT NOT NULL DEFAULT 0," \
     "user_id "          "BIGINT NOT NULL DEFAULT 0," \
     "user_alias "       "VARCHAR(64)," /* the same length as user_name */ \
     "annot_status "     "INT NOT NULL DEFAULT 0," \
     "annot_flags "      "BIGINT UNSIGNED NOT NULL DEFAULT 0," \
     "annot_language "   "INT NOT NULL DEFAULT 0," \
     "annot_create_time " ANNOTDB_DATETIME " NOT NULL," \
+    "annot_create_ip "  "BIGINT," \
     "annot_update_time " ANNOTDB_DATETIME "," \
     "annot_update_ip "  "BIGINT," \
     "annot_pos "        "BIGINT NOT NULL DEFAULT 0," \
@@ -125,13 +126,13 @@
       "user_status,"            /* 0 */ \
       "user_flags,"             /* 1 */ \
       "user_id,"                /* 2 */ \
-      "group_id,"               /* 3 */ \
-      "user_name,"              /* 4 */ \
-      "user_password,"          /* 5 */ \
-      "user_nickname,"          /* 6 */ \
-      "user_email,"             /* 7 */ \
-      "user_language,"          /* 8 */ \
-      "user_create_time,"       /* 9 */ \
+      "user_name,"              /* 3 */ \
+      "user_password,"          /* 4 */ \
+      "user_nickname,"          /* 5 */ \
+      "user_email,"             /* 6 */ \
+      "user_language,"          /* 7 */ \
+      "user_create_time,"       /* 8 */ \
+      "user_create_ip,"         /* 9 */ \
       "user_login_time,"        /* 10 */ \
       "user_login_ip,"          /* 11 */ \
       "user_login_count,"       /* 12 */ \
@@ -143,13 +144,13 @@
       "?,"      /* 0: user_status */ \
       "?,"      /* 1: user_flags */ \
       "?,"      /* 2: user_id */ \
-      "?,"      /* 3: group_id */ \
-      "?,"      /* 4: user_name */ \
-      "?,"      /* 5: user_password */ \
-      "?,"      /* 6: user_nickname */ \
-      "?,"      /* 7: user_email */ \
-      "?,"      /* 8: user_language */ \
-      ANNOTDB_FROM_UNIXTIME("?") "," /* 9: user_create_time */ \
+      "?,"      /* 3: user_name */ \
+      "?,"      /* 4: user_password */ \
+      "?,"      /* 5: user_nickname */ \
+      "?,"      /* 6: user_email */ \
+      "?,"      /* 7: user_language */ \
+      ANNOTDB_FROM_UNIXTIME("?") "," /* 8: user_create_time */ \
+      "?,"      /* 9: user_create_ip */ \
       ANNOTDB_FROM_UNIXTIME("?") "," /* 10: user_login_time */ \
       "?,"      /* 11: user_login_ip */ \
       "?,"      /* 12: user_login_count */ \
@@ -162,13 +163,13 @@
   (_query).addBindValue((_user).status());       /* 0 */ \
   (_query).addBindValue((_user).flags());        /* 1 */ \
   (_query).addBindValue((_user).id());           /* 2 */ \
-  (_query).addBindValue((_user).groupId());      /* 3 */ \
-  (_query).addBindValue((_user).name());         /* 4 */ \
-  (_query).addBindValue((_user).password());     /* 5 */ \
-  (_query).addBindValue((_user).nickname());     /* 6 */ \
-  (_query).addBindValue((_user).email());        /* 7 */ \
-  (_query).addBindValue((_user).language());     /* 8 */ \
-  (_query).addBindValue((_user).createTime());   /* 9 */ \
+  (_query).addBindValue((_user).name());         /* 3 */ \
+  (_query).addBindValue((_user).password());     /* 4 */ \
+  (_query).addBindValue((_user).nickname());     /* 5 */ \
+  (_query).addBindValue((_user).email());        /* 6 */ \
+  (_query).addBindValue((_user).language());     /* 7 */ \
+  (_query).addBindValue((_user).createTime());   /* 8 */ \
+  (_query).addBindValue((_user).createIp());     /* 9 */ \
   (_query).addBindValue((_user).loginTime());    /* 10 */ \
   (_query).addBindValue((_user).loginIp());      /* 11 */ \
   (_query).addBindValue((_user).loginCount());   /* 12 */ \
@@ -188,8 +189,8 @@
       "token_type,"             /* 3 */ \
       "user_id,"                /* 4 */ \
       "token_digest,"           /* 5 */ \
-      "token_source,"           /* 6 */ \
-      "token_part,"             /* 7 */ \
+      "token_url,"              /* 6 */ \
+      "token_section,"          /* 7 */ \
       "token_create_time,"      /* 8 */ \
       "token_create_ip,"        /* 9 */ \
       "token_blessed_count,"    /* 10 */ \
@@ -205,7 +206,7 @@
       "?,"      /* 4: user_id */ \
       "?,"      /* 5: token_digest */ \
       "?,"      /* 6: token_digest */ \
-      "?,"      /* 7: token_part */ \
+      "?,"      /* 7: token_section */ \
       ANNOTDB_FROM_UNIXTIME("?") "," /* 8: token_create_time */ \
       "?,"      /* 9: token_create_ip */ \
       "?,"      /* 10: token_blessed_count */ \
@@ -221,8 +222,8 @@
   (_query).addBindValue((_token).type());         /* 3 */ \
   (_query).addBindValue((_token).userId());       /* 4 */ \
   (_query).addBindValue((_token).digest());       /* 5 */ \
-  (_query).addBindValue((_token).source());       /* 6 */ \
-  (_query).addBindValue((_token).part());         /* 7 */ \
+  (_query).addBindValue((_token).url());          /* 6 */ \
+  (_query).addBindValue((_token).section());      /* 7 */ \
   (_query).addBindValue((_token).createTime());   /* 8 */ \
   (_query).addBindValue((_token).createIp());     /* 9 */ \
   (_query).addBindValue((_token).blessedCount()); /* 10 */ \
@@ -241,7 +242,7 @@
       "alias_id,"               /* 2 */ \
       "token_id,"               /* 3 */ \
       "token_digest,"           /* 4 */ \
-      "token_part,"             /* 5 */ \
+      "token_section,"          /* 5 */ \
       "user_id,"                /* 6 */ \
       "alias_type,"             /* 7 */ \
       "alias_text,"             /* 8 */ \
@@ -257,7 +258,7 @@
       "?,"      /* 2: alias_id */ \
       "?,"      /* 3: token_id */ \
       "?,"      /* 4: token_digest */ \
-      "?,"      /* 5: token_part */ \
+      "?,"      /* 5: token_section */ \
       "?,"      /* 6: user_id */ \
       "?,"      /* 7: alias_type */ \
       "?,"      /* 8: alias_text */ \
@@ -274,7 +275,7 @@
   (_query).addBindValue((_alias).id());           /* 2 */ \
   (_query).addBindValue((_alias).tokenId());      /* 3 */ \
   (_query).addBindValue((_alias).tokenDigest());  /* 4 */ \
-  (_query).addBindValue((_alias).tokenPart());    /* 5 */ \
+  (_query).addBindValue((_alias).tokenSection()); /* 5 */ \
   (_query).addBindValue((_alias).userId());       /* 6 */ \
   (_query).addBindValue((_alias).type());         /* 7 */ \
   (_query).addBindValue((_alias).text());         /* 8 */ \
@@ -295,7 +296,7 @@
       "annot_id,"       /* 2 */ \
       "token_id,"       /* 3 */ \
       "token_digest,"   /* 4 */ \
-      "token_part,"     /* 5 */ \
+      "token_section,"  /* 5 */ \
       "user_id,"        /* 6 */ \
       "user_alias,"     /* 7 */ \
       "annot_pos,"      /* 8 */ \
@@ -304,18 +305,19 @@
       "annot_text,"     /* 11 */ \
       "annot_language," /* l2 */ \
       "annot_create_time,"      /* 13 */ \
-      "annot_update_time,"      /* 14 */ \
-      "annot_update_ip,"        /* 15 */ \
-      "annot_blessed_count,"    /* 16 */ \
-      "annot_cursed_count,"     /* 17 */ \
-      "annot_blocked_count"     /* 18 */ \
+      "annot_create_ip,"        /* 14 */ \
+      "annot_update_time,"      /* 15 */ \
+      "annot_update_ip,"        /* 16 */ \
+      "annot_blessed_count,"    /* 17 */ \
+      "annot_cursed_count,"     /* 18 */ \
+      "annot_blocked_count"     /* 19 */ \
     ") VALUES (" \
       "?,"      /* 0: annot_status */ \
       "?,"      /* 1: annot_flags */ \
       "?,"      /* 2: annot_id */ \
       "?,"      /* 3: token_id */ \
       "?,"      /* 4: token_digest */ \
-      "?,"      /* 5: token_part */ \
+      "?,"      /* 5: token_section */ \
       "?,"      /* 6: user_id */ \
       "?,"      /* 7: user_alias */ \
       "?,"      /* 8: annot_pos */ \
@@ -324,11 +326,12 @@
       "?,"      /* 11: annot_text */ \
       "?,"      /* 12: annot_language */ \
       ANNOTDB_FROM_UNIXTIME("?") "," /* 13: annot_create_time */ \
-      ANNOTDB_FROM_UNIXTIME("?") "," /* 14: annot_update_time */ \
-      "?,"      /* 15: annot_update_ip */ \
-      "?,"      /* 16: annot_blessed_count */ \
-      "?,"      /* 17: annot_cursed_count */ \
-      "?"       /* 18: annot_blocked_count */ \
+      "?,"      /* 14: annot_create_ip */ \
+      ANNOTDB_FROM_UNIXTIME("?") "," /* 15: annot_update_time */ \
+      "?,"      /* 16: annot_update_ip */ \
+      "?,"      /* 17: annot_blessed_count */ \
+      "?,"      /* 18: annot_cursed_count */ \
+      "?"       /* 19: annot_blocked_count */ \
     ")" \
   ); \
   (_query).addBindValue((_annot).status());       /* 0 */ \
@@ -336,7 +339,7 @@
   (_query).addBindValue((_annot).id());           /* 2 */ \
   (_query).addBindValue((_annot).tokenId());      /* 3 */ \
   (_query).addBindValue((_annot).tokenDigest());  /* 4 */ \
-  (_query).addBindValue((_annot).tokenPart());    /* 5 */ \
+  (_query).addBindValue((_annot).tokenSection()); /* 5 */ \
   (_query).addBindValue((_annot).userId());       /* 6 */ \
   (_query).addBindValue((_annot).userAlias());    /* 7 */ \
   (_query).addBindValue((_annot).pos());          /* 8 */ \
@@ -345,11 +348,12 @@
   (_query).addBindValue((_annot).text());         /* 11 */ \
   (_query).addBindValue((_annot).language());     /* 12 */ \
   (_query).addBindValue((_annot).createTime());   /* 13 */ \
-  (_query).addBindValue((_annot).updateTime());   /* 14 */ \
-  (_query).addBindValue((_annot).updateIp());     /* 15 */ \
-  (_query).addBindValue((_annot).blessedCount()); /* 16 */ \
-  (_query).addBindValue((_annot).cursedCount());  /* 17 */ \
-  (_query).addBindValue((_annot).blockedCount()); /* 18 */ \
+  (_query).addBindValue((_annot).createIp());     /* 14 */ \
+  (_query).addBindValue((_annot).updateTime());   /* 15 */ \
+  (_query).addBindValue((_annot).updateIp());     /* 16 */ \
+  (_query).addBindValue((_annot).blessedCount()); /* 17 */ \
+  (_query).addBindValue((_annot).cursedCount());  /* 18 */ \
+  (_query).addBindValue((_annot).blockedCount()); /* 19 */ \
 }
 
 // - Queries -
@@ -359,19 +363,20 @@
     "user_status,"    /* 0 */ \
     "user_flags,"     /* 1 */ \
     "user_id,"        /* 2 */ \
-    "group_id,"       /* 3 */ \
-    "user_name,"      /* 4 */ \
-    "user_password,"  /* 5 */ \
-    "user_nickname,"  /* 6 */ \
-    "user_email,"     /* 7 */ \
-    "user_language,"  /* 8 */ \
-    ANNOTDB_UNIX_TIMESTAMP("user_create_time") "," /* 9 */ \
+    "user_name,"      /* 3 */ \
+    "user_password,"  /* 4 */ \
+    "user_nickname,"  /* 5 */ \
+    "user_email,"     /* 6 */ \
+    "user_language,"  /* 7 */ \
+    ANNOTDB_UNIX_TIMESTAMP("user_create_time") "," /* 8 */ \
+    "user_create_ip,"     /* 9 */ \
     ANNOTDB_UNIX_TIMESTAMP("user_login_time") ","  /* 10 */ \
-    "user_login_time,"    /* 11 */ \
-    "user_blessed_count," /* 12 */ \
-    "user_cursed_count,"  /* 13 */ \
-    "user_blocked_count," /* 14 */ \
-    "user_annot_count "   /* 15 */ \
+    "user_login_ip,"      /* 11 */ \
+    "user_login_count,"   /* 12 */ \
+    "user_blessed_count," /* 13 */ \
+    "user_cursed_count,"  /* 14 */ \
+    "user_blocked_count," /* 15 */ \
+    "user_annot_count "   /* 16 */ \
   "FROM user "
 
 #define ANNOTDB_SET_USER(_user, _query) \
@@ -383,15 +388,15 @@
   Q_ASSERT(ok); \
   (_user).setId((_query).value(2).toLongLong(&ok)); \
   Q_ASSERT(ok); \
-  (_user).setGroupId((_query).value(3).toLongLong(&ok)); \
+  (_user).setName((_query).value(3).toString()); \
+  (_user).setPassword((_query).value(4).toString()); \
+  (_user).setNickname((_query).value(5).toString()); \
+  (_user).setEmail((_query).value(6).toString()); \
+  (_user).setLanguage((_query).value(7).toInt(&ok)); \
   Q_ASSERT(ok); \
-  (_user).setName((_query).value(4).toString()); \
-  (_user).setPassword((_query).value(5).toString()); \
-  (_user).setNickname((_query).value(6).toString()); \
-  (_user).setEmail((_query).value(7).toString()); \
-  (_user).setLanguage((_query).value(8).toInt(&ok)); \
+  (_user).setCreateTime((_query).value(8).toLongLong(&ok)); \
   Q_ASSERT(ok); \
-  (_user).setCreateTime((_query).value(9).toLongLong(&ok)); \
+  (_user).setCreateIp((_query).value(9).toLongLong(&ok)); \
   Q_ASSERT(ok); \
   (_user).setLoginTime((_query).value(10).toLongLong(&ok)); \
   Q_ASSERT(ok); \
@@ -417,8 +422,8 @@
     "token_type,"          /* 3 */ \
     "user_id,"             /* 4 */ \
     "token_digest,"        /* 5 */ \
-    "token_source,"        /* 6 */ \
-    "token_part,"          /* 7 */ \
+    "token_url,"           /* 6 */ \
+    "token_section,"       /* 7 */ \
     ANNOTDB_UNIX_TIMESTAMP("token_create_time") "," /* 8 */ \
     "token_create_ip,"     /* 9 */ \
     "token_blessed_count," /* 10 */ \
@@ -442,8 +447,8 @@
   (_token).setUserId((_query).value(4).toLongLong()); \
   Q_ASSERT(ok); \
   (_token).setDigest((_query).value(5).toString()); \
-  (_token).setSource((_query).value(6).toString()); \
-  (_token).setPart((_query).value(7).toInt(&ok)); \
+  (_token).setUrl((_query).value(6).toString()); \
+  (_token).setSection((_query).value(7).toInt(&ok)); \
   Q_ASSERT(ok); \
   (_token).setCreateTime((_query).value(8).toLongLong(&ok)); \
   Q_ASSERT(ok); \
@@ -468,7 +473,7 @@
     "alias_id,"            /* 2 */ \
     "token_id,"            /* 3 */ \
     "token_digest,"        /* 4 */ \
-    "token_part,"          /* 5 */ \
+    "token_section,"       /* 5 */ \
     "user_id,"             /* 6 */ \
     "alias_type,"          /* 7 */ \
     "alias_text,"          /* 8 */ \
@@ -492,7 +497,7 @@
   (_alias).setTokenId((_query).value(3).toLongLong()); \
   Q_ASSERT(ok); \
   (_alias).setTokenDigest((_query).value(4).toString()); \
-  (_alias).setTokenPart((_query).value(5).toInt(&ok)); \
+  (_alias).setTokenSection((_query).value(5).toInt(&ok)); \
   Q_ASSERT(ok); \
   (_alias).setUserId((_query).value(6).toLongLong()); \
   Q_ASSERT(ok); \
@@ -520,7 +525,7 @@
     "annot_id,"        /* 2 */ \
     "token_id,"        /* 3 */ \
     "token_digest,"    /* 4 */ \
-    "token_part,"      /* 5 */ \
+    "token_section,"   /* 5 */ \
     "user_id,"         /* 6 */ \
     "user_alias,"      /* 7 */ \
     "annot_pos,"       /* 8 */ \
@@ -529,11 +534,12 @@
     "annot_text,"      /* 11 */ \
     "annot_language,"  /* 12 */ \
     ANNOTDB_UNIX_TIMESTAMP("annot_create_time") "," /* 13 */ \
-    ANNOTDB_UNIX_TIMESTAMP("annot_update_time") "," /* 14 */ \
-    "annot_update_ip," /* 15 */ \
-    "annot_blessed_count," /* 16 */ \
-    "annot_cursed_count,"  /* 17 */ \
-    "annot_blocked_count " /* 18 */ \
+    "annot_create_ip," /* 14 */ \
+    ANNOTDB_UNIX_TIMESTAMP("annot_update_time") "," /* 15 */ \
+    "annot_update_ip," /* 16 */ \
+    "annot_blessed_count," /* 17 */ \
+    "annot_cursed_count,"  /* 18 */ \
+    "annot_blocked_count " /* 19 */ \
   "FROM annot "
 
 #define ANNOTDB_SET_ANNOTATION(_annot, _query) \
@@ -548,7 +554,7 @@
   (_annot).setTokenId((_query).value(3).toLongLong(&ok)); \
   Q_ASSERT(ok); \
   (_annot).setTokenDigest((_query).value(4).toString()); \
-  (_annot).setTokenPart((_query).value(5).toInt(&ok)); \
+  (_annot).setTokenSection((_query).value(5).toInt(&ok)); \
   Q_ASSERT(ok); \
   (_annot).setUserId((_query).value(6).toLongLong(&ok)); \
   Q_ASSERT(ok); \
@@ -564,15 +570,17 @@
   Q_ASSERT(ok); \
   (_annot).setCreateTime((_query).value(13).toLongLong(&ok)); \
   Q_ASSERT(ok); \
-  (_annot).setUpdateTime((_query).value(14).toLongLong(&ok)); \
+  (_annot).setCreateIp((_query).value(14).toLongLong(&ok)); \
   Q_ASSERT(ok); \
-  (_annot).setUpdateIp((_query).value(15).toLongLong(&ok)); \
+  (_annot).setUpdateTime((_query).value(15).toLongLong(&ok)); \
   Q_ASSERT(ok); \
-  (_annot).setBlessedCount((_query).value(16).toUInt(&ok)); \
+  (_annot).setUpdateIp((_query).value(16).toLongLong(&ok)); \
   Q_ASSERT(ok); \
-  (_annot).setCursedCount((_query).value(17).toUInt(&ok)); \
+  (_annot).setBlessedCount((_query).value(17).toUInt(&ok)); \
   Q_ASSERT(ok); \
-  (_annot).setBlockedCount((_query).value(18).toUInt(&ok)); \
+  (_annot).setCursedCount((_query).value(18).toUInt(&ok)); \
+  Q_ASSERT(ok); \
+  (_annot).setBlockedCount((_query).value(19).toUInt(&ok)); \
   Q_ASSERT(ok); \
 }
 

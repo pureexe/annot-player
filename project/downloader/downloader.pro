@@ -1,7 +1,7 @@
 # downloader.pro
 # 3/29/2012
 
-VERSION = 0.1.2.1
+VERSION = 0.1.2.2
 
 DEFINES += PROJECT_DOWNLOADER
 
@@ -15,6 +15,7 @@ include($$ROOTDIR/module/animation/animation.pri)
 include($$ROOTDIR/module/annotcache/annotcache.pri)
 include($$ROOTDIR/module/annotcloud/annotcloud.pri)
 include($$ROOTDIR/module/annotdown/annotdown.pri)
+include($$ROOTDIR/module/annotservice/annotservice.pri)
 include($$ROOTDIR/module/compress/compress.pri)
 include($$ROOTDIR/module/crypt/crypt.pri)
 include($$ROOTDIR/module/download/download.pri)
@@ -26,7 +27,6 @@ include($$ROOTDIR/module/mrlresolver/mrlresolver.pri)
 include($$ROOTDIR/module/qt/qt.pri)
 include($$ROOTDIR/module/qtext/qtext.pri)
 include($$ROOTDIR/module/searchengine/searchengine.pri)
-include($$ROOTDIR/module/serveragent/serveragent.pri)
 include($$ROOTDIR/module/stream/stream.pri)
 
 !mac: include($$ROOTDIR/module/metacall/metacall.pri)

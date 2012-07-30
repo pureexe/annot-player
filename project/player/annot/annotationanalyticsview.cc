@@ -17,28 +17,10 @@
 #include "module/debug/debug.h"
 
 #define WINDOW_SIZE     QSize(640, 640)
-#define BASE_URL        G_HOMEPAGE "/api/player/"
+#define BASE_URL        G_HOMEPAGE "/clients/player/"
 #define EMPTY_URL       BASE_URL "empty.html"
 
 using namespace AnnotCloud;
-
-// - Task -
-
-namespace { namespace detail {
-
-  class InvalidateAnnotations : public QRunnable
-  {
-    AnnotationAnalyticsView *w_;
-    void run() override
-    { w_->invalidateAnnotations(false);} // async = false
-
-  public:
-    explicit InvalidateAnnotations(AnnotationAnalyticsView *w)
-      : w_(w) { Q_ASSERT(w_); }
-  };
-
-} } // anonymous detail
-
 
 // - Construction -
 
@@ -124,7 +106,7 @@ AnnotationAnalyticsView::invalidateAnnotations(bool async)
   DOUT("enter: async =" << async << ", refreshing =" << refreshing_);
   refreshing_ = true;
   if (async) {
-    QThreadPool::globalInstance()->start(new detail::InvalidateAnnotations(this));
+    QtConcurrent::run(this, &Self::invalidateAnnotations, false);
     DOUT("exit: async branch");
     return;
   }

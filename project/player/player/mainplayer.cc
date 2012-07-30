@@ -35,7 +35,7 @@ MainPlayerDock::setVisible(bool visible)
 
 // + MainPlayerUi +
 
-MainPlayerUi::MainPlayerUi(SignalHub *hub, Player *player, ServerAgent *server, QWidget *parent)
+MainPlayerUi::MainPlayerUi(SignalHub *hub, Player *player, AnnotationServerAgent *server, QWidget *parent)
   : Base(hub, player, server, parent)
 {
   setContentsMargins(0, 0, 0, 0);

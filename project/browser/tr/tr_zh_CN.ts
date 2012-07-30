@@ -464,47 +464,48 @@
 <context>
     <name>AnnotationDownloader</name>
     <message>
-        <location filename="../../../module/annotdown/annotationdownloader.cc" line="63"/>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="66"/>
         <source>analyzing</source>
         <translation>分析中</translation>
     </message>
     <message>
-        <location filename="../../../module/annotdown/annotationdownloader.cc" line="88"/>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="91"/>
         <source>downloading</source>
         <translation>下载中</translation>
     </message>
     <message>
-        <location filename="../../../module/annotdown/annotationdownloader.cc" line="103"/>
-        <location filename="../../../module/annotdown/annotationdownloader.cc" line="122"/>
-        <location filename="../../../module/annotdown/annotationdownloader.cc" line="144"/>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="106"/>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="125"/>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="160"/>
         <source>network error, failed to resolve URL</source>
         <translation>网络错误，解析地址失败</translation>
     </message>
     <message>
-        <location filename="../../../module/annotdown/annotationdownloader.cc" line="106"/>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="109"/>
         <source>saving</source>
         <translation>保存中</translation>
     </message>
     <message>
-        <location filename="../../../module/annotdown/annotationdownloader.cc" line="130"/>
-        <location filename="../../../module/annotdown/annotationdownloader.cc" line="151"/>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="133"/>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="147"/>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="167"/>
         <source>failed to resolve URL</source>
         <translation>解析地址失败</translation>
     </message>
     <message>
-        <location filename="../../../module/annotdown/annotationdownloader.cc" line="165"/>
-        <location filename="../../../module/annotdown/annotationdownloader.cc" line="179"/>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="181"/>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="195"/>
         <source>file saved</source>
         <translation>保存完成</translation>
     </message>
     <message>
-        <location filename="../../../module/annotdown/annotationdownloader.cc" line="167"/>
-        <location filename="../../../module/annotdown/annotationdownloader.cc" line="184"/>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="183"/>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="200"/>
         <source>failed to save file</source>
         <translation>保存文件失败</translation>
     </message>
     <message>
-        <location filename="../../../module/annotdown/annotationdownloader.cc" line="173"/>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="189"/>
         <source>failed to cache annotation from URL</source>
         <translation>无法缓冲弹幕</translation>
     </message>
@@ -653,27 +654,27 @@
 <context>
     <name>LuaMrlResolver</name>
     <message>
-        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="132"/>
-        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="146"/>
-        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="236"/>
-        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="250"/>
+        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="105"/>
+        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="119"/>
+        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="209"/>
+        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="223"/>
         <source>failed to resolve URL</source>
         <translation>解析地址失败</translation>
     </message>
     <message>
-        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="140"/>
-        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="244"/>
+        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="113"/>
+        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="217"/>
         <source>failed to resolve URL using nicovideo account</source>
         <translation>使用nico账户解析地址失败</translation>
     </message>
     <message>
-        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="143"/>
-        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="247"/>
+        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="116"/>
+        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="220"/>
         <source>failed to resolve URL using bilibili account</source>
         <translation>使用哔哩哔哩账户解析地址失败</translation>
     </message>
     <message>
-        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="373"/>
+        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="346"/>
         <source>nicovideo.jp account is required to resolve URL</source>
         <translation>请输入nico账户</translation>
     </message>

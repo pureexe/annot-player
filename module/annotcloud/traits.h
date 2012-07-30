@@ -116,7 +116,7 @@ namespace AnnotCloud {
 
     // token:
     enum { TOKEN_DIGEST_LENGTH = MD5_DIGEST_LENGTH * 2 };
-    enum { MAX_SOURCE_LENGTH = 255 };
+    enum { MAX_URL_LENGTH = 255 };
 
     // alias:
     enum { MAX_ALIAS_LENGTH = 255 };

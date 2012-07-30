@@ -105,12 +105,7 @@
 #include "module/annotcloud/annottag.h"
 #include "module/annotcloud/annothtml.h"
 #include "module/annotcache/annotationcachemanager.h"
-#ifdef WITH_MODULE_SERVERAGENT
-# include "module/serveragent/serveragent.h"
-#endif // WITH_MODULE_SERVERAGENT
-#ifdef WITH_MODULE_CLIENTAGENT
-# include "module/clientagent/clientagent.h"
-#endif // WITH_MODULE_CLIENTAGENT
+#include "module/annotservice/annotserveragent.h"
 #ifdef WITH_MODULE_DOLL
 # include "module/doll/doll.h"
 #endif // WITH_MODULE_DOLL
@@ -184,6 +179,8 @@ enum { HISTORY_SIZE = 100 };   // Size of playPos/Sub/AudioTrack history
 enum { HOLD_TIMEOUT = 2000 };
 enum { DBLCLICK_TIMEOUT = 600 }; // around ::GetDoubleClickTime()
 enum { RECENT_COUNT = 35 };
+
+enum { MiniConsoleTimeout = 6000, MainConsoleTimeout = 4000 };
 
 #define PREFERRED_WINDOW_SIZE   QSize(840, 480)
 #define PREFERRED_MIN_WIDTH     400
@@ -305,7 +302,7 @@ MainWindow::MainWindow(bool unique, QWidget *parent, Qt::WindowFlags f)
     annotationCountDialog_(nullptr), deviceDialog_(nullptr), helpDialog_(nullptr), loginDialog_(nullptr), liveDialog_(nullptr),
     processPickDialog_(nullptr), seekDialog_(nullptr), syncDialog_(nullptr), windowPickDialog_(nullptr),
     mediaInfoView_(nullptr), userView_(nullptr),
-    dragPos_(BAD_POS), windowModeUpdateTime_(0), tokenType_(0), recentSourceLocked_(false), cancelContextMenu_(false),
+    dragPos_(BAD_POS), windowModeUpdateTime_(0), tokenType_(0), recentUrlLocked_(false), cancelContextMenu_(false),
     rippleEnabled_(false), rippleFilter_(nullptr), rippleTimer_(nullptr),
     preferredSubtitleTrack_(0), preferredAudioTrack_(0), preferredAudioChannel_(0),
     lastTrackedWindow_(0)
@@ -552,13 +549,7 @@ MainWindow::createComponents(bool unique)
   AC_CONNECT_WARNING(grabber_, this, Qt::AutoConnection);
 
   // Server agents
-  server_ = new ServerAgent(this);
-#ifdef WITH_MODULE_CLIENTAGENT
-  client_ = new ClientAgent(this);
-
-  server_->setClientAgent(client_);
-  client_->setServerAgent(server_);
-#endif // WITH_MODULE_CLIENTAGENT
+  server_ = new AnnotationServerAgent(this);
 
   // Player
   player_ = new Player(this);
@@ -600,10 +591,10 @@ MainWindow::createComponents(bool unique)
   annotationView_->setFullScreenView(osdWindow_);
 
   mainConsole_ = new MainConsole(annotationView_);
-  mainConsole_->setAutoClearInterval(4000); // 4 seconds
+  mainConsole_->setAutoClearInterval(MainConsoleTimeout);
 
   miniConsole_ = new MiniConsole(annotationView_);
-  miniConsole_->setAutoClearInterval(6000); // 6 seconds
+  miniConsole_->setAutoClearInterval(MiniConsoleTimeout);
 
   // Rubber bands
   attractRubberBand_ = new QtExt::CircularRubberBand(QRubberBand::Line, annotationView_);
@@ -795,6 +786,8 @@ MainWindow::createConnections()
 
   connect(this, SIGNAL(posChanged()), embeddedPlayer_, SLOT(hide()));
 
+  //connect(this, SIGNAL(seeked()), SLOT(checkReachEnd()));
+  connect(player_, SIGNAL(timeChanged()), SLOT(checkReachEnd()));
   connect(player_, SIGNAL(titleIdChanged(int)), SLOT(invalidateToken()));
   connect(player_, SIGNAL(errorEncountered()), SLOT(handlePlayerError()));
   connect(player_, SIGNAL(trackNumberChanged(int)), SLOT(invalidateMediaAndPlay()));
@@ -1075,11 +1068,6 @@ MainWindow::createConnections()
     connect(player_, SIGNAL(stopped()), SLOT(enableWindowTransparency()));
   }
 
-  // Agents:
-#ifdef WITH_MODULE_CLIENTAGENT
-  connect(client_, SIGNAL(chatReceived(QString)), SLOT(respond(QString)));
-#endif // WITH_MODULE_CLIENTAGENT
-
   // Clipboard
   connect(clipboardMonitor_, SIGNAL(annotationUrlEntered(QString)), SLOT(enterAnnotationUrl(QString)));
   connect(clipboardMonitor_, SIGNAL(mediaUrlEntered(QString)), SLOT(enterMediaUrl(QString)));
@@ -1130,12 +1118,6 @@ MainWindow::createConnections()
   connect(dataServer_, SIGNAL(preferCacheChanged(bool)), logger_, SLOT(logPreferLocalDatabaseChanged(bool)), Qt::QueuedConnection);
 
   connect(TextCodecManager::globalInstance(), SIGNAL(encodingChanged(QString)), logger_, SLOT(logTextEncodingChanged(QString)), Qt::QueuedConnection);
-
-#ifdef WITH_MODULE_CLIENTAGENT
-  connect(client_, SIGNAL(authorized()), logger_, SLOT(logClientAgentAuthorized()), Qt::QueuedConnection);
-  connect(client_, SIGNAL(deauthorized()), logger_, SLOT(logClientAgentDeauthorized()), Qt::QueuedConnection);
-  connect(client_, SIGNAL(authorizationError()), logger_, SLOT(logClientAgentAuthorizationError()), Qt::QueuedConnection);
-#endif // WITH_MODULE_CLIENTAGENT
 
 #ifdef USE_MODE_SIGNAL
   connect(this, SIGNAL(windowPicked(WId)), annotationView_, SLOT(setTrackedWindow(WId)));
@@ -2699,7 +2681,7 @@ MainWindow::openUrl()
 {
   UrlDialog *d = mediaUrlDialog();
   if (d->isEmpty()) {
-    QString url = dataManager_->token().source();
+    QString url = dataManager_->token().url();
     if (!url.isEmpty())
       d->setText(url);
   }
@@ -2943,7 +2925,7 @@ MainWindow::openAnnotationFile(const QString &fileName, bool import)
   if (t.hashId() || t.hasDigest())
     foreach (Annotation a, l) {
       a.setTokenId(t.id());
-      a.setTokenPart(t.part());
+      a.setTokenSection(t.section());
       a.setTokenDigest(t.digest());
       annots.append(a);
     }
@@ -3058,7 +3040,7 @@ MainWindow::openDevicePath(const QString &path, bool isAudioCD)
   if (isAudioCD && !mrl.startsWith(PLAYER_URL_CD, Qt::CaseInsensitive))
     mrl = PLAYER_URL_CD + path;
 
-  recentSourceLocked_ = false;
+  recentUrlLocked_ = false;
   openMrl(mrl);
 }
 
@@ -3075,7 +3057,7 @@ MainWindow::openDirectory()
     playlist_.clear();
 
     recentPath_ = path;
-    recentSourceLocked_ = false;
+    recentUrlLocked_ = false;
     openMrl(path);
   }
 }
@@ -3106,7 +3088,7 @@ MainWindow::openLocalUrl(const QUrl &url)
   if (!url.isValid())
     return;
 
-  recentSourceLocked_ = false;
+  recentUrlLocked_ = false;
   QString path = url.toLocalFile();
   DOUT("url =" << url << ", path =" << path);
   openSource(path.isEmpty() ? url.toString() : path);
@@ -3151,7 +3133,7 @@ MainWindow::openLocalUrls(const QList<QUrl> &urls)
 void
 MainWindow::openMimeData(const QMimeData *mime)
 {
-  recentSourceLocked_ = false;
+  recentUrlLocked_ = false;
   if (mime && mime->hasUrls())
     openLocalUrls(mime->urls());
 }
@@ -3169,7 +3151,7 @@ void
 MainWindow::openRemoteMedia(const MediaInfo &mi, QNetworkCookieJar *jar)
 {
   DOUT("refurl =" << mi.refurl << ", mrls.size =" << mi.mrls.size());
-  recentSourceLocked_ = false;
+  recentUrlLocked_ = false;
   playlist_.clear();
   if (mi.mrls.isEmpty()) {
     emit errorMessage(tr("failed to resolve URL") + ": " + mi.refurl);
@@ -3185,7 +3167,7 @@ MainWindow::openRemoteMedia(const MediaInfo &mi, QNetworkCookieJar *jar)
   //  if (!mi.title.isEmpty() && !isRemoteMrl(mi.title))
   //    player_->setMediaTitle(mi.title);
   //  recentDigest_.clear();
-  //  recentSource_.clear();
+  //  recentUrl_.clear();
 //
   //  MrlInfo mrl = mi.mrls.first();
   //  DOUT("mrl =" << mrl.url);
@@ -3214,11 +3196,11 @@ MainWindow::openRemoteMedia(const MediaInfo &mi, QNetworkCookieJar *jar)
     player_->setMediaTitle(mi.title);
 
   recentDigest_.clear();
-  recentSource_.clear();
+  recentUrl_.clear();
   if (!mi.refurl.isEmpty()) {
     addRecent(mi.refurl);
-    recentSource_ = mi.refurl;
-    recentSourceLocked_ = true;
+    recentUrl_ = mi.refurl;
+    recentUrlLocked_ = true;
     //setToken();
   }
 
@@ -3397,23 +3379,28 @@ MainWindow::openMrl(const QString &path, bool checkPath)
   }
 
   recentDigest_.clear();
-  if (!recentSourceLocked_)
-    recentSource_.clear();
+  if (!recentUrlLocked_)
+    recentUrl_.clear();
 
   setRecentOpenedFile(path);
 
-  if (!recentSource_.isEmpty())
-    setBrowsedUrl(recentSource_);
+  if (!recentUrl_.isEmpty())
+    setBrowsedUrl(recentUrl_);
   else
     setBrowsedFile(path);
 
   if (checkPath && !isRemoteMrl(path)) {
-    QFileInfo fi(removeUrlPrefix(path));
+    QString file = removeUrlPrefix(path);
+    QFileInfo fi(file);
     if (!fi.exists()) {
-      emit warning(TR(T_ERROR_BAD_FILEPATH) + ": " + path);
-      DOUT("exit: path not exist: " + path);
+      emit warning(TR(T_ERROR_BAD_FILEPATH) + ": " + file);
+      DOUT("exit: path not exist: " + file);
       return;
     }
+    if (fi.isFile() && !Player::isSupportedFile(file))
+      emit warning(tr("play file with unknown extension") + ": "
+        HTML_STYLE_OPEN(color:orange) + fi.suffix() + HTML_STYLE_CLOSE()
+      );
   }
 
   tokenType_ = fileType(path);
@@ -3530,7 +3517,7 @@ MainWindow::invalidateMediaAndPlay(bool async)
     if (async) {
       //QTimer::singleShot(2000, this, SLOT(loadExternalAnnotations())); // offload CPU burden
       emit message(tr("analyzing media ...")); // might cause parallel contension
-      QThreadPool::globalInstance()->start(new detail::InvalidateMediaAndPlay(this));
+      QtConcurrent::run(this, &Self::invalidateMediaAndPlay, false);
       DOUT("exit: returned from async branch");
       return;
     }
@@ -4720,7 +4707,7 @@ MainWindow::submitAliasText(const QString &text, qint32 type, bool async, bool l
   Alias a;
   a.setTokenId(t.id());
   a.setTokenDigest(t.digest());
-  a.setTokenPart(t.part());
+  a.setTokenSection(t.section());
 
   a.setText(text);
   a.setType(type);
@@ -4754,7 +4741,7 @@ MainWindow::submitAlias(const Alias &input, bool async, bool lock)
   }
   if (async) {
     emit message(tr("saving media information ..."));
-    QThreadPool::globalInstance()->start(new detail::SubmitAlias(input, this));
+    QtConcurrent::run(this, &Self::submitAlias, input, false, lock);
     DOUT("exit: returned from async branch");
     return;
   }
@@ -4863,7 +4850,7 @@ MainWindow::updateOnlineAnnotations(bool async)
   if (async) {
     emit message(tr("updating annotations ..."));
     annotationView_->removeAnnotations();
-    QThreadPool::globalInstance()->start(new detail::UpdateOnlineAnnotations(this));
+    QtConcurrent::run(this, &Self::updateOnlineAnnotations, false);
     DOUT("exit: returned from async branch");
     return;
   }
@@ -4888,7 +4875,7 @@ MainWindow::updateOnlineAnnotations(bool async)
     //QTimer::singleShot(1000, this, SLOT(loadExternalAnnotations()));
   }
 
-  QString url = dataManager_->token().source();
+  QString url = dataManager_->token().url();
   if (MrlAnalysis::matchSite(url)) {
     if (async)
       emit openAnnotationUrlRequested(url);
@@ -4941,7 +4928,7 @@ MainWindow::updateOfflineAnnotations(bool async)
     }
     emit message(tr("updating annotations ..."));
     annotationView_->removeAnnotations();
-    QThreadPool::globalInstance()->start(new detail::UpdateOfflineAnnotations(this));
+    QtConcurrent::run(this, &Self::updateOfflineAnnotations, false);
     DOUT("exit: returned from async branch");
     return;
   }
@@ -4985,7 +4972,7 @@ MainWindow::invalidateToken(const QString &mrl)
     if (!recentDigest_.isEmpty())
       setToken(mrl);
 
-  } else if (!recentSource_.isEmpty()) {
+  } else if (!recentUrl_.isEmpty()) {
     dataManager_->clearToken();
     dataManager_->removeAliases();
     annotationView_->invalidateAnnotations();
@@ -5024,7 +5011,7 @@ MainWindow::showVideoViewIfAvailable()
 void
 MainWindow::signFile(const QString &path, bool async)
 {
-  QString url = dataManager_->token().source();
+  QString url = dataManager_->token().url();
   DOUT("url =" << url);
   if (url.isEmpty())
     emit warning(tr("login is requied to to submit annotation URL"));
@@ -5049,7 +5036,7 @@ MainWindow::signFileWithUrl(const QString &path, const QString &url, bool async)
   }
   if (async) {
     emit message(tr("signing media ...") + " " + path);
-    QThreadPool::globalInstance()->start(new detail::SignFileWithUrl(path, url, this));
+    QtConcurrent::run(this, &Self::signFileWithUrl, path, url, false);
     DOUT("exit: returned from async branch");
     return;
   }
@@ -5079,7 +5066,7 @@ MainWindow::signFileWithUrl(const QString &path, const QString &url, bool async)
     }
     Alias a;
     a.setUserId(server_->user().id());
-    a.setType(Alias::AT_Source);
+    a.setType(Alias::AT_File);
     a.setLanguage(server_->user().language());
     a.setText(fileName);
     a.setUpdateTime(now);
@@ -5147,7 +5134,7 @@ MainWindow::setToken(const QString &input, bool async)
   }
   if (async) {
     emit message(tr("searching for media information ..."));
-    QThreadPool::globalInstance()->start(new detail::SetToken(input, this));
+    QtConcurrent::run(this, &Self::setToken, input, false);
     DOUT("exit: returned from async branch");
     return;
   }
@@ -5184,7 +5171,7 @@ MainWindow::setToken(const QString &input, bool async)
           }
 
           alias.setTokenDigest(recentDigest_);
-          alias.setType(Alias::AT_Source);
+          alias.setType(Alias::AT_File);
           alias.setUserId(server_->user().id());
           alias.setLanguage(server_->user().language());
           alias.setText(fileName);
@@ -5194,18 +5181,18 @@ MainWindow::setToken(const QString &input, bool async)
     }
   } else if (!recentDigest_.isEmpty()) {
     token.setDigest(recentDigest_);
-  } else if (!recentSource_.isEmpty()) {
-    token.setSource(recentSource_);
+  } else if (!recentUrl_.isEmpty()) {
+    token.setUrl(recentUrl_);
     token.setType(tokenType_ = Token::TT_Video);
-    int part = currentPlaylistIndex();
-    if (part < 0)
-      part = 0;
-    token.setPart(part);
+    int section = currentPlaylistIndex();
+    if (section < 0)
+      section = 0;
+    token.setSection(section);
     QString title = player_->mediaTitle();
     if (!title.isEmpty() && !isRemoteMrl(title)) {
       if (recentUrlTitles_.size() > RECENT_COUNT)
         recentUrlTitles_.erase(recentUrlTitles_.begin());
-      recentUrlTitles_[recentSource_] = title;
+      recentUrlTitles_[recentUrl_] = title;
       alias.setType(Alias::AT_Name);
       alias.setUserId(server_->user().id());
       alias.setLanguage(server_->user().language());
@@ -5215,7 +5202,7 @@ MainWindow::setToken(const QString &input, bool async)
   }
 
  if (//!token.hasType() ||
-     !token.hasDigest() && !token.hasSource()) {
+     !token.hasDigest() && !token.hasUrl()) {
     DOUT("inetMutex unlocking");
     inetMutex_.unlock();
     DOUT("inetMutex unlocked");
@@ -5226,15 +5213,15 @@ MainWindow::setToken(const QString &input, bool async)
   token.setCreateTime(QDateTime::currentMSecsSinceEpoch() / 1000);
 
   if (hub_->isMediaTokenMode() && player_->hasMedia() && token.hasDigest()) {
-    int part = 0;
+    int section = 0;
     if (player_->titleCount() > 1)
-      part = player_->titleId();
+      section = player_->titleId();
     //else if (player_->hasPlaylist())
-    //  part = player_->trackNumber();
+    //  section = player_->trackNumber();
 
-    if (part < 0)
-      part = 0;
-    token.setPart(part);
+    if (section < 0)
+      section = 0;
+    token.setSection(section);
   }
 
   AliasList aliases;
@@ -5273,14 +5260,14 @@ MainWindow::setToken(const QString &input, bool async)
         //emit warning(TR(T_ERROR_SUBMIT_TOKEN) + ": " + input);
     }
   } else if (token.hasDigest()) {
-    Token t = dataServer_->selectTokenWithDigest(token.digest(), token.part());
+    Token t = dataServer_->selectTokenWithDigest(token.digest(), token.section());
     if (t.isValid() || t.hasDigest())
       token = t;
   }
 
   if (!token.isValid() && cache_->isValid() && token.hasDigest()) {
     emit message(tr("searching for media information in cache ..."));
-    Token t = cache_->selectTokenWithDigest(token.digest(), token.part());
+    Token t = cache_->selectTokenWithDigest(token.digest(), token.section());
     if (t.isValid())
       token = t;
   }
@@ -5301,7 +5288,7 @@ MainWindow::setToken(const QString &input, bool async)
   dataManager_->setToken(token);
   dataManager_->setAliases(aliases);
 
-  DOUT("token type =" << token.type() << ", part =" << token.part() << ", source =" << token.source());
+  DOUT("token type =" << token.type() << ", section =" << token.section() << ", url =" << token.url());
   DOUT("alias count =" << aliases.size());
 
 //  if (commentView_)
@@ -5480,7 +5467,7 @@ MainWindow::submitLiveText(const QString &text, bool async)
 
   if (async) {
     emit message(tr("saving annotation ..."));
-    QThreadPool::globalInstance()->start(new detail::SubmitLiveText(text, this));
+    QtConcurrent::run(this, &Self::submitLiveText, text, false);
     DOUT("exit: returned from async branch");
     return;
   }
@@ -5536,7 +5523,7 @@ MainWindow::submitText(const QString &text, bool async)
     return;
   }
   if (!server_->isAuthorized() ||
-      !dataManager_->token().hasDigest() && !dataManager_->token().hasSource() ||
+      !dataManager_->token().hasDigest() && !dataManager_->token().hasUrl() ||
       hub_->isMediaTokenMode() && !player_->hasMedia()
 #ifdef USE_MODE_SIGNAL
       || hub_->isSignalTokenMode() && !messageHandler_->lastMessageHash().isValid()
@@ -5552,7 +5539,7 @@ MainWindow::submitText(const QString &text, bool async)
 
   if (async) {
     emit message(tr("saving annotation ..."));
-    QThreadPool::globalInstance()->start(new detail::SubmitText(text, this));
+    QtConcurrent::run(this, &Self::submitText, text, false);
     DOUT("exit: returned from async branch");
     return;
   }
@@ -5563,7 +5550,7 @@ MainWindow::submitText(const QString &text, bool async)
   Annotation annot; {
     annot.setTokenId(dataManager_->token().id());
     annot.setTokenDigest(dataManager_->token().digest());
-    annot.setTokenPart(dataManager_->token().part());
+    annot.setTokenSection(dataManager_->token().section());
     annot.setUserId(server_->user().id());
     annot.setUserAlias(server_->user().name());
     annot.setUserAnonymous(server_->user().isAnonymous());
@@ -5662,7 +5649,7 @@ MainWindow::chat(const QString &input, bool async)
 
   if (async) {
     //log(tr("sending chat text ..."));
-    QThreadPool::globalInstance()->start(new detail::Chat(input, this));
+    QtConcurrent::run(this, &Self::chat, input, false);
     DOUT("exit: returned from async branch");
     return;
   }
@@ -7065,6 +7052,7 @@ MainWindow::updateUserMenu()
 #ifdef USE_MODE_SIGNAL
     userMenu_->addAction(toggleTranslateAct_);
     userMenu_->addAction(toggleSubtitleOnTopAct_);
+    userMenu_->addAction(toggleBacklogDialogVisibleAct_);
 #endif // USE_MODE_SIGNAL
 
     userMenu_->addSeparator();
@@ -7485,14 +7473,9 @@ MainWindow::closeEvent(QCloseEvent *event)
   //DOUT("processEvents:leave");
 
   if (QThreadPool::globalInstance()->activeThreadCount()) {
-#if QT_VERSION >= 0x040800
     // wait for at most 5 seconds ant kill all threads
     enum { CloseTimeout = 5000 };
     QThreadPool::globalInstance()->waitForDone(CloseTimeout);
-#else
-    //DOUT("WARNING: killing active threads; will be fixed in Qt 4.8");
-    QThreadPool::globalInstance()->waitForDone();
-#endif  // QT_VERSION
   }
 
   //if (parentWidget())
@@ -7588,7 +7571,7 @@ MainWindow::blessTokenWithId(qint64 id, bool async)
 
   if (async) {
     emit message(tr("blessing media ..."));
-    QThreadPool::globalInstance()->start(new detail::BlessTokenWithId(id, this));
+    QtConcurrent::run(this, &Self::blessTokenWithId, id, false);
     DOUT("exit: returned from async branch");
     return;
   }
@@ -7631,7 +7614,7 @@ MainWindow::curseTokenWithId(qint64 id, bool async)
 
   if (async) {
     emit message(tr("cursing media ..."));
-    QThreadPool::globalInstance()->start(new detail::CurseTokenWithId(id, this));
+    QtConcurrent::run(this, &Self::curseTokenWithId, id, false);
     DOUT("exit: returned from async branch");
     return;
   }
@@ -7683,7 +7666,7 @@ MainWindow::blessUserWithId(qint64 id, bool async)
 
   if (async) {
     emit message(tr("blessing user ..."));
-    QThreadPool::globalInstance()->start(new detail::BlessUserWithId(id, this));
+    QtConcurrent::run(this, &Self::blessUserWithId, id, false);
     DOUT("exit: returned from async branch");
     return;
   }
@@ -7728,7 +7711,7 @@ MainWindow::curseUserWithId(qint64 id, bool async)
 
   if (async) {
     emit message(tr("cursing user ..."));
-    QThreadPool::globalInstance()->start(new detail::CurseUserWithId(id, this));
+    QtConcurrent::run(this, &Self::curseUserWithId, id, false);
     DOUT("exit: returned from async branch");
     return;
   }
@@ -7773,7 +7756,7 @@ MainWindow::blockUserWithId(qint64 id, bool async)
 
   if (async) {
     emit message(tr("blocking user ..."));
-    QThreadPool::globalInstance()->start(new detail::BlockUserWithId(id, this));
+    QtConcurrent::run(this, &Self::blockUserWithId, id, false);
     DOUT("exit: returned from async branch");
     return;
   }
@@ -7814,7 +7797,7 @@ MainWindow::blockUserWithId(qint64 id, bool async)
 \
     if (async) { \
       emit message(tr("casting spell to target ...")); \
-      QThreadPool::globalInstance()->start(new detail::BlockUserWithId(id, this)); \
+      QtConcurrent::run(this, &Self::_cast##_annot##WithId, id, false); \
       DOUT("exit: returned from async branch"); \
       return; \
     } \
@@ -7831,12 +7814,12 @@ MainWindow::blockUserWithId(qint64 id, bool async)
     DOUT("exit: async =" << async); \
   }
 
- CAST(bless, Annotation)
- CAST(block, Annotation)
- CAST(curse, Annotation)
- CAST(bless, Alias)
- CAST(block, Alias)
- CAST(curse, Alias)
+  CAST(bless, Annotation)
+  CAST(block, Annotation)
+  CAST(curse, Annotation)
+  CAST(bless, Alias)
+  CAST(block, Alias)
+  CAST(curse, Alias)
 #undef CAST
 
 void
@@ -7850,7 +7833,7 @@ MainWindow::logout(bool async)
   Q_UNUSED(async);
   //if (async) {
   //  emit message(tr("connecting server to logout ..."));
-  //  QThreadPool::globalInstance()->start(new detaillogout(this));
+  //  QtConcurrent::run(this, &Self::logout, false);
   //  DOUT("exit: returned from async branch");
   //  return;
   //}
@@ -7884,7 +7867,7 @@ MainWindow::checkInternetConnection(bool async)
   }
   if (async) {
     emit message(tr("connecting to server ..."));
-    QThreadPool::globalInstance()->start(new detail::CheckInternetConnection(this));
+    QtConcurrent::run(this, &Self::checkInternetConnection, false);
     DOUT("exit: returned from async branch");
     return;
   }
@@ -7922,7 +7905,7 @@ MainWindow::login(const QString &userName, const QString &encryptedPassword, boo
     return;
   }
   if (async) {
-    QThreadPool::globalInstance()->start(new detail::Login(userName, encryptedPassword, this));
+    QtConcurrent::run(this, &Self::login, userName, encryptedPassword, false);
     DOUT("exit: returned from async branch");
     return;
   }
@@ -8225,7 +8208,7 @@ MainWindow::openProcessHook(ulong hookId, const ProcessInfo &pi)
   }
   if (!mrl.isEmpty()) {
     recentDigest_.clear();
-    recentSource_.clear();
+    recentUrl_.clear();
     invalidateToken(mrl);
   }
 
@@ -8394,7 +8377,7 @@ MainWindow::setUserAnonymous(bool t, bool async)
 
     if (async) {
       emit message(tr("updating anonymous status ..."));
-      QThreadPool::globalInstance()->start(new detail::SetUserAnonymous(t, this));
+      QtConcurrent::run(this, &Self::setUserAnonymous, t, false);
       DOUT("exit: returned from async branch");
       return;
     }
@@ -8435,7 +8418,7 @@ MainWindow::setUserLanguage(int lang, bool async)
 
     if (async) {
       emit message(tr("updating user language ..."));
-      QThreadPool::globalInstance()->start(new detail::SetUserLanguage(lang, this));
+      QtConcurrent::run(this, &Self::setUserLanguage, lang, false);
       DOUT("exit: returned from async branch");
       return;
     }
@@ -9183,8 +9166,8 @@ void
 MainWindow::updateBrowseMenu()
 {
   if (player_->hasMedia()) {
-    QString fileName = recentSource_.isEmpty() ? player_->mediaPath()
-                                               : recentSource_;
+    QString fileName = recentUrl_.isEmpty() ? player_->mediaPath()
+                                            : recentUrl_;
     updateBrowseMenu(fileName);
   }
 }
@@ -9359,7 +9342,7 @@ MainWindow::openNextFile()
 void
 MainWindow::openPreviousMrl()
 {
-  QString mrl = dataManager_->token().source();
+  QString mrl = dataManager_->token().url();
   if (!mrl.isEmpty()) {
     QString n = QtExt::decreaseString(mrl);
     if (n != mrl) {
@@ -9373,7 +9356,7 @@ MainWindow::openPreviousMrl()
 void
 MainWindow::openNextMrl()
 {
-  QString mrl = dataManager_->token().source();
+  QString mrl = dataManager_->token().url();
   if (!mrl.isEmpty()) {
     if (mrl.endsWith("/")) {
       mrl.append("index_2.html");
@@ -9416,6 +9399,24 @@ MainWindow::hasNext() const
     browsedFiles_.size() > 1 && currentBrowsedFileId() < browsedFiles_.size() - 1 ||
     isNavigable()
   );
+}
+
+void
+MainWindow::checkReachEnd()
+{
+  enum { Timeout = MiniConsoleTimeout + 1000 };  // just a little longer then message timeout
+  static qint64 timestamp = 0;
+  if (hub_->isMediaTokenMode() && player_->isPlaying()) {
+    qint64 current_msecs = player_->time(),
+           total_msecs = player_->mediaLength();
+    if ((total_msecs - current_msecs) < Timeout) {
+      qint64 now = QDateTime::currentMSecsSinceEpoch();
+      if (now - timestamp > Timeout) {
+        emit messageOnce(tr("Reaching End Soon ..."));
+        timestamp = now;
+      }
+    }
+  }
 }
 
 void
@@ -9509,7 +9510,7 @@ MainWindow::updateLiveAnnotations(bool async)
 
   if (async) {
     //log(tr("updating annotations ..."));
-    QThreadPool::globalInstance()->start(new detail::UpdateLiveAnnotations(this));
+    QtConcurrent::run(this, &Self::updateLiveAnnotations, false);
     //DOUT("exit: returned from async branch");
     return;
   }
@@ -9552,7 +9553,7 @@ MainWindow::addRemoteAnnotations(const AnnotationList &l, const QString &url, co
   if (t.hashId() || t.hasDigest())
     foreach (Annotation a, l) {
       a.setTokenId(t.id());
-      a.setTokenPart(t.part());
+      a.setTokenSection(t.section());
       a.setTokenDigest(t.digest());
       annots.append(a);
     }
@@ -9566,9 +9567,9 @@ MainWindow::addRemoteAnnotations(const AnnotationList &l, const QString &url, co
      .arg(src);
    emit message(msg);
    emit addAnnotationsRequested(annots);
-   DOUT("token source =" << t.source());
+   DOUT("token url =" << t.url());
    if (cache_->isValid() &&
-       t.hasId() && !t.hasSource())
+       t.hasId() && !t.hasUrl())
      cache_->insertAnnotations(annots);
 
    if (!originalUrl.isEmpty() &&
@@ -9738,8 +9739,8 @@ QString
 MainWindow::currentUrl() const
 {
   QString ret;
-  if (dataManager_->token().hasSource())
-    ret = dataManager_->token().source();
+  if (dataManager_->token().hasUrl())
+    ret = dataManager_->token().url();
   else if (dataManager_->hasAliases())
     foreach (const Alias &a, dataManager_->aliases())
       if (a.type() == Alias::AT_Url) {
@@ -10211,7 +10212,7 @@ MainWindow::isNavigable() const
   if (!isRemoteMrl(player_->mediaPath()))
     return true;
 
-  QString mrl = dataManager_->token().source();
+  QString mrl = dataManager_->token().url();
   return mrl.contains(QRegExp("index_\\d+.html$", Qt::CaseInsensitive));
 }
 
@@ -10279,7 +10280,7 @@ MainWindow::enterAnnotationUrl(const QString &url)
     );
     return;
   }
-  if (url == dataManager_->token().source()) {
+  if (url == dataManager_->token().url()) {
     emit message(tr("media URL is being played ") + ": "
       HTML_STYLE_OPEN(color:orange) + url + HTML_STYLE_CLOSE()
     );
@@ -10311,7 +10312,7 @@ MainWindow::enterMediaUrl(const QString &url)
   //}
   if (!hub_->isMediaTokenMode())
     return;
-  if (url == dataManager_->token().source()) {
+  if (url == dataManager_->token().url()) {
     emit message(tr("media URL is being played ") + ": "
         HTML_STYLE_OPEN(color:orange) + url + HTML_STYLE_CLOSE()
     );
@@ -11146,7 +11147,10 @@ MainWindow::toggleGoogleTranslator(bool t)
   translator_->setService(TranslatorManager::Google, t);
   if (!translator_->hasServices())
     translator_->setServices(DEFAULT_TRANSLATORS);
-  emit message(tr("use Google Translator"));
+  if (t)
+    emit message(tr("load Google Translator"));
+  else
+    emit message(tr("offload Google Translator"));
 }
 
 void
@@ -11155,7 +11159,10 @@ MainWindow::toggleMicrosoftTranslator(bool t)
   translator_->setService(TranslatorManager::Microsoft, t);
   if (!translator_->hasServices())
     translator_->setServices(DEFAULT_TRANSLATORS);
-  emit message(tr("use Microsoft Translator"));
+  if (t)
+    emit message(tr("load Microsoft Translator"));
+  else
+    emit message(tr("offload Microsoft Translator"));
 }
 
 void
@@ -11164,7 +11171,10 @@ MainWindow::toggleRomajiTranslator(bool t)
   translator_->setService(TranslatorManager::Romaji, t);
   if (!translator_->hasServices())
     translator_->setServices(DEFAULT_TRANSLATORS);
-  emit message(tr("use Romaji Translator"));
+  if (t)
+    emit message(tr("load Romaji Translator"));
+  else
+    emit message(tr("offload Romaji Translator"));
 }
 
 // EOF

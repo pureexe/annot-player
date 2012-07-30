@@ -66,17 +66,17 @@ namespace AnnotCloud {
     void setDigest(const QString &hex)  { digest_ = hex; }
     bool hasDigest() const              { return !digest_.isEmpty(); }
 
-  private: QString source_;
+  private: QString url_;
   public:
-    const QString &source() const       { return source_; }
-    void setSource(const QString &href) { source_ = href; }
-    bool hasSource() const              { return !source_.isEmpty(); }
+    const QString &url() const          { return url_; }
+    void setUrl(const QString &href)    { url_ = href; }
+    bool hasUrl() const                 { return !url_.isEmpty(); }
 
-  private: qint32 part_;
+  private: qint32 section_;
   public:
-    qint32 part() const                 { return part_; }
-    void setPart(qint32 part)           { part_ = part; }
-    bool hasPart() const                { return part_; }
+    qint32 section() const              { return section_; }
+    void setSection(qint32 section)     { section_ = section; }
+    bool hasSection() const             { return section_; }
 
   private: qint32 status_;
   public:
@@ -148,21 +148,21 @@ namespace AnnotCloud {
     // - Constructions -
   public:
     Token()
-      : id_(0), type_(0), userId_(0), part_(0), status_(0), flags_(0), createTime_(0), createIp_(0),
+      : id_(0), type_(0), userId_(0), section_(0), status_(0), flags_(0), createTime_(0), createIp_(0),
         blessed_(0), cursed_(0), blocked_(0), visited_(0), annot_(0)
     { }
 
     bool isValid() const { return hasId(); } //&& hasType
     bool isLive() const { return id() < 0; }
-    bool isRemote() const { return hasSource(); }
+    bool isRemote() const { return hasUrl(); }
 
     void clear() { (*this) = Self(); }
 
     qint64 hashId() const
     {
       return hasId() ? id() :
-             hasDigest() ?  -qint64(qHash(digest()) + part()) :
-             hasSource() ? -qint64(qHash(source()) + part()) :
+             hasDigest() ?  -qint64(qHash(digest()) + section()) :
+             hasUrl() ? -qint64(qHash(url()) + section()) :
              0LL;
     }
 

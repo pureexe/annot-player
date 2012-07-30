@@ -447,47 +447,48 @@
 <context>
     <name>AnnotationDownloader</name>
     <message>
-        <location filename="../../../module/annotdown/annotationdownloader.cc" line="63"/>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="66"/>
         <source>analyzing</source>
         <translation>分析中</translation>
     </message>
     <message>
-        <location filename="../../../module/annotdown/annotationdownloader.cc" line="88"/>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="91"/>
         <source>downloading</source>
         <translation>下載中</translation>
     </message>
     <message>
-        <location filename="../../../module/annotdown/annotationdownloader.cc" line="103"/>
-        <location filename="../../../module/annotdown/annotationdownloader.cc" line="122"/>
-        <location filename="../../../module/annotdown/annotationdownloader.cc" line="144"/>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="106"/>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="125"/>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="160"/>
         <source>network error, failed to resolve URL</source>
         <translation>網絡錯誤，解析鏈接失敗</translation>
     </message>
     <message>
-        <location filename="../../../module/annotdown/annotationdownloader.cc" line="106"/>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="109"/>
         <source>saving</source>
         <translation>正在保存</translation>
     </message>
     <message>
-        <location filename="../../../module/annotdown/annotationdownloader.cc" line="130"/>
-        <location filename="../../../module/annotdown/annotationdownloader.cc" line="151"/>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="133"/>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="147"/>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="167"/>
         <source>failed to resolve URL</source>
         <translation>解析鏈接失敗</translation>
     </message>
     <message>
-        <location filename="../../../module/annotdown/annotationdownloader.cc" line="165"/>
-        <location filename="../../../module/annotdown/annotationdownloader.cc" line="179"/>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="181"/>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="195"/>
         <source>file saved</source>
         <translation>保存完成</translation>
     </message>
     <message>
-        <location filename="../../../module/annotdown/annotationdownloader.cc" line="167"/>
-        <location filename="../../../module/annotdown/annotationdownloader.cc" line="184"/>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="183"/>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="200"/>
         <source>failed to save file</source>
         <translation>文件保存失敗</translation>
     </message>
     <message>
-        <location filename="../../../module/annotdown/annotationdownloader.cc" line="173"/>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="189"/>
         <source>failed to cache annotation from URL</source>
         <translation>無法緩衝彈幕</translation>
     </message>
@@ -644,27 +645,27 @@
 <context>
     <name>LuaMrlResolver</name>
     <message>
-        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="132"/>
-        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="146"/>
-        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="236"/>
-        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="250"/>
+        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="105"/>
+        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="119"/>
+        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="209"/>
+        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="223"/>
         <source>failed to resolve URL</source>
         <translation>解析鏈接失敗</translation>
     </message>
     <message>
-        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="140"/>
-        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="244"/>
+        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="113"/>
+        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="217"/>
         <source>failed to resolve URL using nicovideo account</source>
         <translation>使用nico賬戶解析鏈接失敗</translation>
     </message>
     <message>
-        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="143"/>
-        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="247"/>
+        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="116"/>
+        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="220"/>
         <source>failed to resolve URL using bilibili account</source>
         <translation>使用bilibili賬戶解析鏈接失敗</translation>
     </message>
     <message>
-        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="373"/>
+        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="346"/>
         <source>nicovideo.jp account is required to resolve URL</source>
         <translation>請輸入nico賬戶</translation>
     </message>
@@ -919,7 +920,7 @@
         <translation>任務已存在</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1126"/>
+        <location filename="../mainwindow.cc" line="1120"/>
         <source>file saved</source>
         <translation>保存完成</translation>
     </message>
@@ -1261,42 +1262,42 @@
 <context>
     <name>Signer</name>
     <message>
-        <location filename="../signer.cc" line="64"/>
+        <location filename="../signer.cc" line="35"/>
         <source>URL is too long</source>
         <translation>鏈接太長</translation>
     </message>
     <message>
-        <location filename="../signer.cc" line="68"/>
+        <location filename="../signer.cc" line="39"/>
         <source>signing media ...</source>
         <translation>保存彈幕鏈接中...</translation>
     </message>
     <message>
-        <location filename="../signer.cc" line="78"/>
+        <location filename="../signer.cc" line="49"/>
         <source>user didn&apos;t login, skip signing file</source>
         <translation>用戶為登錄，無法保存彈幕鏈接</translation>
     </message>
     <message>
-        <location filename="../signer.cc" line="90"/>
+        <location filename="../signer.cc" line="61"/>
         <source>failed to analyze media</source>
         <translation>分析媒體失敗</translation>
     </message>
     <message>
-        <location filename="../signer.cc" line="109"/>
+        <location filename="../signer.cc" line="80"/>
         <source>truncate long file name</source>
         <translation>截斷過長的文件名</translation>
     </message>
     <message>
-        <location filename="../signer.cc" line="129"/>
+        <location filename="../signer.cc" line="100"/>
         <source>saving aliases ...</source>
         <translation>保存媒體鏈接中...</translation>
     </message>
     <message>
-        <location filename="../signer.cc" line="142"/>
+        <location filename="../signer.cc" line="113"/>
         <source>media signed</source>
         <translation>媒體鏈接保存</translation>
     </message>
     <message>
-        <location filename="../signer.cc" line="144"/>
+        <location filename="../signer.cc" line="115"/>
         <source>failed to sign media</source>
         <translation>媒體鏈接保存失敗</translation>
     </message>
@@ -1305,22 +1306,22 @@
         <translation type="obsolete">缺少用戶名或密碼，放棄登錄</translation>
     </message>
     <message>
-        <location filename="../signer.cc" line="205"/>
+        <location filename="../signer.cc" line="176"/>
         <source>logging in as %1 ...</source>
         <translation>以%1登錄中`...</translation>
     </message>
     <message>
-        <location filename="../signer.cc" line="213"/>
+        <location filename="../signer.cc" line="184"/>
         <source>failed to connect to server</source>
         <translation>連接服務器失敗</translation>
     </message>
     <message>
-        <location filename="../signer.cc" line="220"/>
+        <location filename="../signer.cc" line="191"/>
         <source>login succeeded as %1</source>
         <translation>以%1登錄成功</translation>
     </message>
     <message>
-        <location filename="../signer.cc" line="222"/>
+        <location filename="../signer.cc" line="193"/>
         <source>failed to login as %1</source>
         <translation>以%1登錄失敗</translation>
     </message>

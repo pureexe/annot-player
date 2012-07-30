@@ -583,6 +583,7 @@ WebView::showLink(const QString &url, const QString &title, const QString &conte
     emit message(QString());
   else {
     QString m = QUrl::fromPercentEncoding(url.toUtf8());
+    m.replace(ANNOT_HOST_IP, "annot.me");
     QString t = content.isEmpty() ? title : content;
     t = t.simplified();
     if (!t.isEmpty())

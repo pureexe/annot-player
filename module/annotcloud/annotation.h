@@ -36,7 +36,7 @@ namespace AnnotCloud {
     enum Field {
       None = -1,
       Id,
-      TokenId, TokenDigest, TokenPart,
+      TokenId, TokenDigest, TokenSection,
       UserId, UserAlias,
       Status, Flags, Language,
       CreateTime, UpdateTime,
@@ -75,11 +75,11 @@ namespace AnnotCloud {
     bool hasTokenDigest() const             { return !tokenDigest_.isEmpty(); }
 
     ///  Used only in offline mode
-  private: qint32 tokenPart_;
+  private: qint32 tokenSection_;
   public:
-    qint32 tokenPart() const          { return tokenPart_; }
-    void setTokenPart(qint32 part)    { tokenPart_ = part; }
-    bool hasTokenPart() const         { return tokenPart_; }
+    qint32 tokenSection() const          { return tokenSection_; }
+    void setTokenSection(qint32 section) { tokenSection_ = section; }
+    bool hasTokenSection() const         { return tokenSection_; }
 
   private: qint64 userId_;
   public:
@@ -127,6 +127,12 @@ namespace AnnotCloud {
     qint64 createTime() const           { return createTime_; }
     void setCreateTime(qint64 secs)     { createTime_ = secs; }
     bool hasCreateTime() const          { return createTime_ > 0; }
+
+  private: qint64 createIp_;
+  public:
+    qint64 createIp() const             { return createIp_; }
+    void setCreateIp(qint64 ip)         { createIp_ = ip; }
+    bool hasCreateIp() const            { return createIp_; }
 
   private: qint64 updateTime_;
   public:
@@ -190,8 +196,8 @@ namespace AnnotCloud {
     // - Constructions -
   public:
     Annotation()
-      : id_(0), tokenId_(0), tokenPart_(0), userId_(0), status_(0), flags_(0), language_(0),
-        createTime_(0), updateTime_(0), updateIp_(0),
+      : id_(0), tokenId_(0), tokenSection_(0), userId_(0), status_(0), flags_(0), language_(0),
+        createTime_(0), createIp_(0), updateTime_(0), updateIp_(0),
         pos_(0), posType_(0), time_(0),
         blessed_(0), cursed_(0), blocked_(0), subtitle_(-1)
     { }

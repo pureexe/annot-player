@@ -7,7 +7,7 @@
 
 class Player;
 
-// TODO: Gradually replace signals connections in MainWindow, ServerAgent and Player with this hub
+// TODO: Gradually replace signals connections in MainWindow, AnnotationServerAgent and Player with this hub
 // Use SignalHub to wrap Player
 class SignalHub : public QObject
 {

@@ -17,7 +17,7 @@
 #include "module/debug/debug.h"
 
 #define WINDOW_SIZE     QSize(640, 640)
-#define BASE_URL        G_HOMEPAGE "/api/player/"
+#define BASE_URL        G_HOMEPAGE "/clients/player/"
 #define EMPTY_URL       BASE_URL "empty.html"
 
 using namespace AnnotCloud;
@@ -68,7 +68,7 @@ UserAnalyticsView::setupActions()
 // - Properties -
 
 AnnotationList
-UserAnalyticsView::userAnnotatinons() const
+UserAnalyticsView::userAnnotations() const
 {
   AnnotationList ret;
   if (userId_)
@@ -104,7 +104,7 @@ void
 UserAnalyticsView::invalidateAnnotations()
 {
   QString title = tr("User");
-  AnnotationList a = userAnnotatinons();
+  AnnotationList a = userAnnotations();
   if (a.isEmpty())
     setUrl(QUrl(EMPTY_URL));
   else {

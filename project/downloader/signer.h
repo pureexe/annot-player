@@ -7,7 +7,7 @@
 #include <QtCore/QMutex>
 #include <QtCore/QObject>
 
-class ServerAgent;
+class AnnotationServerAgent;
 
 class Signer : public QObject
 {
@@ -18,7 +18,7 @@ class Signer : public QObject
 
   QMutex m_;
   bool disposed_;
-  ServerAgent *server_;
+  AnnotationServerAgent *server_;
 
 public:
   explicit Signer(QObject *parent = nullptr);

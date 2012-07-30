@@ -97,7 +97,7 @@ AcLocationPrefs::verifyDownloadsLocation()
   else
     emit warning(tr("not exist") + ": " + location);
 
-  resetDownloadsLocationButton_->setEnabled(location == locationManager_->defaultDownloadsLocation());
+  resetDownloadsLocationButton_->setEnabled(location != locationManager_->defaultDownloadsLocation());
   createDownloadsLocationButton_->setEnabled(!ok);
 
   downloadsLocationEdit_->setStyleSheet(downloadsLocationEditStyleSheet_ + (ok ?

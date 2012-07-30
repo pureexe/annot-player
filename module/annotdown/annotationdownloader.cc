@@ -4,6 +4,9 @@
 #include "module/annotdown/annotationdownloader.h"
 #include "module/qtext/filesystem.h"
 #include "module/qtext/network.h"
+#ifdef WITH_MODULE_COMPRESS
+# include "module/compress/qgzip.h"
+#endif // WITH_MODULE_COMPRESS
 #ifdef WITH_MODULE_ANNOTCACHE
 # include "module/annotcache/annotationcachemanager.h"
 #else
@@ -132,7 +135,20 @@ AnnotationDownloader::processReply(QNetworkReply *reply)
     return;
   }
 
-  saveData(reply->readAll(), refurl, title);
+  QByteArray data = reply->readAll();
+#ifdef WITH_MODULE_COMPRESS
+  if (!data.isEmpty() && url.contains(".bilibili.tv/", Qt::CaseInsensitive)) {
+    QByteArray unzipped = ::gHttpUncompress(data);
+    if (!unzipped.isEmpty())
+      data = unzipped;
+  }
+#endif // WITH_MODULE_COMPRESS
+  if (data.isEmpty()) {
+    emit errorMessage(tr("failed to resolve URL") + ": " + url);
+    DOUT("exit: empty data");
+    return;
+  }
+  saveData(data, refurl, title);
   DOUT("exit: after saveData");
 }
 

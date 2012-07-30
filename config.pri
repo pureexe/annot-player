@@ -104,6 +104,7 @@ win32 {
     POPPLER_HOME        = $$DEV_HOME/poppler
     BOOST_HOME          = $$DEV_HOME/boost
     GSOAP_HOME          = $$DEV_HOME/gsoap
+    GSOAP_HOME          = $$DEV_HOME/gsoap/src/gsoap
     ZLIB_HOME           = $$DEV_HOME/zlib
     LUA_HOME            = $$DEV_HOME/lua
     FREETYPE_HOME       = $$DEV_HOME/freetype
@@ -141,7 +142,8 @@ unix {
     LIVE_HOME           = /usr
     POPPLER_HOME        = ${HOME}/opt/poppler
     BOOST_HOME          = /usr
-    GSOAP_HOME          = /usr
+    GSOAP_HOME          = ${HOME}/opt/gsoap
+    GSOAP_SRC           = ${HOME}/opt/src/gsoap
     LUA_HOME            = /usr
     ZLIB_HOME           = /usr
     FREETYPE_HOME       = $$X11_HOME
@@ -168,7 +170,8 @@ mac {
     LIVE_HOME           = ${HOME}/opt/live
     POPPLER_HOME        = ${HOME}/opt/poppler
     BOOST_HOME          = $$MACPORTS_HOME
-    GSOAP_HOME          = $$MACPORTS_HOME
+    GSOAP_HOME          = ${HOME}/opt/gsoap
+    GSOAP_SRC           = ${HOME}/opt/src/gsoap
     ZLIB_HOME           = $$SDK_HOME/usr
     FREETYPE_HOME       = $$X11_HOME
     FONTCONFIG_HOME     = $$X11_HOME
@@ -191,7 +194,7 @@ LIBS            += -L$$VLC_HOME/lib
 INCLUDEPATH     += $$BOOST_HOME/include
 LIBS            += -L$$BOOST_HOME/lib
 INCLUDEPATH     += $$GSOAP_HOME/include
-LIBS            += -L$$GSOAP_HOME/lib
+#LIBS            += -L$$GSOAP_HOME/lib
 INCLUDEPATH     += $$ZLIB_HOME/include
 LIBS            += -L$$ZLIB_HOME/lib
 INCLUDEPATH     += $$FREETYPE_HOME/include \

@@ -25,7 +25,11 @@ MainConsole::MainConsole(QWidget *parent)
   { // Font color and size
     setStyleSheet(
       SS_BEGIN(QLabel)
+#ifdef Q_OS_MAC
+        SS_COLOR(yellow)
+#else
         SS_COLOR(white)
+#endif // Q_OS_MAC
         SS_FONT_SIZE(12pt)
       SS_END
     );

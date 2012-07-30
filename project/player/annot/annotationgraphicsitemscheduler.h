@@ -44,7 +44,7 @@ class AnnotationGraphicsItemScheduler : public QObject
   qint64 flyLaneTime_[LaneCount],
          topLaneTime_[LaneCount],
          bottomLaneTime_[LaneCount];
-  int subLaneStyle_[LaneCount];
+  qint8 subLaneStyle_[LaneCount]; // qint8 must be able to cover AnnotationGraphicsItem::Style
 
 signals:
   void message(const QString &text);

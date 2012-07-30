@@ -9,7 +9,7 @@
 #include "global.h"
 #include "project/common/acui.h"
 #include "project/common/acfilteredtableview.h"
-#include "module/serveragent/serveragent.h"
+#include "module/annotservice/annotserveragent.h"
 #include <QtGui>
 
 using namespace AnnotCloud;
@@ -25,7 +25,7 @@ using namespace AnnotCloud;
   Qt::WindowCloseButtonHint | \
   Qt::WindowStaysOnTopHint)
 
-TokenView::TokenView(DataManager *data, ServerAgent *server, SignalHub *hub, QWidget *parent)
+TokenView::TokenView(DataManager *data, AnnotationServerAgent *server, SignalHub *hub, QWidget *parent)
   : Base(parent, WINDOW_FLAGS), active_(false), data_(data), server_(server), hub_(hub),
     contextMenu_(nullptr), aliasDialog_(nullptr)
 {
@@ -380,7 +380,7 @@ TokenView::submitAlias(const QString &alias, int type, qint32 language)
   Alias a;
   a.setTokenId(t.id());
   a.setTokenDigest(t.digest());
-  a.setTokenPart(t.part());
+  a.setTokenSection(t.section());
   a.setType(type);
   a.setLanguage(language);
   a.setText(alias);
@@ -560,7 +560,7 @@ TokenView::aliasTypeToString(int type)
 {
   switch (type) {
   case Alias::AT_Name:  return tr("name");
-  case Alias::AT_Source:return tr("source");
+  case Alias::AT_File:return tr("file");
   case Alias::AT_Tag:   return tr("tag");
   case Alias::AT_Url: return tr("URL");
   default: return TR(T_NA);

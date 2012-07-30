@@ -7,15 +7,15 @@ DEPENDPATH += $$PWD
 
 HEADERS += \
     $$PWD/httpplugin.h \
-    $$PWD/httpbufferedsession.h \
-    $$PWD/httpsession.h \
-    $$PWD/httpstreamsession.h
+    $$PWD/httpbufferedsession_p.h \
+    $$PWD/httpsession_p.h \
+    $$PWD/httpstreamsession_p.h
 
 SOURCES += \
     $$PWD/httpplugin.cc \
-    $$PWD/httpbufferedsession.cc \
-    $$PWD/httpsession.cc \
-    $$PWD/httpstreamsession.cc
+    $$PWD/httpbufferedsession_p.cc \
+    $$PWD/httpsession_p.cc \
+    $$PWD/httpstreamsession_p.cc
 
 #DEFINES += HAVE_ZLIB_H HAVE_STRUCT_ADDRINFO
 

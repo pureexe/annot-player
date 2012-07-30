@@ -3,12 +3,12 @@
 setlocal
 cd /d d:/dev/build || exit /b 1
 
-set MAJOR=0.1.7
-set MINOR=1
+set MAJOR=0.1.8
+set MINOR=0
 set VERSION=%MAJOR%.%MINOR%
 ::set VERSION=%MAJOR%
-set PREVMAJOR=%MAJOR%
-::set PREVMAJOR=0.1.6
+::set PREVMAJOR=%MAJOR%
+set PREVMAJOR=0.1.7
 set APP=annot-player
 set TARGET=Annot Stream
 set ZIPFILE=%APP%-%PREVMAJOR%-%VERSION%-delta-win.zip
@@ -169,6 +169,8 @@ set LUA_PATH=lua/luascript
 
 :: jsf
 ::cp -Rv "%SOURCE%"/module/annotcloud/jsf . || exit /b 1
+mkdir jsf || exit /b 1
+cp -v "%SOURCE%"/module/annotcloud/jsf/t.xhtml jsf/ || exit /b 1
 
 :: images
 ::cp -Rv "%SOURCE%"/project/player/avatars . || exit /b 1

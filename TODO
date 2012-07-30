@@ -56,17 +56,64 @@ http://qt-project.org/wiki/Category:Add-ons
   see jspwiki
 - chat
 
-# 0.1.7.2
+# server
 
+- social
+  - create user group
+  - change annotation group
+
+- social
+  - allow user share ads/news for game they are playing
+  - allow add comments
+
+- maintain
+  - backup mysql to my own machine
+  - automatic back database everyweek
+  - change DNS server to Japan
+
+http://visualnovelaer.wordpress.com/2012/07/01/a-revolution-for-fan-translation-it-is-now-possible-to-sub-any-visual-novel-without-hacking/
+
+# 0.1.8.1
 - windows xp
   - check if it is possible to bypass apploc on Chinese Windows XP
     - also, if windows title is correct
+  - check subtitle rendering
 
-- sever:
-  - game_scene
-    scene_text scene_context
+- add mediamanager
+  - for recent files
+
+- windows
+  - able to listen to more than 1 channels
+  - listen to more than text
+    - add up to 3 channel to listen
+
 - windows game
   - submit game text as context as well
+  - game_scene
+    scene_text scene_context prev_scene_id
+
+- game
+  - figure out how to utilize ITH profiles
+    - using SHA1256 in qt5
+     compute sha1 256 for game as well
+
+- seek for offline translation abbroach
+
+# 0.1.8.2
+
+- annot-down
+  - rewrite thread using qtconcurrent and QFuture for blocking, rather then eventloop to block
+    eliminate eventloops and signals
+  - rewrite  qnetworkaccessmanager using qtconcurrent and qfuture
+    so that the remote stream could be easily done
+
+  - able to subscribe to nicovideo | bilibili.tv in annot-down
+    keep a history of all downloaded url
+  - rewrite gui using tree mode
+
+- figure out how to recache fonts
+
+- game
   - flag it's already finished, or locked.
   - a different way to display galgame text with phrases splitted
   - Able to manually dumping galgame and upload text online.
@@ -76,45 +123,11 @@ http://qt-project.org/wiki/Category:Add-ons
     - split media_token into media_xxx and game_xxx in the future
     - split media_annot and game_annot
     - upload game text for subtitles/annotations as well
-  - cache google translation for offline subtitle annot, or use a db for translation?
-  - game_text
-    text_id token_id user_id text_create_time text_create_ip text_text
-  was thinking to add something like a universal user dictionary for names/expressions or even complete phrases that are most common used in games so it gets immediately translated, as an example of a user dictionary there is http://www.hongfire.com/forum/showthread.php/79006-fhc-dictionary-of-ATLAS-Japanese-Translator or http://www.hongfire.com/forum/showthread.php/94395-Translation-Aggregator-v0-4-9?p=2269439#post2269439
-  I see. Sharing translation efforts across different games is really a good idea!
-- add issubtitle to annot's flag when submit or edit
-  - repair my old subtitles a week later
-
-- annot down is so buggy
-
-# server
-- backup mysql log in mithril to server and mac as well
-  copy source code of server to mac as well
-- LEARN JSF and ICEfaces
-  - use glassfish + maven + primefaces to redesign the homepage
-  - steal html static: http://www.primefaces.org/index.html
-  - hello world: http://www.techbrainwave.com/?p=198
-    http://www.primefaces.org/
-    htth://www.primefaces.org/showcase/ui/home.jsf
-    http://code.google.com/p/primefaces-extensions/
-    http://www.techbrainwave.com/?p=198
-
-  - move tomcat services to glassfish
-
-- maintain
-  - backup mysql to my own machine
-  - automatic back database everyweek
-  - change DNS server to Japan
-
-# 0.1.7.2
 
 - backlog
   - betterway to show game text, able to split japanese with clucene
     - highlight diff words, etc
     - hover with meanings
-
-- figure out how to utilize ITH profiles
-  - using SHA1256 in qt5
-    compute sha1 256 for game as well
 
 - player
   - add a window tracker class to replace annotationview and embeddedplayer
@@ -122,30 +135,6 @@ http://qt-project.org/wiki/Category:Add-ons
     - make it reusable
     - make a console on the bottomleft to browser as well
 
-- chat
-  - remove livechannel
-    remove live mode!
-- server
-  - deprecate liveannotation
-  - add chatmessage, also redy for bot_message
-  ChatMessage
-    userId  user_id
-    roomId  room_id
-    text    message_text
-    time    message_time
-  ChatRoom
-
-- chat
-  - show online status
-  - standalone chat server, a public chat room
-
-- share to faceook
-   - facbook: http://stackoverflow.com/questions/8635674/publish-on-facebook-wall-from-c-c-or-linux
-  @F facebook: make a screenshot and upload
-  @T twitter: make a screenshot and upload
-  @G google+: make a screenshot and upload
-  @S sina: make a screenshot and upload
-  @M mixi: make a screenshot and upload
 - chatroom
 - usergroup
 
@@ -185,6 +174,17 @@ memory_id user_id memory_create_ip memory_create_time  memory_type memory_first 
     - debug hang when close current video
 
 ## LATER
+- voice recognition
+http://cmusphinx.sourceforge.net/wiki/download/
+
+- share to faceook
+   - facbook: http://stackoverflow.com/questions/8635674/publish-on-facebook-wall-from-c-c-or-linux
+  @F facebook: make a screenshot and upload
+  @T twitter: make a screenshot and upload
+  @G google+: make a screenshot and upload
+  @S sina: make a screenshot and upload
+  @M mixi: make a screenshot and upload
+
 - integrate player and downloader
    - subscript to nicovideo/bilibili threads
 - qt5:  migration
@@ -192,6 +192,23 @@ memory_id user_id memory_create_ip memory_create_time  memory_type memory_first 
   - explicit <QDebug>
   - <QtWidgets>
   - exploit <QtLocation> for desktop
+
+- chat
+  - remove livechannel
+    remove live mode!
+- server
+  - deprecate liveannotation
+  - add chatmessage, also redy for bot_message
+  ChatMessage
+    userId  user_id
+    roomId  room_id
+    text    message_text
+    time    message_time
+  ChatRoom
+
+- chat
+  - show online status
+  - standalone chat server, a public chat room
 
 - livemode & syncmode when more people are using it
 

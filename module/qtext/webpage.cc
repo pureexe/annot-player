@@ -5,11 +5,6 @@
 #include <QtWebKit/QWebFrame>
 #include <QtGui>
 
-//#define HOMEPAGE_URL    "http://annot.me"
-//#define HOMEPAGE_URL    "http://" ANNOT_HOST_IP
-//#define BASE_URL        HOMEPAGE_URL "/api/player/"
-//#define BASE_URL        ""
-
 #define DEBUG "qtext::webpage"
 #include "module/debug/debug.h"
 
