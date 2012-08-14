@@ -23,6 +23,8 @@ SOURCES += \
     main.cc
 
 OTHER_FILES += \
+    scripts/0.1.0/deploy.cmd \
+    scripts/0.1.0/update.cmd \
     updater.rc \
     updater.ico
 

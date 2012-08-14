@@ -49,7 +49,7 @@ WinMain(__in HINSTANCE hInstance, __in HINSTANCE hPrevInstance, __in LPSTR lpCmd
   std::wstring wsAppPath = dirname(wsApp);
 
   // See: http://msdn.microsoft.com/en-us/library/windows/desktop/cc144102(v=vs.85).aspx
-  //::SetFileAttributesW(wsDir.c_str(), FILE_ATTRIBUTE_READONLY);
+  ::SetFileAttributesW(wsDir.c_str(), FILE_ATTRIBUTE_READONLY);
 
   DOUT(QString::fromStdWString(app));
 

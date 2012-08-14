@@ -4,7 +4,6 @@
 http://db.tt/SrtkzxIJ
 http://qt-project.org/wiki/Category:Add-ons
 
-
 # key ideas
 - stream trial games, and sub trial games in chinese
     - librsync for downloading files?
@@ -22,16 +21,49 @@ http://qt-project.org/wiki/Category:Add-ons
   - on the desktop
   - in another notepad
 
-#
+# streaming
 
 work on streaming
 - windows driver
 - sync
 
+# 0.1.9
 
-# 0.1.8.2
-#
 fix cloudserviceudatre.cmd
+fixme: lftp permission on ntfs
+
+- add annot permission instead
+add group of annot
+
+- windows
+- able to listen to more than 1 channels, change GUI interface
+change ui from number comboedit to multiple checkbox of text channels
+create a special combonent for a group of checkbox
+- always keep recent 3 text from all channels
+- listen to more than text
+  - add up to 3 channel to listen
+
+- game
+  - figure out how to utilize ITH profiles
+    - using SHA1256 in qt5
+     compute sha1 256 for game as well
+
+- windows game
+  - submit game text as context as well
+    figure how to use heuristics for scene_text
+  - also figure out how to sugmit game icon or scenario screenshots as well?
+  - game_scene
+    scene_text scene_context prev_scene_id
+
+- mac:
+- add user-defined keyword dictionary for special noun
+  - able to share it online
+  - database: dict_term
+    term_id term_status term_flag user_id term_create_ip term_create_time term_update_time term_update_ip term_type term_from term_to term_source, term_target
+    term_bless_count term_curse_count term_block_count
+
+# 0.1.9.1
+
 
 - option to integrate native applocale to launch galgame
   systemroot/AppPatch
@@ -53,20 +85,6 @@ use curl or vlc native downloader to replace qt networkaccessmanager?
 - Annot Browser
   - add translate engines to annot browser
 
-- windows
-- able to listen to more than 1 channels, change GUI interface
-change ui from number comboedit to multiple checkbox of text channels
-create a special combonent for a group of checkbox
-- always keep recent 3 text from all channels
-- listen to more than text
-  - add up to 3 channel to listen
-
-- mac:
-- add user-defined keyword dictionary for special noun
-  - able to share it online
-  - database: dict_term
-    term_id term_status term_flag user_id term_create_ip term_create_time term_update_time term_update_ip term_type term_from term_to term_source, term_target
-    term_bless_count term_curse_count term_block_count
 
 - able to change annotation language in annotation browser, and annotationgraphicsitem
 
@@ -98,13 +116,6 @@ enable offline annotation edit
   </annot>
 - sync xml with game
 
-- windows game
-  - submit game text as context as well
-    figure how to use heuristics for scene_text
-  - also figure out how to sugmit game icon or scenario screenshots as well?
-  - game_scene
-    scene_text scene_context prev_scene_id
-
 - group: able to flag annot from context menu
   - able to flag outline color for annot, similar to finder
     implement as \halo[red] etc
@@ -115,14 +126,6 @@ enable offline annotation edit
 - integrate winsparkle and appcasting
 
 - flags of annot from context menu
-- add annot permission instead
-add group of annot
-
-- game
-  - figure out how to utilize ITH profiles
-    - using SHA1256 in qt5
-     compute sha1 256 for game as well
-
 
 - use online service for chatting (primepush) instead of writing client in C++
 

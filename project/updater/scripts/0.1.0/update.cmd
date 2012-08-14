@@ -3,14 +3,17 @@
 @echo off
 setlocal
 cd /d %~dp0
+cd /d ..\..
+
+set PATH=%~dp0;%PATH%
 
 set VERSION=0.1.0
-set ROOT=..\..
 
 set HOST=210.175.52.140
-set SOURCE=release/annot-player/win32/Annot Stream
-set TARGET=../..
+set SOURCE=/release/annot-player/win32/Annot Stream
+set TARGET=.
 set EXCLUDE=%VERSION%
+set THREADS=4
 
 echo --------------------------------------------------------------------
 echo   Do you want to update the apps? (An Internet access is required)
@@ -28,9 +31,10 @@ echo.
 pause
 echo.
 
-lftp "%HOST%" -e "mirror --verbose=3 --delete --exclude '%EXCLUDE%' '%SOURCE%' '%TARGET%'; exit"
+:: see: http://lftp.yar.ru/lftp-man.html
+lftp "%HOST%" -e "mirror --verbose=3 --delete --no-perms --no-umask --depth-first --parallel=%THREADS% --exclude '%EXCLUDE%' '%SOURCE%' '%TARGET%'; exit"
 
-pushd ..
+pushd update
 for /r %%i in (deploy.cmd) do if exist "%%~i" call "%%~i"
 popd
 
@@ -43,6 +47,6 @@ echo.
 pause
 echo.
 
-if exist "%ROOT%\ChangeLog.txt" explorer "%ROOT%\ChangeLog.txt"
+if exist "ChangeLog.txt" explorer "ChangeLog.txt"
 
 :: EOF
